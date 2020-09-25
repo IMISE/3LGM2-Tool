@@ -55,4 +55,22 @@ public class ParentComponentFinder {
         }
         return null;
     }
+
+    /**
+     * @param comp
+     * @return the {@link JDialog} or {@link JFrame} that contains the given component
+     */
+    public static final Component getFrameOrDialog(final Object comp) {
+        if (!(comp instanceof Component)) {
+            return null;
+        }
+        Component parent = ((Component) comp).getParent();
+        while (parent != null) {
+            if (parent instanceof JDialog || parent instanceof JFrame) {
+                return parent;
+            }
+            parent = parent.getParent();
+        }
+        return null;
+    }
 }

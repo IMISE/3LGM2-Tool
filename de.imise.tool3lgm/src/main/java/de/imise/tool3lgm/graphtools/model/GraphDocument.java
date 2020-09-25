@@ -159,6 +159,11 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
     public final static int INITIAL_PAGE_WIDTH = 1024;
 
     /**
+     *
+     */
+    public static final int MAX_PAGE_SIZE_FACTOR = 5;
+
+    /**
      * X-position of a new created element
      */
     private int next_x_pos = 0;
@@ -3672,7 +3677,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
             addRedoCommand(MODEL_ACTION_ADDICT + " " + szenHash + " " + edgeClassName + " " + masterHash + " " + slaveHash, pid);
             addUndoCommand(MODEL_ACTION_SET_ELEMENT_POSITION + " " + szenHash + " " + slaveHash + " " + slaveX + " " + slaveY + " " + slaveWidth + " " + slaveHeight, pid);
             slaveContainer.setCoordinates(pos.width, pos.height, slaveWidth, slaveHeight);
-
+            raiseSlaves(masterContainer);
             for (Szenario szenario : gdcoll.getSzenarios()) {
                 EdgeContainer kac = (EdgeContainer) edge.getContainer(szenario);
                 if (kac != null) {

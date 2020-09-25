@@ -1,16 +1,15 @@
 package de.imise.util.image;
 
-import static de.imise.util.swing.component.ParentComponentFinder.getFrameOrDialog;
-
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.GridLayout;
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.RandomAccessFile;
 
+import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
 import javax.swing.JComponent;
@@ -21,16 +20,9 @@ import javax.swing.JRadioButton;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.filechooser.FileSystemView;
 
-import com.sun.media.jai.codec.BMPEncodeParam;
-import com.sun.media.jai.codec.ImageCodec;
-import com.sun.media.jai.codec.ImageEncodeParam;
-import com.sun.media.jai.codec.ImageEncoder;
-import com.sun.media.jai.codec.JPEGEncodeParam;
-import com.sun.media.jai.codec.PNGEncodeParam;
-import com.sun.media.jai.codec.SeekableOutputStream;
-import com.sun.media.jai.codec.TIFFEncodeParam;
-
+import de.imise.util.MemoryHandler;
 import de.imise.util.StringUtils;
+import de.imise.util.swing.component.ParentComponentFinder;
 import de.imise.util.swing.dialog.DialogResourceHandler;
 import de.imise.util.swing.dialog.ExtendedFileChooser;
 
@@ -41,14 +33,17 @@ import de.imise.util.swing.dialog.ExtendedFileChooser;
 public class ComponentAsImageExportHandler {
 
     /**
-     * Mögliche Typen der FileFilter, die dieser Dialog anzeigen kann. Für alle diese Typen gibt es
-     * Ressourcen-Strings, deren Key für die Beschreibung sich über den zusammengebausten String aus
-     * {@link FILE_FILTER_RESOURCE_PREFIX} + {@link FileFilterType#toString()} ergbibt.
-     * Für die Liste der akzeptierten Erweiterungen wird der gleiche Key-String gebildet und noch der
-     * {@link FILE_FILTER_RESOURCE_EXTENSION_POSTFIX} angehängt.
+     * Possible types of FileFilters this dialog can display. For all these
+     * types there are resource strings, whose key for the description results
+     * from the assembled string {@link FILE_FILTER_RESOURCE_PREFIX} +
+     * {@link FileFilterType#toString()}.
+     * For the list of accepted extensions, the same key-string is formed and
+     * the {@link FILE_FILTER_RESOURCE_EXTENSION_POSTFIX} is appended.
+     * Furthermore, the names of these enum entries correspond exactly to the
+     * names ImageIO wants to have for identifying the codec to be used.
      */
     public static enum FileFilterType {
-        JPEG,
+        JPG,
         TIFF,
         BMP,
         PNG
@@ -65,13 +60,6 @@ public class ComponentAsImageExportHandler {
 
     /** Ressourcenhandler */
     private final DialogResourceHandler drh = new DialogResourceHandler(ComponentAsImageExportHandler.class);
-
-    /**
-     *
-     */
-    private ComponentAsImageExportHandler() {
-        super();
-    }
 
     /**
      * Liefert für die übergebenen filterNamen ein Array von FileFiltern, wenn die Beschreibung und die Liste
@@ -94,7 +82,7 @@ public class ComponentAsImageExportHandler {
      * @param fileName
      */
     public static final void createFile(final JComponent comp, final String fileName) {
-        createFile(comp, FileFilterType.JPEG, fileName);
+        createFile(comp, FileFilterType.JPG, fileName);
     }
 
     /**
@@ -128,68 +116,123 @@ public class ComponentAsImageExportHandler {
         if (fileFormat == null) {
             return;
         }
+        ZoomableComponent zoomComp = comp instanceof ZoomableComponent ? (ZoomableComponent) comp : null;
+
         //wenn das Bild mit maximaler Größe gespeichert werden soll und das Bild auch maximierbar ist
-        maximizeSize = comp instanceof ZoomableComponent && maximizeSize;
-        double zoom = 0d;
-        Dimension size = null;
+        maximizeSize = zoomComp != null && maximizeSize;
+        double originalZoom = zoomComp != null ? zoomComp.getZoom() : -1d;
+
         //maximale Bildgröße speichern?
         if (maximizeSize) {
             //vollen Zoom setzen und alten zoom merken
-            zoom = ((ZoomableComponent) comp).setZoomToMaximum();
-            size = comp.getSize();
-            comp.setSize(comp.getPreferredSize());
+            zoomComp.setZoomToMaximum();
         }
+        setHeapAvailableMaximumExportSize(comp);
         Dimension preferredSize = comp.getPreferredSize();
-        int w = preferredSize.width;
-        int h = preferredSize.height;
 
-        BufferedImage buffer = new BufferedImage(w, h, BufferedImage.TYPE_3BYTE_BGR);
+        //MemoryHandler.printMaxNowAvailableMemory();
+        //this here is the critical memory opration
+        BufferedImage buffer = new BufferedImage(preferredSize.width, preferredSize.height, BufferedImage.TYPE_3BYTE_BGR);
+        //MemoryHandler.printMaxNowAvailableMemory();
+
         Graphics og = buffer.getGraphics();
-        ImageEncoder encoder;
-        ImageEncodeParam param;
         og.setColor(new Color(255, 255, 255, 255));
-        og.fillRect(0, 0, w, h);
+        og.fillRect(0, 0, preferredSize.width, preferredSize.height);
         comp.printAll(og);
         //ggf. Zoom auf alten Wert zurück setzen
-        if (maximizeSize) {
-            ((ZoomableComponent) comp).setZoom(zoom);
-            comp.setSize(size);
+        if (originalZoom >= 0d) {
+            zoomComp.setZoom(originalZoom);
         }
 
+        File saveFile = new File(filename);
+        String exportFileType = fileFormat.name();
         try {
-            RandomAccessFile raf = new RandomAccessFile(filename, "rw");
-            SeekableOutputStream os = new SeekableOutputStream(raf);
-            switch (fileFormat) {
-            case JPEG:
-                param = new JPEGEncodeParam();
-                ((JPEGEncodeParam) param).setQuality(1);
-                encoder = ImageCodec.createImageEncoder("JPEG", os, param);
-                break;
-            case TIFF:
-                param = new TIFFEncodeParam();
-                ((TIFFEncodeParam) param).setCompression(TIFFEncodeParam.COMPRESSION_PACKBITS);
-                encoder = ImageCodec.createImageEncoder("TIFF", os, param);
-                break;
-            case BMP:
-                param = new BMPEncodeParam();
-                ((BMPEncodeParam) param).setCompressed(true);
-                encoder = ImageCodec.createImageEncoder("BMP", os, param);
-                break;
-            case PNG:
-                param = new PNGEncodeParam.RGB();
-                encoder = ImageCodec.createImageEncoder("PNG", os, param);
-                break;
-            default:
-                os.close();
-                return;
-            }
-            encoder.encode(buffer);
-            os.close();
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(getFrameOrDialog(comp), drh.getResString("ERROR_MESSAGE"), drh.getResString("ERROR_TITLE"), JOptionPane.ERROR_MESSAGE);
-        } catch (Error err) {
-            JOptionPane.showMessageDialog(getFrameOrDialog(comp), drh.getResString("ERROR_MESSAGE"), drh.getResString("ERROR_TITLE"), JOptionPane.ERROR_MESSAGE);
+            ImageIO.write(buffer, exportFileType, saveFile);
+        } catch (Throwable e) {
+            Component parent = ParentComponentFinder.getFrameOrDialog(comp);
+            JOptionPane.showMessageDialog(parent, drh.getResString("ERROR_MESSAGE"), drh.getResString("ERROR_TITLE"), JOptionPane.ERROR_MESSAGE);
         }
+    }
+
+    /**
+     * @param preferredSize
+     * @return a scaled size of the given size in the same aspect ratio
+     *         that will fit in memory when exporting an image of that
+     *         size
+     */
+    private Dimension getMaxHeapAvailableSize(final Dimension preferredSize) {
+        Dimension maxAvailableImageSize = preferredSize;
+        //70% as memory buffer for other processes during export (tested with -Xmx768m -Xss64m)
+        //lower buffer values than 61% will cause an OutOfMemory exception -> 9% buffer buffer :)
+        long maxImageHeapSize = MemoryHandler.getMaxNowAvailableMemory(70);
+        long imageHeapSize = getImageHeapSize(preferredSize);
+        if (maxImageHeapSize < imageHeapSize) {
+            long squareMax = Double.valueOf(Math.sqrt(maxImageHeapSize)).longValue(); //= max possible side length in a square (rounding dosn't matter here)
+            long widthPlusHeightSquare = squareMax * 2; //= width + height from the square
+            long width = preferredSize.width;
+            long height = preferredSize.height;
+            long widthPlusHeight = width + height;
+            long realWidth = widthPlusHeightSquare * width / widthPlusHeight;
+            long realHeight = widthPlusHeightSquare + height / widthPlusHeight;
+            //this (width or height > Integer.MAX_VALUE) will probably never happen, but one thing is certain
+            long maxInt = Integer.MAX_VALUE;
+            if (realWidth > maxInt) {
+                realHeight = realHeight * maxInt / realWidth;
+                realWidth = maxInt;
+            }
+            if (realHeight > maxInt) {
+                realWidth = realWidth * maxInt / realHeight;
+                realHeight = maxInt;
+            }
+            //these long values are always < Integer.MAX_VALUE -> hard cast
+            int w = (int) realWidth;
+            int h = (int) realHeight;
+            maxAvailableImageSize = new Dimension(w, h);
+        }
+        return maxAvailableImageSize;
+    }
+
+    /**
+     * Sets the maximum available size for the component so that the
+     * image to be exported fits in memory and the export process can
+     * be executed without memory overflow.
+     *
+     * @param comp
+     */
+    private void setHeapAvailableMaximumExportSize(final JComponent comp) {
+        comp.getPreferredSize();
+        Dimension preferredSize = comp.getPreferredSize();
+        Dimension availableSize = getMaxHeapAvailableSize(preferredSize);
+        double preferredWidth = preferredSize.getWidth();
+        double availableWidth = availableSize.getWidth();
+        if (comp instanceof ZoomableComponent) {
+            if (preferredWidth > availableWidth) {
+                ZoomableComponent zComp = (ZoomableComponent) comp;
+                double scaleFactor = availableWidth / preferredWidth;
+                double zoom = zComp.getZoom();
+                zoom *= scaleFactor;
+                zComp.setZoom(zoom);
+                preferredSize = comp.getPreferredSize();
+            }
+        } else if (preferredWidth > availableWidth) {
+            preferredSize = availableSize;
+            comp.setPreferredSize(preferredSize);
+            comp.setSize(preferredSize);
+        }
+    }
+
+    /**
+     * Calculates the size of the image in the memory. The size results
+     * from the width multiplied by the height multiplied by 3, since
+     * each pixel of a {@link BufferedImage#TYPE_3BYTE_BGR} consumes 3
+     * bytes per pixel.
+     *
+     * @param preferredSize
+     * @return
+     */
+    private static long getImageHeapSize(final Dimension preferredImageSize) {
+        long heapSize = preferredImageSize.width * preferredImageSize.height * 3l;
+        return heapSize;
     }
 
     /**

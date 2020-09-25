@@ -245,6 +245,17 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
     private boolean automatic_mode = true;
 
     /**
+     * If an edge is deleted and the start or end element of this egde needs
+     * this edge for existence (minimum cardinality) then the element will
+     * be deleted too, but only if this boolean is <code>false</code>.
+     * If <code>true</code> the now inconsistent element will not be deleted.
+     * This mode is used to prevent deleting of elements which are subordinated
+     * by an {@link CompositionEdge} during the reconnecting this subordinated
+     * element to an other superordinated element.
+     */
+    private boolean ignore_inconsistencies_on_delete_egdes_mode = false;
+
+    /**
      * Wird <code>true</code> sobald der bulk_mode das erste Mal auf <code>false</code> gesetzt wurde.
      */
     private boolean initialized = false;
@@ -398,7 +409,24 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
      * @return
      */
     public boolean isAutomaticMode() {
-        return automatic_mode;
+        return automatic_mode || bulk_mode;
+    }
+
+    /**
+     * @param ignore_inconsistencies_on_delete_egdes_mode
+     * @return the previous ignore_inconsistencies_on_delete_egdes_mode
+     */
+    public boolean setIgnoreInconsistenciesOnDeleteEgdesMode(final boolean ignore_inconsistencies_on_delete_egdes_mode) {
+        boolean old_mode = this.ignore_inconsistencies_on_delete_egdes_mode;
+        this.ignore_inconsistencies_on_delete_egdes_mode = ignore_inconsistencies_on_delete_egdes_mode;
+        return old_mode;
+    }
+
+    /**
+     * @return the ignore_inconsistencies_on_delete_egdes_mode
+     */
+    public boolean isIgnoreInconsistenciesOnDeleteEgdesMode() {
+        return ignore_inconsistencies_on_delete_egdes_mode || bulk_mode;
     }
 
     /**
@@ -1006,20 +1034,22 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
             } else if (me instanceof Edge) {
                 Edge edge = (Edge) me;
                 edgesToDelete.add(edge);
-                //wenn durch das Löschen der Edge auch die Kardinalität für eins oder beide der durch die Edge verbundenen
-                //Elemente unterschritten wurde -> die Elemente auch löschen
-                ModelElement[] startEnd = {
-                        edge.getStart(), edge.getEnd()
-                };
-                for (ModelElement elem : startEnd) {
-                    //wenn die Anzahl der bestehenden Kanten der zu löschenden Art für das verbundene Element gleich
-                    //der minimalen Kardinalität für diese Kantenart ist, dann muss das verbundene Element auch gelöscht werden
-                    //auf Gleichheit muss getestet werden, weil die Edge ja noch nicht wirklich gelöscht ist und somit mitgezählt wird
-                    Class<? extends Edge> edgeClass = edge.getClass();
-                    if (elem != null && elem.countConnections(edgeClass) <= MetaModel.getMinCardinality(elem.getClass(), edgeClass)) {
-                        if (!allElementsToDelete.contains(elem)) {
-                            allElementsToDelete.add(elem);
-                            dependentDeletedElements.add(elem);
+                if (!isIgnoreInconsistenciesOnDeleteEgdesMode()) {
+                    //wenn durch das Löschen der Edge auch die Kardinalität für eins oder beide der durch die Edge verbundenen
+                    //Elemente unterschritten wurde -> die Elemente auch löschen
+                    ModelElement[] startEnd = {
+                            edge.getStart(), edge.getEnd()
+                    };
+                    for (ModelElement elem : startEnd) {
+                        //wenn die Anzahl der bestehenden Kanten der zu löschenden Art für das verbundene Element gleich
+                        //der minimalen Kardinalität für diese Kantenart ist, dann muss das verbundene Element auch gelöscht werden
+                        //auf Gleichheit muss getestet werden, weil die Edge ja noch nicht wirklich gelöscht ist und somit mitgezählt wird
+                        Class<? extends Edge> edgeClass = edge.getClass();
+                        if (elem != null && elem.countConnections(edgeClass) <= MetaModel.getMinCardinality(elem.getClass(), edgeClass)) {
+                            if (!allElementsToDelete.contains(elem)) {
+                                allElementsToDelete.add(elem);
+                                dependentDeletedElements.add(elem);
+                            }
                         }
                     }
                 }
@@ -2155,7 +2185,7 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
         }
         //prüfen, ob es sich um Node gleichen Typs handelt (nur diese können vereint werden)
         if (!(removeElement instanceof Node && remainElement instanceof Node)) {
-            if (!automatic_mode) {
+            if (!isAutomaticMode()) {
                 JOptionPane.showMessageDialog(getMainFrame(), getResString("nur_knoten_sel"), getResString("tool3lgm"), INFORMATION_MESSAGE);
             }
             return null;
@@ -2164,7 +2194,7 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
         Node remainNode = (Node) remainElement;
         Class<? extends ModelElement> nodeClass = removeNode.getClass();
         if (nodeClass != remainNode.getClass()) {
-            if (!automatic_mode) {
+            if (!isAutomaticMode()) {
                 JOptionPane.showMessageDialog(null, getResString("nur_gleiche_sel"), getResString("tool3lgm"), INFORMATION_MESSAGE);
             }
             return null;
