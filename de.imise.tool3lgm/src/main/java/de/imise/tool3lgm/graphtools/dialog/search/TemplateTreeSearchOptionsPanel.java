@@ -41,6 +41,8 @@ public class TemplateTreeSearchOptionsPanel extends BasicSearchOptionsPanel {
         super(tree, new GridBagLayout());
         expanded = false;
         expandButton = new JButton("|");
+        expandButton.setToolTipText(getResString("SEARCH_DIALOG_EXPAND_Button_TT"));
+
         GridBagConstraints constraints = new GridBagConstraints();
 
         constraints.gridy = 0;
@@ -96,9 +98,10 @@ public class TemplateTreeSearchOptionsPanel extends BasicSearchOptionsPanel {
     public final void showFullPanel(final boolean full) {
         if (expanded) {
             showPartlyPanel();
-
+            expandButton.setToolTipText(getResString("SEARCH_DIALOG_EXPAND_Button_TT"));
         } else {
             showFullPanel();
+            expandButton.setToolTipText(getResString("SEARCH_DIALOG_CONTRACT_Button_TT"));
         }
         revalidate();
         repaint();
