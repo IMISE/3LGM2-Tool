@@ -23,10 +23,16 @@ import de.imise.util.Sys;
  */
 public class TemplateTreeSearchOptionsPanel extends BasicSearchOptionsPanel {
 
+    /**
+     *
+     */
     private final JPanel filterOptionPanel = new JPanel(new GridLayout(0, 2));
+
+    /**  */
     private final JButton expandOptions;
+
+    /**  */
     private static boolean expanded;
-    GridBagConstraints c = new GridBagConstraints();
 
     /**
      * Stores the SearchOptions to restore them if
@@ -45,7 +51,7 @@ public class TemplateTreeSearchOptionsPanel extends BasicSearchOptionsPanel {
         add(searchButton, BorderLayout.WEST);
         add(elementName, BorderLayout.CENTER);
         add(expandOptions, BorderLayout.EAST);
-        add(filterOptionPanel, BorderLayout.PAGE_END);
+        add(filterOptionPanel, BorderLayout.SOUTH);
         expandOptions.addActionListener(arg0 -> showFullPanel(expanded));
 
         addListenerToRestoreSearchOptions();
@@ -105,6 +111,7 @@ public class TemplateTreeSearchOptionsPanel extends BasicSearchOptionsPanel {
      */
     protected void showFullPanel() {
         Sys.out1("pushed");
+        GridBagConstraints c = new GridBagConstraints();
         c.fill = GridBagConstraints.HORIZONTAL;
         c.weightx = 0.5;
         c.gridx = 2;

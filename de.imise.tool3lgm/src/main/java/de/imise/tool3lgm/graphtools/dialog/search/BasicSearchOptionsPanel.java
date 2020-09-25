@@ -23,6 +23,7 @@ import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
@@ -92,6 +93,21 @@ public abstract class BasicSearchOptionsPanel extends JPanel implements ItemList
 
     /** View that displays the search result */
     protected final SearchResultView resultTargetView;
+
+    /**  */
+    protected JLabel labelModel = new JLabel(getResString("SEARCH_DIALOG_USERFIELD_Modell"));
+
+    /**  */
+    protected JLabel labelSubmodel = new JLabel(getResString("SEARCH_DIALOG_USERFIELD_Teilmodell"));
+
+    /**  */
+    protected JLabel labelElementType = new JLabel(getResString("SEARCH_DIALOG_USERFIELD_Elementeart"));
+
+    /**  */
+    protected JLabel labelName = new JLabel(getResString("SEARCH_DIALOG_USERFIELD_NAME"));
+
+    /**  */
+    protected JLabel labelDescription = new JLabel(getResString("SEARCH_DIALOG_USERFIELD_BESCHREIBUNG"));
 
     /** The defalut action that will only perform the search (where the action source is irrelevant) */
     private final Action searchActionDefault = new AbstractAction(getResString("SEARCH_DIALOG_USERFIELD_Button")) {

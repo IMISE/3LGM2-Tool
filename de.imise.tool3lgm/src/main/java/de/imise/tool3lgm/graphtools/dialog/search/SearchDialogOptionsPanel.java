@@ -42,15 +42,15 @@ public class SearchDialogOptionsPanel extends BasicSearchOptionsPanel {
         constraints.weightx = 0;
 
         // erste Spalte
-        add(new JLabel(getResString("SEARCH_DIALOG_USERFIELD_Modell")), constraints);
+        add(labelModel, constraints);
         constraints.gridy++;
-        add(new JLabel(getResString("SEARCH_DIALOG_USERFIELD_Teilmodell")), constraints);
+        add(labelSubmodel, constraints);
         constraints.gridy++;
-        add(new JLabel(getResString("SEARCH_DIALOG_USERFIELD_Elementeart")), constraints);
+        add(labelElementType, constraints);
         constraints.gridy++;
-        add(new JLabel(getResString("SEARCH_DIALOG_USERFIELD_NAME")), constraints);
+        add(labelName, constraints);
         constraints.gridy++;
-        add(new JLabel(getResString("SEARCH_DIALOG_USERFIELD_BESCHREIBUNG")), constraints);
+        add(labelDescription, constraints);
 
         // nächste Spalte
         constraints.gridx++;
