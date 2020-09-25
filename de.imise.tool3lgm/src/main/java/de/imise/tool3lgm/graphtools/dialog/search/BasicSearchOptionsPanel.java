@@ -342,15 +342,17 @@ public abstract class BasicSearchOptionsPanel extends JPanel implements ItemList
      */
     @Override
     public void itemStateChanged(final ItemEvent arg0) {
-        Object selectedUserFieldStyle = userFieldStyleComboBox.getSelectedObject();
-        boolean userFieldCheckBoxStateEnabledState = selectedUserFieldStyle == null || selectedUserFieldStyle == UserField.Style.CHECK_BOX;
-        userFieldCheckBoxStateComboBox.setEnabled(userFieldCheckBoxStateEnabledState);
-        // Checkboxmodus (Suche Alle/aktivierte/nicht aktivierte)
-        int userFieldCheckBoxStateSelectedIndex = userFieldCheckBoxStateComboBox.getSelectedIndex();
-        if (userFieldCheckBoxStateSelectedIndex >= 0) {
-            userFieldCheckBoxState = userFieldCheckBoxStateComboBox.getItemAt(userFieldCheckBoxStateSelectedIndex);
-        } else {
-            userFieldCheckBoxState = UserFieldCheckBoxState.CHECKBOXMODE_ALL;
+        if (userFieldStyleComboBox != null) {
+            Object selectedUserFieldStyle = userFieldStyleComboBox.getSelectedObject();
+            boolean userFieldCheckBoxStateEnabledState = selectedUserFieldStyle == null || selectedUserFieldStyle == UserField.Style.CHECK_BOX;
+            userFieldCheckBoxStateComboBox.setEnabled(userFieldCheckBoxStateEnabledState);
+            // Checkboxmodus (Suche Alle/aktivierte/nicht aktivierte)
+            int userFieldCheckBoxStateSelectedIndex = userFieldCheckBoxStateComboBox.getSelectedIndex();
+            if (userFieldCheckBoxStateSelectedIndex >= 0) {
+                userFieldCheckBoxState = userFieldCheckBoxStateComboBox.getItemAt(userFieldCheckBoxStateSelectedIndex);
+            } else {
+                userFieldCheckBoxState = UserFieldCheckBoxState.CHECKBOXMODE_ALL;
+            }
         }
         callSearch();
     }
