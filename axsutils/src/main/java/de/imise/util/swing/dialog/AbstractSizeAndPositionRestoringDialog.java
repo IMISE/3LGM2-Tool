@@ -147,6 +147,7 @@ public abstract class AbstractSizeAndPositionRestoringDialog extends JDialog {
                 openDialogs.remove(dialog);
             }
         });
+        restoreSizeAndPosition();
     }
 
     /**

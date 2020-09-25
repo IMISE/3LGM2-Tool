@@ -92,6 +92,7 @@ public final class ModelPropertyDialog extends AbstractPropertyDialog implements
         for (Szenario szen : szenarios) {
             docBox.addItem(szen);
         }
+        borderLayout = new BorderLayout();
         JPanel northPanel = new JPanel(borderLayout);
         String nortPanelLabelText = getResString("submodel");
         JLabel nortPanelLabel = new JLabel(nortPanelLabelText);
@@ -107,6 +108,7 @@ public final class ModelPropertyDialog extends AbstractPropertyDialog implements
         //als Listener registrieren
         gdcoll.addClosedTransactionsListener(this);
         addAsToolChangeListener();
+
     }
 
     /**
