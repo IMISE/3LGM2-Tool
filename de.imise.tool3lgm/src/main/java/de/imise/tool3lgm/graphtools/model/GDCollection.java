@@ -410,7 +410,7 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
      * @return
      */
     public boolean isAutomaticMode() {
-        return automatic_mode;
+        return automatic_mode || bulk_mode;
     }
 
     /**
@@ -427,7 +427,7 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
      * @return the ignore_inconsistencies_on_delete_egdes_mode
      */
     public boolean isIgnoreInconsistenciesOnDeleteEgdesMode() {
-        return ignore_inconsistencies_on_delete_egdes_mode;
+        return ignore_inconsistencies_on_delete_egdes_mode || bulk_mode;
     }
 
     /**
@@ -1035,7 +1035,7 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
             } else if (me instanceof Edge) {
                 Edge edge = (Edge) me;
                 edgesToDelete.add(edge);
-                if (!ignore_inconsistencies_on_delete_egdes_mode) {
+                if (!isIgnoreInconsistenciesOnDeleteEgdesMode()) {
                     //wenn durch das Löschen der Edge auch die Kardinalität für eins oder beide der durch die Edge verbundenen
                     //Elemente unterschritten wurde -> die Elemente auch löschen
                     ModelElement[] startEnd = {
@@ -2186,7 +2186,7 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
         }
         //prüfen, ob es sich um Node gleichen Typs handelt (nur diese können vereint werden)
         if (!(removeElement instanceof Node && remainElement instanceof Node)) {
-            if (!automatic_mode) {
+            if (!isAutomaticMode()) {
                 JOptionPane.showMessageDialog(getMainFrame(), getResString("nur_knoten_sel"), getResString("tool3lgm"), INFORMATION_MESSAGE);
             }
             return null;
@@ -2195,7 +2195,7 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
         Node remainNode = (Node) remainElement;
         Class<? extends ModelElement> nodeClass = removeNode.getClass();
         if (nodeClass != remainNode.getClass()) {
-            if (!automatic_mode) {
+            if (!isAutomaticMode()) {
                 JOptionPane.showMessageDialog(null, getResString("nur_gleiche_sel"), getResString("tool3lgm"), INFORMATION_MESSAGE);
             }
             return null;

@@ -414,7 +414,6 @@ public class TransactionManager {
         boolean bulkMode = gdcoll.setBulkMode(true);
 
         is_doing = true;
-        boolean lastAutomaticMode = gdcoll.setAutomaticMode(true);
 
         doc.deselectAll(true);
         for (int k = 0; k < trans_q[j].getPostSelectionSize(); k++) {
@@ -451,7 +450,6 @@ public class TransactionManager {
         }
         cur_pos--;
 
-        gdcoll.setAutomaticMode(lastAutomaticMode);
         if (doc.isVerificationMode()) {
             printQueue(10);
         }
@@ -478,7 +476,7 @@ public class TransactionManager {
         if (!isRedoAvailable()) {
             return true;
         }
-
+        boolean bulkMode = gdcoll.setBulkMode(true);
         is_doing = true;
         cur_pos++;
         int j = getTransactionIndexForPID(pid, false);
@@ -503,6 +501,7 @@ public class TransactionManager {
         if (doc.isVerificationMode()) {
             printQueue(10);
         }
+        gdcoll.setBulkMode(bulkMode);
         return true;
     }
 
