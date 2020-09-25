@@ -2,12 +2,10 @@ package de.imise.tool3lgm.graphtools.dialog.search;
 
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
 
-import java.awt.BorderLayout;
 import java.awt.GridBagConstraints;
-import java.awt.GridLayout;
+import java.awt.GridBagLayout;
 
 import javax.swing.JButton;
-import javax.swing.JPanel;
 import javax.swing.event.AncestorEvent;
 import javax.swing.event.AncestorListener;
 
@@ -16,22 +14,16 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.view.pathtree.PathTreeDefinition;
 import de.imise.tool3lgm.graphtools.view.pathtree.PathTreeModel;
 import de.imise.tool3lgm.graphtools.view.template.TemplateBrowserTree;
-import de.imise.util.Sys;
 
 /**
  * @author AXS (31.07.2020)
  */
 public class TemplateTreeSearchOptionsPanel extends BasicSearchOptionsPanel {
 
-    /**
-     *
-     */
-    private final JPanel filterOptionPanel = new JPanel(new GridLayout(0, 2));
-
     /**  */
     private final JButton expandOptions;
 
-    /**  */
+    /** stores information if the panel has been expanded or not */
     private static boolean expanded;
 
     /**
@@ -44,14 +36,25 @@ public class TemplateTreeSearchOptionsPanel extends BasicSearchOptionsPanel {
      * @param tree
      */
     public TemplateTreeSearchOptionsPanel(final TemplateBrowserTree tree) {
-        super(tree, new BorderLayout());
+        super(tree, new GridBagLayout());
         expanded = false;
         expandOptions = new JButton(">>");
+        GridBagConstraints constraints = new GridBagConstraints();
 
-        add(searchButton, BorderLayout.WEST);
-        add(elementName, BorderLayout.CENTER);
-        add(expandOptions, BorderLayout.EAST);
-        add(filterOptionPanel, BorderLayout.SOUTH);
+        constraints.gridy = 0;
+        constraints.gridx = 0;
+        constraints.weightx = 0;
+        add(searchButton, constraints);
+
+        constraints.fill = GridBagConstraints.HORIZONTAL;
+        constraints.gridx = 2;
+        constraints.weightx = 1;
+        add(elementName, constraints);
+
+        constraints.gridx = 4;
+        constraints.weightx = 0;
+        add(expandOptions, constraints);
+        //        add(filterOptionPanel, constraints);
         expandOptions.addActionListener(arg0 -> showFullPanel(expanded));
 
         addListenerToRestoreSearchOptions();
@@ -86,13 +89,6 @@ public class TemplateTreeSearchOptionsPanel extends BasicSearchOptionsPanel {
     }
 
     /**
-     *
-     */
-    public void addExpandOptionsButtonListener() {
-
-    }
-
-    /**
      * @param full
      */
     public final void showFullPanel(final boolean full) {
@@ -107,31 +103,58 @@ public class TemplateTreeSearchOptionsPanel extends BasicSearchOptionsPanel {
     }
 
     /**
-     *
+     * expands the panel with more filter options
      */
     protected void showFullPanel() {
-        Sys.out1("pushed");
-        GridBagConstraints c = new GridBagConstraints();
-        c.fill = GridBagConstraints.HORIZONTAL;
-        c.weightx = 0.5;
-        c.gridx = 2;
-        c.gridy = 0;
-        filterOptionPanel.add(checkNameCaseSensitive);
-        filterOptionPanel.add(elementDescription);
-        filterOptionPanel.add(checkDescriptionCaseSensitive);
-        filterOptionPanel.add(elementClassBox);
+        GridBagConstraints constraints = new GridBagConstraints();
+
+        constraints.fill = GridBagConstraints.HORIZONTAL;
+        constraints.gridx = 1;
+        constraints.gridy = 0;
+        constraints.weightx = 0;
+        add(labelName, constraints);
+
+        constraints.gridx = 2;
+        constraints.gridy++;
+        add(checkNameCaseSensitive, constraints);
+
+        constraints.gridx = 1;
+        constraints.gridy++;
+        constraints.weightx = 0;
+        add(labelDescription, constraints);
+
+        constraints.gridx = 2;
+        constraints.weightx = 1;
+        add(elementDescription, constraints);
+
+        constraints.gridx = 2;
+        constraints.gridy++;
+        constraints.weightx = 0;
+        add(checkDescriptionCaseSensitive, constraints);
+
+        constraints.gridx = 1;
+        constraints.gridy++;
+        constraints.weightx = 0;
+        add(labelElementType, constraints);
+
+        constraints.gridx = 2;
+        constraints.weightx = 1;
+        add(elementClassBox, constraints);
 
         expanded = true;
     }
 
     /**
-     *
+     * removes the added options
      */
     protected void showPartlyPanel() {
-        filterOptionPanel.remove(checkNameCaseSensitive);
-        filterOptionPanel.remove(elementDescription);
-        filterOptionPanel.remove(checkDescriptionCaseSensitive);
-        filterOptionPanel.remove(elementClassBox);
+        remove(labelName);
+        remove(checkNameCaseSensitive);
+        remove(labelDescription);
+        remove(elementDescription);
+        remove(checkDescriptionCaseSensitive);
+        remove(labelElementType);
+        remove(elementClassBox);
 
         expanded = false;
     }
