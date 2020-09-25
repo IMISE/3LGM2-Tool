@@ -3,6 +3,7 @@ package de.imise.tool3lgm.graphtools.dialog;
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
 
 import java.awt.BorderLayout;
+import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.event.WindowEvent;
 import java.util.HashMap;
@@ -12,11 +13,13 @@ import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.border.Border;
 
 import de.imise.tool3lgm.Tool3lgmChangeListener;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.model.LGMChangeListenerSimple;
+import de.imise.tool3lgm.graphtools.model.LGMGraphDocument;
 import de.imise.tool3lgm.graphtools.model.Szenario;
 import de.imise.tool3lgm.log.Log;
 import de.imise.util.swing.component.AlphabeticalComboBox;
@@ -75,24 +78,31 @@ public final class ModelPropertyDialog extends AbstractPropertyDialog implements
      * @throws Exception
      */
     private void init() throws Exception {
-        getContentPane().setLayout(new BorderLayout());
+        Container contentPane = getContentPane();
+        BorderLayout borderLayout = new BorderLayout();
+        contentPane.setLayout(borderLayout);
         textPane = new ExtendedTextPane();
-        textPane.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
-        getContentPane().add(new JScrollPane(textPane), BorderLayout.CENTER);
+        Border border = BorderFactory.createEmptyBorder(5, 10, 5, 10);
+        textPane.setBorder(border);
+        JScrollPane scrollPane = new JScrollPane(textPane);
+        contentPane.add(scrollPane, BorderLayout.CENTER);
 
-        docBox.addItem(gdcoll.getMainDoc());
-        for (Szenario szen : gdcoll.getSzenarios()) {
+        docBox.addItem(mainDoc);
+        Iterable<Szenario> szenarios = gdcoll.getSzenarios();
+        for (Szenario szen : szenarios) {
             docBox.addItem(szen);
         }
-
-        JPanel northPanel = new JPanel(new BorderLayout());
-        northPanel.add(new JLabel(getResString("submodel")), BorderLayout.WEST);
+        JPanel northPanel = new JPanel(borderLayout);
+        String nortPanelLabelText = getResString("submodel");
+        JLabel nortPanelLabel = new JLabel(nortPanelLabelText);
+        northPanel.add(nortPanelLabel, BorderLayout.WEST);
         northPanel.add(docBox, BorderLayout.CENTER);
-        getContentPane().add(northPanel, BorderLayout.NORTH);
+        contentPane.add(northPanel, BorderLayout.NORTH);
 
         docBox.addActionListener(e -> selectedDocChanged());
 
-        docBox.setSelectedItem(gdcoll.getSelectedDoc());
+        LGMGraphDocument selectedDoc = gdcoll.getSelectedDoc();
+        docBox.setSelectedItem(selectedDoc);
 
         //als Listener registrieren
         gdcoll.addClosedTransactionsListener(this);
@@ -104,9 +114,11 @@ public final class ModelPropertyDialog extends AbstractPropertyDialog implements
      */
     private void update() {
         // prüfen, ob alle Teilmodelle in der Auswahlbox vorhanden sind
-        for (Szenario szen : gdcoll.getSzenarios()) {
+        Iterable<Szenario> szenarios = gdcoll.getSzenarios();
+        int docBoxItemCount = docBox.getItemCount();
+        for (Szenario szen : szenarios) {
             boolean found = false;
-            for (int j = 0; j < docBox.getItemCount(); j++) {
+            for (int j = 0; j < docBoxItemCount; j++) {
                 Object item = docBox.getItemAt(j);
                 if (!(item instanceof Szenario)) {
                     continue;
@@ -121,7 +133,7 @@ public final class ModelPropertyDialog extends AbstractPropertyDialog implements
             }
         }
         // prüfen, ob alle auswählbaren Teilmodelle noch vorhanden sind
-        for (int j = 0; j < docBox.getItemCount(); j++) {
+        for (int j = 0; j < docBoxItemCount; j++) {
             Object item = docBox.getItemAt(j);
             if (!(item instanceof Szenario)) {
                 continue;
@@ -147,15 +159,16 @@ public final class ModelPropertyDialog extends AbstractPropertyDialog implements
     @Override
     protected void processWindowEvent(final WindowEvent e) {
         super.processWindowEvent(e);
-        if (e.getID() == WindowEvent.WINDOW_CLOSING) {
-            lastActiveDoc.setDescription(textPane.getText());
+        int windowEventId = e.getID();
+        if (windowEventId == WindowEvent.WINDOW_CLOSING || windowEventId == WindowEvent.WINDOW_DEACTIVATED) {
+            String textPaneText = textPane.getText();
+            lastActiveDoc.setDescription(textPaneText);
+        }
+        if (windowEventId == WindowEvent.WINDOW_CLOSING) {
             GDCOLLECTION_TO_OPEN_DIALOG.remove(gdcoll);
             //als Listener abmelden
             gdcoll.removeClosedTransactionsListener(this);
             removeAsToolChangeListener();
-        }
-        if (e.getID() == WindowEvent.WINDOW_DEACTIVATED) {
-            lastActiveDoc.setDescription(textPane.getText());
         }
     }
 
@@ -164,10 +177,12 @@ public final class ModelPropertyDialog extends AbstractPropertyDialog implements
      */
     private void actualizeFrameTitle() {
         GraphDocument doc = (GraphDocument) docBox.getSelectedItem();
+        String descriptionLabel = getResString("description");
+        String modelName = gdcoll.getName();
         if (doc != null) {
-            setTitle(getResString("description") + " - " + gdcoll.getName() + " - " + doc.getTitle());
+            setTitle(descriptionLabel + " - " + modelName + " - " + doc.getTitle());
         } else {
-            setTitle(getResString("description") + " - " + gdcoll.getName() + " - " + getResString("uebersicht"));
+            setTitle(descriptionLabel + " - " + modelName + " - " + getResString("uebersicht"));
         }
     }
 
@@ -184,11 +199,13 @@ public final class ModelPropertyDialog extends AbstractPropertyDialog implements
         }
         actualizeFrameTitle();
         if (lastActiveDoc != null) {
-            lastActiveDoc.setDescription(textPane.getText());
+            String textPaneText = textPane.getText();
+            lastActiveDoc.setDescription(textPaneText);
         }
         if (activeDoc != null) {
             lastActiveDoc = activeDoc;
-            textPane.setText(activeDoc.getDescription());
+            String activeDocDescription = activeDoc.getDescription();
+            textPane.setText(activeDocDescription);
         }
     }
 
