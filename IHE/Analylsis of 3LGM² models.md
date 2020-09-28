@@ -77,4 +77,16 @@ Here you can select the wanted analysis. If you have selected an element beforeh
 ### 2. Right Click ###
 It is also possible to just right click on the component you want to analyze. This will offer you the analysis options available for this element type.
 
-![analysisRightClick.PNG](https://bitbucket.org/repo/9L6rMz/images/175494577-analysisRightClick.PNG)
+![analysisRightClickOption.PNG](https://bitbucket.org/repo/9L6rMz/images/2233704293-analysisRightClickOption.PNG)
+
+### Results ###
+Basically the analysis will highlight all relevant components, based on the question chosen.
+For an example we will check on **which application components and physical data processing components are needed to achieve the enterprise function *"Request for findings Imaging diagnostics / radiotherapy / nuclear medicine"* **
+
+![analysisResults1.PNG](https://bitbucket.org/repo/9L6rMz/images/748800925-analysisResults1.PNG)
+
+As you can see, the necessary application component and the physical data processing components are highlighted. The connections will also be highlighted. To have these shown for inter-layer connections you can either right click on an empty space on a layer or right click the component for which you want the connections to be shown and choose **Show Configurations**.
+
+![analysisResultsShowConf.PNG](https://bitbucket.org/repo/9L6rMz/images/551341026-analysisResultsShowConf.PNG)
+
+![analysisResults2.PNG](https://bitbucket.org/repo/9L6rMz/images/550805756-analysisResults2.PNG)
