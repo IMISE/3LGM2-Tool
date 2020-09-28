@@ -10,7 +10,7 @@ import javax.swing.JTabbedPane;
 
 import com.google.common.collect.ImmutableList;
 
-import de.imise.tool3lgm.graphtools.dialog.panel.ElementDialogPanel;
+import de.imise.tool3lgm.graphtools.dialog.element.panel.ElementDialogPanel;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.util.swing.component.tab.ReorderableTabbedPane;
 

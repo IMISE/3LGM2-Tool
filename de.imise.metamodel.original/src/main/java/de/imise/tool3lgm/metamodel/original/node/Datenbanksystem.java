@@ -1,8 +1,8 @@
 package de.imise.tool3lgm.metamodel.original.node;
 
-import static de.imise.tool3lgm.graphtools.dialog.panel.AbstractPathConnectionPanel.PanelLabelOption.LABEL_LAST_EDGE_CONNECTION_NAME;
+import static de.imise.tool3lgm.graphtools.dialog.element.panel.AbstractPathConnectionPanel.PanelLabelOption.LABEL_LAST_EDGE_CONNECTION_NAME;
 
-import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
+import de.imise.tool3lgm.graphtools.dialog.element.ElementPropertyDialog;
 import de.imise.tool3lgm.metamodel.original.edge.DbsDatVerbindung;
 import de.imise.tool3lgm.metamodel.original.edge.DbsDbvsVerbindung;
 import de.imise.tool3lgm.metamodel.original.edge.ObjLogspVerbindung;

@@ -6,7 +6,7 @@ import com.google.common.collect.ImmutableList;
 
 import de.imise.tool3lgm.graphtools.consistency.ErrorSolution;
 import de.imise.tool3lgm.graphtools.consistency.ErrorSolutionLibrary;
-import de.imise.tool3lgm.graphtools.dialog.panel.PathConnectionPanel;
+import de.imise.tool3lgm.graphtools.dialog.element.panel.PathConnectionPanel;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModelDefinition;
 import de.imise.tool3lgm.graphtools.path.metapaths.SimpleMetaPath;

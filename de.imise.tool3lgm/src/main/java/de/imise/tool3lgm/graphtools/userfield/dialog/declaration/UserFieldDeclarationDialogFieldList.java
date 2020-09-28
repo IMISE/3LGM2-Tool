@@ -1,7 +1,5 @@
 package de.imise.tool3lgm.graphtools.userfield.dialog.declaration;
 
-import static de.imise.tool3lgm.graphtools.userfield.CostingUtil.getDisplayableStyleName;
-
 import javax.swing.DefaultListModel;
 import javax.swing.JList;
 import javax.swing.ListSelectionModel;
@@ -60,7 +58,7 @@ public class UserFieldDeclarationDialogFieldList extends JList<NamedObjectContai
      * @param index
      */
     public void addEntry(final UserField userField, final int index) {
-        String name = userField.getName() + "  ( " + getUserFieldStyle(userField) + " )";
+        String name = userField.getName() + "  ( " + userField.getStyle() + " )";
         NamedObjectContainer<UserField> noc = new NamedObjectContainer<>(userField, name);
         model.add(index, noc);
     }
@@ -90,10 +88,10 @@ public class UserFieldDeclarationDialogFieldList extends JList<NamedObjectContai
      * @param u
      * @return String, der den ausgeschirebenen Style enthält.
      */
-    private static final String getUserFieldStyle(final UserField u) {
+    private static final String getUserFieldStyleDisplayName(final UserField u) {
         String userFieldStyle = "";
         if (u != null) {
-            userFieldStyle = getDisplayableStyleName(u.getStyle());
+            userFieldStyle = u.getDisplayableStyleName();
         }
         return userFieldStyle;
     }

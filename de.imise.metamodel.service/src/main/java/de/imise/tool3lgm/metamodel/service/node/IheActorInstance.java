@@ -1,7 +1,7 @@
 package de.imise.tool3lgm.metamodel.service.node;
 
-import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
-import de.imise.tool3lgm.graphtools.dialog.panel.ConnectedElementsTableDefinition;
+import de.imise.tool3lgm.graphtools.dialog.element.ElementPropertyDialog;
+import de.imise.tool3lgm.graphtools.dialog.element.panel.ConnectedElementsTableDefinition;
 import de.imise.tool3lgm.metamodel.service.edge.ApplicationSystem_IheActorInstance_Edge;
 import de.imise.tool3lgm.metamodel.service.edge.IheActorInstance_IheActorInstanceInterface_Edge;
 import de.imise.tool3lgm.metamodel.service.edge.IheActorInstance_SoftwareProduct_Edge;

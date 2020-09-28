@@ -3,7 +3,7 @@
  */
 package de.imise.tool3lgm.metamodel.service.node;
 
-import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
+import de.imise.tool3lgm.graphtools.dialog.element.ElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
 import de.imise.tool3lgm.metamodel.service.edge.Process_Function_Edge;
 

@@ -48,8 +48,8 @@ import javax.swing.text.JTextComponent;
 
 import com.google.common.collect.ImmutableList;
 
-import de.imise.tool3lgm.graphtools.dialog.AbstractElementPropertyDialog;
-import de.imise.tool3lgm.graphtools.dialog.panel.ElementDialogPanel;
+import de.imise.tool3lgm.graphtools.dialog.element.AbstractElementPropertyDialog;
+import de.imise.tool3lgm.graphtools.dialog.element.panel.ElementDialogPanel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;

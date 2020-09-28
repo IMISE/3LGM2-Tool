@@ -1,6 +1,9 @@
 package de.imise.tool3lgm.graphtools.path;
 
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.CompositionEdge;
@@ -10,6 +13,7 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.InstanciationEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.path.metapaths.AbstractMetaPath;
 import de.imise.tool3lgm.graphtools.path.metapaths.ElementaryMetaPath;
+import de.imise.tool3lgm.graphtools.path.metapaths.SimpleMetaPath;
 import de.imise.util.ReflectionUtils;
 
 /**
@@ -165,6 +169,32 @@ public class MetaPathFunctions {
             }
         }
         return true;
+    }
+
+    /**
+     * @param simpleMetaPath
+     * @param withSubClasses
+     *            if <code>true</code> all subclasses of thepath step
+     *            connecting classes are added too
+     * @return a set of all classes in the metapath. These are only the
+     *         path step connecting classes and not the edge classes.
+     */
+    public static final Set<Class<? extends ModelElement>> getAllPathStepsStartAndEndClasses(final SimpleMetaPath simpleMetaPath, final boolean withSubClasses) {
+        Set<Class<? extends ModelElement>> returnSet = new HashSet<>();
+        Class<? extends ModelElement> startClass = simpleMetaPath.getStartClass();
+        returnSet.add(startClass);
+        int metaPathLength = simpleMetaPath.length();
+        for (int i = 0; i < metaPathLength; i++) {
+            Class<? extends ModelElement> pathStepElementClass = simpleMetaPath.getPathStepElementClass(i);
+            if (MetaModel.isAbstract(pathStepElementClass)) {
+                MetaModel metaModel = simpleMetaPath.getMetaModel();
+                Collection<Class<? extends ModelElement>> classAndSubClasses = metaModel.getClassAndSubClasses(pathStepElementClass);
+                returnSet.addAll(classAndSubClasses);
+            } else {
+                returnSet.add(pathStepElementClass);
+            }
+        }
+        return returnSet;
     }
 
 }
