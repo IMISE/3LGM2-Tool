@@ -96,4 +96,25 @@ As you can see, the necessary application component and the physical data proces
 ![analysisResetResults.PNG](https://bitbucket.org/repo/9L6rMz/images/3840971573-analysisResetResults.PNG)
 
 ### Editor ###
-You can define your own analysis options. To do this choose the **Editor** in the analysis tab.
+You can define your own analysis options. To do this, choose the **Editor** in the analysis tab.
+
+![analysisTabEditor.PNG](https://bitbucket.org/repo/9L6rMz/images/2598217839-analysisTabEditor.PNG)
+
+This will open following window:
+
+![analysisEditorClean.PNG](https://bitbucket.org/repo/9L6rMz/images/2311358478-analysisEditorClean.PNG)
+
+Here you can define your own rules.
+
+On the Left you have the choice of given element types. Then you can decide if it should or shouldn't be connected to the element you choose on the right. With the plus button you can create further conditions following the choice of the element type from above.
+
+Afterwards you have the option to analyze an object of your choice with the ***Start analysis*** button. Or save it into the repository.
+
+If you chose to save it, then you can call it either through option **1. Repository** or **2. Right Click**.
+
+### Example ###
+Let's say the analysis **"Which application components are needed to achieve this enterprise function?"** didn't exist and we would want to create this.
+
+Since this analysis starts from a function, first we choose the **Function** element type. This object should be connected to a **Function organization unit combination**. This then is connected to the **Application component configuration** which then leads us to the final option the **Computer-based appl. component**.
+
+![analysisEditor.PNG](https://bitbucket.org/repo/9L6rMz/images/1671067454-analysisEditor.PNG)
