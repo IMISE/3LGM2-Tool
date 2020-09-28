@@ -5,6 +5,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.Action;
 import javax.swing.ComboBoxEditor;
@@ -182,6 +184,71 @@ public class HistoryComboBox extends JComboBox<String> implements KeyListener {
 
     @Override
     public void keyReleased(final KeyEvent e) {
+    }
+
+    /**
+     * @return the string of the selected icon
+     */
+    public String getText() {
+        return getText(this);
+    }
+
+    /**
+     * @param comboBox
+     * @return the string of the selected icon in the combobox
+     */
+    public static String getText(final JComboBox<?> comboBox) {
+        Object selectedItem = comboBox.getSelectedItem();
+        if (selectedItem == null) {
+            ComboBoxEditor editor = comboBox.getEditor();
+            Component editorComponent = editor.getEditorComponent();
+            if (editorComponent instanceof JTextComponent) {
+                JTextComponent textEditorComponent = (JTextComponent) editorComponent;
+                selectedItem = textEditorComponent.getText();
+            }
+            if (selectedItem == null) {
+                return null;
+            }
+        }
+        String value = String.valueOf(selectedItem);
+        return value;
+    }
+
+    /**
+     * @param comboBox
+     */
+    public void clearText() {
+        ComboBoxEditor editor = getEditor();
+        Component editorComponent = editor.getEditorComponent();
+        if (editorComponent instanceof JTextComponent) {
+            ((JTextComponent) editorComponent).setText("");
+        }
+    }
+
+    /**
+     * @param history
+     */
+    public void setHistory(final List<String> history) {
+        removeAllItems();
+        if (history != null) {
+            for (String item : history) {
+                addItem(item);
+            }
+        }
+        setSelectedIndex(-1);
+    }
+
+    /**
+     * @return all history entries as a list of strings
+     */
+    public List<String> getHistory() {
+        int itemCount = getItemCount();
+        List<String> history = new ArrayList<>(itemCount);
+        for (int i = 0; i < itemCount; i++) {
+            String item = getItemAt(i);
+            history.add(item);
+        }
+        return history;
     }
 
 }

@@ -2,7 +2,6 @@ package de.imise.tool3lgm.graphtools.userfield.dialog.declaration;
 
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
 import static de.imise.tool3lgm.graphtools.model.LGMChangeListener.LGMChangeType.DATA_CHANGED;
-import static de.imise.tool3lgm.graphtools.userfield.CostingUtil.getDisplayableStyleName;
 import static de.imise.tool3lgm.graphtools.userfield.UserField.Style.CHECK_BOX;
 import static de.imise.tool3lgm.graphtools.userfield.UserField.Style.CLASSIFICATION_NUMBER;
 import static de.imise.tool3lgm.graphtools.userfield.UserField.Style.CLASSIFICATION_NUMBER_FORMULA;
@@ -150,7 +149,7 @@ public final class UserFieldDeclarationDialog extends AbstractUserFieldDeclarati
     }
 
     private void addType(final UserField.Style style) {
-        userFieldTypeComboBox.addItem(style, getDisplayableStyleName(style));
+        userFieldTypeComboBox.addItem(style);
     }
 
     private ActionEvent lastActionEvent = null;

@@ -14,7 +14,6 @@ import com.google.common.base.Strings;
 
 import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
-import de.imise.tool3lgm.graphtools.userfield.UserField.Style;
 import de.imise.tool3lgm.graphtools.userfield.calculator.Calculator;
 
 /**
@@ -258,16 +257,6 @@ public class CostingUtil {
             edgeClass = metaModel.getClassForName(edgeClassName).asSubclass(Edge.class);
         }
         return edgeClass;
-    }
-
-    /**
-     * Gibt zu dem übergebenen {@link Style} den Lokalisierten Anzeigenamen des Styles zurück.
-     *
-     * @param styleValue
-     * @return Lokalisierten Anzeigenamen des Styles oder ""
-     */
-    public final static String getDisplayableStyleName(final UserField.Style style) {
-        return getResString(style.toString());
     }
 
 }

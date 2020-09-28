@@ -6,6 +6,7 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.Objects;
 
 import javax.swing.event.AncestorEvent;
@@ -19,10 +20,14 @@ import javax.swing.tree.TreePath;
 import de.imise.tool3lgm.MetaModelContext;
 import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.Tool3lgmConstants;
+import de.imise.tool3lgm.graphtools.dialog.search.SearchFunctions;
+import de.imise.tool3lgm.graphtools.dialog.search.SearchOptions;
+import de.imise.tool3lgm.graphtools.dialog.search.SearchResultView;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.model.template.TemplateLibrariesManager;
+import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
 import de.imise.tool3lgm.graphtools.view.pathtree.PathTreeDefinition;
 import de.imise.tool3lgm.graphtools.view.pathtree.PathTreeModel;
@@ -35,7 +40,7 @@ import de.imise.tool3lgm.gui.menu.ContextGenerator;
 /**
  * @author AXS (05.09.2019)
  */
-public class TemplateBrowserTree extends DynamicTree implements PropertyChangeListener, AncestorListener, TemplateView {
+public class TemplateBrowserTree extends DynamicTree implements SearchResultView, PropertyChangeListener, AncestorListener, TemplateView {
 
     /**
      * The event type this tree fires to its
@@ -102,6 +107,11 @@ public class TemplateBrowserTree extends DynamicTree implements PropertyChangeLi
     @Override
     public ContextGenerator getContextGenerator() {
         return Static.templateContextGenerator;
+    }
+
+    @Override
+    public PathTreeModel getModel() {
+        return pathTreeModel;
     }
 
     /**
@@ -240,6 +250,24 @@ public class TemplateBrowserTree extends DynamicTree implements PropertyChangeLi
         addSelectionPaths(path);
         if (path.length > 0) {
             scrollPathToVisible(path[path.length - 1]);
+        }
+    }
+
+    @Override
+    public void showResult(final GraphDocument doc, final SearchOptions options) {
+        resetView();
+        for (GDCollection template : getDisplayedTemplates()) {
+            template.deselectAll();
+            GraphDocument selectedTemplateDoc = template.getSelectedDoc();
+            List<ElementContainer> result = SearchFunctions.getResult(selectedTemplateDoc, options);
+            template.addToSelection(result);
+        }
+        setSelection();
+    }
+
+    private void resetView() {
+        for (int i = getRowCount() - 1; i > 0; i--) {
+            collapseRow(i);
         }
     }
 

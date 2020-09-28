@@ -11,9 +11,9 @@ import javax.swing.JTabbedPane;
 
 import com.google.common.collect.ImmutableList;
 
-import de.imise.tool3lgm.graphtools.dialog.panel.AbstractPathConnectionPanel;
-import de.imise.tool3lgm.graphtools.dialog.panel.ElementDialogPanel;
-import de.imise.tool3lgm.graphtools.dialog.panel.MultiPanelElementDialogPanel;
+import de.imise.tool3lgm.graphtools.dialog.element.panel.AbstractPathConnectionPanel;
+import de.imise.tool3lgm.graphtools.dialog.element.panel.ElementDialogPanel;
+import de.imise.tool3lgm.graphtools.dialog.element.panel.MultiPanelElementDialogPanel;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.path.metapaths.MetaPath;
 import de.imise.util.swing.component.tab.ReorderableTabbedPane;

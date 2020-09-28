@@ -23,7 +23,7 @@ import javax.swing.JFrame;
 import javax.swing.JMenuItem;
 
 import de.imise.tool3lgm.Tool3lgm;
-import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
+import de.imise.tool3lgm.graphtools.dialog.element.ElementPropertyDialog;
 import de.imise.tool3lgm.log.Log;
 import de.imise.tool3lgm.userproperties.UserProperties;
 

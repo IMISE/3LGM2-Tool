@@ -194,6 +194,11 @@ public final class UserField implements Cloneable, Comparator<UserFieldTarget>, 
             }
 
         }
+
+        @Override
+        public String toString() {
+            return getResString(name());
+        }
     }
 
     //Die Konstanten für die Styles
@@ -953,6 +958,13 @@ public final class UserField implements Cloneable, Comparator<UserFieldTarget>, 
             }
         }
         return retVal;
+    }
+
+    /**
+     * @return Displayable name of the style of this userfield
+     */
+    public String getDisplayableStyleName() {
+        return style.toString();
     }
 
     /**

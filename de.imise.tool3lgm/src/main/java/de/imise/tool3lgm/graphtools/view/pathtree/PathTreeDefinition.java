@@ -1,11 +1,14 @@
 package de.imise.tool3lgm.graphtools.view.pathtree;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import de.imise.tool3lgm.MetaModelContext;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModelSpecificAdapter;
+import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 
 /**
  * @author AXS (01.09.2019)
@@ -82,6 +85,19 @@ public class PathTreeDefinition extends MetaModelSpecificAdapter implements Iter
             return false;
         }
         return true;
+    }
+
+    /**
+     * @return a set of all classes which are defined as vissible through
+     *         this tree branch
+     */
+    public final Set<Class<? extends ModelElement>> getVisibleElementTypes() {
+        Set<Class<? extends ModelElement>> visibleElementTypes = new HashSet<>();
+        for (PathTreeBranchDefinition branch : branches) {
+            Set<Class<? extends ModelElement>> branchVisibleElementTypes = branch.getVisibleElementTypes();
+            visibleElementTypes.addAll(branchVisibleElementTypes);
+        }
+        return visibleElementTypes;
     }
 
 }

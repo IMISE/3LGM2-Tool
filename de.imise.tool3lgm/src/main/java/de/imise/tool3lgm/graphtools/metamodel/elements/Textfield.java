@@ -1,6 +1,6 @@
 package de.imise.tool3lgm.graphtools.metamodel.elements;
 
-import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
+import de.imise.tool3lgm.graphtools.dialog.element.ElementPropertyDialog;
 
 public class Textfield extends Node {
 
