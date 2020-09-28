@@ -1210,7 +1210,7 @@ public final class MetaModel extends CoreMetaModel {
     public final Collection<Class<? extends ModelElement>> getInstanciableAssignableClasses(final Class<? extends ModelElement> elementClass, final boolean withoutSubClassesOfInstanciableClasses) {
         if (elementClassToNonAbstractAssignableElementClasses.containsKey(elementClass)) {
             Collection<Class<? extends ModelElement>> classes = elementClassToNonAbstractAssignableElementClasses.get(elementClass);
-            if (classes.size() == 0 && classes.iterator().next() == null) {
+            if (classes.isEmpty()) {
                 return EMPTY_ELEMENT_CLASS_COLLECTION;
             }
             //remove subclasses if needed
