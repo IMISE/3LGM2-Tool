@@ -149,7 +149,7 @@ public final class PathTreeBranchDefinition extends MetaModelSpecificAdapter imp
      *         this tree branch
      */
     public final Set<Class<? extends ModelElement>> getVisibleElementTypes() {
-        return MetaPathFunctions.getAllPathStepsSartAndEndClasses(elementsPath);
+        return MetaPathFunctions.getAllPathStepsStartAndEndClasses(elementsPath, true);
     }
 
 }

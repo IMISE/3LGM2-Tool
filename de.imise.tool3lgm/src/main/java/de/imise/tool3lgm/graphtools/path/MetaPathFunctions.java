@@ -1,5 +1,6 @@
 package de.imise.tool3lgm.graphtools.path;
 
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -172,15 +173,26 @@ public class MetaPathFunctions {
 
     /**
      * @param simpleMetaPath
+     * @param withSubClasses
+     *            if <code>true</code> all subclasses of thepath step
+     *            connecting classes are added too
      * @return a set of all classes in the metapath. These are only the
      *         path step connecting classes and not the edge classes.
      */
-    public static final Set<Class<? extends ModelElement>> getAllPathStepsSartAndEndClasses(final SimpleMetaPath simpleMetaPath) {
+    public static final Set<Class<? extends ModelElement>> getAllPathStepsStartAndEndClasses(final SimpleMetaPath simpleMetaPath, final boolean withSubClasses) {
         Set<Class<? extends ModelElement>> returnSet = new HashSet<>();
-        returnSet.add(simpleMetaPath.getStartClass());
-        for (int i = 0; i < simpleMetaPath.length() - 1; i++) {
+        Class<? extends ModelElement> startClass = simpleMetaPath.getStartClass();
+        returnSet.add(startClass);
+        int metaPathLength = simpleMetaPath.length();
+        for (int i = 0; i < metaPathLength; i++) {
             Class<? extends ModelElement> pathStepElementClass = simpleMetaPath.getPathStepElementClass(i);
-            returnSet.add(pathStepElementClass);
+            if (MetaModel.isAbstract(pathStepElementClass)) {
+                MetaModel metaModel = simpleMetaPath.getMetaModel();
+                Collection<Class<? extends ModelElement>> classAndSubClasses = metaModel.getClassAndSubClasses(pathStepElementClass);
+                returnSet.addAll(classAndSubClasses);
+            } else {
+                returnSet.add(pathStepElementClass);
+            }
         }
         return returnSet;
     }

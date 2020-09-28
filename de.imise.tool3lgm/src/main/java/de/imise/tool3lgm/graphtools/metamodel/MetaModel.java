@@ -1171,6 +1171,24 @@ public final class MetaModel extends CoreMetaModel {
     }
 
     /**
+     * @return a collection containing the given class and all its subclasses
+     */
+    public Collection<Class<? extends ModelElement>> getClassAndSubClasses(final Class<? extends ModelElement> elementClass) {
+        Collection<Class<? extends ModelElement>> returnCollection = new HashSet<>();
+        returnCollection.add(elementClass);
+        Collection<Class<? extends ModelElement>> instanciableAssignableClasses = getInstanciableAssignableClasses(elementClass);
+        for (Class<? extends ModelElement> subElementClass : instanciableAssignableClasses) {
+            returnCollection.add(subElementClass);
+            Class<? extends ModelElement> superClass = subElementClass.getSuperclass().asSubclass(ModelElement.class);
+            while (superClass != ModelElement.class && superClass != elementClass) {
+                returnCollection.add(superClass);
+                superClass = superClass.getSuperclass().asSubclass(ModelElement.class);
+            }
+        }
+        return returnCollection;
+    }
+
+    /**
      * Liefert alle nichtabstrakten, zu den übergebenen Klassen zuweisungskompatiblen Element- oder Kantenklassen. Die übergebene Klasse selbst ist in
      * den Rückgabewerten enthalten, wenn sie nichtabstract ist.
      *
