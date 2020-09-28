@@ -4,6 +4,7 @@ import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.util.Set;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -208,7 +209,6 @@ public class TemplateTreeSearchOptionsPanel extends BasicSearchOptionsPanel {
      */
     @Override
     protected void fillElementClassBox() {
-
         elementClassBox.removeAllItems();
         elementClassBox.addItem(ModelElement.class, getResString("SEARCH_DIALOG_all_element_types"));
         elementClassBox.addSeparator(true);
@@ -216,8 +216,10 @@ public class TemplateTreeSearchOptionsPanel extends BasicSearchOptionsPanel {
         PathTreeModel model = ((TemplateBrowserTree) resultTargetView).getModel();
         PathTreeDefinition pathTreeDefinition = model.getPathTreeDefinition();
         ElementsNameBuilder elementsNameBuilder = pathTreeDefinition.getElementsNameBuilder();
-        for (Class<? extends ModelElement> elementClass : pathTreeDefinition.getVisibleElementTypes()) {
-            elementClassBox.addItem(elementClass, elementsNameBuilder.getDisplayableFullName(elementClass));
+        Set<Class<? extends ModelElement>> visibleElementTypes = pathTreeDefinition.getVisibleElementTypes();
+        for (Class<? extends ModelElement> elementClass : visibleElementTypes) {
+            String displayableFullName = elementsNameBuilder.getDisplayableFullName(elementClass);
+            elementClassBox.addItem(elementClass, displayableFullName);
         }
         elementClassBox.setSelectedObject(ModelElement.class);
     }
