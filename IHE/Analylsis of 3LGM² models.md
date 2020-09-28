@@ -90,3 +90,10 @@ As you can see, the necessary application component and the physical data proces
 ![analysisResultsShowConf.PNG](https://bitbucket.org/repo/9L6rMz/images/551341026-analysisResultsShowConf.PNG)
 
 ![analysisResults2.PNG](https://bitbucket.org/repo/9L6rMz/images/550805756-analysisResults2.PNG)
+
+**To reset the results** you can click the **Reset Results** option by going to **Analysis** in the menu bar.
+
+![analysisResetResults.PNG](https://bitbucket.org/repo/9L6rMz/images/3840971573-analysisResetResults.PNG)
+
+### Editor ###
+You can define your own analysis options. To do this choose the **Editor** in the analysis tab.
