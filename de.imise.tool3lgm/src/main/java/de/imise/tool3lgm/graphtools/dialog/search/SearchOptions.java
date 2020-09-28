@@ -22,11 +22,11 @@ public class SearchOptions {
      */
     protected enum UserFieldCheckBoxState {
         /** Konstante für Checkboxen Suchen (aktivierte und deaktivierte) */
-        CHECKBOXMODE_ALL,
+        CHECKBOX_STATE_ALL,
         /** Konstante für aktivierte Checkboxen */
-        CHECKBOXMODE_ACTIVATED,
+        CHECKBOX_STATE_CHECKED,
         /** Konstante für deaktivierte Checkboxen Suchen */
-        CHECKBOXMODE_NOT_ACTIVATED;
+        CHECKBOX_STATE_NOT_CHECKED;
 
         @Override
         public String toString() {

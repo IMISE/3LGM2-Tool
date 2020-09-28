@@ -62,7 +62,7 @@ public abstract class BasicSearchOptionsPanel extends JPanel implements ItemList
     protected final HistoryComboBox elementUserField = new HistoryComboBox();
 
     /** beinhaltet den Wert der oberen Konstanten */
-    protected UserFieldCheckBoxState userFieldCheckBoxState = UserFieldCheckBoxState.CHECKBOXMODE_ALL;
+    protected UserFieldCheckBoxState userFieldCheckBoxState = UserFieldCheckBoxState.CHECKBOX_STATE_ALL;
 
     /** Checkbox für ignore case Bezeichnung */
     protected final JCheckBox checkNameCaseSensitive = createCaseSensitiveCheckBox(BooleanProperty.OPTION_SEARCH_DIALOG_CASE_SENSITIVE_NAME.is());
@@ -79,7 +79,7 @@ public abstract class BasicSearchOptionsPanel extends JPanel implements ItemList
     /** Typbox der benutzerdef. Eigenschaften wie Checkbox, Textfeld usw. */
     protected AlphabeticalComboBox userFieldStyleComboBox;
 
-    /** Combobox Elementeart */
+    /** Combobox Elementart */
     protected final AlphabeticalComboBox elementClassBox = new AlphabeticalComboBox();
 
     /** Combobox Modell */
@@ -95,22 +95,22 @@ public abstract class BasicSearchOptionsPanel extends JPanel implements ItemList
     protected final SearchResultView resultTargetView;
 
     /**  */
-    protected JLabel labelModel = new JLabel(getResString("SEARCH_DIALOG_USERFIELD_Modell"));
+    protected JLabel labelModel = new JLabel(getResString("SEARCH_DIALOG_model"));
 
     /**  */
-    protected JLabel labelSubmodel = new JLabel(getResString("SEARCH_DIALOG_USERFIELD_Teilmodell"));
+    protected JLabel labelSubmodel = new JLabel(getResString("SEARCH_DIALOG_submodel"));
 
     /**  */
-    protected JLabel labelElementType = new JLabel(getResString("SEARCH_DIALOG_USERFIELD_Elementeart"));
+    protected JLabel labelElementType = new JLabel(getResString("SEARCH_DIALOG_element_type"));
 
     /**  */
-    protected JLabel labelName = new JLabel(getResString("SEARCH_DIALOG_USERFIELD_NAME"));
+    protected JLabel labelName = new JLabel(getResString("SEARCH_DIALOG_name"));
 
     /**  */
-    protected JLabel labelDescription = new JLabel(getResString("SEARCH_DIALOG_USERFIELD_BESCHREIBUNG"));
+    protected JLabel labelDescription = new JLabel(getResString("SEARCH_DIALOG_description"));
 
     /** The defalut action that will only perform the search (where the action source is irrelevant) */
-    private final Action searchActionDefault = new AbstractAction(getResString("SEARCH_DIALOG_USERFIELD_Button")) {
+    private final Action searchActionDefault = new AbstractAction(getResString("SEARCH_DIALOG_search")) {
         @Override
         public void actionPerformed(final ActionEvent e) {
             callSearch(false);
@@ -153,7 +153,7 @@ public abstract class BasicSearchOptionsPanel extends JPanel implements ItemList
      * @return
      */
     public static JCheckBox createCaseSensitiveCheckBox(final boolean selected) {
-        return new JCheckBox(getResString("SEARCH_DIALOG_USERFIELD_CaseSensitive"), selected);
+        return new JCheckBox(getResString("SEARCH_DIALOG_case_sensitive"), selected);
     }
 
     /**
@@ -215,10 +215,10 @@ public abstract class BasicSearchOptionsPanel extends JPanel implements ItemList
     protected void fillElementClassBox() {
 
         elementClassBox.removeAllItems();
-        elementClassBox.addItem(ModelElement.class, getResString("SEARCH_DIALOG_USERFIELD_AlleElementeArten"));
+        elementClassBox.addItem(ModelElement.class, getResString("SEARCH_DIALOG_all_element_types"));
         elementClassBox.addSeparator(true);
 
-        elementClassBox.addItem(Node.class, getResString("SEARCH_DIALOG_USERFIELD_AlleKnoten"));
+        elementClassBox.addItem(Node.class, getResString("SEARCH_DIALOG_all_nodes"));
         elementClassBox.addSeparator(true);
         GDCollection gdcoll = (GDCollection) modelBox.getSelectedObject();
         if (gdcoll != null) {
@@ -231,7 +231,7 @@ public abstract class BasicSearchOptionsPanel extends JPanel implements ItemList
                 elementClassBox.addItem(elementClass, elementsNameBuilder.getDisplayableFullName(elementClass));
             }
             elementClassBox.addSeparator(true);
-            elementClassBox.addItem(Edge.class, getResString("SEARCH_DIALOG_USERFIELD_AlleKanten"));
+            elementClassBox.addItem(Edge.class, getResString("SEARCH_DIALOG_all_edges"));
             elementClassBox.addSeparator(true);
 
             for (Class<? extends Edge> edgeClass : metaModel.allEdgesSet) {
@@ -261,10 +261,10 @@ public abstract class BasicSearchOptionsPanel extends JPanel implements ItemList
      * Tooltips an wichtigste Elemente
      */
     private void addToolTips() {
-        searchButton.setToolTipText(getResString("SEARCH_DIALOG_TT_Button"));
-        elementName.setToolTipText(getResString("SEARCH_DIALOG_TT_Textfield"));
-        elementUserField.setToolTipText(getResString("SEARCH_DIALOG_TT_Textfield"));
-        elementDescription.setToolTipText(getResString("SEARCH_DIALOG_TT_Textfield"));
+        searchButton.setToolTipText(getResString("SEARCH_DIALOG_TOOLTIP_search"));
+        elementName.setToolTipText(getResString("SEARCH_DIALOG_TOOLTIP_pattern"));
+        elementUserField.setToolTipText(getResString("SEARCH_DIALOG_TOOLTIP_pattern"));
+        elementDescription.setToolTipText(getResString("SEARCH_DIALOG_TOOLTIP_pattern"));
     }
 
     /**
@@ -319,7 +319,7 @@ public abstract class BasicSearchOptionsPanel extends JPanel implements ItemList
 
         // Auswahlmodi für die benutzerdef. Eigenschaften
         userFieldStyleComboBox = new AlphabeticalComboBox();
-        userFieldStyleComboBox.addItem(null, getResString("SEARCH_DIALOG_USERFIELD_all"));
+        userFieldStyleComboBox.addItem(null, getResString("SEARCH_DIALOG_USERFIELD_type_all"));
         for (Style style : Style.values()) {
             if (style != Style.FORMAT) {
                 userFieldStyleComboBox.addItem(style);
@@ -351,7 +351,7 @@ public abstract class BasicSearchOptionsPanel extends JPanel implements ItemList
             if (userFieldCheckBoxStateSelectedIndex >= 0) {
                 userFieldCheckBoxState = userFieldCheckBoxStateComboBox.getItemAt(userFieldCheckBoxStateSelectedIndex);
             } else {
-                userFieldCheckBoxState = UserFieldCheckBoxState.CHECKBOXMODE_ALL;
+                userFieldCheckBoxState = UserFieldCheckBoxState.CHECKBOX_STATE_ALL;
             }
         }
         callSearch();

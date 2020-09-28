@@ -101,10 +101,10 @@ public class SearchDialogOptionsPanel extends BasicSearchOptionsPanel {
         // Zeile 1 Subpanel
         JPanel userFieldPanel = new JPanel();
         userFieldPanel.setLayout(new GridBagLayout());
-        userFieldPanel.setBorder(BorderFactory.createTitledBorder(getResString("SEARCH_DIALOG_USERFIELD_benutzdef_eig")));
+        userFieldPanel.setBorder(BorderFactory.createTitledBorder(getResString("SEARCH_DIALOG_with_userfields")));
 
-        JLabel userfieldproperty = new JLabel(getResString("SEARCH_DIALOG_USERFIELD_Attributtyp"));
-        userfieldproperty.setToolTipText(getResString("SEARCH_DIALOG_USERFIELD_Attributtyp_TT"));
+        JLabel userfieldproperty = new JLabel(getResString("SEARCH_DIALOG_USERFIELD_type"));
+        userfieldproperty.setToolTipText(getResString("SEARCH_DIALOG_USERFIELD_TOOLTIP_type"));
         userFieldPanel.add(userfieldproperty, constraints);
 
         constraints.gridx++;
@@ -117,8 +117,8 @@ public class SearchDialogOptionsPanel extends BasicSearchOptionsPanel {
         constraints.gridx = 0;
         constraints.gridy++;
         constraints.fill = GridBagConstraints.NONE;
-        JLabel containingText = new JLabel(getResString("SEARCH_DIALOG_USERFIELD_Text"));
-        containingText.setToolTipText(getResString("SEARCH_DIALOG_USERFIELD_Text_TT"));
+        JLabel containingText = new JLabel(getResString("SEARCH_DIALOG_USERFIELD_text"));
+        containingText.setToolTipText(getResString("SEARCH_DIALOG_USERFIELD_TOOLTIP_text"));
         userFieldPanel.add(containingText, constraints);
 
         constraints.gridx++;
@@ -133,7 +133,7 @@ public class SearchDialogOptionsPanel extends BasicSearchOptionsPanel {
         // Zeile 3 Checkboxsuche
         constraints.gridx = 0;
         constraints.gridy++;
-        JLabel checkboxFind = new JLabel(getResString("SEARCH_DIALOG_USERFIELD_CB_filter"));
+        JLabel checkboxFind = new JLabel(getResString("SEARCH_DIALOG_USERFIELD_checkbox_state"));
         userFieldPanel.add(checkboxFind, constraints);
 
         constraints.gridx = 1;
@@ -147,7 +147,7 @@ public class SearchDialogOptionsPanel extends BasicSearchOptionsPanel {
         constraints.fill = GridBagConstraints.HORIZONTAL;
         add(userFieldPanel, constraints);
 
-        userFieldStyleComboBox.setSelectedItem(getResString("SEARCH_DIALOG_USERFIELD_all"));
+        userFieldStyleComboBox.setSelectedItem(getResString("SEARCH_DIALOG_USERFIELD_type_all"));
 
         // Searchbutton
         constraints.gridy++;

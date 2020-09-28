@@ -37,7 +37,7 @@ public class SearchFunctions {
             try {
                 pattern = Pattern.compile(value);
             } catch (PatternSyntaxException error) {
-                Log.show(Log.FATAL, getResString("SEARCH_DIALOG_REGEXP_HINT") + "\n" + error, error);
+                Log.show(Log.FATAL, getResString("SEARCH_DIALOG_regexp_hint") + "\n" + error, error);
             }
         }
         return pattern;
@@ -206,11 +206,11 @@ public class SearchFunctions {
                     }
                     Matcher matchNameOfCheckBox = patternUserFields.matcher(userFieldName);
                     if (matchNameOfCheckBox.find()) {
-                        if (checkBoxMode == UserFieldCheckBoxState.CHECKBOXMODE_ACTIVATED && userFieldInputValue.equals("true")) {
+                        if (checkBoxMode == UserFieldCheckBoxState.CHECKBOX_STATE_CHECKED && userFieldInputValue.equals("true")) {
                             return true;
-                        } else if (checkBoxMode == UserFieldCheckBoxState.CHECKBOXMODE_NOT_ACTIVATED && userFieldInputValue.equals("false")) {
+                        } else if (checkBoxMode == UserFieldCheckBoxState.CHECKBOX_STATE_NOT_CHECKED && userFieldInputValue.equals("false")) {
                             return true;
-                        } else if (checkBoxMode == UserFieldCheckBoxState.CHECKBOXMODE_ALL) {
+                        } else if (checkBoxMode == UserFieldCheckBoxState.CHECKBOX_STATE_ALL) {
                             return true;
                         }
                     }

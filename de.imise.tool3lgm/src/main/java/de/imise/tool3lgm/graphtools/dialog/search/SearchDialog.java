@@ -38,7 +38,7 @@ public class SearchDialog extends JDialog {
         // um überblenden zu verhindern
         setMinimumSize(new Dimension(600, 400));
 
-        setTitle(getResString("SEARCH_DIALOG_TITLE"));
+        setTitle(getResString("SEARCH_DIALOG_title"));
 
         Container contentPane = getContentPane();
         contentPane.setLayout(new BorderLayout());

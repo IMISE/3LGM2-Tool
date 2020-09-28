@@ -41,7 +41,7 @@ public class TemplateTreeSearchOptionsPanel extends BasicSearchOptionsPanel {
         super(tree, new GridBagLayout());
         expanded = false;
         expandButton = new JButton("|");
-        expandButton.setToolTipText(getResString("SEARCH_DIALOG_EXPAND_Button_TT"));
+        expandButton.setToolTipText(getResString("SEARCH_TEMPLATE_TOOLTIP_more_options"));
 
         GridBagConstraints constraints = new GridBagConstraints();
 
@@ -98,10 +98,10 @@ public class TemplateTreeSearchOptionsPanel extends BasicSearchOptionsPanel {
     public final void showFullPanel(final boolean full) {
         if (expanded) {
             showPartlyPanel();
-            expandButton.setToolTipText(getResString("SEARCH_DIALOG_EXPAND_Button_TT"));
+            expandButton.setToolTipText(getResString("SEARCH_TEMPLATE_TOOLTIP_more_options"));
         } else {
             showFullPanel();
-            expandButton.setToolTipText(getResString("SEARCH_DIALOG_CONTRACT_Button_TT"));
+            expandButton.setToolTipText(getResString("SEARCH_TEMPLATE_TOOLTIP_less_options"));
         }
         revalidate();
         repaint();
@@ -210,7 +210,7 @@ public class TemplateTreeSearchOptionsPanel extends BasicSearchOptionsPanel {
     protected void fillElementClassBox() {
 
         elementClassBox.removeAllItems();
-        elementClassBox.addItem(ModelElement.class, getResString("SEARCH_DIALOG_USERFIELD_AlleElementeArten"));
+        elementClassBox.addItem(ModelElement.class, getResString("SEARCH_DIALOG_all_element_types"));
         elementClassBox.addSeparator(true);
 
         PathTreeModel model = ((TemplateBrowserTree) resultTargetView).getModel();

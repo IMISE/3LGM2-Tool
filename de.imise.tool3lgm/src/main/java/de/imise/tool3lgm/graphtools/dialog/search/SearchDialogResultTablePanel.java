@@ -94,9 +94,9 @@ public class SearchDialogResultTablePanel extends JPanel implements SearchResult
      */
     private static final DefaultTableModel getDefaultTableModel() {
         DefaultTableModel mod = new DefaultTableModel();
-        mod.addColumn(getResString("SEARCH_DIALOG_USERFIELD_Col1"));
-        mod.addColumn(getResString("SEARCH_DIALOG_USERFIELD_Col2"));
-        mod.addColumn(getResString("SEARCH_DIALOG_USERFIELD_Col3"));
+        mod.addColumn(getResString("SEARCH_DIALOG_result_table_Col1"));
+        mod.addColumn(getResString("SEARCH_DIALOG_result_table_Col2"));
+        mod.addColumn(getResString("SEARCH_DIALOG_result_table_Col3"));
         return mod;
     }
     /**
