@@ -215,6 +215,17 @@ public class HistoryComboBox extends JComboBox<String> implements KeyListener {
     }
 
     /**
+     * @param comboBox
+     */
+    public void clearText() {
+        ComboBoxEditor editor = getEditor();
+        Component editorComponent = editor.getEditorComponent();
+        if (editorComponent instanceof JTextComponent) {
+            ((JTextComponent) editorComponent).setText("");
+        }
+    }
+
+    /**
      * @param history
      */
     public void setHistory(final List<String> history) {

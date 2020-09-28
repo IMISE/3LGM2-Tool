@@ -28,9 +28,9 @@ import javax.swing.JPanel;
 import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
 import javax.swing.plaf.ActionMapUIResource;
-import javax.swing.text.JTextComponent;
 
 import de.imise.tool3lgm.Static;
+import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
 import de.imise.tool3lgm.graphtools.dialog.search.SearchOptions.UserFieldCheckBoxState;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
@@ -48,7 +48,10 @@ import de.imise.util.swing.component.AlphabeticalComboBox;
 import de.imise.util.swing.component.HistoryComboBox;
 
 /**
- * @author AXS (23.09.2020)
+ * This panel contains all GUI components whcih are needed to specify a
+ * search in model files.
+ *
+ * @author N.N. (original SearchDialog); AXS (23.09.2020)
  */
 public abstract class BasicSearchOptionsPanel extends JPanel implements ItemListener {
 
@@ -133,14 +136,15 @@ public abstract class BasicSearchOptionsPanel extends JPanel implements ItemList
         this.resultTargetView = resultTargetView;
         // Selectboxen befüllen
         fillModelBox();
-        addToolTips();
-
         addSearchButtonKeyListener();
+
+        //add actions
         searchButton.setAction(searchActionDefault);
         elementClassBox.setAction(searchActionDefault);
         modelBox.setAction(searchActionWithUpdateSubmodelAndClassBoxes);
         subModelBox.setAction(searchActionDefault);
 
+        addToolTips(); //add tooltips AFTER adding the actions
         addComboboxListeners();
         addCheckBoxListeners();
 
@@ -246,25 +250,28 @@ public abstract class BasicSearchOptionsPanel extends JPanel implements ItemList
      * Suchfelder leeren
      */
     public final void removeSearchItems() {
-        if (elementName.getEditor().getEditorComponent() instanceof JTextComponent) {
-            ((JTextComponent) elementName.getEditor().getEditorComponent()).setText("");
-        }
-        if (elementName.getEditor().getEditorComponent() instanceof JTextComponent) {
-            ((JTextComponent) elementDescription.getEditor().getEditorComponent()).setText("");
-        }
-        if (elementName.getEditor().getEditorComponent() instanceof JTextComponent) {
-            ((JTextComponent) elementUserField.getEditor().getEditorComponent()).setText("");
-        }
+        elementName.clearText();
+        elementDescription.clearText();
+        elementUserField.clearText();
     }
 
     /**
      * Tooltips an wichtigste Elemente
      */
     private void addToolTips() {
-        searchButton.setToolTipText(getResString("SEARCH_DIALOG_TOOLTIP_search"));
-        elementName.setToolTipText(getResString("SEARCH_DIALOG_TOOLTIP_pattern"));
-        elementUserField.setToolTipText(getResString("SEARCH_DIALOG_TOOLTIP_pattern"));
-        elementDescription.setToolTipText(getResString("SEARCH_DIALOG_TOOLTIP_pattern"));
+        setToolTip(searchButton, "SEARCH_DIALOG_TOOLTIP_search");
+        setToolTip(elementName, "SEARCH_DIALOG_TOOLTIP_pattern");
+        setToolTip(elementUserField, "SEARCH_DIALOG_TOOLTIP_pattern");
+        setToolTip(elementDescription, "SEARCH_DIALOG_TOOLTIP_pattern");
+    }
+
+    /**
+     * @param component
+     * @param toolTipResKeySource
+     */
+    public static final void setToolTip(final JComponent component, final Object toolTipResKeySource) {
+        String toolTip = Tool3lgmConstants.getResString(toolTipResKeySource);
+        component.setToolTipText(toolTip);
     }
 
     /**
@@ -272,7 +279,7 @@ public abstract class BasicSearchOptionsPanel extends JPanel implements ItemList
      */
     private void addSearchButtonKeyListener() {
         //Buttons reagieren nromalerweise immer nur auf Space. Hier wird das so ersetzt, dass es auf Space und Enter reagiert
-        String actionKeyStartSearch = "ACTION_KEY_START_SEARCH"; //beliebiger String! wird nur bebraucht, um zwischen der Keymap und der ActionMap zu mappen
+        String actionKeyStartSearch = "ACTION_KEY_START_SEARCH"; //beliebiger String! wird nur gebraucht, um zwischen der Keymap und der ActionMap zu mappen
         InputMap keyMap = new ComponentInputMap(searchButton);
         keyMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0), actionKeyStartSearch);
         keyMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_SPACE, 0), actionKeyStartSearch);
