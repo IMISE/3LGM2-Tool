@@ -106,7 +106,7 @@ This will open following window:
 
 Here you can define your own rules.
 
-On the Left you have the choice of given element types. Then you can decide if it should or shouldn't be connected to the element you choose on the right. With the plus button you can create further conditions following the choice of the element type from above.
+On the Left you have the choice of given element types. Then you can decide if it should or shouldn't be connected to the element you choose on the right. If nothing is chosen in the right side, then every option on the right is considered. With the plus button you can create further conditions following the choice of the element type from above.
 
 Afterwards you have the option to analyze an object of your choice with the ***Start analysis*** button. Or save it into the repository.
 
