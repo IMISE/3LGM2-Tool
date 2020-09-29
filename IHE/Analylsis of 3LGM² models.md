@@ -112,9 +112,64 @@ Afterwards you have the option to analyze an object of your choice with the ***S
 
 If you chose to save it, then you can call it either through option **1. Repository** or **2. Right Click**.
 
-### Example ###
+#### Example ####
 Let's say the analysis **"Which application components are needed to achieve this enterprise function?"** didn't exist and we would want to create this.
 
 Since this analysis starts from a function, first we choose the **Function** element type. This object should be connected to a **Function organization unit combination**. This then is connected to the **Application component configuration** which then leads us to the final option the **Computer-based appl. component**.
 
 ![analysisEditor.PNG](https://bitbucket.org/repo/9L6rMz/images/1671067454-analysisEditor.PNG)
+
+### Redundancy Analysis ###
+Furthermore you have the options to do certain redundancy analysis.
+
+![analysisTabRedundancy.PNG](https://bitbucket.org/repo/9L6rMz/images/2206756302-analysisTabRedundancy.PNG)
+
+This opens a window, allowing you to choose between following options:
+
+* Application components concerning Functions
+
+* Computer-based appl. components concerning Functions
+
+* Paper-based appl. components concerning Functions
+
+* Software products concerning Functions
+
+* Database systems concerning Entity types
+
+* Self defined analysis
+
+#### Redundancy of Functions regarding Application component configurations ####
+
+This option shows a number on the bottom right corner of each **function**.
+
+![redundancyAnalysisFunction.PNG](https://bitbucket.org/repo/9L6rMz/images/2893024423-redundancyAnalysisFunction.PNG)
+
+* **1**: this function is supported by multiple application components
+
+* **0**: this function is supported by a single application component
+
+* **-1**: this function is not supported by any application component
+
+On the top you can see the:
+
+* Redundancy factor: percentage of functions, that are supported by multiple applications
+
+* Undersaturation factor: percentage of functions, that aren't supported by any application
+
+#### Redundancy of Entity types regarding Logical memories ####
+
+This option shows a number on the bottom right corner of each **entity type**.
+
+![redundancyAnalysisEntity.PNG](https://bitbucket.org/repo/9L6rMz/images/3867167014-redundancyAnalysisEntity.PNG)
+
+* **1**: this entity type is stored in multiple database systems
+
+* **0**: this entity type is stored in a single database system
+
+* **-1**: this entity type is not stored in any database system
+
+On the top you can see the:
+
+* Redundancy factor: percentage of entity types, that are stored in database systems
+
+* Undersaturation factor: percentage of entity types, that aren't stored in any database system
