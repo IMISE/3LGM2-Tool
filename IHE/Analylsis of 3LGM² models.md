@@ -152,9 +152,9 @@ This option shows a number on the bottom right corner of each **function**.
 
 On the top you can see the:
 
-* Redundancy factor: percentage of functions, that are supported by multiple applications
+* **Redundancy factor**: percentage of functions, that are supported by multiple applications
 
-* Undersaturation factor: percentage of functions, that aren't supported by any application
+* **Undersaturation factor**: percentage of functions, that aren't supported by any application
 
 #### Redundancy of Entity types regarding Logical memories ####
 
@@ -170,6 +170,6 @@ This option shows a number on the bottom right corner of each **entity type**.
 
 On the top you can see the:
 
-* Redundancy factor: percentage of entity types, that are stored in database systems
+* **Redundancy factor**: percentage of entity types, that are stored in database systems
 
-* Undersaturation factor: percentage of entity types, that aren't stored in any database system
+* **Undersaturation factor**: percentage of entity types, that aren't stored in any database system
