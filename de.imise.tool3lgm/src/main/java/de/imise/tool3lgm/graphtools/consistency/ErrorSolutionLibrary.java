@@ -15,7 +15,7 @@ import com.google.common.collect.ImmutableList;
 
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
-import de.imise.tool3lgm.graphtools.consistency.checker.ConsistencyChecker;
+import de.imise.tool3lgm.graphtools.consistency.checker.ModelValidator;
 import de.imise.tool3lgm.graphtools.consistency.error.AbstractCardinalityError;
 import de.imise.tool3lgm.graphtools.consistency.error.AbstractConsistencyError;
 import de.imise.tool3lgm.graphtools.consistency.error.AbstractIDError;
@@ -218,13 +218,13 @@ public abstract class ErrorSolutionLibrary implements MetaModelSpecific {
      * fehlerhaft geltende Element aber trotzdem nicht einfach gelöscht werden.
      */
     public void clearUnfixableErrors(final GDCollection gdcoll) {
-        ConsistencyChecker checker = new ConsistencyChecker(gdcoll, false);
+        ModelValidator modelValidator = new ModelValidator(gdcoll, false);
         // dieses Löschen muss man nicht rückgängig machen können -> BulkMode einschalten
         boolean oldBulkMode = gdcoll.setBulkMode(true);
         //ignore MissingPathErrors resp. check only AbstractCardinalityErrors and AbstractIDErrors
         List<Class<? extends AbstractConsistencyError>> errorTypes = ImmutableList.of(AbstractCardinalityError.class, AbstractIDError.class);
         for (Class<? extends AbstractConsistencyError> errorType : errorTypes) {
-            for (AbstractConsistencyError err : checker.getInconsistencies(errorType)) {
+            for (AbstractConsistencyError err : modelValidator.getInconsistencies(errorType)) {
                 if (!isSolutionExecuteable(err)) {
                     ModelElement errorElement = err.getModelElement();
                     gdcoll.deleteElement(errorElement, TransactionManager.STANDARD_PID);

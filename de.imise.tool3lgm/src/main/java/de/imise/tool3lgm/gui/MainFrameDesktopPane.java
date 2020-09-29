@@ -37,7 +37,7 @@ import de.imise.tool3lgm.Tool3lgm;
 import de.imise.tool3lgm.Tool3lgmChangeListener;
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.consistency.SuggestShowConsistencyTableHandler;
-import de.imise.tool3lgm.graphtools.consistency.checker.ConsistencyChecker;
+import de.imise.tool3lgm.graphtools.consistency.checker.ModelValidator;
 import de.imise.tool3lgm.graphtools.consistency.tableview.ConsistencyErrorTablePane;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
@@ -268,10 +268,10 @@ public final class MainFrameDesktopPane extends JPanel implements PropertyChange
      */
     private void checkConsistencyTableVisibility() {
         boolean isCheckConsistency = isShowConsistencyTable();
-        ConsistencyChecker consistencyChecker = ConsistencyChecker.getConsistencyChecker();
+        ModelValidator modelValidator = ModelValidator.getModelValidator();
         JSplitPane topComponent = rightSplitPane != null ? rightSplitPane : leftSplitPane;
         if (!isCheckConsistency) {
-            consistencyChecker.resetConsistencyDefinition();
+            modelValidator.resetConsistencyDefinition();
             if (topComponent.getParent() == workarea) {
                 return;
             }
@@ -300,12 +300,12 @@ public final class MainFrameDesktopPane extends JPanel implements PropertyChange
             if (Static.getSelectedDoc() == null) {
                 if (consistencyErrorTablePane != null) {
                     consistencyErrorTableBorderPanel.remove(consistencyErrorTablePane);
-                    consistencyErrorTablePane.dispose(); //remove the ConsistencyErrorTableGenerator as PropertyChangeListener of global ConsistencyChecker
+                    consistencyErrorTablePane.dispose(); //remove the ConsistencyErrorTableGenerator as PropertyChangeListener of global ModelValidator
                     consistencyErrorTablePane = null;
                 }
             } else {
                 if (consistencyErrorTablePane == null) {
-                    consistencyErrorTablePane = new ConsistencyErrorTablePane(); //adds the ConsistencyErrorTableGenerator as PropertyChangeListener of global ConsistencyChecker
+                    consistencyErrorTablePane = new ConsistencyErrorTablePane(); //adds the ConsistencyErrorTableGenerator as PropertyChangeListener of global ModelValidator
                     consistencyErrorTableBorderPanel.add(consistencyErrorTablePane, BorderLayout.CENTER);
                 }
             }

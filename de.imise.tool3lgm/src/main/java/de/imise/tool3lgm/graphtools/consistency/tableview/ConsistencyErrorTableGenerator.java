@@ -15,7 +15,7 @@ import javax.swing.table.JTableHeader;
 import javax.swing.table.TableColumn;
 
 import de.imise.tool3lgm.Static;
-import de.imise.tool3lgm.graphtools.consistency.checker.ConsistencyChecker;
+import de.imise.tool3lgm.graphtools.consistency.checker.ModelValidator;
 import de.imise.tool3lgm.graphtools.consistency.tableview.ConsistencyErrorTableModel.ColumnNames;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.LGMGraphDocument;
@@ -37,21 +37,21 @@ public class ConsistencyErrorTableGenerator implements PropertyChangeListener {
     /**
      * Der Konsistenzprüfer, der alle Fehler liefert
      */
-    private final ConsistencyChecker checker;
+    private final ModelValidator modelValidator;
 
     /**
      *
      */
     public ConsistencyErrorTableGenerator() {
-        this(ConsistencyChecker.getConsistencyChecker());
+        this(ModelValidator.getModelValidator());
     }
 
     /**
-     * @param checker Konsistenzprüfer, der alle Fehler liefert
+     * @param modelValidator Konsistenzprüfer, der alle Fehler liefert
      */
-    private ConsistencyErrorTableGenerator(final ConsistencyChecker checker) {
-        this.checker = checker;
-        checker.addPropertyChangeListener(this);
+    private ConsistencyErrorTableGenerator(final ModelValidator modelValidator) {
+        this.modelValidator = modelValidator;
+        modelValidator.addPropertyChangeListener(this);
 
         //TableModel
         ConsistencyErrorTableModel tableModel = new ConsistencyErrorTableModel();
@@ -61,7 +61,7 @@ public class ConsistencyErrorTableGenerator implements PropertyChangeListener {
         ToolTipShowTimeHandler.setDismissTime(table, 10000);
 
         //MouseListener
-        ConsistencyErrorTableMouseListener consistencyErrorTableMouseListener = new ConsistencyErrorTableMouseListener(checker, table);
+        ConsistencyErrorTableMouseListener consistencyErrorTableMouseListener = new ConsistencyErrorTableMouseListener(modelValidator, table);
         table.addMouseListener(consistencyErrorTableMouseListener);
 
         //Header
@@ -148,7 +148,7 @@ public class ConsistencyErrorTableGenerator implements PropertyChangeListener {
      */
     public void updateTable() {
         ConsistencyErrorTableModel model = (ConsistencyErrorTableModel) table.getModel();
-        model.setErrors(checker);
+        model.setErrors(modelValidator);
         table.clearSelection();
         table.revalidate();
         table.repaint();
@@ -168,7 +168,7 @@ public class ConsistencyErrorTableGenerator implements PropertyChangeListener {
     }
 
     public void dispose() {
-        checker.removePropertyChangeListener(this);
+        modelValidator.removePropertyChangeListener(this);
     }
     // /////////////////
     // MouseListener //

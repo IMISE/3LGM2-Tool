@@ -18,7 +18,7 @@ import javax.swing.JPopupMenu;
 import javax.swing.JTable;
 
 import de.imise.tool3lgm.graphtools.consistency.ErrorSolutionLibrary;
-import de.imise.tool3lgm.graphtools.consistency.checker.ConsistencyChecker;
+import de.imise.tool3lgm.graphtools.consistency.checker.ModelValidator;
 import de.imise.tool3lgm.graphtools.consistency.error.AbstractConsistencyError;
 import de.imise.tool3lgm.graphtools.consistency.error.MissingPathError;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
@@ -41,7 +41,7 @@ public class ConsistencyErrorTableMouseListener extends MouseAdapter {
     /**
      *
      */
-    private final ConsistencyChecker checker;
+    private final ModelValidator modelValidator;
 
     /**
      *
@@ -54,11 +54,12 @@ public class ConsistencyErrorTableMouseListener extends MouseAdapter {
     private final List<ModelElement> selectedErrorElements = new ArrayList<>();
 
     /**
-     *
+     * @param modelValidator
+     * @param errorTable
      */
-    ConsistencyErrorTableMouseListener(final ConsistencyChecker checker, final JTable errorTable) {
+    ConsistencyErrorTableMouseListener(final ModelValidator modelValidator, final JTable errorTable) {
         super();
-        this.checker = checker;
+        this.modelValidator = modelValidator;
         table = errorTable;
     }
 
@@ -150,7 +151,7 @@ public class ConsistencyErrorTableMouseListener extends MouseAdapter {
         JMenuItem item = new JMenuItem(new AbstractAction(getResString("error_element_delete")) {
             @Override
             public void actionPerformed(final ActionEvent e) {
-                GDCollection gdcoll = checker.getCollection();
+                GDCollection gdcoll = modelValidator.getCollection();
                 gdcoll.deleteElements(selectedErrorElements, TransactionManager.STANDARD_PID);
             }
         });

@@ -29,7 +29,7 @@ import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
 import de.imise.tool3lgm.graphtools.analyse.redundancy.RedundancyAnalysisDefinitions.SingleRedundancyAnalysisDefinition;
 import de.imise.tool3lgm.graphtools.consistency.CardinalityDefinition;
 import de.imise.tool3lgm.graphtools.consistency.ConsistencyDefinition;
-import de.imise.tool3lgm.graphtools.consistency.checker.ConsistencyChecker;
+import de.imise.tool3lgm.graphtools.consistency.checker.ModelValidator;
 import de.imise.tool3lgm.graphtools.consistency.error.AbstractConsistencyError;
 import de.imise.tool3lgm.graphtools.metamodel.AnalysesDefinition;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
@@ -195,9 +195,9 @@ public class RedundancyAnalysis extends WindowAdapter {
         if (Static.getSelectedGDCollection() != gdcoll) {
             Static.setSelectedDoc(selectedDoc);
         }
-        ConsistencyChecker consistencyChecker = ConsistencyChecker.getConsistencyChecker();
-        consistencyChecker.resetConsistencyDefinition();
-        ConsistencyDefinition consistencyDefinition = consistencyChecker.getConsistencyDefinition();
+        ModelValidator modelValidator = ModelValidator.getModelValidator();
+        modelValidator.resetConsistencyDefinition();
+        ConsistencyDefinition consistencyDefinition = modelValidator.getConsistencyDefinition();
         CardinalityDefinition cardinalityDefinition = consistencyDefinition.getCardinalityDefinition();
 
         SingleRedundancyAnalysisDefinition definition = result.getDefinition();
@@ -208,7 +208,7 @@ public class RedundancyAnalysis extends WindowAdapter {
             cardinalityDefinition.setNewForwardCardinality(edgeClass, definition.getNewForwardCardinality(edgeClass));
             cardinalityDefinition.setNewBackwardCardinality(edgeClass, definition.getNewBackwardCardinality(edgeClass));
         }
-        Collection<AbstractConsistencyError> errors = consistencyChecker.getCardinalityInconsistencies();
+        Collection<AbstractConsistencyError> errors = modelValidator.getCardinalityInconsistencies();
         // wenn es relevante Fehler gibt
         if (!errors.isEmpty()) {
             // Custom button xmlText
@@ -220,7 +220,7 @@ public class RedundancyAnalysis extends WindowAdapter {
                 if (!OPTION_SHOW_CONSISTENCY_TABLE.is()) {
                     OPTION_SHOW_CONSISTENCY_TABLE.set(true);
                 } else {
-                    consistencyChecker.dataChanged(selectedDoc);
+                    modelValidator.dataChanged(selectedDoc);
                 }
             }
             return;

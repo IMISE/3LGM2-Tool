@@ -647,7 +647,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
             //			}
             //			System.err.println("#############################################\n");
 
-            //			for (Error err : new ConsistencyChecker(gdcoll).getInconsistencies())
+            //			for (Error err : new ModelValidator(gdcoll).getInconsistencies())
             //				System.err.println(err.getMessage());
         } else {
             exec_command(command, pid);

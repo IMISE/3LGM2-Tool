@@ -3,7 +3,7 @@ package de.imise.tool3lgm.graphtools.consistency.tableview;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 
-import de.imise.tool3lgm.graphtools.consistency.checker.ConsistencyChecker;
+import de.imise.tool3lgm.graphtools.consistency.checker.ModelValidator;
 
 /**
  * A Scrollpane that holds the consistency error table and the
@@ -17,8 +17,8 @@ public class ConsistencyErrorTablePane extends JScrollPane {
 
     public ConsistencyErrorTablePane() {
         consistencyErrorTableGenerator = new ConsistencyErrorTableGenerator();
-        ConsistencyChecker consistencyChecker = ConsistencyChecker.getConsistencyChecker();
-        consistencyChecker.addPropertyChangeListener(consistencyErrorTableGenerator);
+        ModelValidator modelValidator = ModelValidator.getModelValidator();
+        modelValidator.addPropertyChangeListener(consistencyErrorTableGenerator);
         JTable table = consistencyErrorTableGenerator.getTable();
         setViewportView(table);
     }

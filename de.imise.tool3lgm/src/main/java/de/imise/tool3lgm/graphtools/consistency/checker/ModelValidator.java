@@ -26,12 +26,12 @@ import de.imise.util.event.PropertyChangeHandler;
 /**
  * @author AXS (23.03.2020)
  */
-public final class ConsistencyChecker extends PropertyChangeHandler implements LGMChangeListenerSimple, Tool3lgmChangeListener {
+public final class ModelValidator extends PropertyChangeHandler implements LGMChangeListenerSimple, Tool3lgmChangeListener {
 
     /**
      * Checks the consistency of a model. This instance is used for the current selected Model
      */
-    private static ConsistencyChecker consistencyChecker;
+    private static ModelValidator modelValidator;
 
     /**
      * Modell, das überprüft wird.
@@ -56,12 +56,12 @@ public final class ConsistencyChecker extends PropertyChangeHandler implements L
     private final Multimap<Class<? extends AbstractConsistencyError>, AbstractConsistencyError> consistencyErrorTypeToConsistencyErrors;
 
     /**
-     * Erzeugt einen neuen <code>ConsistencyChecker</code> mit initialisierter <code>ErrorSolutionLibraryVersion</code>.
+     * Erzeugt einen neuen {@link ModelValidator} mit initialisierter <code>ErrorSolutionLibraryVersion</code>.
      *
      * @param gdcoll
      * @param changeContext
      */
-    public ConsistencyChecker(final GDCollection gdcoll, final boolean changeContext) {
+    public ModelValidator(final GDCollection gdcoll, final boolean changeContext) {
         checkers = new ArrayList<>();
         checkers.add(new EdgeCardinalityChecker());
         checkers.add(new MissingPathChecker());
@@ -81,39 +81,39 @@ public final class ConsistencyChecker extends PropertyChangeHandler implements L
      *
      * @param gdcoll
      */
-    private ConsistencyChecker(final GDCollection gdcoll) {
+    private ModelValidator(final GDCollection gdcoll) {
         this(gdcoll, false);
     }
 
     /**
-     * Initializes the static instance of {@link ConsistencyChecker} and
+     * Initializes the static instance of {@link ModelValidator} and
      * regsiters it as ToolChangeListener. Once called, the next call
      * has no change effect.
      */
     public static final void init() {
-        if (consistencyChecker == null) {
-            consistencyChecker = new ConsistencyChecker(null, true);
-            consistencyChecker.addAsToolChangeListener();
+        if (modelValidator == null) {
+            modelValidator = new ModelValidator(null, true);
+            modelValidator.addAsToolChangeListener();
         }
     }
 
     /**
-     * @return the ConsistencyChecker instance for the current selected model (GDCollection)
+     * @return the {@link ModelValidator} instance for the current selected model (GDCollection)
      */
-    public static ConsistencyChecker getConsistencyChecker() {
-        return consistencyChecker;
+    public static ModelValidator getModelValidator() {
+        return modelValidator;
     }
 
     /**
      * Adds a {@link ConsistencyErrorChecker} for a special error
-     * type to the static instance of {@link ConsistencyChecker}.
+     * type to the static instance of {@link ModelValidator}.
      *
      * @param errorType
      * @param errorTypeChecker
      */
     public static void registerChecker(final Class<? extends AbstractConsistencyError> errorType, final ConsistencyErrorChecker errorTypeChecker) {
-        ConsistencyChecker consistencyChecker = getConsistencyChecker();
-        consistencyChecker.checkers.add(errorTypeChecker);
+        ModelValidator modelValidator = getModelValidator();
+        modelValidator.checkers.add(errorTypeChecker);
     }
 
     /**
@@ -203,8 +203,8 @@ public final class ConsistencyChecker extends PropertyChangeHandler implements L
      * @return
      */
     public static final boolean hasInconsistencies(final GDCollection gdcoll) {
-        ConsistencyChecker consistencyChecker = new ConsistencyChecker(gdcoll);
-        return consistencyChecker.hasInconsistencies();
+        ModelValidator modelValidator = new ModelValidator(gdcoll);
+        return modelValidator.hasInconsistencies();
     }
 
     /** Gibt wieder, ob Kardinalitäts-Inkonsistenzen im Modell bestehen */

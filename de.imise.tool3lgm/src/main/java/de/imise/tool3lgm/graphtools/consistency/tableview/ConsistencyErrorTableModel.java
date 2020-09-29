@@ -12,7 +12,7 @@ import javax.swing.table.DefaultTableModel;
 
 import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
 import de.imise.tool3lgm.graphtools.consistency.ErrorSolutionLibrary;
-import de.imise.tool3lgm.graphtools.consistency.checker.ConsistencyChecker;
+import de.imise.tool3lgm.graphtools.consistency.checker.ModelValidator;
 import de.imise.tool3lgm.graphtools.consistency.error.AbstractConsistencyError;
 import de.imise.tool3lgm.graphtools.consistency.error.MissingPathError;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
@@ -54,12 +54,12 @@ public class ConsistencyErrorTableModel extends DefaultTableModel {
     }
 
     /**
-     * @param checker
+     * @param modelValidator
      */
-    public void setErrors(final ConsistencyChecker checker) {
+    public void setErrors(final ModelValidator modelValidator) {
         //ignore unfixable missingPath errors. They can be only fixed
         //with other fixable missingPathErrors (if defined)
-        Collection<AbstractConsistencyError> errors = checker.getInconsistencies();
+        Collection<AbstractConsistencyError> errors = modelValidator.getInconsistencies();
         dataVector.clear();
         setRowCount(errors.size());
 

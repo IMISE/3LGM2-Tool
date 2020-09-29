@@ -34,7 +34,7 @@ import com.google.common.collect.ImmutableList;
 import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.Tool3lgmConstants.FileFilterType;
-import de.imise.tool3lgm.graphtools.consistency.checker.ConsistencyChecker;
+import de.imise.tool3lgm.graphtools.consistency.checker.ModelValidator;
 import de.imise.tool3lgm.graphtools.dialog.search.SearchPathDialog;
 import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
@@ -403,7 +403,7 @@ public class WebExportDialog extends JDialog {
      * @return
      */
     private boolean hasInconsistencies() {
-        return ConsistencyChecker.hasInconsistencies(collection);
+        return ModelValidator.hasInconsistencies(collection);
     }
 
     /**
