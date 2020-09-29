@@ -108,10 +108,9 @@ public final class ModelValidator extends PropertyChangeHandler implements LGMCh
      * Adds a {@link ConsistencyErrorChecker} for a special error
      * type to the static instance of {@link ModelValidator}.
      *
-     * @param errorType
      * @param errorTypeChecker
      */
-    public static void registerChecker(final Class<? extends AbstractConsistencyError> errorType, final ConsistencyErrorChecker errorTypeChecker) {
+    public static void registerChecker(final ConsistencyErrorChecker errorTypeChecker) {
         ModelValidator modelValidator = getModelValidator();
         modelValidator.checkers.add(errorTypeChecker);
     }
