@@ -73,7 +73,7 @@ public class MetaPathSelector implements ActionListener {
     /**
      * Metapaths that can be choosed in the <code>metaPathJList</code>
      */
-    private List<MetaPath> selectableMetaPaths;
+    private List<MetaPath> selectableMetaPaths = new ArrayList<>();
 
     /**
      * Choosed metapaths
@@ -167,7 +167,7 @@ public class MetaPathSelector implements ActionListener {
                 }
             }
             selectedMetaPaths.clear();
-            selectableMetaPaths = null;
+            selectableMetaPaths.clear();
             deliverChangeEvent(class1ComboBox);
         } else if (eventSource == class2ComboBox) {
             class2ComboBox.setPopupVisible(false);
@@ -181,12 +181,14 @@ public class MetaPathSelector implements ActionListener {
             selectableMetaPaths = new ArrayList<>(model.getMetaPaths(class1BoxSelection, class2BoxSelection, true));
             Alphabetical.sort(selectableMetaPaths);
             if (selectableMetaPaths != null) {
-                if (selectableMetaPaths.size() == 1) {
+                int selectableMetaPathsCount = selectableMetaPaths.size();
+                if (selectableMetaPathsCount == 1) {
                     MetaPath metaPath = selectableMetaPaths.iterator().next();
-                    selectableMetaPaths = ImmutableList.of(metaPath);
+                    selectableMetaPaths = new ArrayList<>(1);
+                    selectableMetaPaths.add(metaPath);
                     selectedMetaPaths.add(metaPath);
-                } else if (selectableMetaPaths.size() > 1) {
-                    List<NamedObjectContainer<MetaPath>> pathNames = new ArrayList<>(selectableMetaPaths.size());
+                } else if (selectableMetaPathsCount > 1) {
+                    List<NamedObjectContainer<MetaPath>> pathNames = new ArrayList<>(selectableMetaPathsCount);
                     for (MetaPath metaPath : selectableMetaPaths) {
                         String metaPathFullName = metaPath.getFullName();
                         pathNames.add(new NamedObjectContainer<>(metaPath, metaPathFullName));
@@ -194,7 +196,7 @@ public class MetaPathSelector implements ActionListener {
                     StringBuilder sb = append(null, "text_path_1");
                     sb.append(" ");
                     //beliebig viele Pfade sind auswählbar
-                    if (maxParallelSelectedPaths <= 0 || maxParallelSelectedPaths >= selectableMetaPaths.size()) {
+                    if (maxParallelSelectedPaths <= 0 || maxParallelSelectedPaths >= selectableMetaPathsCount) {
                         append(sb, "text_path_2");
                         //maximal 1 Pfad ist auswählbar
                     } else if (maxParallelSelectedPaths == 1) {
@@ -207,9 +209,9 @@ public class MetaPathSelector implements ActionListener {
                         append(sb, " ");
                         append(sb, "text_path_4_2");
                     }
-                    Object[] selectedArray = new Object[selectableMetaPaths.size()];
+                    Object[] selectedArray = new Object[selectableMetaPathsCount];
                     List<?> selected = Arrays.asList(selectedArray);
-                    while (selected != null && (selectedMetaPaths.size() == 0 || selectedMetaPaths.size() > maxParallelSelectedPaths)) {
+                    while (selected != null && (selectedMetaPaths.isEmpty() || selectedMetaPaths.size() > maxParallelSelectedPaths)) {
                         selectedMetaPaths.clear();
                         MainFrame mainFrame = getMainFrame();
                         String title = getResString("choice");
@@ -385,6 +387,9 @@ public class MetaPathSelector implements ActionListener {
         }
     }
 
+    /**
+     * @return
+     */
     public MetaPathSelection getSelection() {
         MetaPathSelection selection = new MetaPathSelection();
         selection.class1 = getSelectedClass(class1ComboBox);
@@ -394,6 +399,9 @@ public class MetaPathSelector implements ActionListener {
         return selection;
     }
 
+    /**
+     * @param selection
+     */
     public void setSelection(final MetaPathSelection selection) {
         class2ComboBox.removeActionListener(this);//von der 2. Combobox muss der ActionListener entfernt werden, damit nicht die MetaPfad-Auswahl an den Benutzer gestellt wird
         class1ComboBox.setSelectedObject(selection == null ? null : selection.class1);
