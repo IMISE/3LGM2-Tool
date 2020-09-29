@@ -10,7 +10,7 @@ import de.imise.util.Alphabetical;
 import de.imise.util.NamedObjectContainer;
 
 /**
- * JList, die alle Items immer alphabetisch sortiert anzeigt.
+ * JList, which always displays all items alphabetically sorted.
  *
  * @author AXS
  *         created on 15.08.2007
@@ -18,7 +18,7 @@ import de.imise.util.NamedObjectContainer;
 public class AlphabeticalJList extends JList<Object> {
 
     /**
-     * ListModel, das die alphabetische Einsortierung vornimmt
+     * ListModel, which does the alphabetical sorting
      */
     private final AlphabeticalListModel lm = new AlphabeticalListModel(null);
 
@@ -26,7 +26,6 @@ public class AlphabeticalJList extends JList<Object> {
      *
      */
     public AlphabeticalJList() {
-        super();
         setModel(lm);
     }
 
@@ -134,6 +133,7 @@ public class AlphabeticalJList extends JList<Object> {
         /**
          * @param items
          */
+        @Override
         public void addAll(final Collection<?> items) {
             for (Iterator<?> it = items.iterator(); it.hasNext();) {
                 addElement(it.next());
