@@ -140,17 +140,17 @@ This opens a window, allowing you to choose between following options:
 
 Proceeding with one of these analysis will generate an output containing:
 
-* Analysis option: which redundancy analysis was chosen
+* Analysis option (which redundancy analysis was chosen)
 
-* Not dispensable systems: which systems are essential
+* Not dispensable systems
 
-* Equivalent and only 1 time needed: 
+* Equivalent and only 1 time needed
 
-* Potentially replaceable: which systems can be replaced
+* Potentially replaceable
 
-* Redundancy Rate: 
+* Redundancy Rate
 
-* Not connected: systems that aren't connected
+* Not connected (systems)
 
 #### Redundancy of Functions regarding Application component configurations ####
 
