@@ -138,6 +138,20 @@ This opens a window, allowing you to choose between following options:
 
 * Self defined analysis
 
+Proceeding with one of these analysis will generate an output containing:
+
+* Analysis option: which redundancy analysis was chosen
+
+* Not dispensable systems: which systems are essential
+
+* Equivalent and only 1 time needed: 
+
+* Potentially replaceable: which systems can be replaced
+
+* Redundancy Rate: 
+
+* Not connected: systems that aren't connected
+
 #### Redundancy of Functions regarding Application component configurations ####
 
 This option shows a number on the bottom right corner of each **function**.
