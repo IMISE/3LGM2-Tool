@@ -1,5 +1,6 @@
 package de.imise.util.swing.component.list;
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Iterator;
 
@@ -34,21 +35,26 @@ public class AlphabeticalJList extends JList<Object> {
      */
     public AlphabeticalJList(final Collection<?> objects) {
         this();
-        for (Iterator<?> it = objects.iterator(); it.hasNext();) {
-            lm.addElement(it.next());
-        }
-
+        setItems(objects);
     }
 
     /**
      * @param listData
      */
     public AlphabeticalJList(final Object[] listData) {
-        this();
-        for (int i = 0; i < listData.length; i++) {
-            lm.addElement(listData[i]);
-        }
+        this(Arrays.asList(listData));
+    }
 
+    /**
+     * @param objects
+     */
+    public void setItems(final Collection<?> objects) {
+        removeAllElements();
+        for (Object o : objects) {
+            lm.addElement(o);
+        }
+        revalidate();
+        repaint();
     }
 
     /**
@@ -57,6 +63,8 @@ public class AlphabeticalJList extends JList<Object> {
     public void addItem(final Object anObject) {
         lm.addElement(anObject);
         revalidate();
+        revalidate();
+        repaint();
     }
 
     /**
