@@ -91,6 +91,13 @@ public class MetaPathSelector implements ActionListener {
     private static MetaPathSelector dialogMetaPathSelecor;
 
     /**
+     * If the selector is displayed in a dialog with this list
+     * as view for the selectable meta paths, this list must
+     * be updated if the selection of the comboboxes is changed.
+     */
+    private AlphabeticalJList metaPathJList;
+
+    /**
      * Model, das die auswählbaren Elementklassen und Pfade festlegt.
      */
     private final MetaPathDefinition model;
@@ -228,6 +235,9 @@ public class MetaPathSelector implements ActionListener {
                         }
                     }
                 }
+                if (metaPathJList != null) {
+                    metaPathJList.setItems(selectableMetaPaths);
+                }
             }
             deliverChangeEvent(class2ComboBox);
         } else {
@@ -288,24 +298,25 @@ public class MetaPathSelector implements ActionListener {
     public static final MetaPathSelector showDialog(final MetaPathDefinition model, final String class1Label, final String class2Label, final String metaPathListLabel, final int maxParallelSelectedPaths) {
         if (dialogMetaPathSelecor == null) {
             dialogMetaPathSelecor = new MetaPathSelector(model, maxParallelSelectedPaths);
+            dialogMetaPathSelecor.metaPathJList = new AlphabeticalJList();
         }
-        AlphabeticalJList metaPathJList = new AlphabeticalJList(dialogMetaPathSelecor.selectableMetaPaths);
         if (maxParallelSelectedPaths <= 1) {
-            metaPathJList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+            dialogMetaPathSelecor.metaPathJList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         } else {
-            metaPathJList.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+            dialogMetaPathSelecor.metaPathJList.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
         }
         Object[] metaPathSelectorMessage = {
-                class1Label, dialogMetaPathSelecor.getClass1ComboBox(), class2Label, dialogMetaPathSelecor.getClass2ComboBox(), metaPathListLabel, new JScrollPane(metaPathJList)
+                class1Label, dialogMetaPathSelecor.getClass1ComboBox(), class2Label, dialogMetaPathSelecor.getClass2ComboBox(), metaPathListLabel, new JScrollPane(dialogMetaPathSelecor.metaPathJList)
         };
         JOptionPane op = new JOptionPane();
         op.setMessage(metaPathSelectorMessage);
         MainFrame mainFrame = Static.getMainFrame();
         String message = Tool3lgmConstants.getResString("metapath_selection");
         JDialog dialog = op.createDialog(mainFrame, message);
+
         dialog.setVisible(true);
         dialogMetaPathSelecor.selectedMetaPaths.clear();
-        Object selectedMetaPath = metaPathJList.getSelectedObject();
+        Object selectedMetaPath = dialogMetaPathSelecor.metaPathJList.getSelectedObject();
         if (selectedMetaPath != null) {
             dialogMetaPathSelecor.selectedMetaPaths.add((AbstractMetaPath) selectedMetaPath);
         }
