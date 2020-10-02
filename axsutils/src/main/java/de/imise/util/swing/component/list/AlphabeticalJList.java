@@ -3,6 +3,7 @@ package de.imise.util.swing.component.list;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.List;
 
 import javax.swing.DefaultListModel;
 import javax.swing.JList;
@@ -102,11 +103,14 @@ public class AlphabeticalJList extends JList<Object> {
      *
      * @return selektierte Objekt
      */
-    public Object[] getSelectedObjects() {
-        Object[] selectedObjects = getSelectedValues();
-        for (int i = 0; i < selectedObjects.length; i++) {
-            if (selectedObjects[i] instanceof NamedObjectContainer) {
-                selectedObjects[i] = ((NamedObjectContainer<?>) selectedObjects[i]).getObject();
+    public List<Object> getSelectedObjects() {
+        List<Object> selectedObjects = getSelectedValuesList();
+        for (int i = 0; i < selectedObjects.size(); i++) {
+            Object selectedObject = selectedObjects.get(i);
+            if (selectedObject instanceof NamedObjectContainer) {
+                NamedObjectContainer<?> selected = (NamedObjectContainer<?>) selectedObject;
+                selectedObject = selected.getObject();
+                selectedObjects.set(i, selectedObject);
             }
         }
         return selectedObjects;
