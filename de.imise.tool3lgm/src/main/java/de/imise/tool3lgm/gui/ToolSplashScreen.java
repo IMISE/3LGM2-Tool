@@ -42,7 +42,8 @@ public class ToolSplashScreen implements MouseMotionListener, MouseListener {
     /**
      *
      */
-    private static Rectangle2D linkPosition = null;
+    private static Rectangle2D linkPositionWebsite = null;
+    private static Rectangle2D linkPositionThirdPartyLicenses = null;
 
     /** Zeitraum der Entwicklung (braucht man nicht auslagern) */
     private static final String DEVELOPMENT_DURATION = "2003 - " + Math.max(2013, Calendar.getInstance().get(Calendar.YEAR));
@@ -79,7 +80,7 @@ public class ToolSplashScreen implements MouseMotionListener, MouseListener {
      * @param g
      * @param normal
      */
-    private static final void printLink(final boolean normal) {
+    private static final void printLink(final boolean normal, final String link) {
         Graphics g = ((ImageIcon) imageLabel.getIcon()).getImage().getGraphics();
 
         g.setFont(g.getFont().deriveFont(Font.BOLD, 13f));
@@ -89,7 +90,12 @@ public class ToolSplashScreen implements MouseMotionListener, MouseListener {
             g.setColor(Color.BLUE);
 
         }
-        g.drawString(getResString("toolWebSite"), 20, 340);
+        if (link == "toolWebSite") {
+            g.drawString(getResString("toolWebSite"), 20, 340);
+        }
+        if (link == "thirdPartyLicenses") {
+            g.drawString(getResString("thirdPartyLicenses"), 20, 370);
+        }
     }
 
     /**
@@ -140,9 +146,15 @@ public class ToolSplashScreen implements MouseMotionListener, MouseListener {
         Graphics g = image.getGraphics();
         g.drawImage(ii.getImage(), 0, 0, imageLabel);
         update(g);
+        g.drawString(getResString("thirdPartyLicenses"), 20, 370);
         Rectangle2D r = g.getFontMetrics().getStringBounds(getResString("toolWebSite"), g);
         r.setRect(r.getX() + 20, r.getY() + 340, r.getWidth(), r.getHeight());
-        linkPosition = r;
+        linkPositionWebsite = r;
+
+        Rectangle2D r2 = g.getFontMetrics().getStringBounds(getResString("thirdPartyLicenses"), g);
+        r2.setRect(r2.getX() + 20, r2.getY() + 370, r2.getWidth(), r2.getHeight());
+        linkPositionThirdPartyLicenses = r2;
+
         new ToolSplashScreen(imageLabel);
         ii.setImage(image);
         imageLabel.setIcon(ii);
@@ -156,10 +168,16 @@ public class ToolSplashScreen implements MouseMotionListener, MouseListener {
 
     @Override
     public void mouseMoved(final MouseEvent e) {
-        if (e.getX() >= linkPosition.getX() && e.getY() >= linkPosition.getY() && e.getX() <= linkPosition.getX() + linkPosition.getWidth() && e.getY() <= linkPosition.getY() + linkPosition.getHeight()) {
-            printLink(false);
+        if (e.getX() >= linkPositionWebsite.getX() && e.getY() >= linkPositionWebsite.getY() && e.getX() <= linkPositionWebsite.getX() + linkPositionWebsite.getWidth() && e.getY() <= linkPositionWebsite.getY() + linkPositionWebsite.getHeight()) {
+            printLink(false, "toolWebSite");
         } else {
-            printLink(true);
+            printLink(true, "toolWebSite");
+        }
+        if (e.getX() >= linkPositionThirdPartyLicenses.getX() && e.getY() >= linkPositionThirdPartyLicenses.getY() && e.getX() <= linkPositionThirdPartyLicenses.getX() + linkPositionThirdPartyLicenses.getWidth()
+                && e.getY() <= linkPositionThirdPartyLicenses.getY() + linkPositionThirdPartyLicenses.getHeight()) {
+            printLink(false, "thirdPartyLicenses");
+        } else {
+            printLink(true, "thirdPartyLicenses");
         }
         update();
         imageLabel.revalidate();
@@ -168,8 +186,12 @@ public class ToolSplashScreen implements MouseMotionListener, MouseListener {
 
     @Override
     public void mouseClicked(final MouseEvent e) {
-        if (e.getX() >= linkPosition.getX() && e.getY() >= linkPosition.getY() && e.getX() <= linkPosition.getX() + linkPosition.getWidth() && e.getY() <= linkPosition.getY() + linkPosition.getHeight()) {
+        if (e.getX() >= linkPositionWebsite.getX() && e.getY() >= linkPositionWebsite.getY() && e.getX() <= linkPositionWebsite.getX() + linkPositionWebsite.getWidth() && e.getY() <= linkPositionWebsite.getY() + linkPositionWebsite.getHeight()) {
             BrowseUtils.browse(getResString("toolWebSite"));
+        }
+        if (e.getX() >= linkPositionThirdPartyLicenses.getX() && e.getY() >= linkPositionThirdPartyLicenses.getY() && e.getX() <= linkPositionThirdPartyLicenses.getX() + linkPositionThirdPartyLicenses.getWidth()
+                && e.getY() <= linkPositionThirdPartyLicenses.getY() + linkPositionThirdPartyLicenses.getHeight()) {
+            BrowseUtils.browse("../de.imise.tool3lgm.deploy/Tool3lgm/thirdPartyLicense.html");
         }
     }
 
