@@ -8,6 +8,10 @@ import java.awt.Graphics;
 import java.awt.GridLayout;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.io.Writer;
 
 import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
@@ -19,6 +23,11 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.filechooser.FileSystemView;
+
+import org.apache.batik.dom.GenericDOMImplementation;
+import org.apache.batik.svggen.SVGGraphics2D;
+import org.w3c.dom.DOMImplementation;
+import org.w3c.dom.Document;
 
 import de.imise.util.MemoryHandler;
 import de.imise.util.StringUtils;
@@ -46,7 +55,8 @@ public class ComponentAsImageExportHandler {
         JPG,
         TIFF,
         BMP,
-        PNG
+        PNG,
+        SVG
     }
 
     /**
@@ -116,6 +126,9 @@ public class ComponentAsImageExportHandler {
         if (fileFormat == null) {
             return;
         }
+
+        File saveFile = new File(filename);
+        String exportFileType = fileFormat.name();
         ZoomableComponent zoomComp = comp instanceof ZoomableComponent ? (ZoomableComponent) comp : null;
 
         //wenn das Bild mit maximaler Größe gespeichert werden soll und das Bild auch maximierbar ist
@@ -130,27 +143,35 @@ public class ComponentAsImageExportHandler {
         setHeapAvailableMaximumExportSize(comp);
         Dimension preferredSize = comp.getPreferredSize();
 
-        //MemoryHandler.printMaxNowAvailableMemory();
-        //this here is the critical memory opration
-        BufferedImage buffer = new BufferedImage(preferredSize.width, preferredSize.height, BufferedImage.TYPE_3BYTE_BGR);
-        //MemoryHandler.printMaxNowAvailableMemory();
+        if (exportFileType == "SVG") {
+            try {
+                exportAsSVG(comp, filename);
+            } catch (Exception e) {
+                e.printStackTrace();
+                Component parent = ParentComponentFinder.getFrameOrDialog(comp);
+                JOptionPane.showMessageDialog(parent, drh.getResString("ERROR_MESSAGE"), drh.getResString("ERROR_TITLE"), JOptionPane.ERROR_MESSAGE);
+            }
+        } else {
+            //MemoryHandler.printMaxNowAvailableMemory();
+            //this here is the critical memory opration
+            BufferedImage buffer = new BufferedImage(preferredSize.width, preferredSize.height, BufferedImage.TYPE_3BYTE_BGR);
+            //MemoryHandler.printMaxNowAvailableMemory();
 
-        Graphics og = buffer.getGraphics();
-        og.setColor(new Color(255, 255, 255, 255));
-        og.fillRect(0, 0, preferredSize.width, preferredSize.height);
-        comp.printAll(og);
-        //ggf. Zoom auf alten Wert zurück setzen
-        if (originalZoom >= 0d) {
-            zoomComp.setZoom(originalZoom);
-        }
+            Graphics og = buffer.getGraphics();
+            og.setColor(new Color(255, 255, 255, 255));
+            og.fillRect(0, 0, preferredSize.width, preferredSize.height);
+            comp.printAll(og);
+            //ggf. Zoom auf alten Wert zurück setzen
+            if (originalZoom >= 0d) {
+                zoomComp.setZoom(originalZoom);
+            }
 
-        File saveFile = new File(filename);
-        String exportFileType = fileFormat.name();
-        try {
-            ImageIO.write(buffer, exportFileType, saveFile);
-        } catch (Throwable e) {
-            Component parent = ParentComponentFinder.getFrameOrDialog(comp);
-            JOptionPane.showMessageDialog(parent, drh.getResString("ERROR_MESSAGE"), drh.getResString("ERROR_TITLE"), JOptionPane.ERROR_MESSAGE);
+            try {
+                ImageIO.write(buffer, exportFileType, saveFile);
+            } catch (Throwable e) {
+                Component parent = ParentComponentFinder.getFrameOrDialog(comp);
+                JOptionPane.showMessageDialog(parent, drh.getResString("ERROR_MESSAGE"), drh.getResString("ERROR_TITLE"), JOptionPane.ERROR_MESSAGE);
+            }
         }
     }
 
@@ -233,6 +254,27 @@ public class ComponentAsImageExportHandler {
     private static long getImageHeapSize(final Dimension preferredImageSize) {
         long heapSize = preferredImageSize.width * preferredImageSize.height * 3l;
         return heapSize;
+    }
+
+    /**
+     * @param comp
+     * @param fileName
+     */
+    private final void exportAsSVG(final JComponent comp, final String fileName) throws IOException {
+        Dimension preferredSize = comp.getPreferredSize();
+        // Get a DOMImplementation.
+        DOMImplementation domImpl = GenericDOMImplementation.getDOMImplementation();
+        Document document = domImpl.createDocument(null, "svg", null);
+        SVGGraphics2D svgGenerator = new SVGGraphics2D(document);
+        svgGenerator.setSVGCanvasSize(preferredSize);
+
+        comp.print(svgGenerator);
+
+        boolean useCSS = true; // we want to use CSS style attribute
+
+        try (Writer out = new OutputStreamWriter(new FileOutputStream(fileName), "UTF-8")) {
+            svgGenerator.stream(out, useCSS);
+        }
     }
 
     /**
