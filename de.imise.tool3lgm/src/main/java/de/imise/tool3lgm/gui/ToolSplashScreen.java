@@ -1,5 +1,6 @@
 package de.imise.tool3lgm.gui;
 
+import static de.imise.tool3lgm.Tool3lgmConstants.THIRD_PARTY_LICENSES_HTML_FILE;
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
 
 import java.awt.Color;
@@ -191,7 +192,7 @@ public class ToolSplashScreen implements MouseMotionListener, MouseListener {
         }
         if (e.getX() >= linkPositionThirdPartyLicenses.getX() && e.getY() >= linkPositionThirdPartyLicenses.getY() && e.getX() <= linkPositionThirdPartyLicenses.getX() + linkPositionThirdPartyLicenses.getWidth()
                 && e.getY() <= linkPositionThirdPartyLicenses.getY() + linkPositionThirdPartyLicenses.getHeight()) {
-            BrowseUtils.browse("../de.imise.tool3lgm.deploy/Tool3lgm/thirdPartyLicense.html");
+            BrowseUtils.browse(THIRD_PARTY_LICENSES_HTML_FILE);
         }
     }
 

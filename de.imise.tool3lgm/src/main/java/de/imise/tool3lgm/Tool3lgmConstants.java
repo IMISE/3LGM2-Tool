@@ -98,6 +98,9 @@ public abstract class Tool3lgmConstants {
     /** Template-Verzeichnis */
     public static final File TEMPLATE_DIR = new File(APPLICATION_DIR, "Templates");
 
+    /** Third party licenses htaml file */
+    public static final File THIRD_PARTY_LICENSES_HTML_FILE = new File(APPLICATION_DIR, "thirdPartyLicense.html");
+
     /**
      * Datei-Endung für große Icons.
      * <p>
