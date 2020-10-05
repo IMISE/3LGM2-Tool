@@ -1,4 +1,4 @@
-# Analylsis of 3LGM² models #
+# **Analylsis of 3LGM² models** #
 The 3LGM² Tool offers a analysis function, which allows the user to answer given questions regarding selected elements.
 Depending on the element type there are different questions offered by the analysis option:
 
@@ -61,25 +61,25 @@ Depending on the element type there are different questions offered by the analy
 * On which application components it is installed?
 
 
-## Accessing the analysis function ##
+## **Accessing the analysis function** ##
 There are two main ways to access these functions.
 The first option would be the **Analysis** option on the top menu bar.
 
 ![analysisMenuBar.PNG](https://bitbucket.org/repo/9L6rMz/images/817250633-analysisMenuBar.PNG)
 
-### 1. Repository ###
+### **1. Repository** ###
 This opens following window:
 
 ![analysisRepository.PNG](https://bitbucket.org/repo/9L6rMz/images/3171069154-analysisRepository.PNG)
 
 Here you can select the wanted analysis. If you have selected an element beforehand, the analysis will be done for the selected element. Otherwise the Analysis will be done for every component.
 
-### 2. Right Click ###
+### **2. Right Click** ###
 It is also possible to just right click on the component you want to analyze. This will offer you the analysis options available for this element type.
 
 ![analysisRightClickOption.PNG](https://bitbucket.org/repo/9L6rMz/images/2233704293-analysisRightClickOption.PNG)
 
-### Results ###
+### **Results** ###
 Basically the analysis will highlight all relevant components, based on the question chosen.
 For an example we will check on **which application components and physical data processing components are needed to achieve the enterprise function *"Request for findings Imaging diagnostics / radiotherapy / nuclear medicine"* **
 
@@ -95,7 +95,7 @@ As you can see, the necessary application component and the physical data proces
 
 ![analysisResetResults.PNG](https://bitbucket.org/repo/9L6rMz/images/3840971573-analysisResetResults.PNG)
 
-### Editor ###
+### **Editor** ###
 You can define your own analysis options. To do this, choose the **Editor** in the analysis tab.
 
 ![analysisTabEditor.PNG](https://bitbucket.org/repo/9L6rMz/images/2598217839-analysisTabEditor.PNG)
@@ -112,14 +112,14 @@ Afterwards you have the option to analyze an object of your choice with the ***S
 
 If you chose to save it, then you can call it either through option **1. Repository** or **2. Right Click**.
 
-#### Example ####
+#### **Example** ####
 Let's say the analysis **"Which application components are needed to achieve this enterprise function?"** didn't exist and we would want to create this.
 
 Since this analysis starts from a function, first we choose the **Function** element type. This object should be connected to a **Function organization unit combination**. This then is connected to the **Application component configuration** which then leads us to the final option the **Computer-based appl. component**.
 
 ![analysisEditor.PNG](https://bitbucket.org/repo/9L6rMz/images/1671067454-analysisEditor.PNG)
 
-### Redundancy Analysis ###
+### **Redundancy Analysis** ###
 Furthermore you have the options to do certain redundancy analysis.
 
 ![analysisTabRedundancy.PNG](https://bitbucket.org/repo/9L6rMz/images/2206756302-analysisTabRedundancy.PNG)
@@ -152,7 +152,7 @@ Proceeding with one of these analysis will generate an output containing:
 
 * Not connected (systems)
 
-#### Redundancy of Functions regarding Application component configurations ####
+#### **Redundancy of Functions regarding Application component configurations** ####
 
 This option shows a number on the bottom right corner of each **function**.
 
@@ -170,7 +170,7 @@ On the top you can see the:
 
 * **Undersaturation factor**: percentage of functions, that aren't supported by any application
 
-#### Redundancy of Entity types regarding Logical memories ####
+#### **Redundancy of Entity types regarding Logical memories** ####
 
 This option shows a number on the bottom right corner of each **entity type**.
 
