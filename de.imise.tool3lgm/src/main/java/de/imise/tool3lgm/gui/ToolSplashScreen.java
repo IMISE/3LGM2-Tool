@@ -35,10 +35,7 @@ import de.imise.util.BrowseUtils;
 public class ToolSplashScreen {
 
     /** Das Label in das beim Anzeigen des Dialoges das Bild gezeichnet wird. */
-    private static JLabel imageLabel = new JLabel();
-
-    /** Static reference to this dialog */
-    private static JDialog infoDialog;
+    private final JLabel imageLabel = new JLabel();
 
     /** Zeitraum der Entwicklung (braucht man nicht auslagern) */
     private static final String DEVELOPMENT_DURATION = "2003 - " + Math.max(2013, Calendar.getInstance().get(Calendar.YEAR));
@@ -85,6 +82,7 @@ public class ToolSplashScreen {
         /** @return the y position of the drawed link string */
         public final int positionY;
 
+        /** */
         public final Object realLink;
 
         /** The position and size of the link on the image */
@@ -105,22 +103,14 @@ public class ToolSplashScreen {
     }
 
     /**
-     * Überwacht die übergebene Componente auf Mausbewegungen
-     *
-     * @param component
-     */
-    private ToolSplashScreen(final Component component) {
-        addMouseAdapter(component);
-    }
-
-    /**
      * In den <code>SplashScreen</code> die lokalisierten Informationen schreiben
      */
     public static final void update() {
         SplashScreen sc = SplashScreen.getSplashScreen();
         if (sc != null) {
             Graphics2D g = sc.createGraphics();
-            update(g);
+            ToolSplashScreen toolSplashScreen = new ToolSplashScreen();
+            toolSplashScreen.update(g);
             sc.update();
 
         }
@@ -134,7 +124,7 @@ public class ToolSplashScreen {
      * @param active
      * @return the position of the link
      */
-    private static final Rectangle2D printLink(final Link linkResKey, final boolean active) {
+    private final Rectangle2D printLink(final Link linkResKey, final boolean active) {
         return printLink(null, linkResKey, active);
     }
 
@@ -147,7 +137,7 @@ public class ToolSplashScreen {
      * @param active
      * @return the position of the link
      */
-    private static final Rectangle2D printLink(Graphics g, final Link link, final boolean active) {
+    private final Rectangle2D printLink(Graphics g, final Link link, final boolean active) {
         if (g == null) {
             ImageIcon icon = (ImageIcon) imageLabel.getIcon();
             Image image = icon.getImage();
@@ -164,7 +154,7 @@ public class ToolSplashScreen {
      *
      * @param g
      */
-    private static final void update(final Graphics g) {
+    private final void update(final Graphics g) {
         RenderingHints qualityHints = new RenderingHints(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         ((Graphics2D) g).setRenderingHints(qualityHints);
         g.setColor(TITLE_COLOR);
@@ -191,14 +181,12 @@ public class ToolSplashScreen {
     /**
      * @return the full dialog
      */
-    public static final void getAboutDialog() {
-        infoDialog = new JDialog(Static.getMainFrame(), getResString("splash_screen_title"), true);
+    public final void getAboutDialog() {
+        JDialog infoDialog = new JDialog(Static.getMainFrame(), getResString("splash_screen_title"), true);
         infoDialog.setSize(200, 100);
         infoDialog.setLocationRelativeTo(infoDialog.getOwner());
 
         ImageIcon imageIcon = Tool3lgmConstants.getImageIcon("splash.gif");
-
-        imageLabel = new JLabel();
 
         infoDialog.add(imageLabel);
         infoDialog.pack();
@@ -209,7 +197,7 @@ public class ToolSplashScreen {
         imageLabel.setIcon(imageIcon);
         update(g);
 
-        new ToolSplashScreen(imageLabel);
+        addMouseAdapter(imageLabel);
         infoDialog.pack();
         infoDialog.setVisible(true);
     }
