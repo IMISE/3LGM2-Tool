@@ -191,7 +191,7 @@ public class ToolSplashScreen {
     /**
      * @return the full dialog
      */
-    public static final void getInfoDialog() {
+    public static final void getAboutDialog() {
         infoDialog = new JDialog(Static.getMainFrame(), getResString("splash_screen_title"), true);
         infoDialog.setSize(200, 100);
         infoDialog.setLocationRelativeTo(infoDialog.getOwner());
