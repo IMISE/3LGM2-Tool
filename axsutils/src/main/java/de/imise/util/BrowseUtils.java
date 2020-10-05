@@ -43,13 +43,11 @@ public class BrowseUtils {
             File file = new File(urlOrPath);
             String fullPath = file.getAbsolutePath();
             file = new File(fullPath);
-            Sys.out1(fullPath);
             Desktop.getDesktop().open(file);
         } catch (Exception e) {
             try {
                 String fullUri = urlOrPath.contains("://") ? urlOrPath : "https://" + urlOrPath; // if no protocel -> https
                 URI uri = new URI(fullUri);
-                Sys.out1(fullUri);
                 browse(uri);
             } catch (Exception ex) {
                 try {
