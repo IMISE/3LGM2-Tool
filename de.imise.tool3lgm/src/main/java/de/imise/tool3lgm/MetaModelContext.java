@@ -169,6 +169,12 @@ public final class MetaModelContext extends SimpleResourceBundleSourceAdapter im
         return super.getResStringWithoutError(resKey);
     }
 
+    @Override
+    public String getResStringWithoutError(final Object resKey) {
+        //muss sein, weil die super-Klasse und das Interface beide eine default-Implementieurn hiervon anbieten
+        return super.getResStringWithoutError(resKey);
+    }
+
     /**
      * Hiermit kann man die Referenz auf das Metamodell in diesem Kontext löschen. Dadurch wird der Speicher freigegeben. Das ist sinnvoll, wenn man
      * das letzte Modell einer bestimmten Art geschlossen hat, um ein bisschen Platz zu schaffen.
