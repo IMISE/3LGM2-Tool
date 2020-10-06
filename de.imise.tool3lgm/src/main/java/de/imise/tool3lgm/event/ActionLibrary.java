@@ -721,7 +721,7 @@ public class ActionLibrary {
         public static final ExtendedAction ACTION_OPEN_ABOUT_DIALOG = new StaticAction(ActionIdentifier.ACTION_OPEN_ABOUT_DIALOG, PPP) {
             @Override
             public void actionPerformed() {
-                new ToolSplashScreen().getAboutDialog();
+                new ToolSplashScreen().showAboutDialog();
             }
         };
 
