@@ -141,37 +141,32 @@ public class ComponentAsImageExportHandler {
             zoomComp.setZoomToMaximum();
         }
         setHeapAvailableMaximumExportSize(comp);
-        Dimension preferredSize = comp.getPreferredSize();
 
-        if (exportFileType == "SVG") {
-            try {
+        try {
+            if (fileFormat == FileFilterType.SVG) {
                 exportAsSVG(comp, filename);
-            } catch (Exception e) {
-                e.printStackTrace();
-                Component parent = ParentComponentFinder.getFrameOrDialog(comp);
-                JOptionPane.showMessageDialog(parent, drh.getResString("ERROR_MESSAGE"), drh.getResString("ERROR_TITLE"), JOptionPane.ERROR_MESSAGE);
-            }
-        } else {
-            //MemoryHandler.printMaxNowAvailableMemory();
-            //this here is the critical memory opration
-            BufferedImage buffer = new BufferedImage(preferredSize.width, preferredSize.height, BufferedImage.TYPE_3BYTE_BGR);
-            //MemoryHandler.printMaxNowAvailableMemory();
+            } else {
+                Dimension preferredSize = comp.getPreferredSize();
+                //MemoryHandler.printMaxNowAvailableMemory();
+                //this here is the critical memory operation
+                BufferedImage buffer = new BufferedImage(preferredSize.width, preferredSize.height, BufferedImage.TYPE_3BYTE_BGR);
+                //MemoryHandler.printMaxNowAvailableMemory();
 
-            Graphics og = buffer.getGraphics();
-            og.setColor(new Color(255, 255, 255, 255));
-            og.fillRect(0, 0, preferredSize.width, preferredSize.height);
-            comp.printAll(og);
-            //ggf. Zoom auf alten Wert zurück setzen
-            if (originalZoom >= 0d) {
-                zoomComp.setZoom(originalZoom);
-            }
+                Graphics og = buffer.getGraphics();
+                og.setColor(new Color(255, 255, 255, 255));
+                og.fillRect(0, 0, preferredSize.width, preferredSize.height);
+                comp.printAll(og);
 
-            try {
                 ImageIO.write(buffer, exportFileType, saveFile);
-            } catch (Throwable e) {
-                Component parent = ParentComponentFinder.getFrameOrDialog(comp);
-                JOptionPane.showMessageDialog(parent, drh.getResString("ERROR_MESSAGE"), drh.getResString("ERROR_TITLE"), JOptionPane.ERROR_MESSAGE);
             }
+        } catch (Exception e) {
+            e.printStackTrace();
+            Component parent = ParentComponentFinder.getFrameOrDialog(comp);
+            JOptionPane.showMessageDialog(parent, drh.getResString("ERROR_MESSAGE"), drh.getResString("ERROR_TITLE"), JOptionPane.ERROR_MESSAGE);
+        }
+        //ggf. Zoom auf alten Wert zurück setzen
+        if (originalZoom >= 0d) {
+            zoomComp.setZoom(originalZoom);
         }
     }
 
@@ -264,7 +259,8 @@ public class ComponentAsImageExportHandler {
         Dimension preferredSize = comp.getPreferredSize();
         // Get a DOMImplementation.
         DOMImplementation domImpl = GenericDOMImplementation.getDOMImplementation();
-        Document document = domImpl.createDocument(null, "svg", null);
+        // String qualifiedName is not relevant for the export
+        Document document = domImpl.createDocument(null, "TlgmSvgExport", null);
         SVGGraphics2D svgGenerator = new SVGGraphics2D(document);
         svgGenerator.setSVGCanvasSize(preferredSize);
 
@@ -272,9 +268,10 @@ public class ComponentAsImageExportHandler {
 
         boolean useCSS = true; // we want to use CSS style attribute
 
-        try (Writer out = new OutputStreamWriter(new FileOutputStream(fileName), "UTF-8")) {
-            svgGenerator.stream(out, useCSS);
-        }
+        FileOutputStream outputStream = new FileOutputStream(fileName);
+        Writer out = new OutputStreamWriter(outputStream, "UTF-8");
+        svgGenerator.stream(out, useCSS);
+        out.close();
     }
 
     /**
