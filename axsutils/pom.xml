@@ -45,6 +45,24 @@
 			<version>20070216</version>
 		</dependency>
 		<!-- https://mvnrepository.com/artifact/com.bea.xml/jsr173-ri -->
+		<!-- https://mvnrepository.com/artifact/org.apache.xmlgraphics/batik-svg-dom -->
+		<dependency>
+		    <groupId>org.apache.xmlgraphics</groupId>
+		    <artifactId>batik-svg-dom</artifactId>
+		    <version>1.13</version>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/org.apache.xmlgraphics/batik-svggen -->
+		<dependency>
+		    <groupId>org.apache.xmlgraphics</groupId>
+		    <artifactId>batik-svggen</artifactId>
+		    <version>1.13</version>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/org.apache.xmlgraphics/batik-codec -->
+		<dependency>
+		    <groupId>org.apache.xmlgraphics</groupId>
+		    <artifactId>batik-codec</artifactId>
+		    <version>1.13</version>
+		</dependency>
 	</dependencies>
 	<repositories>
 		<repository>

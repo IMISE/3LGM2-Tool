@@ -113,7 +113,7 @@ public class Tool3lgmMain {
         setDockIcon();
 
         //In den <code>SplashScreen</code> die lokalisierten Informationen schreiben
-        ToolSplashScreen.update();
+        new ToolSplashScreen().updateSplashScreen();
 
         setUIDefaults();
 
