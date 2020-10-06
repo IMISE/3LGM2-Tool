@@ -127,8 +127,6 @@ public class ComponentAsImageExportHandler {
             return;
         }
 
-        File saveFile = new File(filename);
-        String exportFileType = fileFormat.name();
         ZoomableComponent zoomComp = comp instanceof ZoomableComponent ? (ZoomableComponent) comp : null;
 
         //wenn das Bild mit maximaler Größe gespeichert werden soll und das Bild auch maximierbar ist
@@ -156,6 +154,9 @@ public class ComponentAsImageExportHandler {
                 og.setColor(new Color(255, 255, 255, 255));
                 og.fillRect(0, 0, preferredSize.width, preferredSize.height);
                 comp.printAll(og);
+
+                File saveFile = new File(filename);
+                String exportFileType = fileFormat.name();
 
                 ImageIO.write(buffer, exportFileType, saveFile);
             }
