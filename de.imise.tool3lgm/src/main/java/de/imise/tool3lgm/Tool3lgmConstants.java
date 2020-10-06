@@ -26,6 +26,7 @@ import de.imise.tool3lgm.userproperties.UserProperties;
 import de.imise.util.ApplicationManager;
 import de.imise.util.StringUtils;
 import de.imise.util.collections.CollectionUtils;
+import de.imise.util.resource.SimpleResourceBundleSource;
 import de.imise.util.resource.SimpleResourceIconSource;
 
 /**
@@ -97,6 +98,9 @@ public abstract class Tool3lgmConstants {
 
     /** Template-Verzeichnis */
     public static final File TEMPLATE_DIR = new File(APPLICATION_DIR, "Templates");
+
+    /** Third party licenses htaml file */
+    public static final File THIRD_PARTY_LICENSES_HTML_FILE = new File(APPLICATION_DIR, "thirdPartyLicense.html");
 
     /**
      * Datei-Endung für große Icons.
@@ -238,6 +242,18 @@ public abstract class Tool3lgmConstants {
      * für die Sanduhr...
      */
     protected static Cursor normalCursor = new Cursor(Cursor.DEFAULT_CURSOR), waitCursor = new Cursor(Cursor.WAIT_CURSOR), handCursor = new Cursor(Cursor.HAND_CURSOR);
+
+    /**
+     * Delegate object to this which can be used by classes
+     * which load the resource strings via the interface
+     * {@link SimpleResourceBundleSource}
+     */
+    public static final SimpleResourceBundleSource RESOURCE_BUNDLE_SOURCE = new SimpleResourceBundleSource() {
+        @Override
+        public String getResString(final String resKey) {
+            return Tool3lgmConstants.getResString(resKey);
+        }
+    };
 
     /**
      * Liefert <code>true</code>, wenn der übergebene String eine Extension eines {@link FileNameExtensionFilter} in
