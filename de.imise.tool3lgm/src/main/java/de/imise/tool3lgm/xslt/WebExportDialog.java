@@ -295,7 +295,7 @@ public class WebExportDialog extends JDialog {
 
         if (checkBoxShowResult.isSelected()) {
             File file = new File(path, WEB_EXPORT_RESOURCES_FILES[0]);
-            BrowseUtils.browseAbsoluteFile(file);
+            BrowseUtils.browse(file);
         }
     }
 

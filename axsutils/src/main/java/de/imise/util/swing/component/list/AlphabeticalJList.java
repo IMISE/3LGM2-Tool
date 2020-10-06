@@ -1,7 +1,9 @@
 package de.imise.util.swing.component.list;
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.List;
 
 import javax.swing.DefaultListModel;
 import javax.swing.JList;
@@ -10,7 +12,7 @@ import de.imise.util.Alphabetical;
 import de.imise.util.NamedObjectContainer;
 
 /**
- * JList, die alle Items immer alphabetisch sortiert anzeigt.
+ * JList, which always displays all items alphabetically sorted.
  *
  * @author AXS
  *         created on 15.08.2007
@@ -18,7 +20,7 @@ import de.imise.util.NamedObjectContainer;
 public class AlphabeticalJList extends JList<Object> {
 
     /**
-     * ListModel, das die alphabetische Einsortierung vornimmt
+     * ListModel, which does the alphabetical sorting
      */
     private final AlphabeticalListModel lm = new AlphabeticalListModel(null);
 
@@ -26,7 +28,6 @@ public class AlphabeticalJList extends JList<Object> {
      *
      */
     public AlphabeticalJList() {
-        super();
         setModel(lm);
     }
 
@@ -35,21 +36,26 @@ public class AlphabeticalJList extends JList<Object> {
      */
     public AlphabeticalJList(final Collection<?> objects) {
         this();
-        for (Iterator<?> it = objects.iterator(); it.hasNext();) {
-            lm.addElement(it.next());
-        }
-
+        setItems(objects);
     }
 
     /**
      * @param listData
      */
     public AlphabeticalJList(final Object[] listData) {
-        this();
-        for (int i = 0; i < listData.length; i++) {
-            lm.addElement(listData[i]);
-        }
+        this(Arrays.asList(listData));
+    }
 
+    /**
+     * @param objects
+     */
+    public void setItems(final Collection<?> objects) {
+        removeAllElements();
+        for (Object o : objects) {
+            lm.addElement(o);
+        }
+        revalidate();
+        repaint();
     }
 
     /**
@@ -58,6 +64,8 @@ public class AlphabeticalJList extends JList<Object> {
     public void addItem(final Object anObject) {
         lm.addElement(anObject);
         revalidate();
+        revalidate();
+        repaint();
     }
 
     /**
@@ -95,11 +103,14 @@ public class AlphabeticalJList extends JList<Object> {
      *
      * @return selektierte Objekt
      */
-    public Object[] getSelectedObjects() {
-        Object[] selectedObjects = getSelectedValues();
-        for (int i = 0; i < selectedObjects.length; i++) {
-            if (selectedObjects[i] instanceof NamedObjectContainer) {
-                selectedObjects[i] = ((NamedObjectContainer<?>) selectedObjects[i]).getObject();
+    public List<Object> getSelectedObjects() {
+        List<Object> selectedObjects = getSelectedValuesList();
+        for (int i = 0; i < selectedObjects.size(); i++) {
+            Object selectedObject = selectedObjects.get(i);
+            if (selectedObject instanceof NamedObjectContainer) {
+                NamedObjectContainer<?> selected = (NamedObjectContainer<?>) selectedObject;
+                selectedObject = selected.getObject();
+                selectedObjects.set(i, selectedObject);
             }
         }
         return selectedObjects;
@@ -134,6 +145,7 @@ public class AlphabeticalJList extends JList<Object> {
         /**
          * @param items
          */
+        @Override
         public void addAll(final Collection<?> items) {
             for (Iterator<?> it = items.iterator(); it.hasNext();) {
                 addElement(it.next());

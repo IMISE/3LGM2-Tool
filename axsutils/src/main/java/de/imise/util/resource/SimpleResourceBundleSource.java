@@ -13,7 +13,7 @@ public interface SimpleResourceBundleSource extends SimpleResourceFileLoader {
     /**
      * Liefert für einen übergebenen Resourcen-KeyString einen String aus den Resourcen.
      *
-     * @param resKex
+     * @param resKey
      * @return
      */
     public String getResString(String resKey);
@@ -25,12 +25,24 @@ public interface SimpleResourceBundleSource extends SimpleResourceFileLoader {
      * @param resKey
      * @return
      */
-    public default String getResStringWithoutError(final String resKey) {
+    public default String getResStringWithoutError(final Object resKey) {
         try {
-            return getResString(resKey);
+            String realResKey = getResKey(resKey);
+            return getResString(realResKey);
         } catch (Exception e) {
-            return resKey;
+            return String.valueOf(resKey);
         }
+    }
+
+    /**
+     * @param object
+     * @return
+     */
+    public static String getResKey(final Object object) {
+        if (object instanceof Enum<?>) {
+            return ((Enum<?>) object).name();
+        }
+        return String.valueOf(object);
     }
 
 }

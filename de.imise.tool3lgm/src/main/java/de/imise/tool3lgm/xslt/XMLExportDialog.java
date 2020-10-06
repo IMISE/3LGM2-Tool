@@ -294,7 +294,7 @@ public class XMLExportDialog extends JDialog implements ActionListener {
                 XMLTransformer.transform(tableModel.getScript(selectedRow).openStream(), tableModel.getScript(selectedRow).getSource(), tempXMLFile, fileString);
                 if (checkBoxShowResult.isSelected()) {
                     File exportFile = new File(fileString);
-                    BrowseUtils.browseAbsoluteFile(exportFile);
+                    BrowseUtils.browse(exportFile);
                 }
             } catch (Exception exp) {
                 Log.show(Log.ERROR, getResString("FehlerAllgemein") + "\n" + exp.getMessage() + "\n" + exp.toString(), exp);

@@ -16,9 +16,9 @@ public class BrowseUtils {
      *
      * @param file Pfad zur Datei oder dem Verzeichnis
      */
-    public static final void browseAbsoluteFile(final File file) {
+    public static final boolean browse(final File file) {
         URI uri = file.toURI();
-        browse(uri);
+        return browse(uri);
     }
 
     /**
@@ -26,19 +26,34 @@ public class BrowseUtils {
      *
      * @param relativePath
      */
-    public static final void browseApplicationPathRelativeFile(final String relativePath) {
+    public static final boolean browseApplicationPathRelativeFile(final String relativePath) {
         File file = new File(ApplicationManager.getApplicationDir(), relativePath);
-        browseAbsoluteFile(file);
+        return browse(file);
     }
 
     /**
-     * Versucht den übergebenen String erst als URI-Link zu öffnen. Ist das keine valide URI wird versucht den String als Datei- oder Verzeichnispfad
-     * zu öffen. Klappt das auch nicht, wird vor den String ein "http://" gestellt und dann nochmal als versucht, ihn als Webseite zu öffnen. geht das
-     * auch nicht, passiert gar nichts (keine Fehlermeldung oder Exception!).
+     * Converts the passed object into a string (via String.valueOf(Object)).
+     * If this string describes a file, the file will be loaded. Relative
+     * paths are converted to absolute paths. If the file cannot be opened,
+     * the string is interpreted as URI and opened. If this does not work
+     * either, the string is preceded by "http://" and then again as an
+     * attempt to open it as a web page. If this does not work either,
+     * <code>false</code> returns, otherwise always <code>true</code>.
      *
-     * @param urlOrPath
+     * @param urlOrPathObject the object intereted as file string or uri
      */
-    public static final void browse(final String urlOrPath) {
+    public static final boolean browse(final Object urlOrPathObject) {
+        String urlOrPath = null;
+        if (urlOrPathObject instanceof File) {
+            File file = (File) urlOrPathObject;
+            if (browse((File) urlOrPathObject)) {
+                return true;
+            }
+            urlOrPath = file.getPath();
+        }
+        if (urlOrPath == null) {
+            urlOrPath = String.valueOf(urlOrPathObject);
+        }
         try {
             File file = new File(urlOrPath);
             String fullPath = file.getAbsolutePath();
@@ -54,10 +69,11 @@ public class BrowseUtils {
                     URI uri = new URI("http://" + urlOrPath);
                     browse(uri);
                 } catch (Exception exx) {
-                    //Fehlermdeldung anzeigen?
+                    return false;
                 }
             }
         }
+        return true;
     }
 
     /**
@@ -65,12 +81,13 @@ public class BrowseUtils {
      *
      * @param uri
      */
-    public static final void browse(final URI uri) {
+    public static final boolean browse(final URI uri) {
         try {
             Desktop.getDesktop().browse(uri);
         } catch (Exception e) {
-            //Fehlermdeldung anzeigen?
+            return false;
         }
+        return true;
     }
 
 }
