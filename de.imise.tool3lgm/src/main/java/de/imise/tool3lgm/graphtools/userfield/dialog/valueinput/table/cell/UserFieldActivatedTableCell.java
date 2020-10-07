@@ -103,12 +103,12 @@ public class UserFieldActivatedTableCell implements IUserFieldTableCell {
         UserField userField = value.getObject();
         UserField.Style style = userField.getStyle();
         if (style == COMBO_BOX) {
-            AlphabeticalComboBox component = new AlphabeticalComboBox(true);
+            AlphabeticalComboBox<String> component = new AlphabeticalComboBox<>(true);
             for (int i = 0; i < userField.getListValuesCount(); i++) {
                 String listValue = userField.getListValueAt(i);
-                component.addItem(listValue);
+                component.addObject(listValue);
                 if (listValue.equals(value == null ? "" : value.toString())) {
-                    component.setSelectedItem(listValue);
+                    component.setSelectedObject(listValue);
                 }
             }
             editor = new DefaultCellEditor(component);

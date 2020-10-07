@@ -43,17 +43,17 @@ public class OperatorInputPanel extends JPanel implements ActionListener {
     /**
      * ist die <code>ComboBox</code>, die in alphabetischer Reihenfolge die Assoziationen zwischen Start- und Endklasse anzeigt.
      */
-    private AlphabeticalComboBox associationBox;
+    private AlphabeticalComboBox<Class<? extends Edge>> associationBox;
 
     /**
-     * Ist die <code>ComboBox</code>, die die UserField der Endklasse anzeigt.
+     * Ist die <code>ComboBox</code>, die die UserFields der Endklasse anzeigt.
      */
-    private AlphabeticalComboBox connectedAttributesBox;
+    private AlphabeticalComboBox<UserField> connectedAttributesBox;
 
     /**
      * die Box, die die Verteilungsgewichte enthält. <code>vgBox</code>
      */
-    private AlphabeticalComboBox vgBox;
+    private AlphabeticalComboBox<UserField> vgBox;
 
     /**
      * "Gleichverteilt" in der gewählten Loacle. Wird angezeigt, wenn als Verteilungsgewicht bei einer Verrechnung über die Teilwertsumme kein
@@ -93,7 +93,7 @@ public class OperatorInputPanel extends JPanel implements ActionListener {
         gbc.weighty = 0;
         gbc.gridy = 0;
         add(new JLabel(getResString("target_of_accounting") + " -> " + getResString("source_of_accounting")), gbc);
-        associationBox = new AlphabeticalComboBox();
+        associationBox = new AlphabeticalComboBox<>();
         associationBox.addActionListener(this);
         gbc.insets.top = 3;
         gbc.gridy++;
@@ -103,7 +103,7 @@ public class OperatorInputPanel extends JPanel implements ActionListener {
         gbc.gridy++;
 
         add(new JLabel(getResString("connected_attributes")), gbc);
-        connectedAttributesBox = new AlphabeticalComboBox();
+        connectedAttributesBox = new AlphabeticalComboBox<>();
         gbc.gridy++;
         add(connectedAttributesBox, gbc);
         gbc.gridy++;
@@ -116,7 +116,7 @@ public class OperatorInputPanel extends JPanel implements ActionListener {
             gbc.gridy++;
             add(new JLabel(getResString("weighting") + ": "), gbc);
 
-            vgBox = new AlphabeticalComboBox();
+            vgBox = new AlphabeticalComboBox<>();
             vgBox.addActionListener(this);
             gbc.gridy++;
             add(vgBox, gbc);
@@ -189,22 +189,22 @@ public class OperatorInputPanel extends JPanel implements ActionListener {
                     if (uf.getName().trim().equals("")) {
                         String name = getResString("this_classification_number");
                         connectedAttributesBox.addSeparator(true);
-                        connectedAttributesBox.addItem(uf, name);
+                        connectedAttributesBox.addObject(uf, name);
                     } else {
-                        connectedAttributesBox.addItem(uf);
+                        connectedAttributesBox.addObject(uf);
                     }
                 }
             }
         }
         if (found && !assignableClass) {
-            connectedAttributesBox.removeItem(userField);
+            connectedAttributesBox.removeObject(userField);
         } else if (!found && assignableClass) {
             String name = userField.getName().trim();
             if (name.equals("")) {
                 name = getResString("this_classification_number");
             }
             connectedAttributesBox.addSeparator(true);
-            connectedAttributesBox.addItem(userField, name);
+            connectedAttributesBox.addObject(userField, name);
         }
     }
 
@@ -219,12 +219,12 @@ public class OperatorInputPanel extends JPanel implements ActionListener {
 
         UserFieldDefinitions definitions = userField.getDefinitions();
 
-        vgBox.addItem(UNIFORMLY_DISTRIBUTED);
+        vgBox.addObject(null, UNIFORMLY_DISTRIBUTED);
         vgBox.addSeparator(false);
         for (UserField uf : definitions.getUserFields(edgeClass)) {
-            vgBox.addItem(uf);
+            vgBox.addObject(uf);
         }
-        vgBox.setSelectedObject(UNIFORMLY_DISTRIBUTED);
+        vgBox.setSelectedObject(null); // = UNIFORMLY_DISTRIBUTED
     }
 
     //TODO: man sollte das Öffnen des Dialoges verhindern, wenn keine verrechenbaren Kennzehlen in verbundenen Klassen existieren
@@ -262,17 +262,17 @@ public class OperatorInputPanel extends JPanel implements ActionListener {
             }
             if (startClass.isAssignableFrom(userField.getTargetClass())) {
                 if (HasPartEdge.class.isAssignableFrom(tmpEdgeClass)) {
-                    associationBox.addItem(tmpEdgeClass, getResString("whole_to_part") + " (" + forwardName + ")");
+                    associationBox.addObject(tmpEdgeClass, getResString("whole_to_part") + " (" + forwardName + ")");
                 } else {
-                    associationBox.addItem(tmpEdgeClass, forwardName);
+                    associationBox.addObject(tmpEdgeClass, forwardName);
                 }
             }
             //das hier darf nicht als else-if geschrieben werden!
             if (endClass.isAssignableFrom(userField.getTargetClass())) {
                 if (HasPartEdge.class.isAssignableFrom(tmpEdgeClass)) {
-                    associationBox.addItem(tmpEdgeClass, getResString("part_to_whole") + " (" + backwardName + ")");
+                    associationBox.addObject(tmpEdgeClass, getResString("part_to_whole") + " (" + backwardName + ")");
                 } else {
-                    associationBox.addItem(tmpEdgeClass, backwardName);
+                    associationBox.addObject(tmpEdgeClass, backwardName);
                 }
             }
         }
@@ -287,7 +287,7 @@ public class OperatorInputPanel extends JPanel implements ActionListener {
     public String getRetVal() {
         UserField tmpUserField;
         if (connectedAttributesBox.getSelectedIndex() >= 0) {
-            tmpUserField = (UserField) connectedAttributesBox.getSelectedObject();
+            tmpUserField = connectedAttributesBox.getSelectedObject();
         } else {
             return null;
         }
@@ -295,7 +295,7 @@ public class OperatorInputPanel extends JPanel implements ActionListener {
         if (associationBox.getSelectedIndex() < 0) {
             return null;
         }
-        edgeClass = ((Class<? extends Edge>) associationBox.getSelectedObject()).asSubclass(Edge.class);
+        edgeClass = associationBox.getSelectedObject();
         //mit Assoziation:
 
         StringBuilder sb = new StringBuilder(vfOperator);
@@ -308,7 +308,7 @@ public class OperatorInputPanel extends JPanel implements ActionListener {
         if (vgBox != null) {
             Object selectedWeight = vgBox.getSelectedObject();
             if (selectedWeight != null && selectedWeight != UNIFORMLY_DISTRIBUTED) {
-                UserField uf = (UserField) vgBox.getSelectedObject();
+                UserField uf = vgBox.getSelectedObject();
                 sb.append(" | ");
                 sb.append(uf.getHashCode());
             }
@@ -318,7 +318,8 @@ public class OperatorInputPanel extends JPanel implements ActionListener {
         // merken
         if (HasPartEdge.class.isAssignableFrom(edgeClass)) {
             sb.append(" | ");
-            if (associationBox.getSelectedItem().toString().startsWith(getResString("part_to_whole"))) {
+            String selectedAssociationBoxString = associationBox.getSelectedString();
+            if (selectedAssociationBoxString.startsWith(getResString("part_to_whole"))) {
                 sb.append(UserField.DIRECTION_FROM_PART_TO_WHOLE);
             } else {
                 sb.append(UserField.DIRECTION_FROM_WHOLE_TO_PART);
@@ -333,14 +334,14 @@ public class OperatorInputPanel extends JPanel implements ActionListener {
     @Override
     public void actionPerformed(final ActionEvent e) {
         if (e.getSource() == associationBox) {
-            Class<? extends Edge> edgeClass = (Class<? extends Edge>) associationBox.getSelectedObject();
+            Class<? extends Edge> edgeClass = associationBox.getSelectedObject();
             if (edgeClass == null) {
                 return;
             }
             UserFieldDefinitions definitions = userField.getDefinitions();
             GDCollection gdcoll = definitions.getCollection();
             ElementsNameBuilder elementsNameBuilder = gdcoll.getElementsNameBuilder();
-            String displayName = associationBox.getSelectedItem().toString();
+            String displayName = associationBox.getSelectedString();
             String tmp_string = elementsNameBuilder.getFullForwardMetaAssociationName(edgeClass);
             if (displayName.equals(tmp_string)) {
                 updateFieldListAttributesOfAssociatedClass(getEndClass(edgeClass));

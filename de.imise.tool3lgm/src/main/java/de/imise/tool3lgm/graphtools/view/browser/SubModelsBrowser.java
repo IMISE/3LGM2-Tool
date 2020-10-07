@@ -40,7 +40,7 @@ public final class SubModelsBrowser extends JPanel implements FocusListener, Ite
     /**
      * Combobox, in der das aktuelle Teilmodell ausgewählt werden kann
      */
-    private final AlphabeticalComboBox submodelBox;
+    private final AlphabeticalComboBox<GraphDocument> submodelBox;
 
     /**
      * @param gdcoll
@@ -49,7 +49,7 @@ public final class SubModelsBrowser extends JPanel implements FocusListener, Ite
         super(new BorderLayout());
         this.gdcoll = gdcoll;
         //Submodel ComboBox
-        submodelBox = addFocusListener(new AlphabeticalComboBox());
+        submodelBox = addFocusListener(new AlphabeticalComboBox<>());
         submodelBox.addItemListener(this);
         submodelBox.addPopupMenuListener(this);
         //ModelElements Tree
@@ -79,7 +79,7 @@ public final class SubModelsBrowser extends JPanel implements FocusListener, Ite
         if (submodelBox.contains(doc)) {
             return;
         }
-        submodelBox.addItem(doc);
+        submodelBox.addObject(doc);
         //das erste doc ist immer das Gesamtmodell -> erstes Doc in eigene Liste packen (also einen
         //Separator nach dem ersten einfügen), damit es immer oben steht (egal wie es heißt) und nur
         //die Elemente darunter (alle Szenarios) sortiert werden
@@ -101,7 +101,7 @@ public final class SubModelsBrowser extends JPanel implements FocusListener, Ite
     public int getDocCount() {
         int count = 0;
         for (int i = 0; i < submodelBox.getItemCount(); i++) {
-            if (submodelBox.getObjectAt(i) instanceof GraphDocument) {
+            if (submodelBox.getObjectAt(i) != null) {
                 count++;
             }
         }
@@ -112,18 +112,14 @@ public final class SubModelsBrowser extends JPanel implements FocusListener, Ite
      * @param doc
      */
     public void removeGraphDocument(final GraphDocument doc) {
-        submodelBox.removeItem(doc);
+        submodelBox.removeObject(doc);
     }
 
     /**
      * @return
      */
     GraphDocument getCurrentDoc() {
-        Object o = submodelBox.getSelectedObject();
-        if (o instanceof GraphDocument) {
-            return (GraphDocument) o;
-        }
-        return null;
+        return submodelBox.getSelectedObject();
     }
 
     /**

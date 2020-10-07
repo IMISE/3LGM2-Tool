@@ -149,7 +149,7 @@ public final class UserFieldDeclarationDialog extends AbstractUserFieldDeclarati
     }
 
     private void addType(final UserField.Style style) {
-        userFieldTypeComboBox.addItem(style);
+        userFieldTypeComboBox.addObject(style);
     }
 
     private ActionEvent lastActionEvent = null;
@@ -191,7 +191,7 @@ public final class UserFieldDeclarationDialog extends AbstractUserFieldDeclarati
             //Typ der seleketierten Klasse holen
             Class<? extends UserFieldTarget> selectedClass = classComboBox.getSelectedClass();
             //Definitionseditor für das neue userField anzeigen
-            UserField.Style style = (UserField.Style) userFieldTypeComboBox.getSelectedObject();
+            UserField.Style style = userFieldTypeComboBox.getSelectedObject();
             if (style == null) {
                 JOptionPane.showMessageDialog(this, getResString("userFieldDeclarationDialog_chooseType"), getResString("fehler"), JOptionPane.ERROR_MESSAGE);
                 return;

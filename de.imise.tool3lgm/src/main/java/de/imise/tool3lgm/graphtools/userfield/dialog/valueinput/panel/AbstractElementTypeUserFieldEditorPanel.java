@@ -57,7 +57,7 @@ import de.imise.util.swing.component.AlphabeticalComboBox;
 public abstract class AbstractElementTypeUserFieldEditorPanel extends AbstractUserFieldEditorPanel {
 
     /** Auswahlbox für den Elementtyp */
-    protected AlphabeticalComboBox elementTypeBox;
+    protected AlphabeticalComboBox<Class<? extends ModelElement>> elementTypeBox;
 
     /**
      * Rückgabewerte für die Funktion, die prüft, ob eine Elementklasse
@@ -134,7 +134,7 @@ public abstract class AbstractElementTypeUserFieldEditorPanel extends AbstractUs
 
     private void addElementTypeBox() {
         // elementTypeBox initialisieren
-        elementTypeBox = new AlphabeticalComboBox(10);
+        elementTypeBox = new AlphabeticalComboBox<>(10);
         setActionsForElementTypeBox();
         setElementTypeBoxContent();
         addComponent(elementTypeBox);
@@ -184,14 +184,14 @@ public abstract class AbstractElementTypeUserFieldEditorPanel extends AbstractUs
             }
 
             if (insertType == AS_MODELELEMENT) {
-                elementTypeBox.addItem(elementClass, elementsNameBuilder.getDisplayableName(elementClass));
+                elementTypeBox.addObject(elementClass, elementsNameBuilder.getDisplayableName(elementClass));
             } else if (insertType != NO) {
                 Class<? extends Edge> edgeClass = elementClass.asSubclass(Edge.class);
                 if (insertType == InsertType.AS_EDGE_FORWARD || insertType == AS_EDGE_FORWARD_AND_BACKWARD) {
-                    elementTypeBox.addItem(edgeClass, elementsNameBuilder.getFullForwardMetaAssociationName(edgeClass));
+                    elementTypeBox.addObject(edgeClass, elementsNameBuilder.getFullForwardMetaAssociationName(edgeClass));
                 }
                 if (insertType == InsertType.AS_EDGE_BACKWARD || insertType == AS_EDGE_FORWARD_AND_BACKWARD) {
-                    elementTypeBox.addItem(edgeClass, elementsNameBuilder.getFullBackwardMetaAssociationName(edgeClass));
+                    elementTypeBox.addObject(edgeClass, elementsNameBuilder.getFullBackwardMetaAssociationName(edgeClass));
                 }
             }
 
@@ -201,7 +201,7 @@ public abstract class AbstractElementTypeUserFieldEditorPanel extends AbstractUs
         // zu inkorrekter Darstellung der elementTypeBox kommt
 
         if (elementTypeBox.getItemCount() == 1) {
-            elementTypeBox.addItem(new Object(), "         ");
+            elementTypeBox.addObject(null, "         ");
         }
 
     }
@@ -268,7 +268,7 @@ public abstract class AbstractElementTypeUserFieldEditorPanel extends AbstractUs
     protected abstract UserFieldTableController getTableController(final AbstractUserFieldTableModel uftm);
 
     protected AbstractUserFieldTableModel getTableModel() {
-        Class<? extends ModelElement> selectedClass = ((Class<?>) elementTypeBox.getSelectedObject()).asSubclass(ModelElement.class);
+        Class<? extends ModelElement> selectedClass = elementTypeBox.getSelectedObject();
         GraphDocument doc = dialog.getMainDoc();
         GeneralUserFieldTableModel uftm = new GeneralUserFieldTableModel(doc, selectedClass, hierarchyTypeFilterPane.showTopLevel(), hierarchyTypeFilterPane.showInner(), hierarchyTypeFilterPane.showLeafs(), visibleUserFields);
         return uftm;
@@ -295,7 +295,7 @@ public abstract class AbstractElementTypeUserFieldEditorPanel extends AbstractUs
         if (!hasSelectedItem()) {
             return;
         }
-        Class<? extends ModelElement> selectedClass = ((Class<?>) elementTypeBox.getSelectedObject()).asSubclass(ModelElement.class);
+        Class<? extends ModelElement> selectedClass = elementTypeBox.getSelectedObject();
         MetaModel metaModel = dialog.getMetaModel();
         if (metaModel.canHavePartsOrParents(selectedClass)) {
             hierarchyTypeFilterPane.setVisible(true);
@@ -349,7 +349,7 @@ public abstract class AbstractElementTypeUserFieldEditorPanel extends AbstractUs
      *
      * @return <code>elementTypeBox</code>
      */
-    public AlphabeticalComboBox getElementTypeBox() {
+    public AlphabeticalComboBox<Class<? extends ModelElement>> getElementTypeBox() {
         return elementTypeBox;
     }
 

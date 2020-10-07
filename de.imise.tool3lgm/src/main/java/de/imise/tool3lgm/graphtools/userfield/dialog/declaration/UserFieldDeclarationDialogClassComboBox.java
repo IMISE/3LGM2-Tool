@@ -10,7 +10,7 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.userfield.UserFieldTarget;
 import de.imise.util.swing.component.AlphabeticalComboBox;
 
-public class UserFieldDeclarationDialogClassComboBox extends AlphabeticalComboBox {
+public class UserFieldDeclarationDialogClassComboBox extends AlphabeticalComboBox<Class<? extends UserFieldTarget>> {
 
     private static int lastSelectedIndex = 0;
 
@@ -21,13 +21,13 @@ public class UserFieldDeclarationDialogClassComboBox extends AlphabeticalComboBo
     public UserFieldDeclarationDialogClassComboBox(final MetaModel metaModel, final int maxRowCount) {
         super();
         setMaximumRowCount(13);
-        addItem(GLOBAL_USERFIELD_IDENTIFIER_CLASS, getDisplayableGlobalFieldIdentifierName());
+        addObject(GLOBAL_USERFIELD_IDENTIFIER_CLASS, getDisplayableGlobalFieldIdentifierName());
         addSeparator(true);
         ElementsNameBuilder elementsNameBuilder = metaModel.getElementsNameBuilder();
         //alle nicht abstracten Knotenklassen hinzufügen
         for (Class<? extends ModelElement> elementClass : metaModel.allNodesSet) {
             if (!MetaModel.isAbstract(elementClass)) {
-                addItem(elementClass, elementsNameBuilder.getDisplayableFullName(elementClass));
+                addObject(elementClass, elementsNameBuilder.getDisplayableFullName(elementClass));
             }
         }
         addSeparator(true);
@@ -38,8 +38,8 @@ public class UserFieldDeclarationDialogClassComboBox extends AlphabeticalComboBo
             //Da weder druchdacht ist noch ausprobiert wurde, was passiert, wenn man Kanten mehrfach verknüpft
             //und dann mit Verteilungegewichten bestückt, sind diese Kanten hier erstmal ausßen vor.
             if (!MetaModel.isMultipleEdgeClass(edgeClass)) {
-                addItem(edgeClass, elementsNameBuilder.getFullForwardMetaAssociationName(edgeClass));
-                addItem(edgeClass, elementsNameBuilder.getFullBackwardMetaAssociationName(edgeClass));
+                addObject(edgeClass, elementsNameBuilder.getFullForwardMetaAssociationName(edgeClass));
+                addObject(edgeClass, elementsNameBuilder.getFullBackwardMetaAssociationName(edgeClass));
             }
         }
     }
@@ -49,7 +49,7 @@ public class UserFieldDeclarationDialogClassComboBox extends AlphabeticalComboBo
     }
 
     public Class<? extends UserFieldTarget> getSelectedClass() {
-        return (Class<? extends UserFieldTarget>) getSelectedObject();
+        return getSelectedObject();
     }
 
     public boolean isGlobalUserFieldClassSelected() {
@@ -57,9 +57,9 @@ public class UserFieldDeclarationDialogClassComboBox extends AlphabeticalComboBo
     }
 
     @Override
-    public void setSelectedItem(final Object anObject) {
-        super.setSelectedItem(anObject);
-        lastSelectedIndex = getSelectedIndex();
+    public int setSelectedObject(final Class<? extends UserFieldTarget> anObject) {
+        lastSelectedIndex = super.setSelectedObject(anObject);
+        return lastSelectedIndex;
     }
 
 }

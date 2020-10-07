@@ -56,12 +56,12 @@ public class MetaPathSelector implements ActionListener {
     /**
      * ComboBox für die erste Klasse
      */
-    private final AlphabeticalComboBox class1ComboBox;
+    private final AlphabeticalComboBox<Class<? extends ModelElement>> class1ComboBox;
 
     /**
      * ComboBox für die zweite Klasse
      */
-    private final AlphabeticalComboBox class2ComboBox;
+    private final AlphabeticalComboBox<Class<? extends ModelElement>> class2ComboBox;
 
     /**
      * Chekcbox über die eingestellt werden kann, ob nur absolute Kindelemente (also Elemente ohne
@@ -117,7 +117,7 @@ public class MetaPathSelector implements ActionListener {
     public MetaPathSelector(final MetaPathDefinition model, final int maxParallelSelectedPaths) {
         this.model = model;
         this.maxParallelSelectedPaths = maxParallelSelectedPaths;
-        class1ComboBox = new AlphabeticalComboBox();
+        class1ComboBox = new AlphabeticalComboBox<>();
         Set<Class<? extends ModelElement>> startElementClassesInPaths = model.getStartElementClassesInPaths();
         endElementClassesInPaths = model.getEndElementClassesInPaths();
         MetaModel metaModel = model.getMetaModel();
@@ -135,7 +135,7 @@ public class MetaPathSelector implements ActionListener {
                     sb.append(")");
                     displayableClassName = sb.toString();
                 }
-                class1ComboBox.addItem(elementClass, displayableClassName);
+                class1ComboBox.addObject(elementClass, displayableClassName);
             }
         }
         class1ComboBox.setSelectedItem(null);
@@ -159,18 +159,17 @@ public class MetaPathSelector implements ActionListener {
         Object eventSource = e.getSource();
         if (eventSource == class1ComboBox) {
             class2ComboBox.removeAllItems();
-            Object box1SelectedItem = class1ComboBox.getSelectedItem();
-            if (box1SelectedItem == null) {
+            Class<? extends ModelElement> class1BoxSelection = class1ComboBox.getSelectedObject();
+            if (class1BoxSelection == null) {
                 class2ComboBox.setEnabled(false);
                 return;
             }
             class2ComboBox.setEnabled(true);
-            Class<? extends ModelElement> class1BoxSelection = ((Class<?>) class1ComboBox.getSelectedObject()).asSubclass(ModelElement.class);
             for (Class<? extends ModelElement> elementClass : endElementClassesInPaths) {
                 Set<AbstractMetaPath> metaPathes = model.getMetaPaths(class1BoxSelection, elementClass, false);
                 if (!metaPathes.isEmpty()) {
                     String name = elementsNameBuilder.getDisplayableName(elementClass);
-                    class2ComboBox.addItem(elementClass, name);
+                    class2ComboBox.addObject(elementClass, name);
                 }
             }
             selectedMetaPaths.clear();
@@ -178,12 +177,11 @@ public class MetaPathSelector implements ActionListener {
             deliverChangeEvent(class1ComboBox);
         } else if (eventSource == class2ComboBox) {
             class2ComboBox.setPopupVisible(false);
-            Object box2SelectedItem = class2ComboBox.getSelectedItem();
-            if (box2SelectedItem == null) {
+            Class<? extends ModelElement> class2BoxSelection = class2ComboBox.getSelectedObject();
+            if (class2BoxSelection == null) {
                 return;
             }
-            Class<? extends ModelElement> class1BoxSelection = ((Class<?>) class1ComboBox.getSelectedObject()).asSubclass(ModelElement.class);
-            Class<? extends ModelElement> class2BoxSelection = ((Class<?>) class2ComboBox.getSelectedObject()).asSubclass(ModelElement.class);
+            Class<? extends ModelElement> class1BoxSelection = class1ComboBox.getSelectedObject();
             selectedMetaPaths.clear();
             selectableMetaPaths = new ArrayList<>(model.getMetaPaths(class1BoxSelection, class2BoxSelection, true));
             Alphabetical.sort(selectableMetaPaths);
@@ -326,14 +324,14 @@ public class MetaPathSelector implements ActionListener {
     /**
      * @return Returns the class1ComboBox.
      */
-    public AlphabeticalComboBox getClass1ComboBox() {
+    public AlphabeticalComboBox<Class<? extends ModelElement>> getClass1ComboBox() {
         return class1ComboBox;
     }
 
     /**
      * @return Returns the class2ComboBox.
      */
-    public AlphabeticalComboBox getClass2ComboBox() {
+    public AlphabeticalComboBox<Class<? extends ModelElement>> getClass2ComboBox() {
         return class2ComboBox;
     }
 
@@ -342,24 +340,6 @@ public class MetaPathSelector implements ActionListener {
      */
     public JCheckBox getShowPartsOnlyCheckBox() {
         return showPartsOnlyCheckBox;
-    }
-
-    /**
-     * @param classComboBox
-     * @return selected class of <code>classComboBox</code>
-     */
-    private Class<? extends ModelElement> getSelectedClass(final AlphabeticalComboBox classComboBox) {
-        Object o = classComboBox.getSelectedObject();
-        if (o != null) {
-            Class<? extends Object> clazz = o.getClass();
-            if (Class.class.isAssignableFrom(clazz)) {
-                Class<?> objectAsClass = (Class<?>) o;
-                if (ModelElement.class.isAssignableFrom(objectAsClass)) {
-                    return objectAsClass.asSubclass(ModelElement.class);
-                }
-            }
-        }
-        return null;
     }
 
     /**
@@ -403,8 +383,8 @@ public class MetaPathSelector implements ActionListener {
      */
     public MetaPathSelection getSelection() {
         MetaPathSelection selection = new MetaPathSelection();
-        selection.class1 = getSelectedClass(class1ComboBox);
-        selection.class2 = getSelectedClass(class2ComboBox);
+        selection.class1 = class1ComboBox.getSelectedObject();
+        selection.class2 = class2ComboBox.getSelectedObject();
         selection.showPartsOnly = showPartsOnlyCheckBox.isSelected();
         selection.selectedMetaPaths = ImmutableList.copyOf(selectedMetaPaths); // es muss unbedingt eine Kopie sein!
         return selection;

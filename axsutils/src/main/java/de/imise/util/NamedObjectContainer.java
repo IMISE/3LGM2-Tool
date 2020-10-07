@@ -12,7 +12,7 @@ import de.imise.util.pair.Pair;
  * @author AXS
  * @created 17.10.2007
  */
-public final class NamedObjectContainer<E> extends Pair<E, String> {
+public class NamedObjectContainer<E> extends Pair<E, String> {
 
     /**
      * Wenn <code>true</code>, reicht bei {@link #equals(Object)} für Gleichheit Identität oder dass beide {@link #toString()}-Funktionen dasselbe
@@ -69,6 +69,13 @@ public final class NamedObjectContainer<E> extends Pair<E, String> {
      */
     public E getObject() {
         return getFirstItem();
+    }
+
+    /**
+     * @return Liefert den <code>String</code>
+     */
+    public String getString() {
+        return getSecondItem();
     }
 
     /**
