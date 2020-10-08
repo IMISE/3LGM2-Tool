@@ -16,10 +16,19 @@ import de.imise.util.NamedObjectContainer;
  */
 public class UserFieldDeclarationDialogFieldList extends JList<NamedObjectContainer<UserField>> {
 
+    /**
+     *
+     */
     private final UserFieldDefinitions definitions;
 
+    /**
+     *
+     */
     private final DefaultListModel<NamedObjectContainer<UserField>> model;
 
+    /**
+     * @param definitions
+     */
     public UserFieldDeclarationDialogFieldList(final UserFieldDefinitions definitions) {
         super();
         model = new DefaultListModel<>();
@@ -38,6 +47,9 @@ public class UserFieldDeclarationDialogFieldList extends JList<NamedObjectContai
         }
     }
 
+    /**
+     *
+     */
     private void clear() {
         model.removeAllElements();
     }
@@ -63,6 +75,9 @@ public class UserFieldDeclarationDialogFieldList extends JList<NamedObjectContai
         model.add(index, noc);
     }
 
+    /**
+     *
+     */
     public void refreshSelected() {
         //aus der Liste entfernen und wieder hinzufügen, damit der Anzeigename korrekt aktualisert wird
         int selectedIndex = getSelectedIndex();
@@ -73,33 +88,32 @@ public class UserFieldDeclarationDialogFieldList extends JList<NamedObjectContai
         setSelectedIndex(selectedIndex);
     }
 
+    /**
+     * @return
+     */
     public UserField getSelected() {
         return get(getSelectedIndex());
     }
 
+    /**
+     * @param i
+     * @return
+     */
     public UserField get(final int i) {
         NamedObjectContainer<UserField> selectedValue = i < 0 ? null : model.get(i);
         return selectedValue == null ? null : selectedValue.getObject();
     }
 
     /**
-     * Gibt in Anghänigkeit des übergebenen userfields den style dessen als String zurück.
      *
-     * @param u
-     * @return String, der den ausgeschirebenen Style enthält.
      */
-    private static final String getUserFieldStyleDisplayName(final UserField u) {
-        String userFieldStyle = "";
-        if (u != null) {
-            userFieldStyle = u.getDisplayableStyleName();
-        }
-        return userFieldStyle;
-    }
-
     public void moveUp() {
         move(-1);
     }
 
+    /**
+     *
+     */
     public void moveDown() {
         move(1);
     }
