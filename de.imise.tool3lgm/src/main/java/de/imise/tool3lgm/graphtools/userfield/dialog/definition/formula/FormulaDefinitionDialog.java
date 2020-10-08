@@ -132,12 +132,12 @@ public class FormulaDefinitionDialog extends JDialog implements ActionListener {
     /**
      * Ist die Liste, die die <code> userField<code>s anzeigt.
      */
-    private AlphabeticalJList userFieldList;
+    private AlphabeticalJList<UserField> userFieldList;
 
     /**
      * Die Liste, die die Modellattribute enthält.
      */
-    private AlphabeticalJList modelAttributes;
+    private AlphabeticalJList<UserField> modelAttributes;
 
     /**
      *
@@ -275,14 +275,14 @@ public class FormulaDefinitionDialog extends JDialog implements ActionListener {
         termStack.fill(oldFormulaString);
     }
 
-    private AlphabeticalJList initUserFieldList() {
-        final AlphabeticalJList returnList = new AlphabeticalJList();
+    private AlphabeticalJList<UserField> initUserFieldList() {
+        final AlphabeticalJList<UserField> returnList = new AlphabeticalJList<>();
         returnList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         returnList.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(final MouseEvent e) {
                 if (returnList.isEnabled() && e.getClickCount() > 0) {
-                    UserField tmpUserField = (UserField) returnList.getSelectedValue();
+                    UserField tmpUserField = returnList.getSelectedObject();
                     if (tmpUserField != null) {
                         termStack.push(tmpUserField.getHashCode());
                     }
@@ -361,12 +361,12 @@ public class FormulaDefinitionDialog extends JDialog implements ActionListener {
     private void updateFieldList(final Class<? extends UserFieldTarget> elementClass) {
         for (UserField uf : definitions.getUserFields(elementClass)) {
             if (uf != userField && uf.isClassificationUserField()) {
-                userFieldList.addItem(uf);
+                userFieldList.addObject(uf);
             }
         }
         for (UserField uf : definitions.getGlobalUserFields()) {
             if (!uf.hasStyle(UserField.Style.FORMAT)) {
-                modelAttributes.addItem(uf);
+                modelAttributes.addObject(uf);
             }
         }
     }

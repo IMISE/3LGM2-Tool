@@ -73,12 +73,12 @@ public class ReferencePanel extends JPanel implements ActionListener {
     /**
      * Diese <code>AlphabeticalJList</code> hält die userFields der Start bzw. Endklassen
      */
-    private AlphabeticalJList userFieldList;
+    private AlphabeticalJList<UserField> userFieldList;
 
     /**
      * Die <code>startClassesList</code> hält die möglichen Klassen der Startklassen
      */
-    private AlphabeticalJList classesList;
+    private AlphabeticalJList<Class<? extends ModelElement>> classesList;
 
     /**
      * @param userField
@@ -148,7 +148,7 @@ public class ReferencePanel extends JPanel implements ActionListener {
         JPanel attributePanel = new JPanel(new GridBagLayout());
         attributePanel.setBorder(createTitledBorder(getResString("attributes")));
 
-        classesList = new AlphabeticalJList();
+        classesList = new AlphabeticalJList<>();
         classesList.setSelectionMode(DefaultListSelectionModel.SINGLE_SELECTION);
 
         classesList.addListSelectionListener(e -> {
@@ -175,7 +175,7 @@ public class ReferencePanel extends JPanel implements ActionListener {
         apgbc.gridwidth = 2;
         apgbc.fill = GridBagConstraints.HORIZONTAL;
         apgbc.weightx = 1;
-        userFieldList = new AlphabeticalJList();
+        userFieldList = new AlphabeticalJList<>();
         attributePanel.add(new JScrollPane(userFieldList), apgbc);
 
         gbc.gridy++;
@@ -236,12 +236,12 @@ public class ReferencePanel extends JPanel implements ActionListener {
     /**
      * @param classesList
      */
-    private void setClassesInLists(final AlphabeticalJList classesList) {
+    private void setClassesInLists(final AlphabeticalJList<Class<? extends ModelElement>> classesList) {
         UserFieldDefinitions definitions = userField.getDefinitions();
         MetaModel metaModel = definitions.getMetaModel();
         ElementsNameBuilder elementsNameBuilder = metaModel.getElementsNameBuilder();
         for (int i = 0; i < classes.length; i++) {
-            classesList.addItem(classes[i], elementsNameBuilder.getDisplayableName(classes[i]));
+            classesList.addObject(classes[i], elementsNameBuilder.getDisplayableName(classes[i]));
         }
     }
 
@@ -255,9 +255,9 @@ public class ReferencePanel extends JPanel implements ActionListener {
             if (uf.isClassificationUserField()) {
                 if (uf.getName().trim().equals("")) {
                     String name = getResString("this_classification_number");
-                    userFieldList.addItem(uf, name);
+                    userFieldList.addObject(uf, name);
                 } else {
-                    userFieldList.addItem(uf);
+                    userFieldList.addObject(uf);
                 }
             }
         }
