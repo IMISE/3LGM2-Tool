@@ -219,6 +219,7 @@ public class NamedObjectContainerTest {
         assertNotEquals(noc, ofNoc);
     }
 
+    @SuppressWarnings("deprecation")
     @Test
     public final void setFirstItem() {
         NamedObjectContainer<Object> noc = new NamedObjectContainer<>(new Object(), "Foo");
@@ -227,6 +228,7 @@ public class NamedObjectContainerTest {
         });
     }
 
+    @SuppressWarnings("deprecation")
     @Test
     public void setSecondItem() {
         NamedObjectContainer<Object> noc = new NamedObjectContainer<>(new Object(), "Foo");
