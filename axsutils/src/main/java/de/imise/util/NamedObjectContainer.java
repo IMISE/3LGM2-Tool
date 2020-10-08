@@ -79,6 +79,35 @@ public class NamedObjectContainer<E> extends Pair<E, String> {
     }
 
     /**
+     * @param o
+     * @param type
+     * @return <code>true</code> if the Object o is a {@link NamedObjectContainer} and
+     *         the type of the contained object is assignable from the given type.
+     */
+    public static final boolean isInstanceWithType(final Object o, final Class<?> type) {
+        if (o instanceof NamedObjectContainer) {
+            NamedObjectContainer<?> instance = (NamedObjectContainer<?>) o;
+            if (instance.hasObjectType(type)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * @param type
+     * @return
+     */
+    public boolean hasObjectType(final Class<?> type) {
+        E object = getObject();
+        if (object == null) {
+            return false;
+        }
+        Class<? extends Object> objectType = object.getClass();
+        return type.isAssignableFrom(objectType);
+    }
+
+    /**
      * Guaranteed to throw an exception and leave the list unmodified.
      *
      * @throws UnsupportedOperationException always
