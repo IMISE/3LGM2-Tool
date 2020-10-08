@@ -452,17 +452,4 @@ public class XMLExportDialog extends JDialog implements ActionListener {
         }
     }
 
-    /**
-     * @see java.awt.Window#dispose()
-     */
-    @Override
-    public void dispose() {
-        super.dispose();
-        try {
-            finalize();
-        } catch (Throwable t) {
-            Log.show(Log.ERROR, getResString("FehlerAllgemein"), t);
-        }
-    }
-
 }
