@@ -76,13 +76,13 @@ public class AnalysisEditor extends JDialog implements ActionListener {
          * Enthält die Elementklassen, die start einer XMLAnalyse sein können und die
          * Zwischenschritte in einer Analysekette sein können.
          */
-        private AlphabeticalJList pathStepElementTypeList;
+        private AlphabeticalJList<Class<? extends ModelElement>> pathStepElementTypeList;
 
         /**
          * Enthält die Elemntklassen, die angeben, ob ein Element mit einem seletierten aus dieser
          * Liste verbunden sein muss/nicht verbunden sein darf.
          */
-        private AlphabeticalJList conditionElementTypeList;
+        private AlphabeticalJList<Class<? extends ModelElement>> conditionElementTypeList;
 
         /** In diesem scrollPane sind die Elementklassen */
         private JScrollPane scrollPaneTyp;
@@ -157,8 +157,8 @@ public class AnalysisEditor extends JDialog implements ActionListener {
 
             pathElementCaption = new JLabel(" " + getResString("typeOfPathelement") + ":");
             limitationCaption = new JLabel(" " + getResString("restrictionForPathelement") + ":");
-            pathStepElementTypeList = new AlphabeticalJList();
-            conditionElementTypeList = new AlphabeticalJList();
+            pathStepElementTypeList = new AlphabeticalJList<>();
+            conditionElementTypeList = new AlphabeticalJList<>();
             scrollPaneTyp = new JScrollPane(pathStepElementTypeList);
 
             scrollPaneverb = new JScrollPane(conditionElementTypeList);
@@ -222,7 +222,7 @@ public class AnalysisEditor extends JDialog implements ActionListener {
             conditionElementTypeList.removeAllElements();
 
             PathStepComponent quellPanel = pathPanels.get(index);
-            List<Object> selectedPathStepElements = quellPanel.pathStepElementTypeList.getSelectedObjects();
+            List<Class<? extends ModelElement>> selectedPathStepElements = quellPanel.pathStepElementTypeList.getSelectedObjects();
 
             Class<? extends ModelElement>[] connectable = getConnectableElementClasses(selectedPathStepElements);
 
@@ -230,10 +230,10 @@ public class AnalysisEditor extends JDialog implements ActionListener {
                 String simpleElementClassName = connectable[i].getSimpleName();
                 String resName = metaModel.getResString(simpleElementClassName);
                 if (!newList) {
-                    conditionElementTypeList.addItem(connectable[i], resName);
+                    conditionElementTypeList.addObject(connectable[i], resName);
                 }
                 if (!selectedPathStepElements.isEmpty() && successorPanel != null) {
-                    successorPanel.pathStepElementTypeList.addItem(connectable[i], resName);
+                    successorPanel.pathStepElementTypeList.addObject(connectable[i], resName);
                 }
 
                 conditionElementTypeList.revalidate();
@@ -257,13 +257,13 @@ public class AnalysisEditor extends JDialog implements ActionListener {
      * @param elementClasses
      */
     @SuppressWarnings("unchecked")
-    private Class<? extends ModelElement>[] getConnectableElementClasses(final List<Object> elementClasses) {
+    private Class<? extends ModelElement>[] getConnectableElementClasses(final List<Class<? extends ModelElement>> elementClasses) {
         if (elementClasses == null || elementClasses.isEmpty()) {
             return new Class[0];
         }
         Set<Class<? extends ModelElement>> connectedTypes = new HashSet<>();
         for (int e = 0; e < elementClasses.size(); e++) {
-            Class<? extends ModelElement> elementClass = ((Class<?>) elementClasses.get(e)).asSubclass(ModelElement.class);
+            Class<? extends ModelElement> elementClass = elementClasses.get(e);
             Class<? extends Edge>[] edgeClasses = metaModel.getEdgeTypes(elementClass);
             for (int i = 0; i < edgeClasses.length; i++) {
                 Class<? extends ModelElement> edgeElementClass = getStartClass(edgeClasses[i]);
@@ -458,10 +458,12 @@ public class AnalysisEditor extends JDialog implements ActionListener {
         PathStepComponent firstListPanel = pathPanels.get(0);
         StringBuilder querystring = new StringBuilder("<?xml version=\"1.0\" encoding=\"ISO-8559-15\"?>\n<analyse>\n");
         querystring.append("\t<startknoten name=\"");
-        List<Object> firstSelectionIndices = firstListPanel.pathStepElementTypeList.getSelectedObjects();
+        List<Class<? extends ModelElement>> firstSelectionIndices = firstListPanel.pathStepElementTypeList.getSelectedObjects();
         int lastIndex = firstSelectionIndices.size() - 1;
         for (int j = 0; j < lastIndex; j++) {
-            querystring.append(((Class<?>) firstSelectionIndices.get(j)).getSimpleName());
+            Class<? extends ModelElement> elementClass = firstSelectionIndices.get(j);
+            String simpleElementClassName = elementClass.getSimpleName();
+            querystring.append(simpleElementClassName);
             querystring.append(", ");
         }
         querystring.append(((Class<?>) firstSelectionIndices.get(lastIndex)).getSimpleName());
@@ -474,18 +476,22 @@ public class AnalysisEditor extends JDialog implements ActionListener {
         querystring.append("\t<suche>\n");
         if (!first.pathStepElementTypeList.getSelectedValuesList().isEmpty()) {
             querystring.append("\t\t<typ>\n");
-            List<Object> selectedIndices = first.pathStepElementTypeList.getSelectedObjects();
+            List<Class<? extends ModelElement>> selectedIndices = first.pathStepElementTypeList.getSelectedObjects();
             for (int j = 0; j < selectedIndices.size(); j++) {
-                querystring.append("\t\t\t<eintrag>" + ((Class<?>) selectedIndices.get(j)).getSimpleName() + "</eintrag>\n");
+                Class<? extends ModelElement> elementClass = selectedIndices.get(j);
+                String simpleElementClassName = elementClass.getSimpleName();
+                querystring.append("\t\t\t<eintrag>" + simpleElementClassName + "</eintrag>\n");
             }
             querystring.append("\t\t</typ>\n");
         }
         querystring.append("\t\t<verbundenstate>" + (first.getConnectedState() ? "wahr" : "falsch") + "</verbundenstate>\n");
         if (!first.conditionElementTypeList.getSelectedValuesList().isEmpty()) {
             querystring.append("\t\t<verbundene>\n");
-            List<Object> selectedIndices = first.conditionElementTypeList.getSelectedObjects();
+            List<Class<? extends ModelElement>> selectedIndices = first.conditionElementTypeList.getSelectedObjects();
             for (int j = 0; j < selectedIndices.size(); j++) {
-                querystring.append("\t\t\t<eintrag>" + ((Class<?>) selectedIndices.get(j)).getSimpleName() + "</eintrag>\n");
+                Class<? extends ModelElement> elementClass = selectedIndices.get(j);
+                String simpleElementClassName = elementClass.getSimpleName();
+                querystring.append("\t\t\t<eintrag>" + simpleElementClassName + "</eintrag>\n");
             }
             querystring.append("\t\t</verbundene>\n");
         }
@@ -503,18 +509,22 @@ public class AnalysisEditor extends JDialog implements ActionListener {
             if (!current.pathStepElementTypeList.getSelectedValuesList().isEmpty()) {
                 querystring.append("\t\t<typ>\n");
 
-                List<Object> selectedIndices = current.pathStepElementTypeList.getSelectedObjects();
+                List<Class<? extends ModelElement>> selectedIndices = current.pathStepElementTypeList.getSelectedObjects();
                 for (int j = 0; j < selectedIndices.size(); j++) {
-                    querystring.append("\t\t\t<eintrag>" + ((Class<?>) selectedIndices.get(j)).getSimpleName() + "</eintrag>\n");
+                    Class<? extends ModelElement> elementClass = selectedIndices.get(j);
+                    String simpleElementClassName = elementClass.getSimpleName();
+                    querystring.append("\t\t\t<eintrag>" + simpleElementClassName + "</eintrag>\n");
                 }
                 querystring.append("\t\t</typ>\n");
             }
             querystring.append("\t\t<verbundenstate>" + (current.getConnectedState() ? true : false) + "</verbundenstate>\n");
             if (!current.conditionElementTypeList.getSelectedValuesList().isEmpty()) {
                 querystring.append("\t\t<verbundene>\n");
-                List<Object> selectedIndices = current.conditionElementTypeList.getSelectedObjects();
+                List<Class<? extends ModelElement>> selectedIndices = current.conditionElementTypeList.getSelectedObjects();
                 for (int j = 0; j < selectedIndices.size(); j++) {
-                    querystring.append("\t\t\t<eintrag>" + ((Class<?>) selectedIndices.get(j)).getSimpleName() + "</eintrag>\n");
+                    Class<? extends ModelElement> elementClass = selectedIndices.get(j);
+                    String simpleElementClassName = elementClass.getSimpleName();
+                    querystring.append("\t\t\t<eintrag>" + simpleElementClassName + "</eintrag>\n");
                 }
                 querystring.append("\t\t</verbundene>\n");
             }
@@ -545,7 +555,7 @@ public class AnalysisEditor extends JDialog implements ActionListener {
         for (Class<? extends ModelElement> elementClass : metaModel.allNodesSet) {
             String simpleElementClassName = elementClass.getSimpleName();
             String resName = metaModel.getResString(simpleElementClassName);
-            pathComponent.pathStepElementTypeList.addItem(elementClass, resName);
+            pathComponent.pathStepElementTypeList.addObject(elementClass, resName);
         }
 
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
