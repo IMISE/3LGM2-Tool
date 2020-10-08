@@ -127,7 +127,7 @@ public class ExportPdvb4AwbPlugin {
             entryBuilder.append("\t");
             entryBuilder.append(getParseSaveString(pdvbList.size() > 0 ? pdvbList.get(0).getClearName() : "", true));
             entryBuilder.append("\t");
-            entryBuilder.append(getParseSaveString(new Integer(pdvbList.size()).toString()));
+            entryBuilder.append(getParseSaveString(Integer.valueOf(pdvbList.size()).toString()));
             entryBuilder.append("\t");
             appendNewLine(entryBuilder);
             if (pdvbList.size() > 0) {

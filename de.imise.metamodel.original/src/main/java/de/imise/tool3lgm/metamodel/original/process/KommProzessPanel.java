@@ -507,7 +507,7 @@ public class KommProzessPanel extends ElementDialogPanel {
             } else {
                 // Bemerkungsspalte löschen
                 table.setValueAt(null, i, COMMENTS);
-                table.setValueAt(new Integer(step.getMediumBreaks()), i, MEDIUM_BREAKS);
+                table.setValueAt(Integer.valueOf(step.getMediumBreaks()), i, MEDIUM_BREAKS);
             }
 
             // prüfen ob momentane Spaltenbreite größer ist, als der bisher
