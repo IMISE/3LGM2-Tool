@@ -404,6 +404,7 @@ public final class InputGraphArea extends BasicGraphArea implements MouseListene
     // Methoden des MouseListener-Interfaces --- Anfang ---
 
     @Override
+    @SuppressWarnings("deprecation")
     public final void mouseClicked(final MouseEvent e) {
         int clickCount = e.getClickCount();
 
@@ -419,6 +420,13 @@ public final class InputGraphArea extends BasicGraphArea implements MouseListene
         if (ecUnderMouse != null) {
             szenario.select(ecUnderMouse, 0);
         }
+        //ATTENTION DEPRECATION WARNING
+        //Under no circumstances simply replace the deprecated expressions.
+        //This is especially true for getModifiers() and getModifiersEx(),
+        //because the non-deprecated function getModifiersEx() does not have
+        //the same result in mouseClicked() but only in mousePressed()! But
+        //here we are in mouseClicked().
+        //int modifiers = e.getModifiersEx(); NO!!!!!!!!!!!
         int modifiers = e.getModifiers();
         // Verknüpftes Teilmodell öffnen
         int modifiersMask = modifiers & InputEvent.ALT_MASK;
