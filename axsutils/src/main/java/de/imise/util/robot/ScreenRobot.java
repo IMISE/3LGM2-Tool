@@ -46,9 +46,9 @@ public class ScreenRobot {
     }
 
     public static final void click() {
-        robot.mousePress(InputEvent.BUTTON1_MASK);
+        robot.mousePress(InputEvent.BUTTON1_DOWN_MASK);
         delay(10);
-        robot.mouseRelease(InputEvent.BUTTON1_MASK);
+        robot.mouseRelease(InputEvent.BUTTON1_DOWN_MASK);
     }
 
     public static final void doubleClick() {
