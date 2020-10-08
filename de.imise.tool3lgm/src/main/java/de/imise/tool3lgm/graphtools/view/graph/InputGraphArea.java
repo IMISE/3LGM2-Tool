@@ -426,6 +426,7 @@ public final class InputGraphArea extends BasicGraphArea implements MouseListene
         //because the non-deprecated function getModifiersEx() does not have
         //the same result in mouseClicked() but only in mousePressed()! But
         //here we are in mouseClicked().
+        //Same Problem in SearchDialogResultTablePanel
         //int modifiers = e.getModifiersEx(); NO!!!!!!!!!!!
         int modifiers = e.getModifiers();
         // Verknüpftes Teilmodell öffnen

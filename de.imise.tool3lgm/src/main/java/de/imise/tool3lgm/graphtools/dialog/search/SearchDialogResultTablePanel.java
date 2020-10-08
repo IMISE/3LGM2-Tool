@@ -124,6 +124,7 @@ public class SearchDialogResultTablePanel extends JPanel implements SearchResult
 
         // Listener dranhängen
         table.addMouseListener(new MouseAdapter() {
+            @SuppressWarnings("deprecation")
             private boolean isPopupTrigger(final MouseEvent e) {
 
                 Point clickedPoint = e.getPoint();
@@ -138,6 +139,7 @@ public class SearchDialogResultTablePanel extends JPanel implements SearchResult
                     //do not switch this to e.getModifiersEx() und InputEvent.BUTTON1_DOWN_MASK
                     //this will not work because modifiersEx result is here always 0 and never
                     //the button if it is called with a MouseClicked-Event!
+                    //Same Problem in InputGraphArea
                     int modifiers = e.getModifiers();
                     if ((modifiers & InputEvent.BUTTON1_MASK) != 0) {
                         return false;
