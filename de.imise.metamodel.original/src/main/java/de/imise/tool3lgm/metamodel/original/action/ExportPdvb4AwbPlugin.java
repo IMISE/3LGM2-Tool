@@ -52,6 +52,7 @@ public class ExportPdvb4AwbPlugin {
      */
     private final boolean german = Locale.getDefault().getCountry() == Locale.GERMAN.getCountry();
 
+    @SuppressWarnings("serial")
     public Action getAction() {
         return new AbstractAction(german ? "CSV-Export Anwendungssysteme -> Phys. Datenverabeitungsbausteine" : "CSV Export Application Systems -> Phys. Data Processing Components") {
 

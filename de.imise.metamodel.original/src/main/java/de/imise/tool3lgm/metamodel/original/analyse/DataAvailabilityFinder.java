@@ -440,6 +440,7 @@ public class DataAvailabilityFinder {
 
     }
 
+    @SuppressWarnings("serial")
     public static final Action getAction() {
         return new GraphDocumentAction(DataAvailabilityFinder.class, null, new SimpleResourceBundleSourceAdapter(DataAvailabilityFinder.class).getResString("data_availability"), null) {
             @Override

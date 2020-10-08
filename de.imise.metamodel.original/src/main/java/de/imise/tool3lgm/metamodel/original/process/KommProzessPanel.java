@@ -60,6 +60,7 @@ import de.imise.tool3lgm.metamodel.original.node.Prozess;
  *         (Geschäfts-)Prozesses
  *         Diese Panel wird im Modemnt nicht genutzt und müsste wiederhergestellt werden, falls es noch einmal gebraucht wird.
  */
+@SuppressWarnings("serial")
 public class KommProzessPanel extends ElementDialogPanel {
 
     // das folgende sind die Resourcen zu diesem Panel.Im Zuge der Lolösung des Metamodells aus dem Baukasten, sind sie erstmal hier
