@@ -10,6 +10,7 @@ import java.awt.Container;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Image;
+import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -205,8 +206,10 @@ public abstract class ElementContainer extends JLabel implements Cloneable, Grap
     public ElementContainer clone(final boolean cloneModelElement, final GraphDocument doc) {
         ElementContainer retVal;
         try {
-            retVal = getClass().newInstance();
-        } catch (InstantiationException | IllegalAccessException e) {
+            Class<? extends ElementContainer> elementContainerClass = getClass();
+            Constructor<? extends ElementContainer> emptyConstructor = elementContainerClass.getDeclaredConstructor();
+            retVal = emptyConstructor.newInstance();
+        } catch (Throwable e) {
             Static.showErrorOutputDialog(getResString("FehlerAllgemein"), e);
             return null;
         }

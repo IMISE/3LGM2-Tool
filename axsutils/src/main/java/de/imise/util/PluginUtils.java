@@ -1,7 +1,6 @@
 package de.imise.util;
 
 import java.io.File;
-import java.lang.reflect.Constructor;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.ArrayList;
@@ -115,13 +114,7 @@ public class PluginUtils {
         List<Class<? extends T>> classes = PluginUtils.loadClasses(file, superClassOfResultClasses);
         List<T> instances = new ArrayList<>();
         for (Class<? extends T> clazz : classes) {
-            T instance = null;
-            try {
-                Constructor<? extends T> emptyConstructor = clazz.getDeclaredConstructor();
-                instance = emptyConstructor.newInstance();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+            T instance = ReflectionUtils.newInstance(clazz);
             if (instance != null) {
                 instances.add(instance);
                 if (findOnlyOne) {
