@@ -1951,7 +1951,8 @@ public final class MetaModel extends CoreMetaModel {
             instance = constructor.newInstance(this);
         } catch (Exception e) {
             try {
-                instance = metaModelDependentClass.newInstance();
+                Constructor<? extends T> emptyConstructor = metaModelDependentClass.getDeclaredConstructor();
+                instance = emptyConstructor.newInstance();
             } catch (Exception e2) {
             }
         }

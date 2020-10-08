@@ -1,5 +1,6 @@
 package de.imise.util.collections;
 
+import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Collection;
@@ -378,9 +379,7 @@ public class CollectionMap<K, E, C extends Collection<E>> extends HashMap<K, C> 
         try {
             collectionType.getConstructor((Class<?>[]) null);
             return true;
-        } catch (SecurityException e) {
-            return false;
-        } catch (NoSuchMethodException e) {
+        } catch (Throwable e) {
             return false;
         }
     }
@@ -391,11 +390,10 @@ public class CollectionMap<K, E, C extends Collection<E>> extends HashMap<K, C> 
      */
     private static <V extends Collection<?>> V createCollection(final Class<V> collectionType) {
         try {
-            return collectionType.newInstance();
-        } catch (InstantiationException e) {
-            throw new InternalError();
-        } catch (IllegalAccessException e) {
-            throw new InternalError();
+            Constructor<V> emptyConstructor = collectionType.getDeclaredConstructor();
+            return emptyConstructor.newInstance();
+        } catch (Throwable e) {
+            throw new InternalError(e);
         }
     }
 }
