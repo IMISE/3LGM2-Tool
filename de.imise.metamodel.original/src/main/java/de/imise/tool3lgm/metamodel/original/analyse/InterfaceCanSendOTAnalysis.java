@@ -78,7 +78,7 @@ public class InterfaceCanSendOTAnalysis extends AbstractAnalysis {
             return null;
         }
         List<ModelElement> objectTypes = new ArrayList<>();
-        for (Object o : objectTypeList.getSelectedValues()) {
+        for (Object o : objectTypeList.getSelectedValuesList()) {
             objectTypes.add((ModelElement) o);
         }
         // nichts ausgewählt
