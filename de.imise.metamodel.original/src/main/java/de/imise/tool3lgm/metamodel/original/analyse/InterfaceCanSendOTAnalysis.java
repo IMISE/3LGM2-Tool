@@ -72,14 +72,14 @@ public class InterfaceCanSendOTAnalysis extends AbstractAnalysis {
             return null;
         }
         // Dialog zur Auswahl der interessierenden OT anbieten
-        AlphabeticalJList objectTypeList = new AlphabeticalJList(connectedObjectTypes);
+        AlphabeticalJList<ModelElement> objectTypeList = new AlphabeticalJList<>(connectedObjectTypes);
         objectTypeList.setBorder(BorderFactory.createEtchedBorder());
         if (new MultipleOptionPane().showComponentDialog(Static.getMainFrame(), resHandler.getResString("CHOOSE_OBJECT_TYPE_DIALOG_TITLE"), resHandler.getResString("CHOOSE_OBJECT_TYPE_DIALOG_TITLE"), objectTypeList) != MultipleOptionPane.OK_OPTION) {
             return null;
         }
         List<ModelElement> objectTypes = new ArrayList<>();
-        for (Object o : objectTypeList.getSelectedValuesList()) {
-            objectTypes.add((ModelElement) o);
+        for (ModelElement o : objectTypeList.getSelectedObjects()) {
+            objectTypes.add(o);
         }
         // nichts ausgewählt
         if (objectTypes.size() == 0) {
