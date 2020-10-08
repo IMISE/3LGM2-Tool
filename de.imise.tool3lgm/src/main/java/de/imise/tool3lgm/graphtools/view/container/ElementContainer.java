@@ -784,15 +784,6 @@ public abstract class ElementContainer extends JLabel implements Cloneable, Grap
     public abstract void refreshText();
 
     /**
-     * @param ec
-     */
-    public void refresh(final GraphDocument doc) {
-        GraphDocument ecDoc = getGraphDocument();
-        ElementContainer thisEc = ecDoc == doc ? this : getElement().getContainer(doc);
-        refreshText();
-    }
-
-    /**
      * @param htmlName
      */
     public void setHTMLName(final String htmlName) {
