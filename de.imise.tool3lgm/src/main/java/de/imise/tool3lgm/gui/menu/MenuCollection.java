@@ -111,12 +111,9 @@ public class MenuCollection {
     public static final JMenu WINDOW_MENU = new WindowMenu();
 
     /** Das Hilfe-Menu */
-    public static final JMenu HELP_MENU = createMenu(
-            "help"
-                  , ActionLibrary.HelpActions.ACTION_OPEN_HELP_DIALOG , ActionLibrary.HelpActions.ACTION_ACTIVATE_DIRECT_HELP, new JSeparator() ,
-                  ActionLibrary.HelpActions.ACTION_SHOW_INFORMATION_SYSTEM_EVALUATION_TUTORIAL, new JSeparator()
-                  , ActionLibrary.HelpActions.ACTION_OPEN_URL_ONLINE_HELP, ActionLibrary.HelpActions.ACTION_OPEN_URL_3LGM_WEBSITE, new JSeparator(), ActionLibrary.HelpActions.ACTION_OPEN_EXAMPLE_MODEL_FILE,
-            ActionLibrary.HelpActions.ACTION_OPEN_FILE_CHOSSER_IN_MODEL_LIBRARY, new JSeparator(), ActionLibrary.HelpActions.ACTION_OPEN_URL_ISSUE_TRACKER,
+    public static final JMenu HELP_MENU = createMenu("help", ActionLibrary.HelpActions.ACTION_OPEN_HELP_DIALOG, ActionLibrary.HelpActions.ACTION_ACTIVATE_DIRECT_HELP, new JSeparator(),
+            ActionLibrary.HelpActions.ACTION_SHOW_INFORMATION_SYSTEM_EVALUATION_TUTORIAL, new JSeparator(), ActionLibrary.HelpActions.ACTION_OPEN_URL_ONLINE_HELP, ActionLibrary.HelpActions.ACTION_OPEN_URL_3LGM_WEBSITE, new JSeparator(),
+            ActionLibrary.HelpActions.ACTION_OPEN_EXAMPLE_MODEL_FILE, ActionLibrary.HelpActions.ACTION_OPEN_FILE_CHOSSER_IN_MODEL_LIBRARY, new JSeparator(), ActionLibrary.HelpActions.ACTION_OPEN_URL_ISSUE_TRACKER,
             ActionLibrary.HelpActions.ACTION_OPEN_ABOUT_DIALOG/* , new JSeparator() , ActionLibrary.HelpActions.ACTION_IMPORT_LICENSE_FILE */);
 
     /** Sammlung der Unter-Menus des Datei-Menus */
@@ -343,7 +340,6 @@ public class MenuCollection {
             MenuScroller.setScrollerFor(this, scrollItemCount, 125, placeHolder.getStartIndex() + 2, 0);
         }
 
-        @SuppressWarnings("unchecked")
         @Override
         protected void updateItems(final DynamicMenuPlaceholder placeholder) {
             Action[] a = ActionLibrary.DynamicActions.getSelectFrameActions();
@@ -352,13 +348,15 @@ public class MenuCollection {
             }
             //Die Fenster alphabetisch sortieren (toString liefert nicht den Anzeigenamen)
             //an Index 0 steht der aktive Frame, der nicht mit einsortiert werden darf -> Start ab Index 1
-            NamedObjectContainer<Action>[] noc = new NamedObjectContainer[a.length - 1];
+            List<NamedObjectContainer<Action>> actionsWithTitles = new ArrayList<>(a.length - 1);
             for (int i = 1; i < a.length; i++) {
-                noc[i - 1] = new NamedObjectContainer<>(a[i], a[i].getValue(Action.NAME).toString());
+                NamedObjectContainer<Action> actionWithTitle = new NamedObjectContainer<>(a[i], a[i].getValue(Action.NAME).toString());
+                actionsWithTitles.add(actionWithTitle);
             }
-            Alphabetical.sort(noc);
+            Alphabetical.sort(actionsWithTitles);
             for (int i = 1; i < a.length; i++) {
-                a[i] = noc[i - 1].getObject();
+                NamedObjectContainer<Action> actionWithTitle = actionsWithTitles.get(i - 1);
+                a[i] = actionWithTitle.getObject();
             }
             placeholder.addAll(a);
             placeholder.addSeparator(1);// Trenner zwischen aktivem Frame und aktivierbaren Frames
