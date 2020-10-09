@@ -15,8 +15,10 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
  */
 public abstract class ImportMetaModelDefinition extends DefaultMetaModelDefinitionAdapter {
 
+    @SuppressWarnings("unchecked")
     private final Class<? extends Node>[] nodesArray = getNodes().toArray(new Class[0]);
 
+    @SuppressWarnings("unchecked")
     private final Class<? extends Edge>[] edgesArray = getEdges().toArray(new Class[0]);
 
     /** @return alle Knotenklassen des Metamodells */
