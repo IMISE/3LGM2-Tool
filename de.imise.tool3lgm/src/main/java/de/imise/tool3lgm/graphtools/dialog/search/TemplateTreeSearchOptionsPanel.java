@@ -210,7 +210,7 @@ public class TemplateTreeSearchOptionsPanel extends BasicSearchOptionsPanel {
     @Override
     protected void fillElementClassBox() {
         elementClassBox.removeAllItems();
-        elementClassBox.addItem(ModelElement.class, getResString("SEARCH_DIALOG_all_element_types"));
+        elementClassBox.addObject(ModelElement.class, getResString("SEARCH_DIALOG_all_element_types"));
         elementClassBox.addSeparator(true);
 
         PathTreeModel model = ((TemplateBrowserTree) resultTargetView).getModel();
@@ -219,7 +219,7 @@ public class TemplateTreeSearchOptionsPanel extends BasicSearchOptionsPanel {
         Set<Class<? extends ModelElement>> visibleElementTypes = pathTreeDefinition.getVisibleElementTypes();
         for (Class<? extends ModelElement> elementClass : visibleElementTypes) {
             String displayableFullName = elementsNameBuilder.getDisplayableFullName(elementClass);
-            elementClassBox.addItem(elementClass, displayableFullName);
+            elementClassBox.addObject(elementClass, displayableFullName);
         }
         elementClassBox.setSelectedObject(ModelElement.class);
     }

@@ -1,6 +1,6 @@
 package de.imise.util.swing.component.list;
 
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
@@ -17,12 +17,12 @@ import de.imise.util.NamedObjectContainer;
  * @author AXS
  *         created on 15.08.2007
  */
-public class AlphabeticalJList extends JList<Object> {
+public class AlphabeticalJList<T> extends JList<NamedObjectContainer<T>> {
 
     /**
      * ListModel, which does the alphabetical sorting
      */
-    private final AlphabeticalListModel lm = new AlphabeticalListModel(null);
+    private final AlphabeticalListModel<NamedObjectContainer<T>> lm = new AlphabeticalListModel<>(null);
 
     /**
      *
@@ -34,25 +34,32 @@ public class AlphabeticalJList extends JList<Object> {
     /**
      * @param objects
      */
-    public AlphabeticalJList(final Collection<?> objects) {
+    public AlphabeticalJList(final Collection<? extends T> objects) {
         this();
-        setItems(objects);
-    }
-
-    /**
-     * @param listData
-     */
-    public AlphabeticalJList(final Object[] listData) {
-        this(Arrays.asList(listData));
+        setObjects(objects);
     }
 
     /**
      * @param objects
      */
-    public void setItems(final Collection<?> objects) {
+    public void setItems(final Collection<NamedObjectContainer<T>> objects) {
         removeAllElements();
-        for (Object o : objects) {
+        for (NamedObjectContainer<T> o : objects) {
             lm.addElement(o);
+        }
+        revalidate();
+        repaint();
+    }
+
+    /**
+     * @param objects
+     */
+    public void setObjects(final Collection<? extends T> objects) {
+        removeAllElements();
+        for (T o : objects) {
+            String displayName = o == null ? null : o.toString();
+            NamedObjectContainer<T> namedObjectContainer = new NamedObjectContainer<>(o, displayName);
+            lm.addElement(namedObjectContainer);
         }
         revalidate();
         repaint();
@@ -61,7 +68,7 @@ public class AlphabeticalJList extends JList<Object> {
     /**
      * @param anObject
      */
-    public void addItem(final Object anObject) {
+    public void addItem(final NamedObjectContainer<T> anObject) {
         lm.addElement(anObject);
         revalidate();
         revalidate();
@@ -73,10 +80,21 @@ public class AlphabeticalJList extends JList<Object> {
      * als Objekt und dem Anzeige-String <code>displayName</code>.
      *
      * @param anObject
+     */
+    public void addObject(final T anObject) {
+        addObject(anObject, anObject == null ? null : anObject.toString());
+    }
+
+    /**
+     * Fügt zur Liste ein <code>NamedObjectContainer</code> hinzu mit <code>anObject</code>
+     * als Objekt und dem Anzeige-String <code>displayName</code>.
+     *
+     * @param anObject
      * @param displayName
      */
-    public void addItem(final Object anObject, final String displayName) {
-        addItem(new NamedObjectContainer<>(anObject, displayName));
+    public void addObject(final T anObject, final String displayName) {
+        NamedObjectContainer<T> namedObjectContainer = new NamedObjectContainer<>(anObject, displayName);
+        addItem(namedObjectContainer);
     }
 
     /**
@@ -87,12 +105,9 @@ public class AlphabeticalJList extends JList<Object> {
      *
      * @return selektierte Objekt
      */
-    public Object getSelectedObject() {
-        Object selectedObject = getSelectedValue();
-        if (selectedObject instanceof NamedObjectContainer) {
-            return ((NamedObjectContainer<?>) selectedObject).getObject();
-        }
-        return selectedObject;
+    public T getSelectedObject() {
+        NamedObjectContainer<T> selectedObject = getSelectedValue();
+        return selectedObject.getObject();
     }
 
     /**
@@ -103,15 +118,13 @@ public class AlphabeticalJList extends JList<Object> {
      *
      * @return selektierte Objekt
      */
-    public List<Object> getSelectedObjects() {
-        List<Object> selectedObjects = getSelectedValuesList();
-        for (int i = 0; i < selectedObjects.size(); i++) {
-            Object selectedObject = selectedObjects.get(i);
-            if (selectedObject instanceof NamedObjectContainer) {
-                NamedObjectContainer<?> selected = (NamedObjectContainer<?>) selectedObject;
-                selectedObject = selected.getObject();
-                selectedObjects.set(i, selectedObject);
-            }
+    public List<T> getSelectedObjects() {
+        List<NamedObjectContainer<T>> selectedItems = getSelectedValuesList();
+        int size = selectedItems.size();
+        List<T> selectedObjects = new ArrayList<>(size);
+        for (NamedObjectContainer<T> selectedItem : selectedItems) {
+            T selectedObject = selectedItem.getObject();
+            selectedObjects.add(selectedObject);
         }
         return selectedObjects;
     }
@@ -130,54 +143,50 @@ public class AlphabeticalJList extends JList<Object> {
      *
      * @author AXS
      */
-    private class AlphabeticalListModel extends DefaultListModel<Object> {
+    private class AlphabeticalListModel<E> extends DefaultListModel<E> {
 
         /**
          * @param items
          */
-        public AlphabeticalListModel(final Collection<?> items) {
-            super();
+        public AlphabeticalListModel(final Collection<? extends E> items) {
             if (items != null) {
                 addAll(items);
             }
         }
 
-        /**
-         * @param items
-         */
         @Override
-        public void addAll(final Collection<?> items) {
-            for (Iterator<?> it = items.iterator(); it.hasNext();) {
+        public void addAll(final Collection<? extends E> items) {
+            for (Iterator<? extends E> it = items.iterator(); it.hasNext();) {
                 addElement(it.next());
             }
         }
 
         @Override
-        public void add(int index, final Object element) {
+        public void add(int index, final E element) {
             Object[] array = toArray();
             index = Alphabetical.getInsertPosition(array, element);
             super.add(index, element);
         }
 
         @Override
-        public void addElement(final Object obj) {
+        public void addElement(final E obj) {
             add(0, obj);
         }
 
         @Override
-        public void insertElementAt(final Object obj, final int index) {
+        public void insertElementAt(final E obj, final int index) {
             add(index, obj);
         }
 
         @Override
-        public Object set(final int index, final Object element) {
-            Object o = remove(index);
+        public E set(final int index, final E element) {
+            E o = remove(index);
             add(0, element);
             return o;
         }
 
         @Override
-        public void setElementAt(final Object obj, final int index) {
+        public void setElementAt(final E obj, final int index) {
             set(index, obj);
         }
     }

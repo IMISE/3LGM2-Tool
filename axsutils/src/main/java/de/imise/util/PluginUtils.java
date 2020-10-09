@@ -114,12 +114,7 @@ public class PluginUtils {
         List<Class<? extends T>> classes = PluginUtils.loadClasses(file, superClassOfResultClasses);
         List<T> instances = new ArrayList<>();
         for (Class<? extends T> clazz : classes) {
-            T instance = null;
-            try {
-                instance = clazz.newInstance();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+            T instance = ReflectionUtils.newInstance(clazz);
             if (instance != null) {
                 instances.add(instance);
                 if (findOnlyOne) {

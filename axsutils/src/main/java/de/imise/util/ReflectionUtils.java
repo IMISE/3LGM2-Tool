@@ -1,6 +1,7 @@
 package de.imise.util;
 
 import java.io.File;
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.net.URL;
 import java.util.ArrayList;
@@ -402,6 +403,20 @@ public class ReflectionUtils {
         public Class<?> getCurrentClass() {
             return getClassContext()[1];
         }
+    }
+
+    /**
+     * @param <T>
+     * @param clazz
+     */
+    public static final <T> T newInstance(final Class<? extends T> clazz) {
+        try {
+            Constructor<? extends T> emptyConstructor = clazz.getDeclaredConstructor();
+            return emptyConstructor.newInstance();
+        } catch (Throwable e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
 }

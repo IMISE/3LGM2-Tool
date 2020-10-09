@@ -7,6 +7,7 @@ package de.imise.tool3lgm.graphtools.userfield.calculator;
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.List;
 import java.util.Stack;
 import java.util.StringTokenizer;
@@ -68,8 +69,16 @@ public class Calculator {
      */
     private static final int RESULT_DECIMAL_PLACES_COUNT = 20;
 
-    private static final int DECIMAL_ROUND_MODE = BigDecimal.ROUND_UP;
+    /**
+     *
+     */
+    private static final RoundingMode DECIMAL_ROUND_MODE = RoundingMode.UP;
 
+    /**
+     * @param dividend
+     * @param divisor
+     * @return
+     */
     public static final BigDecimal divide(final BigDecimal dividend, final BigDecimal divisor) {
         //Das Teilen von BigDecimal erfordert die Angabe der Nachkommastellen und des Rundungsverhaltens.
         return dividend.divide(divisor, CALCULATING_DECIMAL_PLACES_COUNT, DECIMAL_ROUND_MODE);
@@ -88,6 +97,11 @@ public class Calculator {
         this.definitions = definitions;
     }
 
+    /**
+     * @param userField
+     * @param userFieldTarget
+     * @return
+     */
     public String calculate(final UserField userField, final UserFieldTarget userFieldTarget) {
         String result = calculateInternal(userField, userFieldTarget);
         //        System.err.print(result);

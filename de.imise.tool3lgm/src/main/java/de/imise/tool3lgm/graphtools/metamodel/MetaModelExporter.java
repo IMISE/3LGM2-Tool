@@ -265,6 +265,7 @@ public class MetaModelExporter {
         return sb.toString();
     }
 
+    @SuppressWarnings("unused")
     private String getEdgeStringOrg2(final Class<? extends Edge> edgeClass, final Class<? extends ModelElement> readingDirectionStartClass, final String intention) {
         String edgeClassName = edgeClass.getSimpleName();
         StringBuilder sb = new StringBuilder();
@@ -281,6 +282,7 @@ public class MetaModelExporter {
         return sb.toString();
     }
 
+    @SuppressWarnings("unused")
     private String getEdgeStringOrg(final Class<? extends Edge> edgeClass, final Class<? extends ModelElement> readingDirectionStartClass, final String intention) {
         String edgeClassName = edgeClass.getSimpleName();
         int minBackwardCardinality = MetaModel.getMinBackwardCardinality(edgeClass);

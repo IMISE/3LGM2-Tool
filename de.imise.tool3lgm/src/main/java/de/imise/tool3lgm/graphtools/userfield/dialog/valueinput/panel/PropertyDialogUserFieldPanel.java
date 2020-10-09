@@ -209,21 +209,21 @@ public class PropertyDialogUserFieldPanel extends ElementDialogPanel {
             textArea.setText(value);
             editorComponent = new JScrollPane(textArea);
         } else if (style == COMBO_BOX) {
-            AlphabeticalComboBox comboBox = new AlphabeticalComboBox(true);
+            AlphabeticalComboBox<String> comboBox = new AlphabeticalComboBox<>(true);
             boolean foundEntry = false;
             for (int i = 0; i < field.getListValuesCount(); i++) {
-                Object listValue = field.getListValueAt(i);
-                comboBox.addItem(listValue);
+                String listValue = field.getListValueAt(i);
+                comboBox.addObject(listValue);
                 if (listValue.equals(value)) {
-                    comboBox.setSelectedItem(listValue);
+                    comboBox.setSelectedObject(listValue);
                     foundEntry = true;
                 }
             }
             if (!foundEntry) {
                 if (value.length() > 0) {
                     field.addListValue(value);
-                    comboBox.addItem(value);
-                    comboBox.setSelectedItem(value);
+                    comboBox.addObject(value);
+                    comboBox.setSelectedObject(value);
                     foundEntry = true;
                 } else {
                     comboBox.setSelectedIndex(-1);

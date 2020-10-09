@@ -16,6 +16,7 @@ import javax.swing.JPopupMenu;
 import javax.swing.JRadioButtonMenuItem;
 
 import de.imise.util.NamedObjectContainer;
+import de.imise.util.ReflectionUtils;
 import de.imise.util.swing.event.ActionSource;
 import de.imise.util.swing.event.ExtendedAction;
 import de.imise.util.swing.event.OptionAction;
@@ -157,8 +158,8 @@ public class MenuCreator {
             }
         } else if (entry instanceof Class<?>) {
             try {
-                Class<?> menuItemClass = (Class<?>) entry;
-                item = (Component) menuItemClass.newInstance();
+                Class<? extends Component> menuItemClass = ((Class<?>) entry).asSubclass(Component.class);
+                item = ReflectionUtils.newInstance(menuItemClass);
             } catch (Exception e) {
                 e.printStackTrace();
             }

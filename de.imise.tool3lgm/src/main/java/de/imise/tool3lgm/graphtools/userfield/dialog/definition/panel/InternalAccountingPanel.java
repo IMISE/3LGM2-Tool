@@ -42,9 +42,9 @@ public class InternalAccountingPanel extends AbstractInputPanel implements Actio
 
     private final JRadioButton twsumAccountingBut = new JRadioButton(UserField.getDisplayableFunctionName(ACCOUNTING_FUNCTION_TWSUM));
 
-    private final AlphabeticalComboBox dirComboBox = new AlphabeticalComboBox();
+    private final AlphabeticalComboBox<String> dirComboBox = new AlphabeticalComboBox<>();
 
-    private final AlphabeticalComboBox vgComboBox = new AlphabeticalComboBox();
+    private final AlphabeticalComboBox<String> vgComboBox = new AlphabeticalComboBox<>();
 
     /**
      * "Gleichverteilt" in der gewählten Loacle. Wird angezeigt, wenn als Verteilungsgewicht bei einer Verrechnung über die Teilwertsumme kein
@@ -70,8 +70,8 @@ public class InternalAccountingPanel extends AbstractInputPanel implements Actio
         functionButtonPanel.add(sumAccountingBut);
         functionButtonPanel.add(twsumAccountingBut);
 
-        dirComboBox.addItem(UserField.DIRECTION_FROM_PART_TO_WHOLE, getResString("part_to_whole"));
-        dirComboBox.addItem(UserField.DIRECTION_FROM_WHOLE_TO_PART, getResString("whole_to_part"));
+        dirComboBox.addObject(UserField.DIRECTION_FROM_PART_TO_WHOLE, getResString("part_to_whole"));
+        dirComboBox.addObject(UserField.DIRECTION_FROM_WHOLE_TO_PART, getResString("whole_to_part"));
 
         Class<? extends UserFieldTarget> userFieldTargetClass = userField.getTargetClass();
         if (ModelElement.class.isAssignableFrom(userFieldTargetClass)) {
@@ -79,10 +79,10 @@ public class InternalAccountingPanel extends AbstractInputPanel implements Actio
             MetaModel metaModel = definitions.getMetaModel();
             for (Class<? extends Edge> edgeClass : metaModel.getEdgeTypes(elementClass)) {
                 if (SubordinationEdge.class.isAssignableFrom(edgeClass)) {
-                    vgComboBox.addItem(UNIFORMLY_DISTRIBUTED);
+                    vgComboBox.addObject(UNIFORMLY_DISTRIBUTED);
                     vgComboBox.addSeparator(false);
                     for (UserField uf : definitions.getUserFields(edgeClass)) {
-                        vgComboBox.addItem(uf.getHashCode(), uf.toString());
+                        vgComboBox.addObject(uf.getHashCode(), uf.toString());
                     }
                 }
             }
@@ -147,7 +147,7 @@ public class InternalAccountingPanel extends AbstractInputPanel implements Actio
         } else if (e.getSource() == twsumAccountingBut) {
             dirComboBox.setEnabled(true);
             vgComboBox.setEnabled(true);
-            vgComboBox.setSelectedItem(UNIFORMLY_DISTRIBUTED);
+            vgComboBox.setSelectedObject(UNIFORMLY_DISTRIBUTED);
         } else {
             dirComboBox.setEnabled(true);
             dirComboBox.setSelectedIndex(0);
@@ -220,9 +220,9 @@ public class InternalAccountingPanel extends AbstractInputPanel implements Actio
      * @return
      */
     public String getSelectedInternalAccountingWeigthHash() {
-        Object vg = vgComboBox.getSelectedObject();
+        String vg = vgComboBox.getSelectedObject();
         if (vg != null && !vg.equals(UNIFORMLY_DISTRIBUTED)) {
-            return vg.toString();
+            return vg;
         }
         return null;
     }

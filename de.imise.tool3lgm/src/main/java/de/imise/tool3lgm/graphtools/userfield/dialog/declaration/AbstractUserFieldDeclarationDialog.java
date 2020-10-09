@@ -23,6 +23,7 @@ import javax.swing.border.EmptyBorder;
 
 import de.imise.tool3lgm.graphtools.dialog.tools.EasyComponents;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
+import de.imise.tool3lgm.graphtools.userfield.UserField;
 import de.imise.tool3lgm.graphtools.userfield.UserFieldDefinitions;
 import de.imise.util.swing.component.AlphabeticalComboBox;
 import de.imise.util.swing.dialog.AbstractSizeAndPositionRestoringDialog;
@@ -66,7 +67,7 @@ public abstract class AbstractUserFieldDeclarationDialog extends AbstractSizeAnd
     /**
      * ComboBox mit der die Art des neuen benutzerdefinierten Eigenschaftsfeldes festgelegt wird
      */
-    protected AlphabeticalComboBox userFieldTypeComboBox;
+    protected AlphabeticalComboBox<UserField.Style> userFieldTypeComboBox;
 
     /**
      * @param owner
@@ -77,7 +78,7 @@ public abstract class AbstractUserFieldDeclarationDialog extends AbstractSizeAnd
         MetaModel metaModel = definitions.getMetaModel();
         classComboBox = new UserFieldDeclarationDialogClassComboBox(metaModel, 13);
         fieldList = new UserFieldDeclarationDialogFieldList(definitions);
-        userFieldTypeComboBox = new AlphabeticalComboBox();
+        userFieldTypeComboBox = new AlphabeticalComboBox<>();
 
         newButton = createButton("new");
         editButton = createDisabledButton("userFieldDeclarationDialog_editButtonText");

@@ -46,12 +46,12 @@ public class DistributionWeightEditorPanel extends AbstractElementTypeUserFieldE
     /**
      * Auswahlbox für die Verteilungsgewichte des in <code>edgeBox</code> ausgewählten Kantentyps
      */
-    private final AlphabeticalComboBox weightBox = new AlphabeticalComboBox();
+    private final AlphabeticalComboBox<UserField> weightBox = new AlphabeticalComboBox<>();
 
     /**
      * Auswahlbox über die man die Tabelle auf genau ein Spaltenelement einschränken kann
      */
-    private final AlphabeticalComboBox columnFilterBox = new AlphabeticalComboBox();
+    private final AlphabeticalComboBox<Object> columnFilterBox = new AlphabeticalComboBox<>();
 
     /**
      * Richtung der Edge, die in der <code>edgeBox</code> ausgewählt ist.
@@ -183,7 +183,7 @@ public class DistributionWeightEditorPanel extends AbstractElementTypeUserFieldE
 
         for (UserField uf : definitions.getUserFields(elementTypeBoxSelection)) {
             if (uf.isClassificationUserField()) {
-                weightBox.addItem(uf);
+                weightBox.addObject(uf);
             }
         }
         weightBox.setEnabled(true);
@@ -221,12 +221,12 @@ public class DistributionWeightEditorPanel extends AbstractElementTypeUserFieldE
         Vector<?> columnIdentifiers = table.getColumnIdentifiers();
         columnFilterBox.removeAllItems();
         columnFilterBox.addSeparator(getResString("filter_column"));
-        columnFilterBox.addItem(new NamedObjectContainer<ModelElement>(null, getResString("show_all_columns")));
+        columnFilterBox.addObject(null, getResString("show_all_columns"));
         columnFilterBox.setSelectedIndex(1);
         columnFilterBox.addSeparator(false);
         if (columnIdentifiers != null) {
             for (Object columnIdentifier : columnIdentifiers) {
-                columnFilterBox.addItem(columnIdentifier);
+                columnFilterBox.addObject(columnIdentifier);
             }
         }
         columnFilterBox.setEnabled(true);
@@ -363,10 +363,10 @@ public class DistributionWeightEditorPanel extends AbstractElementTypeUserFieldE
             return;
         }
         Class<? extends Edge> selectedEdgeClass = ((Class<?>) elementTypeBox.getSelectedObject()).asSubclass(Edge.class);
-        String selectedEdgeName = elementTypeBox.getSelectedItem().toString();
+        String selectedEdgeName = elementTypeBox.getSelectedString();
         ElementsNameBuilder elementsNameBuilder = dialog.getElementsNameBuilder();
         choosedEdgeDirection = selectedEdgeName.equals(elementsNameBuilder.getFullForwardMetaAssociationName(selectedEdgeClass)) ? FORWARD : BACKWARD;
-        UserField selectedWeigthUserField = (UserField) weightBox.getSelectedObject();
+        UserField selectedWeigthUserField = weightBox.getSelectedObject();
         GraphDocument doc = dialog.getMainDoc();
         AbstractUserFieldTableModel uftm = new UserFieldWeightTableModel(doc, selectedEdgeClass, choosedEdgeDirection, selectedWeigthUserField, columnFilterBoxSelection);
         UserFieldTableController tec = UserFieldTableController.getNewDistributionWeightTableController(uftm);

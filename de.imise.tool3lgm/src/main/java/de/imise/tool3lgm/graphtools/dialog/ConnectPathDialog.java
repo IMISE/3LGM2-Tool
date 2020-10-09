@@ -28,12 +28,12 @@ public class ConnectPathDialog implements ActionListener {
     /**
      *
      */
-    private final AlphabeticalComboBox pathChooser;
+    private final AlphabeticalComboBox<SimpleMetaPath> pathChooser;
 
     /**
      *
      */
-    private final AlphabeticalComboBox endElementChooser;
+    private final AlphabeticalComboBox<ModelElement> endElementChooser;
 
     /**
      *
@@ -73,8 +73,8 @@ public class ConnectPathDialog implements ActionListener {
      */
     public ConnectPathDialog(final GraphDocument doc, final SimpleMetaPath... metaPaths) {
         this.doc = doc.getCollection().getMainDoc();
-        pathChooser = new AlphabeticalComboBox(metaPaths);
-        endElementChooser = new AlphabeticalComboBox();
+        pathChooser = new AlphabeticalComboBox<>(metaPaths);
+        endElementChooser = new AlphabeticalComboBox<>();
         pathChooser.addActionListener(this);
         pathChooser.setSelectedIndex(0);
     }
@@ -106,31 +106,47 @@ public class ConnectPathDialog implements ActionListener {
                     ElementsNameBuilder elementsNameBuilder = metaModel.getElementsNameBuilder();
                     String createNew = getResString("new") + ": " + elementsNameBuilder.getDisplayableName(newEndClass);
                     endElementChooser.removeAllItems();
-                    endElementChooser.addItem(createNew);
+                    endElementChooser.addObject(null, createNew);
                     endElementChooser.addSeparator(false);
-                    endElementChooser.addAll(endElements);
+                    endElementChooser.addAllObjects(endElements);
                 }
             }
         }
     }
 
+    /**
+     * @return
+     */
     public SimpleMetaPath getSelectedPath() {
-        return pathChooser.getSelected(SimpleMetaPath.class);
+        return pathChooser.getSelectedObject();
     }
 
+    /**
+     * @return
+     */
     public ModelElement getSelectedEndElement() {
-        return endElementChooser.getSelected(ModelElement.class);
+        return endElementChooser.getSelectedObject();
     }
 
+    /**
+     * @return
+     */
     public boolean isCreateNewEndElementSelected() {
         //erstes ist NEU-Eintrag
         return endElementChooser.getSelectedIndex() == 0;
     }
 
+    /**
+     * @return
+     */
     public boolean hasValidSelection() {
         return pathChooser.getSelectedIndex() >= 0 && endElementChooser.getSelectedIndex() >= 0;
     }
 
+    /**
+     * @param parentComponent
+     * @return
+     */
     public final boolean createDialog(final Component parentComponent) {
         JOptionPane pane = new JOptionPane(jOptionPaneMessage(), JOptionPane.PLAIN_MESSAGE, JOptionPane.OK_CANCEL_OPTION);
         String title = getResString("CONNECT_PATH_TITLE");

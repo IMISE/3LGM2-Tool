@@ -119,7 +119,7 @@ public class Tool3lgmMetaModelContextChooser {
      * @return A ComboBox to choose a MetaModel.
      */
     private static AlphabeticalComboBox getChooseMetaModelComboBox() {
-        AlphabeticalComboBox comboBox = new AlphabeticalComboBox();
+        AlphabeticalComboBox<MetaModelContext> comboBox = new AlphabeticalComboBox<>();
         MetaModelContext selectedOption = null;
         Tool3lgmModelType userpropertiesStoredModelType = Tool3lgmMetaModelContext.getUserpropertiesStoredModelType();
         if (userpropertiesStoredModelType == null) {
@@ -127,7 +127,7 @@ public class Tool3lgmMetaModelContextChooser {
         }
         MetaModelContext lastMetaModelContext = userpropertiesStoredModelType.getMetaModelContext();
         for (MetaModelContext metaModelContext : Tool3lgmMetaModelContext.getRegularMetaModelContexts()) {
-            comboBox.addItem(metaModelContext, "   " + metaModelContext.getMetaModelDisplayName() + "   ");
+            comboBox.addObject(metaModelContext, "   " + metaModelContext.getMetaModelDisplayName() + "   ");
             if (selectedOption == null || lastMetaModelContext == metaModelContext) {
                 selectedOption = metaModelContext;
             }

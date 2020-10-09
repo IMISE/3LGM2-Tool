@@ -161,7 +161,6 @@ public class ComponentAsImageExportHandler {
                 ImageIO.write(buffer, exportFileType, saveFile);
             }
         } catch (Exception e) {
-            e.printStackTrace();
             Component parent = ParentComponentFinder.getFrameOrDialog(comp);
             JOptionPane.showMessageDialog(parent, drh.getResString("ERROR_MESSAGE"), drh.getResString("ERROR_TITLE"), JOptionPane.ERROR_MESSAGE);
         }

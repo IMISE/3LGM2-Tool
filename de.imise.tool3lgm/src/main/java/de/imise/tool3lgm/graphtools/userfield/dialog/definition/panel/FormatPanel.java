@@ -22,7 +22,6 @@ import java.util.Map;
 import java.util.Vector;
 
 import javax.swing.BorderFactory;
-import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
@@ -76,7 +75,7 @@ public class FormatPanel extends AbstractInputPanel implements ActionListener, C
     /**
      * In dieser AlphabeticalComboBox sind die schon bestehenden Formate enthalten
      */
-    private final AlphabeticalComboBox formatComboBox;
+    private final AlphabeticalComboBox<UserField> formatComboBox;
 
     /**
      * Dieser Spinner gibt die anzhal der Nachkommastellen an.
@@ -87,7 +86,7 @@ public class FormatPanel extends AbstractInputPanel implements ActionListener, C
      * In dieser editierbaren ComboBox werden für neue Formatvorlagen die Einheiten eingegeben. Schon bestehende Einheiten befinden sich in der
      * OcmboBox zum Auswählen.
      */
-    private final AlphabeticalComboBox unitBox;
+    private final AlphabeticalComboBox<String> unitBox;
 
     /**
      * Der Button erweitert die Anzeige des Panels um die Eingabeelemente für neue Formatvorlagen.
@@ -138,12 +137,12 @@ public class FormatPanel extends AbstractInputPanel implements ActionListener, C
         newFormatesList = new ArrayList<>();
         setBorder(BorderFactory.createTitledBorder(getResString("formatPaneBorder")));
         GridBagConstraints constraints = new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0, GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0);
-        formatComboBox = new AlphabeticalComboBox();
+        formatComboBox = new AlphabeticalComboBox<>();
         formatComboBox.addActionListener(this);
         SpinnerNumberModel spinnermodel = new SpinnerNumberModel(0, 0, 10, 1);
         digitSpinner = new JSpinner(spinnermodel);
         digitSpinner.addChangeListener(this);
-        unitBox = new AlphabeticalComboBox();
+        unitBox = new AlphabeticalComboBox<>();
         unitBox.setEditable(true);
 
         unitBoxElements.add("");
@@ -250,12 +249,12 @@ public class FormatPanel extends AbstractInputPanel implements ActionListener, C
 
         //ComboBox mit allen bisher defnierten Formaten zusammenbauen
         formatComboBox.removeAllItems();
-        formatComboBox.addItem(null, getResString("standard_format"));
+        formatComboBox.addObject(null, getResString("standard_format"));
         formatComboBox.addSeparator(false);
 
         for (UserField uf : definitions.getFormatUserFields()) {
             if (uf.hasStyle(UserField.Style.FORMAT)) {
-                formatComboBox.addItem(uf, getFormatPatternString(uf));
+                formatComboBox.addObject(uf, getFormatPatternString(uf));
 
                 // In mehrern Formatvorlagen können selbstverständlich auch die Einheiten mehrmals vorkommen.
                 // Damit für die Definition eines neuen Formates die Einheiten nicht mehrmals angeboten werden,
@@ -269,7 +268,7 @@ public class FormatPanel extends AbstractInputPanel implements ActionListener, C
                 }
             }
         }
-        unitBox.addAll(unitBoxElements);
+        unitBox.addAllObjects(unitBoxElements);
 
         //Wenn sich das Standardformat % mit 2 Nachkommastellen noch nicht im
         // Kostenmodell befindet, wird es hinzugefügt.
@@ -343,8 +342,8 @@ public class FormatPanel extends AbstractInputPanel implements ActionListener, C
                     }
                     return true;
                 }
-                //	if (formatUnit.equals(unitBox.getText()))
-                if (formatUnit.equals(unitBox.getSelectedItem())) {
+                String text = unitBox.getText();
+                if (formatUnit.equals(text)) {
                     return true;
                 }
             }
@@ -368,7 +367,7 @@ public class FormatPanel extends AbstractInputPanel implements ActionListener, C
         format.setFormatUnit(unit);
         definitions.add(format);
 
-        formatComboBox.addItem(format, getFormatPatternString(format));
+        formatComboBox.addObject(format, getFormatPatternString(format));
     }
 
     /**
@@ -386,13 +385,15 @@ public class FormatPanel extends AbstractInputPanel implements ActionListener, C
         String digitSpinnerValueString = String.valueOf(digitSpinnerValueObject);
         int formatFractionDigits = Integer.parseInt(digitSpinnerValueString);
         format.setFormatFractionDigits(formatFractionDigits);
-        Object selectedUnitItem = unitBox.getSelectedItem();
-        String formatUnit = selectedUnitItem == null ? "" : selectedUnitItem.toString();
+        //Note: don't replace the AlphabeticalComboBox.getSelectedString() by
+        //AlphabeticalComboBox.getSelectedObject() because the String-method
+        //also returns the editor content if the item was not added to the list!
+        String formatUnit = unitBox.getSelectedString();
 
         format.setFormatUnit(formatUnit);
         unitBoxElements.add(format.getFormatUnit());
         definitions.add(format);
-        unitBox.setModel(new DefaultComboBoxModel(unitBoxElements.toArray()));
+        unitBox.setAllObjects(unitBoxElements);
         return format;
     }
 
@@ -407,7 +408,7 @@ public class FormatPanel extends AbstractInputPanel implements ActionListener, C
         }
         UserField formatUserField = (UserField) selectedFormat;
         //wenn sich im Spinner und im EinheitenTextfeld nichts geändert hat
-        if (((Integer) digitSpinner.getValue()).intValue() == formatUserField.getFormatFractionDigits() && unitBox.getSelectedItem().equals(formatUserField.getFormatUnit())) {
+        if (((Integer) digitSpinner.getValue()).intValue() == formatUserField.getFormatFractionDigits() && unitBox.getSelectedObject().equals(formatUserField.getFormatUnit())) {
             //keinen Refresh anbieten
             refreshButton.setEnabled(false);
         } else {
@@ -462,7 +463,7 @@ public class FormatPanel extends AbstractInputPanel implements ActionListener, C
 
             if (!isDuplicateFormat()) {
                 UserField formatUserField = addNewFormat();
-                formatComboBox.addItem(formatUserField, getFormatPatternString(formatUserField));
+                formatComboBox.addObject(formatUserField, getFormatPatternString(formatUserField));
                 formatComboBox.setSelectedObject(formatUserField);
                 newFormatesList.add(formatUserField);
                 userField.setFormatUserField(getSelectedFormatUserField());

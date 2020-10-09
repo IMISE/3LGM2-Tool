@@ -144,7 +144,7 @@ public final class MetaModelContext extends SimpleResourceBundleSourceAdapter im
         if (metaModel == null) {
             try {
                 metaModel = new MetaModel(this);
-            } catch (InstantiationException | IllegalAccessException e) {
+            } catch (Throwable e) {
                 e.printStackTrace();
             }
         }

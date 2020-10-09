@@ -4,6 +4,7 @@
 package de.imise.tool3lgm.graphtools.consistency.tableview;
 
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
+import static de.imise.tool3lgm.gui.menu.ElementSelectionContextGenerator.addConnectMenuItems;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
@@ -25,7 +26,6 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.path.metapaths.SimpleMetaPath;
 import de.imise.tool3lgm.graphtools.undoredo.TransactionManager;
-import de.imise.tool3lgm.gui.menu.ElementSelectionContextGenerator;
 import de.imise.util.NamedObjectContainer;
 
 /**
@@ -58,7 +58,6 @@ public class ConsistencyErrorTableMouseListener extends MouseAdapter {
      * @param errorTable
      */
     ConsistencyErrorTableMouseListener(final ModelValidator modelValidator, final JTable errorTable) {
-        super();
         this.modelValidator = modelValidator;
         table = errorTable;
     }
@@ -78,11 +77,14 @@ public class ConsistencyErrorTableMouseListener extends MouseAdapter {
         for (int r : rows) {
             int errorColumnIndex = ConsistencyErrorTableModel.ColumnNames.ERROR_TYPE.ordinal();
             Object errorValue = table.getValueAt(r, errorColumnIndex);
-            NamedObjectContainer<AbstractConsistencyError> errContainer = (NamedObjectContainer<AbstractConsistencyError>) errorValue;
-            AbstractConsistencyError error = errContainer.getObject();
-            errors.add(error);
-            ModelElement me = error.getModelElement();
-            selectedErrorElements.add(me);
+            if (NamedObjectContainer.isInstanceWithType(errorValue, AbstractConsistencyError.class)) {
+                @SuppressWarnings("unchecked") //it's checked!
+                NamedObjectContainer<AbstractConsistencyError> errContainer = (NamedObjectContainer<AbstractConsistencyError>) errorValue;
+                AbstractConsistencyError error = errContainer.getObject();
+                errors.add(error);
+                ModelElement me = error.getModelElement();
+                selectedErrorElements.add(me);
+            }
         }
         JPopupMenu popupMenu = getPopupMenu();
         popupMenu.show(table, e.getX(), e.getY());
@@ -103,10 +105,13 @@ public class ConsistencyErrorTableMouseListener extends MouseAdapter {
             int clickedRow = table.rowAtPoint(e.getPoint());
             int column = ConsistencyErrorTableModel.ColumnNames.ERROR_TYPE.ordinal();
             Object value = table.getValueAt(clickedRow, column);
-            NamedObjectContainer<AbstractConsistencyError> errContainer = (NamedObjectContainer<AbstractConsistencyError>) value;
-            AbstractConsistencyError error = errContainer.getObject();
-            ErrorSolutionLibrary errorSolutionLibrary = error.getErrorSolutionLibrary();
-            errorSolutionLibrary.execSolution(error);
+            if (NamedObjectContainer.isInstanceWithType(value, AbstractConsistencyError.class)) {
+                @SuppressWarnings("unchecked") //it's checked!
+                NamedObjectContainer<AbstractConsistencyError> errContainer = (NamedObjectContainer<AbstractConsistencyError>) value;
+                AbstractConsistencyError error = errContainer.getObject();
+                ErrorSolutionLibrary errorSolutionLibrary = error.getErrorSolutionLibrary();
+                errorSolutionLibrary.execSolution(error);
+            }
         }
 
     }
@@ -179,9 +184,8 @@ public class ConsistencyErrorTableMouseListener extends MouseAdapter {
                 ModelElement missingPathStartElement = missingPathError.getMissingPathStartElement();
                 SimpleMetaPath errorCorrectingCreatableMetaPath = missingPathError.getErrorCorrectingCreatableMetaPath();
                 Collection<ModelElement> missingElements = missingPathError.getMissingElements();
-                ElementSelectionContextGenerator.addConnectMenuItems(menu, missingPathStartElement, errorCorrectingCreatableMetaPath, missingElements);
+                addConnectMenuItems(menu, missingPathStartElement, errorCorrectingCreatableMetaPath, missingElements);
             }
-
         }
     }
 

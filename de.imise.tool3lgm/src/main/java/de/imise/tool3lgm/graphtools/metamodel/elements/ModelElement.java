@@ -1897,6 +1897,7 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
      * @param edgeClass Klasse der zu suchenden Kanten
      * @return
      */
+    @SuppressWarnings("unchecked") //it's checked!
     public final <T extends Edge> List<T> getTypedEdges(final Class<T> edgeClass) {
         List<T> returnList = new ArrayList<>(getEdgesCount());
         for (Edge edge : getEdges()) {

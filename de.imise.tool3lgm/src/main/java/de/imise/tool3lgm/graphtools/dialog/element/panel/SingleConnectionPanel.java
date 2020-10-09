@@ -49,7 +49,7 @@ import de.imise.util.swing.component.LimitedSizeScrollTextPane;
 public class SingleConnectionPanel extends AbstractPathConnectionPanel {
 
     /** Box, in der die verbindbaren Elemente zur Auswahl gestellt werden, wenn es mehr als eines gibt. */
-    private final AlphabeticalComboBox connectedElementsBox;
+    private final AlphabeticalComboBox<ElementContainer> connectedElementsBox;
 
     /** Eingabefeld, in dem der Name des verbundenen Elementes angezeit wird und geändert werden kann. */
     private final LimitedSizeScrollTextPane connectedElementName;
@@ -64,13 +64,13 @@ public class SingleConnectionPanel extends AbstractPathConnectionPanel {
     private String oldname = "";
 
     /** Menu entry */
-    private final NamedObjectContainer<?> createNewMenuItem;
+    private final NamedObjectContainer<ElementContainer> createNewMenuItem;
 
     /** Menu entry to unlink (is set to one whitepsace) */
-    private final String unlinkMenuItem;
+    private final NamedObjectContainer<ElementContainer> unlinkMenuItem;
 
     /** Menu entry to delete the connetced element */
-    private NamedObjectContainer<?> deleteConnectedMenuItem;
+    private NamedObjectContainer<ElementContainer> deleteConnectedMenuItem;
 
     /**
      * COMMENTME
@@ -117,14 +117,20 @@ public class SingleConnectionPanel extends AbstractPathConnectionPanel {
             itemListener = new LGMItemListener(getItemStateChangedAction(this));
             connectedElementName = null;
             connectedElementViewComponent = connectedElementsBox;
-            unlinkMenuItem = " ";
+            unlinkMenuItem = new NamedObjectContainer<>(null, " ");
 
             connectedElementsBox.addItemListener(itemListener);
             //Doppelklick-Action und Kontextmenü anghängen
             addMouseActions(connectedElementsBox);
             add(connectedElementsBox, BorderLayout.CENTER);
         }
-        createNewMenuItem = editable && metaPath.isCreatable(true) ? new NamedObjectContainer<Object>(this, getResString("new") + ": " + elementsNameBuilder.getDisplayableName(searchElementClass)) : null;
+        if (editable && metaPath.isCreatable(true)) {
+            String createNewMenuItemDisplayString = getResString("new") + ": " + elementsNameBuilder.getDisplayableName(searchElementClass);
+            createNewMenuItem = new NamedObjectContainer<>(null, createNewMenuItemDisplayString);
+        } else {
+            createNewMenuItem = null;
+        }
+
     }
 
     @Override
@@ -143,8 +149,7 @@ public class SingleConnectionPanel extends AbstractPathConnectionPanel {
                 connectedElementsBox.addItem(unlinkMenuItem);
                 if (connectedElement != null) {
                     connectedElementsBox.addSeparator(false); //prevent reordering of the first 3 entries
-                    deleteConnectedMenuItem = new NamedObjectContainer<Object>(this, getResString("delete") + ": " + connectedElement);
-                    connectedElementsBox.addItem(deleteConnectedMenuItem);
+                    deleteConnectedMenuItem = connectedElementsBox.addObject(null, getResString("delete") + ": " + connectedElement);
                 }
             }
             //bei abhängigen Elementen werden in der Auswahlbox nur die angezeigt, die mit dem Element des Dialoges/Panels verbunden sind, sonst alle bzw. alle, die über den ConditionMetaPath verbunden sind
@@ -160,12 +165,12 @@ public class SingleConnectionPanel extends AbstractPathConnectionPanel {
                 connectedElementsBox.addItem(createNewMenuItem);
             }
             connectedElementsBox.addSeparator(true);
-            connectedElementsBox.addAll(available);
+            connectedElementsBox.addAllObjects(available);
             for (ElementContainer ec : allConnectedContainers) {
-                connectedElementsBox.removeItem(ec);
-                connectedElementsBox.addItem(ec);
+                connectedElementsBox.removeObject(ec);
+                connectedElementsBox.addObject(ec);
             }
-            connectedElementsBox.setSelectedItem(connectedContainer);
+            connectedElementsBox.setSelectedObject(connectedContainer);
             connectedElementsBox.addItemListener(itemListener);
         } else if (connectedElementName != null) { // beim ersten update() aus dem Konstruktor sind beide (Box und TextArea) null -> nicht einfach nur else hier sondern else-if
             //wir hatten mal ausprobiert, den Hintergund bei nicht änderbaren Elementen auszugrauen -> gefiel mir aber nicht (AXS)
@@ -199,7 +204,7 @@ public class SingleConnectionPanel extends AbstractPathConnectionPanel {
     @Override
     protected final Object getSelection(final MouseEvent e) {
         //das Mausevent ist egal, da immer nur das eine verbundene Element des Panel selektiert sein kann
-        return connectedElementsBox != null ? connectedElementsBox.getSelectedItem() : connectedElement;
+        return connectedElementsBox != null ? connectedElementsBox.getSelectedObject() : connectedElement;
     }
 
     @Override

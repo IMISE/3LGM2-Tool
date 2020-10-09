@@ -3,6 +3,7 @@ package de.imise.tool3lgm.graphtools.metamodel;
 import static de.imise.tool3lgm.graphtools.metamodel.EdgeCardinality.ZERO;
 
 import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -338,13 +339,18 @@ public final class MetaModel extends CoreMetaModel {
      * @param metaModelContext
      * @throws IllegalAccessException
      * @throws InstantiationException
+     * @throws SecurityException
+     * @throws NoSuchMethodException
+     * @throws InvocationTargetException
+     * @throws IllegalArgumentException
      */
-    public MetaModel(final MetaModelContext metaModelContext) throws InstantiationException, IllegalAccessException {
+    public MetaModel(final MetaModelContext metaModelContext) throws NoSuchMethodException, SecurityException, InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
         super(metaModelContext);
         modelElementInstanceCreator = new ModelElementInstanceCreator(this);
         elementaryMetaPathHandler = new ElementaryMetaPathHandler(this);
         Class<? extends MetaModelDefinition> metaModelClass = metaModelContext.getMetaModelDefinitionClass();
-        MetaModelDefinition metaModelDefinition = metaModelClass.newInstance();
+        Constructor<? extends MetaModelDefinition> metaModelConstructor = metaModelClass.getDeclaredConstructor();
+        MetaModelDefinition metaModelDefinition = metaModelConstructor.newInstance();
         //Knoten
         allDomainLayerNodesSet = ImmutableSet.copyOf(Arrays.asList(metaModelDefinition.getAllDomainLayerNodes()));
         allInterDomainLogicalLayerNodesSet = ImmutableSet.copyOf(Arrays.asList(metaModelDefinition.getAllInterDomainLogicalLayerNodes()));
@@ -1407,6 +1413,7 @@ public final class MetaModel extends CoreMetaModel {
      * @param superElement
      * @return
      */
+    @SuppressWarnings("unchecked") //it's checked!
     private <T extends SubordinationEdge> List<Class<T>> getSubordinationEdgeTypes(final Class<? extends ModelElement> elementClass, final Class<T> subordinationEdgeClass, final boolean superElement) {
         Class<? extends Edge>[] edgeTypes = getEdgeTypes(elementClass);
         List<Class<T>> returnList = new ArrayList<>();
@@ -1951,7 +1958,8 @@ public final class MetaModel extends CoreMetaModel {
             instance = constructor.newInstance(this);
         } catch (Exception e) {
             try {
-                instance = metaModelDependentClass.newInstance();
+                Constructor<? extends T> emptyConstructor = metaModelDependentClass.getDeclaredConstructor();
+                instance = emptyConstructor.newInstance();
             } catch (Exception e2) {
             }
         }

@@ -299,7 +299,34 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
 
     @Override
     public String toString() {
+        return getName();
+    }
+
+    /**
+     * @return
+     */
+    public String getName() {
         return name;
+    }
+
+    public void setName(final String name) {
+        this.name = name;
+        distribute(MODEL_OR_SZENARIO_NAME_CHANGED, null, getMainDoc(), STANDARD_PID);
+    }
+
+    /**
+     * @return setzt den Title auf dasselbe wie {@link #getName()}, aber ohne die Dateiendung
+     */
+    public String getTitle() {
+        int lastPointIndex = name.lastIndexOf('.');
+        String title = name;
+        if (lastPointIndex > 0 && lastPointIndex < title.length() - 1) {
+            String extension = title.substring(lastPointIndex + 1);
+            if (isExtension(extension)) {
+                title = title.substring(0, lastPointIndex);
+            }
+        }
+        return title;
     }
 
     /**
@@ -434,33 +461,6 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
      */
     public boolean isInitialzed() {
         return initialized;
-    }
-
-    /**
-     * @return
-     */
-    public String getName() {
-        return name;
-    }
-
-    public void setName(final String name) {
-        this.name = name;
-        distribute(MODEL_OR_SZENARIO_NAME_CHANGED, null, getMainDoc(), STANDARD_PID);
-    }
-
-    /**
-     * @return setzt den Title auf dasselbe wie {@link #getName()}, aber ohne die Dateiendung
-     */
-    public String getTitle() {
-        int lastPointIndex = name.lastIndexOf('.');
-        String title = name;
-        if (lastPointIndex > 0 && lastPointIndex < title.length() - 1) {
-            String extension = title.substring(lastPointIndex + 1);
-            if (isExtension(extension)) {
-                title = title.substring(0, lastPointIndex);
-            }
-        }
-        return title;
     }
 
     /**

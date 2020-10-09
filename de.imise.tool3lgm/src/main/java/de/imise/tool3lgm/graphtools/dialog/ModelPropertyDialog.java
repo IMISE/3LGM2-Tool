@@ -42,7 +42,7 @@ public final class ModelPropertyDialog extends AbstractPropertyDialog implements
     private GraphDocument lastActiveDoc = null;
 
     /** Auswahlbox für das aktive (Teil-)Modell */
-    private final AlphabeticalComboBox docBox = new AlphabeticalComboBox();
+    private final AlphabeticalComboBox<GraphDocument> docBox = new AlphabeticalComboBox<>();
 
     private static final Dimension DEFAULT_SIZE = new Dimension(600, 500);
 
@@ -87,10 +87,10 @@ public final class ModelPropertyDialog extends AbstractPropertyDialog implements
         JScrollPane scrollPane = new JScrollPane(textPane);
         contentPane.add(scrollPane, BorderLayout.CENTER);
 
-        docBox.addItem(mainDoc);
+        docBox.addObject(mainDoc);
         Iterable<Szenario> szenarios = gdcoll.getSzenarios();
         for (Szenario szen : szenarios) {
-            docBox.addItem(szen);
+            docBox.addObject(szen);
         }
         borderLayout = new BorderLayout();
         JPanel northPanel = new JPanel(borderLayout);
@@ -103,7 +103,7 @@ public final class ModelPropertyDialog extends AbstractPropertyDialog implements
         docBox.addActionListener(e -> selectedDocChanged());
 
         LGMGraphDocument selectedDoc = gdcoll.getSelectedDoc();
-        docBox.setSelectedItem(selectedDoc);
+        docBox.setSelectedObject(selectedDoc);
 
         //als Listener registrieren
         gdcoll.addClosedTransactionsListener(this);
@@ -121,28 +121,25 @@ public final class ModelPropertyDialog extends AbstractPropertyDialog implements
         for (Szenario szen : szenarios) {
             boolean found = false;
             for (int j = 0; j < docBoxItemCount; j++) {
-                Object item = docBox.getItemAt(j);
-                if (!(item instanceof Szenario)) {
-                    continue;
-                }
-                if (item == szen) {
+                GraphDocument doc = docBox.getObjectAt(j);
+                if (doc == szen) {
                     found = true;
                     break;
                 }
             }
             if (!found) {
-                docBox.addItem(szen);
+                docBox.addObject(szen);
             }
         }
         // prüfen, ob alle auswählbaren Teilmodelle noch vorhanden sind
         for (int j = 0; j < docBoxItemCount; j++) {
-            Object item = docBox.getItemAt(j);
-            if (!(item instanceof Szenario)) {
+            GraphDocument doc = docBox.getObjectAt(j);
+            if (!(doc instanceof Szenario)) {
                 continue;
             }
-            Szenario szen = (Szenario) item;
+            Szenario szen = (Szenario) doc;
             if (!gdcoll.hasSzenario(szen)) {
-                docBox.removeItem(item);
+                docBox.removeObject(szen);
             }
         }
         actualizeFrameTitle();
@@ -153,7 +150,8 @@ public final class ModelPropertyDialog extends AbstractPropertyDialog implements
     @Override
     public void setVisible(final boolean b) {
         if (b) {
-            docBox.setSelectedItem(gdcoll.getSelectedDoc());
+            LGMGraphDocument selectedDoc = gdcoll.getSelectedDoc();
+            docBox.setSelectedObject(selectedDoc);
         }
         super.setVisible(b);
     }
@@ -178,7 +176,7 @@ public final class ModelPropertyDialog extends AbstractPropertyDialog implements
      * Setzt den Titel des Dialogs
      */
     private void actualizeFrameTitle() {
-        GraphDocument doc = (GraphDocument) docBox.getSelectedItem();
+        GraphDocument doc = docBox.getSelectedObject();
         String descriptionLabel = getResString("description");
         String modelName = gdcoll.getName();
         if (doc != null) {
@@ -195,7 +193,7 @@ public final class ModelPropertyDialog extends AbstractPropertyDialog implements
      * angezeigt.
      */
     private void selectedDocChanged() {
-        GraphDocument activeDoc = (GraphDocument) docBox.getSelectedItem();
+        GraphDocument activeDoc = docBox.getSelectedObject();
         if (activeDoc == lastActiveDoc) {
             return;
         }
