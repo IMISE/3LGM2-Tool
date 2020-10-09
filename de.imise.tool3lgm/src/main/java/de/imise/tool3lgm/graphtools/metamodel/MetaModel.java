@@ -1413,6 +1413,7 @@ public final class MetaModel extends CoreMetaModel {
      * @param superElement
      * @return
      */
+    @SuppressWarnings("unchecked") //it's checked!
     private <T extends SubordinationEdge> List<Class<T>> getSubordinationEdgeTypes(final Class<? extends ModelElement> elementClass, final Class<T> subordinationEdgeClass, final boolean superElement) {
         Class<? extends Edge>[] edgeTypes = getEdgeTypes(elementClass);
         List<Class<T>> returnList = new ArrayList<>();
