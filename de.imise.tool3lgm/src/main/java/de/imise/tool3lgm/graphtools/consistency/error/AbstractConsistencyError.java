@@ -36,13 +36,13 @@ public abstract class AbstractConsistencyError extends Error implements MetaMode
     /**
      * Element, das zu anderen Elementen zuviele Verbindungen hat
      */
-    protected ModelElement me;
+    protected final ModelElement me;
 
     /**
      * Klasse der Verbindungen, deren Instanzanzahl für das Modellelement zu hoch oder zu niedrig
      * ist.
      */
-    protected Object errorField;
+    protected final Object errorField;
 
     /**
      * @param me
