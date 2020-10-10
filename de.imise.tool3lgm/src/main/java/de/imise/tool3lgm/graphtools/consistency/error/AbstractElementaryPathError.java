@@ -16,7 +16,7 @@ public abstract class AbstractElementaryPathError extends AbstractPathError {
      * @param cardValue
      */
     public AbstractElementaryPathError(final ModelElement me, final ElementaryMetaPath elementaryMetaPath) {
-        super(me, elementaryMetaPath);
+        super(me, elementaryMetaPath, null); //these errors get their solutions alsways directly from the checker or from the ErrorSolutionLibrary
     }
 
     /**
@@ -32,7 +32,7 @@ public abstract class AbstractElementaryPathError extends AbstractPathError {
      */
     @Override
     public ElementaryMetaPath getMetaPath() {
-        return (ElementaryMetaPath) errorField;
+        return (ElementaryMetaPath) metaPath;
     }
 
     @Override

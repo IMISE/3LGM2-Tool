@@ -306,7 +306,8 @@ public class TLGMServiceMetaPathsDefinition extends MetaPathDefinition {
                 consistencyConditionSubMetaPath4);
 
         //the identifier for the corresponding ErrorSolution is the IheActor_IheActor_MustBeGroupedWith_Edge.class
-        return ImmutableMap.of(consistencyConditionMetaPathActorInstanceMustBeGroupedWith, IheActor_IheActor_MustBeGroupedWith_Edge.class);//, consistencyConditionApplicationSystemNeedsGroupingOfIheActorInstances,IheActor_IheActor_MustBeGroupedWith_Edge.class);
+        //return ImmutableMap.of(consistencyConditionMetaPathActorInstanceMustBeGroupedWith, IheActor_IheActor_MustBeGroupedWith_Edge.class);//, consistencyConditionApplicationSystemNeedsGroupingOfIheActorInstances,IheActor_IheActor_MustBeGroupedWith_Edge.class);
+        return ImmutableMap.of(consistencyConditionApplicationSystemNeedsGroupingOfIheActorInstances, IheActor_IheActor_MustBeGroupedWith_Edge.class);
     }
 
 }

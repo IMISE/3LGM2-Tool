@@ -15,12 +15,15 @@ import com.google.common.collect.ImmutableList;
 
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
+import de.imise.tool3lgm.graphtools.consistency.checker.CheckCondition;
 import de.imise.tool3lgm.graphtools.consistency.checker.ModelValidator;
 import de.imise.tool3lgm.graphtools.consistency.error.AbstractCardinalityError;
 import de.imise.tool3lgm.graphtools.consistency.error.AbstractConsistencyError;
+import de.imise.tool3lgm.graphtools.consistency.error.AbstractElementaryPathError;
 import de.imise.tool3lgm.graphtools.consistency.error.AbstractIDError;
 import de.imise.tool3lgm.graphtools.consistency.error.AbstractPathError;
 import de.imise.tool3lgm.graphtools.consistency.error.MaxCardinalityError;
+import de.imise.tool3lgm.graphtools.consistency.error.MissingPathError;
 import de.imise.tool3lgm.graphtools.consistency.metapath.ConsistencyCheckSectionMetaPath;
 import de.imise.tool3lgm.graphtools.dialog.element.ElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
@@ -59,26 +62,33 @@ public abstract class ErrorSolutionLibrary implements MetaModelSpecific {
      * @param error
      * @return
      */
-    public final ErrorSolution getSolution(final AbstractConsistencyError error) {
+    private final ErrorSolution getSolution(final AbstractConsistencyError error) {
+        ErrorSolution errorSolution = error.getErrorSolution();
+        if (errorSolution != null) {
+            return errorSolution;
+        }
         if (errorSolutions == null) {
             errorSolutions = getErrorSolutions();
         }
         for (ErrorSolution solution : errorSolutions) {
+            Object solutionIDFromSolution = solution.getErrorSolutionID();
+            Object solutionIDFromError = error.getErrorSolutionID();
+
             Class<? extends ModelElement> targetClass = solution.getTargetClass();
             ModelElement me = error.getModelElement();
             Class<? extends ModelElement> elementClass = me.getClass();
             if (targetClass.isAssignableFrom(elementClass)) {
-                Class<? extends Edge> edgeClass = solution.getEdgeClass();
-                Object errorField = error.getErrorField();
-                if (errorField instanceof ElementaryMetaPath) {
-                    ElementaryMetaPath elementaryMetaPath = (ElementaryMetaPath) errorField;
+                if (error.isErrorOfType(AbstractElementaryPathError.class) && solutionIDFromError instanceof ElementaryMetaPath) {
+                    ElementaryMetaPath elementaryMetaPath = (ElementaryMetaPath) solutionIDFromError;
+                    Class<? extends Edge> edgeClass = ((Class<?>) solutionIDFromSolution).asSubclass(Edge.class); //the errorID must be always the edge class
                     if (elementaryMetaPath.hasEdgeClass(edgeClass)) {
                         return solution;
                     }
-                } else if (errorField instanceof ConsistencyCheckSectionMetaPath) {
+                } else if (error.isErrorOfType(MissingPathError.class) && solutionIDFromError instanceof ConsistencyCheckSectionMetaPath) {
                     MetaModel metaModel = getMetaModel();
                     Map<ConsistencyCheckSectionMetaPath, Class<? extends Edge>> consistencyConditionMissingConnectedElementsMetaPathsMap = metaModel.getConsistencyConditionMissingConnectedElementsMetaPaths();
-                    Class<? extends Edge> errorSolutionIdentifierEdgeClass = consistencyConditionMissingConnectedElementsMetaPathsMap.get(errorField);
+                    Class<? extends Edge> edgeClass = ((Class<?>) solutionIDFromSolution).asSubclass(Edge.class); //the errorID must be always the edge class
+                    Class<? extends Edge> errorSolutionIdentifierEdgeClass = consistencyConditionMissingConnectedElementsMetaPathsMap.get(solutionIDFromError);
                     if (errorSolutionIdentifierEdgeClass == edgeClass) {
                         return solution;
                     }
@@ -232,6 +242,13 @@ public abstract class ErrorSolutionLibrary implements MetaModelSpecific {
             }
         }
         gdcoll.setBulkMode(oldBulkMode);
+    }
+
+    /**
+     * @return
+     */
+    public Collection<CheckCondition> getConsistencyCheckConditions() {
+        return ImmutableList.of();
     }
 
 }

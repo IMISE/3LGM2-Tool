@@ -4,6 +4,7 @@ import java.util.Collection;
 
 import com.google.common.collect.ImmutableList;
 
+import de.imise.tool3lgm.graphtools.consistency.CardinalityErrorSolution;
 import de.imise.tool3lgm.graphtools.consistency.ErrorSolution;
 import de.imise.tool3lgm.graphtools.consistency.ErrorSolutionLibrary;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
@@ -36,7 +37,7 @@ public class TLGMServiceErrorSolutionLibrary extends ErrorSolutionLibrary {
 
         pathToPropertyDialogElement = SimpleMetaPathCreator.createSimpleMetaPath(metaModel, IheActorInstance.class, ApplicationSystem.class, ApplicationSystem_IheActorInstance_Edge.class);
         panelMetaPath = SimpleMetaPathCreator.createSimpleMetaPath(metaModel, ApplicationSystem.class, IheActor.class, ApplicationSystem_IheActorInstance_Edge.class, IheActor_IheActorInstance_Edge.class);
-        ErrorSolution solution1 = new ErrorSolution(IheActor_IheActor_MustBeGroupedWith_Edge.class, pathToPropertyDialogElement, panelMetaPath);
+        ErrorSolution solution1 = new CardinalityErrorSolution(IheActor_IheActor_MustBeGroupedWith_Edge.class, pathToPropertyDialogElement, panelMetaPath);
 
         return ImmutableList.of(solution1);
     }

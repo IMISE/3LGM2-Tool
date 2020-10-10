@@ -32,6 +32,7 @@ import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.Tool3lgmModelType.ModelCategory;
 import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
 import de.imise.tool3lgm.graphtools.consistency.ErrorSolutionLibrary;
+import de.imise.tool3lgm.graphtools.consistency.checker.CheckCondition;
 import de.imise.tool3lgm.graphtools.consistency.metapath.ConsistencyCheckSectionMetaPath;
 import de.imise.tool3lgm.graphtools.metamodel.elements.CompositionEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
@@ -263,7 +264,7 @@ public final class MetaModel extends CoreMetaModel {
      * Metapaths which are used to ensure model consistency. This paths say that a model element must be connected
      * over this SectionMetaPaths with the same elements.
      */
-    private final Map<ConsistencyCheckSectionMetaPath, Class<? extends Edge>> consistencyConditionMissingConnectedElementsMetaPaths;
+    private final Collection<CheckCondition> consistencyCheckConditions;
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // Die folgenden Arrays müssen hier unten initialisiert werden nachdem die Maps mit den Edges gefüllt sind, sonst InitialException //
@@ -408,7 +409,7 @@ public final class MetaModel extends CoreMetaModel {
         edgeClassToInitialCreatedNameSourcePath = CollectionUtils.ensureImmutable(metaPathsDefinition.getEdgeClassToInitialCreatedNameSourcePath());
 
         inferenceEdgeClassToConditionMetaPath = CollectionUtils.ensureImmutable(metaPathsDefinition.getInferenceEdgeToConditionMetaPath());
-        consistencyConditionMissingConnectedElementsMetaPaths = CollectionUtils.ensureImmutable(metaPathsDefinition.getConsistencyConditionMissingConnectedElementsMetaPaths());
+        consistencyCheckConditions = CollectionUtils.ensureImmutable(metaPathsDefinition.get);
     }
 
     /**
@@ -1939,6 +1940,7 @@ public final class MetaModel extends CoreMetaModel {
     /**
      * @return {@link ErrorSolutionLibrary} of the metamodel
      */
+    @Override
     public final ErrorSolutionLibrary getErrorSolutionLibrary() {
         return errorSolutionLibrary;
     }

@@ -1,9 +1,11 @@
 package de.imise.tool3lgm.graphtools.consistency.error;
 
+import de.imise.tool3lgm.graphtools.consistency.ErrorSolution;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModelDefinition;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModelSpecific;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
+import de.imise.util.ReflectionUtils;
 
 /**
  * An error object that holds the model ({@link GDCollection}) and a model element that is
@@ -39,19 +41,25 @@ public abstract class AbstractConsistencyError extends Error implements MetaMode
     protected final ModelElement me;
 
     /**
-     * Klasse der Verbindungen, deren Instanzanzahl für das Modellelement zu hoch oder zu niedrig
-     * ist.
+     * The solution for this error
      */
-    protected final Object errorField;
+    protected final ErrorSolution errorSolution;
 
     /**
      * @param me
-     * @param errorField
-     * @param gdcoll
+     * @param errorSolution
      */
-    public AbstractConsistencyError(final ModelElement me, final Object errorField) {
+    public AbstractConsistencyError(final ModelElement me, final ErrorSolution errorSolution) {
         this.me = me;
-        this.errorField = errorField;
+        this.errorSolution = errorSolution;
+    }
+
+    /**
+     * @param me
+     * @param errorSolutionID
+     */
+    public AbstractConsistencyError(final ModelElement me) {
+        this(me, null);
     }
 
     @Override
@@ -88,6 +96,10 @@ public abstract class AbstractConsistencyError extends Error implements MetaMode
         return null;
     }
 
+    /**
+     * @param messageBuilder
+     * @return
+     */
     protected StringBuilder replacePlaceHolder(final StringBuilder messageBuilder) {
         String[] replacements = getMessageReplaceArguments();
         int replacementIndex = 0;
@@ -135,13 +147,6 @@ public abstract class AbstractConsistencyError extends Error implements MetaMode
     }
 
     /**
-     * @return the errorField
-     */
-    public Object getErrorField() {
-        return errorField;
-    }
-
-    /**
      * Liefert einen String, der für jede Art von Fehler eindeutig sein sollte (z.B. "MIN", "MAX" oder "ID").
      * Wird in den Resourcen nichts gefunden, wird "ERROR" zurück gegeben.
      *
@@ -166,7 +171,6 @@ public abstract class AbstractConsistencyError extends Error implements MetaMode
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + (errorField == null ? 0 : errorField.hashCode());
         result = prime * result + (me == null ? 0 : me.hashCode());
         return result;
     }
@@ -183,13 +187,6 @@ public abstract class AbstractConsistencyError extends Error implements MetaMode
             return false;
         }
         AbstractConsistencyError other = (AbstractConsistencyError) obj;
-        if (errorField == null) {
-            if (other.errorField != null) {
-                return false;
-            }
-        } else if (!errorField.equals(other.errorField)) {
-            return false;
-        }
         if (me == null) {
             if (other.me != null) {
                 return false;
@@ -198,6 +195,22 @@ public abstract class AbstractConsistencyError extends Error implements MetaMode
             return false;
         }
         return true;
+    }
+
+    /**
+     * @return
+     */
+    public ErrorSolution getErrorSolution() {
+        return errorSolution;
+    }
+
+    /**
+     * @param errorType
+     * @return <code>true</code> if the parameter type is the same, a sub
+     *         or a super class of this class
+     */
+    public boolean isErrorOfType(final Class<? extends AbstractConsistencyError> errorType) {
+        return ReflectionUtils.isAssignable(getClass(), errorType);
     }
 
 }

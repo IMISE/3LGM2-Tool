@@ -4,6 +4,7 @@ import java.util.Collection;
 
 import com.google.common.collect.ImmutableList;
 
+import de.imise.tool3lgm.graphtools.consistency.CardinalityErrorSolution;
 import de.imise.tool3lgm.graphtools.consistency.ErrorSolution;
 import de.imise.tool3lgm.graphtools.consistency.ErrorSolutionLibrary;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
@@ -40,15 +41,15 @@ public class TLGMOriginalErrorSolutionLibrary extends ErrorSolutionLibrary {
 
         pathToPropertyDialogElement = SimpleMetaPathCreator.createSimpleMetaPath(metaModel, ABKonfiguration.class, Aufgabe.class, AwbkAufOrgVerbindung.class, AufAufOrgVerbindung.class);
         panelMetaPath = SimpleMetaPathCreator.createSimpleMetaPath(metaModel, Aufgabe.class, Anwendungsbaustein.class, AufAufOrgVerbindung.class, AwbkAufOrgVerbindung.class, AwbAwbkVerbindung.class);
-        ErrorSolution solution1 = new ErrorSolution(AwbAwbkVerbindung.class, pathToPropertyDialogElement, panelMetaPath);
+        ErrorSolution solution1 = new CardinalityErrorSolution(AwbAwbkVerbindung.class, pathToPropertyDialogElement, panelMetaPath);
 
         pathToPropertyDialogElement = SimpleMetaPathCreator.createSimpleMetaPath(metaModel, ABKonfiguration.class, Anwendungsbaustein.class, AwbAwbkVerbindung.class);
         panelMetaPath = SimpleMetaPathCreator.createSimpleMetaPath(metaModel, Anwendungsbaustein.class, Aufgabe.class, AwbAwbkVerbindung.class, AwbkAufOrgVerbindung.class, AufAufOrgVerbindung.class);
-        ErrorSolution solution2 = new ErrorSolution(AwbkAufOrgVerbindung.class, pathToPropertyDialogElement, panelMetaPath);
+        ErrorSolution solution2 = new CardinalityErrorSolution(AwbkAufOrgVerbindung.class, pathToPropertyDialogElement, panelMetaPath);
 
         pathToPropertyDialogElement = SimpleMetaPathCreator.createSimpleMetaPath(metaModel, DBKonfiguration.class, Anwendungsbaustein.class, PdvbkAwbVerbindung.class);
         panelMetaPath = SimpleMetaPathCreator.createSimpleMetaPath(metaModel, Anwendungsbaustein.class, PhysischerDVBaustein.class, PdvbkAwbVerbindung.class, PdvbPdvbkVerbindung.class);
-        ErrorSolution solution3 = new ErrorSolution(PdvbPdvbkVerbindung.class, pathToPropertyDialogElement, panelMetaPath);
+        ErrorSolution solution3 = new CardinalityErrorSolution(PdvbPdvbkVerbindung.class, pathToPropertyDialogElement, panelMetaPath);
         return ImmutableList.of(solution1, solution2, solution3);
     }
 

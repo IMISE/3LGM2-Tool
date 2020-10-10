@@ -1,6 +1,5 @@
 package de.imise.tool3lgm.graphtools.consistency;
 
-import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.path.metapaths.MetaPath;
 import de.imise.tool3lgm.graphtools.path.metapaths.SimpleMetaPath;
@@ -8,18 +7,10 @@ import de.imise.tool3lgm.graphtools.path.metapaths.SimpleMetaPath;
 /**
  * @author AXS (20.03.2008)
  */
-public class ErrorSolution {
+public abstract class ErrorSolution {
 
-    /**
-     * Elementklasse, zu der dieser Fehler gehört.
-     */
+    /** Elementklasse, zu der dieser Fehler gehört. */
     private final Class<? extends ModelElement> targetClass;
-
-    /**
-     * Assoziationsklasse, deren Anzahl für Elemente der <code>targetClass</code> nicht korrekt sein
-     * kann.
-     */
-    private final Class<? extends Edge> edgeClass;
 
     /**
      * Pfad ausgehend vom targetElement des Fehlers hin zu den Element(en), in dessen
@@ -40,14 +31,12 @@ public class ErrorSolution {
     private final SimpleMetaPath panelMetaPath;
 
     /**
-     * @param edgeClass
      * @param pathToPropertyDialogElement
      * @param panelMetaPath the metapath that must be {@link MetaPath#isAssignable(MetaPath)}
      *            to the MetaPath of the panel which should be opened to solve the error
      */
-    public ErrorSolution(final Class<? extends Edge> edgeClass, final MetaPath pathToPropertyDialogElement, final SimpleMetaPath panelMetaPath) {
+    public ErrorSolution(final MetaPath pathToPropertyDialogElement, final SimpleMetaPath panelMetaPath) {
         targetClass = pathToPropertyDialogElement.getStartClass();
-        this.edgeClass = edgeClass;
         this.pathToPropertyDialogElement = pathToPropertyDialogElement;
         this.panelMetaPath = panelMetaPath;
     }
@@ -57,13 +46,6 @@ public class ErrorSolution {
      */
     public Class<? extends ModelElement> getTargetClass() {
         return targetClass;
-    }
-
-    /**
-     * @return the edgeClass
-     */
-    public Class<? extends Edge> getEdgeClass() {
-        return edgeClass;
     }
 
     /**

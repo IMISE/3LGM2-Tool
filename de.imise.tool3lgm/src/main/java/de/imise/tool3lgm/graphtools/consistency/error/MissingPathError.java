@@ -2,6 +2,7 @@ package de.imise.tool3lgm.graphtools.consistency.error;
 
 import java.util.Collection;
 
+import de.imise.tool3lgm.graphtools.consistency.ErrorSolution;
 import de.imise.tool3lgm.graphtools.consistency.metapath.ConsistencyCheckSectionMetaPath;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
@@ -30,9 +31,10 @@ public class MissingPathError extends AbstractPathError {
      * @param me
      * @param metaPath
      * @param missingElements
+     * @param errorSolution
      */
-    public MissingPathError(final ModelElement me, final ConsistencyCheckSectionMetaPath metaPath, final Collection<ModelElement> missingElements) {
-        super(me, metaPath);
+    public MissingPathError(final ModelElement me, final ConsistencyCheckSectionMetaPath metaPath, final Collection<ModelElement> missingElements, final ErrorSolution errorSolution) {
+        super(me, metaPath, errorSolution);
         this.missingElements = missingElements;
     }
 
@@ -49,7 +51,7 @@ public class MissingPathError extends AbstractPathError {
 
     @Override
     public ConsistencyCheckSectionMetaPath getMetaPath() {
-        return (ConsistencyCheckSectionMetaPath) errorField;
+        return (ConsistencyCheckSectionMetaPath) metaPath;
     }
 
     /**

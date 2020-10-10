@@ -30,7 +30,7 @@ public abstract class AbstractCardinalityError extends AbstractElementaryPathErr
      * @return
      */
     private Class<? extends Edge> getEdgeClass() {
-        return ((ElementaryMetaPath) errorField).getEdgeClass();
+        return ((ElementaryMetaPath) metaPath).getEdgeClass();
     }
 
     @Override

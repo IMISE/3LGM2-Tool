@@ -1,5 +1,6 @@
 package de.imise.tool3lgm.graphtools.consistency.error;
 
+import de.imise.tool3lgm.graphtools.consistency.ErrorSolution;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.path.metapaths.MetaPath;
 
@@ -23,19 +24,25 @@ public abstract class AbstractPathError extends AbstractConsistencyError {
     public static final String PATH_ERROR_LONG_DESCRIPTION_RESOURCE_KEY_SUFFIX = "_error_descrip_long";
 
     /**
+     *
+     */
+    protected final MetaPath metaPath;
+
+    /**
      * @param me
      * @param metaPath
-     * @param cardValue
+     * @param errorSolution
      */
-    public AbstractPathError(final ModelElement me, final MetaPath metaPath) {
-        super(me, metaPath);
+    public AbstractPathError(final ModelElement me, final MetaPath metaPath, final ErrorSolution errorSolution) {
+        super(me, errorSolution);
+        this.metaPath = metaPath;
     }
 
     /**
      * @return
      */
     public MetaPath getMetaPath() {
-        return (MetaPath) errorField;
+        return metaPath;
     }
 
 }
