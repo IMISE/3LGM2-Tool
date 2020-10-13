@@ -1,3 +1,5 @@
+[TOC]
+
 # **1. Fragen zur Modellierung** #
 ---------------------------
 ## **1.1     Fachliche Ebene** ##
@@ -16,10 +18,10 @@ Einem Objekttyp kann zugeordnet werden, welches Datenbanksystem / welche Dokumen
 ---------------------------
 ## **1.2     Logische Werkzeugebene** ###
 #### ***1.2.1        Wie modelliere ich ein Datenbank, die zu keinem Anwendungsbaustein gehört?*** ####
-Gemeint ist hier wohl ein Datenbanksystem. Ei Datenbanksystem kann im weitesten Sinne selbst Anwendungsbaustein sein. In diesem Fall muss aber zunächst ein Anwendungsbaustein definiert werden, der sozusagen als Hülle dient. Diesem Anwendungsbaustein wird dann ein Datenbanksystem zugeordnet. Der Anwendungsbaustein erhält Bausteinschnittstellen, über die andere Anwendungsbausteine dann auf die Datenbank zugreifen können.
+Gemeint ist hier wohl ein Datenbanksystem. Ein Datenbanksystem kann im weitesten Sinne selbst ein Anwendungsbaustein sein. In diesem Fall muss aber zunächst ein Anwendungsbaustein definiert werden, der sozusagen als Hülle dient. Diesem Anwendungsbaustein wird dann ein Datenbanksystem zugeordnet. Der Anwendungsbaustein erhält Bausteinschnittstellen, über die andere Anwendungsbausteine dann auf die Datenbank zugreifen können.
 
 #### ***1.2.2        Besteht die Möglichkeit für einen Anwendungsbaustein mehrere Datenbank­systeme zu erstellen?*** ####
-Nach unserem Metamodell gibt es keine Möglichkeit, einem Anwendungsbaustein mehrere Daten­banken zuzuordnen. Dies ist aus unserer Erfahrung heraus nicht notwendig, da die uns bekannten Anwendungsbausteine auch immer nur ein Datenbanksystem besitzen. Allerdings kann es durchaus möglich sein, dass ein Anwendungsbaustein auf mehrere Datenbanksysteme zugreift. In diesem Fall sind zuerst die Datenbanksysteme und die sie besitzenden Anwendungsbausteine (siehe auch FAQ 5.) zu modellieren. Der Zugriff muss dann über Bausteinschnittstellen und Kommunikations­beziehungen modelliert werden.
+Nach unserem Metamodell gibt es keine Möglichkeit, einem Anwendungsbaustein mehrere Daten­banken zuzuordnen. Dies ist aus unserer Erfahrung heraus nicht notwendig, da die uns bekannten Anwendungsbausteine auch immer nur ein Datenbanksystem besitzen. Allerdings kann es durchaus möglich sein, dass ein Anwendungsbaustein auf mehrere Datenbanksysteme zugreift. In diesem Fall sind zuerst die Datenbanksysteme und die sie besitzenden Anwendungsbausteine (siehe auch FAQ 1.2.1) zu modellieren. Der Zugriff muss dann über Bausteinschnittstellen und Kommunikations­beziehungen modelliert werden.
 
 #### ***1.2.3        Gibt es Modellierungsrichtlinien auf der logischen Werkzeugebenebene für nicht rechnerbasierte Anwendungsbausteine?*** ####
 
@@ -44,7 +46,7 @@ Tipp: Da im 3LGM²-Baukasten in der Regel keine Benutzer modelliert werden, wird
 Unser Metamodell lässt es zu, dass ein und dieselbe Schnittstelle sowohl Sende- als auch Empfangsschnittstelle sein kann. Dies ist zunächst nicht einsichtig, da realistische Schnittstellen i. a. entweder Sende- oder Empfangsschnittstelle sind. Allerdings ist zu bedenken, dass es wünschenswert sein wird, abstrakter modellieren zu wollen. Möchte man beispielsweise lediglich darstellen, dass zwei Anwendungsbausteine in beide Richtungen miteinander kommunizieren, wird man für jeden AB eine Schnittstelle definieren und diese in beide Richtungen verbinden. Das Meta-Modell lässt hier bewusst Möglichkeiten offen, um es dem Modellierer zu ermöglichen sein IS unter verschiedenen Zielsetzungen und Abstraktionsgraden zu modellieren.
 
 #### ***1.2.9    Wie kann ich auf der logischen Ebene meinem Datenbanksystem seine Master-DBS zuordnen?*** ####
-Das geht nicht. Siehe auch ‎1.4.
+Das geht nicht. Siehe auch 1.‎1.4
 
 #### ***1.2.10    Beim Datensatztyp wird ETNT nicht angeboten, sondern nur beim Dokumententyp. Wie kann ich das dann bei zwei rechnerbasierten Anwendungsbausteinen modellieren?*** ####
 Das ist so gewollt. Dahinter steckt folgendes: Wenn wir uns im rein rechnerbasierten Bereich befinden, erfolgt  die Kommunikation Ausschließlich über Nachrichtentypen, eine ETNT-Kombination ist daher beim Datensatztyp gar nicht notwendig. Der Datensatztyp repräsentiert nur wie Objekttypen gespeichert werden. Im paper-basierten Bereich dagegen wird die Repräsentationsform Dokumententyp sowohl für die Kommunikation als auch für die Speicherung von Objekttypen verwendet. Daher benötigen wir auch eine ETNT-Kombination (, die eigentlich ETDT-Kombination heißen müsste).
