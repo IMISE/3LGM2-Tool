@@ -34,7 +34,7 @@ Eine Schnittstelle ist immer dann eine Bausteinschnittstelle, wenn damit eine Ko
 Nach unserem Metamodell gibt es drei Möglichkeiten, wie ein Objekttyp auf der logischen Werkzeugebene repräsentiert werden kann: als Nachrichtentyp, als Datensatztyp oder als Dokumententyp. Die Repräsentation als Datensatztyp bezieht sich auf die Speicherung in einem Datenbanksystem. Die Repräsentation als Nachrichtentyp bezieht sich auf die Kommunikation zwischen zwei rechnerbasierten Anwendungsbausteine. Die Repräsentation als Dokumententyp bezieht sich auf die Speicherung in einer Dokumentensammlung und die Kommunikation zwischen zwei Anwendungsbausteinen, von denen mindestens einer papierbasiert ist.
 
 #### ***1.2.6    Kann ich unter dem Master-DBS das Datenbankverwaltungssystem verstehen, wie es im Modellbrowser benannt ist?*** ####
-Nein. Siehe auch ‎1.4.
+Nein. Siehe auch 1.‎1.4 
 
 #### ***1.2.7    Wann ist es notwendig, nicht rechnerunterstützte Bausteinschnittstellen zu modellieren? (z.B. wenn zunächst etwas auf Papier dokumentiert und später mit einen rbAB erfasst wird – Leistungsanordnung)*** ####
 Typisches Beispiel für die Datenkommunikation zwischen einem rechnerbasierten und einem papierbasierten Anwendungsbaustein ist das Auftreten von Medienbrüchen. Will man dieses modellieren/sehen, so sind für die Schnittstellen folgende Fragen zu stellen:
@@ -48,7 +48,7 @@ Tipp: Da im 3LGM²-Baukasten in der Regel keine Benutzer modelliert werden, wird
 Unser Metamodell lässt es zu, dass ein und dieselbe Schnittstelle sowohl Sende- als auch Empfangsschnittstelle sein kann. Dies ist zunächst nicht einsichtig, da realistische Schnittstellen i. a. entweder Sende- oder Empfangsschnittstelle sind. Allerdings ist zu bedenken, dass es wünschenswert sein wird, abstrakter modellieren zu wollen. Möchte man beispielsweise lediglich darstellen, dass zwei Anwendungsbausteine in beide Richtungen miteinander kommunizieren, wird man für jeden AB eine Schnittstelle definieren und diese in beide Richtungen verbinden. Das Meta-Modell lässt hier bewusst Möglichkeiten offen, um es dem Modellierer zu ermöglichen sein IS unter verschiedenen Zielsetzungen und Abstraktionsgraden zu modellieren.
 
 #### ***1.2.9    Wie kann ich auf der logischen Ebene meinem Datenbanksystem seine Master-DBS zuordnen?*** ####
-Das geht nicht. Siehe auch 1.‎1.4
+Das geht nicht. Siehe auch [1.‎1.4](#markdown-header-253-welche-inhalte-verstecken-sich-im-kontextmenu-internes-verifizieren-interaktiv) 
 
 #### ***1.2.10    Beim Datensatztyp wird ETNT nicht angeboten, sondern nur beim Dokumententyp. Wie kann ich das dann bei zwei rechnerbasierten Anwendungsbausteinen modellieren?*** ####
 Das ist so gewollt. Dahinter steckt folgendes: Wenn wir uns im rein rechnerbasierten Bereich befinden, erfolgt  die Kommunikation Ausschließlich über Nachrichtentypen, eine ETNT-Kombination ist daher beim Datensatztyp gar nicht notwendig. Der Datensatztyp repräsentiert nur wie Objekttypen gespeichert werden. Im paper-basierten Bereich dagegen wird die Repräsentationsform Dokumententyp sowohl für die Kommunikation als auch für die Speicherung von Objekttypen verwendet. Daher benötigen wir auch eine ETNT-Kombination (, die eigentlich ETDT-Kombination heißen müsste).
