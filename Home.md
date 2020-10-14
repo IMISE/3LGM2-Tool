@@ -3,3 +3,5 @@
 [IHE/1. Introduction](IHE/1. Introduction "Introduction IHE chapter")
 
 [IHE/MustBeGroupedWith](IHE/MustBeGroupedWith "MustBeGroupedWith functionality")
+
+[/FAQ](/FAQ "Frequently asked questions")
