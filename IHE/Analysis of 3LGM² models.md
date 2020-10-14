@@ -1,4 +1,4 @@
-# **Analylsis of 3LGM² models** #
+# **Analysis of 3LGM² models** #
 The 3LGM² Tool offers a analysis function, which allows the user to answer given questions regarding selected elements.
 Depending on the element type there are different questions offered by the analysis option:
 
