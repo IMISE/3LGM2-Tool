@@ -4,4 +4,4 @@
 
 [IHE/MustBeGroupedWith](IHE/MustBeGroupedWith "MustBeGroupedWith functionality")
 
-[/FAQ](/FAQ "Frequently asked questions")
+[FAQ](/FAQ "Frequently asked questions")
