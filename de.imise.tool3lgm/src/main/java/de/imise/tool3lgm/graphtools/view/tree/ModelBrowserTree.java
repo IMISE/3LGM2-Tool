@@ -15,6 +15,7 @@ import static de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty.OP
 import static de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty.OPTION_SUBORDINATE_COMPOSITION_ELEMENTS_IN_MODEL_BROWSER;
 
 import java.awt.Image;
+import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -695,7 +696,9 @@ public final class ModelBrowserTree extends DynamicTree implements UserFieldList
         }
         setSelectionPaths(path);
         if (path.length > 0) {
-            scrollPathToVisible(path[path.length - 1]);
+            Rectangle bounds = getPathBounds(path[path.length - 1]);
+            bounds.x = 0;
+            scrollRectToVisible(bounds);
         }
         setSelectionListenerActive(true);
     }
