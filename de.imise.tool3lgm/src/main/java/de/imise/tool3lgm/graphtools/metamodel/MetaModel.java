@@ -31,9 +31,8 @@ import de.imise.tool3lgm.MetaModelContext;
 import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.Tool3lgmModelType.ModelCategory;
 import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
-import de.imise.tool3lgm.graphtools.consistency.ErrorSolutionLibrary;
-import de.imise.tool3lgm.graphtools.consistency.checker.CheckCondition;
-import de.imise.tool3lgm.graphtools.consistency.metapath.ConsistencyCheckSectionMetaPath;
+import de.imise.tool3lgm.graphtools.consistency.ModelValidatorDefinition;
+import de.imise.tool3lgm.graphtools.consistency.error.condition.MissingPathErrorCheckCondition;
 import de.imise.tool3lgm.graphtools.metamodel.elements.CompositionEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction;
@@ -264,7 +263,7 @@ public final class MetaModel extends CoreMetaModel {
      * Metapaths which are used to ensure model consistency. This paths say that a model element must be connected
      * over this SectionMetaPaths with the same elements.
      */
-    private final Collection<CheckCondition> consistencyCheckConditions;
+    private Collection<MissingPathErrorCheckCondition> missingPathErrorCheckConditions;
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // Die folgenden Arrays müssen hier unten initialisiert werden nachdem die Maps mit den Edges gefüllt sind, sonst InitialException //
@@ -333,8 +332,8 @@ public final class MetaModel extends CoreMetaModel {
     /** Actions, die für das spezielle Metamodell in das Extras-Menü eingetragen werden sollen */
     private final ExtrasActionsDefinition extrasActionsDefinition;
 
-    /** {@link ErrorSolutionLibrary} of this MetaModel */
-    private final ErrorSolutionLibrary errorSolutionLibrary;
+    /** {@link ModelValidatorDefinition} of this MetaModel */
+    private final ModelValidatorDefinition modelValidatorDefinition;
 
     /**
      * @param metaModelContext
@@ -396,7 +395,7 @@ public final class MetaModel extends CoreMetaModel {
         compositionSlaveNodes = getAllCompositionSlaveNodes(); //already immutable
         analysesDefinition = getInstance(metaModelDefinition.getAnalysesDefinitionClass());
         extrasActionsDefinition = getInstance(metaModelDefinition.getExtrasActionsDefinitionClass());
-        errorSolutionLibrary = getInstance(metaModelDefinition.getErrorSolutionLibraryClass());
+        modelValidatorDefinition = getInstance(metaModelDefinition.getModelValidatorDefinitionClass());
         // Die MetaPathsDefinition und die darauffolgend zu initialisierenden Maps
         metaPathsDefinition = getInstance(metaModelDefinition.getMetaPathsDefinitionClass());
         copyDependencies = getInstance(metaModelDefinition.getCopyDependenciesClass());
@@ -409,7 +408,7 @@ public final class MetaModel extends CoreMetaModel {
         edgeClassToInitialCreatedNameSourcePath = CollectionUtils.ensureImmutable(metaPathsDefinition.getEdgeClassToInitialCreatedNameSourcePath());
 
         inferenceEdgeClassToConditionMetaPath = CollectionUtils.ensureImmutable(metaPathsDefinition.getInferenceEdgeToConditionMetaPath());
-        consistencyCheckConditions = CollectionUtils.ensureImmutable(metaPathsDefinition.get);
+
     }
 
     /**
@@ -1848,8 +1847,11 @@ public final class MetaModel extends CoreMetaModel {
     /**
      * @return
      */
-    public Map<ConsistencyCheckSectionMetaPath, Class<? extends Edge>> getConsistencyConditionMissingConnectedElementsMetaPaths() {
-        return consistencyConditionMissingConnectedElementsMetaPaths;
+    public Collection<MissingPathErrorCheckCondition> getMissingPathErrorCheckConditions() {
+        if (missingPathErrorCheckConditions == null) {
+            missingPathErrorCheckConditions = CollectionUtils.ensureImmutable(modelValidatorDefinition.getMissingPathErrorCheckConditions());
+        }
+        return missingPathErrorCheckConditions;
     }
 
     /**
@@ -1938,11 +1940,11 @@ public final class MetaModel extends CoreMetaModel {
     }
 
     /**
-     * @return {@link ErrorSolutionLibrary} of the metamodel
+     * @return {@link ModelValidatorDefinition} of the metamodel
      */
     @Override
-    public final ErrorSolutionLibrary getErrorSolutionLibrary() {
-        return errorSolutionLibrary;
+    public final ModelValidatorDefinition getModelValidatorDefinition() {
+        return modelValidatorDefinition;
     }
 
     /**

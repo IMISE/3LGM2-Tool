@@ -15,7 +15,7 @@ import javax.swing.table.JTableHeader;
 import javax.swing.table.TableColumn;
 
 import de.imise.tool3lgm.Static;
-import de.imise.tool3lgm.graphtools.consistency.checker.ModelValidator;
+import de.imise.tool3lgm.graphtools.consistency.ModelValidator;
 import de.imise.tool3lgm.graphtools.consistency.tableview.ConsistencyErrorTableModel.ColumnNames;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.LGMGraphDocument;

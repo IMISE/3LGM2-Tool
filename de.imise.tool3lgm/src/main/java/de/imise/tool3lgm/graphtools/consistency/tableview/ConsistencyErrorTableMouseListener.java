@@ -18,10 +18,10 @@ import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 import javax.swing.JTable;
 
-import de.imise.tool3lgm.graphtools.consistency.ErrorSolutionLibrary;
-import de.imise.tool3lgm.graphtools.consistency.checker.ModelValidator;
-import de.imise.tool3lgm.graphtools.consistency.error.AbstractConsistencyError;
-import de.imise.tool3lgm.graphtools.consistency.error.MissingPathError;
+import de.imise.tool3lgm.graphtools.consistency.ModelValidatorDefinition;
+import de.imise.tool3lgm.graphtools.consistency.ModelValidator;
+import de.imise.tool3lgm.graphtools.consistency.error.type.AbstractConsistencyError;
+import de.imise.tool3lgm.graphtools.consistency.error.type.MissingPathError;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.path.metapaths.SimpleMetaPath;
@@ -109,8 +109,8 @@ public class ConsistencyErrorTableMouseListener extends MouseAdapter {
                 @SuppressWarnings("unchecked") //it's checked!
                 NamedObjectContainer<AbstractConsistencyError> errContainer = (NamedObjectContainer<AbstractConsistencyError>) value;
                 AbstractConsistencyError error = errContainer.getObject();
-                ErrorSolutionLibrary errorSolutionLibrary = error.getErrorSolutionLibrary();
-                errorSolutionLibrary.execSolution(error);
+                ModelValidatorDefinition modelValidatorDefinition = error.getModelValidatorDefinition();
+                modelValidatorDefinition.execSolution(error);
             }
         }
 
@@ -135,8 +135,8 @@ public class ConsistencyErrorTableMouseListener extends MouseAdapter {
         //dialog to remove the error".
         boolean solutionAvailable = false;
         for (AbstractConsistencyError error : errors) {
-            ErrorSolutionLibrary errorSolutionLibrary = error.getErrorSolutionLibrary();
-            if (errorSolutionLibrary.isSolutionExecuteable(error)) {
+            ModelValidatorDefinition modelValidatorDefinition = error.getModelValidatorDefinition();
+            if (modelValidatorDefinition.isSolutionExecuteable(error)) {
                 solutionAvailable = true;
                 break;
             }
@@ -146,8 +146,8 @@ public class ConsistencyErrorTableMouseListener extends MouseAdapter {
                 @Override
                 public void actionPerformed(final ActionEvent e) {
                     for (AbstractConsistencyError err : errors) {
-                        ErrorSolutionLibrary errorSolutionLibrary = err.getErrorSolutionLibrary();
-                        errorSolutionLibrary.execSolution(err);
+                        ModelValidatorDefinition modelValidatorDefinition = err.getModelValidatorDefinition();
+                        modelValidatorDefinition.execSolution(err);
                     }
                 }
             });

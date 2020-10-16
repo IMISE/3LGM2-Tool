@@ -1,4 +1,4 @@
-package de.imise.tool3lgm.graphtools.consistency.error;
+package de.imise.tool3lgm.graphtools.consistency.error.type;
 
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.userfield.UserField;

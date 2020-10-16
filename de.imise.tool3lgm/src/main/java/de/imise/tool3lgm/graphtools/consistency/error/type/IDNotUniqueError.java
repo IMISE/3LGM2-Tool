@@ -1,4 +1,4 @@
-package de.imise.tool3lgm.graphtools.consistency.error;
+package de.imise.tool3lgm.graphtools.consistency.error.type;
 
 import java.util.Collection;
 

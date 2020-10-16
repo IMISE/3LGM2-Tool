@@ -11,10 +11,10 @@ import java.util.Vector;
 import javax.swing.table.DefaultTableModel;
 
 import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
-import de.imise.tool3lgm.graphtools.consistency.ErrorSolutionLibrary;
-import de.imise.tool3lgm.graphtools.consistency.checker.ModelValidator;
-import de.imise.tool3lgm.graphtools.consistency.error.AbstractConsistencyError;
-import de.imise.tool3lgm.graphtools.consistency.error.MissingPathError;
+import de.imise.tool3lgm.graphtools.consistency.ModelValidator;
+import de.imise.tool3lgm.graphtools.consistency.ModelValidatorDefinition;
+import de.imise.tool3lgm.graphtools.consistency.error.type.AbstractConsistencyError;
+import de.imise.tool3lgm.graphtools.consistency.error.type.MissingPathError;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.util.NamedObjectContainer;
@@ -67,8 +67,8 @@ public class ConsistencyErrorTableModel extends DefaultTableModel {
         for (AbstractConsistencyError error : errors) {
 
             if (error instanceof MissingPathError) {
-                ErrorSolutionLibrary errorSolutionLibrary = error.getErrorSolutionLibrary();
-                if (!errorSolutionLibrary.isSolutionExecuteable(error)) {
+                ModelValidatorDefinition modelValidatorDefinition = error.getModelValidatorDefinition();
+                if (!modelValidatorDefinition.isSolutionExecuteable(error)) {
                     int rowCount = getRowCount();
                     setRowCount(rowCount - 1);
                     continue;

@@ -4,9 +4,9 @@ import java.util.Collection;
 
 import com.google.common.collect.ImmutableList;
 
-import de.imise.tool3lgm.graphtools.consistency.CardinalityErrorSolution;
-import de.imise.tool3lgm.graphtools.consistency.ErrorSolution;
-import de.imise.tool3lgm.graphtools.consistency.ErrorSolutionLibrary;
+import de.imise.tool3lgm.graphtools.consistency.ModelValidatorDefinition;
+import de.imise.tool3lgm.graphtools.consistency.error.solution.CardinalityErrorSolution;
+import de.imise.tool3lgm.graphtools.consistency.error.solution.ErrorSolution;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModelDefinition;
 import de.imise.tool3lgm.graphtools.path.metapaths.SimpleMetaPath;
@@ -25,7 +25,12 @@ import de.imise.tool3lgm.metamodel.original.node.PhysischerDVBaustein;
 /**
  * @author AXS (24.03.2020)
  */
-public class TLGMOriginalErrorSolutionLibrary extends ErrorSolutionLibrary {
+public class TLGMOriginalModelValidatorDefinition extends ModelValidatorDefinition {
+
+    @Override
+    public Class<? extends MetaModelDefinition> getMetaModelDefinitionClass() {
+        return TLGMOriginalMetaModel.class;
+    }
 
     // wenn man keine Error-Solution für einen Min oder Max-Fehler findet, wird ein neues
     // PathConnectionPanel angefügt, das den Fehler anzeigt wenn die minimale Kardinalität
@@ -34,7 +39,7 @@ public class TLGMOriginalErrorSolutionLibrary extends ErrorSolutionLibrary {
     //löschen (das macht der ModelCleaner beim Einlesen und Speichern)
 
     @Override
-    protected final Collection<ErrorSolution> getErrorSolutions() {
+    protected final Collection<ErrorSolution> getCardinalityErrorSolutions() {
         MetaModel metaModel = getMetaModel();
         SimpleMetaPath pathToPropertyDialogElement;
         SimpleMetaPath panelMetaPath;
@@ -63,8 +68,4 @@ public class TLGMOriginalErrorSolutionLibrary extends ErrorSolutionLibrary {
     //            new Pair<>(DBKonfiguration.class, PdvbkAwbVerbindung.class), new Pair<>(ABKonfiguration.class, AwbkAufOrgVerbindung.class),
     //    };
 
-    @Override
-    public Class<? extends MetaModelDefinition> getMetaModelDefinitionClass() {
-        return TLGMOriginalMetaModel.class;
-    }
 }

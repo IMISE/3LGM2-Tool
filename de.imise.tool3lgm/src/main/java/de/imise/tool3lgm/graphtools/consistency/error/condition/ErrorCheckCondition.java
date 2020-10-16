@@ -1,11 +1,11 @@
-package de.imise.tool3lgm.graphtools.consistency.checker;
+package de.imise.tool3lgm.graphtools.consistency.error.condition;
 
-import de.imise.tool3lgm.graphtools.consistency.ErrorSolution;
+import de.imise.tool3lgm.graphtools.consistency.error.solution.ErrorSolution;
 
 /**
- * @author Ich (14.09.2020)
+ * @author AXS (14.09.2020)
  */
-public abstract class CheckCondition {
+public abstract class ErrorCheckCondition {
 
     /**
      *
@@ -15,7 +15,7 @@ public abstract class CheckCondition {
     /**
      * @param errorSolution
      */
-    public CheckCondition(final ErrorSolution errorSolution) {
+    public ErrorCheckCondition(final ErrorSolution errorSolution) {
         this.errorSolution = errorSolution;
     }
 

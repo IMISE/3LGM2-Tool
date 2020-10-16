@@ -3,7 +3,7 @@ package de.imise.tool3lgm.graphtools.consistency.tableview;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 
-import de.imise.tool3lgm.graphtools.consistency.checker.ModelValidator;
+import de.imise.tool3lgm.graphtools.consistency.ModelValidator;
 
 /**
  * A Scrollpane that holds the consistency error table and the

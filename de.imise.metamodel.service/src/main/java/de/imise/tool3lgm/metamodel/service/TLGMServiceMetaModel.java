@@ -4,7 +4,7 @@ import java.util.Set;
 
 import com.google.common.collect.ImmutableSet;
 
-import de.imise.tool3lgm.graphtools.consistency.ErrorSolutionLibrary;
+import de.imise.tool3lgm.graphtools.consistency.ModelValidatorDefinition;
 import de.imise.tool3lgm.graphtools.metamodel.AnalysesDefinition;
 import de.imise.tool3lgm.graphtools.metamodel.CopyDependencies;
 import de.imise.tool3lgm.graphtools.metamodel.ExtrasActionsDefinition;
@@ -182,13 +182,13 @@ public class TLGMServiceMetaModel extends MetaModelDefinition implements Regular
         return super.getExtrasActionsDefinitionClass();
     }
 
-    //////////////////////////
-    // ErrorSolutionLibrary //
-    //////////////////////////
+    //////////////////////////////
+    // ModelValidatorDefinition //
+    //////////////////////////////
 
     @Override
-    public Class<? extends ErrorSolutionLibrary> getErrorSolutionLibraryClass() {
-        return TLGMServiceErrorSolutionLibrary.class;
+    public Class<? extends ModelValidatorDefinition> getModelValidatorDefinitionClass() {
+        return TLGMServiceModelValidatorDefinition.class;
     }
 
     ////////////

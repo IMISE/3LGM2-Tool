@@ -21,9 +21,9 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import de.imise.tool3lgm.Tool3lgmChangeListener.Tool3lgmChangeType;
 import de.imise.tool3lgm.Tool3lgmConstants.FileFilterType;
 import de.imise.tool3lgm.Tool3lgmModelType.ModelCategory;
-import de.imise.tool3lgm.graphtools.consistency.ErrorSolutionLibrary;
+import de.imise.tool3lgm.graphtools.consistency.ModelValidatorDefinition;
 import de.imise.tool3lgm.graphtools.consistency.ModelCleaner;
-import de.imise.tool3lgm.graphtools.consistency.checker.ModelValidator;
+import de.imise.tool3lgm.graphtools.consistency.ModelValidator;
 import de.imise.tool3lgm.graphtools.dialog.element.ElemenPropertyDialogsContext;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
@@ -312,8 +312,8 @@ public class Tool3lgm {
         collections.add(gdcoll);
         distribute(MODEL_CHANGE_MODEL_OPENED, gdcoll);
         //vor dem Selektieren des aktuellen Teilmodells alle nicht behebbaren Fehler löschen
-        ErrorSolutionLibrary errorSolutionLibrary = gdcoll.getErrorSolutionLibrary();
-        errorSolutionLibrary.clearUnfixableErrors(gdcoll);
+        ModelValidatorDefinition modelValidatorDefinition = gdcoll.getModelValidatorDefinition();
+        modelValidatorDefinition.clearUnfixableErrors(gdcoll);
         gdcoll.initSelectedDocByViewParameterFromFile();
         gdcoll.setUnchanged();
         System.gc();

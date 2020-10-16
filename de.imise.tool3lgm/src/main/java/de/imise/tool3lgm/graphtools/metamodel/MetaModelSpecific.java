@@ -8,7 +8,7 @@ import com.google.common.base.Strings;
 import de.imise.tool3lgm.MetaModelContext;
 import de.imise.tool3lgm.Tool3lgmMetaModelContext;
 import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
-import de.imise.tool3lgm.graphtools.consistency.ErrorSolutionLibrary;
+import de.imise.tool3lgm.graphtools.consistency.ModelValidatorDefinition;
 import de.imise.tool3lgm.graphtools.path.metapaths.ElementaryMetaPathHandler;
 import de.imise.util.ReflectionUtils;
 
@@ -147,11 +147,11 @@ public interface MetaModelSpecific {
     }
 
     /**
-     * @return the {@link ErrorSolutionLibrary} of the metamodel
+     * @return the {@link ModelValidatorDefinition} of the metamodel
      */
-    public default ErrorSolutionLibrary getErrorSolutionLibrary() {
+    public default ModelValidatorDefinition getModelValidatorDefinition() {
         MetaModel metaModel = getMetaModel();
-        return metaModel.getErrorSolutionLibrary();
+        return metaModel.getModelValidatorDefinition();
     }
 
 }

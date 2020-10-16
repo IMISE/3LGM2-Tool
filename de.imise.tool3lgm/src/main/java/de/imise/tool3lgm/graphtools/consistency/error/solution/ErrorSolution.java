@@ -1,4 +1,4 @@
-package de.imise.tool3lgm.graphtools.consistency;
+package de.imise.tool3lgm.graphtools.consistency.error.solution;
 
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.path.metapaths.MetaPath;
@@ -36,7 +36,7 @@ public abstract class ErrorSolution {
      *            to the MetaPath of the panel which should be opened to solve the error
      */
     public ErrorSolution(final MetaPath pathToPropertyDialogElement, final SimpleMetaPath panelMetaPath) {
-        targetClass = pathToPropertyDialogElement.getStartClass();
+        targetClass = pathToPropertyDialogElement != null ? pathToPropertyDialogElement.getStartClass() : panelMetaPath.getStartClass();
         this.pathToPropertyDialogElement = pathToPropertyDialogElement;
         this.panelMetaPath = panelMetaPath;
     }

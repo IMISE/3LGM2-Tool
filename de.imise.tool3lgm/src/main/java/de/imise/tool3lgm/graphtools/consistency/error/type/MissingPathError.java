@@ -1,12 +1,10 @@
-package de.imise.tool3lgm.graphtools.consistency.error;
+package de.imise.tool3lgm.graphtools.consistency.error.type;
 
 import java.util.Collection;
 
-import de.imise.tool3lgm.graphtools.consistency.ErrorSolution;
-import de.imise.tool3lgm.graphtools.consistency.metapath.ConsistencyCheckSectionMetaPath;
+import de.imise.tool3lgm.graphtools.consistency.error.condition.MissingPathErrorCheckCondition;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
-import de.imise.tool3lgm.graphtools.path.metapaths.MetaPath;
 import de.imise.tool3lgm.graphtools.path.metapaths.SectionMetaPath;
 import de.imise.tool3lgm.graphtools.path.metapaths.SimpleMetaPath;
 
@@ -21,20 +19,29 @@ public class MissingPathError extends AbstractPathError {
     private final Collection<ModelElement> missingElements;
 
     /**
+     *
+     */
+    private final MissingPathErrorCheckCondition missingPathErrorCheckCondition;
+
+    /**
+     * The element that really causes the error because it has not the path.
      * If the not the whole path should be created this element is
      * the real start element from where the needed path to remove
      * the error will be created.
      */
-    private ModelElement missingPathStartElement;
+    private final ModelElement elementWithMissingPath;
 
     /**
-     * @param me
+     * @param elementWithError
+     * @param elementWithMissingPath
      * @param metaPath
      * @param missingElements
      * @param errorSolution
      */
-    public MissingPathError(final ModelElement me, final ConsistencyCheckSectionMetaPath metaPath, final Collection<ModelElement> missingElements, final ErrorSolution errorSolution) {
-        super(me, metaPath, errorSolution);
+    public MissingPathError(final ModelElement elementWithError, final ModelElement elementWithMissingPath, final MissingPathErrorCheckCondition missingPathErrorCheckCondition, final Collection<ModelElement> missingElements) {
+        super(elementWithError, missingPathErrorCheckCondition.getToConnectableAndToConnectedSectionMetaPath(), missingPathErrorCheckCondition.errorSolution);
+        this.elementWithMissingPath = elementWithMissingPath;
+        this.missingPathErrorCheckCondition = missingPathErrorCheckCondition;
         this.missingElements = missingElements;
     }
 
@@ -50,8 +57,8 @@ public class MissingPathError extends AbstractPathError {
     }
 
     @Override
-    public ConsistencyCheckSectionMetaPath getMetaPath() {
-        return (ConsistencyCheckSectionMetaPath) metaPath;
+    public SectionMetaPath getMetaPath() {
+        return (SectionMetaPath) metaPath;
     }
 
     /**
@@ -59,20 +66,7 @@ public class MissingPathError extends AbstractPathError {
      *         to remove the error
      */
     public ModelElement getMissingPathStartElement() {
-        if (missingPathStartElement == null) {
-            ConsistencyCheckSectionMetaPath metaPath = getMetaPath();
-            MetaPath subMetaPathToRealStartElement = metaPath.getSubMetaPathToRealStartElement();
-            missingPathStartElement = getModelElement();
-            if (subMetaPathToRealStartElement != null) {
-                //this can only be one because the subMetaPathToRealStartElement is
-                //only not null if the path is a single connection.
-                Collection<ModelElement> realStartElement = subMetaPathToRealStartElement.getConnectedElements(missingPathStartElement);
-                if (!realStartElement.isEmpty()) {
-                    missingPathStartElement = realStartElement.iterator().next();
-                }
-            }
-        }
-        return missingPathStartElement;
+        return elementWithMissingPath;
     }
 
     /**
@@ -81,8 +75,7 @@ public class MissingPathError extends AbstractPathError {
      *         is the metaPath that must be created to remove the error
      */
     public SimpleMetaPath getErrorCorrectingCreatableMetaPath() {
-        ConsistencyCheckSectionMetaPath metaPath = getMetaPath();
-        return metaPath.getErrorCorrectingCreatableMetaPath();
+        return missingPathErrorCheckCondition.getToConnectedMetaPath();
     }
 
     /**

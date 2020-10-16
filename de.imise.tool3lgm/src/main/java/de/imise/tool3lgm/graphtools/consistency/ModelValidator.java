@@ -1,4 +1,4 @@
-package de.imise.tool3lgm.graphtools.consistency.checker;
+package de.imise.tool3lgm.graphtools.consistency;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -7,9 +7,12 @@ import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
 
 import de.imise.tool3lgm.Tool3lgmChangeListener;
-import de.imise.tool3lgm.graphtools.consistency.ConsistencyDefinition;
-import de.imise.tool3lgm.graphtools.consistency.error.AbstractCardinalityError;
-import de.imise.tool3lgm.graphtools.consistency.error.AbstractConsistencyError;
+import de.imise.tool3lgm.graphtools.consistency.error.checker.ConsistencyErrorChecker;
+import de.imise.tool3lgm.graphtools.consistency.error.checker.EdgeCardinalityChecker;
+import de.imise.tool3lgm.graphtools.consistency.error.checker.MissingPathChecker;
+import de.imise.tool3lgm.graphtools.consistency.error.checker.UniqueIDChecker;
+import de.imise.tool3lgm.graphtools.consistency.error.type.AbstractCardinalityError;
+import de.imise.tool3lgm.graphtools.consistency.error.type.AbstractConsistencyError;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.model.LGMChangeListenerSimple;
@@ -56,7 +59,8 @@ public final class ModelValidator extends PropertyChangeHandler implements LGMCh
     private final Multimap<Class<? extends AbstractConsistencyError>, AbstractConsistencyError> consistencyErrorTypeToConsistencyErrors;
 
     /**
-     * Erzeugt einen neuen {@link ModelValidator} mit initialisierter <code>ErrorSolutionLibraryVersion</code>.
+     * Erzeugt einen neuen {@link ModelValidator} mit initialisierter
+     * {@link ModelValidatorDefinition}.
      *
      * @param gdcoll
      * @param changeContext

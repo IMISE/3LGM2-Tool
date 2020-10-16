@@ -3,10 +3,10 @@
  */
 package de.imise.tool3lgm.graphtools.consistency;
 
+import java.lang.reflect.Constructor;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 import javax.swing.ImageIcon;
@@ -15,23 +15,20 @@ import com.google.common.collect.ImmutableList;
 
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
-import de.imise.tool3lgm.graphtools.consistency.checker.CheckCondition;
-import de.imise.tool3lgm.graphtools.consistency.checker.ModelValidator;
-import de.imise.tool3lgm.graphtools.consistency.error.AbstractCardinalityError;
-import de.imise.tool3lgm.graphtools.consistency.error.AbstractConsistencyError;
-import de.imise.tool3lgm.graphtools.consistency.error.AbstractElementaryPathError;
-import de.imise.tool3lgm.graphtools.consistency.error.AbstractIDError;
-import de.imise.tool3lgm.graphtools.consistency.error.AbstractPathError;
-import de.imise.tool3lgm.graphtools.consistency.error.MaxCardinalityError;
-import de.imise.tool3lgm.graphtools.consistency.error.MissingPathError;
-import de.imise.tool3lgm.graphtools.consistency.metapath.ConsistencyCheckSectionMetaPath;
+import de.imise.tool3lgm.graphtools.consistency.error.condition.MissingPathErrorCheckCondition;
+import de.imise.tool3lgm.graphtools.consistency.error.solution.CardinalityErrorSolution;
+import de.imise.tool3lgm.graphtools.consistency.error.solution.ErrorSolution;
+import de.imise.tool3lgm.graphtools.consistency.error.type.AbstractCardinalityError;
+import de.imise.tool3lgm.graphtools.consistency.error.type.AbstractConsistencyError;
+import de.imise.tool3lgm.graphtools.consistency.error.type.AbstractIDError;
+import de.imise.tool3lgm.graphtools.consistency.error.type.AbstractPathError;
+import de.imise.tool3lgm.graphtools.consistency.error.type.MaxCardinalityError;
 import de.imise.tool3lgm.graphtools.dialog.element.ElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
+import de.imise.tool3lgm.graphtools.metamodel.MetaModelDefinition;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModelSpecific;
-import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
-import de.imise.tool3lgm.graphtools.path.metapaths.ElementaryMetaPath;
 import de.imise.tool3lgm.graphtools.path.metapaths.MetaPath;
 import de.imise.tool3lgm.graphtools.path.metapaths.SimpleMetaPath;
 import de.imise.tool3lgm.graphtools.undoredo.TransactionManager;
@@ -41,10 +38,12 @@ import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.panel.PropertyDi
  * Diese Klasse ist dazu da, im Fehlerfall an einen besseren Ort (Tab in einem Eigenschaftsdialog) zu lenken,
  * als den Dialog des Elementes, bei dem bei einer Edge ein Kardinalitätsfehler besteht, direkt den Reiter für diese
  * fehlerhafte Edge zu öffnen.
+ * <br>
+ * ATTNENTION: This class will be instanciated by {@link Constructor#newInstance(Object...)}. So don't make it abstract!
  *
  * @author AXS
  */
-public abstract class ErrorSolutionLibrary implements MetaModelSpecific {
+public class ModelValidatorDefinition implements MetaModelSpecific {
 
     /**
      *
@@ -54,8 +53,13 @@ public abstract class ErrorSolutionLibrary implements MetaModelSpecific {
     /**
      * @return
      */
-    protected Collection<ErrorSolution> getErrorSolutions() {
+    protected Collection<ErrorSolution> getCardinalityErrorSolutions() {
         return ImmutableList.of();
+    }
+
+    @Override
+    public Class<? extends MetaModelDefinition> getMetaModelDefinitionClass() {
+        return MetaModelDefinition.class;
     }
 
     /**
@@ -68,29 +72,20 @@ public abstract class ErrorSolutionLibrary implements MetaModelSpecific {
             return errorSolution;
         }
         if (errorSolutions == null) {
-            errorSolutions = getErrorSolutions();
+            errorSolutions = getCardinalityErrorSolutions();
         }
         for (ErrorSolution solution : errorSolutions) {
-            Object solutionIDFromSolution = solution.getErrorSolutionID();
-            Object solutionIDFromError = error.getErrorSolutionID();
-
             Class<? extends ModelElement> targetClass = solution.getTargetClass();
             ModelElement me = error.getModelElement();
             Class<? extends ModelElement> elementClass = me.getClass();
             if (targetClass.isAssignableFrom(elementClass)) {
-                if (error.isErrorOfType(AbstractElementaryPathError.class) && solutionIDFromError instanceof ElementaryMetaPath) {
-                    ElementaryMetaPath elementaryMetaPath = (ElementaryMetaPath) solutionIDFromError;
-                    Class<? extends Edge> edgeClass = ((Class<?>) solutionIDFromSolution).asSubclass(Edge.class); //the errorID must be always the edge class
-                    if (elementaryMetaPath.hasEdgeClass(edgeClass)) {
-                        return solution;
-                    }
-                } else if (error.isErrorOfType(MissingPathError.class) && solutionIDFromError instanceof ConsistencyCheckSectionMetaPath) {
-                    MetaModel metaModel = getMetaModel();
-                    Map<ConsistencyCheckSectionMetaPath, Class<? extends Edge>> consistencyConditionMissingConnectedElementsMetaPathsMap = metaModel.getConsistencyConditionMissingConnectedElementsMetaPaths();
-                    Class<? extends Edge> edgeClass = ((Class<?>) solutionIDFromSolution).asSubclass(Edge.class); //the errorID must be always the edge class
-                    Class<? extends Edge> errorSolutionIdentifierEdgeClass = consistencyConditionMissingConnectedElementsMetaPathsMap.get(solutionIDFromError);
-                    if (errorSolutionIdentifierEdgeClass == edgeClass) {
-                        return solution;
+                if (error instanceof AbstractCardinalityError) {
+                    if (solution instanceof CardinalityErrorSolution) {
+                        AbstractCardinalityError cardError = (AbstractCardinalityError) error;
+                        CardinalityErrorSolution cardinalityErrorSolution = (CardinalityErrorSolution) solution;
+                        if (cardError.hasEdgeClass(cardinalityErrorSolution.edgeClass)) {
+                            return solution;
+                        }
                     }
                 }
             }
@@ -122,7 +117,7 @@ public abstract class ErrorSolutionLibrary implements MetaModelSpecific {
         }
         GDCollection gdcoll = error.getCollection();
         MetaModel metaModel = gdcoll.getMetaModel();
-        ErrorSolutionLibrary solutionsLibrary = metaModel.getErrorSolutionLibrary();
+        ModelValidatorDefinition solutionsLibrary = metaModel.getModelValidatorDefinition();
         ErrorSolution es = solutionsLibrary.getSolution(error);
         if (es == null) {
             return new HashSet<>();
@@ -162,7 +157,7 @@ public abstract class ErrorSolutionLibrary implements MetaModelSpecific {
         if (error instanceof AbstractPathError) {
             GDCollection gdcoll = error.getCollection();
             MetaModel metaModel = gdcoll.getMetaModel();
-            ErrorSolutionLibrary solutionsLibrary = metaModel.getErrorSolutionLibrary();
+            ModelValidatorDefinition solutionsLibrary = metaModel.getModelValidatorDefinition();
             ErrorSolution es = solutionsLibrary.getSolution(error);
             ImageIcon icon = Tool3lgmConstants.getIcon("error.gif");
             if (es == null) {
@@ -247,7 +242,7 @@ public abstract class ErrorSolutionLibrary implements MetaModelSpecific {
     /**
      * @return
      */
-    public Collection<CheckCondition> getConsistencyCheckConditions() {
+    public Collection<MissingPathErrorCheckCondition> getMissingPathErrorCheckConditions() {
         return ImmutableList.of();
     }
 

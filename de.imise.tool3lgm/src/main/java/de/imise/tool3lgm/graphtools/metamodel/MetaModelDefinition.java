@@ -7,7 +7,7 @@ import java.util.Set;
 
 import com.google.common.collect.ImmutableSet;
 
-import de.imise.tool3lgm.graphtools.consistency.ErrorSolutionLibrary;
+import de.imise.tool3lgm.graphtools.consistency.ModelValidatorDefinition;
 import de.imise.tool3lgm.graphtools.metamodel.GraphViewDefinition.DefaultGraphViewDefinitionAdapter;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
@@ -119,12 +119,12 @@ public abstract class MetaModelDefinition implements Serializable {
         return ExtrasActionsDefinition.class;
     }
 
-    //////////////////////////
-    // ErrorSolutionLibrary //
-    //////////////////////////
+    //////////////////////////////
+    // ModelValidatorDefinition //
+    //////////////////////////////
 
-    public Class<? extends ErrorSolutionLibrary> getErrorSolutionLibraryClass() {
-        return ErrorSolutionLibrary.class;
+    public Class<? extends ModelValidatorDefinition> getModelValidatorDefinitionClass() {
+        return ModelValidatorDefinition.class;
     }
 
     ///////////

@@ -1,9 +1,10 @@
-package de.imise.tool3lgm.graphtools.consistency.error;
+package de.imise.tool3lgm.graphtools.consistency.error.type;
 
 import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.path.metapaths.ElementaryMetaPath;
+import de.imise.util.ReflectionUtils;
 
 /**
  * @author AXS
@@ -29,8 +30,16 @@ public abstract class AbstractCardinalityError extends AbstractElementaryPathErr
     /**
      * @return
      */
-    private Class<? extends Edge> getEdgeClass() {
+    public Class<? extends Edge> getEdgeClass() {
         return ((ElementaryMetaPath) metaPath).getEdgeClass();
+    }
+
+    /**
+     * @param edgeClass
+     * @return
+     */
+    public boolean hasEdgeClass(final Class<? extends Edge> edgeClass) {
+        return ReflectionUtils.isAssignable(getEdgeClass(), edgeClass);
     }
 
     @Override

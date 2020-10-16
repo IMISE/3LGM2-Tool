@@ -12,7 +12,6 @@ import javax.swing.JComponent;
 import javax.swing.JOptionPane;
 
 import de.imise.tool3lgm.Static;
-import de.imise.tool3lgm.graphtools.consistency.checker.ModelValidator;
 import de.imise.tool3lgm.graphtools.dialog.tools.GeneralDialogCreator;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.undoredo.TransactionManager;

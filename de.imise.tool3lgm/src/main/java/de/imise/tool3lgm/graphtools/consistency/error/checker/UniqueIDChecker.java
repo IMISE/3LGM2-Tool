@@ -1,4 +1,4 @@
-package de.imise.tool3lgm.graphtools.consistency.checker;
+package de.imise.tool3lgm.graphtools.consistency.error.checker;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -7,10 +7,10 @@ import java.util.List;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
 
-import de.imise.tool3lgm.graphtools.consistency.error.AbstractConsistencyError;
-import de.imise.tool3lgm.graphtools.consistency.error.AbstractIDError;
-import de.imise.tool3lgm.graphtools.consistency.error.IDEmptyError;
-import de.imise.tool3lgm.graphtools.consistency.error.IDNotUniqueError;
+import de.imise.tool3lgm.graphtools.consistency.error.type.AbstractConsistencyError;
+import de.imise.tool3lgm.graphtools.consistency.error.type.AbstractIDError;
+import de.imise.tool3lgm.graphtools.consistency.error.type.IDEmptyError;
+import de.imise.tool3lgm.graphtools.consistency.error.type.IDNotUniqueError;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;

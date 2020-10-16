@@ -1,6 +1,6 @@
-package de.imise.tool3lgm.graphtools.consistency.error;
+package de.imise.tool3lgm.graphtools.consistency.error.type;
 
-import de.imise.tool3lgm.graphtools.consistency.ErrorSolution;
+import de.imise.tool3lgm.graphtools.consistency.error.solution.ErrorSolution;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModelDefinition;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModelSpecific;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;

@@ -1,4 +1,4 @@
-package de.imise.tool3lgm.graphtools.consistency.error;
+package de.imise.tool3lgm.graphtools.consistency.error.type;
 
 import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
@@ -16,7 +16,7 @@ public abstract class AbstractElementaryPathError extends AbstractPathError {
      * @param cardValue
      */
     public AbstractElementaryPathError(final ModelElement me, final ElementaryMetaPath elementaryMetaPath) {
-        super(me, elementaryMetaPath, null); //these errors get their solutions alsways directly from the checker or from the ErrorSolutionLibrary
+        super(me, elementaryMetaPath, null); //these errors get their solutions alsways directly from the checker or from the ModelValidatorDefinition
     }
 
     /**

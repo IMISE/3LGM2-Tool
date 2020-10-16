@@ -1,8 +1,8 @@
-package de.imise.tool3lgm.graphtools.consistency.checker;
+package de.imise.tool3lgm.graphtools.consistency.error.checker;
 
 import java.util.Collection;
 
-import de.imise.tool3lgm.graphtools.consistency.error.AbstractConsistencyError;
+import de.imise.tool3lgm.graphtools.consistency.error.type.AbstractConsistencyError;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 
 /**
