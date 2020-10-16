@@ -65,7 +65,8 @@ public class TLGMServiceModelValidatorDefinition extends ModelValidatorDefinitio
         SimpleMetaPath toConnectableElements = smpc.createSimpleMetaPath(IheActorInstance.class, IheActor.class, IheActor_IheActorInstance_Edge.class, IheActor_IheActor_MustBeGroupedWith_Edge.class);
         SimpleMetaPath toConnectedElements = smpc.createSimpleMetaPath(IheActorInstance.class, IheActor.class, ApplicationSystem_IheActorInstance_Edge.class, ApplicationSystem_IheActorInstance_Edge.class, IheActor_IheActorInstance_Edge.class);
         SimpleMetaPath errorSolutionPanelMetaPath = smpc.createSimpleMetaPath(ApplicationSystem.class, IheActor.class, ApplicationSystem_IheActorInstance_Edge.class, IheActor_IheActorInstance_Edge.class);
-        MissingPathErrorCheckCondition missingPathCondition = new MissingPathErrorCheckCondition(toRealStartElements, toConnectableElements, toConnectedElements, errorSolutionPanelMetaPath);
+        MissingPathErrorCheckCondition missingPathCondition = new MissingPathErrorCheckCondition(toRealStartElements, toConnectableElements, toConnectedElements, "CONSISTENCY_ERROR_ApplicationSystem_needsGroupingOf_IheActorInstances",
+                errorSolutionPanelMetaPath);
         return ImmutableSet.of(missingPathCondition);
     }
 

@@ -25,22 +25,24 @@ public class MissingPathErrorCheckCondition extends ErrorCheckCondition {
      * @param toRealStartElements
      * @param toConnectableElements
      * @param toConnectedElements
+     * @param errorResBaseKey
      * @param errorSolutionPanelMetaPath
      */
-    public MissingPathErrorCheckCondition(final MetaPath toRealStartElements, final MetaPath toConnectableElements, final SimpleMetaPath toConnectedElements, final SimpleMetaPath errorSolutionPanelMetaPath) {
-        this(toRealStartElements, toConnectableElements, toConnectedElements, new MissingPathErrorSolution(errorSolutionPanelMetaPath));
+    public MissingPathErrorCheckCondition(final MetaPath toRealStartElements, final MetaPath toConnectableElements, final SimpleMetaPath toConnectedElements, final String errorResBaseKey, final SimpleMetaPath errorSolutionPanelMetaPath) {
+        this(toRealStartElements, toConnectableElements, toConnectedElements, errorResBaseKey, new MissingPathErrorSolution(errorSolutionPanelMetaPath));
     }
 
     /**
      * @param toRealStartElements
      * @param toConnectableElements
      * @param toConnectedElements
+     * @param errorResBaseKey
      * @param errorSolution
      */
-    public MissingPathErrorCheckCondition(final MetaPath toRealStartElements, final MetaPath toConnectableElements, final SimpleMetaPath toConnectedElements, final ErrorSolution errorSolution) {
+    public MissingPathErrorCheckCondition(final MetaPath toRealStartElements, final MetaPath toConnectableElements, final SimpleMetaPath toConnectedElements, final String errorResBaseKey, final ErrorSolution errorSolution) {
         super(errorSolution);
         this.toRealStartElements = toRealStartElements;
-        toConnectableAndToConnectedSectionMetaPath = new SectionMetaPath(toConnectableElements, toConnectedElements);
+        toConnectableAndToConnectedSectionMetaPath = new SectionMetaPath(errorResBaseKey, toConnectableElements, toConnectedElements);
     }
 
     /**
