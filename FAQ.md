@@ -76,7 +76,31 @@ Das Metamodell sieht das nicht vor, und der Baukasten (dementsprechend) auch nic
 
 ---------------------------
 ## **1.5     Allgemeines** ##
-#### ***1.5.1    Was bedeuten die ist_Teil_von-Beziehungen bei den Aufgaben, Objekttypen, Organisationseinheiten, Anwendungsbausteinen und physischen Datenverarbeitungsbausteinen?*** ####
+#### ***1.5.1    Was bedeutet die Ist_Teil_von Beziehung zwischen Objekttypen?*** ####
+Diese ist_Teil_von Beziehung ist im Sinne einer Aggregation zu verstehen. Die sich hieraus ergebenden Konsequenzen für Beziehungen zwischen Modellkomponenten werden am Beispiel der Beziehung zwischen der Klasse Aufgabe und Objekttyp im folgenden verdeutlicht:
+
+![istTeilVon01.PNG](https://bitbucket.org/repo/9L6rMz/images/1072977069-istTeilVon01.PNG)
+
+1. Alle Teilaufgaben von PATIENTENAUFNAHME greifen interpretierend auf den Objekttyp FALL zu.
+2. Die Teilaufgabe ADMINISTRATIVE PATIENTENAUFNAHME greift bearbeitend auf alle Teil-Objekttypen zu.
+3. Die Teilaufgabe ÄRZTLICHE PATIENTENAUFNAHME greift bearbeitend auf den Objekttyp DIAGNOSE zu.
+
+#### ***1.5.2    Wie wirken sich die Ist-Teil_von Beziehungen beim Vergröbern und Verfeinern aus?*** ####
+![istTeilVon02.PNG](https://bitbucket.org/repo/9L6rMz/images/3419780724-istTeilVon02.PNG)
+
+Beim Vergröbern einer Instanz werden die Beziehungen der untergeordneten Instanzen an die übergeordnete Instanz weitergegeben. In der Darstellung wird unterschieden, ob lediglich Teile berührt sind, oder die Instanz als Ganzes. Im Beispiel ist dies durch farblich unterschiedliche Pfeile ausgedrückt. 
+
+Schwarzer Pfeil: Interpretiert / bearbeitet alle Teil-Objekttypen des Objekttyps PATIENT
+
+Roter Pfeil: Interpretiert / Bearbeitet Teile des Objekttyps PATIENT. Welche dies sind ist in der vergröberten Darstellung nicht relevant.
+
+Für das Modellieren ist es wichtig, Beziehungen auf der feinst-möglichen Stufe zu modellieren, da diese Beziehungen dann richtig auf die übergeordneten Instanzen weitergegeben werden. Wird auf einer sehr groben Stufe modelliert greiftdie Annahme, dass die Beziehungen auch für alle Teile einer Instanz gelten.
+
+
+#### ***1.5.3    Was bedeutet die Ist_Teil_von Beziehung zwischen Anwendungsbausteinen?*** ####
+Alle Anwendungsbausteine, die einem anderen Anwendungsbaustein durch ist_Teil_von Beziehungen untergeordnet sind, können miteinander beliebig kommunizieren. Die Modellierung der Kommunikation zwischen diesen Anwendungsbausteinen ist daher nicht notwendig. Es wird dringend empfohlen - auch im Sinne der Modellkonsistenz und möglicher Analysen - Kommunikation zwischen diesen Anwendungsbausteinen nicht zu modellieren, auch wenn dies derzeit im 3LGM2 und im 3LGM2 Baukasten zulässig ist. 
+
+Ist es notwendig die Kommunikation zwischen diesen Anwendungsbausteinen zu modellieren, ist das ein Indiz dafür die entsprechenden Ist-Teil_von Beziehungen aufzulösen und ggf. den übergeordneten Anwendungsbaustein aus dem entsprechenden Teilmodell zu entfernen.
 
 ---------------------------
 
