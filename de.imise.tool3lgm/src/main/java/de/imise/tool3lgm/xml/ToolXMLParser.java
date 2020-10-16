@@ -14,6 +14,7 @@ import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
+import org.xml.sax.ContentHandler;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
@@ -125,31 +126,30 @@ public class ToolXMLParser {
         //        }
 
         /* Tool3lgm2-Datei-Version */
+        ContentHandler contentHandler = getContentHandler(collection, version, paste);
+        XMLReader xmlReader = parser.getXMLReader();
+        xmlReader.setContentHandler(contentHandler);
+    }
+
+    /**
+     * @return the xml content handler to parse a model wit a specifi Tool3lgm2 file version
+     * @throws SAXException
+     */
+    private ContentHandler getContentHandler(final GDCollection gdcoll, final FileVersion version, final boolean paste) throws SAXException {
+        /* Tool3lgm2-Datei-Version */
         switch (version.lgmVersionIndex) {
         case 0:
-            parser.getXMLReader().setContentHandler(new ToolContentHandlerV1_0(collection));
-            break;
-
+            return new ToolContentHandlerV1_0(gdcoll);
         case 1:
-            parser.getXMLReader().setContentHandler(new ToolContentHandlerV1_1(collection));
-            break;
-
+            return new ToolContentHandlerV1_1(gdcoll);
         case 2:
-            parser.getXMLReader().setContentHandler(new ToolContentHandlerV1_2(collection));
-            break;
-
+            return new ToolContentHandlerV1_2(gdcoll);
         case 3:
-            parser.getXMLReader().setContentHandler(new ToolContentHandlerV2_0(collection));
-            break;
-
+            return new ToolContentHandlerV2_0(gdcoll);
         case 4:
-            parser.getXMLReader().setContentHandler(new ToolContentHandlerV3_0(collection));
-            break;
-
+            return new ToolContentHandlerV3_0(gdcoll);
         case 5:
-            parser.getXMLReader().setContentHandler(new ToolContentHandlerV3_1(collection));
-            break;
-
+            return new ToolContentHandlerV3_1(gdcoll);
         case 6:
         case 7:
         case 8:
@@ -160,15 +160,16 @@ public class ToolXMLParser {
             //nicht kümmert)
         case 11: //Version 3.7 -> OptionalEdge.isOptional() wird gespeichert
         case 12: //Version 3.8 -> valign + halign über GraphElementLayout enums und nicht mehr über SwingConstants ints
-            parser.getXMLReader().setContentHandler(new ToolContentHandlerV3_1(collection, paste));
-            break;
-
+            return new ToolContentHandlerV3_1(gdcoll, paste);
         default:
             throw new SAXException("angegebenes Dateiformat wird nicht unterstützt");
         }
-
     }
 
+    /**
+     * @throws SAXException
+     * @throws IOException
+     */
     public void parseDocument() throws SAXException, IOException {
         Log.showErrorDialog = true;
         //		deprecatedElementHashes = new HashSet();
