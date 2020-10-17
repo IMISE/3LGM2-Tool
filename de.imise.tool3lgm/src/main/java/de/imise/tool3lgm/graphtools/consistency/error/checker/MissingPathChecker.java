@@ -57,7 +57,7 @@ public class MissingPathChecker implements ConsistencyErrorChecker {
                         Collection<ModelElement> connectedElements = toConnectableAndToConnectedSectionMetaPath.getConnectedElements(realStartElement);
                         //if there is not at least on of the needed connected to the current path start element -> error
                         if (connectedElements.isEmpty()) {
-                            MissingPathError error = new MissingPathError(elementToCheck, realStartElement, condition, neededElements);
+                            MissingPathError error = new MissingPathError(elementToCheck, condition, neededElements);
                             errors.add(error);
                             if (checkOnly) {
                                 return errors;

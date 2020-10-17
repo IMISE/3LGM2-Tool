@@ -24,23 +24,14 @@ public class MissingPathError extends AbstractPathError {
     private final MissingPathErrorCheckCondition missingPathErrorCheckCondition;
 
     /**
-     * The element that really causes the error because it has not the path.
-     * If the not the whole path should be created this element is
-     * the real start element from where the needed path to remove
-     * the error will be created.
-     */
-    private final ModelElement elementWithMissingPath;
-
-    /**
      * @param elementWithError
      * @param elementWithMissingPath
      * @param metaPath
      * @param missingElements
      * @param errorSolution
      */
-    public MissingPathError(final ModelElement elementWithError, final ModelElement elementWithMissingPath, final MissingPathErrorCheckCondition missingPathErrorCheckCondition, final Collection<ModelElement> missingElements) {
+    public MissingPathError(final ModelElement elementWithError, final MissingPathErrorCheckCondition missingPathErrorCheckCondition, final Collection<ModelElement> missingElements) {
         super(elementWithError, missingPathErrorCheckCondition.getToConnectableAndToConnectedSectionMetaPath(), missingPathErrorCheckCondition.errorSolution);
-        this.elementWithMissingPath = elementWithMissingPath;
         this.missingPathErrorCheckCondition = missingPathErrorCheckCondition;
         this.missingElements = missingElements;
     }
@@ -62,20 +53,12 @@ public class MissingPathError extends AbstractPathError {
     }
 
     /**
-     * @return the real start element where a path should be added
-     *         to remove the error
-     */
-    public ModelElement getMissingPathStartElement() {
-        return elementWithMissingPath;
-    }
-
-    /**
      * @return the errorCorrectingCreatableMetaPath that is the SimpleMetaPath equals
      *         to the secondSubMetaPathToConnectedElements or a subpath of this and
      *         is the metaPath that must be created to remove the error
      */
     public SimpleMetaPath getErrorCorrectingCreatableMetaPath() {
-        return missingPathErrorCheckCondition.getToConnectedMetaPath();
+        return missingPathErrorCheckCondition.getMetaPathToRealStartElements();
     }
 
     /**

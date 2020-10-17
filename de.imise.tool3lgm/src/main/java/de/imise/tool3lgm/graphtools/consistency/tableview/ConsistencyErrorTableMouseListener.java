@@ -18,8 +18,8 @@ import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 import javax.swing.JTable;
 
-import de.imise.tool3lgm.graphtools.consistency.ModelValidatorDefinition;
 import de.imise.tool3lgm.graphtools.consistency.ModelValidator;
+import de.imise.tool3lgm.graphtools.consistency.ModelValidatorDefinition;
 import de.imise.tool3lgm.graphtools.consistency.error.type.AbstractConsistencyError;
 import de.imise.tool3lgm.graphtools.consistency.error.type.MissingPathError;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
@@ -181,7 +181,7 @@ public class ConsistencyErrorTableMouseListener extends MouseAdapter {
             AbstractConsistencyError consistencyError = errors.get(0);
             if (consistencyError instanceof MissingPathError) {
                 MissingPathError missingPathError = (MissingPathError) consistencyError;
-                ModelElement missingPathStartElement = missingPathError.getMissingPathStartElement();
+                ModelElement missingPathStartElement = missingPathError.getModelElement();
                 SimpleMetaPath errorCorrectingCreatableMetaPath = missingPathError.getErrorCorrectingCreatableMetaPath();
                 Collection<ModelElement> missingElements = missingPathError.getMissingElements();
                 addConnectMenuItems(menu, missingPathStartElement, errorCorrectingCreatableMetaPath, missingElements);

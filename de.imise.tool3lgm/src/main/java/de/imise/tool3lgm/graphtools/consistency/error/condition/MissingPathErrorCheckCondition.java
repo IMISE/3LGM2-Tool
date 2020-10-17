@@ -14,7 +14,7 @@ public class MissingPathErrorCheckCondition extends ErrorCheckCondition {
     /**
      *
      */
-    private final MetaPath toRealStartElements;
+    private final SimpleMetaPath toRealStartElements;
 
     /**
      *
@@ -28,7 +28,7 @@ public class MissingPathErrorCheckCondition extends ErrorCheckCondition {
      * @param errorResBaseKey
      * @param errorSolutionPanelMetaPath
      */
-    public MissingPathErrorCheckCondition(final MetaPath toRealStartElements, final MetaPath toConnectableElements, final SimpleMetaPath toConnectedElements, final String errorResBaseKey, final SimpleMetaPath errorSolutionPanelMetaPath) {
+    public MissingPathErrorCheckCondition(final SimpleMetaPath toRealStartElements, final MetaPath toConnectableElements, final MetaPath toConnectedElements, final String errorResBaseKey, final SimpleMetaPath errorSolutionPanelMetaPath) {
         this(toRealStartElements, toConnectableElements, toConnectedElements, errorResBaseKey, new MissingPathErrorSolution(errorSolutionPanelMetaPath));
     }
 
@@ -39,7 +39,7 @@ public class MissingPathErrorCheckCondition extends ErrorCheckCondition {
      * @param errorResBaseKey
      * @param errorSolution
      */
-    public MissingPathErrorCheckCondition(final MetaPath toRealStartElements, final MetaPath toConnectableElements, final SimpleMetaPath toConnectedElements, final String errorResBaseKey, final ErrorSolution errorSolution) {
+    public MissingPathErrorCheckCondition(final SimpleMetaPath toRealStartElements, final MetaPath toConnectableElements, final MetaPath toConnectedElements, final String errorResBaseKey, final ErrorSolution errorSolution) {
         super(errorSolution);
         this.toRealStartElements = toRealStartElements;
         toConnectableAndToConnectedSectionMetaPath = new SectionMetaPath(errorResBaseKey, toConnectableElements, toConnectedElements);
@@ -48,7 +48,7 @@ public class MissingPathErrorCheckCondition extends ErrorCheckCondition {
     /**
      * @return the toRealStartElements
      */
-    public final MetaPath getMetaPathToRealStartElements() {
+    public final SimpleMetaPath getMetaPathToRealStartElements() {
         return toRealStartElements;
     }
 
@@ -69,8 +69,8 @@ public class MissingPathErrorCheckCondition extends ErrorCheckCondition {
     /**
      * @return
      */
-    public final SimpleMetaPath getToConnectedMetaPath() {
-        return (SimpleMetaPath) toConnectableAndToConnectedSectionMetaPath.getLastSubMetaPath();
+    public final MetaPath getToConnectedMetaPath() {
+        return toConnectableAndToConnectedSectionMetaPath.getLastSubMetaPath();
     }
 
 }
