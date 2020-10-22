@@ -26,6 +26,20 @@ Gemeint ist hier wohl ein Datenbanksystem. Ein Datenbanksystem kann im weitesten
 Nach unserem Metamodell gibt es keine Möglichkeit, einem Anwendungsbaustein mehrere Daten­banken zuzuordnen. Dies ist aus unserer Erfahrung heraus nicht notwendig, da die uns bekannten Anwendungsbausteine auch immer nur ein Datenbanksystem besitzen. Allerdings kann es durchaus möglich sein, dass ein Anwendungsbaustein auf mehrere Datenbanksysteme zugreift. In diesem Fall sind zuerst die Datenbanksysteme und die sie besitzenden Anwendungsbausteine (siehe auch FAQ [1.2.1](#markdown-header-121-wie-modelliere-ich-ein-datenbank-die-zu-keinem-anwendungsbaustein-gehort)) zu modellieren. Der Zugriff muss dann über Bausteinschnittstellen und Kommunikations­beziehungen modelliert werden.
 
 #### ***1.2.3        Gibt es Modellierungsrichtlinien auf der logischen Werkzeugebenebene für nicht rechnerbasierte Anwendungsbausteine?*** ####
+Ja insbesondere bei Kommunikationsverbindungen zwischen (rechnerbasierte) Anwendungsbausteine und (nicht rechnerbasierte) Organisationssysteme.
+
+In dieser Kommunikation werden die Daten entsprechend umgewandelt. 
+
+* Bei der Kommunikation von Anwendungsbausteinen zu Organisationssysteme werden digital vorhandene Daten in physischer Form gebracht. Dies ist zum Beispiel dann der Fall, wenn Daten auf dem Bildschirm angezeigt, auf dem Drucker ausgedruckt, in Form akustischer Signale abgehört (Musik, Text) oder auf einer DVD gespeichert werden und diese Daten anschließend von Menschen innerhalb des
+Organisationssystems weiterverarbeitet werden.
+
+* Bei der Kommunikation von Organisationssysteme zu Anwendungsbausteinen werden physisch vorhandene Daten in digitaler Form gebracht. Dies ist zum Beispiel dann der Fall, wenn ein auf Papier vorhandenes
+Dokument eingetippt, ein (aufgezeichnetes) Diktat geschrieben oder eine CD von Hand in ein Lesegerät
+eingelegt wird, damit die darauf enthaltenen Daten von dem Anwendungssystem gelesen werden können.
+
+Bei der Modellierung der Nachrichten sollte an dieser Stelle nicht davon ausgegangen werden, dass die Nachrichten bereits in der entsprechenden Form liegen.
+
+Es empfiehlt sich vielmehr, zunächst einen Kommunikationsstandard zu modellieren, der Ein- bzw. Ausgaben in Anwendungssysteme beschreibt (z. B. „Eingaben in Anwendungssysteme“, „Ausgaben aus Anwendungssystemen“ oder auch „Ein-/Ausgaben in/aus Anwendungssystemen“); es können bei Bedarf auch Kommunikationsstandards separat für jedes betroffene Anwendungssystem modelliert werden (z. B. „Eingaben in Anwendungssystem XYZ“, „Ausgaben aus Anwendungssystem ABC“ oder auch „Ein-/Ausgaben in/aus Anwendungssystem EFG“). Diesen Kommunikationsstandards sollten dann Nachrichtentypen zugeordnet werden, die entweder recht grob beschreiben, dass eine bestimmte Menge von Objekttypen ein- bzw. ausgegeben werden oder aber auch detaillierter beschreiben, in welcher Form das erfolgt (z. B. „Bildschirmeingabe von Patientenstamm- und Patientenfalldaten“, „Audiowiedergabe eines Befunddiktats“, Ein-/Ausgabe“).
 
 #### ***1.2.4        Wann ist eine Schnittstelle Benutzungsschnittstelle und wann Bausteinschnittstelle?*** ####
 Eine Schnittstelle ist immer dann eine Bausteinschnittstelle, wenn damit eine Kommunikationsbeziehung zu einem anderen Anwendungs­baustein modelliert werden soll. Eine Benutzungsschnittstelle bezieht sich auf die Mensch-Maschine-Interaktion und betrachtet mehr softwareergonomische Aspekte.
