@@ -182,9 +182,9 @@ public class ConsistencyErrorTableMouseListener extends MouseAdapter {
             if (consistencyError instanceof MissingPathError) {
                 MissingPathError missingPathError = (MissingPathError) consistencyError;
                 ModelElement missingPathStartElement = missingPathError.getModelElement();
-                SimpleMetaPath errorCorrectingCreatableMetaPath = missingPathError.getErrorCorrectingCreatableMetaPath();
+                SimpleMetaPath errorFixingCreatableMetaPath = missingPathError.getErrorFixingCreatableMetaPath();
                 Collection<ModelElement> missingElements = missingPathError.getMissingElements();
-                addConnectMenuItems(menu, missingPathStartElement, errorCorrectingCreatableMetaPath, missingElements);
+                addConnectMenuItems(menu, missingPathStartElement, errorFixingCreatableMetaPath, missingElements);
             }
         }
     }

@@ -32,15 +32,6 @@ public class TLGMServiceModelValidatorDefinition extends ModelValidatorDefinitio
     //(Anwendungsparogramm bei AWB, Orgplan bei KAWB) Kanten ohne start und end einfach
     //löschen (das macht der ModelCleaner beim Einlesen und Speichern)
 
-    //    @Override
-    //    protected final Collection<ErrorSolution> getCardinalityErrorSolutions() {
-    //        SimpleMetaPathCreator smpc = new SimpleMetaPathCreator(this);
-    //        SimpleMetaPath pathToPropertyDialogElement = smpc.createSimpleMetaPath(IheActorInstance.class, ApplicationSystem.class, ApplicationSystem_IheActorInstance_Edge.class);
-    //        SimpleMetaPath panelMetaPath = smpc.createSimpleMetaPath(ApplicationSystem.class, IheActor.class, ApplicationSystem_IheActorInstance_Edge.class, IheActor_IheActorInstance_Edge.class);
-    //        ErrorSolution solution1 = new CardinalityErrorSolution(IheActor_IheActor_MustBeGroupedWith_Edge.class, pathToPropertyDialogElement, panelMetaPath);
-    //        return ImmutableList.of(solution1);
-    //    }
-
     /**
      * Liste aller Elementarten, die bei Unterschreitung der Anzahl der zugehörigen Kantenart sofort
      * gelöscht werden. Das hier ist nur beispielhaft aus dem
@@ -56,17 +47,13 @@ public class TLGMServiceModelValidatorDefinition extends ModelValidatorDefinitio
         //Der folgende MetaPfad beschreibt die nicht erfüllte must-be-grouped-with-Beziehung ausgehend vom Anwendungssystem. Fehlt eine must-be-grouped-with-Beziehung,
         //dann kommt der Fehler, dass diesem Anwendungssystem eine weitere IheActorInsatnce zugeordnet werden muss. Hat irgendeine zu gruppierende IheActorInstance gar
         //kein Anwendungssystem, dann kommt kein Fehler.
-        //Problem: hiermit funktioniert die Kaskade von Anhängigkeiten  nicht richtig. Also eine Bedingung gilt schon als erfüllt, sobald nur eine einzige, aber
-        //nicht alle benötigten IheActorInstances an dem Anwendungssystem hängen. Warum das so ist, müsste mal nachvollzogen werden, weil eigentlich halte ich das
-        //hier für den besseren Pfad, da kein Fehler entsteht, wenn die Ihe ActorInstance kein Anwendungssystem hat. Bsp.-Kaskade: XDS-Doc-Consumer mal mit allen
-        //Varianten des Hinzufügens benötigter Anhängigkeiten ausprobieren.
         SimpleMetaPathCreator smpc = new SimpleMetaPathCreator(this);
         SimpleMetaPath toRealStartElements = smpc.createSimpleMetaPath(ApplicationSystem.class, IheActorInstance.class, ApplicationSystem_IheActorInstance_Edge.class);
         SimpleMetaPath toConnectableElements = smpc.createSimpleMetaPath(IheActorInstance.class, IheActor.class, IheActor_IheActorInstance_Edge.class, IheActor_IheActor_MustBeGroupedWith_Edge.class);
         SimpleMetaPath toConnectedElements = smpc.createSimpleMetaPath(IheActorInstance.class, IheActor.class, ApplicationSystem_IheActorInstance_Edge.class, ApplicationSystem_IheActorInstance_Edge.class, IheActor_IheActorInstance_Edge.class);
-        SimpleMetaPath errorSolutionPanelMetaPath = smpc.createSimpleMetaPath(ApplicationSystem.class, IheActor.class, ApplicationSystem_IheActorInstance_Edge.class, IheActor_IheActorInstance_Edge.class);
+        SimpleMetaPath toSolveTheErrorMetaPath = smpc.createSimpleMetaPath(ApplicationSystem.class, IheActor.class, ApplicationSystem_IheActorInstance_Edge.class, IheActor_IheActorInstance_Edge.class);
         MissingPathErrorCheckCondition missingPathCondition = new MissingPathErrorCheckCondition(toRealStartElements, toConnectableElements, toConnectedElements, "CONSISTENCY_ERROR_ApplicationSystem_needsGroupingOf_IheActorInstances",
-                errorSolutionPanelMetaPath);
+                toSolveTheErrorMetaPath);
         return ImmutableSet.of(missingPathCondition);
     }
 
