@@ -13,7 +13,6 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
 import javax.swing.table.TableColumn;
-import javax.swing.table.TableColumnModel;
 
 import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.graphtools.consistency.ModelValidator;
@@ -73,8 +72,6 @@ public class ConsistencyErrorTableGenerator implements PropertyChangeListener {
 
         DescriptionCellRenderer cellRendererWithTooltips = new DescriptionCellRenderer();
         //set max column width and cell renderer
-
-        TableColumnModel columnModel = table.getColumnModel();
 
         for (ColumnNames columnIdentifier : ColumnNames.values()) {
             TableColumn column = table.getColumn(columnIdentifier.toString());
