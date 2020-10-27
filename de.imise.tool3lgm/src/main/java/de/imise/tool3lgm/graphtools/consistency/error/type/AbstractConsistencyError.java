@@ -64,7 +64,8 @@ public abstract class AbstractConsistencyError extends Error implements MetaMode
 
     @Override
     public String getMessage() {
-        return getMessageBuilder().toString();
+        StringBuilder messageBuilder = getMessageBuilder();
+        return messageBuilder.toString();
     }
 
     /**
@@ -82,7 +83,8 @@ public abstract class AbstractConsistencyError extends Error implements MetaMode
     protected StringBuilder getMessageBuilder() {
         StringBuilder sb = new StringBuilder();
         String errClassName = getClass().getSimpleName();
-        sb.append(getResString(errClassName + ERROR_DESCRIPTION_RESOURCE_KEY_SUFFIX));
+        String resString = getResString(errClassName + ERROR_DESCRIPTION_RESOURCE_KEY_SUFFIX);
+        sb.append(resString);
         replacePlaceHolder(sb);
         return sb;
     }
