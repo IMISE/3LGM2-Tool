@@ -8,6 +8,7 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
@@ -82,9 +83,9 @@ public class FlexibleTabPaneTab extends JPanel {
         add(closeButton);
         setBorder(BorderFactory.createEmptyBorder(2, 0, 0, 0));
 
-        addMouseListener(mouseListener);
-        tabLabel.addMouseListener(mouseListener);
-        closeButton.addMouseListener(mouseListener);
+        addMouseListener(selectTabWhenMousePressedMouseListener);
+        tabLabel.addMouseListener(selectTabWhenMousePressedMouseListener);
+        closeButton.addMouseListener(paintCloseButtonWhenMouseOverMouseListener);
     }
 
     /**
@@ -226,11 +227,7 @@ public class FlexibleTabPaneTab extends JPanel {
     /**
      *
      */
-    private final MouseListener mouseListener = new MouseListener() {
-
-        @Override
-        public void mouseReleased(final MouseEvent e) {
-        }
+    private final MouseListener selectTabWhenMousePressedMouseListener = new MouseAdapter() {
 
         @Override
         public void mousePressed(final MouseEvent e) {
@@ -242,8 +239,20 @@ public class FlexibleTabPaneTab extends JPanel {
         }
 
         @Override
-        public void mouseClicked(final MouseEvent e) {
+        public void mouseEntered(final MouseEvent e) {
+            paintCloseButtonWhenMouseOverMouseListener.mouseEntered(e);
         }
+
+        @Override
+        public void mouseExited(final MouseEvent e) {
+            paintCloseButtonWhenMouseOverMouseListener.mouseExited(e);
+        }
+    };
+
+    /**
+    *
+    */
+    private final MouseListener paintCloseButtonWhenMouseOverMouseListener = new MouseAdapter() {
 
         @Override
         public void mouseEntered(final MouseEvent e) {
@@ -259,4 +268,5 @@ public class FlexibleTabPaneTab extends JPanel {
             repaint();
         }
     };
+
 }
