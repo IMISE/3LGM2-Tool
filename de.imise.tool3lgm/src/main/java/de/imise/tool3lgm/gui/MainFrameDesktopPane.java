@@ -36,7 +36,6 @@ import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.Tool3lgm;
 import de.imise.tool3lgm.Tool3lgmChangeListener;
 import de.imise.tool3lgm.Tool3lgmConstants;
-import de.imise.tool3lgm.graphtools.consistency.ModelValidator;
 import de.imise.tool3lgm.graphtools.consistency.SuggestShowConsistencyTableHandler;
 import de.imise.tool3lgm.graphtools.consistency.tableview.ConsistencyErrorTablePane;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
@@ -268,10 +267,8 @@ public final class MainFrameDesktopPane extends JPanel implements PropertyChange
      */
     private void checkConsistencyTableVisibility() {
         boolean isCheckConsistency = isShowConsistencyTable();
-        ModelValidator modelValidator = ModelValidator.getModelValidator();
         JSplitPane topComponent = rightSplitPane != null ? rightSplitPane : leftSplitPane;
         if (!isCheckConsistency) {
-            modelValidator.resetConsistencyDefinition();
             if (topComponent.getParent() == workarea) {
                 return;
             }

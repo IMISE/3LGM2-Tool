@@ -21,9 +21,8 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import de.imise.tool3lgm.Tool3lgmChangeListener.Tool3lgmChangeType;
 import de.imise.tool3lgm.Tool3lgmConstants.FileFilterType;
 import de.imise.tool3lgm.Tool3lgmModelType.ModelCategory;
-import de.imise.tool3lgm.graphtools.consistency.ModelValidatorDefinition;
 import de.imise.tool3lgm.graphtools.consistency.ModelCleaner;
-import de.imise.tool3lgm.graphtools.consistency.ModelValidator;
+import de.imise.tool3lgm.graphtools.consistency.ModelValidatorDefinition;
 import de.imise.tool3lgm.graphtools.dialog.element.ElemenPropertyDialogsContext;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
@@ -80,12 +79,6 @@ public class Tool3lgm {
             Thread.sleep(1000);
         } catch (InterruptedException e) {
         }
-
-        //The ModelValidator should be the first Tool3lgmChangeListener so
-        //that it is the first to be informed when the active model is changed
-        //and recalculates these consistency errors before all views
-        //representing the consistency errors.
-        ModelValidator.init();
 
         // der templateLibrariesManager muss vor dem MainFrame initilaisiert werden, weil er vor dem
         // eventuell sichtbaren TemplateBrowser als Tool3lgmChangeListener registriert sein muuss, damit

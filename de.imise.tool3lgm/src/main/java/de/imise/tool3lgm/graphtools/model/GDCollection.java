@@ -83,6 +83,7 @@ import com.google.common.base.Strings;
 import de.imise.tool3lgm.MetaModelContext;
 import de.imise.tool3lgm.Tool3lgmModelType;
 import de.imise.tool3lgm.Tool3lgmModelType.ModelCategory;
+import de.imise.tool3lgm.graphtools.consistency.ModelValidator;
 import de.imise.tool3lgm.graphtools.dialog.element.ElemenPropertyDialogsContext;
 import de.imise.tool3lgm.graphtools.dialog.element.ElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
@@ -143,6 +144,9 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
 
     /** The data structure to store all model changing transactions for the undo-redo-manager */
     private final TransactionStackTable transStackTable = new TransactionStackTable();
+
+    /** The modelvalidaor for this model */
+    private final ModelValidator modelValidator;
 
     //	/*{
     //
@@ -285,6 +289,7 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
     public GDCollection() {
         fileHandler = new GDCollectionFileHandler(this);
         imExportHandler = new GDCollectionImExportHandler(this);
+        modelValidator = new ModelValidator(this);
         tman = new TransactionManager(this);
     }
 
@@ -295,6 +300,13 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
     public GDCollection(@Nonnull final Tool3lgmModelType modelType) {
         this();
         setModelType(modelType);
+    }
+
+    /**
+     * @return the validator for this model
+     */
+    public ModelValidator getModelValidator() {
+        return modelValidator;
     }
 
     @Override

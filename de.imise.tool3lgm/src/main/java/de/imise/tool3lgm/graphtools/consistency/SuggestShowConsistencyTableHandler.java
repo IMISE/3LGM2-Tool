@@ -94,8 +94,7 @@ public class SuggestShowConsistencyTableHandler implements PropertyChangeListene
         }
 
         lastCheckTime = currentTimeMillis;
-
-        ModelValidator modelValidator = ModelValidator.getModelValidator();
+        ModelValidator modelValidator = selectedGDCollection.getModelValidator();
         if (modelValidator.hasInconsistencies()) {
             JComponent message = GeneralDialogCreator.getLabelPanel("SUGGEST_SHOW_CONSISTENCY_TABLE_DIALOG_MESSAGE", true);
             String title = getResString("message_do_not_ask_again");

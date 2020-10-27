@@ -223,7 +223,7 @@ public class ModelValidatorDefinition implements MetaModelSpecific {
      * fehlerhaft geltende Element aber trotzdem nicht einfach gelöscht werden.
      */
     public void clearUnfixableErrors(final GDCollection gdcoll) {
-        ModelValidator modelValidator = new ModelValidator(gdcoll, false);
+        ModelValidator modelValidator = gdcoll.getModelValidator();
         // dieses Löschen muss man nicht rückgängig machen können -> BulkMode einschalten
         boolean oldBulkMode = gdcoll.setBulkMode(true);
         //ignore MissingPathErrors resp. check only AbstractCardinalityErrors and AbstractIDErrors

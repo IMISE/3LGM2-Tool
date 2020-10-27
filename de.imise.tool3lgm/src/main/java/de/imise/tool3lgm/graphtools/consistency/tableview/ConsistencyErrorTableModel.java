@@ -5,6 +5,7 @@ package de.imise.tool3lgm.graphtools.consistency.tableview;
 
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
 
+import java.util.ArrayList;
 import java.util.Collection;
 
 import javax.swing.table.DefaultTableModel;
@@ -79,7 +80,7 @@ public class ConsistencyErrorTableModel extends DefaultTableModel {
     public void setErrors(final ModelValidator modelValidator) {
         //ignore unfixable missingPath errors. They can be only fixed
         //with other fixable missingPathErrors (if defined)
-        Collection<AbstractConsistencyError> errors = modelValidator.getInconsistencies();
+        Collection<AbstractConsistencyError> errors = modelValidator == null ? new ArrayList<>(0) : modelValidator.getInconsistencies();
         dataVector.clear();
         setRowCount(errors.size());
 

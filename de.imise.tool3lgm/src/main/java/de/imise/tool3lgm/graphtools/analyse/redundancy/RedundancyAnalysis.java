@@ -195,7 +195,7 @@ public class RedundancyAnalysis extends WindowAdapter {
         if (Static.getSelectedGDCollection() != gdcoll) {
             Static.setSelectedDoc(selectedDoc);
         }
-        ModelValidator modelValidator = ModelValidator.getModelValidator();
+        ModelValidator modelValidator = gdcoll.getModelValidator();
         modelValidator.resetConsistencyDefinition();
         ConsistencyDefinition consistencyDefinition = modelValidator.getConsistencyDefinition();
         CardinalityDefinition cardinalityDefinition = consistencyDefinition.getCardinalityDefinition();

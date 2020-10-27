@@ -18,7 +18,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 import javax.swing.JTable;
 
-import de.imise.tool3lgm.graphtools.consistency.ModelValidator;
+import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.graphtools.consistency.ModelValidatorDefinition;
 import de.imise.tool3lgm.graphtools.consistency.error.type.AbstractConsistencyError;
 import de.imise.tool3lgm.graphtools.consistency.error.type.MissingPathError;
@@ -41,11 +41,6 @@ public class ConsistencyErrorTableMouseListener extends MouseAdapter {
     /**
      *
      */
-    private final ModelValidator modelValidator;
-
-    /**
-     *
-     */
     private List<AbstractConsistencyError> errors;
 
     /**
@@ -57,8 +52,7 @@ public class ConsistencyErrorTableMouseListener extends MouseAdapter {
      * @param modelValidator
      * @param errorTable
      */
-    ConsistencyErrorTableMouseListener(final ModelValidator modelValidator, final JTable errorTable) {
-        this.modelValidator = modelValidator;
+    ConsistencyErrorTableMouseListener(final JTable errorTable) {
         table = errorTable;
     }
 
@@ -121,16 +115,6 @@ public class ConsistencyErrorTableMouseListener extends MouseAdapter {
      */
     private JPopupMenu getPopupMenu() {
         JPopupMenu menu = new JPopupMenu();
-        // JMenuItem item = new JMenuItem(new
-        // AbstractAction(getResString("error_element_properties")){
-        // @Override
-        // public void actionPerformed(ActionEvent e) {
-        // for (ModelElement me : selectedErrorElements)
-        // me.getPropertyDialog(checker.getCollection()).showDialog();
-        // }
-        // });
-        // menu.add(item);
-
         //at least one solution must be available to show the "open element
         //dialog to remove the error".
         boolean solutionAvailable = false;
@@ -156,8 +140,8 @@ public class ConsistencyErrorTableMouseListener extends MouseAdapter {
         JMenuItem item = new JMenuItem(new AbstractAction(getResString("error_element_delete")) {
             @Override
             public void actionPerformed(final ActionEvent e) {
-                GDCollection gdcoll = modelValidator.getCollection();
-                gdcoll.deleteElements(selectedErrorElements, TransactionManager.STANDARD_PID);
+                GDCollection selectedGDCollection = Static.getSelectedGDCollection();
+                selectedGDCollection.deleteElements(selectedErrorElements, TransactionManager.STANDARD_PID);
             }
         });
         menu.add(item);

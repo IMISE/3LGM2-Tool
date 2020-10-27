@@ -6,13 +6,13 @@ import java.util.Collection;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
 
-import de.imise.tool3lgm.Tool3lgmChangeListener;
 import de.imise.tool3lgm.graphtools.consistency.error.checker.ConsistencyErrorChecker;
 import de.imise.tool3lgm.graphtools.consistency.error.checker.EdgeCardinalityChecker;
 import de.imise.tool3lgm.graphtools.consistency.error.checker.MissingPathChecker;
 import de.imise.tool3lgm.graphtools.consistency.error.checker.UniqueIDChecker;
 import de.imise.tool3lgm.graphtools.consistency.error.type.AbstractCardinalityError;
 import de.imise.tool3lgm.graphtools.consistency.error.type.AbstractConsistencyError;
+import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.model.LGMChangeListenerSimple;
@@ -29,17 +29,12 @@ import de.imise.util.event.PropertyChangeHandler;
 /**
  * @author AXS (23.03.2020)
  */
-public final class ModelValidator extends PropertyChangeHandler implements LGMChangeListenerSimple, Tool3lgmChangeListener {
-
-    /**
-     * Checks the consistency of a model. This instance is used for the current selected Model
-     */
-    private static ModelValidator modelValidator;
+public final class ModelValidator extends PropertyChangeHandler implements LGMChangeListenerSimple {
 
     /**
      * Modell, das überprüft wird.
      */
-    private GDCollection gdcoll;
+    private final GDCollection gdcoll;
 
     /**
      * Maps from an error type to the checker which can find this type of errors
@@ -65,84 +60,24 @@ public final class ModelValidator extends PropertyChangeHandler implements LGMCh
      * @param gdcoll
      * @param changeContext
      */
-    public ModelValidator(final GDCollection gdcoll, final boolean changeContext) {
+    public ModelValidator(final GDCollection gdcoll) {
         checkers = new ArrayList<>();
+        this.gdcoll = gdcoll;
         checkers.add(new EdgeCardinalityChecker());
         checkers.add(new MissingPathChecker());
         checkers.add(new UniqueIDChecker());
         consistencyErrorTypeToConsistencyErrors = ArrayListMultimap.create();
-        if (changeContext) {
-            changeContext(gdcoll);
-        } else {
-            this.gdcoll = gdcoll;
-            resetConsistencyDefinition();
-        }
-    }
-
-    /**
-     * Legt einen neuen Consistency-Checker an, der sich als Listener beim HauptModell der
-     * übergebenen Collection registeriert.
-     *
-     * @param gdcoll
-     */
-    private ModelValidator(final GDCollection gdcoll) {
-        this(gdcoll, false);
-    }
-
-    /**
-     * Initializes the static instance of {@link ModelValidator} and
-     * regsiters it as ToolChangeListener. Once called, the next call
-     * has no change effect.
-     */
-    public static final void init() {
-        if (modelValidator == null) {
-            modelValidator = new ModelValidator(null, true);
-            modelValidator.addAsToolChangeListener();
-        }
-    }
-
-    /**
-     * @return the {@link ModelValidator} instance for the current selected model (GDCollection)
-     */
-    public static ModelValidator getModelValidator() {
-        return modelValidator;
-    }
-
-    /**
-     * Adds a {@link ConsistencyErrorChecker} for a special error
-     * type to the static instance of {@link ModelValidator}.
-     *
-     * @param errorTypeChecker
-     */
-    public static void registerChecker(final ConsistencyErrorChecker errorTypeChecker) {
-        ModelValidator modelValidator = getModelValidator();
-        modelValidator.checkers.add(errorTypeChecker);
-    }
-
-    /**
-     * Setzt die übergebene Collection als aktuelle Collection
-     *
-     * @param gscoll
-     */
-    private void changeContext(final GDCollection gdcoll) {
-        if (this.gdcoll != gdcoll) {
-            if (this.gdcoll != null) {
-                this.gdcoll.removeAllTransactionsListener(this);
-            }
-            this.gdcoll = gdcoll;
-            if (this.gdcoll != null) {
-                gdcoll.addAllTransactionsListener(this);
-            }
-            resetConsistencyDefinition();
-            updateErrors();
-        }
+        gdcoll.addAllTransactionsListener(this);
+        resetConsistencyDefinition();
+        //        updateErrors();
     }
 
     /**
      * @param consistencyDefinition
      */
     public void resetConsistencyDefinition() {
-        consistencyDefinition = gdcoll != null ? new ConsistencyDefinition(gdcoll.getMetaModel()) : null;
+        MetaModel metaModel = gdcoll.getMetaModel();
+        consistencyDefinition = new ConsistencyDefinition(metaModel);
     }
 
     /**
@@ -150,12 +85,6 @@ public final class ModelValidator extends PropertyChangeHandler implements LGMCh
      */
     public ConsistencyDefinition getConsistencyDefinition() {
         return consistencyDefinition;
-    }
-
-    @Override
-    public void model_change_changed(final GraphDocument source) {
-        GDCollection gdcoll = source.getCollection();
-        changeContext(gdcoll);
     }
 
     /**
