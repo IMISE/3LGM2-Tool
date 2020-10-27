@@ -13,6 +13,7 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
 import javax.swing.table.TableColumn;
+import javax.swing.table.TableColumnModel;
 
 import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.graphtools.consistency.ModelValidator;
@@ -20,7 +21,7 @@ import de.imise.tool3lgm.graphtools.consistency.tableview.ConsistencyErrorTableM
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.LGMGraphDocument;
 import de.imise.tool3lgm.graphtools.undoredo.TransactionManager;
-import de.imise.util.NamedObjectContainer;
+import de.imise.util.Sys;
 import de.imise.util.swing.ToolTipShowTimeHandler;
 
 /**
@@ -71,23 +72,19 @@ public class ConsistencyErrorTableGenerator implements PropertyChangeListener {
         //Table
         table.setAutoResizeMode(JTable.AUTO_RESIZE_LAST_COLUMN);
 
-        //Column number (0)
-        ColumnNames number = ConsistencyErrorTableModel.ColumnNames.NUMBER;
-        String culumnNumberDisplayableName = number.getDisplayableName();
-        TableColumn columnNumber = table.getColumn(culumnNumberDisplayableName);
-        columnNumber.setMaxWidth(40);
+        DescriptionCellRenderer cellRendererWithTooltips = new DescriptionCellRenderer();
+        //set max column width and cell renderer
 
-        //Column error type (1)
-        ColumnNames errorType = ConsistencyErrorTableModel.ColumnNames.ERROR_TYPE;
-        String columnErrorTypeDisplayableName = errorType.getDisplayableName();
-        TableColumn columnErrorType = table.getColumn(columnErrorTypeDisplayableName);
-        columnErrorType.setMaxWidth(40);
+        TableColumnModel columnModel = table.getColumnModel();
+        Sys.err1(columnModel.getColumn(0).getIdentifier());
 
-        //Column description (5)
-        ColumnNames description = ConsistencyErrorTableModel.ColumnNames.DESCRIPTION;
-        String columnDescriptionDisplayableName = description.getDisplayableName();
-        TableColumn columnDescription = table.getColumn(columnDescriptionDisplayableName);
-        columnDescription.setCellRenderer(new DescriptionCellRenderer());
+        for (ColumnNames columnIdentifier : ColumnNames.values()) {
+            TableColumn column = table.getColumn(columnIdentifier.toString());
+            column.setCellRenderer(cellRendererWithTooltips);
+            if (columnIdentifier.maxColumnWidth > 0) {
+                column.setMaxWidth(columnIdentifier.maxColumnWidth);
+            }
+        }
 
         initTabelSelectionModel();
 
@@ -132,13 +129,9 @@ public class ConsistencyErrorTableGenerator implements PropertyChangeListener {
         @Override
         public Component getTableCellRendererComponent(final JTable table, final Object value, final boolean isSelected, final boolean hasFocus, final int row, final int column) {
             JComponent c = (JComponent) super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
-            // This...
-            if (value instanceof NamedObjectContainer) {
-                NamedObjectContainer<?> cellValueWithTooltip = (NamedObjectContainer<?>) value;
-                Object cellObject = cellValueWithTooltip.getObject();
-                String tooltip = cellObject.toString();
-                c.setToolTipText(tooltip);
-            }
+            ConsistencyErrorTableModel model = (ConsistencyErrorTableModel) table.getModel();
+            String tooltip = model.getTooltip(row);
+            c.setToolTipText(tooltip);
             return c;
         }
     }
