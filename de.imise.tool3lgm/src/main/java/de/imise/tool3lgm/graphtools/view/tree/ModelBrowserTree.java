@@ -695,10 +695,14 @@ public final class ModelBrowserTree extends DynamicTree implements UserFieldList
             }
         }
         setSelectionPaths(path);
-        if (path.length > 0) {
-            Rectangle bounds = getPathBounds(path[path.length - 1]);
-            bounds.x = 0;
-            scrollRectToVisible(bounds);
+        int lastSelectedPathIndex = path.length - 1;
+        if (lastSelectedPathIndex >= 0) {
+            TreePath lastSelectedPath = path[lastSelectedPathIndex];
+            Rectangle bounds = getPathBounds(lastSelectedPath);
+            if (bounds != null) {
+                bounds.x = 0;
+                scrollRectToVisible(bounds);
+            }
         }
         setSelectionListenerActive(true);
     }
