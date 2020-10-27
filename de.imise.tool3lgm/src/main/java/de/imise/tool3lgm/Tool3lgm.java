@@ -434,12 +434,6 @@ public class Tool3lgm {
     }
 
     /**
-     * Über diese Variable wird beim Schließen eines Modells die Selektion
-     * der einzelnen Teilmodelle verhindert.
-     */
-    private boolean ignoreDocSelection = false;
-
-    /**
      * Wechselt den Kontext auf das übergebene Teilmodell. In jedem Fall wird der <code>ModelBrowser</code> des aktivierten Teilmodells in den
      * Vordergrund gebracht.
      *
@@ -447,9 +441,6 @@ public class Tool3lgm {
      *            Teilmodell, in dessen Kontext gewechselt werden soll
      */
     void setSelectedDoc(final GraphDocument doc) {
-        if (ignoreDocSelection) {
-            return;
-        }
         if (doc != null) {
             //das zu aktivierende Graphdocument und dessen Collection an die richtige Position bringen
             GDCollection gdcoll = doc.getCollection();
@@ -550,11 +541,7 @@ public class Tool3lgm {
         } catch (Exception e) {
         }
 
-        ignoreDocSelection = true;
-
         distribute(MODEL_CHANGE_MODEL_CLOSED, selDoc);
-
-        ignoreDocSelection = false;
 
         System.gc();
 
