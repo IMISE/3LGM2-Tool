@@ -21,7 +21,6 @@ import de.imise.tool3lgm.graphtools.consistency.tableview.ConsistencyErrorTableM
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.LGMGraphDocument;
 import de.imise.tool3lgm.graphtools.undoredo.TransactionManager;
-import de.imise.util.Sys;
 import de.imise.util.swing.ToolTipShowTimeHandler;
 
 /**
@@ -76,7 +75,6 @@ public class ConsistencyErrorTableGenerator implements PropertyChangeListener {
         //set max column width and cell renderer
 
         TableColumnModel columnModel = table.getColumnModel();
-        Sys.err1(columnModel.getColumn(0).getIdentifier());
 
         for (ColumnNames columnIdentifier : ColumnNames.values()) {
             TableColumn column = table.getColumn(columnIdentifier.toString());
