@@ -76,8 +76,14 @@ import de.imise.util.swing.component.text.NumberTextField;
  */
 public class PropertyDialogUserFieldPanel extends ElementDialogPanel {
 
+    /**
+     *
+     */
     private final List<UserFieldEditorComponent> fieldComponents = new ArrayList<>();
 
+    /**
+     *
+     */
     private final PropertyDialogUserFieldPanelChangeListener changeHandler = new PropertyDialogUserFieldPanelChangeListener(this);
 
     /**
@@ -88,6 +94,9 @@ public class PropertyDialogUserFieldPanel extends ElementDialogPanel {
         create();
     }
 
+    /**
+     * @return
+     */
     private GridBagConstraints getDefaultConstraints() {
         GridBagConstraints constraints = new GridBagConstraints();
         constraints.fill = GridBagConstraints.HORIZONTAL;
@@ -101,6 +110,10 @@ public class PropertyDialogUserFieldPanel extends ElementDialogPanel {
         return constraints;
     }
 
+    /**
+     * @param content
+     * @return
+     */
     private JScrollPane getScrollPane(final JComponent content) {
         JScrollPane scrollPane = new JScrollPane(content);
         JScrollBar scrollbar = scrollPane.getVerticalScrollBar();
@@ -317,6 +330,10 @@ public class PropertyDialogUserFieldPanel extends ElementDialogPanel {
         }
     }
 
+    /**
+     * @param component
+     * @param userField
+     */
     private void registerChangeListener(final JComponent component, final UserField userField) {
         if (component instanceof JTextComponent) {
             JTextComponent textComponent = (JTextComponent) component;
@@ -336,6 +353,10 @@ public class PropertyDialogUserFieldPanel extends ElementDialogPanel {
         }
     }
 
+    /**
+     * @param hyperlinkText
+     * @return
+     */
     private JButton getHyperlinkButton(final JTextComponent hyperlinkText) {
         // Der Button, der für einen Hyperlink das öffnen eines Browsers
         // ermöglicht.
@@ -362,6 +383,10 @@ public class PropertyDialogUserFieldPanel extends ElementDialogPanel {
         return button;
     }
 
+    /**
+     * @param panel2Fill
+     * @param constraints
+     */
     private void addFillSpacePanel(final JPanel panel2Fill, final GridBagConstraints constraints) {
         constraints.gridy++;
         constraints.fill = GridBagConstraints.BOTH;
@@ -542,6 +567,9 @@ public class PropertyDialogUserFieldPanel extends ElementDialogPanel {
         }
     }
 
+    /**
+     * @param c
+     */
     public static final void print(final GridBagConstraints c) {
         System.err.println("anchor = " + c.anchor);
         System.err.println("fill = " + c.fill);
