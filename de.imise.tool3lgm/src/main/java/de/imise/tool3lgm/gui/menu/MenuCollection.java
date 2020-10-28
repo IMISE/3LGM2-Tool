@@ -171,7 +171,8 @@ public class MenuCollection {
     static class OptionsSubMenus {
 
         /** Menu für allgemeine Optionen */
-        public static final JMenu GENERAL_OPTIONS_MENU = createMenu("general", BooleanProperty.OPTION_SHOW_REMOVE_WARNING, BooleanProperty.OPTION_ELEMENTS_RECEIVE_PROPERTIES_FROM_PARENTS, BooleanProperty.OPTION_SHOW_PART_OF_HIERARCHY);
+        public static final JMenu GENERAL_OPTIONS_MENU = createMenu("general", BooleanProperty.OPTION_SHOW_REMOVE_WARNING, BooleanProperty.OPTION_ELEMENTS_RECEIVE_PROPERTIES_FROM_PARENTS, BooleanProperty.OPTION_SHOW_PART_OF_HIERARCHY,
+                BooleanProperty.OPTION_MARK_INCONSISTENT_ELEMENTS);
 
         /** Das Browser-Optionen-Menu */
         public static final JMenu BROWSER_OPTIONS_MENU = createMenu("browserOptionsMenu", BooleanProperty.OPTION_ENABLE_SUBMODEL_BROWSER, BooleanProperty.OPTION_SHOW_MODELS_IN_SEPARATE_BROWSER,
