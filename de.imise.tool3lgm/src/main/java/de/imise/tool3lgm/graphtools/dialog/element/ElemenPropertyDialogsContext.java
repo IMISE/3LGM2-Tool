@@ -51,15 +51,6 @@ public class ElemenPropertyDialogsContext {
     }
 
     /**
-     * Gibt Verctor mit allen geoeffneten Dialogen zurueck
-     *
-     * @return ArrayList mit allen geoeffneten Dialogen
-     */
-    public static final List<ElementPropertyDialog> getDialogs() {
-        return dialogs;
-    }
-
-    /**
      * entfernt einen Dialog aus dem ArrayList mit allen geoeffneten Dialogen
      *
      * @param modelElement Element dessen Dialog aus dem ArrayList entfernt werden soll
@@ -106,7 +97,7 @@ public class ElemenPropertyDialogsContext {
      *
      * @return
      */
-    public Iterable<ElementPropertyDialog> iterateDialogs() {
+    public static Iterable<ElementPropertyDialog> iterateDialogs() {
         return dialogs;
     }
 
