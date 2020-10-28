@@ -105,8 +105,7 @@ public class ModelValidatorDefinition implements MetaModelSpecific {
      * <li>Wenn für den Fehler keine <code>ErrorSolution</code> gefunden wurde, kommt eine leere Liste zurück</li>
      * </ol>
      * Zusäztlich dazu wird auch <code>null</code> zurück gegeben, wenn der übergebene Fehler selbst <code>null</code> ist. Das kann man aber vorher
-     * ausschließen, so dass die eindeutige
-     * Unterscheidung der einzelnen Fehlerarten möglich ist.
+     * ausschließen, so dass die eindeutige Unterscheidung der einzelnen Fehlerarten möglich ist.
      *
      * @param error
      * @return

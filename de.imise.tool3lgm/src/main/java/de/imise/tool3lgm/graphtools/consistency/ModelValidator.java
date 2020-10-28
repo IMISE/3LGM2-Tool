@@ -31,14 +31,10 @@ import de.imise.util.event.PropertyChangeHandler;
  */
 public final class ModelValidator extends PropertyChangeHandler implements LGMChangeListenerSimple {
 
-    /**
-     * Modell, das überprüft wird.
-     */
+    /** Model to be checked */
     private final GDCollection gdcoll;
 
-    /**
-     * Maps from an error type to the checker which can find this type of errors
-     */
+    /** Maps from an error type to the checker which can find this type of errors */
     private final Collection<ConsistencyErrorChecker> checkers;
 
     /**
@@ -48,9 +44,7 @@ public final class ModelValidator extends PropertyChangeHandler implements LGMCh
      */
     private ConsistencyDefinition consistencyDefinition;
 
-    /**
-     * Maps from an error type to all consistency errors of this type.
-     */
+    /** Maps from an error type to all consistency errors of this type */
     private final Multimap<Class<? extends AbstractConsistencyError>, AbstractConsistencyError> consistencyErrorTypeToConsistencyErrors;
 
     /**
@@ -69,7 +63,6 @@ public final class ModelValidator extends PropertyChangeHandler implements LGMCh
         consistencyErrorTypeToConsistencyErrors = ArrayListMultimap.create();
         gdcoll.addAllTransactionsListener(this);
         resetConsistencyDefinition();
-        //        updateErrors();
     }
 
     /**
@@ -88,16 +81,16 @@ public final class ModelValidator extends PropertyChangeHandler implements LGMCh
     }
 
     /**
-     * Liefert das Modell, das dieser Checker überprüft.
+     * Returns the model that this checker checks
      *
-     * @return überprüftes Modell
+     * @return checked model
      */
     public GDCollection getCollection() {
         return gdcoll;
     }
 
     /**
-     *
+     * Updates the map with all errors
      */
     private void updateErrors() {
         consistencyErrorTypeToConsistencyErrors.clear();

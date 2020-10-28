@@ -14,6 +14,7 @@ import javax.swing.JPanel;
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
 import de.imise.tool3lgm.graphtools.dialog.element.panel.AbstractPathConnectionPanel;
+import de.imise.tool3lgm.graphtools.dialog.element.panel.AbstractPathConnectionPanel.PanelLabelOption;
 import de.imise.tool3lgm.graphtools.dialog.element.panel.ConnectedElementsTableDefinition;
 import de.imise.tool3lgm.graphtools.dialog.element.panel.ConnectedElementsTablePanel;
 import de.imise.tool3lgm.graphtools.dialog.element.panel.DescriptedSingleConnectionPanel;
@@ -24,7 +25,6 @@ import de.imise.tool3lgm.graphtools.dialog.element.panel.MutipleCompositionPanel
 import de.imise.tool3lgm.graphtools.dialog.element.panel.PathConnectionLeafPanel;
 import de.imise.tool3lgm.graphtools.dialog.element.panel.PathConnectionPanel;
 import de.imise.tool3lgm.graphtools.dialog.element.panel.TabbedPanel;
-import de.imise.tool3lgm.graphtools.dialog.element.panel.AbstractPathConnectionPanel.PanelLabelOption;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.CompositionEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
