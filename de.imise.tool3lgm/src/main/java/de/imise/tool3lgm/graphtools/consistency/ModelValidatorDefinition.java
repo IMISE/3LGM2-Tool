@@ -48,7 +48,7 @@ public class ModelValidatorDefinition implements MetaModelSpecific {
     /**
      *
      */
-    private Collection<ErrorSolution> errorSolutions = null;
+    private Collection<ErrorSolution> cardinalityErrorSolutions = null;
 
     /**
      * @return
@@ -71,10 +71,10 @@ public class ModelValidatorDefinition implements MetaModelSpecific {
         if (errorSolution != null) {
             return errorSolution;
         }
-        if (errorSolutions == null) {
-            errorSolutions = getCardinalityErrorSolutions();
+        if (cardinalityErrorSolutions == null) {
+            cardinalityErrorSolutions = getCardinalityErrorSolutions();
         }
-        for (ErrorSolution solution : errorSolutions) {
+        for (ErrorSolution solution : cardinalityErrorSolutions) {
             Class<? extends ModelElement> targetClass = solution.getTargetClass();
             ModelElement me = error.getModelElement();
             Class<? extends ModelElement> elementClass = me.getClass();
@@ -156,8 +156,8 @@ public class ModelValidatorDefinition implements MetaModelSpecific {
         if (error instanceof AbstractPathError) {
             GDCollection gdcoll = error.getCollection();
             MetaModel metaModel = gdcoll.getMetaModel();
-            ModelValidatorDefinition solutionsLibrary = metaModel.getModelValidatorDefinition();
-            ErrorSolution es = solutionsLibrary.getSolution(error);
+            ModelValidatorDefinition modelValidatorDefinition = metaModel.getModelValidatorDefinition();
+            ErrorSolution es = modelValidatorDefinition.getSolution(error);
             ImageIcon icon = Tool3lgmConstants.getIcon("error.gif");
             if (es == null) {
                 AbstractPathError pathError = (AbstractPathError) error;
