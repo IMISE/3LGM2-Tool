@@ -167,10 +167,13 @@ public abstract class AbstractTabbedPropertyDialog extends AbstractPropertyDialo
     }
 
     /**
+     * Selects the with a panel or subpanel that displays the
+     * given MetaPath.
+     *
      * @param metaPath
      */
     public final int selectTab(final MetaPath metaPath) {
-        Container panel = getPanel(metaPath);
+        Container panel = getPanel(tabbedPane, metaPath);
         while (panel != null) {
             Container parent = panel.getParent();
             if (parent == tabbedPane) {
@@ -183,19 +186,14 @@ public abstract class AbstractTabbedPropertyDialog extends AbstractPropertyDialo
     }
 
     /**
-     * @param metaPath
-     * @return the panel with the given metapath
-     */
-    public AbstractPathConnectionPanel getPanel(final MetaPath metaPath) {
-        return getPanel(tabbedPane, metaPath);
-    }
-
-    /**
+     * Searches for a subpanel in the given container that
+     * displays the given MetaPath.
+     *
      * @param pane
      * @param metaPath
      * @return
      */
-    private static AbstractPathConnectionPanel getPanel(final Container pane, final MetaPath metaPath) {
+    public static AbstractPathConnectionPanel getPanel(final Container pane, final MetaPath metaPath) {
         for (int i = 0; i < pane.getComponentCount(); i++) {
             Component comp = pane.getComponent(i);
             if (comp instanceof AbstractPathConnectionPanel) {

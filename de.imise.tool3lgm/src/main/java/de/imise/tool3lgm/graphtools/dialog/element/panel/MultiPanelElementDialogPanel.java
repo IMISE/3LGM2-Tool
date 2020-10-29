@@ -18,9 +18,14 @@ import javax.swing.JSeparator;
 import javax.swing.border.Border;
 import javax.swing.border.TitledBorder;
 
+import de.imise.tool3lgm.graphtools.consistency.error.type.AbstractConsistencyError;
+import de.imise.tool3lgm.graphtools.consistency.error.type.AbstractPathError;
+import de.imise.tool3lgm.graphtools.dialog.AbstractTabbedPropertyDialog;
 import de.imise.tool3lgm.graphtools.dialog.element.AbstractElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.dialog.element.ElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.dialog.element.panel.AbstractPathConnectionPanel.PanelLabelOption;
+import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
+import de.imise.tool3lgm.graphtools.path.metapaths.MetaPath;
 import de.imise.tool3lgm.graphtools.path.metapaths.SimpleMetaPath;
 
 /**
@@ -28,7 +33,7 @@ import de.imise.tool3lgm.graphtools.path.metapaths.SimpleMetaPath;
  *
  * @author AXS (21.01.2020)
  */
-public class MultiPanelElementDialogPanel extends ElementDialogPanel implements ActionListener {
+public class MultiPanelElementDialogPanel extends ElementDialogPanel implements ActionListener, DisplayAndFixConsistencyErrorPanel {
 
     /** Added sub panels in the order in which they were added */
     private final List<AbstractPathConnectionPanel> panels = new ArrayList<>();
@@ -216,6 +221,22 @@ public class MultiPanelElementDialogPanel extends ElementDialogPanel implements 
                 hiddenPanelButton.doClick();
             }
         }
+    }
+
+    @Override
+    public ElementDialogPanel getResponsiblePanelForConsistencyError(final AbstractConsistencyError consistencyError) {
+        ModelElement errorModelElement = consistencyError.getModelElement();
+        ModelElement panelModelElement = getModelElement();
+        if (errorModelElement != panelModelElement) {
+            return null;
+        }
+        AbstractPathConnectionPanel panel = null;
+        if (consistencyError instanceof AbstractPathError) {
+            AbstractPathError pathError = (AbstractPathError) consistencyError;
+            MetaPath errorMetaPath = pathError.getMetaPath();
+            panel = AbstractTabbedPropertyDialog.getPanel(this, errorMetaPath);
+        }
+        return panel;
     }
 
 }

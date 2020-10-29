@@ -48,7 +48,10 @@ import javax.swing.text.JTextComponent;
 
 import com.google.common.collect.ImmutableList;
 
+import de.imise.tool3lgm.graphtools.consistency.error.type.AbstractConsistencyError;
+import de.imise.tool3lgm.graphtools.consistency.error.type.AbstractIDError;
 import de.imise.tool3lgm.graphtools.dialog.element.AbstractElementPropertyDialog;
+import de.imise.tool3lgm.graphtools.dialog.element.panel.DisplayAndFixConsistencyErrorPanel;
 import de.imise.tool3lgm.graphtools.dialog.element.panel.ElementDialogPanel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
@@ -74,7 +77,7 @@ import de.imise.util.swing.component.text.NumberTextField;
  *
  * @author Thomas Rudert, xhb, AXS
  */
-public class PropertyDialogUserFieldPanel extends ElementDialogPanel {
+public class PropertyDialogUserFieldPanel extends ElementDialogPanel implements DisplayAndFixConsistencyErrorPanel {
 
     /**
      *
@@ -565,6 +568,16 @@ public class PropertyDialogUserFieldPanel extends ElementDialogPanel {
             this.editorComponent = editorComponent;
             this.userField = userField;
         }
+    }
+
+    @Override
+    public ElementDialogPanel getResponsiblePanelForConsistencyError(final AbstractConsistencyError consistencyError) {
+        ModelElement errorModelElement = consistencyError.getModelElement();
+        ModelElement panelModelElement = getModelElement();
+        if (panelModelElement == errorModelElement && consistencyError instanceof AbstractIDError) {
+            return this;
+        }
+        return null;
     }
 
     /**

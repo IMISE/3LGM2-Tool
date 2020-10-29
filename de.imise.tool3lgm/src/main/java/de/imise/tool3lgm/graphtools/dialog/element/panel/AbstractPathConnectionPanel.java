@@ -31,6 +31,9 @@ import com.google.common.collect.ImmutableList;
 
 import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.Tool3lgmConstants;
+import de.imise.tool3lgm.graphtools.consistency.error.type.AbstractConsistencyError;
+import de.imise.tool3lgm.graphtools.consistency.error.type.AbstractElementaryPathError;
+import de.imise.tool3lgm.graphtools.consistency.error.type.MissingPathError;
 import de.imise.tool3lgm.graphtools.dialog.action.LGMAction;
 import de.imise.tool3lgm.graphtools.dialog.action.LGMMouseListener;
 import de.imise.tool3lgm.graphtools.dialog.element.AbstractElementPropertyDialog;
@@ -59,7 +62,7 @@ import de.imise.util.swing.component.ParentComponentFinder;
  * @author AXS
  * @created 25.04.2017
  */
-public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel {
+public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel implements DisplayAndFixConsistencyErrorPanel {
 
     /**
      * Options which Label should be presented for a panel.
@@ -705,6 +708,23 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
         //        } else {
         component.addMouseListener(mouseListener);
         //        }
+    }
+
+    @Override
+    public ElementDialogPanel getResponsiblePanelForConsistencyError(final AbstractConsistencyError consistencyError) {
+        ModelElement errorModelElement = consistencyError.getModelElement();
+        if (errorModelElement != modelElement) {
+            return null;
+        }
+        MetaPath errorFixingMetaPath = null;
+        if (consistencyError instanceof MissingPathError) {
+            MissingPathError pathError = (MissingPathError) consistencyError;
+            errorFixingMetaPath = pathError.getErrorFixingCreatableMetaPath();
+        } else if (consistencyError instanceof AbstractElementaryPathError) {
+            AbstractElementaryPathError pathError = (AbstractElementaryPathError) consistencyError;
+            errorFixingMetaPath = pathError.getMetaPath();
+        }
+        return errorFixingMetaPath != null && hasMetaPath(errorFixingMetaPath) ? this : null;
     }
 
 }

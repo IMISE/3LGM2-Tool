@@ -23,6 +23,7 @@ import de.imise.tool3lgm.Tool3lgmModelType.ModelCategory;
 import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
 import de.imise.tool3lgm.graphtools.dialog.element.ElemenPropertyDialogsContext;
 import de.imise.tool3lgm.graphtools.dialog.element.ElementPropertyDialog;
+import de.imise.tool3lgm.graphtools.dialog.element.ErrorDecoratedElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.dialog.element.panel.ElementDialogPanel;
 import de.imise.tool3lgm.graphtools.metamodel.GraphViewDefinition;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
@@ -1858,7 +1859,7 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
         if (gdcoll == null) {
             return null;
         }
-        return new ElementPropertyDialog(this);
+        return new ErrorDecoratedElementPropertyDialog(this);
     }
 
     /**

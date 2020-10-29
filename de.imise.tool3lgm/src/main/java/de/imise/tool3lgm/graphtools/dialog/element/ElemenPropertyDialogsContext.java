@@ -1,10 +1,14 @@
 package de.imise.tool3lgm.graphtools.dialog.element;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.List;
 
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
+import de.imise.tool3lgm.userproperties.UserProperties;
+import de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty;
 
 /**
  * Diese Klasse verwaltet statisch die geöffneten Dialoge der ModellElemente. Diese Funktionalität war urpsünglich in ModelConstants.
@@ -14,9 +18,34 @@ import de.imise.tool3lgm.graphtools.model.GraphDocument;
 public class ElemenPropertyDialogsContext {
 
     /**
+     *
+     */
+    private final static ElemenPropertyDialogsContext context = new ElemenPropertyDialogsContext();
+
+    /**
      * Liste aller geöffneten Dialoge
      */
     private static final List<ElementPropertyDialog> dialogs = new ArrayList<>();
+
+    /**
+     *
+     */
+    public ElemenPropertyDialogsContext() {
+        PropertyChangeListener optionsChangeListener = new PropertyChangeListener() {
+            @Override
+            public void propertyChange(final PropertyChangeEvent event) {
+                if (UserProperties.isPropertyChange(BooleanProperty.OPTION_MARK_INCONSISTENT_ELEMENTS, event)) {
+                    for (ElementPropertyDialog dialog : dialogs) {
+                        if (dialog instanceof ErrorDecoratedElementPropertyDialog) {
+                            ErrorDecoratedElementPropertyDialog errorDecoratedDialog = (ErrorDecoratedElementPropertyDialog) dialog;
+                            errorDecoratedDialog.updateDisplayedErrors();
+                        }
+                    }
+                }
+            }
+        };
+        UserProperties.addPropertyChangeListener(optionsChangeListener);
+    }
 
     /**
      * Überprueft, ob fuer ein Objekt schon ein Dialog existiert und gibt diesen ggf. zurück
@@ -25,6 +54,16 @@ public class ElemenPropertyDialogsContext {
      * @return ModelElement obj, wenn schon ein Dialog existiert, null sonst
      */
     public static ElementPropertyDialog hasOpenDialog(final ModelElement obj) {
+        return context.hasOpenDialogInternal(obj);
+    }
+
+    /**
+     * Überprueft, ob fuer ein Objekt schon ein Dialog existiert und gibt diesen ggf. zurück
+     *
+     * @param obj Dialog zu diesem Objekt
+     * @return ModelElement obj, wenn schon ein Dialog existiert, null sonst
+     */
+    private ElementPropertyDialog hasOpenDialogInternal(final ModelElement obj) {
         for (ElementPropertyDialog dialog : dialogs) {
             if (obj == dialog.getModelElement()) {
                 return dialog;

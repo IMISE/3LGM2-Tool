@@ -176,6 +176,8 @@ public abstract class Tool3lgmConstants {
     public static final ImageIcon TOOL_ICON_64 = getIcon("toolIcon_64.gif");
     public static final ImageIcon TOOL_ICON_128 = getIcon("toolIcon_128.gif");
 
+    public static final ImageIcon ERROR_ICON = getIcon("error.gif");
+
     /** All tool ions als list to initialize the frame (like MainFrame) */
     public static final List<Image> TOOL_ICON_IMAGES = ImmutableList.of(TOOL_ICON_16.getImage(), TOOL_ICON_24.getImage(), TOOL_ICON_32.getImage(), TOOL_ICON_64.getImage(), TOOL_ICON_128.getImage());
 
