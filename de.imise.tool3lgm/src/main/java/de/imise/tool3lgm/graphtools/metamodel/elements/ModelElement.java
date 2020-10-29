@@ -1870,6 +1870,7 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
     public final ElementPropertyDialog getNewPropertyDialogInsance() {
         ElementPropertyDialog propertyDialog = createPropertyDialog();
         propertyDialog.extendDefaultDialog();
+        propertyDialog.update();
         return propertyDialog;
     }
 

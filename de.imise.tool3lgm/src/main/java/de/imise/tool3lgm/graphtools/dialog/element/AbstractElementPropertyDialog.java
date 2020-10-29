@@ -142,7 +142,6 @@ public class AbstractElementPropertyDialog extends AbstractTabbedPropertyDialog 
         JPanel up = new JPanel(new GridLayout(1, 1));
         headerPanel = new ElementDialogHeaderPanel(this);
         up.add(headerPanel);
-        update();
 
         descripPanel = new DescripPanel(this);
         addTab(getResString("general"), descripPanel);
