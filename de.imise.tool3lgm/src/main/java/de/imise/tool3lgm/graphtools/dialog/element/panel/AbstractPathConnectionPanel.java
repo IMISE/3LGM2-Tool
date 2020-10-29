@@ -152,9 +152,25 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
      * Panel für eine einfache Assoziation
      *
      * @param dialog
-     * @param labelEdgeIndex Index der Edge, die vorgibt, was als searchElementClass angesehen werden soll, also was ans Label geschrieben
-     *            wird. Es wird immer die Endklasse des Pfades bis zur Edge mit dem jeweiligen Index ans Label geschrieben. Wird ein Wert < 0
-     *            übergeben, dann wird dieser Wert von der Anzahl der Kanten im Gesamtpfad abgezogen, um auf den tatsächlichen Index zu kommen.
+     * @param titleLabelOption Das Label kann folgende Werte annehmen:
+     *            <ul>
+     *            <li>{@link PanelLabelOption#LABEL_END_ELEMENT_TYPE} = Anzeigename der EndElement-Art des MetaPfades</li>
+     *            <li>{@link PanelLabelOption#LABEL_LAST_EDGE_ELEMENT_NAME} = Anzeigename der Element-Art der Kante mit dem Index labelEdgeIndex
+     *            im MetaPfad</li>
+     *            <li>{@link PanelLabelOption#LABEL_LAST_EDGE_CONNECTION_NAME} = Anzeigename der gerichteten Verbindung der Kante mit dem Index
+     *            labelEdgeIndex
+     *            im MetaPfad</li>
+     *            </ul>
+     * @param metaPath
+     */
+    public AbstractPathConnectionPanel(final AbstractElementPropertyDialog dialog, final PanelLabelOption titleLabelOption, final AbstractMetaPath metaPath) {
+        this(dialog, titleLabelOption, LABEL_LAST_EDGE_CONNECTION_NAME, metaPath);
+    }
+
+    /**
+     * Panel für eine einfache Assoziation
+     *
+     * @param dialog
      * @param titleLabelOption Das Label kann folgende Werte annehmen:
      *            <ul>
      *            <li>{@link PanelLabelOption#LABEL_END_ELEMENT_TYPE} = Anzeigename der EndElement-Art des MetaPfades</li>
