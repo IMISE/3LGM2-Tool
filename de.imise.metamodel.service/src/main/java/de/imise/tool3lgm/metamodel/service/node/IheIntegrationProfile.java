@@ -20,7 +20,7 @@ public class IheIntegrationProfile extends Node {
         dialog.addEdgePanel(IheIntegrationProfile_IheActor_Edge.class);
 
         ConnectedElementsTableDefinition tableDefinition = new ConnectedElementsTableDefinition();
-        tableDefinition.setTableResKeyOrName("TABLE_NAME_OVERVIEW");
+        tableDefinition.tableResKeyOrName = "TABLE_NAME_OVERVIEW";
         tableDefinition.addColumnPathStepEnd(0, 300);
         tableDefinition.addColumnPathStepName(2, "HEADER_CONNECTION_TYPE", 150);
         tableDefinition.addColumnEndElement(300);

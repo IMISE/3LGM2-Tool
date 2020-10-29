@@ -57,7 +57,7 @@ public class ConnectedElementsTablePanel extends AbstractPathConnectionPanel {
      * @param simpleMetaPaths MetaPfad, der in der Tabelle dargestellt werden soll
      */
     public ConnectedElementsTablePanel(final ElementPropertyDialog dialog, @Nonnull final ConnectedElementsTableDefinition tableDefinition, final SimpleMetaPath simpleMetaPath) {
-        super(dialog, simpleMetaPath); // den muss es geben!
+        super(dialog, tableDefinition.tablePanelLabelOption, simpleMetaPath); // den muss es geben!
 
         this.tableDefinition = tableDefinition;
         boolean editable = !dialog.isInfoDialog() && metaPath.isCreatable(true);
@@ -65,10 +65,12 @@ public class ConnectedElementsTablePanel extends AbstractPathConnectionPanel {
         table = new ConnectedElementsTable(tableElement, simpleMetaPath, tableDefinition, editable, mouseListener, dialog.getTransactionID());
 
         //wenn in der columnsDefinion ein String als Resourcenschlüssel oder Tabellenname angegeben wurde, dann kommt hier irgendwas nicht leeres zurück
-        MetaModelSpecific resSource = dialog.getCollection();
-        String tableTabName = resSource.getResStringWithoutError(tableDefinition.getTableResKeyOrName());
-        if (!Strings.isNullOrEmpty(tableTabName)) { //Name dieses Panels und somit des Tabs ggf. ersetzen (super setzt den Namen des Endelementes der Pfade)
-            setName(tableTabName);
+        if (tableDefinition.tableResKeyOrName != null) {
+            MetaModelSpecific resSource = dialog.getCollection();
+            String tableTabName = resSource.getResStringWithoutError(tableDefinition.tableResKeyOrName);
+            if (!Strings.isNullOrEmpty(tableTabName)) { //Name dieses Panels und somit des Tabs ggf. ersetzen (super setzt den Namen des Endelementes der Pfade)
+                setName(tableTabName);
+            }
         }
 
         internalInit(editable);
