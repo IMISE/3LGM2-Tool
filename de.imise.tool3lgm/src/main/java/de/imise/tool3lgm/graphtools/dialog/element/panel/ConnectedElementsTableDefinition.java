@@ -1,44 +1,43 @@
 package de.imise.tool3lgm.graphtools.dialog.element.panel;
 
+import static de.imise.tool3lgm.graphtools.dialog.element.panel.AbstractPathConnectionPanel.PanelLabelOption.LABEL_END_ELEMENT_TYPE;
+
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import de.imise.tool3lgm.graphtools.dialog.element.panel.AbstractPathConnectionPanel.PanelLabelOption;
 import de.imise.tool3lgm.graphtools.dialog.element.panel.ConnectedElementsTableDefinition.SingleColumnDefinition;
 import de.imise.tool3lgm.graphtools.metamodel.elements.OptionalEdge;
 import de.imise.tool3lgm.graphtools.path.metapaths.SimpleMetaPath;
 
 /**
- * Datenobjekt, das die Definition von Spaltenköpfen eines {@link ConnectedElementsTable} repräsentiert.
+ * Data object that represents the definition of column headers of a
+ * {@link ConnectedElementsTable}.
  *
  * @author AXS (12 Mar 2019)
  */
 public class ConnectedElementsTableDefinition implements Iterable<SingleColumnDefinition> {
 
     /**
-     * Ressourcenschlüssel des Namens der Tabelle und somit des Tabs, in dem sich die Tabelle befindet. Wird der Schlüssel nicht in den Resourcen
+     * Resource key of the name of the table and thus of the tab in which
+     * the table is located. If it is not <code>null</code> and is not
+     * found in the resources, it is set as value itself. If it is
+     * <code>null</code>, the {@link #tablePanelLabelOption} is used to
+     * label the panel.
      */
-    private String tableResKeyOrName = null;
+    public String tableResKeyOrName = null;
 
     /**
-     * Liefert den Ressourcenschlüssel des Namens der Tabelle und somit des Tabs, in dem sich die Tabelle befindet.
+     * If the {@link #tableResKeyOrName} is <code>null</code>, this option
+     * is used to lable the panel and thus the tab of the panel. Default
+     * ist {@link PanelLabelOption#LABEL_END_ELEMENT_TYPE}.
+     */
+    public PanelLabelOption tablePanelLabelOption = LABEL_END_ELEMENT_TYPE;
+
+    /**
+     * Defines which part of the metapath of the panel a column represents
      *
-     * @return
-     */
-    public String getTableResKeyOrName() {
-        return tableResKeyOrName;
-    }
-
-    /**
-     * Setzt den Ressourcenschlüssel des Namens der Tabelle und somit des Tabs, in dem sich die Tabelle befindet.
-     *
-     * @param tableResKeyOrName
-     */
-    public void setTableResKeyOrName(final String tableResKeyOrName) {
-        this.tableResKeyOrName = tableResKeyOrName;
-    }
-
-    /**
      * @author AXS (11 Mar 2019)
      */
     public enum ColumnType {
@@ -99,6 +98,9 @@ public class ConnectedElementsTableDefinition implements Iterable<SingleColumnDe
             this.width = width;
         }
 
+        /**
+         * @return type of the column
+         */
         public ColumnType getColumnType() {
             return columnType;
         }
@@ -110,10 +112,16 @@ public class ConnectedElementsTableDefinition implements Iterable<SingleColumnDe
             return pathStepIndex;
         }
 
+        /**
+         * @return the reskey or name of the column header
+         */
         public String getHeaderResKeyOrName() {
             return headerResKeyOrName;
         }
 
+        /**
+         * @return the width of the column
+         */
         public int getWidth() {
             return width;
         }

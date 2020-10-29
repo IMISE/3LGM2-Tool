@@ -158,13 +158,26 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
      * Panel for simple association
      *
      * @param dialog
-     * @param labelEdgeIndex
-     *            Index of the edge, which defines what should be considered as searchElementClass,
-     *            i.e. what is written to the label.The end class of the path up to the edge with
-     *            the respective index is always written to the label. If a value < 0 is passed,
-     *            then this value is subtracted from the number of edges in the total path to get
-     *            the actual index.
-     * @param titleLabelOption The label can have the following values:
+     * @param titleLabelOption Das Label kann folgende Werte annehmen:
+     *            <ul>
+     *            <li>{@link PanelLabelOption#LABEL_END_ELEMENT_TYPE} = Anzeigename der EndElement-Art des MetaPfades</li>
+     *            <li>{@link PanelLabelOption#LABEL_LAST_EDGE_ELEMENT_NAME} = Anzeigename der Element-Art der Kante mit dem Index labelEdgeIndex
+     *            im MetaPfad</li>
+     *            <li>{@link PanelLabelOption#LABEL_LAST_EDGE_CONNECTION_NAME} = Anzeigename der gerichteten Verbindung der Kante mit dem Index
+     *            labelEdgeIndex
+     *            im MetaPfad</li>
+     *            </ul>
+     * @param metaPath
+     */
+    public AbstractPathConnectionPanel(final AbstractElementPropertyDialog dialog, final PanelLabelOption titleLabelOption, final MetaPath metaPath) {
+        this(dialog, titleLabelOption, LABEL_LAST_EDGE_CONNECTION_NAME, metaPath);
+    }
+
+    /**
+     * Panel für eine einfache Assoziation
+     *
+     * @param dialog
+     * @param titleLabelOption Das Label kann folgende Werte annehmen:
      *            <ul>
      *            <li>{@link PanelLabelOption#LABEL_END_ELEMENT_TYPE} = Display name of the EndElement type of the MetaPath</li>
      *            <li>{@link PanelLabelOption#LABEL_LAST_EDGE_ELEMENT_NAME} = Display name of the element type of the edge with
