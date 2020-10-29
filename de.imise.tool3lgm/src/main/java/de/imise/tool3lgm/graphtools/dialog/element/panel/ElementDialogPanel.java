@@ -17,6 +17,8 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JTree;
 
+import com.google.common.collect.ImmutableList;
+
 import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
 import de.imise.tool3lgm.graphtools.consistency.error.type.AbstractConsistencyError;
 import de.imise.tool3lgm.graphtools.dialog.action.LGMAction;
@@ -86,6 +88,9 @@ public abstract class ElementDialogPanel extends JPanel {
 
     /** All consistency errors that can be fixed in this panel */
     protected Collection<AbstractConsistencyError> consistencyErrors;
+
+    /** An empty collection of consistency errors */
+    public static final Collection<AbstractConsistencyError> EMPTY_CONSISTENCY_ERROR_COLLECTION = ImmutableList.of();
 
     /** ****************************************************************************** */
 
@@ -384,7 +389,7 @@ public abstract class ElementDialogPanel extends JPanel {
      * @return the consistency errors this panel or subpanels are displaying
      */
     public Collection<AbstractConsistencyError> getConsistencyErrors() {
-        return consistencyErrors;
+        return consistencyErrors == null ? EMPTY_CONSISTENCY_ERROR_COLLECTION : consistencyErrors;
     }
 
     /**
