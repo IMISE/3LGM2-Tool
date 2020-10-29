@@ -14,6 +14,7 @@ import de.imise.tool3lgm.graphtools.dialog.element.panel.DisplayAndFixConsistenc
 import de.imise.tool3lgm.graphtools.dialog.element.panel.ElementDialogPanel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
+import de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty;
 
 /**
  * Extends the dialog by adding error icons to the tabs, if you can fix an error of the dialog element on this tab.
@@ -51,7 +52,9 @@ public final class ErrorDecoratedElementPropertyDialog extends ElementPropertyDi
      */
     public void updateDisplayedErrors() {
         clearPanelConsistencyErrors();
-        setPanelConsistencyErrors();
+        if (BooleanProperty.OPTION_MARK_INCONSISTENT_ELEMENTS.is()) {
+            setPanelConsistencyErrors();
+        }
         updateConsistencyErrorIcons();
     }
 
