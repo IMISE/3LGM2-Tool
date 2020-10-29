@@ -40,6 +40,17 @@ public class TreeRenderer extends DefaultTreeCellRenderer {
     //	static ImageIcon warningIcon = Tool3lgmConstants.getIcon("warning.gif");
 
     /**
+     * Standard text color for all rendered trees
+     */
+    protected static Color standardColor = Color.BLACK;
+
+    /**
+     * If set true by an subclass the text color will
+     * not be set again by this renderer.
+     */
+    protected boolean ignoreColor = false;
+
+    /**
      *
      */
     public TreeRenderer() {
@@ -57,16 +68,20 @@ public class TreeRenderer extends DefaultTreeCellRenderer {
             if (!node.isSelectable()) {
                 setTextNonSelectionColor(Color.gray);
             } else if (OPTION_USE_PROPERTY_COLORS.is()) {
-                setTextNonSelectionColor(node.getSignalColor());
+                if (!ignoreColor) {
+                    setTextNonSelectionColor(node.getSignalColor());
+                }
             } else {
-                setTextNonSelectionColor(Color.black);
+                if (!ignoreColor) {
+                    setTextNonSelectionColor(standardColor);
+                }
             }
 
             super.getTreeCellRendererComponent(tree, value, sel, expanded, leaf, row, hasFocus);
 
-            ImageIcon icon = null;
+            ImageIcon icon = (ImageIcon) getIcon(); //if set then it is an ImageIcon!
             IconState iconState = null;
-            if (node instanceof IconifiedTreeNode) {
+            if (icon == null && node instanceof IconifiedTreeNode) {
                 IconifiedTreeNode iconNode = (IconifiedTreeNode) node;
                 icon = iconNode.getIcon();
                 iconState = iconNode.getIconState();

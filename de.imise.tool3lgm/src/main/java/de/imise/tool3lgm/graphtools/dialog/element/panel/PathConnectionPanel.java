@@ -42,6 +42,8 @@ import de.imise.tool3lgm.graphtools.path.metapaths.MetaPathFunctions;
 import de.imise.tool3lgm.graphtools.path.metapaths.PathFunctions;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.graphtools.view.tree.ElementDialogPanelTree;
+import de.imise.tool3lgm.graphtools.view.tree.PanelTreeRenderer;
+import de.imise.tool3lgm.graphtools.view.tree.TreeRenderer;
 import de.imise.tool3lgm.graphtools.view.tree.node.ElementContainerTreeNode;
 import de.imise.tool3lgm.graphtools.view.tree.node.LGMTreeNode;
 import de.imise.tool3lgm.graphtools.view.tree.node.StringTreeNode;
@@ -154,7 +156,8 @@ public class PathConnectionPanel extends AbstractExpandablePanel {
             rtree.getSelectionModel().setSelectionMode(getTreesSelectionModel());
             rtree.setRootVisible(false);
             rtree.setShowsRootHandles(true);
-            rtree.setCellRenderer(treeRenderer);
+            TreeRenderer highlightErrorElementsTreeRenderer = new PanelTreeRenderer(this);
+            rtree.setCellRenderer(highlightErrorElementsTreeRenderer);
             rScollPane = new LimitedHeightScrollTreePane(rtree, maxLines, false);
 
             //Buttons & Actions erstellen, Actions setzen
