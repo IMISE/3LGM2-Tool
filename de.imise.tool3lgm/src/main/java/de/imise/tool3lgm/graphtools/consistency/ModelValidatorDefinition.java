@@ -3,17 +3,16 @@
  */
 package de.imise.tool3lgm.graphtools.consistency;
 
+import static de.imise.tool3lgm.Tool3lgmConstants.ERROR_ICON;
+
 import java.lang.reflect.Constructor;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import javax.swing.ImageIcon;
-
 import com.google.common.collect.ImmutableList;
 
-import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
 import de.imise.tool3lgm.graphtools.consistency.error.condition.MissingPathErrorCheckCondition;
 import de.imise.tool3lgm.graphtools.consistency.error.solution.CardinalityErrorSolution;
@@ -158,7 +157,6 @@ public class ModelValidatorDefinition implements MetaModelSpecific {
             MetaModel metaModel = gdcoll.getMetaModel();
             ModelValidatorDefinition modelValidatorDefinition = metaModel.getModelValidatorDefinition();
             ErrorSolution es = modelValidatorDefinition.getSolution(error);
-            ImageIcon icon = Tool3lgmConstants.getIcon("error.gif");
             if (es == null) {
                 AbstractPathError pathError = (AbstractPathError) error;
                 MetaPath metaPath = pathError.getMetaPath();
@@ -171,11 +169,11 @@ public class ModelValidatorDefinition implements MetaModelSpecific {
                     String tabName = metaPath.isSingleConnection() ? elementsNameBuilder.getDisplayableName(errorConnectedClass) : elementsNameBuilder.getDisplayablePluralName(errorConnectedClass);
                     //if the maximum cardinality is exceeded -> show always a multiple connection panel
                     dialog.addPathConnectionPanel(metaPath, error instanceof MaxCardinalityError);
-                    dialog.setLastTabIcon(icon);
+                    dialog.setLastTabIcon(ERROR_ICON);
                     dialog.setLastTabTitle(tabName);
                     dialog.selectLastTab();
                 } else {
-                    dialog.setTabIcon(selectedTabIndex, icon);
+                    dialog.setTabIcon(selectedTabIndex, ERROR_ICON);
                 }
                 dialog.showDialog();
             } else {
@@ -187,12 +185,13 @@ public class ModelValidatorDefinition implements MetaModelSpecific {
                     ElementPropertyDialog dialog = connected.getPropertyDialog();
                     SimpleMetaPath panelMetaPath = es.getPanelMetaPath();
                     int selectedTabIndex = dialog.selectTab(panelMetaPath);
-                    dialog.setTabIcon(selectedTabIndex, icon);
+                    dialog.setTabIcon(selectedTabIndex, ERROR_ICON);
                     dialog.showDialog();
                 }
             }
         } else if (error instanceof AbstractIDError) {
-            ElementPropertyDialog dialog = error.getModelElement().getPropertyDialog();
+            ModelElement me = error.getModelElement();
+            ElementPropertyDialog dialog = me.getPropertyDialog();
             dialog.selectTab(PropertyDialogUserFieldPanel.class);
             dialog.showDialog();
         }
