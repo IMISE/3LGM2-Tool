@@ -30,7 +30,6 @@ import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.model.LGMGraphDocument;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
-import de.imise.tool3lgm.graphtools.view.tree.TreeRenderer;
 import de.imise.util.swing.SwingUtils;
 
 /**
@@ -59,11 +58,6 @@ public abstract class ElementDialogPanel extends JPanel {
      * COMMENTME
      */
     protected EventObject lastSelEvent = null;
-
-    /**
-     * Der Renderer der Bäume
-     */
-    protected TreeRenderer treeRenderer;
 
     /**
      * COMMENTME
@@ -112,7 +106,6 @@ public abstract class ElementDialogPanel extends JPanel {
     public ElementDialogPanel(final AbstractElementPropertyDialog dialog, final String name) {
         this.dialog = dialog;
         setName(name);
-        treeRenderer = new TreeRenderer();
         GraphDocument mainDoc = dialog.getMainDoc();
         elementsNameBuilder = mainDoc.getElementsNameBuilder();
         init();

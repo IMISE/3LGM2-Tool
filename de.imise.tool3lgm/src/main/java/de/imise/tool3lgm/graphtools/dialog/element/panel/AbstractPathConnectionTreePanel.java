@@ -11,29 +11,52 @@ import de.imise.tool3lgm.graphtools.dialog.action.LGMActionLibrary;
 import de.imise.tool3lgm.graphtools.dialog.action.LGMTreeSelectionListener;
 import de.imise.tool3lgm.graphtools.dialog.element.AbstractElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.path.metapaths.MetaPath;
+import de.imise.tool3lgm.graphtools.view.tree.TreeRenderer;
 import de.imise.tool3lgm.graphtools.view.tree.node.LGMTreeNode;
 
 /**
- * Ein Panel das davon ausgeht, dass es mind einen Baum hat, der wenn er mit der Maus angeklickt wird eine Selektion zurück liefern kann.
+ * A panel that assumes it has at least one tree that can return a
+ * selection when clicked with the mouse.
  *
  * @author AXS
  * @created 22.06.2017
  */
 public abstract class AbstractPathConnectionTreePanel extends AbstractPathConnectionPanel {
 
+    /** Renderer of all trees */
+    protected TreeRenderer treeRenderer;
+
+    /**
+     * @param dialog
+     * @param metaPath
+     */
     public AbstractPathConnectionTreePanel(final AbstractElementPropertyDialog dialog, final MetaPath metaPath) {
         super(dialog, metaPath);
+        treeRenderer = new TreeRenderer();
     }
 
+    /**
+     * @param dialog
+     * @param titleLabelOption
+     * @param westLabelOption
+     * @param metaPath
+     */
     public AbstractPathConnectionTreePanel(final AbstractElementPropertyDialog dialog, final PanelLabelOption titleLabelOption, final PanelLabelOption westLabelOption, final MetaPath metaPath) {
         super(dialog, titleLabelOption, westLabelOption, metaPath);
+        treeRenderer = new TreeRenderer();
     }
 
+    /**
+     * @param tree
+     */
     protected void addListener(final JTree tree) {
         addMouseActions(tree);
         addTreeSelectionListener(tree);
     }
 
+    /**
+     * @param tree
+     */
     private void addTreeSelectionListener(final JTree tree) {
         LGMAction treeSelectionAction = LGMActionLibrary.getTreeSelectionAction(tree, this);
         TreeSelectionListener treeSelectionListener = new LGMTreeSelectionListener(treeSelectionAction);
