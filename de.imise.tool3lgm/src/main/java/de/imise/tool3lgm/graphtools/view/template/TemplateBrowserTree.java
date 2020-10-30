@@ -6,7 +6,10 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Enumeration;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 import javax.swing.event.AncestorEvent;
@@ -19,6 +22,7 @@ import javax.swing.tree.TreePath;
 
 import de.imise.tool3lgm.MetaModelContext;
 import de.imise.tool3lgm.Static;
+import de.imise.tool3lgm.Tool3lgmChangeListener;
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.dialog.search.SearchFunctions;
 import de.imise.tool3lgm.graphtools.dialog.search.SearchOptions;
@@ -40,7 +44,7 @@ import de.imise.tool3lgm.gui.menu.ContextGenerator;
 /**
  * @author AXS (05.09.2019)
  */
-public class TemplateBrowserTree extends DynamicTree implements SearchResultView, PropertyChangeListener, AncestorListener, TemplateView {
+public class TemplateBrowserTree extends DynamicTree implements SearchResultView, PropertyChangeListener, AncestorListener, TemplateView, Tool3lgmChangeListener {
 
     /**
      * The event type this tree fires to its
@@ -61,6 +65,12 @@ public class TemplateBrowserTree extends DynamicTree implements SearchResultView
      *
      */
     private TemplateLibrariesManager templateLibrariesManager;
+
+    /**
+     * Saves the expanded paths of the tree for the respective model type.
+     * There is a separate PathTreeDefinition for each model type.
+     */
+    private final Map<PathTreeDefinition, Enumeration<TreePath>> lastSelectionOfModelType = new HashMap<>();
 
     /**
      *
@@ -154,47 +164,38 @@ public class TemplateBrowserTree extends DynamicTree implements SearchResultView
         pathTreeModel.setTreeDefinition(templateTreeDefinition);
         setSelectionListenerActive(true);
         setRootVisible(false);
-        restoreExpansionState(templateTreeDefinition);
         boolean newValueHasContent = hasContent();
         firePropertyChange(CONTENT_CHANGED.name(), oldValueHasContent, newValueHasContent);
+        restoreExpansionState(templateTreeDefinition); //always as last!
     }
 
-    //    /**
-    //     * Aus irgendeinem Grund expanded er den Baum nicht wieder - ARRRGGGHH!!
-    //     */
-    //    private final Map<PathTreeDefinition, Enumeration<TreePath>> treeDefintionToExpandedPaths = new HashMap<>();
-    //
-    //    private TreePath rootPath;
-    //
     /**
      * @param treeDefinition
      */
     private void saveExpansionState(final PathTreeDefinition treeDefinition) {
-        //        if (treeDefinition != null) {
-        //            if (rootPath == null) {
-        //                rootPath = getRootPath();
-        //            }
-        //            Enumeration<TreePath> expandedPaths = getExpandedDescendants(rootPath);
-        //            treeDefintionToExpandedPaths.put(treeDefinition, expandedPaths);
-        //        }
+        if (treeDefinition != null) {
+            TreePath rootPath = getRootPath();
+            Enumeration<TreePath> expandedPaths = getExpandedDescendants(rootPath);
+            lastSelectionOfModelType.put(treeDefinition, expandedPaths);
+        }
     }
 
     /**
      * @param treeDefinition
      */
     private void restoreExpansionState(final PathTreeDefinition treeDefinition) {
-        //        if (treeDefinition != null) {
-        //            Enumeration<TreePath> expandedPaths = treeDefintionToExpandedPaths.get(treeDefinition);
-        //            if (expandedPaths != null) {
-        //                setExpandedPaths(expandedPaths);
-        //            } else {
-        try {
-            expandRow(0);
-            expandRow(1);
-        } catch (Exception e) {
+        if (treeDefinition != null) {
+            Enumeration<TreePath> expandedPaths = lastSelectionOfModelType.get(treeDefinition);
+            if (expandedPaths != null) {
+                setExpandedPaths(expandedPaths);
+            } else {
+                try {
+                    expandRow(0);
+                    expandRow(1);
+                } catch (Exception e) {
+                }
+            }
         }
-        //            }
-        //        }
     }
 
     @Override
@@ -263,6 +264,9 @@ public class TemplateBrowserTree extends DynamicTree implements SearchResultView
         setSelection();
     }
 
+    /**
+     * Collapse all excect root
+     */
     private void resetView() {
         for (int i = getRowCount() - 1; i > 0; i--) {
             collapseRow(i);
