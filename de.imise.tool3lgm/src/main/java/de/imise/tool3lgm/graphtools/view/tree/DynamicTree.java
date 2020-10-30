@@ -55,6 +55,9 @@ public abstract class DynamicTree extends JTree implements GraphDocumentOwner {
         init();
     }
 
+    /**
+     *
+     */
     private void init() {
         DynamicTreeMouseAdapter.addAdapter(this);
         selectionListener = new DynamicTreeSelectionListener(this);
