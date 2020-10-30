@@ -248,9 +248,7 @@ public class TemplateBrowserTree extends DynamicTree implements SearchResultView
             }
         }
         addSelectionPaths(path);
-        if (path.length > 0) {
-            scrollPathToVisible(path[path.length - 1]);
-        }
+        scrollToPath(path);
     }
 
     @Override

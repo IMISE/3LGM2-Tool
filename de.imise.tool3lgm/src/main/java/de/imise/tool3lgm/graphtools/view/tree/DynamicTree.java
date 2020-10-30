@@ -1,5 +1,6 @@
 package de.imise.tool3lgm.graphtools.view.tree;
 
+import java.awt.Rectangle;
 import java.awt.event.MouseEvent;
 import java.util.Enumeration;
 
@@ -124,6 +125,21 @@ public abstract class DynamicTree extends JTree implements GraphDocumentOwner {
     @Override
     public final String getToolTipText(final MouseEvent event) {
         return toolTipProvider.getToolTip(event);
+    }
+
+    /**
+     * @param path
+     */
+    public void scrollToPath(final TreePath[] paths) {
+        int lastSelectedPathIndex = paths.length - 1;
+        if (lastSelectedPathIndex >= 0) {
+            TreePath lastSelectedPath = paths[lastSelectedPathIndex];
+            Rectangle bounds = getPathBounds(lastSelectedPath);
+            if (bounds != null) {
+                bounds.x = 0;
+                scrollRectToVisible(bounds);
+            }
+        }
     }
 
 }
