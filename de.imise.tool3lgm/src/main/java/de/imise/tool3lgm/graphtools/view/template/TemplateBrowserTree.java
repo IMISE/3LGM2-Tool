@@ -12,6 +12,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
+import javax.swing.JScrollBar;
+import javax.swing.JScrollPane;
 import javax.swing.event.AncestorEvent;
 import javax.swing.event.AncestorListener;
 import javax.swing.tree.DefaultMutableTreeNode;
@@ -40,6 +42,8 @@ import de.imise.tool3lgm.graphtools.view.tree.TreeRenderer;
 import de.imise.tool3lgm.graphtools.view.tree.node.ElementContainerTreeNode;
 import de.imise.tool3lgm.graphtools.view.tree.node.LGMTreeNode;
 import de.imise.tool3lgm.gui.menu.ContextGenerator;
+import de.imise.util.Sys;
+import de.imise.util.swing.component.ParentComponentFinder;
 
 /**
  * @author AXS (05.09.2019)
@@ -70,7 +74,24 @@ public class TemplateBrowserTree extends DynamicTree implements SearchResultView
      * Saves the expanded paths of the tree for the respective model type.
      * There is a separate PathTreeDefinition for each model type.
      */
-    private final Map<PathTreeDefinition, Enumeration<TreePath>> lastSelectionOfModelType = new HashMap<>();
+    private final Map<PathTreeDefinition, TreeViewData> lastSelectionOfModelType = new HashMap<>();
+
+    /**
+     * Data structure for storing the properties of the Tree
+     *
+     * @author AXS (01.11.2020)
+     */
+    private class TreeViewData {
+
+        /** Expanded paths in the template tree */
+        public Enumeration<TreePath> expandedPaths;
+
+        /**  */
+        public int verticalScrollbarValue;
+
+        /**  */
+        public int horizontalScrollbarValue;
+    }
 
     /**
      *
@@ -158,7 +179,7 @@ public class TemplateBrowserTree extends DynamicTree implements SearchResultView
         TemplateLibrariesManager templateLibrariesManager = Static.getTemplateLibrariesManager();
         PathTreeDefinition templateTreeDefinition = templateLibrariesManager.getTemplateTreeDefintion(newMetaModelContext);
         PathTreeDefinition oldTreeDefinition = pathTreeModel.getPathTreeDefinition();
-        saveExpansionState(oldTreeDefinition);
+        saveViewState(oldTreeDefinition);
         setRootVisible(true);
         setSelectionListenerActive(false);
         pathTreeModel.setTreeDefinition(templateTreeDefinition);
@@ -166,28 +187,43 @@ public class TemplateBrowserTree extends DynamicTree implements SearchResultView
         setRootVisible(false);
         boolean newValueHasContent = hasContent();
         firePropertyChange(CONTENT_CHANGED.name(), oldValueHasContent, newValueHasContent);
-        restoreExpansionState(templateTreeDefinition); //always as last!
+        restoreViewState(templateTreeDefinition); //always as last!
     }
 
     /**
      * @param treeDefinition
      */
-    private void saveExpansionState(final PathTreeDefinition treeDefinition) {
+    private void saveViewState(final PathTreeDefinition treeDefinition) {
         if (treeDefinition != null) {
             TreePath rootPath = getRootPath();
-            Enumeration<TreePath> expandedPaths = getExpandedDescendants(rootPath);
-            lastSelectionOfModelType.put(treeDefinition, expandedPaths);
+            TreeViewData viewData = new TreeViewData();
+            viewData.expandedPaths = getExpandedDescendants(rootPath);
+            JScrollPane scrollPane = ParentComponentFinder.getParent(this, JScrollPane.class);
+            if (scrollPane != null) {
+                JScrollBar scrollBar = scrollPane.getVerticalScrollBar();
+                viewData.verticalScrollbarValue = scrollBar.getValue();
+                scrollBar = scrollPane.getHorizontalScrollBar();
+                viewData.horizontalScrollbarValue = scrollBar.getValue();
+            }
+            lastSelectionOfModelType.put(treeDefinition, viewData);
         }
     }
 
     /**
      * @param treeDefinition
      */
-    private void restoreExpansionState(final PathTreeDefinition treeDefinition) {
+    private void restoreViewState(final PathTreeDefinition treeDefinition) {
         if (treeDefinition != null) {
-            Enumeration<TreePath> expandedPaths = lastSelectionOfModelType.get(treeDefinition);
-            if (expandedPaths != null) {
-                setExpandedPaths(expandedPaths);
+            TreeViewData viewData = lastSelectionOfModelType.get(treeDefinition);
+            if (viewData != null) {
+                setExpandedPaths(viewData.expandedPaths);
+                JScrollPane scrollPane = ParentComponentFinder.getParent(this, JScrollPane.class);
+                if (scrollPane != null) {
+                    JScrollBar scrollBar = scrollPane.getVerticalScrollBar();
+                    scrollBar.setValue(viewData.verticalScrollbarValue);
+                    viewData.verticalScrollbarValue = scrollBar.getValue();
+                    scrollBar.setValue(viewData.horizontalScrollbarValue);
+                }
             } else {
                 try {
                     expandRow(0);
@@ -203,11 +239,13 @@ public class TemplateBrowserTree extends DynamicTree implements SearchResultView
         templateLibrariesManager = Static.getTemplateLibrariesManager();
         templateLibrariesManager.addPropertyChangeListener(this);
         propertyChange(null);
+        Sys.err1(getVisibleRect());
     }
 
     @Override
     public void ancestorRemoved(final AncestorEvent event) {
         templateLibrariesManager.removePropertyChangeListener(this);
+        Sys.err1(getVisibleRect());
     }
 
     @Override
