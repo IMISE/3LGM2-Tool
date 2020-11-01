@@ -86,10 +86,10 @@ public class TemplateBrowserTree extends DynamicTree implements SearchResultView
         /** Expanded paths in the template tree */
         public Enumeration<TreePath> expandedPaths;
 
-        /**  */
+        /** Vertical scrollbar value */
         public int verticalScrollbarValue;
 
-        /**  */
+        /** Horizontal scrollbar value */
         public int horizontalScrollbarValue;
     }
 
