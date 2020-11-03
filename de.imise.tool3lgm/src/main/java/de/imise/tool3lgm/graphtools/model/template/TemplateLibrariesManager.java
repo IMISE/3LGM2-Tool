@@ -56,11 +56,6 @@ public class TemplateLibrariesManager extends PropertyChangeHandler implements P
     }
 
     @Override
-    public void model_change_model_opened(final GraphDocument source) {
-        loadOrUnloadTemplates();
-    }
-
-    @Override
     public void model_change_selected_szenario_changed(final GraphDocument source) {
         loadOrUnloadTemplates();
         activeMetaModelContext = source == null ? null : source.getMetaModelContext();
