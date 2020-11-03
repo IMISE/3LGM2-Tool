@@ -13,10 +13,12 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
 import javax.swing.BorderFactory;
+import javax.swing.Icon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
+import javax.swing.border.Border;
 import javax.swing.plaf.basic.BasicButtonUI;
 
 import de.imise.util.resource.SimpleResourceBundleSourceAdapter;
@@ -32,37 +34,59 @@ public class FlexibleTabPaneTab extends JPanel {
      */
     private final JTabbedPane tabbedPane;
 
-    /**
-     * The label that displays the tab title
-     */
+    /** The label that displays the tab title */
     private final JLabel tabLabel;
 
-    /**
-     *
-     */
+    /** The close button on the tab */
+    private final JButton closeButton;
+
+    /** <code>true</code> if the mouse pointer is over the tab */
     private boolean isRollover;
+
+    /**  */
+    private final Font normalFont;
+
+    /**  */
+    private final Font boldFont;
+
+    /**
+     * The icon that is displayed on the tab
+     */
+    private Icon icon;
 
     /**
      * @param tabbedPane
-     * @param activeColor
+     * @param activeForegroundColor
      */
     public FlexibleTabPaneTab(final JTabbedPane tabbedPane, final Color activeForegroundColor) {
+        this(tabbedPane, null, activeForegroundColor);
+    }
+
+    /**
+     * @param tabbedPane
+     * @param icon
+     * @param activeForegroundColor
+     */
+    public FlexibleTabPaneTab(final JTabbedPane tabbedPane, final Icon icon, final Color activeForegroundColor) {
         super(new FlowLayout(FlowLayout.LEFT, 0, 0));
         this.tabbedPane = tabbedPane;
         setOpaque(false);
 
+        setIcon(icon);
         tabLabel = new JLabel() {
             @Override
             public String getText() {
                 int tabIndex = getTabIndex();
-                return tabIndex >= 0 ? tabbedPane.getTitleAt(tabIndex) : null;
+                if (tabIndex < 0) {
+                    return null;
+                }
+                setFont(isSelectedTab() ? boldFont : normalFont);
+                return tabbedPane.getTitleAt(tabIndex);
             }
 
             @Override
             public Color getForeground() {
-                int tabIndex = getTabIndex();
-                int selectedIndex = getSelectedTabIndex();
-                return tabIndex == selectedIndex ? activeForegroundColor : super.getForeground();
+                return isSelectedTab() ? activeForegroundColor : super.getForeground();
             }
 
             @Override
@@ -70,7 +94,19 @@ public class FlexibleTabPaneTab extends JPanel {
                 return FlexibleTabPaneTab.this.getToolTipText();
             }
 
+            /**
+             * @return
+             */
+            private boolean isSelectedTab() {
+                int tabIndex = getTabIndex();
+                int selectedIndex = getSelectedTabIndex();
+                return tabIndex == selectedIndex;
+            }
+
         };
+
+        normalFont = tabLabel.getFont();
+        boldFont = normalFont.deriveFont(Font.BOLD);
 
         //we must set an irrelevant  dummy tooltip to enable the
         //showing if tooltips on the label. Without that the
@@ -79,7 +115,7 @@ public class FlexibleTabPaneTab extends JPanel {
 
         add(tabLabel);
         tabLabel.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 5));
-        JButton closeButton = new CloseButton();
+        closeButton = new CloseButton();
         add(closeButton);
         setBorder(BorderFactory.createEmptyBorder(2, 0, 0, 0));
 
@@ -268,5 +304,21 @@ public class FlexibleTabPaneTab extends JPanel {
             repaint();
         }
     };
+
+    /**
+     * @param icon
+     */
+    public void setIcon(final Icon icon) {
+        if (this.icon != null) {
+            remove(0);
+        }
+        this.icon = icon;
+        if (icon != null) {
+            JLabel iconLabel = new JLabel(icon);
+            add(iconLabel, 0);
+            Border border = BorderFactory.createEmptyBorder(0, 1, 0, 3);
+            iconLabel.setBorder(border);
+        }
+    }
 
 }
