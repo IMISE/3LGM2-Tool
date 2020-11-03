@@ -188,6 +188,9 @@ public abstract class Tool3lgmConstants {
     /** icon for frames, dialogs and tabs */
     public static final ImageIcon TOOL_ICON_13 = new ImageIcon(TOOL_ICON_16.getImage().getScaledInstance(13, 13, Image.SCALE_FAST));
 
+    /** icon for frames, dialogs and tabs */
+    public static final ImageIcon MATRIX_ICON_13 = getIcon("matrixIcon_13.gif");
+
     /** Anzahl der im Menü angezeigten zu letzt benutzen Dateien */
     public static final int LAST_USED_MODEL_FILES_IN_MENU = 10;
 

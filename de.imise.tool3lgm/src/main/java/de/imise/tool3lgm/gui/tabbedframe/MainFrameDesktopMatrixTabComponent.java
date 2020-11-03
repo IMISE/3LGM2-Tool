@@ -1,5 +1,8 @@
 package de.imise.tool3lgm.gui.tabbedframe;
 
+import javax.swing.ImageIcon;
+
+import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.gui.viewpane.ViewPaneToolbarManager;
 import de.imise.tool3lgm.gui.viewpane.matrix.MatrixViewPane;
@@ -23,6 +26,11 @@ public class MainFrameDesktopMatrixTabComponent extends MainFrameDesktopTabCompo
     @Override
     public MatrixViewPane getViewPane() {
         return (MatrixViewPane) super.getViewPane();
+    }
+
+    @Override
+    public ImageIcon getTabIcon() {
+        return Tool3lgmConstants.MATRIX_ICON_13;
     }
 
 }
