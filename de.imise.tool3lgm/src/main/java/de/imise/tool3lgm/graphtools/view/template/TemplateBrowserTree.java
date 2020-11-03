@@ -42,17 +42,16 @@ import de.imise.tool3lgm.graphtools.view.tree.TreeRenderer;
 import de.imise.tool3lgm.graphtools.view.tree.node.ElementContainerTreeNode;
 import de.imise.tool3lgm.graphtools.view.tree.node.LGMTreeNode;
 import de.imise.tool3lgm.gui.menu.ContextGenerator;
-import de.imise.util.Sys;
 import de.imise.util.swing.component.ParentComponentFinder;
 
 /**
+ * Baum, in dem die Templates dargestellt werden.
+ *
  * @author AXS (05.09.2019)
  */
 public class TemplateBrowserTree extends DynamicTree implements SearchResultView, PropertyChangeListener, AncestorListener, TemplateView, Tool3lgmChangeListener {
 
     /**
-     * The event type this tree fires to its
-     * PropertyChangeListeners.
      *
      * @author Ich (31.07.2020)
      */
@@ -61,12 +60,12 @@ public class TemplateBrowserTree extends DynamicTree implements SearchResultView
     }
 
     /**
-     *
+     * The model of the tree
      */
     private final PathTreeModel pathTreeModel;
 
     /**
-     *
+     * The {@link TemplateLibrariesManager}
      */
     private TemplateLibrariesManager templateLibrariesManager;
 
@@ -170,6 +169,7 @@ public class TemplateBrowserTree extends DynamicTree implements SearchResultView
 
     @Override
     public void propertyChange(final PropertyChangeEvent evt) {
+        //Sys.err("propertyChange " + evt);
         boolean oldValueHasContent = hasContent();
         MetaModelContext currentMetaModelContext = pathTreeModel.getMetaModelContext();
         MetaModelContext newMetaModelContext = Static.getSelectedMetaModelContext();
@@ -191,6 +191,9 @@ public class TemplateBrowserTree extends DynamicTree implements SearchResultView
     }
 
     /**
+     * Saves the expanded paths and the position of the view in the map
+     * that contains this information for the respective model type.
+     *
      * @param treeDefinition
      */
     private void saveViewState(final PathTreeDefinition treeDefinition) {
@@ -210,6 +213,8 @@ public class TemplateBrowserTree extends DynamicTree implements SearchResultView
     }
 
     /**
+     * Restores the expanded paths in the tree.
+     *
      * @param treeDefinition
      */
     private void restoreViewState(final PathTreeDefinition treeDefinition) {
@@ -236,16 +241,16 @@ public class TemplateBrowserTree extends DynamicTree implements SearchResultView
 
     @Override
     public void ancestorAdded(final AncestorEvent event) {
+        //Sys.err("ancestorAdded " + event);
         templateLibrariesManager = Static.getTemplateLibrariesManager();
         templateLibrariesManager.addPropertyChangeListener(this);
         propertyChange(null);
-        Sys.err1(getVisibleRect());
     }
 
     @Override
     public void ancestorRemoved(final AncestorEvent event) {
+        //Sys.err("ancestorRemoved " + event);
         templateLibrariesManager.removePropertyChangeListener(this);
-        Sys.err1(getVisibleRect());
     }
 
     @Override
@@ -269,7 +274,8 @@ public class TemplateBrowserTree extends DynamicTree implements SearchResultView
     }
 
     /**
-     * Selektiert im Baum alle Elemente, die im dazugehörigen Template selektiert sind.
+     * Selects all elements in the tree that are selected in the corresponding
+     * template.
      */
     private void selectObjects(final GraphDocument template) {
         TreePath[] path = new TreePath[template.getSelectedRealElementContainerCount()];

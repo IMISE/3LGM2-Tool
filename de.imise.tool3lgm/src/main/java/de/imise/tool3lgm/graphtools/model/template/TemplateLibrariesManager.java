@@ -22,9 +22,6 @@ import de.imise.util.event.PropertyChangeHandler;
 /**
  * Manager for the loaded templates.
  *
- * @author AXS (11.08.2019)
- */
-/**
  * @author Ich (03.08.2020)
  */
 public class TemplateLibrariesManager extends PropertyChangeHandler implements PropertyChangeListener, Tool3lgmChangeListener {
