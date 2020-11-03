@@ -2,6 +2,9 @@ package de.imise.tool3lgm.graphtools.view.template;
 
 import static de.imise.tool3lgm.graphtools.view.template.TemplateBrowserTree.PropertyChangeEventType.CONTENT_CHANGED;
 
+import java.awt.Point;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
@@ -12,8 +15,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
+import javax.swing.JViewport;
 import javax.swing.event.AncestorEvent;
 import javax.swing.event.AncestorListener;
 import javax.swing.tree.DefaultMutableTreeNode;
@@ -24,7 +27,6 @@ import javax.swing.tree.TreePath;
 
 import de.imise.tool3lgm.MetaModelContext;
 import de.imise.tool3lgm.Static;
-import de.imise.tool3lgm.Tool3lgmChangeListener;
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.dialog.search.SearchFunctions;
 import de.imise.tool3lgm.graphtools.dialog.search.SearchOptions;
@@ -49,9 +51,10 @@ import de.imise.util.swing.component.ParentComponentFinder;
  *
  * @author AXS (05.09.2019)
  */
-public class TemplateBrowserTree extends DynamicTree implements SearchResultView, PropertyChangeListener, AncestorListener, TemplateView, Tool3lgmChangeListener {
+public class TemplateBrowserTree extends DynamicTree implements SearchResultView, PropertyChangeListener, AncestorListener, TemplateView {
 
     /**
+     * The event type this tree fires to its PropertyChangeListeners.
      *
      * @author Ich (31.07.2020)
      */
@@ -73,10 +76,10 @@ public class TemplateBrowserTree extends DynamicTree implements SearchResultView
      * Saves the expanded paths of the tree for the respective model type.
      * There is a separate PathTreeDefinition for each model type.
      */
-    private final Map<PathTreeDefinition, TreeViewData> lastSelectionOfModelType = new HashMap<>();
+    private final Map<PathTreeDefinition, TreeViewData> lastTemplateTreeViewDataOfModelType = new HashMap<>();
 
     /**
-     * Data structure for storing the properties of the Tree
+     * Data structure for storing the properties of the tree
      *
      * @author AXS (01.11.2020)
      */
@@ -85,11 +88,9 @@ public class TemplateBrowserTree extends DynamicTree implements SearchResultView
         /** Expanded paths in the template tree */
         public Enumeration<TreePath> expandedPaths;
 
-        /** Vertical scrollbar value */
-        public int verticalScrollbarValue;
+        /** Position of the viewport view = scroll position of the scrollpane */
+        public Point viewPosition;
 
-        /** Horizontal scrollbar value */
-        public int horizontalScrollbarValue;
     }
 
     /**
@@ -110,6 +111,7 @@ public class TemplateBrowserTree extends DynamicTree implements SearchResultView
         setEditable(false);
         putClientProperty("JTree.lineStyle", "Angled");
         setToggleClickCount(-1);
+        addViewPositionRestoreHandler();
     }
 
     /**
@@ -187,7 +189,7 @@ public class TemplateBrowserTree extends DynamicTree implements SearchResultView
         setRootVisible(false);
         boolean newValueHasContent = hasContent();
         firePropertyChange(CONTENT_CHANGED.name(), oldValueHasContent, newValueHasContent);
-        restoreViewState(templateTreeDefinition); //always as last!
+        restoreExpansionState(templateTreeDefinition); //necessarily after firePropertyChange(...)!
     }
 
     /**
@@ -203,12 +205,10 @@ public class TemplateBrowserTree extends DynamicTree implements SearchResultView
             viewData.expandedPaths = getExpandedDescendants(rootPath);
             JScrollPane scrollPane = ParentComponentFinder.getParent(this, JScrollPane.class);
             if (scrollPane != null) {
-                JScrollBar scrollBar = scrollPane.getVerticalScrollBar();
-                viewData.verticalScrollbarValue = scrollBar.getValue();
-                scrollBar = scrollPane.getHorizontalScrollBar();
-                viewData.horizontalScrollbarValue = scrollBar.getValue();
+                JViewport viewport = scrollPane.getViewport();
+                viewData.viewPosition = viewport.getViewPosition();
             }
-            lastSelectionOfModelType.put(treeDefinition, viewData);
+            lastTemplateTreeViewDataOfModelType.put(treeDefinition, viewData);
         }
     }
 
@@ -217,18 +217,11 @@ public class TemplateBrowserTree extends DynamicTree implements SearchResultView
      *
      * @param treeDefinition
      */
-    private void restoreViewState(final PathTreeDefinition treeDefinition) {
+    private void restoreExpansionState(final PathTreeDefinition treeDefinition) {
         if (treeDefinition != null) {
-            TreeViewData viewData = lastSelectionOfModelType.get(treeDefinition);
+            TreeViewData viewData = lastTemplateTreeViewDataOfModelType.get(treeDefinition);
             if (viewData != null) {
                 setExpandedPaths(viewData.expandedPaths);
-                JScrollPane scrollPane = ParentComponentFinder.getParent(this, JScrollPane.class);
-                if (scrollPane != null) {
-                    JScrollBar scrollBar = scrollPane.getVerticalScrollBar();
-                    scrollBar.setValue(viewData.verticalScrollbarValue);
-                    viewData.verticalScrollbarValue = scrollBar.getValue();
-                    scrollBar.setValue(viewData.horizontalScrollbarValue);
-                }
             } else {
                 try {
                     expandRow(0);
@@ -237,6 +230,40 @@ public class TemplateBrowserTree extends DynamicTree implements SearchResultView
                 }
             }
         }
+    }
+
+    /**
+     * The tree is not immediately resized when the expanded paths are set
+     * (in {@link #restoreExpansionState(PathTreeDefinition)}).
+     * Therefore you cannot simply set the viewPosition after setting the
+     * expansionPaths, but have to wait until the tree component is really
+     * resized.<br>
+     * The ComponentResized event always comes after the PropertyChange
+     * event in which the expanded paths are restored.
+     */
+    private void addViewPositionRestoreHandler() {
+        final TemplateBrowserTree templateBrowserTree = this;
+        addComponentListener(new ComponentAdapter() {
+            @Override
+            public void componentResized(final ComponentEvent e) {
+                MetaModelContext metaModelContext = pathTreeModel.getMetaModelContext();
+                TemplateLibrariesManager templateLibrariesManager = Static.getTemplateLibrariesManager();
+                PathTreeDefinition templateTreeDefinition = templateLibrariesManager.getTemplateTreeDefintion(metaModelContext);
+                if (templateTreeDefinition == null) {
+                    return;
+                }
+                TreeViewData viewData = lastTemplateTreeViewDataOfModelType.get(templateTreeDefinition);
+                if (viewData != null) {
+                    JScrollPane scrollPane = ParentComponentFinder.getParent(templateBrowserTree, JScrollPane.class);
+                    if (scrollPane != null) {
+                        JViewport viewport = scrollPane.getViewport();
+                        viewport.revalidate();
+                        viewport.setViewPosition(viewData.viewPosition);
+                        lastTemplateTreeViewDataOfModelType.remove(templateTreeDefinition);
+                    }
+                }
+            }
+        });
     }
 
     @Override
