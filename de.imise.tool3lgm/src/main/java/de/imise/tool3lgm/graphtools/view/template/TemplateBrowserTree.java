@@ -2,6 +2,7 @@ package de.imise.tool3lgm.graphtools.view.template;
 
 import static de.imise.tool3lgm.graphtools.view.template.TemplateBrowserTree.PropertyChangeEventType.CONTENT_CHANGED;
 
+import java.awt.Color;
 import java.awt.Point;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
@@ -265,8 +266,27 @@ public class TemplateBrowserTree extends DynamicTree implements SearchResultView
                         lastTemplateTreeViewDataOfModelType.remove(templateTreeDefinition);
                     }
                 }
+                removeViewDataForRemovedTemplates(templateLibrariesManager);
             }
         });
+    }
+
+    /**
+     * Checks if the view data of a template type is still needed or if
+     * all models for this template type have been closed and the saved
+     * data can be deleted to restore the view.
+     *
+     * @param templateLibrariesManager
+     */
+    private void removeViewDataForRemovedTemplates(final TemplateLibrariesManager templateLibrariesManager) {
+        List<PathTreeDefinition> pathTreeDefinitions = new ArrayList<>(lastTemplateTreeViewDataOfModelType.keySet()); //Copy!
+        for (PathTreeDefinition pathTreeDefinition : pathTreeDefinitions) {
+            MetaModelContext metaModelContext = pathTreeDefinition.getMetaModelContext();
+            Collection<GDCollection> templates = templateLibrariesManager.getTemplates(metaModelContext);
+            if (templates.isEmpty()) {
+                lastTemplateTreeViewDataOfModelType.remove(pathTreeDefinition);
+            }
+        }
     }
 
     @Override
