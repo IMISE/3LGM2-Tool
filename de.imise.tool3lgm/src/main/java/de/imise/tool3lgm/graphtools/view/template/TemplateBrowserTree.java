@@ -105,9 +105,12 @@ public class TemplateBrowserTree extends DynamicTree implements SearchResultView
         setModel(pathTreeModel);
 
         //analog ModelBrowser
-        setCellRenderer(new TreeRenderer());
-        ((TreeRenderer) getCellRenderer()).setBackgroundNonSelectionColor(getBackground());
-        setBackground(getBackground());
+        TreeRenderer cellRenderer = new TreeRenderer();
+        setCellRenderer(cellRenderer);
+        Color backgroundColor = getBackground();
+        cellRenderer.setBackgroundNonSelectionColor(backgroundColor);
+        setBackground(backgroundColor);
+
         setEditable(false);
         putClientProperty("JTree.lineStyle", "Angled");
         setToggleClickCount(-1);
