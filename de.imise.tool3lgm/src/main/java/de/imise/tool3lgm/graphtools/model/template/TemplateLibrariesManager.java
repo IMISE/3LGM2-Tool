@@ -63,7 +63,7 @@ public class TemplateLibrariesManager extends PropertyChangeHandler implements P
 
     @Override
     public void model_change_model_closed(final GraphDocument source) {
-        loadOrUnloadTemplates();
+        loadOrUnloadTemplates(); //do not remove because model_change_selected_szenario_changed(...) is never called if the last model was closed!
     }
 
     /**
@@ -106,7 +106,28 @@ public class TemplateLibrariesManager extends PropertyChangeHandler implements P
                 addTemplateLibraries(templateLibraryProviders);
             }
         }
+        removeSuperfluousTemplates();
         firePropertyChange();
+    }
+
+    /**
+     * When all models of a certain type are closed, the templates
+     * for that model type can be removed.
+     */
+    private void removeSuperfluousTemplates() {
+        for (MetaModelContext templateMetaModelContext : templateLibrariesContext.getModelTypesWithTemplates()) {
+            boolean isModelOpenWithSameMetaModel = false;
+            for (GDCollection gdcoll : Static.iterableCollections()) {
+                MetaModelContext metaModelContext = gdcoll.getMetaModelContext();
+                if (templateMetaModelContext == metaModelContext) {
+                    isModelOpenWithSameMetaModel = true;
+                    break;
+                }
+            }
+            if (!isModelOpenWithSameMetaModel) {
+                templateLibrariesContext.remove(templateMetaModelContext);
+            }
+        }
     }
 
     /**

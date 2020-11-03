@@ -138,4 +138,11 @@ public class TemplateLibrariesContext {
         return fullPathTreeDefinition;
     }
 
+    /**
+     * @return
+     */
+    Iterable<MetaModelContext> getModelTypesWithTemplates() {
+        return new ArrayList<>(metaModelContextsWithLoadedTemplates); //Copy because it is only used for remove from the original set
+    }
+
 }
