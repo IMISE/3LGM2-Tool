@@ -343,6 +343,7 @@ public final class MainFrameDesktopPane extends JPanel implements PropertyChange
                 bottomSplitPane.setTopComponent(leftSplitPane);
                 bottomSplitPane.setDividerLocation(dividerLocation);
             }
+            templateBrowserPanel = null;
             rightSplitPane = null;
         }
         revalidate();
