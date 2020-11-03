@@ -6,6 +6,7 @@ import static de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty.OP
 import static de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty.OPTION_SHOW_TEMPLATE_ELEMENTS_IN_MODEL_BROWSER;
 
 import java.awt.BorderLayout;
+import java.awt.Container;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
@@ -139,10 +140,15 @@ public class TemplateBrowserPanel extends JPanel implements PropertyChangeListen
      */
     public void updateComponents() {
         checkSearchFieldVisibility();
+        Container scrolPaneParent = treeScrollPane.getParent();
         if (Static.getSelectedDoc() == null) {
-            remove(treeScrollPane);
+            if (scrolPaneParent != null) {
+                remove(treeScrollPane);
+            }
         } else {
-            add(treeScrollPane, BorderLayout.CENTER);
+            if (scrolPaneParent == null) {
+                add(treeScrollPane, BorderLayout.CENTER);
+            }
         }
 
     }
