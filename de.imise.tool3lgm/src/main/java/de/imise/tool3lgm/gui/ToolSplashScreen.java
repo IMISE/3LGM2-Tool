@@ -29,11 +29,13 @@ public class ToolSplashScreen extends BasicSplashScreen {
     /** The color of the title string "3LGM2-Tool" */
     private static final Color TITLE_COLOR = new Color(40, 127, 255);
 
-    /** Normal color of all strings written to the spalsh screen and info dialog */
+    /** Normal color of all strings written to the splash screen and info dialog */
     private static final Color TEXT_COLOR = new Color(24, 76, 153);
 
     /** Color for links over which the mouse pointer is */
     private static final Color ACTIVE_LINK_COLOR = Color.ORANGE;
+
+    private static final String[] gitTagArray = Tool3lgmConstants.getGitTag();
 
     /**
      *
@@ -55,7 +57,10 @@ public class ToolSplashScreen extends BasicSplashScreen {
         g.setColor(TEXT_COLOR);
         drawString(g, "fullToolName1", 50);
         drawString(g, "fullToolName2", 70);
-        drawString(g, "version" + " " + Tool3lgmConstants.TOOL_VERSION, 100);
+        setBoldFontSize(g, 13);
+        drawString(g, gitTagArray[0], 100);
+        drawString(g, gitTagArray[1], 120);
+        setBoldFontSize(g, 16);
         if (!Strings.isNullOrEmpty(Tool3lgmConstants.Branch)) {
             drawString(g, "Branch " + Tool3lgmConstants.Branch, 120);
         }

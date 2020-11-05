@@ -5,7 +5,11 @@ import java.awt.Cursor;
 import java.awt.Image;
 import java.awt.event.InputEvent;
 import java.awt.event.MouseEvent;
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.List;
@@ -99,8 +103,11 @@ public abstract class Tool3lgmConstants {
     /** Template-Verzeichnis */
     public static final File TEMPLATE_DIR = new File(APPLICATION_DIR, "Templates");
 
-    /** Third party licenses htaml file */
+    /** Third party licenses html file */
     public static final File THIRD_PARTY_LICENSES_HTML_FILE = new File(APPLICATION_DIR, "thirdPartyLicense.html");
+
+    /** File containing git describe tag */
+    public static final File GIT_VERSION_FILE = new File(APPLICATION_DIR, "version.info");
 
     /**
      * Datei-Endung für große Icons.
@@ -271,6 +278,33 @@ public abstract class Tool3lgmConstants {
             }
         }
         return false;
+    }
+
+    /**
+     * Reads the git tag from the verion.info file and splits it into two Strings, so that it fits the Splashscreen
+     *
+     * @param
+     * @return tagArray[]
+     */
+    public static final String[] getGitTag() {
+        String gitTag = "";
+        String[] tagArray = new String[2];
+        FileInputStream fileStream;
+
+        try {
+            fileStream = new FileInputStream(GIT_VERSION_FILE);
+            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(fileStream));
+            for (int i = 0; i < 2; ++i) {
+                bufferedReader.readLine();
+            }
+            gitTag = bufferedReader.readLine();
+        } catch (IOException e) {
+        }
+        gitTag = gitTag.replace("git.commit.id.describe=", "");
+        tagArray[0] = gitTag.substring(0, gitTag.indexOf("-"));
+        tagArray[1] = gitTag.substring(gitTag.indexOf("-") + 1);
+
+        return tagArray;
     }
 
     /**
