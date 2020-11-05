@@ -191,13 +191,13 @@ public final class ElementaryMetaPathHandler {
         return getMetaPath(edgeClass, Direction.FORWARD);
     }
 
-    //    /**
-    //     * @param edgeClass
-    //     * @return
-    //     */
-    //    public static final ElementaryMetaPath getBackwardMetaPath(final Class<? extends Edge> edgeClass) {
-    //        return getMetaPath(edgeClass, Direction.BACKWARD);
-    //    }
+    /**
+     * @param edgeClass
+     * @return
+     */
+    public final ElementaryMetaPath getBackwardMetaPath(final Class<? extends Edge> edgeClass) {
+        return getForwardMetaPath(edgeClass).getOtherDirection();
+    }
 
     /**
      * @param doubleMeaningEdgeClass
