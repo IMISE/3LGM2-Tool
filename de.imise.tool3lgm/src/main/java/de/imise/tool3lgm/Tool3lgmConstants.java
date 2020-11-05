@@ -5,16 +5,15 @@ import java.awt.Cursor;
 import java.awt.Image;
 import java.awt.event.InputEvent;
 import java.awt.event.MouseEvent;
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Properties;
 import java.util.ResourceBundle;
 
 import javax.swing.Icon;
@@ -288,27 +287,25 @@ public abstract class Tool3lgmConstants {
     /**
      * Reads the git tag from the verion.info file and splits it into two Strings, so that it fits the Splashscreen
      *
-     * @param
+     * @param versionInfoFile
      * @return tagArray[]
      */
-    public static final String[] getGitTag() {
-        String gitTag = "";
+    public static final String[] getGitTag(final File versionInfoFile) {
+        String gitTag = null;
         String[] tagArray = new String[2];
-        FileInputStream fileStream;
+        tagArray[0] = "Unknown Version";
+        tagArray[1] = "Unknown Commit";
 
-        try {
-            fileStream = new FileInputStream(GIT_VERSION_FILE);
-            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(fileStream));
-            for (int i = 0; i < 2; ++i) {
-                bufferedReader.readLine();
-            }
-            gitTag = bufferedReader.readLine();
+        try (FileInputStream fileInputStream = new FileInputStream(versionInfoFile)) {
+            Properties properties = new Properties();
+            properties.load(fileInputStream);
+            Object gitTagObject = properties.get("git.commit.id.describe");
+            gitTag = gitTagObject == null ? null : gitTagObject.toString();
+            int indexOfMinus = gitTag.indexOf("-");
+            tagArray[0] = gitTag.substring(0, indexOfMinus);
+            tagArray[1] = gitTag.substring(indexOfMinus + 1);
         } catch (IOException e) {
         }
-        gitTag = gitTag.replace("git.commit.id.describe=", "");
-        tagArray[0] = gitTag.substring(0, gitTag.indexOf("-"));
-        tagArray[1] = gitTag.substring(gitTag.indexOf("-") + 1);
-
         return tagArray;
     }
 
