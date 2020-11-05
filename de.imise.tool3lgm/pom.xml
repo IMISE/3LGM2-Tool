@@ -110,15 +110,6 @@
 			<version>1.4</version>
 		</dependency>
 		
-		<!-- https://mvnrepository.com/artifact/com.lukegb.mojo/gitdescribe-maven-plugin -->
-		<dependency>
-			<groupId>pl.project13.maven</groupId>
-			<artifactId>git-commit-id-plugin</artifactId>
-			<version>4.0.3</version>
-			<type>maven-plugin</type>
-		</dependency>
-		
-
 	</dependencies>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
