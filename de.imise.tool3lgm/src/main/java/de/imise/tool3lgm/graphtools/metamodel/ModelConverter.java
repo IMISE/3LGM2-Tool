@@ -28,7 +28,8 @@ import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
 
 /**
- * Diese Klasse übersetzt ein Modell mit einem Metamodell in ein Modell mit einem anderen Metamodell.
+ * Diese Klasse übersetzt ein Modell mit einem Metamodell in ein Modell mit
+ * einem anderen Metamodell.
  *
  * @author AXS (7 Jun 2019)
  */
@@ -43,16 +44,17 @@ public class ModelConverter {
     /** Zielmodell */
     private final GDCollection targetModel;
 
-    /** Mappt vom Teilmodell aus dem SourceModell auf das entsprechende Teilmodell im TagetModell */
+    /**
+     * Mappt vom Teilmodell aus dem SourceModell auf das entsprechende
+     * Teilmodell im TagetModell
+     */
     private final Map<Szenario, Szenario> sourceSzenToTargetSzen = new HashMap<>();
 
     /**
-     * @param modelConverterDefinition
-     *            Transformationsdefinition zur Umwandlung eines Modells in das andere
-     * @param sourceModel
-     *            Quellmodell
-     * @param targetModel
-     *            Zielmodell
+     * @param modelConverterDefinition Transformationsdefinition zur Umwandlung
+     *            eines Modells in das andere
+     * @param sourceModel Quellmodell
+     * @param targetModel Zielmodell
      */
     private ModelConverter(final ModelConverterDefinition modelConverterDefinition, final GDCollection sourceModel, final GDCollection targetModel) {
         this.modelConverterDefinition = modelConverterDefinition;
@@ -61,7 +63,8 @@ public class ModelConverter {
     }
 
     /**
-     * Konvertiert das übergebene Modell anhand der übergebenen Transformationsdefinition in ein Modell mit anderem MetaModell.
+     * Konvertiert das übergebene Modell anhand der übergebenen
+     * Transformationsdefinition in ein Modell mit anderem MetaModell.
      *
      * @param modelConverterDefinition
      * @param sourceModel
@@ -80,7 +83,8 @@ public class ModelConverter {
     }
 
     /**
-     * Konvertiert das übergebene Source-Modell anhand der übergebenen Transformationsdefinition in Elemente des Target-Modells, das ein anderes
+     * Konvertiert das übergebene Source-Modell anhand der übergebenen
+     * Transformationsdefinition in Elemente des Target-Modells, das ein anderes
      * Metamodell hat als das Source-Modell.
      *
      * @param modelConverterDefinition
@@ -101,7 +105,9 @@ public class ModelConverter {
     }
 
     /**
-     * Legt im Target-Model alle Teilmodelle an, die es auch im SourceModel gibt. Diese werden in der Map {@link #sourceSzenToTargetSzen} gespeichert.
+     * Legt im Target-Model alle Teilmodelle an, die es auch im SourceModel
+     * gibt. Diese werden in der Map {@link #sourceSzenToTargetSzen}
+     * gespeichert.
      */
     private void prepareTargetModel() {
         boolean oldBulkMode = targetModel.setBulkMode(true);
@@ -120,7 +126,9 @@ public class ModelConverter {
     }
 
     /**
-     * Überträgt aus dem Ausgangsmodell alle per {@link #modelConverterDefinition} angegebenen direkt abbildbaren Knoten ins Zielmodell.
+     * Überträgt aus dem Ausgangsmodell alle per
+     * {@link #modelConverterDefinition} angegebenen direkt abbildbaren Knoten
+     * ins Zielmodell.
      */
     private void convertDirectMappingNodes() {
         //Map der direkt aufeinander abbildbaren Knotenklassen holen
@@ -236,9 +244,12 @@ public class ModelConverter {
                     ModelElement targetEndElement = targetMainDoc.findNodeCoded(sourceEdgeEndElementHash);
                     //lege den MetaPfad im Zielmodell an
                     SimplePath createdPath = targetMainDoc.createSimplePath(targetStartElement, targetEndElement, targetMetaPath, false, STANDARD_PID);
-                    //replace the generated 3LGM-hashStrings by derived hashStrings from the source edge or join created elements if the same element (same type with same hash id prefix) already exists
-                    ModelConverterUtils.replaceGeneratedHashStringsAndJoinEqualsElements(createdPath, sourceEdgeHash);
-                    //nach der Definiton der Umbenennungen die Namen der Elemente in Abhängigkeit von der Source-Edge umbenennen
+                    // replace the generated 3LGM-hashStrings by derived
+                    // hashStrings from the source edge or join created
+                    // elements if the same element (same type with same hash
+                    // id prefix) already exists
+                    // nach der Definiton der Umbenennungen die Namen der
+                    // Elemente in Abhängigkeit von der Source-Edge umbenennen
                     generatedRenamedElements = ModelConverterUtils.renameAndJoinEqualNamedElements(edgesMappingMetaPathsCreationDefinition, createdPath, sourceEdge, generatedRenamedElements);
                 }
             }
