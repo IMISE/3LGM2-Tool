@@ -1,5 +1,6 @@
 /*
- * Created on 25.11.2003 To change the template for this generated file go to Window&gt;Preferences&gt;Java&gt;Code Generation&gt;Code and Comments
+ * Created on 25.11.2003 To change the template for this generated file go to
+ * Window&gt;Preferences&gt;Java&gt;Code Generation&gt;Code and Comments
  */
 package de.imise.tool3lgm.graphtools.userfield;
 
@@ -11,9 +12,12 @@ import org.xml.sax.SAXException;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 
 /**
- * Die Variablen sind auf protected Gesetzt, damit man einen neuen ContentHandler von dieser Klasse ableiten kann aber trotzdem noch Zugriff auf alle
- * nötigen Werte hat. Ich denke, bei kleinen Änderungen (hinzukommen oder wegfallen einzelnener Felder im Dokument) muß man keinen ganz neuen
- * ContentHandler schreiben sondern muß nur einen abgeleiteten von diesem bilden. Ich würde aber empfehlen von Zeit zu Zeit einen völlig neuen
+ * Die Variablen sind auf protected Gesetzt, damit man einen neuen
+ * ContentHandler von dieser Klasse ableiten kann aber trotzdem noch Zugriff auf
+ * alle nötigen Werte hat. Ich denke, bei kleinen Änderungen (hinzukommen oder
+ * wegfallen einzelnener Felder im Dokument) muß man keinen ganz neuen
+ * ContentHandler schreiben sondern muß nur einen abgeleiteten von diesem
+ * bilden. Ich würde aber empfehlen von Zeit zu Zeit einen völlig neuen
  * ContentHandler zu schreiben.
  *
  * @author Thomas Rudert
@@ -23,11 +27,13 @@ public class UserFieldXMLContentHandler implements ContentHandler {
     private final UserFieldDefinitions definitions;
     private UserField field;
 
-    /** String der in der characters Methode ausgelesen wird (Werte eines Tags) */
+    /**
+     * String der in der characters Methode ausgelesen wird (Werte eines Tags)
+     */
     private final StringBuilder elementValue = new StringBuilder();
 
     /**
-     * 
+     *
      */
     public UserFieldXMLContentHandler(final UserFieldDefinitions def) {
         super();

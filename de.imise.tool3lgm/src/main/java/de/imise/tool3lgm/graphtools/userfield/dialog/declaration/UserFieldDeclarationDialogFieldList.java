@@ -55,7 +55,8 @@ public class UserFieldDeclarationDialogFieldList extends JList<NamedObjectContai
     }
 
     /**
-     * Fügt zur Liste der <code>UserField</code>s das übergebene <code>UserField</code> hinzu.
+     * Fügt zur Liste der <code>UserField</code>s das übergebene
+     * <code>UserField</code> hinzu.
      *
      * @param userField
      */
@@ -64,7 +65,8 @@ public class UserFieldDeclarationDialogFieldList extends JList<NamedObjectContai
     }
 
     /**
-     * Fügt zur Liste der <code>UserField</code>s das übergebene <code>UserField</code> hinzu.
+     * Fügt zur Liste der <code>UserField</code>s das übergebene
+     * <code>UserField</code> hinzu.
      *
      * @param userField
      * @param index
@@ -119,8 +121,9 @@ public class UserFieldDeclarationDialogFieldList extends JList<NamedObjectContai
     }
 
     /**
-     * Verschiebt das selektierte {@link UserField} um i Schritte (wenn die Liste das zulässt).
-     * In den {@link UserFieldDefinitions} wird das UserField ebenfalls verschoben.
+     * Verschiebt das selektierte {@link UserField} um i Schritte (wenn die
+     * Liste das zulässt). In den {@link UserFieldDefinitions} wird das
+     * UserField ebenfalls verschoben.
      *
      * @param i
      */

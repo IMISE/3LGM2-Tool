@@ -3,6 +3,7 @@ package de.imise.tool3lgm.gui;
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
 
 import java.awt.Cursor;
+import java.awt.Frame;
 import java.awt.Rectangle;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
@@ -34,7 +35,8 @@ import de.imise.tool3lgm.userproperties.UserProperties.IntProperty;
 import de.imise.util.swing.SwingUtils;
 
 /**
- * Hauptfenster der Anwendung. Das hier ist alles aus Tool3lgm herausgelöst, das bis dahin das Hauptfenster war. Aber es hat noch eine Menge
+ * Hauptfenster der Anwendung. Das hier ist alles aus Tool3lgm herausgelöst, das
+ * bis dahin das Hauptfenster war. Aber es hat noch eine Menge
  * Controller-Funktionen. Daher die Trennung.
  *
  * @author AXS (9 Aug 2019)
@@ -94,14 +96,15 @@ public class MainFrame extends JFrame implements Tool3lgmChangeListener, Compone
     }
 
     /**
-     * Sets the corresponding UserPropertiy values for the screen index, the width and the height.
+     * Sets the corresponding UserPropertiy values for the screen index, the
+     * width and the height.
      */
     public void saveBoundsAndExtendedStateInUserProperties() {
         Rectangle bounds = getBounds();
         int extendedState = getExtendedState();
-        if (extendedState == JFrame.MAXIMIZED_BOTH) {
+        if (extendedState == Frame.MAXIMIZED_BOTH) {
             IntProperty.PROPERTY_INT_MAINFRAME_EXTENDED_STATE.set(extendedState);
-        } else if (extendedState == JFrame.NORMAL) {
+        } else if (extendedState == Frame.NORMAL) {
             IntProperty.PROPERTY_INT_MAINFRAME_SCREEN_POSX.set(bounds.x);
             IntProperty.PROPERTY_INT_MAINFRAME_SCREEN_POSY.set(bounds.y);
             IntProperty.PROPERTY_INT_MAINFRAME_SCREEN_WIDTH.set(bounds.width);
@@ -111,7 +114,8 @@ public class MainFrame extends JFrame implements Tool3lgmChangeListener, Compone
     }
 
     /**
-     * Restores the screen index, the width and the height from the corresponding UserPropertiy values.
+     * Restores the screen index, the width and the height from the
+     * corresponding UserPropertiy values.
      */
     private void restoreBoundsAndExtendedStateFromUserProperties() {
         int frameX = IntProperty.PROPERTY_INT_MAINFRAME_SCREEN_POSX.get();
@@ -126,7 +130,7 @@ public class MainFrame extends JFrame implements Tool3lgmChangeListener, Compone
         } else {
             setBounds(frameX, frameY, frameWidth, frameHeight); //last height
             int extendedState = IntProperty.PROPERTY_INT_MAINFRAME_EXTENDED_STATE.get();
-            if (extendedState == JFrame.MAXIMIZED_BOTH) {
+            if (extendedState == Frame.MAXIMIZED_BOTH) {
                 setExtendedState(extendedState);
             }
         }

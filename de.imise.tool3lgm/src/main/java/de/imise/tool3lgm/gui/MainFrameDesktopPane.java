@@ -59,7 +59,7 @@ import de.imise.tool3lgm.gui.viewpane.graph.GraphViewPane;
 import de.imise.tool3lgm.gui.viewpane.graph.GraphViewPaneFrameComponent;
 import de.imise.tool3lgm.gui.viewpane.matrix.MatrixViewPaneFrameComponent;
 import de.imise.tool3lgm.log.Log;
-import de.imise.tool3lgm.userproperties.UserProperties;
+import de.imise.tool3lgm.userproperties.AbstractUserProperties;
 import de.imise.tool3lgm.userproperties.UserProperties.IntProperty;
 
 /**
@@ -73,7 +73,10 @@ public final class MainFrameDesktopPane extends JPanel implements PropertyChange
     /** ToolBar with general tools */
     private final MainFrameToolBar mainFrameToolbar = new MainFrameToolBar();
 
-    /** parent der Toolbar Workarea == unten, mainFrameToolbar = oben in der Haupt-Toolbar */
+    /**
+     * parent der Toolbar Workarea == unten, mainFrameToolbar = oben in der
+     * Haupt-Toolbar
+     */
     private final Container graphFrameToolbarParent = workarea; // auch unten wie beim MatrixView
     //private final Container graphFrameToolbarParent = mainFrameToolbar; //oben in der HauptToolbar
     private final Container matrixFrameToolbarParent = workarea;
@@ -81,19 +84,30 @@ public final class MainFrameDesktopPane extends JPanel implements PropertyChange
     /** Aktualisiert die Toolbar je nach Kontext des aktiven Frames */
     private final ViewPaneToolbarManager viewPaneToolbarManager = new ViewPaneToolbarManager(graphFrameToolbarParent, matrixFrameToolbarParent);
 
-    /** splitted pane with modelBrowserPanel on the left and desktop on the right */
+    /**
+     * splitted pane with modelBrowserPanel on the left and desktop on the right
+     */
     private final JSplitPane leftSplitPane;
 
-    /** splitted pane with desktop on the left and TemplateBrowserPanel on the right */
+    /**
+     * splitted pane with desktop on the left and TemplateBrowserPanel on the
+     * right
+     */
     private JSplitPane rightSplitPane;
 
-    /** splitted pane with modelBrowserPanel and the graph on the top and the error table bottom */
+    /**
+     * splitted pane with modelBrowserPanel and the graph on the top and the
+     * error table bottom
+     */
     private JSplitPane bottomSplitPane;
 
     /** panel to hold one or more modelBrowsers */
     private final ModelBrowserPanel modelBrowserPanel;
 
-    /** contain all windows of opened documents (JDesktopPane is a container used to create a multiple-document interface or a virtual desktop) */
+    /**
+     * contain all windows of opened documents (JDesktopPane is a container used
+     * to create a multiple-document interface or a virtual desktop)
+     */
     private final ViewPaneFrameComponentParent desktop;
 
     /** Frame component at desktop, which has the focus */
@@ -109,11 +123,12 @@ public final class MainFrameDesktopPane extends JPanel implements PropertyChange
     private ConsistencyErrorTablePane consistencyErrorTablePane;
 
     /**
-     * Diese Variable wird in <code>setSelectedDoc(LGMGraphDocument, boolean)</code> gebraucht,
-     * um beim Aktivieren eines Matix-Fensters zwar den dazugehörigen ModelBrowser in den
-     * Vordergrund zu bringen (wenn er noch nicht im Vordergrund ist), aber nicht den Grafischen
-     * View des Teilmodells, weil ja dann das Matrix-Fenster sofort nicht mehr im Vordergrund
-     * wäre.
+     * Diese Variable wird in
+     * <code>setSelectedDoc(LGMGraphDocument, boolean)</code> gebraucht, um beim
+     * Aktivieren eines Matix-Fensters zwar den dazugehörigen ModelBrowser in
+     * den Vordergrund zu bringen (wenn er noch nicht im Vordergrund ist), aber
+     * nicht den Grafischen View des Teilmodells, weil ja dann das
+     * Matrix-Fenster sofort nicht mehr im Vordergrund wäre.
      */
     private boolean activateGraphView = true;
 
@@ -143,7 +158,7 @@ public final class MainFrameDesktopPane extends JPanel implements PropertyChange
         //add(new StatusBar(), BorderLayout.SOUTH);
 
         setShowStandardToolbar();
-        UserProperties.addPropertyChangeListener(this);
+        AbstractUserProperties.addPropertyChangeListener(this);
         addAsToolChangeListener();
     }
 
@@ -198,7 +213,8 @@ public final class MainFrameDesktopPane extends JPanel implements PropertyChange
     }
 
     /**
-     * Sets the corresponding UserPropertiy values for the screen index, the width and the height.
+     * Sets the corresponding UserPropertiy values for the screen index, the
+     * width and the height.
      */
     private void savePositionAndSizeInUserProperties() {
         if (OPTION_SHOW_MODEL_BROWSER.is() && leftSplitPane != null && leftSplitPane.isVisible()) {
@@ -216,7 +232,8 @@ public final class MainFrameDesktopPane extends JPanel implements PropertyChange
     }
 
     /**
-     * Restores the screen index, the width and the height from the corresponding UserPropertiy values.
+     * Restores the screen index, the width and the height from the
+     * corresponding UserPropertiy values.
      */
     public void restorePositionAndSizeFromUserProperties() {
         setDividerLocation(OPTION_SHOW_MODEL_BROWSER.is(), PROPERTY_INT_MODELBRWOSER_GRAPHVIEW_DIVIDER_LOCATION, leftSplitPane, 0.2d, true);
@@ -260,10 +277,12 @@ public final class MainFrameDesktopPane extends JPanel implements PropertyChange
     }
 
     /**
-     * Je nachdem, ob in den UserProperties die Konsitenzprüfung ein- oder ausgeschaltet ist, wird sie hier durchgeführt und die Fehlertabelle
+     * Je nachdem, ob in den UserProperties die Konsitenzprüfung ein- oder
+     * ausgeschaltet ist, wird sie hier durchgeführt und die Fehlertabelle
      * angezeigt.
      *
-     * @return <code>true</code>, wenn dei Konsistenzprüfung durchgeführt und angezeigt wurde
+     * @return <code>true</code>, wenn dei Konsistenzprüfung durchgeführt und
+     *         angezeigt wurde
      */
     private void checkConsistencyTableVisibility() {
         boolean isCheckConsistency = isShowConsistencyTable();
@@ -437,8 +456,7 @@ public final class MainFrameDesktopPane extends JPanel implements PropertyChange
     /**
      * set parameters of InputGraphArea to standard
      *
-     * @param InputGraphArea
-     *            to set
+     * @param InputGraphArea to set
      */
     private void setWorkArea(final GraphViewPaneFrameComponent frame) {
         Szenario szenario = (Szenario) frame.getGraphDocument();
@@ -502,14 +520,14 @@ public final class MainFrameDesktopPane extends JPanel implements PropertyChange
     }
 
     /**
-     * Wechselt den Kontext auf das übergebene Teilmodell. In jedem Fall wird der <code>ModelBrowser</code> des aktivierten Teilmodells in den
+     * Wechselt den Kontext auf das übergebene Teilmodell. In jedem Fall wird
+     * der <code>ModelBrowser</code> des aktivierten Teilmodells in den
      * Vordergrund gebracht.
      *
-     * @param doc
-     *            Teilmodell, in dessen Kontext gewechselt werden soll
-     * @param activateGraphView
-     *            Wenn <code>true</code> ist, wird auch das dazugehörige
-     *            Grafikfenster in den Vordergrund geholt, sonst nicht.
+     * @param doc Teilmodell, in dessen Kontext gewechselt werden soll
+     * @param activateGraphView Wenn <code>true</code> ist, wird auch das
+     *            dazugehörige Grafikfenster in den Vordergrund geholt, sonst
+     *            nicht.
      */
     public void setCurrentDoc(final GraphDocument doc, final boolean activateGraphView) {
         //das doc kann null sein, wenn eine Datei geladen wird und das ModelBrowserPanel grade mit den
@@ -578,8 +596,8 @@ public final class MainFrameDesktopPane extends JPanel implements PropertyChange
 
     /**
      * @param doc
-     * @return the frame component of the view pane that contains the
-     *         graph of the {@link GraphDocument} if exists or <code>null</code>
+     * @return the frame component of the view pane that contains the graph of
+     *         the {@link GraphDocument} if exists or <code>null</code>
      */
     public final ViewPaneFrameComponent getGraphViewPaneFrameComponent(final GraphDocument doc) {
         GraphViewPane graphViewPane = desktop.getGraphViewPane(doc);

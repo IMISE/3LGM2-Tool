@@ -37,17 +37,19 @@ public class AnalysesRepositoryFrame extends JFrame {
     };
 
     /**
-     * Lokale Kopie der Analysen aus dem Repository. Die Liste wird für die Tabelle, die die selbe
-     * Liste nutzt, alphabetisch sortiert.
+     * Lokale Kopie der Analysen aus dem Repository. Die Liste wird für die
+     * Tabelle, die die selbe Liste nutzt, alphabetisch sortiert.
      */
     static List<XMLAnalysis> analysen;
 
     /**
-     * Speichert die Analysendatei auf der der Benutzer grade arbeitet, wenn er eine Analysedatei
-     * nicht über das Repository geöffnet oder gespeichert hat. Solange man sich nur vom Repository
-     * die Analysen geben lässt, bleibt diese Variable null.<br>
-     * Diese Variable wird nur gebraucht, um immer in das zuletzt vom Benutzer ausgewählte
-     * Verzeichnis wechseln zu können, damit er es nicht immer wieder neu asuwählen muss.
+     * Speichert die Analysendatei auf der der Benutzer grade arbeitet, wenn er
+     * eine Analysedatei nicht über das Repository geöffnet oder gespeichert
+     * hat. Solange man sich nur vom Repository die Analysen geben lässt, bleibt
+     * diese Variable null.<br>
+     * Diese Variable wird nur gebraucht, um immer in das zuletzt vom Benutzer
+     * ausgewählte Verzeichnis wechseln zu können, damit er es nicht immer
+     * wieder neu asuwählen muss.
      */
     static File analyseFile = null;
 
@@ -55,17 +57,18 @@ public class AnalysesRepositoryFrame extends JFrame {
     static AnalysesRepositoryFrame dialog = new AnalysesRepositoryFrame();
 
     /**
-     * Wenn sich die Analysen geändert haben, muss beim Schließen des Frames gefragt werden, ob sie
-     * als Repository gespeichert werden sollen.
+     * Wenn sich die Analysen geändert haben, muss beim Schließen des Frames
+     * gefragt werden, ob sie als Repository gespeichert werden sollen.
      */
     static boolean analysisChanged = false;
 
     /**
-     * Fügt die übergebene XMLAnalyse in die Liste der Analysen ein, wenn sie nicht <code>null</code> ist und noch nicht in der Liste vorkommt.
+     * Fügt die übergebene XMLAnalyse in die Liste der Analysen ein, wenn sie
+     * nicht <code>null</code> ist und noch nicht in der Liste vorkommt.
      *
      * @param toadd
-     * @param ignoreDuplicates wenn <code>true</code> werden identische Analysen auch mehrfach
-     *            eingefügt, sonst nicht
+     * @param ignoreDuplicates wenn <code>true</code> werden identische Analysen
+     *            auch mehrfach eingefügt, sonst nicht
      * @return
      */
     static boolean addAnalysis(final XMLAnalysis toadd, final boolean ignoreDuplicates) {
@@ -106,8 +109,8 @@ public class AnalysesRepositoryFrame extends JFrame {
     }
 
     /**
-     * Setzt die übergeben ArrayList als die Analysenliste dieses Dialoges und sortiert sie für die
-     * Tabelle.
+     * Setzt die übergeben ArrayList als die Analysenliste dieses Dialoges und
+     * sortiert sie für die Tabelle.
      */
     static void setAnalyses(final List<XMLAnalysis> analysen) {
         Alphabetical.sort(analysen);
@@ -131,7 +134,8 @@ public class AnalysesRepositoryFrame extends JFrame {
     }
 
     /**
-     * Konstruktor. Zugriff auf diese Klasse ist über die Methode showDialog möglich.
+     * Konstruktor. Zugriff auf diese Klasse ist über die Methode showDialog
+     * möglich.
      *
      * @param t die Tool3lgm Klasse, in der dieser Dialog angezeigt wird.
      */

@@ -19,8 +19,7 @@ import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.model.LGMGraphDocument;
 import de.imise.tool3lgm.graphtools.model.Szenario;
-import de.imise.tool3lgm.userproperties.UserProperties;
-import de.imise.util.swing.component.tab.ReorderableTabbedPane;
+import de.imise.tool3lgm.userproperties.AbstractUserProperties;
 
 /**
  * @author Rudi, AXS
@@ -39,8 +38,8 @@ public final class ModelBrowserPanel extends JPanel implements PropertyChangeLis
     public ModelBrowserPanel() {
         setLayout(new GridLayout(1, 1, 0, 0));
         showModelsInSeparateBrowser = OPTION_SHOW_MODELS_IN_SEPARATE_BROWSER.is();
-        inactiveColor = new ModelBrowser(ReorderableTabbedPane.SCROLL_TAB_LAYOUT).getForeground();
-        UserProperties.addPropertyChangeListener(this);
+        inactiveColor = new ModelBrowser(JTabbedPane.SCROLL_TAB_LAYOUT).getForeground();
+        AbstractUserProperties.addPropertyChangeListener(this);
     }
 
     /**
@@ -50,14 +49,14 @@ public final class ModelBrowserPanel extends JPanel implements PropertyChangeLis
     public final void addCollection(final GDCollection gdcoll) {
         ModelBrowser modelBrowser;
         if (showModelsInSeparateBrowser) {
-            modelBrowser = new ModelBrowser(ReorderableTabbedPane.WRAP_TAB_LAYOUT); //WRAP -> never show the scroll buttons even if the space is not enough for the single tab in this pane
+            modelBrowser = new ModelBrowser(JTabbedPane.WRAP_TAB_LAYOUT); //WRAP -> never show the scroll buttons even if the space is not enough for the single tab in this pane
             modelBrowser.addCollection(gdcoll);
             ((GridLayout) getLayout()).setColumns(((GridLayout) getLayout()).getColumns() + 1);
             add(modelBrowser);
         } else {
             modelBrowser = getFirstBrowser();
             if (modelBrowser == null) {
-                modelBrowser = new ModelBrowser(ReorderableTabbedPane.SCROLL_TAB_LAYOUT);
+                modelBrowser = new ModelBrowser(JTabbedPane.SCROLL_TAB_LAYOUT);
                 add(modelBrowser);
             }
             modelBrowser.addCollection(gdcoll);
@@ -102,7 +101,8 @@ public final class ModelBrowserPanel extends JPanel implements PropertyChangeLis
 
     /**
      * Entfernt ein Teil-Modell aus dem dazugehörigen Browser. Wenn das letzte
-     * Teilmodell eines Modells entfernt wird, dann wird das ganze Modell entfernt.
+     * Teilmodell eines Modells entfernt wird, dann wird das ganze Modell
+     * entfernt.
      *
      * @param doc
      */
@@ -202,7 +202,8 @@ public final class ModelBrowserPanel extends JPanel implements PropertyChangeLis
     }
 
     /**
-     * Ruft update für alle SubModelBrowser auf, die alle Bäume komplett neu aufbauen
+     * Ruft update für alle SubModelBrowser auf, die alle Bäume komplett neu
+     * aufbauen
      */
     public void updateModelBrowsers() {
         for (int i = 0; i < getComponentCount(); i++) {

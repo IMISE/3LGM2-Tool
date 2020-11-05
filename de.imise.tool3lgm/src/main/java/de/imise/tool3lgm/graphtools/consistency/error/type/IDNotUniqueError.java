@@ -6,7 +6,8 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.userfield.UserField;
 
 /**
- * ACHTUNG: Wenn der Name der Klasse refactored werden sollte, müssen die ErrorResourcen angepasst werden!
+ * ACHTUNG: Wenn der Name der Klasse refactored werden sollte, müssen die
+ * ErrorResourcen angepasst werden!
  *
  * @author Ich
  * @create 17.08.2015
@@ -14,7 +15,8 @@ import de.imise.tool3lgm.graphtools.userfield.UserField;
 public class IDNotUniqueError extends AbstractIDError {
 
     /**
-     * Alle Elemente, die dieselbe ID benutzen (auch das ModelElement des Fehlers)
+     * Alle Elemente, die dieselbe ID benutzen (auch das ModelElement des
+     * Fehlers)
      */
     private final Collection<ModelElement> allWithSameID;
 

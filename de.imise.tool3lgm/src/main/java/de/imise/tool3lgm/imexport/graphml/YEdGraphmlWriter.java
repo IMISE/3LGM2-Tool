@@ -16,6 +16,7 @@ import javax.swing.SwingConstants;
 import javax.xml.stream.XMLStreamException;
 
 import de.imise.tool3lgm.Tool3lgmConstants;
+import de.imise.tool3lgm.graphtools.metamodel.CoreMetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.DoubleMeaningEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.DoubleMeaningEdge.ConnectionState;
@@ -338,7 +339,7 @@ public class YEdGraphmlWriter extends GraphmlWriter {
     private String getEdgeType(final EdgeContainer ec) {
         Edge edge = ec.getEdge();
         Class<? extends Edge> edgeClass = edge.getClass();
-        String type = MetaModel.isComposition(edgeClass) || MetaModel.isHasPartEdge(edgeClass) ? "dashed" : "line";
+        String type = CoreMetaModel.isComposition(edgeClass) || CoreMetaModel.isHasPartEdge(edgeClass) ? "dashed" : "line";
         return type;
     }
 
@@ -346,7 +347,7 @@ public class YEdGraphmlWriter extends GraphmlWriter {
         Edge edge = ec.getEdge();
         Class<? extends Edge> edgeClass = edge.getClass();
         MetaModel metaModel = edge.getMetaModel();
-        ConnectionState direction = metaModel.isDirectedEdge(edgeClass) ? MetaModel.isDoubleMeaningEdge(edgeClass) ? ((DoubleMeaningEdge) edge).getConnectionState() : ConnectionState.FORWARD : ConnectionState.DOUBLE;
+        ConnectionState direction = metaModel.isDirectedEdge(edgeClass) ? CoreMetaModel.isDoubleMeaningEdge(edgeClass) ? ((DoubleMeaningEdge) edge).getConnectionState() : ConnectionState.FORWARD : ConnectionState.DOUBLE;
         String sourceArrow = direction == ConnectionState.DOUBLE || direction == ConnectionState.BACKWARD ? "delta" : "none";
         String targetArrow = direction == ConnectionState.DOUBLE || direction == ConnectionState.FORWARD ? "delta" : "none";
         writeEmptyElement("y:Arrows", "source", sourceArrow, "target", targetArrow);

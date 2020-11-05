@@ -25,8 +25,8 @@ import de.imise.util.swing.component.text.ExtendedTextField;
 import de.imise.util.swing.dialog.SimpleXMLEditor;
 
 /**
- * Tabelle zum Anzeigen aller Analysen im Repository-Dialog. Die Tabelle hat ihr TableModel als
- * innere Klasse Originalautoren: Sebastian Weber, Thomas
+ * Tabelle zum Anzeigen aller Analysen im Repository-Dialog. Die Tabelle hat ihr
+ * TableModel als innere Klasse Originalautoren: Sebastian Weber, Thomas
  *
  * @author AXS created on 15.08.2007 aus inneren Klassen
  */
@@ -40,7 +40,8 @@ public class AnalysesRepositoryFrameTable extends JTable {
     private class AnalyseTableModel extends AbstractTableModel {
 
         /**
-         * Irgendeine Komponente, die als Parent für einen Fehlerdialog dienen kann.
+         * Irgendeine Komponente, die als Parent für einen Fehlerdialog dienen
+         * kann.
          */
         private final Component parent;
 
@@ -52,10 +53,11 @@ public class AnalysesRepositoryFrameTable extends JTable {
         };
 
         /**
-         * Legt ein neues Model an. Die Parentkomponente wird gebraucht, wenn bei einem Fehler ein
-         * Infodialog ausgegeben werden muss.
+         * Legt ein neues Model an. Die Parentkomponente wird gebraucht, wenn
+         * bei einem Fehler ein Infodialog ausgegeben werden muss.
          *
-         * @param parent Komponente, die als Parent für einen Fehlerdialog dienen kann.
+         * @param parent Komponente, die als Parent für einen Fehlerdialog
+         *            dienen kann.
          */
         private AnalyseTableModel(final Component parent) {
             super();

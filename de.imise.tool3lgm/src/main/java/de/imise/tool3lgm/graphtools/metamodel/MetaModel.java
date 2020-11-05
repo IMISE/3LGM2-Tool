@@ -62,22 +62,27 @@ import de.imise.util.Sys;
 import de.imise.util.collections.CollectionUtils;
 
 /**
- * Dieses Objekt kapselt ein Metamodel. Diese Klasse hier nimmt eine {@link MetaModelDefinition} und füllt damit alle Listen, Sets, Arrays usw. um
+ * Dieses Objekt kapselt ein Metamodel. Diese Klasse hier nimmt eine
+ * {@link MetaModelDefinition} und füllt damit alle Listen, Sets, Arrays usw. um
  * dann alle Fragen über ein konkretes Metamodell zu beantworten.<br>
- * Das hier ist aus der ehemals statischen Klasse ModelConstants entstanden, als es nicht mehr nur ein MetaModel sondern mehrere gleichzeitig geben
- * sollte.
+ * Das hier ist aus der ehemals statischen Klasse ModelConstants entstanden, als
+ * es nicht mehr nur ein MetaModel sondern mehrere gleichzeitig geben sollte.
  *
  * @author AXS (30 Apr 2019)
  */
 public final class MetaModel extends CoreMetaModel {
 
     /**
-     * Hilfsklasse zum Anlegen neuer Elemente, die sicher stellt, dass das richtige MetaModel für die Elemente gesetzt wird und dann nicht mehr von
+     * Hilfsklasse zum Anlegen neuer Elemente, die sicher stellt, dass das
+     * richtige MetaModel für die Elemente gesetzt wird und dann nicht mehr von
      * außen geändert werden kann.
      */
     private final ModelElementInstanceCreator modelElementInstanceCreator;
 
-    /** Handler für das einfache und nicht redundante Anlegen von Elementar-Metapfaden */
+    /**
+     * Handler für das einfache und nicht redundante Anlegen von
+     * Elementar-Metapfaden
+     */
     private final ElementaryMetaPathHandler elementaryMetaPathHandler;
 
     ////////////
@@ -117,8 +122,8 @@ public final class MetaModel extends CoreMetaModel {
     public final Set<Class<? extends ModelElement>> allElementsSet;
 
     /**
-     * Sammlung, die alle Elementklassen inklusive aller Kantenklassen enthält einschließlich aller
-     * ihrer Oberklassen bis hin zu ModelElement.class.
+     * Sammlung, die alle Elementklassen inklusive aller Kantenklassen enthält
+     * einschließlich aller ihrer Oberklassen bis hin zu ModelElement.class.
      */
     public final Set<Class<? extends ModelElement>> allModelElementClassesWithSuperClasses;
 
@@ -127,7 +132,8 @@ public final class MetaModel extends CoreMetaModel {
     ///////////////////////////////////
 
     /**
-     * Mappt von Elementklassen auf alle Kantenklasse, bei der die Reihenfolge von Instanzen dieser Kantenklasse für Elemente der Elementklasse eine
+     * Mappt von Elementklassen auf alle Kantenklasse, bei der die Reihenfolge
+     * von Instanzen dieser Kantenklasse für Elemente der Elementklasse eine
      * Bedeutung haben.
      */
     private final SetMultimap<Class<? extends ModelElement>, Class<? extends Edge>> elementClassToSortedEdges;
@@ -135,31 +141,49 @@ public final class MetaModel extends CoreMetaModel {
     /** Alle Klassen, die man über den Datenimport einlesen kann */
     private final Set<Class<? extends ModelElement>> importableNodes;
 
-    /** Alle Knotenklassen, die in jedem Teilmodell vorkommen, also nicht in jedem Teilmodell einen eigenen Container besitzen. */
+    /**
+     * Alle Knotenklassen, die in jedem Teilmodell vorkommen, also nicht in
+     * jedem Teilmodell einen eigenen Container besitzen.
+     */
     public final Set<Class<? extends Node>> uniqueNodes;
 
-    /** Alle Knotenklassen, die in Slave einer CompositionEdge sind (=nicht unabhängig exsistierende Elemente). */
+    /**
+     * Alle Knotenklassen, die in Slave einer CompositionEdge sind (=nicht
+     * unabhängig exsistierende Elemente).
+     */
     public final List<Class<? extends Node>> compositionSlaveNodes;
 
-    /** Alle Knotenklassen, bei denen in der Grafik zusätzlich zum eigenen Namen noch die Namen verbundener Elemente angezeigt werden sollen */
+    /**
+     * Alle Knotenklassen, bei denen in der Grafik zusätzlich zum eigenen Namen
+     * noch die Namen verbundener Elemente angezeigt werden sollen
+     */
     public final Set<Class<? extends ModelElement>> elementClassesWithNameExtensions;
 
-    /** Alle Elementklassen, die nur im ExpertMode ({@link BooleanProperty#OPTION_ENABLE_EXPERT_MODE} = true) angelegt und verändert werden können. */
+    /**
+     * Alle Elementklassen, die nur im ExpertMode
+     * ({@link BooleanProperty#OPTION_ENABLE_EXPERT_MODE} = true) angelegt und
+     * verändert werden können.
+     */
     private final Set<Class<? extends ModelElement>> pureTemplateElementClasses;
 
     /**
-     * Elementklassen, die nur im Baum angezeigt werden sollen, wenn die Option {@link BooleanProperty#OPTION_ENABLE_EXPERT_MODE}
-     * auf <code>true</code> gestellt ist.
-     * ACHTUNG: hier wird nur mit contains(class) gerpüft -> immer auch die Oberklassen, die versteckt werden sollen reinschreiben
+     * Elementklassen, die nur im Baum angezeigt werden sollen, wenn die Option
+     * {@link BooleanProperty#OPTION_ENABLE_EXPERT_MODE} auf <code>true</code>
+     * gestellt ist. ACHTUNG: hier wird nur mit contains(class) gerpüft -> immer
+     * auch die Oberklassen, die versteckt werden sollen reinschreiben
      */
     private final Set<Class<? extends ModelElement>> onlyExpertModeVisibleNodes;
 
-    /** Alle Elementklassen, die ein Layout brauchen, weil die selbst oder an anderen Elementen in der Grafik dargstellt werden */
+    /**
+     * Alle Elementklassen, die ein Layout brauchen, weil die selbst oder an
+     * anderen Elementen in der Grafik dargstellt werden
+     */
     private final Set<Class<? extends ModelElement>> elementClassesWithLayout;
 
     /**
-     * Alle Elementklassen, die sortierte Kanten zu Elementen haben, die in der Grafik zu sehen sind (z.B. Prozesse können sortierte Kanten zu
-     * Aufgaben haben)
+     * Alle Elementklassen, die sortierte Kanten zu Elementen haben, die in der
+     * Grafik zu sehen sind (z.B. Prozesse können sortierte Kanten zu Aufgaben
+     * haben)
      */
     private final Set<Class<? extends ModelElement>> elementClassesWithSortedEdgesToPaintable;
 
@@ -178,48 +202,58 @@ public final class MetaModel extends CoreMetaModel {
 
     /**
      * Mappt von alten Elementklassen auf die neuen. <br>
-     * Nach einem Refactoring von Node- oder Kantenklassen muss man in diese Map jeweils als <code>String</code> als Schlüssel den alten Namen und
-     * als Value den neuen Namen des Elementes eintragen, damit die Elemente von alten Modellen noch korrekt
-     * eingelesen werden können.
+     * Nach einem Refactoring von Node- oder Kantenklassen muss man in diese Map
+     * jeweils als <code>String</code> als Schlüssel den alten Namen und als
+     * Value den neuen Namen des Elementes eintragen, damit die Elemente von
+     * alten Modellen noch korrekt eingelesen werden können.
      */
     private final Map<String, String> oldToNewClassName;
 
     /**
-     * Mappt von einer Elementklasse auf das Array aller instanziierbaren und zu dieser Klasse zuweisungskompatiblen ModelElement-Klassen.
+     * Mappt von einer Elementklasse auf das Array aller instanziierbaren und zu
+     * dieser Klasse zuweisungskompatiblen ModelElement-Klassen.
      */
     public final Multimap<Class<? extends ModelElement>, Class<? extends ModelElement>> elementClassToNonAbstractAssignableElementClasses = HashMultimap.create();
 
     /**
-     * Mappt von einer Elementklasse auf alle Kanten, die diese Elementklasse selbst besitzt oder von einer ihrer Oberklassen erbt.
+     * Mappt von einer Elementklasse auf alle Kanten, die diese Elementklasse
+     * selbst besitzt oder von einer ihrer Oberklassen erbt.
      */
     private final Map<Class<? extends ModelElement>, Class<? extends Edge>[]> elementClassToEdgeClasses = new HashMap<>();
 
     /**
-     * Mappt vomn 2 Elementklassen auf ein Array von Kantenklassen mappt. Das Array der Kantenklassen enthält alle Kanten, die zwischen den beiden
+     * Mappt vomn 2 Elementklassen auf ein Array von Kantenklassen mappt. Das
+     * Array der Kantenklassen enthält alle Kanten, die zwischen den beiden
      * Schlüsselelementklassen vorhanden sein können.<br />
-     * Für ein Paar von Schlüsselelementklassen ist immer dasselbe Kanteklassen-Array abgelegt - egal in welcher Reihenfolge man die Elementeklassen
-     * als Schlüssel einsetzt.
+     * Für ein Paar von Schlüsselelementklassen ist immer dasselbe
+     * Kanteklassen-Array abgelegt - egal in welcher Reihenfolge man die
+     * Elementeklassen als Schlüssel einsetzt.
      */
     private final Table<Class<? extends ModelElement>, Class<? extends ModelElement>, Class<? extends Edge>[]> elementClassesToEdgeClasses = HashBasedTable.create();
 
     /**
-     * Mappt vom Klassennamen auf die Klasse. Es ist immer der SimpleName und der FullName der Klasse in der Map. Dies ist der Cache für die Funktion
+     * Mappt vom Klassennamen auf die Klasse. Es ist immer der SimpleName und
+     * der FullName der Klasse in der Map. Dies ist der Cache für die Funktion
      * {@link #getClassForName(String)}
      */
     private final Map<String, Class<? extends ModelElement>> elementClassNameToElementClass;
 
     /**
-     * Mappt von einer Kantenklasse auf den MetaPfad, über den die verbindbaren Elemente ebenfalls bereits verbunden sein müssen.
-     * Dieser Mechanismus ist dafür gedacht, verbindbare Elemente einzuschränken auf bestimmte Elemente.
+     * Mappt von einer Kantenklasse auf den MetaPfad, über den die verbindbaren
+     * Elemente ebenfalls bereits verbunden sein müssen. Dieser Mechanismus ist
+     * dafür gedacht, verbindbare Elemente einzuschränken auf bestimmte
+     * Elemente.
      */
     private final Map<Class<? extends Edge>, SimpleMetaPath> edgeClassToConditionMetaPath;
 
     /**
-     * Mappt von einer Kantenklasse auf den MetaPfad, über den verbindbare Elemente ebenfalls bereits verbunden sein SOLLTEN,
-     * aber nicht müssen.
-     * Dieser Mechanismus ist dafür gedacht, aus allen verbindbaren Elemente diejenigen herauszusuchen, die besser als andere
-     * zum Verbinden geeignet sind. Außerdem könnte man eine Warnung (aber eben keinen Fehler) erzeugen, wenn die Kante zu einem
-     * Element besteht, das nicht über einen hier beschriebenen Pfad verfügt.
+     * Mappt von einer Kantenklasse auf den MetaPfad, über den verbindbare
+     * Elemente ebenfalls bereits verbunden sein SOLLTEN, aber nicht müssen.
+     * Dieser Mechanismus ist dafür gedacht, aus allen verbindbaren Elemente
+     * diejenigen herauszusuchen, die besser als andere zum Verbinden geeignet
+     * sind. Außerdem könnte man eine Warnung (aber eben keinen Fehler)
+     * erzeugen, wenn die Kante zu einem Element besteht, das nicht über einen
+     * hier beschriebenen Pfad verfügt.
      *
      * @param edgeClass
      * @return
@@ -227,41 +261,58 @@ public final class MetaModel extends CoreMetaModel {
     private final Map<Class<? extends Edge>, MetaPath> edgeClassToSoftConditionMetaPath;
 
     /**
-     * Sammlung aller MetaPfade, die ausgehend vom Startelement dieser Kante ebenfalls angelegt werden sollen, wenn eine Instanziierung über
-     * diese Kantenklasse durchgeführt wird. <br>
-     * Jeder der Pfade muss zwingend bei derselben Klasse starten, bei der diese Kante startet.<br>
-     * Der Pfad hat nur einen Effekt, wenn seine Startklasse zur Startklasse dieser Kante zuweisungskompatibel ist und er mind. eine
-     * {@link InstanciationEdge} enthält. Der hiermit verbundene Mechanismus geht durch die Kantenklassen des Pfades. Ist die aktuelle
-     * Kantenklasse keine {@link InstanciationEdge}, dann suche von den aktuellen Elementen ausgehend (am Anfang ist das das Startelement dieser
-     * Kante) alle damit über diese Kantenart verbundenen Elemente und nimmt sie für den nächsten Schritt als Startelemente. Sobald im Pfad eine
-     * {@link InstanciationEdge} auftaucht, werden alle Elementarten und Kanten der dahinter liegenden Pfadschritte kompeltt neu erzeugt und die
-     * entstehenden Elemente immer mit den vorherigen verbunden. Wenn der Pfad mit einer Klasse endet (was er in den meisten Fällen tun wird, damit
-     * das ganze sinnvoll ist), die zuweisungskompatibel zur Endklasse dieser Kante ist (also zum durch diese Kante neu erzeugten Element), dann wird
-     * die letzte Verbindung bzw. die letzte Kante hin zum EndElementdieser Kante erzeugt und nicht nochmal ein Element der Endelementart angelegt.
-     * Damit kann man "Nebenbedingungspfade" für das Startelement gleich mit anlegen, wenn man das Startelement über diese Kante hier intsanziiert.
+     * Sammlung aller MetaPfade, die ausgehend vom Startelement dieser Kante
+     * ebenfalls angelegt werden sollen, wenn eine Instanziierung über diese
+     * Kantenklasse durchgeführt wird. <br>
+     * Jeder der Pfade muss zwingend bei derselben Klasse starten, bei der diese
+     * Kante startet.<br>
+     * Der Pfad hat nur einen Effekt, wenn seine Startklasse zur Startklasse
+     * dieser Kante zuweisungskompatibel ist und er mind. eine
+     * {@link InstanciationEdge} enthält. Der hiermit verbundene Mechanismus
+     * geht durch die Kantenklassen des Pfades. Ist die aktuelle Kantenklasse
+     * keine {@link InstanciationEdge}, dann suche von den aktuellen Elementen
+     * ausgehend (am Anfang ist das das Startelement dieser Kante) alle damit
+     * über diese Kantenart verbundenen Elemente und nimmt sie für den nächsten
+     * Schritt als Startelemente. Sobald im Pfad eine {@link InstanciationEdge}
+     * auftaucht, werden alle Elementarten und Kanten der dahinter liegenden
+     * Pfadschritte kompeltt neu erzeugt und die entstehenden Elemente immer mit
+     * den vorherigen verbunden. Wenn der Pfad mit einer Klasse endet (was er in
+     * den meisten Fällen tun wird, damit das ganze sinnvoll ist), die
+     * zuweisungskompatibel zur Endklasse dieser Kante ist (also zum durch diese
+     * Kante neu erzeugten Element), dann wird die letzte Verbindung bzw. die
+     * letzte Kante hin zum EndElementdieser Kante erzeugt und nicht nochmal ein
+     * Element der Endelementart angelegt. Damit kann man "Nebenbedingungspfade"
+     * für das Startelement gleich mit anlegen, wenn man das Startelement über
+     * diese Kante hier intsanziiert.
      */
     private final Multimap<Class<? extends InstanciationEdge>, SimpleMetaPath> instanciationEdgeToAdditionalInstanciationMetaPaths;
 
     /**
-     * Mappt von einer ElementKlasse auf eine Sammlung aller {@link SimpleMetaPath}, die man zwischen ihr und anderen Elementen anlegen kann, wobei
-     * die Zwischenelemente ebenfalls neu angelegt werden. Diese Pfade werden im Kontextmenü bei Mehrfachselektion oder Einfachselektion angeboten.
+     * Mappt von einer ElementKlasse auf eine Sammlung aller
+     * {@link SimpleMetaPath}, die man zwischen ihr und anderen Elementen
+     * anlegen kann, wobei die Zwischenelemente ebenfalls neu angelegt werden.
+     * Diese Pfade werden im Kontextmenü bei Mehrfachselektion oder
+     * Einfachselektion angeboten.
      */
     private final Multimap<Class<? extends ModelElement>, SimpleMetaPath> elementClassToCreatableMetaPaths;
 
     /**
-     * Mappt von Elementklassen, bei denen der Name verbundendener Elemente in der Grafik in Klammern unter der eigentlichen Elementart angezeigt
-     * werden soll, auf den MetaPfad zu den anzuzeigenden, verbundenen Elementen.
+     * Mappt von Elementklassen, bei denen der Name verbundendener Elemente in
+     * der Grafik in Klammern unter der eigentlichen Elementart angezeigt werden
+     * soll, auf den MetaPfad zu den anzuzeigenden, verbundenen Elementen.
      */
     private final Map<Class<? extends ModelElement>, MetaPath> elementClassToNameExtensionPath;
 
     /**
-     * Mappt von einer InferenceEdge-Klasse auf den MetaPath, aus dem diese Inference-Kante abgeleitet wird.
+     * Mappt von einer InferenceEdge-Klasse auf den MetaPath, aus dem diese
+     * Inference-Kante abgeleitet wird.
      */
     private final Map<Class<? extends InferenceEdge>, MetaPath> inferenceEdgeClassToConditionMetaPath;
 
     /**
-     * Metapaths which are used to ensure model consistency. This paths say that a model element must be connected
-     * over this SectionMetaPaths with the same elements.
+     * Metapaths which are used to ensure model consistency. This paths say that
+     * a model element must be connected over this SectionMetaPaths with the
+     * same elements.
      */
     private Collection<MissingPathErrorCheckCondition> missingPathErrorCheckConditions;
 
@@ -293,23 +344,34 @@ public final class MetaModel extends CoreMetaModel {
     /** Alle Elementklassen, die Teile über eine HasPartEdge sein können */
     private final Set<Class<? extends ModelElement>> elementClassesWithPartOfEdgeClasses;
 
-    /** Mappt von einer Elementklasse auf den Layer, auf dem diese ELementklasse liegt (wenn er eindeutig ist) */
+    /**
+     * Mappt von einer Elementklasse auf den Layer, auf dem diese ELementklasse
+     * liegt (wenn er eindeutig ist)
+     */
     private final Map<Class<? extends ModelElement>, Integer> elementClassToLayer;
 
-    /** Mappt von einer Elementklasse auf alle Kantenklassen, mit denen der Elementklasse andere Elemente untergeordnet werden können */
+    /**
+     * Mappt von einer Elementklasse auf alle Kantenklassen, mit denen der
+     * Elementklasse andere Elemente untergeordnet werden können
+     */
     private final SetMultimap<Class<? extends ModelElement>, Class<? extends Edge>> initialSubtypes;
 
-    /** Alle Elementklassen, deren Name generiert und nicht vom Nutzer eingegeben wird */
+    /**
+     * Alle Elementklassen, deren Name generiert und nicht vom Nutzer eingegeben
+     * wird
+     */
     private final Set<Class<? extends ModelElement>> generateNameClasses;
 
     /**
-     * Mappt von einer Kantenklasse auf den Pfad zu den Elementen, deren Name initial für eine neue Kante der
-     * übergebenen Klasse übernommen werden soll. Sind es mehrere, werden sie durch Komma getrennt. Ist es
-     * keines, bleibt der Standardname von {@link GraphDocument#getNextNewName(Class)} erhalten.
-     * Damit kann man z.B. einer neuen Ihe-Kommunikationsbeziehung statt 'IHE Kommunikationsbeziehung 10'
-     * den Namen der über die beiden Schnittstellen verbundenen Transaktion geben.<br>
-     * Das funktioniert im Moment nur bei Kanten, da bei Knoten zum Zeitpunkt des Festlegens des Namens der Knoten
-     * noch mit gar nichts verbunden ist.
+     * Mappt von einer Kantenklasse auf den Pfad zu den Elementen, deren Name
+     * initial für eine neue Kante der übergebenen Klasse übernommen werden
+     * soll. Sind es mehrere, werden sie durch Komma getrennt. Ist es keines,
+     * bleibt der Standardname von {@link GraphDocument#getNextNewName(Class)}
+     * erhalten. Damit kann man z.B. einer neuen Ihe-Kommunikationsbeziehung
+     * statt 'IHE Kommunikationsbeziehung 10' den Namen der über die beiden
+     * Schnittstellen verbundenen Transaktion geben.<br>
+     * Das funktioniert im Moment nur bei Kanten, da bei Knoten zum Zeitpunkt
+     * des Festlegens des Namens der Knoten noch mit gar nichts verbunden ist.
      */
     private final Map<Class<? extends Edge>, MetaPath> edgeClassToInitialCreatedNameSourcePath;
 
@@ -317,7 +379,10 @@ public final class MetaModel extends CoreMetaModel {
     // Weitere Definitionen //
     //////////////////////////
 
-    /** Beschreibung aller abhängigen Elemente, die beim Kopieren mitkopiert werden müssen */
+    /**
+     * Beschreibung aller abhängigen Elemente, die beim Kopieren mitkopiert
+     * werden müssen
+     */
     private final CopyDependencies copyDependencies;
 
     /** {@link MetaPathDefinition} des Metamodells */
@@ -329,7 +394,10 @@ public final class MetaModel extends CoreMetaModel {
     /** {@link AnalysesDefinition} des Metamodells */
     private final AnalysesDefinition analysesDefinition;
 
-    /** Actions, die für das spezielle Metamodell in das Extras-Menü eingetragen werden sollen */
+    /**
+     * Actions, die für das spezielle Metamodell in das Extras-Menü eingetragen
+     * werden sollen
+     */
     private final ExtrasActionsDefinition extrasActionsDefinition;
 
     /** {@link ModelValidatorDefinition} of this MetaModel */
@@ -412,7 +480,8 @@ public final class MetaModel extends CoreMetaModel {
     }
 
     /**
-     * Handler für das einfache und nicht redundante Anlegen von Elementar-Metapfaden für dieses MetaModel
+     * Handler für das einfache und nicht redundante Anlegen von
+     * Elementar-Metapfaden für dieses MetaModel
      *
      * @return
      */
@@ -427,9 +496,9 @@ public final class MetaModel extends CoreMetaModel {
     }
 
     /**
-     * Berechnet aus den vorher initialiserten {@link #allNodesSet} und allEdgesSet ein Set, das alle Elementklassen inklusive aller abstracten
-     * Oberklassen bis
-     * einschließlich {@link ModelElement} enthält.
+     * Berechnet aus den vorher initialiserten {@link #allNodesSet} und
+     * allEdgesSet ein Set, das alle Elementklassen inklusive aller abstracten
+     * Oberklassen bis einschließlich {@link ModelElement} enthält.
      *
      * @return
      */
@@ -452,7 +521,8 @@ public final class MetaModel extends CoreMetaModel {
     }
 
     /**
-     * @return all node classes which are the slave element of a {@link CompositionEdge}
+     * @return all node classes which are the slave element of a
+     *         {@link CompositionEdge}
      */
     private List<Class<? extends Node>> getAllCompositionSlaveNodes() {
         ImmutableList.Builder<Class<? extends Node>> compositionSlaveNodes = new ImmutableList.Builder<>();
@@ -473,8 +543,9 @@ public final class MetaModel extends CoreMetaModel {
     }
 
     /**
-     * Berechnet aus den vorher initialiserten {@link #allModelElementClassesWithSuperClasses} eine Map vom SimpleClassName und dem FullClassName
-     * jeweils auf die Klasse.
+     * Berechnet aus den vorher initialiserten
+     * {@link #allModelElementClassesWithSuperClasses} eine Map vom
+     * SimpleClassName und dem FullClassName jeweils auf die Klasse.
      *
      * @return
      */
@@ -488,9 +559,11 @@ public final class MetaModel extends CoreMetaModel {
     }
 
     /**
-     * Mappt von Elementklassen auf alle Kantenklassen, bei der die Reihenfolge von Instanzen dieser Kantenklasse für Elemente der Elementklasse eine
-     * Bedeutung haben. Elementklasse ohne wenigestens eine solche Edge werden hier nicht eingtragen. D.h. es kommt <code>null</code> zurück, wenn
-     * man nach solcher Elementklasse in der Map sucht und kein leeres Set.
+     * Mappt von Elementklassen auf alle Kantenklassen, bei der die Reihenfolge
+     * von Instanzen dieser Kantenklasse für Elemente der Elementklasse eine
+     * Bedeutung haben. Elementklasse ohne wenigestens eine solche Edge werden
+     * hier nicht eingtragen. D.h. es kommt <code>null</code> zurück, wenn man
+     * nach solcher Elementklasse in der Map sucht und kein leeres Set.
      */
     public final ImmutableSetMultimap<Class<? extends ModelElement>, Class<? extends Edge>> getElementClassToSortedEdges() {
         ImmutableSetMultimap.Builder<Class<? extends ModelElement>, Class<? extends Edge>> mapBuilder = ImmutableSetMultimap.builder();
@@ -516,7 +589,8 @@ public final class MetaModel extends CoreMetaModel {
     }
 
     /**
-     * Berechnet aus den vorher initialiserten {@link #allNodesSet} und der {@link GraphViewDefinition} ein Set, das alle Elementklassen enthält, die
+     * Berechnet aus den vorher initialiserten {@link #allNodesSet} und der
+     * {@link GraphViewDefinition} ein Set, das alle Elementklassen enthält, die
      * ein Layout brauchen.
      *
      * @return
@@ -541,9 +615,12 @@ public final class MetaModel extends CoreMetaModel {
     }
 
     /**
-     * Berechnet aus den vorher initialiserten {@link #allNodesSet} und der {@link GraphViewDefinition} ein Set, das alle Elementklassen enthält, die
-     * Kanten, bei denen die Reihenfolge relevant ist, zu anderen Elementarten hat, die selbst paintable sind. Wenn das der Fall ist, dann kann an
-     * diese anderen Elemente die Nummer(n) der Kanten geschrieben werden. In welcher Farbe das geschieht, bestimmt das Layout des Ausgangselementes.
+     * Berechnet aus den vorher initialiserten {@link #allNodesSet} und der
+     * {@link GraphViewDefinition} ein Set, das alle Elementklassen enthält, die
+     * Kanten, bei denen die Reihenfolge relevant ist, zu anderen Elementarten
+     * hat, die selbst paintable sind. Wenn das der Fall ist, dann kann an diese
+     * anderen Elemente die Nummer(n) der Kanten geschrieben werden. In welcher
+     * Farbe das geschieht, bestimmt das Layout des Ausgangselementes.
      *
      * @return
      */
@@ -566,10 +643,13 @@ public final class MetaModel extends CoreMetaModel {
     }
 
     /**
-     * Erzeugt aus der in der {@link MetaModelDefinition} angegebenen Map von den InstanciateionEdges auf die ebenfalls mitzuinstanziierenden
-     * MetaPfade die gleichartige endgültige Map, bei der die originalen Metapfade durch die Funktion
-     * {@link SimpleMetaPathCreator#getSimpleMetaPathsNonAbstract(Iterable)} in alle Metapfade umgewandelt werden, die keine abstrakten
-     * Zwischenklassen mehr enthalten und somit dann tatsächlich anlegbar sind.
+     * Erzeugt aus der in der {@link MetaModelDefinition} angegebenen Map von
+     * den InstanciateionEdges auf die ebenfalls mitzuinstanziierenden MetaPfade
+     * die gleichartige endgültige Map, bei der die originalen Metapfade durch
+     * die Funktion
+     * {@link SimpleMetaPathCreator#getSimpleMetaPathsNonAbstract(Iterable)} in
+     * alle Metapfade umgewandelt werden, die keine abstrakten Zwischenklassen
+     * mehr enthalten und somit dann tatsächlich anlegbar sind.
      *
      * @param metaModelMap
      * @return
@@ -585,8 +665,10 @@ public final class MetaModel extends CoreMetaModel {
     }
 
     /**
-     * Erzeugt aus der Sammlung aller anlegbaren Pfade die Map die von einer ElementKlasse auf eine Sammlung aller {@link SimpleMetaPath} mappt, die
-     * man zwischen ihr und anderen Elementen anlegen kann, wobei die Zwischenelemente ebenfalls neu angelegt werden. Diese Pfade werden im
+     * Erzeugt aus der Sammlung aller anlegbaren Pfade die Map die von einer
+     * ElementKlasse auf eine Sammlung aller {@link SimpleMetaPath} mappt, die
+     * man zwischen ihr und anderen Elementen anlegen kann, wobei die
+     * Zwischenelemente ebenfalls neu angelegt werden. Diese Pfade werden im
      * Kontextmenü bei Mehrfachselektion oder Einfachselektion angeboten.
      *
      * @param creatablePaths
@@ -626,8 +708,9 @@ public final class MetaModel extends CoreMetaModel {
      * Extrahiert aus den übergebenen Knoten alle, die im Baum angezeigt werden.
      *
      * @param elementClasses Elementklassen, die gefiltert werden sollen
-     * @param creatableOnly wenn <code>true</code>, werden von den anzuzeigenden Knoten nur die übrig gelassen, die man auch ohne ein anderes Element
-     *            anlegen kann
+     * @param creatableOnly wenn <code>true</code>, werden von den anzuzeigenden
+     *            Knoten nur die übrig gelassen, die man auch ohne ein anderes
+     *            Element anlegen kann
      * @return
      */
     private Set<Class<? extends ModelElement>> getTreeVisibleNodes(final Iterable<Class<? extends ModelElement>> elementClasses, final boolean creatableOnly) {
@@ -645,7 +728,8 @@ public final class MetaModel extends CoreMetaModel {
     }
 
     /**
-     * Liefert je nach angegebener Richtung ein Set aller Elementklasse, die Teile haben können oder selbst Teile sind.
+     * Liefert je nach angegebener Richtung ein Set aller Elementklasse, die
+     * Teile haben können oder selbst Teile sind.
      *
      * @param direction
      */
@@ -666,7 +750,10 @@ public final class MetaModel extends CoreMetaModel {
         return elementClassesWithPartEdges.build();
     }
 
-    /** Baut die Map zusammen, die von einer Elementklasse auf den Layer der Klasse mappt, wenn dieser eindeutig ist */
+    /**
+     * Baut die Map zusammen, die von einer Elementklasse auf den Layer der
+     * Klasse mappt, wenn dieser eindeutig ist
+     */
     private Map<Class<? extends ModelElement>, Integer> getElementClassToLayerMap() {
         Map<Class<? extends ModelElement>, Integer> map = new HashMap<>();
         for (Class<? extends ModelElement> elementClass : allDomainLayerNodesSet) {
@@ -698,8 +785,9 @@ public final class MetaModel extends CoreMetaModel {
     }
 
     /**
-     * Liefert für eine Elementklasse alle Elementklassen, die ihr untergeordnet sind (also über eine Komposition mit
-     * ihr verbunden sind, bei der sie der Master ist) und die minimale Kardinlität der Unterklassen > 0 ist.
+     * Liefert für eine Elementklasse alle Elementklassen, die ihr untergeordnet
+     * sind (also über eine Komposition mit ihr verbunden sind, bei der sie der
+     * Master ist) und die minimale Kardinlität der Unterklassen > 0 ist.
      *
      * @param elementClass
      */
@@ -717,8 +805,10 @@ public final class MetaModel extends CoreMetaModel {
     }
 
     /**
-     * Alle Knotenklassen, die in jedem Teilmodell vorkommen, also nicht in jedem Teilmodell einen eigenen Container besitzen.
-     * Das sind alle nicht-abstrakten Knotenklassen (nicht Kante), die in der GraphViewDefinition nicht als paintable eingetragen sind.
+     * Alle Knotenklassen, die in jedem Teilmodell vorkommen, also nicht in
+     * jedem Teilmodell einen eigenen Container besitzen. Das sind alle
+     * nicht-abstrakten Knotenklassen (nicht Kante), die in der
+     * GraphViewDefinition nicht als paintable eingetragen sind.
      */
     public final Set<Class<? extends Node>> getUniqueNodes() {
         ImmutableSet.Builder<Class<? extends Node>> uniqueNodes = new ImmutableSet.Builder<>();
@@ -741,10 +831,12 @@ public final class MetaModel extends CoreMetaModel {
     ////////////////////////////////////////////
 
     /**
-     * Liefert alle Elementklassen, die nur im Baum angezeigt werden sollen, wenn die Option {@link BooleanProperty#OPTION_ENABLE_EXPERT_MODE}
-     * auf <code>true</code> gestellt ist.
+     * Liefert alle Elementklassen, die nur im Baum angezeigt werden sollen,
+     * wenn die Option {@link BooleanProperty#OPTION_ENABLE_EXPERT_MODE} auf
+     * <code>true</code> gestellt ist.
      *
-     * @return alle Elementklassen, die nur im ExpertMode im Baum angezeigt werden
+     * @return alle Elementklassen, die nur im ExpertMode im Baum angezeigt
+     *         werden
      * @see MetaModelDefinition#getOnlyExpertModeVisibleNodes()
      */
     public final Set<Class<? extends ModelElement>> getOnlyExpertModeVisibleNodes() {
@@ -753,15 +845,16 @@ public final class MetaModel extends CoreMetaModel {
 
     /**
      * @param elementClass
-     * @return <code>true</code>if this element class is a class that should be only
-     *         visible in expert mode
+     * @return <code>true</code>if this element class is a class that should be
+     *         only visible in expert mode
      */
     public final boolean isOnlyExpertModeVisibleElementClass(final Class<? extends ModelElement> elementClass) {
         return onlyExpertModeVisibleNodes.contains(elementClass);
     }
 
     /**
-     * @return all element classes which can be only inserted in a model by copiing from a template
+     * @return all element classes which can be only inserted in a model by
+     *         copiing from a template
      */
     public final Set<Class<? extends ModelElement>> getPureTemplateElementClasses() {
         return pureTemplateElementClasses;
@@ -769,8 +862,8 @@ public final class MetaModel extends CoreMetaModel {
 
     /**
      * @param elementClass
-     * @return <code>true</code>if this element class is a class that can be only added
-     *         via en template to a model
+     * @return <code>true</code>if this element class is a class that can be
+     *         only added via en template to a model
      */
     public final boolean isPureTemplateElementClass(final Class<? extends ModelElement> elementClass) {
         if (Edge.class.isAssignableFrom(elementClass)) {
@@ -789,10 +882,13 @@ public final class MetaModel extends CoreMetaModel {
     }
 
     /**
-     * Liefert <code>true</code>, wenn die Klasse nicht angezeigt werden soll, also wenn die Option {@link BooleanProperty#OPTION_ENABLE_EXPERT_MODE}
-     * auf <code>false</code> gestellt ist und die Klasse nur im Expert-Mode angezeigt werden soll.
+     * Liefert <code>true</code>, wenn die Klasse nicht angezeigt werden soll,
+     * also wenn die Option {@link BooleanProperty#OPTION_ENABLE_EXPERT_MODE}
+     * auf <code>false</code> gestellt ist und die Klasse nur im Expert-Mode
+     * angezeigt werden soll.
      *
-     * @return <code>true</code>, wenn die Klasse gerade nicht sichtbar sein soll
+     * @return <code>true</code>, wenn die Klasse gerade nicht sichtbar sein
+     *         soll
      * @see #getOnlyExpertModeVisibleNodes()
      */
     public final boolean isHiddenClass(final Class<? extends ModelElement> elementClass) {
@@ -815,11 +911,13 @@ public final class MetaModel extends CoreMetaModel {
     }
 
     /**
-     * Liefert <code>true</code>, wenn alle übergebenen Klassen aktuell editierbar sind. Das sind sie,
-     * wenn sich das Tool im ExpertMode befindet oder wenn es sich nicht im ExpertMode befindet
-     * und die Klasse keine Klasse aus den {@link #getPureTemplateSourceNodes()} ist. Ist eine
-     * übergebene Klasse eine Kantenklasse, so muss diese Funktion für beide Endklassen ebenfalls
-     * <code>true</code> liefern, damit die Kantenklassen als editable gilt.
+     * Liefert <code>true</code>, wenn alle übergebenen Klassen aktuell
+     * editierbar sind. Das sind sie, wenn sich das Tool im ExpertMode befindet
+     * oder wenn es sich nicht im ExpertMode befindet und die Klasse keine
+     * Klasse aus den {@link #getPureTemplateSourceNodes()} ist. Ist eine
+     * übergebene Klasse eine Kantenklasse, so muss diese Funktion für beide
+     * Endklassen ebenfalls <code>true</code> liefern, damit die Kantenklassen
+     * als editable gilt.
      *
      * @param elementClasses
      * @return
@@ -831,12 +929,14 @@ public final class MetaModel extends CoreMetaModel {
     }
 
     /**
-     * Liefert <code>true</code>, wenn alle übergebenen Klassen aktuell editierbar sind. Das sind sie,
-     * wenn sich das Tool im ExpertMode befindet oder wenn es sich nicht im ExpertMode befindet
-     * und die Klasse keine Klasse aus den {@link #getPureTemplateSourceNodes()} ist. Ist eine
-     * übergebene Klasse eine Kantenklasse, so muss diese Funktion für eine der beiden Endklassen
-     * ebenfalls <code>true</code> liefern, damit die Kantenklassen als editable gilt. Sind beide
-     * Endklassen Templateklassen, dann ist sie nicht editable.
+     * Liefert <code>true</code>, wenn alle übergebenen Klassen aktuell
+     * editierbar sind. Das sind sie, wenn sich das Tool im ExpertMode befindet
+     * oder wenn es sich nicht im ExpertMode befindet und die Klasse keine
+     * Klasse aus den {@link #getPureTemplateSourceNodes()} ist. Ist eine
+     * übergebene Klasse eine Kantenklasse, so muss diese Funktion für eine der
+     * beiden Endklassen ebenfalls <code>true</code> liefern, damit die
+     * Kantenklassen als editable gilt. Sind beide Endklassen Templateklassen,
+     * dann ist sie nicht editable.
      *
      * @param elementClasses
      * @return
@@ -853,12 +953,13 @@ public final class MetaModel extends CoreMetaModel {
     }
 
     /**
-     * Liefert <code>true</code>, wenn die übergebene Klasse aktuell editierbar ist. Das ist sie,
-     * wenn sich das Tool im ExpertMode befindet oder wenn es sich nicht im ExpertMode befindet
-     * und die Klasse keine Klasse aus den {@link #getPureTemplateSourceNodes()} ist. Ist die
-     * übergebene Klasse eine Kantenklasse, so muss diese Funktion für eine der beiden Endklassen
-     * ebenfalls <code>true</code> liefern, damit die Kantenklassen als editable gilt. Sind beide
-     * Endklassen Templateklassen, dann ist sie nicht editable.
+     * Liefert <code>true</code>, wenn die übergebene Klasse aktuell editierbar
+     * ist. Das ist sie, wenn sich das Tool im ExpertMode befindet oder wenn es
+     * sich nicht im ExpertMode befindet und die Klasse keine Klasse aus den
+     * {@link #getPureTemplateSourceNodes()} ist. Ist die übergebene Klasse eine
+     * Kantenklasse, so muss diese Funktion für eine der beiden Endklassen
+     * ebenfalls <code>true</code> liefern, damit die Kantenklassen als editable
+     * gilt. Sind beide Endklassen Templateklassen, dann ist sie nicht editable.
      *
      * @param elementClass
      * @return
@@ -883,12 +984,14 @@ public final class MetaModel extends CoreMetaModel {
     }
 
     /**
-     * Prüft, ob die ein Element der übergebenen Art erzeugt werden kann, ohne gegen die Konsistenzregeln zu verstoßen,
-     * wenn gleichzeitig die übergebenen Kanten hin zu diesem Element angelegt werden. Die Kanten und deren Richtung
-     * stecken in den Elementarmetapfaden.
+     * Prüft, ob die ein Element der übergebenen Art erzeugt werden kann, ohne
+     * gegen die Konsistenzregeln zu verstoßen, wenn gleichzeitig die
+     * übergebenen Kanten hin zu diesem Element angelegt werden. Die Kanten und
+     * deren Richtung stecken in den Elementarmetapfaden.
      *
      * @param elementClass
-     * @return <code>true</code> wenn ein Element der angegebene Art ohne Konsistenzverletzung angelegt werden kann, sonst
+     * @return <code>true</code> wenn ein Element der angegebene Art ohne
+     *         Konsistenzverletzung angelegt werden kann, sonst
      *         <code>false</code>
      */
     public boolean isCreatable(final Class<? extends ModelElement> elementClass) {
@@ -896,16 +999,19 @@ public final class MetaModel extends CoreMetaModel {
     }
 
     /**
-     * Prüft, ob die ein Element der übergebenen Art erzeugt werden kann, ohne gegen die Konsistenzregeln zu verstoßen,
-     * wenn gleichzeitig die übergebenen Kanten hin zu diesem Element angelegt werden. Die Kanten und deren Richtung
-     * stecken in den Elementarmetapfaden.<br>
-     * Ist die übergebene Elementklasse selbst eine Kantenklasse, so wird ebenfalls gepüft, ob die Elementklassen, die
-     * sie verbindet, überhaupt editable sind.
+     * Prüft, ob die ein Element der übergebenen Art erzeugt werden kann, ohne
+     * gegen die Konsistenzregeln zu verstoßen, wenn gleichzeitig die
+     * übergebenen Kanten hin zu diesem Element angelegt werden. Die Kanten und
+     * deren Richtung stecken in den Elementarmetapfaden.<br>
+     * Ist die übergebene Elementklasse selbst eine Kantenklasse, so wird
+     * ebenfalls gepüft, ob die Elementklassen, die sie verbindet, überhaupt
+     * editable sind.
      *
      * @param elementClass
      * @param toElement
      * @param fromElement
-     * @return <code>true</code> wenn ein Element der angegebene Art ohne Konsistenzverletzung angelegt werden kann, sonst
+     * @return <code>true</code> wenn ein Element der angegebene Art ohne
+     *         Konsistenzverletzung angelegt werden kann, sonst
      *         <code>false</code>
      */
     public boolean isCreatable(final Class<? extends ModelElement> elementClass, final ElementaryMetaPath toElement, final ElementaryMetaPath fromElement) {
@@ -941,14 +1047,16 @@ public final class MetaModel extends CoreMetaModel {
     }
 
     /**
-     * Prüft, ob die übergebene Kantenklasse in der angegebenen Richtung in den übergebenen Elemetarpfaden steckt. Die Kantenklasse
-     * wird hier auf Identität geprüft und nicht auf Zuweisungskompatibilität.
+     * Prüft, ob die übergebene Kantenklasse in der angegebenen Richtung in den
+     * übergebenen Elemetarpfaden steckt. Die Kantenklasse wird hier auf
+     * Identität geprüft und nicht auf Zuweisungskompatibilität.
      *
      * @param edgeClass
      * @param directionToElement
      * @param toElement
      * @param fromElement
-     * @return <code>true</code>, wenn die Kantenklasse mit Richtung in den Elementarpfaden vokommt, sonst <code>false</code>
+     * @return <code>true</code>, wenn die Kantenklasse mit Richtung in den
+     *         Elementarpfaden vokommt, sonst <code>false</code>
      */
     private boolean metaPathsContainEdge(final Class<? extends Edge> edgeClass, final Direction directionToElement, final ElementaryMetaPath toElement, final ElementaryMetaPath fromElement) {
         ElementaryMetaPath[] createdElemebtaryMetaPathsToElement = {
@@ -968,8 +1076,10 @@ public final class MetaModel extends CoreMetaModel {
     }
 
     /**
-     * Liefert <code>true</code>, wenn ein Panel mit diesem Pfad angezeigt werden soll. Ob es angezeigt werden soll entscheidet sich anhand der
-     * Zielklasse des Pfades. Ist diese nur im Expert-Mode anzuzeigen, der Modeus aber nicht an, dann sollte ein Panel mit diesem MetaPath nicht
+     * Liefert <code>true</code>, wenn ein Panel mit diesem Pfad angezeigt
+     * werden soll. Ob es angezeigt werden soll entscheidet sich anhand der
+     * Zielklasse des Pfades. Ist diese nur im Expert-Mode anzuzeigen, der
+     * Modeus aber nicht an, dann sollte ein Panel mit diesem MetaPath nicht
      * angezeigt werden.
      *
      * @param metaPath
@@ -992,9 +1102,12 @@ public final class MetaModel extends CoreMetaModel {
     ///////////////////////////////////
 
     /**
-     * Liefert ein Set aller Kantenklassen, die für die übergebene Elementklasse "geordnet sind", d. h. dass für Elemente der übergebenen Klasse die
-     * Reihenfolge der Instanzen der zurück gelieferten Kantenklassen in ihrem Kantenvektor eine Bedeutung hat
-     * (z. B. Reihenfolge von Aufgaben in einem Prozess -> Verbindung zwischen Prozessen und Aufgaben sind für den Prozess geordnet).
+     * Liefert ein Set aller Kantenklassen, die für die übergebene Elementklasse
+     * "geordnet sind", d. h. dass für Elemente der übergebenen Klasse die
+     * Reihenfolge der Instanzen der zurück gelieferten Kantenklassen in ihrem
+     * Kantenvektor eine Bedeutung hat (z. B. Reihenfolge von Aufgaben in einem
+     * Prozess -> Verbindung zwischen Prozessen und Aufgaben sind für den
+     * Prozess geordnet).
      *
      * @param elementClass
      */
@@ -1003,7 +1116,8 @@ public final class MetaModel extends CoreMetaModel {
     }
 
     /**
-     * Liefert <code>true</code>, wenn die übergebene Elementklasse in der Grafik als Knoten oder Kante gezeichnet wird.
+     * Liefert <code>true</code>, wenn die übergebene Elementklasse in der
+     * Grafik als Knoten oder Kante gezeichnet wird.
      *
      * @param elementClass
      * @return
@@ -1013,9 +1127,10 @@ public final class MetaModel extends CoreMetaModel {
     }
 
     /**
-     * Liefert <code>true</code>, wenn die übergebene Elementklasse ein Layout besitzt (und damit nicht unique ist).
-     * Das trifft auf alle Elemenklassen zu, die paintable sind oder ihre Kantennummern an paintable-Elemente schreiben.
-     * Außerdem brauchen die Layer-Knoten ein Layout.
+     * Liefert <code>true</code>, wenn die übergebene Elementklasse ein Layout
+     * besitzt (und damit nicht unique ist). Das trifft auf alle Elemenklassen
+     * zu, die paintable sind oder ihre Kantennummern an paintable-Elemente
+     * schreiben. Außerdem brauchen die Layer-Knoten ein Layout.
      *
      * @param elementClass
      * @return
@@ -1025,9 +1140,11 @@ public final class MetaModel extends CoreMetaModel {
     }
 
     /**
-     * Liefert <code>true</code>, wenn die übergebene Klasse Kanten bei denen die Reihenfolge relevant ist, zu anderen Elementarten hat, die selbst
-     * paintable sind. Wenn das der Fall ist, dann kann an diese anderen Elemente die Nummer(n) der Kanten geschrieben werden. In welcher Farbe das
-     * geschieht, bestimmt das Layout des Ausgangselementes.
+     * Liefert <code>true</code>, wenn die übergebene Klasse Kanten bei denen
+     * die Reihenfolge relevant ist, zu anderen Elementarten hat, die selbst
+     * paintable sind. Wenn das der Fall ist, dann kann an diese anderen
+     * Elemente die Nummer(n) der Kanten geschrieben werden. In welcher Farbe
+     * das geschieht, bestimmt das Layout des Ausgangselementes.
      *
      * @return
      */
@@ -1057,9 +1174,12 @@ public final class MetaModel extends CoreMetaModel {
     //    private static final boolean DEBUG = true;
 
     /**
-     * Prüft, ob Kante gerichtet ist. Das ist sie, wenn sie nicht dieselben Elementarten verbindet oder in beide Richtungen einen unterschiedlichen
-     * Anzeigenamen hat oder eine doppelte Bedeutung hat. Im originalen Metamodell heißen die KommBeziehungen in beide Richtungen gleich, haben
-     * aber eine doppelte Bedeutung und sollen somit gerichtet dargestellt werden.
+     * Prüft, ob Kante gerichtet ist. Das ist sie, wenn sie nicht dieselben
+     * Elementarten verbindet oder in beide Richtungen einen unterschiedlichen
+     * Anzeigenamen hat oder eine doppelte Bedeutung hat. Im originalen
+     * Metamodell heißen die KommBeziehungen in beide Richtungen gleich, haben
+     * aber eine doppelte Bedeutung und sollen somit gerichtet dargestellt
+     * werden.
      *
      * @param edgeClass
      * @return
@@ -1083,8 +1203,10 @@ public final class MetaModel extends CoreMetaModel {
     }
 
     /**
-     * Liefert für die übergebene Kantenklasse den MetaPfad, über den die verbindbaren Elemente ebenfalls bereits verbunden sein müssen.
-     * Dieser Mechanismus ist dafür gedacht, verbindbare Elemente einzuschränken auf bestimmte Elemente.
+     * Liefert für die übergebene Kantenklasse den MetaPfad, über den die
+     * verbindbaren Elemente ebenfalls bereits verbunden sein müssen. Dieser
+     * Mechanismus ist dafür gedacht, verbindbare Elemente einzuschränken auf
+     * bestimmte Elemente.
      *
      * @param edgeClass
      * @return
@@ -1094,11 +1216,13 @@ public final class MetaModel extends CoreMetaModel {
     }
 
     /**
-     * Liefert für die übergebene Kantenklasse den MetaPfad, über den verbindbare Elemente ebenfalls bereits verbunden sein SOLLTEN,
-     * aber nicht müssen.
-     * Dieser Mechanismus ist dafür gedacht, aus allen verbindbaren Elemente diejenigen herauszusuchen, die besser als andere
-     * zum Verbinden geeignet sind. Außerdem könnte man eine Warnung (aber eben keinen Fehler) erzeugen, wenn die Kante zu einem
-     * Element besteht, das nicht über einen hier beschriebenen Pfad verfügt.
+     * Liefert für die übergebene Kantenklasse den MetaPfad, über den
+     * verbindbare Elemente ebenfalls bereits verbunden sein SOLLTEN, aber nicht
+     * müssen. Dieser Mechanismus ist dafür gedacht, aus allen verbindbaren
+     * Elemente diejenigen herauszusuchen, die besser als andere zum Verbinden
+     * geeignet sind. Außerdem könnte man eine Warnung (aber eben keinen Fehler)
+     * erzeugen, wenn die Kante zu einem Element besteht, das nicht über einen
+     * hier beschriebenen Pfad verfügt.
      *
      * @param edgeClass
      * @return
@@ -1133,7 +1257,8 @@ public final class MetaModel extends CoreMetaModel {
     }
 
     /**
-     * Sammlung aller Pfade, die ausgehend vom Startelement dieser Kante ebenfalls angelegt werden sollen, wenn eine Instanziierung über diese
+     * Sammlung aller Pfade, die ausgehend vom Startelement dieser Kante
+     * ebenfalls angelegt werden sollen, wenn eine Instanziierung über diese
      * Kantenklasse durchgeführt wird.
      *
      * @param instanciationEdgeClass
@@ -1150,8 +1275,10 @@ public final class MetaModel extends CoreMetaModel {
     ///////////////////////////////////////////////////////////////////
 
     /**
-     * Liefert aus der <code>HashMap oldToNewName</code> den aktuellen Klassennamen für den übergebenen alten Klassennamen. <br>
-     * Ist in <code>oldToNewName</code> kein Eintrag für den übergebenen alten Klassennamen vorhanden, wird davon ausgegangen, dass der alte Name der
+     * Liefert aus der <code>HashMap oldToNewName</code> den aktuellen
+     * Klassennamen für den übergebenen alten Klassennamen. <br>
+     * Ist in <code>oldToNewName</code> kein Eintrag für den übergebenen alten
+     * Klassennamen vorhanden, wird davon ausgegangen, dass der alte Name der
      * aktuelle ist.
      *
      * @param oldName
@@ -1195,8 +1322,9 @@ public final class MetaModel extends CoreMetaModel {
     }
 
     /**
-     * Liefert alle nichtabstrakten, zu den übergebenen Klassen zuweisungskompatiblen Element- oder Kantenklassen. Die übergebene Klasse selbst ist in
-     * den Rückgabewerten enthalten, wenn sie nichtabstract ist.
+     * Liefert alle nichtabstrakten, zu den übergebenen Klassen
+     * zuweisungskompatiblen Element- oder Kantenklassen. Die übergebene Klasse
+     * selbst ist in den Rückgabewerten enthalten, wenn sie nichtabstract ist.
      *
      * @param elementClass
      * @return
@@ -1211,8 +1339,9 @@ public final class MetaModel extends CoreMetaModel {
     }
 
     /**
-     * Liefert alle nichtabstrakten, zur übergebenen Klasse zuweisungskompatiblen Element- oder Kantenklassen. Die übergebene Klasse selbst ist in den
-     * Rückgabewerten enthalten, wenn sie nichtabstract ist.
+     * Liefert alle nichtabstrakten, zur übergebenen Klasse
+     * zuweisungskompatiblen Element- oder Kantenklassen. Die übergebene Klasse
+     * selbst ist in den Rückgabewerten enthalten, wenn sie nichtabstract ist.
      *
      * @param elementClass
      * @return
@@ -1222,13 +1351,15 @@ public final class MetaModel extends CoreMetaModel {
     }
 
     /**
-     * Liefert alle nichtabstrakten, zur übergebenen Klasse zuweisungskompatiblen Element- oder Kantenklassen. Die übergebene Klasse selbst ist in den
-     * Rückgabewerten enthalten, wenn sie nichtabstract ist.
+     * Liefert alle nichtabstrakten, zur übergebenen Klasse
+     * zuweisungskompatiblen Element- oder Kantenklassen. Die übergebene Klasse
+     * selbst ist in den Rückgabewerten enthalten, wenn sie nichtabstract ist.
      *
      * @param elementClass
-     * @param withoutSubClassesOfInstanciableClasses
-     *            If <code>true</code> only instanciable superclasses are contained. If <code>false</code> all instaciable
-     *            classes (including subclasses of already contained other instanciable classes are contained.
+     * @param withoutSubClassesOfInstanciableClasses If <code>true</code> only
+     *            instanciable superclasses are contained. If <code>false</code>
+     *            all instaciable classes (including subclasses of already
+     *            contained other instanciable classes are contained.
      * @return
      */
     public final Collection<Class<? extends ModelElement>> getInstanciableAssignableClasses(final Class<? extends ModelElement> elementClass, final boolean withoutSubClassesOfInstanciableClasses) {
@@ -1258,7 +1389,8 @@ public final class MetaModel extends CoreMetaModel {
     }
 
     /**
-     * Liefert für eine Elementklasse alle Kantenklassen dieser Klasse zu anderen Elementklassen
+     * Liefert für eine Elementklasse alle Kantenklassen dieser Klasse zu
+     * anderen Elementklassen
      *
      * @param elementClass
      * @return
@@ -1288,7 +1420,8 @@ public final class MetaModel extends CoreMetaModel {
     }
 
     /**
-     * Liefert <code>true</code>, wenn die übergebene Elementklasse die übergebene Kantenart hat. Es wird Zuweisungskompatibilität gerpüft.
+     * Liefert <code>true</code>, wenn die übergebene Elementklasse die
+     * übergebene Kantenart hat. Es wird Zuweisungskompatibilität gerpüft.
      *
      * @param elementClass
      * @param edgeClass
@@ -1305,7 +1438,8 @@ public final class MetaModel extends CoreMetaModel {
     }
 
     /**
-     * Liefert ein Array aller Kantenklassen, die zwischen den beiden übergebenen Elementklassen existieren können. Gibt es keine Kantenklasse
+     * Liefert ein Array aller Kantenklassen, die zwischen den beiden
+     * übergebenen Elementklassen existieren können. Gibt es keine Kantenklasse
      * zwischen den Elementen so kommt ein leeres Array (length==0) zurück.
      *
      * @param elementClass1
@@ -1317,12 +1451,14 @@ public final class MetaModel extends CoreMetaModel {
     }
 
     /**
-     * Liefert ein Array aller Kantenklassen, die zwischen den beiden übergebenen Elementklassen existieren können. Gibt es keine Kantenklasse
+     * Liefert ein Array aller Kantenklassen, die zwischen den beiden
+     * übergebenen Elementklassen existieren können. Gibt es keine Kantenklasse
      * zwischen den Elementen so kommt ein leeres Array (length==0) zurück.
      *
      * @param elementClass1
      * @param elementClass2
-     * @param edgeSuperClass Oberklasse der zu findenden Kantenklasse. Damit kann man filtern
+     * @param edgeSuperClass Oberklasse der zu findenden Kantenklasse. Damit
+     *            kann man filtern
      * @return
      */
     @SuppressWarnings("unchecked")
@@ -1355,8 +1491,9 @@ public final class MetaModel extends CoreMetaModel {
     }
 
     /**
-     * Liefert für eine Elementklasse alle Kantenklassen, die eine Unterklasse von {@link SubordinationEdge} sind
-     * und bei der die Elementklasse das Super-Element ist.
+     * Liefert für eine Elementklasse alle Kantenklassen, die eine Unterklasse
+     * von {@link SubordinationEdge} sind und bei der die Elementklasse das
+     * Super-Element ist.
      *
      * @param elementClass
      * @return
@@ -1366,8 +1503,9 @@ public final class MetaModel extends CoreMetaModel {
     }
 
     /**
-     * Liefert für eine Elementklasse alle Kantenklassen, die eine Unterklasse von {@link SubordinationEdge} sind
-     * und bei der die Elementklasse jedas Sub-Element ist.
+     * Liefert für eine Elementklasse alle Kantenklassen, die eine Unterklasse
+     * von {@link SubordinationEdge} sind und bei der die Elementklasse jedas
+     * Sub-Element ist.
      *
      * @param elementClass
      * @return
@@ -1377,8 +1515,9 @@ public final class MetaModel extends CoreMetaModel {
     }
 
     /**
-     * Liefert für eine Elementklasse alle Kantenklassen, die eine Unterklasse von {@link SubordinationEdge} sind
-     * und bei der die Elementklasse das Super-Element ist.
+     * Liefert für eine Elementklasse alle Kantenklassen, die eine Unterklasse
+     * von {@link SubordinationEdge} sind und bei der die Elementklasse das
+     * Super-Element ist.
      *
      * @param <T>
      * @param elementClass
@@ -1390,8 +1529,9 @@ public final class MetaModel extends CoreMetaModel {
     }
 
     /**
-     * Liefert für eine Elementklasse alle Kantenklassen, die eine Unterklasse von {@link SubordinationEdge} sind
-     * und bei der die Elementklasse jedas Sub-Element ist.
+     * Liefert für eine Elementklasse alle Kantenklassen, die eine Unterklasse
+     * von {@link SubordinationEdge} sind und bei der die Elementklasse jedas
+     * Sub-Element ist.
      *
      * @param <T>
      * @param elementClass
@@ -1403,8 +1543,9 @@ public final class MetaModel extends CoreMetaModel {
     }
 
     /**
-     * Liefert für eine Elementklasse alle Kantenklassen, die eine Unterklasse von {@link SubordinationEdge} sind
-     * und bei der die Elementklasse je nach übergebenem boolean Parameter entweder das Sub- (false) oder das
+     * Liefert für eine Elementklasse alle Kantenklassen, die eine Unterklasse
+     * von {@link SubordinationEdge} sind und bei der die Elementklasse je nach
+     * übergebenem boolean Parameter entweder das Sub- (false) oder das
      * Super-Element (true) ist.
      *
      * @param <T>
@@ -1428,8 +1569,9 @@ public final class MetaModel extends CoreMetaModel {
     }
 
     /**
-     * @return a set of all node classes which are the subordiated element of a {@link CompositionEdge}.
-     *         The order is the same as the composition edges were found in the definition.
+     * @return a set of all node classes which are the subordiated element of a
+     *         {@link CompositionEdge}. The order is the same as the composition
+     *         edges were found in the definition.
      */
     public List<Class<? extends Node>> getCompositionSlaveNodes() {
         return compositionSlaveNodes;
@@ -1453,20 +1595,24 @@ public final class MetaModel extends CoreMetaModel {
     }
 
     /**
-     * Returns <code>true</code>, if the parameter {@code elementClass} is a node class that should be insertet in every submodel automatically or is
-     * an edge class that connects 2 unique node classes. Elements of unique classes have only one {@link ElementContainer} in the main
-     * {@link GraphDocument} of the {@link GDCollection} that is presented in every submodel ({@link Szenario}) and this elements have no graphical
-     * representation. Not unique elements have always a graphical representation and are only inserted in a submodel if the user inserts them
-     * manually.
+     * Returns <code>true</code>, if the parameter {@code elementClass} is a
+     * node class that should be insertet in every submodel automatically or is
+     * an edge class that connects 2 unique node classes. Elements of unique
+     * classes have only one {@link ElementContainer} in the main
+     * {@link GraphDocument} of the {@link GDCollection} that is presented in
+     * every submodel ({@link Szenario}) and this elements have no graphical
+     * representation. Not unique elements have always a graphical
+     * representation and are only inserted in a submodel if the user inserts
+     * them manually.
      *
-     * @param elementClass
-     *            the element class that should be checked as unique
-     * @param modelCategory
-     *            The {@link ModelCategory#TEMPLATE} has no unique elements and returns alsways <code>false</code>. In the
-     *            {@link ModelCategory#REGULAR} only elements that are not visible in a graph view return <code>false</code>.
-     * @return
-     *         <code>true</code> if the element type is unique (only 1 element container in the whole model and no graphical representation for this
-     *         element) otherwise <code>false</code>
+     * @param elementClass the element class that should be checked as unique
+     * @param modelCategory The {@link ModelCategory#TEMPLATE} has no unique
+     *            elements and returns alsways <code>false</code>. In the
+     *            {@link ModelCategory#REGULAR} only elements that are not
+     *            visible in a graph view return <code>false</code>.
+     * @return <code>true</code> if the element type is unique (only 1 element
+     *         container in the whole model and no graphical representation for
+     *         this element) otherwise <code>false</code>
      */
     public final boolean isUnique(final Class<?> elementClass, final ModelCategory modelCategory) {
         //in template models every element type is not unique
@@ -1481,8 +1627,9 @@ public final class MetaModel extends CoreMetaModel {
     }
 
     /**
-     * Liefert <code>true</code>, wenn die übergebene Kantenklasse selbst Assoziationen zu anderen Elementen haben kann - also eine Assoziationsklasse
-     * ist.
+     * Liefert <code>true</code>, wenn die übergebene Kantenklasse selbst
+     * Assoziationen zu anderen Elementen haben kann - also eine
+     * Assoziationsklasse ist.
      *
      * @param elementClass
      * @return
@@ -1496,7 +1643,8 @@ public final class MetaModel extends CoreMetaModel {
     }
 
     /**
-     * Liefert <code>true</code>, wenn die übergebene Klasse Startklasse eines Interebenenmetapfades ist.
+     * Liefert <code>true</code>, wenn die übergebene Klasse Startklasse eines
+     * Interebenenmetapfades ist.
      *
      * @param me
      * @return
@@ -1510,7 +1658,8 @@ public final class MetaModel extends CoreMetaModel {
     /////////////////////////////////
 
     /**
-     * Gibt die Klasse zu einem Klassennamen zurück. Der Klassenname kann voll qualifiziert sein oder aber nur aus dem simplen Klassenamen bestehen.
+     * Gibt die Klasse zu einem Klassennamen zurück. Der Klassenname kann voll
+     * qualifiziert sein oder aber nur aus dem simplen Klassenamen bestehen.
      *
      * @param classname String mit der Klassenbezeichnung
      * @return Class
@@ -1532,7 +1681,8 @@ public final class MetaModel extends CoreMetaModel {
     }
 
     /**
-     * Checks if this edge class is the end element can be the start element of such a HasPartEdge.
+     * Checks if this edge class is the end element can be the start element of
+     * such a HasPartEdge.
      *
      * @param edgeClass
      * @return
@@ -1542,7 +1692,8 @@ public final class MetaModel extends CoreMetaModel {
     }
 
     /**
-     * Checks if this edge class is the end element can be the start element of such a HasPartEdge.
+     * Checks if this edge class is the end element can be the start element of
+     * such a HasPartEdge.
      *
      * @param edgeClass
      * @return
@@ -1552,12 +1703,13 @@ public final class MetaModel extends CoreMetaModel {
     }
 
     /**
-     * Checks if this edge superclass is assignable from the edgeClass and the end element can be
-     * the start element of such a edge.
+     * Checks if this edge superclass is assignable from the edgeClass and the
+     * end element can be the start element of such a edge.
      *
      * @param edgeSuperClass
      * @param edgeClass
-     * @return <code>true</code> if the edge class has the edge superclass and is recursive
+     * @return <code>true</code> if the edge class has the edge superclass and
+     *         is recursive
      */
     private boolean isRecursiveForEndElement(final Class<? extends Edge> edgeSuperClass, final Class<? extends Edge> edgeClass) {
         if (!edgeSuperClass.isAssignableFrom(edgeClass)) {
@@ -1568,11 +1720,13 @@ public final class MetaModel extends CoreMetaModel {
     }
 
     /**
-     * Checks, if the given element class can be the start and end class of the egde class.
+     * Checks, if the given element class can be the start and end class of the
+     * egde class.
      *
      * @param edgeClass
      * @param elementClass
-     * @return <code>true</code>, if the given element class can be the start and end class of the egde class otherwise <code>false</code>.
+     * @return <code>true</code>, if the given element class can be the start
+     *         and end class of the egde class otherwise <code>false</code>.
      */
     public boolean isRecursiveForElementClass(final Class<? extends Edge> edgeClass, final Class<? extends ModelElement> elementClass) {
         return isStartClass(edgeClass, elementClass) && isEndClass(edgeClass, elementClass);
@@ -1581,7 +1735,8 @@ public final class MetaModel extends CoreMetaModel {
     /*******************/
 
     /**
-     * Liefert den Layer der Kante, wenn die Kante die übergebenen Klassen verbindet
+     * Liefert den Layer der Kante, wenn die Kante die übergebenen Klassen
+     * verbindet
      *
      * @param edgeStartClass
      * @param edgeEndClass
@@ -1592,9 +1747,11 @@ public final class MetaModel extends CoreMetaModel {
     }
 
     /**
-     * Liefert den Layer der Kante, wenn die Kante die übergebenen Klassen verbindet
+     * Liefert den Layer der Kante, wenn die Kante die übergebenen Klassen
+     * verbindet
      *
-     * @param map Map mit den Einträgen der Layerwerte alle Elementklassen, die keine Kante sind
+     * @param map Map mit den Einträgen der Layerwerte alle Elementklassen, die
+     *            keine Kante sind
      * @param edgeStartClass
      * @param edgeEndClass
      * @return
@@ -1636,14 +1793,19 @@ public final class MetaModel extends CoreMetaModel {
     }
 
     /**
-     * Liefert ein Array aller Kantenklassen, durch die die übergebene Elementart einer anderen untergeordnet (<code>isMaster==false</code>) oder
-     * übergeordnet (<code>isMaster==true</code>) wird. Dies sind alle Kantenklasse, die Kompositionen sind und bei
-     * denen mindestens eine Endklasse (bei <code>isMaster==false</code>) oder eine Startklasse (bei <code>isMaster==true</code>) zuweisungskompatibel
-     * zur übergebenen Elementklasse ist.
+     * Liefert ein Array aller Kantenklassen, durch die die übergebene
+     * Elementart einer anderen untergeordnet (<code>isMaster==false</code>)
+     * oder übergeordnet (<code>isMaster==true</code>) wird. Dies sind alle
+     * Kantenklasse, die Kompositionen sind und bei denen mindestens eine
+     * Endklasse (bei <code>isMaster==false</code>) oder eine Startklasse (bei
+     * <code>isMaster==true</code>) zuweisungskompatibel zur übergebenen
+     * Elementklasse ist.
      *
      * @param elementClass
-     * @param isMaster wenn <code>true</code> soll die übergebene Elementart die übergeordnete sein, sonst die untergeordnete
-     * @return Array von Kantenklassen, die die übergebene Elementart unterordnen
+     * @param isMaster wenn <code>true</code> soll die übergebene Elementart die
+     *            übergeordnete sein, sonst die untergeordnete
+     * @return Array von Kantenklassen, die die übergebene Elementart
+     *         unterordnen
      */
     @SuppressWarnings("unchecked")
     private Class<? extends CompositionEdge>[] getCompositionEdgeTypes(final Class<? extends ModelElement> elementClass, final boolean isMaster) {
@@ -1678,9 +1840,10 @@ public final class MetaModel extends CoreMetaModel {
     //    }
 
     /**
-     * Liefert ein Array aller Kantenklassen, durch die die übergebene Elementart einer anderen übergeordnet wird. Dies sind alle Kantenklasse, die
-     * Kompositionen sind und bei denen mindestens eine Startklasse zuweisungskompatibel zur übergebenen
-     * Elementklasse ist.
+     * Liefert ein Array aller Kantenklassen, durch die die übergebene
+     * Elementart einer anderen übergeordnet wird. Dies sind alle Kantenklasse,
+     * die Kompositionen sind und bei denen mindestens eine Startklasse
+     * zuweisungskompatibel zur übergebenen Elementklasse ist.
      *
      * @param elementClass
      * @return Array von Kantenklassen, die die übergebene Elementart überordnen
@@ -1690,22 +1853,26 @@ public final class MetaModel extends CoreMetaModel {
     }
 
     /**
-     * Liefert ein Array aller Kantenklassen, durch die die übergebene Elementart einer anderen untergeordnet wird. Dies sind alle Kantenklasse, die
-     * Kompositionen sind und bei denen mindestens eine Endklasse zuweisungskompatibel zur übergebenen
-     * Elementklasse ist.
+     * Liefert ein Array aller Kantenklassen, durch die die übergebene
+     * Elementart einer anderen untergeordnet wird. Dies sind alle Kantenklasse,
+     * die Kompositionen sind und bei denen mindestens eine Endklasse
+     * zuweisungskompatibel zur übergebenen Elementklasse ist.
      *
      * @param elementClass
-     * @return Array von Kantenklassen, die die übergebene Elementart unterordnen
+     * @return Array von Kantenklassen, die die übergebene Elementart
+     *         unterordnen
      */
     public Class<? extends CompositionEdge>[] getCompositionEdgeTypesForSlave(final Class<? extends ModelElement> elementClass) {
         return getCompositionEdgeTypes(elementClass, false);
     }
 
     /**
-     * Liefert alle Elementarten, die der übergebenen Elementart über eine Komposition untergeordnet sind.
+     * Liefert alle Elementarten, die der übergebenen Elementart über eine
+     * Komposition untergeordnet sind.
      *
-     * @param masterElementClass Elementart, für die alle anderen Elementarten ermittelt werden sollen, die mit ihr über eine Komposition verbunden
-     *            sein können.
+     * @param masterElementClass Elementart, für die alle anderen Elementarten
+     *            ermittelt werden sollen, die mit ihr über eine Komposition
+     *            verbunden sein können.
      * @return
      */
     @SuppressWarnings("unchecked")
@@ -1728,11 +1895,14 @@ public final class MetaModel extends CoreMetaModel {
     }
 
     /**
-     * Liefert <code>true</code>, wenn die übergebene Elementklasse mindestens einer anderen Klasse untergeordnet ist. Das erkennt man daran, dass die
-     * übergebene Klasse zuweisungskompatibel zu einer Endklasse einer Kantenklasse ist.
+     * Liefert <code>true</code>, wenn die übergebene Elementklasse mindestens
+     * einer anderen Klasse untergeordnet ist. Das erkennt man daran, dass die
+     * übergebene Klasse zuweisungskompatibel zu einer Endklasse einer
+     * Kantenklasse ist.
      *
      * @param elementClass
-     * @return <code>true</code>, wenn das übergebene ein untergeordnetes Element ist
+     * @return <code>true</code>, wenn das übergebene ein untergeordnetes
+     *         Element ist
      */
     public boolean isSlaveType(final Class<? extends ModelElement> elementClass) {
         for (Class<? extends Edge> edgeClass : getEdgeTypes(elementClass)) {
@@ -1744,7 +1914,8 @@ public final class MetaModel extends CoreMetaModel {
     }
 
     /**
-     * Liefert <code>true</code>, wenn die übergebene Elementart der Slave einer {@link CompositionEdge} ist
+     * Liefert <code>true</code>, wenn die übergebene Elementart der Slave einer
+     * {@link CompositionEdge} ist
      *
      * @param elementClass
      * @return
@@ -1766,9 +1937,12 @@ public final class MetaModel extends CoreMetaModel {
     }
 
     /**
-     * Liefert für die übergebene Elementklasse alle Kantenklassen, die nur einmal an ihr hängen dürfen. Diese müssen beim Join ebenfalls
-     * zusammengeführt werden. Z.B. darf ein Rechanwendungsbaustein laut Metamodell nur ein Datenbanksystem besitzen. Werden zwei
-     * Rechanwendungsbausteine mit jeweils einem Datenbanksystem gejoined, dann müssen auch die Datenbanksysteme gejoined werden.
+     * Liefert für die übergebene Elementklasse alle Kantenklassen, die nur
+     * einmal an ihr hängen dürfen. Diese müssen beim Join ebenfalls
+     * zusammengeführt werden. Z.B. darf ein Rechanwendungsbaustein laut
+     * Metamodell nur ein Datenbanksystem besitzen. Werden zwei
+     * Rechanwendungsbausteine mit jeweils einem Datenbanksystem gejoined, dann
+     * müssen auch die Datenbanksysteme gejoined werden.
      *
      * @param elementClass
      * @return
@@ -1786,8 +1960,9 @@ public final class MetaModel extends CoreMetaModel {
     }
 
     /**
-     * Liefert für eine Elementklasse alle Elementklassen, die ihr untergeordnet sind (also über eine Komposition mit
-     * ihr verbunden sind, bei der sie der Master ist) und die minimale Kardinlität der Unterklassen > 0 ist.
+     * Liefert für eine Elementklasse alle Elementklassen, die ihr untergeordnet
+     * sind (also über eine Komposition mit ihr verbunden sind, bei der sie der
+     * Master ist) und die minimale Kardinlität der Unterklassen > 0 ist.
      *
      * @param elementClass
      */
@@ -1796,7 +1971,8 @@ public final class MetaModel extends CoreMetaModel {
     }
 
     /**
-     * dieser boolean muss in allen Node auf true gesetzt werden, die eine eigene toString() besitzen, welche aus anderen Modellelementen den Namen
+     * dieser boolean muss in allen Node auf true gesetzt werden, die eine
+     * eigene toString() besitzen, welche aus anderen Modellelementen den Namen
      * generiert (siehe AufOrgKombination, EtntEtdtKombination)
      *
      * @return
@@ -1812,8 +1988,9 @@ public final class MetaModel extends CoreMetaModel {
     }
 
     /**
-     * Liefert für eine Kantenart den Pfad zu verbundenen Elementen, deren Name beim Anlegen einer neuen
-     * Kante der übergebnen Art für die neue Kante übernommen werde soll.
+     * Liefert für eine Kantenart den Pfad zu verbundenen Elementen, deren Name
+     * beim Anlegen einer neuen Kante der übergebnen Art für die neue Kante
+     * übernommen werde soll.
      *
      * @param elementClass
      * @return
@@ -1823,15 +2000,16 @@ public final class MetaModel extends CoreMetaModel {
     }
 
     /**
-     * @return Collection alle InferenceEdges dieses Metamodells (also aller Kanten, die
-     *         sich aus einem anderen MetaPfad ergeben.
+     * @return Collection alle InferenceEdges dieses Metamodells (also aller
+     *         Kanten, die sich aus einem anderen MetaPfad ergeben.
      */
     public Collection<Class<? extends InferenceEdge>> getInferenceEdgeClasses() {
         return inferenceEdgeClassToConditionMetaPath.keySet();
     }
 
     /**
-     * @return Collection aller Bedingungspfade für Ableitungskanten (InferenceEdges)
+     * @return Collection aller Bedingungspfade für Ableitungskanten
+     *         (InferenceEdges)
      */
     public Collection<MetaPath> getInferenceEdgeConditionMetaPaths() {
         return inferenceEdgeClassToConditionMetaPath.values();
@@ -1855,7 +2033,8 @@ public final class MetaModel extends CoreMetaModel {
     }
 
     /**
-     * Liefert alle anlegbaren MetaPfade, bei denen für selektierte Elemente der übergebenen Elementart im Kontextmenü eine Liste aller existierenden
+     * Liefert alle anlegbaren MetaPfade, bei denen für selektierte Elemente der
+     * übergebenen Elementart im Kontextmenü eine Liste aller existierenden
      * Elemente angeboten werden soll, zu denen ein Pfad angelegt werden soll.
      *
      * @param elementClass
@@ -1866,9 +2045,12 @@ public final class MetaModel extends CoreMetaModel {
     }
 
     /**
-     * Liefert alle anlegbaren MetaPfade die zwischen den übergebenen Elementarten im Metamodell definiert sind. Alle diese Pfade werden als
-     * verbindbare Pfade im Kontextmenü angeboten, wenn das zuletzt markierte Element und ein anderes markiertes Element zuwesiungskompatibel zu den
-     * übergebenen Elementklassen sind. Diese Pfade werden dann mit allen Zwischenelementen zwischen den beiden Elementen angelegt.
+     * Liefert alle anlegbaren MetaPfade die zwischen den übergebenen
+     * Elementarten im Metamodell definiert sind. Alle diese Pfade werden als
+     * verbindbare Pfade im Kontextmenü angeboten, wenn das zuletzt markierte
+     * Element und ein anderes markiertes Element zuwesiungskompatibel zu den
+     * übergebenen Elementklassen sind. Diese Pfade werden dann mit allen
+     * Zwischenelementen zwischen den beiden Elementen angelegt.
      *
      * @param elementClass1
      * @param elementClass2
@@ -1885,8 +2067,10 @@ public final class MetaModel extends CoreMetaModel {
     }
 
     /**
-     * Liefert für alle Elementklassen, bei denen der Name verbundendener Elemente in der Grafik in Klammern unter der eigentlichen Elementart
-     * angezeigt werden soll, den MetaPfad zu den anzuzeigenden verbundenen Elementen.
+     * Liefert für alle Elementklassen, bei denen der Name verbundendener
+     * Elemente in der Grafik in Klammern unter der eigentlichen Elementart
+     * angezeigt werden soll, den MetaPfad zu den anzuzeigenden verbundenen
+     * Elementen.
      *
      * @return
      */
@@ -1895,7 +2079,8 @@ public final class MetaModel extends CoreMetaModel {
     }
 
     /**
-     * @return Iterable über alle Klassen, bei denen verbundene Elemente an den Namen angehängt werden sollen
+     * @return Iterable über alle Klassen, bei denen verbundene Elemente an den
+     *         Namen angehängt werden sollen
      */
     public Collection<Class<? extends ModelElement>> getElementClassesWithNameExtensionPath() {
         return elementClassesWithNameExtensions;
@@ -1908,11 +2093,12 @@ public final class MetaModel extends CoreMetaModel {
     }
 
     /**
-     * Elements which should not be copied if they come from the copy dependencies
-     * of an other element which should be copied.
+     * Elements which should not be copied if they come from the copy
+     * dependencies of an other element which should be copied.
      *
      * @param elementClass
-     * @return <code>true</code> if the element should not be duplicated during copiing
+     * @return <code>true</code> if the element should not be duplicated during
+     *         copiing
      */
     public boolean avoidDuplicates(final Class<? extends ModelElement> elementClass) {
         return copyDependencies.avoidDuplicates(elementClass);
@@ -1948,9 +2134,10 @@ public final class MetaModel extends CoreMetaModel {
     }
 
     /**
-     * Instanziiert die übergebene Klasse mit einem Kontruktor, der als Parmeter eine Instanz der Klasse {@link MetaModel} erwartet. Geht
-     * dabei irgendwas schief, versucht sie es mit dem leeren Constructor. Geht dabei auch etwas schief, dann kommt ohne Exception <code>null</code>
-     * zurück.
+     * Instanziiert die übergebene Klasse mit einem Kontruktor, der als Parmeter
+     * eine Instanz der Klasse {@link MetaModel} erwartet. Geht dabei irgendwas
+     * schief, versucht sie es mit dem leeren Constructor. Geht dabei auch etwas
+     * schief, dann kommt ohne Exception <code>null</code> zurück.
      *
      * @param metaModelDependentClass
      * @return
@@ -1971,7 +2158,8 @@ public final class MetaModel extends CoreMetaModel {
     }
 
     /**
-     * Liefert die Actions, die für das spezielle Metamodell in das Extras-Menü eingetragen werden sollen
+     * Liefert die Actions, die für das spezielle Metamodell in das Extras-Menü
+     * eingetragen werden sollen
      *
      * @param plugins
      * @return
@@ -1995,10 +2183,12 @@ public final class MetaModel extends CoreMetaModel {
 
     /**
      * Erzeugt eine neue Instanz eines Modellelementes.<br>
-     * Loggt eine Fehlermedung, wenn Objekt nicht erzeugt werden konnte und <code>log</code> mit <code>true</code> übergeben wurde.
+     * Loggt eine Fehlermedung, wenn Objekt nicht erzeugt werden konnte und
+     * <code>log</code> mit <code>true</code> übergeben wurde.
      *
      * @param elementClass Unterklasse von <code>ModelElement</code>
-     * @param log wenn <code>true</code> wird ein eventuell auftretender Fehler geloggt
+     * @param log wenn <code>true</code> wird ein eventuell auftretender Fehler
+     *            geloggt
      * @return neues ModelElement der übergebenen Klasse oder <code>null</code>
      */
     public final <T extends ModelElement> T createElement(final Class<? extends T> elementClass, final boolean log) {

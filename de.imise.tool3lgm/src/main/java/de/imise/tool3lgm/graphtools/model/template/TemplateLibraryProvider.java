@@ -35,7 +35,8 @@ public abstract class TemplateLibraryProvider extends MetaModelSpecificAdapter {
     }
 
     /**
-     * @return display name of this library e.g "IHE (full)" or if the library contains only the ITI part "IHE ITI Domain".
+     * @return display name of this library e.g "IHE (full)" or if the library
+     *         contains only the ITI part "IHE ITI Domain".
      */
     public String getDisplayName() {
         return null;
@@ -70,7 +71,9 @@ public abstract class TemplateLibraryProvider extends MetaModelSpecificAdapter {
 
         /**
          * @param metaModelDefinitionClass
-         * @param resourceNameClass the class the {@link SimpleResourceBundleSourceAdapter} is initialized with
+         * @param resourceNameClass the class the
+         *            {@link SimpleResourceBundleSourceAdapter} is initialized
+         *            with
          */
         public TemplateLibraryProviderResourceHandler(final Class<? extends MetaModelDefinition> metaModelDefinitionClass, final Class<? extends TemplateLibraryProvider> resourceNameClass) {
             super(metaModelDefinitionClass);

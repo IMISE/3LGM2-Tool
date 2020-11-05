@@ -353,20 +353,24 @@ public class ModelCleaner {
     }
 
     /**
-     * Entfernt in dem übergebenen String alle überflüssigen Leerzeichen am Anfang und Ende und
-     * löscht entfernt alle "-ZUSAMMENGEFÜHRT-" Eintragungen, die im Grunde dieselben String
-     * trennen. Wenn dieselben Informationen mehrfach durch "-ZUSAMMENGEFÜHRT-" getrennt im
-     * übergebenen String stehen, dann kommt die Information nur noch einmal zurück. Wenn
-     * verschiedene String durch "-ZUSAMMENGEFÜHRT-" getrennt im Ausgangstring stehen, dann kommt
-     * der Ausgangstring zurück. (also das "-ZUSAMMENGEFÜHRT-" bleibt erhalten) @ param sourceString
-     * String der bereinigt werden soll
+     * Entfernt in dem übergebenen String alle überflüssigen Leerzeichen am
+     * Anfang und Ende und löscht entfernt alle "-ZUSAMMENGEFÜHRT-"
+     * Eintragungen, die im Grunde dieselben String trennen. Wenn dieselben
+     * Informationen mehrfach durch "-ZUSAMMENGEFÜHRT-" getrennt im übergebenen
+     * String stehen, dann kommt die Information nur noch einmal zurück. Wenn
+     * verschiedene String durch "-ZUSAMMENGEFÜHRT-" getrennt im Ausgangstring
+     * stehen, dann kommt der Ausgangstring zurück. (also das
+     * "-ZUSAMMENGEFÜHRT-" bleibt erhalten) @ param sourceString String der
+     * bereinigt werden soll
      *
-     * @param newDelimiter Yeichenkette, die als neuer Trenner im Rückgabestring eingebaut werden
-     *            soll, wenn 2 verschiedene Zeichenketten duruch einen der 'alten' Delimiter aus
-     *            delimiter getrennt waren
-     * @param delimiter Strings, die eventuell identische Tokens untereinander Aufteilen. Beim
-     *            Zusammenführen von Elementen besteht der Name evtl 2 Mal aus derselben
-     *            Zeichenkette, die durch "-ZUSAMMENGEFÜHRT-" voneinander getrennt sind.
+     * @param newDelimiter Yeichenkette, die als neuer Trenner im Rückgabestring
+     *            eingebaut werden soll, wenn 2 verschiedene Zeichenketten
+     *            duruch einen der 'alten' Delimiter aus delimiter getrennt
+     *            waren
+     * @param delimiter Strings, die eventuell identische Tokens untereinander
+     *            Aufteilen. Beim Zusammenführen von Elementen besteht der Name
+     *            evtl 2 Mal aus derselben Zeichenkette, die durch
+     *            "-ZUSAMMENGEFÜHRT-" voneinander getrennt sind.
      * @return
      */
     public static final String getCleanString(String sourceString, final String newDelimiter, final String... delimiter) {
@@ -461,13 +465,17 @@ public class ModelCleaner {
     // /////////////////////////
 
     /**
-     * Bis Datei-Version 3.4 (siehe {@link ToolXMLParser}) gab es IsPartOfBeziehungen, bei denen das Teil-Element StartElement
-     * und das Oberelement EndElement der Kante war. Bei den anderen existierenden Unterordnungsbeziehungen, den Compositions,
-     * war das genau andersrum, also das Oberelement war Start und das Unterelement EndElement.<br>
-     * Das wurde dahingehend vereinheitlicht, dass die IsPartOfEdges zu HasPartEdges geändert wurden, bei denen genau wie bei
-     * den Compositions das Oberelement nun das Startelement ist und beide Klasse dieselbe Oberklasse SubordinationEdge haben
-     * können, die jetzt dafür verantwortlich ist, ob verbundene Elemente in der Grafik mitbewegt werden können und die eventuelle
-     * Kreise in diesen Unterordnungen checkt, die unzulässig sind.
+     * Bis Datei-Version 3.4 (siehe {@link ToolXMLParser}) gab es
+     * IsPartOfBeziehungen, bei denen das Teil-Element StartElement und das
+     * Oberelement EndElement der Kante war. Bei den anderen existierenden
+     * Unterordnungsbeziehungen, den Compositions, war das genau andersrum, also
+     * das Oberelement war Start und das Unterelement EndElement.<br>
+     * Das wurde dahingehend vereinheitlicht, dass die IsPartOfEdges zu
+     * HasPartEdges geändert wurden, bei denen genau wie bei den Compositions
+     * das Oberelement nun das Startelement ist und beide Klasse dieselbe
+     * Oberklasse SubordinationEdge haben können, die jetzt dafür verantwortlich
+     * ist, ob verbundene Elemente in der Grafik mitbewegt werden können und die
+     * eventuelle Kreise in diesen Unterordnungen checkt, die unzulässig sind.
      *
      * @param gdcoll
      */

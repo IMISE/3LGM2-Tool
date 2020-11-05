@@ -38,14 +38,13 @@ public class CopyDependencyResolver {
     /**
      * Sucht alle Element und Icons, die kopiert werden müssen
      *
-     * @param export
-     *            Array von Szenarios, die zu kopieren sind
-     * @param elements
-     *            Set, in welches die zu kopierenden Element geschrieben werden
-     * @param bitmaps
-     *            Set, in welches die HashStrings der zu kopierenden Icons geschrieben werden
-     * @param userFields
-     *            Set, in welches die zu kopierenden benutzdefinierten Eigenschaftsfelder geschrieben werden
+     * @param export Array von Szenarios, die zu kopieren sind
+     * @param elements Set, in welches die zu kopierenden Element geschrieben
+     *            werden
+     * @param bitmaps Set, in welches die HashStrings der zu kopierenden Icons
+     *            geschrieben werden
+     * @param userFields Set, in welches die zu kopierenden benutzdefinierten
+     *            Eigenschaftsfelder geschrieben werden
      */
     public void resolveCopyDependencies(final List<? extends GraphDocument> export, final List<ModelElement> elements, final Set<String> bitmaps, final Set<UserField> userFields) {
         /* alle übergebenen Szenarios durchgehen und copyDependcies auflösen */
@@ -100,7 +99,8 @@ public class CopyDependencyResolver {
     }
 
     /**
-     * sucht alle Element, die beim kopieren eines Knotens ebenfalls kopiert werden sollen (rekursiv, auch für die gefundenen Element)
+     * sucht alle Element, die beim kopieren eines Knotens ebenfalls kopiert
+     * werden sollen (rekursiv, auch für die gefundenen Element)
      *
      * @param knoten der dessen abhängige Element gefunden werden sollen
      * @return HashSet mit den HashStrings der gefundenen Elementen

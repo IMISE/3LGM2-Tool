@@ -18,10 +18,9 @@ public class GraphmlExporter {
     private final Iterable<Szenario> szenarios;
 
     /**
-     * @param file
-     *            Verzeichnis, in das die Graphml-Dateien geschrieben werden sollen
-     * @param gdcoll
-     *            Modell, dessen Teilmodell-Grafiken exportiert werden sollen
+     * @param file Verzeichnis, in das die Graphml-Dateien geschrieben werden
+     *            sollen
+     * @param gdcoll Modell, dessen Teilmodell-Grafiken exportiert werden sollen
      * @throws XMLStreamException
      * @throws IOException
      */
@@ -30,10 +29,9 @@ public class GraphmlExporter {
     }
 
     /**
-     * @param file
-     *            Verzeichnis, in das die Graphml-Dateien geschrieben werden sollen
-     * @param szenarios
-     *            Teilmodelle, deren Grafiken exportiert werden sollen
+     * @param file Verzeichnis, in das die Graphml-Dateien geschrieben werden
+     *            sollen
+     * @param szenarios Teilmodelle, deren Grafiken exportiert werden sollen
      * @throws XMLStreamException
      * @throws IOException
      */

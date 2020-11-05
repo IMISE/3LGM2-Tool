@@ -13,8 +13,9 @@ public class UserFieldTableSumHandler {
     private static boolean lastCallHadValidValues;
 
     /**
-     * Liefert die Summe aller als BigDecimal parsbaren Elemente einer Zeile formatiert mit Einheit.
-     * 
+     * Liefert die Summe aller als BigDecimal parsbaren Elemente einer Zeile
+     * formatiert mit Einheit.
+     *
      * @param tableModel
      * @param row
      * @return
@@ -24,8 +25,9 @@ public class UserFieldTableSumHandler {
     }
 
     /**
-     * Liefert die Summe aller als BigDecimal parsbaren Elemente einer Spalte formatiert mit Einheit.
-     * 
+     * Liefert die Summe aller als BigDecimal parsbaren Elemente einer Spalte
+     * formatiert mit Einheit.
+     *
      * @param tableModel
      * @param col
      * @return
@@ -35,8 +37,9 @@ public class UserFieldTableSumHandler {
     }
 
     /**
-     * Liefert die Summe aller als BigDecimal parsbaren Elemente einer Zeile oder Spalte formatiert mit Einheit.
-     * 
+     * Liefert die Summe aller als BigDecimal parsbaren Elemente einer Zeile
+     * oder Spalte formatiert mit Einheit.
+     *
      * @param tableModel
      * @param rowOrColumnIndex
      * @param useRow
@@ -57,8 +60,9 @@ public class UserFieldTableSumHandler {
     }
 
     /**
-     * Liefert die Summe aller als BigDecimal parsbaren Elemente einer Zeile oder Spalte.
-     * 
+     * Liefert die Summe aller als BigDecimal parsbaren Elemente einer Zeile
+     * oder Spalte.
+     *
      * @param tableModel
      * @param rowOrColumnIndex
      * @param useRow
@@ -96,8 +100,9 @@ public class UserFieldTableSumHandler {
     }
 
     /**
-     * Liefert das UserField, das für die gewünschte Zeile oder Spalte das Format vorgibt.
-     * 
+     * Liefert das UserField, das für die gewünschte Zeile oder Spalte das
+     * Format vorgibt.
+     *
      * @param tableModel
      * @param rowOrColumnIndex
      * @param useRow
@@ -109,7 +114,7 @@ public class UserFieldTableSumHandler {
         //wenn keins gefunden wurde -> dann mal in den jeweils anderen Header schauen, ob dort auch kein UserField steckt
         if (formatSource == null) {
             UserField otherFormatSource = useRow ? getColumnHeaderUserField(tableModel, 0) : getRowHeaderUserField(tableModel, 0);
-            // nur wenn in beiden Headern kein UserField steckt, dann das UserField aus der Zelle holen 
+            // nur wenn in beiden Headern kein UserField steckt, dann das UserField aus der Zelle holen
             if (otherFormatSource == null) {
                 return getCellUserField(tableModel);
             }
@@ -118,8 +123,9 @@ public class UserFieldTableSumHandler {
     }
 
     /**
-     * Liefert das UserField im RowHeader, wenn es ein solches gibt, sonst <code>null</code>.
-     * 
+     * Liefert das UserField im RowHeader, wenn es ein solches gibt, sonst
+     * <code>null</code>.
+     *
      * @param tableModel
      * @param row
      * @return
@@ -131,8 +137,9 @@ public class UserFieldTableSumHandler {
     }
 
     /**
-     * Liefert das UserField im ColumnHeader, wenn es ein solches gibt, sonst <code>null</code>.
-     * 
+     * Liefert das UserField im ColumnHeader, wenn es ein solches gibt, sonst
+     * <code>null</code>.
+     *
      * @param tableModel
      * @param col
      * @return
@@ -144,9 +151,10 @@ public class UserFieldTableSumHandler {
     }
 
     /**
-     * Liefert das erste gesetzte UserField in irgendeiner Zelle der Tabellendaten oder <code>null</code>, wenn
-     * kein Feld gesetzt ist oder das erste gefundene Feld kein UserField enthält.
-     * 
+     * Liefert das erste gesetzte UserField in irgendeiner Zelle der
+     * Tabellendaten oder <code>null</code>, wenn kein Feld gesetzt ist oder das
+     * erste gefundene Feld kein UserField enthält.
+     *
      * @param tableModel
      * @return
      */

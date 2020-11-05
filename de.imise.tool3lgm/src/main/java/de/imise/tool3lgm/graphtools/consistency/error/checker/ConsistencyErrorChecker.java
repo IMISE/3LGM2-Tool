@@ -28,8 +28,10 @@ public interface ConsistencyErrorChecker {
 
     /**
      * @param gdcoll the model to check for inconsistencies
-     * @param checkOnly if <code>true</code> not all but only the first error will be added to the return list
-     * @return all errors this checker found or only the first error if <code>checkOnly</code> is <code>true</code>
+     * @param checkOnly if <code>true</code> not all but only the first error
+     *            will be added to the return list
+     * @return all errors this checker found or only the first error if
+     *         <code>checkOnly</code> is <code>true</code>
      */
     public Collection<AbstractConsistencyError> getErrors(final GDCollection gdcoll, final boolean checkOnly);
 

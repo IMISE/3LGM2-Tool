@@ -124,8 +124,9 @@ public class WeightReplaceTableModel extends AbstractTableModel {
     }
 
     /**
-     * Liefert <code>true</code>, wenn der übergebene Container eine Gleichverteilung repräsentiert (also
-     * das Object im Container <code>null</code> ist).
+     * Liefert <code>true</code>, wenn der übergebene Container eine
+     * Gleichverteilung repräsentiert (also das Object im Container
+     * <code>null</code> ist).
      *
      * @param value
      * @return
@@ -135,8 +136,9 @@ public class WeightReplaceTableModel extends AbstractTableModel {
     }
 
     /**
-     * Liefert einen Container, bei dem als String der Name des übergebenen UserFields gesetzt ist.
-     * Ist das übergebene UserField <code>null</code>, kommt en Container für die Gleichverteilung zurück.
+     * Liefert einen Container, bei dem als String der Name des übergebenen
+     * UserFields gesetzt ist. Ist das übergebene UserField <code>null</code>,
+     * kommt en Container für die Gleichverteilung zurück.
      *
      * @param userField
      * @return
@@ -149,7 +151,8 @@ public class WeightReplaceTableModel extends AbstractTableModel {
     }
 
     /**
-     * Liefert einen Container für das übergebene UserField, dessen String ein Leerzeichen ist.
+     * Liefert einen Container für das übergebene UserField, dessen String ein
+     * Leerzeichen ist.
      *
      * @param userField
      * @return

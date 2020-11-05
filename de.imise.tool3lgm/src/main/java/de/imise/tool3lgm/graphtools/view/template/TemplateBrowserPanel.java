@@ -62,13 +62,13 @@ public class TemplateBrowserPanel extends JPanel implements PropertyChangeListen
     }
 
     /**
-     * Selectes all elements in the templates with the same hashStrings like
-     * the selected elements in the given {@link GraphDocument}. Additionally
-     * all instanciation master elements will be selected which are the same
-     * (same id) like the master element of a selected instanciation instance
-     * element in the model. So if you select an {@link InstanciationEdge}
-     * instance in the model the instanciation master element will be selected
-     * in the {@link TemplateView}.
+     * Selectes all elements in the templates with the same hashStrings like the
+     * selected elements in the given {@link GraphDocument}. Additionally all
+     * instanciation master elements will be selected which are the same (same
+     * id) like the master element of a selected instanciation instance element
+     * in the model. So if you select an {@link InstanciationEdge} instance in
+     * the model the instanciation master element will be selected in the
+     * {@link TemplateView}.
      *
      * @param source
      */

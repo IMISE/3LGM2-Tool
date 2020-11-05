@@ -18,6 +18,7 @@ import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.ScrollPaneConstants;
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 
@@ -34,7 +35,8 @@ public abstract class AbstractUserFieldDeclarationDialog extends AbstractSizeAnd
     protected UserFieldDeclarationDialogClassComboBox classComboBox;
 
     /**
-     * list with the defined userFields Es wird hier keine AplphabeticalJList genutzt, weil die Elemente in der Reinhenfolge angezeigt werden sollen,
+     * list with the defined userFields Es wird hier keine AplphabeticalJList
+     * genutzt, weil die Elemente in der Reinhenfolge angezeigt werden sollen,
      * die der User vorgibt.
      */
     protected UserFieldDeclarationDialogFieldList fieldList;
@@ -65,7 +67,8 @@ public abstract class AbstractUserFieldDeclarationDialog extends AbstractSizeAnd
     protected final JButton okButton;
 
     /**
-     * ComboBox mit der die Art des neuen benutzerdefinierten Eigenschaftsfeldes festgelegt wird
+     * ComboBox mit der die Art des neuen benutzerdefinierten Eigenschaftsfeldes
+     * festgelegt wird
      */
     protected AlphabeticalComboBox<UserField.Style> userFieldTypeComboBox;
 
@@ -168,7 +171,7 @@ public abstract class AbstractUserFieldDeclarationDialog extends AbstractSizeAnd
 
     private JScrollPane createScrollPane(final JComponent view) {
         JScrollPane scrollPane = new JScrollPane(view);
-        scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
         return scrollPane;
     }
 

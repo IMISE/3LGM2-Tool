@@ -51,12 +51,11 @@ public class TableModel implements Iterable<TableCell> {
     private boolean absolutePartsOnly = false;
 
     /**
-     * Hintergrundfarbe für alle {@link TableCell}s
-     * private Color tableCellBackgroundColor = Color.white;
-     * /**
-     * Farben, in denen die Pfade dargestellt werden. Wird nur ein Pfad dargestellt,
-     * bekommt er die erste Pfade, werden 2 Pfade dargestellt, bekommen sie die ersten
-     * beiden und ihre Kombination die 3. Farbe usw. Mit den 15 Farben lassen sich n=4
+     * Hintergrundfarbe für alle {@link TableCell}s private Color
+     * tableCellBackgroundColor = Color.white; /** Farben, in denen die Pfade
+     * dargestellt werden. Wird nur ein Pfad dargestellt, bekommt er die erste
+     * Pfade, werden 2 Pfade dargestellt, bekommen sie die ersten beiden und
+     * ihre Kombination die 3. Farbe usw. Mit den 15 Farben lassen sich n=4
      * Pfade und alle ihre Kombinationen gleichzeitig darstellen (2^n - 1)
      */
     public static Color[] pathColors = {
@@ -66,13 +65,11 @@ public class TableModel implements Iterable<TableCell> {
 
     /**
      * Legt ein neues <code>TableModel</code> an, das erstmal gar nichts
-     * darstellt, sondern nur das <code>GraphDocument</code> kennt, aus dem
-     * nach dem setzen von gültigen Zeilen und Spaltenklassen die
-     * Elementverknüpfungen anzeigen soll.
-     * Konstruktor
+     * darstellt, sondern nur das <code>GraphDocument</code> kennt, aus dem nach
+     * dem setzen von gültigen Zeilen und Spaltenklassen die
+     * Elementverknüpfungen anzeigen soll. Konstruktor
      *
-     * @param graphDocument
-     *            das (Teil-)Modell
+     * @param graphDocument das (Teil-)Modell
      */
     public TableModel(final GraphDocument graphDocument) {
         this.graphDocument = graphDocument;
@@ -80,23 +77,22 @@ public class TableModel implements Iterable<TableCell> {
     }
 
     /**
-     * @param metaPathSelection Selektion, die vorgibt, für welche Klassen und Pfade die Tabelle dargestellt werden soll. Dieser Paramter darf nicht
-     *            null sein!
+     * @param metaPathSelection Selektion, die vorgibt, für welche Klassen und
+     *            Pfade die Tabelle dargestellt werden soll. Dieser Paramter
+     *            darf nicht null sein!
      */
     public void fillTableModel(final MetaPathSelection metaPathSelection) {
         fillTableModelIntern(metaPathSelection.class1, metaPathSelection.class2, metaPathSelection.selectedMetaPaths, metaPathSelection.showPartsOnly);
     }
 
     /**
-     * @param rowClass
-     *            Zeilenklasse
-     * @param colClass
-     *            Spaltenklasse
-     * @param metaPaths
-     *            MetaPfade über den Zeilen- und Spaltenklasse verbunden sein sollen
-     * @param absolutePartsOnly
-     *            legt fest, ob in der Matrix nur Elemente auftauchen sollen, die im
-     *            Gesamtmodell keine Teilelemente besitzen
+     * @param rowClass Zeilenklasse
+     * @param colClass Spaltenklasse
+     * @param metaPaths MetaPfade über den Zeilen- und Spaltenklasse verbunden
+     *            sein sollen
+     * @param absolutePartsOnly legt fest, ob in der Matrix nur Elemente
+     *            auftauchen sollen, die im Gesamtmodell keine Teilelemente
+     *            besitzen
      */
     private void fillTableModelIntern(final Class<? extends ModelElement> rowClass, final Class<? extends ModelElement> colClass, final List<MetaPath> metaPaths, final boolean absolutePartsOnly) {
         this.rowClass = rowClass;
@@ -159,7 +155,8 @@ public class TableModel implements Iterable<TableCell> {
 
     /**
      * Liefert die {@link TableCell} an mit den Koordinaten col und row.
-     * ACHTUNG: Da diese Funktion über den Iterator aller Cells läuft, ist sie bei vielen Zellen sehr 'teuer'.
+     * ACHTUNG: Da diese Funktion über den Iterator aller Cells läuft, ist sie
+     * bei vielen Zellen sehr 'teuer'.
      *
      * @param col
      * @param row
@@ -186,10 +183,11 @@ public class TableModel implements Iterable<TableCell> {
     }
 
     /**
-     * Liefert <code>true</code>, wenn gültige Elementklassen und gültige MetaPfade
-     * (jeweils ungleich <code>null</code>) gesetzt sind.
+     * Liefert <code>true</code>, wenn gültige Elementklassen und gültige
+     * MetaPfade (jeweils ungleich <code>null</code>) gesetzt sind.
      *
-     * @return <code>true</code>, wenn gültige Klassen und gültige Metapfade gesetzt sind, sonst <code>false</code>
+     * @return <code>true</code>, wenn gültige Klassen und gültige Metapfade
+     *         gesetzt sind, sonst <code>false</code>
      */
     public boolean isValid() {
         if (rowClass == null || colClass == null || metaPaths == null) {

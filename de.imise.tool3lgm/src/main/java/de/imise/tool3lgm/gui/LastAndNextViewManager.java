@@ -29,7 +29,10 @@ public class LastAndNextViewManager {
         // no instances allowd
     }
 
-    /** Activates the view which was active before the actual view became activated */
+    /**
+     * Activates the view which was active before the actual view became
+     * activated
+     */
     public static final Action ACTION_GOTO_PREVIOUS_VIEW = new GraphDocumentAction(ActionIdentifier.ACTION_GOTO_PREVIOUS_VIEW) {
         @Override
         protected void actionPerformed() {
@@ -48,7 +51,10 @@ public class LastAndNextViewManager {
 
     };
 
-    /** Activates the view which was active before the last ACTION_GOTO_PREVIOUS_VIEW was performed */
+    /**
+     * Activates the view which was active before the last
+     * ACTION_GOTO_PREVIOUS_VIEW was performed
+     */
     public static final Action ACTION_GOTO_NEXT_VIEW = new GraphDocumentAction(ActionIdentifier.ACTION_GOTO_NEXT_VIEW) {
         @Override
         protected void actionPerformed() {

@@ -9,6 +9,7 @@ import java.util.List;
 
 import javax.swing.AbstractAction;
 import javax.swing.Action;
+import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 
 import org.xml.sax.SAXException;
@@ -52,8 +53,8 @@ public class AnalysesRepositoryFrameActions {
 
     /**
      * Aktion für den Import von Analysen.<br>
-     * Fügt zur Liste der Analysen dieses Dialogs alle Analysen einer vom Benutzer ausgewählten
-     * Datei hinzu.
+     * Fügt zur Liste der Analysen dieses Dialogs alle Analysen einer vom
+     * Benutzer ausgewählten Datei hinzu.
      */
     static final Action ACTION_IMPORT_ANALYSIS = new AbstractAction(getResString("ana_import")) {
         @Override
@@ -67,7 +68,7 @@ public class AnalysesRepositoryFrameActions {
                 chooser.setCurrentDirectory(lastUsedAnalyseFile);
             }
             chooser.setMultiSelectionEnabled(false);
-            if (chooser.showOpenDialog(AnalysesRepositoryFrame.dialog) == ExtendedFileChooser.APPROVE_OPTION) {
+            if (chooser.showOpenDialog(AnalysesRepositoryFrame.dialog) == JFileChooser.APPROVE_OPTION) {
                 File fileToOpen = chooser.getSelectedFile();
                 if (fileToOpen == null) {
                     return;
@@ -104,7 +105,7 @@ public class AnalysesRepositoryFrameActions {
                 chooser.setCurrentDirectory(lastUsedAnalyseFile);
             }
             chooser.setMultiSelectionEnabled(false);
-            if (chooser.showSaveDialog(AnalysesRepositoryFrame.dialog) == ExtendedFileChooser.APPROVE_OPTION) {
+            if (chooser.showSaveDialog(AnalysesRepositoryFrame.dialog) == JFileChooser.APPROVE_OPTION) {
                 File fileToSave = chooser.getSelectedFile();
                 if (fileToSave == null) {
                     return;

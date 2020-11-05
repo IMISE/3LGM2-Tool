@@ -13,6 +13,7 @@ import java.nio.channels.FileLock;
 import java.util.zip.DataFormatException;
 import java.util.zip.ZipInputStream;
 
+import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.xml.stream.FactoryConfigurationError;
 import javax.xml.stream.XMLStreamException;
@@ -36,15 +37,20 @@ public class GDCollectionFileHandler {
     /** {@link GDCollection}, die dieser FileHanlder speichert */
     private final GDCollection gdcoll;
 
-    /** Information für Dateiversion (wird bei jedem Aufruf von getFileVersion() um eins erhoeht) */
+    /**
+     * Information für Dateiversion (wird bei jedem Aufruf von getFileVersion()
+     * um eins erhoeht)
+     */
     private int fileVersion = 0;
 
     /** the file to load collection from or to save collection in */
     private RandomAccessFile randomAccessFile;
 
     /**
-     * der InputStream, der das RandomAccessFile einliest. Er darf nicht geschlossen werden, wenn über das RandomAccessFile noch gespeichert werden
-     * soll und muss am Ende mit forceClose() tatsächlich geschlossen werden
+     * der InputStream, der das RandomAccessFile einliest. Er darf nicht
+     * geschlossen werden, wenn über das RandomAccessFile noch gespeichert
+     * werden soll und muss am Ende mit forceClose() tatsächlich geschlossen
+     * werden
      */
     private StayOpenFileInputStream randomAccessFileInputStream;
 
@@ -55,7 +61,10 @@ public class GDCollectionFileHandler {
     /** flag, whether file for this collection is only opened for reading */
     private final boolean isReadOnly = false;
 
-    /** flag, whether the filesystem of the file for this collection supports locking */
+    /**
+     * flag, whether the filesystem of the file for this collection supports
+     * locking
+     */
     private boolean lockSupported = false;
 
     /** flag, whether collection will be saved in compressed zip-file or not */
@@ -79,7 +88,8 @@ public class GDCollectionFileHandler {
     /**
      * setzt die int-Variable mit der Dateiversion
      *
-     * @param String der dim Aufbau dem Rueckgabe-String der Methode getFileVersion() gleicht
+     * @param String der dim Aufbau dem Rueckgabe-String der Methode
+     *            getFileVersion() gleicht
      */
     public void setFileVersion(final String string) {
         try {
@@ -93,7 +103,8 @@ public class GDCollectionFileHandler {
      * set the file modelElement for this collection
      *
      * @param _file the new File for this collection
-     * @return boolean with false, if file is shared (--> readOnly) otherwise true
+     * @return boolean with false, if file is shared (--> readOnly) otherwise
+     *         true
      * @author Thomas Rudert
      */
     public boolean setFile(final File _file) throws IOException {
@@ -222,7 +233,9 @@ public class GDCollectionFileHandler {
     /**
      * Load collection from file which is specified in field file
      *
-     * @param file File to load/import in the corresponding model. If <code>null</code>, the randomAccesFile of this will be loaded in this model.
+     * @param file File to load/import in the corresponding model. If
+     *            <code>null</code>, the randomAccesFile of this will be loaded
+     *            in this model.
      * @return true if reading was successful
      * @throws Exception; throws all exceptions happen during reading
      * @author Thomas Rudert
@@ -284,7 +297,8 @@ public class GDCollectionFileHandler {
      *
      * @param fileStream the FileInputStream to the file which will be read
      * @return true, if reading was successful
-     * @throws IOException if something wrong with the FileInputStream or the zip-format
+     * @throws IOException if something wrong with the FileInputStream or the
+     *             zip-format
      * @author Thomas Rudert
      */
     public boolean loadZipFile(final InputStream fileStream) throws IOException {
@@ -352,7 +366,7 @@ public class GDCollectionFileHandler {
         if (getFile() != null) {
             fileChooser.setSelectedFile(getFile());
         }
-        if (fileChooser.showSaveDialog(Static.getMainFrame()) != ExtendedFileChooser.APPROVE_OPTION) {
+        if (fileChooser.showSaveDialog(Static.getMainFrame()) != JFileChooser.APPROVE_OPTION) {
             return false;
         }
         File pfad = fileChooser.getSelectedFile();
@@ -372,7 +386,8 @@ public class GDCollectionFileHandler {
      * save collection to file<br/>
      * if isReadOnly is true do nothing and return false<br/>
      * if isZipFile write content into compressed file<br/>
-     * create temporary file for writing and if all actions are completed successfully overwrites original file
+     * create temporary file for writing and if all actions are completed
+     * successfully overwrites original file
      *
      * @return boolean with true, if and only if filewriting was successful
      * @author Thomas Rudert

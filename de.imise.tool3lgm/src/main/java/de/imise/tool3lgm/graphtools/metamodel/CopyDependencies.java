@@ -84,9 +84,11 @@ public class CopyDependencies extends MetaModelSpecificAdapter {
     /////////////////////
 
     /**
-     * @author Thomas Rudert sollte auf true gesetzt werden, wenn beim Kopieren kein Duplikat erstellte werden soll, falls das Modelelement nur durch
-     *         aufgeloeste copyDependencies mitkopiert wird <br>
-     *         (Bsp: kopieren von PhyDvBausteinen soll der Standort nicht doppelt vorhanden sein)
+     * @author Thomas Rudert sollte auf true gesetzt werden, wenn beim Kopieren
+     *         kein Duplikat erstellte werden soll, falls das Modelelement nur
+     *         durch aufgeloeste copyDependencies mitkopiert wird <br>
+     *         (Bsp: kopieren von PhyDvBausteinen soll der Standort nicht
+     *         doppelt vorhanden sein)
      * @param elementClass
      */
     protected final void addToAvoidDuplicates(final Class<? extends ModelElement> elementClass) {

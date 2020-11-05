@@ -16,9 +16,10 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.path.metapaths.ElementaryMetaPath;
 
 /**
- * Knoten, der genutzt werden kann um Pfade in einem Baum zu speichern. Jeder dieser
- * Knoten kann einen Elementarpfad enthalten, über den ausgehend vom Endelement des
- * Pfades des Parentknotens dieser Knoten einen weiteren Elementarpfadschritt repräsentiert.
+ * Knoten, der genutzt werden kann um Pfade in einem Baum zu speichern. Jeder
+ * dieser Knoten kann einen Elementarpfad enthalten, über den ausgehend vom
+ * Endelement des Pfades des Parentknotens dieser Knoten einen weiteren
+ * Elementarpfadschritt repräsentiert.
  *
  * @author AXS
  * @create 02.11.2010
@@ -35,11 +36,17 @@ public class PathResultTreeNode extends DefaultMutableTreeNode {
         START_ELEMENT,
         /** Typ für alle Knoten, die im äußersten Pfad vorkommen */
         SUPERSTEP,
-        /** Gibt an, ob dieser Knoten aus einem in einem Sequenzpfad enthaltenen nicht-Elementarpfad ist. */
+        /**
+         * Gibt an, ob dieser Knoten aus einem in einem Sequenzpfad enthaltenen
+         * nicht-Elementarpfad ist.
+         */
         SUBSTEP
     };
 
-    /** Iterable dieses Objektes wird zurück gegeben, wenn dieser Knoten keine Kinder besitzt */
+    /**
+     * Iterable dieses Objektes wird zurück gegeben, wenn dieser Knoten keine
+     * Kinder besitzt
+     */
     private static final Vector<PathResultTreeNode> EMPTY_CHILDREN = new Vector<>(0);
 
     /**
@@ -159,10 +166,10 @@ public class PathResultTreeNode extends DefaultMutableTreeNode {
 
     /**
      * 2 Knoten sind gleich, wenn sie das gleiche userObject haben.<br>
-     * Das hier überschreibt absichtlich nicht die equals(), weil dann sonst in der
-     * Funktion {@link DefaultMutableTreeNode#removeFromParent()} das zu löschende
-     * Kind ungünstigerweise über equals rausgesucht wird und dann eventuell der
-     * falsche Knoten gelöscht wird.
+     * Das hier überschreibt absichtlich nicht die equals(), weil dann sonst in
+     * der Funktion {@link DefaultMutableTreeNode#removeFromParent()} das zu
+     * löschende Kind ungünstigerweise über equals rausgesucht wird und dann
+     * eventuell der falsche Knoten gelöscht wird.
      *
      * @param obj
      * @return
@@ -207,12 +214,13 @@ public class PathResultTreeNode extends DefaultMutableTreeNode {
     }
 
     /**
-     * Checks if the tree path represented by the other node up to root is contained
-     * completely in the tree path of this node.
+     * Checks if the tree path represented by the other node up to root is
+     * contained completely in the tree path of this node.
      *
      * @param other
-     * @return <code>true</code> if tree path of the other node up to root is contained
-     *         completly in the tree path of this node, otherwise <code>false</code>
+     * @return <code>true</code> if tree path of the other node up to root is
+     *         contained completly in the tree path of this node, otherwise
+     *         <code>false</code>
      */
     public final boolean containsPath(final PathResultTreeNode other) {
         int thisPathLength = getLevel();

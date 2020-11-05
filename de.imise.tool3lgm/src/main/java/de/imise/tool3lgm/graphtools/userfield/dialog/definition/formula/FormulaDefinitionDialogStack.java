@@ -62,11 +62,14 @@ public class FormulaDefinitionDialogStack extends Stack<String> {
     }
 
     /**
-     * Konvertiert einen FormelString in einen Stack. Der String wird dazu mittel StringTokenizers zerlegt. Argumente, die ein userField kennzeichenen
-     * oder +,*,-,/ werden auf den Stack draufgelegt. Verrechnungsfunktionen werden als String zusammengefasst und als einzelnes zusammengehörendes
-     * Argument auf den Stack gelegt.
+     * Konvertiert einen FormelString in einen Stack. Der String wird dazu
+     * mittel StringTokenizers zerlegt. Argumente, die ein userField
+     * kennzeichenen oder +,*,-,/ werden auf den Stack draufgelegt.
+     * Verrechnungsfunktionen werden als String zusammengefasst und als
+     * einzelnes zusammengehörendes Argument auf den Stack gelegt.
      *
-     * @param internalFormula Die Formel in interner repräsentation Bsp: UserFieldHash_XXX_X + ( UserFieldHash_XXX_X )
+     * @param internalFormula Die Formel in interner repräsentation Bsp:
+     *            UserFieldHash_XXX_X + ( UserFieldHash_XXX_X )
      * @return Stack, der die Formel enthält.
      */
     public final void fill(final String internalFormula) {

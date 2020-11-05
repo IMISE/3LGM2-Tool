@@ -31,15 +31,18 @@ public class FormulaPanel extends AbstractInputPanel {
     private final UserField userField;
 
     /**
-     * <code>String</code>, in dem die interne Repräsentation der neuen Formel gespeichert wird. Beim Übernehmen der Eigenschaften in das
-     * <code>UserField</code> wird dieser <code>String</code> dann als Formel im <code>UserField</code> gesetzt.
+     * <code>String</code>, in dem die interne Repräsentation der neuen Formel
+     * gespeichert wird. Beim Übernehmen der Eigenschaften in das
+     * <code>UserField</code> wird dieser <code>String</code> dann als Formel im
+     * <code>UserField</code> gesetzt.
      */
     private String newFormulaInternalStyle;
 
     /**
      * @param userField Feld, dessen Eigenschaften geändert werden sollen
      * @param owner Owner für weitere Unterdialoge
-     * @param userFieldNameSource Textkomponente, die einen evtl. vom aktuell gesetzten Namen des Userfields abweichenden Namen vorgibt
+     * @param userFieldNameSource Textkomponente, die einen evtl. vom aktuell
+     *            gesetzten Namen des Userfields abweichenden Namen vorgibt
      */
     public FormulaPanel(final JDialog owner, final UserField userField, final UserFieldDefinitions definitions, final JTextComponent userFieldNameSource) {
         super();

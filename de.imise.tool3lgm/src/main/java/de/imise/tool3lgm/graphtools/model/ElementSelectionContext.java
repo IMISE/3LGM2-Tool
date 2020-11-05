@@ -13,9 +13,11 @@ import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
 
 /**
- * Stellt Funktionen bereit, um eine Selektion auf den ModellElementen (Knoten, Kanten, Knickpunkte) zu erstellen und diese auszuwerten. Je nach
- * gegebener Selektion müssen (Kontext-)Menüeinträge angepasst werden bzw. Actions verfügbar sein oder eben nicht. Diese Klasse delegiert die
- * eigentliche Selektion und kann in die Vererbungshierarchie eingehängt werden.
+ * Stellt Funktionen bereit, um eine Selektion auf den ModellElementen (Knoten,
+ * Kanten, Knickpunkte) zu erstellen und diese auszuwerten. Je nach gegebener
+ * Selektion müssen (Kontext-)Menüeinträge angepasst werden bzw. Actions
+ * verfügbar sein oder eben nicht. Diese Klasse delegiert die eigentliche
+ * Selektion und kann in die Vererbungshierarchie eingehängt werden.
  */
 public class ElementSelectionContext extends MetaModelSpecificAdapter {
 
@@ -83,10 +85,10 @@ public class ElementSelectionContext extends MetaModelSpecificAdapter {
 
     /**
      * Liefert die Liste der aktuell selektierten {@link ModelElement}s.<br />
-     * Das zuletzt selektierte Element ist auch in dieser Liste das letzte Element.
+     * Das zuletzt selektierte Element ist auch in dieser Liste das letzte
+     * Element.
      *
-     * @return
-     *         Liste der ModellElemente der selektierten ElementContainer
+     * @return Liste der ModellElemente der selektierten ElementContainer
      * @see ModelSelection#getSelectedElements()
      */
     public final List<ModelElement> getSelectedElements() {
@@ -94,11 +96,11 @@ public class ElementSelectionContext extends MetaModelSpecificAdapter {
     }
 
     /**
-     * Liefert die Liste der aktuell selektierten {@link ElementContainer}.<br />
+     * Liefert die Liste der aktuell selektierten
+     * {@link ElementContainer}.<br />
      * Der zuletzt selektierte Container ist in dieser Liste das letzte Element.
      *
-     * @return
-     *         Liste der selektierten {@link ElementContainer}
+     * @return Liste der selektierten {@link ElementContainer}
      * @see ModelSelection#getSelectedContainer()
      */
     public final List<ElementContainer> getSelectedContainer() {
@@ -106,7 +108,8 @@ public class ElementSelectionContext extends MetaModelSpecificAdapter {
     }
 
     /**
-     * @return the last selected element contianer in the whole model (node, edge or bendpoint)
+     * @return the last selected element contianer in the whole model (node,
+     *         edge or bendpoint)
      */
     public final ElementContainer getLastSelected() {
         return selectedContainer.getLastSelected();
@@ -128,9 +131,10 @@ public class ElementSelectionContext extends MetaModelSpecificAdapter {
     }
 
     /**
-     * Fügt den angegebenen {@link ElementContainer} als letztes Element zur Selektion hinzu.
-     * Falls es schon in der Selektion vorhanden war, wird das alte Vorkommen entfernt.
-     * Diese Aktion wird weder Undo-/Redo-technisch geloggt noch wird ein Event gefeuert.
+     * Fügt den angegebenen {@link ElementContainer} als letztes Element zur
+     * Selektion hinzu. Falls es schon in der Selektion vorhanden war, wird das
+     * alte Vorkommen entfernt. Diese Aktion wird weder Undo-/Redo-technisch
+     * geloggt noch wird ein Event gefeuert.
      *
      * @param mc
      * @see #addToSelection(ElementContainer, int)
@@ -233,7 +237,8 @@ public class ElementSelectionContext extends MetaModelSpecificAdapter {
     }
 
     /**
-     * Gibt zurück, ob mehr als ein {@link NodeContainer} oder {@link BendpointContainer} selektiert ist.
+     * Gibt zurück, ob mehr als ein {@link NodeContainer} oder
+     * {@link BendpointContainer} selektiert ist.
      *
      * @return
      */
@@ -251,7 +256,8 @@ public class ElementSelectionContext extends MetaModelSpecificAdapter {
     }
 
     /**
-     * Liefert <code>true</code>, wenn mind. ein {@link NodeContainer} selektiert ist. {@link BendpointContainer} als Unterklasse von
+     * Liefert <code>true</code>, wenn mind. ein {@link NodeContainer}
+     * selektiert ist. {@link BendpointContainer} als Unterklasse von
      * {@link NodeContainer} zählen auch.
      *
      * @return
@@ -261,7 +267,8 @@ public class ElementSelectionContext extends MetaModelSpecificAdapter {
     }
 
     /**
-     * Liefert <code>true</code>, wenn mind. ein {@link BendpointContainer} selektiert ist.
+     * Liefert <code>true</code>, wenn mind. ein {@link BendpointContainer}
+     * selektiert ist.
      *
      * @return
      */
@@ -270,7 +277,8 @@ public class ElementSelectionContext extends MetaModelSpecificAdapter {
     }
 
     /**
-     * Liefert <code>true</code>, wenn mind. ein {@link EdgeContainer} selektiert ist.
+     * Liefert <code>true</code>, wenn mind. ein {@link EdgeContainer}
+     * selektiert ist.
      *
      * @return
      */
@@ -279,7 +287,8 @@ public class ElementSelectionContext extends MetaModelSpecificAdapter {
     }
 
     /**
-     * Liefert <code>true</code>, wenn mind. ein {@link NodeContainer} selektiert ist, der kein {@link BendpointContainer} ist.
+     * Liefert <code>true</code>, wenn mind. ein {@link NodeContainer}
+     * selektiert ist, der kein {@link BendpointContainer} ist.
      *
      * @return
      */
@@ -288,7 +297,8 @@ public class ElementSelectionContext extends MetaModelSpecificAdapter {
     }
 
     /**
-     * Liefert <code>true</code>, wenn nur {@link NodeContainer} selektiert sind.
+     * Liefert <code>true</code>, wenn nur {@link NodeContainer} selektiert
+     * sind.
      *
      * @return
      */
@@ -297,7 +307,8 @@ public class ElementSelectionContext extends MetaModelSpecificAdapter {
     }
 
     /**
-     * Liefert <code>true</code>, wenn nur {@link BendpointContainer} selektiert sind.
+     * Liefert <code>true</code>, wenn nur {@link BendpointContainer} selektiert
+     * sind.
      *
      * @return
      */
@@ -306,7 +317,8 @@ public class ElementSelectionContext extends MetaModelSpecificAdapter {
     }
 
     /**
-     * Liefert <code>true</code>, wenn nur {@link EdgeContainer} selektiert sind.
+     * Liefert <code>true</code>, wenn nur {@link EdgeContainer} selektiert
+     * sind.
      *
      * @return
      */
@@ -315,7 +327,8 @@ public class ElementSelectionContext extends MetaModelSpecificAdapter {
     }
 
     /**
-     * Liefert <code>true</code>, wenn nur {@link NodeContainer} selektiert sind, die keine {@link BendpointContainer} sind.
+     * Liefert <code>true</code>, wenn nur {@link NodeContainer} selektiert
+     * sind, die keine {@link BendpointContainer} sind.
      *
      * @return
      */
@@ -324,8 +337,8 @@ public class ElementSelectionContext extends MetaModelSpecificAdapter {
     }
 
     /**
-     * Gibt wieder, ob alle ausgewählten Elemente <em>unique</em> sind, also in allen Teilmodellen
-     * vorkommen und keine grafische Repräsentation besitzen.
+     * Gibt wieder, ob alle ausgewählten Elemente <em>unique</em> sind, also in
+     * allen Teilmodellen vorkommen und keine grafische Repräsentation besitzen.
      *
      * @return
      */
@@ -334,7 +347,8 @@ public class ElementSelectionContext extends MetaModelSpecificAdapter {
     }
 
     /**
-     * Gibt wieder, ob die selektierten Elemente ausschließlich im Teilmodell existieren
+     * Gibt wieder, ob die selektierten Elemente ausschließlich im Teilmodell
+     * existieren
      *
      * @return
      */
@@ -343,7 +357,8 @@ public class ElementSelectionContext extends MetaModelSpecificAdapter {
     }
 
     /**
-     * Gibt wieder, ob nur untergeordnete Elemente in den RealNodes selektiert sind.
+     * Gibt wieder, ob nur untergeordnete Elemente in den RealNodes selektiert
+     * sind.
      *
      * @return
      */

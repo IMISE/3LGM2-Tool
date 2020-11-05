@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import de.imise.tool3lgm.graphtools.metamodel.CoreMetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.CompositionEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
@@ -20,14 +21,16 @@ import de.imise.util.ReflectionUtils;
 public class MetaPathFunctions {
 
     /**
-     * Gibt einen Elementarpfad anhand eines übergebenen Index zurück. Ist der Index >= 0, dann wird genau der Index zurück gegeben. Ist der Index <
-     * 0, dann wird der übergebene Index von der Länge der Geamtliste der Elementarfade abgezogen. Möchte man also den letzten Elementarpfad haben,
+     * Gibt einen Elementarpfad anhand eines übergebenen Index zurück. Ist der
+     * Index >= 0, dann wird genau der Index zurück gegeben. Ist der Index < 0,
+     * dann wird der übergebene Index von der Länge der Geamtliste der
+     * Elementarfade abgezogen. Möchte man also den letzten Elementarpfad haben,
      * muss man -1 übergeben, für den vorletzten -2 usw.
      *
      * @param metaPath
-     * @param index
-     *            Index der Kante im Pfad, wenn dieser eindeutig ist. Wird ein Wert < 0 übergeben, dann ergibt sich der Index aus der Summe der
-     *            Gesamtanzahl der Elementarpfade und diesem Wert.
+     * @param index Index der Kante im Pfad, wenn dieser eindeutig ist. Wird ein
+     *            Wert < 0 übergeben, dann ergibt sich der Index aus der Summe
+     *            der Gesamtanzahl der Elementarpfade und diesem Wert.
      * @return
      */
     public static final ElementaryMetaPath getElementaryMetaPathInPath(final MetaPath metaPath, final int index) {
@@ -40,14 +43,17 @@ public class MetaPathFunctions {
     }
 
     /**
-     * Liefert die Verbindungsklasse der Elementarpfade am angegebenen Index. Es wird immer die Endklasse des Elementarpfades mit dem Index und die
-     * Startklasse des nächsten genommen, wenn es einen nächsten gibt, und davon die speziellste gemeinsame Oberklasse zurück gegeben. Existiert für
-     * den Pfad keine einfache Elementarpfadliste für diesen MetaPath, dann kommt <code>null</code> zurück.
+     * Liefert die Verbindungsklasse der Elementarpfade am angegebenen Index. Es
+     * wird immer die Endklasse des Elementarpfades mit dem Index und die
+     * Startklasse des nächsten genommen, wenn es einen nächsten gibt, und davon
+     * die speziellste gemeinsame Oberklasse zurück gegeben. Existiert für den
+     * Pfad keine einfache Elementarpfadliste für diesen MetaPath, dann kommt
+     * <code>null</code> zurück.
      *
      * @param simpleMetaPath
-     * @param pathStepIndex
-     *            Index der Kante im Pfad, wenn dieser eindeutig ist. Wird ein Wert < 0 übergeben, dann ergibt sich der Index aus der Summe der
-     *            Gesamtanzahl der Elementarpfade und diesem Wert.
+     * @param pathStepIndex Index der Kante im Pfad, wenn dieser eindeutig ist.
+     *            Wird ein Wert < 0 übergeben, dann ergibt sich der Index aus
+     *            der Summe der Gesamtanzahl der Elementarpfade und diesem Wert.
      * @return
      */
     public static final Class<? extends ModelElement> getElementaryPathsConnectingClass(final MetaPath simpleMetaPath, final int pathStepIndex) {
@@ -65,8 +71,9 @@ public class MetaPathFunctions {
     }
 
     /**
-     * Liefert die speziellere der Endklasse des ersten Pfades und der Startklasse des zweiten Pfades. Ist der zweite Pfad <code>null</code>, kommt
-     * die Endklasse des ersten zurück.
+     * Liefert die speziellere der Endklasse des ersten Pfades und der
+     * Startklasse des zweiten Pfades. Ist der zweite Pfad <code>null</code>,
+     * kommt die Endklasse des ersten zurück.
      *
      * @param elementaryMetaPathToConnectingClass
      * @param elementaryMetaPathFromConnectionClass
@@ -87,8 +94,9 @@ public class MetaPathFunctions {
     }
 
     /**
-     * Liefert die speziellere der Endklasse des ersten Pfades und der Startklasse des zweiten Pfades. Ist der zweite Pfad <code>null</code>, kommt
-     * die Endklasse des ersten zurück.
+     * Liefert die speziellere der Endklasse des ersten Pfades und der
+     * Startklasse des zweiten Pfades. Ist der zweite Pfad <code>null</code>,
+     * kommt die Endklasse des ersten zurück.
      *
      * @param edgeClass1
      * @param direction1
@@ -107,14 +115,15 @@ public class MetaPathFunctions {
     }
 
     /**
-     * Liefert true, wenn die Kantenklasse eine Composition ist und die zugehörige Richtung (direction) vom Master auf den Slave zeigt.
+     * Liefert true, wenn die Kantenklasse eine Composition ist und die
+     * zugehörige Richtung (direction) vom Master auf den Slave zeigt.
      *
      * @param edgeClass
      * @param direction
      * @return
      */
     static final boolean isCompositionFromMasterToSlave(final Class<? extends Edge> edgeClass, final Direction direction) {
-        boolean isEdgeMasterToSlaveComposition = MetaModel.isComposition(edgeClass);
+        boolean isEdgeMasterToSlaveComposition = CoreMetaModel.isComposition(edgeClass);
         if (!isEdgeMasterToSlaveComposition) {
             return false;
         }
@@ -123,14 +132,15 @@ public class MetaPathFunctions {
     }
 
     /**
-     * Liefert true, wenn die Kantenklasse eine Composition ist und die zugehörige Richtung (direction) vom Master auf den Slave zeigt.
+     * Liefert true, wenn die Kantenklasse eine Composition ist und die
+     * zugehörige Richtung (direction) vom Master auf den Slave zeigt.
      *
      * @param edgeClass
      * @param direction
      * @return
      */
     static final boolean isInstanciationFromMasterToInstance(final Class<? extends Edge> edgeClass, final Direction direction) {
-        boolean isEdgeMasterToInstanceInstanciation = MetaModel.isInstanciation(edgeClass);
+        boolean isEdgeMasterToInstanceInstanciation = CoreMetaModel.isInstanciation(edgeClass);
         if (!isEdgeMasterToInstanceInstanciation) {
             return false;
         }
@@ -140,7 +150,8 @@ public class MetaPathFunctions {
 
     /**
      * @param metaPath
-     * @return <code>true</code> if the first {@link ElementaryMetaPath} is between pure template elements
+     * @return <code>true</code> if the first {@link ElementaryMetaPath} is
+     *         between pure template elements
      * @see {@link MetaModel#isPureTemplateElementClass(Class)}
      */
     public static final boolean startsWitTemplateElementsElementaryMetaPath(final MetaPath metaPath) {
@@ -170,11 +181,10 @@ public class MetaPathFunctions {
 
     /**
      * @param simpleMetaPath
-     * @param withSubClasses
-     *            if <code>true</code> all subclasses of thepath step
+     * @param withSubClasses if <code>true</code> all subclasses of thepath step
      *            connecting classes are added too
-     * @return a set of all classes in the metapath. These are only the
-     *         path step connecting classes and not the edge classes.
+     * @return a set of all classes in the metapath. These are only the path
+     *         step connecting classes and not the edge classes.
      */
     public static final Set<Class<? extends ModelElement>> getAllPathStepsStartAndEndClasses(final SimpleMetaPath simpleMetaPath, final boolean withSubClasses) {
         Set<Class<? extends ModelElement>> returnSet = new HashSet<>();
@@ -183,7 +193,7 @@ public class MetaPathFunctions {
         int metaPathLength = simpleMetaPath.length();
         for (int i = 0; i < metaPathLength; i++) {
             Class<? extends ModelElement> pathStepElementClass = simpleMetaPath.getPathStepElementClass(i);
-            if (MetaModel.isAbstract(pathStepElementClass)) {
+            if (CoreMetaModel.isAbstract(pathStepElementClass)) {
                 MetaModel metaModel = simpleMetaPath.getMetaModel();
                 Collection<Class<? extends ModelElement>> classAndSubClasses = metaModel.getClassAndSubClasses(pathStepElementClass);
                 returnSet.addAll(classAndSubClasses);

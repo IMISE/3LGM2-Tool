@@ -81,8 +81,9 @@ public class GraphAreaToolbarButton extends JToggleButton {
 
     /**
      * @param metaModel
-     * @param dummyPaintableElementClass
-     *            irgendeine der grafisch darstellbaren Klassen, die man braucht, um einen Strich auf den Button der Kanten zu malen
+     * @param dummyPaintableElementClass irgendeine der grafisch darstellbaren
+     *            Klassen, die man braucht, um einen Strich auf den Button der
+     *            Kanten zu malen
      * @return
      */
     public static GraphAreaToolbarButton createEdgeButton(final MetaModel metaModel, final Class<? extends Node> dummyPaintableElementClass) {

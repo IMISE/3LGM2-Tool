@@ -28,8 +28,8 @@ import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
 import de.imise.util.ReflectionUtils;
 
 /**
- * Encapsulates all static functions for an metamodel that is independent
- * from a specific metamodel instance.
+ * Encapsulates all static functions for an metamodel that is independent from a
+ * specific metamodel instance.
  *
  * @author AXS (02.04.2020)
  */
@@ -54,7 +54,10 @@ public abstract class CoreMetaModel implements MetaModelSpecific {
 
     public static final Collection<Class<? extends ModelElement>> EMPTY_ELEMENT_CLASS_COLLECTION = ImmutableList.of();
 
-    /** Alle Modellelementklassen, die instanziierbar sind und in jedem Metamodell automatisch enthalten sind */
+    /**
+     * Alle Modellelementklassen, die instanziierbar sind und in jedem
+     * Metamodell automatisch enthalten sind
+     */
     protected static final Set<Class<? extends ModelElement>> META_MODEL_INDEPENDENT_MODEL_ELEMENT_TYPES = ImmutableSet.of(Bendpoint.class, Textfield.class);
 
     /**
@@ -89,40 +92,48 @@ public abstract class CoreMetaModel implements MetaModelSpecific {
     }
 
     /**
-     * Geprüft wird, ob sich die übergebene Klasse eine Unterklasse von {@link Node} oder {@link NodeContainer} ist.
+     * Geprüft wird, ob sich die übergebene Klasse eine Unterklasse von
+     * {@link Node} oder {@link NodeContainer} ist.
      *
      * @param elementClass
-     * @return <code>true</code>, wenn die übergebene Klasse ein Knotentyps ist, sonst <code>false</code>.
+     * @return <code>true</code>, wenn die übergebene Klasse ein Knotentyps ist,
+     *         sonst <code>false</code>.
      */
     public static final boolean isNodeType(final Class<?> elementClass) {
         return Node.class.isAssignableFrom(elementClass) || NodeContainer.class.isAssignableFrom(elementClass);
     }
 
     /**
-     * Geprüft wird, ob sich die übergebene Klasse eine Unterklasse von {@link Node} oder {@link NodeContainer} ist.
+     * Geprüft wird, ob sich die übergebene Klasse eine Unterklasse von
+     * {@link Node} oder {@link NodeContainer} ist.
      *
      * @param elementClass
-     * @return <code>true</code>, wenn die übergebene Klasse ein Knotentyps ist, sonst <code>false</code>.
+     * @return <code>true</code>, wenn die übergebene Klasse ein Knotentyps ist,
+     *         sonst <code>false</code>.
      */
     public static final boolean isBendpointType(final Class<?> elementClass) {
         return Bendpoint.class.isAssignableFrom(elementClass) || BendpointContainer.class.isAssignableFrom(elementClass);
     }
 
     /**
-     * Geprüft wird, ob sich die übergebene Klasse eine Unterklasse von {@link Node} ist.
+     * Geprüft wird, ob sich die übergebene Klasse eine Unterklasse von
+     * {@link Node} ist.
      *
      * @param elementClass
-     * @return <code>true</code>, wenn die übergebene Klasse ein Knotentyps ist, sonst <code>false</code>.
+     * @return <code>true</code>, wenn die übergebene Klasse ein Knotentyps ist,
+     *         sonst <code>false</code>.
      */
     public static final boolean isRealNodeType(final Class<?> elementClass) {
         return isNodeType(elementClass) && !isBendpointType(elementClass);
     }
 
     /**
-     * Geprüft wird, ob sich die übergebene Klasse eine Unterklasse von {@link Edge} ist.
+     * Geprüft wird, ob sich die übergebene Klasse eine Unterklasse von
+     * {@link Edge} ist.
      *
      * @param elementClass
-     * @return <code>true</code>, wenn die übergebene Klasse eine Assoziation ist, sonst <code>false</code>.
+     * @return <code>true</code>, wenn die übergebene Klasse eine Assoziation
+     *         ist, sonst <code>false</code>.
      */
     public static final boolean isEdgeType(final Class<?> elementClass) {
         return Edge.class.isAssignableFrom(elementClass) || EdgeContainer.class.isAssignableFrom(elementClass);
@@ -169,7 +180,8 @@ public abstract class CoreMetaModel implements MetaModelSpecific {
     }
 
     /**
-     * Prüft, ob die übergebene Klasse eine Kantenklasse mit mehreren Bedeutungen ist, also die Richtung der Edge die Bedeutung angibt.
+     * Prüft, ob die übergebene Klasse eine Kantenklasse mit mehreren
+     * Bedeutungen ist, also die Richtung der Edge die Bedeutung angibt.
      *
      * @param edgeClass
      * @return
@@ -179,7 +191,8 @@ public abstract class CoreMetaModel implements MetaModelSpecific {
     }
 
     /**
-     * Liefert <code>true</code>, wenn die übergebene Elementklasse eine Slave-Klasse der übergebenen Kompositionsklasse ist.
+     * Liefert <code>true</code>, wenn die übergebene Elementklasse eine
+     * Slave-Klasse der übergebenen Kompositionsklasse ist.
      *
      * @param compositionClass
      * @param elementClass
@@ -190,7 +203,8 @@ public abstract class CoreMetaModel implements MetaModelSpecific {
     }
 
     /**
-     * Liefert <code>true</code>, wenn die übergebene Elementklasse eine Master-Klasse der übergebenen Kompositionsklasse ist.
+     * Liefert <code>true</code>, wenn die übergebene Elementklasse eine
+     * Master-Klasse der übergebenen Kompositionsklasse ist.
      *
      * @param compositionClass
      * @param elementClass
@@ -201,7 +215,8 @@ public abstract class CoreMetaModel implements MetaModelSpecific {
     }
 
     /**
-     * Liefert <code>true</code>, wenn die übergebene Elementklasse eine Slave-Klasse der übergebenen Kompositionsklasse ist.
+     * Liefert <code>true</code>, wenn die übergebene Elementklasse eine
+     * Slave-Klasse der übergebenen Kompositionsklasse ist.
      *
      * @param compositionClass
      * @param elementClass
@@ -212,7 +227,8 @@ public abstract class CoreMetaModel implements MetaModelSpecific {
     }
 
     /**
-     * Liefert <code>true</code>, wenn die übergebene Elementklasse eine Master-Klasse der übergebenen Kompositionsklasse ist.
+     * Liefert <code>true</code>, wenn die übergebene Elementklasse eine
+     * Master-Klasse der übergebenen Kompositionsklasse ist.
      *
      * @param compositionClass
      * @param elementClass
@@ -223,8 +239,10 @@ public abstract class CoreMetaModel implements MetaModelSpecific {
     }
 
     /**
-     * Liefert <code>true</code>, wenn es sich bei der übergebenen Kantenklasse um eine {@link InstanciationEdge} handelt und die übergebene
-     * Elementklasse davon das StartElement - also das instanziierbare Element ist und nicht die Instanz.
+     * Liefert <code>true</code>, wenn es sich bei der übergebenen Kantenklasse
+     * um eine {@link InstanciationEdge} handelt und die übergebene
+     * Elementklasse davon das StartElement - also das instanziierbare Element
+     * ist und nicht die Instanz.
      *
      * @param edgeClass
      * @param elementClass
@@ -235,8 +253,10 @@ public abstract class CoreMetaModel implements MetaModelSpecific {
     }
 
     /**
-     * Liefert <code>true</code>, wenn es sich bei der übergebenen Kantenklasse um eine {@link InstanciationEdge} handelt und die übergebene
-     * Elementklasse davon das EndElement - also die Instanz ist und nicht das instanziierbare Element.
+     * Liefert <code>true</code>, wenn es sich bei der übergebenen Kantenklasse
+     * um eine {@link InstanciationEdge} handelt und die übergebene
+     * Elementklasse davon das EndElement - also die Instanz ist und nicht das
+     * instanziierbare Element.
      *
      * @param edgeClass
      * @param elementClass
@@ -247,8 +267,9 @@ public abstract class CoreMetaModel implements MetaModelSpecific {
     }
 
     /**
-     * Liefert <code>true</code>, wenn die übergebene Klasse die Startklasse der Edge oder eine Unterklasse davon ist und die Kantenklasse
-     * für diese Elementart nicht entfernt wurde.
+     * Liefert <code>true</code>, wenn die übergebene Klasse die Startklasse der
+     * Edge oder eine Unterklasse davon ist und die Kantenklasse für diese
+     * Elementart nicht entfernt wurde.
      *
      * @param edgeClass
      * @param elementClass
@@ -260,8 +281,9 @@ public abstract class CoreMetaModel implements MetaModelSpecific {
     }
 
     /**
-     * Liefert <code>true</code>, wenn die übergebene Klasse die Endklasse der Edge oder eine Unterklasse davon ist und die Kantenklasse
-     * für diese Elementart nicht entfernt wurde.
+     * Liefert <code>true</code>, wenn die übergebene Klasse die Endklasse der
+     * Edge oder eine Unterklasse davon ist und die Kantenklasse für diese
+     * Elementart nicht entfernt wurde.
      *
      * @param edgeClass
      * @param elementClass
@@ -273,8 +295,9 @@ public abstract class CoreMetaModel implements MetaModelSpecific {
     }
 
     /**
-     * Liefert <code>true</code>, wenn die übergebene Klasse die Startklasse der Edge oder eine Unterklasse oder eine Oberklasse davon ist
-     * und die Kantenklasse für diese Elementart nicht entfernt wurde.
+     * Liefert <code>true</code>, wenn die übergebene Klasse die Startklasse der
+     * Edge oder eine Unterklasse oder eine Oberklasse davon ist und die
+     * Kantenklasse für diese Elementart nicht entfernt wurde.
      *
      * @param edgeClass
      * @param elementClass
@@ -286,8 +309,9 @@ public abstract class CoreMetaModel implements MetaModelSpecific {
     }
 
     /**
-     * Liefert <code>true</code>, wenn die übergebene Klasse die Endklasse der Edge oder eine Unterklasse oder eine Oberlasse davon ist
-     * und die Kantenklasse für diese Elementart nicht entfernt wurde.
+     * Liefert <code>true</code>, wenn die übergebene Klasse die Endklasse der
+     * Edge oder eine Unterklasse oder eine Oberlasse davon ist und die
+     * Kantenklasse für diese Elementart nicht entfernt wurde.
      *
      * @param edgeClass
      * @param elementClass
@@ -299,7 +323,8 @@ public abstract class CoreMetaModel implements MetaModelSpecific {
     }
 
     /**
-     * Liefert <code>true</code>, wenn die übergebene Klasse die Start- oder Endklasse der Edge oder eine Ober- oder Unterklasse davon ist.
+     * Liefert <code>true</code>, wenn die übergebene Klasse die Start- oder
+     * Endklasse der Edge oder eine Ober- oder Unterklasse davon ist.
      *
      * @param edgeClass
      * @param elementClass
@@ -310,8 +335,9 @@ public abstract class CoreMetaModel implements MetaModelSpecific {
     }
 
     /**
-     * Liefert <code>true</code>, wenn die übergebene Kantenklasse Elemente der angegebenen Arten miteinander verbindet. Je nach
-     * Richtung vorwärst (FORWARD), rückwärts (BACKWARD) oder irgendwie (null)
+     * Liefert <code>true</code>, wenn die übergebene Kantenklasse Elemente der
+     * angegebenen Arten miteinander verbindet. Je nach Richtung vorwärst
+     * (FORWARD), rückwärts (BACKWARD) oder irgendwie (null)
      *
      * @param edgeClass
      * @param elementClass1
@@ -330,7 +356,8 @@ public abstract class CoreMetaModel implements MetaModelSpecific {
     }
 
     /**
-     * Liefert <code>true</code>, wenn die übergebene Kantenklasse Elemente der angegebenen Arten miteinander verbindet.
+     * Liefert <code>true</code>, wenn die übergebene Kantenklasse Elemente der
+     * angegebenen Arten miteinander verbindet.
      *
      * @param edgeClass
      * @param elementClass1
@@ -342,9 +369,11 @@ public abstract class CoreMetaModel implements MetaModelSpecific {
     }
 
     /**
-     * Liefert <code>true</code>, wenn die übergebene Kantenklasse Elemente der angegebenen Arten in Vorwärtsrichtung miteinander verbindet. Also
-     * <code>startElementClass</code> die Startklasse der Kantenklasse oder eine Unterklasse davon ist und <code>endElementClass</code> die Endklasse
-     * der Kantenklasse oder eine Unterklasse davon ist.
+     * Liefert <code>true</code>, wenn die übergebene Kantenklasse Elemente der
+     * angegebenen Arten in Vorwärtsrichtung miteinander verbindet. Also
+     * <code>startElementClass</code> die Startklasse der Kantenklasse oder eine
+     * Unterklasse davon ist und <code>endElementClass</code> die Endklasse der
+     * Kantenklasse oder eine Unterklasse davon ist.
      *
      * @param edgeClass
      * @param startElementClass
@@ -356,12 +385,17 @@ public abstract class CoreMetaModel implements MetaModelSpecific {
     }
 
     /**
-     * Wenn die übergebene Elementklasse durch eine Edge der angegebenen Art mit anderen Elementen verbunden sein kann, dann wird die Elementklasse
-     * dieser anderen Elemente zurück gegeben. Passen Edge und Elementklasse nicht zusammen, kommt <code>null</code> zurück.
+     * Wenn die übergebene Elementklasse durch eine Edge der angegebenen Art mit
+     * anderen Elementen verbunden sein kann, dann wird die Elementklasse dieser
+     * anderen Elemente zurück gegeben. Passen Edge und Elementklasse nicht
+     * zusammen, kommt <code>null</code> zurück.
      *
-     * @param edgeClass Kantanklasse, von der die andere verbundene Elementklasse zurück gegeben werden soll
-     * @param meClass Elementklasse der Edge, deren Gegenelementklasse zurück gegeben werden soll
-     * @return die andere Elementklasse der Edge, als die übergebene Klasse oder <code>null</code>, wenn die Klasse gar nicht passt
+     * @param edgeClass Kantanklasse, von der die andere verbundene
+     *            Elementklasse zurück gegeben werden soll
+     * @param meClass Elementklasse der Edge, deren Gegenelementklasse zurück
+     *            gegeben werden soll
+     * @return die andere Elementklasse der Edge, als die übergebene Klasse oder
+     *         <code>null</code>, wenn die Klasse gar nicht passt
      */
     public static final Class<? extends ModelElement> getOther(final Class<? extends Edge> edgeClass, final Class<? extends ModelElement> meClass) {
         if (isStartClass(edgeClass, meClass)) {
@@ -388,7 +422,8 @@ public abstract class CoreMetaModel implements MetaModelSpecific {
     }
 
     /**
-     * Liefert die Kardinalität für Kanten der übergebenen Art, die ein Element der übergebenen Art zu anderen Elementen hat.
+     * Liefert die Kardinalität für Kanten der übergebenen Art, die ein Element
+     * der übergebenen Art zu anderen Elementen hat.
      *
      * @param edgeClass
      * @param elementClass
@@ -405,7 +440,8 @@ public abstract class CoreMetaModel implements MetaModelSpecific {
     }
 
     /**
-     * Liefert die minimale Anzahl von Kanten der übergebenen Art, die ein Element der übergebenen Art zu anderen Elementen haben muss.
+     * Liefert die minimale Anzahl von Kanten der übergebenen Art, die ein
+     * Element der übergebenen Art zu anderen Elementen haben muss.
      *
      * @param edgeClass
      * @param elementClass
@@ -417,7 +453,8 @@ public abstract class CoreMetaModel implements MetaModelSpecific {
     }
 
     /**
-     * Liefert die maximale Anzahl von Kanten der übergebenen Art, die ein Element der übergebenen Art zu anderen Elementen haben kann.
+     * Liefert die maximale Anzahl von Kanten der übergebenen Art, die ein
+     * Element der übergebenen Art zu anderen Elementen haben kann.
      *
      * @param edgeClass
      * @param elementClass

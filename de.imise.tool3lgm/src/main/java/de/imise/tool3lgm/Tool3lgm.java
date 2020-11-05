@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JDesktopPane;
+import javax.swing.JFileChooser;
 import javax.swing.JInternalFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JTabbedPane;
@@ -49,9 +50,9 @@ import de.imise.util.swing.dialog.ExtendedFileChooser;
 public class Tool3lgm {
 
     /**
-     * If <code>true</code> the {@link MainFrameDesktopPane} uses a {@link JTabbedPane}
-     * instead of a {@link JDesktopPane} with {@link JInternalFrame}s to sho the graph
-     * and matix views.
+     * If <code>true</code> the {@link MainFrameDesktopPane} uses a
+     * {@link JTabbedPane} instead of a {@link JDesktopPane} with
+     * {@link JInternalFrame}s to sho the graph and matix views.
      */
     public static final boolean DESKTOP_WITH_TABS_INSTEAD_OF_INTERNAL_FRAMES = true;
 
@@ -187,7 +188,8 @@ public class Tool3lgm {
     }
 
     /**
-     * lädt ein 3LGM²-Dokument (legt die Teilmodell-Fenster an, aktualisiert das Fenster Menu und ModelBrowser)
+     * lädt ein 3LGM²-Dokument (legt die Teilmodell-Fenster an, aktualisiert das
+     * Fenster Menu und ModelBrowser)
      */
     public boolean createNewModel() {
         Tool3lgmModelType choosedModelType = Tool3lgmMetaModelContext.getNewModelType();
@@ -201,7 +203,8 @@ public class Tool3lgm {
      * Lädt eine Modell-Datei
      *
      * @param file die zu ladende Datei
-     * @param fileChooserPathKey the identifier the {@link ExtendedFileChooser} needs to store and reopen the last used path
+     * @param fileChooserPathKey the identifier the {@link ExtendedFileChooser}
+     *            needs to store and reopen the last used path
      * @return
      */
     public boolean openModelFile(final File file) {
@@ -212,7 +215,8 @@ public class Tool3lgm {
      * Lädt eine Modell-Datei
      *
      * @param file die zu ladende Datei
-     * @param fileChooserPathKey the identifier the {@link ExtendedFileChooser} needs to store and reopen the last used path
+     * @param fileChooserPathKey the identifier the {@link ExtendedFileChooser}
+     *            needs to store and reopen the last used path
      * @return
      */
     public boolean openModelFile(File file, final Object fileChooserPathKey) {
@@ -233,7 +237,8 @@ public class Tool3lgm {
      */
     /**
      * @param file
-     * @param fileChooserPathKey the identifier the {@link ExtendedFileChooser} needs to store and reopen the last used path
+     * @param fileChooserPathKey the identifier the {@link ExtendedFileChooser}
+     *            needs to store and reopen the last used path
      * @return
      */
     private File chooseModelFile(File file, final Object fileChooserPathKey) {
@@ -253,7 +258,7 @@ public class Tool3lgm {
         if (fileChooserPathKey == null) {
             UserProperties.setWorkingDirectory(chooser.getCurrentDirectory());
         }
-        if (chooserAnswer == ExtendedFileChooser.APPROVE_OPTION) {
+        if (chooserAnswer == JFileChooser.APPROVE_OPTION) {
             file = chooser.getSelectedFile();
             chooser.setVisible(false);
             return file;
@@ -264,11 +269,12 @@ public class Tool3lgm {
     /**
      * Legt ein neues Modell an oder lädt ein bestehendes aus einer Datei.
      *
-     * @param file
-     *            zu ladende Datei. Wenn <code>null</code> übergeben wird, wird eine neue Datei angelegt.
-     * @param metaModelContext
-     *            MetaModelContext der zu öffnenden Datei oder des neu anzulegenden Modells
-     * @return <code>true</code>, wenn die Datei geöffnet werden konnte oder ein neues Modell angelegt wurde
+     * @param file zu ladende Datei. Wenn <code>null</code> übergeben wird, wird
+     *            eine neue Datei angelegt.
+     * @param metaModelContext MetaModelContext der zu öffnenden Datei oder des
+     *            neu anzulegenden Modells
+     * @return <code>true</code>, wenn die Datei geöffnet werden konnte oder ein
+     *         neues Modell angelegt wurde
      */
     private boolean openModel(final File file, final Tool3lgmModelType modelType) {
         GDCollection gdcoll;
@@ -294,11 +300,12 @@ public class Tool3lgm {
     /**
      * Legt ein neues Modell an oder lädt ein bestehendes aus einer Datei.
      *
-     * @param file
-     *            zu ladende Datei. Wenn <code>null</code> übergeben wird, wird eine neue Datei angelegt.
-     * @param metaModelContext
-     *            MetaModelContext der zu öffnenden Datei oder des neu anzulegenden Modells
-     * @return <code>true</code>, wenn die Datei geöffnet werden konnte oder ein neues Modell angelegt wurde
+     * @param file zu ladende Datei. Wenn <code>null</code> übergeben wird, wird
+     *            eine neue Datei angelegt.
+     * @param metaModelContext MetaModelContext der zu öffnenden Datei oder des
+     *            neu anzulegenden Modells
+     * @return <code>true</code>, wenn die Datei geöffnet werden konnte oder ein
+     *         neues Modell angelegt wurde
      */
     public boolean openModel(final GDCollection gdcoll) {
         Static.setProgressDialogStatusLabel("finish_progress");
@@ -391,7 +398,8 @@ public class Tool3lgm {
     }
 
     /**
-     * Liefert das Modell, das vor dem aktuell selektierten Modell selektiert war
+     * Liefert das Modell, das vor dem aktuell selektierten Modell selektiert
+     * war
      *
      * @return
      */
@@ -427,11 +435,11 @@ public class Tool3lgm {
     }
 
     /**
-     * Wechselt den Kontext auf das übergebene Teilmodell. In jedem Fall wird der <code>ModelBrowser</code> des aktivierten Teilmodells in den
+     * Wechselt den Kontext auf das übergebene Teilmodell. In jedem Fall wird
+     * der <code>ModelBrowser</code> des aktivierten Teilmodells in den
      * Vordergrund gebracht.
      *
-     * @param doc
-     *            Teilmodell, in dessen Kontext gewechselt werden soll
+     * @param doc Teilmodell, in dessen Kontext gewechselt werden soll
      */
     void setSelectedDoc(final GraphDocument doc) {
         if (doc != null) {
@@ -545,8 +553,7 @@ public class Tool3lgm {
     /**
      * save the model, which have the focus to file
      *
-     * @param saveAs,
-     *            boolean with true if model, is to save with new filename
+     * @param saveAs, boolean with true if model, is to save with new filename
      * @return boolean with true if save was successful or save was cancelled
      */
     public boolean fileSave(boolean saveAs) {
@@ -629,7 +636,8 @@ public class Tool3lgm {
      * return GDCollection with the specified index in ArrayList collections
      *
      * @param index int with index of collection in ArrayList collection
-     * @return null if index < 0 or index >= collections.size(); otherwise the GDCollection with specified index
+     * @return null if index < 0 or index >= collections.size(); otherwise the
+     *         GDCollection with specified index
      */
     public GDCollection getCollection(final int index) {
         return index < 0 || index >= collections.size() ? null : (GDCollection) collections.get(index);

@@ -6,7 +6,8 @@ import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 
 /**
- * Ein MetaPath, der einen anderen umschließt, um die Start und Endklasse zu ändern.
+ * Ein MetaPath, der einen anderen umschließt, um die Start und Endklasse zu
+ * ändern.
  *
  * @author AXS (28 Nov 2018)
  */
@@ -50,11 +51,13 @@ public class WrapperMetaPath extends SequenceMetaPath {
     }
 
     /**
-     * Wenn die übergebenen und aktuell ausgewählten Klassen nicht die Start- und Endklasse des Pfades ist, dann werden die Start- und Endklassen
-     * durch diese übergebenen ersetzt.
-     * Das Ersetzten geschieht durch das Anlegen eines Wrapper-Pfades, der den originalen MetaPfad in der Mitte hat und einen einfachen Elementarpfad
-     * mit der neuen Startklasse davor bzw. mit der Endlasse danach.
-     * Stimmen die Start- und Endklasse des Pfades mit den übergebenen Klassen überein, kommt der origialMetaPath zurück
+     * Wenn die übergebenen und aktuell ausgewählten Klassen nicht die Start-
+     * und Endklasse des Pfades ist, dann werden die Start- und Endklassen durch
+     * diese übergebenen ersetzt. Das Ersetzten geschieht durch das Anlegen
+     * eines Wrapper-Pfades, der den originalen MetaPfad in der Mitte hat und
+     * einen einfachen Elementarpfad mit der neuen Startklasse davor bzw. mit
+     * der Endlasse danach. Stimmen die Start- und Endklasse des Pfades mit den
+     * übergebenen Klassen überein, kommt der origialMetaPath zurück
      *
      * @param newStartClass
      * @param newEndClass

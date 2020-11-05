@@ -29,17 +29,19 @@ public abstract class MetaModelDefinition implements Serializable {
 
     /**
      * Mappt von alten Elementklassen auf die neuen. <br>
-     * Nach einem Refactoring von Node- oder Kantenklassen muss man in diese Map jeweils als <code>String</code> als Schlüssel den alten Namen und
-     * als Value den neuen Namen des Elementes eintragen, damit die Elemente von alten Modellen noch korrekt
-     * eingelesen werden können.
+     * Nach einem Refactoring von Node- oder Kantenklassen muss man in diese Map
+     * jeweils als <code>String</code> als Schlüssel den alten Namen und als
+     * Value den neuen Namen des Elementes eintragen, damit die Elemente von
+     * alten Modellen noch korrekt eingelesen werden können.
      */
     private final Map<String, String> oldToNewClassName = new HashMap<>();
 
     /**
      * liefert die Map, die von alten Elementklassen auf die neuen mappt. <br>
-     * Nach einem Refactoring von Node- oder Kantenklassen muss man in diese Map jeweils als <code>String</code> als Schlüssel den alten Namen und
-     * als Value den neuen Namen des Elementes eintragen, damit die Elemente von alten Modellen noch korrekt
-     * eingelesen werden können.
+     * Nach einem Refactoring von Node- oder Kantenklassen muss man in diese Map
+     * jeweils als <code>String</code> als Schlüssel den alten Namen und als
+     * Value den neuen Namen des Elementes eintragen, damit die Elemente von
+     * alten Modellen noch korrekt eingelesen werden können.
      *
      * @return
      */
@@ -49,18 +51,20 @@ public abstract class MetaModelDefinition implements Serializable {
 
     /**
      * Mappt von alten Elementklassen auf die neuen. <br>
-     * Nach einem Refactoring von Node- oder Kantenklassen muss man in diese Map jeweils als <code>String</code> als Schlüssel den alten Namen und
-     * als Value den neuen Namen des Elementes eintragen, damit die Elemente von alten Modellen noch korrekt
-     * eingelesen werden können.
+     * Nach einem Refactoring von Node- oder Kantenklassen muss man in diese Map
+     * jeweils als <code>String</code> als Schlüssel den alten Namen und als
+     * Value den neuen Namen des Elementes eintragen, damit die Elemente von
+     * alten Modellen noch korrekt eingelesen werden können.
      */
     protected void putOldToNewClassNames() {
     }
 
     /**
      * Mappt von alten Elementklassen auf die neuen. <br>
-     * Nach einem Refactoring von Node- oder Kantenklassen muss man in diese Map jeweils als <code>String</code> als Schlüssel den alten Namen und
-     * als Value den neuen Namen des Elementes eintragen, damit die Elemente von alten Modellen noch korrekt
-     * eingelesen werden können.
+     * Nach einem Refactoring von Node- oder Kantenklassen muss man in diese Map
+     * jeweils als <code>String</code> als Schlüssel den alten Namen und als
+     * Value den neuen Namen des Elementes eintragen, damit die Elemente von
+     * alten Modellen noch korrekt eingelesen werden können.
      *
      * @param oldName
      * @param newName
@@ -74,7 +78,8 @@ public abstract class MetaModelDefinition implements Serializable {
     /////////////////////
 
     /**
-     * Unterklassen können diese Funktion überschreiben und damit eine eigene Definition anlegen.
+     * Unterklassen können diese Funktion überschreiben und damit eine eigene
+     * Definition anlegen.
      *
      * @return
      */
@@ -95,7 +100,8 @@ public abstract class MetaModelDefinition implements Serializable {
     //////////////////////
 
     /**
-     * Unterklassen können diese Funktion überschreiben und damit eine eigene Definition anlegen.
+     * Unterklassen können diese Funktion überschreiben und damit eine eigene
+     * Definition anlegen.
      *
      * @return
      */
@@ -135,13 +141,15 @@ public abstract class MetaModelDefinition implements Serializable {
     public abstract Class<? extends ModelElement>[] getAllDomainLayerNodes();
 
     /**
-     * Alle abstracten Klassen, die im Baum auf der FE auftauchen sollen. Werden hier irgendwelche
-     * Unterklassen von ModelElement angegeben, die Oberklassen von einer instanziierbaren Klasse
-     * der Ebene sind, dann wird der Klassenknoten der instanziierbaren Klasse im Baum nicht direkt
-     * unter den Layer-Knoten gehängt, sondern unter den (oder die) Zwischenknoten mit den Oberklassen.
+     * Alle abstracten Klassen, die im Baum auf der FE auftauchen sollen. Werden
+     * hier irgendwelche Unterklassen von ModelElement angegeben, die
+     * Oberklassen von einer instanziierbaren Klasse der Ebene sind, dann wird
+     * der Klassenknoten der instanziierbaren Klasse im Baum nicht direkt unter
+     * den Layer-Knoten gehängt, sondern unter den (oder die) Zwischenknoten mit
+     * den Oberklassen.
      */
     public Class<? extends ModelElement>[] getTreeDomainLayerVisibleAbstractNodes() {
-        return MetaModel.EMPTY_ELEMENT_CLASS_ARRAY;
+        return CoreMetaModel.EMPTY_ELEMENT_CLASS_ARRAY;
     }
 
     /** Alle Node zw. FE und LWE als Array */
@@ -150,13 +158,15 @@ public abstract class MetaModelDefinition implements Serializable {
     public abstract Class<? extends ModelElement>[] getAllLogicalLayerNodes();
 
     /**
-     * Alle abstracten Klassen, die im Baum auf der LWE auftauchen sollen. Werden hier irgendwelche
-     * Unterklassen von ModelElement angegeben, die Oberklassen von einer instanziierbaren Klasse
-     * der Ebene sind, dann wird der Klassenknoten der instanziierbaren Klasse im Baum nicht direkt
-     * unter den Layer-Knoten gehängt, sondern unter den (oder die) Zwischenknoten mit den Oberklassen.
+     * Alle abstracten Klassen, die im Baum auf der LWE auftauchen sollen.
+     * Werden hier irgendwelche Unterklassen von ModelElement angegeben, die
+     * Oberklassen von einer instanziierbaren Klasse der Ebene sind, dann wird
+     * der Klassenknoten der instanziierbaren Klasse im Baum nicht direkt unter
+     * den Layer-Knoten gehängt, sondern unter den (oder die) Zwischenknoten mit
+     * den Oberklassen.
      */
     public Class<? extends ModelElement>[] getTreeLogicalLayerVisibleAbstractNodes() {
-        return MetaModel.EMPTY_ELEMENT_CLASS_ARRAY;
+        return CoreMetaModel.EMPTY_ELEMENT_CLASS_ARRAY;
     }
 
     /** Alle Node zw. LWE und PWE als Array */
@@ -166,13 +176,15 @@ public abstract class MetaModelDefinition implements Serializable {
     public abstract Class<? extends ModelElement>[] getAllPhysicalLayerNodes();
 
     /**
-     * Alle abstracten Klassen, die im Baum auf der LWE auftauchen sollen. Werden hier irgendwelche
-     * Unterklassen von ModelElement angegeben, die Oberklassen von einer instanziierbaren Klasse
-     * der Ebene sind, dann wird der Klassenknoten der instanziierbaren Klasse im Baum nicht direkt
-     * unter den Layer-Knoten gehängt, sondern unter den (oder die) Zwischenknoten mit den Oberklassen.
+     * Alle abstracten Klassen, die im Baum auf der LWE auftauchen sollen.
+     * Werden hier irgendwelche Unterklassen von ModelElement angegeben, die
+     * Oberklassen von einer instanziierbaren Klasse der Ebene sind, dann wird
+     * der Klassenknoten der instanziierbaren Klasse im Baum nicht direkt unter
+     * den Layer-Knoten gehängt, sondern unter den (oder die) Zwischenknoten mit
+     * den Oberklassen.
      */
     public Class<? extends ModelElement>[] getTreePhysicalLayerVisibleAbstractNodes() {
-        return MetaModel.EMPTY_ELEMENT_CLASS_ARRAY;
+        return CoreMetaModel.EMPTY_ELEMENT_CLASS_ARRAY;
     }
 
     private Class[] allNodes = null;
@@ -187,25 +199,27 @@ public abstract class MetaModelDefinition implements Serializable {
     }
 
     /**
-     * Returns all element classes which are not in the set {@link #getPureTemplateSourceNodes()}
-     * but also only visible if the expert mode is enabled.
-     * ({@link BooleanProperty#OPTION_ENABLE_EXPERT_MODE} = true)
-     * ACHTUNG: hier wird nur mit contains(class) gerpüft -> immer auch die Oberklassen, die versteckt werden sollen reinschreiben
+     * Returns all element classes which are not in the set
+     * {@link #getPureTemplateSourceNodes()} but also only visible if the expert
+     * mode is enabled. ({@link BooleanProperty#OPTION_ENABLE_EXPERT_MODE} =
+     * true) ACHTUNG: hier wird nur mit contains(class) gerpüft -> immer auch
+     * die Oberklassen, die versteckt werden sollen reinschreiben
      *
-     * @return alle Elementklassen, die nur im ExpertMode im Baum angezeigt werden
+     * @return alle Elementklassen, die nur im ExpertMode im Baum angezeigt
+     *         werden
      */
     public Set<Class<? extends ModelElement>> getOnlyExpertModeVisibleNodes() {
         return ImmutableSet.of();
     }
 
     /**
-     * Returns all element classes which can be only created in a model by copy existing
-     * elements from a template to a model.
-     * You can make this elements also visible in the model explorer and changeable by
-     * enabling the ExpertMode ({@link BooleanProperty#OPTION_ENABLE_EXPERT_MODE} = true).
+     * Returns all element classes which can be only created in a model by copy
+     * existing elements from a template to a model. You can make this elements
+     * also visible in the model explorer and changeable by enabling the
+     * ExpertMode ({@link BooleanProperty#OPTION_ENABLE_EXPERT_MODE} = true).
      *
-     * @return all element classes form templates which can only changed via model browser
-     *         in expert mode
+     * @return all element classes form templates which can only changed via
+     *         model browser in expert mode
      */
     public Set<Class<? extends ModelElement>> getPureTemplateSourceNodes() {
         return ImmutableSet.of();
@@ -242,11 +256,15 @@ public abstract class MetaModelDefinition implements Serializable {
     //    }
     //
 
-    /** Liefert ein Set aller Elementklassen, bei denen der Name nicht vom Nutzer eingegeben sondern generiert wird. */
+    /**
+     * Liefert ein Set aller Elementklassen, bei denen der Name nicht vom Nutzer
+     * eingegeben sondern generiert wird.
+     */
     public abstract Set<Class<? extends ModelElement>> getGenerateNameClasses();
 
     /**
-     * Adapter, der alle abstrakten Funktionen mit leeren Arrays und Sets überschreibt.
+     * Adapter, der alle abstrakten Funktionen mit leeren Arrays und Sets
+     * überschreibt.
      *
      * @author AXS (6 Jun 2019)
      */

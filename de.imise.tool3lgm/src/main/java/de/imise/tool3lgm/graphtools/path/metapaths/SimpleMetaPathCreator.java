@@ -6,6 +6,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import de.imise.tool3lgm.graphtools.metamodel.CoreMetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModelSpecific;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModelSpecificAdapter;
@@ -37,7 +38,8 @@ public class SimpleMetaPathCreator extends MetaModelSpecificAdapter {
     //
 
     /**
-     * @param metaModelSpecific MetaModel source, in dem die Pfade angelegt werden
+     * @param metaModelSpecific MetaModel source, in dem die Pfade angelegt
+     *            werden
      */
     public SimpleMetaPathCreator(final MetaModelSpecific metaModelSpecific) {
         super(metaModelSpecific);
@@ -55,9 +57,11 @@ public class SimpleMetaPathCreator extends MetaModelSpecificAdapter {
     //    }
     //
     /**
-     * Erzeugt aus den übergebenen Assoziationen einen {@link SequenceMetaPath} zwischen der Start- und Endklasse, die übergeben wurden. Die
-     * Richtungen werden aus diesen Start- und Endklassen abgeleitet. Wenn es nicht eindeutig ist, ob die Startklasse die Kante vorwärts oder
-     * rückwärts dreht, dann wird immer vorwärts angenommen.
+     * Erzeugt aus den übergebenen Assoziationen einen {@link SequenceMetaPath}
+     * zwischen der Start- und Endklasse, die übergeben wurden. Die Richtungen
+     * werden aus diesen Start- und Endklassen abgeleitet. Wenn es nicht
+     * eindeutig ist, ob die Startklasse die Kante vorwärts oder rückwärts
+     * dreht, dann wird immer vorwärts angenommen.
      *
      * @param startClass
      * @param endClass
@@ -71,9 +75,11 @@ public class SimpleMetaPathCreator extends MetaModelSpecificAdapter {
     }
 
     /**
-     * Erzeugt aus den übergebenen Assoziationen einen {@link SequenceMetaPath} zwischen der Start- und Endklasse, die übergeben wurden. Die
-     * Richtungen werden aus diesen Start- und Endklassen abgeleitet. Wenn es nicht eindeutig ist, ob die Startklasse die Kante vorwärts oder
-     * rückwärts dreht, dann wird immer vorwärts angenommen.
+     * Erzeugt aus den übergebenen Assoziationen einen {@link SequenceMetaPath}
+     * zwischen der Start- und Endklasse, die übergeben wurden. Die Richtungen
+     * werden aus diesen Start- und Endklassen abgeleitet. Wenn es nicht
+     * eindeutig ist, ob die Startklasse die Kante vorwärts oder rückwärts
+     * dreht, dann wird immer vorwärts angenommen.
      *
      * @param metaModel
      * @param startClass
@@ -87,17 +93,21 @@ public class SimpleMetaPathCreator extends MetaModelSpecificAdapter {
     }
 
     /**
-     * Erzeugt aus den übergebenen Assoziationen einen {@link SequenceMetaPath} zwischen der Start- und Endklasse, die übergeben wurden. Die
-     * Richtungen werden aus diesen Start- und Endklassen abgeleitet. Wenn es nicht eindeutig ist, ob die Startklasse die Kante vorwärts oder
-     * rückwärts dreht, dann wird immer vorwärts angenommen.
+     * Erzeugt aus den übergebenen Assoziationen einen {@link SequenceMetaPath}
+     * zwischen der Start- und Endklasse, die übergeben wurden. Die Richtungen
+     * werden aus diesen Start- und Endklassen abgeleitet. Wenn es nicht
+     * eindeutig ist, ob die Startklasse die Kante vorwärts oder rückwärts
+     * dreht, dann wird immer vorwärts angenommen.
      *
      * @param metaModel
      * @param startClass
      * @param endClass
-     * @param tryForwardDirectionFirst
-     *            This parameter is only relevant, if the metapath contains edge classes which fit the path in both directions, because the start
-     *            and end class of the edge are the same or assignable. If <code>true</code> (default) all ambigious edges will be interpreted in
-     *            forward direction. If <code>false</code> in backward direction.
+     * @param tryForwardDirectionFirst This parameter is only relevant, if the
+     *            metapath contains edge classes which fit the path in both
+     *            directions, because the start and end class of the edge are
+     *            the same or assignable. If <code>true</code> (default) all
+     *            ambigious edges will be interpreted in forward direction. If
+     *            <code>false</code> in backward direction.
      * @param associations
      * @return
      */
@@ -152,9 +162,11 @@ public class SimpleMetaPathCreator extends MetaModelSpecificAdapter {
     /**
      * @param startClass
      * @param endClass
-     * @param metaPathStepWithPathName
-     *            Index des Elementarpfadschrittes, der den Namen des Gesamtpfades festlegt. Ist er kleiner 0 läuft die Namensgenerierung über den
-     *            super-Namensmechanismus, der den baseResKeyOrName auswertet und wenn er damit auch nichts findet "ist verbunden mit" ausgibt.
+     * @param metaPathStepWithPathName Index des Elementarpfadschrittes, der den
+     *            Namen des Gesamtpfades festlegt. Ist er kleiner 0 läuft die
+     *            Namensgenerierung über den super-Namensmechanismus, der den
+     *            baseResKeyOrName auswertet und wenn er damit auch nichts
+     *            findet "ist verbunden mit" ausgibt.
      * @param metaPaths
      */
     public SimpleMetaPath createSimpleMetaPath(final Class<? extends ModelElement> startClass, final Class<? extends ModelElement> endClass, final int metaPathStepWithPathName, final ElementaryMetaPath... metaPaths) {
@@ -166,9 +178,11 @@ public class SimpleMetaPathCreator extends MetaModelSpecificAdapter {
      * @param metaModel
      * @param startClass
      * @param endClass
-     * @param metaPathStepWithPathName
-     *            Index des Elementarpfadschrittes, der den Namen des Gesamtpfades festlegt. Ist er kleiner 0 läuft die Namensgenerierung über den
-     *            super-Namensmechanismus, der den baseResKeyOrName auswertet und wenn er damit auch nichts findet "ist verbunden mit" ausgibt.
+     * @param metaPathStepWithPathName Index des Elementarpfadschrittes, der den
+     *            Namen des Gesamtpfades festlegt. Ist er kleiner 0 läuft die
+     *            Namensgenerierung über den super-Namensmechanismus, der den
+     *            baseResKeyOrName auswertet und wenn er damit auch nichts
+     *            findet "ist verbunden mit" ausgibt.
      * @param metaPaths
      */
     public static SimpleMetaPath createSimpleMetaPath(final MetaModel metaModel, final Class<? extends ModelElement> startClass, final Class<? extends ModelElement> endClass, final int metaPathStepWithPathName, final ElementaryMetaPath... metaPaths) {
@@ -176,15 +190,20 @@ public class SimpleMetaPathCreator extends MetaModelSpecificAdapter {
     }
 
     /**
-     * Erzeugt aus den übergebenen Assoziationen einen {@link SequenceMetaPath} zwischen der Start- und Endklasse, die übergeben wurden. Die
-     * Richtungen werden aus diesen Start- und Endklassen abgeleitet. Wenn es nicht eindeutig ist, ob die Startklasse die Kante vorwärts oder
-     * rückwärts dreht, dann wird immer vorwärts angenommen.
+     * Erzeugt aus den übergebenen Assoziationen einen {@link SequenceMetaPath}
+     * zwischen der Start- und Endklasse, die übergeben wurden. Die Richtungen
+     * werden aus diesen Start- und Endklassen abgeleitet. Wenn es nicht
+     * eindeutig ist, ob die Startklasse die Kante vorwärts oder rückwärts
+     * dreht, dann wird immer vorwärts angenommen.
      *
      * @param startClass
      * @param endClass
      * @param baseResKeyOrName
-     * @param associations Das ist eine Liste aus Element- und Kantenklassen. Diese Liste kann nur einen validen Pfad definieren, wenn niemals zwei
-     *            reine Elementklassen (die also keine Kantenklassen sind) hintereinander stehen. Es steht immer eine Kantenklasse hinter einer
+     * @param associations Das ist eine Liste aus Element- und Kantenklassen.
+     *            Diese Liste kann nur einen validen Pfad definieren, wenn
+     *            niemals zwei reine Elementklassen (die also keine
+     *            Kantenklassen sind) hintereinander stehen. Es steht immer eine
+     *            Kantenklasse hinter einer
      * @return
      * @throws IllegalArgumentException
      */
@@ -195,16 +214,21 @@ public class SimpleMetaPathCreator extends MetaModelSpecificAdapter {
     }
 
     /**
-     * Erzeugt aus den übergebenen Assoziationen einen {@link SequenceMetaPath} zwischen der Start- und Endklasse, die übergeben wurden. Die
-     * Richtungen werden aus diesen Start- und Endklassen abgeleitet. Wenn es nicht eindeutig ist, ob die Startklasse die Kante vorwärts oder
-     * rückwärts dreht, dann wird immer vorwärts angenommen.
+     * Erzeugt aus den übergebenen Assoziationen einen {@link SequenceMetaPath}
+     * zwischen der Start- und Endklasse, die übergeben wurden. Die Richtungen
+     * werden aus diesen Start- und Endklassen abgeleitet. Wenn es nicht
+     * eindeutig ist, ob die Startklasse die Kante vorwärts oder rückwärts
+     * dreht, dann wird immer vorwärts angenommen.
      *
      * @param metaModel
      * @param startClass
      * @param endClass
      * @param baseResKeyOrName
-     * @param associations Das ist eine Liste aus Element- und Kantenklassen. Diese Liste kann nur einen validen Pfad definieren, wenn niemals zwei
-     *            reine Elementklassen (die also keine Kantenklassen sind) hintereinander stehen. Es steht immer eine Kantenklasse hinter einer
+     * @param associations Das ist eine Liste aus Element- und Kantenklassen.
+     *            Diese Liste kann nur einen validen Pfad definieren, wenn
+     *            niemals zwei reine Elementklassen (die also keine
+     *            Kantenklassen sind) hintereinander stehen. Es steht immer eine
+     *            Kantenklasse hinter einer
      * @return
      * @throws IllegalArgumentException
      */
@@ -215,20 +239,27 @@ public class SimpleMetaPathCreator extends MetaModelSpecificAdapter {
     }
 
     /**
-     * Erzeugt aus den übergebenen Assoziationen einen {@link SequenceMetaPath} zwischen der Start- und Endklasse, die übergeben wurden. Die
-     * Richtungen werden aus diesen Start- und Endklassen abgeleitet. Wenn es nicht eindeutig ist, ob die Startklasse die Kante vorwärts oder
-     * rückwärts dreht, dann wird immer vorwärts angenommen.
+     * Erzeugt aus den übergebenen Assoziationen einen {@link SequenceMetaPath}
+     * zwischen der Start- und Endklasse, die übergeben wurden. Die Richtungen
+     * werden aus diesen Start- und Endklassen abgeleitet. Wenn es nicht
+     * eindeutig ist, ob die Startklasse die Kante vorwärts oder rückwärts
+     * dreht, dann wird immer vorwärts angenommen.
      *
      * @param metaModel
      * @param startClass
      * @param endClass
      * @param baseResKeyOrName
-     * @param tryForwardDirectionFirst
-     *            This parameter is only relevant, if the metapath contains edge classes which fit the path in both directions, because the start
-     *            and end class of the edge are the same or assignable. If <code>true</code> (default) all ambigious edges will be interpreted in
-     *            forward direction. If <code>false</code> in backward direction.
-     * @param associations Das ist eine Liste aus Element- und Kantenklassen. Diese Liste kann nur einen validen Pfad definieren, wenn niemals zwei
-     *            reine Elementklassen (die also keine Kantenklassen sind) hintereinander stehen. Es steht immer eine Kantenklasse hinter einer
+     * @param tryForwardDirectionFirst This parameter is only relevant, if the
+     *            metapath contains edge classes which fit the path in both
+     *            directions, because the start and end class of the edge are
+     *            the same or assignable. If <code>true</code> (default) all
+     *            ambigious edges will be interpreted in forward direction. If
+     *            <code>false</code> in backward direction.
+     * @param associations Das ist eine Liste aus Element- und Kantenklassen.
+     *            Diese Liste kann nur einen validen Pfad definieren, wenn
+     *            niemals zwei reine Elementklassen (die also keine
+     *            Kantenklassen sind) hintereinander stehen. Es steht immer eine
+     *            Kantenklasse hinter einer
      * @return
      * @throws IllegalArgumentException
      */
@@ -239,16 +270,23 @@ public class SimpleMetaPathCreator extends MetaModelSpecificAdapter {
     }
 
     /**
-     * Erzeugt aus den übergebenen Assoziationen einen {@link SequenceMetaPath} ausgehend von der Startklasse, die übergeben wurde. Die
-     * Richtungen und Endklasse werden sukkessive abgeleitet. Wenn es nicht eindeutig ist, ob die Startklasse die Kante vorwärts oder
-     * rückwärts dreht, dann wird immer vorwärts angenommen.
+     * Erzeugt aus den übergebenen Assoziationen einen {@link SequenceMetaPath}
+     * ausgehend von der Startklasse, die übergeben wurde. Die Richtungen und
+     * Endklasse werden sukkessive abgeleitet. Wenn es nicht eindeutig ist, ob
+     * die Startklasse die Kante vorwärts oder rückwärts dreht, dann wird immer
+     * vorwärts angenommen.
      *
      * @param startClass
-     * @param metaPathStepWithPathName
-     *            Index des Elementarpfadschrittes, der den Namen des Gesamtpfades festlegt. Ist er kleiner 0 läuft die Namensgenerierung über den
-     *            super-Namensmechanismus, der den baseResKeyOrName auswertet und wenn er damit auch nichts findet "ist verbunden mit" ausgibt.
-     * @param associations Das ist eine Liste aus Element- und Kantenklassen. Diese Liste kann nur einen validen Pfad definieren, wenn niemals zwei
-     *            reine Elementklassen (die also keine Kantenklassen sind) hintereinander stehen. Es steht immer eine Kantenklasse hinter einer
+     * @param metaPathStepWithPathName Index des Elementarpfadschrittes, der den
+     *            Namen des Gesamtpfades festlegt. Ist er kleiner 0 läuft die
+     *            Namensgenerierung über den super-Namensmechanismus, der den
+     *            baseResKeyOrName auswertet und wenn er damit auch nichts
+     *            findet "ist verbunden mit" ausgibt.
+     * @param associations Das ist eine Liste aus Element- und Kantenklassen.
+     *            Diese Liste kann nur einen validen Pfad definieren, wenn
+     *            niemals zwei reine Elementklassen (die also keine
+     *            Kantenklassen sind) hintereinander stehen. Es steht immer eine
+     *            Kantenklasse hinter einer
      * @return
      * @throws IllegalArgumentException
      */
@@ -259,17 +297,24 @@ public class SimpleMetaPathCreator extends MetaModelSpecificAdapter {
     }
 
     /**
-     * Erzeugt aus den übergebenen Assoziationen einen {@link SequenceMetaPath} ausgehend von der Startklasse, die übergeben wurde. Die
-     * Richtungen und Endklasse werden sukkessive abgeleitet. Wenn es nicht eindeutig ist, ob die Startklasse die Kante vorwärts oder
-     * rückwärts dreht, dann wird immer vorwärts angenommen.
+     * Erzeugt aus den übergebenen Assoziationen einen {@link SequenceMetaPath}
+     * ausgehend von der Startklasse, die übergeben wurde. Die Richtungen und
+     * Endklasse werden sukkessive abgeleitet. Wenn es nicht eindeutig ist, ob
+     * die Startklasse die Kante vorwärts oder rückwärts dreht, dann wird immer
+     * vorwärts angenommen.
      *
      * @param metaModel
      * @param startClass
-     * @param metaPathStepWithPathName
-     *            Index des Elementarpfadschrittes, der den Namen des Gesamtpfades festlegt. Ist er kleiner 0 läuft die Namensgenerierung über den
-     *            super-Namensmechanismus, der den baseResKeyOrName auswertet und wenn er damit auch nichts findet "ist verbunden mit" ausgibt.
-     * @param associations Das ist eine Liste aus Element- und Kantenklassen. Diese Liste kann nur einen validen Pfad definieren, wenn niemals zwei
-     *            reine Elementklassen (die also keine Kantenklassen sind) hintereinander stehen. Es steht immer eine Kantenklasse hinter einer
+     * @param metaPathStepWithPathName Index des Elementarpfadschrittes, der den
+     *            Namen des Gesamtpfades festlegt. Ist er kleiner 0 läuft die
+     *            Namensgenerierung über den super-Namensmechanismus, der den
+     *            baseResKeyOrName auswertet und wenn er damit auch nichts
+     *            findet "ist verbunden mit" ausgibt.
+     * @param associations Das ist eine Liste aus Element- und Kantenklassen.
+     *            Diese Liste kann nur einen validen Pfad definieren, wenn
+     *            niemals zwei reine Elementklassen (die also keine
+     *            Kantenklassen sind) hintereinander stehen. Es steht immer eine
+     *            Kantenklasse hinter einer
      * @return
      * @throws IllegalArgumentException
      */
@@ -279,17 +324,24 @@ public class SimpleMetaPathCreator extends MetaModelSpecificAdapter {
     }
 
     /**
-     * Erzeugt aus den übergebenen Assoziationen einen {@link SequenceMetaPath} zwischen der Start- und Endklasse, die übergeben wurden. Die
-     * Richtungen werden aus diesen Start- und Endklassen abgeleitet. Wenn es nicht eindeutig ist, ob die Startklasse die Kante vorwärts oder
-     * rückwärts dreht, dann wird immer vorwärts angenommen.
+     * Erzeugt aus den übergebenen Assoziationen einen {@link SequenceMetaPath}
+     * zwischen der Start- und Endklasse, die übergeben wurden. Die Richtungen
+     * werden aus diesen Start- und Endklassen abgeleitet. Wenn es nicht
+     * eindeutig ist, ob die Startklasse die Kante vorwärts oder rückwärts
+     * dreht, dann wird immer vorwärts angenommen.
      *
      * @param startClass
      * @param endClass
-     * @param metaPathStepWithPathName
-     *            Index des Elementarpfadschrittes, der den Namen des Gesamtpfades festlegt. Ist er kleiner 0 läuft die Namensgenerierung über den
-     *            super-Namensmechanismus, der den baseResKeyOrName auswertet und wenn er damit auch nichts findet "ist verbunden mit" ausgibt.
-     * @param associations Das ist eine Liste aus Element- und Kantenklassen. Diese Liste kann nur einen validen Pfad definieren, wenn niemals zwei
-     *            reine Elementklassen (die also keine Kantenklassen sind) hintereinander stehen. Es steht immer eine Kantenklasse hinter einer
+     * @param metaPathStepWithPathName Index des Elementarpfadschrittes, der den
+     *            Namen des Gesamtpfades festlegt. Ist er kleiner 0 läuft die
+     *            Namensgenerierung über den super-Namensmechanismus, der den
+     *            baseResKeyOrName auswertet und wenn er damit auch nichts
+     *            findet "ist verbunden mit" ausgibt.
+     * @param associations Das ist eine Liste aus Element- und Kantenklassen.
+     *            Diese Liste kann nur einen validen Pfad definieren, wenn
+     *            niemals zwei reine Elementklassen (die also keine
+     *            Kantenklassen sind) hintereinander stehen. Es steht immer eine
+     *            Kantenklasse hinter einer
      * @return
      * @throws IllegalArgumentException
      */
@@ -301,18 +353,25 @@ public class SimpleMetaPathCreator extends MetaModelSpecificAdapter {
     }
 
     /**
-     * Erzeugt aus den übergebenen Assoziationen einen {@link SequenceMetaPath} zwischen der Start- und Endklasse, die übergeben wurden. Die
-     * Richtungen werden aus diesen Start- und Endklassen abgeleitet. Wenn es nicht eindeutig ist, ob die Startklasse die Kante vorwärts oder
-     * rückwärts dreht, dann wird immer vorwärts angenommen.
+     * Erzeugt aus den übergebenen Assoziationen einen {@link SequenceMetaPath}
+     * zwischen der Start- und Endklasse, die übergeben wurden. Die Richtungen
+     * werden aus diesen Start- und Endklassen abgeleitet. Wenn es nicht
+     * eindeutig ist, ob die Startklasse die Kante vorwärts oder rückwärts
+     * dreht, dann wird immer vorwärts angenommen.
      *
      * @param metaModel
      * @param startClass
      * @param endClass
-     * @param metaPathStepWithPathName
-     *            Index des Elementarpfadschrittes, der den Namen des Gesamtpfades festlegt. Ist er kleiner 0 läuft die Namensgenerierung über den
-     *            super-Namensmechanismus, der den baseResKeyOrName auswertet und wenn er damit auch nichts findet "ist verbunden mit" ausgibt.
-     * @param associations Das ist eine Liste aus Element- und Kantenklassen. Diese Liste kann nur einen validen Pfad definieren, wenn niemals zwei
-     *            reine Elementklassen (die also keine Kantenklassen sind) hintereinander stehen. Es steht immer eine Kantenklasse hinter einer
+     * @param metaPathStepWithPathName Index des Elementarpfadschrittes, der den
+     *            Namen des Gesamtpfades festlegt. Ist er kleiner 0 läuft die
+     *            Namensgenerierung über den super-Namensmechanismus, der den
+     *            baseResKeyOrName auswertet und wenn er damit auch nichts
+     *            findet "ist verbunden mit" ausgibt.
+     * @param associations Das ist eine Liste aus Element- und Kantenklassen.
+     *            Diese Liste kann nur einen validen Pfad definieren, wenn
+     *            niemals zwei reine Elementklassen (die also keine
+     *            Kantenklassen sind) hintereinander stehen. Es steht immer eine
+     *            Kantenklasse hinter einer
      * @return
      * @throws IllegalArgumentException
      */
@@ -323,23 +382,31 @@ public class SimpleMetaPathCreator extends MetaModelSpecificAdapter {
     }
 
     /**
-     * Erzeugt aus den übergebenen Assoziationen einen {@link SequenceMetaPath} zwischen der Start- und Endklasse, die übergeben wurden. Die
-     * Richtungen werden aus diesen Start- und Endklassen abgeleitet. Wenn es nicht eindeutig ist, ob die Startklasse die Kante vorwärts oder
-     * rückwärts dreht, dann wird immer vorwärts angenommen.
+     * Erzeugt aus den übergebenen Assoziationen einen {@link SequenceMetaPath}
+     * zwischen der Start- und Endklasse, die übergeben wurden. Die Richtungen
+     * werden aus diesen Start- und Endklassen abgeleitet. Wenn es nicht
+     * eindeutig ist, ob die Startklasse die Kante vorwärts oder rückwärts
+     * dreht, dann wird immer vorwärts angenommen.
      *
      * @param metaModel
      * @param startClass
      * @param endClass
-     * @param metaPathStepWithPathName
-     *            Index des Elementarpfadschrittes, der den Namen des Gesamtpfades festlegt. Ist er kleiner 0 läuft die Namensgenerierung über den
-     *            super-Namensmechanismus, der den baseResKeyOrName auswertet und wenn er damit auch nichts findet "ist verbunden mit" ausgibt.
-     * @param tryForwardDirectionFirst
-     *            This parameter is only relevant, if the metapath contains edge classes which fit the path in both directions, because the start
-     *            and end class of the edge are the same or assignable. If <code>true</code> (default) all ambigious edges will be interpreted in
-     *            forward direction. If <code>false</code> in backward direction.
-     * @param associations
-     *            Das ist eine Liste aus Element- und Kantenklassen. Diese Liste kann nur einen validen Pfad definieren, wenn niemals zwei reine
-     *            Elementklassen (die also keine Kantenklassen sind) hintereinander stehen. Es steht immer eine Kantenklasse hinter einer
+     * @param metaPathStepWithPathName Index des Elementarpfadschrittes, der den
+     *            Namen des Gesamtpfades festlegt. Ist er kleiner 0 läuft die
+     *            Namensgenerierung über den super-Namensmechanismus, der den
+     *            baseResKeyOrName auswertet und wenn er damit auch nichts
+     *            findet "ist verbunden mit" ausgibt.
+     * @param tryForwardDirectionFirst This parameter is only relevant, if the
+     *            metapath contains edge classes which fit the path in both
+     *            directions, because the start and end class of the edge are
+     *            the same or assignable. If <code>true</code> (default) all
+     *            ambigious edges will be interpreted in forward direction. If
+     *            <code>false</code> in backward direction.
+     * @param associations Das ist eine Liste aus Element- und Kantenklassen.
+     *            Diese Liste kann nur einen validen Pfad definieren, wenn
+     *            niemals zwei reine Elementklassen (die also keine
+     *            Kantenklassen sind) hintereinander stehen. Es steht immer eine
+     *            Kantenklasse hinter einer
      * @return
      * @throws IllegalArgumentException
      */
@@ -350,23 +417,32 @@ public class SimpleMetaPathCreator extends MetaModelSpecificAdapter {
     }
 
     /**
-     * Erzeugt aus den übergebenen Assoziationen einen {@link SequenceMetaPath} zwischen der Start- und Endklasse, die übergeben wurden. Die
-     * Richtungen werden aus diesen Start- und Endklassen abgeleitet. Wenn es nicht eindeutig ist, ob die Startklasse die Kante vorwärts oder
-     * rückwärts dreht, dann wird immer vorwärts angenommen.
+     * Erzeugt aus den übergebenen Assoziationen einen {@link SequenceMetaPath}
+     * zwischen der Start- und Endklasse, die übergeben wurden. Die Richtungen
+     * werden aus diesen Start- und Endklassen abgeleitet. Wenn es nicht
+     * eindeutig ist, ob die Startklasse die Kante vorwärts oder rückwärts
+     * dreht, dann wird immer vorwärts angenommen.
      *
      * @param metaModel
      * @param startClass
      * @param endClass
      * @param baseResKeyOrName
-     * @param metaPathStepWithPathName
-     *            Index des Elementarpfadschrittes, der den Namen des Gesamtpfades festlegt. Ist er kleiner 0 läuft die Namensgenerierung über den
-     *            super-Namensmechanismus, der den baseResKeyOrName auswertet und wenn er damit auch nichts findet "ist verbunden mit" ausgibt.
-     * @param tryForwardDirectionFirst
-     *            This parameter is only relevant, if the metapath contains edge classes which fit the path in both directions, because the start
-     *            and end class of the edge are the same or assignable. If <code>true</code> (default) all ambigious edges will be interpreted in
-     *            forward direction. If <code>false</code> in backward direction.
-     * @param associations Das ist eine Liste aus Element- und Kantenklassen. Diese Liste kann nur einen validen Pfad definieren, wenn niemals zwei
-     *            reine Elementklassen (die also keine Kantenklassen sind) hintereinander stehen. Es steht immer eine Kantenklasse hinter einer
+     * @param metaPathStepWithPathName Index des Elementarpfadschrittes, der den
+     *            Namen des Gesamtpfades festlegt. Ist er kleiner 0 läuft die
+     *            Namensgenerierung über den super-Namensmechanismus, der den
+     *            baseResKeyOrName auswertet und wenn er damit auch nichts
+     *            findet "ist verbunden mit" ausgibt.
+     * @param tryForwardDirectionFirst This parameter is only relevant, if the
+     *            metapath contains edge classes which fit the path in both
+     *            directions, because the start and end class of the edge are
+     *            the same or assignable. If <code>true</code> (default) all
+     *            ambigious edges will be interpreted in forward direction. If
+     *            <code>false</code> in backward direction.
+     * @param associations Das ist eine Liste aus Element- und Kantenklassen.
+     *            Diese Liste kann nur einen validen Pfad definieren, wenn
+     *            niemals zwei reine Elementklassen (die also keine
+     *            Kantenklassen sind) hintereinander stehen. Es steht immer eine
+     *            Kantenklasse hinter einer
      * @return
      * @throws IllegalArgumentException
      */
@@ -413,9 +489,11 @@ public class SimpleMetaPathCreator extends MetaModelSpecificAdapter {
 
     /**
      * @param me
-     * @param metaPathStepWithPathName
-     *            Index des Elementarpfadschrittes, der den Namen des Gesamtpfades festlegt. Ist er kleiner 0 läuft die Namensgenerierung über den
-     *            super-Namensmechanismus, der den baseResKeyOrName auswertet und wenn er damit auch nichts findet "ist verbunden mit" ausgibt.
+     * @param metaPathStepWithPathName Index des Elementarpfadschrittes, der den
+     *            Namen des Gesamtpfades festlegt. Ist er kleiner 0 läuft die
+     *            Namensgenerierung über den super-Namensmechanismus, der den
+     *            baseResKeyOrName auswertet und wenn er damit auch nichts
+     *            findet "ist verbunden mit" ausgibt.
      * @param edgeClasses
      * @return
      */
@@ -471,9 +549,11 @@ public class SimpleMetaPathCreator extends MetaModelSpecificAdapter {
     /**
      * @param me
      * @param endClass
-     * @param metaPathStepWithPathName
-     *            Index des Elementarpfadschrittes, der den Namen des Gesamtpfades festlegt. Ist er kleiner 0 läuft die Namensgenerierung über den
-     *            super-Namensmechanismus, der den baseResKeyOrName auswertet und wenn er damit auch nichts findet "ist verbunden mit" ausgibt.
+     * @param metaPathStepWithPathName Index des Elementarpfadschrittes, der den
+     *            Namen des Gesamtpfades festlegt. Ist er kleiner 0 läuft die
+     *            Namensgenerierung über den super-Namensmechanismus, der den
+     *            baseResKeyOrName auswertet und wenn er damit auch nichts
+     *            findet "ist verbunden mit" ausgibt.
      * @param edgeClasses
      * @return
      */
@@ -487,8 +567,9 @@ public class SimpleMetaPathCreator extends MetaModelSpecificAdapter {
     ///////////////////////////////////////////////////////
 
     /**
-     * Erzeugt ein Array von allen konkreten MetaPfaden, die dem ggf. abstrakten übergebenen MetaPfad entsprechen. Ist keine der übergebenen
-     * Kantenklassen abstrakt, dann kommt in dem Set nur der übergebene Pfad zurück.
+     * Erzeugt ein Array von allen konkreten MetaPfaden, die dem ggf. abstrakten
+     * übergebenen MetaPfad entsprechen. Ist keine der übergebenen Kantenklassen
+     * abstrakt, dann kommt in dem Set nur der übergebene Pfad zurück.
      *
      * @param me
      * @param metaPathStepWithPathName
@@ -501,8 +582,9 @@ public class SimpleMetaPathCreator extends MetaModelSpecificAdapter {
     }
 
     /**
-     * Erzeugt ein Array von allen konkreten MetaPfaden, die dem ggf. abstrakten übergebenen MetaPfad entsprechen. Ist keine der übergebenen
-     * Kantenklassen abstrakt, dann kommt in dem Set nur der übergebene Pfad zurück.
+     * Erzeugt ein Array von allen konkreten MetaPfaden, die dem ggf. abstrakten
+     * übergebenen MetaPfad entsprechen. Ist keine der übergebenen Kantenklassen
+     * abstrakt, dann kommt in dem Set nur der übergebene Pfad zurück.
      *
      * @param metaModel
      * @param metaPathStepWithPathName
@@ -519,8 +601,10 @@ public class SimpleMetaPathCreator extends MetaModelSpecificAdapter {
     }
 
     /**
-     * Wenn die übergebene Startklasse nicht dieselbe Klasse ist, wie die Startklasse des ersten Metapfades, dann wird im Ergebis-Array aller
-     * MetaPfade ein MetaPfad vorangestellt, der nur die übergebene Startklasse enthält. Dasselbe gilt für die Endklasse und die Endklasse des letzten
+     * Wenn die übergebene Startklasse nicht dieselbe Klasse ist, wie die
+     * Startklasse des ersten Metapfades, dann wird im Ergebis-Array aller
+     * MetaPfade ein MetaPfad vorangestellt, der nur die übergebene Startklasse
+     * enthält. Dasselbe gilt für die Endklasse und die Endklasse des letzten
      * Elementarpfades.
      *
      * @param metaModel
@@ -542,18 +626,24 @@ public class SimpleMetaPathCreator extends MetaModelSpecificAdapter {
     }
 
     /**
-     * Wenn die übergebene Elementklasse die Startklasse der übergebenen Kantenklasse ist, dann kommt Direction.FORWARD zurück.
-     * Ist sie die Endklasse, kommt Direction.BACKWARD zurück und wenn sie gar nicht passt, dann null. Es wird genau in dieser
-     * Reihenfolge geprüft, also wenn die übergebene Klasse Start- und Endklasse der Kantenklasse ist, dann kommt Direction.FORWARD.
+     * Wenn die übergebene Elementklasse die Startklasse der übergebenen
+     * Kantenklasse ist, dann kommt Direction.FORWARD zurück. Ist sie die
+     * Endklasse, kommt Direction.BACKWARD zurück und wenn sie gar nicht passt,
+     * dann null. Es wird genau in dieser Reihenfolge geprüft, also wenn die
+     * übergebene Klasse Start- und Endklasse der Kantenklasse ist, dann kommt
+     * Direction.FORWARD.
      *
      * @param metaModel
      * @param startClass
      * @param edgeClass
-     * @param endClass ist diese Klasse null, wird nur die startClass berücksichtigt
-     * @param tryForwardDirectionFirst
-     *            This parameter is only relevant, if the metapath contains edge classes which fit the path in both directions, because the start
-     *            and end class of the edge are the same or assignable. If <code>true</code> (default) all ambigious edges will be interpreted in
-     *            forward direction. If <code>false</code> in backward direction.
+     * @param endClass ist diese Klasse null, wird nur die startClass
+     *            berücksichtigt
+     * @param tryForwardDirectionFirst This parameter is only relevant, if the
+     *            metapath contains edge classes which fit the path in both
+     *            directions, because the start and end class of the edge are
+     *            the same or assignable. If <code>true</code> (default) all
+     *            ambigious edges will be interpreted in forward direction. If
+     *            <code>false</code> in backward direction.
      * @return
      */
     private static ElementaryMetaPath createElementaryMetaPath(final MetaModel metaModel, final Class<? extends ModelElement> startClass, final Class<? extends Edge> edgeClass, final Class<? extends ModelElement> endClass, final boolean forward) {
@@ -588,9 +678,9 @@ public class SimpleMetaPathCreator extends MetaModelSpecificAdapter {
             if (startClass != null) {
                 Class<? extends ModelElement> commonSuperStartAndEdgeClass = ReflectionUtils.getMostSpecialClass(startClass, edgeClass);
                 if (commonSuperStartAndEdgeClass != null) { // START_WITH_EDGE
-                    if (endClass == null || MetaModel.isEndClassOrEndClassSuperclass(edgeClass, endClass)) {
+                    if (endClass == null || CoreMetaModel.isEndClassOrEndClassSuperclass(edgeClass, endClass)) {
                         return emph.getEdgeToEndElementMetaPath(edgeClass, endClass); //FORWARD to edgeEndElement
-                    } else if (MetaModel.isStartClassOrStartClassSuperclass(edgeClass, endClass)) {
+                    } else if (CoreMetaModel.isStartClassOrStartClassSuperclass(edgeClass, endClass)) {
                         return emph.getEdgeToStartElementMetaPath(edgeClass, endClass); //BACKWARD to edgeStartElement
                     }
                 }
@@ -599,9 +689,9 @@ public class SimpleMetaPathCreator extends MetaModelSpecificAdapter {
             if (endClass != null) {
                 Class<? extends ModelElement> commonSuperEndAndEdgeClass = ReflectionUtils.getMostSpecialClass(endClass, edgeClass);
                 if (commonSuperEndAndEdgeClass != null) { // END_WITH_EDGE
-                    if (startClass == null || MetaModel.isStartClassOrStartClassSuperclass(edgeClass, startClass)) {
+                    if (startClass == null || CoreMetaModel.isStartClassOrStartClassSuperclass(edgeClass, startClass)) {
                         return emph.getStartElementToEdgeMetaPath(startClass, edgeClass);//FORWARD to edge
-                    } else if (MetaModel.isEndClassOrEndClassSuperclass(edgeClass, startClass)) {
+                    } else if (CoreMetaModel.isEndClassOrEndClassSuperclass(edgeClass, startClass)) {
                         return emph.getEndElementToEdgeMetaPath(startClass, edgeClass);//BACKWARD to edge
                     }
                 }
@@ -638,7 +728,7 @@ public class SimpleMetaPathCreator extends MetaModelSpecificAdapter {
      * @return
      */
     private static boolean isForward(final MetaModel metaModel, final Class<? extends ModelElement> startClass, final Class<? extends Edge> edgeClass, final Class<? extends ModelElement> endClass) {
-        return (startClass == null || MetaModel.isStartClassOrStartClassSuperclass(edgeClass, startClass)) && (endClass == null || MetaModel.isEndClassOrEndClassSuperclass(edgeClass, endClass));
+        return (startClass == null || CoreMetaModel.isStartClassOrStartClassSuperclass(edgeClass, startClass)) && (endClass == null || CoreMetaModel.isEndClassOrEndClassSuperclass(edgeClass, endClass));
     }
 
     /**
@@ -649,11 +739,12 @@ public class SimpleMetaPathCreator extends MetaModelSpecificAdapter {
      * @return
      */
     private static boolean isBackward(final MetaModel metaModel, final Class<? extends ModelElement> startClass, final Class<? extends Edge> edgeClass, final Class<? extends ModelElement> endClass) {
-        return startClass == null || MetaModel.isEndClassOrEndClassSuperclass(edgeClass, startClass) && endClass == null || MetaModel.isStartClassOrStartClassSuperclass(edgeClass, endClass);
+        return startClass == null || CoreMetaModel.isEndClassOrEndClassSuperclass(edgeClass, startClass) && endClass == null || CoreMetaModel.isStartClassOrStartClassSuperclass(edgeClass, endClass);
     }
 
     /**
-     * Es werden alle verschiedenen {@link SimpleMetaPath}s zurück gegeben, bei denen die im übergebenen {@link SimpleMetaPath} eventuell abstrakten
+     * Es werden alle verschiedenen {@link SimpleMetaPath}s zurück gegeben, bei
+     * denen die im übergebenen {@link SimpleMetaPath} eventuell abstrakten
      * Kantenklassen durch konkrete ersetzt wurden.
      *
      * @param simpleMetaPath
@@ -689,9 +780,11 @@ public class SimpleMetaPathCreator extends MetaModelSpecificAdapter {
     }
 
     /**
-     * Für jeden der Pfade in der Liste wird geprüft, ob das Zwischenelement des Elementarpfadschrittes mit dem übergebenen Index und des darauf
-     * folgenden abstract ist. Wenn es abstract ist, dann wird der Metapfad in der Liste durch alle MetaPfade ersetzt, bei denen die abstrakte
-     * Zwischenklasse durch alle konkreten ersetzt wurde.
+     * Für jeden der Pfade in der Liste wird geprüft, ob das Zwischenelement des
+     * Elementarpfadschrittes mit dem übergebenen Index und des darauf folgenden
+     * abstract ist. Wenn es abstract ist, dann wird der Metapfad in der Liste
+     * durch alle MetaPfade ersetzt, bei denen die abstrakte Zwischenklasse
+     * durch alle konkreten ersetzt wurde.
      *
      * @param simpleMetaPaths
      * @param currentPathStepIndex
@@ -760,8 +853,10 @@ public class SimpleMetaPathCreator extends MetaModelSpecificAdapter {
     }
 
     /**
-     * Für jeden der Pfade in der Liste wird geprüft, ob die Kantensklasse des Elementarpfadschrittes mit dem übergebenen Index abstract ist. Wenn er
-     * abstract ist, dann wird der Metapfad in der Liste durch alle MetaPfade ersetzt, bei denen die abstrakte Kantenklasse durch alle konkreten
+     * Für jeden der Pfade in der Liste wird geprüft, ob die Kantensklasse des
+     * Elementarpfadschrittes mit dem übergebenen Index abstract ist. Wenn er
+     * abstract ist, dann wird der Metapfad in der Liste durch alle MetaPfade
+     * ersetzt, bei denen die abstrakte Kantenklasse durch alle konkreten
      * ersetzt wurde.
      *
      * @param simpleMetaPaths
@@ -778,7 +873,7 @@ public class SimpleMetaPathCreator extends MetaModelSpecificAdapter {
             Class<? extends Edge> edgeClass = elementaryMetaPath.getEdgeClass();
 
             //wenn die Kantenklasse oder das Start- oder Endelement des Pfadschrittes abstract sind
-            if (MetaModel.isAbstract(edgeClass)) {
+            if (CoreMetaModel.isAbstract(edgeClass)) {
                 //alle nicht-abstrakten Kantenklassen zwischen dieser Start- und Endklasse ermitteln
                 MetaModel metaModel = simpleMetaPath.getMetaModel();
                 //Start- und Edklasse des aktuellen Pfadschrittes aus dem originalen MetaPfad ermitteln
@@ -831,13 +926,17 @@ public class SimpleMetaPathCreator extends MetaModelSpecificAdapter {
     }
 
     /**
-     * Es werden DoubleMeaningEdges mit der dem <code>connectionState == null</code> in die einzelnen States
-     * {@link ConnectionState#FORWARD} und {@link ConnectionState#BACKWARD} zerlegt.
+     * Es werden DoubleMeaningEdges mit der dem
+     * <code>connectionState == null</code> in die einzelnen States
+     * {@link ConnectionState#FORWARD} und {@link ConnectionState#BACKWARD}
+     * zerlegt.
      *
      * @param simpleMetaPaths
      * @param currentPathStepIndex
-     * @return Liste mit {@link SimpleMetaPath}, bei denen alle {@link DoubleMeaningEdge}s mit dem {@link ConnectionState}
-     *         <code>null</code> jeweils durch 3 Pfade mit den 3 echten ConnectionStates ersetzt wurden.
+     * @return Liste mit {@link SimpleMetaPath}, bei denen alle
+     *         {@link DoubleMeaningEdge}s mit dem {@link ConnectionState}
+     *         <code>null</code> jeweils durch 3 Pfade mit den 3 echten
+     *         ConnectionStates ersetzt wurden.
      */
     private static List<SimpleMetaPath> replaceSimpleMetaPathsWithDoubleMeaningEdgesBothConnectionStates(final List<SimpleMetaPath> simpleMetaPaths, final int currentPathStepIndex) {
         //bei jedem MetaPfad der Liste
@@ -849,7 +948,7 @@ public class SimpleMetaPathCreator extends MetaModelSpecificAdapter {
             Class<? extends Edge> edgeClass = elementaryMetaPath.getEdgeClass();
 
             //wenn die Kantenklasse des Pfadschrittes eine DoubleMeaningEdge ist
-            if (MetaModel.isDoubleMeaningEdge(edgeClass) && elementaryMetaPath.getConnectionState() == null) {
+            if (CoreMetaModel.isDoubleMeaningEdge(edgeClass) && elementaryMetaPath.getConnectionState() == null) {
                 //Der erste neue SimpleMetaPath, bei dem der aktuelle Elementarpfadschritt durch einen mit nicht-abstrakter Kantenklasse ersetzt wurde, muss in der Ergenisliste den Original-MetaPfad ersetzen.
                 //All anderen danach werden dahinter eingefügt und der Index des aktuellen Elementarpfadschrittes erhöht.
                 boolean replaceOriginalMetaPathInResultList = true;

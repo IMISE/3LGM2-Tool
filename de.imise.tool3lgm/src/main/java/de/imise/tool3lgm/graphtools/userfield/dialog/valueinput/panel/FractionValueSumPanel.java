@@ -29,7 +29,8 @@ import de.imise.util.swing.component.AlphabeticalComboBox;
 public class FractionValueSumPanel extends ClassificationNumberFormulaPanel {
 
     /**
-     * Auswahlbox für ein konkretes Element, für das die Teilwertsummen angezigt werden sollen
+     * Auswahlbox für ein konkretes Element, für das die Teilwertsummen angezigt
+     * werden sollen
      */
     private final AlphabeticalComboBox<ModelElement> elementBox = new AlphabeticalComboBox<>();
 
@@ -39,13 +40,16 @@ public class FractionValueSumPanel extends ClassificationNumberFormulaPanel {
     }
 
     /**
-     * Im Gegensatz zur Oberklasse wird hier nur true zürück gegeben, wenn die übergebene Elementklasse Formel-UserFields hat,
-     * die eine einfache Teilwertsumme sind.
+     * Im Gegensatz zur Oberklasse wird hier nur true zürück gegeben, wenn die
+     * übergebene Elementklasse Formel-UserFields hat, die eine einfache
+     * Teilwertsumme sind.
      *
-     * @param elementClass Die <code>ElementClass</code>e, deren <code>UserField</code>s geprüft werden sollen.
+     * @param elementClass Die <code>ElementClass</code>e, deren
+     *            <code>UserField</code>s geprüft werden sollen.
      * @param definitions Die <code>UserFieldDefinition</code>s
-     * @return Wenn mindestens ein <code>UserField</code> vom Typ Kennzahl (<code>UserField.CLASSIFICATION_NUMBER_FORMULA</code>) ist
-     *         und die Formel selbst eine einfache Teilwertsumme ist
+     * @return Wenn mindestens ein <code>UserField</code> vom Typ Kennzahl
+     *         (<code>UserField.CLASSIFICATION_NUMBER_FORMULA</code>) ist und
+     *         die Formel selbst eine einfache Teilwertsumme ist
      */
     @Override
     protected final InsertType getInsertType(final Class<? extends ModelElement> elementClass, final UserFieldDefinitions definitions) {
@@ -89,7 +93,8 @@ public class FractionValueSumPanel extends ClassificationNumberFormulaPanel {
     }
 
     /**
-     * @return <code>true</code>, if in the elementBox a ModelElement is selected
+     * @return <code>true</code>, if in the elementBox a ModelElement is
+     *         selected
      */
     private boolean hasSelectedElement() {
         Object selectedElement = elementBox.getSelectedObject();
@@ -111,7 +116,8 @@ public class FractionValueSumPanel extends ClassificationNumberFormulaPanel {
     }
 
     /**
-     * Methode setzt die auszuführende Action, bei Änderung der Auswahl in der <code>elementTypeBox</code>.
+     * Methode setzt die auszuführende Action, bei Änderung der Auswahl in der
+     * <code>elementTypeBox</code>.
      */
     @Override
     protected void setActionsForElementTypeBox() {
@@ -119,7 +125,8 @@ public class FractionValueSumPanel extends ClassificationNumberFormulaPanel {
         final FractionValueSumPanel finalPanel = this;
 
         /*
-         * Bei Änderung der Auswahl in elementTypeBox, werden in der elementBox die verfügbaren Elemente angezeigt
+         * Bei Änderung der Auswahl in elementTypeBox, werden in der elementBox
+         * die verfügbaren Elemente angezeigt
          */
         AbstractAction action = new AbstractAction() {
 
@@ -145,7 +152,8 @@ public class FractionValueSumPanel extends ClassificationNumberFormulaPanel {
     }
 
     /**
-     * @return <code>true</code>, wenn die selektierte Kantenklasse in Vorwärtsrichtung geselen wird, sonst <code>false</code>.
+     * @return <code>true</code>, wenn die selektierte Kantenklasse in
+     *         Vorwärtsrichtung geselen wird, sonst <code>false</code>.
      */
     private boolean isSelectedEdgeDirectionForward() {
         Class<? extends Edge> selectedEdgeClass = getSelectedEdgeClass();
@@ -157,9 +165,9 @@ public class FractionValueSumPanel extends ClassificationNumberFormulaPanel {
     }
 
     /**
-     * Setzt den Inhalt der <code>weigthBox</code>. Die für den in der <code>edgeTypeBox</code> gewählten Kantentyp definierten Verteilungsgewichte
-     * werden
-     * der <code>weigthBox</code> hinzugefügt.
+     * Setzt den Inhalt der <code>weigthBox</code>. Die für den in der
+     * <code>edgeTypeBox</code> gewählten Kantentyp definierten
+     * Verteilungsgewichte werden der <code>weigthBox</code> hinzugefügt.
      */
     private void setElementBoxContent() {
         UserFieldDefinitions definitions = getUserFieldDefinitions();
@@ -179,8 +187,10 @@ public class FractionValueSumPanel extends ClassificationNumberFormulaPanel {
     }
 
     /**
-     * Methode setzt die auszuführende Aktion, bei Änderung der Auswahl in <code>weightBox</code>. Werte im Table werden temporär übernommen und die
-     * zum gewählten Verteilungsgewicht gehörigen Daten in einem neuen Table dargestellt.
+     * Methode setzt die auszuführende Aktion, bei Änderung der Auswahl in
+     * <code>weightBox</code>. Werte im Table werden temporär übernommen und die
+     * zum gewählten Verteilungsgewicht gehörigen Daten in einem neuen Table
+     * dargestellt.
      */
     private void setActionsForElementBox() {
         final FractionValueSumPanel finalPanel = this;

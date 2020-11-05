@@ -1,5 +1,6 @@
 /*
- * Created on 07.01.2008 Window - Preferences - Java - Code Style - Code Templates
+ * Created on 07.01.2008 Window - Preferences - Java - Code Style - Code
+ * Templates
  */
 package de.imise.tool3lgm.graphtools.userfield.dialog.definition.formula;
 
@@ -21,8 +22,10 @@ import de.imise.tool3lgm.graphtools.userfield.dialog.definition.formula.panel.Op
 import de.imise.tool3lgm.graphtools.userfield.dialog.definition.formula.panel.ReferencePanel;
 
 /**
- * Der Dialog lässt die Benutzer eine Verrechnungsfunktion spezifieren. Nachdem er im Formeleditor eine Verrechungsfunktion ausgewählt hat ( durch
- * Buttonklick) muss er hier angeben, welche Parameter in der Verrechungsfunktion einfließen sollen.)
+ * Der Dialog lässt die Benutzer eine Verrechnungsfunktion spezifieren. Nachdem
+ * er im Formeleditor eine Verrechungsfunktion ausgewählt hat ( durch
+ * Buttonklick) muss er hier angeben, welche Parameter in der
+ * Verrechungsfunktion einfließen sollen.)
  *
  * @author hboehme
  * @created 07.01.2008
@@ -40,7 +43,8 @@ public class VfDialog extends JDialog implements ActionListener {
     private final UserField userField;
 
     /**
-     * Das Panel wird initialisiert, wenn die VF eine Summe oder TWSumme werden soll.
+     * Das Panel wird initialisiert, wenn die VF eine Summe oder TWSumme werden
+     * soll.
      */
     private OperatorInputPanel operatorInputPanel;
 
@@ -50,16 +54,19 @@ public class VfDialog extends JDialog implements ActionListener {
     private ReferencePanel rp;
 
     /**
-     * wird mit einem Wert der Konstanten belegt <- zur Kennzeichung, welches Panel initialisiert werden soll.
+     * wird mit einem Wert der Konstanten belegt <- zur Kennzeichung, welches
+     * Panel initialisiert werden soll.
      */
     private final String vfOperator;
 
     /**
-     * Instanz des Panels. Beinzhaltet selbst nur den OK.- und Abbrechen button. Kann je nach übergebenem Operatortyp (SUM, TWSUM) den entsprechenden
+     * Instanz des Panels. Beinzhaltet selbst nur den OK.- und Abbrechen button.
+     * Kann je nach übergebenem Operatortyp (SUM, TWSUM) den entsprechenden
      * komplettierten Dialog anzeigen.
      *
      * @param owner
-     * @param operator Eine der beiden Konstanten <code>UserField.SUM</code> oder <code>UserField.TWSUM</code>
+     * @param operator Eine der beiden Konstanten <code>UserField.SUM</code>
+     *            oder <code>UserField.TWSUM</code>
      * @param elementClass
      * @param userField
      */

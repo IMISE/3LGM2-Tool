@@ -28,7 +28,8 @@ import de.imise.util.swing.component.AlphabeticalComboBox;
 import de.imise.util.swing.component.list.AlphabeticalJList;
 
 /**
- * Dieses Panel stellt die möglichen auswählbaren Attribute für die Verrechnungsfunktionen bereit.
+ * Dieses Panel stellt die möglichen auswählbaren Attribute für die
+ * Verrechnungsfunktionen bereit.
  *
  * @author hboehme, AXS
  * @created 02.01.2008
@@ -41,7 +42,8 @@ public class OperatorInputPanel extends JPanel implements ActionListener {
     private final UserField userField;
 
     /**
-     * ist die <code>ComboBox</code>, die in alphabetischer Reihenfolge die Assoziationen zwischen Start- und Endklasse anzeigt.
+     * ist die <code>ComboBox</code>, die in alphabetischer Reihenfolge die
+     * Assoziationen zwischen Start- und Endklasse anzeigt.
      */
     private AlphabeticalComboBox<Class<? extends Edge>> associationBox;
 
@@ -56,21 +58,25 @@ public class OperatorInputPanel extends JPanel implements ActionListener {
     private AlphabeticalComboBox<UserField> vgBox;
 
     /**
-     * "Gleichverteilt" in der gewählten Loacle. Wird angezeigt, wenn als Verteilungsgewicht bei einer Verrechnung über die Teilwertsumme kein
+     * "Gleichverteilt" in der gewählten Loacle. Wird angezeigt, wenn als
+     * Verteilungsgewicht bei einer Verrechnung über die Teilwertsumme kein
      * spezielles Verteilungsgewicht genutzt werden soll.
      */
     private static final String UNIFORMLY_DISTRIBUTED = getResString("uniformly_distributed");
 
     /**
-     * Eine der beiden Konstanten <code>UserField.SUM</code> oder <code>UserField.TWSUM</code>. Legt die Art der verrechnungsfunktion fest.
+     * Eine der beiden Konstanten <code>UserField.SUM</code> oder
+     * <code>UserField.TWSUM</code>. Legt die Art der verrechnungsfunktion fest.
      */
     private final String vfOperator;
 
     /**
      * Das Panel, dass die ComboBoxen darstellt.
      *
-     * @param vfOperator Eine der beiden Konstanten <code>UserField.SUM</code> oder <code>UserField.TWSUM</code>
-     * @param classElement Elementklasse, die sich über die Verrechnungsfunktion irgendeinen Wert einer verbundenen Klasse holen soll
+     * @param vfOperator Eine der beiden Konstanten <code>UserField.SUM</code>
+     *            oder <code>UserField.TWSUM</code>
+     * @param classElement Elementklasse, die sich über die Verrechnungsfunktion
+     *            irgendeinen Wert einer verbundenen Klasse holen soll
      * @param userField
      */
     public OperatorInputPanel(final String vfOperator, final UserField userField) {
@@ -128,14 +134,16 @@ public class OperatorInputPanel extends JPanel implements ActionListener {
     }
 
     /**
-     * Leert die <code>ComboBox</code>, die die UserFields der Endklasse enthält.
+     * Leert die <code>ComboBox</code>, die die UserFields der Endklasse
+     * enthält.
      */
     private void clearBoxAttributsOfAssociatedClass() {
         connectedAttributesBox.removeAllItems();
     }
 
     /**
-     * Aktualisiert die {@link AlphabeticalJList}, die die {@link UserField}s der assoziierten Klasse enthält.
+     * Aktualisiert die {@link AlphabeticalJList}, die die {@link UserField}s
+     * der assoziierten Klasse enthält.
      *
      * @param elementClasses
      */
@@ -209,7 +217,8 @@ public class OperatorInputPanel extends JPanel implements ActionListener {
     }
 
     /**
-     * Aktualisiert die ComboBox, die die Verteilungsgewichte aktuell ausgewählten Kantenklasse beinhaltet.
+     * Aktualisiert die ComboBox, die die Verteilungsgewichte aktuell
+     * ausgewählten Kantenklasse beinhaltet.
      *
      * @param edgeClass die aktuelle Kantenklasse
      */
@@ -279,7 +288,8 @@ public class OperatorInputPanel extends JPanel implements ActionListener {
     }
 
     /**
-     * Gibt aus dem Dialog den String zurück, der die Verrechnungsfunktion beschreibt. Z.B: SUM ( Assoziation | Attribut der verbunden Klasse |
+     * Gibt aus dem Dialog den String zurück, der die Verrechnungsfunktion
+     * beschreibt. Z.B: SUM ( Assoziation | Attribut der verbunden Klasse |
      * Richtung )
      *
      * @return

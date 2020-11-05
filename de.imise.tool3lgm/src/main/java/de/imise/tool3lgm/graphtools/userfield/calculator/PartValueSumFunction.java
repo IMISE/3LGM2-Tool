@@ -15,10 +15,14 @@ import de.imise.tool3lgm.graphtools.userfield.WeightReplacer;
 public class PartValueSumFunction {
 
     /**
-     * Errechnet das Ergebnis der Verrechnungsfunktion TEILWERTSUMME. Die Funktion hat 2, 3 oder 4 Argumente. Das erste Argument ist in jedem Fall der
-     * Name der Assoziation über den verrechnet wird, das 2. ist immer das <code>UserField</code> der verbundenen Klasse, dessen Wert verrechnet
-     * werden soll. Bei 3 Argumenten kann das 3. Argument entweder ein Verteilungsgewicht sein oder, wenn die Edge über die verrechent wird eine
-     * <code>HasPartEdge</code> ist, die Richtung der Verrechnung. Bei 4 Argumenten ist das 3. Argument immer das Verteilungsgewicht und das 4
+     * Errechnet das Ergebnis der Verrechnungsfunktion TEILWERTSUMME. Die
+     * Funktion hat 2, 3 oder 4 Argumente. Das erste Argument ist in jedem Fall
+     * der Name der Assoziation über den verrechnet wird, das 2. ist immer das
+     * <code>UserField</code> der verbundenen Klasse, dessen Wert verrechnet
+     * werden soll. Bei 3 Argumenten kann das 3. Argument entweder ein
+     * Verteilungsgewicht sein oder, wenn die Edge über die verrechent wird eine
+     * <code>HasPartEdge</code> ist, die Richtung der Verrechnung. Bei 4
+     * Argumenten ist das 3. Argument immer das Verteilungsgewicht und das 4
      * immer die Richtung.
      *
      * @param definitions
@@ -187,7 +191,8 @@ public class PartValueSumFunction {
     }
 
     /**
-     * Gibt die Gegenrichtung zurück, wenn eine gültige Richtung als String übergeben wurde.
+     * Gibt die Gegenrichtung zurück, wenn eine gültige Richtung als String
+     * übergeben wurde.
      *
      * @param direction
      * @return
@@ -235,8 +240,8 @@ public class PartValueSumFunction {
         public final String direction;
 
         /**
-         * @param formula
-         *            Die Formel kann entweder die ganze Formel oder nur noch die Argumente sein
+         * @param formula Die Formel kann entweder die ganze Formel oder nur
+         *            noch die Argumente sein
          * @param definitions
          */
         private TWSumArguments(final String formula, final UserFieldDefinitions definitions) {

@@ -33,14 +33,14 @@ public class SuggestShowConsistencyTableHandler implements PropertyChangeListene
     private static long lastCheckTime = 0;
 
     /**
-     * To prevent the user from being asked too often, at least 10 seconds
-     * must elapse between 2 requests.
+     * To prevent the user from being asked too often, at least 10 seconds must
+     * elapse between 2 requests.
      */
     private static final long minTimeBetweenLastShowDialogAndNextShowDialog = 10000;
 
     /**
-     * To prevent this function is called at every data_changed-Event, at
-     * least 1 second must elapse between 2 requests.
+     * To prevent this function is called at every data_changed-Event, at least
+     * 1 second must elapse between 2 requests.
      */
     private static final long minTimeBetweenLastCheckAndNextCheck = 1000;
 

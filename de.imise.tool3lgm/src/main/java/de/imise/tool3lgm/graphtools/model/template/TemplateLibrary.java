@@ -4,7 +4,8 @@ import java.util.Collection;
 import java.util.Iterator;
 
 /**
- * Ungenutzt. Eventuell sollte das hier eine Unterklasse von GDCollection werden. Das hier war ein erster Entwurf. Er erübrigt sicht erst einmal mit
+ * Ungenutzt. Eventuell sollte das hier eine Unterklasse von GDCollection
+ * werden. Das hier war ein erster Entwurf. Er erübrigt sicht erst einmal mit
  * der ModelCategory.REGULAR und TEMPLATE
  *
  * @author AXS (12.09.2019)

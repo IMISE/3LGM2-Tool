@@ -43,7 +43,8 @@ public interface MetaModelSpecific {
     }
 
     /**
-     * Liefert die ID der Metamodellklasse. Dies ist ein String aus dem SimpleClassName + "@" + serialVersionUID. Damit sollte die die
+     * Liefert die ID der Metamodellklasse. Dies ist ein String aus dem
+     * SimpleClassName + "@" + serialVersionUID. Damit sollte die die
      * Metamodellklasse immer eindeutig identifizierbar sein.
      *
      * @return
@@ -67,7 +68,8 @@ public interface MetaModelSpecific {
     }
 
     /**
-     * Handler für das einfache und nicht redundante Anlegen von Elementar-Metapfaden für dieses MetaModel
+     * Handler für das einfache und nicht redundante Anlegen von
+     * Elementar-Metapfaden für dieses MetaModel
      *
      * @return
      */
@@ -78,8 +80,7 @@ public interface MetaModelSpecific {
     }
 
     /**
-     * @param resKey
-     *            resource key
+     * @param resKey resource key
      * @return the string from the resources for the given resKey
      * @throws MissingResourceException
      */
@@ -110,8 +111,7 @@ public interface MetaModelSpecific {
     }
 
     /**
-     * @param resKey
-     *            resource key
+     * @param resKey resource key
      * @return the string from the resources for the given resKey or the key if
      *         there is no string in the resources for the given key
      */
@@ -137,8 +137,8 @@ public interface MetaModelSpecific {
 
     /**
      * @param metaModelDefinitionClass
-     * @return <code>true</code> if the given class is the same or a superclass of of
-     *         the metamodel definition class of this server
+     * @return <code>true</code> if the given class is the same or a superclass
+     *         of of the metamodel definition class of this server
      */
     public default boolean hasMetaModelDefinitionClass(final Class<? extends MetaModelDefinition> metaModelDefinitionClass) {
         Class<? extends MetaModelDefinition> myMetaModelDefinitionClass = getMetaModelDefinitionClass();

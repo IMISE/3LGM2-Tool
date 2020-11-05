@@ -19,26 +19,29 @@ import de.imise.util.Alphabetical;
 import de.imise.util.collections.AlphabeticalSet;
 
 /**
- * Die Redundanzanalyse wurde ursprünglich für Anwendungsbausteine in Bezug auf Aufgaben
- * geschrieben. D.h. es sollte die Frage geklärt werden, welche Anwendungsbausteine überflüssig
- * sind, da sie keine oder nur Aufgaben unterstützen, die schon von anderen Anwendungsbausteinen
- * erledigt werden, die man auf jeden Fall braucht. <br>
- * Mittlerweile ist die ganze XMLAnalyse so allgemein, dass man alle Elemente die über einen Pfad
- * verbunden sind, gegenseitig auf Redundanz testen kann. Alle Kommentare und Variablenbenennungen
- * gehen aber vom oben genannten Szenario aus.
+ * Die Redundanzanalyse wurde ursprünglich für Anwendungsbausteine in Bezug auf
+ * Aufgaben geschrieben. D.h. es sollte die Frage geklärt werden, welche
+ * Anwendungsbausteine überflüssig sind, da sie keine oder nur Aufgaben
+ * unterstützen, die schon von anderen Anwendungsbausteinen erledigt werden, die
+ * man auf jeden Fall braucht. <br>
+ * Mittlerweile ist die ganze XMLAnalyse so allgemein, dass man alle Elemente
+ * die über einen Pfad verbunden sind, gegenseitig auf Redundanz testen kann.
+ * Alle Kommentare und Variablenbenennungen gehen aber vom oben genannten
+ * Szenario aus.
  *
  * @author AXS
  */
 public class CopyOfDecisionTree {
 
     /**
-     * Der Wurzelknoten des Entscheidungsbaumes. Er repräsentiert den keinen AWB.
+     * Der Wurzelknoten des Entscheidungsbaumes. Er repräsentiert den keinen
+     * AWB.
      */
     private DecisionTreeNode root = DecisionTreeNode.createDecisionTreeRoot();
 
     /**
-     * Anazahl der AWB, die im Baum betrachtet werden. Dieser Zähler wird auch für die Tiefe des
-     * Kombinationsbaumes angewendet.
+     * Anazahl der AWB, die im Baum betrachtet werden. Dieser Zähler wird auch
+     * für die Tiefe des Kombinationsbaumes angewendet.
      */
     private int awbCount;
 
@@ -55,8 +58,8 @@ public class CopyOfDecisionTree {
     private int[] lastAwbSupportIndex;
 
     /**
-     * unterstützte Aufgaben pro AWB. Diese Zahl wird negiert, wenn der AWB mind. eine Aufgabe
-     * exklusiv untertsützt.
+     * unterstützte Aufgaben pro AWB. Diese Zahl wird negiert, wenn der AWB
+     * mind. eine Aufgabe exklusiv untertsützt.
      */
     private int[] supportedAuf;
     /** Index der ersten unterstützten Aufgabe pro AWB (oder -1) */
@@ -73,12 +76,14 @@ public class CopyOfDecisionTree {
     private List<DecisionTreeNode> leafs = new ArrayList<>();
 
     /**
-     * Wird gebraucht, um bei großen Bäumen den zu Ende gehenden Speicher wieder zu bereinigen
+     * Wird gebraucht, um bei großen Bäumen den zu Ende gehenden Speicher wieder
+     * zu bereinigen
      */
     private static Runtime runtime = Runtime.getRuntime();
 
     /**
-     * Alle Aufgaben, die durch AWB in der Menge <code>exclusiveAWB</code> erledigt werden.
+     * Alle Aufgaben, die durch AWB in der Menge <code>exclusiveAWB</code>
+     * erledigt werden.
      */
     private final AlphabeticalSet<ModelElement> exclusiveFuncs = new AlphabeticalSet<>();
 
@@ -88,14 +93,14 @@ public class CopyOfDecisionTree {
     private RedundancyAnalysisResult result;
 
     /**
-     * Menge aller AWB, die Funktionen unterstützen, die noch nicht durch exklusive AWB erledigt
-     * werden.
+     * Menge aller AWB, die Funktionen unterstützen, die noch nicht durch
+     * exklusive AWB erledigt werden.
      */
     private ModelElement[] notExclusiveAWB;
 
     /**
-     * Alle Aufgaben, die noch nicht durch AWB in der Menge <code>exclusiveAWB</code> erledigt
-     * werden.
+     * Alle Aufgaben, die noch nicht durch AWB in der Menge
+     * <code>exclusiveAWB</code> erledigt werden.
      */
     private ModelElement[] notExclusiveFunc;
 
@@ -106,11 +111,13 @@ public class CopyOfDecisionTree {
     private List<ModelElement> applicationSystems;
 
     /**
-     * Table der für jede Aufgabe das Set aller von ihr unterstützten AWBs enthält.
+     * Table der für jede Aufgabe das Set aller von ihr unterstützten AWBs
+     * enthält.
      */
     private final Map<ModelElement, AlphabeticalSet<ModelElement>> funcToAWBSets = new HashMap<>();
     /**
-     * Table der für jeden AWB das Set aller von ihm unterstützten Aufgaben enthält.
+     * Table der für jeden AWB das Set aller von ihm unterstützten Aufgaben
+     * enthält.
      */
     private final Map<ModelElement, AlphabeticalSet<ModelElement>> awbToFuncsSets = new HashMap<>();
 
@@ -756,9 +763,10 @@ public class CopyOfDecisionTree {
     }
 
     /**
-     * Ordnet aus dem Entscheidungsbaum die AWBs den Mengen moreUselessAWB und moreNeededAWB zu.
-     * Alle Listen in <code>equalSets</code> haben danach mind. 2 Elemente und von denen von der
-     * Funktionalität immer nur ein AWB gebraucht wird.
+     * Ordnet aus dem Entscheidungsbaum die AWBs den Mengen moreUselessAWB und
+     * moreNeededAWB zu. Alle Listen in <code>equalSets</code> haben danach
+     * mind. 2 Elemente und von denen von der Funktionalität immer nur ein AWB
+     * gebraucht wird.
      */
     private void extractTree() {
         // Set das alle Elemente in minimalen Ästen genau einmal enthält
@@ -834,8 +842,8 @@ public class CopyOfDecisionTree {
     }
 
     /**
-     * Füllt im <code>RedundancyAnalysisResult</code> für alle überflüssigen Elemente die Liste der
-     * Elemente, die das Element überflüssig machen
+     * Füllt im <code>RedundancyAnalysisResult</code> für alle überflüssigen
+     * Elemente die Liste der Elemente, die das Element überflüssig machen
      */
     private void findSameSupporter() {
         List<AlphabeticalSet<ModelElement>> uselessLists = new ArrayList<>(2);
@@ -849,9 +857,9 @@ public class CopyOfDecisionTree {
     }
 
     /**
-     * Wenn die Redundanz von Anwendungsbausteinen bezüglich Aufgaben berechnet wird, dann liefert
-     * die Funktion für einen Anwendungsbaustein alle anderen Anwendungsbauteine, die dieselben
-     * Aufgaben unterstützen.
+     * Wenn die Redundanz von Anwendungsbausteinen bezüglich Aufgaben berechnet
+     * wird, dann liefert die Funktion für einen Anwendungsbaustein alle anderen
+     * Anwendungsbauteine, die dieselben Aufgaben unterstützen.
      *
      * @param me
      * @return
@@ -874,10 +882,11 @@ public class CopyOfDecisionTree {
     }
 
     /**
-     * Findet alle Mengen von AWBs aus den kombinierbaren AWBs, die man gegeneinander austauschen
-     * kann, da sie dieselben Aufgaben unterstützen.
+     * Findet alle Mengen von AWBs aus den kombinierbaren AWBs, die man
+     * gegeneinander austauschen kann, da sie dieselben Aufgaben unterstützen.
      *
-     * @param Set aller bisher als nicht exklusiv und nicht überflüssig erkannten AWB
+     * @param Set aller bisher als nicht exklusiv und nicht überflüssig
+     *            erkannten AWB
      */
     private final void initEqualsSets(final Set<ModelElement> notExclusiveAWBSet) {
         // Liste für alle nicht exklusiven, aber in jedem Kombinationsset enthaltenen AWBs
@@ -913,7 +922,8 @@ public class CopyOfDecisionTree {
     }
 
     /**
-     * Löscht im Baum alle Äste, die nicht zu bereits bekannten minimalen Lösungen führen.
+     * Löscht im Baum alle Äste, die nicht zu bereits bekannten minimalen
+     * Lösungen führen.
      */
     private void clearMemory() {
         List<DecisionTreeNode> leafsNew = new ArrayList<>();

@@ -28,6 +28,7 @@ import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.WindowConstants;
 import javax.swing.border.EtchedBorder;
 
 import com.google.common.collect.ImmutableList;
@@ -45,7 +46,8 @@ import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.panel.ModelVaria
 import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.panel.NodeTypeUserFieldEditorPanel;
 
 /**
- * Dialog zur Massendateneingabe von Kennzahlen, Modelvariablen und Verteilungsgewichten
+ * Dialog zur Massendateneingabe von Kennzahlen, Modelvariablen und
+ * Verteilungsgewichten
  *
  * @author fstephan
  */
@@ -67,7 +69,9 @@ public class UserFieldEditorDialog extends AbstractTabbedPropertyDialog {
     public static final Color SELECTION_BACKROUND_COLOR = new Color(55, 55, 140, 100);
 
     /**
-     * Einzige Instanz des Editors. Es ex. kein öffentlicher Konstruktor. Instanz kann über {@link #getDialog(Frame, GraphDocument)} erhalten werden.
+     * Einzige Instanz des Editors. Es ex. kein öffentlicher Konstruktor.
+     * Instanz kann über {@link #getDialog(Frame, GraphDocument)} erhalten
+     * werden.
      */
     private static UserFieldEditorDialog editor = null;
 
@@ -93,20 +97,26 @@ public class UserFieldEditorDialog extends AbstractTabbedPropertyDialog {
     private AbstractAction cancelAction;
 
     /**
-     * Gibt wieder, ob das Drücken des {@link #okButton}s Grund für das Schließen des Dialogs ist.
+     * Gibt wieder, ob das Drücken des {@link #okButton}s Grund für das
+     * Schließen des Dialogs ist.
      */
     private boolean okButtonPressed;
 
     /**
-     * Gibt wieder, ob der User bei der Datenverlust-Warnmeldung "Ja" oder "Nein" gewählt hat. Wenn ja, schließt sich der Dialog und alle Änderungen
+     * Gibt wieder, ob der User bei der Datenverlust-Warnmeldung "Ja" oder
+     * "Nein" gewählt hat. Wenn ja, schließt sich der Dialog und alle Änderungen
      * gehen verloren, wenn nein, bleibt der Dialog geöffnet.
      */
     private boolean shouldDispose;
 
-    /* ********************* Beginn: Initialisierungsteil ****************************** */
+    /*
+     * ********************* Beginn: Initialisierungsteil
+     * ******************************
+     */
 
     /**
-     * Konstruktor Zugriff von außen nicht über diesen Konstruktor möglich. Verwende stattdessen {@link #getDialog(Frame, GraphDocument)}
+     * Konstruktor Zugriff von außen nicht über diesen Konstruktor möglich.
+     * Verwende stattdessen {@link #getDialog(Frame, GraphDocument)}
      */
     protected UserFieldEditorDialog(final Frame owner, final GDCollection gdcoll) {
         super(owner, gdcoll);
@@ -134,7 +144,7 @@ public class UserFieldEditorDialog extends AbstractTabbedPropertyDialog {
      */
     private void init() {
 
-        setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+        setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 
         final UserFieldEditorDialog finalDialog = this;
 
@@ -148,8 +158,9 @@ public class UserFieldEditorDialog extends AbstractTabbedPropertyDialog {
                 for (AbstractUserFieldEditorPanel tablePanel : tablePanels) {
 
                     /*
-                     * Beendet das Editieren der aktuelle ausgewählten Zelle im Table. Damit können Werte auch ohne Bestätigung mit "Enter" übernommen
-                     * werden.
+                     * Beendet das Editieren der aktuelle ausgewählten Zelle im
+                     * Table. Damit können Werte auch ohne Bestätigung mit
+                     * "Enter" übernommen werden.
                      */
                     tablePanel.stopEditing();
 
@@ -158,7 +169,8 @@ public class UserFieldEditorDialog extends AbstractTabbedPropertyDialog {
                 }
 
                 /*
-                 * Falls in einem Table Änderungen aufgetreten sind, wird eine Datenverlust-Verwarnung angezeigt
+                 * Falls in einem Table Änderungen aufgetreten sind, wird eine
+                 * Datenverlust-Verwarnung angezeigt
                  */
                 if (dataChanged == true) {
                     if (JOptionPane.YES_OPTION != JOptionPane.showConfirmDialog(finalDialog, getResString("userFieldDialog_warning_message"), getResString("userFieldDialog_warning"), JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE)) {
@@ -244,7 +256,8 @@ public class UserFieldEditorDialog extends AbstractTabbedPropertyDialog {
     }
 
     /**
-     * Methode fügt panelCN, panelDW, panelMV und panelCNF an <code>tab</code> an
+     * Methode fügt panelCN, panelDW, panelMV und panelCNF an <code>tab</code>
+     * an
      */
     private void initTab() {
         for (AbstractUserFieldEditorPanel tablePanel : tablePanels) {
@@ -266,8 +279,9 @@ public class UserFieldEditorDialog extends AbstractTabbedPropertyDialog {
     }
 
     /**
-     * Methode sorgt für das Setzen der Actions für <code>applyButton</code>, <code>okButton</code>und <code>cancelButton</code> und fügt diese
-     * Buttons an das <code>controlPanel</code> an.
+     * Methode sorgt für das Setzen der Actions für <code>applyButton</code>,
+     * <code>okButton</code>und <code>cancelButton</code> und fügt diese Buttons
+     * an das <code>controlPanel</code> an.
      */
     private void initControlPanel() {
 
@@ -281,12 +295,14 @@ public class UserFieldEditorDialog extends AbstractTabbedPropertyDialog {
     }
 
     /**
-     * Setzen der Actions für <code>applyButton</code>,<code>okButton</code> und <code>cancelButton</code>.
+     * Setzen der Actions für <code>applyButton</code>,<code>okButton</code> und
+     * <code>cancelButton</code>.
      */
     private void setDefaultActionsOfButtons() {
         final UserFieldEditorDialog finalDialog = this;
         /*
-         * Übernimmt die Werte aus den Tabellen der Panels ins Model, falls sich die Daten in einer der Tabellen geändert haben.
+         * Übernimmt die Werte aus den Tabellen der Panels ins Model, falls sich
+         * die Daten in einer der Tabellen geändert haben.
          */
         final AbstractAction applyAction = new AbstractAction(getResString("apply")) {
             @Override
@@ -297,8 +313,9 @@ public class UserFieldEditorDialog extends AbstractTabbedPropertyDialog {
                 for (AbstractUserFieldEditorPanel tablePanel : tablePanels) {
 
                     /*
-                     * Beendet das Editieren der aktuelle ausgewählten Zelle im Table. Damit können Werte auch ohne Bestätigung mit "Enter" übernommen
-                     * werden.
+                     * Beendet das Editieren der aktuelle ausgewählten Zelle im
+                     * Table. Damit können Werte auch ohne Bestätigung mit
+                     * "Enter" übernommen werden.
                      */
                     tablePanel.stopEditing();
 
@@ -329,7 +346,8 @@ public class UserFieldEditorDialog extends AbstractTabbedPropertyDialog {
         applyButton.setAction(applyAction);
 
         /*
-         * Übernimmt die Werte in den Tabellen der Panels ins Model und schließt diesen Dialog anschließend.
+         * Übernimmt die Werte in den Tabellen der Panels ins Model und schließt
+         * diesen Dialog anschließend.
          */
         okButton.setAction(new AbstractAction(getResString("ok")) {
             @Override
@@ -355,7 +373,8 @@ public class UserFieldEditorDialog extends AbstractTabbedPropertyDialog {
     }
 
     /**
-     * Erstellt und initialisiert ein Panel, dass das Row- und ColumnElement im Table an der aktuellen Mausposition anzeigt und fügt dieses Panel dem
+     * Erstellt und initialisiert ein Panel, dass das Row- und ColumnElement im
+     * Table an der aktuellen Mausposition anzeigt und fügt dieses Panel dem
      * Dialog hinzu.
      */
     private JPanel createElementsAtPointPane() {
@@ -431,15 +450,22 @@ public class UserFieldEditorDialog extends AbstractTabbedPropertyDialog {
         return panel;
     }
 
-    /* ********************* Ende: Initialisierungsteil ****************************** */
+    /*
+     * ********************* Ende: Initialisierungsteil
+     * ******************************
+     */
 
-    /* ********************* Beginn: statische Methoden **************************** */
+    /*
+     * ********************* Beginn: statische Methoden
+     * ****************************
+     */
 
     /**
      * Liefert einen neuen <code>UserFieldEditorDialog</code>.<br>
      *
      * @param owner Frame, das diesen Dialog enthält
-     * @param gdcoll Modell, das die Daten für die Kennzahlen und Verteilungsgewichte der ModelElemente enthält
+     * @param gdcoll Modell, das die Daten für die Kennzahlen und
+     *            Verteilungsgewichte der ModelElemente enthält
      * @return JDialog
      */
     public static JDialog getDialog(final Frame owner, final GDCollection gdcoll) {
@@ -447,15 +473,25 @@ public class UserFieldEditorDialog extends AbstractTabbedPropertyDialog {
         return editor;
     }
 
-    /* ********************* Ende: statische Methoden ****************************** */
+    /*
+     * ********************* Ende: statische Methoden
+     * ******************************
+     */
 
-    /* *********************** Start: funktionale Methoden ******************************* */
+    /*
+     * *********************** Start: funktionale Methoden
+     * *******************************
+     */
 
     /**
-     * Wenn das Drücken des {@link #okButton}s Grund für das Schließen des Dialogs ist, wurden bereits alle Änderungen übernommen. <br>
-     * Falls nicht, wird {@link #cancelAction} ausgeführt, das heißt, dass eine Datenverlust-Warnung angezeigt wird und nach Wunsch des Users alle
-     * Änderungen rückgängig gemacht werden, oder das Schließen des Dialogs abgebrochen wird. Außerdem wird beim Schließen des Dialoges seine Größe
-     * und Position gespeichert und beim erneuten Öffnen wieder auf diese Werte gesetzt. Die Speicherung dieser Werte erfolgt allerdings nur, wenn der
+     * Wenn das Drücken des {@link #okButton}s Grund für das Schließen des
+     * Dialogs ist, wurden bereits alle Änderungen übernommen. <br>
+     * Falls nicht, wird {@link #cancelAction} ausgeführt, das heißt, dass eine
+     * Datenverlust-Warnung angezeigt wird und nach Wunsch des Users alle
+     * Änderungen rückgängig gemacht werden, oder das Schließen des Dialogs
+     * abgebrochen wird. Außerdem wird beim Schließen des Dialoges seine Größe
+     * und Position gespeichert und beim erneuten Öffnen wieder auf diese Werte
+     * gesetzt. Die Speicherung dieser Werte erfolgt allerdings nur, wenn der
      * Dialog durch "Ok" beendet wird.
      *
      * @see java.awt.Window#dispose()
@@ -474,7 +510,10 @@ public class UserFieldEditorDialog extends AbstractTabbedPropertyDialog {
         super.dispose();
     }
 
-    /* *********************** Ende: funktionale Methoden ******************************* */
+    /*
+     * *********************** Ende: funktionale Methoden
+     * *******************************
+     */
 
     @Override
     public Dimension getDefaultSize() {

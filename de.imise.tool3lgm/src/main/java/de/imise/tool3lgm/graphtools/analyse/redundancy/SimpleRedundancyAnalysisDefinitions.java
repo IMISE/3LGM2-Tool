@@ -15,27 +15,30 @@ public final class SimpleRedundancyAnalysisDefinitions {
     private List<SingleSimpleRedundancyAnalysisDefinition> simpleRedundancyAnalysisDefinitionData;
 
     /**
-     * @param metaPath
-     *            Pfad, der angibt, für welche Elementart welche verbundenen Elemente als redundant angesehen werden sollen.
-     *            Die Ausgangselementart ist die Startelementart des Pfades und die über den Pfad verbundenen Elemente sind
-     *            die potenziell redundanten Elemente.
-     * @param showFullSystemResults
-     *            Wenn <code>true</code>, dann wird das Gesamtergebnis oben an den Layer geschrieben.
+     * @param metaPath Pfad, der angibt, für welche Elementart welche
+     *            verbundenen Elemente als redundant angesehen werden sollen.
+     *            Die Ausgangselementart ist die Startelementart des Pfades und
+     *            die über den Pfad verbundenen Elemente sind die potenziell
+     *            redundanten Elemente.
+     * @param showFullSystemResults Wenn <code>true</code>, dann wird das
+     *            Gesamtergebnis oben an den Layer geschrieben.
      */
     public void add(final MetaPath metaPath, final boolean showFullSystemResults) {
         add(metaPath, null, showFullSystemResults);
     }
 
     /**
-     * @param metaPath
-     *            Pfad, der angibt, für welche Elementart welche verbundenen Elemente als redundant angesehen werden sollen.
-     *            Die Ausgangselementart ist die Startelementart des Pfades und die über den Pfad verbundenen Elemente sind
-     *            die potenziell redundanten Elemente.
-     * @param pathToDifferences
-     *            Wird hier ein gültiger Pfad angegeben, müssen sich die über den metaPath verbundenen Elemente in den über diesen
-     *            Pfad verbundenen Elementen unterscheiden, um nicht als dasselbe Element zu gelten.
-     * @param showFullSystemResults
-     *            Wenn <code>true</code>, dann wird das Gesamtergebnis oben an den Layer geschrieben.
+     * @param metaPath Pfad, der angibt, für welche Elementart welche
+     *            verbundenen Elemente als redundant angesehen werden sollen.
+     *            Die Ausgangselementart ist die Startelementart des Pfades und
+     *            die über den Pfad verbundenen Elemente sind die potenziell
+     *            redundanten Elemente.
+     * @param pathToDifferences Wird hier ein gültiger Pfad angegeben, müssen
+     *            sich die über den metaPath verbundenen Elemente in den über
+     *            diesen Pfad verbundenen Elementen unterscheiden, um nicht als
+     *            dasselbe Element zu gelten.
+     * @param showFullSystemResults Wenn <code>true</code>, dann wird das
+     *            Gesamtergebnis oben an den Layer geschrieben.
      */
     public void add(final MetaPath metaPath, final MetaPath pathToDifferences, final boolean showFullSystemResults) {
         if (simpleRedundancyAnalysisDefinitionData == null) {
@@ -65,20 +68,23 @@ public final class SimpleRedundancyAnalysisDefinitions {
     public class SingleSimpleRedundancyAnalysisDefinition {
 
         /**
-         * Pfad, der angibt, für welche Elementart welche verbundenen Elemente als redundant angesehen werden sollen.
-         * Die Ausgangselementart ist die Startelementart des Pfades und die über den Pfad verbundenen Elemente sind
-         * die potenziell redundanten Elemente.
+         * Pfad, der angibt, für welche Elementart welche verbundenen Elemente
+         * als redundant angesehen werden sollen. Die Ausgangselementart ist die
+         * Startelementart des Pfades und die über den Pfad verbundenen Elemente
+         * sind die potenziell redundanten Elemente.
          */
         private final MetaPath metaPath;
 
         /**
-         * Wird hier ein gültiger Pfad angegeben, müssen sich die über den metaPath verbundenen Elemente in den über diesen
-         * Pfad verbundenen Elementen unterscheiden, um nicht als dasselbe Element zu gelten.
+         * Wird hier ein gültiger Pfad angegeben, müssen sich die über den
+         * metaPath verbundenen Elemente in den über diesen Pfad verbundenen
+         * Elementen unterscheiden, um nicht als dasselbe Element zu gelten.
          */
         private final MetaPath pathToDifferences;
 
         /**
-         * Wenn <code>true</code>, dann wird das Gesamtergebnis oben an den Layer geschrieben.
+         * Wenn <code>true</code>, dann wird das Gesamtergebnis oben an den
+         * Layer geschrieben.
          */
         private final boolean showFullSystemResults;
 

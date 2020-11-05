@@ -45,7 +45,8 @@ public class SimplePath extends SequencePath {
     }
 
     /**
-     * Erzeugt aus der Liste von Kanten eine Liste von Elementarpfaden und initialisiert damit einen SimpleMetaPath
+     * Erzeugt aus der Liste von Kanten eine Liste von Elementarpfaden und
+     * initialisiert damit einen SimpleMetaPath
      *
      * @param simpleMetaPath
      * @param edges
@@ -83,7 +84,8 @@ public class SimplePath extends SequencePath {
     }
 
     /**
-     * Hängt den übergebenen {@link SimplePath} an diesen an und gibt des Gesamtpfad als neue Instanz zurück.
+     * Hängt den übergebenen {@link SimplePath} an diesen an und gibt des
+     * Gesamtpfad als neue Instanz zurück.
      *
      * @param path
      * @return

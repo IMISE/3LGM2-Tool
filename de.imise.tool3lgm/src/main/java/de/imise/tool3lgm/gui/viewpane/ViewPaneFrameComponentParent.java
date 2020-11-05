@@ -29,7 +29,8 @@ public interface ViewPaneFrameComponentParent {
     public List<ViewPaneFrameComponent> getAllViewPaneFrameComponents();
 
     /**
-     * Removes all {@link ViewPaneFrameComponent} with the given {@link GraphDocument}
+     * Removes all {@link ViewPaneFrameComponent} with the given
+     * {@link GraphDocument}
      *
      * @param doc
      */
@@ -46,13 +47,14 @@ public interface ViewPaneFrameComponentParent {
 
     /**
      * @param viewPaneFrameComponent
-     * @return <code>true</code> if this component is the selected or active component
+     * @return <code>true</code> if this component is the selected or active
+     *         component
      */
     public boolean isSelected(ViewPaneFrameComponent viewPaneFrameComponent);
 
     /**
-     * Sets component with the given {@link ViewPaneFrameComponent} as the selected or active
-     * component.
+     * Sets component with the given {@link ViewPaneFrameComponent} as the
+     * selected or active component.
      *
      * @param viewPaneFrameComponent
      */
@@ -68,7 +70,8 @@ public interface ViewPaneFrameComponentParent {
      * Create new MatrixViewFrame and add it to parent GraphDocument
      *
      * @param doc Sub-Model as source for the MatrixView
-     * @param titleIndex Index of the matrix view for this doc to display in the title
+     * @param titleIndex Index of the matrix view for this doc to display in the
+     *            title
      * @param viewPaneToolbarManager
      * @return the created matrix component
      */

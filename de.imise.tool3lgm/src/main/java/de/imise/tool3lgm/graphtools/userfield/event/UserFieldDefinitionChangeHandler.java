@@ -16,7 +16,8 @@ import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.panel.PropertyDi
 public abstract class UserFieldDefinitionChangeHandler implements LGMChangeListenerSimple {
 
     /**
-     * Wenn diese Variable <code>true</code> ist, wird bei der Abfrage irgendeines Kennzahlformelwertes alles neu berechnet. Sie wird bei allen
+     * Wenn diese Variable <code>true</code> ist, wird bei der Abfrage
+     * irgendeines Kennzahlformelwertes alles neu berechnet. Sie wird bei allen
      * Änderungen am Modell <code>true</code>.
      */
     private boolean reset = true;
@@ -45,18 +46,25 @@ public abstract class UserFieldDefinitionChangeHandler implements LGMChangeListe
     }
 
     /**
-     * Löscht alle Berechneten Werte, d.h. alle berechneten Werte werden inkonsitstent (null) gesetzt.
+     * Löscht alle Berechneten Werte, d.h. alle berechneten Werte werden
+     * inkonsitstent (null) gesetzt.
      */
     protected abstract void clearCalculatedUserFieldValues();
 
     /**
-     * Über diese Funktion kann dem Calculator mitgeteilt werden, dass sich mind. eine Kennzahl geändert hat. Nachdem alle Kennzahlen geändert wurden,
-     * kann dann die Funktion reset() aufgerufen werden, in der alle Kennzahlen neu berechnet werden. Der Calculator ist selbst kein
-     * {@link LGMChangeListener}, der auf <code>DATA_CHANGED</code> hört, weil er sonst bei jeder Änderung immer alles neu berechen würde.
-     * Das <code>GraphDocument</code> setzt den <code>boolen reset</code> auf <code>true</code>, wenn das Kommando
-     * <code>MODEL_ACTION_SET_USER_FIELD_VALUE</code>
-     * ausgeführt wurde. Ein Aufruf der Funktion <code>reset()</code> nach dem <code>true</code>-setzen, führt dann tatsächlich zu der Neuberechnung.
-     * Das macht aber nicht das <code>GraphDocument</code>, sondern das muss man selber machen, nachdem man alle Kennzahlen geändert hat.
+     * Über diese Funktion kann dem Calculator mitgeteilt werden, dass sich
+     * mind. eine Kennzahl geändert hat. Nachdem alle Kennzahlen geändert
+     * wurden, kann dann die Funktion reset() aufgerufen werden, in der alle
+     * Kennzahlen neu berechnet werden. Der Calculator ist selbst kein
+     * {@link LGMChangeListener}, der auf <code>DATA_CHANGED</code> hört, weil
+     * er sonst bei jeder Änderung immer alles neu berechen würde. Das
+     * <code>GraphDocument</code> setzt den <code>boolen reset</code> auf
+     * <code>true</code>, wenn das Kommando
+     * <code>MODEL_ACTION_SET_USER_FIELD_VALUE</code> ausgeführt wurde. Ein
+     * Aufruf der Funktion <code>reset()</code> nach dem
+     * <code>true</code>-setzen, führt dann tatsächlich zu der Neuberechnung.
+     * Das macht aber nicht das <code>GraphDocument</code>, sondern das muss man
+     * selber machen, nachdem man alle Kennzahlen geändert hat.
      *
      * @see PropertyDialogUserFieldPanel#commit()
      */

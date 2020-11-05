@@ -38,24 +38,27 @@ public abstract class BasicMetaPath extends MetaModelSpecificAdapter {
     protected String name = null;
 
     /**
-     * Anzeigename mit Start- und Endklassen. Kann in Unterlassen geändert werden.
+     * Anzeigename mit Start- und Endklassen. Kann in Unterlassen geändert
+     * werden.
      */
     protected String fullName = null;
 
     /**
-     * MataPath für die Gegenrichtung dieses Pfades. Der ist nur nicht <code>null</code>, wenn er sich tatsächlich
-     * feststellen lässt.
+     * MataPath für die Gegenrichtung dieses Pfades. Der ist nur nicht
+     * <code>null</code>, wenn er sich tatsächlich feststellen lässt.
      */
     protected MetaPath otherDirection = null;
 
     /**
-     * Dieses Objekt gibt den Grund an, warum ein MetaPath nicht valide ist. Ist der darin enthaltene InvalidReason <code>null</code>, gilt der
-     * MetaPath als valide.
+     * Dieses Objekt gibt den Grund an, warum ein MetaPath nicht valide ist. Ist
+     * der darin enthaltene InvalidReason <code>null</code>, gilt der MetaPath
+     * als valide.
      */
     protected InvalidityCheckResult invalidityCheckResult;
 
     /**
-     * If <code>true</code> and the metapath can be recursive (ends with an element type that can be the start element type) then the path is
+     * If <code>true</code> and the metapath can be recursive (ends with an
+     * element type that can be the start element type) then the path is
      * interpreted as recursive.
      */
     private boolean interpretAsRecursive;
@@ -72,8 +75,7 @@ public abstract class BasicMetaPath extends MetaModelSpecificAdapter {
 
     /**
      * @param metaModel
-     * @param name
-     *            Anzeigenamen
+     * @param name Anzeigenamen
      */
     public BasicMetaPath(final MetaModel metaModel, final String name) {
         this(metaModel, (Class<? extends ModelElement>) null, (Class<? extends ModelElement>) null, name);
@@ -147,10 +149,11 @@ public abstract class BasicMetaPath extends MetaModelSpecificAdapter {
     }
 
     /**
-     * Liefert <code>true</code>, wenn die übergebene Elementklasse genau eine Startklasse dieses Metapfades ist.
+     * Liefert <code>true</code>, wenn die übergebene Elementklasse genau eine
+     * Startklasse dieses Metapfades ist.
      *
-     * @param elementClass
-     *            Elementklasse, die als Startklasse geprüft werden soll
+     * @param elementClass Elementklasse, die als Startklasse geprüft werden
+     *            soll
      * @return
      */
     public boolean isStartClass(final Class<? extends ModelElement> elementClass) {
@@ -163,10 +166,11 @@ public abstract class BasicMetaPath extends MetaModelSpecificAdapter {
     }
 
     /**
-     * Liefert <code>true</code>, wenn eine übergebene Elementklasse genau eine Startklasse dieses Metapfades ist.
+     * Liefert <code>true</code>, wenn eine übergebene Elementklasse genau eine
+     * Startklasse dieses Metapfades ist.
      *
-     * @param elementClasses
-     *            Elementklassen, die als Startklasse geprüft werden soll
+     * @param elementClasses Elementklassen, die als Startklasse geprüft werden
+     *            soll
      * @return
      */
     public final boolean isStartClass(final Collection<Class<? extends ModelElement>> elementClasses) {
@@ -179,10 +183,10 @@ public abstract class BasicMetaPath extends MetaModelSpecificAdapter {
     }
 
     /**
-     * Liefert <code>true</code>, wenn die übergebene Elementklasse genau eine Endklasse dieses MetaPfades ist.
+     * Liefert <code>true</code>, wenn die übergebene Elementklasse genau eine
+     * Endklasse dieses MetaPfades ist.
      *
-     * @param elementClass
-     *            Elementklasse, die als Endklasse geprüft werden soll
+     * @param elementClass Elementklasse, die als Endklasse geprüft werden soll
      * @return
      */
     public boolean isEndClass(final Class<? extends ModelElement> elementClass) {
@@ -195,10 +199,11 @@ public abstract class BasicMetaPath extends MetaModelSpecificAdapter {
     }
 
     /**
-     * Liefert <code>true</code>, wenn eine übergebene Elementklasse genau eine Endklasse dieses MetaPfades ist.
+     * Liefert <code>true</code>, wenn eine übergebene Elementklasse genau eine
+     * Endklasse dieses MetaPfades ist.
      *
-     * @param elementClasses
-     *            Elementklasseen, die als Endklasse geprüft werden sollen
+     * @param elementClasses Elementklasseen, die als Endklasse geprüft werden
+     *            sollen
      * @return
      */
     public final boolean isEndClass(final Collection<Class<? extends ModelElement>> elementClasses) {
@@ -211,13 +216,13 @@ public abstract class BasicMetaPath extends MetaModelSpecificAdapter {
     }
 
     /**
-     * Liefert <code>true</code>, wenn die übergebene startClass Startklasse und die übergeben endCLass Endklasse
-     * dieses MetaPfades sein kann.
+     * Liefert <code>true</code>, wenn die übergebene startClass Startklasse und
+     * die übergeben endCLass Endklasse dieses MetaPfades sein kann.
      *
-     * @param startClass
-     *            Elementklasse, die als Startklasse der Kantenklasse geprüft werden soll
-     * @param startClass
-     *            Elementklasse, die als Endklasse der Kantenklasse geprüft werden soll
+     * @param startClass Elementklasse, die als Startklasse der Kantenklasse
+     *            geprüft werden soll
+     * @param startClass Elementklasse, die als Endklasse der Kantenklasse
+     *            geprüft werden soll
      * @return
      */
     public final boolean isStartAndEndClass(final Class<? extends ModelElement> startClass, final Class<? extends ModelElement> endClass) {
@@ -225,7 +230,8 @@ public abstract class BasicMetaPath extends MetaModelSpecificAdapter {
     }
 
     /**
-     * @return <code>true</code>, if the metapath is applicable to the endelements as startelements otherwise <code>false</code>
+     * @return <code>true</code>, if the metapath is applicable to the
+     *         endelements as startelements otherwise <code>false</code>
      */
     public final boolean isInterpretAsRecursive() {
         return interpretAsRecursive;
@@ -239,8 +245,8 @@ public abstract class BasicMetaPath extends MetaModelSpecificAdapter {
     }
 
     /**
-     * @return <code>true</code> if at least one endElement class can be the startElement class
-     *         of this metaPath
+     * @return <code>true</code> if at least one endElement class can be the
+     *         startElement class of this metaPath
      */
     protected boolean canBeRecursive() {
         Set<Class<? extends ModelElement>> endClasses = getEndClasses();
@@ -253,11 +259,12 @@ public abstract class BasicMetaPath extends MetaModelSpecificAdapter {
     }
 
     /**
-     * Liefert <code>true</code>, wenn das übergebene Objekt dieselben Eigenschaften hat, wie this.
+     * Liefert <code>true</code>, wenn das übergebene Objekt dieselben
+     * Eigenschaften hat, wie this.
      *
      * @param obj
-     * @param ignoreName
-     *            Wenn <code>true</code> wird die Gleichheit des Namens nicht mitgeprüft
+     * @param ignoreName Wenn <code>true</code> wird die Gleichheit des Namens
+     *            nicht mitgeprüft
      * @return
      */
     public boolean equals(final Object obj, final boolean ignoreName) {

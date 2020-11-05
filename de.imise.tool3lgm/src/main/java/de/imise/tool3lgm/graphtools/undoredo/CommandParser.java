@@ -7,17 +7,18 @@ import de.imise.util.htmlxml.ParseSaveStringHandler;
 public class CommandParser {
 
     /**
-     * Parst eine Kommando-Zeile, wie sie in Undo-Redo-Kommandos steckt.
-     * Ab dem übergebenen firstArgumentBeginIndex werden alle Tokens als Einzelargument der Rückgabeliste hinzugefügt, die zwischen zwei
-     * einzelnen Hochkomma ' stehen (auch leere Zeichenketten) und/oder die mit Leerzeichen voneinander getrennt sind. Stehen 2 Leerzeichen
-     * außerhalb von Hochkommas hintereinander, so wird dazwischen ein leeres Argument erkannt.
+     * Parst eine Kommando-Zeile, wie sie in Undo-Redo-Kommandos steckt. Ab dem
+     * übergebenen firstArgumentBeginIndex werden alle Tokens als Einzelargument
+     * der Rückgabeliste hinzugefügt, die zwischen zwei einzelnen Hochkomma '
+     * stehen (auch leere Zeichenketten) und/oder die mit Leerzeichen
+     * voneinander getrennt sind. Stehen 2 Leerzeichen außerhalb von Hochkommas
+     * hintereinander, so wird dazwischen ein leeres Argument erkannt.
      *
-     * @param line
-     *            Die zu parsende Kommandozeile
-     * @param args
-     *            Liste, in die die eventuell in der Zeile stehenden Kommandoargumente gelegt werden
-     * @return
-     *         Name des Kommandos der übergebenen Zeile (das ist das erste Wort am Anfang)
+     * @param line Die zu parsende Kommandozeile
+     * @param args Liste, in die die eventuell in der Zeile stehenden
+     *            Kommandoargumente gelegt werden
+     * @return Name des Kommandos der übergebenen Zeile (das ist das erste Wort
+     *         am Anfang)
      */
     public static final String parseCommandLine(final String line, final List<String> args) {
         int nextWhitespace = line.indexOf(' ');

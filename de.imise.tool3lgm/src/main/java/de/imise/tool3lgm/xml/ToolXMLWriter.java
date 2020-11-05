@@ -69,7 +69,10 @@ public class ToolXMLWriter extends IntendingXMLWriter {
     /** Modell, das gespeichert werden soll */
     protected final GDCollection gdcoll;
 
-    /** Hashes aller Icons, die von den über diesen Writer exportierten Elementen tatsächlich genutzt werden */
+    /**
+     * Hashes aller Icons, die von den über diesen Writer exportierten Elementen
+     * tatsächlich genutzt werden
+     */
     private final Set<String> usedIconHashes;
 
     protected ToolXMLWriter(final GDCollection gdcoll, final File file) throws XMLStreamException, FactoryConfigurationError, IOException {
@@ -203,12 +206,18 @@ public class ToolXMLWriter extends IntendingXMLWriter {
      * Schreibt eine Modell in eine XML-Datei.
      *
      * @param name Name des Modells in der Datei
-     * @param szenarios Liste der Teilmodelle, die geschrieben werden sollen. Ist diese Liste <code>null</code>, werden alle Teilmodell geschrieben.
-     * @param elements Liste der Elemente, die geschrieben werden sollen. Ist diese Liste <code>null</code>, werden alle Elemente geschrieben.
-     * @param userFields Alle UserFields, die geschrieben werden sollen. Ist dieses {@link Iterable} <code>null</code>, werden alle UserFields
+     * @param szenarios Liste der Teilmodelle, die geschrieben werden sollen.
+     *            Ist diese Liste <code>null</code>, werden alle Teilmodell
      *            geschrieben.
-     * @param iconHashes HashStrings aller Icons, die geschrieben werden sollen. Ist dieses {@link Iterable} <code>null</code>, werden alle Icons
+     * @param elements Liste der Elemente, die geschrieben werden sollen. Ist
+     *            diese Liste <code>null</code>, werden alle Elemente
      *            geschrieben.
+     * @param userFields Alle UserFields, die geschrieben werden sollen. Ist
+     *            dieses {@link Iterable} <code>null</code>, werden alle
+     *            UserFields geschrieben.
+     * @param iconHashes HashStrings aller Icons, die geschrieben werden sollen.
+     *            Ist dieses {@link Iterable} <code>null</code>, werden alle
+     *            Icons geschrieben.
      * @throws XMLStreamException
      */
     private void writeModel(final String name, final List<Szenario> szenarios, final Collection<ModelElement> elements, final Iterable<UserField> userFields, final Iterable<String> iconHashes) throws XMLStreamException {
@@ -358,10 +367,12 @@ public class ToolXMLWriter extends IntendingXMLWriter {
     ///////////////////
 
     /**
-     * Schreibt die übergebenen ModellElemente in die XML-Datei oder alle ModellElemente der Collection, wenn die übergebenen Elemente
+     * Schreibt die übergebenen ModellElemente in die XML-Datei oder alle
+     * ModellElemente der Collection, wenn die übergebenen Elemente
      * <code>null</code> sind.
      *
-     * @param elements Elemente, die rausgeschrieben werden sollen. Ist dieses Object <code>null</code>, dann werden alle Elemente des
+     * @param elements Elemente, die rausgeschrieben werden sollen. Ist dieses
+     *            Object <code>null</code>, dann werden alle Elemente des
      *            Gesamtmodells rausgeschrieben
      * @throws XMLStreamException
      */
@@ -444,7 +455,8 @@ public class ToolXMLWriter extends IntendingXMLWriter {
 
     /**
      * @param mapping
-     * @return a alphabetical sortet list of all element classes with standard layout
+     * @return a alphabetical sortet list of all element classes with standard
+     *         layout
      */
     private List<Class<? extends ModelElement>> getElementClassesWithStandardLayout(final ElementsLayoutDefinition mapping) {
         Iterable<Class<? extends ModelElement>> elementClassesWithStandardLayout = mapping.getElementClassesWithStandardLayout();
@@ -456,8 +468,12 @@ public class ToolXMLWriter extends IntendingXMLWriter {
     }
 
     /**
-     * @param szenarios Liste der Szenarios, die rausgeschrieben werden sollen. Ist die Liste <code>null</code>, werden alle Szenarios rausgeschrieben
-     * @param elements ist diese Collection nicht null, werden nur die Elemente der Szenarios rausgeschrieben, die sich in der Collection befinden
+     * @param szenarios Liste der Szenarios, die rausgeschrieben werden sollen.
+     *            Ist die Liste <code>null</code>, werden alle Szenarios
+     *            rausgeschrieben
+     * @param elements ist diese Collection nicht null, werden nur die Elemente
+     *            der Szenarios rausgeschrieben, die sich in der Collection
+     *            befinden
      * @throws XMLStreamException
      */
     private void writeSzenarios(final List<Szenario> szenarios, final Collection<ModelElement> elements) throws XMLStreamException {
@@ -500,10 +516,12 @@ public class ToolXMLWriter extends IntendingXMLWriter {
     //////////////////////////////////
 
     /**
-     * Schreibt die LayerContainer mit ihren enthaltenen ElementContainern der Layer in die XML-Datei
+     * Schreibt die LayerContainer mit ihren enthaltenen ElementContainern der
+     * Layer in die XML-Datei
      *
      * @param szen Teilmodell das geschrieben werden soll
-     * @param elements ist diese Collection nicht <code>null</code>, werden nur die darin enthaltenen Elemente rausgeschrieben
+     * @param elements ist diese Collection nicht <code>null</code>, werden nur
+     *            die darin enthaltenen Elemente rausgeschrieben
      * @throws XMLStreamException
      */
     private void writeLayerContainer(final Szenario szen, final Collection<ModelElement> elements) throws XMLStreamException {
@@ -553,9 +571,12 @@ public class ToolXMLWriter extends IntendingXMLWriter {
     ////////////
 
     /**
-     * @param elementClass Elementklasse, für die das Layout geschrieben werden soll (wenn null, dann für Layer)
+     * @param elementClass Elementklasse, für die das Layout geschrieben werden
+     *            soll (wenn null, dann für Layer)
      * @param layout Layout zu diesr Elementklasse
-     * @param expanded wenn <code>true</code>, wird das normale Layout geschrieben, wenn <code>false</code> das zusammengeklappte Layout
+     * @param expanded wenn <code>true</code>, wird das normale Layout
+     *            geschrieben, wenn <code>false</code> das zusammengeklappte
+     *            Layout
      * @throws XMLStreamException
      */
     private void writeGraphElementLayout(final Class<?> elementClass, final GraphElementLayout layout, final boolean expanded) throws XMLStreamException {
@@ -635,7 +656,8 @@ public class ToolXMLWriter extends IntendingXMLWriter {
     ///////////
 
     /**
-     * Schreibt alle Icons in die XML-Datei, deren HashString in den übergebenen iconHashStrings vorkommen
+     * Schreibt alle Icons in die XML-Datei, deren HashString in den übergebenen
+     * iconHashStrings vorkommen
      *
      * @param iconHashStrings
      * @throws XMLStreamException

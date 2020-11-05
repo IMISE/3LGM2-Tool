@@ -31,10 +31,15 @@ public abstract class GraphmlWriter extends IntendingXMLWriter {
     /** Abstand zwischen den Ebenen */
     protected int LAYER_OFFSET_X = GraphDocument.INITIAL_PAGE_WIDTH / 10, LAYER_OFFSET_Y = GraphDocument.INITIAL_PAGE_HEIGHT / 10;
 
-    /** Offset der 0-Punkte der auktuellen Ebene ausgehend von der ersten Ebene */
+    /**
+     * Offset der 0-Punkte der auktuellen Ebene ausgehend von der ersten Ebene
+     */
     protected int currentSzenarioLayerOffsetX = 0, currentSzenarioLayerOffsetY = 0;
 
-    /** Offset der 0 Punkte der Elemente der aktuellen Ebene ausgehend von der ersten Ebene */
+    /**
+     * Offset der 0 Punkte der Elemente der aktuellen Ebene ausgehend von der
+     * ersten Ebene
+     */
     protected int currentSzenarioLayerElementsOffsetX = 0, currentSzenarioLayerElementsOffsetY = 0;
 
     public GraphmlWriter(final File file, final Szenario szenario, final int layer) throws XMLStreamException, IOException {
@@ -147,10 +152,11 @@ public abstract class GraphmlWriter extends IntendingXMLWriter {
     }
 
     /**
-     * Schreibt das Tag element.
-     * Ist cdata <code>null</code>, dann wird nur ein StartElement, aber kein EndElement geschrieben.
-     * Ist cdata ein leerer String "", dann wird nur ein leeres Element geschrieben (EmptyElement).
-     * Ist cdata ein gültiger String, dann wird nur ein StartElement, dann cdata und zuletzt ein EndElement geschrieben.
+     * Schreibt das Tag element. Ist cdata <code>null</code>, dann wird nur ein
+     * StartElement, aber kein EndElement geschrieben. Ist cdata ein leerer
+     * String "", dann wird nur ein leeres Element geschrieben (EmptyElement).
+     * Ist cdata ein gültiger String, dann wird nur ein StartElement, dann cdata
+     * und zuletzt ein EndElement geschrieben.
      *
      * @param element
      * @param cdata

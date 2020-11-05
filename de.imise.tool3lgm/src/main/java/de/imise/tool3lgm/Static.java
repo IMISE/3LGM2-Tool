@@ -51,7 +51,8 @@ import de.imise.util.swing.dialog.OutputDialog;
 import de.imise.util.swing.dialog.ProgressDialog;
 
 /**
- * Klasse, die häufig gebrauchte statische Informationen und Zugriffsfunktionen des Tools liefert.
+ * Klasse, die häufig gebrauchte statische Informationen und Zugriffsfunktionen
+ * des Tools liefert.
  *
  * @author AXS
  */
@@ -67,7 +68,10 @@ public class Static {
     /** Holds the current context and generates context menus */
     public static final RegularContextGenerator contextGenerator = new RegularContextGenerator();
 
-    /** Holds the current context and generates context menus for the template views */
+    /**
+     * Holds the current context and generates context menus for the template
+     * views
+     */
     public static final TemplateContextGenerator templateContextGenerator = new TemplateContextGenerator();
 
     /** Gibt die gerade laufende Instanz von 3lgm wieder */
@@ -130,7 +134,10 @@ public class Static {
         return selectedMetaModelContext.getMetaModel();
     }
 
-    /** @return <code>true</code> if the given MetaModelContext is equals to the DUMMY_META_MODEL_CONTEXT */
+    /**
+     * @return <code>true</code> if the given MetaModelContext is equals to the
+     *         DUMMY_META_MODEL_CONTEXT
+     */
     public static boolean isDummyMetaModelContext(final MetaModelContext metaModelContext) {
         return Tool3lgmMetaModelContext.DUMMY_META_MODEL_CONTEXT.equals(metaModelContext);
     }
@@ -140,7 +147,10 @@ public class Static {
         return tool == null ? null : tool.getSelectedGDCollection();
     }
 
-    /** Liefert das Modell, das vor dem aktuell selektierten Modell selektiert war */
+    /**
+     * Liefert das Modell, das vor dem aktuell selektierten Modell selektiert
+     * war
+     */
     public static GDCollection getPreSelectedGDCollection() {
         return tool == null ? null : tool.getPreSelectedGDCollection();
     }
@@ -151,7 +161,8 @@ public class Static {
     }
 
     /**
-     * Setzt das ausgewählte Modell und holt bei Bedarf den dazugehörigen Frame nach vorne
+     * Setzt das ausgewählte Modell und holt bei Bedarf den dazugehörigen Frame
+     * nach vorne
      *
      * @param doc
      */
@@ -162,13 +173,12 @@ public class Static {
     }
 
     /**
-     * Searches all loaded a models and templates to find the main {@link GraphDocument}
-     * or {@link Szenario} with the given hashString.
+     * Searches all loaded a models and templates to find the main
+     * {@link GraphDocument} or {@link Szenario} with the given hashString.
      *
-     * @param hashString
-     *            hashString of the GraphDocument
-     * @return the {@link GraphDocument} of a model or a template with the given hashString
-     *         or <code>null</code>
+     * @param hashString hashString of the GraphDocument
+     * @return the {@link GraphDocument} of a model or a template with the given
+     *         hashString or <code>null</code>
      */
     public static LGMGraphDocument getGraphDocument(final String hashString) {
         Iterable<GDCollection> allGDCollections = iterableCollections();
@@ -204,7 +214,8 @@ public class Static {
      * return GDCollection with the specified index in ArrayList collections
      *
      * @param index int with index of collection in ArrayList collection
-     * @return null if index < 0 or index >= collections.size(); otherwise the GDCollection with specified index
+     * @return null if index < 0 or index >= collections.size(); otherwise the
+     *         GDCollection with specified index
      */
     public static GDCollection getCollection(final int index) {
         return tool == null ? null : tool.getCollection(index);
@@ -236,12 +247,13 @@ public class Static {
     }
 
     /**
-     * Shows the property dialog for the given element. If the elenents model
-     * is a template model and this model is only shown in the template browser
-     * (and is not selected) so the function tries to find the same element
-     * in the current selected model. If found, the dilog of the element of the
+     * Shows the property dialog for the given element. If the elenents model is
+     * a template model and this model is only shown in the template browser
+     * (and is not selected) so the function tries to find the same element in
+     * the current selected model. If found, the dilog of the element of the
      * selected model will be openend. If the element is not presen in the
-     * selected model so the dialog of the original template element will be shown.
+     * selected model so the dialog of the original template element will be
+     * shown.
      *
      * @param ec
      */
@@ -265,7 +277,8 @@ public class Static {
     }
 
     /**
-     * Shows the PropertyDialog of the last selected Element in the current selected
+     * Shows the PropertyDialog of the last selected Element in the current
+     * selected
      */
     public static final void showPropertyDialogOfLastSelected() {
         LGMGraphDocument selectedDoc = getSelectedDoc();
@@ -275,7 +288,8 @@ public class Static {
     }
 
     /**
-     * Shows the PropertyDialog of the last selected Element of the given {@link GraphDocument}.
+     * Shows the PropertyDialog of the last selected Element of the given
+     * {@link GraphDocument}.
      *
      * @doc
      */
@@ -320,9 +334,9 @@ public class Static {
 
     /**
      * @param doc
-     * @return the ViewParameter of the szenario. If the szanrio has a frame then
-     *         the view parameter of the frame will be retured otherwise the in the
-     *         szenario stored view parameters are returned
+     * @return the ViewParameter of the szenario. If the szanrio has a frame
+     *         then the view parameter of the frame will be retured otherwise
+     *         the in the szenario stored view parameters are returned
      */
     public static final GraphViewParameter getGraphViewParameter(final Szenario szen) {
         MainFrame mainFrame = getMainFrame();
@@ -457,7 +471,8 @@ public class Static {
     }
 
     /**
-     * schließt den ProgressDialog, sofern dieser überhaupt existiert; ansonsten passiert nichts
+     * schließt den ProgressDialog, sofern dieser überhaupt existiert; ansonsten
+     * passiert nichts
      */
     public static void closeProgressDialog() {
         if (progressDialog == null) {
@@ -468,11 +483,10 @@ public class Static {
     }
 
     /**
-     * Setzt einen neuen Titel des ProgressDialog, sofern dieser überhaupt existiert; ansonsten
-     * passiert nichts.
+     * Setzt einen neuen Titel des ProgressDialog, sofern dieser überhaupt
+     * existiert; ansonsten passiert nichts.
      *
-     * @param text
-     *            String mit dem neuen Titel
+     * @param text String mit dem neuen Titel
      */
     public static void setProgressDialogTitle(final String text) {
         if (progressDialog == null) {
@@ -482,9 +496,10 @@ public class Static {
     }
 
     /**
-     * Setzt einen neuen Stautstext des ProgressDialog, sofern dieser überhaupt existiert;
-     * ansonsten passiert nichts. Wenn der übergebene String in den Resourcen gefunden wird,
-     * dann wird er durch den Resourcen-String eretzt, ansonsten wird er direkt angezeigt.
+     * Setzt einen neuen Stautstext des ProgressDialog, sofern dieser überhaupt
+     * existiert; ansonsten passiert nichts. Wenn der übergebene String in den
+     * Resourcen gefunden wird, dann wird er durch den Resourcen-String eretzt,
+     * ansonsten wird er direkt angezeigt.
      *
      * @param text String mit neuen Statustext
      */
@@ -493,8 +508,8 @@ public class Static {
     }
 
     /**
-     * Setzt einen neuen Stautstext des ProgressDialog, sofern dieser überhaupt existiert;
-     * ansonsten passiert nichts.
+     * Setzt einen neuen Stautstext des ProgressDialog, sofern dieser überhaupt
+     * existiert; ansonsten passiert nichts.
      *
      * @param resourceKey
      * @param text
@@ -559,8 +574,9 @@ public class Static {
     // MessageDialoge //
 
     /**
-     * Unter OS-X reagieren modale Dialoge, die aus Drag&Drop-Ereignissen heraus gestartet werden nicht mehr auf die
-     * Maus. Sie tun es erst wieder, wenn sie in einem eigenen Thread gestartet werden. Daher das hier.
+     * Unter OS-X reagieren modale Dialoge, die aus Drag&Drop-Ereignissen heraus
+     * gestartet werden nicht mehr auf die Maus. Sie tun es erst wieder, wenn
+     * sie in einem eigenen Thread gestartet werden. Daher das hier.
      *
      * @param parentComponent
      * @param messageResKey
@@ -583,8 +599,10 @@ public class Static {
     }
 
     /**
-     * Liefert <code>true</code>, wenn auf dem MAC gerade ein DragNDrop ausgeführt wurde. Dann darf möglichst kein Dialog geöffnet werden, weil der
-     * dann wegen eines Java-Bugs auf dem MAC nicht mehr per Maus sondern nur noch per Tatstatur bedienbar ist.
+     * Liefert <code>true</code>, wenn auf dem MAC gerade ein DragNDrop
+     * ausgeführt wurde. Dann darf möglichst kein Dialog geöffnet werden, weil
+     * der dann wegen eines Java-Bugs auf dem MAC nicht mehr per Maus sondern
+     * nur noch per Tatstatur bedienbar ist.
      *
      * @return
      */
@@ -600,9 +618,10 @@ public class Static {
     // Plugin //
 
     /**
-     * Lädt aus dem Plugin-Verzeichnis alle Klassen der übergebenen Art, ruft dann von
-     * jeder Klasse den parameterlosen Konstruktor auf und gibt alle Instanzen zurück,
-     * bei denen der Aufruf des Konstruktors ohne Fehler geklappt hat.
+     * Lädt aus dem Plugin-Verzeichnis alle Klassen der übergebenen Art, ruft
+     * dann von jeder Klasse den parameterlosen Konstruktor auf und gibt alle
+     * Instanzen zurück, bei denen der Aufruf des Konstruktors ohne Fehler
+     * geklappt hat.
      *
      * @param superClassOfResultClasses
      * @return Instanzen der übergebenen Klasse aus dem übergebenen Verzeichnis
@@ -613,13 +632,14 @@ public class Static {
     }
 
     /**
-     * Lädt aus dem Plugin-Verzeichnis die alle Klassen der übergebenen Art, ruft
-     * dann von der jeweils nächsten Klasse den parameterlosen Konstruktor auf und
-     * gibt die erste Instanz zurück, bei denen der Aufruf des Konstruktors ohne
-     * Fehler geklappt hat.
+     * Lädt aus dem Plugin-Verzeichnis die alle Klassen der übergebenen Art,
+     * ruft dann von der jeweils nächsten Klasse den parameterlosen Konstruktor
+     * auf und gibt die erste Instanz zurück, bei denen der Aufruf des
+     * Konstruktors ohne Fehler geklappt hat.
      *
      * @param superClassOfResultClasses
-     * @return Instanz der übergebenen Klasse aus dem übergebenen Verzeichnis oder <code>null</code>, wenn keine Instanz gefunden wurde
+     * @return Instanz der übergebenen Klasse aus dem übergebenen Verzeichnis
+     *         oder <code>null</code>, wenn keine Instanz gefunden wurde
      */
     public static <T> T loadPlugin(final Class<T> superClassOfResultClasses) {
         T instance = PluginUtils.loadInstance(Tool3lgmConstants.PLUGIN_DIR, superClassOfResultClasses);
@@ -627,11 +647,12 @@ public class Static {
     }
 
     /**
-     * Lädt alle Klassen der übergebenen Art aus dem übergebenen Verzeichis oder Jar-File. Ist es ein Verzeichnis, werden alle darin enthaltenen
-     * Jar-Files durchsucht, sonst nur das eine übergebene Jar-File. Ist es weder Verzeichnis noch Jar-File, kommt eine leere Liste zurück.
+     * Lädt alle Klassen der übergebenen Art aus dem übergebenen Verzeichis oder
+     * Jar-File. Ist es ein Verzeichnis, werden alle darin enthaltenen Jar-Files
+     * durchsucht, sonst nur das eine übergebene Jar-File. Ist es weder
+     * Verzeichnis noch Jar-File, kommt eine leere Liste zurück.
      *
-     * @param superClassOfResultClasses
-     *            (Ober-)Klasse aller Ergebnisklassen
+     * @param superClassOfResultClasses (Ober-)Klasse aller Ergebnisklassen
      * @return
      */
     public static <T> List<Class<? extends T>> loadClasses(final Class<? extends T> superClassOfResultClasses) {

@@ -39,11 +39,14 @@ import de.imise.util.swing.component.list.AlphabeticalJList;
 import de.imise.util.swing.dialog.MultipleOptionPane;
 
 /**
- * Diese Klasse stellt 3 zusammengehörige Komponenten bereit, mit denen ein Benutzter einen speziellen Metapfad auswählen kann.<br>
- * In die erste ComboBox kann man eine Klasse des Meta-Pfades eingeben, in die zweite die andere Klasse und, falls es zw. diesen Klassen mehrere
- * MetaPfade gibt, kann man aus einer Liste einen auswählen.<br>
- * Dieser Mechanismus wird in der Matrix-Sicht verwendet.
- * Diesen Selector gab es schon für die alten Pfade der Matrixsicht und hiermit wurde er für die neuen Pfade adaptiert.
+ * Diese Klasse stellt 3 zusammengehörige Komponenten bereit, mit denen ein
+ * Benutzter einen speziellen Metapfad auswählen kann.<br>
+ * In die erste ComboBox kann man eine Klasse des Meta-Pfades eingeben, in die
+ * zweite die andere Klasse und, falls es zw. diesen Klassen mehrere MetaPfade
+ * gibt, kann man aus einer Liste einen auswählen.<br>
+ * Dieser Mechanismus wird in der Matrix-Sicht verwendet. Diesen Selector gab es
+ * schon für die alten Pfade der Matrixsicht und hiermit wurde er für die neuen
+ * Pfade adaptiert.
  *
  * @author AXS
  * @create 13.11.2007
@@ -64,9 +67,10 @@ public class MetaPathSelector implements ActionListener {
     private final AlphabeticalComboBox<Class<? extends ModelElement>> class2ComboBox;
 
     /**
-     * Chekcbox über die eingestellt werden kann, ob nur absolute Kindelemente (also Elemente ohne
-     * eigene Teilelemente) angezeigt werden soll. Diese Box ist disabled, wenn weder in den Zeilen
-     * noch in den Spalten Elemente angezeigt werden, die in Teil-Von-Beziehung stehen können.
+     * Chekcbox über die eingestellt werden kann, ob nur absolute Kindelemente
+     * (also Elemente ohne eigene Teilelemente) angezeigt werden soll. Diese Box
+     * ist disabled, wenn weder in den Zeilen noch in den Spalten Elemente
+     * angezeigt werden, die in Teil-Von-Beziehung stehen können.
      */
     private final JCheckBox showPartsOnlyCheckBox;
 
@@ -86,14 +90,15 @@ public class MetaPathSelector implements ActionListener {
     private final List<ChangeListener> changeListenerList = new ArrayList<>();
 
     /**
-     * Selektor der in allen Dialigen benutzt wird, die statisch von dieser Klasse angezeigt werden. Dadurch bleibt eine alte Auswahl immer erhalten.
+     * Selektor der in allen Dialigen benutzt wird, die statisch von dieser
+     * Klasse angezeigt werden. Dadurch bleibt eine alte Auswahl immer erhalten.
      */
     private static MetaPathSelector dialogMetaPathSelecor;
 
     /**
-     * If the selector is displayed in a dialog with this list
-     * as view for the selectable meta paths, this list must
-     * be updated if the selection of the comboboxes is changed.
+     * If the selector is displayed in a dialog with this list as view for the
+     * selectable meta paths, this list must be updated if the selection of the
+     * comboboxes is changed.
      */
     private AlphabeticalJList metaPathJList;
 
@@ -105,14 +110,16 @@ public class MetaPathSelector implements ActionListener {
     /** Maximale Anzahl gleichzeitig auswählbarer Pfade, wenn es mehrere gibt */
     private int maxParallelSelectedPaths = -1;
 
-    /** Alle Elementklasse, bei denenlaut {@link MetaPathDefinition} Pfade enden. */
+    /**
+     * Alle Elementklasse, bei denenlaut {@link MetaPathDefinition} Pfade enden.
+     */
     private final Set<Class<? extends ModelElement>> endElementClassesInPaths;
 
     /**
-     * @param model
-     *            Model, das die auswählbaren Elementklassen und Pfade festlegt.
-     * @param maxParallelSelectedPaths
-     *            Maximale Anzahl gleichzeitig auswählbarer Pfade, wenn es mehrere gibt
+     * @param model Model, das die auswählbaren Elementklassen und Pfade
+     *            festlegt.
+     * @param maxParallelSelectedPaths Maximale Anzahl gleichzeitig auswählbarer
+     *            Pfade, wenn es mehrere gibt
      */
     public MetaPathSelector(final MetaPathDefinition model, final int maxParallelSelectedPaths) {
         this.model = model;
@@ -261,14 +268,15 @@ public class MetaPathSelector implements ActionListener {
     }
 
     /**
-     * Zeigt einen Dialog an, in dem man Klassen und einen MetaPfad auswählen kann.
+     * Zeigt einen Dialog an, in dem man Klassen und einen MetaPfad auswählen
+     * kann.
      *
-     * @param model
-     *            Model, das die auswählbaren Elementklassen und Pfade festlegt.
-     * @param maxParallelSelectedPaths
-     *            Maximale Anzahl gleichzeitig auswählbarer Pfade, wenn es mehrere gibt
-     * @return einen <code>MetaPathSelector</code> der durch die Einträge aus einem angezeigten
-     *         Dialog gefüllt wurde
+     * @param model Model, das die auswählbaren Elementklassen und Pfade
+     *            festlegt.
+     * @param maxParallelSelectedPaths Maximale Anzahl gleichzeitig auswählbarer
+     *            Pfade, wenn es mehrere gibt
+     * @return einen <code>MetaPathSelector</code> der durch die Einträge aus
+     *         einem angezeigten Dialog gefüllt wurde
      */
     public static final MetaPathSelector showDialog(final MetaPathDefinition model, final int maxParallelSelectedPaths) {
         String class1Name = Tool3lgmConstants.getResString("class1");
@@ -278,20 +286,21 @@ public class MetaPathSelector implements ActionListener {
     }
 
     /**
-     * Zeigt einen Dialog an, in dem man Klassen und einen MetaPfad auswählen kann.
+     * Zeigt einen Dialog an, in dem man Klassen und einen MetaPfad auswählen
+     * kann.
      *
-     * @param model
-     *            Model, das die auswählbaren Elementklassen und Pfade festlegt.
-     * @param class1Label
-     *            Label, das für die erste auszuwählende Klasse angezeigt werden soll
-     * @param class2Label
-     *            Label, das für die zweite auszuwählende Klasse angezeigt werden soll
-     * @param metaPathListLabel
-     *            Label, das über der MetaPathList angezeigt werden soll
-     * @param maxParallelSelectedPaths
-     *            Maximale Anzahl gleichzeitig auswählbarer Pfade, wenn es mehrere gibt
-     * @return einen <code>MetaPathSelector</code> der durch die Einträge aus einem angezeigten
-     *         Dialog gefüllt wurde
+     * @param model Model, das die auswählbaren Elementklassen und Pfade
+     *            festlegt.
+     * @param class1Label Label, das für die erste auszuwählende Klasse
+     *            angezeigt werden soll
+     * @param class2Label Label, das für die zweite auszuwählende Klasse
+     *            angezeigt werden soll
+     * @param metaPathListLabel Label, das über der MetaPathList angezeigt
+     *            werden soll
+     * @param maxParallelSelectedPaths Maximale Anzahl gleichzeitig auswählbarer
+     *            Pfade, wenn es mehrere gibt
+     * @return einen <code>MetaPathSelector</code> der durch die Einträge aus
+     *         einem angezeigten Dialog gefüllt wurde
      */
     public static final MetaPathSelector showDialog(final MetaPathDefinition model, final String class1Label, final String class2Label, final String metaPathListLabel, final int maxParallelSelectedPaths) {
         if (dialogMetaPathSelecor == null) {
@@ -343,11 +352,11 @@ public class MetaPathSelector implements ActionListener {
     }
 
     /**
-     * Liefert <code>true</code>, wenn gültige Elementklassen und ein gültiger MetaPfad (jeweils
-     * ungleich <code>null</code>) gesetzt sind.
+     * Liefert <code>true</code>, wenn gültige Elementklassen und ein gültiger
+     * MetaPfad (jeweils ungleich <code>null</code>) gesetzt sind.
      *
-     * @return <code>true</code>, wenn gültige Klassen und ein gültiger Metapfad ausgewählt wurde,
-     *         sonst <code>false</code>
+     * @return <code>true</code>, wenn gültige Klassen und ein gültiger Metapfad
+     *         ausgewählt wurde, sonst <code>false</code>
      */
     public boolean isValidSelection() {
         MetaPathSelection selection = getSelection();
@@ -407,7 +416,8 @@ public class MetaPathSelector implements ActionListener {
     }
 
     /**
-     * Spiegelt genau eine Auswahl der Einstellungsmöglichkeiten des Selektors wieder
+     * Spiegelt genau eine Auswahl der Einstellungsmöglichkeiten des Selektors
+     * wieder
      *
      * @author AXS (23 Nov 2018)
      */

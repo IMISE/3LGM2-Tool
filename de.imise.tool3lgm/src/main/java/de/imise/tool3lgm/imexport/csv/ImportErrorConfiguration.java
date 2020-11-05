@@ -21,7 +21,8 @@ public class ImportErrorConfiguration {
     private final List<ImportError> errors = new ArrayList<>();
 
     /**
-     * Stores the {@link ImportError.ErrorType} of all already added errors. This is for identifying errors which should not be added twice.
+     * Stores the {@link ImportError.ErrorType} of all already added errors.
+     * This is for identifying errors which should not be added twice.
      */
     private final Set<ImportError.ErrorType> addedErrorTypes = new HashSet<>();
 
@@ -34,15 +35,12 @@ public class ImportErrorConfiguration {
     /**
      * Adds a new {@link ImportError}
      *
-     * @param line
-     *            The line where the error occurs
-     * @param col
-     *            the colum where the error occurs
-     * @param errorType
-     *            the type of the error
-     * @param args
-     *            String arguments to format the printable error message
-     * @return the added error or <code>null</code> if an error with the given type should not be added again
+     * @param line The line where the error occurs
+     * @param col the colum where the error occurs
+     * @param errorType the type of the error
+     * @param args String arguments to format the printable error message
+     * @return the added error or <code>null</code> if an error with the given
+     *         type should not be added again
      */
     public ImportError add(final AbstractImportLine line, final int col, final ImportError.ErrorType errorType, final Object... args) {
         if (errorType.isSingleAddError()) {
@@ -60,14 +58,10 @@ public class ImportErrorConfiguration {
     /**
      * Creates where the error occurs
      *
-     * @param line
-     *            The line where the error occurs
-     * @param col
-     *            the colum where the error occurs
-     * @param errorType
-     *            the type of the error
-     * @param args
-     *            String arguments to format the printable error message
+     * @param line The line where the error occurs
+     * @param col the colum where the error occurs
+     * @param errorType the type of the error
+     * @param args String arguments to format the printable error message
      * @return the created error
      */
     private ImportError createError(final AbstractImportLine line, final int col, final ImportError.ErrorType errorType, final Object... args) {

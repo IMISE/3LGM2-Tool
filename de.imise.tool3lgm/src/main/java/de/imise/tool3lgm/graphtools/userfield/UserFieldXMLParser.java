@@ -18,7 +18,8 @@ import de.imise.tool3lgm.log.Log;
 import de.imise.tool3lgm.xml.ToolXMLWriter;
 
 /**
- * @author Thomas Rudert seit Version Beta 2 P26, AXS mit Inputstreams für die Version zum aus den JARs laden
+ * @author Thomas Rudert seit Version Beta 2 P26, AXS mit Inputstreams für die
+ *         Version zum aus den JARs laden
  */
 public class UserFieldXMLParser {
 

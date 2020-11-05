@@ -52,8 +52,8 @@ public class XSLTFileHandler {
      * Spezifikationen entspricht, ansonsten null
      *
      * @param arg0 File, die zu ueberpruefende Datei
-     * @return String[] mit den gefunden Eigenschaften, oder null
-     *         String[] = { dateiname mit pfad, bezeichnung, beschreibung, autor }
+     * @return String[] mit den gefunden Eigenschaften, oder null String[] = {
+     *         dateiname mit pfad, bezeichnung, beschreibung, autor }
      */
     public static String[] checkContent(final File arg0) {
         if (!arg0.isFile()) {

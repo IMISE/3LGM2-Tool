@@ -31,7 +31,11 @@ import de.imise.util.swing.NoopGraphics;
  * @author N.N.
  * @create Very long time ago
  */
-public class NodeContainer extends ElementContainer/* implements GraphDocumentListener, InTransactionListener */ {
+public class NodeContainer
+        extends ElementContainer/*
+                                 * implements GraphDocumentListener,
+                                 * InTransactionListener
+                                 */ {
 
     /**
      * COMMENTME
@@ -66,8 +70,8 @@ public class NodeContainer extends ElementContainer/* implements GraphDocumentLi
 
     //
     /**
-     * String, der unten links neben den Node geschrieben werden
-     * (z.B. an Aufgaben und Objekttypen Redundanzfaktoren...)
+     * String, der unten links neben den Node geschrieben werden (z.B. an
+     * Aufgaben und Objekttypen Redundanzfaktoren...)
      */
     private String[] additionalTextRightDownLines;
 
@@ -393,12 +397,13 @@ public class NodeContainer extends ElementContainer/* implements GraphDocumentLi
     }
 
     /**
-     * This {@link Graphics} object comes from StackOverflow. It doesn't paint anything.
-     * Painting to this non painting graphics just before painting to the correct graphics
-     * object repairs the HTML SWING-BUG that after the first paint the alignment of the
-     * HTML-labels are always bottom, if they must be wrapped automatically to multiple.
-     * This bug seems to be created by wrong font metrics in the very first paint of such
-     * a wrapped HTML string.
+     * This {@link Graphics} object comes from StackOverflow. It doesn't paint
+     * anything. Painting to this non painting graphics just before painting to
+     * the correct graphics object repairs the HTML SWING-BUG that after the
+     * first paint the alignment of the HTML-labels are always bottom, if they
+     * must be wrapped automatically to multiple. This bug seems to be created
+     * by wrong font metrics in the very first paint of such a wrapped HTML
+     * string.
      *
      * @see https://stackoverflow.com/questions/16227877/how-to-update-a-jcomponent-with-html-without-flickering
      */

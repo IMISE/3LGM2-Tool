@@ -7,8 +7,9 @@ import com.google.common.collect.ImmutableSet;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 
 /**
- * Abstrakte Oberklasse für alle Pfade, die sich aus mind. 1 Pfad zusammen setzen und bei
- * ihrer Anwendung eine der üblichen Mengenoperationen auf die Ergebniselemente anwenden.
+ * Abstrakte Oberklasse für alle Pfade, die sich aus mind. 1 Pfad zusammen
+ * setzen und bei ihrer Anwendung eine der üblichen Mengenoperationen auf die
+ * Ergebniselemente anwenden.
  *
  * @author AXS
  * @create 12.10.2010
@@ -16,7 +17,8 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 public abstract class ParallelMetaPath extends ListMetaPath {
 
     /**
-     * Wahr, wenn sobald einmal verscht wurde, die Gegenrichtung dieses Pfades anzulegen
+     * Wahr, wenn sobald einmal verscht wurde, die Gegenrichtung dieses Pfades
+     * anzulegen
      */
     protected boolean otherDirectionInitilized = false;
 

@@ -1,8 +1,9 @@
 package de.imise.tool3lgm.graphtools.metamodel.elements;
 
 /**
- * Die HasPart-Beziehung ist eine Beziehung zwischen zwei Elementklasse. Start der Edge ist immer das Elternelement,
- * das Ende der Edge ist immer das Kindelement. Dir Richtung der Edge ist immer FORWARD.
+ * Die HasPart-Beziehung ist eine Beziehung zwischen zwei Elementklasse. Start
+ * der Edge ist immer das Elternelement, das Ende der Edge ist immer das
+ * Kindelement. Dir Richtung der Edge ist immer FORWARD.
  *
  * @author AXS (29 Aug 2018) aus der IsPartOfEdge von anno dazumal
  */
@@ -22,7 +23,8 @@ public abstract class HasPartEdge extends PropertyTransferEdge {
     }
 
     /**
-     * Gibt das Element zurück, welches durch diese Edge Teil des anderen Elementes ist.
+     * Gibt das Element zurück, welches durch diese Edge Teil des anderen
+     * Elementes ist.
      *
      * @return Partelement der Edge
      */
@@ -31,7 +33,8 @@ public abstract class HasPartEdge extends PropertyTransferEdge {
     }
 
     /**
-     * Gibt das Element zurück, welches durch diese Edge das Oberelement des anderen Elementes ist.
+     * Gibt das Element zurück, welches durch diese Edge das Oberelement des
+     * anderen Elementes ist.
      *
      * @return Parentelement der Edge
      */
@@ -60,7 +63,8 @@ public abstract class HasPartEdge extends PropertyTransferEdge {
     }
 
     /**
-     * Liefert <code>true</code>, wenn die übergebene Elementklasse mit der Unterlementklasse der übergebenen Edge zuweisungskompatibel ist.
+     * Liefert <code>true</code>, wenn die übergebene Elementklasse mit der
+     * Unterlementklasse der übergebenen Edge zuweisungskompatibel ist.
      *
      * @param hasPartEdgeClass
      * @param meClass
@@ -71,8 +75,9 @@ public abstract class HasPartEdge extends PropertyTransferEdge {
     }
 
     /**
-     * Liefert <code>true</code>, wenn die übergebene Elementklasse mit der Elementklasse der übergebenen Edge zuweisungskompatibel ist, die
-     * nicht die Teilelementklasse ist.
+     * Liefert <code>true</code>, wenn die übergebene Elementklasse mit der
+     * Elementklasse der übergebenen Edge zuweisungskompatibel ist, die nicht
+     * die Teilelementklasse ist.
      *
      * @param hasPartEdgeClass
      * @param meClass

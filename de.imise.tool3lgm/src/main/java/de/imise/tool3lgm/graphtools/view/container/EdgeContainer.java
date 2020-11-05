@@ -409,9 +409,9 @@ public class EdgeContainer extends ElementContainer {
     }
 
     /**
-     * Toleranz in Pixeln, mit der man neben die Edge klicken darf, wenn man sie per Mausklick auswählen will oder mit der entschieden wird, an
-     * welcher Stelle ein neuer Knickpunkt hinzugefügt werden
-     * muss.
+     * Toleranz in Pixeln, mit der man neben die Edge klicken darf, wenn man sie
+     * per Mausklick auswählen will oder mit der entschieden wird, an welcher
+     * Stelle ein neuer Knickpunkt hinzugefügt werden muss.
      */
     public static final int TOLERANCE = 4;
 
@@ -428,8 +428,9 @@ public class EdgeContainer extends ElementContainer {
     }
 
     /**
-     * Liefert den Index, an dem in die Liste <code>knickpunkte</code> ein neuer Knickpunkt eingefügt werden würde, wenn der die übergebenen
-     * Koordinaten besitzt.
+     * Liefert den Index, an dem in die Liste <code>knickpunkte</code> ein neuer
+     * Knickpunkt eingefügt werden würde, wenn der die übergebenen Koordinaten
+     * besitzt.
      *
      * @param x
      * @param y
@@ -440,8 +441,9 @@ public class EdgeContainer extends ElementContainer {
     }
 
     /**
-     * Liefert den Index, an dem in die Liste <code>knickpunkte</code> ein neuer Knickpunkt eingefügt werden würde, wenn der die übergebenen
-     * Koordinaten besitzt.
+     * Liefert den Index, an dem in die Liste <code>knickpunkte</code> ein neuer
+     * Knickpunkt eingefügt werden würde, wenn der die übergebenen Koordinaten
+     * besitzt.
      *
      * @param x
      * @param y
@@ -473,8 +475,9 @@ public class EdgeContainer extends ElementContainer {
     }
 
     /**
-     * Setzt einen Knickpunkt an der richtigen Position in die Liste der Knickpunkte ein. Wird als Index -1 übergeben, dann wird der Index anhand der
-     * Koordinaten berechnet.
+     * Setzt einen Knickpunkt an der richtigen Position in die Liste der
+     * Knickpunkte ein. Wird als Index -1 übergeben, dann wird der Index anhand
+     * der Koordinaten berechnet.
      *
      * @param kp
      * @param index
@@ -492,8 +495,9 @@ public class EdgeContainer extends ElementContainer {
     }
 
     /**
-     * Fügt einen Knickpunkt an der richtigen Position in die Liste der Knickpunkte ein. Wird als Index -1 übergeben, dann wird der Index anhand der
-     * Koordinaten berechnet.
+     * Fügt einen Knickpunkt an der richtigen Position in die Liste der
+     * Knickpunkte ein. Wird als Index -1 übergeben, dann wird der Index anhand
+     * der Koordinaten berechnet.
      *
      * @param kp
      * @param index

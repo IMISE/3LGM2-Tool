@@ -21,8 +21,7 @@ public class UserFieldGlobalNumberTableModel extends AbstractUserFieldTableModel
      * Erstellt und setzt Modeldaten für Modelvariablen
      */
     @SuppressWarnings({
-            "rawtypes",
-            "unchecked"
+            "rawtypes", "unchecked"
     })
     public void setData() {
 

@@ -194,7 +194,10 @@ public class ActionLibrary {
                 }
             };
 
-            /** Öffnet einen Dialog zum Import von Daten im tab-separierten Format */
+            /**
+             * Öffnet einen Dialog zum Import von Daten im tab-separierten
+             * Format
+             */
             public static final Action ACTION_IMPORT_DATA = new GraphDocumentAction(ActionIdentifier.ACTION_IMPORT_DATA, PPP) {
                 @Override
                 protected void actionPerformed() {
@@ -324,7 +327,9 @@ public class ActionLibrary {
                 }
             };
 
-            /** Öffnet einen Dialog zur Anwendung von XSL-Scripts auf das Modell */
+            /**
+             * Öffnet einen Dialog zur Anwendung von XSL-Scripts auf das Modell
+             */
             public static final Action ACTION_EXPORT_XSLT = new GraphDocumentAction(ActionIdentifier.ACTION_EXPORT_XSLT, PPP) {
                 @Override
                 protected void actionPerformed() {
@@ -341,7 +346,9 @@ public class ActionLibrary {
                 }
             };
 
-            /** Öffnet einen Dialog zum Export des gesamten Models als HTML-Site */
+            /**
+             * Öffnet einen Dialog zum Export des gesamten Models als HTML-Site
+             */
             public static final Action ACTION_EXPORT_HTML = new GraphDocumentAction(ActionIdentifier.ACTION_EXPORT_HTML, PPP) {
                 @Override
                 protected void actionPerformed() {
@@ -349,7 +356,10 @@ public class ActionLibrary {
                 }
             };
 
-            /** Öffnet einen Dialog zum Export einzelner Elemente in tab-separiertem Format */
+            /**
+             * Öffnet einen Dialog zum Export einzelner Elemente in
+             * tab-separiertem Format
+             */
             public static final Action ACTION_EXPORT_DATA = new GraphDocumentAction(ActionIdentifier.ACTION_EXPORT_DATA, PPP) {
                 @Override
                 protected void actionPerformed() {
@@ -359,7 +369,8 @@ public class ActionLibrary {
         }
 
         /*
-         * Die Actions zum öffnen der zuletzt verwendeten Dateien befinden sich in der Klasse {@link DynamicActions}
+         * Die Actions zum öffnen der zuletzt verwendeten Dateien befinden sich
+         * in der Klasse {@link DynamicActions}
          */
 
         /** Beenden des Programms */
@@ -412,8 +423,8 @@ public class ActionLibrary {
         };
 
         /**
-         * Zeigt einen ColorChooser zum auswählen der Farbe, mit der Analyseergnisse in der
-         * Grafik hervorgehovben werden
+         * Zeigt einen ColorChooser zum auswählen der Farbe, mit der
+         * Analyseergnisse in der Grafik hervorgehovben werden
          */
         public static final Action ACTION_ANALYSIS_CHOOSE_GRAPH_ANALYSIS_RESULT_COLOR = new StaticAction(ActionIdentifier.ACTION_ANALYSIS_CHOOSE_GRAPH_ANALYSIS_RESULT_COLOR, PPP) {
             @Override
@@ -497,17 +508,19 @@ public class ActionLibrary {
     }
 
     /**
-     * Sammlung von Methoden, die häufig verwendete {@link Action}s generieren. <br>
-     * Das Generieren ist notwendig, weil sich diese Actions wärend der Programmausführung ändern
-     * können und damit nicht statisch definierbar sind.
+     * Sammlung von Methoden, die häufig verwendete {@link Action}s generieren.
+     * <br>
+     * Das Generieren ist notwendig, weil sich diese Actions wärend der
+     * Programmausführung ändern können und damit nicht statisch definierbar
+     * sind.
      *
      * @author fstephan
      */
     public static class DynamicActions {
 
         /**
-         * Gibt ein Array zurück, dessen Elemente Actions zum Öffnen der zuletzt verwendeten Dateien
-         * sind
+         * Gibt ein Array zurück, dessen Elemente Actions zum Öffnen der zuletzt
+         * verwendeten Dateien sind
          */
         public static final Action[] getLastUsedFilesOpenActions() {
             List<String> fileNames = UserProperties.getListValues(StringProperty.LAST_USED_MODEL_FILES);
@@ -538,7 +551,10 @@ public class ActionLibrary {
             return actions;
         }
 
-        /** Gibt ein Array zurück, dessen Elemente Actions zum Öffnen der Teilmodell-Frames sind */
+        /**
+         * Gibt ein Array zurück, dessen Elemente Actions zum Öffnen der
+         * Teilmodell-Frames sind
+         */
         public static final Action[] getSelectFrameActions() {
 
             List<ViewPaneFrameComponent> frames = Static.getAllFrames();
@@ -630,7 +646,10 @@ public class ActionLibrary {
      */
     public static class ExtrasActions {
 
-        /** Öffnet einen Dialog zum Anlegen benutzerdefinierter Eigenschaftsfelder */
+        /**
+         * Öffnet einen Dialog zum Anlegen benutzerdefinierter
+         * Eigenschaftsfelder
+         */
         public static final Action ACTION_OPEN_USERFIELD_DEFINITION_DIALOG = new GraphDocumentAction(ActionIdentifier.ACTION_OPEN_USERFIELD_DEFINITION_DIALOG, PPP) {
             @Override
             public void actionPerformed() {
@@ -682,7 +701,9 @@ public class ActionLibrary {
             }
         };
 
-        /** Zeigt eine lokale Webseite mit Themen zur weiteren Modellnutzung an */
+        /**
+         * Zeigt eine lokale Webseite mit Themen zur weiteren Modellnutzung an
+         */
         public static final ExtendedAction ACTION_SHOW_INFORMATION_SYSTEM_EVALUATION_TUTORIAL = new StaticAction(ActionIdentifier.ACTION_SHOW_INFORMATION_SYSTEM_EVALUATION_TUTORIAL, PPP) {
             @Override
             public void actionPerformed() {
@@ -707,7 +728,10 @@ public class ActionLibrary {
             }
         };
 
-        /** Öffnet den Ordner mit dem Beispielmodellen bzw die sog. Modellbibliothek mit Modellen von Standards */
+        /**
+         * Öffnet den Ordner mit dem Beispielmodellen bzw die sog.
+         * Modellbibliothek mit Modellen von Standards
+         */
         public static final ExtendedAction ACTION_OPEN_FILE_CHOSSER_IN_MODEL_LIBRARY = new StaticAction(ActionIdentifier.ACTION_OPEN_FILE_CHOSSER_IN_MODEL_LIBRARY, PPP) {
             @Override
             public void actionPerformed() {
@@ -741,7 +765,8 @@ public class ActionLibrary {
     public static class CreateElementActions {
 
         /**
-         * Gibt alle Actions zum Erzeugen von {@link ModelElement}en der spezifizierten Klassen wieder
+         * Gibt alle Actions zum Erzeugen von {@link ModelElement}en der
+         * spezifizierten Klassen wieder
          *
          * @param metaModel
          * @param layerIndex
@@ -850,7 +875,8 @@ public class ActionLibrary {
             };
 
             /**
-             * Erzeugt das Array, aller Actions, für die das Ein- und Ausblenden in der Grafik in der GraphViewDefinition angegeben wurde.
+             * Erzeugt das Array, aller Actions, für die das Ein- und Ausblenden
+             * in der Grafik in der GraphViewDefinition angegeben wurde.
              *
              * @param hide
              * @return
@@ -953,10 +979,16 @@ public class ActionLibrary {
             }
         };
 
-        /** Schaltet immer zischen den beiden Aktionen Einzellayer-Ansicht und Mehrlayer-Ansicht um */
+        /**
+         * Schaltet immer zischen den beiden Aktionen Einzellayer-Ansicht und
+         * Mehrlayer-Ansicht um
+         */
         public static final Action ACTION_GRAPH_SWITCH_ONE_LAYER_AND_THREE_LAYER_PERSPECTIVE = new ToggleAction(ACTION_GRAPH_SHOW_THREE_LAYER_PERSPECTIVE, ACTION_GRAPH_SHOW_SINGLE_LAYER_PERSPECTIVE);
 
-        /** Zeigt die Fachliche Ebene an, falls die Ein-Ebenen-Ansicht aktiviert ist */
+        /**
+         * Zeigt die Fachliche Ebene an, falls die Ein-Ebenen-Ansicht aktiviert
+         * ist
+         */
         public static final Action ACTION_ACTIVATE_DOMAIN_LAYER = new GraphDocumentAction(ActionIdentifier.ACTION_ACTIVATE_DOMAIN_LAYER) {
             @Override
             protected void actionPerformed() {
@@ -970,7 +1002,10 @@ public class ActionLibrary {
 
         };
 
-        /** Zeigt die Logische Werzeugebene an, falls die Ein-Ebenen-Ansicht aktiviert ist */
+        /**
+         * Zeigt die Logische Werzeugebene an, falls die Ein-Ebenen-Ansicht
+         * aktiviert ist
+         */
         public static final Action ACTION_ACTIVATE_LOGICAL_LAYER = new GraphDocumentAction(ActionIdentifier.ACTION_ACTIVATE_LOGICAL_LAYER) {
             @Override
             protected void actionPerformed() {
@@ -984,7 +1019,10 @@ public class ActionLibrary {
 
         };
 
-        /** Zeigt die physische Werkzeugebene an, falls die Ein-Ebenen-Ansicht aktiviert ist */
+        /**
+         * Zeigt die physische Werkzeugebene an, falls die Ein-Ebenen-Ansicht
+         * aktiviert ist
+         */
         public static final Action ACTION_ACTIVATE_PHYSICAL_LAYER = new GraphDocumentAction(ActionIdentifier.ACTION_ACTIVATE_PHYSICAL_LAYER) {
             @Override
             protected void actionPerformed() {
@@ -998,7 +1036,10 @@ public class ActionLibrary {
 
         };
 
-        /** Öffnet einen Dialog für die Einstellung von Größe, Abstand, etc. der Ebenen */
+        /**
+         * Öffnet einen Dialog für die Einstellung von Größe, Abstand, etc. der
+         * Ebenen
+         */
         public static final Action ACTION_OPEN_GRAPH_VIEW_SETTINGS_DIALOG = new GraphFrameAction(ActionIdentifier.ACTION_OPEN_GRAPH_VIEW_SETTINGS_DIALOG, PPP) {
             @Override
             protected void actionPerformed() {

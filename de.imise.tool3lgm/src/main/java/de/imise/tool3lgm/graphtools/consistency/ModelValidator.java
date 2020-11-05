@@ -21,8 +21,8 @@ import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.util.event.PropertyChangeHandler;
 
 /**
- * Die Klasse prüft die Konsistenz eines Modells. Es werden alle Kardinalitäten überprüft und
- * fehlerhafte Elemente zurück gegeben.
+ * Die Klasse prüft die Konsistenz eines Modells. Es werden alle Kardinalitäten
+ * überprüft und fehlerhafte Elemente zurück gegeben.
  *
  * @author AXS created on 06.08.2008
  */
@@ -34,13 +34,15 @@ public final class ModelValidator extends PropertyChangeHandler implements LGMCh
     /** Model to be checked */
     private final GDCollection gdcoll;
 
-    /** Maps from an error type to the checker which can find this type of errors */
+    /**
+     * Maps from an error type to the checker which can find this type of errors
+     */
     private final Collection<ConsistencyErrorChecker> checkers;
 
     /**
-     * Die Kardinalitäts und Fehlerdefinitionen für die bei der Prüfung relevanten Kanten. Wenn
-     * diese Variable <code>null</code> ist, werden alle Kanten mit ihren Originalen Kardinalitäten
-     * geprüft.
+     * Die Kardinalitäts und Fehlerdefinitionen für die bei der Prüfung
+     * relevanten Kanten. Wenn diese Variable <code>null</code> ist, werden alle
+     * Kanten mit ihren Originalen Kardinalitäten geprüft.
      */
     private ConsistencyDefinition consistencyDefinition;
 

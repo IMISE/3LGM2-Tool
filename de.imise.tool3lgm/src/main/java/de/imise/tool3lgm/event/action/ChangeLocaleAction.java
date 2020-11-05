@@ -21,12 +21,17 @@ import de.imise.util.Alphabetical;
 import de.imise.util.swing.event.ExtendedAction;
 
 /**
- * Von {@link AbstractAction} abgeleitete Klasse für das Umschalten der Sprache im Programm.
+ * Von {@link AbstractAction} abgeleitete Klasse für das Umschalten der Sprache
+ * im Programm.
  * <p>
- * Diese Klasse generiert automatisch über {@link #getAllActions()} die durch die Anzahl installierter Sprachen beschränkte Liste der möglichen
- * Instanzen dieser Klasse. Jede dieser Instanzen sorgt für das Umschalten auf die jeweils zugeordnete Sprache.<br>
- * Durch das Überschreiben von {@link #setSelected(boolean)} wird garantiert, dass nur genau eine Sprache aktiviert ist. Diese Sprache ist dann unter
- * {@link #selectedAction} abgespeichert und besitzt als einziges den Wert <code>true</code> für die {@link #SELECTED_KEY}-Property.
+ * Diese Klasse generiert automatisch über {@link #getAllActions()} die durch
+ * die Anzahl installierter Sprachen beschränkte Liste der möglichen Instanzen
+ * dieser Klasse. Jede dieser Instanzen sorgt für das Umschalten auf die jeweils
+ * zugeordnete Sprache.<br>
+ * Durch das Überschreiben von {@link #setSelected(boolean)} wird garantiert,
+ * dass nur genau eine Sprache aktiviert ist. Diese Sprache ist dann unter
+ * {@link #selectedAction} abgespeichert und besitzt als einziges den Wert
+ * <code>true</code> für die {@link #SELECTED_KEY}-Property.
  * <p>
  * Das Umschalten erfolgt beim Aufruf von {@link #actionPerformed(ActionEvent)}.
  *
@@ -39,14 +44,17 @@ public class ChangeLocaleAction extends ExtendedAction {
     /** Aktuell ausgewählte Action */
     private static ChangeLocaleAction selectedAction;
 
-    /** Locale, die bei Ausführen dieser Aktion in den UserProperties eingestellt wird. */
+    /**
+     * Locale, die bei Ausführen dieser Aktion in den UserProperties eingestellt
+     * wird.
+     */
     private final Locale locale;
 
     /**
      * Konstruktor
      *
-     * @param locale
-     *            Sprache, die durch {@link #actionPerformed(ActionEvent)} aktiviert wird
+     * @param locale Sprache, die durch {@link #actionPerformed(ActionEvent)}
+     *            aktiviert wird
      */
     private ChangeLocaleAction(final Locale locale) {
         super(locale.getDisplayLanguage(locale));
@@ -77,6 +85,9 @@ public class ChangeLocaleAction extends ExtendedAction {
         setSelected(true);
     }
 
+    /**
+     *
+     */
     private void showLocaleChangeNeedsRestartMessage() {
         // Meldung mit neuer und alter Locale anzeigen
         Locale oldLocale = Locale.getDefault();
@@ -95,15 +106,24 @@ public class ChangeLocaleAction extends ExtendedAction {
         JOptionPane.showMessageDialog(getMainFrame(), info, info_title, JOptionPane.INFORMATION_MESSAGE);
     }
 
+    /**
+     * @param b
+     */
     private void setSelected(final boolean b) {
         selectedAction = this;
     }
 
+    /**
+     * @return
+     */
     public boolean isSelected() {
         return selectedAction == this;
     }
 
-    /** Gibt ein Array von {@link ChangeLocaleAction}s zu jeder installierten Sprache wieder */
+    /**
+     * Gibt ein Array von {@link ChangeLocaleAction}s zu jeder installierten
+     * Sprache wieder
+     */
     public static final ChangeLocaleAction[] getAllActions() {
         Locale[] locales = getInstalledLanguages();
         Alphabetical.sort(locales);
@@ -124,10 +144,13 @@ public class ChangeLocaleAction extends ExtendedAction {
     }
 
     /**
-     * Liefert alle <code>Locale</code>s, für die Resourcen hinterlegt wurden.<br>
-     * Diese werden durch Auslesen der Dateien "Tool3lgmResources_LANGUAGECODE.properties" aus dem resource-Package ermittelt.
-     * Es wird davon ausgegangen, dass auf jeden Fall englische Ressourcen existieren, die in der Datei
-     * "Tool3lgmResources.properties" hinterlegt sind.<br>
+     * Liefert alle <code>Locale</code>s, für die Resourcen hinterlegt
+     * wurden.<br>
+     * Diese werden durch Auslesen der Dateien
+     * "Tool3lgmResources_LANGUAGECODE.properties" aus dem resource-Package
+     * ermittelt. Es wird davon ausgegangen, dass auf jeden Fall englische
+     * Ressourcen existieren, die in der Datei "Tool3lgmResources.properties"
+     * hinterlegt sind.<br>
      *
      * @return alle Locales, für die Ressourcen existieren
      */

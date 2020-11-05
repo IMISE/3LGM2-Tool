@@ -10,6 +10,7 @@ import java.util.List;
 import com.google.common.collect.ImmutableList;
 
 import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
+import de.imise.tool3lgm.graphtools.metamodel.CoreMetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.EdgeCardinality;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.DoubleMeaningEdge;
@@ -36,7 +37,10 @@ public final class ElementaryMetaPath extends MetaPath {
      * Mögliche Arten eines {@link ElementaryMetaPath}.
      */
     public static enum Type {
-        /** Regulärer Elementarmetapfad mit einer Startelementklasse, einer Endelementklasse und einer dazwischen liegenden Kantenklasse */
+        /**
+         * Regulärer Elementarmetapfad mit einer Startelementklasse, einer
+         * Endelementklasse und einer dazwischen liegenden Kantenklasse
+         */
         ELEMENT_EDGE_ELEMENT,
         /** Typ für Metapfade, die nur eine einzelne Elementart beschreiben */
         SINGLE_ELEMENT,
@@ -63,14 +67,18 @@ public final class ElementaryMetaPath extends MetaPath {
     }
 
     /**
-     * Klasse, bei der der Pfad startet. Sie darf in einem validen Pfad niemals <code>null</code> sein und muss eine
-     * Ober- oder Unterklasse des jeweiligen Kantenendes sein, auf das sich die Startklasse laut Richtungsangabe bezieht.
+     * Klasse, bei der der Pfad startet. Sie darf in einem validen Pfad niemals
+     * <code>null</code> sein und muss eine Ober- oder Unterklasse des
+     * jeweiligen Kantenendes sein, auf das sich die Startklasse laut
+     * Richtungsangabe bezieht.
      */
     private final Class<? extends ModelElement> startClass;
 
     /**
-     * Klasse, bei der der Pfad endet. Sie darf in einem validen Pfad niemals <code>null</code> sein und muss eine
-     * Ober- oder Unterklasse des jeweiligen Kantenendes sein, auf das sich die Endklasse laut Richtungsangabe bezieht.
+     * Klasse, bei der der Pfad endet. Sie darf in einem validen Pfad niemals
+     * <code>null</code> sein und muss eine Ober- oder Unterklasse des
+     * jeweiligen Kantenendes sein, auf das sich die Endklasse laut
+     * Richtungsangabe bezieht.
      */
     private final Class<? extends ModelElement> endClass;
 
@@ -81,21 +89,23 @@ public final class ElementaryMetaPath extends MetaPath {
 
     /**
      * Richtung, die festlegt, wie herum die Kantenklasse gelesen werden soll.
-     * Direction.FORWARD bedeutet, dass die {@link #startClass} des Pfades als Startklasse
-     * der Kantenklasse verstanden wird und die Endklasse der Kante auch Endklasse des Pfades ist.
-     * Bei Direction.BACKWARD wird es andersherum verstanden.
+     * Direction.FORWARD bedeutet, dass die {@link #startClass} des Pfades als
+     * Startklasse der Kantenklasse verstanden wird und die Endklasse der Kante
+     * auch Endklasse des Pfades ist. Bei Direction.BACKWARD wird es andersherum
+     * verstanden.
      */
     private final Direction direction;
 
     /**
-     * Richtung, die die Kante ausgehend von der durch die <code>direction</code> festgelegten Richtung haben soll. Dieser Parameter
+     * Richtung, die die Kante ausgehend von der durch die
+     * <code>direction</code> festgelegten Richtung haben soll. Dieser Parameter
      * ist nur bei DoubleMeaningEdges relevant.
      */
     private final ConnectionState connectionState;
 
     /**
-     * Typ des MetaPfades. Ist er nach dem setzen der Richtung immer noch <code>null</code>, dann ist der
-     * Pfad nicht valide.
+     * Typ des MetaPfades. Ist er nach dem setzen der Richtung immer noch
+     * <code>null</code>, dann ist der Pfad nicht valide.
      */
     private final Type type;
 
@@ -110,9 +120,10 @@ public final class ElementaryMetaPath extends MetaPath {
     private final boolean directed;
 
     /**
-     * Ein MetaPfad kann nur aus einer Elementklasse bestehen. Dies beschreibt den Pfad zu allen Elementen dieser Klasse.
-     * Intern sind bei diesem Pfad sowohl die Start- als auch die Endklasse auf diese Elementklasse gesetzt und es gibt
-     * weder eine Kantenklasse noch eine Richtung.
+     * Ein MetaPfad kann nur aus einer Elementklasse bestehen. Dies beschreibt
+     * den Pfad zu allen Elementen dieser Klasse. Intern sind bei diesem Pfad
+     * sowohl die Start- als auch die Endklasse auf diese Elementklasse gesetzt
+     * und es gibt weder eine Kantenklasse noch eine Richtung.
      *
      * @param metaModel
      * @param elementClass
@@ -139,7 +150,8 @@ public final class ElementaryMetaPath extends MetaPath {
     }
 
     /**
-     * Legt einen neuen Elementarmetapfad an, bei dem die Start- und Zielklasse denen der Kante in der angegebenen Richtung entsprechen.
+     * Legt einen neuen Elementarmetapfad an, bei dem die Start- und Zielklasse
+     * denen der Kante in der angegebenen Richtung entsprechen.
      *
      * @param metaModel
      * @param edgeClass
@@ -150,8 +162,9 @@ public final class ElementaryMetaPath extends MetaPath {
     }
 
     /**
-     * Legt einen neuen Elementarmetapfad an, bei dem die Start- und Zielklasse des übergebenen Original-Metapfades durch die übergebenen Klasse
-     * ersetzt werden.
+     * Legt einen neuen Elementarmetapfad an, bei dem die Start- und Zielklasse
+     * des übergebenen Original-Metapfades durch die übergebenen Klasse ersetzt
+     * werden.
      *
      * @param metaModel
      * @param startClass
@@ -222,7 +235,8 @@ public final class ElementaryMetaPath extends MetaPath {
     }
 
     /**
-     * Liefert die Startklasse eines {@link ElementaryMetaPath}, der sich aus der Kante und der übergebenen Richtung ergeben würde.
+     * Liefert die Startklasse eines {@link ElementaryMetaPath}, der sich aus
+     * der Kante und der übergebenen Richtung ergeben würde.
      *
      * @param edgeClass
      * @param direction
@@ -233,7 +247,8 @@ public final class ElementaryMetaPath extends MetaPath {
     }
 
     /**
-     * Liefert die Endklasse eines {@link ElementaryMetaPath}, der sich aus der Kante und der übergebenen Richtung ergeben würde.
+     * Liefert die Endklasse eines {@link ElementaryMetaPath}, der sich aus der
+     * Kante und der übergebenen Richtung ergeben würde.
      *
      * @param edgeClass
      * @param direction
@@ -282,7 +297,8 @@ public final class ElementaryMetaPath extends MetaPath {
     }
 
     /**
-     * Liefert <code>true</code>, wenn die übergebene Kantenklasse eine Ober- oder Unterklasse der im Elementarpfad enthaltenen Kantenklasse ist.
+     * Liefert <code>true</code>, wenn die übergebene Kantenklasse eine Ober-
+     * oder Unterklasse der im Elementarpfad enthaltenen Kantenklasse ist.
      *
      * @param edgeClass Kantenklasse, deren Zuweisungskompatibilität
      * @return
@@ -292,17 +308,18 @@ public final class ElementaryMetaPath extends MetaPath {
     }
 
     /**
-     * Liefert <code>true</code>, wenn die übergebene Elementklasse genau eine Startklasse dieses Metapfades ist.
+     * Liefert <code>true</code>, wenn die übergebene Elementklasse genau eine
+     * Startklasse dieses Metapfades ist.
      *
-     * @param elementClass
-     *            Elementklasse, die als Startklasse geprüft werden soll
+     * @param elementClass Elementklasse, die als Startklasse geprüft werden
+     *            soll
      * @return
      */
     @Override
     public final boolean isStartClass(final Class<? extends ModelElement> elementClass) {
         boolean isStartClass = false;
         if (type == Type.ELEMENT_EDGE_ELEMENT || type == Type.END_WITH_EDGE) {
-            isStartClass = direction == Direction.FORWARD ? MetaModel.isStartClass(edgeClass, elementClass) : MetaModel.isEndClass(edgeClass, elementClass);
+            isStartClass = direction == Direction.FORWARD ? CoreMetaModel.isStartClass(edgeClass, elementClass) : CoreMetaModel.isEndClass(edgeClass, elementClass);
         } else if (type == Type.START_WITH_EDGE) {
             isStartClass = ReflectionUtils.isAssignable(edgeClass, elementClass);
         }
@@ -314,17 +331,17 @@ public final class ElementaryMetaPath extends MetaPath {
     }
 
     /**
-     * Liefert <code>true</code>, wenn die übergebene Elementklasse genau eine Endklasse dieses MetaPfades ist.
+     * Liefert <code>true</code>, wenn die übergebene Elementklasse genau eine
+     * Endklasse dieses MetaPfades ist.
      *
-     * @param elementClass
-     *            Elementklasse, die als Endklasse geprüft werden soll
+     * @param elementClass Elementklasse, die als Endklasse geprüft werden soll
      * @return
      */
     @Override
     public final boolean isEndClass(final Class<? extends ModelElement> elementClass) {
         boolean isEndClass = false;
         if (type == Type.ELEMENT_EDGE_ELEMENT || type == Type.START_WITH_EDGE) {
-            isEndClass = direction == Direction.FORWARD ? MetaModel.isEndClass(edgeClass, elementClass) : MetaModel.isStartClass(edgeClass, elementClass);
+            isEndClass = direction == Direction.FORWARD ? CoreMetaModel.isEndClass(edgeClass, elementClass) : CoreMetaModel.isStartClass(edgeClass, elementClass);
         } else if (type == Type.END_WITH_EDGE) {
             isEndClass = ReflectionUtils.isAssignable(edgeClass, elementClass);
         }
@@ -343,7 +360,8 @@ public final class ElementaryMetaPath extends MetaPath {
     }
 
     /**
-     * Liefert <code>true</code>, wenn die im Elementarpfad enthaltene Kante die Richtung vorwärts hat, also wenn direction == Direction.FORWARD ist,
+     * Liefert <code>true</code>, wenn die im Elementarpfad enthaltene Kante die
+     * Richtung vorwärts hat, also wenn direction == Direction.FORWARD ist,
      * sonst <code>false</code>.
      *
      * @return
@@ -376,11 +394,11 @@ public final class ElementaryMetaPath extends MetaPath {
 
     /**
      * @param other
-     * @return only <code>true</code> if this and the other metapath have an assignable
-     *         start class, an assignable end class, an assignable edge class, the same
-     *         direction and the same type. Assignable only means that one of the class
-     *         must be a subclass of the other (which is sub and which super dosn't
-     *         matters).
+     * @return only <code>true</code> if this and the other metapath have an
+     *         assignable start class, an assignable end class, an assignable
+     *         edge class, the same direction and the same type. Assignable only
+     *         means that one of the class must be a subclass of the other
+     *         (which is sub and which super dosn't matters).
      */
     @Override
     public boolean isAssignable(final MetaPath otherMetaPath) {
@@ -486,15 +504,15 @@ public final class ElementaryMetaPath extends MetaPath {
                 invalidReason = InvalidReason.INVALID_DIRECTION;
             } else if (type == Type.ELEMENT_EDGE_ELEMENT) {
                 if (direction == Direction.FORWARD) {
-                    if (!MetaModel.isStartClass(edgeClass, startClass)) {
+                    if (!CoreMetaModel.isStartClass(edgeClass, startClass)) {
                         invalidReason = InvalidReason.INVALID_EDGE_STARTCLASS_AND_METAPATH_STARTCLASS;
-                    } else if (!MetaModel.isEndClass(edgeClass, endClass)) {
+                    } else if (!CoreMetaModel.isEndClass(edgeClass, endClass)) {
                         invalidReason = InvalidReason.INVALID_EDGE_ENDCLASS_AND_METAPATH_ENDCLASS;
                     }
                 } else { //direction == Direction.BACKWARD
-                    if (!MetaModel.isStartClass(edgeClass, endClass)) {
+                    if (!CoreMetaModel.isStartClass(edgeClass, endClass)) {
                         invalidReason = InvalidReason.INVALID_EDGE_STARTCLASS_AND_METAPATH_ENDCLASS;
-                    } else if (!MetaModel.isEndClass(edgeClass, startClass)) {
+                    } else if (!CoreMetaModel.isEndClass(edgeClass, startClass)) {
                         invalidReason = InvalidReason.INVALID_EDGE_ENDCLASS_AND_METAPATH_STARTCLASS;
                     }
                 }
@@ -505,11 +523,11 @@ public final class ElementaryMetaPath extends MetaPath {
                     invalidReason = InvalidReason.INVALID_END_CLASS;
                 }
                 if (direction == Direction.FORWARD) {
-                    if (!MetaModel.isEndClass(edgeClass, endClass)) {
+                    if (!CoreMetaModel.isEndClass(edgeClass, endClass)) {
                         invalidReason = InvalidReason.INVALID_END_CLASS;
                     }
                 } else { //direction == Direction.BACKWARD
-                    if (!MetaModel.isStartClass(edgeClass, endClass)) {
+                    if (!CoreMetaModel.isStartClass(edgeClass, endClass)) {
                         invalidReason = InvalidReason.INVALID_END_CLASS;
                     }
                 }
@@ -520,11 +538,11 @@ public final class ElementaryMetaPath extends MetaPath {
                     invalidReason = InvalidReason.INVALID_START_CLASS;
                 }
                 if (direction == Direction.FORWARD) {
-                    if (!MetaModel.isStartClass(edgeClass, startClass)) {
+                    if (!CoreMetaModel.isStartClass(edgeClass, startClass)) {
                         invalidReason = InvalidReason.INVALID_START_CLASS;
                     }
                 } else { //direction == Direction.BACKWARD
-                    if (!MetaModel.isEndClass(edgeClass, startClass)) {
+                    if (!CoreMetaModel.isEndClass(edgeClass, startClass)) {
                         invalidReason = InvalidReason.INVALID_START_CLASS;
                     }
                 }
@@ -615,7 +633,8 @@ public final class ElementaryMetaPath extends MetaPath {
     }
 
     /**
-     * @return Cardinality des Pfades in Vorwärtsrichtung, also vom Start- zum EndElement.
+     * @return Cardinality des Pfades in Vorwärtsrichtung, also vom Start- zum
+     *         EndElement.
      */
     public EdgeCardinality getForwardCardinality() {
         if (type == Type.START_WITH_EDGE || type == Type.END_WITH_EDGE) {
@@ -625,7 +644,7 @@ public final class ElementaryMetaPath extends MetaPath {
             return EdgeCardinality.ZERO_UNLIMITED;
         }
         //Wird die Kante in Vorwärtsrichtung gelesen, dann ist es auch die Vorwärtskardinalität der Kante, sonst die Rückwärtskardinalität
-        return direction == Direction.BACKWARD ? MetaModel.getBackwardCardinality(edgeClass) : MetaModel.getForwardCardinality(edgeClass);
+        return direction == Direction.BACKWARD ? CoreMetaModel.getBackwardCardinality(edgeClass) : CoreMetaModel.getForwardCardinality(edgeClass);
     }
 
     /**
@@ -633,7 +652,7 @@ public final class ElementaryMetaPath extends MetaPath {
      */
     public EdgeCardinality getBackwardCardinality() {
         //Wird die Kante in Vorwärtsrichtung gelesen, dann ist es die Rückwärtskardinalität der Kante, sonst die Vorwärtskardinalität
-        return direction == Direction.BACKWARD ? MetaModel.getForwardCardinality(edgeClass) : MetaModel.getBackwardCardinality(edgeClass);
+        return direction == Direction.BACKWARD ? CoreMetaModel.getForwardCardinality(edgeClass) : CoreMetaModel.getBackwardCardinality(edgeClass);
     }
 
     @Override

@@ -53,14 +53,19 @@ public class ToolXMLParser {
      */
     private final GDCollection gdcoll;
 
-    /** unterstützte XML und Datei Versionen (aktuellste Version steht im Array ganz hinten, also mit Index = length-1) */
+    /**
+     * unterstützte XML und Datei Versionen (aktuellste Version steht im Array
+     * ganz hinten, also mit Index = length-1)
+     */
     private static final String[] SUPPORTED_XML_VERSIONS = {
             "<?xml version='1.0' encoding='utf-8'?>", "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
     };
 
     private static final String FILE_VERSION_LINE_START = "<!--Tool3lgmFile ";
 
-    /** Präfix vor der Angabe der Metamodell-Klasse in der Zeile der FileVersion */
+    /**
+     * Präfix vor der Angabe der Metamodell-Klasse in der Zeile der FileVersion
+     */
     private static final String FILE_VERSION_NUMBER_PREFIX = " version='";
 
     /** Alle unterstützten FileVersions */
@@ -81,8 +86,10 @@ public class ToolXMLParser {
     };
 
     /**
-     * String der in den supportedFileVersions-String gebaut wird, um das Metamodell der Dateiversion zu kennzeichnen. Hinter das Hochkomma
-     * am Ende kommt der SimpleClassName der Metamodel-Klasse und danach noch ein Hochkomma.
+     * String der in den supportedFileVersions-String gebaut wird, um das
+     * Metamodell der Dateiversion zu kennzeichnen. Hinter das Hochkomma am Ende
+     * kommt der SimpleClassName der Metamodel-Klasse und danach noch ein
+     * Hochkomma.
      */
     private static final String FILE_VERSION_METAMODEL_CLASS_PREFIX = " metamodel='";
 
@@ -132,7 +139,8 @@ public class ToolXMLParser {
     }
 
     /**
-     * @return the xml content handler to parse a model wit a specifi Tool3lgm2 file version
+     * @return the xml content handler to parse a model wit a specifi Tool3lgm2
+     *         file version
      * @throws SAXException
      */
     private ContentHandler getContentHandler(final GDCollection gdcoll, final FileVersion version, final boolean paste) throws SAXException {

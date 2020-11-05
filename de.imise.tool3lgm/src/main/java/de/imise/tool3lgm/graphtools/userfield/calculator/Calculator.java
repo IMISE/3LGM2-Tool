@@ -24,7 +24,8 @@ import de.imise.tool3lgm.graphtools.userfield.UserFieldDefinitions;
 import de.imise.tool3lgm.graphtools.userfield.UserFieldTarget;
 
 /**
- * Die Klasse <code>Calculator</code> beinhaltet alle Methoden für die Berechnung von Kennzahlen.
+ * Die Klasse <code>Calculator</code> beinhaltet alle Methoden für die
+ * Berechnung von Kennzahlen.
  *
  * @author hboehme, AXS
  * @created 05.11.2007
@@ -58,14 +59,17 @@ public class Calculator {
     public static final String ALL_IN_FUNCTION_SIGNS = WHITESPACE + OPEN_BRACKET + CLOSE_BRACKET + OPERAND_DELIMITER + OPERATOR_PLUS + OPERATOR_MINUS + OPERATOR_MULT + OPERATOR_DIV;
 
     /**
-     * gibt an, auf wieviele Nachkommastellen bei der Berechnung mit BigDecimals gerechnet werden sollen.
+     * gibt an, auf wieviele Nachkommastellen bei der Berechnung mit BigDecimals
+     * gerechnet werden sollen.
      */
     private static final int CALCULATING_DECIMAL_PLACES_COUNT = 30;
 
     /**
-     * Gibt an, auf wieviele Nachkommastellen die BigDecimals-Ergebnisse abgeschnitten werden sollen.
-     * Das beseitigt offensichtliche Rundungsfehler, bei der Berechnung mit 30 Nachkmmastellen
-     * Rundungsfehler ungefähr bis zur 20 Stelle durchschlagen. Also wird der Rest abgeschnitten.
+     * Gibt an, auf wieviele Nachkommastellen die BigDecimals-Ergebnisse
+     * abgeschnitten werden sollen. Das beseitigt offensichtliche
+     * Rundungsfehler, bei der Berechnung mit 30 Nachkmmastellen Rundungsfehler
+     * ungefähr bis zur 20 Stelle durchschlagen. Also wird der Rest
+     * abgeschnitten.
      */
     private static final int RESULT_DECIMAL_PLACES_COUNT = 20;
 
@@ -117,16 +121,23 @@ public class Calculator {
     }
 
     /**
-     * Errechnet zu einer übergebenen Formel in Infix-Notation das Ergebnis. TODO:Dazu wird die Formel jedes Mal erst in Postfix-Notation umgewandelt,
-     * was noch erhebliches Optimierungspotenzial in sich birgt ;) dazu wird der übergebene String zuerst in mittels Stringtokenizers zerlegt und in
-     * einen Stack kopiert. Es wird eine spiegelverkerhrte Kopie des Stacks angelegt, die nicht mehr die Referenzen auf die Werte in Form von
-     * <code>UserField</code> s enthält sonderen die konkreten Werte! Der Stack ist spiegelverkerhrt damit auch korrekt gerechnet werden kann. Zum
-     * Rechnen wird ein weiterer Hilfs-Stack initialisiert, der solange Operanden aufnimmt, bis im HauptStack ein Operator gepoppt wird. Dieser
-     * Operator wird mit den letzten zwei Operanden des Hilfsstacks verrechnent. Das Ergebnis wird wieder auf den Hautstack gelegt. Das geschieht
-     * iterativ so lange, bis der HautptStack keine Operatoren mehr beinhaltet.
+     * Errechnet zu einer übergebenen Formel in Infix-Notation das Ergebnis.
+     * TODO:Dazu wird die Formel jedes Mal erst in Postfix-Notation umgewandelt,
+     * was noch erhebliches Optimierungspotenzial in sich birgt ;) dazu wird der
+     * übergebene String zuerst in mittels Stringtokenizers zerlegt und in einen
+     * Stack kopiert. Es wird eine spiegelverkerhrte Kopie des Stacks angelegt,
+     * die nicht mehr die Referenzen auf die Werte in Form von
+     * <code>UserField</code> s enthält sonderen die konkreten Werte! Der Stack
+     * ist spiegelverkerhrt damit auch korrekt gerechnet werden kann. Zum
+     * Rechnen wird ein weiterer Hilfs-Stack initialisiert, der solange
+     * Operanden aufnimmt, bis im HauptStack ein Operator gepoppt wird. Dieser
+     * Operator wird mit den letzten zwei Operanden des Hilfsstacks verrechnent.
+     * Das Ergebnis wird wieder auf den Hautstack gelegt. Das geschieht iterativ
+     * so lange, bis der HautptStack keine Operatoren mehr beinhaltet.
      *
      * @param userField : das zu berechnende UserField
-     * @param data.me : Das konkrete ModelElement, für das die KF ausgewertet wird.
+     * @param data.me : Das konkrete ModelElement, für das die KF ausgewertet
+     *            wird.
      * @return Das Ergebnis als String
      */
 
@@ -258,10 +269,15 @@ public class Calculator {
 
                     //Manchmal kann es passieren, dass das userField null ist. Der Grund ist noch unbekannt.
                     /*
-                     * if(tmp_userField==null){ System.err.println("'"+formulaSubString+"'"); System.err.println("------------------");
-                     * System.err.println(definitions); return UserField.EMPTY_STRING; } ///// TESTAUSGABE /// //
-                     * System.err.println("'"+formulaSubString+"'"); // System.err.println("------------------"); // System.err.println(definitions);
-                     * // // return UserField.EMPTY_STRING; /// TESTAUSGABE ENDE ///
+                     * if(tmp_userField==null){
+                     * System.err.println("'"+formulaSubString+"'");
+                     * System.err.println("------------------");
+                     * System.err.println(definitions); return
+                     * UserField.EMPTY_STRING; } ///// TESTAUSGABE /// //
+                     * System.err.println("'"+formulaSubString+"'"); //
+                     * System.err.println("------------------"); //
+                     * System.err.println(definitions); // // return
+                     * UserField.EMPTY_STRING; /// TESTAUSGABE ENDE ///
                      */
                     String ufValue = "";
                     if (tmp_userField != null && tmp_userField.isGlobalOrFormat()) {
@@ -329,13 +345,18 @@ public class Calculator {
     }
 
     /**
-     * Ersetzt im übergebenen StringBuilder <code>infix</code> die Formel der Verrechnungsfunktion durch ihren Wert.
+     * Ersetzt im übergebenen StringBuilder <code>infix</code> die Formel der
+     * Verrechnungsfunktion durch ihren Wert.
      *
      * @param infix Der StringBuilder, dessen Formelwerte ersetzt werden müssen
-     * @param userField Das <code>userField</code>, dessen Wert geholt werden soll.
-     * @param me Das ModelElement, für das der <code>userField</code>-Wert geholt werden soll.
-     * @param accountingFunction Der String der Verrechnungsfunktion, für die die Formeln durch ihre Werte ersetzt werden sollen.
-     * @return Gibt bei erfolgreichem Ersetzen nichts zurück. im FehlerFall wird der entsprechende Errorstring zurückgegeben.
+     * @param userField Das <code>userField</code>, dessen Wert geholt werden
+     *            soll.
+     * @param me Das ModelElement, für das der <code>userField</code>-Wert
+     *            geholt werden soll.
+     * @param accountingFunction Der String der Verrechnungsfunktion, für die
+     *            die Formeln durch ihre Werte ersetzt werden sollen.
+     * @return Gibt bei erfolgreichem Ersetzen nichts zurück. im FehlerFall wird
+     *         der entsprechende Errorstring zurückgegeben.
      */
     private String replaceInfixString(final StringBuilder infix, final UserField userField, final ModelElement me, final String accountingFunction) {
 
@@ -381,20 +402,29 @@ public class Calculator {
     }
 
     /**
-     * Berechnet das Ergebnis einer Atomformel, wenn das geht. Ansonsten wird ein Fehler zurück gegeben. <br>
-     * Ist irgendeiner der beiden Operanden ein Fehler-String, wird dieser Fehler-String als Ergebnis zurück gegeben. Ausnahmen: Bei Additionen bei
-     * denen ein Operand <code>UserField.NO_ELEMENTS_CONNECTED</code> ist, wird nur der jeweils andere Operand zurückgegeben. Bei Subtraktionen, bei
-     * denen der zweite Operand <code>UserField.NO_ELEMENTS_CONNECTED</code> ist, wird der erste Operand zurück gegeben. Ist bei Subtraktionen der
-     * erste Operand <code>UserField.NO_ELEMENTS_CONNECTED</code>, dann wird der zweite Operand mal -1 zurück gegeben. Wenn in einer Atom-Formel kein
-     * Fehler enthalten ist, wird die Berechnung durchgeführt und das Ergebnis zurückgeliefert. Spezielle Rechenregeln bei der Division. NOC =
-     * <code>UserField.NO_ELEMENTS_CONNECTED</code>, ES = UserField.EMPTY_STRING, 7 = beliebige Zahl NOC / NOC = return NOC NOC / ES = return NOC NOC
-     * / 7 = return NOC ES / NOC = return NOC ES / ES = return ES ES / 7 = return ES 7 / NOC = return NOC 7 / ES = return ES 7 / 7 = rechne einfach
-     * damit
+     * Berechnet das Ergebnis einer Atomformel, wenn das geht. Ansonsten wird
+     * ein Fehler zurück gegeben. <br>
+     * Ist irgendeiner der beiden Operanden ein Fehler-String, wird dieser
+     * Fehler-String als Ergebnis zurück gegeben. Ausnahmen: Bei Additionen bei
+     * denen ein Operand <code>UserField.NO_ELEMENTS_CONNECTED</code> ist, wird
+     * nur der jeweils andere Operand zurückgegeben. Bei Subtraktionen, bei
+     * denen der zweite Operand <code>UserField.NO_ELEMENTS_CONNECTED</code>
+     * ist, wird der erste Operand zurück gegeben. Ist bei Subtraktionen der
+     * erste Operand <code>UserField.NO_ELEMENTS_CONNECTED</code>, dann wird der
+     * zweite Operand mal -1 zurück gegeben. Wenn in einer Atom-Formel kein
+     * Fehler enthalten ist, wird die Berechnung durchgeführt und das Ergebnis
+     * zurückgeliefert. Spezielle Rechenregeln bei der Division. NOC =
+     * <code>UserField.NO_ELEMENTS_CONNECTED</code>, ES =
+     * UserField.EMPTY_STRING, 7 = beliebige Zahl NOC / NOC = return NOC NOC /
+     * ES = return NOC NOC / 7 = return NOC ES / NOC = return NOC ES / ES =
+     * return ES ES / 7 = return ES 7 / NOC = return NOC 7 / ES = return ES 7 /
+     * 7 = rechne einfach damit
      *
      * @param operand1 Der erste Operand der Atom-Formel
      * @param operand2 Der zweite Operand der Atom-Formel
      * @param operator Der Operator der Atom-Formel
-     * @return Wenn in einer Atom-Formel kein Fehler enthalten ist, wird die Berechnung durchgeführt und das Ergebnis zurückgeliefert.
+     * @return Wenn in einer Atom-Formel kein Fehler enthalten ist, wird die
+     *         Berechnung durchgeführt und das Ergebnis zurückgeliefert.
      */
     private static final String getResult(String operand1, String operand2, final String operator) {
 
@@ -464,11 +494,14 @@ public class Calculator {
     }
 
     /**
-     * Gibt den wert des referenzierten <code>UserField</code> zurück. Die funktion geht davon aus, dass alle übergebenen Parameter korrekt sind.
+     * Gibt den wert des referenzierten <code>UserField</code> zurück. Die
+     * funktion geht davon aus, dass alle übergebenen Parameter korrekt sind.
      *
-     * @param resultUserField das konkrete <code>UserField</code>, auf dessen Wert referenziert wird.
-     * @param me Für diese Edge ist die Kennzahlformel definiert. Dieses <code>UserField</code> zeigt auf ein UserField welches an einer
-     *            Elementklasse
+     * @param resultUserField das konkrete <code>UserField</code>, auf dessen
+     *            Wert referenziert wird.
+     * @param me Für diese Edge ist die Kennzahlformel definiert. Dieses
+     *            <code>UserField</code> zeigt auf ein UserField welches an
+     *            einer Elementklasse
      * @param refFormula
      * @return
      */
@@ -549,10 +582,12 @@ public class Calculator {
     }
 
     /**
-     * Errechnet das Ergebnis der Verrechungsfunktion SUM oder MULT. Die Funktion geht davon aus, dass alle übergebenen Parameter korrekt sind.
+     * Errechnet das Ergebnis der Verrechungsfunktion SUM oder MULT. Die
+     * Funktion geht davon aus, dass alle übergebenen Parameter korrekt sind.
      *
      * @param resultUserField
-     * @param me das konkrete <code>ModelElement</code>, für das die Verrechnungsfunktion aufgelöst werden soll.
+     * @param me das konkrete <code>ModelElement</code>, für das die
+     *            Verrechnungsfunktion aufgelöst werden soll.
      * @param formula Die Formel (in INFIX-Notation)
      * @return Ergebnis der Verrechungsfunktion SUM
      */
@@ -608,10 +643,12 @@ public class Calculator {
     }
 
     /**
-     * Errechnet das Ergebnis der Verrechungsfunktion SUM. Die Funktion geht davon aus, dass alle übergebenen Parameter korrekt sind.
+     * Errechnet das Ergebnis der Verrechungsfunktion SUM. Die Funktion geht
+     * davon aus, dass alle übergebenen Parameter korrekt sind.
      *
      * @param resultUserField
-     * @param me das konkrete <code>ModelElement</code>, für das die Verrechnungsfunktion aufgelöst werden soll.
+     * @param me das konkrete <code>ModelElement</code>, für das die
+     *            Verrechnungsfunktion aufgelöst werden soll.
      * @param formula Die Formel (in INFIX-Notation)
      * @return Ergebnis der Verrechungsfunktion SUM
      */
@@ -620,10 +657,12 @@ public class Calculator {
     }
 
     /**
-     * Errechnet das Ergebnis der Verrechungsfunktion MULT. Die Funktion geht davon aus, dass alle übergebenen Parameter korrekt sind.
+     * Errechnet das Ergebnis der Verrechungsfunktion MULT. Die Funktion geht
+     * davon aus, dass alle übergebenen Parameter korrekt sind.
      *
      * @param resultUserField
-     * @param me das konkrete <code>ModelElement</code>, für das die Verrechnungsfunktion aufgelöst werden soll.
+     * @param me das konkrete <code>ModelElement</code>, für das die
+     *            Verrechnungsfunktion aufgelöst werden soll.
      * @param formula Die Formel (in INFIX-Notation)
      * @return Ergebnis der Verrechungsfunktion MULT
      */
@@ -632,7 +671,8 @@ public class Calculator {
     }
 
     /**
-     * Sucht den kleinsten Wert des <code>UserField</code>s aller verbunden Elemente und gibt ihn zurück.
+     * Sucht den kleinsten Wert des <code>UserField</code>s aller verbunden
+     * Elemente und gibt ihn zurück.
      *
      * @param resultUserField
      * @param me
@@ -645,7 +685,8 @@ public class Calculator {
     }
 
     /**
-     * Sucht den größen Wert des <code>UserField</code>s aller verbunden Elemente und gibt ihn zurück.
+     * Sucht den größen Wert des <code>UserField</code>s aller verbunden
+     * Elemente und gibt ihn zurück.
      *
      * @param resultUserField
      * @param me
@@ -658,10 +699,12 @@ public class Calculator {
     }
 
     /**
-     * Errechnet das Ergebnis der Verrechungsfunktion MIN bzw MAX. Die Funktion geht davon aus, dass alle übergebenen Parameter korrekt sind.
+     * Errechnet das Ergebnis der Verrechungsfunktion MIN bzw MAX. Die Funktion
+     * geht davon aus, dass alle übergebenen Parameter korrekt sind.
      *
      * @param resultUserField
-     * @param me das konkrete <code>ModelElement</code>, für das die Verrechnungsfunktion aufgelöst werden soll.
+     * @param me das konkrete <code>ModelElement</code>, für das die
+     *            Verrechnungsfunktion aufgelöst werden soll.
      * @param minMaxFormula Die Formel (in INFIX-Notation)
      * @return Ergebnis der Verrechungsfunktion MIN bzw MAX
      */
@@ -769,9 +812,11 @@ public class Calculator {
     }
 
     /**
-     * Berechnet eine Indikatorfunktion für das übergebene <code>UserFieldTarget</code>
+     * Berechnet eine Indikatorfunktion für das übergebene
+     * <code>UserFieldTarget</code>
      *
-     * @param indicatorFormulaString Formel einer Kennzahl der eine Indikatorfunktion beschreibt
+     * @param indicatorFormulaString Formel einer Kennzahl der eine
+     *            Indikatorfunktion beschreibt
      * @param target
      * @return gibt den Indikatorwert zurück.
      */
@@ -840,7 +885,8 @@ public class Calculator {
     }
 
     /**
-     * Gibt den Wert eines Referenzierten Attributes zurück, dass zu dem selben Element gehört.
+     * Gibt den Wert eines Referenzierten Attributes zurück, dass zu dem selben
+     * Element gehört.
      *
      * @param userFieldHash
      * @param target
@@ -852,7 +898,8 @@ public class Calculator {
     }
 
     /**
-     * Gibt zu einer Formel in INFIX-Notation (die Normale), die als String übergeben wurde, die Postfix-Notation (umgekehrte plonische) zurück.
+     * Gibt zu einer Formel in INFIX-Notation (die Normale), die als String
+     * übergeben wurde, die Postfix-Notation (umgekehrte plonische) zurück.
      *
      * @param infix
      * @return Postfixnotation der Formel

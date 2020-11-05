@@ -1,6 +1,5 @@
 /*
- * Created on 25.11.2003
- * To change the template for this generated file go to
+ * Created on 25.11.2003 To change the template for this generated file go to
  * Window&gt;Preferences&gt;Java&gt;Code Generation&gt;Code and Comments
  */
 package de.imise.tool3lgm.xml;
@@ -33,14 +32,14 @@ import de.imise.tool3lgm.graphtools.view.graph.ElementsLayoutDefinition;
 import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout;
 
 /**
- * @author Thomas Rudert
- *         Die Variablen sind auf protected Gesetzt, damit man einen neuen ContentHandler
- *         von dieser Klasse ableiten kann aber trotzdem noch Zugriff auf alle nötigen
- *         Werte hat. Ich denke, bei kleinen Änderungen (hinzukommen oder wegfallen einzelnener
- *         Felder im Dokument) muß man keinen ganz neuen ContentHandler schreiben sondern muß
- *         nur einen abgeleiteten von diesem bilden. Ich würde aber empfehlen von Zeit zu Zeit
- *         einen völlig neuen ContentHandler zu schreiben.
- *         erkennt Modell mit 3lgm2.dtd Version 1.0
+ * @author Thomas Rudert Die Variablen sind auf protected Gesetzt, damit man
+ *         einen neuen ContentHandler von dieser Klasse ableiten kann aber
+ *         trotzdem noch Zugriff auf alle nötigen Werte hat. Ich denke, bei
+ *         kleinen Änderungen (hinzukommen oder wegfallen einzelnener Felder im
+ *         Dokument) muß man keinen ganz neuen ContentHandler schreiben sondern
+ *         muß nur einen abgeleiteten von diesem bilden. Ich würde aber
+ *         empfehlen von Zeit zu Zeit einen völlig neuen ContentHandler zu
+ *         schreiben. erkennt Modell mit 3lgm2.dtd Version 1.0
  */
 public class ToolContentHandlerV1_0 implements ContentHandler {
 
@@ -59,7 +58,10 @@ public class ToolContentHandlerV1_0 implements ContentHandler {
     /** aktuelles GraphElementLayout */
     protected GraphElementLayout layout = null;
 
-    /** ElementKlasse auf die sich das GraphElementLayout bezieht (StandardLayout (Mapping) */
+    /**
+     * ElementKlasse auf die sich das GraphElementLayout bezieht (StandardLayout
+     * (Mapping)
+     */
     protected Class<? extends ModelElement> classType = null;
 
     /** aktuelles ModellElement */
@@ -77,16 +79,20 @@ public class ToolContentHandlerV1_0 implements ContentHandler {
     /** definiert die gültigkeit Farbe (fg_color, bg_color, border_color) */
     protected String colorString = null;
 
-    /** String der in der characters Methode ausgelesen wird (Werte eines Tags) */
+    /**
+     * String der in der characters Methode ausgelesen wird (Werte eines Tags)
+     */
     protected StringBuilder elementValue = new StringBuilder();
 
     /** HashString eines Bitmaps */
     protected String iconKey = null;
 
     /**
-     * ArrayList mit allen Containern die ein Icon besitzen; da die Icons erst zu letzt eingelesen werden, wird den Containern zuerst nur der
-     * HashString des Icons mitgeteilt. Nach dem einlesen der Icons müssen diese Container noch das eigentliche Icon aus der Hashmap der Collection
-     * laden. Das passiert in der Methode setIcon();
+     * ArrayList mit allen Containern die ein Icon besitzen; da die Icons erst
+     * zu letzt eingelesen werden, wird den Containern zuerst nur der HashString
+     * des Icons mitgeteilt. Nach dem einlesen der Icons müssen diese Container
+     * noch das eigentliche Icon aus der Hashmap der Collection laden. Das
+     * passiert in der Methode setIcon();
      */
     protected ArrayList<NodeContainer> containerWithIcon = new ArrayList<>();
 
@@ -107,10 +113,12 @@ public class ToolContentHandlerV1_0 implements ContentHandler {
     }
 
     /**
-     * ruft Methoden doc._relinkTraces(), doc._duplicateAufOrgs(), doc._duplicateABKonfs() auf und setzt doc, container, collection, elementValue auf
-     * null;
-     * in der naechsten Version (V1_2) sollte diese Funktion ueberschrieben werden, damit die 3 Funktionen nicht mehr aufgerufen werden, da diese nur
-     * Fehler korrigert haben, die dann nicht mehr auftreten duerften
+     * ruft Methoden doc._relinkTraces(), doc._duplicateAufOrgs(),
+     * doc._duplicateABKonfs() auf und setzt doc, container, collection,
+     * elementValue auf null; in der naechsten Version (V1_2) sollte diese
+     * Funktion ueberschrieben werden, damit die 3 Funktionen nicht mehr
+     * aufgerufen werden, da diese nur Fehler korrigert haben, die dann nicht
+     * mehr auftreten duerften
      *
      * @see org.xml.sax.ContentHandler#endDocument()
      */
@@ -443,7 +451,10 @@ public class ToolContentHandlerV1_0 implements ContentHandler {
 
             Static.setProgressDialogStatusLabel("labelConnectTraces");
 
-            /* die HashStrings für das Start- bzw. End-Objekt einer Edge auflösen und die wirklichen Node setzten */
+            /*
+             * die HashStrings für das Start- bzw. End-Objekt einer Edge
+             * auflösen und die wirklichen Node setzten
+             */
             for (int i = 0; i < ModelConstants.LAYERS.length; i++) {
                 for (EdgeContainer kc : doc.getLayer(ModelConstants.LAYERS[i]).getEdgeContainers()) {
                     kc.getEdge().decodeHashStrings(doc);

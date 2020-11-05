@@ -66,14 +66,22 @@ import de.imise.util.swing.component.text.ExtendedTextField;
 import de.imise.util.swing.component.text.NumberTextField;
 
 /**
- * Panel für den Eigenschaftendialog von Elementen, in dem alle definierten UserField des Elementes angezeigt werden. In ein <code>JScrollPane</code>
- * wird ein <code>JPanel</code> eingefügt. In dem <code>JPanel</code> werden die Eingabemöglichkeiten für die UserField dargestellt. Die grafischen
- * Elemente werden durch <code>JComponent </code>, egal ob <code>JLabel</code>, <code>JTextfield</code> oder <code>JComboBox</code> repräsentiert. Es
- * wird eine <code>ArrayList</code> angelegt, die Objekte vom Typ <code>UserFieldEditorComponent</code> enthält. Eine
- * <code>UserFieldEditorComponent</code> enthält als Objektattribute ein Attribut einer Element- bzw. Kantenklasse und die zugehörige GUI-Komponente.
- * Für die Datenübernahme ist die Methode <code>commit()</code> zuständig. Sie prüft iterativ die Eingaben in GUI-komponenten in der
- * <code>ArrayList</code> und vergleicht Sie mit den bisherigen Werten der UserField. Bei einem Unterschied wird das Tool3lgm-Kommando
- * <code>MODEL_ACTION_SET_USER_FIELD_VALUE</code> aufgerufen und somit der Wert eines Attributes einer Element- bzw. Kanetenklasse geändert.
+ * Panel für den Eigenschaftendialog von Elementen, in dem alle definierten
+ * UserField des Elementes angezeigt werden. In ein <code>JScrollPane</code>
+ * wird ein <code>JPanel</code> eingefügt. In dem <code>JPanel</code> werden die
+ * Eingabemöglichkeiten für die UserField dargestellt. Die grafischen Elemente
+ * werden durch <code>JComponent </code>, egal ob <code>JLabel</code>,
+ * <code>JTextfield</code> oder <code>JComboBox</code> repräsentiert. Es wird
+ * eine <code>ArrayList</code> angelegt, die Objekte vom Typ
+ * <code>UserFieldEditorComponent</code> enthält. Eine
+ * <code>UserFieldEditorComponent</code> enthält als Objektattribute ein
+ * Attribut einer Element- bzw. Kantenklasse und die zugehörige GUI-Komponente.
+ * Für die Datenübernahme ist die Methode <code>commit()</code> zuständig. Sie
+ * prüft iterativ die Eingaben in GUI-komponenten in der <code>ArrayList</code>
+ * und vergleicht Sie mit den bisherigen Werten der UserField. Bei einem
+ * Unterschied wird das Tool3lgm-Kommando
+ * <code>MODEL_ACTION_SET_USER_FIELD_VALUE</code> aufgerufen und somit der Wert
+ * eines Attributes einer Element- bzw. Kanetenklasse geändert.
  *
  * @author Thomas Rudert, xhb, AXS
  */
@@ -129,9 +137,9 @@ public class PropertyDialogUserFieldPanel extends ElementDialogPanel implements 
     }
 
     /**
-     * Liefert den Wert des UserFields für das ModelElement des Dialogs dieses Panels.
-     * Bei allen UserFields außer Kennzahl-UserFields werden EMPTY_STRINGS durch den
-     * echten Leerstring "" ersetzt.
+     * Liefert den Wert des UserFields für das ModelElement des Dialogs dieses
+     * Panels. Bei allen UserFields außer Kennzahl-UserFields werden
+     * EMPTY_STRINGS durch den echten Leerstring "" ersetzt.
      *
      * @param userField
      * @return
@@ -143,9 +151,9 @@ public class PropertyDialogUserFieldPanel extends ElementDialogPanel implements 
     }
 
     /**
-     * Liefert den Wert des UserFields für das ModelElement des Dialogs dieses Panels.
-     * Bei allen UserFields außer Kennzahl-UserFields werden EMPTY_STRINGS durch den
-     * echten Leerstring "" ersetzt.
+     * Liefert den Wert des UserFields für das ModelElement des Dialogs dieses
+     * Panels. Bei allen UserFields außer Kennzahl-UserFields werden
+     * EMPTY_STRINGS durch den echten Leerstring "" ersetzt.
      *
      * @param me
      * @param userField
@@ -164,7 +172,8 @@ public class PropertyDialogUserFieldPanel extends ElementDialogPanel implements 
     }
 
     /**
-     * Visualisiert die UserField mit ihren entsprechenden Style-Vorgaben im <code>JPanel</code>.
+     * Visualisiert die UserField mit ihren entsprechenden Style-Vorgaben im
+     * <code>JPanel</code>.
      */
     private void create() {
         setLayout(new BorderLayout());
@@ -199,9 +208,10 @@ public class PropertyDialogUserFieldPanel extends ElementDialogPanel implements 
     }
 
     /**
-     * Für das übergebene Userfield wird eine 2 elementige Liste erzeugt. Die erste Komponente ist das
-     * Label, das im Dialog für das UserField angezeigt werden soll und die zweite Komponente ist der
-     * zugehörige Editor. Bei Separatoren ist der Editor die Separator-Komponente und bei Formeln ist
+     * Für das übergebene Userfield wird eine 2 elementige Liste erzeugt. Die
+     * erste Komponente ist das Label, das im Dialog für das UserField angezeigt
+     * werden soll und die zweite Komponente ist der zugehörige Editor. Bei
+     * Separatoren ist der Editor die Separator-Komponente und bei Formeln ist
      * der Editor deaktiviert.
      *
      * @param field
@@ -417,8 +427,9 @@ public class PropertyDialogUserFieldPanel extends ElementDialogPanel implements 
     }
 
     /**
-     * Erzeugt einen HTML-String, bei dem der übergebenen <code>fieldName</code> fett in der 1. Zeile und
-     * darunter die übergebene <code>fieldDescription</code> steht.
+     * Erzeugt einen HTML-String, bei dem der übergebenen <code>fieldName</code>
+     * fett in der 1. Zeile und darunter die übergebene
+     * <code>fieldDescription</code> steht.
      *
      * @param fieldName
      * @param fieldDescription
@@ -494,8 +505,9 @@ public class PropertyDialogUserFieldPanel extends ElementDialogPanel implements 
     }
 
     /**
-     * Liefert <code>true</code>, wenn der übergebene <code>newValue</code> ein anderer ist, als
-     * der beim ModelElement aktuell für das übergebenen UserField gesetzte Wert.
+     * Liefert <code>true</code>, wenn der übergebene <code>newValue</code> ein
+     * anderer ist, als der beim ModelElement aktuell für das übergebenen
+     * UserField gesetzte Wert.
      *
      * @param me
      * @param userField
@@ -511,7 +523,8 @@ public class PropertyDialogUserFieldPanel extends ElementDialogPanel implements 
     }
 
     /**
-     * Liefert in Abhängigkeit vom Style den aktuellen Wert der übergebenen editorComponent.
+     * Liefert in Abhängigkeit vom Style den aktuellen Wert der übergebenen
+     * editorComponent.
      *
      * @param style
      * @param editorComponent

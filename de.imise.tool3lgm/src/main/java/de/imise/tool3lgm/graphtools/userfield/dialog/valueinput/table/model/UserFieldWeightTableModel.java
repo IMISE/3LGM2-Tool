@@ -30,13 +30,18 @@ public class UserFieldWeightTableModel extends AbstractUserFieldTableModel {
     /**
      * @param doc
      * @param edgeClass
-     * @param direction Richtung in der die ausgwählte Edge zu lesen ist. In der Tabelle sthen die Startklassen der Edge in den Zeilen, wenn
-     *            <code>FORWARD</code> übergeben wurde. Bei <code>BACKWARD</code> stehen die Endklassenelemente in den Zeilen.
+     * @param direction Richtung in der die ausgwählte Edge zu lesen ist. In der
+     *            Tabelle sthen die Startklassen der Edge in den Zeilen, wenn
+     *            <code>FORWARD</code> übergeben wurde. Bei
+     *            <code>BACKWARD</code> stehen die Endklassenelemente in den
+     *            Zeilen.
      * @param field
-     * @param columnElement Wenn <code>null</code>, werden alle Spalten-Elemente angezeigt, die gefunden werden. Wenn ein Element übergeben wurde,
-     *            dann wird nur die Spalte dieses Elementes angezeigt.
-     * @param columnElement Wenn <code>null</code>, werden alle Spalten-Elemente angezeigt, die gefunden werden. Wenn ein Element übergeben wurde,
-     *            dann wird nur die Spalte dieses Elementes angezeigt.
+     * @param columnElement Wenn <code>null</code>, werden alle Spalten-Elemente
+     *            angezeigt, die gefunden werden. Wenn ein Element übergeben
+     *            wurde, dann wird nur die Spalte dieses Elementes angezeigt.
+     * @param columnElement Wenn <code>null</code>, werden alle Spalten-Elemente
+     *            angezeigt, die gefunden werden. Wenn ein Element übergeben
+     *            wurde, dann wird nur die Spalte dieses Elementes angezeigt.
      */
     public UserFieldWeightTableModel(final GraphDocument doc, final Class<? extends Edge> edgeClass, final Direction direction, final UserField field, final ModelElement columnElement) {
         super(doc);
@@ -48,9 +53,11 @@ public class UserFieldWeightTableModel extends AbstractUserFieldTableModel {
     }
 
     /**
-     * Sucht die RowElements und ColumnElements für alle Elemente heraus, die durch die übergebene Kantenart in der übergebenen
-     * Richtung verbunden sein können. Dabei sind die RowElements immer die Start-Elemente der Edge in der angegebenen Richtung (!) und die
-     * ColumnElements immer die EndElemente in der angegebenen Kantenrichtung
+     * Sucht die RowElements und ColumnElements für alle Elemente heraus, die
+     * durch die übergebene Kantenart in der übergebenen Richtung verbunden sein
+     * können. Dabei sind die RowElements immer die Start-Elemente der Edge in
+     * der angegebenen Richtung (!) und die ColumnElements immer die EndElemente
+     * in der angegebenen Kantenrichtung
      *
      * @param edgeClass
      * @param direction
@@ -111,7 +118,8 @@ public class UserFieldWeightTableModel extends AbstractUserFieldTableModel {
     }
 
     /**
-     * Wenn das übergebene <code>columnElement</code> null ist, wird {@link #getRowAndColumnElements(Class, int)} aufgetrufen, sonst
+     * Wenn das übergebene <code>columnElement</code> null ist, wird
+     * {@link #getRowAndColumnElements(Class, int)} aufgetrufen, sonst
      * {@link #getRowAndColumnElements(Class, int, ModelElement)}
      *
      * @param edgeClass
@@ -133,8 +141,11 @@ public class UserFieldWeightTableModel extends AbstractUserFieldTableModel {
      * Erstellt und setzt Verteilungsgewicht-Modeldaten
      *
      * @param edgeClass
-     * @param direction Richtung in der die ausgwählte Edge zu lesen ist. In der Tabelle sthen die Startklassen der Edge in den Zeilen, wenn
-     *            <code>Direction.FORWARD</code> übergeben wurde. Bei <code>Direction.BACKWARD</code> stehen die Endklassenelemente in den Zeilen.
+     * @param direction Richtung in der die ausgwählte Edge zu lesen ist. In der
+     *            Tabelle sthen die Startklassen der Edge in den Zeilen, wenn
+     *            <code>Direction.FORWARD</code> übergeben wurde. Bei
+     *            <code>Direction.BACKWARD</code> stehen die Endklassenelemente
+     *            in den Zeilen.
      * @param field
      */
     private void setData(final Class<? extends Edge> edgeClass, final Direction direction, final UserField field, final ModelElement columnElement) {

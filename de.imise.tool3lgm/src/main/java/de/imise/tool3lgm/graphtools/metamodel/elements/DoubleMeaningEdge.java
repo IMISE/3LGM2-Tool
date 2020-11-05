@@ -7,7 +7,8 @@ import static de.imise.tool3lgm.graphtools.metamodel.elements.DoubleMeaningEdge.
 import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 
 /**
- * Oberklasse für alle Kantenklassen mit doppelter Bedeutung. Also Kanten, die 2 Assoziationen in einer zwischen 2 Klassen sind.
+ * Oberklasse für alle Kantenklassen mit doppelter Bedeutung. Also Kanten, die 2
+ * Assoziationen in einer zwischen 2 Klassen sind.
  *
  * @author AXS (25.09.2017)
  */
@@ -96,7 +97,8 @@ public abstract class DoubleMeaningEdge extends Edge {
     }
 
     /**
-     * Prüft die Validität der Kanten und stellt sie wenn möglich her. Die Prüfung betrifft die Art der Kantenelemente
+     * Prüft die Validität der Kanten und stellt sie wenn möglich her. Die
+     * Prüfung betrifft die Art der Kantenelemente
      *
      * @return <code>true</code>, wenn die Edge vollständig richtig ist
      */

@@ -31,10 +31,13 @@ import de.imise.util.NamedObjectContainer;
 import de.imise.util.clipboard.ContentExchangeListener;
 
 /**
- * Abstrake Oberklasse für alle Panels zur Massendateneingabe von Kennzahlen und Verteilungsgewichten, d.h. für:
+ * Abstrake Oberklasse für alle Panels zur Massendateneingabe von Kennzahlen und
+ * Verteilungsgewichten, d.h. für:
  * <p>
- * tool3lgm.graphtools.userfield.dialog.valueinput.GeneralUserFieldEditorPanel <br>
- * tool3lgm.graphtools.userfield.dialog.valueinput.DistributionWeigthEditorPanel <br>
+ * tool3lgm.graphtools.userfield.dialog.valueinput.GeneralUserFieldEditorPanel
+ * <br>
+ * tool3lgm.graphtools.userfield.dialog.valueinput.DistributionWeigthEditorPanel
+ * <br>
  * tool3lgm.graphtools.userfield.dialog.valueinput.ModelVariableEditorPanel
  *
  * @author fstephan
@@ -88,8 +91,10 @@ public abstract class AbstractUserFieldEditorPanel extends JPanel implements Com
         initElementsAtMousePointerListener();
 
         /*
-         * Listener, der Änderungen im Model des Tables erkennt. Der UserFieldEditorDialog, der dieses Panel beinhaltet, nutzt diese Informationen um
-         * das richtige Verhalten bei Ok, Übernehmen und Abbrechen zu bestimmen.
+         * Listener, der Änderungen im Model des Tables erkennt. Der
+         * UserFieldEditorDialog, der dieses Panel beinhaltet, nutzt diese
+         * Informationen um das richtige Verhalten bei Ok, Übernehmen und
+         * Abbrechen zu bestimmen.
          */
         dataChangeListener = new TableModelListener() {
             @Override
@@ -102,7 +107,8 @@ public abstract class AbstractUserFieldEditorPanel extends JPanel implements Com
     }
 
     /**
-     * Erstellt und fügt einen Listener an den Table an, der das Reihen- und Spaltenelement an der Mausposition erkennt und an Dialog übergibt.
+     * Erstellt und fügt einen Listener an den Table an, der das Reihen- und
+     * Spaltenelement an der Mausposition erkennt und an Dialog übergibt.
      */
     private void initElementsAtMousePointerListener() {
         ListSelectionListener l = new ListSelectionListener() {
@@ -154,7 +160,8 @@ public abstract class AbstractUserFieldEditorPanel extends JPanel implements Com
     }
 
     /**
-     * Sichert die spezielle Darstellung von <code>UserFieldTable</code>s. Es wird nicht der <code>UserFieldTable</code> selbst, sondern dass ihn
+     * Sichert die spezielle Darstellung von <code>UserFieldTable</code>s. Es
+     * wird nicht der <code>UserFieldTable</code> selbst, sondern dass ihn
      * beinhaltende <code>JScrollPane</code> angefügt.
      *
      * @see java.awt.Container#add(java.awt.Component, java.lang.Object)
@@ -162,7 +169,10 @@ public abstract class AbstractUserFieldEditorPanel extends JPanel implements Com
     @Override
     public void add(final Component comp, final Object constraints) {
 
-        /* Darstellung der Komponente, die den Table und das passende Layout enthält */
+        /*
+         * Darstellung der Komponente, die den Table und das passende Layout
+         * enthält
+         */
         if (comp instanceof UserFieldTable) {
             this.add(((UserFieldTable) comp).getLayoutContainer(), constraints);
         } else {
@@ -171,7 +181,8 @@ public abstract class AbstractUserFieldEditorPanel extends JPanel implements Com
     }
 
     /**
-     * Sichert das korrekte Entfernen des <code>table</code>s zu. Es wird nicht der Table, sondern das ihn beinhaltende <code>JScrollPane</code>
+     * Sichert das korrekte Entfernen des <code>table</code>s zu. Es wird nicht
+     * der Table, sondern das ihn beinhaltende <code>JScrollPane</code>
      * entfernt.
      *
      * @see java.awt.Container#remove(java.awt.Component)
@@ -186,7 +197,8 @@ public abstract class AbstractUserFieldEditorPanel extends JPanel implements Com
     }
 
     /**
-     * Methode verändert das Attribut <code>table</code> und löst ein Update aus. Das Model bzw. die EditCondition des <code>table</code>s wird auf
+     * Methode verändert das Attribut <code>table</code> und löst ein Update
+     * aus. Das Model bzw. die EditCondition des <code>table</code>s wird auf
      * <code>newModel</code> bzw. <code>newController</code> gesetzt.
      *
      * @param newModel
@@ -205,27 +217,32 @@ public abstract class AbstractUserFieldEditorPanel extends JPanel implements Com
     }
 
     /**
-     * @return <code>true</code> wenn es mindestens ein anzuzeigendes Ergebnis in diesem Panel gibt sonst <code>false</code>
+     * @return <code>true</code> wenn es mindestens ein anzuzeigendes Ergebnis
+     *         in diesem Panel gibt sonst <code>false</code>
      */
     public abstract boolean hasValues();
 
     /**
-     * so zu überschreiben, dass Werte aus <code>table</code> im Model übernommen werden
+     * so zu überschreiben, dass Werte aus <code>table</code> im Model
+     * übernommen werden
      */
     public abstract void takeOver();
 
     /**
-     * so zu überschreiben, dass <code>table</code> entsprechend des Anwendungsbereiches korrekt erzeugt wird
+     * so zu überschreiben, dass <code>table</code> entsprechend des
+     * Anwendungsbereiches korrekt erzeugt wird
      */
     protected abstract UserFieldTable initTable();
 
     /**
-     * so zu überschreiben, dass die Constraints für den <code>table</code> zurückgegeben werden
+     * so zu überschreiben, dass die Constraints für den <code>table</code>
+     * zurückgegeben werden
      */
     protected abstract Object constraintsForTable();
 
     /**
-     * Wenn in diesem Panel noch gar nichts selektiert war, wird automatisch das erste Item selektiert.
+     * Wenn in diesem Panel noch gar nichts selektiert war, wird automatisch das
+     * erste Item selektiert.
      */
     protected abstract void initSelectFirstItem();
 
@@ -246,8 +263,10 @@ public abstract class AbstractUserFieldEditorPanel extends JPanel implements Com
     }
 
     /**
-     * Beendet das Editieren der aktuelle ausgewählten Zelle im Table. Methode muss vor dem Schließen des <code>UserFieldEditorDialog</code>s
-     * aufgerufen werden, damit auch der aktuelle Wert der gerade editierten Zelle übernommen wird.
+     * Beendet das Editieren der aktuelle ausgewählten Zelle im Table. Methode
+     * muss vor dem Schließen des <code>UserFieldEditorDialog</code>s aufgerufen
+     * werden, damit auch der aktuelle Wert der gerade editierten Zelle
+     * übernommen wird.
      */
     public void stopEditing() {
         table.stopEditing();
@@ -263,8 +282,9 @@ public abstract class AbstractUserFieldEditorPanel extends JPanel implements Com
     }
 
     /**
-     * Setzt das Attribut {@link #dataChanged} und bestimmt damit, ob dem {@link #dialog} angezeigt werden soll, dass Änderungen gemacht wurden, oder
-     * nicht.
+     * Setzt das Attribut {@link #dataChanged} und bestimmt damit, ob dem
+     * {@link #dialog} angezeigt werden soll, dass Änderungen gemacht wurden,
+     * oder nicht.
      *
      * @param b
      */
@@ -273,7 +293,8 @@ public abstract class AbstractUserFieldEditorPanel extends JPanel implements Com
     }
 
     /**
-     * Gibt das Reihen- und Spaltenelement an der aktuellen Mouse-Position im Table wieder.
+     * Gibt das Reihen- und Spaltenelement an der aktuellen Mouse-Position im
+     * Table wieder.
      *
      * @return {@link #elementsAtMousePointer}
      */
@@ -289,7 +310,8 @@ public abstract class AbstractUserFieldEditorPanel extends JPanel implements Com
     }
 
     /**
-     * Liefert die {@link UserFieldDefinitions} der {@link GDCollection} des Dialoges dieses Panels
+     * Liefert die {@link UserFieldDefinitions} der {@link GDCollection} des
+     * Dialoges dieses Panels
      *
      * @return
      */

@@ -34,60 +34,66 @@ import de.imise.util.image.ComponentAsImageExportHandler.ZoomableComponent;
 public class BasicGraphArea extends JComponent implements ZoomableComponent, GraphDocumentOwner {
 
     /**
-     * The {@link GraphDocument} this area is initialized with. If this doc is
-     * a {@link Szenario} then the {@link #szenario} is the same value otherwise
+     * The {@link GraphDocument} this area is initialized with. If this doc is a
+     * {@link Szenario} then the {@link #szenario} is the same value otherwise
      * it is <code>null</code>.
      */
     protected final GraphDocument doc;
 
     /**
-     * Submodel this are is displaying if it was initialized with a {@link Szenario}.
-     * If the GraphDocument is not a {@link Szenario} the this variable is <code>null</code>.
+     * Submodel this are is displaying if it was initialized with a
+     * {@link Szenario}. If the GraphDocument is not a {@link Szenario} the this
+     * variable is <code>null</code>.
      */
     protected final Szenario szenario;
 
     /**
-     * Factor, mit dem die Zeichenfläche ausgehend von ihrer ursprünglichen Größe gestreckt wird
+     * Factor, mit dem die Zeichenfläche ausgehend von ihrer ursprünglichen
+     * Größe gestreckt wird
      */
     protected double zoom;
 
     /**
-     * Anzahl der Pixel, um die die Ebenen jeweils zueinander nach rechts verschoben werden (mit der
-     * untersten Ebene beginnend).
+     * Anzahl der Pixel, um die die Ebenen jeweils zueinander nach rechts
+     * verschoben werden (mit der untersten Ebene beginnend).
      */
     private double effective_x_shift = 0;
 
     /**
-     * Anzahl der Pixel, um die die Ebenen jeweils zueinander nach oben verschoben werden (mit der
-     * untersten Ebene beginnend).
+     * Anzahl der Pixel, um die die Ebenen jeweils zueinander nach oben
+     * verschoben werden (mit der untersten Ebene beginnend).
      */
     private double effective_y_shift = 0;
 
     /**
-     * Faktor, um die die Darstellung in Y-Richtung skaliert wird. Dieser Faktor wird für den aktuellen
-     * Winkel jeweils neu berechnet. Je größer der Winkel wird, desto kleiner wird dieser Wert, wodurch
-     * die Ebenen in der Höhe gestaucht werden.
+     * Faktor, um die die Darstellung in Y-Richtung skaliert wird. Dieser Faktor
+     * wird für den aktuellen Winkel jeweils neu berechnet. Je größer der Winkel
+     * wird, desto kleiner wird dieser Wert, wodurch die Ebenen in der Höhe
+     * gestaucht werden.
      */
     protected double y_y_factor;
 
     /**
-     * Faktor, um den sich in der Ebenendarstellung mit größeren Y-Werten die X-Werte vergrößern.
-     * Dadurch kann man die Ebene nach (hinten) links (positive Werte) oder nach (hinten) rechts
-     * (negative Werte) kippen.
-     * Im Moment wird dieser Wert nicht genutzt, da keine Notwendigkeit besteht, die Darstellung zu kippen.
+     * Faktor, um den sich in der Ebenendarstellung mit größeren Y-Werten die
+     * X-Werte vergrößern. Dadurch kann man die Ebene nach (hinten) links
+     * (positive Werte) oder nach (hinten) rechts (negative Werte) kippen. Im
+     * Moment wird dieser Wert nicht genutzt, da keine Notwendigkeit besteht,
+     * die Darstellung zu kippen.
      */
     protected double y_x_factor;
 
     /**
-     * Faktor, um die die Darstellung in X-Richtung skaliert wird. Im Moment wird dieser Wert nicht
-     * genutzt, da keine Notwendigkeit besteht, die Darstellung in die Breite zu ziehen.
+     * Faktor, um die die Darstellung in X-Richtung skaliert wird. Im Moment
+     * wird dieser Wert nicht genutzt, da keine Notwendigkeit besteht, die
+     * Darstellung in die Breite zu ziehen.
      */
     protected final double X_X_FACTOR = 1.0;
 
     /**
-     * Faktor, um den sich in der Ebenendarstellung mit größeren X-Werten die Y-Werte vergrößern.
-     * Dadurch kann man die Ebene nach unten (positive Werte) oder nach oben (negative Werte) kippen.
-     * Im Moment wird dieser Wert nicht genutzt, da keine Notwendigkeit besteht, die Darstellung zu kippen.
+     * Faktor, um den sich in der Ebenendarstellung mit größeren X-Werten die
+     * Y-Werte vergrößern. Dadurch kann man die Ebene nach unten (positive
+     * Werte) oder nach oben (negative Werte) kippen. Im Moment wird dieser Wert
+     * nicht genutzt, da keine Notwendigkeit besteht, die Darstellung zu kippen.
      */
     protected final double X_Y_FACTOR = 0.0;
 
@@ -115,7 +121,10 @@ public class BasicGraphArea extends JComponent implements ZoomableComponent, Gra
     /**  */
     protected int layerHeight = 0;
 
-    /** Anzahl der Pixel des Abstandes zwischen den Ebenen in der Mehrebenenansicht */
+    /**
+     * Anzahl der Pixel des Abstandes zwischen den Ebenen in der
+     * Mehrebenenansicht
+     */
     protected int layerGap;
 
     /**  */
@@ -136,7 +145,9 @@ public class BasicGraphArea extends JComponent implements ZoomableComponent, Gra
     /**  */
     protected boolean mouse_selection = false;
 
-    /** Aktuelle Abstände der Ebenendarstellung vom Gesamtrand dieser Komponente */
+    /**
+     * Aktuelle Abstände der Ebenendarstellung vom Gesamtrand dieser Komponente
+     */
     public static final Insets GRAPH_BORDER = new Insets(50, 50, 50, 50);
 
     /** Minimaler interner Zoom-Wert */
@@ -152,7 +163,10 @@ public class BasicGraphArea extends JComponent implements ZoomableComponent, Gra
         REGULAR,
         /** Der aktive Layer in der 3-Ebenen-Ansicht wird nicht hervorgehoben */
         SAVE_IMAGE_AS_FILE,
-        /** Das Raster und evtl. vorhandene Selektionen von Elementen werden nicht mitgezeichnet */
+        /**
+         * Das Raster und evtl. vorhandene Selektionen von Elementen werden
+         * nicht mitgezeichnet
+         */
         WEBEXPORT
     }
 
@@ -227,7 +241,8 @@ public class BasicGraphArea extends JComponent implements ZoomableComponent, Gra
     /**
      * Prueft, ob Einzel- oder Multi-Sicht eingestellt ist.
      *
-     * @return <code>true</code>, wenn Mehrebenenansicht eingestellt ist, sonst <code>false</code>.
+     * @return <code>true</code>, wenn Mehrebenenansicht eingestellt ist, sonst
+     *         <code>false</code>.
      */
     public final boolean isMultiView() {
         return multiView;
@@ -236,7 +251,8 @@ public class BasicGraphArea extends JComponent implements ZoomableComponent, Gra
     /**
      * Schaltet die Sicht auf alle Ebenen ein oder aus.
      *
-     * @param b <code>true</code> schaltet die Mehrebenenansicht ein, <code>false</code> aus.
+     * @param b <code>true</code> schaltet die Mehrebenenansicht ein,
+     *            <code>false</code> aus.
      */
     public void setMultiView(final boolean b) {
         multiView = b;
@@ -252,22 +268,12 @@ public class BasicGraphArea extends JComponent implements ZoomableComponent, Gra
     /**
      * Setzt die Seitenbreite auf <code>width</code> Pixel
      *
-     * @param width
-     *            /
-     *            public final void setPageWidth(int width) {
-     *            page_width = width;
-     *            check_size();
-     *            }
-     *            /**
-     *            Setzt die Seitenhoehe auf height Pixel
-     * @param height
-     *            /
-     *            public final void setPageHeight(int height) {
-     *            page_height = height;
-     *            check_size();
-     *            }
-     *            /**
-     *            Setzt die Seitengroesse auf width mal height Pixel
+     * @param width / public final void setPageWidth(int width) { page_width =
+     *            width; check_size(); } /** Setzt die Seitenhoehe auf height
+     *            Pixel
+     * @param height / public final void setPageHeight(int height) { page_height
+     *            = height; check_size(); } /** Setzt die Seitengroesse auf
+     *            width mal height Pixel
      */
     private final void setPageSize(final int width, final int height) {
         if (width == layerWidth && height == layerHeight) {
@@ -412,7 +418,8 @@ public class BasicGraphArea extends JComponent implements ZoomableComponent, Gra
     }
 
     /**
-     * Stellt die alten Werte des Darstellungswinkels und der Höhenverschiebung wieder her.
+     * Stellt die alten Werte des Darstellungswinkels und der Höhenverschiebung
+     * wieder her.
      *
      * @see #storeSettings()
      */
@@ -640,17 +647,21 @@ public class BasicGraphArea extends JComponent implements ZoomableComponent, Gra
     }
 
     /**
-     * If <code>true</code> the function {@link #paintWithTryCatchOrNormal(LayerContainer, Graphics2D)}
-     * paints the area surrounded with try-cath. If <code>false</code> without the try-catch. This
-     * varibale is <code>true</code> at teh beginning and swutched to <code>false</code> after the
-     * first paint without an exception druing the paint.
+     * If <code>true</code> the function
+     * {@link #paintWithTryCatchOrNormal(LayerContainer, Graphics2D)} paints the
+     * area surrounded with try-cath. If <code>false</code> without the
+     * try-catch. This varibale is <code>true</code> at teh beginning and
+     * swutched to <code>false</code> after the first paint without an exception
+     * druing the paint.
      */
     private static boolean paintWithTryCatch = true;
 
     /**
-     * If we load a model via start parameter an swing internal NullPointerException
-     * occurs at java.desktop/sun.java2d.SunGraphics2D.getClipBounds(SunGraphics2D.java:1831).
-     * After one correct paint without an exception the exception never happens again.
+     * If we load a model via start parameter an swing internal
+     * NullPointerException occurs at
+     * java.desktop/sun.java2d.SunGraphics2D.getClipBounds(SunGraphics2D.java:1831).
+     * After one correct paint without an exception the exception never happens
+     * again.
      *
      * @param lc
      * @param gc
@@ -671,7 +682,8 @@ public class BasicGraphArea extends JComponent implements ZoomableComponent, Gra
     }
 
     /**
-     * Setzt den Export-Modus, in dem Selektionen und das Raster nicht mitgezeichnet werden sollen.
+     * Setzt den Export-Modus, in dem Selektionen und das Raster nicht
+     * mitgezeichnet werden sollen.
      *
      * @param exportMode the exportMode to set
      */
@@ -686,8 +698,7 @@ public class BasicGraphArea extends JComponent implements ZoomableComponent, Gra
     /**
      * set the Graphics2D to the current RenderingHints
      *
-     * @param g2
-     *            Graphics2D which RenderingHints are to set
+     * @param g2 Graphics2D which RenderingHints are to set
      */
     public static void setRenderingHints(final Graphics2D g2) {
         int renderingHints = PROPERTY_INT_RENDER_SETTINGS.get();

@@ -23,6 +23,7 @@ import com.google.common.collect.ImmutableList;
 
 import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
+import de.imise.tool3lgm.graphtools.metamodel.CoreMetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
@@ -115,8 +116,9 @@ public abstract class ElementSelectionContextGenerator extends ContextGenerator 
     }
 
     /**
-     * Liefert eine Action zu einem SimpleMetaPath der zwischen dem zuletzt selektierten Element und allen zum Endelement des Pfades passenden anderen
-     * selektierten Elementen angelegt wird.
+     * Liefert eine Action zu einem SimpleMetaPath der zwischen dem zuletzt
+     * selektierten Element und allen zum Endelement des Pfades passenden
+     * anderen selektierten Elementen angelegt wird.
      *
      * @param path2create
      * @return
@@ -129,8 +131,9 @@ public abstract class ElementSelectionContextGenerator extends ContextGenerator 
     }
 
     /**
-     * Liefert eine Action zu einem SimpleMetaPath der zwischen dem übergebenen StartElement hin zum übergebenen Endelement angelegt wird.
-     * Ist das startElement null wird das zuletzt seletierte genommen.
+     * Liefert eine Action zu einem SimpleMetaPath der zwischen dem übergebenen
+     * StartElement hin zum übergebenen Endelement angelegt wird. Ist das
+     * startElement null wird das zuletzt seletierte genommen.
      *
      * @param startElement
      * @param path2create
@@ -142,12 +145,14 @@ public abstract class ElementSelectionContextGenerator extends ContextGenerator 
     }
 
     /**
-     * Liefert eine Action zu einem SimpleMetaPath der zwischen dem zuletzt selektierten Element und allen zum Endelement des Pfades passenden anderen
-     * übergebenen Elementen angelegt wird.
+     * Liefert eine Action zu einem SimpleMetaPath der zwischen dem zuletzt
+     * selektierten Element und allen zum Endelement des Pfades passenden
+     * anderen übergebenen Elementen angelegt wird.
      *
      * @param startElement
      * @param path2create Pfad der angelegt werden soll
-     * @param endElements Elemente, zu denen der Pfad vom zuletzt selektierten Element aus angelegt werden soll
+     * @param endElements Elemente, zu denen der Pfad vom zuletzt selektierten
+     *            Element aus angelegt werden soll
      * @param name Name der Action
      * @param icon Icon der Sction
      * @return
@@ -211,7 +216,7 @@ public abstract class ElementSelectionContextGenerator extends ContextGenerator 
         if (!metaModel.isSlaveType(meClass)) {
             ElementsNameBuilder elementsNameBuilder = metaModel.getElementsNameBuilder();
             for (Class<? extends Edge> edgeClass : metaModel.getEdgeTypes(meClass)) {
-                if (MetaModel.isInstanciationMaster(edgeClass, meClass)) {
+                if (CoreMetaModel.isInstanciationMaster(edgeClass, meClass)) {
                     if (newInstanceLabel == null) {
                         newInstanceLabel = new JLabel(getResString(MODEL_ACTION_CREATE_INSTANCIATION.name()));
                         menu.add(newInstanceLabel);

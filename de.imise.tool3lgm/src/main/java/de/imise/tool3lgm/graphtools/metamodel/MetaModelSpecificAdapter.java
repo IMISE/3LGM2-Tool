@@ -5,7 +5,8 @@ import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
 import de.imise.util.Sys;
 
 /**
- * Adapter for the interface {@link MetaModelSpecific}. Thsi Adapter makes all interface functions final.
+ * Adapter for the interface {@link MetaModelSpecific}. Thsi Adapter makes all
+ * interface functions final.
  *
  * @author AXS (04.09.2019)
  */
@@ -30,8 +31,7 @@ public class MetaModelSpecificAdapter implements MetaModelSpecific {
     }
 
     /**
-     * @param metaModel
-     *            the metamodel of this instance
+     * @param metaModel the metamodel of this instance
      */
     public MetaModelSpecificAdapter(final MetaModel metaModel) {
         metaModelDefintionClass = metaModel.getMetaModelDefinitionClass();
@@ -42,8 +42,8 @@ public class MetaModelSpecificAdapter implements MetaModelSpecific {
     }
 
     /**
-     * @param metaModelContext
-     *            the metamodel context with the metamodel of this instance
+     * @param metaModelContext the metamodel context with the metamodel of this
+     *            instance
      */
     public MetaModelSpecificAdapter(final MetaModelContext metaModelContext) {
         metaModelDefintionClass = metaModelContext.getMetaModelDefinitionClass();
@@ -54,10 +54,11 @@ public class MetaModelSpecificAdapter implements MetaModelSpecific {
     }
 
     /**
-     * Wrapper constructor for elementes which are MetaModelSpecific by a parameter.
+     * Wrapper constructor for elementes which are MetaModelSpecific by a
+     * parameter.
      *
-     * @param metaModelSpecific
-     *            a MetaModelSpecifict object that provides the metamodel context with the metamodel for this instance
+     * @param metaModelSpecific a MetaModelSpecifict object that provides the
+     *            metamodel context with the metamodel for this instance
      */
     public MetaModelSpecificAdapter(final MetaModelSpecific metaModelSpecific) {
         metaModelDefintionClass = metaModelSpecific.getMetaModelDefinitionClass();
@@ -68,10 +69,12 @@ public class MetaModelSpecificAdapter implements MetaModelSpecific {
     }
 
     /**
-     * Wrapper constructor for elementes which are MetaModelSpecific by a parameter.
+     * Wrapper constructor for elementes which are MetaModelSpecific by a
+     * parameter.
      *
-     * @param metaModelSpecificAdapter
-     *            a MetaModelSpecifictAdapter object that provides the metamodel context with the metamodel for this instance
+     * @param metaModelSpecificAdapter a MetaModelSpecifictAdapter object that
+     *            provides the metamodel context with the metamodel for this
+     *            instance
      */
     public MetaModelSpecificAdapter(final MetaModelSpecificAdapter metaModelSpecificAdapter) {
         metaModelDefintionClass = metaModelSpecificAdapter.metaModelDefintionClass;

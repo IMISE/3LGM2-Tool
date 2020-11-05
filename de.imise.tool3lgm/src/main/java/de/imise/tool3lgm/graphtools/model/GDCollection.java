@@ -86,6 +86,7 @@ import de.imise.tool3lgm.Tool3lgmModelType.ModelCategory;
 import de.imise.tool3lgm.graphtools.consistency.ModelValidator;
 import de.imise.tool3lgm.graphtools.dialog.element.ElemenPropertyDialogsContext;
 import de.imise.tool3lgm.graphtools.dialog.element.ElementPropertyDialog;
+import de.imise.tool3lgm.graphtools.metamodel.CoreMetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModelDefinition;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModelSpecific;
@@ -126,23 +127,33 @@ import de.imise.util.outparam.OutParamObject;
 import de.imise.util.swing.dialog.NameAndColorInputDialog;
 
 /**
- * Represents an entire model. GDCollection = {@link GraphDocument} collection - so a collection of all sub-models. A sub-model is a selection of
- * model elements with a seperate graph view.
+ * Represents an entire model. GDCollection = {@link GraphDocument} collection -
+ * so a collection of all sub-models. A sub-model is a selection of model
+ * elements with a seperate graph view.
  *
  * @author thomas, AXS
  */
 public final class GDCollection extends UserFieldTarget implements MetaModelSpecific {
 
-    /** Holds the {@link MetaModelContext} and the type of the model ( {@link Tool3lgmModelType.ModelCategory} */
+    /**
+     * Holds the {@link MetaModelContext} and the type of the model (
+     * {@link Tool3lgmModelType.ModelCategory}
+     */
     private Tool3lgmModelType modelType;
 
-    /** Holds all concepts (types of model elements) and the relations between this concepts */
+    /**
+     * Holds all concepts (types of model elements) and the relations between
+     * this concepts
+     */
     private MetaModel metaModel;
 
     /** The undo-redo-manager */
     protected final TransactionManager tman;
 
-    /** The data structure to store all model changing transactions for the undo-redo-manager */
+    /**
+     * The data structure to store all model changing transactions for the
+     * undo-redo-manager
+     */
     private final TransactionStackTable transStackTable = new TransactionStackTable();
 
     /** The modelvalidaor for this model */
@@ -171,7 +182,10 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
     //		}
     //
     //	}*/;
-    /** Definition der benutzerdefinierten Eigenschaften, Kennzahlen, Kanennzahlformel und Formaten */
+    /**
+     * Definition der benutzerdefinierten Eigenschaften, Kennzahlen,
+     * Kanennzahlformel und Formaten
+     */
     private UserFieldDefinitions userFieldDefinitions;
 
     /** Hauptdokument der Collection */
@@ -181,22 +195,27 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
     private CopyDependencyResolver copyDependencyResolver;
 
     /**
-     * Alle {@link LGMChangeListener}, die immer benachrichtigt werden - egal ob eine Transaktion durch einen Dialog offen ist oder nicht.
+     * Alle {@link LGMChangeListener}, die immer benachrichtigt werden - egal ob
+     * eine Transaktion durch einen Dialog offen ist oder nicht.
      */
     private final List<LGMChangeListener> allListener = new ArrayList<>();
 
     /**
-     * Alle {@link LGMChangeListener}, die nur benachrichtigt werden, wenn keine Transaktion geöffnet ist bzw. die nur auf Transaktionen
-     * reagieren, die abgeschlossen sind. Das ist der Fall, wenn das Change-Ereignis nicht durch eine geöffneten Dialog kommt.
+     * Alle {@link LGMChangeListener}, die nur benachrichtigt werden, wenn keine
+     * Transaktion geöffnet ist bzw. die nur auf Transaktionen reagieren, die
+     * abgeschlossen sind. Das ist der Fall, wenn das Change-Ereignis nicht
+     * durch eine geöffneten Dialog kommt.
      */
     private final List<LGMChangeListener> closedListener = new ArrayList<>();
 
     /**
-     * Liste aller <code>GraphDocument</code>s in der Reihenfolge, dass immer das selektierte ganz hinten steht,
-     * das davor selektierte direkt davor und so weiter. Jedes <code>GraphDocument</code> der Collection - also
-     * auch das Hauptdokument - kommt genau einmal in der Liste vor. Wird ein Teilmodell gelöscht, wird das davor
-     * selektierte aktiviert, im <code>ModelBrowser</code> selektiert und sein Grafikfenster in den Vordergrund
-     * geholt.
+     * Liste aller <code>GraphDocument</code>s in der Reihenfolge, dass immer
+     * das selektierte ganz hinten steht, das davor selektierte direkt davor und
+     * so weiter. Jedes <code>GraphDocument</code> der Collection - also auch
+     * das Hauptdokument - kommt genau einmal in der Liste vor. Wird ein
+     * Teilmodell gelöscht, wird das davor selektierte aktiviert, im
+     * <code>ModelBrowser</code> selektiert und sein Grafikfenster in den
+     * Vordergrund geholt.
      */
     private final List<LGMGraphDocument> activeGraphDocumentsList = new ArrayList<>();
 
@@ -231,42 +250,47 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
     private final GDCollectionIconTable iconTable = new GDCollectionIconTable();
 
     /**
-     * Wenn <code>true</code>, werden keine Undo-/Redo-Commands aufgezeichnet. Dieser Modus ist beim Einlesen
-     * bzw. vor dem kompletten init eines Modells aktiv und immer dann, wenn UNDO oder REDO ausgeführt wird, da
-     * währenddessen die Kommandos nicht noch einmal aufgezeichnet werden müssen.
-     * <code>false</code> ist der Default. Nach dem Init muss dieser auf <code>true</code> gesetzt werden,
-     * damit die dann Kommandos geloggt werden.
+     * Wenn <code>true</code>, werden keine Undo-/Redo-Commands aufgezeichnet.
+     * Dieser Modus ist beim Einlesen bzw. vor dem kompletten init eines Modells
+     * aktiv und immer dann, wenn UNDO oder REDO ausgeführt wird, da
+     * währenddessen die Kommandos nicht noch einmal aufgezeichnet werden
+     * müssen. <code>false</code> ist der Default. Nach dem Init muss dieser auf
+     * <code>true</code> gesetzt werden, damit die dann Kommandos geloggt
+     * werden.
      */
     private boolean bulk_mode = true;
 
     /**
-     * <code>true</code> means the model is in 'automatic mode'. In this mode the user will not be asked
-     * for any descision or some model change events are not disributed.
-     * If <code>false</code> the user can be asked and all model change events are disributed.
-     * Thsi mode is active, e.g. if elements should be generated without aksing the user for the name of
-     * the element. This elements get standard names.
+     * <code>true</code> means the model is in 'automatic mode'. In this mode
+     * the user will not be asked for any descision or some model change events
+     * are not disributed. If <code>false</code> the user can be asked and all
+     * model change events are disributed. Thsi mode is active, e.g. if elements
+     * should be generated without aksing the user for the name of the element.
+     * This elements get standard names.
      */
     private boolean automatic_mode = true;
 
     /**
      * If an edge is deleted and the start or end element of this egde needs
-     * this edge for existence (minimum cardinality) then the element will
-     * be deleted too, but only if this boolean is <code>false</code>.
-     * If <code>true</code> the now inconsistent element will not be deleted.
-     * This mode is used to prevent deleting of elements which are subordinated
-     * by an {@link CompositionEdge} during the reconnecting this subordinated
-     * element to an other superordinated element.
+     * this edge for existence (minimum cardinality) then the element will be
+     * deleted too, but only if this boolean is <code>false</code>. If
+     * <code>true</code> the now inconsistent element will not be deleted. This
+     * mode is used to prevent deleting of elements which are subordinated by an
+     * {@link CompositionEdge} during the reconnecting this subordinated element
+     * to an other superordinated element.
      */
     private boolean ignore_inconsistencies_on_delete_egdes_mode = false;
 
     /**
-     * Wird <code>true</code> sobald der bulk_mode das erste Mal auf <code>false</code> gesetzt wurde.
+     * Wird <code>true</code> sobald der bulk_mode das erste Mal auf
+     * <code>false</code> gesetzt wurde.
      */
     private boolean initialized = false;
 
     /**
-     * Dieser Counter berechnet die Verschiebung, mit der die Elemente bei einem Paste in die Grafik kopiert werden.
-     * Jedes Mal, wenn gepastet wird ohne eine neue Kopie anzufertigen, dann wird der Counter hochgezählt.
+     * Dieser Counter berechnet die Verschiebung, mit der die Elemente bei einem
+     * Paste in die Grafik kopiert werden. Jedes Mal, wenn gepastet wird ohne
+     * eine neue Kopie anzufertigen, dann wird der Counter hochgezählt.
      */
     private int pasteCounter;
 
@@ -276,10 +300,10 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
     private int active_layer = DOMAIN_LAYER;
 
     /**
-     * The list of change events which were fired during bulk_mode.
-     * This list contains teh same/equals event alsways only one times.
-     * The events are collected if bulk_mode ist active and they are
-     * fired if bulk_mode becomes inactive.
+     * The list of change events which were fired during bulk_mode. This list
+     * contains teh same/equals event alsways only one times. The events are
+     * collected if bulk_mode ist active and they are fired if bulk_mode becomes
+     * inactive.
      */
     private final List<LGMChangeEvent> changeEvents = new ArrayList<>();
 
@@ -327,7 +351,8 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
     }
 
     /**
-     * @return setzt den Title auf dasselbe wie {@link #getName()}, aber ohne die Dateiendung
+     * @return setzt den Title auf dasselbe wie {@link #getName()}, aber ohne
+     *         die Dateiendung
      */
     public String getTitle() {
         int lastPointIndex = name.lastIndexOf('.');
@@ -344,8 +369,8 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
     /**
      * Sets the {@link MetaModelContext} for this model.
      *
-     * @param modelype
-     *            the context that contains the metamodel of this model and the corresponding resource bundle and the type of the model
+     * @param modelype the context that contains the metamodel of this model and
+     *            the corresponding resource bundle and the type of the model
      */
     public void setModelType(final Tool3lgmModelType modelType) {
         this.modelType = modelType;
@@ -663,7 +688,8 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
     }
 
     /**
-     * Setzt das übergebene <code>GraphDocument</code> als das aktuell selektierte.
+     * Setzt das übergebene <code>GraphDocument</code> als das aktuell
+     * selektierte.
      *
      * @param doc
      */
@@ -674,8 +700,9 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
     }
 
     /**
-     * Nachdem alle Szenarios eingelesen oder das eine eines neuen Modell erstellt wurden, muss
-     * man einmal diese Funktion hier aufrufen, damit das richtige Graphdocument selektiert ist.
+     * Nachdem alle Szenarios eingelesen oder das eine eines neuen Modell
+     * erstellt wurden, muss man einmal diese Funktion hier aufrufen, damit das
+     * richtige Graphdocument selektiert ist.
      */
     public void initSelectedDocByViewParameterFromFile() {
         for (Szenario szen : szenarios) {
@@ -699,8 +726,8 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
     }
 
     /**
-     * Entfernt das alle <code>GraphDocument</code>s aus der Liste der Teilmodelle. Sonst passiert
-     * hier nichts!
+     * Entfernt das alle <code>GraphDocument</code>s aus der Liste der
+     * Teilmodelle. Sonst passiert hier nichts!
      *
      * @return
      */
@@ -747,8 +774,8 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
     //#############################################################################################//
     /////////////////////////////////////////////////////////////////////////////////////////////////
     /**
-     * Fügt unter der angegebenen PID die UndoKommandos ein, um das Layout des übergebenen Containers
-     * wieder herzustellen.
+     * Fügt unter der angegebenen PID die UndoKommandos ein, um das Layout des
+     * übergebenen Containers wieder herzustellen.
      *
      * @param ec
      * @param pid
@@ -805,10 +832,11 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
     }
 
     /**
-     * Entfernt die übergebenen Container aus ihrem GraphDocument. Es werden nur {@link NodeContainer} entfernt sowie
-     * deren {@link EdgeContainer} und alle von den übergebenen Elementen abhängigen Elemente. Abhängige Elemente
-     * selbst oder Kanten in der übergebenen Liste werden übergangen und nicht gelöscht, wenn das Element
-     * von dem sie abhängen nicht gelöscht wird.
+     * Entfernt die übergebenen Container aus ihrem GraphDocument. Es werden nur
+     * {@link NodeContainer} entfernt sowie deren {@link EdgeContainer} und alle
+     * von den übergebenen Elementen abhängigen Elemente. Abhängige Elemente
+     * selbst oder Kanten in der übergebenen Liste werden übergangen und nicht
+     * gelöscht, wenn das Element von dem sie abhängen nicht gelöscht wird.
      *
      * @param elementsToRemove
      * @param pid
@@ -880,11 +908,13 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
     }
 
     /**
-     * Entfernt den {@link EdgeContainer} und alle seine Knickpunkte aus seinem GraphDocument.
+     * Entfernt den {@link EdgeContainer} und alle seine Knickpunkte aus seinem
+     * GraphDocument.
      *
      * @param edgeContainer
      * @param pid
-     * @return <code>true</code> wenn der Container nicht <code>null</code> war, sonst <code>false</code>
+     * @return <code>true</code> wenn der Container nicht <code>null</code> war,
+     *         sonst <code>false</code>
      */
     private boolean simpleRemoveEdgeContainer(final EdgeContainer edgeContainer, final int pid) {
         if (edgeContainer == null) {
@@ -905,8 +935,9 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
     }
 
     /**
-     * Entfernt die übergebenen ElementContainer aus dem Szenario des ersten Containers in der Liste ohne dabei
-     * irgendwelche Konsistenzprüfungen vorzunehmen.
+     * Entfernt die übergebenen ElementContainer aus dem Szenario des ersten
+     * Containers in der Liste ohne dabei irgendwelche Konsistenzprüfungen
+     * vorzunehmen.
      *
      * @param containerToRemove
      * @param pid
@@ -959,9 +990,9 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
 
     /**
      * @param me
-     * @param doc
-     *            GraphDocument, das die Transaktion starten und beenden soll, also dessen Selektion im Falle
-     *            eines Undo wieder hergestellt wird. Das Element selbst wird natürlich aus allen Teilmodellen
+     * @param doc GraphDocument, das die Transaktion starten und beenden soll,
+     *            also dessen Selektion im Falle eines Undo wieder hergestellt
+     *            wird. Das Element selbst wird natürlich aus allen Teilmodellen
      *            und dem Hauptmodell gelöscht.
      * @param pid
      */
@@ -981,9 +1012,9 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
 
     /**
      * @param elementHashesToDelete
-     * @param doc
-     *            GraphDocument, das die Transaktion starten und beenden soll, also dessen Selektion im Falle
-     *            eines Undo wieder hergestellt wird. Das Element selbst wird natürlich aus allen Teilmodellen
+     * @param doc GraphDocument, das die Transaktion starten und beenden soll,
+     *            also dessen Selektion im Falle eines Undo wieder hergestellt
+     *            wird. Das Element selbst wird natürlich aus allen Teilmodellen
      *            und dem Hauptmodell gelöscht.
      * @param pid
      */
@@ -1006,9 +1037,9 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
 
     /**
      * @param elementsToDelete
-     * @param doc
-     *            GraphDocument, das die Transaktion starten und beenden soll, also dessen Selektion im Falle
-     *            eines Undo wieder hergestellt wird. Das Element selbst wird natürlich aus allen Teilmodellen
+     * @param doc GraphDocument, das die Transaktion starten und beenden soll,
+     *            also dessen Selektion im Falle eines Undo wieder hergestellt
+     *            wird. Das Element selbst wird natürlich aus allen Teilmodellen
      *            und dem Hauptmodell gelöscht.
      * @param pid
      */
@@ -1057,7 +1088,7 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
                         //der minimalen Kardinalität für diese Kantenart ist, dann muss das verbundene Element auch gelöscht werden
                         //auf Gleichheit muss getestet werden, weil die Edge ja noch nicht wirklich gelöscht ist und somit mitgezählt wird
                         Class<? extends Edge> edgeClass = edge.getClass();
-                        if (elem != null && elem.countConnections(edgeClass) <= MetaModel.getMinCardinality(elem.getClass(), edgeClass)) {
+                        if (elem != null && elem.countConnections(edgeClass) <= CoreMetaModel.getMinCardinality(elem.getClass(), edgeClass)) {
                             if (!allElementsToDelete.contains(elem)) {
                                 allElementsToDelete.add(elem);
                                 dependentDeletedElements.add(elem);
@@ -1163,8 +1194,9 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
     }
 
     /**
-     * Entfernt den übergebenen {@link Bendpoint} aus dem Haupt-{@link GraphDocument} und
-     * dem Szenario, in dem er dargestellt wird (das ist immer nur 1). Es werden die Undo-Redo-Kommandos geloggt.
+     * Entfernt den übergebenen {@link Bendpoint} aus dem
+     * Haupt-{@link GraphDocument} und dem Szenario, in dem er dargestellt wird
+     * (das ist immer nur 1). Es werden die Undo-Redo-Kommandos geloggt.
      *
      * @param kpk
      * @param pid
@@ -1208,8 +1240,8 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
      * @param bendpointHash
      * @param x
      * @param y
-     * @param bendpointIndex
-     *            Index des Knickpunktes auf dem {@link EdgeContainer}
+     * @param bendpointIndex Index des Knickpunktes auf dem
+     *            {@link EdgeContainer}
      * @param pid
      */
     public final BendpointContainer insertBendingPoint(final String szenHash, final String edgeHash, final String bendpointHash, final int x, final int y, int bendpointIndex, final int pid) {
@@ -1333,7 +1365,8 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
     }
 
     /**
-     * Legt für das übergebene Element alle initialen Unterelemente an, wenn diese noch nicht vorhanden sind.
+     * Legt für das übergebene Element alle initialen Unterelemente an, wenn
+     * diese noch nicht vorhanden sind.
      *
      * @param me
      * @param pid
@@ -1341,9 +1374,9 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
     public void createInitialSubtypes(final ModelElement me, final int pid) {
         Class<? extends ModelElement> elementClass = me.getClass();
         for (Class<? extends Edge> subTypeEdgeClass : metaModel.getInitialSubtypes(elementClass)) {
-            Class<? extends ModelElement> subType = MetaModel.isStartClass(subTypeEdgeClass, elementClass) ? getEndClass(subTypeEdgeClass) : getStartClass(subTypeEdgeClass);
+            Class<? extends ModelElement> subType = CoreMetaModel.isStartClass(subTypeEdgeClass, elementClass) ? getEndClass(subTypeEdgeClass) : getStartClass(subTypeEdgeClass);
             //minimale kardinalität für die Unterelemente
-            int minCardForSubType = MetaModel.getMinCardinality(me.getClass(), subTypeEdgeClass);
+            int minCardForSubType = CoreMetaModel.getMinCardinality(me.getClass(), subTypeEdgeClass);
             //bisher verbundene Anzahl von Unterelementen
             List<ModelElement> connectedSubTypes = me.getConnectedElements(subType, subTypeEdgeClass);
             //soviele Unterelemente wie fehlen neu anlegen
@@ -1363,7 +1396,8 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
     }
 
     /**
-     * Updates all {@link InferenceEdge}s. Missing wil be created and superflous will be reomoved.
+     * Updates all {@link InferenceEdge}s. Missing wil be created and superflous
+     * will be reomoved.
      *
      * @param pid
      */
@@ -1388,12 +1422,16 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
     /**
      * Removes all superflous {@link InferenceEdge}s.
      *
-     * @param lockAndForceDelete if <code>true</code> the global variable lockInferenceEgdeCreation will be
-     *            switched to <code>true</code> too, so that the next normal call of {@link #createInferenceEdges(int)}
-     *            will not really create these edges until the global variable lockInferenceEgdeCreation will be switched
-     *            back to <code>false</code>. Additionally if this parameter here is <code>false</code>, then only those
-     *            InferenceEdges are removed whose condition metapaths are not fulfilled. If the parameter is <code>true</code>,
-     *            then all InferenceEdges are removed.
+     * @param lockAndForceDelete if <code>true</code> the global variable
+     *            lockInferenceEgdeCreation will be switched to
+     *            <code>true</code> too, so that the next normal call of
+     *            {@link #createInferenceEdges(int)} will not really create
+     *            these edges until the global variable
+     *            lockInferenceEgdeCreation will be switched back to
+     *            <code>false</code>. Additionally if this parameter here is
+     *            <code>false</code>, then only those InferenceEdges are removed
+     *            whose condition metapaths are not fulfilled. If the parameter
+     *            is <code>true</code>, then all InferenceEdges are removed.
      * @param pid
      */
     void removeInferenceEdges(final boolean lockAndForceDelete, final int pid) {
@@ -1455,12 +1493,15 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
     /**
      * Creates all missing {@link InferenceEdge}s.
      *
-     * @param unlock if <code>true</code> the global variable {@link #lockInferenceEgdeCreation}
-     *            is set or left to <code>true</code>. If <code>false</code> the creation is only executed
-     *            if the global variable <code>lockInferenceEgdeCreation</code> is <code>false</code>. This
-     *            global variable can be set to <code>false</code> by the corresponding function
-     *            {@link #removeInferenceEdges(int)}. This prevents creation of all {@link InferenceEdge}s
-     *            until this function is called with unlock <code>true</code>.
+     * @param unlock if <code>true</code> the global variable
+     *            {@link #lockInferenceEgdeCreation} is set or left to
+     *            <code>true</code>. If <code>false</code> the creation is only
+     *            executed if the global variable
+     *            <code>lockInferenceEgdeCreation</code> is <code>false</code>.
+     *            This global variable can be set to <code>false</code> by the
+     *            corresponding function {@link #removeInferenceEdges(int)}.
+     *            This prevents creation of all {@link InferenceEdge}s until
+     *            this function is called with unlock <code>true</code>.
      * @param pid
      */
     void createInferenceEdges(final boolean unlock, final int pid) {
@@ -1550,8 +1591,9 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
     //START LINK //
 
     /**
-     * Verbindet die beiden Elemente je nach übergebener Richtung vorwärts oder rückwärts. Alle anderen
-     * link()-Funktionen ohne Richtung verbinden vorwärts.
+     * Verbindet die beiden Elemente je nach übergebener Richtung vorwärts oder
+     * rückwärts. Alle anderen link()-Funktionen ohne Richtung verbinden
+     * vorwärts.
      *
      * @param startElement
      * @param endElement
@@ -1569,7 +1611,8 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
     }
 
     /**
-     * Verbindet die beiden Modellelemente miteinander, wenn noch keine Edge zwischen ihnen existiert.<br>
+     * Verbindet die beiden Modellelemente miteinander, wenn noch keine Edge
+     * zwischen ihnen existiert.<br>
      *
      * @param edgeClassName
      * @param hashString
@@ -1578,8 +1621,8 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
      * @param startElementEdgeIndex
      * @param endElementEdgeIndex
      * @param pid
-     * @return
-     *         die neu angelegte Edge zwischen den beiden Elementen oder die Edge, die bereits existierte
+     * @return die neu angelegte Edge zwischen den beiden Elementen oder die
+     *         Edge, die bereits existierte
      * @see #link(String, String, ModelElement, ModelElement, int, int)
      */
     public final Edge link(final String edgeClassName, final String hashString, final String startElementHash, final String endElementHash, final int startElementEdgeIndex, final int endElementEdgeIndex, final int pid) {
@@ -1589,13 +1632,14 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
     }
 
     /**
-     * Verbindet die beiden Modellelemente miteinander, wenn noch keine Edge zwischen ihnen existiert.<br>
+     * Verbindet die beiden Modellelemente miteinander, wenn noch keine Edge
+     * zwischen ihnen existiert.<br>
      *
      * @param startElement
      * @param endElement
      * @param pid
-     * @return
-     *         die neu angelegte Edge zwischen den beiden Elementen oder die Edge, die bereits existierte
+     * @return die neu angelegte Edge zwischen den beiden Elementen oder die
+     *         Edge, die bereits existierte
      * @see #link(String, String, ModelElement, ModelElement, int, int)
      */
     public final Edge link(final ModelElement startElement, final ModelElement endElement, final int pid) {
@@ -1656,65 +1700,71 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
     }
 
     /**
-     * Verbindet die beiden Modellelemente miteinander, wenn noch keine Edge zwischen ihnen existiert. Die Verbindung
-     * entsteht immer in Vorwärtsrichtung von Element <code>me1</code> zu Element <code>me2</code><br>
+     * Verbindet die beiden Modellelemente miteinander, wenn noch keine Edge
+     * zwischen ihnen existiert. Die Verbindung entsteht immer in
+     * Vorwärtsrichtung von Element <code>me1</code> zu Element
+     * <code>me2</code><br>
      *
-     * @param edgeClassName
-     *            Klassenname der kante, die angelegt werden soll. Ist nur relevant, wenn es mehrere Kantenarten zwischen den Elementen geben kann.
-     * @param edgeHash
-     *            Wird ein Wert ungleich <code>null</code> übergeben, wird dieser als HasWert der neuen Edge gesetzt
-     * @param startElement
-     *            Startknoten der Edge
-     * @param endElement
-     *            Endknoten der Edge
+     * @param edgeClassName Klassenname der kante, die angelegt werden soll. Ist
+     *            nur relevant, wenn es mehrere Kantenarten zwischen den
+     *            Elementen geben kann.
+     * @param edgeHash Wird ein Wert ungleich <code>null</code> übergeben, wird
+     *            dieser als HasWert der neuen Edge gesetzt
+     * @param startElement Startknoten der Edge
+     * @param endElement Endknoten der Edge
      * @param edgeIndex
-     * @param startElementEdgeIndex
-     *            Position, an der die Edge beim Startelement in die Kantenliste eingefügt werden soll. Bei ungeordneten Listen sollte hier -1
-     *            übergeben werden.
-     * @param endElementEdgeIndex
-     *            Position, an der die Edge beim Endelement in die Kantenliste eingefügt werden soll. Bei ungeordneten Listen sollte hier -1
-     *            übergeben werden.
-     * @param ensureConsistency
-     *            wenn <code>true</code> wird für die verbundenen Elemente geprüft, ob die Kardinalität mit der neuen Edge
-     *            überschritten wird. Wenn ja, werden überzählige Verbindungen gelöscht
-     * @param pid
-     *            Transaktions-ID mit der die Änderungen am Model durchgeführt werden
-     * @return
-     *         die neu angelegte Edge zwischen den beiden Elementen oder die Edge, die bereits existierte
+     * @param startElementEdgeIndex Position, an der die Edge beim Startelement
+     *            in die Kantenliste eingefügt werden soll. Bei ungeordneten
+     *            Listen sollte hier -1 übergeben werden.
+     * @param endElementEdgeIndex Position, an der die Edge beim Endelement in
+     *            die Kantenliste eingefügt werden soll. Bei ungeordneten Listen
+     *            sollte hier -1 übergeben werden.
+     * @param ensureConsistency wenn <code>true</code> wird für die verbundenen
+     *            Elemente geprüft, ob die Kardinalität mit der neuen Edge
+     *            überschritten wird. Wenn ja, werden überzählige Verbindungen
+     *            gelöscht
+     * @param pid Transaktions-ID mit der die Änderungen am Model durchgeführt
+     *            werden
+     * @return die neu angelegte Edge zwischen den beiden Elementen oder die
+     *         Edge, die bereits existierte
      */
     public Edge link(final String edgeClassName, final String edgeHash, final ModelElement startElement, final ModelElement endElement, final int startElementEdgeIndex, final int endElementEdgeIndex, final boolean ensureConsistency, final int pid) {
         return link(edgeClassName, edgeHash, startElement, endElement, startElementEdgeIndex, endElementEdgeIndex, ensureConsistency, true, pid);
     }
 
     /**
-     * Verbindet die beiden Modellelemente miteinander, wenn noch keine Edge zwischen ihnen existiert. Die Verbindung
-     * entsteht immer in Vorwärtsrichtung von Element <code>me1</code> zu Element <code>me2</code><br>
+     * Verbindet die beiden Modellelemente miteinander, wenn noch keine Edge
+     * zwischen ihnen existiert. Die Verbindung entsteht immer in
+     * Vorwärtsrichtung von Element <code>me1</code> zu Element
+     * <code>me2</code><br>
      *
-     * @param edgeClassName
-     *            Klassenname der kante, die angelegt werden soll. Ist nur relevant, wenn es mehrere Kantenarten zwischen den Elementen geben kann.
-     * @param edgeHash
-     *            Wird ein Wert ungleich <code>null</code> übergeben, wird dieser als HasWert der neuen Edge gesetzt
-     * @param startElement
-     *            Startknoten der Edge
-     * @param endElement
-     *            Endknoten der Edge
+     * @param edgeClassName Klassenname der kante, die angelegt werden soll. Ist
+     *            nur relevant, wenn es mehrere Kantenarten zwischen den
+     *            Elementen geben kann.
+     * @param edgeHash Wird ein Wert ungleich <code>null</code> übergeben, wird
+     *            dieser als HasWert der neuen Edge gesetzt
+     * @param startElement Startknoten der Edge
+     * @param endElement Endknoten der Edge
      * @param edgeIndex
-     * @param startElementEdgeIndex
-     *            Position, an der die Edge beim Startelement in die Kantenliste eingefügt werden soll. Bei ungeordneten Listen sollte hier -1
-     *            übergeben werden.
-     * @param endElementEdgeIndex
-     *            Position, an der die Edge beim Endelement in die Kantenliste eingefügt werden soll. Bei ungeordneten Listen sollte hier -1
-     *            übergeben werden.
-     * @param ensureConsistency
-     *            wenn <code>true</code> wird für die verbundenen Elemente geprüft, ob die Kardinalität mit der neuen Edge
-     *            überschritten wird. Wenn ja, werden überzählige Verbindungen gelöscht
-     * @param linkInferenceEdgesDirect
-     *            wenn <code>true</code> werden InferenceEdges durch diese Funktion direkt angelegt. Bei <code>false</code> werden zuerst ihre
-     *            Bedingspfade generiert und erst dann (in einem weiteren Durchlauf der Funktion) die InferenceEdge selbst.
-     * @param pid
-     *            Transaktions-ID mit der die Änderungen am Model durchgeführt werden
-     * @return
-     *         die neu angelegte Edge zwischen den beiden Elementen oder die Edge, die bereits existierte
+     * @param startElementEdgeIndex Position, an der die Edge beim Startelement
+     *            in die Kantenliste eingefügt werden soll. Bei ungeordneten
+     *            Listen sollte hier -1 übergeben werden.
+     * @param endElementEdgeIndex Position, an der die Edge beim Endelement in
+     *            die Kantenliste eingefügt werden soll. Bei ungeordneten Listen
+     *            sollte hier -1 übergeben werden.
+     * @param ensureConsistency wenn <code>true</code> wird für die verbundenen
+     *            Elemente geprüft, ob die Kardinalität mit der neuen Edge
+     *            überschritten wird. Wenn ja, werden überzählige Verbindungen
+     *            gelöscht
+     * @param linkInferenceEdgesDirect wenn <code>true</code> werden
+     *            InferenceEdges durch diese Funktion direkt angelegt. Bei
+     *            <code>false</code> werden zuerst ihre Bedingspfade generiert
+     *            und erst dann (in einem weiteren Durchlauf der Funktion) die
+     *            InferenceEdge selbst.
+     * @param pid Transaktions-ID mit der die Änderungen am Model durchgeführt
+     *            werden
+     * @return die neu angelegte Edge zwischen den beiden Elementen oder die
+     *         Edge, die bereits existierte
      */
     private Edge link(final String edgeClassName, final String edgeHash, ModelElement startElement, ModelElement endElement, final int startElementEdgeIndex, final int endElementEdgeIndex, final boolean ensureConsistency,
             final boolean linkInferenceEdgesDirect, final int pid) {
@@ -1733,7 +1783,7 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
             return null;
         }
         Class<? extends Edge> edgeClass = edgeClassOrNull == null ? null : edgeClassOrNull.asSubclass(Edge.class);
-        if (edgeClass != null && !MetaModel.isConnecting(edgeClass, startElement.getClass(), endElement.getClass())) {
+        if (edgeClass != null && !CoreMetaModel.isConnecting(edgeClass, startElement.getClass(), endElement.getClass())) {
             return null;
         }
 
@@ -1747,7 +1797,7 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
                 }
             }
             //wenn es schon eine Kante in der Gegenrichtung gibt und diese Kante eine Kante mit doppelter Bedeutung ist -> dann Richtung auf DOUBLE setzen
-            boolean doubleMeaningEdge = MetaModel.isDoubleMeaningEdge(edgeClass);
+            boolean doubleMeaningEdge = CoreMetaModel.isDoubleMeaningEdge(edgeClass);
             if (doubleMeaningEdge) { //wenn es bei Kanten mit doppelter Bedeutung schon die Gegenrichtung gibt -> setzte auch die Hinrichtung
                 edge = startElement.getEdgeFrom(endElement, edgeClass, startElementEdgeIndex);
             }
@@ -1785,7 +1835,7 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
                     edge.setHashString(edgeHash);
                 }
                 ConnectionState connectionState = FORWARD; // wird nur für die DoubleMeaningEdges gebraucht
-                if (!MetaModel.isConnectingForward(edgeClass, startElement.getClass(), endElement.getClass())) {
+                if (!CoreMetaModel.isConnectingForward(edgeClass, startElement.getClass(), endElement.getClass())) {
                     ModelElement dummy = startElement;
                     startElement = endElement;
                     endElement = dummy;
@@ -1848,12 +1898,17 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
     }
 
     /**
-     * @param potencialInferenceEdgeClass must impelemnt {@link InferenceEdge} interface (hard cast)
-     * @param inferenceEdgeConditionMetaPathStartElement original startElement of a potencial inference edge instance
-     * @param inferenceEdgeConditionMetaPathEndElement original endElement of a potencial inference edge instance
-     * @return triple with the conditionMetaPath of the inference edge as the first triple element and
-     *         the given elements in the correct order that the second triple element is the start element
-     *         of the condition path and the third triple element is the end element of the condition path
+     * @param potencialInferenceEdgeClass must impelemnt {@link InferenceEdge}
+     *            interface (hard cast)
+     * @param inferenceEdgeConditionMetaPathStartElement original startElement
+     *            of a potencial inference edge instance
+     * @param inferenceEdgeConditionMetaPathEndElement original endElement of a
+     *            potencial inference edge instance
+     * @return triple with the conditionMetaPath of the inference edge as the
+     *         first triple element and the given elements in the correct order
+     *         that the second triple element is the start element of the
+     *         condition path and the third triple element is the end element of
+     *         the condition path
      */
     private MetaPath getInferenceEdgeConditionMetaPathWithCorrectElementOrder(final Class<? extends Edge> potencialInferenceEdgeClass, final OutParamObject<ModelElement> inferenceEdgeConditionMetaPathStartElement,
             final OutParamObject<ModelElement> inferenceEdgeConditionMetaPathEndElement) {
@@ -1892,8 +1947,8 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
     }
 
     /**
-     * Löst die Verbindung zwischen Start- und Endelement in der angegebenen Richtung. Alle anderen
-     * unlink()-Funktionen unlinken vorwärts.
+     * Löst die Verbindung zwischen Start- und Endelement in der angegebenen
+     * Richtung. Alle anderen unlink()-Funktionen unlinken vorwärts.
      *
      * @param startElement
      * @param endElement
@@ -1943,8 +1998,9 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
     }
 
     /**
-     * ACHTUNG: DIESE BEIDEN UNINK-FUNKTIONEN HABE ICH AM 24.10.2018 HINZUGEFÜGT. DAS PROZESSSTRUKTURPANEL MÜSSTE ÜBER EINE SOLCHE FUNKTION ARBEITEN.
-     * DAS HIER IST DAZU DA, MICH DARAN ZU ERINNERN!
+     * ACHTUNG: DIESE BEIDEN UNINK-FUNKTIONEN HABE ICH AM 24.10.2018
+     * HINZUGEFÜGT. DAS PROZESSSTRUKTURPANEL MÜSSTE ÜBER EINE SOLCHE FUNKTION
+     * ARBEITEN. DAS HIER IST DAZU DA, MICH DARAN ZU ERINNERN!
      *
      * @param edge
      * @param pid
@@ -1954,8 +2010,9 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
     }
 
     /**
-     * ACHTUNG: DIESE BEIDEN UNINK-FUNKTIONEN HABE ICH AM 24.10.2018 HINZUGEFÜGT. DAS PROZESSSTRUKTURPANEL MÜSSTE ÜBER EINE SOLCHE FUNKTION ARBEITEN.
-     * DAS HIER IST DAZU DA, MICH DARAN ZU ERINNERN!
+     * ACHTUNG: DIESE BEIDEN UNINK-FUNKTIONEN HABE ICH AM 24.10.2018
+     * HINZUGEFÜGT. DAS PROZESSSTRUKTURPANEL MÜSSTE ÜBER EINE SOLCHE FUNKTION
+     * ARBEITEN. DAS HIER IST DAZU DA, MICH DARAN ZU ERINNERN!
      *
      * @param edge
      * @param direction
@@ -1972,9 +2029,12 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
     }
 
     /**
-     * Anders als bei link() ist hier die Richtung, also die Reihenfolge der beiden ModelElemente nur wichtig, wenn es eine {@link DoubleMeaningEdge}
-     * ist oder die übergebenen Elemente beide jeweils Start- und EndElement der Kantenklasse sein können. In allen anderen Fällen wird sonst auch
-     * einfach versucht irgendeine Kante dieser Art zwischen den beiden übergebenen Elementen zu löschen.
+     * Anders als bei link() ist hier die Richtung, also die Reihenfolge der
+     * beiden ModelElemente nur wichtig, wenn es eine {@link DoubleMeaningEdge}
+     * ist oder die übergebenen Elemente beide jeweils Start- und EndElement der
+     * Kantenklasse sein können. In allen anderen Fällen wird sonst auch einfach
+     * versucht irgendeine Kante dieser Art zwischen den beiden übergebenen
+     * Elementen zu löschen.
      *
      * @param me1
      * @param me2
@@ -1994,7 +2054,7 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
 
         Class<? extends ModelElement> me1Class = me1.getClass();
         Class<? extends ModelElement> me2Class = me2.getClass();
-        boolean isDirectionImportent = MetaModel.isDoubleMeaningEdge(edgeClass) || MetaModel.isConnecting(edgeClass, me1Class, me2Class) && MetaModel.isConnecting(edgeClass, me2Class, me1Class);
+        boolean isDirectionImportent = CoreMetaModel.isDoubleMeaningEdge(edgeClass) || CoreMetaModel.isConnecting(edgeClass, me1Class, me2Class) && CoreMetaModel.isConnecting(edgeClass, me2Class, me1Class);
         if (isDirectionImportent) {
             edges = me1.getEdgesTo(me2, edgeClass, me1EdgeIndex);
         } else {
@@ -2050,7 +2110,7 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
             ///////////////////////////////////////////////////////////////////////////////////////////
 
         }
-        if (MetaModel.isDoubleMeaningEdge(absoluteEdgeClass)) {
+        if (CoreMetaModel.isDoubleMeaningEdge(absoluteEdgeClass)) {
             DoubleMeaningEdge doubleMeaningEdge = (DoubleMeaningEdge) edge;
             if (doubleMeaningEdge.getConnectionState() == DOUBLE) {
                 if (edge.getStart() == me1) {
@@ -2071,18 +2131,22 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
     }
 
     /**
-     * Voraussetzung: Es gibt 2 Knotenklassen A und B die über eine Kantenklasse K verbunden sind. Dasselbe
-     * gibt es nochmal, also die Knotenklassen AA und BB mit der Kantenklasse KK dazwischen. Die Knotenklasse
-     * A hat eine InstanciationEdge zur Knotenklasse AA, die Knotenklasse B eine InstanciationEdge zur
-     * Knotenklasse BB und die Kantenklasse K eine InstanciationEdge zur Kantenklasse KK. A, B und K sind
-     * die Master der jeweiligen InstanciationEdge und AA, BB und KK die jeweiligen Instanzen dieser
-     * InstanciationEdge, also die aus dem Master jeweils abgeleitete Klasse.<br>
+     * Voraussetzung: Es gibt 2 Knotenklassen A und B die über eine Kantenklasse
+     * K verbunden sind. Dasselbe gibt es nochmal, also die Knotenklassen AA und
+     * BB mit der Kantenklasse KK dazwischen. Die Knotenklasse A hat eine
+     * InstanciationEdge zur Knotenklasse AA, die Knotenklasse B eine
+     * InstanciationEdge zur Knotenklasse BB und die Kantenklasse K eine
+     * InstanciationEdge zur Kantenklasse KK. A, B und K sind die Master der
+     * jeweiligen InstanciationEdge und AA, BB und KK die jeweiligen Instanzen
+     * dieser InstanciationEdge, also die aus dem Master jeweils abgeleitete
+     * Klasse.<br>
      * <br>
-     * Ziel: Erzeuge die InstanciationEdge zw. 2 Kantenelementen, wenn alle anderen Knoten- und Kantenelemente
-     * dieses Graph-Ausschnittes bereits vorhanden sind. D.h. es gibt zwei Knoten von der Art A und B die als
-     * Master jeweils über eine InstanciationEdge mit Instanz-Elementen der Art AA und BB verbunden sind und
-     * sowohl zwischen den Elementen der Art A und B als auch zwischen denen der Art AA und BB die jeweilige
-     * Kante besteht.
+     * Ziel: Erzeuge die InstanciationEdge zw. 2 Kantenelementen, wenn alle
+     * anderen Knoten- und Kantenelemente dieses Graph-Ausschnittes bereits
+     * vorhanden sind. D.h. es gibt zwei Knoten von der Art A und B die als
+     * Master jeweils über eine InstanciationEdge mit Instanz-Elementen der Art
+     * AA und BB verbunden sind und sowohl zwischen den Elementen der Art A und
+     * B als auch zwischen denen der Art AA und BB die jeweilige Kante besteht.
      *
      * @param edge
      */
@@ -2172,7 +2236,9 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
      * @param remainElementHashString
      * @param source
      * @param pid
-     * @return the joined element (this is the element with remainElementHashString) or <code>null</code> if nothing was joined
+     * @return the joined element (this is the element with
+     *         remainElementHashString) or <code>null</code> if nothing was
+     *         joined
      */
     public ModelElement join(final String removeElementHashString, final String remainElementHashString, final GraphDocument source, final int pid) {
         Collection<String> elementHashes2ExcludeFromJoin = new ArrayList<>();
@@ -2187,7 +2253,9 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
      * @param source
      * @param elementHashes2ExcludeFromJoin
      * @param pid
-     * @return the joined element (this is the element with remainElementHashString) or <code>null</code> if nothing was joined
+     * @return the joined element (this is the element with
+     *         remainElementHashString) or <code>null</code> if nothing was
+     *         joined
      */
     private ModelElement joinRecursive(final String removeElementHashString, final String remainElementHashString, final GraphDocument source, final Collection<String> elementHashes2ExcludeFromJoin, final int pid) {
         ModelElement removeElement = mainDoc.findElementCoded(removeElementHashString);
@@ -2421,8 +2489,10 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
     }
 
     /**
-     * Wenn die anderen Parameter aus der Methode <code>distribute(int, ElementContainer, LayerContainer, GraphDocument, int)</code> nicht angegeben
-     * werden können, kann man hiermit ein allgemeines Ereignis feuern.
+     * Wenn die anderen Parameter aus der Methode
+     * <code>distribute(int, ElementContainer, LayerContainer, GraphDocument, int)</code>
+     * nicht angegeben werden können, kann man hiermit ein allgemeines Ereignis
+     * feuern.
      *
      * @param changeType
      */
@@ -2443,8 +2513,8 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
     }
 
     /**
-     * Delivers all change events from the list {@link GDCollection#changeEvents}
-     * and after this clears the list.
+     * Delivers all change events from the list
+     * {@link GDCollection#changeEvents} and after this clears the list.
      */
     private void distributeChangeEvents() {
         //Sys.err(changeEvents.size());
@@ -2713,9 +2783,8 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
      * Löscht aus allen <code>UserFieldTarget</code> s der Collection die
      * Eingabewerte der übergebenen <code>UserField</code>s.
      *
-     * @param userFieldsToRemove
-     *            <code>UserField</code> s deren Eingabewerte gelöscht werden
-     *            sollen
+     * @param userFieldsToRemove <code>UserField</code> s deren Eingabewerte
+     *            gelöscht werden sollen
      */
     public void removeUserFieldValues(final List<UserField> userFieldsToRemove) {
         for (UserField userField : userFieldsToRemove) {

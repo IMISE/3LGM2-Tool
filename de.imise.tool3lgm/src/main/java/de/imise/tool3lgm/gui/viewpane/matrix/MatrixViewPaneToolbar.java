@@ -45,12 +45,14 @@ public class MatrixViewPaneToolbar extends UnfloatableToolBar implements ChangeL
     private final JLabel colLabel;
 
     /**
-     * Label, das das Zeilenelement anzeigt, über dem sich die Maus in der Matrix befindet
+     * Label, das das Zeilenelement anzeigt, über dem sich die Maus in der
+     * Matrix befindet
      */
     private final JLabel rowElementLabel;
 
     /**
-     * Label, das das Spaltenelement anzeigt, über dem sich die Maus in der Matrix befindet
+     * Label, das das Spaltenelement anzeigt, über dem sich die Maus in der
+     * Matrix befindet
      */
     private final JLabel colElementLabel;
 
@@ -60,13 +62,14 @@ public class MatrixViewPaneToolbar extends UnfloatableToolBar implements ChangeL
     private final JLabel pathNameLabel;
 
     /**
-     * Panel für die Legende (gewählter Pfad und Bedeutung der Markierungen in der Matrix)
+     * Panel für die Legende (gewählter Pfad und Bedeutung der Markierungen in
+     * der Matrix)
      */
     private final JPanel legendPanel;
 
     /**
-     * Selektor, der die Comboboxen und die Metapfadauswahlliste zur Festlegung des darzustellenden
-     * Metapfades bereitstellt
+     * Selektor, der die Comboboxen und die Metapfadauswahlliste zur Festlegung
+     * des darzustellenden Metapfades bereitstellt
      */
     private final MetaPathSelector metaPathSelector;
 
@@ -76,13 +79,14 @@ public class MatrixViewPaneToolbar extends UnfloatableToolBar implements ChangeL
     private MatrixViewPaneFrameComponent controlledFrame;
 
     /**
-     * Maximale Anzahle gleichzeitig auswählbarer Metapfade, wenn es mehrere gibt
+     * Maximale Anzahle gleichzeitig auswählbarer Metapfade, wenn es mehrere
+     * gibt
      */
     public static final int MAX_PARALLEL_SELECTED_METAPATHS = 4;
 
     /**
-     * @param controlledFrame
-     *            Frame dessen Darstellung durch diese Toolbar beeinfluss wird.
+     * @param controlledFrame Frame dessen Darstellung durch diese Toolbar
+     *            beeinfluss wird.
      */
     public MatrixViewPaneToolbar(final MatrixViewPaneFrameComponent controlledFrame) {
         // dieser Constructor sollte nur mit MatrixViewPaneFrameComponent aufgerufen werden. ACHTUNG: der
@@ -139,16 +143,13 @@ public class MatrixViewPaneToolbar extends UnfloatableToolBar implements ChangeL
     }
 
     /**
-     * Erstellt fügt einer Componente das GridBagLayout und eine Menge von child- Componenten hinzu.
-     * Bei Anordnung der child-Componenten wird in der linken oberen Ecke angefangen und dann
-     * zeilenweise angeordnet
+     * Erstellt fügt einer Componente das GridBagLayout und eine Menge von
+     * child- Componenten hinzu. Bei Anordnung der child-Componenten wird in der
+     * linken oberen Ecke angefangen und dann zeilenweise angeordnet
      *
-     * @param owner
-     *            Componente, die die child-Componenten besitzen soll
-     * @param childs
-     *            Array mit den child-Componenten
-     * @param columns
-     *            Anzahl der Spalten in jeder Zeile
+     * @param owner Componente, die die child-Componenten besitzen soll
+     * @param childs Array mit den child-Componenten
+     * @param columns Anzahl der Spalten in jeder Zeile
      * @return GridBagConstraints welches genutzt wurde.
      */
     private GridBagConstraints setGridBagLayout(final JComponent owner, final JComponent[] childs, final int columns) {
@@ -179,8 +180,8 @@ public class MatrixViewPaneToolbar extends UnfloatableToolBar implements ChangeL
     }
 
     /**
-     * Aktualisiert die Matrix und die Einträge in der Legende (gewählter Pfad und Bedeutung der
-     * Markierungen in der Matrix)
+     * Aktualisiert die Matrix und die Einträge in der Legende (gewählter Pfad
+     * und Bedeutung der Markierungen in der Matrix)
      */
     @Override
     public void update() {
@@ -217,15 +218,14 @@ public class MatrixViewPaneToolbar extends UnfloatableToolBar implements ChangeL
     }
 
     /**
-     * Aktualisiert die Positionslabels, die die Elemente der Zeile und Spalte darstellen. (Wird
-     * aufgerufen, wenn sich die Mausposition in der Matrix ändert)
+     * Aktualisiert die Positionslabels, die die Elemente der Zeile und Spalte
+     * darstellen. (Wird aufgerufen, wenn sich die Mausposition in der Matrix
+     * ändert)
      *
-     * @param col
-     *            {@link ModelElement}, das in der Spalte dargestellt werden soll
-     * @param row
-     *            {@link ModelElement}, das in der Zeile dargestellt werden soll
-     * @param pathName
-     *            Name des MetaPtafades der aktuell angezeigt wird
+     * @param col {@link ModelElement}, das in der Spalte dargestellt werden
+     *            soll
+     * @param row {@link ModelElement}, das in der Zeile dargestellt werden soll
+     * @param pathName Name des MetaPtafades der aktuell angezeigt wird
      */
     public void positionChanged(final ModelElement col, final ModelElement row, final String pathName) {
         rowElementLabel.setText(row == null ? "" : row.toString());
@@ -241,7 +241,8 @@ public class MatrixViewPaneToolbar extends UnfloatableToolBar implements ChangeL
     }
 
     /**
-     * Liefert den String mit dem Pfadnamen, der für die übergebene Farbe angezeigt wird.
+     * Liefert den String mit dem Pfadnamen, der für die übergebene Farbe
+     * angezeigt wird.
      *
      * @param legendItemColor
      * @return

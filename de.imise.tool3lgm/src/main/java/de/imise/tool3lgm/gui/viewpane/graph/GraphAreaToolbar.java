@@ -6,6 +6,7 @@ import java.util.List;
 import javax.help.CSH;
 import javax.swing.ButtonGroup;
 
+import de.imise.tool3lgm.graphtools.metamodel.CoreMetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
@@ -32,10 +33,16 @@ public class GraphAreaToolbar extends UnfloatableToolBar {
 
     private int currentLayer = -1;
 
-    /** Mappt vom LayerIndex auf die Elementklassen, für die auf der Toolbar ein Button angezeigt werden soll */
+    /**
+     * Mappt vom LayerIndex auf die Elementklassen, für die auf der Toolbar ein
+     * Button angezeigt werden soll
+     */
     //    private static final Multimap<Integer, Class<? extends Node>> layerGraphElementClasses = getLayerGraphElementClasses();
 
-    /** irgendeine der grafisch darstellbaren Klassen, die man braucht, um einen Strich auf den Button der Kanten zu malen */
+    /**
+     * irgendeine der grafisch darstellbaren Klassen, die man braucht, um einen
+     * Strich auf den Button der Kanten zu malen
+     */
     private static final Class<? extends Node> dummyEdgeButtonNodeClass = Textfield.class;
 
     private boolean multiView;
@@ -81,7 +88,7 @@ public class GraphAreaToolbar extends UnfloatableToolBar {
         MetaModel metaModel = doc.getMetaModel();
         List<Class<? extends Node>> paintableNodeClasses = new ArrayList<>(5);
         for (Class<? extends ModelElement> elementClass : metaModel.allNodesSet) {
-            if (MetaModel.isNodeType(elementClass)) { //Assoziationsklassen stehn auch in ALL_NODES -> rausfiltern
+            if (CoreMetaModel.isNodeType(elementClass)) { //Assoziationsklassen stehn auch in ALL_NODES -> rausfiltern
                 if (metaModel.isPaintable(elementClass)) { //Knoten muss natürlich zeichenbar sein
                     if (!metaModel.isSlaveType(elementClass)) { // Knoten darf kein untergeordnetes Element sein
                         if (layerIndex == metaModel.layerFor(elementClass)) { //layer muss stimmen

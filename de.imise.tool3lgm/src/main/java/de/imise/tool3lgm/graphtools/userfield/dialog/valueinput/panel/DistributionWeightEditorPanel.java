@@ -36,20 +36,24 @@ import de.imise.util.swing.component.AlphabeticalComboBox;
 /**
  * Panel zur Darstellung und Eingabe von Verteilungsgewichten für Kanten.
  * <p>
- * Die Dateneingabe erfolgt für jede Klasse von Kantenelementen und jedes für sie definierte Verteilungsgewicht separat - die Auswahl der Klasse
- * erfolgt in der enthaltenen <code>edgeBox</code>, die Auswahl des Verteilungsgewichtes in der <code>weightBox</code>.
+ * Die Dateneingabe erfolgt für jede Klasse von Kantenelementen und jedes für
+ * sie definierte Verteilungsgewicht separat - die Auswahl der Klasse erfolgt in
+ * der enthaltenen <code>edgeBox</code>, die Auswahl des Verteilungsgewichtes in
+ * der <code>weightBox</code>.
  *
  * @author fstephan
  */
 public class DistributionWeightEditorPanel extends AbstractElementTypeUserFieldEditorPanel {
 
     /**
-     * Auswahlbox für die Verteilungsgewichte des in <code>edgeBox</code> ausgewählten Kantentyps
+     * Auswahlbox für die Verteilungsgewichte des in <code>edgeBox</code>
+     * ausgewählten Kantentyps
      */
     private final AlphabeticalComboBox<UserField> weightBox = new AlphabeticalComboBox<>();
 
     /**
-     * Auswahlbox über die man die Tabelle auf genau ein Spaltenelement einschränken kann
+     * Auswahlbox über die man die Tabelle auf genau ein Spaltenelement
+     * einschränken kann
      */
     private final AlphabeticalComboBox<Object> columnFilterBox = new AlphabeticalComboBox<>();
 
@@ -96,8 +100,10 @@ public class DistributionWeightEditorPanel extends AbstractElementTypeUserFieldE
     }
 
     /**
-     * Methode setzt die auszuführende Action, bei Änderung der Auswahl in der <code>edgeBox</code>. Werte im Table werden temporär übernommen und die
-     * zur gewählten Kantenart gehörigen Verteilungsgewichte in die <code>weightBox</code> eingefügt.
+     * Methode setzt die auszuführende Action, bei Änderung der Auswahl in der
+     * <code>edgeBox</code>. Werte im Table werden temporär übernommen und die
+     * zur gewählten Kantenart gehörigen Verteilungsgewichte in die
+     * <code>weightBox</code> eingefügt.
      */
     @Override
     protected void setActionsForElementTypeBox() {
@@ -105,7 +111,8 @@ public class DistributionWeightEditorPanel extends AbstractElementTypeUserFieldE
         final DistributionWeightEditorPanel finalPanel = this;
 
         /*
-         * Bei Änderung der Auswahl in edgeBox, werden in der weightBox die verfügbaren Verteilungsgewichte angezeigt
+         * Bei Änderung der Auswahl in edgeBox, werden in der weightBox die
+         * verfügbaren Verteilungsgewichte angezeigt
          */
         AbstractAction action = new AbstractAction() {
 
@@ -140,8 +147,10 @@ public class DistributionWeightEditorPanel extends AbstractElementTypeUserFieldE
     }
 
     /**
-     * Methode setzt die auszuführende Aktion, bei Änderung der Auswahl in <code>weightBox</code>. Werte im Table werden temporär übernommen und die
-     * zum gewählten Verteilungsgewicht gehörigen Daten in einem neuen Table dargestellt.
+     * Methode setzt die auszuführende Aktion, bei Änderung der Auswahl in
+     * <code>weightBox</code>. Werte im Table werden temporär übernommen und die
+     * zum gewählten Verteilungsgewicht gehörigen Daten in einem neuen Table
+     * dargestellt.
      */
     private void setActionsForWeightBox() {
         final DistributionWeightEditorPanel finalPanel = this;
@@ -171,8 +180,9 @@ public class DistributionWeightEditorPanel extends AbstractElementTypeUserFieldE
     }
 
     /**
-     * Setzt den Inhalt der <code>weigthBox</code>. Die für den in der <code>edgeBox</code> gewählten Kantentyp definierten Verteilungsgewichte werden
-     * der <code>weigthBox</code> hinzugefügt.
+     * Setzt den Inhalt der <code>weigthBox</code>. Die für den in der
+     * <code>edgeBox</code> gewählten Kantentyp definierten Verteilungsgewichte
+     * werden der <code>weigthBox</code> hinzugefügt.
      */
     private void setWeightBoxContent() {
 

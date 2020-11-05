@@ -8,8 +8,9 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
 
 /**
- * Grundeklasse zur Definition eines ganz einfachen 3LGM-Metamodells, das für den Import aus externen Datenquellen genutzt werden kann. Es definiert
- * nur eine Menge von Knoten und eine Menge von Kanten.
+ * Grundeklasse zur Definition eines ganz einfachen 3LGM-Metamodells, das für
+ * den Import aus externen Datenquellen genutzt werden kann. Es definiert nur
+ * eine Menge von Knoten und eine Menge von Kanten.
  *
  * @author AXS (9 Jun 2019)
  */

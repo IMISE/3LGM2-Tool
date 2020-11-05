@@ -1,7 +1,8 @@
 package de.imise.tool3lgm.graphtools.metamodel.elements;
 
 /**
- * Diese Klasse ist für alle Kantenklasse die Oberklasse, bei denen Verbindungseigenschaften von einem der verbundenen Elemente auf das andere
+ * Diese Klasse ist für alle Kantenklasse die Oberklasse, bei denen
+ * Verbindungseigenschaften von einem der verbundenen Elemente auf das andere
  * übertragen werden sollen.
  *
  * @author AXS (29 Dec 2018)
@@ -10,11 +11,13 @@ public abstract class PropertyTransferEdge extends SubordinationEdge {
 
     public enum PropertyTransferType {
         /**
-         * Verbindungseigenschaften werden vom Startelement auf das Endelement übertragen
+         * Verbindungseigenschaften werden vom Startelement auf das Endelement
+         * übertragen
          */
         PROPERTY_TRANSFER_START_TO_END,
         /**
-         * Verbindungseigenschaften werden vom Endelement auf das Startelement übertragen
+         * Verbindungseigenschaften werden vom Endelement auf das Startelement
+         * übertragen
          */
         PROPERTY_TRANSFER_END_TO_START,
         /**
@@ -29,7 +32,8 @@ public abstract class PropertyTransferEdge extends SubordinationEdge {
     private PropertyTransferType propertyTransferType;
 
     /**
-     * Wenn <code>true</code>, dann kann der {@link #propertyTransferType} nicht geändert werden.
+     * Wenn <code>true</code>, dann kann der {@link #propertyTransferType} nicht
+     * geändert werden.
      */
     protected final boolean fixedPropertyTransferType;
 
@@ -101,7 +105,8 @@ public abstract class PropertyTransferEdge extends SubordinationEdge {
     }
 
     /**
-     * Liefert <code>true</code>, wenn diese Kante die Eigenschaften des anderen verbundenen Elementes auf das übergebene ModelElement überträgt.
+     * Liefert <code>true</code>, wenn diese Kante die Eigenschaften des anderen
+     * verbundenen Elementes auf das übergebene ModelElement überträgt.
      *
      * @param me
      * @return
@@ -117,7 +122,8 @@ public abstract class PropertyTransferEdge extends SubordinationEdge {
     }
 
     /**
-     * Liefert <code>true</code>, wenn die übergebene Kante die Eigenschaften des anderen verbundenen Elementes auf das übergebene ModelElement
+     * Liefert <code>true</code>, wenn die übergebene Kante die Eigenschaften
+     * des anderen verbundenen Elementes auf das übergebene ModelElement
      * überträgt.
      *
      * @param edge

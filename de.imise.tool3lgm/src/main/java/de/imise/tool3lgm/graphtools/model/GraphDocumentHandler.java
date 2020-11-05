@@ -11,6 +11,7 @@ import java.util.Collection;
 import java.util.List;
 
 import de.imise.tool3lgm.Tool3lgmModelType.ModelCategory;
+import de.imise.tool3lgm.graphtools.metamodel.CoreMetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Bendpoint;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
@@ -27,15 +28,15 @@ public class GraphDocumentHandler {
      * Gibt alle Modellelemente (Node oder Kanten) zurück.<br/>
      *
      * @param clazz Klasse der gesuchten Elementart (Node oder Kanten)
-     * @param includeSubClasses
-     *            boolean with true if Vererbung beruecksichtigen; Frage nach allen Anwendungsbausteinen gibt
-     *            auch RechAnwendungsbausteine und KonAnwendungsbausteine zurück usw.
-     * @param absolutePartsOnly
-     *            wenn <code>true</code> werden keine Elemente zurückgegeben, denen über eine Part-Of-Beziehung
-     *            Teilelemente zugewiesen sind. Die Teil-Von-Eigenschaft wird nicht für dieses Teilmodell sondern
-     *            für das Gesamtmodell geprüft.
-     * @param alphabetical
-     *            wenn <code>true</code> wird eine alphabetisch sortierte Liste zurückgegeben
+     * @param includeSubClasses boolean with true if Vererbung beruecksichtigen;
+     *            Frage nach allen Anwendungsbausteinen gibt auch
+     *            RechAnwendungsbausteine und KonAnwendungsbausteine zurück usw.
+     * @param absolutePartsOnly wenn <code>true</code> werden keine Elemente
+     *            zurückgegeben, denen über eine Part-Of-Beziehung Teilelemente
+     *            zugewiesen sind. Die Teil-Von-Eigenschaft wird nicht für
+     *            dieses Teilmodell sondern für das Gesamtmodell geprüft.
+     * @param alphabetical wenn <code>true</code> wird eine alphabetisch
+     *            sortierte Liste zurückgegeben
      * @return List mit allen gefundenen Elementen
      */
     public static final List<ModelElement> getModelItems(final GraphDocument doc, final Class<? extends ModelElement> clazz, final boolean includeSubClasses, final boolean absolutePartsOnly, final boolean alphabetical) {
@@ -55,7 +56,7 @@ public class GraphDocumentHandler {
         List<Class<? extends ModelElement>> searchClassesUnique = new ArrayList<>();
         List<Class<? extends ModelElement>> searchClassesNotUnique = new ArrayList<>();
         for (Class<? extends ModelElement> elementClass : metaModel.allElementsSet) {
-            if (MetaModel.isAbstract(elementClass)) {
+            if (CoreMetaModel.isAbstract(elementClass)) {
                 continue;
             }
             if (clazz.isAssignableFrom(elementClass)) {
@@ -96,8 +97,9 @@ public class GraphDocumentHandler {
     }
 
     /**
-     * Liefert alle Elemente aller übergebenen Klasse, die im übergebenen Graphdocument vorkommen. Diese Funktion sucht immer nur im genau übergebenen
-     * GraphDocument
+     * Liefert alle Elemente aller übergebenen Klasse, die im übergebenen
+     * Graphdocument vorkommen. Diese Funktion sucht immer nur im genau
+     * übergebenen GraphDocument
      *
      * @param doc
      * @param searchClasses
@@ -118,10 +120,10 @@ public class GraphDocumentHandler {
             if (Bendpoint.class == searchClass) {
                 searchBendpoints = true;
             }
-            if (!searchNodes && MetaModel.isNodeType(searchClass)) {
+            if (!searchNodes && CoreMetaModel.isNodeType(searchClass)) {
                 searchNodes = true;
             }
-            if (!searchEdges && MetaModel.isEdgeType(searchClass)) {
+            if (!searchEdges && CoreMetaModel.isEdgeType(searchClass)) {
                 searchEdges = true;
             }
             if (searchBendpoints && searchEdges && searchNodes) {

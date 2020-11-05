@@ -1,5 +1,6 @@
 package de.imise.tool3lgm.userproperties;
 
+import java.awt.Frame;
 import java.beans.PropertyChangeEvent;
 import java.io.File;
 import java.io.FileInputStream;
@@ -14,7 +15,6 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 
-import javax.swing.JFrame;
 import javax.swing.filechooser.FileSystemView;
 
 import org.apache.commons.collections4.map.Flat3Map;
@@ -28,12 +28,14 @@ import de.imise.util.io.FileHandler;
 import de.imise.util.swing.event.ActionSource;
 
 /**
- * @author AXS
- *         created on 16.08.2007
+ * @author AXS created on 16.08.2007
  */
 public class UserProperties extends AbstractUserProperties {
 
-    /** Pfad zur Default-Datei in den Ressourcen mit den Optionen für einen Benutzer */
+    /**
+     * Pfad zur Default-Datei in den Ressourcen mit den Optionen für einen
+     * Benutzer
+     */
     private static final URL DEFAULT_USER_INFO_FILE = ClassLoader.getSystemResource("DefaultUserProperties");
 
     /** Pfad zur Datei mit den Optionen eines Benutzers */
@@ -41,8 +43,9 @@ public class UserProperties extends AbstractUserProperties {
 
     /**
      * Liest die Benutzeroptionen ein.<br>
-     * Je nachdem, ob bereits eine Datei mit Optionen im Home-Pfad des Benutzers existiert, wird diese geladen,
-     * ansonsten werden die Standardeinstellungen aus den Ressourcen geladen.
+     * Je nachdem, ob bereits eine Datei mit Optionen im Home-Pfad des Benutzers
+     * existiert, wird diese geladen, ansonsten werden die Standardeinstellungen
+     * aus den Ressourcen geladen.
      */
     public static final void init() {
         initDefaults();
@@ -125,14 +128,15 @@ public class UserProperties extends AbstractUserProperties {
     }
 
     /**
-     * Map, die für StringProperties, die eine Liste bilden, angibt, wie viele Elemente in der Liste enthalten sind.
+     * Map, die für StringProperties, die eine Liste bilden, angibt, wie viele
+     * Elemente in der Liste enthalten sind.
      */
     //Da es im Moment nur 2 Listenschlüssel gibt, die eine Lsite bilden, kann man hier eine Flat3Map nehmen (siehe StringProperty.getMaxListSize())
     private static final Map<StringProperty, Integer> listKeyToListSize = new Flat3Map<>();
 
     /**
-     * Fügt den ListValue in die bestehende Liste ganz am Anfang ein. Wenn der Wert schon in der Liste vorkommt,
-     * wird er an den Anfang verschoben.
+     * Fügt den ListValue in die bestehende Liste ganz am Anfang ein. Wenn der
+     * Wert schon in der Liste vorkommt, wird er an den Anfang verschoben.
      *
      * @param property
      * @param value
@@ -171,7 +175,8 @@ public class UserProperties extends AbstractUserProperties {
     }
 
     /**
-     * Fügt für eine StringProperty, die eine Liste bildet, einen Liste von Werten hinzu
+     * Fügt für eine StringProperty, die eine Liste bildet, einen Liste von
+     * Werten hinzu
      *
      * @param property
      * @param values
@@ -184,7 +189,8 @@ public class UserProperties extends AbstractUserProperties {
     }
 
     /**
-     * Entfernt eine StringProperty aus den Properties und löscht eventuell vorhandene Listenwerte
+     * Entfernt eine StringProperty aus den Properties und löscht eventuell
+     * vorhandene Listenwerte
      *
      * @param property
      */
@@ -203,7 +209,8 @@ public class UserProperties extends AbstractUserProperties {
     }
 
     /**
-     * Liefert für eine StringProperty, die eine Liste bildet, die Liste aller Werte-Strings dieser Property.
+     * Liefert für eine StringProperty, die eine Liste bildet, die Liste aller
+     * Werte-Strings dieser Property.
      *
      * @param property
      * @return Liste aller Werte-Strings der Property
@@ -220,8 +227,8 @@ public class UserProperties extends AbstractUserProperties {
     }
 
     /**
-     * Liest die benutzerspezifischen Informationen aus dem Benutzer-Home-Verzeichnis
-     * oder die Defaultdatei aus den Ressourcen.
+     * Liest die benutzerspezifischen Informationen aus dem
+     * Benutzer-Home-Verzeichnis oder die Defaultdatei aus den Ressourcen.
      */
     private static void readUserInfo() {
         File userInfoFile = USER_INFO_FILE;
@@ -232,8 +239,8 @@ public class UserProperties extends AbstractUserProperties {
             isDefault = true;
         }
 
-        try {
-            properties.load(new FileInputStream(userInfoFile));
+        try (FileInputStream fileInputStream = new FileInputStream(userInfoFile)) {
+            properties.load(fileInputStream);
         } catch (Exception exp) {
             //wenn die Datei nicht gelesen werden konnte und es sich nicht um die Standardeinstellungsdatei
             //handelt (dann hat irgendwer was in die Porperties-Datei des Benutzers geschrieben, was da nicht
@@ -308,29 +315,55 @@ public class UserProperties extends AbstractUserProperties {
     public static enum BooleanProperty implements ActionSource {
         /** Kennzeichne ModelElemente mit verknüpftem Teilmodell */
         OPTION_SHOW_LINKED_WITH_SUBMODEL_SYMBOLS,
-        /** Elemente erben Eigenschaften ihrer Teile (diese Option ist nur in Ausnahmefällen sinnvoll) */
+        /**
+         * Elemente erben Eigenschaften ihrer Teile (diese Option ist nur in
+         * Ausnahmefällen sinnvoll)
+         */
         OPTION_ELEMENTS_RECEIVE_PROPERTIES_FROM_PARTS,
         /** Elemente erben Eigenschaften ihrer Oberelemente */
         OPTION_ELEMENTS_RECEIVE_PROPERTIES_FROM_PARENTS,
-        /** Unterelemente werden in der Grafik mit den Oberelementen verschoben (beim Draggen) */
+        /**
+         * Unterelemente werden in der Grafik mit den Oberelementen verschoben
+         * (beim Draggen)
+         */
         OPTION_GRAPH_MOVE_SUBELEMENTS,
-        /** Der Modelbrowser eines Teilmodells zeigt nur die Elemente im Teilmodell an und nicht immer alle Elemente des Gesamtmodells */
+        /**
+         * Der Modelbrowser eines Teilmodells zeigt nur die Elemente im
+         * Teilmodell an und nicht immer alle Elemente des Gesamtmodells
+         */
         OPTION_ENABLE_SUBMODEL_BROWSER,
-        /** Jedes geöffnete Modell hat einen eigenen ModelBrowser, die alle nebeneinander angeordnet werden */
+        /**
+         * Jedes geöffnete Modell hat einen eigenen ModelBrowser, die alle
+         * nebeneinander angeordnet werden
+         */
         OPTION_SHOW_MODELS_IN_SEPARATE_BROWSER,
-        /** Über CompositionEdges verbundene Elemente im ModellBrowser unterordnen */
+        /**
+         * Über CompositionEdges verbundene Elemente im ModellBrowser
+         * unterordnen
+         */
         OPTION_SUBORDINATE_COMPOSITION_ELEMENTS_IN_MODEL_BROWSER,
         /** Zeige Benutzerdefnierte Eigenschaften im ModellBrowser */
         OPTION_SHOW_USER_DEFINED_PROPERTIES_IN_MODEL_BROWSER,
-        /** Show also the template elements in model browser (and not only in the template browser) */
+        /**
+         * Show also the template elements in model browser (and not only in the
+         * template browser)
+         */
         OPTION_SHOW_TEMPLATE_ELEMENTS_IN_MODEL_BROWSER,
-        /** Hänge alle Teilelemente in Bäumen unter ihre Oberelemente (true) oder ordne alle Elemente in einer flachen Liste an (false) */
+        /**
+         * Hänge alle Teilelemente in Bäumen unter ihre Oberelemente (true) oder
+         * ordne alle Elemente in einer flachen Liste an (false)
+         */
         OPTION_SHOW_PART_OF_HIERARCHY,
-        /** Kanten werden nur für selektierte Elemente in der Grafik gemalt (true) oder alle Kanten werde gezeichnet (false) */
+        /**
+         * Kanten werden nur für selektierte Elemente in der Grafik gemalt
+         * (true) oder alle Kanten werde gezeichnet (false)
+         */
         OPTION_PAINT_EDGES_ONLY_FOR_SELECTED_ELEMENTS,
         /**
-         * Wenn man den UserProperties Farben gibt, werden sie im Baum Farbig geschrieben. Das ist aktuell nicht komplett implementiert.D.h. hierfür
-         * gibt es keine ins Menü eingebundene Umschalt-Action und der Wert ist immer true
+         * Wenn man den UserProperties Farben gibt, werden sie im Baum Farbig
+         * geschrieben. Das ist aktuell nicht komplett implementiert.D.h.
+         * hierfür gibt es keine ins Menü eingebundene Umschalt-Action und der
+         * Wert ist immer true
          */
         OPTION_USE_PROPERTY_COLORS,
         /** Raster in der Grafik an/aus */
@@ -339,7 +372,10 @@ public class UserProperties extends AbstractUserProperties {
         OPTION_SHOW_RASTER,
         /** Konfigurationen bunt oder alle schwarz */
         OPTION_ASSIGN_CONFIGURATION_COLORS,
-        /** Analyseergebnisse werden automatisch in einem neuen Teilmodell eingefügt (true) oder nur in der Grafik hervorgehoben */
+        /**
+         * Analyseergebnisse werden automatisch in einem neuen Teilmodell
+         * eingefügt (true) oder nur in der Grafik hervorgehoben
+         */
         OPTION_CREATE_NEW_SUBMODEL_FOR_ANALYSIS_RESULT,
         /** Kennzahlberechnung an/aus */
         OPTION_ENABLE_CLASSIFICATION_NUMBER_CALCULATION,
@@ -347,7 +383,9 @@ public class UserProperties extends AbstractUserProperties {
         OPTION_MARK_INCONSISTENT_ELEMENTS,
         /** Show consistency table */
         OPTION_SHOW_CONSISTENCY_TABLE,
-        /** Ask user to show the consistency table if the model contains errors */
+        /**
+         * Ask user to show the consistency table if the model contains errors
+         */
         TRANSIENT_OPTION_ASK_SHOW_CONSISTENCY_TABLE,
         /** Warnung vor dem Löschen von Elementen aus dem Gesamtmodell */
         OPTION_SHOW_REMOVE_WARNING,
@@ -360,34 +398,51 @@ public class UserProperties extends AbstractUserProperties {
         OPTION_SHOW_MODEL_BROWSER,
         /** TemplateBrowser an/aus */
         OPTION_SHOW_TEMPLATE_BROWSER,
-        /** Ask user to show the the template browser if new model is opened and templates exist for this model type */
+        /**
+         * Ask user to show the the template browser if new model is opened and
+         * templates exist for this model type
+         */
         TRANSIENT_OPTION_ASK_SHOW_TEMPLATE_BROWSER,
         /** TemplateBrowser an/aus */
         OPTION_SHOW_VIEW_COMPONENT_TITLES,
-        /** Beim Start den Abfragedialog anzeigen, mit dem man das Metamodell wählen kann an/aus */
+        /**
+         * Beim Start den Abfragedialog anzeigen, mit dem man das Metamodell
+         * wählen kann an/aus
+         */
         OPTION_SHOW_CHOOSE_METAMODEL_DIALOG,
-        /** search the element names in the search dialog case sensitive on/off */
+        /**
+         * search the element names in the search dialog case sensitive on/off
+         */
         OPTION_SEARCH_DIALOG_CASE_SENSITIVE_NAME,
-        /** search the element descriptions in the search dialog case sensitive on/off */
+        /**
+         * search the element descriptions in the search dialog case sensitive
+         * on/off
+         */
         OPTION_SEARCH_DIALOG_CASE_SENSITIVE_DESCRIPTION,
-        /** search the element userfields in the search dialog case sensitive on/off */
+        /**
+         * search the element userfields in the search dialog case sensitive
+         * on/off
+         */
         OPTION_SEARCH_DIALOG_CASE_SENSITIVE_USERFIELDS,
 
         /**
-         * Schaltet einige Editieroptionen frei, die im normalen Modus verborgen sind. Das ist z.B. dafür gedacht, dass man in diesem Modus IheActors
+         * Schaltet einige Editieroptionen frei, die im normalen Modus verborgen
+         * sind. Das ist z.B. dafür gedacht, dass man in diesem Modus IheActors
          * ändern kann, was ein normaler Benutzer nicht können soll.
          */
         OPTION_ENABLE_EXPERT_MODE,
 
         /**
          * Zusammengeklappte Elemente werden speziell gezeichnet.<br>
-         * Diese Option wird absichtlich <b>nicht </b> gespeichert und ist zu Beginn immer eingeschaltet.
+         * Diese Option wird absichtlich <b>nicht </b> gespeichert und ist zu
+         * Beginn immer eingeschaltet.
          */
         TRANSIENT_OPTION_SHOW_EXPANSION_SIGN,
 
         /**
-         * Interne Option die das zusätzliche Zeichenen der Rechtecke um die selektierten Elemente in der
-         * Grafik ein- oder ausschalten kann. Nur für Debug-Zwecke.
+         * Interne Option die das zusätzliche Zeichenen der Rechtecke um die
+         * selektierten Elemente in der Grafik ein- oder ausschalten kann. Nur
+         * für Debug-Zwecke.
          */
         TRANSIENT_OPTION_DEBUG_GRAPH;
 
@@ -436,14 +491,16 @@ public class UserProperties extends AbstractUserProperties {
         }
 
         /**
-         * @return the boolean value, this option is set to <code>true</code> in the UserProperties
+         * @return the boolean value, this option is set to <code>true</code> in
+         *         the UserProperties
          */
         public boolean is() {
             return UserProperties.is(this);
         }
 
         /**
-         * @return the boolean value, this option is set to <code>false</code> in the UserProperties
+         * @return the boolean value, this option is set to <code>false</code>
+         *         in the UserProperties
          */
         public boolean isNot() {
             return !is();
@@ -451,10 +508,11 @@ public class UserProperties extends AbstractUserProperties {
 
         /**
          * @param event
-         * @return <code>true</code> if the event is a change event for this property
+         * @return <code>true</code> if the event is a change event for this
+         *         property
          */
         public boolean isChanged(final PropertyChangeEvent event) {
-            return UserProperties.isPropertyChange(this, event);
+            return AbstractUserProperties.isPropertyChange(this, event);
         }
 
     }
@@ -473,7 +531,7 @@ public class UserProperties extends AbstractUserProperties {
         PROPERTY_INT_MAINFRAME_EXTENDED_STATE {
             @Override
             public int getDefault() {
-                return JFrame.NORMAL;
+                return Frame.NORMAL;
             }
         },
 
@@ -489,15 +547,10 @@ public class UserProperties extends AbstractUserProperties {
         },
 
         /**
-         * Bitpattern for Rendering-Hints (standard value: all bits are set to zero
-         * bit0: ANTIALIASING
-         * bit1: ALPHA_INTERPOLATION
-         * bit2: COLOR_RENDERING
-         * bit3: RENDERING
-         * bit4: DITHERING
-         * bit5: FRACTIONALMETRICS
-         * bit6: INTERPOLATION
-         * bit7: TEXT_ANTIALIASING
+         * Bitpattern for Rendering-Hints (standard value: all bits are set to
+         * zero bit0: ANTIALIASING bit1: ALPHA_INTERPOLATION bit2:
+         * COLOR_RENDERING bit3: RENDERING bit4: DITHERING bit5:
+         * FRACTIONALMETRICS bit6: INTERPOLATION bit7: TEXT_ANTIALIASING
          */
         PROPERTY_INT_RENDER_SETTINGS {
             @Override
@@ -562,7 +615,8 @@ public class UserProperties extends AbstractUserProperties {
             }
         };
         /**
-         * Wenn die Property eine Liste sein soll, dann muss sie eine ListSize > 1 haben.
+         * Wenn die Property eine Liste sein soll, dann muss sie eine ListSize >
+         * 1 haben.
          *
          * @return Größe der Liste dieser Property
          */
@@ -599,7 +653,8 @@ public class UserProperties extends AbstractUserProperties {
     private static Locale locale = setLocale(Locale.getDefault().getLanguage());
 
     /**
-     * Liefert die eingestellte Locale. Hat der Benutzer sie nicht geändert, entspricht sie der des Systems.
+     * Liefert die eingestellte Locale. Hat der Benutzer sie nicht geändert,
+     * entspricht sie der des Systems.
      */
     public static final Locale getLocale() {
         return locale;
@@ -607,12 +662,13 @@ public class UserProperties extends AbstractUserProperties {
 
     /**
      * Setzt die Locale, mit der alle Ressourcen geladen werden.<br>
-     * Existieren für die Sprache dieser Locale keine Ressourcen, werden die englischen
-     * Standardressorucen geladen.<br>
-     * Das Umstellen der Locale hat nur Auswirkungen auf das sortieren der Elemente (siehe <code>Alphabetical.class</code>) und bei der Anzeige von
-     * Dialogen aus dem util-Package.
-     * Da das <code>ResourceBundle</code> für die vorher selektierte Sprache nicht neu geladen wird
-     * und das Hauptfenster nicht zur Laufzeit neu initialisiert werden kann, wird das Umstellen der
+     * Existieren für die Sprache dieser Locale keine Ressourcen, werden die
+     * englischen Standardressorucen geladen.<br>
+     * Das Umstellen der Locale hat nur Auswirkungen auf das sortieren der
+     * Elemente (siehe <code>Alphabetical.class</code>) und bei der Anzeige von
+     * Dialogen aus dem util-Package. Da das <code>ResourceBundle</code> für die
+     * vorher selektierte Sprache nicht neu geladen wird und das Hauptfenster
+     * nicht zur Laufzeit neu initialisiert werden kann, wird das Umstellen der
      * locale dort erst nach einem Neustart sichtbar.
      *
      * @param laguage
@@ -650,7 +706,10 @@ public class UserProperties extends AbstractUserProperties {
         }
     };
 
-    /** @return Kopie der Liste aller Verzeichnisse, in denen nach XSLT-Scripten gesucht wird */
+    /**
+     * @return Kopie der Liste aller Verzeichnisse, in denen nach XSLT-Scripten
+     *         gesucht wird
+     */
     public static List<File> getXSLSearchDirs() {
         return new ArrayList<>(xslSearchDirs);
     }

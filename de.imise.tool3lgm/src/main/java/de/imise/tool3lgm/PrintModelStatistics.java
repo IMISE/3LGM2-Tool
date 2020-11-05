@@ -20,8 +20,8 @@ import de.imise.util.collections.CollectionUtils;
 public class PrintModelStatistics {
 
     /**
-     * @param gdc
-     *            {@link GDCollection} to print or <code>null</code> if all {@link GDCollection}s should be printed
+     * @param gdc {@link GDCollection} to print or <code>null</code> if all
+     *            {@link GDCollection}s should be printed
      */
     public static final void printStatistic(final List<GDCollection> collections, final boolean useElements) {
         for (GDCollection gdcoll : collections) {

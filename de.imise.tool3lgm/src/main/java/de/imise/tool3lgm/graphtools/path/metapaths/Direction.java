@@ -3,8 +3,10 @@ package de.imise.tool3lgm.graphtools.path.metapaths;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 
 /**
- * Dieses Konsturkt dient einzig un allein dazu, Pfade über eine Liste aus <code>Class<? extends ModelElement></code> zu erzeugen und bei Bedarf für
- * Kanten Richtungen mit anzugeben, wenn sie sich nicht eindeutig ableiten lässt.
+ * Dieses Konsturkt dient einzig un allein dazu, Pfade über eine Liste aus
+ * <code>Class<? extends ModelElement></code> zu erzeugen und bei Bedarf für
+ * Kanten Richtungen mit anzugeben, wenn sie sich nicht eindeutig ableiten
+ * lässt.
  *
  * @author AXS (5 Dec 2018)
  */

@@ -13,12 +13,14 @@ import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 public class ElementsLayoutDefinition {
 
     /**
-     * Mappt von der Elementklasse auf das zugehörige Standard-<code>GraphElementLayout</code>
+     * Mappt von der Elementklasse auf das zugehörige
+     * Standard-<code>GraphElementLayout</code>
      */
     private Map<Class<? extends ModelElement>, GraphElementLayout> elementClassToStandardLayoutMap = new HashMap<>();
 
     /**
-     * Standardelementlayout. Initial entspricht es dem Standardlayout aus <code>GraphElementLayout</code>
+     * Standardelementlayout. Initial entspricht es dem Standardlayout aus
+     * <code>GraphElementLayout</code>
      */
     private GraphElementLayout standardElementLayout = (GraphElementLayout) GraphElementLayout.STANDARD_ELEMENT_LAYOUT.clone();
 
@@ -32,8 +34,8 @@ public class ElementsLayoutDefinition {
     }
 
     /**
-     * Setzt für diese Map alle Werte der übergebenen. Alle <code>GraphElementLayout</code>s der übergebenen
-     * Map werden geclont.
+     * Setzt für diese Map alle Werte der übergebenen. Alle
+     * <code>GraphElementLayout</code>s der übergebenen Map werden geclont.
      *
      * @param layout2Clone
      */
@@ -47,7 +49,8 @@ public class ElementsLayoutDefinition {
     }
 
     /**
-     * Liefert einen Iterable über alle Elementklassen, für die ein Standardlayout festgelegt wurde
+     * Liefert einen Iterable über alle Elementklassen, für die ein
+     * Standardlayout festgelegt wurde
      *
      * @return
      */
@@ -56,7 +59,8 @@ public class ElementsLayoutDefinition {
     }
 
     /**
-     * Gibt das allgemeine Standardlayout für alle Elementklassen zurück, die kein eigenes Layout besitzen.
+     * Gibt das allgemeine Standardlayout für alle Elementklassen zurück, die
+     * kein eigenes Layout besitzen.
      *
      * @return Returns the standardElementLayout.
      */
@@ -65,13 +69,16 @@ public class ElementsLayoutDefinition {
     }
 
     /**
-     * Gibt das Standardlayout für ModellElemente der übergebenen Art zurcük.<br>
+     * Gibt das Standardlayout für ModellElemente der übergebenen Art
+     * zurcük.<br>
      * Existiert in der Map mit den Layouts für alle Elemente kein eigener
      * Eintrag für diese Elementart, wird das StandardLayout zurück gegeben.<br>
      * Will man das Layout für eine spezielle Elementart setzen, muss man das
-     * Layout übder die Funktion <code>getElementClassSpecificLayout(Class)</code> holen.
+     * Layout übder die Funktion
+     * <code>getElementClassSpecificLayout(Class)</code> holen.
      *
-     * @param ec Container, für dessen Element das StandardLayout ermittelt werden soll
+     * @param ec Container, für dessen Element das StandardLayout ermittelt
+     *            werden soll
      * @see #getElementClassSpecificLayout(Class)
      * @return StandardLayout für Elemente der übergebenen Art
      */
@@ -80,7 +87,8 @@ public class ElementsLayoutDefinition {
     }
 
     /**
-     * @param elementClass Elementklasse, für das das StandardLayout ermitelt werden soll
+     * @param elementClass Elementklasse, für das das StandardLayout ermitelt
+     *            werden soll
      * @return StandardLayout für Elemente der übergebenen Art
      */
     public GraphElementLayout getStandardElementLayout(final Class<? extends ModelElement> elementClass) {
@@ -92,11 +100,13 @@ public class ElementsLayoutDefinition {
     }
 
     /**
-     * Gibt für die übergebene Elementklasse das eigene Standardlayout zurück. Sollte in der Map mit allen
-     * Layouts bisher kein eigenes für diese Elementart vorhanden sein, wird das Standardlayout geclont, in die
-     * Map eingetragen und zurückgegeben.<br>
-     * Über diese Funktion sollte das Layout einer Elementart immer ermittelt werden, wenn man einen Wert setzen
-     * möchte. Bei reinen Abfragen kann man das immer über <code>getStandardGraphElementLayout(Class)</code> tun.
+     * Gibt für die übergebene Elementklasse das eigene Standardlayout zurück.
+     * Sollte in der Map mit allen Layouts bisher kein eigenes für diese
+     * Elementart vorhanden sein, wird das Standardlayout geclont, in die Map
+     * eingetragen und zurückgegeben.<br>
+     * Über diese Funktion sollte das Layout einer Elementart immer ermittelt
+     * werden, wenn man einen Wert setzen möchte. Bei reinen Abfragen kann man
+     * das immer über <code>getStandardGraphElementLayout(Class)</code> tun.
      *
      * @param elementClass
      * @see #getStandardGraphElementLayout(Class)

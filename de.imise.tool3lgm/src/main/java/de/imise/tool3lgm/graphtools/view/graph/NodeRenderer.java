@@ -18,6 +18,7 @@ import java.awt.Stroke;
 
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
+import javax.swing.SwingConstants;
 
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
@@ -31,24 +32,28 @@ import de.imise.util.swing.component.HtmlLabelFunctions;
 import de.imise.util.swing.component.HtmlLabelFunctions.HtmlLabelDimension;
 
 /**
- * Die Klasse zeichnet grafische Elemente Funktionen bereit, um für Punkte zu entscheiden, ob er sich
- * am Rand eines grafischen Elementes befindet und wenn ja, an welcher Position.<br>
+ * Die Klasse zeichnet grafische Elemente Funktionen bereit, um für Punkte zu
+ * entscheiden, ob er sich am Rand eines grafischen Elementes befindet und wenn
+ * ja, an welcher Position.<br>
  */
 public final class NodeRenderer {
 
     /**
-     * Breite der Boxen, die auf die Ecken und die Mitte der Seitenlinien von selektierten
-     * Elementen gezeichnet werden, über die man die Größe des Elementes per Draggen auf dieser
-     * Box verändern kann. Diese Zahl sollte immer ungrade sein!
-     * Die anderen Variablen darunter ergeben sich aus dieser Breite und bestimmen, wo sich der
-     * Pfeil in der Box befindet und wie dick er dargestellt wird.
+     * Breite der Boxen, die auf die Ecken und die Mitte der Seitenlinien von
+     * selektierten Elementen gezeichnet werden, über die man die Größe des
+     * Elementes per Draggen auf dieser Box verändern kann. Diese Zahl sollte
+     * immer ungrade sein! Die anderen Variablen darunter ergeben sich aus
+     * dieser Breite und bestimmen, wo sich der Pfeil in der Box befindet und
+     * wie dick er dargestellt wird.
      */
     private static final int RESIZE_BOX_WIDTH = 9;
     private static final int HALF_RESIZE_BOX_WIDTH = RESIZE_BOX_WIDTH / 2;
     private static final int QUARTER_RESIZE_BOX_WIDTH = RESIZE_BOX_WIDTH / 4;
     private static final int SIXTH_PART_OF_RESIZE_BOX_WIDTH = RESIZE_BOX_WIDTH / 6;
 
-    /** Farbe mit der die Umrandungen von Analysergebnissen dargestellt werden */
+    /**
+     * Farbe mit der die Umrandungen von Analysergebnissen dargestellt werden
+     */
     public static Color analysisColor = null;
 
     protected static int[] xs = new int[8];
@@ -62,10 +67,11 @@ public final class NodeRenderer {
     /////////////////////////////////////////
 
     /**
-     * Sets the size of the given {@link NodeContainer} that it fits the text in the container.
-     * This happens only, if the container has an layout with the inital size (default size).
-     * The resulting width is the maximum of the default width/height and the width/height that
-     * is needed to enclose the text.
+     * Sets the size of the given {@link NodeContainer} that it fits the text in
+     * the container. This happens only, if the container has an layout with the
+     * inital size (default size). The resulting width is the maximum of the
+     * default width/height and the width/height that is needed to enclose the
+     * text.
      *
      * @param kc
      */
@@ -129,15 +135,15 @@ public final class NodeRenderer {
         int horizontalTextPostion;
         int verticalTextPostion;
         if (img != null) {
-            horizontalAlignment = JLabel.CENTER;
-            verticalAlignment = JLabel.CENTER;
+            horizontalAlignment = SwingConstants.CENTER;
+            verticalAlignment = SwingConstants.CENTER;
             horizontalTextPostion = textPositionHorizontalSwingConstant;
             verticalTextPostion = textPositionVerticalSwingConstant;
         } else {
             horizontalAlignment = textPositionHorizontalSwingConstant;
             verticalAlignment = textPositionVerticalSwingConstant;
-            horizontalTextPostion = JLabel.CENTER;
-            verticalTextPostion = JLabel.CENTER;
+            horizontalTextPostion = SwingConstants.CENTER;
+            verticalTextPostion = SwingConstants.CENTER;
         }
         if (kc.getHorizontalAlignment() != horizontalAlignment) {
             kc.setHorizontalAlignment(horizontalAlignment);
@@ -433,9 +439,11 @@ public final class NodeRenderer {
 
     /**
      * Gibt <code>true</code> zurück, wenn die übergebenen Koordinaten innerhalb
-     * des Darstellungsbereiches des übergebenen Containers liegen, sonst <code>false</code>.
+     * des Darstellungsbereiches des übergebenen Containers liegen, sonst
+     * <code>false</code>.
      *
-     * @param ec <code>ElementContainer</code>, für den geprüft wird, ob die Koordinaten in ihm liegen
+     * @param ec <code>ElementContainer</code>, für den geprüft wird, ob die
+     *            Koordinaten in ihm liegen
      * @param xi X-Koordinate
      * @param yi Y-Koordinate
      * @return
@@ -517,7 +525,8 @@ public final class NodeRenderer {
     }
 
     /**
-     * Letzte ausgewählte ResizeBox. Hier werden die Int-Werte der korrespondierenden Cursor benutzt.
+     * Letzte ausgewählte ResizeBox. Hier werden die Int-Werte der
+     * korrespondierenden Cursor benutzt.
      */
     private static int lastResizeCursor = Cursor.DEFAULT_CURSOR;
 
@@ -529,20 +538,29 @@ public final class NodeRenderer {
     }
 
     /**
-     * Liefert den <code>int</code>-Code für Position, welche sich auf dem Container
-     * an den übergebenen Koordinaten befindet.<br>
+     * Liefert den <code>int</code>-Code für Position, welche sich auf dem
+     * Container an den übergebenen Koordinaten befindet.<br>
      * <p>
      * Rückgabewerte:
      * <ul>
-     * <li><code>Cursor.DEFAULT_CURSOR</code>: Koordinaten sind ausserhalb eines der anderen speziellen Grenzbereiche</li>
-     * <li><code>Cursor.N_RESIZE_CURSOR</code>: Koordinaten sind im oberen Grenzbereich</li>
-     * <li><code>Cursor.NE_RESIZE_CURSOR</code>: Koordinaten sind im oberen rechten Grenzbereich</li>
-     * <li><code>Cursor.E_RESIZE_CURSOR</code>: Koordinaten sind im rechten Grenzbereich</li>
-     * <li><code>Cursor.SE_RESIZE_CURSOR</code>: Koordinaten sind im unteren rechten Grenzbereich</li>
-     * <li><code>Cursor.S_RESIZE_CURSOR</code>: Koordinaten sind im unteren Grenzbereich</li>
-     * <li><code>Cursor.SW_RESIZE_CURSOR</code>: Koordinaten sind im unteren linken Grenzbereich</li>
-     * <li><code>Cursor.W_RESIZE_CURSOR</code>: Koordinaten sind im linken Grenzbereich</li>
-     * <li><code>Cursor.NW_RESIZE_CURSOR</code>: Koordinaten sind im oberen linken Grenzbereich</li>
+     * <li><code>Cursor.DEFAULT_CURSOR</code>: Koordinaten sind ausserhalb eines
+     * der anderen speziellen Grenzbereiche</li>
+     * <li><code>Cursor.N_RESIZE_CURSOR</code>: Koordinaten sind im oberen
+     * Grenzbereich</li>
+     * <li><code>Cursor.NE_RESIZE_CURSOR</code>: Koordinaten sind im oberen
+     * rechten Grenzbereich</li>
+     * <li><code>Cursor.E_RESIZE_CURSOR</code>: Koordinaten sind im rechten
+     * Grenzbereich</li>
+     * <li><code>Cursor.SE_RESIZE_CURSOR</code>: Koordinaten sind im unteren
+     * rechten Grenzbereich</li>
+     * <li><code>Cursor.S_RESIZE_CURSOR</code>: Koordinaten sind im unteren
+     * Grenzbereich</li>
+     * <li><code>Cursor.SW_RESIZE_CURSOR</code>: Koordinaten sind im unteren
+     * linken Grenzbereich</li>
+     * <li><code>Cursor.W_RESIZE_CURSOR</code>: Koordinaten sind im linken
+     * Grenzbereich</li>
+     * <li><code>Cursor.NW_RESIZE_CURSOR</code>: Koordinaten sind im oberen
+     * linken Grenzbereich</li>
      * </ul>
      * </p>
      *

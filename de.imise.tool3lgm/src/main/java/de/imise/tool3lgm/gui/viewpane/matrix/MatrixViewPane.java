@@ -39,17 +39,24 @@ public class MatrixViewPane extends ViewPane implements MouseMotionListener, Mou
     /** Panel für die Darstellung der Verbindungen */
     private final CellPanel cellPanel;
 
-    /** Panel, das angezeigt wird, solange kein korrekter MetaPfad ausgewählt ist. */
+    /**
+     * Panel, das angezeigt wird, solange kein korrekter MetaPfad ausgewählt
+     * ist.
+     */
     private final JPanel msgPanel;
 
     /** Das Model nach dem die Tabelle aufgebaut wird */
     private final TableModel tableModel;
 
-    /** Einstellungen, welche Klassen und welche Pfade in der Matrix dargestellt werden sollen */
+    /**
+     * Einstellungen, welche Klassen und welche Pfade in der Matrix dargestellt
+     * werden sollen
+     */
     private MetaPathSelection metaPathSelection;
 
     /**
-     * Zähler, der an den Titel des Fensters angehängt wird. Man kann beliebig viele Matrixfenster für dasselbe Teilmodell öffnen. Der Title soll
+     * Zähler, der an den Titel des Fensters angehängt wird. Man kann beliebig
+     * viele Matrixfenster für dasselbe Teilmodell öffnen. Der Title soll
      * unterscheidbar sein und das wird er durch diese Nummer.
      */
     private final int titleIndex;
@@ -57,8 +64,10 @@ public class MatrixViewPane extends ViewPane implements MouseMotionListener, Mou
     /**
      * @param doc
      * @param toolbarManager
-     * @param titleIndex Zähler, der an den Titel des Fensters angehängt wird. Man kann beliebig viele Matrixfenster für dasselbe Teilmodell öffnen.
-     *            Der Title soll unterscheidbar sein und das wird er durch diese Nummer.
+     * @param titleIndex Zähler, der an den Titel des Fensters angehängt wird.
+     *            Man kann beliebig viele Matrixfenster für dasselbe Teilmodell
+     *            öffnen. Der Title soll unterscheidbar sein und das wird er
+     *            durch diese Nummer.
      */
     public MatrixViewPane(final GraphDocument doc, final ViewPaneToolbarManager toolbarManager, final int titleIndex) {
         super(doc);
@@ -88,7 +97,8 @@ public class MatrixViewPane extends ViewPane implements MouseMotionListener, Mou
     }
 
     /**
-     * @return the name of this view. Default is the name of the {@link GraphDocument}
+     * @return the name of this view. Default is the name of the
+     *         {@link GraphDocument}
      */
     @Override
     public String getName() {

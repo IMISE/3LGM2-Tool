@@ -44,7 +44,8 @@ public class EdgeCardinalityChecker implements ConsistencyErrorChecker {
     }
 
     /**
-     * @return <code>true</code>, wenn diese Instanz eine {@link ConsistencyDefinition} besitzt
+     * @return <code>true</code>, wenn diese Instanz eine
+     *         {@link ConsistencyDefinition} besitzt
      */
     private boolean isValid() {
         return consistencyDefinition != null;
@@ -61,12 +62,14 @@ public class EdgeCardinalityChecker implements ConsistencyErrorChecker {
     }
 
     /**
-     * Fügt der übergebenen Error-Liste alle Kardinalitätsfehler des übergebenen Elementes hinzu.
+     * Fügt der übergebenen Error-Liste alle Kardinalitätsfehler des übergebenen
+     * Elementes hinzu.
      *
      * @param gdcoll
      * @param me
      * @param returnList
-     * @param checkOnly if <code>true</code> not all but only the first error will be added to the return list
+     * @param checkOnly if <code>true</code> not all but only the first error
+     *            will be added to the return list
      */
     private void addCardinalityErrors(final GDCollection gdcoll, final ModelElement me, final Collection<AbstractConsistencyError> returnList, final boolean checkOnly) {
         if (!isValid()) {

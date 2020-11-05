@@ -43,8 +43,8 @@ public final class GraphViewPane extends ViewPane {
     }
 
     /**
-     * @return the name of this view. Default is "Name of GDCollection" + " - " +
-     *         "Name of GraphDocument" + " (" + "Name of MetaModel" + ")";
+     * @return the name of this view. Default is "Name of GDCollection" + " - "
+     *         + "Name of GraphDocument" + " (" + "Name of MetaModel" + ")";
      */
     @Override
     public String getFullName() {
@@ -85,7 +85,8 @@ public final class GraphViewPane extends ViewPane {
     //    }
     //
     /**
-     * @return the name of this view. Default is the name of the {@link GraphDocument}
+     * @return the name of this view. Default is the name of the
+     *         {@link GraphDocument}
      */
     @Override
     public String getName() {

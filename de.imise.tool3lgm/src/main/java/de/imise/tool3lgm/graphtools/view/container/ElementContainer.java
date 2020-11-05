@@ -43,7 +43,8 @@ public abstract class ElementContainer extends JLabel implements Cloneable, Grap
     protected int highlight = 0;
 
     /**
-     * Diese Labels werden (wenn sie Text enthalten) an der jeweiligen Position beim Container dargestellt
+     * Diese Labels werden (wenn sie Text enthalten) an der jeweiligen Position
+     * beim Container dargestellt
      */
     protected SpecialInfoLabel northLabel, eastLabel, southLabel, westLabel;
 
@@ -63,8 +64,8 @@ public abstract class ElementContainer extends JLabel implements Cloneable, Grap
     protected Container containerParent;
 
     /**
-     * The current layout of the container. This variable stores the active layout.
-     * It can only be the {@link ElementContainer#expandedLayout} oder
+     * The current layout of the container. This variable stores the active
+     * layout. It can only be the {@link ElementContainer#expandedLayout} oder
      * {@link ElementContainer#nonExpandedLayout}.
      */
     protected GraphElementLayout layout = null;
@@ -80,8 +81,8 @@ public abstract class ElementContainer extends JLabel implements Cloneable, Grap
     protected GraphElementLayout nonExpandedLayout = null;
 
     /**
-     * gibt an, ob dieses Element durch das Aufklappen seines (ggf. existierenden)
-     * übergeordneten Elements sichtbar gemacht wurde
+     * gibt an, ob dieses Element durch das Aufklappen seines (ggf.
+     * existierenden) übergeordneten Elements sichtbar gemacht wurde
      */
     protected boolean expanded = true;
 
@@ -101,7 +102,8 @@ public abstract class ElementContainer extends JLabel implements Cloneable, Grap
     protected Color lastColor = null;
 
     /**
-     * HTML name of the element with the text alignment information especially for this container.
+     * HTML name of the element with the text alignment information especially
+     * for this container.
      */
     private transient String htmlName;
 
@@ -118,7 +120,8 @@ public abstract class ElementContainer extends JLabel implements Cloneable, Grap
     }
 
     /**
-     * Wenn dieser Container an andere in der Grafik zusätzliche Infos schreiben möchte, dann muss er dieses Generator instanziieren.
+     * Wenn dieser Container an andere in der Grafik zusätzliche Infos schreiben
+     * möchte, dann muss er dieses Generator instanziieren.
      */
     protected AdditionalLabelTextGenerator additionalLabelTextGenerator = null;
 
@@ -221,10 +224,12 @@ public abstract class ElementContainer extends JLabel implements Cloneable, Grap
     }
 
     /**
-     * Checks if the type of the {@link ModelElement} of this container has only one container in the whole model.
+     * Checks if the type of the {@link ModelElement} of this container has only
+     * one container in the whole model.
      *
-     * @return <code>true</code> if this element is unique (only 1 element container in the whole model and so no graphical representation for this
-     *         element) otherwise <code>false</code>
+     * @return <code>true</code> if this element is unique (only 1 element
+     *         container in the whole model and so no graphical representation
+     *         for this element) otherwise <code>false</code>
      * @see ModelElement#isUnique(Class, boolean)
      * @see MetaModel#isUnique(Class, boolean)
      */
@@ -338,8 +343,8 @@ public abstract class ElementContainer extends JLabel implements Cloneable, Grap
     }
 
     /**
-     * legt fest, ob dieses Element durch das Aufklappen seines (ggf. existierenden)
-     * übergeordneten Elements sichtbar gemacht wurde
+     * legt fest, ob dieses Element durch das Aufklappen seines (ggf.
+     * existierenden) übergeordneten Elements sichtbar gemacht wurde
      */
     public void setExpanded(final boolean expanded) {
         if (expanded == this.expanded) {
@@ -409,8 +414,9 @@ public abstract class ElementContainer extends JLabel implements Cloneable, Grap
     }
 
     /**
-     * Erzeugt die angezeigte Bezeichnung. Für Node werden in eckigen Klammern durch Kommas getrennt
-     * alle Szenarien aufgelistet, in denen sie ausser im momentan angezeigten noch vorkommen.
+     * Erzeugt die angezeigte Bezeichnung. Für Node werden in eckigen Klammern
+     * durch Kommas getrennt alle Szenarien aufgelistet, in denen sie ausser im
+     * momentan angezeigten noch vorkommen.
      *
      * @see java.awt.Component#toString()
      */
@@ -441,7 +447,10 @@ public abstract class ElementContainer extends JLabel implements Cloneable, Grap
         return ec != null && ec.isPaintable();
     }
 
-    /* -------- GraphElementLayout - Funktionen aus dem ModelElement -------------- */
+    /*
+     * -------- GraphElementLayout - Funktionen aus dem ModelElement
+     * --------------
+     */
 
     /**
      * @return
@@ -704,7 +713,8 @@ public abstract class ElementContainer extends JLabel implements Cloneable, Grap
     }
 
     /**
-     * @return <code>true</code> if this container has the default ahtml text aligmment
+     * @return <code>true</code> if this container has the default ahtml text
+     *         aligmment
      */
     public boolean isDefaultTextAlignmentHTML() {
         if (layout == null) {
@@ -1043,10 +1053,10 @@ public abstract class ElementContainer extends JLabel implements Cloneable, Grap
             }
             break;
         default:
-            removeSpecialInfoFromThisContainer(infoOwner, GraphElementLayout.NORTH);
-            removeSpecialInfoFromThisContainer(infoOwner, GraphElementLayout.WEST);
-            removeSpecialInfoFromThisContainer(infoOwner, GraphElementLayout.EAST);
-            removeSpecialInfoFromThisContainer(infoOwner, GraphElementLayout.SOUTH);
+            removeSpecialInfoFromThisContainer(infoOwner, SwingConstants.NORTH);
+            removeSpecialInfoFromThisContainer(infoOwner, SwingConstants.WEST);
+            removeSpecialInfoFromThisContainer(infoOwner, SwingConstants.EAST);
+            removeSpecialInfoFromThisContainer(infoOwner, SwingConstants.SOUTH);
         }
     }
 

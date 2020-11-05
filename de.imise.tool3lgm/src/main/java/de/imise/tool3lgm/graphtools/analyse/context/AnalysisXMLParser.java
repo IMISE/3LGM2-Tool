@@ -92,8 +92,10 @@ public class AnalysisXMLParser extends DefaultHandler {
     @Override
     public void endElement(final String namespaceURI, final String localName, final String rawName) {
         /*
-         * System.out.println("endElement:"); System.out.println("namespaceURI: "+namespaceURI);
-         * System.out.println("localName: "+localName); System.out.println("rawName: "+rawName);
+         * System.out.println("endElement:");
+         * System.out.println("namespaceURI: "+namespaceURI);
+         * System.out.println("localName: "+localName);
+         * System.out.println("rawName: "+rawName);
          */
         if (state == UNKNOWN) {
             System.out.println("Ignoring unknown sub-elements.");

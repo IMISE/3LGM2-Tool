@@ -15,7 +15,8 @@ import de.imise.util.collections.CollectionUtils;
 public abstract class ListMetaPath extends MetaPath {
 
     /**
-     * The default reskey for the path is the same like Edge (= is connected with)
+     * The default reskey for the path is the same like Edge (= is connected
+     * with)
      */
     private static final String DEFAULT_RESKEY = Edge.class.getSimpleName() + "_f";
 
@@ -150,7 +151,8 @@ public abstract class ListMetaPath extends MetaPath {
     }
 
     /**
-     * Setzt den MetaPath am angegebenen Index in der Liste der MetaPaths auf rekursiv.
+     * Setzt den MetaPath am angegebenen Index in der Liste der MetaPaths auf
+     * rekursiv.
      *
      * @param metaPathIndex
      */

@@ -11,32 +11,37 @@ import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.table.cell.UserF
 import de.imise.util.NamedObjectContainer;
 
 /**
- * Klasse repräsentiert ein konkretes Layout für einen <code>UserFieldTable</code>.
+ * Klasse repräsentiert ein konkretes Layout für einen
+ * <code>UserFieldTable</code>.
  * <p>
- * Es werden Methoden bereitgestellt, die einen <code>UserFieldTable</code> in einen geeigneten Container einbetten und für diesen das gewählte Layout
+ * Es werden Methoden bereitgestellt, die einen <code>UserFieldTable</code> in
+ * einen geeigneten Container einbetten und für diesen das gewählte Layout
  * setzen.
  * <p>
- * Über statische Methoden können vorgefertigte <code>UserFieldTableLayout</code>s abgerufen werden, die auf Tabels für Kennzahlen, Verteilungsgewicht
- * oder Modelvariablen zugeschnitten sind.
+ * Über statische Methoden können vorgefertigte
+ * <code>UserFieldTableLayout</code>s abgerufen werden, die auf Tabels für
+ * Kennzahlen, Verteilungsgewicht oder Modelvariablen zugeschnitten sind.
  * <p>
- * Es wird ein RowHeader(optional) und ColumnHeader mit Tooltips gesetzt. Der RowHeader und alle Spalten lassen sich in ihrer Größe ändern.
+ * Es wird ein RowHeader(optional) und ColumnHeader mit Tooltips gesetzt. Der
+ * RowHeader und alle Spalten lassen sich in ihrer Größe ändern.
  * <p>
  * Werte im Table werden in formatierter Form dargestellt.
  * <p>
- * Komponenten, die einen solchen <code>UserFieldTable</code> darstellen, sollten nicht den Table selbst, sondern den Container verwenden.<br>
+ * Komponenten, die einen solchen <code>UserFieldTable</code> darstellen,
+ * sollten nicht den Table selbst, sondern den Container verwenden.<br>
  * Beispiel:
- * 
+ *
  * <pre>
  * public void add(Component comp, Object constraints) {
- * 
+ *
  *     if (comp instanceof UserFieldTable) {
  *         this.add(((UserFieldTable) comp).getLayoutContainer(), constraints);
- * 
+ *
  *     } else {
  *         super.add(comp, constraints);
  *     }
  * }
- * 
+ *
  * public void remove(Component comp) {
  *     if (comp instanceof UserFieldTable) {
  *         super.remove(((UserFieldTable) comp).getLayoutContainer());
@@ -44,7 +49,7 @@ import de.imise.util.NamedObjectContainer;
  *         super.remove(comp);
  * }
  * </pre>
- * 
+ *
  * @author fstephan
  */
 public final class UserFieldTableLayout extends AbstractUserFieldTableLayout {
@@ -55,17 +60,18 @@ public final class UserFieldTableLayout extends AbstractUserFieldTableLayout {
     private final boolean changeDeactivatedCellColor;
 
     /**
-     * Erzeugt ein neues Layout.
-     * Nicht editierbare Zellen werden nicht grau gefärbt, d.h. sie bleiben weiß
+     * Erzeugt ein neues Layout. Nicht editierbare Zellen werden nicht grau
+     * gefärbt, d.h. sie bleiben weiß
      */
     public UserFieldTableLayout() {
         this(false);
     }
 
     /**
-     * Erzeugt ein neues Layout.
-     * Falls <code>changeDeactivatedCellColor = true</code>, werden nicht editierbare Zellen grau gefärbt.
-     * 
+     * Erzeugt ein neues Layout. Falls
+     * <code>changeDeactivatedCellColor = true</code>, werden nicht editierbare
+     * Zellen grau gefärbt.
+     *
      * @param changeDeactivatedCellColor
      */
     public UserFieldTableLayout(final boolean changeDeactivatedCellColor) {
@@ -74,7 +80,7 @@ public final class UserFieldTableLayout extends AbstractUserFieldTableLayout {
 
     /**
      * Aktualisiert alle Zellen des <code>table</code>s
-     * 
+     *
      * @param table
      */
     @Override

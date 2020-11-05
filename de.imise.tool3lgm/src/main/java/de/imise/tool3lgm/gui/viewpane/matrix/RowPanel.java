@@ -29,15 +29,15 @@ public class RowPanel extends JPanel {
     private int numberOfRows;
 
     /**
-     * <code>true</code>, wenn das Panel bereits initialisiert wurde, sonst <code>false</code>.
+     * <code>true</code>, wenn das Panel bereits initialisiert wurde, sonst
+     * <code>false</code>.
      */
     private boolean initialized = false;
 
     /**
      * Konstruktor
      *
-     * @param _rows
-     *            ArrayList mit Strings der Zeilenüberschriften
+     * @param _rows ArrayList mit Strings der Zeilenüberschriften
      */
     public RowPanel(final List<ModelElement> _rows) {
         super();
@@ -64,8 +64,7 @@ public class RowPanel extends JPanel {
      * Bestimmt die benötigten Parameter delta und max_length und legt die Größe
      * der Component fest
      *
-     * @param g
-     *            Graphics
+     * @param g Graphics
      */
     private void setRequiredParam(final Graphics g) {
         /* Zeilenhöhe */
@@ -110,8 +109,7 @@ public class RowPanel extends JPanel {
     /**
      * Method getRow return String of header of row at position
      *
-     * @param i
-     *            int-position in pixels
+     * @param i int-position in pixels
      * @return String header of column
      */
     public Node getRow(int i) {
@@ -134,8 +132,7 @@ public class RowPanel extends JPanel {
     /**
      * Method getRowIndex return index of row at position
      *
-     * @param i
-     *            int-position in pixels
+     * @param i int-position in pixels
      * @return int index of row
      */
     public int getRowIndex(final int i) {

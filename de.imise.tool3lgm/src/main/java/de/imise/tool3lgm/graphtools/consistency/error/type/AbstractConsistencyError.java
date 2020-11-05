@@ -8,30 +8,32 @@ import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.util.ReflectionUtils;
 
 /**
- * An error object that holds the model ({@link GDCollection}) and a model element that is
- * the source of the error. Additionally it stores an object to identify the erorr type.
+ * An error object that holds the model ({@link GDCollection}) and a model
+ * element that is the source of the error. Additionally it stores an object to
+ * identify the erorr type.
  *
  * @author AXS (20.03.2008)
  */
 public abstract class AbstractConsistencyError extends Error implements MetaModelSpecific {
 
     /**
-     * Suffix, der an den SimpleClassName gehängt wird, um die genaue BEschreibung des Fehlers
-     * aus den Error-Resourcen zu laden.
+     * Suffix, der an den SimpleClassName gehängt wird, um die genaue
+     * BEschreibung des Fehlers aus den Error-Resourcen zu laden.
      */
     protected static final String ERROR_TYPE_RESOURCE_KEY_SUFFIX = "_type";
 
     /**
-     * Suffix, der an den SimpleClassName gehängt wird, um die genaue Beschreibung des Fehlers
-     * aus den Error-Resourcen zu laden. Diese Beschreibung steht in den allgemeinen Resourcen
-     * des Baukastens.
+     * Suffix, der an den SimpleClassName gehängt wird, um die genaue
+     * Beschreibung des Fehlers aus den Error-Resourcen zu laden. Diese
+     * Beschreibung steht in den allgemeinen Resourcen des Baukastens.
      */
     protected static final String ERROR_DESCRIPTION_RESOURCE_KEY_SUFFIX = "_descrip";
 
     /**
-     * Dieser Placeholder kann zum Beispiel in der Beschreibung in den Resourcen verwendet werden,
-     * um die Stelle zu markieren, an der ein Wert eingefügt werden soll. Das kann beliebig oft
-     * sein, Hauptsache man hält sich bei den übergebenen Werten an die an die Reihenfolge.
+     * Dieser Placeholder kann zum Beispiel in der Beschreibung in den Resourcen
+     * verwendet werden, um die Stelle zu markieren, an der ein Wert eingefügt
+     * werden soll. Das kann beliebig oft sein, Hauptsache man hält sich bei den
+     * übergebenen Werten an die an die Reihenfolge.
      */
     protected static final String ERROR_PLACEHOLDER = "$value";
 
@@ -90,7 +92,8 @@ public abstract class AbstractConsistencyError extends Error implements MetaMode
     }
 
     /**
-     * Liefert alle Replacements für die Message (muss in ggf. Unterklassen überschrieben werden)
+     * Liefert alle Replacements für die Message (muss in ggf. Unterklassen
+     * überschrieben werden)
      *
      * @return
      */
@@ -119,7 +122,8 @@ public abstract class AbstractConsistencyError extends Error implements MetaMode
     }
 
     /**
-     * Liefert einen String, der im ErrorTable in der Spalte "Verbindungstyp / Feld" angezeigt wird.
+     * Liefert einen String, der im ErrorTable in der Spalte "Verbindungstyp /
+     * Feld" angezeigt wird.
      *
      * @return
      */
@@ -149,8 +153,9 @@ public abstract class AbstractConsistencyError extends Error implements MetaMode
     }
 
     /**
-     * Liefert einen String, der für jede Art von Fehler eindeutig sein sollte (z.B. "MIN", "MAX" oder "ID").
-     * Wird in den Resourcen nichts gefunden, wird "ERROR" zurück gegeben.
+     * Liefert einen String, der für jede Art von Fehler eindeutig sein sollte
+     * (z.B. "MIN", "MAX" oder "ID"). Wird in den Resourcen nichts gefunden,
+     * wird "ERROR" zurück gegeben.
      *
      * @return
      */
@@ -208,8 +213,8 @@ public abstract class AbstractConsistencyError extends Error implements MetaMode
 
     /**
      * @param errorType
-     * @return <code>true</code> if the parameter type is the same, a sub
-     *         or a super class of this class
+     * @return <code>true</code> if the parameter type is the same, a sub or a
+     *         super class of this class
      */
     public boolean isErrorOfType(final Class<? extends AbstractConsistencyError> errorType) {
         return ReflectionUtils.isAssignable(getClass(), errorType);

@@ -182,8 +182,9 @@ public class MainFrameToolBar extends UnfloatableToolBar implements MouseListene
     }
 
     /**
-     * Aktualisiert die Tooltips des Undo- und Redo-Knopfes. Wenn man den Verification-Modus einschaltet, wird
-     * der Undo-Stack als Tooltip angezeigt.
+     * Aktualisiert die Tooltips des Undo- und Redo-Knopfes. Wenn man den
+     * Verification-Modus einschaltet, wird der Undo-Stack als Tooltip
+     * angezeigt.
      */
     private void updateUndoRedoToolTips() {
         GraphDocument selectedDoc = Static.getSelectedDoc();

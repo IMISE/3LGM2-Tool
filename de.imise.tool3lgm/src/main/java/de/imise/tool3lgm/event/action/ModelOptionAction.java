@@ -14,8 +14,12 @@ import de.imise.util.swing.event.OptionAction;
  */
 public class ModelOptionAction extends GraphDocumentAction implements OptionAction {
 
+    /**  */
     private final GDCommands option;
 
+    /**
+     * @param identifier
+     */
     public ModelOptionAction(final GDCommands identifier) {
         super(identifier);
         option = identifier;

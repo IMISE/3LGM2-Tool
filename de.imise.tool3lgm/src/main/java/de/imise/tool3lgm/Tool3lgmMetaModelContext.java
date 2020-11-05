@@ -18,14 +18,16 @@ import de.imise.tool3lgm.userproperties.UserProperties.StringProperty;
 import de.imise.util.ReflectionUtils;
 
 /**
- * Klasse, die die verfügbaren Metamodelle verwaltet, initialisiert und bereitstellt.
+ * Klasse, die die verfügbaren Metamodelle verwaltet, initialisiert und
+ * bereitstellt.
  *
  * @author AXS (12.06.2018)
  */
 public final class Tool3lgmMetaModelContext {
 
     /**
-     * Name der Metamodellklasse, die als Default gesetzt werden soll. Das ist auch die Klasse, mit der Modelle geladen werden, bei denen kein
+     * Name der Metamodellklasse, die als Default gesetzt werden soll. Das ist
+     * auch die Klasse, mit der Modelle geladen werden, bei denen kein
      * Metamodell abgegeben ist.
      */
     private static final String DEFAULT_METAMODEL_DEFINITION_CLASS_NAME = "TLGMOriginalMetaModel";
@@ -40,8 +42,9 @@ public final class Tool3lgmMetaModelContext {
     private static final List<MetaModelContext> ALL_METAMODEL_CONTEXTS = loadMetaModelContexts();
 
     /**
-     * Liefert aus der übergebenen Liste von {@link MetaModelContext} eine neue Liste aller Kontexte zurück, deren Definitionsklasse
-     * zuwesiungskompatibel zur übergebenen Klasse ist.
+     * Liefert aus der übergebenen Liste von {@link MetaModelContext} eine neue
+     * Liste aller Kontexte zurück, deren Definitionsklasse zuwesiungskompatibel
+     * zur übergebenen Klasse ist.
      *
      * @param metaModelContexts
      * @param metaModelDefinitonClassOrSuperClass
@@ -59,8 +62,11 @@ public final class Tool3lgmMetaModelContext {
     }
 
     /**
-     * Alle MetaModel-Kontexte, die das Interface {@link RegularMetaModelDefinition} implementieren. Das sind die Metamodell-Definitionen, die man zum
-     * Modellieren nehmen kann. Die Standardmetamodellklasse (= die Klasse mit dem Namen DEFAULT_METAMDOEL_NAME) befindet sich immer an Position 0)
+     * Alle MetaModel-Kontexte, die das Interface
+     * {@link RegularMetaModelDefinition} implementieren. Das sind die
+     * Metamodell-Definitionen, die man zum Modellieren nehmen kann. Die
+     * Standardmetamodellklasse (= die Klasse mit dem Namen
+     * DEFAULT_METAMDOEL_NAME) befindet sich immer an Position 0)
      */
     public static List<MetaModelContext> getRegularMetaModelContexts() {
         return getMetaModelContexts(ALL_METAMODEL_CONTEXTS, RegularMetaModelDefinition.class);
@@ -68,7 +74,8 @@ public final class Tool3lgmMetaModelContext {
 
     /**
      * @param metaModelDefinitionClass
-     * @return <code>true</code>, wenn die <code>metaModelDefinitionClass</code> das Interface {@link RegularMetaModelDefinition} implementiert
+     * @return <code>true</code>, wenn die <code>metaModelDefinitionClass</code>
+     *         das Interface {@link RegularMetaModelDefinition} implementiert
      */
     public static boolean isRegularMetaModelDefinition(final Class<? extends MetaModelDefinition> metaModelDefinitionClass) {
         return ReflectionUtils.isAssignable(RegularMetaModelDefinition.class, metaModelDefinitionClass);
@@ -83,10 +90,13 @@ public final class Tool3lgmMetaModelContext {
     }
 
     /**
-     * Liefert einen MetaModelContext. Abhängig davon, ob in den UserProperties eingestellt ist, ob per Dialog nachgefragt werden soll oder nicht,
-     * wird der in den den UserProperties gespeicherte einfach zurück gegeben oder per Dialog nachgefragt.
+     * Liefert einen MetaModelContext. Abhängig davon, ob in den UserProperties
+     * eingestellt ist, ob per Dialog nachgefragt werden soll oder nicht, wird
+     * der in den den UserProperties gespeicherte einfach zurück gegeben oder
+     * per Dialog nachgefragt.
      *
-     * @return gewählten MetaModelContext oder <code>null</code>, wenn im AuswahlDialog auf Abbrechen gdrückt wurde
+     * @return gewählten MetaModelContext oder <code>null</code>, wenn im
+     *         AuswahlDialog auf Abbrechen gdrückt wurde
      */
     public static Tool3lgmModelType getNewModelType() {
         boolean showDialog = OPTION_SHOW_CHOOSE_METAMODEL_DIALOG.is();
@@ -106,7 +116,8 @@ public final class Tool3lgmMetaModelContext {
     }
 
     /**
-     * Lädt alle im Plaugin-Verzeichnis auffindbaren Metamodell-Klassen in jeweils einen MetaModelContext.
+     * Lädt alle im Plaugin-Verzeichnis auffindbaren Metamodell-Klassen in
+     * jeweils einen MetaModelContext.
      *
      * @return
      */
@@ -136,7 +147,8 @@ public final class Tool3lgmMetaModelContext {
     }
 
     /**
-     * Liefert anhand der ID des in den UserProperties gespeicherten MetaModels den zugehörigen Kontext und die {@link ModelCategory}
+     * Liefert anhand der ID des in den UserProperties gespeicherten MetaModels
+     * den zugehörigen Kontext und die {@link ModelCategory}
      *
      * @return
      */
@@ -168,7 +180,8 @@ public final class Tool3lgmMetaModelContext {
     }
 
     /**
-     * Liefert den {@link MetaModelContext} anhand seiner ID. Das ist der Klassennamen@SerialVersionUID. Bei alten Modellen ist es nur der
+     * Liefert den {@link MetaModelContext} anhand seiner ID. Das ist der
+     * Klassennamen@SerialVersionUID. Bei alten Modellen ist es nur der
      * Klassenname.
      *
      * @param metaModelContextID
@@ -193,8 +206,10 @@ public final class Tool3lgmMetaModelContext {
     }
 
     /**
-     * Liefert einen Kontext zur übergebenen Definition. Wenn es diesen Kontext bereits in der Liste aller Kontexte gibt, wird dieser zurück gegeben.
-     * Gibt es ihn nicht, wird einer neuer erzeugt und in die Liste aller Kontexte eingefügt. Hier wird die Klasse auf Identität geprüft.
+     * Liefert einen Kontext zur übergebenen Definition. Wenn es diesen Kontext
+     * bereits in der Liste aller Kontexte gibt, wird dieser zurück gegeben.
+     * Gibt es ihn nicht, wird einer neuer erzeugt und in die Liste aller
+     * Kontexte eingefügt. Hier wird die Klasse auf Identität geprüft.
      *
      * @param metaModelDefinitionClass
      * @return

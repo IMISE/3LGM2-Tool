@@ -39,7 +39,8 @@ public final class ElementaryPath extends AbstractPath {
     /**
      * @param startsWithEdgeMetaPath
      * @param edge
-     * @throws ClassCastException if the {@link ModelElement} is not an {@link Edge}
+     * @throws ClassCastException if the {@link ModelElement} is not an
+     *             {@link Edge}
      * @return
      */
     public static ElementaryPath createStartsWithEdgePath(final ElementaryMetaPath startsWithEdgeMetaPath, final Edge edge) {
@@ -51,7 +52,8 @@ public final class ElementaryPath extends AbstractPath {
     /**
      * @param startWithEdgeMetaPath
      * @param edge
-     * @throws ClassCastException if the {@link ModelElement} is not an {@link Edge}
+     * @throws ClassCastException if the {@link ModelElement} is not an
+     *             {@link Edge}
      * @return
      */
     public static ElementaryPath createEndsWithEdgePath(final ElementaryMetaPath endsWithEdgeMetaPath, final Edge edge) {

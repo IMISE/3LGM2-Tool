@@ -13,7 +13,7 @@ import javax.swing.JPanel;
 public abstract class AbstractInputPanel extends JPanel {
 
     /**
-     * 
+     *
      */
     public AbstractInputPanel() {
         super();
@@ -27,7 +27,8 @@ public abstract class AbstractInputPanel extends JPanel {
     }
 
     /**
-     * Wird aufgerufen, wenn die Änderungen des Panels rückgängig gemacht werden sollen.
+     * Wird aufgerufen, wenn die Änderungen des Panels rückgängig gemacht werden
+     * sollen.
      */
     public abstract void cancel();
 
@@ -37,7 +38,8 @@ public abstract class AbstractInputPanel extends JPanel {
     public abstract void commit();
 
     /**
-     * Wenn alle Eingaben in dem Panel korrekt sind, kommt <code>null</code> zurück. Ansonsten kommt, eine Fehlermeldung zurück, die dem Benutzer
+     * Wenn alle Eingaben in dem Panel korrekt sind, kommt <code>null</code>
+     * zurück. Ansonsten kommt, eine Fehlermeldung zurück, die dem Benutzer
      * angezeigt werden kann.
      */
     public String getError() {

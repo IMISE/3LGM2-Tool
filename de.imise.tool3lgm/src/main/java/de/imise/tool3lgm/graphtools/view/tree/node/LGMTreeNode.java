@@ -111,8 +111,7 @@ public class LGMTreeNode extends DefaultMutableTreeNode {
     }
 
     /**
-     * @param color
-     *            The color to set.
+     * @param color The color to set.
      */
     public void setForegroundColor(final Color color) {
         foregroundColor = color;

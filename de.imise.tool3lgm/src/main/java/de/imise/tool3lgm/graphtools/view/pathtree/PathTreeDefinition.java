@@ -88,8 +88,8 @@ public class PathTreeDefinition extends MetaModelSpecificAdapter implements Iter
     }
 
     /**
-     * @return a set of all classes which are defined as vissible through
-     *         this tree branch
+     * @return a set of all classes which are defined as vissible through this
+     *         tree branch
      */
     public final Set<Class<? extends ModelElement>> getVisibleElementTypes() {
         Set<Class<? extends ModelElement>> visibleElementTypes = new HashSet<>();

@@ -9,9 +9,10 @@ import javax.swing.text.BadLocationException;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 
 /**
- * Wird zur Zeit nicht genutzt. Wenn dann bei der Eingabe von IDs als benutzerdefinierte Eigenschaften.
- * Die Klasse ist nur rudimentär implementiert.
- * 
+ * Wird zur Zeit nicht genutzt. Wenn dann bei der Eingabe von IDs als
+ * benutzerdefinierte Eigenschaften. Die Klasse ist nur rudimentär
+ * implementiert.
+ *
  * @author Ich
  * @create 19.08.2015
  */

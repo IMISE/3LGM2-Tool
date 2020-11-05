@@ -58,7 +58,10 @@ import de.imise.util.swing.dialog.ProgressDialog;
  */
 public class WebExportDialog extends JDialog {
 
-    /** Rssourcendateien, die der Webexportdialog braucht. Achtung: die Reihenfolge ist wichtig! index.html muss als erste stehen. */
+    /**
+     * Rssourcendateien, die der Webexportdialog braucht. Achtung: die
+     * Reihenfolge ist wichtig! index.html muss als erste stehen.
+     */
     public static final String[] WEB_EXPORT_RESOURCES_FILES = {
             "index.html", "start.html", "tool3lgm.gif", "icon.jpg",
     };
@@ -303,13 +306,10 @@ public class WebExportDialog extends JDialog {
      * export layer of gcdollection to jpg-File
      *
      * @param area
-     * @param filename
-     *            String with jpg-File
-     * @param zoomFactor
-     *            0 < x < 1
-     * @param layer
-     *            -1 for 3layerView; 0 for physical layer; 2 for logical layer;
-     *            4 for domain layer
+     * @param filename String with jpg-File
+     * @param zoomFactor 0 < x < 1
+     * @param layer -1 for 3layerView; 0 for physical layer; 2 for logical
+     *            layer; 4 for domain layer
      */
     public static final void createImage(final BasicGraphArea area, final String filename, final double zoomFactor, final int layer) {
         if (layer < 0) {

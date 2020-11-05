@@ -24,8 +24,9 @@ public class DynamicTreeSelectionListener implements TreeSelectionListener {
     }
 
     /**
-     * Wenn Node selektiert wurden, die keine NodeContainer-Node sind, wird über diese Variable fetsgelegt,
-     * dass gerade so ein Node aus der Selektion entfernt wurde.
+     * Wenn Node selektiert wurden, die keine NodeContainer-Node sind, wird über
+     * diese Variable fetsgelegt, dass gerade so ein Node aus der Selektion
+     * entfernt wurde.
      */
     int correctingSelectionCount = 0;
 
@@ -74,9 +75,10 @@ public class DynamicTreeSelectionListener implements TreeSelectionListener {
     }
 
     /**
-     * Wenn der übergebene Node selbst ein Layer-Node ist, dann kommt dieser Node zurück. Wenn nicht,
-     * wird solange in den Parents des Knotens gesucht bis ein Layer-Node gefunden wurde (der dann zurück
-     * kommt) oder <code>null</code> zurück gegeben, wenn kein Layer-Node gefunden wurde.
+     * Wenn der übergebene Node selbst ein Layer-Node ist, dann kommt dieser
+     * Node zurück. Wenn nicht, wird solange in den Parents des Knotens gesucht
+     * bis ein Layer-Node gefunden wurde (der dann zurück kommt) oder
+     * <code>null</code> zurück gegeben, wenn kein Layer-Node gefunden wurde.
      *
      * @param node
      * @return

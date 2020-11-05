@@ -18,15 +18,20 @@ import de.imise.tool3lgm.gui.viewpane.matrix.MatrixViewPaneToolbar;
 import de.imise.util.swing.component.UnfloatableToolBar;
 
 /**
- * Diese Klasse kümmert sich darum, je nach Kontext, die Toolbar zu updaten, die für den gerade aktiven Frame angezeigt werden muss. Einerseits
- * kümmert sie sich darum, die richtige Toolbar anzuzeigen (GraphFrame oder MatrixView) und dann darum, die Toolbar je nach Kontext zu updaten
- * (selektierter Layer -> spezielle Elemente zum Zeichnen anbieten).
+ * Diese Klasse kümmert sich darum, je nach Kontext, die Toolbar zu updaten, die
+ * für den gerade aktiven Frame angezeigt werden muss. Einerseits kümmert sie
+ * sich darum, die richtige Toolbar anzuzeigen (GraphFrame oder MatrixView) und
+ * dann darum, die Toolbar je nach Kontext zu updaten (selektierter Layer ->
+ * spezielle Elemente zum Zeichnen anbieten).
  *
  * @author AXS (8 Aug 2017)
  */
 public class ViewPaneToolbarManager implements LGMChangeListenerSimple, BasicGraphAreaChangeListener {
 
-    /** toolbar with tools for active layer and sliders for zoom, angel and distance (Graph) or MetaPathSelector (Matrix) */
+    /**
+     * toolbar with tools for active layer and sliders for zoom, angel and
+     * distance (Graph) or MetaPathSelector (Matrix)
+     */
     private UnfloatableToolBar currentToolBar;
 
     /** Container, der die Toolbar für GraphFrames anzeigt */
@@ -116,14 +121,16 @@ public class ViewPaneToolbarManager implements LGMChangeListenerSimple, BasicGra
     }
 
     /**
-     * @return <code>true</code>, wenn die aktuelle Toolbar eine {@link GraphAreaToolbar} ist
+     * @return <code>true</code>, wenn die aktuelle Toolbar eine
+     *         {@link GraphAreaToolbar} ist
      */
     public final boolean isGraphAreaToolBar() {
         return currentToolBar != null && currentToolBar instanceof GraphAreaToolbar;
     }
 
     /**
-     * @return <code>true</code>, wenn die aktuelle Toolbar eine {@link GraphAreaToolbar} ist
+     * @return <code>true</code>, wenn die aktuelle Toolbar eine
+     *         {@link GraphAreaToolbar} ist
      */
     public final boolean isMatrixViewToolbar() {
         return currentToolBar != null && currentToolBar instanceof MatrixViewPaneToolbar;

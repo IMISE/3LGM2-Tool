@@ -27,7 +27,8 @@ public class TransactionManager {
     private final Set<TransactionListener> transactionListeners = new HashSet<>(3);
 
     /**
-     * Liste aller durchgeführten Transaktionen, die sich auch rückgängig machen lassen sollen.
+     * Liste aller durchgeführten Transaktionen, die sich auch rückgängig machen
+     * lassen sollen.
      */
     private final Transaction trans_q[];
 
@@ -37,22 +38,26 @@ public class TransactionManager {
     private static final int TRANSQ_SIZE = 50;
 
     /**
-     * Wert von <code>cur_pos</code>, wenn es keine Transaktion gibt, die sich zurücknehmen lässt.
+     * Wert von <code>cur_pos</code>, wenn es keine Transaktion gibt, die sich
+     * zurücknehmen lässt.
      */
     public static final int INVALID_POS = -1;
 
     /**
-     * Position der Transaktion in <code>trans_q</code>, die sich per Undo als nächstes zurücknehmen lässt.
+     * Position der Transaktion in <code>trans_q</code>, die sich per Undo als
+     * nächstes zurücknehmen lässt.
      */
     private int cur_pos;
 
     /**
-     * Index der letzten Transaktion in <code>trans_q</code> = Anzahl der Elemente in <code>trans_q</code> -1
+     * Index der letzten Transaktion in <code>trans_q</code> = Anzahl der
+     * Elemente in <code>trans_q</code> -1
      */
     private int last_pos;
 
     /**
-     * Unspezifische Prozess-ID. Mit dieser PID ist immer die letzte Transaktion gemeint.
+     * Unspezifische Prozess-ID. Mit dieser PID ist immer die letzte Transaktion
+     * gemeint.
      */
     public static final int UNSPECIFIC_PID = -1;
 
@@ -66,9 +71,10 @@ public class TransactionManager {
     public static final int STANDARD_PID = 0;
 
     /**
-     * Flag, das nur <code>true</code> ist während ein Undo oder Redo ausgeführt wird. Über dieses Flag wird gesteuert, dass der Transaktionsmanager
-     * das Zurückrollen einer Aktion erkennt und die Aktion nicht noch einmal in die Transaktionsliste
-     * aufgenommen wird.
+     * Flag, das nur <code>true</code> ist während ein Undo oder Redo ausgeführt
+     * wird. Über dieses Flag wird gesteuert, dass der Transaktionsmanager das
+     * Zurückrollen einer Aktion erkennt und die Aktion nicht noch einmal in die
+     * Transaktionsliste aufgenommen wird.
      */
     private boolean is_doing;
 
@@ -148,10 +154,12 @@ public class TransactionManager {
     }
 
     /**
-     * Prüft, ob das übergebene Kommando als Undo oder Redo-Kommando hinzugefügt werden kann.
+     * Prüft, ob das übergebene Kommando als Undo oder Redo-Kommando hinzugefügt
+     * werden kann.
      *
      * @param command
-     * @return Das getrimmte Kommando, wenn es ein valides ist, oder <code>null</code> sonst.
+     * @return Das getrimmte Kommando, wenn es ein valides ist, oder
+     *         <code>null</code> sonst.
      */
     private String getValidCommand(String command) {
         if (is_doing) {
@@ -172,7 +180,8 @@ public class TransactionManager {
      *
      * @param command hinzuzufügendes Kommando
      * @param pid ID der Transaktion
-     * @param undo Wenn <code>true</code> wird das Kommando als Undo-Kommando hinzugefügt, sonst als Redo-Kommando
+     * @param undo Wenn <code>true</code> wird das Kommando als Undo-Kommando
+     *            hinzugefügt, sonst als Redo-Kommando
      */
     private final void addUndoOrRedoCommand(String command, final int pid, final boolean undo) {
         command = getValidCommand(command);
@@ -190,8 +199,10 @@ public class TransactionManager {
     }
 
     /**
-     * Fügt der Transaktion mit der angegebenen ID das neue Redo-Kommando hinzu. Die Kommandos werden beim Aufruf der Funktion <code>redo(int)</code>
-     * in der gleichen Reihenfolge erneut ausgeführt, in der sie hier hinztugefügt wurden.
+     * Fügt der Transaktion mit der angegebenen ID das neue Redo-Kommando hinzu.
+     * Die Kommandos werden beim Aufruf der Funktion <code>redo(int)</code> in
+     * der gleichen Reihenfolge erneut ausgeführt, in der sie hier hinztugefügt
+     * wurden.
      *
      * @param command
      * @param pid
@@ -201,8 +212,10 @@ public class TransactionManager {
     }
 
     /**
-     * Fügt der Transaktion mit der angegebenen ID das neue Undo-Kommando hinzu. Die Kommandos werden beim Aufruf der Funktion <code>redo(int)</code>
-     * in der gleichen Reihenfolge erneut ausgeführt, in der sie hier hinztugefügt wurden.
+     * Fügt der Transaktion mit der angegebenen ID das neue Undo-Kommando hinzu.
+     * Die Kommandos werden beim Aufruf der Funktion <code>redo(int)</code> in
+     * der gleichen Reihenfolge erneut ausgeführt, in der sie hier hinztugefügt
+     * wurden.
      *
      * @param command
      * @param pid
@@ -212,10 +225,13 @@ public class TransactionManager {
     }
 
     /**
-     * Löscht das letzte Redo-Kommando, das mit dem <code>commadPrefix</code> beginnt und fürgt ein neues Kommando mit dem <code>commadPrefix</code>
+     * Löscht das letzte Redo-Kommando, das mit dem <code>commadPrefix</code>
+     * beginnt und fürgt ein neues Kommando mit dem <code>commadPrefix</code>
      * und den <code>commandArguments</code> am Ende an. <br />
-     * Diese Funktion ist gedacht, um z. B. bei Verschiebeoperationen nicht jeden Zwischenschritt zu speichern. Für das Redo benötigt man immer nur
-     * die letzte Verschiebeoperation, da sie den endgültigen Ort und Größe eines Elementes eindeutig bestimmt.
+     * Diese Funktion ist gedacht, um z. B. bei Verschiebeoperationen nicht
+     * jeden Zwischenschritt zu speichern. Für das Redo benötigt man immer nur
+     * die letzte Verschiebeoperation, da sie den endgültigen Ort und Größe
+     * eines Elementes eindeutig bestimmt.
      *
      * @param commandPrefix
      * @param commandArguments
@@ -234,9 +250,12 @@ public class TransactionManager {
     }
 
     /**
-     * Logt ein Undo-Kommando nur, wenn nicht schon ein Undo-Kommando mit demselben <code>commandPrefix</code> in dieser Transaktion vorkommt. Diese
-     * Funktion ist gedacht, um z. B. bei Verschiebeoperationen nicht jeden Zwischenschritt zu speichern. Für das
-     * Undo benötigt man immer nur das erste Undo-Kommando, da sie den Ausgangs-Ort und -Größe eines Elementes eindeutig bestimmt.
+     * Logt ein Undo-Kommando nur, wenn nicht schon ein Undo-Kommando mit
+     * demselben <code>commandPrefix</code> in dieser Transaktion vorkommt.
+     * Diese Funktion ist gedacht, um z. B. bei Verschiebeoperationen nicht
+     * jeden Zwischenschritt zu speichern. Für das Undo benötigt man immer nur
+     * das erste Undo-Kommando, da sie den Ausgangs-Ort und -Größe eines
+     * Elementes eindeutig bestimmt.
      *
      * @param commandPrefix
      * @param commandArguments
@@ -358,12 +377,17 @@ public class TransactionManager {
     }
 
     /**
-     * Liefert den Index der Transaktion in der Transaktionsliste <code>trans_q</code>, deren ID der übergebenen <code>pid</code> entspricht.
+     * Liefert den Index der Transaktion in der Transaktionsliste
+     * <code>trans_q</code>, deren ID der übergebenen <code>pid</code>
+     * entspricht.
      *
-     * @param pid ID der Transaktion, die gesucht werden soll. Wird <code>UNSPECIFIC_PID</code> übergeben, kommt der Index der letzten Transaktion
-     *            zurück.
-     * @param undo bei <code>true</code> werden inklusive des aktuellen Transaktionsindex auch die davor liegenden Transaktionen geprüft, bei
-     *            <code>false</code> alle dahinter leigenden Transaktionen
+     * @param pid ID der Transaktion, die gesucht werden soll. Wird
+     *            <code>UNSPECIFIC_PID</code> übergeben, kommt der Index der
+     *            letzten Transaktion zurück.
+     * @param undo bei <code>true</code> werden inklusive des aktuellen
+     *            Transaktionsindex auch die davor liegenden Transaktionen
+     *            geprüft, bei <code>false</code> alle dahinter leigenden
+     *            Transaktionen
      * @return Index der Transaktion oder <code>INVALID_POS</code>
      */
     private int getTransactionIndexForPID(final int pid, final boolean undo) {
@@ -388,8 +412,9 @@ public class TransactionManager {
     }
 
     /**
-     * Nimmt die Transaktion mit der angegebenen ID zurück. Alle Undo-Kommandos der Transaktion werden in der gleichen Reihenfolge ausgeführt, in der
-     * sie hinzugefügt wurden.
+     * Nimmt die Transaktion mit der angegebenen ID zurück. Alle Undo-Kommandos
+     * der Transaktion werden in der gleichen Reihenfolge ausgeführt, in der sie
+     * hinzugefügt wurden.
      *
      * @param pid
      * @return
@@ -465,8 +490,9 @@ public class TransactionManager {
     }
 
     /**
-     * Führt die Transaktion mit der angegebenen ID erneut aus. Alle Redo-Kommandos der Transaktion werden in der gleichen Reihenfolge ausgeführt, in
-     * der sie hinzugefügt wurden.
+     * Führt die Transaktion mit der angegebenen ID erneut aus. Alle
+     * Redo-Kommandos der Transaktion werden in der gleichen Reihenfolge
+     * ausgeführt, in der sie hinzugefügt wurden.
      *
      * @param pid
      * @return
@@ -508,18 +534,22 @@ public class TransactionManager {
     }
 
     /**
-     * Scheibt <code>entryCount</code> Elemente der Transaktionsliste in die Standardausgabe.
+     * Scheibt <code>entryCount</code> Elemente der Transaktionsliste in die
+     * Standardausgabe.
      *
-     * @param entryCount Anzahl der Elemente ab dem ersten, die ausgegeben werden sollen
+     * @param entryCount Anzahl der Elemente ab dem ersten, die ausgegeben
+     *            werden sollen
      */
     public final void printQueue(final int entryCount) {
         System.out.println(getQueue(entryCount));
     }
 
     /**
-     * Liefert eine lesbare Ausgabe der ersten <code>entryCount</code> Einträge der Transaktionsliste <code>trans_q</code>.
+     * Liefert eine lesbare Ausgabe der ersten <code>entryCount</code> Einträge
+     * der Transaktionsliste <code>trans_q</code>.
      *
-     * @param entryCount Anzahl der Elemente ab dem ersten, die ausgegeben werden sollen
+     * @param entryCount Anzahl der Elemente ab dem ersten, die ausgegeben
+     *            werden sollen
      * @return lesbaren String des Transaktionsstacks
      */
     public final String getQueue(final int entryCount) {
@@ -568,12 +598,13 @@ public class TransactionManager {
     }
 
     /**
-     * @return <code>true</code>, if a transaction with the {@link #STANDARD_PID}
-     *         is open or a transaction with another PID, but which then started
-     *         at least one other inner transaction. Normally only dialogs do not
-     *         have the {@link #STANDARD_PID}. So this function determines if a
-     *         real change is happening or if only one dialog is keeping a
-     *         transaction open but is not doing anything.
+     * @return <code>true</code>, if a transaction with the
+     *         {@link #STANDARD_PID} is open or a transaction with another PID,
+     *         but which then started at least one other inner transaction.
+     *         Normally only dialogs do not have the {@link #STANDARD_PID}. So
+     *         this function determines if a real change is happening or if only
+     *         one dialog is keeping a transaction open but is not doing
+     *         anything.
      */
     public final boolean isDeepInTransaction() {
         if (is_doing) {

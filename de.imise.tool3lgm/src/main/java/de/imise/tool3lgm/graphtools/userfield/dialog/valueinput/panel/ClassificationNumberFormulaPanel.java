@@ -15,7 +15,7 @@ import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.table.model.Abst
 
 /**
  * Panel zur Darstellung von berechneten Kennzahlen
- * 
+ *
  * @see de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.panel.AbstractElementTypeUserFieldEditorPanel
  * @author fstephan
  */

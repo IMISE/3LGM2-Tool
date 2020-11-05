@@ -3,6 +3,7 @@ package de.imise.tool3lgm.graphtools.path.metapaths;
 import java.util.HashMap;
 import java.util.Map;
 
+import de.imise.tool3lgm.graphtools.metamodel.CoreMetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.DoubleMeaningEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.DoubleMeaningEdge.ConnectionState;
@@ -22,13 +23,17 @@ public final class ElementaryMetaPathHandler {
     /** Das MetaModel, für das dieser Handler die Pfade verwaltet */
     private final MetaModel metaModel;
 
-    /** Platzhaltermetapfad für die Definition einer beliebigen Verbindung z. B. in einem {@link SequenceMetaPath} */
+    /**
+     * Platzhaltermetapfad für die Definition einer beliebigen Verbindung z. B.
+     * in einem {@link SequenceMetaPath}
+     */
     public final ElementaryMetaPath generalElementarySuperPath;
 
     /**
-     * Mappt von einer Edgenklasse auf ein 2-elementiges Array von MetaPathes, wobei der erste MetaPath
-     * im Array der zur Edge gehörige Metapath in Richtung Edge.Direction.FORWARD und der zweite in
-     * Richtung Edge.Direction.BACKWARD ist.
+     * Mappt von einer Edgenklasse auf ein 2-elementiges Array von MetaPathes,
+     * wobei der erste MetaPath im Array der zur Edge gehörige Metapath in
+     * Richtung Edge.Direction.FORWARD und der zweite in Richtung
+     * Edge.Direction.BACKWARD ist.
      */
     private static final Map<Class<? extends Edge>, ElementaryMetaPath[]> EDGE_CLASS_TO_FORWARD_AND_BACKWARD_METAPATHES = new HashMap<>();
 
@@ -41,8 +46,10 @@ public final class ElementaryMetaPathHandler {
     }
 
     /**
-     * Liefert für eine Edge den dazugehörigen ElementarMetaPfad. Wenn der Rückgabepfad noch nicht in der Map für die
-     * Vorwärts- und Rückwärtsrichtung der Elementarpfade enthalten ist, dann wird er hinzugefügt.
+     * Liefert für eine Edge den dazugehörigen ElementarMetaPfad. Wenn der
+     * Rückgabepfad noch nicht in der Map für die Vorwärts- und
+     * Rückwärtsrichtung der Elementarpfade enthalten ist, dann wird er
+     * hinzugefügt.
      *
      * @param edgeClass
      * @param direction
@@ -61,7 +68,7 @@ public final class ElementaryMetaPathHandler {
     private final ElementaryMetaPath getMetaPath(final Class<? extends Edge> edgeClass, final Direction direction, final ConnectionState connectionState) {
         ElementaryMetaPath[] metaPathes = EDGE_CLASS_TO_FORWARD_AND_BACKWARD_METAPATHES.get(edgeClass);
         if (metaPathes == null) {
-            boolean isDoubleMeaningEdge = MetaModel.isDoubleMeaningEdge(edgeClass);
+            boolean isDoubleMeaningEdge = CoreMetaModel.isDoubleMeaningEdge(edgeClass);
             //Kanten mit doppelter Bedeutung haben für jeden ConnectionState (null, FORWARD, BACKWARD, DOUBLE) und jede Richtung (FORWARD,
             //BACKWARD) je einen Elementarmetapfad mit eigener Bedeutung. Alle anderen haben nur für jede Richtung eine Bedeutung.
             //Index des Elementarpfades ergibt sich aus dem ConnectionState = connectionState == null ? 0 : connectionState.ordinal() + 1
@@ -86,15 +93,18 @@ public final class ElementaryMetaPathHandler {
      * @return
      */
     public final ElementaryMetaPath getMetaPath(final Class<? extends ModelElement> startClass, final Class<? extends Edge> edgeClass) {
-        Direction direction = MetaModel.isStartClass(edgeClass, startClass) ? Direction.FORWARD : Direction.BACKWARD;
+        Direction direction = CoreMetaModel.isStartClass(edgeClass, startClass) ? Direction.FORWARD : Direction.BACKWARD;
         ElementaryMetaPath returnMetaPath = getMetaPath(startClass, edgeClass, direction);
         return returnMetaPath;
     }
 
     /**
-     * Gibt einen ElementaryMetaPath zurück, der bis auf die Start- und Zielklasse identisch ist mit dem übergebenen Elementarpfad. Sind die Start-
-     * und Zielklassen dieselben wie beim übergebenen Elementarpfad, so kommt dieser unverändert zurück. Startklasse des zurück gegebenen Pfades ist
-     * die speziellere Klasse aus der übergebenen startClass und der Startklasse des übergebenen Elementarpfades. Endklasse analog.
+     * Gibt einen ElementaryMetaPath zurück, der bis auf die Start- und
+     * Zielklasse identisch ist mit dem übergebenen Elementarpfad. Sind die
+     * Start- und Zielklassen dieselben wie beim übergebenen Elementarpfad, so
+     * kommt dieser unverändert zurück. Startklasse des zurück gegebenen Pfades
+     * ist die speziellere Klasse aus der übergebenen startClass und der
+     * Startklasse des übergebenen Elementarpfades. Endklasse analog.
      *
      * @param startClass
      * @param originalMetaPath
@@ -112,8 +122,10 @@ public final class ElementaryMetaPathHandler {
     }
 
     /**
-     * Gibt einen ElementaryMetaPath zurück, der bis auf die Startklasse identisch ist mit dem übergebenen Elementarpfad. Ist die Startklasse
-     * dieselben wie beim übergebenen Elementarpfad, so kommt dieser unverändert zurück.
+     * Gibt einen ElementaryMetaPath zurück, der bis auf die Startklasse
+     * identisch ist mit dem übergebenen Elementarpfad. Ist die Startklasse
+     * dieselben wie beim übergebenen Elementarpfad, so kommt dieser unverändert
+     * zurück.
      *
      * @param startClass
      * @param originalElementaryMetaPath
@@ -124,8 +136,9 @@ public final class ElementaryMetaPathHandler {
     }
 
     /**
-     * Gibt einen ElementaryMetaPath zurück, der bis auf die Endklasse identisch ist mit dem übergebenen Elementarpfad. Ist die Endklasse
-     * dieselben wie beim übergebenen Elementarpfad, so kommt dieser unverändert zurück.
+     * Gibt einen ElementaryMetaPath zurück, der bis auf die Endklasse identisch
+     * ist mit dem übergebenen Elementarpfad. Ist die Endklasse dieselben wie
+     * beim übergebenen Elementarpfad, so kommt dieser unverändert zurück.
      *
      * @param originalElementaryMetaPath
      * @param endClass
@@ -209,7 +222,8 @@ public final class ElementaryMetaPathHandler {
     }
 
     /**
-     * Liefert einen Elementarpfad ausgehend von der Start- hin zur Endklasse verläuft. Dabei ist die Kantenklasse die speziellste gemeinsame
+     * Liefert einen Elementarpfad ausgehend von der Start- hin zur Endklasse
+     * verläuft. Dabei ist die Kantenklasse die speziellste gemeinsame
      * Oberklasse aller Kantenklasse, die zwischen Start- und Endklasse liegen.
      *
      * @param startClass
@@ -220,7 +234,7 @@ public final class ElementaryMetaPathHandler {
         Class<? extends Edge>[] edgeTypes = metaModel.getEdgeTypes(startClass, endClass);
         Class<? extends Edge> commonSuperClass = null;
         for (Class<? extends Edge> edgeClass : edgeTypes) {
-            if (MetaModel.isConnectingForward(edgeClass, startClass, endClass)) {
+            if (CoreMetaModel.isConnectingForward(edgeClass, startClass, endClass)) {
                 if (commonSuperClass == null) {
                     commonSuperClass = edgeClass;
                 } else {

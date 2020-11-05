@@ -15,7 +15,8 @@ import de.imise.util.ToolTipProvider;
 import de.imise.util.htmlxml.HTMLConverter;
 
 /**
- * A {@link ToolTipProvider} implementation that provides the tooltips for ModelElements
+ * A {@link ToolTipProvider} implementation that provides the tooltips for
+ * ModelElements
  *
  * @author AXS (09.06.2020)
  */

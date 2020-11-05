@@ -16,8 +16,10 @@ public class MainFrameDesktopMatrixTabComponent extends MainFrameDesktopTabCompo
     /**
      * @param doc
      * @param toolBarManager
-     * @param titleIndex Zähler, der an den Titel des Fensters angehängt wird. Man kann beliebig viele Matrixfenster für dasselbe Teilmodell öffnen.
-     *            Der Title soll unterscheidbar sein und das wird er durch diese Nummer.
+     * @param titleIndex Zähler, der an den Titel des Fensters angehängt wird.
+     *            Man kann beliebig viele Matrixfenster für dasselbe Teilmodell
+     *            öffnen. Der Title soll unterscheidbar sein und das wird er
+     *            durch diese Nummer.
      */
     public MainFrameDesktopMatrixTabComponent(final GraphDocument doc, final ViewPaneToolbarManager toolBarManager, final int titleIndex) {
         super(new MatrixViewPane(doc, toolBarManager, titleIndex));

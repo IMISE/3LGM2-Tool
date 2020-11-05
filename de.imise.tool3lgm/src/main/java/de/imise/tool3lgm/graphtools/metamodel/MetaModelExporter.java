@@ -168,7 +168,7 @@ public class MetaModelExporter {
         for (NamedObjectContainer<List<Class<?>>> noc : elementsHierarchies) {
             System.out.println(noc);
             Class<? extends ModelElement> elementClass = noc.getObject().get(0).asSubclass(ModelElement.class);
-            if (MetaModel.isEdgeType(elementClass)) {
+            if (CoreMetaModel.isEdgeType(elementClass)) {
                 Class<? extends Edge> edgeClass = elementClass.asSubclass(Edge.class);
                 //                String edgeString = getEdgeStringOrg2(edgeClass, ModelElement.class, INDENTION);
                 String edgeString = getEdgeString(edgeClass, INDENTION);
@@ -193,9 +193,10 @@ public class MetaModelExporter {
     }
 
     /**
-     * Liefert true, wenn die Start- oder Endklasse der übergebenen Kantenklasse genau die übergebene Elementklasse ist. Anders als bei
-     * den statischen Funktionen aus Edge für die Start- und Endklasse werden hier keine Ober- oder Unerklassen der übergebenen Elementklasse
-     * zugelassen.
+     * Liefert true, wenn die Start- oder Endklasse der übergebenen Kantenklasse
+     * genau die übergebene Elementklasse ist. Anders als bei den statischen
+     * Funktionen aus Edge für die Start- und Endklasse werden hier keine Ober-
+     * oder Unerklassen der übergebenen Elementklasse zugelassen.
      *
      * @param elementClass
      * @param edgeClass
@@ -245,11 +246,11 @@ public class MetaModelExporter {
 
     private String getEdgeString(final Class<? extends Edge> edgeClass, final boolean forward) {
         StringBuilder sb = new StringBuilder();
-        int minBackwardCardinality = forward ? MetaModel.getMinBackwardCardinality(edgeClass) : MetaModel.getMinForwardCardinality(edgeClass);
-        int maxBackwardCardinality = forward ? MetaModel.getMaxBackwardCardinality(edgeClass) : MetaModel.getMaxForwardCardinality(edgeClass);
+        int minBackwardCardinality = forward ? CoreMetaModel.getMinBackwardCardinality(edgeClass) : CoreMetaModel.getMinForwardCardinality(edgeClass);
+        int maxBackwardCardinality = forward ? CoreMetaModel.getMaxBackwardCardinality(edgeClass) : CoreMetaModel.getMaxForwardCardinality(edgeClass);
         String maxBackwardCardinalityString = maxBackwardCardinality == Integer.MAX_VALUE ? "N" : Integer.toString(maxBackwardCardinality);
-        int minForwardCardinality = forward ? MetaModel.getMinForwardCardinality(edgeClass) : MetaModel.getMinBackwardCardinality(edgeClass);
-        int maxForwardCardinality = forward ? MetaModel.getMaxForwardCardinality(edgeClass) : MetaModel.getMaxBackwardCardinality(edgeClass);
+        int minForwardCardinality = forward ? CoreMetaModel.getMinForwardCardinality(edgeClass) : CoreMetaModel.getMinBackwardCardinality(edgeClass);
+        int maxForwardCardinality = forward ? CoreMetaModel.getMaxForwardCardinality(edgeClass) : CoreMetaModel.getMaxBackwardCardinality(edgeClass);
         String maxForwardCardinalityString = maxForwardCardinality == Integer.MAX_VALUE ? "N" : Integer.toString(maxForwardCardinality);
 
         String startClassName = forward ? elementsNameBuilder.getDisplayableName(getStartClass(edgeClass)) : elementsNameBuilder.getDisplayableName(getEndClass(edgeClass));
@@ -269,12 +270,12 @@ public class MetaModelExporter {
     private String getEdgeStringOrg2(final Class<? extends Edge> edgeClass, final Class<? extends ModelElement> readingDirectionStartClass, final String intention) {
         String edgeClassName = edgeClass.getSimpleName();
         StringBuilder sb = new StringBuilder();
-        boolean forward = MetaModel.isStartClass(edgeClass, readingDirectionStartClass);
-        int minBackwardCardinality = forward ? MetaModel.getMinBackwardCardinality(edgeClass) : MetaModel.getMinForwardCardinality(edgeClass);
-        int maxBackwardCardinality = forward ? MetaModel.getMaxBackwardCardinality(edgeClass) : MetaModel.getMaxForwardCardinality(edgeClass);
+        boolean forward = CoreMetaModel.isStartClass(edgeClass, readingDirectionStartClass);
+        int minBackwardCardinality = forward ? CoreMetaModel.getMinBackwardCardinality(edgeClass) : CoreMetaModel.getMinForwardCardinality(edgeClass);
+        int maxBackwardCardinality = forward ? CoreMetaModel.getMaxBackwardCardinality(edgeClass) : CoreMetaModel.getMaxForwardCardinality(edgeClass);
         String maxBackwardCardinalityString = maxBackwardCardinality == Integer.MAX_VALUE ? "N" : Integer.toString(maxBackwardCardinality);
-        int minForwardCardinality = forward ? MetaModel.getMinForwardCardinality(edgeClass) : MetaModel.getMinBackwardCardinality(edgeClass);
-        int maxForwardCardinality = forward ? MetaModel.getMaxForwardCardinality(edgeClass) : MetaModel.getMaxBackwardCardinality(edgeClass);
+        int minForwardCardinality = forward ? CoreMetaModel.getMinForwardCardinality(edgeClass) : CoreMetaModel.getMinBackwardCardinality(edgeClass);
+        int maxForwardCardinality = forward ? CoreMetaModel.getMaxForwardCardinality(edgeClass) : CoreMetaModel.getMaxBackwardCardinality(edgeClass);
         String maxForwardCardinalityString = maxForwardCardinality == Integer.MAX_VALUE ? "N" : Integer.toString(maxForwardCardinality);
         String fulldMetaAssociationName = forward ? elementsNameBuilder.getFullForwardMetaAssociationName(edgeClass) : elementsNameBuilder.getFullBackwardMetaAssociationName(edgeClass);
         sb.append(intention).append(edgeClassName).append(": [").append(minBackwardCardinality).append(", ").append(maxBackwardCardinalityString).append("] ");
@@ -285,11 +286,11 @@ public class MetaModelExporter {
     @SuppressWarnings("unused")
     private String getEdgeStringOrg(final Class<? extends Edge> edgeClass, final Class<? extends ModelElement> readingDirectionStartClass, final String intention) {
         String edgeClassName = edgeClass.getSimpleName();
-        int minBackwardCardinality = MetaModel.getMinBackwardCardinality(edgeClass);
-        int maxBackwardCardinality = MetaModel.getMaxBackwardCardinality(edgeClass);
+        int minBackwardCardinality = CoreMetaModel.getMinBackwardCardinality(edgeClass);
+        int maxBackwardCardinality = CoreMetaModel.getMaxBackwardCardinality(edgeClass);
         String maxBackwardCardinalityString = maxBackwardCardinality == Integer.MAX_VALUE ? "N" : Integer.toString(maxBackwardCardinality);
-        int minForwardCardinality = MetaModel.getMinForwardCardinality(edgeClass);
-        int maxForwardCardinality = MetaModel.getMaxForwardCardinality(edgeClass);
+        int minForwardCardinality = CoreMetaModel.getMinForwardCardinality(edgeClass);
+        int maxForwardCardinality = CoreMetaModel.getMaxForwardCardinality(edgeClass);
         String maxForwardCardinalityString = maxForwardCardinality == Integer.MAX_VALUE ? "N" : Integer.toString(maxForwardCardinality);
         String fullForwardMetaAssociationName = elementsNameBuilder.getFullForwardMetaAssociationName(edgeClass);
         StringBuilder sb = new StringBuilder();

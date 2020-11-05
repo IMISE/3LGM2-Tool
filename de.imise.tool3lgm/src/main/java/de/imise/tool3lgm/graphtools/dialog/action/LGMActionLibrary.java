@@ -19,24 +19,27 @@ import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.graphtools.view.tree.node.LGMTreeNode;
 
 /**
- * Diese Klasse stellt statische Methoden zur Erzeugung von <code>LGMAction</code>s bereit. Panels erzeugen und verwenden diese Actions um Funktionen
- * wie etwa das Verschieben von Elementen zwischen ihren Trees bereitstellen zu können. <code>LGMActions</code> bereit.
+ * Diese Klasse stellt statische Methoden zur Erzeugung von
+ * <code>LGMAction</code>s bereit. Panels erzeugen und verwenden diese Actions
+ * um Funktionen wie etwa das Verschieben von Elementen zwischen ihren Trees
+ * bereitstellen zu können. <code>LGMActions</code> bereit.
  *
  * @author fstephan (23.11.2007)
  */
 public class LGMActionLibrary {
 
     /*
-     * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! zu
-     * getAddElementAction(...) und getRemoveElementAction(...): Bei Panels mit mehr als zwei Trees,
-     * kann es dazu kommen, dass Elemente falsch verschoben werden. Um dieses Problem zu beheben,
-     * sollte einfach der Wert von switchTree geändert werden.
+     * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+     * zu getAddElementAction(...) und getRemoveElementAction(...): Bei Panels
+     * mit mehr als zwei Trees, kann es dazu kommen, dass Elemente falsch
+     * verschoben werden. Um dieses Problem zu beheben, sollte einfach der Wert
+     * von switchTree geändert werden.
      * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
      */
 
     /**
-     * Methode liefert eine <code>LGMAction</code> zurück, die auf das Selektieren von Elementen in
-     * Trees reagiert.
+     * Methode liefert eine <code>LGMAction</code> zurück, die auf das
+     * Selektieren von Elementen in Trees reagiert.
      *
      * @param tree
      * @param panel
@@ -92,12 +95,16 @@ public class LGMActionLibrary {
     }
 
     /**
-     * Methode liefert eine <code>LGMAction</code> zurück, die beim Eintreten eines DragNDrop-Ereignisses, die konkrete Drop-Location im targetTree
-     * ermittelt. Dabei wird das Element, was sich dem Mouse-Zeiger am nächsten befindet, als SelectionPath des targetTrees gesetzt. Damit ist es
-     * möglich Elemente an eine bestimmte Position innerhalb eines Trees zu verschieben. Methode wird hier automatisch in
-     * <code>getAddElementAction(JTree srcTree, JTree targetTree, ElementDialogPanel edp, boolean switchTree)</code> und in
-     * <code>getRemoveElementAction(JTree srcTree, JTree targetTree, ElementDialogPanel edp, boolean switchTree)</code> aufgerufen --> Panel muss sich
-     * also darum nicht kümmern
+     * Methode liefert eine <code>LGMAction</code> zurück, die beim Eintreten
+     * eines DragNDrop-Ereignisses, die konkrete Drop-Location im targetTree
+     * ermittelt. Dabei wird das Element, was sich dem Mouse-Zeiger am nächsten
+     * befindet, als SelectionPath des targetTrees gesetzt. Damit ist es möglich
+     * Elemente an eine bestimmte Position innerhalb eines Trees zu verschieben.
+     * Methode wird hier automatisch in
+     * <code>getAddElementAction(JTree srcTree, JTree targetTree, ElementDialogPanel edp, boolean switchTree)</code>
+     * und in
+     * <code>getRemoveElementAction(JTree srcTree, JTree targetTree, ElementDialogPanel edp, boolean switchTree)</code>
+     * aufgerufen --> Panel muss sich also darum nicht kümmern
      *
      * @param tree
      */
@@ -117,8 +124,8 @@ public class LGMActionLibrary {
     }
 
     /**
-     * Methode liefert eine <code>LGMAction</code> zurück, die beim Schließen eines Panels alle
-     * WindowListener des Panels entfernt.
+     * Methode liefert eine <code>LGMAction</code> zurück, die beim Schließen
+     * eines Panels alle WindowListener des Panels entfernt.
      *
      * @param panel
      */

@@ -64,7 +64,8 @@ public class Tool3lgmMetaModelContextChooser {
     }
 
     /**
-     * @return The selected model type. This type will be extracted from the selected MetaModel in the ComboBox.
+     * @return The selected model type. This type will be extracted from the
+     *         selected MetaModel in the ComboBox.
      */
     private Tool3lgmModelType getModelType() {
         OPTION_SHOW_CHOOSE_METAMODEL_DIALOG.set(showThisDialogAgainCheckBox.isSelected());
@@ -137,8 +138,9 @@ public class Tool3lgmMetaModelContextChooser {
     }
 
     /**
-     * @return If expert mode is on it returns a CheckBox for enabling or disabling the creation of a template model.
-     *         If expert mode is off it return <code>null</code>.
+     * @return If expert mode is on it returns a CheckBox for enabling or
+     *         disabling the creation of a template model. If expert mode is off
+     *         it return <code>null</code>.
      */
     private static JCheckBox getExpertModeCreateAsTemplateCheckBox() {
         JCheckBox expertModeCreateAsTemplateCheckBox = null;

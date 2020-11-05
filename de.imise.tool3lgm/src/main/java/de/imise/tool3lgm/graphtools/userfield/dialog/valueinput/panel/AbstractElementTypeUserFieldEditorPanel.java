@@ -22,6 +22,7 @@ import javax.swing.JPanel;
 import com.google.common.collect.ImmutableSet;
 
 import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
+import de.imise.tool3lgm.graphtools.metamodel.CoreMetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
@@ -42,10 +43,11 @@ import de.imise.util.swing.component.AlphabeticalComboBox;
 /**
  * Panel zur Darstellung und Eingabe von UserFields
  * <p>
- * Die Dateneingabe erfolgt für jede Klasse von Knotenelementen separat - die Auswahl der Klasse erfolgt in der enthaltenen
- * <code>elementTypeBox</code>.
+ * Die Dateneingabe erfolgt für jede Klasse von Knotenelementen separat - die
+ * Auswahl der Klasse erfolgt in der enthaltenen <code>elementTypeBox</code>.
  * <p>
- * Wenn es sich um eine Elementklasse mit Tiel-Von-Beziehungen handelt, kann mittels der enthaltenen Auswahlbuttons eine Auswahl der anzuzeigenden
+ * Wenn es sich um eine Elementklasse mit Tiel-Von-Beziehungen handelt, kann
+ * mittels der enthaltenen Auswahlbuttons eine Auswahl der anzuzeigenden
  * Elemente vorgenommenwerden: <br>
  * i) alle Elemente anzeigen <br>
  * ii) nur toplevel Elemente anzeigen <br>
@@ -74,8 +76,9 @@ public abstract class AbstractElementTypeUserFieldEditorPanel extends AbstractUs
     }
 
     /**
-     * Panel zur Auswahl wleche Elemente in einer Hierarchie gezeigt werden sollen. Nur absolute Oberelemente,
-     * Elemente mit Parents und Parts oder nur Blattelemente der Elementhiearchie
+     * Panel zur Auswahl wleche Elemente in einer Hierarchie gezeigt werden
+     * sollen. Nur absolute Oberelemente, Elemente mit Parents und Parts oder
+     * nur Blattelemente der Elementhiearchie
      */
     protected ElementTypePane hierarchyTypeFilterPane;
 
@@ -85,12 +88,16 @@ public abstract class AbstractElementTypeUserFieldEditorPanel extends AbstractUs
 
     private final Class<? extends ModelElement> selectableElementsClass;
 
-    /* ************************* Beginn: Initialisierungsteil *********************************** */
+    /*
+     * ************************* Beginn: Initialisierungsteil
+     * ***********************************
+     */
     /**
      * Konstruktor
      *
      * @param dialog Dialog, der dieses Panel enthält
-     * @param selectableElementClass Oberklasse aller instaziierbaren Elementklassen, die in der Auswahlbox stehen sollen
+     * @param selectableElementClass Oberklasse aller instaziierbaren
+     *            Elementklassen, die in der Auswahlbox stehen sollen
      * @param visibleUserField Style der UserFields, die angezeigt werden sollen
      * @param name Name des Panels
      */
@@ -102,8 +109,10 @@ public abstract class AbstractElementTypeUserFieldEditorPanel extends AbstractUs
      * Konstruktor
      *
      * @param dialog Dialog, der dieses Panel enthält
-     * @param selectableElementClass Oberklasse aller instaziierbaren Elementklassen, die in der Auswahlbox stehen sollen
-     * @param visibleUserFields Styles der UserFields, die angezeigt werden sollen
+     * @param selectableElementClass Oberklasse aller instaziierbaren
+     *            Elementklassen, die in der Auswahlbox stehen sollen
+     * @param visibleUserFields Styles der UserFields, die angezeigt werden
+     *            sollen
      * @param name Name des Panels
      */
     public AbstractElementTypeUserFieldEditorPanel(final UserFieldEditorDialog dialog, final Class<? extends ModelElement> selectableElementsClass, final Set<Style> visibleUserFields, final String name) {
@@ -150,9 +159,10 @@ public abstract class AbstractElementTypeUserFieldEditorPanel extends AbstractUs
     }
 
     /**
-     * Methode setzt den Inhalt der <code>elementTypeBox</code> Es werden nur die Klassen von Knotenelementen aufgelistet, für die mindestens ein
-     * Kennzahl
-     * vom Typ <code>UserField.CLASSIFICATION_NUMBER_STYLE</code> definiert ist.
+     * Methode setzt den Inhalt der <code>elementTypeBox</code> Es werden nur
+     * die Klassen von Knotenelementen aufgelistet, für die mindestens ein
+     * Kennzahl vom Typ <code>UserField.CLASSIFICATION_NUMBER_STYLE</code>
+     * definiert ist.
      */
     private void setElementTypeBoxContent() {
         GraphDocument doc = dialog.getMainDoc();
@@ -161,7 +171,7 @@ public abstract class AbstractElementTypeUserFieldEditorPanel extends AbstractUs
         MetaModel metaModel = gdcoll.getMetaModel();
         ElementsNameBuilder elementsNameBuilder = metaModel.getElementsNameBuilder();
 
-        boolean isEdgeType = MetaModel.isEdgeType(selectableElementsClass);
+        boolean isEdgeType = CoreMetaModel.isEdgeType(selectableElementsClass);
         String resKey = isEdgeType ? "userFieldEditor_edge_type" : "userFieldEditor_element_type";
         elementTypeBox.addSeparator(getResString(resKey));
 
@@ -207,13 +217,16 @@ public abstract class AbstractElementTypeUserFieldEditorPanel extends AbstractUs
     }
 
     /**
-     * Prüft, ob mindestens ein <code>UserField</code> der übergebenen <code>elementClass</code> vom Typ Kennzahl ist. Dann wird true zurückggegeben
-     * ansonsten false.
+     * Prüft, ob mindestens ein <code>UserField</code> der übergebenen
+     * <code>elementClass</code> vom Typ Kennzahl ist. Dann wird true
+     * zurückggegeben ansonsten false.
      *
-     * @param elementClass Die <code>ElementClass</code>e, deren <code>UserField</code>s geprüft werden sollen.
+     * @param elementClass Die <code>ElementClass</code>e, deren
+     *            <code>UserField</code>s geprüft werden sollen.
      * @param definitions Die <code>UserFieldDefinition</code>s
-     * @return Wenn mindestens ein <code>UserField</code> vom Typ Kennzahl (<code>UserField.CLASSIFICATION_NUMBER_STYLE</code>) ist: true; ansonsten
-     *         false
+     * @return Wenn mindestens ein <code>UserField</code> vom Typ Kennzahl
+     *         (<code>UserField.CLASSIFICATION_NUMBER_STYLE</code>) ist: true;
+     *         ansonsten false
      */
     protected InsertType getInsertType(final Class<? extends ModelElement> elementClass, final UserFieldDefinitions definitions) {
         InsertType insertType = NO;
@@ -228,7 +241,8 @@ public abstract class AbstractElementTypeUserFieldEditorPanel extends AbstractUs
     }
 
     /**
-     * Methode setzt die auszuführende Action, bei Änderung der Auswahl in der <code>elementTypeBox</code>. Bei Änderung der Auswahl wird das
+     * Methode setzt die auszuführende Action, bei Änderung der Auswahl in der
+     * <code>elementTypeBox</code>. Bei Änderung der Auswahl wird das
      * Neuzeichnen des <code>table</code>s ausgelöst.
      */
     protected void setActionsForElementTypeBox() {
@@ -261,9 +275,15 @@ public abstract class AbstractElementTypeUserFieldEditorPanel extends AbstractUs
         return constraints;
     }
 
-    /* ************************* Ende: Initialisierungsteil *********************************** */
+    /*
+     * ************************* Ende: Initialisierungsteil
+     * ***********************************
+     */
 
-    /* ************************* Beginn: Funktionale Methoden *********************************** */
+    /*
+     * ************************* Beginn: Funktionale Methoden
+     * ***********************************
+     */
 
     protected abstract UserFieldTableController getTableController(final AbstractUserFieldTableModel uftm);
 
@@ -340,9 +360,15 @@ public abstract class AbstractElementTypeUserFieldEditorPanel extends AbstractUs
         definitions.initReset();
     }
 
-    /* ************************* Ende: Funktionale Methoden *********************************** */
+    /*
+     * ************************* Ende: Funktionale Methoden
+     * ***********************************
+     */
 
-    /* ************************* Beginn: get/set - Methoden *********************************** */
+    /*
+     * ************************* Beginn: get/set - Methoden
+     * ***********************************
+     */
 
     /**
      * Gibt die <code>elementTypeBox</code> zurück
@@ -353,9 +379,15 @@ public abstract class AbstractElementTypeUserFieldEditorPanel extends AbstractUs
         return elementTypeBox;
     }
 
-    /* ************************* Ende: get/set - Methoden *********************************** */
+    /*
+     * ************************* Ende: get/set - Methoden
+     * ***********************************
+     */
 
-    /* ************************* Beginn: Unterklassen *********************************** */
+    /*
+     * ************************* Beginn: Unterklassen
+     * ***********************************
+     */
 
     /**
      * Panel zur Auswahl der anzuzeigenden Element-Typen:
@@ -383,7 +415,8 @@ public abstract class AbstractElementTypeUserFieldEditorPanel extends AbstractUs
         }
 
         /**
-         * Gibt die auzuführenden Aktionen für die CheckBoxes wieder. Bei Änderung der Selektion werden Änderungen temporär übernommen und das
+         * Gibt die auzuführenden Aktionen für die CheckBoxes wieder. Bei
+         * Änderung der Selektion werden Änderungen temporär übernommen und das
          * Neuzeichnen des Tables ausgelöst.
          *
          * @param panel
@@ -426,6 +459,9 @@ public abstract class AbstractElementTypeUserFieldEditorPanel extends AbstractUs
 
     }
 
-    /* ************************* Ende: Unterklassen ************************************* */
+    /*
+     * ************************* Ende: Unterklassen
+     * *************************************
+     */
 
 }

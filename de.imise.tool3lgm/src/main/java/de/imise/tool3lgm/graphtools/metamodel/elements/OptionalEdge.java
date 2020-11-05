@@ -4,8 +4,10 @@ import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 
 /**
- * Dieses Interface ist speziell für die Templates eingeführt worden, um der Kante zwischen IheActor und IheInterface die Optionalität mitgeben zu
- * können. Dieses Interface sollte von Kanten impelementiert werden, die bei einem Template als Optional oder Required gekennzeichnet werden sollen.
+ * Dieses Interface ist speziell für die Templates eingeführt worden, um der
+ * Kante zwischen IheActor und IheInterface die Optionalität mitgeben zu können.
+ * Dieses Interface sollte von Kanten impelementiert werden, die bei einem
+ * Template als Optional oder Required gekennzeichnet werden sollen.
  *
  * @author AXS (11 Mar 2019)
  */
@@ -55,7 +57,8 @@ public interface OptionalEdge {
     }
 
     /**
-     * Liefert den Namen der Optionen, den man z.B. in einer Tabelle als Spaltenüberschrift nehmen kann. Default de ist 'Optionalität' und en
+     * Liefert den Namen der Optionen, den man z.B. in einer Tabelle als
+     * Spaltenüberschrift nehmen kann. Default de ist 'Optionalität' und en
      * 'Optionality'.
      *
      * @return

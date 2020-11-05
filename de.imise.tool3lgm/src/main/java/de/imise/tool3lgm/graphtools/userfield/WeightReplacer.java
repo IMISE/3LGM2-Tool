@@ -15,15 +15,17 @@ public class WeightReplacer {
     private static final String UNIFORMLY_DISTRIBUTED = "UNIFORMLY_DISTRIBUTED";
 
     /**
-     * Mappt für einen HashString eines ModelElements und ein dazu gehöriges UserField
-     * auf einen Hash eines anderen UserFields, das das erste in allen Rechnungen ersetzen soll.
+     * Mappt für einen HashString eines ModelElements und ein dazu gehöriges
+     * UserField auf einen Hash eines anderen UserFields, das das erste in allen
+     * Rechnungen ersetzen soll.
      */
     private Table<String, String, String> replacer;
 
     /**
-     * Mappt für einen HashString eines ModelElements und eine Kantenklasse, die zu dem ModelElement passen sollte,
-     * auf einen Hash eines UserFields, das die Gleichverteilung als Kantengewicht bei Rechnungen über die Knatenklasse
-     * ersetzen soll.
+     * Mappt für einen HashString eines ModelElements und eine Kantenklasse, die
+     * zu dem ModelElement passen sollte, auf einen Hash eines UserFields, das
+     * die Gleichverteilung als Kantengewicht bei Rechnungen über die
+     * Knatenklasse ersetzen soll.
      */
     private Table<String, Class<? extends Edge>, String> standardWeigthReplacer;
 
@@ -31,7 +33,8 @@ public class WeightReplacer {
     }
 
     /**
-     * Setzt die Gleichvertilung als Ersetzung für das UserField mit dem übergebenen Hash
+     * Setzt die Gleichvertilung als Ersetzung für das UserField mit dem
+     * übergebenen Hash
      *
      * @param modelElementHash
      * @param userFieldHashToReplace
@@ -42,7 +45,8 @@ public class WeightReplacer {
     }
 
     /**
-     * Setzt für ein(en) ModelElement(-Hash) für einen UserField-Hash einen Erstzungs-UserField-Hash
+     * Setzt für ein(en) ModelElement(-Hash) für einen UserField-Hash einen
+     * Erstzungs-UserField-Hash
      *
      * @param modelElementHash
      * @param userFieldHashToReplace
@@ -82,7 +86,8 @@ public class WeightReplacer {
     }
 
     /**
-     * Entfernt für ein(en) ModelElement(-Hash) für einen UserField-Hash einen Erstzungs-UserField-Hash
+     * Entfernt für ein(en) ModelElement(-Hash) für einen UserField-Hash einen
+     * Erstzungs-UserField-Hash
      *
      * @param modelElementHash
      * @param userFieldHashToReplace
@@ -102,8 +107,9 @@ public class WeightReplacer {
     }
 
     /**
-     * Gibt für ein(en) ModelElement(-Hash) für einen UserField-Hash einen Erstzungs-UserField-Hash zurück.
-     * Gibt es keinen, kommt <code>null</code> zurück.
+     * Gibt für ein(en) ModelElement(-Hash) für einen UserField-Hash einen
+     * Erstzungs-UserField-Hash zurück. Gibt es keinen, kommt <code>null</code>
+     * zurück.
      *
      * @param modelElementHash
      * @param userFieldHashToReplace
@@ -114,7 +120,8 @@ public class WeightReplacer {
     }
 
     /**
-     * Setzt für ein(en) ModelElement(-Hash) einen Erstzungs-UserField-Hash für die Gleichverteilung der Kantenart.
+     * Setzt für ein(en) ModelElement(-Hash) einen Erstzungs-UserField-Hash für
+     * die Gleichverteilung der Kantenart.
      *
      * @param modelElementHash
      * @param edgeClass
@@ -135,8 +142,9 @@ public class WeightReplacer {
     }
 
     /**
-     * Entfernt für ein(en) ModelElement(-Hash) für eine Kantenart, den Has des USerFields, was in Rechunungen
-     * die Gleichverteilung als Verteilungsgewicht ersetzen soll.
+     * Entfernt für ein(en) ModelElement(-Hash) für eine Kantenart, den Has des
+     * USerFields, was in Rechunungen die Gleichverteilung als
+     * Verteilungsgewicht ersetzen soll.
      *
      * @param modelElementHash
      * @param userFieldHashToReplace
@@ -156,9 +164,10 @@ public class WeightReplacer {
     }
 
     /**
-     * Gibt für ein(en) ModelElement(-Hash) für für eine Kantenklasse einen Erstzungs-UserField-Hash,
-     * der bei Rechnungen mit Gleichverteilung über die angegebene Kantenklasse genutzt werden soll, zurück.
-     * Gibt es keinen, kommt <code>null</code> zurück.
+     * Gibt für ein(en) ModelElement(-Hash) für für eine Kantenklasse einen
+     * Erstzungs-UserField-Hash, der bei Rechnungen mit Gleichverteilung über
+     * die angegebene Kantenklasse genutzt werden soll, zurück. Gibt es keinen,
+     * kommt <code>null</code> zurück.
      *
      * @param modelElementHash
      * @param edgeClass
@@ -169,7 +178,8 @@ public class WeightReplacer {
     }
 
     /**
-     * Liefert <code>true</code>, wenn der übergebene Hash für die Gleichverteilung steht.
+     * Liefert <code>true</code>, wenn der übergebene Hash für die
+     * Gleichverteilung steht.
      *
      * @param userFieldHashReplacement
      * @return

@@ -13,7 +13,8 @@ import de.imise.tool3lgm.graphtools.userfield.UserField;
 import de.imise.util.NamedObjectContainer;
 
 /**
- * Erzeugt ein neues Model für den Table des <code>AbstractElementTypeUserFieldEditorPanel</code>s
+ * Erzeugt ein neues Model für den Table des
+ * <code>AbstractElementTypeUserFieldEditorPanel</code>s
  *
  * @author Ich
  * @create 19.08.2015
@@ -21,7 +22,8 @@ import de.imise.util.NamedObjectContainer;
 public class GeneralUserFieldTableModel extends AbstractUserFieldTableModel {
 
     /**
-     * Erzeugt ein neues Model für den Table des <code>AbstractElementTypeUserFieldEditorPanel</code>s
+     * Erzeugt ein neues Model für den Table des
+     * <code>AbstractElementTypeUserFieldEditorPanel</code>s
      *
      * @param doc
      */
@@ -31,7 +33,9 @@ public class GeneralUserFieldTableModel extends AbstractUserFieldTableModel {
 
     /**
      * @param doc
-     * @param elementClass in der <code>elementTypeBox</code> des <code>AbstractElementTypeUserFieldEditorPanel</code>s ausgewählte Klasse
+     * @param elementClass in der <code>elementTypeBox</code> des
+     *            <code>AbstractElementTypeUserFieldEditorPanel</code>s
+     *            ausgewählte Klasse
      * @param elementClass
      * @param showTopLevel
      * @param showInner
@@ -44,7 +48,9 @@ public class GeneralUserFieldTableModel extends AbstractUserFieldTableModel {
 
     /**
      * @param doc
-     * @param elementClass in der <code>elementTypeBox</code> des <code>AbstractElementTypeUserFieldEditorPanel</code>s ausgewählte Klasse
+     * @param elementClass in der <code>elementTypeBox</code> des
+     *            <code>AbstractElementTypeUserFieldEditorPanel</code>s
+     *            ausgewählte Klasse
      * @param elementClass
      * @param showTopLevel
      * @param showInner

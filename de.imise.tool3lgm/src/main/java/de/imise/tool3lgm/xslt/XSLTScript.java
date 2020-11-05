@@ -1,6 +1,5 @@
 /*
- * Created on 19.07.2004
- * To change the template for this generated file go to
+ * Created on 19.07.2004 To change the template for this generated file go to
  * Window&gt;Preferences&gt;Java&gt;Code Generation&gt;Code and Comments
  */
 package de.imise.tool3lgm.xslt;
@@ -14,9 +13,9 @@ import java.io.InputStreamReader;
 import java.net.URL;
 
 /**
- * @author Thomas Rudert
- *         To change the template for this generated type comment go to
- *         Window&gt;Preferences&gt;Java&gt;Code Generation&gt;Code and Comments
+ * @author Thomas Rudert To change the template for this generated type comment
+ *         go to Window&gt;Preferences&gt;Java&gt;Code Generation&gt;Code and
+ *         Comments
  */
 public class XSLTScript {
 
@@ -56,10 +55,10 @@ public class XSLTScript {
     private File file = null;
 
     /**
-     * 
+     *
      */
     public XSLTScript(final URL url) throws IOException {
-        //TODO:AXS: testen, ob der Kommentar unten noch stimmt	    
+        //TODO:AXS: testen, ob der Kommentar unten noch stimmt
         this.url = url;
         //Aus irgendeinem Grund kommt die URL mit "%5c" und "/" als Dateitrenner gemischt rein
         //und das obwohl File.separator einen Backslash ("\") liefert. Deswegen wird hier einfach
@@ -145,7 +144,7 @@ public class XSLTScript {
     @Override
     public int hashCode() {
         //	    assert false : "hashCode not designed";
-        return 42; // any arbitrary constant will do 
+        return 42; // any arbitrary constant will do
     }
 
     @Override

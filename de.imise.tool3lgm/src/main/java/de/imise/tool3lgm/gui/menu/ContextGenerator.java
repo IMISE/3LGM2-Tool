@@ -64,7 +64,8 @@ public abstract class ContextGenerator implements ActionListener {
     }
 
     /**
-     * @return PopupMenu that will update the enabled states before become visible
+     * @return PopupMenu that will update the enabled states before become
+     *         visible
      */
     public final JPopupMenu createUpdatingPopupMenu() {
         return createUpdatingPopupMenu(null);
@@ -72,7 +73,8 @@ public abstract class ContextGenerator implements ActionListener {
 
     /**
      * @param label
-     * @return PopupMenu that will update the enabled states before become visible
+     * @return PopupMenu that will update the enabled states before become
+     *         visible
      */
     public final JPopupMenu createUpdatingPopupMenu(final String label) {
         JPopupMenu menu = new JPopupMenu(label);
@@ -278,7 +280,8 @@ public abstract class ContextGenerator implements ActionListener {
     }
 
     /**
-     * Sets a menu scroller for the given menu with pleasant values for most cases.
+     * Sets a menu scroller for the given menu with pleasant values for most
+     * cases.
      *
      * @param menu
      */
@@ -287,7 +290,8 @@ public abstract class ContextGenerator implements ActionListener {
     }
 
     /**
-     * Sets a menu scroller for the given menu with pleasant values for most cases.
+     * Sets a menu scroller for the given menu with pleasant values for most
+     * cases.
      *
      * @param menu
      * @param topFixedCount number of items before the scroller

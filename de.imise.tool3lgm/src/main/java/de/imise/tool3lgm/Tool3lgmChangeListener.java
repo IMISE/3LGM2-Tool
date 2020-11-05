@@ -5,11 +5,14 @@ import de.imise.tool3lgm.graphtools.model.LGMChangeListener;
 import de.imise.util.event.ListenerSupport;
 
 /**
- * Hier sind alle Ereignisse enthalten, die im gesamten Tool selbst relevant sind. SZENARIO_ADDED und SZENARIO_REMOVED sind eigentlich
- * Modell-spezifische Ereignisse und daher auch im {@link LGMChangeListener}, werden aber auch als Tool-spezifisches Ereignis behandelt, damit nicht
- * alle Klassen, die auf diese Ereignisse reagieren müssen immer an allen Teilmodellen als Listener hinzugefügt werden müssen. Wer sich bei diesen
- * Ereignissen nur für ein Modell interessiert, wird Listener des Modell. Wer sich bei den Ereignissen für alle Modelle gleichzeitig interessiert,
- * wird Listener dieser Klasse hier.
+ * Hier sind alle Ereignisse enthalten, die im gesamten Tool selbst relevant
+ * sind. SZENARIO_ADDED und SZENARIO_REMOVED sind eigentlich Modell-spezifische
+ * Ereignisse und daher auch im {@link LGMChangeListener}, werden aber auch als
+ * Tool-spezifisches Ereignis behandelt, damit nicht alle Klassen, die auf diese
+ * Ereignisse reagieren müssen immer an allen Teilmodellen als Listener
+ * hinzugefügt werden müssen. Wer sich bei diesen Ereignissen nur für ein Modell
+ * interessiert, wird Listener des Modell. Wer sich bei den Ereignissen für alle
+ * Modelle gleichzeitig interessiert, wird Listener dieser Klasse hier.
  *
  * @author AXS (15 Aug 2019)
  */
@@ -57,14 +60,15 @@ public interface Tool3lgmChangeListener {
         ;
 
         /**
-         * Stores the last fired change type to prevent circles in event delivering
-         * (in combination with the {@link #lastDoc}
+         * Stores the last fired change type to prevent circles in event
+         * delivering (in combination with the {@link #lastDoc}
          */
         private static Tool3lgmChangeType lastChangeType;
 
         /**
-         * Stores the doc which was the source of the last fired change type to prevent
-         * circles in event delivering (in combination with the {@link #lastChangeType}
+         * Stores the doc which was the source of the last fired change type to
+         * prevent circles in event delivering (in combination with the
+         * {@link #lastChangeType}
          */
         private static GraphDocument lastDoc;
 
@@ -151,7 +155,8 @@ public interface Tool3lgmChangeListener {
     }
 
     /**
-     * In der default-Implementierung ruft jede andere change-Funktion dieses Listeners einfach diese Funktion hier auf. Überschreibt man sie, fängt
+     * In der default-Implementierung ruft jede andere change-Funktion dieses
+     * Listeners einfach diese Funktion hier auf. Überschreibt man sie, fängt
      * man automatisch jedes Ereignis als Listener ab.
      *
      * @param source das Teilmodell, für das das Change-Ereignis ausgelöst wurde

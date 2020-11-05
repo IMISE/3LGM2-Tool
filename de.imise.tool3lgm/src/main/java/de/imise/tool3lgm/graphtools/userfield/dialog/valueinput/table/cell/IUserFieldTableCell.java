@@ -16,21 +16,28 @@ import de.imise.tool3lgm.graphtools.userfield.UserField;
 /**
  * Repräsentiert genau eine Zelle eines UserFieldTables.<br>
  * Ist die Editor- und die Renderer-Komponente für eine Zelle.
- * 
+ *
  * @author fstephan
  */
 public interface IUserFieldTableCell extends TableCellEditor, TableCellRenderer {
 
     /**
-     * Zeichen, dass im Editor als Dezimal-Trennzeichnen angezeigt wird. Sorgt dafür, dass <code>Strings</code> korrekt auf <code>Number</code>
-     * geparsed werden können.
+     * Zeichen, dass im Editor als Dezimal-Trennzeichnen angezeigt wird. Sorgt
+     * dafür, dass <code>Strings</code> korrekt auf <code>Number</code> geparsed
+     * werden können.
      */
     char EDITOR_DECIMAL_SEPARATOR = '.';
 
-    /** {@link UserField#EMPTY_STRING} wird im Renderer durch <code>""</code> ersetzt */
+    /**
+     * {@link UserField#EMPTY_STRING} wird im Renderer durch <code>""</code>
+     * ersetzt
+     */
     String RENDERER_EMPTY_STRING = "";
 
-    /** {@link UserField#EMPTY_STRING} wird im Editor durch <code>""</code> ersetzt */
+    /**
+     * {@link UserField#EMPTY_STRING} wird im Editor durch <code>""</code>
+     * ersetzt
+     */
     String EDITOR_EMPTY_STRING = "";
 
     /** Renderer stellt Text rechtsbündig dar */

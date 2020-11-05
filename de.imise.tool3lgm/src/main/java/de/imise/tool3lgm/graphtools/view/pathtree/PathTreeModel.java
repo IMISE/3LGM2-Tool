@@ -42,8 +42,10 @@ public class PathTreeModel extends DefaultTreeModel implements MetaModelSpecific
     private final String emptyModelInfo;
 
     /**
-     * If <code>false</code> only the name of the model elements will be displayed in ElementContainerTreeNodes.
-     * If <code>true</code> the name with all submodel information will be displayed for ElementContainerTreeNodes.
+     * If <code>false</code> only the name of the model elements will be
+     * displayed in ElementContainerTreeNodes. If <code>true</code> the name
+     * with all submodel information will be displayed for
+     * ElementContainerTreeNodes.
      */
     private final boolean showElementNamesWithSubmodels;
 
@@ -55,28 +57,32 @@ public class PathTreeModel extends DefaultTreeModel implements MetaModelSpecific
     }
 
     /**
-     * @param emptyModelInfo
-     *            Info that is displayed if there is nothing else to display
+     * @param emptyModelInfo Info that is displayed if there is nothing else to
+     *            display
      */
     public PathTreeModel(final String emptyModelInfo) {
         this(emptyModelInfo, false);
     }
 
     /**
-     * @param showElementNamesWithSubmodels
-     *            If <code>false</code> only the name of the model elements will be displayed in ElementContainerTreeNodes.
-     *            If <code>true</code> the name with all submodel information will be displayed for ElementContainerTreeNodes.
+     * @param showElementNamesWithSubmodels If <code>false</code> only the name
+     *            of the model elements will be displayed in
+     *            ElementContainerTreeNodes. If <code>true</code> the name with
+     *            all submodel information will be displayed for
+     *            ElementContainerTreeNodes.
      */
     public PathTreeModel(final boolean showElementNamesWithSubmodels) {
         this(null, showElementNamesWithSubmodels);
     }
 
     /**
-     * @param emptyModelInfo
-     *            Info that is displayed if there is nothing else to display
-     * @param showElementNamesWithSubmodels
-     *            If <code>false</code> only the name of the model elements will be displayed in ElementContainerTreeNodes.
-     *            If <code>true</code> the name with all submodel information will be displayed for ElementContainerTreeNodes.
+     * @param emptyModelInfo Info that is displayed if there is nothing else to
+     *            display
+     * @param showElementNamesWithSubmodels If <code>false</code> only the name
+     *            of the model elements will be displayed in
+     *            ElementContainerTreeNodes. If <code>true</code> the name with
+     *            all submodel information will be displayed for
+     *            ElementContainerTreeNodes.
      */
     public PathTreeModel(final String emptyModelInfo, final boolean showElementNamesWithSubmodels) {
         super(new StringTreeNode("Root", true));
@@ -132,10 +138,12 @@ public class PathTreeModel extends DefaultTreeModel implements MetaModelSpecific
     }
 
     /**
-     * Creates the full hierarchy of the given branch defintion and returns the last node in this hierarchy.
+     * Creates the full hierarchy of the given branch defintion and returns the
+     * last node in this hierarchy.
      *
      * @param branchDefinition
-     * @return the last node of the hierarchy node defined by the given branch definition
+     * @return the last node of the hierarchy node defined by the given branch
+     *         definition
      */
     private LGMTreeNode getOrCreateBranchLastHierarchyNode(final PathTreeBranchDefinition branchDefinition) {
         LGMTreeNode lastHierarchyNode = root;

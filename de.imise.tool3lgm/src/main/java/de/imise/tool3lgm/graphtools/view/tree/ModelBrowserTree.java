@@ -60,9 +60,9 @@ import de.imise.tool3lgm.gui.menu.ContextGenerator;
 import de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty;
 
 /**
- * A tree view to the model. Under the root node are the layer nodes, then for every
- * layer node the class nodes and then the instances with optional child nodes for
- * the user defined properties.
+ * A tree view to the model. Under the root node are the layer nodes, then for
+ * every layer node the class nodes and then the instances with optional child
+ * nodes for the user defined properties.
  *
  * @author N.N.
  */
@@ -78,36 +78,35 @@ public final class ModelBrowserTree extends DynamicTree implements UserFieldList
     private final LGMTreeNode physicalLayer = new StringTreeNode(ModelConstants.getVisibleLayerName(ModelConstants.PHYSICAL_LAYER), getLayerIcon(ActionIdentifier.ACTION_ACTIVATE_PHYSICAL_LAYER));
 
     /**
-     * Node where all {@link Textfield} instances are displayed as
-     * children which exists at the Domain Layer in the corresponding
+     * Node where all {@link Textfield} instances are displayed as children
+     * which exists at the Domain Layer in the corresponding
      * {@link GraphDocument}.
      */
     private LGMTreeNode textFieldDomainLayer = null;
 
     /**
-     * Node where all {@link Textfield} instances are displayed as
-     * children which exists at the Logical Tool Layer in the
-     * corresponding {@link GraphDocument}.
+     * Node where all {@link Textfield} instances are displayed as children
+     * which exists at the Logical Tool Layer in the corresponding
+     * {@link GraphDocument}.
      */
     private LGMTreeNode textFieldLogicalLayer = null;
 
     /**
-     * Node where all {@link Textfield} instances are displayed as
-     * children which exists at the Physical Tool Layer in the
-     * corresponding {@link GraphDocument}.
+     * Node where all {@link Textfield} instances are displayed as children
+     * which exists at the Physical Tool Layer in the corresponding
+     * {@link GraphDocument}.
      */
     private LGMTreeNode textFieldPhysicalLayer = null;
 
     /**
-     * The {@link GraphDocument} this model browser is showing
-     * the elements from.
+     * The {@link GraphDocument} this model browser is showing the elements
+     * from.
      */
     private GraphDocument doc;
 
     /**
-     * A class that encapsulates all functions to update
-     * the model browser on change events. This is the
-     * {@link LGMChangeListener}.
+     * A class that encapsulates all functions to update the model browser on
+     * change events. This is the {@link LGMChangeListener}.
      */
     private final ModelBrowserTreeLGMChangeListener transactionListener;
 
@@ -116,15 +115,19 @@ public final class ModelBrowserTree extends DynamicTree implements UserFieldList
      */
     public static final int PID = STANDARD_PID;
 
-    /** Rererence to the {@link TreeModel} of this tree as {@link DefaultTreeModel} */
+    /**
+     * Rererence to the {@link TreeModel} of this tree as
+     * {@link DefaultTreeModel}
+     */
     private final DefaultTreeModel myModel;
 
     /** The {@link TreePath} with root as last path element. */
     private final TreePath rootPath;
 
     /**
-     * Maps from a element class to the treenode which has to be only filled with
-     * instance children and added to the model browser if the tool is in enpert mode.
+     * Maps from a element class to the treenode which has to be only filled
+     * with instance children and added to the model browser if the tool is in
+     * enpert mode.
      */
     private final Map<Class<? extends ModelElement>, ElementClassTreeNode> elementClassToParentNode = new HashMap<>();
 
@@ -135,22 +138,36 @@ public final class ModelBrowserTree extends DynamicTree implements UserFieldList
      */
     private final Collection<ElementClassTreeNode> nodesToClear;
 
-    /** Caches the value of {@link BooleanProperty#OPTION_SHOW_PART_OF_HIERARCHY} */
+    /**
+     * Caches the value of {@link BooleanProperty#OPTION_SHOW_PART_OF_HIERARCHY}
+     */
     private static boolean showPartOfHierarchy = false;
 
-    /** Caches the value of {@link BooleanProperty#OPTION_SHOW_USER_DEFINED_PROPERTIES_IN_MODEL_BROWSER} */
+    /**
+     * Caches the value of
+     * {@link BooleanProperty#OPTION_SHOW_USER_DEFINED_PROPERTIES_IN_MODEL_BROWSER}
+     */
     private static boolean showUserDefinedProperties = false;
 
-    /** Caches the value of {@link BooleanProperty#OPTION_SUBORDINATE_COMPOSITION_ELEMENTS_IN_MODEL_BROWSER} */
+    /**
+     * Caches the value of
+     * {@link BooleanProperty#OPTION_SUBORDINATE_COMPOSITION_ELEMENTS_IN_MODEL_BROWSER}
+     */
     private static boolean subordinateSlaveElements = false;
 
     /** Caches the value of {@link BooleanProperty#OPTION_ENABLE_EXPERT_MODE} */
     private static boolean showExpertModeOnlyVisisbleElements = false;
 
-    /** Caches the value of {@link BooleanProperty#OPTION_SHOW_TEMPLATE_ELEMENTS_IN_MODEL_BROWSER} */
+    /**
+     * Caches the value of
+     * {@link BooleanProperty#OPTION_SHOW_TEMPLATE_ELEMENTS_IN_MODEL_BROWSER}
+     */
     private static boolean showTemplateElements = false;
 
-    /** Caches the value of {@link BooleanProperty#OPTION_ENABLE_SUBMODEL_BROWSER} */
+    /**
+     * Caches the value of
+     * {@link BooleanProperty#OPTION_ENABLE_SUBMODEL_BROWSER}
+     */
     private static boolean showSubmodelInBrowser = false;
 
     /**
@@ -209,7 +226,8 @@ public final class ModelBrowserTree extends DynamicTree implements UserFieldList
     }
 
     /**
-     * Setzt das übergebene {@link GraphDocument} für diesen Baum und fügt den Baum als {@link LGMChangeListener} hinzu. Beim vorherigen
+     * Setzt das übergebene {@link GraphDocument} für diesen Baum und fügt den
+     * Baum als {@link LGMChangeListener} hinzu. Beim vorherigen
      * {@link GraphDocument} des Baumes wird der Baum als Listener entfernt.
      *
      * @param doc
@@ -675,7 +693,8 @@ public final class ModelBrowserTree extends DynamicTree implements UserFieldList
     }
 
     /**
-     * Selektiert im Baum alle Elemente, die im dazugehörigen {@link GraphDocument} selektiert sind.
+     * Selektiert im Baum alle Elemente, die im dazugehörigen
+     * {@link GraphDocument} selektiert sind.
      */
     public void selectObjects() {
         setSelectionListenerActive(false);
@@ -727,7 +746,8 @@ public final class ModelBrowserTree extends DynamicTree implements UserFieldList
     }
 
     /**
-     * Wenn die Layer-Nummer gültig ist, wird der zugehörige Ebenenknoten selektiert und ggf. zu ihm hingescollt.
+     * Wenn die Layer-Nummer gültig ist, wird der zugehörige Ebenenknoten
+     * selektiert und ggf. zu ihm hingescollt.
      *
      * @param layer
      */
@@ -749,8 +769,8 @@ public final class ModelBrowserTree extends DynamicTree implements UserFieldList
     }
 
     /**
-     * Über diese Funktion kann der {@link DynamicTreeSelectionListener} den Layer wechseln, wenn
-     * ein Layerknoten im Baum selektiert wurde.
+     * Über diese Funktion kann der {@link DynamicTreeSelectionListener} den
+     * Layer wechseln, wenn ein Layerknoten im Baum selektiert wurde.
      *
      * @param node
      * @return

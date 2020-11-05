@@ -13,11 +13,15 @@ import java.util.Properties;
  */
 public abstract class AbstractUserProperties {
 
-    /** Mit diesem Namenspräfix sind alle Properties zu versehen, die nicht gepspeichert werden sollen */
+    /**
+     * Mit diesem Namenspräfix sind alle Properties zu versehen, die nicht
+     * gepspeichert werden sollen
+     */
     public static final String TRANSIENT_PROPERTY_NAME_PREFIX = "TRANSIENT_";
 
     /**
-     * Liefert <code>true</code>, wenn der übergebene Property-Name mit dem String beginnt, der angibt, dass diese Property nicht gespeichert werden
+     * Liefert <code>true</code>, wenn der übergebene Property-Name mit dem
+     * String beginnt, der angibt, dass diese Property nicht gespeichert werden
      * soll.
      *
      * @param propertyName
@@ -34,8 +38,9 @@ public abstract class AbstractUserProperties {
 
     /**
      * Stellt Property-Change-Funktionalität zur Verfügung. <br>
-     * Zu der Klasse <code>PropertyChangeSupport</code> werden alle Property-Change-Listener
-     * hinzugefügt und in <code>firePorpertyChange()</code> werden alle Listener benachrichtigt.
+     * Zu der Klasse <code>PropertyChangeSupport</code> werden alle
+     * Property-Change-Listener hinzugefügt und in
+     * <code>firePorpertyChange()</code> werden alle Listener benachrichtigt.
      */
     private static PropertyChangeSupport changeSupport = new PropertyChangeSupport(UserProperties.class);
 
@@ -62,7 +67,8 @@ public abstract class AbstractUserProperties {
     }
 
     /**
-     * Sendet an alle PropertyChangeListener das Ereignis, dass sich etwas geändert hat
+     * Sendet an alle PropertyChangeListener das Ereignis, dass sich etwas
+     * geändert hat
      *
      * @param property
      * @param oldValue
@@ -73,7 +79,8 @@ public abstract class AbstractUserProperties {
     }
 
     /**
-     * Prüft, ob das ChangeEvent für das übergebene Property-Objekt ausgelöst wurde
+     * Prüft, ob das ChangeEvent für das übergebene Property-Objekt ausgelöst
+     * wurde
      *
      * @param property
      * @param event

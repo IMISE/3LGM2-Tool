@@ -1,5 +1,6 @@
 /*
- * Created on 26.05.2008 Window - Preferences - Java - Code Style - Code Templates
+ * Created on 26.05.2008 Window - Preferences - Java - Code Style - Code
+ * Templates
  */
 package de.imise.tool3lgm.graphtools.userfield.dialog.definition.formula.panel;
 
@@ -18,11 +19,11 @@ import java.util.ArrayList;
 
 import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
-import javax.swing.DefaultListSelectionModel;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
+import javax.swing.ListSelectionModel;
 
 import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
@@ -34,14 +35,16 @@ import de.imise.tool3lgm.graphtools.userfield.UserFieldDefinitions;
 import de.imise.util.swing.component.list.AlphabeticalJList;
 
 /**
- * Das <code>ReferncePanel</code> wird genutzt um für Kennzahlformeln an Kanten die Verrechunugsfunktion Reference zu definieren.
+ * Das <code>ReferncePanel</code> wird genutzt um für Kennzahlformeln an Kanten
+ * die Verrechunugsfunktion Reference zu definieren.
  *
  * @author hboehme
  */
 public class ReferencePanel extends JPanel implements ActionListener {
 
     /**
-     * die Klasse der Edge, zu der die gebunden Elemente und wiederum deren <code>UserField</code>s gesucht werden.
+     * die Klasse der Edge, zu der die gebunden Elemente und wiederum deren
+     * <code>UserField</code>s gesucht werden.
      */
     private final Class<? extends Edge> edgeClass;
 
@@ -51,32 +54,38 @@ public class ReferencePanel extends JPanel implements ActionListener {
     private final UserField userField;
 
     /**
-     * Das Array, dass alle Elementklassen entählt. Von diesen Elementklassen können <code>UserField></code>s ausgewählt werden.
+     * Das Array, dass alle Elementklassen entählt. Von diesen Elementklassen
+     * können <code>UserField></code>s ausgewählt werden.
      */
     private Class<? extends ModelElement>[] classes;
 
     /**
-     * Wenn die Edge eine Teil-Von Beziehung ist, wird dieses Panel angezeigt. Darin befinden sich die Radion Button zum Kennzeichen der Richtung
+     * Wenn die Edge eine Teil-Von Beziehung ist, wird dieses Panel angezeigt.
+     * Darin befinden sich die Radion Button zum Kennzeichen der Richtung
      */
     private JPanel directionPanel;
 
     /**
-     * Wenn die Edge eine Teil-Von Beziehung ist, kann der RadioButton die Richung gekennzeichnen
+     * Wenn die Edge eine Teil-Von Beziehung ist, kann der RadioButton die
+     * Richung gekennzeichnen
      */
     private JRadioButton vtzmRB;
 
     /**
-     * Wenn die Edge eine Teil-Von Beziehung ist, kann der RadioButton die Richung gekennzeichnen
+     * Wenn die Edge eine Teil-Von Beziehung ist, kann der RadioButton die
+     * Richung gekennzeichnen
      */
     private JRadioButton vgzmRB;
 
     /**
-     * Diese <code>AlphabeticalJList</code> hält die userFields der Start bzw. Endklassen
+     * Diese <code>AlphabeticalJList</code> hält die userFields der Start bzw.
+     * Endklassen
      */
     private AlphabeticalJList<UserField> userFieldList;
 
     /**
-     * Die <code>startClassesList</code> hält die möglichen Klassen der Startklassen
+     * Die <code>startClassesList</code> hält die möglichen Klassen der
+     * Startklassen
      */
     private AlphabeticalJList<Class<? extends ModelElement>> classesList;
 
@@ -149,7 +158,7 @@ public class ReferencePanel extends JPanel implements ActionListener {
         attributePanel.setBorder(createTitledBorder(getResString("attributes")));
 
         classesList = new AlphabeticalJList<>();
-        classesList.setSelectionMode(DefaultListSelectionModel.SINGLE_SELECTION);
+        classesList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
         classesList.addListSelectionListener(e -> {
             clearUserFieldList();
@@ -219,7 +228,7 @@ public class ReferencePanel extends JPanel implements ActionListener {
         }
 
         resultString.append(" | ");
-        resultString.append(((UserField) userFieldList.getSelectedObject()).getHashCode());
+        resultString.append(userFieldList.getSelectedObject().getHashCode());
 
         if (vgzmRB.isSelected()) {
             resultString.append(" | ");

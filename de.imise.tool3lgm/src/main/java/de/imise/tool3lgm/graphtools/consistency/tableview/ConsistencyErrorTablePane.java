@@ -4,8 +4,8 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 
 /**
- * A Scrollpane that holds the consistency error table and the
- * corresponding {@link ConsistencyErrorTableGenerator}
+ * A Scrollpane that holds the consistency error table and the corresponding
+ * {@link ConsistencyErrorTableGenerator}
  *
  * @author AXS (03.09.2020)
  */

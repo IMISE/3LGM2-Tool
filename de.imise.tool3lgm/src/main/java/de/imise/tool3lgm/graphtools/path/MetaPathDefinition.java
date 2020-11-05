@@ -13,6 +13,7 @@ import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Multimap;
 
 import de.imise.tool3lgm.Tool3lgmConstants;
+import de.imise.tool3lgm.graphtools.metamodel.CoreMetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModelSpecificAdapter;
 import de.imise.tool3lgm.graphtools.metamodel.elements.DoubleMeaningEdge;
@@ -56,8 +57,10 @@ public class MetaPathDefinition extends MetaModelSpecificAdapter {
     }
 
     /**
-     * Legt eine neue Pfaddefinition an. Werden dem Konstruktor Kantenklassen übergeben, dann werden nur diese Kantenklassen als
-     * {@link ElementaryMetaPath} zur Definition hinzugefügt. Ist das übergebene Array leer,dann werden alle Kanten des Metamodells hinzugefügt.
+     * Legt eine neue Pfaddefinition an. Werden dem Konstruktor Kantenklassen
+     * übergeben, dann werden nur diese Kantenklassen als
+     * {@link ElementaryMetaPath} zur Definition hinzugefügt. Ist das übergebene
+     * Array leer,dann werden alle Kanten des Metamodells hinzugefügt.
      *
      * @param metaModel
      * @param edgeClasses
@@ -70,7 +73,7 @@ public class MetaPathDefinition extends MetaModelSpecificAdapter {
         ElementaryMetaPathHandler elementaryMetaPathHandler = metaModel.getElementaryMetaPathHandler();
         //Alle Edgen in beiden Richtungen für alle direkten Startklassen und ihre Unterklassen als MetaPfade hinzufügen
         for (Class<? extends Edge> edgeClass : edgeClassesIt) {
-            if (MetaModel.isDoubleMeaningEdge(edgeClass)) {
+            if (CoreMetaModel.isDoubleMeaningEdge(edgeClass)) {
                 Class<? extends DoubleMeaningEdge> doubleMeaningEdgeClass = edgeClass.asSubclass(DoubleMeaningEdge.class);
                 put(elementaryMetaPathHandler.getForwardMetaPath(doubleMeaningEdgeClass, ConnectionState.FORWARD));
                 put(elementaryMetaPathHandler.getForwardMetaPath(doubleMeaningEdgeClass, ConnectionState.BACKWARD));
@@ -82,7 +85,8 @@ public class MetaPathDefinition extends MetaModelSpecificAdapter {
     }
 
     /**
-     * Kann in Unterklassen zur Initialisierung überschrieben werden und wird im Konstruktor aufgerufen
+     * Kann in Unterklassen zur Initialisierung überschrieben werden und wird im
+     * Konstruktor aufgerufen
      */
     protected void init() {
     }
@@ -118,7 +122,8 @@ public class MetaPathDefinition extends MetaModelSpecificAdapter {
     }
 
     /**
-     * Convenience method for {@link SimpleMetaPathCreator#createSimpleMetaPath(Class, Class, Class...)}
+     * Convenience method for
+     * {@link SimpleMetaPathCreator#createSimpleMetaPath(Class, Class, Class...)}
      *
      * @param startClass
      * @param endClass
@@ -132,7 +137,8 @@ public class MetaPathDefinition extends MetaModelSpecificAdapter {
     }
 
     /**
-     * Convenience method for {@link SimpleMetaPathCreator#createSimpleMetaPath(Class, Class, String, Class...)}
+     * Convenience method for
+     * {@link SimpleMetaPathCreator#createSimpleMetaPath(Class, Class, String, Class...)}
      *
      * @param startClass
      * @param endClass
@@ -140,7 +146,8 @@ public class MetaPathDefinition extends MetaModelSpecificAdapter {
      * @param associations
      * @return
      * @throws IllegalArgumentException
-     * @see SimpleMetaPathCreator#createSimpleMetaPath(Class, Class, String, Class...)
+     * @see SimpleMetaPathCreator#createSimpleMetaPath(Class, Class, String,
+     *      Class...)
      */
     @SafeVarargs
     public final SimpleMetaPath smp(final Class<? extends ModelElement> startClass, final Class<? extends ModelElement> endClass, final String baseResKeyOrName, final Class<? extends Edge>... associations) throws IllegalArgumentException {
@@ -148,7 +155,8 @@ public class MetaPathDefinition extends MetaModelSpecificAdapter {
     }
 
     /**
-     * Liefert <code>Tool3lgmConstants.getResString(resKey)</code>. Dient nur zur Verkürzung des Codes.
+     * Liefert <code>Tool3lgmConstants.getResString(resKey)</code>. Dient nur
+     * zur Verkürzung des Codes.
      *
      * @param resKey
      * @return
@@ -174,13 +182,15 @@ public class MetaPathDefinition extends MetaModelSpecificAdapter {
     }
 
     /**
-     * Liefert alle MetaPaths die für die übergebene Startklasse hin zur Endklasse definiert sind.
+     * Liefert alle MetaPaths die für die übergebene Startklasse hin zur
+     * Endklasse definiert sind.
      *
      * @param startClass
      * @param endClass
-     * @param wrap
-     *            Wenn <code>true</code>, dann werden bei den gefundenen MetaPfaden die Start- und Endklasse(n) durch die übergebene Start- und
-     *            Endklasse ersetzt, wenn sie nicht bereits übereinstimmen
+     * @param wrap Wenn <code>true</code>, dann werden bei den gefundenen
+     *            MetaPfaden die Start- und Endklasse(n) durch die übergebene
+     *            Start- und Endklasse ersetzt, wenn sie nicht bereits
+     *            übereinstimmen
      * @return
      */
     public final Set<MetaPath> getMetaPaths(final Class<? extends ModelElement> startClass, final Class<? extends ModelElement> endClass, final boolean wrap) {
@@ -197,8 +207,9 @@ public class MetaPathDefinition extends MetaModelSpecificAdapter {
     }
 
     /**
-     * Legt den übergebenen Metapfad für alle Startklassen und alle Unterklassen davon in die {@link #ELEMENT_CLASS_TO_START_PATHES}.
-     * Wenn der Metapfad eine Gegenrichtung hat, wird diese auch gleich für hinzugefügt.
+     * Legt den übergebenen Metapfad für alle Startklassen und alle Unterklassen
+     * davon in die {@link #ELEMENT_CLASS_TO_START_PATHES}. Wenn der Metapfad
+     * eine Gegenrichtung hat, wird diese auch gleich für hinzugefügt.
      *
      * @param metaPaths
      */
@@ -216,10 +227,12 @@ public class MetaPathDefinition extends MetaModelSpecificAdapter {
     }
 
     /**
-     * Erzeugt aus den übergebenen Assoziationen einen {@link SequenceMetaPath} zwischen der Start- und Endklasse, die übergeben wurden. Die
-     * Richtungen werden aus diesen Start- und Endklassen abgeleitet. Wenn es nicht eindeutig ist, ob die Startklasse die Kante vorwärts oder
-     * rückwärts dreht, dann wird immer vorwärts angenommen.
-     * Dieser Metapfad wird in die Definition mit aufgenommen.
+     * Erzeugt aus den übergebenen Assoziationen einen {@link SequenceMetaPath}
+     * zwischen der Start- und Endklasse, die übergeben wurden. Die Richtungen
+     * werden aus diesen Start- und Endklassen abgeleitet. Wenn es nicht
+     * eindeutig ist, ob die Startklasse die Kante vorwärts oder rückwärts
+     * dreht, dann wird immer vorwärts angenommen. Dieser Metapfad wird in die
+     * Definition mit aufgenommen.
      *
      * @param startClass
      * @param endClass
@@ -235,14 +248,13 @@ public class MetaPathDefinition extends MetaModelSpecificAdapter {
     }
 
     /**
-     * Gibt die ModellElement-Klassen aus, für die Pfade definiert sind und dahinter die Pfade.
-     * /
-     * public final void writePathes() {
-     * ArrayList<Class<? extends ModelElement>> ccc = new ArrayList<>(element_class_to_direct_start_pathes.keySet());
-     * Alphabetical.sort(ccc);
-     * for (Class<? extends ModelElement> elementClass : ccc)
-     * System.err.println(elementClass.getSimpleName() + ": " + element_class_to_direct_start_pathes.get(elementClass));
-     * }
+     * Gibt die ModellElement-Klassen aus, für die Pfade definiert sind und
+     * dahinter die Pfade. / public final void writePathes() { ArrayList<Class<?
+     * extends ModelElement>> ccc = new
+     * ArrayList<>(element_class_to_direct_start_pathes.keySet());
+     * Alphabetical.sort(ccc); for (Class<? extends ModelElement> elementClass :
+     * ccc) System.err.println(elementClass.getSimpleName() + ": " +
+     * element_class_to_direct_start_pathes.get(elementClass)); }
      */
     public final void writePathes() {
         ArrayList<MetaPath> metaPaths = new ArrayList<>(definedMetaPaths);
@@ -253,7 +265,8 @@ public class MetaPathDefinition extends MetaModelSpecificAdapter {
     }
 
     /**
-     * Liefert alle Elementklassen, für die Pfade als Startklasse definiert sind.
+     * Liefert alle Elementklassen, für die Pfade als Startklasse definiert
+     * sind.
      *
      * @return
      */
@@ -262,7 +275,8 @@ public class MetaPathDefinition extends MetaModelSpecificAdapter {
     }
 
     /**
-     * Liefert alle Elementklassen, für die Pfade als Startklasse definiert sind.
+     * Liefert alle Elementklassen, für die Pfade als Startklasse definiert
+     * sind.
      *
      * @return
      */
@@ -273,7 +287,8 @@ public class MetaPathDefinition extends MetaModelSpecificAdapter {
     /**
      * Liefert alle Elementklassen, für die Pfade definiert sind.
      *
-     * @param start wenn <code>true</code> werden alle Startklassen aller Pfade rausgesucht, bei <code>false</code> alle Endklassen
+     * @param start wenn <code>true</code> werden alle Startklassen aller Pfade
+     *            rausgesucht, bei <code>false</code> alle Endklassen
      * @return
      */
     private final Set<Class<? extends ModelElement>> getElementClassesInPaths(final boolean start) {
@@ -319,16 +334,20 @@ public class MetaPathDefinition extends MetaModelSpecificAdapter {
     //////////////////////////////
 
     /**
-     * @return Liefert eine Sammlung aller {@link SimpleMetaPath}, die man zwischen 2 Elementen anlegen kann, wobei die Zwischenelemente ebenfalls neu
-     *         angelegt werden. Diese Pfade werden im Kontextmenü bei Mehrfachselektion oder Einfachselektion angeboten.
+     * @return Liefert eine Sammlung aller {@link SimpleMetaPath}, die man
+     *         zwischen 2 Elementen anlegen kann, wobei die Zwischenelemente
+     *         ebenfalls neu angelegt werden. Diese Pfade werden im Kontextmenü
+     *         bei Mehrfachselektion oder Einfachselektion angeboten.
      */
     public Collection<SimpleMetaPath> getCreatablePaths() {
         return ImmutableList.of();
     }
 
     /**
-     * Mappt von einer Kantenklasse auf den MetaPfad, über den verbindbare Elemente ebenfalls bereits verbunden sein müssen.
-     * Dieser Mechanismus ist dafür gedacht, verbindbare Elemente einzuschränken auf bestimmte Elemente.
+     * Mappt von einer Kantenklasse auf den MetaPfad, über den verbindbare
+     * Elemente ebenfalls bereits verbunden sein müssen. Dieser Mechanismus ist
+     * dafür gedacht, verbindbare Elemente einzuschränken auf bestimmte
+     * Elemente.
      *
      * @return
      */
@@ -337,11 +356,13 @@ public class MetaPathDefinition extends MetaModelSpecificAdapter {
     }
 
     /**
-     * Mappt von einer Kantenklasse auf den MetaPfad, über den verbindbare Elemente ebenfalls bereits verbunden sein SOLLTEN,
-     * aber nicht müssen.
-     * Dieser Mechanismus ist dafür gedacht, aus allen verbindbaren Elemente diejenigen herauszusuchen, die besser als andere
-     * zum Verbinden geeignet sind. Außerdem könnte man eine Warnung (aber eben keinen Fehler) erzeugen, wenn die Kante zu einem
-     * Element besteht, das nicht über einen hier beschriebenen Pfad verfügt.
+     * Mappt von einer Kantenklasse auf den MetaPfad, über den verbindbare
+     * Elemente ebenfalls bereits verbunden sein SOLLTEN, aber nicht müssen.
+     * Dieser Mechanismus ist dafür gedacht, aus allen verbindbaren Elemente
+     * diejenigen herauszusuchen, die besser als andere zum Verbinden geeignet
+     * sind. Außerdem könnte man eine Warnung (aber eben keinen Fehler)
+     * erzeugen, wenn die Kante zu einem Element besteht, das nicht über einen
+     * hier beschriebenen Pfad verfügt.
      *
      * @return
      */
@@ -350,18 +371,29 @@ public class MetaPathDefinition extends MetaModelSpecificAdapter {
     }
 
     /**
-     * Sammlung aller Pfade, die ausgehend vom Startelement dieser Kante ebenfalls angelegt werden sollen, wenn eine Instanziierung über diese
+     * Sammlung aller Pfade, die ausgehend vom Startelement dieser Kante
+     * ebenfalls angelegt werden sollen, wenn eine Instanziierung über diese
      * Kantenklasse durchgeführt wird. <br>
-     * Jeder der Pfade muss zwingend bei derselben Klasse starten, bei der diese Kante startet.<br>
-     * Der Pfad hat nur einen Effekt, wenn seine Startklasse zur Startklasse dieser Kante zuweisungskompatibel ist und er mind. eine
-     * {@link InstanciationEdge} enthält. Der hiermit verbundene Mechanismus geht durch die Kantenklassen des Pfades. Ist die aktuelle
-     * Kantenklasse keine {@link InstanciationEdge}, dann suche von den aktuellen Elementen ausgehend (am Anfang ist das das Startelement dieser
-     * Kante) alle damit über diese Kantenart verbundenen Elemente und nimmt sie für den nächsten Schritt als Startelemente. Sobald im Pfad eine
-     * {@link InstanciationEdge} auftaucht, werden alle Elementarten und Kanten der dahinter liegenden Pfadschritte kompeltt neu erzeugt und die
-     * entstehenden Elemente immer mit den vorherigen verbunden. Wenn der Pfad mit einer Klasse endet (was er in den meisten Fällen tun wird, damit
-     * das ganze sinnvoll ist), die zuweisungskompatibel zur Endklasse dieser Kante ist (also zum durch diese Kante neu erzeugten Element), dann wird
-     * die letzte Verbindung bzw. die letzte Kante hin zum EndElementdieser Kante erzeugt und nicht nochmal ein Element der Endelementart angelegt.
-     * Damit kann man "Nebenbedingungspfade" für das Startelement gleich mit anlegen, wenn man das Startelement über diese Kante hier instanziiert.
+     * Jeder der Pfade muss zwingend bei derselben Klasse starten, bei der diese
+     * Kante startet.<br>
+     * Der Pfad hat nur einen Effekt, wenn seine Startklasse zur Startklasse
+     * dieser Kante zuweisungskompatibel ist und er mind. eine
+     * {@link InstanciationEdge} enthält. Der hiermit verbundene Mechanismus
+     * geht durch die Kantenklassen des Pfades. Ist die aktuelle Kantenklasse
+     * keine {@link InstanciationEdge}, dann suche von den aktuellen Elementen
+     * ausgehend (am Anfang ist das das Startelement dieser Kante) alle damit
+     * über diese Kantenart verbundenen Elemente und nimmt sie für den nächsten
+     * Schritt als Startelemente. Sobald im Pfad eine {@link InstanciationEdge}
+     * auftaucht, werden alle Elementarten und Kanten der dahinter liegenden
+     * Pfadschritte kompeltt neu erzeugt und die entstehenden Elemente immer mit
+     * den vorherigen verbunden. Wenn der Pfad mit einer Klasse endet (was er in
+     * den meisten Fällen tun wird, damit das ganze sinnvoll ist), die
+     * zuweisungskompatibel zur Endklasse dieser Kante ist (also zum durch diese
+     * Kante neu erzeugten Element), dann wird die letzte Verbindung bzw. die
+     * letzte Kante hin zum EndElementdieser Kante erzeugt und nicht nochmal ein
+     * Element der Endelementart angelegt. Damit kann man "Nebenbedingungspfade"
+     * für das Startelement gleich mit anlegen, wenn man das Startelement über
+     * diese Kante hier instanziiert.
      *
      * @return
      */
@@ -370,8 +402,10 @@ public class MetaPathDefinition extends MetaModelSpecificAdapter {
     }
 
     /**
-     * Liefert eine Map, die für alle Elementklassen, bei denen der Name verbundendener Elemente in der Grafik in Klammern unter der eigentlichen
-     * Elementart angezeigt werden soll, den MetaPfad zu den anzuzeigenden verbundenen Elementen liefert.
+     * Liefert eine Map, die für alle Elementklassen, bei denen der Name
+     * verbundendener Elemente in der Grafik in Klammern unter der eigentlichen
+     * Elementart angezeigt werden soll, den MetaPfad zu den anzuzeigenden
+     * verbundenen Elementen liefert.
      *
      * @return
      */
@@ -380,23 +414,28 @@ public class MetaPathDefinition extends MetaModelSpecificAdapter {
     }
 
     /**
-     * Liefert eine Map, die von einer Kantenklasse auf den Pfad zu den Elementen mappt, deren Name initial
-     * für eine neue Kante der übergebenen Klasse übernommen werden soll. Sind es mehrere, werden sie durch Komma
-     * getrennt. Ist es keines, bleibt der Standardname von {@link GraphDocument#getNextNewName(Class)} erhalten.
-     * Damit kann man z.B. einer neuen Ihe-Kommunikationsbeziehung statt 'IHE Kommunikationsbeziehung 10'
-     * den Namen der über die beiden Schnittstellen verbundenen Transaktion geben.<br>
-     * Das funktioniert im Moment nur bei Kanten, da bei Knoten zum Zeitpunkt des Festlegens des Namens der Knoten
-     * noch mit gar nichts verbunden ist.
+     * Liefert eine Map, die von einer Kantenklasse auf den Pfad zu den
+     * Elementen mappt, deren Name initial für eine neue Kante der übergebenen
+     * Klasse übernommen werden soll. Sind es mehrere, werden sie durch Komma
+     * getrennt. Ist es keines, bleibt der Standardname von
+     * {@link GraphDocument#getNextNewName(Class)} erhalten. Damit kann man z.B.
+     * einer neuen Ihe-Kommunikationsbeziehung statt 'IHE
+     * Kommunikationsbeziehung 10' den Namen der über die beiden Schnittstellen
+     * verbundenen Transaktion geben.<br>
+     * Das funktioniert im Moment nur bei Kanten, da bei Knoten zum Zeitpunkt
+     * des Festlegens des Namens der Knoten noch mit gar nichts verbunden ist.
      */
     public Map<Class<? extends Edge>, MetaPath> getEdgeClassToInitialCreatedNameSourcePath() {
         return ImmutableMap.of();
     }
 
     /**
-     * Maps from an {@link InferenceEdge} class to the MetaPath that must be existing to create such an inference edge.
-     * The paths must be defined between the same element types that the edge class connects. The direction will be
-     * tested. That means the path can be defined from the start element of the {@link InferenceEdge} to the end of this
-     * edge or in the other direction.
+     * Maps from an {@link InferenceEdge} class to the MetaPath that must be
+     * existing to create such an inference edge. The paths must be defined
+     * between the same element types that the edge class connects. The
+     * direction will be tested. That means the path can be defined from the
+     * start element of the {@link InferenceEdge} to the end of this edge or in
+     * the other direction.
      *
      * @return
      */

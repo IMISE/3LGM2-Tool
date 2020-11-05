@@ -29,8 +29,10 @@ import de.imise.tool3lgm.graphtools.userfield.UserFieldTarget;
 import de.imise.util.swing.component.AlphabeticalComboBox;
 
 /**
- * Panel mit dem für Kennzahlen ausgewählt werden kann, wie sie innerhalb einer Hierarchie - also elementartintern verrechnet werden können. Dieses
- * Panel wird Moment nicht benutzt, da die interne Verrechnung in Hierarchien jetzt (erstmal) durch die Definition der Formeln erledigt wird.
+ * Panel mit dem für Kennzahlen ausgewählt werden kann, wie sie innerhalb einer
+ * Hierarchie - also elementartintern verrechnet werden können. Dieses Panel
+ * wird Moment nicht benutzt, da die interne Verrechnung in Hierarchien jetzt
+ * (erstmal) durch die Definition der Formeln erledigt wird.
  *
  * @author AXS
  */
@@ -47,7 +49,8 @@ public class InternalAccountingPanel extends AbstractInputPanel implements Actio
     private final AlphabeticalComboBox<String> vgComboBox = new AlphabeticalComboBox<>();
 
     /**
-     * "Gleichverteilt" in der gewählten Loacle. Wird angezeigt, wenn als Verteilungsgewicht bei einer Verrechnung über die Teilwertsumme kein
+     * "Gleichverteilt" in der gewählten Loacle. Wird angezeigt, wenn als
+     * Verteilungsgewicht bei einer Verrechnung über die Teilwertsumme kein
      * spezielles Verteilungsgewicht genutzt werden soll.
      */
     private static final String UNIFORMLY_DISTRIBUTED = getResString("uniformly_distributed");
@@ -201,8 +204,10 @@ public class InternalAccountingPanel extends AbstractInputPanel implements Actio
     //*/
 
     /**
-     * Liefert je nach Auswahl in der Richtungs-ComboBox die Strings <code>UserField.DIRECTION_FROM_PART_TO_WHOLE</code>,
-     * <code>UserField.DIRECTION_FROM_WHOLE_TO_PART</code> oder <code>null</code>.
+     * Liefert je nach Auswahl in der Richtungs-ComboBox die Strings
+     * <code>UserField.DIRECTION_FROM_PART_TO_WHOLE</code>,
+     * <code>UserField.DIRECTION_FROM_WHOLE_TO_PART</code> oder
+     * <code>null</code>.
      *
      * @return Richtung in der eine verrechnet werden soll
      */
@@ -215,7 +220,8 @@ public class InternalAccountingPanel extends AbstractInputPanel implements Actio
     }
 
     /**
-     * Liefert den Hash-String des selektierten Verteilungsgwichtes für die interne Verrechnung.
+     * Liefert den Hash-String des selektierten Verteilungsgwichtes für die
+     * interne Verrechnung.
      *
      * @return
      */

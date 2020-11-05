@@ -5,10 +5,11 @@ import de.imise.tool3lgm.graphtools.model.GDCommands;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 
 /**
- * Eine Action die enabled ist, wenn eine Grafik aktiv ist und in dieser Grafik wenigstens 2
- * sichtbare Knoten (außer Kanten und Knickpunkten) selektiert sind.
+ * Eine Action die enabled ist, wenn eine Grafik aktiv ist und in dieser Grafik
+ * wenigstens 2 sichtbare Knoten (außer Kanten und Knickpunkten) selektiert
+ * sind.
  *
- * @author AXS
+ * @author AXS (25.03.2018)
  */
 public class GraphMultipleSelectedRealNodeOrBendpointAction extends GraphFrameAction {
 

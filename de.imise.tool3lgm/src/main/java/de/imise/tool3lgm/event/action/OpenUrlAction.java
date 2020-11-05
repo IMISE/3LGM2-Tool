@@ -4,20 +4,25 @@ import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.util.BrowseUtils;
 
 /**
- * Action, die eine URL öffnet. Dabei wird erwartet dass für den übergebenen Identifier ein Resourceneintrag existiert der die Form hat:
- * "AnzeigeNameDerAction @URL:Link". Der Link darf im Moment nur ein Weblink sein. Über diese Action könnte man aber auch File-Links öffnen, wenn man
- * sie entsprechend anpasst -> später.
+ * Action, die eine URL öffnet. Dabei wird erwartet dass für den übergebenen
+ * Identifier ein Resourceneintrag existiert der die Form hat:
+ * "AnzeigeNameDerAction @URL:Link". Der Link darf im Moment nur ein Weblink
+ * sein. Über diese Action könnte man aber auch File-Links öffnen, wenn man sie
+ * entsprechend anpasst -> später.
  *
  * @author AXS (25 Apr 2019)
  */
 public class OpenUrlAction extends StaticAction {
 
     /**
-     * Enthält der für diesen Action-Identifier geladene Resource-String diesen Delimiter, dann wird alles davor als Anzeige-Name der Action
-     * interpretiert und alles danach als die URL, die beim Ausführen der Action geöffnet werden soll
+     * Enthält der für diesen Action-Identifier geladene Resource-String diesen
+     * Delimiter, dann wird alles davor als Anzeige-Name der Action
+     * interpretiert und alles danach als die URL, die beim Ausführen der Action
+     * geöffnet werden soll
      */
     public static final String RESOURCE_NAME_AND_URL_DELIMITER = "@URL:";
 
+    /** The url to open */
     private final String url;
 
     /**

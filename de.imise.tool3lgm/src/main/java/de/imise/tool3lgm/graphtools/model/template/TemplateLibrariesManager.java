@@ -16,7 +16,7 @@ import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.view.pathtree.PathTreeBranchDefinition;
 import de.imise.tool3lgm.graphtools.view.pathtree.PathTreeDefinition;
-import de.imise.tool3lgm.userproperties.UserProperties;
+import de.imise.tool3lgm.userproperties.AbstractUserProperties;
 import de.imise.util.event.PropertyChangeHandler;
 
 /**
@@ -43,7 +43,7 @@ public class TemplateLibrariesManager extends PropertyChangeHandler implements P
      *
      */
     public TemplateLibrariesManager() {
-        UserProperties.addPropertyChangeListener(this);
+        AbstractUserProperties.addPropertyChangeListener(this);
         addAsToolChangeListener();
         loadOrUnloadTemplates();
     }
@@ -111,8 +111,8 @@ public class TemplateLibrariesManager extends PropertyChangeHandler implements P
     }
 
     /**
-     * When all models of a certain type are closed, the templates
-     * for that model type can be removed.
+     * When all models of a certain type are closed, the templates for that
+     * model type can be removed.
      */
     private void removeSuperfluousTemplates() {
         for (MetaModelContext templateMetaModelContext : templateLibrariesContext.getModelTypesWithTemplates()) {
@@ -131,7 +131,8 @@ public class TemplateLibrariesManager extends PropertyChangeHandler implements P
     }
 
     /**
-     * @return all {@link TemplateLibraryProvider} which fitting the currently selectd model type
+     * @return all {@link TemplateLibraryProvider} which fitting the currently
+     *         selectd model type
      */
     private List<TemplateLibraryProvider> getTemplateLibraryProviders() {
         MetaModelContext selectedMetaModelContext = Static.getSelectedMetaModelContext();
@@ -142,7 +143,8 @@ public class TemplateLibrariesManager extends PropertyChangeHandler implements P
     }
 
     /**
-     * @return <code>true</code> if there are available templates for the currently selected model type
+     * @return <code>true</code> if there are available templates for the
+     *         currently selected model type
      */
     public final boolean hasAvailableTemplatesForCurrentModelType() {
         MetaModelContext selectedMetaModelContext = Static.getSelectedMetaModelContext();
@@ -153,9 +155,9 @@ public class TemplateLibrariesManager extends PropertyChangeHandler implements P
     }
 
     /**
-     * Removes all template library providers which have a different metamodel definition class
-     * than the given class. Same means that the given metamodel definition class must be the
-     * same class or a superclass.
+     * Removes all template library providers which have a different metamodel
+     * definition class than the given class. Same means that the given
+     * metamodel definition class must be the same class or a superclass.
      *
      * @param templateLibraryProviders
      * @param metaModelDefinitionClass

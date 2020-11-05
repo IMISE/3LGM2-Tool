@@ -109,8 +109,9 @@ public class ConsistencyErrorTableGenerator implements PropertyChangeListener, T
     }
 
     /**
-     * Adds a SelectionListener to the table. If selection changed the element with
-     * the error will be selected in the selected model for a better orientation.
+     * Adds a SelectionListener to the table. If selection changed the element
+     * with the error will be selected in the selected model for a better
+     * orientation.
      */
     private void initTabelSelectionModel() {
         ListSelectionModel selectionModel = table.getSelectionModel();

@@ -10,15 +10,18 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 
 /**
- * Ein {@link SequenceMetaPath}, der immer nur aus einer einfachen Folge von Kanten bzw. {@link ElementaryMetaPath} besteht.
+ * Ein {@link SequenceMetaPath}, der immer nur aus einer einfachen Folge von
+ * Kanten bzw. {@link ElementaryMetaPath} besteht.
  *
  * @author AXS (15 Nov 2018)
  */
 public class SimpleMetaPath extends SequenceMetaPath {
 
     /**
-     * Index des Elementarpfadschrittes, der den Namen des Gesamtpfades festlegt. Ist er kleiner 0 läuft die Namensgenerierung über den
-     * super-Namensmechanismus, der den baseResKeyOrName auswertet und wenn er damit auch nichts findet "ist verbunden mit" ausgibt.
+     * Index des Elementarpfadschrittes, der den Namen des Gesamtpfades
+     * festlegt. Ist er kleiner 0 läuft die Namensgenerierung über den
+     * super-Namensmechanismus, der den baseResKeyOrName auswertet und wenn er
+     * damit auch nichts findet "ist verbunden mit" ausgibt.
      */
     private int metaPathStepWithPathName = -1;
 
@@ -37,9 +40,11 @@ public class SimpleMetaPath extends SequenceMetaPath {
     }
 
     /**
-     * @param metaPathStepWithPathName
-     *            Index des Elementarpfadschrittes, der den Namen des Gesamtpfades festlegt. Ist er kleiner 0 läuft die Namensgenerierung über den
-     *            super-Namensmechanismus, der den baseResKeyOrName auswertet und wenn er damit auch nichts findet "ist verbunden mit" ausgibt.
+     * @param metaPathStepWithPathName Index des Elementarpfadschrittes, der den
+     *            Namen des Gesamtpfades festlegt. Ist er kleiner 0 läuft die
+     *            Namensgenerierung über den super-Namensmechanismus, der den
+     *            baseResKeyOrName auswertet und wenn er damit auch nichts
+     *            findet "ist verbunden mit" ausgibt.
      * @param metaPaths
      */
     public SimpleMetaPath(final int metaPathStepWithPathName, final ElementaryMetaPath... metaPaths) {
@@ -65,9 +70,11 @@ public class SimpleMetaPath extends SequenceMetaPath {
     }
 
     /**
-     * @param metaPathStepWithPathName
-     *            Index des Elementarpfadschrittes, der den Namen des Gesamtpfades festlegt. Ist er kleiner 0 läuft die Namensgenerierung über den
-     *            super-Namensmechanismus, der den baseResKeyOrName auswertet und wenn er damit auch nichts findet "ist verbunden mit" ausgibt.
+     * @param metaPathStepWithPathName Index des Elementarpfadschrittes, der den
+     *            Namen des Gesamtpfades festlegt. Ist er kleiner 0 läuft die
+     *            Namensgenerierung über den super-Namensmechanismus, der den
+     *            baseResKeyOrName auswertet und wenn er damit auch nichts
+     *            findet "ist verbunden mit" ausgibt.
      * @param direction
      * @param metaPaths
      */
@@ -77,7 +84,9 @@ public class SimpleMetaPath extends SequenceMetaPath {
     }
 
     /**
-     * Hängt den übergebenen {@link SimpleMetaPath} an diesen {@link SimpleMetaPath} an und gibt den Gesamtpfad als neue Instanz zurück.
+     * Hängt den übergebenen {@link SimpleMetaPath} an diesen
+     * {@link SimpleMetaPath} an und gibt den Gesamtpfad als neue Instanz
+     * zurück.
      *
      * @param simpleMetaPath
      * @return
@@ -87,7 +96,9 @@ public class SimpleMetaPath extends SequenceMetaPath {
     }
 
     /**
-     * Hängt den übergebenen {@link ElementaryMetaPath} an diesen {@link SimpleMetaPath} an und gibt den Gesamtpfad als neue Instanz zurück.
+     * Hängt den übergebenen {@link ElementaryMetaPath} an diesen
+     * {@link SimpleMetaPath} an und gibt den Gesamtpfad als neue Instanz
+     * zurück.
      *
      * @param simpleMetaPath
      * @return
@@ -149,7 +160,8 @@ public class SimpleMetaPath extends SequenceMetaPath {
     }
 
     /**
-     * Liefert einen Sub-Path beginnend vom angegebenen Start-Index bis zur letzten Kante.
+     * Liefert einen Sub-Path beginnend vom angegebenen Start-Index bis zur
+     * letzten Kante.
      *
      * @param pathStepStartIndex
      * @return
@@ -159,7 +171,8 @@ public class SimpleMetaPath extends SequenceMetaPath {
     }
 
     /**
-     * Liefert einen Sub-Path beginnend vom angegebenen Start-Index bis zum MetaPath vor dem End-Index (exklusive).
+     * Liefert einen Sub-Path beginnend vom angegebenen Start-Index bis zum
+     * MetaPath vor dem End-Index (exklusive).
      *
      * @param pathStepStartIndex
      * @param pathStepEndIndex
@@ -203,8 +216,10 @@ public class SimpleMetaPath extends SequenceMetaPath {
     }
 
     /**
-     * Liefert den Index des Elementarpfadschrittes, der den Namen des Gesamtpfades festlegt. Ist er kleiner 0 läuft die Namensgenerierung über den
-     * super-Namensmechanismus, der den baseResKeyOrName auswertet und wenn er damit auch nichts findet "ist verbunden mit" ausgibt.
+     * Liefert den Index des Elementarpfadschrittes, der den Namen des
+     * Gesamtpfades festlegt. Ist er kleiner 0 läuft die Namensgenerierung über
+     * den super-Namensmechanismus, der den baseResKeyOrName auswertet und wenn
+     * er damit auch nichts findet "ist verbunden mit" ausgibt.
      *
      * @return
      */

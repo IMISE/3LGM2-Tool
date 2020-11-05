@@ -3,10 +3,11 @@ package de.imise.tool3lgm.event.action;
 import de.imise.tool3lgm.Static;
 
 /**
- * Eine Action die enabled ist, wenn eine Grafik aktiv ist und in dieser Grafik wenigstens
- * ein sichtbarer Knoten (außer Kanten und Knickpunkten) selektiert ist.
+ * Eine Action die enabled ist, wenn eine Grafik aktiv ist und in dieser Grafik
+ * wenigstens ein sichtbarer Knoten (außer Kanten und Knickpunkten) selektiert
+ * ist.
  *
- * @author imise
+ * @author AXS
  */
 public class GraphSelectedRealNodeAction extends SelectedRealNodeAction {
 

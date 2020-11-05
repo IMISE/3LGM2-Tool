@@ -23,20 +23,24 @@ import de.imise.tool3lgm.graphtools.userfield.calculator.Calculator;
 public class CostingUtil {
 
     /**
-     * Eine Stringkonstante, die Kennzeichent, dass es sich um einen UserFieldHash handelt. Sämtliche UserFieldHashes werden während der Prüfung auf
-     * sytaktische Korrekthet einer Formel gegen diese Konstante ersetzt.
+     * Eine Stringkonstante, die Kennzeichent, dass es sich um einen
+     * UserFieldHash handelt. Sämtliche UserFieldHashes werden während der
+     * Prüfung auf sytaktische Korrekthet einer Formel gegen diese Konstante
+     * ersetzt.
      */
     private static final String USERFIELDHASH = "ufh";
 
     /**
-     * Hier sind verschiedene Methoden enthalten, die an unterschiedlichen Stellen genutzt werden.
+     * Hier sind verschiedene Methoden enthalten, die an unterschiedlichen
+     * Stellen genutzt werden.
      */
     public CostingUtil() {
     }
 
     /**
-     * Syncronisiert den HashString und den FormelString. Da nur der HashString gespeichert wird, muss aus dem HashString wieder ein FormelString
-     * gemacht werden, der in lesbarer Form vorliegt.
+     * Syncronisiert den HashString und den FormelString. Da nur der HashString
+     * gespeichert wird, muss aus dem HashString wieder ein FormelString gemacht
+     * werden, der in lesbarer Form vorliegt.
      *
      * @param hash_formula FormelString in hash-Form.
      * @param definitions
@@ -75,11 +79,13 @@ public class CostingUtil {
     }
 
     /**
-     * Prüft die übergebene Formel auf Korrektheit. Kriterien für Korrektheit: Die Anzahl der öffnenden und schließenden Klammern muss übereinstimmen
+     * Prüft die übergebene Formel auf Korrektheit. Kriterien für Korrektheit:
+     * Die Anzahl der öffnenden und schließenden Klammern muss übereinstimmen
      * auf eine öffnende Klammer darf keine schließende Folgen
      *
      * @param formula Der zu prüfende Formelstring
-     * @return Gibt true zurück, wenn die übergebene Formel korrekt ist, ansonsten false
+     * @return Gibt true zurück, wenn die übergebene Formel korrekt ist,
+     *         ansonsten false
      */
     public static final boolean isFormulaValid(final String formula) {
         if (formula == null) {
@@ -158,8 +164,9 @@ public class CostingUtil {
     }
 
     /**
-     * Wenn das übergebene UserField eine einfache Teilwertsummenformel ist, dann kommt hier die Formel ohne
-     * alle WhiteSpaces und ohne die evtl. vorhandenen und überflüssigen Klammern am Anfang und Endezurück.
+     * Wenn das übergebene UserField eine einfache Teilwertsummenformel ist,
+     * dann kommt hier die Formel ohne alle WhiteSpaces und ohne die evtl.
+     * vorhandenen und überflüssigen Klammern am Anfang und Endezurück.
      *
      * @param userField
      * @return
@@ -220,8 +227,9 @@ public class CostingUtil {
     }
 
     /**
-     * Prüft, ob die Formel des übergebenen UserFields eine einfache Teilwertsummenformel ist.
-     * Diese Funktion setzt vorraus, dass die Formel valide ist!
+     * Prüft, ob die Formel des übergebenen UserFields eine einfache
+     * Teilwertsummenformel ist. Diese Funktion setzt vorraus, dass die Formel
+     * valide ist!
      *
      * @param userField
      * @return
@@ -243,10 +251,12 @@ public class CostingUtil {
     }
 
     /**
-     * Wenn das übergebene UserField eine einfache Teilwertsumme ist, dann wird hier die Kantenklasse der Formel extrahiert.
+     * Wenn das übergebene UserField eine einfache Teilwertsumme ist, dann wird
+     * hier die Kantenklasse der Formel extrahiert.
      *
      * @param userField
-     * @return Kantenklasse der einfachenTeilwertsummenformel oder <code>null</code>
+     * @return Kantenklasse der einfachenTeilwertsummenformel oder
+     *         <code>null</code>
      */
     public static final Class<? extends Edge> getSimpleFractionValueSumFormulaEdgeClass(final UserField userField) {
         Class<? extends Edge> edgeClass = null;

@@ -54,8 +54,7 @@ import de.imise.tool3lgm.log.Log;
  * wegfallen einzelnener Felder im Dokument) muß man keinen ganz neuen
  * ContentHandler schreiben sondern muß nur einen abgeleiteten von diesem
  * bilden. Ich würde aber empfehlen von Zeit zu Zeit einen völlig neuen
- * ContentHandler zu schreiben.
- * erkennt Modell mit 3lgm2_v3_0.dtd Version 3.0
+ * ContentHandler zu schreiben. erkennt Modell mit 3lgm2_v3_0.dtd Version 3.0
  *
  * @author Thomas Rudert
  */
@@ -65,21 +64,25 @@ public class ToolContentHandlerV3_0 implements ContentHandler {
 
     private boolean paste = false;
 
-    /** Alle über Copy&Paste eingefügten Elemente. Diese werden am Ende selected(true) gesetzt */
+    /**
+     * Alle über Copy&Paste eingefügten Elemente. Diese werden am Ende
+     * selected(true) gesetzt
+     */
     private List<ElementContainer> pastedElements;
 
     /**
-     * Hier kommen beim Anlegen der Elemente alle Elemente rein, die keinen feststehenden Layer haben. Im
-     * Moment sind das Bendpoints und TextFields
+     * Hier kommen beim Anlegen der Elemente alle Elemente rein, die keinen
+     * feststehenden Layer haben. Im Moment sind das Bendpoints und TextFields
      */
     private final Map<String, ElementContainer> hashToMainDocContainer = new HashMap<>();
 
     private Map<String, BendpointContainer> hashToSzenarioBendpointContainer;
 
     /**
-     * Faktor, um den die Position von per Paste eingefügten Elementen in x und y Richtung nach unten
-     * verschoben wird. Mehrmaliges Hintereinandereinfügen erhöht diesen Faktor, so dass die kopierten
-     * Elemente immer schräg unter den originalen bzw. zuletzt eingefügten Elementen landen.
+     * Faktor, um den die Position von per Paste eingefügten Elementen in x und
+     * y Richtung nach unten verschoben wird. Mehrmaliges Hintereinandereinfügen
+     * erhöht diesen Faktor, so dass die kopierten Elemente immer schräg unter
+     * den originalen bzw. zuletzt eingefügten Elementen landen.
      */
     private int copyAndPastePositionShift = 0;
 
@@ -88,11 +91,15 @@ public class ToolContentHandlerV3_0 implements ContentHandler {
     }
 
     /**
-     * gänderte Hashcodes (bei copyAndPaste) Schlüssel ist alter HashString, Wert ist neuer HashString
+     * gänderte Hashcodes (bei copyAndPaste) Schlüssel ist alter HashString,
+     * Wert ist neuer HashString
      */
     private Map<String, String> oldToNewHashString;
 
-    /** Alle Kanten. Am Ende müssem deren hashStrings (start, end) aufgelöst werden. */
+    /**
+     * Alle Kanten. Am Ende müssem deren hashStrings (start, end) aufgelöst
+     * werden.
+     */
     private final List<Edge> edges = new ArrayList<>();
 
     /** GDCollection in die die Element geschrieben werden */
@@ -113,7 +120,10 @@ public class ToolContentHandlerV3_0 implements ContentHandler {
     /** aktuelles GraphElementLayout */
     protected GraphElementLayout layout = null;
 
-    /** ElementKlasse auf die sich das GraphElementLayout bezieht (StandardLayout (Mapping) */
+    /**
+     * ElementKlasse auf die sich das GraphElementLayout bezieht (StandardLayout
+     * (Mapping)
+     */
     protected Class<? extends ModelElement> classType = null;
 
     /** aktuelles ModellElement */
@@ -134,7 +144,9 @@ public class ToolContentHandlerV3_0 implements ContentHandler {
     /** definiert die gültigkeit Farbe (fg_color, bg_color, border_color) */
     protected String colorString = null;
 
-    /** String der in der characters Methode ausgelesen wird (Werte eines Tags) */
+    /**
+     * String der in der characters Methode ausgelesen wird (Werte eines Tags)
+     */
     protected StringBuilder elementValue = new StringBuilder();
 
     /** HashString eines Bitmaps */

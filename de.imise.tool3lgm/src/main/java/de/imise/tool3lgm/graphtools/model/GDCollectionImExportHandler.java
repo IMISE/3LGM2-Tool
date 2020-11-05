@@ -13,6 +13,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import javax.swing.JFileChooser;
+
 import com.google.common.collect.ImmutableList;
 
 import de.imise.tool3lgm.Static;
@@ -52,30 +54,34 @@ public final class GDCollectionImExportHandler {
     }
 
     /**
-     * Zeigt einen Dialog an, um eine Modelldatei zu wählen und stellt dann die darin enthaltenen Teilmodelle zur Auswahl, die dann importiert werden.
+     * Zeigt einen Dialog an, um eine Modelldatei zu wählen und stellt dann die
+     * darin enthaltenen Teilmodelle zur Auswahl, die dann importiert werden.
      */
     public static final void importSzenarios() {
         importModel(true);
     }
 
     /**
-     * Zeigt einen Dialog an, um eine Modelldatei zu wählen und importiert dann das Gesamtmodell.
+     * Zeigt einen Dialog an, um eine Modelldatei zu wählen und importiert dann
+     * das Gesamtmodell.
      */
     public static final void importModel() {
         importModel(false);
     }
 
     /**
-     * Zeigt einen Dialog an, um eine Modelldatei zu wählen, die importiert werden soll.
+     * Zeigt einen Dialog an, um eine Modelldatei zu wählen, die importiert
+     * werden soll.
      *
-     * @param chooseSubmodels wenn <code>true</code> wird auch ein Auswahldialog für zu importierende Teilmodelle angezeigt. Bei <code>false</code>
-     *            wird das Gesamtmodell importiert.
+     * @param chooseSubmodels wenn <code>true</code> wird auch ein Auswahldialog
+     *            für zu importierende Teilmodelle angezeigt. Bei
+     *            <code>false</code> wird das Gesamtmodell importiert.
      */
     private static final void importModel(final boolean chooseSubmodels) {
         ExtendedFileChooser oeffnenDialog = new ExtendedFileChooser(null);
         oeffnenDialog.setMultiSelectionEnabled(false);
         oeffnenDialog.setFileFilters(false, getFileNameExtensionFilters(FileFilterType.LGM3, FileFilterType.LGM3_ZIP, FileFilterType.LGM3_UNZIPPED));
-        if (oeffnenDialog.showOpenDialog(getMainFrame()) == ExtendedFileChooser.APPROVE_OPTION) {
+        if (oeffnenDialog.showOpenDialog(getMainFrame()) == JFileChooser.APPROVE_OPTION) {
             GDCollection selectedGDColl = getSelectedGDCollection();
             GDCollectionImExportHandler imExportHandler = selectedGDColl.getImExportHandler();
             imExportHandler.importSzenarios(oeffnenDialog.getSelectedFile(), chooseSubmodels);
@@ -85,10 +91,8 @@ public final class GDCollectionImExportHandler {
     /**
      * Importiert Szenarios aus einem anderem Modell in dieses Modell
      *
-     * @param file
-     *            Modelldatei, aus der Szenarios importiert werden sollen
-     * @param chooseSzenarioDialog
-     *            wenn <code>true</code> kann der
+     * @param file Modelldatei, aus der Szenarios importiert werden sollen
+     * @param chooseSzenarioDialog wenn <code>true</code> kann der
      */
     private void importSzenarios(final File file, final boolean chooseSzenarioDialog) {
         GDCollection sourceGDColl = new GDCollection(gdcoll.getModelType());
@@ -254,8 +258,7 @@ public final class GDCollectionImExportHandler {
      * Speichert das Modell in der angegeben Datei im XML-Format (File wird
      * geschlossen)
      *
-     * @param f
-     *            Ziel-Datei beim Speichern
+     * @param f Ziel-Datei beim Speichern
      */
     public void exportModel(final File f) {
         //        if (!LicenseHandler.checkLicenses()) {

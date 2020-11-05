@@ -6,7 +6,7 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 
 /**
  * An abstract representation of one line of an import
- * 
+ *
  * @author AXS
  * @create 06.10.2014
  */
@@ -34,20 +34,13 @@ public abstract class AbstractImportLine {
     private final int row;
 
     /**
-     * @param elementClass
-     *            The element type this line is defined for
-     * @param elementType
-     *            Value of the element type column in this line
-     * @param name
-     *            Value of the name column in this line
-     * @param description
-     *            Value of the description column in this line
-     * @param hash
-     *            Value of the hash column in this line
-     * @param userFields
-     *            List of all values for userFields in this line
-     * @param row
-     *            Row number of this line
+     * @param elementClass The element type this line is defined for
+     * @param elementType Value of the element type column in this line
+     * @param name Value of the name column in this line
+     * @param description Value of the description column in this line
+     * @param hash Value of the hash column in this line
+     * @param userFields List of all values for userFields in this line
+     * @param row Row number of this line
      */
     protected AbstractImportLine(final Class<? extends ModelElement> elementClass, final String elementType, final String name, final String description, final String hash, final List<String> userFields, final int row) {
         this.elementClass = elementClass;
@@ -97,7 +90,8 @@ public abstract class AbstractImportLine {
     }
 
     /**
-     * @return <code>true</code> if the value of the element type column in this line is not <code>null</code>
+     * @return <code>true</code> if the value of the element type column in this
+     *         line is not <code>null</code>
      */
     public boolean hasElementTypeColumn() {
         return elementType != null;
@@ -119,7 +113,8 @@ public abstract class AbstractImportLine {
     }
 
     /**
-     * @return <code>true</code> if the value of the name column in this line is not <code>null</code>
+     * @return <code>true</code> if the value of the name column in this line is
+     *         not <code>null</code>
      */
     public boolean hasName() {
         return name != null;
@@ -141,7 +136,8 @@ public abstract class AbstractImportLine {
     }
 
     /**
-     * @return <code>true</code> if the value of the description column in this line is not <code>null</code>
+     * @return <code>true</code> if the value of the description column in this
+     *         line is not <code>null</code>
      */
     public boolean hasDescriptionColumn() {
         return getDescription() != null;
@@ -163,7 +159,8 @@ public abstract class AbstractImportLine {
     }
 
     /**
-     * @return <code>true</code> if the value of the hash column in this line is not <code>null</code>
+     * @return <code>true</code> if the value of the hash column in this line is
+     *         not <code>null</code>
      */
     public boolean hasHash() {
         return hash != null;

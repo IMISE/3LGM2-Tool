@@ -8,9 +8,10 @@ import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.log.Log;
 
 /**
- * Oberklasse aller Kanten, die ein Element einem anderen unterorden. Dieses Interface geht an mehreren Stellen davon aus,
- * dass die eigentliche Klasse, an der es hängt, auf jeden Fall eine Unterklasse von {@link Edge} ist. Es finden keine Checks statt,
- * um an dieser Stelle CastExceptions abzufangen.
+ * Oberklasse aller Kanten, die ein Element einem anderen unterorden. Dieses
+ * Interface geht an mehreren Stellen davon aus, dass die eigentliche Klasse, an
+ * der es hängt, auf jeden Fall eine Unterklasse von {@link Edge} ist. Es finden
+ * keine Checks statt, um an dieser Stelle CastExceptions abzufangen.
  *
  * @author AXS (10.04.2018)
  */
@@ -59,7 +60,8 @@ public abstract class SubordinationEdge extends Edge {
     }
 
     /**
-     * Liefert <code>true</code>, wenn die übergebene Elementklasse mit der Unterlementklasse der übergebenen Edge zuweisungskompatibel ist.
+     * Liefert <code>true</code>, wenn die übergebene Elementklasse mit der
+     * Unterlementklasse der übergebenen Edge zuweisungskompatibel ist.
      *
      * @param subordinationEdgeClass
      * @param meClass
@@ -70,8 +72,9 @@ public abstract class SubordinationEdge extends Edge {
     }
 
     /**
-     * Liefert <code>true</code>, wenn die übergebene Elementklasse mit der Elementklasse der übergebenen Edge zuweisungskompatibel ist, die
-     * nicht die Teilelementklasse ist.
+     * Liefert <code>true</code>, wenn die übergebene Elementklasse mit der
+     * Elementklasse der übergebenen Edge zuweisungskompatibel ist, die nicht
+     * die Teilelementklasse ist.
      *
      * @param subordinationEdgeClass
      * @param meClass
@@ -153,7 +156,8 @@ public abstract class SubordinationEdge extends Edge {
     }
 
     /**
-     * Liefert true, wenn ein über diese Kantenart verbundenes Oberelement gleichzeitig solche Unterelemente haben kann.
+     * Liefert true, wenn ein über diese Kantenart verbundenes Oberelement
+     * gleichzeitig solche Unterelemente haben kann.
      *
      * @return
      */

@@ -4,8 +4,8 @@ import de.imise.tool3lgm.graphtools.model.LGMChangeListener.LGMChangeType;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 
 /**
- * This class is only needed to decide the same/equals event was fired
- * already in the bulk_mode of the {@link GDCollection}.
+ * This class is only needed to decide the same/equals event was fired already
+ * in the bulk_mode of the {@link GDCollection}.
  *
  * @author AXS (26.06.2020)
  */

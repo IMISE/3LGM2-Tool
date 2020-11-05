@@ -17,13 +17,16 @@ import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout;
 public class AdditionalLabelTextGenerator {
 
     /**
-     * Set aller {@link ElementContainer}, an die dieses Objekt etwas ranschreibt
+     * Set aller {@link ElementContainer}, an die dieses Objekt etwas
+     * ranschreibt
      */
     private Set<ElementContainer> additionalTextTargets = new HashSet<>();
 
     /**
-     * Liste der {@link ElementContainer}, an die dieses Objekt etwas ranschreibt / protected HashSet<ElementContainer> specialInfoTargets = null; /**
-     * Layout mit dessen Farbe und Schrift die zusätzlichen Infos an Elemente geschrieben werden
+     * Liste der {@link ElementContainer}, an die dieses Objekt etwas
+     * ranschreibt / protected HashSet<ElementContainer> specialInfoTargets =
+     * null; /** Layout mit dessen Farbe und Schrift die zusätzlichen Infos an
+     * Elemente geschrieben werden
      */
     protected GraphElementLayout layout;
 
@@ -33,7 +36,8 @@ public class AdditionalLabelTextGenerator {
     protected int specialInfoPosition = SwingConstants.NORTH;
 
     /**
-     * Falls ein anderes Objekt dieses Objekt nur als Stellvertreter nutzen will, kann man hier den echten Owner verpacken.
+     * Falls ein anderes Objekt dieses Objekt nur als Stellvertreter nutzen
+     * will, kann man hier den echten Owner verpacken.
      */
     protected Object realOwner = null;
 
@@ -55,7 +59,8 @@ public class AdditionalLabelTextGenerator {
     }
 
     /**
-     * / private static final void removeAllAdditionalTextFromAllTargets(){ for (ElementContainer ec : additionalTextTargets)
+     * / private static final void removeAllAdditionalTextFromAllTargets(){ for
+     * (ElementContainer ec : additionalTextTargets)
      * ec.removeAllSpecialInfosFromThisContainer(); } /**
      *
      * @return the layout
@@ -65,7 +70,8 @@ public class AdditionalLabelTextGenerator {
     }
 
     /**
-     * specialInfoDirection kann die 4 meoglichen Werte SwingConstants.NORTH, - EAST, -SOUTH und -WEST haben
+     * specialInfoDirection kann die 4 meoglichen Werte SwingConstants.NORTH, -
+     * EAST, -SOUTH und -WEST haben
      *
      * @param i
      */

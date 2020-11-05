@@ -2,13 +2,15 @@ package de.imise.tool3lgm.graphtools.analyse.redundancy;
 
 /**
  * Node eines Entscheidungsbaumes.<br>
- * Man kann in beide Richtungen navigieren, d.h. ein Node kennt seinen Vater-Node und seine
- * beiden Kindknoten (wenn vorhanden). Hat ein Node nur einen Kindknoten, so ist dieser immer der
- * erste Kindknoten (<code>firstNode</code>). Entfernt man von einem Node mit 2 Kindknoten den
+ * Man kann in beide Richtungen navigieren, d.h. ein Node kennt seinen
+ * Vater-Node und seine beiden Kindknoten (wenn vorhanden). Hat ein Node nur
+ * einen Kindknoten, so ist dieser immer der erste Kindknoten
+ * (<code>firstNode</code>). Entfernt man von einem Node mit 2 Kindknoten den
  * ersten Node, so wird der vormals zweite Kindknoten dann der erste.<br>
  * Es können maximal 2 Kindknoten hinzugefügt werden.<br>
- * Jeder Node hat einen <code>boolean</code>-Status. Im Kontext eines Entscheidungsbaumes gibt der
- * Status an, ob ein Element, das der Node repräsentiert, dazugehört oder nicht.
+ * Jeder Node hat einen <code>boolean</code>-Status. Im Kontext eines
+ * Entscheidungsbaumes gibt der Status an, ob ein Element, das der Node
+ * repräsentiert, dazugehört oder nicht.
  *
  * @author AXS
  */
@@ -30,7 +32,8 @@ public class DecisionTreeNode {
     private DecisionTreeNode firstNode = null;
 
     /**
-     * Zweiter Kindknoten. Ist nur ungleich <code>null</code>, wenn es einen ersten Kindknoten gibt.
+     * Zweiter Kindknoten. Ist nur ungleich <code>null</code>, wenn es einen
+     * ersten Kindknoten gibt.
      */
     private DecisionTreeNode secondNode = null;
 
@@ -89,9 +92,10 @@ public class DecisionTreeNode {
     boolean deleted = false;
 
     /**
-     * Entfernt den übergebenen Node von diesem Node, wenn er der Vater davon ist. Falls der zu
-     * löschende Node der erste Kindknoten ist und es noch einen zweiten Knidknoten gibt, ist der
-     * ehemals zweite nach dem Löschen der erste.
+     * Entfernt den übergebenen Node von diesem Node, wenn er der Vater davon
+     * ist. Falls der zu löschende Node der erste Kindknoten ist und es noch
+     * einen zweiten Knidknoten gibt, ist der ehemals zweite nach dem Löschen
+     * der erste.
      *
      * @param node
      */
@@ -190,8 +194,8 @@ public class DecisionTreeNode {
     }
 
     /**
-     * Klasse für die Blätter des Baumes. Sie merken sich zusätzlich noch den Gesamtwert der
-     * Unterstützung
+     * Klasse für die Blätter des Baumes. Sie merken sich zusätzlich noch den
+     * Gesamtwert der Unterstützung
      *
      * @author AXS
      */

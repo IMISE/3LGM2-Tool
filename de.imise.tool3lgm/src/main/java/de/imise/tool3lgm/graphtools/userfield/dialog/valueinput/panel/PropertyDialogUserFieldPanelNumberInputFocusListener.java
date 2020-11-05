@@ -10,10 +10,11 @@ import de.imise.tool3lgm.graphtools.userfield.UserField;
 import de.imise.util.swing.component.text.NumberTextField;
 
 /**
- * Ein Focus-Listener der nur für Eingabefelder von Kennzahlen gedacht ist. Er sorgt dafür, dass der
- * Wert eines Eingabetextfeldes formatiert angezeigt wird, solange das Eingabefeld nicht den Focus hat
- * und wenn es den Focus bekommt (und damit im Editiermodus ist), immer unformatiert angezeigt wird.
- * 
+ * Ein Focus-Listener der nur für Eingabefelder von Kennzahlen gedacht ist. Er
+ * sorgt dafür, dass der Wert eines Eingabetextfeldes formatiert angezeigt wird,
+ * solange das Eingabefeld nicht den Focus hat und wenn es den Focus bekommt
+ * (und damit im Editiermodus ist), immer unformatiert angezeigt wird.
+ *
  * @author Ich
  * @create 27.09.2015
  */

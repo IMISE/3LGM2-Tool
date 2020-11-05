@@ -28,8 +28,9 @@ public abstract class TemplateViewDefinition {
     }
 
     /**
-     * @return Name of the main category of this template library e.g "IHE" or "HL7". More than one template library can be in the same category. If
-     *         <code>null</code> it will be ignored.
+     * @return Name of the main category of this template library e.g "IHE" or
+     *         "HL7". More than one template library can be in the same
+     *         category. If <code>null</code> it will be ignored.
      */
     protected String getMainCategoryResStringAndIconKey() {
         return null;
@@ -41,9 +42,9 @@ public abstract class TemplateViewDefinition {
     protected abstract List<SimpleMetaPath> getViewMetaPaths();
 
     /**
-     * Converts this view definition with all its view metapaths in a list of the
-     * {@link PathTreeBranchDefinition} to show this template in a tree with a
-     * {@link PathTreeModel}.
+     * Converts this view definition with all its view metapaths in a list of
+     * the {@link PathTreeBranchDefinition} to show this template in a tree with
+     * a {@link PathTreeModel}.
      *
      * @return List of the resulting PathTreeBranchDefinitions
      */

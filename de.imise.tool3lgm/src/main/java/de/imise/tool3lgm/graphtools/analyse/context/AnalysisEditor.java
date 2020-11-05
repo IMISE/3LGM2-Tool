@@ -47,47 +47,56 @@ public class AnalysisEditor extends JDialog implements ActionListener {
     private final MetaModel metaModel;
 
     /**
-     * Diese Componente besteht aus zwei Listen, die Elementklassen enthalten. In der ersten sind
-     * die Elemteklassen enthalten, von denen eine Teilanalyse ausgeht. In der zweiten sind die
-     * Elemtklassen enthalten, die die Bedingung für eine Teilanalyse darstellen. Es sind
-     * Radiobutton enthalten. Die Radiobuttons sind einer ButtonGroup zugeordnet. Die Radiobuttons
-     * geben die Ausprägung der Condition an. D.h. Soll ein Element verbunden sein oder nicht? An
-     * die erste Liste ist ein <code>ListSelectionListener</code> geknüpft, der die nachfolgende
-     * Liste füllt, wenn sie schon existiert. Wenn also eine Elementklasse selektiert wird, werden
-     * in der nachfolgenen <code>PathStepComponent</code> die erste Liste mit den möglichen
-     * Elementklassen gefüllt, die mit dem selektierten Element verbunden sein können.
+     * Diese Componente besteht aus zwei Listen, die Elementklassen enthalten.
+     * In der ersten sind die Elemteklassen enthalten, von denen eine
+     * Teilanalyse ausgeht. In der zweiten sind die Elemtklassen enthalten, die
+     * die Bedingung für eine Teilanalyse darstellen. Es sind Radiobutton
+     * enthalten. Die Radiobuttons sind einer ButtonGroup zugeordnet. Die
+     * Radiobuttons geben die Ausprägung der Condition an. D.h. Soll ein Element
+     * verbunden sein oder nicht? An die erste Liste ist ein
+     * <code>ListSelectionListener</code> geknüpft, der die nachfolgende Liste
+     * füllt, wenn sie schon existiert. Wenn also eine Elementklasse selektiert
+     * wird, werden in der nachfolgenen <code>PathStepComponent</code> die erste
+     * Liste mit den möglichen Elementklassen gefüllt, die mit dem selektierten
+     * Element verbunden sein können.
      */
     private class PathStepComponent implements ListSelectionListener {
 
         /**
-         * Diese ButtonGroup beinhaltet die zwei Radiobuttons, die die Condition darstellen. Es sind
-         * die zwei RadioButtons enthalten, die angeben, ob ein Element mit einem anderen verbunden
-         * sein muss oder nicht verbunden sein darf.
+         * Diese ButtonGroup beinhaltet die zwei Radiobuttons, die die Condition
+         * darstellen. Es sind die zwei RadioButtons enthalten, die angeben, ob
+         * ein Element mit einem anderen verbunden sein muss oder nicht
+         * verbunden sein darf.
          */
         private ButtonGroup bgroup;
 
         /**
-         * Die RadioButtons, die angeben, ob das selektierte Element der ersten Liste mit dem(n)
-         * selektierten Element(en) der Eingränzungsliste verbunden sein muss oder nicht sein darf.
+         * Die RadioButtons, die angeben, ob das selektierte Element der ersten
+         * Liste mit dem(n) selektierten Element(en) der Eingränzungsliste
+         * verbunden sein muss oder nicht sein darf.
          */
         private JRadioButton connectedRadioBut, notConnectedRadioBut;
 
         /**
-         * Enthält die Elementklassen, die start einer XMLAnalyse sein können und die
-         * Zwischenschritte in einer Analysekette sein können.
+         * Enthält die Elementklassen, die start einer XMLAnalyse sein können
+         * und die Zwischenschritte in einer Analysekette sein können.
          */
         private AlphabeticalJList<Class<? extends ModelElement>> pathStepElementTypeList;
 
         /**
-         * Enthält die Elemntklassen, die angeben, ob ein Element mit einem seletierten aus dieser
-         * Liste verbunden sein muss/nicht verbunden sein darf.
+         * Enthält die Elemntklassen, die angeben, ob ein Element mit einem
+         * seletierten aus dieser Liste verbunden sein muss/nicht verbunden sein
+         * darf.
          */
         private AlphabeticalJList<Class<? extends ModelElement>> conditionElementTypeList;
 
         /** In diesem scrollPane sind die Elementklassen */
         private JScrollPane scrollPaneTyp;
 
-        /** In diesem <code>JScrollPane</code> sind die Elementklassen für Einschränkungen */
+        /**
+         * In diesem <code>JScrollPane</code> sind die Elementklassen für
+         * Einschränkungen
+         */
         private JScrollPane scrollPaneverb;
 
         /** Die Überschrift für das <code>scrollPaneTyp</code> */
@@ -148,8 +157,8 @@ public class AnalysisEditor extends JDialog implements ActionListener {
         }
 
         /**
-         * Initialisiert die Listen und Labels Ruft initial die Methode auf, die die GUI-Elemente
-         * zum <code>pathStepMainPanel</code> hinzufügt.
+         * Initialisiert die Listen und Labels Ruft initial die Methode auf, die
+         * die GUI-Elemente zum <code>pathStepMainPanel</code> hinzufügt.
          *
          * @param listener
          */
@@ -180,8 +189,9 @@ public class AnalysisEditor extends JDialog implements ActionListener {
         }
 
         /**
-         * Löscht sich selbst aus der grafischen Anzeige. Es werden die Listen, die RadioButtons
-         * sowie die Beschriftungen der zuletzt hinzugefügten Gruppe gelöscht.
+         * Löscht sich selbst aus der grafischen Anzeige. Es werden die Listen,
+         * die RadioButtons sowie die Beschriftungen der zuletzt hinzugefügten
+         * Gruppe gelöscht.
          */
         public void removeLastInsertetLists() {
             pathStepMainPanel.remove(scrollPaneverb);
@@ -251,8 +261,8 @@ public class AnalysisEditor extends JDialog implements ActionListener {
     }
 
     /**
-     * Liefert ein Array der Klassen aller Elemente, die mit Elementen der übergebenen Art über
-     * irgendeine Art von Kanten verbunden sein können.
+     * Liefert ein Array der Klassen aller Elemente, die mit Elementen der
+     * übergebenen Art über irgendeine Art von Kanten verbunden sein können.
      *
      * @param elementClasses
      */
@@ -313,22 +323,31 @@ public class AnalysisEditor extends JDialog implements ActionListener {
     }
 
     /**
-     * Liste aller <code>PathStepComponent</code>s, über die weitere Pfadschritte und bedinungen
-     * eingegeben werden können
+     * Liste aller <code>PathStepComponent</code>s, über die weitere
+     * Pfadschritte und bedinungen eingegeben werden können
      */
     private final List<PathStepComponent> pathPanels = new ArrayList<>();
 
-    /** Button, mit dem das letzte Panel eines Pfadschrittes wieder entfernt werden kann */
-    private final JButton addPathStepPanelBut = new JButton("+"/* getResString("erw") */);
+    /**
+     * Button, mit dem das letzte Panel eines Pfadschrittes wieder entfernt
+     * werden kann
+     */
+    private final JButton addPathStepPanelBut = new JButton(
+            "+"/* getResString("erw") */);
 
-    /** Button, mit dem ein weiteres Panel für einen Pfadschritt hinzugefügt werden kann */
-    private final JButton removePathStepPanelBut = new JButton("-"/* getResString("vereinfachen") */);
+    /**
+     * Button, mit dem ein weiteres Panel für einen Pfadschritt hinzugefügt
+     * werden kann
+     */
+    private final JButton removePathStepPanelBut = new JButton(
+            "-"/* getResString("vereinfachen") */);
 
     /** Panel, das alle <code>PathStepComponent</code>s enthält */
     private JPanel pathStepMainPanel;
 
     /**
-     * Die Constraints mit denen die einzelnen <code>PathStepComponent</code>s in das <code>pathStepMainPanel</code> eingefügt werden.
+     * Die Constraints mit denen die einzelnen <code>PathStepComponent</code>s
+     * in das <code>pathStepMainPanel</code> eingefügt werden.
      */
     private final GridBagConstraints pathStepMainPanelConstraints = new GridBagConstraints();
 

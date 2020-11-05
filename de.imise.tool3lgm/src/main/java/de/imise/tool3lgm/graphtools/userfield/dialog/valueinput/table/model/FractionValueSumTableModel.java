@@ -27,7 +27,8 @@ public class FractionValueSumTableModel extends AbstractUserFieldTableModel {
     }
 
     /**
-     * Entfernt je nach Werten der übergebenen boolean-Varibalen alle Elemente, die nicht dazu passen aus der übergebenen Liste
+     * Entfernt je nach Werten der übergebenen boolean-Varibalen alle Elemente,
+     * die nicht dazu passen aus der übergebenen Liste
      *
      * @param elements
      */

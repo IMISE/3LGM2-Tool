@@ -28,7 +28,10 @@ public class TableToolBarLegendItem extends JPanel {
     private String descriptionPrefix = null;
     private String descriptionPostfix = null;
 
-    /** Wenn <code>true</code> wird der jeweilige BEschreibungteil Fett dargestellt */
+    /**
+     * Wenn <code>true</code> wird der jeweilige BEschreibungteil Fett
+     * dargestellt
+     */
     boolean boldDescriptionPrefix = false;
     boolean boldDescription = false;
     boolean boldDescriptionPostfix = false;

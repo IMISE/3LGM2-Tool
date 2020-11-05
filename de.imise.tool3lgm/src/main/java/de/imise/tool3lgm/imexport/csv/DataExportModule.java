@@ -13,10 +13,13 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import javax.swing.JFileChooser;
+
 import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.Tool3lgmConstants.FileFilterType;
 import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
+import de.imise.tool3lgm.graphtools.metamodel.CoreMetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
@@ -54,7 +57,7 @@ public class DataExportModule {
         ExtendedFileChooser saveDialog = new ExtendedFileChooser(FileFilterType.CSV, docDir, exportFileName);
         saveDialog.setMultiSelectionEnabled(false);
         saveDialog.setFileFilters(true, Tool3lgmConstants.getFileNameExtensionFilter(FileFilterType.CSV));
-        if (saveDialog.showSaveDialog(Static.getMainFrame()) == ExtendedFileChooser.APPROVE_OPTION) {
+        if (saveDialog.showSaveDialog(Static.getMainFrame()) == JFileChooser.APPROVE_OPTION) {
             exportData(doc, saveDialog.getSelectedFile());
         }
 
@@ -99,7 +102,7 @@ public class DataExportModule {
                     if (elementClass != classElement) {
                         classElement = elementClass;
                         ElementsNameBuilder elementsNameBuilder = metaModel.getElementsNameBuilder();
-                        String displayableClassName = MetaModel.isEdgeType(elementClass) ? elementsNameBuilder.getFullForwardMetaAssociationName(elementClass.asSubclass(Edge.class)) : elementsNameBuilder.getDisplayableName(elementClass);
+                        String displayableClassName = CoreMetaModel.isEdgeType(elementClass) ? elementsNameBuilder.getFullForwardMetaAssociationName(elementClass.asSubclass(Edge.class)) : elementsNameBuilder.getDisplayableName(elementClass);
                         caption = displayableClassName + "\tName\tDescription\tHashString";
                         for (SimpleMetaPath metaPath : metaPaths2Export) {
                             if (metaPath.getStartClass().isAssignableFrom(elementClass)) {

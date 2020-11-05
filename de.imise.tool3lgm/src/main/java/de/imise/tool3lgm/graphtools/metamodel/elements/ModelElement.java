@@ -25,6 +25,7 @@ import de.imise.tool3lgm.graphtools.dialog.element.ElemenPropertyDialogsContext;
 import de.imise.tool3lgm.graphtools.dialog.element.ElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.dialog.element.ErrorDecoratedElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.dialog.element.panel.ElementDialogPanel;
+import de.imise.tool3lgm.graphtools.metamodel.CoreMetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.GraphViewDefinition;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModelDefinition;
@@ -66,26 +67,29 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
     protected String hashstring;
 
     /**
-     * Name des Elementes mit allen Namen der Teilmodelle in eckigen Klammern dahinter.
+     * Name des Elementes mit allen Namen der Teilmodelle in eckigen Klammern
+     * dahinter.
      */
     private String nameWithSzens = null;
 
     /**
-     * Table, der von einem <code>GraphDocument</code> auf den Container des Elemtentes in diesem <code>GraphDocument</code> mappt, wenn es darin
+     * Table, der von einem <code>GraphDocument</code> auf den Container des
+     * Elemtentes in diesem <code>GraphDocument</code> mappt, wenn es darin
      * vorkommt.
      */
     private Map<GraphDocument, ElementContainer> containerTable;
 
     /**
-     * Liste aller Assoziationen zu anderen Elementen. Solange keine Elemente in dieser Liste sind,
-     * wird sie <code>null</code> gehalten, so dass bei Elementen, die sowieso niemals Kanten
-     * haben (Kanten selbst und Knickpunkte), auch keine unnöige Liste angelegt wird.
+     * Liste aller Assoziationen zu anderen Elementen. Solange keine Elemente in
+     * dieser Liste sind, wird sie <code>null</code> gehalten, so dass bei
+     * Elementen, die sowieso niemals Kanten haben (Kanten selbst und
+     * Knickpunkte), auch keine unnöige Liste angelegt wird.
      */
     private List<Edge> edges = null;
 
     /**
-     * Ein StringBuilder, der gebraucht wird, um die Namen der Elemente zusammen zu bauen. Er ist statisch, damit man ihn nicht ständig neu anlegen
-     * muss.
+     * Ein StringBuilder, der gebraucht wird, um die Namen der Elemente zusammen
+     * zu bauen. Er ist statisch, damit man ihn nicht ständig neu anlegen muss.
      */
     private static final StringBuilder toStringBuffer = new StringBuilder(40);
 
@@ -101,15 +105,17 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
     private MetaModel metaModel;
 
     /**
-     * {@link GDCollection}, zu der dieses Element gehört. Dieser Wert ist nur als Cache gedacht, d.h. auch innerhalb von ModelElement sollte die
+     * {@link GDCollection}, zu der dieses Element gehört. Dieser Wert ist nur
+     * als Cache gedacht, d.h. auch innerhalb von ModelElement sollte die
      * GDCollection immer über {@link #getCollection()} geholt werden.
      */
     private GDCollection gdcoll;
 
     /**
-     * HashString des Teilmodells, mit dem das Element verknüpft ist. Diese Verknüpfung sagt einfach nur aus, dass das Element in dem Teilmodell näher
-     * berschrieben wird (z.B. duch seine Teile). Es kann, aber muss selbst nicht in diesem Teilmodell
-     * vorkommen.
+     * HashString des Teilmodells, mit dem das Element verknüpft ist. Diese
+     * Verknüpfung sagt einfach nur aus, dass das Element in dem Teilmodell
+     * näher berschrieben wird (z.B. duch seine Teile). Es kann, aber muss
+     * selbst nicht in diesem Teilmodell vorkommen.
      */
     private String associatedSzenHashString = null;
 
@@ -128,10 +134,14 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
     }
 
     /**
-     * Setzt das MetaModel, zu dem dieses Element gehört. Diese Funktion ist nur für das package sichtbar und es gibt es nur, weil zwar jedes
-     * ModelElement das Metamodel kennen muss, aber nicht jede Unterklasse von ModelElement einen Konstruktor mit Parameter {@link MetaModelInsance}
-     * haben soll, sondern alle nur den leeren. Bei jedem ModelElement muss das MetaModel sofort (!) nach dem Anlegen über diese Funktion gesetzt
-     * werden, damit das ModelElement richtig funktioniert. Anlegen und setzen macht beides der {@link ModelElementInstanceCreator}.
+     * Setzt das MetaModel, zu dem dieses Element gehört. Diese Funktion ist nur
+     * für das package sichtbar und es gibt es nur, weil zwar jedes ModelElement
+     * das Metamodel kennen muss, aber nicht jede Unterklasse von ModelElement
+     * einen Konstruktor mit Parameter {@link MetaModelInsance} haben soll,
+     * sondern alle nur den leeren. Bei jedem ModelElement muss das MetaModel
+     * sofort (!) nach dem Anlegen über diese Funktion gesetzt werden, damit das
+     * ModelElement richtig funktioniert. Anlegen und setzen macht beides der
+     * {@link ModelElementInstanceCreator}.
      */
     final void setMetaModel(final MetaModel metaModel) {
         if (this.metaModel == null) {
@@ -164,9 +174,10 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
     }
 
     /**
-     * Liefert den Index der Ebene, auf dem das Element liegt. Diese Funktion wird von den konkreten Elementen überschrieben. Das braucht man neben
-     * den der Möglichkeit das für eine Klasse über die {@link ModelConstants} zu sagen, weil es nicht bei allen Klassen der Layer feststeht
-     * (Knickpunkte)
+     * Liefert den Index der Ebene, auf dem das Element liegt. Diese Funktion
+     * wird von den konkreten Elementen überschrieben. Das braucht man neben den
+     * der Möglichkeit das für eine Klasse über die {@link ModelConstants} zu
+     * sagen, weil es nicht bei allen Klassen der Layer feststeht (Knickpunkte)
      *
      * @return
      */
@@ -389,7 +400,8 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
     }
 
     /**
-     * Setzt den Namen des Objektes und sortiert die Liste der {@link NodeContainer} im LayerContainer
+     * Setzt den Namen des Objektes und sortiert die Liste der
+     * {@link NodeContainer} im LayerContainer
      *
      * @param name
      */
@@ -398,18 +410,20 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
     }
 
     /**
-     * Liefert für alle Elementklassen, bei denen der Name verbundendener Elemente in der Grafik in Klammern
-     * unter der eigentlichen Elementart angezeigt werden soll, den MetaPfad zu den anzuzeigenden verbundenen
-     * Elementen.
-     * Diese Funktion darf nicht einfach refactored werden und wenn doch, dann muss das Feld GET_NAME_EXTENSION_METHOD_NAME
-     * ebenfalls umbenannt werden.
+     * Liefert für alle Elementklassen, bei denen der Name verbundendener
+     * Elemente in der Grafik in Klammern unter der eigentlichen Elementart
+     * angezeigt werden soll, den MetaPfad zu den anzuzeigenden verbundenen
+     * Elementen. Diese Funktion darf nicht einfach refactored werden und wenn
+     * doch, dann muss das Feld GET_NAME_EXTENSION_METHOD_NAME ebenfalls
+     * umbenannt werden.
      */
     private final MetaPath getNameExtensionPath() {
         return metaModel.getNameExtensionPath(getClass());
     }
 
     /**
-     * Aktualisiert den Namen, wenn das Element hinter seinem Namen auch den Namen verbundener Elemente anzeigen soll
+     * Aktualisiert den Namen, wenn das Element hinter seinem Namen auch den
+     * Namen verbundener Elemente anzeigen soll
      */
     public void updateNameExtensions() {
         if (getNameExtensionPath() != null) {
@@ -418,7 +432,8 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
     }
 
     /**
-     * Setzt den Namen des Objektes und sortiert die Liste der {@link NodeContainer} im LayerContainer, wenn sort==true
+     * Setzt den Namen des Objektes und sortiert die Liste der
+     * {@link NodeContainer} im LayerContainer, wenn sort==true
      *
      * @param name
      * @param sort
@@ -436,7 +451,7 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
         //weil ModelElement die Unterlasse Node nicht kennen sollte.
         //Eventuell wird das in Zukunft auch eine andere Bedingung wie metaModel.hasVisibleName(me) oder so etwas,
         //was auch Kanten mit einschließen würde, falls deren Namen auch mal eine Rolle spielen sollten
-        boolean isNodeType = MetaModel.isNodeType(getClass());
+        boolean isNodeType = CoreMetaModel.isNodeType(getClass());
         if (sort && isNodeType) {
             for (ElementContainer ec : containerTable.values()) {
                 NodeContainer kc = (NodeContainer) ec;
@@ -493,9 +508,8 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
     }
 
     /**
-     * @param targetContainer
-     *            the single target container to update or <code>null</code> to
-     *            update all containers
+     * @param targetContainer the single target container to update or
+     *            <code>null</code> to update all containers
      */
     public void updateHTMLName(final ElementContainer targetContainer) {
         ElementsLayoutDefinition defaultElementsLayout = null;
@@ -641,7 +655,8 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
     }
 
     /**
-     * set a property / field of the ModelElement possible fieldNames: name, description
+     * set a property / field of the ModelElement possible fieldNames: name,
+     * description
      *
      * @author Thomas Rudert
      * @param fieldName String with the name of the field
@@ -683,7 +698,8 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
     }
 
     /**
-     * Fügt diesem Node in der List connections an der Position pos die Edge kante hinzu.
+     * Fügt diesem Node in der List connections an der Position pos die Edge
+     * kante hinzu.
      */
     public boolean insertEdge(final Edge edge, int pos) {
         if (edge == null || edges != null && edges.contains(edge)) {
@@ -779,7 +795,8 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
 
     /**
      * @param edge
-     * @return <code>true</code>, wenn Edge <i>k</i> an diesem Node ansetzt, sonst <code>false</code>
+     * @return <code>true</code>, wenn Edge <i>k</i> an diesem Node ansetzt,
+     *         sonst <code>false</code>
      */
     public final boolean hasConnection(final Edge edge) {
         return getEdgeIndex(edge) >= 0;
@@ -787,7 +804,8 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
 
     /**
      * @param modelElement
-     * @return <code>true</code>, wenn eine Edge zwischen diesem und dem übergebenen Element besteht
+     * @return <code>true</code>, wenn eine Edge zwischen diesem und dem
+     *         übergebenen Element besteht
      */
     public final boolean isConnectedWith(final ModelElement modelElement) {
         for (Edge edge : getEdges()) {
@@ -800,7 +818,8 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
 
     /**
      * @param modelElement
-     * @return <code>true</code>, wenn eine Edge von diesem zu dem übergebenen Element besteht
+     * @return <code>true</code>, wenn eine Edge von diesem zu dem übergebenen
+     *         Element besteht
      */
     public final boolean isConnectedTo(final ModelElement modelElement) {
         for (Edge edge : getEdges()) {
@@ -813,7 +832,8 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
 
     /**
      * @param modelElement
-     * @return <code>true</code>, wenn eine Edge vom übergebenen zu diesem Element besteht
+     * @return <code>true</code>, wenn eine Edge vom übergebenen zu diesem
+     *         Element besteht
      */
     public final boolean isConnectedFrom(final ModelElement modelElement) {
         for (Edge edge : getEdges()) {
@@ -825,11 +845,14 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
     }
 
     /**
-     * Prüft, ob zwischen diesem und dem übergebenen Element eine Edge der angegebenen Art existiert. Die Richtung ist dabei egal.
+     * Prüft, ob zwischen diesem und dem übergebenen Element eine Edge der
+     * angegebenen Art existiert. Die Richtung ist dabei egal.
      *
-     * @param modelElement Element zu dem die Existenz einer Verbindung geprüft werden soll
+     * @param modelElement Element zu dem die Existenz einer Verbindung geprüft
+     *            werden soll
      * @param edgeClass Art der Edge, die gesucht werden soll
-     * @return <code>true</code>, wenn eine Edge zwischen diesem und dem übergebenen Element besteht
+     * @return <code>true</code>, wenn eine Edge zwischen diesem und dem
+     *         übergebenen Element besteht
      */
     public final boolean isConnectedWith(final ModelElement modelElement, final Class<? extends Edge> edgeClass) {
         for (Edge edge : getEdges()) {
@@ -859,8 +882,10 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
     }
 
     /**
-     * Gibt die erste Edge vom Typ <code>edgeClass</code> zurück, die von diesem <code>ModelElement</code> zum <code>ModelElement k</code> geht.
-     * Führt <code>getConnectionTo(ModelElement, Class, int)</code> für alle Positionen aus.
+     * Gibt die erste Edge vom Typ <code>edgeClass</code> zurück, die von diesem
+     * <code>ModelElement</code> zum <code>ModelElement k</code> geht. Führt
+     * <code>getConnectionTo(ModelElement, Class, int)</code> für alle
+     * Positionen aus.
      *
      * @param modelElement
      * @param edgeClasses
@@ -871,8 +896,10 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
     }
 
     /**
-     * Gibt die erste Edge vom Typ <code>edgeClass</code> zurück, die von diesem <code>ModelElement</code> zum <code>ModelElement k</code> geht.
-     * Führt <code>getConnectionTo(ModelElement, Class, int)</code> für alle Positionen aus.
+     * Gibt die erste Edge vom Typ <code>edgeClass</code> zurück, die von diesem
+     * <code>ModelElement</code> zum <code>ModelElement k</code> geht. Führt
+     * <code>getConnectionTo(ModelElement, Class, int)</code> für alle
+     * Positionen aus.
      *
      * @param modelElement
      * @param edgeClasses
@@ -924,9 +951,11 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
     }
 
     /**
-     * Prüft, ob die übergebene Kante der übergebenen die zuweisungskompatibel zur übergebenen Kantenklasse ist (wenn die Kantenklasse
-     * <code>null</code> ist, dann ist sie egal bzw. ganauso als würde man ModelElement.class übergeben) und ob sie this mit dem
-     * übergebenen ModelElement in Richtung FORWAD verbindet.
+     * Prüft, ob die übergebene Kante der übergebenen die zuweisungskompatibel
+     * zur übergebenen Kantenklasse ist (wenn die Kantenklasse <code>null</code>
+     * ist, dann ist sie egal bzw. ganauso als würde man ModelElement.class
+     * übergeben) und ob sie this mit dem übergebenen ModelElement in Richtung
+     * FORWAD verbindet.
      *
      * @param edge
      * @param edgeClass
@@ -939,8 +968,10 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
     }
 
     /**
-     * Prüft, ob die übergebene Kante der übergebenen die zuweisungskompatibel zur übergebenen Kantenklasse ist (wenn die Kantenklasse
-     * <code>null</code> ist, dann ist sie egal bzw. ganauso als würde man ModelElement.class übergeben).
+     * Prüft, ob die übergebene Kante der übergebenen die zuweisungskompatibel
+     * zur übergebenen Kantenklasse ist (wenn die Kantenklasse <code>null</code>
+     * ist, dann ist sie egal bzw. ganauso als würde man ModelElement.class
+     * übergeben).
      *
      * @param edge
      * @param edgeClass
@@ -1035,7 +1066,8 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
     }
 
     /**
-     * Sucht alle Kanten, die diesen Node mit Node des angegebenen Typs verbinden.
+     * Sucht alle Kanten, die diesen Node mit Node des angegebenen Typs
+     * verbinden.
      *
      * @param elementClass Klasse der verbundenen Node
      * @return List mit allen gefundenen Kanten
@@ -1045,7 +1077,8 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
     }
 
     /**
-     * Sucht alle Kanten des angegebenen Typs, die diesen Node mit Node des angegebenen Typs verbinden. Wird als <code>edgeClass</code>
+     * Sucht alle Kanten des angegebenen Typs, die diesen Node mit Node des
+     * angegebenen Typs verbinden. Wird als <code>edgeClass</code>
      * <code>null</code> übergeben, werden alle Kantenarten zurückgegeben.
      *
      * @param elementClass Klasse der verbundenen Node
@@ -1057,8 +1090,10 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
     }
 
     /**
-     * Sucht alle Kanten des angegebenen Typs, die diesen Node in Vorwärtsrichtung mit Node des angegebenen Typs verbinden. Wird als
-     * <code>edgeClass</code> <code>null</code> übergeben, werden alle Kantenarten zurückgegeben.
+     * Sucht alle Kanten des angegebenen Typs, die diesen Node in
+     * Vorwärtsrichtung mit Node des angegebenen Typs verbinden. Wird als
+     * <code>edgeClass</code> <code>null</code> übergeben, werden alle
+     * Kantenarten zurückgegeben.
      *
      * @param elementClass Klasse der verbundenen Node
      * @param edgeClass Kanteklasse nach der gesucht werden soll
@@ -1069,8 +1104,10 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
     }
 
     /**
-     * Sucht alle Kanten des angegebenen Typs, die diesen Node in Rückwärtsrichtung mit Node des angegebenen Typs verbinden. Wird als
-     * <code>edgeClass</code> <code>null</code> übergeben, werden alle Kantenarten zurückgegeben.
+     * Sucht alle Kanten des angegebenen Typs, die diesen Node in
+     * Rückwärtsrichtung mit Node des angegebenen Typs verbinden. Wird als
+     * <code>edgeClass</code> <code>null</code> übergeben, werden alle
+     * Kantenarten zurückgegeben.
      *
      * @param elementClass Klasse der verbundenen Node
      * @param edgeClass Kanteklasse nach der gesucht werden soll
@@ -1081,13 +1118,14 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
     }
 
     /**
-     * Sucht alle Kanten des angegebenen Typs, die diesen Node mit Node des angegebenen Typs verbinden. Wird als <code>edgeClass</code>
+     * Sucht alle Kanten des angegebenen Typs, die diesen Node mit Node des
+     * angegebenen Typs verbinden. Wird als <code>edgeClass</code>
      * <code>null</code> übergeben, werden alle Kanten zurückgegeben.
      *
      * @param elementClass Klasse der verbundenen Node
      * @param edgeClass Kanteklasse nach der gesucht werden soll
-     * @param Richtung der Edge nach der gesucht werden soll (<code>ANY</code>, <code>FORWARD</code> oder
-     *            <code>BACKWARD</code>)
+     * @param Richtung der Edge nach der gesucht werden soll (<code>ANY</code>,
+     *            <code>FORWARD</code> oder <code>BACKWARD</code>)
      * @return List mit allen gefundenen Kanten
      */
     private final List<Edge> getEdgesWith(final Class<? extends ModelElement> elementClass, final Class<? extends Edge> edgeClass, final Direction direction) {
@@ -1114,10 +1152,12 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
     }
 
     /**
-     * Gibt eine alphabetisch sortierte Liste aller ElementContainer der mit diesem Node verbundenen Node der Klasse
-     * <code>searchElementClass</code>, die in doc enthalten, sind zurueck
+     * Gibt eine alphabetisch sortierte Liste aller ElementContainer der mit
+     * diesem Node verbundenen Node der Klasse <code>searchElementClass</code>,
+     * die in doc enthalten, sind zurueck
      *
-     * @param searchElementClass Art der verbundenen Elemente, deren Container geliefert werden sollen
+     * @param searchElementClass Art der verbundenen Elemente, deren Container
+     *            geliefert werden sollen
      * @param doc Node aus diesem Dokument
      * @return List mit ElementContainer der gefundenen Node
      */
@@ -1126,7 +1166,8 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
     }
 
     /**
-     * Gibt eine alphabetisch sortierte Liste aller ElementContainer zurück, die mit diesem Node übder die angegebene Kantenart verbundenen sind.
+     * Gibt eine alphabetisch sortierte Liste aller ElementContainer zurück, die
+     * mit diesem Node übder die angegebene Kantenart verbundenen sind.
      *
      * @param doc Node aus diesem Dokument
      * @param searchEdgeClass Art der zu suchenden Verbindungen
@@ -1137,8 +1178,9 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
     }
 
     /**
-     * Gibt eine alphabetisch sortierte Liste aller ElementContainer zurück, die mit diesem Node übder die angegebene Kantenart in der
-     * angegebenen Richtung verbundenen sind.
+     * Gibt eine alphabetisch sortierte Liste aller ElementContainer zurück, die
+     * mit diesem Node übder die angegebene Kantenart in der angegebenen
+     * Richtung verbundenen sind.
      *
      * @param doc Node aus diesem Dokument
      * @param searchEdgeClass Art der zu suchenden Verbindungen
@@ -1171,10 +1213,12 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
     }
 
     /**
-     * Gibt eine alphabetisch sotrierte Liste aller ElementContainer der mit diesem Node verbundenen Node des Klasse searchElementClass, die in
-     * doc enthalten, sind zurueck
+     * Gibt eine alphabetisch sotrierte Liste aller ElementContainer der mit
+     * diesem Node verbundenen Node des Klasse searchElementClass, die in doc
+     * enthalten, sind zurueck
      *
-     * @param searchElementClass Elementklasse deren Objekte zurück gegeben werden sollen
+     * @param searchElementClass Elementklasse deren Objekte zurück gegeben
+     *            werden sollen
      * @param doc Node aus diesem Dokument
      * @param start true = Verbindungen beginnen nicht bei diesem Node
      * @param end true = Verbindungen enden nicht bei diesem Node
@@ -1194,11 +1238,14 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
     //////////////////////////////
 
     /**
-     * Liefert eine Liste aller Elemente der angegebenen Art, die über irgendeine Kantenart mit den direkten und indirekten Teilelementen dieses
-     * Elementes verbunden sind. Es wird nur in dem angegebenen <code>GraphDocument</code> gesucht:
+     * Liefert eine Liste aller Elemente der angegebenen Art, die über
+     * irgendeine Kantenart mit den direkten und indirekten Teilelementen dieses
+     * Elementes verbunden sind. Es wird nur in dem angegebenen
+     * <code>GraphDocument</code> gesucht:
      *
      * @param searchElementClass Elementart nach der gesucht werden soll
-     * @param doc <code>GraphDocument</code>, in dem nach verbundenen Elementen gesucht wird
+     * @param doc <code>GraphDocument</code>, in dem nach verbundenen Elementen
+     *            gesucht wird
      * @return Liste mit verbundenen <code>ModelElement</code>s
      * @see #getPartConnectedContainers(Class, GraphDocument, Class, int)
      */
@@ -1207,14 +1254,18 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
     }
 
     /**
-     * Liefert eine Liste aller Elemente, die über die angegebene Kantenart mit den direkten und indirekten Teilelementen dieses Elementes verbunden
-     * sind. Es wird nur in dem angegebenen <code>GraphDocument</code> gesucht und nur in der angegebenen
-     * Richtung der Edge.
+     * Liefert eine Liste aller Elemente, die über die angegebene Kantenart mit
+     * den direkten und indirekten Teilelementen dieses Elementes verbunden
+     * sind. Es wird nur in dem angegebenen <code>GraphDocument</code> gesucht
+     * und nur in der angegebenen Richtung der Edge.
      *
      * @param searchElementClass Elementart nach der gesucht werden soll
-     * @param doc <code>GraphDocument</code>, in dem nach verbundenen Elementen gesucht wird
-     * @param edgeClass Art der Edge, über die Elemente mit den Teilen dieses Elementes verbunden sein sollen
-     * @param direction Richtung, die die Kanten haben sollen, über die die verbundenen Elemente gesucht werden
+     * @param doc <code>GraphDocument</code>, in dem nach verbundenen Elementen
+     *            gesucht wird
+     * @param edgeClass Art der Edge, über die Elemente mit den Teilen dieses
+     *            Elementes verbunden sein sollen
+     * @param direction Richtung, die die Kanten haben sollen, über die die
+     *            verbundenen Elemente gesucht werden
      * @return Liste mit verbundenen <code>ModelElement</code>s
      */
     public final List<ElementContainer> getPartConnectedContainers(final Class<? extends ModelElement> searchElementClass, final GraphDocument doc, final Class<? extends Edge> edgeClass, final Direction direction) {
@@ -1229,11 +1280,14 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
     }
 
     /**
-     * Liefert eine Liste aller Elemente der angegebenen Art, die über irgendeine Kantenart mit den direkten und indirekten Oberelementen dieses
-     * Elementes verbunden sind. Es wird nur in dem angegebenen <code>GraphDocument</code> gesucht.
+     * Liefert eine Liste aller Elemente der angegebenen Art, die über
+     * irgendeine Kantenart mit den direkten und indirekten Oberelementen dieses
+     * Elementes verbunden sind. Es wird nur in dem angegebenen
+     * <code>GraphDocument</code> gesucht.
      *
      * @param searchElementClass Elementart nach der gesucht werden soll
-     * @param doc <code>GraphDocument</code>, in dem nach verbundenen Elementen gesucht wird
+     * @param doc <code>GraphDocument</code>, in dem nach verbundenen Elementen
+     *            gesucht wird
      * @return Liste mit verbundenen <code>ModelElement</code>s
      * @see #getParentConnectedContainers(Class, GraphDocument, Class, int)
      */
@@ -1242,14 +1296,18 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
     }
 
     /**
-     * Liefert eine Liste aller Elemente, die über die angegebene Kantenart mit den direkten und indirekten Oberelementen dieses Elementes verbunden
-     * sind. Es wird nur in dem angegebenen <code>GraphDocument</code> gesucht und nur in der angegebenen
-     * Richtung der Edge.
+     * Liefert eine Liste aller Elemente, die über die angegebene Kantenart mit
+     * den direkten und indirekten Oberelementen dieses Elementes verbunden
+     * sind. Es wird nur in dem angegebenen <code>GraphDocument</code> gesucht
+     * und nur in der angegebenen Richtung der Edge.
      *
      * @param searchElementClass Elementart nach der gesucht werden soll
-     * @param doc <code>GraphDocument</code>, in dem nach verbundenen Elementen gesucht wird
-     * @param edgeClass Art der Edge, über die Elemente mit den Teilen dieses Elementes verbunden sein sollen
-     * @param direction Richtung, die die Kanten haben sollen, über die die verbundenen Elemente gesucht werden
+     * @param doc <code>GraphDocument</code>, in dem nach verbundenen Elementen
+     *            gesucht wird
+     * @param edgeClass Art der Edge, über die Elemente mit den Teilen dieses
+     *            Elementes verbunden sein sollen
+     * @param direction Richtung, die die Kanten haben sollen, über die die
+     *            verbundenen Elemente gesucht werden
      * @return Liste mit verbundenen <code>ModelElement</code>s
      */
     public final List<ElementContainer> getParentConnectedContainers(final Class<? extends ModelElement> searchElementClass, final GraphDocument doc, final Class<? extends Edge> edgeClass, final Direction direction) {
@@ -1266,28 +1324,31 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
     }
 
     /**
-     * Liefert eine Liste mit den ElementContainer der direkten Teilelemente im aktuellen <code>GraphDocument</code>
+     * Liefert eine Liste mit den ElementContainer der direkten Teilelemente im
+     * aktuellen <code>GraphDocument</code>
      *
      * @param doc
      * @return Liste mit den Containern der direkten Teilelemente
      */
     public List<ElementContainer> getDirectPartContainers(final GraphDocument doc) {
-        return getConnectedContainers(ModelElement.class, doc, HasPartEdge.class, HasPartEdge.SUPER_TO_SUB_DIRECTION);
+        return getConnectedContainers(ModelElement.class, doc, HasPartEdge.class, SubordinationEdge.SUPER_TO_SUB_DIRECTION);
     }
 
     /**
-     * Liefert eine Liste mit den ElementContainer der direkten Oberelemente im aktuellen <code>GraphDocument</code>
+     * Liefert eine Liste mit den ElementContainer der direkten Oberelemente im
+     * aktuellen <code>GraphDocument</code>
      *
      * @param doc
      * @return Liste mit den Containern der direkten oberelemente
      */
     public List<ElementContainer> getDirectParentContainers(final GraphDocument doc) {
-        return getConnectedContainers(ModelElement.class, doc, HasPartEdge.class, HasPartEdge.SUB_TO_SUPER_DIRECTION);
+        return getConnectedContainers(ModelElement.class, doc, HasPartEdge.class, SubordinationEdge.SUB_TO_SUPER_DIRECTION);
     }
 
     /**
-     * Prüft, ob im übergebenen GraphDocument der Container eines direkt verbundenen Parent-Elementes von <code>this</code> existiert. Wenn ja, kommt
-     * <code>true</code> zurück.
+     * Prüft, ob im übergebenen GraphDocument der Container eines direkt
+     * verbundenen Parent-Elementes von <code>this</code> existiert. Wenn ja,
+     * kommt <code>true</code> zurück.
      *
      * @param doc
      * @return
@@ -1297,8 +1358,8 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
     }
 
     /**
-     * Prüft, ob im übergebenen GraphDocument ein Container eines Part-Elementes von <code>this</code> existiert. Wenn ja, kommt <code>true</code>
-     * zurück.
+     * Prüft, ob im übergebenen GraphDocument ein Container eines Part-Elementes
+     * von <code>this</code> existiert. Wenn ja, kommt <code>true</code> zurück.
      *
      * @param doc
      * @return
@@ -1308,7 +1369,8 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
     }
 
     /**
-     * @return <code>true</code> if the element is the slave of a composition edge
+     * @return <code>true</code> if the element is the slave of a composition
+     *         edge
      */
     public boolean isCompositionSlave(final GraphDocument doc) {
         List<ElementContainer> masterContainers = getConnectedContainers(ModelElement.class, doc, CompositionEdge.class, CompositionEdge.SLAVE_TO_MASTER_DIRECTION);
@@ -1316,10 +1378,12 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
     }
 
     /**
-     * Liefert ein <code>List</code> aller <code>ElementContainer</code>, deren Elemente Teil dieses Elementes sind, aber selbst keine Teile
-     * besitzen. <br>
+     * Liefert ein <code>List</code> aller <code>ElementContainer</code>, deren
+     * Elemente Teil dieses Elementes sind, aber selbst keine Teile besitzen.
+     * <br>
      *
-     * @return Liste mit <code>ElementContainer</code>n, die die absoluten Kindelemente sind
+     * @return Liste mit <code>ElementContainer</code>n, die die absoluten
+     *         Kindelemente sind
      */
     public final List<ElementContainer> getAbsolutePartContainers(final GraphDocument doc) {
         List<ElementContainer> parts = getDirectPartContainers(doc);
@@ -1335,7 +1399,8 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
     }
 
     /**
-     * Füllt die übergebene Liste <code>returnList</code> mit allen hierarschich verbundenen Elementen.
+     * Füllt die übergebene Liste <code>returnList</code> mit allen hierarschich
+     * verbundenen Elementen.
      *
      * @param returnList Liste mit <code>ElementContainer</code>n
      * @param doc (Teil-)Modell in dem gesucht werden soll
@@ -1352,11 +1417,13 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
     }
 
     /**
-     * Gibt die <code>ElementContainer</code> aller rekursiv untergeordneten Elemente zurück.
+     * Gibt die <code>ElementContainer</code> aller rekursiv untergeordneten
+     * Elemente zurück.
      *
      * @param doc
      * @param withParts
-     * @return Ein <code>Set</code> gefüllt mit <code>ElementContainer</code>n der untergeorndeten Elemente.
+     * @return Ein <code>Set</code> gefüllt mit <code>ElementContainer</code>n
+     *         der untergeorndeten Elemente.
      */
     public final Set<ElementContainer> getSubordinatedContainers(final GraphDocument doc, final boolean withParts) {
         Set<ElementContainer> subordinated = new HashSet<>();
@@ -1373,7 +1440,8 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
     /////////////////////////////
 
     /**
-     * Liefert alle Eltern, Kinder und Geschwister dieses Elementes und das Element selbst. Es werden also alle Elemente gesucht, die mit diesem
+     * Liefert alle Eltern, Kinder und Geschwister dieses Elementes und das
+     * Element selbst. Es werden also alle Elemente gesucht, die mit diesem
      * Element über eine beliebigen Pfad von PartOfVerbindungen zusammenhängen.
      *
      * @return Liste mit <code>ModelElement</code>en
@@ -1540,8 +1608,9 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
     }
 
     /**
-     * Liefert <code>true</code>, wenn <code>this</code> und <code>me</code> direkt über eine {@link HasPartEdge} verbunden sind und
-     * <code>this</code> ein Teil von <code>me</code> ist.
+     * Liefert <code>true</code>, wenn <code>this</code> und <code>me</code>
+     * direkt über eine {@link HasPartEdge} verbunden sind und <code>this</code>
+     * ein Teil von <code>me</code> ist.
      *
      * @param me
      * @return
@@ -1551,8 +1620,9 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
     }
 
     /**
-     * Liefert <code>true</code>, wenn <code>me</code> und <code>this</code> direkt über eine {@link HasPartEdge} verbunden sind und
-     * <code>me</code> ein Teil von <code>this</code> ist.
+     * Liefert <code>true</code>, wenn <code>me</code> und <code>this</code>
+     * direkt über eine {@link HasPartEdge} verbunden sind und <code>me</code>
+     * ein Teil von <code>this</code> ist.
      *
      * @param me
      * @return
@@ -1596,8 +1666,10 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
     ////////////////////////
 
     /**
-     * Liefert eine Liste aller Container der Slaveelemente dieses Elementes, also aller Elemente, die mit diesem Element über eine
-     * {@link CompositionEdge} verbunden sind, wobei das verbundene Element diesem Element übergeordnet ist.
+     * Liefert eine Liste aller Container der Slaveelemente dieses Elementes,
+     * also aller Elemente, die mit diesem Element über eine
+     * {@link CompositionEdge} verbunden sind, wobei das verbundene Element
+     * diesem Element übergeordnet ist.
      *
      * @param doc {@link GraphDocument} in dem die Container liegen sollen
      * @return
@@ -1624,23 +1696,28 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
     //////////////////////
 
     /**
-     * Gibt alle mit diesem <code>ModelElement</code> verbundenen <code>ModelElement</code>s zurück. Wenn eine Kantenklasse übergeben wurde,
-     * die zu diesem ModelElement passt, wird nach Elementen gesucht, die über diese Kantenklasse mit diesem Element verbunden sind.
-     * Wenn eine Elementklasse übergeben wurde, wird nach allen Elementen dieser Art gesucht, die über irgendeine Kante in beliebiger Richtung mit dem
-     * Element verbunden sind.
+     * Gibt alle mit diesem <code>ModelElement</code> verbundenen
+     * <code>ModelElement</code>s zurück. Wenn eine Kantenklasse übergeben
+     * wurde, die zu diesem ModelElement passt, wird nach Elementen gesucht, die
+     * über diese Kantenklasse mit diesem Element verbunden sind. Wenn eine
+     * Elementklasse übergeben wurde, wird nach allen Elementen dieser Art
+     * gesucht, die über irgendeine Kante in beliebiger Richtung mit dem Element
+     * verbunden sind.
      *
      * @param edgeOrElementClass
      * @return
      */
     public final List<ModelElement> getConnectedElements(final Class<? extends ModelElement> edgeOrElementClass) {
-        if (Edge.class.isAssignableFrom(edgeOrElementClass) && MetaModel.isStartOrEndClass(edgeOrElementClass.asSubclass(Edge.class), getClass())) {
+        if (Edge.class.isAssignableFrom(edgeOrElementClass) && CoreMetaModel.isStartOrEndClass(edgeOrElementClass.asSubclass(Edge.class), getClass())) {
             return getConnectedElements(ModelElement.class, edgeOrElementClass.asSubclass(Edge.class));
         }
         return getConnectedElements(edgeOrElementClass, (Class<? extends Edge>) null);
     }
 
     /**
-     * Gibt alle mit diesem <code>ModelElement</code> verbundenen <code>ModelElement</code>s des Klasse <code>searchElementClass</code> zurueck.
+     * Gibt alle mit diesem <code>ModelElement</code> verbundenen
+     * <code>ModelElement</code>s des Klasse <code>searchElementClass</code>
+     * zurueck.
      *
      * @param searchElementClass
      * @param edgeClass
@@ -1651,7 +1728,9 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
     }
 
     /**
-     * Gibt alle mit diesem <code>ModelElement</code> verbundenen <code>ModelElement</code>s des Klasse <code>searchElementClass</code> zurueck.
+     * Gibt alle mit diesem <code>ModelElement</code> verbundenen
+     * <code>ModelElement</code>s des Klasse <code>searchElementClass</code>
+     * zurueck.
      *
      * @param searchElementClass
      * @param edgeClass
@@ -1663,7 +1742,9 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
     }
 
     /**
-     * Gibt alle mit diesem <code>ModelElement</code> verbundenen <code>ModelElement</code>s des Klasse <code>searchElementClass</code> zurueck.
+     * Gibt alle mit diesem <code>ModelElement</code> verbundenen
+     * <code>ModelElement</code>s des Klasse <code>searchElementClass</code>
+     * zurueck.
      *
      * @param searchElementClass
      * @param edgeClass
@@ -1675,7 +1756,9 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
     }
 
     /**
-     * Gibt alle mit diesem <code>ModelElement</code> verbundenen <code>ModelElement</code>s des Klasse <code>searchElementClass</code> zurueck.
+     * Gibt alle mit diesem <code>ModelElement</code> verbundenen
+     * <code>ModelElement</code>s des Klasse <code>searchElementClass</code>
+     * zurueck.
      *
      * @param searchElementClass
      * @param edgeClass
@@ -1687,7 +1770,9 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
     }
 
     /**
-     * Gibt alle mit diesem <code>ModelElement</code> verbundenen <code>ModelElement</code>s des Klasse <code>searchElementClass</code> zurueck.
+     * Gibt alle mit diesem <code>ModelElement</code> verbundenen
+     * <code>ModelElement</code>s des Klasse <code>searchElementClass</code>
+     * zurueck.
      *
      * @param searchElementClass
      * @param edgeClass
@@ -1700,15 +1785,20 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
     }
 
     /**
-     * Gibt alle mit diesem <code>ModelElement</code> verbundenen <code>ModelElement</code>s der Klasse <code>searchElementClass</code> zurueck.
+     * Gibt alle mit diesem <code>ModelElement</code> verbundenen
+     * <code>ModelElement</code>s der Klasse <code>searchElementClass</code>
+     * zurueck.
      *
      * @param searchElementClass
-     * @param doc <code>GraphDocument</code> in dem verbundene Elemente gesucht werden sollen. Wird <code>null</code> übergeben, werden alle
-     *            verbundenen Elemente zurück gegeben, was der Suche im Hauptmodell entspricht.
+     * @param doc <code>GraphDocument</code> in dem verbundene Elemente gesucht
+     *            werden sollen. Wird <code>null</code> übergeben, werden alle
+     *            verbundenen Elemente zurück gegeben, was der Suche im
+     *            Hauptmodell entspricht.
      * @param edgeClass
      * @param direction
      * @param alphabetical
-     * @return List mit allen verbundenen <code>ModelElement</code>s oder <code>ElementContainer</code>n
+     * @return List mit allen verbundenen <code>ModelElement</code>s oder
+     *         <code>ElementContainer</code>n
      */
     @SuppressWarnings("unchecked")
     public final List<ModelElement> getConnectedElements(final Class<? extends ModelElement> searchElementClass, final GraphDocument doc, final Class<? extends Edge> edgeClass, final Direction direction, final boolean alphabetical) {
@@ -1716,19 +1806,25 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
     }
 
     /**
-     * Gibt alle mit diesem <code>ModelElement</code> verbundenen <code>ModelElement</code>s der Klasse <code>searchElementClass</code> zurueck oder
-     * deren <code>ElementContainer</code>.
+     * Gibt alle mit diesem <code>ModelElement</code> verbundenen
+     * <code>ModelElement</code>s der Klasse <code>searchElementClass</code>
+     * zurueck oder deren <code>ElementContainer</code>.
      *
      * @param searchElementClass
-     * @param doc <code>GraphDocument</code> in dem verbundene Elemente gesucht werden sollen. Wird <code>null</code> übergeben, werden alle
-     *            verbundenen Elemente zurück gegeben, was der Suche im Hauptmodell entspricht. Will man aber <code>ElementContainer</code> aus dem
-     *            Hauptmodell haben, muss man ein gültiges Haupt- <code>GraphDocument</code> übergeben.
+     * @param doc <code>GraphDocument</code> in dem verbundene Elemente gesucht
+     *            werden sollen. Wird <code>null</code> übergeben, werden alle
+     *            verbundenen Elemente zurück gegeben, was der Suche im
+     *            Hauptmodell entspricht. Will man aber
+     *            <code>ElementContainer</code> aus dem Hauptmodell haben, muss
+     *            man ein gültiges Haupt- <code>GraphDocument</code> übergeben.
      * @param edgeClass
      * @param direction
-     * @param container wenn <code>true</code>, werden die <code>ElementContainer</code> der gefundenen Elemente zurück gegeben; sonst die Elemente
-     *            selbst
+     * @param container wenn <code>true</code>, werden die
+     *            <code>ElementContainer</code> der gefundenen Elemente zurück
+     *            gegeben; sonst die Elemente selbst
      * @param alphabetical
-     * @return List mit allen verbundenen <code>ModelElement</code>s oder <code>ElementContainer</code>n
+     * @return List mit allen verbundenen <code>ModelElement</code>s oder
+     *         <code>ElementContainer</code>n
      */
     private final List<?> getConnected(final Class<? extends ModelElement> searchElementClass, final GraphDocument doc, final Class<? extends Edge> edgeClass, final Direction direction, final boolean container, final boolean alphabetical) {
         List<Object> connectedElements = new ArrayList<>(getEdgesCount());
@@ -1750,7 +1846,7 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
                     //bei allen gerichteten Kanten
                     if (metaModel.isDirectedEdge(edgeClass)) {
                         //bei Kanten mit doppelter Bedeutung ist nur der ConnectionState entscheidenend
-                        if (MetaModel.isDoubleMeaningEdge(edgeClass)) {
+                        if (CoreMetaModel.isDoubleMeaningEdge(edgeClass)) {
                             switch (((DoubleMeaningEdge) edge).getConnectionState()) {
                             case FORWARD:
                                 connected = edge.isEnd(this) ? null : edge.getEnd();
@@ -1774,7 +1870,7 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
                     //bei allen gerichteten Kanten
                     if (metaModel.isDirectedEdge(edgeClass)) {
                         //bei Kanten mit doppelter Bedeutung ist nur der ConnectionState entscheidenend
-                        if (MetaModel.isDoubleMeaningEdge(edgeClass)) {
+                        if (CoreMetaModel.isDoubleMeaningEdge(edgeClass)) {
                             switch (((DoubleMeaningEdge) edge).getConnectionState()) {
                             case FORWARD:
                                 connected = edge.isEnd(this) ? edge.getStart() : null;
@@ -1838,8 +1934,10 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
     }
 
     /**
-     * Liefert einen Eigenschafts-Dialog für dieses Element. Wenn bereits einer existiert, wird dieser zurück gegeben, sonst wird ein neuer Dialog
-     * angelegt. Der Dialog wird sofort angezeigt oder wenn er bereits angezeigt wird in den Vordergrund gebracht.
+     * Liefert einen Eigenschafts-Dialog für dieses Element. Wenn bereits einer
+     * existiert, wird dieser zurück gegeben, sonst wird ein neuer Dialog
+     * angelegt. Der Dialog wird sofort angezeigt oder wenn er bereits angezeigt
+     * wird in den Vordergrund gebracht.
      *
      * @param gdcoll GDCollection, in der sich das Element befinden sollte
      * @return
@@ -1849,7 +1947,8 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
     }
 
     /**
-     * Erzeugt den Eigenchaftsdialog des Elementes. Unterklassen sollten diese Funktion überschreiben und alle nötigen {@link ElementDialogPanel}
+     * Erzeugt den Eigenchaftsdialog des Elementes. Unterklassen sollten diese
+     * Funktion überschreiben und alle nötigen {@link ElementDialogPanel}
      * hinzufügen.
      *
      * @return
@@ -1863,8 +1962,10 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
     }
 
     /**
-     * Ruft einfach nur {@link #createPropertyDialog()} auf. Diese Funktion wurde notwendig, damit für den neuen {@link ElemenPropertyDialogsContext}
-     * nicht die Sichtbarkeit von {@link #createPropertyDialog()} geändert werden musste.
+     * Ruft einfach nur {@link #createPropertyDialog()} auf. Diese Funktion
+     * wurde notwendig, damit für den neuen {@link ElemenPropertyDialogsContext}
+     * nicht die Sichtbarkeit von {@link #createPropertyDialog()} geändert
+     * werden musste.
      *
      * @return
      */
@@ -1877,7 +1978,8 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
 
     /**
      * Gibt eine Liste aller Verbindungen der angegebenen Art zurück.<br>
-     * Die übergebene Klasse muss gleich der zurückzugebenen Kantenklassen oder eine Oberklasse davon sein.
+     * Die übergebene Klasse muss gleich der zurückzugebenen Kantenklassen oder
+     * eine Oberklasse davon sein.
      *
      * @param edgeClass Klasse der zu suchenden Kanten
      * @return
@@ -1894,7 +1996,8 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
 
     /**
      * Gibt eine Liste aller Verbindungen der angegebenen Art zurück.<br>
-     * Die übergebene Klasse muss gleich der zurückzugebenen Kantenklassen oder eine Oberklasse davon sein.
+     * Die übergebene Klasse muss gleich der zurückzugebenen Kantenklassen oder
+     * eine Oberklasse davon sein.
      *
      * @param edgeClass Klasse der zu suchenden Kanten
      * @return
@@ -1929,10 +2032,8 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
     /**
      * Counts the edges with me as startElement
      *
-     * @param edgeClass
-     *            Type of edges to count
-     * @return
-     *         Number of edges with the specified type
+     * @param edgeClass Type of edges to count
+     * @return Number of edges with the specified type
      */
     public final int countStartConnections(final Class<? extends Edge> edgeClass) {
         int retVal = 0;
@@ -1947,10 +2048,8 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
     /**
      * Counts the edges with me as endElement
      *
-     * @param edgeClass
-     *            Type of edges to count
-     * @return
-     *         Number of edges with the specified type
+     * @param edgeClass Type of edges to count
+     * @return Number of edges with the specified type
      */
     public final int countEndConnections(final Class<? extends Edge> edgeClass) {
         int retVal = 0;
@@ -1963,8 +2062,9 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
     }
 
     /**
-     * @return <code>true</code>, wenn das Elemente alle Kanten in ausreichender Anzahl hat, die es haben muss
-     *         (= Kanten, bei denen die minimale Kardinalität > 0 ist)
+     * @return <code>true</code>, wenn das Elemente alle Kanten in ausreichender
+     *         Anzahl hat, die es haben muss (= Kanten, bei denen die minimale
+     *         Kardinalität > 0 ist)
      */
     public boolean isConsistent() {
         Class<? extends ModelElement> meClass = getClass();
@@ -1974,9 +2074,9 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
             //minimale Kardinalität wird erst einmal als 0 angenommen
             int minCardinality = 0;
             //wenn diese Elementart Startklasse der aktuellen Kantenart ist
-            if (MetaModel.isStartClass(edgeType, meClass)) {
+            if (CoreMetaModel.isStartClass(edgeType, meClass)) {
                 //minimale Kardinalität zur Endklasse holen
-                minCardinality = MetaModel.getMinForwardCardinality(edgeType);
+                minCardinality = CoreMetaModel.getMinForwardCardinality(edgeType);
                 //wenn diese minimale Kardinalität > 0 ist, aber dieses Element weniger Kanten zu anderen Elementen hat, als nötig
                 if (minCardinality > 0 && getEdgesTo(ModelElement.class, edgeType).size() < minCardinality) {
                     //nicht konsistent
@@ -1984,9 +2084,9 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
                 }
             }
             //OHNE ELSE-IF! Wenn diese Elementart Endklasse der aktuellen Kantenart ist
-            if (MetaModel.isEndClass(edgeType, meClass)) {
+            if (CoreMetaModel.isEndClass(edgeType, meClass)) {
                 //minimale Kardinalität zur Startklasse holen
-                minCardinality = MetaModel.getMinBackwardCardinality(edgeType);
+                minCardinality = CoreMetaModel.getMinBackwardCardinality(edgeType);
                 //wenn diese minimale Kardinalität > 0 ist, aber dieses Element weniger Kanten von anderen Elementen zu sich hat, als nötig
                 if (minCardinality > 0 && getEdgesFrom(ModelElement.class, edgeType).size() < minCardinality) {
                     //nicht konsistent
@@ -1999,10 +2099,12 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
     }
 
     /**
-     * Checks if the type of this element has only one {@link ElementContainer} in the whole model.
+     * Checks if the type of this element has only one {@link ElementContainer}
+     * in the whole model.
      *
-     * @return <code>true</code> if this element is unique (only 1 element container in the whole model and no graphical representation for this
-     *         element) otherwise <code>false</code>
+     * @return <code>true</code> if this element is unique (only 1 element
+     *         container in the whole model and no graphical representation for
+     *         this element) otherwise <code>false</code>
      * @see MetaModel#isUnique(Class, boolean)
      */
     public boolean isUnique() {
@@ -2012,8 +2114,9 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
     }
 
     /**
-     * @return <code>true</code> if {@link MetaModel#isPureTemplateElementClass(Class)}
-     *         returns <code>true</code> for the class of this element.
+     * @return <code>true</code> if
+     *         {@link MetaModel#isPureTemplateElementClass(Class)} returns
+     *         <code>true</code> for the class of this element.
      */
     public boolean isPureTemplateElement() {
         return metaModel.isPureTemplateElementClass(getClass());
@@ -2041,34 +2144,39 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
     }
 
     /**
-     * @return <code>true</code>, wenn die Elementart eine {@link HasPartEdge} hat
+     * @return <code>true</code>, wenn die Elementart eine {@link HasPartEdge}
+     *         hat
      */
     public final boolean canHaveParts() {
         return metaModel.canHaveParts(getClass());
     }
 
     /**
-     * @return <code>true</code>, wenn die Elementart eine {@link HasPartEdge} hat
+     * @return <code>true</code>, wenn die Elementart eine {@link HasPartEdge}
+     *         hat
      */
     public final boolean canHaveParents() {
         return metaModel.canHaveParents(getClass());
     }
 
     /**
-     * Testet, ob das Modelelement this in der Richtung direction zu dem ModelElement eine Edge haben kann
+     * Testet, ob das Modelelement this in der Richtung direction zu dem
+     * ModelElement eine Edge haben kann
      *
      * @param me
      * @param direction {@link .FORWARD, {@link .BACKWARD
-     * @param testCardinality wenn <code>true</code>, wird auch noch getestet, ob die maximale Kardinalität der Verbindungen bereits erreicht ist
+     * @param testCardinality wenn <code>true</code>, wird auch noch getestet,
+     *            ob die maximale Kardinalität der Verbindungen bereits erreicht
+     *            ist
      * @return
      */
     public final boolean isForwardLinkable(final ModelElement me, final Class<? extends Edge> edgeClass, final boolean testCardinality) {
         //wenn die Edge die beiden Elemente nicht in Vorwärtsrichtung verbinden kann
-        if (!MetaModel.isConnectingForward(edgeClass, getClass(), me.getClass())) {
+        if (!CoreMetaModel.isConnectingForward(edgeClass, getClass(), me.getClass())) {
             return false;
         }
         //Wenn es sich bei dieser Kantenart nicht um eine mehrfach zwischend denselben Elementen anlgebare Edge handelt
-        if (!MetaModel.isMultipleEdgeClass(edgeClass)) {
+        if (!CoreMetaModel.isMultipleEdgeClass(edgeClass)) {
             //wenn schon eine solche Edge zwischen den beiden Elementen existiert
             List<Edge> edges = getEdgesTo(me, edgeClass);
             if (edges != null && edges.size() > 0) {
@@ -2085,11 +2193,11 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
         //wenn das Überschreiten der Kardinalität geprüft werden soll
         if (testCardinality) {
             //für das Startelement ist die maximale Verbindungsanzahl bereits erreicht?
-            if (MetaModel.getMaxForwardCardinality(edgeClass) <= countConnections(edgeClass)) {
+            if (CoreMetaModel.getMaxForwardCardinality(edgeClass) <= countConnections(edgeClass)) {
                 return false;
             }
             //für das Endelement ist die maximale Verbindungsanzahl bereits erreicht?
-            if (MetaModel.getMaxBackwardCardinality(edgeClass) <= me.countConnections(edgeClass)) {
+            if (CoreMetaModel.getMaxBackwardCardinality(edgeClass) <= me.countConnections(edgeClass)) {
                 return false;
             }
         }
@@ -2098,7 +2206,8 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
     }
 
     /**
-     * Liefert das Modell, in dem dieses Element vorkommt oder <code>null</code>.
+     * Liefert das Modell, in dem dieses Element vorkommt oder
+     * <code>null</code>.
      *
      * @return
      */
@@ -2115,7 +2224,8 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
     }
 
     /**
-     * join Element properties without connections this.hashstring = other.hashstring other will be not changed
+     * join Element properties without connections this.hashstring =
+     * other.hashstring other will be not changed
      *
      * @return the joined Element or <code>null</code> if an error occurs;
      */

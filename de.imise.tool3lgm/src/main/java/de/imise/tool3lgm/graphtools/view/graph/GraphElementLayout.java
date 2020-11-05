@@ -9,23 +9,15 @@ import java.awt.Stroke;
 
 import javax.swing.SwingConstants;
 
-// TODO: Konzept der Klasse GraphElementLayout überarbeiten und toXMLString-Methode verändern und nur GraphElementLayout-Informationen speichern die
+// TODO: Konzept der Klasse GraphElementLayout überarbeiten und
+// toXMLString-Methode verändern und nur GraphElementLayout-Informationen
+// speichern die
 // nicht Standard aus Mapping entsprechen
 
 public class GraphElementLayout implements SwingConstants, Cloneable {
 
     public static Color[] STANDARD_COLORS = {
-            Color.black,
-            Color.blue,
-            Color.cyan,
-            Color.darkGray,
-            Color.gray,
-            Color.green,
-            Color.magenta,
-            Color.orange,
-            Color.pink,
-            Color.red,
-            Color.yellow
+            Color.black, Color.blue, Color.cyan, Color.darkGray, Color.gray, Color.green, Color.magenta, Color.orange, Color.pink, Color.red, Color.yellow
     };
 
     /**
@@ -58,10 +50,11 @@ public class GraphElementLayout implements SwingConstants, Cloneable {
     }, 0f);
 
     /**
-     * Alle Standardformen. Die String-Repräsentation steht als Schlüssel auch in den
-     * Ressourcen. Die Position des Enum-Eintrages wird in der XML-Repräsentation
-     * des Modells gepsiechert. D.h. wer hier die Reihenfolge ändert, ändert das
-     * Layout der Elemente in Modellen, die vorher erstellt wurden.
+     * Alle Standardformen. Die String-Repräsentation steht als Schlüssel auch
+     * in den Ressourcen. Die Position des Enum-Eintrages wird in der
+     * XML-Repräsentation des Modells gepsiechert. D.h. wer hier die Reihenfolge
+     * ändert, ändert das Layout der Elemente in Modellen, die vorher erstellt
+     * wurden.
      */
     public static enum SHAPE {
         rechteck,
@@ -140,32 +133,19 @@ public class GraphElementLayout implements SwingConstants, Cloneable {
     public static final int TRANSPARENCY_FULL = 0;
 
     public static final String[] FONT_NAMES = {
-            getResString("courier"),
-            getResString("helvetica"),
-            getResString("luc_sans"),
-            getResString("serif"),
-            getResString("icon"),
-            getResString("times")
+            getResString("courier"), getResString("helvetica"), getResString("luc_sans"), getResString("serif"), getResString("icon"), getResString("times")
     };
 
     public static final int[] FONT_SIZES = {
-            10,
-            12,
-            14,
-            18,
-            24
+            10, 12, 14, 18, 24
     };
 
     public static final String[] FONT_STYLE_NAMES = {
-            getResString("font_plain"),
-            getResString("font_bold"),
-            getResString("font_italic")
+            getResString("font_plain"), getResString("font_bold"), getResString("font_italic")
     };
 
     public static final int[] FONT_STYLES = {
-            Font.PLAIN,
-            Font.BOLD,
-            Font.ITALIC
+            Font.PLAIN, Font.BOLD, Font.ITALIC
     };
 
     /**
@@ -331,7 +311,8 @@ public class GraphElementLayout implements SwingConstants, Cloneable {
     public static final Font STANDARD_FONT = new Font(STANDARD_FONT_NAME, STANDARD_FONT_STYLE, STANDARD_FONT_SIZE);
 
     /**
-     * Standardlayout für alle Node und Kanten, die kein spezielles eigenes Layout haben
+     * Standardlayout für alle Node und Kanten, die kein spezielles eigenes
+     * Layout haben
      */
     public static final GraphElementLayout STANDARD_ELEMENT_LAYOUT = new GraphElementLayout();
     static {
@@ -402,14 +383,16 @@ public class GraphElementLayout implements SwingConstants, Cloneable {
     public int line_style;
 
     /**
-     * Horizontale Position des Labeltextes. Gibt es kein Icon, dann bezieht sich diese
-     * Position auf das gesamte Label. Mit Icon bezieht sie sich auf das Icon.
+     * Horizontale Position des Labeltextes. Gibt es kein Icon, dann bezieht
+     * sich diese Position auf das gesamte Label. Mit Icon bezieht sie sich auf
+     * das Icon.
      */
     public TextPositionHorizontal textPositionHorizontal;
 
     /**
-     * Vertikale Position des Labeltextes. Gibt es kein Icon, dann bezieht sich diese
-     * Position auf das gesamte Label. Mit Icon bezieht sie sich auf das Icon.
+     * Vertikale Position des Labeltextes. Gibt es kein Icon, dann bezieht sich
+     * diese Position auf das gesamte Label. Mit Icon bezieht sie sich auf das
+     * Icon.
      */
     public TextPositionVertical textPositionVertical;
 
@@ -498,7 +481,8 @@ public class GraphElementLayout implements SwingConstants, Cloneable {
     }
 
     /**
-     * @return <code>true</code> if the <code>textAlignmentHTML</code> has the default value
+     * @return <code>true</code> if the <code>textAlignmentHTML</code> has the
+     *         default value
      */
     public boolean isDefaultTextAlignmentHTML() {
         return textAlignmentHTML == STANDARD_TEXT_ALIGNMENT_HTML;

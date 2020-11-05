@@ -2,7 +2,7 @@ package de.imise.tool3lgm.imexport.csv;
 
 /**
  * Represents an import error
- * 
+ *
  * @author AXS
  * @create 06.10.2014
  */
@@ -10,7 +10,7 @@ public class ImportError {
 
     /**
      * The type of the error with a printable representation.
-     * 
+     *
      * @author AXS
      * @create 06.10.2014
      */
@@ -74,7 +74,8 @@ public class ImportError {
         }
 
         /**
-         * @return <code>true</code> if more than one occurance of this error is irrelevant
+         * @return <code>true</code> if more than one occurance of this error is
+         *         irrelevant
          */
         public boolean isSingleAddError() {
             return singleAdd;
@@ -82,7 +83,7 @@ public class ImportError {
 
         /**
          * Counts the number of arguments in the errorMessage
-         * 
+         *
          * @return
          */
         private int countArguments() {
@@ -110,10 +111,8 @@ public class ImportError {
     private final String errorString;
 
     /**
-     * @param errorString
-     *            message for this error
-     * @param errorType
-     *            type of this error
+     * @param errorString message for this error
+     * @param errorType type of this error
      */
     private ImportError(final String errorString, final ErrorType errorType) {
         this.errorType = errorType;
@@ -122,17 +121,12 @@ public class ImportError {
 
     /**
      * Creates an import error
-     * 
-     * @param row
-     *            row number
-     * @param col
-     *            column number
-     * @param errorType
-     *            error type
-     * @param args
-     *            arguments to format the error message
-     * @return
-     *         a new Import error
+     *
+     * @param row row number
+     * @param col column number
+     * @param errorType error type
+     * @param args arguments to format the error message
+     * @return a new Import error
      */
     public static ImportError create(final int row, final int col, final ErrorType errorType, final Object... args) {
         String errorString = createErrorString(row, col, errorType, args);
@@ -142,17 +136,14 @@ public class ImportError {
 
     /**
      * Formats the error string with the given parameters
-     * 
-     * @param row
-     *            Row number for the error message. If the row number is lower than 0 it will be ignored and not added to the message.
-     * @param col
-     *            Column number for the error message. If the column number is lower than 0 it will be ignored and not added to the message.
-     * @param errorType
-     *            The error type which prescribe the error message
-     * @param args
-     *            Arguments to format the error message
-     * @return
-     *         The formatted error message string
+     *
+     * @param row Row number for the error message. If the row number is lower
+     *            than 0 it will be ignored and not added to the message.
+     * @param col Column number for the error message. If the column number is
+     *            lower than 0 it will be ignored and not added to the message.
+     * @param errorType The error type which prescribe the error message
+     * @param args Arguments to format the error message
+     * @return The formatted error message string
      */
     private static String createErrorString(final int row, final int col, final ErrorType errorType, final Object... args) {
         String details = String.format(errorType.toString(), args);

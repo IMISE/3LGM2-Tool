@@ -1,7 +1,8 @@
 package de.imise.tool3lgm.graphtools.metamodel.elements;
 
 /**
- * Spezialisierungskanten vererben ihre Eigenschaften vom Generellen ans Spezielle, also vom Startelement an das Endelement.
+ * Spezialisierungskanten vererben ihre Eigenschaften vom Generellen ans
+ * Spezielle, also vom Startelement an das Endelement.
  *
  * @author AXS (05 Dec 2018)
  */

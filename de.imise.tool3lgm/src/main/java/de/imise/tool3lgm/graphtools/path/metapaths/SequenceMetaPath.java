@@ -24,20 +24,23 @@ import de.imise.util.collections.CollectionUtils;
 public class SequenceMetaPath extends ListMetaPath {
 
     /**
-     * Wahr, wenn sobald einmal verscht wurde, die Gegenrichtung dieses Pfades anzulegen
+     * Wahr, wenn sobald einmal verscht wurde, die Gegenrichtung dieses Pfades
+     * anzulegen
      */
     protected boolean otherDirectionInitilized = false;
 
     /**
-     * Liste von Elementarpfaden, aus denen dieser Pfad besteht. Diese Liste lässt sich nur anlegen,
-     * wenn dieser MetaPfad keine parallelen und keine rekursiven MetaPfade enthählt sondern nur
-     * aus {@link ElementaryMetaPath}s besteht oder aus anderen {@link SequenceMetaPath}s, die selbst
-     * keine parallelen und keine rekursiven Metapfade enthalten.
+     * Liste von Elementarpfaden, aus denen dieser Pfad besteht. Diese Liste
+     * lässt sich nur anlegen, wenn dieser MetaPfad keine parallelen und keine
+     * rekursiven MetaPfade enthählt sondern nur aus {@link ElementaryMetaPath}s
+     * besteht oder aus anderen {@link SequenceMetaPath}s, die selbst keine
+     * parallelen und keine rekursiven Metapfade enthalten.
      */
     private ImmutableList<ElementaryMetaPath> elementaryMetaPaths = null;
 
     /**
-     * Diese Richtung wird nur zum Erzeugen des Namens gebraucht. Je nachdem welche Rictung hier vermerkt ist, wird an den {@link #baseResKeyOrName}
+     * Diese Richtung wird nur zum Erzeugen des Namens gebraucht. Je nachdem
+     * welche Rictung hier vermerkt ist, wird an den {@link #baseResKeyOrName}
      * noch "_f" (FORWARD) pder "_b" (BACKWARD) angehängt.
      */
     protected final Direction direction;
@@ -173,7 +176,8 @@ public class SequenceMetaPath extends ListMetaPath {
     }
 
     /**
-     * Legt den eigentlichen Gegenrichtungspfad an, wenn es ihn gibt (also wenn sich jeder Pfad in der Liste auch umdrehen lässt)
+     * Legt den eigentlichen Gegenrichtungspfad an, wenn es ihn gibt (also wenn
+     * sich jeder Pfad in der Liste auch umdrehen lässt)
      *
      * @param baseResKeyOrName
      * @return
@@ -328,7 +332,8 @@ public class SequenceMetaPath extends ListMetaPath {
     }
 
     /**
-     * @return Iterable over all ElementaryMetaPaths if this list can be created. If not, an empty iterable will be returned.
+     * @return Iterable over all ElementaryMetaPaths if this list can be
+     *         created. If not, an empty iterable will be returned.
      */
     public Iterable<ElementaryMetaPath> iterableElementaryMetaPaths() {
         List<ElementaryMetaPath> elementaryMetaPaths = getElementaryMetaPaths();
@@ -374,11 +379,14 @@ public class SequenceMetaPath extends ListMetaPath {
     }
 
     /**
-     * Liefert alle Verbindungsklassen zwischen dem MetaPfad mit dem übergebenen Index und dem darauffolgenden. Beim Index Gesamtpfadlänge -1 kommen
-     * die Endklassen des letzten Metapfades zurück, ansonsten werden immer paarweise die Endklassen des MetaPfades mit dem übergebenen Index mit den
-     * Startklassen des darauffolgenden Metapfades verglichen und wenn sie zuweisungskompatibel sind die speziellere der beiden zum Ergebnisset
-     * hinzugefügt.
-     * Bei Pfaden, die nur aus Elementarpfaden bestehen enthält das Set genau die Klasse (oder null), die auch bei
+     * Liefert alle Verbindungsklassen zwischen dem MetaPfad mit dem übergebenen
+     * Index und dem darauffolgenden. Beim Index Gesamtpfadlänge -1 kommen die
+     * Endklassen des letzten Metapfades zurück, ansonsten werden immer
+     * paarweise die Endklassen des MetaPfades mit dem übergebenen Index mit den
+     * Startklassen des darauffolgenden Metapfades verglichen und wenn sie
+     * zuweisungskompatibel sind die speziellere der beiden zum Ergebnisset
+     * hinzugefügt. Bei Pfaden, die nur aus Elementarpfaden bestehen enthält das
+     * Set genau die Klasse (oder null), die auch bei
      * {@link #getPathStepElementClass(int)} zurück kommt.
      *
      * @param pathStepIndex
@@ -412,10 +420,13 @@ public class SequenceMetaPath extends ListMetaPath {
     }
 
     /**
-     * Liefert die Verbindungsklasse des Pfadschrittes mit dem übergebenen Index in der Elementarpfadliste dieses Pfades. Dies ist beim Index 0 die
-     * speziellere der Endklasse des ersten Elementarpfades und der Startklasse des nächsten Elementarpfades. Der Pfadschritt mit dem Index der
-     * Pfadlänge -1 ist die Endklasse des letzten Elementarpfades = Endklasse der gesamten Elementarpfadliste. An die Startklasse des Gesamtpfades
-     * kommt man mit dieser Funktion nicht.
+     * Liefert die Verbindungsklasse des Pfadschrittes mit dem übergebenen Index
+     * in der Elementarpfadliste dieses Pfades. Dies ist beim Index 0 die
+     * speziellere der Endklasse des ersten Elementarpfades und der Startklasse
+     * des nächsten Elementarpfades. Der Pfadschritt mit dem Index der Pfadlänge
+     * -1 ist die Endklasse des letzten Elementarpfades = Endklasse der gesamten
+     * Elementarpfadliste. An die Startklasse des Gesamtpfades kommt man mit
+     * dieser Funktion nicht.
      *
      * @param pathStepIndex
      * @return

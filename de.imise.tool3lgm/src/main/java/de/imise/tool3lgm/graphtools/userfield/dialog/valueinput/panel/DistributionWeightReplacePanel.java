@@ -30,10 +30,13 @@ import de.imise.util.NamedObjectContainer;
 import de.imise.util.swing.component.AlphabeticalComboBox;
 
 /**
- * Panel zur Darstellung und Eingabe der Ersetzung von Kantengweichten durch andere Kantengewichte.
+ * Panel zur Darstellung und Eingabe der Ersetzung von Kantengweichten durch
+ * andere Kantengewichte.
  * <p>
- * Die Dateneingabe erfolgt für jede Klasse von ModelElementen und jede für sie definierte Kantenklasse separat - die Auswahl der ElementKlasse
- * erfolgt in der enthaltenen <code>elementClassBox</code>, die Auswahl der Kantenklasse in der <code>EdgeClassBox</code>.
+ * Die Dateneingabe erfolgt für jede Klasse von ModelElementen und jede für sie
+ * definierte Kantenklasse separat - die Auswahl der ElementKlasse erfolgt in
+ * der enthaltenen <code>elementClassBox</code>, die Auswahl der Kantenklasse in
+ * der <code>EdgeClassBox</code>.
  *
  * @author AXS
  * @create 02.09.2015
@@ -102,8 +105,9 @@ public class DistributionWeightReplacePanel extends AbstractUserFieldEditorPanel
     }
 
     /**
-     * Methode setzt den Inhalt der <code>elementClassBox</code> Es werden nur Elementklassen hinzugefügt, die Kanten mit mind.
-     * einem definierten Verteilungsgewicht besitzen.
+     * Methode setzt den Inhalt der <code>elementClassBox</code> Es werden nur
+     * Elementklassen hinzugefügt, die Kanten mit mind. einem definierten
+     * Verteilungsgewicht besitzen.
      */
     private void setElementClassBoxContent() {
         UserFieldDefinitions definitions = getUserFieldDefinitions();
@@ -123,8 +127,10 @@ public class DistributionWeightReplacePanel extends AbstractUserFieldEditorPanel
     }
 
     /**
-     * Methode setzt die auszuführende Action, bei Änderung der Auswahl in der <code>edgeBox</code>. Werte im Table werden temporär übernommen und die
-     * zur gewählten Kantenart gehörigen Verteilungsgewichte in die <code>weightBox</code> eingefügt.
+     * Methode setzt die auszuführende Action, bei Änderung der Auswahl in der
+     * <code>edgeBox</code>. Werte im Table werden temporär übernommen und die
+     * zur gewählten Kantenart gehörigen Verteilungsgewichte in die
+     * <code>weightBox</code> eingefügt.
      */
     private void setActionsForElementClassBox() {
 
@@ -169,9 +175,10 @@ public class DistributionWeightReplacePanel extends AbstractUserFieldEditorPanel
     }
 
     /**
-     * Methode setzt die auszuführende Aktion, bei Änderung der Auswahl in <code>edgeClassBox</code>.
-     * Werte im Table werden temporär übernommen und die zur gewählten Edge gehörigen
-     * Verteilungsgweichte mit den neuen Dten in einem neuen Table dargestellt.
+     * Methode setzt die auszuführende Aktion, bei Änderung der Auswahl in
+     * <code>edgeClassBox</code>. Werte im Table werden temporär übernommen und
+     * die zur gewählten Edge gehörigen Verteilungsgweichte mit den neuen Dten
+     * in einem neuen Table dargestellt.
      */
     private void setActionsForEdgeClassBox() {
         final DistributionWeightReplacePanel finalPanel = this;
@@ -197,9 +204,9 @@ public class DistributionWeightReplacePanel extends AbstractUserFieldEditorPanel
     }
 
     /**
-     * Setzt den Inhalt der <code>edgeClassBox</code>. Die für den in der <code>edgeBox</code> gewählten Kantentyp definierten Verteilungsgewichte
-     * werden
-     * der <code>weigthBox</code> hinzugefügt.
+     * Setzt den Inhalt der <code>edgeClassBox</code>. Die für den in der
+     * <code>edgeBox</code> gewählten Kantentyp definierten Verteilungsgewichte
+     * werden der <code>weigthBox</code> hinzugefügt.
      */
     private void setEdgeClassBoxContent() {
         @SuppressWarnings("unchecked")

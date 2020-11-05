@@ -12,7 +12,7 @@ import org.xml.sax.SAXException;
 public class ToolDTDHandler implements DTDHandler {
 
     /**
-     * 
+     *
      */
     public ToolDTDHandler() {
         super();

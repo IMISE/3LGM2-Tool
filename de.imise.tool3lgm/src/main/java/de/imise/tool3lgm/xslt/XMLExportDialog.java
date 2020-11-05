@@ -16,12 +16,14 @@ import java.util.List;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JDialog;
+import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
+import javax.swing.SwingConstants;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableModel;
 
@@ -40,8 +42,7 @@ import de.imise.util.swing.dialog.ExtendedFileChooser;
 import de.imise.util.swing.dialog.ProgressDialog;
 
 /**
- * @author Thomas Rudert
- *         Dialog zum Export von Modellen ueber XSLT
+ * @author Thomas Rudert Dialog zum Export von Modellen ueber XSLT
  */
 public class XMLExportDialog extends JDialog implements ActionListener {
 
@@ -77,7 +78,8 @@ public class XMLExportDialog extends JDialog implements ActionListener {
      *
      * @see java.awt.Window#Window(Frame)
      * @param owner, besitzendes Fenster des Dialogs
-     * @param collection, die GDCollection, auf der die Exporte ausgeführt werden
+     * @param collection, die GDCollection, auf der die Exporte ausgeführt
+     *            werden
      */
     public XMLExportDialog(final Frame owner, final GDCollection collection) {
         /* Besitzer, Titel, modal anzeigen */
@@ -126,14 +128,14 @@ public class XMLExportDialog extends JDialog implements ActionListener {
         szenarioTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
         JPanel szenarioPanel = new JPanel(new BorderLayout());
         szenarioPanel.setPreferredSize(new Dimension(400, 120));
-        szenarioPanel.add(new JLabel(getResString("labelSource") + collection.getName(), JLabel.CENTER), BorderLayout.NORTH);
-        szenarioPanel.add(new JLabel(getResString("labelXSLTExportSzenario"), JLabel.CENTER), BorderLayout.SOUTH);
+        szenarioPanel.add(new JLabel(getResString("labelSource") + collection.getName(), SwingConstants.CENTER), BorderLayout.NORTH);
+        szenarioPanel.add(new JLabel(getResString("labelXSLTExportSzenario"), SwingConstants.CENTER), BorderLayout.SOUTH);
         szenarioPanel.add(new JScrollPane(szenarioTable), BorderLayout.CENTER);
         getContentPane().add(szenarioPanel, BorderLayout.NORTH);
 
         JPanel scriptPanel = new JPanel(new BorderLayout());
-        scriptPanel.add(new JLabel(getResString("labelXSLScript"), JLabel.CENTER), BorderLayout.NORTH);
-        scriptPanel.add(new JLabel(getResString("labelScriptSelection"), JLabel.CENTER), BorderLayout.SOUTH);
+        scriptPanel.add(new JLabel(getResString("labelXSLScript"), SwingConstants.CENTER), BorderLayout.NORTH);
+        scriptPanel.add(new JLabel(getResString("labelScriptSelection"), SwingConstants.CENTER), BorderLayout.SOUTH);
         scriptPanel.add(new JScrollPane(table), BorderLayout.CENTER);
         getContentPane().add(scriptPanel, BorderLayout.CENTER);
 
@@ -276,7 +278,7 @@ public class XMLExportDialog extends JDialog implements ActionListener {
 
                 ExtendedFileChooser saveDialog = new ExtendedFileChooser(XMLExportDialog.class);
                 saveDialog.setSelectedFile(file);
-                if (saveDialog.showSaveDialog(this, false, new FileNameExtensionFilter("*." + fileExtension, fileExtension)) != ExtendedFileChooser.APPROVE_OPTION) {
+                if (saveDialog.showSaveDialog(this, false, new FileNameExtensionFilter("*." + fileExtension, fileExtension)) != JFileChooser.APPROVE_OPTION) {
                     return;
                 }
                 file = saveDialog.getSelectedFile();

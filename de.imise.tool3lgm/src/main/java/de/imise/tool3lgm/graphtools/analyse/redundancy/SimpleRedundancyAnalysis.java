@@ -17,10 +17,11 @@ import de.imise.tool3lgm.graphtools.view.container.LayerContainer;
 import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
 
 /**
- * Diese Klasse führt die Redundnazanalyse, die Dr. Birgit Brigl 1995 in "Brigl B, Hübner-Bloder G,
- * Wendt T, Haux R, Winter A. (2005). Architectural Quality Criteria for Hospital Information
- * Systems" veröffentlicht hat. Es geht um Funktionale Redundanzrate und Funktionale
- * Untersättigungsrate sowie um Datenredundanz von Objekttypen. Das ganze ist eine Art Vorläufer zur
+ * Diese Klasse führt die Redundnazanalyse, die Dr. Birgit Brigl 1995 in "Brigl
+ * B, Hübner-Bloder G, Wendt T, Haux R, Winter A. (2005). Architectural Quality
+ * Criteria for Hospital Information Systems" veröffentlicht hat. Es geht um
+ * Funktionale Redundanzrate und Funktionale Untersättigungsrate sowie um
+ * Datenredundanz von Objekttypen. Das ganze ist eine Art Vorläufer zur
  * "richtigen" Funktionalen Redundanzanalyse.
  *
  * @author AXS

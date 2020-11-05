@@ -46,7 +46,8 @@ public interface ViewPaneFrameComponent extends GraphDocumentOwner {
 
     /**
      * @return the component that contains this. The direct or indirect parent
-     *         component of this should be a {@link ViewPaneFrameComponentParent}.
+     *         component of this should be a
+     *         {@link ViewPaneFrameComponentParent}.
      */
     public default ViewPaneFrameComponentParent getFrameComponentParent() {
         Component parent = getParent();
@@ -69,7 +70,8 @@ public interface ViewPaneFrameComponent extends GraphDocumentOwner {
     }
 
     /**
-     * Sets this component selected or active in its {@link ViewPaneFrameComponentParent}
+     * Sets this component selected or active in its
+     * {@link ViewPaneFrameComponentParent}
      */
     public default void setSelected() {
         ViewPaneFrameComponentParent frameComponentParent = getFrameComponentParent();

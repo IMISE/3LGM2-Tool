@@ -1,15 +1,14 @@
 /*
- * (C) Copyright IBM Corp. 1999 All rights reserved.
- * US Government Users Restricted Rights Use, duplication or
- * disclosure restricted by GSA ADP Schedule Contract with IBM Corp.
- * The program is provided "as is" without any warranty express or
- * implied, including the warranty of non-infringement and the implied
- * warranties of merchantibility and fitness for a particular purpose.
- * IBM will not be liable for any damages suffered by you as a result
- * of using the Program. In no event will IBM be liable for any
- * special, indirect or consequential damages or lost profits even if
- * IBM has been advised of the possibility of their occurrence. IBM
- * will not be liable for any third party claims against you.
+ * (C) Copyright IBM Corp. 1999 All rights reserved. US Government Users
+ * Restricted Rights Use, duplication or disclosure restricted by GSA ADP
+ * Schedule Contract with IBM Corp. The program is provided "as is" without any
+ * warranty express or implied, including the warranty of non-infringement and
+ * the implied warranties of merchantibility and fitness for a particular
+ * purpose. IBM will not be liable for any damages suffered by you as a result
+ * of using the Program. In no event will IBM be liable for any special,
+ * indirect or consequential damages or lost profits even if IBM has been
+ * advised of the possibility of their occurrence. IBM will not be liable for
+ * any third party claims against you.
  */
 
 package de.imise.tool3lgm.xml;
@@ -23,8 +22,70 @@ import java.io.Writer;
  */
 public class Base64 {
     private static final char[] S_BASE64CHAR = {
-            'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v',
-            'w', 'x', 'y', 'z', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '+', '/'
+            'A',
+            'B',
+            'C',
+            'D',
+            'E',
+            'F',
+            'G',
+            'H',
+            'I',
+            'J',
+            'K',
+            'L',
+            'M',
+            'N',
+            'O',
+            'P',
+            'Q',
+            'R',
+            'S',
+            'T',
+            'U',
+            'V',
+            'W',
+            'X',
+            'Y',
+            'Z',
+            'a',
+            'b',
+            'c',
+            'd',
+            'e',
+            'f',
+            'g',
+            'h',
+            'i',
+            'j',
+            'k',
+            'l',
+            'm',
+            'n',
+            'o',
+            'p',
+            'q',
+            'r',
+            's',
+            't',
+            'u',
+            'v',
+            'w',
+            'x',
+            'y',
+            'z',
+            '0',
+            '1',
+            '2',
+            '3',
+            '4',
+            '5',
+            '6',
+            '7',
+            '8',
+            '9',
+            '+',
+            '/'
     };
     private static final char S_BASE64PAD = '=';
     private static final byte[] S_DECODETABLE = new byte[128];
@@ -70,7 +131,7 @@ public class Base64 {
 
     /**
      * Decode the base64 data.
-     * 
+     *
      * @param data The base64 encoded data to be decoded
      * @param off The offset within the encoded data at which to start decoding
      * @param len The length of data to decode
@@ -101,7 +162,7 @@ public class Base64 {
 
     /**
      * Decode the base64 data.
-     * 
+     *
      * @param data The base64 encoded data to be decoded
      * @return The decoded data
      */
@@ -130,7 +191,7 @@ public class Base64 {
 
     /**
      * Decode the base64 data.
-     * 
+     *
      * @param data The base64 encoded data to be decoded
      * @param off The offset within the encoded data at which to start decoding
      * @param len The length of data to decode
@@ -156,7 +217,7 @@ public class Base64 {
 
     /**
      * Decode the base64 data.
-     * 
+     *
      * @param data The base64 encoded data to be decoded
      * @param ostream The OutputStream to which the decoded data should be
      *            written
@@ -180,7 +241,7 @@ public class Base64 {
 
     /**
      * Returns base64 representation of specified byte array.
-     * 
+     *
      * @param data The data to be encoded
      * @return The base64 encoded data
      */
@@ -190,7 +251,7 @@ public class Base64 {
 
     /**
      * Returns base64 representation of specified byte array.
-     * 
+     *
      * @param data The data to be encoded
      * @param off The offset within the data at which to start encoding
      * @param len The length of the data to encode
@@ -230,8 +291,9 @@ public class Base64 {
     }
 
     /**
-     * Outputs base64 representation of the specified byte array to a byte stream.
-     * 
+     * Outputs base64 representation of the specified byte array to a byte
+     * stream.
+     *
      * @param data The data to be encoded
      * @param off The offset within the data at which to start encoding
      * @param len The length of the data to encode
@@ -273,13 +335,13 @@ public class Base64 {
     }
 
     /**
-     * Outputs base64 representation of the specified byte array to a character stream.
-     * 
+     * Outputs base64 representation of the specified byte array to a character
+     * stream.
+     *
      * @param data The data to be encoded
      * @param off The offset within the data at which to start encoding
      * @param len The length of the data to encode
-     * @param writer The Writer to which the encoded data should be
-     *            written
+     * @param writer The Writer to which the encoded data should be written
      */
     public static void encode(final byte[] data, final int off, final int len, final Writer writer) throws IOException {
         if (len <= 0) {

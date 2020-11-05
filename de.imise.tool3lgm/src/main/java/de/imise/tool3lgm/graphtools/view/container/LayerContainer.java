@@ -45,12 +45,14 @@ public class LayerContainer extends ElementContainer {
     private int layerNumber = -1;
 
     /**
-     * Liste, aus der die Grafik aufgebaut wird (Reihenfolge der Elemente bestimmt, welches zuerst gemalt wird)
+     * Liste, aus der die Grafik aufgebaut wird (Reihenfolge der Elemente
+     * bestimmt, welches zuerst gemalt wird)
      */
     private List<NodeContainer> graphNodeContainers;
 
     /**
-     * Liste, aus der der Baum aufgebaut wird (Reihenfolge der Elemente wird alphabetisch gehalten)
+     * Liste, aus der der Baum aufgebaut wird (Reihenfolge der Elemente wird
+     * alphabetisch gehalten)
      */
     private List<NodeContainer> treeNodeContainers;
 
@@ -65,7 +67,8 @@ public class LayerContainer extends ElementContainer {
     private List<BendpointContainer> bendpointContainers;
 
     /**
-     * Liste aller NodeContainer, fuer die die Kanten sortiert werden muessen (momentan nur Prozesse)
+     * Liste aller NodeContainer, fuer die die Kanten sortiert werden muessen
+     * (momentan nur Prozesse)
      */
     private List<NodeContainer> numberedEdgesNodeContainer;
 
@@ -85,7 +88,8 @@ public class LayerContainer extends ElementContainer {
     private boolean showInterLayerConnections = false;
 
     /**
-     * Je nach State, werden einige Dinge (Raster + Selektionen) nicht mitgezeichnet
+     * Je nach State, werden einige Dinge (Raster + Selektionen) nicht
+     * mitgezeichnet
      */
     private BasicGraphArea.PaintState paintState = PaintState.REGULAR;
 
@@ -127,9 +131,10 @@ public class LayerContainer extends ElementContainer {
     }
 
     /**
-     * Sortiert die alphabetische Liste der Node erneut. Das muss man machen, da beim initialen einfügen
-     * noch nicht die Namen der zusammengesetzten ETNTKombinationen bekannt sind, so dass sie beim laden
-     * in der Regel falsch einsortiert wurden.
+     * Sortiert die alphabetische Liste der Node erneut. Das muss man machen, da
+     * beim initialen einfügen noch nicht die Namen der zusammengesetzten
+     * ETNTKombinationen bekannt sind, so dass sie beim laden in der Regel
+     * falsch einsortiert wurden.
      */
     public void refreshAlpahbetical() {
         Alphabetical.sort(treeNodeContainers);
@@ -174,7 +179,8 @@ public class LayerContainer extends ElementContainer {
     }
 
     /**
-     * Zählt Alle Elemente der übergebenen Art. Die Klasse wird auf Idenittät geprüft, nicht auf Zuweisungskompatibilität.
+     * Zählt Alle Elemente der übergebenen Art. Die Klasse wird auf Idenittät
+     * geprüft, nicht auf Zuweisungskompatibilität.
      *
      * @param elementClass
      * @return
@@ -457,7 +463,8 @@ public class LayerContainer extends ElementContainer {
     }
 
     /**
-     * Ist oben auskommentiert und daher ungenutzt, da man es nur zum Debug braucht
+     * Ist oben auskommentiert und daher ungenutzt, da man es nur zum Debug
+     * braucht
      *
      * @param g
      */
@@ -536,8 +543,9 @@ public class LayerContainer extends ElementContainer {
     }
 
     /**
-     * Paint the {@link InputGraphArea#grabbedElementsFullRect}, {@link InputGraphArea#grabbedElementsRasteredRect}
-     * and he {@link InputGraphArea#grabbedElementsRealRect} to the layer.
+     * Paint the {@link InputGraphArea#grabbedElementsFullRect},
+     * {@link InputGraphArea#grabbedElementsRasteredRect} and he
+     * {@link InputGraphArea#grabbedElementsRealRect} to the layer.
      *
      * @param g
      */
@@ -658,8 +666,10 @@ public class LayerContainer extends ElementContainer {
     }
 
     /**
-     * Sortiert die EdgeContainer in der Liste aller EdgeContainer so um, dass ihre Reihenfolge für alle NodeContainer
-     * mit Kanten, deren Reihenfolge eine Bedeutung hat, der Reihenfolge der Kanten in ihrer ArrayList connections entspricht.
+     * Sortiert die EdgeContainer in der Liste aller EdgeContainer so um, dass
+     * ihre Reihenfolge für alle NodeContainer mit Kanten, deren Reihenfolge
+     * eine Bedeutung hat, der Reihenfolge der Kanten in ihrer ArrayList
+     * connections entspricht.
      */
     public void sortEdgeContainers() {
         //fuer alle NodeContainer in numberedEdgesNodeContainer
@@ -864,10 +874,8 @@ public class LayerContainer extends ElementContainer {
     /**
      * (De-)Aktiviert das Anzeigen aller Interebenenbeziehungen
      *
-     * @param showInterLayerConnections
-     *            aktiviren / deaktivieren
-     * @param doc
-     *            aktives GraphDocument
+     * @param showInterLayerConnections aktiviren / deaktivieren
+     * @param doc aktives GraphDocument
      */
     public void setShowInterLayerConnections(final boolean showInterLayerConnections) {
         this.showInterLayerConnections = showInterLayerConnections;
@@ -877,14 +885,13 @@ public class LayerContainer extends ElementContainer {
     }
 
     /**
-     * (De-)Aktiviert das Anzeigen der Interebenenbeziehungen für den spezifizierten {@link ElementContainer}
+     * (De-)Aktiviert das Anzeigen der Interebenenbeziehungen für den
+     * spezifizierten {@link ElementContainer}
      *
-     * @param showInterLayerConnections
-     *            aktiviren / deaktivieren
-     * @param doc
-     *            aktives GraphDocument
-     * @param ec
-     *            Container, dessen Interebenenbeziehungen (de-)aktiviert werden sollen
+     * @param showInterLayerConnections aktiviren / deaktivieren
+     * @param doc aktives GraphDocument
+     * @param ec Container, dessen Interebenenbeziehungen (de-)aktiviert werden
+     *            sollen
      */
     public void setShowInterLayerConnections(final boolean showInterLayerConnections, final ElementContainer ec) {
         if (ec instanceof InterLayerConnectedNodeContainer) {
@@ -933,7 +940,8 @@ public class LayerContainer extends ElementContainer {
     }
 
     /**
-     * Funktioniert wie eine Map, bei der die Werte aber in einer Listenreihenfolge erhalten bleiben.
+     * Funktioniert wie eine Map, bei der die Werte aber in einer
+     * Listenreihenfolge erhalten bleiben.
      */
     private class KeyObjectStringMap {
         List<Object> keyList = new ArrayList<>();

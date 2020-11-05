@@ -39,8 +39,8 @@ public abstract class AbstractAnalysis extends MetaModelSpecificAdapter {
     }
 
     /**
-     * Liefert die Ergenis-Elemente der Analyse für die in diesem GraphDocument selektierten
-     * Elemente.
+     * Liefert die Ergenis-Elemente der Analyse für die in diesem GraphDocument
+     * selektierten Elemente.
      *
      * @param doc
      * @return
@@ -48,9 +48,11 @@ public abstract class AbstractAnalysis extends MetaModelSpecificAdapter {
     public abstract List<ElementContainer> getResult(GraphDocument doc);
 
     /**
-     * Gibt die Namen der Knotentypen zurück, auf die die XMLAnalyse angewandt werden kann.<br>
-     * ACHTUNG: Diese Liste wird nicht bei der Durchführung der XMLAnalyse verwendet, sondern nur
-     * bei der Zuordnung, welche Analysen für wlche Node zur Verfügung stehen.
+     * Gibt die Namen der Knotentypen zurück, auf die die XMLAnalyse angewandt
+     * werden kann.<br>
+     * ACHTUNG: Diese Liste wird nicht bei der Durchführung der XMLAnalyse
+     * verwendet, sondern nur bei der Zuordnung, welche Analysen für wlche Node
+     * zur Verfügung stehen.
      *
      * @return eine Liste der Startelementklassen.
      */
@@ -59,7 +61,8 @@ public abstract class AbstractAnalysis extends MetaModelSpecificAdapter {
     }
 
     /**
-     * @return Kommaseparierten String aller Startklassen der XMLAnalyse für die aktuelle Locale
+     * @return Kommaseparierten String aller Startklassen der XMLAnalyse für die
+     *         aktuelle Locale
      */
     public String getStartClassesDisplayNames() {
         if (startClasses == null || startClasses.size() == 0) {

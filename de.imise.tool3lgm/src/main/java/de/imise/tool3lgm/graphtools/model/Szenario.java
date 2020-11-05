@@ -94,7 +94,8 @@ public class Szenario extends LGMGraphDocument {
     }
 
     /**
-     * Holt das Slave-Element der übergegebenen <code>Composition</code> in dieses Szenario
+     * Holt das Slave-Element der übergegebenen <code>Composition</code> in
+     * dieses Szenario
      *
      * @param k
      * @param sourceDoc
@@ -130,10 +131,10 @@ public class Szenario extends LGMGraphDocument {
      * Erzeugt alle Kanten für den übergebenen ElementContainer.
      *
      * @param egdeStartOrEndContainer
-     * @param sourceDoc
-     *            Haupt- oder Teilmodell, aus dem das Element und die Kanten übernommen werden sollen
-     * @param select
-     *            wenn <code>true</code> sind alle neuen Kanten- und Element-Container nach dieser Aktion selektiert (zusätzlich
+     * @param sourceDoc Haupt- oder Teilmodell, aus dem das Element und die
+     *            Kanten übernommen werden sollen
+     * @param select wenn <code>true</code> sind alle neuen Kanten- und
+     *            Element-Container nach dieser Aktion selektiert (zusätzlich
      *            zur ursprünglichen Selektion)
      * @param pid
      */

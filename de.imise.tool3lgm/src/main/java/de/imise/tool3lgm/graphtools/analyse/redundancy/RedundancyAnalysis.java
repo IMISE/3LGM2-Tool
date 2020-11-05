@@ -48,44 +48,49 @@ import de.imise.util.swing.dialog.OutputDialog;
 import de.imise.util.swing.dialog.ProgressDialog;
 
 /**
- * Stellt Funktionen bereit, die die funktionale Redundanz von Modellen untersuchen.
+ * Stellt Funktionen bereit, die die funktionale Redundanz von Modellen
+ * untersuchen.
  *
  * @author AXS
  */
 public class RedundancyAnalysis extends WindowAdapter {
 
     /**
-     * Konstante für die Einstellung des Benutzers nur Anwendungssysteme zu analysieren
+     * Konstante für die Einstellung des Benutzers nur Anwendungssysteme zu
+     * analysieren
      */
     public static final int APPLICATION_SYSTEM_OPTION = 1;
 
     /**
-     * Konstante für die Einstellung des Benutzers nur Organisationssysteme zu analysieren
+     * Konstante für die Einstellung des Benutzers nur Organisationssysteme zu
+     * analysieren
      */
     public static final int ORGANISATION_SYSTEM_OPTION = 2;
 
     /**
-     * Konstante für die Einstellung des Benutzers Anwendungssysteme und Organisationssysteme zu
-     * analysieren
+     * Konstante für die Einstellung des Benutzers Anwendungssysteme und
+     * Organisationssysteme zu analysieren
      */
     public static final int APPLICATION_AND_ORGANISATION_SYSTEM_OPTION = 3;
 
     /**
-     * Legt die Vorauswahl der selektierten Optionen im Auswahldialog fest. Es sind nur 2 booleans
-     * dort enthalten, einer für Anwendungssysteme und einer für Organisationssysteme.
+     * Legt die Vorauswahl der selektierten Optionen im Auswahldialog fest. Es
+     * sind nur 2 booleans dort enthalten, einer für Anwendungssysteme und einer
+     * für Organisationssysteme.
      */
     private static List<?> selectedOptions = null;
 
     /**
      * <code>Thread</code> für die eigentliche Berechnung.<br>
-     * Die Berechnung findet in einem eigenen Thread statt, damit man sie abbrechen kann. Wenn sie
-     * nicht in einem eigenen Thread läuft, werden Benutzereingaben (Abbrechen) vom GUI nicht
-     * weitergeleitet.
+     * Die Berechnung findet in einem eigenen Thread statt, damit man sie
+     * abbrechen kann. Wenn sie nicht in einem eigenen Thread läuft, werden
+     * Benutzereingaben (Abbrechen) vom GUI nicht weitergeleitet.
      */
     private Thread redundancyThread = null;
 
     /**
-     * Konstruktor, um eine Instanz des Checkers mit eigenem <code>RedundancyThread</code> zu haben.
+     * Konstruktor, um eine Instanz des Checkers mit eigenem
+     * <code>RedundancyThread</code> zu haben.
      */
     private RedundancyAnalysis() {
         super();
@@ -330,16 +335,10 @@ public class RedundancyAnalysis extends WindowAdapter {
             int minimalSetSize = result.equalsSets.size() + result.exclusiveAWB.size() + result.moreNeededAWB.size();
 
             // Anzahl aller AWB
-            int fullAWBCount = result.exclusiveAWB.size() + result.moreNeededAWB.size() + result.uselessAWB.size() + result.moreUselessAWB.size() /*
-                                                                                                                                                   * +
-                                                                                                                                                   * result
-                                                                                                                                                   * .
-                                                                                                                                                   * notSupportingAWB
-                                                                                                                                                   * .
-                                                                                                                                                   * size
-                                                                                                                                                   * (
-                                                                                                                                                   * )
-                                                                                                                                                   */;
+            int fullAWBCount = result.exclusiveAWB.size() + result.moreNeededAWB.size() + result.uselessAWB.size() + result.moreUselessAWB
+                    .size() /*
+                             * + result . notSupportingAWB . size ( )
+                             */;
             for (AlphabeticalSet<ModelElement> as : result.equalsSets) {
                 fullAWBCount += as.size();
             }
@@ -483,7 +482,8 @@ public class RedundancyAnalysis extends WindowAdapter {
         private final List<RedundancyAnalysisResult> resultList;
 
         /**
-         * @param resultsToFill Liste mit RedundancyAnalysisResult, die gefüllt werden sollen
+         * @param resultsToFill Liste mit RedundancyAnalysisResult, die gefüllt
+         *            werden sollen
          */
         public RedundancyThread(final List<RedundancyAnalysisResult> resultsToFill) {
             super();
@@ -491,7 +491,8 @@ public class RedundancyAnalysis extends WindowAdapter {
         }
 
         /**
-         * @param resultsToFill Liste mit RedundancyAnalysisResult, die gefüllt werden sollen
+         * @param resultsToFill Liste mit RedundancyAnalysisResult, die gefüllt
+         *            werden sollen
          */
         public RedundancyThread(final RedundancyAnalysisResult resultToFill) {
             this(ImmutableList.of(resultToFill));

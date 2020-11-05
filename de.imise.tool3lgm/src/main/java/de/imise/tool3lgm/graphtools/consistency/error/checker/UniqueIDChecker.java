@@ -82,10 +82,12 @@ public class UniqueIDChecker implements ConsistencyErrorChecker {
     }
 
     /**
-     * Liefert eine Liste aller Elemente derselben Art, wie das übergebene Modelelement, die bei demselben UserField denselben Wert haben.
-     * Das Element selbst ist auch immer in der Liste, also ist die Rückgabeliste immer mind. 1 groß, es sei denn das UserField passt gar
-     * nicht zum Element.
-     * ACHTUNG: Das hier geht für beliebige UserFields - nicht nur für ID-USerFields!
+     * Liefert eine Liste aller Elemente derselben Art, wie das übergebene
+     * Modelelement, die bei demselben UserField denselben Wert haben. Das
+     * Element selbst ist auch immer in der Liste, also ist die Rückgabeliste
+     * immer mind. 1 groß, es sei denn das UserField passt gar nicht zum
+     * Element. ACHTUNG: Das hier geht für beliebige UserFields - nicht nur für
+     * ID-USerFields!
      *
      * @param userField
      * @param me

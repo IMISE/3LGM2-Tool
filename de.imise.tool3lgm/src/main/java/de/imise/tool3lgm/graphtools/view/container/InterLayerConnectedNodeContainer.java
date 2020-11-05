@@ -10,19 +10,26 @@ import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout;
 
 /**
- * Von {@link NodeContainer} abgeleitete Klasse, die der Container für Elemente ist,
- * die in der Mehrebenenansicht Verbindungen zwischen den Ebenen anzeigen.
+ * Von {@link NodeContainer} abgeleitete Klasse, die der Container für Elemente
+ * ist, die in der Mehrebenenansicht Verbindungen zwischen den Ebenen anzeigen.
  * <p>
- * Im Unterschied zur Oberklasse kann hier das Anzeigen der Interebenenbeziehungen gesteurt werden.
+ * Im Unterschied zur Oberklasse kann hier das Anzeigen der
+ * Interebenenbeziehungen gesteurt werden.
  *
  * @author fstephan
  */
 public final class InterLayerConnectedNodeContainer extends NodeContainer {
 
-    /** Gibt wieder, ob die Interebenenbeziehungen angezeigt werden sollen, oder nicht. */
+    /**
+     * Gibt wieder, ob die Interebenenbeziehungen angezeigt werden sollen, oder
+     * nicht.
+     */
     private boolean showInterLayerConnections = false;
 
-    /** The color of interlayer connections of this container are painted in the graph. */
+    /**
+     * The color of interlayer connections of this container are painted in the
+     * graph.
+     */
     private Color interLayerConnectionColor = null;
 
     /**
@@ -47,7 +54,8 @@ public final class InterLayerConnectedNodeContainer extends NodeContainer {
     /**
      * Konstruktor
      * <p>
-     * Benötigt für cloning in {@link ElementContainer#clone(boolean, GraphDocument)}
+     * Benötigt für cloning in
+     * {@link ElementContainer#clone(boolean, GraphDocument)}
      */
     public InterLayerConnectedNodeContainer() {
         super();
@@ -66,8 +74,8 @@ public final class InterLayerConnectedNodeContainer extends NodeContainer {
 
     /**
      * Überprüft initial ob Interebenenbeziehungen angezeigt werden sollen. <br>
-     * Dafür wird überprüft, ob auf der jeweiligen Ebene das Anzeigen aller Interebenenbeziehungen
-     * aktiviert ist oder nicht.
+     * Dafür wird überprüft, ob auf der jeweiligen Ebene das Anzeigen aller
+     * Interebenenbeziehungen aktiviert ist oder nicht.
      *
      * @param doc
      */
@@ -79,7 +87,9 @@ public final class InterLayerConnectedNodeContainer extends NodeContainer {
         showInterLayerConnections = lc.isShowInterLayerConnections();
     }
 
-    /** Gibt wieder, ob die Konfigurationen angezeigt werden sollen, oder nicht. */
+    /**
+     * Gibt wieder, ob die Konfigurationen angezeigt werden sollen, oder nicht.
+     */
     public boolean isShowInterLayerConnections() {
         return showInterLayerConnections;
     }
@@ -103,14 +113,16 @@ public final class InterLayerConnectedNodeContainer extends NodeContainer {
     }
 
     /**
-     * @return the color of interlayer connections of this container are painted in the graph.
+     * @return the color of interlayer connections of this container are painted
+     *         in the graph.
      */
     public Color getInterLayerConnectionColor() {
         return interLayerConnectionColor;
     }
 
     /**
-     * Set the color of interlayer connections of this container are painted in the graph.
+     * Set the color of interlayer connections of this container are painted in
+     * the graph.
      *
      * @param interLayerConnectionColor
      */

@@ -35,8 +35,7 @@ public abstract class MetaPath extends BasicMetaPath {
 
     /**
      * @param metaModel
-     * @param name
-     *            Anzeigenamen
+     * @param name Anzeigenamen
      */
     public MetaPath(final MetaModel metaModel, final String name) {
         super(metaModel, name);
@@ -74,25 +73,29 @@ public abstract class MetaPath extends BasicMetaPath {
     }
 
     /**
-     * Repräsentiert den Validitätszustand eines MetaPath. Ist der invalidReason <code>null</code>, dann gilt der MetaPath als valide, sonst nicht.
+     * Repräsentiert den Validitätszustand eines MetaPath. Ist der invalidReason
+     * <code>null</code>, dann gilt der MetaPath als valide, sonst nicht.
      *
      * @author AXS (6 Dec 2018)
      */
     public class InvalidityCheckResult {
 
         /**
-         * Ein beliebiger Enum, der einen FehlerKey enthält. Über diesen Key-Name kann ein Ressourcenstring geladen werden, der dem Benutzer einen
-         * Hinweis auf den Fehler gibt.
+         * Ein beliebiger Enum, der einen FehlerKey enthält. Über diesen
+         * Key-Name kann ein Ressourcenstring geladen werden, der dem Benutzer
+         * einen Hinweis auf den Fehler gibt.
          */
         public final Enum<?> invalidReason;
 
         /**
-         * Falls der Fehler mit irgendeinem Index zusammen hängt, kann man diesen hier speichern (z.B. Index des Pfades mit dem Fehler)
+         * Falls der Fehler mit irgendeinem Index zusammen hängt, kann man
+         * diesen hier speichern (z.B. Index des Pfades mit dem Fehler)
          */
         public final int index1;
 
         /**
-         * Falls der Fehler mit irgendeinem weiteren Index zusammen hängt, kann man diesen hier speichern (z.B. Index des Elementarpfades mit dem
+         * Falls der Fehler mit irgendeinem weiteren Index zusammen hängt, kann
+         * man diesen hier speichern (z.B. Index des Elementarpfades mit dem
          * Fehler)
          */
         public final int index2;
@@ -149,32 +152,40 @@ public abstract class MetaPath extends BasicMetaPath {
     }
 
     /**
-     * Liefert <code>true</code>, wenn der Pfad prinzipiell angelegt werden kann. Das ist der Fall, wenn es sich um eine
-     * einfache Assoziationsfolge ohne parallele Pfade oder Verweigungen zu Assoziationsklassen dazwischen handelt und alle
-     * Zwischenelementklassen nicht abstrakt sind.
+     * Liefert <code>true</code>, wenn der Pfad prinzipiell angelegt werden
+     * kann. Das ist der Fall, wenn es sich um eine einfache Assoziationsfolge
+     * ohne parallele Pfade oder Verweigungen zu Assoziationsklassen dazwischen
+     * handelt und alle Zwischenelementklassen nicht abstrakt sind.
      *
-     * @param checkCreateEndElement
-     *            wenn <code>true</code>, dann wird auch geprüft, ob das EndElement angelegt werden kann, wenn der Pfad angelegt
-     *            wird, ohne die Konsistenz zu verletzten (also nicht abstract und durch den Pfad entstehen für alle Elemente
-     *            alle anderen Elemente, die sie für ihre Existenz brauchen).
+     * @param checkCreateEndElement wenn <code>true</code>, dann wird auch
+     *            geprüft, ob das EndElement angelegt werden kann, wenn der Pfad
+     *            angelegt wird, ohne die Konsistenz zu verletzten (also nicht
+     *            abstract und durch den Pfad entstehen für alle Elemente alle
+     *            anderen Elemente, die sie für ihre Existenz brauchen).
      * @return <code>true</code> wenn dieser Pfad anlegbar ist
      */
     public abstract boolean isCreatable(boolean checkCreateEndElement);
 
     /**
-     * Prüft, ob der Pfad ausgehend von der Startelementart entfernt werden kann, ohne dass das Startelement dadurch inkonsistent
-     * wird und ebenfalls gelöscht werden würde, wenn man den Pfad entfernt.
+     * Prüft, ob der Pfad ausgehend von der Startelementart entfernt werden
+     * kann, ohne dass das Startelement dadurch inkonsistent wird und ebenfalls
+     * gelöscht werden würde, wenn man den Pfad entfernt.
      *
-     * @param checkEndElement wenn <code>true</code>, wird genauso für das Endelement geprüft, ob es inkonsistent und damit gelöscht
-     *            werden würde, wenn man den Pfad zwischen ihm und einem Startelement entfernt.
-     * @return <code>true</code> wenn sich der Pfad entfernen lässt, ohne dass das Startelement oder bei <code>checkEndElement == true</code>
-     *         auch das Endelement nicht inkonsistent und damit gelöscht werden, sonst <code>false</code>.
+     * @param checkEndElement wenn <code>true</code>, wird genauso für das
+     *            Endelement geprüft, ob es inkonsistent und damit gelöscht
+     *            werden würde, wenn man den Pfad zwischen ihm und einem
+     *            Startelement entfernt.
+     * @return <code>true</code> wenn sich der Pfad entfernen lässt, ohne dass
+     *         das Startelement oder bei <code>checkEndElement == true</code>
+     *         auch das Endelement nicht inkonsistent und damit gelöscht werden,
+     *         sonst <code>false</code>.
      */
     public abstract boolean isRemoveable(boolean checkEndElement);
 
     /**
-     * Liefert <code>true</code>, wenn der Pfad eine einfache Assoziationsfolge ist (also bei {@link #getElementaryMetaPaths()} nicht
-     * <code>null</code> zurück gibt und jeder Einzelpfad die maximale Endkardinalität von 1 hat.
+     * Liefert <code>true</code>, wenn der Pfad eine einfache Assoziationsfolge
+     * ist (also bei {@link #getElementaryMetaPaths()} nicht <code>null</code>
+     * zurück gibt und jeder Einzelpfad die maximale Endkardinalität von 1 hat.
      */
     public final boolean isSingleConnection() {
         List<ElementaryMetaPath> elementaryMetaPaths = getElementaryMetaPaths();
@@ -188,8 +199,9 @@ public abstract class MetaPath extends BasicMetaPath {
     }
 
     /**
-     * Liefert <code>true</code>, wenn das erste Element des Pfades nur existieren kann, wenn es mit einem
-     * auf dem Pfad dahinter liegenden Element verbunden ist. Das wird gebraucht, um zu entscheiden, ob ein neu
+     * Liefert <code>true</code>, wenn das erste Element des Pfades nur
+     * existieren kann, wenn es mit einem auf dem Pfad dahinter liegenden
+     * Element verbunden ist. Das wird gebraucht, um zu entscheiden, ob ein neu
      * angelegtes EndElement des Pfades immer sofort verbunden werden muss.
      *
      * @return
@@ -210,8 +222,9 @@ public abstract class MetaPath extends BasicMetaPath {
     }
 
     /**
-     * Liefert <code>true</code>, wenn das letzte Element des Pfades nur existieren kann, wenn es mit einem
-     * auf dem Pfad davor liegenden Element verbunden ist. Das wird gebraucht, um zu entscheiden, ob ein neu
+     * Liefert <code>true</code>, wenn das letzte Element des Pfades nur
+     * existieren kann, wenn es mit einem auf dem Pfad davor liegenden Element
+     * verbunden ist. Das wird gebraucht, um zu entscheiden, ob ein neu
      * angelegtes EndElement des Pfades immer sofort verbunden werden muss.
      *
      * @return
@@ -232,7 +245,8 @@ public abstract class MetaPath extends BasicMetaPath {
     }
 
     /**
-     * Liefert den MetaPfad der die Gegenricthung beschreibt oder <code>null</code>, wenn es einen solchen nicht gibt.
+     * Liefert den MetaPfad der die Gegenricthung beschreibt oder
+     * <code>null</code>, wenn es einen solchen nicht gibt.
      *
      * @return the otherDirectionPath
      */
@@ -241,8 +255,10 @@ public abstract class MetaPath extends BasicMetaPath {
     }
 
     /**
-     * Liefert eine Folge von Elementarpfaden, wenn sich dieser Pfad so bilden lässt, ansonsten kommt eine leere Liste zurück. Alle parallelen Pfade
-     * geben hier leere Liste zurück. {@link SequenceMetaPath} geben nur keine leere Liste zurück, wenn sie im innersten ein einzelner Pfad sind ohne
+     * Liefert eine Folge von Elementarpfaden, wenn sich dieser Pfad so bilden
+     * lässt, ansonsten kommt eine leere Liste zurück. Alle parallelen Pfade
+     * geben hier leere Liste zurück. {@link SequenceMetaPath} geben nur keine
+     * leere Liste zurück, wenn sie im innersten ein einzelner Pfad sind ohne
      * parallele oder rekursive Pfade sind.
      *
      * @return
@@ -252,7 +268,9 @@ public abstract class MetaPath extends BasicMetaPath {
     }
 
     /**
-     * @return den ersten ElementaryMetaPath aus {@link #getElementaryMetaPaths()}, wenn die Liste mind. einen solchen Elementarpfad enthält.
+     * @return den ersten ElementaryMetaPath aus
+     *         {@link #getElementaryMetaPaths()}, wenn die Liste mind. einen
+     *         solchen Elementarpfad enthält.
      */
     public ElementaryMetaPath getFirstElementaryMetaPath() {
         List<ElementaryMetaPath> elementaryMetaPaths = getElementaryMetaPaths();
@@ -265,7 +283,9 @@ public abstract class MetaPath extends BasicMetaPath {
     }
 
     /**
-     * @return den letzten ElementaryMetaPath aus {@link #getElementaryMetaPaths()}, wenn die Liste mind. einen solchen Elementarpfad enthält.
+     * @return den letzten ElementaryMetaPath aus
+     *         {@link #getElementaryMetaPaths()}, wenn die Liste mind. einen
+     *         solchen Elementarpfad enthält.
      */
     public ElementaryMetaPath getLastElementaryMetaPath() {
         List<ElementaryMetaPath> elementaryMetaPaths = getElementaryMetaPaths();
@@ -289,25 +309,30 @@ public abstract class MetaPath extends BasicMetaPath {
     public abstract int getSubMetaPathCount();
 
     /**
-     * Liefert <code>false</code>, wenn der Pfad in beide Richtungen dasselbe bedeutet. Dafür muss
-     * er dieselben Elementarten miteinander verbinden und denselben Namen in beiden Richtungen
-     * tragen. Z.B können 2 physische DV-Bausteine über Datenübertragungsverbindungen miteinander
-     * verbunden sein. Diese Verbindung heißt in jede der beiden Richtungen "ist verbunden mit" und
-     * verbindet dieselbe Elementart miteinander. Der dazugehörige Elementarpfad ist also undirected.
-     * Dasselbe ist aber auch für {@link SequenceMetaPath}s möglich, wenn z.B. die beiden physischen
-     * DV-Bausteine Schnittstellen beitzen würden (was sie im aktuellen Metamodell nicht haben) und diese
-     * dann über eine Datenübertragungsverbindung mit der beidseitigen Bedeutung "ist verbunden mit"
-     * verbunden sind, dann bedeutet der Pfad auch in beide Richtungen dasselbe, nämlich
-     * "Phys. DV-Baustein besitzt Schnittstelle ist verbunden mit Schnittstelle gehört zu Phys. DV-Baustein".
-     * Die Umkehrrichtung dieses Pfades ist er selbst und somit ist er undirected.
+     * Liefert <code>false</code>, wenn der Pfad in beide Richtungen dasselbe
+     * bedeutet. Dafür muss er dieselben Elementarten miteinander verbinden und
+     * denselben Namen in beiden Richtungen tragen. Z.B können 2 physische
+     * DV-Bausteine über Datenübertragungsverbindungen miteinander verbunden
+     * sein. Diese Verbindung heißt in jede der beiden Richtungen "ist verbunden
+     * mit" und verbindet dieselbe Elementart miteinander. Der dazugehörige
+     * Elementarpfad ist also undirected. Dasselbe ist aber auch für
+     * {@link SequenceMetaPath}s möglich, wenn z.B. die beiden physischen
+     * DV-Bausteine Schnittstellen beitzen würden (was sie im aktuellen
+     * Metamodell nicht haben) und diese dann über eine
+     * Datenübertragungsverbindung mit der beidseitigen Bedeutung "ist verbunden
+     * mit" verbunden sind, dann bedeutet der Pfad auch in beide Richtungen
+     * dasselbe, nämlich "Phys. DV-Baustein besitzt Schnittstelle ist verbunden
+     * mit Schnittstelle gehört zu Phys. DV-Baustein". Die Umkehrrichtung dieses
+     * Pfades ist er selbst und somit ist er undirected.
      *
-     * @return
-     *         <code>true</code> wenn Vorwärts- und Rückwärtsrichtungen unterschiedliche Bedeutung haben
+     * @return <code>true</code> wenn Vorwärts- und Rückwärtsrichtungen
+     *         unterschiedliche Bedeutung haben
      */
     public abstract boolean isDirected();
 
     /**
-     * Liefert <code>true</code>, wenn der Metapfad irgendwo eine {@link PartOfVerbindung} enthält.
+     * Liefert <code>true</code>, wenn der Metapfad irgendwo eine
+     * {@link PartOfVerbindung} enthält.
      *
      * @return
      */
@@ -315,11 +340,11 @@ public abstract class MetaPath extends BasicMetaPath {
 
     /**
      * @param other
-     * @return only <code>true</code> if this and the other metapath have an assignable
-     *         start class, an assignable end class, an assignable edge class, the same
-     *         direction and the same type. Assignable only means that one of the class
-     *         must be a subclass of the other (which is sub and which super dosn't
-     *         matters).
+     * @return only <code>true</code> if this and the other metapath have an
+     *         assignable start class, an assignable end class, an assignable
+     *         edge class, the same direction and the same type. Assignable only
+     *         means that one of the class must be a subclass of the other
+     *         (which is sub and which super dosn't matters).
      */
     public boolean isAssignable(final MetaPath other) {
         //Maybe there would be an useful expression here for general MetaPath too, but
@@ -332,13 +357,13 @@ public abstract class MetaPath extends BasicMetaPath {
     ///////////////////////////////////////////////////////////////////////////
 
     /**
-     * Liefert alle mit dem übergebenen Element über diesen MetaPfad verbundenen Elemente.
+     * Liefert alle mit dem übergebenen Element über diesen MetaPfad verbundenen
+     * Elemente.
      *
-     * @param me
-     *            Ausgangselement
-     * @param multiple
-     *            Wenn <code>true</code> sind mehrfach verbundene Element auch mehrfach in der Ergebnisliste, bei <code>false</code> ist jedes Element
-     *            nur einmal enthalten.
+     * @param me Ausgangselement
+     * @param multiple Wenn <code>true</code> sind mehrfach verbundene Element
+     *            auch mehrfach in der Ergebnisliste, bei <code>false</code> ist
+     *            jedes Element nur einmal enthalten.
      * @return
      */
     public List<ModelElement> getConnectedElements(final ModelElement me, final boolean multiple) {
@@ -356,7 +381,8 @@ public abstract class MetaPath extends BasicMetaPath {
     }
 
     /**
-     * Liefert eine Sammlung aller Elemente, die über diesen Pfad mit den übergebenen Elementen verbunden sind.
+     * Liefert eine Sammlung aller Elemente, die über diesen Pfad mit den
+     * übergebenen Elementen verbunden sind.
      *
      * @param modelElements
      * @return
@@ -366,13 +392,14 @@ public abstract class MetaPath extends BasicMetaPath {
     }
 
     /**
-     * Liefert eine Sammlung aller Elemente, die über diesen Pfad mit den übergebenen Elementen verbunden sind.
+     * Liefert eine Sammlung aller Elemente, die über diesen Pfad mit den
+     * übergebenen Elementen verbunden sind.
      *
-     * @param modelElements
-     *            Ausgangselemente
-     * @param multiple
-     *            Wenn <code>true</code> enthält die Rückgabesammlung dieselben Elemente sooft, wie sie mit Elementen der
-     *            Ausgangliste über diesen Pfad verbunden sind. Bei <code>false</code> ist jedes Element nur einmal enthalten.
+     * @param modelElements Ausgangselemente
+     * @param multiple Wenn <code>true</code> enthält die Rückgabesammlung
+     *            dieselben Elemente sooft, wie sie mit Elementen der
+     *            Ausgangliste über diesen Pfad verbunden sind. Bei
+     *            <code>false</code> ist jedes Element nur einmal enthalten.
      * @return
      */
     public List<ModelElement> getConnectedElements(final Collection<ModelElement> modelElements, final boolean multiple) {
@@ -438,8 +465,8 @@ public abstract class MetaPath extends BasicMetaPath {
     }
 
     /**
-     * Liefert einen Ergebnisbaum, der alle eventuell vorhandenen Pfade ausgehend vom
-     * übergebenen Element aufspannt
+     * Liefert einen Ergebnisbaum, der alle eventuell vorhandenen Pfade
+     * ausgehend vom übergebenen Element aufspannt
      *
      * @param startElement
      * @return
@@ -449,8 +476,8 @@ public abstract class MetaPath extends BasicMetaPath {
     }
 
     /**
-     * Liefert einen Ergebnisbaum, der alle eventuell vorhandenen Pfade ausgehend vom
-     * übergebenen Element aufspannt
+     * Liefert einen Ergebnisbaum, der alle eventuell vorhandenen Pfade
+     * ausgehend vom übergebenen Element aufspannt
      *
      * @param startElement
      * @param keepIncompleteBranches

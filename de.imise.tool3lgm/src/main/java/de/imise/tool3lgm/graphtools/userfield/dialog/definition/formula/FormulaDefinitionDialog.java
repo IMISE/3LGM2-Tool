@@ -48,6 +48,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.ListSelectionModel;
+import javax.swing.ScrollPaneConstants;
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 
@@ -55,6 +56,7 @@ import com.google.common.base.Strings;
 
 import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
 import de.imise.tool3lgm.graphtools.dialog.tools.EasyComponents;
+import de.imise.tool3lgm.graphtools.metamodel.CoreMetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
@@ -67,16 +69,23 @@ import de.imise.util.swing.component.list.AlphabeticalJList;
 import de.imise.util.swing.component.text.ExtendedTextArea;
 
 /**
- * Der Formeleditor ist eine GUI-Komponente, die es ermöglich Formelnstrings aus verschiedenen Komponenten(Auswahl aus <code>JList</code>en und
+ * Der Formeleditor ist eine GUI-Komponente, die es ermöglich Formelnstrings aus
+ * verschiedenen Komponenten(Auswahl aus <code>JList</code>en und
  * <code>JButton</code> zu erstellen (zusammen zu klicken). <br>
- * Die Formel liegt danach in menschenlesbarer Form und als interne Repräsentation, jeweils als String, vor. Die menschenlesbare Form besteht aus den
- * Namen der benutzten <code>userField</code>s und den Operatoren. Die interne Repräsentation besteht aus den userField_Hash_codes und den Operatoren.
- * Zur Eingabe werden die OperatorButtons und OperandenListen jeweils aktiviert, wenn diese als nächstes in der FOrmel "erlaubt" sind. Alle eingaben
- * werden auf einem Stack gespeichert. D.h.: A * B + () C - D > / E Zur korrekten Auswerung in: A * + ( C - D ) / E Wird der Stack abgebaut und die
- * Elemente in die korrekte Position zueinander gebracht Das Klammersymbol liegt wie ein Operand auf dem Stack. Alle nachfolgenden Elemente gehören
- * damit in die Klammer. Zum Kenntlichmachen, das der nächste Operand/Operator nicht mehr in die Klammer gehört, wurde das Metazeichen " > "eingeührt.
- * In diesem Dialog kann die interne Repräsentation der Formal angezeigt werden. Dazu ist <code>hashAreaVisible</code> auf true zu setzen. Andernfalls
- * auf false.
+ * Die Formel liegt danach in menschenlesbarer Form und als interne
+ * Repräsentation, jeweils als String, vor. Die menschenlesbare Form besteht aus
+ * den Namen der benutzten <code>userField</code>s und den Operatoren. Die
+ * interne Repräsentation besteht aus den userField_Hash_codes und den
+ * Operatoren. Zur Eingabe werden die OperatorButtons und OperandenListen
+ * jeweils aktiviert, wenn diese als nächstes in der FOrmel "erlaubt" sind. Alle
+ * eingaben werden auf einem Stack gespeichert. D.h.: A * B + () C - D > / E Zur
+ * korrekten Auswerung in: A * + ( C - D ) / E Wird der Stack abgebaut und die
+ * Elemente in die korrekte Position zueinander gebracht Das Klammersymbol liegt
+ * wie ein Operand auf dem Stack. Alle nachfolgenden Elemente gehören damit in
+ * die Klammer. Zum Kenntlichmachen, das der nächste Operand/Operator nicht mehr
+ * in die Klammer gehört, wurde das Metazeichen " > "eingeührt. In diesem Dialog
+ * kann die interne Repräsentation der Formal angezeigt werden. Dazu ist
+ * <code>hashAreaVisible</code> auf true zu setzen. Andernfalls auf false.
  *
  * @author hboehme
  */
@@ -88,7 +97,8 @@ public class FormulaDefinitionDialog extends JDialog implements ActionListener {
     public static final String CLASSIFICATION_NUMBER = "CLASSIFICATION_NUMBER";
 
     /**
-     * Kenzeichen dafür, dass eine Klammer in einer Formel nach rechts Verlassen wird.
+     * Kenzeichen dafür, dass eine Klammer in einer Formel nach rechts Verlassen
+     * wird.
      */
     public static final String LEAVE_BRACKET_ESCAPE_CHARS = "%>%";
 
@@ -115,17 +125,21 @@ public class FormulaDefinitionDialog extends JDialog implements ActionListener {
     private final ExtendedTextArea formulaArea;
 
     /**
-     * <code>ExtendedTextArea</code> zum Anzeigen des FormelStrings in HashCode-Komination. Diese Area ist nicht Teil des Formeleditor. Sie ist nur so
-     * lang Bestandteil, wie die Arbeit am Editor dauert. Vor Auslieferung wird sie entfernt. Die Zugriffe darauf können gegen die Abfrage eines
-     * Strings ausgetauscht werden.
+     * <code>ExtendedTextArea</code> zum Anzeigen des FormelStrings in
+     * HashCode-Komination. Diese Area ist nicht Teil des Formeleditor. Sie ist
+     * nur so lang Bestandteil, wie die Arbeit am Editor dauert. Vor
+     * Auslieferung wird sie entfernt. Die Zugriffe darauf können gegen die
+     * Abfrage eines Strings ausgetauscht werden.
      */
     private final ExtendedTextArea hashArea;
 
     private String formelString = "";
 
     /**
-     * Gibt an, ob die <code>hashArea</code> im Formeleditor angezeigt werden soll oder nicht. Da die <code>hashArea</code> in einem
-     * <code>JScrollPane</code> liegt, wird die <code>JScrollPane</code> angezeigt oder nicht
+     * Gibt an, ob die <code>hashArea</code> im Formeleditor angezeigt werden
+     * soll oder nicht. Da die <code>hashArea</code> in einem
+     * <code>JScrollPane</code> liegt, wird die <code>JScrollPane</code>
+     * angezeigt oder nicht
      */
     private final boolean hashAreaVisible = false;
 
@@ -145,12 +159,14 @@ public class FormulaDefinitionDialog extends JDialog implements ActionListener {
     private final UserFieldDefinitions definitions;
 
     /**
-     * Beim Bearbeiten einer Formel, der schon bestehende String in Hash-Ausdrücken.
+     * Beim Bearbeiten einer Formel, der schon bestehende String in
+     * Hash-Ausdrücken.
      */
     private String oldFormulaString = "";
 
     /**
-     * Dieser <code>Stack</code> beinhaltet die Formel in klickreihenfolge. Bsp: Klickreihenfolge: 3 * () 4 + 5 soll darstellen: 3 * ( 4 + 5 )
+     * Dieser <code>Stack</code> beinhaltet die Formel in klickreihenfolge. Bsp:
+     * Klickreihenfolge: 3 * () 4 + 5 soll darstellen: 3 * ( 4 + 5 )
      */
     private FormulaDefinitionDialogStack termStack;
 
@@ -166,13 +182,16 @@ public class FormulaDefinitionDialog extends JDialog implements ActionListener {
     private int leaveableBracketCounter = 0;
 
     /**
-     * Dieses Label zeigt an, ob die Formel syntaktisch korrekt ist. dafür verbessern.
+     * Dieses Label zeigt an, ob die Formel syntaktisch korrekt ist. dafür
+     * verbessern.
      */
     private JLabel statusLabel;
 
     /**
-     * <code>caretPosInFormulaArea</code>, ist die Postition, an der der Cursor in der TextArea angezeigt werden soll, in der die Formel in
-     * menschenlasbarer Form dargestellt wird. Der cursor zeigt die aktuelle Einfügemarke an. somit weiß man in geschachtelten klammer, wo als
+     * <code>caretPosInFormulaArea</code>, ist die Postition, an der der Cursor
+     * in der TextArea angezeigt werden soll, in der die Formel in
+     * menschenlasbarer Form dargestellt wird. Der cursor zeigt die aktuelle
+     * Einfügemarke an. somit weiß man in geschachtelten klammer, wo als
      * nächstes ein Term eingefügt wird.
      */
     private int caretPosInFormulaArea;
@@ -191,10 +210,10 @@ public class FormulaDefinitionDialog extends JDialog implements ActionListener {
         oldFormulaString = userField.getFormula();
         Class<? extends UserFieldTarget> targetClass = userField.getTargetClass();
         Class<? extends ModelElement> elementClass = ModelElement.class.isAssignableFrom(targetClass) ? targetClass.asSubclass(ModelElement.class) : null;
-        MetaModel.isNodeType(targetClass);
+        CoreMetaModel.isNodeType(targetClass);
         GDCollection gdcoll = def.getCollection();
         ElementsNameBuilder elementsNameBuilder = gdcoll.getElementsNameBuilder();
-        String targetClassDisplayName = elementClass == null || MetaModel.isEdgeType(targetClass) ? "" : "  -  " + elementsNameBuilder.getDisplayableName(elementClass);
+        String targetClassDisplayName = elementClass == null || CoreMetaModel.isEdgeType(targetClass) ? "" : "  -  " + elementsNameBuilder.getDisplayableName(elementClass);
         setTitle(getResString("formulaEditorDialog") + targetClassDisplayName + "  -  " + newUserFieldName);
         setLocationByPlatform(true);
 
@@ -218,7 +237,8 @@ public class FormulaDefinitionDialog extends JDialog implements ActionListener {
         setLocationByPlatform(true);
         setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
         /*
-         * schließen des Fensters abfangen (wenn nicht durch Abbrechen-Button veranlasst)
+         * schließen des Fensters abfangen (wenn nicht durch Abbrechen-Button
+         * veranlasst)
          */
         addWindowListener(new WindowAdapter() {
             @Override
@@ -241,7 +261,7 @@ public class FormulaDefinitionDialog extends JDialog implements ActionListener {
         gbc.weightx = 1;
         gbc.weighty = 0.5;
         gbc.gridheight = 1;
-        JScrollPane formualAreaScrollPane = new JScrollPane(formulaArea, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        JScrollPane formualAreaScrollPane = new JScrollPane(formulaArea, ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
         panel.add(formualAreaScrollPane, nextLine(gbc));
 
         //Wenn die hashArea nicht sichtbar sein soll, darf ich nicht die ScrollPane eingefügt werden.
@@ -354,7 +374,8 @@ public class FormulaDefinitionDialog extends JDialog implements ActionListener {
     }
 
     /**
-     * Lädt alle anderen <code>UserField</code>s (userFields, die vom STYLE CLASSIFICATION_NUMBER sind) in die JList.
+     * Lädt alle anderen <code>UserField</code>s (userFields, die vom STYLE
+     * CLASSIFICATION_NUMBER sind) in die JList.
      *
      * @param elementClass
      */
@@ -472,10 +493,13 @@ public class FormulaDefinitionDialog extends JDialog implements ActionListener {
     }
 
     /**
-     * Konvertiert den Stack mit seinen Elementen, die in Eingabereihenfolge vorliegen, in einen String der die Formel in der Form enthält, wie sie
-     * mathematisch korrekt ist. Zusätzlich wird hier entschieden, an welcher Position der Cursor im Textfeld für die Formel angezeigt wird.
+     * Konvertiert den Stack mit seinen Elementen, die in Eingabereihenfolge
+     * vorliegen, in einen String der die Formel in der Form enthält, wie sie
+     * mathematisch korrekt ist. Zusätzlich wird hier entschieden, an welcher
+     * Position der Cursor im Textfeld für die Formel angezeigt wird.
      *
-     * @return String Die Formel in menschenlesbarer Form aber in <code>UserField</code>-hashCode-schreibweise.
+     * @return String Die Formel in menschenlesbarer Form aber in
+     *         <code>UserField</code>-hashCode-schreibweise.
      */
     private String convertStackFormulaToOrdinaryFormula() {
         // Schreibt die Elemente aus dem Term-Stack in die <code>ArrayList</code> mit diesem Mechanismus kann evtl. auf den Stack ganz verzichtet
@@ -538,7 +562,8 @@ public class FormulaDefinitionDialog extends JDialog implements ActionListener {
     }
 
     /**
-     * Setzte den enabled-Status der Buttons auf true oder false. Somit soll Verhindert werden, dass mehrmal Operatoren hintereinanderer angegeben
+     * Setzte den enabled-Status der Buttons auf true oder false. Somit soll
+     * Verhindert werden, dass mehrmal Operatoren hintereinanderer angegeben
      * werden können.
      */
     private void updateButtonStates() {
@@ -613,7 +638,8 @@ public class FormulaDefinitionDialog extends JDialog implements ActionListener {
     }
 
     /**
-     * Setzt den Cursor in der TextArea, die die Formel darstellt. Der Cusor soll dem Benutzer anzeigen, an welcher Stelle er sich in der Formel
+     * Setzt den Cursor in der TextArea, die die Formel darstellt. Der Cusor
+     * soll dem Benutzer anzeigen, an welcher Stelle er sich in der Formel
      * befindet und wo als nächstes ein Element eingefügt wird. Vorgehen:
      */
     private void setCaretInFormulaArea() {
@@ -640,7 +666,8 @@ public class FormulaDefinitionDialog extends JDialog implements ActionListener {
     private class FormulaControlButtonPanel extends JPanel {
 
         /**
-         * Die Buttons für die Formelsteuerung. Rückgänig machen, Klammer verlassen, Formel leeren.
+         * Die Buttons für die Formelsteuerung. Rückgänig machen, Klammer
+         * verlassen, Formel leeren.
          */
         private final JButton undoButton, leaveBracketButton, clearFormulaButton;
 
@@ -666,7 +693,8 @@ public class FormulaDefinitionDialog extends JDialog implements ActionListener {
     private class AccountingFunctionsButtonPanel extends JPanel {
 
         /**
-         * Die Buttons für die Verrechnungsfunktionen Summe, Teilwertsumme, Maximum, Minimum, Indikator und Reference
+         * Die Buttons für die Verrechnungsfunktionen Summe, Teilwertsumme,
+         * Maximum, Minimum, Indikator und Reference
          */
         private final JButton buttonsum, buttonMult, buttonteilwertsumme, buttonmax, buttonmin, buttonmittelwert, buttonindikator, buttonReference;
 
@@ -698,7 +726,7 @@ public class FormulaDefinitionDialog extends JDialog implements ActionListener {
                 add(buttonmittelwert);
                 add(buttonindikator);
             }
-            if (MetaModel.isEdgeType(userField.getTargetClass())) {
+            if (CoreMetaModel.isEdgeType(userField.getTargetClass())) {
                 add(buttonReference);
             }
         }
@@ -764,11 +792,16 @@ public class FormulaDefinitionDialog extends JDialog implements ActionListener {
         }
 
         /**
-         * @param operatorsEnabled wenn <code>true</code> sind die Operator-Buttons ( +,*,/ ) enabled, sonst nicht
-         * @param minusEnabled wenn <code>true</code> ist der Minus-Button ( - ) enabled, sonst nicht
-         * @param numbersEnabled wenn <code>true</code> sind die Zahlen-Buttons ( 0 -9 ) enabled, sonst nicht
-         * @param commaEnabled wenn <code>true</code> ist der Komma-Button enabled, sonst nicht
-         * @param bracketsEnabled wenn <code>true</code> ist der Klammer-Button enabled, sonst nicht
+         * @param operatorsEnabled wenn <code>true</code> sind die
+         *            Operator-Buttons ( +,*,/ ) enabled, sonst nicht
+         * @param minusEnabled wenn <code>true</code> ist der Minus-Button ( - )
+         *            enabled, sonst nicht
+         * @param numbersEnabled wenn <code>true</code> sind die Zahlen-Buttons
+         *            ( 0 -9 ) enabled, sonst nicht
+         * @param commaEnabled wenn <code>true</code> ist der Komma-Button
+         *            enabled, sonst nicht
+         * @param bracketsEnabled wenn <code>true</code> ist der Klammer-Button
+         *            enabled, sonst nicht
          */
         public void setButtonStates(final boolean operatorsEnabled, final boolean minusEnabled, final boolean numbersEnabled, final boolean commaEnabled, final boolean bracketsEnabled) {
             buttonplus.setEnabled(operatorsEnabled);

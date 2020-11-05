@@ -11,25 +11,22 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 
-import net.sf.saxon.TransformerFactoryImpl;
-
 /**
- * @author Thomas Rudert
- *         Klasse zum Ausführen von Transformationen auf XML-Dokumenten mit Hilfe von
- *         XSLT-Dateien
+ * @author Thomas Rudert Klasse zum Ausführen von Transformationen auf
+ *         XML-Dokumenten mit Hilfe von XSLT-Dateien
  */
 public class XMLTransformer {
 
     /**
      * führt eine Transformation aus
-     * 
+     *
      * @param xsltSource Quelle mit den Transformationsvorschriften
      * @param xmlSource Quelle der XML-Modell-Datei
      * @param destination Ziel für die transformierte Datei
      * @return boolean with true if execution was successful
      */
     public static void transform(final InputStream xsltSource, final String xsltName, final File xmlSource, final String destination) throws TransformerException, IOException {
-        TransformerFactory tFactory = TransformerFactoryImpl.newInstance();
+        TransformerFactory tFactory = TransformerFactory.newInstance();
 
         Transformer transformer = tFactory.newTransformer(new StreamSource(xsltSource));
 

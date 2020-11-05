@@ -8,6 +8,7 @@ import java.awt.Dimension;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 
+import javax.swing.SwingConstants;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
@@ -30,7 +31,7 @@ public final class ModelBrowser extends ReorderableTabbedPane implements ChangeL
      * Ein neuer Browser
      */
     protected ModelBrowser(final int tabLayoutPolicy) {
-        super(ReorderableTabbedPane.TOP, tabLayoutPolicy);
+        super(SwingConstants.TOP, tabLayoutPolicy);
         setMinimumSize(new Dimension(10, 10));
         addFocusListener(this);
         inactiveColor = getForeground();
@@ -88,7 +89,8 @@ public final class ModelBrowser extends ReorderableTabbedPane implements ChangeL
     }
 
     /**
-     * @return <code>GraphDocument</code> of the selected <code>ModelBrowser</code> -tree
+     * @return <code>GraphDocument</code> of the selected
+     *         <code>ModelBrowser</code> -tree
      */
     private GraphDocument getCurrentDoc() {
         SubModelsBrowser subModelsBrowser = (SubModelsBrowser) getSelectedComponent();
@@ -156,7 +158,8 @@ public final class ModelBrowser extends ReorderableTabbedPane implements ChangeL
     }
 
     /**
-     * Hebt den aktiven Tab hervor und löscht die Hervorhebung beim letzten aktiven Tab.
+     * Hebt den aktiven Tab hervor und löscht die Hervorhebung beim letzten
+     * aktiven Tab.
      */
     private void updateActiveBrowserTab() {
         boolean isShowModelsInSeparateBrowser = OPTION_SHOW_MODELS_IN_SEPARATE_BROWSER.is();

@@ -15,7 +15,8 @@ import de.imise.tool3lgm.gui.viewpane.ViewPane;
 import de.imise.tool3lgm.gui.viewpane.ViewPaneFrameComponent;
 
 /**
- * Abstrakte Klasse für alle internen Fenster zur Darstellung von (Teil-)Modellen
+ * Abstrakte Klasse für alle internen Fenster zur Darstellung von
+ * (Teil-)Modellen
  *
  * @author Thomas Rudert
  */
@@ -30,7 +31,10 @@ public abstract class ToolInternalFrame extends JInternalFrame implements ViewPa
      * @param viewPane the view to display
      */
     public ToolInternalFrame(final ViewPane viewPane) {
-        /* JInternalFrame mit Titel, resizable, closable, maximizable, and iconifiable */
+        /*
+         * JInternalFrame mit Titel, resizable, closable, maximizable, and
+         * iconifiable
+         */
         super("", true, false, true, true);
         this.viewPane = viewPane;
         getContentPane().add(viewPane);

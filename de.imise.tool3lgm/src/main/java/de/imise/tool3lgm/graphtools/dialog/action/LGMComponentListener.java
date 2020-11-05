@@ -19,11 +19,13 @@ public class LGMComponentListener implements ComponentListener {
 
     private final LGMAction componentShownAction;
 
-    /** ************************************************************************* */
+    /**
+     * *************************************************************************
+     */
 
     /**
      * Konstruktor
-     * 
+     *
      * @param componentHiddenAction
      * @param componentMovedAction
      * @param componentResizedAction

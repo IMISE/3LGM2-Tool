@@ -10,20 +10,24 @@ import de.imise.util.NamedObjectContainer;
 /**
  * Model für alle Tables des Attributeditors
  * <p>
- * Über die statischen Methoden können vorgefertigte <code>AbstractUserFieldTableModel</code>s abgerufen werden, die auf Tabels für Kennzahlen,
- * Verteilungsgewicht oder Modelvariablen zugeschnitten sind.
+ * Über die statischen Methoden können vorgefertigte
+ * <code>AbstractUserFieldTableModel</code>s abgerufen werden, die auf Tabels
+ * für Kennzahlen, Verteilungsgewicht oder Modelvariablen zugeschnitten sind.
  * <p>
- * !!! Die Änderung der Daten erfolgt nicht mehr über javax.swing.table.DefaultTableModel.setDataVector(java.lang.Object[][], java.lang.Object[])
- * sondern über setDataVector(java.lang.Object[][], java.lang.Object[],java.lang.Object[]). Die Anwendung der alten Methode kann dann dazu führen,
- * dass die im Table dargstellten Daten nicht mehr den Modeldaten entsprechen !!!
- * 
+ * !!! Die Änderung der Daten erfolgt nicht mehr über
+ * javax.swing.table.DefaultTableModel.setDataVector(java.lang.Object[][],
+ * java.lang.Object[]) sondern über setDataVector(java.lang.Object[][],
+ * java.lang.Object[],java.lang.Object[]). Die Anwendung der alten Methode kann
+ * dann dazu führen, dass die im Table dargstellten Daten nicht mehr den
+ * Modeldaten entsprechen !!!
+ *
  * @author fstephan
  */
 public abstract class AbstractUserFieldTableModel extends AbstractTableModel {
 
     /**
      * Konstruktor
-     * 
+     *
      * @param doc
      */
     protected AbstractUserFieldTableModel(final GraphDocument doc) {
@@ -43,7 +47,7 @@ public abstract class AbstractUserFieldTableModel extends AbstractTableModel {
 
     /**
      * Setzt den Wert der Zelle in (row, col) auf {@link UserField#EMPTY_STRING}
-     * 
+     *
      * @param row
      * @param col
      */

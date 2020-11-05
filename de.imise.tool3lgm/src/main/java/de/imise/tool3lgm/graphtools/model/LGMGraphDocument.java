@@ -123,8 +123,9 @@ public class LGMGraphDocument extends GraphDocument {
     private final List<SimpleRedundancyAnalysis> simpleRedundancyAnalysis = new ArrayList<>();
 
     /**
-     * Wenn es bereits eine {@link SimpleRedundancyAnalysis} mit den übergebenen Pfaden gibt, wird diese
-     * entfernt. Ansonsten wird eine neue hinzugefügt. Sobald es sie gibt, wird sie auch ausgeführt.
+     * Wenn es bereits eine {@link SimpleRedundancyAnalysis} mit den übergebenen
+     * Pfaden gibt, wird diese entfernt. Ansonsten wird eine neue hinzugefügt.
+     * Sobald es sie gibt, wird sie auch ausgeführt.
      *
      * @param singleSimpleRedundancyDefinition
      */
@@ -260,8 +261,9 @@ public class LGMGraphDocument extends GraphDocument {
     }
 
     /**
-     * Liste aller Kanten, bei denen das das eine Endelement gerade kopiert werden soll und das
-     * andere nicht kopiert werden soll aber bereits im Zielmodell vorkommt
+     * Liste aller Kanten, bei denen das das eine Endelement gerade kopiert
+     * werden soll und das andere nicht kopiert werden soll aber bereits im
+     * Zielmodell vorkommt
      *
      * @param sourceElements
      * @param targetDoc
@@ -510,7 +512,8 @@ public class LGMGraphDocument extends GraphDocument {
     }
 
     /**
-     * Fuehrt selektierte ModelElemente in diesem oder in beiden Modellen zusammen
+     * Fuehrt selektierte ModelElemente in diesem oder in beiden Modellen
+     * zusammen
      *
      * @param doc2
      * @param saveInBoth

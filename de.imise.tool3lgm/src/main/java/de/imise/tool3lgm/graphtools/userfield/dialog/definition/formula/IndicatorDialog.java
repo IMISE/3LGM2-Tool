@@ -31,9 +31,11 @@ import de.imise.util.swing.component.AlphabeticalComboBox;
 import de.imise.util.swing.component.text.ExtendedTextField;
 
 /**
- * Der <code>IndicatorDialog</code> stellt eine Oberfläche zur Verfügung, mit der die Verrechnungsfunktion "Indikator" spezifiziert werden kann. Es
- * muss zuerst ein Kennzahl ausgewählt werden, die indiziert werden soll. Danach kann die Anzahl der möglichen Wertebereiche über einen
- * <code>JSpinner</code> festgelegt und die Werte in den TextFields angegeben werden.
+ * Der <code>IndicatorDialog</code> stellt eine Oberfläche zur Verfügung, mit
+ * der die Verrechnungsfunktion "Indikator" spezifiziert werden kann. Es muss
+ * zuerst ein Kennzahl ausgewählt werden, die indiziert werden soll. Danach kann
+ * die Anzahl der möglichen Wertebereiche über einen <code>JSpinner</code>
+ * festgelegt und die Werte in den TextFields angegeben werden.
  *
  * @author hboehme
  * @created 05.11.2007
@@ -56,7 +58,8 @@ public class IndicatorDialog extends JDialog implements ActionListener {
     private int newValue = 1;
 
     /**
-     * Die Liste enthält die <code>JTextField</code>- und Label-Componenten (GwInputPair) für die Eingabe der Wertebreiche. (Gw=Grenzwert)
+     * Die Liste enthält die <code>JTextField</code>- und Label-Componenten
+     * (GwInputPair) für die Eingabe der Wertebreiche. (Gw=Grenzwert)
      */
     private ArrayList<GwInputPair> gwList;
 
@@ -76,12 +79,14 @@ public class IndicatorDialog extends JDialog implements ActionListener {
     private String retVal = "";
 
     /**
-     * Diese comboBox enthält die Attribute der aktuellen Elementklasse, für die der Indikator definiert werden soll-
+     * Diese comboBox enthält die Attribute der aktuellen Elementklasse, für die
+     * der Indikator definiert werden soll-
      */
     private AlphabeticalComboBox<UserField> userFieldComboBox;
 
     /**
-     * Wenn eine Indikatordefinition bearbeitet werden soll, wird das UserField gesetzt, damit sich der Dialog die definition holen kann.
+     * Wenn eine Indikatordefinition bearbeitet werden soll, wird das UserField
+     * gesetzt, damit sich der Dialog die definition holen kann.
      */
     private final UserField userField;
 
@@ -94,9 +99,13 @@ public class IndicatorDialog extends JDialog implements ActionListener {
      * Instanz des Dialoges.
      *
      * @param owner des Dialoges
-     * @param classElement : für welches Klassenelement soll ein Indikator angelegt werden.
-     * @param userField : wenn eine schon bestehende Indikationsdefinition bearbeitet werden soll, das entsprechende UserField übergeben <br>
-     *            ansonsten null übergeben! wenn eine neue Indikatordefinitions angelegt werden soll: null übergeben!
+     * @param classElement : für welches Klassenelement soll ein Indikator
+     *            angelegt werden.
+     * @param userField : wenn eine schon bestehende Indikationsdefinition
+     *            bearbeitet werden soll, das entsprechende UserField übergeben
+     *            <br>
+     *            ansonsten null übergeben! wenn eine neue Indikatordefinitions
+     *            angelegt werden soll: null übergeben!
      */
     public IndicatorDialog(final JDialog owner, final UserField userField) {
         super(owner, UserField.getDisplayableFunctionName(UserField.ACCOUNTING_FUNCTION_INDI));
@@ -206,7 +215,8 @@ public class IndicatorDialog extends JDialog implements ActionListener {
     }
 
     /**
-     * Erstellt die Eingabefelder für die Grenzwerte in Abhäigkeit des aktuell gewählten Wert im Spinner. Wird aufgerufen, wenn dich der Wert des
+     * Erstellt die Eingabefelder für die Grenzwerte in Abhäigkeit des aktuell
+     * gewählten Wert im Spinner. Wird aufgerufen, wenn dich der Wert des
      * Spinners ändert.
      */
     private void createInputFields() {
@@ -250,7 +260,8 @@ public class IndicatorDialog extends JDialog implements ActionListener {
     }
 
     /**
-     * Wenn ein schon bestehender Indikator bearbeitet werden soll, wird der Dialog mit schon vorhandenen Indikationsbereichen gefüllt.
+     * Wenn ein schon bestehender Indikator bearbeitet werden soll, wird der
+     * Dialog mit schon vorhandenen Indikationsbereichen gefüllt.
      */
     private void fillIndiValues() {
         if (userField.hasStyle(UserField.Style.CLASSIFICATION_NUMBER_FORMULA)) {
@@ -295,7 +306,8 @@ public class IndicatorDialog extends JDialog implements ActionListener {
     }
 
     /**
-     * Syncronisiert nach dem Betätigen des Spinners das Panel, das die textfields darstellt und die Liste, die die Textfieldcomponenten (
+     * Syncronisiert nach dem Betätigen des Spinners das Panel, das die
+     * textfields darstellt und die Liste, die die Textfieldcomponenten (
      * <code>GwInputPair</code>) enthält.
      */
     private void syncronizeGwInputPairs() {
@@ -315,7 +327,8 @@ public class IndicatorDialog extends JDialog implements ActionListener {
     /**
      * zeigt den Dialog an.
      *
-     * @return Gibt als String das zu indizierende <code>UserField</code> und die Wertebereiche zurück.
+     * @return Gibt als String das zu indizierende <code>UserField</code> und
+     *         die Wertebereiche zurück.
      */
     public String showDialog() {
         setVisible(true);
@@ -349,7 +362,8 @@ public class IndicatorDialog extends JDialog implements ActionListener {
      * Prüft den Indikatordialog.
      * <ul>
      * <li>Prüft die Eingabefelder der Grenzwerte auf gültige Eingabewerte.</li>
-     * <li>Prüft die <code>AlpabeticalComboBox</code>, ob ein Element ausgewählt ist</li>
+     * <li>Prüft die <code>AlpabeticalComboBox</code>, ob ein Element ausgewählt
+     * ist</li>
      * </ul>
      *
      * @return True, wenn alle Eingabefelder korrekt belegt sind, sonst false.
@@ -379,8 +393,9 @@ public class IndicatorDialog extends JDialog implements ActionListener {
     }
 
     /**
-     * Ein Object, welches JPanel erweitert und ein <code>JLabel</code> sowie ein <code>JTexftField</code> enthält. Dieses Objekt geht in die Liste
-     * der Wertetabelle ein und kann damit dynamisch erweitert oder gekürzt werden.
+     * Ein Object, welches JPanel erweitert und ein <code>JLabel</code> sowie
+     * ein <code>JTexftField</code> enthält. Dieses Objekt geht in die Liste der
+     * Wertetabelle ein und kann damit dynamisch erweitert oder gekürzt werden.
      *
      * @author hboehme
      * @created 16.11.2007

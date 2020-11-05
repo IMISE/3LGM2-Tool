@@ -21,6 +21,7 @@ import javax.swing.JPanel;
 
 import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
 import de.imise.tool3lgm.graphtools.dialog.AbstractPropertyDialog;
+import de.imise.tool3lgm.graphtools.metamodel.CoreMetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.DoubleMeaningEdge.ConnectionState;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
@@ -40,9 +41,11 @@ import de.imise.tool3lgm.graphtools.userfield.dialog.definition.panel.OptionPane
 import de.imise.util.swing.dialog.MultipleOptionPane;
 
 /**
- * Definiert ein UserField. Ein UserField bekommt einen Namen, eine Beschreibung, eine Stylezuordnung (Separator, <code>JComboBox</code>,
- * <code>JCheckBox</code>,<code>JRadioButton</code>, <code>JTextField</code>,<code>JTextArea</code>, Kennzahl, KennzahlFormel, Verteilungsgewicht),
- * ein Zahlenformat und Einheit zugeordnet.
+ * Definiert ein UserField. Ein UserField bekommt einen Namen, eine
+ * Beschreibung, eine Stylezuordnung (Separator, <code>JComboBox</code>,
+ * <code>JCheckBox</code>,<code>JRadioButton</code>,
+ * <code>JTextField</code>,<code>JTextArea</code>, Kennzahl, KennzahlFormel,
+ * Verteilungsgewicht), ein Zahlenformat und Einheit zugeordnet.
  *
  * @author Thomas Rudert
  */
@@ -54,7 +57,8 @@ public final class UserFieldDefinitionDialog extends AbstractPropertyDialog impl
     private final List<AbstractInputPanel> panelList = new ArrayList<>();
 
     /**
-     * Rückgabewert des Dialoges, wenn er über den Abbrechen-Knopf verlassen wurde
+     * Rückgabewert des Dialoges, wenn er über den Abbrechen-Knopf verlassen
+     * wurde
      */
     public static final int CANCEL = 0;
 
@@ -64,7 +68,8 @@ public final class UserFieldDefinitionDialog extends AbstractPropertyDialog impl
     public static final int OK = 1;
 
     /**
-     * Rückgabewert des Dialoges. Er nimmt einen der Werte UserFieldDefinitionDialog.OK oder UserFieldDefinitionDialog.CANCEL an
+     * Rückgabewert des Dialoges. Er nimmt einen der Werte
+     * UserFieldDefinitionDialog.OK oder UserFieldDefinitionDialog.CANCEL an
      */
     private int retVal = -1;
 
@@ -74,7 +79,8 @@ public final class UserFieldDefinitionDialog extends AbstractPropertyDialog impl
     private final UserFieldDefinitions definitions;
 
     /**
-     * Das UserField, dessem Eigenschaften mit diesem Panel geändert werden sollen.
+     * Das UserField, dessem Eigenschaften mit diesem Panel geändert werden
+     * sollen.
      */
     private final UserField userField;
 
@@ -101,7 +107,8 @@ public final class UserFieldDefinitionDialog extends AbstractPropertyDialog impl
         setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
 
         /*
-         * schließen des Fensters abfangen (wenn nicht durch Abbrechen-Button veranlasst)
+         * schließen des Fensters abfangen (wenn nicht durch Abbrechen-Button
+         * veranlasst)
          */
         addWindowListener(new WindowAdapter() {
 
@@ -123,12 +130,12 @@ public final class UserFieldDefinitionDialog extends AbstractPropertyDialog impl
         Class<? extends UserFieldTarget> targetClass = userField.getTargetClass();
         MetaModel metaModel = definitions.getMetaModel();
         ElementsNameBuilder elementsNameBuilder = metaModel.getElementsNameBuilder();
-        if (MetaModel.isNodeType(targetClass)) {
+        if (CoreMetaModel.isNodeType(targetClass)) {
             Class<? extends Node> nodeClass = targetClass.asSubclass(Node.class);
             String displayableClassName = elementsNameBuilder.getDisplayableName(nodeClass);
             sb.append(displayableClassName);
         } else {
-            if (MetaModel.isEdgeType(targetClass)) {
+            if (CoreMetaModel.isEdgeType(targetClass)) {
                 Class<? extends Edge> edgeClass = targetClass.asSubclass(Edge.class);
                 sb.append(elementsNameBuilder.getMetaAssociationName(edgeClass, Direction.FORWARD, ConnectionState.DOUBLE, true, true));
             } else if (userField.isGlobalOrFormat()) {

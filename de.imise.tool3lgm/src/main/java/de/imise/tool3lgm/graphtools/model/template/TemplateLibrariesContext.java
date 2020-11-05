@@ -16,20 +16,24 @@ import de.imise.tool3lgm.graphtools.view.pathtree.PathTreeBranchDefinition;
 import de.imise.tool3lgm.graphtools.view.pathtree.PathTreeDefinition;
 
 /**
- * Context for the templates view. It stores a set of templates for every metamodel.
+ * Context for the templates view. It stores a set of templates for every
+ * metamodel.
  *
  * @author AXS (09.09.2019)
  */
 public class TemplateLibrariesContext {
 
     /**
-     * All metaModelContexts whose templates are loaded. If there are no templates
-     * for a metaModelContext the metaModelContext is added nevertheless to indicate
-     * that there is nothing to load.
+     * All metaModelContexts whose templates are loaded. If there are no
+     * templates for a metaModelContext the metaModelContext is added
+     * nevertheless to indicate that there is nothing to load.
      */
     private final Set<MetaModelContext> metaModelContextsWithLoadedTemplates;
 
-    /** Map with all branches for the template browser tree which should be visible if such an template will be displayed */
+    /**
+     * Map with all branches for the template browser tree which should be
+     * visible if such an template will be displayed
+     */
     private final Map<GDCollection, PathTreeDefinition> templateToTreeDefinition;
 
     /**
@@ -66,14 +70,16 @@ public class TemplateLibrariesContext {
     }
 
     /**
-     * @return Iterable f all templates loaded template <code>GDCollection</code>s
+     * @return Iterable f all templates loaded template
+     *         <code>GDCollection</code>s
      */
     public Iterable<GDCollection> iterableTemplates() {
         return templateToTreeDefinition.keySet();
     }
 
     /**
-     * Returns <code>true</code> if the given metaModelContext is contained in this template context
+     * Returns <code>true</code> if the given metaModelContext is contained in
+     * this template context
      *
      * @param metaModelContext
      * @return
@@ -91,7 +97,8 @@ public class TemplateLibrariesContext {
     }
 
     /**
-     * @return <code>true</code> if the context is empty (no templates added or all removed)
+     * @return <code>true</code> if the context is empty (no templates added or
+     *         all removed)
      */
     public boolean isEmpty() {
         return metaModelContextsWithLoadedTemplates.isEmpty();

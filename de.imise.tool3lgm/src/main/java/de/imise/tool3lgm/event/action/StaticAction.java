@@ -25,13 +25,18 @@ import de.imise.util.swing.event.ActionSource;
 import de.imise.util.swing.event.ExtendedAction;
 
 /**
- * Von {@link ExtendedAction} abgeleitete Klasse, die eine global einsetzbare Action repräsentiert.
+ * Von {@link ExtendedAction} abgeleitete Klasse, die eine global einsetzbare
+ * Action repräsentiert.
  * <p>
- * Jede Instanz dieser Klasse wird durch einen {@link ActionIdentifier} identifiziert über den alle Attribute, wie Name, Icon, etc. gesetzt werden.
+ * Jede Instanz dieser Klasse wird durch einen {@link ActionIdentifier}
+ * identifiziert über den alle Attribute, wie Name, Icon, etc. gesetzt werden.
  * <p>
- * Außerdem ist es möglich, ein Überprüfen des gerade ausgewählten {@link GraphDocument}s zu aktivieren, sowie einen initialen Selektionszustand für
- * die Anwendung bei {@link JCheckBoxMenuItem}s bzw. {@link JRadioButtonMenuItem}s zu setzen.<br>
- * Der Zugriff auf diese Attribute wird durch die Schlüssel {@link StaticAction#ENABLED_WHEN_SELECTED_DOC_NOT_NULL_KEY} bzw.
+ * Außerdem ist es möglich, ein Überprüfen des gerade ausgewählten
+ * {@link GraphDocument}s zu aktivieren, sowie einen initialen Selektionszustand
+ * für die Anwendung bei {@link JCheckBoxMenuItem}s bzw.
+ * {@link JRadioButtonMenuItem}s zu setzen.<br>
+ * Der Zugriff auf diese Attribute wird durch die Schlüssel
+ * {@link StaticAction#ENABLED_WHEN_SELECTED_DOC_NOT_NULL_KEY} bzw.
  * {@link Action#SELECTED_KEY} über {@link #getValue(String)} ermöglicht.
  *
  * @see ActionIdentifier
@@ -43,75 +48,70 @@ public abstract class StaticAction extends ExtendedAction {
     /** "..."-Suffix Actions */
     public static final String PPP = "...";
 
-    /** Schlüssel für den {@link ActionIdentifier} oder das {@link GDCommands} dieser Action */
+    /**
+     * Schlüssel für den {@link ActionIdentifier} oder das {@link GDCommands}
+     * dieser Action
+     */
     public static final String IDENTIFIER_KEY = "IdentifierKey";
 
     /** Key, für das Argument des auszuführenden Kommandos */
     public static final String ARGUMENT_KEY = "ArgumentKey";
 
     /**
-     * Konstruktor
-     * <p>
-     * Erzeugt eine durch den spezifizierten {@link ActionIdentifier} identifizierte Instanz dieser Klasse mit den dazugehörigen Attributen.
+     * Erzeugt eine durch den spezifizierten {@link ActionIdentifier}
+     * identifizierte Instanz dieser Klasse mit den dazugehörigen Attributen.
      *
-     * @param identifier
-     *            eindeutiger Identifier für diese Action
+     * @param identifier eindeutiger Identifier für diese Action
      */
     public StaticAction(final Object identifier) {
         this(identifier, null, null, null);
     }
 
     /**
-     * Konstruktor
+     * Erzeugt eine durch den spezifizierten {@link ActionIdentifier}
+     * identifizierte Instanz dieser Klasse mit den dazugehörigen Attributen.
      * <p>
-     * Erzeugt eine durch den spezifizierten {@link ActionIdentifier} identifizierte Instanz dieser Klasse mit den dazugehörigen Attributen.
-     * <p>
-     * Der Rückgabewert von {@link #isEnabled()} hängt von <code>enabledWhenSelectedDocNotNull</code>.
+     * Der Rückgabewert von {@link #isEnabled()} hängt von
+     * <code>enabledWhenSelectedDocNotNull</code>.
      *
-     * @param identifier
-     *            eindeutiger Identifier für diese Action
-     * @param textSuffix
-     *            Suffix für die Text-Property (in der Regel werden 3 Punkte angehängt, wenn die Aktion einen Dialog öffnet)
+     * @param identifier eindeutiger Identifier für diese Action
+     * @param textSuffix Suffix für die Text-Property (in der Regel werden 3
+     *            Punkte angehängt, wenn die Aktion einen Dialog öffnet)
      */
     public StaticAction(final Object identifier, final String textSuffix) {
         this(identifier, null, null, textSuffix);
     }
 
     /**
-     * Konstruktor
+     * Erzeugt eine durch den spezifizierten {@link ActionIdentifier}
+     * identifizierte Instanz dieser Klasse mit den dazugehörigen Attributen.
      * <p>
-     * Erzeugt eine durch den spezifizierten {@link ActionIdentifier} identifizierte Instanz dieser Klasse mit den dazugehörigen Attributen.
-     * <p>
-     * Der initiale Selektionszustand wird auf den spezifizierten Wert gesetz und kann bei {@link JCheckBoxMenuItem}s bzw.
+     * Der initiale Selektionszustand wird auf den spezifizierten Wert gesetz
+     * und kann bei {@link JCheckBoxMenuItem}s bzw.
      * {@link JRadioButtonMenuItem}s genutzt werden. Die Action wird
      *
-     * @param identifier
-     *            eindeutiger Identifier für diese Action
-     * @param arguments
-     *            Argumente des Kommandos
-     * @param text
-     *            Anzeigetext der Action, wenn sie auf einem Button oder MenuItem liegt
+     * @param identifier eindeutiger Identifier für diese Action
+     * @param arguments Argumente des Kommandos
+     * @param text Anzeigetext der Action, wenn sie auf einem Button oder
+     *            MenuItem liegt
      */
     public StaticAction(final Object identifier, final String arguments, final String text) {
         this(identifier, arguments, text, null);
     }
 
     /**
-     * Konstruktor
+     * Erzeugt eine durch den spezifizierten {@link ActionIdentifier}
+     * identifizierte Instanz dieser Klasse mit den dazugehörigen Attributen.
      * <p>
-     * Erzeugt eine durch den spezifizierten {@link ActionIdentifier} identifizierte Instanz dieser Klasse mit den dazugehörigen Attributen.
-     * <p>
-     * Der initiale Selektionszustand wird auf den spezifizierten Wert gesetz und kann bei {@link JCheckBoxMenuItem}s bzw.
+     * Der initiale Selektionszustand wird auf den spezifizierten Wert gesetz
+     * und kann bei {@link JCheckBoxMenuItem}s bzw.
      * {@link JRadioButtonMenuItem}s genutzt werden. Die Action wird
      *
-     * @param identifier
-     *            eindeutiger Identifier für diese Action
-     * @param arguments
-     *            Argumente des Kommandos
-     * @param text
-     *            Anzeigetext der Action, wenn sie auf einem Button oder MenuItem liegt
-     * @param textSuffix
-     *            Suffix für die Text-Property
+     * @param identifier eindeutiger Identifier für diese Action
+     * @param arguments Argumente des Kommandos
+     * @param text Anzeigetext der Action, wenn sie auf einem Button oder
+     *            MenuItem liegt
+     * @param textSuffix Suffix für die Text-Property
      * @see de.imise.util.swing.event.ExtendedAction#isOptionAction()
      */
     public StaticAction(final Object identifier, final String arguments, final String text, final String textSuffix) {
@@ -216,7 +216,8 @@ public abstract class StaticAction extends ExtendedAction {
     }
 
     /**
-     * Ersetzt den originalText der Action mit Replacement-Markern durch die übergebenen Replacements.
+     * Ersetzt den originalText der Action mit Replacement-Markern durch die
+     * übergebenen Replacements.
      *
      * @param replacements
      * @see Tool3lgmConstants#getReplacedString(String, String...)
@@ -273,14 +274,22 @@ public abstract class StaticAction extends ExtendedAction {
         }
     }
 
+    /**
+     * Diese Funktion können Unterklassen überschreiben und müssen das enabled
+     * nie wieder testen. Da bei all diesen Action die ActionEvent-Souce egal
+     * ist, wird das Event auch nicht durchgereicht
+     */
     protected void actionPerformed() {
-        //diese Funktion können Unterklassen überschreiben und müssen das enabled nie wieder testen.
-        //Da bei all diesen Action die ActionEvent-Souce egal ist, wird das Event auch nicht durchgereicht
     }
 
+    /**
+     * Diese Funktion können Unterklassen überschreiben und müssen das enabled
+     * nie wieder testen. Diese Funktion sollte von allen Unterklassen
+     * überschrieben werden, die das Event brauchen
+     *
+     * @param e
+     */
     protected void actionPerformedWithEvent(final ActionEvent e) {
-        //diese Funktion können Unterklassen überschreiben und müssen das enabled nie wieder testen.
-        //Diese Funktion sollte von allen Unterklassen überschrieben werden, die das Event brauchen
     }
 
 }

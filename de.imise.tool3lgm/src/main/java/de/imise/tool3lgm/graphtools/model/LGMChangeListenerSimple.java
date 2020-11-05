@@ -4,8 +4,10 @@ import de.imise.tool3lgm.graphtools.userfield.UserFieldTarget;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 
 /**
- * Vereinfachung des Interfaces {@link LGMChangeListener}. In jeder der Methoden wird die abstrakte Methode {@link #changed()} und
- * {@link #changed(GraphDocument)} oder {@link #changed(ElementContainer)} aufgerufen (je nach Context).
+ * Vereinfachung des Interfaces {@link LGMChangeListener}. In jeder der Methoden
+ * wird die abstrakte Methode {@link #changed()} und
+ * {@link #changed(GraphDocument)} oder {@link #changed(ElementContainer)}
+ * aufgerufen (je nach Context).
  *
  * @author AXS (Created on 21.02.2008)
  */

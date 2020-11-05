@@ -12,9 +12,10 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.HasPartEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 
 /**
- * Regeln, die statt der im Metamodell vorgegebenen Regeln angegeben werden können, was bei der
- * Konsistenzprüfung als Inkonsistenz angesehen werden soll. Hierrüber kann man die im Metamodell
- * vorgegebenen Kardinalitäten für den Konsistenzcheck ändern bzw. filtern.
+ * Regeln, die statt der im Metamodell vorgegebenen Regeln angegeben werden
+ * können, was bei der Konsistenzprüfung als Inkonsistenz angesehen werden soll.
+ * Hierrüber kann man die im Metamodell vorgegebenen Kardinalitäten für den
+ * Konsistenzcheck ändern bzw. filtern.
  *
  * @author AXS
  * @create 17.02.2011
@@ -25,15 +26,17 @@ public class ConsistencyDefinition {
     private final MetaModel metaModel;
 
     /**
-     * Definition der Kardinalitäten, die bei der Konsistenzprüfung eingealten werden sollen.
+     * Definition der Kardinalitäten, die bei der Konsistenzprüfung eingealten
+     * werden sollen.
      */
     private CardinalityDefinition cardinalityDefinition = new CardinalityDefinition();
 
     /**
-     * Mappt von einer Elemnentklasse auf alle Kanten, die bei Elementen dieser Klasse nur an
-     * solchen Elementen ohne Kindelemente vorkommen dürfen. Also alle Elemente der Keyklasse dürfen
-     * keine Edge der in der Liste befindlichen Art haben, wenn ihnen über eine Teil-Von-Beziehung
-     * ein anderes Element untergeordnet ist.
+     * Mappt von einer Elemnentklasse auf alle Kanten, die bei Elementen dieser
+     * Klasse nur an solchen Elementen ohne Kindelemente vorkommen dürfen. Also
+     * alle Elemente der Keyklasse dürfen keine Edge der in der Liste
+     * befindlichen Art haben, wenn ihnen über eine Teil-Von-Beziehung ein
+     * anderes Element untergeordnet ist.
      */
     private final Map<Class<? extends ModelElement>, Collection<Class<? extends Edge>>> elementToOnlyLeafAllowedEdgeClasses = new HashMap<>();
 
@@ -88,8 +91,8 @@ public class ConsistencyDefinition {
     }
 
     /**
-     * Setzt für diese Elementart, dass alle Kanten nur an Blättern im Teil-Von-Baum dieser Elemente
-     * hängen dürfen.
+     * Setzt für diese Elementart, dass alle Kanten nur an Blättern im
+     * Teil-Von-Baum dieser Elemente hängen dürfen.
      *
      * @param elementClass
      */

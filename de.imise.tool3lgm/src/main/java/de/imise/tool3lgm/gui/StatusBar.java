@@ -7,9 +7,9 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 /**
- * Die Statusbar der Anwendung.
- * Hier können nach Belieben bei Ereignissen Informationen ausgegeben werden.
- * 
+ * Die Statusbar der Anwendung. Hier können nach Belieben bei Ereignissen
+ * Informationen ausgegeben werden.
+ *
  * @author AXS
  */
 public class StatusBar extends JPanel {
@@ -30,13 +30,14 @@ public class StatusBar extends JPanel {
 
     /**
      * Label, welches die Speicherwerte formatiert anzeigt.
-     * 
+     *
      * @author AXS
      */
     private class MemoryLabel extends JLabel {
 
         /**
-         * <code>StringBuilder</code>, in dem immer der neue <code>String</code> zusammengebaut wird.
+         * <code>StringBuilder</code>, in dem immer der neue <code>String</code>
+         * zusammengebaut wird.
          */
         StringBuilder sb = new StringBuilder();
 
@@ -47,19 +48,21 @@ public class StatusBar extends JPanel {
         Runtime runtime = Runtime.getRuntime();
 
         /**
-         * Die Speicherwerte des Systems kommen in Bytes zurück. Bei Teilung durch
-         * diesem Faktor werden daraus Kilobytes.
+         * Die Speicherwerte des Systems kommen in Bytes zurück. Bei Teilung
+         * durch diesem Faktor werden daraus Kilobytes.
          */
         long factor = 1024l;
 
         /**
-         * Zeit in Millisekunden, die zwischen 2 Updates der Speicherwerte vergehen soll.
+         * Zeit in Millisekunden, die zwischen 2 Updates der Speicherwerte
+         * vergehen soll.
          */
         long delay = 1000;
 
         /**
-         * Erzeugt eine neue Instanz eines Labels zur Anzeige des freien Speichers
-         * und startet einen Tread, der alle nach einer Periode von <code>delay</code> Millisekunden die Anzeige aktualisiert.
+         * Erzeugt eine neue Instanz eines Labels zur Anzeige des freien
+         * Speichers und startet einen Tread, der alle nach einer Periode von
+         * <code>delay</code> Millisekunden die Anzeige aktualisiert.
          */
         public MemoryLabel() {
             super();
@@ -67,7 +70,8 @@ public class StatusBar extends JPanel {
         }
 
         /**
-         * Fragt von der Runtime die aktuellen Speicherwerte ab und setzt sie als Labeltext.
+         * Fragt von der Runtime die aktuellen Speicherwerte ab und setzt sie
+         * als Labeltext.
          */
         public void updateMemoryValues() {
             sb.setLength(0);
@@ -82,8 +86,9 @@ public class StatusBar extends JPanel {
         }
 
         /**
-         * Ein Thread, der das MemoryLabel nach dem Intervall von <code>delay</code> Millisekunden updated.
-         * 
+         * Ein Thread, der das MemoryLabel nach dem Intervall von
+         * <code>delay</code> Millisekunden updated.
+         *
          * @author AXS
          */
         private class LabelUpdater extends Thread {

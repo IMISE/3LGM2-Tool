@@ -11,9 +11,12 @@ import java.util.Set;
 import de.imise.util.htmlxml.XMLCharacterCoder;
 
 /**
- * Oberklasse für alle Klassen, denen man benutzerdefinierte Eigenschaften geben kann. Hinweis: Beim Löschen eines UserFields bleibt sein Hash und
- * Value-Paar in der HashMap. Nimmt man das Löschen zurück, indem man im <code>UserFieldDeclarationDialog</code> auf abbrechen geht, wird die beim
- * Öffnen des Dialogs erstellte Kopie der <code>UserFieldDefinitions</code> zurück gesetzt und alles ist wie vorher.
+ * Oberklasse für alle Klassen, denen man benutzerdefinierte Eigenschaften geben
+ * kann. Hinweis: Beim Löschen eines UserFields bleibt sein Hash und Value-Paar
+ * in der HashMap. Nimmt man das Löschen zurück, indem man im
+ * <code>UserFieldDeclarationDialog</code> auf abbrechen geht, wird die beim
+ * Öffnen des Dialogs erstellte Kopie der <code>UserFieldDefinitions</code>
+ * zurück gesetzt und alles ist wie vorher.
  *
  * @author AXS
  * @created 30.10.2007
@@ -21,12 +24,14 @@ import de.imise.util.htmlxml.XMLCharacterCoder;
 public class UserFieldTarget implements Cloneable {
 
     /**
-     * Mappt von den für das Modell definierten <code>UserField</code>s auf die vom Benutzer eingegebenen Werte.
+     * Mappt von den für das Modell definierten <code>UserField</code>s auf die
+     * vom Benutzer eingegebenen Werte.
      */
     private Map<UserField, String> userFieldToInputValuesMap = null;
 
     /**
-     * Mappt von den für das Modell definierten <code>UserField</code>s auf die berechneten Werte. Die Map wird nur initialisiert, wenn das
+     * Mappt von den für das Modell definierten <code>UserField</code>s auf die
+     * berechneten Werte. Die Map wird nur initialisiert, wenn das
      * <code>UserFieldTarget</code> mind. einen berechneten Wert hat.
      */
     private Map<UserField, String> userFieldToCalculatedValuesMap = null;
@@ -50,7 +55,8 @@ public class UserFieldTarget implements Cloneable {
     }
 
     /**
-     * Ersetzt alle UserFields in der Map der Eingabewerte durch die in der übergebenen Definition mit demselben HashString.
+     * Ersetzt alle UserFields in der Map der Eingabewerte durch die in der
+     * übergebenen Definition mit demselben HashString.
      *
      * @param definitions
      */
@@ -77,8 +83,10 @@ public class UserFieldTarget implements Cloneable {
     ////////////////////////////
 
     /**
-     * Liefert den vom Benutzer für das <code>UserField</code> mit dem übergebenen HashCode eingegebenen Wert. Wurde noch keiner eingegeben oder
-     * gehört das betreffende <code>UserField</code> gar nicht zu diesem <code>UserFieldTarget</code>, kommt <code>null</code> zurück.
+     * Liefert den vom Benutzer für das <code>UserField</code> mit dem
+     * übergebenen HashCode eingegebenen Wert. Wurde noch keiner eingegeben oder
+     * gehört das betreffende <code>UserField</code> gar nicht zu diesem
+     * <code>UserFieldTarget</code>, kommt <code>null</code> zurück.
      *
      * @param userField
      * @return den eingebenen Wert oder <code>UserField.EMPTY_STRING</code>
@@ -141,7 +149,8 @@ public class UserFieldTarget implements Cloneable {
     }
 
     /**
-     * Hängt an den übergebenen <code>StringBuilder</code> für jedes <code>UserField</code> einen XML-Eintrag an.
+     * Hängt an den übergebenen <code>StringBuilder</code> für jedes
+     * <code>UserField</code> einen XML-Eintrag an.
      *
      * @param sb <code>StringBuilder</code>, an den die Einträge gehängt werden
      */
@@ -159,18 +168,24 @@ public class UserFieldTarget implements Cloneable {
     ////////////////////////////
 
     /**
-     * Liefert den berechneten Wert eines <code>UserField</code>s, wenn es ihn gibt. Gibt es ihn nicht, weil er noch nicht berechnet wurde oder das
-     * userField gar nicht zu dieser Klasse gehört, kommt <code>null</code> zurück. ACHTUNG: Diese Funktion sollte nur die Klasse
-     * <code>UserField</code> aufrufen. Kein anderer! Möchte man den berechneten oder eingegebenen Wert eines <code>UserField</code>s für ein Element
-     * abfragen, sollte das immer über die Funktion <code>UserField.getValue(ModelElement)</code> geschehen, da diese ggf. die Neuberechnung von
-     * Kennzahlformeln anstößt.
+     * Liefert den berechneten Wert eines <code>UserField</code>s, wenn es ihn
+     * gibt. Gibt es ihn nicht, weil er noch nicht berechnet wurde oder das
+     * userField gar nicht zu dieser Klasse gehört, kommt <code>null</code>
+     * zurück. ACHTUNG: Diese Funktion sollte nur die Klasse
+     * <code>UserField</code> aufrufen. Kein anderer! Möchte man den berechneten
+     * oder eingegebenen Wert eines <code>UserField</code>s für ein Element
+     * abfragen, sollte das immer über die Funktion
+     * <code>UserField.getValue(ModelElement)</code> geschehen, da diese ggf.
+     * die Neuberechnung von Kennzahlformeln anstößt.
      *
-     * @param userField <code>UserField</code> für das der berechnete Wert dieses Elementes zurück gegeben werden soll
+     * @param userField <code>UserField</code> für das der berechnete Wert
+     *            dieses Elementes zurück gegeben werden soll
      * @see #_getUserFieldInputValue(String)
      * @see #_getUserFieldInputValue(UserField)
      * @see UserField#getValue(UserFieldTarget)
-     * @return den für den übergebenen HashString eines Formel-UserFields vermerkten berechenten Wert oder <code>EMPTY_STRING</code>, wenn kein Wert
-     *         vermerk ist
+     * @return den für den übergebenen HashString eines Formel-UserFields
+     *         vermerkten berechenten Wert oder <code>EMPTY_STRING</code>, wenn
+     *         kein Wert vermerk ist
      */
     protected String getCalculatedUserFieldValue(final UserField userField) {
         if (userFieldToCalculatedValuesMap == null) {
@@ -194,7 +209,8 @@ public class UserFieldTarget implements Cloneable {
     }
 
     /**
-     * Löscht alle Einträge aus der Map, die von den UserFields auf die berechneten Werte mappt.
+     * Löscht alle Einträge aus der Map, die von den UserFields auf die
+     * berechneten Werte mappt.
      */
     protected void resetCalculatedUserFieldMap() {
         if (userFieldToCalculatedValuesMap != null) {

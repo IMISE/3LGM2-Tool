@@ -46,7 +46,8 @@ public abstract class UrlSourceDataImporter<T> extends DataImporter<T> {
     }
 
     /**
-     * @param url Url zur Datenquelle. Kann <code>null</code> sein und muss dann durch einen validen Wert ersetzt werden .
+     * @param url Url zur Datenquelle. Kann <code>null</code> sein und muss dann
+     *            durch einen validen Wert ersetzt werden .
      * @return <code>true</code>, wenn der Import erfolgreich war
      */
     protected abstract boolean importData(final URL url);

@@ -23,13 +23,17 @@ import de.imise.util.BasicSplashScreen;
  */
 public class ToolSplashScreen extends BasicSplashScreen {
 
-    /** x-position of all strings displayed in the splash screen or info dialog */
+    /**
+     * x-position of all strings displayed in the splash screen or info dialog
+     */
     private static final int STRING_X = 20;
 
     /** The color of the title string "3LGM2-Tool" */
     private static final Color TITLE_COLOR = new Color(40, 127, 255);
 
-    /** Normal color of all strings written to the spalsh screen and info dialog */
+    /**
+     * Normal color of all strings written to the spalsh screen and info dialog
+     */
     private static final Color TEXT_COLOR = new Color(24, 76, 153);
 
     /** Color for links over which the mouse pointer is */

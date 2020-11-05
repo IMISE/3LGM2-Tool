@@ -60,7 +60,8 @@ public class UserFieldTreeNode extends IconifiedTreeNode {
     /**
      * Wenn das UserField ein Hyperlink ist, dann wird dieser geöffnet.
      *
-     * @return <code>true</code> wenn das UserField ein Hyperlink, sonst <code>false</code>
+     * @return <code>true</code> wenn das UserField ein Hyperlink, sonst
+     *         <code>false</code>
      */
     public boolean openHyperlink() {
         UserField userField = getUserField();

@@ -66,7 +66,9 @@ public class CellPanel extends BlockScrollableJPanel implements MouseMotionListe
             g.drawLine(0, j * height, i * width, j * height);
         }
 
-        /* linke obere Ecke und Kantenlänge des Würfels zum Markieren der Zellen */
+        /*
+         * linke obere Ecke und Kantenlänge des Würfels zum Markieren der Zellen
+         */
         int x, y, a = (width + height) / 4;
 
         int dx = (width - a) / 2;

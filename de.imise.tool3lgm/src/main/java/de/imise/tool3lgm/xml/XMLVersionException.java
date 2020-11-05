@@ -9,7 +9,7 @@ package de.imise.tool3lgm.xml;
 public class XMLVersionException extends Exception {
 
     /**
-     * 
+     *
      */
     public XMLVersionException() {
         super();

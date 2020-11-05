@@ -74,8 +74,8 @@ public class TemplateBrowserTree extends DynamicTree implements SearchResultView
     private TemplateLibrariesManager templateLibrariesManager;
 
     /**
-     * Saves the expanded paths of the tree for the respective model type.
-     * There is a separate PathTreeDefinition for each model type.
+     * Saves the expanded paths of the tree for the respective model type. There
+     * is a separate PathTreeDefinition for each model type.
      */
     private final Map<PathTreeDefinition, TreeViewData> lastTemplateTreeViewDataOfModelType = new HashMap<>();
 
@@ -197,8 +197,8 @@ public class TemplateBrowserTree extends DynamicTree implements SearchResultView
     }
 
     /**
-     * Saves the expanded paths and the position of the view in the map
-     * that contains this information for the respective model type.
+     * Saves the expanded paths and the position of the view in the map that
+     * contains this information for the respective model type.
      *
      * @param treeDefinition
      */
@@ -237,13 +237,12 @@ public class TemplateBrowserTree extends DynamicTree implements SearchResultView
     }
 
     /**
-     * The tree is not immediately resized when the expanded paths are set
-     * (in {@link #restoreExpansionState(PathTreeDefinition)}).
-     * Therefore you cannot simply set the viewPosition after setting the
-     * expansionPaths, but have to wait until the tree component is really
-     * resized.<br>
-     * The ComponentResized event always comes after the PropertyChange
-     * event in which the expanded paths are restored.
+     * The tree is not immediately resized when the expanded paths are set (in
+     * {@link #restoreExpansionState(PathTreeDefinition)}). Therefore you cannot
+     * simply set the viewPosition after setting the expansionPaths, but have to
+     * wait until the tree component is really resized.<br>
+     * The ComponentResized event always comes after the PropertyChange event in
+     * which the expanded paths are restored.
      */
     private void addViewPositionRestoreHandler() {
         final TemplateBrowserTree templateBrowserTree = this;
@@ -272,9 +271,9 @@ public class TemplateBrowserTree extends DynamicTree implements SearchResultView
     }
 
     /**
-     * Checks if the view data of a template type is still needed or if
-     * all models for this template type have been closed and the saved
-     * data can be deleted to restore the view.
+     * Checks if the view data of a template type is still needed or if all
+     * models for this template type have been closed and the saved data can be
+     * deleted to restore the view.
      *
      * @param templateLibrariesManager
      */

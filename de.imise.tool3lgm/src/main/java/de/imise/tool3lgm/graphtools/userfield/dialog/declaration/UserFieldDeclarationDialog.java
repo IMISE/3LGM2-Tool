@@ -39,18 +39,22 @@ import de.imise.util.event.DoubleClickListener;
 import de.imise.util.swing.dialog.MultipleOptionPane;
 
 /**
- * @author Thomas Rudert Dialog to create, edit, remove, import and export user-definied property-fields for model-elements
+ * @author Thomas Rudert Dialog to create, edit, remove, import and export
+ *         user-definied property-fields for model-elements
  */
 public final class UserFieldDeclarationDialog extends AbstractUserFieldDeclarationDialog implements ActionListener, ListSelectionListener {
 
-    /** Die <code>GDCollection</code> in dessen Kontext gerade gearbeitet wird. */
+    /**
+     * Die <code>GDCollection</code> in dessen Kontext gerade gearbeitet wird.
+     */
     private final GDCollection gdcoll;
 
     /** Speichert alle defnierten benutzerdefinierten Eigenschaftsfelder */
     private final UserFieldDefinitions definitions;
 
     /**
-     * Clone der Definitionen vor allen Änderungen. Wird beim Abbrechen auf diese Defnition zurück gesetzt.
+     * Clone der Definitionen vor allen Änderungen. Wird beim Abbrechen auf
+     * diese Defnition zurück gesetzt.
      */
     private final UserFieldDefinitions oldUserFieldDefionitions;
 
@@ -65,13 +69,15 @@ public final class UserFieldDeclarationDialog extends AbstractUserFieldDeclarati
     private int returnValue = 0;
 
     /**
-     * Liste mit allen UserFields, die gelöscht wurden. Wird der Dialog mit OK verlassen, werden bei allen <code>UserFieldTarget</code>s die Werte
+     * Liste mit allen UserFields, die gelöscht wurden. Wird der Dialog mit OK
+     * verlassen, werden bei allen <code>UserFieldTarget</code>s die Werte
      * dieser UserFields *unwiederbringlich* gelöscht.
      */
     private final List<UserField> removedUserFields = new ArrayList<>();
 
     /**
-     * ist true, wenn eine Warnung angezeigt werden soll, dass die Werte einer Kennzahl gelöscht werden - sonst false.
+     * ist true, wenn eine Warnung angezeigt werden soll, dass die Werte einer
+     * Kennzahl gelöscht werden - sonst false.
      */
     private static boolean showWarningForDeletingUserFields = true;
 
@@ -92,8 +98,10 @@ public final class UserFieldDeclarationDialog extends AbstractUserFieldDeclarati
      * show the dialog
      *
      * @param owner Frame which owns the dialog
-     * @param doc actual which give the context of <code>GDCollection</code> and <code>UserFieldDefinitions</code>
-     * @return -1 if cancel was selected, 0 if ok was selected but k was changed by user, 1 if user made changes and pressed ok-button
+     * @param doc actual which give the context of <code>GDCollection</code> and
+     *            <code>UserFieldDefinitions</code>
+     * @return -1 if cancel was selected, 0 if ok was selected but k was changed
+     *         by user, 1 if user made changes and pressed ok-button
      */
     public static int showDialog(final Frame owner, final GDCollection gdcoll) {
         UserFieldDeclarationDialog dialog = new UserFieldDeclarationDialog(owner, gdcoll);
@@ -121,11 +129,15 @@ public final class UserFieldDeclarationDialog extends AbstractUserFieldDeclarati
     }
 
     /**
-     * Setzt in Abhängigkeit von der ausgewählten Klasse der <code>classComboBox</code> nur die Arten von neu anlgebaren benutzerdefinierten
-     * Eigenschaftenfeldern, die man für die jeweilige Klasse anlegen kann.<br>
-     * Für Kantenklassen kann man als einziges Verteilungsgewichte anlegen. Für Kanten sind aber keine Kennzahlen oder Kennzahlformeln vorgesehen. Im
-     * Moment auch nicht für Assoziationsklassen (z. B. <code>KommBeziehung</code>), da man das dür das Umsetzen von Ansgars Kostenmodell nicht
-     * braucht.
+     * Setzt in Abhängigkeit von der ausgewählten Klasse der
+     * <code>classComboBox</code> nur die Arten von neu anlgebaren
+     * benutzerdefinierten Eigenschaftenfeldern, die man für die jeweilige
+     * Klasse anlegen kann.<br>
+     * Für Kantenklassen kann man als einziges Verteilungsgewichte anlegen. Für
+     * Kanten sind aber keine Kennzahlen oder Kennzahlformeln vorgesehen. Im
+     * Moment auch nicht für Assoziationsklassen (z. B.
+     * <code>KommBeziehung</code>), da man das dür das Umsetzen von Ansgars
+     * Kostenmodell nicht braucht.
      */
     private void updateUserFieldTypeComboBox() {
 

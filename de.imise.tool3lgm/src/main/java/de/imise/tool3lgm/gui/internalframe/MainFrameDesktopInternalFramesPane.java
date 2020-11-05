@@ -115,7 +115,8 @@ public class MainFrameDesktopInternalFramesPane extends JDesktopPane implements 
     //////////////////////////////////////////////
 
     /**
-     * @return all internal frames with the 0 position and max width of the desktop
+     * @return all internal frames with the 0 position and max width of the
+     *         desktop
      */
     private Iterable<JInternalFrame> getFramesWithMaxSize() {
         Set<JInternalFrame> framesWithMaxSize = new HashSet<>();

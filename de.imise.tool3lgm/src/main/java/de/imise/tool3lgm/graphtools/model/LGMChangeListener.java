@@ -109,14 +109,21 @@ public interface LGMChangeListener {
 
         ;
 
-        /** Enthält alle {@link LGMChangeType}s, für die die Funktion {@link #isSzenarioSpecific()} <code>false</code> liefern soll */
+        /**
+         * Enthält alle {@link LGMChangeType}s, für die die Funktion
+         * {@link #isSzenarioSpecific()} <code>false</code> liefern soll
+         */
         private static final Collection<LGMChangeType> NOT_SZENARIO_SPECIFIC_CHANGE_TYPES = ImmutableSet.of(DATA_CHANGED, ELEMENT_NAME_CHANGED, USER_FIELD_VALUE_CHANGED, SELECTION_CHANGED, ACTIVE_LAYER_CHANGED); //ACTIVE_LAYER wird in der Collection gespeichert und gilt immer für alle docs
 
         /**
-         * Liefert <code>true</code>, wenn dieses Ereignis nur für ein bestimmtes Szenario ausgelöst werden soll. Soll es für alle ausgelöst werden,
-         * dann muss das Ereignis <code>false</code> liefern. Bsp.: DATA_CHANGED oder ELEMENT_NAME_CHANGED muss in allen Szenarios durchschlagen, also
-         * muss diese Funktion <code>false</code> liefern. SZENARIO_REMOVED aber darf nur für das tatsächlich gelöschte Szenario aufgerufen werden, da
-         * sonst auch alle anderen melden, dass sie gelöscht seien und die Fenster alle zugehen.
+         * Liefert <code>true</code>, wenn dieses Ereignis nur für ein
+         * bestimmtes Szenario ausgelöst werden soll. Soll es für alle ausgelöst
+         * werden, dann muss das Ereignis <code>false</code> liefern. Bsp.:
+         * DATA_CHANGED oder ELEMENT_NAME_CHANGED muss in allen Szenarios
+         * durchschlagen, also muss diese Funktion <code>false</code> liefern.
+         * SZENARIO_REMOVED aber darf nur für das tatsächlich gelöschte Szenario
+         * aufgerufen werden, da sonst auch alle anderen melden, dass sie
+         * gelöscht seien und die Fenster alle zugehen.
          *
          * @return
          */
@@ -135,8 +142,11 @@ public interface LGMChangeListener {
          * @param listeners
          * @param source
          * @param last_elem
-         * @param deliverStatic if <code>true</code>, the SZENARIO_ADDED and SZENARIO_REMOVED will be distributet as MODEL_CHANGE_SZENARIO_ADDED and
-         *            MODEL_CHANGE_SZENARIO_REMOVED to the {@link Tool3lgmChangeListener}
+         * @param deliverStatic if <code>true</code>, the SZENARIO_ADDED and
+         *            SZENARIO_REMOVED will be distributet as
+         *            MODEL_CHANGE_SZENARIO_ADDED and
+         *            MODEL_CHANGE_SZENARIO_REMOVED to the
+         *            {@link Tool3lgmChangeListener}
          */
         protected void deliverEvent(final List<LGMChangeListener> listeners, final GraphDocument source, final ElementContainer last_elem, final boolean deliverStatic) {
             //das hier muss sein, weil es vorkommen kann, dass sich bei deliverEvent(l, source, last_elem); der aktuelle Listener aus der Listener-Liste löscht
@@ -183,7 +193,9 @@ public interface LGMChangeListener {
     /** Hier reagiert nur die GraphArea */
     public void elementGraphicsChanged(ElementContainer ec);
 
-    /** Wenn sich das Standard-GraphElementLayout geaendert hat (nur GraphArea) */
+    /**
+     * Wenn sich das Standard-GraphElementLayout geaendert hat (nur GraphArea)
+     */
     public void layoutChanged(GraphDocument source);
 
     /** Hier "sollte" sich meiner Ansicht nach der ModelBrowser erneuern */
@@ -202,13 +214,18 @@ public interface LGMChangeListener {
     public void selectionChanged(GraphDocument source);
 
     /**
-     * Aktualisiert je nach Parameter alle Components, die den Title eines Modells oder Teilmodells anzeigen. Wenn
-     * <code>!(source instanceof Szenario)</code>, dann nur die Fenster eines bestimmtem Modells () oder wenn <code>source instanceof Szenario</code>,
-     * dann nur die Fenster eines bestimmten Szenarios. Ein Szenario hat max. eine {@link GraphViewPaneFrameComponent} und dann noch beliebig viele
-     * {@link MatrixViewPaneFrameComponent}. ModelBrowser + FrameTitle + Fenster-Actions im Menü + ...
+     * Aktualisiert je nach Parameter alle Components, die den Title eines
+     * Modells oder Teilmodells anzeigen. Wenn
+     * <code>!(source instanceof Szenario)</code>, dann nur die Fenster eines
+     * bestimmtem Modells () oder wenn <code>source instanceof Szenario</code>,
+     * dann nur die Fenster eines bestimmten Szenarios. Ein Szenario hat max.
+     * eine {@link GraphViewPaneFrameComponent} und dann noch beliebig viele
+     * {@link MatrixViewPaneFrameComponent}. ModelBrowser + FrameTitle +
+     * Fenster-Actions im Menü + ...
      *
-     * @param source <code>null</code> = alle Modelle, Szenario = nur dieses Teilmodell, GraphDocument = Hauptmodell des Modells, bei dem alle
-     *            Teilmodelle betroffen sind
+     * @param source <code>null</code> = alle Modelle, Szenario = nur dieses
+     *            Teilmodell, GraphDocument = Hauptmodell des Modells, bei dem
+     *            alle Teilmodelle betroffen sind
      */
     public void modelOrSzenarioNameChanged(GraphDocument source);
 
@@ -217,14 +234,16 @@ public interface LGMChangeListener {
 
     /**
      * alle, die die Teilmodelle dieses Modells darstellen oder repräsentieren.
-     * ACHTUNG: {@link Tooll3gmChangeListener} hat auch so ein Ereignis, das aber immer gefeuert wird, wenn bei irgendeinem Modell ein Teilmodell
+     * ACHTUNG: {@link Tooll3gmChangeListener} hat auch so ein Ereignis, das
+     * aber immer gefeuert wird, wenn bei irgendeinem Modell ein Teilmodell
      * hinzugefügt wurde.
      */
     public void szenarioAdded(GraphDocument source);
 
     /**
      * alle, die die Teilmodelle dieses Modells darstellen oder repräsentieren.
-     * ACHTUNG: {@link Tooll3gmChangeListener} hat auch so ein Ereignis, das aber immer gefeuert wird, wenn bei irgendeinem Modell ein Teilmodell
+     * ACHTUNG: {@link Tooll3gmChangeListener} hat auch so ein Ereignis, das
+     * aber immer gefeuert wird, wenn bei irgendeinem Modell ein Teilmodell
      * entfernt wurde.
      */
     public void szenarioRemoved(GraphDocument source);
@@ -233,8 +252,10 @@ public interface LGMChangeListener {
      * @param listeners
      * @param source
      * @param last_elem
-     * @param deliverStatic if <code>true</code>, the SZENARIO_ADDED and SZENARIO_REMOVED will be distributet as MODEL_CHANGE_SZENARIO_ADDED and
-     *            MODEL_CHANGE_SZENARIO_REMOVED to the {@link Tool3lgmChangeListener}
+     * @param deliverStatic if <code>true</code>, the SZENARIO_ADDED and
+     *            SZENARIO_REMOVED will be distributet as
+     *            MODEL_CHANGE_SZENARIO_ADDED and MODEL_CHANGE_SZENARIO_REMOVED
+     *            to the {@link Tool3lgmChangeListener}
      */
     public static void distributeEvent(final LGMChangeType changeType, final List<LGMChangeListener> listeners, final GraphDocument source, final ElementContainer last_elem, final boolean deliverStatic) {
         if (source != null) {

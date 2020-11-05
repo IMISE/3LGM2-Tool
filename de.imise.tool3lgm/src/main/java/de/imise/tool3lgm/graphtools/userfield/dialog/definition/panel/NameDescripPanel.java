@@ -23,7 +23,8 @@ import de.imise.util.swing.component.text.ExtendedTextField;
 public class NameDescripPanel extends AbstractInputPanel {
 
     /**
-     * Das UserField, dessen Eigenschaften mit diesem Panel geändert werden sollen.
+     * Das UserField, dessen Eigenschaften mit diesem Panel geändert werden
+     * sollen.
      */
     private final UserField userField;
 

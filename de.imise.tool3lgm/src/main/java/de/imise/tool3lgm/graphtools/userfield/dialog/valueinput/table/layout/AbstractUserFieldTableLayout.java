@@ -27,32 +27,37 @@ import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.table.UserFieldT
 import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.table.cell.IUserFieldTableCell;
 
 /**
- * Klasse repräsentiert ein konkretes Layout für einen <code>UserFieldTable</code>.
+ * Klasse repräsentiert ein konkretes Layout für einen
+ * <code>UserFieldTable</code>.
  * <p>
- * Es werden Methoden bereitgestellt, die einen <code>UserFieldTable</code> in einen geeigneten Container einbetten und für diesen das gewählte Layout
+ * Es werden Methoden bereitgestellt, die einen <code>UserFieldTable</code> in
+ * einen geeigneten Container einbetten und für diesen das gewählte Layout
  * setzen.
  * <p>
- * Über statische Methoden können vorgefertigte <code>UserFieldTableLayout</code>s abgerufen werden, die auf Tabels für Kennzahlen, Verteilungsgewicht
- * oder Modelvariablen zugeschnitten sind.
+ * Über statische Methoden können vorgefertigte
+ * <code>UserFieldTableLayout</code>s abgerufen werden, die auf Tabels für
+ * Kennzahlen, Verteilungsgewicht oder Modelvariablen zugeschnitten sind.
  * <p>
- * Es wird ein RowHeader(optional) und ColumnHeader mit Tooltips gesetzt. Der RowHeader und alle Spalten lassen sich in ihrer Größe ändern.
+ * Es wird ein RowHeader(optional) und ColumnHeader mit Tooltips gesetzt. Der
+ * RowHeader und alle Spalten lassen sich in ihrer Größe ändern.
  * <p>
  * Werte im Table werden in formatierter Form dargestellt.
  * <p>
- * Komponenten, die einen solchen <code>UserFieldTable</code> darstellen, sollten nicht den Table selbst, sondern den Container verwenden.<br>
+ * Komponenten, die einen solchen <code>UserFieldTable</code> darstellen,
+ * sollten nicht den Table selbst, sondern den Container verwenden.<br>
  * Beispiel:
- * 
+ *
  * <pre>
  * public void add(Component comp, Object constraints) {
- * 
+ *
  *     if (comp instanceof UserFieldTable) {
  *         this.add(((UserFieldTable) comp).getLayoutContainer(), constraints);
- * 
+ *
  *     } else {
  *         super.add(comp, constraints);
  *     }
  * }
- * 
+ *
  * public void remove(Component comp) {
  *     if (comp instanceof UserFieldTable) {
  *         super.remove(((UserFieldTable) comp).getLayoutContainer());
@@ -60,12 +65,15 @@ import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.table.cell.IUser
  *         super.remove(comp);
  * }
  * </pre>
- * 
+ *
  * @author fstephan
  */
 public abstract class AbstractUserFieldTableLayout {
 
-    /* ****************************** Beginn: Konstanten ********************************* */
+    /*
+     * ****************************** Beginn: Konstanten
+     * *********************************
+     */
 
     /** Maximale initiale Breite des rowHeaders */
     public static final int MAX_INITIAL_ROW_HEADER_WIDTH = 200;
@@ -73,23 +81,36 @@ public abstract class AbstractUserFieldTableLayout {
     /** Minimale Breite des rowHeaders */
     public static final int MIN_ROW_HEADER_WIDTH = 50;
 
-    /* ****************************** Ende: Konstanten *********************************** */
+    /*
+     * ****************************** Ende: Konstanten
+     * ***********************************
+     */
 
-    /* ************************************ Start: Deklaration ************************************ */
+    /*
+     * ************************************ Start: Deklaration
+     * ************************************
+     */
 
     /**
      * Gibt wieder, ob der Table Zeilenköpfe enthält
      */
     protected boolean hasRowHeader = true;
 
-    /* ************************************ Ende: Deklaration ************************************ */
+    /*
+     * ************************************ Ende: Deklaration
+     * ************************************
+     */
 
-    /* ************************************ Start: Initialisierung ************************************ */
+    /*
+     * ************************************ Start: Initialisierung
+     * ************************************
+     */
 
     /**
-     * Erzeugt ein neues Layout.
-     * Falls <code>changeDeactivatedCellColor = true</code>, werden nicht editierbare Zellen grau gefärbt.
-     * 
+     * Erzeugt ein neues Layout. Falls
+     * <code>changeDeactivatedCellColor = true</code>, werden nicht editierbare
+     * Zellen grau gefärbt.
+     *
      * @param changeDeactivatedCellColor
      */
     protected AbstractUserFieldTableLayout() {
@@ -97,7 +118,7 @@ public abstract class AbstractUserFieldTableLayout {
 
     /**
      * Erzeugt einen TableHeader, der ToolTips anzeigt und gibt diesen zurück
-     * 
+     *
      * @param table
      */
     private JTableHeader createColumnHeader(final UserFieldTable table) {
@@ -128,8 +149,9 @@ public abstract class AbstractUserFieldTableLayout {
     }
 
     /**
-     * Setzt für jede Zelle des Tables ein <code>IUserFieldTableCell</code> als Editor und Renderer und legt die Zeilenhöhe fest.
-     * 
+     * Setzt für jede Zelle des Tables ein <code>IUserFieldTableCell</code> als
+     * Editor und Renderer und legt die Zeilenhöhe fest.
+     *
      * @param table
      */
     private void setTableCells(final UserFieldTable table) {
@@ -138,8 +160,9 @@ public abstract class AbstractUserFieldTableLayout {
     }
 
     /**
-     * <code>RowHeaderRenderer</code> wird als Renderer für die Zeilenköpfe gesetzt
-     * 
+     * <code>RowHeaderRenderer</code> wird als Renderer für die Zeilenköpfe
+     * gesetzt
+     *
      * @param table
      */
     private void setRowHeader(final UserFieldTable table, final JScrollPane layoutContainer) {
@@ -159,9 +182,12 @@ public abstract class AbstractUserFieldTableLayout {
     }
 
     /**
-     * Berechnet die durchschnittliche Breite der Zellen des rowHeaders. Liegt der errechnete Wert oberhalb der maximalen Breite, wird
-     * {@link #MAX_INITIAL_ROW_HEADER_WIDTH} genommen, bzw. {@link #MIN_ROW_HEADER_WIDTH}, falls die minimale Breite unterschritten wird.
-     * 
+     * Berechnet die durchschnittliche Breite der Zellen des rowHeaders. Liegt
+     * der errechnete Wert oberhalb der maximalen Breite, wird
+     * {@link #MAX_INITIAL_ROW_HEADER_WIDTH} genommen, bzw.
+     * {@link #MIN_ROW_HEADER_WIDTH}, falls die minimale Breite unterschritten
+     * wird.
+     *
      * @return
      */
     private static final int calculateRowHeaderWidth(final JList header) {
@@ -186,7 +212,7 @@ public abstract class AbstractUserFieldTableLayout {
 
     /**
      * Aktiviert die Änderbarkeit der RowHeader-Breite
-     * 
+     *
      * @param layoutContainer
      */
     private void initResizableRowHeader(final JScrollPane layoutContainer) {
@@ -209,7 +235,7 @@ public abstract class AbstractUserFieldTableLayout {
 
     /**
      * Entfernt den alten <code>RowHeaderResizeListener</code>
-     * 
+     *
      * @param layoutContainer
      */
     private static final void removeRowHeaderResizeListener(final JScrollPane layoutContainer) {
@@ -229,19 +255,30 @@ public abstract class AbstractUserFieldTableLayout {
         }
     }
 
-    /* ************************************ Ende: Initialisierung ************************************ */
+    /*
+     * ************************************ Ende: Initialisierung
+     * ************************************
+     */
 
-    /* ************************************ Start: funktionale Methoden ************************************ */
+    /*
+     * ************************************ Start: funktionale Methoden
+     * ************************************
+     */
 
     /**
      * Aktualisiert die Zellen, sowie Row- und ColumnHeader des Tables.
      * <p>
-     * Diese Methode ist bei der Initialisierung des <code>table</code>s und nach jedem Neusetzen des dazugehörigen TableModels auszuführen.
+     * Diese Methode ist bei der Initialisierung des <code>table</code>s und
+     * nach jedem Neusetzen des dazugehörigen TableModels auszuführen.
      * <p>
-     * Im Falle, dass der <code>table</code> noch nicht in seinen <code>layoutContainer</code> eingebettet wurde, wird dies hier noch erledigt.
+     * Im Falle, dass der <code>table</code> noch nicht in seinen
+     * <code>layoutContainer</code> eingebettet wurde, wird dies hier noch
+     * erledigt.
      * <p>
-     * Im Falle, dass der <code>table</code> noch keinen <code>layoutContainer</code> besitzt, wird eine {@link IllegalArgumentException} geworfen.
-     * 
+     * Im Falle, dass der <code>table</code> noch keinen
+     * <code>layoutContainer</code> besitzt, wird eine
+     * {@link IllegalArgumentException} geworfen.
+     *
      * @param table
      * @throws IllegalArgumentException
      */
@@ -283,9 +320,10 @@ public abstract class AbstractUserFieldTableLayout {
     /**
      * Erzeugt ein {@link JScrollPane} und gibt dieses wieder.
      * <p>
-     * Zu Darstellung des Tables, muss dieses ScrollPane verwendet werden, nachdem der Table durch {@link #embed(UserFieldTable, JScrollPane)}
+     * Zu Darstellung des Tables, muss dieses ScrollPane verwendet werden,
+     * nachdem der Table durch {@link #embed(UserFieldTable, JScrollPane)}
      * eingebettet wurde. Andernfalls erfolgt keine Darstellung des RowHeaders.
-     * 
+     *
      * @return
      */
     public JScrollPane createLayoutContainer() {
@@ -294,13 +332,17 @@ public abstract class AbstractUserFieldTableLayout {
 
     /**
      * Bettet den <code>table</code> in <code>layoutContainer</code> ein.<br>
-     * Um die grafische Darstellung zu aktualisieren, ist möglicherweise noch ein Aufruf von {@link #update(UserFieldTable)} für den
-     * <code>table</code> notwendig.
+     * Um die grafische Darstellung zu aktualisieren, ist möglicherweise noch
+     * ein Aufruf von {@link #update(UserFieldTable)} für den <code>table</code>
+     * notwendig.
      * <p>
-     * Falls das Einbetten gelingt, wird <code>true</code> zurückgegeben, sonst <code>false</code>.
-     * 
-     * @param table Table, der in den <code>layoutContainer</code> einzubetten ist
-     * @param layoutContainer Scrollpane, in das der <code>table</code> eingebettet werden soll
+     * Falls das Einbetten gelingt, wird <code>true</code> zurückgegeben, sonst
+     * <code>false</code>.
+     *
+     * @param table Table, der in den <code>layoutContainer</code> einzubetten
+     *            ist
+     * @param layoutContainer Scrollpane, in das der <code>table</code>
+     *            eingebettet werden soll
      */
     public boolean embed(final UserFieldTable table, final JScrollPane layoutContainer) {
         if (table == null || layoutContainer == null) {
@@ -312,7 +354,7 @@ public abstract class AbstractUserFieldTableLayout {
 
     /**
      * Aktualisiert alle Zellen des <code>table</code>s
-     * 
+     *
      * @param table
      */
     public void updateTableCells(final UserFieldTable table) {
@@ -327,9 +369,10 @@ public abstract class AbstractUserFieldTableLayout {
     public abstract IUserFieldTableCell[][] getTableCells(final UserFieldTable table);
 
     /**
-     * Deaktiviert die formatierte Darstellung der Werte, das Resizing des RowHeaders, die Tooltips des RowHeaders und die Farbänderung nicht
+     * Deaktiviert die formatierte Darstellung der Werte, das Resizing des
+     * RowHeaders, die Tooltips des RowHeaders und die Farbänderung nicht
      * editierbarer Zellen
-     * 
+     *
      * @param table
      */
     public void removeFrom(final UserFieldTable table) {
@@ -343,14 +386,21 @@ public abstract class AbstractUserFieldTableLayout {
         }
     }
 
-    /* ************************************ Ende: funktionale Methoden ************************************ */
+    /*
+     * ************************************ Ende: funktionale Methoden
+     * ************************************
+     */
 
-    /* ************************************ Start: Unterklassen ************************************ */
+    /*
+     * ************************************ Start: Unterklassen
+     * ************************************
+     */
 
     /**
-     * Der Renderer für die JList, die als RowHeader angezeigt wird. Sie wird im Großen und Ganzen so dargestellt, wie der ColumnHeader. Außerdem wird
-     * der Titel jeder Zeile als ToolTipText angezeigt.
-     * 
+     * Der Renderer für die JList, die als RowHeader angezeigt wird. Sie wird im
+     * Großen und Ganzen so dargestellt, wie der ColumnHeader. Außerdem wird der
+     * Titel jeder Zeile als ToolTipText angezeigt.
+     *
      * @author AXS
      */
     private class RowHeaderRenderer extends JLabel implements ListCellRenderer {
@@ -362,7 +412,7 @@ public abstract class AbstractUserFieldTableLayout {
 
         /**
          * Konstruktor
-         * 
+         *
          * @param table Table, der diesen RowHeader besitzt
          */
         public RowHeaderRenderer(final UserFieldTable table) {
@@ -396,14 +446,15 @@ public abstract class AbstractUserFieldTableLayout {
 
     /**
      * Listener, der das Resizing des rowHeaders ermöglicht und überwacht
-     * 
+     *
      * @author fstephan
      */
     private class RowHeaderResizeListener extends MouseAdapter {
 
         /**
          * MousePointer - Verschiebung <br>
-         * Sorgt dafür, dass beim Eintreten eines Resize-Ereignisses der rowHeader das source-Objekt der MouseEvents ist.
+         * Sorgt dafür, dass beim Eintreten eines Resize-Ereignisses der
+         * rowHeader das source-Objekt der MouseEvents ist.
          */
         private static final int MOUSE_POINT_X_PITCH = 1;
 
@@ -418,19 +469,22 @@ public abstract class AbstractUserFieldTableLayout {
 
         /**
          * der MouseCursor <br>
-         * ändert sich, wenn er sich auf dem Rand zwischen RowHeader und Table befindet
+         * ändert sich, wenn er sich auf dem Rand zwischen RowHeader und Table
+         * befindet
          */
         private Cursor cursor;
 
         /**
-         * Gibt wieder, ob sich der {@link #cursor} auf dem Rand zwischen Table und RowHeader befindet.
+         * Gibt wieder, ob sich der {@link #cursor} auf dem Rand zwischen Table
+         * und RowHeader befindet.
          */
         private boolean canResize = false;
 
         /**
          * Konstruktor
-         * 
-         * @param sp {@link ScrollPane}, das den {@link #header} als <code>RowHeaderViewportView</code> beinhaltet
+         *
+         * @param sp {@link ScrollPane}, das den {@link #header} als
+         *            <code>RowHeaderViewportView</code> beinhaltet
          */
         public RowHeaderResizeListener(final JScrollPane sp) {
             pane = sp;
@@ -438,9 +492,10 @@ public abstract class AbstractUserFieldTableLayout {
         }
 
         /**
-         * Verändert den Cursor-Typ in Abhängigkeit seiner Position. Ist er über dem Rand zwischen rowHeader und table, wechselt er in die
+         * Verändert den Cursor-Typ in Abhängigkeit seiner Position. Ist er über
+         * dem Rand zwischen rowHeader und table, wechselt er in die
          * resize-Dartsellung, sonst wir der Standard-Cursor angezeigt.
-         * 
+         *
          * @param e
          */
         @Override
@@ -470,9 +525,10 @@ public abstract class AbstractUserFieldTableLayout {
         }
 
         /**
-         * Führt den resize aus. Unterbindet das Verkleinern, falls die minimale Breite unterschritten wird. Unterbindet das Vergrößern, falls die
+         * Führt den resize aus. Unterbindet das Verkleinern, falls die minimale
+         * Breite unterschritten wird. Unterbindet das Vergrößern, falls die
          * Breite des rowHeaders fast die Fensterbreite erreicht.
-         * 
+         *
          * @param e
          */
         @Override
@@ -487,7 +543,8 @@ public abstract class AbstractUserFieldTableLayout {
             int mouseX = e.getX() + MOUSE_POINT_X_PITCH;
 
             /*
-             * Verhindert, dass der rowHeader seine minimale Größe unterschreiten bzw. die Fenstergröße überschreiten kann
+             * Verhindert, dass der rowHeader seine minimale Größe
+             * unterschreiten bzw. die Fenstergröße überschreiten kann
              */
             JViewport p = pane.getViewport();
             if (mouseX <= header.getMinimumSize().width || mouseX >= p.getWidth() + p.getX() - 10) {
@@ -507,6 +564,9 @@ public abstract class AbstractUserFieldTableLayout {
 
     }
 
-    /* ************************************ Ende: Unterklassen ************************************ */
+    /*
+     * ************************************ Ende: Unterklassen
+     * ************************************
+     */
 
 }

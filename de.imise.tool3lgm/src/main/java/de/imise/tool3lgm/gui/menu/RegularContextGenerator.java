@@ -64,6 +64,7 @@ import de.imise.tool3lgm.event.ActionLibrary;
 import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
 import de.imise.tool3lgm.graphtools.analyse.context.AbstractAnalysis;
 import de.imise.tool3lgm.graphtools.analyse.context.AnalysesRepository;
+import de.imise.tool3lgm.graphtools.metamodel.CoreMetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Bendpoint;
 import de.imise.tool3lgm.graphtools.metamodel.elements.CompositionEdge;
@@ -94,8 +95,8 @@ import de.imise.util.NamedObjectContainer;
 import de.imise.util.pair.Pair;
 
 /**
- * This is the context generator for a regular model. It is used in the ModelBrowser,
- * the graph and the dialogs.
+ * This is the context generator for a regular model. It is used in the
+ * ModelBrowser, the graph and the dialogs.
  *
  * @author N.N., Thomas, AXS
  */
@@ -176,14 +177,17 @@ public class RegularContextGenerator extends ElementSelectionContextGenerator im
      */
     private boolean resizing = false;
 
-    /** Element, das den Kontext vorgibt, also das Element auf das sich die Aktionen beziehen. */
+    /**
+     * Element, das den Kontext vorgibt, also das Element auf das sich die
+     * Aktionen beziehen.
+     */
     private ElementContainer ec = null;
 
     /**
      * Konstruktor, den Tool3lgm am Anfang aufruft. Der ContextListener und das
      * GrapDocument sind erstmal egal, da sie beim ersten aktivieren über
-     * changeContext(GraphDocument) eines Frames auf korrekte Werte
-     * gesetzt werden.
+     * changeContext(GraphDocument) eines Frames auf korrekte Werte gesetzt
+     * werden.
      */
     public RegularContextGenerator() {
         init();
@@ -293,7 +297,7 @@ public class RegularContextGenerator extends ElementSelectionContextGenerator im
         for (Pair<Class<? extends CompositionEdge>, Class<? extends ModelElement>> slavePair : slavePairs) {
             Class<? extends CompositionEdge> compositionClass = slavePair.getFirstItem();
             JMenuItem item = getItem(slavePair.getSecondItem().getSimpleName(), MODEL_ACTION_CREATE_ADDICTED, doc.getHashString() + " " + me.getHashString() + " " + compositionClass.getSimpleName() + " " + slavePair.getSecondItem().getSimpleName());
-            item.setEnabled(me.countConnections(compositionClass) < MetaModel.getMaxMasterToSlaveCardinality(compositionClass));
+            item.setEnabled(me.countConnections(compositionClass) < CoreMetaModel.getMaxMasterToSlaveCardinality(compositionClass));
             items.add(item);
         }
         Alphabetical.sort(items);
@@ -535,12 +539,12 @@ public class RegularContextGenerator extends ElementSelectionContextGenerator im
                             boolean addLinkMenuEntry = false;
 
                             //prüfen, ob die Kante in der aktuellen Richtung hinzugefügt werden soll
-                            if (MetaModel.isConnecting(edgeClass, lastSelectedClass, me2Class, edgeDirection)) {
+                            if (CoreMetaModel.isConnecting(edgeClass, lastSelectedClass, me2Class, edgeDirection)) {
                                 if (edgeDirection == Direction.FORWARD) {
                                     addLinkMenuEntry = true;
                                 } else {
                                     // Doppeldeutige Kanten mit identischer Start- und Endklasse brauchen nur 1x angeboten werden -> Rückrichtung nur, wenn die Klassen verschieden sind
-                                    if (MetaModel.isDoubleMeaningEdge(edgeClass)) {
+                                    if (CoreMetaModel.isDoubleMeaningEdge(edgeClass)) {
                                         if (Edge.getStartClass(edgeClass) != Edge.getEndClass(edgeClass)) {
                                             addLinkMenuEntry = true;
                                         }
@@ -556,7 +560,7 @@ public class RegularContextGenerator extends ElementSelectionContextGenerator im
                             if (addLinkMenuEntry) {
                                 ConnectionState[] connectionStates;
                                 //bei Kanten mit doppelter Bedeutung auch jeden ConnectionState hinzufügen (also 2 EInträge pro Kante generieren)
-                                if (MetaModel.isDoubleMeaningEdge(edgeClass)) {
+                                if (CoreMetaModel.isDoubleMeaningEdge(edgeClass)) {
                                     connectionStates = new ConnectionState[2];
                                     connectionStates[0] = ConnectionState.FORWARD;
                                     connectionStates[1] = ConnectionState.BACKWARD;
@@ -583,7 +587,7 @@ public class RegularContextGenerator extends ElementSelectionContextGenerator im
                                             connectable = true;
                                         } else {
                                             //bei PartOfEdges darf immer nur einer der beiden disconnect-Einträge aktiv sein
-                                            if (MetaModel.isHasPartEdge(edgeClass)) {
+                                            if (CoreMetaModel.isHasPartEdge(edgeClass)) {
                                                 if (edgeDirection == HasPartEdge.PARENT_TO_PART_DIRECTION) {
                                                     disconnectable = lastSelected.isDirectParentOf(me2);
                                                 } else {
@@ -1680,12 +1684,8 @@ public class RegularContextGenerator extends ElementSelectionContextGenerator im
 
     // Klicks mit rechts
     /*
-     * private void right_nodehand_nodes() {
-     * }
-     * private void right_nodehand_edges() {
-     * }
-     * private void right_nodehand_multi() {
-     * }
+     * private void right_nodehand_nodes() { } private void
+     * right_nodehand_edges() { } private void right_nodehand_multi() { }
      */
     // Klicks mit links
 
@@ -1885,7 +1885,8 @@ public class RegularContextGenerator extends ElementSelectionContextGenerator im
     }
 
     /**
-     * Liefert eine Kanteart zwischen den beiden übergebenen Elementarte zurück, wenn es mind. eine gibt. Gibt es mehrere, wird der Benutzer mit einem
+     * Liefert eine Kanteart zwischen den beiden übergebenen Elementarte zurück,
+     * wenn es mind. eine gibt. Gibt es mehrere, wird der Benutzer mit einem
      * Dialog vor die Auswahl gestellt.
      *
      * @param metaModel

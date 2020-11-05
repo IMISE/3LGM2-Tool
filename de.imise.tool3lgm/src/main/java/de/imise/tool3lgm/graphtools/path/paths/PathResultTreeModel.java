@@ -28,21 +28,27 @@ import de.imise.tool3lgm.graphtools.path.paths.PathResultTreeNode.NodeType;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 
 /**
- * Ein Model, das je nach übergebenem MetaPfad und Startelementen einen Baum aufbaut, in dem man ausgehend von den Startelementen alle
- * Instanzen der Pfade finden kann, die dem übergebenen MetaPfad entsprechen.
- * Der Baum hat dabei immer denselben Aufbau:
- * Ebene 0: Der Root-Knoten. Er hat keinerlei Bedeutung
- * Ebene 1: Für jedes übergebene Startelement, für das mind. ein Gesamtpfad existiert, wird in Ebene 1 ein PathResultTreeNode angelegt.
- * Der interne Pfad dieses Kotens hat keinen hinterlegten MetaPfad, die Kante ist null und Start- und Endelement sind immer das
- * Startelement, von welchem dieser Pfad los geht.
- * Ebene 2: PathResultTreeNode, der jeweils einen ersten Pfadschritt ausgehend von einem in Ebene 1 repräsentierten Startelement beschreibt.
- * Ebene 3+: ausgehend vom Endelement des darüber liegenden Knotens ein weiterer Pfadschritt
- * Ebene n: Blätter des Baumes enthalten alle Ergebniselemente, die über den durch den MetaPath festgelegten Pfad ausgehend von den
- * Startelementen erreichbar sind.
- * Zusätzlich wird jeder PathResultTreeNode mit der Information markiert, ob er ein Pfadschritt innerhalb eines MetaSequencePaths ist, der
- * selbst wieder in einem MetaSequncePath enthalten ist (Varibale isSubStep im PathResultTreeNode). Nur bei den äußersten MetaSequencePaths
- * ist diese Variable <code>false</code> und bei allen darin enthaltenen MetaSequencePaths und ihren enthaltenen SubPfaden ist diese Variable
- * <code>true</code>. Diese Information kann man zum Aufbau von anzuzeigenden Bäumen nutzen um SubPfade nicht mit anzuzeigen.
+ * Ein Model, das je nach übergebenem MetaPfad und Startelementen einen Baum
+ * aufbaut, in dem man ausgehend von den Startelementen alle Instanzen der Pfade
+ * finden kann, die dem übergebenen MetaPfad entsprechen. Der Baum hat dabei
+ * immer denselben Aufbau: Ebene 0: Der Root-Knoten. Er hat keinerlei Bedeutung
+ * Ebene 1: Für jedes übergebene Startelement, für das mind. ein Gesamtpfad
+ * existiert, wird in Ebene 1 ein PathResultTreeNode angelegt. Der interne Pfad
+ * dieses Kotens hat keinen hinterlegten MetaPfad, die Kante ist null und Start-
+ * und Endelement sind immer das Startelement, von welchem dieser Pfad los geht.
+ * Ebene 2: PathResultTreeNode, der jeweils einen ersten Pfadschritt ausgehend
+ * von einem in Ebene 1 repräsentierten Startelement beschreibt. Ebene 3+:
+ * ausgehend vom Endelement des darüber liegenden Knotens ein weiterer
+ * Pfadschritt Ebene n: Blätter des Baumes enthalten alle Ergebniselemente, die
+ * über den durch den MetaPath festgelegten Pfad ausgehend von den
+ * Startelementen erreichbar sind. Zusätzlich wird jeder PathResultTreeNode mit
+ * der Information markiert, ob er ein Pfadschritt innerhalb eines
+ * MetaSequencePaths ist, der selbst wieder in einem MetaSequncePath enthalten
+ * ist (Varibale isSubStep im PathResultTreeNode). Nur bei den äußersten
+ * MetaSequencePaths ist diese Variable <code>false</code> und bei allen darin
+ * enthaltenen MetaSequencePaths und ihren enthaltenen SubPfaden ist diese
+ * Variable <code>true</code>. Diese Information kann man zum Aufbau von
+ * anzuzeigenden Bäumen nutzen um SubPfade nicht mit anzuzeigen.
  *
  * @author AXS
  * @create 05.11.2010
@@ -50,40 +56,44 @@ import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 public class PathResultTreeModel extends DefaultTreeModel {
 
     /**
-     * Der Gesamt-MetaPath, über den Pfadinstanzen von den Startelementen gesucht werden.
+     * Der Gesamt-MetaPath, über den Pfadinstanzen von den Startelementen
+     * gesucht werden.
      */
     private final MetaPath metaPath;
 
     /**
-     * Bei allen {@link ParallelMetaPath} kann man mehrere Startsets brauchen (für jeden der
-     * parallelen Metapfade eins). Bei den {@link ElementaryMetaPath} und {@link SequenceMetaPath} steht immer nur eine Collection an Index 0 in der
-     * Liste.
+     * Bei allen {@link ParallelMetaPath} kann man mehrere Startsets brauchen
+     * (für jeden der parallelen Metapfade eins). Bei den
+     * {@link ElementaryMetaPath} und {@link SequenceMetaPath} steht immer nur
+     * eine Collection an Index 0 in der Liste.
      */
     private List<Collection<ModelElement>> startElementsCollections = new ArrayList<>();
 
     /**
-     * Alle Blattknoten, die ausgehend von einem Startknoten im Ergebnisbaum vorhanden sind, die nicht
-     * den kompletten MetaPath darstellen. Hier können nur Knoten enthalten sein, falls <code>keepIncompleteBranches == true</code>. Alle anderen
-     * Blattknoten, die einen kompletten
-     * Pfad beschreiben sind immer in {@link #completePathLeafs}
+     * Alle Blattknoten, die ausgehend von einem Startknoten im Ergebnisbaum
+     * vorhanden sind, die nicht den kompletten MetaPath darstellen. Hier können
+     * nur Knoten enthalten sein, falls
+     * <code>keepIncompleteBranches == true</code>. Alle anderen Blattknoten,
+     * die einen kompletten Pfad beschreiben sind immer in
+     * {@link #completePathLeafs}
      */
     private final List<PathResultTreeNode> incompletePathLeafs = new ArrayList<>();
 
     /**
-     * Alle Blattknoten, die ausgehend von einem Startknoten im Ergebnisbaum und einen gesamten Pfad
-     * repräsentieren.
+     * Alle Blattknoten, die ausgehend von einem Startknoten im Ergebnisbaum und
+     * einen gesamten Pfad repräsentieren.
      */
     private final List<PathResultTreeNode> completePathLeafs = new ArrayList<>();
 
     /**
-     * Wenn <code>false</code> werden Zweige im Ergebnisbaum gelöscht, die nicht den gesamten Metapfad
-     * darstellen.
+     * Wenn <code>false</code> werden Zweige im Ergebnisbaum gelöscht, die nicht
+     * den gesamten Metapfad darstellen.
      */
     private boolean keepIncompleteBranches = false;
 
     /**
-     * Wenn <code>true</code> werden alle Branches im Baum gelassen die gefunden werden (auch doppelte),
-     * bei <code>false</code> werden gleiche entfernt
+     * Wenn <code>true</code> werden alle Branches im Baum gelassen die gefunden
+     * werden (auch doppelte), bei <code>false</code> werden gleiche entfernt
      */
     private boolean keepMultipleEqualsBranches = false;
 
@@ -243,7 +253,8 @@ public class PathResultTreeModel extends DefaultTreeModel {
     }
 
     /**
-     * Setzt das übergebene Element als StartElement für die suche der Verbindungen über den gesetzten Pfad
+     * Setzt das übergebene Element als StartElement für die suche der
+     * Verbindungen über den gesetzten Pfad
      *
      * @param startElement
      */
@@ -254,7 +265,8 @@ public class PathResultTreeModel extends DefaultTreeModel {
     }
 
     /**
-     * Liefert alle Knoten, die Blätter dieses Baumes sind und die Endelemente des gesamten Pfades enthalten
+     * Liefert alle Knoten, die Blätter dieses Baumes sind und die Endelemente
+     * des gesamten Pfades enthalten
      *
      * @return the completePathLeafs
      */
@@ -263,8 +275,9 @@ public class PathResultTreeModel extends DefaultTreeModel {
     }
 
     /**
-     * Liefert alle Knoten, die Blätter dieses Baumes sind, aber nur Zwischenelemente des gesamten Pfades sind,
-     * da sie nicht weiter mit den gesuchten Endelementen verbuden sind.
+     * Liefert alle Knoten, die Blätter dieses Baumes sind, aber nur
+     * Zwischenelemente des gesamten Pfades sind, da sie nicht weiter mit den
+     * gesuchten Endelementen verbuden sind.
      *
      * @return the incompletePathLeafs
      */
@@ -273,11 +286,12 @@ public class PathResultTreeModel extends DefaultTreeModel {
     }
 
     /**
-     * Liefert alle mit dem übergebenen Element über diesen MetaPfad verbundenen Elemente.
+     * Liefert alle mit dem übergebenen Element über diesen MetaPfad verbundenen
+     * Elemente.
      *
-     * @param multiple
-     *            Wenn <code>true</code> sind mehrfach verbundene Element auch mehrfach in der Ergebnisliste, bei <code>false</code> ist jedes Element
-     *            nur einmal enthalten.
+     * @param multiple Wenn <code>true</code> sind mehrfach verbundene Element
+     *            auch mehrfach in der Ergebnisliste, bei <code>false</code> ist
+     *            jedes Element nur einmal enthalten.
      * @return
      */
     public final List<ModelElement> getConnectedElements(final boolean multiple) {
@@ -285,13 +299,15 @@ public class PathResultTreeModel extends DefaultTreeModel {
     }
 
     /**
-     * Liefert alle mit dem übergebenen Element über diesen MetaPfad verbundenen Elemente.
+     * Liefert alle mit dem übergebenen Element über diesen MetaPfad verbundenen
+     * Elemente.
      *
-     * @param multiple
-     *            Wenn <code>true</code> sind mehrfach verbundene Element auch mehrfach in der Ergebnisliste, bei <code>false</code> ist jedes Element
-     *            nur einmal enthalten.
-     * @param forlast wenn <code>true</code>, werden nicht die letzten Elemente des Pfades zurück gegeben, sondern die vorletzten. Ist der Pfad nur 1
-     *            lang, kommem die Ausgangselemente zurück
+     * @param multiple Wenn <code>true</code> sind mehrfach verbundene Element
+     *            auch mehrfach in der Ergebnisliste, bei <code>false</code> ist
+     *            jedes Element nur einmal enthalten.
+     * @param forlast wenn <code>true</code>, werden nicht die letzten Elemente
+     *            des Pfades zurück gegeben, sondern die vorletzten. Ist der
+     *            Pfad nur 1 lang, kommem die Ausgangselemente zurück
      * @return
      */
     public final List<ModelElement> getConnectedElements(final boolean multiple, final boolean forlast) {
@@ -306,7 +322,8 @@ public class PathResultTreeModel extends DefaultTreeModel {
     }
 
     /**
-     * Liefert alle mit dem übergebenen Element über diesen MetaPfad verbundenen Elemente.
+     * Liefert alle mit dem übergebenen Element über diesen MetaPfad verbundenen
+     * Elemente.
      *
      * @return
      */
@@ -315,8 +332,9 @@ public class PathResultTreeModel extends DefaultTreeModel {
     }
 
     /**
-     * Liefert alle Parent-Elemente der mit dem übergebenen Element über diesen MetaPfad verbundenen Elemente. Besteht der Pfad nur aus einer Kante,
-     * so kommt hier das Ausgangselement zurück.
+     * Liefert alle Parent-Elemente der mit dem übergebenen Element über diesen
+     * MetaPfad verbundenen Elemente. Besteht der Pfad nur aus einer Kante, so
+     * kommt hier das Ausgangselement zurück.
      *
      * @return
      */
@@ -325,11 +343,12 @@ public class PathResultTreeModel extends DefaultTreeModel {
     }
 
     /**
-     * Liefert alle mit dem übergebenen Element über diesen MetaPfad verbundenen Elemente.
+     * Liefert alle mit dem übergebenen Element über diesen MetaPfad verbundenen
+     * Elemente.
      *
-     * @param multiple
-     *            Wenn <code>true</code> sind mehrfach verbundene Element auch mehrfach in der Ergebnisliste, bei <code>false</code> ist jedes Element
-     *            nur einmal enthalten.
+     * @param multiple Wenn <code>true</code> sind mehrfach verbundene Element
+     *            auch mehrfach in der Ergebnisliste, bei <code>false</code> ist
+     *            jedes Element nur einmal enthalten.
      * @return
      */
     public final List<ElementContainer> getConnectedContainer(final GraphDocument doc) {
@@ -337,14 +356,14 @@ public class PathResultTreeModel extends DefaultTreeModel {
     }
 
     /**
-     * Liefert alle mit dem übergebenen Element über diesen MetaPfad verbundenen Elemente.
+     * Liefert alle mit dem übergebenen Element über diesen MetaPfad verbundenen
+     * Elemente.
      *
-     * @param doc
-     *            GraphDocument, in dem die Container gesucht werden
-     * @param forlast
-     *            wenn <code>true</code> werden nicht die letzten, sondern die vorletzten im
-     *            Pfad zurück gegeben. Bei Pfaden, die nur aus einer Edge bestehen ist das das
-     *            Ausgangselement des Pfades, also das ModelElement des Dialoges.
+     * @param doc GraphDocument, in dem die Container gesucht werden
+     * @param forlast wenn <code>true</code> werden nicht die letzten, sondern
+     *            die vorletzten im Pfad zurück gegeben. Bei Pfaden, die nur aus
+     *            einer Edge bestehen ist das das Ausgangselement des Pfades,
+     *            also das ModelElement des Dialoges.
      * @return
      */
     public final List<ElementContainer> getConnectedContainer(final GraphDocument doc, final boolean forlast) {
@@ -401,12 +420,13 @@ public class PathResultTreeModel extends DefaultTreeModel {
     }
 
     /**
-     * Removes all incomplete branches which are contained in a complete branch. Such branches are created
-     * by UnionMetaPaths (and maybe other parallel MetaPaths) where at least two parallel metaPaths are
-     * partly equals and for one of the metaPaths you can find a complete path and for another you can only
-     * find an incomplete path for the equals part of the first metaPath. These incomplete and so on multiple
-     * paths are removed here.
-     * It is not possible to check this already during the pathTree creation.
+     * Removes all incomplete branches which are contained in a complete branch.
+     * Such branches are created by UnionMetaPaths (and maybe other parallel
+     * MetaPaths) where at least two parallel metaPaths are partly equals and
+     * for one of the metaPaths you can find a complete path and for another you
+     * can only find an incomplete path for the equals part of the first
+     * metaPath. These incomplete and so on multiple paths are removed here. It
+     * is not possible to check this already during the pathTree creation.
      */
     private void removeIncompleteBranchesContainedInCompleteBranches() {
         for (int i = incompletePathLeafs.size() - 1; i >= 0; i--) {
@@ -422,7 +442,8 @@ public class PathResultTreeModel extends DefaultTreeModel {
     }
 
     /**
-     * Funktion, die für den übergebenen {@link MetaPath} die richtige Unterfunktion aufruft.
+     * Funktion, die für den übergebenen {@link MetaPath} die richtige
+     * Unterfunktion aufruft.
      *
      * @param startNode
      * @param metaPath
@@ -445,7 +466,8 @@ public class PathResultTreeModel extends DefaultTreeModel {
     }
 
     /**
-     * Hängt an den übergebenen startNode einen Knoten an, der den übergebenen MetaPath und
+     * Hängt an den übergebenen startNode einen Knoten an, der den übergebenen
+     * MetaPath und
      *
      * @param startNode
      * @param metaPath
@@ -609,8 +631,8 @@ public class PathResultTreeModel extends DefaultTreeModel {
     }
 
     /**
-     * Compares the {@link PathResultTreeNode} with the other ones in the list with the
-     * {@link PathResultTreeNode#equalsTo(Object)} method.
+     * Compares the {@link PathResultTreeNode} with the other ones in the list
+     * with the {@link PathResultTreeNode#equalsTo(Object)} method.
      *
      * @param node
      * @param nodeList
@@ -626,7 +648,8 @@ public class PathResultTreeModel extends DefaultTreeModel {
     }
 
     /**
-     * Löscht den übergebenen Knoten und alle darüber die nur 1 Kind (den jeweils zu löschenden Knoten) haben.
+     * Löscht den übergebenen Knoten und alle darüber die nur 1 Kind (den
+     * jeweils zu löschenden Knoten) haben.
      *
      * @param node
      */
@@ -670,15 +693,14 @@ public class PathResultTreeModel extends DefaultTreeModel {
     //    }
 
     /**
-     * Liefert alle mit dem übergebenen Element verbundenen Elemente und Kanten als Ergebnisknoten zum einhängen in den
-     * Ergebnisbaum zurück.
+     * Liefert alle mit dem übergebenen Element verbundenen Elemente und Kanten
+     * als Ergebnisknoten zum einhängen in den Ergebnisbaum zurück.
      *
-     * @param me
-     *            Element, für das die verbundenen Elemente gesucht werden sollen
-     * @param metaPath
-     *            Elementar-MetaPath, über den Elemente verbunden sein sollen
-     * @param isSubStep
-     *            Wenn <code>true</code> werden die Ergebnsiknoten als Unterpfadschritt markiert.
+     * @param me Element, für das die verbundenen Elemente gesucht werden sollen
+     * @param metaPath Elementar-MetaPath, über den Elemente verbunden sein
+     *            sollen
+     * @param isSubStep Wenn <code>true</code> werden die Ergebnsiknoten als
+     *            Unterpfadschritt markiert.
      * @return
      */
     private List<PathResultTreeNode> getConnectedNodes(final ModelElement me, final ElementaryMetaPath metaPath, final boolean isSubStep) {

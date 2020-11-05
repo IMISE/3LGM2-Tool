@@ -17,17 +17,20 @@ import de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty;
 public class OptionPanel extends AbstractInputPanel {
 
     /**
-     * Das UserField, dessem Eigenschaften mit diesem Panel geändert werden sollen.
+     * Das UserField, dessem Eigenschaften mit diesem Panel geändert werden
+     * sollen.
      */
     private final UserField userField;
 
     /**
-     * CheckBox zum Einstellen, ob ein Benutzerfeld im Baum angezeigt werden soll
+     * CheckBox zum Einstellen, ob ein Benutzerfeld im Baum angezeigt werden
+     * soll
      */
     private final JCheckBox treeVisCheckBox = new JCheckBox(getResString("userFieldEditor_treevis"));
 
     /**
-     * CheckBox zum Unstellen der Option, ob Kennzahlformeln tatsächlich berechnet werden sollen
+     * CheckBox zum Unstellen der Option, ob Kennzahlformeln tatsächlich
+     * berechnet werden sollen
      */
     private JCheckBox enableClassificationNumberCalculationCheckBox;
 

@@ -7,7 +7,8 @@ import de.imise.tool3lgm.gui.viewpane.graph.GraphViewPane;
 import de.imise.tool3lgm.gui.viewpane.graph.GraphViewPaneFrameComponent;
 
 /**
- * Erzeugt InternalFrame für 3lgm mit bestimmter Größe und und Lage. Es werden freie Stellen gesucht und eingfügt.
+ * Erzeugt InternalFrame für 3lgm mit bestimmter Größe und und Lage. Es werden
+ * freie Stellen gesucht und eingfügt.
  */
 public final class GraphViewInternalFrame extends ToolInternalFrame implements GraphViewPaneFrameComponent {
 

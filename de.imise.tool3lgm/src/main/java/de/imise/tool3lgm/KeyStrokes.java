@@ -50,8 +50,8 @@ public class KeyStrokes {
     }
 
     /**
-     * Ermöglicht das Auslösen der in {@link Tool3lgmConstants} festgelegten Aktionen
-     * durch die jeweiligen {@link KeyStroke}s im gesamten Tool.
+     * Ermöglicht das Auslösen der in {@link Tool3lgmConstants} festgelegten
+     * Aktionen durch die jeweiligen {@link KeyStroke}s im gesamten Tool.
      */
     public static final void registerPublicKeyStrokes(final JComponent component, final KeyStroke... ingnoreStrokes) {
         InputMap im = component.getInputMap();

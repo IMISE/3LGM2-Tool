@@ -65,16 +65,20 @@ import de.imise.util.math.Maths;
 public final class InputGraphArea extends BasicGraphArea implements MouseListener, MouseMotionListener, MouseWheelListener {
 
     /**
-     * Toleranz in Pixel, die im Abstand zwischen 2 Knickpunten in beiden Dimensionen unterschritten
-     * sein muss, damit sie als übereinander leigend gelten.
+     * Toleranz in Pixel, die im Abstand zwischen 2 Knickpunten in beiden
+     * Dimensionen unterschritten sein muss, damit sie als übereinander leigend
+     * gelten.
      */
     private static final int BENDPOINT_OVERLAY_TOLERANCE = 5;
 
     /**
-     * Mit diesem Wert wird bestimmt, ob ein Knickpunkt auf die Linie zwischen seinen ihn umgebenden Knickpunkten
-     * verschoben wurde. Es ist die Abweichung zw. dem Cosinus des Winkels zwischen der Linie vom Vorgängerknickpunkt
-     * des verschobenen Knickpunktes und dem verschobenen Knickpunkt selbst sowie der Linie zwischen Vorgänger und
-     * Nachfolger. Unterschreitet der Kosinus diesen Wert, gilt der verschobene Knickpunkt als auf der Linie liegend.
+     * Mit diesem Wert wird bestimmt, ob ein Knickpunkt auf die Linie zwischen
+     * seinen ihn umgebenden Knickpunkten verschoben wurde. Es ist die
+     * Abweichung zw. dem Cosinus des Winkels zwischen der Linie vom
+     * Vorgängerknickpunkt des verschobenen Knickpunktes und dem verschobenen
+     * Knickpunkt selbst sowie der Linie zwischen Vorgänger und Nachfolger.
+     * Unterschreitet der Kosinus diesen Wert, gilt der verschobene Knickpunkt
+     * als auf der Linie liegend.
      */
     private static final double BENDPOINT_LINE_DIFFERENCE_ANGLE_IN_DEG = 0.0002;
 
@@ -84,43 +88,48 @@ public final class InputGraphArea extends BasicGraphArea implements MouseListene
     private int xin = 0, yin = 0;
 
     /**
-     * Für jede der 5 Ebenen eine X und Y-Koordinate in die die Input-Koordinaten je nach dargestelltem
-     * Ausschnitt, Neigung usw. der Ebene umgerechnet wird.
+     * Für jede der 5 Ebenen eine X und Y-Koordinate in die die
+     * Input-Koordinaten je nach dargestelltem Ausschnitt, Neigung usw. der
+     * Ebene umgerechnet wird.
      */
     private final int[] xreal = new int[LAYERS.length], yreal = new int[LAYERS.length];
 
     /**
-     * Im Grunde das gleiche wie <code>xreal</code> und <code>yreal</code>. Beim Draggen auf Kanten und der Entstehung der
-     * neuen Knickpunkte muss man aber die Koordinaten kennen, bei denen die Maus vor dem Draggen war, sonst haut die
-     * Positionsbestimmung des neuen Knickpunktes nicht hin.
+     * Im Grunde das gleiche wie <code>xreal</code> und <code>yreal</code>. Beim
+     * Draggen auf Kanten und der Entstehung der neuen Knickpunkte muss man aber
+     * die Koordinaten kennen, bei denen die Maus vor dem Draggen war, sonst
+     * haut die Positionsbestimmung des neuen Knickpunktes nicht hin.
      */
     private final int[] lastXreal = new int[LAYERS.length], lastYreal = new int[LAYERS.length];
 
     /**
-     * Wenn Node verschoben werden, dann grenzen diese Koordinaten den minimalen Bereich ein, in dem alle
-     * Elemente liegen.
-     * Dies ist der Bereich, in dem die Elemente liegen würden, wenn ohne Raster verschoben wird.
-     * ACHTUNG: <code>height</code> und <code>width</code> dieses Rechtecks sind nicht die wirkliche Weite
-     * sondern die Koordinaten des Punktes der rechten unteren Ecke.
+     * Wenn Node verschoben werden, dann grenzen diese Koordinaten den minimalen
+     * Bereich ein, in dem alle Elemente liegen. Dies ist der Bereich, in dem
+     * die Elemente liegen würden, wenn ohne Raster verschoben wird. ACHTUNG:
+     * <code>height</code> und <code>width</code> dieses Rechtecks sind nicht
+     * die wirkliche Weite sondern die Koordinaten des Punktes der rechten
+     * unteren Ecke.
      */
     public static Rectangle grabbedElementsRealRect;
 
     /**
-     * Wenn Node verschoben werden, dann grenzen diese Koordinaten den minimalen Bereich ein, in dem alle
-     * Elemente liegen.
-     * Dies ist der Bereich, in dem die Elemente liegen würden, wenn mit Raster verschoben wird.
-     * ACHTUNG: <code>height</code> und <code>width</code> dieses Rechtecks sind nicht die wirkliche Weite
-     * sondern die Koordinaten des Punktes der rechten unteren Ecke.
+     * Wenn Node verschoben werden, dann grenzen diese Koordinaten den minimalen
+     * Bereich ein, in dem alle Elemente liegen. Dies ist der Bereich, in dem
+     * die Elemente liegen würden, wenn mit Raster verschoben wird. ACHTUNG:
+     * <code>height</code> und <code>width</code> dieses Rechtecks sind nicht
+     * die wirkliche Weite sondern die Koordinaten des Punktes der rechten
+     * unteren Ecke.
      */
     public static Rectangle grabbedElementsRasteredRect;
 
     /**
-     * Wenn Node verschoben werden, dann grenzen diese Koordinaten den minimalen Bereich ein, in dem alle
-     * Elemente liegen.
-     * Dies ist der Bereich, in dem die Elemente und alle ihre evtl. nicht selektierten, aber bei der
-     * "mit Teilelementen verschieben"-Option ebenfalls verschobenen Elemente.
-     * ACHTUNG: <code>height</code> und <code>width</code> dieses Rechtecks sind nicht die wirkliche Weite
-     * sondern die Koordinaten des Punktes der rechten unteren Ecke.
+     * Wenn Node verschoben werden, dann grenzen diese Koordinaten den minimalen
+     * Bereich ein, in dem alle Elemente liegen. Dies ist der Bereich, in dem
+     * die Elemente und alle ihre evtl. nicht selektierten, aber bei der "mit
+     * Teilelementen verschieben"-Option ebenfalls verschobenen Elemente.
+     * ACHTUNG: <code>height</code> und <code>width</code> dieses Rechtecks sind
+     * nicht die wirkliche Weite sondern die Koordinaten des Punktes der rechten
+     * unteren Ecke.
      */
     public static Rectangle grabbedElementsFullRect;
 
@@ -279,19 +288,20 @@ public final class InputGraphArea extends BasicGraphArea implements MouseListene
     }
 
     /**
-     * Berechnet in jeder Richtung die minimalen und maximalen Koordinaten von der übergebenen {@link Rectangle} und dem {@link ElementContainer}.
-     * Wird als {@link Rectangle} <code>null</code> übergeben, dann kommt ein neues {@link Rectangle}-Objekt zurück, ansonsten wird das bestehende
-     * zurück gegeben.
-     * Die Weite und Höhe des {@link Rectangle} geben Koordinaten an und nicht die Weite und Höhe im eigentlichen
-     * Sinne
+     * Berechnet in jeder Richtung die minimalen und maximalen Koordinaten von
+     * der übergebenen {@link Rectangle} und dem {@link ElementContainer}. Wird
+     * als {@link Rectangle} <code>null</code> übergeben, dann kommt ein neues
+     * {@link Rectangle}-Objekt zurück, ansonsten wird das bestehende zurück
+     * gegeben. Die Weite und Höhe des {@link Rectangle} geben Koordinaten an
+     * und nicht die Weite und Höhe im eigentlichen Sinne
      *
-     * @param rect
-     *            {@link Rectangle}, die verändert wird, falls die Koordinaten des übergebenen {@link ElementContainer}s
-     *            außerhalb der vorher bestehenden Dimasion lagen
-     * @param ec
-     *            {@link ElementContainer}, dessen Koordinaten in der übergebenen {@link Rectangle} liegen sollen
-     * @return
-     *         die übergebenen {@link Rectangle} oder wenn <code>null</code> übergeben wurde eine neue {@link Rectangle}
+     * @param rect {@link Rectangle}, die verändert wird, falls die Koordinaten
+     *            des übergebenen {@link ElementContainer}s außerhalb der vorher
+     *            bestehenden Dimasion lagen
+     * @param ec {@link ElementContainer}, dessen Koordinaten in der übergebenen
+     *            {@link Rectangle} liegen sollen
+     * @return die übergebenen {@link Rectangle} oder wenn <code>null</code>
+     *         übergeben wurde eine neue {@link Rectangle}
      */
     private static final Rectangle getIncludingRectangle(final Rectangle rect, final ElementContainer ec) {
         int w = ec.getWidth();
@@ -306,16 +316,16 @@ public final class InputGraphArea extends BasicGraphArea implements MouseListene
     }
 
     /**
-     * /**
-     * Berechnet in jeder Richtung die minimalen und maximalen Koordinaten von der übergebenen {@link Rectangle} und dem {@link ElementContainer}.
-     * Wird als {@link Rectangle} <code>null</code> übergeben, dann kommt ein neues {@link Rectangle}-Objekt zurück, ansonsten wird das bestehende
-     * zurück gegeben.
-     * Die Weite und Höhe des {@link Rectangle} geben Koordinaten an und nicht die Weite und Höhe im eigentlichen
-     * Sinne
+     * /** Berechnet in jeder Richtung die minimalen und maximalen Koordinaten
+     * von der übergebenen {@link Rectangle} und dem {@link ElementContainer}.
+     * Wird als {@link Rectangle} <code>null</code> übergeben, dann kommt ein
+     * neues {@link Rectangle}-Objekt zurück, ansonsten wird das bestehende
+     * zurück gegeben. Die Weite und Höhe des {@link Rectangle} geben
+     * Koordinaten an und nicht die Weite und Höhe im eigentlichen Sinne
      *
-     * @param rect
-     *            {@link Rectangle}, die verändert wird, falls die Koordinaten des übergebenen {@link ElementContainer}s
-     *            außerhalb der vorher bestehenden Dimasion lagen
+     * @param rect {@link Rectangle}, die verändert wird, falls die Koordinaten
+     *            des übergebenen {@link ElementContainer}s außerhalb der vorher
+     *            bestehenden Dimasion lagen
      * @param x1
      * @param y1
      * @param x2
@@ -343,9 +353,11 @@ public final class InputGraphArea extends BasicGraphArea implements MouseListene
     }
 
     /**
-     * Füllt die 3 {@link Rectangle} {@link #grabbedElementsFullRect}, {@link #grabbedElementsRasteredRect} und {@link #grabbedElementsRealRect} mit
-     * den Koordinaten in Abhängigkeit von der Selektion. Wenn eine
-     * Einzelebenenansicht eingeschaltet ist, dann werden nur Elemente der aktuellen Ebene einbezogen sonst alle.
+     * Füllt die 3 {@link Rectangle} {@link #grabbedElementsFullRect},
+     * {@link #grabbedElementsRasteredRect} und {@link #grabbedElementsRealRect}
+     * mit den Koordinaten in Abhängigkeit von der Selektion. Wenn eine
+     * Einzelebenenansicht eingeschaltet ist, dann werden nur Elemente der
+     * aktuellen Ebene einbezogen sonst alle.
      */
     private void findIncludingRectangles() {
         boolean singleSelection = szenario.isSingleSelection();
@@ -749,8 +761,8 @@ public final class InputGraphArea extends BasicGraphArea implements MouseListene
     }
 
     /**
-     * @return the first element container under the mouse pointer or <code>null</code>
-     *         if there is no element container
+     * @return the first element container under the mouse pointer or
+     *         <code>null</code> if there is no element container
      */
     private final ElementContainer getElementContainerUnderMousePointer() {
         ElementContainer returnContainer = null;

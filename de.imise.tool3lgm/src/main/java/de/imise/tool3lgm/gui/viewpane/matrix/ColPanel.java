@@ -23,13 +23,19 @@ public class ColPanel extends JPanel {
     /** Integer, der die Spaltenbreite definiert */
     private double deltaY = Double.NaN;
 
-    /** Integer, der die horizontale Verschiebung zwischen zwei Einträgen definiert */
+    /**
+     * Integer, der die horizontale Verschiebung zwischen zwei Einträgen
+     * definiert
+     */
     private double deltaX = 0;
 
     /** Integer der die maximal Länge der Strings in Pixeln */
     private int maxLength = 0;
 
-    /** Winkel, um welchen die Schrift gekippt werden soll (Standard: 45° gegen Uhrzeigersinn) */
+    /**
+     * Winkel, um welchen die Schrift gekippt werden soll (Standard: 45° gegen
+     * Uhrzeigersinn)
+     */
     private final double theta = Math.PI / 4.;
 
     /** affine Transformation zum kippen der Spaltenüberschrift */
@@ -94,7 +100,8 @@ public class ColPanel extends JPanel {
     }
 
     /**
-     * Bestimmt die benötigten Parameter delta und max_height und legt die Größe der Component fest
+     * Bestimmt die benötigten Parameter delta und max_height und legt die Größe
+     * der Component fest
      *
      * @param g Graphics
      */

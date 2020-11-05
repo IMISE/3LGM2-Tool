@@ -12,8 +12,8 @@ import de.imise.tool3lgm.graphtools.view.graph.GraphViewParameter;
 import de.imise.tool3lgm.log.Log;
 
 /**
- * @author Thomas Rudert
- *         new xml-tags: view with childs x, y, zoom, degree, shift and multiView
+ * @author Thomas Rudert new xml-tags: view with childs x, y, zoom, degree,
+ *         shift and multiView
  */
 public class ToolContentHandlerV3_1 extends ToolContentHandlerV3_0 {
 

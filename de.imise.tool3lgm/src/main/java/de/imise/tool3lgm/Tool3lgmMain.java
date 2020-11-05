@@ -33,7 +33,8 @@ import de.imise.util.OperatingSystem;
 public class Tool3lgmMain {
 
     /**
-     * Debug- Optionen fuer Swing-Komponenten; muss fuer Komponente mit setDebugGraphicsOption(int) gesetzt werden
+     * Debug- Optionen fuer Swing-Komponenten; muss fuer Komponente mit
+     * setDebugGraphicsOption(int) gesetzt werden
      */
     private static int debugGraphicsOption = DebugGraphics.NONE_OPTION;
 
@@ -43,8 +44,10 @@ public class Tool3lgmMain {
     private static String[] allStartParameters;
 
     /**
-     * @param parameter an object its toString() method returns a potential parameter
-     * @return <code>true</code> if one of the given parameters was a startParameter
+     * @param parameter an object its toString() method returns a potential
+     *            parameter
+     * @return <code>true</code> if one of the given parameters was a
+     *         startParameter
      */
     public static boolean hasStartParameter(final Object... parameter) {
         List<String> startParameters = getStartParameters();
@@ -203,12 +206,14 @@ public class Tool3lgmMain {
     }
 
     /**
-     * Wenn der Baukasten mit RMI gestartet werden soll, wird <code>activateRMI</code> ausgeführt.
+     * Wenn der Baukasten mit RMI gestartet werden soll, wird
+     * <code>activateRMI</code> ausgeführt.
      *
      * @param args
      * @param visible
      * @param newInstance
-     * @return <code>true</code>, wenn der Baukasten erfolgreich den RMI starten konnte. Wenn Fehler aufgetreten sind <code>false</code>.
+     * @return <code>true</code>, wenn der Baukasten erfolgreich den RMI starten
+     *         konnte. Wenn Fehler aufgetreten sind <code>false</code>.
      */
     private static boolean activateRMI(final List<String> args, final boolean visible, final boolean newInstance) {
 
@@ -379,14 +384,10 @@ public class Tool3lgmMain {
     /**
      * setzt die Debug-Optionen fuer Swing-Komponenten
      *
-     * @param LOG
-     *            boolean; Ausgabe der Ereignisse?
-     * @param FLASH
-     *            boolean; Aufleuchten der Aenderungen?
-     * @param BUFFERED
-     *            boolean; Anzeige des Buffers?
-     * @param flashTime
-     *            int; Dauer des FLASH
+     * @param LOG boolean; Ausgabe der Ereignisse?
+     * @param FLASH boolean; Aufleuchten der Aenderungen?
+     * @param BUFFERED boolean; Anzeige des Buffers?
+     * @param flashTime int; Dauer des FLASH
      */
     public static void setDebugGraphicsOption(final boolean LOG, final boolean FLASH, final boolean BUFFERED, final int flashTime) {
         debugGraphicsOption = 0;

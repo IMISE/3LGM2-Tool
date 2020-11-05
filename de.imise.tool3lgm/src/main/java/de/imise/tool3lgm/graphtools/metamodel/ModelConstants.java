@@ -43,8 +43,9 @@ public final class ModelConstants {
     public static final String EDGE_SHORT_NAME = "DLK";
 
     /**
-     * Short-Name der zurückgegeben wird, wenn die an <code>getShortName(Class)</code> übergebene Klasse weder eine gültige Node noch Kantenklasse
-     * ist.
+     * Short-Name der zurückgegeben wird, wenn die an
+     * <code>getShortName(Class)</code> übergebene Klasse weder eine gültige
+     * Node noch Kantenklasse ist.
      */
     public static final String NO_MODEL_ELEMENT_SHORT_NAME = "NME";
 

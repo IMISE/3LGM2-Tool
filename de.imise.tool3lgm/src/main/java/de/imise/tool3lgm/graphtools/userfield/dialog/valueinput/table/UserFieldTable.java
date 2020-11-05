@@ -14,6 +14,7 @@ import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
+import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.Vector;
@@ -49,14 +50,18 @@ import de.imise.util.pair.Pair;
 import de.imise.util.swing.component.ParentComponentFinder;
 
 /**
- * Klasse repräsentiert einen speziellen <code>JTable</code>, der zur Eingabe und Darstellung von Kennzahlen, Verteilungsgewichten und Modelvaribalen
+ * Klasse repräsentiert einen speziellen <code>JTable</code>, der zur Eingabe
+ * und Darstellung von Kennzahlen, Verteilungsgewichten und Modelvaribalen
  * verwendet werden kann.
  * <p>
- * Es besteht die Möglichkeit, diese Tabelle in eine Komponente mit speziellem Layout einzubetten(im Allgem. ein <code>JScrollPane</code>). Die
- * grafische Darstellung des Tables ist dann über <code>getLayoutContainer()</code> zu erreichen.
+ * Es besteht die Möglichkeit, diese Tabelle in eine Komponente mit speziellem
+ * Layout einzubetten(im Allgem. ein <code>JScrollPane</code>). Die grafische
+ * Darstellung des Tables ist dann über <code>getLayoutContainer()</code> zu
+ * erreichen.
  * <p>
- * Über eine <code>TableEditCondition</code> kann die Editierbarkeit einer jeden Zelle speziell festgelegt werden. Über die Konstanten können
- * spezielle AutoResizeModes aktiviert werden.
+ * Über eine <code>TableEditCondition</code> kann die Editierbarkeit einer jeden
+ * Zelle speziell festgelegt werden. Über die Konstanten können spezielle
+ * AutoResizeModes aktiviert werden.
  * <p>
  * Code für die Verwendung des <code>container</code>s
  *
@@ -83,22 +88,28 @@ import de.imise.util.swing.component.ParentComponentFinder;
  * </pre>
  * <p>
  * Spezielle Selektierungseigenschaften: <br>
- * Es ist möglich mittels Gedrückthalten der "Shift" oder "Strg" - Taste, mehrere Zellen auszuwählen und ebenso auch die Selektierung wieder
- * aufzuheben. Änderungen durch Werteeingabe werden auf alle ausgewählten Zellen übertragen.
+ * Es ist möglich mittels Gedrückthalten der "Shift" oder "Strg" - Taste,
+ * mehrere Zellen auszuwählen und ebenso auch die Selektierung wieder
+ * aufzuheben. Änderungen durch Werteeingabe werden auf alle ausgewählten Zellen
+ * übertragen.
  * <p>
  * Undo/Redo: <br>
- * Mit den Tastenkombinationen <b>Ctrl+Z</b> bzw. <b>Ctrl+Y</b> ist und Undo bzw. Redo möglich.
+ * Mit den Tastenkombinationen <b>Ctrl+Z</b> bzw. <b>Ctrl+Y</b> ist und Undo
+ * bzw. Redo möglich.
  * <p>
  * Cut/Copy/Paste: <br>
- * Mit den Tastenkombinationen <b>Ctrl+X</b>, <b>Ctrl+C</b>, <b>Ctrl+V</b> ist das Ausschneiden und das Kopieren von Werten aus dem Table in die
- * Systemzwischenablage möglich, sowie das Einfügen von Werten aus der Zwischenablage in den Table.
+ * Mit den Tastenkombinationen <b>Ctrl+X</b>, <b>Ctrl+C</b>, <b>Ctrl+V</b> ist
+ * das Ausschneiden und das Kopieren von Werten aus dem Table in die
+ * Systemzwischenablage möglich, sowie das Einfügen von Werten aus der
+ * Zwischenablage in den Table.
  *
  * @author fstephan
  */
 public class UserFieldTable extends JTable implements ContentExchanger {
 
     /**
-     * Beschreibt die Editierbarkeit und den Selektionszustand der Zellen des Tables
+     * Beschreibt die Editierbarkeit und den Selektionszustand der Zellen des
+     * Tables
      */
     private UserFieldTableController tableController;
 
@@ -113,31 +124,37 @@ public class UserFieldTable extends JTable implements ContentExchanger {
     private AbstractUserFieldTableLayout tableLayout;
 
     /**
-     * Drückt aus, ob Standard-AutoResizeModes von <code>JTable</code> verwendet werden sollen, oder nicht.
+     * Drückt aus, ob Standard-AutoResizeModes von <code>JTable</code> verwendet
+     * werden sollen, oder nicht.
      *
-     * @value = true, falls <code>JTable</code> AutoResizeModes verwendet werden soll
+     * @value = true, falls <code>JTable</code> AutoResizeModes verwendet werden
+     *        soll
      * @value = false, falls eigene AutoResizeModes verwendet werden sollen
      */
     private boolean superResize = false;
 
     /**
-     * Bestimmt das Resize-Verhalten des Tables bei großem Fenster(Table kann vollständig in seiner<code>preferredSize</code> dargestellt werden).
+     * Bestimmt das Resize-Verhalten des Tables bei großem Fenster(Table kann
+     * vollständig in seiner<code>preferredSize</code> dargestellt werden).
      */
     private int autoResizeModeLarge;
 
     /**
-     * Bestimmt das Resize-Verhalten des Tables bei kleinem Fenster (Table kann nicht vollständig in seiner<code>preferredSize</code> dargestellt
+     * Bestimmt das Resize-Verhalten des Tables bei kleinem Fenster (Table kann
+     * nicht vollständig in seiner<code>preferredSize</code> dargestellt
      * werden).
      */
     private int autoResizeModeSmall;
 
     /**
-     * Spezielle Renderer- und Editorkomponenten für die Zellen des Tables. Werden zur formatierten Darstellung der Werte der Zellen verwendet.
+     * Spezielle Renderer- und Editorkomponenten für die Zellen des Tables.
+     * Werden zur formatierten Darstellung der Werte der Zellen verwendet.
      */
     private IUserFieldTableCell[][] tableCells;
 
     /**
-     * Gibt an, ob die Werte in den {@link #tableCells} formatiert dargestellt werden sollen
+     * Gibt an, ob die Werte in den {@link #tableCells} formatiert dargestellt
+     * werden sollen
      */
     private boolean doFormatting;
 
@@ -149,11 +166,15 @@ public class UserFieldTable extends JTable implements ContentExchanger {
 
     private static final int MAX_UNDO_REDO_STACK_SIZE = 10;
 
-    /* ************************ Beginn: Initialisierungsteil ***************************************** */
+    /*
+     * ************************ Beginn: Initialisierungsteil
+     * *****************************************
+     */
 
     /**
-     * Konstruktor Setzt <code>uftm</code> als <code>dataModel</code>, <code>uftc</code> als <code>tableController</code> und bettet diesen Table in
-     * eine durch <code>uftl</code> erzeugte Layout-Komponente ein.
+     * Konstruktor Setzt <code>uftm</code> als <code>dataModel</code>,
+     * <code>uftc</code> als <code>tableController</code> und bettet diesen
+     * Table in eine durch <code>uftl</code> erzeugte Layout-Komponente ein.
      *
      * @param uftm
      * @param uftl
@@ -169,7 +190,8 @@ public class UserFieldTable extends JTable implements ContentExchanger {
     }
 
     /**
-     * Konstruktor Erzeugt einen leeren Table, der in eine durch <code>uftl</code> erzeugte Layout-Komponente besitzt.
+     * Konstruktor Erzeugt einen leeren Table, der in eine durch
+     * <code>uftl</code> erzeugte Layout-Komponente besitzt.
      *
      * @param uftl
      */
@@ -179,8 +201,9 @@ public class UserFieldTable extends JTable implements ContentExchanger {
 
     /**
      * Initialisiert diesen Table. <br>
-     * Es wird das AutoResize-Verhalten und das Focus-Verhalten festgelegt, ein {@link ContentExchangeListener} hinzugefügt sowie Undo bzw. Redo für
-     * die Tastenkombinationen <b>Ctrl+Z</b> bzw. <b>Ctrl+Y</b> gesetzt.
+     * Es wird das AutoResize-Verhalten und das Focus-Verhalten festgelegt, ein
+     * {@link ContentExchangeListener} hinzugefügt sowie Undo bzw. Redo für die
+     * Tastenkombinationen <b>Ctrl+Z</b> bzw. <b>Ctrl+Y</b> gesetzt.
      */
     private void init() {
         setRowSelectionAllowed(false);
@@ -211,8 +234,8 @@ public class UserFieldTable extends JTable implements ContentExchanger {
         InputMap im = getInputMap();
         ActionMap am = getActionMap();
 
-        im.put(KeyStroke.getKeyStroke(KeyEvent.VK_Z, KeyEvent.CTRL_DOWN_MASK), KeyEvent.VK_Z);
-        im.put(KeyStroke.getKeyStroke(KeyEvent.VK_Y, KeyEvent.CTRL_DOWN_MASK), KeyEvent.VK_Y);
+        im.put(KeyStroke.getKeyStroke(KeyEvent.VK_Z, InputEvent.CTRL_DOWN_MASK), KeyEvent.VK_Z);
+        im.put(KeyStroke.getKeyStroke(KeyEvent.VK_Y, InputEvent.CTRL_DOWN_MASK), KeyEvent.VK_Y);
         am.put(KeyEvent.VK_Z, new AbstractAction() {
             @Override
             public void actionPerformed(final ActionEvent e) {
@@ -243,9 +266,15 @@ public class UserFieldTable extends JTable implements ContentExchanger {
         });
     }
 
-    /* ************************ Ende: Initialisierungsteil ***************************************** */
+    /*
+     * ************************ Ende: Initialisierungsteil
+     * *****************************************
+     */
 
-    /* ************************ Beginn: Funktionale Methoden ***************************************** */
+    /*
+     * ************************ Beginn: Funktionale Methoden
+     * *****************************************
+     */
 
     /**
      * Aktiviert die Darstellung von Formaten in den Zellen.
@@ -280,18 +309,21 @@ public class UserFieldTable extends JTable implements ContentExchanger {
     }
 
     /**
-     * Löst das Neuzeichnen der Zelle an der Position (<code>row</code>,<code>column</code>) aus.
+     * Löst das Neuzeichnen der Zelle an der Position
+     * (<code>row</code>,<code>column</code>) aus.
      *
      * @param row Zeilennummer der Zelle
      * @param column Spaltennummer der Zelle
-     * @param includeSpacing sagt aus, ob der Zellzwischenraum auch neu gezeichnet werden soll
+     * @param includeSpacing sagt aus, ob der Zellzwischenraum auch neu
+     *            gezeichnet werden soll
      */
     public void repaintCellAt(final int row, final int column, final boolean includeSpacing) {
         repaint(getCellRect(row, column, includeSpacing));
     }
 
     /**
-     * So überschrieben, dass Änderungen in der Selektion jetzt auch während gedrückter Shift-Taste an das {@link #selectionModel} übergeben werden.
+     * So überschrieben, dass Änderungen in der Selektion jetzt auch während
+     * gedrückter Shift-Taste an das {@link #selectionModel} übergeben werden.
      *
      * @see javax.swing.JTable#changeSelection(int, int, boolean, boolean)
      * @param rowIndex
@@ -333,7 +365,8 @@ public class UserFieldTable extends JTable implements ContentExchanger {
     }
 
     /**
-     * Aktualisiert die gesamte grafische Darstellung des Tables und des umschließenden ScrollPanes.
+     * Aktualisiert die gesamte grafische Darstellung des Tables und des
+     * umschließenden ScrollPanes.
      */
     public void updateLayout() {
         tableLayout.update(this);
@@ -421,7 +454,8 @@ public class UserFieldTable extends JTable implements ContentExchanger {
     }
 
     /**
-     * Zeigt eine Warnung mit dem in den Resourcem durch <code>key</code> identifizierten Text an.
+     * Zeigt eine Warnung mit dem in den Resourcem durch <code>key</code>
+     * identifizierten Text an.
      *
      * @param key
      */
@@ -472,7 +506,8 @@ public class UserFieldTable extends JTable implements ContentExchanger {
     }
 
     /**
-     * Speichert die letzten Werte im {@link #undoStack} und löscht den {@link #redoStack}.
+     * Speichert die letzten Werte im {@link #undoStack} und löscht den
+     * {@link #redoStack}.
      */
     private boolean saveValues() {
         Object[][] data = ((AbstractTableModel) dataModel).getValues();
@@ -488,12 +523,19 @@ public class UserFieldTable extends JTable implements ContentExchanger {
         return true;
     }
 
-    /* ************************ Ende: Funktionale Methoden ***************************************** */
+    /*
+     * ************************ Ende: Funktionale Methoden
+     * *****************************************
+     */
 
-    /* ************************ Beginn: get/set - Methoden ***************************************** */
+    /*
+     * ************************ Beginn: get/set - Methoden
+     * *****************************************
+     */
 
     /**
-     * Methode setzt <code>dataModel</code> bzw. <code>tableController</code> auf <code>uftm</code> bzw. <code>uftc</code>.
+     * Methode setzt <code>dataModel</code> bzw. <code>tableController</code>
+     * auf <code>uftm</code> bzw. <code>uftc</code>.
      *
      * @param uftm
      * @param uftc
@@ -518,7 +560,8 @@ public class UserFieldTable extends JTable implements ContentExchanger {
     }
 
     /**
-     * Methode setzt <code>tableController</code> auf <code>uftc</code> und aktiviert Mehrfachauswahl von Zellen
+     * Methode setzt <code>tableController</code> auf <code>uftc</code> und
+     * aktiviert Mehrfachauswahl von Zellen
      *
      * @param uftc
      * @param enableMultipleSelection
@@ -645,8 +688,10 @@ public class UserFieldTable extends JTable implements ContentExchanger {
     }
 
     /**
-     * Gibt den LayoutContainer dieses Tables zurück. Alle Klassen, die den Table darstellen wollen, sollten stattdessen das hier zurückgegebene
-     * ScrollPane darstellen. Die Modifizierungen des RowHeaders sind sonst nicht sichtbar.
+     * Gibt den LayoutContainer dieses Tables zurück. Alle Klassen, die den
+     * Table darstellen wollen, sollten stattdessen das hier zurückgegebene
+     * ScrollPane darstellen. Die Modifizierungen des RowHeaders sind sonst
+     * nicht sichtbar.
      *
      * @return container
      */
@@ -655,8 +700,9 @@ public class UserFieldTable extends JTable implements ContentExchanger {
     }
 
     /**
-     * Gibt den Renderer für die Zelle an Position (<code>row</code>,<code>column</code>) wieder. Der zurückgegebene Renderer sorgt für die
-     * formatierte Darstellung der Werte in dieser Zelle.
+     * Gibt den Renderer für die Zelle an Position
+     * (<code>row</code>,<code>column</code>) wieder. Der zurückgegebene
+     * Renderer sorgt für die formatierte Darstellung der Werte in dieser Zelle.
      *
      * @param row
      * @param column
@@ -676,8 +722,9 @@ public class UserFieldTable extends JTable implements ContentExchanger {
     }
 
     /**
-     * Gibt den Editor für die Zelle an Position (<code>row</code>,<code>column</code>) wieder. Der zurückgegebene Editor stellt den tatsächlichen
-     * unformatierten Wert dar.
+     * Gibt den Editor für die Zelle an Position
+     * (<code>row</code>,<code>column</code>) wieder. Der zurückgegebene Editor
+     * stellt den tatsächlichen unformatierten Wert dar.
      *
      * @param row
      * @param column
@@ -697,14 +744,22 @@ public class UserFieldTable extends JTable implements ContentExchanger {
     }
 
     /**
-     * Gibt alle Werte aus dem angegebenen Bereich in einem <code>Object[][]</code> wieder.
+     * Gibt alle Werte aus dem angegebenen Bereich in einem
+     * <code>Object[][]</code> wieder.
      *
-     * @param firstRow erste Zeile, aber der die Werte zurückgegeben werden sollen
-     * @param lastRow letzte Zeile, bis zu der die Werte zurückgegeben werden sollen
-     * @param firstColumn erste Spalte, aber der die Werte zurückgegeben werden sollen
-     * @param lastColumn letzte Spalte, bis zu der die Werte zurückgegeben werden sollen
-     * @param replaceIgnorableErrors gibt an, ob Werte aus {@link UserField#IGNOREABLE_ERROR_SET} durch <code>""</code> ersetzt werden soll
-     * @param replaceErrors gibt an, ob Werte aus {@link UserField#ERROR_SET} durch <code>""</code> ersetzt werden soll
+     * @param firstRow erste Zeile, aber der die Werte zurückgegeben werden
+     *            sollen
+     * @param lastRow letzte Zeile, bis zu der die Werte zurückgegeben werden
+     *            sollen
+     * @param firstColumn erste Spalte, aber der die Werte zurückgegeben werden
+     *            sollen
+     * @param lastColumn letzte Spalte, bis zu der die Werte zurückgegeben
+     *            werden sollen
+     * @param replaceIgnorableErrors gibt an, ob Werte aus
+     *            {@link UserField#IGNOREABLE_ERROR_SET} durch <code>""</code>
+     *            ersetzt werden soll
+     * @param replaceErrors gibt an, ob Werte aus {@link UserField#ERROR_SET}
+     *            durch <code>""</code> ersetzt werden soll
      * @return
      */
     private Object[][] getValues(final int firstRow, final int lastRow, final int firstColumn, final int lastColumn, final boolean replaceIgnorableErrors, final boolean replaceErrors) {
@@ -753,7 +808,8 @@ public class UserFieldTable extends JTable implements ContentExchanger {
     }
 
     /**
-     * Gibt den <code>Viewport</code> des {@link #layoutContainer}s wieder, das heißt den Bereich des {@link #layoutContainer}s, der die Zellen des
+     * Gibt den <code>Viewport</code> des {@link #layoutContainer}s wieder, das
+     * heißt den Bereich des {@link #layoutContainer}s, der die Zellen des
      * Tables darstellt.
      *
      * @see JScrollPane#getViewport()
@@ -773,7 +829,8 @@ public class UserFieldTable extends JTable implements ContentExchanger {
     }
 
     /**
-     * Reguliert die Editierbarkeit von Zellen in Abhängigkeit von dem <code>tableController</code>.
+     * Reguliert die Editierbarkeit von Zellen in Abhängigkeit von dem
+     * <code>tableController</code>.
      */
     @Override
     public boolean isCellEditable(final int row, final int col) {
@@ -784,7 +841,8 @@ public class UserFieldTable extends JTable implements ContentExchanger {
     }
 
     /**
-     * Überschreibt die Methode von {@link JTable}, sodass der Wert von {@link UserFieldTableController#isCellSelected(int, int)} an der Stelle (
+     * Überschreibt die Methode von {@link JTable}, sodass der Wert von
+     * {@link UserFieldTableController#isCellSelected(int, int)} an der Stelle (
      * <code>row</code>,<code>column</code>) zurückgegeben wird.
      */
     @Override
@@ -796,7 +854,8 @@ public class UserFieldTable extends JTable implements ContentExchanger {
     }
 
     /**
-     * Gibt wieder, ob <code>p</code> der Ausgangspunkt der aktuellen Selektion ist
+     * Gibt wieder, ob <code>p</code> der Ausgangspunkt der aktuellen Selektion
+     * ist
      *
      * @param p
      * @see UserFieldTableController#isAnchorPoint(Point)
@@ -809,7 +868,8 @@ public class UserFieldTable extends JTable implements ContentExchanger {
     }
 
     /**
-     * Gibt wieder, ob <code>p</code> der Punkt ist, bis zu dem die aktuelle Selektion reicht.
+     * Gibt wieder, ob <code>p</code> der Punkt ist, bis zu dem die aktuelle
+     * Selektion reicht.
      *
      * @param p
      * @see UserFieldTableController#isLeadingPoint(Point)
@@ -822,7 +882,8 @@ public class UserFieldTable extends JTable implements ContentExchanger {
     }
 
     /**
-     * Gibt wieder, ob die formatierte Darstellung der Werte in den Zellen aktiviert ist
+     * Gibt wieder, ob die formatierte Darstellung der Werte in den Zellen
+     * aktiviert ist
      *
      * @return {@link UserFieldTable#doFormatting}
      */
@@ -831,7 +892,8 @@ public class UserFieldTable extends JTable implements ContentExchanger {
     }
 
     /**
-     * Gibt zurück, ob das {@link #dataModel} eine Instanz der Klasse {@link AbstractTableModel} ist.
+     * Gibt zurück, ob das {@link #dataModel} eine Instanz der Klasse
+     * {@link AbstractTableModel} ist.
      *
      * @return
      */
@@ -851,9 +913,15 @@ public class UserFieldTable extends JTable implements ContentExchanger {
         return dataModel.getRowCount() > 0 && dataModel.getColumnCount() > 0;
     }
 
-    /* ************************ Ende: get/set - Methoden ***************************************** */
+    /*
+     * ************************ Ende: get/set - Methoden
+     * *****************************************
+     */
 
-    /* ************************ Start: add/remove Methoden ************************************** */
+    /*
+     * ************************ Start: add/remove Methoden
+     * **************************************
+     */
 
     /**
      * Fügt den <code>ListSelectionListener l</code> an alle Spalten an.
@@ -868,7 +936,8 @@ public class UserFieldTable extends JTable implements ContentExchanger {
     }
 
     /**
-     * Fügt den {@link TableModelListener} <code>l</code> an {@link #dataModel} an.
+     * Fügt den {@link TableModelListener} <code>l</code> an {@link #dataModel}
+     * an.
      *
      * @see TableModel#addTableModelListener(TableModelListener)
      * @param l
@@ -909,7 +978,8 @@ public class UserFieldTable extends JTable implements ContentExchanger {
     }
 
     /**
-     * Löscht den gesamten Table inklusive Row- und ColumnHeader aus dem {@link #layoutContainer}
+     * Löscht den gesamten Table inklusive Row- und ColumnHeader aus dem
+     * {@link #layoutContainer}
      */
     public void removeFromLayoutContainer() {
         clearSelection();
@@ -918,9 +988,15 @@ public class UserFieldTable extends JTable implements ContentExchanger {
         layoutContainer.repaint();
     }
 
-    /* ************************ Ende: add/remove Methoden ************************************** */
+    /*
+     * ************************ Ende: add/remove Methoden
+     * **************************************
+     */
 
-    /* ************************ Start: Kontroll-Methoden *************************************** */
+    /*
+     * ************************ Start: Kontroll-Methoden
+     * ***************************************
+     */
 
     /**
      * Typen von internen Werten. Dazu gehören:
@@ -928,7 +1004,8 @@ public class UserFieldTable extends JTable implements ContentExchanger {
      * <li>Renderer-Werte
      * <li>Selektionszustand
      *
-     * @see UserFieldTable#showInternalValueTable(UserFieldTable, Frame, INTERNAL_VALUE_TYPE)
+     * @see UserFieldTable#showInternalValueTable(UserFieldTable, Frame,
+     *      INTERNAL_VALUE_TYPE)
      */
     private static enum INTERNAL_VALUE_TYPE {
         ModelValues,
@@ -938,7 +1015,8 @@ public class UserFieldTable extends JTable implements ContentExchanger {
     }
 
     /**
-     * Zeigt einen Table mit den Model-Werten der Zellen von <code>originalTable</code> an.
+     * Zeigt einen Table mit den Model-Werten der Zellen von
+     * <code>originalTable</code> an.
      *
      * @param originTable Table, dessen Model-Werte angezeigt werden sollen
      * @param owner Frame, in dem der Table angezeigt werden soll
@@ -948,7 +1026,8 @@ public class UserFieldTable extends JTable implements ContentExchanger {
     }
 
     /**
-     * Zeigt einen Table mit den Editor-Werten der Zellen von <code>originalTable</code> an.
+     * Zeigt einen Table mit den Editor-Werten der Zellen von
+     * <code>originalTable</code> an.
      *
      * @param originTable Table, dessen Editor-Werte angezeigt werden sollen
      * @param owner Frame, in dem der Table angezeigt werden soll
@@ -958,7 +1037,8 @@ public class UserFieldTable extends JTable implements ContentExchanger {
     }
 
     /**
-     * Zeigt einen Table mit den Renderer-Werten der Zellen von <code>originalTable</code> an.
+     * Zeigt einen Table mit den Renderer-Werten der Zellen von
+     * <code>originalTable</code> an.
      *
      * @param originTable Table, dessen Renderer-Werte angezeigt werden sollen
      * @param owner Frame, in dem der Table angezeigt werden soll
@@ -968,9 +1048,11 @@ public class UserFieldTable extends JTable implements ContentExchanger {
     }
 
     /**
-     * Zeigt einen Table mit dem Selektionszustand der Zellen von <code>originalTable</code> an.
+     * Zeigt einen Table mit dem Selektionszustand der Zellen von
+     * <code>originalTable</code> an.
      *
-     * @param originTable Table, dessen Selektionszustand für die Zellen angezeigt werden sollen
+     * @param originTable Table, dessen Selektionszustand für die Zellen
+     *            angezeigt werden sollen
      * @param owner Frame, in dem der Table angezeigt werden soll
      */
     public static void showSelectionStateTable(final UserFieldTable originTable, final Frame owner) {
@@ -978,7 +1060,8 @@ public class UserFieldTable extends JTable implements ContentExchanger {
     }
 
     /**
-     * Generiert einen {@link JOptionPane} mit dem durch <code>type</code> spezifizierten Table
+     * Generiert einen {@link JOptionPane} mit dem durch <code>type</code>
+     * spezifizierten Table
      *
      * @param originTable
      * @param owner
@@ -1050,6 +1133,9 @@ public class UserFieldTable extends JTable implements ContentExchanger {
         JOptionPane.showMessageDialog(owner, new JScrollPane(table), title, JOptionPane.INFORMATION_MESSAGE);
     }
 
-    /* ************************ Start: Kontroll-Methoden *************************************** */
+    /*
+     * ************************ Start: Kontroll-Methoden
+     * ***************************************
+     */
 
 }

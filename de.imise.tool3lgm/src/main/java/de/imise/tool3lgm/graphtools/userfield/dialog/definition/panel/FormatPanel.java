@@ -41,13 +41,21 @@ import de.imise.util.swing.component.AlphabeticalComboBox;
 import de.imise.util.swing.dialog.MultipleOptionPane;
 
 /**
- * @author AXS Das FormatPanel ist in den Definitionsdialog für <code>UserField</code> s eingebettet. In ihm werden die Anzahl der Nachkommastellen
- *         und die einheit angegeben. Wenn eine solche neue Formatvorlage angelegt wurde, wird sie in der Modelldatei als FormatUserField gespeichert
- *         und kann für beliebig vielen Kennzahlen als Formatierung für die spätere Ansicht der werte genutzt werden. Eine Formatvorlage kann nur
- *         einmal angelegt werden. Es gibt Standardvorlagen. Wenn in dem Kostenmodell die Formatierungsvorlagen noch nicht angelegt sind ( neues
- *         Modell ), werden sie initial angelegt. Die Standardformatvorlage ist notwendig, da bei speziellen Einheiten die Darstelung der Werte ander
- *         ist als die Eingabe. Beispiel ist das %: Eingabe muss der auf 1 normierte Wert sein. Dargestllt wird der auch 100% normierte Wert. Eingabe:
- *         0,5 Ausgabe 50% Deshalb benötigt man die Standardvorlage: % Standardvorlagen: * Formatvorlage mit 2 Nachkommastellen und dem %-Zeichen
+ * @author AXS Das FormatPanel ist in den Definitionsdialog für
+ *         <code>UserField</code> s eingebettet. In ihm werden die Anzahl der
+ *         Nachkommastellen und die einheit angegeben. Wenn eine solche neue
+ *         Formatvorlage angelegt wurde, wird sie in der Modelldatei als
+ *         FormatUserField gespeichert und kann für beliebig vielen Kennzahlen
+ *         als Formatierung für die spätere Ansicht der werte genutzt werden.
+ *         Eine Formatvorlage kann nur einmal angelegt werden. Es gibt
+ *         Standardvorlagen. Wenn in dem Kostenmodell die Formatierungsvorlagen
+ *         noch nicht angelegt sind ( neues Modell ), werden sie initial
+ *         angelegt. Die Standardformatvorlage ist notwendig, da bei speziellen
+ *         Einheiten die Darstelung der Werte ander ist als die Eingabe.
+ *         Beispiel ist das %: Eingabe muss der auf 1 normierte Wert sein.
+ *         Dargestllt wird der auch 100% normierte Wert. Eingabe: 0,5 Ausgabe
+ *         50% Deshalb benötigt man die Standardvorlage: % Standardvorlagen: *
+ *         Formatvorlage mit 2 Nachkommastellen und dem %-Zeichen
  */
 public class FormatPanel extends AbstractInputPanel implements ActionListener, ChangeListener, CaretListener {
 
@@ -67,13 +75,15 @@ public class FormatPanel extends AbstractInputPanel implements ActionListener, C
     private final JDialog owner;
 
     /**
-     * In diesem Panel sind die Elemente für die Formatdefinition enthalten. Also die ComboBox, das Einheiten-<code>JTextField</code>, die Übernehmen
+     * In diesem Panel sind die Elemente für die Formatdefinition enthalten.
+     * Also die ComboBox, das Einheiten-<code>JTextField</code>, die Übernehmen
      * und Abbrechen button..
      */
     private final JPanel zahlenFormatPanel;
 
     /**
-     * In dieser AlphabeticalComboBox sind die schon bestehenden Formate enthalten
+     * In dieser AlphabeticalComboBox sind die schon bestehenden Formate
+     * enthalten
      */
     private final AlphabeticalComboBox<UserField> formatComboBox;
 
@@ -83,13 +93,15 @@ public class FormatPanel extends AbstractInputPanel implements ActionListener, C
     private final JSpinner digitSpinner;
 
     /**
-     * In dieser editierbaren ComboBox werden für neue Formatvorlagen die Einheiten eingegeben. Schon bestehende Einheiten befinden sich in der
+     * In dieser editierbaren ComboBox werden für neue Formatvorlagen die
+     * Einheiten eingegeben. Schon bestehende Einheiten befinden sich in der
      * OcmboBox zum Auswählen.
      */
     private final AlphabeticalComboBox<String> unitBox;
 
     /**
-     * Der Button erweitert die Anzeige des Panels um die Eingabeelemente für neue Formatvorlagen.
+     * Der Button erweitert die Anzeige des Panels um die Eingabeelemente für
+     * neue Formatvorlagen.
      */
     private final JButton expandPanelButton;
 
@@ -99,7 +111,8 @@ public class FormatPanel extends AbstractInputPanel implements ActionListener, C
     private final JButton newButton;
 
     /**
-     * Der delete-Button löscht schon bestehende Formatvorlagen aus dem Kostenmodell.
+     * Der delete-Button löscht schon bestehende Formatvorlagen aus dem
+     * Kostenmodell.
      */
     private final JButton deleteButton;
 
@@ -113,14 +126,18 @@ public class FormatPanel extends AbstractInputPanel implements ActionListener, C
      */
     private final Vector<String> unitBoxElements = new Vector<>();
     /**
-     * Wenn Formate über dieses Panel gelöscht werden, dann wird in dieser Map jeweils in einer <code>ArrayList</code> gespeichert, welche UserFields
-     * dieses Format benutzt haben. Wenn Abbrechen aufgerufen wird, müssen die Formate wieder alle gesetzt werden.
+     * Wenn Formate über dieses Panel gelöscht werden, dann wird in dieser Map
+     * jeweils in einer <code>ArrayList</code> gespeichert, welche UserFields
+     * dieses Format benutzt haben. Wenn Abbrechen aufgerufen wird, müssen die
+     * Formate wieder alle gesetzt werden.
      */
     private final Map<UserField, List<UserField>> deletedFormatToFormatUser = new HashMap<>();
 
     /**
-     * In dieser Liste werden die neu angelegten Format- <code>UserField</code> s gespeichert bis <code>commit()</code> aufgerufen wurde. Im Falle von
-     * <code>cancel()</code>, werden diese dann auch wieder aus den <code>definitions</code> entfernt.
+     * In dieser Liste werden die neu angelegten Format- <code>UserField</code>
+     * s gespeichert bis <code>commit()</code> aufgerufen wurde. Im Falle von
+     * <code>cancel()</code>, werden diese dann auch wieder aus den
+     * <code>definitions</code> entfernt.
      */
     private final List<UserField> newFormatesList;
 
@@ -281,10 +298,12 @@ public class FormatPanel extends AbstractInputPanel implements ActionListener, C
     }
 
     /**
-     * Liefert einen Anzeige- <code>String</code> des übergebenen Format- <code>UserField</code>s.
+     * Liefert einen Anzeige- <code>String</code> des übergebenen Format-
+     * <code>UserField</code>s.
      *
      * @param userField
-     * @return Anzeige- <code>String</code> des Formates. Wenn kein Format eingestellt ist, kommt <code>null</code> zurück;
+     * @return Anzeige- <code>String</code> des Formates. Wenn kein Format
+     *         eingestellt ist, kommt <code>null</code> zurück;
      */
     private static final String getFormatPatternString(final UserField formatuserField) {
         int minimumFractionDigits = formatuserField.getFormatFractionDigits();
@@ -307,9 +326,11 @@ public class FormatPanel extends AbstractInputPanel implements ActionListener, C
     }
 
     /**
-     * Gibt zu dem selektierten Element der <code>formatComboBox</code> das Format als <code>UserField</code> zurück.
+     * Gibt zu dem selektierten Element der <code>formatComboBox</code> das
+     * Format als <code>UserField</code> zurück.
      *
-     * @return das Objekt <code>UserField</code> zu dem selektierten Element der <code>formatComboBox</code>
+     * @return das Objekt <code>UserField</code> zu dem selektierten Element der
+     *         <code>formatComboBox</code>
      */
     private UserField getSelectedFormatUserField() {
         Object selectedFormatUserField = formatComboBox.getSelectedObject();
@@ -320,10 +341,12 @@ public class FormatPanel extends AbstractInputPanel implements ActionListener, C
     }
 
     /**
-     * Prüft, ob eine neu anzulegende Formatvorlage schon vorhanden ist. 2 Formate sind gleich, wenn sie die gleich Anzahl von Nachkommastellen und
+     * Prüft, ob eine neu anzulegende Formatvorlage schon vorhanden ist. 2
+     * Formate sind gleich, wenn sie die gleich Anzahl von Nachkommastellen und
      * die gleiche Einheit besitzen.
      *
-     * @return Wenn ein Duplikat entdeckt wird, gibt die Methode <code>true</code> zurück, sonst <code>false</code>.
+     * @return Wenn ein Duplikat entdeckt wird, gibt die Methode
+     *         <code>true</code> zurück, sonst <code>false</code>.
      */
     private boolean isDuplicateFormat() {
         Object digitSpinnerValue = digitSpinner.getValue();
@@ -352,9 +375,11 @@ public class FormatPanel extends AbstractInputPanel implements ActionListener, C
     }
 
     /**
-     * Wenn die Standardformate noch nicht vorhanden sind, werden sie angelegt ( Im Kostenmodell und in der <code>formatComboBox</code>.
+     * Wenn die Standardformate noch nicht vorhanden sind, werden sie angelegt (
+     * Im Kostenmodell und in der <code>formatComboBox</code>.
      *
-     * @param fractionDigits Die Anzahl der Nachkommastellen für die Darstellung des Kennzhahlwertes
+     * @param fractionDigits Die Anzahl der Nachkommastellen für die Darstellung
+     *            des Kennzhahlwertes
      * @param unit Die Einheit, in der die Kennzahl angegeben ist.
      */
     private void addStandardFormat(final int fractionDigits, final String unit) {
@@ -371,7 +396,8 @@ public class FormatPanel extends AbstractInputPanel implements ActionListener, C
     }
 
     /**
-     * Schreibt die neue Formatvorlage als Modellvariable in Form eines <code>UserField</code> s in die <code>GDCollection</code>
+     * Schreibt die neue Formatvorlage als Modellvariable in Form eines
+     * <code>UserField</code> s in die <code>GDCollection</code>
      *
      * @return das neu erzeugte <code>UserField</code>
      */
@@ -478,8 +504,8 @@ public class FormatPanel extends AbstractInputPanel implements ActionListener, C
             //für cancel() merken, wer das Format alles benutzt hat
             boolean selfUser = formatUser.remove(userField);
             if (formatUser.size() > 0) {
-                int option = MultipleOptionPane.showConfirmDialog(owner, getResString("warnung"), getResString("format_template_in_use"), MultipleOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
-                if (option != MultipleOptionPane.YES_OPTION) {
+                int option = MultipleOptionPane.showConfirmDialog(owner, getResString("warnung"), getResString("format_template_in_use"), JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
+                if (option != JOptionPane.YES_OPTION) {
                     return;
                 }
             }

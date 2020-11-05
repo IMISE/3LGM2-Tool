@@ -38,9 +38,9 @@ public class ConsistencyErrorTableModel extends DefaultTableModel {
         public final int maxColumnWidth;
 
         /**
-         * Store the toString value because this String
-         * is the identifier for the column and it will
-         * be compared by object identity (and not equals).
+         * Store the toString value because this String is the identifier for
+         * the column and it will be compared by object identity (and not
+         * equals).
          */
         private String toString;
 

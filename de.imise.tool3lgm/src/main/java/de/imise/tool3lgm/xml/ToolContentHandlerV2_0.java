@@ -38,25 +38,34 @@ import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout.TextPositionVe
 import de.imise.tool3lgm.log.Log;
 
 /**
- * Die Variablen sind auf protected Gesetzt, damit man einen neuen ContentHandler
- * von dieser Klasse ableiten kann aber trotzdem noch Zugriff auf alle nötigen
- * Werte hat. Ich denke, bei kleinen Änderungen (hinzukommen oder wegfallen einzelnener
- * Felder im Dokument) muß man keinen ganz neuen ContentHandler schreiben sondern muß
- * nur einen abgeleiteten von diesem bilden. Ich würde aber empfehlen von Zeit zu Zeit
- * einen völlig neuen ContentHandler zu schreiben.
- * erkennt Modell mit 3lgm2_v2_0.dtd Version 2.0
+ * Die Variablen sind auf protected Gesetzt, damit man einen neuen
+ * ContentHandler von dieser Klasse ableiten kann aber trotzdem noch Zugriff auf
+ * alle nötigen Werte hat. Ich denke, bei kleinen Änderungen (hinzukommen oder
+ * wegfallen einzelnener Felder im Dokument) muß man keinen ganz neuen
+ * ContentHandler schreiben sondern muß nur einen abgeleiteten von diesem
+ * bilden. Ich würde aber empfehlen von Zeit zu Zeit einen völlig neuen
+ * ContentHandler zu schreiben. erkennt Modell mit 3lgm2_v2_0.dtd Version 2.0
  *
  * @author Thomas Rudert
  */
 public class ToolContentHandlerV2_0 implements ContentHandler {
 
-    /** gänderte Hashcodes (bei copyAndPaste) Schlüssel ist alter HashString, Wert ist neuer HashString */
+    /**
+     * gänderte Hashcodes (bei copyAndPaste) Schlüssel ist alter HashString,
+     * Wert ist neuer HashString
+     */
     protected Map<String, String> hashCodes;
 
-    /** Kanten deren hashStrings (start, end) aufgelöst werden müssen (bei copyAndPaste) */
+    /**
+     * Kanten deren hashStrings (start, end) aufgelöst werden müssen (bei
+     * copyAndPaste)
+     */
     protected List<Edge> edges;
 
-    /** KantenContainer deren computeBorderPoints()-Methode aufgerufen werden muss */
+    /**
+     * KantenContainer deren computeBorderPoints()-Methode aufgerufen werden
+     * muss
+     */
     protected List<EdgeContainer> edgeContainers;
 
     /** GDCollection in die die Element geschrieben werden */
@@ -74,7 +83,10 @@ public class ToolContentHandlerV2_0 implements ContentHandler {
     /** aktuelles GraphElementLayout */
     protected GraphElementLayout layout = null;
 
-    /** ElementKlasse auf die sich das GraphElementLayout bezieht (StandardLayout (Mapping) */
+    /**
+     * ElementKlasse auf die sich das GraphElementLayout bezieht (StandardLayout
+     * (Mapping)
+     */
     protected Class<? extends ModelElement> classType = null;
 
     /** aktuelles ModellElement */
@@ -92,16 +104,20 @@ public class ToolContentHandlerV2_0 implements ContentHandler {
     /** definiert die gültigkeit Farbe (fg_color, bg_color, border_color) */
     protected String colorString = null;
 
-    /** String der in der characters Methode ausgelesen wird (Werte eines Tags) */
+    /**
+     * String der in der characters Methode ausgelesen wird (Werte eines Tags)
+     */
     protected StringBuilder elementValue = new StringBuilder();
 
     /** HashString eines Bitmaps */
     protected String iconKey = null;
 
     /**
-     * ArrayList mit allen Containern die ein Icon besitzen; da die Icons erst zu letzt eingelesen werden, wird den Containern zuerst nur der
-     * HashString des Icons mitgeteilt. Nach dem einlesen der Icons müssen diese Container noch das eigentliche Icon aus der Hashmap der Collection
-     * laden. Das passiert in der Methode setIcon();
+     * ArrayList mit allen Containern die ein Icon besitzen; da die Icons erst
+     * zu letzt eingelesen werden, wird den Containern zuerst nur der HashString
+     * des Icons mitgeteilt. Nach dem einlesen der Icons müssen diese Container
+     * noch das eigentliche Icon aus der Hashmap der Collection laden. Das
+     * passiert in der Methode setIcon();
      */
     protected List<NodeContainer> containerWithIcon = new ArrayList<>();
 
@@ -113,9 +129,10 @@ public class ToolContentHandlerV2_0 implements ContentHandler {
     protected boolean avoidDuplicates = false;
 
     /**
-     * Faktor, um den die Position von per Paste eingefügten Elementen in x und y Richtung nach unten
-     * verschoben wird. Mehrmaliges Hintereinandereinfügen erhöht diesen Faktor, so dass die kopierten
-     * Elemente immer schräg unter den originalen bzw. zuletzt eingefügten Elementen landen.
+     * Faktor, um den die Position von per Paste eingefügten Elementen in x und
+     * y Richtung nach unten verschoben wird. Mehrmaliges Hintereinandereinfügen
+     * erhöht diesen Faktor, so dass die kopierten Elemente immer schräg unter
+     * den originalen bzw. zuletzt eingefügten Elementen landen.
      */
     private int copyAndPastePositionShift = 0;
 
@@ -140,10 +157,12 @@ public class ToolContentHandlerV2_0 implements ContentHandler {
     }
 
     /**
-     * ruft Methoden doc._relinkTraces(), doc._duplicateAufOrgs(), doc._duplicateABKonfs() auf und setzt doc, container, collection, elementValue auf
-     * null;
-     * in der naechsten Version (V1_2) sollte diese Funktion ueberschrieben werden, damit die 3 Funktionen nicht mehr aufgerufen werden, da diese nur
-     * Fehler korrigert haben, die dann nicht mehr auftreten duerften
+     * ruft Methoden doc._relinkTraces(), doc._duplicateAufOrgs(),
+     * doc._duplicateABKonfs() auf und setzt doc, container, collection,
+     * elementValue auf null; in der naechsten Version (V1_2) sollte diese
+     * Funktion ueberschrieben werden, damit die 3 Funktionen nicht mehr
+     * aufgerufen werden, da diese nur Fehler korrigert haben, die dann nicht
+     * mehr auftreten duerften
      *
      * @see org.xml.sax.ContentHandler#endDocument()
      */
@@ -605,7 +624,10 @@ public class ToolContentHandlerV2_0 implements ContentHandler {
 
                 Static.setProgressDialogStatusLabel("labelConnectTraces");
 
-                /* die HashStrings für das Start- bzw. End-Objekt einer Edge auflösen und die wirklichen Node setzten */
+                /*
+                 * die HashStrings für das Start- bzw. End-Objekt einer Edge
+                 * auflösen und die wirklichen Node setzten
+                 */
                 if (isCopyAndPaste()) {
                     Edge edge;
                     for (int i = 0; i < edges.size(); i++) {

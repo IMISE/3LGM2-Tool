@@ -3,8 +3,9 @@ package de.imise.tool3lgm.event.action;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 
 /**
- * Eine Aktion, die enabled ist, wenn (außer evtl. auch selektierten Knickpunten) wenigstens
- * eine Knoten oder eine Kante selketiert ist (egal ob in der Grafik oder im Baum).
+ * Eine Aktion, die enabled ist, wenn (außer evtl. auch selektierten
+ * Knickpunten) wenigstens eine Knoten oder eine Kante selketiert ist (egal ob
+ * in der Grafik oder im Baum).
  *
  * @author imise
  */

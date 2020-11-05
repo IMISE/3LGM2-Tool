@@ -70,7 +70,8 @@ public class Transaction {
     }
 
     /**
-     * Liefert <code>true</code>, wenn das ausführen des Undo- oder Redokommandos nichts sinnvolles bewirkt.
+     * Liefert <code>true</code>, wenn das ausführen des Undo- oder
+     * Redokommandos nichts sinnvolles bewirkt.
      *
      * @return
      */
@@ -123,10 +124,14 @@ public class Transaction {
     }
 
     /**
-     * Löscht das letzte Redo-Kommando, das mit dem <code>commadPrefix</code> beginnt, wenn es ein solches gibt und fügt ein neues Kommando mit dem
-     * <code>commadPrefix</code> und den <code>commandArguments</code> am Ende an. <br />
-     * Diese Funktion ist gedacht, um z. B. bei Verschiebeoperationen nicht jeden Zwischenschritt zu speichern. Für das Redo benötigt man immer nur
-     * die letzte Verschiebeoperation, da sie den endgültigen Ort und Größe eines Elementes eindeutig bestimmt.
+     * Löscht das letzte Redo-Kommando, das mit dem <code>commadPrefix</code>
+     * beginnt, wenn es ein solches gibt und fügt ein neues Kommando mit dem
+     * <code>commadPrefix</code> und den <code>commandArguments</code> am Ende
+     * an. <br />
+     * Diese Funktion ist gedacht, um z. B. bei Verschiebeoperationen nicht
+     * jeden Zwischenschritt zu speichern. Für das Redo benötigt man immer nur
+     * die letzte Verschiebeoperation, da sie den endgültigen Ort und Größe
+     * eines Elementes eindeutig bestimmt.
      *
      * @param commandPrefix
      * @param commandArguments
@@ -145,9 +150,12 @@ public class Transaction {
     }
 
     /**
-     * Logt ein Undo-Kommando nur, wenn nicht schon ein Undo-Kommando mit demselben <code>commandpre</code> in dieser Trasaktion vorkommt. Diese
-     * Funktion ist gedacht, um z. B. bei Verschiebeoperationen nicht jeden Zwischenschritt zu speichern. Für das
-     * Undo benötigt man immer nur das erste Undo-Kommando, da sie den Ausgangs-Ort und -Größe eines Elementes eindeutig bestimmt.
+     * Logt ein Undo-Kommando nur, wenn nicht schon ein Undo-Kommando mit
+     * demselben <code>commandpre</code> in dieser Trasaktion vorkommt. Diese
+     * Funktion ist gedacht, um z. B. bei Verschiebeoperationen nicht jeden
+     * Zwischenschritt zu speichern. Für das Undo benötigt man immer nur das
+     * erste Undo-Kommando, da sie den Ausgangs-Ort und -Größe eines Elementes
+     * eindeutig bestimmt.
      *
      * @param commandPrefix
      * @param commandArguments
@@ -272,9 +280,8 @@ public class Transaction {
 
     /**
      * @return <code>true</code> only if the transaction have the
-     *         {@link TransactionManager#STANDARD_PID} and the
-     *         transaction is still running (open counter must be
-     *         at least 1)
+     *         {@link TransactionManager#STANDARD_PID} and the transaction is
+     *         still running (open counter must be at least 1)
      */
     public boolean isOpenStandardPidTransaction() {
         return hasStandardPid() && open > 0;
@@ -282,8 +289,8 @@ public class Transaction {
 
     /**
      * @return <code>true</code> only if the transaction does not have the
-     *         {@link TransactionManager#STANDARD_PID} and at least one
-     *         inner transaction is open (open counter must be at least 2)
+     *         {@link TransactionManager#STANDARD_PID} and at least one inner
+     *         transaction is open (open counter must be at least 2)
      */
     public boolean isOpenDialogTransaction() {
         return !hasStandardPid() && open > 1;

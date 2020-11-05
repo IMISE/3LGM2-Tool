@@ -66,8 +66,8 @@ public class GraphAnalysis {
     }
 
     /**
-     * Sucht nach passenden Elementen. Diesmal müssen sie aber bereits mit im übergebenen Vektor
-     * "origin" enthaltenen Elementen verbunden sein.
+     * Sucht nach passenden Elementen. Diesmal müssen sie aber bereits mit im
+     * übergebenen Vektor "origin" enthaltenen Elementen verbunden sein.
      *
      * @param doc
      * @param origin

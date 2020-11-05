@@ -22,17 +22,18 @@ import de.imise.util.ReflectionUtils;
 import de.imise.util.collections.CollectionUtils;
 
 /**
- * Grundklasse zur Verwaltung der Modellselektion. Sie besteht aus 3 Mengen (selektierte Node, Kanten und Knickpunkte).
- * Zusätzlich dazu wird sich das zuletzt zur Selektion hinzugefügte Element gemerkt.
+ * Grundklasse zur Verwaltung der Modellselektion. Sie besteht aus 3 Mengen
+ * (selektierte Node, Kanten und Knickpunkte). Zusätzlich dazu wird sich das
+ * zuletzt zur Selektion hinzugefügte Element gemerkt.
  *
- * @author AXS
- *         created on 11.12.2006
+ * @author AXS created on 11.12.2006
  */
 public class ModelSelection extends MetaModelSpecificAdapter implements Set<ElementContainer> {
 
     /**
-     * Speziellste Oberklasse der {@link ModelElement}s aller selektierbaren {@link NodeContainer}. Das
-     * sollte in alle Metamodellen {@link ModelElement} sein, muss es aber in Zukunft nicht.
+     * Speziellste Oberklasse der {@link ModelElement}s aller selektierbaren
+     * {@link NodeContainer}. Das sollte in alle Metamodellen
+     * {@link ModelElement} sein, muss es aber in Zukunft nicht.
      */
     private final Class<?> commonRealElementsSuperClass;
 
@@ -52,13 +53,17 @@ public class ModelSelection extends MetaModelSpecificAdapter implements Set<Elem
     private NodeContainer lastSelectedGraphVisibleNodeOrBendpoint;
 
     /**
-     * Enthält die speziellste gemeinsame Unterklasse von {@link ModelElement} aus allen Elementen
-     * der selektierten {@link NodeContainer} aus <code>selectedRealNodeContainer</code>.<br>
+     * Enthält die speziellste gemeinsame Unterklasse von {@link ModelElement}
+     * aus allen Elementen der selektierten {@link NodeContainer} aus
+     * <code>selectedRealNodeContainer</code>.<br>
      * Wenn nichts selektiert ist, ist dieser Wert <code>null</code>.
      */
     private Class<? extends ModelElement> mostSpecialRealElementClass = null;
 
-    /** Wenn viele Elemente hinzugefügt oder entfernt werden sollen, muss nicht bei jedem Hinzufügen einzeln. */
+    /**
+     * Wenn viele Elemente hinzugefügt oder entfernt werden sollen, muss nicht
+     * bei jedem Hinzufügen einzeln.
+     */
     private boolean preventUpdate = false;
 
     /**
@@ -83,7 +88,8 @@ public class ModelSelection extends MetaModelSpecificAdapter implements Set<Elem
     }
 
     /**
-     * Erzeugt eine neue Selektion mit den übergebenen Objekten als Selektionsmenge.
+     * Erzeugt eine neue Selektion mit den übergebenen Objekten als
+     * Selektionsmenge.
      *
      * @param metaModel
      * @param selection
@@ -94,7 +100,8 @@ public class ModelSelection extends MetaModelSpecificAdapter implements Set<Elem
     }
 
     /**
-     * Liefert das zuletzt selektierte Element, auf das sich alle Aktionen beziehen.
+     * Liefert das zuletzt selektierte Element, auf das sich alle Aktionen
+     * beziehen.
      *
      * @return
      */
@@ -117,10 +124,10 @@ public class ModelSelection extends MetaModelSpecificAdapter implements Set<Elem
      */
     private void setLastSelected(final ElementContainer lastSelected) {
         /*
-         * if (lastSelected instanceof EdgeContainer) {
-         * Edge edge = (Edge) lastSelected.getElement();
-         * System.err.println(ModelConstants.getDisplayableName(edge) + ": Start=" + edge.getStart() + " <-> End=" + edge.getEnd());
-         * }
+         * if (lastSelected instanceof EdgeContainer) { Edge edge = (Edge)
+         * lastSelected.getElement();
+         * System.err.println(ModelConstants.getDisplayableName(edge) +
+         * ": Start=" + edge.getStart() + " <-> End=" + edge.getEnd()); }
          */
         this.lastSelected = lastSelected;
         if (lastSelected == null) {
@@ -145,11 +152,12 @@ public class ModelSelection extends MetaModelSpecificAdapter implements Set<Elem
     }
 
     /**
-     * Liefert die Selektion. Wenn die Parameter-Listen nicht leer sind, dann werden die selektierten Node, die in
-     * den Parameter-Listen enthalten sind, am Anfang der Rückgabeliste in derselben Reihenfolge eingetragen, in der sie
-     * in den Parameter-Listen stehen.
-     * Die Parameter-Listen sollten die node-Listen der LayerContainer sein, so dass die Rückgabe-Liste die Reihenfolge
-     * enthält, mit der die Node auf dem Layer gezeichnet werden.
+     * Liefert die Selektion. Wenn die Parameter-Listen nicht leer sind, dann
+     * werden die selektierten Node, die in den Parameter-Listen enthalten sind,
+     * am Anfang der Rückgabeliste in derselben Reihenfolge eingetragen, in der
+     * sie in den Parameter-Listen stehen. Die Parameter-Listen sollten die
+     * node-Listen der LayerContainer sein, so dass die Rückgabe-Liste die
+     * Reihenfolge enthält, mit der die Node auf dem Layer gezeichnet werden.
      *
      * @param orderSources
      * @return
@@ -171,11 +179,12 @@ public class ModelSelection extends MetaModelSpecificAdapter implements Set<Elem
     }
 
     /**
-     * Liefert die Liste der aktuell selektierten <code>ModelElements</code>.<br />
-     * Das zuletzt selektierte Element ist auch in dieser Liste das letzte Element.
+     * Liefert die Liste der aktuell selektierten
+     * <code>ModelElements</code>.<br />
+     * Das zuletzt selektierte Element ist auch in dieser Liste das letzte
+     * Element.
      *
-     * @return
-     *         Liste der ModellElemente der selektierten ElementContainer
+     * @return Liste der ModellElemente der selektierten ElementContainer
      */
     public final List<ModelElement> getSelectedElements() {
         ArrayList<ModelElement> returnList = new ArrayList<>(size());
@@ -193,7 +202,8 @@ public class ModelSelection extends MetaModelSpecificAdapter implements Set<Elem
     }
 
     /**
-     * Liefert alle Elementklassen aller selektierten Knotenelemente ohne das zuletzt selektierte Element.
+     * Liefert alle Elementklassen aller selektierten Knotenelemente ohne das
+     * zuletzt selektierte Element.
      *
      * @return
      */
@@ -375,9 +385,11 @@ public class ModelSelection extends MetaModelSpecificAdapter implements Set<Elem
     }
 
     /**
-     * Liefert eine neu erzeugte Liste aller selektierten Container. Die Reihenfolge der
-     * Elemente ist zufällig, aber das zueltzt selektierte Element ist immer ganz hinten
-     * in der Liste. Diese Rückgabeliste kann genutzt werden, um über die Funktion {@link #set(Collection)} eine alte Selektion wiederherzustellen.
+     * Liefert eine neu erzeugte Liste aller selektierten Container. Die
+     * Reihenfolge der Elemente ist zufällig, aber das zueltzt selektierte
+     * Element ist immer ganz hinten in der Liste. Diese Rückgabeliste kann
+     * genutzt werden, um über die Funktion {@link #set(Collection)} eine alte
+     * Selektion wiederherzustellen.
      *
      * @return
      */
@@ -522,7 +534,8 @@ public class ModelSelection extends MetaModelSpecificAdapter implements Set<Elem
     }
 
     /**
-     * Aktualisiert die <code>mostSpecialFullSelectionClass</code> und alle <code>boolean</code>-Werte dieser Klasse.
+     * Aktualisiert die <code>mostSpecialFullSelectionClass</code> und alle
+     * <code>boolean</code>-Werte dieser Klasse.
      */
     public void updateSelectionState() {
         if (preventUpdate) {
@@ -555,9 +568,10 @@ public class ModelSelection extends MetaModelSpecificAdapter implements Set<Elem
 
     /**
      * Gibt die erste gemeinsame Klasse aller selektierten Elemente zurück.<br>
-     * In der Selektion sind zwar {@link ElementContainer}, aber hier kommt die Oberklasse
-     * der in den Containern befindlichen Unterklassen von {@link ModelElement} zurück.
-     * Wenn nichts selektiert ist, ist dieser Wert <code>null</code>.
+     * In der Selektion sind zwar {@link ElementContainer}, aber hier kommt die
+     * Oberklasse der in den Containern befindlichen Unterklassen von
+     * {@link ModelElement} zurück. Wenn nichts selektiert ist, ist dieser Wert
+     * <code>null</code>.
      *
      * @return
      */
@@ -566,8 +580,9 @@ public class ModelSelection extends MetaModelSpecificAdapter implements Set<Elem
     }
 
     /**
-     * Liefert <code>true</code>, wenn die selektierten Elemente vereinbar sind. Das gilt,
-     * wenn die <code>mostSpecialFullSelectionElementClass</code> nicht abtract ist und wenigstens 2 Elemente selektiert sind.
+     * Liefert <code>true</code>, wenn die selektierten Elemente vereinbar sind.
+     * Das gilt, wenn die <code>mostSpecialFullSelectionElementClass</code>
+     * nicht abtract ist und wenigstens 2 Elemente selektiert sind.
      *
      * @return Returns the joinableElements.
      */
@@ -576,7 +591,8 @@ public class ModelSelection extends MetaModelSpecificAdapter implements Set<Elem
     }
 
     /**
-     * Liefert <code>true</code>, wenn nur Knickpunkte in der Selektion vorkommen.
+     * Liefert <code>true</code>, wenn nur Knickpunkte in der Selektion
+     * vorkommen.
      *
      * @return
      */
@@ -585,8 +601,8 @@ public class ModelSelection extends MetaModelSpecificAdapter implements Set<Elem
     }
 
     /**
-     * Gibt wieder, ob alle ausgewählten Elemente <em>unique</em> sind (= ohne grafische
-     * Repräsentation immer in allen Teilmodellen vorkommen).
+     * Gibt wieder, ob alle ausgewählten Elemente <em>unique</em> sind (= ohne
+     * grafische Repräsentation immer in allen Teilmodellen vorkommen).
      *
      * @return
      */
@@ -605,7 +621,8 @@ public class ModelSelection extends MetaModelSpecificAdapter implements Set<Elem
     }
 
     /**
-     * Gibt wieder, ob nur untergeordnete Elemente in den RealNodes selektiert sind.
+     * Gibt wieder, ob nur untergeordnete Elemente in den RealNodes selektiert
+     * sind.
      *
      * @return
      */
@@ -620,7 +637,8 @@ public class ModelSelection extends MetaModelSpecificAdapter implements Set<Elem
     }
 
     /**
-     * Gibt wieder, ob ausschließlich {@link ElementContainer} von {@link Textfield} und {@link Bendpoint} selektiert sind.
+     * Gibt wieder, ob ausschließlich {@link ElementContainer} von
+     * {@link Textfield} und {@link Bendpoint} selektiert sind.
      *
      * @return
      */
@@ -630,7 +648,8 @@ public class ModelSelection extends MetaModelSpecificAdapter implements Set<Elem
     }
 
     /**
-     * Liefert die Anzahl an selektierten Modellelementen (also alles außer Knickpunkte und Kanten).
+     * Liefert die Anzahl an selektierten Modellelementen (also alles außer
+     * Knickpunkte und Kanten).
      *
      * @return
      */

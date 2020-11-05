@@ -5,14 +5,16 @@ import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.model.template.TemplateLibrariesManager;
 
 /**
- * Eine Aktion, die enabled ist, wenn irgendein Teilmodell oder ein Gesamtmodell aktiv (also geöffnet) ist.
+ * Eine Aktion, die enabled ist, wenn irgendein Teilmodell oder ein Gesamtmodell
+ * aktiv (also geöffnet) ist.
  *
  * @author AXS
  */
 public class GraphDocumentAction extends StaticAction {
 
     /**
-     * Wenn <code>true</code> wird das aktive doc aus dem TemplateContext genommen, sonst das aus Static.
+     * Wenn <code>true</code> wird das aktive doc aus dem TemplateContext
+     * genommen, sonst das aus Static.
      */
     private final boolean templateContextAction;
 
@@ -58,6 +60,9 @@ public class GraphDocumentAction extends StaticAction {
         return super.isEnabled() && getActiveDoc() != null;
     }
 
+    /**
+     * @return
+     */
     protected GraphDocument getActiveDoc() {
         if (templateContextAction) {
             TemplateLibrariesManager templateLibrariesManager = Static.getTemplateLibrariesManager();

@@ -28,20 +28,25 @@ public abstract class GraphViewDefinition {
     protected final MetaModel metaModel;
 
     /**
-     * Liefert eine Liste aller metamodellabhängigen Knoten, die in der Grafik dargestellt werden.
-     * Die Reihenfolge in dieser Liste legt fest, in welcher Reihenfolge die Elemente in dem gloabeln LayoutEditor angezeigt werden
+     * Liefert eine Liste aller metamodellabhängigen Knoten, die in der Grafik
+     * dargestellt werden. Die Reihenfolge in dieser Liste legt fest, in welcher
+     * Reihenfolge die Elemente in dem gloabeln LayoutEditor angezeigt werden
      *
      * @return
      */
     protected abstract Class<? extends ModelElement>[] getPaintableNodes();
 
     /**
-     * Liste aller Knoten, die in der Grafik sichtbar sind. Das sind alle Knoten metammodellabhängigen Knoten aus paintableNodes plus die
+     * Liste aller Knoten, die in der Grafik sichtbar sind. Das sind alle Knoten
+     * metammodellabhängigen Knoten aus paintableNodes plus die
      * metamodellunabhängigen Knickpunkte, Layer und Textfelder.
      */
     private final Set<Class<? extends ModelElement>> allPaintableNodes;
 
-    /** Liste aller metmodellabhängigen Knoten, die in der Grafik angezeigt werden */
+    /**
+     * Liste aller metmodellabhängigen Knoten, die in der Grafik angezeigt
+     * werden
+     */
     private final List<Class<? extends ModelElement>> metaModelSpecificPaintableNodes;
 
     private Map<Class<? extends ModelElement>, SimpleMetaPath> classToConfigurationPaths = null;
@@ -67,7 +72,8 @@ public abstract class GraphViewDefinition {
     }
 
     /**
-     * Liefert <code>true</code>, wenn die Elementklasse nicht in der Grafik dargestellt wird.
+     * Liefert <code>true</code>, wenn die Elementklasse nicht in der Grafik
+     * dargestellt wird.
      *
      * @param elementClass
      * @return
@@ -84,21 +90,24 @@ public abstract class GraphViewDefinition {
     }
 
     /**
-     * @return Liste aller metmodellabhängigen Knoten, die in der Grafik angezeigt werden
+     * @return Liste aller metmodellabhängigen Knoten, die in der Grafik
+     *         angezeigt werden
      */
     public List<Class<? extends ModelElement>> getMetaModelSpecificPaintableNodes() {
         return metaModelSpecificPaintableNodes;
     }
 
     /**
-     * Liefert die MetaPfade, die als Interebenenbeziehungen dargestellt werden sollen
+     * Liefert die MetaPfade, die als Interebenenbeziehungen dargestellt werden
+     * sollen
      *
      * @return
      */
     protected abstract SimpleMetaPath[] getConfigurationPaths();
 
     /**
-     * Liefert den MetaPfade, der als Interebenenbeziehung dargestellt werden soll, wenn es einen solchen gibt.
+     * Liefert den MetaPfade, der als Interebenenbeziehung dargestellt werden
+     * soll, wenn es einen solchen gibt.
      *
      * @param me
      * @return
@@ -108,7 +117,8 @@ public abstract class GraphViewDefinition {
     }
 
     /**
-     * Liefert den MetaPfade, der als Interebenenbeziehung dargestellt werden soll, wenn es einen solchen gibt.
+     * Liefert den MetaPfade, der als Interebenenbeziehung dargestellt werden
+     * soll, wenn es einen solchen gibt.
      *
      * @param elementClass
      * @return
@@ -129,8 +139,8 @@ public abstract class GraphViewDefinition {
     }
 
     /**
-     * Liefert alle Elementklassen, die man in der Grafik ausblenden kann, wenn sie über keine Kante der zugehörigen
-     * Kantenart verfügen.
+     * Liefert alle Elementklassen, die man in der Grafik ausblenden kann, wenn
+     * sie über keine Kante der zugehörigen Kantenart verfügen.
      *
      * @return
      */

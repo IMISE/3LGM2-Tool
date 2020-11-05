@@ -21,7 +21,8 @@ import de.imise.tool3lgm.gui.viewpane.ViewPaneFrameComponentListener;
 import de.imise.util.swing.component.AlphabeticalComboBox;
 
 /**
- * Interface für alle {@link Component}, die im {@link ModelBrowser} Teilmodelle anzeigen.
+ * Interface für alle {@link Component}, die im {@link ModelBrowser} Teilmodelle
+ * anzeigen.
  *
  * @author AXS
  */
@@ -33,7 +34,8 @@ public final class SubModelsBrowser extends JPanel implements FocusListener, Ite
     private final GDCollection gdcoll;
 
     /**
-     * Der Baum, in dem in diesem TeilomodellBrwoser alle Daten angezeigt werden. Er wird immer in den Tab im Vordergrund eingebaut.
+     * Der Baum, in dem in diesem TeilomodellBrwoser alle Daten angezeigt
+     * werden. Er wird immer in den Tab im Vordergrund eingebaut.
      */
     private final ModelBrowserTree tree;
 

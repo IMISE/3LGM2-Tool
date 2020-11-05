@@ -10,18 +10,27 @@ import de.imise.tool3lgm.graphtools.model.LGMChangeListener.LGMChangeType;
 import de.imise.util.swing.event.OptionAction;
 
 /**
- * Eine Action, die für globale Boolean-Optionen ist. Die ganzen Optionen der UserProperties können hiermit behandelt werden.
+ * Eine Action, die für globale Boolean-Optionen ist. Die ganzen Optionen der
+ * UserProperties können hiermit behandelt werden.
  *
  * @author AXS 04.12.2017
  */
 public abstract class GlobalOptionAction extends StaticAction implements OptionAction {
 
+    /**  */
     private final LGMChangeType changeType;
 
+    /**
+     * @param identifier
+     */
     public GlobalOptionAction(final Object identifier) {
         this(identifier, LGMChangeType.DATA_CHANGED);
     }
 
+    /**
+     * @param identifier
+     * @param changeType
+     */
     public GlobalOptionAction(final Object identifier, final LGMChangeType changeType) {
         super(identifier);
         this.changeType = changeType;
@@ -42,7 +51,9 @@ public abstract class GlobalOptionAction extends StaticAction implements OptionA
         distributeOptionChange(changeType);
     }
 
-    /** Benachrichtigt das Tool über das Eintreten des spezifizierten Ereignisses */
+    /**
+     * Benachrichtigt das Tool über das Eintreten des spezifizierten Ereignisses
+     */
     private void distributeOptionChange(final LGMChangeType eventCode) {
         for (int i = 0; i < Static.getCollectionCount(); i++) {
             GDCollection col = Static.getCollection(i);
@@ -55,6 +66,9 @@ public abstract class GlobalOptionAction extends StaticAction implements OptionA
         return OptionAction.super.createMenuItem();
     }
 
+    /**
+     *
+     */
     public abstract void changeOption();
 
 }

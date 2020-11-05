@@ -16,6 +16,7 @@ import java.io.RandomAccessFile;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
+import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -26,9 +27,8 @@ import de.imise.util.swing.component.text.ExtendedTextArea;
 import de.imise.util.swing.dialog.ExtendedFileChooser;
 
 /**
- * @author Thomas Rudert
- *         Klasse stellt einen TextEditor fuer unformatierten TextDokumente zur
- *         Verfuegung
+ * @author Thomas Rudert Klasse stellt einen TextEditor fuer unformatierten
+ *         TextDokumente zur Verfuegung
  */
 public class XSLTEditor extends JDialog implements ActionListener, WindowListener {
 
@@ -213,7 +213,7 @@ public class XSLTEditor extends JDialog implements ActionListener, WindowListene
         } else {
             saveDialog.setCurrentDirectory(lastUserDir);
         }
-        if (saveDialog.showSaveDialog(this) != ExtendedFileChooser.APPROVE_OPTION) {
+        if (saveDialog.showSaveDialog(this) != JFileChooser.APPROVE_OPTION) {
             return false;
         }
         file = saveDialog.getSelectedFile();

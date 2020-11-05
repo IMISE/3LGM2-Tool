@@ -53,9 +53,10 @@ public class MissingPathError extends AbstractPathError {
     }
 
     /**
-     * @return the errorCorrectingCreatableMetaPath that is the SimpleMetaPath equals
-     *         to the secondSubMetaPathToConnectedElements or a subpath of this and
-     *         is the metaPath that must be created to remove the error
+     * @return the errorCorrectingCreatableMetaPath that is the SimpleMetaPath
+     *         equals to the secondSubMetaPathToConnectedElements or a subpath
+     *         of this and is the metaPath that must be created to remove the
+     *         error
      */
     public SimpleMetaPath getErrorFixingCreatableMetaPath() {
         return missingPathErrorCheckCondition.getToFixTheErrorMetaPath();

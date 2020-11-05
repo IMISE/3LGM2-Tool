@@ -2,8 +2,8 @@ package de.imise.tool3lgm.graphtools.metamodel.elements;
 
 import static de.imise.tool3lgm.graphtools.metamodel.EdgeCardinality.ZERO_UNLIMITED;
 
+import de.imise.tool3lgm.graphtools.metamodel.CoreMetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.EdgeCardinality;
-import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
@@ -17,54 +17,65 @@ import de.imise.util.ReflectionUtils;
 public abstract class Edge extends ModelElement {
 
     /**
-     * Name der <code>Class&lt;? extends ModelElement&gt;</code>, mit der jede Kantenklasse seine Startklasse beschreibt. Über diesen Namen wird die
+     * Name der <code>Class&lt;? extends ModelElement&gt;</code>, mit der jede
+     * Kantenklasse seine Startklasse beschreibt. Über diesen Namen wird die
      * jeweilige Startklasse per Reflection ermittelt.
      */
     public static final String START_CLASS_FIELD_NAME = "STCL";
 
     /**
-     * Name der <code>Class&lt;? extends ModelElement&gt;</code>, mit dem jede Kantenklasse seine Endklasse beschreibt. Über diesen Namen wird die
+     * Name der <code>Class&lt;? extends ModelElement&gt;</code>, mit dem jede
+     * Kantenklasse seine Endklasse beschreibt. Über diesen Namen wird die
      * jeweilige Endklasse per Reflection ermittelt.
      */
     public static final String END_CLASS_FIELD_NAME = "ETCL";
 
     /**
-     * Name des Feldes mit der {@link EdgeCardinality}, mit der jede Kantenklasse die Kardinalitäten beschreibt, mit denen Elemente der Startklasse
-     * für Elemente der Endklasse vorhanden sein müssen.<br />
+     * Name des Feldes mit der {@link EdgeCardinality}, mit der jede
+     * Kantenklasse die Kardinalitäten beschreibt, mit denen Elemente der
+     * Startklasse für Elemente der Endklasse vorhanden sein müssen.<br />
      * Über diesen Namen werden die Kardinalitäten per Reflection ermittelt.
      */
     public static final String START_CARDINALITY_FIELD_NAME = "SCARD";
 
     /**
-     * Name des Feldes mit der {@link EdgeCardinality}, mit der jede Kantenklasse die Kardinalitäten beschreibt, mit denen Elemente der Endklasse für
-     * Elemente der Startklasse vorhanden sein müssen.<br />
+     * Name des Feldes mit der {@link EdgeCardinality}, mit der jede
+     * Kantenklasse die Kardinalitäten beschreibt, mit denen Elemente der
+     * Endklasse für Elemente der Startklasse vorhanden sein müssen.<br />
      * Über diesen Namen werden die Kardinalitäten per Reflection ermittelt.
      */
     public static final String END_CARDINALITY_FIELD_NAME = "ECARD";
 
     /**
-     * Auch für Kanten muss angegeben, welche Elementarten sie verbinden können, damit die Vererbung bei der Definition der MetaPfade funktioniert,
-     * die getStartElementClass() und getEndElementClass() aufruft. Unterklassen können eine eigene Konstante derselben Form defnieren. Da diese über
-     * Reflection geholt werden, funktioniert das mit diesen statischen Feldern genauso, als würde man eine Instanzfunktion überschreiben (trotz dass
-     * sie final sind).
+     * Auch für Kanten muss angegeben, welche Elementarten sie verbinden können,
+     * damit die Vererbung bei der Definition der MetaPfade funktioniert, die
+     * getStartElementClass() und getEndElementClass() aufruft. Unterklassen
+     * können eine eigene Konstante derselben Form defnieren. Da diese über
+     * Reflection geholt werden, funktioniert das mit diesen statischen Feldern
+     * genauso, als würde man eine Instanzfunktion überschreiben (trotz dass sie
+     * final sind).
      */
     public static final Class<? extends ModelElement> STCL = ModelElement.class;
 
     /**
-     * Kardinalität der Endklasse zur Startklasse. Sie gibt also immer an wie viele der Startelemente das EndElement braucht. Verwendung in
+     * Kardinalität der Endklasse zur Startklasse. Sie gibt also immer an wie
+     * viele der Startelemente das EndElement braucht. Verwendung in
      * Unterklassen identisch zu STCL.
      */
     public static final EdgeCardinality SCARD = ZERO_UNLIMITED;
 
     /**
-     * Kardinalität der Startklasse zur Endklasse. Sie gibt also immer an wie viele der Startelemente das EndElement braucht. Verwendung in
+     * Kardinalität der Startklasse zur Endklasse. Sie gibt also immer an wie
+     * viele der Startelemente das EndElement braucht. Verwendung in
      * Unterklassen identisch zu STCL.
      */
     public static final EdgeCardinality ECARD = ZERO_UNLIMITED;
 
     /**
-     * Auch für Kanten muss angegeben, welche Elementarten sie verbinden können, damit die Vererbung bei der Definition der MetaPfade funktioniert,
-     * die getStartElementClass() und getEndElementClass() aufruft. Verwendung in Unterklassen identisch zu STCL.
+     * Auch für Kanten muss angegeben, welche Elementarten sie verbinden können,
+     * damit die Vererbung bei der Definition der MetaPfade funktioniert, die
+     * getStartElementClass() und getEndElementClass() aufruft. Verwendung in
+     * Unterklassen identisch zu STCL.
      */
     public static final Class<? extends ModelElement> ETCL = ModelElement.class;
 
@@ -110,7 +121,8 @@ public abstract class Edge extends ModelElement {
     }
 
     /**
-     * liefert true, wenn beide Node, die die Edge verbindet identisch sind und die Edge von derselben Art ist (Richtung ist egal)
+     * liefert true, wenn beide Node, die die Edge verbindet identisch sind und
+     * die Edge von derselben Art ist (Richtung ist egal)
      *
      * @param edge
      * @return
@@ -154,19 +166,18 @@ public abstract class Edge extends ModelElement {
     }
 
     /**
-     * Setzt fuer die Edge das Start- und Endelement und fügt die Edge beim StartElement an Position startElementEdgePos und bei endElement an
+     * Setzt fuer die Edge das Start- und Endelement und fügt die Edge beim
+     * StartElement an Position startElementEdgePos und bei endElement an
      * Position endElementEdgePos ein.
      *
-     * @param startElement
-     *            Startelement der Edge
-     * @param startElementEdgePos
-     *            Postion der Edge in der Kantenliste des StartElementes. Wenn der Wert größer oder kleiner als die aktuelle Liste ist, dann wird die
-     *            Edge hinten angefügt.
-     * @param endElement
-     *            Endelement der Edge
-     * @param endElementEdgePos
-     *            Postion der Edge in der Kantenliste von EndElementes. Wenn der Wert größer oder kleiner als die aktuelle Liste ist, dann wird die
-     *            Edge hinten angefügt.
+     * @param startElement Startelement der Edge
+     * @param startElementEdgePos Postion der Edge in der Kantenliste des
+     *            StartElementes. Wenn der Wert größer oder kleiner als die
+     *            aktuelle Liste ist, dann wird die Edge hinten angefügt.
+     * @param endElement Endelement der Edge
+     * @param endElementEdgePos Postion der Edge in der Kantenliste von
+     *            EndElementes. Wenn der Wert größer oder kleiner als die
+     *            aktuelle Liste ist, dann wird die Edge hinten angefügt.
      */
     public void setNodesAndInsert(final ModelElement startElement, final int startElementEdgePos, final ModelElement endElement, final int endElementEdgePos) {
         this.startElement = startElement;
@@ -232,7 +243,8 @@ public abstract class Edge extends ModelElement {
     }
 
     /**
-     * Wenn das übergebene Element durch diese Edge mit einem anderen Element verbunden ist, kommt das andere Element der Edge zurück, sons
+     * Wenn das übergebene Element durch diese Edge mit einem anderen Element
+     * verbunden ist, kommt das andere Element der Edge zurück, sons
      * <code>null</code>.
      *
      * @param me
@@ -332,7 +344,8 @@ public abstract class Edge extends ModelElement {
     }
 
     /**
-     * Prüft die Validität der Kanten und stellt sie wenn möglich her. Die Prüfung betrifft die Art der Kantenelemente
+     * Prüft die Validität der Kanten und stellt sie wenn möglich her. Die
+     * Prüfung betrifft die Art der Kantenelemente
      *
      * @return <code>true</code>, wenn die Edge vollständig richtig ist
      */
@@ -343,7 +356,7 @@ public abstract class Edge extends ModelElement {
             Class<? extends ModelElement> elementClass = startElement.getClass();
             Class<? extends Edge> edgeClass = getClass();
             //prüfen, ob das StartElement von einer der Startklassen ist
-            if (!MetaModel.isStartClass(edgeClass, elementClass)) {
+            if (!CoreMetaModel.isStartClass(edgeClass, elementClass)) {
                 //wenn nicht
                 switchStart = isEndClass(elementClass);
             } else {
@@ -438,25 +451,27 @@ public abstract class Edge extends ModelElement {
     }
 
     /**
-     * Liefert <code>true</code>, wenn die übergebene Klasse die Startklasse der Edge oder eine Ober- oder Unterklasse davon ist.
+     * Liefert <code>true</code>, wenn die übergebene Klasse die Startklasse der
+     * Edge oder eine Ober- oder Unterklasse davon ist.
      *
      * @param elementClass
      * @return
      */
     public final boolean isStartClass(final Class<? extends ModelElement> elementClass) {
         Class<? extends Edge> edgeClass = getClass();
-        return MetaModel.isStartClass(edgeClass, elementClass);
+        return CoreMetaModel.isStartClass(edgeClass, elementClass);
     }
 
     /**
-     * Liefert <code>true</code>, wenn die übergebene Klasse die Endklasse der Edge oder eine Ober- oder Unterklasse davon ist.
+     * Liefert <code>true</code>, wenn die übergebene Klasse die Endklasse der
+     * Edge oder eine Ober- oder Unterklasse davon ist.
      *
      * @param elementClass
      * @return
      */
     public final boolean isEndClass(final Class<? extends ModelElement> elementClass) {
         Class<? extends Edge> edgeClass = getClass();
-        return MetaModel.isEndClass(edgeClass, elementClass);
+        return CoreMetaModel.isEndClass(edgeClass, elementClass);
     }
 
     /**
@@ -464,7 +479,7 @@ public abstract class Edge extends ModelElement {
      */
     public final int getMinForwardCardinality() {
         Class<? extends Edge> edgeClass = getClass();
-        return MetaModel.getMinForwardCardinality(edgeClass);
+        return CoreMetaModel.getMinForwardCardinality(edgeClass);
     }
 
     /**
@@ -472,7 +487,7 @@ public abstract class Edge extends ModelElement {
      */
     public final int getMaxForwardCardinality() {
         Class<? extends Edge> edgeClass = getClass();
-        return MetaModel.getMaxForwardCardinality(edgeClass);
+        return CoreMetaModel.getMaxForwardCardinality(edgeClass);
     }
 
     /**
@@ -480,7 +495,7 @@ public abstract class Edge extends ModelElement {
      */
     public final int getMinBackwardCardinality() {
         Class<? extends Edge> edgeClass = getClass();
-        return MetaModel.getMinBackwardCardinality(edgeClass);
+        return CoreMetaModel.getMinBackwardCardinality(edgeClass);
     }
 
     /**
@@ -488,7 +503,7 @@ public abstract class Edge extends ModelElement {
      */
     public final int getMaxBackwardCardinality() {
         Class<? extends Edge> edgeClass = getClass();
-        return MetaModel.getMaxBackwardCardinality(edgeClass);
+        return CoreMetaModel.getMaxBackwardCardinality(edgeClass);
     }
 
     /**

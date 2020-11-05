@@ -10,6 +10,7 @@ import java.util.Collection;
 import java.util.List;
 
 import de.imise.tool3lgm.Static;
+import de.imise.tool3lgm.graphtools.metamodel.CoreMetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.CompositionEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
@@ -28,17 +29,25 @@ import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
 public class PathFunctions {
 
     /**
-     * Status der möglichen Verbindungen über einen MetaPfad zwischen 2 Elementen.
+     * Status der möglichen Verbindungen über einen MetaPfad zwischen 2
+     * Elementen.
      * <ul>
      * <li><code>NOT_CONNECTED</code>: Die Elemente sind nicht verbunden.</li>
-     * <li><code>SELF</code>: Das Element hat selbst die Verbindung zu mind. einem EndElement</li>
-     * <li><code>PARENT</code>: Ein Parent des Elements hat die Verbindung zu mind. einem EndElement</li>
-     * <li><code>PART</code>: Ein Part des Elements hat die Verbindung zu mind. einem EndElement</li>
-     * <li><code>SELF_PARENT</code>: Das Element selbst und einer seiner Parents hat die Verbindung zu mind. einem EndElement</li>
-     * <li><code>SELF_PART</code>: Das Element selbst und einer seiner Parts hat die Verbindung zu mind. einem EndElement</li>
-     * <li><code>PARENT_PART</code>: Mind. ein Part und mind. ein Parent, aber nicht das Element selbst hat die Verbindung zu mind. einem
+     * <li><code>SELF</code>: Das Element hat selbst die Verbindung zu mind.
+     * einem EndElement</li>
+     * <li><code>PARENT</code>: Ein Parent des Elements hat die Verbindung zu
+     * mind. einem EndElement</li>
+     * <li><code>PART</code>: Ein Part des Elements hat die Verbindung zu mind.
+     * einem EndElement</li>
+     * <li><code>SELF_PARENT</code>: Das Element selbst und einer seiner Parents
+     * hat die Verbindung zu mind. einem EndElement</li>
+     * <li><code>SELF_PART</code>: Das Element selbst und einer seiner Parts hat
+     * die Verbindung zu mind. einem EndElement</li>
+     * <li><code>PARENT_PART</code>: Mind. ein Part und mind. ein Parent, aber
+     * nicht das Element selbst hat die Verbindung zu mind. einem
      * EndElement</li>
-     * <li><code>SELF_PARENT_PART</code>: Sowohl das Element selbst als auch mind. ein Part und mind. ein Parent hat die Verbindung zu mind. einem
+     * <li><code>SELF_PARENT_PART</code>: Sowohl das Element selbst als auch
+     * mind. ein Part und mind. ein Parent hat die Verbindung zu mind. einem
      * EndElement</li>
      * </ul>
      */
@@ -54,15 +63,14 @@ public class PathFunctions {
     }
 
     /**
-     * Liefert true, wenn für das übergebene Element der übergebene Pfad angelegt werden kann, ohne gegen die Konsistenz zu verstoßen
+     * Liefert true, wenn für das übergebene Element der übergebene Pfad
+     * angelegt werden kann, ohne gegen die Konsistenz zu verstoßen
      *
-     * @param modelElement
-     *            Element, für das der Pfad angelegt werden soll
-     * @param metaPath
-     *            Elementarpfad, der angelegt werden soll
-     * @param modelElementAsStartElement
-     *            <code>true</code>, wenn das übergebene Element als Startelement getestet werden soll, <code>false</code>, wenn es Endelement sein
-     *            soll
+     * @param modelElement Element, für das der Pfad angelegt werden soll
+     * @param metaPath Elementarpfad, der angelegt werden soll
+     * @param modelElementAsStartElement <code>true</code>, wenn das übergebene
+     *            Element als Startelement getestet werden soll,
+     *            <code>false</code>, wenn es Endelement sein soll
      * @return
      */
     private static final boolean isCreatable(final ModelElement modelElement, final ElementaryMetaPath metaPath, final boolean modelElementAsStartElement) {
@@ -80,12 +88,12 @@ public class PathFunctions {
         }
         if (metaPath.getDirection() == Direction.FORWARD) {
             //für das Startelement ist die maximale Verbindungsanzahl bereits erreicht?
-            if (MetaModel.getMaxForwardCardinality(metaPath.getEdgeClass()) <= modelElement.countStartConnections(metaPath.getEdgeClass())) {
+            if (CoreMetaModel.getMaxForwardCardinality(metaPath.getEdgeClass()) <= modelElement.countStartConnections(metaPath.getEdgeClass())) {
                 return false;
             }
         } else if (metaPath.getDirection() == Direction.BACKWARD) {
             //für das Endelement ist die maximale Verbindungsanzahl bereits erreicht?
-            if (MetaModel.getMaxBackwardCardinality(metaPath.getEdgeClass()) <= modelElement.countEndConnections(metaPath.getEdgeClass())) {
+            if (CoreMetaModel.getMaxBackwardCardinality(metaPath.getEdgeClass()) <= modelElement.countEndConnections(metaPath.getEdgeClass())) {
                 return false;
             }
         }
@@ -93,8 +101,9 @@ public class PathFunctions {
     }
 
     /**
-     * Liefert <code>true</code>, wenn sich der übergebene MetaPfad mit allen Zwischenelementen zwischen den
-     * übergebenen Modellelementen ohne Konsistenzprobleme anlegen lässt.
+     * Liefert <code>true</code>, wenn sich der übergebene MetaPfad mit allen
+     * Zwischenelementen zwischen den übergebenen Modellelementen ohne
+     * Konsistenzprobleme anlegen lässt.
      *
      * @param startElement
      * @param endElement
@@ -191,7 +200,8 @@ public class PathFunctions {
     }
 
     /**
-     * Liefert <code>true</code>, wenn der übergebene {@link PathConnectionState} angibt, dass das Element selbst mit einem
+     * Liefert <code>true</code>, wenn der übergebene
+     * {@link PathConnectionState} angibt, dass das Element selbst mit einem
      * anderen Element verbunden ist und nicht nur seine Partents oder Parts.
      *
      * @param state
@@ -338,21 +348,32 @@ public class PathFunctions {
     }
 
     /**
-     * Erzeugt ein neues Element und verknüpft es mit dem übergebenen Startelelement. Für das neue Element werden alle anderen
-     * Elemente angelegt, die es braucht, damit keine Verletzung irgendwelcher Kardinalitäten bestehen.
+     * Erzeugt ein neues Element und verknüpft es mit dem übergebenen
+     * Startelelement. Für das neue Element werden alle anderen Elemente
+     * angelegt, die es braucht, damit keine Verletzung irgendwelcher
+     * Kardinalitäten bestehen.
      *
-     * @param startElement Element, von dem aus die Kanten angelegt werden sollen. Ist dieses Element null, dann wird nur das neue Element angelegt,
-     *            aber nichts verknüpft.
-     * @param edgeClassToNewElement Kantenklasse, die zwischen dem startElement und dem anzulegenden Element bestehen soll. Diese Klasse und die
-     *            directionToNewElement geben vor, welche Elementart neu angelegt werden soll
-     * @param directionToNewElement Richtung der neu anzulegenden Edge ausgehend vom startContainer
+     * @param startElement Element, von dem aus die Kanten angelegt werden
+     *            sollen. Ist dieses Element null, dann wird nur das neue
+     *            Element angelegt, aber nichts verknüpft.
+     * @param edgeClassToNewElement Kantenklasse, die zwischen dem startElement
+     *            und dem anzulegenden Element bestehen soll. Diese Klasse und
+     *            die directionToNewElement geben vor, welche Elementart neu
+     *            angelegt werden soll
+     * @param directionToNewElement Richtung der neu anzulegenden Edge ausgehend
+     *            vom startContainer
      * @param newElementClass Klasse des neu anzulegenden Elementes
-     * @param edgeClassFromNewElement Kantenklasse, die nicht neu angelegt wird, auch wenn die Kardinalität das bedingen würde. Da diese Funktion hier
-     *            für einen anzulegenden Pfad aufgerufen wird, dürfen die Edge, dieses Pfades eben nicht schon hier automatisch angelegt werden.
-     * @param doc GraphDocument, in dem die anzulegenden Container landen sollen (wenn sie teilmodellspezifisch sind)
+     * @param edgeClassFromNewElement Kantenklasse, die nicht neu angelegt wird,
+     *            auch wenn die Kardinalität das bedingen würde. Da diese
+     *            Funktion hier für einen anzulegenden Pfad aufgerufen wird,
+     *            dürfen die Edge, dieses Pfades eben nicht schon hier
+     *            automatisch angelegt werden.
+     * @param doc GraphDocument, in dem die anzulegenden Container landen sollen
+     *            (wenn sie teilmodellspezifisch sind)
      * @param pid Process-ID des Dialoges
-     * @return den neu angelegtes ModelElement mit allen davon abhängigen Elementen (außer denen, die evtl. auf dem Pfad liegen, der insgesamt
-     *         angelegt werden soll)
+     * @return den neu angelegtes ModelElement mit allen davon abhängigen
+     *         Elementen (außer denen, die evtl. auf dem Pfad liegen, der
+     *         insgesamt angelegt werden soll)
      */
     private static final ModelElement createNodeWithContainerAndDependents(final LGMGraphDocument doc, final ModelElement startElement, final Class<? extends Edge> edgeClassToNewElement, final Direction directionToNewElement,
             final Class<? extends ModelElement> newElementClass, final Class<? extends Edge> edgeClassFromNewElement, final Direction directionFromNewElement, final int pid) {
@@ -373,7 +394,7 @@ public class PathFunctions {
         boolean lastAutomaticMode = gdcoll.setAutomaticMode(newAutomaticMode);
 
         //abstracte Elemente können nicht angelegt werden! hier wird nicht auf null gecheckt, weil man diese Funktion nur mit SimpleMetaPaths aufrufen sollte, die creatable sind!
-        if (MetaModel.isAbstract(newElementClass)) {
+        if (CoreMetaModel.isAbstract(newElementClass)) {
             return null;
         }
 
@@ -430,9 +451,9 @@ public class PathFunctions {
                 continue;
             }
             //wenn das neu angelegte Element StartElement der Edge ist
-            if (MetaModel.isStartClass(edgeType, newElementClass)) {
+            if (CoreMetaModel.isStartClass(edgeType, newElementClass)) {
                 //hole die MinKardnalität zu dem anderen Element der Edge
-                int minCardinalityForwardToOther = MetaModel.getMinForwardCardinality(edgeType);
+                int minCardinalityForwardToOther = CoreMetaModel.getMinForwardCardinality(edgeType);
                 if (minCardinalityForwardToOther > 0) {
                     //hole alle Kanten des neu angelgten Elementes, die denselben Typ haben
                     List<Edge> edgesForwardTo = createdDependent.getEdgesTo(ModelElement.class, edgeType);
@@ -454,7 +475,7 @@ public class PathFunctions {
                 //wenn das neu angelegte Element EndElement der Edge ist
             } else {
                 //hole die MinKardnalität zu dem anderen Element der Edge
-                int minCardinalityBackwardToOther = MetaModel.getMinBackwardCardinality(edgeType);
+                int minCardinalityBackwardToOther = CoreMetaModel.getMinBackwardCardinality(edgeType);
                 if (minCardinalityBackwardToOther > 0) {
                     //hole alle Kanten des neu angelgten Elementes, die denselben Typ haben
                     List<Edge> edgesBackwardTo = createdDependent.getEdgesFrom(ModelElement.class, edgeType);

@@ -46,8 +46,7 @@ public class LineParser {
     /**
      * Sets the current line to parse
      *
-     * @param str
-     *            line to parse
+     * @param str line to parse
      */
     public void setLine(final String str) {
         string = str;
@@ -84,20 +83,18 @@ public class LineParser {
     }
 
     /**
-     * @param index
-     *            index of the token to be returned
-     * @return
-     *         token at the given index or <code>null</code> if the given index is greater than the token count
+     * @param index index of the token to be returned
+     * @return token at the given index or <code>null</code> if the given index
+     *         is greater than the token count
      */
     public String getToken(final int index) {
         return getTokenCount() > index ? line.get(index) : null;
     }
 
     /**
-     * @param index
-     *            index of the column to be returned
-     * @return
-     *         column at the given index or <code>null</code> if the given index is greater than the column count
+     * @param index index of the column to be returned
+     * @return column at the given index or <code>null</code> if the given index
+     *         is greater than the column count
      */
     public String getColumn(final int index) {
         int realIndex = index * 2;
@@ -119,10 +116,9 @@ public class LineParser {
     }
 
     /**
-     * @param startColumn
-     *            index of the column where the list should start
-     * @return
-     *         list of the values of all columns starting with the column at the given index
+     * @param startColumn index of the column where the list should start
+     * @return list of the values of all columns starting with the column at the
+     *         given index
      */
     public List<String> getColumns(final int startColumn) {
         List<String> columns = new ArrayList<>();

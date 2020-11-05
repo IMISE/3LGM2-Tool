@@ -33,10 +33,11 @@ public final class RedundancyAnalysisDefinitions extends MetaPathDefinition {
     private List<SingleRedundancyAnalysisDefinition> redundancyAnalysisDefinitionData;
 
     /**
-     * @param metaPath
-     *            Pfad, der angibt, für welche Elementart welche verbundenen Elemente als redundant angesehen werden sollen.
-     *            Die Ausgangselementart ist die Startelementart des Pfades und die über den Pfad verbundenen Elemente sind
-     *            die potenziell redundanten Elemente.
+     * @param metaPath Pfad, der angibt, für welche Elementart welche
+     *            verbundenen Elemente als redundant angesehen werden sollen.
+     *            Die Ausgangselementart ist die Startelementart des Pfades und
+     *            die über den Pfad verbundenen Elemente sind die potenziell
+     *            redundanten Elemente.
      */
     public SingleRedundancyAnalysisDefinition add(final MetaPath metaPath) {
         if (redundancyAnalysisDefinitionData == null) {
@@ -69,18 +70,22 @@ public final class RedundancyAnalysisDefinitions extends MetaPathDefinition {
         private final CardinalityDefinition cardinalityDefinition;
 
         /**
-         * Wenn hier für ein Element ein MetaPfad angegeben ist, dann wird der Anzeige-Name dieser Elementart bei der
-         * Ausgabe des Analysergebnisses um die über den angegebenen MetaPath verbundenen Elemente erweitert.
-         * Z.B. kann man für für Anwendungsbausteine einen MetaPfad definieren über das verbundene Anwendungsprogramm
-         * hin zu den Softwareprodukten. Wird das getan dann hat der Anzeigename des Anwendungsbausteins die Form
-         * "Name des Anwendungsbausteins (Softwareprodukt1, Softwareprodukt2, ...)"
+         * Wenn hier für ein Element ein MetaPfad angegeben ist, dann wird der
+         * Anzeige-Name dieser Elementart bei der Ausgabe des Analysergebnisses
+         * um die über den angegebenen MetaPath verbundenen Elemente erweitert.
+         * Z.B. kann man für für Anwendungsbausteine einen MetaPfad definieren
+         * über das verbundene Anwendungsprogramm hin zu den Softwareprodukten.
+         * Wird das getan dann hat der Anzeigename des Anwendungsbausteins die
+         * Form "Name des Anwendungsbausteins (Softwareprodukt1,
+         * Softwareprodukt2, ...)"
          */
         private Map<Class<? extends ModelElement>, MetaPath> elementClassToExpandedNamePath;
 
         /**
-         * Pfad, der angibt, für welche Elementart welche verbundenen Elemente als redundant angesehen werden sollen.
-         * Die Ausgangselementart ist die Startelementart des Pfades und die über den Pfad verbundenen Elemente sind
-         * die potenziell redundanten Elemente.
+         * Pfad, der angibt, für welche Elementart welche verbundenen Elemente
+         * als redundant angesehen werden sollen. Die Ausgangselementart ist die
+         * Startelementart des Pfades und die über den Pfad verbundenen Elemente
+         * sind die potenziell redundanten Elemente.
          */
         private final MetaPath metaPath;
 
@@ -105,34 +110,44 @@ public final class RedundancyAnalysisDefinitions extends MetaPathDefinition {
         }
 
         /**
-         * Setzt die übergebenen Kardinalitäten für die Vorwärtsrichtung derübergebenen Kantenart. Damit werden die originalen Kardinalitäten bei der
-         * Konsistenzprüfung überschrieben.
-         * Dieser Mechanismus ist dafür gedacht, für die Redundanzanalyse andere Kardinalitäten vorzugeben, als das Metamodell definiert.
-         * Z.B. funktioniert die Redundanzanalyse auf dem originalen 3LGM-Metamodell nur, wenn Anwendungsbausteinkonfigurationen immer nur mit genau
-         * einem Anwednungsbaustein verbunden sind. Das originale Metamodell lässt aber beliebig viele dieser Verbindungen zu. Hierüber kann man die
-         * "richtige" Anzahl der Verbindungen nur für die Analyse einschränken, so dass sie ein interpretiertbares Ergebnis liefert.
+         * Setzt die übergebenen Kardinalitäten für die Vorwärtsrichtung
+         * derübergebenen Kantenart. Damit werden die originalen Kardinalitäten
+         * bei der Konsistenzprüfung überschrieben. Dieser Mechanismus ist dafür
+         * gedacht, für die Redundanzanalyse andere Kardinalitäten vorzugeben,
+         * als das Metamodell definiert. Z.B. funktioniert die Redundanzanalyse
+         * auf dem originalen 3LGM-Metamodell nur, wenn
+         * Anwendungsbausteinkonfigurationen immer nur mit genau einem
+         * Anwednungsbaustein verbunden sind. Das originale Metamodell lässt
+         * aber beliebig viele dieser Verbindungen zu. Hierüber kann man die
+         * "richtige" Anzahl der Verbindungen nur für die Analyse einschränken,
+         * so dass sie ein interpretiertbares Ergebnis liefert.
          *
-         * @param edgeClass
-         *            Kantenklasse für die vom Metamodell abweichende Cardinalitäten angegeben werden
-         * @param edgeCardinality
-         *            neue Kardinalitäten für die übergebene Kantenklasse
+         * @param edgeClass Kantenklasse für die vom Metamodell abweichende
+         *            Cardinalitäten angegeben werden
+         * @param edgeCardinality neue Kardinalitäten für die übergebene
+         *            Kantenklasse
          */
         public void setNewForwardCardinality(final Class<? extends Edge> edgeClass, final EdgeCardinality edgeCardinality) {
             cardinalityDefinition.setNewForwardCardinality(edgeClass, edgeCardinality);
         }
 
         /**
-         * Setzt die übergebenen Kardinalitäten für die Rückwärtsrichtung derübergebenen Kantenart. Damit werden die originalen Kardinalitäten bei der
-         * Konsistenzprüfung überschrieben.
-         * Dieser Mechanismus ist dafür gedacht, für die Redundanzanalyse andere Kardinalitäten vorzugeben, als das Metamodell definiert.
-         * Z.B. funktioniert die Redundanzanalyse auf dem originalen 3LGM-Metamodell nur, wenn Anwendungsbausteinkonfigurationen immer nur mit genau
-         * einem Anwednungsbaustein verbunden sind. Das originale Metamodell lässt aber beliebig viele dieser Verbindungen zu. Hierüber kann man die
-         * "richtige" Anzahl der Verbindungen nur für die Analyse einschränken, so dass sie ein interpretiertbares Ergebnis liefert.
+         * Setzt die übergebenen Kardinalitäten für die Rückwärtsrichtung
+         * derübergebenen Kantenart. Damit werden die originalen Kardinalitäten
+         * bei der Konsistenzprüfung überschrieben. Dieser Mechanismus ist dafür
+         * gedacht, für die Redundanzanalyse andere Kardinalitäten vorzugeben,
+         * als das Metamodell definiert. Z.B. funktioniert die Redundanzanalyse
+         * auf dem originalen 3LGM-Metamodell nur, wenn
+         * Anwendungsbausteinkonfigurationen immer nur mit genau einem
+         * Anwednungsbaustein verbunden sind. Das originale Metamodell lässt
+         * aber beliebig viele dieser Verbindungen zu. Hierüber kann man die
+         * "richtige" Anzahl der Verbindungen nur für die Analyse einschränken,
+         * so dass sie ein interpretiertbares Ergebnis liefert.
          *
-         * @param edgeClass
-         *            Kantenklasse für die vom Metamodell abweichende Kardinalitäten angegeben werden
-         * @param edgeCardinality
-         *            neue Kardinalitäten für die übergebene Kantenklasse
+         * @param edgeClass Kantenklasse für die vom Metamodell abweichende
+         *            Kardinalitäten angegeben werden
+         * @param edgeCardinality neue Kardinalitäten für die übergebene
+         *            Kantenklasse
          */
         public void setNewBackwardCardinality(final Class<? extends Edge> edgeClass, final EdgeCardinality edgeCardinality) {
             cardinalityDefinition.setNewBackwardCardinality(edgeClass, edgeCardinality);
@@ -157,11 +172,14 @@ public final class RedundancyAnalysisDefinitions extends MetaPathDefinition {
         }
 
         /**
-         * Wenn hier für ein Element ein MetaPfad angegeben ist, dann wird der Anzeige-Name dieser Elementart bei der
-         * Ausgabe des Analysergebnisses um die über den angegebenen MetaPath verbundenen Elemente erweitert.
-         * Z.B. kann man für für Anwendungsbausteine einen MetaPfad definieren über das verbundene Anwendungsprogramm
-         * hin zu den Softwareprodukten. Wird das getan dann hat der Anzeigename des Anwendungsbausteins die Form
-         * "Name des Anwendungsbausteins (Softwareprodukt1, Softwareprodukt2, ...)"
+         * Wenn hier für ein Element ein MetaPfad angegeben ist, dann wird der
+         * Anzeige-Name dieser Elementart bei der Ausgabe des Analysergebnisses
+         * um die über den angegebenen MetaPath verbundenen Elemente erweitert.
+         * Z.B. kann man für für Anwendungsbausteine einen MetaPfad definieren
+         * über das verbundene Anwendungsprogramm hin zu den Softwareprodukten.
+         * Wird das getan dann hat der Anzeigename des Anwendungsbausteins die
+         * Form "Name des Anwendungsbausteins (Softwareprodukt1,
+         * Softwareprodukt2, ...)"
          *
          * @param metaPath
          */

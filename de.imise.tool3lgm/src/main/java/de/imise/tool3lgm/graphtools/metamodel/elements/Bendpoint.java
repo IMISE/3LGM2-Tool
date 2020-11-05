@@ -88,7 +88,8 @@ public final class Bendpoint extends Node {
     }
 
     /**
-     * @return Den Container in dem Szenario, in dem der Knickpunkt dargestellt wird
+     * @return Den Container in dem Szenario, in dem der Knickpunkt dargestellt
+     *         wird
      */
     public final BendpointContainer getBendpointContainer() {
         return (BendpointContainer) getContainer(getGraphDocument());

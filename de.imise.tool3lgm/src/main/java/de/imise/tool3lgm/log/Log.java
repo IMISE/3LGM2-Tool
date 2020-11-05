@@ -28,7 +28,10 @@ public class Log {
     /** der verwendete Logger */
     static Logger logger;
 
-    /** eine Component, die als Parent angenommen werden soll, wenn Fehler in einer OptionPane angezeigt werden */
+    /**
+     * eine Component, die als Parent angenommen werden soll, wenn Fehler in
+     * einer OptionPane angezeigt werden
+     */
     private static Component parentComponent;
 
     /** Fehlerlevel DEBUG */
@@ -49,7 +52,8 @@ public class Log {
     public static boolean showErrorDialog = false;
 
     /**
-     * Gibt den Logger zurück. Initialisiert den Logger, falls dieser noch nicht initialisiert ist.
+     * Gibt den Logger zurück. Initialisiert den Logger, falls dieser noch nicht
+     * initialisiert ist.
      *
      * @return der Logger den diese Klasse verwendet.
      */
@@ -122,8 +126,8 @@ public class Log {
     }
 
     /**
-     * Logt eine Meldung und zeigt diese in einer JOptionPane an. Zusätzlich zur Meldung
-     * wird die Throwable in die Log-Datei geschrieben.
+     * Logt eine Meldung und zeigt diese in einer JOptionPane an. Zusätzlich zur
+     * Meldung wird die Throwable in die Log-Datei geschrieben.
      *
      * @param Level der Fehlermeldung (siehe Fehlerlevel)
      * @param meldung die Meldung, welche geloggt und angezeigt werden soll

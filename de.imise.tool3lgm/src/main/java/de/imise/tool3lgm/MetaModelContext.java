@@ -12,17 +12,23 @@ import de.imise.tool3lgm.userproperties.UserProperties;
 import de.imise.util.resource.SimpleResourceBundleSourceAdapter;
 
 /**
- * Klasse, die die Klasse eines Metamodells und das dazugehörige ResouceBundle dieses Metamodells enthält. Es enthält noch nicht das MetaModel
- * sondern das MetaModel wird mit diesem Kontext hier initilisiert. Man braucht das ResourceBundle der Metamodelle bevor man eine Instanz der
- * Metamodell-Klasse bildet, um bei der Auswahl, welches Metmodell überhaupt instanziiert werden soll, den Namen des Metamodells anzeigen zu können.
- * So kann man dafür sorgen, dass die Metamodelle nur instanziiert und damit initialisiert werden, wenn man sie wirklich braucht, um damit eine
- * Modelldatei zu erzeugen.
+ * Klasse, die die Klasse eines Metamodells und das dazugehörige ResouceBundle
+ * dieses Metamodells enthält. Es enthält noch nicht das MetaModel sondern das
+ * MetaModel wird mit diesem Kontext hier initilisiert. Man braucht das
+ * ResourceBundle der Metamodelle bevor man eine Instanz der Metamodell-Klasse
+ * bildet, um bei der Auswahl, welches Metmodell überhaupt instanziiert werden
+ * soll, den Namen des Metamodells anzeigen zu können. So kann man dafür sorgen,
+ * dass die Metamodelle nur instanziiert und damit initialisiert werden, wenn
+ * man sie wirklich braucht, um damit eine Modelldatei zu erzeugen.
  *
  * @author AXS (8 May 2019)
  */
 public final class MetaModelContext extends SimpleResourceBundleSourceAdapter implements MetaModelSpecific {
 
-    /** Appendix of the resource key with the class name of the meta model and with the value of the description of this model type */
+    /**
+     * Appendix of the resource key with the class name of the meta model and
+     * with the value of the description of this model type
+     */
     public static final String META_MODEL_DESCRIPTION_RESKEY_POSTFIX = "_description";
 
     /** Klasse des Metamodells */
@@ -32,14 +38,16 @@ public final class MetaModelContext extends SimpleResourceBundleSourceAdapter im
     private MetaModel metaModel;
 
     /**
-     * NameBuilder für die metamodellspezifischen Knoten- und Kantenklassen. Auch diese Klasse wird erst initialisiert, wenn das Metamodel geladen
+     * NameBuilder für die metamodellspezifischen Knoten- und Kantenklassen.
+     * Auch diese Klasse wird erst initialisiert, wenn das Metamodel geladen
      * bzw. initialisiert wird.
      */
     private ElementsNameBuilder elementsNameBuilder;
 
     /**
-     * Initialisiert den Kontext. Dabei wird das ResourceBundle einmal geladen, um an den Namen des Metamodells zu kommen. Das ResourceBundel wird
-     * aber nicht gespeichert.
+     * Initialisiert den Kontext. Dabei wird das ResourceBundle einmal geladen,
+     * um an den Namen des Metamodells zu kommen. Das ResourceBundel wird aber
+     * nicht gespeichert.
      *
      * @param metaModelDefinitionClass
      */
@@ -57,7 +65,8 @@ public final class MetaModelContext extends SimpleResourceBundleSourceAdapter im
     }
 
     /**
-     * Liefert <code>true</code>, wenn die übergebene Definitionklasse des Metamodells dieselbe ist, die für diesen Kontext gesetzt ist.
+     * Liefert <code>true</code>, wenn die übergebene Definitionklasse des
+     * Metamodells dieselbe ist, die für diesen Kontext gesetzt ist.
      *
      * @param metaModelDefinitionClass
      * @return
@@ -97,9 +106,12 @@ public final class MetaModelContext extends SimpleResourceBundleSourceAdapter im
     }
 
     /**
-     * Diese Funktion mach genau das umgekehrte wie die Funktion {@link Tool3lgmConstants#getResString(String)}. D.h. sie schaut zuerst in die
-     * Resourcen des eigenen Metamodells und wenn sie dort den key nicht gefunden hat, dann in die allgemeinen des Tools. Im Unterschied zu der
-     * Funktion aus den {@link Tool3lgmConstants} wird hier aber nicht in die Resourcen des aktuell selektierten Modells geschaut, sondern in die
+     * Diese Funktion mach genau das umgekehrte wie die Funktion
+     * {@link Tool3lgmConstants#getResString(String)}. D.h. sie schaut zuerst in
+     * die Resourcen des eigenen Metamodells und wenn sie dort den key nicht
+     * gefunden hat, dann in die allgemeinen des Tools. Im Unterschied zu der
+     * Funktion aus den {@link Tool3lgmConstants} wird hier aber nicht in die
+     * Resourcen des aktuell selektierten Modells geschaut, sondern in die
      * dieses Modells hier.
      *
      * @param key
@@ -118,10 +130,13 @@ public final class MetaModelContext extends SimpleResourceBundleSourceAdapter im
     }
 
     /**
-     * Liefert die Klasse, über die alle Knoten- und Kantenklassennamen generiert werden, also die Anzeigenamen in Ein- und Mehrzahl und bei den
-     * Kanten die gerichteten Namen.
-     * Solange das Metamodell nicht initialisiert wurde, kommt hier immer eine neue Instanz des Builders zurück! Aber ohne dass das Metamodell
-     * initilisiert wurde, gibt es eigentlich keinen Grund auf die Elementnamen zuzugreifen, da die vorhandenen Elemente nicht bekannt sind.
+     * Liefert die Klasse, über die alle Knoten- und Kantenklassennamen
+     * generiert werden, also die Anzeigenamen in Ein- und Mehrzahl und bei den
+     * Kanten die gerichteten Namen. Solange das Metamodell nicht initialisiert
+     * wurde, kommt hier immer eine neue Instanz des Builders zurück! Aber ohne
+     * dass das Metamodell initilisiert wurde, gibt es eigentlich keinen Grund
+     * auf die Elementnamen zuzugreifen, da die vorhandenen Elemente nicht
+     * bekannt sind.
      *
      * @return
      */
@@ -134,7 +149,8 @@ public final class MetaModelContext extends SimpleResourceBundleSourceAdapter im
     }
 
     /**
-     * Liefert die tatsächliche Instanz des MetaModells. Wenn diese noch nicht initialisert ist, dann wird das hier getan. Das ResoruceBundle wird
+     * Liefert die tatsächliche Instanz des MetaModells. Wenn diese noch nicht
+     * initialisert ist, dann wird das hier getan. Das ResoruceBundle wird
      * ebenfalls dauerhaft gesetzt.
      *
      * @return
@@ -176,8 +192,10 @@ public final class MetaModelContext extends SimpleResourceBundleSourceAdapter im
     }
 
     /**
-     * Hiermit kann man die Referenz auf das Metamodell in diesem Kontext löschen. Dadurch wird der Speicher freigegeben. Das ist sinnvoll, wenn man
-     * das letzte Modell einer bestimmten Art geschlossen hat, um ein bisschen Platz zu schaffen.
+     * Hiermit kann man die Referenz auf das Metamodell in diesem Kontext
+     * löschen. Dadurch wird der Speicher freigegeben. Das ist sinnvoll, wenn
+     * man das letzte Modell einer bestimmten Art geschlossen hat, um ein
+     * bisschen Platz zu schaffen.
      */
     public void unloadMetaModel() {
         metaModel = null;

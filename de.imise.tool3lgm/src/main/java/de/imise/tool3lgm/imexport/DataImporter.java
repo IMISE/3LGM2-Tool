@@ -29,9 +29,13 @@ import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
 public abstract class DataImporter<T> implements GDCollectionOwner, MetaModelSpecific {
 
     /**
-     * Mappt von einem eine Knotenklassen-Instanz repräsentierenden Objekt auf den im 3LGM2-Import-Modell erzeugten korrespondierenden Knoten. Über
-     * diese Map kann beim Erstellen der Kanten aus dem SorceModell herausgefunden werden, welcher Source-Knoten zu welchem Target-Knoten geworden
-     * ist. Diese Information benötigt man immer, wenn man einen Graphen mit Knoten und Kanten importieren möchte, undabhängig von der Datenquelle.
+     * Mappt von einem eine Knotenklassen-Instanz repräsentierenden Objekt auf
+     * den im 3LGM2-Import-Modell erzeugten korrespondierenden Knoten. Über
+     * diese Map kann beim Erstellen der Kanten aus dem SorceModell
+     * herausgefunden werden, welcher Source-Knoten zu welchem Target-Knoten
+     * geworden ist. Diese Information benötigt man immer, wenn man einen
+     * Graphen mit Knoten und Kanten importieren möchte, undabhängig von der
+     * Datenquelle.
      */
     private final Map<T, Node> sourceInstanceToTargetNode = new HashMap<>();
 
@@ -60,22 +64,26 @@ public abstract class DataImporter<T> implements GDCollectionOwner, MetaModelSpe
     }
 
     /**
-     * Diese Funktion sollten Unterklassen überschreiben und den eigentlichen Import darin durchführen.
+     * Diese Funktion sollten Unterklassen überschreiben und den eigentlichen
+     * Import darin durchführen.
      *
-     * @return <code>true</code>, wenn der Import geklappt hat, sonst <code>false</code>
+     * @return <code>true</code>, wenn der Import geklappt hat, sonst
+     *         <code>false</code>
      */
     protected abstract boolean importData();
 
     /**
-     * @return the default name for the imported {@link GDCollection}. If it returns <code>null</code>
-     *         the tools default name for a new {@link GDCollection} will not be changed.
+     * @return the default name for the imported {@link GDCollection}. If it
+     *         returns <code>null</code> the tools default name for a new
+     *         {@link GDCollection} will not be changed.
      */
     protected String getImportModelDefaultName() {
         return null;
     }
 
     /**
-     * @return Klasse des Metamodells, das dem Modell (der {@link GDCollection}) zugrunde liegt, in die importiert wird.
+     * @return Klasse des Metamodells, das dem Modell (der {@link GDCollection})
+     *         zugrunde liegt, in die importiert wird.
      */
     public abstract Class<? extends MetaModelDefinition> getImportMetaModelDefinitionClass();
 
@@ -85,11 +93,13 @@ public abstract class DataImporter<T> implements GDCollectionOwner, MetaModelSpe
     }
 
     /**
-     * Initialisiert ein Modell ({@link GDCollection}) mit dem übergebenen Metamodel. Diese Funktion könnte woanders hin, wo evtl auch der
-     * Tool3lgmMetaModelContext abgefragt wird, damit das Metamodel nicht doppelt initialisiert wird.
+     * Initialisiert ein Modell ({@link GDCollection}) mit dem übergebenen
+     * Metamodel. Diese Funktion könnte woanders hin, wo evtl auch der
+     * Tool3lgmMetaModelContext abgefragt wird, damit das Metamodel nicht
+     * doppelt initialisiert wird.
      *
-     * @param metaModelDefinitionClass
-     *            Definitionsklasse des Metamodells des zu erzeugenden Modells
+     * @param metaModelDefinitionClass Definitionsklasse des Metamodells des zu
+     *            erzeugenden Modells
      * @param modelCategory
      * @return Leeres Modell mit ImportMetaModel
      */
@@ -109,7 +119,8 @@ public abstract class DataImporter<T> implements GDCollectionOwner, MetaModelSpe
     }
 
     /**
-     * Liefert für ein SourceObject den Node der dafür im ImportModel angelegt wurde.
+     * Liefert für ein SourceObject den Node der dafür im ImportModel angelegt
+     * wurde.
      *
      * @param sourceObject
      * @return
@@ -135,15 +146,13 @@ public abstract class DataImporter<T> implements GDCollectionOwner, MetaModelSpe
     /**
      * Fügt im Zielmodell einen Knoten hinzu.
      *
-     * @param sourceObject
-     *            ein Objetct aus der Source, über das man auf den neuen Knoten mappen kann. Es sollte der korrespondierende Knoten im SourceModell
-     *            sein.
-     * @param nodeClass
-     *            3LGM2 Knotenklasse, die im Target-Modell angelegt werden soll
-     * @param name
-     *            Name des Knotens im Target-Modell
-     * @param description
-     *            Beschreibung des Knotens im Target-Modell
+     * @param sourceObject ein Objetct aus der Source, über das man auf den
+     *            neuen Knoten mappen kann. Es sollte der korrespondierende
+     *            Knoten im SourceModell sein.
+     * @param nodeClass 3LGM2 Knotenklasse, die im Target-Modell angelegt werden
+     *            soll
+     * @param name Name des Knotens im Target-Modell
+     * @param description Beschreibung des Knotens im Target-Modell
      * @return
      */
     protected Node addNode(final T sourceObject, final Class<? extends Node> nodeClass, final String name, final String description) {
@@ -153,17 +162,14 @@ public abstract class DataImporter<T> implements GDCollectionOwner, MetaModelSpe
     /**
      * Fügt im Zielmodell einen Knoten hinzu.
      *
-     * @param sourceObject
-     *            ein Objetct aus der Source, über das man auf den neuen Knoten mappen kann. Es sollte der korrespondierende Knoten im SourceModell
-     *            sein.
-     * @param nodeClass
-     *            3LGM2 Knotenklasse, die im Target-Modell angelegt werden soll
-     * @param name
-     *            Name des Knotens im Target-Modell
-     * @param description
-     *            Beschreibung des Knotens im Target-Modell
-     * @param hashString
-     *            HashString des Knotens im Target-Modell
+     * @param sourceObject ein Objetct aus der Source, über das man auf den
+     *            neuen Knoten mappen kann. Es sollte der korrespondierende
+     *            Knoten im SourceModell sein.
+     * @param nodeClass 3LGM2 Knotenklasse, die im Target-Modell angelegt werden
+     *            soll
+     * @param name Name des Knotens im Target-Modell
+     * @param description Beschreibung des Knotens im Target-Modell
+     * @param hashString HashString des Knotens im Target-Modell
      * @return den erzeugten Knoten
      */
     protected Node addNode(final T sourceObject, final Class<? extends Node> nodeClass, final String name, final String description, final String hashString) {
@@ -176,14 +182,11 @@ public abstract class DataImporter<T> implements GDCollectionOwner, MetaModelSpe
     /**
      * Fügt im Zielmodell eine Kante hinzu.
      *
-     * @param edgeClassName
-     *            3LGM2 Kantenklasse, die im Target-Modell angelegt werden soll
-     * @param name
-     *            HashString der Kanten im Target-Modell
-     * @param startNode
-     *            Startknoten der Kante im Target-Modell
-     * @param endNode
-     *            Endknoten der Kante im Target-Modell
+     * @param edgeClassName 3LGM2 Kantenklasse, die im Target-Modell angelegt
+     *            werden soll
+     * @param name HashString der Kanten im Target-Modell
+     * @param startNode Startknoten der Kante im Target-Modell
+     * @param endNode Endknoten der Kante im Target-Modell
      * @return die erzeugte Kante
      */
     public Edge addEdge(final String edgeClassName, final String name, final Node startNode, final Node endNode) {
@@ -192,16 +195,12 @@ public abstract class DataImporter<T> implements GDCollectionOwner, MetaModelSpe
     /**
      * Fügt im Zielmodell eine Kante hinzu.
      *
-     * @param edgeClassName
-     *            3LGM2 Kantenklasse, die im Target-Modell angelegt werden soll
-     * @param name
-     *            Name des Knotens im Target-Modell
-     * @param hashString
-     *            HashString der Kante im Target-Modell
-     * @param startNode
-     *            Startknoten der Kante im Target-Modell
-     * @param endNode
-     *            Endknoten der Kante im Target-Modell
+     * @param edgeClassName 3LGM2 Kantenklasse, die im Target-Modell angelegt
+     *            werden soll
+     * @param name Name des Knotens im Target-Modell
+     * @param hashString HashString der Kante im Target-Modell
+     * @param startNode Startknoten der Kante im Target-Modell
+     * @param endNode Endknoten der Kante im Target-Modell
      * @return die erzeugte Kante
      */
     public Edge addEdge(final String edgeClassName, final String name, final String hashString, final Node startNode, final Node endNode) {

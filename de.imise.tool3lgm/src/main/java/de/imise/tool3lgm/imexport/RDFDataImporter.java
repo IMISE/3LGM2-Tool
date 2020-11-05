@@ -45,11 +45,14 @@ import de.imise.util.StringUtils;
 import de.imise.util.collections.ExtendedMap;
 
 /**
- * Allgemeiner Importer für OWL RDF-Dateien. Der Importer fragt das OWL-Model nach genau den Knoten- und Kantenklassen bzw. deren Instanzen im
- * OWL-Model und baut daraus ein äquivalentes 3LGM2-Modell zusammen.
- * Der DataImporter wird mit dem Typ &ltObject&gt initialisiert, weil anscheinend alle Objekte, die man aus dem OntModel holen kann, immer als
- * hashCode den hashCode der Uri zurück liefern. Daher kann man in die Map der Source-Knoten auf die Target-Knoten mit jedem Object fragen und nicht
- * nur mit Objecten eines ganz bestimmten Typs.
+ * Allgemeiner Importer für OWL RDF-Dateien. Der Importer fragt das OWL-Model
+ * nach genau den Knoten- und Kantenklassen bzw. deren Instanzen im OWL-Model
+ * und baut daraus ein äquivalentes 3LGM2-Modell zusammen. Der DataImporter wird
+ * mit dem Typ &ltObject&gt initialisiert, weil anscheinend alle Objekte, die
+ * man aus dem OntModel holen kann, immer als hashCode den hashCode der Uri
+ * zurück liefern. Daher kann man in die Map der Source-Knoten auf die
+ * Target-Knoten mit jedem Object fragen und nicht nur mit Objecten eines ganz
+ * bestimmten Typs.
  *
  * @author AXS (26 Jun 2019)
  */
@@ -58,7 +61,10 @@ public abstract class RDFDataImporter extends UrlSourceDataImporter<Object> impl
     /** If <code>true</code> the importer will log the progress. */
     private final boolean logDebug = Tool3lgmMain.hasStartParameter("-log_rdf", "-log_all");
 
-    /** If <code>true</code> all warnings and errors durcing the rdf import process are logged */
+    /**
+     * If <code>true</code> all warnings and errors durcing the rdf import
+     * process are logged
+     */
     private final boolean logWarningsAndErrors = Tool3lgmMain.hasStartParameter("-log_rdf_err");
 
     /**
@@ -80,7 +86,8 @@ public abstract class RDFDataImporter extends UrlSourceDataImporter<Object> impl
     }
 
     /**
-     * Hülle um einen String, damit dieser in Namenspattern als Name einer Objectproperty erkannt werden kann.
+     * Hülle um einen String, damit dieser in Namenspattern als Name einer
+     * Objectproperty erkannt werden kann.
      *
      * @author AXS (24.09.2019)
      */
@@ -113,9 +120,10 @@ public abstract class RDFDataImporter extends UrlSourceDataImporter<Object> impl
         }
 
         /**
-         * Liefert die Property, die die Beschreibung enthält. Es kann sein, dass es Ontologien gibt,
-         * bei denen das hier nicht stimmt, weil {@link AnnotationProperty}s nicht in jeder OWL-Datei
-         * vorkommen oder die Description irgendwas anderes beschreibt.
+         * Liefert die Property, die die Beschreibung enthält. Es kann sein,
+         * dass es Ontologien gibt, bei denen das hier nicht stimmt, weil
+         * {@link AnnotationProperty}s nicht in jeder OWL-Datei vorkommen oder
+         * die Description irgendwas anderes beschreibt.
          *
          * @param propertyUriOrLocalName
          * @return
@@ -172,7 +180,8 @@ public abstract class RDFDataImporter extends UrlSourceDataImporter<Object> impl
     }
 
     /**
-     * @return Anhang des Namens, um den der Name von den 3LGM-Kantenklassen des Import-Metamodells von den Namen der zu importierdenden
+     * @return Anhang des Namens, um den der Name von den 3LGM-Kantenklassen des
+     *         Import-Metamodells von den Namen der zu importierdenden
      *         ObjectProperties abweicht
      */
     public abstract String getEdgeClassNamePostfix();
@@ -273,9 +282,12 @@ public abstract class RDFDataImporter extends UrlSourceDataImporter<Object> impl
     }
 
     /**
-     * Fragt in der Ontologie alle Class-Knoten ab, deren Klasse denselben Namen hat, wie eine Klasse aus dem Metamodell des zu füllenden
-     * 3LGM2-Modells und legt in diesem 3LGM2-Modell für jede Instanz des Class-Knotens im RDF-Quellmodell einen Knoten im 3LGM2-Zielmodell an.
-     * Außerdem werden die Class-Knoten und der korrespondierende 3LGM2-Knoten in einer Map in DataImporter gespeichert.
+     * Fragt in der Ontologie alle Class-Knoten ab, deren Klasse denselben Namen
+     * hat, wie eine Klasse aus dem Metamodell des zu füllenden 3LGM2-Modells
+     * und legt in diesem 3LGM2-Modell für jede Instanz des Class-Knotens im
+     * RDF-Quellmodell einen Knoten im 3LGM2-Zielmodell an. Außerdem werden die
+     * Class-Knoten und der korrespondierende 3LGM2-Knoten in einer Map in
+     * DataImporter gespeichert.
      *
      * @param ontModel Quellmodell
      * @param annotationPropertyResolver
@@ -337,12 +349,14 @@ public abstract class RDFDataImporter extends UrlSourceDataImporter<Object> impl
     }
 
     /**
-     * Liefert alle Statements, die eine Kante repräsentieren, die ins Zielmodell übernommen werden muss.
+     * Liefert alle Statements, die eine Kante repräsentieren, die ins
+     * Zielmodell übernommen werden muss.
      *
      * @param ontModel
      * @param descriptionPropertyResolver
-     * @return Map mit allen Statements, die eine zu importierende Kante repräsentieren als Key und dem Namen der daraus zu erzeugenden Kantenart im
-     *         Zielmodell als value
+     * @return Map mit allen Statements, die eine zu importierende Kante
+     *         repräsentieren als Key und dem Namen der daraus zu erzeugenden
+     *         Kantenart im Zielmodell als value
      */
     private void importEdges(final OntModel ontModel, final OntPropertyResolver descriptionPropertyResolver) {
         //ObjectProperty -> Kantenklassenname
@@ -391,11 +405,14 @@ public abstract class RDFDataImporter extends UrlSourceDataImporter<Object> impl
     }
 
     /**
-     * Bestimmt alle ObjectProperties, die ins Zielmodell als Kante übernommen werden sollen.
+     * Bestimmt alle ObjectProperties, die ins Zielmodell als Kante übernommen
+     * werden sollen.
      *
      * @param ontModel
-     * @return Map, die von ObjectProperties, bei denen der eigene Name oder der einer SuperProperty sich der Name aus einem Kantenklassennamen aus
-     *         dem ImportMetamodell ableiten lässt, auf den Namen dieser Kantenklasse aus dem ImportMetaModell
+     * @return Map, die von ObjectProperties, bei denen der eigene Name oder der
+     *         einer SuperProperty sich der Name aus einem Kantenklassennamen
+     *         aus dem ImportMetamodell ableiten lässt, auf den Namen dieser
+     *         Kantenklasse aus dem ImportMetaModell
      */
     private Map<ObjectProperty, String> getImportableObjetctProperties(final OntModel ontModel) {
         Map<ObjectProperty, String> importableObjectPropertiesToTargetEdgeClassName = new ExtendedMap<>();
@@ -425,7 +442,8 @@ public abstract class RDFDataImporter extends UrlSourceDataImporter<Object> impl
     }
 
     /**
-     * Liefert <code>true</code>, wenn dei übergebene ObjectProperty wenigstens eine SubProperty hat, die nicht sie selbst ist (das ist nämlich immer
+     * Liefert <code>true</code>, wenn dei übergebene ObjectProperty wenigstens
+     * eine SubProperty hat, die nicht sie selbst ist (das ist nämlich immer
      * eine SubProperty)
      *
      * @param objectProperty
@@ -442,12 +460,15 @@ public abstract class RDFDataImporter extends UrlSourceDataImporter<Object> impl
     }
 
     /**
-     * Prüft rekursiv, ob die übergebene ObjectProperty eine Super-ObjectProperty besitzt, deren Name zu den zu importierenden ObjectProperties
-     * gehört.
+     * Prüft rekursiv, ob die übergebene ObjectProperty eine
+     * Super-ObjectProperty besitzt, deren Name zu den zu importierenden
+     * ObjectProperties gehört.
      *
-     * @param objectProperty aktuelle Property, deren Oberklassen rekursiv durchsucht werden sollen
+     * @param objectProperty aktuelle Property, deren Oberklassen rekursiv
+     *            durchsucht werden sollen
      * @param importableObjectPropertyNames gültige ObjectProperty-Klassennamen
-     * @return wird eine passende Super-Property mit gültigem Namen gefeunden, kommt deren Name zurück, sonst <code>null</code>
+     * @return wird eine passende Super-Property mit gültigem Namen gefeunden,
+     *         kommt deren Name zurück, sonst <code>null</code>
      */
     private final String getImportableSuperObjectPropertyName(final OntProperty objectProperty, final Collection<String> importableObjectPropertyNames) {
         for (Iterator<? extends OntProperty> superProperties = objectProperty.listSuperProperties(); superProperties.hasNext();) {
@@ -464,8 +485,10 @@ public abstract class RDFDataImporter extends UrlSourceDataImporter<Object> impl
     }
 
     /**
-     * Liefert aus der übergebenen Menge von Klassen ein Set der darin enthaltenen simplen Klassennamen. Wird ein postfix-String übergeben, dann wird
-     * dieser von allen Klassennamen abgezogen, in denen er vorkommt. Jeder der gefundenen Klassennamen wird einmal mit großem und einmal mit kleinem
+     * Liefert aus der übergebenen Menge von Klassen ein Set der darin
+     * enthaltenen simplen Klassennamen. Wird ein postfix-String übergeben, dann
+     * wird dieser von allen Klassennamen abgezogen, in denen er vorkommt. Jeder
+     * der gefundenen Klassennamen wird einmal mit großem und einmal mit kleinem
      * Anfangsbuchstaben ins Set geschrieben.
      *
      * @param classes
@@ -499,7 +522,8 @@ public abstract class RDFDataImporter extends UrlSourceDataImporter<Object> impl
     private final Map<Class<? extends ModelElement>, Object[]> elementClassToNamePattern = new HashMap<>();
 
     /**
-     * Fügt ein Pattern zur Erzeugung des Namens der Elemente aus der Importquelle hinzu.
+     * Fügt ein Pattern zur Erzeugung des Namens der Elemente aus der
+     * Importquelle hinzu.
      *
      * @param elementClass
      * @param patternObjects

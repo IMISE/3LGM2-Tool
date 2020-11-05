@@ -102,7 +102,8 @@ public class ElementDialogPanelTree extends CorrectSelectionTree {
     }
 
     /**
-     * <code>ArrayList</code> mit den <code>String</code>s der expandierten Pfade
+     * <code>ArrayList</code> mit den <code>String</code>s der expandierten
+     * Pfade
      */
     private final List<String> expandedPathStrings = new ArrayList<>();
 
@@ -121,8 +122,9 @@ public class ElementDialogPanelTree extends CorrectSelectionTree {
     }
 
     /**
-     * Expansion wieder herstellen. Da sich wenn man die Selektion wieder herstellen möchte eigentlich
-     * immer das <code>TreeModel</code> geändert hat, wird es auch neu geladen.
+     * Expansion wieder herstellen. Da sich wenn man die Selektion wieder
+     * herstellen möchte eigentlich immer das <code>TreeModel</code> geändert
+     * hat, wird es auch neu geladen.
      */
     public final void restoreExpansion() {
         expandFull();
@@ -186,8 +188,9 @@ public class ElementDialogPanelTree extends CorrectSelectionTree {
     }
 
     /**
-     * Selektion wieder herstellen. Da sich wenn man die Selektion wieder herstellen möchte eigentlich
-     * immer das <code>TreeModel</code> geändert hat, wird es auch neu geladen.
+     * Selektion wieder herstellen. Da sich wenn man die Selektion wieder
+     * herstellen möchte eigentlich immer das <code>TreeModel</code> geändert
+     * hat, wird es auch neu geladen.
      */
     public final void restoreSelection() {
         if (selectedPaths.length == 0) {
@@ -214,11 +217,13 @@ public class ElementDialogPanelTree extends CorrectSelectionTree {
     }
 
     /**
-     * In diesem Baum werden alle Elemente selektiert, die sichtbar sind und deren letztes Pfadelement
-     * denen des übergebenen Baumes entspricht.
-     * Diese Funktion ist hilfreich, falls in Dialogen "von einem Baum in einen anderen" etwas übernommen
-     * wurde. Im Quellbaum ist das Element dann häufig nicht mehr selektierbar, im Zielbaum erkennt man
-     * nicht, dass es selektiert sein soll, außer man sicht nach den Node mit dem gleichen UserObject.
+     * In diesem Baum werden alle Elemente selektiert, die sichtbar sind und
+     * deren letztes Pfadelement denen des übergebenen Baumes entspricht. Diese
+     * Funktion ist hilfreich, falls in Dialogen "von einem Baum in einen
+     * anderen" etwas übernommen wurde. Im Quellbaum ist das Element dann häufig
+     * nicht mehr selektierbar, im Zielbaum erkennt man nicht, dass es
+     * selektiert sein soll, außer man sicht nach den Node mit dem gleichen
+     * UserObject.
      *
      * @param selectionSource Der Baum dessen Selektion nachgebildet werden soll
      */
@@ -239,7 +244,8 @@ public class ElementDialogPanelTree extends CorrectSelectionTree {
     }
 
     /**
-     * Macht dasselbe wie <code>restoreSelectionAndScroll(LGMTree selectionSource)</code> und
+     * Macht dasselbe wie
+     * <code>restoreSelectionAndScroll(LGMTree selectionSource)</code> und
      * scrollt die erste selektierte Zeile in den sichtbaren Bereich.
      *
      * @param selectionSource

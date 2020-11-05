@@ -21,7 +21,7 @@ public class LGMWindowListener implements WindowListener {
 
     /**
      * Konstruktor
-     * 
+     *
      * @param windowActivatedAction
      * @param windowClosedAction
      * @param windowClosingAction

@@ -26,17 +26,20 @@ import de.imise.tool3lgm.graphtools.view.graph.GraphViewParameter;
 public class ConfigurationRenderer {
 
     /**
-     * {@link GraphElementLayout#STANDARD_COLORS} defines a list of colors. This colors
-     * will be used to paint the different configuratons. If there are more configurations
-     * in the graph than colors, the counter starts at 0 again.
+     * {@link GraphElementLayout#STANDARD_COLORS} defines a list of colors. This
+     * colors will be used to paint the different configuratons. If there are
+     * more configurations in the graph than colors, the counter starts at 0
+     * again.
      */
     public static int colorCounter = 0;
 
     /**
-     * Renders the configuration from the <code>configurationStart</code> to all of its ends.
+     * Renders the configuration from the <code>configurationStart</code> to all
+     * of its ends.
      *
      * @param g the target graphics objetct where the rendering is done
-     * @param configurationStart the container whose configurations should be rendered
+     * @param configurationStart the container whose configurations should be
+     *            rendered
      * @param doc the submodel in which the configurations should be shown
      */
     public static final void render(final Graphics g, final InterLayerConnectedNodeContainer configurationStart, final GraphDocument doc) {

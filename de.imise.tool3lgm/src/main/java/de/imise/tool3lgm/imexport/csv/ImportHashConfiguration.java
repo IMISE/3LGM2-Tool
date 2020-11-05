@@ -8,7 +8,8 @@ import java.util.Map;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 
 /**
- * Speichert die Hashes aller Elemente während des Imports. Damit können Widersprüche bei der Verwendung der Hashes erkannt werden.
+ * Speichert die Hashes aller Elemente während des Imports. Damit können
+ * Widersprüche bei der Verwendung der Hashes erkannt werden.
  *
  * @author AXS
  * @create 06.10.2014
@@ -23,18 +24,21 @@ public class ImportHashConfiguration {
     private final Map<String, Class<? extends ModelElement>> hashToElementClass = new HashMap<>();
 
     /**
-     * Liste aller bisher verwendeten Element-Hashes. Beim Import wird für jede Zeile erst einmal ein Default-Hash eingetragen und
-     * dann durch einen eventuell gefundenen Hash ersetzt.
+     * Liste aller bisher verwendeten Element-Hashes. Beim Import wird für jede
+     * Zeile erst einmal ein Default-Hash eingetragen und dann durch einen
+     * eventuell gefundenen Hash ersetzt.
      */
     private final List<String> hashes = new ArrayList<>();
 
     /**
-     * Mappt von einem Hash einer Edge auf den Hash des Elementes, bei dem die Edge startet
+     * Mappt von einem Hash einer Edge auf den Hash des Elementes, bei dem die
+     * Edge startet
      */
     private final Map<String, String> edgeHashToStartElementHash = new HashMap<>();
 
     /**
-     * Mappt von einem Hash einer Edge auf den Hash des Elementes, bei dem die Edge endet
+     * Mappt von einem Hash einer Edge auf den Hash des Elementes, bei dem die
+     * Edge endet
      */
     private final Map<String, String> edgeHashToEndElementHash = new HashMap<>();
 
@@ -78,7 +82,8 @@ public class ImportHashConfiguration {
     }
 
     /**
-     * Gibt den Index zurück, an dem sich ein Hash in der Liste aller Hashes befindet.
+     * Gibt den Index zurück, an dem sich ein Hash in der Liste aller Hashes
+     * befindet.
      *
      * @param hash
      * @return
@@ -88,7 +93,8 @@ public class ImportHashConfiguration {
     }
 
     /**
-     * Speichert für einen gegebenen Kantenhash den Hash des Startelementes und des Endelmentes
+     * Speichert für einen gegebenen Kantenhash den Hash des Startelementes und
+     * des Endelmentes
      *
      * @param edgeHash
      * @param startElementHash

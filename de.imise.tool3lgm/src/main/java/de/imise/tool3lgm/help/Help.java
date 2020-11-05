@@ -6,8 +6,8 @@ package de.imise.tool3lgm.help;
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
 
 /**
- * Diese Klasse stellt den HelpBroker und das HelpSet für die gesamte
- * Anwendung zur Verfügung.
+ * Diese Klasse stellt den HelpBroker und das HelpSet für die gesamte Anwendung
+ * zur Verfügung.
  *
  * @author Sebp
  */
@@ -28,8 +28,8 @@ import de.imise.tool3lgm.log.Log;
 import de.imise.tool3lgm.userproperties.UserProperties;
 
 /**
- * Diese Klasse stellt den HelpBroker und das HelpSet für die gesamte
- * Anwendung zur Verfügung.
+ * Diese Klasse stellt den HelpBroker und das HelpSet für die gesamte Anwendung
+ * zur Verfügung.
  *
  * @author Sebp
  */
@@ -43,15 +43,15 @@ public class Help {
     private HelpSet mainHS = null;
 
     /**
-     * Einige Methoden der kontextsensitiven Hilfe und des HelpBrokers
-     * verlangen zur Anzeige der Hilfe eine Presäntationsform, die als
-     * String übergeben wird.
+     * Einige Methoden der kontextsensitiven Hilfe und des HelpBrokers verlangen
+     * zur Anzeige der Hilfe eine Presäntationsform, die als String übergeben
+     * wird.
      */
     private static final String DEFAULT_CSH_PRESENTATION = "javax.help.MainWindow";
 
     /**
-     * Privater Konstruktor um diese Klasse als Singleton zu realisieren.
-     * Eine Instanz der Klasse wird über die Methode getInstance() zurück gegeben.
+     * Privater Konstruktor um diese Klasse als Singleton zu realisieren. Eine
+     * Instanz der Klasse wird über die Methode getInstance() zurück gegeben.
      */
     private Help() {
         try {
@@ -84,14 +84,14 @@ public class Help {
     }
 
     /**
-     * Ermöglicht die Verwendung der durch <code>id</code> spezifizierten Hilfe innerhalb einer Komponente wie
-     * z.B. innerhalb eines {@link JFrame}s.
+     * Ermöglicht die Verwendung der durch <code>id</code> spezifizierten Hilfe
+     * innerhalb einer Komponente wie z.B. innerhalb eines {@link JFrame}s.
      *
-     * @param comp
-     *            Komponente innerhalb der die Hilfe aktiviert werden soll (z.B. {@link JFrame})
-     * @param id
-     *            ID der zu aktivierenden Hilfe
-     * @see javax.help.HelpBroker#enableHelpKey(java.awt.Component, java.lang.String, javax.help.HelpSet)
+     * @param comp Komponente innerhalb der die Hilfe aktiviert werden soll
+     *            (z.B. {@link JFrame})
+     * @param id ID der zu aktivierenden Hilfe
+     * @see javax.help.HelpBroker#enableHelpKey(java.awt.Component,
+     *      java.lang.String, javax.help.HelpSet)
      */
     public void enableHelpKey(final Component comp, final String id) {
         //mainHB.enableHelpKey(comp, id, mainHS);
@@ -99,13 +99,11 @@ public class Help {
     }
 
     /**
-     * Ermöglicht das Öffnen der durch <code>id</code> spezifizierten Hilfe durch Click auf die spezifizierte
-     * Komponente.
+     * Ermöglicht das Öffnen der durch <code>id</code> spezifizierten Hilfe
+     * durch Click auf die spezifizierte Komponente.
      *
-     * @param comp
-     *            Komponente die die Hilfe öffnet (z.B. {@link JMenuItem})
-     * @param id
-     *            ID der zu aktivierenden Hilfe
+     * @param comp Komponente die die Hilfe öffnet (z.B. {@link JMenuItem})
+     * @param id ID der zu aktivierenden Hilfe
      * @see javax.help.HelpBroker#enableHelpOnButton(Component, String, HelpSet)
      */
     public void enableHelpOnButton(final Component comp, final String id) {
@@ -113,8 +111,8 @@ public class Help {
     }
 
     /**
-     * Gibt einen {@link ActionListener} zurück, der bei Anfügen die Direkthilfe für einer Swing-Komponente
-     * aktiviert.
+     * Gibt einen {@link ActionListener} zurück, der bei Anfügen die Direkthilfe
+     * für einer Swing-Komponente aktiviert.
      *
      * @see CSH.DisplayHelpAfterTracking
      */
@@ -123,9 +121,9 @@ public class Help {
     }
 
     /**
-     * Um die kontextsensitive Hilfe für eine GUI-Komponente zu aktivieren,
-     * muß diesem mittels CSH.setHelpIDString() eine HelpID zugewiesen werden.
-     * (Die HelpID muß in der Datei map-Datei über eine mapID mit der URL der
+     * Um die kontextsensitive Hilfe für eine GUI-Komponente zu aktivieren, muß
+     * diesem mittels CSH.setHelpIDString() eine HelpID zugewiesen werden. (Die
+     * HelpID muß in der Datei map-Datei über eine mapID mit der URL der
      * entsprechenden Hilfe Seite verlinkt sein.)
      *
      * @return die HelpID für das übergebene Object.

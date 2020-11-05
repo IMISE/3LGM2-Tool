@@ -21,17 +21,24 @@ import de.imise.util.pair.Pair;
 /**
  * Klasse stellt den Controller für <code>UserFieldTable</code>s dar.
  * <p>
- * Mittels Instanzen dieser Klasse kann die Editierbarkeit der Zellen von Tables kontrolliert werden. <br>
- * Außerdem wird die Möglichkeit geboten, mehrfache Auswahl von Zellen vorzunehemen, sowie die gemeinsame Änderung der Werte aller markierten Zellen.
+ * Mittels Instanzen dieser Klasse kann die Editierbarkeit der Zellen von Tables
+ * kontrolliert werden. <br>
+ * Außerdem wird die Möglichkeit geboten, mehrfache Auswahl von Zellen
+ * vorzunehemen, sowie die gemeinsame Änderung der Werte aller markierten
+ * Zellen.
  * <p>
- * Über die statischen Methoden können vorgefertigte Instanzen dieser Klasse abgerufen werden, die auf Tabels für primäre und sekundäre Kennzahlen,
+ * Über die statischen Methoden können vorgefertigte Instanzen dieser Klasse
+ * abgerufen werden, die auf Tabels für primäre und sekundäre Kennzahlen,
  * Verteilungsgewicht oder Modelvariablen zugeschnitten sind.
- * 
+ *
  * @author fstephan
  */
 public abstract class UserFieldTableController {
 
-    /* ************************************** Start: Konstanten ****************************************** */
+    /*
+     * ************************************** Start: Konstanten
+     * ******************************************
+     */
 
     // Konstanten für den selectionChangeMode
 
@@ -41,47 +48,64 @@ public abstract class UserFieldTableController {
 
     private static final int DEFAULT_MODE = 0;
 
-    /* ************************************** Ende: Konstanten ****************************************** */
+    /*
+     * ************************************** Ende: Konstanten
+     * ******************************************
+     */
 
-    /* ************************************** Start: Deklaration ****************************************** */
+    /*
+     * ************************************** Start: Deklaration
+     * ******************************************
+     */
 
     /**
-     * Abbildung einer Zelle auf den Wert ihrer Editierbarkeit: (i,j) -> ist_editierbar(i,j) für alle Zellen eines Tables
+     * Abbildung einer Zelle auf den Wert ihrer Editierbarkeit: (i,j) ->
+     * ist_editierbar(i,j) für alle Zellen eines Tables
      */
     boolean[][] editMatrix;
 
     /**
-     * Abbildung einer Zelle auf ihren Selektionsstatus: (i,j) -> ist_selektiert(i,j) für alle Zellen eines Tables
+     * Abbildung einer Zelle auf ihren Selektionsstatus: (i,j) ->
+     * ist_selektiert(i,j) für alle Zellen eines Tables
      */
     boolean[][] initialSelectionMatrix;
 
     /**
-     * Ändert und überwacht {@link #selectionChangeMode} in Abhängigkeit davon, ob Shift oder Strg gedrückt wurde bzw. ein MouseDragging erfolgt ist.
-     * Damit wird das korrekte Selektionsverhalten dieses {@link UserFieldTableController}s ermöglicht.
+     * Ändert und überwacht {@link #selectionChangeMode} in Abhängigkeit davon,
+     * ob Shift oder Strg gedrückt wurde bzw. ein MouseDragging erfolgt ist.
+     * Damit wird das korrekte Selektionsverhalten dieses
+     * {@link UserFieldTableController}s ermöglicht.
      */
     private SelectionModeHandler selectionModeHandler;
 
     /**
-     * {@link KeyListener}, der das Verhalten des Tables bei Drücken der Pfeiltasten der Entertaste oder der Deletetaste bestimmt.
+     * {@link KeyListener}, der das Verhalten des Tables bei Drücken der
+     * Pfeiltasten der Entertaste oder der Deletetaste bestimmt.
      */
     private KeySelectionChangeHandler keySelectionHandler;
 
     /**
-     * Listener, der dafür sorgt, dass die Selektion beim Dragging mit der Mouse auch über dem RowHeader fortgesetzt wird.
+     * Listener, der dafür sorgt, dass die Selektion beim Dragging mit der Mouse
+     * auch über dem RowHeader fortgesetzt wird.
      */
     private RowHeaderSelectionListener rowHeaderSelectionListener;
 
     /**
-     * Array, das den durch das Keyboard und Mouse-Dragging erzeugten Selektionszustand der Zellen enthält
+     * Array, das den durch das Keyboard und Mouse-Dragging erzeugten
+     * Selektionszustand der Zellen enthält
      */
     private boolean[][] rangeSelectionMatrix;
 
-    /** Array, das den durch Mouse-Clicks erzeugten Selektionszustand der Zellen enthält */
+    /**
+     * Array, das den durch Mouse-Clicks erzeugten Selektionszustand der Zellen
+     * enthält
+     */
     private boolean[][] singleSelectionMatrix;
 
     /**
-     * Array, das für jede Zelle wiedergibt, ob ihre Selektion durch die Methoden {@link #clearRangeSelections()} und {@link #clearSingleSelections()}
-     * aufgehoben werden darf.
+     * Array, das für jede Zelle wiedergibt, ob ihre Selektion durch die
+     * Methoden {@link #clearRangeSelections()} und
+     * {@link #clearSingleSelections()} aufgehoben werden darf.
      */
     private boolean[][] ignoreClearingMatrix;
 
@@ -99,11 +123,15 @@ public abstract class UserFieldTableController {
     /** Gibt an, ob die Mehrfachselektion aktiviert ist */
     private boolean isMultipleSelectionEnabled = false;
 
-    /* ************************************** Ende: Deklaration ****************************************** */
+    /*
+     * ************************************** Ende: Deklaration
+     * ******************************************
+     */
 
     /**
-     * Konstruktor Zugriff von Außen nicht möglich. Verwende stattdessen eine der getNew...() Methoden
-     * 
+     * Konstruktor Zugriff von Außen nicht möglich. Verwende stattdessen eine
+     * der getNew...() Methoden
+     *
      * @param editMatrix Gibt zu jeder Zelle
      * @param initialSelectionMatrix
      */
@@ -118,8 +146,9 @@ public abstract class UserFieldTableController {
     }
 
     /**
-     * Methode ist so zu überschreiben, dass zurückgegeben wird, ob die Zelle an der Position (row,col) editierbar ist, oder nicht.
-     * 
+     * Methode ist so zu überschreiben, dass zurückgegeben wird, ob die Zelle an
+     * der Position (row,col) editierbar ist, oder nicht.
+     *
      * @param row
      * @param col
      * @return
@@ -127,8 +156,9 @@ public abstract class UserFieldTableController {
     abstract boolean isEditable(int row, int col);
 
     /**
-     * Methode gibt wieder, ob die Zelle an der Position (<code>row</code>,<code>col</code>) ausgewählt ist.
-     * 
+     * Methode gibt wieder, ob die Zelle an der Position
+     * (<code>row</code>,<code>col</code>) ausgewählt ist.
+     *
      * @param row
      * @param col
      * @return
@@ -145,8 +175,9 @@ public abstract class UserFieldTableController {
     }
 
     /**
-     * Gibt wieder, ob <code>p</code> der Ausgangspunkt der aktuellen Selektion ist
-     * 
+     * Gibt wieder, ob <code>p</code> der Ausgangspunkt der aktuellen Selektion
+     * ist
+     *
      * @param p
      * @return <code>p.equals(anchorPoint)</code>
      */
@@ -155,8 +186,9 @@ public abstract class UserFieldTableController {
     }
 
     /**
-     * Gibt wieder, ob <code>p</code> der Punkt ist, bis zu dem die aktuelle Selektion reicht.
-     * 
+     * Gibt wieder, ob <code>p</code> der Punkt ist, bis zu dem die aktuelle
+     * Selektion reicht.
+     *
      * @param p
      * @return <code>p.equals(leadingPoint)</code>
      */
@@ -166,7 +198,7 @@ public abstract class UserFieldTableController {
 
     /**
      * Gibt den Ausgangspunkt der aktuellen Selektion wieder
-     * 
+     *
      * @return {@link #anchorPoint}
      */
     Point getAnchorSelectionPoint() {
@@ -175,7 +207,7 @@ public abstract class UserFieldTableController {
 
     /**
      * Gibt den Punkt wieder, bis zu dem die aktuelle Selektion reicht.
-     * 
+     *
      * @return
      */
     Point getLeadSelectionPoint() {
@@ -184,7 +216,7 @@ public abstract class UserFieldTableController {
 
     /**
      * Aktiviert die Mehrfachauswahl im Table
-     * 
+     *
      * @param table
      */
     void enableMultipleSelection(final UserFieldTable table) {
@@ -224,7 +256,7 @@ public abstract class UserFieldTableController {
 
     /**
      * Deaktiviert die Mehrfachauswahl im Table
-     * 
+     *
      * @param table
      */
     void disableMultipleSelection(final UserFieldTable table) {
@@ -244,8 +276,9 @@ public abstract class UserFieldTableController {
     }
 
     /**
-     * Benachrichtigt den Controller, dass im Table eine andere Zelle ausgewählt wurde und löst ein Aktualisieren der Selektion aus.
-     * 
+     * Benachrichtigt den Controller, dass im Table eine andere Zelle ausgewählt
+     * wurde und löst ein Aktualisieren der Selektion aus.
+     *
      * @param row neuer Zeilenindex
      * @param col neuer Spaltenindex
      */
@@ -264,7 +297,8 @@ public abstract class UserFieldTableController {
             break;
 
         /*
-         * Lösche alle bisherigen Selektionen und setzte nur die eben angeklickte Zelle als selektiert.
+         * Lösche alle bisherigen Selektionen und setzte nur die eben
+         * angeklickte Zelle als selektiert.
          */
         case DEFAULT_MODE:
             defaultModeSelectionChange(row, col);
@@ -293,7 +327,7 @@ public abstract class UserFieldTableController {
 
     /**
      * Gibt zurück, ob mehr als eine Zelle markiert ist.
-     * 
+     *
      * @return
      */
     boolean hasMultipleSelection() {
@@ -320,9 +354,12 @@ public abstract class UserFieldTableController {
     }
 
     /**
-     * Gibt, wenn die aktuelle Selektion zusammenhängend ist, ein Punkte-Paar wieder. Der erste Punkt repräsentiert dabei die markierte Zelle mit dem
-     * kleinsten Zeilen- und Spaltenindex und der zweite Punkt die mit dem größten Zeilen- und Spaltenindex. <br>
-     * Ist die Selektion nicht zusammenhängend, wird <code>null</code> zurückgegeben.
+     * Gibt, wenn die aktuelle Selektion zusammenhängend ist, ein Punkte-Paar
+     * wieder. Der erste Punkt repräsentiert dabei die markierte Zelle mit dem
+     * kleinsten Zeilen- und Spaltenindex und der zweite Punkt die mit dem
+     * größten Zeilen- und Spaltenindex. <br>
+     * Ist die Selektion nicht zusammenhängend, wird <code>null</code>
+     * zurückgegeben.
      */
     Pair<Point, Point> getCoherentlySelection() {
 
@@ -361,8 +398,9 @@ public abstract class UserFieldTableController {
     }
 
     /**
-     * Erweitert Selektion vom {@link #anchorPoint} bis zum gerade gewählten Punkt (<code>row</code>,<code>col</code>).
-     * 
+     * Erweitert Selektion vom {@link #anchorPoint} bis zum gerade gewählten
+     * Punkt (<code>row</code>,<code>col</code>).
+     *
      * @param row
      * @param col
      */
@@ -404,9 +442,10 @@ public abstract class UserFieldTableController {
     }
 
     /**
-     * Hält bisherige Selektionen fest und beginnt eine neue, indem der {@link #anchorPoint} auf den gerade ausgewählten Punkt (<code>row</code>,
+     * Hält bisherige Selektionen fest und beginnt eine neue, indem der
+     * {@link #anchorPoint} auf den gerade ausgewählten Punkt (<code>row</code>,
      * <code>col</code>) gesetzt wird.
-     * 
+     *
      * @param row
      * @param col
      */
@@ -431,8 +470,9 @@ public abstract class UserFieldTableController {
     }
 
     /**
-     * Aktualisiert die Selektionen im Table, falls werder die Shift- noch die Strg- Taste gedrückt wurde.
-     * 
+     * Aktualisiert die Selektionen im Table, falls werder die Shift- noch die
+     * Strg- Taste gedrückt wurde.
+     *
      * @param row
      * @param col
      */
@@ -446,7 +486,8 @@ public abstract class UserFieldTableController {
     }
 
     /**
-     * Löscht alle durch Mouseclicks erzeugten Selektionen, bis auf die, die durch {@link #ignoreClearingMatrix} davor geschütz sind.
+     * Löscht alle durch Mouseclicks erzeugten Selektionen, bis auf die, die
+     * durch {@link #ignoreClearingMatrix} davor geschütz sind.
      */
     private void clearSingleSelections() {
         for (int i = 0; i < singleSelectionMatrix.length; i++) {
@@ -459,8 +500,8 @@ public abstract class UserFieldTableController {
     }
 
     /**
-     * Löscht alle durch das Keyboard und MouseDragging erzeugten Selektionen, bis auf die, die durch {@link #ignoreClearingMatrix} davor geschütz
-     * sind.
+     * Löscht alle durch das Keyboard und MouseDragging erzeugten Selektionen,
+     * bis auf die, die durch {@link #ignoreClearingMatrix} davor geschütz sind.
      */
     private void clearRangeSelections() {
         for (int i = 0; i < rangeSelectionMatrix.length; i++) {
@@ -473,7 +514,8 @@ public abstract class UserFieldTableController {
     }
 
     /**
-     * Löscht alle Selektionen, behält aber {@link #anchorPoint} und {@link #leadingPoint} bei.
+     * Löscht alle Selektionen, behält aber {@link #anchorPoint} und
+     * {@link #leadingPoint} bei.
      */
     private void clearAllSelections() {
         ignoreClearingMatrix = new boolean[ignoreClearingMatrix.length][ignoreClearingMatrix[0].length];
@@ -483,7 +525,7 @@ public abstract class UserFieldTableController {
 
     /**
      * Deaktiviert die Mehrfachselektion.
-     * 
+     *
      * @param table
      */
     void removeFrom(final UserFieldTable table) {
@@ -492,7 +534,7 @@ public abstract class UserFieldTableController {
 
     /**
      * Zelle editierbar gdw. editMatrix für diese Zelle = true
-     * 
+     *
      * @param editMatrix
      * @return
      */
@@ -506,52 +548,62 @@ public abstract class UserFieldTableController {
         };
     }
 
-    /* ************************** Beginn: statische Methode ********************************************* */
+    /*
+     * ************************** Beginn: statische Methode
+     * *********************************************
+     */
 
     /**
-     * Methode gibt eine <code>TableEditCondition</code> für Tables, die Kennzahlen enthalten und <code>uftm</code> als Model besitzen zurück.
-     * 
+     * Methode gibt eine <code>TableEditCondition</code> für Tables, die
+     * Kennzahlen enthalten und <code>uftm</code> als Model besitzen zurück.
+     *
      * @param uftm
      */
     public static UserFieldTableController getNewGeneralUserFieldTableController(final AbstractTableModel uftm) {
 
         /*
-         * Eigenschaften: - erste Zeile NICHT editierbar - erste Spalte NICHT editierbar - unabhängig von ModelValue
+         * Eigenschaften: - erste Zeile NICHT editierbar - erste Spalte NICHT
+         * editierbar - unabhängig von ModelValue
          */
         return getNewUserFieldTableController(uftm, false, false, false);
     }
 
     /**
-     * Methode gibt eine <code>TableEditCondition</code> für Tables, die Kennzahlen enthalten und <code>uftm</code> als Model besitzen zurück.
-     * 
+     * Methode gibt eine <code>TableEditCondition</code> für Tables, die
+     * Kennzahlen enthalten und <code>uftm</code> als Model besitzen zurück.
+     *
      * @param uftm
      */
     public static UserFieldTableController getNewDistributionWeightReplaceTableController(final AbstractTableModel uftm) {
 
         /*
-         * Eigenschaften: - erste Zeile NICHT editierbar - erste Spalte NICHT editierbar - unabhängig von ModelValue
+         * Eigenschaften: - erste Zeile NICHT editierbar - erste Spalte NICHT
+         * editierbar - unabhängig von ModelValue
          */
         return getNewUserFieldTableController(uftm, false, false, false);
     }
 
     /**
-     * Methode gibt eine <code>TableEditCondition</code> für Tables, die Verteilungsgewichte enthalten und <code>uftm</code> als Model besitzen
+     * Methode gibt eine <code>TableEditCondition</code> für Tables, die
+     * Verteilungsgewichte enthalten und <code>uftm</code> als Model besitzen
      * zurück.
-     * 
+     *
      * @param uftm
      */
     public static UserFieldTableController getNewDistributionWeightTableController(final AbstractTableModel uftm) {
 
         /*
-         * Eigenschaften: - erste Zeile NICHT editierbar - erste Spalte NICHT editierbar - abhängig von ModelValue
+         * Eigenschaften: - erste Zeile NICHT editierbar - erste Spalte NICHT
+         * editierbar - abhängig von ModelValue
          */
         return getNewUserFieldTableController(uftm, false, false, true);
     }
 
     /**
-     * Methode gibt eine <code>TableEditCondition</code> für Tables, die berechnete Kennzahlen enthalten und <code>uftm</code> als Model besitzen
+     * Methode gibt eine <code>TableEditCondition</code> für Tables, die
+     * berechnete Kennzahlen enthalten und <code>uftm</code> als Model besitzen
      * zurück.
-     * 
+     *
      * @param uftm
      */
     public static UserFieldTableController getNewClassificationNumberFormulaTableController(final AbstractTableModel uftm) {
@@ -573,24 +625,29 @@ public abstract class UserFieldTableController {
     }
 
     /**
-     * Methode gibt eine <code>TableEditCondition</code> für Tables, die ModelVariablen enthalten und <code>uftm</code> als Model besitzen zurück.
-     * 
+     * Methode gibt eine <code>TableEditCondition</code> für Tables, die
+     * ModelVariablen enthalten und <code>uftm</code> als Model besitzen zurück.
+     *
      * @param uftm
      */
     public static UserFieldTableController getNewModelVariableTableController(final AbstractTableModel uftm) {
 
         /*
-         * Eigenschaften: - erste Zeile NICHT editierbar - erste Spalte editierbar - unabhängig von ModelValue
+         * Eigenschaften: - erste Zeile NICHT editierbar - erste Spalte
+         * editierbar - unabhängig von ModelValue
          */
         return getNewUserFieldTableController(uftm, false, false, false);
     }
 
     /**
-     * Methode gibt in Abhängigkeit der übergebenen Parameter eine neue Instanz dieser Klasse wieder: <code>uftm</code> ist das zum Table gehörige
-     * Model <code>firstRowEditable</code> gibt an, ob die oberste Reihe editierbar sein soll <code>firstColumnEditable</code> gibt an, ob die linke
-     * Spalte editierbar sein soll <code>dependsOnModelValue</code> gibt an, ob die Editierbarkeit der Zellen zusätzlich noch vom ModelValue der
-     * Zellen abhängen soll
-     * 
+     * Methode gibt in Abhängigkeit der übergebenen Parameter eine neue Instanz
+     * dieser Klasse wieder: <code>uftm</code> ist das zum Table gehörige Model
+     * <code>firstRowEditable</code> gibt an, ob die oberste Reihe editierbar
+     * sein soll <code>firstColumnEditable</code> gibt an, ob die linke Spalte
+     * editierbar sein soll <code>dependsOnModelValue</code> gibt an, ob die
+     * Editierbarkeit der Zellen zusätzlich noch vom ModelValue der Zellen
+     * abhängen soll
+     *
      * @param uftm
      * @param firstRowEditable
      * @param firstColumnEditable
@@ -657,18 +714,26 @@ public abstract class UserFieldTableController {
         };
     }
 
-    /* ************************** Ende: statische Methode ********************************************* */
+    /*
+     * ************************** Ende: statische Methode
+     * *********************************************
+     */
 
-    /* ************************* Beginn: Unterklassen ******************************************** */
+    /*
+     * ************************* Beginn: Unterklassen
+     * ********************************************
+     */
 
     /**
-     * Ändert und überwacht {@link #selectionChangeMode} in Abhängigkeit davon, ob Shift oder Strg gedrückt wurde bzw. ein MouseDragging erfolgt ist.
+     * Ändert und überwacht {@link #selectionChangeMode} in Abhängigkeit davon,
+     * ob Shift oder Strg gedrückt wurde bzw. ein MouseDragging erfolgt ist.
      * <br>
-     * Beim Drücken von Strg- und Pfeiltasten erfolgt ein Springen der Selektion an den jeweiligen Rand des {@link #table}s. <br>
+     * Beim Drücken von Strg- und Pfeiltasten erfolgt ein Springen der Selektion
+     * an den jeweiligen Rand des {@link #table}s. <br>
      * MouseDragging wird als gedrücktes Shift interpretiert.
      * <p>
      * Außerdem
-     * 
+     *
      * @author fstephan
      */
     private class SelectionModeHandler extends MouseAdapter implements KeyListener {
@@ -681,7 +746,7 @@ public abstract class UserFieldTableController {
 
         /**
          * Konstruktor
-         * 
+         *
          * @param table zu überwachender Table
          */
         public SelectionModeHandler(final UserFieldTable table) {
@@ -689,8 +754,9 @@ public abstract class UserFieldTableController {
         }
 
         /**
-         * Hier erfolgt das Setzen des {@link #selectionChangeMode}s beim Drücken von Shift oder Strg.
-         * 
+         * Hier erfolgt das Setzen des {@link #selectionChangeMode}s beim
+         * Drücken von Shift oder Strg.
+         *
          * @see java.awt.event.KeyListener#keyPressed(java.awt.event.KeyEvent)
          */
         @Override
@@ -749,8 +815,9 @@ public abstract class UserFieldTableController {
         }
 
         /**
-         * Hier erfolgt das Setzen des {@link #selectionChangeMode}s beim Lösen von Shift oder Strg.
-         * 
+         * Hier erfolgt das Setzen des {@link #selectionChangeMode}s beim Lösen
+         * von Shift oder Strg.
+         *
          * @see java.awt.event.KeyListener#keyReleased(java.awt.event.KeyEvent)
          */
         @Override
@@ -760,7 +827,7 @@ public abstract class UserFieldTableController {
 
         /**
          * Setzt den Selektionsmodus je nach gedrückten Shift- und Strg-Knöpfen.
-         * 
+         *
          * @param e
          */
         private final void setSelectionChangeMode(final InputEvent e) {
@@ -784,8 +851,9 @@ public abstract class UserFieldTableController {
         }
 
         /**
-         * Hier erfolgt das Setzen des {@link #selectionChangeMode}s beim Dragging der Mouse.
-         * 
+         * Hier erfolgt das Setzen des {@link #selectionChangeMode}s beim
+         * Dragging der Mouse.
+         *
          * @see java.awt.event.MouseAdapter#mouseDragged(java.awt.event.MouseEvent)
          */
         @Override
@@ -795,8 +863,9 @@ public abstract class UserFieldTableController {
         }
 
         /**
-         * Hier erfolgt das Setzen des {@link #selectionChangeMode}s beim Lösen der Mouse-Taste.
-         * 
+         * Hier erfolgt das Setzen des {@link #selectionChangeMode}s beim Lösen
+         * der Mouse-Taste.
+         *
          * @see java.awt.event.MouseAdapter#mouseReleased(java.awt.event.MouseEvent)
          */
         @Override
@@ -807,16 +876,21 @@ public abstract class UserFieldTableController {
     }
 
     /**
-     * {@link KeyListener}, der das Verhalten des Tables bei Drücken der Pfeiltasten der Entertaste oder der Deletetaste bestimmt.
+     * {@link KeyListener}, der das Verhalten des Tables bei Drücken der
+     * Pfeiltasten der Entertaste oder der Deletetaste bestimmt.
      * <p>
-     * Sind mehrere Zellen markiert, wird nach Drücken von Enter die Markierung auf den {@link #leadingPoint} der letzten Selektion gesetzt. <br>
-     * Ist nur eine Zelle markiert, wird nach Drücken von Enter die Markierung um Eins nach unten verschoben, bzw. in die nächste Spalte, falls das
+     * Sind mehrere Zellen markiert, wird nach Drücken von Enter die Markierung
+     * auf den {@link #leadingPoint} der letzten Selektion gesetzt. <br>
+     * Ist nur eine Zelle markiert, wird nach Drücken von Enter die Markierung
+     * um Eins nach unten verschoben, bzw. in die nächste Spalte, falls das
      * Spaltendende überschritten wurde.
      * <p>
-     * Wird eine der Pfeiltasten gedrückt, wandert die Markierung vom {@link #leadingPoint} aus um Eins in die jeweilige Richtung.
+     * Wird eine der Pfeiltasten gedrückt, wandert die Markierung vom
+     * {@link #leadingPoint} aus um Eins in die jeweilige Richtung.
      * <p>
-     * Beim Drücken der Delete-Taste wird sofort der Inhalt aller markierten Zellen gelöscht, ohne dabei ein Editieren der Lead-Zelle zu starten.
-     * 
+     * Beim Drücken der Delete-Taste wird sofort der Inhalt aller markierten
+     * Zellen gelöscht, ohne dabei ein Editieren der Lead-Zelle zu starten.
+     *
      * @author fstephan
      */
     private class KeySelectionChangeHandler extends KeyAdapter {
@@ -826,7 +900,7 @@ public abstract class UserFieldTableController {
 
         /**
          * Konstruktor
-         * 
+         *
          * @param table zu überwachender Table
          */
         public KeySelectionChangeHandler(final UserFieldTable table) {
@@ -834,8 +908,9 @@ public abstract class UserFieldTableController {
         }
 
         /**
-         * Ändert die Markierung im {@link #table} in Abhänigigkeit der gedrückten Taste und der Anzahl selektierter Zellen.
-         * 
+         * Ändert die Markierung im {@link #table} in Abhänigigkeit der
+         * gedrückten Taste und der Anzahl selektierter Zellen.
+         *
          * @see java.awt.event.KeyListener#keyPressed(java.awt.event.KeyEvent)
          */
         @Override
@@ -872,7 +947,7 @@ public abstract class UserFieldTableController {
 
         /**
          * Übernimmt Delete sofort auf alle selektierten Zellen.
-         * 
+         *
          * @param e
          * @see java.awt.event.KeyAdapter#keyReleased(java.awt.event.KeyEvent)
          */
@@ -894,8 +969,9 @@ public abstract class UserFieldTableController {
         }
 
         /**
-         * Gibt wieder ob das {@link KeyEvent} <code>e</code> durch Drücken der Enter- oder einer der Pfeiltasten ausgelöst wurde.
-         * 
+         * Gibt wieder ob das {@link KeyEvent} <code>e</code> durch Drücken der
+         * Enter- oder einer der Pfeiltasten ausgelöst wurde.
+         *
          * @param e
          * @return
          */
@@ -904,8 +980,9 @@ public abstract class UserFieldTableController {
         }
 
         /**
-         * Gibt wieder ob das {@link KeyEvent} <code>e</code> durch Drücken einer der Pfeiltasten ausgelöst wurde.
-         * 
+         * Gibt wieder ob das {@link KeyEvent} <code>e</code> durch Drücken
+         * einer der Pfeiltasten ausgelöst wurde.
+         *
          * @param e
          * @return
          */
@@ -915,8 +992,9 @@ public abstract class UserFieldTableController {
         }
 
         /**
-         * Gibt wieder ob das {@link KeyEvent} <code>e</code> durch Drücken der Entertaste ausgelöst wurde.
-         * 
+         * Gibt wieder ob das {@link KeyEvent} <code>e</code> durch Drücken der
+         * Entertaste ausgelöst wurde.
+         *
          * @param e
          * @return
          */
@@ -926,9 +1004,10 @@ public abstract class UserFieldTableController {
     }
 
     /**
-     * Listener, der die Selektion im <code>table</code> auch dann der Mouse folgen lässt, wenn sich der Cursor über dem <code>rowHeader</code>
+     * Listener, der die Selektion im <code>table</code> auch dann der Mouse
+     * folgen lässt, wenn sich der Cursor über dem <code>rowHeader</code>
      * befindet.
-     * 
+     *
      * @author fstephan
      */
     private class RowHeaderSelectionListener implements MouseMotionListener {
@@ -938,7 +1017,7 @@ public abstract class UserFieldTableController {
 
         /**
          * Konstruktor
-         * 
+         *
          * @param table
          * @param rowHeader
          */
@@ -965,6 +1044,9 @@ public abstract class UserFieldTableController {
 
     }
 
-    /* ************************* Ende: Unterklassen ******************************************** */
+    /*
+     * ************************* Ende: Unterklassen
+     * ********************************************
+     */
 
 }

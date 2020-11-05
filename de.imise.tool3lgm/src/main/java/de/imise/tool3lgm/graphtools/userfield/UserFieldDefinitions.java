@@ -31,13 +31,17 @@ import de.imise.util.collections.CollectionUtils;
 import de.imise.util.swing.dialog.MultipleOptionPane;
 
 /**
- * Beinhaltet alle <code>UserField</code>s in einer <code>HashMap</code>, die für Node, Kanten und das Modell deklariert und definiert wurden.
+ * Beinhaltet alle <code>UserField</code>s in einer <code>HashMap</code>, die
+ * für Node, Kanten und das Modell deklariert und definiert wurden.
  *
  * @author Thomas Rudert
  */
 public final class UserFieldDefinitions extends UserFieldDefinitionChangeHandler implements Cloneable {
 
-    /** Mappt von der Elementklasse auf die dafür definierte Liste von <code>UserField</code>s */
+    /**
+     * Mappt von der Elementklasse auf die dafür definierte Liste von
+     * <code>UserField</code>s
+     */
     private Map<Class<? extends UserFieldTarget>, UserFieldList> classToUserFieldListMap = new HashMap<>();
 
     /** Mappt von den HashCodes der UserFields auf das UserField */
@@ -50,27 +54,29 @@ public final class UserFieldDefinitions extends UserFieldDefinitionChangeHandler
     private final PartValueSumSinglePartResults partValueSumSinglePartResults;
 
     /**
-     * Liste aller UserFields, die Formeln darstellen. Die Reihenfolge ist relevant für die
-     * Konsistenz der Definition. Wenn Formeln andere Formeln referenzieren, dann müssen die
-     * referenzierten Formeln in der Liste immer vor den Formeln stehen, durch die sie
-     * referenziert werden.
+     * Liste aller UserFields, die Formeln darstellen. Die Reihenfolge ist
+     * relevant für die Konsistenz der Definition. Wenn Formeln andere Formeln
+     * referenzieren, dann müssen die referenzierten Formeln in der Liste immer
+     * vor den Formeln stehen, durch die sie referenziert werden.
      */
     private List<UserField> formulaUserFieldList = new ArrayList<>();
 
     /**
-     * guava-Table für die Speicherung, bei welchem ModelElement welches Verteilungsgeweichtg in
-     * Verrechnungsfunktionen, die dieses Verteilungsgewicht nutzen, durch ein anderes ersetzt
-     * werden soll.
+     * guava-Table für die Speicherung, bei welchem ModelElement welches
+     * Verteilungsgeweichtg in Verrechnungsfunktionen, die dieses
+     * Verteilungsgewicht nutzen, durch ein anderes ersetzt werden soll.
      */
     private final WeightReplacer weightReplacer;
 
     /**
-     * Analyzer, über den der Zustand dieser {@link UserFieldDefinitions} abgefragt werden kann
+     * Analyzer, über den der Zustand dieser {@link UserFieldDefinitions}
+     * abgefragt werden kann
      */
     private UserFieldDefinitionsAnalyzer definitionsAnalyzer;
 
     /**
-     * Klasse, über die die sogenannten Modellvariablen identifiziert werden, also Variablen, die nicht für ein spezielles Element sondern für das
+     * Klasse, über die die sogenannten Modellvariablen identifiziert werden,
+     * also Variablen, die nicht für ein spezielles Element sondern für das
      * Gesamtmodell gelten und zur Verfügung stehen.
      */
     public static final Class<? extends UserFieldTarget> GLOBAL_USERFIELD_IDENTIFIER_CLASS = GDCollection.class;
@@ -84,7 +90,8 @@ public final class UserFieldDefinitions extends UserFieldDefinitionChangeHandler
     public static final Class<? extends UserFieldTarget> GLOBAL_FORMAT_IDENTIFIER_CLASS = GlobalFormatIdentifierClass.class;
 
     /**
-     * Liefert einen anzeigbaren String für den globalen Identifier (da es Modellvariablen sind wird hier der Res-String für Model zurück gegeben)
+     * Liefert einen anzeigbaren String für den globalen Identifier (da es
+     * Modellvariablen sind wird hier der Res-String für Model zurück gegeben)
      *
      * @return
      */
@@ -93,26 +100,35 @@ public final class UserFieldDefinitions extends UserFieldDefinitionChangeHandler
     }
 
     /**
-     * Konstante um für <code>firstInconsistentUserFieldFormulaIndex</code> anzugeben, dass alle darin befindlichen Formeln berechnet werden können.
+     * Konstante um für <code>firstInconsistentUserFieldFormulaIndex</code>
+     * anzugeben, dass alle darin befindlichen Formeln berechnet werden können.
      */
     private static final int NO_INCONSISTENCE_INDEX_FOUND = -1;
 
     /**
-     * Maximale Anzahl der abhängigen <code>UserField</code>s, die im Warnungsdialog vor dem Löschen eines <code>UserField</code>s angezeigt werden.
+     * Maximale Anzahl der abhängigen <code>UserField</code>s, die im
+     * Warnungsdialog vor dem Löschen eines <code>UserField</code>s angezeigt
+     * werden.
      */
     private static final int MAX_USED_USERFIELD_DELETE_NUMBER = 10;
 
     /**
-     * Konstante um für <code>firstInconsistentUserFieldFormulaIndex</code> anzugeben, dass die Liste <code>formulaUserFieldList</code> neu sortiert
-     * werden müsste, um festzustellen, ob sich alle Formeln berechnen lassen bzw. welche inkonsitent sind.
+     * Konstante um für <code>firstInconsistentUserFieldFormulaIndex</code>
+     * anzugeben, dass die Liste <code>formulaUserFieldList</code> neu sortiert
+     * werden müsste, um festzustellen, ob sich alle Formeln berechnen lassen
+     * bzw. welche inkonsitent sind.
      */
     private static final int FORMULA_INCONSITENCE_INDEX_UNKNOWN = -2;
 
     /**
-     * Die Liste <code>formulaUserFieldList</code> wird (wenn keine Kreisreferenzen in den Formeln vorkommen) so sortiert, dass sich jede Formel in
-     * der Liste berechnen lässt, wenn alle Formeln berechnet wurden, die sich in der Liste davor befinden. Sollte doch mind. eine Kreisreferenz
-     * vorliegen, wird in dieser Variable hier der Index des ersten <code>UserField</code>s in <code>formulaUserFieldList</code> gespeichert, der sich
-     * nicht mehr berechnen lässt. Lassen sich alle Formeln berechnen, dann ist der Index -1.
+     * Die Liste <code>formulaUserFieldList</code> wird (wenn keine
+     * Kreisreferenzen in den Formeln vorkommen) so sortiert, dass sich jede
+     * Formel in der Liste berechnen lässt, wenn alle Formeln berechnet wurden,
+     * die sich in der Liste davor befinden. Sollte doch mind. eine
+     * Kreisreferenz vorliegen, wird in dieser Variable hier der Index des
+     * ersten <code>UserField</code>s in <code>formulaUserFieldList</code>
+     * gespeichert, der sich nicht mehr berechnen lässt. Lassen sich alle
+     * Formeln berechnen, dann ist der Index -1.
      */
     private int firstInconsistentUserFieldFormulaIndex = FORMULA_INCONSITENCE_INDEX_UNKNOWN;
 
@@ -130,16 +146,19 @@ public final class UserFieldDefinitions extends UserFieldDefinitionChangeHandler
     }
 
     /**
-     * @return Analyzer, über den der Zustand dieser {@link UserFieldDefinitions} abgefragt werden kann
+     * @return Analyzer, über den der Zustand dieser
+     *         {@link UserFieldDefinitions} abgefragt werden kann
      */
     public UserFieldDefinitionsAnalyzer getAnalyzer() {
         return definitionsAnalyzer;
     }
 
     /**
-     * Hängt der zuletzt benutzen Liste ein neues Element an. Die Methode erwartet beim Aufruf ein <code>UserField</code>. Das <code>UserField</code>
-     * wird an eine Liste, die sich in der <code>classToUserFieldListMap</code>- HashMap befindet, angehangen. Methode wird beim Laden des Modells
-     * aufgerufen.
+     * Hängt der zuletzt benutzen Liste ein neues Element an. Die Methode
+     * erwartet beim Aufruf ein <code>UserField</code>. Das
+     * <code>UserField</code> wird an eine Liste, die sich in der
+     * <code>classToUserFieldListMap</code>- HashMap befindet, angehangen.
+     * Methode wird beim Laden des Modells aufgerufen.
      *
      * @param userField
      */
@@ -162,7 +181,8 @@ public final class UserFieldDefinitions extends UserFieldDefinitionChangeHandler
     }
 
     /**
-     * Fügt der zuletzt benutzen Liste ein neues Element ein. Positioniert am übergebenen Index.
+     * Fügt der zuletzt benutzen Liste ein neues Element ein. Positioniert am
+     * übergebenen Index.
      *
      * @param userField
      * @param index
@@ -182,9 +202,12 @@ public final class UserFieldDefinitions extends UserFieldDefinitionChangeHandler
     }
 
     /**
-     * Liefert <code>true</code>, wenn das übergebene <code>UserField</code> von anderen <code>UserField</code>s benutzt wird.<br>
-     * Das trifft bei Kennzahlformeln, Knenzahlen und Verteilungsgewichten zu, die in anderen Kennzahlformeln verwendet werden. Außerdem wird für zu
-     * löschende Format-UserFields geprüft, ob sie mind. einem anderen UserField als Format zugewiesen sind.
+     * Liefert <code>true</code>, wenn das übergebene <code>UserField</code> von
+     * anderen <code>UserField</code>s benutzt wird.<br>
+     * Das trifft bei Kennzahlformeln, Knenzahlen und Verteilungsgewichten zu,
+     * die in anderen Kennzahlformeln verwendet werden. Außerdem wird für zu
+     * löschende Format-UserFields geprüft, ob sie mind. einem anderen UserField
+     * als Format zugewiesen sind.
      *
      * @param userField
      * @return
@@ -323,10 +346,12 @@ public final class UserFieldDefinitions extends UserFieldDefinitionChangeHandler
     }
 
     /**
-     * Ersetzt die UserFields in der übergebenen Liste durch die aus der übergebenen Map mit demselben HashString.
-     * Weil UserFieldList nicht das Interface {@link List} implementiert muss man im Grunde dieselbe Funktion hier 2 mal schreiben.
-     * Die UserFieldList soll aber nicht List implementieren, weil es zu aufwändig wäre, sie für alle darin enthaltenen Funktionen
-     * konsitent zu halten
+     * Ersetzt die UserFields in der übergebenen Liste durch die aus der
+     * übergebenen Map mit demselben HashString. Weil UserFieldList nicht das
+     * Interface {@link List} implementiert muss man im Grunde dieselbe Funktion
+     * hier 2 mal schreiben. Die UserFieldList soll aber nicht List
+     * implementieren, weil es zu aufwändig wäre, sie für alle darin enthaltenen
+     * Funktionen konsitent zu halten
      *
      * @param userFieldList
      * @param hashStringToClonedUserFieldMap
@@ -341,7 +366,8 @@ public final class UserFieldDefinitions extends UserFieldDefinitionChangeHandler
     }
 
     /**
-     * Ersetzt die UserFields in der übergebenen Liste durch die aus der übergebenen Map mit demselben HashString.
+     * Ersetzt die UserFields in der übergebenen Liste durch die aus der
+     * übergebenen Map mit demselben HashString.
      *
      * @param userFieldList
      * @param hashStringToClonedUserFieldMap
@@ -367,12 +393,15 @@ public final class UserFieldDefinitions extends UserFieldDefinitionChangeHandler
     }
 
     /**
-     * Liefert ein Benutzerfeld, das anhand des Namens herausgesucht wird. ACHTUNG: Es wird immer nur das erste mit dem übergebenen Namen gefunden.
-     * Gebraucht werden sollte diese Funktion nur beim Import von Daten, da der Name kein eindeutiges Kriterium ist.
+     * Liefert ein Benutzerfeld, das anhand des Namens herausgesucht wird.
+     * ACHTUNG: Es wird immer nur das erste mit dem übergebenen Namen gefunden.
+     * Gebraucht werden sollte diese Funktion nur beim Import von Daten, da der
+     * Name kein eindeutiges Kriterium ist.
      *
      * @param userFieldTargetClass
      * @param name
-     * @return das erstebeste UserField mit dem übergebenen Namen oder <code>null</code>, wenn keins gefunden wurde
+     * @return das erstebeste UserField mit dem übergebenen Namen oder
+     *         <code>null</code>, wenn keins gefunden wurde
      */
     public UserField getUserField(final Class<? extends UserFieldTarget> userFieldTargetClass, final String name) {
         for (Class<?> clazz : classToUserFieldListMap.keySet()) {
@@ -391,7 +420,8 @@ public final class UserFieldDefinitions extends UserFieldDefinitionChangeHandler
 
     /**
      * @param userFieldTargetClass
-     * @return <code>true</code> if there is at least one {@link UserField} defined for the userFieldTargetClass
+     * @return <code>true</code> if there is at least one {@link UserField}
+     *         defined for the userFieldTargetClass
      */
     public boolean hasUserFields(final Class<? extends UserFieldTarget> userFieldTargetClass) {
         return getUserFields(userFieldTargetClass).iterator().hasNext();
@@ -454,10 +484,13 @@ public final class UserFieldDefinitions extends UserFieldDefinitionChangeHandler
     }
 
     /**
-     * Liefert eine Liste aller UserFields mit einfachen Teilwertsummenformeln, die für die übergebene Element- und Kantenklasse definiert sind.
+     * Liefert eine Liste aller UserFields mit einfachen Teilwertsummenformeln,
+     * die für die übergebene Element- und Kantenklasse definiert sind.
      *
-     * @param me Elementklasse, für die das UserField mit der einfachen Teilwertsummenformel definiert ist
-     * @param edgeClass Kantenklasse über die die einfache Teilwertsummenformel rechnnetr
+     * @param me Elementklasse, für die das UserField mit der einfachen
+     *            Teilwertsummenformel definiert ist
+     * @param edgeClass Kantenklasse über die die einfache Teilwertsummenformel
+     *            rechnnetr
      * @return
      */
     public List<UserField> getFractionValueSumUserFields(final Class<? extends ModelElement> elementClass, final Class<? extends Edge> edgeClass) {
@@ -530,19 +563,26 @@ public final class UserFieldDefinitions extends UserFieldDefinitionChangeHandler
     }
 
     /**
-     * Die Methode <code>get</code> gibt unter Angabe der zugehörigen Klasse und des entsprechenden Indices ein <code>UserField</code> zurück. Es wird
-     * aus der HashMap die zur übergebenen Klasse gehörende ArrayList geladen, falls sie nicht schon geladen ist, und das Element an der Stelle
+     * Die Methode <code>get</code> gibt unter Angabe der zugehörigen Klasse und
+     * des entsprechenden Indices ein <code>UserField</code> zurück. Es wird aus
+     * der HashMap die zur übergebenen Klasse gehörende ArrayList geladen, falls
+     * sie nicht schon geladen ist, und das Element an der Stelle
      * <code>index</code> zurückgegeben.
      *
      * @param userFieldTargetClass
      * @param index
-     * @return UserField / public UserField get(Class<?> userFieldTargetClass, int index) { UserFieldList ufl =
-     *         classToUserFieldListMap.get(userFieldTargetClass); if (ufl != null) return ufl.get(index); return null; } /** Liefert das globale
-     *         {@link UserField} mit dem entsprechenden Index (oder <code>null</code> wenn es kein solches gibt.
+     * @return UserField / public UserField get(Class<?> userFieldTargetClass,
+     *         int index) { UserFieldList ufl =
+     *         classToUserFieldListMap.get(userFieldTargetClass); if (ufl !=
+     *         null) return ufl.get(index); return null; } /** Liefert das
+     *         globale {@link UserField} mit dem entsprechenden Index (oder
+     *         <code>null</code> wenn es kein solches gibt.
      * @param index
      * @return
-     * @see #get(Class, int) / public UserField getGlobal(int index) { return get(GLOBAL_USERFIELD_IDENTIFIER_CLASS, index); } /** Gibt
-     *      <code>UserField</code> zurück, für das der <code>hashString</code> angegeben wurde.
+     * @see #get(Class, int) / public UserField getGlobal(int index) { return
+     *      get(GLOBAL_USERFIELD_IDENTIFIER_CLASS, index); } /** Gibt
+     *      <code>UserField</code> zurück, für das der <code>hashString</code>
+     *      angegeben wurde.
      * @param hashString
      * @return <code>UserField</code>
      */
@@ -551,10 +591,12 @@ public final class UserFieldDefinitions extends UserFieldDefinitionChangeHandler
     }
 
     /**
-     * Prüft für ein übergebenes <code>UserField</code>, ob es zu den berechenbaren Formel-UserFields gehört.
+     * Prüft für ein übergebenes <code>UserField</code>, ob es zu den
+     * berechenbaren Formel-UserFields gehört.
      *
      * @param formulaUserField
-     * @return <code>true</code>, wenn es ein Formel-UserField ist, das berechnet werden kann, sonst <code>false</code>
+     * @return <code>true</code>, wenn es ein Formel-UserField ist, das
+     *         berechnet werden kann, sonst <code>false</code>
      */
     public boolean isCalculatable(final UserField formulaUserField) {
         int index = formulaUserFieldList.indexOf(formulaUserField);
@@ -565,9 +607,11 @@ public final class UserFieldDefinitions extends UserFieldDefinitionChangeHandler
     }
 
     /**
-     * Prüft, ob die Formeldefinitionen konsistent sind - also ob sich die Formeln nicht im Kreis referenzieren.
+     * Prüft, ob die Formeldefinitionen konsistent sind - also ob sich die
+     * Formeln nicht im Kreis referenzieren.
      *
-     * @return <code>false</code>, wenn alle Formeln berechnet werden können, sonst <code>true</code>
+     * @return <code>false</code>, wenn alle Formeln berechnet werden können,
+     *         sonst <code>true</code>
      */
     public boolean hasCrossReferences() {
         //wenn irgendwas an den Kennzahlformeldefinitionen geändert wurde -> prüfe die Kreisreferenzen in den Formeln
@@ -593,7 +637,8 @@ public final class UserFieldDefinitions extends UserFieldDefinitionChangeHandler
     }
 
     /**
-     * Prüft, ob sich ein FormeluserField in seiner Formel außerhalb einer verrechnungsfunktion selbst referenziert.
+     * Prüft, ob sich ein FormeluserField in seiner Formel außerhalb einer
+     * verrechnungsfunktion selbst referenziert.
      *
      * @param userField
      * @return
@@ -721,7 +766,8 @@ public final class UserFieldDefinitions extends UserFieldDefinitionChangeHandler
     }
 
     /**
-     * @return Iterator aller Schlüsselwerte der Map, die von den Klassen auf die für sie definierten UserFields mappt
+     * @return Iterator aller Schlüsselwerte der Map, die von den Klassen auf
+     *         die für sie definierten UserFields mappt
      */
     public Set<Class<? extends UserFieldTarget>> getClassToUserFieldKeys() {
         return classToUserFieldListMap.keySet();
@@ -732,11 +778,13 @@ public final class UserFieldDefinitions extends UserFieldDefinitionChangeHandler
     /////////////////////////////////////////////////////////////////////////////
 
     /**
-     * Sortiert die Liste <code>formulaUserFieldList</code> so, dass sie konsistent ist. Siehe Kommentar zur Variable
+     * Sortiert die Liste <code>formulaUserFieldList</code> so, dass sie
+     * konsistent ist. Siehe Kommentar zur Variable
      * <code>formulaUserFieldList</code>.
      *
-     * @return Liste von <code>UserField</code>s, die sich im Kreus referenzieren oder von solchen Elementen abhängig sind bzw. <code>null</code>,
-     *         wenn es keine Kreisreferenzen gibt
+     * @return Liste von <code>UserField</code>s, die sich im Kreus
+     *         referenzieren oder von solchen Elementen abhängig sind bzw.
+     *         <code>null</code>, wenn es keine Kreisreferenzen gibt
      */
     private ArrayList<UserField> makeFormulaUserFieldListConsistent() {
         ArrayList<UserField> calculateableFormulaList = new ArrayList<>(formulaUserFieldList.size());
@@ -871,12 +919,14 @@ public final class UserFieldDefinitions extends UserFieldDefinitionChangeHandler
     }
 
     /**
-     * Berechnet den Wert des übergebenen <code>UserField</code>s für das übergebene <code>UserFieldTarget</code>.
+     * Berechnet den Wert des übergebenen <code>UserField</code>s für das
+     * übergebene <code>UserFieldTarget</code>.
      *
      * @param userField
      * @param target
-     * @return <code>UserField.ERROR_OBJECT_VALUE</code>, wenn die Berechnung nicht durchgeführt werden konnte oder den <code>Double</code>-Wert als
-     *         <code>String</code>
+     * @return <code>UserField.ERROR_OBJECT_VALUE</code>, wenn die Berechnung
+     *         nicht durchgeführt werden konnte oder den
+     *         <code>Double</code>-Wert als <code>String</code>
      */
     protected final String calculate(final UserField userField, final UserFieldTarget target) {
         if (!isCalculatable(userField)) {
@@ -903,8 +953,10 @@ public final class UserFieldDefinitions extends UserFieldDefinitionChangeHandler
     }
 
     /**
-     * Immer wenn sich was an den Definitionen ändert muss diese Funktion aufgerufen werden, damit die Definition auf CrossReferences geprüft wird.
-     * Beim Hinzufügen oder Entfernen von UserFields macht die Definition das allein, aber wenn von einer Kennzahlformel der FormelString geändert
+     * Immer wenn sich was an den Definitionen ändert muss diese Funktion
+     * aufgerufen werden, damit die Definition auf CrossReferences geprüft wird.
+     * Beim Hinzufügen oder Entfernen von UserFields macht die Definition das
+     * allein, aber wenn von einer Kennzahlformel der FormelString geändert
      * wird, muss das der Ändernde machen.
      */
     public void setConsistencyUnknown() {
@@ -913,8 +965,10 @@ public final class UserFieldDefinitions extends UserFieldDefinitionChangeHandler
     }
 
     /**
-     * @param format Format-UserField, für das alle Kennzahlen zurück gegeben werden sollen, die es benutzen
-     * @return Liste aller USerFields, die das übergebene Format-Userfield als benutzen
+     * @param format Format-UserField, für das alle Kennzahlen zurück gegeben
+     *            werden sollen, die es benutzen
+     * @return Liste aller USerFields, die das übergebene Format-Userfield als
+     *         benutzen
      */
     public ArrayList<UserField> getFormatUser(final UserField format) {
         ArrayList<UserField> returnList = new ArrayList<>();

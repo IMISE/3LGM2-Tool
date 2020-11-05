@@ -44,9 +44,11 @@ public class ToolContentHandlerV1_2 extends ToolContentHandlerV1_1 {
     }
 
     /**
-     * es muss gewaehrleistet werden, dass elementValue.setLength(0) aufgerufen wird
+     * es muss gewaehrleistet werden, dass elementValue.setLength(0) aufgerufen
+     * wird
      *
-     * @see de.imise.tool3lgm.xml.ToolContentHandlerV1_0#startElement(java.lang.String, java.lang.String, java.lang.String, org.xml.sax.Attributes)
+     * @see de.imise.tool3lgm.xml.ToolContentHandlerV1_0#startElement(java.lang.String,
+     *      java.lang.String, java.lang.String, org.xml.sax.Attributes)
      */
     @Override
     public void startElement(final String namespaceURI, final String localName, final String qName, final Attributes atts) throws SAXException {

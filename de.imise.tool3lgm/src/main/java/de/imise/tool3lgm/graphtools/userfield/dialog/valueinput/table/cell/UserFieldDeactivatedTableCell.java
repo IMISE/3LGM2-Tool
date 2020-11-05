@@ -9,9 +9,10 @@ import javax.swing.event.CellEditorListener;
 import javax.swing.table.DefaultTableCellRenderer;
 
 /**
- * Repräsentiert eine nicht editierbare Zelle eines UserFieldTables. Ist Editor- und die Renderer-Komponente für eine solche Zelle. Sorgt dafür,
- * dass die Zelle grau dargstellt wird und nicht editierbar ist.
- * 
+ * Repräsentiert eine nicht editierbare Zelle eines UserFieldTables. Ist Editor-
+ * und die Renderer-Komponente für eine solche Zelle. Sorgt dafür, dass die
+ * Zelle grau dargstellt wird und nicht editierbar ist.
+ *
  * @author fstephan
  */
 public class UserFieldDeactivatedTableCell implements IUserFieldTableCell {
@@ -66,9 +67,11 @@ public class UserFieldDeactivatedTableCell implements IUserFieldTableCell {
     }
 
     /**
-     * Gibt die Renderer-Komponente diese Zelle zurück. Setzt die BackgroundColor auf Grau
-     * 
-     * @see javax.swing.table.TableCellRenderer#getTableCellRendererComponent(javax.swing.JTable, java.lang.Object, boolean, boolean, int, int)
+     * Gibt die Renderer-Komponente diese Zelle zurück. Setzt die
+     * BackgroundColor auf Grau
+     *
+     * @see javax.swing.table.TableCellRenderer#getTableCellRendererComponent(javax.swing.JTable,
+     *      java.lang.Object, boolean, boolean, int, int)
      */
     @Override
     public Component getTableCellRendererComponent(final JTable table, final Object value, final boolean isSelected, final boolean hasFocus, final int row, final int column) {

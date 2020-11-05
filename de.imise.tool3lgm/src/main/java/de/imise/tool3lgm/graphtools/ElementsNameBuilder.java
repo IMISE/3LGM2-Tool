@@ -16,7 +16,7 @@ import com.google.common.base.Strings;
 
 import de.imise.tool3lgm.MetaModelContext;
 import de.imise.tool3lgm.Tool3lgmConstants;
-import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
+import de.imise.tool3lgm.graphtools.metamodel.CoreMetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModelSpecificAdapter;
 import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
 import de.imise.tool3lgm.graphtools.metamodel.elements.DoubleMeaningEdge.ConnectionState;
@@ -35,9 +35,10 @@ public final class ElementsNameBuilder extends MetaModelSpecificAdapter {
     public static final String STANDARD_DOUBLE_MEANING_EDGE_DELIMITER = " / ";
 
     /**
-     * Mappt von den Knotenklassen auf den zugehörigen Short-Name für die HashString der Elemente. Diese 3-Buchstabigen Klassenkürzel sind nicht
-     * zwangsläufig eindeutig und diesen lediglich der besseren Lesbarkeit von Hash-Strings, denen sie immer
-     * Vorangestellt werden.
+     * Mappt von den Knotenklassen auf den zugehörigen Short-Name für die
+     * HashString der Elemente. Diese 3-Buchstabigen Klassenkürzel sind nicht
+     * zwangsläufig eindeutig und diesen lediglich der besseren Lesbarkeit von
+     * Hash-Strings, denen sie immer Vorangestellt werden.
      */
     private static HashMap<String, String> elementClassSimpleNameToHashShortName = null;
 
@@ -62,8 +63,10 @@ public final class ElementsNameBuilder extends MetaModelSpecificAdapter {
     /**
      * Gibt den anzeigbaren Namen der Klassen aus den Resoucen zurück.<br>
      *
-     * @param plural wenn true, wird der Pluralname zurück gegeben, sonst der Singular
-     * @param elementClass Klasse für die der anzeigbare Name geliefert werden soll
+     * @param plural wenn true, wird der Pluralname zurück gegeben, sonst der
+     *            Singular
+     * @param elementClass Klasse für die der anzeigbare Name geliefert werden
+     *            soll
      * @return String aus dem geladenen ResourcenBundle
      */
     public final String getDisplayableName(final boolean plural, final Class<? extends ModelElement> elementClass) {
@@ -72,11 +75,14 @@ public final class ElementsNameBuilder extends MetaModelSpecificAdapter {
 
     /**
      * Gibt den anzeigbaren Namen der Klassen aus den Resoucen zurück.<br>
-     * Im Unterschied zu {@link #getDisplayableName(boolean, Class...)} wird hier bei Elementen, die der Master
-     * einer {@link InstanciationEdge} sind noch "(Template)" angehängt.
+     * Im Unterschied zu {@link #getDisplayableName(boolean, Class...)} wird
+     * hier bei Elementen, die der Master einer {@link InstanciationEdge} sind
+     * noch "(Template)" angehängt.
      *
-     * @param plural wenn true, wird der Pluralname zurück gegeben, sonst der Singular
-     * @param elementClass Klasse für die der anzeigbare Name geliefert werden soll
+     * @param plural wenn true, wird der Pluralname zurück gegeben, sonst der
+     *            Singular
+     * @param elementClass Klasse für die der anzeigbare Name geliefert werden
+     *            soll
      * @return String aus dem geladenen ResourcenBundle
      */
     public final String getDisplayableFullName(final boolean plural, final Class<? extends ModelElement> elementClass) {
@@ -86,7 +92,8 @@ public final class ElementsNameBuilder extends MetaModelSpecificAdapter {
     /**
      * Gibt den anzeigbaren Namen der Klassen aus den Resoucen zurück.<br>
      *
-     * @param plural wenn true, wird der Pluralname zurück gegeben, sonst der Singular
+     * @param plural wenn true, wird der Pluralname zurück gegeben, sonst der
+     *            Singular
      * @param classes Klassen für die der anzeigbare Name geliefert werden soll
      * @return String aus dem geladenen ResourcenBundle
      */
@@ -100,10 +107,12 @@ public final class ElementsNameBuilder extends MetaModelSpecificAdapter {
 
     /**
      * Gibt den anzeigbaren Namen der Klassen aus den Resoucen zurück.<br>
-     * Im Unterschied zu {@link #getDisplayableName(boolean, Class...)} wird hier bei Elementen, die der Master
-     * einer {@link InstanciationEdge} sind noch "(Template)" angehängt.
+     * Im Unterschied zu {@link #getDisplayableName(boolean, Class...)} wird
+     * hier bei Elementen, die der Master einer {@link InstanciationEdge} sind
+     * noch "(Template)" angehängt.
      *
-     * @param plural wenn true, wird der Pluralname zurück gegeben, sonst der Singular
+     * @param plural wenn true, wird der Pluralname zurück gegeben, sonst der
+     *            Singular
      * @param classes Klassen für die der anzeigbare Name geliefert werden soll
      * @return String aus dem geladenen ResourcenBundle
      */
@@ -119,9 +128,12 @@ public final class ElementsNameBuilder extends MetaModelSpecificAdapter {
      * @param plural
      * @param classes
      * @param alphabetical
-     * @param appendRealizationOrTemplatePostfix If <code>true</code> and the element class has a {@link InstanciationEdge}
-     *            then the name gets an appendix. If the element is the instanciation master, then the appendix is "(Template)".
-     *            If it is the instanciation slave element (= the instane)then the appendix is "(Realization)".
+     * @param appendRealizationOrTemplatePostfix If <code>true</code> and the
+     *            element class has a {@link InstanciationEdge} then the name
+     *            gets an appendix. If the element is the instanciation master,
+     *            then the appendix is "(Template)". If it is the instanciation
+     *            slave element (= the instane)then the appendix is
+     *            "(Realization)".
      * @return
      */
     private final String getDisplayableName(final boolean plural, final Collection<Class<? extends ModelElement>> classes, final boolean alphabetical, final boolean appendRealizationOrTemplatePostfix) {
@@ -158,7 +170,7 @@ public final class ElementsNameBuilder extends MetaModelSpecificAdapter {
         if (metaModel.isPureTemplateElementClass(elementClass)) {
             Class<? extends Edge>[] edgeTypes = metaModel.getEdgeTypes(elementClass);
             for (Class<? extends Edge> edgeClass : edgeTypes) {
-                Class<? extends ModelElement> other = MetaModel.getOther(edgeClass, elementClass);
+                Class<? extends ModelElement> other = CoreMetaModel.getOther(edgeClass, elementClass);
                 String otherDisplayableName = getDisplayableName(other, plural, false);
                 if (otherDisplayableName.equals(name)) {
                     return true;
@@ -171,8 +183,10 @@ public final class ElementsNameBuilder extends MetaModelSpecificAdapter {
     /**
      * @param elementClass
      * @param plural
-     * @param appendTemplatePostfix If <code>true</code> and the element class has a {@link InstanciationEdge}
-     *            then the name gets an appendix. If the element is the instanciation master, then the appendix is "(Template)".
+     * @param appendTemplatePostfix If <code>true</code> and the element class
+     *            has a {@link InstanciationEdge} then the name gets an
+     *            appendix. If the element is the instanciation master, then the
+     *            appendix is "(Template)".
      * @return
      */
     private String getDisplayableName(Class<? extends ModelElement> elementClass, final boolean plural, final boolean appendTemplatePostfix) {
@@ -200,8 +214,10 @@ public final class ElementsNameBuilder extends MetaModelSpecificAdapter {
     }
 
     /**
-     * Gibt den anzeigbaren Namen einer Klasse in der Mehrzahl (Plural) aus den Resoucen zurück.<br>
-     * Wird <code>null</code> übergeben, wird der Name für ein Modell (im Deutschen also "Modell" zurück gegeben.)
+     * Gibt den anzeigbaren Namen einer Klasse in der Mehrzahl (Plural) aus den
+     * Resoucen zurück.<br>
+     * Wird <code>null</code> übergeben, wird der Name für ein Modell (im
+     * Deutschen also "Modell" zurück gegeben.)
      *
      * @param classes Klassen für die der anzeigbare Name geliefert werden soll
      * @return String aus dem geladenen ResourcenBundle
@@ -212,10 +228,13 @@ public final class ElementsNameBuilder extends MetaModelSpecificAdapter {
     }
 
     /**
-     * Gibt den anzeigbaren Namen einer Klasse in der Mehrzahl (Plural) aus den Resoucen zurück.<br>
-     * Wird <code>null</code> übergeben, wird der Name für ein Modell (im Deutschen also "Modell" zurück gegeben.)
-     * Im Unterschied zu {@link #getDisplayablePluralName(Class...)} wird hier bei Elementen, die der Master
-     * einer {@link InstanciationEdge} sind noch "(Template)" angehängt.
+     * Gibt den anzeigbaren Namen einer Klasse in der Mehrzahl (Plural) aus den
+     * Resoucen zurück.<br>
+     * Wird <code>null</code> übergeben, wird der Name für ein Modell (im
+     * Deutschen also "Modell" zurück gegeben.) Im Unterschied zu
+     * {@link #getDisplayablePluralName(Class...)} wird hier bei Elementen, die
+     * der Master einer {@link InstanciationEdge} sind noch "(Template)"
+     * angehängt.
      *
      * @param classes Klassen für die der anzeigbare Name geliefert werden soll
      * @return String aus dem geladenen ResourcenBundle
@@ -226,8 +245,10 @@ public final class ElementsNameBuilder extends MetaModelSpecificAdapter {
     }
 
     /**
-     * Gibt den anzeigbaren Namen einer Klasse in der Mehrzahl (Plural) aus den Resoucen zurück.<br>
-     * Wird <code>null</code> übergeben, wird der Name für ein Modell (im Deutschen also "Modell" zurück gegeben.)
+     * Gibt den anzeigbaren Namen einer Klasse in der Mehrzahl (Plural) aus den
+     * Resoucen zurück.<br>
+     * Wird <code>null</code> übergeben, wird der Name für ein Modell (im
+     * Deutschen also "Modell" zurück gegeben.)
      *
      * @param classes Klassen für die der anzeigbare Name geliefert werden soll
      * @return String aus dem geladenen ResourcenBundle
@@ -237,10 +258,12 @@ public final class ElementsNameBuilder extends MetaModelSpecificAdapter {
     }
 
     /**
-     * Gibt den anzeigbaren Namen einer Klasse in der Mehrzahl (Plural) aus den Resoucen zurück.<br>
-     * Wird <code>null</code> übergeben, wird der Name für ein Modell (im Deutschen also "Modell" zurück gegeben.)
-     * Im Unterschied zu {@link #getDisplayableName(Collection)} wird hier bei Elementen, die der Master
-     * einer {@link InstanciationEdge} sind noch "(Template)" angehängt.
+     * Gibt den anzeigbaren Namen einer Klasse in der Mehrzahl (Plural) aus den
+     * Resoucen zurück.<br>
+     * Wird <code>null</code> übergeben, wird der Name für ein Modell (im
+     * Deutschen also "Modell" zurück gegeben.) Im Unterschied zu
+     * {@link #getDisplayableName(Collection)} wird hier bei Elementen, die der
+     * Master einer {@link InstanciationEdge} sind noch "(Template)" angehängt.
      *
      * @param classes Klassen für die der anzeigbare Name geliefert werden soll
      * @return String aus dem geladenen ResourcenBundle
@@ -251,9 +274,11 @@ public final class ElementsNameBuilder extends MetaModelSpecificAdapter {
 
     /**
      * Gibt den anzeigbaren Namen einer Klasse aus den Resoucen zurück.<br>
-     * Wird <code>null</code> übergeben, wird der Name für ein Modell (im Deutschen also "Modell" zurück gegeben.)
+     * Wird <code>null</code> übergeben, wird der Name für ein Modell (im
+     * Deutschen also "Modell" zurück gegeben.)
      *
-     * @param elementClass Klasse für die der anzeigbare Name geliefert werden soll
+     * @param elementClass Klasse für die der anzeigbare Name geliefert werden
+     *            soll
      * @return String aus dem geladenen ResourcenBundle
      */
     public final String getDisplayableName(final Class<? extends ModelElement> elementClass) {
@@ -262,11 +287,13 @@ public final class ElementsNameBuilder extends MetaModelSpecificAdapter {
 
     /**
      * Gibt den anzeigbaren Namen einer Klasse aus den Resoucen zurück.<br>
-     * Wird <code>null</code> übergeben, wird der Name für ein Modell (im Deutschen also "Modell" zurück gegeben.)
-     * Im Unterschied zu {@link #getDisplayableName(Class)} wird hier bei Elementen, die der Master
-     * einer {@link InstanciationEdge} sind noch "(Template)" angehängt.
+     * Wird <code>null</code> übergeben, wird der Name für ein Modell (im
+     * Deutschen also "Modell" zurück gegeben.) Im Unterschied zu
+     * {@link #getDisplayableName(Class)} wird hier bei Elementen, die der
+     * Master einer {@link InstanciationEdge} sind noch "(Template)" angehängt.
      *
-     * @param elementClass Klasse für die der anzeigbare Name geliefert werden soll
+     * @param elementClass Klasse für die der anzeigbare Name geliefert werden
+     *            soll
      * @return String aus dem geladenen ResourcenBundle
      */
     public final String getDisplayableFullName(final Class<? extends ModelElement> elementClass) {
@@ -275,7 +302,8 @@ public final class ElementsNameBuilder extends MetaModelSpecificAdapter {
 
     /**
      * Gibt den anzeigbaren Namen einer Klasse aus den Resoucen zurück.<br>
-     * Wird <code>null</code> übergeben, wird der Name für ein Modell (im Deutschen also "Modell" zurück gegeben.)
+     * Wird <code>null</code> übergeben, wird der Name für ein Modell (im
+     * Deutschen also "Modell" zurück gegeben.)
      *
      * @param classes Klasse für die der anzeigbare Name geliefert werden soll
      * @return String aus dem geladenen ResourcenBundle
@@ -287,9 +315,10 @@ public final class ElementsNameBuilder extends MetaModelSpecificAdapter {
 
     /**
      * Gibt den anzeigbaren Namen einer Klasse aus den Resoucen zurück.<br>
-     * Wird <code>null</code> übergeben, wird der Name für ein Modell (im Deutschen also "Modell" zurück gegeben.)
-     * Im Unterschied zu {@link #getDisplayableName(Class...)} wird hier bei Elementen, die der Master
-     * einer {@link InstanciationEdge} sind noch "(Template)" angehängt.
+     * Wird <code>null</code> übergeben, wird der Name für ein Modell (im
+     * Deutschen also "Modell" zurück gegeben.) Im Unterschied zu
+     * {@link #getDisplayableName(Class...)} wird hier bei Elementen, die der
+     * Master einer {@link InstanciationEdge} sind noch "(Template)" angehängt.
      *
      * @param classes Klasse für die der anzeigbare Name geliefert werden soll
      * @return String aus dem geladenen ResourcenBundle
@@ -301,7 +330,8 @@ public final class ElementsNameBuilder extends MetaModelSpecificAdapter {
 
     /**
      * Gibt den anzeigbaren Namen einer Klasse aus den Resoucen zurück.<br>
-     * Wird <code>null</code> übergeben, wird der Name für ein Modell (im Deutschen also "Modell" zurück gegeben.)
+     * Wird <code>null</code> übergeben, wird der Name für ein Modell (im
+     * Deutschen also "Modell" zurück gegeben.)
      *
      * @param classes Klassen für die der anzeigbare Name geliefert werden soll
      * @return String aus dem geladenen ResourcenBundle
@@ -312,9 +342,10 @@ public final class ElementsNameBuilder extends MetaModelSpecificAdapter {
 
     /**
      * Gibt den anzeigbaren Namen einer Klasse aus den Resoucen zurück.<br>
-     * Wird <code>null</code> übergeben, wird der Name für ein Modell (im Deutschen also "Modell" zurück gegeben.)
-     * Im Unterschied zu {@link #getDisplayableName(Collection)} wird hier bei Elementen, die der Master
-     * einer {@link InstanciationEdge} sind noch "(Template)" angehängt.
+     * Wird <code>null</code> übergeben, wird der Name für ein Modell (im
+     * Deutschen also "Modell" zurück gegeben.) Im Unterschied zu
+     * {@link #getDisplayableName(Collection)} wird hier bei Elementen, die der
+     * Master einer {@link InstanciationEdge} sind noch "(Template)" angehängt.
      *
      * @param classes Klassen für die der anzeigbare Name geliefert werden soll
      * @return String aus dem geladenen ResourcenBundle
@@ -337,18 +368,21 @@ public final class ElementsNameBuilder extends MetaModelSpecificAdapter {
     /**
      * @param edgeClass
      * @return
-     * @see ElementsNameBuilder#getMetaAssociationName(Class, boolean, ModelConstants.ConnectionState, boolean, boolean, String)
+     * @see ElementsNameBuilder#getMetaAssociationName(Class, boolean,
+     *      ModelConstants.ConnectionState, boolean, boolean, String)
      */
     public String getForwardMetaAssociationName(final Class<? extends Edge> edgeClass) {
         return getForwardMetaAssociationName(edgeClass, false, false);
     }
 
     /**
-     * Liefert den Meta-Namen der Kanteklasse für die Vorwärtsrichtung ohne die Elementartnamen, die die Edge verbindet.
+     * Liefert den Meta-Namen der Kanteklasse für die Vorwärtsrichtung ohne die
+     * Elementartnamen, die die Edge verbindet.
      *
      * @param edgeClass
      * @return
-     * @see ElementsNameBuilder#getMetaAssociationName(Class, boolean, ModelConstants.ConnectionState, boolean, boolean, String)
+     * @see ElementsNameBuilder#getMetaAssociationName(Class, boolean,
+     *      ModelConstants.ConnectionState, boolean, boolean, String)
      */
     public String getFullForwardMetaAssociationName(final Class<? extends Edge> edgeClass) {
         return getForwardMetaAssociationName(edgeClass, true, true);
@@ -359,7 +393,8 @@ public final class ElementsNameBuilder extends MetaModelSpecificAdapter {
      * @param appendPrefixClass
      * @param appendPostfixClass
      * @return
-     * @see ElementsNameBuilder#getMetaAssociationName(Class, boolean, ModelConstants.ConnectionState, boolean, boolean)
+     * @see ElementsNameBuilder#getMetaAssociationName(Class, boolean,
+     *      ModelConstants.ConnectionState, boolean, boolean)
      */
     public String getForwardMetaAssociationName(final Class<? extends Edge> edgeClass, final boolean appendPrefixClass, final boolean appendPostfixClass) {
         return getForwardMetaAssociationName(edgeClass, ConnectionState.DOUBLE, appendPrefixClass, appendPostfixClass);
@@ -371,7 +406,8 @@ public final class ElementsNameBuilder extends MetaModelSpecificAdapter {
      * @param appendPrefixClass
      * @param appendPostfixClass
      * @return
-     * @see ElementsNameBuilder#getMetaAssociationName(Class, boolean, ModelConstants.ConnectionState, boolean, boolean)
+     * @see ElementsNameBuilder#getMetaAssociationName(Class, boolean,
+     *      ModelConstants.ConnectionState, boolean, boolean)
      */
     public String getForwardMetaAssociationName(final Class<? extends Edge> edgeClass, final ConnectionState connectionState, final boolean appendPrefixClass, final boolean appendPostfixClass) {
         return getMetaAssociationName(edgeClass, Direction.FORWARD, connectionState, appendPrefixClass, appendPostfixClass);
@@ -380,18 +416,21 @@ public final class ElementsNameBuilder extends MetaModelSpecificAdapter {
     /**
      * @param edgeClass
      * @return
-     * @see ElementsNameBuilder#getMetaAssociationName(Class, boolean, ModelConstants.ConnectionState, boolean, boolean, String)
+     * @see ElementsNameBuilder#getMetaAssociationName(Class, boolean,
+     *      ModelConstants.ConnectionState, boolean, boolean, String)
      */
     public String getBackwardMetaAssociationName(final Class<? extends Edge> edgeClass) {
         return getBackwardMetaAssociationName(edgeClass, false, false);
     }
 
     /**
-     * Liefert den Meta-Namen der Kanteklasse für die Rückwärtsrichtung mit den Elementartnamen, die die Edge verbindet.
+     * Liefert den Meta-Namen der Kanteklasse für die Rückwärtsrichtung mit den
+     * Elementartnamen, die die Edge verbindet.
      *
      * @param edgeClass
      * @return
-     * @see ElementsNameBuilder#getMetaAssociationName(Class, boolean, ModelConstants.ConnectionState, boolean, boolean)
+     * @see ElementsNameBuilder#getMetaAssociationName(Class, boolean,
+     *      ModelConstants.ConnectionState, boolean, boolean)
      */
     public String getFullBackwardMetaAssociationName(final Class<? extends Edge> edgeClass) {
         return getBackwardMetaAssociationName(edgeClass, true, true);
@@ -402,7 +441,8 @@ public final class ElementsNameBuilder extends MetaModelSpecificAdapter {
      * @param appendPrefixClass
      * @param appendPostfixClass
      * @return
-     * @see ElementsNameBuilder#getMetaAssociationName(Class, boolean, ModelConstants.ConnectionState, boolean, boolean)
+     * @see ElementsNameBuilder#getMetaAssociationName(Class, boolean,
+     *      ModelConstants.ConnectionState, boolean, boolean)
      */
     public String getBackwardMetaAssociationName(final Class<? extends Edge> edgeClass, final boolean appendPrefixClass, final boolean appendPostfixClass) {
         return getBackwardMetaAssociationName(edgeClass, ConnectionState.DOUBLE, appendPrefixClass, appendPostfixClass);
@@ -414,7 +454,8 @@ public final class ElementsNameBuilder extends MetaModelSpecificAdapter {
      * @param appendPrefixClass
      * @param appendPostfixClass
      * @return
-     * @see ElementsNameBuilder#getMetaAssociationName(Class, boolean, ModelConstants.ConnectionState, boolean, boolean)
+     * @see ElementsNameBuilder#getMetaAssociationName(Class, boolean,
+     *      ModelConstants.ConnectionState, boolean, boolean)
      */
     public String getBackwardMetaAssociationName(final Class<? extends Edge> edgeClass, final ConnectionState connectionState, final boolean appendPrefixClass, final boolean appendPostfixClass) {
         return getMetaAssociationName(edgeClass, Direction.BACKWARD, connectionState, appendPrefixClass, appendPostfixClass);
@@ -425,20 +466,25 @@ public final class ElementsNameBuilder extends MetaModelSpecificAdapter {
      * @param direction
      * @param connectionState
      * @return
-     * @see ElementsNameBuilder#getMetaAssociationName(Class, boolean, ModelConstants.ConnectionState, boolean, boolean)
+     * @see ElementsNameBuilder#getMetaAssociationName(Class, boolean,
+     *      ModelConstants.ConnectionState, boolean, boolean)
      */
     public String getFullMetaAssociationName(final Class<? extends Edge> edgeClass, final Direction direction, final ConnectionState connectionState) {
         return getMetaAssociationName(edgeClass, direction, connectionState, true, true);
     }
 
     /**
-     * Bedeutungen zurück.
-     * Liefert in Abhängigkeit von der Richtung den Meta-Namen der Kanteklasse. Bei Kanten mit doppelter Bedeutung kommt hier der Name mit beiden
+     * Bedeutungen zurück. Liefert in Abhängigkeit von der Richtung den
+     * Meta-Namen der Kanteklasse. Bei Kanten mit doppelter Bedeutung kommt hier
+     * der Name mit beiden
      *
      * @param edgeClass
-     * @param direction gibt an, ob die Bedeutung der Edge von der Startklasse zur Endklasse (Direction.FORWARD) oder von der Endklasse
-     *            zur Startklasse (Direction.BACKWARD) zurück gegeben werden soll. Mit Start- und Endklasse sind hier die
-     *            beiden Elementklasse gemeint, die in der Kantenklasse in dieser Reihenfolge definiert sind
+     * @param direction gibt an, ob die Bedeutung der Edge von der Startklasse
+     *            zur Endklasse (Direction.FORWARD) oder von der Endklasse zur
+     *            Startklasse (Direction.BACKWARD) zurück gegeben werden soll.
+     *            Mit Start- und Endklasse sind hier die beiden Elementklasse
+     *            gemeint, die in der Kantenklasse in dieser Reihenfolge
+     *            definiert sind
      * @return
      */
     public String getMetaAssociationName(final Class<? extends Edge> edgeClass, final Direction direction) {
@@ -449,31 +495,42 @@ public final class ElementsNameBuilder extends MetaModelSpecificAdapter {
      * Liefert in Abhängigkeit von der Richtung den Meta-Namen der Kanteklasse
      *
      * @param edgeClass
-     * @param direction gibt an, ob die Bedeutung der Edge von der Startklasse zur Endklasse (Direction.FORWARD) oder von der Endklasse
-     *            zur Startklasse (Direction.BACKWARD) zurück gegeben werden soll. Mit Start- und Endklasse sind hier die
-     *            beiden Elementklasse gemeint, die in der Kantenklasse in dieser Reihenfolge definiert sind
-     * @param connectionState MeaningDirection.FORWARD, MeaningDirection.BACKWARD oder MeaningDirection.DOUBLE - Bei allen
-     *            Assoziationen, die in jede Richtung nur eine Bedeutung haben, ist dieser Parameter egal. Bei Assoziationen, die mehr als eine
-     *            Bedeutung haben, kann hier die Richtung angegeben werden für die die bedeutung zurück gegeben werden soll.<br>
-     *            Alle Assoziationen im aktuellen Metamodell haben maximal 2 Bedeutungen. Das ist bei allen Assoziationen der Fall, die eigentlich 2
-     *            Assoziationen sind, aber aus allerlei Gründen in eine gepackt wurden.<br>
-     *            Beispiel 1: AufObjVerbindung = Assoziation zw. Startklasse Aufgabe und Endklasse Objekttyp.<br>
+     * @param direction gibt an, ob die Bedeutung der Edge von der Startklasse
+     *            zur Endklasse (Direction.FORWARD) oder von der Endklasse zur
+     *            Startklasse (Direction.BACKWARD) zurück gegeben werden soll.
+     *            Mit Start- und Endklasse sind hier die beiden Elementklasse
+     *            gemeint, die in der Kantenklasse in dieser Reihenfolge
+     *            definiert sind
+     * @param connectionState MeaningDirection.FORWARD,
+     *            MeaningDirection.BACKWARD oder MeaningDirection.DOUBLE - Bei
+     *            allen Assoziationen, die in jede Richtung nur eine Bedeutung
+     *            haben, ist dieser Parameter egal. Bei Assoziationen, die mehr
+     *            als eine Bedeutung haben, kann hier die Richtung angegeben
+     *            werden für die die bedeutung zurück gegeben werden soll.<br>
+     *            Alle Assoziationen im aktuellen Metamodell haben maximal 2
+     *            Bedeutungen. Das ist bei allen Assoziationen der Fall, die
+     *            eigentlich 2 Assoziationen sind, aber aus allerlei Gründen in
+     *            eine gepackt wurden.<br>
+     *            Beispiel 1: AufObjVerbindung = Assoziation zw. Startklasse
+     *            Aufgabe und Endklasse Objekttyp.<br>
      *            <ul>
-     *            <li>
-     *            <code>switchDefinedDirection == false</code>, <code>direction == {@link Doppelkante}.FORWARD</code> heißt
+     *            <li><code>switchDefinedDirection == false</code>,
+     *            <code>direction == {@link Doppelkante}.FORWARD</code> heißt
      *            "Aufgabe bearbeitet Objekttyp"</li>
-     *            <li>
-     *            <code>switchDefinedDirection == false</code>, <code>direction == {@link Doppelkante}.BACKWARD</code> heißt
+     *            <li><code>switchDefinedDirection == false</code>,
+     *            <code>direction == {@link Doppelkante}.BACKWARD</code> heißt
      *            "Aufgabe interpretiert Objekttyp"</li>
-     *            <li>
-     *            <code>switchDefinedDirection == true</code>, <code>direction == {@link Doppelkante}.FORWARD</code> heißt
+     *            <li><code>switchDefinedDirection == true</code>,
+     *            <code>direction == {@link Doppelkante}.FORWARD</code> heißt
      *            "Objekttyp wird interpretiert von Aufgabe "</li>
-     *            <li>
-     *            <code>switchDefinedDirection == true</code>, <code>direction == {@link Doppelkante}.BACKWARD</code> heißt
+     *            <li><code>switchDefinedDirection == true</code>,
+     *            <code>direction == {@link Doppelkante}.BACKWARD</code> heißt
      *            "Objekttyp wird bearbeitet von Aufgabe"</li>
      *            </ul>
-     * @param doubleMeaningEdgeDelimiter String der bei Kanten mit doppelter Bedeutung, bei denen beide Bedeutungen gleichzeitig ausgegeben werden
-     *            sollen zwischen die beiden Bedeutungen geschrieben wird.
+     * @param doubleMeaningEdgeDelimiter String der bei Kanten mit doppelter
+     *            Bedeutung, bei denen beide Bedeutungen gleichzeitig ausgegeben
+     *            werden sollen zwischen die beiden Bedeutungen geschrieben
+     *            wird.
      * @return
      */
     public String getMetaAssociationName(final Class<? extends Edge> edgeClass, final Direction direction, final ConnectionState connectionState) {
@@ -549,8 +606,9 @@ public final class ElementsNameBuilder extends MetaModelSpecificAdapter {
     }
 
     /**
-     * Setzt aus dem übergebenen String und den beiden anderen Parametern einen Gesamt-ResourceKey zusammen. Ist der connectionState null oder leer,
-     * wird er nicht mit angehängt.
+     * Setzt aus dem übergebenen String und den beiden anderen Parametern einen
+     * Gesamt-ResourceKey zusammen. Ist der connectionState null oder leer, wird
+     * er nicht mit angehängt.
      *
      * @param baseResKey
      * @param direction
@@ -585,7 +643,8 @@ public final class ElementsNameBuilder extends MetaModelSpecificAdapter {
     }
 
     /**
-     * Erzeugt aus dem übergbenen <code>baseResKey</code> und dem 2. String einen Gesamt-ResourceKey, dessen String geladen wird.
+     * Erzeugt aus dem übergbenen <code>baseResKey</code> und dem 2. String
+     * einen Gesamt-ResourceKey, dessen String geladen wird.
      *
      * @param baseResKey
      * @param direction
@@ -596,7 +655,8 @@ public final class ElementsNameBuilder extends MetaModelSpecificAdapter {
     }
 
     /**
-     * Hängt die übergebenen Strings hintereinander und versucht den daraus enstandenen ResourceKey zu laden. Ist der connectionState null oder leer,
+     * Hängt die übergebenen Strings hintereinander und versucht den daraus
+     * enstandenen ResourceKey zu laden. Ist der connectionState null oder leer,
      * wird er nicht mit angehängt.
      *
      * @param baseResKey
@@ -617,7 +677,8 @@ public final class ElementsNameBuilder extends MetaModelSpecificAdapter {
     }
 
     /**
-     * Erzeugt einen String, in dem die Namen der Elementklassen kommasepariert in aplhabetischer Reihenfolge zurück kommen.
+     * Erzeugt einen String, in dem die Namen der Elementklassen kommasepariert
+     * in aplhabetischer Reihenfolge zurück kommen.
      *
      * @param classes
      * @return
@@ -755,11 +816,15 @@ public final class ElementsNameBuilder extends MetaModelSpecificAdapter {
     //    }
 
     /**
-     * Gibt Namenskuerzel einer Elementklasse zurueck. Diese Namenskürzel garantieren nicht, dass man von ihnen auf die Klasse zurückschließen kann.
-     * Sie dienen lediglich dazu, die Hash-Strings der Modellelemente im Baukasten und der XML-Datei etwas lesbarer zu gestalten. 2 verschiedene
-     * Klassen können den selben Shortname haben. So wird in beiden Fällen aus AufObjVerbindung und AufOrgVerbindung der Short-Name AOV.
+     * Gibt Namenskuerzel einer Elementklasse zurueck. Diese Namenskürzel
+     * garantieren nicht, dass man von ihnen auf die Klasse zurückschließen
+     * kann. Sie dienen lediglich dazu, die Hash-Strings der Modellelemente im
+     * Baukasten und der XML-Datei etwas lesbarer zu gestalten. 2 verschiedene
+     * Klassen können den selben Shortname haben. So wird in beiden Fällen aus
+     * AufObjVerbindung und AufOrgVerbindung der Short-Name AOV.
      *
-     * @param elementClass Elementklasse für die das Kürzel zurück gegeben werden soll.
+     * @param elementClass Elementklasse für die das Kürzel zurück gegeben
+     *            werden soll.
      * @return String mit Namenskuerzel
      */
     public final String getShortName(final Class<? extends ModelElement> elementClass) {

@@ -15,7 +15,8 @@ public class UserFieldDefinitionsAnalyzer {
 
     /**
      * @param userFieldTargetClass
-     * @return <code>true</code> if there is at least one {@link UserField} defined for the userFieldTargetClass, sonst <code>false</code>
+     * @return <code>true</code> if there is at least one {@link UserField}
+     *         defined for the userFieldTargetClass, sonst <code>false</code>
      */
     public boolean hasNumberFields(final Class<? extends UserFieldTarget> userFieldTargetClass) {
         for (UserField uf : definitions.getUserFields(userFieldTargetClass)) {
@@ -28,8 +29,10 @@ public class UserFieldDefinitionsAnalyzer {
 
     /**
      * @param style
-     * @return <code>true</code>, wenn für irgendeine Knotenklasse (= Unterklasse von {@link UserFieldTarget}) mind. ein UserField mit dem übergebenen
-     *         Style definiert ist, sonst <code>false</code>. Für Kantenklasse wird hier nicht geguckt.
+     * @return <code>true</code>, wenn für irgendeine Knotenklasse (=
+     *         Unterklasse von {@link UserFieldTarget}) mind. ein UserField mit
+     *         dem übergebenen Style definiert ist, sonst <code>false</code>.
+     *         Für Kantenklasse wird hier nicht geguckt.
      */
     public boolean hasStyle(final UserField.Style style) {
         Set<Class<? extends UserFieldTarget>> userFieldTargets = definitions.getUserFieldTargets();
@@ -48,9 +51,10 @@ public class UserFieldDefinitionsAnalyzer {
 
     /**
      * Prüft, ob
-     * 
-     * @return <code>true</code>, wenn für wenigstens eine Kantenklasse ein UserField definiert ist, das eine Kennzahl oder Kennzahlformel ist, sonst
-     *         <code>false</code>
+     *
+     * @return <code>true</code>, wenn für wenigstens eine Kantenklasse ein
+     *         UserField definiert ist, das eine Kennzahl oder Kennzahlformel
+     *         ist, sonst <code>false</code>
      */
     public boolean hasDistributionWeights() {
         Set<Class<? extends UserFieldTarget>> userFieldTargets = definitions.getUserFieldTargets();
@@ -68,8 +72,10 @@ public class UserFieldDefinitionsAnalyzer {
     }
 
     /**
-     * @return <code>true</code>, wenn für irgendeine {@link UserFieldTarget}-Klasse ein {@link UserField} definiert ist, das eine einfache
-     *         Teilwertsumme ist, sonst <code>false</code>
+     * @return <code>true</code>, wenn für irgendeine
+     *         {@link UserFieldTarget}-Klasse ein {@link UserField} definiert
+     *         ist, das eine einfache Teilwertsumme ist, sonst
+     *         <code>false</code>
      */
     public boolean hasSimpleFractionValueSums() {
         Set<Class<? extends UserFieldTarget>> userFieldTargets = definitions.getUserFieldTargets();
@@ -85,7 +91,8 @@ public class UserFieldDefinitionsAnalyzer {
     }
 
     /**
-     * @return <code>true</code>, wenn wenigstens ein globales {@link UserField} definiert ist.
+     * @return <code>true</code>, wenn wenigstens ein globales {@link UserField}
+     *         definiert ist.
      */
     public boolean hasGlobalUserFields() {
         boolean hasValues = definitions.getGlobalUserFields().iterator().hasNext();

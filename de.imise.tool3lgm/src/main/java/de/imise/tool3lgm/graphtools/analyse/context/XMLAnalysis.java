@@ -43,11 +43,13 @@ public final class XMLAnalysis extends AbstractAnalysis {
     /**
      * Erzeugt eine neue XMLAnalyse mit den übergebenen Parametern.
      *
-     * @param metaModelContext der Context des Metamodels, für das die Analyse anwendbar ist
+     * @param metaModelContext der Context des Metamodels, für das die Analyse
+     *            anwendbar ist
      * @param analyseText die XMLAnalyse als XML-Text.
-     * @return wenn kein Fehler beim erzeugen der XMLAnalyse auftrat, wird eine neue XMLAnalyse mit
-     *         den übergebenen Parametern zurück gegeben.
-     * @throws SAXException wenn ein Fehler beim parsen des Analysetextes auftritt.
+     * @return wenn kein Fehler beim erzeugen der XMLAnalyse auftrat, wird eine
+     *         neue XMLAnalyse mit den übergebenen Parametern zurück gegeben.
+     * @throws SAXException wenn ein Fehler beim parsen des Analysetextes
+     *             auftritt.
      */
     public static XMLAnalysis createAnalysis(final MetaModelContext metaModelContext, final String analyseText) throws SAXException {
         XMLAnalysis xMLAnalysis = new XMLAnalysis(metaModelContext);
@@ -58,12 +60,14 @@ public final class XMLAnalysis extends AbstractAnalysis {
     /**
      * Erzeugt eine neue XMLAnalyse mit den übergebenen Parametern.
      *
-     * @param metaModelContext der Context des Metamodels, für das die Analyse anwendbar ist
+     * @param metaModelContext der Context des Metamodels, für das die Analyse
+     *            anwendbar ist
      * @param name Name der XMLAnalyse.
      * @param analyseText die XMLAnalyse als XML-Text.
-     * @return wenn kein Fehler beim erzeugen der XMLAnalyse auftrat, wird eine neue XMLAnalyse mit
-     *         den übergebenen Parametern zurück gegeben.
-     * @throws SAXException wenn ein Fehler beim parsen des Analysetextes auftritt.
+     * @return wenn kein Fehler beim erzeugen der XMLAnalyse auftrat, wird eine
+     *         neue XMLAnalyse mit den übergebenen Parametern zurück gegeben.
+     * @throws SAXException wenn ein Fehler beim parsen des Analysetextes
+     *             auftritt.
      */
     public static XMLAnalysis createAnalysis(final MetaModelContext metaModelContext, final String name, final String analyseText) throws SAXException {
         XMLAnalysis xMLAnalysis = new XMLAnalysis(metaModelContext);
@@ -85,7 +89,8 @@ public final class XMLAnalysis extends AbstractAnalysis {
      * Setzt eine neue Beschreibung für diese XMLAnalyse.
      *
      * @param xmlText der Text der die XMLAnalyse beschreibt.
-     * @throws SAXException wenn ein Fehler beim parsen des Analysetextes auftritt.
+     * @throws SAXException wenn ein Fehler beim parsen des Analysetextes
+     *             auftritt.
      */
     public void setXMLText(String xmlText) throws SAXException {
         if (xmlText == null || xmlText.trim().length() == 0) {
@@ -154,7 +159,8 @@ public final class XMLAnalysis extends AbstractAnalysis {
      * Parst einen Analysetext.
      *
      * @param analysisText der Analysetext.
-     * @throws SAXException wenn ein Fehler beim parsen des Analysetextes auftritt.
+     * @throws SAXException wenn ein Fehler beim parsen des Analysetextes
+     *             auftritt.
      */
     public void parseAnalysis(final String analysisText) throws SAXException {
         SAXParser parser = null;

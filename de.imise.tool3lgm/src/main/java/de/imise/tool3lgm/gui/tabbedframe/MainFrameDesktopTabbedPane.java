@@ -25,16 +25,16 @@ import de.imise.tool3lgm.gui.viewpane.matrix.MatrixViewPaneFrameComponent;
 import de.imise.util.swing.component.tab.JTabbedPaneWithCloseIconsRight;
 
 /**
- * The TabbedPane, which holds all main windows
- * (submodel views and matrix views).
+ * The TabbedPane, which holds all main windows (submodel views and matrix
+ * views).
  *
  * @author AXS (27.05.2020)
  */
 public class MainFrameDesktopTabbedPane extends JTabbedPaneWithCloseIconsRight implements ViewPaneFrameComponentParent, LGMChangeListenerSimple {
 
     /**
-     * If all tabs are removed no border should be painted.
-     * Store the original TabbedPaintUI to reset it if there is at least one tab.
+     * If all tabs are removed no border should be painted. Store the original
+     * TabbedPaintUI to reset it if there is at least one tab.
      */
     private TabbedPaneUI defaultTabbedPaneUI;
 
@@ -63,8 +63,8 @@ public class MainFrameDesktopTabbedPane extends JTabbedPaneWithCloseIconsRight i
     }
 
     /**
-     * If all tabs are removed no border is painted.
-     * If there is at least one tab the default border is painted.
+     * If all tabs are removed no border is painted. If there is at least one
+     * tab the default border is painted.
      */
     private void updateBorder() {
         if (getTabCount() == 0) {
