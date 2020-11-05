@@ -29,8 +29,8 @@ import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
 import de.imise.tool3lgm.graphtools.analyse.redundancy.RedundancyAnalysisDefinitions.SingleRedundancyAnalysisDefinition;
 import de.imise.tool3lgm.graphtools.consistency.CardinalityDefinition;
 import de.imise.tool3lgm.graphtools.consistency.ConsistencyDefinition;
-import de.imise.tool3lgm.graphtools.consistency.checker.ConsistencyChecker;
-import de.imise.tool3lgm.graphtools.consistency.error.AbstractConsistencyError;
+import de.imise.tool3lgm.graphtools.consistency.ModelValidator;
+import de.imise.tool3lgm.graphtools.consistency.error.type.AbstractConsistencyError;
 import de.imise.tool3lgm.graphtools.metamodel.AnalysesDefinition;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
@@ -39,9 +39,8 @@ import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.LGMGraphDocument;
 import de.imise.tool3lgm.graphtools.path.MetaPathSelector;
 import de.imise.tool3lgm.graphtools.path.MetaPathSelector.MetaPathSelection;
-import de.imise.tool3lgm.graphtools.path.PathFunctions;
-import de.imise.tool3lgm.graphtools.path.metapaths.AbstractMetaPath;
 import de.imise.tool3lgm.graphtools.path.metapaths.ElementaryMetaPath;
+import de.imise.tool3lgm.graphtools.path.metapaths.MetaPath;
 import de.imise.tool3lgm.graphtools.path.metapaths.WrapperMetaPath;
 import de.imise.util.collections.AlphabeticalSet;
 import de.imise.util.swing.dialog.MultipleOptionPane;
@@ -128,7 +127,7 @@ public class RedundancyAnalysis extends WindowAdapter {
             ElementsNameBuilder elementsNameBuilder = metaModel.getElementsNameBuilder();
             for (int i = 0; i < analyseCount; i++) {
                 SingleRedundancyAnalysisDefinition singleRedundancyAnalysisDefinition = redundancyAnalysisDefinitions.get(i);
-                AbstractMetaPath metaPath = singleRedundancyAnalysisDefinition.getMetaPath();
+                MetaPath metaPath = singleRedundancyAnalysisDefinition.getMetaPath();
                 Set<Class<? extends ModelElement>> startClass = metaPath.getStartClasses();
                 Set<Class<? extends ModelElement>> endClass = metaPath.getEndClasses();
                 options[i] = elementsNameBuilder.getDisplayablePluralName(startClass) + con + elementsNameBuilder.getDisplayablePluralName(endClass);
@@ -163,9 +162,9 @@ public class RedundancyAnalysis extends WindowAdapter {
                     MetaPathSelection metaPathSelection = mps.getSelection();
                     Class<? extends ModelElement> c1 = metaPathSelection.class1;
                     Class<? extends ModelElement> c2 = metaPathSelection.class2;
-                    List<AbstractMetaPath> selectedMetaPaths = metaPathSelection.selectedMetaPaths;
-                    AbstractMetaPath mp = selectedMetaPaths.get(0); //es solte genau einer sein
-                    AbstractMetaPath metaPath = WrapperMetaPath.wrapMetaPath(c1, c2, mp);
+                    List<MetaPath> selectedMetaPaths = metaPathSelection.selectedMetaPaths;
+                    MetaPath mp = selectedMetaPaths.get(0); //es solte genau einer sein
+                    MetaPath metaPath = WrapperMetaPath.wrapMetaPath(c1, c2, mp);
                     SingleRedundancyAnalysisDefinition definition = new RedundancyAnalysisDefinitions(metaModel).add(metaPath);
                     String resultName = c2.getSimpleName() + " " + mp.toString();
                     result = new RedundancyAnalysisResult(gdcoll, definition, resultName);
@@ -196,20 +195,20 @@ public class RedundancyAnalysis extends WindowAdapter {
         if (Static.getSelectedGDCollection() != gdcoll) {
             Static.setSelectedDoc(selectedDoc);
         }
-        ConsistencyChecker consistencyChecker = ConsistencyChecker.getConsistencyChecker();
-        consistencyChecker.resetConsistencyDefinition();
-        ConsistencyDefinition consistencyDefinition = consistencyChecker.getConsistencyDefinition();
+        ModelValidator modelValidator = gdcoll.getModelValidator();
+        modelValidator.resetConsistencyDefinition();
+        ConsistencyDefinition consistencyDefinition = modelValidator.getConsistencyDefinition();
         CardinalityDefinition cardinalityDefinition = consistencyDefinition.getCardinalityDefinition();
 
         SingleRedundancyAnalysisDefinition definition = result.getDefinition();
-        AbstractMetaPath metaPath = definition.getMetaPath();
+        MetaPath metaPath = definition.getMetaPath();
         for (ElementaryMetaPath elementaryMetaPath : metaPath.getElementaryMetaPaths()) {
             Class<? extends Edge> edgeClass = elementaryMetaPath.getEdgeClass();
             //jetzt die Kardinalitätsvorgaben der gewählten Analyse in die Kardinalitäten der Konsitenzprüfung übertragen
             cardinalityDefinition.setNewForwardCardinality(edgeClass, definition.getNewForwardCardinality(edgeClass));
             cardinalityDefinition.setNewBackwardCardinality(edgeClass, definition.getNewBackwardCardinality(edgeClass));
         }
-        Collection<AbstractConsistencyError> errors = consistencyChecker.getFixableCardinalityInconsistencies();
+        Collection<AbstractConsistencyError> errors = modelValidator.getCardinalityInconsistencies();
         // wenn es relevante Fehler gibt
         if (!errors.isEmpty()) {
             // Custom button xmlText
@@ -221,7 +220,7 @@ public class RedundancyAnalysis extends WindowAdapter {
                 if (!OPTION_SHOW_CONSISTENCY_TABLE.is()) {
                     OPTION_SHOW_CONSISTENCY_TABLE.set(true);
                 } else {
-                    consistencyChecker.dataChanged(selectedDoc);
+                    modelValidator.dataChanged(selectedDoc);
                 }
             }
             return;
@@ -388,11 +387,11 @@ public class RedundancyAnalysis extends WindowAdapter {
      */
     private static String getElementName(final ModelElement me, final SingleRedundancyAnalysisDefinition analysisDefinition) {
         String retVal = me.toString().replace("-\n", "").replace('\n', ' ');
-        AbstractMetaPath expandedNamePath = analysisDefinition.getExpandedNamePath(me.getClass());
+        MetaPath expandedNamePath = analysisDefinition.getExpandedNamePath(me.getClass());
         if (expandedNamePath != null) {
             StringBuilder sb = new StringBuilder(retVal);
             sb.append(" (");
-            for (ModelElement connected : PathFunctions.getConnectedElements(me, expandedNamePath)) {
+            for (ModelElement connected : expandedNamePath.getConnectedElements(me)) {
                 sb.append(getElementName(connected, analysisDefinition));
                 sb.append(", ");
             }

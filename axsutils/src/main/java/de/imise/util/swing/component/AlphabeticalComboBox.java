@@ -3,6 +3,7 @@ package de.imise.util.swing.component;
 import java.awt.Component;
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 import java.util.Vector;
 
 import javax.swing.DefaultComboBoxModel;
@@ -16,147 +17,166 @@ import de.imise.util.Alphabetical;
 import de.imise.util.NamedObjectContainer;
 
 /**
- * Combobox, die eine oder mehrere getrennte Listen von Items jeweils immer alphabetisch
- * sortiert anzeigt.<br>
- * Die Sortierung erfolgt über die Klasse <code>Alphabetical</code>.<br>
+ * Combo box, which displays one or more separate lists of items
+ * always sorted alphabetically.<br>
+ * .
+ * The sorting is done by the class {@link Alphabetical}.<br>
  * <br>
- * Alle Einträge der Auswahlliste außer Separatoren lassen sich um eine beliebige Anzahl
- * von Leerzeichen nach rechts einrücken.<br>
- * Separatoren können wahlweise unsichtbar oder als nicht selektierbare Einträge mit einem
- * eigenen Label in die Liste eingefügt werden.
+ * All entries of the selection list except Separators can be
+ * indented to the right by any number of spaces. <br>
+ * Separators can be added to the list either invisibly or as
+ * non-selectable entries with their own label.
  *
- * @see <code>Alphabetical</code>
  * @author AXS
  *         created on 15.08.2007
  */
-public class AlphabeticalComboBox extends JComboBox {
+public class AlphabeticalComboBox<E> extends JComboBox<NamedObjectContainer<E>> {
 
     /**
-     * Referenz auf den Vector der Einträge der Combobox. (Der Parent-Vector hat
-     * die Sichtbarkeit 'package').
+     * Reference to the vector of the combo box entries.
+     * (The parent vector has the visibility 'package').
      */
-    private final Vector<Object> items = new Vector<>();
+    private final Vector<NamedObjectContainer<E>> items = new Vector<>();
 
     /**
-     * Eintrag für eine Leerzeile, um "keine Auswahl" zu treffen.
+     * Entry for an empty line to make "no selection".
      */
-    public static final String EMPTY_VALUE_ENTRY = " ";
+    public final NamedObjectContainer<E> EMPTY_VALUE_ENTRY = new NamedObjectContainer<>(null, " ");
 
     /**
-     * Existiert in Combobox ein Leerfeld ja/nein
-     */
-    private boolean nullAble = false;
-    /**
-     * Index, ab dem neue Elemente alphabetisch einsortiert werden. Alle Einträge davor bleiben in
-     * ihrer Reihenfolge unverändert.
+     * Index from which new elements are sorted alphabetically.
+     * All entries before that remain unchanged in their order.
      */
     int newListStartIndex = 0;
 
     /**
-     * Zuletzt selektierter Index.<br>
-     * Da Separatoren nicht selektierbar sein sollen, wird sich in dieser Variable der Index
-     * gemerkt, der vor der Selektion eines Separators selektiert war und dann die Selektion
-     * auf diesen zurückgesetzt.
+     * Last selected index.<br>
+     * Since separators should not be selectable, the index that
+     * was selected before a separator was selected is noted in
+     * this variable and the selection is reset to this separator.
      */
     private int lastCorrectSelectedIndex = -1;
 
     /**
-     * Legt eine neue ComboBox an, die ihre Einträge alphabetisch sortiert.<br>
+     * Legt eine neue ComboBox an, die ihre Einträge alphabetisch sortiert.
      */
-
     public AlphabeticalComboBox() {
         this(0);
     }
 
     /**
-     * Legt eine neue ComboBox an, die ihre Einträge alphabetisch sortiert.<br>
+     * Creates a new ComboBox that sorts its entries alphabetically.
      *
-     * @param Leerfeld?
+     * @param addEmptyItem
+     *            if true a blank item is added at the top
      */
-    public AlphabeticalComboBox(final boolean nullAble) {
+    public AlphabeticalComboBox(final boolean addEmptyItem) {
         this(0);
-        setNullAble(nullAble);
+        if (addEmptyItem) {
+            addItem(EMPTY_VALUE_ENTRY);
+        }
     }
 
     /**
-     * Legt eine neue ComboBox an, die ihre Einträge alphabetisch sortiert.<br>
-     * Die Auswahlliste wird mit den Elementen der übergebenen Liste gefüllt.
+     * Creates a new ComboBox that sorts its entries alphabetically.<br>
+     * The selection list is filled with the elements of the passed list.
      *
      * @param objects
-     *            Initiale Liste von Elementen in der Auswahlliste
+     *            Initial elements in the drop-down list
      */
-    public AlphabeticalComboBox(final Collection<Object> objects) {
+    public AlphabeticalComboBox(final Collection<E> objects) {
         this(objects, 0);
     }
 
     /**
-     * Legt eine neue ComboBox an, die ihre Einträge alphabetisch sortiert.<br>
-     * Allen Einträge der Auswahlliste, die hinzugefügt werden, werden in der
-     * Darstellung der Auswahlliste <code>shift</code> Leerzeichen vorangestellt.
+     * Creates a new ComboBox that sorts its entries alphabetically.<br>
+     * All entries of the drop-down list that are added are preceded by
+     * <code>shift</code> blanks in the display of the drop-down list.
      *
      * @param shift
-     *            Anzahl der Leerzeichen, die vor jedem Listeneintrag dargestellt werden sollen
+     *            Number of spaces to be displayed before each list entry
      */
-    @SuppressWarnings({
-            "unchecked"
-    })
     public AlphabeticalComboBox(final int shift) {
-        super();
-        DefaultComboBoxModel model = new DefaultComboBoxModel(items);
+        DefaultComboBoxModel<NamedObjectContainer<E>> model = new DefaultComboBoxModel<>(items);
         setModel(model);
         setRenderer(new MyRenderer(shift));
-        //30 Zeilen solten eigentlich immer darstellbar sein
+        //30 lines should actually always be displayable
         setMaximumRowCount(30);
     }
 
     /**
-     * Legt eine neue ComboBox an, die ihre Einträge alphabetisch sortiert.<br>
-     * Die Auswahlliste wird mit den Elementen der übergebenen Liste gefüllt.
-     * Allen Einträge der Auswahlliste, die hinzugefügt werden, werden in der
-     * Darstellung der Auswahlliste <code>shift</code> Leerzeichen vorangestellt.
+     * Creates a new ComboBox that sorts its entries alphabetically.<br>
+     * The selection list is filled with the elements of the passed list.
+     * All entries of the drop-down list that are added are preceded by
+     * <code>shift</code> spaces in the display of the drop-down list.
      *
      * @param objects
-     *            Initiale Liste von Elementen in der Auswahlliste
+     *            Initial elements in the drop-down list
      * @param shift
-     *            Anzahl der Leerzeichen, die vor jedem Listeneintrag dargestellt werden sollen
+     *            Number of spaces to be displayed before each list entry
      */
-    public AlphabeticalComboBox(final Collection<Object> objects, final int shift) {
+    public AlphabeticalComboBox(final Collection<E> objects, final int shift) {
         this(shift);
-        items.addAll(objects);
-        Alphabetical.sort(items);
-    }
-
-    /**
-     * @param shift
-     * @param objects
-     */
-    public AlphabeticalComboBox(final Object... objects) {
-        this(0, objects);
-    }
-
-    /**
-     * @param shift
-     * @param objects
-     */
-    public AlphabeticalComboBox(final int shift, final Object... objects) {
-        this(shift);
-        for (Object o : objects) {
-            items.add(o);
+        for (E o : objects) {
+            addItemInternal(o);
         }
         Alphabetical.sort(items);
     }
 
     /**
-     * Sortiert alle Listen neu
+     * Creates a new ComboBox that sorts its entries alphabetically.<br>
+     * The selection list is filled with the elements of the passed list.
+     *
+     * @param objects
+     *            Initial elements in the drop-down list
+     */
+    @SafeVarargs
+    public AlphabeticalComboBox(final E... objects) {
+        this(0, objects);
+    }
+
+    /**
+     * Creates a new ComboBox that sorts its entries alphabetically.<br>
+     * The selection list is filled with the elements of the passed list.
+     * All entries of the drop-down list that are added are preceded by
+     * <code>shift</code> spaces in the display of the drop-down list.
+     *
+     * @param shift
+     *            Number of spaces to be displayed before each list entry
+     * @param objects
+     *            Initial elements in the drop-down list
+     */
+    @SafeVarargs
+    public AlphabeticalComboBox(final int shift, final E... objects) {
+        this(shift);
+        for (E o : objects) {
+            addItemInternal(o);
+        }
+        Alphabetical.sort(items);
+    }
+
+    /**
+     * Encloses the passed object with a NamedObjectContainer.
+     * The string of this container is the String.valueOf(Object).
+     *
+     * @param object
+     */
+    private void addItemInternal(final E object) {
+        NamedObjectContainer<E> namedObjectContainer = new NamedObjectContainer<>(object, String.valueOf(object));
+        items.add(namedObjectContainer);
+    }
+
+    /**
+     * Re-sorts all lists
      */
     public void resort() {
         for (int i = 0; i < items.size(); i++) {
-            if (items.get(i) instanceof SeparatorItem) {
+            if (items.get(i) instanceof AlphabeticalComboBox.SeparatorItem) {
                 continue;
             }
             int j = i + 1;
             for (; j < items.size(); j++) {
-                if (!(items.get(i) instanceof SeparatorItem)) {
+                if (!(items.get(i) instanceof AlphabeticalComboBox.SeparatorItem)) {
                     continue;
                 }
                 j--;
@@ -166,7 +186,7 @@ public class AlphabeticalComboBox extends JComboBox {
                 j--;
             }
             if (j < items.size()) {
-                List<Object> subList = items.subList(i, j + 1);
+                List<NamedObjectContainer<E>> subList = items.subList(i, j + 1);
                 Alphabetical.sort(subList);
                 for (int k = i; k <= j; k++) {
                     items.set(k, subList.get(k - i));
@@ -178,11 +198,10 @@ public class AlphabeticalComboBox extends JComboBox {
         repaint();
     }
 
-    @SuppressWarnings("unchecked")
     @Override
-    public void insertItemAt(final Object anObject, final int index) {
+    public void insertItemAt(final NamedObjectContainer<E> anObject, final int index) {
         if (newListStartIndex > 0) {
-            List<Object> sortedSubList = items.subList(newListStartIndex, items.size());
+            List<NamedObjectContainer<E>> sortedSubList = items.subList(newListStartIndex, items.size());
             int insertPos = Alphabetical.getInsertPosition(sortedSubList, anObject);
             insertPos += newListStartIndex;
             super.insertItemAt(anObject, insertPos);
@@ -192,46 +211,60 @@ public class AlphabeticalComboBox extends JComboBox {
     }
 
     @Override
-    public void addItem(final Object anObject) {
+    public void addItem(final NamedObjectContainer<E> anObject) {
         insertItemAt(anObject, 0);
-        //		//wenn nullable, dann muss 0tes Item übersprungen werden
-        //		if (!isNullAble())
-        //			insertItemAt(anObject, 0);
-        //		else
-        //			insertItemAt(anObject, 1);
     }
 
     /**
-     * Fügt alle Einträge in diese ComboBox ein.
+     * Inserts all entries into this ComboBox.
      *
      * @param entries
+     * @see #addItem(NamedObjectContainer)
      */
-    public void addAll(final Iterable<?> entries) {
-        for (Object o : entries) {
+    public void addAllItems(final Iterable<NamedObjectContainer<E>> entries) {
+        for (NamedObjectContainer<E> o : entries) {
             addItem(o);
         }
     }
 
     /**
-     * Selektiert das erste Auftreten des übergebenen Objektes in der Liste.
-     * Sind <code>NamedObjectContainer</code> in der Liste enthalten, wird von diesen die Methode
-     * <code>getObject()<code> aufgerufen und das übergebene Objekt mit diesem dann vergleichen.
-     * Sind sie gleich, wird die Zeile selektiert. Ist das Objekt in der Liste kein <code>NamedObjectContainer</code>,
-     * wird einfach damit verglichen.
+     * Creates a NamedObjectContainer for all passed objects and adds it
+     * to the item list.
+     *
+     * @param entries
+     *            the objects to be added
+     * @see #addObject(Object)
+     */
+    public void addAllObjects(final Iterable<E> objects) {
+        for (E object : objects) {
+            addObject(object);
+        }
+    }
+
+    /**
+     * Sets the given entries in this box (reomve all and then add all)
+     *
+     * @param entries
+     *            Objects to be set as drop-down list
+     */
+    public void setAllObjects(final Iterable<E> objects) {
+        removeAllItems();
+        addAllObjects(objects);
+    }
+
+    /**
+     * Selects the first occurrence of the passed object in the list.
+     * From the {@link NamedObjectContainer} in the list, the method
+     * <code>getObjectAt(int)<code> is called and the passed object is
+     * compared with it. If they are equal, the line is selected.
      *
      * @param o
+     *            Object that is equal to the object to be selected
      */
-    public int setSelectedObject(final Object o) {
+    public int setSelectedObject(final E o) {
         for (int i = 0; i < getItemCount(); i++) {
-            Object oAtI = getObjectAt(i);
-            if (oAtI == null) {
-                if (o != null) {
-                    continue;
-                }
-                setSelectedIndex(i);
-                return i;
-            }
-            if (oAtI.equals(o)) {
+            Object itemObject = getObjectAt(i);
+            if (Objects.equals(itemObject, o)) {
                 setSelectedIndex(i);
                 return i;
             }
@@ -243,74 +276,98 @@ public class AlphabeticalComboBox extends JComboBox {
     }
 
     /**
-     * Wenn man die Klasse kennt, die man aus der Combobox und evtl. darin enthaltenen {@link NamedObjectContainer}n holen möchte, kann man hierüber
-     * das selektierte Element ohne zusätzlichen Cast bekommen.
+     * Selects the first occurrence of the passed string in the list.
+     * From the {@link NamedObjectContainer} in the list, the method
+     * <code>toString()<code> is called and the passed string is
+     * compared with it. If they are equal, the line is selected.
      *
-     * @param comboBox
-     * @param clazz
-     * @return
+     * @param s
+     *            String that is equal to the string to be selected
      */
-    @SuppressWarnings("unchecked")
-    public static <T> T getSelected(final JComboBox<?> comboBox, final Class<T> clazz) {
-        Object selectedItem = comboBox.getSelectedItem();
-        if (selectedItem instanceof NamedObjectContainer) {
-            selectedItem = ((NamedObjectContainer<?>) selectedItem).getObject();
+    public int setSelectedString(final String s) {
+        for (int i = 0; i < getItemCount(); i++) {
+            String itemString = getStringAt(i);
+            if (Objects.equals(itemString, s)) {
+                setSelectedIndex(i);
+                return i;
+            }
         }
-        if (selectedItem != null && clazz.isAssignableFrom(selectedItem.getClass())) {
-            return (T) selectedItem;
+        if (s == null) {
+            setSelectedIndex(-1);
+        }
+        return -1;
+    }
+
+    /**
+     * @return The currently displayed text. This can be that
+     *         of a selected item or just the current text in
+     *         the editor, but not yet added to the list.
+     */
+    public String getText() {
+        Object item = editor.getItem();
+        return item.toString();
+    }
+
+    /**
+     * @return The object of the selected item or
+     *         <code>null</code> if no item is selected.
+     */
+    public E getSelectedObject() {
+        int selectedIndex = getSelectedIndex();
+        if (selectedIndex >= 0) {
+            return getObjectAt(selectedIndex);
         }
         return null;
     }
 
     /**
-     * Wenn man die Klasse kennt, die man aus der Combobox und evtl. darin enthaltenen {@link NamedObjectContainer}n holen möchte, kann man hierüber
-     * das selektierte Element ohne zusätzlichen Cast bekommen.
-     *
-     * @param clazz
-     * @return
+     * @return The string of the selected item or the current
+     *         text in the editor if no item is selected.
      */
-    public <T> T getSelected(final Class<T> clazz) {
-        return getSelected(this, clazz);
-    }
-
-    /**
-     * Liefert das selektierte <code>Object</code>.<br>
-     * Wenn ein <code>NamedObjectContainer</code> selektiert ist, wird von diesem die Methode
-     * <code>getObject()<code> aufgerufen und das Ergebnis zurück gegeben, sonst wird einfach
-     * das <code>Object</code> am selektierten Index zurückgegeben.
-     *
-     * @return selektierte Objekt
-     */
-    public Object getSelectedObject() {
-        return getObjectAt(getSelectedIndex());
-    }
-
-    /**
-     * Liefert das <code>Object</code> an Index <code>index</code>.<br>
-     * Wenn das ein <code>NamedObjectContainer</code> ist, wird von diesem die Methode
-     * <code>getObject()<code> aufgerufen und das Ergebnis zurück gegeben, sonst wird einfach
-     * das <code>Object</code> am Index <code>index</code> zurückgegeben.
-     *
-     * @return selektierte Objekt
-     */
-    @SuppressWarnings("rawtypes")
-    public Object getObjectAt(final int index) {
-        Object o = getItemAt(index);
-        if (o instanceof NamedObjectContainer) {
-            return ((NamedObjectContainer) o).getObject();
+    public String getSelectedString() {
+        int selectedIndex = getSelectedIndex();
+        if (selectedIndex >= 0) {
+            return getStringAt(selectedIndex);
         }
-        return o;
+        return getText();
     }
 
     /**
-     * Fügt am Ende der bestehenden Liste ein <code>SeparatorItem</code> ein
-     * und beginnt eine neue alphabetisch sortierte Liste.
-     * Der Parameter <code>showSeparatorLine</code> legt fest, ob eine Zeichenkette
-     * bestehend aus Minuszeichen angezeigt werden soll. Wird fals übergeben, werden
-     * alle neu hinzugefügten Elemente ab diesem Separator wieder neu aplhabetisch sortiert.
+     * @param index
+     * @return the object of the {@link NamedObjectContainer} with
+     *         the index in the list of this ComboBox.
+     */
+    public E getObjectAt(final int index) {
+        NamedObjectContainer<E> itemAtIndex = getItemAt(index);
+        if (itemAtIndex == null) {
+            return null;
+        }
+        return itemAtIndex.getObject();
+    }
+
+    /**
+     * @param index
+     * @return the String of the {@link NamedObjectContainer} with
+     *         the index in the list of this ComboBox.
+     */
+    public String getStringAt(final int index) {
+        NamedObjectContainer<E> itemAtIndex = getItemAt(index);
+        if (itemAtIndex == null) {
+            return null;
+        }
+        return itemAtIndex.getString();
+    }
+
+    /**
+     * Inserts a <code>SeparatorItem</code> at the end of the
+     * existing list and starts a new alphabetically sorted list.
+     * The parameter <code>showSeparatorLine</code> determines
+     * whether a line should be displayed between the last and
+     * the new list. If false is passed, no line is displayed.
      *
      * @param showSeparatorLine
-     *            wird <code>true</code> übergeben, wird in der Auswahlliste eine Zeichenkette aus Minuszeichen angezeigt
+     *            Defines whether a line should be drawn over a
+     *            new list or not.
      */
     public void addSeparator(final boolean showSeparatorLine) {
         if (showSeparatorLine) {
@@ -320,10 +377,11 @@ public class AlphabeticalComboBox extends JComboBox {
     }
 
     /**
-     * Fügt am Ende der bestehenden Liste ein <code>SeparatorItem</code> ein
-     * und beginnt eine neue alphabetisch sortierte Liste.
+     * Inserts a <code>SeparatorItem</code> at the end of the
+     * existing list and starts a new alphabetically sorted list.
      *
-     * @name <code>String</code> der als Separator angezeigt werden soll
+     * @name <code>String</code> to be displayed as separator. If
+     *       it is <code>null</code>, only a line is displayed.
      */
     public void addSeparator(final String name) {
         items.add(new SeparatorItem(name));
@@ -331,110 +389,127 @@ public class AlphabeticalComboBox extends JComboBox {
     }
 
     /**
-     * Fügt zur Liste ein <code>NamedObjectContainer</code> hinzu mit <code>anObject</code> als Objekt und dem Anzeige-String
-     * <code>anObject.toString()</code>, dem <code>shift</code> Leerzeichen vorangestellt werden.
+     * Adds an entry to the drop-down list.
      *
      * @param anObject
-     * @param shift
+     *            Object that is added to the drop-down list in a
+     *            {@link NamedObjectContainer}
      */
-    public void addItem(final Object anObject, final int shift) {
-        addItem(anObject, anObject.toString(), shift);
+    public NamedObjectContainer<E> addObject(final E anObject) {
+        return addObject(anObject, 0);
     }
 
     /**
-     * Fügt zur Liste ein <code>NamedObjectContainer</code> hinzu mit <code>anObject</code> als Objekt und dem Anzeige-String <code>displayName</code>
-     * .
+     * Adds <code>NamedObjectContainer</code> to the list with
+     * <code>anObject</code> as object and the display string
+     * <code>String.valueOf(anObject)</code>, preceded by
+     * <code>shift</code> spaces.
      *
      * @param anObject
-     * @param displayName
+     *            Object that is added to the drop-down list in a
+     *            {@link NamedObjectContainer}
+     * @param shift
+     *            Number of spaces to be displayed before the
+     *            list entry
      */
-    public void addItem(final Object anObject, final String displayName) {
-        addItem(anObject, displayName, 0);
+    public NamedObjectContainer<E> addObject(final E anObject, final int shift) {
+        return addObject(anObject, String.valueOf(anObject), shift);
     }
 
     /**
-     * Fügt zur Liste ein <code>NamedObjectContainer</code> hinzu mit <code>anObject</code> als Objekt und dem Anzeige-String <code>displayName</code>
+     * Add to the list <code>NamedObjectContainer</code> with
+     * <code>anObject</code> as object and the display string
+     * <code>displayName</code>
      * .
      *
      * @param anObject
+     *            the object to be added
      * @param displayName
-     * @param shift
-     *            Anzahl der Leerzeichen, um die der neue Eintrag nach rechts eingerückt werden soll
+     *            the display name of the object in the list
      */
-    public void addItem(final Object anObject, final String displayName, final int shift) {
+    public NamedObjectContainer<E> addObject(final E anObject, final String displayName) {
+        return addObject(anObject, displayName, 0);
+    }
+
+    /**
+     * Add to the list <code>NamedObjectContainer</code> with
+     * <code>anObject</code> as object and the display string
+     * <code>displayName</code>. The display name is indented
+     * by <code>shift</code> positions.
+     *
+     * @param anObject
+     *            the object to be added
+     * @param displayName
+     *            the display name of the object in the list
+     * @param shift
+     *            Number of spaces to be displayed before the
+     *            list entry
+     */
+    public NamedObjectContainer<E> addObject(final E anObject, String displayName, final int shift) {
         StringBuilder sb = new StringBuilder(displayName.length() + shift);
         for (int i = 0; i < shift; i++) {
             sb.append(" ");
         }
         sb.append(displayName);
-        insertItemAt(new NamedObjectContainer<>(anObject, sb.toString()), 0);
+        displayName = sb.toString();
+        NamedObjectContainer<E> noc = new NamedObjectContainer<>(anObject, displayName);
+        insertItemAt(noc, 0);
+        return noc;
     }
 
-    /*
-     * (non-Javadoc)
-     * @see javax.swing.JComboBox#selectedItemChanged()
-     */
     @Override
     protected void selectedItemChanged() {
-        //erstmal die Selektion durchführen
+        //perform the selection first
         super.selectedItemChanged();
-        //das selektierte Objekt holen
+        //get the selected object
         Object selected = getSelectedItem();
-        //wenn nichts selektiert ist -> raus
+        //if nothing is selected -> out
         if (selected == null) {
             return;
         }
-        //wenn ein Separator selektiert wurde
+        //if a separator was selected
         if (selected.getClass() == SeparatorItem.class) {
-            //Selektion auf den vorher selektierten Eintrag zurück setzen
+            //reset selection to the previously selected entry
             setSelectedIndex(lastCorrectSelectedIndex);
         } else {
-            //speichere den Index des jetzt selektierten Elementes
+            //store the index of the now selected element
             lastCorrectSelectedIndex = getSelectedIndex();
         }
     }
 
     /**
-     * Ein Separator, der in die Liste einer <code>AlphabeticalComboBox</code> eingefügt werden kann, um
-     * mehrere Listen voneinander zu trennen.<br>
-     * Wird dem Separator kein eigener <code>String</code> übergeben, wird er als <code>JSeparator</code> gerendert. Wird ein <code>String name</code>
-     * übergeben, so wird dieser angezeigt.
+     * A separator that can be added to the list of a
+     * {@link AlphabeticalComboBox} to separate multiple lists
+     * from each other.<br>
+     * If no own {@link String} is passed to the separator, it
+     * will be rendered as <code>JSeparator</code>. If a
+     * <code>String name</code> is passed, it will be displayed.
      *
      * @author AXS
      * @created 19.10.2007
      */
-    private static final class SeparatorItem {
+    private final class SeparatorItem extends NamedObjectContainer<E> {
 
         /**
-         * <code>String</code>, der angezeigt werden soll
-         */
-        private final String name;
-
-        /**
-         * Erzeugt einen neuen Separator, der in der <code>AlphabeticalComboBox</code> als Zeichenfolge
-         * aus Minuszeichen ('-') angezeigt wird.
+         * Creates a new separator that is rendered as a line in the
+         * {@link AlphabeticalComboBox}.
          */
         public SeparatorItem() {
             this(null);
         }
 
         /**
-         * @param name <code>String</code>, der angezeigt werden soll
+         * @param name String to be displayed
          */
         public SeparatorItem(final String name) {
-            super();
-            this.name = name;
+            super(null, name);
         }
 
-        @Override
-        public String toString() {
-            return name;
-        }
     }
 
     /**
-     * Sorgt dafür, dass <code>SeparatorItem</code>s nicht selektierbar und nicht enabled
-     * dargestellt werden. Der Rest der Liste wird defaultmäßig gerendert.
+     * Makes separator items non-selectable and non-enabled.The rest of
+     * the list is rendered by default.
      *
      * @author AXS
      * @created 19.10.2007
@@ -442,21 +517,23 @@ public class AlphabeticalComboBox extends JComboBox {
     private class MyRenderer extends DefaultListCellRenderer {
 
         /**
-         * <code>String</code> bestehend aus Leerzeichen, die allen Einträgen außer Separatoren vorangestellt
-         * werden, wenn im Konstruktor eine Zahl <code>shift > 0</code> übergeben wurde.<br>
-         * Die Anzahl der Leerzeichen wird durch <code>shift</code> festgelegt.
+         * String consisting of blanks, which are placed in front of all
+         * entries except separators, if a number <code>shift > 0</code>
+         * was passed in the constructor.<br>
+         * The number of spaces is defined by <code>shift</code>.
          */
         private String shiftString = null;
 
         /**
-         * Erzeugt einen neuen Renderer, der alle Einträge, die keinen Separatoren sind um <code>shift</code> Leerzeichen nach rechts verschiebt.
+         * Creates a new renderer that shifts all entries that are not
+         * separators by <code>shift</code> spaces to the right.
          *
          * @param shift
-         *            Anzahl der Leerzeichen, um die Einträge verschoben werden sollen.
+         *            Number of spaces by which entries should be shifted
          */
         public MyRenderer(int shift) {
             super();
-            //shiftString aus so wielen Leerzeichen aufbauen, wie shift > 0 ist
+            //build shiftString from as few spaces as shift > 0
             if (shift > 0) {
                 StringBuilder sb = new StringBuilder();
                 do {
@@ -467,29 +544,29 @@ public class AlphabeticalComboBox extends JComboBox {
         }
 
         @Override
-        public Component getListCellRendererComponent(final JList list, final Object value, final int index, boolean isSelected, boolean cellHasFocus) {
+        public Component getListCellRendererComponent(final JList<?> list, final Object value, final int index, boolean isSelected, boolean cellHasFocus) {
             JLabel c = null;
-            //Separatoren
-            if (value instanceof SeparatorItem) {
-                //disabled und nicht selektierbar darstellen
+            //separators
+            if (value instanceof AlphabeticalComboBox.SeparatorItem) {
+                //disabled and not selectable
                 cellHasFocus = false;
                 isSelected = false;
-                //wenn ein Separator ohne speziellen Text angezeigt werden soll
-                if (value.toString() == null) {
+                //if a separator should be displayed without special text
+                if (((AlphabeticalComboBox.SeparatorItem) value).getSecondItem() == null) {
                     return new JSeparator();
                 }
-                //wenn der Separator mit Text angezeigt werden soll
+                //if the separator should be displayed with text
                 c = (JLabel) super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
                 c.setEnabled(false);
-                //normale Einträge
+                //normal entries
             } else {
                 c = (JLabel) super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
-                //Einträge verschieben
+                //shift entries
                 if (shiftString != null) {
                     c.setText(shiftString + c.getText());
                 }
 
-                //Tooltips
+                //tooltips
                 if (isSelected) {
                     setBackground(list.getSelectionBackground());
                     setForeground(list.getSelectionForeground());
@@ -523,55 +600,83 @@ public class AlphabeticalComboBox extends JComboBox {
 
     /**
      * @param anObject
-     * @return
+     * @return the index of the item in the list whose object is equal
+     *         to the passed one or -1 if no such item was found
      */
-    public int getIndexOf(final Object anObject) {
-        DefaultComboBoxModel model = (DefaultComboBoxModel) getModel();
-        int index = model.getIndexOf(anObject);
-        return index;
+    public int getIndexOfObject(final E anObject) {
+        int itemCount = getItemCount();
+        for (int i = 0; i < itemCount; i++) {
+            E objectAt = getObjectAt(i);
+            if (Objects.equals(objectAt, anObject)) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    /**
+     * @param item
+     * @return the index of the item in the list, which is equal to the
+     *         passed one or -1 if no such item was found
+     */
+    public int getIndexOfItem(final NamedObjectContainer<E> item) {
+        int itemCount = getItemCount();
+        for (int i = 0; i < itemCount; i++) {
+            NamedObjectContainer<E> itemAt = getItemAt(i);
+            if (Objects.equals(itemAt, item)) {
+                return i;
+            }
+        }
+        return -1;
     }
 
     /**
      * @param anObject
-     * @return <code>true</code> if the list contains the object
+     * @return <code>true</code> if the passed object is the object of
+     *         a contained item
      */
-    public boolean contains(final Object anObject) {
-        int index = getIndexOf(anObject);
+    public boolean contains(final E anObject) {
+        int index = getIndexOfObject(anObject);
         return index >= 0;
     }
 
     /**
-     * Zuerst wird versucht, das übergebene Object zu entfernen. Wenn es sich nicht entfernen ließ,
-     * werden alle <code>NamedObjectContainer</code> durchsucht, ob sie das übergebene Object einthalten,
-     * bis der erste von hinten gefunden wurde. Dieser wird dann entfernt.
-     *
-     * @see javax.swing.JComboBox#removeItem(java.lang.Object)
+     * @param anObject
+     */
+    public void removeObject(final E anObject) {
+        int indexOfObject = getIndexOfObject(anObject);
+        if (indexOfObject >= 0) {
+            removeItemAt(indexOfObject);
+            newListStartIndex--;
+        }
+    }
+
+    /**
+     * If the passed object is a NamedObjectContainer, an equal one (if
+     * existing) will be removed from the item list. If it is not a
+     * NamedObjectContainer itself, all elements (which are always
+     * NamedObjectContainers) are checked for equality of the object
+     * contained in them. If one is found, the object is removed.
      */
     @Override
     public void removeItem(final Object anObject) {
-        int index = getIndexOf(anObject);
-
-        // Wenn der zurückgegebene Index <0 ist, ist das zu löschende Element nicht in der comboBox und der removeItemAt würde eine Ex. werfen.
-        if (index < 0) {
-            return;
-        }
-
-        if (index >= 0 && index < newListStartIndex) {
-            newListStartIndex--;
-        } else {
-            DefaultComboBoxModel model = (DefaultComboBoxModel) getModel();
-            for (int i = 0; i < model.getSize(); i++) {
-                Object o = model.getElementAt(i);
-                if (o instanceof NamedObjectContainer) {
-                    o = ((NamedObjectContainer<?>) o).getObject();
-                    if (o == anObject || o != null && o.equals(anObject)) {
-                        index = i;
-                        break;
-                    }
+        if (anObject instanceof NamedObjectContainer) {
+            int itemCount = getItemCount();
+            for (int i = 0; i < itemCount; i++) {
+                NamedObjectContainer<E> itemAt = getItemAt(i);
+                if (Objects.equals(itemAt, anObject)) {
+                    newListStartIndex--;
+                    super.removeItemAt(i);
+                    return;
                 }
             }
         }
-        super.removeItemAt(index);
+        try {
+            @SuppressWarnings("unchecked")
+            E object = (E) anObject;
+            removeObject(object);
+        } catch (Exception e) {
+        }
     }
 
     @Override
@@ -580,28 +685,6 @@ public class AlphabeticalComboBox extends JComboBox {
         if (anIndex < newListStartIndex) {
             newListStartIndex--;
         }
-    }
-
-    /**
-     * @return Leerfeld ja/nein
-     */
-    public boolean isNullAble() {
-        return nullAble;
-    }
-
-    /**
-     * setter für Leerfeld, ruft zusätzlich jeweilige Methode auf
-     * auf private gesetzt: nur einmal beim konstruktor gültig!
-     *
-     * @param nullAble
-     */
-    private void setNullAble(final boolean nullAble) {
-        if (!isNullAble() && nullAble) {
-            addItem(EMPTY_VALUE_ENTRY);
-        } else if (isNullAble() && !nullAble) {
-            removeItem(EMPTY_VALUE_ENTRY);
-        }
-        this.nullAble = nullAble;
     }
 
     @Override

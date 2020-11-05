@@ -1,8 +1,8 @@
-package de.imise.tool3lgm.graphtools.consistency.error;
+package de.imise.tool3lgm.graphtools.consistency.error.type;
 
+import de.imise.tool3lgm.graphtools.consistency.error.solution.ErrorSolution;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
-import de.imise.tool3lgm.graphtools.model.GDCollection;
-import de.imise.tool3lgm.graphtools.path.metapaths.AbstractMetaPath;
+import de.imise.tool3lgm.graphtools.path.metapaths.MetaPath;
 
 /**
  * @author AXS (Sa, 21.03.2020, 8:14' (Corona time...))
@@ -24,20 +24,25 @@ public abstract class AbstractPathError extends AbstractConsistencyError {
     public static final String PATH_ERROR_LONG_DESCRIPTION_RESOURCE_KEY_SUFFIX = "_error_descrip_long";
 
     /**
+     *
+     */
+    protected final MetaPath metaPath;
+
+    /**
      * @param me
      * @param metaPath
-     * @param cardValue
-     * @param gdcoll
+     * @param errorSolution
      */
-    public AbstractPathError(final ModelElement me, final AbstractMetaPath metaPath, final GDCollection gdcoll) {
-        super(me, metaPath, gdcoll);
+    public AbstractPathError(final ModelElement me, final MetaPath metaPath, final ErrorSolution errorSolution) {
+        super(me, errorSolution);
+        this.metaPath = metaPath;
     }
 
     /**
      * @return
      */
-    public AbstractMetaPath getMetaPath() {
-        return (AbstractMetaPath) errorField;
+    public MetaPath getMetaPath() {
+        return metaPath;
     }
 
 }

@@ -263,10 +263,6 @@ public class ProgressDialog extends JDialog {
         update(getGraphics());
     }
 
-    /*
-     * (non-Javadoc)
-     * @see java.awt.Window#dispose()
-     */
     @Override
     public void dispose() {
         run = false;
@@ -276,10 +272,6 @@ public class ProgressDialog extends JDialog {
         }
         super.dispose();
         owner.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
-        try {
-            finalize();
-        } catch (Throwable t) {
-        }
     }
 
     /**

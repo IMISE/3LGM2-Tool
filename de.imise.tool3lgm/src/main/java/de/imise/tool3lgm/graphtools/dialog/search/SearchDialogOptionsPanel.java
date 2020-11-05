@@ -147,7 +147,7 @@ public class SearchDialogOptionsPanel extends BasicSearchOptionsPanel {
         constraints.fill = GridBagConstraints.HORIZONTAL;
         add(userFieldPanel, constraints);
 
-        userFieldStyleComboBox.setSelectedItem(getResString("SEARCH_DIALOG_USERFIELD_type_all"));
+        userFieldStyleComboBox.setSelectedString(getResString("SEARCH_DIALOG_USERFIELD_type_all"));
 
         // Searchbutton
         constraints.gridy++;

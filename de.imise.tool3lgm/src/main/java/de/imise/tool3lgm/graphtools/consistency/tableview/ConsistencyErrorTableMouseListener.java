@@ -4,6 +4,7 @@
 package de.imise.tool3lgm.graphtools.consistency.tableview;
 
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
+import static de.imise.tool3lgm.gui.menu.ElementSelectionContextGenerator.addConnectMenuItems;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
@@ -18,9 +19,9 @@ import javax.swing.JPopupMenu;
 import javax.swing.JTable;
 
 import de.imise.tool3lgm.Static;
-import de.imise.tool3lgm.graphtools.consistency.checker.ConsistencyChecker;
-import de.imise.tool3lgm.graphtools.consistency.error.AbstractConsistencyError;
-import de.imise.tool3lgm.graphtools.consistency.error.MissingPathError;
+import de.imise.tool3lgm.graphtools.consistency.ModelValidatorDefinition;
+import de.imise.tool3lgm.graphtools.consistency.error.type.AbstractConsistencyError;
+import de.imise.tool3lgm.graphtools.consistency.error.type.MissingPathError;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.path.metapaths.SimpleMetaPath;
@@ -40,11 +41,6 @@ public class ConsistencyErrorTableMouseListener extends MouseAdapter {
     /**
      *
      */
-    private final ConsistencyChecker checker;
-
-    /**
-     *
-     */
     private List<AbstractConsistencyError> errors;
 
     /**
@@ -53,11 +49,10 @@ public class ConsistencyErrorTableMouseListener extends MouseAdapter {
     private final List<ModelElement> selectedErrorElements = new ArrayList<>();
 
     /**
-     *
+     * @param modelValidator
+     * @param errorTable
      */
-    ConsistencyErrorTableMouseListener(final ConsistencyChecker checker, final JTable errorTable) {
-        super();
-        this.checker = checker;
+    ConsistencyErrorTableMouseListener(final JTable errorTable) {
         table = errorTable;
     }
 
@@ -76,11 +71,14 @@ public class ConsistencyErrorTableMouseListener extends MouseAdapter {
         for (int r : rows) {
             int errorColumnIndex = ConsistencyErrorTableModel.ColumnNames.ERROR_TYPE.ordinal();
             Object errorValue = table.getValueAt(r, errorColumnIndex);
-            NamedObjectContainer<AbstractConsistencyError> errContainer = (NamedObjectContainer<AbstractConsistencyError>) errorValue;
-            AbstractConsistencyError error = errContainer.getObject();
-            errors.add(error);
-            ModelElement me = error.getModelElement();
-            selectedErrorElements.add(me);
+            if (NamedObjectContainer.isInstanceWithType(errorValue, AbstractConsistencyError.class)) {
+                @SuppressWarnings("unchecked") //it's checked!
+                NamedObjectContainer<AbstractConsistencyError> errContainer = (NamedObjectContainer<AbstractConsistencyError>) errorValue;
+                AbstractConsistencyError error = errContainer.getObject();
+                errors.add(error);
+                ModelElement me = error.getModelElement();
+                selectedErrorElements.add(me);
+            }
         }
         JPopupMenu popupMenu = getPopupMenu();
         popupMenu.show(table, e.getX(), e.getY());
@@ -101,9 +99,13 @@ public class ConsistencyErrorTableMouseListener extends MouseAdapter {
             int clickedRow = table.rowAtPoint(e.getPoint());
             int column = ConsistencyErrorTableModel.ColumnNames.ERROR_TYPE.ordinal();
             Object value = table.getValueAt(clickedRow, column);
-            NamedObjectContainer<AbstractConsistencyError> errContainer = (NamedObjectContainer<AbstractConsistencyError>) value;
-            AbstractConsistencyError error = errContainer.getObject();
-            checker.execSolution(error);
+            if (NamedObjectContainer.isInstanceWithType(value, AbstractConsistencyError.class)) {
+                @SuppressWarnings("unchecked") //it's checked!
+                NamedObjectContainer<AbstractConsistencyError> errContainer = (NamedObjectContainer<AbstractConsistencyError>) value;
+                AbstractConsistencyError error = errContainer.getObject();
+                ModelValidatorDefinition modelValidatorDefinition = error.getModelValidatorDefinition();
+                modelValidatorDefinition.execSolution(error);
+            }
         }
 
     }
@@ -113,21 +115,12 @@ public class ConsistencyErrorTableMouseListener extends MouseAdapter {
      */
     private JPopupMenu getPopupMenu() {
         JPopupMenu menu = new JPopupMenu();
-        // JMenuItem item = new JMenuItem(new
-        // AbstractAction(getResString("error_element_properties")){
-        // @Override
-        // public void actionPerformed(ActionEvent e) {
-        // for (ModelElement me : selectedErrorElements)
-        // me.getPropertyDialog(checker.getCollection()).showDialog();
-        // }
-        // });
-        // menu.add(item);
-
         //at least one solution must be available to show the "open element
         //dialog to remove the error".
         boolean solutionAvailable = false;
         for (AbstractConsistencyError error : errors) {
-            if (checker.isSolutionExecuteable(error)) {
+            ModelValidatorDefinition modelValidatorDefinition = error.getModelValidatorDefinition();
+            if (modelValidatorDefinition.isSolutionExecuteable(error)) {
                 solutionAvailable = true;
                 break;
             }
@@ -137,7 +130,8 @@ public class ConsistencyErrorTableMouseListener extends MouseAdapter {
                 @Override
                 public void actionPerformed(final ActionEvent e) {
                     for (AbstractConsistencyError err : errors) {
-                        checker.execSolution(err);
+                        ModelValidatorDefinition modelValidatorDefinition = err.getModelValidatorDefinition();
+                        modelValidatorDefinition.execSolution(err);
                     }
                 }
             });
@@ -146,8 +140,8 @@ public class ConsistencyErrorTableMouseListener extends MouseAdapter {
         JMenuItem item = new JMenuItem(new AbstractAction(getResString("error_element_delete")) {
             @Override
             public void actionPerformed(final ActionEvent e) {
-                GDCollection gdcoll = checker.getCollection();
-                gdcoll.deleteElements(selectedErrorElements, TransactionManager.STANDARD_PID);
+                GDCollection selectedGDCollection = Static.getSelectedGDCollection();
+                selectedGDCollection.deleteElements(selectedErrorElements, TransactionManager.STANDARD_PID);
             }
         });
         menu.add(item);
@@ -171,12 +165,11 @@ public class ConsistencyErrorTableMouseListener extends MouseAdapter {
             AbstractConsistencyError consistencyError = errors.get(0);
             if (consistencyError instanceof MissingPathError) {
                 MissingPathError missingPathError = (MissingPathError) consistencyError;
-                ModelElement missingPathStartElement = missingPathError.getMissingPathStartElement();
-                SimpleMetaPath errorCorrectingCreatableMetaPath = missingPathError.getErrorCorrectingCreatableMetaPath();
+                ModelElement missingPathStartElement = missingPathError.getModelElement();
+                SimpleMetaPath errorFixingCreatableMetaPath = missingPathError.getErrorFixingCreatableMetaPath();
                 Collection<ModelElement> missingElements = missingPathError.getMissingElements();
-                Static.contextGenerator.addConnectMenuItems(menu, missingPathStartElement, errorCorrectingCreatableMetaPath, missingElements);
+                addConnectMenuItems(menu, missingPathStartElement, errorFixingCreatableMetaPath, missingElements);
             }
-
         }
     }
 

@@ -44,6 +44,7 @@ import de.imise.tool3lgm.graphtools.userfield.UserField;
 import de.imise.tool3lgm.graphtools.userfield.UserField.Style;
 import de.imise.tool3lgm.userproperties.UserProperties;
 import de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty;
+import de.imise.util.Sys;
 import de.imise.util.swing.component.AlphabeticalComboBox;
 import de.imise.util.swing.component.HistoryComboBox;
 
@@ -80,16 +81,16 @@ public abstract class BasicSearchOptionsPanel extends JPanel implements ItemList
     protected JComboBox<UserFieldCheckBoxState> userFieldCheckBoxStateComboBox;
 
     /** Typbox der benutzerdef. Eigenschaften wie Checkbox, Textfeld usw. */
-    protected AlphabeticalComboBox userFieldStyleComboBox;
+    protected AlphabeticalComboBox<Style> userFieldStyleComboBox;
 
     /** Combobox Elementart */
-    protected final AlphabeticalComboBox elementClassBox = new AlphabeticalComboBox();
+    protected final AlphabeticalComboBox<Class<? extends ModelElement>> elementClassBox = new AlphabeticalComboBox<>();
 
     /** Combobox Modell */
-    protected final AlphabeticalComboBox modelBox = new AlphabeticalComboBox();
+    protected final AlphabeticalComboBox<GDCollection> modelBox = new AlphabeticalComboBox<>();
 
     /** Combobox Teilmodell */
-    protected final AlphabeticalComboBox subModelBox = new AlphabeticalComboBox();
+    protected final AlphabeticalComboBox<GraphDocument> subModelBox = new AlphabeticalComboBox<>();
 
     /** Suchknopf */
     protected final JButton searchButton = new JButton();
@@ -137,15 +138,10 @@ public abstract class BasicSearchOptionsPanel extends JPanel implements ItemList
         // Selectboxen befüllen
         fillModelBox();
         addSearchButtonKeyListener();
-
-        //add actions
         searchButton.setAction(searchActionDefault);
-        elementClassBox.setAction(searchActionDefault);
-        modelBox.setAction(searchActionWithUpdateSubmodelAndClassBoxes);
-        subModelBox.setAction(searchActionDefault);
 
         addToolTips(); //add tooltips AFTER adding the actions
-        addComboboxListeners();
+        addComboboxListenersAndActions();
         addCheckBoxListeners();
 
     }
@@ -191,11 +187,12 @@ public abstract class BasicSearchOptionsPanel extends JPanel implements ItemList
      * @param refreshSubModelAndClassBox
      */
     private void callSearch(final boolean refreshSubModelAndClassBox) {
+        Sys.err(refreshSubModelAndClassBox);
         HistoryComboBox.addToHistory(elementName);
         HistoryComboBox.addToHistory(elementUserField);
         HistoryComboBox.addToHistory(elementDescription);
 
-        GraphDocument doc = (GraphDocument) subModelBox.getSelectedObject();
+        GraphDocument doc = subModelBox.getSelectedObject();
         if (refreshSubModelAndClassBox) {
             fillSubModelBox();
             fillElementClassBox();
@@ -219,12 +216,12 @@ public abstract class BasicSearchOptionsPanel extends JPanel implements ItemList
     protected void fillElementClassBox() {
 
         elementClassBox.removeAllItems();
-        elementClassBox.addItem(ModelElement.class, getResString("SEARCH_DIALOG_all_element_types"));
+        elementClassBox.addObject(ModelElement.class, getResString("SEARCH_DIALOG_all_element_types"));
         elementClassBox.addSeparator(true);
 
-        elementClassBox.addItem(Node.class, getResString("SEARCH_DIALOG_all_nodes"));
+        elementClassBox.addObject(Node.class, getResString("SEARCH_DIALOG_all_nodes"));
         elementClassBox.addSeparator(true);
-        GDCollection gdcoll = (GDCollection) modelBox.getSelectedObject();
+        GDCollection gdcoll = modelBox.getSelectedObject();
         if (gdcoll != null) {
             MetaModel metaModel = gdcoll.getMetaModel();
             ElementsNameBuilder elementsNameBuilder = gdcoll.getElementsNameBuilder();
@@ -232,15 +229,15 @@ public abstract class BasicSearchOptionsPanel extends JPanel implements ItemList
                 if (Modifier.isAbstract(elementClass.getModifiers())) {
                     continue;
                 }
-                elementClassBox.addItem(elementClass, elementsNameBuilder.getDisplayableFullName(elementClass));
+                elementClassBox.addObject(elementClass, elementsNameBuilder.getDisplayableFullName(elementClass));
             }
             elementClassBox.addSeparator(true);
-            elementClassBox.addItem(Edge.class, getResString("SEARCH_DIALOG_all_edges"));
+            elementClassBox.addObject(Edge.class, getResString("SEARCH_DIALOG_all_edges"));
             elementClassBox.addSeparator(true);
 
             for (Class<? extends Edge> edgeClass : metaModel.allEdgesSet) {
-                elementClassBox.addItem(edgeClass, elementsNameBuilder.getFullForwardMetaAssociationName(edgeClass));
-                elementClassBox.addItem(edgeClass, elementsNameBuilder.getFullBackwardMetaAssociationName(edgeClass));
+                elementClassBox.addObject(edgeClass, elementsNameBuilder.getFullForwardMetaAssociationName(edgeClass));
+                elementClassBox.addObject(edgeClass, elementsNameBuilder.getFullBackwardMetaAssociationName(edgeClass));
             }
             elementClassBox.setSelectedObject(ModelElement.class);
         }
@@ -295,7 +292,7 @@ public abstract class BasicSearchOptionsPanel extends JPanel implements ItemList
     private void fillModelBox() {
         for (int i = 0; i < Static.getCollectionCount(); i++) {
             GDCollection gdcoll = Static.getCollection(i);
-            modelBox.addItem(gdcoll, gdcoll.getName());
+            modelBox.addObject(gdcoll);
         }
         modelBox.setSelectedObject(Static.getSelectedGDCollection());
         fillSubModelBox();
@@ -307,14 +304,14 @@ public abstract class BasicSearchOptionsPanel extends JPanel implements ItemList
      */
     private void fillSubModelBox() {
         subModelBox.removeAllItems();
-        GDCollection gdcoll = (GDCollection) modelBox.getSelectedObject();
+        GDCollection gdcoll = modelBox.getSelectedObject();
         if (gdcoll == null) {
             return;
         }
         GraphDocument mainDoc = gdcoll.getMainDoc();
-        subModelBox.addItem(mainDoc, mainDoc.getTitle());
+        subModelBox.addObject(mainDoc, mainDoc.getTitle());
         for (Szenario szen : gdcoll.getSzenarios()) {
-            subModelBox.addItem(szen, szen.getTitle());
+            subModelBox.addObject(szen);
         }
         subModelBox.setSelectedObject(mainDoc);
     }
@@ -325,11 +322,11 @@ public abstract class BasicSearchOptionsPanel extends JPanel implements ItemList
     protected void createUserFieldTypeComboBox() {
 
         // Auswahlmodi für die benutzerdef. Eigenschaften
-        userFieldStyleComboBox = new AlphabeticalComboBox();
-        userFieldStyleComboBox.addItem(null, getResString("SEARCH_DIALOG_USERFIELD_type_all"));
+        userFieldStyleComboBox = new AlphabeticalComboBox<>();
+        userFieldStyleComboBox.addObject(null, getResString("SEARCH_DIALOG_USERFIELD_type_all"));
         for (Style style : Style.values()) {
             if (style != Style.FORMAT) {
-                userFieldStyleComboBox.addItem(style);
+                userFieldStyleComboBox.addObject(style);
             }
         }
         userFieldStyleComboBox.setSelectedIndex(0);
@@ -387,7 +384,7 @@ public abstract class BasicSearchOptionsPanel extends JPanel implements ItemList
         callSearch();
     }
 
-    private void addComboboxListeners() {
+    private void addComboboxListenersAndActions() {
         setComboboxListeners(false);
     }
 
@@ -415,6 +412,9 @@ public abstract class BasicSearchOptionsPanel extends JPanel implements ItemList
                 userFieldStyleComboBox.removeItemListener(this);
                 userFieldCheckBoxStateComboBox.removeItemListener(this);
             }
+            elementClassBox.setAction(null);
+            modelBox.setAction(null);
+            subModelBox.setAction(null);
         } else {
             elementName.addItemListener(this);
             elementDescription.addItemListener(this);
@@ -423,7 +423,9 @@ public abstract class BasicSearchOptionsPanel extends JPanel implements ItemList
                 userFieldStyleComboBox.addItemListener(this);
                 userFieldCheckBoxStateComboBox.addItemListener(this);
             }
-
+            elementClassBox.setAction(searchActionDefault);
+            modelBox.setAction(searchActionWithUpdateSubmodelAndClassBoxes);
+            subModelBox.setAction(searchActionDefault);
         }
     }
 
@@ -475,9 +477,9 @@ public abstract class BasicSearchOptionsPanel extends JPanel implements ItemList
         checkNameCaseSensitive.setSelected(searchOptions.caseSensitiveName);
         checkDescriptionCaseSensitive.setSelected(searchOptions.caseSensitiveDescription);
         checkUserFieldCaseSensitive.setSelected(searchOptions.caseSensitiveUserFields);
-        elementClassBox.setSelectedItem(searchOptions.searchedElementType);
+        elementClassBox.setSelectedObject(searchOptions.searchedElementType);
         if (userFieldStyleComboBox != null) {
-            userFieldStyleComboBox.setSelectedItem(searchOptions.userFieldStyle);
+            userFieldStyleComboBox.setSelectedObject(searchOptions.userFieldStyle);
         }
         if (userFieldCheckBoxStateComboBox != null) {
             userFieldCheckBoxStateComboBox.setSelectedItem(searchOptions.userFieldCheckBoxState);
@@ -486,7 +488,7 @@ public abstract class BasicSearchOptionsPanel extends JPanel implements ItemList
         elementDescription.setHistory(searchOptions.inputHistoryDescription);
         elementUserField.setHistory(searchOptions.inputHistoryUserFields);
         //readd the listeners to the comboboxes
-        addComboboxListeners();
+        addComboboxListenersAndActions();
     }
 
 }

@@ -694,9 +694,7 @@ public final class ModelBrowserTree extends DynamicTree implements UserFieldList
             }
         }
         setSelectionPaths(path);
-        if (path.length > 0) {
-            scrollPathToVisible(path[path.length - 1]);
-        }
+        scrollToPath(path);
         setSelectionListenerActive(true);
     }
 

@@ -12,7 +12,6 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction;
 import de.imise.tool3lgm.graphtools.metamodel.elements.InstanciationEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
-import de.imise.tool3lgm.graphtools.path.MetaPathFunctions;
 import de.imise.tool3lgm.graphtools.path.metapaths.ElementaryMetaPath.Type;
 import de.imise.util.ReflectionUtils;
 import de.imise.util.collections.CollectionUtils;
@@ -51,7 +50,7 @@ public class SequenceMetaPath extends ListMetaPath {
     /**
      * @param metaPaths
      */
-    public SequenceMetaPath(final AbstractMetaPath... metaPaths) {
+    public SequenceMetaPath(final MetaPath... metaPaths) {
         this(null, metaPaths);
     }
 
@@ -59,7 +58,7 @@ public class SequenceMetaPath extends ListMetaPath {
      * @param baseResKeyOrName
      * @param metaPaths
      */
-    public SequenceMetaPath(final String baseResKeyOrName, final AbstractMetaPath... metaPaths) {
+    public SequenceMetaPath(final String baseResKeyOrName, final MetaPath... metaPaths) {
         this(baseResKeyOrName, Direction.FORWARD, metaPaths);
     }
 
@@ -68,7 +67,7 @@ public class SequenceMetaPath extends ListMetaPath {
      * @param direction
      * @param metaPaths
      */
-    protected SequenceMetaPath(final String baseResKeyOrName, final Direction direction, final AbstractMetaPath... metaPaths) {
+    protected SequenceMetaPath(final String baseResKeyOrName, final Direction direction, final MetaPath... metaPaths) {
         super(baseResKeyOrName, metaPaths);
         this.direction = direction;
         directed = getIsDirected();
@@ -147,7 +146,7 @@ public class SequenceMetaPath extends ListMetaPath {
 
     public String getAllMetaPathsName() {
         StringBuilder sb = new StringBuilder();
-        for (AbstractMetaPath metaPath : subMetaPaths) {
+        for (MetaPath metaPath : subMetaPaths) {
             sb.append(metaPath.getFullName());
             sb.append(" -> ");
         }
@@ -161,7 +160,7 @@ public class SequenceMetaPath extends ListMetaPath {
         if (!otherDirectionInitilized) {
             otherDirectionInitilized = true;
             // versuchen, die Gegenrichtung zusammen zu bauen
-            AbstractMetaPath[] otherDirectionMetaPaths = getOtherDirectionMetaPaths();
+            MetaPath[] otherDirectionMetaPaths = getOtherDirectionMetaPaths();
             // Gegenrichtung für diesen und den Gegenrichtungspfad setzen, wenn es die Gegenrichtung gibt
             if (otherDirectionMetaPaths != null) {
                 SequenceMetaPath other = createOtherDirection(baseResKeyOrName);
@@ -180,17 +179,17 @@ public class SequenceMetaPath extends ListMetaPath {
      * @return
      */
     protected SequenceMetaPath createOtherDirection(final String baseResKeyOrName) {
-        AbstractMetaPath[] otherDirectionMetaPaths = getOtherDirectionMetaPaths();
+        MetaPath[] otherDirectionMetaPaths = getOtherDirectionMetaPaths();
         return new SequenceMetaPath(baseResKeyOrName, Direction.BACKWARD, otherDirectionMetaPaths);
     }
 
-    protected AbstractMetaPath[] getOtherDirectionMetaPaths() {
+    protected MetaPath[] getOtherDirectionMetaPaths() {
         // versuchen, die Gegenrichtung zusammen zu bauen
-        AbstractMetaPath[] otherDirectionMetaPaths = new AbstractMetaPath[subMetaPaths.size()];
+        MetaPath[] otherDirectionMetaPaths = new MetaPath[subMetaPaths.size()];
         // Gegenrichtung der enthaltenen Einzelpfade in umgekehrter Reihenfolge einfügen
         for (int i = otherDirectionMetaPaths.length - 1; i >= 0; i--) {
-            AbstractMetaPath currentMetaPath = subMetaPaths.get(i);
-            AbstractMetaPath otherDirection = currentMetaPath.getOtherDirection();
+            MetaPath currentMetaPath = subMetaPaths.get(i);
+            MetaPath otherDirection = currentMetaPath.getOtherDirection();
             if (otherDirection == null) {
                 otherDirectionMetaPaths = null;
                 break;
@@ -311,7 +310,7 @@ public class SequenceMetaPath extends ListMetaPath {
     public final List<ElementaryMetaPath> getElementaryMetaPaths() {
         if (elementaryMetaPaths == null) {
             ImmutableList.Builder<ElementaryMetaPath> simpleMetaPathBuilder = ImmutableList.builder();
-            for (AbstractMetaPath metaPath : subMetaPaths) {
+            for (MetaPath metaPath : subMetaPaths) {
                 List<ElementaryMetaPath> innerMetaPaths = metaPath.getElementaryMetaPaths();
                 if (innerMetaPaths.isEmpty()) { //der aktuelle innere Pfad hat keine einfache Elementarpfadliste
                     elementaryMetaPaths = EMPTY_ELEMENTARY_PATH_LIST;
@@ -366,7 +365,7 @@ public class SequenceMetaPath extends ListMetaPath {
 
     @Override
     public boolean containsPropertyTransferEdge() {
-        for (AbstractMetaPath metaPath : subMetaPaths) {
+        for (MetaPath metaPath : subMetaPaths) {
             if (metaPath.containsPropertyTransferEdge()) {
                 return true;
             }
@@ -386,12 +385,12 @@ public class SequenceMetaPath extends ListMetaPath {
      * @return
      */
     public final Set<Class<? extends ModelElement>> getPathStepConnectingClasses(final int pathStepIndex) {
-        AbstractMetaPath metaPath = subMetaPaths.get(pathStepIndex);
+        MetaPath metaPath = subMetaPaths.get(pathStepIndex);
         Set<Class<? extends ModelElement>> endClasses = metaPath.getEndClasses();
         if (pathStepIndex == subMetaPaths.size() - 1) {
             return endClasses;
         }
-        AbstractMetaPath nextMetaPath = subMetaPaths.get(pathStepIndex + 1);
+        MetaPath nextMetaPath = subMetaPaths.get(pathStepIndex + 1);
         Set<Class<? extends ModelElement>> nextStartClasses = nextMetaPath.getStartClasses();
         Set<Class<? extends ModelElement>> pathStepClasses = new HashSet<>();
         for (Class<? extends ModelElement> endClass : endClasses) {
@@ -438,7 +437,7 @@ public class SequenceMetaPath extends ListMetaPath {
 
     @Override
     public InvalidityCheckResult getInvalidityCheckResult() {
-        //wenn der Pfad aus Sicht des AbstractMetaPath valide ist
+        //wenn der Pfad aus Sicht des MetaPath valide ist
         if (super.getInvalidityCheckResult().invalidReason == null) {
             //jeden Einzelpfad durchgehen
             for (int i = 0; i < subMetaPaths.size(); i++) {

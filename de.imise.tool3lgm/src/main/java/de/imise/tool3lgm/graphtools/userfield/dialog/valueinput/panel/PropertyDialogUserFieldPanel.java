@@ -48,7 +48,10 @@ import javax.swing.text.JTextComponent;
 
 import com.google.common.collect.ImmutableList;
 
+import de.imise.tool3lgm.graphtools.consistency.error.type.AbstractConsistencyError;
+import de.imise.tool3lgm.graphtools.consistency.error.type.AbstractIDError;
 import de.imise.tool3lgm.graphtools.dialog.element.AbstractElementPropertyDialog;
+import de.imise.tool3lgm.graphtools.dialog.element.panel.DisplayAndFixConsistencyErrorPanel;
 import de.imise.tool3lgm.graphtools.dialog.element.panel.ElementDialogPanel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
@@ -74,10 +77,16 @@ import de.imise.util.swing.component.text.NumberTextField;
  *
  * @author Thomas Rudert, xhb, AXS
  */
-public class PropertyDialogUserFieldPanel extends ElementDialogPanel {
+public class PropertyDialogUserFieldPanel extends ElementDialogPanel implements DisplayAndFixConsistencyErrorPanel {
 
+    /**
+     *
+     */
     private final List<UserFieldEditorComponent> fieldComponents = new ArrayList<>();
 
+    /**
+     *
+     */
     private final PropertyDialogUserFieldPanelChangeListener changeHandler = new PropertyDialogUserFieldPanelChangeListener(this);
 
     /**
@@ -88,6 +97,9 @@ public class PropertyDialogUserFieldPanel extends ElementDialogPanel {
         create();
     }
 
+    /**
+     * @return
+     */
     private GridBagConstraints getDefaultConstraints() {
         GridBagConstraints constraints = new GridBagConstraints();
         constraints.fill = GridBagConstraints.HORIZONTAL;
@@ -101,6 +113,10 @@ public class PropertyDialogUserFieldPanel extends ElementDialogPanel {
         return constraints;
     }
 
+    /**
+     * @param content
+     * @return
+     */
     private JScrollPane getScrollPane(final JComponent content) {
         JScrollPane scrollPane = new JScrollPane(content);
         JScrollBar scrollbar = scrollPane.getVerticalScrollBar();
@@ -209,21 +225,21 @@ public class PropertyDialogUserFieldPanel extends ElementDialogPanel {
             textArea.setText(value);
             editorComponent = new JScrollPane(textArea);
         } else if (style == COMBO_BOX) {
-            AlphabeticalComboBox comboBox = new AlphabeticalComboBox(true);
+            AlphabeticalComboBox<String> comboBox = new AlphabeticalComboBox<>(true);
             boolean foundEntry = false;
             for (int i = 0; i < field.getListValuesCount(); i++) {
-                Object listValue = field.getListValueAt(i);
-                comboBox.addItem(listValue);
+                String listValue = field.getListValueAt(i);
+                comboBox.addObject(listValue);
                 if (listValue.equals(value)) {
-                    comboBox.setSelectedItem(listValue);
+                    comboBox.setSelectedObject(listValue);
                     foundEntry = true;
                 }
             }
             if (!foundEntry) {
                 if (value.length() > 0) {
                     field.addListValue(value);
-                    comboBox.addItem(value);
-                    comboBox.setSelectedItem(value);
+                    comboBox.addObject(value);
+                    comboBox.setSelectedObject(value);
                     foundEntry = true;
                 } else {
                     comboBox.setSelectedIndex(-1);
@@ -317,6 +333,10 @@ public class PropertyDialogUserFieldPanel extends ElementDialogPanel {
         }
     }
 
+    /**
+     * @param component
+     * @param userField
+     */
     private void registerChangeListener(final JComponent component, final UserField userField) {
         if (component instanceof JTextComponent) {
             JTextComponent textComponent = (JTextComponent) component;
@@ -336,6 +356,10 @@ public class PropertyDialogUserFieldPanel extends ElementDialogPanel {
         }
     }
 
+    /**
+     * @param hyperlinkText
+     * @return
+     */
     private JButton getHyperlinkButton(final JTextComponent hyperlinkText) {
         // Der Button, der für einen Hyperlink das öffnen eines Browsers
         // ermöglicht.
@@ -362,6 +386,10 @@ public class PropertyDialogUserFieldPanel extends ElementDialogPanel {
         return button;
     }
 
+    /**
+     * @param panel2Fill
+     * @param constraints
+     */
     private void addFillSpacePanel(final JPanel panel2Fill, final GridBagConstraints constraints) {
         constraints.gridy++;
         constraints.fill = GridBagConstraints.BOTH;
@@ -542,6 +570,19 @@ public class PropertyDialogUserFieldPanel extends ElementDialogPanel {
         }
     }
 
+    @Override
+    public ElementDialogPanel getResponsiblePanelForConsistencyError(final AbstractConsistencyError consistencyError) {
+        ModelElement errorModelElement = consistencyError.getModelElement();
+        ModelElement panelModelElement = getModelElement();
+        if (panelModelElement == errorModelElement && consistencyError instanceof AbstractIDError) {
+            return this;
+        }
+        return null;
+    }
+
+    /**
+     * @param c
+     */
     public static final void print(final GridBagConstraints c) {
         System.err.println("anchor = " + c.anchor);
         System.err.println("fill = " + c.fill);

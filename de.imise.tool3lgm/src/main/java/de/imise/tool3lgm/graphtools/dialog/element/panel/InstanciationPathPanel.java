@@ -17,9 +17,8 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction;
 import de.imise.tool3lgm.graphtools.metamodel.elements.InstanciationEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
-import de.imise.tool3lgm.graphtools.path.PathFunctions;
-import de.imise.tool3lgm.graphtools.path.metapaths.AbstractMetaPath;
 import de.imise.tool3lgm.graphtools.path.metapaths.ElementaryMetaPath;
+import de.imise.tool3lgm.graphtools.path.metapaths.MetaPath;
 import de.imise.tool3lgm.graphtools.path.metapaths.SimpleMetaPath;
 import de.imise.tool3lgm.graphtools.view.tree.node.LGMTreeNode;
 
@@ -52,7 +51,7 @@ public class InstanciationPathPanel extends PathConnectionPanel {
      * @param dialog
      * @param simpleMetaPath
      */
-    private InstanciationPathPanel(final AbstractElementPropertyDialog dialog, final AbstractMetaPath metaPath) {
+    private InstanciationPathPanel(final AbstractElementPropertyDialog dialog, final MetaPath metaPath) {
         super(dialog, LABEL_END_ELEMENT_TYPE, LABEL_LAST_EDGE_START_ELEMENT_TYPE, metaPath);
         List<ElementaryMetaPath> elementaryMetaPaths = metaPath.getElementaryMetaPaths();
         elementaryMetaPathCount = elementaryMetaPaths.size();
@@ -69,7 +68,7 @@ public class InstanciationPathPanel extends PathConnectionPanel {
      * @param metaPath
      * @return
      */
-    public static final InstanciationPathPanel getInstanciationPathPanel(final AbstractElementPropertyDialog dialog, final AbstractMetaPath metaPath) {
+    public static final InstanciationPathPanel getInstanciationPathPanel(final AbstractElementPropertyDialog dialog, final MetaPath metaPath) {
         if (isCreatableMetaPathWithBackwardInstanciationEnd(metaPath)) {
             return new InstanciationPathPanel(dialog, metaPath);
         }
@@ -80,7 +79,7 @@ public class InstanciationPathPanel extends PathConnectionPanel {
      * @return the elementaryMetaPathCount of the given metaPath if this metaPath fits the conditions
      *         for this panel or -1 if the conditions are not fulfilled.
      */
-    private static final boolean isCreatableMetaPathWithBackwardInstanciationEnd(final AbstractMetaPath metaPath) {
+    private static final boolean isCreatableMetaPathWithBackwardInstanciationEnd(final MetaPath metaPath) {
         if (!metaPath.isCreatable(false)) {
             return false;
         }
@@ -169,7 +168,7 @@ public class InstanciationPathPanel extends PathConnectionPanel {
                     //das ist der Index der Edge im Pfad, ab der entfernt werden soll
                     int treePathEdgeIndex = path2disconnect[i].getPathCount() - 2;
                     ModelElement instanceElement = PathConnectionPanel.getPathModelElement(path2disconnect[i]);
-                    List<ModelElement> instanciationMasters = PathFunctions.getConnectedElements(instanceElement, lastElementaryMetaPathWithBackwardInstanciationEdge);
+                    List<ModelElement> instanciationMasters = lastElementaryMetaPathWithBackwardInstanciationEdge.getConnectedElements(instanceElement);
                     for (ModelElement instanciationMaster : instanciationMasters) {
                         panel.disconnect(instanceElement, instanciationMaster, treePathEdgeIndex + 1);
                     }

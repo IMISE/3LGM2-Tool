@@ -1,5 +1,7 @@
 package de.imise.tool3lgm.graphtools.metamodel.elements;
 
+import java.lang.reflect.Constructor;
+
 import javax.annotation.Nonnull;
 
 import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
@@ -34,7 +36,8 @@ public class ModelElementInstanceCreator {
      */
     public final <T extends ModelElement> T createElement(final Class<? extends T> elementClass, final boolean log) {
         try {
-            T me = elementClass.newInstance();
+            Constructor<? extends T> emptyConstructor = elementClass.getDeclaredConstructor();
+            T me = emptyConstructor.newInstance();
             me.setMetaModel(metaModel);
             return me;
         } catch (Exception e) {

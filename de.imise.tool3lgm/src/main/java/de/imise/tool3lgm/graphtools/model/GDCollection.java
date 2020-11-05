@@ -83,6 +83,7 @@ import com.google.common.base.Strings;
 import de.imise.tool3lgm.MetaModelContext;
 import de.imise.tool3lgm.Tool3lgmModelType;
 import de.imise.tool3lgm.Tool3lgmModelType.ModelCategory;
+import de.imise.tool3lgm.graphtools.consistency.ModelValidator;
 import de.imise.tool3lgm.graphtools.dialog.element.ElemenPropertyDialogsContext;
 import de.imise.tool3lgm.graphtools.dialog.element.ElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
@@ -102,8 +103,7 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.MultipleEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
 import de.imise.tool3lgm.graphtools.metamodel.elements.OptionalEdge;
 import de.imise.tool3lgm.graphtools.model.LGMChangeListener.LGMChangeType;
-import de.imise.tool3lgm.graphtools.path.PathFunctions;
-import de.imise.tool3lgm.graphtools.path.metapaths.AbstractMetaPath;
+import de.imise.tool3lgm.graphtools.path.metapaths.MetaPath;
 import de.imise.tool3lgm.graphtools.path.paths.AbstractPath;
 import de.imise.tool3lgm.graphtools.undoredo.TransactionManager;
 import de.imise.tool3lgm.graphtools.undoredo.TransactionStackTable;
@@ -144,6 +144,9 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
 
     /** The data structure to store all model changing transactions for the undo-redo-manager */
     private final TransactionStackTable transStackTable = new TransactionStackTable();
+
+    /** The modelvalidaor for this model */
+    private final ModelValidator modelValidator;
 
     //	/*{
     //
@@ -286,6 +289,7 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
     public GDCollection() {
         fileHandler = new GDCollectionFileHandler(this);
         imExportHandler = new GDCollectionImExportHandler(this);
+        modelValidator = new ModelValidator(this);
         tman = new TransactionManager(this);
     }
 
@@ -298,9 +302,43 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
         setModelType(modelType);
     }
 
+    /**
+     * @return the validator for this model
+     */
+    public ModelValidator getModelValidator() {
+        return modelValidator;
+    }
+
     @Override
     public String toString() {
+        return getName();
+    }
+
+    /**
+     * @return
+     */
+    public String getName() {
         return name;
+    }
+
+    public void setName(final String name) {
+        this.name = name;
+        distribute(MODEL_OR_SZENARIO_NAME_CHANGED, null, getMainDoc(), STANDARD_PID);
+    }
+
+    /**
+     * @return setzt den Title auf dasselbe wie {@link #getName()}, aber ohne die Dateiendung
+     */
+    public String getTitle() {
+        int lastPointIndex = name.lastIndexOf('.');
+        String title = name;
+        if (lastPointIndex > 0 && lastPointIndex < title.length() - 1) {
+            String extension = title.substring(lastPointIndex + 1);
+            if (isExtension(extension)) {
+                title = title.substring(0, lastPointIndex);
+            }
+        }
+        return title;
     }
 
     /**
@@ -435,33 +473,6 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
      */
     public boolean isInitialzed() {
         return initialized;
-    }
-
-    /**
-     * @return
-     */
-    public String getName() {
-        return name;
-    }
-
-    public void setName(final String name) {
-        this.name = name;
-        distribute(MODEL_OR_SZENARIO_NAME_CHANGED, null, getMainDoc(), STANDARD_PID);
-    }
-
-    /**
-     * @return setzt den Title auf dasselbe wie {@link #getName()}, aber ohne die Dateiendung
-     */
-    public String getTitle() {
-        int lastPointIndex = name.lastIndexOf('.');
-        String title = name;
-        if (lastPointIndex > 0 && lastPointIndex < title.length() - 1) {
-            String extension = title.substring(lastPointIndex + 1);
-            if (isExtension(extension)) {
-                title = title.substring(0, lastPointIndex);
-            }
-        }
-        return title;
     }
 
     /**
@@ -1403,7 +1414,7 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
                 //get the InferenceEdge class as Edge class
                 Class<? extends Edge> edgeClass = inferenceEdgeClass.asSubclass(Edge.class);
                 //get the condition metapath of this InferenceEdge
-                AbstractMetaPath conditionMetaPath = metaModel.getInferenceEdgeConditionMetaPath(inferenceEdgeClass);
+                MetaPath conditionMetaPath = metaModel.getInferenceEdgeConditionMetaPath(inferenceEdgeClass);
                 //get the start and end element class of this InferencenEdge class
                 Class<? extends ModelElement> edgeStartClass = Edge.getStartClass(edgeClass);
                 Class<? extends ModelElement> edgeEndClass = Edge.getEndClass(edgeClass);
@@ -1421,7 +1432,7 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
                         //is the condition metapath defined in the same direction like the edge?
                         boolean readEdgeForward = conditionMetaPath.isStartAndEndClass(edgeStartClass, edgeEndClass);
                         //is the condition for this InferenceEdge still fulfilled?
-                        remove = !PathFunctions.isDirectConnected(readEdgeForward ? edgeStart : edgeEnd, readEdgeForward ? edgeEnd : edgeStart, conditionMetaPath);
+                        remove = !conditionMetaPath.isDirectConnected(readEdgeForward ? edgeStart : edgeEnd, readEdgeForward ? edgeEnd : edgeStart);
                     }
                     //if not -> remove the InferenceEdge
                     if (remove) {
@@ -1470,7 +1481,7 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
                 //get the InferenceEdge class as Edge class
                 Class<? extends Edge> edgeClass = inferenceEdgeClass.asSubclass(Edge.class);
                 //get the condition metapath of this InferenceEdge
-                AbstractMetaPath conditionMetaPath = metaModel.getInferenceEdgeConditionMetaPath(inferenceEdgeClass);
+                MetaPath conditionMetaPath = metaModel.getInferenceEdgeConditionMetaPath(inferenceEdgeClass);
                 //get all startClasses of the condition metapath
                 Set<Class<? extends ModelElement>> startClasses = conditionMetaPath.getStartClasses();
                 //get all model elements of this startclasses
@@ -1478,7 +1489,7 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
                 //for every of this model elements
                 for (ModelElement pathStartElement : pathStartElements) {
                     //get all elements which are conected over the path with the pathStartElement
-                    Collection<ModelElement> pathEndElements = PathFunctions.getConnectedElements(pathStartElement, conditionMetaPath);
+                    Collection<ModelElement> pathEndElements = conditionMetaPath.getConnectedElements(pathStartElement);
                     //for every of this connected elements
                     for (ModelElement pathEndElement : pathEndElements) {
                         //if the resulting InferenceEdge dosn't exists -> create the link
@@ -1750,8 +1761,8 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
                     //hole die Bedingungspfade
                     OutParamObject<ModelElement> inferenceEdgeConditionMetaPathStartElement = new OutParamObject<>(startElement);
                     OutParamObject<ModelElement> inferenceEdgeConditionMetaPathEndElement = new OutParamObject<>(endElement);
-                    AbstractMetaPath inferenceEdgeConditionMetaPath = getInferenceEdgeConditionMetaPathWithCorrectElementOrder(edgeClass, inferenceEdgeConditionMetaPathStartElement, inferenceEdgeConditionMetaPathEndElement);
-                    if (!PathFunctions.isConnected(inferenceEdgeConditionMetaPathStartElement.value, inferenceEdgeConditionMetaPathEndElement.value, inferenceEdgeConditionMetaPath)) {
+                    MetaPath inferenceEdgeConditionMetaPath = getInferenceEdgeConditionMetaPathWithCorrectElementOrder(edgeClass, inferenceEdgeConditionMetaPathStartElement, inferenceEdgeConditionMetaPathEndElement);
+                    if (!inferenceEdgeConditionMetaPath.isConnected(inferenceEdgeConditionMetaPathStartElement.value, inferenceEdgeConditionMetaPathEndElement.value)) {
                         if (!inferenceEdgeConditionMetaPath.isCreatable(false)) {
                             mainDoc.finish_transaction(pid);
                             return null;
@@ -1844,10 +1855,10 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
      *         the given elements in the correct order that the second triple element is the start element
      *         of the condition path and the third triple element is the end element of the condition path
      */
-    private AbstractMetaPath getInferenceEdgeConditionMetaPathWithCorrectElementOrder(final Class<? extends Edge> potencialInferenceEdgeClass, final OutParamObject<ModelElement> inferenceEdgeConditionMetaPathStartElement,
+    private MetaPath getInferenceEdgeConditionMetaPathWithCorrectElementOrder(final Class<? extends Edge> potencialInferenceEdgeClass, final OutParamObject<ModelElement> inferenceEdgeConditionMetaPathStartElement,
             final OutParamObject<ModelElement> inferenceEdgeConditionMetaPathEndElement) {
         Class<? extends InferenceEdge> inferenceEdgeClass = potencialInferenceEdgeClass.asSubclass(InferenceEdge.class);
-        AbstractMetaPath inferenceEdgeConditionMetaPath = metaModel.getInferenceEdgeConditionMetaPath(inferenceEdgeClass);
+        MetaPath inferenceEdgeConditionMetaPath = metaModel.getInferenceEdgeConditionMetaPath(inferenceEdgeClass);
         //es kann sein, dass die Bedingungspfade genau andersrum als die Kante (also mit verdrehtem Start- und Endelement) definiert sind
         ModelElement startElement = inferenceEdgeConditionMetaPathStartElement.value;
         ModelElement endElement = inferenceEdgeConditionMetaPathEndElement.value;
@@ -1867,9 +1878,9 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
     private String getNewEdgeName(final Edge edge) {
         String name = null;
         Class<? extends Edge> edgeClass = edge.getClass();
-        AbstractMetaPath initialCreatedNameSourcePath = metaModel.getInitialCreatedNameSourcePath(edgeClass);
+        MetaPath initialCreatedNameSourcePath = metaModel.getInitialCreatedNameSourcePath(edgeClass);
         if (initialCreatedNameSourcePath != null) {
-            Collection<ModelElement> nameSources = PathFunctions.getConnectedElements(edge, initialCreatedNameSourcePath);
+            Collection<ModelElement> nameSources = initialCreatedNameSourcePath.getConnectedElements(edge);
             if (!nameSources.isEmpty()) {
                 name = StringUtils.createCollectionString(nameSources, ", ");
             }
@@ -2029,7 +2040,7 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
         if (InferenceEdge.class.isAssignableFrom(absoluteEdgeClass)) {
             OutParamObject<ModelElement> inferenceEdgeConditionMetaPathStartElement = new OutParamObject<>(me1);
             OutParamObject<ModelElement> inferenceEdgeConditionMetaPathEndElement = new OutParamObject<>(me2);
-            AbstractMetaPath inferenceEdgeConditionMetaPath = getInferenceEdgeConditionMetaPathWithCorrectElementOrder(edgeClass, inferenceEdgeConditionMetaPathStartElement, inferenceEdgeConditionMetaPathEndElement);
+            MetaPath inferenceEdgeConditionMetaPath = getInferenceEdgeConditionMetaPathWithCorrectElementOrder(edgeClass, inferenceEdgeConditionMetaPathStartElement, inferenceEdgeConditionMetaPathEndElement);
 
             //TODO: Remove Inference Egdes implementieren
             ///////////////////////////////////////////////////////////////////////////////////////////

@@ -18,6 +18,7 @@ public class ParentComponentFinder {
      * @param parentType
      * @return
      */
+    @SuppressWarnings("unchecked") //it's checked!
     public static final <T> T getParent(final Component component, final Class<T> parentType) {
         Component parent = component.getParent();
         while (parent != null) {

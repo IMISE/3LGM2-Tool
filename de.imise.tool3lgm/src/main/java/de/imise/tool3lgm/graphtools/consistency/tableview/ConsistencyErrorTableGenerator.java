@@ -1,6 +1,8 @@
 package de.imise.tool3lgm.graphtools.consistency.tableview;
 
 import java.awt.Component;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 
 import javax.swing.JComponent;
 import javax.swing.JTable;
@@ -13,35 +15,32 @@ import javax.swing.table.JTableHeader;
 import javax.swing.table.TableColumn;
 
 import de.imise.tool3lgm.Static;
-import de.imise.tool3lgm.graphtools.consistency.checker.ConsistencyChecker;
+import de.imise.tool3lgm.Tool3lgmChangeListener;
+import de.imise.tool3lgm.graphtools.consistency.ModelValidator;
 import de.imise.tool3lgm.graphtools.consistency.tableview.ConsistencyErrorTableModel.ColumnNames;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
+import de.imise.tool3lgm.graphtools.model.GDCollection;
+import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.model.LGMGraphDocument;
 import de.imise.tool3lgm.graphtools.undoredo.TransactionManager;
-import de.imise.util.NamedObjectContainer;
 import de.imise.util.swing.ToolTipShowTimeHandler;
 
 /**
  * @author AXS
  * @created 13.09.2008
  */
-public class ConsistencyErrorTableGenerator {
+public class ConsistencyErrorTableGenerator implements PropertyChangeListener, Tool3lgmChangeListener {
 
-    /**
-     * Der Baum, der aufgebaut wird
-     */
+    /** Der Baum, der aufgebaut wird */
     private final UneditableJTable table;
 
-    /**
-     * Der Konsistenzprüfer, der alle Fehler liefert
-     */
-    private final ConsistencyChecker checker;
+    /** The model for which this table currently shows the errors */
+    private GDCollection currentGDCollection;
 
     /**
-     * @param checker Konsistenzprüfer, der alle Fehler liefert
+     *
      */
-    public ConsistencyErrorTableGenerator(final ConsistencyChecker checker) {
-        this.checker = checker;
+    public ConsistencyErrorTableGenerator() {
 
         //TableModel
         ConsistencyErrorTableModel tableModel = new ConsistencyErrorTableModel();
@@ -51,7 +50,7 @@ public class ConsistencyErrorTableGenerator {
         ToolTipShowTimeHandler.setDismissTime(table, 10000);
 
         //MouseListener
-        ConsistencyErrorTableMouseListener consistencyErrorTableMouseListener = new ConsistencyErrorTableMouseListener(checker, table);
+        ConsistencyErrorTableMouseListener consistencyErrorTableMouseListener = new ConsistencyErrorTableMouseListener(table);
         table.addMouseListener(consistencyErrorTableMouseListener);
 
         //Header
@@ -61,26 +60,51 @@ public class ConsistencyErrorTableGenerator {
         //Table
         table.setAutoResizeMode(JTable.AUTO_RESIZE_LAST_COLUMN);
 
-        //Column number (0)
-        ColumnNames number = ConsistencyErrorTableModel.ColumnNames.NUMBER;
-        String culumnNumberDisplayableName = number.getDisplayableName();
-        TableColumn columnNumber = table.getColumn(culumnNumberDisplayableName);
-        columnNumber.setMaxWidth(40);
+        DescriptionCellRenderer cellRendererWithTooltips = new DescriptionCellRenderer();
+        //set max column width and cell renderer
 
-        //Column error type (1)
-        ColumnNames errorType = ConsistencyErrorTableModel.ColumnNames.ERROR_TYPE;
-        String columnErrorTypeDisplayableName = errorType.getDisplayableName();
-        TableColumn columnErrorType = table.getColumn(columnErrorTypeDisplayableName);
-        columnErrorType.setMaxWidth(40);
+        for (ColumnNames columnIdentifier : ColumnNames.values()) {
+            TableColumn column = table.getColumn(columnIdentifier.toString());
+            column.setCellRenderer(cellRendererWithTooltips);
+            if (columnIdentifier.maxColumnWidth > 0) {
+                column.setMaxWidth(columnIdentifier.maxColumnWidth);
+            }
+        }
 
-        //Column description (5)
-        ColumnNames description = ConsistencyErrorTableModel.ColumnNames.DESCRIPTION;
-        String columnDescriptionDisplayableName = description.getDisplayableName();
-        TableColumn columnDescription = table.getColumn(columnDescriptionDisplayableName);
-        columnDescription.setCellRenderer(new DescriptionCellRenderer());
+        addAsToolChangeListener();
+        addAsPropertyChangeListener();
 
         initTabelSelectionModel();
 
+        updateTable();
+    }
+
+    /**
+     *
+     */
+    private void addAsPropertyChangeListener() {
+        removeAsPropertyChangeListener();
+        currentGDCollection = Static.getSelectedGDCollection();
+        if (currentGDCollection != null) {
+            ModelValidator modelValidator = currentGDCollection.getModelValidator();
+            modelValidator.addPropertyChangeListener(this);
+        }
+    }
+
+    /**
+     *
+     */
+    private void removeAsPropertyChangeListener() {
+        if (currentGDCollection != null) {
+            ModelValidator modelValidator = currentGDCollection.getModelValidator();
+            modelValidator.removePropertyChangeListener(this);
+        }
+        currentGDCollection = null;
+    }
+
+    @Override
+    public void model_change_selected_szenario_changed(final GraphDocument source) {
+        addAsPropertyChangeListener();
         updateTable();
     }
 
@@ -115,17 +139,16 @@ public class ConsistencyErrorTableGenerator {
         });
     }
 
+    /**
+     * @author AXS
+     */
     private static class DescriptionCellRenderer extends DefaultTableCellRenderer {
         @Override
         public Component getTableCellRendererComponent(final JTable table, final Object value, final boolean isSelected, final boolean hasFocus, final int row, final int column) {
             JComponent c = (JComponent) super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
-            // This...
-            if (value instanceof NamedObjectContainer) {
-                NamedObjectContainer<?> cellValueWithTooltip = (NamedObjectContainer<?>) value;
-                Object cellObject = cellValueWithTooltip.getObject();
-                String tooltip = cellObject.toString();
-                c.setToolTipText(tooltip);
-            }
+            ConsistencyErrorTableModel model = (ConsistencyErrorTableModel) table.getModel();
+            String tooltip = model.getTooltip(row);
+            c.setToolTipText(tooltip);
             return c;
         }
     }
@@ -135,7 +158,9 @@ public class ConsistencyErrorTableGenerator {
      */
     public void updateTable() {
         ConsistencyErrorTableModel model = (ConsistencyErrorTableModel) table.getModel();
-        model.setErrors(checker);
+        GDCollection selectedGDCollection = Static.getSelectedGDCollection();
+        ModelValidator modelValidator = selectedGDCollection == null ? null : selectedGDCollection.getModelValidator();
+        model.setErrors(modelValidator);
         table.clearSelection();
         table.revalidate();
         table.repaint();
@@ -147,6 +172,16 @@ public class ConsistencyErrorTableGenerator {
     public JTable getTable() {
         updateTable();
         return table;
+    }
+
+    @Override
+    public void propertyChange(final PropertyChangeEvent evt) {
+        updateTable();
+    }
+
+    public void dispose() {
+        removeAsPropertyChangeListener();
+        removeAsToolChangeListener();
     }
 
     // /////////////////

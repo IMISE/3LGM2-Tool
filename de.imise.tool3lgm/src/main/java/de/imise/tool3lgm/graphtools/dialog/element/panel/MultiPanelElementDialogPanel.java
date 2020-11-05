@@ -18,17 +18,22 @@ import javax.swing.JSeparator;
 import javax.swing.border.Border;
 import javax.swing.border.TitledBorder;
 
+import de.imise.tool3lgm.graphtools.consistency.error.type.AbstractConsistencyError;
+import de.imise.tool3lgm.graphtools.consistency.error.type.AbstractPathError;
+import de.imise.tool3lgm.graphtools.dialog.AbstractTabbedPropertyDialog;
 import de.imise.tool3lgm.graphtools.dialog.element.AbstractElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.dialog.element.ElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.dialog.element.panel.AbstractPathConnectionPanel.PanelLabelOption;
+import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
+import de.imise.tool3lgm.graphtools.path.metapaths.MetaPath;
 import de.imise.tool3lgm.graphtools.path.metapaths.SimpleMetaPath;
 
 /**
- * Panel, das mehrere andere Panels aufnehmen kann.
+ * Panel, which can hold several other panels.
  *
  * @author AXS (21.01.2020)
  */
-public class MultiPanelElementDialogPanel extends ElementDialogPanel implements ActionListener {
+public class MultiPanelElementDialogPanel extends ElementDialogPanel implements ActionListener, DisplayAndFixConsistencyErrorPanel {
 
     /** Added sub panels in the order in which they were added */
     private final List<AbstractPathConnectionPanel> panels = new ArrayList<>();
@@ -55,15 +60,19 @@ public class MultiPanelElementDialogPanel extends ElementDialogPanel implements 
     private JButton panelButton;
 
     /**
-     * @param dialog
+     * Panel, which can hold several other panels.
+     *
+     * @param dialog dialog the dialog which contains this panel
      */
     public MultiPanelElementDialogPanel(final AbstractElementPropertyDialog dialog) {
         this(dialog, (String) null);
     }
 
     /**
-     * @param dialog
-     * @param name
+     * Panel, which can hold several other panels.
+     *
+     * @param dialog the dialog which contains this panel
+     * @param name displayed panel name on the tab
      */
     public MultiPanelElementDialogPanel(final AbstractElementPropertyDialog dialog, final String name) {
         super(dialog, name);
@@ -212,6 +221,22 @@ public class MultiPanelElementDialogPanel extends ElementDialogPanel implements 
                 hiddenPanelButton.doClick();
             }
         }
+    }
+
+    @Override
+    public ElementDialogPanel getResponsiblePanelForConsistencyError(final AbstractConsistencyError consistencyError) {
+        ModelElement errorModelElement = consistencyError.getModelElement();
+        ModelElement panelModelElement = getModelElement();
+        if (errorModelElement != panelModelElement) {
+            return null;
+        }
+        AbstractPathConnectionPanel panel = null;
+        if (consistencyError instanceof AbstractPathError) {
+            AbstractPathError pathError = (AbstractPathError) consistencyError;
+            MetaPath errorMetaPath = pathError.getMetaPath();
+            panel = AbstractTabbedPropertyDialog.getPanel(this, errorMetaPath);
+        }
+        return panel;
     }
 
 }

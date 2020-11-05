@@ -9,7 +9,7 @@ public class SectionMetaPath extends ParallelMetaPath {
     /**
      * @param metaPaths
      */
-    public SectionMetaPath(final AbstractMetaPath... metaPaths) {
+    public SectionMetaPath(final MetaPath... metaPaths) {
         super(metaPaths);
     }
 
@@ -17,7 +17,7 @@ public class SectionMetaPath extends ParallelMetaPath {
      * @param baseResKeyOrName
      * @param metaPaths
      */
-    public SectionMetaPath(final String baseResKeyOrName, final AbstractMetaPath... metaPaths) {
+    public SectionMetaPath(final String baseResKeyOrName, final MetaPath... metaPaths) {
         super(baseResKeyOrName, metaPaths);
     }
 
@@ -31,7 +31,7 @@ public class SectionMetaPath extends ParallelMetaPath {
     @Override
     protected boolean canBeRecursive() {
         //bei Schnittmengenpfaden müssen alle enthaltenen Pfade rekursiv sein, damit es Ergebniselemente geben kann
-        for (AbstractMetaPath metaPath : subMetaPaths) {
+        for (MetaPath metaPath : subMetaPaths) {
             if (!metaPath.canBeRecursive()) {
                 return false;
             }
@@ -41,7 +41,7 @@ public class SectionMetaPath extends ParallelMetaPath {
 
     @Override
     public boolean isCreatable(final boolean checkCreateEndElement) {
-        for (AbstractMetaPath metaPath : getSubMetaPaths()) {
+        for (MetaPath metaPath : getSubMetaPaths()) {
             if (!metaPath.isCreatable(checkCreateEndElement)) {
                 return false;
             }
@@ -50,7 +50,7 @@ public class SectionMetaPath extends ParallelMetaPath {
     }
 
     @Override
-    public SectionMetaPath createInstance(final AbstractMetaPath... subMetaPaths) {
+    public SectionMetaPath createInstance(final MetaPath... subMetaPaths) {
         return new SectionMetaPath(subMetaPaths);
     }
 

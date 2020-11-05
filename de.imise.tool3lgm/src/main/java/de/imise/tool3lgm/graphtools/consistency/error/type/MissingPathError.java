@@ -1,12 +1,10 @@
-package de.imise.tool3lgm.graphtools.consistency.error;
+package de.imise.tool3lgm.graphtools.consistency.error.type;
 
 import java.util.Collection;
 
+import de.imise.tool3lgm.graphtools.consistency.error.condition.MissingPathErrorCheckCondition;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
-import de.imise.tool3lgm.graphtools.model.GDCollection;
-import de.imise.tool3lgm.graphtools.path.PathFunctions;
-import de.imise.tool3lgm.graphtools.path.metapaths.ConsistencyCheckSectionMetaPath;
 import de.imise.tool3lgm.graphtools.path.metapaths.SectionMetaPath;
 import de.imise.tool3lgm.graphtools.path.metapaths.SimpleMetaPath;
 
@@ -21,20 +19,20 @@ public class MissingPathError extends AbstractPathError {
     private final Collection<ModelElement> missingElements;
 
     /**
-     * If the not the whole path should be created this element is
-     * the real start element from where the needed path to remove
-     * the error will be created.
+     *
      */
-    private ModelElement missingPathStartElement;
+    private final MissingPathErrorCheckCondition missingPathErrorCheckCondition;
 
     /**
-     * @param me
+     * @param elementWithError
+     * @param elementWithMissingPath
      * @param metaPath
-     * @param gdcoll
      * @param missingElements
+     * @param errorSolution
      */
-    public MissingPathError(final ModelElement me, final ConsistencyCheckSectionMetaPath metaPath, final GDCollection gdcoll, final Collection<ModelElement> missingElements) {
-        super(me, metaPath, gdcoll);
+    public MissingPathError(final ModelElement elementWithError, final MissingPathErrorCheckCondition missingPathErrorCheckCondition, final Collection<ModelElement> missingElements) {
+        super(elementWithError, missingPathErrorCheckCondition.getToConnectableAndToConnectedSectionMetaPath(), missingPathErrorCheckCondition.errorSolution);
+        this.missingPathErrorCheckCondition = missingPathErrorCheckCondition;
         this.missingElements = missingElements;
     }
 
@@ -50,29 +48,8 @@ public class MissingPathError extends AbstractPathError {
     }
 
     @Override
-    public ConsistencyCheckSectionMetaPath getMetaPath() {
-        return (ConsistencyCheckSectionMetaPath) errorField;
-    }
-
-    /**
-     * @return the real start element where a path should be added
-     *         to remove the error
-     */
-    public ModelElement getMissingPathStartElement() {
-        if (missingPathStartElement == null) {
-            ConsistencyCheckSectionMetaPath metaPath = getMetaPath();
-            SimpleMetaPath subMetaPathToRealStartElement = metaPath.getSubMetaPathToRealStartElement();
-            missingPathStartElement = getModelElement();
-            if (subMetaPathToRealStartElement != null) {
-                //this can only be one because the subMetaPathToRealStartElement is
-                //only not null if the path is a single connection.
-                Collection<ModelElement> realStartElement = PathFunctions.getConnectedElements(missingPathStartElement, subMetaPathToRealStartElement);
-                if (!realStartElement.isEmpty()) {
-                    missingPathStartElement = realStartElement.iterator().next();
-                }
-            }
-        }
-        return missingPathStartElement;
+    public SectionMetaPath getMetaPath() {
+        return (SectionMetaPath) metaPath;
     }
 
     /**
@@ -80,9 +57,8 @@ public class MissingPathError extends AbstractPathError {
      *         to the secondSubMetaPathToConnectedElements or a subpath of this and
      *         is the metaPath that must be created to remove the error
      */
-    public SimpleMetaPath getErrorCorrectingCreatableMetaPath() {
-        ConsistencyCheckSectionMetaPath metaPath = getMetaPath();
-        return metaPath.getErrorCorrectingCreatableMetaPath();
+    public SimpleMetaPath getErrorFixingCreatableMetaPath() {
+        return missingPathErrorCheckCondition.getToFixTheErrorMetaPath();
     }
 
     /**

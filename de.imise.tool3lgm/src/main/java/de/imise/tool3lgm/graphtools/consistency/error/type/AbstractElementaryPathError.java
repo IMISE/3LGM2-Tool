@@ -1,10 +1,8 @@
-package de.imise.tool3lgm.graphtools.consistency.error;
+package de.imise.tool3lgm.graphtools.consistency.error.type;
 
 import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
-import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
-import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.path.metapaths.ElementaryMetaPath;
 
 /**
@@ -16,10 +14,9 @@ public abstract class AbstractElementaryPathError extends AbstractPathError {
      * @param me
      * @param elementaryMetaPath
      * @param cardValue
-     * @param gdcoll
      */
-    public AbstractElementaryPathError(final ModelElement me, final ElementaryMetaPath elementaryMetaPath, final GDCollection gdcoll) {
-        super(me, elementaryMetaPath, gdcoll);
+    public AbstractElementaryPathError(final ModelElement me, final ElementaryMetaPath elementaryMetaPath) {
+        super(me, elementaryMetaPath, null); //these errors get their solutions alsways directly from the checker or from the ModelValidatorDefinition
     }
 
     /**
@@ -35,14 +32,13 @@ public abstract class AbstractElementaryPathError extends AbstractPathError {
      */
     @Override
     public ElementaryMetaPath getMetaPath() {
-        return (ElementaryMetaPath) errorField;
+        return (ElementaryMetaPath) metaPath;
     }
 
     @Override
     public String getErrorFieldString() {
         Class<? extends Edge> edgeClass = getEdgeClass();
-        MetaModel metaModel = gdcoll.getMetaModel();
-        ElementsNameBuilder elementsNameBuilder = metaModel.getElementsNameBuilder();
+        ElementsNameBuilder elementsNameBuilder = getElementsNameBuilder();
         return elementsNameBuilder.getFullForwardMetaAssociationName(edgeClass);
     }
 

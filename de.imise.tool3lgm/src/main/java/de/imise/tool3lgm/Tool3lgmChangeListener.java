@@ -115,6 +115,11 @@ public interface Tool3lgmChangeListener {
         Static.getTool().removeChangeListener(this);
     }
 
+    /** @return <code>true</code> if this is a change listener of the tool */
+    public default boolean isAddedToolChangeListener() {
+        return Static.getTool().isAddedToolChangeListener(this);
+    }
+
     /** alle die Modelle darstellen */
     public default void model_change_model_opened(final GraphDocument source) {
         model_change_changed(source);

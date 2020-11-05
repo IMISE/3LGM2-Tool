@@ -141,7 +141,7 @@ public class SimpleMetaPath extends SequenceMetaPath {
     @Override
     protected ElementaryMetaPath[] getOtherDirectionMetaPaths() {
         ElementaryMetaPath[] otherDirectionElementaryMetaPaths = null;
-        AbstractMetaPath[] otherDirectionMetaPaths = super.getOtherDirectionMetaPaths();
+        MetaPath[] otherDirectionMetaPaths = super.getOtherDirectionMetaPaths();
         if (otherDirectionMetaPaths != null) {
             otherDirectionElementaryMetaPaths = Arrays.copyOf(otherDirectionMetaPaths, otherDirectionMetaPaths.length, ElementaryMetaPath[].class);
         }
@@ -184,36 +184,22 @@ public class SimpleMetaPath extends SequenceMetaPath {
         return new SimpleMetaPath(subMetaPathsArray);
     }
 
-    /**
-     * @param other
-     * @return <code>true</code> if this metaPath contains the given other metapath as a sub metapath or is equals.
-     */
-    public boolean equalsOrContainsSubPath(final SimpleMetaPath other) {
-        if (this.equals(other)) {
-            return true;
-        }
+    @Override
+    public boolean isAssignable(final MetaPath other) {
         List<ElementaryMetaPath> elementaryMetaPaths = getElementaryMetaPaths();
         List<ElementaryMetaPath> otherElementaryMetaPaths = other.getElementaryMetaPaths();
-        int elementaryMetaPathsCount = elementaryMetaPaths.size();
-        int otherElementaryMetaPathsCount = otherElementaryMetaPaths.size();
-        for (int i = 0; i < elementaryMetaPathsCount; i++) {
+        int subMetaPathCount = elementaryMetaPaths.size();
+        if (subMetaPathCount != otherElementaryMetaPaths.size()) {
+            return false;
+        }
+        for (int i = 0; i < subMetaPathCount; i++) {
             ElementaryMetaPath elementaryMetaPath = elementaryMetaPaths.get(i);
-            if (i + otherElementaryMetaPathsCount > elementaryMetaPathsCount) {
+            ElementaryMetaPath otherElementaryMetaPath = otherElementaryMetaPaths.get(i);
+            if (!elementaryMetaPath.isAssignable(otherElementaryMetaPath)) {
                 return false;
             }
-            boolean containsSubPath = true;
-            for (int j = 0; j < otherElementaryMetaPathsCount; j++) {
-                ElementaryMetaPath otherElementaryMetaPath = otherElementaryMetaPaths.get(j);
-                if (!elementaryMetaPath.equals(otherElementaryMetaPath)) {
-                    containsSubPath = false;
-                    break;
-                }
-            }
-            if (containsSubPath) {
-                return true;
-            }
         }
-        return false;
+        return true;
     }
 
     /**

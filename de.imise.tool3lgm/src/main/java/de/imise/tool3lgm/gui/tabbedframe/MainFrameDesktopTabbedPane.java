@@ -6,6 +6,7 @@ import java.awt.Insets;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.ImageIcon;
 import javax.swing.JTabbedPane;
 import javax.swing.plaf.TabbedPaneUI;
 import javax.swing.plaf.basic.BasicTabbedPaneUI;
@@ -24,10 +25,17 @@ import de.imise.tool3lgm.gui.viewpane.matrix.MatrixViewPaneFrameComponent;
 import de.imise.util.swing.component.tab.JTabbedPaneWithCloseIconsRight;
 
 /**
+ * The TabbedPane, which holds all main windows
+ * (submodel views and matrix views).
+ *
  * @author AXS (27.05.2020)
  */
 public class MainFrameDesktopTabbedPane extends JTabbedPaneWithCloseIconsRight implements ViewPaneFrameComponentParent, LGMChangeListenerSimple {
 
+    /**
+     * If all tabs are removed no border should be painted.
+     * Store the original TabbedPaintUI to reset it if there is at least one tab.
+     */
     private TabbedPaneUI defaultTabbedPaneUI;
 
     /**
@@ -55,11 +63,11 @@ public class MainFrameDesktopTabbedPane extends JTabbedPaneWithCloseIconsRight i
     }
 
     /**
-     *
+     * If all tabs are removed no border is painted.
+     * If there is at least one tab the default border is painted.
      */
     private void updateBorder() {
         if (getTabCount() == 0) {
-
             defaultTabbedPaneUI = getUI();
             setUI(new BasicTabbedPaneUI() {
                 private final Insets borderInsets = new Insets(0, 0, 0, 0);
@@ -127,7 +135,10 @@ public class MainFrameDesktopTabbedPane extends JTabbedPaneWithCloseIconsRight i
      * @param tabComponent
      */
     private void addView(final MainFrameDesktopTabComponent tabComponent) {
-        addTab(tabComponent.getName(), null, tabComponent, tabComponent.getFullName());
+        String name = tabComponent.getName();
+        ImageIcon icon = tabComponent.getTabIcon();
+        String toolTip = tabComponent.getFullName();
+        addTab(name, icon, tabComponent, toolTip);
         GraphDocument doc = tabComponent.getGraphDocument();
         doc.addAllTransactionsListener(this);
         setSelected(tabComponent);

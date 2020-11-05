@@ -3,7 +3,7 @@ package de.imise.tool3lgm.graphtools.analyse.redundancy;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.imise.tool3lgm.graphtools.path.metapaths.AbstractMetaPath;
+import de.imise.tool3lgm.graphtools.path.metapaths.MetaPath;
 
 /**
  * Definition aller {@link SimpleRedundancyAnalysis}
@@ -22,7 +22,7 @@ public final class SimpleRedundancyAnalysisDefinitions {
      * @param showFullSystemResults
      *            Wenn <code>true</code>, dann wird das Gesamtergebnis oben an den Layer geschrieben.
      */
-    public void add(final AbstractMetaPath metaPath, final boolean showFullSystemResults) {
+    public void add(final MetaPath metaPath, final boolean showFullSystemResults) {
         add(metaPath, null, showFullSystemResults);
     }
 
@@ -37,7 +37,7 @@ public final class SimpleRedundancyAnalysisDefinitions {
      * @param showFullSystemResults
      *            Wenn <code>true</code>, dann wird das Gesamtergebnis oben an den Layer geschrieben.
      */
-    public void add(final AbstractMetaPath metaPath, final AbstractMetaPath pathToDifferences, final boolean showFullSystemResults) {
+    public void add(final MetaPath metaPath, final MetaPath pathToDifferences, final boolean showFullSystemResults) {
         if (simpleRedundancyAnalysisDefinitionData == null) {
             simpleRedundancyAnalysisDefinitionData = new ArrayList<>();
         }
@@ -69,30 +69,30 @@ public final class SimpleRedundancyAnalysisDefinitions {
          * Die Ausgangselementart ist die Startelementart des Pfades und die über den Pfad verbundenen Elemente sind
          * die potenziell redundanten Elemente.
          */
-        private final AbstractMetaPath metaPath;
+        private final MetaPath metaPath;
 
         /**
          * Wird hier ein gültiger Pfad angegeben, müssen sich die über den metaPath verbundenen Elemente in den über diesen
          * Pfad verbundenen Elementen unterscheiden, um nicht als dasselbe Element zu gelten.
          */
-        private final AbstractMetaPath pathToDifferences;
+        private final MetaPath pathToDifferences;
 
         /**
          * Wenn <code>true</code>, dann wird das Gesamtergebnis oben an den Layer geschrieben.
          */
         private final boolean showFullSystemResults;
 
-        public SingleSimpleRedundancyAnalysisDefinition(final AbstractMetaPath metaPath, final AbstractMetaPath pathToDifferences, final boolean showFullSystemResults) {
+        public SingleSimpleRedundancyAnalysisDefinition(final MetaPath metaPath, final MetaPath pathToDifferences, final boolean showFullSystemResults) {
             this.metaPath = metaPath;
             this.pathToDifferences = pathToDifferences;
             this.showFullSystemResults = showFullSystemResults;
         }
 
-        public AbstractMetaPath getMetaPath() {
+        public MetaPath getMetaPath() {
             return metaPath;
         }
 
-        public AbstractMetaPath getPathToDifferences() {
+        public MetaPath getPathToDifferences() {
             return pathToDifferences;
         }
 

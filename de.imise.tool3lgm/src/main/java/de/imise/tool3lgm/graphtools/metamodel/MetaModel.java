@@ -3,6 +3,7 @@ package de.imise.tool3lgm.graphtools.metamodel;
 import static de.imise.tool3lgm.graphtools.metamodel.EdgeCardinality.ZERO;
 
 import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -30,7 +31,8 @@ import de.imise.tool3lgm.MetaModelContext;
 import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.Tool3lgmModelType.ModelCategory;
 import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
-import de.imise.tool3lgm.graphtools.consistency.ErrorSolutionLibrary;
+import de.imise.tool3lgm.graphtools.consistency.ModelValidatorDefinition;
+import de.imise.tool3lgm.graphtools.consistency.error.condition.MissingPathErrorCheckCondition;
 import de.imise.tool3lgm.graphtools.metamodel.elements.CompositionEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction;
@@ -48,10 +50,9 @@ import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.model.Szenario;
 import de.imise.tool3lgm.graphtools.path.MetaPathDefinition;
-import de.imise.tool3lgm.graphtools.path.metapaths.AbstractMetaPath;
-import de.imise.tool3lgm.graphtools.path.metapaths.ConsistencyCheckSectionMetaPath;
 import de.imise.tool3lgm.graphtools.path.metapaths.ElementaryMetaPath;
 import de.imise.tool3lgm.graphtools.path.metapaths.ElementaryMetaPathHandler;
+import de.imise.tool3lgm.graphtools.path.metapaths.MetaPath;
 import de.imise.tool3lgm.graphtools.path.metapaths.SimpleMetaPath;
 import de.imise.tool3lgm.graphtools.path.metapaths.SimpleMetaPathCreator;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
@@ -223,7 +224,7 @@ public final class MetaModel extends CoreMetaModel {
      * @param edgeClass
      * @return
      */
-    private final Map<Class<? extends Edge>, AbstractMetaPath> edgeClassToSoftConditionMetaPath;
+    private final Map<Class<? extends Edge>, MetaPath> edgeClassToSoftConditionMetaPath;
 
     /**
      * Sammlung aller MetaPfade, die ausgehend vom Startelement dieser Kante ebenfalls angelegt werden sollen, wenn eine Instanziierung über
@@ -251,18 +252,18 @@ public final class MetaModel extends CoreMetaModel {
      * Mappt von Elementklassen, bei denen der Name verbundendener Elemente in der Grafik in Klammern unter der eigentlichen Elementart angezeigt
      * werden soll, auf den MetaPfad zu den anzuzeigenden, verbundenen Elementen.
      */
-    private final Map<Class<? extends ModelElement>, AbstractMetaPath> elementClassToNameExtensionPath;
+    private final Map<Class<? extends ModelElement>, MetaPath> elementClassToNameExtensionPath;
 
     /**
      * Mappt von einer InferenceEdge-Klasse auf den MetaPath, aus dem diese Inference-Kante abgeleitet wird.
      */
-    private final Map<Class<? extends InferenceEdge>, AbstractMetaPath> inferenceEdgeClassToConditionMetaPath;
+    private final Map<Class<? extends InferenceEdge>, MetaPath> inferenceEdgeClassToConditionMetaPath;
 
     /**
      * Metapaths which are used to ensure model consistency. This paths say that a model element must be connected
      * over this SectionMetaPaths with the same elements.
      */
-    private final Map<ConsistencyCheckSectionMetaPath, Class<? extends Edge>> consistencyConditionMissingConnectedElementsMetaPaths;
+    private Collection<MissingPathErrorCheckCondition> missingPathErrorCheckConditions;
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // Die folgenden Arrays müssen hier unten initialisiert werden nachdem die Maps mit den Edges gefüllt sind, sonst InitialException //
@@ -310,7 +311,7 @@ public final class MetaModel extends CoreMetaModel {
      * Das funktioniert im Moment nur bei Kanten, da bei Knoten zum Zeitpunkt des Festlegens des Namens der Knoten
      * noch mit gar nichts verbunden ist.
      */
-    private final Map<Class<? extends Edge>, AbstractMetaPath> edgeClassToInitialCreatedNameSourcePath;
+    private final Map<Class<? extends Edge>, MetaPath> edgeClassToInitialCreatedNameSourcePath;
 
     //////////////////////////
     // Weitere Definitionen //
@@ -331,20 +332,25 @@ public final class MetaModel extends CoreMetaModel {
     /** Actions, die für das spezielle Metamodell in das Extras-Menü eingetragen werden sollen */
     private final ExtrasActionsDefinition extrasActionsDefinition;
 
-    /** {@link ErrorSolutionLibrary} of this MetaModel */
-    private final ErrorSolutionLibrary errorSolutionLibrary;
+    /** {@link ModelValidatorDefinition} of this MetaModel */
+    private final ModelValidatorDefinition modelValidatorDefinition;
 
     /**
      * @param metaModelContext
      * @throws IllegalAccessException
      * @throws InstantiationException
+     * @throws SecurityException
+     * @throws NoSuchMethodException
+     * @throws InvocationTargetException
+     * @throws IllegalArgumentException
      */
-    public MetaModel(final MetaModelContext metaModelContext) throws InstantiationException, IllegalAccessException {
+    public MetaModel(final MetaModelContext metaModelContext) throws NoSuchMethodException, SecurityException, InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
         super(metaModelContext);
         modelElementInstanceCreator = new ModelElementInstanceCreator(this);
         elementaryMetaPathHandler = new ElementaryMetaPathHandler(this);
         Class<? extends MetaModelDefinition> metaModelClass = metaModelContext.getMetaModelDefinitionClass();
-        MetaModelDefinition metaModelDefinition = metaModelClass.newInstance();
+        Constructor<? extends MetaModelDefinition> metaModelConstructor = metaModelClass.getDeclaredConstructor();
+        MetaModelDefinition metaModelDefinition = metaModelConstructor.newInstance();
         //Knoten
         allDomainLayerNodesSet = ImmutableSet.copyOf(Arrays.asList(metaModelDefinition.getAllDomainLayerNodes()));
         allInterDomainLogicalLayerNodesSet = ImmutableSet.copyOf(Arrays.asList(metaModelDefinition.getAllInterDomainLogicalLayerNodes()));
@@ -389,7 +395,7 @@ public final class MetaModel extends CoreMetaModel {
         compositionSlaveNodes = getAllCompositionSlaveNodes(); //already immutable
         analysesDefinition = getInstance(metaModelDefinition.getAnalysesDefinitionClass());
         extrasActionsDefinition = getInstance(metaModelDefinition.getExtrasActionsDefinitionClass());
-        errorSolutionLibrary = getInstance(metaModelDefinition.getErrorSolutionLibraryClass());
+        modelValidatorDefinition = getInstance(metaModelDefinition.getModelValidatorDefinitionClass());
         // Die MetaPathsDefinition und die darauffolgend zu initialisierenden Maps
         metaPathsDefinition = getInstance(metaModelDefinition.getMetaPathsDefinitionClass());
         copyDependencies = getInstance(metaModelDefinition.getCopyDependenciesClass());
@@ -402,7 +408,7 @@ public final class MetaModel extends CoreMetaModel {
         edgeClassToInitialCreatedNameSourcePath = CollectionUtils.ensureImmutable(metaPathsDefinition.getEdgeClassToInitialCreatedNameSourcePath());
 
         inferenceEdgeClassToConditionMetaPath = CollectionUtils.ensureImmutable(metaPathsDefinition.getInferenceEdgeToConditionMetaPath());
-        consistencyConditionMissingConnectedElementsMetaPaths = CollectionUtils.ensureImmutable(metaPathsDefinition.getConsistencyConditionMissingConnectedElementsMetaPaths());
+
     }
 
     /**
@@ -930,7 +936,7 @@ public final class MetaModel extends CoreMetaModel {
      * @return
      */
     public boolean isInferenceCreateable(final Class<? extends InferenceEdge> inferenceEdgeClass) {
-        AbstractMetaPath inferenceEdgeConditionMetaPath = getInferenceEdgeConditionMetaPath(inferenceEdgeClass);
+        MetaPath inferenceEdgeConditionMetaPath = getInferenceEdgeConditionMetaPath(inferenceEdgeClass);
         return inferenceEdgeConditionMetaPath.isCreatable(false);
     }
 
@@ -969,7 +975,7 @@ public final class MetaModel extends CoreMetaModel {
      * @param metaPath
      * @return
      */
-    public final boolean isVisible(final AbstractMetaPath metaPath) {
+    public final boolean isVisible(final MetaPath metaPath) {
         if (Static.isExpertMode()) {
             return true;
         }
@@ -1098,7 +1104,7 @@ public final class MetaModel extends CoreMetaModel {
      * @return
      * @see #getBestConnectableMetPath(Class)
      */
-    public AbstractMetaPath getSoftConditionMetaPath(final Class<? extends Edge> edgeClass) {
+    public MetaPath getSoftConditionMetaPath(final Class<? extends Edge> edgeClass) {
         return edgeClassToSoftConditionMetaPath.get(edgeClass);
     }
 
@@ -1109,10 +1115,10 @@ public final class MetaModel extends CoreMetaModel {
      * @param elenentClass
      * @return best connectable element types
      */
-    public Collection<AbstractMetaPath> getBestConnectableMetPath(final Class<? extends ModelElement> elementClass) {
-        List<AbstractMetaPath> bestConnectableMetaPaths = new ArrayList<>();
+    public Collection<MetaPath> getBestConnectableMetPath(final Class<? extends ModelElement> elementClass) {
+        List<MetaPath> bestConnectableMetaPaths = new ArrayList<>();
         for (Class<? extends Edge> edgeClass : edgeClassToSoftConditionMetaPath.keySet()) {
-            AbstractMetaPath metaPath = edgeClassToSoftConditionMetaPath.get(edgeClass);
+            MetaPath metaPath = edgeClassToSoftConditionMetaPath.get(edgeClass);
             if (metaPath.isStartClass(elementClass)) {
                 bestConnectableMetaPaths.add(metaPath);
             }
@@ -1407,6 +1413,7 @@ public final class MetaModel extends CoreMetaModel {
      * @param superElement
      * @return
      */
+    @SuppressWarnings("unchecked") //it's checked!
     private <T extends SubordinationEdge> List<Class<T>> getSubordinationEdgeTypes(final Class<? extends ModelElement> elementClass, final Class<T> subordinationEdgeClass, final boolean superElement) {
         Class<? extends Edge>[] edgeTypes = getEdgeTypes(elementClass);
         List<Class<T>> returnList = new ArrayList<>();
@@ -1811,7 +1818,7 @@ public final class MetaModel extends CoreMetaModel {
      * @param elementClass
      * @return
      */
-    public final AbstractMetaPath getInitialCreatedNameSourcePath(final Class<? extends Edge> edgeClass) {
+    public final MetaPath getInitialCreatedNameSourcePath(final Class<? extends Edge> edgeClass) {
         return edgeClassToInitialCreatedNameSourcePath.get(edgeClass);
     }
 
@@ -1826,22 +1833,25 @@ public final class MetaModel extends CoreMetaModel {
     /**
      * @return Collection aller Bedingungspfade für Ableitungskanten (InferenceEdges)
      */
-    public Collection<AbstractMetaPath> getInferenceEdgeConditionMetaPaths() {
+    public Collection<MetaPath> getInferenceEdgeConditionMetaPaths() {
         return inferenceEdgeClassToConditionMetaPath.values();
     }
 
     /**
      * @return Bedingungspfad für eine Ableitungskante (InferenceEdge)
      */
-    public AbstractMetaPath getInferenceEdgeConditionMetaPath(final Class<? extends InferenceEdge> inferenceEdgeClass) {
+    public MetaPath getInferenceEdgeConditionMetaPath(final Class<? extends InferenceEdge> inferenceEdgeClass) {
         return inferenceEdgeClassToConditionMetaPath.get(inferenceEdgeClass);
     }
 
     /**
      * @return
      */
-    public Map<ConsistencyCheckSectionMetaPath, Class<? extends Edge>> getConsistencyConditionMissingConnectedElementsMetaPaths() {
-        return consistencyConditionMissingConnectedElementsMetaPaths;
+    public Collection<MissingPathErrorCheckCondition> getMissingPathErrorCheckConditions() {
+        if (missingPathErrorCheckConditions == null) {
+            missingPathErrorCheckConditions = CollectionUtils.ensureImmutable(modelValidatorDefinition.getMissingPathErrorCheckConditions());
+        }
+        return missingPathErrorCheckConditions;
     }
 
     /**
@@ -1880,7 +1890,7 @@ public final class MetaModel extends CoreMetaModel {
      *
      * @return
      */
-    public AbstractMetaPath getNameExtensionPath(final Class<? extends ModelElement> elementClass) {
+    public MetaPath getNameExtensionPath(final Class<? extends ModelElement> elementClass) {
         return elementClassToNameExtensionPath.get(elementClass);
     }
 
@@ -1930,10 +1940,11 @@ public final class MetaModel extends CoreMetaModel {
     }
 
     /**
-     * @return {@link ErrorSolutionLibrary} of the metamodel
+     * @return {@link ModelValidatorDefinition} of the metamodel
      */
-    public final ErrorSolutionLibrary getErrorSolutionLibrary() {
-        return errorSolutionLibrary;
+    @Override
+    public final ModelValidatorDefinition getModelValidatorDefinition() {
+        return modelValidatorDefinition;
     }
 
     /**
@@ -1951,7 +1962,8 @@ public final class MetaModel extends CoreMetaModel {
             instance = constructor.newInstance(this);
         } catch (Exception e) {
             try {
-                instance = metaModelDependentClass.newInstance();
+                Constructor<? extends T> emptyConstructor = metaModelDependentClass.getDeclaredConstructor();
+                instance = emptyConstructor.newInstance();
             } catch (Exception e2) {
             }
         }

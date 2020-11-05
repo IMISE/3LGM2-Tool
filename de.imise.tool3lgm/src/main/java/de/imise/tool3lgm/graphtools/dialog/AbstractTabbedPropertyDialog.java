@@ -1,6 +1,7 @@
 package de.imise.tool3lgm.graphtools.dialog;
 
 import java.awt.Component;
+import java.awt.Container;
 import java.awt.Dialog;
 import java.awt.Frame;
 import java.util.List;
@@ -10,8 +11,11 @@ import javax.swing.JTabbedPane;
 
 import com.google.common.collect.ImmutableList;
 
+import de.imise.tool3lgm.graphtools.dialog.element.panel.AbstractPathConnectionPanel;
 import de.imise.tool3lgm.graphtools.dialog.element.panel.ElementDialogPanel;
+import de.imise.tool3lgm.graphtools.dialog.element.panel.MultiPanelElementDialogPanel;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
+import de.imise.tool3lgm.graphtools.path.metapaths.MetaPath;
 import de.imise.util.swing.component.tab.ReorderableTabbedPane;
 
 /**
@@ -127,23 +131,24 @@ public abstract class AbstractTabbedPropertyDialog extends AbstractPropertyDialo
     }
 
     /**
-     * Bringt den Tab mit dem angegebenen Titel in den Vordergrund, wenn zusätzlich noch die
-     * übergebene Klasse mit der Klasse der Componente in dem Tab zuweisungskompatibel ist. Die
-     * Klasse der im Tabpanel enthaltenen Componente muss die gleiche oder eine Unterklasse der
-     * übergebenen Klasse sein.
-     *
-     * @param title Titel des zu selektierenden Tabs. Wird <code>null</code> übergeben, wird der
-     *            erstbeste passende Tab herausgesucht
-     * @param tabComponentClass Oberklasse der Komponente in dem zu selektierenden Tab
-     * @return Index des Tabs, wenn ein Tab der angegebenen Art gefunden und in den Vordergund
-     *         geracht werden konnte
+     * Selects the last tab
      */
-    public int selectTab(final String title, final Class<? extends Component> tabComponentClass) {
+    public void selectLastTab() {
+        tabbedPane.setSelectedIndex(tabbedPane.getTabCount() - 1);
+
+    }
+
+    /**
+     * Selects the first tab of the contained tabbed pane where the component
+     * of this tab is an instance of the given class.
+     *
+     * @param tabComponentClass
+     * @return index of the selected tab
+     * @see #selectTab(String, Class)
+     */
+    public int selectTab(final Class<? extends Component> tabComponentClass) {
         for (int i = 0; i < tabbedPane.getComponentCount(); i++) {
             Component comp = tabbedPane.getComponent(i);
-            if (title != null && !tabbedPane.getTitleAt(i).equals(title)) {
-                continue;
-            }
             if (!tabComponentClass.isAssignableFrom(comp.getClass())) {
                 continue;
             }
@@ -154,23 +159,57 @@ public abstract class AbstractTabbedPropertyDialog extends AbstractPropertyDialo
     }
 
     /**
-     * Selects the first tab of the contained tabbed pane where the component of this tab is
-     * an instance of the given class.
-     *
-     * @param tabComponentClass
-     * @return
-     * @see #selectTab(String, Class)
-     */
-    public int selectTab(final Class<? extends Component> tabComponentClass) {
-        return selectTab(null, tabComponentClass);
-    }
-
-    /**
      * @return the {@link ElementDialogPanel} in the active tab of the contained tabbed pane
      */
     public ElementDialogPanel getSelectedElementDialogPanel() {
         Component selectedComponent = tabbedPane.getSelectedComponent();
         return selectedComponent instanceof ElementDialogPanel ? (ElementDialogPanel) selectedComponent : null;
+    }
+
+    /**
+     * Selects the with a panel or subpanel that displays the
+     * given MetaPath.
+     *
+     * @param metaPath
+     */
+    public final int selectTab(final MetaPath metaPath) {
+        Container panel = getPanel(tabbedPane, metaPath);
+        while (panel != null) {
+            Container parent = panel.getParent();
+            if (parent == tabbedPane) {
+                tabbedPane.setSelectedComponent(panel);
+                return tabbedPane.getSelectedIndex();
+            }
+            panel = parent;
+        }
+        return -1;
+    }
+
+    /**
+     * Searches for a subpanel in the given container that
+     * displays the given MetaPath.
+     *
+     * @param pane
+     * @param metaPath
+     * @return
+     */
+    public static AbstractPathConnectionPanel getPanel(final Container pane, final MetaPath metaPath) {
+        for (int i = 0; i < pane.getComponentCount(); i++) {
+            Component comp = pane.getComponent(i);
+            if (comp instanceof AbstractPathConnectionPanel) {
+                AbstractPathConnectionPanel panel = (AbstractPathConnectionPanel) comp;
+                if (panel.hasMetaPath(metaPath)) {
+                    return panel;
+                }
+            } else if (comp instanceof MultiPanelElementDialogPanel) {
+                MultiPanelElementDialogPanel panel = (MultiPanelElementDialogPanel) comp;
+                AbstractPathConnectionPanel subpanel = getPanel(panel, metaPath);
+                if (subpanel != null) {
+                    return subpanel;
+                }
+            }
+        }
+        return null;
     }
 
     /**

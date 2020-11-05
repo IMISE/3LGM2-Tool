@@ -46,6 +46,7 @@ public class B1ExportPlugin {
     /** Datei, in die als letztes exportiert wurde */
     private File lastSelectedFile = null;
 
+    @SuppressWarnings("serial")
     public Action getAction() {
         return new AbstractAction("Bereich 1 Tabellenexport") {
             @Override

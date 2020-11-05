@@ -17,7 +17,7 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.path.MetaPathSelector.MetaPathSelection;
-import de.imise.tool3lgm.graphtools.path.metapaths.AbstractMetaPath;
+import de.imise.tool3lgm.graphtools.path.metapaths.MetaPath;
 import de.imise.tool3lgm.graphtools.undoredo.TransactionManager;
 import de.imise.tool3lgm.gui.viewpane.ViewPane;
 import de.imise.tool3lgm.gui.viewpane.ViewPaneToolbarManager;
@@ -93,10 +93,8 @@ public class MatrixViewPane extends ViewPane implements MouseMotionListener, Mou
     @Override
     public String getName() {
         GraphDocument doc = getGraphDocument();
-        String matrixLabel = getResString("matrix");
         String docTitle = doc.getTitle();
-        String name = "(" + matrixLabel + " " + titleIndex + ") " + docTitle;
-        return name;
+        return docTitle;
     }
 
     /**
@@ -198,13 +196,13 @@ public class MatrixViewPane extends ViewPane implements MouseMotionListener, Mou
 
     private void mouseEventRoutine(final MouseEvent e) {
         /* nur anlegbare Verbindungen */
-        List<AbstractMetaPath> metaPaths = tableModel.getMetaPaths();
+        List<MetaPath> metaPaths = tableModel.getMetaPaths();
         if (metaPaths == null) {
             return;
         }
 
         /* nur anlgebare Verbindungen */
-        for (AbstractMetaPath metaPath : metaPaths) {
+        for (MetaPath metaPath : metaPaths) {
             if (!metaPath.isCreatable(false)) {
                 return;
             }

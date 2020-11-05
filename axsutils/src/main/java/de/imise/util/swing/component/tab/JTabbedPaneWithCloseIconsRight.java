@@ -53,7 +53,8 @@ public class JTabbedPaneWithCloseIconsRight extends JTabbedPane {
         //start if the tool loads a model via start parameter2911
         setBorder(BorderFactory.createEmptyBorder());
         int lastTabComponentIndex = getTabCount() - 1;
-        setTabComponentAt(lastTabComponentIndex, new FlexibleTabPaneTab(this, activeForegroundColor));
+        Icon tabIcon = getIconAt(lastTabComponentIndex);
+        setTabComponentAt(lastTabComponentIndex, new FlexibleTabPaneTab(this, tabIcon, activeForegroundColor));
     }
 
     /**

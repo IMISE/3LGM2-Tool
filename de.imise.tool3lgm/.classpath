@@ -35,7 +35,7 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="lib" path="Plugins/tool3lgm.metamodel.original-1.0.0.jar"/>
-	<classpathentry kind="lib" path="Plugins/tool3lgm.metamodel.service-1.0.0.jar"/>
+	<classpathentry kind="lib" path="Plugins/tool3lgm.metamodel.service-1.0.0.jar" sourcepath="/de.imise.tool3lgm.metamodel.service"/>
 	<classpathentry kind="lib" path="Plugins/tool3lgm.template.ihe-1.0.0.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

@@ -31,7 +31,7 @@ public class FractionValueSumPanel extends ClassificationNumberFormulaPanel {
     /**
      * Auswahlbox für ein konkretes Element, für das die Teilwertsummen angezigt werden sollen
      */
-    private final AlphabeticalComboBox elementBox = new AlphabeticalComboBox();
+    private final AlphabeticalComboBox<ModelElement> elementBox = new AlphabeticalComboBox<>();
 
     public FractionValueSumPanel(final UserFieldEditorDialog dialog, final String name) {
         super(dialog, Edge.class, name);
@@ -102,7 +102,7 @@ public class FractionValueSumPanel extends ClassificationNumberFormulaPanel {
         super.initSelectFirstItem();
         if (!hasSelectedElement()) {
             for (int i = 0; i < elementBox.getItemCount(); i++) {
-                if (elementBox.getItemAt(i) instanceof ModelElement) {
+                if (elementBox.getObjectAt(i) != null) { //separators have null objects
                     elementBox.setSelectedIndex(i);
                     break;
                 }
@@ -151,7 +151,7 @@ public class FractionValueSumPanel extends ClassificationNumberFormulaPanel {
         Class<? extends Edge> selectedEdgeClass = getSelectedEdgeClass();
         ElementsNameBuilder elementsNameBuilder = dialog.getElementsNameBuilder();
         String fullForwardMetaAssociationName = elementsNameBuilder.getFullForwardMetaAssociationName(selectedEdgeClass);
-        String selectedEdgeClassVisibleName = elementTypeBox.getSelectedItem().toString();
+        String selectedEdgeClassVisibleName = elementTypeBox.getSelectedString();
         boolean isSelectedEdgeDirectionForward = fullForwardMetaAssociationName.equals(selectedEdgeClassVisibleName);
         return isSelectedEdgeDirectionForward;
     }
@@ -173,7 +173,7 @@ public class FractionValueSumPanel extends ClassificationNumberFormulaPanel {
             GraphDocument doc = definitions.getCollection().getMainDoc();
             List<ModelElement> elements = doc.getModelItems(elementClass, true, true);
             for (ModelElement me : elements) {
-                elementBox.addItem(me);
+                elementBox.addObject(me);
             }
         }
     }
@@ -196,7 +196,7 @@ public class FractionValueSumPanel extends ClassificationNumberFormulaPanel {
     protected AbstractUserFieldTableModel getTableModel() {
         Class<? extends Edge> edgeClass = getSelectedEdgeClass();
         boolean edgeForwardDirection = isSelectedEdgeDirectionForward();
-        ModelElement me = (ModelElement) elementBox.getSelectedObject();
+        ModelElement me = elementBox.getSelectedObject();
         AbstractUserFieldTableModel uftm = new FractionValueSumTableModel(me, edgeClass, edgeForwardDirection, hierarchyTypeFilterPane.showTopLevel(), hierarchyTypeFilterPane.showInner(), hierarchyTypeFilterPane.showLeafs());
         return uftm;
     }

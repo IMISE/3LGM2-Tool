@@ -8,6 +8,7 @@ import java.awt.Component;
 import java.awt.Container;
 import java.awt.GridBagConstraints;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.EventObject;
 import java.util.List;
 
@@ -16,7 +17,10 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JTree;
 
+import com.google.common.collect.ImmutableList;
+
 import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
+import de.imise.tool3lgm.graphtools.consistency.error.type.AbstractConsistencyError;
 import de.imise.tool3lgm.graphtools.dialog.action.LGMAction;
 import de.imise.tool3lgm.graphtools.dialog.action.LGMActionLibrary;
 import de.imise.tool3lgm.graphtools.dialog.action.LGMComponentListener;
@@ -28,7 +32,6 @@ import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.model.LGMGraphDocument;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
-import de.imise.tool3lgm.graphtools.view.tree.TreeRenderer;
 import de.imise.util.swing.SwingUtils;
 
 /**
@@ -59,11 +62,6 @@ public abstract class ElementDialogPanel extends JPanel {
     protected EventObject lastSelEvent = null;
 
     /**
-     * Der Renderer der Bäume
-     */
-    protected TreeRenderer treeRenderer;
-
-    /**
      * COMMENTME
      */
     private int correctingSelectionCount = 0;
@@ -88,6 +86,12 @@ public abstract class ElementDialogPanel extends JPanel {
      */
     private LGMAction componentShownAction;
 
+    /** All consistency errors that can be fixed in this panel */
+    protected Collection<AbstractConsistencyError> consistencyErrors;
+
+    /** An empty collection of consistency errors */
+    public static final Collection<AbstractConsistencyError> EMPTY_CONSISTENCY_ERROR_COLLECTION = ImmutableList.of();
+
     /** ****************************************************************************** */
 
     /**
@@ -107,7 +111,6 @@ public abstract class ElementDialogPanel extends JPanel {
     public ElementDialogPanel(final AbstractElementPropertyDialog dialog, final String name) {
         this.dialog = dialog;
         setName(name);
-        treeRenderer = new TreeRenderer();
         GraphDocument mainDoc = dialog.getMainDoc();
         elementsNameBuilder = mainDoc.getElementsNameBuilder();
         init();
@@ -344,6 +347,57 @@ public abstract class ElementDialogPanel extends JPanel {
      */
     public final MetaModel getMetaModel() {
         return elementsNameBuilder.getMetaModel();
+    }
+
+    /**
+     * @param consistencyError
+     */
+    public boolean addConsistencyError(final AbstractConsistencyError consistencyError) {
+        if (this instanceof DisplayAndFixConsistencyErrorPanel) {
+            DisplayAndFixConsistencyErrorPanel panel = (DisplayAndFixConsistencyErrorPanel) this;
+            ElementDialogPanel responsiblePanelForConsistencyError = panel.getResponsiblePanelForConsistencyError(consistencyError);
+            if (responsiblePanelForConsistencyError != null) {
+                addConsistencyError(responsiblePanelForConsistencyError, consistencyError);
+                addConsistencyError(this, consistencyError);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * @param panel
+     * @param consistencyError
+     */
+    private static void addConsistencyError(final ElementDialogPanel panel, final AbstractConsistencyError consistencyError) {
+        if (panel.consistencyErrors == null) {
+            panel.consistencyErrors = new ArrayList<>();
+        }
+        panel.consistencyErrors.add(consistencyError);
+    }
+
+    /**
+     *
+     */
+    public void clearConsistencyErrors() {
+        if (consistencyErrors != null) {
+            consistencyErrors.clear();
+        }
+    }
+
+    /**
+     * @return the consistency errors this panel or subpanels are displaying
+     */
+    public Collection<AbstractConsistencyError> getConsistencyErrors() {
+        return consistencyErrors == null ? EMPTY_CONSISTENCY_ERROR_COLLECTION : consistencyErrors;
+    }
+
+    /**
+     * @return
+     */
+    public final boolean hasConsistencyErrors() {
+        Collection<AbstractConsistencyError> consistencyErrors = getConsistencyErrors(); //don't replace the function by direct access of this.consistencyErrors
+        return consistencyErrors != null && !consistencyErrors.isEmpty();
     }
 
     // -------------------------------------------------------------------------------- -/

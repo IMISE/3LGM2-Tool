@@ -142,7 +142,6 @@ public class AbstractElementPropertyDialog extends AbstractTabbedPropertyDialog 
         JPanel up = new JPanel(new GridLayout(1, 1));
         headerPanel = new ElementDialogHeaderPanel(this);
         up.add(headerPanel);
-        update();
 
         descripPanel = new DescripPanel(this);
         addTab(getResString("general"), descripPanel);
@@ -335,7 +334,7 @@ public class AbstractElementPropertyDialog extends AbstractTabbedPropertyDialog 
             }
         }
         //alle anderen Dialoge updaten
-        for (ElementPropertyDialog pd : ElemenPropertyDialogsContext.getDialogs()) {
+        for (ElementPropertyDialog pd : ElemenPropertyDialogsContext.iterateDialogs()) {
             // this wird in update klargemacht...
             if (pd != this) {
                 for (int m = 0; m < pd.getTabCount(); m++) {

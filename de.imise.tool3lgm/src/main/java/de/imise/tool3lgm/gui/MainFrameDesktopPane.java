@@ -37,7 +37,7 @@ import de.imise.tool3lgm.Tool3lgm;
 import de.imise.tool3lgm.Tool3lgmChangeListener;
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.consistency.SuggestShowConsistencyTableHandler;
-import de.imise.tool3lgm.graphtools.consistency.checker.ConsistencyChecker;
+import de.imise.tool3lgm.graphtools.consistency.tableview.ConsistencyErrorTablePane;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.model.LGMChangeListenerSimple;
@@ -105,8 +105,8 @@ public final class MainFrameDesktopPane extends JPanel implements PropertyChange
     /** The panel that displays the consistency error table */
     private JPanel consistencyErrorTableBorderPanel;
 
-    /** The scroll pane surrounding the table */
-    private JComponent consistencyErrorTable;
+    /** The scroll pane with the consistency error table */
+    private ConsistencyErrorTablePane consistencyErrorTablePane;
 
     /**
      * Diese Variable wird in <code>setSelectedDoc(LGMGraphDocument, boolean)</code> gebraucht,
@@ -267,10 +267,8 @@ public final class MainFrameDesktopPane extends JPanel implements PropertyChange
      */
     private void checkConsistencyTableVisibility() {
         boolean isCheckConsistency = isShowConsistencyTable();
-        ConsistencyChecker consistencyChecker = ConsistencyChecker.getConsistencyChecker();
         JSplitPane topComponent = rightSplitPane != null ? rightSplitPane : leftSplitPane;
         if (!isCheckConsistency) {
-            consistencyChecker.resetConsistencyDefinition();
             if (topComponent.getParent() == workarea) {
                 return;
             }
@@ -278,7 +276,10 @@ public final class MainFrameDesktopPane extends JPanel implements PropertyChange
                 workarea.remove(bottomSplitPane);
                 bottomSplitPane = null;
                 consistencyErrorTableBorderPanel = null;
-                consistencyErrorTable = null;
+                if (consistencyErrorTablePane != null) {
+                    consistencyErrorTablePane.dispose();
+                }
+                consistencyErrorTablePane = null;
             }
             workarea.add(topComponent, BorderLayout.CENTER);
         } else {
@@ -294,14 +295,15 @@ public final class MainFrameDesktopPane extends JPanel implements PropertyChange
         //remove the table of the consistency error view
         if (consistencyErrorTableBorderPanel != null) {
             if (Static.getSelectedDoc() == null) {
-                if (consistencyErrorTable != null) {
-                    consistencyErrorTableBorderPanel.remove(consistencyErrorTable);
-                    consistencyErrorTable = null;
+                if (consistencyErrorTablePane != null) {
+                    consistencyErrorTableBorderPanel.remove(consistencyErrorTablePane);
+                    consistencyErrorTablePane.dispose(); //remove the ConsistencyErrorTableGenerator as PropertyChangeListener of global ModelValidator
+                    consistencyErrorTablePane = null;
                 }
             } else {
-                if (consistencyErrorTable == null) {
-                    consistencyErrorTable = consistencyChecker.getScrollableErrorTable();
-                    consistencyErrorTableBorderPanel.add(consistencyErrorTable, BorderLayout.CENTER);
+                if (consistencyErrorTablePane == null) {
+                    consistencyErrorTablePane = new ConsistencyErrorTablePane(); //adds the ConsistencyErrorTableGenerator as PropertyChangeListener of global ModelValidator
+                    consistencyErrorTableBorderPanel.add(consistencyErrorTablePane, BorderLayout.CENTER);
                 }
             }
         }
@@ -341,6 +343,7 @@ public final class MainFrameDesktopPane extends JPanel implements PropertyChange
                 bottomSplitPane.setTopComponent(leftSplitPane);
                 bottomSplitPane.setDividerLocation(dividerLocation);
             }
+            templateBrowserPanel = null;
             rightSplitPane = null;
         }
         revalidate();

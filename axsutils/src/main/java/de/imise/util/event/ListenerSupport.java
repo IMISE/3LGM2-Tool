@@ -5,7 +5,9 @@ import java.util.Iterator;
 import java.util.List;
 
 /**
- * Eine Klasse, die eine Liste zur Verfügung stellt, über die Elemente hinzugefügt oder entfernt werden können. Das
+ * A class that provides a list through which elements can be added or removed.
+ * Actually the class is very general and only the name indicates the intended
+ * application area.
  *
  * @author AXS (16 Aug 2019)
  */
@@ -46,6 +48,14 @@ public class ListenerSupport<T> implements Iterable<T> {
      */
     public T get(final int i) {
         return elements.get(i);
+    }
+
+    /**
+     * @param element
+     * @return
+     */
+    public boolean contains(final Object element) {
+        return elements.contains(element);
     }
 
 }

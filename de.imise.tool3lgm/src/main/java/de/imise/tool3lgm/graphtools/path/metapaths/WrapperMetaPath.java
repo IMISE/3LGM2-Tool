@@ -17,7 +17,7 @@ public class WrapperMetaPath extends SequenceMetaPath {
      * @param newEndClass
      * @param wrappedMetaPath
      */
-    private WrapperMetaPath(final Class<? extends ModelElement> newStartClass, final Class<? extends ModelElement> newEndClass, final AbstractMetaPath wrappedMetaPath) {
+    private WrapperMetaPath(final Class<? extends ModelElement> newStartClass, final Class<? extends ModelElement> newEndClass, final MetaPath wrappedMetaPath) {
         super(getWrappedMetaPath(newStartClass, newEndClass, wrappedMetaPath));
     }
 
@@ -27,14 +27,14 @@ public class WrapperMetaPath extends SequenceMetaPath {
      * @param wrappedMetaPath
      * @return
      */
-    private static final AbstractMetaPath[] getWrappedMetaPath(final Class<? extends ModelElement> newStartClass, final Class<? extends ModelElement> newEndClass, final AbstractMetaPath wrappedMetaPath) {
+    private static final MetaPath[] getWrappedMetaPath(final Class<? extends ModelElement> newStartClass, final Class<? extends ModelElement> newEndClass, final MetaPath wrappedMetaPath) {
         int wrappedMetaPathSize = 3;
         int startClassPathIndex = newStartClass == null ? -1 : 0; // -1 oder 0
         wrappedMetaPathSize += startClassPathIndex; // bleibt 3 oder wird 2
         int edgePathIndex = startClassPathIndex + 1; // 0 oder 1
         int endClassPathIndex = newEndClass == null ? -1 : edgePathIndex + 1; // -1 oder 1 oder 2
         wrappedMetaPathSize += endClassPathIndex < 0 ? endClassPathIndex : 0; // bleibt 3 oder wird 2 oder wird 1
-        AbstractMetaPath[] wrapped = new AbstractMetaPath[wrappedMetaPathSize];
+        MetaPath[] wrapped = new MetaPath[wrappedMetaPathSize];
         if (startClassPathIndex == 0) {
             MetaModel metaModel = wrapped[0].getMetaModel();
             wrapped[0] = new ElementaryMetaPath(metaModel, newStartClass);
@@ -60,7 +60,7 @@ public class WrapperMetaPath extends SequenceMetaPath {
      * @param newEndClass
      * @param originalMetaPath
      */
-    public static final AbstractMetaPath wrapMetaPath(final Class<? extends ModelElement> newStartClass, final Class<? extends ModelElement> newEndClass, final AbstractMetaPath originalMetaPath) {
+    public static final MetaPath wrapMetaPath(final Class<? extends ModelElement> newStartClass, final Class<? extends ModelElement> newEndClass, final MetaPath originalMetaPath) {
         Set<Class<? extends ModelElement>> startClasses = originalMetaPath.getStartClasses();
         Class<? extends ModelElement> startClass = newStartClass != null && (startClasses.size() != 1 || !startClasses.contains(newStartClass)) ? newStartClass : null;
         Set<Class<? extends ModelElement>> endClasses = originalMetaPath.getEndClasses();
@@ -79,7 +79,7 @@ public class WrapperMetaPath extends SequenceMetaPath {
 
     @Override
     protected final String createName() {
-        AbstractMetaPath firstMetaPath = subMetaPaths.get(0);
+        MetaPath firstMetaPath = subMetaPaths.get(0);
         if (firstMetaPath instanceof ElementaryMetaPath && ((ElementaryMetaPath) firstMetaPath).getType() == ElementaryMetaPath.Type.SINGLE_ELEMENT) {
             return subMetaPaths.get(1).createName();
         }

@@ -12,7 +12,6 @@ import javax.swing.JComponent;
 import javax.swing.JOptionPane;
 
 import de.imise.tool3lgm.Static;
-import de.imise.tool3lgm.graphtools.consistency.checker.ConsistencyChecker;
 import de.imise.tool3lgm.graphtools.dialog.tools.GeneralDialogCreator;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.undoredo.TransactionManager;
@@ -90,14 +89,13 @@ public class SuggestShowConsistencyTableHandler implements PropertyChangeListene
             return;
         }
         TransactionManager transactionManager = selectedGDCollection.getTman();
-        if (transactionManager.isInTransaction()) {
+        if (transactionManager.isDeepInTransaction()) {
             return;
         }
 
         lastCheckTime = currentTimeMillis;
-
-        ConsistencyChecker consistencyChecker = ConsistencyChecker.getConsistencyChecker();
-        if (consistencyChecker.hasFixableInconsistencies()) {
+        ModelValidator modelValidator = selectedGDCollection.getModelValidator();
+        if (modelValidator.hasInconsistencies()) {
             JComponent message = GeneralDialogCreator.getLabelPanel("SUGGEST_SHOW_CONSISTENCY_TABLE_DIALOG_MESSAGE", true);
             String title = getResString("message_do_not_ask_again");
             JCheckBox dontAskAgain = new JCheckBox(title, false);

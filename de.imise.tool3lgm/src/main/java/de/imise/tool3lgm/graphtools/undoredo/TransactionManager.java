@@ -34,7 +34,7 @@ public class TransactionManager {
     /**
      * Maximale Größe der Transaktionsliste <code>trans_q</code>.
      */
-    private static final int TRANSQ_SIZE = 20;
+    private static final int TRANSQ_SIZE = 50;
 
     /**
      * Wert von <code>cur_pos</code>, wenn es keine Transaktion gibt, die sich zurücknehmen lässt.
@@ -57,9 +57,11 @@ public class TransactionManager {
     public static final int UNSPECIFIC_PID = -1;
 
     /**
-     * Prozess-ID für alle Prozesse, die keine spezielle eigene ID brauchen.<br>
-     * Diese Konstante ist nachträglich eingeführt worden um die Magic-Number 0, die an vielen Stellen im Code als Prozess-ID aufgetaucht ist, zu
-     * beseitigen. In welchen Fällen man 0 als Prozess-ID übergeben darf, ist nicht ganz klar.
+     * Process ID for all processes that do not need a special PID of their own.
+     * Only the dialogs should not use this PID here, but create an PID by
+     * {@link GraphDocument#createTransactionId()}. All other functions should
+     * always use this PID, because only then the function
+     * {@link #isDeepInTransaction()} works correctly.
      */
     public static final int STANDARD_PID = 0;
 
@@ -566,18 +568,21 @@ public class TransactionManager {
     }
 
     /**
-     * Liefert <code>true</code>, wenn wenigstens eine offene Transaktion existiert.
-     *
-     * @return <code>true</code>, wenn eine Transaktion offen ist
+     * @return <code>true</code>, if a transaction with the {@link #STANDARD_PID}
+     *         is open or a transaction with another PID, but which then started
+     *         at least one other inner transaction. Normally only dialogs do not
+     *         have the {@link #STANDARD_PID}. So this function determines if a
+     *         real change is happening or if only one dialog is keeping a
+     *         transaction open but is not doing anything.
      */
-    public final boolean isInTransaction() {
+    public final boolean isDeepInTransaction() {
         if (is_doing) {
             return true;
         }
         for (int i = 0; i < TRANSQ_SIZE; i++) {
             if (trans_q[i] == null) {
                 return false;
-            } else if (trans_q[i].isOpen()) {
+            } else if (trans_q[i].isOpenStandardPidTransaction() || trans_q[i].isOpenDialogTransaction()) {
                 return true;
             }
         }

@@ -43,12 +43,12 @@ public class DistributionWeightReplacePanel extends AbstractUserFieldEditorPanel
     /**
      * Auswahlbox für den Elementtyp
      */
-    private final AlphabeticalComboBox elementClassBox = new AlphabeticalComboBox();
+    private final AlphabeticalComboBox<Class<? extends ModelElement>> elementClassBox = new AlphabeticalComboBox<>();
 
     /**
      * Auswahlbox für die Kantenklasse
      */
-    private final AlphabeticalComboBox edgeClassBox = new AlphabeticalComboBox();
+    private final AlphabeticalComboBox<Class<? extends Edge>> edgeClassBox = new AlphabeticalComboBox<>();
 
     ////////////////////////////////////////////////////////////
     /// elementClassBoxSelection und egdeClassBoxSelection   ///
@@ -68,7 +68,7 @@ public class DistributionWeightReplacePanel extends AbstractUserFieldEditorPanel
     /**
      * Zuletzt ausgewähltes Element in der {@link #egdeClassBox}
      */
-    private Object edgeClassBoxSelection;
+    private Class<? extends Edge> edgeClassBoxSelection;
 
     /**
      * Konstruktor
@@ -115,7 +115,7 @@ public class DistributionWeightReplacePanel extends AbstractUserFieldEditorPanel
             for (int k = 0; k < edgeTypes.length; k++) {
                 Class<? extends Edge> edgeClass = edgeTypes[k];
                 if (definitions.getAnalyzer().hasNumberFields(edgeClass)) {
-                    elementClassBox.addItem(elementClass, elementsNameBuilder.getDisplayableName(elementClass));
+                    elementClassBox.addObject(elementClass, elementsNameBuilder.getDisplayableName(elementClass));
                     continue loop;
                 }
             }
@@ -179,18 +179,15 @@ public class DistributionWeightReplacePanel extends AbstractUserFieldEditorPanel
         // Kantentyp gehörige Table im Panel dargestellt.
         ItemListener il = e -> {
 
-            Object o = edgeClassBox.getSelectedObject();
-            if (o == null) {
-                return;
-            }
-            if (!(o instanceof Class) || !Edge.class.isAssignableFrom((Class<?>) o)) {
+            Class<? extends Edge> selectedEdgeClass = edgeClassBox.getSelectedObject();
+            if (selectedEdgeClass == null) {
                 return;
             }
             stopEditing();
             takeOver();
 
             // Selektion für nächstes takeOver
-            finalPanel.edgeClassBoxSelection = o;
+            finalPanel.edgeClassBoxSelection = selectedEdgeClass;
 
             finalPanel.drawTable();
             finalPanel.distributeSelectionChangedEvent();
@@ -206,7 +203,7 @@ public class DistributionWeightReplacePanel extends AbstractUserFieldEditorPanel
      */
     private void setEdgeClassBoxContent() {
         @SuppressWarnings("unchecked")
-        Class<? extends ModelElement> elementClass = (Class<? extends ModelElement>) elementClassBox.getSelectedObject();
+        Class<? extends ModelElement> elementClass = elementClassBox.getSelectedObject();
         UserFieldDefinitions definitions = getUserFieldDefinitions();
         edgeClassBox.removeAllItems();
         edgeClassBox.addSeparator(getResString("userFieldEditor_edge_type"));
@@ -217,7 +214,7 @@ public class DistributionWeightReplacePanel extends AbstractUserFieldEditorPanel
         for (int k = 0; k < edgeTypes.length; k++) {
             Class<? extends Edge> edgeClass = edgeTypes[k];
             if (definitions.getAnalyzer().hasNumberFields(edgeClass)) {
-                edgeClassBox.addItem(edgeClass, elementsNameBuilder.getFullForwardMetaAssociationName(edgeClass));
+                edgeClassBox.addObject(edgeClass, elementsNameBuilder.getFullForwardMetaAssociationName(edgeClass));
                 //                edgeClassBox.addItem(edgeClass, ModelConstants.getFullBackwardMetaAssociationName(edgeClass));
             }
         }
@@ -287,10 +284,9 @@ public class DistributionWeightReplacePanel extends AbstractUserFieldEditorPanel
                 }
             }
         } else { //das Gleichverteilungs-UserField soll ersetzt werden
-            Class<? extends Edge> selectedEdgeClass = (Class<? extends Edge>) edgeClassBoxSelection;
-            String selectedEdgeClassName = selectedEdgeClass.getSimpleName();
+            String selectedEdgeClassName = edgeClassBoxSelection.getSimpleName();
             String replaceUserFieldHash = replaceUserField == null ? null : replaceUserField.getHashCode();
-            String oldReplacement = replacer.getUniformDistributionReplacement(rowElementHash, selectedEdgeClass);
+            String oldReplacement = replacer.getUniformDistributionReplacement(rowElementHash, edgeClassBoxSelection);
             //wenn tatsächlich einer Wert übergeben wurde
             //FAll 1: Es ist kein alter Wert gesetzt und es soll wieder der Leerwert gesetzt werden (beide null)
             boolean setOldValue1 = oldReplacement == replaceUserFieldHash;
@@ -306,7 +302,7 @@ public class DistributionWeightReplacePanel extends AbstractUserFieldEditorPanel
 
     @Override
     protected UserFieldTable initTable() {
-        AbstractUserFieldTableLayout uftl = new WeightReplaceTableLayout((Class<? extends Edge>) edgeClassBoxSelection);
+        AbstractUserFieldTableLayout uftl = new WeightReplaceTableLayout(edgeClassBoxSelection);
         UserFieldTable table = new UserFieldTable(uftl);
         return table;
     }

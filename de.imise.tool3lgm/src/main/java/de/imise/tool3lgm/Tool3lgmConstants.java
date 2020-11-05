@@ -59,7 +59,7 @@ public abstract class Tool3lgmConstants {
 
     /** String with the version-identifier for Tool3lgm */
     // TODO _____###### ständig aktualisieren!
-    public static final String TOOL_VERSION = "4.3.1_dev";
+    public static final String TOOL_VERSION = "4.3.2_dev";
     public static final String Branch = ""; //"origin/SplitMetaModelAndTemplates";
 
     /**
@@ -183,6 +183,8 @@ public abstract class Tool3lgmConstants {
     public static final ImageIcon TOOL_ICON_64 = getIcon("toolIcon_64.gif");
     public static final ImageIcon TOOL_ICON_128 = getIcon("toolIcon_128.gif");
 
+    public static final ImageIcon ERROR_ICON = getIcon("error.gif");
+
     /** All tool ions als list to initialize the frame (like MainFrame) */
     public static final List<Image> TOOL_ICON_IMAGES = ImmutableList.of(TOOL_ICON_16.getImage(), TOOL_ICON_24.getImage(), TOOL_ICON_32.getImage(), TOOL_ICON_64.getImage(), TOOL_ICON_128.getImage());
 
@@ -192,6 +194,9 @@ public abstract class Tool3lgmConstants {
 
     /** icon for frames, dialogs and tabs */
     public static final ImageIcon TOOL_ICON_13 = new ImageIcon(TOOL_ICON_16.getImage().getScaledInstance(13, 13, Image.SCALE_FAST));
+
+    /** icon for frames, dialogs and tabs */
+    public static final ImageIcon MATRIX_ICON_13 = getIcon("matrixIcon_13.gif");
 
     /** Anzahl der im Menü angezeigten zu letzt benutzen Dateien */
     public static final int LAST_USED_MODEL_FILES_IN_MENU = 10;

@@ -1,4 +1,4 @@
-package de.imise.tool3lgm.graphtools.path;
+package de.imise.tool3lgm.graphtools.path.metapaths;
 
 import java.util.Collection;
 import java.util.HashSet;
@@ -11,9 +11,6 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction;
 import de.imise.tool3lgm.graphtools.metamodel.elements.InstanciationEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
-import de.imise.tool3lgm.graphtools.path.metapaths.AbstractMetaPath;
-import de.imise.tool3lgm.graphtools.path.metapaths.ElementaryMetaPath;
-import de.imise.tool3lgm.graphtools.path.metapaths.SimpleMetaPath;
 import de.imise.util.ReflectionUtils;
 
 /**
@@ -33,7 +30,7 @@ public class MetaPathFunctions {
      *            Gesamtanzahl der Elementarpfade und diesem Wert.
      * @return
      */
-    public static final ElementaryMetaPath getElementaryMetaPathInPath(final AbstractMetaPath metaPath, final int index) {
+    public static final ElementaryMetaPath getElementaryMetaPathInPath(final MetaPath metaPath, final int index) {
         List<ElementaryMetaPath> elementaryMetaPaths = metaPath.getElementaryMetaPaths();
         if (elementaryMetaPaths.isEmpty()) {
             return null;
@@ -53,7 +50,7 @@ public class MetaPathFunctions {
      *            Gesamtanzahl der Elementarpfade und diesem Wert.
      * @return
      */
-    public static final Class<? extends ModelElement> getElementaryPathsConnectingClass(final AbstractMetaPath simpleMetaPath, final int pathStepIndex) {
+    public static final Class<? extends ModelElement> getElementaryPathsConnectingClass(final MetaPath simpleMetaPath, final int pathStepIndex) {
         List<ElementaryMetaPath> elementaryMetaPaths = simpleMetaPath.getElementaryMetaPaths();
         if (elementaryMetaPaths.isEmpty()) {
             return null;
@@ -146,10 +143,10 @@ public class MetaPathFunctions {
      * @return <code>true</code> if the first {@link ElementaryMetaPath} is between pure template elements
      * @see {@link MetaModel#isPureTemplateElementClass(Class)}
      */
-    public static final boolean startsWitTemplateElementsElementaryMetaPath(final AbstractMetaPath metaPath) {
-        List<AbstractMetaPath> subMetaPaths = metaPath.getSubMetaPaths();
+    public static final boolean startsWitTemplateElementsElementaryMetaPath(final MetaPath metaPath) {
+        List<MetaPath> subMetaPaths = metaPath.getSubMetaPaths();
         MetaModel metaModel = metaPath.getMetaModel();
-        for (AbstractMetaPath subMetaPath : subMetaPaths) {
+        for (MetaPath subMetaPath : subMetaPaths) {
             List<ElementaryMetaPath> elementaryMetaPaths = metaPath.getElementaryMetaPaths();
             if (!elementaryMetaPaths.isEmpty()) {
                 //At the moment only the first elementary metaPath counts. In special cases

@@ -8,6 +8,7 @@ import com.google.common.base.Strings;
 import de.imise.tool3lgm.MetaModelContext;
 import de.imise.tool3lgm.Tool3lgmMetaModelContext;
 import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
+import de.imise.tool3lgm.graphtools.consistency.ModelValidatorDefinition;
 import de.imise.tool3lgm.graphtools.path.metapaths.ElementaryMetaPathHandler;
 import de.imise.util.ReflectionUtils;
 
@@ -143,6 +144,14 @@ public interface MetaModelSpecific {
         Class<? extends MetaModelDefinition> myMetaModelDefinitionClass = getMetaModelDefinitionClass();
         boolean assignable = ReflectionUtils.isAssignable(myMetaModelDefinitionClass, metaModelDefinitionClass);
         return assignable;
+    }
+
+    /**
+     * @return the {@link ModelValidatorDefinition} of the metamodel
+     */
+    public default ModelValidatorDefinition getModelValidatorDefinition() {
+        MetaModel metaModel = getMetaModel();
+        return metaModel.getModelValidatorDefinition();
     }
 
 }

@@ -1,8 +1,8 @@
-package de.imise.tool3lgm.graphtools.consistency.checker;
+package de.imise.tool3lgm.graphtools.consistency.error.checker;
 
 import java.util.Collection;
 
-import de.imise.tool3lgm.graphtools.consistency.error.AbstractConsistencyError;
+import de.imise.tool3lgm.graphtools.consistency.error.type.AbstractConsistencyError;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 
 /**
@@ -32,5 +32,10 @@ public interface ConsistencyErrorChecker {
      * @return all errors this checker found or only the first error if <code>checkOnly</code> is <code>true</code>
      */
     public Collection<AbstractConsistencyError> getErrors(final GDCollection gdcoll, final boolean checkOnly);
+
+    /**
+     * @return the type of the errors returned by this checker
+     */
+    public Class<? extends AbstractConsistencyError> getErrorType();
 
 }

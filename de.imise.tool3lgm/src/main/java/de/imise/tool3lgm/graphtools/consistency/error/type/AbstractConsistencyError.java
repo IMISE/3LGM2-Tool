@@ -1,9 +1,11 @@
-package de.imise.tool3lgm.graphtools.consistency.error;
+package de.imise.tool3lgm.graphtools.consistency.error.type;
 
-import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
-
+import de.imise.tool3lgm.graphtools.consistency.error.solution.ErrorSolution;
+import de.imise.tool3lgm.graphtools.metamodel.MetaModelDefinition;
+import de.imise.tool3lgm.graphtools.metamodel.MetaModelSpecific;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
+import de.imise.util.ReflectionUtils;
 
 /**
  * An error object that holds the model ({@link GDCollection}) and a model element that is
@@ -11,7 +13,7 @@ import de.imise.tool3lgm.graphtools.model.GDCollection;
  *
  * @author AXS (20.03.2008)
  */
-public abstract class AbstractConsistencyError extends Error {
+public abstract class AbstractConsistencyError extends Error implements MetaModelSpecific {
 
     /**
      * Suffix, der an den SimpleClassName gehängt wird, um die genaue BEschreibung des Fehlers
@@ -36,33 +38,34 @@ public abstract class AbstractConsistencyError extends Error {
     /**
      * Element, das zu anderen Elementen zuviele Verbindungen hat
      */
-    protected ModelElement me;
+    protected final ModelElement me;
 
     /**
-     * Klasse der Verbindungen, deren Instanzanzahl für das Modellelement zu hoch oder zu niedrig
-     * ist.
+     * The solution for this error
      */
-    protected Object errorField;
-
-    /**
-     * Das Modell in dem der Fehler auftrat
-     */
-    protected GDCollection gdcoll;
+    protected final ErrorSolution errorSolution;
 
     /**
      * @param me
-     * @param errorField
-     * @param gdcoll
+     * @param errorSolution
      */
-    public AbstractConsistencyError(final ModelElement me, final Object errorField, final GDCollection gdcoll) {
+    public AbstractConsistencyError(final ModelElement me, final ErrorSolution errorSolution) {
         this.me = me;
-        this.errorField = errorField;
-        this.gdcoll = gdcoll;
+        this.errorSolution = errorSolution;
+    }
+
+    /**
+     * @param me
+     * @param errorSolutionID
+     */
+    public AbstractConsistencyError(final ModelElement me) {
+        this(me, null);
     }
 
     @Override
     public String getMessage() {
-        return getMessageBuilder().toString();
+        StringBuilder messageBuilder = getMessageBuilder();
+        return messageBuilder.toString();
     }
 
     /**
@@ -80,7 +83,8 @@ public abstract class AbstractConsistencyError extends Error {
     protected StringBuilder getMessageBuilder() {
         StringBuilder sb = new StringBuilder();
         String errClassName = getClass().getSimpleName();
-        sb.append(getResString(errClassName + ERROR_DESCRIPTION_RESOURCE_KEY_SUFFIX));
+        String resString = getResString(errClassName + ERROR_DESCRIPTION_RESOURCE_KEY_SUFFIX);
+        sb.append(resString);
         replacePlaceHolder(sb);
         return sb;
     }
@@ -94,6 +98,10 @@ public abstract class AbstractConsistencyError extends Error {
         return null;
     }
 
+    /**
+     * @param messageBuilder
+     * @return
+     */
     protected StringBuilder replacePlaceHolder(final StringBuilder messageBuilder) {
         String[] replacements = getMessageReplaceArguments();
         int replacementIndex = 0;
@@ -132,14 +140,12 @@ public abstract class AbstractConsistencyError extends Error {
      * @return the gdcoll
      */
     public final GDCollection getCollection() {
-        return gdcoll;
+        return me.getCollection();
     }
 
-    /**
-     * @return the errorField
-     */
-    public Object getErrorField() {
-        return errorField;
+    @Override
+    public final Class<? extends MetaModelDefinition> getMetaModelDefinitionClass() {
+        return me.getMetaModelDefinitionClass();
     }
 
     /**
@@ -167,8 +173,6 @@ public abstract class AbstractConsistencyError extends Error {
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + (errorField == null ? 0 : errorField.hashCode());
-        result = prime * result + (gdcoll == null ? 0 : gdcoll.hashCode());
         result = prime * result + (me == null ? 0 : me.hashCode());
         return result;
     }
@@ -185,20 +189,6 @@ public abstract class AbstractConsistencyError extends Error {
             return false;
         }
         AbstractConsistencyError other = (AbstractConsistencyError) obj;
-        if (errorField == null) {
-            if (other.errorField != null) {
-                return false;
-            }
-        } else if (!errorField.equals(other.errorField)) {
-            return false;
-        }
-        if (gdcoll == null) {
-            if (other.gdcoll != null) {
-                return false;
-            }
-        } else if (!gdcoll.equals(other.gdcoll)) {
-            return false;
-        }
         if (me == null) {
             if (other.me != null) {
                 return false;
@@ -207,6 +197,22 @@ public abstract class AbstractConsistencyError extends Error {
             return false;
         }
         return true;
+    }
+
+    /**
+     * @return
+     */
+    public ErrorSolution getErrorSolution() {
+        return errorSolution;
+    }
+
+    /**
+     * @param errorType
+     * @return <code>true</code> if the parameter type is the same, a sub
+     *         or a super class of this class
+     */
+    public boolean isErrorOfType(final Class<? extends AbstractConsistencyError> errorType) {
+        return ReflectionUtils.isAssignable(getClass(), errorType);
     }
 
 }

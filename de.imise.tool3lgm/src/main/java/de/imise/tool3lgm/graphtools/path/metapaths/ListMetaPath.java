@@ -12,7 +12,7 @@ import de.imise.util.collections.CollectionUtils;
 /**
  * @author AXS (10 Dec 2018)
  */
-public abstract class ListMetaPath extends AbstractMetaPath {
+public abstract class ListMetaPath extends MetaPath {
 
     /**
      * The default reskey for the path is the same like Edge (= is connected with)
@@ -22,7 +22,7 @@ public abstract class ListMetaPath extends AbstractMetaPath {
     /**
      * Liste der Pfade, die dieser Metapfad parallel enthält.
      */
-    protected final List<AbstractMetaPath> subMetaPaths;
+    protected final List<MetaPath> subMetaPaths;
 
     /**
      * BasisResourcenschlüssel oder Name des Pfades. Wenn dieser Schlüssel nicht
@@ -36,7 +36,7 @@ public abstract class ListMetaPath extends AbstractMetaPath {
      * @param metaModel
      * @param subMetaPaths
      */
-    public ListMetaPath(final AbstractMetaPath... subMetaPaths) {
+    public ListMetaPath(final MetaPath... subMetaPaths) {
         this(null, subMetaPaths);
     }
 
@@ -45,7 +45,7 @@ public abstract class ListMetaPath extends AbstractMetaPath {
      * @param baseResKeyOrName
      * @param subMetaPaths
      */
-    public ListMetaPath(final String baseResKeyOrName, final AbstractMetaPath... subMetaPaths) {
+    public ListMetaPath(final String baseResKeyOrName, final MetaPath... subMetaPaths) {
         this(subMetaPaths[0], baseResKeyOrName, ImmutableList.copyOf(subMetaPaths));
     }
 
@@ -69,7 +69,7 @@ public abstract class ListMetaPath extends AbstractMetaPath {
      * @param baseResKeyOrName
      * @param subMetaPaths
      */
-    private ListMetaPath(final MetaModelSpecific metaModelSource, final String baseResKeyOrName, final List<AbstractMetaPath> subMetaPaths) {
+    private ListMetaPath(final MetaModelSpecific metaModelSource, final String baseResKeyOrName, final List<MetaPath> subMetaPaths) {
         super(metaModelSource.getMetaModel());
         this.baseResKeyOrName = !Strings.isNullOrEmpty(baseResKeyOrName) ? baseResKeyOrName : DEFAULT_RESKEY;
         this.subMetaPaths = subMetaPaths;
@@ -82,7 +82,7 @@ public abstract class ListMetaPath extends AbstractMetaPath {
      * @return the metaPaths
      */
     @Override
-    public final List<AbstractMetaPath> getSubMetaPaths() {
+    public final List<MetaPath> getSubMetaPaths() {
         return subMetaPaths;
     }
 
@@ -90,7 +90,7 @@ public abstract class ListMetaPath extends AbstractMetaPath {
      * @param index
      * @return
      */
-    public AbstractMetaPath getSubMetaPath(final int index) {
+    public MetaPath getSubMetaPath(final int index) {
         return subMetaPaths.get(index);
     }
 
@@ -120,14 +120,14 @@ public abstract class ListMetaPath extends AbstractMetaPath {
 
     @Override
     public InvalidityCheckResult getInvalidityCheckResult() {
-        //wenn der Pfad aus Sicht des AbstractMetaPath valide ist
+        //wenn der Pfad aus Sicht des MetaPath valide ist
         if (super.getInvalidityCheckResult().invalidReason == null) {
             if (subMetaPaths.size() == 0) {
                 invalidityCheckResult = new InvalidityCheckResult(InvalidReason.INVALID_LIST_PATH_EMPTY);
             } else {
                 //jeden Einzelpfad durchgehen
                 for (int i = 0; i < subMetaPaths.size(); i++) {
-                    AbstractMetaPath metaPath = subMetaPaths.get(i);
+                    MetaPath metaPath = subMetaPaths.get(i);
                     InvalidityCheckResult innerInvalidityCheckResult = metaPath.getInvalidityCheckResult();
                     //wenn der Einzelpfad nicht valide ist
                     if (innerInvalidityCheckResult.invalidReason != null) {
@@ -145,7 +145,7 @@ public abstract class ListMetaPath extends AbstractMetaPath {
     /**
      * @return iterable over all metapaths
      */
-    public Iterable<AbstractMetaPath> iterableSubMetaPaths() {
+    public Iterable<MetaPath> iterableSubMetaPaths() {
         return CollectionUtils.iterable(subMetaPaths);
     }
 
@@ -155,21 +155,21 @@ public abstract class ListMetaPath extends AbstractMetaPath {
      * @param metaPathIndex
      */
     public final void setInterpretAsRecursive(final int metaPathIndex, final boolean recursive) {
-        AbstractMetaPath metaPath = subMetaPaths.get(metaPathIndex);
+        MetaPath metaPath = subMetaPaths.get(metaPathIndex);
         metaPath.setInterpretAsRecursive(recursive);
     }
 
     /**
      * @return
      */
-    public final AbstractMetaPath getFirstSubMetaPath() {
+    public final MetaPath getFirstSubMetaPath() {
         return subMetaPaths.get(0);
     }
 
     /**
      * @return
      */
-    public final AbstractMetaPath getLastSubMetaPath() {
+    public final MetaPath getLastSubMetaPath() {
         return subMetaPaths.get(getSubMetaPathCount() - 1);
     }
 

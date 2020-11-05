@@ -1,22 +1,22 @@
 package de.imise.tool3lgm.graphtools.path.metapaths;
 
+import static de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty.OPTION_ELEMENTS_RECEIVE_PROPERTIES_FROM_PARENTS;
+import static de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty.OPTION_ELEMENTS_RECEIVE_PROPERTIES_FROM_PARTS;
+
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
-import com.google.common.base.Strings;
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableSet;
-
-import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
 import de.imise.tool3lgm.graphtools.metamodel.EdgeCardinality;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
-import de.imise.tool3lgm.graphtools.metamodel.MetaModelSpecificAdapter;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.InstanciationEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
-import de.imise.util.ReflectionUtils;
-import de.imise.util.collections.CollectionUtils;
+import de.imise.tool3lgm.graphtools.model.GraphDocument;
+import de.imise.tool3lgm.graphtools.path.metapaths.PathFunctions.PathConnectionState;
+import de.imise.tool3lgm.graphtools.path.paths.PathResultTreeModel;
+import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 
 /**
  * Oberklasse für alle Metapfade.
@@ -24,59 +24,13 @@ import de.imise.util.collections.CollectionUtils;
  * @author AXS
  * @create 12.10.2010
  */
-public abstract class AbstractMetaPath extends MetaModelSpecificAdapter {
-
-    /**
-     * Leere Elementarpfadliste
-     */
-    protected static final ImmutableList<ElementaryMetaPath> EMPTY_ELEMENTARY_PATH_LIST = ImmutableList.of();
-
-    /**
-     * Liste aller Startklassen dieses Pfades.
-     */
-    protected Set<Class<? extends ModelElement>> startElementClasses = null;
-
-    /**
-     * Liste aller Endklassen dieses Pfades.
-     */
-    protected Set<Class<? extends ModelElement>> endElementClasses = null;
-
-    /**
-     * Anzeigename des Pfades. Falls es ein
-     */
-    protected String name = null;
-
-    /**
-     * Anzeigename mit Start- und Endklassen. Kann in Unterlassen geändert werden.
-     */
-    protected String fullName = null;
-
-    /**
-     * MataPath für die Gegenrichtung dieses Pfades. Der ist nur nicht <code>null</code>, wenn er sich tatsächlich
-     * feststellen lässt.
-     */
-    protected AbstractMetaPath otherDirection = null;
-
-    /**
-     * Dieses Objekt gibt den Grund an, warum ein MetaPath nicht valide ist. Ist der darin enthaltene InvalidReason <code>null</code>, gilt der
-     * MetaPath als valide.
-     */
-    protected InvalidityCheckResult invalidityCheckResult;
-
-    /**
-     * If <code>true</code> and the metapath can be recursive (ends with an element type that can be the start element type) then the path is
-     * interpreted as recursive.
-     */
-    private boolean interpretAsRecursive;
-
-    /** the metamodel */
-    protected final MetaModel metaModel;
+public abstract class MetaPath extends BasicMetaPath {
 
     /**
      * @param metaModel
      */
-    public AbstractMetaPath(final MetaModel metaModel) {
-        this(metaModel, null);
+    public MetaPath(final MetaModel metaModel) {
+        super(metaModel);
     }
 
     /**
@@ -84,8 +38,8 @@ public abstract class AbstractMetaPath extends MetaModelSpecificAdapter {
      * @param name
      *            Anzeigenamen
      */
-    public AbstractMetaPath(final MetaModel metaModel, final String name) {
-        this(metaModel, (Class<? extends ModelElement>) null, (Class<? extends ModelElement>) null, name);
+    public MetaPath(final MetaModel metaModel, final String name) {
+        super(metaModel, name);
     }
 
     /**
@@ -93,8 +47,8 @@ public abstract class AbstractMetaPath extends MetaModelSpecificAdapter {
      * @param startElementClass
      * @param endElementClass
      */
-    public AbstractMetaPath(final MetaModel metaModel, final Class<? extends ModelElement> startElementClass, final Class<? extends ModelElement> endElementClass) {
-        this(metaModel, startElementClass, endElementClass, null);
+    public MetaPath(final MetaModel metaModel, final Class<? extends ModelElement> startElementClass, final Class<? extends ModelElement> endElementClass) {
+        super(metaModel, startElementClass, endElementClass);
 
     }
 
@@ -104,8 +58,8 @@ public abstract class AbstractMetaPath extends MetaModelSpecificAdapter {
      * @param endElementClass
      * @param name
      */
-    public AbstractMetaPath(final MetaModel metaModel, final Class<? extends ModelElement> startElementClass, final Class<? extends ModelElement> endElementClass, final String name) {
-        this(metaModel, startElementClass != null ? ImmutableSet.of(startElementClass) : null, endElementClass != null ? ImmutableSet.of(endElementClass) : null, name);
+    public MetaPath(final MetaModel metaModel, final Class<? extends ModelElement> startElementClass, final Class<? extends ModelElement> endElementClass, final String name) {
+        super(metaModel, startElementClass, endElementClass, name);
 
     }
 
@@ -115,150 +69,8 @@ public abstract class AbstractMetaPath extends MetaModelSpecificAdapter {
      * @param endElementClasses
      * @param name
      */
-    public AbstractMetaPath(final MetaModel metaModel, final Set<Class<? extends ModelElement>> startElementClasses, final Set<Class<? extends ModelElement>> endElementClasses, final String name) {
-        super(metaModel);
-        this.metaModel = metaModel;
-        this.startElementClasses = CollectionUtils.ensureImmutable(startElementClasses);
-        this.endElementClasses = CollectionUtils.ensureImmutable(endElementClasses);
-        this.name = name;
-    }
-
-    /**
-     * @return
-     */
-    public final Set<Class<? extends ModelElement>> getStartClasses() {
-        return startElementClasses;
-    }
-
-    /**
-     * @return
-     */
-    public Class<? extends ModelElement> getStartClass() {
-        Set<Class<? extends ModelElement>> startClasses = getStartClasses();
-        Class<? extends ModelElement> commonSuperClass = ReflectionUtils.getCommonSuperClassOfClasses(startClasses);
-        return commonSuperClass;
-    }
-
-    /**
-     * @return
-     */
-    public final Set<Class<? extends ModelElement>> getEndClasses() {
-        return endElementClasses;
-    }
-
-    /**
-     * @return
-     */
-    public Class<? extends ModelElement> getEndClass() {
-        Set<Class<? extends ModelElement>> endClasses = getEndClasses();
-        Class<? extends ModelElement> commonSuperClass = ReflectionUtils.getCommonSuperClassOfClasses(endClasses);
-        return commonSuperClass;
-    }
-
-    /**
-     * Liefert <code>true</code>, wenn die übergebene Elementklasse genau eine Startklasse dieses Metapfades ist.
-     *
-     * @param elementClass
-     *            Elementklasse, die als Startklasse geprüft werden soll
-     * @return
-     */
-    public boolean isStartClass(final Class<? extends ModelElement> elementClass) {
-        for (Class<? extends ModelElement> startClass : getStartClasses()) {
-            if (startClass.isAssignableFrom(elementClass)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    /**
-     * Liefert <code>true</code>, wenn eine übergebene Elementklasse genau eine Startklasse dieses Metapfades ist.
-     *
-     * @param elementClasses
-     *            Elementklassen, die als Startklasse geprüft werden soll
-     * @return
-     */
-    public final boolean isStartClass(final Collection<Class<? extends ModelElement>> elementClasses) {
-        for (Class<? extends ModelElement> elementClass : elementClasses) {
-            if (isStartClass(elementClass)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    /**
-     * Liefert <code>true</code>, wenn die übergebene Elementklasse genau eine Endklasse dieses MetaPfades ist.
-     *
-     * @param elementClass
-     *            Elementklasse, die als Endklasse geprüft werden soll
-     * @return
-     */
-    public boolean isEndClass(final Class<? extends ModelElement> elementClass) {
-        for (Class<? extends ModelElement> endClass : getEndClasses()) {
-            if (endClass.isAssignableFrom(elementClass)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    /**
-     * Liefert <code>true</code>, wenn eine übergebene Elementklasse genau eine Endklasse dieses MetaPfades ist.
-     *
-     * @param elementClasses
-     *            Elementklasseen, die als Endklasse geprüft werden sollen
-     * @return
-     */
-    public final boolean isEndClass(final Collection<Class<? extends ModelElement>> elementClasses) {
-        for (Class<? extends ModelElement> elementClass : elementClasses) {
-            if (isEndClass(elementClass)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    /**
-     * Liefert <code>true</code>, wenn die übergebene startClass Startklasse und die übergeben endCLass Endklasse
-     * dieses MetaPfades sein kann.
-     *
-     * @param startClass
-     *            Elementklasse, die als Startklasse der Kantenklasse geprüft werden soll
-     * @param startClass
-     *            Elementklasse, die als Endklasse der Kantenklasse geprüft werden soll
-     * @return
-     */
-    public final boolean isStartAndEndClass(final Class<? extends ModelElement> startClass, final Class<? extends ModelElement> endClass) {
-        return isStartClass(startClass) && isEndClass(endClass);
-    }
-
-    /**
-     * @return <code>true</code>, if the metapath is applicable to the endelements as startelements otherwise <code>false</code>
-     */
-    public final boolean isInterpretAsRecursive() {
-        return interpretAsRecursive;
-    }
-
-    /**
-     * @param
-     */
-    public final void setInterpretAsRecursive(final boolean interpretAsRecursive) {
-        this.interpretAsRecursive = interpretAsRecursive;
-    }
-
-    /**
-     * @return <code>true</code> if at least one endElement class can be the startElement class
-     *         of this metaPath
-     */
-    protected boolean canBeRecursive() {
-        Set<Class<? extends ModelElement>> endClasses = getEndClasses();
-        for (Class<? extends ModelElement> endClass : endClasses) {
-            if (isStartClass(endClass)) {
-                return true;
-            }
-        }
-        return false;
+    public MetaPath(final MetaModel metaModel, final Set<Class<? extends ModelElement>> startElementClasses, final Set<Class<? extends ModelElement>> endElementClasses, final String name) {
+        super(metaModel, startElementClasses, endElementClasses, name);
     }
 
     /**
@@ -334,123 +146,6 @@ public abstract class AbstractMetaPath extends MetaModelSpecificAdapter {
      */
     public final boolean isValid() {
         return getInvalidityCheckResult().invalidReason == null;
-    }
-
-    /**
-     * Liefert <code>true</code>, wenn das übergebene Objekt dieselben Eigenschaften hat, wie this.
-     *
-     * @param obj
-     * @param ignoreName
-     *            Wenn <code>true</code> wird die Gleichheit des Namens nicht mitgeprüft
-     * @return
-     */
-    public boolean equals(final Object obj, final boolean ignoreName) {
-        if (!super.equals(obj)) {
-            return false;
-        }
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        AbstractMetaPath other = (AbstractMetaPath) obj;
-        if (endElementClasses == null) {
-            if (other.endElementClasses != null) {
-                return false;
-            }
-        } else if (!endElementClasses.equals(other.endElementClasses)) {
-            return false;
-        }
-        if (!ignoreName) {
-            if (fullName == null) {
-                if (other.fullName != null) {
-                    return false;
-                }
-            } else if (!fullName.equals(other.fullName)) {
-                return false;
-            }
-            if (name == null) {
-                if (other.name != null) {
-                    return false;
-                }
-            } else if (!name.equals(other.name)) {
-                return false;
-            }
-        }
-        if (startElementClasses == null) {
-            if (other.startElementClasses != null) {
-                return false;
-            }
-        } else if (!startElementClasses.equals(other.startElementClasses)) {
-            return false;
-        }
-        return true;
-    }
-
-    @Override
-    public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + (endElementClasses == null ? 0 : endElementClasses.hashCode());
-        result = prime * result + (fullName == null ? 0 : fullName.hashCode());
-        result = prime * result + (name == null ? 0 : name.hashCode());
-        result = prime * result + (startElementClasses == null ? 0 : startElementClasses.hashCode());
-        return result;
-    }
-
-    @Override
-    public boolean equals(final Object obj) {
-        return equals(obj, true);
-    }
-
-    /**
-     * @return
-     */
-    protected abstract String createName();
-
-    /**
-     * @return
-     */
-    public final String getName() {
-        if (Strings.isNullOrEmpty(name)) {
-            name = createName();
-        }
-        return name;
-    }
-
-    /**
-     * @return
-     */
-    public final String getFullName() {
-        if (Strings.isNullOrEmpty(fullName)) {
-            fullName = getName(true, true);
-        }
-        return fullName;
-    }
-
-    /**
-     * @param withStartClasses
-     * @param withEndClasses
-     * @return
-     */
-    public String getName(final boolean withStartClasses, final boolean withEndClasses) {
-        if (withStartClasses || withEndClasses) {
-            ElementsNameBuilder elementsNameBuilder = metaModel.getElementsNameBuilder();
-            if (withStartClasses && withEndClasses) {
-                return elementsNameBuilder.getDisplayableClassesNames(getStartClasses()) + " " + getName() + " " + elementsNameBuilder.getDisplayableClassesNames(getEndClasses());
-            } else if (withStartClasses) {
-                return elementsNameBuilder.getDisplayableClassesNames(getStartClasses()) + " " + getName();
-            } else if (withEndClasses) {
-                return getName() + " " + elementsNameBuilder.getDisplayableClassesNames(getEndClasses());
-            }
-        }
-        return getName();
-    }
-
-    @Override
-    public String toString() {
-        return getName();
     }
 
     /**
@@ -541,7 +236,7 @@ public abstract class AbstractMetaPath extends MetaModelSpecificAdapter {
      *
      * @return the otherDirectionPath
      */
-    public AbstractMetaPath getOtherDirection() {
+    public MetaPath getOtherDirection() {
         return otherDirection;
     }
 
@@ -584,9 +279,9 @@ public abstract class AbstractMetaPath extends MetaModelSpecificAdapter {
     }
 
     /**
-     * @return Liste aller {@link AbstractMetaPath}, die dieser MetaPfad enthält.
+     * @return Liste aller {@link MetaPath}, die dieser MetaPfad enthält.
      */
-    public abstract List<AbstractMetaPath> getSubMetaPaths();
+    public abstract List<MetaPath> getSubMetaPaths();
 
     /**
      * @return the number of contained metapaths
@@ -617,5 +312,186 @@ public abstract class AbstractMetaPath extends MetaModelSpecificAdapter {
      * @return
      */
     public abstract boolean containsPropertyTransferEdge();
+
+    /**
+     * @param other
+     * @return only <code>true</code> if this and the other metapath have an assignable
+     *         start class, an assignable end class, an assignable edge class, the same
+     *         direction and the same type. Assignable only means that one of the class
+     *         must be a subclass of the other (which is sub and which super dosn't
+     *         matters).
+     */
+    public boolean isAssignable(final MetaPath other) {
+        //Maybe there would be an useful expression here for general MetaPath too, but
+        //we only need this function for SimpleMetaPaths and ElementaryMetaPaths
+        return false;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////
+    //getConnectedElements(...) + getConnectedContainer(...) + getResultTree //
+    ///////////////////////////////////////////////////////////////////////////
+
+    /**
+     * Liefert alle mit dem übergebenen Element über diesen MetaPfad verbundenen Elemente.
+     *
+     * @param me
+     *            Ausgangselement
+     * @param multiple
+     *            Wenn <code>true</code> sind mehrfach verbundene Element auch mehrfach in der Ergebnisliste, bei <code>false</code> ist jedes Element
+     *            nur einmal enthalten.
+     * @return
+     */
+    public List<ModelElement> getConnectedElements(final ModelElement me, final boolean multiple) {
+        List<ModelElement> modelElements = new ArrayList<>();
+        modelElements.add(me);
+        return getConnectedElements(modelElements, multiple);
+    }
+
+    /**
+     * @param me
+     * @return
+     */
+    public List<ModelElement> getConnectedElements(final ModelElement me) {
+        return getConnectedElements(me, false);
+    }
+
+    /**
+     * Liefert eine Sammlung aller Elemente, die über diesen Pfad mit den übergebenen Elementen verbunden sind.
+     *
+     * @param modelElements
+     * @return
+     */
+    public List<ModelElement> getConnectedElements(final Collection<ModelElement> modelElements) {
+        return getConnectedElements(modelElements, false);
+    }
+
+    /**
+     * Liefert eine Sammlung aller Elemente, die über diesen Pfad mit den übergebenen Elementen verbunden sind.
+     *
+     * @param modelElements
+     *            Ausgangselemente
+     * @param multiple
+     *            Wenn <code>true</code> enthält die Rückgabesammlung dieselben Elemente sooft, wie sie mit Elementen der
+     *            Ausgangliste über diesen Pfad verbunden sind. Bei <code>false</code> ist jedes Element nur einmal enthalten.
+     * @return
+     */
+    public List<ModelElement> getConnectedElements(final Collection<ModelElement> modelElements, final boolean multiple) {
+        PathResultTreeModel resultTree = getResultTree(modelElements);
+        return resultTree.getConnectedElements(multiple);
+    }
+
+    /**
+     * @param me
+     * @param doc
+     * @return
+     */
+    public List<ElementContainer> getConnectedContainer(final ModelElement me, final GraphDocument doc) {
+        return getConnectedContainer(me, doc, false);
+    }
+
+    /**
+     * @param me
+     * @param doc
+     * @param forlast
+     * @return
+     */
+    public List<ElementContainer> getConnectedContainer(final ModelElement me, final GraphDocument doc, final boolean forlast) {
+        PathResultTreeModel resultTree = getResultTree(me);
+        return resultTree.getConnectedContainer(doc, forlast);
+    }
+    /**
+     * @param startElement
+     * @param endElement
+     * @param searchParents
+     * @param searchParts
+     * @return
+     */
+    public PathConnectionState getPathConnectionState(final ModelElement startElement, final ModelElement endElement, final boolean searchParents, final boolean searchParts) {
+        return PathFunctions.getPathConnectionState(startElement, endElement, this, searchParents, searchParts);
+    }
+
+    /**
+     * @param startElement
+     * @param endElement
+     * @return
+     */
+    public PathConnectionState getPathConnectionState(final ModelElement startElement, final ModelElement endElement) {
+        return PathFunctions.getPathConnectionState(startElement, endElement, this, OPTION_ELEMENTS_RECEIVE_PROPERTIES_FROM_PARENTS.is(), OPTION_ELEMENTS_RECEIVE_PROPERTIES_FROM_PARTS.is());
+    }
+
+    /**
+     * @param startElement
+     * @param endElement
+     * @return
+     */
+    public boolean isConnected(final ModelElement startElement, final ModelElement endElement) {
+        return getPathConnectionState(startElement, endElement) != PathConnectionState.NOT_CONNECTED;
+    }
+
+    /**
+     * @param startElement
+     * @param endElement
+     * @return
+     */
+    public boolean isDirectConnected(final ModelElement startElement, final ModelElement endElement) {
+        return getPathConnectionState(startElement, endElement, false, false) != PathConnectionState.NOT_CONNECTED;
+    }
+
+    /**
+     * Liefert einen Ergebnisbaum, der alle eventuell vorhandenen Pfade ausgehend vom
+     * übergebenen Element aufspannt
+     *
+     * @param startElement
+     * @return
+     */
+    public PathResultTreeModel getResultTree(final ModelElement startElement) {
+        return new PathResultTreeModel(this, startElement);
+    }
+
+    /**
+     * Liefert einen Ergebnisbaum, der alle eventuell vorhandenen Pfade ausgehend vom
+     * übergebenen Element aufspannt
+     *
+     * @param startElement
+     * @param keepIncompleteBranches
+     * @return
+     */
+    public PathResultTreeModel getResultTree(final ModelElement startElement, final boolean keepIncompleteBranches) {
+        return new PathResultTreeModel(this, startElement, keepIncompleteBranches);
+    }
+
+    /**
+     * @param startElements
+     * @return
+     */
+    public PathResultTreeModel getResultTree(final Collection<ModelElement> startElements) {
+        return new PathResultTreeModel(this, startElements);
+    }
+
+    /**
+     * @param startElements
+     * @param keepIncompleteBranches
+     * @return
+     */
+    public PathResultTreeModel getResultTree(final Collection<ModelElement> startElements, final boolean keepIncompleteBranches) {
+        return new PathResultTreeModel(this, startElements, keepIncompleteBranches);
+    }
+
+    /**
+     * @param startElements
+     * @return
+     */
+    public PathResultTreeModel getResultTree(final List<Collection<ModelElement>> startElements) {
+        return new PathResultTreeModel(this, startElements);
+    }
+
+    /**
+     * @param startElements
+     * @param keepIncompleteBranches
+     * @return
+     */
+    public PathResultTreeModel getResultTree(final List<Collection<ModelElement>> startElements, final boolean keepIncompleteBranches) {
+        return new PathResultTreeModel(this, startElements, keepIncompleteBranches);
+    }
 
 }

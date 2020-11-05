@@ -20,7 +20,7 @@ import de.imise.util.NamedObjectContainer;
  * !!! Die Änderung der Daten erfolgt nicht mehr über javax.swing.table.DefaultTableModel.setDataVector(java.lang.Object[][], java.lang.Object[])
  * sondern über setDataVector(java.lang.Object[][], java.lang.Object[],java.lang.Object[]). Die Anwendung der alten Methode kann dann dazu führen,
  * dass die im Table dargstellten Daten nicht mehr den Modeldaten entsprechen !!!
- * 
+ *
  * @author fstephan
  */
 public abstract class AbstractTableModel extends DefaultTableModel {
@@ -33,7 +33,7 @@ public abstract class AbstractTableModel extends DefaultTableModel {
     /// anzuzeigenden Elemente.                 ///
     /// Ist in createClassificationNumberModel( ///
     /// Class elementClass, GraphDocument doc,  ///
-    /// int elementTypesToShow) für             /// 
+    /// int elementTypesToShow) für             ///
     /// "elementTypesToShow" anzuwenden         ///
     ///////////////////////////////////////////////
 
@@ -82,11 +82,10 @@ public abstract class AbstractTableModel extends DefaultTableModel {
 
     /**
      * Konstruktor
-     * 
+     *
      * @param doc
      */
     protected AbstractTableModel(final GraphDocument doc) {
-        super();
         this.doc = doc;
         definitions = doc.getUserFieldDefinitions();
     }
@@ -97,7 +96,7 @@ public abstract class AbstractTableModel extends DefaultTableModel {
 
     /**
      * Liefert den ToolTipText für den Kopf der Spalte <code>columnIndex</code>.
-     * 
+     *
      * @param columnIndex
      * @return
      */
@@ -107,7 +106,7 @@ public abstract class AbstractTableModel extends DefaultTableModel {
 
     /**
      * Liefert den ToolTipText für den Kopf der Zeile <code>rowIndex</code>.
-     * 
+     *
      * @param rowIndex
      * @return
      */
@@ -118,7 +117,7 @@ public abstract class AbstractTableModel extends DefaultTableModel {
     /**
      * Überschreibt die Methode der Superklasse, sodass in Abhängigkeit der Daten über die Editierbarkeit der Zelle an der Stelle (<code>row</code>,
      * <code>column</code>) entschieden wird.
-     * 
+     *
      * @return <code>true</code>, falls ein Wert an der Stelle (<code>row</code>,<code>column</code>) exisitiert, sonst <code>false</code>
      * @see javax.swing.table.TableModel#isCellEditable(int, int)
      */
@@ -130,7 +129,7 @@ public abstract class AbstractTableModel extends DefaultTableModel {
 
     /**
      * Gibt die Spaltenköpfe wieder
-     * 
+     *
      * @return <code>columnIdentifiers</code>
      */
     public Vector<NamedObjectContainer<?>> getColumnIdentifiers() {
@@ -140,7 +139,7 @@ public abstract class AbstractTableModel extends DefaultTableModel {
     /**
      * Methode setzt den <code>dataVector</code>, die <code>columnIdentifiers</code> und die <code>rowIdentifiers</code>. Speichert <code>data</code>
      * in <code>dataField</code> ab.
-     * 
+     *
      * @param data
      * @param columnIdentifiers
      * @param rowIdentifiers
@@ -153,7 +152,7 @@ public abstract class AbstractTableModel extends DefaultTableModel {
 
     /**
      * Gibt eine Kopie des gesamten Datenfeldes zurück
-     * 
+     *
      * @return
      */
     public NamedObjectContainer<?>[][] getValues() {
@@ -162,7 +161,7 @@ public abstract class AbstractTableModel extends DefaultTableModel {
 
     /**
      * Gibt alle Werte aus dem angegebenen Bereich in einem <code>Object[][]</code> wieder.
-     * 
+     *
      * @param firstRow erste Zeile, aber der die Werte zurückgegeben werden sollen
      * @param lastRow letzte Zeile, bis zu der die Werte zurückgegeben werden sollen
      * @param firstColumn erste Spalte, aber der die Werte zurückgegeben werden sollen
@@ -186,7 +185,7 @@ public abstract class AbstractTableModel extends DefaultTableModel {
     /**
      * Liefert einen {@link NamedObjectContainer} für der an die Zelle mit den gegebenen Indizes gesetzt wird. Unterklassen
      * müssen diese Container geeignet initialisieren.
-     * 
+     *
      * @param newValue
      *            Dar neue Value, der in einen {@link NamedObjectContainer} gepackt werden muss
      * @param row
@@ -196,7 +195,7 @@ public abstract class AbstractTableModel extends DefaultTableModel {
 
     /**
      * Löscht den Wert an der angegebenen Stelle bzw. setzt einen als leer interpretierten Wert.
-     * 
+     *
      * @param row
      * @param col
      */
@@ -206,7 +205,7 @@ public abstract class AbstractTableModel extends DefaultTableModel {
      * Übernimmt einen im Table eingegebenen Wert in dieses Model. Dabei wird ein neuer <code>NamedObjectContainer</code> aus <code>value</code> und
      * dem bereits in {@link #dataField} enthaltenen <code>UserField</code> erstellt und als neuer Wert in {@link DefaultTableModel#dataVector}
      * gesetzt.
-     * 
+     *
      * @param value
      * @param row
      * @param column
@@ -238,7 +237,7 @@ public abstract class AbstractTableModel extends DefaultTableModel {
      * Setzt die Modeldaten beginnend bei (<code>firstRow</code>,<code>firstColumn</code>) auf die Werte in <code>values</code>.<br>
      * Wird dabei die Größe des Models überschritten, gibt diese Methode <code>false</code> zurück.<br>
      * War das Übernehmen der Werte erfolgreich, wird <code>true</code> zurückgegeben.
-     * 
+     *
      * @param values neue Werte
      * @param firstRow Zeilenindex, ab dem die Werte eingefügt werden sollen
      * @param firstColumn Spaltenindex, ab dem die Werte eingefügt werden sollen
@@ -267,7 +266,7 @@ public abstract class AbstractTableModel extends DefaultTableModel {
 
     /**
      * Setzt die Modeldaten auf die Werte in <code>values</code>.
-     * 
+     *
      * @see AbstractUserFieldTableModel#setValuesAt(Object[][], int, int)
      * @param values neue Werte
      * @return
@@ -278,7 +277,7 @@ public abstract class AbstractTableModel extends DefaultTableModel {
 
     /**
      * Gibt die Zeilenköpfe wieder
-     * 
+     *
      * @return rowIdentifiers
      */
     public Vector<NamedObjectContainer<?>> getRowIdentifiers() {
@@ -287,7 +286,7 @@ public abstract class AbstractTableModel extends DefaultTableModel {
 
     /**
      * Gibt wieder,
-     * 
+     *
      * @return <code>this.columnIdentifiers != null</code>
      */
     public boolean hasColumnIdentifiers() {
@@ -303,7 +302,7 @@ public abstract class AbstractTableModel extends DefaultTableModel {
 
     /**
      * Gibt wieder, ob sich Daten in diesem Model befinden oder nicht
-     * 
+     *
      * @return
      */
     public boolean hasData() {
@@ -320,7 +319,7 @@ public abstract class AbstractTableModel extends DefaultTableModel {
     /**
      * Methode setzt das Attribut {@link #dataChanged} und bestimmt damit, ob sich Daten geändert haben oder nicht. <br>
      * Löst {@link #fireTableDataChanged()} aus, falls <code>b</code> den Wert <code>true</code> hat.
-     * 
+     *
      * @param b
      */
     public void dataChanged(final boolean b) {

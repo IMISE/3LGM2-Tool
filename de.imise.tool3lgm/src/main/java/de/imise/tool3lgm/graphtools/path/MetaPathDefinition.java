@@ -13,8 +13,6 @@ import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Multimap;
 
 import de.imise.tool3lgm.Tool3lgmConstants;
-import de.imise.tool3lgm.graphtools.consistency.ErrorSolution;
-import de.imise.tool3lgm.graphtools.consistency.ErrorSolutionLibrary;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModelSpecificAdapter;
 import de.imise.tool3lgm.graphtools.metamodel.elements.DoubleMeaningEdge;
@@ -24,11 +22,9 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.InferenceEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.InstanciationEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
-import de.imise.tool3lgm.graphtools.path.metapaths.AbstractMetaPath;
-import de.imise.tool3lgm.graphtools.path.metapaths.ConsistencyCheckSectionMetaPath;
 import de.imise.tool3lgm.graphtools.path.metapaths.ElementaryMetaPath;
 import de.imise.tool3lgm.graphtools.path.metapaths.ElementaryMetaPathHandler;
-import de.imise.tool3lgm.graphtools.path.metapaths.SectionMetaPath;
+import de.imise.tool3lgm.graphtools.path.metapaths.MetaPath;
 import de.imise.tool3lgm.graphtools.path.metapaths.SequenceMetaPath;
 import de.imise.tool3lgm.graphtools.path.metapaths.SimpleMetaPath;
 import de.imise.tool3lgm.graphtools.path.metapaths.SimpleMetaPathCreator;
@@ -44,7 +40,7 @@ import de.imise.util.Alphabetical;
 public class MetaPathDefinition extends MetaModelSpecificAdapter {
 
     /** Sammlung aller definierten Metapfade */
-    private final Set<AbstractMetaPath> definedMetaPaths = new HashSet<>();
+    private final Set<MetaPath> definedMetaPaths = new HashSet<>();
 
     /** Der MetaPathCreator zum zugehörigen Metamodel */
     protected final SimpleMetaPathCreator simpleMetaPathCreator;
@@ -167,9 +163,9 @@ public class MetaPathDefinition extends MetaModelSpecificAdapter {
      * @param startClass
      * @return
      */
-    public final Set<AbstractMetaPath> getMetaPaths(final Class<? extends ModelElement> startClass) {
-        Set<AbstractMetaPath> metaPaths = new HashSet<>();
-        for (AbstractMetaPath metaPath : definedMetaPaths) {
+    public final Set<MetaPath> getMetaPaths(final Class<? extends ModelElement> startClass) {
+        Set<MetaPath> metaPaths = new HashSet<>();
+        for (MetaPath metaPath : definedMetaPaths) {
             if (metaPath.isStartClass(startClass)) {
                 metaPaths.add(metaPath);
             }
@@ -187,9 +183,9 @@ public class MetaPathDefinition extends MetaModelSpecificAdapter {
      *            Endklasse ersetzt, wenn sie nicht bereits übereinstimmen
      * @return
      */
-    public final Set<AbstractMetaPath> getMetaPaths(final Class<? extends ModelElement> startClass, final Class<? extends ModelElement> endClass, final boolean wrap) {
-        Set<AbstractMetaPath> metaPaths = new HashSet<>();
-        for (AbstractMetaPath metaPath : definedMetaPaths) {
+    public final Set<MetaPath> getMetaPaths(final Class<? extends ModelElement> startClass, final Class<? extends ModelElement> endClass, final boolean wrap) {
+        Set<MetaPath> metaPaths = new HashSet<>();
+        for (MetaPath metaPath : definedMetaPaths) {
             if (metaPath.isStartAndEndClass(startClass, endClass)) {
                 if (wrap) {
                     metaPath = WrapperMetaPath.wrapMetaPath(startClass, endClass, metaPath);
@@ -206,11 +202,11 @@ public class MetaPathDefinition extends MetaModelSpecificAdapter {
      *
      * @param metaPaths
      */
-    protected final void put(final AbstractMetaPath... metaPaths) {
+    protected final void put(final MetaPath... metaPaths) {
         if (metaPaths == null) {
             return;
         }
-        for (AbstractMetaPath metaPath : metaPaths) {
+        for (MetaPath metaPath : metaPaths) {
             definedMetaPaths.add(metaPath);
             metaPath = metaPath.getOtherDirection();
             if (metaPath != null) {
@@ -249,9 +245,9 @@ public class MetaPathDefinition extends MetaModelSpecificAdapter {
      * }
      */
     public final void writePathes() {
-        ArrayList<AbstractMetaPath> metaPaths = new ArrayList<>(definedMetaPaths);
+        ArrayList<MetaPath> metaPaths = new ArrayList<>(definedMetaPaths);
         Alphabetical.sort(metaPaths);
-        for (AbstractMetaPath metaPath : metaPaths) {
+        for (MetaPath metaPath : metaPaths) {
             System.err.println(metaPath);
         }
     }
@@ -284,7 +280,7 @@ public class MetaPathDefinition extends MetaModelSpecificAdapter {
         Set<Class<? extends ModelElement>> pathsElementClassesSet = new HashSet<>();
         //alle Metapfade durchlaufen und alle neu gefundenen Startklassen zur Rückgabeliste hinzufügen
         MetaModel metaModel = getMetaModel();
-        for (AbstractMetaPath metaPath : definedMetaPaths) {
+        for (MetaPath metaPath : definedMetaPaths) {
             ArrayList<Class<? extends ModelElement>> newElementClasses = new ArrayList<>();
             //Für alle Startklassen des aktuellen Metapfades
             for (Class<? extends ModelElement> elementClass : start ? metaPath.getStartClasses() : metaPath.getEndClasses()) {
@@ -349,7 +345,7 @@ public class MetaPathDefinition extends MetaModelSpecificAdapter {
      *
      * @return
      */
-    public Map<Class<? extends Edge>, AbstractMetaPath> getSoftConditionMetaPaths() {
+    public Map<Class<? extends Edge>, MetaPath> getSoftConditionMetaPaths() {
         return ImmutableMap.of();
     }
 
@@ -379,7 +375,7 @@ public class MetaPathDefinition extends MetaModelSpecificAdapter {
      *
      * @return
      */
-    public Map<Class<? extends ModelElement>, AbstractMetaPath> getElementClassToNameExtensionPath() {
+    public Map<Class<? extends ModelElement>, MetaPath> getElementClassToNameExtensionPath() {
         return ImmutableMap.of();
     }
 
@@ -392,7 +388,7 @@ public class MetaPathDefinition extends MetaModelSpecificAdapter {
      * Das funktioniert im Moment nur bei Kanten, da bei Knoten zum Zeitpunkt des Festlegens des Namens der Knoten
      * noch mit gar nichts verbunden ist.
      */
-    public Map<Class<? extends Edge>, AbstractMetaPath> getEdgeClassToInitialCreatedNameSourcePath() {
+    public Map<Class<? extends Edge>, MetaPath> getEdgeClassToInitialCreatedNameSourcePath() {
         return ImmutableMap.of();
     }
 
@@ -404,25 +400,7 @@ public class MetaPathDefinition extends MetaModelSpecificAdapter {
      *
      * @return
      */
-    public Map<Class<? extends InferenceEdge>, AbstractMetaPath> getInferenceEdgeToConditionMetaPath() {
-        return ImmutableMap.of();
-    }
-
-    /**
-     * @return A map where the keys are a collection of all {@link SectionMetaPath}s which
-     *         must be checked to ensure consistency of a model.<br>
-     *         This conditions says that the SectionMetaPath should not have an empty result.
-     *         That means that at least one element must be connected over all sub-metapaths
-     *         of this SectionMetaPath. The very first sub metaPath must lead to the set of
-     *         all elements which *could* be connected. The next metapath(s) should lead to
-     *         the elements which *are* connected. This is relevant to generate an error
-     *         description with the elements which should be connected to solve the problem.
-     *         The values of this map are an edge class which is only used to identify the
-     *         corresponding {@link ErrorSolution}. This ErrorSolutions are defined in the
-     *         {@link ErrorSolutionLibrary} of the metamodel. This edge class must be the same
-     *         as the edge class in the {@link ErrorSolution}.
-     */
-    public Map<ConsistencyCheckSectionMetaPath, Class<? extends Edge>> getConsistencyConditionMissingConnectedElementsMetaPaths() {
+    public Map<Class<? extends InferenceEdge>, MetaPath> getInferenceEdgeToConditionMetaPath() {
         return ImmutableMap.of();
     }
 

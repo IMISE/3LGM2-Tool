@@ -34,11 +34,10 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.CompositionEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.InstanciationEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
-import de.imise.tool3lgm.graphtools.path.PathFunctions;
-import de.imise.tool3lgm.graphtools.path.metapaths.AbstractMetaPath;
 import de.imise.tool3lgm.graphtools.path.metapaths.ElementaryMetaPath;
 import de.imise.tool3lgm.graphtools.path.metapaths.ElementaryMetaPath.Type;
 import de.imise.tool3lgm.graphtools.path.metapaths.ElementaryMetaPathHandler;
+import de.imise.tool3lgm.graphtools.path.metapaths.MetaPath;
 import de.imise.tool3lgm.graphtools.path.metapaths.ParallelMetaPath;
 import de.imise.tool3lgm.graphtools.path.metapaths.SimpleMetaPath;
 import de.imise.tool3lgm.graphtools.path.paths.AbstractPath;
@@ -669,7 +668,7 @@ public class LGMGraphDocument extends GraphDocument {
                 }
                 //für diesen Pfadteil müssen die verbundenen Elemente herausgesucht werden
                 SimpleMetaPath subPathConnected = metaPath.getSubPath(0, path2CreateStartIndex);
-                Collection<ModelElement> connectedElements = PathFunctions.getConnectedElements(master, subPathConnected);
+                Collection<ModelElement> connectedElements = subPathConnected.getConnectedElements(master);
                 for (ModelElement me : connectedElements) {
                     //ab diesem Pfadteil muss neu angelegt werden
                     SimpleMetaPath subPathCreate = metaPath.getSubPath(path2CreateStartIndex);
@@ -689,7 +688,7 @@ public class LGMGraphDocument extends GraphDocument {
      * @param pid
      * @return
      */
-    public final AbstractPath createPath(final ModelElement startElement, final ModelElement endElement, final AbstractMetaPath metaPath, final int pid) {
+    public final AbstractPath createPath(final ModelElement startElement, final ModelElement endElement, final MetaPath metaPath, final int pid) {
         return createPath(startElement, endElement, metaPath, false, pid);
     }
 
@@ -701,13 +700,13 @@ public class LGMGraphDocument extends GraphDocument {
      * @param pid
      * @return
      */
-    public final AbstractPath createPath(final ModelElement startElement, final ModelElement endElement, final AbstractMetaPath metaPath, final boolean askNameForNewEndElement, final int pid) {
+    public final AbstractPath createPath(final ModelElement startElement, final ModelElement endElement, final MetaPath metaPath, final boolean askNameForNewEndElement, final int pid) {
         if (metaPath instanceof SimpleMetaPath) {
             return createSimplePath(startElement, endElement, (SimpleMetaPath) metaPath, askNameForNewEndElement, pid);
         } else if (metaPath instanceof ParallelMetaPath) {
             ParallelMetaPath parallelMetaPath = (ParallelMetaPath) metaPath;
             List<AbstractPath> paths = new ArrayList<>();
-            for (AbstractMetaPath internalMetaPath : parallelMetaPath.iterableSubMetaPaths()) {
+            for (MetaPath internalMetaPath : parallelMetaPath.iterableSubMetaPaths()) {
                 AbstractPath subPath = createPath(startElement, endElement, internalMetaPath, pid);
                 paths.add(subPath);
             }

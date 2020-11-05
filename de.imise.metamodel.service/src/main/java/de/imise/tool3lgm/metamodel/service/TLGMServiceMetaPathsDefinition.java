@@ -16,11 +16,10 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.InferenceEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.InstanciationEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.path.MetaPathDefinition;
-import de.imise.tool3lgm.graphtools.path.metapaths.AbstractMetaPath;
-import de.imise.tool3lgm.graphtools.path.metapaths.ConsistencyCheckSectionMetaPath;
 import de.imise.tool3lgm.graphtools.path.metapaths.DifferenceMetaPath;
 import de.imise.tool3lgm.graphtools.path.metapaths.ElementaryMetaPath;
 import de.imise.tool3lgm.graphtools.path.metapaths.ElementaryMetaPathHandler;
+import de.imise.tool3lgm.graphtools.path.metapaths.MetaPath;
 import de.imise.tool3lgm.graphtools.path.metapaths.SectionMetaPath;
 import de.imise.tool3lgm.graphtools.path.metapaths.SimpleMetaPath;
 import de.imise.tool3lgm.metamodel.service.edge.ApplicationSystem_IheActorInstance_Edge;
@@ -29,7 +28,6 @@ import de.imise.tool3lgm.metamodel.service.edge.CommunicationLink_Edge;
 import de.imise.tool3lgm.metamodel.service.edge.IheActorInstanceCommunicationLink_Edge;
 import de.imise.tool3lgm.metamodel.service.edge.IheActorInstance_IheActorInstanceInterface_Edge;
 import de.imise.tool3lgm.metamodel.service.edge.IheActor_IheActorInstance_Edge;
-import de.imise.tool3lgm.metamodel.service.edge.IheActor_IheActor_MustBeGroupedWith_Edge;
 import de.imise.tool3lgm.metamodel.service.edge.IheActor_IheInterface_Edge;
 import de.imise.tool3lgm.metamodel.service.edge.IheCommunicationLink_Edge;
 import de.imise.tool3lgm.metamodel.service.edge.IheCommunicationLink_IheActorInstanceCommunicationLink_Edge;
@@ -87,7 +85,7 @@ public class TLGMServiceMetaPathsDefinition extends MetaPathDefinition {
     }
 
     @Override
-    public final Map<Class<? extends Edge>, AbstractMetaPath> getSoftConditionMetaPaths() {
+    public final Map<Class<? extends Edge>, MetaPath> getSoftConditionMetaPaths() {
         //IheActorInstanceCommunicationLink_Edge (best connectable ActorInstanceInterfaces should be connected with IheInterfaces which are connected via an IheCommunicationInterface)
         SimpleMetaPath includeCondition1 = smp(IheActorInstanceInvokingInterface.class, IheActorInstanceProvidingInterface.class, IheInvokingInterface_IheActorInstanceInvokingInterface_Edge.class, IheCommunicationLink_Edge.class,
                 IheProvidingInterface_IheActorInstanceProvidingInterface_Edge.class);
@@ -132,14 +130,14 @@ public class TLGMServiceMetaPathsDefinition extends MetaPathDefinition {
     ////////////////////////////////////////////////////////////////////////
 
     @Override
-    public Map<Class<? extends ModelElement>, AbstractMetaPath> getElementClassToNameExtensionPath() {
+    public Map<Class<? extends ModelElement>, MetaPath> getElementClassToNameExtensionPath() {
         SimpleMetaPath applicationsSystemNameExtensionPath = smp(ApplicationSystem.class, SoftwareProduct.class, ApplicationSystem_SoftwareProduct_Edge.class);
         SimpleMetaPath iheActorInstanceNameExtensionPath = smp(IheActorInstance.class, IheActor.class, IheActor_IheActorInstance_Edge.class);
         return ImmutableMap.of(ApplicationSystem.class, applicationsSystemNameExtensionPath, IheActorInstance.class, iheActorInstanceNameExtensionPath);
     }
 
     @Override
-    public Map<Class<? extends Edge>, AbstractMetaPath> getEdgeClassToInitialCreatedNameSourcePath() {
+    public Map<Class<? extends Edge>, MetaPath> getEdgeClassToInitialCreatedNameSourcePath() {
         MetaModel metaModel = getMetaModel();
         ElementaryMetaPathHandler emph = metaModel.getElementaryMetaPathHandler();
 
@@ -157,7 +155,7 @@ public class TLGMServiceMetaPathsDefinition extends MetaPathDefinition {
         ElementaryMetaPath iheCommunicationLink_nameMetaPath2_pathStep2 = emph.getMetaPath(IheProvidingInterface.class, IheProvidingInterface_IheTransaction_Edge.class, Direction.FORWARD, IheTransaction.class);
         SimpleMetaPath iheCommunicationLink_nameMetaPath2 = new SimpleMetaPath(iheCommunicationLink_nameMetaPath2_pathStep1, iheCommunicationLink_nameMetaPath2_pathStep2);
 
-        AbstractMetaPath iheCommunicationLink_nameMetaPath = new SectionMetaPath(iheCommunicationLink_nameMetaPath1, iheCommunicationLink_nameMetaPath2);
+        MetaPath iheCommunicationLink_nameMetaPath = new SectionMetaPath(iheCommunicationLink_nameMetaPath1, iheCommunicationLink_nameMetaPath2);
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // IheActorInstanceCommunicationLink_Edge -> bekommt Name der Transaktion, die über ihre Schnittstellen verbunden ist //
@@ -183,7 +181,7 @@ public class TLGMServiceMetaPathsDefinition extends MetaPathDefinition {
         SimpleMetaPath iheActorInstanceCommunicationLink_nameMetaPath2 = new SimpleMetaPath(iheActorInstanceCommunicationLink_nameMetaPath2_pathStep1, iheActorInstanceCommunicationLink_nameMetaPath2_pathStep2,
                 iheActorInstanceCommunicationLink_nameMetaPath2_pathStep3);
 
-        AbstractMetaPath iheActorInstanceCommunicationLink_nameMetaPath = new SectionMetaPath(iheActorInstanceCommunicationLink_nameMetaPath1, iheActorInstanceCommunicationLink_nameMetaPath2);
+        MetaPath iheActorInstanceCommunicationLink_nameMetaPath = new SectionMetaPath(iheActorInstanceCommunicationLink_nameMetaPath1, iheActorInstanceCommunicationLink_nameMetaPath2);
         return ImmutableMap.of(IheCommunicationLink_Edge.class, iheCommunicationLink_nameMetaPath, IheActorInstanceCommunicationLink_Edge.class, iheActorInstanceCommunicationLink_nameMetaPath);
     }
 
@@ -192,7 +190,7 @@ public class TLGMServiceMetaPathsDefinition extends MetaPathDefinition {
     ////////////////////////////////////////////////////////////////////////////////
 
     @Override
-    public final Map<Class<? extends InferenceEdge>, AbstractMetaPath> getInferenceEdgeToConditionMetaPath() {
+    public final Map<Class<? extends InferenceEdge>, MetaPath> getInferenceEdgeToConditionMetaPath() {
 
         MetaModel metaModel = getMetaModel();
         ElementaryMetaPathHandler emph = metaModel.getElementaryMetaPathHandler();
@@ -211,7 +209,7 @@ public class TLGMServiceMetaPathsDefinition extends MetaPathDefinition {
         ElementaryMetaPath service_CommunicationLink_InferenceMetaPath2_pathStep2 = emph.getMetaPath(InvokingInterface.class, Service_ProvidingInterface_Edge.class, Direction.BACKWARD, Service.class);
         SimpleMetaPath service_CommunicationLink_InferenceMetaPath2 = new SimpleMetaPath(service_CommunicationLink_InferenceMetaPath2_pathStep1, service_CommunicationLink_InferenceMetaPath2_pathStep2);
         //   (*A1) Service_CommunicationLink_Edge is inferred by Section-MetaPath of MetaPaths 1 and 2:
-        AbstractMetaPath service_CommunicationLink_InferenceMetaPath = new SectionMetaPath(service_CommunicationLink_InferenceMetaPath1, service_CommunicationLink_InferenceMetaPath2);
+        MetaPath service_CommunicationLink_InferenceMetaPath = new SectionMetaPath(service_CommunicationLink_InferenceMetaPath1, service_CommunicationLink_InferenceMetaPath2);
 
         // Edge between IheTransaction and IheCommunicationLink_Edge = IheTransaction_IheCommunicationLink_Edge
         //   (*A2) IheTransaction_IheCommunicationLink_Edge is inferred by Section-MetaPath of MetaPaths 1 and 2:
@@ -227,7 +225,7 @@ public class TLGMServiceMetaPathsDefinition extends MetaPathDefinition {
         ElementaryMetaPath iheTransaction_IheCommunicationLink_InferenceMetaPath2_pathStep2 = emph.getMetaPath(IheProvidingInterface.class, IheProvidingInterface_IheTransaction_Edge.class, Direction.FORWARD, IheTransaction.class);
         SimpleMetaPath iheTransaction_IheCommunicationLink_InferenceMetaPath2 = new SimpleMetaPath(iheTransaction_IheCommunicationLink_InferenceMetaPath2_pathStep1, iheTransaction_IheCommunicationLink_InferenceMetaPath2_pathStep2);
         //   (*A2) IheTransaction_IheCommunicationLink_Edge is inferred by Section-MetaPath of MetaPaths 1 and 2:
-        AbstractMetaPath iheTransaction_IheCommunicationLink_InferenceMetaPath = new SectionMetaPath(iheTransaction_IheCommunicationLink_InferenceMetaPath1, iheTransaction_IheCommunicationLink_InferenceMetaPath2);
+        MetaPath iheTransaction_IheCommunicationLink_InferenceMetaPath = new SectionMetaPath(iheTransaction_IheCommunicationLink_InferenceMetaPath1, iheTransaction_IheCommunicationLink_InferenceMetaPath2);
 
         // Edge between IheCommunicationLink_Edge and IheActorInstanceCommunicationLink_Edge= IheCommunicationLink_IheActorInstanceCommunicationLink_Edge
         //    (*A3) IheCommunicationLink_IheActorInstanceCommunicationLink_Edge InferenceEdge is inferred by Section-MetaPath of MetaPaths 1 and 2:
@@ -254,59 +252,11 @@ public class TLGMServiceMetaPathsDefinition extends MetaPathDefinition {
                 iheCommunicationLink_IheActorInstanceCommunicationLink_InferenceMetaPath2_pathStep2, iheCommunicationLink_IheActorInstanceCommunicationLink_InferenceMetaPath2_pathStep3);
 
         //    (*A3) IheCommunicationLink_IheActorInstanceCommunicationLink_Edge InferenceEdge is inferred by Section-MetaPath of MetaPaths 1 and 2:
-        AbstractMetaPath iheCommunicationLink_IheActorInstanceCommunicationLink_InferenceMetaPath = new SectionMetaPath(iheCommunicationLink_IheActorInstanceCommunicationLink_InferenceMetaPath1,
+        MetaPath iheCommunicationLink_IheActorInstanceCommunicationLink_InferenceMetaPath = new SectionMetaPath(iheCommunicationLink_IheActorInstanceCommunicationLink_InferenceMetaPath1,
                 iheCommunicationLink_IheActorInstanceCommunicationLink_InferenceMetaPath2);
 
         return ImmutableMap.of(Service_CommunicationLink_Edge.class, service_CommunicationLink_InferenceMetaPath, IheTransaction_IheCommunicationLink_Edge.class, iheTransaction_IheCommunicationLink_InferenceMetaPath,
                 IheCommunicationLink_IheActorInstanceCommunicationLink_Edge.class, iheCommunicationLink_IheActorInstanceCommunicationLink_InferenceMetaPath);
-    }
-
-    /////////////////////////////////////
-    //  ConsistencyConditionMetaPaths  //
-    /////////////////////////////////////
-
-    @Override
-    public Map<ConsistencyCheckSectionMetaPath, Class<? extends Edge>> getConsistencyConditionMissingConnectedElementsMetaPaths() {
-        //AXS am 08.09.20220:
-        //Dieser erste MetaPath beschreibt den Fehler aus Sicht der IheActorInstance. Fehlt für sie der muss-gruppiert-werden-mit-Partner, dann kommt der
-        //Fehler. Problem: der Fehler sagt aus, dass dem Anwendungssystem, dieser IheActorInstance ein weiteres Anwendungssystem zugeordnet werden muss.
-        //Das kommt auch, wenn die IheActorInstance gar keinem Anwendungssystem zugeordnet ist. Dadurch aber gibt es das sogenannte Element zur Fehlerbehebung
-        //nicht, dessen Eigenschaftsdialog man öffnen könnte, um den Fehler zu beheben (denn das geht nur durch Öffnen des Dialoes für das zugehörige
-        //Anwendungssystem, was ja nicht da ist). Dadurch gilt dieser Fehler automatisch als nicht behebbar. Dadurch würde die IheActorInsance beim Einlesen
-        //eines solchen fehlerhaften Modells automatisch gelöscht werden (in #clearUnfixableErrors()), was nur dadurch verhindert wird, dass alle diese
-        //MissingPathErrors in #clearUnfixableErrors() ignoriert werden. Das ist auch ok so, weil bei beliebig langen Pfaden nie weiß, warum der Fehler
-        //aufgetreten ist und das Element somit nicht einfach löschen sollte.
-        //Es gab mehrere Möglichkeiten, das nicht erwünschte Löschen zu umgehen:
-        // 1.) den Fehler nicht aus Sicht der IheActorInsance sondern für das Anwenundungssystem generieren. Dann kommt der Fehler nur, wenn auch tatsächlich
-        //ein Anwendungssystem vorhanden ist. ABER (siehe unten): die Kaskade der Abhängigkeiten funktioniert dann nciht mehr richtig
-        //2.) Generell festlegen, dass MissingPathErrors niemals als unfixable gelten und somit die betreffenden Elemente nicht gelöscht werden. Die normalen
-        //MIN-MAX-Errors sind davon nicht betroffen, da sie genau für eine einzelne Kante gelten.
-        //3.) nicht wirklich praktikabel aber möglich: Man definiert noch eine Bedingung, die zutreffen muss, damit der Fehler anwendbar ist. In dem Fall hier,
-        //müsste man den ersten Pfadschritt irgendwie als Bedingung angeben, dass es ihn geben muss, damit der zweite Pfadschritt als fehlerhaft angesehen werden
-        //kann.
-        //Fazit: Ich habe mich für 2.) entschieden, also MissingPathError-Elemente werden niemals gelöscht und es wird weiterhin der MetaPfad mit der
-        //funktionierenden Abhängigkeits-Kaskade ausgeführt. Weiterhin werde ich in der Fehlertabelle der Konsistenzprüfung verhindern, dass Fehler angezeigt werden,
-        //die man gar nicht beheben kann. Denn eigentlich müsste für die IheActorInstance noch ein Fehler oder eine Warnung erzeugt werden, dass sie mit keinem
-        //Anwendungssystem verbunden ist.
-        SimpleMetaPath consistencyConditionSubMetaPath1 = smp(IheActorInstance.class, IheActor.class, IheActor_IheActorInstance_Edge.class, IheActor_IheActor_MustBeGroupedWith_Edge.class);
-        SimpleMetaPath consistencyConditionSubMetaPath2 = smp(IheActorInstance.class, IheActor.class, ApplicationSystem_IheActorInstance_Edge.class, ApplicationSystem_IheActorInstance_Edge.class, IheActor_IheActorInstance_Edge.class);
-        ConsistencyCheckSectionMetaPath consistencyConditionMetaPathActorInstanceMustBeGroupedWith = new ConsistencyCheckSectionMetaPath("PATH_IheActorInstance_mustBeGroupedWith_IheActor", consistencyConditionSubMetaPath1,
-                consistencyConditionSubMetaPath2);
-
-        //Der folgende MetaPfad beschreibt die nicht erfüllte must-be-grouped-with-Beziehung ausgehend vom Anwendungssystem. Fehlt eine must-be-grouped-with-Beziehung,
-        //dann kommt der Fehler, dass diesem Anwendungssystem eine weitere IheActorInsatnce zugeordnet werden muss. Hat irgendeine zu gruppierende IheActorInstance gar
-        //kein Anwendungssystem, dann kommt kein Fehler.
-        //Problem: hiermit funktioniert die Kaskade von Anhängigkeiten  nicht richtig. Also eine Bedingung gilt schon als erfüllt, sobald nur eine einzige, aber
-        //nicht alle benötigten IheActorInstances an dem Anwendungssystem hängen. Warum das so ist, müsste mal nachvollzogen werden, weil eigentlich halte ich das
-        //hier für den besseren Pfad, da kein Fehler entsteht, wenn die Ihe ActorInstance kein Anwendungssystem hat. Bsp.-Kaskade: XDS-Doc-Consumer mal mit allen
-        //Varianten des Hinzufügens benötigter Anhängigkeiten ausprobieren.
-        SimpleMetaPath consistencyConditionSubMetaPath3 = smp(ApplicationSystem.class, IheActor.class, ApplicationSystem_IheActorInstance_Edge.class, IheActor_IheActorInstance_Edge.class, IheActor_IheActor_MustBeGroupedWith_Edge.class);
-        SimpleMetaPath consistencyConditionSubMetaPath4 = smp(ApplicationSystem.class, IheActor.class, ApplicationSystem_IheActorInstance_Edge.class, IheActor_IheActorInstance_Edge.class);
-        ConsistencyCheckSectionMetaPath consistencyConditionApplicationSystemNeedsGroupingOfIheActorInstances = new ConsistencyCheckSectionMetaPath("PATH_ApplicationSystem_needsGroupingOf_IheActorInstances", consistencyConditionSubMetaPath3,
-                consistencyConditionSubMetaPath4);
-
-        //the identifier for the corresponding ErrorSolution is the IheActor_IheActor_MustBeGroupedWith_Edge.class
-        return ImmutableMap.of(consistencyConditionMetaPathActorInstanceMustBeGroupedWith, IheActor_IheActor_MustBeGroupedWith_Edge.class);//, consistencyConditionApplicationSystemNeedsGroupingOfIheActorInstances,IheActor_IheActor_MustBeGroupedWith_Edge.class);
     }
 
 }

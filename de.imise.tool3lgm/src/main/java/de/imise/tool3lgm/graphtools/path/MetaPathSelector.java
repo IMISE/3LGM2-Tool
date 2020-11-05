@@ -30,7 +30,7 @@ import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
 import de.imise.tool3lgm.graphtools.metamodel.CoreMetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
-import de.imise.tool3lgm.graphtools.path.metapaths.AbstractMetaPath;
+import de.imise.tool3lgm.graphtools.path.metapaths.MetaPath;
 import de.imise.tool3lgm.gui.MainFrame;
 import de.imise.util.Alphabetical;
 import de.imise.util.NamedObjectContainer;
@@ -56,12 +56,12 @@ public class MetaPathSelector implements ActionListener {
     /**
      * ComboBox für die erste Klasse
      */
-    private final AlphabeticalComboBox class1ComboBox;
+    private final AlphabeticalComboBox<Class<? extends ModelElement>> class1ComboBox;
 
     /**
      * ComboBox für die zweite Klasse
      */
-    private final AlphabeticalComboBox class2ComboBox;
+    private final AlphabeticalComboBox<Class<? extends ModelElement>> class2ComboBox;
 
     /**
      * Chekcbox über die eingestellt werden kann, ob nur absolute Kindelemente (also Elemente ohne
@@ -73,12 +73,12 @@ public class MetaPathSelector implements ActionListener {
     /**
      * Metapaths that can be choosed in the <code>metaPathJList</code>
      */
-    private List<AbstractMetaPath> selectableMetaPaths = new ArrayList<>();
+    private List<MetaPath> selectableMetaPaths = new ArrayList<>();
 
     /**
      * Choosed metapaths
      */
-    private final List<AbstractMetaPath> selectedMetaPaths;
+    private final List<MetaPath> selectedMetaPaths;
 
     /**
      * Listeners for change events
@@ -117,7 +117,7 @@ public class MetaPathSelector implements ActionListener {
     public MetaPathSelector(final MetaPathDefinition model, final int maxParallelSelectedPaths) {
         this.model = model;
         this.maxParallelSelectedPaths = maxParallelSelectedPaths;
-        class1ComboBox = new AlphabeticalComboBox();
+        class1ComboBox = new AlphabeticalComboBox<>();
         Set<Class<? extends ModelElement>> startElementClassesInPaths = model.getStartElementClassesInPaths();
         endElementClassesInPaths = model.getEndElementClassesInPaths();
         MetaModel metaModel = model.getMetaModel();
@@ -135,7 +135,7 @@ public class MetaPathSelector implements ActionListener {
                     sb.append(")");
                     displayableClassName = sb.toString();
                 }
-                class1ComboBox.addItem(elementClass, displayableClassName);
+                class1ComboBox.addObject(elementClass, displayableClassName);
             }
         }
         class1ComboBox.setSelectedItem(null);
@@ -159,18 +159,17 @@ public class MetaPathSelector implements ActionListener {
         Object eventSource = e.getSource();
         if (eventSource == class1ComboBox) {
             class2ComboBox.removeAllItems();
-            Object box1SelectedItem = class1ComboBox.getSelectedItem();
-            if (box1SelectedItem == null) {
+            Class<? extends ModelElement> class1BoxSelection = class1ComboBox.getSelectedObject();
+            if (class1BoxSelection == null) {
                 class2ComboBox.setEnabled(false);
                 return;
             }
             class2ComboBox.setEnabled(true);
-            Class<? extends ModelElement> class1BoxSelection = ((Class<?>) class1ComboBox.getSelectedObject()).asSubclass(ModelElement.class);
             for (Class<? extends ModelElement> elementClass : endElementClassesInPaths) {
-                Set<AbstractMetaPath> metaPathes = model.getMetaPaths(class1BoxSelection, elementClass, false);
+                Set<MetaPath> metaPathes = model.getMetaPaths(class1BoxSelection, elementClass, false);
                 if (!metaPathes.isEmpty()) {
                     String name = elementsNameBuilder.getDisplayableName(elementClass);
-                    class2ComboBox.addItem(elementClass, name);
+                    class2ComboBox.addObject(elementClass, name);
                 }
             }
             selectedMetaPaths.clear();
@@ -178,25 +177,24 @@ public class MetaPathSelector implements ActionListener {
             deliverChangeEvent(class1ComboBox);
         } else if (eventSource == class2ComboBox) {
             class2ComboBox.setPopupVisible(false);
-            Object box2SelectedItem = class2ComboBox.getSelectedItem();
-            if (box2SelectedItem == null) {
+            Class<? extends ModelElement> class2BoxSelection = class2ComboBox.getSelectedObject();
+            if (class2BoxSelection == null) {
                 return;
             }
-            Class<? extends ModelElement> class1BoxSelection = ((Class<?>) class1ComboBox.getSelectedObject()).asSubclass(ModelElement.class);
-            Class<? extends ModelElement> class2BoxSelection = ((Class<?>) class2ComboBox.getSelectedObject()).asSubclass(ModelElement.class);
+            Class<? extends ModelElement> class1BoxSelection = class1ComboBox.getSelectedObject();
             selectedMetaPaths.clear();
             selectableMetaPaths = new ArrayList<>(model.getMetaPaths(class1BoxSelection, class2BoxSelection, true));
             Alphabetical.sort(selectableMetaPaths);
             if (selectableMetaPaths != null) {
                 int selectableMetaPathsCount = selectableMetaPaths.size();
                 if (selectableMetaPathsCount == 1) {
-                    AbstractMetaPath metaPath = selectableMetaPaths.iterator().next();
+                    MetaPath metaPath = selectableMetaPaths.iterator().next();
                     selectableMetaPaths = new ArrayList<>(1);
                     selectableMetaPaths.add(metaPath);
                     selectedMetaPaths.add(metaPath);
                 } else if (selectableMetaPathsCount > 1) {
-                    List<NamedObjectContainer<AbstractMetaPath>> pathNames = new ArrayList<>(selectableMetaPathsCount);
-                    for (AbstractMetaPath metaPath : selectableMetaPaths) {
+                    List<NamedObjectContainer<MetaPath>> pathNames = new ArrayList<>(selectableMetaPathsCount);
+                    for (MetaPath metaPath : selectableMetaPaths) {
                         String metaPathFullName = metaPath.getFullName();
                         pathNames.add(new NamedObjectContainer<>(metaPath, metaPathFullName));
                     }
@@ -228,8 +226,8 @@ public class MetaPathSelector implements ActionListener {
                             Object selectedI = selected.get(i);
                             if (selectedI != null) {
                                 @SuppressWarnings("unchecked")
-                                NamedObjectContainer<AbstractMetaPath> metaPathCont = (NamedObjectContainer<AbstractMetaPath>) selectedI;
-                                AbstractMetaPath metaPath = metaPathCont.getObject();
+                                NamedObjectContainer<MetaPath> metaPathCont = (NamedObjectContainer<MetaPath>) selectedI;
+                                MetaPath metaPath = metaPathCont.getObject();
                                 selectedMetaPaths.add(metaPath);
                             }
                         }
@@ -318,7 +316,7 @@ public class MetaPathSelector implements ActionListener {
         dialogMetaPathSelecor.selectedMetaPaths.clear();
         Object selectedMetaPath = dialogMetaPathSelecor.metaPathJList.getSelectedObject();
         if (selectedMetaPath != null) {
-            dialogMetaPathSelecor.selectedMetaPaths.add((AbstractMetaPath) selectedMetaPath);
+            dialogMetaPathSelecor.selectedMetaPaths.add((MetaPath) selectedMetaPath);
         }
         return dialogMetaPathSelecor;
     }
@@ -326,14 +324,14 @@ public class MetaPathSelector implements ActionListener {
     /**
      * @return Returns the class1ComboBox.
      */
-    public AlphabeticalComboBox getClass1ComboBox() {
+    public AlphabeticalComboBox<Class<? extends ModelElement>> getClass1ComboBox() {
         return class1ComboBox;
     }
 
     /**
      * @return Returns the class2ComboBox.
      */
-    public AlphabeticalComboBox getClass2ComboBox() {
+    public AlphabeticalComboBox<Class<? extends ModelElement>> getClass2ComboBox() {
         return class2ComboBox;
     }
 
@@ -342,24 +340,6 @@ public class MetaPathSelector implements ActionListener {
      */
     public JCheckBox getShowPartsOnlyCheckBox() {
         return showPartsOnlyCheckBox;
-    }
-
-    /**
-     * @param classComboBox
-     * @return selected class of <code>classComboBox</code>
-     */
-    private Class<? extends ModelElement> getSelectedClass(final AlphabeticalComboBox classComboBox) {
-        Object o = classComboBox.getSelectedObject();
-        if (o != null) {
-            Class<? extends Object> clazz = o.getClass();
-            if (Class.class.isAssignableFrom(clazz)) {
-                Class<?> objectAsClass = (Class<?>) o;
-                if (ModelElement.class.isAssignableFrom(objectAsClass)) {
-                    return objectAsClass.asSubclass(ModelElement.class);
-                }
-            }
-        }
-        return null;
     }
 
     /**
@@ -403,8 +383,8 @@ public class MetaPathSelector implements ActionListener {
      */
     public MetaPathSelection getSelection() {
         MetaPathSelection selection = new MetaPathSelection();
-        selection.class1 = getSelectedClass(class1ComboBox);
-        selection.class2 = getSelectedClass(class2ComboBox);
+        selection.class1 = class1ComboBox.getSelectedObject();
+        selection.class2 = class2ComboBox.getSelectedObject();
         selection.showPartsOnly = showPartsOnlyCheckBox.isSelected();
         selection.selectedMetaPaths = ImmutableList.copyOf(selectedMetaPaths); // es muss unbedingt eine Kopie sein!
         return selection;
@@ -440,7 +420,7 @@ public class MetaPathSelector implements ActionListener {
         public Class<? extends ModelElement> class2;
 
         /** Choosed metapaths */
-        public List<AbstractMetaPath> selectedMetaPaths;
+        public List<MetaPath> selectedMetaPaths;
 
         /** Show parts only in matrix rows and columns **/
         public boolean showPartsOnly;

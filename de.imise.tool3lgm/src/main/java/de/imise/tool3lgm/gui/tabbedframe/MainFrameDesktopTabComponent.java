@@ -2,6 +2,7 @@ package de.imise.tool3lgm.gui.tabbedframe;
 
 import java.awt.BorderLayout;
 
+import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 
 import de.imise.tool3lgm.gui.viewpane.ViewPane;
@@ -42,5 +43,10 @@ public abstract class MainFrameDesktopTabComponent extends JPanel implements Vie
     @Override
     public void dispose() {
     }
+
+    /**
+     * @return the icon that should be displayed on the tab
+     */
+    public abstract ImageIcon getTabIcon();
 
 }

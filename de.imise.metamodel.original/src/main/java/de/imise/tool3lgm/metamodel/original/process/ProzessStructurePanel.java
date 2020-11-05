@@ -60,6 +60,9 @@ import de.imise.tool3lgm.metamodel.original.node.Objekttyp;
  *
  * @author AXS
  */
+@SuppressWarnings({
+        "unused", "serial"
+})
 public class ProzessStructurePanel extends PathConnectionLeafPanel implements TreeWillExpandListener {
 
     /**

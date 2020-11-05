@@ -235,10 +235,6 @@ public class MainFrameToolBar extends UnfloatableToolBar implements MouseListene
             this(actionSource.createAction(), smallIcon);
         }
 
-        public ToolbarButton(final ActionSource actionSource) {
-            this(actionSource.createAction());
-        }
-
         @Override
         public void setText(final String arg0) {
             //das muss sein, weil bei einer im Menü und in der Toolbar gleichzeitig genutzen tool3lgm.util.swing.event.ToggleAction

@@ -5,7 +5,7 @@ import java.util.List;
 import com.google.common.collect.ImmutableList;
 
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
-import de.imise.tool3lgm.graphtools.path.metapaths.AbstractMetaPath;
+import de.imise.tool3lgm.graphtools.path.metapaths.MetaPath;
 import de.imise.tool3lgm.graphtools.path.metapaths.SimpleMetaPath;
 
 /**
@@ -20,7 +20,7 @@ public class SequencePath extends ListPath {
      * @param metaPath
      * @param paths
      */
-    public SequencePath(final AbstractMetaPath metaPath, final List<AbstractPath> paths) {
+    public SequencePath(final MetaPath metaPath, final List<AbstractPath> paths) {
         super(metaPath, paths != null && paths.size() > 0 ? paths.get(0).getStartElement() : null, paths != null && paths.size() > 0 ? paths.get(paths.size() - 1).getEndElement() : null, paths);
     }
 
@@ -28,7 +28,7 @@ public class SequencePath extends ListPath {
      * @param metaPath
      * @param paths
      */
-    public SequencePath(final AbstractMetaPath metaPath, final AbstractPath... paths) {
+    public SequencePath(final MetaPath metaPath, final AbstractPath... paths) {
         super(metaPath, paths.length > 0 ? paths[0].getStartElement() : null, paths.length > 0 ? paths[paths.length - 1].getEndElement() : null, paths);
     }
 

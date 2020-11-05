@@ -32,6 +32,7 @@ public class ExtrasActions {
         };
     }
 
+    @SuppressWarnings("serial")
     private Action getRelinkETNTAction() {
         GraphDocumentAction relinkETNT = new GraphDocumentAction(getClass(), null, resHandler.getResString("ACTION_NAME_RELINK_ETNT"), null) {
             @Override

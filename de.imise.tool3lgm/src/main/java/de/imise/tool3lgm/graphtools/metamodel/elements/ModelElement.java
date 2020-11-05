@@ -23,6 +23,7 @@ import de.imise.tool3lgm.Tool3lgmModelType.ModelCategory;
 import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
 import de.imise.tool3lgm.graphtools.dialog.element.ElemenPropertyDialogsContext;
 import de.imise.tool3lgm.graphtools.dialog.element.ElementPropertyDialog;
+import de.imise.tool3lgm.graphtools.dialog.element.ErrorDecoratedElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.dialog.element.panel.ElementDialogPanel;
 import de.imise.tool3lgm.graphtools.metamodel.GraphViewDefinition;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
@@ -34,8 +35,7 @@ import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GDCollectionOwner;
 import de.imise.tool3lgm.graphtools.model.GDCommands;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
-import de.imise.tool3lgm.graphtools.path.PathFunctions;
-import de.imise.tool3lgm.graphtools.path.metapaths.AbstractMetaPath;
+import de.imise.tool3lgm.graphtools.path.metapaths.MetaPath;
 import de.imise.tool3lgm.graphtools.userfield.UserField;
 import de.imise.tool3lgm.graphtools.userfield.UserFieldTarget;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
@@ -404,7 +404,7 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
      * Diese Funktion darf nicht einfach refactored werden und wenn doch, dann muss das Feld GET_NAME_EXTENSION_METHOD_NAME
      * ebenfalls umbenannt werden.
      */
-    private final AbstractMetaPath getNameExtensionPath() {
+    private final MetaPath getNameExtensionPath() {
         return metaModel.getNameExtensionPath(getClass());
     }
 
@@ -456,7 +456,7 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
      * @return
      */
     public String getNameExtension() {
-        AbstractMetaPath nameExtensionPath = getNameExtensionPath();
+        MetaPath nameExtensionPath = getNameExtensionPath();
         updateHTMLNameSuffixBuffer(nameExtensionPath);
         return suffixBuf.toString();
     }
@@ -464,10 +464,10 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
     /**
      * @param nameExtension
      */
-    private void updateHTMLNameSuffixBuffer(final AbstractMetaPath nameExtension) {
+    private void updateHTMLNameSuffixBuffer(final MetaPath nameExtension) {
         suffixBuf.setLength(0);
         if (nameExtension != null) {
-            Collection<ModelElement> directConnectedElements = PathFunctions.getConnectedElements(this, nameExtension);
+            Collection<ModelElement> directConnectedElements = nameExtension.getConnectedElements(this);
             //Kein Element, dessen Namen in Klammern angezeigt werden soll verbunden -> weiter
             if (!directConnectedElements.isEmpty()) {
                 //genau ein Element verbunden, das denselben Namen hat wie dieses Element -> weiter (damit in der Grafik nicht
@@ -502,7 +502,7 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
         GraphElementLayout nameExtendsionClassLayout = null;
         Iterable<ElementContainer> targetContainers;
         if (targetContainer == null) {
-            AbstractMetaPath nameExtension = getNameExtensionPath();
+            MetaPath nameExtension = getNameExtensionPath();
             updateHTMLNameSuffixBuffer(nameExtension);
             Class<? extends ModelElement> nameExtendsionClass;
             GraphViewDefinition graphViewDefinition;
@@ -1859,7 +1859,7 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
         if (gdcoll == null) {
             return null;
         }
-        return new ElementPropertyDialog(this);
+        return new ErrorDecoratedElementPropertyDialog(this);
     }
 
     /**
@@ -1871,6 +1871,7 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
     public final ElementPropertyDialog getNewPropertyDialogInsance() {
         ElementPropertyDialog propertyDialog = createPropertyDialog();
         propertyDialog.extendDefaultDialog();
+        propertyDialog.update();
         return propertyDialog;
     }
 
@@ -1898,6 +1899,7 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
      * @param edgeClass Klasse der zu suchenden Kanten
      * @return
      */
+    @SuppressWarnings("unchecked") //it's checked!
     public final <T extends Edge> List<T> getTypedEdges(final Class<T> edgeClass) {
         List<T> returnList = new ArrayList<>(getEdgesCount());
         for (Edge edge : getEdges()) {

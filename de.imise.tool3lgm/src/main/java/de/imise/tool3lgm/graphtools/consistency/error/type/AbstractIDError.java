@@ -1,7 +1,6 @@
-package de.imise.tool3lgm.graphtools.consistency.error;
+package de.imise.tool3lgm.graphtools.consistency.error.type;
 
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
-import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.userfield.UserField;
 
 /**
@@ -12,17 +11,21 @@ import de.imise.tool3lgm.graphtools.userfield.UserField;
 public class AbstractIDError extends AbstractConsistencyError {
 
     /**
-     * @param me
-     * @param errorField
-     * @param gdcoll
+     *
      */
-    public AbstractIDError(final ModelElement me, final Object errorField, final GDCollection gdcoll) {
-        super(me, errorField, gdcoll);
+    protected final UserField userField;
+
+    /**
+     * @param me
+     * @param userField
+     */
+    public AbstractIDError(final ModelElement me, final UserField userField) {
+        super(me);
+        this.userField = userField;
     }
 
     @Override
     public String getErrorFieldString() {
-        UserField userField = getUserField();
         StringBuilder sb = new StringBuilder(userField.getName());
         sb.append(" = ");
         sb.append(me.getUserFieldInputValue(userField));
@@ -34,7 +37,7 @@ public class AbstractIDError extends AbstractConsistencyError {
      * @return
      */
     public UserField getUserField() {
-        return (UserField) errorField;
+        return userField;
     }
 
 }

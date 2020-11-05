@@ -1,10 +1,9 @@
 /**
  *
  */
-package de.imise.tool3lgm.graphtools.consistency.error;
+package de.imise.tool3lgm.graphtools.consistency.error.type;
 
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
-import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.path.metapaths.ElementaryMetaPath;
 
 /**
@@ -17,10 +16,9 @@ public class MinCardinalityError extends AbstractCardinalityError {
      * @param me
      * @param elementaryMetaPath
      * @param cardValue
-     * @param gdcoll
      */
-    public MinCardinalityError(final ModelElement me, final ElementaryMetaPath elementaryMetaPath, final GDCollection gdcoll, final int cardValue) {
-        super(me, elementaryMetaPath, gdcoll, cardValue);
+    public MinCardinalityError(final ModelElement me, final ElementaryMetaPath elementaryMetaPath, final int cardValue) {
+        super(me, elementaryMetaPath, cardValue);
     }
 
 }

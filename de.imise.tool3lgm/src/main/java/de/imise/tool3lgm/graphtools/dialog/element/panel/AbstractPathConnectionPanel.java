@@ -31,6 +31,9 @@ import com.google.common.collect.ImmutableList;
 
 import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.Tool3lgmConstants;
+import de.imise.tool3lgm.graphtools.consistency.error.type.AbstractConsistencyError;
+import de.imise.tool3lgm.graphtools.consistency.error.type.AbstractElementaryPathError;
+import de.imise.tool3lgm.graphtools.consistency.error.type.MissingPathError;
 import de.imise.tool3lgm.graphtools.dialog.action.LGMAction;
 import de.imise.tool3lgm.graphtools.dialog.action.LGMMouseListener;
 import de.imise.tool3lgm.graphtools.dialog.element.AbstractElementPropertyDialog;
@@ -42,10 +45,11 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.MultipleEdge;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.model.LGMGraphDocument;
-import de.imise.tool3lgm.graphtools.path.MetaPathFunctions;
-import de.imise.tool3lgm.graphtools.path.PathFunctions;
-import de.imise.tool3lgm.graphtools.path.metapaths.AbstractMetaPath;
+import de.imise.tool3lgm.graphtools.model.template.TemplateLibrariesManager;
 import de.imise.tool3lgm.graphtools.path.metapaths.ElementaryMetaPath;
+import de.imise.tool3lgm.graphtools.path.metapaths.MetaPath;
+import de.imise.tool3lgm.graphtools.path.metapaths.MetaPathFunctions;
+import de.imise.tool3lgm.graphtools.path.metapaths.PathFunctions;
 import de.imise.tool3lgm.graphtools.path.metapaths.SimpleMetaPath;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.util.ReflectionUtils;
@@ -58,7 +62,7 @@ import de.imise.util.swing.component.ParentComponentFinder;
  * @author AXS
  * @created 25.04.2017
  */
-public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel {
+public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel implements DisplayAndFixConsistencyErrorPanel {
 
     /**
      * Options which Label should be presented for a panel.
@@ -121,15 +125,16 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
         LABEL_LAST_EDGE_START_ELEMENT_TYPE_PLURAL,
     }
 
-    /** Der MetaPfad zu anderen Elementen */
-    protected AbstractMetaPath metaPath;
+    /** The metapath to the connected elements */
+    protected MetaPath metaPath;
 
-    /** Label vor dem verbundenen Element mit der Art des Elementes */
+    /** Label in front of the connected element with the type of element */
     protected final JLabel westLabel;
 
     /**
-     * Indikator, ob über den Pfad verbundene Elemente immer eindeutig an einem Punkt angehängt werden können (=<code>true</code>) oder
-     * ob es mehrere Möglichkeiten gibt, weil Zwischenpfade mehrfach existieren können.
+     * Indicator, whether elements connected by the path can always be attached
+     * unambiguously to one point (=<code>true</code>) or whether there are
+     * several possibilities, because intermediate paths can exist multiple times.
      */
     protected final boolean isConnectionPointUnique;
 
@@ -139,22 +144,20 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
     private final ModelElement modelElement;
 
     /**
-     * Panel für eine einfache Assoziation. Das Label trägt den Anzeigenamen der letzten Elementart.
+     * Panel for simple association. The label has the display name of the last
+     * element type.
      *
      * @param dialog
      * @param metaPath
      */
-    public AbstractPathConnectionPanel(final AbstractElementPropertyDialog dialog, final AbstractMetaPath metaPath) {
+    public AbstractPathConnectionPanel(final AbstractElementPropertyDialog dialog, final MetaPath metaPath) {
         this(dialog, LABEL_END_ELEMENT_TYPE, LABEL_LAST_EDGE_CONNECTION_NAME, metaPath);
     }
 
     /**
-     * Panel für eine einfache Assoziation
+     * Panel for simple association
      *
      * @param dialog
-     * @param labelEdgeIndex Index der Edge, die vorgibt, was als searchElementClass angesehen werden soll, also was ans Label geschrieben
-     *            wird. Es wird immer die Endklasse des Pfades bis zur Edge mit dem jeweiligen Index ans Label geschrieben. Wird ein Wert < 0
-     *            übergeben, dann wird dieser Wert von der Anzahl der Kanten im Gesamtpfad abgezogen, um auf den tatsächlichen Index zu kommen.
      * @param titleLabelOption Das Label kann folgende Werte annehmen:
      *            <ul>
      *            <li>{@link PanelLabelOption#LABEL_END_ELEMENT_TYPE} = Anzeigename der EndElement-Art des MetaPfades</li>
@@ -164,19 +167,38 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
      *            labelEdgeIndex
      *            im MetaPfad</li>
      *            </ul>
+     * @param metaPath
+     */
+    public AbstractPathConnectionPanel(final AbstractElementPropertyDialog dialog, final PanelLabelOption titleLabelOption, final MetaPath metaPath) {
+        this(dialog, titleLabelOption, LABEL_LAST_EDGE_CONNECTION_NAME, metaPath);
+    }
+
+    /**
+     * Panel für eine einfache Assoziation
+     *
+     * @param dialog
+     * @param titleLabelOption Das Label kann folgende Werte annehmen:
+     *            <ul>
+     *            <li>{@link PanelLabelOption#LABEL_END_ELEMENT_TYPE} = Display name of the EndElement type of the MetaPath</li>
+     *            <li>{@link PanelLabelOption#LABEL_LAST_EDGE_ELEMENT_NAME} = Display name of the element type of the edge with
+     *            the index labelEdgeIndex in the MetaPath</li>
+     *            <li>{@link PanelLabelOption#LABEL_LAST_EDGE_CONNECTION_NAME} = Display name of the directed connection of the
+     *            edge with the index labelEdgeIndex in the MetaPath</li>
+     *            </ul>
      * @param westLabelOption analog titleLabelOption
      * @param metaPath
      */
-    public AbstractPathConnectionPanel(final AbstractElementPropertyDialog dialog, final PanelLabelOption titleLabelOption, final PanelLabelOption westLabelOption, final AbstractMetaPath metaPath) {
+    public AbstractPathConnectionPanel(final AbstractElementPropertyDialog dialog, final PanelLabelOption titleLabelOption, final PanelLabelOption westLabelOption, final MetaPath metaPath) {
         super(dialog);
         this.metaPath = metaPath;
         modelElement = getPanelModelElement();
         searchElementClass = getInitialSearchElementClass(metaPath);
         isConnectionPointUnique = isConnectionPointUnique();
 
-        // Das WestLabel auf jeden Fall initialisieren, denn es kann von anderen Panels dann hinzugefügt werden
+        // Make sure to initialize the WestLabel, because it can be added by other panels
         westLabel = new JLabel();
-        //bei allen SingleConnectionPanels kann das Westlabel auch die MouseActions bekommen, so dass man auf dem Label an das verknüpfte Element kommt
+        //with all SingleConnectionPanels the west label can also get the MouseActions, so that
+        //you can get to the connected element with a double click or the context menu on the label
         if (metaPath.isSingleConnection()) {
             addMouseActions(westLabel);
         }
@@ -187,7 +209,7 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
     }
 
     /**
-     * Erstellt den Namen des Panels, der auch der String des westLabels wird.
+     * Creates the name of the panel, which also becomes the string of the westLabel.
      *
      * @param labelEdgeIndex
      * @param panelLabelOption
@@ -201,7 +223,7 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
                 Class<? extends Edge> edgeClass = getEdgeClassInPath(labelEdgeIndex);
                 Direction directionInPath = getDirectionInPath(labelEdgeIndex);
                 westLabelText = elementsNameBuilder.getMetaAssociationName(edgeClass, directionInPath);
-            } else {//der Pfad besteht nicht aus einer einfachen Elementarpfadliste
+            } else {//the path does not consist of a simple elementary path list
                 westLabelText = Tool3lgmConstants.getResString("verb");
             }
         } else {
@@ -213,7 +235,8 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
                 boolean labelSecondLastElementClass = panelLabelOption == LABEL_LAST_EDGE_START_ELEMENT_TYPE || panelLabelOption == LABEL_LAST_EDGE_START_ELEMENT_TYPE_SINGULAR || panelLabelOption == LABEL_LAST_EDGE_START_ELEMENT_TYPE_PLURAL;
                 int labelEdgeIndexDiff = labelSecondLastElementClass ? 1 : 0;
                 nameSourceClass = MetaPathFunctions.getElementaryPathsConnectingClass(metaPath, labelEdgeIndex - labelEdgeIndexDiff);
-                //zur Beschriftung des Labels wird immer die speziellere Klasse genommen aus Endklasse des Pfades und searchElementClass. Weil immer nur davon können die verbundenen Elemente sein.
+                //As text of the label always the more special class is taken from end class of the path
+                //and searchElementClass (only the connected elements can be of this class)
                 if (nameSourceClass == null || nameSourceClass.isAssignableFrom(searchElementClass)) {
                     nameSourceClass = searchElementClass;
                 }
@@ -242,7 +265,7 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
                 }
             }
         }
-        westLabelText = StringUtils.capitalizeFirstChar(westLabelText); // Den ersten Buchstaben des Labels immer groß schreiben
+        westLabelText = StringUtils.capitalizeFirstChar(westLabelText); // Always capitalize the first letter of the label
         return westLabelText;
     }
 
@@ -269,15 +292,24 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
     }
 
     /**
-     * Gibt die gemeinsame Oberklasse aller Endklassen des Pfades zurück. Das ist die SearchElementClass.
+     * Returns the common superclass of all end classes of the path.
+     * This is the searchElementClass.
      *
      * @param metaPath
      * @return
      */
-    private static Class<? extends ModelElement> getInitialSearchElementClass(final AbstractMetaPath metaPath) {
+    private static Class<? extends ModelElement> getInitialSearchElementClass(final MetaPath metaPath) {
         Set<Class<? extends ModelElement>> endClasses = metaPath.getEndClasses();
         Class<? extends ModelElement> searchElementClass = ReflectionUtils.getCommonSuperClassOfClasses(endClasses);
         return searchElementClass;
+    }
+
+    /**
+     * @param metaPath
+     * @return
+     */
+    public boolean hasMetaPath(final MetaPath metaPath) {
+        return this.metaPath.isAssignable(metaPath);
     }
 
     /**
@@ -295,11 +327,10 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
     }
 
     /**
-     * Gibt einen Elementarpfad anhand eines übergebenen Index zurück. Ist der Index >= 0, dann wird genau der Index zurück gegeben. Ist der Index
-     * <
-     * 0, dann wird der übergebene Index von der Länge der Geamtliste der Elementarfade abgezogen. Möchte man also den letzten Elementarpfad
-     * haben,
-     * muss man -1 übergeben, für den vorletzten -2 usw.
+     * Returns an elementary path using a given index. If the index >= 0,then exactly
+     * the index is returned. If the index is < 0, then the given index is subtracted
+     * from the length of the list of elementary paths. Thus, if you want to have the
+     * last elementary path, you must pass index == -1, for the second last -2, etc.
      *
      * @param index
      * @return
@@ -310,8 +341,9 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
 
     /**
      * @param index
-     *            Index der Kante im Pfad, wenn dieser eindeutig ist. Wird ein Wert < 0 übergeben, dann ergibt sich der Index aus der Summe der
-     *            Gesamtanzahl der Elementarpfade und diesem Wert.
+     *            Index of the edge in the path, if it is unique. If a value < 0 is
+     *            given, then the index results from the sum of the total number of
+     *            elementary paths and this value.
      * @return
      */
     public Direction getDirectionInPath(final int index) {
@@ -321,8 +353,9 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
 
     /**
      * @param index
-     *            Index der Kante im Pfad, wenn dieser eindeutig ist. Wird ein Wert < 0 übergeben, dann ergibt sich der Index aus der Summe der
-     *            Gesamtanzahl der Elementarpfade und diesem Wert.
+     *            Index of the edge in the path, if it is unique. If a value < 0 is
+     *            given, then the index results from the sum of the total number of
+     *            elementary paths and this value.
      * @return
      */
     public Class<? extends Edge> getEdgeClassInPath(final int index) {
@@ -345,13 +378,14 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
     }
 
     /**
-     * Liefert <code>true</code>, wenn der durch die Kanten vorgegebene Pfad eindeitig festlegt, wo zu verbindende Elemente verknüpft werden.
-     * Sobald in einem Pfad der Länge > 1 (also mind. aus 2 Kanten) eines der mittleren Elemente mehrfach mit dem Ausgangselement verbunden
-     * sein kann, ist nicht mehr eindeutig, wo die Endelemente angehängt werden sollen.
-     * Außerdem ist der Pfad nicht eindeutig, wenn die letzte Kante eine {@link MultipleEdge} ist, also eine Kante, bei der dieselben Elemente
-     * mehrfach miteinander verbunden sein können.
-     *
      * @return
+     *         <code>true</code>, if the path given by the edges uniquely defines
+     *         where to connect elements. As soon as in a MetaPath of length > 1 (i.e. at
+     *         least of 2 edges) one of the middle elements can be connected multiple times
+     *         to the starting element, it is no longer clear where to append the end
+     *         elements. Furthermore, the path is ambiguous if the last edge is a
+     *         {@link MultipleEdge}, i.e. an edge where the same elements can be connected
+     *         several times.
      */
     protected boolean isConnectionPointUnique() {
         List<ElementaryMetaPath> elementaryMetaPaths = metaPath.getElementaryMetaPaths();
@@ -581,7 +615,7 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
      *
      * @return
      */
-    protected List<ElementContainer> getAvailableConnectables() {
+    protected final List<ElementContainer> getAvailableConnectables() {
         List<ElementContainer> available = null;
         //Pfad des Panels besteht aus genau einer Kante
         List<ElementaryMetaPath> elementaryMetaPaths = metaPath.getElementaryMetaPaths();
@@ -591,22 +625,26 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
             Class<? extends Edge> edgeClass = elementaryMetaPath.getEdgeClass();
             MetaModel metaModel = mainDoc.getMetaModel();
             SimpleMetaPath conditionMetaPath = metaModel.getConditionMetaPath(edgeClass);
-            //für diese eine Kante ist ein ConditionMetaPath angegeben
+            //for this edge is a condition metapath defined
             if (conditionMetaPath != null) {
                 if (elementaryMetaPath.getDirection() == BACKWARD) {
                     conditionMetaPath = conditionMetaPath.getOtherDirection();
                 }
                 ModelElement me = getModelElement();
-                Collection<ModelElement> conditionElements = PathFunctions.getConnectedElements(me, conditionMetaPath);
+                Collection<ModelElement> conditionElements = conditionMetaPath.getConnectedElements(me);
                 available = new ArrayList<>(conditionElements.size());
                 for (ModelElement conditionElement : conditionElements) {
-                    available.add(conditionElement.getContainer(mainDoc));
+                    ElementContainer conditionElementContainer = conditionElement.getContainer(mainDoc);
+                    available.add(conditionElementContainer);
                 }
             }
             if (available == null) {
                 available = mainDoc.getElementContainers(searchElementClass, true);
             }
-            //alle available entfernen, für die die Kante nicht mehr gelten soll
+            addAvailablesFromTemplate(available);
+            //remove all available that must not have the edge to be created here according
+            //to the metamodel (some subclasses do not inherit some edges of their
+            //superclasses, which is checked by metamodel.isStartClass(...)
             for (int i = available.size() - 1; i >= 0; i--) {
                 ElementContainer ec = available.get(i);
                 ModelElement availableMe = ec.getElement();
@@ -623,8 +661,38 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
             }
         } else {
             available = mainDoc.getElementContainers(searchElementClass, true);
+            addAvailablesFromTemplate(available);
         }
         return available;
+    }
+
+    /**
+     * If the searchElement is a pure template class, then all elements from
+     * the template that do not occur in the model are also added here to the
+     * connectable elements.
+     *
+     * @param availables
+     *            the list of connectable elements which will be filled with
+     *            template elements if the searchElementClass is a pure
+     *            template class
+     */
+    private void addAvailablesFromTemplate(final List<ElementContainer> availables) {
+        MetaModel metaModel = getMetaModel();
+        if (metaModel.isPureTemplateElementClass(searchElementClass)) {
+            TemplateLibrariesManager templateLibrariesManager = Static.getTemplateLibrariesManager();
+            Collection<GDCollection> allActiveTemplates = templateLibrariesManager.getAllActiveTemplates();
+            LGMGraphDocument targetMainDoc = getMainDoc();
+            for (GDCollection template : allActiveTemplates) {
+                LGMGraphDocument templateMainDoc = template.getMainDoc();
+                List<ElementContainer> templateAvalibales = templateMainDoc.getElementContainers(searchElementClass, true);
+                for (ElementContainer templateAvalibale : templateAvalibales) {
+                    String templateAvalibaleHashString = templateAvalibale.getHashString();
+                    if (!targetMainDoc.isMyElement(templateAvalibaleHashString)) {
+                        availables.add(templateAvalibale);
+                    }
+                }
+            }
+        }
     }
 
     protected final MouseListener mouseListener = new LGMMouseListener(null, null, null, getMouseClickedAction(), null);
@@ -653,6 +721,23 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
         //        } else {
         component.addMouseListener(mouseListener);
         //        }
+    }
+
+    @Override
+    public ElementDialogPanel getResponsiblePanelForConsistencyError(final AbstractConsistencyError consistencyError) {
+        ModelElement errorModelElement = consistencyError.getModelElement();
+        if (errorModelElement != modelElement) {
+            return null;
+        }
+        MetaPath errorFixingMetaPath = null;
+        if (consistencyError instanceof MissingPathError) {
+            MissingPathError pathError = (MissingPathError) consistencyError;
+            errorFixingMetaPath = pathError.getErrorFixingCreatableMetaPath();
+        } else if (consistencyError instanceof AbstractElementaryPathError) {
+            AbstractElementaryPathError pathError = (AbstractElementaryPathError) consistencyError;
+            errorFixingMetaPath = pathError.getMetaPath();
+        }
+        return errorFixingMetaPath != null && hasMetaPath(errorFixingMetaPath) ? this : null;
     }
 
 }

@@ -22,7 +22,7 @@ import de.imise.tool3lgm.Tool3lgmChangeListener.Tool3lgmChangeType;
 import de.imise.tool3lgm.Tool3lgmConstants.FileFilterType;
 import de.imise.tool3lgm.Tool3lgmModelType.ModelCategory;
 import de.imise.tool3lgm.graphtools.consistency.ModelCleaner;
-import de.imise.tool3lgm.graphtools.consistency.checker.ConsistencyChecker;
+import de.imise.tool3lgm.graphtools.consistency.ModelValidatorDefinition;
 import de.imise.tool3lgm.graphtools.dialog.element.ElemenPropertyDialogsContext;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
@@ -110,6 +110,14 @@ public class Tool3lgm {
      */
     public final void removeChangeListener(final Tool3lgmChangeListener tcl) {
         toolChangeListenerSupport.remove(tcl);
+    }
+
+    /**
+     * @param o
+     * @return
+     */
+    public boolean isAddedToolChangeListener(final Object o) {
+        return toolChangeListenerSupport.contains(o);
     }
 
     /**
@@ -297,7 +305,8 @@ public class Tool3lgm {
         collections.add(gdcoll);
         distribute(MODEL_CHANGE_MODEL_OPENED, gdcoll);
         //vor dem Selektieren des aktuellen Teilmodells alle nicht behebbaren Fehler löschen
-        ConsistencyChecker.clearUnfixableErrors(gdcoll);
+        ModelValidatorDefinition modelValidatorDefinition = gdcoll.getModelValidatorDefinition();
+        modelValidatorDefinition.clearUnfixableErrors(gdcoll);
         gdcoll.initSelectedDocByViewParameterFromFile();
         gdcoll.setUnchanged();
         System.gc();
@@ -418,12 +427,6 @@ public class Tool3lgm {
     }
 
     /**
-     * Über diese Variable wird beim Schließen eines Modells die Selektion
-     * der einzelnen Teilmodelle verhindert.
-     */
-    private boolean ignoreDocSelection = false;
-
-    /**
      * Wechselt den Kontext auf das übergebene Teilmodell. In jedem Fall wird der <code>ModelBrowser</code> des aktivierten Teilmodells in den
      * Vordergrund gebracht.
      *
@@ -431,9 +434,6 @@ public class Tool3lgm {
      *            Teilmodell, in dessen Kontext gewechselt werden soll
      */
     void setSelectedDoc(final GraphDocument doc) {
-        if (ignoreDocSelection) {
-            return;
-        }
         if (doc != null) {
             //das zu aktivierende Graphdocument und dessen Collection an die richtige Position bringen
             GDCollection gdcoll = doc.getCollection();
@@ -534,11 +534,7 @@ public class Tool3lgm {
         } catch (Exception e) {
         }
 
-        ignoreDocSelection = true;
-
         distribute(MODEL_CHANGE_MODEL_CLOSED, selDoc);
-
-        ignoreDocSelection = false;
 
         System.gc();
 

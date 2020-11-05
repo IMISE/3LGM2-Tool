@@ -1,4 +1,4 @@
-package de.imise.tool3lgm.graphtools.path;
+package de.imise.tool3lgm.graphtools.path.metapaths;
 
 import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction.BACKWARD;
 import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction.FORWARD;
@@ -19,10 +19,6 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.model.LGMGraphDocument;
-import de.imise.tool3lgm.graphtools.path.metapaths.AbstractMetaPath;
-import de.imise.tool3lgm.graphtools.path.metapaths.ElementaryMetaPath;
-import de.imise.tool3lgm.graphtools.path.metapaths.SequenceMetaPath;
-import de.imise.tool3lgm.graphtools.path.paths.PathResultTreeModel;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
 
@@ -55,183 +51,6 @@ public class PathFunctions {
         SELF_PART,
         PARENT_PART,
         SELF_PARENT_PART
-    }
-
-    /**
-     * Liefert einen Ergebnisbaum, der alle eventuell vorhandenen Pfade ausgehend vom
-     * übergebenen Element aufspannt
-     *
-     * @param startElement
-     * @param metaPath
-     * @return
-     */
-    public static final PathResultTreeModel getResultTree(final ModelElement startElement, final AbstractMetaPath metaPath) {
-        return new PathResultTreeModel(metaPath, startElement);
-    }
-
-    /**
-     * Liefert einen Ergebnisbaum, der alle eventuell vorhandenen Pfade ausgehend vom
-     * übergebenen Element aufspannt
-     *
-     * @param startElement
-     * @param metaPath
-     * @param keepIncompleteBranches
-     * @return
-     */
-    public static final PathResultTreeModel getResultTree(final ModelElement startElement, final AbstractMetaPath metaPath, final boolean keepIncompleteBranches) {
-        return new PathResultTreeModel(metaPath, startElement, keepIncompleteBranches);
-    }
-
-    /**
-     * @param startElements
-     * @param metaPath
-     * @return
-     */
-    public static final PathResultTreeModel getResultTree(final Collection<ModelElement> startElements, final AbstractMetaPath metaPath) {
-        return new PathResultTreeModel(metaPath, startElements);
-    }
-
-    /**
-     * @param startElements
-     * @param metaPath
-     * @param keepIncompleteBranches
-     * @return
-     */
-    public static final PathResultTreeModel getResultTree(final Collection<ModelElement> startElements, final AbstractMetaPath metaPath, final boolean keepIncompleteBranches) {
-        return new PathResultTreeModel(metaPath, startElements, keepIncompleteBranches);
-    }
-
-    /**
-     * @param startElements
-     * @param metaPath
-     * @return
-     */
-    public static final PathResultTreeModel getResultTree(final List<Collection<ModelElement>> startElements, final AbstractMetaPath metaPath) {
-        return new PathResultTreeModel(metaPath, startElements);
-    }
-
-    /**
-     * @param startElements
-     * @param metaPath
-     * @param keepIncompleteBranches
-     * @return
-     */
-    public static final PathResultTreeModel getResultTree(final List<Collection<ModelElement>> startElements, final AbstractMetaPath metaPath, final boolean keepIncompleteBranches) {
-        return new PathResultTreeModel(metaPath, startElements, keepIncompleteBranches);
-    }
-
-    /**
-     * Liefert alle mit dem übergebenen Element über diesen MetaPfad verbundenen Elemente.
-     *
-     * @param me
-     *            Ausgangselement
-     * @param metaPath
-     * @param multiple
-     *            Wenn <code>true</code> sind mehrfach verbundene Element auch mehrfach in der Ergebnisliste, bei <code>false</code> ist jedes Element
-     *            nur einmal enthalten.
-     * @return
-     */
-    public static final List<ModelElement> getConnectedElements(final ModelElement me, final AbstractMetaPath metaPath, final boolean multiple) {
-        List<ModelElement> modelElements = new ArrayList<>();
-        modelElements.add(me);
-        return PathFunctions.getConnectedElements(modelElements, metaPath, multiple);
-    }
-
-    /**
-     * @param me
-     * @param metaPath
-     * @return
-     */
-    public static final List<ModelElement> getConnectedElements(final ModelElement me, final AbstractMetaPath metaPath) {
-        return getConnectedElements(me, metaPath, false);
-    }
-
-    /**
-     * Liefert eine Sammlung aller Elemente, die über diesen Pfad mit den übergebenen Elementen verbunden sind.
-     *
-     * @param modelElements
-     * @param metaPath
-     * @return
-     */
-    public static final List<ModelElement> getConnectedElements(final Collection<ModelElement> modelElements, final AbstractMetaPath metaPath) {
-        return PathFunctions.getConnectedElements(modelElements, metaPath, false);
-    }
-
-    /**
-     * Liefert eine Sammlung aller Elemente, die über diesen Pfad mit den übergebenen Elementen verbunden sind.
-     *
-     * @param modelElements
-     *            Ausgangselemente
-     * @param metaPath
-     * @param multiple
-     *            Wenn <code>true</code> enthält die Rückgabesammlung dieselben Elemente sooft, wie sie mit Elementen der
-     *            Ausgangliste über diesen Pfad verbunden sind. Bei <code>false</code> ist jedes Element nur einmal enthalten.
-     * @return
-     */
-    static final List<ModelElement> getConnectedElements(final Collection<ModelElement> modelElements, final AbstractMetaPath metaPath, final boolean multiple) {
-        if (metaPath instanceof ElementaryMetaPath) {
-            List<ModelElement> returnList = new ArrayList<>();
-            ElementaryMetaPath elementaryMetaPath = (ElementaryMetaPath) metaPath;
-            Direction direction = elementaryMetaPath.getDirection();
-            Class<? extends Edge> edgeClass = elementaryMetaPath.getEdgeClass();
-            for (ModelElement me : modelElements) {
-                List<ModelElement> connectedElements = me.getConnectedElements(edgeClass, direction);
-                if (multiple) {
-                    returnList.addAll(connectedElements);
-                } else {
-                    for (ModelElement connected : connectedElements) {
-                        if (!returnList.contains(connected)) {
-                            returnList.add(connected);
-                        }
-                    }
-                }
-            }
-            return returnList;
-        }
-        PathResultTreeModel resultTree = getResultTree(modelElements, metaPath);
-        return resultTree.getConnectedElements(multiple);
-    }
-
-    /**
-     * @param me
-     * @param doc
-     * @param metaPath
-     * @return
-     */
-    public static final List<ElementContainer> getConnectedContainer(final ModelElement me, final GraphDocument doc, final AbstractMetaPath metaPath) {
-        return PathFunctions.getConnectedContainer(me, doc, metaPath, false);
-    }
-
-    /**
-     * @param me
-     * @param doc
-     * @param metaPath
-     * @param forlast
-     * @return
-     */
-    public static final List<ElementContainer> getConnectedContainer(final ModelElement me, final GraphDocument doc, final AbstractMetaPath metaPath, final boolean forlast) {
-        if (metaPath instanceof ElementaryMetaPath) {
-            List<ElementContainer> returnList = new ArrayList<>();
-            if (forlast) { //das hier ist nicht sinnvoll (Elementarpfad und von den verbundenen den vorletzten = das übergebene Element), muss aber der Vollständigkeit halber sein
-                ElementContainer ec = me.getContainer(doc);
-                if (ec != null) {
-                    returnList.add(ec);
-                }
-                return returnList;
-            }
-            ElementaryMetaPath elementaryMetaPath = (ElementaryMetaPath) metaPath;
-            Direction direction = elementaryMetaPath.getDirection();
-            Class<? extends Edge> edgeClass = elementaryMetaPath.getEdgeClass();
-            List<ElementContainer> connectedContainer = me.getConnectedContainers(doc, edgeClass, direction);
-            for (ElementContainer connected : connectedContainer) {
-                if (!returnList.contains(connected)) {
-                    returnList.add(connected);
-                }
-            }
-            return returnList;
-        }
-        PathResultTreeModel resultTree = getResultTree(me, metaPath);
-        return resultTree.getConnectedContainer(doc, forlast);
     }
 
     /**
@@ -283,7 +102,7 @@ public class PathFunctions {
      * @param checkConsistency
      * @return
      */
-    public static final boolean isCreatable(final ModelElement startElement, final ModelElement endElement, final AbstractMetaPath metaPath, final boolean checkConsistency) {
+    static final boolean isCreatable(final ModelElement startElement, final ModelElement endElement, final MetaPath metaPath, final boolean checkConsistency) {
         if (!metaPath.isCreatable(false)) {
             return false;
         }
@@ -295,16 +114,16 @@ public class PathFunctions {
             return endElement.isForwardLinkable(startElement, elemMetaPath.getEdgeClass(), checkConsistency);
         } else if (metaPath instanceof SequenceMetaPath) {
             SequenceMetaPath sequenceMetaPath = (SequenceMetaPath) metaPath;
-            AbstractMetaPath firstMetaPath = sequenceMetaPath.getSubMetaPaths().get(0);
+            MetaPath firstMetaPath = sequenceMetaPath.getSubMetaPaths().get(0);
             while (firstMetaPath instanceof SequenceMetaPath) {
                 firstMetaPath = ((SequenceMetaPath) firstMetaPath).getSubMetaPaths().get(0);
             }
             if (!(firstMetaPath instanceof ElementaryMetaPath)) {
                 return false;
             }
-            AbstractMetaPath lastMetaPath = sequenceMetaPath.getSubMetaPaths().get(sequenceMetaPath.getSubMetaPaths().size() - 1);
+            MetaPath lastMetaPath = sequenceMetaPath.getSubMetaPaths().get(sequenceMetaPath.getSubMetaPaths().size() - 1);
             while (lastMetaPath instanceof SequenceMetaPath) {
-                List<AbstractMetaPath> lastSequenceMetaPathList = ((SequenceMetaPath) lastMetaPath).getSubMetaPaths();
+                List<MetaPath> lastSequenceMetaPathList = ((SequenceMetaPath) lastMetaPath).getSubMetaPaths();
                 lastMetaPath = lastSequenceMetaPathList.get(lastSequenceMetaPathList.size() - 1);
             }
             if (!(lastMetaPath instanceof ElementaryMetaPath)) {
@@ -327,12 +146,12 @@ public class PathFunctions {
             //            Anlegen zu allen Elementen genügend Edgen hat. Initialsubtypes müssen auch beachtet werden usw.
             //            Das ist aber erstmal nicht so wichtig
             //            if (checkConsistency) {
-            //                List<AbstractMetaPath> metaPaths = sequenceMetaPath.getSubMetaPaths();
+            //                List<MetaPath> metaPaths = sequenceMetaPath.getSubMetaPaths();
             //                for (int i = 0; i < metaPaths.size(); i++) {
-            //                    AbstractMetaPath mp = metaPaths.get(i);
+            //                    MetaPath mp = metaPaths.get(i);
             //                    //prüfen, ob die Zwischenelemente angelegt werden können
             //                    if (i + 1 < metaPaths.size()) {
-            //                        AbstractMetaPath nextMetaPath = metaPaths.get(i + 1);
+            //                        MetaPath nextMetaPath = metaPaths.get(i + 1);
             //                        boolean creatableMetaPathEndClass = mp.getEndClasses().size() == 1;
             //                        boolean creatableNextMetaPathStartClass = nextMetaPath.getStartClasses().size() == 1;
             //                        //Keine eindeutige Folgeklasse
@@ -363,7 +182,7 @@ public class PathFunctions {
      * @param metaPath
      * @return
      */
-    public static final boolean pathExists(final ModelElement startElement, final ModelElement endElement, final AbstractMetaPath metaPath) {
+    static final boolean pathExists(final ModelElement startElement, final ModelElement endElement, final MetaPath metaPath) {
         //TODO: implementieren
         if (true) {
             throw new Error("TODO: Implementieren");
@@ -388,7 +207,7 @@ public class PathFunctions {
      * @param metaPath
      * @return
      */
-    public static final PathConnectionState getPathConnectionState(final ModelElement startElement, final ModelElement endElement, final AbstractMetaPath metaPath) {
+    static final PathConnectionState getPathConnectionState(final ModelElement startElement, final ModelElement endElement, final MetaPath metaPath) {
         return PathFunctions.getPathConnectionState(startElement, endElement, metaPath, OPTION_ELEMENTS_RECEIVE_PROPERTIES_FROM_PARENTS.is(), OPTION_ELEMENTS_RECEIVE_PROPERTIES_FROM_PARTS.is());
     }
 
@@ -400,7 +219,7 @@ public class PathFunctions {
      * @param searchParts
      * @return
      */
-    public static final PathConnectionState getPathConnectionState(final ModelElement startElement, final ModelElement endElement, final AbstractMetaPath metaPath, final boolean searchParents, final boolean searchParts) {
+    static final PathConnectionState getPathConnectionState(final ModelElement startElement, final ModelElement endElement, final MetaPath metaPath, final boolean searchParents, final boolean searchParts) {
         List<ModelElement> startElements = null;
         startElements = new ArrayList<>(1);
         startElements.add(startElement);
@@ -453,33 +272,13 @@ public class PathFunctions {
     }
 
     /**
-     * @param startElement
-     * @param endElement
-     * @param metaPath
-     * @return
-     */
-    public static final boolean isConnected(final ModelElement startElement, final ModelElement endElement, final AbstractMetaPath metaPath) {
-        return getPathConnectionState(startElement, endElement, metaPath) != PathConnectionState.NOT_CONNECTED;
-    }
-
-    /**
-     * @param startElement
-     * @param endElement
-     * @param metaPath
-     * @return
-     */
-    public static final boolean isDirectConnected(final ModelElement startElement, final ModelElement endElement, final AbstractMetaPath metaPath) {
-        return getPathConnectionState(startElement, endElement, metaPath, false, false) != PathConnectionState.NOT_CONNECTED;
-    }
-
-    /**
      * @param startElements
      * @param endElements
      * @param metaPath
      * @return
      */
-    static final boolean isConnected(final List<ModelElement> startElements, final List<ModelElement> endElements, final AbstractMetaPath metaPath) {
-        Collection<ModelElement> connected = getConnectedElements(startElements, metaPath);
+    static boolean isConnected(final List<ModelElement> startElements, final List<ModelElement> endElements, final MetaPath metaPath) {
+        Collection<ModelElement> connected = metaPath.getConnectedElements(startElements);
         for (ModelElement endElement : endElements) {
             if (connected.contains(endElement)) {
                 return true;

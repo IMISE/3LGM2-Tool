@@ -1,4 +1,4 @@
-package de.imise.tool3lgm.graphtools.consistency.checker;
+package de.imise.tool3lgm.graphtools.consistency.error.checker;
 
 import static de.imise.tool3lgm.graphtools.metamodel.EdgeCardinality.ZERO_UNLIMITED;
 
@@ -7,9 +7,10 @@ import java.util.Collection;
 import java.util.List;
 
 import de.imise.tool3lgm.graphtools.consistency.ConsistencyDefinition;
-import de.imise.tool3lgm.graphtools.consistency.error.AbstractConsistencyError;
-import de.imise.tool3lgm.graphtools.consistency.error.MaxCardinalityError;
-import de.imise.tool3lgm.graphtools.consistency.error.MinCardinalityError;
+import de.imise.tool3lgm.graphtools.consistency.error.type.AbstractCardinalityError;
+import de.imise.tool3lgm.graphtools.consistency.error.type.AbstractConsistencyError;
+import de.imise.tool3lgm.graphtools.consistency.error.type.MaxCardinalityError;
+import de.imise.tool3lgm.graphtools.consistency.error.type.MinCardinalityError;
 import de.imise.tool3lgm.graphtools.metamodel.EdgeCardinality;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
@@ -30,10 +31,9 @@ public class EdgeCardinalityChecker implements ConsistencyErrorChecker {
      */
     private ConsistencyDefinition consistencyDefinition;
 
-    /**
-     * @param consistencyDefinition
-     */
-    public EdgeCardinalityChecker() {
+    @Override
+    public Class<? extends AbstractConsistencyError> getErrorType() {
+        return AbstractCardinalityError.class;
     }
 
     /**
@@ -111,42 +111,42 @@ public class EdgeCardinalityChecker implements ConsistencyErrorChecker {
             if (HasPartEdge.class.isAssignableFrom(edgeClass)) {
                 if (meHasStartClass) {
                     if (meIsStartConnections.size() < minStartCard) {
-                        returnList.add(new MinCardinalityError(me, forwardElementaryMetaPath, gdcoll, minEndCard));
+                        returnList.add(new MinCardinalityError(me, forwardElementaryMetaPath, minEndCard));
                     }
                     if (meIsStartConnections.size() > maxStartCard) {
-                        returnList.add(new MaxCardinalityError(me, forwardElementaryMetaPath, meIsStartConnections, gdcoll, maxEndCard));
+                        returnList.add(new MaxCardinalityError(me, forwardElementaryMetaPath, meIsStartConnections, maxEndCard));
                     }
                 }
                 if (meHasEndClass) {
                     if (meIsEndConnections.size() < minEndCard) {
-                        returnList.add(new MinCardinalityError(me, forwardElementaryMetaPath.getOtherDirection(), gdcoll, minStartCard));
+                        returnList.add(new MinCardinalityError(me, forwardElementaryMetaPath.getOtherDirection(), minStartCard));
                     }
                     if (meIsEndConnections.size() > maxEndCard) {
-                        returnList.add(new MaxCardinalityError(me, forwardElementaryMetaPath.getOtherDirection(), meIsEndConnections, gdcoll, maxStartCard));
+                        returnList.add(new MaxCardinalityError(me, forwardElementaryMetaPath.getOtherDirection(), meIsEndConnections, maxStartCard));
                     }
                 }
             } else if (meHasStartClass && meHasEndClass) {
                 int card = minStartCard < minEndCard ? minEndCard : minStartCard;
                 if (connections.size() < card) {
-                    returnList.add(new MinCardinalityError(me, forwardElementaryMetaPath, gdcoll, card));
+                    returnList.add(new MinCardinalityError(me, forwardElementaryMetaPath, card));
                 }
                 card = maxStartCard < maxEndCard ? maxStartCard : maxEndCard;
                 if (connections.size() > card) {
-                    returnList.add(new MaxCardinalityError(me, forwardElementaryMetaPath, connections, gdcoll, card));
+                    returnList.add(new MaxCardinalityError(me, forwardElementaryMetaPath, connections, card));
                 }
             } else if (meHasStartClass) {
                 if (connections.size() < minStartCard) {
-                    returnList.add(new MinCardinalityError(me, forwardElementaryMetaPath, gdcoll, minStartCard));
+                    returnList.add(new MinCardinalityError(me, forwardElementaryMetaPath, minStartCard));
                 }
                 if (connections.size() > maxStartCard) {
-                    returnList.add(new MaxCardinalityError(me, forwardElementaryMetaPath, connections, gdcoll, maxStartCard));
+                    returnList.add(new MaxCardinalityError(me, forwardElementaryMetaPath, connections, maxStartCard));
                 }
             } else if (meHasEndClass) {
                 if (connections.size() < minEndCard) {
-                    returnList.add(new MinCardinalityError(me, forwardElementaryMetaPath.getOtherDirection(), gdcoll, minEndCard));
+                    returnList.add(new MinCardinalityError(me, forwardElementaryMetaPath.getOtherDirection(), minEndCard));
                 }
                 if (connections.size() > maxEndCard) {
-                    returnList.add(new MaxCardinalityError(me, forwardElementaryMetaPath.getOtherDirection(), connections, gdcoll, maxEndCard));
+                    returnList.add(new MaxCardinalityError(me, forwardElementaryMetaPath.getOtherDirection(), connections, maxEndCard));
                 }
             } else {
                 System.err.println("Die Edge darf gar nicht für dieses Element existieren!");

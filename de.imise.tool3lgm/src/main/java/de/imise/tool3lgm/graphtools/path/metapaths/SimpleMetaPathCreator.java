@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Set;
 
 import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
+import de.imise.tool3lgm.graphtools.metamodel.MetaModelSpecific;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModelSpecificAdapter;
 import de.imise.tool3lgm.graphtools.metamodel.elements.DoubleMeaningEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.DoubleMeaningEdge.ConnectionState;
@@ -36,10 +37,10 @@ public class SimpleMetaPathCreator extends MetaModelSpecificAdapter {
     //
 
     /**
-     * @param metaModel MetaModel, in dem die Pfade angelegt werden
+     * @param metaModelSpecific MetaModel source, in dem die Pfade angelegt werden
      */
-    public SimpleMetaPathCreator(final MetaModel metaModel) {
-        super(metaModel);
+    public SimpleMetaPathCreator(final MetaModelSpecific metaModelSpecific) {
+        super(metaModelSpecific);
     }
 
     // braucht keine eigene equals() und hashCode(), weil es derselbe Builder wird, wenn die selbe MetaModelDefintion-Klasse zurgunde liegt

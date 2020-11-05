@@ -1,4 +1,4 @@
-package de.imise.tool3lgm.graphtools.consistency.checker;
+package de.imise.tool3lgm.graphtools.consistency.error.checker;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -7,10 +7,10 @@ import java.util.List;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
 
-import de.imise.tool3lgm.graphtools.consistency.error.AbstractConsistencyError;
-import de.imise.tool3lgm.graphtools.consistency.error.AbstractIDError;
-import de.imise.tool3lgm.graphtools.consistency.error.IDEmptyError;
-import de.imise.tool3lgm.graphtools.consistency.error.IDNotUniqueError;
+import de.imise.tool3lgm.graphtools.consistency.error.type.AbstractConsistencyError;
+import de.imise.tool3lgm.graphtools.consistency.error.type.AbstractIDError;
+import de.imise.tool3lgm.graphtools.consistency.error.type.IDEmptyError;
+import de.imise.tool3lgm.graphtools.consistency.error.type.IDNotUniqueError;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
@@ -22,6 +22,11 @@ import de.imise.tool3lgm.graphtools.userfield.UserFieldTarget;
  * @author AXS (20.03.2016)
  */
 public class UniqueIDChecker implements ConsistencyErrorChecker {
+
+    @Override
+    public Class<? extends AbstractConsistencyError> getErrorType() {
+        return AbstractIDError.class;
+    }
 
     @Override
     public Collection<AbstractConsistencyError> getErrors(final GDCollection gdcoll, final boolean checkOnly) {
@@ -49,7 +54,7 @@ public class UniqueIDChecker implements ConsistencyErrorChecker {
                 for (ModelElement me : userFieldTargetClassElements) {
                     String idValue = me.getUserFieldInputValue(idUserField);
                     if (UserField.EMPTY_STRING.equals(idValue)) {
-                        AbstractIDError idError = new IDEmptyError(me, idUserField, gdcoll);
+                        AbstractIDError idError = new IDEmptyError(me, idUserField);
                         idErrors.add(idError);
                         if (checkOnly) {
                             return idErrors;
@@ -63,7 +68,7 @@ public class UniqueIDChecker implements ConsistencyErrorChecker {
                     if (elementsWithSameID.size() > 1) {
                         for (ModelElement me : elementsWithSameID) {
                             Collection<ModelElement> allWithSameID = new ArrayList<>(elementsWithSameID);
-                            AbstractIDError idError = new IDNotUniqueError(me, idUserField, gdcoll, allWithSameID);
+                            AbstractIDError idError = new IDNotUniqueError(me, idUserField, allWithSameID);
                             idErrors.add(idError);
                             if (checkOnly) {
                                 return idErrors;

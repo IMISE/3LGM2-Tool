@@ -78,7 +78,7 @@ public class IndicatorDialog extends JDialog implements ActionListener {
     /**
      * Diese comboBox enthält die Attribute der aktuellen Elementklasse, für die der Indikator definiert werden soll-
      */
-    private AlphabeticalComboBox userFieldComboBox;
+    private AlphabeticalComboBox<UserField> userFieldComboBox;
 
     /**
      * Wenn eine Indikatordefinition bearbeitet werden soll, wird das UserField gesetzt, damit sich der Dialog die definition holen kann.
@@ -125,7 +125,7 @@ public class IndicatorDialog extends JDialog implements ActionListener {
         constraints.anchor = GridBagConstraints.NORTH;
         JLabel currentValueLabel = new JLabel(getResString("attributeIndicate"));
         panel1.add(currentValueLabel, constraints);
-        userFieldComboBox = new AlphabeticalComboBox();
+        userFieldComboBox = new AlphabeticalComboBox<>();
         if (userField != null) {
             definitions = userField.getDefinitions();
         }
@@ -140,7 +140,7 @@ public class IndicatorDialog extends JDialog implements ActionListener {
                 //setzt den Wert eines Indikators auf einen String, der sich nicht mehr in BigDecimal() umwandeln lässt. Daher kann
                 //man keine Inidikatoren für Indikatoren definieren, was aber auch nicht umbedingt notwendig ist.
                 if (uf.isClassificationUserField() && !uf.isIndicatorFormula()) {
-                    userFieldComboBox.addItem(uf);
+                    userFieldComboBox.addObject(uf);
                 }
             }
         }
@@ -260,10 +260,12 @@ public class IndicatorDialog extends JDialog implements ActionListener {
                 StringTokenizer st = new StringTokenizer(indi, " ()| ");
 
                 //Erstes Token wegschmeißen
-                st.nextElement();
+                st.nextToken();
                 // zweites token enthält den Hash-String des zu indizierenden
                 // UserFields
-                userFieldComboBox.setSelectedItem(definitions.getUserField(st.nextElement().toString()));
+                String userFieldHash = st.nextToken();
+                UserField userField2Select = definitions.getUserField(userFieldHash);
+                userFieldComboBox.setSelectedObject(userField2Select);
 
                 // die Eingabefelder darstellen
                 // beim Durchlaufen des Stringtokenizers, wird der spinnerValue um 1 incrementiert
@@ -271,7 +273,7 @@ public class IndicatorDialog extends JDialog implements ActionListener {
 
                 int spinnerValue = 1;
                 while (st.hasMoreElements()) {
-                    String value = st.nextElement().toString();
+                    String value = st.nextToken();
 
                     spinner.setValue(spinnerValue);
 
@@ -279,7 +281,7 @@ public class IndicatorDialog extends JDialog implements ActionListener {
                         //bei 1 müssen zwei TextFields dargestellt werden. Das für den untersten Grenzwert und der erste obere Grenzwert.
                         GwInputPair gwPair = gwList.get(spinnerValue - 1);
                         gwPair.inputField.setText(value);
-                        value = st.nextElement().toString();
+                        value = st.nextToken();
                     }
                     GwInputPair a = gwList.get(spinnerValue);
                     a.inputField.setText(value);
@@ -324,7 +326,7 @@ public class IndicatorDialog extends JDialog implements ActionListener {
     public void actionPerformed(final ActionEvent e) {
         if (e.getActionCommand().equals("okbutton")) {
             if (validateInputs()) {
-                UserField u = (UserField) userFieldComboBox.getSelectedItem();
+                UserField u = userFieldComboBox.getSelectedObject();
                 retVal += u.getHashCode() + " | ";
                 for (int i = 0; i < gwList.size(); i++) {
                     GwInputPair pair = gwList.get(i);

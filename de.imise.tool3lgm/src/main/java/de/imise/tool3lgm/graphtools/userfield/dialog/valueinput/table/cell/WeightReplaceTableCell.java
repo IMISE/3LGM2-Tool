@@ -35,7 +35,7 @@ public class WeightReplaceTableCell extends UserFieldActivatedTableCell {
 
         //true im Konstuktor bedeutet, dass man einen Leerwert zur Auswahl hat. Der Leerwert
         //steht für "keine Ersetzung"
-        AlphabeticalComboBox component = new AlphabeticalComboBox(false);
+        AlphabeticalComboBox<UserField> component = new AlphabeticalComboBox<>(false);
         for (NamedObjectContainer<UserField> container : columnIdentifiers) {
             UserField colUserField = container.getObject();
             NamedObjectContainer<UserField> replaceValue = null;
@@ -89,7 +89,7 @@ public class WeightReplaceTableCell extends UserFieldActivatedTableCell {
      * <code>"EMPTY_STRING"</code> zurückgegeben. Falls sich der Wert im Editor nicht auf BigDecimal parsen lässt, wird ein neuer
      * {@link NamedObjectContainer} mit {@link #userField} und <code>"NUMBER_FORMAT_ERROR"</code> zurückgegeben. Sonst wird ein neuer
      * {@link NamedObjectContainer} mit {@link #userField} und dem String im Editor zurückgegeben.
-     * 
+     *
      * @see javax.swing.CellEditor#getCellEditorValue()
      */
     @Override

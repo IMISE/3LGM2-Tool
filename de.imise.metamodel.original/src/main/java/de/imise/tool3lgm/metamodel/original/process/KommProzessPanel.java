@@ -60,6 +60,7 @@ import de.imise.tool3lgm.metamodel.original.node.Prozess;
  *         (Geschäfts-)Prozesses
  *         Diese Panel wird im Modemnt nicht genutzt und müsste wiederhergestellt werden, falls es noch einmal gebraucht wird.
  */
+@SuppressWarnings("serial")
 public class KommProzessPanel extends ElementDialogPanel {
 
     // das folgende sind die Resourcen zu diesem Panel.Im Zuge der Lolösung des Metamodells aus dem Baukasten, sind sie erstmal hier
@@ -507,7 +508,7 @@ public class KommProzessPanel extends ElementDialogPanel {
             } else {
                 // Bemerkungsspalte löschen
                 table.setValueAt(null, i, COMMENTS);
-                table.setValueAt(new Integer(step.getMediumBreaks()), i, MEDIUM_BREAKS);
+                table.setValueAt(Integer.valueOf(step.getMediumBreaks()), i, MEDIUM_BREAKS);
             }
 
             // prüfen ob momentane Spaltenbreite größer ist, als der bisher

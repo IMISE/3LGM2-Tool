@@ -3,6 +3,8 @@ package de.imise.tool3lgm.graphtools.path.metapaths;
 import static de.imise.util.ReflectionUtils.getMostSpecialClass;
 
 import java.lang.reflect.Modifier;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import com.google.common.collect.ImmutableList;
@@ -17,6 +19,9 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction;
 import de.imise.tool3lgm.graphtools.metamodel.elements.InstanciationEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.metamodel.elements.PropertyTransferEdge;
+import de.imise.tool3lgm.graphtools.model.GraphDocument;
+import de.imise.tool3lgm.graphtools.path.paths.PathResultTreeModel;
+import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.util.ReflectionUtils;
 
 /**
@@ -25,7 +30,7 @@ import de.imise.util.ReflectionUtils;
  * @author AXS
  * @create 12.10.2010
  */
-public final class ElementaryMetaPath extends AbstractMetaPath {
+public final class ElementaryMetaPath extends MetaPath {
 
     /**
      * Mögliche Arten eines {@link ElementaryMetaPath}.
@@ -369,6 +374,42 @@ public final class ElementaryMetaPath extends AbstractMetaPath {
         return type;
     }
 
+    /**
+     * @param other
+     * @return only <code>true</code> if this and the other metapath have an assignable
+     *         start class, an assignable end class, an assignable edge class, the same
+     *         direction and the same type. Assignable only means that one of the class
+     *         must be a subclass of the other (which is sub and which super dosn't
+     *         matters).
+     */
+    @Override
+    public boolean isAssignable(final MetaPath otherMetaPath) {
+        List<ElementaryMetaPath> elementaryMetaPaths = otherMetaPath.getElementaryMetaPaths();
+        if (elementaryMetaPaths.size() != 1) {
+            return false;
+        }
+        ElementaryMetaPath other = elementaryMetaPaths.get(0);
+        if (!isStartClass(other.startClass)) {
+            return false;
+        }
+        if (!isEndClass(other.endClass)) {
+            return false;
+        }
+        if (!hasEdgeClass(other.edgeClass)) {
+            return false;
+        }
+        if (!hasDirection(other.direction)) {
+            return false;
+        }
+        if (connectionState != other.connectionState) {
+            return false;
+        }
+        if (type != other.type) {
+            return false;
+        }
+        return true;
+    }
+
     @Override
     public int hashCode() {
         final int prime = 31;
@@ -558,8 +599,8 @@ public final class ElementaryMetaPath extends AbstractMetaPath {
 
     @SuppressWarnings("unchecked")
     @Override
-    public final List<AbstractMetaPath> getSubMetaPaths() {
-        return (List<AbstractMetaPath>) (List<?>) getElementaryMetaPaths();
+    public final List<MetaPath> getSubMetaPaths() {
+        return (List<MetaPath>) (List<?>) getElementaryMetaPaths();
     }
 
     @Override
@@ -604,4 +645,49 @@ public final class ElementaryMetaPath extends AbstractMetaPath {
     public String toString() {
         return getFullName();
     }
+
+    @Override
+    public final List<ModelElement> getConnectedElements(final Collection<ModelElement> modelElements, final boolean multiple) {
+        List<ModelElement> returnList = new ArrayList<>();
+        Direction direction = getDirection();
+        Class<? extends Edge> edgeClass = getEdgeClass();
+        for (ModelElement me : modelElements) {
+            List<ModelElement> connectedElements = me.getConnectedElements(edgeClass, direction);
+            if (multiple) {
+                returnList.addAll(connectedElements);
+            } else {
+                for (ModelElement connected : connectedElements) {
+                    if (!returnList.contains(connected)) {
+                        returnList.add(connected);
+                    }
+                }
+            }
+            return returnList;
+        }
+        PathResultTreeModel resultTree = getResultTree(modelElements);
+        return resultTree.getConnectedElements(multiple);
+    }
+
+    @Override
+    public final List<ElementContainer> getConnectedContainer(final ModelElement me, final GraphDocument doc, final boolean forlast) {
+        List<ElementContainer> returnList = new ArrayList<>();
+        if (forlast) { //das hier ist nicht sinnvoll (Elementarpfad und von den verbundenen den vorletzten = das übergebene Element), muss aber der Vollständigkeit halber sein
+            ElementContainer ec = me.getContainer(doc);
+            if (ec != null) {
+                returnList.add(ec);
+            }
+            return returnList;
+        }
+        ElementaryMetaPath elementaryMetaPath = this;
+        Direction direction = elementaryMetaPath.getDirection();
+        Class<? extends Edge> edgeClass = elementaryMetaPath.getEdgeClass();
+        List<ElementContainer> connectedContainer = me.getConnectedContainers(doc, edgeClass, direction);
+        for (ElementContainer connected : connectedContainer) {
+            if (!returnList.contains(connected)) {
+                returnList.add(connected);
+            }
+        }
+        return returnList;
+    }
+
 }

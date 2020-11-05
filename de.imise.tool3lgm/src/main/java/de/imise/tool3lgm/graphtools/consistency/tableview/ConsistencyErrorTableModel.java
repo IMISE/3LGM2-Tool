@@ -5,15 +5,16 @@ package de.imise.tool3lgm.graphtools.consistency.tableview;
 
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
 
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Vector;
 
 import javax.swing.table.DefaultTableModel;
 
 import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
-import de.imise.tool3lgm.graphtools.consistency.checker.ConsistencyChecker;
-import de.imise.tool3lgm.graphtools.consistency.error.AbstractConsistencyError;
-import de.imise.tool3lgm.graphtools.consistency.error.MissingPathError;
+import de.imise.tool3lgm.graphtools.consistency.ModelValidator;
+import de.imise.tool3lgm.graphtools.consistency.ModelValidatorDefinition;
+import de.imise.tool3lgm.graphtools.consistency.error.type.AbstractConsistencyError;
+import de.imise.tool3lgm.graphtools.consistency.error.type.MissingPathError;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.util.NamedObjectContainer;
@@ -24,41 +25,62 @@ import de.imise.util.NamedObjectContainer;
 public class ConsistencyErrorTableModel extends DefaultTableModel {
 
     /**
-     * @author astruebi
+     * @author AXS
      */
     public static enum ColumnNames {
-        NUMBER,
-        ERROR_TYPE,
-        ELEMENT_TYPE,
+        NUMBER(40),
+        ERROR_TYPE(40),
+        DESCRIPTION,
         ELEMENT,
-        CONNECTION_TYPE,
-        DESCRIPTION;
+        ELEMENT_TYPE,
+        CONNECTION_TYPE;
 
-        public String getDisplayableName() {
-            return getResString("ColumnNames_" + name());
+        public final int maxColumnWidth;
+
+        /**
+         * Store the toString value because this String
+         * is the identifier for the column and it will
+         * be compared by object identity (and not equals).
+         */
+        private String toString;
+
+        private ColumnNames() {
+            maxColumnWidth = -1;
         }
+
+        private ColumnNames(final int maxColumnWidth) {
+            this.maxColumnWidth = maxColumnWidth;
+        }
+
+        public int getMaxColimnWidth() {
+            return -1;
+        }
+
+        @Override
+        public String toString() {
+            if (toString == null) {
+                toString = getResString("ColumnNames_" + name());
+            }
+            return toString;
+        }
+
     }
 
     /**
      *
      */
     public ConsistencyErrorTableModel() {
-        super();
         ColumnNames[] colIdentifiers = ColumnNames.values();
-        Vector<String> colNames = new Vector<>(colIdentifiers.length);
-        for (ColumnNames cn : colIdentifiers) {
-            colNames.add(cn.getDisplayableName());
-        }
-        setColumnIdentifiers(colNames);
+        setColumnIdentifiers(colIdentifiers);
     }
 
     /**
-     * @param checker
+     * @param modelValidator
      */
-    public void setErrors(final ConsistencyChecker checker) {
+    public void setErrors(final ModelValidator modelValidator) {
         //ignore unfixable missingPath errors. They can be only fixed
         //with other fixable missingPathErrors (if defined)
-        Collection<AbstractConsistencyError> errors = checker.getFixableInconsistencies();
+        Collection<AbstractConsistencyError> errors = modelValidator == null ? new ArrayList<>(0) : modelValidator.getInconsistencies();
         dataVector.clear();
         setRowCount(errors.size());
 
@@ -66,7 +88,8 @@ public class ConsistencyErrorTableModel extends DefaultTableModel {
         for (AbstractConsistencyError error : errors) {
 
             if (error instanceof MissingPathError) {
-                if (!checker.isSolutionExecuteable(error)) {
+                ModelValidatorDefinition modelValidatorDefinition = error.getModelValidatorDefinition();
+                if (!modelValidatorDefinition.isSolutionExecuteable(error)) {
                     int rowCount = getRowCount();
                     setRowCount(rowCount - 1);
                     continue;
@@ -97,14 +120,27 @@ public class ConsistencyErrorTableModel extends DefaultTableModel {
             String errorFieldString = error.getErrorFieldString();
             setValueAt(errorFieldString, i, ColumnNames.CONNECTION_TYPE);
 
-            // Beschreibung
+            // Beschreibung + Tooltip
+            String errorToolTip = error.getLongMessage();
             String errorDescription = error.getMessage();
-            String errorDescriptionToolTip = error.getLongMessage();
-            NamedObjectContainer<String> errorDescriptionContainer = new NamedObjectContainer<>(errorDescriptionToolTip, errorDescription);
+            //getToolTip(int row) uses this NamedObjectContainer to get the tooltip for the whole row
+            NamedObjectContainer<String> errorDescriptionContainer = new NamedObjectContainer<>(errorToolTip, errorDescription);
             setValueAt(errorDescriptionContainer, i, ColumnNames.DESCRIPTION);
 
             i++;
         }
+    }
+
+    /**
+     * @param row
+     * @return
+     */
+    @SuppressWarnings("unchecked")
+    public String getTooltip(final int row) {
+        int column = ColumnNames.DESCRIPTION.ordinal();
+        Object valueAt = getValueAt(row, column);
+        NamedObjectContainer<String> descriptionWithToolTip = (NamedObjectContainer<String>) valueAt;
+        return descriptionWithToolTip.getFirstItem();
     }
 
     /**

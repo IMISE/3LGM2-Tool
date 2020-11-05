@@ -1,5 +1,6 @@
 package de.imise.tool3lgm.graphtools.metamodel;
 
+import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,6 +13,8 @@ import de.imise.tool3lgm.graphtools.analyse.redundancy.SimpleRedundancyAnalysisD
 /**
  * Klasse, über die für ein Metamodell Analysen hinzugefügt werden können. Um {@link NullPointerException}s zu verhindern, wird wenn für ein
  * Metamodell keine solche Klasse angegeben ist, immer eine Instanz dieser Kasse hier zurück gegeben, die aber keine Actions zurück liefert.
+ *
+ * ATTNENTION: This class will be instanciated by {@link Constructor#newInstance(Object...)}. So don't make it abstract!
  *
  * @author AXS (5 Jun 2018)
  */
