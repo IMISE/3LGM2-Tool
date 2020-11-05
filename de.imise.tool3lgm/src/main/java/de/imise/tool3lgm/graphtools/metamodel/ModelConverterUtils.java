@@ -28,30 +28,37 @@ public class ModelConverterUtils {
     }
 
     /**
-     * Replaces the automatic generated hashStrings in a generated path by a given hashString. The element in the
-     * middle gets the original given hashString. All the others get the same with an unique number appended.
-     * This algorithm is deterministic, so converting the same model again will generate the same hashStrings.
-     * The hashStrings of the start- and endElement of the path will not be changed.
-     * If there is an Element with the same type and with the same hash id (ignoring the added number) than this
-     * element is created by the same edge and is the same element)
+     * Replaces the automatic generated hashStrings in a generated path by a
+     * given hashString. The element in the middle gets the original given
+     * hashString. All the others get the same with an unique number appended.
+     * This algorithm is deterministic, so converting the same model again will
+     * generate the same hashStrings. The hashStrings of the start- and
+     * endElement of the path will not be changed. If there is an Element with
+     * the same type and with the same hash id (ignoring the added number) than
+     * this element is created by the same edge and is the same element)
      *
      * @param path
-     * @param hashString the generated element in the middle of the path gets this hash
+     * @param hashString the generated element in the middle of the path gets
+     *            this hash
      */
     static void replaceGeneratedHashStringsAndJoinEqualsElements(final SimplePath path, final String hashString) {
-        //System.err.println(hashString + "\r\t" + path);
+        // Sys.err1(hashString + "\r\t" + path);
         ModelElement middleElement = getMiddleElement(path);
         GDCollection gdcoll = middleElement.getCollection();
 
         int counter = joinElementIfEquals(gdcoll, middleElement, null, hashString, path, 0);
-        middleElement = getMiddleElement(path); // if joined -> middle element has changed
+        middleElement = getMiddleElement(path); // if joined -> middle element
+                                                // has changed
 
         int pathLength = path.size();
         for (int i = 0; i < pathLength; i++) {
             ElementaryPath pathStep = path.getPathStep(i);
-            //edge
+            // edge
             Edge edge = pathStep.getEdge();
-            counter = setHashString(gdcoll, edge, hashString, counter); //Kanten nicht joinen, weil dieselbe Art Kante im Pfad mit demselben HashString zwischen völlig verschiedenen Elementen erzeugt worden sein kann
+            // Do not join edges, because the same kind of edge in the path can
+            // be created with the same hash string between completely different
+            // elements.
+            counter = setHashString(gdcoll, edge, hashString, counter);
             if (i < pathLength - 1) { // endElement
                 ModelElement endElement = pathStep.getEndElement();
                 counter = joinElementIfEquals(gdcoll, endElement, middleElement, hashString, path, counter);
@@ -70,13 +77,16 @@ public class ModelConverterUtils {
      */
     private static int joinElementIfEquals(final GDCollection gdcoll, final ModelElement me, final ModelElement ignoreElement, final String hashString, final SimplePath path, int counter) {
         if (me != ignoreElement && me instanceof Node) {
-            //gibt es bereits ein Element wie das middleElement, das denselben HastString-Prefix hat (dieses Element ist aus derselben Kante entstanden)
+            // gibt es bereits ein Element wie das middleElement, das denselben
+            // HastString-Prefix hat (dieses Element ist aus derselben Kante
+            // entstanden)
             ModelElement equalElement = getEqualElement(me, hashString);
             if (equalElement != null) {
                 String resultingJoinedElementHash = equalElement.getHashString();
-                //System.err.println("JOINED ########## " + renamedElement);
+                // System.err.println("JOINED ########## " + renamedElement);
 
-                //to prevent that the name or description will be joined too -> set it to the same value
+                // to prevent that the name or description will be joined too ->
+                // set it to the same value
                 String elementHash = me.getHashString();
                 String resultingName = equalElement.getName();
                 String resultingDescription = equalElement.getDescription();
@@ -85,10 +95,15 @@ public class ModelConverterUtils {
 
                 LGMGraphDocument mainDoc = gdcoll.getMainDoc();
 
-                //Achtung: Das Join haut nicht richtig hin! daher muss es im Moment umgenagen werden, indem man dafür sorgt, dass es nichts zu joinen gibt und
-                //den 2.Pfad, der entstehen soll, auf andere Weise anlegt
-                equalElement = gdcoll.join(elementHash, resultingJoinedElementHash, mainDoc, TransactionManager.STANDARD_PID); //Element hash for the resulting element must be the second parameter!
-                //if joined with an existing element -> replace the renamed element in the path by the joined one
+                // Achtung: Das Join haut nicht richtig hin! daher muss es im
+                // Moment umgenagen werden, indem man dafür sorgt, dass es
+                // nichts zu joinen gibt und den 2.Pfad, der entstehen soll, auf
+                // andere Weise anlegt.
+                // Element hash for the resulting element must be the second
+                // parameter!
+                equalElement = gdcoll.join(elementHash, resultingJoinedElementHash, mainDoc, TransactionManager.STANDARD_PID);
+                // if joined with an existing element -> replace the renamed
+                // element in the path by the joined one
                 path.replaceElement(me, equalElement);
             } else {
                 counter = setHashString(gdcoll, me, hashString, counter);
@@ -98,10 +113,11 @@ public class ModelConverterUtils {
     }
 
     /**
-     * Searches the model for an element with the same type and the given hashString prefix. If there is
-     * such an element it will be returned. If not <code>null</code> will be returned. The hashString of
-     * the returned element is the same like the given or it starts with this hashString followed by an
-     * underscore '_' and then by a number.
+     * Searches the model for an element with the same type and the given
+     * hashString prefix. If there is such an element it will be returned. If
+     * not <code>null</code> will be returned. The hashString of the returned
+     * element is the same like the given or it starts with this hashString
+     * followed by an underscore '_' and then by a number.
      *
      * @param me
      * @param hashString
@@ -155,7 +171,8 @@ public class ModelConverterUtils {
         int pathLength = path.size();
         int middlePathStep = pathLength / 2;
         ElementaryPath pathStep = path.getPathStep(middlePathStep);
-        //even path step count -> node in the middle; odd pathStepCount -> edge in the middle
+        // even path step count -> node in the middle; odd pathStepCount -> edge
+        // in the middle
         ModelElement middleElement = pathLength % 2 == 0 ? pathStep.getStartElement() : pathStep.getEdge();
         return middleElement;
     }
@@ -165,8 +182,9 @@ public class ModelConverterUtils {
     ///////////////////////////////////////////
 
     /**
-     * Zwischenelemente des übergebenen Pfades werden entsprechend der Definition umbenannt und wenn sie dann gleich heißen, wie bereits zuvor
-     * umbenannte Elemente derselben Art, dann werden die Elemente vereinigt.
+     * Intermediate elements of the passed path are renamed according to the
+     * definition and if they then have the same name as previously renamed
+     * elements of the same type, then the elements are merged.
      *
      * @param targetMetaPathsCreationDefinition
      * @param simplePath
@@ -181,7 +199,8 @@ public class ModelConverterUtils {
             Object[] patternObjetcs = targetMetaPathsCreationDefinition.getPatternObjetcs(pathStepIndex);
             ModelElement renamedElement = renameElement(pathStepEndElement, nameSourceEdge, patternObjetcs);
             ModelElement addedOrJoinedElement = addOrJoinRenamedElement(renamedElement, alreadyRenamedElements);
-            //if joined with an existing element -> replace the renamed element in the path by the joined one
+            // if joined with an existing element -> replace the renamed element
+            // in the path by the joined one
             if (renamedElement != addedOrJoinedElement) {
                 simplePath.replaceElement(renamedElement, addedOrJoinedElement);
             }
@@ -192,7 +211,8 @@ public class ModelConverterUtils {
     /**
      * @param renamedElement
      * @param alreadyRenamedElements
-     * @return <code>true</code> if the given element was joined with an element in alreadyRenamedElements with the same name
+     * @return <code>true</code> if the given element was joined with an element
+     *         in alreadyRenamedElements with the same name
      */
     private static ModelElement addOrJoinRenamedElement(final ModelElement renamedElement, final Set<ModelElement> alreadyRenamedElements) {
         if (renamedElement == null) {
@@ -210,13 +230,18 @@ public class ModelConverterUtils {
                 String name = me.getName();
                 if (Objects.equals(name, renamedName)) {
                     String resultingJoinedElementHash = me.getHashString();
-                    //System.err.println("JOINED ########## " + renamedElement);
-                    resultElement = gdcoll.join(renamedHash, resultingJoinedElementHash, mainDoc, TransactionManager.STANDARD_PID); //Element hash for the resulting element must be the second parameter!
+                    // System.err.println("JOINED ########## " +
+                    // renamedElement);
+                    // Element hash for the resulting element must be the second
+                    // parameter!
+                    resultElement = gdcoll.join(renamedHash, resultingJoinedElementHash, mainDoc, TransactionManager.STANDARD_PID);
                     break;
                 }
             }
         }
-        if (resultElement == renamedElement) { //kein Join mit einem vorhandenen Element -> als original renamed Element merken
+        // no join with an existing element -> remember as original renamed
+        // element
+        if (resultElement == renamedElement) {
             alreadyRenamedElements.add(renamedElement);
         }
         return resultElement;
@@ -258,8 +283,11 @@ public class ModelConverterUtils {
             }
         }
         element2Rename.setName(newName.toString());
+        // ATTENTION: This is a crutch to quickly see something for IHE, because
+        // now every element that gets name parts always gets the description of
+        // the element
         String description = nameSourceEdge.getDescription();
-        element2Rename.setDescription(description); //ACHTUNG: Das hier ist ne Krücke um mal schnell was für IHE zu sehen, da jetzt jedes Element, das Namensbestandteile bekommt, immer die Beschreibung des Elementes erhält
+        element2Rename.setDescription(description);
         return element2Rename;
     }
 

@@ -25,40 +25,41 @@ import de.imise.util.ReflectionUtils;
  * Definition der Transformation eines (Meta-)Modells in ein anderes.<br>
  * Die definierbaren Transformationen im einzelnen sind im Moment:
  * <ol>
- * <li>
- * Einfaches direktes Mapping von Knotenklassen aus dem Source-Metamodell auf das Target-Metamodell (z.B. Actor im Protegé-Import-Metamodel wird
- * IheActor im 3LGM-S(IHE)-Metamodel).
- * </li>
- * <li>
- * Einfaches direktes Mapping von Kantenklassen, wenn beide Knotenklassen, die diese Kante verbindet, direkt gemappt werden (z.B. die Kante
- * «IntegrationProfile enthält Actor» im Protegé-Import-Metamodel wird im 3LGM2-S(IHE)-Metamodell zu «IheIntegrationProfile enthält IheActor"),
- * d.h hier stimmt sogar die Richtung der Kante und es muss nichts herumgedreht werden.
- * </li>
- * <li>
- * Direktes Mapping von Kantenklassen, aber die Richtung der Kante muss gedreht werden.
- * </li>
- * <li>
- * Eine Kantenklasse im Source-Modell wird zu einem Pfad über mehrere Kanten im Target-Metamodell (z.B. die Kante “Actor stellt bereit
- * Transaction” im Protegé-Import-Metamodel wird im 3LGM-S(IHE)-Metamodel zum Pfad über die Kanten "IheActor besitzt IheProvidingInterface" +
- * "IheProvidingInterface stellt bereit IheTransaction").
- * </li>
- * <li>
- * Der umgekehrte Fall von 3. = ein Pfad im Source-Metamodell wird zu einer Kante im Target-Metamodell (diesen Fall haben wir in unserer aktuellen
- * Aufgabenstellung nicht).
- * </li>
- * <li>
- * Ein Pfad im Source-Metamodell wird zu einem völlig anderen Pfad im TagetMetamodell. Das bedeutet, 2 Elementklassen, die sich direkt aufeinander
- * mappen ließen, sind in beiden Metamodellen über verschiedene, nicht direkt aufeinander abbildbare Kantenklassen und Zwischenelemente miteinander
- * verbunden (auch dieser Fall ist hypothetisch, also habe ich dafür kein Beispiel aus unserer aktuellen Aufgabenstellung).
- * </li>
- * <li>
- * Irgendwas anderes, was sich nicht so sauber auf den Metamodell-Konzepten beschreiben lässt, wie die Punkte 1–5 es zulassen würden. Entweder
- * hier oder in einem zusätzlichen Punkt müsste man so etwas wie die Optionalität der “Actor stellt bereit Transaction”-Kanten übertragen.
- * </li>
+ * <li>Einfaches direktes Mapping von Knotenklassen aus dem Source-Metamodell
+ * auf das Target-Metamodell (z.B. Actor im Protegé-Import-Metamodel wird
+ * IheActor im 3LGM-S(IHE)-Metamodel).</li>
+ * <li>Einfaches direktes Mapping von Kantenklassen, wenn beide Knotenklassen,
+ * die diese Kante verbindet, direkt gemappt werden (z.B. die Kante
+ * «IntegrationProfile enthält Actor» im Protegé-Import-Metamodel wird im
+ * 3LGM2-S(IHE)-Metamodell zu «IheIntegrationProfile enthält IheActor"), d.h
+ * hier stimmt sogar die Richtung der Kante und es muss nichts herumgedreht
+ * werden.</li>
+ * <li>Direktes Mapping von Kantenklassen, aber die Richtung der Kante muss
+ * gedreht werden.</li>
+ * <li>Eine Kantenklasse im Source-Modell wird zu einem Pfad über mehrere Kanten
+ * im Target-Metamodell (z.B. die Kante “Actor stellt bereit Transaction” im
+ * Protegé-Import-Metamodel wird im 3LGM-S(IHE)-Metamodel zum Pfad über die
+ * Kanten "IheActor besitzt IheProvidingInterface" + "IheProvidingInterface
+ * stellt bereit IheTransaction").</li>
+ * <li>Der umgekehrte Fall von 3. = ein Pfad im Source-Metamodell wird zu einer
+ * Kante im Target-Metamodell (diesen Fall haben wir in unserer aktuellen
+ * Aufgabenstellung nicht).</li>
+ * <li>Ein Pfad im Source-Metamodell wird zu einem völlig anderen Pfad im
+ * TagetMetamodell. Das bedeutet, 2 Elementklassen, die sich direkt aufeinander
+ * mappen ließen, sind in beiden Metamodellen über verschiedene, nicht direkt
+ * aufeinander abbildbare Kantenklassen und Zwischenelemente miteinander
+ * verbunden (auch dieser Fall ist hypothetisch, also habe ich dafür kein
+ * Beispiel aus unserer aktuellen Aufgabenstellung).</li>
+ * <li>Irgendwas anderes, was sich nicht so sauber auf den Metamodell-Konzepten
+ * beschreiben lässt, wie die Punkte 1–5 es zulassen würden. Entweder hier oder
+ * in einem zusätzlichen Punkt müsste man so etwas wie die Optionalität der
+ * “Actor stellt bereit Transaction”-Kanten übertragen.</li>
  * </ol>
- * Für die Punkte 1–6 kann man Maps angeben, die diese Transformationen definieren. Der Punkt 7 wird in einer zusätzlichen “Erledige den
- * Rest”-Funktion untergebracht, in der beliebiger Java-Code stehen kanm und in der man somit auch die Punkte 1–6 erledigen könnte, wenn man zu
- * bequem ist, die Mappings für die Funktionen 1–6 explizit zu definieren.
+ * Für die Punkte 1–6 kann man Maps angeben, die diese Transformationen
+ * definieren. Der Punkt 7 wird in einer zusätzlichen “Erledige den
+ * Rest”-Funktion untergebracht, in der beliebiger Java-Code stehen kanm und in
+ * der man somit auch die Punkte 1–6 erledigen könnte, wenn man zu bequem ist,
+ * die Mappings für die Funktionen 1–6 explizit zu definieren.
  *
  * @author AXS (7 Jun 2019)
  */
@@ -101,8 +102,9 @@ public abstract class ModelConverterDefinition {
 
     /**
      * @param clazz
-     * @return <code>true</code>, wenn die übergebene Klasse zuweisungskompatibel zur {@link #sourceMetaModelDefinitionClass} ist, sonst
-     *         <code>false</code>
+     * @return <code>true</code>, wenn die übergebene Klasse
+     *         zuweisungskompatibel zur {@link #sourceMetaModelDefinitionClass}
+     *         ist, sonst <code>false</code>
      */
     public final boolean isSourceMetaModelDefinitionClass(final Class<?> clazz) {
         return ReflectionUtils.isAssignable(sourceMetaModelDefinitionClass, clazz);
@@ -110,8 +112,9 @@ public abstract class ModelConverterDefinition {
 
     /**
      * @param clazz
-     * @return <code>true</code>, wenn die übergebene Klasse zuweisungskompatibel zur {@link #targetMetaModelDefinitionClass} ist, sonst
-     *         <code>false</code>
+     * @return <code>true</code>, wenn die übergebene Klasse
+     *         zuweisungskompatibel zur {@link #targetMetaModelDefinitionClass}
+     *         ist, sonst <code>false</code>
      */
     public final boolean isTargetMetaModelDefinitionClass(final Class<?> clazz) {
         return ReflectionUtils.isAssignable(targetMetaModelDefinitionClass, clazz);
@@ -119,7 +122,8 @@ public abstract class ModelConverterDefinition {
 
     /**
      * @param metaModelDefinitionClass
-     * @return <code>true</code>, wenn die übergebene MetaModelDefinition-Klasse der {@link #sourceMetaModelDefinitionClass} entspricht, sonst
+     * @return <code>true</code>, wenn die übergebene MetaModelDefinition-Klasse
+     *         der {@link #sourceMetaModelDefinitionClass} entspricht, sonst
      *         <code>false</code>
      */
     public final boolean canConvert(final Class<? extends MetaModelDefinition> metaModelDefinitionClass) {
@@ -127,7 +131,8 @@ public abstract class ModelConverterDefinition {
     }
 
     /**
-     * @return {@link MetaModelContext} zur {@link #sourceMetaModelDefinitionClass}.
+     * @return {@link MetaModelContext} zur
+     *         {@link #sourceMetaModelDefinitionClass}.
      */
     public final MetaModelContext getSourceMetaModelContext() {
         if (sourceMetaModelContext == null) {
@@ -137,7 +142,8 @@ public abstract class ModelConverterDefinition {
     }
 
     /**
-     * @return {@link MetaModelContext} zur {@link #targetMetaModelDefinitionClass}.
+     * @return {@link MetaModelContext} zur
+     *         {@link #targetMetaModelDefinitionClass}.
      */
     public final MetaModelContext getTargetMetaModelContext() {
         if (targetMetaModelContext == null) {
@@ -153,8 +159,9 @@ public abstract class ModelConverterDefinition {
     }
 
     /**
-     * Liefert eine Map, die von Knotenklassen aus dem Source-Metamodell direkt auf jeweils eine Knotenklasse im Targetmetamodell mappt. Deckt den
-     * Fall 1 ab.
+     * Liefert eine Map, die von Knotenklassen aus dem Source-Metamodell direkt
+     * auf jeweils eine Knotenklasse im Targetmetamodell mappt. Deckt den Fall 1
+     * ab.
      *
      * @return Map von direkt aufeinander abbildbaren Knotenklassen
      */
@@ -163,8 +170,9 @@ public abstract class ModelConverterDefinition {
     }
 
     /**
-     * Liefert eine Map, die von Kantenklassen aus dem Source-Metamodell direkt auf jeweils eine Kantenklasse im Targetmetamodell mappt. Dabei
-     * bleibt auch die Richtung der Kante erhalten. Deckt den Fall 2 ab.
+     * Liefert eine Map, die von Kantenklassen aus dem Source-Metamodell direkt
+     * auf jeweils eine Kantenklasse im Targetmetamodell mappt. Dabei bleibt
+     * auch die Richtung der Kante erhalten. Deckt den Fall 2 ab.
      *
      * @return Map von direkt aufeinander abbildbaren Knotenklassen
      */
@@ -173,8 +181,9 @@ public abstract class ModelConverterDefinition {
     }
 
     /**
-     * Liefert eine Map, die von Kantenklassen aus dem Source-Metamodell direkt auf jeweils eine Kantenklasse im Targetmetamodell mappt. Dabei
-     * wird die Richtung der Kante gedreht. Deckt den Fall 3 ab.
+     * Liefert eine Map, die von Kantenklassen aus dem Source-Metamodell direkt
+     * auf jeweils eine Kantenklasse im Targetmetamodell mappt. Dabei wird die
+     * Richtung der Kante gedreht. Deckt den Fall 3 ab.
      *
      * @return Map von direkt aufeinander abbildbaren Knotenklassen
      */
@@ -183,8 +192,10 @@ public abstract class ModelConverterDefinition {
     }
 
     /**
-     * Liefert eine Map, die von Kantenklassen aus dem Source-Metamodell auf einen Pfad im Targetmetamodell mappt. Deckt den Fall 4 ab. Der Pfad
-     * steckt in den Value-Klassen und außerdem noch eine Definition, wie Namen von Zwischenelemente, die beim Erzeugen des Pfades angelegt werden
+     * Liefert eine Map, die von Kantenklassen aus dem Source-Metamodell auf
+     * einen Pfad im Targetmetamodell mappt. Deckt den Fall 4 ab. Der Pfad
+     * steckt in den Value-Klassen und außerdem noch eine Definition, wie Namen
+     * von Zwischenelemente, die beim Erzeugen des Pfades angelegt werden
      * erzeugt werden sollen.
      *
      * @return Map von direkt aufeinander abbildbaren Knotenklassen
@@ -194,7 +205,8 @@ public abstract class ModelConverterDefinition {
     }
 
     /**
-     * Liefert eine Map, die von einem Pfad aus dem Source-Metamodell auf Kantenklassen im Targetmetamodell mappt. Deckt den Fall 5 ab.
+     * Liefert eine Map, die von einem Pfad aus dem Source-Metamodell auf
+     * Kantenklassen im Targetmetamodell mappt. Deckt den Fall 5 ab.
      *
      * @return Map von direkt aufeinander abbildbaren Knotenklassen
      */
@@ -203,7 +215,8 @@ public abstract class ModelConverterDefinition {
     }
 
     /**
-     * Liefert eine Map, die von einem Pfad aus dem Source-Metamodell auf einen Pfad im Targetmetamodell mappt. Deckt den Fall 6 ab.
+     * Liefert eine Map, die von einem Pfad aus dem Source-Metamodell auf einen
+     * Pfad im Targetmetamodell mappt. Deckt den Fall 6 ab.
      *
      * @return Map von direkt aufeinander abbildbaren Knotenklassen
      */
@@ -218,7 +231,7 @@ public abstract class ModelConverterDefinition {
      * @param target
      */
     public void beforeTransform(final GDCollection source, final GDCollection target) {
-        //subclasses can do special transforms here
+        // subclasses can do special transforms here
     }
 
     /**
@@ -228,13 +241,16 @@ public abstract class ModelConverterDefinition {
      * @param target
      */
     public void afterTransform(final GDCollection source, final GDCollection target) {
-        //subclasses can do special transforms here
+        // subclasses can do special transforms here
     }
 
     /**
-     * Spezielle Datenklasse für das Mapping von Kanten auf SimpleMetaPaths. Außer welcher Pfad aus der jeweiligen Kante entstehen soll, wird hier
-     * auch noch defniert, welche Namen die neu anzulegenden Zwischenelemente erhalten sollen. Diese Namen bleiben entweder die generierten
-     * Standardnamen oder werden ein String, der sich irgendwie aus der Kante bzw. deren Name oder dem Namen der durch die Kante verbundenen Elemente
+     * Spezielle Datenklasse für das Mapping von Kanten auf SimpleMetaPaths.
+     * Außer welcher Pfad aus der jeweiligen Kante entstehen soll, wird hier
+     * auch noch defniert, welche Namen die neu anzulegenden Zwischenelemente
+     * erhalten sollen. Diese Namen bleiben entweder die generierten
+     * Standardnamen oder werden ein String, der sich irgendwie aus der Kante
+     * bzw. deren Name oder dem Namen der durch die Kante verbundenen Elemente
      * ergibt.
      *
      * @author AXS (12 Jun 2019)
@@ -250,17 +266,19 @@ public abstract class ModelConverterDefinition {
             PATH_STEP_EDGE_NAME,
         }
 
-        /** MetaPfad, der über diese Defintion angelegt werden kann */
+        /** MetaPath that can be created using this definition */
         private final SimpleMetaPath simpleMetaPath2Create;
 
         /**
-         * Mappt von dem Index des Endelementes eines Pfadschrittes auf ein Pattern, über das Elemente, die an diesem Pfadschritt angelegt wurden,
-         * umbenannt werden können.
+         * Mappt von dem Index des Endelementes eines Pfadschrittes auf ein
+         * Pattern, über das Elemente, die an diesem Pfadschritt angelegt
+         * wurden, umbenannt werden können.
          */
         private Map<Integer, Object[]> pathStepElementIndexToElementNameCreationPattern;
 
         /**
-         * @param simpleMetaPath2Create
+         * @param simpleMetaPath2Create MetaPath that can be created using this
+         *            definition.
          */
         public TargetPathsCreationDefinition(final SimpleMetaPath simpleMetaPath2Create) {
             this.simpleMetaPath2Create = simpleMetaPath2Create;
@@ -269,12 +287,15 @@ public abstract class ModelConverterDefinition {
         /**
          * Fügt ein Pattern für den Pfadschritt mit dem angegebenen Index hinzu
          *
-         * @param pathStepElementIndex
-         *            Index des Zwischenelementes im Pfad, dessen Name generiert werden soll.
-         * @param patternObjects
-         *            Die Objekte, aus denen der Name generiert wird. Das ist eine Liste von beliebigen Objekten und {@link NameSource}s. Alle Objekte
-         *            außer {@link NameSource}s werden einfach über {@link String#valueOf(Object)} in Strings umgewandelt und aneinandergehängt. Die
-         *            NameSources werden durch den von ihnen beschriebenen String ersetzt und dann angehängt.
+         * @param pathStepElementIndex Index des Zwischenelementes im Pfad,
+         *            dessen Name generiert werden soll.
+         * @param patternObjects Die Objekte, aus denen der Name generiert wird.
+         *            Das ist eine Liste von beliebigen Objekten und
+         *            {@link NameSource}s. Alle Objekte außer
+         *            {@link NameSource}s werden einfach über
+         *            {@link String#valueOf(Object)} in Strings umgewandelt und
+         *            aneinandergehängt. Die NameSources werden durch den von
+         *            ihnen beschriebenen String ersetzt und dann angehängt.
          */
         public void addElementNameCreationPattern(final int pathStepElementIndex, final Object... patternObjects) {
             if (pathStepElementIndexToElementNameCreationPattern == null) {
@@ -284,7 +305,8 @@ public abstract class ModelConverterDefinition {
         }
 
         /**
-         * @return the simpleMetaPath2Create MetaPfad, der über diese Defintion angelegt werden kann
+         * @return the simpleMetaPath2Create MetaPfad, der über diese Defintion
+         *         angelegt werden kann
          */
         public SimpleMetaPath getSimpleMetaPath2Create() {
             return simpleMetaPath2Create;
