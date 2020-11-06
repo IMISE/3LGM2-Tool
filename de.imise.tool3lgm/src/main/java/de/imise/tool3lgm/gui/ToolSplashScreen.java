@@ -59,7 +59,7 @@ public class ToolSplashScreen extends BasicSplashScreen {
         drawString(g, "fullToolName1", 50);
         drawString(g, "fullToolName2", 70);
         setBoldFontSize(g, 13);
-        String versionString = getResString("version") + ": " + TOOL_VERSION_INFO.tag;
+        String versionString = getResString("version") + ": " + TOOL_VERSION_INFO.version;
         drawString(g, versionString, 100);
         if (TOOL_VERSION_INFO.isDevelopmentBuild()) {
             String commitString = getResString("commit") + ": " + TOOL_VERSION_INFO.commit;

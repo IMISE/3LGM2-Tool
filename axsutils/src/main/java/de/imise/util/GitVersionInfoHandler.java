@@ -32,7 +32,7 @@ public class GitVersionInfoHandler {
     public static class GitVersionInfo {
 
         /** The tag name */
-        public String tag = "Unknown Version";
+        public String version = "Unknown Version";
 
         /** The commit ID */
         public String commit = "Unknown Commit";
@@ -49,9 +49,9 @@ public class GitVersionInfoHandler {
         @Override
         public String toString() {
             if (isReleaseBuild()) {
-                return tag;
+                return version;
             }
-            return tag + " (" + commit + ")";
+            return version + " (" + commit + ")";
         }
 
         /**
@@ -59,7 +59,7 @@ public class GitVersionInfoHandler {
          *         contained in the version string
          */
         public boolean isDevelopmentBuild() {
-            return devVersionIndicator != null && tag.contains(devVersionIndicator);
+            return devVersionIndicator != null && version.contains(devVersionIndicator);
         }
 
         /**
@@ -97,9 +97,9 @@ public class GitVersionInfoHandler {
             if (gitTagObject != null) {
                 String gitTag = gitTagObject.toString();
                 int indexOfMinus = gitTag.indexOf("-");
-                versionInfo.tag = gitTag.substring(0, indexOfMinus);
-                if (ignoreTagPrefix != null && versionInfo.tag.startsWith(ignoreTagPrefix)) {
-                    versionInfo.tag = versionInfo.tag.substring(ignoreTagPrefix.length());
+                versionInfo.version = gitTag.substring(0, indexOfMinus);
+                if (ignoreTagPrefix != null && versionInfo.version.startsWith(ignoreTagPrefix)) {
+                    versionInfo.version = versionInfo.version.substring(ignoreTagPrefix.length());
                 }
                 versionInfo.commit = gitTag.substring(indexOfMinus + 1);
             }
