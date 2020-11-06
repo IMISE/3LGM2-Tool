@@ -154,7 +154,6 @@ public class AlphabeticalJList<T> extends JList<NamedObjectContainer<T>> {
             }
         }
 
-        @Override
         public void addAll(final Collection<? extends E> items) {
             for (Iterator<? extends E> it = items.iterator(); it.hasNext();) {
                 addElement(it.next());

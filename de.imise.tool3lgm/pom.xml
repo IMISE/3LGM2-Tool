@@ -109,7 +109,7 @@
 			<artifactId>AppleJavaExtensions</artifactId>
 			<version>1.4</version>
 		</dependency>
-
+		
 	</dependencies>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -239,6 +239,43 @@
 					</execution>
 				</executions>
 			</plugin>
+			<!-- erstellt version.info datei und füllt sie mit Branchnamen und git describe tag -->
+			<plugin>
+                <groupId>pl.project13.maven</groupId>
+                <artifactId>git-commit-id-plugin</artifactId>
+                <version>4.0.3</version>
+                <executions>
+                    <execution>
+                        <id>get-the-git-infos</id>
+                        <goals>
+                            <goal>revision</goal>
+                        </goals>
+                        <phase>initialize</phase>
+                    </execution>
+                </executions>
+                <configuration>
+                    <generateGitPropertiesFile>true</generateGitPropertiesFile>
+                    <generateGitPropertiesFilename>../de.imise.tool3lgm/version.info</generateGitPropertiesFilename>
+					<includeOnlyProperties>
+						<includeOnlyProperty>git.branch</includeOnlyProperty>
+						<includeOnlyProperty>git.commit.id.describe</includeOnlyProperty>
+					</includeOnlyProperties>
+					<gitDescribe>
+                		<skip>false</skip>
+                		<always>true</always>
+                		<tags>false</tags>
+                	</gitDescribe>
+                	<replacementProperties>
+                	<!-- entfernen des -dirty Tags -->
+						<replacementProperty>
+							<property>git.commit.id.describe</property>
+							<token>^(.*?)(-dirty)?$</token>
+							<value>$1</value>
+						</replacementProperty>
+					</replacementProperties>
+                </configuration>
+            </plugin>
+			
 			<!-- <plugin> -->
 			<!-- <groupId>org.codehaus.mojo</groupId> -->
 			<!-- <artifactId>license-maven-plugin</artifactId> -->

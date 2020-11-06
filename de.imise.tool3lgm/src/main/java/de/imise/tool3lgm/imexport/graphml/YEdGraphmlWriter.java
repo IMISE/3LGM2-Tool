@@ -1,5 +1,7 @@
 package de.imise.tool3lgm.imexport.graphml;
 
+import static de.imise.tool3lgm.Tool3lgmConstants.TOOL_VERSION_INFO;
+
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.image.BufferedImage;
@@ -15,7 +17,6 @@ import javax.swing.ImageIcon;
 import javax.swing.SwingConstants;
 import javax.xml.stream.XMLStreamException;
 
-import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.metamodel.CoreMetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.DoubleMeaningEdge;
@@ -40,7 +41,7 @@ public class YEdGraphmlWriter extends GraphmlWriter {
 
     @Override
     protected String getCreatedByComment() {
-        return "Created by Tool3lgm " + Tool3lgmConstants.TOOL_VERSION;
+        return "Created by Tool3lgm " + TOOL_VERSION_INFO.tag;
     }
 
     @Override

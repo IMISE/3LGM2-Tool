@@ -1,6 +1,7 @@
 package de.imise.tool3lgm.gui;
 
 import static de.imise.tool3lgm.Tool3lgmConstants.THIRD_PARTY_LICENSES_HTML_FILE;
+import static de.imise.tool3lgm.Tool3lgmConstants.TOOL_VERSION_INFO;
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
 
 import java.awt.Color;
@@ -10,8 +11,6 @@ import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 
 import javax.swing.ImageIcon;
-
-import com.google.common.base.Strings;
 
 import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.Tool3lgmConstants;
@@ -59,10 +58,14 @@ public class ToolSplashScreen extends BasicSplashScreen {
         g.setColor(TEXT_COLOR);
         drawString(g, "fullToolName1", 50);
         drawString(g, "fullToolName2", 70);
-        drawString(g, "version" + " " + Tool3lgmConstants.TOOL_VERSION, 100);
-        if (!Strings.isNullOrEmpty(Tool3lgmConstants.Branch)) {
-            drawString(g, "Branch " + Tool3lgmConstants.Branch, 120);
+        setBoldFontSize(g, 13);
+        String versionString = getResString("version") + ": " + TOOL_VERSION_INFO.tag;
+        drawString(g, versionString, 100);
+        if (TOOL_VERSION_INFO.isDevelopmentBuild()) {
+            String commitString = getResString("commit") + ": " + TOOL_VERSION_INFO.commit;
+            drawString(g, commitString, 120);
         }
+        setBoldFontSize(g, 16);
         drawString(g, "instituteName1", 260);
         drawString(g, "instituteName2", 280);
         drawString(g, "instituteName3", 300);
