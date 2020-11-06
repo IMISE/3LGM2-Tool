@@ -22,6 +22,12 @@ public class GitVersionInfoHandler {
      */
     private static final String VERSION_INFO_LINE_PREFIX_TAG_AND_COMMIT = "git.commit.id.describe";
 
+    /**
+     * Key string for the property with the branch name in the version-info
+     * file.
+     */
+    private static final String VERSION_INFO_LINE_PREFIX_BRANCH = "git.branch";
+
     /** Git Version with tag and commit ID */
     public static class GitVersionInfo {
 
@@ -30,6 +36,9 @@ public class GitVersionInfoHandler {
 
         /** The commit ID */
         public String commit = "Unknown Commit";
+
+        /** the branch name */
+        public String branch = "Unknown Branch";
 
         /**
          * If this string is contained in the version string, then the entire
@@ -83,14 +92,23 @@ public class GitVersionInfoHandler {
         try (FileInputStream fileInputStream = new FileInputStream(versionInfoFile)) {
             Properties properties = new Properties();
             properties.load(fileInputStream);
+            //Version and Commit ID
             Object gitTagObject = properties.get(VERSION_INFO_LINE_PREFIX_TAG_AND_COMMIT);
-            String gitTag = gitTagObject == null ? null : gitTagObject.toString();
-            int indexOfMinus = gitTag.indexOf("-");
-            versionInfo.tag = gitTag.substring(0, indexOfMinus);
-            if (ignoreTagPrefix != null && versionInfo.tag.startsWith(ignoreTagPrefix)) {
-                versionInfo.tag = versionInfo.tag.substring(ignoreTagPrefix.length());
+            if (gitTagObject != null) {
+                String gitTag = gitTagObject.toString();
+                int indexOfMinus = gitTag.indexOf("-");
+                versionInfo.tag = gitTag.substring(0, indexOfMinus);
+                if (ignoreTagPrefix != null && versionInfo.tag.startsWith(ignoreTagPrefix)) {
+                    versionInfo.tag = versionInfo.tag.substring(ignoreTagPrefix.length());
+                }
+                versionInfo.commit = gitTag.substring(indexOfMinus + 1);
             }
-            versionInfo.commit = gitTag.substring(indexOfMinus + 1);
+            //Branch name
+            Object branchName = properties.get(VERSION_INFO_LINE_PREFIX_BRANCH);
+            if (branchName != null) {
+                versionInfo.branch = branchName.toString();
+            }
+
         } catch (IOException e) {
         }
         return versionInfo;

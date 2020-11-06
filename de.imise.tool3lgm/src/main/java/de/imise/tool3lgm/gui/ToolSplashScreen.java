@@ -64,6 +64,8 @@ public class ToolSplashScreen extends BasicSplashScreen {
         if (TOOL_VERSION_INFO.isDevelopmentBuild()) {
             String commitString = getResString("commit") + ": " + TOOL_VERSION_INFO.commit;
             drawString(g, commitString, 120);
+            String branchString = getResString("branch") + ": " + TOOL_VERSION_INFO.branch;
+            drawString(g, branchString, 140);
         }
         setBoldFontSize(g, 16);
         drawString(g, "instituteName1", 260);
