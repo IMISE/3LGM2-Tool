@@ -1746,7 +1746,6 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
      * <code>ModelElement</code>s des Klasse <code>searchElementClass</code>
      * zurueck.
      *
-     * @param searchElementClass
      * @param edgeClass
      * @param direction
      * @return

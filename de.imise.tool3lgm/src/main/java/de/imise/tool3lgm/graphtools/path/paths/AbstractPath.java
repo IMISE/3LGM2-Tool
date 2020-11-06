@@ -41,7 +41,6 @@ public abstract class AbstractPath {
      * @param endElement
      */
     public AbstractPath(final ModelElement startElement, final ModelElement endElement) {
-        super();
         this.startElement = startElement;
         this.endElement = endElement;
     }
@@ -143,14 +142,14 @@ public abstract class AbstractPath {
      * @param replacement
      * @return
      */
-    public void replaceElement(final ModelElement original, final ModelElement replacement) {
+    public final void replaceElement(final ModelElement original, final ModelElement replacement) {
+        replace(original, replacement);
         if (startElement == original) {
             setStartElement(replacement);
         }
         if (endElement == original) {
             setEndElement(replacement);
         }
-        replace(original, replacement);
     }
 
     /**

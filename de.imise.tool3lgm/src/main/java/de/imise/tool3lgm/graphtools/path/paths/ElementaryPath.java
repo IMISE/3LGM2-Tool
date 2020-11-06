@@ -1,5 +1,7 @@
 package de.imise.tool3lgm.graphtools.path.paths;
 
+import java.util.List;
+
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
@@ -214,8 +216,46 @@ public final class ElementaryPath extends AbstractPath {
 
     @Override
     protected void replace(final ModelElement original, final ModelElement replacement) {
+        ElementaryMetaPath metaPath = getMetaPath();
+        Type type = metaPath.getType();
+        if (startElement == original || endElement == original) {
+            Class<? extends Edge> edgeClass = edge.getClass();
+            if (startElement == original) {
+                startElement = replacement;
+            }
+            if (endElement == original) {
+                endElement = replacement;
+            }
+            if (type == Type.ELEMENT_EDGE_ELEMENT) {
+                List<Edge> edges = metaPath.hasDirectionForward() ? startElement.getEdgesTo(endElement, edgeClass) : endElement.getEdgesTo(startElement, edgeClass);
+                if (!edges.contains(edge)) {
+                    //this must exist!
+                    int size = edges.size();
+                    Edge edge = edges.get(size - 1);
+                    this.edge = edge;
+                }
+            }
+        }
         if (edge == original) {
             edge = (Edge) replacement; // must be castable!
+            if (type == Type.ELEMENT_EDGE_ELEMENT) {
+                if (metaPath.hasDirectionForward()) {
+                    edge = (Edge) replacement;
+                    if (metaPath.hasDirectionForward()) {
+                        startElement = edge.getStart();
+                        endElement = edge.getEnd();
+                    } else {
+                        startElement = edge.getEnd();
+                        endElement = edge.getStart();
+                    }
+                }
+            } else if (type == Type.START_WITH_EDGE) {
+                startElement = edge;
+                endElement = metaPath.hasDirectionForward() ? edge.getEnd() : edge.getStart();
+            } else if (type == Type.END_WITH_EDGE) {
+                endElement = edge;
+                startElement = metaPath.hasDirectionForward() ? edge.getStart() : edge.getEnd();
+            }
         }
     }
 

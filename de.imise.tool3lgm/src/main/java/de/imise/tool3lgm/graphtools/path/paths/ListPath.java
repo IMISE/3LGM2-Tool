@@ -61,7 +61,7 @@ public abstract class ListPath extends AbstractPath implements Iterable<Abstract
     @Override
     protected final void replace(final ModelElement original, final ModelElement replacement) {
         for (AbstractPath path : paths) {
-            path.replace(original, replacement);
+            path.replaceElement(original, replacement);
         }
     }
 
