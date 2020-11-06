@@ -41,7 +41,7 @@ public class YEdGraphmlWriter extends GraphmlWriter {
 
     @Override
     protected String getCreatedByComment() {
-        return "Created by Tool3lgm " + TOOL_VERSION_INFO.tag;
+        return "Created by Tool3lgm " + TOOL_VERSION_INFO;
     }
 
     @Override
