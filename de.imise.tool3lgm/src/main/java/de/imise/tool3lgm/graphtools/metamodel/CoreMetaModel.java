@@ -227,6 +227,20 @@ public abstract class CoreMetaModel implements MetaModelSpecific {
     }
 
     /**
+     * Returns <code>true</code> if the given edge is a CompositionEdge and the
+     * given ModelElement is the is the slave element of this edge.
+     *
+     * @param egde
+     * @param me
+     * @return
+     */
+    public static final boolean isCompositionSlave(final Edge edge, final ModelElement me) {
+        Class<? extends Edge> edgeClass = edge.getClass();
+        Class<? extends ModelElement> elementClass = me.getClass();
+        return isCompositionSlaveType(edgeClass, elementClass);
+    }
+
+    /**
      * Liefert <code>true</code>, wenn die übergebene Elementklasse eine
      * Master-Klasse der übergebenen Kompositionsklasse ist.
      *

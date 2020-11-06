@@ -104,7 +104,7 @@ public class IheModelConverterDefinition extends ModelConverterDefinition {
         //        SequenceMetaPath actor_to_Actor_MetaPath = new SequenceMetaPath(actor_to_InvokingInterface_MetaPath, invokingInterface_to_ProvidingInterface_MetaPath, providingInterface_to_Actor_MetaPath);
 
         SimpleMetaPath actor_Transaction_Actor_MetaPath = get_Actor_Transaction_Actor_MetaPath();
-        TargetPathsCreationDefinition def1 = new TargetPathsCreationDefinition(actor_Transaction_Actor_MetaPath);
+        TargetPathsCreationDefinition def1 = new TargetPathsCreationDefinition(actor_Transaction_Actor_MetaPath, true); //Interfaces with the sameName should be joined
         def1.addElementNameCreationPattern(1, NameSource.PATH_STEP_EDGE_NAME); //EndElement der 2.Kante im Pfad ( IheInvokingInterface_IheTransaction_Edge -> EndElement = Transaction) soll den Namen der Ursprungskante bekommen
 
         //        //IHE Actor besitzt IHE Schnittstelle + IHE Schnittstelle (aufrufend) ist vrbunden mit IHE Schnittstelle (bereitstellend) + IHE Schnittstelle gehört zu IHE Actor
@@ -115,8 +115,8 @@ public class IheModelConverterDefinition extends ModelConverterDefinition {
         //       return ImmutableListMultimap.of(IheTransaction_Edge.class, def1, IheTransaction_Edge.class, def2);
         //Das funktioniert nicht:
         //Problem ist das Joinen im Verlauf der Hintereinanderusführung des Anlegens der beiden Pfade. Das müsste komplett beseitigt werden
-        //und dadruch ersetzt werden, dass man die Pfade, die aus derselben Kante entstehen sollen, gleich durch das im Moment nicht umgesetzte
-        //Anlegen von Pararllelen Pfaden erzeugt.
+        //und dadurch ersetzt werden, dass man die Pfade, die aus derselben Kante entstehen sollen, gleich durch das im Moment nicht umgesetzte
+        //Anlegen von Parallelen Pfaden erzeugt.
         //Lösung hier (bzw. Workaround): Einfach die IheCommunicationLink_Edge zwischen allen Schnittstellen anlegen, die über Transaktionen
         //verbunden sind. Das sollte in diesem Fall hinhauen.
 

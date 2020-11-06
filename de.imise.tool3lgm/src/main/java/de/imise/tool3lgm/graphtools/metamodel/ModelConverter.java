@@ -238,8 +238,8 @@ public class ModelConverter {
                     String sourceEdgeStartElementHash = sourceEdgeStartElement.getHashString();
                     String sourceEdgeEndElementHash = sourceEdgeEndElement.getHashString();
                     String sourceEdgeHash = sourceEdgeElement.getHashString();
-                    //                    System.err.println(sourceEdgeStartElement + " (" + sourceEdgeStartElement.getHashString() + ") " + sourceEdge.getClass().getSimpleName() + " (" + sourceEdge.getHashString() + ") " + " " + sourceEdgeEndElement + " ("
-                    //                            + sourceEdgeEndElement.getHashString() + ") ");
+                    //System.err.println(sourceEdgeStartElement + " (" + sourceEdgeStartElement.getHashString() + ") " + sourceEdge.getClass().getSimpleName() + " (" + sourceEdge.getHashString() + ") " + " " + sourceEdgeEndElement + " ("
+                    //+ sourceEdgeEndElement.getHashString() + ") ");
                     ModelElement targetStartElement = targetMainDoc.findNodeCoded(sourceEdgeStartElementHash);
                     ModelElement targetEndElement = targetMainDoc.findNodeCoded(sourceEdgeEndElementHash);
                     //lege den MetaPfad im Zielmodell an
@@ -248,9 +248,17 @@ public class ModelConverter {
                     // hashStrings from the source edge or join created
                     // elements if the same element (same type with same hash
                     // id prefix) already exists
+                    ModelConverterUtils.replaceGeneratedHashStringsAndJoinEqualsElements(createdPath, sourceEdgeHash);
                     // nach der Definiton der Umbenennungen die Namen der
                     // Elemente in Abhängigkeit von der Source-Edge umbenennen
+                    //und ggf. zusammenführen, wenn sie identisch heißen
                     generatedRenamedElements = ModelConverterUtils.renameAndJoinEqualNamedElements(edgesMappingMetaPathsCreationDefinition, createdPath, sourceEdge, generatedRenamedElements);
+                    //am Ende alle untergeordneten Elemente, die nach dem obigen
+                    //join dieselben Elemente verbinden, auch joinen, wenn die
+                    //Definition das vorgibt
+                    if (edgesMappingMetaPathsCreationDefinition.joinSubordinatedBetweenEqualsElements) {
+                        ModelConverterUtils.joinSubordinatedBetweenEqualsElements(createdPath);
+                    }
                 }
             }
         }

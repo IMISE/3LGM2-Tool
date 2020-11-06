@@ -270,6 +270,15 @@ public abstract class ModelConverterDefinition {
         private final SimpleMetaPath simpleMetaPath2Create;
 
         /**
+         * If <code>true</code> then subordinated elements are merged, which
+         * connect the same elements on the path. In IHE models, interfaces that
+         * reside on the same application system and can call or provide the
+         * same transaction become one interface, rather than as many as the
+         * application system originally had transaction connections.
+         */
+        public final boolean joinSubordinatedBetweenEqualsElements;
+
+        /**
          * Mappt von dem Index des Endelementes eines Pfadschrittes auf ein
          * Pattern, über das Elemente, die an diesem Pfadschritt angelegt
          * wurden, umbenannt werden können.
@@ -281,7 +290,23 @@ public abstract class ModelConverterDefinition {
          *            definition.
          */
         public TargetPathsCreationDefinition(final SimpleMetaPath simpleMetaPath2Create) {
+            this(simpleMetaPath2Create, false);
+        }
+
+        /**
+         * @param simpleMetaPath2Create MetaPath that can be created using this
+         *            definition.
+         * @param joinSubordinatedBetweenEqualsElements If <code>true</code>
+         *            then subordinated elements are merged, which connect the
+         *            same elements on the path. In IHE models, interfaces that
+         *            reside on the same application system and can call or
+         *            provide the same transaction become one interface, rather
+         *            than as many as the application system originally had
+         *            transaction connections.
+         */
+        public TargetPathsCreationDefinition(final SimpleMetaPath simpleMetaPath2Create, final boolean joinSubordinatedBetweenEqualsElements) {
             this.simpleMetaPath2Create = simpleMetaPath2Create;
+            this.joinSubordinatedBetweenEqualsElements = joinSubordinatedBetweenEqualsElements;
         }
 
         /**

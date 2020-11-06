@@ -6,6 +6,7 @@ import java.util.Set;
 
 import de.imise.tool3lgm.graphtools.metamodel.ModelConverterDefinition.TargetPathsCreationDefinition;
 import de.imise.tool3lgm.graphtools.metamodel.ModelConverterDefinition.TargetPathsCreationDefinition.NameSource;
+import de.imise.tool3lgm.graphtools.metamodel.elements.CompositionEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
@@ -46,7 +47,7 @@ public class ModelConverterUtils {
         ModelElement middleElement = getMiddleElement(path);
         GDCollection gdcoll = middleElement.getCollection();
 
-        int counter = joinElementIfEquals(gdcoll, middleElement, null, hashString, path, 0);
+        int counter = setHashStringOrJoinElementIfEqualsExists(gdcoll, middleElement, null, hashString, path, 0);
         middleElement = getMiddleElement(path); // if joined -> middle element
                                                 // has changed
 
@@ -61,7 +62,53 @@ public class ModelConverterUtils {
             counter = setHashString(gdcoll, edge, hashString, counter);
             if (i < pathLength - 1) { // endElement
                 ModelElement endElement = pathStep.getEndElement();
-                counter = joinElementIfEquals(gdcoll, endElement, middleElement, hashString, path, counter);
+                counter = setHashStringOrJoinElementIfEqualsExists(gdcoll, endElement, middleElement, hashString, path, counter);
+            }
+        }
+    }
+
+    /**
+     * Subordinated elements are merged, which connect the same elements on the
+     * path. In IHE models, interfaces that reside on the same application
+     * system and can call or provide the same transaction become one interface,
+     * rather than as many as the application system originally had transaction
+     * connections.
+     *
+     * @param path
+     */
+    static void joinSubordinatedBetweenEqualsElements(final SimplePath path) {
+        int pathLength = path.size();
+        GDCollection gdcoll = null;
+        for (int i = 0; i < pathLength - 1; i++) {
+            ElementaryPath pathStep = path.getPathStep(i);
+            Edge edge = pathStep.getEdge();
+            ModelElement endElement = pathStep.getEndElement();
+            if (MetaModel.isCompositionSlave(edge, endElement)) {
+                ModelElement master = pathStep.getStartElement();
+                Class<? extends Edge> edgeClass = edge.getClass();
+                ElementaryPath nextPathStep = path.getPathStep(i + 1);
+                Edge nextPathStepEdge = nextPathStep.getEdge();
+                Class<? extends Edge> nextPathStepEdgeClass = nextPathStepEdge.getClass();
+                ModelElement nextPathStepEndElement = nextPathStep.getEndElement();
+                List<ModelElement> allSlaveElements = master.getConnectedElements(edgeClass, CompositionEdge.MASTER_TO_SLAVE_DIRECTION);
+                for (ModelElement slaveElement : allSlaveElements) {
+                    if (slaveElement != endElement) {
+                        if (slaveElement.isConnectedWith(nextPathStepEndElement, nextPathStepEdgeClass)) {
+                            if (gdcoll == null) {
+                                gdcoll = endElement.getCollection();
+                            }
+                            LGMGraphDocument mainDoc = gdcoll.getMainDoc();
+                            String elementHash = endElement.getHashString();
+                            String resultingJoinedElementHash = slaveElement.getHashString();
+                            // Element hash for the resulting element must be the second
+                            // parameter!
+                            slaveElement = gdcoll.join(elementHash, resultingJoinedElementHash, mainDoc, TransactionManager.STANDARD_PID);
+                            // if joined with an existing element -> replace the renamed
+                            // element in the path by the joined one
+                            path.replaceElement(endElement, slaveElement);
+                        }
+                    }
+                }
             }
         }
     }
@@ -75,7 +122,7 @@ public class ModelConverterUtils {
      * @param counter
      * @return
      */
-    private static int joinElementIfEquals(final GDCollection gdcoll, final ModelElement me, final ModelElement ignoreElement, final String hashString, final SimplePath path, int counter) {
+    private static int setHashStringOrJoinElementIfEqualsExists(final GDCollection gdcoll, final ModelElement me, final ModelElement ignoreElement, final String hashString, final SimplePath path, int counter) {
         if (me != ignoreElement && me instanceof Node) {
             // gibt es bereits ein Element wie das middleElement, das denselben
             // HastString-Prefix hat (dieses Element ist aus derselben Kante
