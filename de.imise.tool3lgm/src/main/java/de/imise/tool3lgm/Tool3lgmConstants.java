@@ -59,11 +59,6 @@ public abstract class Tool3lgmConstants {
         JAR
     }
 
-    /** String with the version-identifier for Tool3lgm */
-    // TODO _____###### ständig aktualisieren!
-    public static final String TOOL_VERSION = "4.3.2_dev";
-    public static final String Branch = ""; //"origin/SplitMetaModelAndTemplates";
-
     /**
      * Wenn <code>true</code>, liefern die {@link GDCommands} in ihrer
      * toString()-Methode den Namen des Kommandos zurück. Wenn

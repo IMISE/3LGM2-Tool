@@ -1,5 +1,7 @@
 package de.imise.tool3lgm.userproperties;
 
+import static de.imise.tool3lgm.Tool3lgmConstants.TOOL_VERSION_INFO;
+
 import java.beans.PropertyChangeEvent;
 import java.io.File;
 import java.io.FileInputStream;
@@ -293,7 +295,7 @@ public class UserProperties extends AbstractUserProperties {
             for (Object key : transientProperties.keySet()) {
                 properties.remove(key);
             }
-            properties.store(out, "Tool3lgm-Version " + Tool3lgmConstants.TOOL_VERSION);
+            properties.store(out, "Tool3lgm-Version " + TOOL_VERSION_INFO);
             properties.putAll(transientProperties);
         } catch (Exception e) {
             e.printStackTrace();

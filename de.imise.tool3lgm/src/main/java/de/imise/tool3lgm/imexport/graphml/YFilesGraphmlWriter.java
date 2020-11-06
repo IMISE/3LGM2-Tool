@@ -1,5 +1,7 @@
 package de.imise.tool3lgm.imexport.graphml;
 
+import static de.imise.tool3lgm.Tool3lgmConstants.TOOL_VERSION_INFO;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
@@ -10,7 +12,6 @@ import javax.xml.stream.XMLStreamException;
 
 import com.google.common.base.Strings;
 
-import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
@@ -32,7 +33,7 @@ public class YFilesGraphmlWriter extends GraphmlWriter {
 
     @Override
     protected String getCreatedByComment() {
-        return "Created by Tool3lgm " + Tool3lgmConstants.TOOL_VERSION;
+        return "Created by Tool3lgm " + TOOL_VERSION_INFO;
     }
 
     @Override
