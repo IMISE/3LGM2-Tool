@@ -33,7 +33,7 @@ public class GitVersionInfoHandler {
 
         /**
          * If this string is contained in the version string, then the entire
-         * version is considered to be a deletion version.
+         * version is considered to be a development version.
          */
         public String devVersionIndicator = null;
 
