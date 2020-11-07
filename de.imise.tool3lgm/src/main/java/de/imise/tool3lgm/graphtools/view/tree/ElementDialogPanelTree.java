@@ -39,13 +39,11 @@ public class ElementDialogPanelTree extends CorrectSelectionTree {
     }
 
     public LGMTreeNode addObject(final ElementContainer ec, final boolean force, final boolean childrenAreSelectable) {
-        LGMTreeNode root = getRoot();
-        return addObject(ec, root, null, force, childrenAreSelectable);
+        return addObject(ec, null, force, childrenAreSelectable);
     }
 
     public LGMTreeNode addObject(final ElementContainer ec, final Collection<ElementContainer> excludeChildren, final boolean force, final boolean childrenAreSelectable) {
-        LGMTreeNode root = getRoot();
-        return addObject(ec, root, excludeChildren, force, childrenAreSelectable);
+        return addObject(ec, null, excludeChildren, force, childrenAreSelectable);
     }
 
     private LGMTreeNode addObject(final ElementContainer ec, final LGMTreeNode parent, final Collection<ElementContainer> excludeChildren, final boolean force, final boolean childrenAreSelectable) {
@@ -57,11 +55,10 @@ public class ElementDialogPanelTree extends CorrectSelectionTree {
     }
 
     public LGMTreeNode addObject(final ElementContainer ec, final Collection<ElementContainer> excludeChildren, final boolean force, final boolean checkAlreadyAdded, final boolean childrenAreSelectable) {
-        LGMTreeNode root = getRoot();
-        return addObject(ec, root, excludeChildren, force, checkAlreadyAdded, childrenAreSelectable);
+        return addObject(ec, null, excludeChildren, force, checkAlreadyAdded, childrenAreSelectable);
     }
 
-    public LGMTreeNode addObject(final ElementContainer ec, final LGMTreeNode parent, final Collection<ElementContainer> excludeChildren, final boolean force, final boolean checkAlreadyAdded, final boolean childrenAreSelectable) {
+    public LGMTreeNode addObject(final ElementContainer ec, LGMTreeNode parent, final Collection<ElementContainer> excludeChildren, final boolean force, final boolean checkAlreadyAdded, final boolean childrenAreSelectable) {
         if (checkAlreadyAdded && elementsAdded.contains(ec)) {
             return null;
         }
@@ -72,6 +69,9 @@ public class ElementDialogPanelTree extends CorrectSelectionTree {
         LGMTreeNode elementNode = new ElementContainerTreeNode(ec, false, true);
         if (excludeChildren != null && excludeChildren.contains(ec)) {
             elementNode.setSelectable(false);
+        }
+        if (parent == null) {
+            parent = getRoot();
         }
 
         parent.add(elementNode);
