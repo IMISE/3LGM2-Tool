@@ -100,6 +100,7 @@ public class PathConnectionLeafPanel extends PathConnectionPanel {
                     nodeToParentModelElement.put(leaf, parentMe);
                 }
                 //alle Elemente vom root abhängen
+                LGMTreeNode lroot = ltree.getRoot();
                 lroot.removeAllChildren();
                 //alle Blätter direkt an den root hängen
                 for (LGMTreeNode leaf : leafNodes) {
@@ -108,7 +109,6 @@ public class PathConnectionLeafPanel extends PathConnectionPanel {
             } else { //der Pfad ist nicht anlegbar und somit werden die verbundenen Elemente nur angezeigt -> keins doppelt anzeigen! In diesem Fall ist nodeToParentModelElement egal!
                 ImmutableList.Builder<LGMTreeNode> newLeafNodes = ImmutableList.builder();
                 //alle Elemente vom root abhängen
-                lroot.removeAllChildren();
                 ltree.reset(); //check von bereits hinzugefügten Elementen zurück setzen
                 //alle Blätter neu erzeugen und direkt an den root hängen
                 for (LGMTreeNode leaf : leafNodes) {

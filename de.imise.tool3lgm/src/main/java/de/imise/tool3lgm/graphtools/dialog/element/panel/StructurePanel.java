@@ -42,7 +42,6 @@ public class StructurePanel extends AbstractPathOfOneEdgePanel {
     private ElementDialogPanelTree lotree, lutree;
     private ElementDialogPanelTree rtree;
     private DefaultTreeModel lomodel, lumodel, rmodel;
-    private LGMTreeNode loroot, luroot, rroot;
     private JPanel control1, control2;
     private JLabel rlabel;
     private JScrollPane rscrollPane;
@@ -74,7 +73,7 @@ public class StructurePanel extends AbstractPathOfOneEdgePanel {
         String name = me.getName();
         // lotree
         JLabel lolabel = new JLabel(getResString("ueberg"));
-        loroot = new StringTreeNode(name);
+        LGMTreeNode loroot = new StringTreeNode(name);
         lomodel = new DefaultTreeModel(loroot);
         lotree = new ElementDialogPanelTree(lomodel, mainDoc);
         lotree.setName("lotree");
@@ -86,7 +85,7 @@ public class StructurePanel extends AbstractPathOfOneEdgePanel {
 
         // lutree
         JLabel lulabel = new JLabel(getResString("unterg"));
-        luroot = new StringTreeNode(name);
+        LGMTreeNode luroot = new StringTreeNode(name);
         lumodel = new DefaultTreeModel(luroot);
         lutree = new ElementDialogPanelTree(lumodel, mainDoc);
         lutree.setName("lutree");
@@ -117,7 +116,7 @@ public class StructurePanel extends AbstractPathOfOneEdgePanel {
 
         // rtree
         rlabel = new JLabel(getResString("frei"));
-        rroot = new StringTreeNode(getResString("frei"));
+        LGMTreeNode rroot = new StringTreeNode(getResString("frei"));
         rmodel = new DefaultTreeModel(rroot);
         rtree = new ElementDialogPanelTree(rmodel, mainDoc);
         rtree.setName("rtree");
@@ -162,7 +161,6 @@ public class StructurePanel extends AbstractPathOfOneEdgePanel {
         ElementContainer meContainer = me.getContainer(mainDoc);
         childrenToExcludeFromRtree.add(meContainer);
         lotree.saveExpansionAndSelection();
-        loroot.removeAllChildren();
         lotree.reset();
         for (ElementContainer ec : me.getDirectParentContainers(mainDoc)) {
             childrenToExcludeFromRtree.add(ec);
@@ -172,7 +170,6 @@ public class StructurePanel extends AbstractPathOfOneEdgePanel {
         lotree.restoreExpansionAndSelection();
 
         lutree.saveExpansionAndSelection();
-        luroot.removeAllChildren();
         lutree.reset();
         for (ElementContainer ec : me.getDirectPartContainers(mainDoc)) {
             childrenToExcludeFromRtree.add(ec);
@@ -183,7 +180,6 @@ public class StructurePanel extends AbstractPathOfOneEdgePanel {
 
         if (isRightSideVisible()) {
             rtree.saveExpansionAndSelection();
-            rroot.removeAllChildren();
             rtree.reset();
             List<ElementContainer> all = mainDoc.getElementContainersOfEndClass(edgeClass);
             all.remove(meContainer);

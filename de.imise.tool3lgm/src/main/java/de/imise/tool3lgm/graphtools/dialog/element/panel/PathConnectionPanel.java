@@ -67,10 +67,6 @@ public class PathConnectionPanel extends AbstractExpandablePanel {
 
     private final DefaultTreeModel rmodel;
 
-    protected final LGMTreeNode lroot;
-
-    protected final LGMTreeNode rroot;
-
     private final JLabel rLabel;
 
     private final LimitedHeightScrollTreePane rScollPane;
@@ -121,7 +117,7 @@ public class PathConnectionPanel extends AbstractExpandablePanel {
         GraphDocument mainDoc = getMainDoc();
         ElementContainer ec = me.getContainer(mainDoc);
         boolean sortLeftTree = getSortLeftTreeRootChildrenAlphabetical();
-        lroot = new ElementContainerTreeNode(ec, false, sortLeftTree);
+        LGMTreeNode lroot = new ElementContainerTreeNode(ec, false, sortLeftTree);
         lmodel = new DefaultTreeModel(lroot);
         ltree = new ElementDialogPanelTree(lmodel, mainDoc);
         ltree.setRootVisible(false);
@@ -150,7 +146,7 @@ public class PathConnectionPanel extends AbstractExpandablePanel {
             String rtreeLabelString = getResString("frei");
             rtreeLabelString = StringUtils.capitalizeFirstChar(rtreeLabelString);
             rLabel = new JLabel(rtreeLabelString);
-            rroot = new StringTreeNode(rtreeLabelString);
+            LGMTreeNode rroot = new StringTreeNode(rtreeLabelString);
             rmodel = new DefaultTreeModel(rroot);
             rtree = new ElementDialogPanelTree(rmodel, mainDoc);
             rtree.getSelectionModel().setSelectionMode(getTreesSelectionModel());
@@ -175,7 +171,7 @@ public class PathConnectionPanel extends AbstractExpandablePanel {
 
         } else {
             rLabel = null;
-            rroot = null;
+            LGMTreeNode rroot = null;
             rmodel = null;
             addAction = null;
             removeAction = null;
@@ -299,7 +295,6 @@ public class PathConnectionPanel extends AbstractExpandablePanel {
 
     private void updateLeftTree() {
         ltree.saveExpansionAndSelection();
-        lroot.removeAllChildren();
         ltree.reset();
         buildLeftTree();
         lmodel.reload();
@@ -373,7 +368,6 @@ public class PathConnectionPanel extends AbstractExpandablePanel {
     private void buildRightTree() {
         rtree.saveExpansion();
         rtree.saveSelection();
-        rroot.removeAllChildren();
         rtree.reset();
 
         //        Collection<AbstractConsistencyError> consistencyErrors = getConsistencyErrors();

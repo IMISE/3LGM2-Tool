@@ -51,9 +51,6 @@ public class DoubleMeaningEdgePanel extends AbstractPathOfOneEdgePanel {
     private final DefaultTreeModel lomodel, lumodel;
     private DefaultTreeModel romodel;
     private DefaultTreeModel rumodel;
-    private final LGMTreeNode loroot, luroot;
-    private LGMTreeNode roroot;
-    private LGMTreeNode ruroot;
     private JPanel buttonpanel1, buttonpanel2;
     private JLabel rolabel, rulabel;
     private JScrollPane sp3, sp4;
@@ -79,7 +76,7 @@ public class DoubleMeaningEdgePanel extends AbstractPathOfOneEdgePanel {
         boolean showRootHandles = metaModel.canHaveParts(this.searchElementClass);
 
         GraphDocument mainDoc = getMainDoc();
-        loroot = new StringTreeNode("loroot");
+        LGMTreeNode loroot = new StringTreeNode("loroot");
         lomodel = new DefaultTreeModel(loroot);
         lotree = new ElementDialogPanelTree(lomodel, mainDoc);
         lotree.setRootVisible(false);
@@ -91,7 +88,7 @@ public class DoubleMeaningEdgePanel extends AbstractPathOfOneEdgePanel {
         String lulabeltext = StringUtils.capitalizeFirstChar(getEdgeDisplayName(ConnectionState.FORWARD));
         JLabel lulabel = new JLabel(lulabeltext);
 
-        luroot = new StringTreeNode("luroot");
+        LGMTreeNode luroot = new StringTreeNode("luroot");
         lumodel = new DefaultTreeModel(luroot);
         lutree = new ElementDialogPanelTree(lumodel, mainDoc);
         lutree.setRootVisible(false);
@@ -119,7 +116,7 @@ public class DoubleMeaningEdgePanel extends AbstractPathOfOneEdgePanel {
         add(this, sp2, constraints, 0, 3, 1, 1);
 
         if (editable) {
-            roroot = new StringTreeNode("roroot");
+            LGMTreeNode roroot = new StringTreeNode("roroot");
             romodel = new DefaultTreeModel(roroot);
             rotree = new ElementDialogPanelTree(romodel, mainDoc);
             rotree.setRootVisible(false);
@@ -131,7 +128,7 @@ public class DoubleMeaningEdgePanel extends AbstractPathOfOneEdgePanel {
             String unconnected = getResString("frei");
             rolabel = new JLabel(unconnected);
             rulabel = new JLabel(unconnected);
-            ruroot = new StringTreeNode("ruroot");
+            LGMTreeNode ruroot = new StringTreeNode("ruroot");
             rumodel = new DefaultTreeModel(ruroot);
             rutree = new ElementDialogPanelTree(rumodel, mainDoc);
             rutree.setRootVisible(false);
@@ -183,8 +180,6 @@ public class DoubleMeaningEdgePanel extends AbstractPathOfOneEdgePanel {
         lutree.saveExpansion();
         lutree.saveSelection();
 
-        loroot.removeAllChildren();
-        luroot.removeAllChildren();
         lotree.reset();
         lutree.reset();
         childrenToExcludeFromRotree.clear();
@@ -257,8 +252,6 @@ public class DoubleMeaningEdgePanel extends AbstractPathOfOneEdgePanel {
             rotree.saveSelection();
             rutree.saveSelection();
 
-            roroot.removeAllChildren();
-            ruroot.removeAllChildren();
             rotree.reset();
             rutree.reset();
 

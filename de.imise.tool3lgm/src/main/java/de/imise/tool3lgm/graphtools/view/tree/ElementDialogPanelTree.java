@@ -32,20 +32,20 @@ public class ElementDialogPanelTree extends CorrectSelectionTree {
 
     Collection<ElementContainer> elementsAdded = new HashSet<>();
 
-    public void reset() {
+    public final void reset() {
+        LGMTreeNode root = getRoot();
+        root.removeAllChildren();
         elementsAdded.clear();
     }
 
     public LGMTreeNode addObject(final ElementContainer ec, final boolean force, final boolean childrenAreSelectable) {
-        TreeModel model = getModel();
-        LGMTreeNode parent = (LGMTreeNode) model.getRoot();
-        return addObject(ec, parent, null, force, childrenAreSelectable);
+        LGMTreeNode root = getRoot();
+        return addObject(ec, root, null, force, childrenAreSelectable);
     }
 
     public LGMTreeNode addObject(final ElementContainer ec, final Collection<ElementContainer> excludeChildren, final boolean force, final boolean childrenAreSelectable) {
-        TreeModel model = getModel();
-        LGMTreeNode parent = (LGMTreeNode) model.getRoot();
-        return addObject(ec, parent, excludeChildren, force, childrenAreSelectable);
+        LGMTreeNode root = getRoot();
+        return addObject(ec, root, excludeChildren, force, childrenAreSelectable);
     }
 
     private LGMTreeNode addObject(final ElementContainer ec, final LGMTreeNode parent, final Collection<ElementContainer> excludeChildren, final boolean force, final boolean childrenAreSelectable) {
@@ -57,9 +57,8 @@ public class ElementDialogPanelTree extends CorrectSelectionTree {
     }
 
     public LGMTreeNode addObject(final ElementContainer ec, final Collection<ElementContainer> excludeChildren, final boolean force, final boolean checkAlreadyAdded, final boolean childrenAreSelectable) {
-        TreeModel model = getModel();
-        LGMTreeNode parent = (LGMTreeNode) model.getRoot();
-        return addObject(ec, parent, excludeChildren, force, checkAlreadyAdded, childrenAreSelectable);
+        LGMTreeNode root = getRoot();
+        return addObject(ec, root, excludeChildren, force, checkAlreadyAdded, childrenAreSelectable);
     }
 
     public LGMTreeNode addObject(final ElementContainer ec, final LGMTreeNode parent, final Collection<ElementContainer> excludeChildren, final boolean force, final boolean checkAlreadyAdded, final boolean childrenAreSelectable) {
@@ -83,6 +82,12 @@ public class ElementDialogPanelTree extends CorrectSelectionTree {
 
         //this.setExpandedState(new TreePath(elementNode.getPath()), false);
         return elementNode;
+    }
+
+    public LGMTreeNode getRoot() {
+        TreeModel model = getModel();
+        LGMTreeNode root = (LGMTreeNode) model.getRoot();
+        return root;
     }
 
     private void addChildren(final LGMTreeNode elementNode, final Collection<ElementContainer> excludeChildren, final boolean checkAlreadyAdded, final boolean childrenAreSelectable) {

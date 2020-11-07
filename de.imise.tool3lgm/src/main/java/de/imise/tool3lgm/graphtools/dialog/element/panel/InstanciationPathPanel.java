@@ -120,6 +120,7 @@ public class InstanciationPathPanel extends PathConnectionPanel {
             //if there are more thant 2 elementary metapaths in the whole metapath
             //all other nodes between the root and the seocnd last have to be removed
             //from the tree
+            LGMTreeNode lroot = ltree.getRoot();
             if (elementaryMetaPathCount > 2) {
                 lroot.removeAllChildren();
             }
