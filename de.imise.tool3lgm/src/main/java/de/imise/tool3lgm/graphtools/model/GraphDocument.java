@@ -4816,7 +4816,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
             List<ElementContainer> selection = new ArrayList<>(selectedContainer);
             for (ElementContainer ec : new ArrayList<>(selection)) {
                 String element2JoinHash = ec.getHashString();
-                joinElements(element2JoinHash, targetHash, pid);
+                joinElements(element2JoinHash, targetHash, true, pid);
             }
             //nach dem Join kann man kein Undo mehr machen -> alle Undo-Kommandos davor auch löschen
             gdcoll.getTransStackTable().clear();
@@ -4829,13 +4829,14 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
      *
      * @param removeElementHashString das abschliessend zu löschende Element
      * @param remainElementHashString gibt das verbleibende Element an
+     * @param joinNameDescriptionAndUserfields
      * @param pid
      * @return the joined element (this is the element with
      *         remainElementHashString) or <code>null</code> if nothing was
      *         joined
      */
-    public final ModelElement joinElements(final String removeElementHashString, final String remainElementHashString, final int pid) {
-        ModelElement joinedElement = gdcoll.join(removeElementHashString, remainElementHashString, null, pid);
+    private final ModelElement joinElements(final String removeElementHashString, final String remainElementHashString, final boolean joinNameDescriptionAndUserfields, final int pid) {
+        ModelElement joinedElement = gdcoll.join(removeElementHashString, remainElementHashString, null, joinNameDescriptionAndUserfields, pid);
         if (joinedElement != null) {
             String hash = joinedElement.getHashString();
             ElementContainer ec = findNodeContainerCoded(hash);

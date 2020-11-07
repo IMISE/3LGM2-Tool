@@ -384,7 +384,7 @@ public class LGMGraphDocument extends GraphDocument {
                     if (answer.overwriteOption == OVERWRITE) {
                         //hier müsste das alte evtl. noch gelöscht werden !?
                     } else if (answer.overwriteOption == JOIN) {
-                        targetDoc.joinElements(targetElement, sourceElement, sourceDoc);
+                        targetDoc.joinElements(targetElement, sourceElement, sourceDoc, true);
                         if (targetElement instanceof Edge) {
                             Edge edge = (Edge) targetElement;
                             edge.reconnect(targetCollection);
@@ -527,7 +527,7 @@ public class LGMGraphDocument extends GraphDocument {
         lastSelected = doc2.selectedContainer.getLastSelected();
         ModelElement me2 = lastSelected.getElement();
 
-        joinElements(me1, me2, doc2);
+        joinElements(me1, me2, doc2, true);
         distributeEvent(DATA_CHANGED);
     }
 
@@ -535,8 +535,9 @@ public class LGMGraphDocument extends GraphDocument {
      * @param me1
      * @param me2
      * @param doc2
+     * @param joinNameDescriptionAndUserfields parameter for
      */
-    private void joinElements(final ModelElement me1, final ModelElement me2, final GraphDocument doc2) {
+    private void joinElements(final ModelElement me1, final ModelElement me2, final GraphDocument doc2, final boolean joinNameDescriptionAndUserfields) {
         if (me1 instanceof Bendpoint) {
             return;
         }
@@ -544,7 +545,7 @@ public class LGMGraphDocument extends GraphDocument {
         String me2hash = me2.getHashString();
         ModelElement me3 = findElementCoded(me2hash);
         boolean overwriteHashString = me3 == null || me3 == me2;
-        if (me1.join(me2, overwriteHashString) == null) {
+        if (me1.join(me2, overwriteHashString, joinNameDescriptionAndUserfields) == null) {
             return;
         }
         me1.refreshText();
@@ -600,7 +601,7 @@ public class LGMGraphDocument extends GraphDocument {
                 }
             }
 
-            joinElements(edge, oldEdge, doc2);
+            joinElements(edge, oldEdge, doc2, joinNameDescriptionAndUserfields);
         }
     }
 

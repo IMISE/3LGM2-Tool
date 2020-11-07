@@ -102,7 +102,7 @@ public class ModelConverterUtils {
                             String resultingJoinedElementHash = slaveElement.getHashString();
                             // Element hash for the resulting element must be the second
                             // parameter!
-                            slaveElement = gdcoll.join(elementHash, resultingJoinedElementHash, mainDoc, TransactionManager.STANDARD_PID);
+                            slaveElement = gdcoll.join(elementHash, resultingJoinedElementHash, mainDoc, false, TransactionManager.STANDARD_PID);
                             // if joined with an existing element -> replace the renamed
                             // element in the path by the joined one
                             path.replaceElement(endElement, slaveElement);
@@ -148,7 +148,7 @@ public class ModelConverterUtils {
                 // andere Weise anlegt.
                 // Element hash for the resulting element must be the second
                 // parameter!
-                equalElement = gdcoll.join(elementHash, resultingJoinedElementHash, mainDoc, TransactionManager.STANDARD_PID);
+                equalElement = gdcoll.join(elementHash, resultingJoinedElementHash, mainDoc, false, TransactionManager.STANDARD_PID);
                 // if joined with an existing element -> replace the renamed
                 // element in the path by the joined one
                 path.replaceElement(me, equalElement);
@@ -281,7 +281,7 @@ public class ModelConverterUtils {
                     // renamedElement);
                     // Element hash for the resulting element must be the second
                     // parameter!
-                    resultElement = gdcoll.join(renamedHash, resultingJoinedElementHash, mainDoc, TransactionManager.STANDARD_PID);
+                    resultElement = gdcoll.join(renamedHash, resultingJoinedElementHash, mainDoc, false, TransactionManager.STANDARD_PID);
                     break;
                 }
             }

@@ -2235,16 +2235,17 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
      * @param removeElementHashString
      * @param remainElementHashString
      * @param source
+     * @param joinNameDescriptionAndUserfields
      * @param pid
      * @return the joined element (this is the element with
      *         remainElementHashString) or <code>null</code> if nothing was
      *         joined
      */
-    public ModelElement join(final String removeElementHashString, final String remainElementHashString, final GraphDocument source, final int pid) {
+    public ModelElement join(final String removeElementHashString, final String remainElementHashString, final GraphDocument source, final boolean joinNameDescriptionAndUserfields, final int pid) {
         Collection<String> elementHashes2ExcludeFromJoin = new ArrayList<>();
         elementHashes2ExcludeFromJoin.add(removeElementHashString);
         elementHashes2ExcludeFromJoin.add(remainElementHashString);
-        return joinRecursive(removeElementHashString, remainElementHashString, source, elementHashes2ExcludeFromJoin, pid);
+        return joinRecursive(removeElementHashString, remainElementHashString, source, elementHashes2ExcludeFromJoin, joinNameDescriptionAndUserfields, pid);
     }
 
     /**
@@ -2252,12 +2253,14 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
      * @param remainElementHashString
      * @param source
      * @param elementHashes2ExcludeFromJoin
+     * @param joinNameDescriptionAndUserfields
      * @param pid
      * @return the joined element (this is the element with
      *         remainElementHashString) or <code>null</code> if nothing was
      *         joined
      */
-    private ModelElement joinRecursive(final String removeElementHashString, final String remainElementHashString, final GraphDocument source, final Collection<String> elementHashes2ExcludeFromJoin, final int pid) {
+    private ModelElement joinRecursive(final String removeElementHashString, final String remainElementHashString, final GraphDocument source, final Collection<String> elementHashes2ExcludeFromJoin, final boolean joinNameDescriptionAndUserfields,
+            final int pid) {
         ModelElement removeElement = mainDoc.findElementCoded(removeElementHashString);
         ModelElement remainElement = mainDoc.findElementCoded(remainElementHashString);
         if (removeElement == null || remainElement == null || removeElement == remainElement) {
@@ -2285,8 +2288,8 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
             s.start_transaction(pid, false);
         }
         //Namen und Beschreibung des zu löschenden Node an den verbleibenden anhängen
-        //und ExtIDs und benutzerdef. Eigenschaftsfelder zusammenführen
-        remainNode.join(removeNode, false);
+        //und ExtIDs und benutzerdef. Eigenschaftsfelder zusammenführen, falls gewünscht
+        remainNode.join(removeNode, false, joinNameDescriptionAndUserfields);
         //knoten2.createNameWithSzens(doc);
 
         for (Class<? extends Edge> edgeClass : metaModel.getSubordinatedJoinbleTypes(remainNode.getClass())) {
@@ -2305,7 +2308,7 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
                 }
                 elementHashes2ExcludeFromJoin.add(removeSubHash);
                 elementHashes2ExcludeFromJoin.add(remainSubHash);
-                joinRecursive(removeSubHash, remainSubHash, source, elementHashes2ExcludeFromJoin, pid);
+                joinRecursive(removeSubHash, remainSubHash, source, elementHashes2ExcludeFromJoin, joinNameDescriptionAndUserfields, pid);
             }
         }
         //Das hier ist Hardcore, weil hier das IterableObject zurück auf List gecastet wird-> eigentlich müsste sich Edge selbst irgenwie darum kümmern!

@@ -2226,9 +2226,16 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
      * join Element properties without connections this.hashstring =
      * other.hashstring other will be not changed
      *
+     * @param other the element to join
+     * @param overwriteHashstring if <code>true</code> the result element will
+     *            have the hashString of the other element. If it is
+     *            <code>false</code>, then it keeps its hashString.
+     * @param joinNameDescriptionAndUserfields If <code>true</code>, then the
+     *            name and the description will also be merged. If
+     *            <code>false</code>, then not.
      * @return the joined Element or <code>null</code> if an error occurs;
      */
-    public ModelElement join(final ModelElement other, final boolean overwriteHashstring) {
+    public ModelElement join(final ModelElement other, final boolean overwriteHashstring, final boolean joinNameDescriptionAndUserfields) {
         if (other.getClass() != this.getClass() || this == other) {
             return null;
         }
@@ -2237,42 +2244,46 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
             hashstring = other.getHashString();
         }
 
-        String joined = Tool3lgmConstants.getResString("joined");
-        if (!name.trim().equals(other.name.trim())) {
-            name = name.concat("\n-" + joined + "-\n" + other.name);
-        }
-        String descrip = descr.trim();
-        //es gibt keine Beschreibung bei this
-        if (Strings.isNullOrEmpty(descrip)) {
-            //egal, was in der Beschreibung für other steht -> setze sie bei this
-            descr = other.descr;
-            //es gibt eine Beschreibung bei this
-        } else {
-            String otherDescrip = other.descr.trim();
-            //wenn es auch eine Beschreibung für other gibt, die sich von der von this unterscheidet -> hänge sie zusammen
-            if (!descrip.equals(otherDescrip) && !Strings.isNullOrEmpty(otherDescrip)) {
-                descr = descr.concat("\n-" + joined + "-\n" + other.descr);
+        String joined = null;
+        if (joinNameDescriptionAndUserfields) {
+            joined = Tool3lgmConstants.getResString("joined");
+            if (!name.trim().equals(other.name.trim())) {
+                name = name.concat("\n-" + joined + "-\n" + other.name);
+            }
+            String descrip = descr.trim();
+            //es gibt keine Beschreibung bei this
+            if (Strings.isNullOrEmpty(descrip)) {
+                //egal, was in der Beschreibung für other steht -> setze sie bei this
+                descr = other.descr;
+                //es gibt eine Beschreibung bei this
+            } else {
+                String otherDescrip = other.descr.trim();
+                //wenn es auch eine Beschreibung für other gibt, die sich von der von this unterscheidet -> hänge sie zusammen
+                if (!descrip.equals(otherDescrip) && !Strings.isNullOrEmpty(otherDescrip)) {
+                    descr = descr.concat("\n-" + joined + "-\n" + other.descr);
+                }
             }
         }
-
         updateHTMLName(null);
         refreshText();
 
-        //UserFields zusammenführen. Bei allen UserFields, bei denen nur ein Element einen Wert hat oder sich die Werte nicht
-        //unterscheiden, nimm nur einen gültigen Wert. Haben beide einen unterschiedlichen Wert, führe sie String-technisch zusammen
-        Set<UserField> allElementUserFields = new HashSet<>(getUserFieldInputValueKeys());
-        allElementUserFields.addAll(other.getUserFieldInputValueKeys());
-        for (UserField userField : allElementUserFields) {
-            String value = getUserFieldInputValue(userField);
-            String otherValue = other.getUserFieldInputValue(userField);
-            if (otherValue != EMPTY_STRING) {
-                if (value == EMPTY_STRING) {
-                    setUserFieldInputValue(userField, otherValue);
-                    //wenn es einen otherValue gibt, der sich vom value unterscheidet -> füge sie zusammen
-                } else if (!value.equals(otherValue)) {
-                    //Bei Kennzahlen bleibt es einfach der Wert des ersten Elements
-                    if (!userField.isClassificationUserField()) {
-                        setUserFieldInputValue(userField, value.toString().concat(" -" + joined + "- ").concat(otherValue.toString()));
+        if (joinNameDescriptionAndUserfields) {
+            //UserFields zusammenführen. Bei allen UserFields, bei denen nur ein Element einen Wert hat oder sich die Werte nicht
+            //unterscheiden, nimm nur einen gültigen Wert. Haben beide einen unterschiedlichen Wert, führe sie String-technisch zusammen
+            Set<UserField> allElementUserFields = new HashSet<>(getUserFieldInputValueKeys());
+            allElementUserFields.addAll(other.getUserFieldInputValueKeys());
+            for (UserField userField : allElementUserFields) {
+                String value = getUserFieldInputValue(userField);
+                String otherValue = other.getUserFieldInputValue(userField);
+                if (otherValue != EMPTY_STRING) {
+                    if (value == EMPTY_STRING) {
+                        setUserFieldInputValue(userField, otherValue);
+                        //wenn es einen otherValue gibt, der sich vom value unterscheidet -> füge sie zusammen
+                    } else if (!value.equals(otherValue)) {
+                        //Bei Kennzahlen bleibt es einfach der Wert des ersten Elements
+                        if (!userField.isClassificationUserField()) {
+                            setUserFieldInputValue(userField, value.toString().concat(" -" + joined + "- ").concat(otherValue.toString()));
+                        }
                     }
                 }
             }
