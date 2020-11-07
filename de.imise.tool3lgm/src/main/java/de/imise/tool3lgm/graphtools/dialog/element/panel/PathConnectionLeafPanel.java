@@ -23,9 +23,11 @@ import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.graphtools.view.tree.node.LGMTreeNode;
 
 /**
- * Ein {@link PathConnectionPanel}, das statt im linken bzw. einzigen Baum den ganzen Pfad anzuzeigen immer
- * nur die Blätter unter root anzeigt, wobei diese "Blätter" dann noch ihre Teile (über HasPartEdges)
- * angehängt bekommen. Es werden also nur die End-Elemente des Pfades angezeigt und keine Zwischenelemente.
+ * Ein {@link PathConnectionPanel}, das statt im linken bzw. einzigen Baum den
+ * ganzen Pfad anzuzeigen immer nur die Blätter unter root anzeigt, wobei diese
+ * "Blätter" dann noch ihre Teile (über HasPartEdges) angehängt bekommen. Es
+ * werden also nur die End-Elemente des Pfades angezeigt und keine
+ * Zwischenelemente.
  *
  * @author astruebi
  * @created 31.05.2017
@@ -33,8 +35,9 @@ import de.imise.tool3lgm.graphtools.view.tree.node.LGMTreeNode;
 public class PathConnectionLeafPanel extends PathConnectionPanel {
 
     /**
-     * Mappt von einem Endelement (Blattknoten) auf das ModelElement des im linken Baum darüber liegenden
-     * Knotens. Das ist der Node, von dem aus ein eventuell durchzuführendes Unlinken angestoßen werden muss.
+     * Mappt von einem Endelement (Blattknoten) auf das ModelElement des im
+     * linken Baum darüber liegenden Knotens. Das ist der Node, von dem aus ein
+     * eventuell durchzuführendes Unlinken angestoßen werden muss.
      */
     protected Map<LGMTreeNode, ModelElement> nodeToParentModelElement;
 
@@ -65,7 +68,8 @@ public class PathConnectionLeafPanel extends PathConnectionPanel {
     }
 
     /**
-     * Initializes nodeToParentModelElement or clears it if it is already initialized.
+     * Initializes nodeToParentModelElement or clears it if it is already
+     * initialized.
      */
     protected void resetNodeToParentModelElement() {
         if (nodeToParentModelElement == null) {
@@ -111,7 +115,7 @@ public class PathConnectionLeafPanel extends PathConnectionPanel {
                     Object userObject = leaf.getUserObject();
                     if (userObject instanceof ElementContainer) {
                         ElementContainer ec = (ElementContainer) userObject;
-                        LGMTreeNode node = ltree.addObject(ec, lroot, null, true, true, false);
+                        LGMTreeNode node = ltree.addObject(ec, true, true, false);
                         if (node != null) {
                             newLeafNodes.add(node);
                         }

@@ -10,6 +10,7 @@ import java.util.List;
 
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
+import javax.swing.tree.TreeModel;
 import javax.swing.tree.TreePath;
 
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
@@ -35,8 +36,30 @@ public class ElementDialogPanelTree extends CorrectSelectionTree {
         elementsAdded.clear();
     }
 
-    public LGMTreeNode addObject(final ElementContainer ec, final LGMTreeNode parent, final Collection<ElementContainer> excludeChildren, final boolean force, final boolean childrenAreSelectable) {
+    public LGMTreeNode addObject(final ElementContainer ec, final boolean force, final boolean childrenAreSelectable) {
+        TreeModel model = getModel();
+        LGMTreeNode parent = (LGMTreeNode) model.getRoot();
+        return addObject(ec, parent, null, force, childrenAreSelectable);
+    }
+
+    public LGMTreeNode addObject(final ElementContainer ec, final Collection<ElementContainer> excludeChildren, final boolean force, final boolean childrenAreSelectable) {
+        TreeModel model = getModel();
+        LGMTreeNode parent = (LGMTreeNode) model.getRoot();
+        return addObject(ec, parent, excludeChildren, force, childrenAreSelectable);
+    }
+
+    private LGMTreeNode addObject(final ElementContainer ec, final LGMTreeNode parent, final Collection<ElementContainer> excludeChildren, final boolean force, final boolean childrenAreSelectable) {
         return addObject(ec, parent, excludeChildren, force, true, childrenAreSelectable);
+    }
+
+    public LGMTreeNode addObject(final ElementContainer ec, final boolean force, final boolean checkAlreadyAdded, final boolean childrenAreSelectable) {
+        return addObject(ec, null, force, checkAlreadyAdded, childrenAreSelectable);
+    }
+
+    public LGMTreeNode addObject(final ElementContainer ec, final Collection<ElementContainer> excludeChildren, final boolean force, final boolean checkAlreadyAdded, final boolean childrenAreSelectable) {
+        TreeModel model = getModel();
+        LGMTreeNode parent = (LGMTreeNode) model.getRoot();
+        return addObject(ec, parent, excludeChildren, force, checkAlreadyAdded, childrenAreSelectable);
     }
 
     public LGMTreeNode addObject(final ElementContainer ec, final LGMTreeNode parent, final Collection<ElementContainer> excludeChildren, final boolean force, final boolean checkAlreadyAdded, final boolean childrenAreSelectable) {

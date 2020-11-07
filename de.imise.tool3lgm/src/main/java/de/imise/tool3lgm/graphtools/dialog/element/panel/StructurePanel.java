@@ -48,7 +48,8 @@ public class StructurePanel extends AbstractPathOfOneEdgePanel {
     private JScrollPane rscrollPane;
 
     /**
-     * Liste aller ElementContainer, die nicht im rectne Baum angezeigt werden sollen, weil sie links schon verknüpft sind
+     * Liste aller ElementContainer, die nicht im rectne Baum angezeigt werden
+     * sollen, weil sie links schon verknüpft sind
      */
     private final Collection<ElementContainer> childrenToExcludeFromRtree = new HashSet<>();
 
@@ -165,7 +166,7 @@ public class StructurePanel extends AbstractPathOfOneEdgePanel {
         lotree.reset();
         for (ElementContainer ec : me.getDirectParentContainers(mainDoc)) {
             childrenToExcludeFromRtree.add(ec);
-            lotree.addObject(ec, loroot, null, true, false, false);
+            lotree.addObject(ec, true, false, false);
         }
         lomodel.reload();
         lotree.restoreExpansionAndSelection();
@@ -175,7 +176,7 @@ public class StructurePanel extends AbstractPathOfOneEdgePanel {
         lutree.reset();
         for (ElementContainer ec : me.getDirectPartContainers(mainDoc)) {
             childrenToExcludeFromRtree.add(ec);
-            lutree.addObject(ec, luroot, null, true, false, false);
+            lutree.addObject(ec, true, false, false);
         }
         lumodel.reload();
         lutree.restoreExpansionAndSelection();
@@ -187,7 +188,7 @@ public class StructurePanel extends AbstractPathOfOneEdgePanel {
             List<ElementContainer> all = mainDoc.getElementContainersOfEndClass(edgeClass);
             all.remove(meContainer);
             for (ElementContainer ec : all) {
-                rtree.addObject(ec, rroot, childrenToExcludeFromRtree, false, false, true);
+                rtree.addObject(ec, childrenToExcludeFromRtree, false, false, true);
             }
             rmodel.reload();
             rtree.restoreExpansionAndSelection();
@@ -222,8 +223,8 @@ public class StructurePanel extends AbstractPathOfOneEdgePanel {
     }
 
     /**
-     * Hier werden alle möglichen DragNDrop-Aktionen zwischen den Trees des Panels zumsammengefasst
-     * und als Attribut in der Oberklasse abgespeichert.
+     * Hier werden alle möglichen DragNDrop-Aktionen zwischen den Trees des
+     * Panels zumsammengefasst und als Attribut in der Oberklasse abgespeichert.
      */
     @Override
     protected DragNDropInitializer.DragNDropActionChain[] collectDragNDropActionChains() {

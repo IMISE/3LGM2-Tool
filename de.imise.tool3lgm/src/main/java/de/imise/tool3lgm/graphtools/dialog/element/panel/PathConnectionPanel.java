@@ -52,8 +52,8 @@ import de.imise.util.swing.SwingUtils;
 import de.imise.util.swing.component.LimitedHeightScrollTreePane;
 
 /**
- * Mit diesem Panel können für ein Element über einen Pfad von mehr als einer Edge verbundene Elemente
- * angezeigt, hinzugefügt und entfernt werden.
+ * Mit diesem Panel können für ein Element über einen Pfad von mehr als einer
+ * Edge verbundene Elemente angezeigt, hinzugefügt und entfernt werden.
  *
  * @author AXS created on 20.05.2007
  */
@@ -206,7 +206,8 @@ public class PathConnectionPanel extends AbstractExpandablePanel {
     }
 
     /**
-     * Wenn <code>true</code> werden die TreeNodes unter dem Root im linken Baum sortiert
+     * Wenn <code>true</code> werden die TreeNodes unter dem Root im linken Baum
+     * sortiert
      *
      * @return
      */
@@ -268,13 +269,15 @@ public class PathConnectionPanel extends AbstractExpandablePanel {
     }
 
     /**
-     * Set aller TreeNodes, die im linken Baum bereits verknüpft sind und im rechten nicht mehr auftauchen sollen
+     * Set aller TreeNodes, die im linken Baum bereits verknüpft sind und im
+     * rechten nicht mehr auftauchen sollen
      */
     private final Collection<ElementContainer> childrenToExcludeFromRtree = new HashSet<>();
 
     /**
-     * Sammelt für die letzte Edge alle Elemente ein, die im rechten Baum nicht mehr angezeigt werden sollen, weil
-     * sie bereits verknüpft sind und kein weiteres Mal verknüpft werden können.
+     * Sammelt für die letzte Edge alle Elemente ein, die im rechten Baum nicht
+     * mehr angezeigt werden sollen, weil sie bereits verknüpft sind und kein
+     * weiteres Mal verknüpft werden können.
      *
      * @param edgeIndex
      * @param potentialExcludeChildren
@@ -332,7 +335,7 @@ public class PathConnectionPanel extends AbstractExpandablePanel {
         ImmutableList.Builder<LGMTreeNode> leafs = ImmutableList.builder();
         List<LGMTreeNode> firstLevelNodes = new ArrayList<>(all.size());
         for (ElementContainer ec : all) {
-            LGMTreeNode node = ltree.addObject(ec, lroot, null, true, false, false);
+            LGMTreeNode node = ltree.addObject(ec, true, false, false);
             firstLevelNodes.add(node);
         }
         List<LGMTreeNode> nextStepStartNodes = firstLevelNodes;
@@ -372,8 +375,24 @@ public class PathConnectionPanel extends AbstractExpandablePanel {
         rtree.saveSelection();
         rroot.removeAllChildren();
         rtree.reset();
+
+        //        Collection<AbstractConsistencyError> consistencyErrors = getConsistencyErrors();
+        //        List<ElementContainer> errorSolutionElements = new ArrayList<>();
+        //        boolean highlight = false;
+        //        for (AbstractConsistencyError consistencyError : consistencyErrors) {
+        //            if (consistencyError instanceof MissingPathError) {
+        //                MissingPathError missingPathError = (MissingPathError) consistencyError;
+        //                Collection<ModelElement> missingElements = missingPathError.getMissingElements();
+        //                if (missingElements.contains(me)) {
+        //                    setFont(higlightFont);
+        //                    highlight = true;
+        //                    break;
+        //                }
+        //            }
+        //        }
+
         for (ElementContainer ec : getAvailableConnectables()) {
-            rtree.addObject(ec, rroot, childrenToExcludeFromRtree, false, true);
+            rtree.addObject(ec, childrenToExcludeFromRtree, false, true);
         }
         rmodel.reload();
         rtree.restoreExpansion();
@@ -399,8 +418,8 @@ public class PathConnectionPanel extends AbstractExpandablePanel {
     }
 
     /**
-     * Liefert den TreePath, der im linken Baum als selektiert gilt und an den der neue Pfad(teil)
-     * angehängt werden soll.
+     * Liefert den TreePath, der im linken Baum als selektiert gilt und an den
+     * der neue Pfad(teil) angehängt werden soll.
      *
      * @return
      */
@@ -471,12 +490,14 @@ public class PathConnectionPanel extends AbstractExpandablePanel {
     }
 
     /**
-     * Methode liefert eine <code>LGMAction</code> zurück, die das Verschieben von Elementen aus dem
-     * <code>srcTree</code> in den <code>targetTree</code> realisiert. Diese <code>LGMAction</code>
-     * sollte an die "removeButtons" der Panels angefügt werden.
+     * Methode liefert eine <code>LGMAction</code> zurück, die das Verschieben
+     * von Elementen aus dem <code>srcTree</code> in den <code>targetTree</code>
+     * realisiert. Diese <code>LGMAction</code> sollte an die "removeButtons"
+     * der Panels angefügt werden.
      *
      * @param srcTree linker Baum mit dem verknüpften Pfaden
-     * @param targetTree rechter Baum mit den Elementen, die ausgewählt werden können
+     * @param targetTree rechter Baum mit den Elementen, die ausgewählt werden
+     *            können
      */
     protected LGMAction getDisconnectAction() {
         final PathConnectionPanel panel = this;
@@ -536,10 +557,12 @@ public class PathConnectionPanel extends AbstractExpandablePanel {
     }
 
     /**
-     * Hängt an den targetTreePath die lastPathComponent der sourceTreePaths an. Wenn als targetTreePath ein vollständiger Pfad
-     * übergeben wird, dann werden die sourceTReePath-Elemente an den Parent der LastPathComponent gehängt. Wenn der Pfad gleich
-     * nur bis zum Parent geht, dann werden sie da angehängt. Ist der Pfad kürzer, dann wird er bis zum Parent erzeugt und dann
-     * die übergebenen sourceTreePath-Elemente angehängt.
+     * Hängt an den targetTreePath die lastPathComponent der sourceTreePaths an.
+     * Wenn als targetTreePath ein vollständiger Pfad übergeben wird, dann
+     * werden die sourceTReePath-Elemente an den Parent der LastPathComponent
+     * gehängt. Wenn der Pfad gleich nur bis zum Parent geht, dann werden sie da
+     * angehängt. Ist der Pfad kürzer, dann wird er bis zum Parent erzeugt und
+     * dann die übergebenen sourceTreePath-Elemente angehängt.
      *
      * @param targetTreePath
      * @param sourceTreePaths
