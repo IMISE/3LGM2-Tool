@@ -81,32 +81,35 @@ public class ModelConverterUtils {
         GDCollection gdcoll = null;
         for (int i = 0; i < pathLength - 1; i++) {
             ElementaryPath pathStep = path.getPathStep(i);
+            ElementaryPath nextPathStep = path.getPathStep(i + 1);
             Edge edge = pathStep.getEdge();
-            ModelElement endElement = pathStep.getEndElement();
-            if (MetaModel.isCompositionSlave(edge, endElement)) {
-                ModelElement master = pathStep.getStartElement();
-                Class<? extends Edge> edgeClass = edge.getClass();
-                ElementaryPath nextPathStep = path.getPathStep(i + 1);
-                Edge nextPathStepEdge = nextPathStep.getEdge();
-                Class<? extends Edge> nextPathStepEdgeClass = nextPathStepEdge.getClass();
-                ModelElement nextPathStepEndElement = nextPathStep.getEndElement();
-                List<ModelElement> allSlaveElements = master.getConnectedElements(edgeClass, CompositionEdge.MASTER_TO_SLAVE_DIRECTION);
-                for (ModelElement slaveElement : allSlaveElements) {
-                    if (slaveElement != endElement) {
-                        if (slaveElement.isConnectedWith(nextPathStepEndElement, nextPathStepEdgeClass)) {
-                            if (gdcoll == null) {
-                                gdcoll = endElement.getCollection();
-                            }
-                            LGMGraphDocument mainDoc = gdcoll.getMainDoc();
-                            String elementHash = endElement.getHashString();
-                            String resultingJoinedElementHash = slaveElement.getHashString();
-                            // Element hash for the resulting element must be the second
-                            // parameter!
-                            slaveElement = gdcoll.join(elementHash, resultingJoinedElementHash, mainDoc, false, TransactionManager.STANDARD_PID);
-                            // if joined with an existing element -> replace the renamed
-                            // element in the path by the joined one
-                            path.replaceElement(endElement, slaveElement);
+            Edge nextPathStepEdge = nextPathStep.getEdge();
+            ModelElement slaveElementCandidate = pathStep.getEndElement();
+            boolean compositionSlaveOfPathStep = MetaModel.isCompositionSlave(edge, slaveElementCandidate);
+            boolean compositionSlaveOfNextPathStep = !compositionSlaveOfPathStep && MetaModel.isCompositionSlave(nextPathStepEdge, slaveElementCandidate);
+            if (!(compositionSlaveOfPathStep || compositionSlaveOfNextPathStep)) {
+                continue;
+            }
+            ModelElement master = compositionSlaveOfPathStep ? pathStep.getStartElement() : nextPathStep.getEndElement();
+            Class<? extends Edge> compositionEdgeClass = compositionSlaveOfPathStep ? edge.getClass() : nextPathStepEdge.getClass();
+            Class<? extends Edge> otherPathStepEdgeClass = compositionSlaveOfPathStep ? nextPathStepEdge.getClass() : edge.getClass();
+            ModelElement otherPathStepOtherElement = compositionSlaveOfPathStep ? nextPathStep.getEndElement() : pathStep.getStartElement();
+            List<ModelElement> allSlaveElements = master.getConnectedElements(compositionEdgeClass, CompositionEdge.MASTER_TO_SLAVE_DIRECTION);
+            for (ModelElement slaveElement : allSlaveElements) {
+                if (slaveElement != slaveElementCandidate) {
+                    if (slaveElement.isConnectedWith(otherPathStepOtherElement, otherPathStepEdgeClass)) {
+                        if (gdcoll == null) {
+                            gdcoll = slaveElementCandidate.getCollection();
                         }
+                        LGMGraphDocument mainDoc = gdcoll.getMainDoc();
+                        String elementHash = slaveElementCandidate.getHashString();
+                        String resultingJoinedElementHash = slaveElement.getHashString();
+                        // Element hash for the resulting element must be the second
+                        // parameter!
+                        slaveElement = gdcoll.join(elementHash, resultingJoinedElementHash, mainDoc, false, TransactionManager.STANDARD_PID);
+                        // if joined with an existing element -> replace the renamed
+                        // element in the path by the joined one
+                        path.replaceElement(slaveElementCandidate, slaveElement);
                     }
                 }
             }
