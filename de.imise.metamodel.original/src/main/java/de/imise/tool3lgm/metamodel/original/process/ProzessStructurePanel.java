@@ -1,6 +1,6 @@
 /*
- * Created on 27.11.2003 To change this generated comment go to Window>Preferences>Java>Code
- * Generation>Code and Comments
+ * Created on 27.11.2003 To change this generated comment go to
+ * Window>Preferences>Java>Code Generation>Code and Comments
  */
 package de.imise.tool3lgm.metamodel.original.process;
 
@@ -54,9 +54,10 @@ import de.imise.tool3lgm.metamodel.original.node.Aufgabe;
 import de.imise.tool3lgm.metamodel.original.node.Objekttyp;
 
 /**
- * 24.10.2018: Dieses Panel funktioniert im Moment überhaupt nicht mehr richtig. Die Aufgaben des Prozesses werden alphabetisch sortiert und die
- * Umbenennung mit den Nummern davor findet auch nicht mehr statt. Die Objekttypen werden auch nicht mehr angehängt und das Verifizieren geht auch
- * nicht mehr.
+ * 24.10.2018: Dieses Panel funktioniert im Moment überhaupt nicht mehr richtig.
+ * Die Aufgaben des Prozesses werden alphabetisch sortiert und die Umbenennung
+ * mit den Nummern davor findet auch nicht mehr statt. Die Objekttypen werden
+ * auch nicht mehr angehängt und das Verifizieren geht auch nicht mehr.
  *
  * @author AXS
  */
@@ -81,9 +82,10 @@ public class ProzessStructurePanel extends PathConnectionLeafPanel implements Tr
     protected boolean selectionChanged = false;
 
     /**
-     * werden gebraucht, um die Bäume zu aktualisieren, wenn sich die Anzahl der Aufgaben,
-     * Objekttypen oder die Kanten zwischen diesen beiden ändert während dieses Panel offen ist, NUR
-     * DANN muss aktualisiert werden, sonst nicht
+     * werden gebraucht, um die Bäume zu aktualisieren, wenn sich die Anzahl der
+     * Aufgaben, Objekttypen oder die Kanten zwischen diesen beiden ändert
+     * während dieses Panel offen ist, NUR DANN muss aktualisiert werden, sonst
+     * nicht
      */
     private final int oldObjectCounter = -1, objectCounter = 0;
 
@@ -235,7 +237,8 @@ public class ProzessStructurePanel extends PathConnectionLeafPanel implements Tr
     /**
      * Die TreeNodes unter dem Root im linken Baum dürfen nicht sortiert werden
      *
-     * @return false, damit die TreeNodes unter dem Root im linken Baum dürfen nicht sortiert werden
+     * @return false, damit die TreeNodes unter dem Root im linken Baum dürfen
+     *         nicht sortiert werden
      */
     @Override
     protected final boolean getSortLeftTreeRootChildrenAlphabetical() {
@@ -248,8 +251,9 @@ public class ProzessStructurePanel extends PathConnectionLeafPanel implements Tr
     }
 
     /**
-     * Haengt an den uebergebenen LGMTreeNode neue LGMTreeNodes mit den Objekttypen an, die von der
-     * Aufgabe (UserObject des uebergebenen LGMTreeNode) bearbeitet und interpretiert werden.
+     * Haengt an den uebergebenen LGMTreeNode neue LGMTreeNodes mit den
+     * Objekttypen an, die von der Aufgabe (UserObject des uebergebenen
+     * LGMTreeNode) bearbeitet und interpretiert werden.
      *
      * @param aufgabenContainerNode
      */
@@ -981,8 +985,8 @@ public class ProzessStructurePanel extends PathConnectionLeafPanel implements Tr
     }
 
     /**
-     * Selekiert in destinationTree die Zeile row. Wird row=-1 uebergeben, wird eine evtl. Selekion
-     * gelöscht.
+     * Selekiert in destinationTree die Zeile row. Wird row=-1 uebergeben, wird
+     * eine evtl. Selekion gelöscht.
      *
      * @param destinationTree
      * @param row
@@ -1137,9 +1141,10 @@ public class ProzessStructurePanel extends PathConnectionLeafPanel implements Tr
     }
 
     /**
-     * Methode liefert eine <code>LGMAction</code> zurück, die das Verschieben von Elementen aus dem
-     * <code>srcTree</code> in den <code>targetTree</code> realisiert. Diese <code>LGMAction</code>
-     * sollte an die "addButtons" der Panels angefügt werden.
+     * Methode liefert eine <code>LGMAction</code> zurück, die das Verschieben
+     * von Elementen aus dem <code>srcTree</code> in den <code>targetTree</code>
+     * realisiert. Diese <code>LGMAction</code> sollte an die "addButtons" der
+     * Panels angefügt werden.
      *
      * @param srcTree
      * @param targetTree
@@ -1213,9 +1218,10 @@ public class ProzessStructurePanel extends PathConnectionLeafPanel implements Tr
     }
 
     /**
-     * Methode liefert eine <code>LGMAction</code> zurück, die das Verschieben von Elementen aus dem
-     * <code>srcTree</code> in den <code>targetTree</code> realisiert. Diese <code>LGMAction</code>
-     * sollte an die "removeButtons" der Panels angefügt werden.
+     * Methode liefert eine <code>LGMAction</code> zurück, die das Verschieben
+     * von Elementen aus dem <code>srcTree</code> in den <code>targetTree</code>
+     * realisiert. Diese <code>LGMAction</code> sollte an die "removeButtons"
+     * der Panels angefügt werden.
      *
      * @param srcTree
      * @param targetTree
@@ -1278,8 +1284,8 @@ public class ProzessStructurePanel extends PathConnectionLeafPanel implements Tr
     }
 
     /**
-     * Methode liefert eine <code>LGMAction</code> zurück, die das Verschieben eines Elements in
-     * einem Tree realisiert.
+     * Methode liefert eine <code>LGMAction</code> zurück, die das Verschieben
+     * eines Elements in einem Tree realisiert.
      *
      * @param tree
      * @param edp
@@ -1354,8 +1360,8 @@ public class ProzessStructurePanel extends PathConnectionLeafPanel implements Tr
     }
 
     /**
-     * Methode liefert eine <code>LGMAction</code> zurück, die das Verschieben eines Elements in
-     * einem Tree realisiert.
+     * Methode liefert eine <code>LGMAction</code> zurück, die das Verschieben
+     * eines Elements in einem Tree realisiert.
      *
      * @param tree
      * @throws ActionNotDefinedForClassException

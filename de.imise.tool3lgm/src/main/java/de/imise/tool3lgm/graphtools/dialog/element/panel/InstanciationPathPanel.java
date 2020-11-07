@@ -23,15 +23,17 @@ import de.imise.tool3lgm.graphtools.path.metapaths.SimpleMetaPath;
 import de.imise.tool3lgm.graphtools.view.tree.node.LGMTreeNode;
 
 /**
- * Panel to represent instaciation paths. That means the last {@link ElementaryMetaPath}
- * in the panels {@link SimpleMetaPath} has an {@link InstanciationEdge} as edge class
- * and the direction {@link InstanciationEdge#INSTANCE_TO_MASTER_DIRECTION} =
- * {@link Direction#BACKWARD}. In this case the panel shows on the left side the instances
- * (= start elements of the last path step) and on the right side the instanciation master
- * elements (=end elements of the last path step and the whole path).<BR>
- * If an element from the right is connected or dragged to the left, internally an instance
- * of the instanciation master is created and connected over the path to the model element
- * of the dialog.
+ * Panel to represent instaciation paths. That means the last
+ * {@link ElementaryMetaPath} in the panels {@link SimpleMetaPath} has an
+ * {@link InstanciationEdge} as edge class and the direction
+ * {@link InstanciationEdge#INSTANCE_TO_MASTER_DIRECTION} =
+ * {@link Direction#BACKWARD}. In this case the panel shows on the left side the
+ * instances (= start elements of the last path step) and on the right side the
+ * instanciation master elements (=end elements of the last path step and the
+ * whole path).<BR>
+ * If an element from the right is connected or dragged to the left, internally
+ * an instance of the instanciation master is created and connected over the
+ * path to the model element of the dialog.
  *
  * @author AXS (02.04.2020)
  */
@@ -59,10 +61,10 @@ public class InstanciationPathPanel extends PathConnectionPanel {
     }
 
     /**
-     * Returns a valid panel (and not null) only if the simpleMetaPath fits the conditions.
-     * These are that the metaPath must be creatable and the last {@link ElementaryMetaPath}
-     * must be an {@link InstanciationEdge} from instance element to instanciation master
-     * element.
+     * Returns a valid panel (and not null) only if the simpleMetaPath fits the
+     * conditions. These are that the metaPath must be creatable and the last
+     * {@link ElementaryMetaPath} must be an {@link InstanciationEdge} from
+     * instance element to instanciation master element.
      *
      * @param dialog
      * @param metaPath
@@ -76,8 +78,9 @@ public class InstanciationPathPanel extends PathConnectionPanel {
     }
 
     /**
-     * @return the elementaryMetaPathCount of the given metaPath if this metaPath fits the conditions
-     *         for this panel or -1 if the conditions are not fulfilled.
+     * @return the elementaryMetaPathCount of the given metaPath if this
+     *         metaPath fits the conditions for this panel or -1 if the
+     *         conditions are not fulfilled.
      */
     private static final boolean isCreatableMetaPathWithBackwardInstanciationEnd(final MetaPath metaPath) {
         if (!metaPath.isCreatable(false)) {
@@ -144,12 +147,14 @@ public class InstanciationPathPanel extends PathConnectionPanel {
     }
 
     /**
-     * Methode liefert eine <code>LGMAction</code> zurück, die das Verschieben von Elementen aus dem
-     * <code>srcTree</code> in den <code>targetTree</code> realisiert. Diese <code>LGMAction</code>
-     * sollte an die "removeButtons" der Panels angefügt werden.
+     * Methode liefert eine <code>LGMAction</code> zurück, die das Verschieben
+     * von Elementen aus dem <code>srcTree</code> in den <code>targetTree</code>
+     * realisiert. Diese <code>LGMAction</code> sollte an die "removeButtons"
+     * der Panels angefügt werden.
      *
      * @param srcTree linker Baum mit dem verknüpften Pfaden
-     * @param targetTree rechter Baum mit den Elementen, die ausgewählt werden können
+     * @param targetTree rechter Baum mit den Elementen, die ausgewählt werden
+     *            können
      */
     @Override
     protected LGMAction getDisconnectAction() {
