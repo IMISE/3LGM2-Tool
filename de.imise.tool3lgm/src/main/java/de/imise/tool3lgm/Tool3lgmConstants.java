@@ -553,11 +553,12 @@ public abstract class Tool3lgmConstants {
      * @param replacements
      * @return
      */
-    public static String getReplacedString(final String org, final String... replacements) {
+    public static String getReplacedString(final String org, final Object... replacements) {
         String s = org;
         for (int i = 0; i < replacements.length; i++) {
             String currentReplacementMarker = "{" + i + "}";
-            s = s.replace(currentReplacementMarker, replacements[i]);
+            String replacement = String.valueOf(replacements[i]);
+            s = s.replace(currentReplacementMarker, replacement);
         }
         return s;
     }

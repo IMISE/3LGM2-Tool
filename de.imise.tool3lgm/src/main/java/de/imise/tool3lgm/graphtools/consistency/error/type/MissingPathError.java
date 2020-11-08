@@ -2,6 +2,7 @@ package de.imise.tool3lgm.graphtools.consistency.error.type;
 
 import java.util.Collection;
 
+import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.consistency.error.condition.MissingPathErrorCheckCondition;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
@@ -95,7 +96,8 @@ public class MissingPathError extends AbstractPathError {
         String errorDescriptionResourceKey = metaPath.getBaseResKeyOrName();
         errorDescriptionResourceKey += longDescription ? PATH_ERROR_LONG_DESCRIPTION_RESOURCE_KEY_SUFFIX : PATH_ERROR_DESCRIPTION_RESOURCE_KEY_SUFFIX;
         MetaModel metaModel = metaPath.getMetaModel();
-        String errorDescription = metaModel.getResStringWithoutError(errorDescriptionResourceKey);
+        String errorDescription = metaModel.getResString(errorDescriptionResourceKey);
+        errorDescription = Tool3lgmConstants.getReplacedString(errorDescription, me);
         if (errorDescription == errorDescriptionResourceKey) {
             errorDescription = super.getMessage();
         }
