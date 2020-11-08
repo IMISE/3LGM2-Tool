@@ -14,6 +14,7 @@ import java.util.Collection;
 import java.util.EventObject;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -388,7 +389,7 @@ public class PathConnectionPanel extends AbstractExpandablePanel {
 
         //add all connectable element containers to the tree but not
         //these with an element to solve an error
-        List<ElementContainer> errorSolutionElementContainers = new ArrayList<>();
+        Set<ElementContainer> errorSolutionElementContainers = new HashSet<>();
         //the available connectables are sorted
         List<ElementContainer> availableConnectables = getAvailableConnectables();
         for (ElementContainer ec : availableConnectables) {
