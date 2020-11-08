@@ -44,14 +44,14 @@ public final class ErrorDecoratedElementPropertyDialog extends ElementPropertyDi
 
     @Override
     public void update() {
-        super.update();
         updateDisplayedErrors();
+        super.update();
     }
 
     /**
      * Updates the error icons of the tabs
      */
-    public void updateDisplayedErrors() {
+    public final void updateDisplayedErrors() {
         clearPanelConsistencyErrors();
         if (BooleanProperty.OPTION_MARK_INCONSISTENT_ELEMENTS.is()) {
             setPanelConsistencyErrors();

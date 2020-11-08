@@ -23,6 +23,8 @@ import javax.swing.tree.TreeSelectionModel;
 
 import com.google.common.collect.ImmutableList;
 
+import de.imise.tool3lgm.graphtools.consistency.error.type.AbstractConsistencyError;
+import de.imise.tool3lgm.graphtools.consistency.error.type.MissingPathError;
 import de.imise.tool3lgm.graphtools.dialog.action.LGMAction;
 import de.imise.tool3lgm.graphtools.dialog.action.LGMActionLibrary;
 import de.imise.tool3lgm.graphtools.dialog.dragdrop.DragNDropInitializer;
@@ -171,7 +173,6 @@ public class PathConnectionPanel extends AbstractExpandablePanel {
 
         } else {
             rLabel = null;
-            LGMTreeNode rroot = null;
             rmodel = null;
             addAction = null;
             removeAction = null;
@@ -369,24 +370,41 @@ public class PathConnectionPanel extends AbstractExpandablePanel {
         rtree.saveExpansion();
         rtree.saveSelection();
         rtree.reset();
+        //disable sorting -> we have 2 lists, which must both be sorted
+        //independently of each other and must not be sorted into each other
+        LGMTreeNode root = rtree.getRoot();
+        root.setSort(false);
 
-        //        Collection<AbstractConsistencyError> consistencyErrors = getConsistencyErrors();
-        //        List<ElementContainer> errorSolutionElements = new ArrayList<>();
-        //        boolean highlight = false;
-        //        for (AbstractConsistencyError consistencyError : consistencyErrors) {
-        //            if (consistencyError instanceof MissingPathError) {
-        //                MissingPathError missingPathError = (MissingPathError) consistencyError;
-        //                Collection<ModelElement> missingElements = missingPathError.getMissingElements();
-        //                if (missingElements.contains(me)) {
-        //                    setFont(higlightFont);
-        //                    highlight = true;
-        //                    break;
-        //                }
-        //            }
-        //        }
+        //find all elements which should be connected to solve a missing path error
+        List<ModelElement> errorSolutionElements = new ArrayList<>();
+        Collection<AbstractConsistencyError> consistencyErrors = getConsistencyErrors();
+        for (AbstractConsistencyError consistencyError : consistencyErrors) {
+            if (consistencyError instanceof MissingPathError) {
+                MissingPathError missingPathError = (MissingPathError) consistencyError;
+                Collection<ModelElement> missingElements = missingPathError.getMissingElements();
+                errorSolutionElements.addAll(missingElements);
+            }
+        }
 
-        for (ElementContainer ec : getAvailableConnectables()) {
-            rtree.addObject(ec, childrenToExcludeFromRtree, false, true);
+        //add all connectable element containers to the tree but not
+        //these with an element to solve an error
+        List<ElementContainer> errorSolutionElementContainers = new ArrayList<>();
+        //the available connectables are sorted
+        List<ElementContainer> availableConnectables = getAvailableConnectables();
+        for (ElementContainer ec : availableConnectables) {
+            ModelElement me = ec.getElement();
+            if (errorSolutionElements.contains(me)) {
+                //store the connectable element containers with an element
+                //to solve an error and not connect them now
+                errorSolutionElementContainers.add(ec);
+            } else {
+                rtree.addObject(ec, childrenToExcludeFromRtree, false, true);
+            }
+        }
+        //disable sorting during insert -> the connectable element stay at the beginning
+        int errorSolutionElementInsertIndex = 0;
+        for (ElementContainer ec : errorSolutionElementContainers) {
+            rtree.insertObject(errorSolutionElementInsertIndex++, ec, childrenToExcludeFromRtree, false, true);
         }
         rmodel.reload();
         rtree.restoreExpansion();

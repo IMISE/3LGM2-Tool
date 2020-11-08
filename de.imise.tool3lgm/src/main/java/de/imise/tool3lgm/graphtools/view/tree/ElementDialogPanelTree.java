@@ -46,6 +46,10 @@ public class ElementDialogPanelTree extends CorrectSelectionTree {
         return addObject(ec, null, excludeChildren, force, childrenAreSelectable);
     }
 
+    public LGMTreeNode insertObject(final int index, final ElementContainer ec, final Collection<ElementContainer> excludeChildren, final boolean force, final boolean childrenAreSelectable) {
+        return insertObject(index, ec, null, excludeChildren, force, true, childrenAreSelectable);
+    }
+
     private LGMTreeNode addObject(final ElementContainer ec, final LGMTreeNode parent, final Collection<ElementContainer> excludeChildren, final boolean force, final boolean childrenAreSelectable) {
         return addObject(ec, parent, excludeChildren, force, true, childrenAreSelectable);
     }
@@ -58,7 +62,11 @@ public class ElementDialogPanelTree extends CorrectSelectionTree {
         return addObject(ec, null, excludeChildren, force, checkAlreadyAdded, childrenAreSelectable);
     }
 
-    public LGMTreeNode addObject(final ElementContainer ec, LGMTreeNode parent, final Collection<ElementContainer> excludeChildren, final boolean force, final boolean checkAlreadyAdded, final boolean childrenAreSelectable) {
+    public LGMTreeNode addObject(final ElementContainer ec, final LGMTreeNode parent, final Collection<ElementContainer> excludeChildren, final boolean force, final boolean checkAlreadyAdded, final boolean childrenAreSelectable) {
+        return insertObject(-1, ec, parent, excludeChildren, force, checkAlreadyAdded, childrenAreSelectable);
+    }
+
+    private LGMTreeNode insertObject(final int index, final ElementContainer ec, LGMTreeNode parent, final Collection<ElementContainer> excludeChildren, final boolean force, final boolean checkAlreadyAdded, final boolean childrenAreSelectable) {
         if (checkAlreadyAdded && elementsAdded.contains(ec)) {
             return null;
         }
@@ -73,8 +81,11 @@ public class ElementDialogPanelTree extends CorrectSelectionTree {
         if (parent == null) {
             parent = getRoot();
         }
-
-        parent.add(elementNode);
+        if (index < 0 || index > parent.getChildCount()) {
+            parent.add(elementNode);
+        } else {
+            parent.insert(elementNode, index);
+        }
         elementsAdded.add(ec);
         if (showPartOfHierarchy) {
             addChildren(elementNode, excludeChildren, checkAlreadyAdded, childrenAreSelectable);

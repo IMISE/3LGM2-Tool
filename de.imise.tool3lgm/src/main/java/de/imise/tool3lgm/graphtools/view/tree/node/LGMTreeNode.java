@@ -17,7 +17,7 @@ public class LGMTreeNode extends DefaultMutableTreeNode {
 
     private String visibleText = null;
 
-    private final boolean sort;
+    private boolean sort;
 
     private boolean selectable = true;
 
@@ -47,6 +47,13 @@ public class LGMTreeNode extends DefaultMutableTreeNode {
     public LGMTreeNode(final Object o, final String visibleText, final boolean sort) {
         super(o);
         this.visibleText = visibleText;
+        this.sort = sort;
+    }
+
+    /**
+     * @param sort
+     */
+    public void setSort(final boolean sort) {
         this.sort = sort;
     }
 

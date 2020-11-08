@@ -504,12 +504,12 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
      * @param gdl
      */
     public final void addAllTransactionsListener(final LGMChangeListener gdl) {
-        //System.err.println("addAllTransactionsListener " + this);
-        //        Sys.errn(3, allListener.size() + " " + gdl);
-        //        if (allListener.contains(gdl)) {
-        //            Sys.err1(gdl);
-        //        }
         allListener.add(gdl); //Don't prevent adding multiple the same listener! The MainFrameDesktopTabbedPane needs to be added multiple
+        //        for (LGMChangeListener l : allListener) {
+        //            System.err.println(l);
+        //        }
+        //        Sys.err1("jetzt");
+        //        System.err.println();
     }
 
     /**

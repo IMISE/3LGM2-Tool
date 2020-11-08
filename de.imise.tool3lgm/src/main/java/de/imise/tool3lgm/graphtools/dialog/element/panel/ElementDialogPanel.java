@@ -356,7 +356,7 @@ public abstract class ElementDialogPanel extends JPanel {
     /**
      * @param consistencyError
      */
-    public boolean addConsistencyError(final AbstractConsistencyError consistencyError) {
+    public final boolean addConsistencyError(final AbstractConsistencyError consistencyError) {
         if (this instanceof DisplayAndFixConsistencyErrorPanel) {
             DisplayAndFixConsistencyErrorPanel panel = (DisplayAndFixConsistencyErrorPanel) this;
             ElementDialogPanel responsiblePanelForConsistencyError = panel.getResponsiblePanelForConsistencyError(consistencyError);
