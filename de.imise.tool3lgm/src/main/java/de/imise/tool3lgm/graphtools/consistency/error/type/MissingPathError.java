@@ -104,4 +104,42 @@ public class MissingPathError extends AbstractPathError {
         return errorDescription;
     }
 
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = super.hashCode();
+        result = prime * result + (missingElements == null ? 0 : missingElements.hashCode());
+        result = prime * result + (missingPathErrorCheckCondition == null ? 0 : missingPathErrorCheckCondition.hashCode());
+        return result;
+    }
+
+    @Override
+    public boolean equals(final Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (!super.equals(obj)) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        MissingPathError other = (MissingPathError) obj;
+        if (missingElements == null) {
+            if (other.missingElements != null) {
+                return false;
+            }
+        } else if (!missingElements.equals(other.missingElements)) {
+            return false;
+        }
+        if (missingPathErrorCheckCondition == null) {
+            if (other.missingPathErrorCheckCondition != null) {
+                return false;
+            }
+        } else if (!missingPathErrorCheckCondition.equals(other.missingPathErrorCheckCondition)) {
+            return false;
+        }
+        return true;
+    }
+
 }

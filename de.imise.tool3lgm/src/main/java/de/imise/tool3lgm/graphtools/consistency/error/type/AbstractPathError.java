@@ -47,4 +47,34 @@ public abstract class AbstractPathError extends AbstractConsistencyError {
         return metaPath;
     }
 
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = super.hashCode();
+        result = prime * result + (metaPath == null ? 0 : metaPath.hashCode());
+        return result;
+    }
+
+    @Override
+    public boolean equals(final Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (!super.equals(obj)) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        AbstractPathError other = (AbstractPathError) obj;
+        if (metaPath == null) {
+            if (other.metaPath != null) {
+                return false;
+            }
+        } else if (!metaPath.equals(other.metaPath)) {
+            return false;
+        }
+        return true;
+    }
+
 }

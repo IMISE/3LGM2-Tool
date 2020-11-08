@@ -65,4 +65,50 @@ public abstract class ErrorSolution {
         return panelMetaPath;
     }
 
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + (panelMetaPath == null ? 0 : panelMetaPath.hashCode());
+        result = prime * result + (pathToPropertyDialogElement == null ? 0 : pathToPropertyDialogElement.hashCode());
+        result = prime * result + (targetClass == null ? 0 : targetClass.hashCode());
+        return result;
+    }
+
+    @Override
+    public boolean equals(final Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        ErrorSolution other = (ErrorSolution) obj;
+        if (panelMetaPath == null) {
+            if (other.panelMetaPath != null) {
+                return false;
+            }
+        } else if (!panelMetaPath.equals(other.panelMetaPath)) {
+            return false;
+        }
+        if (pathToPropertyDialogElement == null) {
+            if (other.pathToPropertyDialogElement != null) {
+                return false;
+            }
+        } else if (!pathToPropertyDialogElement.equals(other.pathToPropertyDialogElement)) {
+            return false;
+        }
+        if (targetClass == null) {
+            if (other.targetClass != null) {
+                return false;
+            }
+        } else if (!targetClass.equals(other.targetClass)) {
+            return false;
+        }
+        return true;
+    }
+
 }

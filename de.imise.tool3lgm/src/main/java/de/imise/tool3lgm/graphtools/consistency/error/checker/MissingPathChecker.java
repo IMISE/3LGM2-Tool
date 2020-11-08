@@ -58,9 +58,11 @@ public class MissingPathChecker implements ConsistencyErrorChecker {
                         //if there is not at least on of the needed connected to the current path start element -> error
                         if (connectedElements.isEmpty()) {
                             MissingPathError error = new MissingPathError(elementToCheck, condition, neededElements);
-                            errors.add(error);
-                            if (checkOnly) {
-                                return errors;
+                            if (!errors.contains(error)) {
+                                errors.add(error);
+                                if (checkOnly) {
+                                    return errors;
+                                }
                             }
                         }
                     }
