@@ -49,8 +49,8 @@ import de.imise.util.swing.component.AlphabeticalComboBox;
 import de.imise.util.swing.component.HistoryComboBox;
 
 /**
- * This panel contains all GUI components whcih are needed to specify a
- * search in model files.
+ * This panel contains all GUI components whcih are needed to specify a search
+ * in model files.
  *
  * @author N.N. (original SearchDialog); AXS (23.09.2020)
  */
@@ -62,7 +62,10 @@ public abstract class BasicSearchOptionsPanel extends JPanel implements ItemList
     /** Input field for the search pattern for the element descriptions */
     protected final HistoryComboBox elementDescription = new HistoryComboBox();
 
-    /** Input field for for the search pattern for the element {@link UserField} names */
+    /**
+     * Input field for for the search pattern for the element {@link UserField}
+     * names
+     */
     protected final HistoryComboBox elementUserField = new HistoryComboBox();
 
     /** beinhaltet den Wert der oberen Konstanten */
@@ -113,7 +116,10 @@ public abstract class BasicSearchOptionsPanel extends JPanel implements ItemList
     /**  */
     protected JLabel labelDescription = new JLabel(getResString("SEARCH_DIALOG_description"));
 
-    /** The defalut action that will only perform the search (where the action source is irrelevant) */
+    /**
+     * The defalut action that will only perform the search (where the action
+     * source is irrelevant)
+     */
     private final Action searchActionDefault = new AbstractAction(getResString("SEARCH_DIALOG_search")) {
         @Override
         public void actionPerformed(final ActionEvent e) {
@@ -121,7 +127,10 @@ public abstract class BasicSearchOptionsPanel extends JPanel implements ItemList
         }
     };
 
-    /** The action that will perform the search and refreshes the submodel and class boxes */
+    /**
+     * The action that will perform the search and refreshes the submodel and
+     * class boxes
+     */
     private final Action searchActionWithUpdateSubmodelAndClassBoxes = new AbstractAction() {
         @Override
         public void actionPerformed(final ActionEvent e) {
@@ -173,16 +182,18 @@ public abstract class BasicSearchOptionsPanel extends JPanel implements ItemList
     }
 
     /**
-     * Die zentrale Suchmethode die aufgerufen wird. Prinzip: Alle Elemente des Teilmodels landen in <code>searchSet</code> Nicht erfüllte
-     * Suchkriterium werden herausgefiltert mittels <code>searchSet.remove</code>
+     * Die zentrale Suchmethode die aufgerufen wird. Prinzip: Alle Elemente des
+     * Teilmodels landen in <code>searchSet</code> Nicht erfüllte Suchkriterium
+     * werden herausgefiltert mittels <code>searchSet.remove</code>
      */
     public void callSearch() {
         callSearch(false);
     }
 
     /**
-     * Die zentrale Suchmethode die aufgerufen wird. Prinzip: Alle Elemente des Teilmodels landen in <code>searchSet</code> Nicht erfüllte
-     * Suchkriterium werden herausgefiltert mittels <code>searchSet.remove</code>
+     * Die zentrale Suchmethode die aufgerufen wird. Prinzip: Alle Elemente des
+     * Teilmodels landen in <code>searchSet</code> Nicht erfüllte Suchkriterium
+     * werden herausgefiltert mittels <code>searchSet.remove</code>
      *
      * @param refreshSubModelAndClassBox
      */
@@ -366,8 +377,8 @@ public abstract class BasicSearchOptionsPanel extends JPanel implements ItemList
     ////////////////////////////////////////////////
 
     /**
-     * Adds the ActionListener to the case sensitive CheckBoxes which save
-     * the cureent state in the {@link UserProperties} and start the search.
+     * Adds the ActionListener to the case sensitive CheckBoxes which save the
+     * cureent state in the {@link UserProperties} and start the search.
      */
     private void addCheckBoxListeners() {
         checkNameCaseSensitive.addActionListener(e -> saveCheckBoxStateInUserPropertiesAndCallSearch(checkNameCaseSensitive, OPTION_SEARCH_DIALOG_CASE_SENSITIVE_NAME));
@@ -393,11 +404,11 @@ public abstract class BasicSearchOptionsPanel extends JPanel implements ItemList
     }
 
     /**
-     * Adds or removes the ItemListener and Action to or from
-     * the HistoryComboBoxes
+     * Adds or removes the ItemListener and Action to or from the
+     * HistoryComboBoxes
      *
-     * @param delete If <code>true</code> all listeners are removed.
-     *            If <code>false</code> a change will start a search.
+     * @param delete If <code>true</code> all listeners are removed. If
+     *            <code>false</code> a change will start a search.
      */
     private void setComboboxListeners(final boolean remove) {
         Action enterAction = remove ? null : searchActionDefault;
@@ -434,10 +445,10 @@ public abstract class BasicSearchOptionsPanel extends JPanel implements ItemList
     ///////////////////
 
     /**
-     * @param withHistory if <code>true</code> the fields that store the
-     *            history of the {@link HistoryComboBox}es will be filled too
-     * @return the SearchOptions object that represent the current state of
-     *         all gui input fields
+     * @param withHistory if <code>true</code> the fields that store the history
+     *            of the {@link HistoryComboBox}es will be filled too
+     * @return the SearchOptions object that represent the current state of all
+     *         gui input fields
      */
     public SearchOptions getSearchOptions(final boolean withHistory) {
         SearchOptions searchOptions = new SearchOptions();

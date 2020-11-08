@@ -93,8 +93,10 @@ public class AbstractElementPropertyDialog extends AbstractTabbedPropertyDialog 
     private static final Point DEFAULT_POSITION = new Point(100, 100);
 
     /**
-     * Wird im Konstruktor auf <code>true</code> gesetzt und nach dem ersten zeigen des Dialoges auf <code>false</code>. Damit kann sicher gestellt
-     * werden, dass die Transaktion des Dialoges nur einmal am Anfang und nicht bei jedem weiteren Zeigen des Dialoges gestartet wird.
+     * Wird im Konstruktor auf <code>true</code> gesetzt und nach dem ersten
+     * zeigen des Dialoges auf <code>false</code>. Damit kann sicher gestellt
+     * werden, dass die Transaktion des Dialoges nur einmal am Anfang und nicht
+     * bei jedem weiteren Zeigen des Dialoges gestartet wird.
      */
     boolean opening = false;
 
@@ -110,14 +112,15 @@ public class AbstractElementPropertyDialog extends AbstractTabbedPropertyDialog 
     private final PropertyDialogUserFieldPanel propertyDialogUserFieldPanel;
 
     /**
-     * Panel in the south with the panel for the buttons OK, Take over and Cancel in the
-     * EAST and an additional button that is given by the curren displayed panel in the WEST.
+     * Panel in the south with the panel for the buttons OK, Take over and
+     * Cancel in the EAST and an additional button that is given by the curren
+     * displayed panel in the WEST.
      */
     private final JPanel southButtonsPanel = new JPanel();
 
     /**
-     * One additional button of the currently displayed panel to add to the button panel
-     * with the OK, Cancel, TakeOver buttons.
+     * One additional button of the currently displayed panel to add to the
+     * button panel with the OK, Cancel, TakeOver buttons.
      */
     private JButton panelButton = null;
 
@@ -198,16 +201,17 @@ public class AbstractElementPropertyDialog extends AbstractTabbedPropertyDialog 
     }
 
     /**
-     * @return the template element the dialogs model element is created from
-     *         or <code>null</code> if it not created by a template element
+     * @return the template element the dialogs model element is created from or
+     *         <code>null</code> if it not created by a template element
      */
     public final ModelElement getTemplateElementSource() {
         return templateElementSource;
     }
 
     /**
-     * @return a collection with at least the modelElement from this dialog and if exists
-     *         additionally the template element the modelElement was created from
+     * @return a collection with at least the modelElement from this dialog and
+     *         if exists additionally the template element the modelElement was
+     *         created from
      */
     public final Collection<ModelElement> getModelElementWithTemplateElement() {
         if (templateElementSource == null) {
@@ -217,7 +221,8 @@ public class AbstractElementPropertyDialog extends AbstractTabbedPropertyDialog 
     }
 
     /**
-     * @return <code>true</code> if this dialog only presents information but nothing is ediable/changeable:
+     * @return <code>true</code> if this dialog only presents information but
+     *         nothing is ediable/changeable:
      */
     public final boolean isInfoDialog() {
         if (gdcoll.getModelCategory() == ModelCategory.TEMPLATE) {
@@ -232,7 +237,8 @@ public class AbstractElementPropertyDialog extends AbstractTabbedPropertyDialog 
     }
 
     /**
-     * Bleibt <code>true</code>, wenn keine Unterklasse den Dialog erweitert, sondern der Dialog nur aus dem Allgemein-Reiter besteht, auf dem auch
+     * Bleibt <code>true</code>, wenn keine Unterklasse den Dialog erweitert,
+     * sondern der Dialog nur aus dem Allgemein-Reiter besteht, auf dem auch
      * nichts durch eine Unterklasse hinzugefügt wurde.
      */
     protected final boolean isUnchangedDefaultDialog() {
@@ -253,8 +259,9 @@ public class AbstractElementPropertyDialog extends AbstractTabbedPropertyDialog 
     }
 
     /**
-     * Adds the panel 'Structure' to the dialog, which shows the part-of-hierarchy of the element
-     * of the dialog, if this element has a {@link HasPartEdge}.
+     * Adds the panel 'Structure' to the dialog, which shows the
+     * part-of-hierarchy of the element of the dialog, if this element has a
+     * {@link HasPartEdge}.
      */
     private void addPartOfStructurePanel() {
         List<Class<? extends HasPartEdge>> realPartOfs = getRecursiveHasPartEdges();
@@ -268,8 +275,9 @@ public class AbstractElementPropertyDialog extends AbstractTabbedPropertyDialog 
     }
 
     /**
-     * Liefert alle {@link HasPartEdge}en, bei denen die Kindelemente auch wieder Kindelemente haben können (also wo die
-     * Start- und Endklasse der PartOBeziehung gleich ist).
+     * Liefert alle {@link HasPartEdge}en, bei denen die Kindelemente auch
+     * wieder Kindelemente haben können (also wo die Start- und Endklasse der
+     * PartOBeziehung gleich ist).
      *
      * @return
      */

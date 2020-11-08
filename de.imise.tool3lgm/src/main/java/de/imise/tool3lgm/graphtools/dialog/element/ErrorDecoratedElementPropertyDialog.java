@@ -17,7 +17,8 @@ import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty;
 
 /**
- * Extends the dialog by adding error icons to the tabs, if you can fix an error of the dialog element on this tab.
+ * Extends the dialog by adding error icons to the tabs, if you can fix an error
+ * of the dialog element on this tab.
  *
  * @author AXS (28.10.2020)
  */
@@ -92,9 +93,8 @@ public final class ErrorDecoratedElementPropertyDialog extends ElementPropertyDi
     }
 
     /**
-     * Updates the tab icons. If the contained panel has resp. can fix
-     * an error, this tab is marked with an error icon. If not no icon
-     * is set.
+     * Updates the tab icons. If the contained panel has resp. can fix an error,
+     * this tab is marked with an error icon. If not no icon is set.
      */
     private void updateConsistencyErrorIcons() {
         for (int i = 0; i < getTabCount(); i++) {

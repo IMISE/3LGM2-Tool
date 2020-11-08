@@ -19,7 +19,8 @@ import de.imise.tool3lgm.gui.viewpane.graph.GraphAreaOptionSliders.SliderWithTex
 import de.imise.tool3lgm.gui.viewpane.graph.GraphViewPaneFrameComponent;
 
 /**
- * Dialog zum Einstellen von Ebenenabstand, Zoom, Winkel und Größe der Zeichenfläche
+ * Dialog zum Einstellen von Ebenenabstand, Zoom, Winkel und Größe der
+ * Zeichenfläche
  *
  * @author N.N.
  */

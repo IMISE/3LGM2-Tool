@@ -1,7 +1,3 @@
-/*
- * Created on 30.10.2003 To change the template for this generated file go to Window - Preferences -
- * Java - Code Generation - Code and Comments
- */
 package de.imise.tool3lgm.graphtools.dialog;
 
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
@@ -17,26 +13,28 @@ import javax.swing.JDialog;
 import javax.swing.JPanel;
 
 /**
- * @author Thomas Rudert Dialog for setting the properties for drawing graphics
+ * Dialog for setting the properties for drawing graphics
+ *
+ * @author Thomas Rudert (30.10.2003)
  */
 public class GraphicPropertyDialog extends JDialog {
 
     /**
-     * Bitpattern for Rendering-Hints (standard value: all bits are set to zero bit0: ANTIALIASING
-     * bit1: ALPHA_INTERPOLATION bit2: COLOR_RENDERING bit3: RENDERING bit4: DITHERING bit5:
-     * FRACTIONALMETRICS bit6: INTERPOLATION bit7: TEXT_ANTIALIASING
+     * Bitpattern for Rendering-Hints (standard value: all bits are set to
+     * zero<br>
+     * bit0: ANTIALIASING<br>
+     * bit1: ALPHA_INTERPOLATION<br>
+     * bit2: COLOR_RENDERING<br>
+     * bit3: RENDERING<br>
+     * bit4: DITHERING<br>
+     * bit5: FRACTIONALMETRICS<br>
+     * bit6: INTERPOLATION<br>
+     * bit7: TEXT_ANTIALIASING<br>
      */
 
     private final JCheckBox[] checkBoxArray = new JCheckBox[8];
     private final String[] checkBoxText = {
-            "Antialiasing",
-            "Alpha-Interpolation",
-            "Color-Rendering",
-            "Rendering",
-            "Dithering",
-            "Fractionalmetrics",
-            "Interpolation",
-            "Text-Antialiasing"
+            "Antialiasing", "Alpha-Interpolation", "Color-Rendering", "Rendering", "Dithering", "Fractionalmetrics", "Interpolation", "Text-Antialiasing"
     };
 
     public GraphicPropertyDialog(final Frame owner) {

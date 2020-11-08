@@ -11,7 +11,8 @@ import de.imise.tool3lgm.userproperties.UserProperties;
 import de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty;
 
 /**
- * Diese Klasse verwaltet statisch die geöffneten Dialoge der ModellElemente. Diese Funktionalität war urpsünglich in ModelConstants.
+ * Diese Klasse verwaltet statisch die geöffneten Dialoge der ModellElemente.
+ * Diese Funktionalität war urpsünglich in ModelConstants.
  *
  * @author AXS (30 Apr 2019)
  */
@@ -48,7 +49,8 @@ public class ElemenPropertyDialogsContext {
     }
 
     /**
-     * Überprueft, ob fuer ein Objekt schon ein Dialog existiert und gibt diesen ggf. zurück
+     * Überprueft, ob fuer ein Objekt schon ein Dialog existiert und gibt diesen
+     * ggf. zurück
      *
      * @param obj Dialog zu diesem Objekt
      * @return ModelElement obj, wenn schon ein Dialog existiert, null sonst
@@ -58,7 +60,8 @@ public class ElemenPropertyDialogsContext {
     }
 
     /**
-     * Überprueft, ob fuer ein Objekt schon ein Dialog existiert und gibt diesen ggf. zurück
+     * Überprueft, ob fuer ein Objekt schon ein Dialog existiert und gibt diesen
+     * ggf. zurück
      *
      * @param obj Dialog zu diesem Objekt
      * @return ModelElement obj, wenn schon ein Dialog existiert, null sonst
@@ -73,11 +76,11 @@ public class ElemenPropertyDialogsContext {
     }
 
     /**
-     * Liefert eine Dialog zum übergebenen Element. Dieser Dialog wird nen angelegt, wenn nicht schon ein Dialog dieses Elementes in der Liste der
+     * Liefert eine Dialog zum übergebenen Element. Dieser Dialog wird nen
+     * angelegt, wenn nicht schon ein Dialog dieses Elementes in der Liste der
      * geöffneten Dialoge ist.
      *
-     * @param me
-     *            ModelElement fpr das der Dialog geöffnet werden soll
+     * @param me ModelElement fpr das der Dialog geöffnet werden soll
      * @return
      */
     public static ElementPropertyDialog getDialog(final ModelElement me) {
@@ -92,7 +95,8 @@ public class ElemenPropertyDialogsContext {
     /**
      * entfernt einen Dialog aus dem ArrayList mit allen geoeffneten Dialogen
      *
-     * @param modelElement Element dessen Dialog aus dem ArrayList entfernt werden soll
+     * @param modelElement Element dessen Dialog aus dem ArrayList entfernt
+     *            werden soll
      */
     public static final void removeDialog(final ModelElement modelElement) {
         for (int n = 0; n < dialogs.size(); n++) {
@@ -122,7 +126,8 @@ public class ElemenPropertyDialogsContext {
     }
 
     /**
-     * Liefert den {@link ElementPropertyDialog}, der in der Liste der geöffneten Dialoge am angegebene Index steht.
+     * Liefert den {@link ElementPropertyDialog}, der in der Liste der
+     * geöffneten Dialoge am angegebene Index steht.
      *
      * @param index
      * @return

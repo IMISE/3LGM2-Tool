@@ -36,7 +36,8 @@ import de.imise.util.NamedObjectContainer;
 import de.imise.util.collections.CollectionUtils;
 
 /**
- * Dieses Panel stellt einen oder mehrere Pfade ausgehend vom ModelElement des zugehörigen {@link ElementPropertyDialog} in einer Tabelle dar.
+ * Dieses Panel stellt einen oder mehrere Pfade ausgehend vom ModelElement des
+ * zugehörigen {@link ElementPropertyDialog} in einer Tabelle dar.
  *
  * @author AXS (11 Mar 2019)
  */
@@ -53,8 +54,10 @@ public class ConnectedElementsTablePanel extends AbstractPathConnectionPanel {
 
     /**
      * @param dialog
-     * @param tableDefinition Spaltendefinition (die zu den Pfaden passen sollte)
-     * @param simpleMetaPaths MetaPfad, der in der Tabelle dargestellt werden soll
+     * @param tableDefinition Spaltendefinition (die zu den Pfaden passen
+     *            sollte)
+     * @param simpleMetaPaths MetaPfad, der in der Tabelle dargestellt werden
+     *            soll
      */
     public ConnectedElementsTablePanel(final ElementPropertyDialog dialog, @Nonnull final ConnectedElementsTableDefinition tableDefinition, final SimpleMetaPath simpleMetaPath) {
         super(dialog, tableDefinition.tablePanelLabelOption, simpleMetaPath); // den muss es geben!
@@ -77,7 +80,8 @@ public class ConnectedElementsTablePanel extends AbstractPathConnectionPanel {
     }
 
     /**
-     * @param editable wenn <code>true</code>, dann werden die Buttons zum hinzufügen oder Löschen angezeigt
+     * @param editable wenn <code>true</code>, dann werden die Buttons zum
+     *            hinzufügen oder Löschen angezeigt
      */
     private void internalInit(final boolean editable) {
         JScrollPane scrollPane = new JScrollPane(table);
@@ -135,7 +139,8 @@ public class ConnectedElementsTablePanel extends AbstractPathConnectionPanel {
     }
 
     /**
-     * Action für den Löschen Button. Es wird die letzte Kante des Pfades einer Zeile gelöscht. Elemente, die nur mit dieser Kante existieren können,
+     * Action für den Löschen Button. Es wird die letzte Kante des Pfades einer
+     * Zeile gelöscht. Elemente, die nur mit dieser Kante existieren können,
      * werden ebenfalls gelöscht und deren Kanten usw.
      */
     public final LGMAction getDisconnectAction() {
@@ -153,7 +158,8 @@ public class ConnectedElementsTablePanel extends AbstractPathConnectionPanel {
     }
 
     /**
-     * Liefert <code>true</code>, wenn die Zeile mit dem übergebenen Index selektiert ist
+     * Liefert <code>true</code>, wenn die Zeile mit dem übergebenen Index
+     * selektiert ist
      *
      * @param row
      * @return
@@ -189,9 +195,11 @@ public class ConnectedElementsTablePanel extends AbstractPathConnectionPanel {
     }
 
     /**
-     * Wenn in der Zelle mit dem Row- und Column-Index ein ModelElement, ein ElementContainer oder ein {@link NamedObjectContainer} mit einem
-     * ModelElement oder ElementContainer steckt, dann wird dieses ModelElenent bzw. das ModelElement des ElementContainers zurück gegeben.
-     * Ist es das alles nicht, kommt <code>null</code> zurück.
+     * Wenn in der Zelle mit dem Row- und Column-Index ein ModelElement, ein
+     * ElementContainer oder ein {@link NamedObjectContainer} mit einem
+     * ModelElement oder ElementContainer steckt, dann wird dieses ModelElenent
+     * bzw. das ModelElement des ElementContainers zurück gegeben. Ist es das
+     * alles nicht, kommt <code>null</code> zurück.
      *
      * @param row
      * @param col

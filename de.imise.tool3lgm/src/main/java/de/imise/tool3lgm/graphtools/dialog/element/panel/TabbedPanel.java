@@ -10,8 +10,8 @@ import de.imise.tool3lgm.graphtools.dialog.element.ElementPropertyDialog;
 import de.imise.util.swing.component.tab.ReorderableTabbedPane;
 
 /**
- * EIn {@link ElementDialogPanel}, das andere {@link ElementDialogPanel} auf Tabs in sich aufnehmen
- * kann.
+ * EIn {@link ElementDialogPanel}, das andere {@link ElementDialogPanel} auf
+ * Tabs in sich aufnehmen kann.
  *
  * @author AXS
  */

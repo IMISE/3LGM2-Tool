@@ -49,8 +49,10 @@ public class ElementPropertyDialog extends AbstractElementPropertyDialog impleme
     }
 
     /**
-     * Wenn der Dialog von keiner Unterklasse des ModelElements aus seinem Default-Zustand (DescripPanel + evtl. Benutzerdef. Eigenschaften) geändert
-     * wurde, dann werden hier automatisch für alle Kanten des Elementes passende Panels hinzugefügt.
+     * Wenn der Dialog von keiner Unterklasse des ModelElements aus seinem
+     * Default-Zustand (DescripPanel + evtl. Benutzerdef. Eigenschaften)
+     * geändert wurde, dann werden hier automatisch für alle Kanten des
+     * Elementes passende Panels hinzugefügt.
      */
     public void extendDefaultDialog() {
         if (isUnchangedDefaultDialog()) {
@@ -178,7 +180,10 @@ public class ElementPropertyDialog extends AbstractElementPropertyDialog impleme
     // MultiPanel -> add SubPanels //
     //////////////////////////////////////
 
-    /** The last added Panel that is an subclass of {@link MultiPanelElementDialogPanel} (except the general) */
+    /**
+     * The last added Panel that is an subclass of
+     * {@link MultiPanelElementDialogPanel} (except the general)
+     */
     private MultiPanelElementDialogPanel lastAddedMultiPanel;
 
     /**
@@ -269,7 +274,11 @@ public class ElementPropertyDialog extends AbstractElementPropertyDialog impleme
     // TabbedPanel -> add SubPanels //
     //////////////////////////////////
 
-    /** Das zuletzt über die Funktion {@link ElementPropertyDialog#addTabbedPanel(Class)} hinzugefügte TabbedPanel */
+    /**
+     * Das zuletzt über die Funktion
+     * {@link ElementPropertyDialog#addTabbedPanel(Class)} hinzugefügte
+     * TabbedPanel
+     */
     private TabbedPanel lastAddedTabbedPanel;
 
     /**

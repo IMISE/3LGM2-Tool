@@ -24,29 +24,38 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 /**
- * @author hboehme RMI-fehlerPanel für die RMI-Konfiguration. Das Panel beinhaltet zwei
- *         <code>JLabel</code>s, eine <code>JCheckBox</code> und ein <code>JTextField</code> Wenn
- *         die <code>JCheckBox</code> aktiviert wird, wird versucht für den RMI-Service der nächste
- *         freie Port zu finden, sonst nicht. In das <code>JTextField</code> wird vom User der Port
- *         eingetragen, auf dem der RMI-Server lauschen soll. Sollte das auch wieder fhelschlagen,
- *         wird der Dialog erneut angeuzeigt.
+ * @author hboehme RMI-fehlerPanel für die RMI-Konfiguration. Das Panel
+ *         beinhaltet zwei <code>JLabel</code>s, eine <code>JCheckBox</code> und
+ *         ein <code>JTextField</code> Wenn die <code>JCheckBox</code> aktiviert
+ *         wird, wird versucht für den RMI-Service der nächste freie Port zu
+ *         finden, sonst nicht. In das <code>JTextField</code> wird vom User der
+ *         Port eingetragen, auf dem der RMI-Server lauschen soll. Sollte das
+ *         auch wieder fhelschlagen, wird der Dialog erneut angeuzeigt.
  */
 public class RMIErrorPanel extends JPanel implements ItemListener {
 
-    /** Hier wird festgelegt, ob automatisch ein neuer freie Port gesucht werden soll */
+    /**
+     * Hier wird festgelegt, ob automatisch ein neuer freie Port gesucht werden
+     * soll
+     */
     private final JCheckBox rmiAutoNextFreePortCheckBox = new JCheckBox();
 
-    /** hier wird vom User eingetragen und dargestellt, auf welchem Pot der RMI-Server lauschen soll */
+    /**
+     * hier wird vom User eingetragen und dargestellt, auf welchem Pot der
+     * RMI-Server lauschen soll
+     */
     private final JTextField rmiRegistryPortTextField = new JTextField();
 
     /** Der Button setzt den Standardport 1099 in das TextField. */
     private final JButton rmiStdRegistryButton = new JButton();
 
     /**
-     * Das Panel beinhaltet zwei <code>JLabel</code>s, eine <code>JCheckBox</code> und ein
-     * <code>JTextField</code> Wenn die <code>JCheckBox</code> aktiviert wird, wird versucht ein
-     * neue freier Port für den RMI-Service zu finden, sonst nicht. In das <code>JTextField</code>
-     * wird vom User der Port eingetragen, auf dem der RMI-Server lauschen soll.
+     * Das Panel beinhaltet zwei <code>JLabel</code>s, eine
+     * <code>JCheckBox</code> und ein <code>JTextField</code> Wenn die
+     * <code>JCheckBox</code> aktiviert wird, wird versucht ein neue freier Port
+     * für den RMI-Service zu finden, sonst nicht. In das
+     * <code>JTextField</code> wird vom User der Port eingetragen, auf dem der
+     * RMI-Server lauschen soll.
      */
     public RMIErrorPanel() {
         super();

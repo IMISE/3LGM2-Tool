@@ -38,7 +38,8 @@ import de.imise.util.StringUtils;
 public class ConnectedElementsTableModel extends DefaultTableModel {
 
     /**
-     * ModelElement, für das die verbundenen Elemente über den MetaPfad dargestellt werden sollen
+     * ModelElement, für das die verbundenen Elemente über den MetaPfad
+     * dargestellt werden sollen
      */
     private final ModelElement modelElement;
 
@@ -48,8 +49,9 @@ public class ConnectedElementsTableModel extends DefaultTableModel {
     private final UnionMetaPath metaPath;
 
     /**
-     * Definition der Spalten der Tabelle. Das bezieht sich im Header auf den im Konstruktor übergebenen {@link SimpleMetaPath} und in den
-     * Zellen auf die Positionen im {@link PathResultTreeModel}.
+     * Definition der Spalten der Tabelle. Das bezieht sich im Header auf den im
+     * Konstruktor übergebenen {@link SimpleMetaPath} und in den Zellen auf die
+     * Positionen im {@link PathResultTreeModel}.
      */
     private final ConnectedElementsTableDefinition tableDefinition;
 
@@ -59,19 +61,21 @@ public class ConnectedElementsTableModel extends DefaultTableModel {
     private PathResultTreeModel currentPathResultTreeModel;
 
     /**
-     * Der Identifier für die versteckte Spalte mit dem PathResultTreeNode. Muss nur eindeutig sein und wird nirgends angezeigt, daher einfach ein
+     * Der Identifier für die versteckte Spalte mit dem PathResultTreeNode. Muss
+     * nur eindeutig sein und wird nirgends angezeigt, daher einfach ein
      * statisches Object.
      */
     public static String HIDDEN_RESULT_NODE_COLUMN_IDENTIFIER = new Object().toString();
 
     /**
-     * @param modelElement
-     *            ModelElement, für das die verbundenen Elemente über den MetaPfad dargestellt werden sollen
-     * @param simpleMetaPath
-     *            MetaPfad, der in der Tabelle dargestellt werden soll
-     * @param tableDefinition
-     *            Definition der Spalten der Tabelle. Das bezieht sich im Header auf den im Konstruktor übergebenen {@link SimpleMetaPath} und in den
-     *            Zellen auf die Positionen im {@link PathResultTreeModel}.
+     * @param modelElement ModelElement, für das die verbundenen Elemente über
+     *            den MetaPfad dargestellt werden sollen
+     * @param simpleMetaPath MetaPfad, der in der Tabelle dargestellt werden
+     *            soll
+     * @param tableDefinition Definition der Spalten der Tabelle. Das bezieht
+     *            sich im Header auf den im Konstruktor übergebenen
+     *            {@link SimpleMetaPath} und in den Zellen auf die Positionen im
+     *            {@link PathResultTreeModel}.
      */
     public ConnectedElementsTableModel(final ModelElement modelElement, final SimpleMetaPath simpleMetaPath, final ConnectedElementsTableDefinition tableDefinition) {
         this.modelElement = modelElement;

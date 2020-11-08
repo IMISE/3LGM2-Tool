@@ -18,9 +18,9 @@ import de.imise.util.htmlxml.ParseSaveStringHandler;
 import de.imise.util.swing.component.text.ExtendedTextPane;
 
 /**
- * @author AXS
- *         Dieses Panel ist ein {@link SingleConnectionPanel}, das zusätzlich dazu noch ein Beschreibungfeld
- *         für das searchElement zur Verfügung stellt.
+ * @author AXS Dieses Panel ist ein {@link SingleConnectionPanel}, das
+ *         zusätzlich dazu noch ein Beschreibungfeld für das searchElement zur
+ *         Verfügung stellt.
  */
 public class DescriptedSingleConnectionPanel extends SingleConnectionPanel {
 
@@ -28,7 +28,10 @@ public class DescriptedSingleConnectionPanel extends SingleConnectionPanel {
 
     private final JLabel descriptionWestLabel = new JLabel(getResString("description"));
 
-    /** Cache zur Speicherung, ob die Beschreibung des verbundenen Elementes geändert wurde */
+    /**
+     * Cache zur Speicherung, ob die Beschreibung des verbundenen Elementes
+     * geändert wurde
+     */
     private String olddescrip = "";
 
     /**
@@ -43,9 +46,13 @@ public class DescriptedSingleConnectionPanel extends SingleConnectionPanel {
      * @param dialog
      * @param panelLabelOption Das Label kann folgende Werte annehmen:
      *            <ul>
-     *            <li>{@link PanelLabelOption#LABEL_END_ELEMENT_TYPE} = Anzeigename der EndElement-Art des MetaPfades</li>
-     *            <li>{@link PanelLabelOption#LABEL_LAST_EDGE_ELEMENT_NAME} = Anzeigename der Element-Art der letzten Kante des MetaPfades</li>
-     *            <li>{@link PanelLabelOption#LABEL_LAST_EDGE_CONNECTION_NAME} = Anzeigename der gerichteten Verbindung der letzten Kante des
+     *            <li>{@link PanelLabelOption#LABEL_END_ELEMENT_TYPE} =
+     *            Anzeigename der EndElement-Art des MetaPfades</li>
+     *            <li>{@link PanelLabelOption#LABEL_LAST_EDGE_ELEMENT_NAME} =
+     *            Anzeigename der Element-Art der letzten Kante des
+     *            MetaPfades</li>
+     *            <li>{@link PanelLabelOption#LABEL_LAST_EDGE_CONNECTION_NAME} =
+     *            Anzeigename der gerichteten Verbindung der letzten Kante des
      *            MetaPfades</li>
      *            </ul>
      * @param metaPath

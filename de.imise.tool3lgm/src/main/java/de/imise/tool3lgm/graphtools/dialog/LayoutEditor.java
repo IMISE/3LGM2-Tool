@@ -43,8 +43,8 @@ import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout;
 import de.imise.tool3lgm.log.Log;
 
 /**
- * Der LayoutEdior für die Konfiguration von Form, Farbe und Schriftwart der Elemetklassen
- * zuständig.
+ * Der LayoutEdior für die Konfiguration von Form, Farbe und Schriftwart der
+ * Elemetklassen zuständig.
  */
 public class LayoutEditor extends JDialog implements ActionListener {
 

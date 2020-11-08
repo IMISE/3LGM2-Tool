@@ -20,22 +20,27 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 /**
- * @author hboehme Eigenschaftenpanel für die RMI-Konfiguration. Das Panel beinhaltet zwei
- *         <code>JLabel</code>s, eine <code>JCheckBox</code> und ein <code>JTextField</code> Wenn
- *         die <code>JCheckBox</code> aktiviert wird, wird bem nächsten Systemstart die RMI-Funktion
- *         geladen, sonst nicht. In das <code>JTextField</code> wird der Port eingetragen, auf dem
- *         der RMI-Server lauschen soll.
+ * @author hboehme Eigenschaftenpanel für die RMI-Konfiguration. Das Panel
+ *         beinhaltet zwei <code>JLabel</code>s, eine <code>JCheckBox</code> und
+ *         ein <code>JTextField</code> Wenn die <code>JCheckBox</code> aktiviert
+ *         wird, wird bem nächsten Systemstart die RMI-Funktion geladen, sonst
+ *         nicht. In das <code>JTextField</code> wird der Port eingetragen, auf
+ *         dem der RMI-Server lauschen soll.
  */
 public class RMIPropertyPanel extends JPanel {
 
-    /** hier wird eingetragen und dargestellt, auf welchem Pot der RMI-Server lauschen soll */
+    /**
+     * hier wird eingetragen und dargestellt, auf welchem Pot der RMI-Server
+     * lauschen soll
+     */
     private final JTextField rmiRegistryPortTextField = new JTextField();
 
     /**
-     * Das Panel beinhaltet zwei <code>JLabel</code>s, eine <code>JCheckBox</code> und ein
-     * <code>JTextField</code> Wenn die <code>JCheckBox</code> aktiviert wird, wird bem nächsten
-     * Systemstart die RMI-Funktion geladen, sonst nicht. In das <code>JTextField</code> wird der
-     * Port eingetragen, auf dem der RMI-Server lauschen soll.
+     * Das Panel beinhaltet zwei <code>JLabel</code>s, eine
+     * <code>JCheckBox</code> und ein <code>JTextField</code> Wenn die
+     * <code>JCheckBox</code> aktiviert wird, wird bem nächsten Systemstart die
+     * RMI-Funktion geladen, sonst nicht. In das <code>JTextField</code> wird
+     * der Port eingetragen, auf dem der RMI-Server lauschen soll.
      */
     public RMIPropertyPanel() {
         super();

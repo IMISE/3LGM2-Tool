@@ -17,21 +17,23 @@ import de.imise.tool3lgm.graphtools.dialog.action.LGMAction;
 
 /**
  * @author fstephan Diese Klasse stellt statische Methoden bereit, um in einem
- *         <code>JTree</code> die DragNDrop-Funktion zu integrieren. Außerdem besteht die
- *         Möglichkeit eine Aktionsfolge für das DragNDrop zwischen Trees zu erstellen, die keinen
- *         gemeinsamen Aktionsbutton besitzen, sondern über weitere Trees und dazugehörige
- *         ActionButtons verbunden sind.
+ *         <code>JTree</code> die DragNDrop-Funktion zu integrieren. Außerdem
+ *         besteht die Möglichkeit eine Aktionsfolge für das DragNDrop zwischen
+ *         Trees zu erstellen, die keinen gemeinsamen Aktionsbutton besitzen,
+ *         sondern über weitere Trees und dazugehörige ActionButtons verbunden
+ *         sind.
  */
 public class DragNDropInitializer {
 
     public static boolean isExecuting = false;
 
     /**
-     * Diese Methode initialisiert die DragNDrop Funktion vom <code>srcTree</code> zum
-     * <code>targetTree</code> der übergebenen <code>DragNDropActionChain</code>. Beim Ausführen
-     * einer DragNDrop-Aktion vom <code>srcTree</code> zum <code>targetTree</code> wird die in der
-     * <code>DragNDropActionChain</code> enthaltenen Folge von <code>LGMAction</code>s nacheinander
-     * ausgeführt.
+     * Diese Methode initialisiert die DragNDrop Funktion vom
+     * <code>srcTree</code> zum <code>targetTree</code> der übergebenen
+     * <code>DragNDropActionChain</code>. Beim Ausführen einer DragNDrop-Aktion
+     * vom <code>srcTree</code> zum <code>targetTree</code> wird die in der
+     * <code>DragNDropActionChain</code> enthaltenen Folge von
+     * <code>LGMAction</code>s nacheinander ausgeführt.
      *
      * @param dndAC
      */
@@ -54,9 +56,10 @@ public class DragNDropInitializer {
     }
 
     /**
-     * Diese Methode initialisiert die DragNDrop Funktion vom <code>srcTree</code> zum
-     * <code>targetTree</code>. Beim Ausführen einer DragNDrop-Aktion vom <code>srcTree</code> zum
-     * <code>targetTree</code> wird <code>action</code> ausgeführt.
+     * Diese Methode initialisiert die DragNDrop Funktion vom
+     * <code>srcTree</code> zum <code>targetTree</code>. Beim Ausführen einer
+     * DragNDrop-Aktion vom <code>srcTree</code> zum <code>targetTree</code>
+     * wird <code>action</code> ausgeführt.
      *
      * @param srcTree
      * @param targetTree
@@ -84,10 +87,11 @@ public class DragNDropInitializer {
     }
 
     /**
-     * Methode erzeugt eine Instanz von <code>DropTargetAdapter</code>. Mittels dieses
-     * <code>DropTargetAdapter</code>s wird beim Eintreten eines DragNDrop-Ereignisses, die in
-     * <code>dragNDropActionChain</code> enthaltene Aktionsfolge ausgeführt. Außerdem werden die
-     * verschobenen Elemente im targetTree automatisch wieder selektiert.
+     * Methode erzeugt eine Instanz von <code>DropTargetAdapter</code>. Mittels
+     * dieses <code>DropTargetAdapter</code>s wird beim Eintreten eines
+     * DragNDrop-Ereignisses, die in <code>dragNDropActionChain</code>
+     * enthaltene Aktionsfolge ausgeführt. Außerdem werden die verschobenen
+     * Elemente im targetTree automatisch wieder selektiert.
      *
      * @param dragNDropActionChain
      */
@@ -98,7 +102,8 @@ public class DragNDropInitializer {
         DropTargetAdapter dta = new DropTargetAdapter() {
 
             /**
-             * Methode wird beim Eintreten eines DragNDrop-Ereignisses aufgerufen.
+             * Methode wird beim Eintreten eines DragNDrop-Ereignisses
+             * aufgerufen.
              *
              * @see java.awt.dnd.DropTargetListener#drop(java.awt.dnd.DropTargetDropEvent)
              */
@@ -129,9 +134,10 @@ public class DragNDropInitializer {
                         dtde.dropComplete(true);
 
                         /*
-                         * bei DragNDrop Verkettung, wird das srcElement, das in den targetTree
-                         * verschoben wird, dort markiert um danach in einen weiteren Tree
-                         * verschoben werden zu können
+                         * bei DragNDrop Verkettung, wird das srcElement, das in
+                         * den targetTree verschoben wird, dort markiert um
+                         * danach in einen weiteren Tree verschoben werden zu
+                         * können
                          */
                         dndTargetTree.addSelectionPaths(selectedPaths);
 
@@ -147,8 +153,8 @@ public class DragNDropInitializer {
             }
 
             /**
-             * Methode sorgt für das Ausführen von <code>action</code>. Methode gibt wieder, ob die
-             * Aktion erfolgreich ausgeführt wurde.
+             * Methode sorgt für das Ausführen von <code>action</code>. Methode
+             * gibt wieder, ob die Aktion erfolgreich ausgeführt wurde.
              *
              * @param al
              * @param ae
@@ -184,8 +190,9 @@ public class DragNDropInitializer {
      * Diese Methode erstellt anhand der übergebenen Parameter eine neue
      * <code>DragNDropActionChain</code> und gibt diese wieder.
      *
-     * @see #createNewDragNDropActionChain(JTree[] trees,LGMAction[] actions) mit
-     *      <code>trees</code> = {<code>srcTree</code>,<code>targetTree</code> und
+     * @see #createNewDragNDropActionChain(JTree[] trees,LGMAction[] actions)
+     *      mit <code>trees</code> =
+     *      {<code>srcTree</code>,<code>targetTree</code> und
      *      <code>actions</code> = {<code>action</code> .
      * @param srcTree
      * @param targetTree
@@ -194,8 +201,7 @@ public class DragNDropInitializer {
     public static DragNDropActionChain createNewDragNDropActionChain(final JTree srcTree, final JTree targetTree, final LGMAction action) {
 
         JTree[] trees = new JTree[] {
-                srcTree,
-                targetTree
+                srcTree, targetTree
         };
         LGMAction[] actions = new LGMAction[] {
                 action
@@ -206,10 +212,11 @@ public class DragNDropInitializer {
     }
 
     /**
-     * @author fstephan Diese Klasse bietet die Möglichkeit eine Aktionsfolge für das DragNDrop
-     *         zwischen Trees zu erstellen. Mittels der Aktionsfolgen kann so auch DragNDrop
-     *         zwischen Trees erfolgen, die keinen gemeinsamen Aktionsbutton besitzen sondern über
-     *         weitere Trees und dazugehörige ActionButtons verbunden sind.
+     * @author fstephan Diese Klasse bietet die Möglichkeit eine Aktionsfolge
+     *         für das DragNDrop zwischen Trees zu erstellen. Mittels der
+     *         Aktionsfolgen kann so auch DragNDrop zwischen Trees erfolgen, die
+     *         keinen gemeinsamen Aktionsbutton besitzen sondern über weitere
+     *         Trees und dazugehörige ActionButtons verbunden sind.
      */
     public static class DragNDropActionChain {
 
@@ -228,13 +235,17 @@ public class DragNDropInitializer {
          */
         private int actionCount;
 
-        /** ************************************************************************* */
+        /**
+         * *************************************************************************
+         */
 
         /**
-         * Konstruktor Syntax: <code>trees</code> = [srcTree, tree 2, tree 3, ... , tree n-1,
-         * targetTree] <code>actions</code> = [action 1, action 2, ..., action n-1] -->
-         * <code>trees.length - 1</code> = <code>actions.length</code> Semantik: Bei DragNDrop von
-         * srcTree zu targetTree führe zwischen tree i und tree i+1 action i für alle i aus.
+         * Konstruktor Syntax: <code>trees</code> = [srcTree, tree 2, tree 3,
+         * ... , tree n-1, targetTree] <code>actions</code> = [action 1, action
+         * 2, ..., action n-1] --> <code>trees.length - 1</code> =
+         * <code>actions.length</code> Semantik: Bei DragNDrop von srcTree zu
+         * targetTree führe zwischen tree i und tree i+1 action i für alle i
+         * aus.
          *
          * @param trees
          * @param actions
@@ -247,23 +258,26 @@ public class DragNDropInitializer {
         }
 
         /**
-         * Methode überprüft ob diese Instanz eine gültige <code>DragNDropActionChain</code> ist.
+         * Methode überprüft ob diese Instanz eine gültige
+         * <code>DragNDropActionChain</code> ist.
          */
         private boolean isValid() {
             return trees.length == actions.length + 1;
         }
 
         /**
-         * Methode gibt zurück, ob bereits alle <code>actions</code> abgearbeitet worden sind.
+         * Methode gibt zurück, ob bereits alle <code>actions</code>
+         * abgearbeitet worden sind.
          */
         private boolean isEmpty() {
             return !(actionCount < actions.length);
         }
 
         /**
-         * Methode gibt anhand des internen <code>actionCount</code>s die nächste auszuführende
-         * <code>DragNDropAction</code> wieder. Diese <code>DragNDropAction</code> muss beim
-         * eintreten des dazugehörigen dropping-Ereignisses ausgeführt werden.
+         * Methode gibt anhand des internen <code>actionCount</code>s die
+         * nächste auszuführende <code>DragNDropAction</code> wieder. Diese
+         * <code>DragNDropAction</code> muss beim eintreten des dazugehörigen
+         * dropping-Ereignisses ausgeführt werden.
          */
         private DragNDropAction getNextDragNDropAction() {
 
@@ -288,8 +302,9 @@ public class DragNDropInitializer {
         }
 
         /**
-         * Methode setzt den <code>actionCount</code> auf 0 zurück. Kann nicht während der
-         * Abarbeitung der <code>DragNDropActionChain</code> ausgeführt werden.
+         * Methode setzt den <code>actionCount</code> auf 0 zurück. Kann nicht
+         * während der Abarbeitung der <code>DragNDropActionChain</code>
+         * ausgeführt werden.
          */
         private void restoreActionCount() {
             if (isEmpty()) {
@@ -312,10 +327,12 @@ public class DragNDropInitializer {
         }
 
         /**
-         * @author fstephan Diese Klasse stellt genau eine atomare Aktion dar, die bei einem
-         *         dropping-Ereignis ausgelöst wird. Instanzen dieser Klasse sind ausführbare
-         *         Aktionen, die mit <code>execute(EventObject)</code> oder
-         *         <code>actionPerformed(ActionEvent e)</code> ausgeführt werden können.
+         * @author fstephan Diese Klasse stellt genau eine atomare Aktion dar,
+         *         die bei einem dropping-Ereignis ausgelöst wird. Instanzen
+         *         dieser Klasse sind ausführbare Aktionen, die mit
+         *         <code>execute(EventObject)</code> oder
+         *         <code>actionPerformed(ActionEvent e)</code> ausgeführt werden
+         *         können.
          */
         private class DragNDropAction extends LGMAction {
 
@@ -350,9 +367,11 @@ public class DragNDropInitializer {
             }
 
             /**
-             * Methode überprüft ob diese Instanz eine gültige <code>DragNDropAction</code> ist.
+             * Methode überprüft ob diese Instanz eine gültige
+             * <code>DragNDropAction</code> ist.
              *
-             * @return <code>true</code>, falls gültige Instanz, <code>false</code>, sonst
+             * @return <code>true</code>, falls gültige Instanz,
+             *         <code>false</code>, sonst
              */
             public boolean isValid() {
 

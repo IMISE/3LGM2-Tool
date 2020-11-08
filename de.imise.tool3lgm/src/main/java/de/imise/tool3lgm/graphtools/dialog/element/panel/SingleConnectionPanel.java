@@ -34,33 +34,48 @@ import de.imise.util.swing.component.AlphabeticalComboBox;
 import de.imise.util.swing.component.LimitedSizeScrollTextPane;
 
 /**
- * @author AXS
- *         Dieses Panel stellt in einer Combobox ein einzelne Element zur direkten Verknüpfung mit dem
- *         ModelElement des Dialoges zur Auswahl. Je nachdem ob die Verknüpfung über eine normale
- *         {@link Edge} oder eine {@link CompositionEdge} läuft, werden andere im Modell befindliche
- *         Elemente zur Verknüpfung angeboten {@link Edge}) oder nicht ({@link CompositionEdge}).
- *         Die Verknüpfung kann über einen Pfad erfolgen, d.h. es gehen nicht nur direkte Verbindungen.
- *         ABER: Dieses Panel beachtet keine Vererbung. Das heißt es werden immer nur direkt mit
- *         dem Ausgangselement verbundene Elemente angezeigt. Im PathConnectionPanel hingegen werden
- *         auch Elemente, die man durch Vererbung erhält, angezeigt. Das ist hier aber nicht sinnvoll,
- *         da man z.B. jedem Anwendungsbaustein sein eigenes Datenbanksystem geben will, auch wenn ein
- *         übergeordneter Anwendungsbaustein schon eines besitzt.
+ * @author AXS Dieses Panel stellt in einer Combobox ein einzelne Element zur
+ *         direkten Verknüpfung mit dem ModelElement des Dialoges zur Auswahl.
+ *         Je nachdem ob die Verknüpfung über eine normale {@link Edge} oder
+ *         eine {@link CompositionEdge} läuft, werden andere im Modell
+ *         befindliche Elemente zur Verknüpfung angeboten {@link Edge}) oder
+ *         nicht ({@link CompositionEdge}). Die Verknüpfung kann über einen Pfad
+ *         erfolgen, d.h. es gehen nicht nur direkte Verbindungen. ABER: Dieses
+ *         Panel beachtet keine Vererbung. Das heißt es werden immer nur direkt
+ *         mit dem Ausgangselement verbundene Elemente angezeigt. Im
+ *         PathConnectionPanel hingegen werden auch Elemente, die man durch
+ *         Vererbung erhält, angezeigt. Das ist hier aber nicht sinnvoll, da man
+ *         z.B. jedem Anwendungsbaustein sein eigenes Datenbanksystem geben
+ *         will, auch wenn ein übergeordneter Anwendungsbaustein schon eines
+ *         besitzt.
  */
 public class SingleConnectionPanel extends AbstractPathConnectionPanel {
 
-    /** Box, in der die verbindbaren Elemente zur Auswahl gestellt werden, wenn es mehr als eines gibt. */
+    /**
+     * Box, in der die verbindbaren Elemente zur Auswahl gestellt werden, wenn
+     * es mehr als eines gibt.
+     */
     private final AlphabeticalComboBox<ElementContainer> connectedElementsBox;
 
-    /** Eingabefeld, in dem der Name des verbundenen Elementes angezeit wird und geändert werden kann. */
+    /**
+     * Eingabefeld, in dem der Name des verbundenen Elementes angezeit wird und
+     * geändert werden kann.
+     */
     private final LimitedSizeScrollTextPane connectedElementName;
 
-    /** Je nachdem was von beiden (Box oder Textfeld) initialisert wurde, ist dies diese Komponente */
+    /**
+     * Je nachdem was von beiden (Box oder Textfeld) initialisert wurde, ist
+     * dies diese Komponente
+     */
     protected final Component connectedElementViewComponent;
 
     /** Das verbundene Element das angezeigt wird (wenn es mind. eins gibt) */
     protected ModelElement connectedElement;
 
-    /** Cache zur Speicherung, ob der Name des verbundenen Elementes geändert wurde */
+    /**
+     * Cache zur Speicherung, ob der Name des verbundenen Elementes geändert
+     * wurde
+     */
     private String oldname = "";
 
     /** Menu entry */
@@ -89,9 +104,13 @@ public class SingleConnectionPanel extends AbstractPathConnectionPanel {
      * @param dialog
      * @param panelLabelOption Das Label kann folgende Werte annehmen:
      *            <ul>
-     *            <li>{@link PanelLabelOption#LABEL_END_ELEMENT_TYPE} = Anzeigename der EndElement-Art des MetaPfades</li>
-     *            <li>{@link PanelLabelOption#LABEL_LAST_EDGE_ELEMENT_NAME} = Anzeigename der Element-Art der letzten Kante des MetaPfades</li>
-     *            <li>{@link PanelLabelOption#LABEL_LAST_EDGE_CONNECTION_NAME} = Anzeigename der gerichteten Verbindung der letzten Kante des
+     *            <li>{@link PanelLabelOption#LABEL_END_ELEMENT_TYPE} =
+     *            Anzeigename der EndElement-Art des MetaPfades</li>
+     *            <li>{@link PanelLabelOption#LABEL_LAST_EDGE_ELEMENT_NAME} =
+     *            Anzeigename der Element-Art der letzten Kante des
+     *            MetaPfades</li>
+     *            <li>{@link PanelLabelOption#LABEL_LAST_EDGE_CONNECTION_NAME} =
+     *            Anzeigename der gerichteten Verbindung der letzten Kante des
      *            MetaPfades</li>
      *            </ul>
      * @param metaPath
@@ -195,7 +214,8 @@ public class SingleConnectionPanel extends AbstractPathConnectionPanel {
     }
 
     /**
-     * @return Das verbundene Element das angezeigt wird (wenn es mind. eins gibt)
+     * @return Das verbundene Element das angezeigt wird (wenn es mind. eins
+     *         gibt)
      */
     public ModelElement getConnectedElement() {
         return connectedElement;
@@ -272,11 +292,13 @@ public class SingleConnectionPanel extends AbstractPathConnectionPanel {
     }
 
     /**
-     * Liefert die mit dem ModelElement des Dialoges über die angegebenen Kanten verbundenen Elemente.
+     * Liefert die mit dem ModelElement des Dialoges über die angegebenen Kanten
+     * verbundenen Elemente.
      *
-     * @param forelastInPath wenn <code>true</code> werden nicht die letzten, sondern die vorletzten im
-     *            Pfad zurück gegeben. Bei Pfaden, die nur aus einer Edge bestehen ist das das
-     *            Ausgangselement des Pfades, also das ModelElement des Dialoges.
+     * @param forelastInPath wenn <code>true</code> werden nicht die letzten,
+     *            sondern die vorletzten im Pfad zurück gegeben. Bei Pfaden, die
+     *            nur aus einer Edge bestehen ist das das Ausgangselement des
+     *            Pfades, also das ModelElement des Dialoges.
      * @return
      */
     private Collection<ElementContainer> getConnectedContainer(final boolean forelastInPath) {
@@ -286,7 +308,8 @@ public class SingleConnectionPanel extends AbstractPathConnectionPanel {
     }
 
     /**
-     * Liefert alle Elemente der searchElementClass, die mit dem Ausgangselement direkt verbunden sind.
+     * Liefert alle Elemente der searchElementClass, die mit dem Ausgangselement
+     * direkt verbunden sind.
      *
      * @return
      */
@@ -295,8 +318,10 @@ public class SingleConnectionPanel extends AbstractPathConnectionPanel {
     }
 
     /**
-     * Liefert die ElementContainer, die mit den Endelementen des Pfades verbunden sind. Ist der Pfad nur eine Kante lang, sind das immer das/die
-     * Ausgeangselement/e. Ist der Pfad länger, sind es immer die StartElemente des letzten Pfadschrittes.
+     * Liefert die ElementContainer, die mit den Endelementen des Pfades
+     * verbunden sind. Ist der Pfad nur eine Kante lang, sind das immer das/die
+     * Ausgeangselement/e. Ist der Pfad länger, sind es immer die StartElemente
+     * des letzten Pfadschrittes.
      *
      * @return
      */
@@ -305,11 +330,11 @@ public class SingleConnectionPanel extends AbstractPathConnectionPanel {
     }
 
     /**
-     * Removes all connections between the penultimate and searchElements,
-     * which are connected to the dialog element via the panel path.
+     * Removes all connections between the penultimate and searchElements, which
+     * are connected to the dialog element via the panel path.
      *
-     * @param deleteUnlinked
-     *            if <code>true</code> the previously connected element is deleted
+     * @param deleteUnlinked if <code>true</code> the previously connected
+     *            element is deleted
      */
     private final void unlinkAll(final boolean deleteUnlinked) {
         Collection<ElementContainer> searchElementConnectedContainer = getForelastConnectedContainer();

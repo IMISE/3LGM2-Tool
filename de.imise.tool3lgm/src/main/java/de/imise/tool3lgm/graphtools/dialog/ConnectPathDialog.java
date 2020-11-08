@@ -46,7 +46,8 @@ public class ConnectPathDialog implements ActionListener {
     private Class<? extends ModelElement> lastPathEndClass = null;
 
     /**
-     * @param unionMetaPath UnionMetaPath der nur aus SimpleMetaPaths bestehen sollte
+     * @param unionMetaPath UnionMetaPath der nur aus SimpleMetaPaths bestehen
+     *            sollte
      * @return
      */
     private static final SimpleMetaPath[] getSimpleMetaPathArray(final MetaPath unionMetaPath) {
@@ -60,8 +61,8 @@ public class ConnectPathDialog implements ActionListener {
 
     /**
      * @param doc
-     * @param simpleMetaPathsInUnionMetaPath
-     *            UnionMetaPath der nur aus SimpleMetaPaths bestehen sollte
+     * @param simpleMetaPathsInUnionMetaPath UnionMetaPath der nur aus
+     *            SimpleMetaPaths bestehen sollte
      */
     public ConnectPathDialog(final GraphDocument doc, final MetaPath simpleMetaPathsInUnionMetaPath) {
         this(doc, getSimpleMetaPathArray(simpleMetaPathsInUnionMetaPath));

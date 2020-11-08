@@ -22,8 +22,8 @@ import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 
 /**
- * Panel das im Kopf jedes Eigenschaftsdialogs der Elemente deren Namen, ID usw. anzeigt. Es zeigt
- * die Informationen nur an und ist nicht editierbar.
+ * Panel das im Kopf jedes Eigenschaftsdialogs der Elemente deren Namen, ID usw.
+ * anzeigt. Es zeigt die Informationen nur an und ist nicht editierbar.
  *
  * @author AXS
  * @create 27.09.2010

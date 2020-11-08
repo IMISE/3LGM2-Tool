@@ -30,8 +30,8 @@ public class TemplateTreeSearchOptionsPanel extends BasicSearchOptionsPanel {
     private static boolean expanded;
 
     /**
-     * Stores the SearchOptions to restore them if
-     * the panel was removed and then added again.
+     * Stores the SearchOptions to restore them if the panel was removed and
+     * then added again.
      */
     private static SearchOptions lastSearchOptions;
 
@@ -66,8 +66,7 @@ public class TemplateTreeSearchOptionsPanel extends BasicSearchOptionsPanel {
     }
 
     /**
-     * Adds an {@link AncestorListener} to restore the
-     * {@link SearchOptions}
+     * Adds an {@link AncestorListener} to restore the {@link SearchOptions}
      */
     private void addListenerToRestoreSearchOptions() {
 

@@ -46,8 +46,9 @@ public abstract class ElementDialogPanel extends JPanel {
     protected final ElementsNameBuilder elementsNameBuilder;
 
     /**
-     * Liste mit allen Elementen, die im Panel selektiert sind. Da ein Panel mehrere Bäume enthalten
-     * kann, wird sich in dieser Liste sozusagen die Gesamtselektion gemerkt.
+     * Liste mit allen Elementen, die im Panel selektiert sind. Da ein Panel
+     * mehrere Bäume enthalten kann, wird sich in dieser Liste sozusagen die
+     * Gesamtselektion gemerkt.
      */
     protected List<ElementContainer> highlight = new ArrayList<>(0);
 
@@ -92,11 +93,13 @@ public abstract class ElementDialogPanel extends JPanel {
     /** An empty collection of consistency errors */
     public static final Collection<AbstractConsistencyError> EMPTY_CONSISTENCY_ERROR_COLLECTION = ImmutableList.of();
 
-    /** ****************************************************************************** */
+    /**
+     * ******************************************************************************
+     */
 
     /**
-     * TODO: die Konstruktoren braucht man sicher nicht mehr, wenn alle Panels mit Kanten oder
-     * Pfaden initialisiert werden
+     * TODO: die Konstruktoren braucht man sicher nicht mehr, wenn alle Panels
+     * mit Kanten oder Pfaden initialisiert werden
      *
      * @param dialog Dialog, der dieses Panel enthält
      */
@@ -166,7 +169,8 @@ public abstract class ElementDialogPanel extends JPanel {
     }
 
     /**
-     * @return a button that the dialog will show beside the OK,Cancel, TakeOver buttons
+     * @return a button that the dialog will show beside the OK,Cancel, TakeOver
+     *         buttons
      */
     public JButton getPanelButton() {
         return null;//Subclasses that will show e.g. a view button beside the OK,Cancel, TakeOver buttons can return the button here
@@ -314,8 +318,8 @@ public abstract class ElementDialogPanel extends JPanel {
     }
 
     /**
-     * Das Hauptdokument des Modells. In den Dialogen werden immer alle Verbindungen angezeigt, die
-     * in diesem Dokument vorkommen.
+     * Das Hauptdokument des Modells. In den Dialogen werden immer alle
+     * Verbindungen angezeigt, die in diesem Dokument vorkommen.
      *
      * @return
      */

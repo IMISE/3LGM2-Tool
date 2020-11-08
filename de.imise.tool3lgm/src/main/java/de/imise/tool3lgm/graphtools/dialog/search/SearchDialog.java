@@ -15,8 +15,8 @@ import javax.swing.JDialog;
 public class SearchDialog extends JDialog {
 
     /**
-     * Stores the searchOptions of the last opended SearchDialog
-     * to restore them if a new dialog is opened.
+     * Stores the searchOptions of the last opended SearchDialog to restore them
+     * if a new dialog is opened.
      */
     private static SearchOptions lastSearchOptions;
 
@@ -52,8 +52,8 @@ public class SearchDialog extends JDialog {
     }
 
     /**
-     * Store/restore the old values of all input
-     * components if the dialog is closed/opened
+     * Store/restore the old values of all input components if the dialog is
+     * closed/opened
      */
     private void addWindowListenerToRestoreOldStates() {
         addWindowListener(new WindowAdapter() {

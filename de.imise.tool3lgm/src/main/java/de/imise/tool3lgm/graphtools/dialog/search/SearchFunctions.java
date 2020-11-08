@@ -164,8 +164,9 @@ public class SearchFunctions {
      * @param patternUserFields
      * @param ec
      * @param caseSensitive
-     * @param searchUserFieldStyle if <code>null</code> then all userfield types are searched for
-     *            matches otherwise only the specified type will be searched
+     * @param searchUserFieldStyle if <code>null</code> then all userfield types
+     *            are searched for matches otherwise only the specified type
+     *            will be searched
      * @param checkBoxMode
      * @return
      */
@@ -261,7 +262,8 @@ public class SearchFunctions {
     /**
      * @param doc
      * @param searchedElementType
-     * @return all ElementContainer of the given type in the given {@link GraphDocument}
+     * @return all ElementContainer of the given type in the given
+     *         {@link GraphDocument}
      */
     private static List<ElementContainer> getInitialTargetElements(final GraphDocument doc, final Class<? extends ModelElement> searchedElementType) {
         List<ElementContainer> initialTargetElements = doc.getElementContainers(searchedElementType, true);

@@ -33,8 +33,10 @@ import de.imise.tool3lgm.graphtools.view.tree.node.LGMTreeNode;
 import de.imise.tool3lgm.graphtools.view.tree.node.StringTreeNode;
 
 /**
- * Panel für {@link CompositionEdge}s, die ein Element mehrfach zu den über die Compositions untergeordneten Elementen haben kann.
- * Also für alle Compositions, bei denen die maximale Kardinalität zu dem untergeordneten Element > 1 ist.
+ * Panel für {@link CompositionEdge}s, die ein Element mehrfach zu den über die
+ * Compositions untergeordneten Elementen haben kann. Also für alle
+ * Compositions, bei denen die maximale Kardinalität zu dem untergeordneten
+ * Element > 1 ist.
  */
 public class MutipleCompositionPanel extends AbstractPathConnectionTreePanel {
 
@@ -159,9 +161,10 @@ public class MutipleCompositionPanel extends AbstractPathConnectionTreePanel {
     }
 
     /**
-     * Methode liefert eine <code>LGMAction</code> zurück, die das Verschieben von Elementen aus dem
-     * <code>srcTree</code> in den <code>targetTree</code> realisiert. Diese <code>LGMAction</code>
-     * sollte an die "removeButtons" der Panels angefügt werden.
+     * Methode liefert eine <code>LGMAction</code> zurück, die das Verschieben
+     * von Elementen aus dem <code>srcTree</code> in den <code>targetTree</code>
+     * realisiert. Diese <code>LGMAction</code> sollte an die "removeButtons"
+     * der Panels angefügt werden.
      */
     public final LGMAction getDisconnectAction() {
         LGMAction returnAction = new LGMAction(getResString("delete")) {

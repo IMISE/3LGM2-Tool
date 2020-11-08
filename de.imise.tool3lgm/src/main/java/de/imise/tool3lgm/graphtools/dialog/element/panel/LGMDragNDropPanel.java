@@ -20,15 +20,18 @@ import de.imise.tool3lgm.graphtools.path.metapaths.MetaPath;
 
 /**
  * @author fstephan Diese Klasse ist eine abstrakte Oberklasse, für alle
- *         <code>ElementDialogPanel</code>s, die DragNDrop-Funktionalität bereitstellen wollen. Es
- *         werden Methoden zur Behandlung aller für DragNDrop relevanten <code>MouseEvent</code>s
- *         und Methoden zur Sammlung aller gewünschten DragNDrop-Aktionen bereitgestellt. Achtung!
- *         <code>init()</code> muss von allen erbenden Klassen aufgerufen werden.
+ *         <code>ElementDialogPanel</code>s, die DragNDrop-Funktionalität
+ *         bereitstellen wollen. Es werden Methoden zur Behandlung aller für
+ *         DragNDrop relevanten <code>MouseEvent</code>s und Methoden zur
+ *         Sammlung aller gewünschten DragNDrop-Aktionen bereitgestellt.
+ *         Achtung! <code>init()</code> muss von allen erbenden Klassen
+ *         aufgerufen werden.
  */
 public abstract class LGMDragNDropPanel extends AbstractPathConnectionTreePanel {
 
     /**
-     * Konstruktor Ruft den Super-Konstruktor auf. Setzt Klassen-Attribute auf default-Werte
+     * Konstruktor Ruft den Super-Konstruktor auf. Setzt Klassen-Attribute auf
+     * default-Werte
      *
      * @param dialog
      * @param titleLabelOption
@@ -40,9 +43,11 @@ public abstract class LGMDragNDropPanel extends AbstractPathConnectionTreePanel 
     }
 
     /**
-     * Methode erstellt anhand der übergeben <code>LGMAction</code> einen MouseListener, der an alle
-     * Trees, die durch <code>getAllDragNDropTrees()</code> zurückgegeben werden, angeheftet wird.
-     * Damit werden nun alle Trees kontrolliert und DragNDrop kann stattfinden.
+     * Methode erstellt anhand der übergeben <code>LGMAction</code> einen
+     * MouseListener, der an alle Trees, die durch
+     * <code>getAllDragNDropTrees()</code> zurückgegeben werden, angeheftet
+     * wird. Damit werden nun alle Trees kontrolliert und DragNDrop kann
+     * stattfinden.
      *
      * @param action
      */
@@ -60,21 +65,23 @@ public abstract class LGMDragNDropPanel extends AbstractPathConnectionTreePanel 
     }
 
     /**
-     * Diese Methode soll so überschrieben werden, dass alle möglichen DragNDrop-Aktionen die im
-     * jeweils abgeleiteten Panel zur Verfügung stehen sollen, als <code>DragNDropActionChain</code>
-     * s in einem Array zusammengefasst und returniert werden.
+     * Diese Methode soll so überschrieben werden, dass alle möglichen
+     * DragNDrop-Aktionen die im jeweils abgeleiteten Panel zur Verfügung stehen
+     * sollen, als <code>DragNDropActionChain</code> s in einem Array
+     * zusammengefasst und returniert werden.
      */
     protected abstract DragNDropActionChain[] collectDragNDropActionChains();
 
     /**
-     * Methode soll so überschrieben werden, dass alle Trees, die an DragNDrop-Aktionen beteiligt
-     * sind, in einem Array zusammengefasst und returniert werden.
+     * Methode soll so überschrieben werden, dass alle Trees, die an
+     * DragNDrop-Aktionen beteiligt sind, in einem Array zusammengefasst und
+     * returniert werden.
      */
     public abstract JTree[] getAllDragNDropTrees();
 
     /**
-     * Gibt die Edge zurück, die man zwischen Elementen der übergebenen Art in diesem Panel neu
-     * erzeugen kann.
+     * Gibt die Edge zurück, die man zwischen Elementen der übergebenen Art in
+     * diesem Panel neu erzeugen kann.
      *
      * @param me1
      * @param me2
@@ -85,36 +92,40 @@ public abstract class LGMDragNDropPanel extends AbstractPathConnectionTreePanel 
     }
 
     /**
-     * Methode liefert eine neue LGMAction zurück. Diese LGMAction verwaltet das Initialisieren von
-     * DragNDrop in einem Panel. Alle Panels, die DragNDrop-Funktionalität bieten wollen, müssen
-     * diese Action über einen MouseListener an ihre Trees anfügen. Dabei sollte diese Action sowohl
-     * bei mousePressed als auch bei mouseEntered aufgerufen werden.
+     * Methode liefert eine neue LGMAction zurück. Diese LGMAction verwaltet das
+     * Initialisieren von DragNDrop in einem Panel. Alle Panels, die
+     * DragNDrop-Funktionalität bieten wollen, müssen diese Action über einen
+     * MouseListener an ihre Trees anfügen. Dabei sollte diese Action sowohl bei
+     * mousePressed als auch bei mouseEntered aufgerufen werden.
      *
-     * @param dndActionChains Sammlung aller <code>DragNDropActionChain</code>s, die bei einem DragNDrop-Ereignis
-     *            ausgeführt werden können
+     * @param dndActionChains Sammlung aller <code>DragNDropActionChain</code>s,
+     *            die bei einem DragNDrop-Ereignis ausgeführt werden können
      */
     private static final LGMAction getDragNDropInitAction(final DragNDropInitializer.DragNDropActionChain[] dndActionChains) {
 
         return new LGMAction() {
 
             /**
-             * Variable dient der Trennung von DragNDrop-Ausführung und DragNDrop-Initialisierungen.
-             * Es kann entweder eine DragNDrop-Aktion in einem Panel ausgeführt werden, oder eine
-             * DragNDrop-Aktion für ein Panel initialisiert werden. = <code>true</code>, wenn gerade
-             * eine DragNDrop-Aktion ausgeführt wird =<code>false</code>, sonst
+             * Variable dient der Trennung von DragNDrop-Ausführung und
+             * DragNDrop-Initialisierungen. Es kann entweder eine
+             * DragNDrop-Aktion in einem Panel ausgeführt werden, oder eine
+             * DragNDrop-Aktion für ein Panel initialisiert werden. =
+             * <code>true</code>, wenn gerade eine DragNDrop-Aktion ausgeführt
+             * wird =<code>false</code>, sonst
              */
             private boolean blockDragNDropInitializing;
 
             /**
-             * Attribut speichert den zuletzt angeklickten Tree, um mehrfaches Initialisieren von
-             * DragNDrop zu vermeiden.
+             * Attribut speichert den zuletzt angeklickten Tree, um mehrfaches
+             * Initialisieren von DragNDrop zu vermeiden.
              */
             private JTree lastEnteredTree;
 
             /**
-             * Falls <code>e</code> ein <code>MouseEvent</code> ist, wird in Abhängigkeit davon, ob
-             * die Maus über einen Tree bewegt bzw. ein Element des Trees angeklickt wurde, die
-             * Methode <code>mouseEntered(MouseEvent me)</code> bzw.
+             * Falls <code>e</code> ein <code>MouseEvent</code> ist, wird in
+             * Abhängigkeit davon, ob die Maus über einen Tree bewegt bzw. ein
+             * Element des Trees angeklickt wurde, die Methode
+             * <code>mouseEntered(MouseEvent me)</code> bzw.
              * <code>mousePressed(MouseEvent me)</code> aufgerufen.
              *
              * @param e
@@ -135,11 +146,12 @@ public abstract class LGMDragNDropPanel extends AbstractPathConnectionTreePanel 
             }
 
             /**
-             * Hier wird, je nach dem welcher der Trees angeklickt wurde, die Selektion der Elemente
-             * in den anderen Trees entfernt. Dadurch werden Uneindeutigkeiten beim DragNDrop
-             * vermieden. Solang die Mousetaste gedrückt bleibt, ist das Initialisieren einer neuen
-             * DragNDrop-Aktion deaktiviert, um das Auführen der aktuellen DragNDrop-Aktion nicht zu
-             * behindern.
+             * Hier wird, je nach dem welcher der Trees angeklickt wurde, die
+             * Selektion der Elemente in den anderen Trees entfernt. Dadurch
+             * werden Uneindeutigkeiten beim DragNDrop vermieden. Solang die
+             * Mousetaste gedrückt bleibt, ist das Initialisieren einer neuen
+             * DragNDrop-Aktion deaktiviert, um das Auführen der aktuellen
+             * DragNDrop-Aktion nicht zu behindern.
              *
              * @param me
              */
@@ -164,8 +176,9 @@ public abstract class LGMDragNDropPanel extends AbstractPathConnectionTreePanel 
             }
 
             /**
-             * Methode ruft <code>activateDragNDrop(LGMDragNDropTree focusedTree)</code> auf, falls
-             * sich die Mouse über einen der Trees des Panels befindet.
+             * Methode ruft
+             * <code>activateDragNDrop(LGMDragNDropTree focusedTree)</code> auf,
+             * falls sich die Mouse über einen der Trees des Panels befindet.
              *
              * @param me
              */
@@ -176,8 +189,10 @@ public abstract class LGMDragNDropPanel extends AbstractPathConnectionTreePanel 
             }
 
             /**
-             * Methode aktiviert die DragNDrop-Funktion vom <code>focusedTree</code> auf alle Trees,
-             * die in den <code>dndActionChains</code> als targetTree dieses Trees vorkommen.
+             * Methode aktiviert die DragNDrop-Funktion vom
+             * <code>focusedTree</code> auf alle Trees, die in den
+             * <code>dndActionChains</code> als targetTree dieses Trees
+             * vorkommen.
              *
              * @param focusedTree
              */

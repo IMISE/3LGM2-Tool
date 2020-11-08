@@ -52,6 +52,7 @@ import de.imise.tool3lgm.graphtools.path.metapaths.MetaPathFunctions;
 import de.imise.tool3lgm.graphtools.path.metapaths.PathFunctions;
 import de.imise.tool3lgm.graphtools.path.metapaths.SimpleMetaPath;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
+import de.imise.util.Alphabetical;
 import de.imise.util.ReflectionUtils;
 import de.imise.util.StringUtils;
 import de.imise.util.swing.component.ParentComponentFinder;
@@ -71,56 +72,57 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
      */
     public static enum PanelLabelOption {
         /**
-         * Indicator to label the panel with the end element type name from the resources.
-         * If the meta path is a single connection meta path, the singular will be shown
-         * as label. If not the plural.
+         * Indicator to label the panel with the end element type name from the
+         * resources. If the meta path is a single connection meta path, the
+         * singular will be shown as label. If not the plural.
          */
         LABEL_END_ELEMENT_TYPE,
         /**
-         * Indicator to label the panel with the end element type name from the resources
-         * in singular.
+         * Indicator to label the panel with the end element type name from the
+         * resources in singular.
          */
         LABEL_END_ELEMENT_TYPE_SINGULAR,
         /**
-         * Indicator to label the panel with the end element type name from the resources
-         * in plural.
+         * Indicator to label the panel with the end element type name from the
+         * resources in plural.
          */
         LABEL_END_ELEMENT_TYPE_PLURAL,
         /**
-         * Indicator to label the panel with last edge element type name from the resources.
-         * If the meta path is a single connection meta path, the singular will be shown
-         * as label. If not the plural.
+         * Indicator to label the panel with last edge element type name from
+         * the resources. If the meta path is a single connection meta path, the
+         * singular will be shown as label. If not the plural.
          */
         LABEL_LAST_EDGE_ELEMENT_NAME,
         /**
-         * Indicator to label the panel with last edge element type name from the resources
-         * in singular.
+         * Indicator to label the panel with last edge element type name from
+         * the resources in singular.
          */
         LABEL_LAST_EDGE_ELEMENT_NAME_SINGULAR,
         /**
-         * Indicator to label the panel with last edge element type name from the resources
-         * in plural.
+         * Indicator to label the panel with last edge element type name from
+         * the resources in plural.
          */
         LABEL_LAST_EDGE_ELEMENT_NAME_PLURAL,
         /**
-         * Indicator to label the panel with directed name of the connection from the resources.
+         * Indicator to label the panel with directed name of the connection
+         * from the resources.
          */
         LABEL_LAST_EDGE_CONNECTION_NAME,
         /**
-         * Indicator to label the panel with the start element type of the last edge with
-         * the name from the resources.
-         * If the meta path is a single connection meta path, the singular will be shown
-         * as label. If not the plural.
+         * Indicator to label the panel with the start element type of the last
+         * edge with the name from the resources. If the meta path is a single
+         * connection meta path, the singular will be shown as label. If not the
+         * plural.
          */
         LABEL_LAST_EDGE_START_ELEMENT_TYPE,
         /**
-         * Indicator to label the panel with the end element type of the last edge with
-         * name from the resources in singular.
+         * Indicator to label the panel with the end element type of the last
+         * edge with name from the resources in singular.
          */
         LABEL_LAST_EDGE_START_ELEMENT_TYPE_SINGULAR,
         /**
-         * Indicator to label the panel with the end element type of the last edge with
-         * name from the resources in plural.
+         * Indicator to label the panel with the end element type of the last
+         * edge with name from the resources in plural.
          */
         LABEL_LAST_EDGE_START_ELEMENT_TYPE_PLURAL,
     }
@@ -134,7 +136,8 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
     /**
      * Indicator, whether elements connected by the path can always be attached
      * unambiguously to one point (=<code>true</code>) or whether there are
-     * several possibilities, because intermediate paths can exist multiple times.
+     * several possibilities, because intermediate paths can exist multiple
+     * times.
      */
     protected final boolean isConnectionPointUnique;
 
@@ -160,12 +163,14 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
      * @param dialog
      * @param titleLabelOption Das Label kann folgende Werte annehmen:
      *            <ul>
-     *            <li>{@link PanelLabelOption#LABEL_END_ELEMENT_TYPE} = Anzeigename der EndElement-Art des MetaPfades</li>
-     *            <li>{@link PanelLabelOption#LABEL_LAST_EDGE_ELEMENT_NAME} = Anzeigename der Element-Art der Kante mit dem Index labelEdgeIndex
-     *            im MetaPfad</li>
-     *            <li>{@link PanelLabelOption#LABEL_LAST_EDGE_CONNECTION_NAME} = Anzeigename der gerichteten Verbindung der Kante mit dem Index
-     *            labelEdgeIndex
-     *            im MetaPfad</li>
+     *            <li>{@link PanelLabelOption#LABEL_END_ELEMENT_TYPE} =
+     *            Anzeigename der EndElement-Art des MetaPfades</li>
+     *            <li>{@link PanelLabelOption#LABEL_LAST_EDGE_ELEMENT_NAME} =
+     *            Anzeigename der Element-Art der Kante mit dem Index
+     *            labelEdgeIndex im MetaPfad</li>
+     *            <li>{@link PanelLabelOption#LABEL_LAST_EDGE_CONNECTION_NAME} =
+     *            Anzeigename der gerichteten Verbindung der Kante mit dem Index
+     *            labelEdgeIndex im MetaPfad</li>
      *            </ul>
      * @param metaPath
      */
@@ -179,11 +184,14 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
      * @param dialog
      * @param titleLabelOption Das Label kann folgende Werte annehmen:
      *            <ul>
-     *            <li>{@link PanelLabelOption#LABEL_END_ELEMENT_TYPE} = Display name of the EndElement type of the MetaPath</li>
-     *            <li>{@link PanelLabelOption#LABEL_LAST_EDGE_ELEMENT_NAME} = Display name of the element type of the edge with
-     *            the index labelEdgeIndex in the MetaPath</li>
-     *            <li>{@link PanelLabelOption#LABEL_LAST_EDGE_CONNECTION_NAME} = Display name of the directed connection of the
-     *            edge with the index labelEdgeIndex in the MetaPath</li>
+     *            <li>{@link PanelLabelOption#LABEL_END_ELEMENT_TYPE} = Display
+     *            name of the EndElement type of the MetaPath</li>
+     *            <li>{@link PanelLabelOption#LABEL_LAST_EDGE_ELEMENT_NAME} =
+     *            Display name of the element type of the edge with the index
+     *            labelEdgeIndex in the MetaPath</li>
+     *            <li>{@link PanelLabelOption#LABEL_LAST_EDGE_CONNECTION_NAME} =
+     *            Display name of the directed connection of the edge with the
+     *            index labelEdgeIndex in the MetaPath</li>
      *            </ul>
      * @param westLabelOption analog titleLabelOption
      * @param metaPath
@@ -209,7 +217,8 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
     }
 
     /**
-     * Creates the name of the panel, which also becomes the string of the westLabel.
+     * Creates the name of the panel, which also becomes the string of the
+     * westLabel.
      *
      * @param labelEdgeIndex
      * @param panelLabelOption
@@ -270,9 +279,10 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
     }
 
     /**
-     * Checks wheter this panel must show a template element or the model element.
-     * The template elememt will be shown if the metapath starts with a
-     * {@link ElementaryMetaPath} which is defined between pure template elenents.
+     * Checks wheter this panel must show a template element or the model
+     * element. The template elememt will be shown if the metapath starts with a
+     * {@link ElementaryMetaPath} which is defined between pure template
+     * elenents.
      *
      * @return the real visible {@link ModelElement}
      */
@@ -292,8 +302,8 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
     }
 
     /**
-     * Returns the common superclass of all end classes of the path.
-     * This is the searchElementClass.
+     * Returns the common superclass of all end classes of the path. This is the
+     * searchElementClass.
      *
      * @param metaPath
      * @return
@@ -327,10 +337,11 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
     }
 
     /**
-     * Returns an elementary path using a given index. If the index >= 0,then exactly
-     * the index is returned. If the index is < 0, then the given index is subtracted
-     * from the length of the list of elementary paths. Thus, if you want to have the
-     * last elementary path, you must pass index == -1, for the second last -2, etc.
+     * Returns an elementary path using a given index. If the index >= 0,then
+     * exactly the index is returned. If the index is < 0, then the given index
+     * is subtracted from the length of the list of elementary paths. Thus, if
+     * you want to have the last elementary path, you must pass index == -1, for
+     * the second last -2, etc.
      *
      * @param index
      * @return
@@ -340,10 +351,9 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
     }
 
     /**
-     * @param index
-     *            Index of the edge in the path, if it is unique. If a value < 0 is
-     *            given, then the index results from the sum of the total number of
-     *            elementary paths and this value.
+     * @param index Index of the edge in the path, if it is unique. If a value <
+     *            0 is given, then the index results from the sum of the total
+     *            number of elementary paths and this value.
      * @return
      */
     public Direction getDirectionInPath(final int index) {
@@ -352,10 +362,9 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
     }
 
     /**
-     * @param index
-     *            Index of the edge in the path, if it is unique. If a value < 0 is
-     *            given, then the index results from the sum of the total number of
-     *            elementary paths and this value.
+     * @param index Index of the edge in the path, if it is unique. If a value <
+     *            0 is given, then the index results from the sum of the total
+     *            number of elementary paths and this value.
      * @return
      */
     public Class<? extends Edge> getEdgeClassInPath(final int index) {
@@ -378,14 +387,14 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
     }
 
     /**
-     * @return
-     *         <code>true</code>, if the path given by the edges uniquely defines
-     *         where to connect elements. As soon as in a MetaPath of length > 1 (i.e. at
-     *         least of 2 edges) one of the middle elements can be connected multiple times
-     *         to the starting element, it is no longer clear where to append the end
-     *         elements. Furthermore, the path is ambiguous if the last edge is a
-     *         {@link MultipleEdge}, i.e. an edge where the same elements can be connected
-     *         several times.
+     * @return <code>true</code>, if the path given by the edges uniquely
+     *         defines where to connect elements. As soon as in a MetaPath of
+     *         length > 1 (i.e. at least of 2 edges) one of the middle elements
+     *         can be connected multiple times to the starting element, it is no
+     *         longer clear where to append the end elements. Furthermore, the
+     *         path is ambiguous if the last edge is a {@link MultipleEdge},
+     *         i.e. an edge where the same elements can be connected several
+     *         times.
      */
     protected boolean isConnectionPointUnique() {
         List<ElementaryMetaPath> elementaryMetaPaths = metaPath.getElementaryMetaPaths();
@@ -412,11 +421,13 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
     }
 
     /**
-     * Legt für das übergebene Startelement den Teilpfad ab startEdgeIndex an und hängt die übergebenen elements2connect an.
+     * Legt für das übergebene Startelement den Teilpfad ab startEdgeIndex an
+     * und hängt die übergebenen elements2connect an.
      *
      * @param startElement Das Element bei dem der Teilpfad losgehen soll.
      * @param elements2Connect Die Elemente die am Ende angehängt werden sollen
-     * @param startEdgeIndex Index der Edge, bei der der anzulegende Teilpfad losgeht
+     * @param startEdgeIndex Index der Edge, bei der der anzulegende Teilpfad
+     *            losgeht
      */
     protected void connectOld(final ModelElement startElement, final Iterable<ModelElement> elements2Connect, final int startEdgeIndex) {
         LGMGraphDocument selectedDoc = getSelectedDoc();
@@ -445,11 +456,13 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
     }
 
     /**
-     * Legt für das übergebene Startelement den Teilpfad ab startEdgeIndex an und hängt die übergebenen elements2connect an.
+     * Legt für das übergebene Startelement den Teilpfad ab startEdgeIndex an
+     * und hängt die übergebenen elements2connect an.
      *
      * @param startElement Das Element bei dem der Teilpfad losgehen soll.
      * @param elements2Connect Die Elemente die am Ende angehängt werden sollen
-     * @param startEdgeIndex Index der Edge, bei der der anzulegende Teilpfad losgeht
+     * @param startEdgeIndex Index der Edge, bei der der anzulegende Teilpfad
+     *            losgeht
      */
     protected final void connect(final ModelElement startElement, final Iterable<ModelElement> elements2Connect, final int startEdgeIndex) {
         int pid = getTransactionID();
@@ -481,14 +494,15 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
     }
 
     /**
-     * Legt den kompletten Pfad bei jeweils dem ersten Element an, das ausgehend vom ModelElement des Dialoges
-     * gefunden wird. Wenn der Pfad schon existiert, passiert nichts. Wenn er zu Teilen besteht, wird der Rest
+     * Legt den kompletten Pfad bei jeweils dem ersten Element an, das ausgehend
+     * vom ModelElement des Dialoges gefunden wird. Wenn der Pfad schon
+     * existiert, passiert nichts. Wenn er zu Teilen besteht, wird der Rest
      * angelegt.
      *
-     * @param element2Connect
-     *            wenn hier ein nicht <code>null</code>-Element übergeben wird, dann wird dieses
-     *            als letztes verknüpft. Ist es <code>null</code> wird auch das letzte Element
-     *            des Pfades neu angelegt.
+     * @param element2Connect wenn hier ein nicht <code>null</code>-Element
+     *            übergeben wird, dann wird dieses als letztes verknüpft. Ist es
+     *            <code>null</code> wird auch das letzte Element des Pfades neu
+     *            angelegt.
      */
     protected void connectToFirstPath(final ModelElement element2Connect) {
         ModelElement me = getModelElement();
@@ -517,7 +531,8 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
     protected abstract Object getSelection(MouseEvent e);
 
     /**
-     * Methode liefert eine <code>LGMAction</code> zurück, die auf Mouse-Aktionen für ein selektiertes Element reagiert.
+     * Methode liefert eine <code>LGMAction</code> zurück, die auf
+     * Mouse-Aktionen für ein selektiertes Element reagiert.
      *
      * @return
      */
@@ -537,9 +552,10 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
     }
 
     /**
-     * Wenn die übergebene Selektion ein {@link ElementContainer} oder {@link ModelElement} ist, dann
-     * wird bei einem Rechtsklick das Kontextmenü des Elementes gezeigt oder bei einem Doppelklick
-     * wird der Eigenschaftsdialog des Elementes geöffnet.
+     * Wenn die übergebene Selektion ein {@link ElementContainer} oder
+     * {@link ModelElement} ist, dann wird bei einem Rechtsklick das Kontextmenü
+     * des Elementes gezeigt oder bei einem Doppelklick wird der
+     * Eigenschaftsdialog des Elementes geöffnet.
      *
      * @param selectionObject
      * @param e
@@ -606,12 +622,16 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
     }
 
     /**
-     * Liefert eine Liste aller Elementcontainer, die zum Verbinden zur Verfügung stehen. In der Regel sind das alle Elemente der
-     * <code>searchElementClass</code>. Besteht, der Pfad des Panels aber nur aus einer einzigen Kante und diese hat zusätzlich einen
-     * ConditionMetaPath (also einen Pfad, über den das startElement außerdem noch mit den Zielelementen verbunden sein muss), dann
-     * werden nur diese Zielelemente als zum Verbinden verfügbare Elemente zurück gegeben, die auch über diesen ConditonPath verbunden sind.
-     * <br>
-     * Außerdem wird geprüft, ob für ein verbindbares Element die Kante gar nicht mehr gelten soll.
+     * Liefert eine Liste aller Elementcontainer, die zum Verbinden zur
+     * Verfügung stehen. In der Regel sind das alle Elemente der
+     * <code>searchElementClass</code>. Besteht, der Pfad des Panels aber nur
+     * aus einer einzigen Kante und diese hat zusätzlich einen ConditionMetaPath
+     * (also einen Pfad, über den das startElement außerdem noch mit den
+     * Zielelementen verbunden sein muss), dann werden nur diese Zielelemente
+     * als zum Verbinden verfügbare Elemente zurück gegeben, die auch über
+     * diesen ConditonPath verbunden sind. <br>
+     * Außerdem wird geprüft, ob für ein verbindbares Element die Kante gar
+     * nicht mehr gelten soll.
      *
      * @return
      */
@@ -663,17 +683,17 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
             available = mainDoc.getElementContainers(searchElementClass, true);
             addAvailablesFromTemplate(available);
         }
+        Alphabetical.sort(available);
         return available;
     }
 
     /**
-     * If the searchElement is a pure template class, then all elements from
-     * the template that do not occur in the model are also added here to the
+     * If the searchElement is a pure template class, then all elements from the
+     * template that do not occur in the model are also added here to the
      * connectable elements.
      *
-     * @param availables
-     *            the list of connectable elements which will be filled with
-     *            template elements if the searchElementClass is a pure
+     * @param availables the list of connectable elements which will be filled
+     *            with template elements if the searchElementClass is a pure
      *            template class
      */
     private void addAvailablesFromTemplate(final List<ElementContainer> availables) {
@@ -698,7 +718,8 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
     protected final MouseListener mouseListener = new LGMMouseListener(null, null, null, getMouseClickedAction(), null);
 
     /**
-     * Fügt der übergebenen Komponente die Doppelklick-Öffne-Eigenschaftsdialog-des-selektierten-Elementes-Action
+     * Fügt der übergebenen Komponente die
+     * Doppelklick-Öffne-Eigenschaftsdialog-des-selektierten-Elementes-Action
      * hinzu und die Rechte-Maustastae-Öffnet-KontextMenü-Action.
      *
      * @param component

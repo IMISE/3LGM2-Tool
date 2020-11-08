@@ -24,8 +24,8 @@ public interface SearchResultView {
 
     /**
      * Calls {@link #showResult(GraphDocument, SearchOptions)} with
-     * <code>null</code> for the {@link GraphDocument}. This class
-     * must know by its own which model it has to search.
+     * <code>null</code> for the {@link GraphDocument}. This class must know by
+     * its own which model it has to search.
      *
      * @param options
      */

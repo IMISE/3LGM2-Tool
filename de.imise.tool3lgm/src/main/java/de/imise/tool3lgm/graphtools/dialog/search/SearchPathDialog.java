@@ -32,10 +32,10 @@ import de.imise.tool3lgm.userproperties.UserProperties;
 import de.imise.util.swing.component.DirectoryTreePane;
 
 /**
- * @author Thomas Rudert TODO:AXS: Verallgemeinern und ab ins utils-package (also von allen
- *         tool3lgm-Zeug außerhalb des util-Packages befreien) To change the template for this
- *         generated type comment go to Window&gt;Preferences&gt;Java&gt;Code Generation&gt;Code and
- *         Comments
+ * @author Thomas Rudert TODO:AXS: Verallgemeinern und ab ins utils-package
+ *         (also von allen tool3lgm-Zeug außerhalb des util-Packages befreien)
+ *         To change the template for this generated type comment go to
+ *         Window&gt;Preferences&gt;Java&gt;Code Generation&gt;Code and Comments
  */
 public class SearchPathDialog extends JDialog implements ActionListener {
     private final JList searchList = new JList(new DefaultListModel() {

@@ -14,7 +14,8 @@ import de.imise.tool3lgm.graphtools.path.metapaths.MetaPath;
 import de.imise.util.swing.component.MinSizedIconButton;
 
 /**
- * Panel, bei dem man die rechte Seite auf und zuklappen kann. In der Regel sind dort links und rechts Bäume.
+ * Panel, bei dem man die rechte Seite auf und zuklappen kann. In der Regel sind
+ * dort links und rechts Bäume.
  *
  * @author AXS
  * @created 12.06.2017
@@ -102,14 +103,16 @@ public abstract class AbstractExpandablePanel extends LGMDragNDropPanel {
     }
 
     /**
-     * Sets the state, that the panel cannot be expaded by setting the viewButton to <code>null</code>
+     * Sets the state, that the panel cannot be expaded by setting the
+     * viewButton to <code>null</code>
      */
     protected void setUnexpandable() {
         viewButton = null;
     }
 
     /**
-     * Methode liefert eine <code>LGMAction</code> zurück, die das gesamte oder nur einen Teils des Panels anzeigt.
+     * Methode liefert eine <code>LGMAction</code> zurück, die das gesamte oder
+     * nur einen Teils des Panels anzeigt.
      *
      * @param panel
      */
@@ -123,7 +126,8 @@ public abstract class AbstractExpandablePanel extends LGMDragNDropPanel {
     }
 
     /**
-     * Liefert einen Button, der zwischen den Bäumen dargestellt werden kann mit entsprechender Maximalgröße. Das sind in der Regel die
+     * Liefert einen Button, der zwischen den Bäumen dargestellt werden kann mit
+     * entsprechender Maximalgröße. Das sind in der Regel die
      * Add/Remove/New-Buttons.
      *
      * @param a Action
@@ -134,7 +138,9 @@ public abstract class AbstractExpandablePanel extends LGMDragNDropPanel {
     }
 
     /**
-     * Legt ein Panel an, dass für jede übergebene Action, die nicht <code>null</code> ist, einen Button enthält. Die Buttons stehen übereinander.
+     * Legt ein Panel an, dass für jede übergebene Action, die nicht
+     * <code>null</code> ist, einen Button enthält. Die Buttons stehen
+     * übereinander.
      *
      * @param actions
      * @return

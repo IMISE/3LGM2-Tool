@@ -38,24 +38,33 @@ public class MultiPanelElementDialogPanel extends ElementDialogPanel implements 
     /** Added sub panels in the order in which they were added */
     private final List<AbstractPathConnectionPanel> panels = new ArrayList<>();
 
-    /** GridBagConstraints used to place the sub panel components in this panel */
+    /**
+     * GridBagConstraints used to place the sub panel components in this panel
+     */
     protected final GridBagConstraints gbc = new GridBagConstraints();
 
-    /** Row for the {@link GridBagConstraints} to add the components of the next panel */
+    /**
+     * Row for the {@link GridBagConstraints} to add the components of the next
+     * panel
+     */
     protected int gridy = 0;
 
     /**
-     * Bleibt <code>true</code>, wenn keine Unterklasse von {@link AbstractElementPropertyDialog} das Panel erweitert hat, sondern er im
-     * Ausgangszustand (Name + Beschreibung) geblieben ist.
+     * Bleibt <code>true</code>, wenn keine Unterklasse von
+     * {@link AbstractElementPropertyDialog} das Panel erweitert hat, sondern er
+     * im Ausgangszustand (Name + Beschreibung) geblieben ist.
      */
     protected boolean isUnchangedDefaultPanel = true;
 
-    /** Liste mit allen Buttons, die die geaddeten Panels jeweils über ihre {@link #getPanelButton()} Methode zurück liefern. */
+    /**
+     * Liste mit allen Buttons, die die geaddeten Panels jeweils über ihre
+     * {@link #getPanelButton()} Methode zurück liefern.
+     */
     private final List<JButton> panelButtons = new ArrayList<>();
 
     /**
-     * The button this panel accumulates of the {@link #getPanelButton()} result buttons of the
-     * panels in this multi panel.
+     * The button this panel accumulates of the {@link #getPanelButton()} result
+     * buttons of the panels in this multi panel.
      */
     private JButton panelButton;
 
@@ -182,8 +191,9 @@ public class MultiPanelElementDialogPanel extends ElementDialogPanel implements 
     }
 
     /**
-     * @return <code>true</code>, wenn keine Unterklasse von {@link ElementPropertyDialog} das Panel erweitert hat, sondern er im Ausgangszustand
-     *         (Name + Beschreibung) geblieben ist.
+     * @return <code>true</code>, wenn keine Unterklasse von
+     *         {@link ElementPropertyDialog} das Panel erweitert hat, sondern er
+     *         im Ausgangszustand (Name + Beschreibung) geblieben ist.
      */
     public final boolean isUnchangedDefaultPanel() {
         return isUnchangedDefaultPanel;

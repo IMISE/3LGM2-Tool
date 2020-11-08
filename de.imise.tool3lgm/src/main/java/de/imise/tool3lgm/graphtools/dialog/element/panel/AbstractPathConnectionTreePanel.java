@@ -15,8 +15,8 @@ import de.imise.tool3lgm.graphtools.view.tree.TreeRenderer;
 import de.imise.tool3lgm.graphtools.view.tree.node.LGMTreeNode;
 
 /**
- * A panel that assumes it has at least one tree that can return a
- * selection when clicked with the mouse.
+ * A panel that assumes it has at least one tree that can return a selection
+ * when clicked with the mouse.
  *
  * @author AXS
  * @created 22.06.2017

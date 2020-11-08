@@ -27,8 +27,9 @@ import de.imise.util.swing.dialog.AbstractSizeAndPositionRestoringDialog;
 
 /**
  * Allgemeiner Eigenschaftendialog.<br>
- * In dieser Form kann er als Eigenschaftendialog für ein Modell genutzt werden. Der
- * Eigenschaftendialog von Modellelementen ist eine spezielle Unterklasse dieser Dialogklasse.
+ * In dieser Form kann er als Eigenschaftendialog für ein Modell genutzt werden.
+ * Der Eigenschaftendialog von Modellelementen ist eine spezielle Unterklasse
+ * dieser Dialogklasse.
  *
  * @author AXS
  * @created 30.10.2007
@@ -65,7 +66,8 @@ public abstract class AbstractPropertyDialog extends AbstractSizeAndPositionRest
     protected int transactionID;
 
     /**
-     * Panel, das <code>applyButton</code>,<code>okButton</code> und <code>cancelButton</code> beinhaltet
+     * Panel, das <code>applyButton</code>,<code>okButton</code> und
+     * <code>cancelButton</code> beinhaltet
      */
     protected JPanel controlPanel;
 

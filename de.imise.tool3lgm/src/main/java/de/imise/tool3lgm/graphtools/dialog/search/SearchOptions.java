@@ -9,16 +9,15 @@ import de.imise.tool3lgm.graphtools.userfield.UserField;
 import de.imise.util.swing.component.HistoryComboBox;
 
 /**
- * Class for the data structure that represents search options
- * in a model.
+ * Class for the data structure that represents search options in a model.
  *
  * @author Ich (23.09.2020)
  */
 public class SearchOptions {
 
     /**
-     * The order is importent. Its the same order they are
-     * displayed in the {@link BasicSearchOptionsPanel}
+     * The order is importent. Its the same order they are displayed in the
+     * {@link BasicSearchOptionsPanel}
      */
     protected enum UserFieldCheckBoxState {
         /** Konstante für Checkboxen Suchen (aktivierte und deaktivierte) */
@@ -61,13 +60,22 @@ public class SearchOptions {
     /** */
     public UserFieldCheckBoxState userFieldCheckBoxState;
 
-    /** the history of the {@link HistoryComboBox} with the search string for the names */
+    /**
+     * the history of the {@link HistoryComboBox} with the search string for the
+     * names
+     */
     public List<String> inputHistoryName;
 
-    /** the history of the {@link HistoryComboBox} with the search string for the descriptions */
+    /**
+     * the history of the {@link HistoryComboBox} with the search string for the
+     * descriptions
+     */
     public List<String> inputHistoryDescription;
 
-    /** the history of the {@link HistoryComboBox} with the search string for the userfields */
+    /**
+     * the history of the {@link HistoryComboBox} with the search string for the
+     * userfields
+     */
     public List<String> inputHistoryUserFields;
 
 }

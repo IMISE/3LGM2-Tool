@@ -37,8 +37,9 @@ import de.imise.util.swing.component.text.ExtendedTextField;
 import de.imise.util.swing.dialog.ExtendedFileChooser;
 
 /**
- * @author Thomas Rudert To change the template for this generated type comment go to
- *         Window&gt;Preferences&gt;Java&gt;Code Generation&gt;Code and Comments
+ * @author Thomas Rudert To change the template for this generated type comment
+ *         go to Window&gt;Preferences&gt;Java&gt;Code Generation&gt;Code and
+ *         Comments
  */
 public class SzenarioDialog extends JDialog {
 
@@ -129,11 +130,13 @@ public class SzenarioDialog extends JDialog {
     }
 
     /**
-     * zeigt einen Dialog zum auswählen der Szenarios, die exportiert werden sollen und zur Auswahl
-     * der Zieldatei, und exportiert die Szenarios anschließend in die Zieldatei
+     * zeigt einen Dialog zum auswählen der Szenarios, die exportiert werden
+     * sollen und zur Auswahl der Zieldatei, und exportiert die Szenarios
+     * anschließend in die Zieldatei
      *
      * @param owner das übergeordnete JFrame
-     * @param collection die GDCollection aus der die Szenarios exportiert werden sollen
+     * @param collection die GDCollection aus der die Szenarios exportiert
+     *            werden sollen
      */
     public static void showExportDialog(final JFrame owner, final GDCollection collection) {
         SzenarioDialog dialog = new SzenarioDialog(owner, collection, false);
@@ -141,10 +144,12 @@ public class SzenarioDialog extends JDialog {
     }
 
     /**
-     * zeigt einen Dialog zum auswählen der Szenarios, die importiert werden sollen
+     * zeigt einen Dialog zum auswählen der Szenarios, die importiert werden
+     * sollen
      *
      * @param owner das übergeordnete JFrame
-     * @param collection die GDCollection aus der die Szenarios importiert werden sollen
+     * @param collection die GDCollection aus der die Szenarios importiert
+     *            werden sollen
      * @return Array mit den Szenarios die importiert werden sollen
      */
     public static List<Szenario> showImportDialog(final JFrame owner, final GDCollection collection) {

@@ -19,7 +19,8 @@ import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.graphtools.view.tree.node.LGMTreeNode;
 
 /**
- * Panel für alle einfachen Verbindungen zwischen 2 Elementen, also der Kantenpfad ist genau eine Edge lang.
+ * Panel für alle einfachen Verbindungen zwischen 2 Elementen, also der
+ * Kantenpfad ist genau eine Edge lang.
  *
  * @author AXS
  * @created 24.04.2017
@@ -59,9 +60,10 @@ public abstract class AbstractPathOfOneEdgePanel extends AbstractExpandablePanel
     }
 
     /**
-     * Methode liefert eine <code>LGMAction</code> zurück, die das Verschieben von Elementen aus dem
-     * <code>srcTree</code> in den <code>targetTree</code> realisiert. Diese <code>LGMAction</code>
-     * sollte an die "addButtons" der Panels angefügt werden.
+     * Methode liefert eine <code>LGMAction</code> zurück, die das Verschieben
+     * von Elementen aus dem <code>srcTree</code> in den <code>targetTree</code>
+     * realisiert. Diese <code>LGMAction</code> sollte an die "addButtons" der
+     * Panels angefügt werden.
      *
      * @param srcTree
      * @param targetTree
@@ -88,9 +90,10 @@ public abstract class AbstractPathOfOneEdgePanel extends AbstractExpandablePanel
     }
 
     /**
-     * Methode liefert eine <code>LGMAction</code> zurück, die das Verschieben von Elementen aus dem
-     * <code>srcTree</code> in den <code>targetTree</code> realisiert. Diese <code>LGMAction</code>
-     * sollte an die "removeButtons" der Panels angefügt werden.
+     * Methode liefert eine <code>LGMAction</code> zurück, die das Verschieben
+     * von Elementen aus dem <code>srcTree</code> in den <code>targetTree</code>
+     * realisiert. Diese <code>LGMAction</code> sollte an die "removeButtons"
+     * der Panels angefügt werden.
      *
      * @param srcTree
      * @param targetTree

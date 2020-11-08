@@ -53,8 +53,9 @@ public abstract class AbstractTabbedPropertyDialog extends AbstractPropertyDialo
     }
 
     /**
-     * Fügt dem Dialog einen neuen Tab mit der übergebenen Componente hinzu. Der Titel des Tabs ist der
-     * wird über die getName()-Funktion der Componente ermittelt.
+     * Fügt dem Dialog einen neuen Tab mit der übergebenen Componente hinzu. Der
+     * Titel des Tabs ist der wird über die getName()-Funktion der Componente
+     * ermittelt.
      *
      * @param component
      */
@@ -63,7 +64,8 @@ public abstract class AbstractTabbedPropertyDialog extends AbstractPropertyDialo
     }
 
     /**
-     * Fügt dem Dialog einen neuen Tab mit dem übergebenen Titel und der Komponente hinzu.
+     * Fügt dem Dialog einen neuen Tab mit dem übergebenen Titel und der
+     * Komponente hinzu.
      *
      * @param title
      * @param component
@@ -73,7 +75,8 @@ public abstract class AbstractTabbedPropertyDialog extends AbstractPropertyDialo
     }
 
     /**
-     * Fügt dem Dialog einen neuen Tab mit dem übergebenen Titel, Icon und der Komponente hinzu.
+     * Fügt dem Dialog einen neuen Tab mit dem übergebenen Titel, Icon und der
+     * Komponente hinzu.
      *
      * @param title
      * @param icon
@@ -111,7 +114,8 @@ public abstract class AbstractTabbedPropertyDialog extends AbstractPropertyDialo
     }
 
     /**
-     * Delegates {@link JTabbedPane#setIAt(int, Icon)} of the contained tabbed pane.
+     * Delegates {@link JTabbedPane#setIAt(int, Icon)} of the contained tabbed
+     * pane.
      *
      * @param tabIndex
      * @param icon
@@ -121,7 +125,8 @@ public abstract class AbstractTabbedPropertyDialog extends AbstractPropertyDialo
     }
 
     /**
-     * Delegates {@link JTabbedPane#setTitleAt(int, String)} of the contained tabbed pane.
+     * Delegates {@link JTabbedPane#setTitleAt(int, String)} of the contained
+     * tabbed pane.
      *
      * @param tabIndex
      * @param title
@@ -139,8 +144,8 @@ public abstract class AbstractTabbedPropertyDialog extends AbstractPropertyDialo
     }
 
     /**
-     * Selects the first tab of the contained tabbed pane where the component
-     * of this tab is an instance of the given class.
+     * Selects the first tab of the contained tabbed pane where the component of
+     * this tab is an instance of the given class.
      *
      * @param tabComponentClass
      * @return index of the selected tab
@@ -159,7 +164,8 @@ public abstract class AbstractTabbedPropertyDialog extends AbstractPropertyDialo
     }
 
     /**
-     * @return the {@link ElementDialogPanel} in the active tab of the contained tabbed pane
+     * @return the {@link ElementDialogPanel} in the active tab of the contained
+     *         tabbed pane
      */
     public ElementDialogPanel getSelectedElementDialogPanel() {
         Component selectedComponent = tabbedPane.getSelectedComponent();
@@ -167,8 +173,7 @@ public abstract class AbstractTabbedPropertyDialog extends AbstractPropertyDialo
     }
 
     /**
-     * Selects the with a panel or subpanel that displays the
-     * given MetaPath.
+     * Selects the with a panel or subpanel that displays the given MetaPath.
      *
      * @param metaPath
      */
@@ -186,8 +191,8 @@ public abstract class AbstractTabbedPropertyDialog extends AbstractPropertyDialo
     }
 
     /**
-     * Searches for a subpanel in the given container that
-     * displays the given MetaPath.
+     * Searches for a subpanel in the given container that displays the given
+     * MetaPath.
      *
      * @param pane
      * @param metaPath
@@ -213,7 +218,8 @@ public abstract class AbstractTabbedPropertyDialog extends AbstractPropertyDialo
     }
 
     /**
-     * @return a list of all tab names in the order of the tabs added to the contained tabbed pane
+     * @return a list of all tab names in the order of the tabs added to the
+     *         contained tabbed pane
      */
     public List<String> getTabNames() {
         ImmutableList.Builder<String> tabNames = ImmutableList.builder();
@@ -226,7 +232,8 @@ public abstract class AbstractTabbedPropertyDialog extends AbstractPropertyDialo
     }
 
     /**
-     * @return delegates {@link JTabbedPane#getTabCount()} of the contained tabbed pane
+     * @return delegates {@link JTabbedPane#getTabCount()} of the contained
+     *         tabbed pane
      */
     protected int getTabCount() {
         return tabbedPane.getTabCount();
@@ -234,7 +241,8 @@ public abstract class AbstractTabbedPropertyDialog extends AbstractPropertyDialo
 
     /**
      * @param index
-     * @return delegates {@link JTabbedPane#getTabComponentAt(int)} of the contained tabbed pane
+     * @return delegates {@link JTabbedPane#getTabComponentAt(int)} of the
+     *         contained tabbed pane
      */
     protected Component getTabComponentAt(final int index) {
         return tabbedPane.getComponentAt(index);

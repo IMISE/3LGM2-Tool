@@ -35,10 +35,16 @@ public final class ModelPropertyDialog extends AbstractPropertyDialog implements
     /** Mappt von einem Modell auf den für dieses Modell geöffneten Dialog */
     private static final Map<GDCollection, ModelPropertyDialog> GDCOLLECTION_TO_OPEN_DIALOG = new HashMap<>();
 
-    /** Textpane in dem die Beschreibungen angezeigt werden und editiert werden können. */
+    /**
+     * Textpane in dem die Beschreibungen angezeigt werden und editiert werden
+     * können.
+     */
     private ExtendedTextPane textPane;
 
-    /** Das {@link GraphDocument}, das vor einer Änderung des aktiven {@link GraphDocument} aktiv war. */
+    /**
+     * Das {@link GraphDocument}, das vor einer Änderung des aktiven
+     * {@link GraphDocument} aktiv war.
+     */
     private GraphDocument lastActiveDoc = null;
 
     /** Auswahlbox für das aktive (Teil-)Modell */
@@ -187,10 +193,10 @@ public final class ModelPropertyDialog extends AbstractPropertyDialog implements
     }
 
     /**
-     * Wird ausgeführt, wenn sich das {@link GraphDocument} ändert, dessen BEschreibung angezeigt
-     * werden soll. Erst wird für das zuletzt aktive {@link GraphDocument} die eingegebene
-     * Beschreibung gesetzt, dann wird die Beschreibung des aktivierten {@link GraphDocument}s
-     * angezeigt.
+     * Wird ausgeführt, wenn sich das {@link GraphDocument} ändert, dessen
+     * BEschreibung angezeigt werden soll. Erst wird für das zuletzt aktive
+     * {@link GraphDocument} die eingegebene Beschreibung gesetzt, dann wird die
+     * Beschreibung des aktivierten {@link GraphDocument}s angezeigt.
      */
     private void selectedDocChanged() {
         GraphDocument activeDoc = docBox.getSelectedObject();
