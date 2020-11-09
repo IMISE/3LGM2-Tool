@@ -184,7 +184,9 @@ public class ElementPropertyDialogsContext {
     private void addTooltipMouseListeners(final ElementPropertyDialog dialog) {
         Collection<JComponent> toolTipTargets = dialog.getToolTipTargets();
         for (JComponent toolTipTarget : toolTipTargets) {
-            toolTipProvider.addToolTipMouseListeners(toolTipTarget);
+            if (toolTipTarget != null) {
+                toolTipProvider.addToolTipMouseListeners(toolTipTarget);
+            }
         }
     }
 
