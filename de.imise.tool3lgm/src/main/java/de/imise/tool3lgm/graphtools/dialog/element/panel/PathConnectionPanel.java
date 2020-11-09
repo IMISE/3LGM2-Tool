@@ -16,6 +16,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.tree.DefaultTreeModel;
@@ -23,6 +24,7 @@ import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
 
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Lists;
 
 import de.imise.tool3lgm.graphtools.consistency.error.type.AbstractConsistencyError;
 import de.imise.tool3lgm.graphtools.consistency.error.type.MissingPathError;
@@ -645,6 +647,11 @@ public class PathConnectionPanel extends AbstractExpandablePanel {
         LGMGraphDocument selectedDoc = getSelectedDoc();
         int pid = getTransactionID();
         selectedDoc.createPath(me, endElement, metaPath, true, pid);
+    }
+
+    @Override
+    public Collection<JComponent> getTooltipTargets() {
+        return Lists.newArrayList(ltree, rtree);
     }
 
 }

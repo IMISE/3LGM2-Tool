@@ -6,9 +6,12 @@ import static de.imise.tool3lgm.graphtools.dialog.element.panel.AbstractPathConn
 import java.awt.Component;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
+import java.util.ArrayList;
+import java.util.Collection;
 
 import javax.annotation.Nullable;
 import javax.swing.Icon;
+import javax.swing.JComponent;
 import javax.swing.JPanel;
 
 import de.imise.tool3lgm.Tool3lgmConstants;
@@ -19,6 +22,7 @@ import de.imise.tool3lgm.graphtools.dialog.element.panel.ConnectedElementsTableD
 import de.imise.tool3lgm.graphtools.dialog.element.panel.ConnectedElementsTablePanel;
 import de.imise.tool3lgm.graphtools.dialog.element.panel.DescriptedSingleConnectionPanel;
 import de.imise.tool3lgm.graphtools.dialog.element.panel.DoubleMeaningEdgePanel;
+import de.imise.tool3lgm.graphtools.dialog.element.panel.ElementDialogPanel;
 import de.imise.tool3lgm.graphtools.dialog.element.panel.InstanciationPathPanel;
 import de.imise.tool3lgm.graphtools.dialog.element.panel.MultiPanelElementDialogPanel;
 import de.imise.tool3lgm.graphtools.dialog.element.panel.MutipleCompositionPanel;
@@ -32,6 +36,7 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.path.metapaths.MetaPath;
 import de.imise.tool3lgm.graphtools.path.metapaths.SimpleMetaPath;
 import de.imise.tool3lgm.graphtools.path.metapaths.SimpleMetaPathCreator;
+import de.imise.tool3lgm.graphtools.view.tooltip.ElementToolTipProvider;
 import de.imise.util.swing.component.tab.ReorderableTabbedPane;
 
 /**
@@ -637,6 +642,23 @@ public class ElementPropertyDialog extends AbstractElementPropertyDialog impleme
             }
         }
         return false;
+    }
+
+    /**
+     * @return all components that should show tooltips via
+     *         {@link ElementToolTipProvider}
+     */
+    public Collection<JComponent> getTooltipTargets() {
+        Collection<JComponent> tooltipTargets = new ArrayList<>();
+        for (int i = 0; i < tabbedPane.getTabCount(); i++) {
+            Component tabComponent = tabbedPane.getComponentAt(i);
+            if (tabComponent instanceof ElementDialogPanel) {
+                ElementDialogPanel panel = (ElementDialogPanel) tabComponent;
+                Collection<JComponent> panelTooltipTargets = panel.getTooltipTargets();
+                tooltipTargets.addAll(panelTooltipTargets);
+            }
+        }
+        return tooltipTargets;
     }
 
 }

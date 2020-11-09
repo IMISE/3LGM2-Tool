@@ -1,7 +1,6 @@
 package de.imise.tool3lgm.graphtools.view.tooltip;
 
 import javax.swing.JComponent;
-import javax.swing.ToolTipManager;
 
 import com.google.common.base.Strings;
 
@@ -23,22 +22,18 @@ import de.imise.util.htmlxml.HTMLConverter;
 public class ElementToolTipProvider implements ToolTipProvider {
 
     /**
+     *
+     */
+    public ElementToolTipProvider() {
+    }
+
+    /**
      * Registers the component as target for this tooltip provider.
      *
      * @param target
      */
     public ElementToolTipProvider(final JComponent target) {
-        ToolTipManager toolTipManager = ToolTipManager.sharedInstance();
-        toolTipManager.registerComponent(target);
-    }
-
-    /**
-     * Registers the component as target for thsi tooltip provider.
-     *
-     * @param component
-     */
-    public static final void registerAsToolTipTarget(final JComponent component) {
-
+        registerComponent(target);
     }
 
     @Override

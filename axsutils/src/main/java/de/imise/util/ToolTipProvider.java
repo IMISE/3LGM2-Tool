@@ -2,12 +2,14 @@ package de.imise.util;
 
 import java.awt.event.MouseEvent;
 
+import javax.swing.JComponent;
 import javax.swing.JTree;
+import javax.swing.ToolTipManager;
 import javax.swing.tree.TreePath;
 
 /**
- * The main function provides a string for a given object. The string
- * can be used as tooltip. The other function prov
+ * The main function provides a string for a given object. The string can be
+ * used as tooltip. The other function prov
  *
  * @author AXS (09.06.2020)
  */
@@ -39,5 +41,21 @@ public interface ToolTipProvider {
      * @return
      */
     public String getToolTip(Object o);
+
+    /**
+     * @param target
+     */
+    public default void registerComponent(final JComponent target) {
+        ToolTipManager toolTipManager = ToolTipManager.sharedInstance();
+        toolTipManager.registerComponent(target);
+    }
+
+    /**
+     * @param target
+     */
+    public default void unregisterComponent(final JComponent target) {
+        ToolTipManager toolTipManager = ToolTipManager.sharedInstance();
+        toolTipManager.unregisterComponent(target);
+    }
 
 }

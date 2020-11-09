@@ -9,10 +9,12 @@ import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JSeparator;
 import javax.swing.border.Border;
@@ -247,6 +249,16 @@ public class MultiPanelElementDialogPanel extends ElementDialogPanel implements 
             panel = AbstractTabbedPropertyDialog.getPanel(this, errorMetaPath);
         }
         return panel;
+    }
+
+    @Override
+    public Collection<JComponent> getTooltipTargets() {
+        Collection<JComponent> tooltipTargets = new ArrayList<>();
+        for (AbstractPathConnectionPanel panel : panels) {
+            Collection<JComponent> panelTooltipTargets = panel.getTooltipTargets();
+            tooltipTargets.addAll(panelTooltipTargets);
+        }
+        return tooltipTargets;
     }
 
 }

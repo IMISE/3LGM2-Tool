@@ -14,6 +14,7 @@ import java.util.List;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.JTree;
 
@@ -32,6 +33,7 @@ import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.model.LGMGraphDocument;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
+import de.imise.tool3lgm.graphtools.view.tooltip.ElementToolTipProvider;
 import de.imise.util.swing.SwingUtils;
 
 /**
@@ -405,5 +407,13 @@ public abstract class ElementDialogPanel extends JPanel {
     }
 
     // -------------------------------------------------------------------------------- -/
+
+    /**
+     * @return all components that should show tooltips via
+     *         {@link ElementToolTipProvider}
+     */
+    public Collection<JComponent> getTooltipTargets() {
+        return new ArrayList<>();
+    }
 
 }

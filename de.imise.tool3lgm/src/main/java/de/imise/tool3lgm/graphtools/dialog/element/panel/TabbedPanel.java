@@ -2,7 +2,10 @@ package de.imise.tool3lgm.graphtools.dialog.element.panel;
 
 import java.awt.Component;
 import java.awt.GridLayout;
+import java.util.ArrayList;
+import java.util.Collection;
 
+import javax.swing.JComponent;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
@@ -20,7 +23,7 @@ public class TabbedPanel extends ElementDialogPanel implements ChangeListener {
     /**
      * COMMENTME
      */
-    private final ReorderableTabbedPane rf;
+    private final ReorderableTabbedPane tabbedPane;
 
     /**
      * @param dialog
@@ -29,21 +32,21 @@ public class TabbedPanel extends ElementDialogPanel implements ChangeListener {
     public TabbedPanel(final ElementPropertyDialog dialog, final ElementDialogPanel... dialogPanels) {
         super(dialog);
 
-        rf = new ReorderableTabbedPane();
-        rf.addChangeListener(this);
+        tabbedPane = new ReorderableTabbedPane();
+        tabbedPane.addChangeListener(this);
 
         for (ElementDialogPanel dialogPanel : dialogPanels) {
-            rf.addTab(dialogPanel.getName(), dialogPanel);
+            tabbedPane.addTab(dialogPanel.getName(), dialogPanel);
         }
 
         setLayout(new GridLayout(1, 1));
-        add(rf);
+        add(tabbedPane);
 
         init();
     }
 
     public void addTab(final ElementDialogPanel dialogPanel) {
-        rf.addTab(dialogPanel.getName(), dialogPanel);
+        tabbedPane.addTab(dialogPanel.getName(), dialogPanel);
         init();
     }
 
@@ -55,8 +58,8 @@ public class TabbedPanel extends ElementDialogPanel implements ChangeListener {
 
     @Override
     public void update() {
-        for (int i = 0; i < rf.getTabCount(); i++) {
-            Component c = rf.getComponentAt(i);
+        for (int i = 0; i < tabbedPane.getTabCount(); i++) {
+            Component c = tabbedPane.getComponentAt(i);
             if (c instanceof ElementDialogPanel) {
                 ((ElementDialogPanel) c).update();
             }
@@ -71,4 +74,19 @@ public class TabbedPanel extends ElementDialogPanel implements ChangeListener {
             ((ElementDialogPanel) o).update();
         }
     }
+
+    @Override
+    public Collection<JComponent> getTooltipTargets() {
+        Collection<JComponent> tooltipTargets = new ArrayList<>();
+        for (int i = 0; i < tabbedPane.getTabCount(); i++) {
+            Component tabComponent = tabbedPane.getComponentAt(i);
+            if (tabComponent instanceof ElementDialogPanel) {
+                ElementDialogPanel panel = (ElementDialogPanel) tabComponent;
+                Collection<JComponent> panelTooltipTargets = panel.getTooltipTargets();
+                tooltipTargets.addAll(panelTooltipTargets);
+            }
+        }
+        return tooltipTargets;
+    }
+
 }

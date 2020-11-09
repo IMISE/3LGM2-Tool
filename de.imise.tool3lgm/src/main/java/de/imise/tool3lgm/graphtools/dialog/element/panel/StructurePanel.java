@@ -14,11 +14,14 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 
+import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeSelectionModel;
+
+import com.google.common.collect.Lists;
 
 import de.imise.tool3lgm.graphtools.dialog.action.LGMAction;
 import de.imise.tool3lgm.graphtools.dialog.dragdrop.DragNDropInitializer;
@@ -259,6 +262,11 @@ public class StructurePanel extends AbstractPathOfOneEdgePanel {
         return new ElementDialogPanelTree[] {
                 rtree, lotree, lutree
         };
+    }
+
+    @Override
+    public Collection<JComponent> getTooltipTargets() {
+        return Lists.newArrayList(rtree, lotree, lutree);
     }
 
 }

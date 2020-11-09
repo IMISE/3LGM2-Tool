@@ -3,12 +3,17 @@ package de.imise.tool3lgm.graphtools.dialog.element;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
+
+import javax.swing.JComponent;
 
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
+import de.imise.tool3lgm.graphtools.view.tooltip.ElementToolTipProvider;
 import de.imise.tool3lgm.userproperties.UserProperties;
 import de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty;
+import de.imise.util.ToolTipProvider;
 
 /**
  * Diese Klasse verwaltet statisch die geöffneten Dialoge der ModellElemente.
@@ -23,10 +28,11 @@ public class ElemenPropertyDialogsContext {
      */
     private final static ElemenPropertyDialogsContext context = new ElemenPropertyDialogsContext();
 
-    /**
-     * Liste aller geöffneten Dialoge
-     */
-    private static final List<ElementPropertyDialog> dialogs = new ArrayList<>();
+    /** List of all opened dialogs */
+    private final List<ElementPropertyDialog> dialogs = new ArrayList<>();
+
+    /** The tooltip provier */
+    private final ToolTipProvider toolTipProvider;
 
     /**
      *
@@ -46,6 +52,14 @@ public class ElemenPropertyDialogsContext {
             }
         };
         UserProperties.addPropertyChangeListener(optionsChangeListener);
+        toolTipProvider = new ElementToolTipProvider();
+    }
+
+    /**
+     * @return the toolTipProvider
+     */
+    public static final ToolTipProvider getToolTipProvider() {
+        return context.toolTipProvider;
     }
 
     /**
@@ -84,12 +98,13 @@ public class ElemenPropertyDialogsContext {
      * @return
      */
     public static ElementPropertyDialog getDialog(final ModelElement me) {
-        ElementPropertyDialog prop = ElemenPropertyDialogsContext.hasOpenDialog(me);
-        if (prop == null) {
-            prop = me.getNewPropertyDialogInsance();
-            dialogs.add(prop);
+        ElementPropertyDialog dialog = ElemenPropertyDialogsContext.hasOpenDialog(me);
+        if (dialog == null) {
+            dialog = me.getNewPropertyDialogInsance();
+            context.dialogs.add(dialog);
+            context.registerTooltipTargets(dialog);
         }
-        return prop;
+        return dialog;
     }
 
     /**
@@ -99,10 +114,11 @@ public class ElemenPropertyDialogsContext {
      *            werden soll
      */
     public static final void removeDialog(final ModelElement modelElement) {
-        for (int n = 0; n < dialogs.size(); n++) {
-            ElementPropertyDialog dialog = dialogs.get(n);
+        for (int n = 0; n < context.dialogs.size(); n++) {
+            ElementPropertyDialog dialog = context.dialogs.get(n);
             if (modelElement == dialog.getModelElement()) {
-                dialogs.remove(n--);
+                context.dialogs.remove(n--);
+                context.unregisterTooltipTargets(dialog);
             }
         }
     }
@@ -113,7 +129,7 @@ public class ElemenPropertyDialogsContext {
      * @return
      */
     public static boolean hasOpenDialogs() {
-        return !dialogs.isEmpty();
+        return !context.dialogs.isEmpty();
     }
 
     /**
@@ -122,7 +138,7 @@ public class ElemenPropertyDialogsContext {
      * @return
      */
     public static int getDialogCount() {
-        return dialogs.size();
+        return context.dialogs.size();
     }
 
     /**
@@ -133,7 +149,7 @@ public class ElemenPropertyDialogsContext {
      * @return
      */
     public static ElementPropertyDialog getDialog(final int index) {
-        return dialogs.get(index);
+        return context.dialogs.get(index);
     }
 
     /**
@@ -142,7 +158,7 @@ public class ElemenPropertyDialogsContext {
      * @return
      */
     public static Iterable<ElementPropertyDialog> iterateDialogs() {
-        return dialogs;
+        return context.dialogs;
     }
 
     /**
@@ -151,8 +167,8 @@ public class ElemenPropertyDialogsContext {
      * @param doc
      */
     public static void closeAllDialogs(final GraphDocument doc) {
-        for (int n = 0; n < dialogs.size(); n++) {
-            ElementPropertyDialog dialog = dialogs.get(n);
+        for (int n = context.dialogs.size() - 1; n >= 0; n--) {
+            ElementPropertyDialog dialog = context.dialogs.get(n);
             // wenn der Dialog zum zu schließenden Modell gehört
             if (doc.isMyElement(dialog.getModelElement())) {
                 // alle Änderungen der geöffneten Dialoge zurück rollen
@@ -160,6 +176,26 @@ public class ElemenPropertyDialogsContext {
                 // in pd.cancel() wird die dialogs.size() um -1 geändert
                 n--;
             }
+        }
+    }
+
+    /**
+     * @param dialog
+     */
+    private void registerTooltipTargets(final ElementPropertyDialog dialog) {
+        Collection<JComponent> tooltipTargets = dialog.getTooltipTargets();
+        for (JComponent tooltipTarget : tooltipTargets) {
+            toolTipProvider.registerComponent(tooltipTarget);
+        }
+    }
+
+    /**
+     * @param dialog
+     */
+    private void unregisterTooltipTargets(final ElementPropertyDialog dialog) {
+        Collection<JComponent> tooltipTargets = dialog.getTooltipTargets();
+        for (JComponent tooltipTarget : tooltipTargets) {
+            toolTipProvider.unregisterComponent(tooltipTarget);
         }
     }
 

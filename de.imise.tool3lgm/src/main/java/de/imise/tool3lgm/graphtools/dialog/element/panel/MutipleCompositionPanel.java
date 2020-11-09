@@ -8,16 +8,20 @@ import static de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty.OP
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
+import java.util.Collection;
 import java.util.EventObject;
 import java.util.List;
 
 import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTree;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
+
+import com.google.common.collect.Lists;
 
 import de.imise.tool3lgm.graphtools.dialog.action.LGMAction;
 import de.imise.tool3lgm.graphtools.dialog.element.ElementPropertyDialog;
@@ -189,6 +193,11 @@ public class MutipleCompositionPanel extends AbstractPathConnectionTreePanel {
             }
         };
         return returnAction;
+    }
+
+    @Override
+    public Collection<JComponent> getTooltipTargets() {
+        return Lists.newArrayList(tree);
     }
 
 }

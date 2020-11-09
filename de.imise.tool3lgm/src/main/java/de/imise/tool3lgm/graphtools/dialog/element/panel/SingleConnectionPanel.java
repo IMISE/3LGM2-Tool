@@ -13,7 +13,10 @@ import java.util.Collection;
 import java.util.EventObject;
 import java.util.List;
 
+import javax.swing.JComponent;
 import javax.swing.UIManager;
+
+import com.google.common.collect.Lists;
 
 import de.imise.tool3lgm.graphtools.dialog.action.LGMAction;
 import de.imise.tool3lgm.graphtools.dialog.action.LGMItemListener;
@@ -358,6 +361,11 @@ public class SingleConnectionPanel extends AbstractPathConnectionPanel {
             }
             gdcoll.setIgnoreInconsistenciesOnDeleteEgdesMode(false);
         }
+    }
+
+    @Override
+    public Collection<JComponent> getTooltipTargets() {
+        return Lists.newArrayList(connectedElementsBox);
     }
 
 }

@@ -2,6 +2,7 @@ package de.imise.tool3lgm.graphtools.view.tree;
 
 import static de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty.OPTION_SHOW_PART_OF_HIERARCHY;
 
+import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Enumeration;
@@ -13,11 +14,13 @@ import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeModel;
 import javax.swing.tree.TreePath;
 
+import de.imise.tool3lgm.graphtools.dialog.element.ElemenPropertyDialogsContext;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
 import de.imise.tool3lgm.graphtools.view.tree.node.ElementContainerTreeNode;
 import de.imise.tool3lgm.graphtools.view.tree.node.LGMTreeNode;
+import de.imise.util.ToolTipProvider;
 import de.imise.util.swing.component.tree.CorrectSelectionTree;
 
 public class ElementDialogPanelTree extends CorrectSelectionTree {
@@ -292,6 +295,12 @@ public class ElementDialogPanelTree extends CorrectSelectionTree {
     public final void restoreSelectionAndScroll(final ElementDialogPanelTree selectionSource) {
         restoreSelection(selectionSource);
         scrollPathToVisible(getLeadSelectionPath());
+    }
+
+    @Override
+    public final String getToolTipText(final MouseEvent event) {
+        ToolTipProvider toolTipProvider = ElemenPropertyDialogsContext.getToolTipProvider();
+        return toolTipProvider.getToolTip(event);
     }
 
 }
