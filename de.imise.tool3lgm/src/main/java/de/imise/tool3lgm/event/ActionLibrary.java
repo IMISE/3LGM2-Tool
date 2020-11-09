@@ -50,7 +50,7 @@ import de.imise.tool3lgm.graphtools.dialog.LayoutEditor;
 import de.imise.tool3lgm.graphtools.dialog.ModelPropertyDialog;
 import de.imise.tool3lgm.graphtools.dialog.RMIPropertyPanel;
 import de.imise.tool3lgm.graphtools.dialog.SzenarioDialog;
-import de.imise.tool3lgm.graphtools.dialog.element.ElemenPropertyDialogsContext;
+import de.imise.tool3lgm.graphtools.dialog.element.ElementPropertyDialogsContext;
 import de.imise.tool3lgm.graphtools.dialog.search.SearchDialog;
 import de.imise.tool3lgm.graphtools.metamodel.AnalysesDefinition;
 import de.imise.tool3lgm.graphtools.metamodel.GraphViewDefinition;
@@ -653,7 +653,7 @@ public class ActionLibrary {
         public static final Action ACTION_OPEN_USERFIELD_DEFINITION_DIALOG = new GraphDocumentAction(ActionIdentifier.ACTION_OPEN_USERFIELD_DEFINITION_DIALOG, PPP) {
             @Override
             public void actionPerformed() {
-                if (ElemenPropertyDialogsContext.hasOpenDialogs()) {
+                if (ElementPropertyDialogsContext.hasOpenDialogs()) {
                     JOptionPane.showMessageDialog(getMainFrame(), getResString("message_close_all_dialogs"));
                     return;
                 }
@@ -665,7 +665,7 @@ public class ActionLibrary {
         public static final Action ACTION_OPEN_USERFIELD_VALUE_EDITOR_DIALOG = new GraphDocumentAction(ActionIdentifier.ACTION_OPEN_USERFIELD_VALUE_EDITOR_DIALOG, PPP) {
             @Override
             public void actionPerformed() {
-                if (ElemenPropertyDialogsContext.hasOpenDialogs()) {
+                if (ElementPropertyDialogsContext.hasOpenDialogs()) {
                     JOptionPane.showMessageDialog(getMainFrame(), getResString("message_close_all_dialogs"));
                     return;
                 }

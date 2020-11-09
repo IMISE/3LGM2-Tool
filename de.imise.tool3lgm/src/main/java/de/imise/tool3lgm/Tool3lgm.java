@@ -24,7 +24,7 @@ import de.imise.tool3lgm.Tool3lgmConstants.FileFilterType;
 import de.imise.tool3lgm.Tool3lgmModelType.ModelCategory;
 import de.imise.tool3lgm.graphtools.consistency.ModelCleaner;
 import de.imise.tool3lgm.graphtools.consistency.ModelValidatorDefinition;
-import de.imise.tool3lgm.graphtools.dialog.element.ElemenPropertyDialogsContext;
+import de.imise.tool3lgm.graphtools.dialog.element.ElementPropertyDialogsContext;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
@@ -523,7 +523,7 @@ public class Tool3lgm {
         Static.showProgressDialog(true);
         Static.setProgressDialogTitle(getResString("close_model") + " " + gdcoll.getName());
 
-        ElemenPropertyDialogsContext.closeAllDialogs(selDoc);
+        ElementPropertyDialogsContext.closeAllDialogs(selDoc);
 
         if (!askUserCloseModel(gdcoll)) {
             Static.closeProgressDialog();

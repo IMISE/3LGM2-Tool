@@ -21,12 +21,12 @@ import de.imise.util.ToolTipProvider;
  *
  * @author AXS (30 Apr 2019)
  */
-public class ElemenPropertyDialogsContext {
+public class ElementPropertyDialogsContext {
 
     /**
      *
      */
-    private final static ElemenPropertyDialogsContext context = new ElemenPropertyDialogsContext();
+    private final static ElementPropertyDialogsContext context = new ElementPropertyDialogsContext();
 
     /** List of all opened dialogs */
     private final List<ElementPropertyDialog> dialogs = new ArrayList<>();
@@ -37,7 +37,7 @@ public class ElemenPropertyDialogsContext {
     /**
      *
      */
-    public ElemenPropertyDialogsContext() {
+    public ElementPropertyDialogsContext() {
         PropertyChangeListener optionsChangeListener = new PropertyChangeListener() {
             @Override
             public void propertyChange(final PropertyChangeEvent event) {
@@ -98,7 +98,7 @@ public class ElemenPropertyDialogsContext {
      * @return
      */
     public static ElementPropertyDialog getDialog(final ModelElement me) {
-        ElementPropertyDialog dialog = ElemenPropertyDialogsContext.hasOpenDialog(me);
+        ElementPropertyDialog dialog = ElementPropertyDialogsContext.hasOpenDialog(me);
         if (dialog == null) {
             dialog = me.getNewPropertyDialogInsance();
             context.dialogs.add(dialog);

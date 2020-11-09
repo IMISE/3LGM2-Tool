@@ -342,7 +342,7 @@ public class AbstractElementPropertyDialog extends AbstractTabbedPropertyDialog 
             }
         }
         //alle anderen Dialoge updaten
-        for (ElementPropertyDialog pd : ElemenPropertyDialogsContext.iterateDialogs()) {
+        for (ElementPropertyDialog pd : ElementPropertyDialogsContext.iterateDialogs()) {
             // this wird in update klargemacht...
             if (pd != this) {
                 for (int m = 0; m < pd.getTabCount(); m++) {
@@ -387,7 +387,7 @@ public class AbstractElementPropertyDialog extends AbstractTabbedPropertyDialog 
      *
      */
     private void close() {
-        ElemenPropertyDialogsContext.removeDialog(modelElement);
+        ElementPropertyDialogsContext.removeDialog(modelElement);
         mainDoc.finish_transaction(transactionID);
         mainDoc.removeAllTransactionsListener(this);
         dispose();

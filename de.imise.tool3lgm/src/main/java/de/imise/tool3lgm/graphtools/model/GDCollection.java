@@ -84,7 +84,7 @@ import de.imise.tool3lgm.MetaModelContext;
 import de.imise.tool3lgm.Tool3lgmModelType;
 import de.imise.tool3lgm.Tool3lgmModelType.ModelCategory;
 import de.imise.tool3lgm.graphtools.consistency.ModelValidator;
-import de.imise.tool3lgm.graphtools.dialog.element.ElemenPropertyDialogsContext;
+import de.imise.tool3lgm.graphtools.dialog.element.ElementPropertyDialogsContext;
 import de.imise.tool3lgm.graphtools.dialog.element.ElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.metamodel.CoreMetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
@@ -1061,7 +1061,7 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
                 continue;
             }
             //den evtl. geöffneten Dialog des Elementes scließen
-            ElementPropertyDialog dialog = ElemenPropertyDialogsContext.hasOpenDialog(me);
+            ElementPropertyDialog dialog = ElementPropertyDialogsContext.hasOpenDialog(me);
             if (dialog != null) {
                 dialog.performOK();
             }

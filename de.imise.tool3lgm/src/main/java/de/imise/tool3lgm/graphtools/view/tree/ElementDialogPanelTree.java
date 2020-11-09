@@ -14,7 +14,7 @@ import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeModel;
 import javax.swing.tree.TreePath;
 
-import de.imise.tool3lgm.graphtools.dialog.element.ElemenPropertyDialogsContext;
+import de.imise.tool3lgm.graphtools.dialog.element.ElementPropertyDialogsContext;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
@@ -299,7 +299,7 @@ public class ElementDialogPanelTree extends CorrectSelectionTree {
 
     @Override
     public final String getToolTipText(final MouseEvent event) {
-        ToolTipProvider toolTipProvider = ElemenPropertyDialogsContext.getToolTipProvider();
+        ToolTipProvider toolTipProvider = ElementPropertyDialogsContext.getToolTipProvider();
         return toolTipProvider.getToolTip(event);
     }
 
