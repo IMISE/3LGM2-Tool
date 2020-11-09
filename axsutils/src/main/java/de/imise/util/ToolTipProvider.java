@@ -1,6 +1,7 @@
 package de.imise.util;
 
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 
 import javax.swing.JComponent;
 import javax.swing.JTree;
@@ -43,17 +44,27 @@ public interface ToolTipProvider {
     public String getToolTip(Object o);
 
     /**
+     * This call registers the component as a toolTip component. Registering
+     * just means that the <code>ToolTipManager.sharedInstance()</code> adds
+     * special {@link MouseListener} to the component. It does not store an
+     * instance of the component, so you do not need to unregister the component
+     * when closing or removing it.
+     *
      * @param target
      */
-    public default void registerComponent(final JComponent target) {
+    public default void addToolTipMouseListeners(final JComponent target) {
         ToolTipManager toolTipManager = ToolTipManager.sharedInstance();
+        //this function only adds mouse listeners - nothing else
         toolTipManager.registerComponent(target);
     }
 
     /**
+     * Removes the special MouseListener, which displays the ToolTips, from the
+     * component.
+     *
      * @param target
      */
-    public default void unregisterComponent(final JComponent target) {
+    public default void removeToolTipMouseListeners(final JComponent target) {
         ToolTipManager toolTipManager = ToolTipManager.sharedInstance();
         toolTipManager.unregisterComponent(target);
     }

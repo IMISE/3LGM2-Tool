@@ -102,7 +102,7 @@ public class ElementPropertyDialogsContext {
         if (dialog == null) {
             dialog = me.getNewPropertyDialogInsance();
             context.dialogs.add(dialog);
-            context.registerToolTipTargets(dialog);
+            context.addTooltipMouseListeners(dialog);
         }
         return dialog;
     }
@@ -118,7 +118,6 @@ public class ElementPropertyDialogsContext {
             ElementPropertyDialog dialog = context.dialogs.get(n);
             if (modelElement == dialog.getModelElement()) {
                 context.dialogs.remove(n--);
-                context.unregisterToolTipTargets(dialog);
             }
         }
     }
@@ -182,20 +181,10 @@ public class ElementPropertyDialogsContext {
     /**
      * @param dialog
      */
-    private void registerToolTipTargets(final ElementPropertyDialog dialog) {
+    private void addTooltipMouseListeners(final ElementPropertyDialog dialog) {
         Collection<JComponent> toolTipTargets = dialog.getToolTipTargets();
         for (JComponent toolTipTarget : toolTipTargets) {
-            toolTipProvider.registerComponent(toolTipTarget);
-        }
-    }
-
-    /**
-     * @param dialog
-     */
-    private void unregisterToolTipTargets(final ElementPropertyDialog dialog) {
-        Collection<JComponent> toolTipTargets = dialog.getToolTipTargets();
-        for (JComponent toolTipTarget : toolTipTargets) {
-            toolTipProvider.unregisterComponent(toolTipTarget);
+            toolTipProvider.addToolTipMouseListeners(toolTipTarget);
         }
     }
 

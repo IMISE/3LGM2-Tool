@@ -34,7 +34,7 @@ public class ElementToolTipProvider implements ToolTipProvider {
      * @param target
      */
     public ElementToolTipProvider(final JComponent target) {
-        registerComponent(target);
+        addToolTipMouseListeners(target);
     }
 
     @Override
