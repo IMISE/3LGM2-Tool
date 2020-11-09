@@ -38,7 +38,7 @@ import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.table.cell.IUser
  * <code>UserFieldTableLayout</code>s abgerufen werden, die auf Tabels für
  * Kennzahlen, Verteilungsgewicht oder Modelvariablen zugeschnitten sind.
  * <p>
- * Es wird ein RowHeader(optional) und ColumnHeader mit Tooltips gesetzt. Der
+ * Es wird ein RowHeader(optional) und ColumnHeader mit ToolTips gesetzt. Der
  * RowHeader und alle Spalten lassen sich in ihrer Größe ändern.
  * <p>
  * Werte im Table werden in formatierter Form dargestellt.
@@ -131,7 +131,7 @@ public abstract class AbstractUserFieldTableLayout {
             toolTips[i] = identifiers.get(i).toString();
         }
 
-        // Setzte Header mit Tooltips
+        // Setzte Header mit TooTtips
         final JTableHeader columnHeader = new JTableHeader(table.getColumnModel()) {
             @Override
             public String getToolTipText(final MouseEvent e) {

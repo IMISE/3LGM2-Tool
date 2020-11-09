@@ -1,6 +1,6 @@
 package de.imise.tool3lgm.gui;
 
-import static de.imise.tool3lgm.Tool3lgmConstants.getTooltipResString;
+import static de.imise.tool3lgm.Tool3lgmConstants.getToolTipResString;
 
 import java.awt.Component;
 import java.awt.event.MouseEvent;
@@ -182,13 +182,13 @@ public class MainFrameToolBar extends UnfloatableToolBar implements MouseListene
     }
 
     /**
-     * Aktualisiert die Tooltips des Undo- und Redo-Knopfes. Wenn man den
+     * Aktualisiert die ToolTips des Undo- und Redo-Knopfes. Wenn man den
      * Verification-Modus einschaltet, wird der Undo-Stack als Tooltip
      * angezeigt.
      */
     private void updateUndoRedoToolTips() {
         GraphDocument selectedDoc = Static.getSelectedDoc();
-        //die Tooltips auf den Undo-Redo-Buttons sollen den Queue anzeigen, wenn das aktuelle doc auf verfificationMode gestellt wurde oder der globale Code-Schalter an ist
+        //die ToolTips auf den Undo-Redo-Buttons sollen den Queue anzeigen, wenn das aktuelle doc auf verfificationMode gestellt wurde oder der globale Code-Schalter an ist
         boolean showQueueAsToolTip = selectedDoc != null && selectedDoc.getCollection().getTman() != null && selectedDoc.isVerificationMode();
         if (showQueueAsToolTip) {
             TransactionManager tman = selectedDoc.getCollection().getTman();
@@ -198,19 +198,19 @@ public class MainFrameToolBar extends UnfloatableToolBar implements MouseListene
             undo.setToolTipText(queue);
             redo.setToolTipText(queue);
         } else {
-            setStaticResourceTooltip(undo);
-            setStaticResourceTooltip(redo);
+            setStaticResourceToolTip(undo);
+            setStaticResourceToolTip(redo);
         }
     }
 
     /**
      * @param button
      */
-    private void setStaticResourceTooltip(final JButton button) {
+    private void setStaticResourceToolTip(final JButton button) {
         Action action = button.getAction();
-        Object tooltipReskey = action.getValue(StaticAction.IDENTIFIER_KEY);
-        String tooltipText = getTooltipResString(tooltipReskey);
-        button.setToolTipText(tooltipText);
+        Object toolTipReskey = action.getValue(StaticAction.IDENTIFIER_KEY);
+        String toolTipText = getToolTipResString(toolTipReskey);
+        button.setToolTipText(toolTipText);
     }
 
     private final class ToolbarButton extends JButton {

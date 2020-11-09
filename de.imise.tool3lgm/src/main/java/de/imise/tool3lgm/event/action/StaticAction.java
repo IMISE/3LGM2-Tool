@@ -234,7 +234,7 @@ public abstract class StaticAction extends ExtendedAction {
     private void setToolTip(final String command) {
         //ToolTip laden (wenn vorhanden)
         try {
-            setShortDescription(Tool3lgmConstants.getTooltipResString(command));
+            setShortDescription(Tool3lgmConstants.getToolTipResString(command));
         } catch (MissingResourceException e) {
         }
     }

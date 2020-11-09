@@ -471,7 +471,7 @@ public abstract class Tool3lgmConstants {
      * @param baseKey
      * @return a resource string with the full key "TOOLTIP_" + baseKey
      */
-    public static String getTooltipResString(final Object baseKey) {
+    public static String getToolTipResString(final Object baseKey) {
         return getResString(TOOLTIP_RESSOURCE_PREFIX, baseKey);
     }
 

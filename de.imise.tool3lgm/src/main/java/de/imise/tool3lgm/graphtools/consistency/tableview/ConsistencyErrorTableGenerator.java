@@ -46,7 +46,7 @@ public class ConsistencyErrorTableGenerator implements PropertyChangeListener, T
         ConsistencyErrorTableModel tableModel = new ConsistencyErrorTableModel();
         table = new UneditableJTable(tableModel);
 
-        //Tooltip dismiss time increase (from 4s to 10s)
+        //ToolTip dismiss time increase (from 4s to 10s)
         ToolTipShowTimeHandler.setDismissTime(table, 10000);
 
         //MouseListener
@@ -60,12 +60,12 @@ public class ConsistencyErrorTableGenerator implements PropertyChangeListener, T
         //Table
         table.setAutoResizeMode(JTable.AUTO_RESIZE_LAST_COLUMN);
 
-        DescriptionCellRenderer cellRendererWithTooltips = new DescriptionCellRenderer();
+        DescriptionCellRenderer cellRendererWithToolTips = new DescriptionCellRenderer();
         //set max column width and cell renderer
 
         for (ColumnNames columnIdentifier : ColumnNames.values()) {
             TableColumn column = table.getColumn(columnIdentifier.toString());
-            column.setCellRenderer(cellRendererWithTooltips);
+            column.setCellRenderer(cellRendererWithToolTips);
             if (columnIdentifier.maxColumnWidth > 0) {
                 column.setMaxWidth(columnIdentifier.maxColumnWidth);
             }
@@ -148,8 +148,8 @@ public class ConsistencyErrorTableGenerator implements PropertyChangeListener, T
         public Component getTableCellRendererComponent(final JTable table, final Object value, final boolean isSelected, final boolean hasFocus, final int row, final int column) {
             JComponent c = (JComponent) super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
             ConsistencyErrorTableModel model = (ConsistencyErrorTableModel) table.getModel();
-            String tooltip = model.getTooltip(row);
-            c.setToolTipText(tooltip);
+            String toolTip = model.getToolTip(row);
+            c.setToolTipText(toolTip);
             return c;
         }
     }

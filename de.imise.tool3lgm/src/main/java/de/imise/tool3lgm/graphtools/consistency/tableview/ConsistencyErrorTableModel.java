@@ -136,7 +136,7 @@ public class ConsistencyErrorTableModel extends DefaultTableModel {
      * @return
      */
     @SuppressWarnings("unchecked")
-    public String getTooltip(final int row) {
+    public String getToolTip(final int row) {
         int column = ColumnNames.DESCRIPTION.ordinal();
         Object valueAt = getValueAt(row, column);
         NamedObjectContainer<String> descriptionWithToolTip = (NamedObjectContainer<String>) valueAt;

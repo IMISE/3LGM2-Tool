@@ -650,7 +650,7 @@ public class PathConnectionPanel extends AbstractExpandablePanel {
     }
 
     @Override
-    public Collection<JComponent> getTooltipTargets() {
+    public Collection<JComponent> getToolTipTargets() {
         return Lists.newArrayList(ltree, rtree);
     }
 

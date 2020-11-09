@@ -412,7 +412,7 @@ public abstract class ElementDialogPanel extends JPanel {
      * @return all components that should show tooltips via
      *         {@link ElementToolTipProvider}
      */
-    public Collection<JComponent> getTooltipTargets() {
+    public Collection<JComponent> getToolTipTargets() {
         return new ArrayList<>();
     }
 

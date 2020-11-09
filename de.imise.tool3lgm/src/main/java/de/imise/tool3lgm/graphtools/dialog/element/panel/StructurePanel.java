@@ -265,7 +265,7 @@ public class StructurePanel extends AbstractPathOfOneEdgePanel {
     }
 
     @Override
-    public Collection<JComponent> getTooltipTargets() {
+    public Collection<JComponent> getToolTipTargets() {
         return Lists.newArrayList(rtree, lotree, lutree);
     }
 

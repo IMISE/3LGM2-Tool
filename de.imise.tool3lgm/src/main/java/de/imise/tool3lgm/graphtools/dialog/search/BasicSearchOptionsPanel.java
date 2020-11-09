@@ -264,7 +264,7 @@ public abstract class BasicSearchOptionsPanel extends JPanel implements ItemList
     }
 
     /**
-     * Tooltips an wichtigste Elemente
+     * ToolTips an wichtigste Elemente
      */
     private void addToolTips() {
         setToolTip(searchButton, "SEARCH_DIALOG_TOOLTIP_search");

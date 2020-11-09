@@ -29,8 +29,7 @@ import de.imise.util.resource.SimpleResourceBundleSourceAdapter;
 public class FlexibleTabPaneTab extends JPanel {
 
     /**
-     * The tabbed pane that uses this as a component
-     * to display a tab.
+     * The tabbed pane that uses this as a component to display a tab.
      */
     private final JTabbedPane tabbedPane;
 
@@ -111,7 +110,7 @@ public class FlexibleTabPaneTab extends JPanel {
         //we must set an irrelevant  dummy tooltip to enable the
         //showing if tooltips on the label. Without that the
         //tabLabel.getTooltipText() is never called.
-        tabLabel.setToolTipText("Dummy Tooltip");
+        tabLabel.setToolTipText("Dummy ToolTip");
 
         add(tabLabel);
         tabLabel.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 5));
@@ -141,8 +140,8 @@ public class FlexibleTabPaneTab extends JPanel {
             int size = 17;
             setPreferredSize(new Dimension(size, size));
             SimpleResourceBundleSourceAdapter resourceHandler = new SimpleResourceBundleSourceAdapter(FlexibleTabPaneTab.class);
-            String tooltip = resourceHandler.getResString("close_tab");
-            setToolTipText(tooltip);
+            String toolTip = resourceHandler.getResString("close_tab");
+            setToolTipText(toolTip);
             //the BasicButtonUI enables rollover and mouse clicked events
             setUI(new BasicButtonUI());
             //transparent button -> buttons backgound == tab background

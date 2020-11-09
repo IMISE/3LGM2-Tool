@@ -22,7 +22,7 @@ import de.imise.util.NamedObjectContainer;
  * <code>UserFieldTableLayout</code>s abgerufen werden, die auf Tabels für
  * Kennzahlen, Verteilungsgewicht oder Modelvariablen zugeschnitten sind.
  * <p>
- * Es wird ein RowHeader(optional) und ColumnHeader mit Tooltips gesetzt. Der
+ * Es wird ein RowHeader(optional) und ColumnHeader mit ToolTips gesetzt. Der
  * RowHeader und alle Spalten lassen sich in ihrer Größe ändern.
  * <p>
  * Werte im Table werden in formatierter Form dargestellt.

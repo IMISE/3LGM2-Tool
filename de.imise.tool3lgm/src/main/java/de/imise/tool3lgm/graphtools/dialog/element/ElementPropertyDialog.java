@@ -648,17 +648,17 @@ public class ElementPropertyDialog extends AbstractElementPropertyDialog impleme
      * @return all components that should show tooltips via
      *         {@link ElementToolTipProvider}
      */
-    public Collection<JComponent> getTooltipTargets() {
-        Collection<JComponent> tooltipTargets = new ArrayList<>();
+    public Collection<JComponent> getToolTipTargets() {
+        Collection<JComponent> toolTipTargets = new ArrayList<>();
         for (int i = 0; i < tabbedPane.getTabCount(); i++) {
             Component tabComponent = tabbedPane.getComponentAt(i);
             if (tabComponent instanceof ElementDialogPanel) {
                 ElementDialogPanel panel = (ElementDialogPanel) tabComponent;
-                Collection<JComponent> panelTooltipTargets = panel.getTooltipTargets();
-                tooltipTargets.addAll(panelTooltipTargets);
+                Collection<JComponent> panelToolTipTargets = panel.getToolTipTargets();
+                toolTipTargets.addAll(panelToolTipTargets);
             }
         }
-        return tooltipTargets;
+        return toolTipTargets;
     }
 
 }

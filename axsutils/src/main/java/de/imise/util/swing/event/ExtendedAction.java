@@ -18,7 +18,8 @@ import de.imise.util.pair.Pair;
 /**
  * Erweiterungsklasse zu {@link AbstractAction}
  * <p>
- * Ermöglich den Zugriff auf bzw. das Setzen der durch {@link Action} gegebenen Properties über get- bzw. set-Methoden. <br>
+ * Ermöglich den Zugriff auf bzw. das Setzen der durch {@link Action} gegebenen
+ * Properties über get- bzw. set-Methoden. <br>
  *
  * @author fstephan, AXS
  */
@@ -27,8 +28,10 @@ public abstract class ExtendedAction extends AbstractAction {
     /**
      * Konstruktor
      * <p>
-     * Erzeugt eine Instanz dieser Klasse mit den spezifizierten Property-Werten ({@link Action}). <br>
-     * Die Mnemonic-Property wird hier ausgeschlossen, da sie üblicherweise innerhalb von {@link AbstractButton}-Gruppen gemeinsam gesetzt wird und
+     * Erzeugt eine Instanz dieser Klasse mit den spezifizierten Property-Werten
+     * ({@link Action}). <br>
+     * Die Mnemonic-Property wird hier ausgeschlossen, da sie üblicherweise
+     * innerhalb von {@link AbstractButton}-Gruppen gemeinsam gesetzt wird und
      * beim Erzeugen der Action noch nicht bekannt ist.
      * </p>
      *
@@ -52,7 +55,8 @@ public abstract class ExtendedAction extends AbstractAction {
     /**
      * Konstruktor
      * <p>
-     * Erzeugt eine Instanz dieser Klasse mit den spezifizierten Property-Werten ({@link Action}).
+     * Erzeugt eine Instanz dieser Klasse mit den spezifizierten Property-Werten
+     * ({@link Action}).
      * </p>
      *
      * @param text
@@ -65,7 +69,8 @@ public abstract class ExtendedAction extends AbstractAction {
     /**
      * Konstruktor
      * <p>
-     * Erzeugt eine Instanz dieser Klasse mit dem spezifizierten Property-Wert ({@link Action}).
+     * Erzeugt eine Instanz dieser Klasse mit dem spezifizierten Property-Wert
+     * ({@link Action}).
      * </p>
      *
      * @param text
@@ -136,7 +141,7 @@ public abstract class ExtendedAction extends AbstractAction {
     }
 
     /**
-     * Setzt kurze Beschreibung der Action. (Zur Verwendung als Tooltip)
+     * Setzt kurze Beschreibung der Action. (Zur Verwendung als ToolTip)
      *
      * @param description
      */
@@ -158,7 +163,8 @@ public abstract class ExtendedAction extends AbstractAction {
     }
 
     /**
-     * Setzt den command-<code>String</code> für das {@link ActionEvent}, das beim Auslösen dieser Action entsteht.
+     * Setzt den command-<code>String</code> für das {@link ActionEvent}, das
+     * beim Auslösen dieser Action entsteht.
      *
      * @param actionCommand
      */
@@ -208,7 +214,8 @@ public abstract class ExtendedAction extends AbstractAction {
     }
 
     /**
-     * Gibt den Index des Mnemonics im Text wieder, falls er gesetz wurde. Sonst wird <code>-1</code> zurückgegeben.
+     * Gibt den Index des Mnemonics im Text wieder, falls er gesetz wurde. Sonst
+     * wird <code>-1</code> zurückgegeben.
      *
      * @see #getText()
      * @return
@@ -219,7 +226,7 @@ public abstract class ExtendedAction extends AbstractAction {
     }
 
     /**
-     * Gibt kurze Beschreibung der Action zurück. (Zur Verwendung als Tooltip)
+     * Gibt kurze Beschreibung der Action zurück. (Zur Verwendung als ToolTip)
      *
      * @param description
      */
@@ -228,7 +235,8 @@ public abstract class ExtendedAction extends AbstractAction {
     }
 
     /**
-     * Gibt ausführliche Beschreibung der Action zurück. (Zur Verwendung bei Hilfe)
+     * Gibt ausführliche Beschreibung der Action zurück. (Zur Verwendung bei
+     * Hilfe)
      *
      * @param description
      */
@@ -237,7 +245,8 @@ public abstract class ExtendedAction extends AbstractAction {
     }
 
     /**
-     * Gibt den command-<code>String</code> des {@link ActionEvent}s wieder, das beim Auslösen dieser Action entsteht.
+     * Gibt den command-<code>String</code> des {@link ActionEvent}s wieder, das
+     * beim Auslösen dieser Action entsteht.
      *
      * @param actionCommand
      */
@@ -246,11 +255,11 @@ public abstract class ExtendedAction extends AbstractAction {
     }
 
     /**
-     * Legt die spezifizierten {@link Pair}s auf die Attribute-Map von {@link AbstractAction}. <br>
+     * Legt die spezifizierten {@link Pair}s auf die Attribute-Map von
+     * {@link AbstractAction}. <br>
      *
      * @see AbstractAction#putValue(String, Object)
-     * @param keysAndValues
-     *            - erstes Item: key - zweites Item: value
+     * @param keysAndValues - erstes Item: key - zweites Item: value
      */
     public void putValues(@SuppressWarnings("unchecked") final Pair<String, Object>... keysAndValues) {
         for (Pair<String, Object> keyAndValue : keysAndValues) {
@@ -259,18 +268,19 @@ public abstract class ExtendedAction extends AbstractAction {
     }
 
     /**
-     * Legt das spezifiziert {@link Pair} auf die Attribute-Map von {@link AbstractAction}. <br>
+     * Legt das spezifiziert {@link Pair} auf die Attribute-Map von
+     * {@link AbstractAction}. <br>
      *
      * @see AbstractAction#putValue(String, Object)
-     * @param keysAndValues
-     *            - erstes Item: key - zweites Item: value
+     * @param keysAndValues - erstes Item: key - zweites Item: value
      */
     public void putValue(final Pair<String, Object> keyAndValue) {
         putValue(keyAndValue.getFirstItem(), keyAndValue.getSecondItem());
     }
 
     /**
-     * Entfernt alle Attributwerte dieser Action und setzt sie auf die Werte der spezifizierten Action. <br>
+     * Entfernt alle Attributwerte dieser Action und setzt sie auf die Werte der
+     * spezifizierten Action. <br>
      * Achtung: Die Attributwerte werden hierbei nicht geclont!
      */
     public void setAllAttributes(final ExtendedAction source) {
@@ -279,7 +289,8 @@ public abstract class ExtendedAction extends AbstractAction {
     }
 
     /**
-     * Setzt alle Attributwerte dieser Action auf die Attributwerte der spezifizierten Action.<br>
+     * Setzt alle Attributwerte dieser Action auf die Attributwerte der
+     * spezifizierten Action.<br>
      * Achtung: Die Attributwerte werden hierbei nicht geclont!
      */
     public void addAttributesFrom(final ExtendedAction source) {
@@ -289,7 +300,9 @@ public abstract class ExtendedAction extends AbstractAction {
         }
     }
 
-    /** Entfernt alle Attribute aus der Attribute-Map von {@link AbstractAction} */
+    /**
+     * Entfernt alle Attribute aus der Attribute-Map von {@link AbstractAction}
+     */
     public void clearAttributes() {
         Object[] keys = getKeys();
         for (Object key : keys) {
@@ -315,7 +328,10 @@ public abstract class ExtendedAction extends AbstractAction {
         return sb.toString();
     }
 
-    /** Unterklassen können diese Funktion überschreiben und gleich ein passendes MenuItem erzeugen */
+    /**
+     * Unterklassen können diese Funktion überschreiben und gleich ein passendes
+     * MenuItem erzeugen
+     */
     public JMenuItem createMenuItem() {
         JMenuItem item = new JMenuItem(this);
         item.addAncestorListener(new AncestorListener() {

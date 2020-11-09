@@ -199,7 +199,7 @@ public class MutipleCompositionPanel extends AbstractPathConnectionTreePanel {
     }
 
     @Override
-    public Collection<JComponent> getTooltipTargets() {
+    public Collection<JComponent> getToolTipTargets() {
         return Lists.newArrayList(tree);
     }
 
