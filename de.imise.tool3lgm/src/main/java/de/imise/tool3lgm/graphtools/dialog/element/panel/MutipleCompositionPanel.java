@@ -31,7 +31,9 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
+import de.imise.tool3lgm.graphtools.model.LGMGraphDocument;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
+import de.imise.tool3lgm.graphtools.view.tree.ElementDialogPanelTree;
 import de.imise.tool3lgm.graphtools.view.tree.node.ElementContainerTreeNode;
 import de.imise.tool3lgm.graphtools.view.tree.node.LGMTreeNode;
 import de.imise.tool3lgm.graphtools.view.tree.node.StringTreeNode;
@@ -78,9 +80,10 @@ public class MutipleCompositionPanel extends AbstractPathConnectionTreePanel {
         setLayout(gbl);
         GridBagConstraints constraints = new GridBagConstraints();
 
+        LGMGraphDocument mainDoc = getMainDoc();
         root = new StringTreeNode(getResString("verb"));
         model = new DefaultTreeModel(root);
-        tree = new JTree(model);
+        tree = new ElementDialogPanelTree(model, mainDoc);
         tree.setRootVisible(false);
         tree.setCellRenderer(treeRenderer);
         tree.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
