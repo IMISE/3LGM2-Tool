@@ -365,6 +365,9 @@ public class SingleConnectionPanel extends AbstractPathConnectionPanel {
 
     @Override
     public Collection<JComponent> getToolTipTargets() {
+        if (connectedElementsBox == null) {
+            return super.getToolTipTargets();
+        }
         return Lists.newArrayList(connectedElementsBox);
     }
 
