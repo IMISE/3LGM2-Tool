@@ -8,6 +8,7 @@ import java.util.Vector;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.MutableTreeNode;
 
+import de.imise.tool3lgm.graphtools.consistency.error.type.AbstractConsistencyError;
 import de.imise.util.Alphabetical;
 
 /**
@@ -15,12 +16,26 @@ import de.imise.util.Alphabetical;
  */
 public class LGMTreeNode extends DefaultMutableTreeNode {
 
+    /**
+     * If you do not want to display the value of the toString() function of the
+     * userObject, you can set this alternative display string.
+     */
     private String visibleText = null;
 
+    /**
+     * If this error is set, this node is rendered in a different way. The way
+     * depends on whether the element of this node is the faulty element or an
+     * element to solve the error.
+     */
+    private AbstractConsistencyError consistencyError;
+
+    /** If <code>true</code> the node will sort its children */
     private boolean sort;
 
+    /** selectable yes/no */
     private boolean selectable = true;
 
+    /** The color of the font */
     private Color foregroundColor = Color.black;
 
     /**
@@ -191,6 +206,20 @@ public class LGMTreeNode extends DefaultMutableTreeNode {
             return false;
         }
         return true;
+    }
+
+    /**
+     * @return the consistencyError
+     */
+    public final AbstractConsistencyError getConsistencyError() {
+        return consistencyError;
+    }
+
+    /**
+     * @param consistencyError the consistencyError to set
+     */
+    public final void setConsistencyError(final AbstractConsistencyError consistencyError) {
+        this.consistencyError = consistencyError;
     }
 
 }

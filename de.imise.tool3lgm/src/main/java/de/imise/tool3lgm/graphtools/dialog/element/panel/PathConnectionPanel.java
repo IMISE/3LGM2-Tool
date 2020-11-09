@@ -379,15 +379,7 @@ public class PathConnectionPanel extends AbstractExpandablePanel {
         root.setSort(false);
 
         //find all elements which should be connected to solve a missing path error
-        List<ModelElement> errorSolutionElements = new ArrayList<>();
-        Collection<AbstractConsistencyError> consistencyErrors = getConsistencyErrors();
-        for (AbstractConsistencyError consistencyError : consistencyErrors) {
-            if (consistencyError instanceof MissingPathError) {
-                MissingPathError missingPathError = (MissingPathError) consistencyError;
-                Collection<ModelElement> missingElements = missingPathError.getMissingElements();
-                errorSolutionElements.addAll(missingElements);
-            }
-        }
+        List<ModelElement> errorSolutionElements = getErrorSolutionElements();
 
         //add all connectable element containers to the tree but not
         //these with an element to solve an error
@@ -407,11 +399,50 @@ public class PathConnectionPanel extends AbstractExpandablePanel {
         //disable sorting during insert -> the connectable element stay at the beginning
         int errorSolutionElementInsertIndex = 0;
         for (ElementContainer ec : errorSolutionElementContainers) {
-            rtree.insertObject(errorSolutionElementInsertIndex++, ec, childrenToExcludeFromRtree, false, true);
+            LGMTreeNode errorSulutionTreeNode = rtree.insertObject(errorSolutionElementInsertIndex++, ec, childrenToExcludeFromRtree, false, true);
+            ModelElement me = ec.getElement();
+            AbstractConsistencyError errorElementIsSolutionFor = getErrorElementIsSolutionFor(me);
+            errorSulutionTreeNode.setConsistencyError(errorElementIsSolutionFor);
         }
         rmodel.reload();
         rtree.restoreExpansion();
         rtree.restoreSelection();
+    }
+
+    /**
+     * @return all elements which should be connected to solve a missing path
+     *         error
+     */
+    private List<ModelElement> getErrorSolutionElements() {
+        List<ModelElement> errorSolutionElements = new ArrayList<>();
+        Collection<AbstractConsistencyError> consistencyErrors = getConsistencyErrors();
+        for (AbstractConsistencyError consistencyError : consistencyErrors) {
+            if (consistencyError instanceof MissingPathError) {
+                MissingPathError missingPathError = (MissingPathError) consistencyError;
+                Collection<ModelElement> missingElements = missingPathError.getMissingElements();
+                errorSolutionElements.addAll(missingElements);
+            }
+        }
+        return errorSolutionElements;
+    }
+
+    /**
+     * @param me
+     * @return an ConsistencyError, if the given ModelElement is an element to
+     *         resolve the error, otherwise <code>null</code>
+     */
+    private AbstractConsistencyError getErrorElementIsSolutionFor(final ModelElement me) {
+        Collection<AbstractConsistencyError> consistencyErrors = getConsistencyErrors();
+        for (AbstractConsistencyError consistencyError : consistencyErrors) {
+            if (consistencyError instanceof MissingPathError) {
+                MissingPathError missingPathError = (MissingPathError) consistencyError;
+                Collection<ModelElement> missingElements = missingPathError.getMissingElements();
+                if (missingElements.contains(me)) {
+                    return missingPathError;
+                }
+            }
+        }
+        return null;
     }
 
     @Override

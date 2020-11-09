@@ -5,6 +5,7 @@ import javax.swing.JComponent;
 import com.google.common.base.Strings;
 
 import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
+import de.imise.tool3lgm.graphtools.consistency.error.type.AbstractConsistencyError;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
@@ -40,6 +41,13 @@ public class ElementToolTipProvider implements ToolTipProvider {
     public String getToolTip(Object o) {
         if (o instanceof LGMTreeNode) {
             LGMTreeNode treeNode = (LGMTreeNode) o;
+            AbstractConsistencyError consistencyError = treeNode.getConsistencyError();
+            if (consistencyError != null) {
+                String treeNodeToolTip = consistencyError.getLongMessage();
+                if (!Strings.isNullOrEmpty(treeNodeToolTip)) {
+                    return treeNodeToolTip;
+                }
+            }
             o = treeNode.getUserObject();
         }
         if (o instanceof NamedObjectContainer) {
