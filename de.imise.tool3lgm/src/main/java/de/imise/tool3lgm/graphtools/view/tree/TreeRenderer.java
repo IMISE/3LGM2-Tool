@@ -45,8 +45,8 @@ public class TreeRenderer extends DefaultTreeCellRenderer {
     protected static Color standardColor = Color.BLACK;
 
     /**
-     * If set true by an subclass the text color will not be set again by this
-     * renderer.
+     * If set <code>true</code> by an subclass the text color will not be set
+     * again by this renderer.
      */
     protected boolean ignoreColor = false;
 
