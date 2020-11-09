@@ -207,38 +207,6 @@
 					</execution>
 				</executions>
 			</plugin>
-			<!-- per Ant die tool3lgm.jar und Template ins deploy kopieren -->
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-antrun-plugin</artifactId>
-				<version>1.8</version>
-				<executions>
-					<execution>
-						<phase>package</phase>
-						<configuration>
-							<target>
-							
-								<copy
-									file="../de.imise.tool3lgm/thirdPartyLicense.html"
-									tofile="../de.imise.tool3lgm.deploy/Tool3lgm/thirdPartyLicense.html" />
-								<!-- tool3lgm.jar aus dem target ins deploy kopieren -->
-								<copy
-									file="${project.build.directory}/${project.artifactId}.${project.packaging}"
-									tofile="../de.imise.tool3lgm.deploy/Tool3lgm/lib/${project.artifactId}.${project.packaging}" />
-								<!-- Templates aus dem tool3lm-Projekt nach ../de.imise.tool3lgm.deploy/Tool3lgm/Templates 
-									kopieren -->
-								<copy
-									toDir="../de.imise.tool3lgm.deploy/Tool3lgm/Templates">
-									<fileset dir="../de.imise.tool3lgm/Templates" />
-								</copy>
-							</target>
-						</configuration>
-						<goals>
-							<goal>run</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
 			<!-- erstellt version.info datei und füllt sie mit Branchnamen und git describe tag -->
 			<plugin>
                 <groupId>pl.project13.maven</groupId>
@@ -275,7 +243,40 @@
 					</replacementProperties>
                 </configuration>
             </plugin>
-			
+			<!-- per Ant die tool3lgm.jar und Template ins deploy kopieren -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-antrun-plugin</artifactId>
+				<version>1.8</version>
+				<executions>
+					<execution>
+						<phase>package</phase>
+						<configuration>
+							<target>
+								<copy
+									file="../de.imise.tool3lgm/version.info"
+									tofile="../de.imise.tool3lgm.deploy/Tool3lgm/version.info" />				
+								<copy
+									file="../de.imise.tool3lgm/thirdPartyLicense.html"
+									tofile="../de.imise.tool3lgm.deploy/Tool3lgm/thirdPartyLicense.html" />
+								<!-- tool3lgm.jar aus dem target ins deploy kopieren -->
+								<copy
+									file="${project.build.directory}/${project.artifactId}.${project.packaging}"
+									tofile="../de.imise.tool3lgm.deploy/Tool3lgm/lib/${project.artifactId}.${project.packaging}" />
+								<!-- Templates aus dem tool3lm-Projekt nach ../de.imise.tool3lgm.deploy/Tool3lgm/Templates 
+									kopieren -->
+								<copy
+									toDir="../de.imise.tool3lgm.deploy/Tool3lgm/Templates">
+									<fileset dir="../de.imise.tool3lgm/Templates" />
+								</copy>
+							</target>
+						</configuration>
+						<goals>
+							<goal>run</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
 			<!-- <plugin> -->
 			<!-- <groupId>org.codehaus.mojo</groupId> -->
 			<!-- <artifactId>license-maven-plugin</artifactId> -->
