@@ -60,25 +60,31 @@ public class DataAvailabilityFinder {
         commPathFinder = new ShortestCommunicationPathFinder(mainDoc.getCollection());
 
         /*
-         * ArrayList elements = mainDoc.getModelItems(Anwendungsbaustein.class, true); //
-         * System.err.println(elements.size()); HashSet allMe = new HashSet(elements); for (int i=0;
-         * i<elements.size(); i++){ ModelElement me = (ModelElement)elements.get(i); if
-         * (me.getConnectionsFrom(Anwendungsbaustein.class, PdvbPdvbVerbindung.class).size()>0 ||
-         * me.getConnectionsFrom(Anwendungsbaustein.class, RawbRawbVerbindung.class).size()>0);
-         * allMe.add(me); } /* System.err.println("Anwendungsbaustein: " + allMe.size()); elements =
+         * ArrayList elements = mainDoc.getModelItems(Anwendungsbaustein.class,
+         * true); // System.err.println(elements.size()); HashSet allMe = new
+         * HashSet(elements); for (int i=0; i<elements.size(); i++){
+         * ModelElement me = (ModelElement)elements.get(i); if
+         * (me.getConnectionsFrom(Anwendungsbaustein.class,
+         * PdvbPdvbVerbindung.class).size()>0 ||
+         * me.getConnectionsFrom(Anwendungsbaustein.class,
+         * RawbRawbVerbindung.class).size()>0); allMe.add(me); } /*
+         * System.err.println("Anwendungsbaustein: " + allMe.size()); elements =
          * mainDoc.getAllModelElements(Bausteinschnittstelle.class);
-         * System.err.println("Bausteinschnittstellen: " + elements.size()); elements =
-         * mainDoc.getAllModelElements(KommBeziehung.class);
+         * System.err.println("Bausteinschnittstellen: " + elements.size());
+         * elements = mainDoc.getAllModelElements(KommBeziehung.class);
          * System.err.println("Kommunikationsbeziehungen: " + elements.size());
          */
         /*
-         * int b=0; int i=0; ArrayList elements = mainDoc.getModelItmes(AufObjVerbindung.class); for
-         * (int k=0; k<elements.size(); k++){ Doppelkante kante = (Doppelkante)elements.get(k); if
-         * (kante.getDirection()==Doppelkante.FORWARD){ if (kante.getStart() instanceof Aufgabe)
-         * b++; else i++; }else if(kante.getDirection()==Doppelkante.BACKWARD){ if (kante.getStart()
-         * instanceof Aufgabe) i++; else b++; }else { b++; i++; } } // System.err.println(i); //
-         * System.err.println(b); // System.err.println("Kommunikationsbeziehungen: " +
-         * elements.size());
+         * int b=0; int i=0; ArrayList elements =
+         * mainDoc.getModelItmes(AufObjVerbindung.class); for (int k=0;
+         * k<elements.size(); k++){ Doppelkante kante =
+         * (Doppelkante)elements.get(k); if
+         * (kante.getDirection()==Doppelkante.FORWARD){ if (kante.getStart()
+         * instanceof Aufgabe) b++; else i++; }else
+         * if(kante.getDirection()==Doppelkante.BACKWARD){ if (kante.getStart()
+         * instanceof Aufgabe) i++; else b++; }else { b++; i++; } } //
+         * System.err.println(i); // System.err.println(b); //
+         * System.err.println("Kommunikationsbeziehungen: " + elements.size());
          */
 
         showReport();
@@ -88,8 +94,8 @@ public class DataAvailabilityFinder {
      * Prüft, ob der übergebenene Objekttyp irgendwo gespeichert wird.
      *
      * @param objecttype
-     * @return <code>true</code>, wenn der übergebenene Objekttyp irgendwo gespeichert wird, sonst
-     *         <code>false</code>
+     * @return <code>true</code>, wenn der übergebenene Objekttyp irgendwo
+     *         gespeichert wird, sonst <code>false</code>
      */
     public boolean hasStoringSystem(final Objekttyp objecttype) {
         ModelAnalyzerCache mac = commPathFinder.getAnalyzerCache();
@@ -101,8 +107,8 @@ public class DataAvailabilityFinder {
      * Prüft, ob der übergebenene Objekttyp einen Master-Speicher besitzt.
      *
      * @param objecttype
-     * @return <code>true</code>, wenn der übergebenene Objekttyp einen Master-Speicher besitzt,
-     *         sonst <code>false</code>
+     * @return <code>true</code>, wenn der übergebenene Objekttyp einen
+     *         Master-Speicher besitzt, sonst <code>false</code>
      */
     public boolean hasMasterSystem(final Objekttyp objecttype) {
         ModelAnalyzerCache mac = commPathFinder.getAnalyzerCache();
@@ -111,27 +117,30 @@ public class DataAvailabilityFinder {
     }
 
     /**
-     * Prüft, ob der übergebenene Objekttyp irgendwo gespeichert wird und ob er einen
-     * Master-Speicher besitzt.
+     * Prüft, ob der übergebenene Objekttyp irgendwo gespeichert wird und ob er
+     * einen Master-Speicher besitzt.
      *
      * @param objecttype
-     * @return <code>true</code>, wenn der übergebenene Objekttyp irgendwo gespeichert wird und er
-     *         einen Master-Speicher besitzt, sonst <code>false</code>
+     * @return <code>true</code>, wenn der übergebenene Objekttyp irgendwo
+     *         gespeichert wird und er einen Master-Speicher besitzt, sonst
+     *         <code>false</code>
      */
     public boolean isStored(final Objekttyp objecttype) {
         return hasStoringSystem(objecttype) && hasMasterSystem(objecttype);
     }
 
     /**
-     * Liefert eine Liste von <code>SameTypePair</code>s, mit allen Master-Anwendungssystemen des
-     * Objekttyps, zwischen denen untereinander kein gerichteter Kommunikationsweg existiert, über
-     * den der Objekttyp übertragen werden kann. Das erste Objekt jedes <code>SameTypePair</code>
+     * Liefert eine Liste von <code>SameTypePair</code>s, mit allen
+     * Master-Anwendungssystemen des Objekttyps, zwischen denen untereinander
+     * kein gerichteter Kommunikationsweg existiert, über den der Objekttyp
+     * übertragen werden kann. Das erste Objekt jedes <code>SameTypePair</code>
      * ist Sender und das zweite Empfänger des Objekttyps.<br>
-     * Es kann sein, dass gar keine Kommunikation zwischen 2 Master Anwendungsystemen möglich ist.
-     * Dann sind 2 <code>SameTypePair</code>s in der Liste, die jeweils die beiden Master als
-     * Objekte enthalten, aber beide in jeweils umgekehrter Reihenfolge. Ist nur eine
-     * kommunikationsrichtung nicht gegeben, dann ist nur das entsprechend gerichtete
-     * <code>SameTypePair</code> in der Liste.
+     * Es kann sein, dass gar keine Kommunikation zwischen 2 Master
+     * Anwendungsystemen möglich ist. Dann sind 2 <code>SameTypePair</code>s in
+     * der Liste, die jeweils die beiden Master als Objekte enthalten, aber
+     * beide in jeweils umgekehrter Reihenfolge. Ist nur eine
+     * kommunikationsrichtung nicht gegeben, dann ist nur das entsprechend
+     * gerichtete <code>SameTypePair</code> in der Liste.
      *
      * @param objecttype
      * @return
@@ -176,9 +185,10 @@ public class DataAvailabilityFinder {
     }
 
     /**
-     * Gibt den minimalen Kommunikationsweg zwischen den Anwendungssystemen der Konfiguration der
-     * Aufgabe und den speichernden Anwendungssystemen des Objekttyps zurück. Wenn die Aufgabe keine
-     * Anwendungssysteme in ihrer Konfiguration
+     * Gibt den minimalen Kommunikationsweg zwischen den Anwendungssystemen der
+     * Konfiguration der Aufgabe und den speichernden Anwendungssystemen des
+     * Objekttyps zurück. Wenn die Aufgabe keine Anwendungssysteme in ihrer
+     * Konfiguration
      *
      * @param function
      * @param objecttype
@@ -202,13 +212,15 @@ public class DataAvailabilityFinder {
     }
 
     /**
-     * Gibt alle Anwenungssysteme zurück, die den Objekttyp zwar speichern, zu denen aber keine
-     * Kommunikation vom Master-Anwendungssystem des Objekttyps besteht. Dies kann daran liegen,
-     * dass der Objekttyp kein Master-Anwenungssystem besitzt oder keine Kommunikationsverbindung
+     * Gibt alle Anwenungssysteme zurück, die den Objekttyp zwar speichern, zu
+     * denen aber keine Kommunikation vom Master-Anwendungssystem des Objekttyps
+     * besteht. Dies kann daran liegen, dass der Objekttyp kein
+     * Master-Anwenungssystem besitzt oder keine Kommunikationsverbindung
      * zwischen dem Master- und dem speichernden Anwendungssystem besteht.
      *
      * @param objekttyp
-     * @return alle Anwendungssysteme, die den Objekttyp inkonsistent speichern TODO: implementieren
+     * @return alle Anwendungssysteme, die den Objekttyp inkonsistent speichern
+     *         TODO: implementieren
      */
     public Set<ModelElement> getInconsistentStorageSystems(final Objekttyp objekttyp) {
         return null;

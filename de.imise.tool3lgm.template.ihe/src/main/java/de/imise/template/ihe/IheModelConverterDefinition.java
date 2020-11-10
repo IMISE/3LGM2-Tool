@@ -130,11 +130,14 @@ public class IheModelConverterDefinition extends ModelConverterDefinition {
     }
 
     /**
-     * Diese Funktion erzeugt zwischen allen Schnittstellen, die über eine Transaktion miteinander verbunden sind, auch eine
-     * IheCommunicationLink_Edge.
-     * Das hier könnte man sich sparen, wenn man parallele Pfade auch aus einem parallelen MetaPfad erzeugen könnte (und nicht
-     * nur SimplePaths aus SimpleMetaPaths wie bisher). Das ganze ist schon angedacht, aber noch nicht umgesetzt (siehe
-     * getSourceEdgeClassesToTargetMetaPaths(). Das hier ist der Quick-And-Dirty-Workaround.
+     * Diese Funktion erzeugt zwischen allen Schnittstellen, die über eine
+     * Transaktion miteinander verbunden sind, auch eine
+     * IheCommunicationLink_Edge. Das hier könnte man sich sparen, wenn man
+     * parallele Pfade auch aus einem parallelen MetaPfad erzeugen könnte (und
+     * nicht nur SimplePaths aus SimpleMetaPaths wie bisher). Das ganze ist
+     * schon angedacht, aber noch nicht umgesetzt (siehe
+     * getSourceEdgeClassesToTargetMetaPaths(). Das hier ist der
+     * Quick-And-Dirty-Workaround.
      *
      * @param target
      */
@@ -159,8 +162,9 @@ public class IheModelConverterDefinition extends ModelConverterDefinition {
     }
 
     /**
-     * Das hier macht aus dem Namen "IHE Schnittstelle (bereistellend) 33" den Namen "ITI-43 Schnittstelle (bereitstellend)",
-     * je nachdem mit welcher Transaktion die Schnittstelle verbunden ist.
+     * Das hier macht aus dem Namen "IHE Schnittstelle (bereistellend) 33" den
+     * Namen "ITI-43 Schnittstelle (bereitstellend)", je nachdem mit welcher
+     * Transaktion die Schnittstelle verbunden ist.
      *
      * @param source
      * @param target

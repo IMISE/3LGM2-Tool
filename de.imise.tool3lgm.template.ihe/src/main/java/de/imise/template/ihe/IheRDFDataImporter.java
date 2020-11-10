@@ -39,8 +39,8 @@ public class IheRDFDataImporter extends RDFDataImporter {
     }
 
     /**
-     * Da ObjectProperties u.U. genauso heißen, wie Knoten-Klassen, sollte man mit diesem Namenszusatz bei 3LGM2-Kantenklassen für Eindeutigkeit
-     * sorgen.
+     * Da ObjectProperties u.U. genauso heißen, wie Knoten-Klassen, sollte man
+     * mit diesem Namenszusatz bei 3LGM2-Kantenklassen für Eindeutigkeit sorgen.
      */
     private static final String TLGM_EDGE_CLASS_NAME_POSTFIX = "_Edge";
 

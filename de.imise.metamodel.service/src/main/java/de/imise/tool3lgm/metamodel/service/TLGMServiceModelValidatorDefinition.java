@@ -33,8 +33,9 @@ public class TLGMServiceModelValidatorDefinition extends ModelValidatorDefinitio
     //löschen (das macht der ModelCleaner beim Einlesen und Speichern)
 
     /**
-     * Liste aller Elementarten, die bei Unterschreitung der Anzahl der zugehörigen Kantenart sofort
-     * gelöscht werden. Das hier ist nur beispielhaft aus dem
+     * Liste aller Elementarten, die bei Unterschreitung der Anzahl der
+     * zugehörigen Kantenart sofort gelöscht werden. Das hier ist nur
+     * beispielhaft aus dem
      *
      * @return
      */

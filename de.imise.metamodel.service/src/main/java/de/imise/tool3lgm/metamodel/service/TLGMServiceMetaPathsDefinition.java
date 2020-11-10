@@ -53,10 +53,11 @@ import de.imise.tool3lgm.metamodel.service.node.Service;
 import de.imise.tool3lgm.metamodel.service.node.SoftwareProduct;
 
 /**
- * In this definition all pathes of the metamodel are defined. The {@link MetaModelDefinition}
- * should/can not contain any metapath definitions because itself is needed to created any metapath.
- * This definition here is loaded lazy by the {@link MetaPathDefinition} so the basic metamodel
- * object exists while creating the metapaths.
+ * In this definition all pathes of the metamodel are defined. The
+ * {@link MetaModelDefinition} should/can not contain any metapath definitions
+ * because itself is needed to created any metapath. This definition here is
+ * loaded lazy by the {@link MetaPathDefinition} so the basic metamodel object
+ * exists while creating the metapaths.
  *
  * @author AXS (27 May 2019)
  */

@@ -32,7 +32,8 @@ import de.imise.tool3lgm.metamodel.service.node.IheProvidingInterface;
 import de.imise.tool3lgm.metamodel.service.node.IheTransaction;
 
 /**
- * Function to load a {@link TLGMServiceMetaModel} template and the definition of the corresponding view of the template browser.
+ * Function to load a {@link TLGMServiceMetaModel} template and the definition
+ * of the corresponding view of the template browser.
  *
  * @author AXS (30.08.2019)
  */

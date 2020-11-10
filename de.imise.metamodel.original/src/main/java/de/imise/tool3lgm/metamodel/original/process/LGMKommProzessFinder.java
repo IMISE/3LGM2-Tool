@@ -1,6 +1,6 @@
 /*
- * Created on 01.03.2004 To change this generated comment go to Window>Preferences>Java>Code
- * Generation>Code and Comments
+ * Created on 01.03.2004 To change this generated comment go to
+ * Window>Preferences>Java>Code Generation>Code and Comments
  */
 package de.imise.tool3lgm.metamodel.original.process;
 
@@ -15,8 +15,8 @@ import de.imise.tool3lgm.metamodel.original.node.Anwendungsbaustein;
 import de.imise.tool3lgm.metamodel.original.node.Bausteinschnittstelle;
 
 /**
- * @author AXS To change this generated comment go to Window>Preferences>Java>Code Generation>Code
- *         and Comments
+ * @author AXS To change this generated comment go to
+ *         Window>Preferences>Java>Code Generation>Code and Comments
  */
 public class LGMKommProzessFinder {
 
@@ -30,8 +30,9 @@ public class LGMKommProzessFinder {
     }
 
     /**
-     * Setzt in den übergebenen LGMProzessSteps, den kürzesten Kommunikationspfad, wenn es einen
-     * gibt. (Unendliche Pfade sind an Ende null)
+     * Setzt in den übergebenen LGMProzessSteps, den kürzesten
+     * Kommunikationspfad, wenn es einen gibt. (Unendliche Pfade sind an Ende
+     * null)
      *
      * @param steps
      */
