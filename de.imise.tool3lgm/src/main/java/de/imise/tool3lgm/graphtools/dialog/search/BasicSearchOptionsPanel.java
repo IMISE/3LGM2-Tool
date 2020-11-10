@@ -44,7 +44,6 @@ import de.imise.tool3lgm.graphtools.userfield.UserField;
 import de.imise.tool3lgm.graphtools.userfield.UserField.Style;
 import de.imise.tool3lgm.userproperties.UserProperties;
 import de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty;
-import de.imise.util.Sys;
 import de.imise.util.swing.component.AlphabeticalComboBox;
 import de.imise.util.swing.component.HistoryComboBox;
 
@@ -198,7 +197,6 @@ public abstract class BasicSearchOptionsPanel extends JPanel implements ItemList
      * @param refreshSubModelAndClassBox
      */
     private void callSearch(final boolean refreshSubModelAndClassBox) {
-        Sys.err(refreshSubModelAndClassBox);
         HistoryComboBox.addToHistory(elementName);
         HistoryComboBox.addToHistory(elementUserField);
         HistoryComboBox.addToHistory(elementDescription);
