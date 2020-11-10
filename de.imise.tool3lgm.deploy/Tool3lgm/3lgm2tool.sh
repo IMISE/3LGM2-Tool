@@ -51,4 +51,4 @@ if [ $# -gt 0 ]; then
 	fi
 fi
 
-$java -classpath ./lib/*:./Plugins/* -splash:splash.gif $MEMORY de.imise.tool3lgm.Tool3lgmMain
+$java -classpath ./lib/*:./Plugins/* -splash:splash.gif $MEMORY de.imise.tool3lgm.Tool3lgmMain $*
