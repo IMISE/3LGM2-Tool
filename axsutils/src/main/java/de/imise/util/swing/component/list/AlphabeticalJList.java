@@ -107,7 +107,7 @@ public class AlphabeticalJList<T> extends JList<NamedObjectContainer<T>> {
      */
     public T getSelectedObject() {
         NamedObjectContainer<T> selectedObject = getSelectedValue();
-        return selectedObject.getObject();
+        return selectedObject == null ? null : selectedObject.getObject();
     }
 
     /**
