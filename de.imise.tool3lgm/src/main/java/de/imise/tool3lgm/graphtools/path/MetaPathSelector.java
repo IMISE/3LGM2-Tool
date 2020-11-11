@@ -100,7 +100,7 @@ public class MetaPathSelector implements ActionListener {
      * selectable meta paths, this list must be updated if the selection of the
      * comboboxes is changed.
      */
-    private AlphabeticalJList metaPathJList;
+    private AlphabeticalJList<MetaPath> metaPathJList;
 
     /**
      * Model, das die auswählbaren Elementklassen und Pfade festlegt.
@@ -148,7 +148,7 @@ public class MetaPathSelector implements ActionListener {
         class1ComboBox.setSelectedItem(null);
         class1ComboBox.addActionListener(this);
 
-        class2ComboBox = new AlphabeticalComboBox();
+        class2ComboBox = new AlphabeticalComboBox<>();
         class2ComboBox.addActionListener(this);
         class2ComboBox.setEnabled(false);
         Dimension preferredSizeBox1 = class1ComboBox.getPreferredSize();
@@ -241,7 +241,7 @@ public class MetaPathSelector implements ActionListener {
                     }
                 }
                 if (metaPathJList != null) {
-                    metaPathJList.setItems(selectableMetaPaths);
+                    metaPathJList.setObjects(selectableMetaPaths);
                 }
             }
             deliverChangeEvent(class2ComboBox);
@@ -305,7 +305,7 @@ public class MetaPathSelector implements ActionListener {
     public static final MetaPathSelector showDialog(final MetaPathDefinition model, final String class1Label, final String class2Label, final String metaPathListLabel, final int maxParallelSelectedPaths) {
         if (dialogMetaPathSelecor == null) {
             dialogMetaPathSelecor = new MetaPathSelector(model, maxParallelSelectedPaths);
-            dialogMetaPathSelecor.metaPathJList = new AlphabeticalJList();
+            dialogMetaPathSelecor.metaPathJList = new AlphabeticalJList<>();
         }
         if (maxParallelSelectedPaths <= 1) {
             dialogMetaPathSelecor.metaPathJList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
