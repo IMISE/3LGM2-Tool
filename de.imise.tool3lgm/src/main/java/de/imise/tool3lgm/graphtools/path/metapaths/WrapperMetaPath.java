@@ -11,7 +11,12 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
  *
  * @author AXS (28 Nov 2018)
  */
-public class WrapperMetaPath extends SequenceMetaPath {
+public class WrapperMetaPath extends ListMetaPath {
+
+    /**
+     *
+     */
+    private final MetaPath wrappedMetaPath;
 
     /**
      * @param newStartClass
@@ -19,7 +24,8 @@ public class WrapperMetaPath extends SequenceMetaPath {
      * @param wrappedMetaPath
      */
     private WrapperMetaPath(final Class<? extends ModelElement> newStartClass, final Class<? extends ModelElement> newEndClass, final MetaPath wrappedMetaPath) {
-        super(getWrappedMetaPath(newStartClass, newEndClass, wrappedMetaPath));
+        super(wrappedMetaPath.name, getWrappedMetaPath(newStartClass, newEndClass, wrappedMetaPath));
+        this.wrappedMetaPath = wrappedMetaPath;
     }
 
     /**
@@ -82,11 +88,37 @@ public class WrapperMetaPath extends SequenceMetaPath {
 
     @Override
     protected final String createName() {
-        MetaPath firstMetaPath = subMetaPaths.get(0);
-        if (firstMetaPath instanceof ElementaryMetaPath && ((ElementaryMetaPath) firstMetaPath).getType() == ElementaryMetaPath.Type.SINGLE_ELEMENT) {
-            return subMetaPaths.get(1).createName();
+        return wrappedMetaPath.createName();
+    }
+
+    @Override
+    protected void initStartEndClasses() {
+        if (subMetaPaths != null && !subMetaPaths.isEmpty()) {
+            MetaPath firstSubMetaPath = getFirstSubMetaPath();
+            startElementClasses = firstSubMetaPath.startElementClasses;
+            MetaPath lastSubMetaPath = getLastSubMetaPath();
+            endElementClasses = lastSubMetaPath.endElementClasses;
         }
-        return firstMetaPath.createName();
+    }
+
+    @Override
+    public boolean isCreatable(final boolean checkCreateEndElement) {
+        return wrappedMetaPath.isCreatable(checkCreateEndElement);
+    }
+
+    @Override
+    public boolean isRemoveable(final boolean checkEndElement) {
+        return wrappedMetaPath.isRemoveable(checkEndElement);
+    }
+
+    @Override
+    public boolean isDirected() {
+        return wrappedMetaPath.isDirected();
+    }
+
+    @Override
+    public boolean containsPropertyTransferEdge() {
+        return wrappedMetaPath.containsPropertyTransferEdge();
     }
 
 }
