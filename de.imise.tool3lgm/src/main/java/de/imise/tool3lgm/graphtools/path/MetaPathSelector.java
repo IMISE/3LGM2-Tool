@@ -1,13 +1,9 @@
 package de.imise.tool3lgm.graphtools.path;
 
-import static de.imise.tool3lgm.Static.getMainFrame;
-import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
-
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;
@@ -33,10 +29,8 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.path.metapaths.MetaPath;
 import de.imise.tool3lgm.gui.MainFrame;
 import de.imise.util.Alphabetical;
-import de.imise.util.NamedObjectContainer;
 import de.imise.util.swing.component.AlphabeticalComboBox;
 import de.imise.util.swing.component.list.AlphabeticalJList;
-import de.imise.util.swing.dialog.MultipleOptionPane;
 
 /**
  * Diese Klasse stellt 3 zusammengehörige Komponenten bereit, mit denen ein
@@ -107,9 +101,6 @@ public class MetaPathSelector implements ActionListener {
      */
     private final MetaPathDefinition model;
 
-    /** Maximale Anzahl gleichzeitig auswählbarer Pfade, wenn es mehrere gibt */
-    private int maxParallelSelectedPaths = -1;
-
     /**
      * Alle Elementklasse, bei denenlaut {@link MetaPathDefinition} Pfade enden.
      */
@@ -123,7 +114,6 @@ public class MetaPathSelector implements ActionListener {
      */
     public MetaPathSelector(final MetaPathDefinition model, final int maxParallelSelectedPaths) {
         this.model = model;
-        this.maxParallelSelectedPaths = maxParallelSelectedPaths;
         class1ComboBox = new AlphabeticalComboBox<>();
         Set<Class<? extends ModelElement>> startElementClassesInPaths = model.getStartElementClassesInPaths();
         endElementClassesInPaths = model.getEndElementClassesInPaths();
@@ -192,79 +182,13 @@ public class MetaPathSelector implements ActionListener {
             selectedMetaPaths.clear();
             selectableMetaPaths = new ArrayList<>(model.getMetaPaths(class1BoxSelection, class2BoxSelection, true));
             Alphabetical.sort(selectableMetaPaths);
-            if (selectableMetaPaths != null) {
-                int selectableMetaPathsCount = selectableMetaPaths.size();
-                if (selectableMetaPathsCount == 1) {
-                    MetaPath metaPath = selectableMetaPaths.iterator().next();
-                    selectableMetaPaths = new ArrayList<>(1);
-                    selectableMetaPaths.add(metaPath);
-                    selectedMetaPaths.add(metaPath);
-                } else if (selectableMetaPathsCount > 1) {
-                    List<NamedObjectContainer<MetaPath>> pathNames = new ArrayList<>(selectableMetaPathsCount);
-                    for (MetaPath metaPath : selectableMetaPaths) {
-                        String metaPathFullName = metaPath.getFullName();
-                        pathNames.add(new NamedObjectContainer<>(metaPath, metaPathFullName));
-                    }
-                    StringBuilder sb = append(null, "text_path_1");
-                    sb.append(" ");
-                    //beliebig viele Pfade sind auswählbar
-                    if (maxParallelSelectedPaths <= 0 || maxParallelSelectedPaths >= selectableMetaPathsCount) {
-                        append(sb, "text_path_2");
-                        //maximal 1 Pfad ist auswählbar
-                    } else if (maxParallelSelectedPaths == 1) {
-                        append(sb, "text_path_3");
-                        //es dürfen einer oder mehrere, aber nicht alle zur Verfügung stehenden Pfade ausgewählt werden
-                    } else {
-                        append(sb, "text_path_4_1");
-                        append(sb, " ");
-                        append(sb, maxParallelSelectedPaths);
-                        append(sb, " ");
-                        append(sb, "text_path_4_2");
-                    }
-                    Object[] selectedArray = new Object[selectableMetaPathsCount];
-                    List<?> selected = Arrays.asList(selectedArray);
-                    while (selected != null && (selectedMetaPaths.isEmpty() || selectedMetaPaths.size() > maxParallelSelectedPaths)) {
-                        selectedMetaPaths.clear();
-                        MainFrame mainFrame = getMainFrame();
-                        String title = getResString("choice");
-                        String message = sb.toString();
-                        selected = MultipleOptionPane.showCheckBoxOptionDialog(mainFrame, title, message, pathNames, null, false);
-                        for (int i = 0; selected != null && i < selected.size(); i++) {
-                            Object selectedI = selected.get(i);
-                            if (selectedI != null) {
-                                @SuppressWarnings("unchecked")
-                                NamedObjectContainer<MetaPath> metaPathCont = (NamedObjectContainer<MetaPath>) selectedI;
-                                MetaPath metaPath = metaPathCont.getObject();
-                                selectedMetaPaths.add(metaPath);
-                            }
-                        }
-                    }
-                }
-                if (metaPathJList != null) {
-                    metaPathJList.setObjects(selectableMetaPaths);
-                }
+            if (metaPathJList != null) {
+                metaPathJList.setObjects(selectableMetaPaths);
             }
             deliverChangeEvent(class2ComboBox);
         } else {
             deliverChangeEvent(e.getSource());
         }
-    }
-
-    /**
-     * @param sb
-     * @param resKey
-     * @return
-     */
-    private StringBuilder append(StringBuilder sb, final Object resKeyOrToStringObject) {
-        if (sb == null) {
-            sb = new StringBuilder();
-        }
-        String s = String.valueOf(resKeyOrToStringObject);
-        if (resKeyOrToStringObject instanceof String) {
-            s = Tool3lgmConstants.getResStringWithoutError(s);
-        }
-        sb.append(s);
-        return sb;
     }
 
     /**
