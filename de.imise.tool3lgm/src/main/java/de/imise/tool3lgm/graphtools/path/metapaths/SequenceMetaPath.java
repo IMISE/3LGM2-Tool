@@ -79,8 +79,10 @@ public class SequenceMetaPath extends ListMetaPath {
     @Override
     protected void initStartEndClasses() {
         if (subMetaPaths != null && !subMetaPaths.isEmpty()) {
-            startElementClasses = subMetaPaths.get(0).startElementClasses;
-            endElementClasses = subMetaPaths.get(subMetaPaths.size() - 1).endElementClasses;
+            MetaPath firstSubMetaPath = getFirstSubMetaPath();
+            startElementClasses = firstSubMetaPath.startElementClasses;
+            MetaPath lastSubMetaPath = getLastSubMetaPath();
+            endElementClasses = lastSubMetaPath.endElementClasses;
         }
     }
 
