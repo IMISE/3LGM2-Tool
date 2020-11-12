@@ -26,7 +26,7 @@ import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.path.metapaths.ElementaryMetaPath;
 import de.imise.tool3lgm.graphtools.path.metapaths.ElementaryMetaPathHandler;
 import de.imise.tool3lgm.graphtools.path.metapaths.MetaPath;
-import de.imise.tool3lgm.graphtools.path.metapaths.SequenceMetaPath;
+import de.imise.tool3lgm.graphtools.path.metapaths.SerialMetaPath;
 import de.imise.tool3lgm.graphtools.path.metapaths.SimpleMetaPath;
 import de.imise.tool3lgm.graphtools.path.metapaths.SimpleMetaPathCreator;
 import de.imise.tool3lgm.graphtools.path.metapaths.WrapperMetaPath;
@@ -227,7 +227,7 @@ public class MetaPathDefinition extends MetaModelSpecificAdapter {
     }
 
     /**
-     * Erzeugt aus den übergebenen Assoziationen einen {@link SequenceMetaPath}
+     * Erzeugt aus den übergebenen Assoziationen einen {@link SerialMetaPath}
      * zwischen der Start- und Endklasse, die übergeben wurden. Die Richtungen
      * werden aus diesen Start- und Endklassen abgeleitet. Wenn es nicht
      * eindeutig ist, ob die Startklasse die Kante vorwärts oder rückwärts

@@ -34,7 +34,6 @@ public abstract class ListMetaPath extends MetaPath {
     protected final String baseResKeyOrName;
 
     /**
-     * @param metaModel
      * @param subMetaPaths
      */
     public ListMetaPath(final MetaPath... subMetaPaths) {
@@ -42,7 +41,6 @@ public abstract class ListMetaPath extends MetaPath {
     }
 
     /**
-     * @param metaModel
      * @param baseResKeyOrName
      * @param subMetaPaths
      */

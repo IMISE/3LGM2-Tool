@@ -21,7 +21,7 @@ import de.imise.util.collections.CollectionUtils;
  *
  * @author AXS (26.10.2018) (original AXS (13.10.2010))
  */
-public class SequenceMetaPath extends ListMetaPath {
+public class SerialMetaPath extends ListMetaPath {
 
     /**
      * Wahr, wenn sobald einmal verscht wurde, die Gegenrichtung dieses Pfades
@@ -33,7 +33,7 @@ public class SequenceMetaPath extends ListMetaPath {
      * Liste von Elementarpfaden, aus denen dieser Pfad besteht. Diese Liste
      * lässt sich nur anlegen, wenn dieser MetaPfad keine parallelen und keine
      * rekursiven MetaPfade enthählt sondern nur aus {@link ElementaryMetaPath}s
-     * besteht oder aus anderen {@link SequenceMetaPath}s, die selbst keine
+     * besteht oder aus anderen {@link SerialMetaPath}s, die selbst keine
      * parallelen und keine rekursiven Metapfade enthalten.
      */
     private ImmutableList<ElementaryMetaPath> elementaryMetaPaths = null;
@@ -53,7 +53,7 @@ public class SequenceMetaPath extends ListMetaPath {
     /**
      * @param metaPaths
      */
-    public SequenceMetaPath(final MetaPath... metaPaths) {
+    public SerialMetaPath(final MetaPath... metaPaths) {
         this(null, metaPaths);
     }
 
@@ -61,7 +61,7 @@ public class SequenceMetaPath extends ListMetaPath {
      * @param baseResKeyOrName
      * @param metaPaths
      */
-    public SequenceMetaPath(final String baseResKeyOrName, final MetaPath... metaPaths) {
+    public SerialMetaPath(final String baseResKeyOrName, final MetaPath... metaPaths) {
         this(baseResKeyOrName, Direction.FORWARD, metaPaths);
     }
 
@@ -70,7 +70,7 @@ public class SequenceMetaPath extends ListMetaPath {
      * @param direction
      * @param metaPaths
      */
-    protected SequenceMetaPath(final String baseResKeyOrName, final Direction direction, final MetaPath... metaPaths) {
+    protected SerialMetaPath(final String baseResKeyOrName, final Direction direction, final MetaPath... metaPaths) {
         super(baseResKeyOrName, metaPaths);
         this.direction = direction;
         directed = getIsDirected();
@@ -108,7 +108,7 @@ public class SequenceMetaPath extends ListMetaPath {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        SequenceMetaPath other = (SequenceMetaPath) obj;
+        SerialMetaPath other = (SerialMetaPath) obj;
         if (directed != other.directed) {
             return false;
         }
@@ -160,7 +160,7 @@ public class SequenceMetaPath extends ListMetaPath {
     }
 
     @Override
-    public SequenceMetaPath getOtherDirection() {
+    public SerialMetaPath getOtherDirection() {
         // wenn noch nicht bereits einmal versucht wurde den Gegenrichtungspfad zusammenzubauen
         if (!otherDirectionInitilized) {
             otherDirectionInitilized = true;
@@ -168,13 +168,13 @@ public class SequenceMetaPath extends ListMetaPath {
             MetaPath[] otherDirectionMetaPaths = getOtherDirectionMetaPaths();
             // Gegenrichtung für diesen und den Gegenrichtungspfad setzen, wenn es die Gegenrichtung gibt
             if (otherDirectionMetaPaths != null) {
-                SequenceMetaPath other = createOtherDirection(baseResKeyOrName);
+                SerialMetaPath other = createOtherDirection(baseResKeyOrName);
                 other.otherDirection = this;
                 other.otherDirectionInitilized = true;
                 super.otherDirection = other;
             }
         }
-        return (SequenceMetaPath) super.otherDirection;
+        return (SerialMetaPath) super.otherDirection;
     }
 
     /**
@@ -184,9 +184,9 @@ public class SequenceMetaPath extends ListMetaPath {
      * @param baseResKeyOrName
      * @return
      */
-    protected SequenceMetaPath createOtherDirection(final String baseResKeyOrName) {
+    protected SerialMetaPath createOtherDirection(final String baseResKeyOrName) {
         MetaPath[] otherDirectionMetaPaths = getOtherDirectionMetaPaths();
-        return new SequenceMetaPath(baseResKeyOrName, Direction.BACKWARD, otherDirectionMetaPaths);
+        return new SerialMetaPath(baseResKeyOrName, Direction.BACKWARD, otherDirectionMetaPaths);
     }
 
     protected MetaPath[] getOtherDirectionMetaPaths() {

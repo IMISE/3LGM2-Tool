@@ -25,7 +25,7 @@ public final class ElementaryMetaPathHandler {
 
     /**
      * Platzhaltermetapfad für die Definition einer beliebigen Verbindung z. B.
-     * in einem {@link SequenceMetaPath}
+     * in einem {@link SerialMetaPath}
      */
     public final ElementaryMetaPath generalElementarySuperPath;
 

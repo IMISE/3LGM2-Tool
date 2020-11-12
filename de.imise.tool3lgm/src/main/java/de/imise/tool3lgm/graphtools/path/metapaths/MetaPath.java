@@ -257,7 +257,7 @@ public abstract class MetaPath extends BasicMetaPath {
     /**
      * Liefert eine Folge von Elementarpfaden, wenn sich dieser Pfad so bilden
      * lässt, ansonsten kommt eine leere Liste zurück. Alle parallelen Pfade
-     * geben hier leere Liste zurück. {@link SequenceMetaPath} geben nur keine
+     * geben hier leere Liste zurück. {@link SerialMetaPath} geben nur keine
      * leere Liste zurück, wenn sie im innersten ein einzelner Pfad sind ohne
      * parallele oder rekursive Pfade sind.
      *
@@ -316,7 +316,7 @@ public abstract class MetaPath extends BasicMetaPath {
      * sein. Diese Verbindung heißt in jede der beiden Richtungen "ist verbunden
      * mit" und verbindet dieselbe Elementart miteinander. Der dazugehörige
      * Elementarpfad ist also undirected. Dasselbe ist aber auch für
-     * {@link SequenceMetaPath}s möglich, wenn z.B. die beiden physischen
+     * {@link SerialMetaPath}s möglich, wenn z.B. die beiden physischen
      * DV-Bausteine Schnittstellen beitzen würden (was sie im aktuellen
      * Metamodell nicht haben) und diese dann über eine
      * Datenübertragungsverbindung mit der beidseitigen Bedeutung "ist verbunden

@@ -23,9 +23,11 @@ import de.imise.util.ReflectionUtils;
 public class SimpleMetaPathCreator extends MetaModelSpecificAdapter {
 
     //    /**
-    //     * Erzeugt aus den übergebenen Assoziationen einen {@link SequenceMetaPath} ausgehend von der Startklasse, die übergeben wurde. Die
-    //     * Richtungen werden aus dder Startklasse abgeleitet. Wenn es nicht eindeutig ist, ob die Startklasse die Kante vorwärts oder
-    //     * rückwärts dreht, dann wird immer vorwärts angenommen.
+    //     * Erzeugt aus den übergebenen Assoziationen einen {@link SimpleMetaPath}
+    //     * ausgehend von der Startklasse, die übergeben wurde. Die Richtungen werden
+    //     * aus dder Startklasse abgeleitet. Wenn es nicht eindeutig ist, ob die
+    //     * Startklasse die Kante vorwärts oder rückwärts dreht, dann wird immer
+    //     * vorwärts angenommen.
     //     *
     //     * @param startClass
     //     * @param associations
@@ -35,7 +37,6 @@ public class SimpleMetaPathCreator extends MetaModelSpecificAdapter {
     //    public static final SimpleMetaPath createSimpleMetaPath(final Class<? extends ModelElement> startClass, final Class<? extends Edge>... associations) {
     //        return createSimpleMetaPath(startClass, null, null, associations);
     //    }
-    //
 
     /**
      * @param metaModelSpecific MetaModel source, in dem die Pfade angelegt
@@ -57,7 +58,7 @@ public class SimpleMetaPathCreator extends MetaModelSpecificAdapter {
     //    }
     //
     /**
-     * Erzeugt aus den übergebenen Assoziationen einen {@link SequenceMetaPath}
+     * Erzeugt aus den übergebenen Assoziationen einen {@link SerialMetaPath}
      * zwischen der Start- und Endklasse, die übergeben wurden. Die Richtungen
      * werden aus diesen Start- und Endklassen abgeleitet. Wenn es nicht
      * eindeutig ist, ob die Startklasse die Kante vorwärts oder rückwärts
@@ -75,7 +76,7 @@ public class SimpleMetaPathCreator extends MetaModelSpecificAdapter {
     }
 
     /**
-     * Erzeugt aus den übergebenen Assoziationen einen {@link SequenceMetaPath}
+     * Erzeugt aus den übergebenen Assoziationen einen {@link SerialMetaPath}
      * zwischen der Start- und Endklasse, die übergeben wurden. Die Richtungen
      * werden aus diesen Start- und Endklassen abgeleitet. Wenn es nicht
      * eindeutig ist, ob die Startklasse die Kante vorwärts oder rückwärts
@@ -93,7 +94,7 @@ public class SimpleMetaPathCreator extends MetaModelSpecificAdapter {
     }
 
     /**
-     * Erzeugt aus den übergebenen Assoziationen einen {@link SequenceMetaPath}
+     * Erzeugt aus den übergebenen Assoziationen einen {@link SerialMetaPath}
      * zwischen der Start- und Endklasse, die übergeben wurden. Die Richtungen
      * werden aus diesen Start- und Endklassen abgeleitet. Wenn es nicht
      * eindeutig ist, ob die Startklasse die Kante vorwärts oder rückwärts
@@ -190,7 +191,7 @@ public class SimpleMetaPathCreator extends MetaModelSpecificAdapter {
     }
 
     /**
-     * Erzeugt aus den übergebenen Assoziationen einen {@link SequenceMetaPath}
+     * Erzeugt aus den übergebenen Assoziationen einen {@link SerialMetaPath}
      * zwischen der Start- und Endklasse, die übergeben wurden. Die Richtungen
      * werden aus diesen Start- und Endklassen abgeleitet. Wenn es nicht
      * eindeutig ist, ob die Startklasse die Kante vorwärts oder rückwärts
@@ -214,7 +215,7 @@ public class SimpleMetaPathCreator extends MetaModelSpecificAdapter {
     }
 
     /**
-     * Erzeugt aus den übergebenen Assoziationen einen {@link SequenceMetaPath}
+     * Erzeugt aus den übergebenen Assoziationen einen {@link SerialMetaPath}
      * zwischen der Start- und Endklasse, die übergeben wurden. Die Richtungen
      * werden aus diesen Start- und Endklassen abgeleitet. Wenn es nicht
      * eindeutig ist, ob die Startklasse die Kante vorwärts oder rückwärts
@@ -239,7 +240,7 @@ public class SimpleMetaPathCreator extends MetaModelSpecificAdapter {
     }
 
     /**
-     * Erzeugt aus den übergebenen Assoziationen einen {@link SequenceMetaPath}
+     * Erzeugt aus den übergebenen Assoziationen einen {@link SerialMetaPath}
      * zwischen der Start- und Endklasse, die übergeben wurden. Die Richtungen
      * werden aus diesen Start- und Endklassen abgeleitet. Wenn es nicht
      * eindeutig ist, ob die Startklasse die Kante vorwärts oder rückwärts
@@ -270,7 +271,7 @@ public class SimpleMetaPathCreator extends MetaModelSpecificAdapter {
     }
 
     /**
-     * Erzeugt aus den übergebenen Assoziationen einen {@link SequenceMetaPath}
+     * Erzeugt aus den übergebenen Assoziationen einen {@link SerialMetaPath}
      * ausgehend von der Startklasse, die übergeben wurde. Die Richtungen und
      * Endklasse werden sukkessive abgeleitet. Wenn es nicht eindeutig ist, ob
      * die Startklasse die Kante vorwärts oder rückwärts dreht, dann wird immer
@@ -297,7 +298,7 @@ public class SimpleMetaPathCreator extends MetaModelSpecificAdapter {
     }
 
     /**
-     * Erzeugt aus den übergebenen Assoziationen einen {@link SequenceMetaPath}
+     * Erzeugt aus den übergebenen Assoziationen einen {@link SerialMetaPath}
      * ausgehend von der Startklasse, die übergeben wurde. Die Richtungen und
      * Endklasse werden sukkessive abgeleitet. Wenn es nicht eindeutig ist, ob
      * die Startklasse die Kante vorwärts oder rückwärts dreht, dann wird immer
@@ -324,7 +325,7 @@ public class SimpleMetaPathCreator extends MetaModelSpecificAdapter {
     }
 
     /**
-     * Erzeugt aus den übergebenen Assoziationen einen {@link SequenceMetaPath}
+     * Erzeugt aus den übergebenen Assoziationen einen {@link SerialMetaPath}
      * zwischen der Start- und Endklasse, die übergeben wurden. Die Richtungen
      * werden aus diesen Start- und Endklassen abgeleitet. Wenn es nicht
      * eindeutig ist, ob die Startklasse die Kante vorwärts oder rückwärts
@@ -353,7 +354,7 @@ public class SimpleMetaPathCreator extends MetaModelSpecificAdapter {
     }
 
     /**
-     * Erzeugt aus den übergebenen Assoziationen einen {@link SequenceMetaPath}
+     * Erzeugt aus den übergebenen Assoziationen einen {@link SerialMetaPath}
      * zwischen der Start- und Endklasse, die übergeben wurden. Die Richtungen
      * werden aus diesen Start- und Endklassen abgeleitet. Wenn es nicht
      * eindeutig ist, ob die Startklasse die Kante vorwärts oder rückwärts
@@ -382,7 +383,7 @@ public class SimpleMetaPathCreator extends MetaModelSpecificAdapter {
     }
 
     /**
-     * Erzeugt aus den übergebenen Assoziationen einen {@link SequenceMetaPath}
+     * Erzeugt aus den übergebenen Assoziationen einen {@link SerialMetaPath}
      * zwischen der Start- und Endklasse, die übergeben wurden. Die Richtungen
      * werden aus diesen Start- und Endklassen abgeleitet. Wenn es nicht
      * eindeutig ist, ob die Startklasse die Kante vorwärts oder rückwärts
@@ -417,7 +418,7 @@ public class SimpleMetaPathCreator extends MetaModelSpecificAdapter {
     }
 
     /**
-     * Erzeugt aus den übergebenen Assoziationen einen {@link SequenceMetaPath}
+     * Erzeugt aus den übergebenen Assoziationen einen {@link SerialMetaPath}
      * zwischen der Start- und Endklasse, die übergeben wurden. Die Richtungen
      * werden aus diesen Start- und Endklassen abgeleitet. Wenn es nicht
      * eindeutig ist, ob die Startklasse die Kante vorwärts oder rückwärts

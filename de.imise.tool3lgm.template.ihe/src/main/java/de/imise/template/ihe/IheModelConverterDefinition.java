@@ -101,7 +101,7 @@ public class IheModelConverterDefinition extends ModelConverterDefinition {
         //        //End: IheProvidingInterface > IheActor
         //        SimpleMetaPath providingInterface_to_Actor_MetaPath = targetMetaPath(IheProvidingInterface.class, IheActor.class, IheActor_IheInterface_Edge.class);
         //        //Full: Start + Middle + End
-        //        SequenceMetaPath actor_to_Actor_MetaPath = new SequenceMetaPath(actor_to_InvokingInterface_MetaPath, invokingInterface_to_ProvidingInterface_MetaPath, providingInterface_to_Actor_MetaPath);
+        //        SerialMetaPath actor_to_Actor_MetaPath = new SerialMetaPath(actor_to_InvokingInterface_MetaPath, invokingInterface_to_ProvidingInterface_MetaPath, providingInterface_to_Actor_MetaPath);
 
         SimpleMetaPath actor_Transaction_Actor_MetaPath = get_Actor_Transaction_Actor_MetaPath();
         TargetPathsCreationDefinition def1 = new TargetPathsCreationDefinition(actor_Transaction_Actor_MetaPath, true); //Interfaces with the sameName should be joined

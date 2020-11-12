@@ -22,7 +22,7 @@ import de.imise.tool3lgm.graphtools.path.metapaths.ListMetaPath;
 import de.imise.tool3lgm.graphtools.path.metapaths.MetaPath;
 import de.imise.tool3lgm.graphtools.path.metapaths.ParallelMetaPath;
 import de.imise.tool3lgm.graphtools.path.metapaths.SectionMetaPath;
-import de.imise.tool3lgm.graphtools.path.metapaths.SequenceMetaPath;
+import de.imise.tool3lgm.graphtools.path.metapaths.SerialMetaPath;
 import de.imise.tool3lgm.graphtools.path.metapaths.UnionMetaPath;
 import de.imise.tool3lgm.graphtools.path.paths.PathResultTreeNode.NodeType;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
@@ -43,10 +43,10 @@ import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
  * über den durch den MetaPath festgelegten Pfad ausgehend von den
  * Startelementen erreichbar sind. Zusätzlich wird jeder PathResultTreeNode mit
  * der Information markiert, ob er ein Pfadschritt innerhalb eines
- * MetaSequencePaths ist, der selbst wieder in einem MetaSequncePath enthalten
- * ist (Varibale isSubStep im PathResultTreeNode). Nur bei den äußersten
- * MetaSequencePaths ist diese Variable <code>false</code> und bei allen darin
- * enthaltenen MetaSequencePaths und ihren enthaltenen SubPfaden ist diese
+ * SerialMetaPaths ist, der selbst wieder in einem MetaSequncePath enthalten ist
+ * (Varibale isSubStep im PathResultTreeNode). Nur bei den äußersten
+ * SerialMetaPaths ist diese Variable <code>false</code> und bei allen darin
+ * enthaltenen SerialMetaPaths und ihren enthaltenen SubPfaden ist diese
  * Variable <code>true</code>. Diese Information kann man zum Aufbau von
  * anzuzeigenden Bäumen nutzen um SubPfade nicht mit anzuzeigen.
  *
@@ -64,7 +64,7 @@ public class PathResultTreeModel extends DefaultTreeModel {
     /**
      * Bei allen {@link ParallelMetaPath} kann man mehrere Startsets brauchen
      * (für jeden der parallelen Metapfade eins). Bei den
-     * {@link ElementaryMetaPath} und {@link SequenceMetaPath} steht immer nur
+     * {@link ElementaryMetaPath} und {@link SerialMetaPath} steht immer nur
      * eine Collection an Index 0 in der Liste.
      */
     private List<Collection<ModelElement>> startElementsCollections = new ArrayList<>();
@@ -393,10 +393,10 @@ public class PathResultTreeModel extends DefaultTreeModel {
         //mehrere Startmemngen wurden übergeben (das geht nur bei einem alles umschließenden Parallelmetapfad)
         if (startElementsCollections.size() > 1) {
             MetaPath realFirstMetaPath = metaPath;
-            //solange aus dem SequenceMetaPath den jeweils ersten MetaPath holen, bis man bei einem
-            //MetaPath ist, der selbst kein SequenceMetaPath mehr ist
-            while (realFirstMetaPath instanceof SequenceMetaPath) {
-                realFirstMetaPath = ((SequenceMetaPath) realFirstMetaPath).getSubMetaPaths().get(0);
+            //solange aus dem SerialMetaPath den jeweils ersten MetaPath holen, bis man bei einem
+            //MetaPath ist, der selbst kein SerialMetaPath mehr ist
+            while (realFirstMetaPath instanceof SerialMetaPath) {
+                realFirstMetaPath = ((SerialMetaPath) realFirstMetaPath).getSubMetaPaths().get(0);
                 //TODO: hier muss ein paralleler MetaPfad kommen, den wir später behandeln...
             }
 
@@ -453,8 +453,8 @@ public class PathResultTreeModel extends DefaultTreeModel {
     private List<PathResultTreeNode> addPath(final PathResultTreeNode startNode, final MetaPath metaPath, final boolean isSubStep) {
         if (metaPath instanceof ElementaryMetaPath) {
             return addPath(startNode, (ElementaryMetaPath) metaPath, isSubStep);
-        } else if (metaPath instanceof SequenceMetaPath) {
-            return addPath(startNode, (SequenceMetaPath) metaPath, isSubStep);
+        } else if (metaPath instanceof SerialMetaPath) {
+            return addPath(startNode, (SerialMetaPath) metaPath, isSubStep);
         } else if (metaPath instanceof UnionMetaPath) {
             return addPath(startNode, (UnionMetaPath) metaPath, isSubStep);
         } else if (metaPath instanceof SectionMetaPath) {
@@ -489,7 +489,7 @@ public class PathResultTreeModel extends DefaultTreeModel {
      * @param isSubStep
      * @return
      */
-    private List<PathResultTreeNode> addPath(final PathResultTreeNode startNode, final SequenceMetaPath metaPath, final boolean isSubStep) {
+    private List<PathResultTreeNode> addPath(final PathResultTreeNode startNode, final SerialMetaPath metaPath, final boolean isSubStep) {
         List<PathResultTreeNode> resultNodes = new ArrayList<>();
         resultNodes.add(startNode);
         for (MetaPath subMetaPath : metaPath.getSubMetaPaths()) {

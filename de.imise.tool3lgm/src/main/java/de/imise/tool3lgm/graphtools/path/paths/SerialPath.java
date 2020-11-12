@@ -9,18 +9,18 @@ import de.imise.tool3lgm.graphtools.path.metapaths.MetaPath;
 import de.imise.tool3lgm.graphtools.path.metapaths.SimpleMetaPath;
 
 /**
- * Ein SequencePath ist ein Pfad der selbst wieder Pfade enthält
+ * A SerialPath is a path that contains paths one after another.
  *
  * @author AXS
  * @create 08.02.2011
  */
-public class SequencePath extends ListPath {
+public class SerialPath extends ListPath {
 
     /**
      * @param metaPath
      * @param paths
      */
-    public SequencePath(final MetaPath metaPath, final List<AbstractPath> paths) {
+    public SerialPath(final MetaPath metaPath, final List<AbstractPath> paths) {
         super(metaPath, paths != null && paths.size() > 0 ? paths.get(0).getStartElement() : null, paths != null && paths.size() > 0 ? paths.get(paths.size() - 1).getEndElement() : null, paths);
     }
 
@@ -28,7 +28,7 @@ public class SequencePath extends ListPath {
      * @param metaPath
      * @param paths
      */
-    public SequencePath(final MetaPath metaPath, final AbstractPath... paths) {
+    public SerialPath(final MetaPath metaPath, final AbstractPath... paths) {
         super(metaPath, paths.length > 0 ? paths[0].getStartElement() : null, paths.length > 0 ? paths[paths.length - 1].getEndElement() : null, paths);
     }
 
@@ -36,7 +36,7 @@ public class SequencePath extends ListPath {
      * @param metaPath
      * @param paths
      */
-    public SequencePath(final SimpleMetaPath metaPath, final List<ElementaryPath> paths) {
+    public SerialPath(final SimpleMetaPath metaPath, final List<ElementaryPath> paths) {
         super(metaPath, paths != null && paths.size() > 0 ? paths.get(0).getStartElement() : null, paths != null && paths.size() > 0 ? paths.get(paths.size() - 1).getEndElement() : null, createPathsList(paths));
     }
 
