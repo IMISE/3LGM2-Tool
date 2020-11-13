@@ -6,6 +6,6 @@ package de.imise.tool3lgm.graphtools.path.metapaths;
  *
  * @author Ich (12.11.2020)
  */
-public interface SequenceMetaPath extends IMetaPath {
+public interface SequenceMetaPath extends MetaPath {
 
 }

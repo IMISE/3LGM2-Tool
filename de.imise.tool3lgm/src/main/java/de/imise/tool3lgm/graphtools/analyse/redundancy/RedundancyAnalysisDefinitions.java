@@ -13,7 +13,7 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.path.MetaPathDefinition;
 import de.imise.tool3lgm.graphtools.path.metapaths.ElementaryMetaPath;
-import de.imise.tool3lgm.graphtools.path.metapaths.IMetaPath;
+import de.imise.tool3lgm.graphtools.path.metapaths.MetaPath;
 
 /**
  * Definition aller {@link RedundancyAnalysis}
@@ -39,7 +39,7 @@ public final class RedundancyAnalysisDefinitions extends MetaPathDefinition {
      *            die über den Pfad verbundenen Elemente sind die potenziell
      *            redundanten Elemente.
      */
-    public SingleRedundancyAnalysisDefinition add(final IMetaPath metaPath) {
+    public SingleRedundancyAnalysisDefinition add(final MetaPath metaPath) {
         if (redundancyAnalysisDefinitionData == null) {
             redundancyAnalysisDefinitionData = new ArrayList<>();
         }
@@ -79,7 +79,7 @@ public final class RedundancyAnalysisDefinitions extends MetaPathDefinition {
          * Form "Name des Anwendungsbausteins (Softwareprodukt1,
          * Softwareprodukt2, ...)"
          */
-        private Map<Class<? extends ModelElement>, IMetaPath> elementClassToExpandedNamePath;
+        private Map<Class<? extends ModelElement>, MetaPath> elementClassToExpandedNamePath;
 
         /**
          * Pfad, der angibt, für welche Elementart welche verbundenen Elemente
@@ -87,9 +87,9 @@ public final class RedundancyAnalysisDefinitions extends MetaPathDefinition {
          * Startelementart des Pfades und die über den Pfad verbundenen Elemente
          * sind die potenziell redundanten Elemente.
          */
-        private final IMetaPath metaPath;
+        private final MetaPath metaPath;
 
-        private SingleRedundancyAnalysisDefinition(final IMetaPath metaPath) {
+        private SingleRedundancyAnalysisDefinition(final MetaPath metaPath) {
             super(metaPath);
             this.metaPath = metaPath;
             if (!isValidRedundancyMetaPath()) {
@@ -105,7 +105,7 @@ public final class RedundancyAnalysisDefinitions extends MetaPathDefinition {
             }
         }
 
-        public IMetaPath getMetaPath() {
+        public MetaPath getMetaPath() {
             return metaPath;
         }
 
@@ -183,7 +183,7 @@ public final class RedundancyAnalysisDefinitions extends MetaPathDefinition {
          *
          * @param metaPath
          */
-        public void addExpandedNamePath(final IMetaPath metaPath) {
+        public void addExpandedNamePath(final MetaPath metaPath) {
             if (elementClassToExpandedNamePath == null) {
                 elementClassToExpandedNamePath = new HashMap<>();
             }
@@ -195,7 +195,7 @@ public final class RedundancyAnalysisDefinitions extends MetaPathDefinition {
             }
         }
 
-        public IMetaPath getExpandedNamePath(final Class<? extends ModelElement> elementClass) {
+        public MetaPath getExpandedNamePath(final Class<? extends ModelElement> elementClass) {
             return elementClassToExpandedNamePath != null ? elementClassToExpandedNamePath.get(elementClass) : null;
         }
 

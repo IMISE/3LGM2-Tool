@@ -53,7 +53,7 @@ public class SerialMetaPath extends ListMetaPath {
     /**
      * @param metaPaths
      */
-    public SerialMetaPath(final IMetaPath... metaPaths) {
+    public SerialMetaPath(final MetaPath... metaPaths) {
         this(null, metaPaths);
     }
 
@@ -61,7 +61,7 @@ public class SerialMetaPath extends ListMetaPath {
      * @param baseResKeyOrName
      * @param metaPaths
      */
-    public SerialMetaPath(final String baseResKeyOrName, final IMetaPath... metaPaths) {
+    public SerialMetaPath(final String baseResKeyOrName, final MetaPath... metaPaths) {
         this(baseResKeyOrName, Direction.FORWARD, metaPaths);
     }
 
@@ -70,7 +70,7 @@ public class SerialMetaPath extends ListMetaPath {
      * @param direction
      * @param metaPaths
      */
-    protected SerialMetaPath(final String baseResKeyOrName, final Direction direction, final IMetaPath... metaPaths) {
+    protected SerialMetaPath(final String baseResKeyOrName, final Direction direction, final MetaPath... metaPaths) {
         super(baseResKeyOrName, metaPaths);
         this.direction = direction;
         directed = getIsDirected();
@@ -79,9 +79,9 @@ public class SerialMetaPath extends ListMetaPath {
     @Override
     protected void initStartEndClasses() {
         if (subMetaPaths != null && !subMetaPaths.isEmpty()) {
-            IMetaPath firstSubMetaPath = getFirstSubMetaPath();
+            MetaPath firstSubMetaPath = getFirstSubMetaPath();
             startElementClasses = firstSubMetaPath.getStartClasses();
-            IMetaPath lastSubMetaPath = getLastSubMetaPath();
+            MetaPath lastSubMetaPath = getLastSubMetaPath();
             endElementClasses = lastSubMetaPath.getEndClasses();
         }
     }
@@ -151,7 +151,7 @@ public class SerialMetaPath extends ListMetaPath {
 
     public String getAllMetaPathsName() {
         StringBuilder sb = new StringBuilder();
-        for (IMetaPath metaPath : subMetaPaths) {
+        for (MetaPath metaPath : subMetaPaths) {
             sb.append(metaPath.getFullName());
             sb.append(" -> ");
         }
@@ -165,7 +165,7 @@ public class SerialMetaPath extends ListMetaPath {
         if (!otherDirectionInitilized) {
             otherDirectionInitilized = true;
             // versuchen, die Gegenrichtung zusammen zu bauen
-            IMetaPath[] otherDirectionMetaPaths = getOtherDirectionMetaPaths();
+            MetaPath[] otherDirectionMetaPaths = getOtherDirectionMetaPaths();
             // Gegenrichtung für diesen und den Gegenrichtungspfad setzen, wenn es die Gegenrichtung gibt
             if (otherDirectionMetaPaths != null) {
                 SerialMetaPath other = createOtherDirection(baseResKeyOrName);
@@ -185,17 +185,17 @@ public class SerialMetaPath extends ListMetaPath {
      * @return
      */
     protected SerialMetaPath createOtherDirection(final String baseResKeyOrName) {
-        IMetaPath[] otherDirectionMetaPaths = getOtherDirectionMetaPaths();
+        MetaPath[] otherDirectionMetaPaths = getOtherDirectionMetaPaths();
         return new SerialMetaPath(baseResKeyOrName, Direction.BACKWARD, otherDirectionMetaPaths);
     }
 
-    protected IMetaPath[] getOtherDirectionMetaPaths() {
+    protected MetaPath[] getOtherDirectionMetaPaths() {
         // versuchen, die Gegenrichtung zusammen zu bauen
-        IMetaPath[] otherDirectionMetaPaths = new IMetaPath[subMetaPaths.size()];
+        MetaPath[] otherDirectionMetaPaths = new MetaPath[subMetaPaths.size()];
         // Gegenrichtung der enthaltenen Einzelpfade in umgekehrter Reihenfolge einfügen
         for (int i = otherDirectionMetaPaths.length - 1; i >= 0; i--) {
-            IMetaPath currentMetaPath = subMetaPaths.get(i);
-            IMetaPath otherDirection = currentMetaPath.getOtherDirection();
+            MetaPath currentMetaPath = subMetaPaths.get(i);
+            MetaPath otherDirection = currentMetaPath.getOtherDirection();
             if (otherDirection == null) {
                 otherDirectionMetaPaths = null;
                 break;
@@ -316,7 +316,7 @@ public class SerialMetaPath extends ListMetaPath {
     public final List<ElementaryMetaPath> getElementaryMetaPaths() {
         if (elementaryMetaPaths == null) {
             ImmutableList.Builder<ElementaryMetaPath> simpleMetaPathBuilder = ImmutableList.builder();
-            for (IMetaPath metaPath : subMetaPaths) {
+            for (MetaPath metaPath : subMetaPaths) {
                 List<ElementaryMetaPath> innerMetaPaths = metaPath.getElementaryMetaPaths();
                 if (innerMetaPaths.isEmpty()) { //der aktuelle innere Pfad hat keine einfache Elementarpfadliste
                     elementaryMetaPaths = EMPTY_ELEMENTARY_PATH_LIST;
@@ -372,7 +372,7 @@ public class SerialMetaPath extends ListMetaPath {
 
     @Override
     public boolean containsPropertyTransferEdge() {
-        for (IMetaPath metaPath : subMetaPaths) {
+        for (MetaPath metaPath : subMetaPaths) {
             if (metaPath.containsPropertyTransferEdge()) {
                 return true;
             }
@@ -395,12 +395,12 @@ public class SerialMetaPath extends ListMetaPath {
      * @return
      */
     public final Set<Class<? extends ModelElement>> getPathStepConnectingClasses(final int pathStepIndex) {
-        IMetaPath metaPath = subMetaPaths.get(pathStepIndex);
+        MetaPath metaPath = subMetaPaths.get(pathStepIndex);
         Set<Class<? extends ModelElement>> endClasses = metaPath.getEndClasses();
         if (pathStepIndex == subMetaPaths.size() - 1) {
             return endClasses;
         }
-        IMetaPath nextMetaPath = subMetaPaths.get(pathStepIndex + 1);
+        MetaPath nextMetaPath = subMetaPaths.get(pathStepIndex + 1);
         Set<Class<? extends ModelElement>> nextStartClasses = nextMetaPath.getStartClasses();
         Set<Class<? extends ModelElement>> pathStepClasses = new HashSet<>();
         for (Class<? extends ModelElement> endClass : endClasses) {

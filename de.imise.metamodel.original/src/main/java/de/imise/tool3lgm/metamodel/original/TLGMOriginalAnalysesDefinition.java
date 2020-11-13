@@ -8,7 +8,7 @@ import javax.swing.Action;
 import de.imise.tool3lgm.graphtools.analyse.redundancy.RedundancyAnalysisDefinitions.SingleRedundancyAnalysisDefinition;
 import de.imise.tool3lgm.graphtools.metamodel.AnalysesDefinition;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
-import de.imise.tool3lgm.graphtools.path.metapaths.IMetaPath;
+import de.imise.tool3lgm.graphtools.path.metapaths.MetaPath;
 import de.imise.tool3lgm.metamodel.original.analyse.DataAvailabilityFinder;
 import de.imise.tool3lgm.metamodel.original.analyse.InterfaceCanSendOTAnalysis;
 import de.imise.tool3lgm.metamodel.original.edge.AufAufOrgVerbindung;
@@ -38,9 +38,9 @@ public class TLGMOriginalAnalysesDefinition extends AnalysesDefinition {
     }
 
     private void initSimpleRedundancyAnalyses() {
-        IMetaPath functionToConfigurationRedundancy = createSimpleMetaPath(metaModel, Aufgabe.class, ABKonfiguration.class, AufAufOrgVerbindung.class, AwbkAufOrgVerbindung.class);
-        IMetaPath functionToConfigurationRedundancyDifference = createSimpleMetaPath(metaModel, ABKonfiguration.class, Anwendungsbaustein.class, AwbAwbkVerbindung.class);
-        IMetaPath objecttypeToStoreplaceRedundancy = createSimpleMetaPath(metaModel, Objekttyp.class, LogischerSpeicher.class, ObjLogspVerbindung.class);
+        MetaPath functionToConfigurationRedundancy = createSimpleMetaPath(metaModel, Aufgabe.class, ABKonfiguration.class, AufAufOrgVerbindung.class, AwbkAufOrgVerbindung.class);
+        MetaPath functionToConfigurationRedundancyDifference = createSimpleMetaPath(metaModel, ABKonfiguration.class, Anwendungsbaustein.class, AwbAwbkVerbindung.class);
+        MetaPath objecttypeToStoreplaceRedundancy = createSimpleMetaPath(metaModel, Objekttyp.class, LogischerSpeicher.class, ObjLogspVerbindung.class);
         simpleRedundancyAnalysisDefinitions.add(functionToConfigurationRedundancy, functionToConfigurationRedundancyDifference, true);
         simpleRedundancyAnalysisDefinitions.add(objecttypeToStoreplaceRedundancy, true);
     }
@@ -51,7 +51,7 @@ public class TLGMOriginalAnalysesDefinition extends AnalysesDefinition {
         //es darf immer nur ein Anwendungsbaustein an jeder Konfiguration hängen, damit die Analyse ein interpretierbares Ergebnis liefert -> Kardinalitäten einschränken
         analyse.setNewForwardCardinality(AwbAwbkVerbindung.class, ONE_ONE);
         //Bei Anwenudngsbausteinen sollen in der Ausgabe der Analyse hinter dem Namen in Klammern alle verbundenen Softwareprodukte aufgelistet werden -> dieser Pfad muss als Namenserweiterungspfad angegeben werden
-        IMetaPath awbExpandedNamePath = createSimpleMetaPath(metaModel, RechAnwendungsbaustein.class, Softwareprodukt.class, RawbAwpVerbindung.class, AwpSwpVerbindung.class);
+        MetaPath awbExpandedNamePath = createSimpleMetaPath(metaModel, RechAnwendungsbaustein.class, Softwareprodukt.class, RawbAwpVerbindung.class, AwpSwpVerbindung.class);
         analyse.addExpandedNamePath(awbExpandedNamePath);
 
         //Analyse 2: Nur Rechnerbasierte Anwendungsbausteine bezüglich Aufgaben (analog zu oben)

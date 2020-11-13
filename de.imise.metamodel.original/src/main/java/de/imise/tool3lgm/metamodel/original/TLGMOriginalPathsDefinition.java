@@ -7,7 +7,7 @@ import com.google.common.collect.ImmutableMap;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.path.MetaPathDefinition;
-import de.imise.tool3lgm.graphtools.path.metapaths.IMetaPath;
+import de.imise.tool3lgm.graphtools.path.metapaths.MetaPath;
 import de.imise.tool3lgm.metamodel.original.edge.AufAufOrgVerbindung;
 import de.imise.tool3lgm.metamodel.original.edge.AwbAwbkVerbindung;
 import de.imise.tool3lgm.metamodel.original.edge.AwbKommssVerbindung;
@@ -114,7 +114,7 @@ public class TLGMOriginalPathsDefinition extends MetaPathDefinition {
     ////////////////////////////////////////////////////////////////////////
 
     @Override
-    public Map<Class<? extends ModelElement>, IMetaPath> getElementClassToNameExtensionPath() {
+    public Map<Class<? extends ModelElement>, MetaPath> getElementClassToNameExtensionPath() {
         return ImmutableMap.of(RechAnwendungsbaustein.class, simpleMetaPathCreator.createSimpleMetaPath(RechAnwendungsbaustein.class, Softwareprodukt.class, RawbAwpVerbindung.class, AwpSwpVerbindung.class));
     }
 

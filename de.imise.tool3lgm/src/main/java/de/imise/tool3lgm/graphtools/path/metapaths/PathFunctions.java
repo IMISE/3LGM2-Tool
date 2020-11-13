@@ -111,7 +111,7 @@ public class PathFunctions {
      * @param checkConsistency
      * @return
      */
-    static final boolean isCreatable(final ModelElement startElement, final ModelElement endElement, final IMetaPath metaPath, final boolean checkConsistency) {
+    static final boolean isCreatable(final ModelElement startElement, final ModelElement endElement, final MetaPath metaPath, final boolean checkConsistency) {
         if (!metaPath.isCreatable(false)) {
             return false;
         }
@@ -123,16 +123,16 @@ public class PathFunctions {
             return endElement.isForwardLinkable(startElement, elemMetaPath.getEdgeClass(), checkConsistency);
         } else if (metaPath instanceof SerialMetaPath) {
             SerialMetaPath serialMetaPath = (SerialMetaPath) metaPath;
-            IMetaPath firstMetaPath = serialMetaPath.getSubMetaPaths().get(0);
+            MetaPath firstMetaPath = serialMetaPath.getSubMetaPaths().get(0);
             while (firstMetaPath instanceof SerialMetaPath) {
                 firstMetaPath = ((SerialMetaPath) firstMetaPath).getSubMetaPaths().get(0);
             }
             if (!(firstMetaPath instanceof ElementaryMetaPath)) {
                 return false;
             }
-            IMetaPath lastMetaPath = serialMetaPath.getSubMetaPaths().get(serialMetaPath.getSubMetaPaths().size() - 1);
+            MetaPath lastMetaPath = serialMetaPath.getSubMetaPaths().get(serialMetaPath.getSubMetaPaths().size() - 1);
             while (lastMetaPath instanceof SerialMetaPath) {
-                List<IMetaPath> lastSerialMetaPathList = ((SerialMetaPath) lastMetaPath).getSubMetaPaths();
+                List<MetaPath> lastSerialMetaPathList = ((SerialMetaPath) lastMetaPath).getSubMetaPaths();
                 lastMetaPath = lastSerialMetaPathList.get(lastSerialMetaPathList.size() - 1);
             }
             if (!(lastMetaPath instanceof ElementaryMetaPath)) {
@@ -191,7 +191,7 @@ public class PathFunctions {
      * @param metaPath
      * @return
      */
-    static final boolean pathExists(final ModelElement startElement, final ModelElement endElement, final IMetaPath metaPath) {
+    static final boolean pathExists(final ModelElement startElement, final ModelElement endElement, final MetaPath metaPath) {
         //TODO: implementieren
         if (true) {
             throw new Error("TODO: Implementieren");
@@ -217,7 +217,7 @@ public class PathFunctions {
      * @param metaPath
      * @return
      */
-    static final PathConnectionState getPathConnectionState(final ModelElement startElement, final ModelElement endElement, final IMetaPath metaPath) {
+    static final PathConnectionState getPathConnectionState(final ModelElement startElement, final ModelElement endElement, final MetaPath metaPath) {
         return PathFunctions.getPathConnectionState(startElement, endElement, metaPath, OPTION_ELEMENTS_RECEIVE_PROPERTIES_FROM_PARENTS.is(), OPTION_ELEMENTS_RECEIVE_PROPERTIES_FROM_PARTS.is());
     }
 
@@ -229,7 +229,7 @@ public class PathFunctions {
      * @param searchParts
      * @return
      */
-    static final PathConnectionState getPathConnectionState(final ModelElement startElement, final ModelElement endElement, final IMetaPath metaPath, final boolean searchParents, final boolean searchParts) {
+    static final PathConnectionState getPathConnectionState(final ModelElement startElement, final ModelElement endElement, final MetaPath metaPath, final boolean searchParents, final boolean searchParts) {
         List<ModelElement> startElements = null;
         startElements = new ArrayList<>(1);
         startElements.add(startElement);
@@ -287,7 +287,7 @@ public class PathFunctions {
      * @param metaPath
      * @return
      */
-    static boolean isConnected(final List<ModelElement> startElements, final List<ModelElement> endElements, final IMetaPath metaPath) {
+    static boolean isConnected(final List<ModelElement> startElements, final List<ModelElement> endElements, final MetaPath metaPath) {
         Collection<ModelElement> connected = metaPath.getConnectedElements(startElements);
         for (ModelElement endElement : endElements) {
             if (connected.contains(endElement)) {

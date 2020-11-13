@@ -36,7 +36,7 @@ import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GDCollectionOwner;
 import de.imise.tool3lgm.graphtools.model.GDCommands;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
-import de.imise.tool3lgm.graphtools.path.metapaths.IMetaPath;
+import de.imise.tool3lgm.graphtools.path.metapaths.MetaPath;
 import de.imise.tool3lgm.graphtools.userfield.UserField;
 import de.imise.tool3lgm.graphtools.userfield.UserFieldTarget;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
@@ -417,7 +417,7 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
      * doch, dann muss das Feld GET_NAME_EXTENSION_METHOD_NAME ebenfalls
      * umbenannt werden.
      */
-    private final IMetaPath getNameExtensionPath() {
+    private final MetaPath getNameExtensionPath() {
         return metaModel.getNameExtensionPath(getClass());
     }
 
@@ -471,7 +471,7 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
      * @return
      */
     public String getNameExtension() {
-        IMetaPath nameExtensionPath = getNameExtensionPath();
+        MetaPath nameExtensionPath = getNameExtensionPath();
         updateHTMLNameSuffixBuffer(nameExtensionPath);
         return suffixBuf.toString();
     }
@@ -479,7 +479,7 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
     /**
      * @param nameExtension
      */
-    private void updateHTMLNameSuffixBuffer(final IMetaPath nameExtension) {
+    private void updateHTMLNameSuffixBuffer(final MetaPath nameExtension) {
         suffixBuf.setLength(0);
         if (nameExtension != null) {
             Collection<ModelElement> directConnectedElements = nameExtension.getConnectedElements(this);
@@ -516,7 +516,7 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
         GraphElementLayout nameExtendsionClassLayout = null;
         Iterable<ElementContainer> targetContainers;
         if (targetContainer == null) {
-            IMetaPath nameExtension = getNameExtensionPath();
+            MetaPath nameExtension = getNameExtensionPath();
             updateHTMLNameSuffixBuffer(nameExtension);
             Class<? extends ModelElement> nameExtendsionClass;
             GraphViewDefinition graphViewDefinition;

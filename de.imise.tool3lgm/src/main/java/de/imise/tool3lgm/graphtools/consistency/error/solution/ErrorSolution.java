@@ -1,7 +1,7 @@
 package de.imise.tool3lgm.graphtools.consistency.error.solution;
 
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
-import de.imise.tool3lgm.graphtools.path.metapaths.IMetaPath;
+import de.imise.tool3lgm.graphtools.path.metapaths.MetaPath;
 import de.imise.tool3lgm.graphtools.path.metapaths.SimpleMetaPath;
 
 /**
@@ -24,10 +24,10 @@ public abstract class ErrorSolution {
      * Beipsiel <code>AWBKonfiguration</code>. Sie werden im Eigenschaftsdialog
      * von Aufgaben angezeigt und zusammengesetzt.
      */
-    private final IMetaPath pathToPropertyDialogElement;
+    private final MetaPath pathToPropertyDialogElement;
 
     /**
-     * The metapath that must be {@link IMetaPath#isAssignable(IMetaPath)} to
+     * The metapath that must be {@link MetaPath#isAssignable(MetaPath)} to
      * the MetaPath of the panel which should be opened to solve the error
      */
     private final SimpleMetaPath panelMetaPath;
@@ -35,10 +35,10 @@ public abstract class ErrorSolution {
     /**
      * @param pathToPropertyDialogElement
      * @param panelMetaPath the metapath that must be
-     *            {@link IMetaPath#isAssignable(IMetaPath)} to the MetaPath of
+     *            {@link MetaPath#isAssignable(MetaPath)} to the MetaPath of
      *            the panel which should be opened to solve the error
      */
-    public ErrorSolution(final IMetaPath pathToPropertyDialogElement, final SimpleMetaPath panelMetaPath) {
+    public ErrorSolution(final MetaPath pathToPropertyDialogElement, final SimpleMetaPath panelMetaPath) {
         targetClass = pathToPropertyDialogElement != null ? pathToPropertyDialogElement.getStartClass() : panelMetaPath.getStartClass();
         this.pathToPropertyDialogElement = pathToPropertyDialogElement;
         this.panelMetaPath = panelMetaPath;
@@ -54,7 +54,7 @@ public abstract class ErrorSolution {
     /**
      * @return the pathToPropertyDialogElement
      */
-    public IMetaPath getPathToPropertyDialogElement() {
+    public MetaPath getPathToPropertyDialogElement() {
         return pathToPropertyDialogElement;
     }
 

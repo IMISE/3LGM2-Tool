@@ -15,7 +15,7 @@ public class DifferenceMetaPath extends ParallelMetaPath {
     /**
      * @param metaPaths
      */
-    public DifferenceMetaPath(final IMetaPath... metaPaths) {
+    public DifferenceMetaPath(final MetaPath... metaPaths) {
         super(metaPaths);
     }
 
@@ -23,7 +23,7 @@ public class DifferenceMetaPath extends ParallelMetaPath {
      * @param name
      * @param metaPaths
      */
-    public DifferenceMetaPath(final String name, final IMetaPath... metaPaths) {
+    public DifferenceMetaPath(final String name, final MetaPath... metaPaths) {
         super(name, metaPaths);
     }
 
@@ -48,7 +48,7 @@ public class DifferenceMetaPath extends ParallelMetaPath {
     public String createName() {
         StringBuilder sb = new StringBuilder();
         sb.append("(");
-        Iterator<IMetaPath> it = subMetaPaths.iterator();
+        Iterator<MetaPath> it = subMetaPaths.iterator();
         if (it.hasNext()) {
             sb.append(it.next().getFullName());
         }
@@ -68,7 +68,7 @@ public class DifferenceMetaPath extends ParallelMetaPath {
     @Override
     public boolean canBeRecursive() {
         //rekursiv, wenn der erste MetaPath (der die Elemente festlegt, von denen die der folgenden MetaPfade abgezogen werden) rekursiv ist
-        IMetaPath firstMetaPath = subMetaPaths.get(0);
+        MetaPath firstMetaPath = subMetaPaths.get(0);
         return firstMetaPath.canBeRecursive();
     }
 
@@ -78,7 +78,7 @@ public class DifferenceMetaPath extends ParallelMetaPath {
     }
 
     @Override
-    public DifferenceMetaPath createInstance(final IMetaPath... subMetaPaths) {
+    public DifferenceMetaPath createInstance(final MetaPath... subMetaPaths) {
         return new DifferenceMetaPath(subMetaPaths);
     }
 

@@ -401,7 +401,7 @@ public final class ElementaryMetaPath extends MetaPathImpl implements SequenceMe
      *         (which is sub and which super dosn't matters).
      */
     @Override
-    public boolean isAssignable(final IMetaPath otherMetaPath) {
+    public boolean isAssignable(final MetaPath otherMetaPath) {
         List<ElementaryMetaPath> elementaryMetaPaths = otherMetaPath.getElementaryMetaPaths();
         if (elementaryMetaPaths.size() != 1) {
             return false;
@@ -617,8 +617,8 @@ public final class ElementaryMetaPath extends MetaPathImpl implements SequenceMe
 
     @SuppressWarnings("unchecked")
     @Override
-    public final List<IMetaPath> getSubMetaPaths() {
-        return (List<IMetaPath>) (List<?>) getElementaryMetaPaths();
+    public final List<MetaPath> getSubMetaPaths() {
+        return (List<MetaPath>) (List<?>) getElementaryMetaPaths();
     }
 
     @Override

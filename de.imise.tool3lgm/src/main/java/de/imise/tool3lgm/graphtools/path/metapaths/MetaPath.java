@@ -11,7 +11,7 @@ import de.imise.tool3lgm.graphtools.path.metapaths.PathFunctions.PathConnectionS
 import de.imise.tool3lgm.graphtools.path.paths.PathResultTreeModel;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 
-public interface IMetaPath extends IBasicMetaPath {
+public interface MetaPath extends BasicMetaPath {
 
     /**
      * Empty ElementaryMetaPath list
@@ -94,7 +94,7 @@ public interface IMetaPath extends IBasicMetaPath {
      *
      * @return the otherDirectionPath
      */
-    IMetaPath getOtherDirection();
+    MetaPath getOtherDirection();
 
     /**
      * Liefert eine Folge von Elementarpfaden, wenn sich dieser Pfad so bilden
@@ -122,9 +122,9 @@ public interface IMetaPath extends IBasicMetaPath {
     ElementaryMetaPath getLastElementaryMetaPath();
 
     /**
-     * @return Liste aller {@link IMetaPath}, die dieser MetaPfad enthält.
+     * @return Liste aller {@link MetaPath}, die dieser MetaPfad enthält.
      */
-    List<IMetaPath> getSubMetaPaths();
+    List<MetaPath> getSubMetaPaths();
 
     /**
      * @return the number of contained metapaths
@@ -169,7 +169,7 @@ public interface IMetaPath extends IBasicMetaPath {
      *         means that one of the class must be a subclass of the other
      *         (which is sub and which super dosn't matters).
      */
-    boolean isAssignable(IMetaPath other);
+    boolean isAssignable(MetaPath other);
 
     /**
      * Liefert alle mit dem übergebenen Element über diesen MetaPfad verbundenen

@@ -13,7 +13,7 @@ import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.LGMGraphDocument;
-import de.imise.tool3lgm.graphtools.path.metapaths.IMetaPath;
+import de.imise.tool3lgm.graphtools.path.metapaths.MetaPath;
 
 /**
  * @author AXS (22.03.2020)
@@ -33,9 +33,9 @@ public class MissingPathChecker implements ConsistencyErrorChecker {
         LGMGraphDocument mainDoc = gdcoll.getMainDoc();
         //for every consistency condition
         for (MissingPathErrorCheckCondition condition : missingPathErrorCheckConditions) {
-            IMetaPath toRealStartElementsMetaPath = condition.getMetaPathToRealStartElements();
-            IMetaPath toConnectableAndToConnectedSectionMetaPath = condition.getToConnectableAndToConnectedSectionMetaPath();
-            IMetaPath metaPathFromStartElements = toRealStartElementsMetaPath != null ? toRealStartElementsMetaPath : toConnectableAndToConnectedSectionMetaPath;
+            MetaPath toRealStartElementsMetaPath = condition.getMetaPathToRealStartElements();
+            MetaPath toConnectableAndToConnectedSectionMetaPath = condition.getToConnectableAndToConnectedSectionMetaPath();
+            MetaPath metaPathFromStartElements = toRealStartElementsMetaPath != null ? toRealStartElementsMetaPath : toConnectableAndToConnectedSectionMetaPath;
             Class<? extends ModelElement> elementClassToCheck = metaPathFromStartElements.getStartClass();
             List<ModelElement> possibleInconsistentElements = mainDoc.getModelItems(elementClassToCheck, true);
             for (ModelElement elementToCheck : possibleInconsistentElements) {
@@ -48,7 +48,7 @@ public class MissingPathChecker implements ConsistencyErrorChecker {
                 //for every of these elements
                 for (ModelElement realStartElement : realStartElements) {
                     //the first sub metapath of the SectionMetaPath describes the connection to the needed elements -> get the first
-                    IMetaPath metaPathToNeededElements = condition.getToConnectableMetaPath();
+                    MetaPath metaPathToNeededElements = condition.getToConnectableMetaPath();
                     //get the elements which should be connected over the other subpaths too
                     Collection<ModelElement> neededElements = metaPathToNeededElements.getConnectedElements(realStartElement);
                     //if there are needed elements

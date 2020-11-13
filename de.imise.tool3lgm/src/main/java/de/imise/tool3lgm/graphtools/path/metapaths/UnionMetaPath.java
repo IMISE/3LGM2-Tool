@@ -11,7 +11,7 @@ public class UnionMetaPath extends ParallelMetaPath {
     /**
      * @param metaPaths
      */
-    public UnionMetaPath(final IMetaPath... metaPaths) {
+    public UnionMetaPath(final MetaPath... metaPaths) {
         super(metaPaths);
     }
 
@@ -26,7 +26,7 @@ public class UnionMetaPath extends ParallelMetaPath {
      * @param name
      * @param metaPaths
      */
-    public UnionMetaPath(final String name, final IMetaPath... metaPaths) {
+    public UnionMetaPath(final String name, final MetaPath... metaPaths) {
         super(name, metaPaths);
     }
 
@@ -46,7 +46,7 @@ public class UnionMetaPath extends ParallelMetaPath {
     @Override
     public boolean canBeRecursive() {
         //bei Vereinigungsmengen reicht es, wenn einer der enthaltenen Pfade für die Elemente rekursiv ist
-        for (IMetaPath metaPath : subMetaPaths) {
+        for (MetaPath metaPath : subMetaPaths) {
             if (metaPath.canBeRecursive()) {
                 return true;
             }
@@ -56,7 +56,7 @@ public class UnionMetaPath extends ParallelMetaPath {
 
     @Override
     public boolean isCreatable(final boolean checkCreateEndElement) {
-        for (IMetaPath metaPath : getSubMetaPaths()) {
+        for (MetaPath metaPath : getSubMetaPaths()) {
             if (!metaPath.isCreatable(checkCreateEndElement)) {
                 return false;
             }
@@ -65,7 +65,7 @@ public class UnionMetaPath extends ParallelMetaPath {
     }
 
     @Override
-    public UnionMetaPath createInstance(final IMetaPath... subMetaPaths) {
+    public UnionMetaPath createInstance(final MetaPath... subMetaPaths) {
         return new UnionMetaPath(subMetaPaths);
     }
 

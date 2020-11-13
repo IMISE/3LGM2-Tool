@@ -26,7 +26,7 @@ import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
 import de.imise.tool3lgm.graphtools.metamodel.CoreMetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
-import de.imise.tool3lgm.graphtools.path.metapaths.IMetaPath;
+import de.imise.tool3lgm.graphtools.path.metapaths.MetaPath;
 import de.imise.tool3lgm.gui.MainFrame;
 import de.imise.util.Alphabetical;
 import de.imise.util.swing.component.AlphabeticalComboBox;
@@ -71,12 +71,12 @@ public class MetaPathSelector implements ActionListener {
     /**
      * Metapaths that can be choosed in the <code>metaPathJList</code>
      */
-    private List<IMetaPath> selectableMetaPaths = new ArrayList<>();
+    private List<MetaPath> selectableMetaPaths = new ArrayList<>();
 
     /**
      * Choosed metapaths
      */
-    private final List<IMetaPath> selectedMetaPaths;
+    private final List<MetaPath> selectedMetaPaths;
 
     /**
      * Listeners for change events
@@ -94,7 +94,7 @@ public class MetaPathSelector implements ActionListener {
      * selectable meta paths, this list must be updated if the selection of the
      * comboboxes is changed.
      */
-    private AlphabeticalJList<IMetaPath> metaPathJList;
+    private AlphabeticalJList<MetaPath> metaPathJList;
 
     /**
      * Model, das die auswählbaren Elementklassen und Pfade festlegt.
@@ -163,7 +163,7 @@ public class MetaPathSelector implements ActionListener {
             }
             class2ComboBox.setEnabled(true);
             for (Class<? extends ModelElement> elementClass : endElementClassesInPaths) {
-                Set<IMetaPath> metaPathes = model.getMetaPaths(class1BoxSelection, elementClass, false);
+                Set<MetaPath> metaPathes = model.getMetaPaths(class1BoxSelection, elementClass, false);
                 if (!metaPathes.isEmpty()) {
                     String name = elementsNameBuilder.getDisplayableName(elementClass);
                     class2ComboBox.addObject(elementClass, name);
@@ -249,7 +249,7 @@ public class MetaPathSelector implements ActionListener {
         dialogMetaPathSelecor.selectedMetaPaths.clear();
         Object selectedMetaPath = dialogMetaPathSelecor.metaPathJList.getSelectedObject();
         if (selectedMetaPath != null) {
-            dialogMetaPathSelecor.selectedMetaPaths.add((IMetaPath) selectedMetaPath);
+            dialogMetaPathSelecor.selectedMetaPaths.add((MetaPath) selectedMetaPath);
         }
         return dialogMetaPathSelecor;
     }
@@ -354,7 +354,7 @@ public class MetaPathSelector implements ActionListener {
         public Class<? extends ModelElement> class2;
 
         /** Choosed metapaths */
-        public List<IMetaPath> selectedMetaPaths;
+        public List<MetaPath> selectedMetaPaths;
 
         /** Show parts only in matrix rows and columns **/
         public boolean showPartsOnly;

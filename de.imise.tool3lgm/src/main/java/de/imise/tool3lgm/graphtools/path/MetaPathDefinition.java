@@ -25,7 +25,7 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.path.metapaths.ElementaryMetaPath;
 import de.imise.tool3lgm.graphtools.path.metapaths.ElementaryMetaPathHandler;
-import de.imise.tool3lgm.graphtools.path.metapaths.IMetaPath;
+import de.imise.tool3lgm.graphtools.path.metapaths.MetaPath;
 import de.imise.tool3lgm.graphtools.path.metapaths.SerialMetaPath;
 import de.imise.tool3lgm.graphtools.path.metapaths.SimpleMetaPath;
 import de.imise.tool3lgm.graphtools.path.metapaths.SimpleMetaPathCreator;
@@ -41,7 +41,7 @@ import de.imise.util.Alphabetical;
 public class MetaPathDefinition extends MetaModelSpecificAdapter {
 
     /** Sammlung aller definierten Metapfade */
-    private final Set<IMetaPath> definedMetaPaths = new HashSet<>();
+    private final Set<MetaPath> definedMetaPaths = new HashSet<>();
 
     /** Der MetaPathCreator zum zugehörigen Metamodel */
     protected final SimpleMetaPathCreator simpleMetaPathCreator;
@@ -171,9 +171,9 @@ public class MetaPathDefinition extends MetaModelSpecificAdapter {
      * @param startClass
      * @return
      */
-    public final Set<IMetaPath> getMetaPaths(final Class<? extends ModelElement> startClass) {
-        Set<IMetaPath> metaPaths = new HashSet<>();
-        for (IMetaPath metaPath : definedMetaPaths) {
+    public final Set<MetaPath> getMetaPaths(final Class<? extends ModelElement> startClass) {
+        Set<MetaPath> metaPaths = new HashSet<>();
+        for (MetaPath metaPath : definedMetaPaths) {
             if (metaPath.isStartClass(startClass)) {
                 metaPaths.add(metaPath);
             }
@@ -193,9 +193,9 @@ public class MetaPathDefinition extends MetaModelSpecificAdapter {
      *            übereinstimmen
      * @return
      */
-    public final Set<IMetaPath> getMetaPaths(final Class<? extends ModelElement> startClass, final Class<? extends ModelElement> endClass, final boolean wrap) {
-        Set<IMetaPath> metaPaths = new HashSet<>();
-        for (IMetaPath metaPath : definedMetaPaths) {
+    public final Set<MetaPath> getMetaPaths(final Class<? extends ModelElement> startClass, final Class<? extends ModelElement> endClass, final boolean wrap) {
+        Set<MetaPath> metaPaths = new HashSet<>();
+        for (MetaPath metaPath : definedMetaPaths) {
             if (metaPath.isStartAndEndClass(startClass, endClass)) {
                 if (wrap) {
                     metaPath = WrapperMetaPath.wrapMetaPath(startClass, endClass, metaPath);
@@ -213,11 +213,11 @@ public class MetaPathDefinition extends MetaModelSpecificAdapter {
      *
      * @param metaPaths
      */
-    protected final void put(final IMetaPath... metaPaths) {
+    protected final void put(final MetaPath... metaPaths) {
         if (metaPaths == null) {
             return;
         }
-        for (IMetaPath metaPath : metaPaths) {
+        for (MetaPath metaPath : metaPaths) {
             definedMetaPaths.add(metaPath);
             metaPath = metaPath.getOtherDirection();
             if (metaPath != null) {
@@ -257,9 +257,9 @@ public class MetaPathDefinition extends MetaModelSpecificAdapter {
      * element_class_to_direct_start_pathes.get(elementClass)); }
      */
     public final void writePathes() {
-        ArrayList<IMetaPath> metaPaths = new ArrayList<>(definedMetaPaths);
+        ArrayList<MetaPath> metaPaths = new ArrayList<>(definedMetaPaths);
         Alphabetical.sort(metaPaths);
-        for (IMetaPath metaPath : metaPaths) {
+        for (MetaPath metaPath : metaPaths) {
             System.err.println(metaPath);
         }
     }
@@ -295,7 +295,7 @@ public class MetaPathDefinition extends MetaModelSpecificAdapter {
         Set<Class<? extends ModelElement>> pathsElementClassesSet = new HashSet<>();
         //alle Metapfade durchlaufen und alle neu gefundenen Startklassen zur Rückgabeliste hinzufügen
         MetaModel metaModel = getMetaModel();
-        for (IMetaPath metaPath : definedMetaPaths) {
+        for (MetaPath metaPath : definedMetaPaths) {
             ArrayList<Class<? extends ModelElement>> newElementClasses = new ArrayList<>();
             //Für alle Startklassen des aktuellen Metapfades
             for (Class<? extends ModelElement> elementClass : start ? metaPath.getStartClasses() : metaPath.getEndClasses()) {
@@ -366,7 +366,7 @@ public class MetaPathDefinition extends MetaModelSpecificAdapter {
      *
      * @return
      */
-    public Map<Class<? extends Edge>, IMetaPath> getSoftConditionMetaPaths() {
+    public Map<Class<? extends Edge>, MetaPath> getSoftConditionMetaPaths() {
         return ImmutableMap.of();
     }
 
@@ -409,7 +409,7 @@ public class MetaPathDefinition extends MetaModelSpecificAdapter {
      *
      * @return
      */
-    public Map<Class<? extends ModelElement>, IMetaPath> getElementClassToNameExtensionPath() {
+    public Map<Class<? extends ModelElement>, MetaPath> getElementClassToNameExtensionPath() {
         return ImmutableMap.of();
     }
 
@@ -425,7 +425,7 @@ public class MetaPathDefinition extends MetaModelSpecificAdapter {
      * Das funktioniert im Moment nur bei Kanten, da bei Knoten zum Zeitpunkt
      * des Festlegens des Namens der Knoten noch mit gar nichts verbunden ist.
      */
-    public Map<Class<? extends Edge>, IMetaPath> getEdgeClassToInitialCreatedNameSourcePath() {
+    public Map<Class<? extends Edge>, MetaPath> getEdgeClassToInitialCreatedNameSourcePath() {
         return ImmutableMap.of();
     }
 
@@ -439,7 +439,7 @@ public class MetaPathDefinition extends MetaModelSpecificAdapter {
      *
      * @return
      */
-    public Map<Class<? extends InferenceEdge>, IMetaPath> getInferenceEdgeToConditionMetaPath() {
+    public Map<Class<? extends InferenceEdge>, MetaPath> getInferenceEdgeToConditionMetaPath() {
         return ImmutableMap.of();
     }
 

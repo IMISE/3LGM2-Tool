@@ -10,7 +10,7 @@ import de.imise.tool3lgm.graphtools.dialog.action.LGMAction;
 import de.imise.tool3lgm.graphtools.dialog.action.LGMActionLibrary;
 import de.imise.tool3lgm.graphtools.dialog.action.LGMTreeSelectionListener;
 import de.imise.tool3lgm.graphtools.dialog.element.AbstractElementPropertyDialog;
-import de.imise.tool3lgm.graphtools.path.metapaths.IMetaPath;
+import de.imise.tool3lgm.graphtools.path.metapaths.MetaPath;
 import de.imise.tool3lgm.graphtools.view.tree.TreeRenderer;
 import de.imise.tool3lgm.graphtools.view.tree.node.LGMTreeNode;
 
@@ -30,7 +30,7 @@ public abstract class AbstractPathConnectionTreePanel extends AbstractPathConnec
      * @param dialog
      * @param metaPath
      */
-    public AbstractPathConnectionTreePanel(final AbstractElementPropertyDialog dialog, final IMetaPath metaPath) {
+    public AbstractPathConnectionTreePanel(final AbstractElementPropertyDialog dialog, final MetaPath metaPath) {
         super(dialog, metaPath);
         treeRenderer = new TreeRenderer();
     }
@@ -41,7 +41,7 @@ public abstract class AbstractPathConnectionTreePanel extends AbstractPathConnec
      * @param westLabelOption
      * @param metaPath
      */
-    public AbstractPathConnectionTreePanel(final AbstractElementPropertyDialog dialog, final PanelLabelOption titleLabelOption, final PanelLabelOption westLabelOption, final IMetaPath metaPath) {
+    public AbstractPathConnectionTreePanel(final AbstractElementPropertyDialog dialog, final PanelLabelOption titleLabelOption, final PanelLabelOption westLabelOption, final MetaPath metaPath) {
         super(dialog, titleLabelOption, westLabelOption, metaPath);
         treeRenderer = new TreeRenderer();
     }

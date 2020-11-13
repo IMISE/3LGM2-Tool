@@ -24,7 +24,7 @@ import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
  * @author AXS
  * @create 12.10.2010
  */
-abstract class MetaPathImpl extends BasicMetaPathImpl implements IMetaPath {
+abstract class MetaPathImpl extends BasicMetaPathImpl implements MetaPath {
 
     /**
      * @param metaModel
@@ -173,7 +173,7 @@ abstract class MetaPathImpl extends BasicMetaPathImpl implements IMetaPath {
      * @return the otherDirectionPath
      */
     @Override
-    public IMetaPath getOtherDirection() {
+    public MetaPath getOtherDirection() {
         return otherDirection;
     }
 
@@ -233,7 +233,7 @@ abstract class MetaPathImpl extends BasicMetaPathImpl implements IMetaPath {
      *         (which is sub and which super dosn't matters).
      */
     @Override
-    public boolean isAssignable(final IMetaPath other) {
+    public boolean isAssignable(final MetaPath other) {
         //Maybe there would be an useful expression here for general MetaPath too, but
         //we only need this function for SimpleMetaPaths and ElementaryMetaPaths
         return false;

@@ -13,7 +13,7 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.util.ReflectionUtils;
 import de.imise.util.collections.CollectionUtils;
 
-abstract class BasicMetaPathImpl extends MetaModelSpecificAdapter implements IBasicMetaPath {
+abstract class BasicMetaPathImpl extends MetaModelSpecificAdapter implements BasicMetaPath {
 
     /**
      * Liste aller Startklassen dieses Pfades.

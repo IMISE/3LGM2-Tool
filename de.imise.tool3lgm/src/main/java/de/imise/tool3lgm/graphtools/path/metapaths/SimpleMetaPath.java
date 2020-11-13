@@ -152,7 +152,7 @@ public class SimpleMetaPath extends SerialMetaPath implements SequenceMetaPath {
     @Override
     protected ElementaryMetaPath[] getOtherDirectionMetaPaths() {
         ElementaryMetaPath[] otherDirectionElementaryMetaPaths = null;
-        IMetaPath[] otherDirectionMetaPaths = super.getOtherDirectionMetaPaths();
+        MetaPath[] otherDirectionMetaPaths = super.getOtherDirectionMetaPaths();
         if (otherDirectionMetaPaths != null) {
             otherDirectionElementaryMetaPaths = Arrays.copyOf(otherDirectionMetaPaths, otherDirectionMetaPaths.length, ElementaryMetaPath[].class);
         }
@@ -198,7 +198,7 @@ public class SimpleMetaPath extends SerialMetaPath implements SequenceMetaPath {
     }
 
     @Override
-    public boolean isAssignable(final IMetaPath other) {
+    public boolean isAssignable(final MetaPath other) {
         List<ElementaryMetaPath> elementaryMetaPaths = getElementaryMetaPaths();
         List<ElementaryMetaPath> otherElementaryMetaPaths = other.getElementaryMetaPaths();
         int subMetaPathCount = elementaryMetaPaths.size();

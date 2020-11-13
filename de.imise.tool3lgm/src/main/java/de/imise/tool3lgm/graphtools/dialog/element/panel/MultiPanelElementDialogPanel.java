@@ -27,7 +27,7 @@ import de.imise.tool3lgm.graphtools.dialog.element.AbstractElementPropertyDialog
 import de.imise.tool3lgm.graphtools.dialog.element.ElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.dialog.element.panel.AbstractPathConnectionPanel.PanelLabelOption;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
-import de.imise.tool3lgm.graphtools.path.metapaths.IMetaPath;
+import de.imise.tool3lgm.graphtools.path.metapaths.MetaPath;
 import de.imise.tool3lgm.graphtools.path.metapaths.SimpleMetaPath;
 
 /**
@@ -245,7 +245,7 @@ public class MultiPanelElementDialogPanel extends ElementDialogPanel implements 
         AbstractPathConnectionPanel panel = null;
         if (consistencyError instanceof AbstractPathError) {
             AbstractPathError pathError = (AbstractPathError) consistencyError;
-            IMetaPath errorMetaPath = pathError.getMetaPath();
+            MetaPath errorMetaPath = pathError.getMetaPath();
             panel = AbstractTabbedPropertyDialog.getPanel(this, errorMetaPath);
         }
         return panel;

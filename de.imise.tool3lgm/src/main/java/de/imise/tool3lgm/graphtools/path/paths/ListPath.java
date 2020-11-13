@@ -5,7 +5,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
-import de.imise.tool3lgm.graphtools.path.metapaths.IMetaPath;
+import de.imise.tool3lgm.graphtools.path.metapaths.MetaPath;
 import de.imise.util.collections.CollectionUtils;
 
 /**
@@ -22,7 +22,7 @@ public abstract class ListPath extends AbstractPath implements Iterable<Abstract
      * @param endElement
      * @param paths
      */
-    public ListPath(final IMetaPath metaPath, final ModelElement startElement, final ModelElement endElement, final AbstractPath[] paths) {
+    public ListPath(final MetaPath metaPath, final ModelElement startElement, final ModelElement endElement, final AbstractPath[] paths) {
         super(metaPath, startElement, endElement);
         this.paths = CollectionUtils.ensureImmutable(Arrays.asList(paths));
     }
@@ -33,7 +33,7 @@ public abstract class ListPath extends AbstractPath implements Iterable<Abstract
      * @param endElement
      * @param paths
      */
-    public ListPath(final IMetaPath metaPath, final ModelElement startElement, final ModelElement endElement, final List<AbstractPath> paths) {
+    public ListPath(final MetaPath metaPath, final ModelElement startElement, final ModelElement endElement, final List<AbstractPath> paths) {
         super(metaPath, startElement, endElement);
         this.paths = CollectionUtils.ensureImmutable(paths);
     }

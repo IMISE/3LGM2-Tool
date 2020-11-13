@@ -2,7 +2,7 @@ package de.imise.tool3lgm.graphtools.consistency.error.condition;
 
 import de.imise.tool3lgm.graphtools.consistency.error.solution.ErrorSolution;
 import de.imise.tool3lgm.graphtools.consistency.error.solution.MissingPathErrorSolution;
-import de.imise.tool3lgm.graphtools.path.metapaths.IMetaPath;
+import de.imise.tool3lgm.graphtools.path.metapaths.MetaPath;
 import de.imise.tool3lgm.graphtools.path.metapaths.SectionMetaPath;
 import de.imise.tool3lgm.graphtools.path.metapaths.SimpleMetaPath;
 
@@ -20,7 +20,7 @@ public class MissingPathErrorCheckCondition extends ErrorCheckCondition {
      * <code>null</code>, then the passed start element(s) are considered to be
      * the output elements of the error.
      */
-    private final IMetaPath toRealStartElements;
+    private final MetaPath toRealStartElements;
 
     /**
      * Starting from the real start elements causing the error, this metapath
@@ -55,7 +55,7 @@ public class MissingPathErrorCheckCondition extends ErrorCheckCondition {
      *            which the start element has to be connected in order to fix
      *            the error.
      */
-    public MissingPathErrorCheckCondition(final IMetaPath toRealStartElements, final IMetaPath toConnectableElements, final IMetaPath toConnectedElements, final String errorResBaseKey, final SimpleMetaPath toFixTheErrorMetaPath) {
+    public MissingPathErrorCheckCondition(final MetaPath toRealStartElements, final MetaPath toConnectableElements, final MetaPath toConnectedElements, final String errorResBaseKey, final SimpleMetaPath toFixTheErrorMetaPath) {
         this(toRealStartElements, toConnectableElements, toConnectedElements, errorResBaseKey, new MissingPathErrorSolution(toFixTheErrorMetaPath));
     }
 
@@ -81,7 +81,7 @@ public class MissingPathErrorCheckCondition extends ErrorCheckCondition {
      *            table.
      * @param errorSolution The solution to solve the error.
      */
-    private MissingPathErrorCheckCondition(final IMetaPath toRealStartElements, final IMetaPath toConnectableElements, final IMetaPath toConnectedElements, final String errorResBaseKey, final ErrorSolution errorSolution) {
+    private MissingPathErrorCheckCondition(final MetaPath toRealStartElements, final MetaPath toConnectableElements, final MetaPath toConnectedElements, final String errorResBaseKey, final ErrorSolution errorSolution) {
         super(errorSolution);
         this.toRealStartElements = toRealStartElements;
         toConnectableAndToConnectedSectionMetaPath = new SectionMetaPath(errorResBaseKey, toConnectableElements, toConnectedElements);
@@ -90,7 +90,7 @@ public class MissingPathErrorCheckCondition extends ErrorCheckCondition {
     /**
      * @return the {@link #toRealStartElements}
      */
-    public final IMetaPath getMetaPathToRealStartElements() {
+    public final MetaPath getMetaPathToRealStartElements() {
         return toRealStartElements;
     }
 
@@ -106,7 +106,7 @@ public class MissingPathErrorCheckCondition extends ErrorCheckCondition {
      *         metapath describes the connection to all elements, of which at
      *         least one should be connected.
      */
-    public final IMetaPath getToConnectableMetaPath() {
+    public final MetaPath getToConnectableMetaPath() {
         return toConnectableAndToConnectedSectionMetaPath.getFirstSubMetaPath();
     }
 
@@ -115,7 +115,7 @@ public class MissingPathErrorCheckCondition extends ErrorCheckCondition {
      *         metapath describes the connection to all elements that are
      *         actually connected.
      */
-    public final IMetaPath getToConnectedMetaPath() {
+    public final MetaPath getToConnectedMetaPath() {
         return toConnectableAndToConnectedSectionMetaPath.getLastSubMetaPath();
     }
 

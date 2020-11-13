@@ -16,14 +16,14 @@ public class WrapperMetaPath extends ListMetaPath {
     /**
      *
      */
-    private final IMetaPath wrappedMetaPath;
+    private final MetaPath wrappedMetaPath;
 
     /**
      * @param newStartClass
      * @param newEndClass
      * @param wrappedMetaPath
      */
-    private WrapperMetaPath(final Class<? extends ModelElement> newStartClass, final Class<? extends ModelElement> newEndClass, final IMetaPath wrappedMetaPath) {
+    private WrapperMetaPath(final Class<? extends ModelElement> newStartClass, final Class<? extends ModelElement> newEndClass, final MetaPath wrappedMetaPath) {
         super(wrappedMetaPath.getName(), getWrappedMetaPath(newStartClass, newEndClass, wrappedMetaPath));
         this.wrappedMetaPath = wrappedMetaPath;
     }
@@ -34,14 +34,14 @@ public class WrapperMetaPath extends ListMetaPath {
      * @param wrappedMetaPath
      * @return
      */
-    private static final IMetaPath[] getWrappedMetaPath(final Class<? extends ModelElement> newStartClass, final Class<? extends ModelElement> newEndClass, final IMetaPath wrappedMetaPath) {
+    private static final MetaPath[] getWrappedMetaPath(final Class<? extends ModelElement> newStartClass, final Class<? extends ModelElement> newEndClass, final MetaPath wrappedMetaPath) {
         int wrappedMetaPathSize = 3;
         int startClassPathIndex = newStartClass == null ? -1 : 0; // -1 oder 0
         wrappedMetaPathSize += startClassPathIndex; // bleibt 3 oder wird 2
         int edgePathIndex = startClassPathIndex + 1; // 0 oder 1
         int endClassPathIndex = newEndClass == null ? -1 : edgePathIndex + 1; // -1 oder 1 oder 2
         wrappedMetaPathSize += endClassPathIndex < 0 ? endClassPathIndex : 0; // bleibt 3 oder wird 2 oder wird 1
-        IMetaPath[] wrapped = new IMetaPath[wrappedMetaPathSize];
+        MetaPath[] wrapped = new MetaPath[wrappedMetaPathSize];
         if (startClassPathIndex == 0) {
             MetaModel metaModel = wrapped[0].getMetaModel();
             wrapped[0] = new ElementaryMetaPath(metaModel, newStartClass);
@@ -69,7 +69,7 @@ public class WrapperMetaPath extends ListMetaPath {
      * @param newEndClass
      * @param originalMetaPath
      */
-    public static final IMetaPath wrapMetaPath(final Class<? extends ModelElement> newStartClass, final Class<? extends ModelElement> newEndClass, final IMetaPath originalMetaPath) {
+    public static final MetaPath wrapMetaPath(final Class<? extends ModelElement> newStartClass, final Class<? extends ModelElement> newEndClass, final MetaPath originalMetaPath) {
         Set<Class<? extends ModelElement>> startClasses = originalMetaPath.getStartClasses();
         Class<? extends ModelElement> startClass = newStartClass != null && (startClasses.size() != 1 || !startClasses.contains(newStartClass)) ? newStartClass : null;
         Set<Class<? extends ModelElement>> endClasses = originalMetaPath.getEndClasses();
@@ -94,9 +94,9 @@ public class WrapperMetaPath extends ListMetaPath {
     @Override
     protected void initStartEndClasses() {
         if (subMetaPaths != null && !subMetaPaths.isEmpty()) {
-            IMetaPath firstSubMetaPath = getFirstSubMetaPath();
+            MetaPath firstSubMetaPath = getFirstSubMetaPath();
             startElementClasses = firstSubMetaPath.getStartClasses();
-            IMetaPath lastSubMetaPath = getLastSubMetaPath();
+            MetaPath lastSubMetaPath = getLastSubMetaPath();
             endElementClasses = lastSubMetaPath.getEndClasses();
         }
     }

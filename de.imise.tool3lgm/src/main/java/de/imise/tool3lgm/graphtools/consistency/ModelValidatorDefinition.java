@@ -28,7 +28,7 @@ import de.imise.tool3lgm.graphtools.metamodel.MetaModelDefinition;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModelSpecific;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
-import de.imise.tool3lgm.graphtools.path.metapaths.IMetaPath;
+import de.imise.tool3lgm.graphtools.path.metapaths.MetaPath;
 import de.imise.tool3lgm.graphtools.path.metapaths.SimpleMetaPath;
 import de.imise.tool3lgm.graphtools.undoredo.TransactionManager;
 import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.panel.PropertyDialogUserFieldPanel;
@@ -128,7 +128,7 @@ public class ModelValidatorDefinition implements MetaModelSpecific {
         if (es == null) {
             return new HashSet<>();
         }
-        IMetaPath pathToDialogElement = es.getPathToPropertyDialogElement();
+        MetaPath pathToDialogElement = es.getPathToPropertyDialogElement();
         ModelElement me = error.getModelElement();
         if (pathToDialogElement != null) {
             Collection<ModelElement> connected = pathToDialogElement.getConnectedElements(me);
@@ -168,7 +168,7 @@ public class ModelValidatorDefinition implements MetaModelSpecific {
             ErrorSolution es = modelValidatorDefinition.getSolution(error);
             if (es == null) {
                 AbstractPathError pathError = (AbstractPathError) error;
-                IMetaPath metaPath = pathError.getMetaPath();
+                MetaPath metaPath = pathError.getMetaPath();
                 ModelElement me = pathError.getModelElement();
                 ElementPropertyDialog dialog = me.getPropertyDialog();
                 int selectedTabIndex = dialog.selectTab(metaPath);
