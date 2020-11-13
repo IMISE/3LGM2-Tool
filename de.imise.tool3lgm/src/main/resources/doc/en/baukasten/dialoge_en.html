@@ -1,0 +1,570 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<html>
+<head>
+	<title>Inserting and modifying model elements</title>
+</head>
+
+<body>
+<h1>Inserting and modifying model elements</h1>
+
+<p>
+<h2>Inserting model elements</h2>
+You have two options for adding a new model element to your model.<br> 
+You can select a model element from the <a href="uebersicht_en.html#menueleiste">menu bar</a> from the Insert menu, or, if the element is a building component that is graphically represented in the model, you can select it from the <a href="uebersicht_en.html#zeichensymbolleiste">drawing toolbar</a>.<br> 
+Note that you are only provided with model elements that can be used in the selected layer of the model. You can easily select the layer you are working with from the <a href="uebersicht_en.html#standardsymbolleiste">standard toolbar</a>.<br> 
+<br>
+When you insert elements, a dialog appears asking you to give the element a name. After you have assigned a name, press <i>OK</i> to apply the element to your model.<br> 
+<br> 
+You cannot give a name to an <b>ETNT combination</b> when you create it, because the identifier for this combination is automatically created from the assigned event type and message type or document type.<br>  
+<br>
+When you create an <b>application component</b>, you are also asked to specify the component type (conventional, computer-based or mixed) before you assign the name for this component.
+</p>
+
+<p>
+<h2>Changing model elements</h2>
+To modify a model element, double-click the element in the <a href="uebersicht_en.html#modellbrowser">Model Browser</a> or in the <a href="uebersicht_en.html#dokumentfenster">document window</a>. A dialog will then open, allowing you to change the properties of this element. In the following, the properties of the elements are explained using the properties dialogs.
+</p>
+
+<h3><a name="fachlich">Properties of the elements of the domain layer</a></h3>
+<div>
+	<img src="../bilder/down.gif" width=14 height=10 border=0 alt="">&nbsp;<a href="#aufgabe">Function</a><br>
+	<img src="../bilder/down.gif" width=14 height=10 border=0 alt="">&nbsp;<a href="#objekttyp">Object type</a><br>
+	<img src="../bilder/down.gif" width=14 height=10 border=0 alt="">&nbsp;<a href="#organisationseinheit">Organizational unit</a><br>
+	<img src="../bilder/down.gif" width=14 height=10 border=0 alt="">&nbsp;<a href="#rolle">Role</a><br>
+	<img src="../bilder/down.gif" width=14 height=10 border=0 alt="">&nbsp;<a href="#prozess">Process</a><br>
+</div>
+
+<p>
+<h4><a name="aufgabe">Function</a></h4>
+<i>General</i><br>
+Here you can change general settings for this function. This includes, above all, the name of the function. In addition, there are three fields for free text in which you can document a description for this function and requirements.
+</p>
+<p>
+<i>Structure</i><br>
+You can assign other functions to a function in order to subdivide functions. Under the tab <i>Structure</i> the parent functions to which this function belongs or the subordinate functions into which this function is divided are displayed. You can also add or remove parent and child functions here. To do this, click the button <img src="../bilder/auf.gif" width=12 height=12 border=1 alt="">. From the free functions, you can use the button <img src="../bilder/trennen.gif" width=12 height=12 border=1 alt="">&nbsp; to add a function to the parent or child functions. You can use the button <img src="../bilder/verbinden.gif" width=12 height=12 border=1 alt="">&nbsp; to remove a selected parent or child function.
+</p>
+<p>
+<i>Object type</i><br>
+Here you can see the object types assigned to this function for interpretation or processing. To assign or remove object types, click the button <img src="../bilder/auf.gif" width=12 height=12 border=1 alt="">&nbsp;. Now select the object types you want to add from the free object types and click the button <img src="../bilder/trennen.gif" width=12 height=12 border=1 alt="">&nbsp; to add them. To remove object types, select them and click the button <img src="../bilder/verbinden.gif" width=12 height=12 border=1 alt="">.
+</p>
+<p>
+<i>Organizational unit</i><br>
+Functions are performed in specific organizational units. The organizational units in which this function is performed are displayed here. To add organizational units, click the button <img src="../bilder/auf.gif" width=12 height=12 border=1 alt="">. Select the organizational unit you want to add from the right side and click on <img src="../bilder/trennen.gif" width=12 height=12 border=1 alt="">&nbsp; to add it. To remove organizational units, select them and click the button <img src="../bilder/verbinden.gif" width=12 height=12 border=1 alt="">.
+</p>
+<p>
+<i>Event Type</i><br>
+Here you can see the event types that are triggered by an activity of this function. To add event types, click the button <img src="../bilder/auf.gif" width=12 height=12 border=1 alt="">. Select the event types you want to add from the right side and click on <img src="../bilder/trennen.gif" width=12 height=12 border=1 alt="">&nbsp; to add them. To remove event types, select them and click the button <img src="../bilder/verbinden.gif" width=12 height=12 border=1 alt="">.
+</p>
+<p>
+<i><a name="awb_konf">Application Component Configuration</a></i><br>
+Here you can see the organizational units that will perform this function and the application component configuration that will be used by the corresponding organizational unit to perform this function. To change the application component configurations, click on the button <img src="../bilder/auf.gif" width=12 height=12 border=1 alt="">. Select an application component and an application component configuration and click on <img src="../bilder/trennen.gif" width=12 height=12 border=1 alt="">&nbsp; to add this application component to this application component configuration. To remove an application component from an application component configuration, click on the application component and then on the button <img src="../bilder/verbinden.gif" width=12 height=12 border=1 alt="">.<br> 
+If you do not want this function to be processed by one of the displayed organizational units anymore, go to the tab <i>Organizational</i> Unit and remove the organizational unit.
+</p>
+
+<p>
+<h4><a name="objekttyp">Object type</a></h4>
+<i>General</i><br>
+Here you can change general settings for this object type. This includes, above all, the name of the object type. You can also enter a description as free text. Under <i>Master DBS</i> you can specify the database system where this object type is stored.
+</p>
+<p>
+<i>Structure</i><br>
+You can subordinate other object types to an object type to subdivide it. Under the tab <i>Structure</i> the superordinate object types to which this object type belongs or the subordinate object types into which this object type is divided are displayed.<br> 
+You can also add or remove superior and subordinate object types here. To do this, click the button <img src="../bilder/auf.gif" width=12 height=12 border=1 alt="">.<br> 
+From the free object types, you can use the button <img src="../bilder/trennen.gif" width=12 height=12 border=1 alt="">&nbsp; to add an object type to the superordinate or subordinate object types. You can use the button <img src="../bilder/verbinden.gif" width=12 height=12 border=1 alt="">&nbsp; to remove a selected parent or child object type.
+</p>
+<p>
+<i>Functions</i><br>
+Here you can see the functions that this object type interprets or processes. To assign or remove functions, click the button <img src="../bilder/auf.gif" width=12 height=12 border=1 alt="">. Now select from the free functions those you want to add and click the button <img src="../bilder/trennen.gif" width=12 height=12 border=1 alt="">&nbsp; to add them. To remove functions, select them and click the button <img src="../bilder/verbinden.gif" width=12 height=12 border=1 alt="">.
+</p>
+<p>
+<i>Representation form</i><br>
+An object type can have a representation form, which is composed of dataset type, document type and message type. You can see the assigned types under the corresponding tabs. To add a type, click on the button <img src="../bilder/auf.gif" width=12 height=12 border=1 alt="">. Then select from the free types those you want to add and click the button <img src="../bilder/trennen.gif" width=12 height=12 border=1 alt="">&nbsp; to add them. To remove a type, select it and click on the button <img src="../bilder/verbinden.gif" width=12 height=12 border=1 alt="">.
+</p>
+
+
+
+
+
+
+
+
+Functions Here you can see the functions that this role performs. To assign or remove functions, click the button. Now select the functions you want to add from the free functions and click the button to add them. To remove functions, select them and click on the button <img src="../bilder/verbinden.gif" width=12 height=12 border=1 alt="">&nbsp; to add them.
+
+
+<p>
+<h4><a name="organisationseinheit">Organization Unit</a></h4>
+<i>General</i><br>
+Here you can change general settings for this organizational unit. This includes the name of the organizational unit. Furthermore, a description can be entered as free text.
+</p>
+<p>
+<i>Structure</i><br>
+You can assign other organizational units to an organizational unit to subdivide it. The tab <i>Structure</i> shows the superordinate organizational units to which this organizational unit belongs or the subordinate organizational units into which this organizational unit is divided.<br> 
+You can also add or remove superordinate and subordinate organizational units here. To do this, click the button <img src="../bilder/auf.gif" width=12 height=12 border=1 alt="">. From the free organizational units, you can use the button <img src="../bilder/trennen.gif" width=12 height=12 border=1 alt="">&nbsp; to add an organizational unit to the higher-level or lower-level organizational units.<br> 
+You can use the button <img src="../bilder/verbinden.gif" width=12 height=12 border=1 alt="">&nbsp; to remove a selected super- or subordinate organizational unit.
+</p>
+<p>
+<i>Functions</i><br>
+Here you will find the functions that can be performed by this organizational unit. To assign or remove functions click the button <img src="../bilder/auf.gif" width=12 height=12 border=1 alt="">. Now select the functions you want to add and click the button <img src="../bilder/trennen.gif" width=12 height=12 border=1 alt="">&nbsp; to add them. To remove functions, select them and click the button <img src="../bilder/verbinden.gif" width=12 height=12 border=1 alt="">.<br> 
+To change the application component configuration with which this organizational unit performs a function, right-click on this function. A context dialog opens where you can select the <i>Properties item</i> to display the properties of the function. Now select the tab <i>Application Component Configuration</i> to change the application component configuration. To do this, proceed as described under <i>Application Component Configuration</i> for the <a href="#aufgabe">properties dialog of functions</a>.
+</p>
+
+<p>
+<h4><a name="rolle">Role</a></h4>
+<i>General</i><br>
+Here you can change general settings for this role. This includes the name of the role. Furthermore, you can enter a description of the role as free text.
+</p>
+<p>
+<i>Structure</i><br>
+You can assign other roles to a role to subdivide it. Under the tab <i>Structure</i> the superordinate roles to which this role belongs or the subordinate roles in which this role is divided are displayed.<br> 
+You can also add or remove parent and child roles here. To do this, click the button <img src="../bilder/auf.gif" width=12 height=12 border=1 alt="">. From the free roles, you can use the button <img src="../bilder/trennen.gif" width=12 height=12 border=1 alt="">&nbsp; to add a role to the parent or child roles.<br> 
+You can use the button <img src="../bilder/verbinden.gif" width=12 height=12 border=1 alt="">&nbsp; to remove a selected parent or child role.
+</p>
+<p>
+<i>Functions</i><br>
+Here you can see the functions that this role performs. To assign or remove functions, click on the button <img src="../bilder/auf.gif" width=12 height=12 border=1 alt="">. Now select from the free functions those you want to add and click the button <img src="../bilder/trennen.gif" width=12 height=12 border=1 alt="">&nbsp; to add them. To remove functions, select them and click on the button <img src="../bilder/verbinden.gif" width=12 height=12 border=1 alt="">.
+</p>
+
+<p>
+<h3><a name="logisch">Properties of the Logical Tool Layer Elements</a><</h3>
+<div>
+	<img src="../bilder/down.gif" width=14 height=10 border=0 alt="">&nbsp;&nbsp;<a href="#rechner_ab">Computer-based application component</a><br>
+	<img src="../bilder/down.gif" width=14 height=10 border=0 alt="">&nbsp;&nbsp;<a href="#papier_ab">Paper-based application component</a><br>
+	<img src="../bilder/down.gif" width=14 height=10 border=0 alt="">&nbsp;&nbsp;<a href="#gemischt_ab">Mixed application component</a><br>
+	<img src="../bilder/down.gif" width=14 height=10 border=0 alt="">&nbsp;&nbsp;<a href="#softwareprodukt">Software product</a><br>
+	<img src="../bilder/down.gif" width=14 height=10 border=0 alt="">&nbsp;&nbsp;<a href="#komm_standard">Communication standard</a><br>
+	<img src="../bilder/down.gif" width=14 height=10 border=0 alt="">&nbsp;&nbsp;<a href="#db_system">DB management system</a><br>
+	<img src="../bilder/down.gif" width=14 height=10 border=0 alt="">&nbsp;&nbsp;<a href="#ereignistyp">Event type</a><br>
+	<img src="../bilder/down.gif" width=14 height=10 border=0 alt="">&nbsp;&nbsp;<a href="#nachrichtentyp">Message type</a><br>
+	<img src="../bilder/down.gif" width=14 height=10 border=0 alt="">&nbsp;&nbsp;<a href="#dokumententyp">Document type</a><br>
+	<img src="../bilder/down.gif" width=14 height=10 border=0 alt="">&nbsp;&nbsp;<a href="#etnt_kombi">ETNT combination</a><br>
+	<img src="../bilder/down.gif" width=14 height=10 border=0 alt="">&nbsp;&nbsp;<a href="#kom_prozess">Communication process</a><br>
+	<img src="../bilder/down.gif" width=14 height=10 border=0 alt="">&nbsp;&nbsp;<a href="#baustein_s">Component interface</a><br>
+	<img src="../bilder/down.gif" width=14 height=10 border=0 alt="">&nbsp;&nbsp;<a href="#benutzer_s">User interface</a><br>
+	<img src="../bilder/down.gif" width=14 height=10 border=0 alt="">&nbsp;&nbsp;<a href="#dbs">Database system</a><br>
+	<img src="../bilder/down.gif" width=14 height=10 border=0 alt="">&nbsp;&nbsp;<a href="#datensatztyp">Data dataset type</a><br>
+	<img src="../bilder/down.gif" width=14 height=10 border=0 alt="">&nbsp;&nbsp;<a href="#dokumentensammlung">Document collection</a><br>
+	<img src="../bilder/down.gif" width=14 height=10 border=0 alt="">&nbsp;&nbsp;<a href="#anwendungsprogramm">Application program</a><br>
+	<img src="../bilder/down.gif" width=14 height=10 border=0 alt="">&nbsp;&nbsp;<a href="#organisationsplan">Organization plan</a><br>
+</div>
+</p>
+<p>
+<h4><a name="rechner_ab">Computer-based application component</a></h4>
+<i>General</i><br>
+Here you can change general settings for this computer-based application component. This includes, above all, the name of the component. Furthermore, you can enter a description as free text and specify the database system and the software product installed on this application component.
+</p>
+<p>
+<i>Structure</i><br>
+A computer-based application component can be subordinated to other computer-based application components to subdivide it. Under the tab <i>Structure</i> the superordinate computer-based application components to which this computer-based application component belongs or the subordinate computer-based application components into which this computer-based application component is divided are displayed.<br> 
+You can also add or remove higher-level and subordinate computer-based application components here. To do this, click the button <img src="../bilder/auf.gif" width=12 height=12 border=1 alt="">. From the free computer-based application components, you can use the button <img src="../bilder/trennen.gif" width=12 height=12 border=1 alt="">&nbsp; to add a computer-based application component to the higher-level or lower-level computer-based application components.<br> 
+You can use the button <img src="../bilder/verbinden.gif" width=12 height=12 border=1 alt="">&nbsp; to remove a selected higher-level or lower-level computer-based application component.
+</p>
+<p>
+<i>Component interface</i><br>
+The component interfaces of this computer-based application component are listed here. To add a new component interface, click on the button <img src="../bilder/runter.gif" width=12 height=12 border=1 alt="">. Now click <i>Add</i> to add a new component interface. If you want to change the properties of the component interface, right-click the component interface. In the context menu, select Properties to change the properties of the component interface as described in <a href="#bausteinschnittstelle">Device Interface Properties Dialog</a>.
+</p>
+<p>
+<i>User Interface</i><br>
+The user interfaces that this computer-based application component has are listed here. To add a new user interface, click the button <img src="../bilder/runter.gif" width=12 height=12 border=1 alt="">. Now click <i>Add</i> to add a new user interface. If you want to change the user interface properties, right-click the user interface. On the shortcut menu, select Properties to change the properties of the user interface.
+</p>
+<p>
+<i>Application Program</i><br>
+The application program associated with this computer-based application component. Each computer-based application component has exactly one application program.The name for this application program is entered automatically, but you can also change the identifier.<br> 
+Furthermore, a description for this application program can be entered as free text.
+</p>
+<p>
+<i><a name="dvb_konf_rechner">Physical data processing component configuration</a></i><br>
+Here you can see the physical data processing component configurations through which this computer-based application component can be used. To change the physical data processing component configuration, click on the button <img src="../bilder/auf.gif" width=12 height=12 border=1 alt="">. Select a physical data processing component and a physical data processing component configuration and click on <img src="../bilder/trennen.gif" width=12 height=12 border=1 alt="">&nbsp; to add this data processing component to this data processing component configuration.<br> 
+To remove a data handling component from a data handling component configuration, click on the data handling component and then on the button <img src="../bilder/verbinden.gif" width=12 height=12 border=1 alt="">.<br> 
+</p>
+
+<p>
+<h4><a name="papier_ab">Paper-based application component</a></h4>
+<i>General</i><br>
+Here you can change general settings for this paper-based application component. This includes, above all, the name of the component. Furthermore, you can enter a description as free text and the document collection in which the documents of this component are stored.
+</p>
+<p>
+<i>Structure</i><br>
+You can assign other paper-based application components to a paper-based application component in order to subdivide it. Under the tab <i>Structure</i> the superordinate paper-based application components to which this paper-based application component belongs or the subordinate paper-based application components into which this paper-based application component is divided are displayed.<br> 
+You can also add or remove parent and child paper-based application components here. To do this, click the button <img src="../bilder/auf.gif" width=12 height=12 border=1 alt="">. From the free paper-based application components, you can use the button <img src="../bilder/trennen.gif" width=12 height=12 border=1 alt="">&nbsp; to add a paper-based application component to the parent or child paper-based application components.<br> 
+You can use the button <img src="../bilder/verbinden.gif" width=12 height=12 border=1 alt="">&nbsp; to remove a selected parent or child paper-based application component.
+</p>
+<p>
+<i>Component interface</i><br>
+The component interfaces that this paper-based application component has are listed here. To add a new component interface, click the button <img src="../bilder/runter.gif" width=12 height=12 border=1 alt="">. Now click <i>Add</i> to add a new component interface. If you want to change the component interface properties, right-click the component interface. In the context menu, select Properties to change the properties of the component interface as described in <a href="#bausteinschnittstelle">Device Interface Properties Dialog</a>.
+</p>
+<p>
+<i>User Interface</i><br>
+This lists the user interfaces that this paper-based application component has. To add a new user interface, click the button <img src="../bilder/runter.gif" width=12 height=12 border=1 alt="">. Now click <i>Add</i> to add a new user interface. If you want to change the user interface properties, right-click the user interface. On the shortcut menu, select Properties to change the properties of the user interface.
+</p>
+<p>
+<i>Organization Plan</i><br>
+Here you can specify the organization plan through which this paper-based application component is implemented. In addition, you can enter a description of this organization plan.
+</p>
+<p>
+<i><a name="dvb_konf_papier">Physical data processing component configuration</a></i><br>
+Here you can see the physical data processing component configurations through which this paper-based application component can be used. To change the physical data processing component configuration click on the button <img src="../bilder/auf.gif" width=12 height=12 border=1 alt="">. Select a physical data processing component and a physical data processing component configuration and click on <img src="../bilder/trennen.gif" width=12 height=12 border=1 alt="">&nbsp; to add this data processing component to this data processing component configuration.<br> 
+To remove a data handling component from a data handling component configuration, click on the data handling component and then on the button <img src="../bilder/verbinden.gif" width=12 height=12 border=1 alt="">.<br>
+</p>
+
+<p>
+<h4><a name="gemischt_ab">Mixed Application Component</a></h4>
+<i>General</i><br>
+Here you can change general settings for this Mixed Application Component. This includes, above all, the name of the component. Furthermore, a description can be entered as free text. Since this is a mixed application component, you can specify the document collection in which the documents of this component are stored, the database system and the software product with which this application component works.
+</p>
+<p>
+<i>Structure</i><br>
+You can assign other mixed application components to a mixed application component in order to subdivide it. Under the <i>Structure</i> tab, the higher-level Mixed Application Components to which this Mixed Application Component belongs or the lower-level Mixed Application Components into which this Mixed Application Component is divided are displayed.<br> 
+You can also add or remove higher-level and lower-level Mixed Application Components here. To do this, click the button <img src="../bilder/auf.gif" width=12 height=12 border=1 alt="">. You can use the button <img src="../bilder/trennen.gif" width=12 height=12 border=1 alt="">&nbsp; to add a Mixed Application Component from the free Mixed Application Components to the higher-level or lower-level Mixed Application Components.<br> 
+Use the button <img src="../bilder/verbinden.gif" width=12 height=12 border=1 alt="">&nbsp; to remove a selected higher-level or lower-level Mixed Application Component.
+</p>
+<i>Component interface</i><br>
+The component interfaces of this Mixed Application Component are listed here. To add a new component interface, click on the button <img src="../bilder/runter.gif" width=12 height=12 border=1 alt="">. Now click <i>Add</i> to add a new component interface. If you want to change the properties of the component interface, right-click the component interface. In the context menu, select Properties to change the properties of the component interface as described in the <a href="#bausteinschnittstelle">Device Interface Properties dialog</a>.
+</p>
+<p>
+<i>User Interface</i><br>
+This lists the user interfaces that this mixed application component has. To add a new user interface, click the button <img src="../bilder/runter.gif" width=12 height=12 border=1 alt="">. Now click <i>Add</i> to add a new user interface. If you want to change the user interface properties, right-click the user interface. On the shortcut menu, select Properties to change the properties of the user interface.
+</p>
+<p>
+<i>Application Program</i><br>
+The application program associated with this mixed application component. Each Mixed Application Component has exactly one application program. The name for this application program is entered automatically, but you can also change the identifier.<br> 
+Furthermore, you can enter a description for this application program as free text.
+</p>
+<p>
+<i>Organization plan</i><br>
+Here you can specify the organization plan that is used to implement this mixed application component. Additionally, a description of this organization plan can be entered.
+</p>
+<p>
+<i><a name="dvb_konf_gemischt">Physical data processing component configuration</a></i><br>
+Here you can see the physical data processing component configurations by which this mixed application component can be used. To change the physical data processing component configuration, click on the button <img src="../bilder/auf.gif" width=12 height=12 border=1 alt="">. Select a physical data processing component and a physical data processing component configuration and click on <img src="../bilder/trennen.gif" width=12 height=12 border=1 alt="">&nbsp; to add this data processing component to this data processing component configuration.<br> 
+To remove a data handling component from a data handling component configuration, click on the data handling component and then on the button <img src="../bilder/verbinden.gif" width=12 height=12 border=1 alt="">.<br>
+</p>
+
+<p>
+<h4><a name="softwareprodukt">Software product</a></h4>
+<i>General</i><br>
+Here you can change general settings for this software product. This includes the name of the software product. Furthermore, a description can be entered as free text.
+</p>
+<p>
+<i>Function</i><br>
+A software product supports the processing of a function. Here you can view or change the functions assigned to the software product. To change the assignment of the functions click on the button <img src="../bilder/auf.gif" width=12 height=12 border=1 alt="">. From the free functions you can add a function to the supported functions with the help of the button <img src="../bilder/trennen.gif" width=12 height=12 border=1 alt="">.<br> 
+With the button <img src="../bilder/verbinden.gif" width=12 height=12 border=1 alt="">&nbsp; you can remove a selected function.
+</p>
+
+<p>
+<h4><a name="komm_standard">Communication standard</a></h4>
+<i>General</i><br>
+Here you can change general settings for this communication standard. This includes, above all, the name of the communication standard. Furthermore, a description can be entered as free text.
+</p>
+<p>
+<i>ETNT combination</i><br>
+A communication standard can be connected to several ETNT combinations. Here you can view or change the ETNT combinations connected with the communication standard. To change the assignment of the ETNT combination click on the button <img src="../bilder/auf.gif" width=12 height=12 border=1 alt="">. 
+From the free ETNT combinations, you can add an ETNT combination to the connected ETNT combinations with the help of the button<img src="../bilder/trennen.gif" width=12 height=12 border=1 alt="">.<br> 
+With the button <img src="../bilder/verbinden.gif" width=12 height=12 border=1 alt="">&nbsp; you can remove a selected ETNT combination. To change the properties of an ETNT combination, click with the right mouse button on the ETNT combination and select the item <i>Properties</i> from the displayed context menu.
+</p>
+<p>
+<i>Component interfaces</i><br>
+A communication standard can be used in several component interfaces. Here you can see the component interfaces that use this communication standard. To change the assignment of the component interfaces, click on the button <img src="../bilder/auf.gif" width=12 height=12 border=1 alt="">. From the free component interfaces, you can add a component interface to the connected component interfaces using the button <img src="../bilder/trennen.gif" width=12 height=12 border=1 alt="">.<br> 
+You can use the button <img src="../bilder/verbinden.gif" width=12 height=12 border=1 alt="">&nbsp; to remove a selected component interface. To change the properties of a component interface, right-click on the component interfaces and select <i>Properties</i> from the context menu that appears.
+</p>
+
+<p>
+<h4><a name="db_system">DB Management System</a></h4>
+<i>General</i><br>
+Here you can change general settings for this DB management system. This includes especially the name of the DB management system. Furthermore a description can be entered as free text.
+</p>
+<p>
+<i>DBS</i><br>
+A DB administration system can administer several databases, which are used by computer based application modules. Here you can view or change the database systems managed by this DB administration system. To change the assignment of the database systems click on the button <img src="../bilder/auf.gif" width=12 height=12 border=1 alt="">. From the free database systems, you can use the button <img src="../bilder/trennen.gif" width=12 height=12 border=1 alt="">&nbsp; to add a database system to the managed database systems.<br> 
+With the button <img src="../bilder/verbinden.gif" width=12 height=12 border=1 alt="">&nbsp; you can remove a selected database system. To change the properties of a database system, right-click on the database system and select <i>Properties</i> from the context menu that appears.
+</p>
+
+<p>
+<h4><a name="ereignistyp">Event type</a></h4>
+<i>General</i><br>
+Here you can change general settings for this event type. This includes the name of the event type. Furthermore, a description can be entered as free text.
+</p>
+<p>
+<i>Aufgabe</i><br>
+Task An event type can be triggered by one or more tasks. Here you can view or change the tasks that trigger this event type. To change the assignment of the tasks click on the button <img src="../bilder/auf.gif" width=12 height=12 border=1 alt="">. From the free tasks, you can use the button <img src="../bilder/trennen.gif" width=12 height=12 border=1 alt="">&nbsp; to add a task to the associated tasks.<br> 
+Use the button <img src="../bilder/verbinden.gif" width=12 height=12 border=1 alt="">&nbsp; to remove a selected task. To change the properties of a task, right-click on the task and select <i>Properties</i> from the context menu that appears.
+</p>
+<p>
+<i>ETNT combination</i><br>
+An event type can be linked to a message type via one or more ETNT combinations. You can view or change the ETNT combinations that link this event type here.<br> 
+To change the assignment of the ETNT combination click on the button <img src="../bilder/auf.gif" width=12 height=12 border=1 alt="">. From the free ETNT combinations you can add an ETNT combination to the connected ETNT combinations with the help of the button <img src="../bilder/trennen.gif" width=12 height=12 border=1 alt="">.<br> 
+With the button <img src="../bilder/verbinden.gif" width=12 height=12 border=1 alt="">&nbsp; you can remove a selected ETNT combination. To change the properties of an ETNT combination, click with the right mouse button on the ETNT combination and select the item <i>Properties</i> from the displayed context menu.
+</p>
+
+<p>
+<h4><a name="nachrichtentyp">Message type</a></h4>
+<i>General</i><br>
+Here you can change general settings for this message type. This includes, above all, the name of the message type. Furthermore, a description can be entered as free text.
+</p>
+<p>
+<i>Object Type</i><br>
+An object type is represented by a message type, among other things.<br> 
+Here you can view or change the object types that are represented by this message type. To change the assignment of the object types, click on the button <img src="../bilder/auf.gif" width=12 height=12 border=1 alt="">. From the free object types, you can use the button <img src="../bilder/trennen.gif" width=12 height=12 border=1 alt="">&nbsp; to add an object type to the connected object types.<br> 
+Use the button <img src="../bilder/verbinden.gif" width=12 height=12 border=1 alt="">&nbsp; to remove a selected object type. To change the properties of an object type, right-click on the object type and select <i>Properties</i> from the context menu that appears.
+</p>
+<p>
+<i>ETNT combination</i><br>
+A message type can be linked to an event type via one or more ETNT combinations. You can view or change the ETNT combinations that link this message type here.<br> 
+To change the assignment of the ETNT combination click on the button <img src="../bilder/auf.gif" width=12 height=12 border=1 alt="">. From the free ETNT combinations you can add an ETNT combination to the connected ETNT combinations with the help of the button <img src="../bilder/trennen.gif" width=12 height=12 border=1 alt="">.<br> 
+With the button <img src="../bilder/verbinden.gif" width=12 height=12 border=1 alt="">&nbsp; you can remove a selected ETNT combination. To change the properties of an ETNT combination, click with the right mouse button on the ETNT combination and select the item <i>Properties</i> from the displayed context menu.
+</p>
+
+<p>
+<h4><a name="dokumententyp">Document type</a></h4>
+<i>General</i><br>
+Here you can change general settings for this document type. This includes the name of the document type. Furthermore, a description can be entered as free text.
+</p>
+<p>
+<i>Object type</i><br>
+An object type is represented by a document type, among other things.<br> 
+Here you can view or change the object types that are represented by this document type. To change the assignment of the object types, click on the button <img src="../bilder/auf.gif" width=12 height=12 border=1 alt="">. From the free object types, you can use the button <img src="../bilder/trennen.gif" width=12 height=12 border=1 alt="">&nbsp; to add an object type to the connected object types.<br> 
+You can use the button <img src="../bilder/verbinden.gif" width=12 height=12 border=1 alt="">&nbsp; to remove a selected object type. To change the properties of an object type, right-click on the object type and select <i>Properties</i> from the context menu that appears.
+</p>
+<p>
+<i>Document collection</i><br> 
+A document type is kept in a document collection. The document collections in which this document type is stored can be viewed and modified here.<br> 
+To change the assignment to a document collection, click on the button <img src="../bilder/auf.gif" width=12 height=12 border=1 alt="">. From the free document collections, you can use the button <img src="../bilder/trennen.gif" width=12 height=12 border=1 alt="">&nbsp; to add a document collection to the document collections in which this document type is stored.<br> 
+You can use the button <img src="../bilder/verbinden.gif" width=12 height=12 border=1 alt="">&nbsp; to remove a selected document collection. To change the properties of a document collection, right-click on the document collection and select <i>Properties</i> from the context menu that appears.
+</p>
+<p>
+<i>ETNT combination</i><br>
+A document type can be linked to an event type via one or more ETNT combinations. You can view or change the ETNT combinations that link this document type here.<br> 
+To change the assignment of the ETNT combination, click on the button <img src="../bilder/auf.gif" width=12 height=12 border=1 alt="">. From the free ETNT combinations you can add an ETNT combination to the connected ETNT combinations with the help of the button<img src="../bilder/trennen.gif" width=12 height=12 border=1 alt="">.<br> 
+With the button <img src="../bilder/verbinden.gif" width=12 height=12 border=1 alt="">&nbsp; you can remove a selected ETNT combination. To change the properties of an ETNT combination, click with the right mouse button on the ETNT combination and select the item <i>Properties</i> from the displayed context menu.
+</p>
+
+<p>
+<h4><a name="etnt_kombi">ETNT combination</a></h4>
+<i>General</i><br>
+Here you can change general settings for this event type. The name of the ETNT combination is automatically composed of the event type, message type, or document type that this ETNT combination connects.<br> 
+Event type, message type or document type can be selected below. Furthermore, a description can be entered as free text for the ETNT combination.
+</p>
+<p>
+<i>Communication standard</i><br>
+An ETNT combination is based on one or more communication standards. These can be viewed or changed here.<br> 
+To change the assignment of the communication standards click on the button <img src="../bilder/auf.gif" width=12 height=12 border=1 alt="">. From the free communication standards, you can use the button <img src="../bilder/trennen.gif" width=12 height=12 border=1 alt="">&nbsp; to add a communication standard to the connected communication standards.<br> 
+Use the button <img src="../bilder/verbinden.gif" width=12 height=12 border=1 alt="">&nbsp; to remove a selected communication standard again. To change the properties of a communication standard, right-click on the communication standard and select <i>Properties</i> from the context menu that appears.
+</p>
+
+<p>
+<h4><a name="kom_prozess">Communication process</a></h4>
+<i>General</i><br>
+Here you can change general settings for this communication process. This includes the name of the communication process and a description of the communication process as free text.
+</p>
+
+<p>
+<h4><a name="baustein_s">Component interface</a></h4>
+<i>General</i><br>
+Here you can change general settings for this component interface. This includes the name of the component interface and a description of the component interface as free text. Under <i>Communication Standard</i>, you can select the communication standard on which this component interface is based.
+</p>
+<p>
+<i>Communication Standard</i><br>
+A component interface can be based on several communication standards. To change the assignment of the communication standards, click the button <img src="../bilder/auf.gif" width=12 height=12 border=1 alt="">. From the free communication standards, you can use the button <img src="../bilder/trennen.gif" width=12 height=12 border=1 alt="">&nbsp; to add a communication standard to the connected communication standards.<br> 
+Use the button <img src="../bilder/verbinden.gif" width=12 height=12 border=1 alt="">&nbsp; to remove a selected communication standard. To change the properties of a communication standard, right-click on the communication standard and select <i>Properties</i> from the context menu that appears.
+</p>
+<p>
+<i>Communication relation</i><br>
+A component interface can be connected to other component interfaces via a communication relation. To connect a component interface to this component interface, click the button <img src="../bilder/auf.gif" width=12 height=12 border=1 alt="">. From the free component interfaces, you can use the button <img src="../bilder/trennen.gif" width=12 height=12 border=1 alt="">&nbsp; to add a component interface to the component interfaces with which this component interface communicates.<br> 
+Use the button <img src="../bilder/verbinden.gif" width=12 height=12 border=1 alt="">&nbsp; to remove a selected component interface. To change the properties of one of the displayed component interfaces, right-click on the component interface and select <i>Properties</i> from the context menu that appears.
+</p>
+<p>
+<i>Sendable ETNT combinations + Receivable ETNT combinations</i><br>
+Here you can view and select the ETNT combinations that this component interface is capable of sending or receiving. However, this does not necessarily mean that these ETNT combinations are actually transmitted or received. You can specify which ETNT combinations are actually sent and received in the properties dialog of the communication relationships that connect this component interface with other component interfaces. To specify a new sendable and receivable ETNT combination, click on the button <img src="../bilder/auf.gif" width=12 height=12 border=1 alt="">. From the free ETNT combinations, you can add an ETNT combination to the sendable or receivable ETNT combinations with the help of the button <img src="../bilder/trennen.gif" width=12 height=12 border=1 alt="">.<br> 
+With the button <img src="../bilder/verbinden.gif" width=12 height=12 border=1 alt="">&nbsp; you can remove a selected ETNT combination. To change the properties of one of the displayed ETNT combinations, click with the right mouse button on the ETNT combination and select the <i>Properties</i> item from the displayed context menu.
+</p>
+
+<p>
+<h4><a name="benutzer_s">User interface</a></h4>
+Application modules can exchange data with users via user interfaces.
+<i>General</i><br>
+Here you can change general settings for this user interface. This includes the name of the user interface and a description of the user interface as free text.
+</p>
+
+<p>
+<h4><a name="dbs">Database system</a></h4>
+<i>General</i><br>
+Here you can change general settings for this database system. This includes the name of the database system and a description of the database system as free text.
+</p>
+<p>
+<i>Dataset Type</i><br>
+Hier sehen Sie die Datensatztypen, die dieses Datenbanksystem speichert. 
+Um Datensatztypen hinzuzuf&uuml;gen oder zu entfernen klicken Sie auf die Schaltfl&auml;che 
+<img src="../bilder/auf.gif" width=12 height=12 border=1 alt="">.
+Here you can see the dataset types that this database system stores. To add or remove dataset types click on the button <img src="../bilder/auf.gif" width=12 height=12 border=1 alt="">. Select a dataset type and click <img src="../bilder/trennen.gif" width=12 height=12 border=1 alt="">&nbsp; on to add this dataset type to the dataset types managed by this database system.<br> 
+To remove a dataset type, click on the dataset type and then click on the button <img src="../bilder/verbinden.gif" width=12 height=12 border=1 alt="">.<br> 
+To change the properties of a dataset type, right-click on the dataset type and select <i>Properties</i> from the context menu that appears. To add a new dataset type, click on the <i>New</i> button.
+</p>
+
+<p>
+<h4><a name="datensatztyp">Dataset type</a></h4>
+<i>Allgemein</i><br>
+Here you can change general settings for this dataset type. This includes the name of the dataset type and a description of the dataset type as free text.
+</p>
+<p>
+<i>Object Type</i><br>
+An object type is represented by a data set type, among other things.<br> 
+Here you can view or change the object types that are represented by this data set type. To change the assignment of the object types, click on the button <img src="../bilder/auf.gif" width=12 height=12 border=1 alt="">. From the free object types, you can use the button <img src="../bilder/trennen.gif" width=12 height=12 border=1 alt="">&nbsp; to add an object type to the connected object types.<br> 
+Use the button <img src="../bilder/verbinden.gif" width=12 height=12 border=1 alt="">&nbsp; to remove a selected object type. To change the properties of an object type, right-click on the object type and select <i>Properties</i> from the context menu that appears.
+</p>
+<p>
+<i>Database system</i><br>
+Here you can see in which database systems this object type is used. To change the assignment of the object types to the database systems, click on the button <img src="../bilder/auf.gif" width=12 height=12 border=1 alt="">. From the free database systems you can add a database system to the connected database systems with the help of the button <img src="../bilder/trennen.gif" width=12 height=12 border=1 alt="">.<br> 
+With the button <img src="../bilder/verbinden.gif" width=12 height=12 border=1 alt="">&nbsp; you can remove a selected database system. To change the properties of a database system, right-click on the object type and select <i>Properties</i> from the context menu that appears.
+</p>
+
+<p>
+<h4><a name="dokumentensammlung">Document collection</a></h4>
+<i>General</i><br>
+Here you can change general settings for this document collection. This includes the name of the document collection and a description of the document collection as free text.
+</p>
+<p>
+<i>Document Type</i><br>
+Here you can see the document types that this document collection stores. To add or remove document types, click on the button <img src="../bilder/auf.gif" width=12 height=12 border=1 alt="">. Select a document type and click <img src="../bilder/trennen.gif" width=12 height=12 border=1 alt="">&nbsp; on to add this document type to the document types managed by this document collection.<br> 
+To remove a document type, click on the document type and then on the button<img src="../bilder/verbinden.gif" width=12 height=12 border=1 alt="">.<br> 
+To change the properties of a document type, right-click on the document type and select <i>Properties</i> from the context menu that appears. To add a new document type, click on the <i>New</i> button.
+</p>
+
+<p>
+<h4><a name="anwendungsprogramm">Application program</a></h4>
+<i>General</i><br>
+Here you can change general settings for this application program. This includes the name of the application program and a description of the application program as free text.
+</p>
+<p>
+<i>Softwareprodukt</i><br>
+Software Product Here you can see the software products that this application program instantiates. To add or remove software products, click the button <img src="../bilder/auf.gif" width=12 height=12 border=1 alt="">. Select a software product and click <img src="../bilder/trennen.gif" width=12 height=12 border=1 alt="">&nbsp; to add this software product.<br> 
+To remove a software product, click on the software product and then click the button <img src="../bilder/verbinden.gif" width=12 height=12 border=1 alt="">.<br> 
+To change the properties of a software product, right-click on the software product and select <i>Properties</i> from the context menu that appears. To add a new software product, click the <i>New</i> button.
+</p>
+<p>
+<i>Application Module</i><br>
+Here you can see the application module that uses this application program. To add or remove an application component, click on the button <img src="../bilder/auf.gif" width=12 height=12 border=1 alt="">. To remove an application component, click on the application component and then on the button <img src="../bilder/verbinden.gif" width=12 height=12 border=1 alt="">.<br> 
+Select an application component and click on <img src="../bilder/trennen.gif" width=12 height=12 border=1 alt="">&nbsp; to add this application component.<br> 
+To change the properties of an application component, right-click on the application component and select <i>Properties</i> from the context menu that appears.
+</p>
+
+<p>
+<h4><a name="organisationsplan">Organization plan</a></h4>
+<i>General</i><br>
+Here you can change general settings for this organization plan. This includes the name of the organization plan and a description of the organization plan as free text.
+</p>
+<p>
+<i>Application modules</i><br>
+Several paper-based application modules can be assigned to an organization plan, which this organization plan controls. To add or remove an application component, click on the button <img src="../bilder/auf.gif" width=12 height=12 border=1 alt="">. To remove an application component, click on the application component and then on the button <img src="../bilder/verbinden.gif" width=12 height=12 border=1 alt="">.<br> 
+Select an application component and click on <img src="../bilder/trennen.gif" width=12 height=12 border=1 alt="">&nbsp; to add this application component.<br> 
+To change the properties of an application component, right-click on the application component and select <i>Properties</i> from the context menu that appears.
+</p>
+
+<p>
+<h3><a name="physisch">Properties of the elements of the physical tool layer</a></h3>
+<div>
+	<img src="../bilder/down.gif" width=14 height=10 border=0 alt="">&nbsp;&nbsp;<a href="#dv_baustein">Physical data processing component</a><br>
+	<img src="../bilder/down.gif" width=14 height=10 border=0 alt="">&nbsp;&nbsp;<a href="#standort">Location</a><br>
+	<img src="../bilder/down.gif" width=14 height=10 border=0 alt="">&nbsp;&nbsp;<a href="#bausteintyp">Component type</a><br>
+	<img src="../bilder/down.gif" width=14 height=10 border=0 alt="">&nbsp;&nbsp;<a href="#netztyp">Network type</a><br>
+	<img src="../bilder/down.gif" width=14 height=10 border=0 alt="">&nbsp;&nbsp;<a href="#subnetz">Subnet</a><br>
+	<img src="../bilder/down.gif" width=14 height=10 border=0 alt="">&nbsp;&nbsp;<a href="#netzprotokoll">Net protocol</a><br>
+</div>
+</p>
+
+<p>
+<h4><a name="dv_baustein">Physical data processing component</a></h4>
+<i>General</i><br>
+Here you can change general settings for this physical data processing component. This includes the name of the physical component, a description of the physical component as free text, as well as location and component type.
+</p>
+<p>
+<i>Technical features Merkmale</i><br>
+A physical data processing component has technical features which you can specify here.
+</p>
+<p>
+<i>Subnet</i><br>
+A physical data processing component can belong to a network.<br> 
+To add or remove subnets to which the component belongs, click on the button <img src="../bilder/auf.gif" width=12 height=12 border=1 alt="">. Select a subnet and click on <img src="../bilder/trennen.gif" width=12 height=12 border=1 alt="">&nbsp; to add the component to this subnet.<br> 
+To remove the component from a subnet, click on the subnet and then click on the button <img src="../bilder/verbinden.gif" width=12 height=12 border=1 alt="">.<br> 
+To change the properties of a subnet, right-click on the subnet and select <i>Properties</i> from the context menu that appears. To add a new subnet, click on the <i>New</i> button.
+</p>
+
+<p>
+<h4><a name="standort">Location</a></h4>
+<i>General</i><br>
+Here you can change general settings for this location. This includes the name of the location and a description of the location as free text.
+</p>
+<p>
+<i>Physical data processing components</i><br>
+Several physical data processing component can be located at one location.<br> 
+To add or remove a physical data processing component, click the button <img src="../bilder/auf.gif" width=12 height=12 border=1 alt="">. From the free physical dadata processing components you can use the button <img src="../bilder/trennen.gif" width=12 height=12 border=1 alt="">&nbsp; to add a physical dadata processing components to the connected physical data processing components.<br> 
+Use the button <img src="../bilder/verbinden.gif" width=12 height=12 border=1 alt="">&nbsp; to remove a selected physical data processing component. To change the properties of a physical data processing component, right-click on the physical data processing component and select <i>Properties</i> from the displayed context menu. To add a new physical data processing component, click the <i>New</i> button.
+</p>
+
+<p>
+<h4><a name="bausteintyp">Component typ</a></h4>
+The physical data processing components are divided into categories according to their functionality. Examples: PC, Router, Cardfile Cabinet<br>
+<i>General</i><br>
+Here you can change general settings for this component type. This includes the name of the component type and a description of the component type as free text.
+</p>
+<p>
+<i>Physical data processing components</i><br>
+A physical data processing component has a component type. The physical data processing components listed here have this data processing component type.<br> 
+To add or remove a hysical data processing component, click on the button <img src="../bilder/auf.gif" width=12 height=12 border=1 alt="">. From the free physical data processing components you can use the button <img src="../bilder/trennen.gif" width=12 height=12 border=1 alt="">&nbsp; to add a physical data processing component to the connected physical data processing components.<br> 
+Use the button <img src="../bilder/verbinden.gif" width=12 height=12 border=1 alt="">&nbsp; to remove a selected hysical data processing component. To change the properties of a hysical data processing component, right-click on the hysical data processing component and select <i>Properties</i> from the displayed context menu. To add a new hysical data processing component, click the <i>New</i> button.
+</p>
+
+<p>
+<h4><a name="netztyp">Network type</a></h4>
+<i>General</i><br>
+Here you can change general settings for this network type. This includes the name of the net type and a description of the net type as free text.
+</p>
+<p>
+<i>Subnet</i><br>
+A subnet is based on a network type. The subnets listed here have this network type.<br> 
+To add or remove a subnet, click on the button <img src="../bilder/auf.gif" width=12 height=12 border=1 alt="">. From the free subnets you can use the button <img src="../bilder/trennen.gif" width=12 height=12 border=1 alt="">&nbsp; to add a subnet to the connected subnets.<br> 
+Use the button <img src="../bilder/verbinden.gif" width=12 height=12 border=1 alt="">&nbsp; to remove a selected subnet. To change the properties of a subnet, right-click on the subnet and select <i>Properties</i> from the displayed context menu.<br> 
+To add a new subnet, click on the <i>New</i> button.
+</p>
+
+<p>
+<h4><a name="subnetz">Subnet</a></h4>
+<i>General</i><br>
+Here you can change general settings for this subnet. This includes the name of the subnet and a description of the subnet as free text.
+</p>
+<p>
+<i>Physical data processing components</i><br>
+A physical data processing component can belong to a subnet.<br> 
+To add or remove a physical component to this subnet, click the button <img src="../bilder/auf.gif" width=12 height=12 border=1 alt="">. From the free physical data processing components you can use the button <img src="../bilder/trennen.gif" width=12 height=12 border=1 alt="">&nbsp; to add a physical data processing component to the connected physical data processing components.<br> 
+Use the button <img src="../bilder/verbinden.gif" width=12 height=12 border=1 alt="">&nbsp; to remove a selected physical data processing component. To change the properties of a physical data processing component, right-click on the physical data processing component and select <i>Properties</i> from the displayed context menu.<br> 
+To add a new physical data processing component, click the <i>New</i> button.
+</p>
+<p>
+<i>Network Type</i><br>
+A subnet is based on a network type. This subnet is based on the net types listed here.<br> 
+To add or remove a network type, click the button <img src="../bilder/auf.gif" width=12 height=12 border=1 alt="">. From the free network types, you can use the button <img src="../bilder/trennen.gif" width=12 height=12 border=1 alt="">&nbsp; to add a network type to the connected network types.<br>
+You can use the button <img src="../bilder/verbinden.gif" width=12 height=12 border=1 alt="">&nbsp; to remove a selected net type. To change the properties of a network type, right-click on the network type and select <i>Properties</i> from the context menu that appears.<br> 
+To add a new mesh type, click on the <i>New</i> button.
+</p>
+<p>
+<i>Network Protocol</i><br>
+A subnet uses a network protocol. This subnet uses the network protocols listed here.<br> 
+To add or remove a network protocol, click the button <img src="../bilder/auf.gif" width=12 height=12 border=1 alt="">. From the free network protocols, you can use the button <img src="../bilder/trennen.gif" width=12 height=12 border=1 alt="">&nbsp; to add a network protocol to the connected network protocols.<br> 
+Use the button <img src="../bilder/verbinden.gif" width=12 height=12 border=1 alt="">&nbsp; to remove a selected network protocol. To change the properties of a network protocol, right-click on the network protocol and select <i>Properties</i> from the context menu that appears.<br> 
+To add a new network protocol, click the <i>New</i> button.
+</p>
+
+<p>
+<h4><a name="netzprotokoll">Net protocol</a></h4>
+<i>General</i><br>
+Here you can change general settings for this network protocol. This includes the name of the network protocol and a description of the network protocol as free text.
+</p>
+<p>
+<i>Subnet</i><br>
+A subnet uses a network protocol. The subnets listed here use this network protocol.<br> 
+To add or remove a subnet, click the button <img src="../bilder/auf.gif" width=12 height=12 border=1 alt="">. From the free subnets you can use the button <img src="../bilder/trennen.gif" width=12 height=12 border=1 alt="">&nbsp; to add a subnet to the connected subnets.<br> 
+Use the button <img src="../bilder/verbinden.gif" width=12 height=12 border=1 alt="">&nbsp; to remove a selected subnet. To change the properties of a subnet, right-click on the subnet and select <i>Properties</i> from the displayed context menu.<br> 
+To add a new subnet, click on the <i>New</i> button.
+</p>
+
+</body>
+</html>

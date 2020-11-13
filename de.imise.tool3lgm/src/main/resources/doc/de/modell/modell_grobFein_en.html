@@ -1,0 +1,31 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<html>
+<head>
+	<title>Coarsening and refining a model</title>
+</head>
+
+<body>
+
+<h1>Coarsening and refining a model</h1>
+<p>
+Via the is_part_of_relationships it is possible to coarsen and refine models. Refining and coarsening is not a function that is used in the context of modeling ("I want to refine a task now") - this is only possible through the is_part_of_relationships - but a function that is applied to a 'finished' model. This makes it easier to visualize models and to analyze them on any rough layer. The functions Coarsen and Refine refer to model elements.
+</p>
+
+The following rules apply to coarsening and refining:
+<ul>
+<li>Relationships of elements are to be modeled on as deep a hierarchical layer as possible.</li>
+<li>When coarsening a model, relationships of the subordinate elements are dynamically passed to the parent element.</li>
+<li>When refining a model, relationships that have been dynamically assigned to the parent element due to coarsening on the corresponding hierarchy layer are (returned) to the child elements; i.e. they are simply removed from the parent element.</li>
+<li>Analysis and export functions always work on the respective current (coarsened or refined) model.</li>
+<li>The following applies to application component configurations when coarsening: The application component configuration of the parent tasks is created by forming the cross product of the sets of application component configurations of the child tasks (see <a href="#abb1">Fig. 1</a>). Application component configurations that were previously assigned to the parent task are retained. If there are a large number of is_part_of relationships and a large number of application component configurations for the subordinate tasks, this can result in a very large number of AB configurations being assigned to the superordinate application component. The same applies to <a name="dvb_konf">data processing component configurations</a>.</li>
+</ul>
+
+<div align="center">
+<a name="abb1">
+<img src="../bilder/mod_vergroebern.gif" width=472 height=364 border=0 align="bottom" alt="">
+</a>
+<br>Fig. 1: Application component configurations when coarsening a 3LGM&sup2; model.
+</div>
+</body>
+</html>

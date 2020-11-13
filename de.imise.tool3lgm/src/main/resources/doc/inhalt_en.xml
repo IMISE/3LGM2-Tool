@@ -1,0 +1,49 @@
+<?xml version='1.0' encoding='ISO-8859-1'  ?>
+<!DOCTYPE toc PUBLIC "-//Sun Microsystems Inc.//DTD JavaHelp TOC Version 1.0//EN"
+            "http://java.sun.com/products/javahelp/toc_1_0.dtd">
+
+<toc version="2.0" xml:lang="en_EN">
+	<tocitem text="First steps" expand="false">
+		<tocitem text="Preface" target="vorwort"/>
+		<tocitem text="Create, open and save models" target="neu"/>
+		<tocitem text="Navigate the model" target="navigieren"/>
+		<tocitem text="Add elements" target="neueElemente"/>
+	</tocitem>
+
+	<tocitem text="The 3LGM² Metamodel" expand="false">
+		<tocitem text="Domain Layer" target="modell_fachlich"/>
+		<tocitem text="Logical Tool Layer" target="modell_logisch"/>
+		<tocitem text="Physical Tool Layer" target="modell_physisch"/>
+		<tocitem text="Inter-Layer-Relationships" target="modell_ebenen"/>
+		<tocitem text="Coarsening and Refining" target="modell_grobFein"/>
+		<tocitem text="Literature" target="modell_literatur"/>
+	</tocitem>
+
+	<tocitem text="The 3LGM² Toolkit" expand="false">
+		<tocitem text="Overview" target="baukasten_uebersicht"/>
+		<tocitem text="Inserting and modifying model elements" target="dialoge"/>
+		<tocitem text="The Matrix-View" target="matrixsicht"/>
+		<tocitem text="Model Analysis" target="analyse"/>
+		<tocitem text="Import and Export of Models" target="import_export"/>
+		<tocitem text="Keyboard shortcuts" target="tasten"/>
+	</tocitem>
+
+	<tocitem text="FAQ" expand="false">
+		<tocitem text="Questions about Modeling">
+			<tocitem text="Domain Layer" target="faq_mod_fachlich"/>
+			<tocitem text="Logical Tool Layer" target="faq_mod_logisch"/>
+			<tocitem text="Physical Tool Layer" target="faq_mod_physisch"/>
+			<tocitem text="Inter-Layer-Relationships" target="faq_mod_ebenen"/>
+			<tocitem text="General" target="faq_mod_allgemein"/>
+		</tocitem>
+		<tocitem text="Questions about Toolkit">
+			<tocitem text="Domain Layer" target="faq_bed_fachlich"/>
+			<tocitem text="Logical Tool Layer" target="faq_bed_logisch"/>
+			<tocitem text="Physical Tool Layer" target="faq_bed_physisch"/>
+			<tocitem text="Inter-Layer-Relationships" target="faq_bed_ebenen"/>
+			<tocitem text="General" target="faq_bed_allgemein"/>
+		</tocitem>
+		<!-- <tocitem text="Ihre Frage"/> -->
+	</tocitem>
+	<tocitem text="Imprint" target="impressum"/>
+</toc>
