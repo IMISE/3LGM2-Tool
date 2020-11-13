@@ -19,7 +19,6 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.InstanciationEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.path.metapaths.ElementaryMetaPath;
 import de.imise.tool3lgm.graphtools.path.metapaths.IMetaPath;
-import de.imise.tool3lgm.graphtools.path.metapaths.MetaPath;
 import de.imise.tool3lgm.graphtools.path.metapaths.SimpleMetaPath;
 import de.imise.tool3lgm.graphtools.view.tree.node.LGMTreeNode;
 
@@ -54,7 +53,7 @@ public class InstanciationPathPanel extends PathConnectionPanel {
      * @param dialog
      * @param simpleMetaPath
      */
-    private InstanciationPathPanel(final AbstractElementPropertyDialog dialog, final MetaPath metaPath) {
+    private InstanciationPathPanel(final AbstractElementPropertyDialog dialog, final IMetaPath metaPath) {
         super(dialog, LABEL_END_ELEMENT_TYPE, LABEL_LAST_EDGE_START_ELEMENT_TYPE, metaPath);
         List<ElementaryMetaPath> elementaryMetaPaths = metaPath.getElementaryMetaPaths();
         elementaryMetaPathCount = elementaryMetaPaths.size();
@@ -71,7 +70,7 @@ public class InstanciationPathPanel extends PathConnectionPanel {
      * @param metaPath
      * @return
      */
-    public static final InstanciationPathPanel getInstanciationPathPanel(final AbstractElementPropertyDialog dialog, final MetaPath metaPath) {
+    public static final InstanciationPathPanel getInstanciationPathPanel(final AbstractElementPropertyDialog dialog, final IMetaPath metaPath) {
         if (isCreatableMetaPathWithBackwardInstanciationEnd(metaPath)) {
             return new InstanciationPathPanel(dialog, metaPath);
         }

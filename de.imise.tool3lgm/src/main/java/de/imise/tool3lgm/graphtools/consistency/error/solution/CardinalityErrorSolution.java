@@ -1,7 +1,7 @@
 package de.imise.tool3lgm.graphtools.consistency.error.solution;
 
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
-import de.imise.tool3lgm.graphtools.path.metapaths.MetaPath;
+import de.imise.tool3lgm.graphtools.path.metapaths.IMetaPath;
 import de.imise.tool3lgm.graphtools.path.metapaths.SimpleMetaPath;
 
 /**
@@ -19,7 +19,7 @@ public class CardinalityErrorSolution extends ErrorSolution {
      * @param pathToPropertyDialogElement
      * @param panelMetaPath
      */
-    public CardinalityErrorSolution(final Class<? extends Edge> edgeClass, final MetaPath pathToPropertyDialogElement, final SimpleMetaPath panelMetaPath) {
+    public CardinalityErrorSolution(final Class<? extends Edge> edgeClass, final IMetaPath pathToPropertyDialogElement, final SimpleMetaPath panelMetaPath) {
         super(pathToPropertyDialogElement, panelMetaPath);
         this.edgeClass = edgeClass;
     }

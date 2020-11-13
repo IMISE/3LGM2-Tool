@@ -48,7 +48,6 @@ import de.imise.tool3lgm.graphtools.model.LGMGraphDocument;
 import de.imise.tool3lgm.graphtools.model.template.TemplateLibrariesManager;
 import de.imise.tool3lgm.graphtools.path.metapaths.ElementaryMetaPath;
 import de.imise.tool3lgm.graphtools.path.metapaths.IMetaPath;
-import de.imise.tool3lgm.graphtools.path.metapaths.MetaPath;
 import de.imise.tool3lgm.graphtools.path.metapaths.MetaPathFunctions;
 import de.imise.tool3lgm.graphtools.path.metapaths.PathFunctions;
 import de.imise.tool3lgm.graphtools.path.metapaths.SimpleMetaPath;
@@ -129,7 +128,7 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
     }
 
     /** The metapath to the connected elements */
-    protected MetaPath metaPath;
+    protected IMetaPath metaPath;
 
     /** Label in front of the connected element with the type of element */
     protected final JLabel westLabel;
@@ -154,7 +153,7 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
      * @param dialog
      * @param metaPath
      */
-    public AbstractPathConnectionPanel(final AbstractElementPropertyDialog dialog, final MetaPath metaPath) {
+    public AbstractPathConnectionPanel(final AbstractElementPropertyDialog dialog, final IMetaPath metaPath) {
         this(dialog, LABEL_END_ELEMENT_TYPE, LABEL_LAST_EDGE_CONNECTION_NAME, metaPath);
     }
 
@@ -175,7 +174,7 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
      *            </ul>
      * @param metaPath
      */
-    public AbstractPathConnectionPanel(final AbstractElementPropertyDialog dialog, final PanelLabelOption titleLabelOption, final MetaPath metaPath) {
+    public AbstractPathConnectionPanel(final AbstractElementPropertyDialog dialog, final PanelLabelOption titleLabelOption, final IMetaPath metaPath) {
         this(dialog, titleLabelOption, LABEL_LAST_EDGE_CONNECTION_NAME, metaPath);
     }
 
@@ -197,7 +196,7 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
      * @param westLabelOption analog titleLabelOption
      * @param metaPath
      */
-    public AbstractPathConnectionPanel(final AbstractElementPropertyDialog dialog, final PanelLabelOption titleLabelOption, final PanelLabelOption westLabelOption, final MetaPath metaPath) {
+    public AbstractPathConnectionPanel(final AbstractElementPropertyDialog dialog, final PanelLabelOption titleLabelOption, final PanelLabelOption westLabelOption, final IMetaPath metaPath) {
         super(dialog);
         this.metaPath = metaPath;
         modelElement = getPanelModelElement();
@@ -309,7 +308,7 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
      * @param metaPath
      * @return
      */
-    private static Class<? extends ModelElement> getInitialSearchElementClass(final MetaPath metaPath) {
+    private static Class<? extends ModelElement> getInitialSearchElementClass(final IMetaPath metaPath) {
         Set<Class<? extends ModelElement>> endClasses = metaPath.getEndClasses();
         Class<? extends ModelElement> searchElementClass = ReflectionUtils.getCommonSuperClassOfClasses(endClasses);
         return searchElementClass;

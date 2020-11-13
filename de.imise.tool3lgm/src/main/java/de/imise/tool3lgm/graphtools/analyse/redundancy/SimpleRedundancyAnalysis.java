@@ -12,7 +12,6 @@ import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.path.metapaths.IMetaPath;
-import de.imise.tool3lgm.graphtools.path.metapaths.MetaPath;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.graphtools.view.container.LayerContainer;
 import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
@@ -104,7 +103,7 @@ public class SimpleRedundancyAnalysis {
             //das hier musste dekativiert werden, damit nach dem entfernen der Funktion aus Node keine Fehler entstehen. Bei Raktivierung -> Umschreiben
             String s = getRedundanceString(redundanceFak, saturationFak);
             //#################################
-            MetaPath metaPath = definition.getMetaPath();
+            IMetaPath metaPath = definition.getMetaPath();
             Class<? extends ModelElement> elementClass = metaPath.getStartClasses().iterator().next();
             MetaModel metaModel = doc.getMetaModel();
             int layer = metaModel.layerFor(elementClass);
@@ -119,7 +118,7 @@ public class SimpleRedundancyAnalysis {
      * Entfernt die Ausgaben dieser Analyse an den Elementen und am Layer.
      */
     public void removeGraphTexts() {
-        MetaPath metaPath = definition.getMetaPath();
+        IMetaPath metaPath = definition.getMetaPath();
         Class<? extends ModelElement> elementClass = metaPath.getStartClasses().iterator().next();
         MetaModel metaModel = doc.getMetaModel();
         int layer = metaModel.layerFor(elementClass);
@@ -134,7 +133,7 @@ public class SimpleRedundancyAnalysis {
     }
 
     private List<ElementContainer> getAllAbsolutePartContainer() {
-        MetaPath metaPath = definition.getMetaPath();
+        IMetaPath metaPath = definition.getMetaPath();
         Class<? extends ModelElement> startClass = metaPath.getStartClasses().iterator().next();
         List<ElementContainer> allElemCont = doc.getElementContainers(startClass, true);
         for (int i = allElemCont.size() - 1; i >= 0; i--) {
@@ -192,7 +191,7 @@ public class SimpleRedundancyAnalysis {
     }
 
     private String getRedundanceString(final float redundance, final float saturation) {
-        MetaPath metaPath = definition.getMetaPath();
+        IMetaPath metaPath = definition.getMetaPath();
         StringBuilder sb = new StringBuilder();
         MetaModel metaModel = doc.getMetaModel();
         ElementsNameBuilder elementsNameBuilder = metaModel.getElementsNameBuilder();

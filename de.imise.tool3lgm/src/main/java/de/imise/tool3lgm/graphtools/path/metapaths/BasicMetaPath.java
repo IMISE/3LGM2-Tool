@@ -14,7 +14,7 @@ import de.imise.tool3lgm.graphtools.path.metapaths.MetaPath.InvalidityCheckResul
 import de.imise.util.ReflectionUtils;
 import de.imise.util.collections.CollectionUtils;
 
-public abstract class BasicMetaPath extends MetaModelSpecificAdapter implements IBasicMetaPath {
+abstract class BasicMetaPath extends MetaModelSpecificAdapter implements IBasicMetaPath {
 
     /**
      * Liste aller Startklassen dieses Pfades.
@@ -253,6 +253,7 @@ public abstract class BasicMetaPath extends MetaModelSpecificAdapter implements 
      * @return <code>true</code> if at least one endElement class can be the
      *         startElement class of this metaPath
      */
+    @Override
     public boolean canBeRecursive() {
         Set<Class<? extends ModelElement>> endClasses = getEndClasses();
         for (Class<? extends ModelElement> endClass : endClasses) {

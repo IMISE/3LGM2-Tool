@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.imise.tool3lgm.graphtools.path.metapaths.IMetaPath;
-import de.imise.tool3lgm.graphtools.path.metapaths.MetaPath;
 
 /**
  * Definition aller {@link SimpleRedundancyAnalysis}
@@ -24,7 +23,7 @@ public final class SimpleRedundancyAnalysisDefinitions {
      * @param showFullSystemResults Wenn <code>true</code>, dann wird das
      *            Gesamtergebnis oben an den Layer geschrieben.
      */
-    public void add(final MetaPath metaPath, final boolean showFullSystemResults) {
+    public void add(final IMetaPath metaPath, final boolean showFullSystemResults) {
         add(metaPath, null, showFullSystemResults);
     }
 
@@ -41,7 +40,7 @@ public final class SimpleRedundancyAnalysisDefinitions {
      * @param showFullSystemResults Wenn <code>true</code>, dann wird das
      *            Gesamtergebnis oben an den Layer geschrieben.
      */
-    public void add(final MetaPath metaPath, final MetaPath pathToDifferences, final boolean showFullSystemResults) {
+    public void add(final IMetaPath metaPath, final IMetaPath pathToDifferences, final boolean showFullSystemResults) {
         if (simpleRedundancyAnalysisDefinitionData == null) {
             simpleRedundancyAnalysisDefinitionData = new ArrayList<>();
         }
@@ -74,14 +73,14 @@ public final class SimpleRedundancyAnalysisDefinitions {
          * Startelementart des Pfades und die über den Pfad verbundenen Elemente
          * sind die potenziell redundanten Elemente.
          */
-        private final MetaPath metaPath;
+        private final IMetaPath metaPath;
 
         /**
          * Wird hier ein gültiger Pfad angegeben, müssen sich die über den
          * metaPath verbundenen Elemente in den über diesen Pfad verbundenen
          * Elementen unterscheiden, um nicht als dasselbe Element zu gelten.
          */
-        private final MetaPath pathToDifferences;
+        private final IMetaPath pathToDifferences;
 
         /**
          * Wenn <code>true</code>, dann wird das Gesamtergebnis oben an den
@@ -89,13 +88,13 @@ public final class SimpleRedundancyAnalysisDefinitions {
          */
         private final boolean showFullSystemResults;
 
-        public SingleSimpleRedundancyAnalysisDefinition(final MetaPath metaPath, final MetaPath pathToDifferences, final boolean showFullSystemResults) {
+        public SingleSimpleRedundancyAnalysisDefinition(final IMetaPath metaPath, final IMetaPath pathToDifferences, final boolean showFullSystemResults) {
             this.metaPath = metaPath;
             this.pathToDifferences = pathToDifferences;
             this.showFullSystemResults = showFullSystemResults;
         }
 
-        public MetaPath getMetaPath() {
+        public IMetaPath getMetaPath() {
             return metaPath;
         }
 

@@ -24,7 +24,7 @@ import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
  * @author AXS
  * @create 12.10.2010
  */
-public abstract class MetaPath extends BasicMetaPath implements IMetaPath {
+abstract class MetaPath extends BasicMetaPath implements IMetaPath {
 
     /**
      * @param metaModel

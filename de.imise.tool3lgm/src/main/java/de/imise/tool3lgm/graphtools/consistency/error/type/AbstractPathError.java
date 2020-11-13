@@ -2,7 +2,7 @@ package de.imise.tool3lgm.graphtools.consistency.error.type;
 
 import de.imise.tool3lgm.graphtools.consistency.error.solution.ErrorSolution;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
-import de.imise.tool3lgm.graphtools.path.metapaths.MetaPath;
+import de.imise.tool3lgm.graphtools.path.metapaths.IMetaPath;
 
 /**
  * @author AXS (Sa, 21.03.2020, 8:14' (Corona time...))
@@ -28,14 +28,14 @@ public abstract class AbstractPathError extends AbstractConsistencyError {
     /**
      *
      */
-    protected final MetaPath metaPath;
+    protected final IMetaPath metaPath;
 
     /**
      * @param me
      * @param metaPath
      * @param errorSolution
      */
-    public AbstractPathError(final ModelElement me, final MetaPath metaPath, final ErrorSolution errorSolution) {
+    public AbstractPathError(final ModelElement me, final IMetaPath metaPath, final ErrorSolution errorSolution) {
         super(me, errorSolution);
         this.metaPath = metaPath;
     }
@@ -43,7 +43,7 @@ public abstract class AbstractPathError extends AbstractConsistencyError {
     /**
      * @return
      */
-    public MetaPath getMetaPath() {
+    public IMetaPath getMetaPath() {
         return metaPath;
     }
 

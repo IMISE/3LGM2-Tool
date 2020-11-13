@@ -2,7 +2,6 @@ package de.imise.tool3lgm.graphtools.path.paths;
 
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.path.metapaths.IMetaPath;
-import de.imise.tool3lgm.graphtools.path.metapaths.MetaPath;
 
 /**
  * Oberklasse für eine tatsächliche Pfadinstanz
@@ -25,14 +24,14 @@ public abstract class AbstractPath {
     /**
      * COMMENTME
      */
-    protected MetaPath metaPath;
+    protected IMetaPath metaPath;
 
     /**
      * @param metaPath
      * @param startElement
      * @param endElement
      */
-    public AbstractPath(final MetaPath metaPath, final ModelElement startElement, final ModelElement endElement) {
+    public AbstractPath(final IMetaPath metaPath, final ModelElement startElement, final ModelElement endElement) {
         this(startElement, endElement);
         this.metaPath = metaPath;
     }

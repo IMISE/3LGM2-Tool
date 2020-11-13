@@ -20,7 +20,6 @@ import de.imise.tool3lgm.graphtools.path.metapaths.ElementaryMetaPath;
 import de.imise.tool3lgm.graphtools.path.metapaths.ElementaryMetaPath.Type;
 import de.imise.tool3lgm.graphtools.path.metapaths.IMetaPath;
 import de.imise.tool3lgm.graphtools.path.metapaths.ListMetaPath;
-import de.imise.tool3lgm.graphtools.path.metapaths.MetaPath;
 import de.imise.tool3lgm.graphtools.path.metapaths.ParallelMetaPath;
 import de.imise.tool3lgm.graphtools.path.metapaths.SectionMetaPath;
 import de.imise.tool3lgm.graphtools.path.metapaths.SerialMetaPath;
@@ -443,7 +442,7 @@ public class PathResultTreeModel extends DefaultTreeModel {
     }
 
     /**
-     * Funktion, die für den übergebenen {@link MetaPath} die richtige
+     * Funktion, die für den übergebenen {@link IMetaPath} die richtige
      * Unterfunktion aufruft.
      *
      * @param startNode
