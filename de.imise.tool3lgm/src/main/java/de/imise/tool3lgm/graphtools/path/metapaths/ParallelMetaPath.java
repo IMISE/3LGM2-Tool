@@ -110,7 +110,7 @@ public abstract class ParallelMetaPath extends ListMetaPath {
         //The only point where it is used at the moment (01.09.2020) is the
         //TLGMServiceMetaPathsDefinition in the Service-metamodel plugin for the
         //(at the moment) only use of a DifferenceMetaPath.
-        IMetaPath[] otherDirectionMetaPaths = new MetaPath[subMetaPaths.size()];
+        IMetaPath[] otherDirectionMetaPaths = new IMetaPath[subMetaPaths.size()];
         for (int i = 0; i < otherDirectionMetaPaths.length; i++) {
             IMetaPath subMetaPath = subMetaPaths.get(i);
             IMetaPath subMetaPathOtherDirection = subMetaPath.getOtherDirection();

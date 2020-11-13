@@ -31,7 +31,7 @@ import de.imise.util.ReflectionUtils;
  * @author AXS
  * @create 12.10.2010
  */
-public final class ElementaryMetaPath extends MetaPath implements SequenceMetaPath {
+public final class ElementaryMetaPath extends MetaPathImpl implements SequenceMetaPath {
 
     /**
      * Mögliche Arten eines {@link ElementaryMetaPath}.

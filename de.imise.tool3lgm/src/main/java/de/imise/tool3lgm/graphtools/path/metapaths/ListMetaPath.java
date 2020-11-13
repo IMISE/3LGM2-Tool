@@ -12,7 +12,7 @@ import de.imise.util.collections.CollectionUtils;
 /**
  * @author AXS (10 Dec 2018)
  */
-public abstract class ListMetaPath extends MetaPath {
+public abstract class ListMetaPath extends MetaPathImpl {
 
     /**
      * The default reskey for the path is the same like Edge (= is connected

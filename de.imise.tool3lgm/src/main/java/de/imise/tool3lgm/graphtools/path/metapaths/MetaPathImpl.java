@@ -24,12 +24,12 @@ import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
  * @author AXS
  * @create 12.10.2010
  */
-abstract class MetaPath extends BasicMetaPath implements IMetaPath {
+abstract class MetaPathImpl extends BasicMetaPathImpl implements IMetaPath {
 
     /**
      * @param metaModel
      */
-    public MetaPath(final MetaModel metaModel) {
+    public MetaPathImpl(final MetaModel metaModel) {
         super(metaModel);
     }
 
@@ -37,7 +37,7 @@ abstract class MetaPath extends BasicMetaPath implements IMetaPath {
      * @param metaModel
      * @param name Anzeigenamen
      */
-    public MetaPath(final MetaModel metaModel, final String name) {
+    public MetaPathImpl(final MetaModel metaModel, final String name) {
         super(metaModel, name);
     }
 
@@ -46,7 +46,7 @@ abstract class MetaPath extends BasicMetaPath implements IMetaPath {
      * @param startElementClass
      * @param endElementClass
      */
-    public MetaPath(final MetaModel metaModel, final Class<? extends ModelElement> startElementClass, final Class<? extends ModelElement> endElementClass) {
+    public MetaPathImpl(final MetaModel metaModel, final Class<? extends ModelElement> startElementClass, final Class<? extends ModelElement> endElementClass) {
         super(metaModel, startElementClass, endElementClass);
 
     }
@@ -57,7 +57,7 @@ abstract class MetaPath extends BasicMetaPath implements IMetaPath {
      * @param endElementClass
      * @param name
      */
-    public MetaPath(final MetaModel metaModel, final Class<? extends ModelElement> startElementClass, final Class<? extends ModelElement> endElementClass, final String name) {
+    public MetaPathImpl(final MetaModel metaModel, final Class<? extends ModelElement> startElementClass, final Class<? extends ModelElement> endElementClass, final String name) {
         super(metaModel, startElementClass, endElementClass, name);
 
     }
@@ -68,60 +68,8 @@ abstract class MetaPath extends BasicMetaPath implements IMetaPath {
      * @param endElementClasses
      * @param name
      */
-    public MetaPath(final MetaModel metaModel, final Set<Class<? extends ModelElement>> startElementClasses, final Set<Class<? extends ModelElement>> endElementClasses, final String name) {
+    public MetaPathImpl(final MetaModel metaModel, final Set<Class<? extends ModelElement>> startElementClasses, final Set<Class<? extends ModelElement>> endElementClasses, final String name) {
         super(metaModel, startElementClasses, endElementClasses, name);
-    }
-
-    /**
-     * Repräsentiert den Validitätszustand eines MetaPath. Ist der invalidReason
-     * <code>null</code>, dann gilt der MetaPath als valide, sonst nicht.
-     *
-     * @author AXS (6 Dec 2018)
-     */
-    public class InvalidityCheckResult {
-
-        /**
-         * Ein beliebiger Enum, der einen FehlerKey enthält. Über diesen
-         * Key-Name kann ein Ressourcenstring geladen werden, der dem Benutzer
-         * einen Hinweis auf den Fehler gibt.
-         */
-        public final Enum<?> invalidReason;
-
-        /**
-         * Falls der Fehler mit irgendeinem Index zusammen hängt, kann man
-         * diesen hier speichern (z.B. Index des Pfades mit dem Fehler)
-         */
-        public final int index1;
-
-        /**
-         * Falls der Fehler mit irgendeinem weiteren Index zusammen hängt, kann
-         * man diesen hier speichern (z.B. Index des Elementarpfades mit dem
-         * Fehler)
-         */
-        public final int index2;
-
-        public InvalidityCheckResult(final Enum<?> invalidReason) {
-            this(invalidReason, -1, -1);
-        }
-
-        public InvalidityCheckResult(final Enum<?> invalidReason, final int index1) {
-            this(invalidReason, index1, -1);
-        }
-
-        public InvalidityCheckResult(final Enum<?> invalidReason, final int index1, final int index2) {
-            this.invalidReason = invalidReason;
-            this.index1 = index1;
-            this.index2 = index2;
-        }
-
-    }
-
-    /**
-     *
-     */
-    public enum InvalidReason {
-        INVALID_START_CLASSES,
-        INVALID_END_CLASSES;
     }
 
     /**

@@ -138,4 +138,56 @@ public interface IBasicMetaPath extends MetaModelSpecific {
     @Override
     String toString();
 
+    /**
+     * Repräsentiert den Validitätszustand eines MetaPath. Ist der invalidReason
+     * <code>null</code>, dann gilt der MetaPath als valide, sonst nicht.
+     *
+     * @author AXS (6 Dec 2018)
+     */
+    public class InvalidityCheckResult {
+
+        /**
+         * Ein beliebiger Enum, der einen FehlerKey enthält. Über diesen
+         * Key-Name kann ein Ressourcenstring geladen werden, der dem Benutzer
+         * einen Hinweis auf den Fehler gibt.
+         */
+        public final Enum<?> invalidReason;
+
+        /**
+         * Falls der Fehler mit irgendeinem Index zusammen hängt, kann man
+         * diesen hier speichern (z.B. Index des Pfades mit dem Fehler)
+         */
+        public final int index1;
+
+        /**
+         * Falls der Fehler mit irgendeinem weiteren Index zusammen hängt, kann
+         * man diesen hier speichern (z.B. Index des Elementarpfades mit dem
+         * Fehler)
+         */
+        public final int index2;
+
+        public InvalidityCheckResult(final Enum<?> invalidReason) {
+            this(invalidReason, -1, -1);
+        }
+
+        public InvalidityCheckResult(final Enum<?> invalidReason, final int index1) {
+            this(invalidReason, index1, -1);
+        }
+
+        public InvalidityCheckResult(final Enum<?> invalidReason, final int index1, final int index2) {
+            this.invalidReason = invalidReason;
+            this.index1 = index1;
+            this.index2 = index2;
+        }
+
+    }
+
+    /**
+     *
+     */
+    public enum InvalidReason {
+        INVALID_START_CLASSES,
+        INVALID_END_CLASSES;
+    }
+
 }

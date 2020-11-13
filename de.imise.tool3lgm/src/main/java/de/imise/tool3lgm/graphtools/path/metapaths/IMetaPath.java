@@ -7,7 +7,6 @@ import com.google.common.collect.ImmutableList;
 
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
-import de.imise.tool3lgm.graphtools.path.metapaths.MetaPath.InvalidityCheckResult;
 import de.imise.tool3lgm.graphtools.path.metapaths.PathFunctions.PathConnectionState;
 import de.imise.tool3lgm.graphtools.path.paths.PathResultTreeModel;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;

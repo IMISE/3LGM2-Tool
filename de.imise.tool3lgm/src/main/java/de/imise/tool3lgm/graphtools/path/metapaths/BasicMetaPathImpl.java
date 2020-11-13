@@ -10,11 +10,10 @@ import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModelSpecificAdapter;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
-import de.imise.tool3lgm.graphtools.path.metapaths.MetaPath.InvalidityCheckResult;
 import de.imise.util.ReflectionUtils;
 import de.imise.util.collections.CollectionUtils;
 
-abstract class BasicMetaPath extends MetaModelSpecificAdapter implements IBasicMetaPath {
+abstract class BasicMetaPathImpl extends MetaModelSpecificAdapter implements IBasicMetaPath {
 
     /**
      * Liste aller Startklassen dieses Pfades.
@@ -41,7 +40,7 @@ abstract class BasicMetaPath extends MetaModelSpecificAdapter implements IBasicM
      * MataPath für die Gegenrichtung dieses Pfades. Der ist nur nicht
      * <code>null</code>, wenn er sich tatsächlich feststellen lässt.
      */
-    protected MetaPath otherDirection = null;
+    protected MetaPathImpl otherDirection = null;
 
     /**
      * Dieses Objekt gibt den Grund an, warum ein MetaPath nicht valide ist. Ist
@@ -63,7 +62,7 @@ abstract class BasicMetaPath extends MetaModelSpecificAdapter implements IBasicM
     /**
      * @param metaModel
      */
-    public BasicMetaPath(final MetaModel metaModel) {
+    public BasicMetaPathImpl(final MetaModel metaModel) {
         this(metaModel, null);
     }
 
@@ -71,7 +70,7 @@ abstract class BasicMetaPath extends MetaModelSpecificAdapter implements IBasicM
      * @param metaModel
      * @param name Anzeigenamen
      */
-    public BasicMetaPath(final MetaModel metaModel, final String name) {
+    public BasicMetaPathImpl(final MetaModel metaModel, final String name) {
         this(metaModel, (Class<? extends ModelElement>) null, (Class<? extends ModelElement>) null, name);
     }
 
@@ -80,7 +79,7 @@ abstract class BasicMetaPath extends MetaModelSpecificAdapter implements IBasicM
      * @param startElementClass
      * @param endElementClass
      */
-    public BasicMetaPath(final MetaModel metaModel, final Class<? extends ModelElement> startElementClass, final Class<? extends ModelElement> endElementClass) {
+    public BasicMetaPathImpl(final MetaModel metaModel, final Class<? extends ModelElement> startElementClass, final Class<? extends ModelElement> endElementClass) {
         this(metaModel, startElementClass, endElementClass, null);
 
     }
@@ -91,7 +90,7 @@ abstract class BasicMetaPath extends MetaModelSpecificAdapter implements IBasicM
      * @param endElementClass
      * @param name
      */
-    public BasicMetaPath(final MetaModel metaModel, final Class<? extends ModelElement> startElementClass, final Class<? extends ModelElement> endElementClass, final String name) {
+    public BasicMetaPathImpl(final MetaModel metaModel, final Class<? extends ModelElement> startElementClass, final Class<? extends ModelElement> endElementClass, final String name) {
         this(metaModel, startElementClass != null ? ImmutableSet.of(startElementClass) : null, endElementClass != null ? ImmutableSet.of(endElementClass) : null, name);
 
     }
@@ -102,7 +101,7 @@ abstract class BasicMetaPath extends MetaModelSpecificAdapter implements IBasicM
      * @param endElementClasses
      * @param name
      */
-    public BasicMetaPath(final MetaModel metaModel, final Set<Class<? extends ModelElement>> startElementClasses, final Set<Class<? extends ModelElement>> endElementClasses, final String name) {
+    public BasicMetaPathImpl(final MetaModel metaModel, final Set<Class<? extends ModelElement>> startElementClasses, final Set<Class<? extends ModelElement>> endElementClasses, final String name) {
         super(metaModel);
         this.metaModel = metaModel;
         this.startElementClasses = CollectionUtils.ensureImmutable(startElementClasses);
@@ -284,7 +283,7 @@ abstract class BasicMetaPath extends MetaModelSpecificAdapter implements IBasicM
         if (getClass() != obj.getClass()) {
             return false;
         }
-        MetaPath other = (MetaPath) obj;
+        MetaPathImpl other = (MetaPathImpl) obj;
         if (endElementClasses == null) {
             if (other.endElementClasses != null) {
                 return false;
