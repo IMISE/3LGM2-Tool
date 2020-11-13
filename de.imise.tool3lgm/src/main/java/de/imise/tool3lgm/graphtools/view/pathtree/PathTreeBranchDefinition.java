@@ -9,7 +9,7 @@ import javax.swing.ImageIcon;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModelSpecificAdapter;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.path.metapaths.MetaPathFunctions;
-import de.imise.tool3lgm.graphtools.path.metapaths.SimpleMetaPath;
+import de.imise.tool3lgm.graphtools.path.metapaths.SequenceMetaPath;
 import de.imise.tool3lgm.graphtools.view.tree.node.ElementClassTreeNode;
 import de.imise.tool3lgm.graphtools.view.tree.node.ElementContainerTreeNode;
 import de.imise.tool3lgm.graphtools.view.tree.node.StringTreeNode;
@@ -38,7 +38,7 @@ public final class PathTreeBranchDefinition extends MetaModelSpecificAdapter imp
     /**
      * Der Pfad der Elemente, die angezeigt werden sollen.
      */
-    private final SimpleMetaPath elementsPath;
+    private final SequenceMetaPath elementsPath;
 
     /**
      * Respurce Handler to get the strings and icons
@@ -50,7 +50,7 @@ public final class PathTreeBranchDefinition extends MetaModelSpecificAdapter imp
      * @param elementsPath
      * @param hierarchyObjects
      */
-    public PathTreeBranchDefinition(final SimpleResourceSource resourceHandler, final SimpleMetaPath elementsPath, final Object... hierarchyObjects) {
+    public PathTreeBranchDefinition(final SimpleResourceSource resourceHandler, final SequenceMetaPath elementsPath, final Object... hierarchyObjects) {
         super(elementsPath);
         this.resourceHandler = resourceHandler;
         this.elementsPath = elementsPath;
@@ -69,7 +69,7 @@ public final class PathTreeBranchDefinition extends MetaModelSpecificAdapter imp
     /**
      * @return the visiblePath
      */
-    public SimpleMetaPath getElementsPath() {
+    public SequenceMetaPath getElementsPath() {
         return elementsPath;
     }
 

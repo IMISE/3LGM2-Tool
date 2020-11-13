@@ -8,15 +8,15 @@ import de.imise.tool3lgm.MetaModelContext;
 import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.Tool3lgmMetaModelContext;
 import de.imise.tool3lgm.Tool3lgmModelType.ModelCategory;
-import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModelDefinition;
 import de.imise.tool3lgm.graphtools.metamodel.ModelConverter;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.template.TemplateLibraryProvider;
 import de.imise.tool3lgm.graphtools.model.template.TemplateUsageDefinition;
 import de.imise.tool3lgm.graphtools.model.template.TemplateViewDefinition;
-import de.imise.tool3lgm.graphtools.path.metapaths.SimpleMetaPath;
-import de.imise.tool3lgm.graphtools.path.metapaths.SimpleMetaPathCreator;
+import de.imise.tool3lgm.graphtools.path.metapaths.SequenceMetaPath;
+import de.imise.tool3lgm.graphtools.path.metapaths.SimpleSerialMetaPathCreator;
+import de.imise.tool3lgm.graphtools.path.metapaths.SimpleSerialMetaPathCreator.SimpleSerialMetaPathBuilder;
 import de.imise.tool3lgm.metamodel.service.TLGMServiceMetaModel;
 import de.imise.tool3lgm.metamodel.service.edge.IheActor_IheInterface_Edge;
 import de.imise.tool3lgm.metamodel.service.edge.IheIntegrationProfile_IheActor_Edge;
@@ -27,6 +27,7 @@ import de.imise.tool3lgm.metamodel.service.edge.IheProvidingInterface_IheTransac
 import de.imise.tool3lgm.metamodel.service.node.IheActor;
 import de.imise.tool3lgm.metamodel.service.node.IheDomain;
 import de.imise.tool3lgm.metamodel.service.node.IheIntegrationProfile;
+import de.imise.tool3lgm.metamodel.service.node.IheInterface;
 import de.imise.tool3lgm.metamodel.service.node.IheInvokingInterface;
 import de.imise.tool3lgm.metamodel.service.node.IheProvidingInterface;
 import de.imise.tool3lgm.metamodel.service.node.IheTransaction;
@@ -59,13 +60,16 @@ public class IheTemplateLibraryProvider extends TemplateLibraryProvider {
                 return "MAIN_CATEGORY_NAME";
             }
 
+            @SuppressWarnings("unchecked")
             @Override
-            public List<SimpleMetaPath> getViewMetaPaths() {
+            public List<SequenceMetaPath> getViewMetaPaths() {
                 MetaModelContext metaModelContext = Tool3lgmMetaModelContext.getMetaModelContextForDefinitionClass(getMetaModelDefinitionClass());
-                MetaModel metaModel = metaModelContext.getMetaModel();
-                SimpleMetaPath submodelMetaPath = SimpleMetaPathCreator.createSimpleMetaPath(metaModel, IheDomain.class, IheTransaction.class, IheIntegrationProfile_IheDomain_Edge.class, IheIntegrationProfile_IheActor_Edge.class,
-                        IheActor_IheInterface_Edge.class, IheInterface_IheTransaction_Edge.class);
-                return ImmutableList.of(submodelMetaPath);
+                SimpleSerialMetaPathBuilder builder = SimpleSerialMetaPathCreator.builder(metaModelContext);
+                builder.add(IheDomain.class, IheActor.class, IheIntegrationProfile_IheDomain_Edge.class, IheIntegrationProfile_IheActor_Edge.class);
+                builder.addSimpleMetaPath(IheActor.class, IheInterface.class, IheActor_IheInterface_Edge.class);
+                builder.add(IheInterface.class, IheTransaction.class, IheInterface_IheTransaction_Edge.class);
+                SequenceMetaPath iheTemplateViewPath = builder.build();
+                return ImmutableList.of(iheTemplateViewPath);
             }
 
         };

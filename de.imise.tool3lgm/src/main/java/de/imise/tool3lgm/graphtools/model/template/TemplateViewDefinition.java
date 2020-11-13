@@ -3,7 +3,7 @@ package de.imise.tool3lgm.graphtools.model.template;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.imise.tool3lgm.graphtools.path.metapaths.SimpleMetaPath;
+import de.imise.tool3lgm.graphtools.path.metapaths.SequenceMetaPath;
 import de.imise.tool3lgm.graphtools.view.pathtree.PathTreeBranchDefinition;
 import de.imise.tool3lgm.graphtools.view.pathtree.PathTreeModel;
 import de.imise.util.resource.SimpleResourceSource;
@@ -39,7 +39,7 @@ public abstract class TemplateViewDefinition {
     /**
      * @return the metaPaths with the visible elements for the template browser
      */
-    protected abstract List<SimpleMetaPath> getViewMetaPaths();
+    protected abstract List<SequenceMetaPath> getViewMetaPaths();
 
     /**
      * Converts this view definition with all its view metapaths in a list of
@@ -51,7 +51,7 @@ public abstract class TemplateViewDefinition {
     public final List<PathTreeBranchDefinition> getTreeBranchDefinition() {
         List<PathTreeBranchDefinition> treeBranchDefinitions = new ArrayList<>();
         String mainCategoryResStringAndIconKey = getMainCategoryResStringAndIconKey();
-        for (SimpleMetaPath viewMetaPath : getViewMetaPaths()) {
+        for (SequenceMetaPath viewMetaPath : getViewMetaPaths()) {
             PathTreeBranchDefinition pathTreeBranchDefinition = new PathTreeBranchDefinition(resourceHandler, viewMetaPath, mainCategoryResStringAndIconKey);
             treeBranchDefinitions.add(pathTreeBranchDefinition);
         }
