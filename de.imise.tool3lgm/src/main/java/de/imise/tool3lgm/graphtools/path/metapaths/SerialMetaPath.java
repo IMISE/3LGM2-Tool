@@ -447,29 +447,6 @@ public class SerialMetaPath extends ListMetaPath {
         return pathStepClasses;
     }
 
-    /**
-     * Liefert die Verbindungsklasse des Pfadschrittes mit dem übergebenen Index
-     * in der Elementarpfadliste dieses Pfades. Dies ist beim Index 0 die
-     * speziellere der Endklasse des ersten Elementarpfades und der Startklasse
-     * des nächsten Elementarpfades. Der Pfadschritt mit dem Index der Pfadlänge
-     * -1 ist die Endklasse des letzten Elementarpfades = Endklasse der gesamten
-     * Elementarpfadliste. An die Startklasse des Gesamtpfades kommt man mit
-     * dieser Funktion nicht.
-     *
-     * @param pathStepIndex
-     * @return
-     */
-    public final Class<? extends ModelElement> getPathStepElementClass(final int pathStepIndex) {
-        List<ElementaryMetaPath> elementaryMetaPaths = getElementaryMetaPaths();
-        if (elementaryMetaPaths.isEmpty()) {
-            return null;
-        }
-        ElementaryMetaPath elementaryMetaPath1 = pathStepIndex >= 0 ? elementaryMetaPaths.get(pathStepIndex) : null;
-        ElementaryMetaPath elementaryMetaPath2 = pathStepIndex == elementaryMetaPaths.size() - 1 ? null : elementaryMetaPaths.get(pathStepIndex + 1);
-        Class<? extends ModelElement> connectingClass = MetaPathFunctions.getElementaryPathsConnectingClass(elementaryMetaPath1, elementaryMetaPath2);
-        return connectingClass;
-    }
-
     public enum InvalidReason {
         INVALID_SEQUENCE_INCOMPATIBLE_PATH_STEP_AND_EDGE_CLASSES,
     }

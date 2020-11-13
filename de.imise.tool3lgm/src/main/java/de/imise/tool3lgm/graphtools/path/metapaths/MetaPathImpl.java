@@ -225,6 +225,29 @@ abstract class MetaPathImpl extends BasicMetaPathImpl implements MetaPath {
     }
 
     /**
+     * Returns the connection class of the path step with the passed index in
+     * the element path list of this path. With index 0, this is the more
+     * special of the end class of the first elementary path and the start class
+     * of the next elementary path. The path step with the index of path length
+     * -1 is the end class of the last elementary path = end class of the whole
+     * elementary path list. The start class of the complete path is not
+     * accessible through this function.
+     *
+     * @param pathStepIndex
+     * @return
+     */
+    public final Class<? extends ModelElement> getPathStepElementClass(final int pathStepIndex) {
+        List<ElementaryMetaPath> elementaryMetaPaths = getElementaryMetaPaths();
+        if (elementaryMetaPaths.isEmpty()) {
+            return null;
+        }
+        ElementaryMetaPath elementaryMetaPath1 = pathStepIndex >= 0 ? elementaryMetaPaths.get(pathStepIndex) : null;
+        ElementaryMetaPath elementaryMetaPath2 = pathStepIndex == elementaryMetaPaths.size() - 1 ? null : elementaryMetaPaths.get(pathStepIndex + 1);
+        Class<? extends ModelElement> connectingClass = MetaPathFunctions.getElementaryPathsConnectingClass(elementaryMetaPath1, elementaryMetaPath2);
+        return connectingClass;
+    }
+
+    /**
      * @param other
      * @return only <code>true</code> if this and the other metapath have an
      *         assignable start class, an assignable end class, an assignable

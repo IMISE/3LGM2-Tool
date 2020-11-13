@@ -186,15 +186,15 @@ public class MetaPathFunctions {
      * @return a set of all classes in the metapath. These are only the path
      *         step connecting classes and not the edge classes.
      */
-    public static final Set<Class<? extends ModelElement>> getAllPathStepsStartAndEndClasses(final SimpleMetaPath simpleMetaPath, final boolean withSubClasses) {
+    public static final Set<Class<? extends ModelElement>> getAllPathStepsStartAndEndClasses(final SequenceMetaPath sequenceMetaPath, final boolean withSubClasses) {
         Set<Class<? extends ModelElement>> returnSet = new HashSet<>();
-        Class<? extends ModelElement> startClass = simpleMetaPath.getStartClass();
+        Class<? extends ModelElement> startClass = sequenceMetaPath.getStartClass();
         returnSet.add(startClass);
-        int metaPathLength = simpleMetaPath.length();
+        int metaPathLength = sequenceMetaPath.length();
         for (int i = 0; i < metaPathLength; i++) {
-            Class<? extends ModelElement> pathStepElementClass = simpleMetaPath.getPathStepElementClass(i);
+            Class<? extends ModelElement> pathStepElementClass = sequenceMetaPath.getPathStepElementClass(i);
             if (CoreMetaModel.isAbstract(pathStepElementClass)) {
-                MetaModel metaModel = simpleMetaPath.getMetaModel();
+                MetaModel metaModel = sequenceMetaPath.getMetaModel();
                 Collection<Class<? extends ModelElement>> classAndSubClasses = metaModel.getClassAndSubClasses(pathStepElementClass);
                 returnSet.addAll(classAndSubClasses);
             } else {
