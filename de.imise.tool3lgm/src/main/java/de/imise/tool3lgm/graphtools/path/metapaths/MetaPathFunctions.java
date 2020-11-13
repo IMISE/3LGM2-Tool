@@ -33,7 +33,7 @@ public class MetaPathFunctions {
      *            der Gesamtanzahl der Elementarpfade und diesem Wert.
      * @return
      */
-    public static final ElementaryMetaPath getElementaryMetaPathInPath(final MetaPath metaPath, final int index) {
+    public static final ElementaryMetaPath getElementaryMetaPathInPath(final IMetaPath metaPath, final int index) {
         List<ElementaryMetaPath> elementaryMetaPaths = metaPath.getElementaryMetaPaths();
         if (elementaryMetaPaths.isEmpty()) {
             return null;
@@ -56,7 +56,7 @@ public class MetaPathFunctions {
      *            der Summe der Gesamtanzahl der Elementarpfade und diesem Wert.
      * @return
      */
-    public static final Class<? extends ModelElement> getElementaryPathsConnectingClass(final MetaPath simpleMetaPath, final int pathStepIndex) {
+    public static final Class<? extends ModelElement> getElementaryPathsConnectingClass(final IMetaPath simpleMetaPath, final int pathStepIndex) {
         List<ElementaryMetaPath> elementaryMetaPaths = simpleMetaPath.getElementaryMetaPaths();
         if (elementaryMetaPaths.isEmpty()) {
             return null;
@@ -154,10 +154,10 @@ public class MetaPathFunctions {
      *         between pure template elements
      * @see {@link MetaModel#isPureTemplateElementClass(Class)}
      */
-    public static final boolean startsWitTemplateElementsElementaryMetaPath(final MetaPath metaPath) {
-        List<MetaPath> subMetaPaths = metaPath.getSubMetaPaths();
+    public static final boolean startsWitTemplateElementsElementaryMetaPath(final IMetaPath metaPath) {
+        List<IMetaPath> subMetaPaths = metaPath.getSubMetaPaths();
         MetaModel metaModel = metaPath.getMetaModel();
-        for (MetaPath subMetaPath : subMetaPaths) {
+        for (IMetaPath subMetaPath : subMetaPaths) {
             List<ElementaryMetaPath> elementaryMetaPaths = metaPath.getElementaryMetaPaths();
             if (!elementaryMetaPaths.isEmpty()) {
                 //At the moment only the first elementary metaPath counts. In special cases

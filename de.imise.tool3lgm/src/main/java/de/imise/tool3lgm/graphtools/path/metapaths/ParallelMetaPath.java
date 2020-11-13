@@ -39,7 +39,7 @@ public abstract class ParallelMetaPath extends ListMetaPath {
     /**
      * @param metaPaths
      */
-    public ParallelMetaPath(final MetaPath... metaPaths) {
+    public ParallelMetaPath(final IMetaPath... metaPaths) {
         this(null, metaPaths);
     }
 
@@ -47,7 +47,7 @@ public abstract class ParallelMetaPath extends ListMetaPath {
      * @param baseResKeyOrName
      * @param metaPaths
      */
-    public ParallelMetaPath(final String baseResKeyOrName, final MetaPath... metaPaths) {
+    public ParallelMetaPath(final String baseResKeyOrName, final IMetaPath... metaPaths) {
         super(baseResKeyOrName, metaPaths);
     }
 
@@ -63,9 +63,9 @@ public abstract class ParallelMetaPath extends ListMetaPath {
     protected void initStartEndClasses() {
         ImmutableSet.Builder<Class<? extends ModelElement>> startElementClassesBuilder = ImmutableSet.builder();
         ImmutableSet.Builder<Class<? extends ModelElement>> endElementClassesBuilder = ImmutableSet.builder();
-        for (MetaPath metaPath : subMetaPaths) {
-            startElementClassesBuilder.addAll(metaPath.startElementClasses);
-            endElementClassesBuilder.addAll(metaPath.endElementClasses);
+        for (IMetaPath metaPath : subMetaPaths) {
+            startElementClassesBuilder.addAll(metaPath.getStartClasses());
+            endElementClassesBuilder.addAll(metaPath.getEndClasses());
         }
         startElementClasses = startElementClassesBuilder.build();
         endElementClasses = endElementClassesBuilder.build();
@@ -82,12 +82,12 @@ public abstract class ParallelMetaPath extends ListMetaPath {
     }
 
     @Override
-    public MetaPath getOtherDirection() {
+    public IMetaPath getOtherDirection() {
         // wenn noch nicht bereits einmal versucht wurde den Gegenrichtungspfad zusammenzubauen
         if (!otherDirectionInitilized) {
             otherDirectionInitilized = true;
             // versuchen, die Gegenrichtung zusammen zu bauen
-            MetaPath[] otherDirectionSubMetaPaths = getOtherDirectionMetaPaths();
+            IMetaPath[] otherDirectionSubMetaPaths = getOtherDirectionMetaPaths();
             // Gegenrichtung für diesen und den Gegenrichtungspfad setzen, wenn es die Gegenrichtung gibt
             if (otherDirectionSubMetaPaths != null) {
                 ParallelMetaPath other = createInstance(otherDirectionSubMetaPaths);
@@ -102,7 +102,7 @@ public abstract class ParallelMetaPath extends ListMetaPath {
     /**
      * @return
      */
-    private final MetaPath[] getOtherDirectionMetaPaths() {
+    private final IMetaPath[] getOtherDirectionMetaPaths() {
         //these kind of constructing the other direction of a metapath makes not
         //sense in every case but only in some very special cases. One condition
         //for sense is that all submetapaths have the same start- and endelements,
@@ -110,10 +110,10 @@ public abstract class ParallelMetaPath extends ListMetaPath {
         //The only point where it is used at the moment (01.09.2020) is the
         //TLGMServiceMetaPathsDefinition in the Service-metamodel plugin for the
         //(at the moment) only use of a DifferenceMetaPath.
-        MetaPath[] otherDirectionMetaPaths = new MetaPath[subMetaPaths.size()];
+        IMetaPath[] otherDirectionMetaPaths = new MetaPath[subMetaPaths.size()];
         for (int i = 0; i < otherDirectionMetaPaths.length; i++) {
-            MetaPath subMetaPath = subMetaPaths.get(i);
-            MetaPath subMetaPathOtherDirection = subMetaPath.getOtherDirection();
+            IMetaPath subMetaPath = subMetaPaths.get(i);
+            IMetaPath subMetaPathOtherDirection = subMetaPath.getOtherDirection();
             if (subMetaPathOtherDirection == null) {
                 return null;
             }
@@ -126,7 +126,7 @@ public abstract class ParallelMetaPath extends ListMetaPath {
      * @param subMetaPaths
      * @return
      */
-    public abstract ParallelMetaPath createInstance(MetaPath... subMetaPaths);
+    public abstract ParallelMetaPath createInstance(IMetaPath... subMetaPaths);
 
     @Override
     public boolean isRemoveable(final boolean checkEndElement) {
@@ -135,7 +135,7 @@ public abstract class ParallelMetaPath extends ListMetaPath {
 
     @Override
     public boolean isDirected() {
-        for (MetaPath metaPath : subMetaPaths) {
+        for (IMetaPath metaPath : subMetaPaths) {
             if (!metaPath.isDirected()) {
                 return false;
             }
@@ -145,7 +145,7 @@ public abstract class ParallelMetaPath extends ListMetaPath {
 
     @Override
     public boolean containsPropertyTransferEdge() {
-        for (MetaPath metaPath : subMetaPaths) {
+        for (IMetaPath metaPath : subMetaPaths) {
             if (metaPath.containsPropertyTransferEdge()) {
                 return true;
             }

@@ -1,6 +1,7 @@
 package de.imise.tool3lgm.graphtools.path.paths;
 
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
+import de.imise.tool3lgm.graphtools.path.metapaths.IMetaPath;
 import de.imise.tool3lgm.graphtools.path.metapaths.MetaPath;
 
 /**
@@ -82,7 +83,7 @@ public abstract class AbstractPath {
     /**
      * @return the metaPath
      */
-    public MetaPath getMetaPath() {
+    public IMetaPath getMetaPath() {
         return metaPath;
     }
 

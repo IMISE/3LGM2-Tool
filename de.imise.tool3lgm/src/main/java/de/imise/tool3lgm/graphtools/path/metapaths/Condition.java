@@ -30,7 +30,7 @@ public class Condition {
 
     private Collection<ModelElement> connectedElements = null;
 
-    private MetaPath metaPath = null;
+    private IMetaPath metaPath = null;
 
     private final CountCondition countCondition;
 
@@ -39,7 +39,7 @@ public class Condition {
     /**
      *
      */
-    private Condition(final MetaPath metaPath, final CountCondition countCondition, final ConnectionStateCondition connectionStateCondition, final int connectionCount, final Collection<ModelElement> connectedElements) {
+    private Condition(final IMetaPath metaPath, final CountCondition countCondition, final ConnectionStateCondition connectionStateCondition, final int connectionCount, final Collection<ModelElement> connectedElements) {
         super();
         this.metaPath = metaPath;
         this.countCondition = countCondition;
@@ -62,7 +62,7 @@ public class Condition {
         return connectedElements;
     }
 
-    public static final Condition getElementCountGreaterCondition(final MetaPath metaPath, final int elementCount) {
+    public static final Condition getElementCountGreaterCondition(final IMetaPath metaPath, final int elementCount) {
         //        Condition condition = new Condition(CountCondition.GREATER);
         //        condition.connectionCount = elementCount;
         //        return condition;

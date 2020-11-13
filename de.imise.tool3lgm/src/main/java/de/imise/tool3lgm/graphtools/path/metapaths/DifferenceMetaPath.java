@@ -15,7 +15,7 @@ public class DifferenceMetaPath extends ParallelMetaPath {
     /**
      * @param metaPaths
      */
-    public DifferenceMetaPath(final MetaPath... metaPaths) {
+    public DifferenceMetaPath(final IMetaPath... metaPaths) {
         super(metaPaths);
     }
 
@@ -23,7 +23,7 @@ public class DifferenceMetaPath extends ParallelMetaPath {
      * @param name
      * @param metaPaths
      */
-    public DifferenceMetaPath(final String name, final MetaPath... metaPaths) {
+    public DifferenceMetaPath(final String name, final IMetaPath... metaPaths) {
         super(name, metaPaths);
     }
 
@@ -38,17 +38,17 @@ public class DifferenceMetaPath extends ParallelMetaPath {
     protected void initStartEndClasses() {
         ImmutableSet.Builder<Class<? extends ModelElement>> startElementClassesBuilder = ImmutableSet.builder();
         ImmutableSet.Builder<Class<? extends ModelElement>> endElementClassesBuilder = ImmutableSet.builder();
-        startElementClassesBuilder.addAll(subMetaPaths.get(0).startElementClasses);
-        endElementClassesBuilder.addAll(subMetaPaths.get(0).endElementClasses);
+        startElementClassesBuilder.addAll(subMetaPaths.get(0).getStartClasses());
+        endElementClassesBuilder.addAll(subMetaPaths.get(0).getEndClasses());
         startElementClasses = startElementClassesBuilder.build();
         endElementClasses = endElementClassesBuilder.build();
     }
 
     @Override
-    protected String createName() {
+    public String createName() {
         StringBuilder sb = new StringBuilder();
         sb.append("(");
-        Iterator<MetaPath> it = subMetaPaths.iterator();
+        Iterator<IMetaPath> it = subMetaPaths.iterator();
         if (it.hasNext()) {
             sb.append(it.next().getFullName());
         }
@@ -66,9 +66,9 @@ public class DifferenceMetaPath extends ParallelMetaPath {
     }
 
     @Override
-    protected boolean canBeRecursive() {
+    public boolean canBeRecursive() {
         //rekursiv, wenn der erste MetaPath (der die Elemente festlegt, von denen die der folgenden MetaPfade abgezogen werden) rekursiv ist
-        MetaPath firstMetaPath = subMetaPaths.get(0);
+        IMetaPath firstMetaPath = subMetaPaths.get(0);
         return firstMetaPath.canBeRecursive();
     }
 
@@ -78,7 +78,7 @@ public class DifferenceMetaPath extends ParallelMetaPath {
     }
 
     @Override
-    public DifferenceMetaPath createInstance(final MetaPath... subMetaPaths) {
+    public DifferenceMetaPath createInstance(final IMetaPath... subMetaPaths) {
         return new DifferenceMetaPath(subMetaPaths);
     }
 

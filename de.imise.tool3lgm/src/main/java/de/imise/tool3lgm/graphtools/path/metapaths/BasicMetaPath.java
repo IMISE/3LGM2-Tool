@@ -4,7 +4,6 @@ import java.util.Collection;
 import java.util.Set;
 
 import com.google.common.base.Strings;
-import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 
 import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
@@ -15,12 +14,7 @@ import de.imise.tool3lgm.graphtools.path.metapaths.MetaPath.InvalidityCheckResul
 import de.imise.util.ReflectionUtils;
 import de.imise.util.collections.CollectionUtils;
 
-public abstract class BasicMetaPath extends MetaModelSpecificAdapter {
-
-    /**
-     * Leere Elementarpfadliste
-     */
-    protected static final ImmutableList<ElementaryMetaPath> EMPTY_ELEMENTARY_PATH_LIST = ImmutableList.of();
+public abstract class BasicMetaPath extends MetaModelSpecificAdapter implements IBasicMetaPath {
 
     /**
      * Liste aller Startklassen dieses Pfades.
@@ -119,6 +113,7 @@ public abstract class BasicMetaPath extends MetaModelSpecificAdapter {
     /**
      * @return
      */
+    @Override
     public final Set<Class<? extends ModelElement>> getStartClasses() {
         return startElementClasses;
     }
@@ -126,6 +121,7 @@ public abstract class BasicMetaPath extends MetaModelSpecificAdapter {
     /**
      * @return
      */
+    @Override
     public Class<? extends ModelElement> getStartClass() {
         Set<Class<? extends ModelElement>> startClasses = getStartClasses();
         Class<? extends ModelElement> commonSuperClass = ReflectionUtils.getCommonSuperClassOfClasses(startClasses);
@@ -135,6 +131,7 @@ public abstract class BasicMetaPath extends MetaModelSpecificAdapter {
     /**
      * @return
      */
+    @Override
     public final Set<Class<? extends ModelElement>> getEndClasses() {
         return endElementClasses;
     }
@@ -142,6 +139,7 @@ public abstract class BasicMetaPath extends MetaModelSpecificAdapter {
     /**
      * @return
      */
+    @Override
     public Class<? extends ModelElement> getEndClass() {
         Set<Class<? extends ModelElement>> endClasses = getEndClasses();
         Class<? extends ModelElement> commonSuperClass = ReflectionUtils.getCommonSuperClassOfClasses(endClasses);
@@ -156,6 +154,7 @@ public abstract class BasicMetaPath extends MetaModelSpecificAdapter {
      *            soll
      * @return
      */
+    @Override
     public boolean isStartClass(final Class<? extends ModelElement> elementClass) {
         for (Class<? extends ModelElement> startClass : getStartClasses()) {
             if (startClass.isAssignableFrom(elementClass)) {
@@ -173,6 +172,7 @@ public abstract class BasicMetaPath extends MetaModelSpecificAdapter {
      *            soll
      * @return
      */
+    @Override
     public final boolean isStartClass(final Collection<Class<? extends ModelElement>> elementClasses) {
         for (Class<? extends ModelElement> elementClass : elementClasses) {
             if (isStartClass(elementClass)) {
@@ -189,6 +189,7 @@ public abstract class BasicMetaPath extends MetaModelSpecificAdapter {
      * @param elementClass Elementklasse, die als Endklasse geprüft werden soll
      * @return
      */
+    @Override
     public boolean isEndClass(final Class<? extends ModelElement> elementClass) {
         for (Class<? extends ModelElement> endClass : getEndClasses()) {
             if (endClass.isAssignableFrom(elementClass)) {
@@ -206,6 +207,7 @@ public abstract class BasicMetaPath extends MetaModelSpecificAdapter {
      *            sollen
      * @return
      */
+    @Override
     public final boolean isEndClass(final Collection<Class<? extends ModelElement>> elementClasses) {
         for (Class<? extends ModelElement> elementClass : elementClasses) {
             if (isEndClass(elementClass)) {
@@ -225,6 +227,7 @@ public abstract class BasicMetaPath extends MetaModelSpecificAdapter {
      *            geprüft werden soll
      * @return
      */
+    @Override
     public final boolean isStartAndEndClass(final Class<? extends ModelElement> startClass, final Class<? extends ModelElement> endClass) {
         return isStartClass(startClass) && isEndClass(endClass);
     }
@@ -233,6 +236,7 @@ public abstract class BasicMetaPath extends MetaModelSpecificAdapter {
      * @return <code>true</code>, if the metapath is applicable to the
      *         endelements as startelements otherwise <code>false</code>
      */
+    @Override
     public final boolean isInterpretAsRecursive() {
         return interpretAsRecursive;
     }
@@ -240,6 +244,7 @@ public abstract class BasicMetaPath extends MetaModelSpecificAdapter {
     /**
      * @param
      */
+    @Override
     public final void setInterpretAsRecursive(final boolean interpretAsRecursive) {
         this.interpretAsRecursive = interpretAsRecursive;
     }
@@ -248,7 +253,7 @@ public abstract class BasicMetaPath extends MetaModelSpecificAdapter {
      * @return <code>true</code> if at least one endElement class can be the
      *         startElement class of this metaPath
      */
-    protected boolean canBeRecursive() {
+    public boolean canBeRecursive() {
         Set<Class<? extends ModelElement>> endClasses = getEndClasses();
         for (Class<? extends ModelElement> endClass : endClasses) {
             if (isStartClass(endClass)) {
@@ -267,6 +272,7 @@ public abstract class BasicMetaPath extends MetaModelSpecificAdapter {
      *            nicht mitgeprüft
      * @return
      */
+    @Override
     public boolean equals(final Object obj, final boolean ignoreName) {
         if (!super.equals(obj)) {
             return false;
@@ -330,11 +336,7 @@ public abstract class BasicMetaPath extends MetaModelSpecificAdapter {
     /**
      * @return
      */
-    protected abstract String createName();
-
-    /**
-     * @return
-     */
+    @Override
     public final String getName() {
         if (Strings.isNullOrEmpty(name)) {
             name = createName();
@@ -345,6 +347,7 @@ public abstract class BasicMetaPath extends MetaModelSpecificAdapter {
     /**
      * @return
      */
+    @Override
     public final String getFullName() {
         if (Strings.isNullOrEmpty(fullName)) {
             fullName = getName(true, true);
@@ -357,6 +360,7 @@ public abstract class BasicMetaPath extends MetaModelSpecificAdapter {
      * @param withEndClasses
      * @return
      */
+    @Override
     public String getName(final boolean withStartClasses, final boolean withEndClasses) {
         if (withStartClasses || withEndClasses) {
             ElementsNameBuilder elementsNameBuilder = metaModel.getElementsNameBuilder();

@@ -23,7 +23,7 @@ public abstract class ListMetaPath extends MetaPath {
     /**
      * Liste der Pfade, die dieser Metapfad parallel enthält.
      */
-    protected final List<MetaPath> subMetaPaths;
+    protected final List<IMetaPath> subMetaPaths;
 
     /**
      * BasisResourcenschlüssel oder Name des Pfades. Wenn dieser Schlüssel nicht
@@ -36,7 +36,7 @@ public abstract class ListMetaPath extends MetaPath {
     /**
      * @param subMetaPaths
      */
-    public ListMetaPath(final MetaPath... subMetaPaths) {
+    public ListMetaPath(final IMetaPath... subMetaPaths) {
         this(null, subMetaPaths);
     }
 
@@ -44,7 +44,7 @@ public abstract class ListMetaPath extends MetaPath {
      * @param baseResKeyOrName
      * @param subMetaPaths
      */
-    public ListMetaPath(final String baseResKeyOrName, final MetaPath... subMetaPaths) {
+    public ListMetaPath(final String baseResKeyOrName, final IMetaPath... subMetaPaths) {
         this(subMetaPaths[0], baseResKeyOrName, ImmutableList.copyOf(subMetaPaths));
     }
 
@@ -68,7 +68,7 @@ public abstract class ListMetaPath extends MetaPath {
      * @param baseResKeyOrName
      * @param subMetaPaths
      */
-    private ListMetaPath(final MetaModelSpecific metaModelSource, final String baseResKeyOrName, final List<MetaPath> subMetaPaths) {
+    private ListMetaPath(final MetaModelSpecific metaModelSource, final String baseResKeyOrName, final List<IMetaPath> subMetaPaths) {
         super(metaModelSource.getMetaModel());
         this.baseResKeyOrName = !Strings.isNullOrEmpty(baseResKeyOrName) ? baseResKeyOrName : DEFAULT_RESKEY;
         this.subMetaPaths = subMetaPaths;
@@ -81,7 +81,7 @@ public abstract class ListMetaPath extends MetaPath {
      * @return the metaPaths
      */
     @Override
-    public final List<MetaPath> getSubMetaPaths() {
+    public final List<IMetaPath> getSubMetaPaths() {
         return subMetaPaths;
     }
 
@@ -89,7 +89,7 @@ public abstract class ListMetaPath extends MetaPath {
      * @param index
      * @return
      */
-    public MetaPath getSubMetaPath(final int index) {
+    public IMetaPath getSubMetaPath(final int index) {
         return subMetaPaths.get(index);
     }
 
@@ -102,7 +102,7 @@ public abstract class ListMetaPath extends MetaPath {
     }
 
     @Override
-    protected String createName() {
+    public String createName() {
         return metaModel.getResStringWithoutError(baseResKeyOrName);
     }
 
@@ -126,7 +126,7 @@ public abstract class ListMetaPath extends MetaPath {
             } else {
                 //jeden Einzelpfad durchgehen
                 for (int i = 0; i < subMetaPaths.size(); i++) {
-                    MetaPath metaPath = subMetaPaths.get(i);
+                    IMetaPath metaPath = subMetaPaths.get(i);
                     InvalidityCheckResult innerInvalidityCheckResult = metaPath.getInvalidityCheckResult();
                     //wenn der Einzelpfad nicht valide ist
                     if (innerInvalidityCheckResult.invalidReason != null) {
@@ -144,7 +144,7 @@ public abstract class ListMetaPath extends MetaPath {
     /**
      * @return iterable over all metapaths
      */
-    public Iterable<MetaPath> iterableSubMetaPaths() {
+    public Iterable<IMetaPath> iterableSubMetaPaths() {
         return CollectionUtils.iterable(subMetaPaths);
     }
 
@@ -155,21 +155,21 @@ public abstract class ListMetaPath extends MetaPath {
      * @param metaPathIndex
      */
     public final void setInterpretAsRecursive(final int metaPathIndex, final boolean recursive) {
-        MetaPath metaPath = subMetaPaths.get(metaPathIndex);
+        IMetaPath metaPath = subMetaPaths.get(metaPathIndex);
         metaPath.setInterpretAsRecursive(recursive);
     }
 
     /**
      * @return
      */
-    public final MetaPath getFirstSubMetaPath() {
+    public final IMetaPath getFirstSubMetaPath() {
         return subMetaPaths.get(0);
     }
 
     /**
      * @return
      */
-    public final MetaPath getLastSubMetaPath() {
+    public final IMetaPath getLastSubMetaPath() {
         return subMetaPaths.get(getSubMetaPathCount() - 1);
     }
 

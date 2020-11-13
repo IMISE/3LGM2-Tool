@@ -21,7 +21,7 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.OptionalEdge;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.path.metapaths.ElementaryMetaPath;
 import de.imise.tool3lgm.graphtools.path.metapaths.ElementaryMetaPathHandler;
-import de.imise.tool3lgm.graphtools.path.metapaths.MetaPath;
+import de.imise.tool3lgm.graphtools.path.metapaths.IMetaPath;
 import de.imise.tool3lgm.graphtools.path.metapaths.SimpleMetaPath;
 import de.imise.tool3lgm.graphtools.path.metapaths.SimpleMetaPathCreator;
 import de.imise.tool3lgm.graphtools.path.metapaths.UnionMetaPath;
@@ -111,8 +111,8 @@ public class ConnectedElementsTableModel extends DefaultTableModel {
                         colName = OptionalEdge.getOptionalityName();
                     } else {
                         Collection<String> colNameParts = new ArrayList<>();
-                        List<MetaPath> metaPaths = columnHeaderReferencePath.getSubMetaPaths();
-                        for (MetaPath metaPath : metaPaths) {
+                        List<IMetaPath> metaPaths = columnHeaderReferencePath.getSubMetaPaths();
+                        for (IMetaPath metaPath : metaPaths) {
                             List<ElementaryMetaPath> elementaryMetaPaths = metaPath.getElementaryMetaPaths();
                             int pathStepIndex = columnDefinition.getPathStepIndex();
                             ElementaryMetaPath elementaryMetaPath = elementaryMetaPaths.get(pathStepIndex);
@@ -151,6 +151,9 @@ public class ConnectedElementsTableModel extends DefaultTableModel {
         setColumnIdentifiers(colNames);
     }
 
+    /**
+     *
+     */
     private void setData() {
         List<PathResultTreeNode> completePathLeafs = currentPathResultTreeModel.getCompletePathLeafs();
         List<PathResultTreeNode> incompletePathLeafs = currentPathResultTreeModel.getIncompletePathLeafs();
@@ -206,6 +209,11 @@ public class ConnectedElementsTableModel extends DefaultTableModel {
         }
     }
 
+    /**
+     * @param oldValue
+     * @param newValue
+     * @param pid
+     */
     void setOptionalValue(final Object oldValue, final Object newValue, final int pid) {
         if (!oldValue.equals(newValue)) {
             if (oldValue instanceof NamedObjectContainer) {
@@ -222,16 +230,26 @@ public class ConnectedElementsTableModel extends DefaultTableModel {
         }
     }
 
+    /**
+     *
+     */
     public void update() {
         //get resultTree with incomplete paths
         currentPathResultTreeModel = metaPath.getResultTree(modelElement, true);
         setData();
     }
 
+    /**
+     * @return
+     */
     public int getHiddenPathResultTreeNodeColumn() {
         return findColumn(HIDDEN_RESULT_NODE_COLUMN_IDENTIFIER.toString());
     }
 
+    /**
+     * @param rowIndex
+     * @return
+     */
     public PathResultTreeNode getPathResultTreeNode(final int rowIndex) {
         return (PathResultTreeNode) getValueAt(rowIndex, getHiddenPathResultTreeNodeColumn());
     }

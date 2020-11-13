@@ -28,6 +28,7 @@ import de.imise.tool3lgm.graphtools.metamodel.MetaModelDefinition;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModelSpecific;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
+import de.imise.tool3lgm.graphtools.path.metapaths.IMetaPath;
 import de.imise.tool3lgm.graphtools.path.metapaths.MetaPath;
 import de.imise.tool3lgm.graphtools.path.metapaths.SimpleMetaPath;
 import de.imise.tool3lgm.graphtools.undoredo.TransactionManager;
@@ -128,7 +129,7 @@ public class ModelValidatorDefinition implements MetaModelSpecific {
         if (es == null) {
             return new HashSet<>();
         }
-        MetaPath pathToDialogElement = es.getPathToPropertyDialogElement();
+        IMetaPath pathToDialogElement = es.getPathToPropertyDialogElement();
         ModelElement me = error.getModelElement();
         if (pathToDialogElement != null) {
             Collection<ModelElement> connected = pathToDialogElement.getConnectedElements(me);

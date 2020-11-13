@@ -24,7 +24,7 @@ import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
  * @author AXS
  * @create 12.10.2010
  */
-public abstract class MetaPath extends BasicMetaPath {
+public abstract class MetaPath extends BasicMetaPath implements IMetaPath {
 
     /**
      * @param metaModel
@@ -127,6 +127,7 @@ public abstract class MetaPath extends BasicMetaPath {
     /**
      * @return
      */
+    @Override
     public InvalidityCheckResult getInvalidityCheckResult() {
         if (invalidityCheckResult == null) {
             InvalidReason invalidReason = null;
@@ -147,46 +148,17 @@ public abstract class MetaPath extends BasicMetaPath {
      *
      * @return
      */
+    @Override
     public final boolean isValid() {
         return getInvalidityCheckResult().invalidReason == null;
     }
-
-    /**
-     * Liefert <code>true</code>, wenn der Pfad prinzipiell angelegt werden
-     * kann. Das ist der Fall, wenn es sich um eine einfache Assoziationsfolge
-     * ohne parallele Pfade oder Verweigungen zu Assoziationsklassen dazwischen
-     * handelt und alle Zwischenelementklassen nicht abstrakt sind.
-     *
-     * @param checkCreateEndElement wenn <code>true</code>, dann wird auch
-     *            geprüft, ob das EndElement angelegt werden kann, wenn der Pfad
-     *            angelegt wird, ohne die Konsistenz zu verletzten (also nicht
-     *            abstract und durch den Pfad entstehen für alle Elemente alle
-     *            anderen Elemente, die sie für ihre Existenz brauchen).
-     * @return <code>true</code> wenn dieser Pfad anlegbar ist
-     */
-    public abstract boolean isCreatable(boolean checkCreateEndElement);
-
-    /**
-     * Prüft, ob der Pfad ausgehend von der Startelementart entfernt werden
-     * kann, ohne dass das Startelement dadurch inkonsistent wird und ebenfalls
-     * gelöscht werden würde, wenn man den Pfad entfernt.
-     *
-     * @param checkEndElement wenn <code>true</code>, wird genauso für das
-     *            Endelement geprüft, ob es inkonsistent und damit gelöscht
-     *            werden würde, wenn man den Pfad zwischen ihm und einem
-     *            Startelement entfernt.
-     * @return <code>true</code> wenn sich der Pfad entfernen lässt, ohne dass
-     *         das Startelement oder bei <code>checkEndElement == true</code>
-     *         auch das Endelement nicht inkonsistent und damit gelöscht werden,
-     *         sonst <code>false</code>.
-     */
-    public abstract boolean isRemoveable(boolean checkEndElement);
 
     /**
      * Liefert <code>true</code>, wenn der Pfad eine einfache Assoziationsfolge
      * ist (also bei {@link #getElementaryMetaPaths()} nicht <code>null</code>
      * zurück gibt und jeder Einzelpfad die maximale Endkardinalität von 1 hat.
      */
+    @Override
     public final boolean isSingleConnection() {
         List<ElementaryMetaPath> elementaryMetaPaths = getElementaryMetaPaths();
         for (ElementaryMetaPath elementaryMetaPath : elementaryMetaPaths) {
@@ -206,6 +178,7 @@ public abstract class MetaPath extends BasicMetaPath {
      *
      * @return
      */
+    @Override
     public final boolean isFirstPathElementDependent() {
         ElementaryMetaPath firstElementaryMetaPathInPath = getFirstElementaryMetaPath();
         if (firstElementaryMetaPathInPath == null) {
@@ -229,6 +202,7 @@ public abstract class MetaPath extends BasicMetaPath {
      *
      * @return
      */
+    @Override
     public final boolean isLastPathElementDependent() {
         ElementaryMetaPath lastElementaryMetaPathInPath = getLastElementaryMetaPath();
         if (lastElementaryMetaPathInPath == null) {
@@ -250,7 +224,8 @@ public abstract class MetaPath extends BasicMetaPath {
      *
      * @return the otherDirectionPath
      */
-    public MetaPath getOtherDirection() {
+    @Override
+    public IMetaPath getOtherDirection() {
         return otherDirection;
     }
 
@@ -263,6 +238,7 @@ public abstract class MetaPath extends BasicMetaPath {
      *
      * @return
      */
+    @Override
     public List<ElementaryMetaPath> getElementaryMetaPaths() {
         return EMPTY_ELEMENTARY_PATH_LIST;
     }
@@ -272,6 +248,7 @@ public abstract class MetaPath extends BasicMetaPath {
      *         {@link #getElementaryMetaPaths()}, wenn die Liste mind. einen
      *         solchen Elementarpfad enthält.
      */
+    @Override
     public ElementaryMetaPath getFirstElementaryMetaPath() {
         List<ElementaryMetaPath> elementaryMetaPaths = getElementaryMetaPaths();
         //wenn der Pfad keine einfache Liste von Elementarpfaden ist, dann wird davon ausgegangen, dass das letzte Pfadelement gebraucht wird
@@ -287,6 +264,7 @@ public abstract class MetaPath extends BasicMetaPath {
      *         {@link #getElementaryMetaPaths()}, wenn die Liste mind. einen
      *         solchen Elementarpfad enthält.
      */
+    @Override
     public ElementaryMetaPath getLastElementaryMetaPath() {
         List<ElementaryMetaPath> elementaryMetaPaths = getElementaryMetaPaths();
         //wenn der Pfad keine einfache Liste von Elementarpfaden ist, dann wird davon ausgegangen, dass das letzte Pfadelement gebraucht wird
@@ -299,46 +277,6 @@ public abstract class MetaPath extends BasicMetaPath {
     }
 
     /**
-     * @return Liste aller {@link MetaPath}, die dieser MetaPfad enthält.
-     */
-    public abstract List<MetaPath> getSubMetaPaths();
-
-    /**
-     * @return the number of contained metapaths
-     */
-    public abstract int getSubMetaPathCount();
-
-    /**
-     * Liefert <code>false</code>, wenn der Pfad in beide Richtungen dasselbe
-     * bedeutet. Dafür muss er dieselben Elementarten miteinander verbinden und
-     * denselben Namen in beiden Richtungen tragen. Z.B können 2 physische
-     * DV-Bausteine über Datenübertragungsverbindungen miteinander verbunden
-     * sein. Diese Verbindung heißt in jede der beiden Richtungen "ist verbunden
-     * mit" und verbindet dieselbe Elementart miteinander. Der dazugehörige
-     * Elementarpfad ist also undirected. Dasselbe ist aber auch für
-     * {@link SerialMetaPath}s möglich, wenn z.B. die beiden physischen
-     * DV-Bausteine Schnittstellen beitzen würden (was sie im aktuellen
-     * Metamodell nicht haben) und diese dann über eine
-     * Datenübertragungsverbindung mit der beidseitigen Bedeutung "ist verbunden
-     * mit" verbunden sind, dann bedeutet der Pfad auch in beide Richtungen
-     * dasselbe, nämlich "Phys. DV-Baustein besitzt Schnittstelle ist verbunden
-     * mit Schnittstelle gehört zu Phys. DV-Baustein". Die Umkehrrichtung dieses
-     * Pfades ist er selbst und somit ist er undirected.
-     *
-     * @return <code>true</code> wenn Vorwärts- und Rückwärtsrichtungen
-     *         unterschiedliche Bedeutung haben
-     */
-    public abstract boolean isDirected();
-
-    /**
-     * Liefert <code>true</code>, wenn der Metapfad irgendwo eine
-     * {@link PartOfVerbindung} enthält.
-     *
-     * @return
-     */
-    public abstract boolean containsPropertyTransferEdge();
-
-    /**
      * @param other
      * @return only <code>true</code> if this and the other metapath have an
      *         assignable start class, an assignable end class, an assignable
@@ -346,7 +284,8 @@ public abstract class MetaPath extends BasicMetaPath {
      *         means that one of the class must be a subclass of the other
      *         (which is sub and which super dosn't matters).
      */
-    public boolean isAssignable(final MetaPath other) {
+    @Override
+    public boolean isAssignable(final IMetaPath other) {
         //Maybe there would be an useful expression here for general MetaPath too, but
         //we only need this function for SimpleMetaPaths and ElementaryMetaPaths
         return false;
@@ -366,6 +305,7 @@ public abstract class MetaPath extends BasicMetaPath {
      *            jedes Element nur einmal enthalten.
      * @return
      */
+    @Override
     public List<ModelElement> getConnectedElements(final ModelElement me, final boolean multiple) {
         List<ModelElement> modelElements = new ArrayList<>();
         modelElements.add(me);
@@ -376,6 +316,7 @@ public abstract class MetaPath extends BasicMetaPath {
      * @param me
      * @return
      */
+    @Override
     public List<ModelElement> getConnectedElements(final ModelElement me) {
         return getConnectedElements(me, false);
     }
@@ -387,6 +328,7 @@ public abstract class MetaPath extends BasicMetaPath {
      * @param modelElements
      * @return
      */
+    @Override
     public List<ModelElement> getConnectedElements(final Collection<ModelElement> modelElements) {
         return getConnectedElements(modelElements, false);
     }
@@ -402,6 +344,7 @@ public abstract class MetaPath extends BasicMetaPath {
      *            <code>false</code> ist jedes Element nur einmal enthalten.
      * @return
      */
+    @Override
     public List<ModelElement> getConnectedElements(final Collection<ModelElement> modelElements, final boolean multiple) {
         PathResultTreeModel resultTree = getResultTree(modelElements);
         return resultTree.getConnectedElements(multiple);
@@ -412,6 +355,7 @@ public abstract class MetaPath extends BasicMetaPath {
      * @param doc
      * @return
      */
+    @Override
     public List<ElementContainer> getConnectedContainer(final ModelElement me, final GraphDocument doc) {
         return getConnectedContainer(me, doc, false);
     }
@@ -422,6 +366,7 @@ public abstract class MetaPath extends BasicMetaPath {
      * @param forlast
      * @return
      */
+    @Override
     public List<ElementContainer> getConnectedContainer(final ModelElement me, final GraphDocument doc, final boolean forlast) {
         PathResultTreeModel resultTree = getResultTree(me);
         return resultTree.getConnectedContainer(doc, forlast);
@@ -433,6 +378,7 @@ public abstract class MetaPath extends BasicMetaPath {
      * @param searchParts
      * @return
      */
+    @Override
     public PathConnectionState getPathConnectionState(final ModelElement startElement, final ModelElement endElement, final boolean searchParents, final boolean searchParts) {
         return PathFunctions.getPathConnectionState(startElement, endElement, this, searchParents, searchParts);
     }
@@ -442,6 +388,7 @@ public abstract class MetaPath extends BasicMetaPath {
      * @param endElement
      * @return
      */
+    @Override
     public PathConnectionState getPathConnectionState(final ModelElement startElement, final ModelElement endElement) {
         return PathFunctions.getPathConnectionState(startElement, endElement, this, OPTION_ELEMENTS_RECEIVE_PROPERTIES_FROM_PARENTS.is(), OPTION_ELEMENTS_RECEIVE_PROPERTIES_FROM_PARTS.is());
     }
@@ -451,6 +398,7 @@ public abstract class MetaPath extends BasicMetaPath {
      * @param endElement
      * @return
      */
+    @Override
     public boolean isConnected(final ModelElement startElement, final ModelElement endElement) {
         return getPathConnectionState(startElement, endElement) != PathConnectionState.NOT_CONNECTED;
     }
@@ -460,6 +408,7 @@ public abstract class MetaPath extends BasicMetaPath {
      * @param endElement
      * @return
      */
+    @Override
     public boolean isDirectConnected(final ModelElement startElement, final ModelElement endElement) {
         return getPathConnectionState(startElement, endElement, false, false) != PathConnectionState.NOT_CONNECTED;
     }
@@ -471,6 +420,7 @@ public abstract class MetaPath extends BasicMetaPath {
      * @param startElement
      * @return
      */
+    @Override
     public PathResultTreeModel getResultTree(final ModelElement startElement) {
         return new PathResultTreeModel(this, startElement);
     }
@@ -483,6 +433,7 @@ public abstract class MetaPath extends BasicMetaPath {
      * @param keepIncompleteBranches
      * @return
      */
+    @Override
     public PathResultTreeModel getResultTree(final ModelElement startElement, final boolean keepIncompleteBranches) {
         return new PathResultTreeModel(this, startElement, keepIncompleteBranches);
     }
@@ -491,6 +442,7 @@ public abstract class MetaPath extends BasicMetaPath {
      * @param startElements
      * @return
      */
+    @Override
     public PathResultTreeModel getResultTree(final Collection<ModelElement> startElements) {
         return new PathResultTreeModel(this, startElements);
     }
@@ -500,6 +452,7 @@ public abstract class MetaPath extends BasicMetaPath {
      * @param keepIncompleteBranches
      * @return
      */
+    @Override
     public PathResultTreeModel getResultTree(final Collection<ModelElement> startElements, final boolean keepIncompleteBranches) {
         return new PathResultTreeModel(this, startElements, keepIncompleteBranches);
     }
@@ -508,6 +461,7 @@ public abstract class MetaPath extends BasicMetaPath {
      * @param startElements
      * @return
      */
+    @Override
     public PathResultTreeModel getResultTree(final List<Collection<ModelElement>> startElements) {
         return new PathResultTreeModel(this, startElements);
     }
@@ -517,6 +471,7 @@ public abstract class MetaPath extends BasicMetaPath {
      * @param keepIncompleteBranches
      * @return
      */
+    @Override
     public PathResultTreeModel getResultTree(final List<Collection<ModelElement>> startElements, final boolean keepIncompleteBranches) {
         return new PathResultTreeModel(this, startElements, keepIncompleteBranches);
     }

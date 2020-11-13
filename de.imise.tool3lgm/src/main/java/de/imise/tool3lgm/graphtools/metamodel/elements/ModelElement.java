@@ -21,8 +21,8 @@ import com.google.common.collect.ImmutableList;
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.Tool3lgmModelType.ModelCategory;
 import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
-import de.imise.tool3lgm.graphtools.dialog.element.ElementPropertyDialogsContext;
 import de.imise.tool3lgm.graphtools.dialog.element.ElementPropertyDialog;
+import de.imise.tool3lgm.graphtools.dialog.element.ElementPropertyDialogsContext;
 import de.imise.tool3lgm.graphtools.dialog.element.ErrorDecoratedElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.dialog.element.panel.ElementDialogPanel;
 import de.imise.tool3lgm.graphtools.metamodel.CoreMetaModel;
@@ -36,7 +36,7 @@ import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GDCollectionOwner;
 import de.imise.tool3lgm.graphtools.model.GDCommands;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
-import de.imise.tool3lgm.graphtools.path.metapaths.MetaPath;
+import de.imise.tool3lgm.graphtools.path.metapaths.IMetaPath;
 import de.imise.tool3lgm.graphtools.userfield.UserField;
 import de.imise.tool3lgm.graphtools.userfield.UserFieldTarget;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
@@ -417,7 +417,7 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
      * doch, dann muss das Feld GET_NAME_EXTENSION_METHOD_NAME ebenfalls
      * umbenannt werden.
      */
-    private final MetaPath getNameExtensionPath() {
+    private final IMetaPath getNameExtensionPath() {
         return metaModel.getNameExtensionPath(getClass());
     }
 
@@ -471,7 +471,7 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
      * @return
      */
     public String getNameExtension() {
-        MetaPath nameExtensionPath = getNameExtensionPath();
+        IMetaPath nameExtensionPath = getNameExtensionPath();
         updateHTMLNameSuffixBuffer(nameExtensionPath);
         return suffixBuf.toString();
     }
@@ -479,7 +479,7 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
     /**
      * @param nameExtension
      */
-    private void updateHTMLNameSuffixBuffer(final MetaPath nameExtension) {
+    private void updateHTMLNameSuffixBuffer(final IMetaPath nameExtension) {
         suffixBuf.setLength(0);
         if (nameExtension != null) {
             Collection<ModelElement> directConnectedElements = nameExtension.getConnectedElements(this);
@@ -516,7 +516,7 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
         GraphElementLayout nameExtendsionClassLayout = null;
         Iterable<ElementContainer> targetContainers;
         if (targetContainer == null) {
-            MetaPath nameExtension = getNameExtensionPath();
+            IMetaPath nameExtension = getNameExtensionPath();
             updateHTMLNameSuffixBuffer(nameExtension);
             Class<? extends ModelElement> nameExtendsionClass;
             GraphViewDefinition graphViewDefinition;
@@ -1962,9 +1962,9 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
 
     /**
      * Ruft einfach nur {@link #createPropertyDialog()} auf. Diese Funktion
-     * wurde notwendig, damit für den neuen {@link ElementPropertyDialogsContext}
-     * nicht die Sichtbarkeit von {@link #createPropertyDialog()} geändert
-     * werden musste.
+     * wurde notwendig, damit für den neuen
+     * {@link ElementPropertyDialogsContext} nicht die Sichtbarkeit von
+     * {@link #createPropertyDialog()} geändert werden musste.
      *
      * @return
      */

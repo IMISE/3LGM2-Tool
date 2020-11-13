@@ -18,6 +18,7 @@ import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.path.metapaths.DifferenceMetaPath;
 import de.imise.tool3lgm.graphtools.path.metapaths.ElementaryMetaPath;
 import de.imise.tool3lgm.graphtools.path.metapaths.ElementaryMetaPath.Type;
+import de.imise.tool3lgm.graphtools.path.metapaths.IMetaPath;
 import de.imise.tool3lgm.graphtools.path.metapaths.ListMetaPath;
 import de.imise.tool3lgm.graphtools.path.metapaths.MetaPath;
 import de.imise.tool3lgm.graphtools.path.metapaths.ParallelMetaPath;
@@ -59,7 +60,7 @@ public class PathResultTreeModel extends DefaultTreeModel {
      * Der Gesamt-MetaPath, über den Pfadinstanzen von den Startelementen
      * gesucht werden.
      */
-    private final MetaPath metaPath;
+    private final IMetaPath metaPath;
 
     /**
      * Bei allen {@link ParallelMetaPath} kann man mehrere Startsets brauchen
@@ -110,7 +111,7 @@ public class PathResultTreeModel extends DefaultTreeModel {
     /**
      * @param metaPath
      */
-    public PathResultTreeModel(final MetaPath metaPath) {
+    public PathResultTreeModel(final IMetaPath metaPath) {
         super(new PathResultTreeNode(null, PathResultTreeNode.NodeType.ROOT));
         this.metaPath = metaPath;
     }
@@ -119,7 +120,7 @@ public class PathResultTreeModel extends DefaultTreeModel {
      * @param metaPath
      * @param startElement
      */
-    public PathResultTreeModel(final MetaPath metaPath, final ModelElement startElement) {
+    public PathResultTreeModel(final IMetaPath metaPath, final ModelElement startElement) {
         this(metaPath);
         setStartElements(startElement);
     }
@@ -128,7 +129,7 @@ public class PathResultTreeModel extends DefaultTreeModel {
      * @param metaPath
      * @param startElements
      */
-    public PathResultTreeModel(final MetaPath metaPath, final Collection<ModelElement> startElements) {
+    public PathResultTreeModel(final IMetaPath metaPath, final Collection<ModelElement> startElements) {
         this(metaPath);
         setStartElements(startElements);
     }
@@ -137,7 +138,7 @@ public class PathResultTreeModel extends DefaultTreeModel {
      * @param metaPath
      * @param startElementSets
      */
-    public PathResultTreeModel(final MetaPath metaPath, final List<Collection<ModelElement>> startElementSets) {
+    public PathResultTreeModel(final IMetaPath metaPath, final List<Collection<ModelElement>> startElementSets) {
         this(metaPath);
         setStartElementSets(startElementSets);
     }
@@ -146,7 +147,7 @@ public class PathResultTreeModel extends DefaultTreeModel {
      * @param metaPath
      * @param keepIncompleteBranches
      */
-    public PathResultTreeModel(final MetaPath metaPath, final boolean keepIncompleteBranches) {
+    public PathResultTreeModel(final IMetaPath metaPath, final boolean keepIncompleteBranches) {
         this(metaPath);
         this.keepIncompleteBranches = keepIncompleteBranches;
     }
@@ -156,7 +157,7 @@ public class PathResultTreeModel extends DefaultTreeModel {
      * @param keepIncompleteBranches
      * @param keepMultipleEqualsBranches
      */
-    public PathResultTreeModel(final MetaPath metaPath, final boolean keepIncompleteBranches, final boolean keepMultipleEqualsBranches) {
+    public PathResultTreeModel(final IMetaPath metaPath, final boolean keepIncompleteBranches, final boolean keepMultipleEqualsBranches) {
         this(metaPath);
         this.keepIncompleteBranches = keepIncompleteBranches;
         this.keepMultipleEqualsBranches = keepMultipleEqualsBranches;
@@ -167,7 +168,7 @@ public class PathResultTreeModel extends DefaultTreeModel {
      * @param startElement
      * @param keepIncompleteBranches
      */
-    public PathResultTreeModel(final MetaPath metaPath, final ModelElement startElement, final boolean keepIncompleteBranches) {
+    public PathResultTreeModel(final IMetaPath metaPath, final ModelElement startElement, final boolean keepIncompleteBranches) {
         this(metaPath, startElement, keepIncompleteBranches, false);
     }
 
@@ -177,7 +178,7 @@ public class PathResultTreeModel extends DefaultTreeModel {
      * @param keepIncompleteBranches
      * @param keepMultipleEqualsBranches
      */
-    public PathResultTreeModel(final MetaPath metaPath, final ModelElement startElement, final boolean keepIncompleteBranches, final boolean keepMultipleEqualsBranches) {
+    public PathResultTreeModel(final IMetaPath metaPath, final ModelElement startElement, final boolean keepIncompleteBranches, final boolean keepMultipleEqualsBranches) {
         this(metaPath, keepIncompleteBranches);
         setStartElements(startElement);
     }
@@ -187,7 +188,7 @@ public class PathResultTreeModel extends DefaultTreeModel {
      * @param startElements
      * @param keepIncompleteBranches
      */
-    public PathResultTreeModel(final MetaPath metaPath, final Collection<ModelElement> startElements, final boolean keepIncompleteBranches) {
+    public PathResultTreeModel(final IMetaPath metaPath, final Collection<ModelElement> startElements, final boolean keepIncompleteBranches) {
         this(metaPath, startElements, keepIncompleteBranches, false);
     }
 
@@ -197,7 +198,7 @@ public class PathResultTreeModel extends DefaultTreeModel {
      * @param keepIncompleteBranches
      * @param keepMultipleEqualsBranches
      */
-    public PathResultTreeModel(final MetaPath metaPath, final Collection<ModelElement> startElements, final boolean keepIncompleteBranches, final boolean keepMultipleEqualsBranches) {
+    public PathResultTreeModel(final IMetaPath metaPath, final Collection<ModelElement> startElements, final boolean keepIncompleteBranches, final boolean keepMultipleEqualsBranches) {
         this(metaPath, keepIncompleteBranches, keepMultipleEqualsBranches);
         setStartElements(startElements);
     }
@@ -207,7 +208,7 @@ public class PathResultTreeModel extends DefaultTreeModel {
      * @param startElementSets
      * @param keepIncompleteBranches
      */
-    public PathResultTreeModel(final MetaPath metaPath, final List<Collection<ModelElement>> startElementSets, final boolean keepIncompleteBranches) {
+    public PathResultTreeModel(final IMetaPath metaPath, final List<Collection<ModelElement>> startElementSets, final boolean keepIncompleteBranches) {
         this(metaPath, startElementSets, keepIncompleteBranches, false);
     }
 
@@ -217,7 +218,7 @@ public class PathResultTreeModel extends DefaultTreeModel {
      * @param keepIncompleteBranches
      * @param keepMultipleEqualsBranches
      */
-    public PathResultTreeModel(final MetaPath metaPath, final List<Collection<ModelElement>> startElementSets, final boolean keepIncompleteBranches, final boolean keepMultipleEqualsBranches) {
+    public PathResultTreeModel(final IMetaPath metaPath, final List<Collection<ModelElement>> startElementSets, final boolean keepIncompleteBranches, final boolean keepMultipleEqualsBranches) {
         this(metaPath, keepIncompleteBranches, keepMultipleEqualsBranches);
         setStartElementSets(startElementSets);
     }
@@ -392,7 +393,7 @@ public class PathResultTreeModel extends DefaultTreeModel {
         }
         //mehrere Startmemngen wurden übergeben (das geht nur bei einem alles umschließenden Parallelmetapfad)
         if (startElementsCollections.size() > 1) {
-            MetaPath realFirstMetaPath = metaPath;
+            IMetaPath realFirstMetaPath = metaPath;
             //solange aus dem SerialMetaPath den jeweils ersten MetaPath holen, bis man bei einem
             //MetaPath ist, der selbst kein SerialMetaPath mehr ist
             while (realFirstMetaPath instanceof SerialMetaPath) {
@@ -450,7 +451,7 @@ public class PathResultTreeModel extends DefaultTreeModel {
      * @param isSubStep
      * @return
      */
-    private List<PathResultTreeNode> addPath(final PathResultTreeNode startNode, final MetaPath metaPath, final boolean isSubStep) {
+    private List<PathResultTreeNode> addPath(final PathResultTreeNode startNode, final IMetaPath metaPath, final boolean isSubStep) {
         if (metaPath instanceof ElementaryMetaPath) {
             return addPath(startNode, (ElementaryMetaPath) metaPath, isSubStep);
         } else if (metaPath instanceof SerialMetaPath) {
@@ -492,7 +493,7 @@ public class PathResultTreeModel extends DefaultTreeModel {
     private List<PathResultTreeNode> addPath(final PathResultTreeNode startNode, final SerialMetaPath metaPath, final boolean isSubStep) {
         List<PathResultTreeNode> resultNodes = new ArrayList<>();
         resultNodes.add(startNode);
-        for (MetaPath subMetaPath : metaPath.getSubMetaPaths()) {
+        for (IMetaPath subMetaPath : metaPath.getSubMetaPaths()) {
             List<PathResultTreeNode> actStartNodes = new ArrayList<>(resultNodes);
             resultNodes.clear();
             for (PathResultTreeNode actStartNode : actStartNodes) {
@@ -520,7 +521,7 @@ public class PathResultTreeModel extends DefaultTreeModel {
      */
     private List<PathResultTreeNode> addPath(final PathResultTreeNode startNode, final UnionMetaPath metaPath, final boolean isSubStep) {
         List<PathResultTreeNode> resultNodes = new ArrayList<>();
-        for (MetaPath subMetaPath : metaPath.getSubMetaPaths()) {
+        for (IMetaPath subMetaPath : metaPath.getSubMetaPaths()) {
             List<PathResultTreeNode> pathResultTreeNodes = addPath(startNode, subMetaPath, subMetaPath instanceof ElementaryMetaPath ? isSubStep : true);
             resultNodes.addAll(pathResultTreeNodes);
         }
@@ -556,12 +557,12 @@ public class PathResultTreeModel extends DefaultTreeModel {
      */
     private List<PathResultTreeNode> addPath(final PathResultTreeNode startNode, final ListMetaPath metaPath, final boolean sectionAndNotDifference, final boolean isSubStep) {
         List<PathResultTreeNode> resultNodes = new ArrayList<>();
-        MetaPath firstMetaPath = null;
+        IMetaPath firstMetaPath = null;
         //1. Pfad anhängen, dann von allen weiteren die Endelemente prüfen, ob jedes der EndElemente in jedem der
         //weiteren Pfade auch vorkommt -> wenn nicht, das endElement löschen und ggf. deleteBranch mit aktualisierung der IncompleteLeafs anstoßen
         PathResultTreeNode startNodeClone = new PathResultTreeNode(startNode);
         List<PathResultTreeNode> nextPathResultNodes = new ArrayList<>();
-        for (MetaPath subMetaPath : metaPath.getSubMetaPaths()) {
+        for (IMetaPath subMetaPath : metaPath.getSubMetaPaths()) {
             if (firstMetaPath == null) {
                 firstMetaPath = subMetaPath;
                 List<PathResultTreeNode> pathResultTreeNodes = addPath(startNode, subMetaPath, subMetaPath instanceof ElementaryMetaPath ? isSubStep : true);

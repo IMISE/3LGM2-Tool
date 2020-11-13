@@ -15,7 +15,7 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
  *
  * @author AXS (15 Nov 2018)
  */
-public class SimpleMetaPath extends SerialMetaPath {
+public class SimpleMetaPath extends SerialMetaPath implements SequenceMetaPath {
 
     /**
      * Index des Elementarpfadschrittes, der den Namen des Gesamtpfades
@@ -152,7 +152,7 @@ public class SimpleMetaPath extends SerialMetaPath {
     @Override
     protected ElementaryMetaPath[] getOtherDirectionMetaPaths() {
         ElementaryMetaPath[] otherDirectionElementaryMetaPaths = null;
-        MetaPath[] otherDirectionMetaPaths = super.getOtherDirectionMetaPaths();
+        IMetaPath[] otherDirectionMetaPaths = super.getOtherDirectionMetaPaths();
         if (otherDirectionMetaPaths != null) {
             otherDirectionElementaryMetaPaths = Arrays.copyOf(otherDirectionMetaPaths, otherDirectionMetaPaths.length, ElementaryMetaPath[].class);
         }
@@ -198,7 +198,7 @@ public class SimpleMetaPath extends SerialMetaPath {
     }
 
     @Override
-    public boolean isAssignable(final MetaPath other) {
+    public boolean isAssignable(final IMetaPath other) {
         List<ElementaryMetaPath> elementaryMetaPaths = getElementaryMetaPaths();
         List<ElementaryMetaPath> otherElementaryMetaPaths = other.getElementaryMetaPaths();
         int subMetaPathCount = elementaryMetaPaths.size();

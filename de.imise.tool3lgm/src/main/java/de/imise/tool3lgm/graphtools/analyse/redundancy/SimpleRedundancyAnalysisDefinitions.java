@@ -3,6 +3,7 @@ package de.imise.tool3lgm.graphtools.analyse.redundancy;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.imise.tool3lgm.graphtools.path.metapaths.IMetaPath;
 import de.imise.tool3lgm.graphtools.path.metapaths.MetaPath;
 
 /**
@@ -98,7 +99,7 @@ public final class SimpleRedundancyAnalysisDefinitions {
             return metaPath;
         }
 
-        public MetaPath getPathToDifferences() {
+        public IMetaPath getPathToDifferences() {
             return pathToDifferences;
         }
 

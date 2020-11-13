@@ -15,7 +15,7 @@ import de.imise.tool3lgm.graphtools.dialog.element.panel.AbstractPathConnectionP
 import de.imise.tool3lgm.graphtools.dialog.element.panel.ElementDialogPanel;
 import de.imise.tool3lgm.graphtools.dialog.element.panel.MultiPanelElementDialogPanel;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
-import de.imise.tool3lgm.graphtools.path.metapaths.MetaPath;
+import de.imise.tool3lgm.graphtools.path.metapaths.IMetaPath;
 import de.imise.util.swing.component.tab.ReorderableTabbedPane;
 
 /**
@@ -177,7 +177,7 @@ public abstract class AbstractTabbedPropertyDialog extends AbstractPropertyDialo
      *
      * @param metaPath
      */
-    public final int selectTab(final MetaPath metaPath) {
+    public final int selectTab(final IMetaPath metaPath) {
         Container panel = getPanel(tabbedPane, metaPath);
         while (panel != null) {
             Container parent = panel.getParent();
@@ -198,7 +198,7 @@ public abstract class AbstractTabbedPropertyDialog extends AbstractPropertyDialo
      * @param metaPath
      * @return
      */
-    public static AbstractPathConnectionPanel getPanel(final Container pane, final MetaPath metaPath) {
+    public static AbstractPathConnectionPanel getPanel(final Container pane, final IMetaPath metaPath) {
         for (int i = 0; i < pane.getComponentCount(); i++) {
             Component comp = pane.getComponent(i);
             if (comp instanceof AbstractPathConnectionPanel) {

@@ -24,7 +24,7 @@ import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.path.MetaPathDefinition;
 import de.imise.tool3lgm.graphtools.path.MetaPathSelector;
 import de.imise.tool3lgm.graphtools.path.MetaPathSelector.MetaPathSelection;
-import de.imise.tool3lgm.graphtools.path.metapaths.MetaPath;
+import de.imise.tool3lgm.graphtools.path.metapaths.IMetaPath;
 import de.imise.util.swing.component.UnfloatableToolBar;
 
 /**
@@ -198,7 +198,7 @@ public class MatrixViewPaneToolbar extends UnfloatableToolBar implements ChangeL
             String startClassName = elementsNameBuilder.getDisplayableName(metaPathSelection.class1);
             String endClassName = elementsNameBuilder.getDisplayableName(metaPathSelection.class2);
             String and = " " + Tool3lgmConstants.getResString("und") + " ";
-            List<MetaPath> metaPaths = metaPathSelection.selectedMetaPaths;
+            List<IMetaPath> metaPaths = metaPathSelection.selectedMetaPaths;
             int metaPathCount = metaPaths.size();
             int combinations = (1 << metaPathCount) - 1;
             for (int i = 0; i < combinations; i++) {

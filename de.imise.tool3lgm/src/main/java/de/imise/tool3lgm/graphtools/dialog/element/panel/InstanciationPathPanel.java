@@ -18,6 +18,7 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction;
 import de.imise.tool3lgm.graphtools.metamodel.elements.InstanciationEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.path.metapaths.ElementaryMetaPath;
+import de.imise.tool3lgm.graphtools.path.metapaths.IMetaPath;
 import de.imise.tool3lgm.graphtools.path.metapaths.MetaPath;
 import de.imise.tool3lgm.graphtools.path.metapaths.SimpleMetaPath;
 import de.imise.tool3lgm.graphtools.view.tree.node.LGMTreeNode;
@@ -82,7 +83,7 @@ public class InstanciationPathPanel extends PathConnectionPanel {
      *         metaPath fits the conditions for this panel or -1 if the
      *         conditions are not fulfilled.
      */
-    private static final boolean isCreatableMetaPathWithBackwardInstanciationEnd(final MetaPath metaPath) {
+    private static final boolean isCreatableMetaPathWithBackwardInstanciationEnd(final IMetaPath metaPath) {
         if (!metaPath.isCreatable(false)) {
             return false;
         }

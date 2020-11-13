@@ -47,6 +47,7 @@ import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.model.LGMGraphDocument;
 import de.imise.tool3lgm.graphtools.model.template.TemplateLibrariesManager;
 import de.imise.tool3lgm.graphtools.path.metapaths.ElementaryMetaPath;
+import de.imise.tool3lgm.graphtools.path.metapaths.IMetaPath;
 import de.imise.tool3lgm.graphtools.path.metapaths.MetaPath;
 import de.imise.tool3lgm.graphtools.path.metapaths.MetaPathFunctions;
 import de.imise.tool3lgm.graphtools.path.metapaths.PathFunctions;
@@ -318,7 +319,7 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
      * @param metaPath
      * @return
      */
-    public boolean hasMetaPath(final MetaPath metaPath) {
+    public boolean hasMetaPath(final IMetaPath metaPath) {
         return this.metaPath.isAssignable(metaPath);
     }
 
@@ -750,7 +751,7 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
         if (errorModelElement != modelElement) {
             return null;
         }
-        MetaPath errorFixingMetaPath = null;
+        IMetaPath errorFixingMetaPath = null;
         if (consistencyError instanceof MissingPathError) {
             MissingPathError pathError = (MissingPathError) consistencyError;
             errorFixingMetaPath = pathError.getErrorFixingCreatableMetaPath();

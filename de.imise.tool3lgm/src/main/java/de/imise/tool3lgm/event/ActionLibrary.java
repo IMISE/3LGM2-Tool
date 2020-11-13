@@ -66,6 +66,7 @@ import de.imise.tool3lgm.graphtools.model.GDCollectionImExportHandler;
 import de.imise.tool3lgm.graphtools.model.GDCommands;
 import de.imise.tool3lgm.graphtools.model.LGMChangeListener.LGMChangeType;
 import de.imise.tool3lgm.graphtools.model.Szenario;
+import de.imise.tool3lgm.graphtools.path.metapaths.IMetaPath;
 import de.imise.tool3lgm.graphtools.path.metapaths.MetaPath;
 import de.imise.tool3lgm.graphtools.userfield.dialog.declaration.UserFieldDeclarationDialog;
 import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.UserFieldEditorDialog;
@@ -461,7 +462,7 @@ public class ActionLibrary {
                             ModelElement me = ec.getElement();
                             ModelElement selected = ec.getElement();
                             GraphViewDefinition graphViewDefinition = selectedMetaModel.getGraphViewDefinition();
-                            MetaPath interLayerMetaPath = graphViewDefinition.getInterLayerMetaPath(selected);
+                            IMetaPath interLayerMetaPath = graphViewDefinition.getInterLayerMetaPath(selected);
                             if (interLayerMetaPath != null) {
                                 Collection<ModelElement> interLayerConnectedElements = interLayerMetaPath.getConnectedElements(me);
                                 if (!interLayerConnectedElements.isEmpty()) {

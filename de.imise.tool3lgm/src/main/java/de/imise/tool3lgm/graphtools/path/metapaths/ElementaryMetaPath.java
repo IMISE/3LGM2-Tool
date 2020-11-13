@@ -31,7 +31,7 @@ import de.imise.util.ReflectionUtils;
  * @author AXS
  * @create 12.10.2010
  */
-public final class ElementaryMetaPath extends MetaPath {
+public final class ElementaryMetaPath extends MetaPath implements SequenceMetaPath {
 
     /**
      * Mögliche Arten eines {@link ElementaryMetaPath}.
@@ -401,7 +401,7 @@ public final class ElementaryMetaPath extends MetaPath {
      *         (which is sub and which super dosn't matters).
      */
     @Override
-    public boolean isAssignable(final MetaPath otherMetaPath) {
+    public boolean isAssignable(final IMetaPath otherMetaPath) {
         List<ElementaryMetaPath> elementaryMetaPaths = otherMetaPath.getElementaryMetaPaths();
         if (elementaryMetaPaths.size() != 1) {
             return false;
@@ -553,7 +553,7 @@ public final class ElementaryMetaPath extends MetaPath {
     }
 
     @Override
-    protected String createName() {
+    public String createName() {
         ElementsNameBuilder elementsNameBuilder = metaModel.getElementsNameBuilder();
         String name = elementsNameBuilder.getMetaAssociationName(edgeClass, direction, connectionState);
         return name;
@@ -617,8 +617,8 @@ public final class ElementaryMetaPath extends MetaPath {
 
     @SuppressWarnings("unchecked")
     @Override
-    public final List<MetaPath> getSubMetaPaths() {
-        return (List<MetaPath>) (List<?>) getElementaryMetaPaths();
+    public final List<IMetaPath> getSubMetaPaths() {
+        return (List<IMetaPath>) (List<?>) getElementaryMetaPaths();
     }
 
     @Override

@@ -1,6 +1,7 @@
 package de.imise.tool3lgm.graphtools.consistency.error.solution;
 
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
+import de.imise.tool3lgm.graphtools.path.metapaths.IMetaPath;
 import de.imise.tool3lgm.graphtools.path.metapaths.MetaPath;
 import de.imise.tool3lgm.graphtools.path.metapaths.SimpleMetaPath;
 
@@ -54,7 +55,7 @@ public abstract class ErrorSolution {
     /**
      * @return the pathToPropertyDialogElement
      */
-    public MetaPath getPathToPropertyDialogElement() {
+    public IMetaPath getPathToPropertyDialogElement() {
         return pathToPropertyDialogElement;
     }
 
