@@ -54,6 +54,13 @@ public class SerialMetaPath extends ListMetaPath {
      * @param metaPaths
      */
     public SerialMetaPath(final MetaPath... metaPaths) {
+        this(ImmutableList.copyOf(metaPaths));
+    }
+
+    /**
+     * @param metaPaths
+     */
+    public SerialMetaPath(final List<MetaPath> metaPaths) {
         this(null, metaPaths);
     }
 
@@ -67,10 +74,29 @@ public class SerialMetaPath extends ListMetaPath {
 
     /**
      * @param baseResKeyOrName
+     * @param metaPaths
+     */
+    public SerialMetaPath(final String baseResKeyOrName, final List<MetaPath> metaPaths) {
+        this(baseResKeyOrName, Direction.FORWARD, metaPaths);
+    }
+
+    /**
+     * @param baseResKeyOrName
      * @param direction
      * @param metaPaths
      */
     protected SerialMetaPath(final String baseResKeyOrName, final Direction direction, final MetaPath... metaPaths) {
+        super(baseResKeyOrName, metaPaths);
+        this.direction = direction;
+        directed = getIsDirected();
+    }
+
+    /**
+     * @param baseResKeyOrName
+     * @param direction
+     * @param metaPaths
+     */
+    protected SerialMetaPath(final String baseResKeyOrName, final Direction direction, final List<MetaPath> metaPaths) {
         super(baseResKeyOrName, metaPaths);
         this.direction = direction;
         directed = getIsDirected();

@@ -37,6 +37,13 @@ public abstract class ListMetaPath extends MetaPathImpl {
      * @param subMetaPaths
      */
     public ListMetaPath(final MetaPath... subMetaPaths) {
+        this(ImmutableList.copyOf(subMetaPaths));
+    }
+
+    /**
+     * @param subMetaPaths
+     */
+    public ListMetaPath(final List<MetaPath> subMetaPaths) {
         this(null, subMetaPaths);
     }
 
@@ -45,7 +52,15 @@ public abstract class ListMetaPath extends MetaPathImpl {
      * @param subMetaPaths
      */
     public ListMetaPath(final String baseResKeyOrName, final MetaPath... subMetaPaths) {
-        this(subMetaPaths[0], baseResKeyOrName, ImmutableList.copyOf(subMetaPaths));
+        this(baseResKeyOrName, ImmutableList.copyOf(subMetaPaths));
+    }
+
+    /**
+     * @param baseResKeyOrName
+     * @param subMetaPaths
+     */
+    public ListMetaPath(final String baseResKeyOrName, final List<MetaPath> subMetaPaths) {
+        this(subMetaPaths.get(0), baseResKeyOrName, ImmutableList.copyOf(subMetaPaths));
     }
 
     /**
