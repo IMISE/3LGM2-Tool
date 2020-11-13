@@ -3,7 +3,7 @@
   <dontWrapJar>true</dontWrapJar>
   <headerType>gui</headerType>
   <jar>lib\tool3lgm.jar</jar>
-  <outfile>..\..\Tool3lgm\3lgm2tool.exe</outfile>
+  <outfile>..\..\Tool3lgm\3lgm2tool_jre.exe</outfile>
   <errTitle></errTitle>
   <cmdLine></cmdLine>
   <chdir>.</chdir>

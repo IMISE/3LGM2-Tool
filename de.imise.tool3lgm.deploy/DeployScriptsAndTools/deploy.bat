@@ -77,6 +77,7 @@ SET "DEPLOY_PROJECT_TOOL3LGM_START_EXE=%DEPLOY_PROJECT_TOOL3LGM_DIR%\%DEPLOY_PRO
 ::voller Name der Icon-Datei, mit der die Exe und der Innosetup-Installer versehen wird
 SET "DEPLOY_TOOL3LGM_ICON=..\DeployScriptsAndTools\Icons\toolIcon_gross.ico"
 
+::[ToDo] Versionsermittlung anpassen
 ::Tool3LGMConstants.java gibt die Version vor. Das ist die Stelle, die vorher im Code angepasst
 ::werden muss. Die Zeile mit diesem String wird über BATCH-Kommandos ausgelesen.
 SET "JAVA_FILE_WITH_TOOL_VERSION=%TOOL3LGM_PROJECT_DIR%\src\main\java\de\imise\tool3lgm\Tool3lgmConstants.java"
@@ -120,11 +121,12 @@ SET "POM_FILE_LINE_SRT=  ^<version^>"
 ::SET "POM_FILE_LINE_SRT=	^<version^>"
 SET "POM_FILE_LINE_END=^</version^>"
 
-::update version in launch4j\3lgm2tool.cfg.xml
+::update version in 3lgm2tool.cfg.xml und 3lgm2tool_jre-bundled.cfg.xml
 ::Zeile mit der Version in der pom.xml des Tools wird ebenfalls vor dem Compilieren geupdatet. Damit das klappt
 ::Hinweise: auch spitze Klammern müsses gequotet werden: "^<"
 ::  Die Formatierung der Datei ist wichtig (Leerzeichen)!
 SET "LAUNCH4J_FILE=%LAUNCH4J_DIR%\3lgm2tool.cfg.xml"
+SET "LAUNCH4J_JRE_FILE=%LAUNCH4J_DIR%\3lgm2tool_jre-bundled.cfg.xml"
 SET "LAUNCH4J_FILE_LINE_SRT=    ^<txtProductVersion^>"
 SET "LAUNCH4J_FILE_LINE_END=^</txtProductVersion^>"
 
@@ -166,6 +168,10 @@ CD /D %SCRIPT_LOCATION%
 ::@ECHO on
 ECHO.
 
+::[ToDo] Versionsermittlung anpassen:
+::  - maven-Jobs an dieser Stelle ausführen
+::  - anschließend Version aus version.info auslesen
+::
 ::Zeile mit der Version aus der Tool3lgmConstants.java-Datei lesen
 SETLOCAL EnableDelayedExpansion
 FOR /f "tokens=* usebackq" %%a IN (`FINDSTR /C:"%JAVA_FILE_WITH_TOOL_VERSION_LINE%" "%JAVA_FILE_WITH_TOOL_VERSION%"`) DO (
@@ -198,8 +204,9 @@ SET "CLH=/wait javaw -classpath ^"%DEPLOY_TOOLS_JAR%^" de.axs.deploytools.Change
 ::  START %CLH% "%POM_FILE%" "%POM_FILE_LINE_SRT%" "%POM_FILE_LINE_END%" "%lgmVersion%"
 ::Debug:
 ::  EXIT /B
-::Version in die launch4j Config-Datei schreiben
+::Version in die launch4j Config-Dateien schreiben
 START %CLH% "%LAUNCH4J_FILE%" "%LAUNCH4J_FILE_LINE_SRT%" "%LAUNCH4J_FILE_LINE_END%" "%lgmVersion%"
+START %CLH% "%LAUNCH4J_JRE_FILE%" "%LAUNCH4J_FILE_LINE_SRT%" "%LAUNCH4J_FILE_LINE_END%" "%lgmVersion%"
 ::Version in die ISS-Datei schreiben
 START %CLH% "%ISS_FILE%" "%ISS_FILE_LINE_VERSION_SRT%" "%ISS_FILE_LINE_VERSION_END%" "%lgmVersion%"
 ::ExeName in die ISS-Datei schreiben
@@ -291,9 +298,10 @@ FOR %%A IN (%*) DO (
   )
 )
 
-ECHO "### Execute launch4j"
+ECHO "### Execute launch4j to compile exe files"
 CD /D %SCRIPT_LOCATION%
 CALL "%LAUNCH4J_DIR%\launch4jc.exe" %LAUNCH4J_FILE%
+CALL "%LAUNCH4J_DIR%\launch4jc.exe" %LAUNCH4J_JRE_FILE%
 
 :LAUNCH4J_NEXT
 
@@ -301,6 +309,25 @@ CALL "%LAUNCH4J_DIR%\launch4jc.exe" %LAUNCH4J_FILE%
 ::Bestehende Dateien im Verzeichnis %DEPLOY_DESTINATION_DIR% löschen
 ECHO "### Entferne vorhandene Dateien im Verzeichnis %DEPLOY_DESTINATION_DIR%"
 DEL %DEPLOY_DESTINATION_DIR%\*  /s /q
+
+
+::[ToDo]
+::-> 2 Versionen bauen: 1) inkl. JRE, 2.) ohne JRE
+:: 1) inkl. JRE
+:: - exe ohne JRE verschieben: 3lgm2tool.exe -> ../3lgm2tool_nojre.exe
+:: - exe inkl. JRE umbenennen: 3lgm2tool_jre.exe -> 3lgm2tool.exe
+:: - Inno Setup aufrufen; Setup-Datei %WINDOWS_INSTALLER_EXE_BASE_NAME%.exe in %WINDOWS_INSTALLER_EXE_BASE_NAME%_JRE.exe
+:: - Zip aufrufen und Zip-Datei mit "_JRE" im Namen erzeugen
+:: 2) ohne JRE
+:: - exe inkl. JRE zurück umbenennen und verschieben: 3lgm2tool.exe -> ../3lgm2tool_jre.exe
+:: - exe ohne JRE zurück verschieben: ../3lgm2tool_nojre.exe -> 3lgm2tool.exe
+:: - JRE verschieben: jre -> ../
+:: - Inno Setup aufrufen
+:: - Zip aufrufen
+:: - tar.gz aufrufen
+:: - JRE zurück verschieben: ../jre -> jre
+:: - exe inkl. JRE zurück verschieben: ../3lgm2tool_jre.exe -> 3lgm2tool_jre.exe
+
 
 ::run Inno Setup -> Erzeuge Windows-Installer
 CD /D "%INNOSETUP_PROGRAM_DIR%"
