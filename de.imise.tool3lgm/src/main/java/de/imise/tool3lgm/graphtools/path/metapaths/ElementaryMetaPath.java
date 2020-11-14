@@ -709,9 +709,4 @@ public final class ElementaryMetaPath extends MetaPathImpl implements SequenceMe
         return returnList;
     }
 
-    @Override
-    public int length() {
-        return 1;
-    }
-
 }

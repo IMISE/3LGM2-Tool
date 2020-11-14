@@ -191,6 +191,12 @@ abstract class MetaPathImpl extends BasicMetaPathImpl implements MetaPath {
         return EMPTY_ELEMENTARY_PATH_LIST;
     }
 
+    @Override
+    public int getElementaryMetaPathCount() {
+        List<ElementaryMetaPath> elementaryMetaPaths = getElementaryMetaPaths();
+        return elementaryMetaPaths == null || elementaryMetaPaths.isEmpty() ? 0 : elementaryMetaPaths.size();
+    }
+
     /**
      * @return den ersten ElementaryMetaPath aus
      *         {@link #getElementaryMetaPaths()}, wenn die Liste mind. einen

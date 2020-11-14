@@ -108,6 +108,14 @@ public interface MetaPath extends BasicMetaPath {
     List<ElementaryMetaPath> getElementaryMetaPaths();
 
     /**
+     * @return The number of elementary metapaths, if this liset can be formed.
+     *         If the list of {@link #getElementaryMetaPaths()} is
+     *         <code>null</code> or empty, the 0 is returned.
+     * @see #getElementaryMetaPaths()
+     */
+    int getElementaryMetaPathCount();
+
+    /**
      * @return den ersten ElementaryMetaPath aus
      *         {@link #getElementaryMetaPaths()}, wenn die Liste mind. einen
      *         solchen Elementarpfad enthält.

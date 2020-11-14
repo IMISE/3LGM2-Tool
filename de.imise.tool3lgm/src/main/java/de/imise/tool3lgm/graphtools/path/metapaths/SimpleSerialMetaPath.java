@@ -65,22 +65,4 @@ public class SimpleSerialMetaPath extends SerialMetaPath implements SequenceMeta
         super(baseResKeyOrName, direction, (List<MetaPath>) (List<?>) metaPaths);
     }
 
-    //    /**
-    //     * @param sequenceMetaPaths
-    //     * @return
-    //     */
-    //    private static List<MetaPath> getMetaPathList(final List<SequenceMetaPath> sequenceMetaPaths) {
-    //        List<MetaPath> metaPaths = new ArrayList<>();
-    //        for (SequenceMetaPath sequenceMetaPath : sequenceMetaPaths) {
-    //            metaPaths.add(sequenceMetaPath);
-    //        }
-    //        return metaPaths;
-    //    }
-
-    @Override
-    public int length() {
-        List<ElementaryMetaPath> elementaryMetaPaths = getElementaryMetaPaths();
-        return elementaryMetaPaths.size();
-    }
-
 }

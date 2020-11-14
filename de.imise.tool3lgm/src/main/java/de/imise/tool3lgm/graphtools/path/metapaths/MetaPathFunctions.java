@@ -190,7 +190,7 @@ public class MetaPathFunctions {
         Set<Class<? extends ModelElement>> returnSet = new HashSet<>();
         Class<? extends ModelElement> startClass = sequenceMetaPath.getStartClass();
         returnSet.add(startClass);
-        int metaPathLength = sequenceMetaPath.length();
+        int metaPathLength = sequenceMetaPath.getElementaryMetaPathCount();
         for (int i = 0; i < metaPathLength; i++) {
             Class<? extends ModelElement> pathStepElementClass = sequenceMetaPath.getPathStepElementClass(i);
             if (CoreMetaModel.isAbstract(pathStepElementClass)) {

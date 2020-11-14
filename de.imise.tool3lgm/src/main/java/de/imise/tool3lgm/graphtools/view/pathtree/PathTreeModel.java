@@ -174,7 +174,7 @@ public class PathTreeModel extends DefaultTreeModel implements MetaModelSpecific
             List<ElementContainer> elementContainers = mainGraphDocument.getElementContainers(pathStepConnectionClass);
             createNodes(pathStepNodes, elementContainers, lastHierarchyNode, branchDefinition);
         }
-        int pathLength = elementsPath.length();
+        int pathLength = elementsPath.getElementaryMetaPathCount();
         for (int i = 0; i < pathLength; i++) {
             pathStepConnectionClass = elementsPath.getPathStepElementClass(i);
             pathStepNodes = addPathStepNodes(pathStepNodes, pathStepConnectionClass, branchDefinition);

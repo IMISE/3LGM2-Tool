@@ -22,10 +22,7 @@ public interface SequenceMetaPath extends MetaPath {
      * @param pathStepIndex
      * @return
      */
+    @Override
     public Class<? extends ModelElement> getPathStepElementClass(final int pathStepIndex);
 
-    /**
-     * @return the number of elementary metapaths in the complete path
-     */
-    public int length();
 }
