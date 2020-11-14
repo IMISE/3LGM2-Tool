@@ -56,6 +56,7 @@ public class SimpleSerialMetaPathCreator extends SimpleMetaPathCreator {
 
         /**
          * @param startClass
+         * @param endClass
          * @param edgeClasses
          */
         @SuppressWarnings("unchecked")
@@ -69,11 +70,24 @@ public class SimpleSerialMetaPathCreator extends SimpleMetaPathCreator {
 
         /**
          * @param startClass
+         * @param endClass
          * @param edgeClasses
          */
         @SuppressWarnings("unchecked")
         public void addSimpleMetaPath(final Class<? extends ModelElement> startClass, final Class<? extends ModelElement> endClass, final Class<? extends Edge>... edgeClasses) {
             SimpleMetaPath simpleMetaPath = sequenceMetaPathCreator.createSimpleMetaPath(startClass, endClass, edgeClasses);
+            sequenceMetaPaths.add(simpleMetaPath);
+        }
+
+        /**
+         * @param startClass
+         * @param endClass
+         * @param baseResKeyOrName
+         * @param edgeClasses
+         */
+        @SuppressWarnings("unchecked")
+        public void addSimpleMetaPath(final Class<? extends ModelElement> startClass, final Class<? extends ModelElement> endClass, final String baseResKeyOrName, final Class<? extends Edge>... edgeClasses) {
+            SimpleMetaPath simpleMetaPath = sequenceMetaPathCreator.createSimpleMetaPath(startClass, endClass, baseResKeyOrName, edgeClasses);
             sequenceMetaPaths.add(simpleMetaPath);
         }
 

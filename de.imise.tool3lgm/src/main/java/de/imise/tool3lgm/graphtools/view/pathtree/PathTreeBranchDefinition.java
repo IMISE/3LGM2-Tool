@@ -27,7 +27,7 @@ public final class PathTreeBranchDefinition extends MetaModelSpecificAdapter imp
     /**
      * Alle Objekte in dieser Liste geben vor, welche Hierarchie-Knoten
      * unterhalb von Root angezeigt werden sollen. Sind die Objekte Strings,
-     * dann werden sie als Resorucen-Keys interpretiert und im Baum ein
+     * dann werden sie als Resourcen-Keys interpretiert und im Baum ein
      * {@link StringTreeNode} angelegt. Sind die Objekte Elementklassen, dann
      * wird um Baum ein {@link ElementClassTreeNode} angelegt und der
      * AnzeigeName der Klasse gezeigt. Sind die Objekte Modell-Elemente, dann
