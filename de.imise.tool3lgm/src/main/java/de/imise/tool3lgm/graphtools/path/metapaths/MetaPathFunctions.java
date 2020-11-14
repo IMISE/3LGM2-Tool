@@ -192,7 +192,7 @@ public class MetaPathFunctions {
         returnSet.add(startClass);
         int metaPathLength = sequenceMetaPath.getElementaryMetaPathCount();
         for (int i = 0; i < metaPathLength; i++) {
-            Class<? extends ModelElement> pathStepElementClass = sequenceMetaPath.getPathStepElementClass(i);
+            Class<? extends ModelElement> pathStepElementClass = sequenceMetaPath.getElementaryPathStepConnectingClass(i);
             if (CoreMetaModel.isAbstract(pathStepElementClass)) {
                 MetaModel metaModel = sequenceMetaPath.getMetaModel();
                 Collection<Class<? extends ModelElement>> classAndSubClasses = metaModel.getClassAndSubClasses(pathStepElementClass);

@@ -23,6 +23,6 @@ public interface SequenceMetaPath extends MetaPath {
      * @return
      */
     @Override
-    public Class<? extends ModelElement> getPathStepElementClass(final int pathStepIndex);
+    public Class<? extends ModelElement> getElementaryPathStepConnectingClass(final int pathStepIndex);
 
 }

@@ -243,7 +243,7 @@ abstract class MetaPathImpl extends BasicMetaPathImpl implements MetaPath {
      * @return
      */
     @Override
-    public final Class<? extends ModelElement> getPathStepElementClass(final int pathStepIndex) {
+    public final Class<? extends ModelElement> getElementaryPathStepConnectingClass(final int pathStepIndex) {
         List<ElementaryMetaPath> elementaryMetaPaths = getElementaryMetaPaths();
         if (elementaryMetaPaths.isEmpty()) {
             return null;

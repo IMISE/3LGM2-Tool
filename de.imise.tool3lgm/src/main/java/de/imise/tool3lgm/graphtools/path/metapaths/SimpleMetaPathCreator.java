@@ -799,8 +799,8 @@ public class SimpleMetaPathCreator extends MetaModelSpecificAdapter {
             MetaModel metaModel = simpleMetaPath.getMetaModel();
 
             //Start- und Endklasse des aktuellen Pfadschrittes aus dem originalen MetaPfad ermitteln
-            Class<? extends ModelElement> pathStepConnectingStartClass = currentPathStepIndex == 0 ? simpleMetaPath.getStartClass() : simpleMetaPath.getPathStepElementClass(currentPathStepIndex - 1);
-            Class<? extends ModelElement> pathStepConnectingEndClass = simpleMetaPath.getPathStepElementClass(currentPathStepIndex);
+            Class<? extends ModelElement> pathStepConnectingStartClass = currentPathStepIndex == 0 ? simpleMetaPath.getStartClass() : simpleMetaPath.getElementaryPathStepConnectingClass(currentPathStepIndex - 1);
+            Class<? extends ModelElement> pathStepConnectingEndClass = simpleMetaPath.getElementaryPathStepConnectingClass(currentPathStepIndex);
 
             //Expand the start & end class only to all of its instanciable subclasses, if they are abstract. If they are not abstract
             //and they have subclasses, you must define the path for the subclasses by it's own or (if this functionality is needed)
@@ -878,8 +878,8 @@ public class SimpleMetaPathCreator extends MetaModelSpecificAdapter {
                 //alle nicht-abstrakten Kantenklassen zwischen dieser Start- und Endklasse ermitteln
                 MetaModel metaModel = simpleMetaPath.getMetaModel();
                 //Start- und Edklasse des aktuellen Pfadschrittes aus dem originalen MetaPfad ermitteln
-                Class<? extends ModelElement> pathStepConnectingStartClass = currentPathStepIndex == 0 ? simpleMetaPath.getStartClass() : simpleMetaPath.getPathStepElementClass(currentPathStepIndex - 1);
-                Class<? extends ModelElement> pathStepConnectingEndClass = simpleMetaPath.getPathStepElementClass(currentPathStepIndex);
+                Class<? extends ModelElement> pathStepConnectingStartClass = currentPathStepIndex == 0 ? simpleMetaPath.getStartClass() : simpleMetaPath.getElementaryPathStepConnectingClass(currentPathStepIndex - 1);
+                Class<? extends ModelElement> pathStepConnectingEndClass = simpleMetaPath.getElementaryPathStepConnectingClass(currentPathStepIndex);
                 Class<? extends Edge>[] edgeTypes = metaModel.getEdgeTypes(pathStepConnectingStartClass, pathStepConnectingEndClass);
                 //Der erste neue SimpleMetaPath, bei dem der aktuelle Elementarpfadschritt durch einen mit nicht-abstrakter Kantenklasse ersetzt wurde, muss in der Ergenisliste den Original-MetaPfad ersetzen.
                 //All anderen danach werden dahinter eingefügt und der Index des aktuellen Elementarpfadschrittes erhöht.

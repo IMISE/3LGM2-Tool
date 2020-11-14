@@ -289,7 +289,7 @@ public class SerialMetaPath extends ListMetaPath {
                 return false;
             }
             ElementaryMetaPath nextElementaryMetaPath = elementaryMetaPaths.get(i + 1);
-            Class<? extends ModelElement> pathStepElementClass = getPathStepElementClass(i);
+            Class<? extends ModelElement> pathStepElementClass = getElementaryPathStepConnectingClass(i);
             if (!metaModel.isCreatable(pathStepElementClass, elementaryMetaPath, nextElementaryMetaPath)) {
                 return false;
             }
@@ -415,7 +415,7 @@ public class SerialMetaPath extends ListMetaPath {
      * zuweisungskompatibel sind die speziellere der beiden zum Ergebnisset
      * hinzugefügt. Bei Pfaden, die nur aus Elementarpfaden bestehen enthält das
      * Set genau die Klasse (oder null), die auch bei
-     * {@link #getPathStepElementClass(int)} zurück kommt.
+     * {@link #getElementaryPathStepConnectingClass(int)} zurück kommt.
      *
      * @param pathStepIndex
      * @return

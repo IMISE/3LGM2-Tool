@@ -141,7 +141,7 @@ public interface MetaPath extends BasicMetaPath {
      * @param pathStepIndex
      * @return
      */
-    Class<? extends ModelElement> getPathStepElementClass(int pathStepIndex);
+    Class<? extends ModelElement> getElementaryPathStepConnectingClass(int pathStepIndex);
 
     /**
      * @return Liste aller {@link MetaPath}, die dieser MetaPfad enthält.
