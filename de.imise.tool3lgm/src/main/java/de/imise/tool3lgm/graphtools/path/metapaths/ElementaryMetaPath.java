@@ -622,11 +622,6 @@ public final class ElementaryMetaPath extends MetaPathImpl implements SequenceMe
     }
 
     @Override
-    public int getSubMetaPathCount() {
-        return 1;
-    }
-
-    @Override
     public final boolean containsPropertyTransferEdge() {
         Class<? extends Edge> edgeClass = getEdgeClass();
         return edgeClass != null && PropertyTransferEdge.class.isAssignableFrom(getEdgeClass());

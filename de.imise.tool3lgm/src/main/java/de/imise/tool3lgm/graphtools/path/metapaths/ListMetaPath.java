@@ -100,27 +100,14 @@ public abstract class ListMetaPath extends MetaPathImpl {
         return subMetaPaths;
     }
 
-    /**
-     * @param index
-     * @return
-     */
-    public MetaPath getSubMetaPath(final int index) {
-        return subMetaPaths.get(index);
-    }
-
-    /**
-     * @return
-     */
-    @Override
-    public final int getSubMetaPathCount() {
-        return subMetaPaths.size();
-    }
-
     @Override
     public String createName() {
         return metaModel.getResStringWithoutError(baseResKeyOrName);
     }
 
+    /**
+     * @author Ich (12.12.2018)
+     */
     public enum InvalidReason {
         INVALID_LIST_PATH_EMPTY
     }

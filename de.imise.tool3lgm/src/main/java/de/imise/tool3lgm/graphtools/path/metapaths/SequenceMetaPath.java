@@ -1,5 +1,11 @@
 package de.imise.tool3lgm.graphtools.path.metapaths;
 
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
+
+import de.imise.tool3lgm.graphtools.metamodel.CoreMetaModel;
+import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 
 /**
@@ -11,18 +17,44 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 public interface SequenceMetaPath extends MetaPath {
 
     /**
-     * Returns the connection class of the path step with the passed index in
-     * the element path list of this path. With index 0, this is the more
-     * special of the end class of the first elementary path and the start class
-     * of the next elementary path. The path step with the index of path length
-     * -1 is the end class of the last elementary path = end class of the whole
-     * elementary path list. The start class of the complete path is not
-     * accessible through this function.
-     *
-     * @param pathStepIndex
+     * @return All start and end classes of all contained elementary metapaths
+     *         with their subclasses.
+     */
+    public default Set<Class<? extends ModelElement>> getAllElementaryPathsStartAndEndClasses() {
+        return getAllMetaPathsStartAndEndClasses(this, true);
+    }
+
+    /**
+     * @return the connection classes of the outer contained SequenceMetaPaths.
+     *         If the path consists only of SequenceMetaPaths of length 1 (i.e.
+     *         only one elementary metaPath at a time), then the same returns as
+     *         with {@link #getAllElementaryPathsStartAndEndClasses()}
+     */
+    public default Set<Class<? extends ModelElement>> getAllFirstLevelSubMetaPathsStartAndEndClasses() {
+        return getAllMetaPathsStartAndEndClasses(this, false);
+    }
+
+    /**
+     * @param sequenceMetaPath
+     * @param checkElementaryMetaPaths
      * @return
      */
-    @Override
-    public Class<? extends ModelElement> getElementaryPathStepConnectingClass(final int pathStepIndex);
+    static Set<Class<? extends ModelElement>> getAllMetaPathsStartAndEndClasses(final SequenceMetaPath sequenceMetaPath, final boolean checkElementaryMetaPaths) {
+        Set<Class<? extends ModelElement>> returnSet = new HashSet<>();
+        Class<? extends ModelElement> startClass = sequenceMetaPath.getStartClass();
+        returnSet.add(startClass);
+        int metaPathLength = checkElementaryMetaPaths ? sequenceMetaPath.getElementaryMetaPathCount() : sequenceMetaPath.getSubMetaPathCount();
+        for (int i = 0; i < metaPathLength; i++) {
+            Class<? extends ModelElement> pathStepElementClass = checkElementaryMetaPaths ? MetaPathFunctions.getElementaryMetaPathsConnectingClass(sequenceMetaPath, i) : MetaPathFunctions.getSubMetaPathsConnectingClass(sequenceMetaPath, i);
+            if (CoreMetaModel.isAbstract(pathStepElementClass)) {
+                MetaModel metaModel = sequenceMetaPath.getMetaModel();
+                Collection<Class<? extends ModelElement>> classAndSubClasses = metaModel.getClassAndSubClasses(pathStepElementClass);
+                returnSet.addAll(classAndSubClasses);
+            } else {
+                returnSet.add(pathStepElementClass);
+            }
+        }
+        return returnSet;
+    }
 
 }

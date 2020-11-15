@@ -1,9 +1,6 @@
 package de.imise.tool3lgm.graphtools.path.metapaths;
 
-import java.util.Collection;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import de.imise.tool3lgm.graphtools.metamodel.CoreMetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
@@ -50,24 +47,70 @@ public class MetaPathFunctions {
      * Pfad keine einfache Elementarpfadliste für diesen MetaPath, dann kommt
      * <code>null</code> zurück.
      *
-     * @param simpleMetaPath
+     * @param metaPath
      * @param pathStepIndex Index der Kante im Pfad, wenn dieser eindeutig ist.
      *            Wird ein Wert < 0 übergeben, dann ergibt sich der Index aus
      *            der Summe der Gesamtanzahl der Elementarpfade und diesem Wert.
      * @return
      */
-    public static final Class<? extends ModelElement> getElementaryPathsConnectingClass(final MetaPath simpleMetaPath, final int pathStepIndex) {
-        List<ElementaryMetaPath> elementaryMetaPaths = simpleMetaPath.getElementaryMetaPaths();
-        if (elementaryMetaPaths.isEmpty()) {
+    public static final Class<? extends ModelElement> getElementaryMetaPathsConnectingClass(final MetaPath metaPath, final int pathStepIndex) {
+        return getMetaPathsConnectingClass(metaPath, pathStepIndex, true);
+    }
+
+    /**
+     * Liefert die Verbindungsklasse der Elementarpfade am angegebenen Index. Es
+     * wird immer die Endklasse des Elementarpfades mit dem Index und die
+     * Startklasse des nächsten genommen, wenn es einen nächsten gibt, und davon
+     * die speziellste gemeinsame Oberklasse zurück gegeben. Existiert für den
+     * Pfad keine einfache Elementarpfadliste für diesen MetaPath, dann kommt
+     * <code>null</code> zurück.
+     *
+     * @param metaPath
+     * @param pathStepIndex Index der Kante im Pfad, wenn dieser eindeutig ist.
+     *            Wird ein Wert < 0 übergeben, dann ergibt sich der Index aus
+     *            der Summe der Gesamtanzahl der Elementarpfade und diesem Wert.
+     * @return
+     */
+    public static final Class<? extends ModelElement> getSubMetaPathsConnectingClass(final MetaPath metaPath, final int pathStepIndex) {
+        return getMetaPathsConnectingClass(metaPath, pathStepIndex, false);
+    }
+
+    /**
+     * Returns the connection class of the path step with the passed index in
+     * the element path list of this path. With index 0, this is the more
+     * special of the end class of the first elementary path and the start class
+     * of the next elementary path. The path step with the index of path length
+     * -1 is the end class of the last elementary path = end class of the whole
+     * elementary path list. The start class of the complete path is not
+     * accessible through this function.<br>
+     * Liefert die Verbindungsklasse der Elementarpfade am angegebenen Index. Es
+     * wird immer die Endklasse des Elementarpfades mit dem Index und die
+     * Startklasse des nächsten genommen, wenn es einen nächsten gibt, und davon
+     * die speziellste gemeinsame Oberklasse zurück gegeben. Existiert für den
+     * Pfad keine einfache Elementarpfadliste für diesen MetaPath, dann kommt
+     * <code>null</code> zurück.
+     *
+     * @param metaPath
+     * @param pathStepIndex Index der Kante im Pfad, wenn dieser eindeutig ist.
+     *            Wird ein Wert < 0 übergeben, dann ergibt sich der Index aus
+     *            der Summe der Gesamtanzahl der Elementarpfade und diesem Wert.
+     * @param pathStepIndex
+     * @param checkElementaryMetaPaths
+     * @return
+     */
+    @SuppressWarnings("unchecked")
+    private static final Class<? extends ModelElement> getMetaPathsConnectingClass(final MetaPath metaPath, final int pathStepIndex, final boolean checkElementaryMetaPaths) {
+        List<MetaPath> subMetaPaths = checkElementaryMetaPaths ? (List<MetaPath>) (List<?>) metaPath.getElementaryMetaPaths() : metaPath.getSubMetaPaths();
+        if (subMetaPaths.isEmpty()) {
             return null;
         }
-        int index = pathStepIndex < 0 ? elementaryMetaPaths.size() + pathStepIndex : pathStepIndex;
-        ElementaryMetaPath elementaryMetaPath1 = elementaryMetaPaths.get(index);
-        ElementaryMetaPath elementaryMetaPath2 = null;
-        if (index + 1 < elementaryMetaPaths.size()) {
-            elementaryMetaPath2 = elementaryMetaPaths.get(index + 1);
+        int index = pathStepIndex < 0 ? subMetaPaths.size() + pathStepIndex : pathStepIndex;
+        MetaPath elementaryMetaPath1 = subMetaPaths.get(index);
+        MetaPath elementaryMetaPath2 = null;
+        if (index + 1 < subMetaPaths.size()) {
+            elementaryMetaPath2 = subMetaPaths.get(index + 1);
         }
-        return getElementaryPathsConnectingClass(elementaryMetaPath1, elementaryMetaPath2);
+        return getMetaPathsConnectingClass(elementaryMetaPath1, elementaryMetaPath2);
     }
 
     /**
@@ -79,7 +122,7 @@ public class MetaPathFunctions {
      * @param elementaryMetaPathFromConnectionClass
      * @return
      */
-    public static final Class<? extends ModelElement> getElementaryPathsConnectingClass(final ElementaryMetaPath elementaryMetaPathToConnectingClass, final ElementaryMetaPath elementaryMetaPathFromConnectionClass) {
+    public static final Class<? extends ModelElement> getMetaPathsConnectingClass(final MetaPath elementaryMetaPathToConnectingClass, final MetaPath elementaryMetaPathFromConnectionClass) {
         //ACHTUNG: diese Funktion nicht einfach durch die andere mit den EdgeClasses laufen lassen, da die Start- und Endklasse der ElementaryMetaPaths was anderes sein können, als die Start- bzw. die Endklasse der enthaltenen Kantenklasse
         if (elementaryMetaPathToConnectingClass == null) { //tritt auf, wenn es um den ersten Pfaschritt geht, also den Anfang des Pfades
             return elementaryMetaPathFromConnectionClass.getStartClass();
@@ -104,7 +147,7 @@ public class MetaPathFunctions {
      * @param direction2
      * @return
      */
-    public static final Class<? extends ModelElement> getElementaryPathsConnectingClass(final Class<? extends Edge> edgeClass1, final Direction direction1, final Class<? extends Edge> edgeClass2, final Direction direction2) {
+    public static final Class<? extends ModelElement> getEdgeClassesConnectingClass(final Class<? extends Edge> edgeClass1, final Direction direction1, final Class<? extends Edge> edgeClass2, final Direction direction2) {
         Class<? extends ModelElement> endClass = ElementaryMetaPath.getEndClass(edgeClass1, direction1);
         if (edgeClass2 == null) {
             return endClass;
@@ -177,31 +220,6 @@ public class MetaPathFunctions {
             }
         }
         return true;
-    }
-
-    /**
-     * @param simpleMetaPath
-     * @param withSubClasses if <code>true</code> all subclasses of thepath step
-     *            connecting classes are added too
-     * @return a set of all classes in the metapath. These are only the path
-     *         step connecting classes and not the edge classes.
-     */
-    public static final Set<Class<? extends ModelElement>> getAllPathStepsStartAndEndClasses(final SequenceMetaPath sequenceMetaPath, final boolean withSubClasses) {
-        Set<Class<? extends ModelElement>> returnSet = new HashSet<>();
-        Class<? extends ModelElement> startClass = sequenceMetaPath.getStartClass();
-        returnSet.add(startClass);
-        int metaPathLength = sequenceMetaPath.getElementaryMetaPathCount();
-        for (int i = 0; i < metaPathLength; i++) {
-            Class<? extends ModelElement> pathStepElementClass = sequenceMetaPath.getElementaryPathStepConnectingClass(i);
-            if (CoreMetaModel.isAbstract(pathStepElementClass)) {
-                MetaModel metaModel = sequenceMetaPath.getMetaModel();
-                Collection<Class<? extends ModelElement>> classAndSubClasses = metaModel.getClassAndSubClasses(pathStepElementClass);
-                returnSet.addAll(classAndSubClasses);
-            } else {
-                returnSet.add(pathStepElementClass);
-            }
-        }
-        return returnSet;
     }
 
 }

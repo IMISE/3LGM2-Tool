@@ -176,7 +176,7 @@ public class PathTreeModel extends DefaultTreeModel implements MetaModelSpecific
         }
         int pathLength = elementsPath.getElementaryMetaPathCount();
         for (int i = 0; i < pathLength; i++) {
-            pathStepConnectionClass = elementsPath.getElementaryPathStepConnectingClass(i);
+            pathStepConnectionClass = elementsPath.getElementaryMetaPathStepConnectingClass(i);
             pathStepNodes = addPathStepNodes(pathStepNodes, pathStepConnectionClass, branchDefinition);
         }
     }

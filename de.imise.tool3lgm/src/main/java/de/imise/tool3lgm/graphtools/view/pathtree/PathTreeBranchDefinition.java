@@ -8,7 +8,6 @@ import javax.swing.ImageIcon;
 
 import de.imise.tool3lgm.graphtools.metamodel.MetaModelSpecificAdapter;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
-import de.imise.tool3lgm.graphtools.path.metapaths.MetaPathFunctions;
 import de.imise.tool3lgm.graphtools.path.metapaths.SequenceMetaPath;
 import de.imise.tool3lgm.graphtools.view.tree.node.ElementClassTreeNode;
 import de.imise.tool3lgm.graphtools.view.tree.node.ElementContainerTreeNode;
@@ -144,11 +143,21 @@ public final class PathTreeBranchDefinition extends MetaModelSpecificAdapter imp
     }
 
     /**
-     * @return a set of all classes which are defined as vissible through this
+     * @param allElementaryMetaPaths If <code>true</code> then the whole
+     *            connection classes of the elementary path steps are searched
+     *            out. If <code>false</code> then the connection classes of the
+     *            outer contained SequenceMetaPaths are returned. If the
+     *            metapath consists only of SequenceMetaPaths of length 1 (i.e.
+     *            only one elementary metaPath at a time), then this parameter
+     *            is irrelevant.
+     * @return a set of all classes which are defined as visible through this
      *         tree branch
      */
-    public final Set<Class<? extends ModelElement>> getVisibleElementTypes() {
-        return MetaPathFunctions.getAllPathStepsStartAndEndClasses(elementsPath, true);
+    public final Set<Class<? extends ModelElement>> getVisibleElementTypes(final boolean allElementaryMetaPaths) {
+        if (allElementaryMetaPaths) {
+            return elementsPath.getAllElementaryPathsStartAndEndClasses();
+        }
+        return elementsPath.getAllFirstLevelSubMetaPathsStartAndEndClasses();
     }
 
 }

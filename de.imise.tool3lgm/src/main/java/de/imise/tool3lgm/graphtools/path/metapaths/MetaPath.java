@@ -132,21 +132,41 @@ public interface MetaPath extends BasicMetaPath {
     /**
      * Returns the connection class of the path step with the passed index in
      * the element path list of this path. With index 0, this is the more
-     * special of the end class of the first elementary path and the start class
-     * of the next elementary path. The path step with the index of path length
-     * -1 is the end class of the last elementary path = end class of the whole
-     * elementary path list. The start class of the complete path is not
+     * special of the end class of the first elementary metapath and the start
+     * class of the next elementary metapath. The path step with the index of
+     * metapath length -1 is the end class of the last elementary metapath = end
+     * class of the whole elementary metapath list. The start class of the
+     * complete metapath is not accessible through this function.
+     *
+     * @param pathStepIndex
+     * @return
+     */
+    Class<? extends ModelElement> getElementaryMetaPathStepConnectingClass(int pathStepIndex);
+
+    /**
+     * Returns the connection class of the path step with the passed index in
+     * the element path list of this path. With index 0, this is the more
+     * special of the end class of the first submetapath and the start class of
+     * the next submetapath. The path step with the index of metapath length -1
+     * is the end class of the last submetapath = end class of the whole
+     * sunmetapath list. The start class of the complete metapath is not
      * accessible through this function.
      *
      * @param pathStepIndex
      * @return
      */
-    Class<? extends ModelElement> getElementaryPathStepConnectingClass(int pathStepIndex);
+    Class<? extends ModelElement> getSubMetaPathStepConnectingClass(int pathStepIndex);
 
     /**
      * @return Liste aller {@link MetaPath}, die dieser MetaPfad enthält.
      */
     List<MetaPath> getSubMetaPaths();
+
+    /**
+     * @param index
+     * @return the sub metapath at the index
+     */
+    MetaPath getSubMetaPath(final int index);
 
     /**
      * @return the number of contained metapaths

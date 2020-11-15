@@ -243,7 +243,7 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
             } else {
                 boolean labelSecondLastElementClass = panelLabelOption == LABEL_LAST_EDGE_START_ELEMENT_TYPE || panelLabelOption == LABEL_LAST_EDGE_START_ELEMENT_TYPE_SINGULAR || panelLabelOption == LABEL_LAST_EDGE_START_ELEMENT_TYPE_PLURAL;
                 int labelEdgeIndexDiff = labelSecondLastElementClass ? 1 : 0;
-                nameSourceClass = MetaPathFunctions.getElementaryPathsConnectingClass(metaPath, labelEdgeIndex - labelEdgeIndexDiff);
+                nameSourceClass = MetaPathFunctions.getElementaryMetaPathsConnectingClass(metaPath, labelEdgeIndex - labelEdgeIndexDiff);
                 //As text of the label always the more special class is taken from end class of the path
                 //and searchElementClass (only the connected elements can be of this class)
                 if (nameSourceClass == null || nameSourceClass.isAssignableFrom(searchElementClass)) {

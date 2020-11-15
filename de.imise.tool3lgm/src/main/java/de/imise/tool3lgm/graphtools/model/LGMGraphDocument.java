@@ -761,7 +761,7 @@ public class LGMGraphDocument extends GraphDocument {
             }
         }
         if (!createSubPath && endElement == null) {
-            Class<? extends ModelElement> pathEndClass = metaPath.getElementaryPathStepConnectingClass(lastPathStepIndex);
+            Class<? extends ModelElement> pathEndClass = metaPath.getElementaryMetaPathStepConnectingClass(lastPathStepIndex);
             boolean oldAutomaticMode = gdcoll.setAutomaticMode(!askNameForNewEndElement);
             NodeContainer pathEndElementContainer = createNodeAndContainer(pathEndClass, pid);
             gdcoll.setAutomaticMode(oldAutomaticMode);
@@ -792,7 +792,7 @@ public class LGMGraphDocument extends GraphDocument {
                 }
                 if (createdElementaryPath == null) {
                     ModelElement pathStepEndElement = i == lastPathStepIndex ? endElement : null;
-                    Class<? extends ModelElement> pathStepEndClass = metaPath.getElementaryPathStepConnectingClass(i);
+                    Class<? extends ModelElement> pathStepEndClass = metaPath.getElementaryMetaPathStepConnectingClass(i);
                     MetaModel metaModel = getMetaModel();
                     ElementaryMetaPathHandler emph = metaModel.getElementaryMetaPathHandler();
                     Class<? extends ModelElement> pathStepStartClass = pathStepStartElement.getClass();

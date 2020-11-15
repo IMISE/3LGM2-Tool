@@ -338,7 +338,7 @@ public class PathFunctions {
      * @return
      */
     public static final ModelElement createNodeWithContainerAndDependents(final LGMGraphDocument doc, final ModelElement startElement, final ElementaryMetaPath pathToNewElement, final ElementaryMetaPath pathFromNewElement, final int pid) {
-        Class<? extends ModelElement> newElementClass = MetaPathFunctions.getElementaryPathsConnectingClass(pathToNewElement, pathFromNewElement);
+        Class<? extends ModelElement> newElementClass = MetaPathFunctions.getMetaPathsConnectingClass(pathToNewElement, pathFromNewElement);
         Class<? extends Edge> edgeClass2Create = pathToNewElement.getEdgeClass();
         Direction edgeClass2CreateDirection = pathToNewElement.getDirection();
         Class<? extends Edge> nextEdgeClass2Create = pathFromNewElement != null ? pathFromNewElement.getEdgeClass() : null;

@@ -197,6 +197,18 @@ abstract class MetaPathImpl extends BasicMetaPathImpl implements MetaPath {
         return elementaryMetaPaths == null || elementaryMetaPaths.isEmpty() ? 0 : elementaryMetaPaths.size();
     }
 
+    @Override
+    public final MetaPath getSubMetaPath(final int index) {
+        List<MetaPath> subMetaPaths = getSubMetaPaths();
+        return subMetaPaths.get(index);
+    }
+
+    @Override
+    public final int getSubMetaPathCount() {
+        List<MetaPath> subMetaPaths = getSubMetaPaths();
+        return subMetaPaths.size();
+    }
+
     /**
      * @return den ersten ElementaryMetaPath aus
      *         {@link #getElementaryMetaPaths()}, wenn die Liste mind. einen
@@ -241,17 +253,30 @@ abstract class MetaPathImpl extends BasicMetaPathImpl implements MetaPath {
      *
      * @param pathStepIndex
      * @return
+     * @see MetaPathFunctions#getElementaryMetaPathsConnectingClass(MetaPath,
+     *      int)
      */
     @Override
-    public final Class<? extends ModelElement> getElementaryPathStepConnectingClass(final int pathStepIndex) {
-        List<ElementaryMetaPath> elementaryMetaPaths = getElementaryMetaPaths();
-        if (elementaryMetaPaths.isEmpty()) {
-            return null;
-        }
-        ElementaryMetaPath elementaryMetaPath1 = pathStepIndex >= 0 ? elementaryMetaPaths.get(pathStepIndex) : null;
-        ElementaryMetaPath elementaryMetaPath2 = pathStepIndex == elementaryMetaPaths.size() - 1 ? null : elementaryMetaPaths.get(pathStepIndex + 1);
-        Class<? extends ModelElement> connectingClass = MetaPathFunctions.getElementaryPathsConnectingClass(elementaryMetaPath1, elementaryMetaPath2);
-        return connectingClass;
+    public final Class<? extends ModelElement> getElementaryMetaPathStepConnectingClass(final int pathStepIndex) {
+        return MetaPathFunctions.getElementaryMetaPathsConnectingClass(this, pathStepIndex);
+    }
+
+    /**
+     * Returns the connection class of the path step with the passed index in
+     * the element path list of this path. With index 0, this is the more
+     * special of the end class of the first elementary path and the start class
+     * of the next elementary path. The path step with the index of path length
+     * -1 is the end class of the last elementary path = end class of the whole
+     * elementary path list. The start class of the complete path is not
+     * accessible through this function.
+     *
+     * @param pathStepIndex
+     * @return
+     * @see MetaPathFunctions#getSubMetaPathsConnectingClass(MetaPath, int)
+     */
+    @Override
+    public final Class<? extends ModelElement> getSubMetaPathStepConnectingClass(final int pathStepIndex) {
+        return MetaPathFunctions.getSubMetaPathsConnectingClass(this, pathStepIndex);
     }
 
     /**
