@@ -19,6 +19,7 @@ import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.model.LGMGraphDocument;
 import de.imise.tool3lgm.graphtools.model.template.TemplateLibrariesManager;
+import de.imise.tool3lgm.graphtools.path.metapaths.ElementaryMetaPath;
 import de.imise.tool3lgm.graphtools.path.metapaths.MetaPath;
 import de.imise.tool3lgm.graphtools.path.metapaths.MetaPathFunctions;
 import de.imise.tool3lgm.graphtools.path.metapaths.SequenceMetaPath;
@@ -27,6 +28,7 @@ import de.imise.tool3lgm.graphtools.view.tree.node.ElementClassTreeNode;
 import de.imise.tool3lgm.graphtools.view.tree.node.ElementContainerTreeNode;
 import de.imise.tool3lgm.graphtools.view.tree.node.IconifiedTreeNode;
 import de.imise.tool3lgm.graphtools.view.tree.node.LGMTreeNode;
+import de.imise.tool3lgm.graphtools.view.tree.node.PathStepTreeNode;
 import de.imise.tool3lgm.graphtools.view.tree.node.StringTreeNode;
 import de.imise.util.BooleanOption;
 
@@ -163,7 +165,7 @@ public class PathTreeModel extends DefaultTreeModel implements MetaModelSpecific
         for (GDCollection template : templates) {
             LGMGraphDocument mainGraphDocument = template.getMainDoc();
             List<ElementContainer> elementContainers = mainGraphDocument.getElementContainers(pathStepConnectionClass);
-            getOrCreateNodes(pathStepNodes, elementContainers, lastHierarchyNode, branchDefinition);
+            getOrCreateNodes(pathStepNodes, elementContainers, lastHierarchyNode, null, branchDefinition);
         }
         boolean showAllElements = this.showAllElements.is();
         List<MetaPath> subMetaPaths = metaPath.getSubMetaPaths(showAllElements);
@@ -188,7 +190,7 @@ public class PathTreeModel extends DefaultTreeModel implements MetaModelSpecific
             GraphDocument doc = parentEc.getGraphDocument();
             ModelElement me = parentEc.getElement();
             List<ElementContainer> connectedContainers = subMetaPath.getConnectedContainer(me, doc);
-            getOrCreateNodes(nextPathStepNodes, connectedContainers, parentNode, branchDefinition);
+            getOrCreateNodes(nextPathStepNodes, connectedContainers, parentNode, subMetaPath, branchDefinition);
         }
         return nextPathStepNodes;
     }
@@ -197,14 +199,16 @@ public class PathTreeModel extends DefaultTreeModel implements MetaModelSpecific
      * @param createdNodes
      * @param elementContainers
      * @param parent
+     * @param subMetaPath
      * @param branchDefinition
      */
-    private void getOrCreateNodes(final Collection<ElementContainerTreeNode> createdNodes, final Iterable<ElementContainer> elementContainers, final LGMTreeNode parent, final PathTreeBranchDefinition branchDefinition) {
+    private void getOrCreateNodes(final Collection<ElementContainerTreeNode> createdNodes, final Iterable<ElementContainer> elementContainers, final LGMTreeNode parent, final MetaPath subMetaPath, final PathTreeBranchDefinition branchDefinition) {
         for (ElementContainer ec : elementContainers) {
             ModelElement me = ec.getElement();
             Class<? extends ModelElement> meClass = me.getClass();
             ImageIcon icon = branchDefinition.getIcon(meClass);
-            ElementContainerTreeNode pathStepNode = new ElementContainerTreeNode(ec, true, true, icon);
+            boolean createSimpleNode = subMetaPath == null || subMetaPath instanceof ElementaryMetaPath;
+            ElementContainerTreeNode pathStepNode = createSimpleNode ? new ElementContainerTreeNode(ec, true, true, icon) : new PathStepTreeNode(ec, subMetaPath, true, true, icon);
             if (!showElementNamesWithSubmodels) {
                 String simpleName = me.toString();
                 String currentToStringName = pathStepNode.toString();

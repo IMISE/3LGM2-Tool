@@ -24,11 +24,32 @@ public class ElementContainerTreeNode extends IconifiedTreeNode implements Graph
     /**
      * @param ec
      * @param setTreeNode
+     * @param visibleText
+     * @param sort
+     */
+    public ElementContainerTreeNode(final ElementContainer ec, final boolean setTreeNode, final String visibleText, final boolean sort) {
+        this(ec, setTreeNode, visibleText, sort, null);
+    }
+
+    /**
+     * @param ec
+     * @param setTreeNode
      * @param sort
      * @param icon
      */
     public ElementContainerTreeNode(final ElementContainer ec, final boolean setTreeNode, final boolean sort, final ImageIcon icon) {
-        super(ec, sort, icon);
+        this(ec, setTreeNode, null, sort, icon);
+    }
+
+    /**
+     * @param ec
+     * @param setTreeNode
+     * @param visibleText
+     * @param sort
+     * @param icon
+     */
+    public ElementContainerTreeNode(final ElementContainer ec, final boolean setTreeNode, final String visibleText, final boolean sort, final ImageIcon icon) {
+        super(ec, visibleText, sort, icon);
         if (setTreeNode && ec instanceof NodeContainer) {
             ((NodeContainer) ec).setTreeNode(this);
         }
