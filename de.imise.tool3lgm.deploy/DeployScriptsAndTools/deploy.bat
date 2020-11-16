@@ -86,7 +86,8 @@ SET "DEPLOY_TOOL3LGM_ICON=..\DeployScriptsAndTools\Icons\toolIcon_gross.ico"
 ::werden muss. Die Zeile mit diesem String wird über BATCH-Kommandos ausgelesen.
 SET "JAVA_FILE_WITH_TOOL_VERSION=%TOOL3LGM_PROJECT_DIR%\src\main\java\de\imise\tool3lgm\Tool3lgmConstants.java"
 SET "JAVA_FILE_WITH_TOOL_VERSION_LINE=public static final String TOOL_VERSION = " 
-
+SET "GIT_VERSION_FILE=%DEPLOY_PROJECT_TOOL3LGM_DIR%\version.info"
+SET "GIT_VERSION_FILE_LINE=git.commit.id.describe="
 
 ::update ApplicationVersion in Tool3LGMConstants and the Innosetup ISS-File
 ::Pfad zur Innosetup-Scriptdatei zum Erzeugen des Windows-Installers des Tools
@@ -213,14 +214,27 @@ ECHO.
 ::  - anschließend Version aus version.info auslesen
 ::
 ::Zeile mit der Version aus der Tool3lgmConstants.java-Datei lesen
+::SETLOCAL EnableDelayedExpansion
+::FOR /f "tokens=* usebackq" %%a IN (`FINDSTR /C:"%JAVA_FILE_WITH_TOOL_VERSION_LINE%" "%JAVA_FILE_WITH_TOOL_VERSION%"`) DO (
+::    SET z=%%a
+::    SET z=!z:"=?!
+::    FOR /f "tokens=1-3 delims=?" %%a IN ("!z!") DO SET lgmVersion=%%b
+::)
+
+::Versionermittlung (neu)
+:: Datei mit den Versionsinfos: %GIT_VERSION_FILE%
 SETLOCAL EnableDelayedExpansion
-FOR /f "tokens=* usebackq" %%a IN (`FINDSTR /C:"%JAVA_FILE_WITH_TOOL_VERSION_LINE%" "%JAVA_FILE_WITH_TOOL_VERSION%"`) DO (
-    SET z=%%a
-    SET z=!z:"=?!
-    FOR /f "tokens=1-3 delims=?" %%a IN ("!z!") DO SET lgmVersion=%%b
+FOR /f "tokens=* usebackq" %%b IN (`FINDSTR /C:"%GIT_VERSION_FILE_LINE%" "%GIT_VERSION_FILE%"`) DO (
+    SET y=%%b
+    SET y=!y:"=?!
+    ::ECHO %%b
+    FOR /f "tokens=2 delims==" %%b IN ("!y!") DO SET lgmVersionGit=%%b
 )
+
+
 ::3LGM-Version ausgeben
-ECHO "### Current version %lgmVersion%"
+::ECHO "### Current version: %lgmVersion%"
+ECHO "### Current version: %lgmVersionGit%"
 ECHO.
 
 ::voller Name der von Innosetup erzeugten Exe-Installationsdatei mit Version und Untertrichen statt Leerzeichen
@@ -265,7 +279,6 @@ START %CLH% "%ISS_FILE%" "%ISS_FILE_LINE_FILEEXE_SRT%" "%ISS_FILE_LINE_FILEEXE_E
 ::Alle Files in die ISS-Datei schreiben
 CALL :NORMALIZEPATH "%DEPLOY_PROJECT_TOOL3LGM_DIR%"
 START %CLH% "%ISS_FILE%" "%ISS_FILE_LINE_FILEALL_SRT%" "%ISS_FILE_LINE_FILEALL_END%" "%ABSOLUTEPATH%\*"
-
 
 
 ::IHE Domain Ontology pull
