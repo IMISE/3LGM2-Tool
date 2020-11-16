@@ -694,10 +694,12 @@ public final class ElementaryMetaPath extends MetaPathImpl implements SequenceMe
         ElementaryMetaPath elementaryMetaPath = this;
         Direction direction = elementaryMetaPath.getDirection();
         Class<? extends Edge> edgeClass = elementaryMetaPath.getEdgeClass();
-        List<ElementContainer> connectedContainer = me.getConnectedContainers(doc, edgeClass, direction);
-        for (ElementContainer connected : connectedContainer) {
-            if (!returnList.contains(connected)) {
-                returnList.add(connected);
+        List<ElementContainer> connectedContainers = me.getConnectedContainers(doc, edgeClass, direction);
+        for (ElementContainer connectedContainer : connectedContainers) {
+            ModelElement connected = connectedContainer.getElement();
+            Class<? extends ModelElement> connectedClass = connected.getClass();
+            if (isEndClass(connectedClass) && !returnList.contains(connectedContainer)) {
+                returnList.add(connectedContainer);
             }
         }
         return returnList;
