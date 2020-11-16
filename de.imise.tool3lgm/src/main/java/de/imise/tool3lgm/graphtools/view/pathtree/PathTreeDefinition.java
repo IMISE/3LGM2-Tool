@@ -16,15 +16,6 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 public class PathTreeDefinition extends MetaModelSpecificAdapter implements Iterable<PathTreeBranchDefinition> {
 
     /**
-     * If <code>true</code> then the whole connection classes of the elementary
-     * path steps are searched out. If <code>false</code> then the connection
-     * classes of the outer contained SequenceMetaPaths are returned. If the
-     * metapath consists only of SequenceMetaPaths of length 1 (i.e. only one
-     * elementary metaPath at a time), then this parameter is irrelevant.
-     */
-    private boolean showAllElementaryMetaPaths = false;
-
-    /**
      * Definition of the visible branches in the tree
      */
     private final List<PathTreeBranchDefinition> branches = new ArrayList<>();
@@ -97,31 +88,23 @@ public class PathTreeDefinition extends MetaModelSpecificAdapter implements Iter
     }
 
     /**
+     * @param showAllElementaryMetaPaths If <code>true</code> then the whole
+     *            connection classes of the elementary path steps are searched
+     *            out. If <code>false</code> then the connection classes of the
+     *            outer contained SequenceMetaPaths are returned. If the
+     *            metapath consists only of SequenceMetaPaths of length 1 (i.e.
+     *            only one elementary metaPath at a time), then this parameter
+     *            is irrelevant.
      * @return a set of all classes which are defined as vissible through this
      *         tree branch
-     * @return
      */
-    public final Set<Class<? extends ModelElement>> getVisibleElementTypes() {
+    public final Set<Class<? extends ModelElement>> getVisibleElementTypes(final boolean showAllElementaryMetaPaths) {
         Set<Class<? extends ModelElement>> visibleElementTypes = new HashSet<>();
         for (PathTreeBranchDefinition branch : branches) {
             Set<Class<? extends ModelElement>> branchVisibleElementTypes = branch.getVisibleElementTypes(showAllElementaryMetaPaths);
             visibleElementTypes.addAll(branchVisibleElementTypes);
         }
         return visibleElementTypes;
-    }
-
-    /**
-     * @return the showAllElementaryMetaPaths
-     */
-    public final boolean isShowAllElementaryMetaPaths() {
-        return showAllElementaryMetaPaths;
-    }
-
-    /**
-     * @param showAllElementaryMetaPaths the showAllElementaryMetaPaths to set
-     */
-    public final void setShowAllElementaryMetaPaths(final boolean showAllElementaryMetaPaths) {
-        this.showAllElementaryMetaPaths = showAllElementaryMetaPaths;
     }
 
 }
