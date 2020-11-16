@@ -65,6 +65,7 @@ public class IheTemplateLibraryProvider extends TemplateLibraryProvider {
                 MetaModelContext metaModelContext = Tool3lgmMetaModelContext.getMetaModelContextForDefinitionClass(getMetaModelDefinitionClass());
                 SimpleSerialMetaPathBuilder builder = SimpleSerialMetaPathCreator.builder(metaModelContext);
                 builder.add(IheDomain.class, IheActor.class, IheIntegrationProfile_IheDomain_Edge.class, IheIntegrationProfile_IheActor_Edge.class);
+                //IheInterfaces should be only visible in Expert mode -> encapsulate them in an inner SimpleMetaPath
                 builder.addSimpleMetaPath(IheActor.class, IheTransaction.class, IheActor_IheInterface_Edge.class, IheInterface_IheTransaction_Edge.class);
                 SequenceMetaPath iheTemplateViewPath = builder.build();
                 return ImmutableList.of(iheTemplateViewPath);

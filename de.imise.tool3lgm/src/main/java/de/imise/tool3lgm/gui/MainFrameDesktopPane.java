@@ -197,6 +197,9 @@ public final class MainFrameDesktopPane extends JPanel implements PropertyChange
             setShowStandardToolbar();
         } else if (OPTION_ENABLE_EXPERT_MODE.isChanged(evt)) {
             modelBrowserPanel.updateModelBrowsers();
+            if (templateBrowserPanel != null) {
+                templateBrowserPanel.refresh();
+            }
         } else {
             String propertyName = evt.getPropertyName();
             if (propertyName.equals("dividerLocation")) {

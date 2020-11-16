@@ -209,7 +209,15 @@ public abstract class BasicSearchOptionsPanel extends JPanel implements ItemList
 
         SearchOptions searchOptions = getSearchOptions(false);
         resultTargetView.showResult(doc, searchOptions);
+    }
 
+    /**
+     * Updates the panel
+     */
+    public void refresh() {
+        removeComboboxListeners();
+        fillElementClassBox();
+        addComboboxListenersAndActions();
     }
 
     /**
