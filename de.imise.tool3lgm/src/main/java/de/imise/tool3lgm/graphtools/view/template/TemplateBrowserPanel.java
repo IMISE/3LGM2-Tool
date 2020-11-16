@@ -25,6 +25,7 @@ import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.model.LGMGraphDocument;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
+import de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty;
 
 /**
  * @author AXS (23.08.2019)
@@ -49,7 +50,7 @@ public class TemplateBrowserPanel extends JPanel implements PropertyChangeListen
      */
     public TemplateBrowserPanel() {
         setLayout(new BorderLayout());
-        tree = new TemplateBrowserTree();
+        tree = new TemplateBrowserTree(BooleanProperty.OPTION_ENABLE_EXPERT_MODE);
         treeScrollPane = new JScrollPane(tree);
         tree.addPropertyChangeListener(CONTENT_CHANGED, this);
     }

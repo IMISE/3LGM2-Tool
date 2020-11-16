@@ -19,6 +19,8 @@ import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.model.LGMGraphDocument;
 import de.imise.tool3lgm.graphtools.model.template.TemplateLibrariesManager;
+import de.imise.tool3lgm.graphtools.path.metapaths.MetaPath;
+import de.imise.tool3lgm.graphtools.path.metapaths.MetaPathFunctions;
 import de.imise.tool3lgm.graphtools.path.metapaths.SequenceMetaPath;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.graphtools.view.tree.node.ElementClassTreeNode;
@@ -26,6 +28,7 @@ import de.imise.tool3lgm.graphtools.view.tree.node.ElementContainerTreeNode;
 import de.imise.tool3lgm.graphtools.view.tree.node.IconifiedTreeNode;
 import de.imise.tool3lgm.graphtools.view.tree.node.LGMTreeNode;
 import de.imise.tool3lgm.graphtools.view.tree.node.StringTreeNode;
+import de.imise.util.BooleanOption;
 
 /**
  * @author AXS (01.09.2019)
@@ -50,7 +53,12 @@ public class PathTreeModel extends DefaultTreeModel implements MetaModelSpecific
     private final boolean showElementNamesWithSubmodels;
 
     /**
+     * If <code>true</code> all elements in the definition tree paths are
+     * displayed. If <code>false</code> only the start- and end-classes of the
+     * contained outer metapaths in the {@link PathTreeBranchDefinition} will be
+     * displayed
      */
+    final BooleanOption showAllElements;
 
     /**
      * @param emptyModelInfo Info that is displayed if there is nothing else to
@@ -60,12 +68,18 @@ public class PathTreeModel extends DefaultTreeModel implements MetaModelSpecific
      *            ElementContainerTreeNodes. If <code>true</code> the name with
      *            all submodel information will be displayed for
      *            ElementContainerTreeNodes.
+     * @param showAllElements if <code>true</code> all elements in the
+     *            definition tree paths are displayed. If <code>false</code>
+     *            only the start- and end-classes of the contained outer
+     *            metapaths in the {@link PathTreeBranchDefinition} will be
+     *            displayed
      */
-    public PathTreeModel(final String emptyModelInfo, final boolean showElementNamesWithSubmodels) {
+    public PathTreeModel(final String emptyModelInfo, final boolean showElementNamesWithSubmodels, final BooleanOption showAllElements) {
         super(new StringTreeNode("Root", true));
         root = (LGMTreeNode) super.root;
         this.emptyModelInfo = emptyModelInfo;
         this.showElementNamesWithSubmodels = showElementNamesWithSubmodels;
+        this.showAllElements = showAllElements;
     }
 
     /**
@@ -140,37 +154,40 @@ public class PathTreeModel extends DefaultTreeModel implements MetaModelSpecific
      */
     private void addBranch(final PathTreeBranchDefinition branchDefinition) {
         LGMTreeNode lastHierarchyNode = getOrCreateBranchLastHierarchyNode(branchDefinition);
-        SequenceMetaPath elementsPath = branchDefinition.getElementsPath();
+        SequenceMetaPath metaPath = branchDefinition.getElementsPath();
         MetaModelContext metaModelContext = getMetaModelContext();
         TemplateLibrariesManager templateLibrariesManager = Static.getTemplateLibrariesManager();
         Collection<GDCollection> templates = templateLibrariesManager.getTemplates(metaModelContext);
-        Class<? extends ModelElement> pathStepConnectionClass = elementsPath.getStartClass();
+        Class<? extends ModelElement> pathStepConnectionClass = metaPath.getStartClass();
         Collection<ElementContainerTreeNode> pathStepNodes = new ArrayList<>();
         for (GDCollection template : templates) {
             LGMGraphDocument mainGraphDocument = template.getMainDoc();
             List<ElementContainer> elementContainers = mainGraphDocument.getElementContainers(pathStepConnectionClass);
             createNodes(pathStepNodes, elementContainers, lastHierarchyNode, branchDefinition);
         }
-        int pathLength = elementsPath.getElementaryMetaPathCount();
+        boolean showAllElements = this.showAllElements.is();
+        List<MetaPath> subMetaPaths = metaPath.getSubMetaPaths(showAllElements);
+        int pathLength = subMetaPaths.size();
         for (int i = 0; i < pathLength; i++) {
-            pathStepConnectionClass = elementsPath.getElementaryMetaPathStepConnectingClass(i);
-            pathStepNodes = addPathStepNodes(pathStepNodes, pathStepConnectionClass, branchDefinition);
+            pathStepConnectionClass = MetaPathFunctions.getMetaPathsConnectingClass(subMetaPaths, i);
+            MetaPath subMetaPath = subMetaPaths.get(i);
+            pathStepNodes = addPathStepNodes(pathStepNodes, subMetaPath, branchDefinition);
         }
     }
 
     /**
      * @param parentNodes
-     * @param nextPathStepElementClass
+     * @param subMetaPath
      * @param branchDefinition
      * @return
      */
-    private Collection<ElementContainerTreeNode> addPathStepNodes(final Iterable<ElementContainerTreeNode> parentNodes, final Class<? extends ModelElement> nextPathStepElementClass, final PathTreeBranchDefinition branchDefinition) {
+    private Collection<ElementContainerTreeNode> addPathStepNodes(final Iterable<ElementContainerTreeNode> parentNodes, final MetaPath subMetaPath, final PathTreeBranchDefinition branchDefinition) {
         Collection<ElementContainerTreeNode> nextPathStepNodes = new ArrayList<>();
         for (ElementContainerTreeNode parentNode : parentNodes) {
             ElementContainer parentEc = parentNode.getUserObject();
             GraphDocument doc = parentEc.getGraphDocument();
             ModelElement me = parentEc.getElement();
-            List<ElementContainer> connectedContainers = me.getConnectedContainers(nextPathStepElementClass, doc);
+            List<ElementContainer> connectedContainers = subMetaPath.getConnectedContainer(me, doc);
             createNodes(nextPathStepNodes, connectedContainers, parentNode, branchDefinition);
         }
         return nextPathStepNodes;
