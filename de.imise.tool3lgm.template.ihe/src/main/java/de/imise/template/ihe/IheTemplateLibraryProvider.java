@@ -27,7 +27,6 @@ import de.imise.tool3lgm.metamodel.service.edge.IheProvidingInterface_IheTransac
 import de.imise.tool3lgm.metamodel.service.node.IheActor;
 import de.imise.tool3lgm.metamodel.service.node.IheDomain;
 import de.imise.tool3lgm.metamodel.service.node.IheIntegrationProfile;
-import de.imise.tool3lgm.metamodel.service.node.IheInterface;
 import de.imise.tool3lgm.metamodel.service.node.IheInvokingInterface;
 import de.imise.tool3lgm.metamodel.service.node.IheProvidingInterface;
 import de.imise.tool3lgm.metamodel.service.node.IheTransaction;
@@ -66,8 +65,7 @@ public class IheTemplateLibraryProvider extends TemplateLibraryProvider {
                 MetaModelContext metaModelContext = Tool3lgmMetaModelContext.getMetaModelContextForDefinitionClass(getMetaModelDefinitionClass());
                 SimpleSerialMetaPathBuilder builder = SimpleSerialMetaPathCreator.builder(metaModelContext);
                 builder.add(IheDomain.class, IheActor.class, IheIntegrationProfile_IheDomain_Edge.class, IheIntegrationProfile_IheActor_Edge.class);
-                builder.addSimpleMetaPath(IheActor.class, IheInterface.class, IheActor_IheInterface_Edge.class);
-                builder.add(IheInterface.class, IheTransaction.class, IheInterface_IheTransaction_Edge.class);
+                builder.addSimpleMetaPath(IheActor.class, IheTransaction.class, IheActor_IheInterface_Edge.class, IheInterface_IheTransaction_Edge.class);
                 SequenceMetaPath iheTemplateViewPath = builder.build();
                 return ImmutableList.of(iheTemplateViewPath);
             }
