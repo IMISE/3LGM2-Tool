@@ -98,9 +98,21 @@ public class MetaPathFunctions {
      * @param checkElementaryMetaPaths
      * @return
      */
-    @SuppressWarnings("unchecked")
     private static final Class<? extends ModelElement> getMetaPathsConnectingClass(final MetaPath metaPath, final int pathStepIndex, final boolean checkElementaryMetaPaths) {
-        List<MetaPath> subMetaPaths = checkElementaryMetaPaths ? (List<MetaPath>) (List<?>) metaPath.getElementaryMetaPaths() : metaPath.getSubMetaPaths();
+        List<MetaPath> subMetaPaths = metaPath.getSubMetaPaths(checkElementaryMetaPaths);
+        return getMetaPathsConnectingClass(subMetaPaths, pathStepIndex);
+    }
+
+    /**
+     * Liefert die speziellere der Endklasse des ersten Pfades und der
+     * Startklasse des zweiten Pfades. Ist der zweite Pfad <code>null</code>,
+     * kommt die Endklasse des ersten zurück.
+     *
+     * @param subMetaPaths
+     * @param pathStepIndex
+     * @return
+     */
+    public static final Class<? extends ModelElement> getMetaPathsConnectingClass(final List<MetaPath> subMetaPaths, final int pathStepIndex) {
         if (subMetaPaths.isEmpty()) {
             return null;
         }
@@ -118,20 +130,20 @@ public class MetaPathFunctions {
      * Startklasse des zweiten Pfades. Ist der zweite Pfad <code>null</code>,
      * kommt die Endklasse des ersten zurück.
      *
-     * @param elementaryMetaPathToConnectingClass
-     * @param elementaryMetaPathFromConnectionClass
+     * @param metaPathToConnectingClass
+     * @param metaPathFromConnectionClass
      * @return
      */
-    public static final Class<? extends ModelElement> getMetaPathsConnectingClass(final MetaPath elementaryMetaPathToConnectingClass, final MetaPath elementaryMetaPathFromConnectionClass) {
+    public static final Class<? extends ModelElement> getMetaPathsConnectingClass(final MetaPath metaPathToConnectingClass, final MetaPath metaPathFromConnectionClass) {
         //ACHTUNG: diese Funktion nicht einfach durch die andere mit den EdgeClasses laufen lassen, da die Start- und Endklasse der ElementaryMetaPaths was anderes sein können, als die Start- bzw. die Endklasse der enthaltenen Kantenklasse
-        if (elementaryMetaPathToConnectingClass == null) { //tritt auf, wenn es um den ersten Pfaschritt geht, also den Anfang des Pfades
-            return elementaryMetaPathFromConnectionClass.getStartClass();
+        if (metaPathToConnectingClass == null) { //tritt auf, wenn es um den ersten Pfaschritt geht, also den Anfang des Pfades
+            return metaPathFromConnectionClass.getStartClass();
         }
-        if (elementaryMetaPathFromConnectionClass == null) { //tritt auf, wenn es um den letzten Pfadschritt geht, also das Ende des Pfades
-            return elementaryMetaPathToConnectingClass.getEndClass();
+        if (metaPathFromConnectionClass == null) { //tritt auf, wenn es um den letzten Pfadschritt geht, also das Ende des Pfades
+            return metaPathToConnectingClass.getEndClass();
         }
-        Class<? extends ModelElement> lastEndClass = elementaryMetaPathToConnectingClass.getEndClass();
-        Class<? extends ModelElement> nextStartClass = elementaryMetaPathFromConnectionClass.getStartClass();
+        Class<? extends ModelElement> lastEndClass = metaPathToConnectingClass.getEndClass();
+        Class<? extends ModelElement> nextStartClass = metaPathFromConnectionClass.getStartClass();
         Class<? extends ModelElement> connectingClass = ReflectionUtils.getMostSpecialClass(lastEndClass, nextStartClass);
         return connectingClass;
     }
