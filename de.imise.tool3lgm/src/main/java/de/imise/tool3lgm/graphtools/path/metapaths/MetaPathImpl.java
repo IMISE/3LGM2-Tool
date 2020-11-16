@@ -209,6 +209,13 @@ abstract class MetaPathImpl extends BasicMetaPathImpl implements MetaPath {
         return subMetaPaths.size();
     }
 
+    @SuppressWarnings("unchecked")
+    @Override
+    public final List<MetaPath> getSubMetaPaths(final boolean elementaryMetaPaths) {
+        List<MetaPath> subMetaPaths = elementaryMetaPaths ? (List<MetaPath>) (List<?>) getElementaryMetaPaths() : getSubMetaPaths();
+        return subMetaPaths;
+    }
+
     /**
      * @return den ersten ElementaryMetaPath aus
      *         {@link #getElementaryMetaPaths()}, wenn die Liste mind. einen

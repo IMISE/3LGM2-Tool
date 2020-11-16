@@ -615,10 +615,9 @@ public final class ElementaryMetaPath extends MetaPathImpl implements SequenceMe
         return elementaryMetaPaths;
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     public final List<MetaPath> getSubMetaPaths() {
-        return (List<MetaPath>) (List<?>) getElementaryMetaPaths();
+        return getSubMetaPaths(true);
     }
 
     @Override

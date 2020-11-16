@@ -174,6 +174,14 @@ public interface MetaPath extends BasicMetaPath {
     int getSubMetaPathCount();
 
     /**
+     * @param elementaryMetaPaths If <code>true</code>, then the list of
+     *            ElementaryMetaPaths is returned. If false, then the list of
+     *            SubMetaPaths is returned.
+     * @return
+     */
+    public List<MetaPath> getSubMetaPaths(final boolean elementaryMetaPaths);
+
+    /**
      * Liefert <code>false</code>, wenn der Pfad in beide Richtungen dasselbe
      * bedeutet. Dafür muss er dieselben Elementarten miteinander verbinden und
      * denselben Namen in beiden Richtungen tragen. Z.B können 2 physische
