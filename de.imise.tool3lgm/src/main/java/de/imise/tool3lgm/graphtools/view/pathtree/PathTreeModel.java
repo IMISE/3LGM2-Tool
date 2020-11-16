@@ -50,30 +50,7 @@ public class PathTreeModel extends DefaultTreeModel implements MetaModelSpecific
     private final boolean showElementNamesWithSubmodels;
 
     /**
-     *
      */
-    public PathTreeModel() {
-        this(null, false);
-    }
-
-    /**
-     * @param emptyModelInfo Info that is displayed if there is nothing else to
-     *            display
-     */
-    public PathTreeModel(final String emptyModelInfo) {
-        this(emptyModelInfo, false);
-    }
-
-    /**
-     * @param showElementNamesWithSubmodels If <code>false</code> only the name
-     *            of the model elements will be displayed in
-     *            ElementContainerTreeNodes. If <code>true</code> the name with
-     *            all submodel information will be displayed for
-     *            ElementContainerTreeNodes.
-     */
-    public PathTreeModel(final boolean showElementNamesWithSubmodels) {
-        this(null, showElementNamesWithSubmodels);
-    }
 
     /**
      * @param emptyModelInfo Info that is displayed if there is nothing else to
