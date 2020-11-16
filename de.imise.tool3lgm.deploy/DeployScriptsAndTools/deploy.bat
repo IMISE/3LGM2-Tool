@@ -7,6 +7,10 @@ SET "SKIPLAUNCH4J=no"
 ::  Per Default Maven Jobs ausfuehren
 ::  Alternativ: CMD-Line Parameter "-skip-mvn" verwenden
 SET "SKIPMVN=no" 
+::  Per Default create Install/Zip packages
+::  Alternativ: CMD-Line Parameter "-skip-ipackages" verwenden
+SET "SKIPIPACKAGES=no" 
+
 
 SET "INITIAL_DIR=%CD%"
 
@@ -153,7 +157,43 @@ FOR %%A IN (%*) DO (
 CD /D %DEPLOY_TOOLS_PROJECT_DIR%
 CALL mvn -B clean install
 
+::Jetzt alle Teilprojekte per Maven bauen. Die pom.xml des tool3lgm-Projektes kopiert am Ende die
+::axutils.jar und die tool3lgm.jar sowie alle anderen benötigten Bibliotheken ins lib-Verzeichnis
+::des zu deployenden Tools im %DEPLOY_PROJECT_TOOL3LGM_DIR%.
+::Die Plugin-Projekte kopieren jeweils ihr jar-Artefakt auch innerhalb der pom.xml in das
+::Plugins-Verzeichnis des zu deployenden Tools.
+
+::Da die Pfade immer relativ zur %SCRIPT_LOCATION% sind, muss am Ende immer zur %SCRIPT_LOCATION%
+::zurück gewechselt werden. Das ist auf jeden Fall einfacher, als erst nochmal die ganzen Pfade
+::absolut zu machen.
+
+::create axsutils per Maven
+CD /D %AXSUTILS_PROJECT_DIR%
+CALL mvn -B clean install
+CD /D %SCRIPT_LOCATION%
+
+::create Tool3lgm per Maven
+CD /D %TOOL3LGM_PROJECT_DIR%
+CALL mvn -B clean install
+CD /D %SCRIPT_LOCATION%
+
+::create Original-Metamodel per Maven
+CD /D %METAMODEL_ORIGINAL_PROJECT_DIR%
+CALL mvn -B clean install
+CD /D %SCRIPT_LOCATION%
+
+::create Service-Metamodel per Maven
+CD /D %METAMODEL_SERVICE_PROJECT_DIR%
+CALL mvn -B clean install
+CD /D %SCRIPT_LOCATION%
+
+::create IHE-Template Plugin per Maven
+CD /D %IHE_TEMPLATE_PROJECT_DIR%
+CALL mvn -B clean install
+CD /D %SCRIPT_LOCATION%
+
 :MVN_NEXT1
+
 
 ::suche die jar-Datei der Deploy-Tools im target-Ordner des deploy-tools-Projektes. Falls mal jemand die Version
 ::der Deploy-Tools in deren pom.xml ändert, dann heißt die generierte jar-Datei anders. Indem man sie hier
@@ -226,54 +266,7 @@ START %CLH% "%ISS_FILE%" "%ISS_FILE_LINE_FILEEXE_SRT%" "%ISS_FILE_LINE_FILEEXE_E
 CALL :NORMALIZEPATH "%DEPLOY_PROJECT_TOOL3LGM_DIR%"
 START %CLH% "%ISS_FILE%" "%ISS_FILE_LINE_FILEALL_SRT%" "%ISS_FILE_LINE_FILEALL_END%" "%ABSOLUTEPATH%\*"
 
-::Jetzt alle Teilprojekte per Maven bauen. Die pom.xml des tool3lgm-Projektes kopiert am Ende die
-::axutils.jar und die tool3lgm.jar sowie alle anderen benötigten Bibliotheken ins lib-Verzeichnis
-::des zu deployenden Tools im %DEPLOY_PROJECT_TOOL3LGM_DIR%.
-::Die Plugin-Projekte kopieren jeweils ihr jar-Artefakt auch innerhalb der pom.xml in das
-::Plugins-Verzeichnis des zu deployenden Tools.
 
-::Da die Pfade immer relativ zur %SCRIPT_LOCATION% sind, muss am Ende immer zur %SCRIPT_LOCATION%
-::zurück gewechselt werden. Das ist auf jeden Fall einfacher, als erst nochmal die ganzen Pfade
-::absolut zu machen.
-
-::Maven Build Job ueberspringen
-IF "%SKIPMVN%"=="yes" (
-  ECHO "### Skipping Maven Jobs (SKIPMVN=yes)"
-  GOTO MVN_NEXT2
-)
-FOR %%A IN (%*) DO (
-  IF "%%A"=="-skip-mvn" (
-    ECHO "### Skipping Maven Jobs (-skip-mvn)"
-    GOTO MVN_NEXT2
-  )
-)
-
-::create axsutils per Maven
-CD /D %AXSUTILS_PROJECT_DIR%
-CALL mvn -B clean install
-CD /D %SCRIPT_LOCATION%
-
-::create Tool3lgm per Maven
-CD /D %TOOL3LGM_PROJECT_DIR%
-CALL mvn -B clean install
-CD /D %SCRIPT_LOCATION%
-
-::create Original-Metamodel per Maven
-CD /D %METAMODEL_ORIGINAL_PROJECT_DIR%
-CALL mvn -B clean install
-CD /D %SCRIPT_LOCATION%
-
-::create Service-Metamodel per Maven
-CD /D %METAMODEL_SERVICE_PROJECT_DIR%
-CALL mvn -B clean install
-CD /D %SCRIPT_LOCATION%
-
-::create IHE-Template Plugin per Maven
-CD /D %IHE_TEMPLATE_PROJECT_DIR%
-CALL mvn -B clean install
-CD /D %SCRIPT_LOCATION%
-
-:MVN_NEXT2
 
 ::IHE Domain Ontology pull
 ::ToDo: Repo pullen
@@ -306,6 +299,17 @@ CALL "%LAUNCH4J_DIR%\launch4jc.exe" %LAUNCH4J_JRE_FILE%
 :LAUNCH4J_NEXT
 
 
+::create Install/Zip packages
+IF "%SKIPIPACKAGES%"=="yes" (
+  ECHO "### Skipping the creation von Install resp. Zip packages (SKIPIPACKAGES=yes)"
+  GOTO SKIPIPACKAGES_NEXT
+)
+FOR %%A IN (%*) DO (
+  IF "%%A"=="-skip-ipackages" (
+    ECHO "### Skipping the creation von Install resp. Zip packages (-skip-ipackages)"
+    GOTO SKIPIPACKAGES_NEXT
+  )
+)
 ::Bestehende Dateien im Verzeichnis %DEPLOY_DESTINATION_DIR% löschen
 ECHO "### Entferne vorhandene Dateien im Verzeichnis %DEPLOY_DESTINATION_DIR%"
 DEL %DEPLOY_DESTINATION_DIR%\*  /s /q
@@ -346,6 +350,8 @@ FOR /d %%X IN ("%DEPLOY_PROJECT_TOOL3LGM_DIR%") DO "%SEVENZIP_PROGRAM_FILE%" a "
 "%SEVENZIP_PROGRAM_FILE%" a -ttar "%DEPLOY_DESTINATION_DIR%\%ZIP_AND_TARGZ_RESULT_NAME%.tar" "%DEPLOY_PROJECT_TOOL3LGM_DIR%"
 "%SEVENZIP_PROGRAM_FILE%" a -tgzip "%DEPLOY_DESTINATION_DIR%\%ZIP_AND_TARGZ_RESULT_NAME%.tar.gz" "%DEPLOY_DESTINATION_DIR%\%ZIP_AND_TARGZ_RESULT_NAME%.tar"
 DEL %DEPLOY_DESTINATION_DIR%\%ZIP_AND_TARGZ_RESULT_NAME%.tar
+
+:SKIPIPACKAGES_NEXT
 
 CD /D %INITIAL_DIR%
 ::PAUSE
