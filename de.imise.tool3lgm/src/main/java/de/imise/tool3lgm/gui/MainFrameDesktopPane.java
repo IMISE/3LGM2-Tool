@@ -198,7 +198,7 @@ public final class MainFrameDesktopPane extends JPanel implements PropertyChange
         } else if (OPTION_ENABLE_EXPERT_MODE.isChanged(evt)) {
             modelBrowserPanel.updateModelBrowsers();
             if (templateBrowserPanel != null) {
-                templateBrowserPanel.refresh();
+                templateBrowserPanel.refresh(true);
             }
         } else {
             String propertyName = evt.getPropertyName();

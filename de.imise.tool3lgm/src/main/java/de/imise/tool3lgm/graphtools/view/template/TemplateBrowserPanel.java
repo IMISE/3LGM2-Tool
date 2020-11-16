@@ -115,17 +115,18 @@ public class TemplateBrowserPanel extends JPanel implements PropertyChangeListen
 
     @Override
     public void propertyChange(final PropertyChangeEvent evt) {
-        refresh();
+        refresh(false);
     }
 
     /**
-     *
+     * @param forceReloadTree
      */
-    public void refresh() {
+    public void refresh(final boolean forceReloadTree) {
         checkSearchFieldVisibility();
         if (searchPanel != null) {
             searchPanel.refresh();
         }
+        tree.reload(forceReloadTree);
     }
 
     /**

@@ -182,10 +182,19 @@ public class TemplateBrowserTree extends DynamicTree implements SearchResultView
     @Override
     public void propertyChange(final PropertyChangeEvent evt) {
         //Sys.err("propertyChange " + evt);
+        reload(false);
+    }
+
+    /**
+     * @param forceReload The tree must always be reloaded if the
+     *            MetaModelContext has changed or the "Expert Mode" option where
+     *            all elements should be displayed.
+     */
+    public void reload(final boolean forceReload) {
         boolean oldValueHasContent = hasContent();
         MetaModelContext currentMetaModelContext = pathTreeModel.getMetaModelContext();
         MetaModelContext newMetaModelContext = Static.getSelectedMetaModelContext();
-        if (Objects.equals(currentMetaModelContext, newMetaModelContext)) {
+        if (!forceReload && Objects.equals(currentMetaModelContext, newMetaModelContext)) {
             return;
         }
         TemplateLibrariesManager templateLibrariesManager = Static.getTemplateLibrariesManager();
