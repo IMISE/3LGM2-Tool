@@ -99,6 +99,18 @@ public final class ElementaryMetaPathHandler {
     }
 
     /**
+     * @param startClass
+     * @param edgeClass
+     * @param endClass
+     * @return
+     */
+    public final ElementaryMetaPath getMetaPath(final Class<? extends ModelElement> startClass, final Class<? extends Edge> edgeClass, final Class<? extends ModelElement> endClass) {
+        Direction direction = CoreMetaModel.isStartClass(edgeClass, startClass) ? Direction.FORWARD : Direction.BACKWARD;
+        ElementaryMetaPath returnMetaPath = getMetaPath(startClass, edgeClass, direction, endClass);
+        return returnMetaPath;
+    }
+
+    /**
      * Gibt einen ElementaryMetaPath zurück, der bis auf die Start- und
      * Zielklasse identisch ist mit dem übergebenen Elementarpfad. Sind die
      * Start- und Zielklassen dieselben wie beim übergebenen Elementarpfad, so
