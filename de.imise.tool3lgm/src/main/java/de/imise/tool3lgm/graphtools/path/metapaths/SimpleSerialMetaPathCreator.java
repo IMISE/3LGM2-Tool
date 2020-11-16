@@ -34,7 +34,7 @@ public class SimpleSerialMetaPathCreator extends SimpleMetaPathCreator {
     /**
      * @author Ich (13.11.2020)
      */
-    public static class SimpleSerialMetaPathBuilder {
+    public static class SimpleSerialMetaPathBuilder implements Cloneable {
 
         /**
          *
@@ -52,6 +52,20 @@ public class SimpleSerialMetaPathCreator extends SimpleMetaPathCreator {
         private SimpleSerialMetaPathBuilder(final SimpleSerialMetaPathCreator sequenceMetaPathCreator) {
             this.sequenceMetaPathCreator = sequenceMetaPathCreator;
             sequenceMetaPaths = new ArrayList<>();
+        }
+
+        /**
+         * @param sequenceMetaPathCreator
+         */
+        private SimpleSerialMetaPathBuilder(final SimpleSerialMetaPathCreator sequenceMetaPathCreator, final List<SequenceMetaPath> sequenceMetaPaths) {
+            this.sequenceMetaPathCreator = sequenceMetaPathCreator;
+            this.sequenceMetaPaths = new ArrayList<>(sequenceMetaPaths);
+        }
+
+        @Override
+        public SimpleSerialMetaPathBuilder clone() {
+            SimpleSerialMetaPathBuilder simpleSerialMetaPathBuilder = new SimpleSerialMetaPathBuilder(sequenceMetaPathCreator, sequenceMetaPaths);
+            return simpleSerialMetaPathBuilder;
         }
 
         /**
@@ -88,6 +102,17 @@ public class SimpleSerialMetaPathCreator extends SimpleMetaPathCreator {
         @SuppressWarnings("unchecked")
         public void addSimpleMetaPath(final Class<? extends ModelElement> startClass, final Class<? extends ModelElement> endClass, final String baseResKeyOrName, final Class<? extends Edge>... edgeClasses) {
             SimpleMetaPath simpleMetaPath = sequenceMetaPathCreator.createSimpleMetaPath(startClass, endClass, baseResKeyOrName, edgeClasses);
+            sequenceMetaPaths.add(simpleMetaPath);
+        }
+
+        /**
+         * @param startClass
+         * @param endClass
+         * @param baseResKeyOrName
+         * @param edgeClasses
+         */
+        public void addSimpleMetaPath(final ElementaryMetaPath... elementaryMetaPaths) {
+            SimpleMetaPath simpleMetaPath = new SimpleMetaPath(elementaryMetaPaths);
             sequenceMetaPaths.add(simpleMetaPath);
         }
 

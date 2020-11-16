@@ -14,6 +14,8 @@ import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.template.TemplateLibraryProvider;
 import de.imise.tool3lgm.graphtools.model.template.TemplateUsageDefinition;
 import de.imise.tool3lgm.graphtools.model.template.TemplateViewDefinition;
+import de.imise.tool3lgm.graphtools.path.metapaths.ElementaryMetaPath;
+import de.imise.tool3lgm.graphtools.path.metapaths.ElementaryMetaPathHandler;
 import de.imise.tool3lgm.graphtools.path.metapaths.SequenceMetaPath;
 import de.imise.tool3lgm.graphtools.path.metapaths.SimpleSerialMetaPathCreator;
 import de.imise.tool3lgm.graphtools.path.metapaths.SimpleSerialMetaPathCreator.SimpleSerialMetaPathBuilder;
@@ -63,12 +65,22 @@ public class IheTemplateLibraryProvider extends TemplateLibraryProvider {
             @Override
             public List<SequenceMetaPath> getViewMetaPaths() {
                 MetaModelContext metaModelContext = Tool3lgmMetaModelContext.getMetaModelContextForDefinitionClass(getMetaModelDefinitionClass());
-                SimpleSerialMetaPathBuilder builder = SimpleSerialMetaPathCreator.builder(metaModelContext);
-                builder.add(IheDomain.class, IheActor.class, IheIntegrationProfile_IheDomain_Edge.class, IheIntegrationProfile_IheActor_Edge.class);
+                ElementaryMetaPathHandler emph = metaModelContext.getElementaryMetaPathHandler();
+
+                SimpleSerialMetaPathBuilder builder1 = SimpleSerialMetaPathCreator.builder(metaModelContext);
+                builder1.add(IheDomain.class, IheActor.class, IheIntegrationProfile_IheDomain_Edge.class, IheIntegrationProfile_IheActor_Edge.class);
+                SimpleSerialMetaPathBuilder builder2 = builder1.clone();
+
+                ElementaryMetaPath emp1 = emph.getMetaPath(IheActor.class, IheActor_IheInterface_Edge.class);
+                ElementaryMetaPath emp2a = emph.getMetaPath(IheInvokingInterface.class, IheInterface_IheTransaction_Edge.class, IheTransaction.class);
+                ElementaryMetaPath emp2b = emph.getMetaPath(IheProvidingInterface.class, IheInterface_IheTransaction_Edge.class, IheTransaction.class);
+
                 //IheInterfaces should be only visible in Expert mode -> encapsulate them in an inner SimpleMetaPath
-                builder.addSimpleMetaPath(IheActor.class, IheTransaction.class, IheActor_IheInterface_Edge.class, IheInterface_IheTransaction_Edge.class);
-                SequenceMetaPath iheTemplateViewPath = builder.build();
-                return ImmutableList.of(iheTemplateViewPath);
+                builder1.addSimpleMetaPath(emp1, emp2a);
+                builder2.addSimpleMetaPath(emp1, emp2b);
+                SequenceMetaPath iheTemplateViewPath1 = builder1.build();
+                SequenceMetaPath iheTemplateViewPath2 = builder2.build();
+                return ImmutableList.of(iheTemplateViewPath1, iheTemplateViewPath2);
             }
 
         };
