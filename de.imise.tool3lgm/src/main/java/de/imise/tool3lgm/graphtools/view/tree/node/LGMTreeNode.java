@@ -7,6 +7,7 @@ import java.util.Vector;
 
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.MutableTreeNode;
+import javax.swing.tree.TreeNode;
 
 import de.imise.tool3lgm.graphtools.consistency.error.type.AbstractConsistencyError;
 import de.imise.util.Alphabetical;
@@ -176,6 +177,21 @@ public class LGMTreeNode extends DefaultMutableTreeNode {
         }
 
         return retVal;
+    }
+
+    /**
+     * @param node
+     * @return
+     */
+    public final LGMTreeNode getEqualsChild(final LGMTreeNode node) {
+        if (children != null) {
+            for (TreeNode child : children) {
+                if (node.equals(child)) {
+                    return (LGMTreeNode) child;
+                }
+            }
+        }
+        return null;
     }
 
     @Override

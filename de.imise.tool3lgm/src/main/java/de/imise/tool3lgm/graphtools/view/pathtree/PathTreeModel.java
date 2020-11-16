@@ -163,7 +163,7 @@ public class PathTreeModel extends DefaultTreeModel implements MetaModelSpecific
         for (GDCollection template : templates) {
             LGMGraphDocument mainGraphDocument = template.getMainDoc();
             List<ElementContainer> elementContainers = mainGraphDocument.getElementContainers(pathStepConnectionClass);
-            createNodes(pathStepNodes, elementContainers, lastHierarchyNode, branchDefinition);
+            getOrCreateNodes(pathStepNodes, elementContainers, lastHierarchyNode, branchDefinition);
         }
         boolean showAllElements = this.showAllElements.is();
         List<MetaPath> subMetaPaths = metaPath.getSubMetaPaths(showAllElements);
@@ -188,7 +188,7 @@ public class PathTreeModel extends DefaultTreeModel implements MetaModelSpecific
             GraphDocument doc = parentEc.getGraphDocument();
             ModelElement me = parentEc.getElement();
             List<ElementContainer> connectedContainers = subMetaPath.getConnectedContainer(me, doc);
-            createNodes(nextPathStepNodes, connectedContainers, parentNode, branchDefinition);
+            getOrCreateNodes(nextPathStepNodes, connectedContainers, parentNode, branchDefinition);
         }
         return nextPathStepNodes;
     }
@@ -199,12 +199,12 @@ public class PathTreeModel extends DefaultTreeModel implements MetaModelSpecific
      * @param parent
      * @param branchDefinition
      */
-    private void createNodes(final Collection<ElementContainerTreeNode> createdNodes, final Iterable<ElementContainer> elementContainers, final LGMTreeNode parent, final PathTreeBranchDefinition branchDefinition) {
+    private void getOrCreateNodes(final Collection<ElementContainerTreeNode> createdNodes, final Iterable<ElementContainer> elementContainers, final LGMTreeNode parent, final PathTreeBranchDefinition branchDefinition) {
         for (ElementContainer ec : elementContainers) {
             ModelElement me = ec.getElement();
             Class<? extends ModelElement> meClass = me.getClass();
             ImageIcon icon = branchDefinition.getIcon(meClass);
-            ElementContainerTreeNode pathStepNode = new ElementContainerTreeNode(ec, true, false, icon);
+            ElementContainerTreeNode pathStepNode = new ElementContainerTreeNode(ec, true, true, icon);
             if (!showElementNamesWithSubmodels) {
                 String simpleName = me.toString();
                 String currentToStringName = pathStepNode.toString();
@@ -212,7 +212,12 @@ public class PathTreeModel extends DefaultTreeModel implements MetaModelSpecific
                     pathStepNode.setText(simpleName);
                 }
             }
-            parent.add(pathStepNode);
+            LGMTreeNode existingEqualsNode = parent.getEqualsChild(pathStepNode);
+            if (existingEqualsNode == null) {
+                parent.add(pathStepNode);
+            } else {
+                pathStepNode = (ElementContainerTreeNode) existingEqualsNode;
+            }
             createdNodes.add(pathStepNode);
         }
     }
