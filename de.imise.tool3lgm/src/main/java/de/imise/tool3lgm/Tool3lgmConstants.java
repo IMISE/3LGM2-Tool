@@ -7,6 +7,7 @@ import java.awt.event.InputEvent;
 import java.awt.event.MouseEvent;
 import java.io.File;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -29,6 +30,7 @@ import de.imise.util.GitVersionInfoHandler.GitVersionInfo;
 import de.imise.util.StringUtils;
 import de.imise.util.collections.CollectionUtils;
 import de.imise.util.resource.SimpleResourceBundleSource;
+import de.imise.util.resource.SimpleResourceBundleSourceAdapter;
 import de.imise.util.resource.SimpleResourceIconSource;
 
 /**
@@ -283,6 +285,17 @@ public abstract class Tool3lgmConstants {
     private static ResourceBundle resourceBundle = ResourceBundle.getBundle(RESOURCE_BASE_NAME);
 
     /**
+     * Delegate object to this which can be used by classes which load the
+     * resource strings via the interface {@link SimpleResourceBundleSource}
+     */
+    public static final SimpleResourceBundleSource RESOURCE_BUNDLE_SOURCE = new SimpleResourceBundleSourceAdapter(resourceBundle);
+
+    /**
+     *
+     */
+    private final static List<ResourceBundle> ADDITIONAL_RESOURCE_BUNDLES = new ArrayList<>();
+
+    /**
      * Name der Datei mit Analysen. Unter diesem Namen ex. die Standarddatei in
      * den localisierten Resourcen. Wenn der Benutzer irgendeine XMLAnalyse mal
      * aufgerufen hat, dann gibt es mit diesem Namen im APPLICATION_PATH eine
@@ -304,17 +317,6 @@ public abstract class Tool3lgmConstants {
      * für die Sanduhr...
      */
     protected static Cursor normalCursor = new Cursor(Cursor.DEFAULT_CURSOR), waitCursor = new Cursor(Cursor.WAIT_CURSOR), handCursor = new Cursor(Cursor.HAND_CURSOR);
-
-    /**
-     * Delegate object to this which can be used by classes which load the
-     * resource strings via the interface {@link SimpleResourceBundleSource}
-     */
-    public static final SimpleResourceBundleSource RESOURCE_BUNDLE_SOURCE = new SimpleResourceBundleSource() {
-        @Override
-        public String getResString(final String resKey) {
-            return Tool3lgmConstants.getResString(resKey);
-        }
-    };
 
     /**
      * Liefert <code>true</code>, wenn der übergebene String eine Extension
@@ -468,6 +470,15 @@ public abstract class Tool3lgmConstants {
     }
 
     /**
+     * @param resourceBundleSource
+     */
+    public static final void addResourceBundle(final SimpleResourceBundleSource resourceBundleSource) {
+        ResourceBundle resourceBundle = resourceBundleSource.getResourceBundle();
+        ADDITIONAL_RESOURCE_BUNDLES.remove(resourceBundle);
+        ADDITIONAL_RESOURCE_BUNDLES.add(resourceBundle);
+    }
+
+    /**
      * @param baseKey
      * @return a resource string with the full key "TOOLTIP_" + baseKey
      */
@@ -489,12 +500,30 @@ public abstract class Tool3lgmConstants {
      *
      * @param key String with key for resource or the key
      * @return String with value of resource
+     * @throws Exception
      */
     public static String getResString(final String key) {
         //das hier darf auf keinen Fall mit try-catch komplett umrandet werden, da mehrere Funktionen auf die
         //MissingResocureException regaieren (z.B. die Funktionen zum heraussuchen der Kantennamen bei
         //Kanten mit doppelter Bedeutung
-        return resourceBundle.getString(key);
+        if (ADDITIONAL_RESOURCE_BUNDLES.isEmpty()) {
+            return resourceBundle.getString(key);
+        }
+        try {
+            return resourceBundle.getString(key);
+        } catch (Exception e) {
+            int additionalResourceBundleCount = ADDITIONAL_RESOURCE_BUNDLES.size() - 1;
+            for (int i = 0; i < additionalResourceBundleCount; i++) {
+                try {
+                    ResourceBundle resourceBundle = ADDITIONAL_RESOURCE_BUNDLES.get(i);
+                    return resourceBundle.getString(key);
+                } catch (Exception ex) {
+                    // ignore
+                }
+            }
+            ResourceBundle resourceBundle = ADDITIONAL_RESOURCE_BUNDLES.get(additionalResourceBundleCount);
+            return resourceBundle.getString(key);
+        }
     }
 
     /**

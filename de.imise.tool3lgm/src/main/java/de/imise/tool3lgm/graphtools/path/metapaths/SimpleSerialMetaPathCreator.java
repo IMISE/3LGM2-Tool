@@ -106,13 +106,19 @@ public class SimpleSerialMetaPathCreator extends SimpleMetaPathCreator {
         }
 
         /**
-         * @param startClass
-         * @param endClass
-         * @param baseResKeyOrName
-         * @param edgeClasses
+         * @param elementaryMetaPaths
          */
         public void addSimpleMetaPath(final ElementaryMetaPath... elementaryMetaPaths) {
             SimpleMetaPath simpleMetaPath = new SimpleMetaPath(elementaryMetaPaths);
+            sequenceMetaPaths.add(simpleMetaPath);
+        }
+
+        /**
+         * @param baseResKeyOrName
+         * @param elementaryMetaPaths
+         */
+        public void addSimpleMetaPath(final String baseResKeyOrName, final ElementaryMetaPath... elementaryMetaPaths) {
+            SimpleMetaPath simpleMetaPath = new SimpleMetaPath(baseResKeyOrName, elementaryMetaPaths);
             sequenceMetaPaths.add(simpleMetaPath);
         }
 
