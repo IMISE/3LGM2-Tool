@@ -78,8 +78,8 @@ public class IheTemplateLibraryProvider extends TemplateLibraryProvider {
                 ElementaryMetaPath emp2b = emph.getMetaPath(IheProvidingInterface.class, IheInterface_IheTransaction_Edge.class, IheTransaction.class);
 
                 //IheInterfaces should be only visible in Expert mode -> encapsulate them in an inner SimpleMetaPath
-                builder1.addSimpleMetaPath("TEMPLATE_BROWSER_IHE_INVOKING_INTERFACE_METAPATH", emp1, emp2a);
-                builder2.addSimpleMetaPath("TEMPLATE_BROWSER_IHE_PROVIDING_INTERFACE_METAPATH", emp1, emp2b);
+                builder1.addSimpleMetaPath("IHE_ACTOR_INVOKING_TRANSACTION", emp1, emp2a);
+                builder2.addSimpleMetaPath("IHE_ACTOR_PROVIDING_TRANSACTION", emp1, emp2b);
                 SequenceMetaPath iheTemplateViewPath1 = builder1.build();
                 SequenceMetaPath iheTemplateViewPath2 = builder2.build();
                 return ImmutableList.of(iheTemplateViewPath1, iheTemplateViewPath2);

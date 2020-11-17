@@ -206,8 +206,16 @@ public class PathTreeModel extends DefaultTreeModel implements MetaModelSpecific
         for (ElementContainer ec : elementContainers) {
             ModelElement me = ec.getElement();
             Class<? extends ModelElement> meClass = me.getClass();
-            ImageIcon icon = branchDefinition.getIcon(meClass);
             boolean createSimpleNode = subMetaPath == null || subMetaPath instanceof ElementaryMetaPath;
+            ImageIcon icon = null;
+            if (!createSimpleNode) {
+                //try to load an icon with the metapath resoruce key
+                String baseResKeyOrName = subMetaPath.getBaseResKeyOrName();
+                icon = branchDefinition.getIcon(baseResKeyOrName);
+            }
+            if (icon == null) {
+                icon = branchDefinition.getIcon(meClass);
+            }
             ElementContainerTreeNode pathStepNode = createSimpleNode ? new ElementContainerTreeNode(ec, true, true, icon) : new PathStepTreeNode(ec, subMetaPath, true, true, icon);
             if (!showElementNamesWithSubmodels) {
                 String simpleName = me.toString();

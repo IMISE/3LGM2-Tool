@@ -18,6 +18,8 @@ public interface MetaPath extends BasicMetaPath {
      */
     ImmutableList<ElementaryMetaPath> EMPTY_ELEMENTARY_PATH_LIST = ImmutableList.of();
 
+    String getBaseResKeyOrName();
+
     /**
      * @return
      */

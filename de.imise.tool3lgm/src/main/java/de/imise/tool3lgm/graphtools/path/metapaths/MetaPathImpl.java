@@ -72,6 +72,11 @@ abstract class MetaPathImpl extends BasicMetaPathImpl implements MetaPath {
         super(metaModel, startElementClasses, endElementClasses, name);
     }
 
+    @Override
+    public String getBaseResKeyOrName() {
+        return null;
+    }
+
     /**
      * @return
      */
