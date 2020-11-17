@@ -216,7 +216,9 @@ public class PathTreeModel extends DefaultTreeModel implements MetaModelSpecific
             if (icon == null) {
                 icon = branchDefinition.getIcon(meClass);
             }
-            ElementContainerTreeNode pathStepNode = createSimpleNode ? new ElementContainerTreeNode(ec, true, true, icon) : new PathStepTreeNode(ec, subMetaPath, true, true, icon);
+            //setTreeNode is false. Set the treeNode only if there is no equals existing node
+            boolean setTreeNodeInNodeContainer = false;
+            ElementContainerTreeNode pathStepNode = createSimpleNode ? new ElementContainerTreeNode(ec, setTreeNodeInNodeContainer, true, icon) : new PathStepTreeNode(ec, subMetaPath, setTreeNodeInNodeContainer, true, icon);
             if (!showElementNamesWithSubmodels) {
                 String simpleName = me.toString();
                 String currentToStringName = pathStepNode.toString();
@@ -227,6 +229,7 @@ public class PathTreeModel extends DefaultTreeModel implements MetaModelSpecific
             LGMTreeNode existingEqualsNode = parent.getEqualsChild(pathStepNode);
             if (existingEqualsNode == null) {
                 parent.add(pathStepNode);
+                pathStepNode.setTreeNode(ec); //now set the new TreeNode to the ElementContainer (NodeContainer)
             } else {
                 pathStepNode = (ElementContainerTreeNode) existingEqualsNode;
             }
