@@ -2,7 +2,7 @@
 <!DOCTYPE map PUBLIC "-//Sun Microsystems Inc.//DTD JavaHelp Map Version 1.0//EN"
             "http://java.sun.com/products/javahelp/map_1_0.dtd">
 
-<map version="1.0">
+<map version="1.0" xml:lang="de_DE">
 	<mapID target="willkommen" url="willkommen.html"/>
 	<mapID target="impressum" url="impressum.html"/>
 
@@ -139,4 +139,3 @@
 	<!-- Glossar -->
 	<mapID target="anwendungsbaustein" url="glossar/anwendungsbaustein.html"/>
 </map>
-

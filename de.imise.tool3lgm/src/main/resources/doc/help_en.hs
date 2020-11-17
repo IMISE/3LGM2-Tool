@@ -9,21 +9,21 @@
 
    <maps>
      <homeID>impressum</homeID>
-     <mapref location="map.jhm" />
+     <mapref location="map_en.jhm" />
    </maps>       
-
-   <view xml:lang="de_DE">
-      <name>TOC</name>
-      <label>Inhalt</label>
-      <type>javax.help.TOCView</type>
-      <data>inhalt.xml</data>
-   </view>
+	
+  	<view xml:lang="en_EN">
+      	<name>TOC</name>
+      	<label>Inhalt</label>
+      	<type>javax.help.TOCView</type>
+      	<data>inhalt_en.xml</data>
+   	</view>
    
-   <view xml:lang="de_DE" mergetype="javax.help.SortMerge">
+   <view xml:lang="en_EN" mergetype="javax.help.SortMerge">
    		<name>Index</name>
 		<label>Index</label>
 		<type>javax.help.IndexView</type>
-		<data>index.xml</data>
+		<data>index_en.xml</data>
 	</view>
 	
    <!--

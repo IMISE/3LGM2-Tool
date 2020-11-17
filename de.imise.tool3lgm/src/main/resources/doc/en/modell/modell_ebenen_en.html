@@ -1,0 +1,152 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<html>
+<head>
+	<title>Inter-layer relationships between static components</title>
+</head>
+
+<body>
+
+<h1>Inter-layer relationships between static components</h1>
+
+<p>
+As we have already seen at one point or another, the three layers do not exist independently of each other. The manifold relations between the layers are called inter-layer relations. In the class diagrams of the layers they are visible as dotted classes and association relations. We can find relations between the domain layer and the logical tool layer as well as between the logical and the physical tool layer.
+</p>
+<br>
+<br>
+
+<h2>Relations between the domain layer and the logical tool layer</h2>
+<p>
+<h3>Function - Application component</h3>
+Within a hospital a function can be supported by
+<ul>
+<li>several application components together,</li>
+<li>by a single application component, </li>
+<li>by combinations of these. </li>
+</ul>
+
+This fact is expressed in the application component configuration. 
+The application component configurations can be determined as follows:
+<ol type="1">
+<li><i>Which application components are required together to support the function?</i><br>
+An application component configuration thus contains all the application components that are directly required to support the function. Directly refers to the pure functionality, not to the delivery of data. If you remove an application component from a configuration, the function is no longer supported.</li>
+<li><i>What are the possible alternatives for supporting the function?</i><br>
+A function can be supported by several application component configurations. If you remove an application component configuration, the function can still be completed by one of the remaining ones, possibly with quality restrictions. If this is not the case, this may be an indication that the modeling at the business layer was not adequate (e.g. not fine enough).</li>
+</ol>
+</p>
+
+<p>
+<a href="#abb1">Fig. 1</a> shows an example of an application component configuration.
+<div align="center">
+<a name="abb1">
+<img src="../bilder/bez_fachlich_logisch.gif" width=439 height=194 border=0 align="bottom" alt="">
+</a>
+<br>Fig. 1: Application component configurations (example)
+</div>
+</p>
+
+<p>
+Application component configurations can give hints on redundancies on the logical tool layer, but also hints on weaknesses in the model of the domain-oriented layer. This is discussed again in the following notes. Fig. 12 shows an example for application component configurations. The function PATIENT RECEPTION is supported by two application component configurations. The light gray one consists of the PVS - which does not contain its own database - and MED DB which contains the central database where the recording data is stored. Thus, the function PATIENT RECORDING can only be executed if both application components, PVS and MED DB, are available. The dark gray application component configuration consists of exactly one application component, which is sufficient to support the PATIENT ADMINISTRATION function.
+</p>
+
+<p><i>
+Notes on the concept of application component configurations: In the following <a href="#abb2">Fig. 2</a> it initially looks as if AC Laboratory could replace AC Radiology. That this is not the case is obvious. So there is a modeling problem. There are two possibilities to solve this problem: 
+</p></i>
+<ul>
+<li><i>On the professional layer, we refine the function diagnostics in laboratory diagnostics, radiology diagnostics and pathological diagnostics. Each of these functions is then assigned to the corresponding application component.</i></li>
+<li><i>On the logical tool layer, we coarsen and combine the application components for diagnostics into one application component.</i></li>
+<li><i>A third option is to introduce organizational units, as done in the current version of the meta model. If these are taken into account later when assigning the application component configurations - as suggested in the meta model - this problem can be avoided.</i></li>
+</ul>
+<p><i>
+This makes it easy to realize that the use of application component configurations is in principle equivalent to the coarsening and refinement of application components. However, the use of application component configurations is intended to avoid having to introduce 'artificial' application components and one would prefer to model this fact explicitly as another concept. 
+</i>
+
+<div align="center">
+<a name="abb2">
+<img src="../bilder/bausteinkonfig.gif" width=369 height=206 border=0 align="bottom" alt="">
+</a>
+<br>Fig. 2: Application component configurations with reference to inadequate modeling
+</div>
+</p>
+
+<p><i>
+On the other hand, if you have a function that is actually alternatively supported by two application components (see <a href="#abb3">Fig. 3</a>), you will have to consider the following:
+</i></p>
+<ul>
+<li><i>Is it really the same function?</i></li>
+<li><i>Are the alternatives really necessary (for example, because of external circumstances, or because one of the application components supports an additional function)?</i></li>
+</ul>
+
+<div align="center">
+<a name="abb3">
+<img src="../bilder/bausteinkonfigAlternativ.gif" width=373 height=206 border=0 align="bottom" alt="">
+</a>
+<br>Fig. 3: Application component Configurations Alternatives
+</div>
+
+<p><i>
+In the example in <a href="#abb3">Fig. 3</a>, we see the function Laboratory Services alternatively supported by two application components, which are also based on two different software products (the software products are indicated in brackets). However, it is quite possible that one of the application components is also used in teaching, i.e. supports another function. But then we have to ask ourselves if at least some of the application components based on the same software product should be used. 
+</i></p>
+
+<p><i>
+Another example is the function Scheduling. It is true that there is appointment planning both in surgery planning and in a radiology department. However, the corresponding application components cannot replace each other. Obviously, the function Scheduling must therefore be refined or be understood as a subfunction of the functions Surgery Planning and Radiology Services. However, if one moves away from department-oriented thinking towards service-oriented thinking, there may actually be a generic Scheduling service that works differently depending on where it is used. 
+</i></p>
+
+There are some other important inter-layer-relationships between concepts of the domain and the logical tool layer which we will shortly describe in the following:
+
+<p>
+<h3><a name="objekttyp">Object Type</a> - <a name="dbs">Database System</a></h3>
+An object type can be assigned which database system / <a name="dokumentensammlung">document collection</a> is master for this object type (relationship has_as_master). Data for this object type may only be inserted, changed or deleted in this 'master database system' / 'master document collection'. All other database systems / document collections that also store data for this object type must use communication between the corresponding application components to synchronize their databases with this database system / document collection when data is changed, added or deleted, otherwise data integrity cannot be guaranteed. This is of course particularly problematic with document collections!
+</p>
+
+<p>
+<h3>Object type - <a name="repraesent">Representation form</a></h3>
+Object types can be represented logically by record types, by <a name="dokumententyp">document types</a> and by message types. Record types describe which information represented by object types is stored in a database system. Document types describe which information represented as object types is stored in a document collection and which information is transported via a communication link. A message type describes which information is transported in message-based communication.
+</p>
+
+<p>
+<h3>Function - <a name="softwareprodukt">Software Product</a></h3>
+A software product supports the execution of certain functions. According to a certain parameterization, however, it is possible that an application component based on a certain software product does not support all these functions. This relationship therefore does not describe which functions an application component based on a software product actually supports, but only the potential that a certain software product offers.
+</p>
+
+<p>
+<h3>Function - Event</h3>
+Terminating an activity of a function can trigger an event of a certain <a name="ereignistyp">event type</a>, which in turn controls the sending of a message of a certain message type. This relationship makes it possible to describe message-based communication in particular.  
+</p>
+<br>
+<br>
+
+<h2>Relationships between logical tool layer and physical tool layer</h2>
+<p>
+<h3>Application components - <a name="dv_baustein">Physical data processing components</a></h3>
+A computer-based application component can be installed on:
+<ul>
+<li>several physical data processing components together,</li>
+<li>on a single physical data processing component,</li>
+<li>on combinations of these.</li>
+</ul>
+</p>
+
+<p>
+This fact is expressed in the data processing component configuration. 
+The data processing component configurations can be determined as follows:
+<ol type="1">
+<li><i>Which data processing components are required together to install the application component?</i><br>
+A data processing component configuration thus contains all the data processing components that are required to install the application component. If a data processing component is removed from a configuration, the application component can no longer be used.</li>
+<li><i>What are the possible alternatives for using an application component?</i><br>
+An application component can be made usable by several data processing component configurations. If one data processing component configuration is removed, the application component can still be used by one of the remaining ones, if necessary with quality restrictions. This is not the case if a data processing component that is included in both configurations fails.</li>
+</ol>
+
+<div align="center">
+<a name="abb4">
+<img src="../bilder/bez_logisch_physisch.gif" width=549 height=203 border=0 alt="" align="bottom">
+</a>
+<br>Fig. 4: Data processing component configurations (example)
+</div>
+
+<p>
+In our example in <a href="#abb4">Fig. 4</a> there are two alternative configurations for the WARD application component. If the PDVB WARD PC1 fails, configuration 1 cannot be used, but configuration 2 can be used. If the PDVB DB server fails, no configuration can be used.
+</p>
+
+</body>
+</html>

@@ -1,0 +1,67 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+<head>
+	<title>FAQ zur Modellierung - Fachliche Ebene</title>
+
+</head>
+
+<body>
+<h1>FAQ zur Modellierung - Fachliche Ebene</h1>
+
+<p align="left">
+<h2><a name="f1">1.</a> Wie finde ich geeignete Objekttypen?</h2>
+Zwar ist das Metamodell der fachlichen Ebene sehr einfach, und dem ersten Anschein nach ist 
+es leicht ein geeignetes Modell zu erstellen. Allerdings ist es sehr anspruchsvoll geeignete 
+Objekttypen und Aufgaben zu finden. Die gr&ouml;&szlig;te Schwierigkeit wird darin liegen zu 
+verstehen, was eigentlich Objekttypen sind. Dabei ist es sehr empfehlenswert sich noch mal 
+die Definition des Begriffs Objekttyp klarzumachen: <i>&quot;...Durch Objekttypen kann 
+beschrieben werden, welcher Art Informationen sind, die zur Bearbeitung einer Aufgabe 
+ben&ouml;tigt werden oder nach Bearbeitung der Aufgabe bereitgestellt werden k&ouml;nnen.&quot;</i> Dies 
+f&uuml;hrt zu folgenden Konsequenzen: Soll beispielsweise ein Arztbrief als physisches Ding der 
+Welt modelliert werden, ist dabei zu bedenken, dass dieser auch Informationen &uuml;ber Patient, 
+Fall, Diagnosen ... enth&auml;lt, die in der Regel als eigene Objekttypen definiert werden. F&uuml;r eine 
+bestimmte Problemstellung kann es notwendig sein, diesen Zusammenhang (in Form von 
+ist_Teil_von Beziehungen) darzustellen. Erst dadurch gelingt es die Komplexit&auml;t der 
+Wirklichkeit ad&auml;quat darzustellen. Aus oben genannten Gr&uuml;nden empfehlen wir f&uuml;r die 
+Fachliche Ebene Referenzmodelle zu verwenden, soweit sie verf&uuml;gbar sind, z.B. das fachliche 
+Referenzmodell f&uuml;r ein Archiv.
+</p>
+
+<p align="left">
+<h2><a name="f2">2.</a> Gibt es eine M&ouml;glichkeit die Organisationseinheiten grafisch darzustellen (z.B. 
+Darstellung der Organisationseinheiten mit den dazugeh&ouml;renden Aufgaben)? </h2>
+Derzeit gibt es keine M&ouml;glichkeit Organisationseinheiten grafisch darzustellen. Damit soll 
+vermieden werden, dass das graphische Modell '&uuml;berladen' wird.
+</p>
+
+<p align="left">
+<h2><a name="f3">3.</a> Wieso sollen auf der fachlichen Ebene Nachrichtentypen, Dokumententypen 
+und Datensatztypen (Repr&auml;sentationsform) festgelegt werden, die doch eher der logischen 
+Werkzeugebene zugeh&ouml;ren?</h2>
+Nachrichtentypen, Dokumententypen und Datensatztypen geh&ouml;ren zur logischen 
+Werkzeugebene. Im Eigenschaftendialog eines Objekttyps kann lediglich festgelegt werden, 
+wie dieser auf der logischen Werkzeugebene repr&auml;sentiert wird. Um die Modellierung zu 
+vereinfachen, ist es in diesem Zusammenhang auch m&ouml;glich neue Nachrichtentypen, 
+Dokumententypen und Datensatztypen anzulegen, wenn die ben&ouml;tigten Instanzen einer 
+anderen Ebene bisher noch nicht modelliert wurden.
+</p>
+
+<p align="left">
+<h2><a name="f4">4.</a> Was soll ich mit der Master-DBS beim 
+Objekttyp/Eigenschaftendialog/Allgemein auf der fachlichen Ebene anfangen?</h2>
+Einem Objekttyp kann zugeordnet werden, welches Datenbanksystem / welche 
+Dokumentensammlung f&uuml;r diesen Objekttyp Master ist (Beziehung hat_als_Master im 
+Metamodell). 'Master' hei&szlig;t in diesem Zusammenhang, dass nur in diesem Datenbanksystem / 
+dieser Dokumentensammlung Daten hinzugef&uuml;gt, ge&auml;ndert und gel&ouml;scht werden d&uuml;rfen. Alle 
+anderen Datenbanksysteme / Dokumentensammlungen, die diesen Objekttyp ebenfalls 
+speichern, m&uuml;ssen &uuml;ber Kommunikation zwischen den entsprechenden 
+Anwendungsbausteinen ihre Datenbest&auml;nde mit diesem Datenbanksystem / 
+Dokumentensammlung abgleichen wenn Daten ge&auml;ndert, hinzugef&uuml;gt oder gel&ouml;scht werden, 
+da sonst die Datenintegrit&auml;t nicht gew&auml;hrleistet ist. (Bei Dokumentensammlungen ist dies 
+nat&uuml;rlich besonders problematisch!). Der Abgleich von Datenbest&auml;nden erfolgt &uuml;ber die 
+Kommunikation zwischen Anwendungsbausteinen, sind beide Anwendungsbausteine 
+rechnerbasiert werden dabei Ereignis-Nachrichtentypen kommuniziert, ist einer der 
+Anwendungsbausteine papierbasiert werden Ereignis-Dokumententypen kommuniziert.
+</p>
+</body>
+</html>

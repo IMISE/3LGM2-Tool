@@ -1,0 +1,489 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<html>
+<head>
+	<title>Model Analysis</title>
+	<link rel="stylesheet" type="text/css" href="style.css">
+</head>
+
+<body>
+<h1>Model Analysis</h1>
+<p>
+With the help of model analysis you can investigate the connections between the elements of your model. Since a 3LGM² model quickly becomes confusing due to its complexity, you have the option of extracting parts of the model from the overall model.
+</p>
+
+<p>
+<h2><a name="dialog">Analysis dialog</a></h2>
+The analysis dialog should enable you to create an analysis quickly. You can follow paths in your model by specifying two types. You must also specify whether these two types should be connected or not. With the help of the analysis you can then show you between which elements of this type in your model the connection exists or does not exist. To define several such connections, click on the button <i>Extend</i>. You then have the possibility to define further paths.<br> 
+Start by Analysis, start the analysis. You can also save the analysis by clicking on the button <i>Save to analysis directory</i>. The name of the analysis, which you assign when saving, will then appear below the analyses which are displayed in the analysis directory dialog.<br> 
+In this way you can use an analysis you have created once again and again. If you want the result of an analysis to be stored as a submodel in your model, activate the option <i>Create new submodel for analysis result</i> in the <a href="uebersicht.html#optionen">Options menu</a>. 
+</p>
+
+<p>
+<h2><a name="verzeichnis">Analysis directory dialog</a></h2>
+In the analysis directory dialog you can select and start an analysis, create a new analysis or modify existing analyses. After opening the dialog via the <a href="uebersicht.html#analyse">Analysis menu</a>, the existing analyses are displayed in a table. In the first column is a list of nodes to which an analysis applies and in the second column is the name of the analysis.<br> 
+<b>Run an analysis.</b> To run an analysis, click on the corresponding row in the table. The analysis in the table is now highlighted. Press the button Start Analysis and the analysis will be executed. Run several analyses at once. To perform multiple analyses, select all the desired analyses in the table and press the <i>Start Analysis</i> button.<br> 
+<b>Change analyses.</b> If you want to change an analysis, click on the analysis in the third column. An editor will open and display the analysis text. To understand the analysis text, please read the following section <a href="#analysetext">The analysis text</a>. After editing the analysis you can close the editor window by clicking <i>OK</i>. If your analysis works as desired, close the analysis directory dialog with <i>OK</i> to make the changes to the analysis take effect.
+</p>
+
+<p>
+<h2><a name="analysetext">The analysis text</a></h2>
+The text of the analysis is written in xml. A simple analysis, which outputs all application modules and physical data processing modules that are needed to fulfill a task, looks like this: <br>
+<pre>
+&lt;analyse>
+	&lt;startknoten name="Aufgabe"/>
+	&lt;suche>
+		&lt;typ>
+			&lt;eintrag>AufOrgKombination&lt;/eintrag>
+		&lt;/typ>
+		&lt;verbundenstate>wahr&lt;/verbundenstate>
+	&lt;/suche>
+	&lt;suche>
+		&lt;typ>
+			&lt;eintrag>ABKonfiguration&lt;/eintrag>
+		&lt;/typ>
+		&lt;verbundenstate>true&lt;/verbundenstate>
+	&lt;/suche>
+	&lt;suche>
+		&lt;typ>
+			&lt;eintrag>Anwendungsbaustein&lt;/eintrag>
+			&lt;eintrag>KonAnwendungsbaustein&lt;/eintrag>
+			&lt;eintrag>RechAnwendungsbaustein&lt;/eintrag>
+		&lt;/typ>
+		&lt;verbundenstate>true&lt;/verbundenstate>
+	&lt;/suche>
+	&lt;suche>
+		&lt;typ>
+			&lt;eintrag>DBKonfiguration&lt;/eintrag>
+		&lt;/typ>
+		&lt;verbundenstate>true&lt;/verbundenstate>
+	&lt;/suche>
+	&lt;suche>
+		&lt;typ>
+			&lt;eintrag>PhysischerDVBaustein&lt;/eintrag>
+		&lt;/typ>
+		&lt;verbundenstate>true&lt;/verbundenstate>
+	&lt;/suche>
+&lt;/analyse>
+</pre>
+<br>
+An explanation of the tags can be found in the following table:  <br><br>
+<TABLE WIDTH=100% BORDER=1 BORDERCOLOR="#000000" CELLPADDING=4 CELLSPACING=0>
+	<COL WIDTH=43*>
+	<COL WIDTH=70*>
+	<COL WIDTH=52*>
+	<COL WIDTH=36*>
+	<COL WIDTH=54*>
+	<THEAD>
+		<TR VALIGN=TOP>
+			<TH WIDTH=17%>
+				<P STYLE="font-style: normal">Day</P>
+			</TH>
+			<TH WIDTH=27%>
+				<P STYLE="font-style: normal">Meaning</P>
+			</TH>
+			<TH WIDTH=20%>
+				<P STYLE="font-style: normal">allowed within</P>
+			</TH>
+			<TH WIDTH=14%>
+				<P STYLE="font-style: normal">Content</P>
+			</TH>
+			<TH WIDTH=21%>
+				<P STYLE="font-style: normal">Attributes</P>
+			</TH>
+		</TR>
+	</THEAD>
+	<TBODY>
+		<TR VALIGN=TOP>
+			<TD WIDTH=17%>
+				<P>Analysis</P>
+			</TD>
+			<TD WIDTH=27%>
+				<P>Description of analysis</P>
+			</TD>
+			<TD WIDTH=20%>
+				<P>top-level</P>
+			</TD>
+			<TD WIDTH=14%>
+				<P>none</P>
+			</TD>
+			<TD WIDTH=21%>
+				<P>none</P>
+			</TD>
+		</TR>
+		<TR VALIGN=TOP>
+			<TD WIDTH=17%>
+				<P>Start node</P>
+			</TD>
+			<TD WIDTH=27%>
+				<P>Specifies the node from which the analysis starts.</P>
+			</TD>
+			<TD WIDTH=20%>
+				<P>Analysis</P>
+			</TD>
+			<TD WIDTH=14%>
+				<P>none</P>
+			</TD>
+			<TD WIDTH=21%>
+				<P>name=&quot;&lt;Element&gt;&quot;</P>
+			</TD>
+		</TR>
+		<TR VALIGN=TOP>
+			<TD WIDTH=17%>
+				<P>Search</P>
+			</TD>
+			<TD WIDTH=27%>
+				<P>An analysis can consist of several searches.</P>
+			</TD>
+			<TD WIDTH=20%>
+				<P>Analysis</P>
+			</TD>
+			<TD WIDTH=14%>
+				<P>none</P>
+			</TD>
+			<TD WIDTH=21%>
+				<P>none</P>
+			</TD>
+		</TR>
+		<TR VALIGN=TOP>
+			<TD WIDTH=17%>
+				<P>Type</P>
+			</TD>
+			<TD WIDTH=27%>
+				<P>Specify types within a search.</P>
+			</TD>
+			<TD WIDTH=20%>
+				<P>Search</P>
+			</TD>
+			<TD WIDTH=14%>
+				<P>none</P>
+			</TD>
+			<TD WIDTH=21%>
+				<P>none</P>
+			</TD>
+		</TR>
+		<TR VALIGN=TOP>
+			<TD WIDTH=17%>
+				<P>Entry</P>
+			</TD>
+			<TD WIDTH=27%>
+				<P>Specification of an element.</P>
+			</TD>
+			<TD WIDTH=20%>
+				<P>type</P>
+			</TD>
+			<TD WIDTH=14%>
+				<P>Name of the element.</P>
+			</TD>
+			<TD WIDTH=21%>
+				<P>none</P>
+			</TD>
+		</TR>
+		<TR VALIGN=TOP>
+			<TD WIDTH=17%>
+				<P>connectedstate</P>
+			</TD>
+			<TD WIDTH=27%>
+				<P>Specifies whether the elements of this search should be connected to the start node or not.</P>
+			</TD>
+			<TD WIDTH=20%>
+				<P>search</P>
+			</TD>
+			<TD WIDTH=14%>
+				<P>false</P>
+				<P>true</P>
+			</TD>
+			<TD WIDTH=21%>
+				<P>none</P>
+			</TD>
+		</TR>
+	</TBODY>
+</TABLE>
+<br>
+Die Namen der Elemente, welche Sie in einer Analyse verwenden k&ouml;nnen sind in der folgenden Tabelle
+The names of the elements you can use in an analysis are listed in the following table. In the first column are the names of the elements in written form and in the second column are the names of the elements as used in the analysis.<br> 
+Identifiers that differ from the name of the element are printed in italics.  
+<br><br>
+<TABLE WIDTH=100% BORDER=1 BORDERCOLOR="#000000" CELLPADDING=4 CELLSPACING=0>
+	<COL WIDTH=128*>
+	<COL WIDTH=128*>
+	<THEAD>
+		<TR VALIGN=TOP>
+			<TH WIDTH=50%>
+				<P>Element</P>
+			</TH>
+			<TH WIDTH=50%>
+				<P>Designation</P>
+			</TH>
+		</TR>
+	</THEAD>
+	<TBODY>
+		<TR VALIGN=TOP>
+			<TD WIDTH=50%>
+				<P>Application component configuration</P>
+			</TD>
+			<TD WIDTH=50%>
+				<P><I>ABConfiguration</I></P>
+			</TD>
+		</TR>
+		<TR VALIGN=TOP>
+			<TD WIDTH=50%>
+				<P>Mixed application component</P>
+			</TD>
+			<TD WIDTH=50%>
+				<P><I>Application component</I></P>
+			</TD>
+		</TR>
+		<TR VALIGN=TOP>
+			<TD WIDTH=50%>
+				<P>Application programm</P>
+			</TD>
+			<TD WIDTH=50%>
+				<P>Application programm</P>
+			</TD>
+		</TR>
+		<TR VALIGN=TOP>
+			<TD WIDTH=50%>
+				<P>Function</P>
+			</TD>
+			<TD WIDTH=50%>
+				<P>Funtion</P>
+			</TD>
+		</TR>
+		<TR VALIGN=TOP>
+			<TD WIDTH=50%>
+				<P>Combination Function-Organizational unit</P>
+			</TD>
+			<TD WIDTH=50%>
+				<P><I>FunOrgCombination</I></P>
+			</TD>
+		</TR>
+		<TR VALIGN=TOP>
+			<TD WIDTH=50%>
+				<P>Component interface</P>
+			</TD>
+			<TD WIDTH=50%>
+				<P>Component interface</P>
+			</TD>
+		</TR>
+		<TR VALIGN=TOP>
+			<TD WIDTH=50%>
+				<P>Component type</P>
+			</TD>
+			<TD WIDTH=50%>
+				<P>Component type</P>
+			</TD>
+		</TR>
+		<TR VALIGN=TOP>
+			<TD WIDTH=50%>
+				<P>User interface</P>
+			</TD>
+			<TD WIDTH=50%>
+				<P>User interface</P>
+			</TD>
+		</TR>
+		<TR VALIGN=TOP>
+			<TD WIDTH=50%>
+				<P>Database system</P>
+			</TD>
+			<TD WIDTH=50%>
+				<P>Database system</P>
+			</TD>
+		</TR>
+		<TR VALIGN=TOP>
+			<TD WIDTH=50%>
+				<P>Record type</P>
+			</TD>
+			<TD WIDTH=50%>
+				<P>Record type</P>
+			</TD>
+		</TR>
+		<TR VALIGN=TOP>
+			<TD WIDTH=50%>
+				<P>Database configuration</P>
+			</TD>
+			<TD WIDTH=50%>
+				<P><I>DBConfiguration</I></P>
+			</TD>
+		</TR>
+		<TR VALIGN=TOP>
+			<TD WIDTH=50%>
+				<P>Database management system</P>
+			</TD>
+			<TD WIDTH=50%>
+				<P><I>DBManagementSystem</I></P>
+			</TD>
+		</TR>
+		<TR VALIGN=TOP>
+			<TD WIDTH=50%>
+				<P>Document collection</P>
+			</TD>
+			<TD WIDTH=50%>
+				<P>Document collection</P>
+			</TD>
+		</TR>
+		<TR VALIGN=TOP>
+			<TD WIDTH=50%>
+				<P>Document type</P>
+			</TD>
+			<TD WIDTH=50%>
+				<P>Document type</P>
+			</TD>
+		</TR>
+		<TR VALIGN=TOP>
+			<TD WIDTH=50%>
+				<P>Event type</P>
+			</TD>
+			<TD WIDTH=50%>
+				<P>Event type</P>
+			</TD>
+		</TR>
+		<TR VALIGN=TOP>
+			<TD WIDTH=50%>
+				<P>ETNT-Combination</P>
+			</TD>
+			<TD WIDTH=50%>
+				<P><I>ETNTCombination</I></P>
+			</TD>
+		</TR>
+		<TR VALIGN=TOP>
+			<TD WIDTH=50%>
+				<P>Communication process</P>
+			</TD>
+			<TD WIDTH=50%>
+				<P>Communication process</P>
+			</TD>
+		</TR>
+		<TR VALIGN=TOP>
+			<TD WIDTH=50%>
+				<P>Communication standard</P>
+			</TD>
+			<TD WIDTH=50%>
+				<P>Communication standard</P>
+			</TD>
+		</TR>
+		<TR VALIGN=TOP>
+			<TD WIDTH=50%>
+				<P>Conventional application component</P>
+			</TD>
+			<TD WIDTH=50%>
+				<P><I>ConApplicationComponent</I></P>
+			</TD>
+		</TR>
+		<TR VALIGN=TOP>
+			<TD WIDTH=50%>
+				<P>Message type</P>
+			</TD>
+			<TD WIDTH=50%>
+				<P>Message type</P>
+			</TD>
+		</TR>
+		<TR VALIGN=TOP>
+			<TD WIDTH=50%>
+				<P>Network protocol</P>
+			</TD>
+			<TD WIDTH=50%>
+				<P>Network protocol</P>
+			</TD>
+		</TR>
+		<TR VALIGN=TOP>
+			<TD WIDTH=50%>
+				<P>Network type</P>
+			</TD>
+			<TD WIDTH=50%>
+				<P>Network type</P>
+			</TD>
+		</TR>
+		<TR VALIGN=TOP>
+			<TD WIDTH=50%>
+				<P>Object type</P>
+			</TD>
+			<TD WIDTH=50%>
+				<P>Object type</P>
+			</TD>
+		</TR>
+		<TR VALIGN=TOP>
+			<TD WIDTH=50%>
+				<P>Orgazitional unit</P>
+			</TD>
+			<TD WIDTH=50%>
+				<P>Orgazitional unit</P>
+			</TD>
+		</TR>
+		<TR VALIGN=TOP>
+			<TD WIDTH=50%>
+				<P>Organization plan</P>
+			</TD>
+			<TD WIDTH=50%>
+				<P>Organization plan</P>
+			</TD>
+		</TR>
+		<TR VALIGN=TOP>
+			<TD WIDTH=50%>
+				<P>Physical dataprocessing component</P>
+			</TD>
+			<TD WIDTH=50%>
+				<P><I>PhysicalDPComponent</I></P>
+			</TD>
+		</TR>
+		<TR VALIGN=TOP>
+			<TD WIDTH=50%>
+				<P>Process</P>
+			</TD>
+			<TD WIDTH=50%>
+				<P>Process</P>
+			</TD>
+		</TR>
+		<TR VALIGN=TOP>
+			<TD WIDTH=50%>
+				<P>Computer-based application component</P>
+			</TD>
+			<TD WIDTH=50%>
+				<P><I>CompApplicationComponent</I></P>
+			</TD>
+		</TR>
+		<TR VALIGN=TOP>
+			<TD WIDTH=50%>
+				<P>Role</P>
+			</TD>
+			<TD WIDTH=50%>
+				<P>Role</P>
+			</TD>
+		</TR>
+		<TR VALIGN=TOP>
+			<TD WIDTH=50%>
+				<P>Interface</P>
+			</TD>
+			<TD WIDTH=50%>
+				<P>Interface</P>
+			</TD>
+		</TR>
+		<TR VALIGN=TOP>
+			<TD WIDTH=50%>
+				<P>Software product</P>
+			</TD>
+			<TD WIDTH=50%>
+				<P>Software product</P>
+			</TD>
+		</TR>
+		<TR VALIGN=TOP>
+			<TD WIDTH=50%>
+				<P>Location</P>
+			</TD>
+			<TD WIDTH=50%>
+				<P>Location</P>
+			</TD>
+		</TR>
+		<TR VALIGN=TOP>
+			<TD WIDTH=50%>
+				<P>Subnet</P>
+			</TD>
+			<TD WIDTH=50%>
+				<P>Subnet</P>
+			</TD>
+		</TR>
+	</TBODY>
+</TABLE>
+
+</body>
+</html>
