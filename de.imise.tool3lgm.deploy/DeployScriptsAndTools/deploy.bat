@@ -61,9 +61,11 @@ SET "SEVENZIP_PROGRAM_FILE=7zip\7z.exe"
 SET "LAUNCH4J_DIR=launch4j"
 
 ::Basisname der von Innosetup erzeugten Exe-Installationsdatei. Diese wird noch um die Version ergänzt
-SET "WINDOWS_INSTALLER_EXE_BASE_NAME=setup3lgm_V" 
+::SET "WINDOWS_INSTALLER_EXE_BASE_NAME=setup3lgm_V" 
+SET "WINDOWS_INSTALLER_EXE_BASE_NAME=" 
 ::Basisname der zip und tar.gz-Dateien, die am Ende enstehen. Diese wird noch um die Version ergänzt
-SET "ZIP_AND_TARGZ_RESULT_BASE_NAME=Tool3lgm_V" 
+::SET "ZIP_AND_TARGZ_RESULT_BASE_NAME=Tool3lgm_V" 
+SET "ZIP_AND_TARGZ_RESULT_BASE_NAME=" 
 
 
 ::Name des Ordners mit dem zu deployenden Tools. Das ist auch der Name des Ordners, in dem das Tool
@@ -130,8 +132,8 @@ SET "POM_FILE_LINE_END=^</version^>"
 ::Zeile mit der Version in der pom.xml des Tools wird ebenfalls vor dem Compilieren geupdatet. Damit das klappt
 ::Hinweise: auch spitze Klammern müsses gequotet werden: "^<"
 ::  Die Formatierung der Datei ist wichtig (Leerzeichen)!
-SET "LAUNCH4J_FILE=%LAUNCH4J_DIR%\3lgm2tool.cfg.xml"
-SET "LAUNCH4J_JRE_FILE=%LAUNCH4J_DIR%\3lgm2tool_jre-bundled.cfg.xml"
+SET "LAUNCH4J_FILE=3lgm2tool.cfg.xml"
+SET "LAUNCH4J_JRE_FILE=3lgm2tool_jre-bundled.cfg.xml"
 SET "LAUNCH4J_FILE_LINE_SRT=    ^<txtProductVersion^>"
 SET "LAUNCH4J_FILE_LINE_END=^</txtProductVersion^>"
 
@@ -199,6 +201,7 @@ CD /D %SCRIPT_LOCATION%
 ::suche die jar-Datei der Deploy-Tools im target-Ordner des deploy-tools-Projektes. Falls mal jemand die Version
 ::der Deploy-Tools in deren pom.xml ändert, dann heißt die generierte jar-Datei anders. Indem man sie hier
 ::automatisch heraussucht, funktioniert das hier dann trotzdem noch.
+CD /D %DEPLOY_TOOLS_PROJECT_DIR%
 FOR %%F IN (target\*.jar) DO (
  set "DEPLOY_TOOLS_JAR=%DEPLOY_TOOLS_PROJECT_DIR%^\%%F"
  goto deploy_tools_jar_found
@@ -228,13 +231,13 @@ FOR /f "tokens=* usebackq" %%b IN (`FINDSTR /C:"%GIT_VERSION_FILE_LINE%" "%GIT_V
     SET y=%%b
     SET y=!y:"=?!
     ::ECHO %%b
-    FOR /f "tokens=2 delims==" %%b IN ("!y!") DO SET lgmVersionGit=%%b
+    FOR /f "tokens=2 delims==" %%b IN ("!y!") DO SET lgmVersion=%%b
 )
 
-
 ::3LGM-Version ausgeben
-::ECHO "### Current version: %lgmVersion%"
-ECHO "### Current version: %lgmVersionGit%"
+ECHO "### Current version: %lgmVersion%"
+
+
 ECHO.
 
 ::voller Name der von Innosetup erzeugten Exe-Installationsdatei mit Version und Untertrichen statt Leerzeichen
@@ -305,10 +308,10 @@ FOR %%A IN (%*) DO (
 )
 
 ECHO "### Execute launch4j to compile exe files"
+CD /D %SCRIPT_LOCATION%\%LAUNCH4J_DIR%
+java -jar launch4j.jar %LAUNCH4J_FILE%
+java -jar launch4j.jar %LAUNCH4J_JRE_FILE%
 CD /D %SCRIPT_LOCATION%
-CALL "%LAUNCH4J_DIR%\launch4jc.exe" %LAUNCH4J_FILE%
-CALL "%LAUNCH4J_DIR%\launch4jc.exe" %LAUNCH4J_JRE_FILE%
-
 :LAUNCH4J_NEXT
 
 
