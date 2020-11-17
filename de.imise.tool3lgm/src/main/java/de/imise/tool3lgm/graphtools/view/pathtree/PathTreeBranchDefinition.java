@@ -2,6 +2,7 @@ package de.imise.tool3lgm.graphtools.view.pathtree;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.ResourceBundle;
 import java.util.Set;
 
 import javax.swing.ImageIcon;
@@ -102,6 +103,11 @@ public final class PathTreeBranchDefinition extends MetaModelSpecificAdapter imp
     @Override
     public final String getResStringWithoutError(final String resKey) {
         return resourceHandler.getResStringWithoutError(resKey);
+    }
+
+    @Override
+    public ResourceBundle getResourceBundle() {
+        return resourceHandler.getResourceBundle();
     }
 
     @Override
