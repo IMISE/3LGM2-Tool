@@ -128,7 +128,7 @@ public class CommandParser {
      * @param args
      * @return
      */
-    public static final String getCommand(final GDCommands command, final Object... args) {
+    public static final String getCommandLine(final GDCommands command, final Object... args) {
         StringBuilder sb = new StringBuilder();
         sb.append(command);
         appendArguments(sb, args);

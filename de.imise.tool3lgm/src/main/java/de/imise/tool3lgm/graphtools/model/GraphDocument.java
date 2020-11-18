@@ -534,7 +534,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
      * @param args
      */
     public final void addUndo(final int pid, final GDCommands command, final Object... args) {
-        String commandString = CommandParser.getCommand(command, args);
+        String commandString = CommandParser.getCommandLine(command, args);
         addUndoCommand(pid, commandString);
     }
 
@@ -544,7 +544,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
      * @param args
      */
     public final void addRedo(final int pid, final GDCommands command, final Object... args) {
-        String commandString = CommandParser.getCommand(command, args);
+        String commandString = CommandParser.getCommandLine(command, args);
         addRedoCommand(pid, commandString);
     }
 
@@ -583,7 +583,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
     private void addRedoCommandOrReplace(final int pid, final Object commandArguments, final GDCommands command, final Object... commandPrefix) {
         if (!gdcoll.isBulkMode()) {
             TransactionManager transactionManager = gdcoll.getTman();
-            String fullCommandPrefix = CommandParser.getCommand(command, commandPrefix);
+            String fullCommandPrefix = CommandParser.getCommandLine(command, commandPrefix);
             String arguments = String.valueOf(commandArguments);
             transactionManager.addOrReplaceRedoCommand(pid, fullCommandPrefix, arguments);
         }
@@ -603,7 +603,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
     private void addUndoCommandIfNotExist(final int pid, final Object commandArguments, final GDCommands command, final Object... commandPrefix) {
         if (!gdcoll.isBulkMode()) {
             TransactionManager transactionManager = gdcoll.getTman();
-            String fullCommandPrefix = CommandParser.getCommand(command, commandPrefix);
+            String fullCommandPrefix = CommandParser.getCommandLine(command, commandPrefix);
             String arguments = String.valueOf(commandArguments);
             transactionManager.addUndoCommandIfNotExist(pid, fullCommandPrefix, arguments);
         }
