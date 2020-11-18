@@ -54,11 +54,15 @@ public class ParseSaveStringHandler {
      * <code>getParseSaveString(String s)</code> wieder rückgängig gemacht
      * werden.
      *
-     * @param s
+     * @param o
      * @return
      */
-    public static String getDecodedParseSaveString(String s) {
-        if (s == null || s.length() == 0) {
+    public static String getDecodedParseSaveString(final Object o) {
+        if (o == null) {
+            return "";
+        }
+        String s = o.toString();
+        if (s.isEmpty()) {
             return "";
         }
         if (s.charAt(0) == TEXT_SURROUNDER && s.charAt(s.length() - 1) == TEXT_SURROUNDER) {
