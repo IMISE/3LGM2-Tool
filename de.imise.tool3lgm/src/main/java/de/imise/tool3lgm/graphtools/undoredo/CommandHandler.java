@@ -7,7 +7,7 @@ import java.util.List;
 import de.imise.tool3lgm.graphtools.model.GDCommands;
 import de.imise.util.htmlxml.ParseSaveStringHandler;
 
-public class CommandParser {
+public class CommandHandler {
 
     /**
      * Parst eine Kommando-Zeile, wie sie in Undo-Redo-Kommandos steckt. Ab dem

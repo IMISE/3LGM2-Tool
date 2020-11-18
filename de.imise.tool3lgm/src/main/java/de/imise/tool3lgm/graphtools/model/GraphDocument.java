@@ -47,7 +47,9 @@ import static de.imise.tool3lgm.graphtools.model.LGMChangeListener.LGMChangeType
 import static de.imise.tool3lgm.graphtools.model.LGMChangeListener.LGMChangeType.GROUP_ORDER_CHANGED;
 import static de.imise.tool3lgm.graphtools.model.LGMChangeListener.LGMChangeType.SELECTION_CHANGED;
 import static de.imise.tool3lgm.graphtools.model.LGMChangeListener.LGMChangeType.USER_FIELD_VALUE_CHANGED;
-import static de.imise.tool3lgm.graphtools.undoredo.CommandParser.getArgumentsString;
+import static de.imise.tool3lgm.graphtools.undoredo.CommandHandler.getArgumentsString;
+import static de.imise.tool3lgm.graphtools.undoredo.CommandHandler.getCommandLine;
+import static de.imise.tool3lgm.graphtools.undoredo.CommandHandler.parseCommandLine;
 import static de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty.OPTION_GRAPH_MOVE_SUBELEMENTS;
 import static de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty.OPTION_SHOW_REMOVE_WARNING;
 import static de.imise.util.htmlxml.ParseSaveStringHandler.getDecodedParseSaveString;
@@ -95,7 +97,6 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
 import de.imise.tool3lgm.graphtools.metamodel.elements.OptionalEdge;
 import de.imise.tool3lgm.graphtools.model.LGMChangeListener.LGMChangeType;
 import de.imise.tool3lgm.graphtools.path.metapaths.ElementaryMetaPath;
-import de.imise.tool3lgm.graphtools.undoredo.CommandParser;
 import de.imise.tool3lgm.graphtools.undoredo.TransactionManager;
 import de.imise.tool3lgm.graphtools.undoredo.TransactionStackTable;
 import de.imise.tool3lgm.graphtools.userfield.UserField;
@@ -534,7 +535,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
      * @param args
      */
     public final void addUndo(final int pid, final GDCommands command, final Object... args) {
-        String commandString = CommandParser.getCommandLine(command, args);
+        String commandString = getCommandLine(command, args);
         addUndoCommand(pid, commandString);
     }
 
@@ -544,7 +545,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
      * @param args
      */
     public final void addRedo(final int pid, final GDCommands command, final Object... args) {
-        String commandString = CommandParser.getCommandLine(command, args);
+        String commandString = getCommandLine(command, args);
         addRedoCommand(pid, commandString);
     }
 
@@ -583,7 +584,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
     private void addRedoCommandOrReplace(final int pid, final Object commandArguments, final GDCommands command, final Object... commandPrefix) {
         if (!gdcoll.isBulkMode()) {
             TransactionManager transactionManager = gdcoll.getTman();
-            String fullCommandPrefix = CommandParser.getCommandLine(command, commandPrefix);
+            String fullCommandPrefix = getCommandLine(command, commandPrefix);
             String arguments = String.valueOf(commandArguments);
             transactionManager.addOrReplaceRedoCommand(pid, fullCommandPrefix, arguments);
         }
@@ -603,7 +604,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
     private void addUndoCommandIfNotExist(final int pid, final Object commandArguments, final GDCommands command, final Object... commandPrefix) {
         if (!gdcoll.isBulkMode()) {
             TransactionManager transactionManager = gdcoll.getTman();
-            String fullCommandPrefix = CommandParser.getCommandLine(command, commandPrefix);
+            String fullCommandPrefix = getCommandLine(command, commandPrefix);
             String arguments = String.valueOf(commandArguments);
             transactionManager.addUndoCommandIfNotExist(pid, fullCommandPrefix, arguments);
         }
@@ -1502,7 +1503,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
                 return;
             }
             List<String> args = new ArrayList<>();
-            String commandName = CommandParser.parseCommandLine(line, args);
+            String commandName = parseCommandLine(line, args);
             GDCommands command = getCommand(commandName);
             String[] argv = args.toArray(new String[0]);
             dispatch_command(command, argv, pid);
@@ -1790,7 +1791,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
         if (fontName != null) {
             int fontSize = ec.getFontSize();
             int fontStyle = ec.getFontStyle();
-            String arguments = CommandParser.getArgumentsString(fontName, fontSize, fontStyle);
+            String arguments = getArgumentsString(fontName, fontSize, fontStyle);
             addUndoCommandIfNotExist(pid, arguments, MODEL_ACTION_SET_ELEMENT_FONT, doc.getHashString(), ec.getHashString());
             ec.setFont(null);
         }
