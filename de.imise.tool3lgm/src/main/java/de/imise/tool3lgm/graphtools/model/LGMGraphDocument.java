@@ -4,6 +4,8 @@ import static de.imise.tool3lgm.Static.getMainFrame;
 import static de.imise.tool3lgm.graphtools.dialog.OverwriteDialog.OverwriteOption.IGNORE;
 import static de.imise.tool3lgm.graphtools.dialog.OverwriteDialog.OverwriteOption.JOIN;
 import static de.imise.tool3lgm.graphtools.dialog.OverwriteDialog.OverwriteOption.OVERWRITE;
+import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_DELETE_FROM_MODEL;
+import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_PASTE;
 import static de.imise.tool3lgm.graphtools.model.LGMChangeListener.LGMChangeType.DATA_CHANGED;
 import static de.imise.tool3lgm.graphtools.model.LGMChangeListener.LGMChangeType.ELEMENT_GRAPHICS_CHANGED;
 import static de.imise.tool3lgm.graphtools.model.LGMChangeListener.LGMChangeType.SELECTION_CHANGED;
@@ -218,8 +220,8 @@ public class LGMGraphDocument extends GraphDocument {
         int pid = TransactionManager.STANDARD_PID;
         try {
             start_transaction(pid);
-            addRedoCommand(GDCommands.MODEL_ACTION_PASTE + " ", pid);
-            addUndoCommand(GDCommands.MODEL_ACTION_DELETE_FROM_MODEL + " ", pid);
+            addRedo(pid, MODEL_ACTION_PASTE);
+            addUndo(pid, MODEL_ACTION_DELETE_FROM_MODEL);
             deselectAll(true);
             getCollection().loadClipboard(file);
         } catch (Exception e) {
@@ -240,13 +242,14 @@ public class LGMGraphDocument extends GraphDocument {
      * @param istream
      */
     public synchronized void pasteInputStream(final InputStream istream) {
-        start_transaction(STANDARD_PID);
-        addUndoCommand(GDCommands.MODEL_ACTION_DELETE_FROM_MODEL + " ", STANDARD_PID);
+        int pid = TransactionManager.STANDARD_PID;
+        start_transaction(pid);
+        addUndo(pid, MODEL_ACTION_DELETE_FROM_MODEL);
         deselectAll(true);
         try {
             getCollection().loadFile(istream);
         } catch (Exception e) {
-            undo(STANDARD_PID);
+            undo(pid);
             Log.show(Log.ERROR, getResString("FehlerAllgemein"), e);
             Object[] buttons = new Object[] {
                     getResString("ok")
@@ -256,8 +259,8 @@ public class LGMGraphDocument extends GraphDocument {
             return;
         }
 
-        finish_transaction(STANDARD_PID);
-        distributeEvent(DATA_CHANGED, STANDARD_PID);
+        finish_transaction(pid);
+        distributeEvent(DATA_CHANGED, pid);
     }
 
     /**

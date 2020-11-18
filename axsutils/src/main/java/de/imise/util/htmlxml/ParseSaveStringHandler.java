@@ -14,39 +14,45 @@ public class ParseSaveStringHandler {
     public static final char TEXT_SURROUNDER = '\'';
 
     /**
-     * Liefert den übergeben String eingerahmt in einfache Anführungszeichen ('') sowie
-     * kodierten Backslashes. Dies ist der Elementname, der in alle Undo-Redo-Kommandos
-     * benutzt werden sollte.
+     * Liefert den übergeben String eingerahmt in einfache Anführungszeichen
+     * ('') sowie kodierten Backslashes. Dies ist der Elementname, der in alle
+     * Undo-Redo-Kommandos benutzt werden sollte.
      *
-     * @param s
+     * @param o
+     * @param trim
      * @return
      */
-    public static String getParseSaveString(final String s, final boolean trim) {
-        if (s == null) {
+    public static String getParseSaveString(final Object o, final boolean trim) {
+        if (o == null) {
             StringBuilder sb = new StringBuilder(2);
             sb.append(TEXT_SURROUNDER);
             sb.append(TEXT_SURROUNDER);
             return sb.toString();
         }
-        String ss = trim ? s.trim() : s;
-        return TEXT_SURROUNDER + ss.replace("\r", "").replace('\n', '\u001e').replace(TEXT_SURROUNDER, '´').replaceAll("\\\\", "\\\\\\\\") + TEXT_SURROUNDER;
+        String s = o.toString();
+        if (trim) {
+            s = s.trim();
+        }
+        return TEXT_SURROUNDER + s.replace("\r", "").replace('\n', '\u001e').replace(TEXT_SURROUNDER, '´').replaceAll("\\\\", "\\\\\\\\") + TEXT_SURROUNDER;
     }
 
     /**
-     * Liefert den übergeben String eingerahmt in einfache Anführungszeichen ('') sowie
-     * kodierten Backslashes. Dies ist der Elementname, der in alle Undo-Redo-Kommandos
-     * benutzt werden sollte.
+     * Liefert den übergeben String eingerahmt in einfache Anführungszeichen
+     * ('') sowie kodierten Backslashes. Dies ist der Elementname, der in alle
+     * Undo-Redo-Kommandos benutzt werden sollte.
      *
-     * @param s
+     * @param o
      * @return
      */
-    public static String getParseSaveString(final String s) {
-        return getParseSaveString(s, false);
+    public static String getParseSaveString(final Object o) {
+        return getParseSaveString(o, false);
     }
 
     /**
-     * Liefert einen übergebenen String, in dem die Transformationen der Zeilenumbrüche durch
-     * die Funktion <code>getParseSaveString(String s)</code> wieder rückgängig gemacht werden.
+     * Liefert einen übergebenen String, in dem die Transformationen der
+     * Zeilenumbrüche durch die Funktion
+     * <code>getParseSaveString(String s)</code> wieder rückgängig gemacht
+     * werden.
      *
      * @param s
      * @return

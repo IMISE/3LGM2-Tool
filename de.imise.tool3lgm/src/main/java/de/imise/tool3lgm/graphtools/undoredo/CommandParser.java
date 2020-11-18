@@ -1,7 +1,10 @@
 package de.imise.tool3lgm.graphtools.undoredo;
 
+import static de.imise.util.htmlxml.ParseSaveStringHandler.getParseSaveString;
+
 import java.util.List;
 
+import de.imise.tool3lgm.graphtools.model.GDCommands;
 import de.imise.util.htmlxml.ParseSaveStringHandler;
 
 public class CommandParser {
@@ -118,6 +121,46 @@ public class CommandParser {
             }
         }
         return commandName;
+    }
+
+    /**
+     * @param command
+     * @param args
+     * @return
+     */
+    public static final String getCommand(final GDCommands command, final Object... args) {
+        StringBuilder sb = new StringBuilder();
+        sb.append(command);
+        appendArguments(sb, args);
+        return sb.toString();
+    }
+
+    /**
+     * @param args
+     * @return
+     */
+    public static final String getArgumentsString(final Object... args) {
+        StringBuilder sb = new StringBuilder();
+        appendArguments(sb, args);
+        return sb.toString();
+    }
+
+    /**
+     * @param sb
+     * @param args
+     */
+    private static final void appendArguments(final StringBuilder sb, final Object... args) {
+        for (Object arg : args) {
+            if (sb.length() != 0) {
+                sb.append(" ");
+            }
+            if (arg != null && arg instanceof Number) {
+                sb.append(arg);
+            } else {
+                String s = getParseSaveString(arg);
+                sb.append(s);
+            }
+        }
     }
 
 }

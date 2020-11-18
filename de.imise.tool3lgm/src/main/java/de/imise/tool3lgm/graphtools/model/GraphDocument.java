@@ -7,8 +7,37 @@ import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.MIN_LAYER_IN
 import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.NO_LAYER;
 import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction.BACKWARD;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_ADDICT;
+import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_ADD_ELEMENT_TO_SUBMODEL;
+import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_DELETE_FROM_SUBMODEL;
+import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_LINK_ELEMENT_TO_SUBMODEL;
+import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_MOVE_ORDER;
+import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_MOVE_ORDER_ONE_POSITION_DOWN;
+import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_MOVE_ORDER_ONE_POSITION_UP;
+import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_SET_ELEMENT_ALPHA;
+import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_SET_ELEMENT_COLOR;
+import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_SET_ELEMENT_DEFAULT_COLOR;
+import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_SET_ELEMENT_DEFAULT_FONT;
+import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_SET_ELEMENT_DEFAULT_TRANSPARENCY;
+import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_SET_ELEMENT_DESCRIPTION;
+import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_SET_ELEMENT_EXPANSION_OFF;
+import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_SET_ELEMENT_EXPANSION_ON;
+import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_SET_ELEMENT_FONT;
+import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_SET_ELEMENT_ICON;
+import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_SET_ELEMENT_ICON_NONE;
+import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_SET_ELEMENT_NAME;
+import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_SET_ELEMENT_OPTIONAL;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_SET_ELEMENT_POSITION;
+import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_SET_ELEMENT_TEXT_ALIGNMENT_HTML;
+import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_SET_ELEMENT_TEXT_POSITION_HORIZONTAL;
+import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_SET_ELEMENT_TEXT_POSITION_VERTICAL;
+import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_SET_ELEMENT_VISIBILITY_OFF;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_SET_ELEMENT_VISIBILITY_ON;
+import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_SET_LAYER_ALPHA;
+import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_SET_LAYER_COLOR;
+import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_SET_LAYER_DEFAULT_COLOR_AND_TRANSPARENCY;
+import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_SET_LAYER_SIZE_FACTOR;
+import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_SET_USER_FIELD_VALUE;
+import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_SET_USER_FIELD_WEIGHT_REPLACEMENT;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_SWAP_EDGE_POSITIONS;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_OPTION_GDOC_VERIFICATION_MODE;
 import static de.imise.tool3lgm.graphtools.model.LGMChangeListener.LGMChangeType.ACTIVE_LAYER_CHANGED;
@@ -18,6 +47,7 @@ import static de.imise.tool3lgm.graphtools.model.LGMChangeListener.LGMChangeType
 import static de.imise.tool3lgm.graphtools.model.LGMChangeListener.LGMChangeType.GROUP_ORDER_CHANGED;
 import static de.imise.tool3lgm.graphtools.model.LGMChangeListener.LGMChangeType.SELECTION_CHANGED;
 import static de.imise.tool3lgm.graphtools.model.LGMChangeListener.LGMChangeType.USER_FIELD_VALUE_CHANGED;
+import static de.imise.tool3lgm.graphtools.undoredo.CommandParser.getArgumentsString;
 import static de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty.OPTION_GRAPH_MOVE_SUBELEMENTS;
 import static de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty.OPTION_SHOW_REMOVE_WARNING;
 import static de.imise.util.htmlxml.ParseSaveStringHandler.getDecodedParseSaveString;
@@ -89,7 +119,6 @@ import de.imise.tool3lgm.userproperties.UserProperties;
 import de.imise.util.Alphabetical;
 import de.imise.util.OptionsSupport;
 import de.imise.util.collections.CollectionUtils;
-import de.imise.util.htmlxml.ParseSaveStringHandler;
 import de.imise.util.swing.dialog.ImageChooser;
 import de.imise.util.swing.dialog.MultipleOptionPane;
 
@@ -325,8 +354,8 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
         //wenn der Wert sich geändert hat, dann die UNDO/REDO-Kommandos hinzufügen
         if (logUndoRedo) {
             start_transaction(pid);
-            addUndoCommandIfNotExist(GDCommands.MODEL_ACTION_SET_LAYER_SIZE_FACTOR + " " + hashString, oldPageSizeFactor, pid);
-            addRedoCommandOrReplace(GDCommands.MODEL_ACTION_SET_LAYER_SIZE_FACTOR + " " + hashString, newPageSizeFactor, pid);
+            addUndoCommandIfNotExist(pid, oldPageSizeFactor, MODEL_ACTION_SET_LAYER_SIZE_FACTOR, hashString);
+            addRedoCommandOrReplace(pid, newPageSizeFactor, MODEL_ACTION_SET_LAYER_SIZE_FACTOR, hashString);
             finish_transaction(pid);
         }
         distributeEvent(LGMChangeType.LAYOUT_CHANGED);
@@ -500,24 +529,44 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
     }
 
     /**
-     * @param command
      * @param pid
+     * @param command
+     * @param args
      */
-    public void addUndoCommand(final String command, final int pid) {
+    public final void addUndo(final int pid, final GDCommands command, final Object... args) {
+        String commandString = CommandParser.getCommand(command, args);
+        addUndoCommand(pid, commandString);
+    }
+
+    /**
+     * @param pid
+     * @param command
+     * @param args
+     */
+    public final void addRedo(final int pid, final GDCommands command, final Object... args) {
+        String commandString = CommandParser.getCommand(command, args);
+        addRedoCommand(pid, commandString);
+    }
+
+    /**
+     * @param pid
+     * @param command
+     */
+    private void addUndoCommand(final int pid, final String command) {
         if (!gdcoll.isBulkMode()) {
             TransactionManager transactionManager = gdcoll.getTman();
-            transactionManager.addUndoCommand(command, pid);
+            transactionManager.addUndoCommand(pid, command);
         }
     }
 
     /**
-     * @param command
      * @param pid
+     * @param command
      */
-    public void addRedoCommand(final String command, final int pid) {
+    private void addRedoCommand(final int pid, final String command) {
         if (!gdcoll.isBulkMode()) {
             TransactionManager transactionManager = gdcoll.getTman();
-            transactionManager.addRedoCommand(command, pid);
+            transactionManager.addRedoCommand(pid, command);
         }
     }
 
@@ -526,15 +575,17 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
      * ist, das den gleichen Prefix besitzt, dann wird das vorhandene Kommando
      * durch das übergebene ersetzt.
      *
-     * @param commandPrefix
-     * @param commandArguments
      * @param pid
+     * @param commandArguments
+     * @param command
+     * @param commandPrefix
      */
-    private void addRedoCommandOrReplace(final String commandPrefix, final Object commandArguments, final int pid) {
+    private void addRedoCommandOrReplace(final int pid, final Object commandArguments, final GDCommands command, final Object... commandPrefix) {
         if (!gdcoll.isBulkMode()) {
             TransactionManager transactionManager = gdcoll.getTman();
+            String fullCommandPrefix = CommandParser.getCommand(command, commandPrefix);
             String arguments = String.valueOf(commandArguments);
-            transactionManager.addOrReplaceRedoCommand(commandPrefix, arguments, pid);
+            transactionManager.addOrReplaceRedoCommand(pid, fullCommandPrefix, arguments);
         }
     }
 
@@ -544,15 +595,17 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
      * wurde. Hiermit kann man das Logging von Zwischenschritten unterbinden
      * (z.B. beim Draggen von Elementen in der Grafik)
      *
-     * @param commandPrefix
-     * @param commandArguments
      * @param pid
+     * @param commandArguments
+     * @param command
+     * @param commandPrefix
      */
-    private void addUndoCommandIfNotExist(final String commandPrefix, final Object commandArguments, final int pid) {
+    private void addUndoCommandIfNotExist(final int pid, final Object commandArguments, final GDCommands command, final Object... commandPrefix) {
         if (!gdcoll.isBulkMode()) {
             TransactionManager transactionManager = gdcoll.getTman();
+            String fullCommandPrefix = CommandParser.getCommand(command, commandPrefix);
             String arguments = String.valueOf(commandArguments);
-            transactionManager.addUndoCommandIfNotExist(commandPrefix, arguments, pid);
+            transactionManager.addUndoCommandIfNotExist(pid, fullCommandPrefix, arguments);
         }
     }
 
@@ -1559,7 +1612,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
                 for (ElementContainer ec : selectedContainer) {
                     TransactionManager transactionManager = gdcoll.getTman();
                     String hash = ec.getHashString();
-                    transactionManager.addPreSelectionItem(hash, pid);
+                    transactionManager.addPreSelectionItem(pid, hash);
                 }
             }
         }
@@ -1609,7 +1662,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
                 //				System.err.println("finish_transaction " + iii++ + " - " + pid + ": "+ transStackInt + " " + this);
                 for (ElementContainer ec : selectedContainer) {
                     String hash = ec.getHashString();
-                    transactionManager.addPostSelectionItem(hash, pid);
+                    transactionManager.addPostSelectionItem(pid, hash);
                 }
             }
             transactionManager.finishTransaction(pid);
@@ -1731,19 +1784,14 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
     private final void normalizeFontElement(final ElementContainer ec, final int pid) {
         start_transaction(pid);
         GraphDocument doc = ec.getGraphDocument();
-        String szenHash = doc.getHashString();
-        String elementHash = ec.getHashString();
-        String command = GDCommands.MODEL_ACTION_SET_ELEMENT_DEFAULT_FONT + " " + szenHash + " " + elementHash;
-        addRedoCommandOrReplace(command, "", pid);
+        addRedoCommandOrReplace(pid, "", MODEL_ACTION_SET_ELEMENT_DEFAULT_FONT, doc.getHashString(), ec.getHashString());
 
         String fontName = ec.getFontName();
         if (fontName != null) {
-            command = GDCommands.MODEL_ACTION_SET_ELEMENT_FONT + " " + szenHash + " " + elementHash;
-            String parseSaveFontName = ParseSaveStringHandler.getParseSaveString(fontName);
             int fontSize = ec.getFontSize();
             int fontStyle = ec.getFontStyle();
-            String arguments = parseSaveFontName + " " + fontSize + " " + fontStyle;
-            addUndoCommandIfNotExist(command, arguments, pid);
+            String arguments = CommandParser.getArgumentsString(fontName, fontSize, fontStyle);
+            addUndoCommandIfNotExist(pid, arguments, MODEL_ACTION_SET_ELEMENT_FONT, doc.getHashString(), ec.getHashString());
             ec.setFont(null);
         }
         finish_transaction(pid);
@@ -1769,15 +1817,11 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
     private final void normalizeColorElement(final ElementContainer ec, final int pid) {
         start_transaction(pid);
         GraphDocument doc = ec.getGraphDocument();
-        String szenHash = doc.getHashString();
-        String elementHash = ec.getHashString();
-        String command = GDCommands.MODEL_ACTION_SET_ELEMENT_DEFAULT_COLOR + " " + szenHash + " " + elementHash;
-        addRedoCommandOrReplace(command, "", pid);
+        addRedoCommandOrReplace(pid, "", MODEL_ACTION_SET_ELEMENT_DEFAULT_COLOR, doc.getHashString(), ec.getHashString());
         Color color = ec.getColor();
         if (color != null) {
-            command = GDCommands.MODEL_ACTION_SET_ELEMENT_COLOR + " " + szenHash + " " + elementHash;
             int rgb = color.getRGB();
-            addUndoCommandIfNotExist(command, rgb, pid);
+            addUndoCommandIfNotExist(pid, rgb, MODEL_ACTION_SET_ELEMENT_COLOR, doc.getHashString(), ec.getHashString());
             ec.setColor(null);
         }
         finish_transaction(pid);
@@ -1805,13 +1849,9 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
     private final void normalizeTransparencyElement(final ElementContainer ec, final int pid) {
         start_transaction(pid);
         GraphDocument doc = ec.getGraphDocument();
-        String szenHash = doc.hashString;
-        String elementHash = ec.getHashString();
-        String redoCommand = GDCommands.MODEL_ACTION_SET_ELEMENT_DEFAULT_TRANSPARENCY + " " + szenHash + " " + elementHash;
-        addRedoCommandOrReplace(redoCommand, "", pid);
-        String undoCommand = GDCommands.MODEL_ACTION_SET_ELEMENT_ALPHA + " " + szenHash + " " + elementHash;
+        addRedoCommandOrReplace(pid, "", MODEL_ACTION_SET_ELEMENT_DEFAULT_TRANSPARENCY, doc.hashString, ec.getHashString());
         int alpha = ec.getAlpha();
-        addUndoCommandIfNotExist(undoCommand, alpha, pid);
+        addUndoCommandIfNotExist(pid, alpha, MODEL_ACTION_SET_ELEMENT_ALPHA, doc.hashString, ec.getHashString());
         ec.setAlpha(GraphElementLayout.TRANSPARENCY_NONE);
         finish_transaction(pid);
     }
@@ -1910,19 +1950,18 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
         }
         NodeContainer nc = (NodeContainer) t;
         szen.start_transaction(pid);
-        String elementHash = nc.getHashString();
         Color color = nc.getColor();
         Integer rgb = color == null ? null : color.getRGB();
-        addUndoCommandIfNotExist(GDCommands.MODEL_ACTION_SET_ELEMENT_COLOR + " " + szenHash + " " + elementHash, rgb, pid);
+        addUndoCommandIfNotExist(pid, rgb, MODEL_ACTION_SET_ELEMENT_COLOR, szenHash, nc.getHashString());
         int alpha = color == null ? 255 : color.getAlpha();
-        addUndoCommandIfNotExist(GDCommands.MODEL_ACTION_SET_ELEMENT_ALPHA + " " + szenHash + " " + elementHash, alpha, pid);
+        addUndoCommandIfNotExist(pid, alpha, MODEL_ACTION_SET_ELEMENT_ALPHA, szenHash, nc.getHashString());
         if (nc.getIcon() != null) {
             String iconString = nc.getIconString();
-            addUndoCommandIfNotExist(GDCommands.MODEL_ACTION_SET_ELEMENT_ICON + " " + szenHash + " " + elementHash, iconString, pid);
+            addUndoCommandIfNotExist(pid, iconString, MODEL_ACTION_SET_ELEMENT_ICON, szenHash, nc.getHashString());
         } else {
-            addUndoCommandIfNotExist(GDCommands.MODEL_ACTION_SET_ELEMENT_ICON_NONE + " " + szenHash + " " + elementHash, "", pid);
+            addUndoCommandIfNotExist(pid, "", MODEL_ACTION_SET_ELEMENT_ICON_NONE, szenHash, nc.getHashString());
         }
-        addRedoCommandOrReplace(GDCommands.MODEL_ACTION_SET_ELEMENT_ICON + " " + szenHash + " " + elementHash, iconKey, pid);
+        addRedoCommandOrReplace(pid, iconKey, MODEL_ACTION_SET_ELEMENT_ICON, szenHash, nc.getHashString());
         GDCollectionIconTable iconTable = gdcoll.getIconTable();
         nc.setIcon(iconKey, iconTable);
         szen.finish_transaction(pid);
@@ -1983,12 +2022,11 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
         }
         NodeContainer nc = (NodeContainer) ec;
         szen.start_transaction(pid);
-        String elementHash = nc.getHashString();
         if (nc.getIcon() != null) {
             String iconString = nc.getIconString();
-            addUndoCommandIfNotExist(GDCommands.MODEL_ACTION_SET_ELEMENT_ICON + " " + szenHash + " " + elementHash, iconString, pid);
+            addUndoCommandIfNotExist(pid, iconString, MODEL_ACTION_SET_ELEMENT_ICON, szenHash, hashString);
         }
-        addRedoCommandOrReplace(GDCommands.MODEL_ACTION_SET_ELEMENT_ICON_NONE + " " + szenHash + " " + elementHash, "", pid);
+        addRedoCommandOrReplace(pid, "", MODEL_ACTION_SET_ELEMENT_ICON_NONE, szenHash, hashString);
         GDCollectionIconTable iconTable = gdcoll.getIconTable();
         nc.setIcon(null, iconTable);
         szen.finish_transaction(pid);
@@ -2071,16 +2109,13 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
         }
         GraphDocument ecDoc = ec.getGraphDocument();
         ecDoc.start_transaction(pid);
-        String szenHash = ecDoc.hashString;
-        String elementHash = ec.getHashString();
-        String command = GDCommands.MODEL_ACTION_SET_ELEMENT_COLOR + " " + szenHash + " " + elementHash;
         //redo
         Integer rgb = color == null ? null : color.getRGB();
-        addRedoCommandOrReplace(command, rgb, pid);
+        addRedoCommandOrReplace(pid, rgb, MODEL_ACTION_SET_ELEMENT_COLOR, ecDoc.hashString, ec.getHashString());
         //undo
         Color undoColor = ec.getColor();
         rgb = undoColor == null ? null : undoColor.getRGB();
-        addUndoCommandIfNotExist(command, rgb, pid);
+        addUndoCommandIfNotExist(pid, rgb, MODEL_ACTION_SET_ELEMENT_COLOR, ecDoc.hashString, ec.getHashString());
         //do
         ec.setColor(color);
         ecDoc.finish_transaction(pid);
@@ -2122,15 +2157,14 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
             return;
         }
         szen.start_transaction(pid);
-        String command = GDCommands.MODEL_ACTION_SET_LAYER_COLOR + " " + szenHash + " " + layer_idx;
         //redo
         Integer rgb = color == null ? null : color.getRGB();
-        addRedoCommandOrReplace(command, rgb, pid);
+        addRedoCommandOrReplace(pid, rgb, MODEL_ACTION_SET_LAYER_COLOR, szenHash, layer_idx);
         LayerContainer lc = szen.layer[layer_idx];
         //undo
         Color undoColor = lc.getColor();
         rgb = undoColor == null ? null : undoColor.getRGB();
-        addUndoCommandIfNotExist(command, rgb, pid);
+        addUndoCommandIfNotExist(pid, rgb, MODEL_ACTION_SET_LAYER_COLOR, szenHash, layer_idx);
         //do
         lc.setColor(color);
         szen.finish_transaction(pid);
@@ -2186,20 +2220,18 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
         }
 
         GraphDocument ecDoc = ec.getGraphDocument();
-        String szenHash = ecDoc.hashString;
 
         ecDoc.start_transaction(pid);
         if (ec.getColor() == null) {
             Color standardBackGroundColor = mapping.getStandardBackGroundColor(ec);
             changeColor(ec, standardBackGroundColor, pid);
         }
-        String elementHash = ec.getHashString();
-        String command = GDCommands.MODEL_ACTION_SET_ELEMENT_ALPHA + " " + szenHash + " " + elementHash;
+
         //redo
-        addRedoCommandOrReplace(command, alpha, pid);
+        addRedoCommandOrReplace(pid, alpha, MODEL_ACTION_SET_ELEMENT_ALPHA, ecDoc.hashString, ec.getHashString());
         //undo
         int undoAlpha = ec.getAlpha();
-        addUndoCommandIfNotExist(command, undoAlpha, pid);
+        addUndoCommandIfNotExist(pid, undoAlpha, MODEL_ACTION_SET_ELEMENT_ALPHA, ecDoc.hashString, ec.getHashString());
         //do
         ec.setAlpha(alpha);
         ecDoc.finish_transaction(pid);
@@ -2226,10 +2258,9 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
         }
         LayerContainer lc = szen.layer[layer_idx];
         szen.start_transaction(pid);
-        String command = GDCommands.MODEL_ACTION_SET_LAYER_ALPHA + " " + szenHash + " " + layer_idx;
-        addRedoCommandOrReplace(command, alphaMode, pid);
+        addRedoCommandOrReplace(pid, alphaMode, MODEL_ACTION_SET_LAYER_ALPHA, szenHash, layer_idx);
         int undoAlpha = lc.getAlpha();
-        addUndoCommandIfNotExist(command, undoAlpha, pid);
+        addUndoCommandIfNotExist(pid, undoAlpha, MODEL_ACTION_SET_LAYER_ALPHA, szenHash, layer_idx);
         lc.setAlpha(alphaMode);
         szen.finish_transaction(pid);
         szen.distributeEvent(ELEMENT_GRAPHICS_CHANGED, lc, pid);
@@ -2260,16 +2291,16 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
         }
         szen.start_transaction(pid);
         //redo
-        addRedoCommandOrReplace(GDCommands.MODEL_ACTION_SET_LAYER_DEFAULT_COLOR_AND_TRANSPARENCY + " " + szenHash + " " + layer_idx, "", pid);
+        addRedoCommandOrReplace(pid, "", MODEL_ACTION_SET_LAYER_DEFAULT_COLOR_AND_TRANSPARENCY, szenHash, layer_idx);
         //undo
         LayerContainer lc = szen.layer[layer_idx];
         //undo alpha
         int alpha = lc.getAlpha();
-        addUndoCommandIfNotExist(GDCommands.MODEL_ACTION_SET_LAYER_ALPHA + " " + szenHash + " " + layer_idx, alpha, pid);
+        addUndoCommandIfNotExist(pid, alpha, MODEL_ACTION_SET_LAYER_ALPHA, szenHash, layer_idx);
         //undo color
         Color color = lc.getColor();
         Integer rgb = color == null ? null : color.getRGB();
-        addUndoCommandIfNotExist(GDCommands.MODEL_ACTION_SET_LAYER_COLOR + " " + szenHash + " " + layer_idx, rgb, pid);
+        addUndoCommandIfNotExist(pid, rgb, MODEL_ACTION_SET_LAYER_COLOR, szenHash, layer_idx);
         //do
         lc.setColor(Color.white);
         lc.setAlpha(GraphElementLayout.TRANSPARENCY_NONE);
@@ -2290,21 +2321,18 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
         doc.start_transaction(pid);
         String szenHash = doc.hashString;
 
-        String commandPrefix = GDCommands.MODEL_ACTION_SET_ELEMENT_FONT + " " + szenHash + " " + ec.getHashString();
         //undo
         String fontName = ec.getFontName();
-        fontName = ParseSaveStringHandler.getParseSaveString(fontName);
         int fontSize = ec.getFontSize();
         int fontStyle = ec.getFontStyle();
-        String undoCommandArguments = ec.hasStandardFont() ? "" : fontName + " " + fontSize + " " + fontStyle;
-        addUndoCommandIfNotExist(commandPrefix, undoCommandArguments, pid);
+        String undoCommandArguments = ec.hasStandardFont() ? "" : getArgumentsString(fontName, fontSize, fontStyle);
+        addUndoCommandIfNotExist(pid, undoCommandArguments, MODEL_ACTION_SET_ELEMENT_FONT, szenHash, ec.getHashString());
         //redo
         fontName = font.getName();
-        fontName = ParseSaveStringHandler.getParseSaveString(fontName);
         fontSize = font.getSize();
         fontStyle = font.getStyle();
-        String redoCommandArguments = ec.isStandardFont(font) ? "" : fontName + " " + fontSize + " " + fontStyle;
-        addRedoCommandOrReplace(commandPrefix, redoCommandArguments, pid);
+        String redoCommandArguments = ec.isStandardFont(font) ? "" : getArgumentsString(fontName, fontSize, fontStyle);
+        addRedoCommandOrReplace(pid, redoCommandArguments, MODEL_ACTION_SET_ELEMENT_FONT, szenHash, ec.getHashString());
         //do
         ec.setFont(font);
         ec.refreshText();
@@ -2386,13 +2414,12 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
             return;
         }
         start_transaction(pid);
-        String szenHash = nc.getGraphDocument().hashString;
+        GraphDocument ncDoc = nc.getGraphDocument();
 
-        String undoCommandArguments = nc.getX() + " " + nc.getY() + " " + nc.getWidth() + " " + nc.getHeight();
-        String redoCommandArguments = x + " " + y + " " + width + " " + height;
-        String commandPrefix = MODEL_ACTION_SET_ELEMENT_POSITION + " " + szenHash + " " + nc.getHashString();
-        addUndoCommandIfNotExist(commandPrefix, undoCommandArguments, pid);
-        addRedoCommandOrReplace(commandPrefix, redoCommandArguments, pid);
+        String undoCommandArguments = getArgumentsString(nc.getX(), nc.getY(), nc.getWidth(), nc.getHeight());
+        String redoCommandArguments = getArgumentsString(x, y, width, height);
+        addUndoCommandIfNotExist(pid, undoCommandArguments, MODEL_ACTION_SET_ELEMENT_POSITION, ncDoc.getHashString(), nc.getHashString());
+        addRedoCommandOrReplace(pid, redoCommandArguments, MODEL_ACTION_SET_ELEMENT_POSITION, ncDoc.getHashString(), nc.getHashString());
         nc.setCoordinates(x, y, width, height);
 
         //wenn NodeContainer verschoben werden (keine BendpointContainer)
@@ -2723,10 +2750,8 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
         tmpExpandedElements.add(ec);
 
         szen.start_transaction(pid);
-        String expandCommand = GDCommands.MODEL_ACTION_SET_ELEMENT_EXPANSION_ON + " " + szenHash + " " + elementHash;
-        String collapseCommand = GDCommands.MODEL_ACTION_SET_ELEMENT_EXPANSION_OFF + " " + szenHash + " " + elementHash;
-        szen.addRedoCommand(expand ? expandCommand : collapseCommand, pid);
-        szen.addUndoCommand(expand ? collapseCommand : expandCommand, pid);
+        szen.addRedo(pid, expand ? MODEL_ACTION_SET_ELEMENT_EXPANSION_ON : MODEL_ACTION_SET_ELEMENT_EXPANSION_OFF, szenHash, elementHash);
+        szen.addUndo(pid, expand ? MODEL_ACTION_SET_ELEMENT_EXPANSION_OFF : MODEL_ACTION_SET_ELEMENT_EXPANSION_ON, szenHash, elementHash);
 
         if (expand) {
             expand(szen, ec, pid);
@@ -2912,8 +2937,8 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
         }
         String commandArguments = commandArgumentsBuilder.toString();
 
-        szen.addUndoCommand((visible ? GDCommands.MODEL_ACTION_SET_ELEMENT_VISIBILITY_OFF : GDCommands.MODEL_ACTION_SET_ELEMENT_VISIBILITY_ON) + commandArguments, pid);
-        szen.addRedoCommand((visible ? GDCommands.MODEL_ACTION_SET_ELEMENT_VISIBILITY_ON : GDCommands.MODEL_ACTION_SET_ELEMENT_VISIBILITY_OFF) + commandArguments, pid);
+        szen.addUndo(pid, visible ? MODEL_ACTION_SET_ELEMENT_VISIBILITY_OFF : MODEL_ACTION_SET_ELEMENT_VISIBILITY_ON, commandArguments);
+        szen.addRedo(pid, visible ? MODEL_ACTION_SET_ELEMENT_VISIBILITY_ON : MODEL_ACTION_SET_ELEMENT_VISIBILITY_OFF, commandArguments);
         szen.finish_transaction(pid);
         szen.distributeEvent(DATA_CHANGED, pid);
     }
@@ -3694,14 +3719,12 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
         if (slaveContainer != null) {
             Dimension pos = calculateAddictPosition(masterContainer);
             String edgeHash = edge.getHashString();//eigentlich müsste der hier auch beim Undo auf diesen Wert gesetzt werden, aber das passiert im Moment nicht
-            String masterHash = masterElement.getHashString();
-            String slaveHash = slaveElement.getHashString();
             int slaveX = slaveContainer.getX();
             int slaveY = slaveContainer.getY();
             int slaveWidth = slaveContainer.getWidth();
             int slaveHeight = slaveContainer.getHeight();
-            addRedoCommand(MODEL_ACTION_ADDICT + " " + szenHash + " " + edgeClassName + " " + masterHash + " " + slaveHash, pid);
-            addUndoCommand(MODEL_ACTION_SET_ELEMENT_POSITION + " " + szenHash + " " + slaveHash + " " + slaveX + " " + slaveY + " " + slaveWidth + " " + slaveHeight, pid);
+            addRedo(pid, MODEL_ACTION_ADDICT, szenHash, edgeClassName, masterElement.getHashString(), slaveElement.getHashString());
+            addUndo(pid, MODEL_ACTION_SET_ELEMENT_POSITION, szenHash, slaveElement.getHashString(), slaveX, slaveY, slaveWidth, slaveHeight);
             slaveContainer.setCoordinates(pos.width, pos.height, slaveWidth, slaveHeight);
             raiseSlaves(masterContainer);
             for (Szenario szenario : gdcoll.getSzenarios()) {
@@ -3977,9 +4000,8 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
         }
         start_transaction(pid);
         if (me.swapEdges(edgeIndex2, edgeIndex2)) {
-            String elementHash = me.getHashString();
-            addRedoCommand(MODEL_ACTION_SWAP_EDGE_POSITIONS + " " + elementHash + " " + edgeIndex1 + " " + edgeIndex2, pid);
-            addUndoCommand(MODEL_ACTION_SWAP_EDGE_POSITIONS + " " + elementHash + " " + edgeIndex2 + " " + edgeIndex1, pid);
+            addRedo(pid, MODEL_ACTION_SWAP_EDGE_POSITIONS, me.getHashString(), edgeIndex1, edgeIndex2);
+            addUndo(pid, MODEL_ACTION_SWAP_EDGE_POSITIONS, me.getHashString(), edgeIndex2, edgeIndex1);
         }
         /*
          * if (knot.isSpecialInfoKnot()){ ElementContainer kc =
@@ -4005,8 +4027,8 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
         LayerContainer lc = doc.layer[layer];
         int indexOnLayer = lc.indexOf(ec);
         doc.start_transaction(pid);
-        addRedoCommand(GDCommands.MODEL_ACTION_MOVE_ORDER_ONE_POSITION_UP + " " + szenHash + " " + elementHash, pid);
-        addUndoCommand(GDCommands.MODEL_ACTION_MOVE_ORDER + " " + szenHash + " " + elementHash + " " + indexOnLayer, pid);
+        addRedo(pid, MODEL_ACTION_MOVE_ORDER_ONE_POSITION_UP, szenHash, elementHash);
+        addUndo(pid, MODEL_ACTION_MOVE_ORDER, szenHash, elementHash, indexOnLayer);
         lc.z_move_up(ec);
         doc.finish_transaction(pid);
         distributeEvent(GROUP_ORDER_CHANGED, lc, pid);
@@ -4052,13 +4074,11 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
         }
         GraphDocument doc = ec.getGraphDocument();
 
-        String szenHash = doc.getHashString();
-        String elementHash = ec.getHashString();
         LayerContainer lc = doc.layer[layer];
         int indexOnLayer = lc.indexOf(ec);
         doc.start_transaction(pid);
-        addRedoCommand(GDCommands.MODEL_ACTION_MOVE_ORDER_ONE_POSITION_DOWN + " " + szenHash + " " + elementHash, pid);
-        addUndoCommand(GDCommands.MODEL_ACTION_MOVE_ORDER + " " + szenHash + " " + elementHash + " " + indexOnLayer, pid);
+        addRedo(pid, MODEL_ACTION_MOVE_ORDER_ONE_POSITION_DOWN, doc.getHashString(), ec.getHashString());
+        addUndo(pid, MODEL_ACTION_MOVE_ORDER, doc.getHashString(), ec.getHashString(), indexOnLayer);
         lc.z_move_down(ec);
         doc.finish_transaction(pid);
         distributeEvent(GROUP_ORDER_CHANGED, lc, pid);
@@ -4111,8 +4131,8 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
         LayerContainer lc = szen.layer[layer];
         int indexOnLayer = lc.indexOf(ec);
         szen.start_transaction(pid);
-        addRedoCommand(GDCommands.MODEL_ACTION_MOVE_ORDER + " " + szenHash + " " + elementHash + " " + position, pid);
-        addUndoCommand(GDCommands.MODEL_ACTION_MOVE_ORDER + " " + szenHash + " " + elementHash + " " + indexOnLayer, pid);
+        addRedo(pid, MODEL_ACTION_MOVE_ORDER, szenHash, elementHash, position);
+        addUndo(pid, MODEL_ACTION_MOVE_ORDER, szenHash, elementHash, indexOnLayer);
         lc.z_move(ec, position);
         szen.finish_transaction(pid);
         distributeEvent(GROUP_ORDER_CHANGED, lc, pid);
@@ -4154,8 +4174,8 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
         if (log) {
             String szenHash = doc.getHashString();
             String elementHash = ec.getHashString();
-            addRedoCommand(GDCommands.MODEL_ACTION_MOVE_ORDER_ONE_POSITION_UP + " " + szenHash + " " + elementHash, pid);
-            addUndoCommand(GDCommands.MODEL_ACTION_MOVE_ORDER_ONE_POSITION_DOWN + " " + szenHash + " " + elementHash, pid);
+            addRedo(pid, MODEL_ACTION_MOVE_ORDER_ONE_POSITION_UP, szenHash, elementHash);
+            addUndo(pid, MODEL_ACTION_MOVE_ORDER_ONE_POSITION_DOWN, szenHash, elementHash);
         }
         LayerContainer lc = doc.layer[layer];
         lc.z_step_up(ec);
@@ -4192,8 +4212,8 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
         doc.start_transaction(pid);
         String szenHash = doc.getHashString();
         String elementHash = ec.getHashString();
-        addRedoCommand(GDCommands.MODEL_ACTION_MOVE_ORDER_ONE_POSITION_DOWN + " " + szenHash + " " + elementHash, pid);
-        addUndoCommand(GDCommands.MODEL_ACTION_MOVE_ORDER_ONE_POSITION_UP + " " + szenHash + " " + elementHash, pid);
+        addRedo(pid, MODEL_ACTION_MOVE_ORDER_ONE_POSITION_DOWN, szenHash, elementHash);
+        addUndo(pid, MODEL_ACTION_MOVE_ORDER_ONE_POSITION_UP, szenHash, elementHash);
         LayerContainer lc = doc.layer[layer];
         lc.z_step_down(ec);
         doc.finish_transaction(pid);
@@ -4268,11 +4288,9 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
             return;
         }
         start_transaction(pid);
-        String szenHash = szen.getHashString();
-        String elementHash = ec.getHashString();
         TextPositionHorizontal textPositionHorizontal = layout.textPositionHorizontal;
-        addUndoCommand(GDCommands.MODEL_ACTION_SET_ELEMENT_TEXT_POSITION_HORIZONTAL + " " + szenHash + " " + elementHash + " " + textPositionHorizontal, pid);
-        addRedoCommand(GDCommands.MODEL_ACTION_SET_ELEMENT_TEXT_POSITION_HORIZONTAL + " " + szenHash + " " + elementHash + " " + mode, pid);
+        addUndo(pid, MODEL_ACTION_SET_ELEMENT_TEXT_POSITION_HORIZONTAL, szen.getHashString(), ec.getHashString(), textPositionHorizontal);
+        addRedo(pid, MODEL_ACTION_SET_ELEMENT_TEXT_POSITION_HORIZONTAL, szen.getHashString(), ec.getHashString(), mode);
         layout.textPositionHorizontal = mode;
         finish_transaction(pid);
         distributeEvent(ELEMENT_GRAPHICS_CHANGED, ec, pid);
@@ -4319,11 +4337,9 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
             return;
         }
         start_transaction(pid);
-        String szenHash = szen.getHashString();
-        String elementHash = ec.getHashString();
         TextPositionVertical textPositionVertical = layout.textPositionVertical;
-        addUndoCommand(GDCommands.MODEL_ACTION_SET_ELEMENT_TEXT_POSITION_VERTICAL + " " + szenHash + " " + elementHash + " " + textPositionVertical, pid);
-        addRedoCommand(GDCommands.MODEL_ACTION_SET_ELEMENT_TEXT_POSITION_VERTICAL + " " + szenHash + " " + elementHash + " " + mode, pid);
+        addUndo(pid, MODEL_ACTION_SET_ELEMENT_TEXT_POSITION_VERTICAL, szen.getHashString(), ec.getHashString(), textPositionVertical);
+        addRedo(pid, MODEL_ACTION_SET_ELEMENT_TEXT_POSITION_VERTICAL, szen.getHashString(), ec.getHashString(), mode);
         layout.textPositionVertical = mode;
         finish_transaction(pid);
         distributeEvent(ELEMENT_GRAPHICS_CHANGED, ec, pid);
@@ -4367,11 +4383,9 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
             return;
         }
         start_transaction(pid);
-        String szenHash = szen.getHashString();
-        String elementHash = ec.getHashString();
         TextAlignmentHTML textAlignmentHTML = layout.textAlignmentHTML;
-        addUndoCommand(GDCommands.MODEL_ACTION_SET_ELEMENT_TEXT_ALIGNMENT_HTML + " " + szenHash + " " + elementHash + " " + textAlignmentHTML, pid);
-        addRedoCommand(GDCommands.MODEL_ACTION_SET_ELEMENT_TEXT_ALIGNMENT_HTML + " " + szenHash + " " + elementHash + " " + mode, pid);
+        addUndo(pid, MODEL_ACTION_SET_ELEMENT_TEXT_ALIGNMENT_HTML, szen.getHashString(), ec.getHashString(), textAlignmentHTML);
+        addRedo(pid, MODEL_ACTION_SET_ELEMENT_TEXT_ALIGNMENT_HTML, szen.getHashString(), ec.getHashString(), mode);
         layout.textAlignmentHTML = mode;
         ModelElement me = ec.getElement();
         me.updateHTMLName(ec);
@@ -4389,13 +4403,12 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
             return;
         }
         start_transaction(pid);
-        String elementHash = me.getHashString();
         String newName = getParseSaveString(name);
         String oldName = me.getName();
         oldName = getParseSaveString(oldName);
         //falls in derselben Transaction der Name mehrfach geändert wird, soll das nur 1 Mal geloggt werden
-        addRedoCommandOrReplace(GDCommands.MODEL_ACTION_SET_ELEMENT_NAME + " " + elementHash, newName, pid);
-        addUndoCommandIfNotExist(GDCommands.MODEL_ACTION_SET_ELEMENT_NAME + " " + elementHash, oldName, pid);
+        addRedoCommandOrReplace(pid, newName, MODEL_ACTION_SET_ELEMENT_NAME, me.getHashString());
+        addUndoCommandIfNotExist(pid, oldName, MODEL_ACTION_SET_ELEMENT_NAME, me.getHashString());
         //	Das hier sollte man nicht einfach ohne Nachfragen machen! Wenn dann nur mit Bestätigungsdialog
         //      Verbundene Elemente die den Namen dieses Elementes in sich tragen auch updaten
         //		List<ModelElement> connected = me.getConnectedElements(ModelElement.class);
@@ -4425,12 +4438,11 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
             return;
         }
         start_transaction(pid);
-        String elementHash = me.getHashString();
         String newDescription = getParseSaveString(description);
         String oldDescription = me.getDescription();
         oldDescription = getParseSaveString(oldDescription);
-        addRedoCommandOrReplace(GDCommands.MODEL_ACTION_SET_ELEMENT_DESCRIPTION + " " + elementHash, newDescription, pid);
-        addUndoCommandIfNotExist(GDCommands.MODEL_ACTION_SET_ELEMENT_DESCRIPTION + " " + elementHash, oldDescription, pid);
+        addRedoCommandOrReplace(pid, newDescription, MODEL_ACTION_SET_ELEMENT_DESCRIPTION, me.getHashString());
+        addUndoCommandIfNotExist(pid, oldDescription, MODEL_ACTION_SET_ELEMENT_DESCRIPTION, me.getHashString());
         newDescription = getDecodedParseSaveString(description);
         me.setDescription(newDescription);
         finish_transaction(pid);
@@ -4465,13 +4477,11 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
      */
     public void setUserFieldValue(final ModelElement me, final UserField userField, final String value, final int pid) {
         start_transaction(pid);
-        String elementHash = me.getHashString();
-        String userFieldHash = userField.getHashCode();
         String newValue = getParseSaveString(value, true);
         String oldValue = userField.getValue(me);
         oldValue = getParseSaveString(oldValue, true);
-        addRedoCommandOrReplace(GDCommands.MODEL_ACTION_SET_USER_FIELD_VALUE + " " + elementHash + " " + userFieldHash, newValue, pid);
-        addUndoCommandIfNotExist(GDCommands.MODEL_ACTION_SET_USER_FIELD_VALUE + " " + elementHash + " " + userFieldHash, oldValue, pid);
+        addRedoCommandOrReplace(pid, newValue, MODEL_ACTION_SET_USER_FIELD_VALUE, me.getHashString(), userField.getHashCode());
+        addUndoCommandIfNotExist(pid, oldValue, MODEL_ACTION_SET_USER_FIELD_VALUE, me.getHashString(), userField.getHashCode());
         newValue = getDecodedParseSaveString(value);
         me.setUserFieldInputValue(userField, newValue);
         finish_transaction(pid);
@@ -4535,12 +4545,17 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
 
         //UNDO und REDO Commands schreiben
         start_transaction(pid);
-        addRedoCommandOrReplace(GDCommands.MODEL_ACTION_SET_USER_FIELD_WEIGHT_REPLACEMENT + " " + modelElementHash + " " + userFieldHashToReplaceOrSimpleEdgeClassName, hashReplacement, pid);
-        addUndoCommandIfNotExist(GDCommands.MODEL_ACTION_SET_USER_FIELD_WEIGHT_REPLACEMENT + " " + modelElementHash + " " + userFieldHashToReplaceOrSimpleEdgeClassName, oldUserFieldHashReplacement, pid);
+        addRedoCommandOrReplace(pid, hashReplacement, MODEL_ACTION_SET_USER_FIELD_WEIGHT_REPLACEMENT, modelElementHash, userFieldHashToReplaceOrSimpleEdgeClassName);
+        addUndoCommandIfNotExist(pid, oldUserFieldHashReplacement, MODEL_ACTION_SET_USER_FIELD_WEIGHT_REPLACEMENT, modelElementHash, userFieldHashToReplaceOrSimpleEdgeClassName);
         finish_transaction(pid);
 
     }
 
+    /**
+     * @param edge
+     * @param value
+     * @param pid
+     */
     public final void setOptional(final Edge edge, final boolean value, final int pid) {
         if (!(edge instanceof OptionalEdge)) {
             return;
@@ -4549,11 +4564,10 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
         //optinality really switched? -> write Undo-Redo-Commands
         if (optional.setOptional(value)) {
             start_transaction(pid);
-            String hash = edge.getHashString();
             String newValue = Boolean.toString(value);
             String oldValue = Boolean.toString(!value);
-            addRedoCommandOrReplace(GDCommands.MODEL_ACTION_SET_ELEMENT_OPTIONAL + " " + hash, newValue, pid);
-            addUndoCommandIfNotExist(GDCommands.MODEL_ACTION_SET_ELEMENT_OPTIONAL + " " + hash, oldValue, pid);
+            addRedoCommandOrReplace(pid, newValue, MODEL_ACTION_SET_ELEMENT_OPTIONAL, edge.getHashString());
+            addUndoCommandIfNotExist(pid, oldValue, MODEL_ACTION_SET_ELEMENT_OPTIONAL, edge.getHashString());
             finish_transaction(pid);
         }
     }
@@ -4734,12 +4748,11 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
         NodeContainer targetContainer = (NodeContainer) targetSzenario.addContainerCopy(sourceContainer);
         if (targetContainer != null) {
             if (targetContainer != sourceContainer) {
-                String elementHash = me.getHashString();
                 GraphDocument sourceDoc = sourceContainer.getGraphDocument();
                 String sourceDocHash = sourceDoc.getHashString();
-                targetSzenario.addUndoCommand(GDCommands.MODEL_ACTION_DELETE_FROM_SUBMODEL + " " + targetSzenHash + " " + elementHash, pid);
+                targetSzenario.addUndo(pid, MODEL_ACTION_DELETE_FROM_SUBMODEL, targetSzenHash, me.getHashString());
                 //Argumente: 1.) Quell-GraphDoc 2.) Zielszenario 3.) Hash des Elementes
-                targetSzenario.addRedoCommand(GDCommands.MODEL_ACTION_ADD_ELEMENT_TO_SUBMODEL + " " + sourceDocHash + " " + targetSzenHash + " " + elementHash, pid);
+                targetSzenario.addRedo(pid, MODEL_ACTION_ADD_ELEMENT_TO_SUBMODEL, sourceDocHash, targetSzenHash, me.getHashString());
                 targetSzenario.createEdgeContainer(targetContainer, sourceDoc, true, pid);
             }
             targetSzenario.addToSelection(targetContainer, pid);
@@ -4761,13 +4774,12 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
         }
         start_transaction(pid);
         ModelElement me = ec.getElement();
-        String elementHash = me.getHashString();
         String oldSzen = me.getAssociatedDoc();
         szenHashString = "null".equals(szenHashString) ? null : szenHashString;
         me.setAssociatedDoc(szenHashString);
         String oldSzenHash = oldSzen == null ? "null" : oldSzen;
-        addUndoCommand(GDCommands.MODEL_ACTION_LINK_ELEMENT_TO_SUBMODEL + " " + oldSzenHash + " " + elementHash, pid);
-        addRedoCommand(GDCommands.MODEL_ACTION_LINK_ELEMENT_TO_SUBMODEL + " " + szenHashString + " " + elementHash, pid);
+        addUndo(pid, MODEL_ACTION_LINK_ELEMENT_TO_SUBMODEL, oldSzenHash, me.getHashString());
+        addRedo(pid, MODEL_ACTION_LINK_ELEMENT_TO_SUBMODEL, szenHashString, me.getHashString());
         finish_transaction(pid);
         distributeEvent(DATA_CHANGED, ec, 0);
     }

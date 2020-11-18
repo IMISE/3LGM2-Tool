@@ -8,6 +8,7 @@ import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.model.LGMGraphDocument;
+import de.imise.util.Sys;
 
 /**
  * Verwaltet die Undo-/Redo-Steuerung
@@ -142,8 +143,8 @@ public class TransactionManager {
             return;
         }
         startTransaction(pid, doc);
-        addRedoCommand(undoCommand, pid);
-        addUndoCommand(redoCommand, pid);
+        addRedoCommand(pid, undoCommand);
+        addUndoCommand(pid, redoCommand);
         if (doc.isVerificationMode()) {
             System.out.println("log :  " + undoCommand);
             System.out.println("ulog:  " + redoCommand);
@@ -178,12 +179,12 @@ public class TransactionManager {
     /**
      * Fügt ein neues Kommando als Undo- oder Redo-Kommando hinzu.
      *
-     * @param command hinzuzufügendes Kommando
      * @param pid ID der Transaktion
+     * @param command hinzuzufügendes Kommando
      * @param undo Wenn <code>true</code> wird das Kommando als Undo-Kommando
      *            hinzugefügt, sonst als Redo-Kommando
      */
-    private final void addUndoOrRedoCommand(String command, final int pid, final boolean undo) {
+    private final void addUndoOrRedoCommand(final int pid, String command, final boolean undo) {
         command = getValidCommand(command);
         if (command == null) {
             return;
@@ -204,11 +205,11 @@ public class TransactionManager {
      * der gleichen Reihenfolge erneut ausgeführt, in der sie hier hinztugefügt
      * wurden.
      *
-     * @param command
      * @param pid
+     * @param command
      */
-    public final void addRedoCommand(final String command, final int pid) {
-        addUndoOrRedoCommand(command, pid, false);
+    public final void addRedoCommand(final int pid, final String command) {
+        addUndoOrRedoCommand(pid, command, false);
     }
 
     /**
@@ -217,11 +218,11 @@ public class TransactionManager {
      * der gleichen Reihenfolge erneut ausgeführt, in der sie hier hinztugefügt
      * wurden.
      *
-     * @param command
      * @param pid
+     * @param command
      */
-    public final void addUndoCommand(final String command, final int pid) {
-        addUndoOrRedoCommand(command, pid, true);
+    public final void addUndoCommand(final int pid, final String command) {
+        addUndoOrRedoCommand(pid, command, true);
     }
 
     /**
@@ -233,11 +234,11 @@ public class TransactionManager {
      * die letzte Verschiebeoperation, da sie den endgültigen Ort und Größe
      * eines Elementes eindeutig bestimmt.
      *
+     * @param pid
      * @param commandPrefix
      * @param commandArguments
-     * @param pid
      */
-    public void addOrReplaceRedoCommand(String commandPrefix, String commandArguments, final int pid) {
+    public void addOrReplaceRedoCommand(final int pid, String commandPrefix, String commandArguments) {
         commandPrefix = getValidCommand(commandPrefix);
         if (commandPrefix == null) {
             return;
@@ -257,11 +258,11 @@ public class TransactionManager {
      * das erste Undo-Kommando, da sie den Ausgangs-Ort und -Größe eines
      * Elementes eindeutig bestimmt.
      *
+     * @param pid
      * @param commandPrefix
      * @param commandArguments
-     * @param pid
      */
-    public final void addUndoCommandIfNotExist(String commandPrefix, String commandArguments, final int pid) {
+    public final void addUndoCommandIfNotExist(final int pid, String commandPrefix, String commandArguments) {
         commandPrefix = getValidCommand(commandPrefix);
         if (commandPrefix == null) {
             return;
@@ -313,10 +314,10 @@ public class TransactionManager {
     }
 
     /**
-     * @param string
      * @param pid
+     * @param string
      */
-    public final void addPreSelectionItem(final String string, final int pid) {
+    public final void addPreSelectionItem(final int pid, final String string) {
         if (is_doing) {
             return;
         }
@@ -328,10 +329,10 @@ public class TransactionManager {
     }
 
     /**
-     * @param string
      * @param pid
+     * @param string
      */
-    public final void addPostSelectionItem(final String string, final int pid) {
+    public final void addPostSelectionItem(final int pid, final String string) {
         if (is_doing) {
             return;
         }
