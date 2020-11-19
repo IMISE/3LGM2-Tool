@@ -489,7 +489,7 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
      * @return the ignore_inconsistencies_on_delete_egdes_mode
      */
     public boolean isIgnoreInconsistenciesOnDeleteEgdesMode() {
-        return ignore_inconsistencies_on_delete_egdes_mode || bulk_mode;
+        return ignore_inconsistencies_on_delete_egdes_mode;// || bulk_mode; //Achtung: nicht den bulk_mode hier anhängen! Dann funktioniert das Undo-Redo nicht richtig, wenn man einen IHE-Actor im Modell löscht, der mind, eine Schnittstelle hat.
     }
 
     /**
