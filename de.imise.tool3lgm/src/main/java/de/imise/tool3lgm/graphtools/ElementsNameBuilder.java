@@ -837,12 +837,12 @@ public final class ElementsNameBuilder extends MetaModelSpecificAdapter {
         }
         String simpleClassName = elementClass.getSimpleName();
         String shortName = elementClassSimpleNameToHashShortName.get(simpleClassName);
-        if (shortName == null) {
+        if (Strings.isNullOrEmpty(shortName)) {
             if (simpleClassName.length() <= 3) {
                 shortName = simpleClassName;
             } else {
                 StringBuilder shortNameBuilder = new StringBuilder(simpleClassName.charAt(0));
-                for (int j = 1; j < simpleClassName.length(); j++) {
+                for (int j = 0; j < simpleClassName.length(); j++) {
                     //suche Großbuchstaben -> sie werden bevorzugt in den Shortname aufgenommen
                     String character = simpleClassName.substring(j, j + 1);
                     if (character.toUpperCase().equals(character)) {
@@ -865,8 +865,8 @@ public final class ElementsNameBuilder extends MetaModelSpecificAdapter {
                         char charAfterlastUpperChar = simpleClassName.charAt(lastUpperChar + 1);
                         shortNameBuilder.append(charAfterlastUpperChar); //hänge den Buchstaben direkt nach dem 2. Großbuchstaben ans Ende an
                     }
+                    shortName = shortNameBuilder.toString();
                 }
-                shortName = shortNameBuilder.toString();
             }
             elementClassSimpleNameToHashShortName.put(simpleClassName, shortName.toUpperCase());
         }
