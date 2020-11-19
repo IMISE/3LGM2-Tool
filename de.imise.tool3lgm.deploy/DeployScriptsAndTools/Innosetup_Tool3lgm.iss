@@ -2,7 +2,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "3LGM² Tool"
-#define MyAppVersion "Tool3LGM_Version_4.3.2_(dev)-73-g91e4427"
+#define MyAppVersion "Tool3LGM_Version_4.3.2_(dev)-75-g2ff7883"
 #define MyAppPublisher "University Leipzig - IMISE"
 #define MyAppURL "http://www.3lgm2.de"
 #define MyAppExeName "3lgm2tool.exe"
@@ -22,9 +22,9 @@ AppUpdatesURL={#MyAppURL}
 DefaultDirName={pf}\3LGM2-Tool
 DefaultGroupName={#MyAppName}
 AllowNoIcons=yes
-OutputDir=c:\3lgm-deploy\tool-3lgm2\de.imise.tool3lgm.deploy\DeployResults
-OutputBaseFilename=Tool3LGM_Version_4.3.2_(dev)-73-g91e4427
-SetupIconFile=c:\3lgm-deploy\tool-3lgm2\de.imise.tool3lgm.deploy\DeployScriptsAndTools\Icons\toolIcon_gross.ico
+OutputDir=C:\Users\sippe\git\3LGM\tool-3lgm2\de.imise.tool3lgm.deploy\DeployResults
+OutputBaseFilename=Tool3LGM_Version_4.3.2_(dev)-75-g2ff7883_setup
+SetupIconFile=C:\Users\sippe\git\3LGM\tool-3lgm2\de.imise.tool3lgm.deploy\DeployScriptsAndTools\Icons\toolIcon_gross.ico
 Compression=lzma
 SolidCompression=yes
 
@@ -37,8 +37,8 @@ Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{
 Name: "quicklaunchicon"; Description: "{cm:CreateQuickLaunchIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked; OnlyBelowVersion: 0,6.1
 
 [Files]
-Source: "c:\3lgm-deploy\tool-3lgm2\de.imise.tool3lgm.deploy\Tool3lgm\3lgm2tool.exe"; DestDir: "{app}"; Flags: ignoreversion
-Source: "c:\3lgm-deploy\tool-3lgm2\de.imise.tool3lgm.deploy\Tool3lgm\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "C:\Users\sippe\git\3LGM\tool-3lgm2\de.imise.tool3lgm.deploy\Tool3lgm\3lgm2tool.exe"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Users\sippe\git\3LGM\tool-3lgm2\de.imise.tool3lgm.deploy\Tool3lgm\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
 [Icons]

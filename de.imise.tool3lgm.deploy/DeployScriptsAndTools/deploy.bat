@@ -67,7 +67,6 @@ SET "WINDOWS_INSTALLER_EXE_BASE_NAME="
 ::SET "ZIP_AND_TARGZ_RESULT_BASE_NAME=Tool3lgm_V" 
 SET "ZIP_AND_TARGZ_RESULT_BASE_NAME=" 
 
-
 ::Name des Ordners mit dem zu deployenden Tools. Das ist auch der Name des Ordners, in dem das Tool
 ::in der zip und tar.gz-Datei liegt.
 SET "DEPLOY_PROJECT_TOOL3LGM_DIR_NAME=Tool3lgm"
@@ -83,11 +82,7 @@ SET "DEPLOY_PROJECT_TOOL3LGM_START_EXE=%DEPLOY_PROJECT_TOOL3LGM_DIR%\%DEPLOY_PRO
 ::voller Name der Icon-Datei, mit der die Exe und der Innosetup-Installer versehen wird
 SET "DEPLOY_TOOL3LGM_ICON=..\DeployScriptsAndTools\Icons\toolIcon_gross.ico"
 
-::[ToDo] Versionsermittlung anpassen
-::Tool3LGMConstants.java gibt die Version vor. Das ist die Stelle, die vorher im Code angepasst
-::werden muss. Die Zeile mit diesem String wird über BATCH-Kommandos ausgelesen.
-SET "JAVA_FILE_WITH_TOOL_VERSION=%TOOL3LGM_PROJECT_DIR%\src\main\java\de\imise\tool3lgm\Tool3lgmConstants.java"
-SET "JAVA_FILE_WITH_TOOL_VERSION_LINE=public static final String TOOL_VERSION = " 
+::Versionsermittlung aus der version.info
 SET "GIT_VERSION_FILE=%DEPLOY_PROJECT_TOOL3LGM_DIR%\version.info"
 SET "GIT_VERSION_FILE_LINE=git.commit.id.describe="
 
@@ -159,6 +154,8 @@ FOR %%A IN (%*) DO (
 ::create deploytools per Maven und speichere Pfad zur jar in einer Variable 
 CD /D %DEPLOY_TOOLS_PROJECT_DIR%
 CALL mvn -B clean install
+CD /D %SCRIPT_LOCATION%
+
 
 ::Jetzt alle Teilprojekte per Maven bauen. Die pom.xml des tool3lgm-Projektes kopiert am Ende die
 ::axutils.jar und die tool3lgm.jar sowie alle anderen benötigten Bibliotheken ins lib-Verzeichnis
@@ -212,19 +209,8 @@ CD /D %SCRIPT_LOCATION%
 ::@ECHO on
 ECHO.
 
-::[ToDo] Versionsermittlung anpassen:
-::  - maven-Jobs an dieser Stelle ausführen
-::  - anschließend Version aus version.info auslesen
-::
-::Zeile mit der Version aus der Tool3lgmConstants.java-Datei lesen
-::SETLOCAL EnableDelayedExpansion
-::FOR /f "tokens=* usebackq" %%a IN (`FINDSTR /C:"%JAVA_FILE_WITH_TOOL_VERSION_LINE%" "%JAVA_FILE_WITH_TOOL_VERSION%"`) DO (
-::    SET z=%%a
-::    SET z=!z:"=?!
-::    FOR /f "tokens=1-3 delims=?" %%a IN ("!z!") DO SET lgmVersion=%%b
-::)
 
-::Versionermittlung (neu)
+::Versionermittlung
 :: Datei mit den Versionsinfos: %GIT_VERSION_FILE%
 SETLOCAL EnableDelayedExpansion
 FOR /f "tokens=* usebackq" %%b IN (`FINDSTR /C:"%GIT_VERSION_FILE_LINE%" "%GIT_VERSION_FILE%"`) DO (
@@ -240,49 +226,6 @@ ECHO "### Current version: %lgmVersion%"
 
 ECHO.
 
-::voller Name der von Innosetup erzeugten Exe-Installationsdatei mit Version und Untertrichen statt Leerzeichen
-SET "WINDOWS_INSTALLER_EXE_BASE_NAME=%WINDOWS_INSTALLER_EXE_BASE_NAME%%lgmVersion%" 
-SET WINDOWS_INSTALLER_EXE_BASE_NAME=!WINDOWS_INSTALLER_EXE_BASE_NAME: =_!
-
-::Abkürzung für den Aufruf des Java-ChangeLineHandlers aus den Java-Deploy-Tools
-::Syntax: START %CLH% FILE_NAME LINE_START_STRING LINE_END_STRING REPLACE_STRING
-::Er ersetzt in allen Zeilen (i.d.R. genau eine) einer Datei, die mit einem bestimmten String beginnen und enden,
-::den Mittelteil.
-::Wenn man sehen will, was genau ersetzt wurde, dann muss man in der folgenden Batch-Code-Zeile das 'javaw' durch
-::'java' ersetzen. Ist die Anzeigezeit zu kurz, muss man diese in der Datei ChangeLineHandler.java hochsetzen.
-SET "CLH=/wait javaw -classpath ^"%DEPLOY_TOOLS_JAR%^" de.axs.deploytools.ChangeLineHandler"
-
-::Version in die pom.xml-Datei schreiben
-::Debug:
-::  ECHO %CLH% 
-::  ECHO "%POM_FILE%" "%POM_FILE_LINE_SRT%" "%POM_FILE_LINE_END%" "%lgmVersion%"
-::  START javaw -classpath "%DEPLOY_TOOLS_JAR%" de.axs.deploytools.ChangeLineHandler "%POM_FILE%" "%POM_FILE_LINE_SRT%" "%POM_FILE_LINE_END%" "%lgmVersion%"
-::Hinweis: Aktuell darf die POM-Datei nicht geändert werden, da es Abhängigkeiten zu anderen POM Dateien (Plugins) gibt.
-::  START %CLH% "%POM_FILE%" "%POM_FILE_LINE_SRT%" "%POM_FILE_LINE_END%" "%lgmVersion%"
-::Debug:
-::  EXIT /B
-::Version in die launch4j Config-Dateien schreiben
-START %CLH% "%LAUNCH4J_FILE%" "%LAUNCH4J_FILE_LINE_SRT%" "%LAUNCH4J_FILE_LINE_END%" "%lgmVersion%"
-START %CLH% "%LAUNCH4J_JRE_FILE%" "%LAUNCH4J_FILE_LINE_SRT%" "%LAUNCH4J_FILE_LINE_END%" "%lgmVersion%"
-::Version in die ISS-Datei schreiben
-START %CLH% "%ISS_FILE%" "%ISS_FILE_LINE_VERSION_SRT%" "%ISS_FILE_LINE_VERSION_END%" "%lgmVersion%"
-::ExeName in die ISS-Datei schreiben
-START %CLH% "%ISS_FILE%" "%ISS_FILE_LINE_EXENAME_SRT%" "%ISS_FILE_LINE_EXENAME_END%" "%DEPLOY_PROJECT_TOOL3LGM_START_EXE_FILENAME%"
-::Zielverzeichnis in die ISS-Datei schreiben
-CALL :NORMALIZEPATH "%DEPLOY_DESTINATION_DIR%"
-START %CLH% "%ISS_FILE%" "%ISS_FILE_LINE_OUTDIR__SRT%" "%ISS_FILE_LINE_OUTDIR__END%" "%ABSOLUTEPATH%"
-::Basename der von Innosetup gebauten Installations-Exe-Datei in die ISS-Datei schreiben
-START %CLH% "%ISS_FILE%" "%ISS_FILE_LINE_OUTEXE__SRT%" "%ISS_FILE_LINE_OUTEXE__END%" "%WINDOWS_INSTALLER_EXE_BASE_NAME%"
-::Icon in die ISS-Datei schreiben
-CALL :NORMALIZEPATH "%DEPLOY_TOOL3LGM_ICON%"
-START %CLH% "%ISS_FILE%" "%ISS_FILE_LINE_ICON____SRT%" "%ISS_FILE_LINE_ICON____END%" "%ABSOLUTEPATH%"
-::Exe in die ISS-Datei schreiben
-CALL :NORMALIZEPATH "%DEPLOY_PROJECT_TOOL3LGM_START_EXE%"
-START %CLH% "%ISS_FILE%" "%ISS_FILE_LINE_FILEEXE_SRT%" "%ISS_FILE_LINE_FILEEXE_END%" "%ABSOLUTEPATH%"
-::Alle Files in die ISS-Datei schreiben
-CALL :NORMALIZEPATH "%DEPLOY_PROJECT_TOOL3LGM_DIR%"
-START %CLH% "%ISS_FILE%" "%ISS_FILE_LINE_FILEALL_SRT%" "%ISS_FILE_LINE_FILEALL_END%" "%ABSOLUTEPATH%\*"
-
 
 ::IHE Domain Ontology pull
 ::ToDo: Repo pullen
@@ -292,6 +235,15 @@ START %CLH% "%ISS_FILE%" "%ISS_FILE_LINE_FILEALL_SRT%" "%ISS_FILE_LINE_FILEALL_E
 ::IHE Domain Ontology aus git Repository aktualisieren (kopieren)
 ECHO "### Copy IHE Domain Ontology %METAMODEL3LGM2_DIR%\IHE\iheDomain_Ontology_straight-forward_v2.rdf -> %SCRIPT_LOCATION%\..\Tool3lgm\Templates\IHE\"
 COPY /Y %METAMODEL3LGM2_DIR%\IHE\iheDomain_Ontology_straight-forward_v2.rdf %SCRIPT_LOCATION%\..\Tool3lgm\Templates\IHE\
+
+
+::Abkürzung für den Aufruf des Java-ChangeLineHandlers aus den Java-Deploy-Tools
+::Syntax: START %CLH% FILE_NAME LINE_START_STRING LINE_END_STRING REPLACE_STRING
+::Er ersetzt in allen Zeilen (i.d.R. genau eine) einer Datei, die mit einem bestimmten String beginnen und enden,
+::den Mittelteil.
+::Wenn man sehen will, was genau ersetzt wurde, dann muss man in der folgenden Batch-Code-Zeile das 'javaw' durch
+::'java' ersetzen. Ist die Anzeigezeit zu kurz, muss man diese in der Datei ChangeLineHandler.java hochsetzen.
+SET "CLH=/wait javaw -classpath ^"%DEPLOY_TOOLS_JAR%^" de.axs.deploytools.ChangeLineHandler"
 
 
 ::launch4j: erzeugt aus einer Jar-Datei eine Exe-Datei
@@ -307,11 +259,16 @@ FOR %%A IN (%*) DO (
   )
 )
 
+::Version in die launch4j Config-Dateien schreiben
+START %CLH% "%LAUNCH4J_FILE%" "%LAUNCH4J_FILE_LINE_SRT%" "%LAUNCH4J_FILE_LINE_END%" "%lgmVersion%"
+START %CLH% "%LAUNCH4J_JRE_FILE%" "%LAUNCH4J_FILE_LINE_SRT%" "%LAUNCH4J_FILE_LINE_END%" "%lgmVersion%"
+
 ECHO "### Execute launch4j to compile exe files"
 CD /D %SCRIPT_LOCATION%\%LAUNCH4J_DIR%
 java -jar launch4j.jar %LAUNCH4J_FILE%
 java -jar launch4j.jar %LAUNCH4J_JRE_FILE%
 CD /D %SCRIPT_LOCATION%
+
 :LAUNCH4J_NEXT
 
 
@@ -326,28 +283,45 @@ FOR %%A IN (%*) DO (
     GOTO SKIPIPACKAGES_NEXT
   )
 )
+
 ::Bestehende Dateien im Verzeichnis %DEPLOY_DESTINATION_DIR% löschen
 ECHO "### Entferne vorhandene Dateien im Verzeichnis %DEPLOY_DESTINATION_DIR%"
 DEL %DEPLOY_DESTINATION_DIR%\*  /s /q
 
 
-::[ToDo]
-::-> 2 Versionen bauen: 1) inkl. JRE, 2.) ohne JRE
-:: 1) inkl. JRE
-:: - exe ohne JRE verschieben: 3lgm2tool.exe -> ../3lgm2tool_nojre.exe
-:: - exe inkl. JRE umbenennen: 3lgm2tool_jre.exe -> 3lgm2tool.exe
-:: - Inno Setup aufrufen; Setup-Datei %WINDOWS_INSTALLER_EXE_BASE_NAME%.exe in %WINDOWS_INSTALLER_EXE_BASE_NAME%_JRE.exe
-:: - Zip aufrufen und Zip-Datei mit "_JRE" im Namen erzeugen
-:: 2) ohne JRE
-:: - exe inkl. JRE zurück umbenennen und verschieben: 3lgm2tool.exe -> ../3lgm2tool_jre.exe
-:: - exe ohne JRE zurück verschieben: ../3lgm2tool_nojre.exe -> 3lgm2tool.exe
-:: - JRE verschieben: jre -> ../
-:: - Inno Setup aufrufen
-:: - Zip aufrufen
-:: - tar.gz aufrufen
-:: - JRE zurück verschieben: ../jre -> jre
-:: - exe inkl. JRE zurück verschieben: ../3lgm2tool_jre.exe -> 3lgm2tool_jre.exe
+::Inno Setup Config File anpassen
+::Version in die ISS-Datei schreiben
+START %CLH% "%ISS_FILE%" "%ISS_FILE_LINE_VERSION_SRT%" "%ISS_FILE_LINE_VERSION_END%" "%lgmVersion%"
+::ExeName in die ISS-Datei schreiben
+START %CLH% "%ISS_FILE%" "%ISS_FILE_LINE_EXENAME_SRT%" "%ISS_FILE_LINE_EXENAME_END%" "%DEPLOY_PROJECT_TOOL3LGM_START_EXE_FILENAME%"
+::Zielverzeichnis in die ISS-Datei schreiben
+CALL :NORMALIZEPATH "%DEPLOY_DESTINATION_DIR%"
+START %CLH% "%ISS_FILE%" "%ISS_FILE_LINE_OUTDIR__SRT%" "%ISS_FILE_LINE_OUTDIR__END%" "%ABSOLUTEPATH%"
+::Icon in die ISS-Datei schreiben
+CALL :NORMALIZEPATH "%DEPLOY_TOOL3LGM_ICON%"
+START %CLH% "%ISS_FILE%" "%ISS_FILE_LINE_ICON____SRT%" "%ISS_FILE_LINE_ICON____END%" "%ABSOLUTEPATH%"
+::Exe in die ISS-Datei schreiben
+CALL :NORMALIZEPATH "%DEPLOY_PROJECT_TOOL3LGM_START_EXE%"
+START %CLH% "%ISS_FILE%" "%ISS_FILE_LINE_FILEEXE_SRT%" "%ISS_FILE_LINE_FILEEXE_END%" "%ABSOLUTEPATH%"
+::Alle Files in die ISS-Datei schreiben
+CALL :NORMALIZEPATH "%DEPLOY_PROJECT_TOOL3LGM_DIR%"
+START %CLH% "%ISS_FILE%" "%ISS_FILE_LINE_FILEALL_SRT%" "%ISS_FILE_LINE_FILEALL_END%" "%ABSOLUTEPATH%\*"
 
+
+::-> 2 Versionen bauen: 1) inkl. JRE, 2.) ohne JRE
+:: 1) inkl. JRE: Inno Setup, ZIP
+
+SET "INKL_JRE=_inkl_JRE"
+::voller Name der von Innosetup erzeugten Exe-Installationsdatei mit Version und Untertrichen statt Leerzeichen
+SET "WINDOWS_INSTALLER_EXE_BASE_NAME_PROZ=%WINDOWS_INSTALLER_EXE_BASE_NAME%%lgmVersion%_setup%inkl_JRE%" 
+SET WINDOWS_INSTALLER_EXE_BASE_NAME_PROZ=!WINDOWS_INSTALLER_EXE_BASE_NAME_PROZ: =_!
+::Basename der von Innosetup gebauten Installations-Exe-Datei in die ISS-Datei schreiben
+START %CLH% "%ISS_FILE%" "%ISS_FILE_LINE_OUTEXE__SRT%" "%ISS_FILE_LINE_OUTEXE__END%" "%WINDOWS_INSTALLER_EXE_BASE_NAME_PROZ%"
+
+:: - exe ohne JRE verschieben: 3lgm2tool.exe -> ../3lgm2tool_nojre.exe
+move /Y %DEPLOY_PROJECT_TOOL3LGM_DIR%\3lgm2tool.exe %DEPLOY_PROJECT_TOOL3LGM_DIR%\..\3lgm2tool_nojre.exe
+:: - exe inkl. JRE umbenennen: 3lgm2tool_jre.exe -> 3lgm2tool.exe
+move /Y %DEPLOY_PROJECT_TOOL3LGM_DIR%\3lgm2tool_jre.exe %DEPLOY_PROJECT_TOOL3LGM_DIR%\3lgm2tool.exe
 
 ::run Inno Setup -> Erzeuge Windows-Installer
 CD /D "%INNOSETUP_PROGRAM_DIR%"
@@ -355,7 +329,37 @@ START /wait Compil32 /cc "%ISS_FILE%"
 CD /D %SCRIPT_LOCATION%
 
 ::Name der zu erstellenden zip und tar.gz-Dateien
-SET "ZIP_AND_TARGZ_RESULT_NAME=%ZIP_AND_TARGZ_RESULT_BASE_NAME%%lgmVersion%"
+SET "ZIP_AND_TARGZ_RESULT_NAME=%ZIP_AND_TARGZ_RESULT_BASE_NAME%%lgmVersion%%INKL_JRE%"
+SET ZIP_AND_TARGZ_RESULT_NAME=%ZIP_AND_TARGZ_RESULT_NAME: =_%
+ECHO "### ZIP_AND_TARGZ_RESULT_NAME = %ZIP_AND_TARGZ_RESULT_NAME% "
+
+:: ZIP the deploy Files with 7zip
+FOR /d %%X IN ("%DEPLOY_PROJECT_TOOL3LGM_DIR%") DO "%SEVENZIP_PROGRAM_FILE%" a "%DEPLOY_DESTINATION_DIR%\%ZIP_AND_TARGZ_RESULT_NAME%.zip" "%%X\"
+
+
+:: 2) ohne JRE: Inno Setup, ZIP, TAR.GZ
+
+SET "INKL_JRE="
+::voller Name der von Innosetup erzeugten Exe-Installationsdatei mit Version und Untertrichen statt Leerzeichen
+SET "WINDOWS_INSTALLER_EXE_BASE_NAME_PROZ=%WINDOWS_INSTALLER_EXE_BASE_NAME%%lgmVersion%_setup%inkl_JRE%" 
+SET WINDOWS_INSTALLER_EXE_BASE_NAME_PROZ=!WINDOWS_INSTALLER_EXE_BASE_NAME_PROZ: =_!
+::Basename der von Innosetup gebauten Installations-Exe-Datei in die ISS-Datei schreiben
+START %CLH% "%ISS_FILE%" "%ISS_FILE_LINE_OUTEXE__SRT%" "%ISS_FILE_LINE_OUTEXE__END%" "%WINDOWS_INSTALLER_EXE_BASE_NAME_PROZ%"
+
+:: - exe inkl. JRE zurück umbenennen und verschieben: 3lgm2tool.exe -> ../3lgm2tool_jre.exe
+move /Y %DEPLOY_PROJECT_TOOL3LGM_DIR%\3lgm2tool.exe %DEPLOY_PROJECT_TOOL3LGM_DIR%\..\3lgm2tool_jre.exe
+:: - exe ohne JRE zurück verschieben: ../3lgm2tool_nojre.exe -> 3lgm2tool.exe
+move /Y %DEPLOY_PROJECT_TOOL3LGM_DIR%\..\3lgm2tool_nojre.exe %DEPLOY_PROJECT_TOOL3LGM_DIR%\3lgm2tool.exe
+:: - JRE verschieben: jre -> ../
+move /Y %DEPLOY_PROJECT_TOOL3LGM_DIR%\jre %DEPLOY_PROJECT_TOOL3LGM_DIR%\..\jre
+
+::run Inno Setup -> Erzeuge Windows-Installer
+CD /D "%INNOSETUP_PROGRAM_DIR%"
+START /wait Compil32 /cc "%ISS_FILE%"
+CD /D %SCRIPT_LOCATION%
+
+::Name der zu erstellenden zip und tar.gz-Dateien
+SET "ZIP_AND_TARGZ_RESULT_NAME=%ZIP_AND_TARGZ_RESULT_BASE_NAME%%lgmVersion%%INKL_JRE%"
 SET ZIP_AND_TARGZ_RESULT_NAME=%ZIP_AND_TARGZ_RESULT_NAME: =_%
 ECHO "### ZIP_AND_TARGZ_RESULT_NAME = %ZIP_AND_TARGZ_RESULT_NAME% "
 
@@ -367,10 +371,17 @@ FOR /d %%X IN ("%DEPLOY_PROJECT_TOOL3LGM_DIR%") DO "%SEVENZIP_PROGRAM_FILE%" a "
 "%SEVENZIP_PROGRAM_FILE%" a -tgzip "%DEPLOY_DESTINATION_DIR%\%ZIP_AND_TARGZ_RESULT_NAME%.tar.gz" "%DEPLOY_DESTINATION_DIR%\%ZIP_AND_TARGZ_RESULT_NAME%.tar"
 DEL %DEPLOY_DESTINATION_DIR%\%ZIP_AND_TARGZ_RESULT_NAME%.tar
 
+:: - JRE zurück verschieben: ../jre -> jre
+move /Y %DEPLOY_PROJECT_TOOL3LGM_DIR%\..\jre %DEPLOY_PROJECT_TOOL3LGM_DIR%\jre
+:: - exe inkl. JRE zurück verschieben: ../3lgm2tool_jre.exe -> 3lgm2tool_jre.exe
+move /Y %DEPLOY_PROJECT_TOOL3LGM_DIR%\..\3lgm2tool_jre.exe %DEPLOY_PROJECT_TOOL3LGM_DIR%\3lgm2tool_jre.exe
+
 :SKIPIPACKAGES_NEXT
+
 
 CD /D %INITIAL_DIR%
 ::PAUSE
+
 
 :: ========== FUNCTIONS ==========
 EXIT /B
