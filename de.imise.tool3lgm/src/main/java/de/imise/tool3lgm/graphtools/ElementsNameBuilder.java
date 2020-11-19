@@ -865,6 +865,8 @@ public final class ElementsNameBuilder extends MetaModelSpecificAdapter {
                         char charAfterlastUpperChar = simpleClassName.charAt(lastUpperChar + 1);
                         shortNameBuilder.append(charAfterlastUpperChar); //hänge den Buchstaben direkt nach dem 2. Großbuchstaben ans Ende an
                     }
+                }
+                if (Strings.isNullOrEmpty(shortName)) {
                     shortName = shortNameBuilder.toString();
                 }
             }
