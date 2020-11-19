@@ -21,6 +21,7 @@ import com.google.common.collect.ImmutableList;
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.Tool3lgmModelType.ModelCategory;
 import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
+import de.imise.tool3lgm.graphtools.IDSource;
 import de.imise.tool3lgm.graphtools.dialog.element.ElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.dialog.element.ElementPropertyDialogsContext;
 import de.imise.tool3lgm.graphtools.dialog.element.ErrorDecoratedElementPropertyDialog;
@@ -49,7 +50,7 @@ import de.imise.util.Alphabetical;
 import de.imise.util.IDStringGenerator;
 import de.imise.util.htmlxml.HTMLConverter;
 
-public abstract class ModelElement extends UserFieldTarget implements MetaModelSpecific, GDCollectionOwner {
+public abstract class ModelElement extends UserFieldTarget implements MetaModelSpecific, GDCollectionOwner, IDSource {
 
     /**
      * Die Ebene auf der sich dieses Element befindet
@@ -284,9 +285,7 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
         this.id = id;
     }
 
-    /**
-     * @return
-     */
+    @Override
     public final String getID() {
         return id;
     }

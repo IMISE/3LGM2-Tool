@@ -6,6 +6,8 @@ import java.util.List;
 
 import com.google.common.collect.ImmutableList;
 
+import de.imise.tool3lgm.graphtools.IDSource;
+
 /**
  * @author Thomas Rudert
  */

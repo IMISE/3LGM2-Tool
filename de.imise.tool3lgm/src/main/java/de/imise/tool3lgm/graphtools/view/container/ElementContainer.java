@@ -20,6 +20,7 @@ import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 
 import de.imise.tool3lgm.Static;
+import de.imise.tool3lgm.graphtools.IDSource;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.CompositionEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
@@ -35,7 +36,7 @@ import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout.TextPositionHo
 import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout.TextPositionVertical;
 import de.imise.tool3lgm.graphtools.view.graph.SpecialInfoLabel;
 
-public abstract class ElementContainer extends JLabel implements Cloneable, GraphDocumentOwner {
+public abstract class ElementContainer extends JLabel implements Cloneable, GraphDocumentOwner, IDSource {
 
     /**
      * COMMENTME
@@ -738,18 +739,9 @@ public abstract class ElementContainer extends JLabel implements Cloneable, Grap
         return me.getDescription();
     }
 
-    /**
-     * @return
-     */
+    @Override
     public final String getID() {
         return me.getID();
-    }
-
-    /**
-     * @param id
-     */
-    public final void setID(final String id) {
-        me.setID(id);
     }
 
     /**

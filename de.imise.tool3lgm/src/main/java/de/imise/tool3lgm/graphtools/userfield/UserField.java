@@ -16,6 +16,7 @@ import java.util.StringTokenizer;
 import com.google.common.base.Strings;
 import com.google.common.collect.ImmutableSet;
 
+import de.imise.tool3lgm.graphtools.IDSource;
 import de.imise.util.IDStringGenerator;
 
 /**
@@ -745,9 +746,6 @@ public final class UserField implements Cloneable, Comparator<UserFieldTarget>, 
         return targetClass;
     }
 
-    /**
-     * @return the ID
-     */
     @Override
     public String getID() {
         return id;

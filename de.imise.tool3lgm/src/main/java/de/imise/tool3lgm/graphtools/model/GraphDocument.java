@@ -80,6 +80,7 @@ import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.Tool3lgmModelType.ModelCategory;
 import de.imise.tool3lgm.event.action.UserPropertyBooleanChangeAction;
 import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
+import de.imise.tool3lgm.graphtools.IDSource;
 import de.imise.tool3lgm.graphtools.dialog.element.panel.ElementDialogPanel;
 import de.imise.tool3lgm.graphtools.dialog.tools.EasyDialogAccess;
 import de.imise.tool3lgm.graphtools.metamodel.CoreMetaModel;
@@ -129,7 +130,7 @@ import de.imise.util.swing.dialog.MultipleOptionPane;
  * oder ein Szenario (= eine beliebige Elementauswahl aus allen Elementen mit
  * einer grafischen Repräsentation)
  */
-public abstract class GraphDocument extends ElementSelectionContext implements GDCollectionOwner {
+public abstract class GraphDocument extends ElementSelectionContext implements GDCollectionOwner, IDSource {
 
     /**
      *
@@ -443,16 +444,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
         return minPageSizeFactor;
     }
 
-    /**
-     * @param id
-     */
-    public void setIDString(final String id) {
-        this.id = id;
-    }
-
-    /**
-     * @return
-     */
+    @Override
     public final String getID() {
         return id;
     }
