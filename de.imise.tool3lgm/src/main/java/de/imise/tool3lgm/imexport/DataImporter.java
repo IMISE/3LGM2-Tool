@@ -1,5 +1,7 @@
 package de.imise.tool3lgm.imexport;
 
+import static de.imise.tool3lgm.graphtools.undoredo.TransactionManager.STANDARD_PID;
+
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -169,11 +171,11 @@ public abstract class DataImporter<T> implements GDCollectionOwner, MetaModelSpe
      *            soll
      * @param name Name des Knotens im Target-Modell
      * @param description Beschreibung des Knotens im Target-Modell
-     * @param hashString HashString des Knotens im Target-Modell
+     * @param id ID des Knotens im Target-Modell
      * @return den erzeugten Knoten
      */
-    protected Node addNode(final T sourceObject, final Class<? extends Node> nodeClass, final String name, final String description, final String hashString) {
-        NodeContainer nodeContainer = gdcoll.createNodeAndContainer(nodeClass, name, description, hashString, TransactionManager.STANDARD_PID);
+    protected Node addNode(final T sourceObject, final Class<? extends Node> nodeClass, final String name, final String description, final String id) {
+        NodeContainer nodeContainer = gdcoll.createNodeAndContainer(nodeClass, name, description, id, STANDARD_PID);
         Node node = nodeContainer.getNode();
         sourceInstanceToTargetNode.put(sourceObject, node);
         return node;
@@ -184,7 +186,7 @@ public abstract class DataImporter<T> implements GDCollectionOwner, MetaModelSpe
      *
      * @param edgeClassName 3LGM2 Kantenklasse, die im Target-Modell angelegt
      *            werden soll
-     * @param name HashString der Kanten im Target-Modell
+     * @param name
      * @param startNode Startknoten der Kante im Target-Modell
      * @param endNode Endknoten der Kante im Target-Modell
      * @return die erzeugte Kante
@@ -198,13 +200,13 @@ public abstract class DataImporter<T> implements GDCollectionOwner, MetaModelSpe
      * @param edgeClassName 3LGM2 Kantenklasse, die im Target-Modell angelegt
      *            werden soll
      * @param name Name des Knotens im Target-Modell
-     * @param hashString HashString der Kante im Target-Modell
+     * @param id ID der Kante im Target-Modell
      * @param startNode Startknoten der Kante im Target-Modell
      * @param endNode Endknoten der Kante im Target-Modell
      * @return die erzeugte Kante
      */
-    public Edge addEdge(final String edgeClassName, final String name, final String hashString, final Node startNode, final Node endNode) {
-        Edge edge = gdcoll.link(edgeClassName, hashString, startNode, endNode, -1, -1, false, TransactionManager.STANDARD_PID);
+    public Edge addEdge(final String edgeClassName, final String name, final String id, final Node startNode, final Node endNode) {
+        Edge edge = gdcoll.link(edgeClassName, id, startNode, endNode, -1, -1, false, TransactionManager.STANDARD_PID);
         if (edge != null && !Strings.isNullOrEmpty(name)) {
             edge.setName(name);
         }

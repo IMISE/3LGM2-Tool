@@ -20,17 +20,17 @@ public class EdgeHeaderLine extends AbstractEdgeLine {
      * @param nameHeader Name of the name column in this header line
      * @param descriptionHeader Name of the description column in this header
      *            line
-     * @param hashHeader Name of the hash column in this header line
-     * @param startHashHeader Name column with the start hashes for the
-     *            following edge lines
-     * @param endHashHeader Name column with the end hashes for the following
+     * @param idHeader Name of the ID column in this header line
+     * @param startIDHeader Name column with the start IDs for the following
      *            edge lines
+     * @param endIDHeader Name column with the end IDs for the following edge
+     *            lines
      * @param userFieldNames List of all names for userFields in this line
      * @param row Row number of this line
      */
-    public EdgeHeaderLine(final Class<? extends ModelElement> elementClass, final String elementType, final String nameHeader, final String descriptionHeader, final String hashHeader, final String startHashHeader, final String endHashHeader,
+    public EdgeHeaderLine(final Class<? extends ModelElement> elementClass, final String elementType, final String nameHeader, final String descriptionHeader, final String idHeader, final String startIDHeader, final String endIDHeader,
             final List<String> userFieldNames, final int row) {
-        super(elementClass, elementType, nameHeader, descriptionHeader, hashHeader, startHashHeader, endHashHeader, userFieldNames, row);
+        super(elementClass, elementType, nameHeader, descriptionHeader, idHeader, startIDHeader, endIDHeader, userFieldNames, row);
     }
 
 }

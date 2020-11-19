@@ -21,14 +21,14 @@ public class EdgeLine extends AbstractEdgeLine {
      * @param elementType Value of the element type column in this line
      * @param name Value of the name column in this line
      * @param description Value of the description column in this line
-     * @param hash Value of the hash column in this line
-     * @param startHash Hash of the element where this edge starts
-     * @param endHash Hash of the element where this edge ends
+     * @param id Value of the ID column in this line
+     * @param startID ID of the element where this edge starts
+     * @param endID ID of the element where this edge ends
      * @param userFields List of all values for userFields in this line
      * @param row Row number of this line
      */
-    public EdgeLine(final EdgeHeaderLine headerLine, final String name, final String description, final String hash, final String startHash, final String endHash, final List<String> userFields, final int row) {
-        super(headerLine == null ? null : headerLine.getElementClass(), "", name, description, hash, startHash, endHash, userFields, row);
+    public EdgeLine(final EdgeHeaderLine headerLine, final String name, final String description, final String id, final String startID, final String endID, final List<String> userFields, final int row) {
+        super(headerLine == null ? null : headerLine.getElementClass(), "", name, description, id, startID, endID, userFields, row);
         this.headerLine = headerLine;
     }
 

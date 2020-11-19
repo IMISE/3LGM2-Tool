@@ -13,7 +13,7 @@ public final class Bendpoint extends Node {
     /**
      * ID der Kante, zu der der Knickpunkt gehört
      */
-    private String edgeHash = "";
+    private String edgeID = "";
 
     /**
      * {@link EdgeContainer}, zu der der Knickpunkt gehört
@@ -33,21 +33,21 @@ public final class Bendpoint extends Node {
     /**
      * @return
      */
-    public String getEdgeHash() {
-        return edgeHash;
+    public String getEdgeID() {
+        return edgeID;
     }
 
     /**
-     * @param egdeHash
+     * @param edgeID
      */
-    public void setEdgeHash(final String egdeHash) {
-        edgeHash = egdeHash == null ? "" : egdeHash;
+    public void setEdgeID(final String edgeID) {
+        this.edgeID = edgeID == null ? "" : edgeID;
     }
 
     @Override
     public boolean putXMLFieldString(final String field, final String value) {
         if (field.equals("kantenHash")) {
-            setEdgeHash(value);
+            setEdgeID(value);
             return true;
         }
         if (field.equals("index")) {
@@ -70,7 +70,7 @@ public final class Bendpoint extends Node {
      */
     public void setOwner(final EdgeContainer kc) {
         this.kc = kc;
-        edgeHash = kc.getHashString();
+        edgeID = kc.getID();
     }
 
     /**

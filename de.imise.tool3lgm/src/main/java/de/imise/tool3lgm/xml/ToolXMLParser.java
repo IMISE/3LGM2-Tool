@@ -37,16 +37,16 @@ import de.imise.tool3lgm.log.Log;
 public class ToolXMLParser {
 
     //	/**
-    //	 * Set der Hashes aller Elemente, die nicht länger unterstützt werden. Beispielsweise werden
+    //	 * Set der IDs aller Elemente, die nicht länger unterstützt werden. Beispielsweise werden
     //	 * keine gemischten Anwendungsbausteine mehr unterstützt. Die zugehörige Klasse "Anwendungsbaustein"
     //	 * ist jetzt abstract. Da diese nicht mehr unterstützten Elemente aber Assoziationen zu anderen
     //	 * Elementen aber auch untergeordnete Elemente haben können, müssen diese auch entfernt werden. Um diese
-    //	 * Assoziationen und Elemente zu finden, muss man sich alle Hashes der nicht mehr unterstützten Elemente
+    //	 * Assoziationen und Elemente zu finden, muss man sich alle IDs der nicht mehr unterstützten Elemente
     //	 * merken.
     //	 *
     //	 * TODO:implementieren
     //	 */
-    //	private static Set<String> _deprecatedElementHashes;
+    //	private static Set<String> _deprecatedElementIDs;
 
     /**
      * Die Collection, die dieser Parser einliest
@@ -180,7 +180,7 @@ public class ToolXMLParser {
      */
     public void parseDocument() throws SAXException, IOException {
         Log.showErrorDialog = true;
-        //		deprecatedElementHashes = new HashSet();
+        //		deprecatedElementIDs = new HashSet();
         Static.setProgressDialogStatusLabel("labelReadFile");
 
         XMLReader reader = parser.getXMLReader();
@@ -192,18 +192,18 @@ public class ToolXMLParser {
 
         ////TODO:AXS: sauberes Entfernen nicht mehr unterstützter Elemente beenden
         ///*
-        // 		//HashSet, in das die HashStrings aller Elemente kommen, die gelöscht werden müssen,
+        // 		//HashSet, in das die IDs aller Elemente kommen, die gelöscht werden müssen,
         // 		//weil sie von einem anderen Element abhängig sind (untergeordnete Elemente),
         //
-        // 		HashSet alreadyRemovedHashes = new HashSet();
-        // 		System.err.println(deprecatedElementHashes);
+        // 		HashSet alreadyRemovedIDs = new HashSet();
+        // 		System.err.println(deprecatedElementIDs);
         //
-        // 		//für alle HashWerte von ModellElementen, die nicht mehr unterstützt werden
-        // 		for (Iterator it=deprecatedElementHashes.iterator(); it.hasNext();){
-        // 			String deprecatedElementHash = it.next().toString();
+        // 		//für alle IDs von ModellElementen, die nicht mehr unterstützt werden
+        // 		for (Iterator it=deprecatedElementIDs.iterator(); it.hasNext();){
+        // 			String deprecatedElementID = it.next().toString();
         // 			//wenn er schon aufgrund eines anderen nicht mehr unterstützten Elementes gelöscht
-        // 			//wurde -> nimm den nächsten Hash
-        // 			if (alreadyRemovedHashes.contains(deprecatedElementHash))
+        // 			//wurde -> nimm die nächsten ID
+        // 			if (alreadyRemovedIDs.contains(deprecatedElementID))
         // 				continue;
         // 			//für alle Kantenarten
         // 			for (int i=0; i<ModelConstants.ALL_TRACES.length; i++){
@@ -212,20 +212,20 @@ public class ToolXMLParser {
         // 	 			//für jede dieser Kanten
         // 				for (Iterator tracesIt=connections.iterator(); tracesIt.hasNext();){
         // 	 				Edge trace = (Edge)tracesIt.next();
-        // 	 				String elemToDeleteHash = null;
+        // 	 				String elemToDeleteID = null;
         // 					Object[][] typesAndCardinality = null;
         // 					ModelElement me = null;
-        // 	 				//wenn der Hashstring des nicht mehr unterstützten Elementes dem StartHash
+        // 	 				//wenn die IDdes nicht mehr unterstützten Elementes der StartID
         // 					//der Edge entspricht
-        // 					if (trace.getStartHash().equals(deprecatedElementHash)){
+        // 					if (trace.getStartID().equals(deprecatedElementID)){
         // 	 					//hole das Endelement der Edge und die Kardinalitäten
-        // 						me = mainDoc.findElementCoded(trace.getEndHash());
+        // 						me = mainDoc.findElementCoded(trace.getEndID());
         // 	 					typesAndCardinality = trace.getStartTypesAndCardinality();
-        // 	 	 				//wenn der Hashstring des nicht mehr unterstützten Elementes dem EndHash
+        // 	 	 				//wenn die ID des nicht mehr unterstützten Elementes der EndID
         // 	 					//der Edge entspricht
-        // 	 				}else if (trace.getEndHash().equals(deprecatedElementHash)){
+        // 	 				}else if (trace.getEndID().equals(deprecatedElementID)){
         // 	 					//hole das Startelement der Edge und die Kardinalitäten
-        // 	 					me = mainDoc.findElementCoded(trace.getStartHash());
+        // 	 					me = mainDoc.findElementCoded(trace.getStartID());
         // 	 					typesAndCardinality = trace.getEndTypesAndCardinality();
         // 	 				}
         // 	 				//entferne die Edge
@@ -242,21 +242,21 @@ public class ToolXMLParser {
         // 					for (int o=0; o<typesAndCardinality.length; o++){
         //	 	 				if (((Class)typesAndCardinality[o][0]).isAssignableFrom(elementClass))
         // 	 	 					if (((Integer)typesAndCardinality[o][1]).intValue()>0)
-        // 	 	 	 	 				elemToDeleteHash = trace.getEndHash();
+        // 	 	 	 	 				elemToDeleteID = trace.getEndID();
         // 	 				}
         // 	 				//das andere Element der Edge muss auch gelöscht werden
-        // 					if (elemToDeleteHash!=null){
-        // 	 					mainDoc.remove(elemToDeleteHash, TransactionManager.STANDARD_PID);
+        // 					if (elemToDeleteID != null){
+        // 	 					mainDoc.remove(elemToDelete, TransactionManager.STANDARD_PID);
         // 	 					//merke es als bereits gelöscht, falls es selbst auch ein nicht mehr
         // 	 					//unterstütztes Element ist
-        // 	 					alreadyRemovedHashes.add(elemToDeleteHash);
+        // 	 					alreadyRemovedIDs.add(elemToDeleteID);
         // 	 				}
         // 	 			}
         // 			}
         // 		}
         //*/
-        ///* 		deprecatedElementHashes.clear();
-        // 		deprecatedElementHashes = null;
+        ///* 		deprecatedElementIDs.clear();
+        // 		deprecatedElementIDs = null;
         //*/
         // 		//Bis zur version[1] == 7 (= FileVersion V3_4)haben die x- und Y-Koordinaten der Elemente den Mittelpunkt
         // 		//beschrieben, danach den oberen linken Eckpunkt. Das hier war nur nötig, weil die alte version auch Modelle
@@ -485,12 +485,12 @@ public class ToolXMLParser {
     }
 
     //	/**
-    //	 * Fügt zu den Hashes der Elemente, die nicht mehr unterstützt werden den übergebenen hinzu.
+    //	 * Fügt zu den IDs der Elemente, die nicht mehr unterstützt werden den übergebenen hinzu.
     //	 *
-    //	 * @param hash
+    //	 * @param id
     //	 */
-    ///*	public static void addDeprecatedElementHashes(String hash) {
-    //		deprecatedElementHashes.add(hash);
+    ///*	public static void addDeprecatedElementIDs(String id) {
+    //		deprecatedElementIDs.add(id);
     //	}
     //*/
 }

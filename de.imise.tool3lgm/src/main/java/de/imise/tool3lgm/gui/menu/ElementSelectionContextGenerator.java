@@ -172,8 +172,8 @@ public abstract class ElementSelectionContextGenerator extends ContextGenerator 
                 ModelElement realStartElement = null;
                 if (startElementGDColl != selectedGDColl) {
                     LGMGraphDocument.copyToModel(startElement, selectedDoc);
-                    String startElementHash = startElement.getHashString();
-                    realStartElement = selectedDoc.findElementCoded(startElementHash);
+                    String startElementID = startElement.getID();
+                    realStartElement = selectedDoc.findElementCoded(startElementID);
                 }
                 if (realStartElement == null) {
                     realStartElement = startElement;
@@ -226,11 +226,11 @@ public abstract class ElementSelectionContextGenerator extends ContextGenerator 
                     String label = elementsNameBuilder.getDisplayableName(endClass);
                     String edgeClassName = edgeClass.getSimpleName();
                     LGMGraphDocument sourceDoc = me.getSelectedDoc();
-                    String sourceDocHash = sourceDoc.getHashString();
+                    String sourceDocID = sourceDoc.getID();
                     LGMGraphDocument targetDoc = Static.getSelectedDoc();
-                    String targetDocHash = targetDoc.getHashString();
-                    String elementHash = me.getHashString();
-                    String arguments = StringUtils.createCollectionString(" ", sourceDocHash, targetDocHash, edgeClassName, elementHash);
+                    String targetDocID = targetDoc.getID();
+                    String elementID = me.getID();
+                    String arguments = StringUtils.createCollectionString(" ", sourceDocID, targetDocID, edgeClassName, elementID);
                     JMenuItem item = getItem(label, MODEL_ACTION_CREATE_INSTANCIATION, arguments, link_icon, true, toolTip);
                     menu.add(item);
                 }

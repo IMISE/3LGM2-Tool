@@ -46,7 +46,7 @@ import de.imise.tool3lgm.graphtools.view.graph.ElementsLayoutDefinition;
 import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout;
 import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout.TextAlignmentHTML;
 import de.imise.util.Alphabetical;
-import de.imise.util.HashStringGenerator;
+import de.imise.util.IDStringGenerator;
 import de.imise.util.htmlxml.HTMLConverter;
 
 public abstract class ModelElement extends UserFieldTarget implements MetaModelSpecific, GDCollectionOwner {
@@ -62,9 +62,9 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
     private String name = "", htmlName = "", descr = "";
 
     /**
-     * HashString
+     * ID of the element
      */
-    protected String hashstring;
+    protected String id;
 
     /**
      * Name des Elementes mit allen Namen der Teilmodelle in eckigen Klammern
@@ -112,18 +112,18 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
     private GDCollection gdcoll;
 
     /**
-     * HashString des Teilmodells, mit dem das Element verknüpft ist. Diese
-     * Verknüpfung sagt einfach nur aus, dass das Element in dem Teilmodell
-     * näher berschrieben wird (z.B. duch seine Teile). Es kann, aber muss
-     * selbst nicht in diesem Teilmodell vorkommen.
+     * ID des Teilmodells, mit dem das Element verknüpft ist. Diese Verknüpfung
+     * sagt einfach nur aus, dass das Element in dem Teilmodell näher
+     * berschrieben wird (z.B. duch seine Teile). Es kann, aber muss selbst
+     * nicht in diesem Teilmodell vorkommen.
      */
-    private String associatedSzenHashString = null;
+    private String associatedSzenID = null;
 
     /**
-     * Erzeut ein neues Modellelement mit einem HashString.
+     * Creates a new ModelElement with a new ID
      */
     public ModelElement() {
-        hashstring = getNewHashString(this);
+        id = getNewID(this);
         initContainerTable();
     }
 
@@ -167,7 +167,7 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
     public ModelElement clone() {
         ModelElement retVal = (ModelElement) super.clone();
         retVal.gdcoll = null;
-        retVal.hashstring = getNewHashString(this);
+        retVal.id = getNewID(this);
         retVal.initContainerTable();
         retVal.edges = null;
         return retVal;
@@ -199,11 +199,11 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
      * @param me
      * @return
      */
-    private final String getNewHashString(final ModelElement me) {
+    private final String getNewID(final ModelElement me) {
         ElementsNameBuilder elementsNameBuilder = getElementsNameBuilder();
         Class<? extends ModelElement> elementClass = me.getClass();
         String elementClassShortName = elementsNameBuilder.getShortName(elementClass);
-        return HashStringGenerator.getHash(elementClassShortName);
+        return IDStringGenerator.createIDString(elementClassShortName);
     }
 
     /**
@@ -272,23 +272,23 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
     }
 
     /**
-     * @param _hashstring
+     * @param id
      */
-    public final void setHashString(final String _hashstring) {
-        if (_hashstring == null) {
+    public final void setID(final String id) {
+        if (id == null) {
             return;
         }
-        if (_hashstring.equals("") || _hashstring.equals("null")) {
+        if (id.equals("") || id.equals("null")) {
             return;
         }
-        hashstring = _hashstring;
+        this.id = id;
     }
 
     /**
      * @return
      */
-    public final String getHashString() {
-        return hashstring;
+    public final String getID() {
+        return id;
     }
 
     /** Gibt den Namen des Objektes zurueck */
@@ -2223,25 +2223,25 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
     }
 
     /**
-     * join Element properties without connections this.hashstring =
-     * other.hashstring other will be not changed
+     * join Element properties without connections this.id = other.id other will
+     * be not changed
      *
      * @param other the element to join
-     * @param overwriteHashstring if <code>true</code> the result element will
-     *            have the hashString of the other element. If it is
-     *            <code>false</code>, then it keeps its hashString.
+     * @param overwriteID if <code>true</code> the result element will have the
+     *            id of the other element. If it is <code>false</code>, then it
+     *            keeps its id.
      * @param joinNameDescriptionAndUserfields If <code>true</code>, then the
      *            name and the description will also be merged. If
      *            <code>false</code>, then not.
      * @return the joined Element or <code>null</code> if an error occurs;
      */
-    public ModelElement join(final ModelElement other, final boolean overwriteHashstring, final boolean joinNameDescriptionAndUserfields) {
+    public ModelElement join(final ModelElement other, final boolean overwriteID, final boolean joinNameDescriptionAndUserfields) {
         if (other.getClass() != this.getClass() || this == other) {
             return null;
         }
 
-        if (overwriteHashstring) {
-            hashstring = other.getHashString();
+        if (overwriteID) {
+            id = other.getID();
         }
 
         String joined = null;
@@ -2294,15 +2294,15 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
     /**
      * @return
      */
-    public String getAssociatedDoc() {
-        return associatedSzenHashString;
+    public String getAssociatedSzenID() {
+        return associatedSzenID;
     }
 
     /**
-     * @param document
+     * @param docID
      */
-    public void setAssociatedDoc(final String document) {
-        associatedSzenHashString = document;
+    public void setAssociatedDoc(final String docID) {
+        associatedSzenID = docID;
     }
 
     /**

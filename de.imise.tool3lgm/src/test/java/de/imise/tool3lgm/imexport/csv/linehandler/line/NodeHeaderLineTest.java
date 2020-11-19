@@ -18,17 +18,17 @@ public class NodeHeaderLineTest {
         String elementType = "Aufgabe oder irgend was anderes";
         String nameHeader = "irrelevantString1";
         String descriptionHeader = "irrelevantString2";
-        String hashHeader = "irrelevantString3";
+        String idHeader = "irrelevantString3";
         List<String> userFieldNames = new ArrayList<>();
         userFieldNames.add("userFieldName");
         userFieldNames.add("userFieldName");
         userFieldNames.add("userFieldName2");
         int row = 1;
-        NodeHeaderLine nodeHeaderLine = new NodeHeaderLine(elementClass, elementType, nameHeader, descriptionHeader, hashHeader, userFieldNames, row);
+        NodeHeaderLine nodeHeaderLine = new NodeHeaderLine(elementClass, elementType, nameHeader, descriptionHeader, idHeader, userFieldNames, row);
         assertEquals(nodeHeaderLine.getElementClass(), elementClass);
         assertEquals(nodeHeaderLine.getName(), nameHeader);
         assertEquals(nodeHeaderLine.getDescription(), descriptionHeader);
-        assertEquals(nodeHeaderLine.getHash(), hashHeader);
+        assertEquals(nodeHeaderLine.getID(), idHeader);
         assertEquals(nodeHeaderLine.getUserFields(), userFieldNames);
         assertEquals(nodeHeaderLine.getRow(), row);
 

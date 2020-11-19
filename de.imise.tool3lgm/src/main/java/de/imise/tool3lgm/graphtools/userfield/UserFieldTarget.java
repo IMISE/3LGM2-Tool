@@ -12,7 +12,7 @@ import de.imise.util.htmlxml.XMLCharacterCoder;
 
 /**
  * Oberklasse für alle Klassen, denen man benutzerdefinierte Eigenschaften geben
- * kann. Hinweis: Beim Löschen eines UserFields bleibt sein Hash und Value-Paar
+ * kann. Hinweis: Beim Löschen eines UserFields bleibt seine ID und Value-Paar
  * in der HashMap. Nimmt man das Löschen zurück, indem man im
  * <code>UserFieldDeclarationDialog</code> auf abbrechen geht, wird die beim
  * Öffnen des Dialogs erstellte Kopie der <code>UserFieldDefinitions</code>
@@ -56,7 +56,7 @@ public class UserFieldTarget implements Cloneable {
 
     /**
      * Ersetzt alle UserFields in der Map der Eingabewerte durch die in der
-     * übergebenen Definition mit demselben HashString.
+     * übergebenen Definition mit derselben ID.
      *
      * @param definitions
      */
@@ -69,8 +69,8 @@ public class UserFieldTarget implements Cloneable {
             for (Object oldUserFieldObject : oldUserFields) {
                 if (oldUserFieldObject != null) {
                     UserField oldUserField = (UserField) oldUserFieldObject;
-                    String userFieldHashCode = oldUserField.getHashCode();
-                    UserField newUserField = definitions.getUserField(userFieldHashCode);
+                    String userFieldID = oldUserField.getID();
+                    UserField newUserField = definitions.getUserField(userFieldID);
                     String inputValue = userFieldToInputValuesMap.remove(oldUserField);
                     userFieldToInputValuesMap.put(newUserField, inputValue);
                 }
@@ -83,8 +83,8 @@ public class UserFieldTarget implements Cloneable {
     ////////////////////////////
 
     /**
-     * Liefert den vom Benutzer für das <code>UserField</code> mit dem
-     * übergebenen HashCode eingegebenen Wert. Wurde noch keiner eingegeben oder
+     * Liefert den vom Benutzer für das <code>UserField</code> mit der
+     * übergebenen ID eingegebenen Wert. Wurde noch keiner eingegeben oder
      * gehört das betreffende <code>UserField</code> gar nicht zu diesem
      * <code>UserFieldTarget</code>, kommt <code>null</code> zurück.
      *
@@ -158,7 +158,7 @@ public class UserFieldTarget implements Cloneable {
         for (UserField keyUserField : getUserFieldInputValueKeys()) {
             //Hier muss geprüft werden, ob das rauszuschreibende userfield null ist, denn darf es nicht rausgeschrieben werden.
             if (keyUserField != null) {
-                sb.append("<userField hash=\"" + keyUserField.getHashCode() + "\">" + XMLCharacterCoder.encodeString(getUserFieldInputValue(keyUserField)) + "</userField>");
+                sb.append("<userField hash=\"" + keyUserField.getID() + "\">" + XMLCharacterCoder.encodeString(getUserFieldInputValue(keyUserField)) + "</userField>");
             }
         }
     }
@@ -183,9 +183,9 @@ public class UserFieldTarget implements Cloneable {
      * @see #_getUserFieldInputValue(String)
      * @see #_getUserFieldInputValue(UserField)
      * @see UserField#getValue(UserFieldTarget)
-     * @return den für den übergebenen HashString eines Formel-UserFields
-     *         vermerkten berechenten Wert oder <code>EMPTY_STRING</code>, wenn
-     *         kein Wert vermerk ist
+     * @return den für die übergebene ID eines Formel-UserFields vermerkten
+     *         berechenten Wert oder <code>EMPTY_STRING</code>, wenn kein Wert
+     *         vermerk ist
      */
     protected String getCalculatedUserFieldValue(final UserField userField) {
         if (userFieldToCalculatedValuesMap == null) {

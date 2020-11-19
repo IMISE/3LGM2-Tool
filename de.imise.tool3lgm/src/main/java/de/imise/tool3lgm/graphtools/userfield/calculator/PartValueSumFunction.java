@@ -171,21 +171,28 @@ public class PartValueSumFunction {
         return erg.toString();
     }
 
+    /**
+     * @param definitions
+     * @param me
+     * @param edgeClass
+     * @param userFieldToReplace
+     * @return
+     */
     private static UserField getReplacer(final UserFieldDefinitions definitions, final ModelElement me, final Class<? extends Edge> edgeClass, final UserField userFieldToReplace) {
         UserField field = null;
         WeightReplacer replacer = definitions.getWeightReplacer();
-        String modelElementHash = me.getHashString();
-        String fieldHash = null;
+        String elementID = me.getID();
+        String userFieldID = null;
         if (userFieldToReplace == null) {
-            fieldHash = replacer.getUniformDistributionReplacement(modelElementHash, edgeClass);
+            userFieldID = replacer.getUniformDistributionReplacement(elementID, edgeClass);
         } else {
-            String userFieldHashToReplace = userFieldToReplace.getHashCode();
-            fieldHash = replacer.getReplacement(modelElementHash, userFieldHashToReplace);
+            String userFieldIDToReplace = userFieldToReplace.getID();
+            userFieldID = replacer.getReplacement(elementID, userFieldIDToReplace);
         }
-        if (fieldHash == null) {
+        if (userFieldID == null) {
             field = userFieldToReplace;
         } else {
-            field = definitions.getUserField(fieldHash);
+            field = definitions.getUserField(userFieldID);
         }
         return field;
     }
@@ -256,10 +263,10 @@ public class PartValueSumFunction {
             MetaModel metaModel = definitions.getMetaModel();
             edgeClass = metaModel.getClassForName(token).asSubclass(Edge.class);
 
-            String ufHash = st.nextToken();
+            String userFieldID = st.nextToken();
 
             //Das UserField, das das zu verrechnende Attribut kennzeichnet.
-            kzUserField = definitions.getUserField(ufHash);
+            kzUserField = definitions.getUserField(userFieldID);
 
             //die TargetClass des UserFields als ModelElement-Unterklasse
             elementClass = kzUserField.getTargetClass().asSubclass(ModelElement.class);
@@ -274,7 +281,7 @@ public class PartValueSumFunction {
             if (st.hasMoreTokens()) {
                 String nextToken = st.nextToken();
                 //wenn der nächste Token das Verteilungsgewicht angibt
-                if (nextToken.startsWith(UserField.USERFIELD_HASH_STRING_PREFIX)) {
+                if (nextToken.startsWith(UserField.USERFIELD_ID_PREFIX)) {
                     vgUserField = definitions.getUserField(nextToken);
                     //wenn es nicht das VG ist, kann es nur noch die Richtung sein
                 } else {

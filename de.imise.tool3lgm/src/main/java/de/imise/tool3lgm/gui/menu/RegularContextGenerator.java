@@ -213,7 +213,7 @@ public class RegularContextGenerator extends ElementSelectionContextGenerator im
         unlinkToSzenario = getItem(MODEL_ACTION_UNLINK_SELECTED_TO_SUBMODEL);
         selectLinkedSzenario = getItem("selectLinkedSzenario", MODEL_ACTION_SELECT_LINKED_SUBMODEL);
         delete_selected = getItem(MODEL_ACTION_DELETE_FROM_MODEL);
-        // der leere Argumentstring bewirkt, dass am Ende ein Leerzeichen angehängt wird, hinter das dann die Hashes der zulöschenden Elemnte kommen
+        // der leere Argumentstring bewirkt, dass am Ende ein Leerzeichen angehängt wird, hinter das dann die IDs der zulöschenden Elemnte kommen
         delete_selected_from_szenario = getItem(MODEL_ACTION_DELETE_FROM_SUBMODEL);
 
         join_selected = getItem(MODEL_ACTION_JOIN_SELECTED);
@@ -296,7 +296,7 @@ public class RegularContextGenerator extends ElementSelectionContextGenerator im
         ArrayList<JMenuItem> items = new ArrayList<>(slavePairs.size());
         for (Pair<Class<? extends CompositionEdge>, Class<? extends ModelElement>> slavePair : slavePairs) {
             Class<? extends CompositionEdge> compositionClass = slavePair.getFirstItem();
-            JMenuItem item = getItem(slavePair.getSecondItem().getSimpleName(), MODEL_ACTION_CREATE_ADDICTED, doc.getHashString() + " " + me.getHashString() + " " + compositionClass.getSimpleName() + " " + slavePair.getSecondItem().getSimpleName());
+            JMenuItem item = getItem(slavePair.getSecondItem().getSimpleName(), MODEL_ACTION_CREATE_ADDICTED, doc.getID() + " " + me.getID() + " " + compositionClass.getSimpleName() + " " + slavePair.getSecondItem().getSimpleName());
             item.setEnabled(me.countConnections(compositionClass) < CoreMetaModel.getMaxMasterToSlaveCardinality(compositionClass));
             items.add(item);
         }
@@ -332,7 +332,7 @@ public class RegularContextGenerator extends ElementSelectionContextGenerator im
             }
 
             item.addActionListener(this);
-            item.setActionCommand(MODEL_ACTION_ADD_SELECTED_TO_SUBMODEL + " " + szen.getHashString());
+            item.setActionCommand(MODEL_ACTION_ADD_SELECTED_TO_SUBMODEL + " " + szen.getID());
         }
 
         item = getItem(MODEL_ACTION_ADD_SELECTED_TO_ALL_SUBMODELS);
@@ -358,14 +358,14 @@ public class RegularContextGenerator extends ElementSelectionContextGenerator im
             /* ist Node schon mit diesem Szenario verknüpft */
             if (ec != null) {
                 ModelElement me = ec.getElement();
-                String szenHash = szen.getHashString();
-                String associatedSzenHash = me.getAssociatedDoc();
-                if (szenHash.equals(associatedSzenHash)) {
+                String szenID = szen.getID();
+                String associatedSzenID = me.getAssociatedSzenID();
+                if (szenID.equals(associatedSzenID)) {
                     item.setEnabled(false);
                 }
             }
             item.addActionListener(this);
-            item.setActionCommand(MODEL_ACTION_LINK_SELECTED_TO_SUBMODEL + " " + szen.getHashString());
+            item.setActionCommand(MODEL_ACTION_LINK_SELECTED_TO_SUBMODEL + " " + szen.getID());
             link_to_szenario_menu.add(item);
         }
         setMenuScroller(link_to_szenario_menu, 1, 0);
@@ -413,11 +413,11 @@ public class RegularContextGenerator extends ElementSelectionContextGenerator im
                 menu.add(addToModelMenu);
             }
 
-            if (me.getAssociatedDoc() != null) {
+            if (me.getAssociatedSzenID() != null) {
                 menu.add(selectLinkedSzenario);
             }
             menu.add(getLinkToSzenarioMenu());
-            if (me.getAssociatedDoc() != null) {
+            if (me.getAssociatedSzenID() != null) {
                 menu.add(unlinkToSzenario);
             }
             GraphDocument doc = getDoc();
@@ -1810,7 +1810,7 @@ public class RegularContextGenerator extends ElementSelectionContextGenerator im
 
     @Override
     public void popupMenuWillBecomeInvisible(final PopupMenuEvent e) {
-        // das Leerzeichen am Ende muss sein, da dahinter dann die Hashes der zulöschenden Elemnte kommen
+        // das Leerzeichen am Ende muss sein, da dahinter dann die IDs der zulöschenden Elemnte kommen
         delete_selected_from_szenario.setActionCommand(GDCommands.MODEL_ACTION_DELETE_FROM_SUBMODEL + " ");
         delete_selected.setActionCommand(GDCommands.MODEL_ACTION_DELETE_FROM_MODEL + " ");
         ((JPopupMenu) e.getSource()).removePopupMenuListener(this);

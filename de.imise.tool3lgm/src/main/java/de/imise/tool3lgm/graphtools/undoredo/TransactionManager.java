@@ -8,7 +8,6 @@ import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.model.LGMGraphDocument;
-import de.imise.util.Sys;
 
 /**
  * Verwaltet die Undo-/Redo-Steuerung
@@ -458,7 +457,7 @@ public class TransactionManager {
         for (int i2 = transactions - 1; i2 >= 0; i2--) {
             // die Kommandos werden immer im Hauptdokument ausgführt! Alle Transaktionen, die
             // ein Teilmodell betreffen (Layout-Änderungen, Entfernen  Hinzufügen von Elemente usw.)
-            // müssen immer den HashString des Szenarios beachten, für das sie ausgeführt werden sollen
+            // müssen immer die ID des Szenarios beachten, für das sie ausgeführt werden sollen
             String undoCommand = trans_q[j].getUndoCommand(i2);
             LGMGraphDocument mainDoc = gdcoll.getMainDoc();
             mainDoc.exec(undoCommand, pid);

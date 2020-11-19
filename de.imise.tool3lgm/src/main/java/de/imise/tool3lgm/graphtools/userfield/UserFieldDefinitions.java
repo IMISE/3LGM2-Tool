@@ -44,8 +44,8 @@ public final class UserFieldDefinitions extends UserFieldDefinitionChangeHandler
      */
     private Map<Class<? extends UserFieldTarget>, UserFieldList> classToUserFieldListMap = new HashMap<>();
 
-    /** Mappt von den HashCodes der UserFields auf das UserField */
-    private Map<String, UserField> hashStringToUserFieldMap = new HashMap<>();
+    /** Mappt von den IDs der UserFields auf das UserField */
+    private Map<String, UserField> idToUserFieldMap = new HashMap<>();
 
     /** Berechnet für diese Defnition alle Kennzahlen der konkreten Elemente */
     private Calculator calculator;
@@ -172,7 +172,7 @@ public final class UserFieldDefinitions extends UserFieldDefinitionChangeHandler
             classToUserFieldListMap.put(userField.getTargetClass(), ufl);
         }
         ufl.add(userField);
-        hashStringToUserFieldMap.put(userField.getHashCode(), userField);
+        idToUserFieldMap.put(userField.getID(), userField);
         //Formeln extra merken
         if (userField.hasStyle(UserField.Style.CLASSIFICATION_NUMBER_FORMULA)) {
             formulaUserFieldList.add(userField);
@@ -193,7 +193,7 @@ public final class UserFieldDefinitions extends UserFieldDefinitionChangeHandler
             return;
         }
         ufl.insert(userField, index);
-        hashStringToUserFieldMap.put(userField.getHashCode(), userField);
+        idToUserFieldMap.put(userField.getID(), userField);
         //Formeln extra merken
         if (userField.hasStyle(UserField.Style.CLASSIFICATION_NUMBER_FORMULA)) {
             formulaUserFieldList.add(userField);
@@ -249,7 +249,7 @@ public final class UserFieldDefinitions extends UserFieldDefinitionChangeHandler
                     }
                 }
             }
-            hashStringToUserFieldMap.remove(userField.getHashCode());
+            idToUserFieldMap.remove(userField.getID());
             ufl.remove(userField);
             deleted.add(userField);
             //wenn das zu löschende UserField ein UserField ist, das bei einem anderen in der Formel vorkommen kann (Kennzahl, Kennzahlformel, Verteilungsgewicht)
@@ -289,14 +289,14 @@ public final class UserFieldDefinitions extends UserFieldDefinitionChangeHandler
             }
 
             for (UserField field : userFieldsToDelete) {
-                hashStringToUserFieldMap.remove(field.getHashCode());
+                idToUserFieldMap.remove(field.getID());
                 ufl = classToUserFieldListMap.get(field.getTargetClass());
                 ufl.remove(field);
             }
             deleted.addAll(userFieldsToDelete);
             //bei allem, was nicht mit Kennzahlen zu tun hat -> einfach löschen
         } else {
-            hashStringToUserFieldMap.remove(userField.getHashCode());
+            idToUserFieldMap.remove(userField.getID());
             ufl.remove(userField);
             deleted.add(userField);
         }
@@ -313,13 +313,13 @@ public final class UserFieldDefinitions extends UserFieldDefinitionChangeHandler
             throw new InternalError(e);
         }
         //Alle Eigenschaften clonen, die ein anderes Object sein müssen, als beim Original
-        //die Map mit allen Userfields, die von ihren HashStrings auf das UserField mappt clonen
-        def.hashStringToUserFieldMap = new HashMap<>(hashStringToUserFieldMap);
+        //die Map mit allen Userfields, die von ihren IDs auf das UserField mappt clonen
+        def.idToUserFieldMap = new HashMap<>(idToUserFieldMap);
         //jedes einzelne UserField clonen (erstmal nur in dieser Map)
-        for (String key : hashStringToUserFieldMap.keySet()) {
-            UserField userFieldClone = def.hashStringToUserFieldMap.get(key).clone();
+        for (String key : idToUserFieldMap.keySet()) {
+            UserField userFieldClone = def.idToUserFieldMap.get(key).clone();
             userFieldClone.setDefinitions(def);
-            def.hashStringToUserFieldMap.put(key, userFieldClone);
+            def.idToUserFieldMap.put(key, userFieldClone);
         }
         //die Map, die von den UserFieldTargetClasses auf die Liste der dafür defnierten
         //UserFields mappt auch clonen und alle darin enthaltenen UserFields durch die
@@ -332,11 +332,11 @@ public final class UserFieldDefinitions extends UserFieldDefinitionChangeHandler
             //Listen mit ihren clones ersetzen
             def.classToUserFieldListMap.put(targetClass, userFieldList);
             //in der geclonten Listen die UserFields mit den clones ersetzen
-            replaceWithClones(userFieldList, def.hashStringToUserFieldMap);
+            replaceWithClones(userFieldList, def.idToUserFieldMap);
         }
         //in der Liste mit allen Formel-UserFields auch die Original durch die clone ersetzen
         def.formulaUserFieldList = new ArrayList<>(formulaUserFieldList);
-        replaceWithClones(def.formulaUserFieldList, def.hashStringToUserFieldMap);
+        replaceWithClones(def.formulaUserFieldList, def.idToUserFieldMap);
 
         //eigenen Calculator für den clone initialisieren
         def.calculator = new Calculator(def);
@@ -347,36 +347,36 @@ public final class UserFieldDefinitions extends UserFieldDefinitionChangeHandler
 
     /**
      * Ersetzt die UserFields in der übergebenen Liste durch die aus der
-     * übergebenen Map mit demselben HashString. Weil UserFieldList nicht das
-     * Interface {@link List} implementiert muss man im Grunde dieselbe Funktion
-     * hier 2 mal schreiben. Die UserFieldList soll aber nicht List
-     * implementieren, weil es zu aufwändig wäre, sie für alle darin enthaltenen
-     * Funktionen konsitent zu halten
+     * übergebenen Map mit derselben ID. Weil UserFieldList nicht das Interface
+     * {@link List} implementiert muss man im Grunde dieselbe Funktion hier 2
+     * mal schreiben. Die UserFieldList soll aber nicht List implementieren,
+     * weil es zu aufwändig wäre, sie für alle darin enthaltenen Funktionen
+     * konsitent zu halten
      *
      * @param userFieldList
-     * @param hashStringToClonedUserFieldMap
+     * @param idToClonedUserFieldMap
      */
-    private static void replaceWithClones(final UserFieldList userFieldList, final Map<String, UserField> hashStringToClonedUserFieldMap) {
+    private static void replaceWithClones(final UserFieldList userFieldList, final Map<String, UserField> idToClonedUserFieldMap) {
         for (int i = 0; i < userFieldList.size(); i++) {
             UserField orgUserField = userFieldList.get(i);
-            String userFieldHash = orgUserField.getHashCode();
-            UserField cloneUserField = hashStringToClonedUserFieldMap.get(userFieldHash);
+            String userFieldID = orgUserField.getID();
+            UserField cloneUserField = idToClonedUserFieldMap.get(userFieldID);
             userFieldList.set(i, cloneUserField);
         }
     }
 
     /**
      * Ersetzt die UserFields in der übergebenen Liste durch die aus der
-     * übergebenen Map mit demselben HashString.
+     * übergebenen Map mit derselben ID.
      *
      * @param userFieldList
-     * @param hashStringToClonedUserFieldMap
+     * @param idToClonedUserFieldMap
      */
-    private static void replaceWithClones(final List<UserField> userFieldList, final Map<String, UserField> hashStringToClonedUserFieldMap) {
+    private static void replaceWithClones(final List<UserField> userFieldList, final Map<String, UserField> idToClonedUserFieldMap) {
         for (int i = 0; i < userFieldList.size(); i++) {
             UserField orgUserField = userFieldList.get(i);
-            String userFieldHash = orgUserField.getHashCode();
-            UserField cloneUserField = hashStringToClonedUserFieldMap.get(userFieldHash);
+            String userFieldID = orgUserField.getID();
+            UserField cloneUserField = idToClonedUserFieldMap.get(userFieldID);
             userFieldList.set(i, cloneUserField);
         }
     }
@@ -581,13 +581,12 @@ public final class UserFieldDefinitions extends UserFieldDefinitionChangeHandler
      * @return
      * @see #get(Class, int) / public UserField getGlobal(int index) { return
      *      get(GLOBAL_USERFIELD_IDENTIFIER_CLASS, index); } /** Gibt
-     *      <code>UserField</code> zurück, für das der <code>hashString</code>
-     *      angegeben wurde.
-     * @param hashString
+     *      <code>UserField</code> zurück, für das die ID angegeben wurde.
+     * @param id
      * @return <code>UserField</code>
      */
-    public UserField getUserField(final String hashString) {
-        return hashStringToUserFieldMap.get(hashString);
+    public UserField getUserField(final String id) {
+        return idToUserFieldMap.get(id);
     }
 
     /**
@@ -659,7 +658,7 @@ public final class UserFieldDefinitions extends UserFieldDefinitionChangeHandler
         }
 
         // Prüfen kann man das, in dem man darauf hin prüft, ob vor dem
-        // userFieldHash, der KEnnzahl, die überprüft werden soll, ein "|" (
+        // userFieldID, der Kennzahl, die überprüft werden soll, ein "|" (
         // Calculator.OPERAND_DELIMITER ) steht. Dann und nur dann, liegt keine
         // Kreisreferenz vor.
         // Das ist nämlich genau dann der Fall, wenn das userField in einer
@@ -679,7 +678,7 @@ public final class UserFieldDefinitions extends UserFieldDefinitionChangeHandler
         while (st.hasMoreTokens()) {
             secondString = st.nextToken();
 
-            if (secondString.equals(userField.getHashCode())) {
+            if (secondString.equals(userField.getID())) {
                 if (!firstString.equals(Calculator.OPERAND_DELIMITER)) {
                     return true;
                 }
@@ -692,10 +691,10 @@ public final class UserFieldDefinitions extends UserFieldDefinitionChangeHandler
 
         // Das Vorgehen:
         // In einer Schleife:
-        // 1) Durchsuche den Stringtokenizer nach userFieldHashes, die gleich dem eigenen userfield sind.
+        // 1) Durchsuche den Stringtokenizer nach userFieldIDs, die gleich dem eigenen userfield sind.
         // 2) Wenn so einer gefunden wurde, handelt es sich um eine interne Verrechnung.
-        //    Suche die Richtung: Prüfe, ob nach dem userFieldHash erst ein Verteilungsgewicht angegeben wurde.
-        //    (Das ist auch ein userFieldHash)
+        //    Suche die Richtung: Prüfe, ob nach der userFieldID erst ein Verteilungsgewicht angegeben wurde.
+        //    (Das ist auch eine userFieldID)
         // 3) Wenn die Richtung gefunden wurde, prüfe, ob die Variable direction noch leer ist,
         //      wenn ja, setze die Variable mit den Richtungswert.
         //      Wenn nein, dann prüfe, ob der Richtungswert gleich dem der Variable ist.
@@ -714,7 +713,7 @@ public final class UserFieldDefinitions extends UserFieldDefinitionChangeHandler
         while (st.hasMoreTokens()) {
             firstString = st.nextToken();
 
-            if (firstString.equals(userField.getHashCode())) {
+            if (firstString.equals(userField.getID())) {
 
                 // Das nächtse Zeichen holen, wenn es ein Delimiter ist, steht
                 // dahinter entweder die Richtung oder im Falle einer TWSUM kann
@@ -731,7 +730,7 @@ public final class UserFieldDefinitions extends UserFieldDefinitionChangeHandler
                     // Wenn wieder auf das eigene UserField gestoßen wird, muss
                     // geprüft werden, ob erst ein Verteilungsgewicht angegeben
                     // wurde.
-                    if (secondString.startsWith(UserField.USERFIELD_HASH_STRING_PREFIX)) {
+                    if (secondString.startsWith(UserField.USERFIELD_ID_PREFIX)) {
                         // Wenn erst ein Verteilungsgewicht angegeben wurde,
                         // muss als nächstes der Delimiter und als nächstes die
                         // Richtung geholt werden
@@ -807,7 +806,7 @@ public final class UserFieldDefinitions extends UserFieldDefinitionChangeHandler
                 StringTokenizer st = new StringTokenizer(formula, Calculator.ALL_IN_FUNCTION_SIGNS);
                 while (st.hasMoreElements()) {
                     String token = st.nextToken();
-                    if (token.startsWith(UserField.USERFIELD_HASH_STRING_PREFIX)) {
+                    if (token.startsWith(UserField.USERFIELD_ID_PREFIX)) {
                         //hole das UserField von dem die aktuelle Formel abhängig ist
                         UserField dependingUserField = getUserField(token);
                         //wenn jetzt die Formel sich selbst enthält, dann ist das zulässig (oben wurden alle
@@ -1018,7 +1017,7 @@ public final class UserFieldDefinitions extends UserFieldDefinitionChangeHandler
                     continue;
                 }
                 sb.append("\t");
-                sb.append(uf.getHashCode());
+                sb.append(uf.getID());
                 sb.append("\n\t\t");
                 sb.append(uf.getName());
                 sb.append("\n");

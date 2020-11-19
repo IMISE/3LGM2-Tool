@@ -85,7 +85,7 @@ public class InternalAccountingPanel extends AbstractInputPanel implements Actio
                     vgComboBox.addObject(UNIFORMLY_DISTRIBUTED);
                     vgComboBox.addSeparator(false);
                     for (UserField uf : definitions.getUserFields(edgeClass)) {
-                        vgComboBox.addObject(uf.getHashCode(), uf.toString());
+                        vgComboBox.addObject(uf.getID(), uf.toString());
                     }
                 }
             }
@@ -134,8 +134,8 @@ public class InternalAccountingPanel extends AbstractInputPanel implements Actio
         //		else if (userField.getInternalAccountingDirection()==UserField.DIRECTION_FROM_WHOLE_TO_PART)
         //			dirComboBox.setSelectedObject(UserField.DIRECTION_FROM_WHOLE_TO_PART);
         //		//das bei der Verrechnung zu nutzende Verteilungsgewicht setzen
-        //		if (userField.getInternalAccountingWeightUserFieldHash()!=null)
-        //			vgComboBox.setSelectedObject(userField.getInternalAccountingWeightUserFieldHash());
+        //		if (userField.getInternalAccountingWeightUserFieldID()!=null)
+        //			vgComboBox.setSelectedObject(userField.getInternalAccountingWeightUserFieldID());
 
         initSelection();
     }
@@ -175,11 +175,11 @@ public class InternalAccountingPanel extends AbstractInputPanel implements Actio
         //
         //		//das Verteilungsgewicht der internen Verrechnung selektieren (nur bei Teilwertsumme möglich)
         //		if (twsumAccountingBut.isSelected()) {
-        //			String weightHash = userField.getInternalAccountingWeightUserFieldHash();
-        //			if (vgComboBox.setSelectedObject(weightHash)<0)
+        //			String weightID = userField.getInternalAccountingWeightUserFieldID();
+        //			if (vgComboBox.setSelectedObject(weightID)<0)
         //				vgComboBox.setSelectedObject(UNIFORMLY_DISTRIBUTED);
         //			else
-        //				vgComboBox.setSelectedObject(weightHash);
+        //				vgComboBox.setSelectedObject(weightID);
         //		}
         //		*/
     }
@@ -220,12 +220,12 @@ public class InternalAccountingPanel extends AbstractInputPanel implements Actio
     }
 
     /**
-     * Liefert den Hash-String des selektierten Verteilungsgwichtes für die
-     * interne Verrechnung.
+     * Liefert die ID des selektierten Verteilungsgwichtes für die interne
+     * Verrechnung.
      *
      * @return
      */
-    public String getSelectedInternalAccountingWeigthHash() {
+    public String getSelectedInternalAccountingWeigthID() {
         String vg = vgComboBox.getSelectedObject();
         if (vg != null && !vg.equals(UNIFORMLY_DISTRIBUTED)) {
             return vg;
@@ -243,12 +243,12 @@ public class InternalAccountingPanel extends AbstractInputPanel implements Actio
         //         String selectedFuntion = getSelectedInternalFuntionName(); if (UserField.INTERNAL_ACCOUNTING_FUNCTION_SUM.equals(selectedFuntion)){
         //         userField.setInternalAccountingFunction(UserField.INTERNAL_ACCOUNTING_FUNCTION_SUM);
         //         userField.setInternalAccountingDirection(getSelectedInternalAccountingDirection());
-        //         userField.setInternalAccountingWeightUserFieldHash(null); }else if (UserField.INTERNAL_ACCOUNTING_FUNCTION_TWSUM.equals(selectedFuntion)){
+        //         userField.setInternalAccountingWeightUserFieldID(null); }else if (UserField.INTERNAL_ACCOUNTING_FUNCTION_TWSUM.equals(selectedFuntion)){
         //         userField.setInternalAccountingFunction(UserField.INTERNAL_ACCOUNTING_FUNCTION_TWSUM);
         //         userField.setInternalAccountingDirection(getSelectedInternalAccountingDirection());
-        //         userField.setInternalAccountingWeightUserFieldHash(getSelectedInternalAccountingWeigthHash()); }else {
+        //         userField.setInternalAccountingWeightUserFieldID(getSelectedInternalAccountingWeigthID()); }else {
         //         userField.setInternalAccountingFunction(null); userField.setInternalAccountingDirection(null);
-        //         userField.setInternalAccountingWeightUserFieldHash(null); }
+        //         userField.setInternalAccountingWeightUserFieldID(null); }
 
     }
 

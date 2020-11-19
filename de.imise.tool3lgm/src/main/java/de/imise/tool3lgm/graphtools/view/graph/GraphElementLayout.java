@@ -320,7 +320,7 @@ public class GraphElementLayout implements SwingConstants, Cloneable {
         STANDARD_ELEMENT_LAYOUT.bg_color = STANDARD_NODE_COLOR;
         STANDARD_ELEMENT_LAYOUT.border_color = STANDARD_BORDER_COLOR;
         STANDARD_ELEMENT_LAYOUT.font = STANDARD_FONT;
-        STANDARD_ELEMENT_LAYOUT.icon = null;
+        STANDARD_ELEMENT_LAYOUT.iconID = null;
 
         //TODO: den Standard-Linestyle aus den Containern hier her verlegen
         //		STANDARD_ELEMENT_LAYOUT.line_style =
@@ -376,8 +376,8 @@ public class GraphElementLayout implements SwingConstants, Cloneable {
     /** Höhe */
     public int height;
 
-    /** Hash-Key des Icons */
-    private String icon;
+    /** ID des Icons */
+    private String iconID;
 
     /** Stil des Rahmens bei Node oder der Linie bei Kanten */
     public int line_style;
@@ -420,7 +420,7 @@ public class GraphElementLayout implements SwingConstants, Cloneable {
         fg_color = null; // default: Color.black
         border_color = null; // default: Color.black
         line_thickness = STANDARD_LINE_THICKNESS;
-        icon = null;
+        iconID = null;
         font = null;
         form = null;
         line_style = STANDARD_LINE_STYLE;
@@ -450,7 +450,7 @@ public class GraphElementLayout implements SwingConstants, Cloneable {
         tmp.y = y;
         tmp.width = width;
         tmp.height = height;
-        tmp.icon = icon == null ? null : new String(icon);
+        tmp.iconID = iconID == null ? null : new String(iconID);
         tmp.line_style = line_style;
         tmp.textPositionVertical = textPositionVertical;
         tmp.textPositionHorizontal = textPositionHorizontal;
@@ -459,25 +459,25 @@ public class GraphElementLayout implements SwingConstants, Cloneable {
     }
 
     /**
-     * @return the icon
+     * @return the iconID
      */
-    public String getIcon() {
-        return icon;
+    public String getIconID() {
+        return iconID;
     }
 
     /**
-     * @param icon the icon to set
+     * @param iconID of the icon to set
      */
-    public void setIcon(final String icon) {
-        if (this.icon == icon) {
+    public void setIconID(final String iconID) {
+        if (this.iconID == iconID) {
             return;
         }
-        if (icon == null) {
+        if (iconID == null) {
             textPositionVertical = TextPositionVertical.CENTER;
         } else {
             textPositionVertical = TextPositionVertical.BOTTOM;
         }
-        this.icon = icon;
+        this.iconID = iconID;
     }
 
     /**

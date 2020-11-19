@@ -228,7 +228,7 @@ public class ReferencePanel extends JPanel implements ActionListener {
         }
 
         resultString.append(" | ");
-        resultString.append(userFieldList.getSelectedObject().getHashCode());
+        resultString.append(userFieldList.getSelectedObject().getID());
 
         if (vgzmRB.isSelected()) {
             resultString.append(" | ");

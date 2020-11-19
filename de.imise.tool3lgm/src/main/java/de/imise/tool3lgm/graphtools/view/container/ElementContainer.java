@@ -741,15 +741,15 @@ public abstract class ElementContainer extends JLabel implements Cloneable, Grap
     /**
      * @return
      */
-    public final String getHashString() {
-        return me.getHashString();
+    public final String getID() {
+        return me.getID();
     }
 
     /**
-     * @param _hashstring
+     * @param id
      */
-    public final void setHashString(final String _hashstring) {
-        me.setHashString(_hashstring);
+    public final void setID(final String id) {
+        me.setID(id);
     }
 
     /**

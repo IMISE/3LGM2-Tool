@@ -25,7 +25,7 @@ import de.imise.tool3lgm.xml.Base64;
 
 public class YFilesGraphmlWriter extends GraphmlWriter {
 
-    private final Map<String, String> hashIdToSharedDataKey = new HashMap<>();
+    private final Map<String, String> idToSharedDataKey = new HashMap<>();
 
     public YFilesGraphmlWriter(final File file, final Szenario szenario, final int layer) throws XMLStreamException, IOException {
         super(file, szenario, layer);
@@ -46,7 +46,7 @@ public class YFilesGraphmlWriter extends GraphmlWriter {
         writeAttribute("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance");
 
         //diese Funktion hier wird garantiert genau 1x pro Schreibvorgang aufgerufen -> sharedDataEntryCount hier zurücksetzen
-        hashIdToSharedDataKey.clear();
+        idToSharedDataKey.clear();
     }
 
     private String[] getAttributes(final String... strings) {
@@ -204,7 +204,7 @@ public class YFilesGraphmlWriter extends GraphmlWriter {
     }
 
     private boolean writeIconAsSharedData(final NodeContainer nc) throws XMLStreamException {
-        String styleKey = nc.getIconString();
+        String styleKey = nc.getIconID();
         //das Element hat kein Icon
         if (styleKey == null) {
             return false;
@@ -219,13 +219,13 @@ public class YFilesGraphmlWriter extends GraphmlWriter {
     }
 
     public String getNewSharedDataStyleKey(final String styleKey) {
-        String sharedDataStyleKey = hashIdToSharedDataKey.get(styleKey);
+        String sharedDataStyleKey = idToSharedDataKey.get(styleKey);
         //dieses Layout wurde schon in die SharedData Section geschrieben
         if (sharedDataStyleKey != null) {
             return null;
         }
-        sharedDataStyleKey = String.valueOf(hashIdToSharedDataKey.size());
-        hashIdToSharedDataKey.put(styleKey, sharedDataStyleKey);
+        sharedDataStyleKey = String.valueOf(idToSharedDataKey.size());
+        idToSharedDataKey.put(styleKey, sharedDataStyleKey);
         return sharedDataStyleKey;
     }
 
@@ -290,7 +290,7 @@ public class YFilesGraphmlWriter extends GraphmlWriter {
 
     protected final void writeElementTlgmId(final ElementContainer ec) throws XMLStreamException {
         YFilesGraphmlWriterDataKeys key = ec instanceof EdgeContainer ? YFilesGraphmlWriterDataKeys.edge_tlgmid_string : YFilesGraphmlWriterDataKeys.node_tlgmid_string;
-        writeElementDataKey(key.getKeyID(), ec.getHashString());
+        writeElementDataKey(key.getKeyID(), ec.getID());
     }
 
     private void writeNodeLabel(final ElementContainer ec) throws XMLStreamException {
@@ -346,7 +346,7 @@ public class YFilesGraphmlWriter extends GraphmlWriter {
         //wenn der labelStyle selbst kein MainLabelStyle hatte -> Referenz auf die SharedData eintragen
         if (labelStyle.mainLabelStyle == null) {
             String labelStyleKey = labelStyle.getLabelStyleKey();
-            String sharedDataLabelStyleKey = hashIdToSharedDataKey.get(labelStyleKey);
+            String sharedDataLabelStyleKey = idToSharedDataKey.get(labelStyleKey);
             labelStyle.mainLabelStyle = "{y:GraphMLReference " + sharedDataLabelStyleKey + "}";
         }
         writeStartElement("y:Label", "LayoutParameter", labelStyle.labelLayout, "Style", labelStyle.mainLabelStyle); // start y:Label
@@ -381,8 +381,8 @@ public class YFilesGraphmlWriter extends GraphmlWriter {
         //            <yjs:ShapeNodeStyle fill="#FF6868FF" shape="ELLIPSE"/>
         //        </data>
         writeStartElementDataKey(YFilesGraphmlWriterDataKeys.node_NodeStyle.getKeyID()); //start data
-        String iconHash = nc.getIconString();
-        String styleKey = iconHash != null ? iconHash : new YFilesGraphmlNodeStyle(nc).getNodeStyleKey();
+        String iconID = nc.getIconID();
+        String styleKey = iconID != null ? iconID : new YFilesGraphmlNodeStyle(nc).getNodeStyleKey();
         writeSharedDataReference(styleKey);
         writeEndElement(); // end data
     }
@@ -452,7 +452,7 @@ public class YFilesGraphmlWriter extends GraphmlWriter {
     }
 
     protected void writeSharedDataReference(final String styleKey) throws XMLStreamException {
-        String sharedDataKey = hashIdToSharedDataKey.get(styleKey);
+        String sharedDataKey = idToSharedDataKey.get(styleKey);
         writeEmptyElement("y:GraphMLReference", "ResourceKey", sharedDataKey);
     }
 

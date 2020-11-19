@@ -38,15 +38,15 @@ public class Szenario extends LGMGraphDocument {
      * @param _gdcoll
      * @param title
      */
-    public Szenario(final GDCollection _gdcoll, final String title, final String description, final String hashString) {
+    public Szenario(final GDCollection _gdcoll, final String title, final String description, final String id) {
         super(_gdcoll);
         setTitle(title == null ? "" : title);
         setDescription(description);
-        //wenn der HashString gültig und noch nicht vergeben ist -> setze ihn
-        if (StringUtils.isValid(hashString, "null") && gdcoll.getGraphDocumentCoded(hashString) == null) {
-            this.hashString = hashString;
+        //wenn die ID gültig und noch nicht vergeben ist -> setze ihn
+        if (StringUtils.isValid(id, "null") && gdcoll.getGraphDocumentCoded(id) == null) {
+            this.id = id;
         } else {
-            this.hashString = "SZN" + "_" + new Date().getTime() + "_" + szenCounter++;
+            this.id = "SZN" + "_" + new Date().getTime() + "_" + szenCounter++;
         }
     }
 
@@ -118,10 +118,10 @@ public class Szenario extends LGMGraphDocument {
                 if (!(slaveCont instanceof NodeContainer)) {
                     return;
                 }
-                addElementToSzenario(getHashString(), (NodeContainer) slaveCont, TransactionManager.STANDARD_PID);
+                addElementToSzenario(getID(), (NodeContainer) slaveCont, TransactionManager.STANDARD_PID);
                 //wenn der Container aus dem Hauptdokument übernommen wurde -> initiale Grafik setzen
                 if (sourceDoc == getCollection().getMainDoc()) {
-                    addict(hashString, edge.getClass().getName(), master, slave, TransactionManager.STANDARD_PID);
+                    addict(id, edge.getClass().getName(), master, slave, TransactionManager.STANDARD_PID);
                 }
             }
         }

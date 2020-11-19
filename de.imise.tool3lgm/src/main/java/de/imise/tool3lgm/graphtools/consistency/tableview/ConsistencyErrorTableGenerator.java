@@ -130,8 +130,8 @@ public class ConsistencyErrorTableGenerator implements PropertyChangeListener, T
                         int elementColumn = element.ordinal();
                         selectedData = table.getValueAt(selectedRow[i], elementColumn);
                         ModelElement selectedElement = (ModelElement) selectedData;
-                        String hash = selectedElement.getHashString();
-                        selectedDoc.addToSelection(hash, TransactionManager.STANDARD_PID);
+                        String idString = selectedElement.getID();
+                        selectedDoc.addToSelection(idString, TransactionManager.STANDARD_PID);
                     }
                 } catch (Exception ex) {
                     // ignore

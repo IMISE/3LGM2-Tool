@@ -35,12 +35,12 @@ public final class ElementsNameBuilder extends MetaModelSpecificAdapter {
     public static final String STANDARD_DOUBLE_MEANING_EDGE_DELIMITER = " / ";
 
     /**
-     * Mappt von den Knotenklassen auf den zugehörigen Short-Name für die
-     * HashString der Elemente. Diese 3-Buchstabigen Klassenkürzel sind nicht
-     * zwangsläufig eindeutig und diesen lediglich der besseren Lesbarkeit von
-     * Hash-Strings, denen sie immer Vorangestellt werden.
+     * Mappt von den Knotenklassen auf den zugehörigen Short-Name für die IDs
+     * der Elemente. Diese 3-Buchstabigen Klassenkürzel sind nicht zwangsläufig
+     * eindeutig und diesen lediglich der besseren Lesbarkeit von IDs, denen sie
+     * immer Vorangestellt werden.
      */
-    private static HashMap<String, String> elementClassSimpleNameToHashShortName = null;
+    private static HashMap<String, String> elementClassSimpleNameToIDShortName = null;
 
     /**
      * @param metaModelContext
@@ -698,7 +698,7 @@ public final class ElementsNameBuilder extends MetaModelSpecificAdapter {
 
     //    /**
     //     * Gibt Namenskuerzel einer Elementklasse zurueck. Diese Namenskürzel garantieren nicht, dass man von ihnen auf die Klasse zurückschließen kann.
-    //     * Sie dienen lediglich dazu, die Hash-Strings der Modellelemente im Baukasten und der XML-Datei etwas
+    //     * Sie dienen lediglich dazu, die IDs der Modellelemente im Baukasten und der XML-Datei etwas
     //     * lesbarer zu gestalten.
     //     *
     //     * @param elementClass Elementklasse für die das Kürzel zurück gegeben werden soll.
@@ -707,15 +707,15 @@ public final class ElementsNameBuilder extends MetaModelSpecificAdapter {
     //    public static final String getShortName(final Class<? extends ModelElement> elementClass) {
     //
     //        //HashMap mit den ShortNames der Klassen initialisieren (einmal statisch)
-    //        if (elementClassToHashShortName == null) {
-    //            elementClassToHashShortName = new HashMap<>();
+    //        if (elementClassToIDShortName == null) {
+    //            elementClassToIDShortName = new HashMap<>();
     //            //Set in das alle bisher gefundenen ShortNames eingetragen werden, um zu prüfen, ob ein shortName bereits existiert
     //            Set<String> allShortNames = new HashSet<>();
     //            loop1: for (Class<? extends ModelElement> nodeClass : ModelConstants.ALL_NODES_SET) {
     //                String s = nodeClass.getSimpleName();
     //                //wenn der Klassenname aus weniger als 4 Zeichen besteht
     //                if (s.length() <= 3) {
-    //                    elementClassToHashShortName.put(nodeClass, s.toUpperCase());
+    //                    elementClassToIDShortName.put(nodeClass, s.toUpperCase());
     //                    continue;
     //                }
     //                //mehr als 3 Zeichen
@@ -731,7 +731,7 @@ public final class ElementsNameBuilder extends MetaModelSpecificAdapter {
     //                            //wenn es den ShortName noch nicht gibt
     //                            if (!allShortNames.contains(sn)) {
     //                                allShortNames.add(sn);
-    //                                elementClassToHashShortName.put(nodeClass, sn);
+    //                                elementClassToIDShortName.put(nodeClass, sn);
     //                                continue loop1;
     //                            }
     //                            //es gibt den ShortName bereits -> letztes Zeichen löschen und weiter nach Großbuchstanben suchen
@@ -763,7 +763,7 @@ public final class ElementsNameBuilder extends MetaModelSpecificAdapter {
     //                        //wenn es den ShortName noch nicht gibt
     //                        if (!allShortNames.contains(sn)) {
     //                            allShortNames.add(sn);
-    //                            elementClassToHashShortName.put(nodeClass, sn);
+    //                            elementClassToIDShortName.put(nodeClass, sn);
     //                            continue loop1;
     //                        }
     //                        //es gibt den ShortName bereits -> letztes Zeichen löschen und weiter suchen
@@ -784,7 +784,7 @@ public final class ElementsNameBuilder extends MetaModelSpecificAdapter {
     //                    // wenn es den ShortName noch nicht gibt
     //                    if (!allShortNames.contains(sn)) {
     //                        allShortNames.add(sn);
-    //                        elementClassToHashShortName.put(nodeClass, sn);
+    //                        elementClassToIDShortName.put(nodeClass, sn);
     //                        continue loop1;
     //                    }
     //                    //es gibt den ShortName bereits -> letztes Zeichen löschen und weiter suchen
@@ -796,18 +796,18 @@ public final class ElementsNameBuilder extends MetaModelSpecificAdapter {
     //                //-> nimm einfach die ersten 3 Zeichen ohne noch einmal irgendwelche Eindeutigkeit zu prüfen;
     //                String sn = s.substring(0, 3).toUpperCase();
     //                allShortNames.add(sn); //kann man sich wahrscheinlich sparen, weil auch diese Kombination schon oben durchprobiert wurde, aber sicher ist sicher
-    //                elementClassToHashShortName.put(nodeClass, sn);
+    //                elementClassToIDShortName.put(nodeClass, sn);
     //            }
     //        }
     //
     //        //Node
     //        if (Node.class.isAssignableFrom(elementClass)) {
-    //            Object o = elementClassToHashShortName.get(elementClass);
-    //            //ist null bei Layerknoten. Die brauchen aber auch keinen lesbaren Hash
+    //            Object o = elementClassToIDShortName.get(elementClass);
+    //            //ist null bei Layerknoten. Die brauchen aber auch keine lesbare ID
     //            if (o == null) {
     //                return ModelConstants.NO_MODEL_ELEMENT_SHORT_NAME;
     //            }
-    //            return elementClassToHashShortName.get(elementClass).toString();
+    //            return elementClassToIDShortName.get(elementClass).toString();
     //            //Kanten
     //        } else if (Edge.class.isAssignableFrom(elementClass)) {
     //            return ModelConstants.EDGE_SHORT_NAME;
@@ -818,9 +818,9 @@ public final class ElementsNameBuilder extends MetaModelSpecificAdapter {
     /**
      * Gibt Namenskuerzel einer Elementklasse zurueck. Diese Namenskürzel
      * garantieren nicht, dass man von ihnen auf die Klasse zurückschließen
-     * kann. Sie dienen lediglich dazu, die Hash-Strings der Modellelemente im
-     * Baukasten und der XML-Datei etwas lesbarer zu gestalten. 2 verschiedene
-     * Klassen können den selben Shortname haben. So wird in beiden Fällen aus
+     * kann. Sie dienen lediglich dazu, die IDs der Modellelemente im Baukasten
+     * und der XML-Datei etwas lesbarer zu gestalten. 2 verschiedene Klassen
+     * können den selben Shortname haben. So wird in beiden Fällen aus
      * AufObjVerbindung und AufOrgVerbindung der Short-Name AOV.
      *
      * @param elementClass Elementklasse für die das Kürzel zurück gegeben
@@ -832,11 +832,11 @@ public final class ElementsNameBuilder extends MetaModelSpecificAdapter {
             return ModelConstants.EDGE_SHORT_NAME;
         }
         //HashMap mit den ShortNames der Klassen initialisieren (einmal statisch)
-        if (elementClassSimpleNameToHashShortName == null) {
-            elementClassSimpleNameToHashShortName = new HashMap<>();
+        if (elementClassSimpleNameToIDShortName == null) {
+            elementClassSimpleNameToIDShortName = new HashMap<>();
         }
         String simpleClassName = elementClass.getSimpleName();
-        String shortName = elementClassSimpleNameToHashShortName.get(simpleClassName);
+        String shortName = elementClassSimpleNameToIDShortName.get(simpleClassName);
         if (shortName == null) {
             if (simpleClassName.length() <= 3) {
                 shortName = simpleClassName;
@@ -868,7 +868,7 @@ public final class ElementsNameBuilder extends MetaModelSpecificAdapter {
                 }
                 shortName = shortNameBuilder.toString();
             }
-            elementClassSimpleNameToHashShortName.put(simpleClassName, shortName.toUpperCase());
+            elementClassSimpleNameToIDShortName.put(simpleClassName, shortName.toUpperCase());
         }
         return shortName;
     }

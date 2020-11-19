@@ -23,12 +23,11 @@ import de.imise.tool3lgm.graphtools.userfield.calculator.Calculator;
 public class CostingUtil {
 
     /**
-     * Eine Stringkonstante, die Kennzeichent, dass es sich um einen
-     * UserFieldHash handelt. Sämtliche UserFieldHashes werden während der
-     * Prüfung auf sytaktische Korrekthet einer Formel gegen diese Konstante
-     * ersetzt.
+     * Eine Stringkonstante, die Kennzeichent, dass es sich um eine UserFieldID
+     * handelt. Sämtliche UserFieldIDs werden während der Prüfung auf
+     * sytaktische Korrekthet einer Formel gegen diese Konstante ersetzt.
      */
-    private static final String USERFIELDHASH = "ufh";
+    private static final String USERFIELD_ID = "ufh";
 
     /**
      * Hier sind verschiedene Methoden enthalten, die an unterschiedlichen
@@ -38,26 +37,26 @@ public class CostingUtil {
     }
 
     /**
-     * Syncronisiert den HashString und den FormelString. Da nur der HashString
-     * gespeichert wird, muss aus dem HashString wieder ein FormelString gemacht
-     * werden, der in lesbarer Form vorliegt.
+     * Syncronisiert die ID und den FormelString. Da nur die ID gespeichert
+     * wird, muss aus der ID wieder ein FormelString gemacht werden, der in
+     * lesbarer Form vorliegt.
      *
-     * @param hash_formula FormelString in hash-Form.
+     * @param id_formula FormelString in id-Form.
      * @param definitions
      * @return Den FormelString in menschenlesbarer Form
      */
-    public static final String getHumanReadableFormulaString(final String hash_formula, final UserFieldDefinitions definitions) {
+    public static final String getHumanReadableFormulaString(final String id_formula, final UserFieldDefinitions definitions) {
         StringBuilder resultString = new StringBuilder();
-        if (hash_formula != null) {
-            StringTokenizer hashtok = new StringTokenizer(hash_formula, " ");
+        if (id_formula != null) {
+            StringTokenizer idTok = new StringTokenizer(id_formula, " ");
             String s = "";
             UserField tmpField = null;
-            while (hashtok.hasMoreTokens()) {
-                s = hashtok.nextToken();
+            while (idTok.hasMoreTokens()) {
+                s = idTok.nextToken();
                 if (isOperator(s) || s.equals(Calculator.OPEN_BRACKET) || s.equals(Calculator.CLOSE_BRACKET) || UserField.isAccountingFunction(s)) {
                     resultString.append(" " + s);
                 } else {
-                    if (s.contains(UserField.USERFIELD_HASH_STRING_PREFIX)) {
+                    if (s.contains(UserField.USERFIELD_ID_PREFIX)) {
                         try {
                             tmpField = definitions.getUserField(s);
                             resultString.append(" " + tmpField.getName());
@@ -113,15 +112,15 @@ public class CostingUtil {
         String second = "";
         if (formulaTokens.hasMoreTokens()) {
             first = formulaTokens.nextToken();
-            if (first.startsWith(UserField.USERFIELD_HASH_STRING_PREFIX)) {
-                first = USERFIELDHASH;
+            if (first.startsWith(UserField.USERFIELD_ID_PREFIX)) {
+                first = USERFIELD_ID;
             }
         }
         while (formulaTokens.hasMoreTokens()) {
             second = formulaTokens.nextToken();
 
-            if (second.startsWith(UserField.USERFIELD_HASH_STRING_PREFIX)) {
-                second = USERFIELDHASH;
+            if (second.startsWith(UserField.USERFIELD_ID_PREFIX)) {
+                second = USERFIELD_ID;
             }
 
             //Damit wird verhindert, dass zwei Operatoren aufeinander folgen
@@ -135,7 +134,7 @@ public class CostingUtil {
             }
 
             // Wenn auf eine schließende Klammer ein Operatorzeichen folgt
-            if (first.equals(Calculator.CLOSE_BRACKET) && second.equals(USERFIELDHASH)) {
+            if (first.equals(Calculator.CLOSE_BRACKET) && second.equals(USERFIELD_ID)) {
                 return false;
             }
 
@@ -155,7 +154,7 @@ public class CostingUtil {
             }
 
             // Wenn zwei Operanden auf ein anderfolgen
-            if (first.equals(USERFIELDHASH) && second.equals(USERFIELDHASH)) {
+            if (first.equals(USERFIELD_ID) && second.equals(USERFIELD_ID)) {
                 return false;
             }
             first = second;
