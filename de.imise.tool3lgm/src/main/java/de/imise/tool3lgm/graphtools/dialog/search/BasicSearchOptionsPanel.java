@@ -209,7 +209,15 @@ public abstract class BasicSearchOptionsPanel extends JPanel implements ItemList
 
         SearchOptions searchOptions = getSearchOptions(false);
         resultTargetView.showResult(doc, searchOptions);
+    }
 
+    /**
+     * Updates the panel
+     */
+    public void refresh() {
+        removeComboboxListeners();
+        fillElementClassBox();
+        addComboboxListenersAndActions();
     }
 
     /**
@@ -223,7 +231,6 @@ public abstract class BasicSearchOptionsPanel extends JPanel implements ItemList
      * Befüllt die elementClassBox
      */
     protected void fillElementClassBox() {
-
         elementClassBox.removeAllItems();
         elementClassBox.addObject(ModelElement.class, getResString("SEARCH_DIALOG_all_element_types"));
         elementClassBox.addSeparator(true);
@@ -236,6 +243,9 @@ public abstract class BasicSearchOptionsPanel extends JPanel implements ItemList
             ElementsNameBuilder elementsNameBuilder = gdcoll.getElementsNameBuilder();
             for (Class<? extends ModelElement> elementClass : metaModel.allNodesSet) {
                 if (Modifier.isAbstract(elementClass.getModifiers())) {
+                    continue;
+                }
+                if (!Static.isExpertMode() && metaModel.isOnlyExpertModeVisibleElementClass(elementClass)) {
                     continue;
                 }
                 elementClassBox.addObject(elementClass, elementsNameBuilder.getDisplayableFullName(elementClass));

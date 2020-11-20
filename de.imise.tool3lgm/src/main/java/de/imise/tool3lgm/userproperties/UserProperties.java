@@ -26,6 +26,7 @@ import com.google.common.collect.ImmutableSet;
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.event.action.ChangeLocaleAction;
 import de.imise.tool3lgm.event.action.UserPropertyBooleanChangeAction;
+import de.imise.util.BooleanOption;
 import de.imise.util.io.FileHandler;
 import de.imise.util.swing.event.ActionSource;
 
@@ -314,7 +315,7 @@ public class UserProperties extends AbstractUserProperties {
      *
      * @author AXS (9 Aug 2017)
      */
-    public static enum BooleanProperty implements ActionSource {
+    public static enum BooleanProperty implements ActionSource, BooleanOption {
         /** Kennzeichne ModelElemente mit verknüpftem Teilmodell */
         OPTION_SHOW_LINKED_WITH_SUBMODEL_SYMBOLS,
         /**
@@ -488,6 +489,7 @@ public class UserProperties extends AbstractUserProperties {
          * @param value
          * @return the old value
          */
+        @Override
         public boolean set(final boolean value) {
             return UserProperties.set(this, value);
         }
@@ -496,16 +498,9 @@ public class UserProperties extends AbstractUserProperties {
          * @return the boolean value, this option is set to <code>true</code> in
          *         the UserProperties
          */
+        @Override
         public boolean is() {
             return UserProperties.is(this);
-        }
-
-        /**
-         * @return the boolean value, this option is set to <code>false</code>
-         *         in the UserProperties
-         */
-        public boolean isNot() {
-            return !is();
         }
 
         /**

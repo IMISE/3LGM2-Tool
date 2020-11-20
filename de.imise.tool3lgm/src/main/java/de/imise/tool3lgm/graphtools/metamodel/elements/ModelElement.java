@@ -21,8 +21,8 @@ import com.google.common.collect.ImmutableList;
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.Tool3lgmModelType.ModelCategory;
 import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
-import de.imise.tool3lgm.graphtools.dialog.element.ElementPropertyDialogsContext;
 import de.imise.tool3lgm.graphtools.dialog.element.ElementPropertyDialog;
+import de.imise.tool3lgm.graphtools.dialog.element.ElementPropertyDialogsContext;
 import de.imise.tool3lgm.graphtools.dialog.element.ErrorDecoratedElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.dialog.element.panel.ElementDialogPanel;
 import de.imise.tool3lgm.graphtools.metamodel.CoreMetaModel;
@@ -1962,9 +1962,9 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
 
     /**
      * Ruft einfach nur {@link #createPropertyDialog()} auf. Diese Funktion
-     * wurde notwendig, damit für den neuen {@link ElementPropertyDialogsContext}
-     * nicht die Sichtbarkeit von {@link #createPropertyDialog()} geändert
-     * werden musste.
+     * wurde notwendig, damit für den neuen
+     * {@link ElementPropertyDialogsContext} nicht die Sichtbarkeit von
+     * {@link #createPropertyDialog()} geändert werden musste.
      *
      * @return
      */

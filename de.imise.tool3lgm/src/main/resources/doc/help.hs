@@ -4,7 +4,7 @@
          "http://java.sun.com/products/javahelp/helpset_1_0.dtd">
 <helpset version="2.0">
 
-   <title>3LGM²-Baukasten - Hilfe</title>
+   <title>3LGMï¿½-Baukasten - Hilfe</title>
                         
 
    <maps>

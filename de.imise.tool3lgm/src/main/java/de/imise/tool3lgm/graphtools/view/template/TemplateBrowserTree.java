@@ -38,6 +38,7 @@ import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.model.template.TemplateLibrariesManager;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
+import de.imise.tool3lgm.graphtools.view.pathtree.PathTreeBranchDefinition;
 import de.imise.tool3lgm.graphtools.view.pathtree.PathTreeDefinition;
 import de.imise.tool3lgm.graphtools.view.pathtree.PathTreeModel;
 import de.imise.tool3lgm.graphtools.view.tree.DynamicTree;
@@ -45,6 +46,7 @@ import de.imise.tool3lgm.graphtools.view.tree.TreeRenderer;
 import de.imise.tool3lgm.graphtools.view.tree.node.ElementContainerTreeNode;
 import de.imise.tool3lgm.graphtools.view.tree.node.LGMTreeNode;
 import de.imise.tool3lgm.gui.menu.ContextGenerator;
+import de.imise.util.BooleanOption;
 import de.imise.util.swing.component.ParentComponentFinder;
 
 /**
@@ -95,14 +97,18 @@ public class TemplateBrowserTree extends DynamicTree implements SearchResultView
     }
 
     /**
-     *
+     * @param showAllElements if <code>true</code> all elements in the
+     *            definition tree paths are displayed. If <code>false</code>
+     *            only the start- and end-classes of the contained outer
+     *            metapaths in the {@link PathTreeBranchDefinition} will be
+     *            displayed
      */
-    public TemplateBrowserTree() {
+    public TemplateBrowserTree(final BooleanOption showAllElements) {
         super((TreeModel) null);
         setRootVisible(false);
         setShowsRootHandles(true);
         addAncestorListener(this);
-        pathTreeModel = new PathTreeModel(Tool3lgmConstants.getResString("TEMPLATE_BROWSER_NO_TEMPLATES_AVAILABLE"), true);
+        pathTreeModel = new PathTreeModel(Tool3lgmConstants.getResString("TEMPLATE_BROWSER_NO_TEMPLATES_AVAILABLE"), true, showAllElements);
         setModel(pathTreeModel);
 
         //analog ModelBrowser
@@ -176,10 +182,19 @@ public class TemplateBrowserTree extends DynamicTree implements SearchResultView
     @Override
     public void propertyChange(final PropertyChangeEvent evt) {
         //Sys.err("propertyChange " + evt);
+        reload(false);
+    }
+
+    /**
+     * @param forceReload The tree must always be reloaded if the
+     *            MetaModelContext has changed or the "Expert Mode" option where
+     *            all elements should be displayed.
+     */
+    public void reload(final boolean forceReload) {
         boolean oldValueHasContent = hasContent();
         MetaModelContext currentMetaModelContext = pathTreeModel.getMetaModelContext();
         MetaModelContext newMetaModelContext = Static.getSelectedMetaModelContext();
-        if (Objects.equals(currentMetaModelContext, newMetaModelContext)) {
+        if (!forceReload && Objects.equals(currentMetaModelContext, newMetaModelContext)) {
             return;
         }
         TemplateLibrariesManager templateLibrariesManager = Static.getTemplateLibrariesManager();

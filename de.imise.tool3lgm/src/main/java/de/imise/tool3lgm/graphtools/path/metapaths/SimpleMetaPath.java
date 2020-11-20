@@ -10,12 +10,12 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 
 /**
- * Ein {@link SequenceMetaPath}, der immer nur aus einer einfachen Folge von
+ * Ein {@link SerialMetaPath}, der immer nur aus einer einfachen Folge von
  * Kanten bzw. {@link ElementaryMetaPath} besteht.
  *
  * @author AXS (15 Nov 2018)
  */
-public class SimpleMetaPath extends SequenceMetaPath {
+public class SimpleMetaPath extends SerialMetaPath implements SequenceMetaPath {
 
     /**
      * Index des Elementarpfadschrittes, der den Namen des Gesamtpfades

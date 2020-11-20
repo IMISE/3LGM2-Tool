@@ -121,19 +121,19 @@ public class PathFunctions {
                 return startElement.isForwardLinkable(endElement, elemMetaPath.getEdgeClass(), checkConsistency);
             }
             return endElement.isForwardLinkable(startElement, elemMetaPath.getEdgeClass(), checkConsistency);
-        } else if (metaPath instanceof SequenceMetaPath) {
-            SequenceMetaPath sequenceMetaPath = (SequenceMetaPath) metaPath;
-            MetaPath firstMetaPath = sequenceMetaPath.getSubMetaPaths().get(0);
-            while (firstMetaPath instanceof SequenceMetaPath) {
-                firstMetaPath = ((SequenceMetaPath) firstMetaPath).getSubMetaPaths().get(0);
+        } else if (metaPath instanceof SerialMetaPath) {
+            SerialMetaPath serialMetaPath = (SerialMetaPath) metaPath;
+            MetaPath firstMetaPath = serialMetaPath.getSubMetaPaths().get(0);
+            while (firstMetaPath instanceof SerialMetaPath) {
+                firstMetaPath = ((SerialMetaPath) firstMetaPath).getSubMetaPaths().get(0);
             }
             if (!(firstMetaPath instanceof ElementaryMetaPath)) {
                 return false;
             }
-            MetaPath lastMetaPath = sequenceMetaPath.getSubMetaPaths().get(sequenceMetaPath.getSubMetaPaths().size() - 1);
-            while (lastMetaPath instanceof SequenceMetaPath) {
-                List<MetaPath> lastSequenceMetaPathList = ((SequenceMetaPath) lastMetaPath).getSubMetaPaths();
-                lastMetaPath = lastSequenceMetaPathList.get(lastSequenceMetaPathList.size() - 1);
+            MetaPath lastMetaPath = serialMetaPath.getSubMetaPaths().get(serialMetaPath.getSubMetaPaths().size() - 1);
+            while (lastMetaPath instanceof SerialMetaPath) {
+                List<MetaPath> lastSerialMetaPathList = ((SerialMetaPath) lastMetaPath).getSubMetaPaths();
+                lastMetaPath = lastSerialMetaPathList.get(lastSerialMetaPathList.size() - 1);
             }
             if (!(lastMetaPath instanceof ElementaryMetaPath)) {
                 return false;
@@ -149,13 +149,13 @@ public class PathFunctions {
                 return false;
             }
 
-            //TODO: anlegen von Sequenzmetapathes richtig implementieren
+            //TODO: anlegen von SerialMetaPathes richtig implementieren
 
             //            Das hier ist nicht fertig. Hier müsste man jetzt noch für jedes Zwischenelement testen, ob es nach dem
             //            Anlegen zu allen Elementen genügend Edgen hat. Initialsubtypes müssen auch beachtet werden usw.
             //            Das ist aber erstmal nicht so wichtig
             //            if (checkConsistency) {
-            //                List<MetaPath> metaPaths = sequenceMetaPath.getSubMetaPaths();
+            //                List<MetaPath> metaPaths = metaPath.getSubMetaPaths();
             //                for (int i = 0; i < metaPaths.size(); i++) {
             //                    MetaPath mp = metaPaths.get(i);
             //                    //prüfen, ob die Zwischenelemente angelegt werden können
@@ -338,7 +338,7 @@ public class PathFunctions {
      * @return
      */
     public static final ModelElement createNodeWithContainerAndDependents(final LGMGraphDocument doc, final ModelElement startElement, final ElementaryMetaPath pathToNewElement, final ElementaryMetaPath pathFromNewElement, final int pid) {
-        Class<? extends ModelElement> newElementClass = MetaPathFunctions.getElementaryPathsConnectingClass(pathToNewElement, pathFromNewElement);
+        Class<? extends ModelElement> newElementClass = MetaPathFunctions.getMetaPathsConnectingClass(pathToNewElement, pathFromNewElement);
         Class<? extends Edge> edgeClass2Create = pathToNewElement.getEdgeClass();
         Direction edgeClass2CreateDirection = pathToNewElement.getDirection();
         Class<? extends Edge> nextEdgeClass2Create = pathFromNewElement != null ? pathFromNewElement.getEdgeClass() : null;

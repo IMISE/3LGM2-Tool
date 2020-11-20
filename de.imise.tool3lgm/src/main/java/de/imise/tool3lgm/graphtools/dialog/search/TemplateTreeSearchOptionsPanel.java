@@ -17,6 +17,7 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.view.pathtree.PathTreeDefinition;
 import de.imise.tool3lgm.graphtools.view.pathtree.PathTreeModel;
 import de.imise.tool3lgm.graphtools.view.template.TemplateBrowserTree;
+import de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty;
 
 /**
  * @author AXS (31.07.2020)
@@ -215,7 +216,8 @@ public class TemplateTreeSearchOptionsPanel extends BasicSearchOptionsPanel {
         PathTreeModel model = ((TemplateBrowserTree) resultTargetView).getModel();
         PathTreeDefinition pathTreeDefinition = model.getPathTreeDefinition();
         ElementsNameBuilder elementsNameBuilder = pathTreeDefinition.getElementsNameBuilder();
-        Set<Class<? extends ModelElement>> visibleElementTypes = pathTreeDefinition.getVisibleElementTypes();
+        boolean showAllElementaryMetaPaths = BooleanProperty.OPTION_ENABLE_EXPERT_MODE.is();
+        Set<Class<? extends ModelElement>> visibleElementTypes = pathTreeDefinition.getVisibleElementTypes(showAllElementaryMetaPaths);
         for (Class<? extends ModelElement> elementClass : visibleElementTypes) {
             String displayableFullName = elementsNameBuilder.getDisplayableFullName(elementClass);
             elementClassBox.addObject(elementClass, displayableFullName);

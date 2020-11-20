@@ -1,6 +1,7 @@
 package de.imise.util.resource;
 
 import java.util.MissingResourceException;
+import java.util.ResourceBundle;
 
 /**
  * Ein Interface, das genutzt werden kann, um zu markieren, dass die
@@ -11,7 +12,8 @@ import java.util.MissingResourceException;
 public interface SimpleResourceBundleSource extends SimpleResourceFileLoader {
 
     /**
-     * Liefert für einen übergebenen Resourcen-KeyString einen String aus den Resourcen.
+     * Liefert für einen übergebenen Resourcen-KeyString einen String aus den
+     * Resourcen.
      *
      * @param resKey
      * @return
@@ -19,7 +21,8 @@ public interface SimpleResourceBundleSource extends SimpleResourceFileLoader {
     public String getResString(String resKey);
 
     /**
-     * Liefert für einen übergebenen Resourcen-KeyString einen String aus den Resourcen. Wird der Key nicht in den Resourcen gefunden, kommt ohne
+     * Liefert für einen übergebenen Resourcen-KeyString einen String aus den
+     * Resourcen. Wird der Key nicht in den Resourcen gefunden, kommt ohne
      * {@link MissingResourceException} der Key zurück.
      *
      * @param resKey
@@ -44,5 +47,10 @@ public interface SimpleResourceBundleSource extends SimpleResourceFileLoader {
         }
         return String.valueOf(object);
     }
+
+    /**
+     * @return
+     */
+    public ResourceBundle getResourceBundle();
 
 }

@@ -64,8 +64,8 @@ public abstract class ParallelMetaPath extends ListMetaPath {
         ImmutableSet.Builder<Class<? extends ModelElement>> startElementClassesBuilder = ImmutableSet.builder();
         ImmutableSet.Builder<Class<? extends ModelElement>> endElementClassesBuilder = ImmutableSet.builder();
         for (MetaPath metaPath : subMetaPaths) {
-            startElementClassesBuilder.addAll(metaPath.startElementClasses);
-            endElementClassesBuilder.addAll(metaPath.endElementClasses);
+            startElementClassesBuilder.addAll(metaPath.getStartClasses());
+            endElementClassesBuilder.addAll(metaPath.getEndClasses());
         }
         startElementClasses = startElementClassesBuilder.build();
         endElementClasses = endElementClassesBuilder.build();

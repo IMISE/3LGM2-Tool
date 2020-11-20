@@ -44,7 +44,7 @@ public class UnionMetaPath extends ParallelMetaPath {
     }
 
     @Override
-    protected boolean canBeRecursive() {
+    public boolean canBeRecursive() {
         //bei Vereinigungsmengen reicht es, wenn einer der enthaltenen Pfade für die Elemente rekursiv ist
         for (MetaPath metaPath : subMetaPaths) {
             if (metaPath.canBeRecursive()) {

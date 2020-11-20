@@ -187,7 +187,7 @@ public final class RedundancyAnalysisDefinitions extends MetaPathDefinition {
             if (elementClassToExpandedNamePath == null) {
                 elementClassToExpandedNamePath = new HashMap<>();
             }
-            MetaModel metaModel = getMetaModel();
+            MetaModel metaModel = metaPath.getMetaModel();
             for (Class<? extends ModelElement> startClass : metaPath.getStartClasses()) {
                 for (Class<? extends ModelElement> instanciableAssignableClass : metaModel.getInstanciableAssignableClasses(startClass)) {
                     elementClassToExpandedNamePath.put(instanciableAssignableClass, metaPath);

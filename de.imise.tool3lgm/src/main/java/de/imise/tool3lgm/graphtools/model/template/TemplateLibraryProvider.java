@@ -1,5 +1,7 @@
 package de.imise.tool3lgm.graphtools.model.template;
 
+import java.util.ResourceBundle;
+
 import javax.swing.ImageIcon;
 
 import de.imise.tool3lgm.graphtools.metamodel.MetaModelDefinition;
@@ -95,6 +97,11 @@ public abstract class TemplateLibraryProvider extends MetaModelSpecificAdapter {
             } catch (Exception e) {
                 return super.getResString(resKey);
             }
+        }
+
+        @Override
+        public ResourceBundle getResourceBundle() {
+            return resourceHandler.getResourceBundle();
         }
 
     }

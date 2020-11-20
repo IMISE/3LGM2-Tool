@@ -74,8 +74,8 @@ public interface MetaModelSpecific {
      * @return
      */
     public default ElementaryMetaPathHandler getElementaryMetaPathHandler() {
-        MetaModelContext metaModelContext = getMetaModelContext();
-        ElementaryMetaPathHandler elementaryMetaPathHandler = metaModelContext.getElementaryMetaPathHandler();
+        MetaModel metaModel = getMetaModel();
+        ElementaryMetaPathHandler elementaryMetaPathHandler = metaModel.getElementaryMetaPathHandler();
         return elementaryMetaPathHandler;
     }
 

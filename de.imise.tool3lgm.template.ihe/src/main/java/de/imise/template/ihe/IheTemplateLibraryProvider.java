@@ -6,17 +6,20 @@ import com.google.common.collect.ImmutableList;
 
 import de.imise.tool3lgm.MetaModelContext;
 import de.imise.tool3lgm.Static;
+import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.Tool3lgmMetaModelContext;
 import de.imise.tool3lgm.Tool3lgmModelType.ModelCategory;
-import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModelDefinition;
 import de.imise.tool3lgm.graphtools.metamodel.ModelConverter;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.template.TemplateLibraryProvider;
 import de.imise.tool3lgm.graphtools.model.template.TemplateUsageDefinition;
 import de.imise.tool3lgm.graphtools.model.template.TemplateViewDefinition;
-import de.imise.tool3lgm.graphtools.path.metapaths.SimpleMetaPath;
-import de.imise.tool3lgm.graphtools.path.metapaths.SimpleMetaPathCreator;
+import de.imise.tool3lgm.graphtools.path.metapaths.ElementaryMetaPath;
+import de.imise.tool3lgm.graphtools.path.metapaths.ElementaryMetaPathHandler;
+import de.imise.tool3lgm.graphtools.path.metapaths.SequenceMetaPath;
+import de.imise.tool3lgm.graphtools.path.metapaths.SimpleSerialMetaPathCreator;
+import de.imise.tool3lgm.graphtools.path.metapaths.SimpleSerialMetaPathCreator.SimpleSerialMetaPathBuilder;
 import de.imise.tool3lgm.metamodel.service.TLGMServiceMetaModel;
 import de.imise.tool3lgm.metamodel.service.edge.IheActor_IheInterface_Edge;
 import de.imise.tool3lgm.metamodel.service.edge.IheIntegrationProfile_IheActor_Edge;
@@ -44,6 +47,7 @@ public class IheTemplateLibraryProvider extends TemplateLibraryProvider {
      */
     public IheTemplateLibraryProvider() {
         super(TLGMServiceMetaModel.class);
+        Tool3lgmConstants.addResourceBundle(resourceHandler);
     }
 
     @Override
@@ -59,13 +63,26 @@ public class IheTemplateLibraryProvider extends TemplateLibraryProvider {
                 return "MAIN_CATEGORY_NAME";
             }
 
+            @SuppressWarnings("unchecked")
             @Override
-            public List<SimpleMetaPath> getViewMetaPaths() {
+            public List<SequenceMetaPath> getViewMetaPaths() {
                 MetaModelContext metaModelContext = Tool3lgmMetaModelContext.getMetaModelContextForDefinitionClass(getMetaModelDefinitionClass());
-                MetaModel metaModel = metaModelContext.getMetaModel();
-                SimpleMetaPath submodelMetaPath = SimpleMetaPathCreator.createSimpleMetaPath(metaModel, IheDomain.class, IheTransaction.class, IheIntegrationProfile_IheDomain_Edge.class, IheIntegrationProfile_IheActor_Edge.class,
-                        IheActor_IheInterface_Edge.class, IheInterface_IheTransaction_Edge.class);
-                return ImmutableList.of(submodelMetaPath);
+                ElementaryMetaPathHandler emph = metaModelContext.getElementaryMetaPathHandler();
+
+                SimpleSerialMetaPathBuilder builder1 = SimpleSerialMetaPathCreator.builder(metaModelContext);
+                builder1.add(IheDomain.class, IheActor.class, IheIntegrationProfile_IheDomain_Edge.class, IheIntegrationProfile_IheActor_Edge.class);
+                SimpleSerialMetaPathBuilder builder2 = builder1.clone();
+
+                ElementaryMetaPath emp1 = emph.getMetaPath(IheActor.class, IheActor_IheInterface_Edge.class);
+                ElementaryMetaPath emp2a = emph.getMetaPath(IheInvokingInterface.class, IheInterface_IheTransaction_Edge.class, IheTransaction.class);
+                ElementaryMetaPath emp2b = emph.getMetaPath(IheProvidingInterface.class, IheInterface_IheTransaction_Edge.class, IheTransaction.class);
+
+                //IheInterfaces should be only visible in Expert mode -> encapsulate them in an inner SimpleMetaPath
+                builder1.addSimpleMetaPath("IHE_ACTOR_INVOKING_TRANSACTION", emp1, emp2a);
+                builder2.addSimpleMetaPath("IHE_ACTOR_PROVIDING_TRANSACTION", emp1, emp2b);
+                SequenceMetaPath iheTemplateViewPath1 = builder1.build();
+                SequenceMetaPath iheTemplateViewPath2 = builder2.build();
+                return ImmutableList.of(iheTemplateViewPath1, iheTemplateViewPath2);
             }
 
         };

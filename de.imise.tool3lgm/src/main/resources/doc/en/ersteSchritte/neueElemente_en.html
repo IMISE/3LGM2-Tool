@@ -1,0 +1,51 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<html>
+<head>
+	<title>Adding elements</title>
+</head>
+
+<body>
+<h1>Adding elements</h1>
+In this section we will show you how to insert new elements into a model. The best way to do this is to open the <a href="../beispieldateien/oeffnen_en.html">example model</a> included in this help.<br>
+<p>
+In the following, the insertion of elements will be demonstrated using a Function as an example. Other elements of the construction kit can be inserted into a model in a similar way.<br> 
+First switch on the single layer view and switch to the domain layer.
+</p>
+<p>
+If you now select the menu item <i>Insert</i> from the <a href="../baukasten/uebersicht_en.html#menueleiste">menu bar</a>, you will see all elements that you can insert into the domain layer. (If you have selected another layer, the elements that you can add to the selected layer will appear under <i>Insert</i>).<br>
+Now select the menu item <i>Function</i>. A dialog will appear in which you are asked to enter the name of the function. Give the function the name <nobr>'Request for findings in central laboratory'</nobr> and click on the <i>OK</i> button.<br> 
+The function now appears in the view of the work area in the document window and can be moved in the work area by clicking and holding the left mouse button on the function.
+
+</p>
+<p>
+At the same time as the function appears in the document window, the function is displayed in the domain layer under <i>Function</i> in the document window.
+</p>
+<p>
+Elements that are displayed graphically in the document window can also be inserted quickly using the <i>drawing toolbar</i>.
+</p>
+<p>
+The following is now to be modeled:<br> 
+The function 'Central laboratory findings request' is completed (interpreted) by a patient and creates or modifies (edits) the object 'Central laboratory findings request document'.<br> 
+The function 'Central Laboratory Findings Request' is also a part of the function 'Findings Request'.
+</p>
+<p>
+To model this behavior, click with the left mouse button on the object 'Patient' and then with the right mouse button on the function 'Request central laboratory'. Now select the item <i>uses<i> from the context menu that appears. An arrow is drawn from the patient object to the function 'Central laboratory findings request'. This models the relationship <i>Patient uses the function 'Central laboratory findings request'</i>.<br> 
+In order to model the second subject <i>function updates 'Central laboratory request document'</i> click the left mouse button on the function 'Central laboratory findings request' and the right mouse button on the object 'Central laboratory request document'. Select <i>Updates</i> in the context menu that appears.
+</p>
+<p>
+In order to model the function 'Central laboratory findings request' as part of the function 'Findings request', first click the left mouse button on the function 'Findings request central laboratory' and then the right mouse button on the function 'Findings request'. Select <i>Is part of</i> in the appearing context dialog.
+<p>
+<p>
+Your model should now look as follows:<br>
+<img src="../bilder/beispiel1.jpg" width=496 height=305 border=0 alt="" vspace=20 align="top">
+</p>
+<p>
+This would model the situation described above. You can now look in the <a href="../baukasten/dialoge_en.html">properties dialogs</a> of the individual elements to see how the connections just modeled are represented here.
+</p>
+<p>
+Other elements on other layers can be inserted and modified similarly to the scheme described above.
+</p>
+
+</body>
+</html>

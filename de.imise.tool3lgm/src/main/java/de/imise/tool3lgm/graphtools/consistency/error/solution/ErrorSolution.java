@@ -27,16 +27,16 @@ public abstract class ErrorSolution {
     private final MetaPath pathToPropertyDialogElement;
 
     /**
-     * The metapath that must be {@link MetaPath#isAssignable(MetaPath)} to the
-     * MetaPath of the panel which should be opened to solve the error
+     * The metapath that must be {@link MetaPath#isAssignable(MetaPath)} to
+     * the MetaPath of the panel which should be opened to solve the error
      */
     private final SimpleMetaPath panelMetaPath;
 
     /**
      * @param pathToPropertyDialogElement
      * @param panelMetaPath the metapath that must be
-     *            {@link MetaPath#isAssignable(MetaPath)} to the MetaPath of the
-     *            panel which should be opened to solve the error
+     *            {@link MetaPath#isAssignable(MetaPath)} to the MetaPath of
+     *            the panel which should be opened to solve the error
      */
     public ErrorSolution(final MetaPath pathToPropertyDialogElement, final SimpleMetaPath panelMetaPath) {
         targetClass = pathToPropertyDialogElement != null ? pathToPropertyDialogElement.getStartClass() : panelMetaPath.getStartClass();

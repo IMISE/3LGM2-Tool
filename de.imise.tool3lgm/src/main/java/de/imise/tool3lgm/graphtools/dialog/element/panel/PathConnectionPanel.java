@@ -590,7 +590,7 @@ public class PathConnectionPanel extends AbstractExpandablePanel {
         if (nextEdgeIndexInPath < elementaryMetaPaths.size()) {
             ElementaryMetaPath nextElementaryMetaPath = elementaryMetaPaths.get(nextEdgeIndexInPath);
             Class<? extends Edge> nextEdgeClass = nextElementaryMetaPath.getEdgeClass();
-            Class<? extends ModelElement> nextElementClassInPath = MetaPathFunctions.getElementaryPathsConnectingClass(elementaryMetaPath, nextElementaryMetaPath);
+            Class<? extends ModelElement> nextElementClassInPath = MetaPathFunctions.getMetaPathsConnectingClass(elementaryMetaPath, nextElementaryMetaPath);
             List<ModelElement> connectedElements = endInPath.getConnectedElements(nextElementClassInPath, nextEdgeClass);
             for (ModelElement connectedElement : connectedElements) {
                 disconnect(endInPath, connectedElement, nextEdgeIndexInPath);
