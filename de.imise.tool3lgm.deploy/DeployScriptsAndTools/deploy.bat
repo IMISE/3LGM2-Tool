@@ -1,4 +1,4 @@
-@ECHO OFF &SETLOCAL
+@ECHO OFF &SETLOCAL EnableDelayedExpansion
 
 ::Default Variablen setzen
 ::  Per Default launch4j ausfuehren
@@ -84,7 +84,9 @@ SET "DEPLOY_TOOL3LGM_ICON=..\DeployScriptsAndTools\Icons\toolIcon_gross.ico"
 
 ::Versionsermittlung aus der version.info
 SET "GIT_VERSION_FILE=%DEPLOY_PROJECT_TOOL3LGM_DIR%\version.info"
-SET "GIT_VERSION_FILE_LINE=git.commit.id.describe="
+SET "GIT_VERSION_FILE_DESCRIBE=git.commit.id.describe="
+SET "GIT_VERSION_FILE_TAGNAME=git.closest.tag.name="
+
 
 ::update ApplicationVersion in Tool3LGMConstants and the Innosetup ISS-File
 ::Pfad zur Innosetup-Scriptdatei zum Erzeugen des Windows-Installers des Tools
@@ -210,19 +212,45 @@ CD /D %SCRIPT_LOCATION%
 ECHO.
 
 
-::Versionermittlung
-:: Datei mit den Versionsinfos: %GIT_VERSION_FILE%
-SETLOCAL EnableDelayedExpansion
-FOR /f "tokens=* usebackq" %%b IN (`FINDSTR /C:"%GIT_VERSION_FILE_LINE%" "%GIT_VERSION_FILE%"`) DO (
+::Versionermittlung:
+:: - Datei mit den Versionsinfos: %GIT_VERSION_FILE%
+:: - Ermittlung, ob eine dev oder eine prod Version deployed werden soll
+
+:: git description aus version.info ermitteln
+:: SETLOCAL EnableDelayedExpansion
+FOR /f "tokens=* usebackq" %%b IN (`FINDSTR /C:"%GIT_VERSION_FILE_DESCRIBE%" "%GIT_VERSION_FILE%"`) DO (
     SET y=%%b
     SET y=!y:"=?!
     ::ECHO %%b
-    FOR /f "tokens=2 delims==" %%b IN ("!y!") DO SET lgmVersion=%%b
+    FOR /f "tokens=2 delims==" %%b IN ("!y!") DO SET lgmVersion_describe=%%b
+)
+::Debug: 3LGM-Version (describe) ausgeben
+::ECHO "### version (describe): %lgmVersion_describe%"
+
+:: git tag-name aus version.info ermitteln
+FOR /f "tokens=* usebackq" %%c IN (`FINDSTR /C:"%GIT_VERSION_FILE_TAGNAME%" "%GIT_VERSION_FILE%"`) DO (
+    SET w=%%c
+    SET w=!w:"=?!
+    ::ECHO %%c
+    FOR /f "tokens=2 delims==" %%c IN ("!w!") DO SET lgmVersion_tagname=%%c
+)
+::Debug: 3LGM-Version (tagname) ausgeben
+::ECHO "### version (tagname): %lgmVersion_tagname%"
+
+:: ist "dev" oder "DEV" oder "Dev" enthalten -> lgmVersion = git description (dev-Version)
+::   sonst: lgmVersion = git tag-name (=> prod-Version)
+SET STRING=%lgmVersion_tagname%
+SET SUBSTRING=dev
+ECHO %STRING% | FINDSTR /I /C:"%SUBSTRING%" >nul & IF ERRORLEVEL 1 (
+	ECHO "### prod-Version found => include git tagname to lgmVersion"
+	SET "lgmVersion=%lgmVersion_tagname%"
+) else (
+	ECHO "### dev-Version found => include git tagname, count and hash to lgmVersion"
+	SET "lgmVersion=%lgmVersion_describe%"
 )
 
 ::3LGM-Version ausgeben
-ECHO "### Current version: %lgmVersion%"
-
+ECHO "### Version: %lgmVersion%"
 
 ECHO.
 
