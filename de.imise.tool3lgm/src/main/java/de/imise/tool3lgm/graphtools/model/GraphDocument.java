@@ -892,13 +892,17 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
                 changeColor(pid);
                 break;
             case 3:
+                Color color = null;
                 try {
+                    //argv[2] can be the string "null" -> change
+                    //to default color if parseInt(..) not works
                     int colorValue = Integer.parseInt(argv[2]);
-                    Color color = new Color(colorValue);
-                    changeColor(argv[0], argv[1], color, pid);
+                    color = new Color(colorValue);
                 } catch (Exception e) {
-                    Log(e);
+                    //ignore
                 }
+                //if color is null -> default color will be set
+                changeColor(argv[0], argv[1], color, pid);
                 break;
             default:
                 break;
@@ -1301,7 +1305,11 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
             break;
 
         case MODEL_ACTION_SET_ELEMENT_FONT: {
-            String name = "";
+            //argv[0] = Target-Szenario-ID
+            //argv[1] = Element-ID
+            //argv[2] = Font name
+            //argv[3] = Font size
+            //argv[4] = Font style
             switch (argc) {
             case 0:
                 changeFont(null, pid);
@@ -1310,16 +1318,13 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
                 changeFont(argv[0], argv[1], pid);
                 break;
             default:
-                int size = 0;
-                int style = 0;
                 try {
-                    name = argv[2];
-                    size = Integer.parseInt(argv[3]);
-                    style = Integer.parseInt(argv[4]);
+                    int size = Integer.parseInt(argv[3]);
+                    int style = Integer.parseInt(argv[4]);
+                    changeFont(argv[0], argv[1], argv[2], size, style, pid);
                 } catch (Exception e) {
-                    Log(e);
+                    //should not happen but ignore
                 }
-                changeFont(argv[0], argv[1], name, size, style, pid);
             }
             break;
         }
@@ -2312,17 +2317,25 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
         GraphDocument szen = ec.getGraphDocument();
         szen.start_transaction(pid);
         //undo
-        String fontName = ec.getFontName();
-        int fontSize = ec.getFontSize();
-        int fontStyle = ec.getFontStyle();
-        String undoCommandArguments = ec.hasStandardFont() ? "" : getArgumentsString(fontName, fontSize, fontStyle);
-        addUndoCommandIfNotExist(pid, undoCommandArguments, MODEL_ACTION_SET_ELEMENT_FONT, szen, ec);
+        if (ec.hasStandardFont()) {
+            addUndo(pid, MODEL_ACTION_SET_ELEMENT_FONT, szen, ec);
+        } else {
+            String fontName = ec.getFontName();
+            int fontSize = ec.getFontSize();
+            int fontStyle = ec.getFontStyle();
+            addUndo(pid, MODEL_ACTION_SET_ELEMENT_FONT, szen, ec, fontName, fontSize, fontStyle);
+        }
+
         //redo
-        fontName = font.getName();
-        fontSize = font.getSize();
-        fontStyle = font.getStyle();
-        String redoCommandArguments = ec.isStandardFont(font) ? "" : getArgumentsString(fontName, fontSize, fontStyle);
-        addRedoCommandOrReplace(pid, redoCommandArguments, MODEL_ACTION_SET_ELEMENT_FONT, szen, ec);
+        if (ec.isStandardFont(font)) {
+            addUndo(pid, MODEL_ACTION_SET_ELEMENT_FONT, szen, ec);
+        } else {
+            String fontName = font.getName();
+            int fontSize = font.getSize();
+            int fontStyle = font.getStyle();
+            addRedo(pid, MODEL_ACTION_SET_ELEMENT_FONT, szen, ec, fontName, fontSize, fontStyle);
+        }
+
         //do
         ec.setFont(font);
         ec.refreshText();
