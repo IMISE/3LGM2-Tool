@@ -15,17 +15,17 @@ public class WeightReplacer {
     private static final String UNIFORMLY_DISTRIBUTED = "UNIFORMLY_DISTRIBUTED";
 
     /**
-     * Mappt für einen HashString eines ModelElements und ein dazu gehöriges
-     * UserField auf einen Hash eines anderen UserFields, das das erste in allen
-     * Rechnungen ersetzen soll.
+     * Mappt für eine ID eines ModelElements und ein dazu gehöriges UserField
+     * auf eine ID eines anderen UserFields, das das erste in allen Rechnungen
+     * ersetzen soll.
      */
     private Table<String, String, String> replacer;
 
     /**
-     * Mappt für einen HashString eines ModelElements und eine Kantenklasse, die
-     * zu dem ModelElement passen sollte, auf einen Hash eines UserFields, das
-     * die Gleichverteilung als Kantengewicht bei Rechnungen über die
-     * Knatenklasse ersetzen soll.
+     * Mappt für eine ID eines ModelElements und eine Kantenklasse, die zu dem
+     * ModelElement passen sollte, auf eine ID eines UserFields, das die
+     * Gleichverteilung als Kantengewicht bei Rechnungen über die Knatenklasse
+     * ersetzen soll.
      */
     private Table<String, Class<? extends Edge>, String> standardWeigthReplacer;
 
@@ -33,36 +33,36 @@ public class WeightReplacer {
     }
 
     /**
-     * Setzt die Gleichvertilung als Ersetzung für das UserField mit dem
-     * übergebenen Hash
+     * Setzt die Gleichvertilung als Ersetzung für das UserField mit der
+     * übergebenen ID
      *
-     * @param modelElementHash
-     * @param userFieldHashToReplace
+     * @param modelElementID
+     * @param userFieldIDToReplace
      * @return
      */
-    public String setUniformDistribution(final String modelElementHash, final String userFieldHashToReplace) {
-        return setReplacement(modelElementHash, userFieldHashToReplace, UNIFORMLY_DISTRIBUTED);
+    public String setUniformDistribution(final String modelElementID, final String userFieldIDToReplace) {
+        return setReplacement(modelElementID, userFieldIDToReplace, UNIFORMLY_DISTRIBUTED);
     }
 
     /**
-     * Setzt für ein(en) ModelElement(-Hash) für einen UserField-Hash einen
-     * Erstzungs-UserField-Hash
+     * Setzt für ein(e) ModelElement(-ID) für eine UserField-ID eine
+     * Erstzungs-UserField-ID
      *
-     * @param modelElementHash
-     * @param userFieldHashToReplace
-     * @param userFieldHashReplacement
+     * @param modelElementID
+     * @param userFieldIDToReplace
+     * @param userFieldIDReplacement
      */
-    public String setReplacement(final String modelElementHash, final String userFieldHashToReplace, final String userFieldHashReplacement) {
-        //wenn kein gültiger HashWert angegeben ist oder die hashes gleich sind -> entferne die evtl. vorhandene Ersetzung
-        if (Strings.isNullOrEmpty(userFieldHashReplacement) || userFieldHashReplacement.equals(userFieldHashToReplace)) {
-            return removeReplacement(modelElementHash, userFieldHashToReplace);
+    public String setReplacement(final String modelElementID, final String userFieldIDToReplace, final String userFieldIDReplacement) {
+        //wenn keine gültige ID angegeben ist oder die IDs gleich sind -> entferne die evtl. vorhandene Ersetzung
+        if (Strings.isNullOrEmpty(userFieldIDReplacement) || userFieldIDReplacement.equals(userFieldIDToReplace)) {
+            return removeReplacement(modelElementID, userFieldIDToReplace);
         }
         //der Replacer ist noch nicht initialisiert
         if (replacer == null) {
             replacer = HashBasedTable.create();
         }
         //füge das Replacement hinzu
-        return replacer.put(modelElementHash, userFieldHashToReplace, userFieldHashReplacement);
+        return replacer.put(modelElementID, userFieldIDToReplace, userFieldIDReplacement);
     }
 
     public boolean isEmpty() {
@@ -86,19 +86,19 @@ public class WeightReplacer {
     }
 
     /**
-     * Entfernt für ein(en) ModelElement(-Hash) für einen UserField-Hash einen
-     * Erstzungs-UserField-Hash
+     * Entfernt für ein(e) ModelElement(-ID) für eine UserField-ID eine
+     * Erstzungs-UserField-ID
      *
-     * @param modelElementHash
-     * @param userFieldHashToReplace
+     * @param modelElementID
+     * @param userFieldIDToReplace
      */
-    public String removeReplacement(final String modelElementHash, final String userFieldHashToReplace) {
+    public String removeReplacement(final String modelElementID, final String userFieldIDToReplace) {
         //es kann gar nichts entfernt werden -> raus
         if (replacer == null) {
             return null;
         }
         //entferne den Wert
-        String returnValue = replacer.remove(modelElementHash, userFieldHashToReplace);
+        String returnValue = replacer.remove(modelElementID, userFieldIDToReplace);
         //wenn nichts mehr im Table steht -> lösche ihn
         if (replacer.isEmpty()) {
             replacer = null;
@@ -107,55 +107,55 @@ public class WeightReplacer {
     }
 
     /**
-     * Gibt für ein(en) ModelElement(-Hash) für einen UserField-Hash einen
-     * Erstzungs-UserField-Hash zurück. Gibt es keinen, kommt <code>null</code>
+     * Gibt für ein(e) ModelElement(-ID) für eine UserField-ID eine
+     * Erstzungs-UserField-ID zurück. Gibt es keine, kommt <code>null</code>
      * zurück.
      *
-     * @param modelElementHash
-     * @param userFieldHashToReplace
+     * @param modelElementID
+     * @param userFieldIDToReplace
      * @return
      */
-    public String getReplacement(final String modelElementHash, final String userFieldHashToReplace) {
-        return replacer == null ? null : replacer.get(modelElementHash, userFieldHashToReplace);
+    public String getReplacement(final String modelElementID, final String userFieldIDToReplace) {
+        return replacer == null ? null : replacer.get(modelElementID, userFieldIDToReplace);
     }
 
     /**
-     * Setzt für ein(en) ModelElement(-Hash) einen Erstzungs-UserField-Hash für
-     * die Gleichverteilung der Kantenart.
+     * Setzt für ein(e) ModelElement(-ID) eine Erstzungs-UserField-ID für die
+     * Gleichverteilung der Kantenart.
      *
-     * @param modelElementHash
+     * @param modelElementID
      * @param edgeClass
-     * @param userFieldHashReplacement
+     * @param userFieldIDReplacement
      * @return
      */
-    public String setUniformDistributionReplacement(final String modelElementHash, final Class<? extends Edge> edgeClass, final String userFieldHashReplacement) {
-        //wenn kein gültiger HashWert angegeben ist oder die hashes gleich sind -> entferne die evtl. vorhandene Ersetzung
-        if (Strings.isNullOrEmpty(userFieldHashReplacement)) {
-            return removeUniformDistributionReplacement(modelElementHash, edgeClass);
+    public String setUniformDistributionReplacement(final String modelElementID, final Class<? extends Edge> edgeClass, final String userFieldIDReplacement) {
+        //wenn keine gültige ID angegeben ist oder die IDs gleich sind -> entferne die evtl. vorhandene Ersetzung
+        if (Strings.isNullOrEmpty(userFieldIDReplacement)) {
+            return removeUniformDistributionReplacement(modelElementID, edgeClass);
         }
         //der Replacer ist noch nicht initialisiert
         if (standardWeigthReplacer == null) {
             standardWeigthReplacer = HashBasedTable.create();
         }
         //füge das Replacement hinzu
-        return standardWeigthReplacer.put(modelElementHash, edgeClass, userFieldHashReplacement);
+        return standardWeigthReplacer.put(modelElementID, edgeClass, userFieldIDReplacement);
     }
 
     /**
-     * Entfernt für ein(en) ModelElement(-Hash) für eine Kantenart, den Has des
-     * USerFields, was in Rechunungen die Gleichverteilung als
+     * Entfernt für ein(e) ModelElement(-ID) für eine Kantenart, die ID des
+     * UserFields, das in Rechunungen die Gleichverteilung als
      * Verteilungsgewicht ersetzen soll.
      *
-     * @param modelElementHash
-     * @param userFieldHashToReplace
+     * @param modelElementID
+     * @param userFieldIDToReplace
      */
-    public String removeUniformDistributionReplacement(final String modelElementHash, final Class<? extends Edge> edgeClass) {
+    public String removeUniformDistributionReplacement(final String modelElementID, final Class<? extends Edge> edgeClass) {
         //es kann gar nichts entfernt werden -> raus
         if (standardWeigthReplacer == null) {
             return null;
         }
         //entferne den Wert
-        String returnValue = standardWeigthReplacer.remove(modelElementHash, edgeClass);
+        String returnValue = standardWeigthReplacer.remove(modelElementID, edgeClass);
         //wenn nichts mehr im Table steht -> lösche ihn
         if (standardWeigthReplacer.isEmpty()) {
             standardWeigthReplacer = null;
@@ -164,28 +164,28 @@ public class WeightReplacer {
     }
 
     /**
-     * Gibt für ein(en) ModelElement(-Hash) für für eine Kantenklasse einen
-     * Erstzungs-UserField-Hash, der bei Rechnungen mit Gleichverteilung über
-     * die angegebene Kantenklasse genutzt werden soll, zurück. Gibt es keinen,
-     * kommt <code>null</code> zurück.
+     * Gibt für ein(e) ModelElement(-ID) für eine Kantenklasse eine
+     * Erstzungs-UserField-ID, die bei Rechnungen mit Gleichverteilung über die
+     * angegebene Kantenklasse genutzt werden soll, zurück. Gibt es keine, kommt
+     * <code>null</code> zurück.
      *
-     * @param modelElementHash
+     * @param modelElementID
      * @param edgeClass
      * @return
      */
-    public String getUniformDistributionReplacement(final String modelElementHash, final Class<? extends Edge> edgeClass) {
-        return standardWeigthReplacer == null ? null : standardWeigthReplacer.get(modelElementHash, edgeClass);
+    public String getUniformDistributionReplacement(final String modelElementID, final Class<? extends Edge> edgeClass) {
+        return standardWeigthReplacer == null ? null : standardWeigthReplacer.get(modelElementID, edgeClass);
     }
 
     /**
-     * Liefert <code>true</code>, wenn der übergebene Hash für die
+     * Liefert <code>true</code>, wenn die übergebene ID für die
      * Gleichverteilung steht.
      *
-     * @param userFieldHashReplacement
+     * @param userFieldIDReplacement
      * @return
      */
-    public boolean isUniformDistribution(final String userFieldHashReplacement) {
-        return UNIFORMLY_DISTRIBUTED.equals(userFieldHashReplacement);
+    public boolean isUniformDistribution(final String userFieldIDReplacement) {
+        return UNIFORMLY_DISTRIBUTED.equals(userFieldIDReplacement);
     }
 
 }

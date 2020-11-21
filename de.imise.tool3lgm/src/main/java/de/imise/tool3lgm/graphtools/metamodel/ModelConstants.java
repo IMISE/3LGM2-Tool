@@ -39,7 +39,7 @@ public final class ModelConstants {
         return layerIndex % 2 == 1;
     }
 
-    /** Short-Name für den beginn des HashStrings bei allen Kanten */
+    /** Short-Name für den beginn der IDs bei allen Kanten */
     public static final String EDGE_SHORT_NAME = "DLK";
 
     /**

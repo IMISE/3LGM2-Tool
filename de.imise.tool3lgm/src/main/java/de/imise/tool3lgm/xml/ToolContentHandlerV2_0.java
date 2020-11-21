@@ -51,14 +51,12 @@ import de.imise.tool3lgm.log.Log;
 public class ToolContentHandlerV2_0 implements ContentHandler {
 
     /**
-     * gänderte Hashcodes (bei copyAndPaste) Schlüssel ist alter HashString,
-     * Wert ist neuer HashString
+     * Geänderte IDs (bei copyAndPaste). Schlüssel ist alte ID, Wert ist neue ID
      */
-    protected Map<String, String> hashCodes;
+    protected Map<String, String> ids;
 
     /**
-     * Kanten deren hashStrings (start, end) aufgelöst werden müssen (bei
-     * copyAndPaste)
+     * Kanten deren IDs (start, end) aufgelöst werden müssen (bei copyAndPaste)
      */
     protected List<Edge> edges;
 
@@ -109,15 +107,15 @@ public class ToolContentHandlerV2_0 implements ContentHandler {
      */
     protected StringBuilder elementValue = new StringBuilder();
 
-    /** HashString eines Bitmaps */
-    protected String iconKey = null;
+    /** ID of a Bitmap */
+    protected String iconID = null;
 
     /**
      * ArrayList mit allen Containern die ein Icon besitzen; da die Icons erst
-     * zu letzt eingelesen werden, wird den Containern zuerst nur der HashString
-     * des Icons mitgeteilt. Nach dem einlesen der Icons müssen diese Container
-     * noch das eigentliche Icon aus der Hashmap der Collection laden. Das
-     * passiert in der Methode setIcon();
+     * zu letzt eingelesen werden, wird den Containern zuerst nur die ID des
+     * Icons mitgeteilt. Nach dem einlesen der Icons müssen diese Container noch
+     * das eigentliche Icon aus der Hashmap der Collection laden. Das passiert
+     * in der Methode setIcon();
      */
     protected List<NodeContainer> containerWithIcon = new ArrayList<>();
 
@@ -221,12 +219,12 @@ public class ToolContentHandlerV2_0 implements ContentHandler {
 
                 if (element != null) {
                     if (isCopyAndPaste()) {
-                        hashCodes.put(atts.getValue("hash"), element.getHashString());
+                        ids.put(atts.getValue("hash"), element.getID());
                         if (element instanceof Edge) {
                             edges.add((Edge) element);
                         }
                     } else {
-                        element.setHashString(atts.getValue("hash"));
+                        element.setID(atts.getValue("hash"));
                     }
                 }
             } else if (qName.equals("avoidDuplicates")) {
@@ -234,7 +232,7 @@ public class ToolContentHandlerV2_0 implements ContentHandler {
 
             } else if (qName.equals("container")) {
                 if (isCopyAndPaste()) {
-                    element = doc.findElementCoded(hashCodes.get(atts.getValue("hash")).toString());
+                    element = doc.findElementCoded(ids.get(atts.getValue("hash")).toString());
                 } else {
                     element = doc.findElementCoded(atts.getValue("hash"));
                 }
@@ -343,7 +341,7 @@ public class ToolContentHandlerV2_0 implements ContentHandler {
 
             } else if (qName.equals("bitmap")) {
                 if (atts.getValue("type").equals("gif/base64")) {
-                    iconKey = atts.getValue("hash");
+                    iconID = atts.getValue("hash");
                 }
 
             } else if (qName.equals("images")) {
@@ -364,7 +362,7 @@ public class ToolContentHandlerV2_0 implements ContentHandler {
                 copyAndPastePositionShift = collection.increasePasteCounter();
                 szenario = collection.getSelectedDoc();
                 szenario.clearSelection();
-                hashCodes = new HashMap<>();
+                ids = new HashMap<>();
                 edges = new ArrayList<>();
                 edgeContainers = new ArrayList<>();
 
@@ -384,7 +382,7 @@ public class ToolContentHandlerV2_0 implements ContentHandler {
         try {
             if (qName.equals("field")) {
                 if (element != null && !element.putXMLFieldString(field, elementValue.toString())) {
-                    throw new SAXException("ModelElement konnte field nicht verarbeiten!\n ModelElement=" + element.getHashString() + "\n field=" + field + "\n Wert=" + elementValue);
+                    throw new SAXException("ModelElement konnte field nicht verarbeiten!\n ModelElement=" + element.getID() + "\n field=" + field + "\n Wert=" + elementValue);
                 }
 
                 field = null;
@@ -393,7 +391,7 @@ public class ToolContentHandlerV2_0 implements ContentHandler {
                 if (element != null && (!avoidDuplicates || element.getContainer(doc) == null)) {
                     container = element.createContainer(doc);
                     if (element.layerFor() < 0 || element.layerFor() >= ModelConstants.LAYERS.length) {
-                        throw new SAXException("ModelElement hat ungueltige Ebenenangabe! hash=" + element.getHashString() + "layerFor=" + element.layerFor());
+                        throw new SAXException("ModelElement hat ungueltige Ebenenangabe! ID=" + element.getID() + "layerFor=" + element.layerFor());
                     }
                     doc.getLayer(element.layerFor()).add(container);
                 }
@@ -571,7 +569,7 @@ public class ToolContentHandlerV2_0 implements ContentHandler {
                 classType = null;
 
             } else if (qName.equals("icon")) {
-                layout.setIcon(elementValue.toString());
+                layout.setIconID(elementValue.toString());
                 containerWithIcon.add((NodeContainer) container);
 
             } else if (qName.equals("layer")) {
@@ -590,11 +588,11 @@ public class ToolContentHandlerV2_0 implements ContentHandler {
                 }
 
             } else if (qName.equals("bitmap")) {
-                if (iconKey != null && !collection.getIconTable().containsKey(iconKey)) {
-                    collection.getIconTable().put(iconKey, Base64.decode(elementValue.toString()));
+                if (iconID != null && !collection.getIconTable().containsKey(iconID)) {
+                    collection.getIconTable().put(iconID, Base64.decode(elementValue.toString()));
                 }
 
-                iconKey = null;
+                iconID = null;
 
             } else if (qName.equals("images")) {
 
@@ -625,21 +623,21 @@ public class ToolContentHandlerV2_0 implements ContentHandler {
                 Static.setProgressDialogStatusLabel("labelConnectTraces");
 
                 /*
-                 * die HashStrings für das Start- bzw. End-Objekt einer Edge
-                 * auflösen und die wirklichen Node setzten
+                 * die IDs für das Start- bzw. End-Objekt einer Edge auflösen
+                 * und die wirklichen Node setzten
                  */
                 if (isCopyAndPaste()) {
                     Edge edge;
                     for (int i = 0; i < edges.size(); i++) {
                         edge = edges.get(i);
-                        edge.putXMLFieldString("start", hashCodes.get(edge.getStartHash()));
-                        edge.putXMLFieldString("end", hashCodes.get(edge.getEndHash()));
-                        edge.decodeHashStrings(doc);
+                        edge.putXMLFieldString("start", ids.get(edge.getStartID()));
+                        edge.putXMLFieldString("end", ids.get(edge.getEndID()));
+                        edge.decodeIDs(doc);
                     }
                 } else {
                     for (int i = 0; i < ModelConstants.LAYERS.length; i++) {
                         for (EdgeContainer kc : doc.getLayer(ModelConstants.LAYERS[i]).getEdgeContainers()) {
-                            kc.getEdge().decodeHashStrings(doc);
+                            kc.getEdge().decodeIDs(doc);
                         }
                     }
                 }

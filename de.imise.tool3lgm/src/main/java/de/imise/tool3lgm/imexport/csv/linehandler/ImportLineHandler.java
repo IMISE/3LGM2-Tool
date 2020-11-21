@@ -32,17 +32,17 @@ public class ImportLineHandler {
     /** Column index for the description */
     public static final int COLUMN_INDEX_DESCRIPTION = 2;
 
-    /** Column index for the hash */
-    public static final int COLUMN_INDEX_HASH = 3;
+    /** Column index for the ID */
+    public static final int COLUMN_INDEX_ID = 3;
 
     /** Column index for the first user filed column in node lines */
     public static final int COLUMN_INDEX_NODE_USERFIELD_NAMES_START = 4;
 
-    /** Column index for the hash of the start element in egde lines */
-    public static final int COLUMN_INDEX_EDGE_START_HASH = 4;
+    /** Column index for the ID of the start element in egde lines */
+    public static final int COLUMN_INDEX_EDGE_START_ID = 4;
 
-    /** Column index for the hash of the end element in egde lines */
-    public static final int COLUMN_INDEX_EDGE_END_HASH = 5;
+    /** Column index for the ID of the end element in egde lines */
+    public static final int COLUMN_INDEX_EDGE_END_ID = 5;
 
     /** Column index for the first user filed column in edge lines */
     public static final int COLUMN_INDEX_EDGE_USERFIELD_NAMES_START = 6;
@@ -83,21 +83,21 @@ public class ImportLineHandler {
         String elementType = parser.getColumn(COLUMN_INDEX_ELEMENT_TYPE);
         String name = parser.getColumn(COLUMN_INDEX_NAME);
         String description = parser.getColumn(COLUMN_INDEX_DESCRIPTION);
-        String hash = parser.getColumn(COLUMN_INDEX_HASH);
+        String id = parser.getColumn(COLUMN_INDEX_ID);
         //Header line?
         if (!EMPTY_STRING.equals(elementType)) {
             //resolve the element type to a element class
             Class<? extends ModelElement> elementClass = nameHandler.getElementClass(elementType);
             //element class is a subclass of Edge
             if (CoreMetaModel.isEdgeType(elementClass)) {
-                String startHash = parser.getColumn(COLUMN_INDEX_EDGE_START_HASH);
-                String endHash = parser.getColumn(COLUMN_INDEX_EDGE_END_HASH);
+                String startID = parser.getColumn(COLUMN_INDEX_EDGE_START_ID);
+                String endID = parser.getColumn(COLUMN_INDEX_EDGE_END_ID);
                 List<String> userFieldNames = parser.getColumns(COLUMN_INDEX_EDGE_USERFIELD_NAMES_START);
-                line = new EdgeHeaderLine(elementClass, elementType, name, description, hash, startHash, endHash, userFieldNames, row);
+                line = new EdgeHeaderLine(elementClass, elementType, name, description, id, startID, endID, userFieldNames, row);
                 //element class not found or element class is a subclass of Node
             } else if (elementClass == null || CoreMetaModel.isNodeType(elementClass)) {
                 List<String> userFieldNames = parser.getColumns(COLUMN_INDEX_NODE_USERFIELD_NAMES_START);
-                line = new NodeHeaderLine(elementClass, elementType, name, description, hash, userFieldNames, row);
+                line = new NodeHeaderLine(elementClass, elementType, name, description, id, userFieldNames, row);
             }
             //store the header as lastHeader
             lastHeader = line;
@@ -105,14 +105,14 @@ public class ImportLineHandler {
         } else {
             //the last found header is a EdgeLineHeader
             if (lastHeader != null && lastHeader instanceof EdgeHeaderLine) {
-                String startHash = parser.getColumn(COLUMN_INDEX_EDGE_START_HASH);
-                String endHash = parser.getColumn(COLUMN_INDEX_EDGE_END_HASH);
+                String startID = parser.getColumn(COLUMN_INDEX_EDGE_START_ID);
+                String endID = parser.getColumn(COLUMN_INDEX_EDGE_END_ID);
                 List<String> userFields = parser.getColumns(COLUMN_INDEX_EDGE_USERFIELD_NAMES_START);
-                line = new EdgeLine((EdgeHeaderLine) lastHeader, name, description, hash, startHash, endHash, userFields, row);
+                line = new EdgeLine((EdgeHeaderLine) lastHeader, name, description, id, startID, endID, userFields, row);
                 //no header or a NodeLineHeader is set as thelast header
             } else if (lastHeader == null || lastHeader instanceof NodeHeaderLine) {
                 List<String> userFields = parser.getColumns(COLUMN_INDEX_NODE_USERFIELD_NAMES_START);
-                line = new NodeLine((NodeHeaderLine) lastHeader, name, description, hash, userFields, row);
+                line = new NodeLine((NodeHeaderLine) lastHeader, name, description, id, userFields, row);
             }
         }
     }

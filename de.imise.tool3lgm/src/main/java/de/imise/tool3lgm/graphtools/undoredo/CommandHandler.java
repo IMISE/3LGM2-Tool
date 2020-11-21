@@ -1,10 +1,15 @@
 package de.imise.tool3lgm.graphtools.undoredo;
 
+import static de.imise.util.htmlxml.ParseSaveStringHandler.getParseSaveString;
+
+import java.util.Collection;
 import java.util.List;
 
+import de.imise.tool3lgm.graphtools.IDSource;
+import de.imise.tool3lgm.graphtools.model.GDCommands;
 import de.imise.util.htmlxml.ParseSaveStringHandler;
 
-public class CommandParser {
+public class CommandHandler {
 
     /**
      * Parst eine Kommando-Zeile, wie sie in Undo-Redo-Kommandos steckt. Ab dem
@@ -118,6 +123,65 @@ public class CommandParser {
             }
         }
         return commandName;
+    }
+
+    /**
+     * @param command
+     * @param args
+     * @return
+     */
+    public static final String getCommandLine(final GDCommands command, final Object... args) {
+        StringBuilder sb = new StringBuilder();
+        sb.append(command);
+        appendArguments(sb, args);
+        return sb.toString();
+    }
+
+    /**
+     * @param args
+     * @return
+     */
+    public static final String getArgumentsString(final Object... args) {
+        StringBuilder sb = new StringBuilder();
+        appendArguments(sb, args);
+        return sb.toString();
+    }
+
+    /**
+     * @param sb
+     * @param args
+     */
+    private static final void appendArguments(final StringBuilder sb, final Object... args) {
+        for (Object arg : args) {
+            appendArgument(sb, arg);
+        }
+    }
+
+    /**
+     * @param sb
+     * @param args
+     */
+    private static final void appendArgument(final StringBuilder sb, Object arg) {
+        if (sb.length() != 0) {
+            sb.append(" ");
+        }
+        if (arg instanceof Collection) {
+            Collection<?> innerArgs = (Collection<?>) arg;
+            for (Object innerArg : innerArgs) {
+                appendArgument(sb, innerArg); //Collections of collections are not allowed
+            }
+        } else {
+            //IDSource ? -> replace arg-Object by its ID
+            if (arg != null && arg instanceof IDSource) {
+                arg = ((IDSource) arg).getID();
+            }
+            //not a Number? -> convert arg to String that the command parser
+            //understands as one token (numbers are already one token)
+            if (arg != null && !(arg instanceof Number)) {
+                arg = getParseSaveString(arg);
+            }
+            sb.append(arg);
+        }
     }
 
 }

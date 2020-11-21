@@ -139,7 +139,7 @@ public class B1ExportPlugin {
         for (int i = parentLists.size() - 1; i >= 0; i--) {
             parents = parentLists.get(i);
             Alphabetical.sort(parents);
-            linePartBuilder.append(getParseSaveString(getHashListColumn(parents), true));
+            linePartBuilder.append(getParseSaveString(getIDListColumn(parents), true));
             linePartBuilder.append("\t");
             linePartBuilder.append(getParseSaveString(getNamesListColumn(parents), true));
             linePartBuilder.append("\t");
@@ -289,20 +289,20 @@ public class B1ExportPlugin {
      * @param containerList
      * @return
      */
-    private static final String getHashListColumn(final List<ElementContainer> containerList) {
+    private static final String getIDListColumn(final List<ElementContainer> containerList) {
         return getStringListColumn(containerList, true);
     }
 
     /**
      * @param containerList
-     * @param hash
+     * @param withID
      * @return
      */
-    private static final String getStringListColumn(final List<ElementContainer> containerList, final boolean hash) {
+    private static final String getStringListColumn(final List<ElementContainer> containerList, final boolean withID) {
         StringBuilder sb = new StringBuilder();
         for (ElementContainer ec : containerList) {
-            if (hash) {
-                sb.append(ec.getHashString());
+            if (withID) {
+                sb.append(ec.getID());
             } else {
                 sb.append(ec.getElement().getClearName());
             }

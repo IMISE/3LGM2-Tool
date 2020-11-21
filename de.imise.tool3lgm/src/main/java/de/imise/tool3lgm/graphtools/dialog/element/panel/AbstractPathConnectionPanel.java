@@ -579,16 +579,16 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
             } else if (selectedObject instanceof ModelElement) {
                 me = (ModelElement) selectedObject;
             }
-            String hashString = me.getHashString();
+            String meID = me.getID();
             GDCollection gdcoll = me.getCollection();
             LGMGraphDocument selectedObjectMainDoc = gdcoll.getMainDoc();
             if (selectedObjectMainDoc != mainDoc && !docs.contains(selectedObjectMainDoc)) {
                 docs.add(selectedObjectMainDoc);
                 selectedObjectMainDoc.deselectAll(true);
             }
-            ElementContainer selectedContainer = mainDoc.findContainerCoded(hashString);
+            ElementContainer selectedContainer = mainDoc.findContainerCoded(meID);
             if (selectedContainer == null) {
-                selectedContainer = selectedObjectMainDoc.findContainerCoded(hashString);
+                selectedContainer = selectedObjectMainDoc.findContainerCoded(meID);
                 selectedObjectMainDoc.addToSelection(selectedContainer, getTransactionID());
             } else {
                 mainDoc.addToSelection(selectedContainer, getTransactionID());
@@ -597,7 +597,7 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
                 if (doubleClick) {
                     //even if this dialog model element is a template element this
                     //Static call tries to open the dialog of the enventually existing
-                    //element with the same id (hashString) in the currently selected
+                    //element with the same ID in the currently selected
                     //doc
                     Static.showPropertyDialog(selectedContainer);
                 }
@@ -706,8 +706,8 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
                 LGMGraphDocument templateMainDoc = template.getMainDoc();
                 List<ElementContainer> templateAvalibales = templateMainDoc.getElementContainers(searchElementClass, true);
                 for (ElementContainer templateAvalibale : templateAvalibales) {
-                    String templateAvalibaleHashString = templateAvalibale.getHashString();
-                    if (!targetMainDoc.isMyElement(templateAvalibaleHashString)) {
+                    String templateAvalibaleID = templateAvalibale.getID();
+                    if (!targetMainDoc.isMyElement(templateAvalibaleID)) {
                         availables.add(templateAvalibale);
                     }
                 }

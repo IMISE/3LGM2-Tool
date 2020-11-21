@@ -226,12 +226,12 @@ public class Calculator {
             String tmp_String = st.nextToken();
             //In Funktionen, die nur auf andere UserFields referenzieren,
             // beginnt der tmp_String
-            //immer mit einem UserField-Hash
+            //immer mit einer UserField-ID
             // Wenn dieser Fall eintritt, beinhaltet der Postfix-String und
             // somit der stringTokenizer nur einen token.
-            // Dieser String ist ein userFieldHash eines userFields, das dem
+            // Dieser String ist eine userFieldID eines userFields, das dem
             // selben Element zugeordnet ist.
-            if (tmp_String.startsWith(UserField.USERFIELD_HASH_STRING_PREFIX)) {
+            if (tmp_String.startsWith(UserField.USERFIELD_ID_PREFIX)) {
                 return getValueOfReferencedUserField(tmp_String, me);
             }
             return postfix;
@@ -251,14 +251,14 @@ public class Calculator {
             formelStack.push(st.nextToken());
         }
 
-        // Hier werden aus den userFieldHash - Angaben konkrete Werte geholt.
-        // Iterativ: Operatoren und userFieldHashes werden vom Stack geholt werden.
-        // Die Hashes werden in konkrete Werte gewandetlt. Operatoren und operanden werden auf den Hilfsstack gelegt.
+        // Hier werden aus den userFieldID - Angaben konkrete Werte geholt.
+        // Iterativ: Operatoren und userFieldIDs werden vom Stack geholt werden.
+        // Die IDs werden in konkrete Werte gewandetlt. Operatoren und operanden werden auf den Hilfsstack gelegt.
         // Der Hilfsstack, der nur noch konkrete Werte und Operatoren enthält ist der neue Hauptstack.
         while (!formelStack.empty()) {
             String formulaSubString = formelStack.pop().toString();
             if (!isOperator(formulaSubString)) {
-                if (formulaSubString.startsWith(UserField.USERFIELD_HASH_STRING_PREFIX)) {
+                if (formulaSubString.startsWith(UserField.USERFIELD_ID_PREFIX)) {
                     //Das userfield wird gebildet, weil es sein kann, dass der
                     // Wert von einer Modellvariable geholt wird,
                     // der sich nicht mit
@@ -514,7 +514,7 @@ public class Calculator {
         MetaModel metaModel = definitions.getMetaModel();
         Class<?> elementClass = metaModel.getClassForName(st.nextToken());
 
-        //Der nächste String ist der Hashcode des <code>UserFields</code>,
+        //Der nächste String ist die ID des <code>UserFields</code>,
         // dessen Wert geholt werden soll
         UserField userField = definitions.getUserField(st.nextToken());
 
@@ -600,7 +600,7 @@ public class Calculator {
         MetaModel metaModel = definitions.getMetaModel();
         Class<? extends Edge> edgeClass = metaModel.getClassForName(st.nextToken()).asSubclass(Edge.class);
 
-        //nächster Token ist der HashString des UserFields das aufsummiert
+        //nächster Token ist die ID des UserFields das aufsummiert
         // werden soll -> hole dafür das UserField aus den Definitions
         UserField userField = definitions.getUserField(st.nextToken());
 
@@ -717,7 +717,7 @@ public class Calculator {
         MetaModel metaModel = definitions.getMetaModel();
         Class<? extends Edge> edgeClass = metaModel.getClassForName(st.nextToken()).asSubclass(Edge.class);
 
-        //nächster Token ist der HashString des UserFields das aufsummiert
+        //nächster Token ist die ID des UserFields das aufsummiert
         // werden soll -> hole dafür das UserField aus den Definitions
         UserField userField = definitions.getUserField(st.nextToken());
 
@@ -845,11 +845,11 @@ public class Calculator {
         stack.pop();
         stacksize--;
 
-        String userFieldhash = stack.pop().toString();
+        String userFieldID = stack.pop().toString();
         stacksize--;
 
         //Der aktuelle Wert des UserFields, das indiziert werden soll.
-        String tmp_value = definitions.getUserField(userFieldhash).getValue(target);
+        String tmp_value = definitions.getUserField(userFieldID).getValue(target);
 
         if (UserField.isError(tmp_value)) {
             return tmp_value;
@@ -888,12 +888,12 @@ public class Calculator {
      * Gibt den Wert eines Referenzierten Attributes zurück, dass zu dem selben
      * Element gehört.
      *
-     * @param userFieldHash
+     * @param userFieldID
      * @param target
      * @return Der Wert des <code>userField</code>s.
      */
-    private String getValueOfReferencedUserField(final String userFieldHash, final UserFieldTarget target) {
-        String value = definitions.getUserField(userFieldHash).getValue(target);
+    private String getValueOfReferencedUserField(final String userFieldID, final UserFieldTarget target) {
+        String value = definitions.getUserField(userFieldID).getValue(target);
         return value;
     }
 
@@ -944,7 +944,7 @@ public class Calculator {
                 }
             } else {
                 try {
-                    if (tmp_str.contains(UserField.USERFIELD_HASH_STRING_PREFIX)) {
+                    if (tmp_str.contains(UserField.USERFIELD_ID_PREFIX)) {
                         tmp_string_postfix.append(" ");
                         tmp_string_postfix.append(tmp_str);
                     } else {

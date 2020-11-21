@@ -9,7 +9,7 @@ import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.NO_LAYER;
 import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.isInterLayer;
 import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction.BACKWARD;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.INVALID_BENDPOINT_INDEX;
-import static de.imise.tool3lgm.graphtools.model.GDCommands.INVALID_HASH_STRING;
+import static de.imise.tool3lgm.graphtools.model.GDCommands.INVALID_ID_STRING;
 import static de.imise.tool3lgm.graphtools.model.LGMChangeListener.LGMChangeType.ELEMENT_GRAPHICS_CHANGED;
 import static de.imise.tool3lgm.graphtools.undoredo.TransactionManager.STANDARD_PID;
 import static de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty.OPTION_GRAPH_MOVE_SUBELEMENTS;
@@ -1160,10 +1160,10 @@ public final class InputGraphArea extends BasicGraphArea implements MouseListene
                 //die Edge getroffen wurde (also grabbed==true ist), aber die Koordinaten bei mouseDragged() beim ersten Drag-Schritt ausßerhalb
                 //des Kantenbereichs liegen und der Index des neuen Knickpunktes nicht korrekt bestimmt werden kann.
                 //Da die Einfügeposition anhand der Koodinaten betimmt wird, wird -1 übergeben.
-                String szenHash = szenario.getHashString();
+                String szenID = szenario.getID();
                 ModelElement egde = clickedEc.getElement();
-                String edgeHash = egde.getHashString();
-                clickedEc = gdcoll.insertBendingPoint(szenHash, edgeHash, INVALID_HASH_STRING, lastXreal[ebene], lastYreal[ebene], INVALID_BENDPOINT_INDEX, STANDARD_PID);
+                String edgeID = egde.getID();
+                clickedEc = gdcoll.insertBendingPoint(szenID, edgeID, INVALID_ID_STRING, lastXreal[ebene], lastYreal[ebene], INVALID_BENDPOINT_INDEX, STANDARD_PID);
                 szenario.select(clickedEc, STANDARD_PID);
                 findIncludingRectangles();
             }

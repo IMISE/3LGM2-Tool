@@ -562,23 +562,23 @@ public class LayerContainer extends ElementContainer {
     }
 
     /**
-     * @param hashString
+     * @param id
      * @return
      */
-    public boolean containsHashString(final String hashString) {
+    public boolean containsID(final String id) {
         if (!doc.getCollection().isBulkMode()) {
             for (NodeContainer ec : graphNodeContainers) {
-                if (ec.getHashString().equals(hashString)) {
+                if (ec.getID().equals(id)) {
                     return true;
                 }
             }
             for (EdgeContainer ec : edgeContainers) {
-                if (ec.getHashString().equals(hashString)) {
+                if (ec.getID().equals(id)) {
                     return true;
                 }
             }
             for (BendpointContainer ec : bendpointContainers) {
-                if (ec.getHashString().equals(hashString)) {
+                if (ec.getID().equals(id)) {
                     return true;
                 }
             }
@@ -602,7 +602,7 @@ public class LayerContainer extends ElementContainer {
 
     @Override
     public Component add(final Component comp, final int pos) {
-        if (containsHashString(((ElementContainer) comp).getHashString())) {
+        if (containsID(((ElementContainer) comp).getID())) {
             return null;
         }
         //		comp = super.add(comp);
@@ -779,12 +779,12 @@ public class LayerContainer extends ElementContainer {
     }
 
     /**
-     * @param hashString
+     * @param id
      * @return
      */
-    public EdgeContainer getEdgeContainer(final String hashString) {
+    public EdgeContainer getEdgeContainer(final String id) {
         for (EdgeContainer kc : edgeContainers) {
-            if (kc.getHashString().equals(hashString)) {
+            if (kc.getID().equals(id)) {
                 return kc;
             }
         }

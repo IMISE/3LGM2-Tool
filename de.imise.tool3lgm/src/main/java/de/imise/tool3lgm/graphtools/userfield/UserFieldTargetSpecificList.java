@@ -6,10 +6,12 @@ import java.util.List;
 
 import com.google.common.collect.ImmutableList;
 
+import de.imise.tool3lgm.graphtools.IDSource;
+
 /**
  * @author Thomas Rudert
  */
-public class UserFieldTargetSpecificList<T extends HashSource> implements Cloneable, Iterable<T> {
+public class UserFieldTargetSpecificList<T extends IDSource> implements Cloneable, Iterable<T> {
 
     private final Class<? extends UserFieldTarget> targetClass;
 
@@ -101,12 +103,12 @@ public class UserFieldTargetSpecificList<T extends HashSource> implements Clonea
     }
 
     /**
-     * @param hashString
+     * @param id
      * @return
      */
-    public final T get(final Object hashString) {
+    public final T get(final Object id) {
         for (T element : list) {
-            if (element.getHashCode().equals(hashString)) {
+            if (element.getID().equals(id)) {
                 return element;
             }
         }

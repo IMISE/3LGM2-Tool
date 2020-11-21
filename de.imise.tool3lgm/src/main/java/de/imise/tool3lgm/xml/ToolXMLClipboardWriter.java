@@ -78,7 +78,7 @@ public class ToolXMLClipboardWriter extends ToolXMLWriter {
         }
         writeEndElement(); //</objects>
         writeStartElement("szenario"); //<szenario>
-        Set<String> icons = new HashSet<>();
+        Set<String> iconIDs = new HashSet<>();
         int lastLayer = -1;
         for (ModelElement me : copyElements) {
             if (me.isUnique()) {
@@ -100,9 +100,9 @@ public class ToolXMLClipboardWriter extends ToolXMLWriter {
             writeElementContainer(ec);
             GraphElementLayout layout = ec.get3LGMLayout();
             if (layout != null) {
-                String icon = layout.getIcon();
-                if (icon != null) {
-                    icons.add(icon);
+                String iconID = layout.getIconID();
+                if (iconID != null) {
+                    iconIDs.add(iconID);
                 }
             }
         }
@@ -112,8 +112,8 @@ public class ToolXMLClipboardWriter extends ToolXMLWriter {
         writeEndElement(); //</szenario>
         writeStartElement("images"); //<images>
         Map<String, byte[]> iconTable = gdcoll.getIconTable();
-        for (String iconHashString : icons) {
-            writeImage(iconHashString, iconTable.get(iconHashString));
+        for (String iconID : iconIDs) {
+            writeImage(iconID, iconTable.get(iconID));
         }
         writeEndElement(); //</images>
         writeEndElement(); //</tool3lgm_clipboard>

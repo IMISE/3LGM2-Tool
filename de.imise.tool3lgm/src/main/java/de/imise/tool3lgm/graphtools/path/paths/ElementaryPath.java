@@ -261,7 +261,7 @@ public final class ElementaryPath extends AbstractPath {
 
     @Override
     public String toString() {
-        //        return startElement + " (" + startElement.getHashString() + ") " + metaPath.getName() + " (" + edge.getHashString() + ") " + " " + endElement + " (" + endElement.getHashString() + ") ";
+        //        return startElement + " (" + startElement.getID() + ") " + metaPath.getName() + " (" + edge.getID() + ") " + " " + endElement + " (" + endElement.getID() + ") ";
         String metaPathName = metaPath == null ? null : metaPath.getName();
         return startElement + " " + metaPathName + " " + endElement;
     }

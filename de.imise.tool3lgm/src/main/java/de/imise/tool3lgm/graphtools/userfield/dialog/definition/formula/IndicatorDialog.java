@@ -272,10 +272,9 @@ public class IndicatorDialog extends JDialog implements ActionListener {
 
                 //Erstes Token wegschmeißen
                 st.nextToken();
-                // zweites token enthält den Hash-String des zu indizierenden
-                // UserFields
-                String userFieldHash = st.nextToken();
-                UserField userField2Select = definitions.getUserField(userFieldHash);
+                // zweites token enthält die ID des zu indizierenden UserFields
+                String userFieldID = st.nextToken();
+                UserField userField2Select = definitions.getUserField(userFieldID);
                 userFieldComboBox.setSelectedObject(userField2Select);
 
                 // die Eingabefelder darstellen
@@ -340,7 +339,7 @@ public class IndicatorDialog extends JDialog implements ActionListener {
         if (e.getActionCommand().equals("okbutton")) {
             if (validateInputs()) {
                 UserField u = userFieldComboBox.getSelectedObject();
-                retVal += u.getHashCode() + " | ";
+                retVal += u.getID() + " | ";
                 for (int i = 0; i < gwList.size(); i++) {
                     GwInputPair pair = gwList.get(i);
                     retVal += pair.inputField.getText();

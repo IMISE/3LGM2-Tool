@@ -12,15 +12,15 @@ public class NodeLineTest {
     public void NodeLine() {
         String name = "NAME";
         String description = "DESCRIPTION";
-        String hash = "HASH";
+        String id = "ID";
         List<String> userFields = null;
         int row = 0;
-        NodeLine nodeLine = new NodeLine(null, name, description, hash, userFields, row);
+        NodeLine nodeLine = new NodeLine(null, name, description, id, userFields, row);
         assertEquals(nodeLine.getElementClass(), null);
         assertEquals(nodeLine.getHeaderLine(), null);
         assertEquals(nodeLine.getName(), name);
         assertEquals(nodeLine.getDescription(), description);
-        assertEquals(nodeLine.getHash(), hash);
+        assertEquals(nodeLine.getID(), id);
         assertEquals(nodeLine.getUserFields(), null);
         assertEquals(nodeLine.getRow(), row);
     }
@@ -30,7 +30,7 @@ public class NodeLineTest {
 
         //        new MockUp<NodeHeaderLine>() {
         //            @Mock
-        //            public void $init(final Class<? extends ModelElement> elementClass, final String elementType, final String nameHeader, final String descriptionHeader, final String hashHeader, final List<String> userFieldNames, final int row) {
+        //            public void $init(final Class<? extends ModelElement> elementClass, final String elementType, final String nameHeader, final String descriptionHeader, final String idHeader, final List<String> userFieldNames, final int row) {
         //
         //            }
         //
@@ -38,15 +38,15 @@ public class NodeLineTest {
 
         String name = "NAME";
         String description = "DESCRIPTION";
-        String hash = "HASH";
+        String id = "ID";
         List<String> userFields = null;
         int row = 0;
 
-        NodeLine nodeLine = new NodeLine(null, name, description, hash, userFields, row);
+        NodeLine nodeLine = new NodeLine(null, name, description, id, userFields, row);
         assertEquals(nodeLine.getHeaderLine(), null);
         assertEquals(nodeLine.getName(), name);
         assertEquals(nodeLine.getDescription(), description);
-        assertEquals(nodeLine.getHash(), hash);
+        assertEquals(nodeLine.getID(), id);
         assertEquals(nodeLine.getUserFields(), null);
         assertEquals(nodeLine.getRow(), row);
     }

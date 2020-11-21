@@ -92,7 +92,7 @@ public class FormulaDefinitionDialogStack extends Stack<String> {
                     push(FormulaDefinitionDialog.BRACKETS);
                 } else if (token.equals(")")) {
                     push(FormulaDefinitionDialog.LEAVE_BRACKET_ESCAPE_CHARS);
-                } else if (token.startsWith(UserField.USERFIELD_HASH_STRING_PREFIX)) {
+                } else if (token.startsWith(UserField.USERFIELD_ID_PREFIX)) {
                     push(token);
                 } else if (isOperator(token)) {
                     push(token);

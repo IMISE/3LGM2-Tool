@@ -24,8 +24,8 @@ public abstract class AbstractImportLine {
     /** Value of the description column in this line */
     private final String description;
 
-    /** Value of the hash column in this line */
-    private final String hash;
+    /** Value of the id column in this line */
+    private final String id;
 
     /** List of all values for userFields in this line */
     private final List<String> userFields;
@@ -38,16 +38,16 @@ public abstract class AbstractImportLine {
      * @param elementType Value of the element type column in this line
      * @param name Value of the name column in this line
      * @param description Value of the description column in this line
-     * @param hash Value of the hash column in this line
+     * @param id Value of the id column in this line
      * @param userFields List of all values for userFields in this line
      * @param row Row number of this line
      */
-    protected AbstractImportLine(final Class<? extends ModelElement> elementClass, final String elementType, final String name, final String description, final String hash, final List<String> userFields, final int row) {
+    protected AbstractImportLine(final Class<? extends ModelElement> elementClass, final String elementType, final String name, final String description, final String id, final List<String> userFields, final int row) {
         this.elementClass = elementClass;
         this.elementType = elementType;
         this.name = name;
         this.description = description;
-        this.hash = hash;
+        this.id = id;
         this.userFields = userFields;
         this.row = row;
     }
@@ -144,26 +144,26 @@ public abstract class AbstractImportLine {
     }
 
     //    /**
-    //     * @param hash
-    //     *            Value of the hash column in this line
+    //     * @param id
+    //     *            Value of the id column in this line
     //     */
-    //    public void setHash(final String hash) {
-    //        this.hash = hash;
+    //    public void setID(final String id) {
+    //        this.id = id;
     //    }
 
     /**
-     * @return Value of the hash column in this line
+     * @return Value of the id column in this line
      */
-    public String getHash() {
-        return hash;
+    public String getID() {
+        return id;
     }
 
     /**
-     * @return <code>true</code> if the value of the hash column in this line is
+     * @return <code>true</code> if the value of the id column in this line is
      *         not <code>null</code>
      */
-    public boolean hasHash() {
-        return hash != null;
+    public boolean hasID() {
+        return id != null;
     }
 
     /**

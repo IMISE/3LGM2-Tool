@@ -59,11 +59,11 @@ public class TemplateBrowserPanel extends JPanel implements PropertyChangeListen
      * @param selectionSource
      */
     public void updateSelection(final GraphDocument selectionSource) {
-        selectElementsWithSameHashAndInstaniationMasterElements(selectionSource);
+        selectElementsWithSameIDAndInstaniationMasterElements(selectionSource);
     }
 
     /**
-     * Selectes all elements in the templates with the same hashStrings like the
+     * Selectes all elements in the templates with the same IDs like the
      * selected elements in the given {@link GraphDocument}. Additionally all
      * instanciation master elements will be selected which are the same (same
      * id) like the master element of a selected instanciation instance element
@@ -73,7 +73,7 @@ public class TemplateBrowserPanel extends JPanel implements PropertyChangeListen
      *
      * @param source
      */
-    private void selectElementsWithSameHashAndInstaniationMasterElements(final GraphDocument source) {
+    private void selectElementsWithSameIDAndInstaniationMasterElements(final GraphDocument source) {
         Collection<GDCollection> displayedTemplateModels = tree.getDisplayedTemplates();
         Collection<GraphDocument> displayedTemplates = new ArrayList<>(displayedTemplateModels.size());
         for (GDCollection template : displayedTemplateModels) {
@@ -103,13 +103,13 @@ public class TemplateBrowserPanel extends JPanel implements PropertyChangeListen
     }
 
     /**
+     * @param templates
      * @param me
-     * @param elementHash
      */
     private void selectSameElementInTemplates(final Collection<GraphDocument> templates, final ModelElement me) {
-        String elementHash = me.getHashString();
+        String elementID = me.getID();
         for (GraphDocument template : templates) {
-            template.addToSelection(elementHash, STANDARD_PID);
+            template.addToSelection(elementID, STANDARD_PID);
         }
     }
 

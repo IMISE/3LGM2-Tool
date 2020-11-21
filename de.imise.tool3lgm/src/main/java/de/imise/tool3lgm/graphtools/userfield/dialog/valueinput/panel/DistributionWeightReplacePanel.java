@@ -243,13 +243,13 @@ public class DistributionWeightReplacePanel extends AbstractUserFieldEditorPanel
             for (int i = 0; i < rowIdentifiers.size(); i++) {
                 // Das ModelElement in der i-ten Zeile
                 ModelElement rowElement = (ModelElement) rowIdentifiers.elementAt(i).getObject();
-                String rowElementHash = rowElement.getHashString();
+                String rowElementID = rowElement.getID();
                 for (int j = 0; j < columnIdentifiers.size(); j++) {
                     NamedObjectContainer<UserField> noc = (NamedObjectContainer<UserField>) tableModel.getValueAt(i, j);
                     UserField replaceUserField = noc.getObject();
                     // Das UserField in der j-ten Spalte
                     UserField columnUserField = (UserField) columnIdentifiers.elementAt(j).getObject();
-                    setReplacement(doc, rowElementHash, columnUserField, replaceUserField);
+                    setReplacement(doc, rowElementID, columnUserField, replaceUserField);
                 }
             }
         }
@@ -264,45 +264,45 @@ public class DistributionWeightReplacePanel extends AbstractUserFieldEditorPanel
      * Setzt über das GraphDocument im Replacer ein neues Replacement
      *
      * @param doc
-     * @param rowElementHash
+     * @param rowElementID
      * @param columnUserField
      * @param replaceUserField
      */
-    private void setReplacement(final GraphDocument doc, final String rowElementHash, final UserField columnUserField, final UserField replaceUserField) {
+    private void setReplacement(final GraphDocument doc, final String rowElementID, final UserField columnUserField, final UserField replaceUserField) {
         int pid = dialog.getTransactionID();
         WeightReplacer replacer = doc.getCollection().getUserFieldDefinitions().getWeightReplacer();
         //wenn es NICHT das Gleichverteilungs-UserField ist, das ersetzt werden soll
         if (columnUserField != null) {
-            String columnUserFieldHash = columnUserField.getHashCode();
+            String columnUserFieldID = columnUserField.getID();
             if (replaceUserField == null) { // es soll durch die Gleichverteilung ersetzt werden
-                doc.setUserFieldWeightReplacement(rowElementHash, columnUserFieldHash, null, pid);
+                doc.setUserFieldWeightReplacement(rowElementID, columnUserFieldID, null, pid);
             } else { //es soll durch ein anderes UserField ersetzt bzw. gelöscht werden
-                String userFieldHashReplacement = replaceUserField.getHashCode();
-                String oldReplacement = replacer.getReplacement(rowElementHash, columnUserFieldHash);
+                String userFieldIDReplacement = replaceUserField.getID();
+                String oldReplacement = replacer.getReplacement(rowElementID, columnUserFieldID);
                 //wenn tatsächlich einer Wert übergeben wurde
                 //FAll 1: Es ist kein alter Wert gesetzt und es soll wieder der Leerwert gesetzt werden
-                boolean setOldValue1 = oldReplacement == null && columnUserFieldHash.equals(userFieldHashReplacement);
+                boolean setOldValue1 = oldReplacement == null && columnUserFieldID.equals(userFieldIDReplacement);
                 //Fall 2: es ist ein alter Wert gesetzt und es soll derselbe Wert nochmal gesetzt werden
-                boolean setOldvalue2 = oldReplacement != null && oldReplacement.equals(userFieldHashReplacement);
+                boolean setOldvalue2 = oldReplacement != null && oldReplacement.equals(userFieldIDReplacement);
                 if (!setOldValue1 && !setOldvalue2) {
-                    //wenn columnUserFieldHash == userFieldHashReplacement sein sollte, dann wird die Ersetzung gelöscht
+                    //wenn columnUserFieldID == userFieldIDReplacement sein sollte, dann wird die Ersetzung gelöscht
                     //wenn die ungleich sind, wird die Ersetzung gesetzt
-                    doc.setUserFieldWeightReplacement(rowElementHash, columnUserFieldHash, userFieldHashReplacement, pid);
+                    doc.setUserFieldWeightReplacement(rowElementID, columnUserFieldID, userFieldIDReplacement, pid);
                 }
             }
         } else { //das Gleichverteilungs-UserField soll ersetzt werden
             String selectedEdgeClassName = edgeClassBoxSelection.getSimpleName();
-            String replaceUserFieldHash = replaceUserField == null ? null : replaceUserField.getHashCode();
-            String oldReplacement = replacer.getUniformDistributionReplacement(rowElementHash, edgeClassBoxSelection);
+            String replaceUserFieldID = replaceUserField == null ? null : replaceUserField.getID();
+            String oldReplacement = replacer.getUniformDistributionReplacement(rowElementID, edgeClassBoxSelection);
             //wenn tatsächlich einer Wert übergeben wurde
             //FAll 1: Es ist kein alter Wert gesetzt und es soll wieder der Leerwert gesetzt werden (beide null)
-            boolean setOldValue1 = oldReplacement == replaceUserFieldHash;
+            boolean setOldValue1 = oldReplacement == replaceUserFieldID;
             //Fall 2: es ist ein alter Wert gesetzt und es soll derselbe Wert nochmal gesetzt werden
-            boolean setOldValue2 = oldReplacement != null && oldReplacement.equals(replaceUserFieldHash);
+            boolean setOldValue2 = oldReplacement != null && oldReplacement.equals(replaceUserFieldID);
             if (!setOldValue1 && !setOldValue2) {
-                //wenn replaceUserFieldHash == null sein sollte wird eine vorhandene Ersetzung gelöscht
-                //wenn es nicht null ist, dann wird der neue Ersetzungshash gesetzt
-                doc.setUserFieldWeightReplacement(rowElementHash, selectedEdgeClassName, replaceUserFieldHash, pid);
+                //wenn replaceUserFieldID == null sein sollte wird eine vorhandene Ersetzung gelöscht
+                //wenn es nicht null ist, dann wird der neue Ersetzungs-ID gesetzt
+                doc.setUserFieldWeightReplacement(rowElementID, selectedEdgeClassName, replaceUserFieldID, pid);
             }
         }
     }

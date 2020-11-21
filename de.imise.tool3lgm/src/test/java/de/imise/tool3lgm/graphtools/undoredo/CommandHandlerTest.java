@@ -9,7 +9,7 @@ import java.util.List;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
-public class CommandParserTest {
+public class CommandHandlerTest {
 
     final String cmd = "C";
     final String arg0 = "A";
@@ -94,7 +94,7 @@ public class CommandParserTest {
 
     private void realTest(final String commandLine, final String... expectedArgs) {
         List<String> args = new ArrayList<>();
-        String commandName = CommandParser.parseCommandLine(commandLine, args);
+        String commandName = CommandHandler.parseCommandLine(commandLine, args);
         assertTrue(commandLine.startsWith(commandName));
         assertTrue(commandLine.equals(commandName) || commandLine.charAt(commandName.length()) == ' ');
         Assert.assertEquals(args, Arrays.asList(expectedArgs));

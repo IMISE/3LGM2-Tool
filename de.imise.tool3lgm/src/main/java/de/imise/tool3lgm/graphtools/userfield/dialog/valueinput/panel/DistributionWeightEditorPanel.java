@@ -282,13 +282,13 @@ public class DistributionWeightEditorPanel extends AbstractElementTypeUserFieldE
                     int pid = dialog.getTransactionID();
                     if (newValue.equals(UserField.EMPTY_STRING)) {
                         // Neuen Wert setzen
-                        doc.setUserFieldValue(edge.getHashString(), selectedWeigth.getHashCode(), newValue, pid);
+                        doc.setUserFieldValue(edge.getID(), selectedWeigth.getID(), newValue, pid);
                     } else {
                         try {
                             //Warum soll man hier keine falschen Werte setzen dürfen, die dann bei Berechnungen zu NUMBER_FORMAT_ERRORS werden
                             new BigDecimal(newValue);
                             // Neuen Wert setzen
-                            doc.setUserFieldValue(edge.getHashString(), selectedWeigth.getHashCode(), newValue, pid);
+                            doc.setUserFieldValue(edge.getID(), selectedWeigth.getID(), newValue, pid);
                         } catch (NumberFormatException nfe) {
                             continue;
                         }

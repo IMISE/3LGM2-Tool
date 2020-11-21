@@ -18,11 +18,11 @@ public class WeightReplaceTableCell extends UserFieldActivatedTableCell {
 
     private final Class<? extends Edge> edgeClass;
 
-    private final String modelElementHash;
+    private final String elementID;
 
     public WeightReplaceTableCell(final NamedObjectContainer<UserField> noc, final UserFieldTable table, final ModelElement me, final Class<? extends Edge> edgeClass, final int column) {
         super(noc, table, column);
-        modelElementHash = me.getHashString();
+        elementID = me.getID();
         this.edgeClass = edgeClass;
     }
 
@@ -52,18 +52,18 @@ public class WeightReplaceTableCell extends UserFieldActivatedTableCell {
             //Item ggf. selektieren
             UserField userField = value.getObject();
             if (colUserField == null) {
-                String replaceHash = replacer.getUniformDistributionReplacement(modelElementHash, edgeClass);
-                if (replaceHash == null && userField == null) {
+                String replaceID = replacer.getUniformDistributionReplacement(elementID, edgeClass);
+                if (replaceID == null && userField == null) {
                     component.setSelectedItem(replaceValue);
-                } else if (userField != null && userField.getHashCode().equals(replaceHash)) {
+                } else if (userField != null && userField.getID().equals(replaceID)) {
                     component.setSelectedItem(replaceValue);
                 }
             } else {
-                String userFieldHashToReplace = colUserField.getHashCode();
-                String replaceHash = replacer.getReplacement(modelElementHash, userFieldHashToReplace);
-                if (replaceHash == null && colUserField.equals(userField)) {
+                String userFieldIDToReplace = colUserField.getID();
+                String replaceID = replacer.getReplacement(elementID, userFieldIDToReplace);
+                if (replaceID == null && colUserField.equals(userField)) {
                     component.setSelectedItem(replaceValue);
-                } else if (userField != null && userField.getHashCode().equals(replaceHash)) {
+                } else if (userField != null && userField.getID().equals(replaceID)) {
                     component.setSelectedItem(replaceValue);
                 }
             }

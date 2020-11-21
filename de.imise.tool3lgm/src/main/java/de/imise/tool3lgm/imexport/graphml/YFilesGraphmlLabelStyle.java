@@ -45,7 +45,7 @@ public class YFilesGraphmlLabelStyle {
     }
 
     public YFilesGraphmlLabelStyle(final NodeContainer nc) {
-        labelLayout = nc.getIconString() == null ? "{x:Static y:InteriorStretchLabelModel.Center}" : "{x:Static y:ExteriorLabelModel.South}";
+        labelLayout = nc.getIconID() == null ? "{x:Static y:InteriorStretchLabelModel.Center}" : "{x:Static y:ExteriorLabelModel.South}";
         if (!nc.hideText()) {
             mainLabelStyle = null;
             TextPositionVertical valignEnum = nc.getTextPositionVertical();

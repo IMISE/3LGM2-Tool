@@ -139,22 +139,22 @@ public final class GDCollectionImExportHandler {
         /* ModellElemente, die kopiert werden müssen */
         List<ModelElement> elements = new ArrayList<>(size);
 
-        /* HashStrings aller Icons, die kopiert werden müssen */
-        Set<String> bitmaps = new HashSet<>();
+        /* IDs aller Icons, die kopiert werden müssen */
+        Set<String> iconIDs = new HashSet<>();
 
-        bitmaps = new HashSet<>(sourceGDColl.getIconTable().size());
+        iconIDs = new HashSet<>(sourceGDColl.getIconTable().size());
         Set<UserField> userFields = new HashSet<>();
 
         CopyDependencyResolver copyDependencyResolver = gdcoll.getCopyDependencyResolver();
-        copyDependencyResolver.resolveCopyDependencies(importSzenarios, elements, bitmaps, userFields);
+        copyDependencyResolver.resolveCopyDependencies(importSzenarios, elements, iconIDs, userFields);
         UserFieldDefinitions userFieldDefinitions = gdcoll.getUserFieldDefinitions();
         for (UserField uf : userFields) {
             userFieldDefinitions.add(uf);
         }
 
         Map<String, byte[]> iconTable = gdcoll.getIconTable();
-        for (String bmHash : bitmaps) {
-            iconTable.put(bmHash, sourceGDColl.getIconTable().get(bmHash));
+        for (String iconID : iconIDs) {
+            iconTable.put(iconID, sourceGDColl.getIconTable().get(iconID));
         }
 
         LGMGraphDocument mainDoc = gdcoll.getMainDoc();
@@ -167,12 +167,12 @@ public final class GDCollectionImExportHandler {
             if (!(importDoc instanceof Szenario)) {
                 continue;
             }
-            Szenario newSzenario = gdcoll.createSzenario(importDoc.getTitle() + " (import)", false, importDoc.getDescription(), importDoc.getHashString(), false, TransactionManager.STANDARD_PID);
+            Szenario newSzenario = gdcoll.createSzenario(importDoc.getTitle() + " (import)", false, importDoc.getDescription(), importDoc.getID(), false, TransactionManager.STANDARD_PID);
             for (int i = 0; i < ModelConstants.LAYERS.length; i++) {
                 LayerContainer importLayerContainer = importDoc.getLayer(ModelConstants.LAYERS[i]);
                 newSzenario.getLayer(ModelConstants.LAYERS[i]).set3LGMLayout(importLayerContainer.get3LGMLayout());
                 for (NodeContainer importKC : importLayerContainer.getGraphNodeContainers()) {
-                    ModelElement element = mainDoc.findNodeCoded(importKC.getElement().getHashString());
+                    ModelElement element = mainDoc.findNodeCoded(importKC.getElement().getID());
                     ElementContainer container = element.createContainer(newSzenario);
                     container.set3LGMLayout(importKC.get3LGMLayout());
                     container.setE3LGMLayout(importKC.getE3LGMLayout());
@@ -183,11 +183,11 @@ public final class GDCollectionImExportHandler {
                 }
 
                 for (EdgeContainer importKC : importLayerContainer.getEdgeContainers()) {
-                    ModelElement element = mainDoc.findEdgeCoded(importKC.getElement().getHashString());
+                    ModelElement element = mainDoc.findEdgeCoded(importKC.getElement().getID());
                     if (element == null) {
                         continue;
                     }
-                    ((Edge) element).decodeHashStrings(mainDoc);
+                    ((Edge) element).decodeIDs(mainDoc);
                     ElementContainer container = element.createContainer(newSzenario);
                     container.set3LGMLayout(importKC.get3LGMLayout());
                     container.setE3LGMLayout(importKC.getE3LGMLayout());
@@ -198,8 +198,8 @@ public final class GDCollectionImExportHandler {
                 }
 
                 for (BendpointContainer importKC : importLayerContainer.getBendpointContainers()) {
-                    ModelElement element = mainDoc.findBendpointCoded(importKC.getElement().getHashString());
-                    EdgeContainer kc = newSzenario.findEdgeContainerCoded(((Bendpoint) element).getEdgeHash());
+                    ModelElement element = mainDoc.findBendpointCoded(importKC.getElement().getID());
+                    EdgeContainer kc = newSzenario.findEdgeContainerCoded(((Bendpoint) element).getEdgeID());
                     if (kc == null) {
                         continue;
                     }
@@ -243,14 +243,14 @@ public final class GDCollectionImExportHandler {
             }
             // hastStrings aller ModellElemente, die kopiert werden müssen
             List<ModelElement> elements = new ArrayList<>(size);
-            // HashStrings aller Icons, die kopiert werden müssen
+            // IDs aller Icons, die kopiert werden müssen
             Map<String, byte[]> iconTable = gdcoll.getIconTable();
-            Set<String> iconHashes = new HashSet<>(iconTable.size());
-            // HashStrings aller benutzdefinierten Eigenschaftsfelder, die mit kopiert werden müssen
+            Set<String> iconIDs = new HashSet<>(iconTable.size());
+            // IDs aller benutzdefinierten Eigenschaftsfelder, die mit kopiert werden müssen
             Set<UserField> userFields = new HashSet<>();
             CopyDependencyResolver copyDependencyResolver = gdcoll.getCopyDependencyResolver();
-            copyDependencyResolver.resolveCopyDependencies(szenarios, elements, iconHashes, userFields);
-            ToolXMLWriter.writeExport(gdcoll, file, szenarios, elements, userFields, iconHashes);
+            copyDependencyResolver.resolveCopyDependencies(szenarios, elements, iconIDs, userFields);
+            ToolXMLWriter.writeExport(gdcoll, file, szenarios, elements, userFields, iconIDs);
         }
     }
 

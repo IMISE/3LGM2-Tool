@@ -312,7 +312,7 @@ public class OperatorInputPanel extends JPanel implements ActionListener {
         sb.append(" ( ");
         sb.append(edgeClass.getSimpleName());
         sb.append(" | ");
-        sb.append(tmpUserField.getHashCode());
+        sb.append(tmpUserField.getID());
 
         //die vgBox ist nur bei TWSUM nicht null
         if (vgBox != null) {
@@ -320,7 +320,7 @@ public class OperatorInputPanel extends JPanel implements ActionListener {
             if (selectedWeight != null && selectedWeight != UNIFORMLY_DISTRIBUTED) {
                 UserField uf = vgBox.getSelectedObject();
                 sb.append(" | ");
-                sb.append(uf.getHashCode());
+                sb.append(uf.getID());
             }
         }
 

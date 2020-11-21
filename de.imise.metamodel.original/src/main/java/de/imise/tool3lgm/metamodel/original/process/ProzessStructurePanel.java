@@ -595,7 +595,7 @@ public class ProzessStructurePanel extends PathConnectionLeafPanel implements Tr
     //                                if (node.getUserObject() instanceof NodeContainer && ((NodeContainer) node.getUserObject()).getElement() instanceof Aufgabe) {
     //                                    int selRow = ltree.getRowForPath(selPath);
     //                                    int index = lmodel.getIndexOfChild(lroot, node);
-    //                                    doc.exec("MODEL_ACTION_LINK " + "null" + " " + "null" + " " + modelElement.getHashString() + " " + knot.getHashString() + " " + index, dialog.getTransactionID());
+    //                                    doc.exec("MODEL_ACTION_LINK " + "null" + " " + "null" + " " + modelElement.getID() + " " + knot.getID() + " " + index, dialog.getTransactionID());
     //                                    // ((NodeContainer)modelElement.getContainer(doc)).addSpecialInfoTarget(index,knot);
     //                                    selRow++;
     //                                    while (ltree.getPathForRow(selRow).getPathCount() != 2) {
@@ -607,7 +607,7 @@ public class ProzessStructurePanel extends PathConnectionLeafPanel implements Tr
     //                            //wenn links nichts selektiert war -> einfach hinten anhaengen
     //                            if (nothingSelected) {
     //                                //es wird eine neue ProzessKante angelegt, aber der rechte Baum braucht nicht aktualisiert werden
-    //                                doc.exec("MODEL_ACTION_LINK " + "null" + " " + "null" + " " + modelElement.getHashString() + " " + knot.getHashString() + " " + modelElement.countConnections(), dialog.getTransactionID());
+    //                                doc.exec("MODEL_ACTION_LINK " + "null" + " " + "null" + " " + modelElement.getID() + " " + knot.getID() + " " + modelElement.countConnections(), dialog.getTransactionID());
     //                                ltree.scrollRowToVisible(ltree.getRowCount() - 1);
     //                            }
     //                        }
@@ -628,7 +628,7 @@ public class ProzessStructurePanel extends PathConnectionLeafPanel implements Tr
     //                    if (!(knot instanceof String) && ((ElementContainer) knot).getElement() instanceof Aufgabe) {
     //                        //es wird eine neue ProzessKante angelegt, aber der rechte Baum braucht nicht aktualisiert werden
     //                        int index = lmodel.getIndexOfChild(lroot, node);
-    //                        doc.exec("MODEL_ACTION_UNLINK " + modelElement.getHashString() + " " + ((ElementContainer) knot).getHashString() + " " + index, dialog.getTransactionID());
+    //                        doc.exec("MODEL_ACTION_UNLINK " + modelElement.getID() + " " + ((ElementContainer) knot).getID() + " " + index, dialog.getTransactionID());
     //                    }
     //                    //####################################################################################################
     //                    //Dies hier evtl. weglassen, da es auf nem lahmen Rechner und nem großen Modell rel. lange dauern kann
@@ -752,7 +752,7 @@ public class ProzessStructurePanel extends PathConnectionLeafPanel implements Tr
     //            //dass alle Kinder von lroot Blätter sind und lroot selbst nicht angezeigt wird immer automatisch ist.
     //            for (int i = ltree.getRowCount() - 1; i >= 0; i--) {
     //                NodeContainer knotCont = (NodeContainer) ((LGMTreeNode) lroot.getChildAt(i)).getUserObject();
-    //                doc.exec("MODEL_ACTION_UNLINK " + prozess.getHashString() + " " + knotCont.getHashString(), dialog.getTransactionID());
+    //                doc.exec("MODEL_ACTION_UNLINK " + prozess.getID() + " " + knotCont.getID(), dialog.getTransactionID());
     //                lroot.remove(i);
     //            }
     //            return;

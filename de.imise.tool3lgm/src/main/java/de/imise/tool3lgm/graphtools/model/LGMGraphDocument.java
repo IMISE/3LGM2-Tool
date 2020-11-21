@@ -4,6 +4,8 @@ import static de.imise.tool3lgm.Static.getMainFrame;
 import static de.imise.tool3lgm.graphtools.dialog.OverwriteDialog.OverwriteOption.IGNORE;
 import static de.imise.tool3lgm.graphtools.dialog.OverwriteDialog.OverwriteOption.JOIN;
 import static de.imise.tool3lgm.graphtools.dialog.OverwriteDialog.OverwriteOption.OVERWRITE;
+import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_DELETE_FROM_MODEL;
+import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_PASTE;
 import static de.imise.tool3lgm.graphtools.model.LGMChangeListener.LGMChangeType.DATA_CHANGED;
 import static de.imise.tool3lgm.graphtools.model.LGMChangeListener.LGMChangeType.ELEMENT_GRAPHICS_CHANGED;
 import static de.imise.tool3lgm.graphtools.model.LGMChangeListener.LGMChangeType.SELECTION_CHANGED;
@@ -218,8 +220,8 @@ public class LGMGraphDocument extends GraphDocument {
         int pid = TransactionManager.STANDARD_PID;
         try {
             start_transaction(pid);
-            addRedoCommand(GDCommands.MODEL_ACTION_PASTE + " ", pid);
-            addUndoCommand(GDCommands.MODEL_ACTION_DELETE_FROM_MODEL + " ", pid);
+            addRedo(pid, MODEL_ACTION_PASTE);
+            addUndo(pid, MODEL_ACTION_DELETE_FROM_MODEL);
             deselectAll(true);
             getCollection().loadClipboard(file);
         } catch (Exception e) {
@@ -240,13 +242,14 @@ public class LGMGraphDocument extends GraphDocument {
      * @param istream
      */
     public synchronized void pasteInputStream(final InputStream istream) {
-        start_transaction(STANDARD_PID);
-        addUndoCommand(GDCommands.MODEL_ACTION_DELETE_FROM_MODEL + " ", STANDARD_PID);
+        int pid = TransactionManager.STANDARD_PID;
+        start_transaction(pid);
+        addUndo(pid, MODEL_ACTION_DELETE_FROM_MODEL);
         deselectAll(true);
         try {
             getCollection().loadFile(istream);
         } catch (Exception e) {
-            undo(STANDARD_PID);
+            undo(pid);
             Log.show(Log.ERROR, getResString("FehlerAllgemein"), e);
             Object[] buttons = new Object[] {
                     getResString("ok")
@@ -256,8 +259,8 @@ public class LGMGraphDocument extends GraphDocument {
             return;
         }
 
-        finish_transaction(STANDARD_PID);
-        distributeEvent(DATA_CHANGED, STANDARD_PID);
+        finish_transaction(pid);
+        distributeEvent(DATA_CHANGED, pid);
     }
 
     /**
@@ -278,8 +281,8 @@ public class LGMGraphDocument extends GraphDocument {
             for (Edge edge : me.getEdges()) {
                 if (!sourceElements.contains(edge)) {
                     ModelElement other = edge.getOther(me);
-                    String otherHash = other.getHashString();
-                    ModelElement destElement = targetMainDoc.findElementCoded(otherHash);
+                    String otherID = other.getID();
+                    ModelElement destElement = targetMainDoc.findElementCoded(otherID);
                     if (destElement != null) {
                         sourceElements.add(edge);
                     }
@@ -372,8 +375,8 @@ public class LGMGraphDocument extends GraphDocument {
                     sourceContainer = sourceElement.getContainer(sourceMainDoc);
                 }
 
-                String sourceHash = sourceElement.getHashString();
-                ModelElement targetElement = targetMainDoc.findElementCoded(sourceHash);
+                String sourceID = sourceElement.getID();
+                ModelElement targetElement = targetMainDoc.findElementCoded(sourceID);
                 if (targetElement != null) {
                     if (!answer.applyToAll) {
                         sourceDoc.select(sourceContainer, STANDARD_PID);
@@ -393,12 +396,12 @@ public class LGMGraphDocument extends GraphDocument {
                     } else if (answer.overwriteOption == IGNORE) {
                         continue;
                     }
-                    //wenn der Hash des zu kopierenden Elementes noch nicht im Modell vorkommt
+                    //wenn die ID des zu kopierenden Elementes noch nicht im Modell vorkommt
                 } else {
                     //first create the element in the mainDoc
                     ElementContainer targetMainContainer = sourceContainer.clone(true, targetMainDoc);
                     targetElement = targetMainContainer.getElement();
-                    targetElement.setHashString(sourceHash);
+                    targetElement.setID(sourceID);
                     targetMainContainer.setVisible(true);
                     targetMainContainer.setExpanded(true);
                     targetMainContainer.setHighLight(false);
@@ -456,7 +459,7 @@ public class LGMGraphDocument extends GraphDocument {
             List<EdgeContainer> edgeConts = new ArrayList<>();
             while (!bendpoints.isEmpty()) {
                 BendpointContainer kp = bendpoints.remove(0);
-                BendpointContainer oldKP = sourceDoc.findBendpointContainerCoded(kp.getHashString());
+                BendpointContainer oldKP = sourceDoc.findBendpointContainerCoded(kp.getID());
                 //der Container kann null sein, wenn die zu kopierende Kante auch noch mind. einen Knickpunkt in einem
                 //anderen Teilmodell hat, denn es werden beim resolven der CopyDependencies alle Knickpunkte der Kante aus
                 //allen Teilmodellen eingesammelt
@@ -464,13 +467,13 @@ public class LGMGraphDocument extends GraphDocument {
                     continue;
                 }
                 Bendpoint bendpoint = kp.getBendpoint();
-                String edgeHash = bendpoint.getEdgeHash();
-                EdgeContainer kC = targetDoc.findEdgeContainerCoded(edgeHash);
+                String edgeID = bendpoint.getEdgeID();
+                EdgeContainer kC = targetDoc.findEdgeContainerCoded(edgeID);
 
                 Bendpoint oldBendpoint = oldKP.getBendpoint();
                 EdgeContainer oldKC = oldBendpoint.getOwner();
                 if (oldKC == null) {
-                    oldKC = sourceDoc.findEdgeContainerCoded(kC.getHashString());
+                    oldKC = sourceDoc.findEdgeContainerCoded(kC.getID());
                 }
                 if (kC != null) {
                     if (!edges.contains(kC.getElement())) {
@@ -542,10 +545,10 @@ public class LGMGraphDocument extends GraphDocument {
             return;
         }
 
-        String me2hash = me2.getHashString();
-        ModelElement me3 = findElementCoded(me2hash);
-        boolean overwriteHashString = me3 == null || me3 == me2;
-        if (me1.join(me2, overwriteHashString, joinNameDescriptionAndUserfields) == null) {
+        String me2ID = me2.getID();
+        ModelElement me3 = findElementCoded(me2ID);
+        boolean overwriteID = me3 == null || me3 == me2;
+        if (me1.join(me2, overwriteID, joinNameDescriptionAndUserfields) == null) {
             return;
         }
         me1.refreshText();
@@ -554,7 +557,7 @@ public class LGMGraphDocument extends GraphDocument {
             Edge oldEdge;
             /* vorwaerts */
             if (edge.getStart().equals(me2)) {
-                me3 = findElementCoded(edge.getEnd().getHashString());
+                me3 = findElementCoded(edge.getEnd().getID());
                 if (me3 == null || me3 == me1) {
                     continue;
                 }
@@ -568,7 +571,7 @@ public class LGMGraphDocument extends GraphDocument {
                 edge.setEndAndInsert(me3);
                 /* rueckwaerts */
             } else if (edge.getEnd().equals(me2)) {
-                me3 = findElementCoded(edge.getStart().getHashString());
+                me3 = findElementCoded(edge.getStart().getID());
                 if (me3 == null || me3 == me1) {
                     continue;
                 }
@@ -643,8 +646,8 @@ public class LGMGraphDocument extends GraphDocument {
             ElementContainer sourceElementContainer = sourceDoc.getElementContainer(master);
             copyToModel(sourceElementContainer, targetDoc);
         }
-        String masterHashString = master.getHashString();
-        master = targetDoc.findElementCoded(masterHashString);
+        String masterID = master.getID();
+        master = targetDoc.findElementCoded(masterID);
 
         //Hauptkante anlegen
         Class<? extends ModelElement> class2Create = Edge.getEndClass(instanciationEdgeClass);
