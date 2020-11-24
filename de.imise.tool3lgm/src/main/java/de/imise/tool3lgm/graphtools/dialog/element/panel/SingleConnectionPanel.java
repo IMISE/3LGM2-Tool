@@ -135,7 +135,7 @@ public class SingleConnectionPanel extends AbstractPathConnectionPanel {
             unlinkMenuItem = null;
             deleteConnectedMenuItem = null;
         } else {
-            connectedElementsBox = new AlphabeticalComboBox();
+            connectedElementsBox = new AlphabeticalComboBox<>();
             itemListener = new LGMItemListener(getItemStateChangedAction(this));
             connectedElementName = null;
             connectedElementViewComponent = connectedElementsBox;
@@ -345,7 +345,6 @@ public class SingleConnectionPanel extends AbstractPathConnectionPanel {
             GDCollection gdcoll = getCollection();
             //prevent automatically deleting the dialog element and closing the dialog
             //if the removing of the connection causes an inconsistency in the dialog element
-            gdcoll.setIgnoreInconsistenciesOnDeleteEgdesMode(true);
             Class<? extends Edge> lastEdgeInPath = getLastEdgeClassInPath();
             Direction lastDirectionInPath = getLastDirectionInPath();
             for (ElementContainer ec : searchElementConnectedContainer) {
@@ -359,7 +358,6 @@ public class SingleConnectionPanel extends AbstractPathConnectionPanel {
                     }
                 }
             }
-            gdcoll.setIgnoreInconsistenciesOnDeleteEgdesMode(false);
         }
     }
 
