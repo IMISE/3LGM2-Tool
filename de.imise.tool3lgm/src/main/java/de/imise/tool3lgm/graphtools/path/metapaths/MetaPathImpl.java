@@ -133,18 +133,26 @@ abstract class MetaPathImpl extends BasicMetaPathImpl implements MetaPath {
      */
     @Override
     public final boolean isFirstPathElementDependent() {
-        ElementaryMetaPath firstElementaryMetaPathInPath = getFirstElementaryMetaPath();
-        if (firstElementaryMetaPathInPath == null) {
+        List<ElementaryMetaPath> elementaryMetaPaths = getElementaryMetaPaths();
+        //wenn der Pfad keine einfache Liste von Elementarpfaden ist, dann wird davon ausgegangen, dass mehrere Verbindungen mgl. sind
+        if (elementaryMetaPaths.isEmpty()) {
             return false;
         }
-        //Verbindungen, die durch InstanciationEgdes bestehen, kann man nicht einfach lösen/ändern und gelten als existenznotwendig
-        Class<? extends Edge> edgeClass = firstElementaryMetaPathInPath.getEdgeClass();
-        if (InstanciationEdge.class.isAssignableFrom(edgeClass)) {
-            return true;
+        for (ElementaryMetaPath elementaryMetaPath : elementaryMetaPaths) {
+            //min cardinality == 0 -> dependent
+            EdgeCardinality forwardCardinality = elementaryMetaPath.getForwardCardinality();
+            int forwardMinCardinality = forwardCardinality.min();
+            if (forwardMinCardinality > 0) {
+                continue;
+            }
+            //InstanciationEgde -> dependent
+            Class<? extends Edge> edgeClass = elementaryMetaPath.getEdgeClass();
+            if (InstanciationEdge.class.isAssignableFrom(edgeClass)) {
+                continue;
+            }
+            return false;
         }
-        EdgeCardinality forwardCardinality = firstElementaryMetaPathInPath.getForwardCardinality();
-        int minCardinality = forwardCardinality.min();
-        return minCardinality > 0;
+        return true;
     }
 
     /**
@@ -157,18 +165,11 @@ abstract class MetaPathImpl extends BasicMetaPathImpl implements MetaPath {
      */
     @Override
     public final boolean isLastPathElementDependent() {
-        ElementaryMetaPath lastElementaryMetaPathInPath = getLastElementaryMetaPath();
-        if (lastElementaryMetaPathInPath == null) {
+        MetaPath otherDirection = getOtherDirection();
+        if (otherDirection == null) {
             return false;
         }
-        //Verbindungen, die durch InstanciationEgdes bestehen, kann man nicht einfach lösen/ändern und gelten als existenznotwendig
-        Class<? extends Edge> edgeClass = lastElementaryMetaPathInPath.getEdgeClass();
-        if (InstanciationEdge.class.isAssignableFrom(edgeClass)) {
-            return true;
-        }
-        EdgeCardinality backwardCardinality = lastElementaryMetaPathInPath.getBackwardCardinality();
-        int minCardinality = backwardCardinality.min();
-        return minCardinality > 0;
+        return otherDirection.isFirstPathElementDependent();
     }
 
     /**
