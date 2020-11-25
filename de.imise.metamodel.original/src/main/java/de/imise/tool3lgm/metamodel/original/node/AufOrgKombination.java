@@ -27,8 +27,8 @@ public class AufOrgKombination extends Node {
     @Override
     public ElementPropertyDialog createPropertyDialog() {
         ElementPropertyDialog dialog = super.createPropertyDialog();
+        dialog.addDescripDescriptedPanel(AufAufOrgVerbindung.class);
         dialog.addPathConnectionPanel(OrgAufOrgVerbindung.class);
-        dialog.addPathConnectionPanel(AufAufOrgVerbindung.class);
         return dialog;
     }
 
