@@ -1,6 +1,7 @@
 package de.imise.util.swing.component;
 
 import java.awt.Component;
+import java.awt.event.ItemEvent;
 import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
@@ -410,18 +411,37 @@ public class AlphabeticalComboBox<E> extends JComboBox<NamedObjectContainer<E>> 
     }
 
     /**
-     * Add to the list <code>NamedObjectContainer</code> with
-     * <code>anObject</code> as object and the display string
-     * <code>displayName</code>. The display name is indented
-     * by <code>shift</code> positions.
+     * Adds an {@link NamedObjectContainer} with a <code>null</code> object and
+     * the given dipslay string.
      *
-     * @param anObject
-     *            the object to be added
      * @param displayName
-     *            the display name of the object in the list
-     * @param shift
-     *            Number of spaces to be displayed before the
-     *            list entry
+     * @return
+     */
+    public NamedObjectContainer<E> addString(final String displayName) {
+        return addObject(null, displayName);
+    }
+
+    /**
+     * Creates an item with the given display name and a <code>null</code>
+     * object. This item will not be added to the list. It only meets the
+     * requirements to be added.
+     *
+     * @param displayName
+     * @return
+     */
+    public NamedObjectContainer<E> createStringItem(final String displayName) {
+        return new NamedObjectContainer<>(null, displayName);
+    }
+
+    /**
+     * Adds to the list <code>NamedObjectContainer</code> with
+     * <code>anObject</code> as object and the display string
+     * <code>displayName</code>. The display name is indented by
+     * <code>shift</code> positions.
+     *
+     * @param anObject the object to be added
+     * @param displayName the display name of the object in the list
+     * @param shift Number of spaces to be displayed before the list entry
      */
     public NamedObjectContainer<E> addObject(final E anObject, String displayName, final int shift) {
         StringBuilder sb = new StringBuilder(displayName.length() + shift);
@@ -667,6 +687,24 @@ public class AlphabeticalComboBox<E> extends JComboBox<NamedObjectContainer<E>> 
     @Override
     public String toString() {
         return getClass().getName() + items;
+    }
+
+    /**
+     * @param e
+     * @return
+     */
+    @SuppressWarnings("unchecked")
+    public E getObject(final ItemEvent itemEvent) {
+        Object item = itemEvent.getItem();
+        if (item instanceof NamedObjectContainer) {
+            NamedObjectContainer<?> noc = (NamedObjectContainer<?>) item;
+            item = noc.getObject();
+        }
+        try {
+            return (E) item;
+        } catch (Exception e) {
+            return null;
+        }
     }
 
 }
