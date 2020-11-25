@@ -574,6 +574,16 @@ public class PathConnectionPanel extends AbstractExpandablePanel {
      * @param edgeIndexInPath
      */
     protected final void disconnect(final ModelElement startInPath, final ModelElement endInPath, final int edgeIndexInPath) {
+        disconnect(startInPath, endInPath, edgeIndexInPath, false);
+    }
+
+    /**
+     * @param startInPath
+     * @param endInPath
+     * @param edgeIndexInPath
+     * @param ensureConsistency
+     */
+    private final void disconnect(final ModelElement startInPath, final ModelElement endInPath, final int edgeIndexInPath, final boolean ensureConsistency) {
         GDCollection gdcoll = getCollection();
         //das disconnect sollte nur angeboten werden, wenn der Path ceratable ist und dann kommt bei metaPath.getElementaryMetaPaths() auch was sinnvolles zurück
         List<ElementaryMetaPath> elementaryMetaPaths = metaPath.getElementaryMetaPaths();
@@ -581,7 +591,8 @@ public class PathConnectionPanel extends AbstractExpandablePanel {
         int pid = getTransactionID();
         Class<? extends Edge> edgeClass = elementaryMetaPath.getEdgeClass();
         Direction direction = elementaryMetaPath.getDirection();
-        gdcoll.unlink(startInPath, endInPath, edgeClass, direction, pid);
+        ModelElement dialogElement = getModelElement();
+        gdcoll.unlink(startInPath, endInPath, edgeClass, direction, dialogElement, pid);
         //das hier stand mal drin, aber gdcoll.unlink() löscht startInPath auch schon, wenn das es durch das unlink inkonsistent wird
         //        if (!startInPath.isConsistent()) {
         //            gdcoll.deleteElement(startInPath, selDoc, pid);

@@ -960,6 +960,15 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
 
     /**
      * @param me
+     * @param ignoreElementIfIconosistent
+     * @param pid
+     */
+    public final void deleteElement(final ModelElement me, final ModelElement ignoreElementIfIconosistent, final int pid) {
+        deleteElement(me, mainDoc, ignoreElementIfIconosistent, pid);
+    }
+
+    /**
+     * @param me
      * @param doc GraphDocument, das die Transaktion starten und beenden soll,
      *            also dessen Selektion im Falle eines Undo wieder hergestellt
      *            wird. Das Element selbst wird natürlich aus allen Teilmodellen
@@ -967,9 +976,21 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
      * @param pid
      */
     public final void deleteElement(final ModelElement me, final GraphDocument doc, final int pid) {
+        deleteElement(me, doc, null, pid);
+    }
+
+    /**
+     * @param me
+     * @param doc GraphDocument, das die Transaktion starten und beenden soll,
+     *            also dessen Selektion im Falle eines Undo wieder hergestellt
+     *            wird. Das Element selbst wird natürlich aus allen Teilmodellen
+     *            und dem Hauptmodell gelöscht.
+     * @param pid
+     */
+    public final void deleteElement(final ModelElement me, final GraphDocument doc, final ModelElement ignoreElementIfIconosistent, final int pid) {
         List<ModelElement> list = new ArrayList<>();
         list.add(me);
-        deleteElements(list, doc, pid);
+        deleteElements(list, doc, ignoreElementIfIconosistent, pid);
     }
 
     /**
@@ -1014,6 +1035,19 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
      * @param pid
      */
     public final void deleteElements(final List<? extends ModelElement> elementsToDelete, final GraphDocument doc, final int pid) {
+        deleteElements(elementsToDelete, doc, null, pid);
+    }
+
+    /**
+     * @param elementsToDelete
+     * @param doc GraphDocument, das die Transaktion starten und beenden soll,
+     *            also dessen Selektion im Falle eines Undo wieder hergestellt
+     *            wird. Das Element selbst wird natürlich aus allen Teilmodellen
+     *            und dem Hauptmodell gelöscht.
+     * @param ignoreElementIfIconosistent
+     * @param pid
+     */
+    private final void deleteElements(final List<? extends ModelElement> elementsToDelete, final GraphDocument doc, final ModelElement ignoreElementIfIconosistent, final int pid) {
         //das wird die Liste mit allen zu löschenden Elementen. Das sind alle Elemente aus <code>elementsToDelete</code>,
         //alle Kanten dieser Elemente und rekursiv alle von den zu löschenden Elementen abhängigen Elemente (min. Karfinalität=1)
         //sowie deren Kanten
@@ -1056,8 +1090,13 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
                     //wenn die Anzahl der bestehenden Kanten der zu löschenden Art für das verbundene Element gleich
                     //der minimalen Kardinalität für diese Kantenart ist, dann muss das verbundene Element auch gelöscht werden
                     //auf Gleichheit muss getestet werden, weil die Edge ja noch nicht wirklich gelöscht ist und somit mitgezählt wird
+                    //Das Element soll aber nicht gelöscht werden, wenn es als spezieller Parameter ignoreElementIfIconosistent
+                    //übergeben wurde. Damit kann man verhindern, dass wenn man im Dialog eines Elementes, dessen Existenz von einem
+                    //enderen Element abhängt und man die Verbindung zu diesem Element aus dem Dialog des abhängigen Elementes heraus
+                    //schließt, dass sich dann der Dialog des Elementes einfach schlließt, weil das Element inkonsistent geworden ist
+                    //und somit hier gelöscht wurde.
                     Class<? extends Edge> edgeClass = edge.getClass();
-                    if (elem != null && elem.countConnections(edgeClass) <= CoreMetaModel.getMinCardinality(elem.getClass(), edgeClass)) {
+                    if (elem != null && elem != ignoreElementIfIconosistent && elem.countConnections(edgeClass) <= CoreMetaModel.getMinCardinality(elem.getClass(), edgeClass)) {
                         if (!allElementsToDelete.contains(elem)) {
                             allElementsToDelete.add(elem);
                             dependentDeletedElements.add(elem);
@@ -1919,10 +1958,25 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
      * @param pid
      */
     public void unlink(final ModelElement startElement, final ModelElement endElement, final Class<? extends Edge> edgeClass, final Direction direction, final int pid) {
+        unlink(startElement, endElement, edgeClass, direction, null, pid);
+    }
+
+    /**
+     * Löst die Verbindung zwischen Start- und Endelement in der angegebenen
+     * Richtung. Alle anderen unlink()-Funktionen unlinken vorwärts.
+     *
+     * @param startElement
+     * @param endElement
+     * @param edgeClass
+     * @param direction
+     * @param ignoreElementIfIconosistent
+     * @param pid
+     */
+    public void unlink(final ModelElement startElement, final ModelElement endElement, final Class<? extends Edge> edgeClass, final Direction direction, final ModelElement ignoreElementIfIconosistent, final int pid) {
         if (direction == Direction.FORWARD) {
-            unlink(startElement, endElement, edgeClass, pid);
+            unlink(startElement, endElement, edgeClass, ignoreElementIfIconosistent, pid);
         } else {
-            unlink(endElement, startElement, edgeClass, pid);
+            unlink(endElement, startElement, edgeClass, ignoreElementIfIconosistent, pid);
         }
     }
 
@@ -1957,6 +2011,17 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
      */
     public final void unlink(final ModelElement me1, final ModelElement me2, final Class<? extends Edge> edgeClass, final int pid) {
         unlink(me1, me2, edgeClass, INVALID_EDGE_INDEX, pid);
+    }
+
+    /**
+     * @param me1
+     * @param me2
+     * @param edgeClass
+     * @param ignoreElementIfIconosistent
+     * @param pid
+     */
+    public final void unlink(final ModelElement me1, final ModelElement me2, final Class<? extends Edge> edgeClass, final ModelElement ignoreElementIfIconosistent, final int pid) {
+        unlink(me1, me2, edgeClass, INVALID_EDGE_INDEX, ignoreElementIfIconosistent, pid);
     }
 
     /**
@@ -2004,7 +2069,26 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
      * @param me1EdgeIndex
      * @param pid
      */
-    public final void unlink(final ModelElement me1, ModelElement me2, final Class<? extends Edge> edgeClass, final int me1EdgeIndex, final int pid) {
+    public final void unlink(final ModelElement me1, final ModelElement me2, final Class<? extends Edge> edgeClass, final int me1EdgeIndex, final int pid) {
+        unlink(me1, me2, edgeClass, me1EdgeIndex, null, pid);
+    }
+
+    /**
+     * Anders als bei link() ist hier die Richtung, also die Reihenfolge der
+     * beiden ModelElemente nur wichtig, wenn es eine {@link DoubleMeaningEdge}
+     * ist oder die übergebenen Elemente beide jeweils Start- und EndElement der
+     * Kantenklasse sein können. In allen anderen Fällen wird sonst auch einfach
+     * versucht irgendeine Kante dieser Art zwischen den beiden übergebenen
+     * Elementen zu löschen.
+     *
+     * @param me1
+     * @param me2
+     * @param edgeClass
+     * @param me1EdgeIndex
+     * @param ignoreElementIfIconosistent
+     * @param pid
+     */
+    public final void unlink(final ModelElement me1, ModelElement me2, final Class<? extends Edge> edgeClass, final int me1EdgeIndex, final ModelElement ignoreElementIfIconosistent, final int pid) {
         if (me1 == null || me2 == null) {
             return;
         }
@@ -2081,10 +2165,10 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
                     doubleMeaningEdge.setConnectionState(FORWARD);
                 }
             } else {
-                deleteElement(edge, mainDoc, pid);
+                deleteElement(edge, mainDoc, ignoreElementIfIconosistent, pid);
             }
         } else {
-            deleteElement(edge, mainDoc, pid);
+            deleteElement(edge, mainDoc, ignoreElementIfIconosistent, pid);
         }
         mainDoc.finish_transaction(pid);
         mainDoc.distributeEvent(DATA_CHANGED, pid);

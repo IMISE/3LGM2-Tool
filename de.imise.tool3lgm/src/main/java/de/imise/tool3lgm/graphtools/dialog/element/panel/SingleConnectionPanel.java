@@ -346,18 +346,18 @@ public class SingleConnectionPanel extends AbstractPathConnectionPanel {
         Collection<ElementContainer> searchElementConnectedContainer = getForelastConnectedContainer();
         if (!searchElementConnectedContainer.isEmpty()) {
             GDCollection gdcoll = getCollection();
-            //prevent automatically deleting the dialog element and closing the dialog
-            //if the removing of the connection causes an inconsistency in the dialog element
             Class<? extends Edge> lastEdgeInPath = getLastEdgeClassInPath();
             Direction lastDirectionInPath = getLastDirectionInPath();
             for (ElementContainer ec : searchElementConnectedContainer) {
                 ModelElement me = ec.getElement();
                 List<ModelElement> connectedElements = me.getConnectedElements(searchElementClass, lastEdgeInPath, lastDirectionInPath);
                 for (ModelElement connected : connectedElements) {
+                    ModelElement dialogElement = getModelElement();
                     int pid = getTransactionID();
-                    gdcoll.unlink(me, connected, lastEdgeInPath, lastDirectionInPath, pid);
+                    //the dialog element should not be deletet even if it is inconsistent after unlink
+                    gdcoll.unlink(me, connected, lastEdgeInPath, lastDirectionInPath, dialogElement, pid);
                     if (deleteUnlinked) {
-                        gdcoll.deleteElement(connected, pid);
+                        gdcoll.deleteElement(connected, dialogElement, pid);
                     }
                 }
             }
