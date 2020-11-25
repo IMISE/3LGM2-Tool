@@ -461,9 +461,9 @@ public class ElementPropertyDialog extends AbstractElementPropertyDialog impleme
             //            System.err.print(metaPath.getEndClass().getSimpleName() + ": ");
             boolean editable = metaPath.isCreatable(false);
             //            System.err.print(editable + " -> ");
-            editable &= !metaPath.isFirstPathElementDependent();
+            editable &= !metaPath.isStartDependent();
             //            System.err.print(editable + " -> ");
-            editable &= !metaPath.isLastPathElementDependent();
+            editable &= !metaPath.isEndElementDependent();
             //            System.err.println(editable);
             if (editable || !singleConnection) {
                 JPanel panel2Add = InstanciationPathPanel.getInstanciationPathPanel(this, metaPath);

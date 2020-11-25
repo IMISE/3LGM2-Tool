@@ -78,7 +78,7 @@ public interface MetaPath extends BasicMetaPath {
      *
      * @return
      */
-    boolean isFirstPathElementDependent();
+    boolean isStartDependent();
 
     /**
      * Liefert <code>true</code>, wenn das letzte Element des Pfades nur
@@ -88,7 +88,7 @@ public interface MetaPath extends BasicMetaPath {
      *
      * @return
      */
-    boolean isLastPathElementDependent();
+    boolean isEndElementDependent();
 
     /**
      * Liefert den MetaPfad der die Gegenricthung beschreibt oder

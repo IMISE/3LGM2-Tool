@@ -132,7 +132,7 @@ abstract class MetaPathImpl extends BasicMetaPathImpl implements MetaPath {
      * @return
      */
     @Override
-    public final boolean isFirstPathElementDependent() {
+    public final boolean isStartDependent() {
         List<ElementaryMetaPath> elementaryMetaPaths = getElementaryMetaPaths();
         //wenn der Pfad keine einfache Liste von Elementarpfaden ist, dann wird davon ausgegangen, dass mehrere Verbindungen mgl. sind
         if (elementaryMetaPaths.isEmpty()) {
@@ -164,12 +164,12 @@ abstract class MetaPathImpl extends BasicMetaPathImpl implements MetaPath {
      * @return
      */
     @Override
-    public final boolean isLastPathElementDependent() {
+    public final boolean isEndElementDependent() {
         MetaPath otherDirection = getOtherDirection();
         if (otherDirection == null) {
             return false;
         }
-        return otherDirection.isFirstPathElementDependent();
+        return otherDirection.isStartDependent();
     }
 
     /**

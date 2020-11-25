@@ -157,7 +157,7 @@ public class SingleConnectionPanel extends AbstractPathConnectionPanel {
         boolean editable = !dialog.isInfoDialog();
         if (editable) {
             editable &= metaPath.isCreatable(false); //für editable reicht es, wenn der Pfad zw. bestehenden Elementen entfernt oder angehängt werden kann. Das zu verbindende Element muss nicht neu erzeugt werden können
-            editable &= connectedElement == null || !metaPath.isFirstPathElementDependent(); //bei untergeordneten oder Instanzen Elementen nicht das Abhängen/Löschen/Ändern des übergeordneten anbieten
+            editable &= connectedElement == null || !metaPath.isStartDependent(); //bei untergeordneten oder Instanzen Elementen nicht das Abhängen/Löschen/Ändern des übergeordneten anbieten
         }
         return editable;
     }
@@ -171,11 +171,11 @@ public class SingleConnectionPanel extends AbstractPathConnectionPanel {
         if (connectedElementsBox != null) {
             Color enabledColor = UIManager.getColor("TextField.background");
             connectedElementsBox.setBackground(enabledColor); //Combobox should have the same background color like Textfields
-            boolean isLastPathElementDependent = metaPath.isLastPathElementDependent();
+            boolean isLastPathElementDependent = metaPath.isEndElementDependent();
             connectedElementsBox.removeItemListener(itemListener);
             connectedElementsBox.removeAllItems();
             //disconnecting resp. empty element only if the dialog element is not dependent on this connection or the connected element is null
-            if (unlinkMenuItem != null && (!metaPath.isFirstPathElementDependent() || connectedElement == null)) {
+            if (unlinkMenuItem != null && (!metaPath.isStartDependent() || connectedElement == null)) {
                 connectedElementsBox.addItem(unlinkMenuItem);
             }
             //bei abhängigen Elementen werden in der Auswahlbox nur die angezeigt, die mit dem Element des Dialoges/Panels verbunden sind, sonst alle bzw. alle, die über den ConditionMetaPath verbunden sind

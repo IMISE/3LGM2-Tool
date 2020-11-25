@@ -327,11 +327,11 @@ public class SerialMetaPath extends ListMetaPath {
 
     @Override
     public boolean isRemoveable(final boolean checkEndElement) {
-        if (isFirstPathElementDependent()) {
+        if (isStartDependent()) {
             return false;
         }
         if (checkEndElement) {
-            if (isLastPathElementDependent()) {
+            if (isEndElementDependent()) {
                 return false;
             }
         }

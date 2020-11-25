@@ -591,11 +591,11 @@ public final class ElementaryMetaPath extends MetaPathImpl implements SequenceMe
 
     @Override
     public boolean isRemoveable(final boolean checkEndElement) {
-        if (isFirstPathElementDependent()) {
+        if (isStartDependent()) {
             return false;
         }
         if (checkEndElement) {
-            if (isLastPathElementDependent()) {
+            if (isEndElementDependent()) {
                 return false;
             }
         }
