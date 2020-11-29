@@ -20,6 +20,7 @@ import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
 import de.imise.tool3lgm.graphtools.view.tree.node.ElementContainerTreeNode;
 import de.imise.tool3lgm.graphtools.view.tree.node.LGMTreeNode;
+import de.imise.tool3lgm.graphtools.view.tree.node.StringTreeNode;
 import de.imise.util.ToolTipProvider;
 import de.imise.util.swing.component.tree.CorrectSelectionTree;
 
@@ -27,9 +28,15 @@ public class ElementDialogPanelTree extends CorrectSelectionTree {
 
     private final GraphDocument doc;
 
-    public ElementDialogPanelTree(final DefaultTreeModel treeModel, final GraphDocument doc) {
-        super(treeModel);
+    public ElementDialogPanelTree(final String rootObject, final GraphDocument doc) {
+        super(new DefaultTreeModel(new StringTreeNode(rootObject)));
         this.doc = doc;
+        setShowsRootHandles(true);
+    }
+
+    public ElementDialogPanelTree(final ElementContainer ec, final boolean sortRootChildren) {
+        super(new DefaultTreeModel(new ElementContainerTreeNode(ec, false, sortRootChildren)));
+        doc = ec.getGraphDocument();
         setShowsRootHandles(true);
     }
 
@@ -127,6 +134,14 @@ public class ElementDialogPanelTree extends CorrectSelectionTree {
                 addChildren(childNode, excludeChildren, checkAlreadyAdded, childrenAreSelectable);
             }
         }
+    }
+
+    /**
+     *
+     */
+    public void reloadModel() {
+        DefaultTreeModel model = (DefaultTreeModel) getModel();
+        model.reload();
     }
 
     ////////////////////////////////////////////////////////////////

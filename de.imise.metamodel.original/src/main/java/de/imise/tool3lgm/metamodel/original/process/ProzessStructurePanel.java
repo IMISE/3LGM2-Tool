@@ -1307,6 +1307,7 @@ public class ProzessStructurePanel extends PathConnectionLeafPanel implements Tr
                 if (selPath != null && selPath.getPathCount() == 2) {
                     LGMTreeNode lroot = ltree.getRoot();
                     // Position der selektierten Aufgabe im Baum bzw. Prozess holen
+                    DefaultTreeModel lmodel = (DefaultTreeModel) ltree.getModel();
                     int pos1 = lmodel.getIndexOfChild(lroot, selPath.getLastPathComponent());
                     // wenn nicht die erste sondern eine Aufgabe dahinter selektiert ist
                     if (pos1 > 0) {

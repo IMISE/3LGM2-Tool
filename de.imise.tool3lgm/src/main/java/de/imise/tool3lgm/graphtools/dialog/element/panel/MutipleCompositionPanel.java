@@ -16,8 +16,6 @@ import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.JTree;
-import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
 
@@ -36,7 +34,6 @@ import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.graphtools.view.tree.ElementDialogPanelTree;
 import de.imise.tool3lgm.graphtools.view.tree.node.ElementContainerTreeNode;
 import de.imise.tool3lgm.graphtools.view.tree.node.LGMTreeNode;
-import de.imise.tool3lgm.graphtools.view.tree.node.StringTreeNode;
 
 /**
  * Panel für {@link CompositionEdge}s, die ein Element mehrfach zu den über die
@@ -47,20 +44,13 @@ import de.imise.tool3lgm.graphtools.view.tree.node.StringTreeNode;
 public class MutipleCompositionPanel extends AbstractPathConnectionTreePanel {
 
     /**
-     * COMMENTME
+     *
      */
-    private final JTree tree;
+    private final ElementDialogPanelTree tree;
 
     /**
-     * COMMENTME
+     *
      */
-    private final DefaultTreeModel model;
-
-    /**
-     * COMMENTME
-     */
-    private final LGMTreeNode root;
-
     private JPanel buttonpanel;
 
     /**
@@ -81,9 +71,8 @@ public class MutipleCompositionPanel extends AbstractPathConnectionTreePanel {
         GridBagConstraints constraints = new GridBagConstraints();
 
         LGMGraphDocument mainDoc = getMainDoc();
-        root = new StringTreeNode(getResString("verb"));
-        model = new DefaultTreeModel(root);
-        tree = new ElementDialogPanelTree(model, mainDoc);
+        String rootString = getResString("verb");
+        tree = new ElementDialogPanelTree(rootString, mainDoc);
         tree.setRootVisible(false);
         tree.setCellRenderer(treeRenderer);
         tree.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
@@ -116,6 +105,7 @@ public class MutipleCompositionPanel extends AbstractPathConnectionTreePanel {
 
     @Override
     public void update() {
+        LGMTreeNode root = tree.getRoot();
         root.removeAllChildren();
         ModelElement me = getModelElement();
         GraphDocument mainDoc = getMainDoc();
@@ -140,7 +130,7 @@ public class MutipleCompositionPanel extends AbstractPathConnectionTreePanel {
                 root.add(node);
             }
         }
-        model.reload();
+        tree.reloadModel();
         expandTree(tree);
         revalidate();
         repaint();
