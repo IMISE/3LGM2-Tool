@@ -19,7 +19,6 @@ import java.util.Set;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
 
@@ -49,9 +48,7 @@ import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.graphtools.view.tree.ElementDialogPanelTree;
 import de.imise.tool3lgm.graphtools.view.tree.PanelTreeRenderer;
 import de.imise.tool3lgm.graphtools.view.tree.TreeRenderer;
-import de.imise.tool3lgm.graphtools.view.tree.node.ElementContainerTreeNode;
 import de.imise.tool3lgm.graphtools.view.tree.node.LGMTreeNode;
-import de.imise.tool3lgm.graphtools.view.tree.node.StringTreeNode;
 import de.imise.util.StringUtils;
 import de.imise.util.swing.SwingUtils;
 import de.imise.util.swing.component.LimitedHeightScrollTreePane;
@@ -67,10 +64,6 @@ public class PathConnectionPanel extends AbstractExpandablePanel {
     protected final ElementDialogPanelTree ltree;
 
     protected final ElementDialogPanelTree rtree;
-
-    protected final DefaultTreeModel lmodel;
-
-    private final DefaultTreeModel rmodel;
 
     private final JLabel rLabel;
 
@@ -122,9 +115,7 @@ public class PathConnectionPanel extends AbstractExpandablePanel {
         GraphDocument mainDoc = getMainDoc();
         ElementContainer ec = me.getContainer(mainDoc);
         boolean sortLeftTree = getSortLeftTreeRootChildrenAlphabetical();
-        LGMTreeNode lroot = new ElementContainerTreeNode(ec, false, sortLeftTree);
-        lmodel = new DefaultTreeModel(lroot);
-        ltree = new ElementDialogPanelTree(lmodel, mainDoc);
+        ltree = new ElementDialogPanelTree(ec, sortLeftTree);
         ltree.setRootVisible(false);
         ltree.setShowsRootHandles(true);
         ltree.setCellRenderer(treeRenderer);
@@ -151,9 +142,7 @@ public class PathConnectionPanel extends AbstractExpandablePanel {
             String rtreeLabelString = getResString("frei");
             rtreeLabelString = StringUtils.capitalizeFirstChar(rtreeLabelString);
             rLabel = new JLabel(rtreeLabelString);
-            LGMTreeNode rroot = new StringTreeNode(rtreeLabelString);
-            rmodel = new DefaultTreeModel(rroot);
-            rtree = new ElementDialogPanelTree(rmodel, mainDoc);
+            rtree = new ElementDialogPanelTree(rtreeLabelString, mainDoc);
             rtree.getSelectionModel().setSelectionMode(getTreesSelectionModel());
             rtree.setRootVisible(false);
             rtree.setShowsRootHandles(true);
@@ -176,7 +165,6 @@ public class PathConnectionPanel extends AbstractExpandablePanel {
 
         } else {
             rLabel = null;
-            rmodel = null;
             addAction = null;
             removeAction = null;
             newElementAction = null;
@@ -301,7 +289,7 @@ public class PathConnectionPanel extends AbstractExpandablePanel {
         ltree.saveExpansionAndSelection();
         ltree.reset();
         buildLeftTree();
-        lmodel.reload();
+        ltree.reloadModel();
         ltree.restoreExpansionAndSelection();
     }
 
@@ -404,7 +392,7 @@ public class PathConnectionPanel extends AbstractExpandablePanel {
             AbstractConsistencyError errorElementIsSolutionFor = getErrorElementIsSolutionFor(me);
             errorSulutionTreeNode.setConsistencyError(errorElementIsSolutionFor);
         }
-        rmodel.reload();
+        rtree.reloadModel();
         rtree.restoreExpansion();
         rtree.restoreSelection();
     }
