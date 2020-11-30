@@ -62,7 +62,7 @@ public class MutipleCompositionPanel extends AbstractPathConnectionTreePanel {
      */
     public MutipleCompositionPanel(final ElementPropertyDialog dialog, final PanelLabelOption titleLabelOption, final PanelLabelOption westLabelOption, final Class<? extends ModelElement> searchElementClass,
             final Class<? extends CompositionEdge> edgeClass) {
-        super(dialog, titleLabelOption, westLabelOption, dialog.createSimpleMetaPath(searchElementClass, edgeClass));
+        super(dialog, titleLabelOption, westLabelOption, dialog.createSequenceMetaPath(searchElementClass, edgeClass));
 
         boolean editable = !dialog.isInfoDialog() && metaPath.isCreatable(true) && !metaPath.isStartDependent(); // element to connect can be created new in this panel
 

@@ -61,7 +61,6 @@ public class DoubleMeaningEdgePanel extends AbstractPathOfOneEdgePanel {
 
     public DoubleMeaningEdgePanel(final ElementPropertyDialog dialog, final PanelLabelOption titleLabelOption, final Class<? extends ModelElement> searchElementClass, final Class<? extends Edge> edgeClass) {
         super(dialog, titleLabelOption, titleLabelOption, searchElementClass, edgeClass); //westLabelOption ist egal, da sowieso eigene Kantennamen-Labels über die Bäume kommen
-
         boolean editable = !dialog.isInfoDialog() && metaPath.isCreatable(false);
         GridBagLayout gbl = new GridBagLayout();
         setLayout(gbl);
@@ -152,8 +151,14 @@ public class DoubleMeaningEdgePanel extends AbstractPathOfOneEdgePanel {
 
     }
 
+    /**
+     * @param connectionState
+     * @return
+     */
     protected String getEdgeDisplayName(final ConnectionState connectionState) {
+        Class<? extends Edge> edgeClass = metaPath.getEdgeClass();
         boolean isDoubleMeaningEdge = MetaModel.isDoubleMeaningEdge(edgeClass);
+        boolean edgeIsForward = metaPath.getDirection() == FORWARD;
         //dieses Panel war urspünglich nur für Kanten mit doppelter Bedeutung. Danach hat AXS das auch für Kanten zwischen denselben Elementen, die aber eine Richtung haben, angepasst.
         //Kanten ohne doppelte Bedeutung haben immer die Richtung FORWARD, aber der connectionState muss hier als Lesrichtung der Kante interpretiert werden, damit über den beiden Bäumen jeweils eine Richtung steht
         boolean forward = isDoubleMeaningEdge && edgeIsForward || !isDoubleMeaningEdge && connectionState == ConnectionState.FORWARD;
@@ -187,6 +192,7 @@ public class DoubleMeaningEdgePanel extends AbstractPathOfOneEdgePanel {
         childrenToExcludeFromRotree.add(elementContainer);
         childrenToExcludeFromRutree.add(elementContainer);
 
+        Class<? extends Edge> edgeClass = metaPath.getEdgeClass();
         for (ElementContainer ec : modelElement.getConnectedContainers(searchElementClass, mainDoc, edgeClass, BACKWARD)) {
             lotree.addObject(ec, true, false, false);
             childrenToExcludeFromRotree.add(ec);
