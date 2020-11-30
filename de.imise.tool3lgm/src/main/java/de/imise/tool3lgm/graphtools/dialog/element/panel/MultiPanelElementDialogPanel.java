@@ -28,7 +28,7 @@ import de.imise.tool3lgm.graphtools.dialog.element.ElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.dialog.element.panel.AbstractPathConnectionPanel.PanelLabelOption;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.path.metapaths.MetaPath;
-import de.imise.tool3lgm.graphtools.path.metapaths.SimpleMetaPath;
+import de.imise.tool3lgm.graphtools.path.metapaths.SequenceMetaPath;
 
 /**
  * Panel, which can hold several other panels.
@@ -91,20 +91,20 @@ public class MultiPanelElementDialogPanel extends ElementDialogPanel implements 
         gbc.fill = GridBagConstraints.BOTH;
     }
 
-    public final void addDescriptedSingleConnectionPanel(final SimpleMetaPath simpleMetaPath) {
-        addDescriptedSingleConnectionPanel(LABEL_END_ELEMENT_TYPE, simpleMetaPath);
+    public final void addDescriptedSingleConnectionPanel(final SequenceMetaPath sequenceMetaPath) {
+        addDescriptedSingleConnectionPanel(LABEL_END_ELEMENT_TYPE, sequenceMetaPath);
     }
 
-    public final void addDescriptedSingleConnectionPanel(final PanelLabelOption panelLabelOption, final SimpleMetaPath simpleMetaPath) {
-        addPanel(new DescriptedSingleConnectionPanel(dialog, panelLabelOption, simpleMetaPath));
+    public final void addDescriptedSingleConnectionPanel(final PanelLabelOption panelLabelOption, final SequenceMetaPath sequenceMetaPath) {
+        addPanel(new DescriptedSingleConnectionPanel(dialog, panelLabelOption, sequenceMetaPath));
     }
 
-    public final void addSingleConnectionPanel(final PanelLabelOption panelLabelOption, final SimpleMetaPath simpleMetaPath) {
-        addPanel(new SingleConnectionPanel(dialog, panelLabelOption, simpleMetaPath));
+    public final void addSingleConnectionPanel(final PanelLabelOption panelLabelOption, final SequenceMetaPath sequenceMetaPath) {
+        addPanel(new SingleConnectionPanel(dialog, panelLabelOption, sequenceMetaPath));
     }
 
-    public final void addListPanel(final PanelLabelOption westLabelOption, final SimpleMetaPath simpleMetaPath) {
-        addPanel(new PathConnectionLeafPanel(dialog, westLabelOption, westLabelOption, 4, simpleMetaPath));//die titleLabelOption ist egal -> auch einfach die westLabelOption übergeben
+    public final void addListPanel(final PanelLabelOption westLabelOption, final SequenceMetaPath sequenceMetaPath) {
+        addPanel(new PathConnectionLeafPanel(dialog, westLabelOption, westLabelOption, 4, sequenceMetaPath));//die titleLabelOption ist egal -> auch einfach die westLabelOption übergeben
     }
 
     public final void addPanel(final AbstractPathConnectionPanel panel) {

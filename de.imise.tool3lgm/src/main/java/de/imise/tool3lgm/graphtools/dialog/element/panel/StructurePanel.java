@@ -177,6 +177,7 @@ public class StructurePanel extends AbstractPathOfOneEdgePanel {
         if (isRightSideVisible()) {
             rtree.saveExpansionAndSelection();
             rtree.reset();
+            Class<? extends Edge> edgeClass = metaPath.getEdgeClass();
             List<ElementContainer> all = mainDoc.getElementContainersOfEndClass(edgeClass);
             all.remove(meContainer);
             for (ElementContainer ec : all) {

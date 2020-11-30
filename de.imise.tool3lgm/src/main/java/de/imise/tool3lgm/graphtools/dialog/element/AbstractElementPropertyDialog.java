@@ -37,9 +37,11 @@ import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.HasPartEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
+import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.model.LGMChangeListenerSimple;
-import de.imise.tool3lgm.graphtools.path.metapaths.SimpleMetaPath;
+import de.imise.tool3lgm.graphtools.path.metapaths.ElementaryMetaPathHandler;
+import de.imise.tool3lgm.graphtools.path.metapaths.SequenceMetaPath;
 import de.imise.tool3lgm.graphtools.path.metapaths.SimpleMetaPathCreator;
 import de.imise.tool3lgm.graphtools.userfield.UserFieldDefinitions;
 import de.imise.tool3lgm.graphtools.userfield.UserFieldTarget;
@@ -297,9 +299,29 @@ public class AbstractElementPropertyDialog extends AbstractTabbedPropertyDialog 
         return recursiveHasPartEdges;
     }
 
+    /**
+     * @param searchElementClass
+     * @param edgeClasses
+     * @return
+     */
     @SafeVarargs
-    public final SimpleMetaPath createSimpleMetaPath(@Nullable final Class<? extends ModelElement> searchElementClass, final Class<? extends Edge>... edgeClasses) {
+    public final SequenceMetaPath createSequenceMetaPath(@Nullable final Class<? extends ModelElement> searchElementClass, final Class<? extends Edge>... edgeClasses) {
+        if (edgeClasses.length == 1) {
+            return createSequenceMetaPath(searchElementClass, edgeClasses[0]);
+        }
         return SimpleMetaPathCreator.createSimpleMetaPath(modelElement, searchElementClass, edgeClasses);
+    }
+
+    /**
+     * @param searchElementClass
+     * @param edgeClass
+     * @return
+     */
+    public final SequenceMetaPath createSequenceMetaPath(@Nullable final Class<? extends ModelElement> searchElementClass, final Class<? extends Edge> edgeClass) {
+        GDCollection gdcoll = getCollection();
+        ElementaryMetaPathHandler emph = gdcoll.getElementaryMetaPathHandler();
+        Class<? extends ModelElement> metaPathStartClass = modelElement.getClass();
+        return emph.getMetaPath(metaPathStartClass, edgeClass, searchElementClass);
     }
 
     /**

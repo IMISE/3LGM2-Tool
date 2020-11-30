@@ -1,7 +1,6 @@
 package de.imise.tool3lgm.graphtools.dialog.element.panel;
 
 import static de.imise.tool3lgm.graphtools.dialog.element.panel.AbstractPathConnectionPanel.PanelLabelOption.LABEL_END_ELEMENT_TYPE;
-import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction.FORWARD;
 
 import java.util.EventObject;
 
@@ -15,6 +14,7 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
+import de.imise.tool3lgm.graphtools.path.metapaths.ElementaryMetaPath;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.graphtools.view.tree.node.LGMTreeNode;
 
@@ -27,10 +27,7 @@ import de.imise.tool3lgm.graphtools.view.tree.node.LGMTreeNode;
  */
 public abstract class AbstractPathOfOneEdgePanel extends AbstractExpandablePanel {
 
-    /** Die Kantenklasse zum anderen Element */
-    protected final Class<? extends Edge> edgeClass;
-
-    protected final boolean edgeIsForward;
+    protected final ElementaryMetaPath metaPath;
 
     /**
      * Panel für eine einfache Assoziation
@@ -54,9 +51,8 @@ public abstract class AbstractPathOfOneEdgePanel extends AbstractExpandablePanel
      */
     public AbstractPathOfOneEdgePanel(final AbstractElementPropertyDialog dialog, final PanelLabelOption titleLabelOption, final PanelLabelOption westLabelOption, final Class<? extends ModelElement> searchElementClass,
             final Class<? extends Edge> edgeClass) {
-        super(dialog, titleLabelOption, westLabelOption, dialog.createSimpleMetaPath(searchElementClass, edgeClass));
-        this.edgeClass = edgeClass;
-        edgeIsForward = getLastDirectionInPath() == FORWARD;
+        super(dialog, titleLabelOption, westLabelOption, dialog.createSequenceMetaPath(searchElementClass, edgeClass));
+        metaPath = (ElementaryMetaPath) super.metaPath;
     }
 
     /**
@@ -82,6 +78,7 @@ public abstract class AbstractPathOfOneEdgePanel extends AbstractExpandablePanel
                         GDCollection gdcoll = ec.getCollection();
                         ModelElement me = ec.getElement();
                         ModelElement panelModelElement = getModelElement();
+                        Class<? extends Edge> edgeClass = metaPath.getEdgeClass();
                         gdcoll.link(panelModelElement, me, edgeClass, direction, pid);
                     }
                 }
@@ -112,6 +109,7 @@ public abstract class AbstractPathOfOneEdgePanel extends AbstractExpandablePanel
                         GDCollection gdcoll = ec.getCollection();
                         ModelElement me = ec.getElement();
                         ModelElement panelModelElement = getModelElement();
+                        Class<? extends Edge> edgeClass = metaPath.getEdgeClass();
                         gdcoll.unlink(panelModelElement, me, edgeClass, direction, pid);
                     }
                 }
