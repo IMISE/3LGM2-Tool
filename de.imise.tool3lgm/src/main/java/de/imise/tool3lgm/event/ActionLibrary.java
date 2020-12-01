@@ -444,11 +444,11 @@ public class ActionLibrary {
             }
         };
 
-        public static final Action MODEL_ACTION_SET_ELEMENT_INTERLAYER_CONNECTIONS_VISIBILITY_OFF = createMODEL_ACTION_SET_ELEMENT_INTERLAYER_CONNECTIONS_VISIBILITY(false);
+        public static final GraphSelectedRealNodeAction MODEL_ACTION_SET_ELEMENT_INTERLAYER_CONNECTIONS_VISIBILITY_OFF = createMODEL_ACTION_SET_ELEMENT_INTERLAYER_CONNECTIONS_VISIBILITY(false);
 
-        public static final Action MODEL_ACTION_SET_ELEMENT_INTERLAYER_CONNECTIONS_VISIBILITY_ON = createMODEL_ACTION_SET_ELEMENT_INTERLAYER_CONNECTIONS_VISIBILITY(true);
+        public static final GraphSelectedRealNodeAction MODEL_ACTION_SET_ELEMENT_INTERLAYER_CONNECTIONS_VISIBILITY_ON = createMODEL_ACTION_SET_ELEMENT_INTERLAYER_CONNECTIONS_VISIBILITY(true);
 
-        public static final Action createMODEL_ACTION_SET_ELEMENT_INTERLAYER_CONNECTIONS_VISIBILITY(final boolean show) {
+        public static final GraphSelectedRealNodeAction createMODEL_ACTION_SET_ELEMENT_INTERLAYER_CONNECTIONS_VISIBILITY(final boolean show) {
             return new GraphSelectedRealNodeAction(show ? GDCommands.MODEL_ACTION_SET_ELEMENT_INTERLAYER_CONNECTIONS_VISIBILITY_ON : GDCommands.MODEL_ACTION_SET_ELEMENT_INTERLAYER_CONNECTIONS_VISIBILITY_OFF) {
                 @Override
                 public boolean isEnabled() {
@@ -478,11 +478,11 @@ public class ActionLibrary {
             };
         }
 
-        public static final Action MODEL_ACTION_SET_LAYER_INTERLAYER_CONNECTIONS_VISIBILITY_ON = createMODEL_ACTION_SET_LAYER_INTERLAYER_CONNECTIONS_VISIBILITY(true);
+        public static final GraphFrameAction MODEL_ACTION_SET_LAYER_INTERLAYER_CONNECTIONS_VISIBILITY_ON = createMODEL_ACTION_SET_LAYER_INTERLAYER_CONNECTIONS_VISIBILITY(true);
 
-        public static final Action MODEL_ACTION_SET_LAYER_INTERLAYER_CONNECTIONS_VISIBILITY_OFF = createMODEL_ACTION_SET_LAYER_INTERLAYER_CONNECTIONS_VISIBILITY(false);
+        public static final GraphFrameAction MODEL_ACTION_SET_LAYER_INTERLAYER_CONNECTIONS_VISIBILITY_OFF = createMODEL_ACTION_SET_LAYER_INTERLAYER_CONNECTIONS_VISIBILITY(false);
 
-        private static final Action createMODEL_ACTION_SET_LAYER_INTERLAYER_CONNECTIONS_VISIBILITY(final boolean visible) {
+        private static final GraphFrameAction createMODEL_ACTION_SET_LAYER_INTERLAYER_CONNECTIONS_VISIBILITY(final boolean visible) {
             return new GraphFrameAction(visible ? GDCommands.MODEL_ACTION_SET_LAYER_INTERLAYER_CONNECTIONS_VISIBILITY_ON : GDCommands.MODEL_ACTION_SET_LAYER_INTERLAYER_CONNECTIONS_VISIBILITY_OFF) {
                 @Override
                 public boolean isEnabled() {
@@ -504,6 +504,24 @@ public class ActionLibrary {
                 }
             };
         }
+
+        public static final Action MODEL_ACTION_SET_INTERLAYER_CONNECTIONS_VISIBILITY_ON = new GraphSelectedRealNodeAction(GDCommands.MODEL_ACTION_SET_LAYER_INTERLAYER_CONNECTIONS_VISIBILITY_ON) {
+
+            @Override
+            public boolean isEnabled() {
+                return MODEL_ACTION_SET_LAYER_INTERLAYER_CONNECTIONS_VISIBILITY_ON.isEnabled() || MODEL_ACTION_SET_ELEMENT_INTERLAYER_CONNECTIONS_VISIBILITY_ON.isEnabled();
+            };
+
+            @Override
+            protected void actionPerformed() {
+                if (MODEL_ACTION_SET_ELEMENT_INTERLAYER_CONNECTIONS_VISIBILITY_ON.isEnabled()) {
+                    MODEL_ACTION_SET_ELEMENT_INTERLAYER_CONNECTIONS_VISIBILITY_ON.actionPerformed(null);
+                } else {
+                    MODEL_ACTION_SET_LAYER_INTERLAYER_CONNECTIONS_VISIBILITY_ON.actionPerformed(null);
+                }
+            };
+
+        };
 
     }
 

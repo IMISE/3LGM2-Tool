@@ -15,6 +15,7 @@ import javax.swing.JSeparator;
 import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.event.ActionLibrary;
 import de.imise.tool3lgm.event.ActionLibrary.AnalysisActions;
+import de.imise.tool3lgm.event.ActionLibrary.ContextActions;
 import de.imise.tool3lgm.event.ActionLibrary.EditActions;
 import de.imise.tool3lgm.event.ActionLibrary.ExtrasActions;
 import de.imise.tool3lgm.event.ActionLibrary.FileActions;
@@ -73,7 +74,8 @@ public class MenuCollection {
     public static final JMenu LAYOUT_MENU = new LayoutMenu();
 
     /** Das Teilmodell-Menu */
-    public static final JMenu SUBMODEL_MENU = createMenu("submodels", GDCommands.MODEL_ACTION_CREATE_SUBMODEL, GDCommands.MODEL_ACTION_DELETE_SUBMODEL, new JSeparator(), GDCommands.MODEL_ACTION_RENAME_SUBMODEL);
+    public static final JMenu SUBMODEL_MENU = createMenu("submodels", GDCommands.MODEL_ACTION_CREATE_SUBMODEL, GDCommands.MODEL_ACTION_DELETE_SUBMODEL, new JSeparator(), GDCommands.MODEL_ACTION_RENAME_SUBMODEL,
+            ContextActions.MODEL_ACTION_SET_INTERLAYER_CONNECTIONS_VISIBILITY_ON);
 
     /** Das XMLAnalyse-Menu */
     //    public static final JMenu ANALYSIS_MENU = new AnalysisMenu();
