@@ -5,7 +5,7 @@ import java.awt.Color;
 /**
  * @author Thomas Rudert
  */
-public class TableCell {
+public class MatrixViewTableCell {
 
     /**
      * COMMENTME
@@ -27,7 +27,7 @@ public class TableCell {
      * @param _colIndex
      * @param _color
      */
-    public TableCell(final int _rowIndex, final int _colIndex, final Color _color) {
+    public MatrixViewTableCell(final int _rowIndex, final int _colIndex, final Color _color) {
         rowIndex = _rowIndex;
         colIndex = _colIndex;
         color = _color;
@@ -44,8 +44,8 @@ public class TableCell {
      */
     @Override
     public boolean equals(final Object other) {
-        if (other instanceof TableCell) {
-            return rowIndex == ((TableCell) other).getRowIndex() && colIndex == ((TableCell) other).getColIndex();
+        if (other instanceof MatrixViewTableCell) {
+            return rowIndex == ((MatrixViewTableCell) other).getRowIndex() && colIndex == ((MatrixViewTableCell) other).getColIndex();
         } else {
             return false;
         }

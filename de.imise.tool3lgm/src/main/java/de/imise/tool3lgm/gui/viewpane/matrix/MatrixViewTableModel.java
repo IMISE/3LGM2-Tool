@@ -23,7 +23,7 @@ import de.imise.tool3lgm.log.Log;
  *
  * @author Thomas Rudert, AXS (23.10.07)
  */
-public class TableModel implements Iterable<TableCell> {
+public class MatrixViewTableModel implements Iterable<MatrixViewTableCell> {
 
     /**
      * ArrayList mit den ModelElementen für die Spalten. <br>
@@ -33,7 +33,7 @@ public class TableModel implements Iterable<TableCell> {
     /** ArrayList mit den ModelElementen für die Zeilen */
     private List<ModelElement> rowHeader;
 
-    private Set<TableCell> cellsSet = null;
+    private Set<MatrixViewTableCell> cellsSet = null;
 
     /** das zugehörige (Teil-)Modell */
     private final GraphDocument graphDocument;
@@ -51,7 +51,7 @@ public class TableModel implements Iterable<TableCell> {
     private boolean absolutePartsOnly = false;
 
     /**
-     * Hintergrundfarbe für alle {@link TableCell}s private Color
+     * Hintergrundfarbe für alle {@link MatrixViewTableCell}s private Color
      * tableCellBackgroundColor = Color.white; /** Farben, in denen die Pfade
      * dargestellt werden. Wird nur ein Pfad dargestellt, bekommt er die erste
      * Pfade, werden 2 Pfade dargestellt, bekommen sie die ersten beiden und
@@ -71,7 +71,7 @@ public class TableModel implements Iterable<TableCell> {
      *
      * @param graphDocument das (Teil-)Modell
      */
-    public TableModel(final GraphDocument graphDocument) {
+    public MatrixViewTableModel(final GraphDocument graphDocument) {
         this.graphDocument = graphDocument;
         fillTableModelIntern(null, null, null, false);
     }
@@ -149,12 +149,12 @@ public class TableModel implements Iterable<TableCell> {
     }
 
     @Override
-    public Iterator<TableCell> iterator() {
+    public Iterator<MatrixViewTableCell> iterator() {
         return cellsSet.iterator();
     }
 
     /**
-     * Liefert die {@link TableCell} an mit den Koordinaten col und row.
+     * Liefert die {@link MatrixViewTableCell} an mit den Koordinaten col und row.
      * ACHTUNG: Da diese Funktion über den Iterator aller Cells läuft, ist sie
      * bei vielen Zellen sehr 'teuer'.
      *
@@ -162,8 +162,8 @@ public class TableModel implements Iterable<TableCell> {
      * @param row
      * @return
      */
-    public TableCell getCell(final int col, final int row) {
-        for (TableCell cell : cellsSet) {
+    public MatrixViewTableCell getCell(final int col, final int row) {
+        for (MatrixViewTableCell cell : cellsSet) {
             if (cell.getColIndex() == col && cell.getRowIndex() == row) {
                 return cell;
             }
@@ -235,7 +235,7 @@ public class TableModel implements Iterable<TableCell> {
                         }
                     }
                     if (connectionBitPattern >= 0) {
-                        cellsSet.add(new TableCell(i, j, pathColors[connectionBitPattern]));
+                        cellsSet.add(new MatrixViewTableCell(i, j, pathColors[connectionBitPattern]));
                     }
                 } catch (StackOverflowError err) {
                     Log.show(Log.ERROR, Tool3lgmConstants.getResString("FehlerAllgemein"), err);

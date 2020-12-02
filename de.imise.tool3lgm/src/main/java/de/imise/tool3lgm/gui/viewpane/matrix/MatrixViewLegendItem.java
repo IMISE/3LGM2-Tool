@@ -14,7 +14,7 @@ import javax.swing.JPanel;
  *
  * @author Thomas Rudert
  */
-public class TableToolBarLegendItem extends JPanel {
+public class MatrixViewLegendItem extends JPanel {
 
     /**
      * Farbe der Felder, die dieses Legenden-Item erklärt
@@ -40,7 +40,7 @@ public class TableToolBarLegendItem extends JPanel {
      * @param description
      * @param color
      */
-    public TableToolBarLegendItem(final int i, final String description, final Color color) {
+    public MatrixViewLegendItem(final int i, final String description, final Color color) {
         this(null, description, null, color);
     }
 
@@ -50,7 +50,7 @@ public class TableToolBarLegendItem extends JPanel {
      * @param descriptionPostfix
      * @param color
      */
-    public TableToolBarLegendItem(final String descriptionPrefix, final String description, final String descriptionPostfix, final Color color) {
+    public MatrixViewLegendItem(final String descriptionPrefix, final String description, final String descriptionPostfix, final Color color) {
         this(descriptionPrefix, description, descriptionPostfix, color, false, descriptionPrefix != null && descriptionPostfix != null, false);
     }
 
@@ -60,7 +60,7 @@ public class TableToolBarLegendItem extends JPanel {
      * @param descriptionPostfix
      * @param color
      */
-    public TableToolBarLegendItem(final String descriptionPrefix, final String description, final String descriptionPostfix, final Color color, final boolean boldDescriptionPrefix, final boolean boldDescription, final boolean boldDescriptionPostfix) {
+    public MatrixViewLegendItem(final String descriptionPrefix, final String description, final String descriptionPostfix, final Color color, final boolean boldDescriptionPrefix, final boolean boldDescription, final boolean boldDescriptionPostfix) {
         this.descriptionPrefix = descriptionPrefix;
         this.description = description;
         this.descriptionPostfix = descriptionPostfix;

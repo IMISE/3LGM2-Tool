@@ -210,7 +210,7 @@ public class MatrixViewPaneToolbar extends UnfloatableToolBar implements ChangeL
                     }
                 }
                 sb.setLength(sb.length() - and.length());
-                legendPanel.add(new TableToolBarLegendItem(startClassName, sb.toString(), endClassName, TableModel.pathColors[i]));
+                legendPanel.add(new MatrixViewLegendItem(startClassName, sb.toString(), endClassName, MatrixViewTableModel.pathColors[i]));
             }
         }
         legendPanel.revalidate();
@@ -249,7 +249,7 @@ public class MatrixViewPaneToolbar extends UnfloatableToolBar implements ChangeL
      */
     public String getPathName(final Color legendItemColor) {
         for (int i = 0; i < legendPanel.getComponentCount(); i++) {
-            TableToolBarLegendItem item = (TableToolBarLegendItem) legendPanel.getComponent(i);
+            MatrixViewLegendItem item = (MatrixViewLegendItem) legendPanel.getComponent(i);
             if (item.getColor().equals(legendItemColor)) {
                 return item.getDescription();
             }
