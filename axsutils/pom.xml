@@ -56,12 +56,6 @@
 		    <artifactId>batik-codec</artifactId>
 		    <version>1.13</version>
 		</dependency>
-		<!-- https://mvnrepository.com/artifact/pl.project13.maven/git-commit-id-plugin-core -->
-		<dependency>
-		    <groupId>pl.project13.maven</groupId>
-		    <artifactId>git-commit-id-plugin-core</artifactId>
-		    <version>4.0.3</version>
-		</dependency>
 
 	</dependencies>
 	<repositories>
