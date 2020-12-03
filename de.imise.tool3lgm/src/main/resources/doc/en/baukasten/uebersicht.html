@@ -1,0 +1,503 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<html>
+<head>
+	<title>Modelling kit overview</title>
+	<link rel="stylesheet" type="text/css" href="style.css">
+</head>
+
+<body>
+<h1>Modelling kit overview</h1>
+This section provides an overview of the basic functions of the 3LGM&sup2; modelling kit. The following view is obtained by starting the 3LGM&sup2; kit and selecting 'File' and 'New Model' from the menu bar.
+<div align="center">
+<img src="../../bilder/uebersicht.jpg" width=891 height=406 border=0 alt="">
+</div>
+
+<div>
+	<img src="../../bilder/down.gif" width=14 height=10 border=0 alt="">&nbsp;<a href="#modellbrowser">The Model Browser</a><br>
+	<img src="../../bilder/down.gif" width=14 height=10 border=0 alt="">&nbsp;<a href="#dokumentfenster">The Document Window</a><br>
+	<img src="../../bilder/down.gif" width=14 height=10 border=0 alt="">&nbsp;<a href="#menueleiste">The Menu Bar</a><br>
+	<img src="../../bilder/down.gif" width=14 height=10 border=0 alt="">&nbsp;<a href="#standardsymbolleiste">The Standard Toolbar</a><br>
+	<img src="../../bilder/down.gif" width=14 height=10 border=0 alt="">&nbsp;<a href="#zeichensymbolleiste">The Drawing Toolbar</a><br>
+	<img src="../../bilder/down.gif" width=14 height=10 border=0 alt="">&nbsp;<a href="#ansichtswerkzeuge">The View Tools</a><br>
+</div>
+
+<p>
+<h2><a name="modellbrowser">The Model Browser</a></h2>
+In the model browser you can see the currently open models and their elements. You can choose to display all elements of a model or the elements of the individual submodels of a model. The elements are divided into elements of the domain layer, the logical tool layer and the physical tool layer.<br>
+You can open a node in the model browser by clicking with the left mouse button on it.<br> 
+By double-clicking with the left mouse button on an element in the model browser its properties dialog opens.<br> 
+By right-clicking on a node or an element, its context menu is displayed.
+</p>
+
+<p>
+<h2><a name="dokumentfenster">The document window</a></h2>
+The document window displays the layers of the model.<br> 
+When viewing the layers individually, one of the layers is displayed at a time. You can select the layers using the <a href="standardsymbolleiste">standard toolbar</a>. You can change the views by using the button <a href="#multiview">'MultiView'</a> in the standard toolbar.
+</p>
+
+<p>
+<h2><a name="menueleiste">The menu bar</a></h2>
+The menu bar is located at the top of the window. The individual menus are introduced in more detail below.
+
+<div>
+	<img src="../../bilder/down.gif" width=14 height=10 border=0 alt="">&nbsp;<a href="#datei">File</a><br>
+	<img src="../../bilder/down.gif" width=14 height=10 border=0 alt="">&nbsp;<a href="#bearbeiten">Edit</a><br>
+	<img src="../../bilder/down.gif" width=14 height=10 border=0 alt="">&nbsp;<a href="#ansicht">View</a><br>
+	<img src="../../bilder/down.gif" width=14 height=10 border=0 alt="">&nbsp;<a href="#einfuegen">Insert</a><br>
+	<img src="../../bilder/down.gif" width=14 height=10 border=0 alt="">&nbsp;<a href="#format">Layout</a><br>
+	<img src="../../bilder/down.gif" width=14 height=10 border=0 alt="">&nbsp;<a href="#teilmodelle">Submodels</a><br>
+	<img src="../../bilder/down.gif" width=14 height=10 border=0 alt="">&nbsp;<a href="#analyse">Analysis</a><br>
+	<img src="../../bilder/down.gif" width=14 height=10 border=0 alt="">&nbsp;<a href="#optionen">Options</a><br>
+	<img src="../../bilder/down.gif" width=14 height=10 border=0 alt="">&nbsp;<a href="#extras">Extras</a><br>
+	<img src="../../bilder/down.gif" width=14 height=10 border=0 alt="">&nbsp;<a href="#hilfe">Help</a><br>
+</div>
+
+<h3><a name="datei">File</a></h3>
+The <i>File</i> menu contains actions for handling model files. 
+<table border="1" bordercolor="Silver">
+	<tr valign="TOP">
+		<td>New Model</td>
+		<td>Use this menu item to create a new model. A new tab with the name of the new model appears in the model browser. If you have several models open, you can use these tabs to select the model to be edited.</td>
+	</tr>
+	<tr valign="TOP">
+		<td>Open...</td>
+		<td>Use this menu item to open an existing model. A corresponding dialog box appears in which you can select the file to be opened. Saved 3LGM&sup2; models usually have the extension .3lgm.</td>
+	</tr>
+	<tr valign="TOP">
+		<td>Save</td>
+		<td>Use this menu item to save your changes to a model. If you have opened a new model that has not yet been saved, a dialog will appear in which you can select a directory for the file to be saved and enter the name of the file. Saved 3LGM&sup2; models usually have the extension .3lgm. If your new model has already been saved to a file or if you have opened an existing file, the current state of the model is saved to this file when you click the <i>Save Model</i> button.</td>
+	</tr>
+	<tr valign="TOP">
+		<td>Save as...</td>
+		<td>Using this menu item you can save your changes to a model in a file to be renamed. A dialog box appears in which you can select a directory for the file to be saved and enter the name of the file. Saved 3LGM&sup2; models usually have the extension .3lgm.</td>
+	</tr>
+	<tr valign="TOP">
+		<td>Close</td>
+		<td>Closes the current model.</td>
+	</tr>
+	<tr valign="TOP">
+		<td>Description...</td>
+		<td>This menu item takes you to a text editor in which you can describe the individual submodels of the currently selected model. Use the tabs to select a submodel and enter your description or notes on this model as free text.</td>
+	</tr>
+	<tr valign="TOP">
+		<td>Import</td>
+		<td>The import function gives you the possibility to import an already existing model or submodel into your model. Please read the section <a href="import_export.html#import">Importing models</a>.</td>
+	</tr>
+	<tr valign="TOP">
+		<td>Export</td>
+		<td>The export function gives you the possibility to export your model in another format or as a graphic. Please read the section <a href="import_export.html#export">Exporting Models</a>.</td>
+	</tr>
+	<tr valign="TOP">
+		<td>Print...</td>
+		<td>This function has not yet been implemented.</td>
+	</tr>
+	<tr valign="TOP">
+		<td>Exit</td>
+		<td>Closes the 3LGM&sup2; kit.</td>
+	</tr>
+</table>
+
+<h3><a name="bearbeiten">Edit</a></h3>
+In the <i>Edit</i> menu you will find tools for working with the models.
+<table border="1" bordercolor="Silver">
+	<tr valign="TOP">	
+		<td>Undo</td>
+		<td>Use this menu item to undo the last changes made to your model.</td>
+	</tr>
+	<tr valign="TOP">
+		<td>Redo</td>
+		<td>With this menu item you can restore the last undone changes.</td>
+	</tr>
+	<tr valign="TOP">
+		<td>Search...</td>
+		<td>This menu item opens a dialog for text search in your model. You can enter a name to be searched for or a description, or both. If you want to search only in the labels and descriptions of a certain <i>node type</i>, you can select it in the selection list Node Type. If you have not selected a node type, the labels and descriptions of all nodes will be searched for the text you specify.</td>
+	</tr>
+	<tr valign="TOP">
+		<td>Select All</td>
+		<td>Selects all elements of the selected submodel.</td>
+	</tr>
+	<tr valign="TOP">
+		<td>Copy</td>
+		<td>Copies the selected elements to the clipboard.</td>
+	</tr>
+	<tr valign="TOP">
+		<td>Cut</td>
+		<td>Copies the selected elements to the clipboard and removes them from the model.</td>
+	</tr>
+	<tr valign="TOP">
+		<td>Paste</td>
+		<td>Pastes the content of the clipboard at the selected position.</td>
+	</tr>
+	<tr valign="TOP">
+		<td>Remove From Submodel</td>
+		<td>Removes the selected element from the submodel.</td>
+	</tr>
+<!-- 	<tr valign="TOP">
+		<td>Aus Modell l&ouml;schen (inkl. aller Teilmodelle)</td>
+		<td>Entfernt alle vorhandene Teilmodellen.</td>
+	</tr> -->
+</table>
+
+<h3><a name="ansicht">View</a></h3>
+The <i>View</i> menu allows you to customize the view of the 3LGM&sup2; Modelling Kit to suit your needs. 
+<table border="1" bordercolor="Silver">
+	<tr valign="TOP">
+		<td>Toolbars</td>
+		<td>Use this menu to show and hide various toolbars of the modelling kit.</td>
+	</tr>
+	<tr valign="TOP">
+		<td>Model browser</td>
+		<td>Use this menu item to hide or show the model browser.</td>
+	</tr>
+	<tr valign="TOP">
+		<td>Template browser</td>
+		<td>With this menu item you can hide or show the template browser.</td>
+	</tr>
+	<tr valign="TOP">
+		<td>Show View Component Titles</td>
+		<td>With this action you can hide or show all browser titles.</td>
+	</tr>
+	<tr valign="TOP">
+		<td nowrap>Single-layer perspective/<br> Three-layer perspective</td>
+		<td>Use this menu item to switch the views in the document window. You have the choice between the view of all three layers in one window or the single view of the layers.</td>
+	</tr>
+	<tr valign="TOP">
+		<td>Domain layer</td>
+		<td>Selects the domain layer.</td>
+	</tr>
+	<tr valign="TOP">
+		<td>Logical tool layer</td>
+		<td>Selects the logical tool layer.</td>
+	</tr>
+	<tr valign="TOP">
+		<td>Physical tool layer</td>
+		<td>Selects the physical tool layer.</td>
+	</tr>
+	<tr valign="TOP">
+		<td>Graph Settings...</td>
+		<td>Opens a dialog that allows you to change the view of the document window. If the view of the layers in the document window is set to single layer view, only the zoom factor can be changed. If all three layers are displayed in the document window, the zoom factor, layer angle and layer distance can be changed. The views can be changed with the button <a href="#multiview">'MultiView'</a>.</td>
+	</tr>
+	<tr valign="TOP">
+		<td>Matrix View</td>
+		<td>Opens a new matrix view. For information on working with the Matrix view, see The <a href="matrixsicht.html"><nobr>Matrix View</nobr></a>.</td>
+	</tr>
+</table>
+</p>
+
+<p>
+<h3><a name="einfuegen">Insert</a></h3>
+The <i>Insert</i> menu contains the elements that can be inserted in the selected layer. By selecting an element you insert it into the selected layer. For more information, see <a href="dialoge.html">Inserting and Modifying Model Elements</a>.
+</p>
+
+<p>
+<h3><a name="format">Layout</a></h3>
+<table border="1" bordercolor="Silver">
+	<tr valign="TOP">
+		<td>Global Layout...</td>		
+		<td>Use this menu item to modify the global layout of your model. A dialog opens where you can set the shape, color and font for each individual building component element. The settings are effective for all elements of the modelling kit after pressing the <i>OK</i> or <i>Apply</i> button.</td>
+	</tr>
+	<tr valign="TOP">
+		<td>Layer Layout</td>
+		<td>Three sub-items allow you to change the appearance of the currently selected layer. Select:
+		<ul>
+			<li><i>Reset Color and Transparency</i> - to cancel visual changes in the layer</li>
+			<li><i>Change Color...</i> - to change the color of the layer</li>
+			<li><i>Transparency</i> - to make the layer not, half or fully transparent.</li>
+		</ul>
+		</td>
+	</tr>
+</table>
+</p>
+
+<p>
+<h3><a name="teilmodelle">Submodels</a></h3>
+This menu item contains some functions for working with submodels. 
+<table border="1" bordercolor="Silver">
+	<tr valign="TOP">
+		<td>New Submodel...</td>
+		<td>Creates a new submodel. A dialog appears asking you to name the submodel. Then click <i>OK</i> and the submodel is displayed.</td>
+	</tr>
+	<tr valign="TOP">
+		<td>Delete submodel...</td>
+		<td>Use this menu item to delete your current submodel.</td>
+	</tr>
+	<tr valign="TOP">
+		<td>Rename submodel...</td>
+		<td>Use this menu item to rename your current submodel.</td>
+	</tr>
+</table>
+</p>
+
+<p>
+<h3><a name="analyse">Analysis</a></h3>
+<table border="1" bordercolor="Silver">
+	<tr valign="TOP">
+		<td>Repository...</td>
+		<td>Shows a list of predefined analyses.</td>
+	</tr>
+	<tr valign="TOP">
+		<td>Editor...</td>
+		<td>Opens a dialog for creating new analyses.</td>
+	</tr>
+	<tr valign="TOP">
+		<td>Reset Results</td>
+		<td>With this menu item you can reset the analysis result, which is also displayed directly in the model.</td>
+	</tr>
+	<tr valign="TOP">
+		<td>Create New Submodel</td>
+		<td>When this option is selected, a new submodel is created for each analysis result. Before starting the analysis you will be asked to give a new name to the resulting model.<br> 
+		More about <a href="analyse.html">analysis</a>.</td>
+	</tr>
+	<tr valign="TOP">
+		<td>Analysis Color...</td>
+		<td>here you can choose the color of the analysis</td>
+	</tr>
+	<tr valign="TOP">
+		<td>Redundancy Analysis...</td>
+		<td>with this menu item, the analyses are checked for redundancy</td>
+	</tr>
+	<tr valign="TOP">
+		<td>Redundancy of functions regarding application component configurations</td>
+		<td>here the redundancy of functions regarding application component configurations is displayed</td>
+	</tr>
+	<tr valign="TOP">
+		<td>Redundancy of object types regarding logical memory</td>
+		<td>here the redundancy of object types regarding logical memory is displayed</td>
+	</tr>
+	<tr valign="TOP">
+		<td>Data availability</td>
+		<td>here the data are checked for availability</td>
+	</tr>
+</table>
+</p>
+
+<p>
+<h3><a name="optionen">Options</a></h3>
+<table border="1" bordercolor="Silver">
+	<tr valign="TOP">
+		<td nowrap>General</td>
+		<td>Opens a dialog in which you can make some general settings.</td>
+	</tr>
+	<tr valign="TOP">
+		<td nowrap>Model Browser</td>
+		<td>Opens a dialog in which you can make some settings for the display of the model browser.</td>
+	</tr>
+	<tr valign="TOP">
+		<td nowrap>Graphics</td>
+		<td>Opens a dialog in which you can make some settings for displaying the graphics in the document window.</td>
+	</tr>
+	<tr valign="TOP">
+		<td>RMI-Settings...</td>
+		<td></td>
+	</tr>
+	<tr valign="TOP">
+		<td nowrap>Set Default Model Type...</td>
+		<td>Opens a dialog where you can decide which model type is needed.</td>
+	</tr>
+	<tr valign="TOP">
+		<td nowrap>Show frame around text fields</td>
+		<td>If you have created text fields, you can use this option to specify whether a frame should be displayed around the text fields.</td>
+	</tr>
+	
+	<tr valign="TOP">
+		<td>Language (Sprache)</td>
+		<td>here you choose your language.</td>
+	</tr>
+	<tr valign="TOP">
+		<td>Expert Mode</td>
+		<td>Use this function to display additional elements in the model.</td>
+	</tr>
+</table>
+</p>
+
+<p>
+<h3><a name="extras">Extras</a></h3>
+<table border="1" bordercolor="Silver">
+	<tr valign="TOP">
+		<td nowrap>User-defined property fields...</td>
+		<td></td>
+	</tr>
+	<tr valign="TOP">
+		<td nowrap>Attribute - Editor...</td>
+		<td>Opens a dialog in which you can edit attributes.</td>
+	</tr>
+	<tr valign="TOP">
+		<td nowrap>Activate key figure calculation</td>
+		<td>Activates the calculation of the key figure.</td>
+	</tr>
+	<tr valign="TOP">
+		<td>Assign ETNT combinations automatically</td>
+		<td>When this option is selected, the ETNT combinations of the interfaces are automatically assigned to the connected communication relationships. Each communication relationship is assigned exactly those ETNT relationships for which the interface from which the communication relationship originates sends this ETNT combination and the interface to which the communication relationship leads can receive this ETNT combination. Therefore, if in your model for each two interfaces, which are connected by a communication relation and can send or receive the same ETNT combination, it is generally valid that this ETNT combination is then also transmitted by this communication relation, then you can activate this function.<br> 
+		When you activate this function, all communication relationships already existing in your model are automatically checked and, if necessary, updated.<br> 
+		<i>Note: In older versions of 3LGM, it was not yet possible to assign communication relationships to ETNT combinations. By automatically assigning ETNT combinations to communication links, you can quickly create these missing entries.</i></td>
+	</tr>
+	<tr valign="TOP">
+		<td nowrap>Plugin</td>
+		<td>Opens a selection of plugins.</td>
+	</tr>
+</table>	
+</p>
+
+<p>
+<h3><a name="fenster">Fenster</a></h3>
+In the <i>Window</i> menu, you can select the appearance of the windows. If you have several windows open, you can select the window to be edited from the menu. A list of open windows follows the standard entries <i>Side by Side</i> and <i>Overlap</i> in this menu. 
+<table border="1" bordercolor="Silver">
+	<tr valign="TOP">
+		<td>Side by side</td>
+		<td>When this option is selected, all open windows are displayed next to each other.</td>
+	</tr>
+	<tr valign="TOP">
+		<td>Overlapping</td>
+		<td>If this option is selected, all open windows will overlap each other.</td>
+	</tr>
+</table>
+</p>
+
+<p>
+<h3><a name="hilfe">Help</a></h3>
+<table border="1" bordercolor="Silver">
+	<tr valign="TOP">
+		<td>Help Contents...</td>
+		<td>Starts the online help of the 3LGM&sup2; kit.</td>
+	</tr>
+	<tr valign="TOP">
+		<td>Direct Help</td>
+		<td>Allows the user to click on a component for further information.</td>
+	</tr>
+	<tr valign="TOP">
+		<td>About 3LGM&sup2; Tool...</td>
+		<td>Opens a window with information about the 3LGM&sup2; modelling kit.</td>
+	</tr>
+</table>
+</p>
+
+<p>
+<h2><a name="standardsymbolleiste">The Standard Toolbar</a></h2>
+The standard toolbar is located under the menu bar. It contains some of the most frequently used functions of the construction kit. The buttons of the standard toolbar have the following functions: 
+
+<table cellpadding="10">
+	<tr>
+		<td valign="TOP"><img src="../../bilder/standardsymbolleiste/neu.gif" width=24 height=24 border=0 alt=""></td>
+		<td>
+		<h3><a name="neuesModell">Create New Model</a></h3>
+		Use this button to create a new model. A new tab appears in the model browser with the name of the new model. If you have several models open, you can use these tabs to select the model to be edited.
+		</td>
+	</tr>
+	<tr>
+		<td valign="TOP"><img src="../../bilder/standardsymbolleiste/oeffnen.gif" width=24 height=24 border=0 alt=""></td>
+		<td>
+		<h3><a name="oeffnen">Open model</a></h3>
+		Use this button to open an existing model. A corresponding dialog appears in which you can select the file to be opened. Saved 3LGM&sup2; models usually have the extension .3lgm.
+		</td>
+	</tr>
+	<tr>
+		<td valign="TOP"><img src="../../bilder/standardsymbolleiste/speichern.gif" width=24 height=24 border=0 alt=""></td>
+		<td>
+		<h3><a name="speichern">Save Model</a></h3>
+		Use this button to save your changes to a model. If you have opened a new model that has not yet been saved, a dialog will appear in which you can select a directory for the file to be saved and enter the name of the file. Saved 3LGM&sup2; models usually have the extension .3lgm. If your new model has already been saved to a file or if you have opened an existing file, the current state of the model is saved to this file when you click the <i>Save Model</i> button.
+		</td>
+	</tr>
+	<tr>
+		<td valign="TOP"><img src="../../bilder/standardsymbolleiste/undo.gif" width=24 height=24 border=0 alt=""></td>
+		<td>
+		<h3><a name="undo">Undo</a></h3>
+		Use this button to undo the last changes made to your model.
+		</td>
+	</tr>
+	<tr>
+		<td valign="TOP"><img src="../../bilder/standardsymbolleiste/redo.gif" width=24 height=24 border=0 alt=""></td>
+		<td>
+		<h3><a name="redo">Redo</a></h3>
+		Use this button to restore the last undone changes.
+		</td>
+	</tr>
+	<tr>
+		<td valign="TOP"><a name="multiview"><img src="../../bilder/standardsymbolleiste/ebenen.gif" width=24 height=24 border=0 alt=""></a></td>
+		<td>
+		<h3>MultiView</h3>
+		Use this button to switch views in the document window. You can choose between viewing all three layers in one window or viewing the layers individually.
+		</td>
+	</tr>
+	<tr>
+		<td valign="TOP"><img src="../../bilder/standardsymbolleiste/fachlich.png" width=35 height=33 border=0 alt=""></td>
+		<td>
+		<h3><a name="fachlich">Domain Layer</a></h3>
+		Selects the domain layer.
+		</td>
+	</tr>
+	<tr>
+		<td valign="TOP"><img src="../../bilder/standardsymbolleiste/logisch.png" width=35 height=35 border=0 alt=""></td>
+		<td>
+		<h3><a name="logisch">Logical tool layer</a></h3>
+		Selects the logical tool layer.
+		</td>
+	</tr>
+	<tr>
+		<td valign="TOP"><img src="../../bilder/standardsymbolleiste/physisch.png" width=34 height=32 border=0 alt=""></td>
+		<td>
+		<h3><a name="physisch">Physical tool layer</a></h3>
+		Selects the physical tool layer.
+		</td>
+	</tr>
+</table>
+</p>
+
+<p>
+<h2><a name="zeichensymbolleiste">The Drawing Toolbar</a></h2>
+The drawing toolbar is located at the bottom left. It contains the drawing objects available in the selected layer. Since different objects can be drawn depending on the selected layer, the appearance of the drawing toolbar also differs depending on the selected layer. Depending on the selected layer, the icons of the Drawing Toolbar have the following appearance and function: 
+<table cellspacing="10">
+	<tr>
+		<td colspan="2"><h3>for the domain layer</h3></td>
+	</tr>
+	<tr>
+		<td valign="TOP">
+		<img src="../../bilder/zeichensymbolleiste/fachlich.gif" width=92 height=32 border=0 alt="" align="top">
+		</td>
+		<td>
+		<h4><a name="maus">Select and edit elements</a></h4>
+		Select this button to select or edit elements of the Tray layer in the Document Window. In the document window, you can now double-click on a function or object type to open its properties dialog. A single right-click on a function or object type opens a context menu for the element.
+		<h4><a name="aufgabe">Function</a></h4>
+		Select this button to create a new function in the business layer. Move the mouse into the document window. The mouse pointer is now displayed as crosshairs. Click with the left mouse button on a free space in the workspace layer. A dialog box appears in which you are asked to enter a name for this function.
+		<h4><a name="objekttyp">Object type</a></h4>
+		Select this button to create a new object type in the Tray Layer. Move the mouse to the document window. The mouse pointer is now displayed as crosshairs. Click with the left mouse button on a free space in the workspace layer. A dialog box appears in which you are asked to enter a name for this object type.	
+		</td>
+	</tr>
+	<tr>
+		<td colspan="2"><h3>For the logical tool layer</h3></td>
+	</tr>
+	<tr>
+		<td valign="TOP">
+		<img src="../../bilder/zeichensymbolleiste/logisch.gif" width=62 height=32 border=0 alt="" align="top">
+		</td>
+		<td>
+		<h4>Select and edit elements</h4>
+		Select this button to select or edit logical tool layer elements in the Document Window. In the document window, you can now double-click on an application component to open its properties dialog. A single right-click on an application POU opens a context menu.
+		<h4><a name="anwendungsbaustein">Application Component</a></h4>
+		Select this button to create a new application component in the Logical Tool layer. Move the mouse to the Document Window. The mouse pointer is now displayed as crosshairs. Click with the left mouse button on a free space in the Logical Tool Plane. A dialog box appears in which you are asked to enter a type and a name for this application component.
+		</td>
+	</tr>
+	<tr>
+		<td colspan="2"><h3>For the physical tool layer</h3></td>
+	</tr>
+	<tr>
+		<td valign="TOP">
+		<img src="../../bilder/zeichensymbolleiste/physisch.gif" width=62 height=32 border=0 alt="" align="top">
+		</td>
+		<td>
+		<h4>Select and edit elements</h4>
+		Select this button to select or edit physical tool layer elements in the Document Window. In the document window, you can now double-click on a physical dataprocessing component to open its properties dialog. A single right-click on a physical device opens a context menu.
+		<h4><a name="datenverarbeitungsbaustein">Physical Dataprocessing Component</a></h4>
+		Select this button to create a new Physical DV component in the Physical Tool layer. Move the mouse to the Document Window. The mouse pointer is now displayed as crosshairs. Click with the left mouse button on a free space in the Physical Tool Plane. A dialog box appears in which you are asked to enter a name for this physical dataprocessing component.
+		</td>
+	</tr>
+</table>
+</p>
+
+<p>
+<h2><a name="ansichtswerkzeuge">The View Tools</a></h2>
+The view tools are used to customize the view of the document window as needed. If the view of the layers in the document window is set to single layer view, only the zoom factor can be changed. When all three layers are viewed in the document window, the zoom factor, layer angle and layer distance can be changed. The views can be changed with the button <a href="#multiview">'MultiView'</a>.
+</p>
+
+</body>
+</html>

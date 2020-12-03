@@ -5,13 +5,14 @@ import java.awt.Cursor;
 
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.model.GraphDocumentOwner;
+import de.imise.tool3lgm.graphtools.model.LGMChangeListenerSimple;
 
 /**
  * The component that surrounds resp. contains a single {@link ViewPane}.
  *
  * @author AXS (20.05.2020)
  */
-public interface ViewPaneFrameComponent extends GraphDocumentOwner {
+public interface ViewPaneFrameComponent extends GraphDocumentOwner, LGMChangeListenerSimple {
 
     /**
      * @return the contained {@link ViewPane}

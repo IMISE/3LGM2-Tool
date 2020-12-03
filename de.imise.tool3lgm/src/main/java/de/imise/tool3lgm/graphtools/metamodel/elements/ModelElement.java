@@ -32,6 +32,7 @@ import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModelDefinition;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModelSpecific;
 import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
+import de.imise.tool3lgm.graphtools.metamodel.elements.DoubleMeaningEdge.ConnectionState;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GDCollectionOwner;
@@ -1225,7 +1226,7 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
      */
     @SuppressWarnings("unchecked")
     public final List<ElementContainer> getConnectedContainers(final Class<? extends ModelElement> searchElementClass, final GraphDocument doc, final Class<? extends Edge> edgeClass, final Direction direction, final boolean alphabetical) {
-        return (List<ElementContainer>) getConnected(searchElementClass, doc, edgeClass, direction, true, alphabetical);
+        return (List<ElementContainer>) getConnected(searchElementClass, doc, edgeClass, direction, null, true, alphabetical);
     }
 
     ////////////////////
@@ -1750,7 +1751,21 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
      * @return
      */
     public final List<ModelElement> getConnectedElements(final Class<? extends Edge> edgeClass, final Direction direction) {
-        return getConnectedElements(ModelElement.class, edgeClass, direction, false);
+        return getConnectedElements(edgeClass, direction, null);
+    }
+
+    /**
+     * Gibt alle mit diesem <code>ModelElement</code> verbundenen
+     * <code>ModelElement</code>s des Klasse <code>searchElementClass</code>
+     * zurueck.
+     *
+     * @param edgeClass
+     * @param direction
+     * @param connectionState
+     * @return
+     */
+    public final List<ModelElement> getConnectedElements(final Class<? extends Edge> edgeClass, final Direction direction, final ConnectionState connectionState) {
+        return getConnectedElements(ModelElement.class, edgeClass, direction, connectionState, false);
     }
 
     /**
@@ -1775,11 +1790,28 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
      * @param searchElementClass
      * @param edgeClass
      * @param direction
+     * @param connectionState
      * @param alphabetical
-     * @return List mit allen verbundenen Node
+     * @return
      */
     public final List<ModelElement> getConnectedElements(final Class<? extends ModelElement> searchElementClass, final Class<? extends Edge> edgeClass, final Direction direction, final boolean alphabetical) {
-        return getConnectedElements(searchElementClass, null, edgeClass, direction, alphabetical);
+        return getConnectedElements(searchElementClass, null, edgeClass, direction, null, alphabetical);
+    }
+
+    /**
+     * Gibt alle mit diesem <code>ModelElement</code> verbundenen
+     * <code>ModelElement</code>s des Klasse <code>searchElementClass</code>
+     * zurueck.
+     *
+     * @param searchElementClass
+     * @param edgeClass
+     * @param direction
+     * @param connectionState
+     * @param alphabetical
+     * @return
+     */
+    public final List<ModelElement> getConnectedElements(final Class<? extends ModelElement> searchElementClass, final Class<? extends Edge> edgeClass, final Direction direction, final ConnectionState connectionState, final boolean alphabetical) {
+        return getConnectedElements(searchElementClass, null, edgeClass, direction, connectionState, alphabetical);
     }
 
     /**
@@ -1798,9 +1830,31 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
      * @return List mit allen verbundenen <code>ModelElement</code>s oder
      *         <code>ElementContainer</code>n
      */
-    @SuppressWarnings("unchecked")
     public final List<ModelElement> getConnectedElements(final Class<? extends ModelElement> searchElementClass, final GraphDocument doc, final Class<? extends Edge> edgeClass, final Direction direction, final boolean alphabetical) {
-        return (List<ModelElement>) getConnected(searchElementClass, doc, edgeClass, direction, false, alphabetical);
+        return getConnectedElements(searchElementClass, doc, edgeClass, direction, null, alphabetical);
+    }
+
+    /**
+     * Gibt alle mit diesem <code>ModelElement</code> verbundenen
+     * <code>ModelElement</code>s der Klasse <code>searchElementClass</code>
+     * zurueck.
+     *
+     * @param searchElementClass
+     * @param doc <code>GraphDocument</code> in dem verbundene Elemente gesucht
+     *            werden sollen. Wird <code>null</code> übergeben, werden alle
+     *            verbundenen Elemente zurück gegeben, was der Suche im
+     *            Hauptmodell entspricht.
+     * @param edgeClass
+     * @param direction
+     * @param connectionState
+     * @param alphabetical
+     * @return List mit allen verbundenen <code>ModelElement</code>s oder
+     *         <code>ElementContainer</code>n
+     */
+    @SuppressWarnings("unchecked")
+    public final List<ModelElement> getConnectedElements(final Class<? extends ModelElement> searchElementClass, final GraphDocument doc, final Class<? extends Edge> edgeClass, final Direction direction, final ConnectionState connectionState,
+            final boolean alphabetical) {
+        return (List<ModelElement>) getConnected(searchElementClass, doc, edgeClass, direction, connectionState, false, alphabetical);
     }
 
     /**
@@ -1817,6 +1871,7 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
      *            man ein gültiges Haupt- <code>GraphDocument</code> übergeben.
      * @param edgeClass
      * @param direction
+     * @param connectionState
      * @param container wenn <code>true</code>, werden die
      *            <code>ElementContainer</code> der gefundenen Elemente zurück
      *            gegeben; sonst die Elemente selbst
@@ -1824,7 +1879,8 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
      * @return List mit allen verbundenen <code>ModelElement</code>s oder
      *         <code>ElementContainer</code>n
      */
-    private final List<?> getConnected(final Class<? extends ModelElement> searchElementClass, final GraphDocument doc, final Class<? extends Edge> edgeClass, final Direction direction, final boolean container, final boolean alphabetical) {
+    private final List<?> getConnected(final Class<? extends ModelElement> searchElementClass, final GraphDocument doc, final Class<? extends Edge> edgeClass, final Direction direction, final ConnectionState connectionState, final boolean container,
+            final boolean alphabetical) {
         List<Object> connectedElements = new ArrayList<>(getEdgesCount());
 
         if (doc == null && container) {
@@ -1839,55 +1895,25 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
 
             ModelElement connected = null;
             if (direction != null) {
-                switch (direction) {
-                case FORWARD:
-                    //bei allen gerichteten Kanten
-                    if (metaModel.isDirectedEdge(edgeClass)) {
-                        //bei Kanten mit doppelter Bedeutung ist nur der ConnectionState entscheidenend
-                        if (CoreMetaModel.isDoubleMeaningEdge(edgeClass)) {
-                            switch (((DoubleMeaningEdge) edge).getConnectionState()) {
-                            case FORWARD:
-                                connected = edge.isEnd(this) ? null : edge.getEnd();
-                                break;
-                            case BACKWARD:
-                                connected = edge.isEnd(this) ? edge.getStart() : null;
-                                break;
-                            default:
-                                connected = edge.getOther(this);
-                            }
-                        } else {
-                            //bei allen anderen gerichteten Kanten wird hier immer in Vorwärts-Richtung geschaut
-                            connected = edge.isEnd(this) ? null : edge.getEnd();
+                //bei allen gerichteten Kanten
+                if (metaModel.isDirectedEdge(edgeClass)) {
+                    if (connectionState != null && CoreMetaModel.isDoubleMeaningEdge(edgeClass)) {
+                        ConnectionState edgeConnectionState = ((DoubleMeaningEdge) edge).getConnectionState();
+                        if (direction == BACKWARD) {
+                            edgeConnectionState = edgeConnectionState.getBackwardEdgeDirectionEquivalentConnectionState();
                         }
-                    } else {
-                        //bei allen ungerichteten Kanten wird davon ausgegangen, dass sie einfach immer beide Richtungen verbinden
-                        connected = edge.getOther(this);
-                    }
-                    break;
-                case BACKWARD:
-                    //bei allen gerichteten Kanten
-                    if (metaModel.isDirectedEdge(edgeClass)) {
-                        //bei Kanten mit doppelter Bedeutung ist nur der ConnectionState entscheidenend
-                        if (CoreMetaModel.isDoubleMeaningEdge(edgeClass)) {
-                            switch (((DoubleMeaningEdge) edge).getConnectionState()) {
-                            case FORWARD:
-                                connected = edge.isEnd(this) ? edge.getStart() : null;
-                                break;
-                            case BACKWARD:
-                                connected = edge.isEnd(this) ? null : edge.getEnd();
-                                break;
-                            default:
-                                connected = edge.getOther(this);
-                            }
-                        } else {
-                            //bei allen anderen gerichteten Kanten wird hier immer in Rückwärts-Richtung geschaut
-                            connected = edge.isStart(this) ? null : edge.getStart();
+                        if (edgeConnectionState != ConnectionState.DOUBLE && edgeConnectionState != connectionState) {
+                            continue;
                         }
-                    } else {
-                        //bei allen ungerichteten Kanten wird davon ausgegangen, dass sie einfach immer beide Richtungen verbinden
-                        connected = edge.getOther(this);
                     }
-                    break;
+                    if (direction == FORWARD) {
+                        connected = edge.isEnd(this) ? null : edge.getEnd();
+                    } else {
+                        connected = edge.isStart(this) ? null : edge.getStart();
+                    }
+                } else {
+                    //bei allen ungerichteten Kanten wird davon ausgegangen, dass sie einfach immer beide Richtungen verbinden
+                    connected = edge.getOther(this);
                 }
             } else {
                 connected = edge.getEnd() == this ? edge.getStart() : edge.getEnd();

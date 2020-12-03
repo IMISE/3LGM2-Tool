@@ -5,6 +5,7 @@ import java.awt.BorderLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 
+import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.gui.viewpane.ViewPane;
 import de.imise.tool3lgm.gui.viewpane.ViewPaneFrameComponent;
 
@@ -23,6 +24,8 @@ public abstract class MainFrameDesktopTabComponent extends JPanel implements Vie
         this.viewPane = viewPane;
         setLayout(new BorderLayout());
         add(viewPane, BorderLayout.CENTER);
+        GraphDocument doc = viewPane.getGraphDocument();
+        doc.addAllTransactionsListener(this);
     }
 
     @Override
@@ -42,6 +45,8 @@ public abstract class MainFrameDesktopTabComponent extends JPanel implements Vie
 
     @Override
     public void dispose() {
+        GraphDocument doc = getGraphDocument();
+        doc.removeAllTransactionsListener(this);
     }
 
     /**

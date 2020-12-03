@@ -339,7 +339,7 @@ public class MetaPathDefinition extends MetaModelSpecificAdapter {
      *         ebenfalls neu angelegt werden. Diese Pfade werden im Kontextmenü
      *         bei Mehrfachselektion oder Einfachselektion angeboten.
      */
-    public Collection<SimpleMetaPath> getCreatablePaths() {
+    public Collection<SimpleMetaPath> getCreatableMetaPaths() {
         return ImmutableList.of();
     }
 
@@ -409,7 +409,7 @@ public class MetaPathDefinition extends MetaModelSpecificAdapter {
      *
      * @return
      */
-    public Map<Class<? extends ModelElement>, MetaPath> getElementClassToNameExtensionPath() {
+    public Map<Class<? extends ModelElement>, MetaPath> getElementClassToNameExtensionMetaPath() {
         return ImmutableMap.of();
     }
 
@@ -425,7 +425,7 @@ public class MetaPathDefinition extends MetaModelSpecificAdapter {
      * Das funktioniert im Moment nur bei Kanten, da bei Knoten zum Zeitpunkt
      * des Festlegens des Namens der Knoten noch mit gar nichts verbunden ist.
      */
-    public Map<Class<? extends Edge>, MetaPath> getEdgeClassToInitialCreatedNameSourcePath() {
+    public Map<Class<? extends Edge>, MetaPath> getEdgeClassToInitialCreatedNameSourceMetaPath() {
         return ImmutableMap.of();
     }
 

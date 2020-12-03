@@ -1,0 +1,142 @@
+<?xml version='1.0' encoding='ISO-8859-1' ?>
+<!DOCTYPE map PUBLIC "-//Sun Microsystems Inc.//DTD JavaHelp Map Version 1.0//EN"
+            "http://java.sun.com/products/javahelp/map_1_0.dtd">
+
+<map version="1.0" xml:lang="de_DE">
+	<mapID target="wilkommen" url="de/willkommen.html"/>
+	<mapID target="impressum" url="de/impressum.html"/>
+
+	<mapID target="vorwort" url="de/ersteSchritte/vorwort.html"/>
+	<mapID target="neu" url="de/ersteSchritte/neuesModell.html"/>
+	<mapID target="navigieren" url="de/ersteSchritte/navigieren.html"/>
+	<mapID target="neueElemente" url="de/ersteSchritte/neueElemente.html"/>
+
+	<mapID target="faq_mod_fachlich" url="de/faq/faq_mod_fachlich.html"/>
+	<mapID target="faq_mod_logisch" url="de/faq/faq_mod_logisch.html"/>
+	<mapID target="faq_mod_physisch" url="de/faq/faq_mod_physisch.html"/>
+	<mapID target="faq_mod_ebenen" url="de/faq/faq_mod_ebenen.html"/>
+	<mapID target="faq_mod_allgemein" url="de/faq/faq_mod_allgemein.html"/>
+	<mapID target="faq_bed_fachlich" url="de/faq/faq_bed_fachlich.html"/>
+	<mapID target="faq_bed_logisch" url="de/faq/faq_bed_logisch.html"/>
+	<mapID target="faq_bed_physisch" url="de/faq/faq_bed_physisch.html"/>
+	<mapID target="faq_bed_ebenen" url="de/faq/faq_bed_ebenen.html"/>
+	<mapID target="faq_bed_allgemein" url="de/faq/faq_bed_allgemein.html"/>
+
+	<mapID target="modell_ueberblick" url="de/modell/modell_ueberblick.html"/>
+	<mapID target="modell_fachlich" url="de/modell/modell_fachlich.html"/>
+	<mapID target="modell_logisch" url="de/modell/modell_logisch.html"/>
+	<mapID target="modell_physisch" url="de/modell/modell_physisch.html"/>
+	<mapID target="modell_ebenen" url="de/modell/modell_ebenen.html"/>
+	<mapID target="modell_grobFein" url="de/modell/modell_grobFein.html"/>
+	<mapID target="modell_literatur" url="de/modell/literatur.html"/>
+
+	<mapID target="baukasten_uebersicht" url="de/baukasten/uebersicht.html"/>
+	<mapID target="matrixsicht" url="de/baukasten/matrixsicht.html"/>
+	<mapID target="import_export" url="de/baukasten/import_export.html"/>
+	<mapID target="analyse" url="de/baukasten/analyse.html"/>
+	<mapID target="dialoge" url="de/baukasten/dialoge.html"/>
+	<mapID target="tasten" url="de/baukasten/tasten.html"/>
+	
+	<!-- Index -->
+	<mapID target="uebersicht_ansichtswerkzeuge" url="de/baukasten/uebersicht.html#ansichtswerkzeuge"/>
+	<mapID target="dialoge_rechner_ab" url="de/baukasten/dialoge.html#rechner_ab"/>
+	<mapID target="dialoge_papier_ab" url="de/baukasten/dialoge.html#papier_ab"/>
+	<mapID target="dialoge_gemischt_ab" url="de/baukasten/dialoge.html#gemischt_ab"/>
+	<mapID target="modell_logisch_awb_konf" url="de/modell/modell_logisch.html#awb_konf"/>
+	<mapID target="dialoge_aufgabe_awb_konf" url="de/baukasten/dialoge.html#awb_konf"/>
+	<mapID target="modell_logisch_anwendungsprogramm" url="de/modell/modell_logisch.html#anwendungsprogramm"/>
+	<mapID target="dialoge_anwendungsprogramm" url="de/baukasten/dialoge.html#anwendungsprogramm"/>
+	<mapID target="dialoge_aufgabe" url="de/baukasten/dialoge.html#aufgabe"/>
+	<mapID target="modell_fachlich_aufgaben" url="de/modell/modell_fachlich.html#aufgaben"/>
+	<mapID target="dialoge_bausteintyp" url="de/baukasten/dialoge.html#bausteintyp"/>
+	<mapID target="dialoge_benutzer_s" url="de/baukasten/dialoge.html#benutzer_s"/>
+	<mapID target="modell_logisch_benutzer_s" url="de/modell/modell_logisch.html#benutzer_s"/>
+	<mapID target="dialoge_dbs" url="de/baukasten/dialoge.html#dbs"/>
+	<mapID target="modell_ebenen_dbs" url="de/modell/modell_ebenen.html#dbs"/>
+	<mapID target="modell_logisch_dbs" url="de/modell/modell_logisch.html#dbs"/>
+	<mapID target="modell_grobFein_dvb_konf" url="de/modell/modell_grobFein.html#dvb_konf"/>
+	<mapID target="dvb_konf_rechner" url="de/baukasten/dialoge.html#dvb_konf_rechner"/>
+	<mapID target="dvb_konf_papier" url="de/baukasten/dialoge.html#dvb_konf_papier"/>
+	<mapID target="dvb_konf_gemischt" url="de/baukasten/dialoge.html#dvb_konf_gemischt"/>
+	<mapID target="dialoge_db_system" url="de/baukasten/dialoge.html#db_system"/>
+	<mapID target="modell_logisch_db_system" url="de/modell/modell_logisch.html#db_system"/>
+	<mapID target="uebersicht_dokumentfenster" url="de/baukasten/uebersicht.html#dokumentfenster"/>
+	<mapID target="dialoge_fachlich" url="de/baukasten/dialoge.html#fachlich"/>
+	<mapID target="dialoge_logisch" url="de/baukasten/dialoge.html#logisch"/>
+	<mapID target="dialoge_physisch" url="de/baukasten/dialoge.html#physisch"/>
+	<mapID target="navigieren_iib" url="de/ersteSchritte/navigieren.html#iib"/>
+	<mapID target="uebersicht_menueleiste" url="de/baukasten/uebersicht.html#menueleiste"/>
+	<mapID target="uebersicht_modellbrowser" url="de/baukasten/uebersicht.html#modellbrowser"/>
+	<mapID target="dialoge_nachrichtentyp" url="de/baukasten/dialoge.html#nachrichtentyp"/>
+	<mapID target="modell_ebenen_repraesent" url="de/modell/modell_ebenen.html#repraesent"/>
+	<mapID target="modell_logisch_nachrichtentyp" url="de/modell/modell_logisch.html#nachrichtentyp"/>
+	<mapID target="dialoge_komm_standard" url="de/baukasten/dialoge.html#komm_standard"/>
+	<mapID target="modell_logisch_komm_standard" url="de/modell/modell_logisch.html#komm_standard"/>
+	<mapID target="dialoge_netzprotokoll" url="de/baukasten/dialoge.html#netzprotokoll"/>
+	<mapID target="modell_physisch_netzprotokoll" url="de/modell/modell_physisch.html#netzprotokoll"/>
+	<mapID target="dialoge_netztyp" url="de/baukasten/dialoge.html#netztyp"/>
+	<mapID target="modell_physisch_netztyp" url="de/modell/modell_physisch.html#netztyp"/>
+	<mapID target="dialoge_objekttyp" url="de/baukasten/dialoge.html#objekttyp"/>
+	<mapID target="modell_fachlich_objekttyp" url="de/modell/modell_fachlich.html#objekttyp"/>
+	<mapID target="modell_logisch_objekttyp" url="de/modell/modell_logisch.html#objekttyp"/>
+	<mapID target="modell_ebenen_objekttyp" url="de/modell/modell_ebenen.html#objekttyp"/>
+	<mapID target="dialoge_organisationsplan" url="de/baukasten/dialoge.html#organisationsplan"/>
+	<mapID target="modell_logisch_organisationsplan" url="de/modell/modell_logisch.html#organisationsplan"/>
+	<mapID target="dialoge_dv_baustein" url="de/baukasten/dialoge.html#dv_baustein"/>
+	<mapID target="modell_ebenen_dv_baustein" url="de/modell/modell_ebenen.html#dv_baustein"/>
+	<mapID target="modell_physisch_dv_baustein" url="de/modell/modell_physisch.html#dv_baustein"/>
+	<mapID target="dialoge_softwareprodukt" url="de/baukasten/dialoge.html#softwareprodukt"/>
+	<mapID target="modell_fachlich_softwareprodukt" url="de/modell/modell_fachlich.html#softwareprodukt"/>
+	<mapID target="modell_logisch_softwareprodukt" url="de/modell/modell_logisch.html#softwareprodukt"/>
+	<mapID target="modell_ebenen_softwareprodukt" url="de/modell/modell_ebenen.html#softwareprodukt"/>
+	<mapID target="uebersicht_standardsymbolleiste" url="de/baukasten/uebersicht.html#standardsymbolleiste"/>
+	<mapID target="dialoge_standort" url="de/baukasten/dialoge.html#standort"/>
+	<mapID target="dialoge_subnetz" url="de/baukasten/dialoge.html#subnetz"/>
+	<mapID target="modell_physisch_subnetz" url="de/modell/modell_physisch.html#subnetz"/>
+	<mapID target="uebersicht_zeichensymbolleiste" url="de/baukasten/uebersicht.html#zeichensymbolleiste"/>
+	<mapID target="dialoge_baustein_s" url="de/baukasten/dialoge.html#baustein_s"/>
+	<mapID target="modell_logisch_baustein_s" url="de/modell/modell_logisch.html#baustein_s"/>
+	<mapID target="modell_logisch_datensatztyp" url="de/modell/modell_logisch.html#datensatztyp"/>
+	<mapID target="dialoge_datensatztyp" url="de/baukasten/dialoge.html#datensatztyp"/>
+	<mapID target="modell_logisch_dokumentensammlung" url="de/modell/modell_logisch.html#dokumentensammlung"/>
+	<mapID target="modell_ebenen_dokumentensammlung" url="de/modell/modell_ebenen.html#dokumentensammlung"/>
+	<mapID target="dialoge_dokumentensammlung" url="de/baukasten/dialoge.html#dokumentensammlung"/>
+	<mapID target="dialoge_dokumententyp" url="de/baukasten/dialoge.html#dokumententyp"/>
+	<mapID target="modell_ebenen_dokumententyp" url="de/modell/modell_ebenen.html#dokumententyp"/>
+	<mapID target="modell_logisch_dokumententyp" url="de/modell/modell_logisch.html#dokumententyp"/>
+	<mapID target="modell_ebenen_ereignistyp" url="de/modell/modell_ebenen.html#ereignistyp"/>
+	<mapID target="dialoge_ereignistyp" url="de/baukasten/dialoge.html#ereignistyp"/>
+	<mapID target="dialoge_etnt_kombi" url="de/baukasten/dialoge.html#etnt_kombi"/>
+	<mapID target="dialoge_organisationseinheit" url="de/baukasten/dialoge.html#organisationseinheit"/>
+	<mapID target="modell_fachlich_organisationseinheit" url="de/modell/modell_fachlich.html#organisationseinheit"/>
+	<mapID target="dialoge_rolle" url="de/baukasten/dialoge.html#rolle"/>
+	<mapID target="modell_fachlich_rolle" url="de/modell/modell_fachlich.html#rolle"/>
+	
+	<mapID target="dialoge_kom_prozess" url="de/baukasten/dialoge.html#kom_prozess"/>
+
+	<!-- direkthilfe -->
+	<mapID target="standardsymbolleiste" url="de/baukasten/uebersicht.html#standardsymbolleiste"/>
+	<mapID target="ACTION_GRAPH_SHOW_THREE_LAYER_PERSPECTIVE" url="de/baukasten/uebersicht.html#multiview"/>
+	<mapID target="ACTION_GRAPH_SHOW_SINGLE_LAYER_PERSPECTIVE" url="de/baukasten/uebersicht.html#multiview"/>
+	<mapID target="ACTION_ACTIVATE_DOMAIN_LAYER" url="de/baukasten/uebersicht.html#fachlich"/>
+	<mapID target="ACTION_ACTIVATE_LOGICAL_LAYER" url="de/baukasten/uebersicht.html#logisch"/>
+	<mapID target="ACTION_ACTIVATE_PHYSICAL_LAYER" url="de/baukasten/uebersicht.html#physisch"/>
+	<mapID target="ACTION_NEW_MODEL" url="de/baukasten/uebersicht.html#neuesModell"/>
+	<mapID target="ACTION_OPEN_MODEL" url="de/baukasten/uebersicht.html#oeffnen"/>
+	<mapID target="ACTION_SAVE_MODEL" url="de/baukasten/uebersicht.html#speichern"/>
+	<mapID target="ACTION_UNDO" url="de/baukasten/uebersicht.html#undo"/>
+	<mapID target="ACTION_REDO" url="de/baukasten/uebersicht.html#redo"/>
+	<mapID target="GRAPH_TOOLBAR_ansichtswerkzeuge" url="de/baukasten/uebersicht.html#ansichtswerkzeuge"/>
+	<mapID target="GRAPH_TOOLBAR_switchMouseMode" url="de/baukasten/uebersicht.html#maus"/>
+	<mapID target="GRAPH_TOOLBAR_Aufgabe" url="de/baukasten/uebersicht.html#aufgabe"/>
+	<mapID target="GRAPH_TOOLBAR_Objekttyp" url="de/baukasten/uebersicht.html#objekttyp"/>
+	<mapID target="GRAPH_TOOLBAR_KonAnwendungsbaustein" url="de/baukasten/uebersicht.html#anwendungsbaustein"/>
+	<mapID target="GRAPH_TOOLBAR_RechAnwendungsbaustein" url="de/baukasten/uebersicht.html#anwendungsbaustein"/>
+	<mapID target="GRAPH_TOOLBAR_PhysischerDVBaustein" url="de/baukasten/uebersicht.html#datenverarbeitungsbaustein"/>
+	
+	
+
+	<!-- Glossar -->
+	<mapID target="anwendungsbaustein" url="de/glossar/anwendungsbaustein.html"/>
+</map>
+

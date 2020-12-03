@@ -1,167 +1,167 @@
 <?xml version='1.0' encoding='ISO-8859-1' ?>
 <!DOCTYPE index PUBLIC "-//Sun Microsystems Inc.//DTD JavaHelp Index Version 2.0//EN" "http://java.sun.com/products/javahelp/index_2_0.dtd">
 <index version="2.0">
-	<indexitem text="Ansichtswerkzeuge">
-		<indexitem text="Baukasten&uuml;bersicht" target="baukasten_uebersicht"/>
-		<indexitem text="Ansichtswerkzeuge" target="uebersicht_ansichtswerkzeuge"/>
+	<indexitem text="Viewing tools">
+		<indexitem text="Modelling kit overview" target="baukasten_uebersicht"/>
+		<indexitem text="Viewing tools" target="uebersicht_ansichtswerkzeuge"/>
 	</indexitem>
-	<indexitem text="Anwendungsbaustein">
-		<indexitem text="Statische Sicht der Logischen Werkzeugebene" target="modell_logisch"/>
-		<indexitem text="Eigenschaften-Dialog Rechnerbasierter Anwendungsbaustein" target="dialoge_rechner_ab"/>
-		<indexitem text="Eigenschaften-Dialog Papierbasierter Anwendungsbaustein" target="dialoge_papier_ab"/>
-		<indexitem text="Eigenschaften-Dialog Gemischter Anwendungsbaustein" target="dialoge_gemischt_ab"/>
+	<indexitem text="Application component">
+		<indexitem text="Static view of the domain layer" target="modell_logisch"/>
+		<indexitem text="Property-Dialog Computer-based application component" target="dialoge_rechner_ab"/>
+		<indexitem text="Property-Dialog Paper-based application component" target="dialoge_papier_ab"/>
+		<indexitem text="Property-Dialog mixed application component" target="dialoge_gemischt_ab"/>
 	</indexitem>
-	<indexitem text="Anwendungsbausteinkonfiguration">
-		<indexitem text="Statische Sicht der Logischen Werkzeugebene" target="modell_logisch_awb_konf"/>
-		<indexitem text="Eigenschaften-Dialog Aufgabe" target="dialoge_aufgabe_awb_konf"/>
+	<indexitem text="Application component configuration">
+		<indexitem text="Static view of the logical layer" target="modell_logisch_awb_konf"/>
+		<indexitem text="Property-Dialog Function" target="dialoge_aufgabe_awb_konf"/>
 	</indexitem>
-	<indexitem text="Anwendungsprogramm">
-		<indexitem text="Statische Sicht der Logischen Werkzeugebene" target="modell_logisch_anwendungsprogramm"/>
-		<indexitem text="Eigenschaften-Dialog Anwendungsprogramm" target="dialoge_anwendungsprogramm"/>
+	<indexitem text="Application program">
+		<indexitem text="Static view of the logical layer" target="modell_logisch_anwendungsprogramm"/>
+		<indexitem text="Property-Dialog application programm" target="dialoge_anwendungsprogramm"/>
 	</indexitem>
-	<indexitem text="Aufgabe">
-		<indexitem text="Statische Sicht der Fachlichen Ebene" target="modell_fachlich_aufgaben"/>
-		<indexitem text="Eigenschaften-Dialog Aufgabe" target="dialoge_aufgabe"/>
+	<indexitem text="Function">
+		<indexitem text="Static View of the Domain Layer" target="modell_fachlich_aufgaben"/>
+		<indexitem text="Property-dialog function" target="dialoge_aufgabe"/>
 	</indexitem>
-	<indexitem text="Bausteinschnittstelle">
-		<indexitem text="Eigenschaften-Dialog Bausteinschnittstelle" target="dialoge_baustein_s"/>
-		<indexitem text="Statische Sicht der Logischen Werkzeugebene" target="modell_logisch_baustein_s"/>
+	<indexitem text="Component interface">
+		<indexitem text="Property-dialog component interface" target="dialoge_baustein_s"/>
+		<indexitem text="Static view of the logical tool layer" target="modell_logisch_baustein_s"/>
 	</indexitem>
-	<indexitem text="Bausteintyp" target="dialoge_bausteintyp"/>
-	<indexitem text="Benutzungsschnittstelle">
-		<indexitem text="Statische Sicht der Logischen Werkzeugebene" target="modell_logisch_benutzer_s"/>
-		<indexitem text="Eigenschaften-Dialog Benutzungsschnittstelle" target="dialoge_benutzer_s"/>
+	<indexitem text="Component type" target="dialoge_bausteintyp"/>
+	<indexitem text="User interface">
+		<indexitem text="Static view of the logical tool layer" target="modell_logisch_benutzer_s"/>
+		<indexitem text="Property-dialog user interface" target="dialoge_benutzer_s"/>
 	</indexitem>
-	<indexitem text="Datenbanksystem">
-		<indexitem text="Eigenschaften-Dialog Datenbanksystem" target="dialoge_dbs"/>
-		<indexitem text="Interebenen-Beziehung zwischen statischen Komponenten" target="modell_ebenen_dbs"/>
-		<indexitem text="Statische Sicht der Logischen Werkzeugebene" target="modell_logisch_dbs"/>
+	<indexitem text="Databasesystem">
+		<indexitem text="Property-dialog Databasesystem" target="dialoge_dbs"/>
+		<indexitem text="Inter-layer-relationships between static components" target="modell_ebenen_dbs"/>
+		<indexitem text="Static view of the logical tool layer" target="modell_logisch_dbs"/>
 	</indexitem>
-	<indexitem text="Datenverarbeitungsbausteinkonfiguration">
-		<indexitem text="Vergr&ouml;bern und Verfeinern von Modellen" target="modell_grobFein_dvb_konf"/>
-		<indexitem text="Eigenschaften-Dialog Papierbasierter Anwendungsbaustein" target="dvb_konf_papier"/>
-		<indexitem text="Eigenschaften-Dialog Rechnerbasierter Anwendungsbaustein" target="dvb_konf_rechner"/>
-		<indexitem text="Eigenschaften-Dialog Gemischter Anwendungsbaustein" target="dvb_konf_gemischt"/>
+	<indexitem text="Data processing component configuration">
+		<indexitem text="Coarsening and Refining the models" target="modell_grobFein_dvb_konf"/>
+		<indexitem text="Property-dialog paper-based application component" target="dvb_konf_papier"/>
+		<indexitem text="Property-dialog computer-based application component" target="dvb_konf_rechner"/>
+		<indexitem text="Property-dialog mixed application component" target="dvb_konf_gemischt"/>
 	</indexitem>
-	<indexitem text="DB-Verwaltungssystem">
-		<indexitem text="Eigenschaften-Dialog DB-Verwaltungssystem" target="dialoge_db_system"/>
-		<indexitem text="Statische Sicht der Logischen Werkzeugebene" target="modell_logisch_db_system"/>
+	<indexitem text="DB-Manaagementsystem">
+		<indexitem text="Property-dialog DB-Manaagementsystem" target="dialoge_db_system"/>
+		<indexitem text="Static view of the logical tool layer" target="modell_logisch_db_system"/>
 	</indexitem>
-	<indexitem text="Dokumentfenster">
-		<indexitem text="Baukasten&uuml;bersicht" target="baukasten_uebersicht"/>
-		<indexitem text="Dokumentfenster" target="uebersicht_dokumentfenster"/>
+	<indexitem text="Document window">
+		<indexitem text="Modeling kit overview" target="baukasten_uebersicht"/>
+		<indexitem text="Document window" target="uebersicht_dokumentfenster"/>
 	</indexitem>
-	<indexitem text="Fachliche Ebene">
-		<indexitem text="Statische Sicht der Fachlichen Ebene" target="modell_fachlich"/>
-		<indexitem text="Eigenschaften der Elemente der Fachlichen Ebene" target="dialoge_fachlich"/>
+	<indexitem text="Domain layer">
+		<indexitem text="Static view of the domain layer" target="modell_fachlich"/>
+		<indexitem text="Properties of the domain layer elements" target="dialoge_fachlich"/>
 	</indexitem>
-	<indexitem text="Logische Werkzeugebene">
-		<indexitem text="Statische Sicht der Logischen Werkzeugebene" target="modell_logisch"/>
-		<indexitem text="Eigenschaften der Elemente der Logischen Werkzeugebene" target="dialoge_logisch"/>
+	<indexitem text="Logical tool layer">
+		<indexitem text="Static view of the logical tool layer" target="modell_logisch"/>
+		<indexitem text="Eigenschaften of the logical tool layer elements" target="dialoge_logisch"/>
 	</indexitem>
-	<indexitem text="Physische Werkzeugebene">
-		<indexitem text="Statische Sicht der Physischen Werkzeugebene" target="modell_physisch"/>
-		<indexitem text="Eigenschaften der Elemente der Physischen Werkzeugebene" target="dialoge_physisch"/>
+	<indexitem text="Physical tool layer">
+		<indexitem text="Static view of the physical tool layer" target="modell_physisch"/>
+		<indexitem text="Properties of the physical tool layer elements" target="dialoge_physisch"/>
 	</indexitem>
-	<indexitem text="Inter-Ebenen-Beziehungen">
-		<indexitem text="Im Modell navigieren" target="navigieren_iib"/>
-		<indexitem text="Interebenen-Beziehungen zwischen statischen Komponenten" target="modell_ebenen"/>
+	<indexitem text="Inter-layer-relationships">
+		<indexitem text="Navigate the model" target="navigieren_iib"/>
+		<indexitem text="Inter-layer-relationships between static components" target="modell_ebenen"/>
 	</indexitem>
 	<indexitem text="Master" target="modell_ebenen_dbs"/>
-	<indexitem text="Men&uuml;leiste">
-		<indexitem text="Baukasten&uuml;bersicht" target="baukasten_uebersicht"/>
-		<indexitem text="Men&uuml;leiste" target="uebersicht_menueleiste"/>
+	<indexitem text="Menu bar">
+		<indexitem text="Modeling kit overview" target="baukasten_uebersicht"/>
+		<indexitem text="Menu bar" target="uebersicht_menueleiste"/>
 	</indexitem>
-	<indexitem text="Modellbrowser">
-		<indexitem text="Baukasten&uuml;bersicht" target="baukasten_uebersicht"/>
-		<indexitem text="Modellbrowser" target="uebersicht_modellbrowser"/>
+	<indexitem text="Modelbrowser">
+		<indexitem text="Modeling kit overview" target="baukasten_uebersicht"/>
+		<indexitem text="Modelbrowser" target="uebersicht_modellbrowser"/>
 	</indexitem>
-	<indexitem text="Nachrichtentyp">
-		<indexitem text="Eigenschaften-Dialog Nachrichtentyp" target="dialoge_nachrichtentyp"/>
-		<indexitem text="Objekttyp - Repr&auml;sentationsform" target="modell_ebenen_repraesent"/>
-		<indexitem text="Statische Sicht der Logischen Werkzeugebene" target="modell_logisch_nachrichtentyp"/>
+	<indexitem text="Message type">
+		<indexitem text="Property-dialog message type" target="dialoge_nachrichtentyp"/>
+		<indexitem text="Object type - form of representation" target="modell_ebenen_repraesent"/>
+		<indexitem text="Static view of the logical tool layer" target="modell_logisch_nachrichtentyp"/>
 	</indexitem>
-	<indexitem text="Kommunikationsstandard">
-		<indexitem text="Eigenschaften-Dialog Kommunikationsstandard" target="dialoge_komm_standard"/>
-		<indexitem text="Statische Sicht der Logischen Werkzeugebene" target="modell_logisch_komm_standard"/>
+	<indexitem text="Communication standard">
+		<indexitem text="Property-dialog communication standard" target="dialoge_komm_standard"/>
+		<indexitem text="Static view of the logical tool layer" target="modell_logisch_komm_standard"/>
 	</indexitem>
-	<indexitem text="Netzprotokoll">
-		<indexitem text="Eigenschaften-Dialog Netzprotokoll" target="dialoge_netzprotokoll"/>
-		<indexitem text="Statische Sicht der Physischen Werkzeugebene" target="modell_physisch_netzprotokoll"/>
+	<indexitem text="Network protocol">
+		<indexitem text="Property-dialog network protocol" target="dialoge_netzprotokoll"/>
+		<indexitem text="Static view of the physical tool layer" target="modell_physisch_netzprotokoll"/>
 	</indexitem>
-	<indexitem text="Netztyp">
-		<indexitem text="Eigenschaften-Dialog Netztyp" target="dialoge_netztyp"/>
-		<indexitem text="Statische Sicht der Physischen Werkzeugebene" target="modell_physisch_netztyp"/>
+	<indexitem text="Network type">
+		<indexitem text="Property-dialog network type" target="dialoge_netztyp"/>
+		<indexitem text="Static view of the physical tool layer" target="modell_physisch_netztyp"/>
 	</indexitem>
 	<indexitem text="Objekttyp">
-		<indexitem text="Statische Sicht der Fachlichen Ebene" target="modell_fachlich_objekttyp"/>
-		<indexitem text="Statische Sicht der Logischen Ebene" target="modell_logisch_objekttyp"/>
-		<indexitem text="Interebenen-Beziehungen zwischen statischen Komponenten" target="modell_ebenen_objekttyp"/>
-		<indexitem text="Eigenschaften-Dialog Objekttyp" target="dialoge_objekttyp"/>
+		<indexitem text="Static view of the domain layer" target="modell_fachlich_objekttyp"/>
+		<indexitem text="Static view of the Logischen Ebene" target="modell_logisch_objekttyp"/>
+		<indexitem text="Inter-layer-relationships between static components" target="modell_ebenen_objekttyp"/>
+		<indexitem text="Property-dialog object type" target="dialoge_objekttyp"/>
 	</indexitem>
-	<indexitem text="Organisationsplan">
-		<indexitem text="Eigenschaften-Dialog Organisationsplan" target="dialoge_organisationsplan"/>
-		<indexitem text="Statische Sicht der Logischen Werkzeugebene" target="modell_logisch_organisationsplan"/>
+	<indexitem text="Organisation plan">
+		<indexitem text="Property-dialog organisation plan" target="dialoge_organisationsplan"/>
+		<indexitem text="Static view of the logical tool layer" target="modell_logisch_organisationsplan"/>
 	</indexitem>
 	<indexitem text="Physischer DV-Baustein">
-		<indexitem text="Eigenschaften-Dialog Physischer DV-Baustein" target="dialoge_dv_baustein"/>
-		<indexitem text="Interebenen-Beziehungen zwischen statischen Komponenten" target="modell_ebenen_dv_baustein"/>
-		<indexitem text="Statische Sicht der Physischen Werkzeugebene" target="modell_physisch_dv_baustein"/>
+		<indexitem text="Property-dialog physical data processing component" target="dialoge_dv_baustein"/>
+		<indexitem text="Inter-layer-relationships between static components" target="modell_ebenen_dv_baustein"/>
+		<indexitem text="Static view of the physical tool layer" target="modell_physisch_dv_baustein"/>
 	</indexitem>
 	<indexitem text="Softwareprodukt">
-		<indexitem text="Statische Sicht der Logischen Werkzeugebene" target="modell_logisch_softwareprodukt"/>
-		<indexitem text="Statische Sicht der Fachlichen Ebene" target="modell_fachlich_softwareprodukt"/>
-		<indexitem text="Interebenen-Beziehungen zwischen statischen Komponenten" target="modell_ebenen_softwareprodukt"/>
-		<indexitem text="Eigenschaften-Dialog Softwareprodukt" target="dialoge_softwareprodukt"/>
+		<indexitem text="Static view of the logical tool layer" target="modell_logisch_softwareprodukt"/>
+		<indexitem text="Static view of the domain layer" target="modell_fachlich_softwareprodukt"/>
+		<indexitem text="Inter-layer-relationships between static components" target="modell_ebenen_softwareprodukt"/>
+		<indexitem text="Property-dialog software product" target="dialoge_softwareprodukt"/>
 	</indexitem>
-	<indexitem text="Standardsymbolleiste">
-		<indexitem text="Baukasten&uuml;bersicht" target="baukasten_uebersicht"/>
-		<indexitem text="Standardsymbolleiste" target="uebersicht_standardsymbolleiste"/>
+	<indexitem text="Standard toolbar">
+		<indexitem text="Modeling kit overview" target="baukasten_uebersicht"/>
+		<indexitem text="Standard toolbar" target="uebersicht_standardsymbolleiste"/>
 	</indexitem>
-	<indexitem text="Standort" target="dialoge_standort"/>
-	<indexitem text="Subnetz">
-		<indexitem text="Eigenschaften-Dialog Subnetz" target="dialoge_subnetz"/>
-		<indexitem text="Statische Sicht der Physischen Werkzeugebene" target="modell_physisch_subnetz"/>
+	<indexitem text="Location" target="dialoge_standort"/>
+	<indexitem text="Sub network">
+		<indexitem text="Property-dialog sub network" target="dialoge_subnetz"/>
+		<indexitem text="Static view of the physical tool layer" target="modell_physisch_subnetz"/>
 	</indexitem>
-	<indexitem text="Tastenkombinationen" target="tasten"/>
-	<indexitem text="Zeichensymbolleiste">
-		<indexitem text="Baukasten&uuml;bersicht" target="baukasten_uebersicht"/>
-		<indexitem text="Zeichensymbolleiste" target="uebersicht_zeichensymbolleiste"/>
+	<indexitem text="Keyboard shortcuts" target="tasten"/>
+	<indexitem text="Drawing toolbar">
+		<indexitem text="Modeling kit overview" target="baukasten_uebersicht"/>
+		<indexitem text="Drawing toolbar" target="uebersicht_zeichensymbolleiste"/>
 	</indexitem>
-	<indexitem text="Modell">
-		<indexitem text="Importieren und Exportieren von Modellen" target="import_export"/>
-		<indexitem text="Modelle anlegen, &ouml;ffnen und speichern" target="neu"/>
-		<indexitem text="Im Modell navigieren" target="navigieren"/>
-		<indexitem text="Das 3LGM²-Metamodell - &Uuml;berblick" target="modell_ueberblick"/>
+	<indexitem text="Model">
+		<indexitem text="Import and Export of Models" target="import_export"/>
+		<indexitem text="Create, open and save models" target="neu"/>
+		<indexitem text="Navigate the model" target="navigieren"/>
+		<indexitem text="The 3LGM²-Metamodel - Overview" target="modell_ueberblick"/>
 	</indexitem>
-	<indexitem text="Datensatztyp">
-		<indexitem text="Eigenschaften-Dialog Datensatztyp" target="dialoge_datensatztyp"/>
-		<indexitem text="Statische Sicht der Logischen Werkzeugebene" target="modell_logisch_datensatztyp"/>
+	<indexitem text="Dataset type">
+		<indexitem text="Property-dialog dataset type" target="dialoge_datensatztyp"/>
+		<indexitem text="Static view of the logical tool layer" target="modell_logisch_datensatztyp"/>
 	</indexitem>
-	<indexitem text="Dokumentensammlung">
-		<indexitem text="Eigenschaften-Dialog Dokumentensammlung" target="dialoge_dokumentensammlung"/>
-		<indexitem text="Statische Sicht der Logischen Werkzeugebene" target="modell_logisch_dokumentensammlung"/>
-		<indexitem text="Interebenen-Beziehungen zwischen statischen Komponenten" target="modell_ebenen_dokumentensammlung"/>
+	<indexitem text="Document collection">
+		<indexitem text="Property-dialog document collection" target="dialoge_dokumentensammlung"/>
+		<indexitem text="Static view of the logical tool layer" target="modell_logisch_dokumentensammlung"/>
+		<indexitem text="Inter-layer-relationships between static components" target="modell_ebenen_dokumentensammlung"/>
 	</indexitem>
-	<indexitem text="Dokumententyp">
-		<indexitem text="Eigenschaften-Dialog Dokumententyp" target="dialoge_dokumententyp"/>
-		<indexitem text="Statische Sicht der Logischen Werkzeugebene" target="modell_logisch_dokumententyp"/>
-		<indexitem text="Interebenen-Beziehungen zwischen statischen Komponenten" target="modell_ebenen_dokumententyp"/>
+	<indexitem text="Document type">
+		<indexitem text="Property-dialog document type" target="dialoge_dokumententyp"/>
+		<indexitem text="Static view of the logical tool layer" target="modell_logisch_dokumententyp"/>
+		<indexitem text="Inter-layer-relationships between static components" target="modell_ebenen_dokumententyp"/>
 	</indexitem>
-	<indexitem text="Ereignistyp">
-		<indexitem text="Eigenschaften-Dialog Ereignistyp" target="dialoge_ereignistyp"/>
-		<indexitem text="Interebenen-Beziehungen zwischen statischen Komponenten" target="modell_ebenen_ereignistyp"/>
+	<indexitem text="Event type">
+		<indexitem text="Property-dialog event type" target="dialoge_ereignistyp"/>
+		<indexitem text="Inter-layer-relationships between static components" target="modell_ebenen_ereignistyp"/>
 	</indexitem>
-	<indexitem text="ETNT-Kombination">
-		<indexitem text="Eigenschaften-Dialog ETNT-Kombination" target="dialoge_etnt_kombi"/>
+	<indexitem text="ETNT-combination">
+		<indexitem text="Property-dialog ETNT-combination" target="dialoge_etnt_kombi"/>
 	</indexitem>
-	<indexitem text="Organisatinseinheit">
-		<indexitem text="Statische Sicht der Fachlichen Ebene" target="modell_fachlich_organisationseinheit"/>
-		<indexitem text="Eigenschaften-Dialog Organisationseinheit" target="dialoge_organisationseinheit"/>
+	<indexitem text="Organizational unit">
+		<indexitem text="Static view of the domain layer" target="modell_fachlich_organisationseinheit"/>
+		<indexitem text="Property-dialog organizational unit" target="dialoge_organisationseinheit"/>
 	</indexitem>
-	<indexitem text="Rolle">
-		<indexitem text="Statische Sicht der Fachlichen Ebene" target="modell_fachlich_rolle"/>
-		<indexitem text="Eigenschaften-Dialog Rolle" target="dialoge_rolle"/>
+	<indexitem text="Role">
+		<indexitem text="Static view of the domain layer" target="modell_fachlich_rolle"/>
+		<indexitem text="Property-dialog role" target="dialoge_rolle"/>
 	</indexitem>
 </index>
 
