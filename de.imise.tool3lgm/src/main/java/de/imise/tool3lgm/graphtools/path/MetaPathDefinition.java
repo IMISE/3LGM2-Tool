@@ -26,7 +26,7 @@ import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.path.metapaths.ElementaryMetaPath;
 import de.imise.tool3lgm.graphtools.path.metapaths.ElementaryMetaPathHandler;
 import de.imise.tool3lgm.graphtools.path.metapaths.MetaPath;
-import de.imise.tool3lgm.graphtools.path.metapaths.SequenceMetaPath;
+import de.imise.tool3lgm.graphtools.path.metapaths.SerialMetaPath;
 import de.imise.tool3lgm.graphtools.path.metapaths.SimpleMetaPath;
 import de.imise.tool3lgm.graphtools.path.metapaths.SimpleMetaPathCreator;
 import de.imise.tool3lgm.graphtools.path.metapaths.WrapperMetaPath;
@@ -227,7 +227,7 @@ public class MetaPathDefinition extends MetaModelSpecificAdapter {
     }
 
     /**
-     * Erzeugt aus den übergebenen Assoziationen einen {@link SequenceMetaPath}
+     * Erzeugt aus den übergebenen Assoziationen einen {@link SerialMetaPath}
      * zwischen der Start- und Endklasse, die übergeben wurden. Die Richtungen
      * werden aus diesen Start- und Endklassen abgeleitet. Wenn es nicht
      * eindeutig ist, ob die Startklasse die Kante vorwärts oder rückwärts
@@ -339,7 +339,7 @@ public class MetaPathDefinition extends MetaModelSpecificAdapter {
      *         ebenfalls neu angelegt werden. Diese Pfade werden im Kontextmenü
      *         bei Mehrfachselektion oder Einfachselektion angeboten.
      */
-    public Collection<SimpleMetaPath> getCreatablePaths() {
+    public Collection<SimpleMetaPath> getCreatableMetaPaths() {
         return ImmutableList.of();
     }
 
@@ -409,7 +409,7 @@ public class MetaPathDefinition extends MetaModelSpecificAdapter {
      *
      * @return
      */
-    public Map<Class<? extends ModelElement>, MetaPath> getElementClassToNameExtensionPath() {
+    public Map<Class<? extends ModelElement>, MetaPath> getElementClassToNameExtensionMetaPath() {
         return ImmutableMap.of();
     }
 
@@ -425,7 +425,7 @@ public class MetaPathDefinition extends MetaModelSpecificAdapter {
      * Das funktioniert im Moment nur bei Kanten, da bei Knoten zum Zeitpunkt
      * des Festlegens des Namens der Knoten noch mit gar nichts verbunden ist.
      */
-    public Map<Class<? extends Edge>, MetaPath> getEdgeClassToInitialCreatedNameSourcePath() {
+    public Map<Class<? extends Edge>, MetaPath> getEdgeClassToInitialCreatedNameSourceMetaPath() {
         return ImmutableMap.of();
     }
 

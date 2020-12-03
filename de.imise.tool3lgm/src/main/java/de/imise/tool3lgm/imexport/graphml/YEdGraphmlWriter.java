@@ -275,7 +275,7 @@ public class YEdGraphmlWriter extends GraphmlWriter {
     private final List<String> usedIconResources = new ArrayList<>();
 
     private String getIconResourceID(final NodeContainer nc) {
-        String iconId = nc.getIconString();
+        String iconId = nc.getIconID();
         int resourceID = 0;
         if (iconId != null) {
             resourceID = usedIconResources.indexOf(iconId) + 1;
@@ -422,10 +422,10 @@ public class YEdGraphmlWriter extends GraphmlWriter {
     }
 
     private BufferedImage getResourceIconAsImage(final int usedIconResourceIndex) {
-        String iconHashID = usedIconResources.get(usedIconResourceIndex);
+        String iconID = usedIconResources.get(usedIconResourceIndex);
         GDCollection gdcoll = szenario.getCollection();
         Map<String, byte[]> iconTable = gdcoll.getIconTable();
-        byte[] iconData = iconTable.get(iconHashID);
+        byte[] iconData = iconTable.get(iconID);
         ImageIcon icon = new ImageIcon(iconData);
         return ImageTools.toBufferedImage(icon);
     }

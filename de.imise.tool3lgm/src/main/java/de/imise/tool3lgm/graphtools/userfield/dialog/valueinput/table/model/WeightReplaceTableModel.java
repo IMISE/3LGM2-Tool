@@ -62,16 +62,16 @@ public class WeightReplaceTableModel extends AbstractTableModel {
                 }
 
                 WeightReplacer weightReplacer = definitions.getWeightReplacer();
-                String replaceUserFieldHash;
+                String replaceUserFieldID;
                 //im Falle des Platzhalters für das nicht wirklich vorhandene UserFieldWeight für die Gleichverteilung
                 if (ce == null) {
-                    replaceUserFieldHash = weightReplacer.getUniformDistributionReplacement(re.getHashString(), edgeClass);
-                } else { //ansonsten einfach den genauen Ersetzungshash suchen
-                    replaceUserFieldHash = weightReplacer.getReplacement(re.getHashString(), ce.getHashCode());
+                    replaceUserFieldID = weightReplacer.getUniformDistributionReplacement(re.getID(), edgeClass);
+                } else { //ansonsten einfach die genaue Ersetzungs-ID suchen
+                    replaceUserFieldID = weightReplacer.getReplacement(re.getID(), ce.getID());
                 }
-                //wenn ein Ersetzungshash gefunden wurde
-                if (!Strings.isNullOrEmpty(replaceUserFieldHash)) {
-                    UserField replaceUserField = definitions.getUserField(replaceUserFieldHash);
+                //wenn eine Ersetzungs-ID gefunden wurde
+                if (!Strings.isNullOrEmpty(replaceUserFieldID)) {
+                    UserField replaceUserField = definitions.getUserField(replaceUserFieldID);
                     data[rowIndex][columnIndex] = getValueContainer(replaceUserField);
                 } else {
                     data[rowIndex][columnIndex] = getBlankValueContainer(ce);

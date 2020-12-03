@@ -12,7 +12,7 @@ import de.imise.util.collections.CollectionUtils;
 /**
  * @author AXS (10 Dec 2018)
  */
-public abstract class ListMetaPath extends MetaPath {
+public abstract class ListMetaPath extends MetaPathImpl {
 
     /**
      * The default reskey for the path is the same like Edge (= is connected
@@ -34,20 +34,33 @@ public abstract class ListMetaPath extends MetaPath {
     protected final String baseResKeyOrName;
 
     /**
-     * @param metaModel
      * @param subMetaPaths
      */
     public ListMetaPath(final MetaPath... subMetaPaths) {
+        this(ImmutableList.copyOf(subMetaPaths));
+    }
+
+    /**
+     * @param subMetaPaths
+     */
+    public ListMetaPath(final List<MetaPath> subMetaPaths) {
         this(null, subMetaPaths);
     }
 
     /**
-     * @param metaModel
      * @param baseResKeyOrName
      * @param subMetaPaths
      */
     public ListMetaPath(final String baseResKeyOrName, final MetaPath... subMetaPaths) {
-        this(subMetaPaths[0], baseResKeyOrName, ImmutableList.copyOf(subMetaPaths));
+        this(baseResKeyOrName, ImmutableList.copyOf(subMetaPaths));
+    }
+
+    /**
+     * @param baseResKeyOrName
+     * @param subMetaPaths
+     */
+    public ListMetaPath(final String baseResKeyOrName, final List<MetaPath> subMetaPaths) {
+        this(subMetaPaths.get(0), baseResKeyOrName, ImmutableList.copyOf(subMetaPaths));
     }
 
     /**
@@ -87,27 +100,14 @@ public abstract class ListMetaPath extends MetaPath {
         return subMetaPaths;
     }
 
-    /**
-     * @param index
-     * @return
-     */
-    public MetaPath getSubMetaPath(final int index) {
-        return subMetaPaths.get(index);
-    }
-
-    /**
-     * @return
-     */
     @Override
-    public final int getSubMetaPathCount() {
-        return subMetaPaths.size();
-    }
-
-    @Override
-    protected String createName() {
+    public String createName() {
         return metaModel.getResStringWithoutError(baseResKeyOrName);
     }
 
+    /**
+     * @author Ich (12.12.2018)
+     */
     public enum InvalidReason {
         INVALID_LIST_PATH_EMPTY
     }

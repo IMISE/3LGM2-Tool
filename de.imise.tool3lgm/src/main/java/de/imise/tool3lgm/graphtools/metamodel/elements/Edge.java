@@ -84,10 +84,10 @@ public abstract class Edge extends ModelElement {
      */
     protected ModelElement startElement, endElement;
 
-    /**
-     * Hash-Strings of the start
-     */
-    private String start_hash, end_hash;
+    /** ID of the start */
+    private String startID;
+
+    private String endID;
 
     public enum Direction {
         FORWARD,
@@ -106,8 +106,8 @@ public abstract class Edge extends ModelElement {
     @Override
     public final Edge clone() {
         Edge retVal = (Edge) super.clone();
-        retVal.start_hash = "";
-        retVal.end_hash = "";
+        retVal.startID = "";
+        retVal.endID = "";
         return retVal;
     }
 
@@ -263,11 +263,11 @@ public abstract class Edge extends ModelElement {
     @Override
     public boolean putXMLFieldString(final String field, final String value) {
         if (field.equals("start")) {
-            start_hash = value;
+            startID = value;
             return true;
         }
         if (field.equals("end")) {
-            end_hash = value;
+            endID = value;
             return true;
         }
         if (field.equals("direction")) {
@@ -283,19 +283,19 @@ public abstract class Edge extends ModelElement {
      * @param doc
      * @return
      */
-    public final boolean decodeHashStrings(final GraphDocument doc) {
+    public final boolean decodeIDs(final GraphDocument doc) {
         ModelElement startElement = null, endElement = null;
-        if (start_hash == null || end_hash == null) {
+        if (startID == null || endID == null) {
             return false;
         }
-        startElement = doc.findElementCoded(start_hash);
+        startElement = doc.findElementCoded(startID);
         if (startElement == null) {
-            System.out.println("Error decoding start element hash \"" + start_hash + "\"" + getClass());
+            System.out.println("Error decoding start element ID \"" + startID + "\"" + getClass());
         }
 
-        endElement = doc.findElementCoded(end_hash);
+        endElement = doc.findElementCoded(endID);
         if (endElement == null) {
-            System.out.println("Error decoding end element hash \"" + end_hash + "\"" + getClass());
+            System.out.println("Error decoding end element ID \"" + endID + "\"" + getClass());
         }
 
         if (startElement == null || endElement == null) {
@@ -305,6 +305,11 @@ public abstract class Edge extends ModelElement {
         return true;
     }
 
+    /**
+     * @param me1
+     * @param me2
+     * @return
+     */
     public boolean isDirecting(final ModelElement me1, final ModelElement me2) {
         return isDirectingForward(me1, me2);
     }
@@ -338,9 +343,9 @@ public abstract class Edge extends ModelElement {
     public final String getDebugString() {
         String startName = startElement == null ? "null" : startElement.getName();
         String endName = endElement == null ? "null" : endElement.getName();
-        String startHash = start_hash != null ? start_hash : startElement == null ? "null" : startElement.getHashString();
-        String endHash = end_hash != null ? end_hash : endElement == null ? "null" : endElement.getHashString();
-        return startHash + " <-> " + endHash + " " + getClass().getSimpleName() + ": " + getName() + " " + startName + " <-> " + endName;
+        String startID = this.startID != null ? this.startID : startElement == null ? "null" : startElement.getID();
+        String endID = this.endID != null ? this.endID : endElement == null ? "null" : endElement.getID();
+        return startID + " <-> " + endID + " " + getClass().getSimpleName() + ": " + getName() + " " + startName + " <-> " + endName;
     }
 
     /**
@@ -509,15 +514,15 @@ public abstract class Edge extends ModelElement {
     /**
      * @return
      */
-    public final String getStartHash() {
-        return start_hash;
+    public final String getStartID() {
+        return startID;
     }
 
     /**
      * @return
      */
-    public final String getEndHash() {
-        return end_hash;
+    public final String getEndID() {
+        return endID;
     }
 
     /**
@@ -529,10 +534,10 @@ public abstract class Edge extends ModelElement {
             return false;
         }
 
-        startElement = coll.getMainDoc().findElementCoded(startElement.getHashString());
-        endElement = coll.getMainDoc().findElementCoded(endElement.getHashString());
+        startElement = coll.getMainDoc().findElementCoded(startElement.getID());
+        endElement = coll.getMainDoc().findElementCoded(endElement.getID());
 
-        if (startElement == null || endElement == null || coll.getMainDoc().findElementCoded(getHashString()) == null) {
+        if (startElement == null || endElement == null || coll.getMainDoc().findElementCoded(getID()) == null) {
             return false;
         }
 
@@ -543,8 +548,8 @@ public abstract class Edge extends ModelElement {
     }
 
     @Override
-    public final ModelElement join(final ModelElement other, final boolean overwriteHashstringAndExtIDs, final boolean joinNameDescriptionAndUserfields) {
-        ModelElement joinedEdge = super.join(other, overwriteHashstringAndExtIDs, joinNameDescriptionAndUserfields);
+    public final ModelElement join(final ModelElement other, final boolean overwriteIDsAndExtIDs, final boolean joinNameDescriptionAndUserfields) {
+        ModelElement joinedEdge = super.join(other, overwriteIDsAndExtIDs, joinNameDescriptionAndUserfields);
         if (joinedEdge != null) {
             startElement = ((Edge) other).startElement;
             endElement = ((Edge) other).endElement;

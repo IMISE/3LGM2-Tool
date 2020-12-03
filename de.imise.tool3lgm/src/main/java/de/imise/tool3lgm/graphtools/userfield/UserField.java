@@ -16,7 +16,8 @@ import java.util.StringTokenizer;
 import com.google.common.base.Strings;
 import com.google.common.collect.ImmutableSet;
 
-import de.imise.util.HashStringGenerator;
+import de.imise.tool3lgm.graphtools.IDSource;
+import de.imise.util.IDStringGenerator;
 
 /**
  * Ein <code>UserField</code> ist ein Element bzw. Objekt, dass Element- und
@@ -24,13 +25,13 @@ import de.imise.util.HashStringGenerator;
  * zusätzliche Eigenschaften für Element- und Kantenklassen deklariert und
  * definiert werden. Es kann somit eine benutzergesteuerte Erweiterung des
  * Metamodells vorgenommen werden. die Klasse <code>UserField</code> hat als
- * Attribute eine Bezeichung, eine Beschreibung, einen <code>hashCode</code> ,
- * einen <code>style</code> und einen Identifikator, der kenntlich macht, zu
- * welcher Elementklasse das <code>UserField</code> gehört.
+ * Attribute eine Bezeichung, eine Beschreibung, eine ID, einen
+ * <code>style</code> und einen Identifikator, der kenntlich macht, zu welcher
+ * Elementklasse das <code>UserField</code> gehört.
  *
  * @author Thomas Rudert
  */
-public final class UserField implements Cloneable, Comparator<UserFieldTarget>, HashSource {
+public final class UserField implements Cloneable, Comparator<UserFieldTarget>, IDSource {
 
     public static enum Style {
         SEPARATOR {
@@ -333,9 +334,9 @@ public final class UserField implements Cloneable, Comparator<UserFieldTarget>, 
     public static final String ACCOUNTING_FUNCTION_MAX = "MAX";
 
     /**
-     * Präfix aller Hash-Strings von <code>UserField</code>s
+     * Präfix aller IDs von <code>UserField</code>s
      */
-    public static final String USERFIELD_HASH_STRING_PREFIX = "USERFIELD";
+    public static final String USERFIELD_ID_PREFIX = "USERFIELD";
 
     //////////////////////////////////////////////////////////////////////
     // Werte der Kennzahl- und Kennzahlformeluserfields in Sonderfällen //
@@ -406,13 +407,12 @@ public final class UserField implements Cloneable, Comparator<UserFieldTarget>, 
     private NumberFormat numberFormat = null;
 
     /**
-     * Ist der <code>String</code>, durch den das <code>UserField</code>
-     * eindeutig identifizierbar wird. Dieser ist final, da UserFields nur
+     * ID des <code>UserField</code>s. Diese ist final, da UserFields nur
      * geclont werden, um eine Sicherheitskopie vor einer Änderung anzulegen,
-     * die eventuell zurück genommen wird, so dass der alte hashCode erhalten
-     * bleiben muss.
+     * die eventuell zurück genommen wird, so dass die alte ID erhalten bleiben
+     * muss.
      */
-    private final String hashCode;
+    private final String id;
 
     /**
      * Gibt an, zu welcher Klasse das <code>UserField</code> gehört.
@@ -505,16 +505,16 @@ public final class UserField implements Cloneable, Comparator<UserFieldTarget>, 
      * @param definitions
      */
     public UserField(final Class<? extends UserFieldTarget> targetClass, final UserFieldDefinitions definitions) {
-        this(targetClass, HashStringGenerator.getHash(USERFIELD_HASH_STRING_PREFIX), definitions);
+        this(targetClass, IDStringGenerator.createIDString(USERFIELD_ID_PREFIX), definitions);
     }
 
     /**
      * @param targetClass
-     * @param hashCode
+     * @param id
      * @param definitions
      */
-    public UserField(final Class<? extends UserFieldTarget> targetClass, final String hashCode, final UserFieldDefinitions definitions) {
-        this.hashCode = hashCode;
+    public UserField(final Class<? extends UserFieldTarget> targetClass, final String id, final UserFieldDefinitions definitions) {
+        this.id = id;
         if (targetClass != null) {
             this.targetClass = targetClass;
         } else {
@@ -526,11 +526,11 @@ public final class UserField implements Cloneable, Comparator<UserFieldTarget>, 
     /**
      * Erzeugt ein globales UserField
      *
-     * @param hashCode
+     * @param id
      * @param definitions
      */
-    public UserField(final String hashCode, final UserFieldDefinitions definitions) {
-        this(null, hashCode, definitions);
+    public UserField(final String id, final UserFieldDefinitions definitions) {
+        this(null, id, definitions);
     }
 
     /**
@@ -746,18 +746,13 @@ public final class UserField implements Cloneable, Comparator<UserFieldTarget>, 
         return targetClass;
     }
 
-    /**
-     * gibt den <code>hashCode</code> des <code>UserField</code> s zurück.
-     *
-     * @return hashCode des <code>UserField</code> s
-     */
     @Override
-    public String getHashCode() {
-        return hashCode;
+    public String getID() {
+        return id;
     }
 
     /**
-     * @return Returns the definitions.
+     * @return the definitions
      */
     public UserFieldDefinitions getDefinitions() {
         return definitions;
@@ -979,12 +974,12 @@ public final class UserField implements Cloneable, Comparator<UserFieldTarget>, 
 
     @Override
     public int hashCode() {
-        return hashCode.hashCode();
+        return id.hashCode();
     }
 
     @Override
     public boolean equals(final Object obj) {
-        return obj instanceof UserField && ((UserField) obj).getHashCode().equals(hashCode);
+        return obj instanceof UserField && ((UserField) obj).getID().equals(id);
     }
 
     @Override
@@ -1302,8 +1297,8 @@ public final class UserField implements Cloneable, Comparator<UserFieldTarget>, 
             return true;
         }
         if (style == Style.CLASSIFICATION_NUMBER_FORMULA) {
-            Set<String> hashesInFormula = getHashesInFormula();
-            if (hashesInFormula != null && getHashesInFormula().contains(possibleUsedField.hashCode)) {
+            Set<String> idsInFormula = getIDsInFormula();
+            if (idsInFormula != null && getIDsInFormula().contains(possibleUsedField.id)) {
                 return true;
             }
         }
@@ -1327,25 +1322,24 @@ public final class UserField implements Cloneable, Comparator<UserFieldTarget>, 
     }
 
     /**
-     * Liefert eine Liste aller in der Formel vorkommenden Hash-Strings von
-     * anderen <code>UserField</code>s.
+     * Liefert eine Liste aller in der Formel vorkommenden IDs von anderen
+     * <code>UserField</code>s.
      *
      * @return
      */
-    public Set<String> getHashesInFormula() {
+    public Set<String> getIDsInFormula() {
         if (formulaString == null || formulaString.equals("")) {
             return null;
         }
         StringTokenizer st = new StringTokenizer(formulaString, " ()+-/*|");
-        Set<String> hashList = new HashSet<>(st.countTokens());
+        Set<String> ids = new HashSet<>(st.countTokens());
         while (st.hasMoreElements()) {
             String token = st.nextToken();
-            if (token.startsWith(USERFIELD_HASH_STRING_PREFIX)) {
-                //hashList.add(st.nextToken());
-                hashList.add(token);
+            if (token.startsWith(USERFIELD_ID_PREFIX)) {
+                ids.add(token);
             }
         }
-        return hashList;
+        return ids;
     }
 
     /**

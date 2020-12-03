@@ -665,7 +665,7 @@ public class Tool3lgm {
             if (viewPaneFrameComponent instanceof GraphViewPaneFrameComponent) {
                 GraphViewPaneFrameComponent f = (GraphViewPaneFrameComponent) viewPaneFrameComponent;
                 GraphDocument cd = f.getGraphDocument();
-                if (cd instanceof Szenario && ((Szenario) cd).getHashString().equals(me.getAssociatedDoc())) {
+                if (cd instanceof Szenario && ((Szenario) cd).getID().equals(me.getAssociatedSzenID())) {
                     frame = f;
                 }
             }
@@ -731,7 +731,7 @@ public class Tool3lgm {
             }
             List<ViewPaneFrameComponent> frames = getAllFrames();
             for (ViewPaneFrameComponent frame : frames) {
-                if (frame.getGraphDocument().getHashString().equalsIgnoreCase(params[0])) {
+                if (frame.getGraphDocument().getID().equalsIgnoreCase(params[0])) {
                     frame.setSelected();
                 }
             }

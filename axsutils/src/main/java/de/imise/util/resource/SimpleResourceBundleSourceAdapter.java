@@ -6,7 +6,8 @@ import java.util.ResourceBundle;
 import de.imise.util.Sys;
 
 /**
- * Erzeugt einen neuen Handler, der die Resourcen für eine übergebene Klasse zurückgeben kann.
+ * Erzeugt einen neuen Handler, der die Resourcen für eine übergebene Klasse
+ * zurückgeben kann.
  *
  * @author AXS created on 21.08.2007
  */
@@ -18,61 +19,83 @@ public class SimpleResourceBundleSourceAdapter implements SimpleResourceBundleSo
     private final ResourceBundle resourceBundle;
 
     /**
-     * Erzeugt einen neuen Handler, der die Resourcen für die übergebene Klasse zurückgeben kann.
+     * Erzeugt einen neuen Handler, der die Resourcen für die übergebene Klasse
+     * zurückgeben kann.
      *
-     * @param ressourceNameClassSource
-     *            Klassenname, der den Namen der zu ladenden Ressorcendatei vorgibt. Außerdem wird von dieser Klasse der ClassLoader genutzt,
-     *            um das ResourceBundle zu laden.
+     * @param ressourceNameClassSource Klassenname, der den Namen der zu
+     *            ladenden Ressorcendatei vorgibt. Außerdem wird von dieser
+     *            Klasse der ClassLoader genutzt, um das ResourceBundle zu
+     *            laden.
      */
     public SimpleResourceBundleSourceAdapter() {
         this(null, null);
     }
 
     /**
-     * Erzeugt einen neuen Handler, der die Resourcen für die übergebene Klasse zurückgeben kann.
+     * Erzeugt einen neuen Handler, der die Resourcen aus dem übergebenen
+     * ResourceBundle zurück gibt.
      *
-     * @param ressourceNameClassSource
-     *            Klassenname, der den Namen der zu ladenden Ressorcendatei vorgibt. Außerdem wird von dieser Klasse der ClassLoader genutzt,
-     *            um das ResourceBundle zu laden.
+     * @param resourceBundle the resourceBundle
+     */
+    public SimpleResourceBundleSourceAdapter(final ResourceBundle resourceBundle) {
+        this.resourceBundle = resourceBundle;
+    }
+
+    /**
+     * Erzeugt einen neuen Handler, der die Resourcen für die übergebene Klasse
+     * zurückgeben kann.
+     *
+     * @param ressourceNameClassSource Klassenname, der den Namen der zu
+     *            ladenden Ressorcendatei vorgibt. Außerdem wird von dieser
+     *            Klasse der ClassLoader genutzt, um das ResourceBundle zu
+     *            laden.
      */
     public SimpleResourceBundleSourceAdapter(final Class<?> ressourceNameClassSource) {
         this(ressourceNameClassSource, null);
     }
 
     /**
-     * Erzeugt einen neuen Handler, der die Resourcen für die übergebene Klasse zurückgeben kann.
+     * Erzeugt einen neuen Handler, der die Resourcen für die übergebene Klasse
+     * zurückgeben kann.
      *
-     * @param ressourcePackageNameSource
-     *            Klassen, deren Package das Package des zu ladenden ResouceBundles vorgibt. Außerdem wird von dieser Klasse der ClassLoader genutzt,
-     *            um das ResourceBundle zu laden.
-     * @param resourceBundleSimpleName
-     *            SimpleName des ResouceBundles. Dieser wird dan den Package-Namen des obigen Packages angehängt. Ist dieser SimpleName
-     *            <code>null</code>, dann wird der GesamtName aus <code>ressourcePackageNameSource</code> gebildet - also nicht nur das Package
-     *            genommen, sondern auch der SimpleName der Klasse als Package-Name.
+     * @param ressourcePackageNameSource Klassen, deren Package das Package des
+     *            zu ladenden ResouceBundles vorgibt. Außerdem wird von dieser
+     *            Klasse der ClassLoader genutzt, um das ResourceBundle zu
+     *            laden.
+     * @param resourceBundleSimpleName SimpleName des ResouceBundles. Dieser
+     *            wird dan den Package-Namen des obigen Packages angehängt. Ist
+     *            dieser SimpleName <code>null</code>, dann wird der GesamtName
+     *            aus <code>ressourcePackageNameSource</code> gebildet - also
+     *            nicht nur das Package genommen, sondern auch der SimpleName
+     *            der Klasse als Package-Name.
      */
     public SimpleResourceBundleSourceAdapter(final Class<?> ressourcePackageNameSource, final String resourceBundleSimpleName) {
         this(ressourcePackageNameSource, resourceBundleSimpleName, Locale.getDefault());
     }
 
     /**
-     * Erzeugt einen neuen Handler, der die Resourcen für die übergebene Klasse zurückgeben kann
+     * Erzeugt einen neuen Handler, der die Resourcen für die übergebene Klasse
+     * zurückgeben kann
      *
-     * @param ressourcePackageNameSource
-     *            Klassen, deren Package das Package des zu ladenden ResouceBundles vorgibt. Außerdem wird von dieser Klasse der ClassLoader genutzt,
-     *            um das ResourceBundle zu laden.
-     * @param resourceBundleSimpleName
-     *            SimpleName des ResouceBundles. Dieser wird dan den Package-Namen des obigen Packages angehängt. Ist dieser SimpleName
-     *            <code>null</code>, dann wird der GesamtName aus <code>ressourcePackageNameSource</code> gebildet - also nicht nur das Package
-     *            genommen, sondern auch der SimpleName der Klasse als Package-Name.
-     * @param locale
-     *            Locale des ResourceBundles
+     * @param ressourcePackageNameSource Klassen, deren Package das Package des
+     *            zu ladenden ResouceBundles vorgibt. Außerdem wird von dieser
+     *            Klasse der ClassLoader genutzt, um das ResourceBundle zu
+     *            laden.
+     * @param resourceBundleSimpleName SimpleName des ResouceBundles. Dieser
+     *            wird dan den Package-Namen des obigen Packages angehängt. Ist
+     *            dieser SimpleName <code>null</code>, dann wird der GesamtName
+     *            aus <code>ressourcePackageNameSource</code> gebildet - also
+     *            nicht nur das Package genommen, sondern auch der SimpleName
+     *            der Klasse als Package-Name.
+     * @param locale Locale des ResourceBundles
      */
     public SimpleResourceBundleSourceAdapter(final Class<?> ressourcePackageNameSource, final String resourceBundleSimpleName, final Locale locale) {
         resourceBundle = loadResourceBundle(ressourcePackageNameSource, resourceBundleSimpleName, locale);
     }
 
     /**
-     * Initialisiertdas ResourceBundle, wenn es sich laden lässt. Wenn nicht, dann bleibt dieses <code>null</code>.
+     * Initialisiertdas ResourceBundle, wenn es sich laden lässt. Wenn nicht,
+     * dann bleibt dieses <code>null</code>.
      *
      * @param ressourcePackageNameSource
      * @param resourceBundleSimpleName
@@ -100,7 +123,8 @@ public class SimpleResourceBundleSourceAdapter implements SimpleResourceBundleSo
     }
 
     /**
-     * Liefert <code>true</code>, wenn ein gültiges ResourceBundle geladen werden konnte.
+     * Liefert <code>true</code>, wenn ein gültiges ResourceBundle geladen
+     * werden konnte.
      *
      * @return
      */
@@ -118,4 +142,8 @@ public class SimpleResourceBundleSourceAdapter implements SimpleResourceBundleSo
         Sys.out1(resourceBundle);
     }
 
+    @Override
+    public ResourceBundle getResourceBundle() {
+        return resourceBundle;
+    }
 }

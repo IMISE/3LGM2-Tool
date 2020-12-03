@@ -8,8 +8,9 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
 import de.imise.tool3lgm.metamodel.service.edge.Process_Function_Edge;
 
 /**
- * @author AXS Ein Prozess ist ein Node der Kanten zu Aufgaben haelt. Die Reihenfolge der Kanten zu den Aufgaben in der ArrayList connections legt
- *         den Prozessablauf fest.
+ * @author AXS Ein Prozess ist ein Node der Kanten zu Aufgaben haelt. Die
+ *         Reihenfolge der Kanten zu den Aufgaben in der ArrayList connections
+ *         legt den Prozessablauf fest.
  */
 public final class Process extends Node {
 

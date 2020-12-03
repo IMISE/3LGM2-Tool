@@ -114,7 +114,7 @@ public class TLGMOriginalPathsDefinition extends MetaPathDefinition {
     ////////////////////////////////////////////////////////////////////////
 
     @Override
-    public Map<Class<? extends ModelElement>, MetaPath> getElementClassToNameExtensionPath() {
+    public Map<Class<? extends ModelElement>, MetaPath> getElementClassToNameExtensionMetaPath() {
         return ImmutableMap.of(RechAnwendungsbaustein.class, simpleMetaPathCreator.createSimpleMetaPath(RechAnwendungsbaustein.class, Softwareprodukt.class, RawbAwpVerbindung.class, AwpSwpVerbindung.class));
     }
 

@@ -14,11 +14,11 @@ import de.imise.tool3lgm.graphtools.path.metapaths.SimpleMetaPath;
 import de.imise.util.collections.CollectionUtils;
 
 /**
- * Ein SequencePath, der nur aus Elementarpfaden besteht.
+ * Ein SerialPath, der nur aus Elementarpfaden besteht.
  *
  * @author AXS (12 Jun 2019)
  */
-public class SimplePath extends SequencePath {
+public class SimplePath extends SerialPath {
 
     /** */
     private final List<ElementaryPath> elementaryPaths;

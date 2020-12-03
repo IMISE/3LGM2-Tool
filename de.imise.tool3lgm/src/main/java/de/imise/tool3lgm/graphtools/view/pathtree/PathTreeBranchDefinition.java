@@ -2,14 +2,14 @@ package de.imise.tool3lgm.graphtools.view.pathtree;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.ResourceBundle;
 import java.util.Set;
 
 import javax.swing.ImageIcon;
 
 import de.imise.tool3lgm.graphtools.metamodel.MetaModelSpecificAdapter;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
-import de.imise.tool3lgm.graphtools.path.metapaths.MetaPathFunctions;
-import de.imise.tool3lgm.graphtools.path.metapaths.SimpleMetaPath;
+import de.imise.tool3lgm.graphtools.path.metapaths.SequenceMetaPath;
 import de.imise.tool3lgm.graphtools.view.tree.node.ElementClassTreeNode;
 import de.imise.tool3lgm.graphtools.view.tree.node.ElementContainerTreeNode;
 import de.imise.tool3lgm.graphtools.view.tree.node.StringTreeNode;
@@ -27,7 +27,7 @@ public final class PathTreeBranchDefinition extends MetaModelSpecificAdapter imp
     /**
      * Alle Objekte in dieser Liste geben vor, welche Hierarchie-Knoten
      * unterhalb von Root angezeigt werden sollen. Sind die Objekte Strings,
-     * dann werden sie als Resorucen-Keys interpretiert und im Baum ein
+     * dann werden sie als Resourcen-Keys interpretiert und im Baum ein
      * {@link StringTreeNode} angelegt. Sind die Objekte Elementklassen, dann
      * wird um Baum ein {@link ElementClassTreeNode} angelegt und der
      * AnzeigeName der Klasse gezeigt. Sind die Objekte Modell-Elemente, dann
@@ -38,7 +38,7 @@ public final class PathTreeBranchDefinition extends MetaModelSpecificAdapter imp
     /**
      * Der Pfad der Elemente, die angezeigt werden sollen.
      */
-    private final SimpleMetaPath elementsPath;
+    private final SequenceMetaPath elementsPath;
 
     /**
      * Respurce Handler to get the strings and icons
@@ -50,7 +50,7 @@ public final class PathTreeBranchDefinition extends MetaModelSpecificAdapter imp
      * @param elementsPath
      * @param hierarchyObjects
      */
-    public PathTreeBranchDefinition(final SimpleResourceSource resourceHandler, final SimpleMetaPath elementsPath, final Object... hierarchyObjects) {
+    public PathTreeBranchDefinition(final SimpleResourceSource resourceHandler, final SequenceMetaPath elementsPath, final Object... hierarchyObjects) {
         super(elementsPath);
         this.resourceHandler = resourceHandler;
         this.elementsPath = elementsPath;
@@ -69,7 +69,7 @@ public final class PathTreeBranchDefinition extends MetaModelSpecificAdapter imp
     /**
      * @return the visiblePath
      */
-    public SimpleMetaPath getElementsPath() {
+    public SequenceMetaPath getElementsPath() {
         return elementsPath;
     }
 
@@ -103,6 +103,11 @@ public final class PathTreeBranchDefinition extends MetaModelSpecificAdapter imp
     @Override
     public final String getResStringWithoutError(final String resKey) {
         return resourceHandler.getResStringWithoutError(resKey);
+    }
+
+    @Override
+    public ResourceBundle getResourceBundle() {
+        return resourceHandler.getResourceBundle();
     }
 
     @Override
@@ -144,11 +149,21 @@ public final class PathTreeBranchDefinition extends MetaModelSpecificAdapter imp
     }
 
     /**
-     * @return a set of all classes which are defined as vissible through this
+     * @param allElementaryMetaPaths If <code>true</code> then the whole
+     *            connection classes of the elementary path steps are searched
+     *            out. If <code>false</code> then the connection classes of the
+     *            outer contained SequenceMetaPaths are returned. If the
+     *            metapath consists only of SequenceMetaPaths of length 1 (i.e.
+     *            only one elementary metaPath at a time), then this parameter
+     *            is irrelevant.
+     * @return a set of all classes which are defined as visible through this
      *         tree branch
      */
-    public final Set<Class<? extends ModelElement>> getVisibleElementTypes() {
-        return MetaPathFunctions.getAllPathStepsStartAndEndClasses(elementsPath, true);
+    public final Set<Class<? extends ModelElement>> getVisibleElementTypes(final boolean allElementaryMetaPaths) {
+        if (allElementaryMetaPaths) {
+            return elementsPath.getAllElementaryPathsStartAndEndClasses();
+        }
+        return elementsPath.getAllFirstLevelSubMetaPathsStartAndEndClasses();
     }
 
 }

@@ -20,25 +20,25 @@ public class ImportError {
         UNKNOWN_LINE("Row %s ErrorType in row"),
 
         HEADER_UNKNOWN_ELEMENT_TYPE("Unknown element type %s"),
-        //        HEADER_MISSING_NAME_COLUMN("Missing columns 'Name', 'Description' and 'Hash_String'"),
-        //        HEADER_MISSING_DESCRIPTION_COLUMN("Missing columns 'Description' and 'Hash_String'"),
-        //        HEADER_MISSING_HASHSTRING_COLUMN("Missing column 'Hash_String'"),
+        //        HEADER_MISSING_NAME_COLUMN("Missing columns 'Name', 'Description' and 'ID_String'"),
+        //        HEADER_MISSING_DESCRIPTION_COLUMN("Missing columns 'Description' and 'ID_String'"),
+        //        HEADER_MISSING_ID_COLUMN("Missing column 'ID_String'"),
         HEADER_MISSING("Header is missing", true),
 
-        HASH_DUPLICATE("Duplicate hash string \'%s\' in line %s"),
-        HASH_CONFLICT("Hash string conflict. There is an other element with a different element class but the same has string. %s \'%s\' with hash \'%s\'"),
+        ID_DUPLICATE("Duplicate ID \'%s\' in line %s"),
+        ID_CONFLICT("ID conflict. There is an other element with a different element class but the same has string. %s \'%s\' with ID \'%s\'"),
         USERFIELD_MISSING("Missing user field. Define a user field \'%s\' for element class \'%s\'"),
 
         NODE_OR_EDGE_EMPTY_NAME("An empty elemnt name is not allowed."),
 
-        EDGE_HEADER_MISSING_START_HASH_COLUMN("Missing column 'Start_Hash'"),
-        EDGE_HEADER_MISSING_END_HASH_COLUMN("Missing column 'End_Hash'"),
-        EDGE_START_HASH_MISSING("Missing start hash string"),
-        EDGE_END_HASH_MISSING("Missing end hash string"),
-        EDGE_START_HASH_NO_ELEMENT_FOUND("No element found for start has string \'%s\'"),
-        EDGE_END_HASH_NO_ELEMENT_FOUND("No element found for end has string \'%s\'"),
-        EDGE_START_HASH_NOT_MATCHING("Element \'%s\' with class \'%s\' doesn't match the egde start class"),
-        EDGE_END_HASH_NOT_MATCHING("Element \'%s\' with class \'%s\' doesn't match the egde end class"),
+        EDGE_HEADER_MISSING_START_ID_COLUMN("Missing column 'Start_ID'"),
+        EDGE_HEADER_MISSING_END_ID_COLUMN("Missing column 'End_ID'"),
+        EDGE_START_ID_MISSING("Missing start ID"),
+        EDGE_END_ID_MISSING("Missing end ID"),
+        EDGE_START_ID_NO_ELEMENT_FOUND("No element found for start ID \'%s\'"),
+        EDGE_END_ID_NO_ELEMENT_FOUND("No element found for end ID \'%s\'"),
+        EDGE_START_ID_NOT_MATCHING("Element \'%s\' with class \'%s\' doesn't match the egde start class"),
+        EDGE_END_ID_NOT_MATCHING("Element \'%s\' with class \'%s\' doesn't match the egde end class"),
 
         ;
 

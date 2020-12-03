@@ -70,10 +70,10 @@ public class ToolXMLWriter extends IntendingXMLWriter {
     protected final GDCollection gdcoll;
 
     /**
-     * Hashes aller Icons, die von den über diesen Writer exportierten Elementen
+     * IDs aller Icons, die von den über diesen Writer exportierten Elementen
      * tatsächlich genutzt werden
      */
-    private final Set<String> usedIconHashes;
+    private final Set<String> usedIconIDs;
 
     protected ToolXMLWriter(final GDCollection gdcoll, final File file) throws XMLStreamException, FactoryConfigurationError, IOException {
         this(gdcoll, file, null);
@@ -82,7 +82,7 @@ public class ToolXMLWriter extends IntendingXMLWriter {
     protected ToolXMLWriter(final GDCollection gdcoll, final File file, final String zipEntryName) throws XMLStreamException, FactoryConfigurationError, IOException {
         super(file, zipEntryName);
         this.gdcoll = gdcoll;
-        usedIconHashes = gdcoll != null ? new HashSet<>() : null;
+        usedIconIDs = gdcoll != null ? new HashSet<>() : null;
     }
 
     /**
@@ -179,13 +179,13 @@ public class ToolXMLWriter extends IntendingXMLWriter {
      * @param szenarios
      * @param elements
      * @param userFields
-     * @param iconHashes
+     * @param iconIDs
      * @return
      */
-    public static boolean writeExport(final GDCollection gdcoll, final File file, final List<Szenario> szenarios, final Collection<ModelElement> elements, final Iterable<UserField> userFields, final Iterable<String> iconHashes) {
+    public static boolean writeExport(final GDCollection gdcoll, final File file, final List<Szenario> szenarios, final Collection<ModelElement> elements, final Iterable<UserField> userFields, final Iterable<String> iconIDs) {
         try {
             ToolXMLWriter toolXMLWriter = new ToolXMLWriter(gdcoll, file);
-            toolXMLWriter.writeModel(gdcoll.getName() + " (export)", szenarios, elements, userFields, iconHashes);
+            toolXMLWriter.writeModel(gdcoll.getName() + " (export)", szenarios, elements, userFields, iconIDs);
             toolXMLWriter.finish();
         } catch (Exception e) {
             Log.show(Log.ERROR, "Exception while exporting UserFieldFile", e);
@@ -215,12 +215,12 @@ public class ToolXMLWriter extends IntendingXMLWriter {
      * @param userFields Alle UserFields, die geschrieben werden sollen. Ist
      *            dieses {@link Iterable} <code>null</code>, werden alle
      *            UserFields geschrieben.
-     * @param iconHashes HashStrings aller Icons, die geschrieben werden sollen.
-     *            Ist dieses {@link Iterable} <code>null</code>, werden alle
-     *            Icons geschrieben.
+     * @param iconIDs IDs aller Icons, die geschrieben werden sollen. Ist dieses
+     *            {@link Iterable} <code>null</code>, werden alle Icons
+     *            geschrieben.
      * @throws XMLStreamException
      */
-    private void writeModel(final String name, final List<Szenario> szenarios, final Collection<ModelElement> elements, final Iterable<UserField> userFields, final Iterable<String> iconHashes) throws XMLStreamException {
+    private void writeModel(final String name, final List<Szenario> szenarios, final Collection<ModelElement> elements, final Iterable<UserField> userFields, final Iterable<String> iconIDs) throws XMLStreamException {
         writeStartDocument();
         writeStartElement("modell_3lgm_2"); //<modell_3lgm_2>
         writeStartElement("header"); //<header>
@@ -241,7 +241,7 @@ public class ToolXMLWriter extends IntendingXMLWriter {
         writeEndElement(); //</objects>
         writeSzenarios(szenarios, elements);
         writeStartElement("images"); //<images>
-        writeImages(iconHashes == null ? gdcoll.getIconTable().keySet() : iconHashes);
+        writeImages(iconIDs == null ? gdcoll.getIconTable().keySet() : iconIDs);
         writeEndElement(); //</images>
         writeEndElement(); //</modell_3lgm_2>
     }
@@ -286,7 +286,7 @@ public class ToolXMLWriter extends IntendingXMLWriter {
         if (!uf.isGlobalOrFormat()) {
             writeAttribute("elementClass", uf.getTargetClass().getSimpleName());
         }
-        writeAttribute("hash", uf.getHashCode());
+        writeAttribute("hash", uf.getID());
         writeElement("userFieldName", uf.getName());
         writeElement("userFieldDescription", uf.getDescription());
         Style style = uf.getStyle();
@@ -301,13 +301,13 @@ public class ToolXMLWriter extends IntendingXMLWriter {
         } else if (style == Style.CLASSIFICATION_NUMBER) {
             UserField formatUserField = uf.getFormatUserField();
             if (formatUserField != null) {
-                writeElement("userFieldFormatHash", formatUserField.getHashCode());
+                writeElement("userFieldFormatHash", formatUserField.getID());
             }
         } else if (style == Style.CLASSIFICATION_NUMBER_FORMULA) {
             writeElement("userFieldFormula", uf.getFormula());
             UserField formatUserField = uf.getFormatUserField();
             if (formatUserField != null) {
-                writeElement("userFieldFormatHash", formatUserField.getHashCode());
+                writeElement("userFieldFormatHash", formatUserField.getID());
             }
         }
         writeEndElement();
@@ -355,7 +355,7 @@ public class ToolXMLWriter extends IntendingXMLWriter {
             //Hier muss geprüft werden, ob das rauszuschreibende userfield null ist, denn darf es nicht rausgeschrieben werden.
             if (keyUserField != null) {
                 writeStartElement("userField"); //<userField>
-                writeAttribute("hash", keyUserField.getHashCode());
+                writeAttribute("hash", keyUserField.getID());
                 writeCharacters(userFieldTarget.getUserFieldInputValue(keyUserField));
                 writeEndElement(); //</userField>
             }
@@ -407,19 +407,19 @@ public class ToolXMLWriter extends IntendingXMLWriter {
     public void writeModelElement(final ModelElement me) throws XMLStreamException {
         writeStartElement("element"); //<element>
         writeAttribute("class", me.getClass().getSimpleName());
-        writeAttribute("hash", me.getHashString());
+        writeAttribute("hash", me.getID());
         writeModelElementField("name", me.getName());
         writeModelElementField("description", me.getDescription());
-        String associatedSzenHashString = me.getAssociatedDoc();
-        if (!Strings.isNullOrEmpty(associatedSzenHashString)) {
-            writeModelElementField("assoc_szen", associatedSzenHashString);
+        String associatedSzenID = me.getAssociatedSzenID();
+        if (!Strings.isNullOrEmpty(associatedSzenID)) {
+            writeModelElementField("assoc_szen", associatedSzenID);
         }
         writeUserFieldValues(me);
 
         if (me instanceof Edge) {
             Edge edge = (Edge) me;
-            writeModelElementField("start", edge.getStart().getHashString());
-            writeModelElementField("end", edge.getEnd().getHashString());
+            writeModelElementField("start", edge.getStart().getID());
+            writeModelElementField("end", edge.getEnd().getID());
             if (me instanceof DoubleMeaningEdge) {
                 writeModelElementField("state", ((DoubleMeaningEdge) edge).getConnectionStateName());
             }
@@ -432,7 +432,7 @@ public class ToolXMLWriter extends IntendingXMLWriter {
         } else if (me instanceof Bendpoint) {
             Bendpoint bendpoint = (Bendpoint) me;
             EdgeContainer edgeContainer = bendpoint.getOwner();
-            writeModelElementField("kantenHash", edgeContainer.getHashString());
+            writeModelElementField("kantenHash", edgeContainer.getID());
             writeModelElementField("index", edgeContainer.getIndexOfBendpoint(bendpoint));
         }
         writeEndElement(); //</element>
@@ -483,7 +483,7 @@ public class ToolXMLWriter extends IntendingXMLWriter {
                 continue;
             }
             writeStartElement("szenario"); //<szenario>
-            writeAttribute("hash", szen.getHashString());
+            writeAttribute("hash", szen.getID());
             writeAttribute("titel", szen.getTitle());
             writeElement("description", szen.getDescription());
             // Informationen über Ansicht speichern
@@ -550,7 +550,7 @@ public class ToolXMLWriter extends IntendingXMLWriter {
 
     protected void writeElementContainer(final ElementContainer ec) throws XMLStreamException {
         writeStartElement("container"); //<container>
-        writeAttribute("hash", ec.getHashString());
+        writeAttribute("hash", ec.getID());
         if (!(ec instanceof EdgeContainer)) {
             writeElement("expanded", ec.isExpanded());
             writeElement("visible", ec.isVisible());
@@ -612,9 +612,9 @@ public class ToolXMLWriter extends IntendingXMLWriter {
         if (layout.height != -1) {
             writeElement("height", layout.height);
         }
-        String icon = layout.getIcon();
+        String icon = layout.getIconID();
         if (icon != null) {
-            usedIconHashes.add(icon);
+            usedIconIDs.add(icon);
             writeElement("icon", icon);
         }
         if (layout.textPositionHorizontal != STANDARD_TEXT_POSITION_HORIZONTAL) {
@@ -656,26 +656,31 @@ public class ToolXMLWriter extends IntendingXMLWriter {
     ///////////
 
     /**
-     * Schreibt alle Icons in die XML-Datei, deren HashString in den übergebenen
-     * iconHashStrings vorkommen
+     * Schreibt alle Icons in die XML-Datei, deren ID in den übergebenen iconIDs
+     * vorkommen
      *
-     * @param iconHashStrings
+     * @param iconIDs
      * @throws XMLStreamException
      */
-    private void writeImages(final Iterable<String> iconHashStrings) throws XMLStreamException {
+    private void writeImages(final Iterable<String> iconIDs) throws XMLStreamException {
         Map<String, byte[]> iconTable = gdcoll.getIconTable();
-        for (String iconHashString : iconHashStrings) {
+        for (String iconID : iconIDs) {
             //nur die Icons in den XML-Stream schreiben, die von den exportierten Elementen auch genutzt werden
-            if (usedIconHashes.contains(iconHashString)) {
-                writeImage(iconHashString, iconTable.get(iconHashString));
+            if (usedIconIDs.contains(iconID)) {
+                writeImage(iconID, iconTable.get(iconID));
             }
         }
     }
 
-    protected void writeImage(final String iconHashString, final byte[] icon) throws XMLStreamException {
+    /**
+     * @param iconID
+     * @param icon
+     * @throws XMLStreamException
+     */
+    protected void writeImage(final String iconID, final byte[] icon) throws XMLStreamException {
         writeStartElement("bitmap"); //<bitmap>
         writeAttribute("type", "gif/base64");
-        writeAttribute("hash", iconHashString);
+        writeAttribute("hash", iconID);
         writeCharacters(Base64.encode(icon));
         writeEndElement(); //</bitmap>
     }

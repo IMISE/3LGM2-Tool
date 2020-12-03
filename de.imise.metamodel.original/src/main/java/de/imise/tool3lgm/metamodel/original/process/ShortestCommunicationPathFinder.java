@@ -24,54 +24,60 @@ import de.imise.tool3lgm.metamodel.original.node.Repraesentationsform;
 import de.imise.util.pair.SameTypePair;
 
 /**
- * Mit dieser Klasse können für Objekttypen alle kürzesten Kommunikationspfade ermittelt werden.
- * Integer.MAX_VALUE
+ * Mit dieser Klasse können für Objekttypen alle kürzesten Kommunikationspfade
+ * ermittelt werden. Integer.MAX_VALUE
  *
  * @author AXS Created on 19.06.2008
  */
 public class ShortestCommunicationPathFinder {
 
     /**
-     * Unendlich als Maximaler Kostenwert. Dieser darf nicht in der Kostenmatrix (bzw. in der
-     * Distanzmatrix = Kostenmatrix nach FloydWarshall) als "echter Wert" auftauchen! (es ist extrem
-     * unwahrscheinlich, dass das mal passiert, da die Einzelkosten immer 1 sind)wenn man einen
-     * negativen Wert nehmen wollte, müsste man im Algorithmus mehr Vergleiche anstellen -> wär
+     * Unendlich als Maximaler Kostenwert. Dieser darf nicht in der Kostenmatrix
+     * (bzw. in der Distanzmatrix = Kostenmatrix nach FloydWarshall) als "echter
+     * Wert" auftauchen! (es ist extrem unwahrscheinlich, dass das mal passiert,
+     * da die Einzelkosten immer 1 sind)wenn man einen negativen Wert nehmen
+     * wollte, müsste man im Algorithmus mehr Vergleiche anstellen -> wär
      * langsamer
      */
     public final static int INFINITY = Integer.MAX_VALUE;
 
     /**
-     * Mappt von einem Objekttyp auf eine Liste von Schnittstellen, über die der Objekttyp gesendet
-     * oder empfangen werden kann. Der Index einer Schnittstelle in dieser Liste entspricht dem
-     * Index der Schnittstelle in der Kosten- und Pfadmatrix.
+     * Mappt von einem Objekttyp auf eine Liste von Schnittstellen, über die der
+     * Objekttyp gesendet oder empfangen werden kann. Der Index einer
+     * Schnittstelle in dieser Liste entspricht dem Index der Schnittstelle in
+     * der Kosten- und Pfadmatrix.
      */
     private final Map<ModelElement, List<ModelElement>> objectTypeToInterfaceList = new HashMap<>();
 
     /**
-     * Mappt von einem Objekttyp auf die dazugehörige Kostenmatrix der Kommunikationswege. Eine
-     * Kostenmatrix ist ein zweidimensionales Array, welches für alle Schnittstellen, über die der
-     * Objekttyp kommuniziert werden kann, den <code>int</code>-Wert der Kosten speichert. Die
-     * Indizes der Schnittstellen in den Matrix-Feldern entsprechen den Indizes der Schnittstellen
-     * in <code>objectTypeToInterfaceList</code>. Die Kostenmatrizen haben die Form
-     * <code>int[][]</code>:<br>
+     * Mappt von einem Objekttyp auf die dazugehörige Kostenmatrix der
+     * Kommunikationswege. Eine Kostenmatrix ist ein zweidimensionales Array,
+     * welches für alle Schnittstellen, über die der Objekttyp kommuniziert
+     * werden kann, den <code>int</code>-Wert der Kosten speichert. Die Indizes
+     * der Schnittstellen in den Matrix-Feldern entsprechen den Indizes der
+     * Schnittstellen in <code>objectTypeToInterfaceList</code>. Die
+     * Kostenmatrizen haben die Form <code>int[][]</code>:<br>
      * Indizes: 1. Zeilenschnittstelle, 2. Spaltenschnittstelle<br>
-     * Wert: int-Wert der Kosten, die Kommunikation von Zeilenschnittstelle zu Spaltenschnittstelle
-     * verursacht. Gibt es keine Kommunikationsweg, sind die Kosten <code>INFINITY</code>.
+     * Wert: int-Wert der Kosten, die Kommunikation von Zeilenschnittstelle zu
+     * Spaltenschnittstelle verursacht. Gibt es keine Kommunikationsweg, sind
+     * die Kosten <code>INFINITY</code>.
      */
     private final Map<ModelElement, int[][]> objectTypeToCostMatrix = new HashMap<>();
 
     /**
-     * Mappt von einem Objekttyp auf die dazugehörige Pfadmatrix der Kommunikationswege. Eine
-     * Pfadmatrix ist ein zweidimensionales Array, welches für jede Kombination aus Zeilen- und
-     * Spaltenschnittstelle die Liste der Schnittstellen speichert, über die man einen Objekttyp von
-     * der Zeilen- zur Spaltenschnittstelle versenden kann. Ist keine Kommunikation möglich, bleibt
-     * die Liste <code>null</code>. Die Indizes der Schnittstellen in den Matrix-Feldern entsprechen
-     * den Indizes der Schnittstellen in <code>objectTypeToInterfaceList</code>. Die Pfadmatrizen
-     * haben die Form <code>ArrayList[][]</code>:<br>
+     * Mappt von einem Objekttyp auf die dazugehörige Pfadmatrix der
+     * Kommunikationswege. Eine Pfadmatrix ist ein zweidimensionales Array,
+     * welches für jede Kombination aus Zeilen- und Spaltenschnittstelle die
+     * Liste der Schnittstellen speichert, über die man einen Objekttyp von der
+     * Zeilen- zur Spaltenschnittstelle versenden kann. Ist keine Kommunikation
+     * möglich, bleibt die Liste <code>null</code>. Die Indizes der
+     * Schnittstellen in den Matrix-Feldern entsprechen den Indizes der
+     * Schnittstellen in <code>objectTypeToInterfaceList</code>. Die
+     * Pfadmatrizen haben die Form <code>ArrayList[][]</code>:<br>
      * Indizes: 1. Zeilenschnittstelle, 2. Spaltenschnittstelle<br>
-     * Wert: Liste der Schittstellen, die einen Pfad von der Zeilen- zur SPlatenschnittstelle
-     * beschreiben. Wenn es einen Pfad gibt, sind die Zeilen- und Spaltenschnittstelle immer auch
-     * enthalten.
+     * Wert: Liste der Schittstellen, die einen Pfad von der Zeilen- zur
+     * SPlatenschnittstelle beschreiben. Wenn es einen Pfad gibt, sind die
+     * Zeilen- und Spaltenschnittstelle immer auch enthalten.
      */
     private final Map<ModelElement, List<ModelElement>[][]> objectTypeToPathMatrix = new HashMap<>();
 
@@ -81,7 +87,8 @@ public class ShortestCommunicationPathFinder {
     private final ModelAnalyzerCache analyzerCache;
 
     /**
-     * @param analyzerCache ein bereits initialisierter <code>ModelAnalyzerCache</code> dessen
+     * @param analyzerCache ein bereits initialisierter
+     *            <code>ModelAnalyzerCache</code> dessen
      *            <code>GDCollection</code> den Kontext vorgibt
      */
     public ShortestCommunicationPathFinder(final ModelAnalyzerCache analyzerCache) {
@@ -212,8 +219,8 @@ public class ShortestCommunicationPathFinder {
     /**
      * Das hier ist der Floyd-Warhall-Algorhytmus.
      *
-     * @param o Index des Objekttyps, für den die Pfadmatrix mit den kürzesten Pfaden aufgebaut
-     *            werden soll.
+     * @param o Index des Objekttyps, für den die Pfadmatrix mit den kürzesten
+     *            Pfaden aufgebaut werden soll.
      */
     private void initShortestPath(final Objekttyp ot) {
         Object interfacesObject = objectTypeToInterfaceList.get(ot);
@@ -427,11 +434,12 @@ public class ShortestCommunicationPathFinder {
         private int pathCosts = INFINITY;
 
         /**
-         * Länge des Pfades über die Schnittstellen. Wenn die erste und 2. Schnittstelle eines
-         * Pfades auf demselben Anwendungssystem liegen, so kann dieser Pfad von den Pfadkosten her
-         * trotzdem minimal sein, da die Kosten für Schnittstellen auf dem selebn Anwendungssystem
-         * immer 0 betragen. Ein wikrlich minimaler Pfad hat die geringsten Kosten bei geringster
-         * Länge.
+         * Länge des Pfades über die Schnittstellen. Wenn die erste und 2.
+         * Schnittstelle eines Pfades auf demselben Anwendungssystem liegen, so
+         * kann dieser Pfad von den Pfadkosten her trotzdem minimal sein, da die
+         * Kosten für Schnittstellen auf dem selebn Anwendungssystem immer 0
+         * betragen. Ein wikrlich minimaler Pfad hat die geringsten Kosten bei
+         * geringster Länge.
          */
         private int interfacePathLength = INFINITY;
 

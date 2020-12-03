@@ -1,6 +1,6 @@
 /*
- * Created on 26.02.2004 To change this generated comment go to Window>Preferences>Java>Code
- * Generation>Code and Comments
+ * Created on 26.02.2004 To change this generated comment go to
+ * Window>Preferences>Java>Code Generation>Code and Comments
  */
 package de.imise.tool3lgm.metamodel.original.process;
 
@@ -17,8 +17,8 @@ import de.imise.tool3lgm.metamodel.original.node.Objekttyp;
 import de.imise.tool3lgm.metamodel.original.node.Prozess;
 
 /**
- * @author AXS To change this generated comment go to Window>Preferences>Java>Code Generation>Code
- *         and Comments
+ * @author AXS To change this generated comment go to
+ *         Window>Preferences>Java>Code Generation>Code and Comments
  */
 public class LGMProzessStep {
 
@@ -31,8 +31,8 @@ public class LGMProzessStep {
      */
     private final Aufgabe endAufgabe;
     /**
-     * Objekttyp, der von <code>startAufgabe</code> bearbeitet und von <code>endAufgabe</code>
-     * interpretiert wird
+     * Objekttyp, der von <code>startAufgabe</code> bearbeitet und von
+     * <code>endAufgabe</code> interpretiert wird
      */
     private final Objekttyp objektTyp;
 
@@ -46,7 +46,8 @@ public class LGMProzessStep {
     private ABKonfiguration endAufgabeKonf;
 
     /**
-     * Sequenz der Schnittstellen, über die dieser Prozess kommuniziert werden kann
+     * Sequenz der Schnittstellen, über die dieser Prozess kommuniziert werden
+     * kann
      */
     private List<ModelElement> kommProzessSchnittstellen;
 
@@ -56,7 +57,8 @@ public class LGMProzessStep {
     private List<Edge> kommProzessEdges;
 
     /**
-     * KonfigurationContainer, an denen die mögliche Kommunikation wirklich startet
+     * KonfigurationContainer, an denen die mögliche Kommunikation wirklich
+     * startet
      */
     private List<ModelElement> realCommunicationStartKonfConts;
 
@@ -66,14 +68,15 @@ public class LGMProzessStep {
     private List<ModelElement> realCommunicationEndKonfConts;
 
     /**
-     * die Positionen geben an, wo die startAufgabe und die endAufgabe im Prozess stehen (die selben
-     * Aufgaben können mehrfach im Prozess vorkommen)
+     * die Positionen geben an, wo die startAufgabe und die endAufgabe im
+     * Prozess stehen (die selben Aufgaben können mehrfach im Prozess vorkommen)
      */
     private int startPosition = -1, endPosition = -1;
 
     /**
-     * Gibt die Anzahl der Schnitstellen wieder (ist zur Unterscheidung, ob es gar keinen Weg gibt
-     * (-1) oder der Weg die Länge 0 hat (beide Konfigurationen überschneiden sich)
+     * Gibt die Anzahl der Schnitstellen wieder (ist zur Unterscheidung, ob es
+     * gar keinen Weg gibt (-1) oder der Weg die Länge 0 hat (beide
+     * Konfigurationen überschneiden sich)
      */
     private int kommProzessLength = -1;
 
@@ -137,16 +140,16 @@ public class LGMProzessStep {
 
     // ----------------------------------------------------------------------------------------------------------------------------------
     /**
-     * @return <code>true</code>, wenn dieser Step eine gültige Start-Konfiguration mit einem
-     *         Anwendungssystem besitzt
+     * @return <code>true</code>, wenn dieser Step eine gültige
+     *         Start-Konfiguration mit einem Anwendungssystem besitzt
      */
     public boolean hasStartKonfiguration() {
         return startAufgabeKonf != null && startAufgabeKonf.getConnectedElements(Anwendungsbaustein.class).size() != 0;
     }
 
     /**
-     * @return <code>true</code>, wenn dieser Step eine gültige End-Konfiguration mit einem
-     *         Anwendungssystem besitzt
+     * @return <code>true</code>, wenn dieser Step eine gültige
+     *         End-Konfiguration mit einem Anwendungssystem besitzt
      */
     public boolean hasEndKonfiguration() {
         return endAufgabeKonf != null && endAufgabeKonf.getConnectedElements(Anwendungsbaustein.class).size() != 0;
@@ -159,8 +162,8 @@ public class LGMProzessStep {
     /**
      * Prüft, ob für den Step eine gültige Start-Aufgabe besitzt
      *
-     * @return <code>true</code>, wenn der Step eine gültige Start-Aufgabe besitzt sonst
-     *         <code>false</code>
+     * @return <code>true</code>, wenn der Step eine gültige Start-Aufgabe
+     *         besitzt sonst <code>false</code>
      */
     public boolean hasStartAufgabe() {
         return startAufgabe != null;
@@ -169,17 +172,19 @@ public class LGMProzessStep {
     /**
      * Prüft, ob für den Step eine gültige End-Aufgabe besitzt
      *
-     * @return <code>true</code>, wenn der Step eine gültige End-Aufgabe besitzt sonst
-     *         <code>false</code>
+     * @return <code>true</code>, wenn der Step eine gültige End-Aufgabe besitzt
+     *         sonst <code>false</code>
      */
     public boolean hasObjekttyp() {
         return objektTyp != null;
     }
 
     /**
-     * Prüft, ob alle Variablen mit gültigen Werten belegt sind, also nicht <code>null</code> sind.
+     * Prüft, ob alle Variablen mit gültigen Werten belegt sind, also nicht
+     * <code>null</code> sind.
      *
-     * @return <code>true</code>, wenn alle Variablen nicht <code>null</code> sind.
+     * @return <code>true</code>, wenn alle Variablen nicht <code>null</code>
+     *         sind.
      */
     public boolean isCorrect() {
         return hasStartAufgabe() && hasObjekttyp() && hasStartKonfiguration() && hasEndKonfiguration();

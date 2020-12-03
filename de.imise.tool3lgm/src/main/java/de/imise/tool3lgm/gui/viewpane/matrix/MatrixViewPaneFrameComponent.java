@@ -1,5 +1,6 @@
 package de.imise.tool3lgm.gui.viewpane.matrix;
 
+import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.path.MetaPathSelector.MetaPathSelection;
 import de.imise.tool3lgm.gui.viewpane.ViewPaneFrameComponent;
 
@@ -42,6 +43,12 @@ public interface MatrixViewPaneFrameComponent extends ViewPaneFrameComponent {
     public default void setMatrixViewToolbar(final MatrixViewPaneToolbar matrixViewToolbar) {
         MatrixViewPane viewPane = getViewPane();
         viewPane.setMatrixViewToolbar(matrixViewToolbar);
+    }
+
+    @Override
+    default void dataChanged(final GraphDocument source) {
+        MatrixViewPane viewPane = getViewPane();
+        viewPane.update();
     }
 
 }

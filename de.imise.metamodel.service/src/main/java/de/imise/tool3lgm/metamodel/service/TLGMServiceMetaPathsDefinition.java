@@ -53,10 +53,11 @@ import de.imise.tool3lgm.metamodel.service.node.Service;
 import de.imise.tool3lgm.metamodel.service.node.SoftwareProduct;
 
 /**
- * In this definition all pathes of the metamodel are defined. The {@link MetaModelDefinition}
- * should/can not contain any metapath definitions because itself is needed to created any metapath.
- * This definition here is loaded lazy by the {@link MetaPathDefinition} so the basic metamodel
- * object exists while creating the metapaths.
+ * In this definition all pathes of the metamodel are defined. The
+ * {@link MetaModelDefinition} should/can not contain any metapath definitions
+ * because itself is needed to created any metapath. This definition here is
+ * loaded lazy by the {@link MetaPathDefinition} so the basic metamodel object
+ * exists while creating the metapaths.
  *
  * @author AXS (27 May 2019)
  */
@@ -114,7 +115,7 @@ public class TLGMServiceMetaPathsDefinition extends MetaPathDefinition {
     ///////////////////////////////////////////////////////////////////
 
     @Override
-    public Collection<SimpleMetaPath> getCreatablePaths() {
+    public Collection<SimpleMetaPath> getCreatableMetaPaths() {
         SimpleMetaPath metaPath1 = smp(ApplicationSystem.class, IheActor.class, "PATH_ApplicationSystem_IheActor", ApplicationSystem_IheActorInstance_Edge.class, IheActor_IheActorInstance_Edge.class);
         //        SimpleMetaPath metaPath2 = smp(IheActorInstance.class, IheActor.class, "PATH_IheActorInstance_ApplicationSystem_IheActor", ApplicationSystem_IheActorInstance_Edge.class, ApplicationSystem_IheActorInstance_Edge.class,
         //                IheActor_IheActorInstance_Edge.class);
@@ -130,14 +131,14 @@ public class TLGMServiceMetaPathsDefinition extends MetaPathDefinition {
     ////////////////////////////////////////////////////////////////////////
 
     @Override
-    public Map<Class<? extends ModelElement>, MetaPath> getElementClassToNameExtensionPath() {
+    public Map<Class<? extends ModelElement>, MetaPath> getElementClassToNameExtensionMetaPath() {
         SimpleMetaPath applicationsSystemNameExtensionPath = smp(ApplicationSystem.class, SoftwareProduct.class, ApplicationSystem_SoftwareProduct_Edge.class);
         SimpleMetaPath iheActorInstanceNameExtensionPath = smp(IheActorInstance.class, IheActor.class, IheActor_IheActorInstance_Edge.class);
         return ImmutableMap.of(ApplicationSystem.class, applicationsSystemNameExtensionPath, IheActorInstance.class, iheActorInstanceNameExtensionPath);
     }
 
     @Override
-    public Map<Class<? extends Edge>, MetaPath> getEdgeClassToInitialCreatedNameSourcePath() {
+    public Map<Class<? extends Edge>, MetaPath> getEdgeClassToInitialCreatedNameSourceMetaPath() {
         MetaModel metaModel = getMetaModel();
         ElementaryMetaPathHandler emph = metaModel.getElementaryMetaPathHandler();
 

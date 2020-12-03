@@ -1,6 +1,6 @@
 /*
- * Created on 09.02.2004 To change this generated comment go to Window>Preferences>Java>Code
- * Generation>Code and Comments
+ * Created on 09.02.2004 To change this generated comment go to
+ * Window>Preferences>Java>Code Generation>Code and Comments
  */
 package de.imise.tool3lgm.metamodel.original.process;
 
@@ -56,9 +56,10 @@ import de.imise.tool3lgm.metamodel.original.node.Organisationseinheit;
 import de.imise.tool3lgm.metamodel.original.node.Prozess;
 
 /**
- * @author AXS Dieses Panel ist das KommunikationsprozessPanel im ElementPropertyDialog eines
- *         (Geschäfts-)Prozesses
- *         Diese Panel wird im Modemnt nicht genutzt und müsste wiederhergestellt werden, falls es noch einmal gebraucht wird.
+ * @author AXS Dieses Panel ist das KommunikationsprozessPanel im
+ *         ElementPropertyDialog eines (Geschäfts-)Prozesses Diese Panel wird im
+ *         Modemnt nicht genutzt und müsste wiederhergestellt werden, falls es
+ *         noch einmal gebraucht wird.
  */
 @SuppressWarnings("serial")
 public class KommProzessPanel extends ElementDialogPanel {
@@ -290,8 +291,9 @@ public class KommProzessPanel extends ElementDialogPanel {
     private final long lastDocModificationTime = System.currentTimeMillis();
 
     /**
-     * Gibt fuer eine ArrayList von NodeContainern oder ModelElements einen String des Inhalts zurück. Ist insertNewLines==false, wird
-     * eine kommaseparierte Liste zurückgegeben.
+     * Gibt fuer eine ArrayList von NodeContainern oder ModelElements einen
+     * String des Inhalts zurück. Ist insertNewLines==false, wird eine
+     * kommaseparierte Liste zurückgegeben.
      *
      * @param ArrayList
      * @param boolean
@@ -762,14 +764,19 @@ public class KommProzessPanel extends ElementDialogPanel {
     ///////////////////////////////////////////////////////////////////////////////////////////
 
     /**
-     * Gibt eine Liste mit Prozessschritten für eine einzelne Aufgabe zurück. In den einzelnen LGMProzessStep dieser Liste sind nur die startAufgabe,
-     * endAufgabe und der Objekttyp gesetzt. endAufgabe ist immer identisch mit der Aufgabe an Position pos aus
-     * der Liste der Prozessaufgaben. Es ist also eine Liste aller Aufgaben die im Prozess vor aufgabenPos stehen inkl. der von diesen Aufgaben im
-     * gegebenen GraphDocument bearbeiteten Objekttypen, die von der Aufgabe an pos gleichzeitig interpretiert
-     * werden. Ex. kein Objekttyp den die Aufgabe an pos interpretiert und eine Vorgaengeraufgabe bearbeitet, wird ein LGMProzessStep zurueckgegeben,
-     * in dem nur die endAufgabe der Aufgabe an pos entspricht und der Rest null ist. Wird testOnly=true
-     * uebergeben, dann werden nicht alle Schritte gesucht sondern nur der erste vollstaendige zurückgegeben oder eine leere Liste, wenn keiner
-     * existiert. Pos wird wie immer ab 0 gezaehlt.
+     * Gibt eine Liste mit Prozessschritten für eine einzelne Aufgabe zurück. In
+     * den einzelnen LGMProzessStep dieser Liste sind nur die startAufgabe,
+     * endAufgabe und der Objekttyp gesetzt. endAufgabe ist immer identisch mit
+     * der Aufgabe an Position pos aus der Liste der Prozessaufgaben. Es ist
+     * also eine Liste aller Aufgaben die im Prozess vor aufgabenPos stehen
+     * inkl. der von diesen Aufgaben im gegebenen GraphDocument bearbeiteten
+     * Objekttypen, die von der Aufgabe an pos gleichzeitig interpretiert
+     * werden. Ex. kein Objekttyp den die Aufgabe an pos interpretiert und eine
+     * Vorgaengeraufgabe bearbeitet, wird ein LGMProzessStep zurueckgegeben, in
+     * dem nur die endAufgabe der Aufgabe an pos entspricht und der Rest null
+     * ist. Wird testOnly=true uebergeben, dann werden nicht alle Schritte
+     * gesucht sondern nur der erste vollstaendige zurückgegeben oder eine leere
+     * Liste, wenn keiner existiert. Pos wird wie immer ab 0 gezaehlt.
      *
      * @param ModelElement
      * @param int
@@ -782,14 +789,19 @@ public class KommProzessPanel extends ElementDialogPanel {
 
     //----------------------------------------------------------------------------------------------------------------------------------
     /**
-     * Gibt eine Liste mit Prozessschritten für eine einzelne Aufgabe zurück. In den einzelnen LGMProzessStep dieser Liste sind nur die startAufgabe,
-     * endAufgabe und der Objekttyp gesetzt. endAufgabe ist immer identisch mit der uebergebenen Aufgabe. Es ist
-     * also eine Liste aller Aufgaben die im Prozess vor aufgabenPos stehen inkl. der von diesen Aufgaben im gegebenen GraphDocument bearbeiteten
-     * Objekttypen, die von der übergebenen Aufgabe gleichzeitig interpretiert werden. Ex. kein Objekttyp den die
-     * uebergebene Aufgabe interpretiert und eine Vorgaengeraufgabe bearbeitet, wird ein LGMProzessStep zurueckgegeben, in dem nur die endAufgabe der
-     * uebergebenen Aufgabe entspricht und der Rest null ist. Wird testOnly=true uebergeben, dann werden nicht
-     * alle Schritte gesucht sondern nur der erste vollstaendige zurückgegeben oder eine leere Liste, wenn keiner existiert. Pos wird wie immer ab 0
-     * gezaehlt.
+     * Gibt eine Liste mit Prozessschritten für eine einzelne Aufgabe zurück. In
+     * den einzelnen LGMProzessStep dieser Liste sind nur die startAufgabe,
+     * endAufgabe und der Objekttyp gesetzt. endAufgabe ist immer identisch mit
+     * der uebergebenen Aufgabe. Es ist also eine Liste aller Aufgaben die im
+     * Prozess vor aufgabenPos stehen inkl. der von diesen Aufgaben im gegebenen
+     * GraphDocument bearbeiteten Objekttypen, die von der übergebenen Aufgabe
+     * gleichzeitig interpretiert werden. Ex. kein Objekttyp den die uebergebene
+     * Aufgabe interpretiert und eine Vorgaengeraufgabe bearbeitet, wird ein
+     * LGMProzessStep zurueckgegeben, in dem nur die endAufgabe der uebergebenen
+     * Aufgabe entspricht und der Rest null ist. Wird testOnly=true uebergeben,
+     * dann werden nicht alle Schritte gesucht sondern nur der erste
+     * vollstaendige zurückgegeben oder eine leere Liste, wenn keiner existiert.
+     * Pos wird wie immer ab 0 gezaehlt.
      *
      * @param ArrayList Liste mit Elementen der Klasse <code>Aufgabe</code>.
      * @param ModelElement
@@ -855,14 +867,20 @@ public class KommProzessPanel extends ElementDialogPanel {
     //----------------------------------------------------------------------------------------------------------------------------------
 
     /**
-     * Liefert eine Liste aller Prozesschritte und all ihrer Kombinationen, die sich aus unterschiedlichen Konfigurationen der Aufgaben ergeben. Die
-     * aufgaben muss eine Liste der ElementContainer von Aufgaben aus dem selben GraphDocument sein. Es wird null
-     * zurückgegeben, wenn die ArrayList aufgaben weniger als 2 Elemente hat. Folgende Arten von Schritten koennen in der Rueckgabeliste stehen: 1.)
-     * vollstaendige Schritte, also Schritte fuer die nach einem Kommunikationsprozess gesucht werden kann (alle
-     * ElementContainer des LGMProzessStep (Startaufgabe, Endaufgabe, Objekttyp, Startkonfiguration, Endkonfiguration) sind nicht null) 2.)
-     * LGMProzessStep, in dem nur die endAufgabe gesetzt ist ( = endAufgabe hat keinen Objekttyp interpretiert, den eine
-     * der Aufgaben davor im Prozess bearbeitet hat (siehe getBuisnessProcessSteps)) 3.) LGMProzessStep, in dem eine oder beide Konfigurationen null
-     * sind ( = mind. eine Aufgabe hat keine Konfiguration)
+     * Liefert eine Liste aller Prozesschritte und all ihrer Kombinationen, die
+     * sich aus unterschiedlichen Konfigurationen der Aufgaben ergeben. Die
+     * aufgaben muss eine Liste der ElementContainer von Aufgaben aus dem selben
+     * GraphDocument sein. Es wird null zurückgegeben, wenn die ArrayList
+     * aufgaben weniger als 2 Elemente hat. Folgende Arten von Schritten koennen
+     * in der Rueckgabeliste stehen: 1.) vollstaendige Schritte, also Schritte
+     * fuer die nach einem Kommunikationsprozess gesucht werden kann (alle
+     * ElementContainer des LGMProzessStep (Startaufgabe, Endaufgabe, Objekttyp,
+     * Startkonfiguration, Endkonfiguration) sind nicht null) 2.)
+     * LGMProzessStep, in dem nur die endAufgabe gesetzt ist ( = endAufgabe hat
+     * keinen Objekttyp interpretiert, den eine der Aufgaben davor im Prozess
+     * bearbeitet hat (siehe getBuisnessProcessSteps)) 3.) LGMProzessStep, in
+     * dem eine oder beide Konfigurationen null sind ( = mind. eine Aufgabe hat
+     * keine Konfiguration)
      *
      * @param ArrayList
      */

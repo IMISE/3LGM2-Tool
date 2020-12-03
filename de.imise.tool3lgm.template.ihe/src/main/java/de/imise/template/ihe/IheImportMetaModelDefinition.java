@@ -12,7 +12,8 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.SimpleEdge;
 import de.imise.tool3lgm.imexport.ImportMetaModelDefinition;
 
 /**
- * Definition der Klassen und Kanten, die aus Protege in 3LGM importiert werden können sollen.
+ * Definition der Klassen und Kanten, die aus Protege in 3LGM importiert werden
+ * können sollen.
  *
  * @author AXS (10 Jun 2019)
  */

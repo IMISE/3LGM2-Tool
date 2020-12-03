@@ -13,7 +13,7 @@ import de.imise.util.collections.CollectionUtils;
  */
 public abstract class ListPath extends AbstractPath implements Iterable<AbstractPath> {
 
-    /** Ein SequencePath enthält eine Liste anderer Pfade */
+    /** List of contained paths */
     private final List<AbstractPath> paths;
 
     /**

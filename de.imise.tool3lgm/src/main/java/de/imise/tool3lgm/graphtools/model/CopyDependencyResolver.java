@@ -41,7 +41,7 @@ public class CopyDependencyResolver {
      * @param export Array von Szenarios, die zu kopieren sind
      * @param elements Set, in welches die zu kopierenden Element geschrieben
      *            werden
-     * @param bitmaps Set, in welches die HashStrings der zu kopierenden Icons
+     * @param bitmaps Set, in welches die IDs der zu kopierenden Icons
      *            geschrieben werden
      * @param userFields Set, in welches die zu kopierenden benutzdefinierten
      *            Eigenschaftsfelder geschrieben werden
@@ -56,7 +56,7 @@ public class CopyDependencyResolver {
                     ElementContainer container = node.getContainer(doc);
                     if (container != null && !elements.contains(node)) {
                         elements.add(node);
-                        String iconName = ((NodeContainer) container).getIconString();
+                        String iconName = ((NodeContainer) container).getIconID();
                         if (iconName != null) {
                             bitmaps.add(iconName);
                         }
@@ -102,14 +102,13 @@ public class CopyDependencyResolver {
      * sucht alle Element, die beim kopieren eines Knotens ebenfalls kopiert
      * werden sollen (rekursiv, auch für die gefundenen Element)
      *
-     * @param knoten der dessen abhängige Element gefunden werden sollen
-     * @return HashSet mit den HashStrings der gefundenen Elementen
-     */
-    /**
      * @param me Element dessen abhängige Elemente gefunden werden sollen
-     * @p
-     * @param elements
-     * @param userFields
+     * @param ignoreClass elements with this class or with a subclass of this
+     *            class will be ignored
+     * @param elements the recursive filled retuern list with all elements. At
+     *            least the given modelelement is contained in this list.
+     * @param userFields all userfields of all elements in the filled elements
+     *            list
      */
     private void resolveCopyDependencies(final ModelElement me, final Class<? extends ModelElement> ignoreClass, final List<ModelElement> elements, final Set<UserField> userFields) {
         if (me instanceof Bendpoint || me instanceof InferenceEdge || elements.contains(me)) {
@@ -128,10 +127,10 @@ public class CopyDependencyResolver {
             Iterable<BendpointContainer> bendpointContainers = lc.getBendpointContainers();
             for (BendpointContainer bpc : bendpointContainers) {
                 Bendpoint bendpoint = bpc.getBendpoint();
-                String edgeHash = bendpoint.getEdgeHash();
-                if (edgeHash != null) {
-                    String meHash = me.getHashString();
-                    if (edgeHash.equals(meHash)) {
+                String edgeID = bendpoint.getEdgeID();
+                if (edgeID != null) {
+                    String meID = me.getID();
+                    if (edgeID.equals(meID)) {
                         if (!elements.contains(bendpoint)) {
                             elements.add(bendpoint);
                         }

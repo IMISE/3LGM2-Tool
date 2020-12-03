@@ -4,7 +4,7 @@
   <header>
     <title>gmds2020_IHE_Grouping-Example.3lgm</title>
     <description></description>
-    <version>14_sippe_1586368743855</version>
+    <version>15_sippe_1605012128993</version>
   </header>
   <userFieldDefinitions>
     <userFieldDef hash="USERFIELD_1497434962331_19">
@@ -99,11 +99,11 @@
   <objects>
     <model></model>
     <element class="IheIntegrationProfile" hash="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA">
-      <field name="name">Audit Trail and Node Authentication</field>
+      <field name="name">Audit Trail and Node Authentication (ATNA)</field>
       <field name="description">The ITI Audit Trail and Node Authentication (ATNA) Profile establishes the characteristics of a Basic Secure Node: It describes the security environment (user identification, authentication, authorization, access control, etc.) assumed for the node so that security reviewers may decide whether this matches their environments. It defines basic security requirements for the communications of the node using TLS or equivalent functionality. It defines basic auditing requirements for the node. The profile also establishes the characteristics of the communication of audit messages between the Basic Secure Nodes and Audit Repository nodes that collect audit information. It defines a Secure Application Actor for describing product configurations that are not able to meet all of the requirements of a Secure Node. This profile has been designed so that specific domain frameworks may extend it through an option defined in the domain specific technical framework. Extensions are used to define additional audit event reporting requirements, especially actor specific requirements. The Radiology Audit Trail Option in the IHE Radiology Technical Framework is an example of such an extension.</field>
     </element>
     <element class="IheIntegrationProfile" hash="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#CT">
-      <field name="name">Consistent Time</field>
+      <field name="name">Consistent Time (CT)</field>
       <field name="description">Consistent Time defines mechanisms to synchronize the time base between multiple actors and computers. Various infrastructure, security, and acquisition profiles require use of a consistent time base on multiple computers. The Consistent Time Profile provides median synchronization error of less than 1 second. Configuration options can provide better synchronization. The Consistent Time Profile specifies the use of the Network Time Protocol (NTP) defined in RFC1305.</field>
     </element>
     <element class="IheActor" hash="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDS-SD_CONTENT_CONSUMER">
@@ -115,7 +115,7 @@
       <field name="description">The Content Creator creates content in a content integration profile</field>
     </element>
     <element class="IheIntegrationProfile" hash="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDS.b">
-      <field name="name">Cross-Enterprise Document Sharing</field>
+      <field name="name">Cross-Enterprise Document Sharing (XDS.b)</field>
       <field name="description">The Cross-Enterprise Document Sharing (XDS.b) IHE Integration Profile facilitates the registration, distribution and access across health enterprises of patient electronic health records. 
 Cross-Enterprise Document Sharing is focused on providing a standards-based specification for managing the sharing of documents between any healthcare enterprise, ranging from a private physician office to a clinic to an acute care in-patient facility. 
 In the rest of the ITI Technical Framework the term XDS refers generically to any flavor of XDS, currently only XDS.b. 
@@ -133,17 +133,13 @@ The XDS.b Integration Profile assumes that these enterprises belong to one or mo
       <field name="name">Doctor´s office context</field>
       <field name="description"></field>
     </element>
-    <element class="IheActor" hash="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_CONSUMER">
-      <field name="name">Document Consumer (XDS.b)</field>
-      <field name="description">The Document Consumer Actor queries a Document Registry Actor for documents meeting certain criteria, and retrieves selected documents from one or more Document Repository actors.</field>
-    </element>
     <element class="IheActor" hash="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REGISTRY">
       <field name="name">Document Registry (XDS.b)</field>
       <field name="description">The Document Registry Actor maintains metadata about each registered document in a document entry. This includes a link to the Document in the Repository where it is stored. The Document Registry responds to queries from Document Consumer actors about documents meeting specific criteria. It also enforces some healthcare specific technical policies at the time of document registration.</field>
     </element>
-    <element class="IheActorInstance" hash="AIN_1585421855719_10012">
-      <field name="name">Document Registry (XDS.b) Instance</field>
-      <field name="description"></field>
+    <element class="IheActorInstance" hash="AIN_1605011965460_3225">
+      <field name="name">Document Registry (XDS.b)  1</field>
+      <field name="description">The Document Registry Actor maintains metadata about each registered document in a document entry. This includes a link to the Document in the Repository where it is stored. The Document Registry responds to queries from Document Consumer actors about documents meeting specific criteria. It also enforces some healthcare specific technical policies at the time of document registration.</field>
     </element>
     <element class="IheActor" hash="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REPOSITORY">
       <field name="name">Document Repository (XDS.b)</field>
@@ -174,14 +170,14 @@ The XDS.b Integration Profile assumes that these enterprises belong to one or mo
       <field name="description">The Integrated Document Source / Repository is an XDS combination of Document Source and Document Repository that does not expose the interface between the Source and Repository. That is, this Source only publishes documents to its own Repository. It does register documents with a Document Registry</field>
     </element>
     <element class="IheInvokingInterface" hash="[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#CT_TIME_CLIENT; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-1; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#CT_TS]_2">
-      <field name="name">ITI-1 Aktor Schnittstelle (aufrufend)</field>
+      <field name="name">ITI-1 Aktor Schnittstelle (aufrufend)
+
+-JOINED-
+
+ITI-1 Actor Interface (invoking)</field>
       <field name="description"></field>
     </element>
     <element class="IheActorInstanceInvokingInterface" hash="AII_1586357146810_1205">
-      <field name="name">ITI-1 Aktor Schnittstelle (aufrufend) Instance</field>
-      <field name="description"></field>
-    </element>
-    <element class="IheActorInstanceInvokingInterface" hash="AII_1586358637922_1261">
       <field name="name">ITI-1 Aktor Schnittstelle (aufrufend) Instance</field>
       <field name="description"></field>
     </element>
@@ -189,45 +185,29 @@ The XDS.b Integration Profile assumes that these enterprises belong to one or mo
       <field name="name">ITI-1 Aktor Schnittstelle (aufrufend) Instance</field>
       <field name="description"></field>
     </element>
+    <element class="IheActorInstanceInvokingInterface" hash="AII_1586358637922_1261">
+      <field name="name">ITI-1 Aktor Schnittstelle (aufrufend) Instance</field>
+      <field name="description"></field>
+    </element>
     <element class="IheTransaction" hash="[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#CT_TIME_CLIENT; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-1; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#CT_TS]">
       <field name="name">ITI-1 Maintain Time</field>
       <field name="description">NTP transactions used to maintain time synchronization.</field>
     </element>
-    <element class="IheInvokingInterface" hash="[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_CONSUMER; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-18; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REGISTRY]_2">
-      <field name="name">ITI-18 Aktor Schnittstelle (aufrufend)
-
--JOINED-
-
-ITI-18 Actor Interface (invoking)</field>
-      <field name="description"></field>
-    </element>
     <element class="IheProvidingInterface" hash="[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_CONSUMER; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-18; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REGISTRY]_5">
-      <field name="name">ITI-18 Aktor Schnittstelle (bereitstellend)</field>
+      <field name="name">ITI-18 Actor Interface (providing)</field>
       <field name="description"></field>
     </element>
-    <element class="IheProvidingInterface" hash="[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_ADMINISTRATOR; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-18; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REGISTRY]_5">
-      <field name="name">ITI-18 Aktor Schnittstelle (bereitstellend)</field>
+    <element class="IheActorInstanceProvidingInterface" hash="AIP_1605011965461_3227">
+      <field name="name">ITI-18 Actor Interface (providing)  1</field>
       <field name="description"></field>
     </element>
-    <element class="IheActorInstanceProvidingInterface" hash="AIP_1585421855762_10022">
-      <field name="name">ITI-18 Aktor Schnittstelle (bereitstellend) Instance</field>
-      <field name="description"></field>
-    </element>
-    <element class="IheActorInstanceProvidingInterface" hash="AIP_1585421855746_10017">
-      <field name="name">ITI-18 Aktor Schnittstelle (bereitstellend) Instance</field>
-      <field name="description"></field>
+    <element class="IheTransaction" hash="[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDS-IB_DOC_CONSUMER; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-18; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDS-IB_DOC_REGISTRY]">
+      <field name="name">ITI-18 Registry Stored Query</field>
+      <field name="description">The Query Registry transaction is issued by the Document Consumer Actor on behalf of a care provider (EHR-CR) to a Document Registry. The Document Registry Actor searches the registry to locate documents that meet the provider s specified query criteria. It will return a list of document entries that contain metadata found to meet the specified criteria including the locations and identifier of each corresponding document in one or more Document Repositories. The stored query uses parameters and not direct SQL</field>
     </element>
     <element class="IheTransaction" hash="[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_CONSUMER; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-18; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REGISTRY]">
       <field name="name">ITI-18 Registry Stored Query</field>
       <field name="description">The Query Registry transaction is issued by the Document Consumer Actor on behalf of a care provider (EHR-CR) to a Document Registry. The Document Registry Actor searches the registry to locate documents that meet the provider s specified query criteria. It will return a list of document entries that contain metadata found to meet the specified criteria including the locations and identifier of each corresponding document in one or more Document Repositories. The stored query uses parameters and not direct SQL</field>
-    </element>
-    <element class="IheInvokingInterface" hash="[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_SN; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-19; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_SA]_2">
-      <field name="name">ITI-19 Aktor Schnittstelle (aufrufend)
-
--JOINED-
-
-ITI-19 Actor Interface (invoking)</field>
-      <field name="description"></field>
     </element>
     <element class="IheInvokingInterface" hash="[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_SA; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-19; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_SN]_2">
       <field name="name">ITI-19 Aktor Schnittstelle (aufrufend)
@@ -237,7 +217,15 @@ ITI-19 Actor Interface (invoking)</field>
 ITI-19 Actor Interface (invoking)</field>
       <field name="description"></field>
     </element>
-    <element class="IheActorInstanceInvokingInterface" hash="AII_1586357173450_1218">
+    <element class="IheInvokingInterface" hash="[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_SN; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-19; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_SA]_2">
+      <field name="name">ITI-19 Aktor Schnittstelle (aufrufend)
+
+-JOINED-
+
+ITI-19 Actor Interface (invoking)</field>
+      <field name="description"></field>
+    </element>
+    <element class="IheActorInstanceInvokingInterface" hash="AII_1586357040596_1191">
       <field name="name">ITI-19 Aktor Schnittstelle (aufrufend)
 
 -JOINED-
@@ -245,7 +233,7 @@ ITI-19 Actor Interface (invoking)</field>
 ITI-19 Actor Interface (invoking) Instance</field>
       <field name="description"></field>
     </element>
-    <element class="IheActorInstanceInvokingInterface" hash="AII_1586357040596_1191">
+    <element class="IheActorInstanceInvokingInterface" hash="AII_1586357173450_1218">
       <field name="name">ITI-19 Aktor Schnittstelle (aufrufend)
 
 -JOINED-
@@ -257,14 +245,6 @@ ITI-19 Actor Interface (invoking) Instance</field>
       <field name="name">ITI-19 Aktor Schnittstelle (aufrufend) Instance</field>
       <field name="description"></field>
     </element>
-    <element class="IheProvidingInterface" hash="[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_SA; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-19; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_SN]_5">
-      <field name="name">ITI-19 Aktor Schnittstelle (bereitstellend)
-
--JOINED-
-
-ITI-19 Actor Interface (providing)</field>
-      <field name="description"></field>
-    </element>
     <element class="IheProvidingInterface" hash="[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_SN; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-19; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_SA]_5">
       <field name="name">ITI-19 Aktor Schnittstelle (bereitstellend)
 
@@ -273,7 +253,15 @@ ITI-19 Actor Interface (providing)</field>
 ITI-19 Actor Interface (providing)</field>
       <field name="description"></field>
     </element>
-    <element class="IheActorInstanceProvidingInterface" hash="AIP_1586357173440_1211">
+    <element class="IheProvidingInterface" hash="[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_SA; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-19; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_SN]_5">
+      <field name="name">ITI-19 Aktor Schnittstelle (bereitstellend)
+
+-JOINED-
+
+ITI-19 Actor Interface (providing)</field>
+      <field name="description"></field>
+    </element>
+    <element class="IheActorInstanceProvidingInterface" hash="AIP_1586357040574_1186">
       <field name="name">ITI-19 Aktor Schnittstelle (bereitstellend)
 
 -JOINED-
@@ -281,7 +269,7 @@ ITI-19 Actor Interface (providing)</field>
 ITI-19 Actor Interface (providing) Instance</field>
       <field name="description"></field>
     </element>
-    <element class="IheActorInstanceProvidingInterface" hash="AIP_1586357040574_1186">
+    <element class="IheActorInstanceProvidingInterface" hash="AIP_1586357173440_1211">
       <field name="name">ITI-19 Aktor Schnittstelle (bereitstellend)
 
 -JOINED-
@@ -297,14 +285,6 @@ ITI-19 Actor Interface (providing) Instance</field>
       <field name="name">ITI-19 Authenticate Node</field>
       <field name="description">This transaction is embedded within all network communications activity. All DICOM, HL7, and HTML connections shall comply with the IHE specification for bi-directional authentication and authorization of communications of Protected Healthcare Information (PHI). IHE does not specify how other protocols that transfer PHI shall perform bi-directional authentication and authorization, but requires that other protocols perform such authentication and authorization.</field>
     </element>
-    <element class="IheInvokingInterface" hash="[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_SN; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-20; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_ARR]_2">
-      <field name="name">ITI-20 Aktor Schnittstelle (aufrufend)
-
--JOINED-
-
-ITI-20 Actor Interface (invoking)</field>
-      <field name="description"></field>
-    </element>
     <element class="IheInvokingInterface" hash="[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_SA; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-20; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_ARR]_2">
       <field name="name">ITI-20 Aktor Schnittstelle (aufrufend)
 
@@ -313,7 +293,15 @@ ITI-20 Actor Interface (invoking)</field>
 ITI-20 Actor Interface (invoking)</field>
       <field name="description"></field>
     </element>
-    <element class="IheActorInstanceInvokingInterface" hash="AII_1586357173463_1227">
+    <element class="IheInvokingInterface" hash="[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_SN; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-20; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_ARR]_2">
+      <field name="name">ITI-20 Aktor Schnittstelle (aufrufend)
+
+-JOINED-
+
+ITI-20 Actor Interface (invoking)</field>
+      <field name="description"></field>
+    </element>
+    <element class="IheActorInstanceInvokingInterface" hash="AII_1586357040620_1198">
       <field name="name">ITI-20 Aktor Schnittstelle (aufrufend)
 
 -JOINED-
@@ -321,7 +309,7 @@ ITI-20 Actor Interface (invoking)</field>
 ITI-20 Actor Interface (invoking) Instance</field>
       <field name="description"></field>
     </element>
-    <element class="IheActorInstanceInvokingInterface" hash="AII_1586357040620_1198">
+    <element class="IheActorInstanceInvokingInterface" hash="AII_1586357173463_1227">
       <field name="name">ITI-20 Aktor Schnittstelle (aufrufend)
 
 -JOINED-
@@ -357,11 +345,19 @@ ITI-20 Actor Interface (invoking) Instance</field>
       <field name="name">ITI-41 Provide and Register Document Set-b</field>
       <field name="description">Provide and Register Document Set-b</field>
     </element>
-    <element class="IheInvokingInterface" hash="[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_EMBED_REPOS; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-42; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REGISTRY]_2">
-      <field name="name">ITI-42 Aktor Schnittstelle (aufrufend)</field>
+    <element class="IheProvidingInterface" hash="[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_EMBED_REPOS; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-42; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REGISTRY]_5">
+      <field name="name">ITI-42 Actor Interface (providing)</field>
+      <field name="description"></field>
+    </element>
+    <element class="IheActorInstanceProvidingInterface" hash="AIP_1605011965463_3230">
+      <field name="name">ITI-42 Actor Interface (providing)  1</field>
       <field name="description"></field>
     </element>
     <element class="IheInvokingInterface" hash="[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REPOSITORY; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-42; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REGISTRY]_2">
+      <field name="name">ITI-42 Aktor Schnittstelle (aufrufend)</field>
+      <field name="description"></field>
+    </element>
+    <element class="IheInvokingInterface" hash="[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_EMBED_REPOS; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-42; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REGISTRY]_2">
       <field name="name">ITI-42 Aktor Schnittstelle (aufrufend)</field>
       <field name="description"></field>
     </element>
@@ -369,55 +365,19 @@ ITI-20 Actor Interface (invoking) Instance</field>
       <field name="name">ITI-42 Aktor Schnittstelle (aufrufend) Instance</field>
       <field name="description"></field>
     </element>
-    <element class="IheProvidingInterface" hash="[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REPOSITORY; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-42; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REGISTRY]_5">
-      <field name="name">ITI-42 Aktor Schnittstelle (bereitstellend)</field>
-      <field name="description"></field>
-    </element>
-    <element class="IheProvidingInterface" hash="[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_EMBED_REPOS; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-42; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REGISTRY]_5">
-      <field name="name">ITI-42 Aktor Schnittstelle (bereitstellend)</field>
-      <field name="description"></field>
-    </element>
-    <element class="IheActorInstanceProvidingInterface" hash="AIP_1585421855807_10035">
-      <field name="name">ITI-42 Aktor Schnittstelle (bereitstellend) Instance</field>
-      <field name="description"></field>
-    </element>
-    <element class="IheActorInstanceProvidingInterface" hash="AIP_1585421855778_10027">
-      <field name="name">ITI-42 Aktor Schnittstelle (bereitstellend) Instance</field>
-      <field name="description"></field>
+    <element class="IheTransaction" hash="[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_EMBED_REPOS; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-42; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REGISTRY]">
+      <field name="name">ITI-42 Register Document Set-b</field>
+      <field name="description">Register Document Set-b</field>
     </element>
     <element class="IheTransaction" hash="[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REPOSITORY; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-42; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REGISTRY]">
       <field name="name">ITI-42 Register Document Set-b</field>
       <field name="description">Register Document Set-b</field>
     </element>
-    <element class="IheInvokingInterface" hash="[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_CONSUMER; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-43; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REPOSITORY]_2">
-      <field name="name">ITI-43 Aktor Schnittstelle (aufrufend)
-
--JOINED-
-
-ITI-43 Actor Interface (invoking)</field>
-      <field name="description"></field>
-    </element>
-    <element class="IheInvokingInterface" hash="[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_CONSUMER; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-43; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_ON_DEMAND_DOC_SOURCE]_2">
-      <field name="name">ITI-43 Aktor Schnittstelle (aufrufend)
-
--JOINED-
-
-ITI-43 Actor Interface (invoking)</field>
-      <field name="description"></field>
-    </element>
-    <element class="IheInvokingInterface" hash="[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_CONSUMER; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-43; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_EMBED_REPOS]_2">
-      <field name="name">ITI-43 Aktor Schnittstelle (aufrufend)
-
--JOINED-
-
-ITI-43 Actor Interface (invoking)</field>
-      <field name="description"></field>
-    </element>
-    <element class="IheProvidingInterface" hash="[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_CONSUMER; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-43; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REPOSITORY]_5">
+    <element class="IheProvidingInterface" hash="[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_CONSUMER; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-43; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_EMBED_REPOS]_5">
       <field name="name">ITI-43 Aktor Schnittstelle (bereitstellend)</field>
       <field name="description"></field>
     </element>
-    <element class="IheProvidingInterface" hash="[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_CONSUMER; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-43; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_EMBED_REPOS]_5">
+    <element class="IheProvidingInterface" hash="[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_CONSUMER; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-43; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REPOSITORY]_5">
       <field name="name">ITI-43 Aktor Schnittstelle (bereitstellend)</field>
       <field name="description"></field>
     </element>
@@ -429,6 +389,14 @@ ITI-43 Actor Interface (invoking)</field>
       <field name="name">ITI-43 Retrieve Document Set</field>
       <field name="description">Retrieve Document Set</field>
     </element>
+    <element class="IheProvidingInterface" hash="[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_PAT_IDENTITY_SRC; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-44; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REGISTRY]_5">
+      <field name="name">ITI-44 Actor Interface (providing)</field>
+      <field name="description"></field>
+    </element>
+    <element class="IheActorInstanceProvidingInterface" hash="AIP_1605011965464_3233">
+      <field name="name">ITI-44 Actor Interface (providing)  1</field>
+      <field name="description"></field>
+    </element>
     <element class="IheInvokingInterface" hash="[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_PAT_IDENTITY_SRC; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-44; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REGISTRY]_2">
       <field name="name">ITI-44 Aktor Schnittstelle (aufrufend)</field>
       <field name="description"></field>
@@ -437,41 +405,49 @@ ITI-43 Actor Interface (invoking)</field>
       <field name="name">ITI-44 Aktor Schnittstelle (aufrufend) Instance</field>
       <field name="description"></field>
     </element>
-    <element class="IheProvidingInterface" hash="[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_PAT_IDENTITY_SRC; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-44; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REGISTRY]_5">
-      <field name="name">ITI-44 Aktor Schnittstelle (bereitstellend)</field>
-      <field name="description"></field>
-    </element>
-    <element class="IheActorInstanceProvidingInterface" hash="AIP_1585421855822_10040">
-      <field name="name">ITI-44 Aktor Schnittstelle (bereitstellend) Instance</field>
-      <field name="description"></field>
+    <element class="IheTransaction" hash="[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#PIXV3_PAT_IDENTITY_SRC; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-44; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#PIXV3_PIX_MANAGER]">
+      <field name="name">ITI-44 Patient Identity Feed HL7 V3</field>
+      <field name="description">Patient Identity Feed HL7 V3</field>
     </element>
     <element class="IheTransaction" hash="[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_PAT_IDENTITY_SRC; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-44; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REGISTRY]">
       <field name="name">ITI-44 Patient Identity Feed HL7 V3</field>
       <field name="description">Patient Identity Feed HL7 V3</field>
     </element>
     <element class="IheProvidingInterface" hash="[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_ADMINISTRATOR; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-57; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REGISTRY]_5">
-      <field name="name">ITI-57 Aktor Schnittstelle (bereitstellend)</field>
+      <field name="name">ITI-57 Actor Interface (providing)</field>
       <field name="description"></field>
     </element>
-    <element class="IheActorInstanceProvidingInterface" hash="AIP_1585421855841_10043">
-      <field name="name">ITI-57 Aktor Schnittstelle (bereitstellend) Instance</field>
+    <element class="IheActorInstanceProvidingInterface" hash="AIP_1605011965466_3236">
+      <field name="name">ITI-57 Actor Interface (providing)  1</field>
       <field name="description"></field>
+    </element>
+    <element class="IheTransaction" hash="[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDR_DOC_ADMINISTRATOR; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-57; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDR_DOC_RECIPIENT]">
+      <field name="name">ITI-57 Update Document Set</field>
+      <field name="description">The Update Document Set transaction passes a collection of metadata updates from the Document Administrator actor to the Document Registry or Document Recipient actor.</field>
     </element>
     <element class="IheTransaction" hash="[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_ADMINISTRATOR; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-57; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REGISTRY]">
       <field name="name">ITI-57 Update Document Set</field>
       <field name="description">The Update Document Set transaction passes a collection of metadata updates from the Document Administrator actor to the Document Registry or Document Recipient actor.</field>
     </element>
     <element class="IheProvidingInterface" hash="[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_ON_DEMAND_DOC_SOURCE; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-61; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REGISTRY]_5">
-      <field name="name">ITI-61 Aktor Schnittstelle (bereitstellend)</field>
+      <field name="name">ITI-61 Actor Interface (providing)</field>
       <field name="description"></field>
     </element>
-    <element class="IheActorInstanceProvidingInterface" hash="AIP_1585421855728_10014">
-      <field name="name">ITI-61 Aktor Schnittstelle (bereitstellend) Instance</field>
+    <element class="IheActorInstanceProvidingInterface" hash="AIP_1605011965467_3239">
+      <field name="name">ITI-61 Actor Interface (providing)  1</field>
       <field name="description"></field>
     </element>
     <element class="IheTransaction" hash="[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_ON_DEMAND_DOC_SOURCE; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-61; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REGISTRY]">
       <field name="name">ITI-61 Register On-Demand Document Entry</field>
       <field name="description">The Register On-Demand Document Entry transaction is used by the On-Demand Document Source to register one or more On-Demand Document Entries in the Document Registry.</field>
+    </element>
+    <element class="IheProvidingInterface" hash="[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_PAT_IDENTITY_SRC; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-8; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REGISTRY]_5">
+      <field name="name">ITI-8 Actor Interface (providing)</field>
+      <field name="description"></field>
+    </element>
+    <element class="IheActorInstanceProvidingInterface" hash="AIP_1605011965469_3242">
+      <field name="name">ITI-8 Actor Interface (providing)  1</field>
+      <field name="description"></field>
     </element>
     <element class="IheInvokingInterface" hash="[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_PAT_IDENTITY_SRC; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-8; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REGISTRY]_2">
       <field name="name">ITI-8 Aktor Schnittstelle (aufrufend)</field>
@@ -481,20 +457,12 @@ ITI-43 Actor Interface (invoking)</field>
       <field name="name">ITI-8 Aktor Schnittstelle (aufrufend) Instance</field>
       <field name="description"></field>
     </element>
-    <element class="IheProvidingInterface" hash="[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_PAT_IDENTITY_SRC; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-8; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REGISTRY]_5">
-      <field name="name">ITI-8 Aktor Schnittstelle (bereitstellend)</field>
-      <field name="description"></field>
-    </element>
-    <element class="IheActorInstanceProvidingInterface" hash="AIP_1585421855794_10032">
-      <field name="name">ITI-8 Aktor Schnittstelle (bereitstellend) Instance</field>
-      <field name="description"></field>
-    </element>
     <element class="IheTransaction" hash="[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_PAT_IDENTITY_SRC; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-8; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REGISTRY]">
       <field name="name">ITI-8 Patient Identity Feed</field>
       <field name="description">Allows a Patient Identity Source Actor to notify a Patient Identity Cross-Referencing Actor of all events related to patient identification (creation, update, merge, etc.).</field>
     </element>
     <element class="IheDomain" hash="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ITI">
-      <field name="name">IT-Infrastructure</field>
+      <field name="name">IT-Infrastructure (ITI)</field>
       <field name="description">The IT Infrastructure Domain supplies infrastructure for sharing healthcare information. An infrastructure interoperability component represents a common IT function that is used as a building block for a variety of use cases... a necessary ingredient, but rarely visible to the end user!! These components may be embedded in an application, but are often deployed as a shared resource within a RHIO or Health Information Exchange.</field>
     </element>
     <element class="ApplicationSystem" hash="S_1570999563825_18176">
@@ -521,15 +489,15 @@ ITI-43 Actor Interface (invoking)</field>
       <field name="name">Secure Application (ATNA)</field>
       <field name="description">The difference between the Secure Node and the Secure Application is the extent to which the underlying operating system and other environment are secured. A Secure Node includes all aspects of user authentication, file system protections, and operating environment security. The Secure Application is a product that does not include the operating environment. The Secure Application provides security features only for the application features. See section 9.7 for the relationships among a Secure Node, Secure Application, and other actors.</field>
     </element>
-    <element class="IheActorInstance" hash="AIN_1586357173434_1209">
-      <field name="name">Secure Application (ATNA) Instance</field>
-      <field name="description"></field>
-    </element>
     <element class="IheActorInstance" hash="AIN_1586357040555_1184">
       <field name="name">Secure Application (ATNA) Instance</field>
       <field name="description"></field>
     </element>
     <element class="IheActorInstance" hash="AIN_1585425511925_1181">
+      <field name="name">Secure Application (ATNA) Instance</field>
+      <field name="description"></field>
+    </element>
+    <element class="IheActorInstance" hash="AIN_1586357173434_1209">
       <field name="name">Secure Application (ATNA) Instance</field>
       <field name="description"></field>
     </element>
@@ -541,7 +509,7 @@ ITI-43 Actor Interface (invoking)</field>
       <field name="name">Time Client (CT)</field>
       <field name="description">Establishes time synchronization with one or more Time Servers using the NTP protocol and either the NTP or SNTP algorithms. Maintains the local computer system clock synchronization with UTC based on synchronization with the Time Servers.</field>
     </element>
-    <element class="IheActorInstance" hash="AIN_1586358636511_1259">
+    <element class="IheActorInstance" hash="AIN_1585425528747_1195">
       <field name="name">Time Client (CT) Instance</field>
       <field name="description"></field>
     </element>
@@ -549,72 +517,26 @@ ITI-43 Actor Interface (invoking)</field>
       <field name="name">Time Client (CT) Instance</field>
       <field name="description"></field>
     </element>
-    <element class="IheActorInstance" hash="AIN_1585425528747_1195">
+    <element class="IheActorInstance" hash="AIN_1586358636511_1259">
       <field name="name">Time Client (CT) Instance</field>
       <field name="description"></field>
     </element>
     <element class="IheIntegrationProfile_IheDomain_Edge" hash="[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDS.b; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iheDomain; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ITI]">
-      <field name="name">IheIntegrationProfile_IheDomain_Edge 13</field>
+      <field name="name">IheIntegrationProfile_IheDomain_Edge 13
+
+-JOINED-
+
+Connection 28</field>
       <field name="description"></field>
       <field name="start">http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDS.b</field>
       <field name="end">http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ITI</field>
     </element>
-    <element class="IheIntegrationProfile_IheActor_Edge" hash="[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_CONSUMER; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iheIntegrationProfile; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDS.b]">
-      <field name="name">IheIntegrationProfile_IheActor_Edge 2</field>
-      <field name="description"></field>
-      <field name="start">http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDS.b</field>
-      <field name="end">http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_CONSUMER</field>
-    </element>
-    <element class="IheInvokingInterface_IheTransaction_Edge" hash="[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_CONSUMER; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-18; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REGISTRY]_3">
-      <field name="name">IheInvokingInterface_IheTransaction_Edge 3</field>
-      <field name="description"></field>
-      <field name="start">[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_CONSUMER; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-18; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REGISTRY]_2</field>
-      <field name="end">[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_CONSUMER; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-18; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REGISTRY]</field>
-    </element>
-    <element class="IheActor_IheInterface_Edge" hash="[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_CONSUMER; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-18; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REGISTRY]_1">
-      <field name="name">IheActor_IheInterface_Edge 5</field>
-      <field name="description"></field>
-      <field name="start">http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_CONSUMER</field>
-      <field name="end">[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_CONSUMER; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-18; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REGISTRY]_2</field>
-    </element>
-    <element class="IheInvokingInterface_IheTransaction_Edge" hash="[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_CONSUMER; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-43; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_EMBED_REPOS]_3">
-      <field name="name">IheInvokingInterface_IheTransaction_Edge 4</field>
-      <field name="description"></field>
-      <field name="start">[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_CONSUMER; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-43; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_EMBED_REPOS]_2</field>
-      <field name="end">[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_CONSUMER; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-43; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REPOSITORY]</field>
-    </element>
-    <element class="IheActor_IheInterface_Edge" hash="[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_CONSUMER; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-43; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_EMBED_REPOS]_1">
-      <field name="name">IheActor_IheInterface_Edge 7</field>
-      <field name="description"></field>
-      <field name="start">http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_CONSUMER</field>
-      <field name="end">[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_CONSUMER; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-43; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_EMBED_REPOS]_2</field>
-    </element>
-    <element class="IheInvokingInterface_IheTransaction_Edge" hash="[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_CONSUMER; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-43; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_ON_DEMAND_DOC_SOURCE]_3">
-      <field name="name">IheInvokingInterface_IheTransaction_Edge 2</field>
-      <field name="description"></field>
-      <field name="start">[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_CONSUMER; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-43; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_ON_DEMAND_DOC_SOURCE]_2</field>
-      <field name="end">[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_CONSUMER; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-43; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REPOSITORY]</field>
-    </element>
-    <element class="IheActor_IheInterface_Edge" hash="[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_CONSUMER; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-43; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_ON_DEMAND_DOC_SOURCE]_1">
-      <field name="name">IheActor_IheInterface_Edge 3</field>
-      <field name="description"></field>
-      <field name="start">http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_CONSUMER</field>
-      <field name="end">[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_CONSUMER; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-43; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_ON_DEMAND_DOC_SOURCE]_2</field>
-    </element>
-    <element class="IheInvokingInterface_IheTransaction_Edge" hash="[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_CONSUMER; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-43; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REPOSITORY]_3">
-      <field name="name">IheInvokingInterface_IheTransaction_Edge 1</field>
-      <field name="description"></field>
-      <field name="start">[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_CONSUMER; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-43; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REPOSITORY]_2</field>
-      <field name="end">[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_CONSUMER; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-43; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REPOSITORY]</field>
-    </element>
-    <element class="IheActor_IheInterface_Edge" hash="[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_CONSUMER; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-43; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REPOSITORY]_1">
-      <field name="name">IheActor_IheInterface_Edge 1</field>
-      <field name="description"></field>
-      <field name="start">http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_CONSUMER</field>
-      <field name="end">[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_CONSUMER; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-43; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REPOSITORY]_2</field>
-    </element>
     <element class="IheIntegrationProfile_IheDomain_Edge" hash="[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDS-SD; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iheDomain; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ITI]">
-      <field name="name">IheIntegrationProfile_IheDomain_Edge 28</field>
+      <field name="name">IheIntegrationProfile_IheDomain_Edge 28
+
+-JOINED-
+
+Connection 50</field>
       <field name="description"></field>
       <field name="start">http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDS-SD</field>
       <field name="end">http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ITI</field>
@@ -625,60 +547,82 @@ ITI-43 Actor Interface (invoking)</field>
       <field name="start">http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDS-SD</field>
       <field name="end">http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDS-SD_CONTENT_CONSUMER</field>
     </element>
-    <element class="IheActor_IheActor_MustBeGroupedWith_Edge" hash="[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDS-SD_CONTENT_CONSUMER; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#mustBeGroupedWith; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_CONSUMER]">
-      <field name="name">IheActor_IheActor_MustBeGroupedWith_Edge 38
+    <element class="IheIntegrationProfile_IheDomain_Edge" hash="[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iheDomain; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ITI]">
+      <field name="name">IheIntegrationProfile_IheDomain_Edge 5
 
 -JOINED-
 
-IheActor_IheActor_MustBeGroupedWith_Edge 31</field>
-      <field name="description"></field>
-      <field name="start">http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDS-SD_CONTENT_CONSUMER</field>
-      <field name="end">http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_CONSUMER</field>
-    </element>
-    <element class="IheIntegrationProfile_IheDomain_Edge" hash="[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iheDomain; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ITI]">
-      <field name="name">IheIntegrationProfile_IheDomain_Edge 5</field>
+Connection 17</field>
       <field name="description"></field>
       <field name="start">http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA</field>
       <field name="end">http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ITI</field>
     </element>
     <element class="IheIntegrationProfile_IheActor_Edge" hash="[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_SA; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iheIntegrationProfile; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA]">
-      <field name="name">IheIntegrationProfile_IheActor_Edge 43</field>
+      <field name="name">IheIntegrationProfile_IheActor_Edge 43
+
+-JOINED-
+
+Connection 49</field>
       <field name="description"></field>
       <field name="start">http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA</field>
       <field name="end">http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_SA</field>
     </element>
     <element class="IheInvokingInterface_IheTransaction_Edge" hash="[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_SA; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-19; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_SN]_3">
-      <field name="name">IheInvokingInterface_IheTransaction_Edge 41</field>
+      <field name="name">IheInvokingInterface_IheTransaction_Edge 41
+
+-JOINED-
+
+Connection 56</field>
       <field name="description"></field>
       <field name="start">[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_SA; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-19; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_SN]_2</field>
       <field name="end">[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_SN; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-19; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_SA]</field>
     </element>
     <element class="IheActor_IheInterface_Edge" hash="[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_SA; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-19; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_SN]_1">
-      <field name="name">IheActor_IheInterface_Edge 81</field>
+      <field name="name">IheActor_IheInterface_Edge 81
+
+-JOINED-
+
+Connection 112</field>
       <field name="description"></field>
       <field name="start">http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_SA</field>
       <field name="end">[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_SA; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-19; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_SN]_2</field>
     </element>
     <element class="IheInvokingInterface_IheTransaction_Edge" hash="[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_SA; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-20; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_ARR]_3">
-      <field name="name">IheInvokingInterface_IheTransaction_Edge 40</field>
+      <field name="name">IheInvokingInterface_IheTransaction_Edge 40
+
+-JOINED-
+
+Connection 55</field>
       <field name="description"></field>
       <field name="start">[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_SA; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-20; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_ARR]_2</field>
       <field name="end">[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_SN; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-20; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_ARR]</field>
     </element>
     <element class="IheActor_IheInterface_Edge" hash="[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_SA; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-20; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_ARR]_1">
-      <field name="name">IheActor_IheInterface_Edge 79</field>
+      <field name="name">IheActor_IheInterface_Edge 79
+
+-JOINED-
+
+Connection 111</field>
       <field name="description"></field>
       <field name="start">http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_SA</field>
       <field name="end">[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_SA; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-20; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_ARR]_2</field>
     </element>
     <element class="IheProvidingInterface_IheTransaction_Edge" hash="[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_SN; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-19; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_SA]_4">
-      <field name="name">IheProvidingInterface_IheTransaction_Edge 32</field>
+      <field name="name">IheProvidingInterface_IheTransaction_Edge 32
+
+-JOINED-
+
+Connection 54</field>
       <field name="description"></field>
       <field name="start">[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_SN; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-19; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_SA]_5</field>
       <field name="end">[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_SN; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-19; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_SA]</field>
     </element>
     <element class="IheActor_IheInterface_Edge" hash="[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_SN; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-19; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_SA]_6">
-      <field name="name">IheActor_IheInterface_Edge 64</field>
+      <field name="name">IheActor_IheInterface_Edge 64
+
+-JOINED-
+
+Connection 105</field>
       <field name="description"></field>
       <field name="start">http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_SA</field>
       <field name="end">[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_SN; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-19; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_SA]_5</field>
@@ -689,30 +633,22 @@ IheActor_IheActor_MustBeGroupedWith_Edge 31</field>
       <field name="start">[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_SA; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-19; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_SN]_2</field>
       <field name="end">[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_SN; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-19; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_SA]_5</field>
     </element>
-    <element class="IheTransaction_IheCommunicationLink_Edge" hash="DLK_1585409326886_860">
-      <field name="name">IheTransaction_IheCommunicationLink_Edge 29</field>
-      <field name="description"></field>
-      <field name="start">[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_SN; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-19; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_SA]</field>
-      <field name="end">DLK_1585409326837_791</field>
-    </element>
-    <element class="IheActor_IheActor_MustBeGroupedWith_Edge" hash="[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_CONSUMER; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#mustBeGroupedWith; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_SA]">
-      <field name="name">IheActor_IheActor_MustBeGroupedWith_Edge 5
+    <element class="IheIntegrationProfile_IheActor_Edge" hash="[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_SN; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iheIntegrationProfile; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA]">
+      <field name="name">IheIntegrationProfile_IheActor_Edge 31
 
 -JOINED-
 
-IheActor_IheActor_MustBeGroupedWith_Edge 4</field>
-      <field name="description"></field>
-      <field name="start">http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_CONSUMER</field>
-      <field name="end">http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_SA</field>
-    </element>
-    <element class="IheIntegrationProfile_IheActor_Edge" hash="[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_SN; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iheIntegrationProfile; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA]">
-      <field name="name">IheIntegrationProfile_IheActor_Edge 31</field>
+Connection 46</field>
       <field name="description"></field>
       <field name="start">http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA</field>
       <field name="end">http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_SN</field>
     </element>
     <element class="IheInvokingInterface_IheTransaction_Edge" hash="[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_SN; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-19; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_SA]_3">
-      <field name="name">IheInvokingInterface_IheTransaction_Edge 32</field>
+      <field name="name">IheInvokingInterface_IheTransaction_Edge 32
+
+-JOINED-
+
+Connection 51</field>
       <field name="description"></field>
       <field name="start">[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_SN; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-19; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_SA]_2</field>
       <field name="end">[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_SN; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-19; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_SA]</field>
@@ -723,32 +659,42 @@ IheActor_IheActor_MustBeGroupedWith_Edge 4</field>
       <field name="start">[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_SN; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-19; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_SA]_2</field>
       <field name="end">[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_SN; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-19; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_SA]_5</field>
     </element>
-    <element class="IheTransaction_IheCommunicationLink_Edge" hash="DLK_1585409326891_870">
-      <field name="name">IheTransaction_IheCommunicationLink_Edge 39</field>
-      <field name="description"></field>
-      <field name="start">[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_SN; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-19; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_SA]</field>
-      <field name="end">DLK_1585409326841_801</field>
-    </element>
     <element class="IheActor_IheInterface_Edge" hash="[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_SN; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-19; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_SA]_1">
-      <field name="name">IheActor_IheInterface_Edge 63</field>
+      <field name="name">IheActor_IheInterface_Edge 63
+
+-JOINED-
+
+Connection 104</field>
       <field name="description"></field>
       <field name="start">http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_SN</field>
       <field name="end">[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_SN; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-19; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_SA]_2</field>
     </element>
     <element class="IheInvokingInterface_IheTransaction_Edge" hash="[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_SN; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-20; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_ARR]_3">
-      <field name="name">IheInvokingInterface_IheTransaction_Edge 31</field>
+      <field name="name">IheInvokingInterface_IheTransaction_Edge 31
+
+-JOINED-
+
+Connection 50</field>
       <field name="description"></field>
       <field name="start">[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_SN; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-20; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_ARR]_2</field>
       <field name="end">[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_SN; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-20; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_ARR]</field>
     </element>
     <element class="IheActor_IheInterface_Edge" hash="[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_SN; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-20; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_ARR]_1">
-      <field name="name">IheActor_IheInterface_Edge 61</field>
+      <field name="name">IheActor_IheInterface_Edge 61
+
+-JOINED-
+
+Connection 102</field>
       <field name="description"></field>
       <field name="start">http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_SN</field>
       <field name="end">[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_SN; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-20; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_ARR]_2</field>
     </element>
     <element class="IheProvidingInterface_IheTransaction_Edge" hash="[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_SA; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-19; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_SN]_4">
-      <field name="name">IheProvidingInterface_IheTransaction_Edge 41</field>
+      <field name="name">IheProvidingInterface_IheTransaction_Edge 41
+
+-JOINED-
+
+Connection 57</field>
       <field name="description"></field>
       <field name="start">[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_SA; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-19; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_SN]_5</field>
       <field name="end">[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_SN; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-19; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_SA]</field>
@@ -759,14 +705,12 @@ IheActor_IheActor_MustBeGroupedWith_Edge 4</field>
       <field name="start">[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_SA; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-19; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_SN]_2</field>
       <field name="end">[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_SA; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-19; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_SN]_5</field>
     </element>
-    <element class="IheTransaction_IheCommunicationLink_Edge" hash="DLK_1585409326885_859">
-      <field name="name">IheTransaction_IheCommunicationLink_Edge 28</field>
-      <field name="description"></field>
-      <field name="start">[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_SN; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-19; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_SA]</field>
-      <field name="end">DLK_1585409326836_790</field>
-    </element>
     <element class="IheActor_IheInterface_Edge" hash="[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_SA; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-19; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_SN]_6">
-      <field name="name">IheActor_IheInterface_Edge 82</field>
+      <field name="name">IheActor_IheInterface_Edge 82
+
+-JOINED-
+
+Connection 113</field>
       <field name="description"></field>
       <field name="start">http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_SN</field>
       <field name="end">[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_SA; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-19; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_SN]_5</field>
@@ -777,38 +721,42 @@ IheActor_IheActor_MustBeGroupedWith_Edge 4</field>
       <field name="start">[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_SN; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-19; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_SA]_2</field>
       <field name="end">[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_SA; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-19; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_SN]_5</field>
     </element>
-    <element class="IheTransaction_IheCommunicationLink_Edge" hash="DLK_1585409326890_869">
-      <field name="name">IheTransaction_IheCommunicationLink_Edge 38</field>
-      <field name="description"></field>
-      <field name="start">[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_SN; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-19; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_SA]</field>
-      <field name="end">DLK_1585409326841_800</field>
-    </element>
-    <element class="IheActor_IheActor_MustBeGroupedWith_Edge" hash="[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_CONSUMER; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#mustBeGroupedWith; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_SN]">
-      <field name="name">IheActor_IheActor_MustBeGroupedWith_Edge 3</field>
-      <field name="description"></field>
-      <field name="start">http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_CONSUMER</field>
-      <field name="end">http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_SN</field>
-    </element>
     <element class="IheIntegrationProfile_IheDomain_Edge" hash="[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#CT; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iheDomain; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ITI]">
-      <field name="name">IheIntegrationProfile_IheDomain_Edge 22</field>
+      <field name="name">IheIntegrationProfile_IheDomain_Edge 22
+
+-JOINED-
+
+Connection 49</field>
       <field name="description"></field>
       <field name="start">http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#CT</field>
       <field name="end">http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ITI</field>
     </element>
     <element class="IheIntegrationProfile_IheActor_Edge" hash="[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#CT_TIME_CLIENT; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iheIntegrationProfile; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#CT]">
-      <field name="name">IheIntegrationProfile_IheActor_Edge 41</field>
+      <field name="name">IheIntegrationProfile_IheActor_Edge 41
+
+-JOINED-
+
+Connection 61</field>
       <field name="description"></field>
       <field name="start">http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#CT</field>
       <field name="end">http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#CT_TIME_CLIENT</field>
     </element>
     <element class="IheInvokingInterface_IheTransaction_Edge" hash="[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#CT_TIME_CLIENT; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-1; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#CT_TS]_3">
-      <field name="name">IheInvokingInterface_IheTransaction_Edge 38</field>
+      <field name="name">IheInvokingInterface_IheTransaction_Edge 38
+
+-JOINED-
+
+Connection 61</field>
       <field name="description"></field>
       <field name="start">[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#CT_TIME_CLIENT; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-1; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#CT_TS]_2</field>
       <field name="end">[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#CT_TIME_CLIENT; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-1; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#CT_TS]</field>
     </element>
     <element class="IheActor_IheInterface_Edge" hash="[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#CT_TIME_CLIENT; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-1; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#CT_TS]_1">
-      <field name="name">IheActor_IheInterface_Edge 75</field>
+      <field name="name">IheActor_IheInterface_Edge 75
+
+-JOINED-
+
+Connection 122</field>
       <field name="description"></field>
       <field name="start">http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#CT_TIME_CLIENT</field>
       <field name="end">[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#CT_TIME_CLIENT; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-1; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#CT_TS]_2</field>
@@ -818,7 +766,11 @@ IheActor_IheActor_MustBeGroupedWith_Edge 4</field>
 
 -JOINED-
 
-IheActor_IheActor_MustBeGroupedWith_Edge 33</field>
+IheActor_IheActor_MustBeGroupedWith_Edge 33
+
+-JOINED-
+
+Grouping 55</field>
       <field name="description"></field>
       <field name="start">http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_SA</field>
       <field name="end">http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#CT_TIME_CLIENT</field>
@@ -828,174 +780,34 @@ IheActor_IheActor_MustBeGroupedWith_Edge 33</field>
 
 -JOINED-
 
-IheActor_IheActor_MustBeGroupedWith_Edge 27</field>
+IheActor_IheActor_MustBeGroupedWith_Edge 27
+
+-JOINED-
+
+Grouping 52</field>
       <field name="description"></field>
       <field name="start">http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_SN</field>
       <field name="end">http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#CT_TIME_CLIENT</field>
     </element>
-    <element class="IheIntegrationProfile_IheActor_Edge" hash="[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REGISTRY; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iheIntegrationProfile; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDS.b]">
-      <field name="name">IheIntegrationProfile_IheActor_Edge 23</field>
-      <field name="description"></field>
-      <field name="start">http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDS.b</field>
-      <field name="end">http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REGISTRY</field>
-    </element>
-    <element class="IheActor_IheActor_MustBeGroupedWith_Edge" hash="[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REGISTRY; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#mustBeGroupedWith; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_SA]">
-      <field name="name">IheActor_IheActor_MustBeGroupedWith_Edge 23
-
--JOINED-
-
-IheActor_IheActor_MustBeGroupedWith_Edge 18</field>
-      <field name="description"></field>
-      <field name="start">http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REGISTRY</field>
-      <field name="end">http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_SA</field>
-    </element>
-    <element class="IheActor_IheActor_MustBeGroupedWith_Edge" hash="[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REGISTRY; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#mustBeGroupedWith; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_SN]">
-      <field name="name">IheActor_IheActor_MustBeGroupedWith_Edge 22
-
--JOINED-
-
-IheActor_IheActor_MustBeGroupedWith_Edge 17</field>
-      <field name="description"></field>
-      <field name="start">http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REGISTRY</field>
-      <field name="end">http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_SN</field>
-    </element>
-    <element class="IheActor_IheActor_MustBeGroupedWith_Edge" hash="[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REGISTRY; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#mustBeGroupedWith; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#CT_TIME_CLIENT]">
-      <field name="name">IheActor_IheActor_MustBeGroupedWith_Edge 21</field>
-      <field name="description"></field>
-      <field name="start">http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REGISTRY</field>
-      <field name="end">http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#CT_TIME_CLIENT</field>
-    </element>
-    <element class="IheProvidingInterface_IheTransaction_Edge" hash="[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_ADMINISTRATOR; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-18; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REGISTRY]_4">
-      <field name="name">IheProvidingInterface_IheTransaction_Edge 6</field>
-      <field name="description"></field>
-      <field name="start">[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_ADMINISTRATOR; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-18; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REGISTRY]_5</field>
-      <field name="end">[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_CONSUMER; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-18; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REGISTRY]</field>
-    </element>
-    <element class="IheActor_IheInterface_Edge" hash="[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_ADMINISTRATOR; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-18; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REGISTRY]_6">
-      <field name="name">IheActor_IheInterface_Edge 12</field>
-      <field name="description"></field>
-      <field name="start">http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REGISTRY</field>
-      <field name="end">[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_ADMINISTRATOR; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-18; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REGISTRY]_5</field>
-    </element>
-    <element class="IheProvidingInterface_IheTransaction_Edge" hash="[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_CONSUMER; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-18; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REGISTRY]_4">
-      <field name="name">IheProvidingInterface_IheTransaction_Edge 3</field>
-      <field name="description"></field>
-      <field name="start">[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_CONSUMER; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-18; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REGISTRY]_5</field>
-      <field name="end">[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_CONSUMER; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-18; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REGISTRY]</field>
-    </element>
-    <element class="IheActor_IheInterface_Edge" hash="[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_CONSUMER; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-18; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REGISTRY]_6">
-      <field name="name">IheActor_IheInterface_Edge 6</field>
-      <field name="description"></field>
-      <field name="start">http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REGISTRY</field>
-      <field name="end">[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_CONSUMER; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-18; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REGISTRY]_5</field>
-    </element>
-    <element class="IheProvidingInterface_IheTransaction_Edge" hash="[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_EMBED_REPOS; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-42; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REGISTRY]_4">
-      <field name="name">IheProvidingInterface_IheTransaction_Edge 27</field>
-      <field name="description"></field>
-      <field name="start">[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_EMBED_REPOS; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-42; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REGISTRY]_5</field>
-      <field name="end">[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REPOSITORY; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-42; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REGISTRY]</field>
-    </element>
-    <element class="IheActor_IheInterface_Edge" hash="[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_EMBED_REPOS; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-42; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REGISTRY]_6">
-      <field name="name">IheActor_IheInterface_Edge 54</field>
-      <field name="description"></field>
-      <field name="start">http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REGISTRY</field>
-      <field name="end">[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_EMBED_REPOS; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-42; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REGISTRY]_5</field>
-    </element>
-    <element class="IheProvidingInterface_IheTransaction_Edge" hash="[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REPOSITORY; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-42; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REGISTRY]_4">
-      <field name="name">IheProvidingInterface_IheTransaction_Edge 13</field>
-      <field name="description"></field>
-      <field name="start">[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REPOSITORY; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-42; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REGISTRY]_5</field>
-      <field name="end">[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REPOSITORY; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-42; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REGISTRY]</field>
-    </element>
-    <element class="IheActor_IheInterface_Edge" hash="[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REPOSITORY; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-42; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REGISTRY]_6">
-      <field name="name">IheActor_IheInterface_Edge 26</field>
-      <field name="description"></field>
-      <field name="start">http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REGISTRY</field>
-      <field name="end">[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REPOSITORY; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-42; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REGISTRY]_5</field>
-    </element>
-    <element class="IheProvidingInterface_IheTransaction_Edge" hash="[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_PAT_IDENTITY_SRC; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-44; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REGISTRY]_4">
-      <field name="name">IheProvidingInterface_IheTransaction_Edge 8</field>
-      <field name="description"></field>
-      <field name="start">[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_PAT_IDENTITY_SRC; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-44; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REGISTRY]_5</field>
-      <field name="end">[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_PAT_IDENTITY_SRC; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-44; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REGISTRY]</field>
-    </element>
-    <element class="IheActor_IheInterface_Edge" hash="[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_PAT_IDENTITY_SRC; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-44; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REGISTRY]_6">
-      <field name="name">IheActor_IheInterface_Edge 16</field>
-      <field name="description"></field>
-      <field name="start">http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REGISTRY</field>
-      <field name="end">[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_PAT_IDENTITY_SRC; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-44; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REGISTRY]_5</field>
-    </element>
-    <element class="IheProvidingInterface_IheTransaction_Edge" hash="[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_ADMINISTRATOR; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-57; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REGISTRY]_4">
-      <field name="name">IheProvidingInterface_IheTransaction_Edge 5</field>
-      <field name="description"></field>
-      <field name="start">[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_ADMINISTRATOR; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-57; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REGISTRY]_5</field>
-      <field name="end">[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_ADMINISTRATOR; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-57; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REGISTRY]</field>
-    </element>
-    <element class="IheActor_IheInterface_Edge" hash="[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_ADMINISTRATOR; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-57; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REGISTRY]_6">
-      <field name="name">IheActor_IheInterface_Edge 10</field>
-      <field name="description"></field>
-      <field name="start">http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REGISTRY</field>
-      <field name="end">[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_ADMINISTRATOR; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-57; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REGISTRY]_5</field>
-    </element>
-    <element class="IheProvidingInterface_IheTransaction_Edge" hash="[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_ON_DEMAND_DOC_SOURCE; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-61; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REGISTRY]_4">
-      <field name="name">IheProvidingInterface_IheTransaction_Edge 30</field>
-      <field name="description"></field>
-      <field name="start">[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_ON_DEMAND_DOC_SOURCE; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-61; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REGISTRY]_5</field>
-      <field name="end">[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_ON_DEMAND_DOC_SOURCE; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-61; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REGISTRY]</field>
-    </element>
-    <element class="IheActor_IheInterface_Edge" hash="[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_ON_DEMAND_DOC_SOURCE; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-61; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REGISTRY]_6">
-      <field name="name">IheActor_IheInterface_Edge 60</field>
-      <field name="description"></field>
-      <field name="start">http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REGISTRY</field>
-      <field name="end">[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_ON_DEMAND_DOC_SOURCE; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-61; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REGISTRY]_5</field>
-    </element>
-    <element class="IheProvidingInterface_IheTransaction_Edge" hash="[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_PAT_IDENTITY_SRC; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-8; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REGISTRY]_4">
-      <field name="name">IheProvidingInterface_IheTransaction_Edge 7</field>
-      <field name="description"></field>
-      <field name="start">[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_PAT_IDENTITY_SRC; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-8; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REGISTRY]_5</field>
-      <field name="end">[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_PAT_IDENTITY_SRC; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-8; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REGISTRY]</field>
-    </element>
-    <element class="IheActor_IheInterface_Edge" hash="[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_PAT_IDENTITY_SRC; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-8; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REGISTRY]_6">
-      <field name="name">IheActor_IheInterface_Edge 14</field>
-      <field name="description"></field>
-      <field name="start">http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REGISTRY</field>
-      <field name="end">[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_PAT_IDENTITY_SRC; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-8; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REGISTRY]_5</field>
-    </element>
-    <element class="IheCommunicationLink_Edge" hash="DLK_1585409326847_821">
-      <field name="name">ITI-18 Registry Stored Query</field>
-      <field name="description"></field>
-      <field name="start">[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_CONSUMER; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-18; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REGISTRY]_2</field>
-      <field name="end">[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_ADMINISTRATOR; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-18; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REGISTRY]_5</field>
-    </element>
-    <element class="IheCommunicationLink_Edge" hash="DLK_1585409326847_822">
-      <field name="name">ITI-18 Registry Stored Query</field>
-      <field name="description"></field>
-      <field name="start">[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_CONSUMER; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-18; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REGISTRY]_2</field>
-      <field name="end">[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_CONSUMER; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-18; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REGISTRY]_5</field>
-    </element>
-    <element class="IheTransaction_IheCommunicationLink_Edge" hash="DLK_1585409326898_890">
-      <field name="name">IheTransaction_IheCommunicationLink_Edge 59</field>
-      <field name="description"></field>
-      <field name="start">[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_CONSUMER; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-18; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REGISTRY]</field>
-      <field name="end">DLK_1585409326847_821</field>
-    </element>
-    <element class="IheTransaction_IheCommunicationLink_Edge" hash="DLK_1585409326899_891">
-      <field name="name">IheTransaction_IheCommunicationLink_Edge 60</field>
-      <field name="description"></field>
-      <field name="start">[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_CONSUMER; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-18; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REGISTRY]</field>
-      <field name="end">DLK_1585409326847_822</field>
-    </element>
     <element class="IheIntegrationProfile_IheActor_Edge" hash="[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REPOSITORY; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iheIntegrationProfile; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDS.b]">
-      <field name="name">IheIntegrationProfile_IheActor_Edge 10</field>
+      <field name="name">IheIntegrationProfile_IheActor_Edge 10
+
+-JOINED-
+
+Connection 39</field>
       <field name="description"></field>
       <field name="start">http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDS.b</field>
       <field name="end">http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REPOSITORY</field>
     </element>
     <element class="IheInvokingInterface_IheTransaction_Edge" hash="[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REPOSITORY; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-42; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REGISTRY]_3">
-      <field name="name">IheInvokingInterface_IheTransaction_Edge 13</field>
+      <field name="name">IheInvokingInterface_IheTransaction_Edge 13
+
+-JOINED-
+
+Connection 46</field>
       <field name="description"></field>
       <field name="start">[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REPOSITORY; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-42; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REGISTRY]_2</field>
-      <field name="end">[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REPOSITORY; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-42; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REGISTRY]</field>
+      <field name="end">[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_EMBED_REPOS; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-42; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REGISTRY]</field>
     </element>
     <element class="IheActor_IheInterface_Edge" hash="[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REPOSITORY; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-42; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REGISTRY]_1">
       <field name="name">IheActor_IheInterface_Edge 25</field>
@@ -1004,16 +816,24 @@ IheActor_IheActor_MustBeGroupedWith_Edge 17</field>
       <field name="end">[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REPOSITORY; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-42; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REGISTRY]_2</field>
     </element>
     <element class="IheIntegrationProfile_IheActor_Edge" hash="[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_EMBED_REPOS; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iheIntegrationProfile; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDS.b]">
-      <field name="name">IheIntegrationProfile_IheActor_Edge 24</field>
+      <field name="name">IheIntegrationProfile_IheActor_Edge 24
+
+-JOINED-
+
+Connection 27</field>
       <field name="description"></field>
       <field name="start">http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDS.b</field>
       <field name="end">http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_EMBED_REPOS</field>
     </element>
     <element class="IheInvokingInterface_IheTransaction_Edge" hash="[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_EMBED_REPOS; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-42; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REGISTRY]_3">
-      <field name="name">IheInvokingInterface_IheTransaction_Edge 27</field>
+      <field name="name">IheInvokingInterface_IheTransaction_Edge 27
+
+-JOINED-
+
+Connection 22</field>
       <field name="description"></field>
       <field name="start">[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_EMBED_REPOS; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-42; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REGISTRY]_2</field>
-      <field name="end">[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REPOSITORY; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-42; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REGISTRY]</field>
+      <field name="end">[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_EMBED_REPOS; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-42; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REGISTRY]</field>
     </element>
     <element class="IheActor_IheInterface_Edge" hash="[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_EMBED_REPOS; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-42; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REGISTRY]_1">
       <field name="name">IheActor_IheInterface_Edge 53</field>
@@ -1044,7 +864,11 @@ IheActor_IheActor_MustBeGroupedWith_Edge 17</field>
 
 -JOINED-
 
-IheActor_IheActor_MustBeGroupedWith_Edge 12</field>
+IheActor_IheActor_MustBeGroupedWith_Edge 12
+
+-JOINED-
+
+Grouping 48</field>
       <field name="description"></field>
       <field name="start">http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REPOSITORY</field>
       <field name="end">http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_SA</field>
@@ -1054,7 +878,11 @@ IheActor_IheActor_MustBeGroupedWith_Edge 12</field>
 
 -JOINED-
 
-IheActor_IheActor_MustBeGroupedWith_Edge 20</field>
+IheActor_IheActor_MustBeGroupedWith_Edge 20
+
+-JOINED-
+
+Grouping 35</field>
       <field name="description"></field>
       <field name="start">http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_EMBED_REPOS</field>
       <field name="end">http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_SA</field>
@@ -1064,7 +892,11 @@ IheActor_IheActor_MustBeGroupedWith_Edge 20</field>
 
 -JOINED-
 
-IheActor_IheActor_MustBeGroupedWith_Edge 11</field>
+IheActor_IheActor_MustBeGroupedWith_Edge 11
+
+-JOINED-
+
+Grouping 47</field>
       <field name="description"></field>
       <field name="start">http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REPOSITORY</field>
       <field name="end">http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_SN</field>
@@ -1074,7 +906,11 @@ IheActor_IheActor_MustBeGroupedWith_Edge 11</field>
 
 -JOINED-
 
-IheActor_IheActor_MustBeGroupedWith_Edge 19</field>
+IheActor_IheActor_MustBeGroupedWith_Edge 19
+
+-JOINED-
+
+Grouping 34</field>
       <field name="description"></field>
       <field name="start">http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_EMBED_REPOS</field>
       <field name="end">http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_SN</field>
@@ -1115,128 +951,12 @@ IheActor_IheActor_MustBeGroupedWith_Edge 19</field>
       <field name="start">http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REPOSITORY</field>
       <field name="end">[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_CONSUMER; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-43; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REPOSITORY]_5</field>
     </element>
-    <element class="IheCommunicationLink_Edge" hash="DLK_1585409326831_774">
-      <field name="name">ITI-42 Register Document Set-b</field>
-      <field name="description"></field>
-      <field name="start">[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REPOSITORY; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-42; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REGISTRY]_2</field>
-      <field name="end">[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_EMBED_REPOS; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-42; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REGISTRY]_5</field>
-    </element>
-    <element class="IheCommunicationLink_Edge" hash="DLK_1585409326831_775">
-      <field name="name">ITI-42 Register Document Set-b</field>
-      <field name="description"></field>
-      <field name="start">[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REPOSITORY; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-42; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REGISTRY]_2</field>
-      <field name="end">[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REPOSITORY; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-42; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REGISTRY]_5</field>
-    </element>
-    <element class="IheCommunicationLink_Edge" hash="DLK_1585409326844_811">
-      <field name="name">ITI-42 Register Document Set-b</field>
-      <field name="description"></field>
-      <field name="start">[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_EMBED_REPOS; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-42; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REGISTRY]_2</field>
-      <field name="end">[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_EMBED_REPOS; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-42; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REGISTRY]_5</field>
-    </element>
-    <element class="IheCommunicationLink_Edge" hash="DLK_1585409326844_812">
-      <field name="name">ITI-42 Register Document Set-b</field>
-      <field name="description"></field>
-      <field name="start">[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_EMBED_REPOS; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-42; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REGISTRY]_2</field>
-      <field name="end">[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REPOSITORY; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-42; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REGISTRY]_5</field>
-    </element>
-    <element class="IheCommunicationLink_Edge" hash="DLK_1585409326846_816">
-      <field name="name">ITI-43 Retrieve Document Set</field>
-      <field name="description"></field>
-      <field name="start">[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_CONSUMER; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-43; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REPOSITORY]_2</field>
-      <field name="end">[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_CONSUMER; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-43; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_EMBED_REPOS]_5</field>
-    </element>
-    <element class="IheCommunicationLink_Edge" hash="DLK_1585409326846_819">
-      <field name="name">ITI-43 Retrieve Document Set</field>
-      <field name="description"></field>
-      <field name="start">[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_CONSUMER; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-43; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_ON_DEMAND_DOC_SOURCE]_2</field>
-      <field name="end">[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_CONSUMER; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-43; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_EMBED_REPOS]_5</field>
-    </element>
-    <element class="IheCommunicationLink_Edge" hash="DLK_1585409326847_824">
-      <field name="name">ITI-43 Retrieve Document Set</field>
-      <field name="description"></field>
-      <field name="start">[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_CONSUMER; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-43; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_EMBED_REPOS]_2</field>
-      <field name="end">[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_CONSUMER; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-43; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_EMBED_REPOS]_5</field>
-    </element>
-    <element class="IheCommunicationLink_Edge" hash="DLK_1585409326846_817">
-      <field name="name">ITI-43 Retrieve Document Set</field>
-      <field name="description"></field>
-      <field name="start">[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_CONSUMER; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-43; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REPOSITORY]_2</field>
-      <field name="end">[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_CONSUMER; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-43; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REPOSITORY]_5</field>
-    </element>
-    <element class="IheCommunicationLink_Edge" hash="DLK_1585409326846_820">
-      <field name="name">ITI-43 Retrieve Document Set</field>
-      <field name="description"></field>
-      <field name="start">[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_CONSUMER; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-43; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_ON_DEMAND_DOC_SOURCE]_2</field>
-      <field name="end">[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_CONSUMER; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-43; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REPOSITORY]_5</field>
-    </element>
-    <element class="IheCommunicationLink_Edge" hash="DLK_1585409326847_825">
-      <field name="name">ITI-43 Retrieve Document Set</field>
-      <field name="description"></field>
-      <field name="start">[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_CONSUMER; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-43; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_EMBED_REPOS]_2</field>
-      <field name="end">[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_CONSUMER; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-43; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REPOSITORY]_5</field>
-    </element>
-    <element class="IheTransaction_IheCommunicationLink_Edge" hash="DLK_1585409326876_843">
-      <field name="name">IheTransaction_IheCommunicationLink_Edge 12</field>
-      <field name="description"></field>
-      <field name="start">[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REPOSITORY; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-42; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REGISTRY]</field>
-      <field name="end">DLK_1585409326831_774</field>
-    </element>
-    <element class="IheTransaction_IheCommunicationLink_Edge" hash="DLK_1585409326876_844">
-      <field name="name">IheTransaction_IheCommunicationLink_Edge 13</field>
-      <field name="description"></field>
-      <field name="start">[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REPOSITORY; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-42; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REGISTRY]</field>
-      <field name="end">DLK_1585409326831_775</field>
-    </element>
-    <element class="IheTransaction_IheCommunicationLink_Edge" hash="DLK_1585409326894_880">
-      <field name="name">IheTransaction_IheCommunicationLink_Edge 49</field>
-      <field name="description"></field>
-      <field name="start">[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REPOSITORY; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-42; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REGISTRY]</field>
-      <field name="end">DLK_1585409326844_811</field>
-    </element>
-    <element class="IheTransaction_IheCommunicationLink_Edge" hash="DLK_1585409326894_881">
-      <field name="name">IheTransaction_IheCommunicationLink_Edge 50</field>
-      <field name="description"></field>
-      <field name="start">[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REPOSITORY; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-42; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REGISTRY]</field>
-      <field name="end">DLK_1585409326844_812</field>
-    </element>
-    <element class="IheTransaction_IheCommunicationLink_Edge" hash="DLK_1585409326896_885">
-      <field name="name">IheTransaction_IheCommunicationLink_Edge 54</field>
-      <field name="description"></field>
-      <field name="start">[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_CONSUMER; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-43; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REPOSITORY]</field>
-      <field name="end">DLK_1585409326846_816</field>
-    </element>
-    <element class="IheTransaction_IheCommunicationLink_Edge" hash="DLK_1585409326897_888">
-      <field name="name">IheTransaction_IheCommunicationLink_Edge 57</field>
-      <field name="description"></field>
-      <field name="start">[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_CONSUMER; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-43; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REPOSITORY]</field>
-      <field name="end">DLK_1585409326846_819</field>
-    </element>
-    <element class="IheTransaction_IheCommunicationLink_Edge" hash="DLK_1585409326901_893">
-      <field name="name">IheTransaction_IheCommunicationLink_Edge 62</field>
-      <field name="description"></field>
-      <field name="start">[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_CONSUMER; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-43; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REPOSITORY]</field>
-      <field name="end">DLK_1585409326847_824</field>
-    </element>
-    <element class="IheTransaction_IheCommunicationLink_Edge" hash="DLK_1585409326897_886">
-      <field name="name">IheTransaction_IheCommunicationLink_Edge 55</field>
-      <field name="description"></field>
-      <field name="start">[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_CONSUMER; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-43; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REPOSITORY]</field>
-      <field name="end">DLK_1585409326846_817</field>
-    </element>
-    <element class="IheTransaction_IheCommunicationLink_Edge" hash="DLK_1585409326898_889">
-      <field name="name">IheTransaction_IheCommunicationLink_Edge 58</field>
-      <field name="description"></field>
-      <field name="start">[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_CONSUMER; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-43; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REPOSITORY]</field>
-      <field name="end">DLK_1585409326846_820</field>
-    </element>
-    <element class="IheTransaction_IheCommunicationLink_Edge" hash="DLK_1585409326902_894">
-      <field name="name">IheTransaction_IheCommunicationLink_Edge 63</field>
-      <field name="description"></field>
-      <field name="start">[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_CONSUMER; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-43; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REPOSITORY]</field>
-      <field name="end">DLK_1585409326847_825</field>
-    </element>
     <element class="IheIntegrationProfile_IheActor_Edge" hash="[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_SOURCE; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iheIntegrationProfile; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDS.b]">
-      <field name="name">IheIntegrationProfile_IheActor_Edge 16</field>
+      <field name="name">IheIntegrationProfile_IheActor_Edge 16
+
+-JOINED-
+
+Connection 72</field>
       <field name="description"></field>
       <field name="start">http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDS.b</field>
       <field name="end">http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_SOURCE</field>
@@ -1276,7 +996,11 @@ IheActor_IheActor_MustBeGroupedWith_Edge 19</field>
 
 -JOINED-
 
-IheActor_IheActor_MustBeGroupedWith_Edge 14</field>
+IheActor_IheActor_MustBeGroupedWith_Edge 14
+
+-JOINED-
+
+Grouping 77</field>
       <field name="description"></field>
       <field name="start">http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_SOURCE</field>
       <field name="end">http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_SA</field>
@@ -1286,7 +1010,11 @@ IheActor_IheActor_MustBeGroupedWith_Edge 14</field>
 
 -JOINED-
 
-IheActor_IheActor_MustBeGroupedWith_Edge 13</field>
+IheActor_IheActor_MustBeGroupedWith_Edge 13
+
+-JOINED-
+
+Grouping 76</field>
       <field name="description"></field>
       <field name="start">http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_SOURCE</field>
       <field name="end">http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_SN</field>
@@ -1303,23 +1031,25 @@ IheActor_IheActor_MustBeGroupedWith_Edge 13</field>
       <field name="start">[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_SOURCE; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-41; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REPOSITORY]_2</field>
       <field name="end">[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_SOURCE; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-41; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REPOSITORY]_5</field>
     </element>
-    <element class="IheTransaction_IheCommunicationLink_Edge" hash="DLK_1585409326877_845">
-      <field name="name">IheTransaction_IheCommunicationLink_Edge 14</field>
-      <field name="description"></field>
-      <field name="start">[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDR_DOC_SOURCE; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-41; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDR_DOC_RECIPIENT]</field>
-      <field name="end">DLK_1585409326832_776</field>
-    </element>
     <element class="IheIntegrationProfile_IheActor_Edge" hash="[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_PAT_IDENTITY_SRC; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iheIntegrationProfile; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDS.b]">
-      <field name="name">IheIntegrationProfile_IheActor_Edge 6</field>
+      <field name="name">IheIntegrationProfile_IheActor_Edge 6
+
+-JOINED-
+
+Connection 74</field>
       <field name="description"></field>
       <field name="start">http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDS.b</field>
       <field name="end">http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_PAT_IDENTITY_SRC</field>
     </element>
     <element class="IheInvokingInterface_IheTransaction_Edge" hash="[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_PAT_IDENTITY_SRC; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-44; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REGISTRY]_3">
-      <field name="name">IheInvokingInterface_IheTransaction_Edge 8</field>
+      <field name="name">IheInvokingInterface_IheTransaction_Edge 8
+
+-JOINED-
+
+Connection 72</field>
       <field name="description"></field>
       <field name="start">[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_PAT_IDENTITY_SRC; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-44; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REGISTRY]_2</field>
-      <field name="end">[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_PAT_IDENTITY_SRC; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-44; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REGISTRY]</field>
+      <field name="end">[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#PIXV3_PAT_IDENTITY_SRC; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-44; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#PIXV3_PIX_MANAGER]</field>
     </element>
     <element class="IheActor_IheInterface_Edge" hash="[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_PAT_IDENTITY_SRC; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-44; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REGISTRY]_1">
       <field name="name">IheActor_IheInterface_Edge 15</field>
@@ -1328,7 +1058,11 @@ IheActor_IheActor_MustBeGroupedWith_Edge 13</field>
       <field name="end">[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_PAT_IDENTITY_SRC; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-44; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REGISTRY]_2</field>
     </element>
     <element class="IheInvokingInterface_IheTransaction_Edge" hash="[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_PAT_IDENTITY_SRC; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-8; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REGISTRY]_3">
-      <field name="name">IheInvokingInterface_IheTransaction_Edge 7</field>
+      <field name="name">IheInvokingInterface_IheTransaction_Edge 7
+
+-JOINED-
+
+Connection 71</field>
       <field name="description"></field>
       <field name="start">[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_PAT_IDENTITY_SRC; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-8; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REGISTRY]_2</field>
       <field name="end">[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_PAT_IDENTITY_SRC; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-8; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REGISTRY]</field>
@@ -1344,7 +1078,11 @@ IheActor_IheActor_MustBeGroupedWith_Edge 13</field>
 
 -JOINED-
 
-IheActor_IheActor_MustBeGroupedWith_Edge 9</field>
+IheActor_IheActor_MustBeGroupedWith_Edge 9
+
+-JOINED-
+
+Grouping 80</field>
       <field name="description"></field>
       <field name="start">http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_PAT_IDENTITY_SRC</field>
       <field name="end">http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_SA</field>
@@ -1354,7 +1092,11 @@ IheActor_IheActor_MustBeGroupedWith_Edge 9</field>
 
 -JOINED-
 
-IheActor_IheActor_MustBeGroupedWith_Edge 8</field>
+IheActor_IheActor_MustBeGroupedWith_Edge 8
+
+-JOINED-
+
+Grouping 79</field>
       <field name="description"></field>
       <field name="start">http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_PAT_IDENTITY_SRC</field>
       <field name="end">http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_SN</field>
@@ -1364,30 +1106,6 @@ IheActor_IheActor_MustBeGroupedWith_Edge 8</field>
       <field name="description"></field>
       <field name="start">http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_PAT_IDENTITY_SRC</field>
       <field name="end">http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#CT_TIME_CLIENT</field>
-    </element>
-    <element class="IheCommunicationLink_Edge" hash="DLK_1585409326844_810">
-      <field name="name">ITI-44 Patient Identity Feed HL7 V3</field>
-      <field name="description"></field>
-      <field name="start">[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_PAT_IDENTITY_SRC; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-44; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REGISTRY]_2</field>
-      <field name="end">[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_PAT_IDENTITY_SRC; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-44; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REGISTRY]_5</field>
-    </element>
-    <element class="IheCommunicationLink_Edge" hash="DLK_1585409326843_808">
-      <field name="name">ITI-8 Patient Identity Feed</field>
-      <field name="description"></field>
-      <field name="start">[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_PAT_IDENTITY_SRC; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-8; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REGISTRY]_2</field>
-      <field name="end">[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_PAT_IDENTITY_SRC; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-8; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REGISTRY]_5</field>
-    </element>
-    <element class="IheTransaction_IheCommunicationLink_Edge" hash="DLK_1585409326894_879">
-      <field name="name">IheTransaction_IheCommunicationLink_Edge 48</field>
-      <field name="description"></field>
-      <field name="start">[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_PAT_IDENTITY_SRC; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-44; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REGISTRY]</field>
-      <field name="end">DLK_1585409326844_810</field>
-    </element>
-    <element class="IheTransaction_IheCommunicationLink_Edge" hash="DLK_1585409326893_877">
-      <field name="name">IheTransaction_IheCommunicationLink_Edge 46</field>
-      <field name="description"></field>
-      <field name="start">[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_PAT_IDENTITY_SRC; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-8; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REGISTRY]</field>
-      <field name="end">DLK_1585409326843_808</field>
     </element>
     <element class="IheActor_IheActorInstance_Edge" hash="DLK_1585421644974_9993">
       <field name="name">IheActor_IheActorInstance_Edge 2</field>
@@ -1437,126 +1155,6 @@ IheActor_IheActor_MustBeGroupedWith_Edge 8</field>
       <field name="start">S_1570999950932_135</field>
       <field name="end">AIN_1585421644969_9992</field>
     </element>
-    <element class="IheActor_IheActorInstance_Edge" hash="DLK_1585421855725_10013">
-      <field name="name">IheActor_IheActorInstance_Edge 3</field>
-      <field name="description"></field>
-      <field name="start">http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REGISTRY</field>
-      <field name="end">AIN_1585421855719_10012</field>
-    </element>
-    <element class="IheProvidingInterface_IheActorInstanceProvidingInterface_Edge" hash="DLK_1585421855738_10015">
-      <field name="name">IheProvidingInterface_IheActorInstanceProvidingInterface_Edge 3</field>
-      <field name="description"></field>
-      <field name="start">[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_ON_DEMAND_DOC_SOURCE; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-61; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REGISTRY]_5</field>
-      <field name="end">AIP_1585421855728_10014</field>
-    </element>
-    <element class="IheActorInstance_IheActorInstanceInterface_Edge" hash="DLK_1585421855741_10016">
-      <field name="name">IheActorInstance_IheActorInstanceInterface_Edge 8</field>
-      <field name="description"></field>
-      <field name="start">AIN_1585421855719_10012</field>
-      <field name="end">AIP_1585421855728_10014</field>
-    </element>
-    <element class="IheProvidingInterface_IheActorInstanceProvidingInterface_Edge" hash="DLK_1585421855752_10018">
-      <field name="name">IheProvidingInterface_IheActorInstanceProvidingInterface_Edge 4</field>
-      <field name="description"></field>
-      <field name="start">[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_ADMINISTRATOR; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-18; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REGISTRY]_5</field>
-      <field name="end">AIP_1585421855746_10017</field>
-    </element>
-    <element class="IheActorInstance_IheActorInstanceInterface_Edge" hash="DLK_1585421855758_10021">
-      <field name="name">IheActorInstance_IheActorInstanceInterface_Edge 9</field>
-      <field name="description"></field>
-      <field name="start">AIN_1585421855719_10012</field>
-      <field name="end">AIP_1585421855746_10017</field>
-    </element>
-    <element class="IheProvidingInterface_IheActorInstanceProvidingInterface_Edge" hash="DLK_1585421855768_10023">
-      <field name="name">IheProvidingInterface_IheActorInstanceProvidingInterface_Edge 5</field>
-      <field name="description"></field>
-      <field name="start">[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_CONSUMER; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-18; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REGISTRY]_5</field>
-      <field name="end">AIP_1585421855762_10022</field>
-    </element>
-    <element class="IheActorInstance_IheActorInstanceInterface_Edge" hash="DLK_1585421855773_10026">
-      <field name="name">IheActorInstance_IheActorInstanceInterface_Edge 10</field>
-      <field name="description"></field>
-      <field name="start">AIN_1585421855719_10012</field>
-      <field name="end">AIP_1585421855762_10022</field>
-    </element>
-    <element class="IheProvidingInterface_IheActorInstanceProvidingInterface_Edge" hash="DLK_1585421855784_10028">
-      <field name="name">IheProvidingInterface_IheActorInstanceProvidingInterface_Edge 6</field>
-      <field name="description"></field>
-      <field name="start">[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_EMBED_REPOS; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-42; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REGISTRY]_5</field>
-      <field name="end">AIP_1585421855778_10027</field>
-    </element>
-    <element class="IheActorInstanceCommunicationLink_Edge" hash="DLK_1585421855785_10029">
-      <field name="name">IHE Communication link 4</field>
-      <field name="description"></field>
-      <field name="start">AII_1585421645007_10006</field>
-      <field name="end">AIP_1585421855778_10027</field>
-    </element>
-    <element class="IheCommunicationLink_IheActorInstanceCommunicationLink_Edge" hash="DLK_1585421855785_10030">
-      <field name="name">IheCommunicationLink_IheActorInstanceCommunicationLink_Edge 4</field>
-      <field name="description"></field>
-      <field name="start">DLK_1585409326831_774</field>
-      <field name="end">DLK_1585421855785_10029</field>
-    </element>
-    <element class="IheActorInstance_IheActorInstanceInterface_Edge" hash="DLK_1585421855790_10031">
-      <field name="name">IheActorInstance_IheActorInstanceInterface_Edge 11</field>
-      <field name="description"></field>
-      <field name="start">AIN_1585421855719_10012</field>
-      <field name="end">AIP_1585421855778_10027</field>
-    </element>
-    <element class="IheProvidingInterface_IheActorInstanceProvidingInterface_Edge" hash="DLK_1585421855800_10033">
-      <field name="name">IheProvidingInterface_IheActorInstanceProvidingInterface_Edge 7</field>
-      <field name="description"></field>
-      <field name="start">[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_PAT_IDENTITY_SRC; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-8; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REGISTRY]_5</field>
-      <field name="end">AIP_1585421855794_10032</field>
-    </element>
-    <element class="IheActorInstance_IheActorInstanceInterface_Edge" hash="DLK_1585421855803_10034">
-      <field name="name">IheActorInstance_IheActorInstanceInterface_Edge 12</field>
-      <field name="description"></field>
-      <field name="start">AIN_1585421855719_10012</field>
-      <field name="end">AIP_1585421855794_10032</field>
-    </element>
-    <element class="IheProvidingInterface_IheActorInstanceProvidingInterface_Edge" hash="DLK_1585421855812_10036">
-      <field name="name">IheProvidingInterface_IheActorInstanceProvidingInterface_Edge 8</field>
-      <field name="description"></field>
-      <field name="start">[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REPOSITORY; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-42; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REGISTRY]_5</field>
-      <field name="end">AIP_1585421855807_10035</field>
-    </element>
-    <element class="IheActorInstance_IheActorInstanceInterface_Edge" hash="DLK_1585421855818_10039">
-      <field name="name">IheActorInstance_IheActorInstanceInterface_Edge 13</field>
-      <field name="description"></field>
-      <field name="start">AIN_1585421855719_10012</field>
-      <field name="end">AIP_1585421855807_10035</field>
-    </element>
-    <element class="IheProvidingInterface_IheActorInstanceProvidingInterface_Edge" hash="DLK_1585421855828_10041">
-      <field name="name">IheProvidingInterface_IheActorInstanceProvidingInterface_Edge 9</field>
-      <field name="description"></field>
-      <field name="start">[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_PAT_IDENTITY_SRC; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-44; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REGISTRY]_5</field>
-      <field name="end">AIP_1585421855822_10040</field>
-    </element>
-    <element class="IheActorInstance_IheActorInstanceInterface_Edge" hash="DLK_1585421855834_10042">
-      <field name="name">IheActorInstance_IheActorInstanceInterface_Edge 14</field>
-      <field name="description"></field>
-      <field name="start">AIN_1585421855719_10012</field>
-      <field name="end">AIP_1585421855822_10040</field>
-    </element>
-    <element class="IheProvidingInterface_IheActorInstanceProvidingInterface_Edge" hash="DLK_1585421855848_10044">
-      <field name="name">IheProvidingInterface_IheActorInstanceProvidingInterface_Edge 10</field>
-      <field name="description"></field>
-      <field name="start">[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_ADMINISTRATOR; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-57; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REGISTRY]_5</field>
-      <field name="end">AIP_1585421855841_10043</field>
-    </element>
-    <element class="IheActorInstance_IheActorInstanceInterface_Edge" hash="DLK_1585421855859_10045">
-      <field name="name">IheActorInstance_IheActorInstanceInterface_Edge 15</field>
-      <field name="description"></field>
-      <field name="start">AIN_1585421855719_10012</field>
-      <field name="end">AIP_1585421855841_10043</field>
-    </element>
-    <element class="ApplicationSystem_IheActorInstance_Edge" hash="DLK_1585421855871_10046">
-      <field name="name">ApplicationSystem_IheActorInstance_Edge 2</field>
-      <field name="description"></field>
-      <field name="start">S_1570999950932_135</field>
-      <field name="end">AIN_1585421855719_10012</field>
-    </element>
     <element class="IheActor_IheActorInstance_Edge" hash="DLK_1585422377751_10051">
       <field name="name">IheActor_IheActorInstance_Edge 4</field>
       <field name="description"></field>
@@ -1569,18 +1167,6 @@ IheActor_IheActor_MustBeGroupedWith_Edge 8</field>
       <field name="start">[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_PAT_IDENTITY_SRC; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-44; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REGISTRY]_2</field>
       <field name="end">AII_1585422377752_10052</field>
     </element>
-    <element class="IheActorInstanceCommunicationLink_Edge" hash="DLK_1585422377754_10054">
-      <field name="name">IHE Communication link 1</field>
-      <field name="description"></field>
-      <field name="start">AII_1585422377752_10052</field>
-      <field name="end">AIP_1585421855822_10040</field>
-    </element>
-    <element class="IheCommunicationLink_IheActorInstanceCommunicationLink_Edge" hash="DLK_1585422377755_10055">
-      <field name="name">IheCommunicationLink_IheActorInstanceCommunicationLink_Edge 1</field>
-      <field name="description"></field>
-      <field name="start">DLK_1585409326844_810</field>
-      <field name="end">DLK_1585422377754_10054</field>
-    </element>
     <element class="IheActorInstance_IheActorInstanceInterface_Edge" hash="DLK_1585422377757_10056">
       <field name="name">IheActorInstance_IheActorInstanceInterface_Edge 16</field>
       <field name="description"></field>
@@ -1592,18 +1178,6 @@ IheActor_IheActor_MustBeGroupedWith_Edge 8</field>
       <field name="description"></field>
       <field name="start">[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_PAT_IDENTITY_SRC; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-8; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REGISTRY]_2</field>
       <field name="end">AII_1585422377758_10057</field>
-    </element>
-    <element class="IheActorInstanceCommunicationLink_Edge" hash="DLK_1585422377761_10059">
-      <field name="name">IHE Communication link 5</field>
-      <field name="description"></field>
-      <field name="start">AII_1585422377758_10057</field>
-      <field name="end">AIP_1585421855794_10032</field>
-    </element>
-    <element class="IheCommunicationLink_IheActorInstanceCommunicationLink_Edge" hash="DLK_1585422377761_10060">
-      <field name="name">IheCommunicationLink_IheActorInstanceCommunicationLink_Edge 5</field>
-      <field name="description"></field>
-      <field name="start">DLK_1585409326843_808</field>
-      <field name="end">DLK_1585422377761_10059</field>
     </element>
     <element class="IheActorInstance_IheActorInstanceInterface_Edge" hash="DLK_1585422377763_10061">
       <field name="name">IheActorInstance_IheActorInstanceInterface_Edge 17</field>
@@ -1634,12 +1208,6 @@ IheActor_IheActor_MustBeGroupedWith_Edge 8</field>
       <field name="description"></field>
       <field name="start">AII_1585422498080_10065</field>
       <field name="end">AIP_1585421644995_10003</field>
-    </element>
-    <element class="IheCommunicationLink_IheActorInstanceCommunicationLink_Edge" hash="DLK_1585422498084_10068">
-      <field name="name">IheCommunicationLink_IheActorInstanceCommunicationLink_Edge 6</field>
-      <field name="description"></field>
-      <field name="start">DLK_1585409326832_776</field>
-      <field name="end">DLK_1585422498084_10067</field>
     </element>
     <element class="IheActorInstance_IheActorInstanceInterface_Edge" hash="DLK_1585422498086_10069">
       <field name="name">IheActorInstance_IheActorInstanceInterface_Edge 18</field>
@@ -1869,6 +1437,288 @@ IheActor_IheActor_MustBeGroupedWith_Edge 8</field>
       <field name="start">S_1571000158218_140</field>
       <field name="end">AIN_1586358636511_1259</field>
     </element>
+    <element class="IheIntegrationProfile_IheActor_Edge" hash="[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REGISTRY; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iheIntegrationProfile; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDS.b]">
+      <field name="name">Connection 58</field>
+      <field name="description"></field>
+      <field name="start">http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDS.b</field>
+      <field name="end">http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REGISTRY</field>
+    </element>
+    <element class="IheProvidingInterface_IheTransaction_Edge" hash="[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_CONSUMER; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-18; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REGISTRY]_4">
+      <field name="name">Connection 18</field>
+      <field name="description"></field>
+      <field name="start">[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_CONSUMER; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-18; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REGISTRY]_5</field>
+      <field name="end">[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDS-IB_DOC_CONSUMER; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-18; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDS-IB_DOC_REGISTRY]</field>
+    </element>
+    <element class="IheActor_IheInterface_Edge" hash="[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_CONSUMER; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-18; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REGISTRY]_6">
+      <field name="name">Connection 35</field>
+      <field name="description"></field>
+      <field name="start">http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REGISTRY</field>
+      <field name="end">[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_CONSUMER; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-18; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REGISTRY]_5</field>
+    </element>
+    <element class="IheProvidingInterface_IheTransaction_Edge" hash="[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_EMBED_REPOS; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-42; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REGISTRY]_4">
+      <field name="name">Connection 26</field>
+      <field name="description"></field>
+      <field name="start">[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_EMBED_REPOS; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-42; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REGISTRY]_5</field>
+      <field name="end">[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_EMBED_REPOS; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-42; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REGISTRY]</field>
+    </element>
+    <element class="IheActor_IheInterface_Edge" hash="[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_EMBED_REPOS; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-42; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REGISTRY]_6">
+      <field name="name">Connection 48</field>
+      <field name="description"></field>
+      <field name="start">http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REGISTRY</field>
+      <field name="end">[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_EMBED_REPOS; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-42; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REGISTRY]_5</field>
+    </element>
+    <element class="IheProvidingInterface_IheTransaction_Edge" hash="[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_PAT_IDENTITY_SRC; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-44; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REGISTRY]_4">
+      <field name="name">Connection 70</field>
+      <field name="description"></field>
+      <field name="start">[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_PAT_IDENTITY_SRC; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-44; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REGISTRY]_5</field>
+      <field name="end">[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#PIXV3_PAT_IDENTITY_SRC; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-44; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#PIXV3_PIX_MANAGER]</field>
+    </element>
+    <element class="IheActor_IheInterface_Edge" hash="[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_PAT_IDENTITY_SRC; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-44; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REGISTRY]_6">
+      <field name="name">Connection 142</field>
+      <field name="description"></field>
+      <field name="start">http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REGISTRY</field>
+      <field name="end">[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_PAT_IDENTITY_SRC; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-44; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REGISTRY]_5</field>
+    </element>
+    <element class="IheProvidingInterface_IheTransaction_Edge" hash="[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_ADMINISTRATOR; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-57; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REGISTRY]_4">
+      <field name="name">Connection 56</field>
+      <field name="description"></field>
+      <field name="start">[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_ADMINISTRATOR; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-57; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REGISTRY]_5</field>
+      <field name="end">[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDR_DOC_ADMINISTRATOR; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-57; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDR_DOC_RECIPIENT]</field>
+    </element>
+    <element class="IheActor_IheInterface_Edge" hash="[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_ADMINISTRATOR; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-57; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REGISTRY]_6">
+      <field name="name">Connection 109</field>
+      <field name="description"></field>
+      <field name="start">http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REGISTRY</field>
+      <field name="end">[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_ADMINISTRATOR; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-57; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REGISTRY]_5</field>
+    </element>
+    <element class="IheProvidingInterface_IheTransaction_Edge" hash="[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_ON_DEMAND_DOC_SOURCE; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-61; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REGISTRY]_4">
+      <field name="name">Connection 9</field>
+      <field name="description"></field>
+      <field name="start">[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_ON_DEMAND_DOC_SOURCE; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-61; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REGISTRY]_5</field>
+      <field name="end">[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_ON_DEMAND_DOC_SOURCE; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-61; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REGISTRY]</field>
+    </element>
+    <element class="IheActor_IheInterface_Edge" hash="[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_ON_DEMAND_DOC_SOURCE; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-61; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REGISTRY]_6">
+      <field name="name">Connection 18</field>
+      <field name="description"></field>
+      <field name="start">http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REGISTRY</field>
+      <field name="end">[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_ON_DEMAND_DOC_SOURCE; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-61; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REGISTRY]_5</field>
+    </element>
+    <element class="IheProvidingInterface_IheTransaction_Edge" hash="[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_PAT_IDENTITY_SRC; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-8; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REGISTRY]_4">
+      <field name="name">Connection 69</field>
+      <field name="description"></field>
+      <field name="start">[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_PAT_IDENTITY_SRC; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-8; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REGISTRY]_5</field>
+      <field name="end">[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_PAT_IDENTITY_SRC; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-8; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REGISTRY]</field>
+    </element>
+    <element class="IheActor_IheInterface_Edge" hash="[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_PAT_IDENTITY_SRC; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-8; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REGISTRY]_6">
+      <field name="name">Connection 140</field>
+      <field name="description"></field>
+      <field name="start">http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REGISTRY</field>
+      <field name="end">[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_PAT_IDENTITY_SRC; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-8; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REGISTRY]_5</field>
+    </element>
+    <element class="IheActor_IheActor_MustBeGroupedWith_Edge" hash="[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REGISTRY; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#mustBeGroupedWith; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_SA]">
+      <field name="name">Grouping 62</field>
+      <field name="description"></field>
+      <field name="start">http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REGISTRY</field>
+      <field name="end">http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_SA</field>
+    </element>
+    <element class="IheActor_IheActor_MustBeGroupedWith_Edge" hash="[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REGISTRY; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#mustBeGroupedWith; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_SN]">
+      <field name="name">Grouping 61</field>
+      <field name="description"></field>
+      <field name="start">http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REGISTRY</field>
+      <field name="end">http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_SN</field>
+    </element>
+    <element class="IheCommunicationLink_Edge" hash="DLK_1605011038173_1702">
+      <field name="name">ITI-42 Register Document Set-b</field>
+      <field name="description"></field>
+      <field name="start">[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REPOSITORY; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-42; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REGISTRY]_2</field>
+      <field name="end">[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_EMBED_REPOS; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-42; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REGISTRY]_5</field>
+    </element>
+    <element class="IheCommunicationLink_Edge" hash="DLK_1605011038179_1780">
+      <field name="name">ITI-42 Register Document Set-b</field>
+      <field name="description"></field>
+      <field name="start">[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_EMBED_REPOS; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-42; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REGISTRY]_2</field>
+      <field name="end">[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_EMBED_REPOS; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-42; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REGISTRY]_5</field>
+    </element>
+    <element class="IheCommunicationLink_Edge" hash="DLK_1605011038178_1770">
+      <field name="name">ITI-44 Patient Identity Feed HL7 V3</field>
+      <field name="description"></field>
+      <field name="start">[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_PAT_IDENTITY_SRC; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-44; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REGISTRY]_2</field>
+      <field name="end">[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_PAT_IDENTITY_SRC; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-44; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REGISTRY]_5</field>
+    </element>
+    <element class="IheCommunicationLink_Edge" hash="DLK_1605011038178_1769">
+      <field name="name">ITI-8 Patient Identity Feed</field>
+      <field name="description"></field>
+      <field name="start">[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_PAT_IDENTITY_SRC; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-8; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REGISTRY]_2</field>
+      <field name="end">[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_PAT_IDENTITY_SRC; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-8; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REGISTRY]_5</field>
+    </element>
+    <element class="IheTransaction_IheCommunicationLink_Edge" hash="DLK_1605011965455_3204">
+      <field name="name">Connection 1</field>
+      <field name="description"></field>
+      <field name="start">[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_SN; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-19; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_SA]</field>
+      <field name="end">DLK_1585409326837_791</field>
+    </element>
+    <element class="IheTransaction_IheCommunicationLink_Edge" hash="DLK_1605011965455_3205">
+      <field name="name">Connection 2</field>
+      <field name="description"></field>
+      <field name="start">[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_SN; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-19; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_SA]</field>
+      <field name="end">DLK_1585409326841_801</field>
+    </element>
+    <element class="IheTransaction_IheCommunicationLink_Edge" hash="DLK_1605011965455_3206">
+      <field name="name">Connection 3</field>
+      <field name="description"></field>
+      <field name="start">[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_SN; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-19; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_SA]</field>
+      <field name="end">DLK_1585409326836_790</field>
+    </element>
+    <element class="IheTransaction_IheCommunicationLink_Edge" hash="DLK_1605011965455_3207">
+      <field name="name">Connection 4</field>
+      <field name="description"></field>
+      <field name="start">[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_SN; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-19; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_SA]</field>
+      <field name="end">DLK_1585409326841_800</field>
+    </element>
+    <element class="IheTransaction_IheCommunicationLink_Edge" hash="DLK_1605011965456_3214">
+      <field name="name">Connection 11</field>
+      <field name="description"></field>
+      <field name="start">[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDR_DOC_SOURCE; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-41; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDR_DOC_RECIPIENT]</field>
+      <field name="end">DLK_1585409326832_776</field>
+    </element>
+    <element class="IheTransaction_IheCommunicationLink_Edge" hash="DLK_1605011965456_3220">
+      <field name="name">Connection 17</field>
+      <field name="description"></field>
+      <field name="start">[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_EMBED_REPOS; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-42; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REGISTRY]</field>
+      <field name="end">DLK_1605011038173_1702</field>
+    </element>
+    <element class="IheTransaction_IheCommunicationLink_Edge" hash="DLK_1605011965456_3221">
+      <field name="name">Connection 18</field>
+      <field name="description"></field>
+      <field name="start">[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_EMBED_REPOS; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-42; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REGISTRY]</field>
+      <field name="end">DLK_1605011038179_1780</field>
+    </element>
+    <element class="IheTransaction_IheCommunicationLink_Edge" hash="DLK_1605011965456_3222">
+      <field name="name">Connection 19</field>
+      <field name="description"></field>
+      <field name="start">[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#PIXV3_PAT_IDENTITY_SRC; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-44; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#PIXV3_PIX_MANAGER]</field>
+      <field name="end">DLK_1605011038178_1770</field>
+    </element>
+    <element class="IheTransaction_IheCommunicationLink_Edge" hash="DLK_1605011965456_3223">
+      <field name="name">Connection 20</field>
+      <field name="description"></field>
+      <field name="start">[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_PAT_IDENTITY_SRC; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-8; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REGISTRY]</field>
+      <field name="end">DLK_1605011038178_1769</field>
+    </element>
+    <element class="IheCommunicationLink_IheActorInstanceCommunicationLink_Edge" hash="DLK_1605011965456_3224">
+      <field name="name">Connection 1</field>
+      <field name="description"></field>
+      <field name="start">DLK_1585409326832_776</field>
+      <field name="end">DLK_1585422498084_10067</field>
+    </element>
+    <element class="IheActor_IheActorInstance_Edge" hash="DLK_1605011965461_3226">
+      <field name="name">Connection 1</field>
+      <field name="description"></field>
+      <field name="start">http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REGISTRY</field>
+      <field name="end">AIN_1605011965460_3225</field>
+    </element>
+    <element class="IheProvidingInterface_IheActorInstanceProvidingInterface_Edge" hash="DLK_1605011965462_3228">
+      <field name="name">Connection 1</field>
+      <field name="description"></field>
+      <field name="start">[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_CONSUMER; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-18; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REGISTRY]_5</field>
+      <field name="end">AIP_1605011965461_3227</field>
+    </element>
+    <element class="IheActorInstance_IheActorInstanceInterface_Edge" hash="DLK_1605011965462_3229">
+      <field name="name">Connection 1</field>
+      <field name="description"></field>
+      <field name="start">AIN_1605011965460_3225</field>
+      <field name="end">AIP_1605011965461_3227</field>
+    </element>
+    <element class="IheProvidingInterface_IheActorInstanceProvidingInterface_Edge" hash="DLK_1605011965463_3231">
+      <field name="name">Connection 2</field>
+      <field name="description"></field>
+      <field name="start">[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_EMBED_REPOS; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-42; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REGISTRY]_5</field>
+      <field name="end">AIP_1605011965463_3230</field>
+    </element>
+    <element class="IheActorInstance_IheActorInstanceInterface_Edge" hash="DLK_1605011965464_3232">
+      <field name="name">Connection 2</field>
+      <field name="description"></field>
+      <field name="start">AIN_1605011965460_3225</field>
+      <field name="end">AIP_1605011965463_3230</field>
+    </element>
+    <element class="IheProvidingInterface_IheActorInstanceProvidingInterface_Edge" hash="DLK_1605011965465_3234">
+      <field name="name">Connection 3</field>
+      <field name="description"></field>
+      <field name="start">[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_PAT_IDENTITY_SRC; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-44; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REGISTRY]_5</field>
+      <field name="end">AIP_1605011965464_3233</field>
+    </element>
+    <element class="IheActorInstance_IheActorInstanceInterface_Edge" hash="DLK_1605011965465_3235">
+      <field name="name">Connection 3</field>
+      <field name="description"></field>
+      <field name="start">AIN_1605011965460_3225</field>
+      <field name="end">AIP_1605011965464_3233</field>
+    </element>
+    <element class="IheProvidingInterface_IheActorInstanceProvidingInterface_Edge" hash="DLK_1605011965466_3237">
+      <field name="name">Connection 4</field>
+      <field name="description"></field>
+      <field name="start">[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_ADMINISTRATOR; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-57; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REGISTRY]_5</field>
+      <field name="end">AIP_1605011965466_3236</field>
+    </element>
+    <element class="IheActorInstance_IheActorInstanceInterface_Edge" hash="DLK_1605011965467_3238">
+      <field name="name">Connection 4</field>
+      <field name="description"></field>
+      <field name="start">AIN_1605011965460_3225</field>
+      <field name="end">AIP_1605011965466_3236</field>
+    </element>
+    <element class="IheProvidingInterface_IheActorInstanceProvidingInterface_Edge" hash="DLK_1605011965468_3240">
+      <field name="name">Connection 5</field>
+      <field name="description"></field>
+      <field name="start">[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_ON_DEMAND_DOC_SOURCE; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-61; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REGISTRY]_5</field>
+      <field name="end">AIP_1605011965467_3239</field>
+    </element>
+    <element class="IheActorInstance_IheActorInstanceInterface_Edge" hash="DLK_1605011965468_3241">
+      <field name="name">Connection 5</field>
+      <field name="description"></field>
+      <field name="start">AIN_1605011965460_3225</field>
+      <field name="end">AIP_1605011965467_3239</field>
+    </element>
+    <element class="IheProvidingInterface_IheActorInstanceProvidingInterface_Edge" hash="DLK_1605011965470_3243">
+      <field name="name">Connection 6</field>
+      <field name="description"></field>
+      <field name="start">[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_PAT_IDENTITY_SRC; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-8; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REGISTRY]_5</field>
+      <field name="end">AIP_1605011965469_3242</field>
+    </element>
+    <element class="IheActorInstance_IheActorInstanceInterface_Edge" hash="DLK_1605011965470_3244">
+      <field name="name">Connection 6</field>
+      <field name="description"></field>
+      <field name="start">AIN_1605011965460_3225</field>
+      <field name="end">AIP_1605011965469_3242</field>
+    </element>
+    <element class="ApplicationSystem_IheActorInstance_Edge" hash="DLK_1605011965473_3245">
+      <field name="name">Connection 1</field>
+      <field name="description"></field>
+      <field name="start">S_1570999950932_135</field>
+      <field name="end">AIN_1605011965460_3225</field>
+    </element>
+    <element class="IheActorInstanceCommunicationLink_Edge" hash="DLK_1605012001696_3246">
+      <field name="name">ITI-42 Register Document Set-b</field>
+      <field name="description"></field>
+      <field name="start">AII_1585421645007_10006</field>
+      <field name="end">AIP_1605011965463_3230</field>
+    </element>
+    <element class="IheCommunicationLink_IheActorInstanceCommunicationLink_Edge" hash="DLK_1605012001696_3247">
+      <field name="name">Connection 2</field>
+      <field name="description"></field>
+      <field name="start">DLK_1605011038173_1702</field>
+      <field name="end">DLK_1605012001696_3246</field>
+    </element>
+    <element class="IheActorInstanceCommunicationLink_Edge" hash="DLK_1605012029832_3248">
+      <field name="name">ITI-8 Patient Identity Feed</field>
+      <field name="description"></field>
+      <field name="start">AII_1585422377758_10057</field>
+      <field name="end">AIP_1605011965469_3242</field>
+    </element>
+    <element class="IheCommunicationLink_IheActorInstanceCommunicationLink_Edge" hash="DLK_1605012029832_3249">
+      <field name="name">Connection 3</field>
+      <field name="description"></field>
+      <field name="start">DLK_1605011038178_1769</field>
+      <field name="end">DLK_1605012029832_3248</field>
+    </element>
     <element class="Bendpoint" hash="_1586357266855_1231">
       <field name="name">Bending point 1</field>
       <field name="description"></field>
@@ -1880,21 +1730,21 @@ IheActor_IheActor_MustBeGroupedWith_Edge 8</field>
     <description></description>
     <view>
       <selected>true</selected>
-      <x>220</x>
-      <y>324</y>
+      <x>166</x>
+      <y>215</y>
       <zoom>1.19</zoom>
-      <degree>65</degree>
-      <shift>200</shift>
+      <degree>0</degree>
+      <shift>0</shift>
       <pageSizeFactor>1.0</pageSizeFactor>
       <activeLayer>2</activeLayer>
       <multiView>false</multiView>
     </view>
     <mapping>
-      <layout class="PhysicalDataProcessingComponent">
+      <layout class="Bendpoint">
         <color name="bg_color">
           <red>255</red>
-          <green>200</green>
-          <blue>0</blue>
+          <green>100</green>
+          <blue>100</blue>
         </color>
         <color name="fg_color">
           <red>0</red>
@@ -1912,8 +1762,8 @@ IheActor_IheActor_MustBeGroupedWith_Edge 8</field>
         <font_size>12</font_size>
         <x>0</x>
         <y>0</y>
-        <width>90</width>
-        <height>50</height>
+        <width>10</width>
+        <height>10</height>
       </layout>
       <layout class="Textfield">
         <color name="bg_color">
@@ -1921,56 +1771,6 @@ IheActor_IheActor_MustBeGroupedWith_Edge 8</field>
           <green>0</green>
           <blue>0</blue>
           <alpha>0</alpha>
-        </color>
-        <color name="fg_color">
-          <red>0</red>
-          <green>0</green>
-          <blue>0</blue>
-        </color>
-        <color name="border_color">
-          <red>0</red>
-          <green>0</green>
-          <blue>0</blue>
-        </color>
-        <form>0</form>
-        <font_family>SansSerif</font_family>
-        <font_style>0</font_style>
-        <font_size>12</font_size>
-        <x>0</x>
-        <y>0</y>
-        <width>90</width>
-        <height>50</height>
-      </layout>
-      <layout class="ObjectType">
-        <color name="bg_color">
-          <red>100</red>
-          <green>100</green>
-          <blue>255</blue>
-        </color>
-        <color name="fg_color">
-          <red>0</red>
-          <green>0</green>
-          <blue>0</blue>
-        </color>
-        <color name="border_color">
-          <red>0</red>
-          <green>0</green>
-          <blue>0</blue>
-        </color>
-        <form>1</form>
-        <font_family>SansSerif</font_family>
-        <font_style>0</font_style>
-        <font_size>12</font_size>
-        <x>0</x>
-        <y>0</y>
-        <width>90</width>
-        <height>50</height>
-      </layout>
-      <layout class="Function">
-        <color name="bg_color">
-          <red>255</red>
-          <green>100</green>
-          <blue>100</blue>
         </color>
         <color name="fg_color">
           <red>0</red>
@@ -2016,11 +1816,11 @@ IheActor_IheActor_MustBeGroupedWith_Edge 8</field>
         <width>90</width>
         <height>50</height>
       </layout>
-      <layout class="ProvidingInterface">
+      <layout class="Function">
         <color name="bg_color">
           <red>255</red>
-          <green>200</green>
-          <blue>0</blue>
+          <green>100</green>
+          <blue>100</blue>
         </color>
         <color name="fg_color">
           <red>0</red>
@@ -2032,14 +1832,39 @@ IheActor_IheActor_MustBeGroupedWith_Edge 8</field>
           <green>0</green>
           <blue>0</blue>
         </color>
-        <form>2</form>
+        <form>0</form>
         <font_family>SansSerif</font_family>
         <font_style>0</font_style>
         <font_size>12</font_size>
         <x>0</x>
         <y>0</y>
-        <width>20</width>
-        <height>20</height>
+        <width>90</width>
+        <height>50</height>
+      </layout>
+      <layout class="IheActorInstance">
+        <color name="bg_color">
+          <red>0</red>
+          <green>204</green>
+          <blue>255</blue>
+        </color>
+        <color name="fg_color">
+          <red>0</red>
+          <green>0</green>
+          <blue>0</blue>
+        </color>
+        <color name="border_color">
+          <red>0</red>
+          <green>0</green>
+          <blue>0</blue>
+        </color>
+        <form>6</form>
+        <font_family>SansSerif</font_family>
+        <font_style>0</font_style>
+        <font_size>12</font_size>
+        <x>0</x>
+        <y>0</y>
+        <width>90</width>
+        <height>50</height>
       </layout>
       <layout class="IheActorInstanceInvokingInterface">
         <color name="bg_color">
@@ -2091,11 +1916,11 @@ IheActor_IheActor_MustBeGroupedWith_Edge 8</field>
         <width>20</width>
         <height>20</height>
       </layout>
-      <layout class="Bendpoint">
+      <layout class="InvokingInterface">
         <color name="bg_color">
-          <red>255</red>
-          <green>100</green>
-          <blue>100</blue>
+          <red>204</red>
+          <green>255</green>
+          <blue>204</blue>
         </color>
         <color name="fg_color">
           <red>0</red>
@@ -2107,14 +1932,39 @@ IheActor_IheActor_MustBeGroupedWith_Edge 8</field>
           <green>0</green>
           <blue>0</blue>
         </color>
-        <form>0</form>
+        <form>1</form>
         <font_family>SansSerif</font_family>
         <font_style>0</font_style>
         <font_size>12</font_size>
         <x>0</x>
         <y>0</y>
-        <width>10</width>
-        <height>10</height>
+        <width>15</width>
+        <height>15</height>
+      </layout>
+      <layout class="ObjectType">
+        <color name="bg_color">
+          <red>100</red>
+          <green>100</green>
+          <blue>255</blue>
+        </color>
+        <color name="fg_color">
+          <red>0</red>
+          <green>0</green>
+          <blue>0</blue>
+        </color>
+        <color name="border_color">
+          <red>0</red>
+          <green>0</green>
+          <blue>0</blue>
+        </color>
+        <form>1</form>
+        <font_family>SansSerif</font_family>
+        <font_style>0</font_style>
+        <font_size>12</font_size>
+        <x>0</x>
+        <y>0</y>
+        <width>90</width>
+        <height>50</height>
       </layout>
       <layout class="OrganisationSystem">
         <color name="bg_color">
@@ -2141,11 +1991,11 @@ IheActor_IheActor_MustBeGroupedWith_Edge 8</field>
         <width>90</width>
         <height>50</height>
       </layout>
-      <layout class="InvokingInterface">
+      <layout class="PhysicalDataProcessingComponent">
         <color name="bg_color">
-          <red>204</red>
-          <green>255</green>
-          <blue>204</blue>
+          <red>255</red>
+          <green>200</green>
+          <blue>0</blue>
         </color>
         <color name="fg_color">
           <red>0</red>
@@ -2157,32 +2007,7 @@ IheActor_IheActor_MustBeGroupedWith_Edge 8</field>
           <green>0</green>
           <blue>0</blue>
         </color>
-        <form>1</form>
-        <font_family>SansSerif</font_family>
-        <font_style>0</font_style>
-        <font_size>12</font_size>
-        <x>0</x>
-        <y>0</y>
-        <width>15</width>
-        <height>15</height>
-      </layout>
-      <layout class="IheActorInstance">
-        <color name="bg_color">
-          <red>0</red>
-          <green>204</green>
-          <blue>255</blue>
-        </color>
-        <color name="fg_color">
-          <red>0</red>
-          <green>0</green>
-          <blue>0</blue>
-        </color>
-        <color name="border_color">
-          <red>0</red>
-          <green>0</green>
-          <blue>0</blue>
-        </color>
-        <form>6</form>
+        <form>0</form>
         <font_family>SansSerif</font_family>
         <font_style>0</font_style>
         <font_size>12</font_size>
@@ -2190,6 +2015,31 @@ IheActor_IheActor_MustBeGroupedWith_Edge 8</field>
         <y>0</y>
         <width>90</width>
         <height>50</height>
+      </layout>
+      <layout class="ProvidingInterface">
+        <color name="bg_color">
+          <red>255</red>
+          <green>200</green>
+          <blue>0</blue>
+        </color>
+        <color name="fg_color">
+          <red>0</red>
+          <green>0</green>
+          <blue>0</blue>
+        </color>
+        <color name="border_color">
+          <red>0</red>
+          <green>0</green>
+          <blue>0</blue>
+        </color>
+        <form>2</form>
+        <font_family>SansSerif</font_family>
+        <font_style>0</font_style>
+        <font_size>12</font_size>
+        <x>0</x>
+        <y>0</y>
+        <width>20</width>
+        <height>20</height>
       </layout>
     </mapping>
     <layer number="0">
@@ -2350,96 +2200,6 @@ IheActor_IheActor_MustBeGroupedWith_Edge 8</field>
           <y>107</y>
           <width>15</width>
           <height>15</height>
-        </layout>
-      </container>
-      <container hash="AIN_1585421855719_10012">
-        <expanded>true</expanded>
-        <visible>true</visible>
-        <layout class="ModelElement">
-          <x>-58</x>
-          <y>45</y>
-          <width>150</width>
-          <height>49</height>
-        </layout>
-      </container>
-      <container hash="AIP_1585421855728_10014">
-        <expanded>true</expanded>
-        <visible>true</visible>
-        <layout class="ModelElement">
-          <x>-125</x>
-          <y>40</y>
-          <width>20</width>
-          <height>20</height>
-        </layout>
-      </container>
-      <container hash="AIP_1585421855746_10017">
-        <expanded>true</expanded>
-        <visible>true</visible>
-        <layout class="ModelElement">
-          <x>-95</x>
-          <y>20</y>
-          <width>20</width>
-          <height>20</height>
-        </layout>
-      </container>
-      <container hash="AIP_1585421855762_10022">
-        <expanded>true</expanded>
-        <visible>true</visible>
-        <layout class="ModelElement">
-          <x>20</x>
-          <y>45</y>
-          <width>20</width>
-          <height>20</height>
-        </layout>
-      </container>
-      <container hash="AIP_1585421855778_10027">
-        <expanded>true</expanded>
-        <visible>true</visible>
-        <layout class="ModelElement">
-          <x>-58</x>
-          <y>70</y>
-          <width>20</width>
-          <height>20</height>
-        </layout>
-      </container>
-      <container hash="AIP_1585421855794_10032">
-        <expanded>true</expanded>
-        <visible>true</visible>
-        <layout class="ModelElement">
-          <x>-58</x>
-          <y>20</y>
-          <width>20</width>
-          <height>20</height>
-        </layout>
-      </container>
-      <container hash="AIP_1585421855807_10035">
-        <expanded>true</expanded>
-        <visible>true</visible>
-        <layout class="ModelElement">
-          <x>-25</x>
-          <y>70</y>
-          <width>20</width>
-          <height>20</height>
-        </layout>
-      </container>
-      <container hash="AIP_1585421855822_10040">
-        <expanded>true</expanded>
-        <visible>true</visible>
-        <layout class="ModelElement">
-          <x>-33</x>
-          <y>20</y>
-          <width>20</width>
-          <height>20</height>
-        </layout>
-      </container>
-      <container hash="AIP_1585421855841_10043">
-        <expanded>true</expanded>
-        <visible>true</visible>
-        <layout class="ModelElement">
-          <x>-115</x>
-          <y>20</y>
-          <width>20</width>
-          <height>20</height>
         </layout>
       </container>
       <container hash="AIN_1585422377748_10050">
@@ -2688,44 +2448,81 @@ IheActor_IheActor_MustBeGroupedWith_Edge 8</field>
           <height>15</height>
         </layout>
       </container>
+      <container hash="AIN_1605011965460_3225">
+        <expanded>true</expanded>
+        <visible>true</visible>
+        <layout class="ModelElement">
+          <x>-55</x>
+          <y>45</y>
+          <width>150</width>
+          <height>49</height>
+        </layout>
+      </container>
+      <container hash="AIP_1605011965461_3227">
+        <expanded>true</expanded>
+        <visible>true</visible>
+        <layout class="ModelElement">
+          <x>-130</x>
+          <y>40</y>
+          <width>20</width>
+          <height>20</height>
+        </layout>
+      </container>
+      <container hash="AIP_1605011965463_3230">
+        <expanded>true</expanded>
+        <visible>true</visible>
+        <layout class="ModelElement">
+          <x>-55</x>
+          <y>70</y>
+          <width>20</width>
+          <height>20</height>
+        </layout>
+      </container>
+      <container hash="AIP_1605011965464_3233">
+        <expanded>true</expanded>
+        <visible>true</visible>
+        <layout class="ModelElement">
+          <x>-33</x>
+          <y>15</y>
+          <width>20</width>
+          <height>20</height>
+        </layout>
+      </container>
+      <container hash="AIP_1605011965466_3236">
+        <expanded>true</expanded>
+        <visible>true</visible>
+        <layout class="ModelElement">
+          <x>20</x>
+          <y>40</y>
+          <width>20</width>
+          <height>20</height>
+        </layout>
+      </container>
+      <container hash="AIP_1605011965467_3239">
+        <expanded>true</expanded>
+        <visible>true</visible>
+        <layout class="ModelElement">
+          <x>-90</x>
+          <y>70</y>
+          <width>20</width>
+          <height>20</height>
+        </layout>
+      </container>
+      <container hash="AIP_1605011965469_3242">
+        <expanded>true</expanded>
+        <visible>true</visible>
+        <layout class="ModelElement">
+          <x>-58</x>
+          <y>15</y>
+          <width>20</width>
+          <height>20</height>
+        </layout>
+      </container>
       <container hash="DLK_1585421644991_10002"></container>
       <container hash="DLK_1585421645003_10005"></container>
       <container hash="DLK_1585421645013_10008"></container>
       <container hash="DLK_1585421645022_10009"></container>
-      <container hash="DLK_1585421855741_10016"></container>
-      <container hash="DLK_1585421855758_10021"></container>
-      <container hash="DLK_1585421855773_10026"></container>
-      <container hash="DLK_1585421855785_10029">
-        <layout class="ModelElement">
-          <x>0</x>
-          <y>0</y>
-          <width>90</width>
-          <height>50</height>
-        </layout>
-      </container>
-      <container hash="DLK_1585421855790_10031"></container>
-      <container hash="DLK_1585421855803_10034"></container>
-      <container hash="DLK_1585421855818_10039"></container>
-      <container hash="DLK_1585421855834_10042"></container>
-      <container hash="DLK_1585421855859_10045"></container>
-      <container hash="DLK_1585421855871_10046"></container>
-      <container hash="DLK_1585422377754_10054">
-        <layout class="ModelElement">
-          <x>0</x>
-          <y>0</y>
-          <width>90</width>
-          <height>50</height>
-        </layout>
-      </container>
       <container hash="DLK_1585422377757_10056"></container>
-      <container hash="DLK_1585422377761_10059">
-        <layout class="ModelElement">
-          <x>0</x>
-          <y>0</y>
-          <width>90</width>
-          <height>50</height>
-        </layout>
-      </container>
       <container hash="DLK_1585422377763_10061"></container>
       <container hash="DLK_1585422377768_10062"></container>
       <container hash="DLK_1585422498084_10067">
@@ -2756,6 +2553,29 @@ IheActor_IheActor_MustBeGroupedWith_Edge 8</field>
       <container hash="DLK_1586357173473_1230"></container>
       <container hash="DLK_1586358637926_1263"></container>
       <container hash="DLK_1586358958586_1268"></container>
+      <container hash="DLK_1605011965462_3229"></container>
+      <container hash="DLK_1605011965464_3232"></container>
+      <container hash="DLK_1605011965465_3235"></container>
+      <container hash="DLK_1605011965467_3238"></container>
+      <container hash="DLK_1605011965468_3241"></container>
+      <container hash="DLK_1605011965470_3244"></container>
+      <container hash="DLK_1605011965473_3245"></container>
+      <container hash="DLK_1605012001696_3246">
+        <layout class="ModelElement">
+          <x>0</x>
+          <y>0</y>
+          <width>90</width>
+          <height>50</height>
+        </layout>
+      </container>
+      <container hash="DLK_1605012029832_3248">
+        <layout class="ModelElement">
+          <x>0</x>
+          <y>0</y>
+          <width>90</width>
+          <height>50</height>
+        </layout>
+      </container>
       <container hash="_1586357266855_1231">
         <expanded>true</expanded>
         <visible>true</visible>

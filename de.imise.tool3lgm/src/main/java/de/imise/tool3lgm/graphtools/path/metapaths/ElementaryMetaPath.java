@@ -31,7 +31,7 @@ import de.imise.util.ReflectionUtils;
  * @author AXS
  * @create 12.10.2010
  */
-public final class ElementaryMetaPath extends MetaPath {
+public final class ElementaryMetaPath extends MetaPathImpl implements SequenceMetaPath {
 
     /**
      * Mögliche Arten eines {@link ElementaryMetaPath}.
@@ -553,7 +553,7 @@ public final class ElementaryMetaPath extends MetaPath {
     }
 
     @Override
-    protected String createName() {
+    public String createName() {
         ElementsNameBuilder elementsNameBuilder = metaModel.getElementsNameBuilder();
         String name = elementsNameBuilder.getMetaAssociationName(edgeClass, direction, connectionState);
         return name;
@@ -591,11 +591,11 @@ public final class ElementaryMetaPath extends MetaPath {
 
     @Override
     public boolean isRemoveable(final boolean checkEndElement) {
-        if (isFirstPathElementDependent()) {
+        if (isStartDependent()) {
             return false;
         }
         if (checkEndElement) {
-            if (isLastPathElementDependent()) {
+            if (isEndElementDependent()) {
                 return false;
             }
         }
@@ -615,15 +615,9 @@ public final class ElementaryMetaPath extends MetaPath {
         return elementaryMetaPaths;
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     public final List<MetaPath> getSubMetaPaths() {
-        return (List<MetaPath>) (List<?>) getElementaryMetaPaths();
-    }
-
-    @Override
-    public int getSubMetaPathCount() {
-        return 1;
+        return getSubMetaPaths(true);
     }
 
     @Override
@@ -668,10 +662,8 @@ public final class ElementaryMetaPath extends MetaPath {
     @Override
     public final List<ModelElement> getConnectedElements(final Collection<ModelElement> modelElements, final boolean multiple) {
         List<ModelElement> returnList = new ArrayList<>();
-        Direction direction = getDirection();
-        Class<? extends Edge> edgeClass = getEdgeClass();
         for (ModelElement me : modelElements) {
-            List<ModelElement> connectedElements = me.getConnectedElements(edgeClass, direction);
+            List<ModelElement> connectedElements = me.getConnectedElements(edgeClass, direction, connectionState);
             if (multiple) {
                 returnList.addAll(connectedElements);
             } else {
@@ -700,10 +692,12 @@ public final class ElementaryMetaPath extends MetaPath {
         ElementaryMetaPath elementaryMetaPath = this;
         Direction direction = elementaryMetaPath.getDirection();
         Class<? extends Edge> edgeClass = elementaryMetaPath.getEdgeClass();
-        List<ElementContainer> connectedContainer = me.getConnectedContainers(doc, edgeClass, direction);
-        for (ElementContainer connected : connectedContainer) {
-            if (!returnList.contains(connected)) {
-                returnList.add(connected);
+        List<ElementContainer> connectedContainers = me.getConnectedContainers(doc, edgeClass, direction);
+        for (ElementContainer connectedContainer : connectedContainers) {
+            ModelElement connected = connectedContainer.getElement();
+            Class<? extends ModelElement> connectedClass = connected.getClass();
+            if (isEndClass(connectedClass) && !returnList.contains(connectedContainer)) {
+                returnList.add(connectedContainer);
             }
         }
         return returnList;

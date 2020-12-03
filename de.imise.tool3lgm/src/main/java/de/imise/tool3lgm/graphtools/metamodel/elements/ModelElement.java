@@ -21,8 +21,9 @@ import com.google.common.collect.ImmutableList;
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.Tool3lgmModelType.ModelCategory;
 import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
-import de.imise.tool3lgm.graphtools.dialog.element.ElementPropertyDialogsContext;
+import de.imise.tool3lgm.graphtools.IDSource;
 import de.imise.tool3lgm.graphtools.dialog.element.ElementPropertyDialog;
+import de.imise.tool3lgm.graphtools.dialog.element.ElementPropertyDialogsContext;
 import de.imise.tool3lgm.graphtools.dialog.element.ErrorDecoratedElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.dialog.element.panel.ElementDialogPanel;
 import de.imise.tool3lgm.graphtools.metamodel.CoreMetaModel;
@@ -31,6 +32,7 @@ import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModelDefinition;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModelSpecific;
 import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
+import de.imise.tool3lgm.graphtools.metamodel.elements.DoubleMeaningEdge.ConnectionState;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GDCollectionOwner;
@@ -46,10 +48,10 @@ import de.imise.tool3lgm.graphtools.view.graph.ElementsLayoutDefinition;
 import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout;
 import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout.TextAlignmentHTML;
 import de.imise.util.Alphabetical;
-import de.imise.util.HashStringGenerator;
+import de.imise.util.IDStringGenerator;
 import de.imise.util.htmlxml.HTMLConverter;
 
-public abstract class ModelElement extends UserFieldTarget implements MetaModelSpecific, GDCollectionOwner {
+public abstract class ModelElement extends UserFieldTarget implements MetaModelSpecific, GDCollectionOwner, IDSource {
 
     /**
      * Die Ebene auf der sich dieses Element befindet
@@ -62,9 +64,9 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
     private String name = "", htmlName = "", descr = "";
 
     /**
-     * HashString
+     * ID of the element
      */
-    protected String hashstring;
+    protected String id;
 
     /**
      * Name des Elementes mit allen Namen der Teilmodelle in eckigen Klammern
@@ -112,18 +114,18 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
     private GDCollection gdcoll;
 
     /**
-     * HashString des Teilmodells, mit dem das Element verknüpft ist. Diese
-     * Verknüpfung sagt einfach nur aus, dass das Element in dem Teilmodell
-     * näher berschrieben wird (z.B. duch seine Teile). Es kann, aber muss
-     * selbst nicht in diesem Teilmodell vorkommen.
+     * ID des Teilmodells, mit dem das Element verknüpft ist. Diese Verknüpfung
+     * sagt einfach nur aus, dass das Element in dem Teilmodell näher
+     * berschrieben wird (z.B. duch seine Teile). Es kann, aber muss selbst
+     * nicht in diesem Teilmodell vorkommen.
      */
-    private String associatedSzenHashString = null;
+    private String associatedSzenID = null;
 
     /**
-     * Erzeut ein neues Modellelement mit einem HashString.
+     * Creates a new ModelElement with a new ID
      */
     public ModelElement() {
-        hashstring = getNewHashString(this);
+        id = getNewID(this);
         initContainerTable();
     }
 
@@ -167,7 +169,7 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
     public ModelElement clone() {
         ModelElement retVal = (ModelElement) super.clone();
         retVal.gdcoll = null;
-        retVal.hashstring = getNewHashString(this);
+        retVal.id = getNewID(this);
         retVal.initContainerTable();
         retVal.edges = null;
         return retVal;
@@ -199,11 +201,11 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
      * @param me
      * @return
      */
-    private final String getNewHashString(final ModelElement me) {
+    private final String getNewID(final ModelElement me) {
         ElementsNameBuilder elementsNameBuilder = getElementsNameBuilder();
         Class<? extends ModelElement> elementClass = me.getClass();
         String elementClassShortName = elementsNameBuilder.getShortName(elementClass);
-        return HashStringGenerator.getHash(elementClassShortName);
+        return IDStringGenerator.createIDString(elementClassShortName);
     }
 
     /**
@@ -272,23 +274,21 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
     }
 
     /**
-     * @param _hashstring
+     * @param id
      */
-    public final void setHashString(final String _hashstring) {
-        if (_hashstring == null) {
+    public final void setID(final String id) {
+        if (id == null) {
             return;
         }
-        if (_hashstring.equals("") || _hashstring.equals("null")) {
+        if (id.equals("") || id.equals("null")) {
             return;
         }
-        hashstring = _hashstring;
+        this.id = id;
     }
 
-    /**
-     * @return
-     */
-    public final String getHashString() {
-        return hashstring;
+    @Override
+    public final String getID() {
+        return id;
     }
 
     /** Gibt den Namen des Objektes zurueck */
@@ -1226,7 +1226,7 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
      */
     @SuppressWarnings("unchecked")
     public final List<ElementContainer> getConnectedContainers(final Class<? extends ModelElement> searchElementClass, final GraphDocument doc, final Class<? extends Edge> edgeClass, final Direction direction, final boolean alphabetical) {
-        return (List<ElementContainer>) getConnected(searchElementClass, doc, edgeClass, direction, true, alphabetical);
+        return (List<ElementContainer>) getConnected(searchElementClass, doc, edgeClass, direction, null, true, alphabetical);
     }
 
     ////////////////////
@@ -1751,7 +1751,21 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
      * @return
      */
     public final List<ModelElement> getConnectedElements(final Class<? extends Edge> edgeClass, final Direction direction) {
-        return getConnectedElements(ModelElement.class, edgeClass, direction, false);
+        return getConnectedElements(edgeClass, direction, null);
+    }
+
+    /**
+     * Gibt alle mit diesem <code>ModelElement</code> verbundenen
+     * <code>ModelElement</code>s des Klasse <code>searchElementClass</code>
+     * zurueck.
+     *
+     * @param edgeClass
+     * @param direction
+     * @param connectionState
+     * @return
+     */
+    public final List<ModelElement> getConnectedElements(final Class<? extends Edge> edgeClass, final Direction direction, final ConnectionState connectionState) {
+        return getConnectedElements(ModelElement.class, edgeClass, direction, connectionState, false);
     }
 
     /**
@@ -1776,11 +1790,28 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
      * @param searchElementClass
      * @param edgeClass
      * @param direction
+     * @param connectionState
      * @param alphabetical
-     * @return List mit allen verbundenen Node
+     * @return
      */
     public final List<ModelElement> getConnectedElements(final Class<? extends ModelElement> searchElementClass, final Class<? extends Edge> edgeClass, final Direction direction, final boolean alphabetical) {
-        return getConnectedElements(searchElementClass, null, edgeClass, direction, alphabetical);
+        return getConnectedElements(searchElementClass, null, edgeClass, direction, null, alphabetical);
+    }
+
+    /**
+     * Gibt alle mit diesem <code>ModelElement</code> verbundenen
+     * <code>ModelElement</code>s des Klasse <code>searchElementClass</code>
+     * zurueck.
+     *
+     * @param searchElementClass
+     * @param edgeClass
+     * @param direction
+     * @param connectionState
+     * @param alphabetical
+     * @return
+     */
+    public final List<ModelElement> getConnectedElements(final Class<? extends ModelElement> searchElementClass, final Class<? extends Edge> edgeClass, final Direction direction, final ConnectionState connectionState, final boolean alphabetical) {
+        return getConnectedElements(searchElementClass, null, edgeClass, direction, connectionState, alphabetical);
     }
 
     /**
@@ -1799,9 +1830,31 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
      * @return List mit allen verbundenen <code>ModelElement</code>s oder
      *         <code>ElementContainer</code>n
      */
-    @SuppressWarnings("unchecked")
     public final List<ModelElement> getConnectedElements(final Class<? extends ModelElement> searchElementClass, final GraphDocument doc, final Class<? extends Edge> edgeClass, final Direction direction, final boolean alphabetical) {
-        return (List<ModelElement>) getConnected(searchElementClass, doc, edgeClass, direction, false, alphabetical);
+        return getConnectedElements(searchElementClass, doc, edgeClass, direction, null, alphabetical);
+    }
+
+    /**
+     * Gibt alle mit diesem <code>ModelElement</code> verbundenen
+     * <code>ModelElement</code>s der Klasse <code>searchElementClass</code>
+     * zurueck.
+     *
+     * @param searchElementClass
+     * @param doc <code>GraphDocument</code> in dem verbundene Elemente gesucht
+     *            werden sollen. Wird <code>null</code> übergeben, werden alle
+     *            verbundenen Elemente zurück gegeben, was der Suche im
+     *            Hauptmodell entspricht.
+     * @param edgeClass
+     * @param direction
+     * @param connectionState
+     * @param alphabetical
+     * @return List mit allen verbundenen <code>ModelElement</code>s oder
+     *         <code>ElementContainer</code>n
+     */
+    @SuppressWarnings("unchecked")
+    public final List<ModelElement> getConnectedElements(final Class<? extends ModelElement> searchElementClass, final GraphDocument doc, final Class<? extends Edge> edgeClass, final Direction direction, final ConnectionState connectionState,
+            final boolean alphabetical) {
+        return (List<ModelElement>) getConnected(searchElementClass, doc, edgeClass, direction, connectionState, false, alphabetical);
     }
 
     /**
@@ -1818,6 +1871,7 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
      *            man ein gültiges Haupt- <code>GraphDocument</code> übergeben.
      * @param edgeClass
      * @param direction
+     * @param connectionState
      * @param container wenn <code>true</code>, werden die
      *            <code>ElementContainer</code> der gefundenen Elemente zurück
      *            gegeben; sonst die Elemente selbst
@@ -1825,7 +1879,8 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
      * @return List mit allen verbundenen <code>ModelElement</code>s oder
      *         <code>ElementContainer</code>n
      */
-    private final List<?> getConnected(final Class<? extends ModelElement> searchElementClass, final GraphDocument doc, final Class<? extends Edge> edgeClass, final Direction direction, final boolean container, final boolean alphabetical) {
+    private final List<?> getConnected(final Class<? extends ModelElement> searchElementClass, final GraphDocument doc, final Class<? extends Edge> edgeClass, final Direction direction, final ConnectionState connectionState, final boolean container,
+            final boolean alphabetical) {
         List<Object> connectedElements = new ArrayList<>(getEdgesCount());
 
         if (doc == null && container) {
@@ -1840,55 +1895,25 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
 
             ModelElement connected = null;
             if (direction != null) {
-                switch (direction) {
-                case FORWARD:
-                    //bei allen gerichteten Kanten
-                    if (metaModel.isDirectedEdge(edgeClass)) {
-                        //bei Kanten mit doppelter Bedeutung ist nur der ConnectionState entscheidenend
-                        if (CoreMetaModel.isDoubleMeaningEdge(edgeClass)) {
-                            switch (((DoubleMeaningEdge) edge).getConnectionState()) {
-                            case FORWARD:
-                                connected = edge.isEnd(this) ? null : edge.getEnd();
-                                break;
-                            case BACKWARD:
-                                connected = edge.isEnd(this) ? edge.getStart() : null;
-                                break;
-                            default:
-                                connected = edge.getOther(this);
-                            }
-                        } else {
-                            //bei allen anderen gerichteten Kanten wird hier immer in Vorwärts-Richtung geschaut
-                            connected = edge.isEnd(this) ? null : edge.getEnd();
+                //bei allen gerichteten Kanten
+                if (metaModel.isDirectedEdge(edgeClass)) {
+                    if (connectionState != null && CoreMetaModel.isDoubleMeaningEdge(edgeClass)) {
+                        ConnectionState edgeConnectionState = ((DoubleMeaningEdge) edge).getConnectionState();
+                        if (direction == BACKWARD) {
+                            edgeConnectionState = edgeConnectionState.getBackwardEdgeDirectionEquivalentConnectionState();
                         }
-                    } else {
-                        //bei allen ungerichteten Kanten wird davon ausgegangen, dass sie einfach immer beide Richtungen verbinden
-                        connected = edge.getOther(this);
-                    }
-                    break;
-                case BACKWARD:
-                    //bei allen gerichteten Kanten
-                    if (metaModel.isDirectedEdge(edgeClass)) {
-                        //bei Kanten mit doppelter Bedeutung ist nur der ConnectionState entscheidenend
-                        if (CoreMetaModel.isDoubleMeaningEdge(edgeClass)) {
-                            switch (((DoubleMeaningEdge) edge).getConnectionState()) {
-                            case FORWARD:
-                                connected = edge.isEnd(this) ? edge.getStart() : null;
-                                break;
-                            case BACKWARD:
-                                connected = edge.isEnd(this) ? null : edge.getEnd();
-                                break;
-                            default:
-                                connected = edge.getOther(this);
-                            }
-                        } else {
-                            //bei allen anderen gerichteten Kanten wird hier immer in Rückwärts-Richtung geschaut
-                            connected = edge.isStart(this) ? null : edge.getStart();
+                        if (edgeConnectionState != ConnectionState.DOUBLE && edgeConnectionState != connectionState) {
+                            continue;
                         }
-                    } else {
-                        //bei allen ungerichteten Kanten wird davon ausgegangen, dass sie einfach immer beide Richtungen verbinden
-                        connected = edge.getOther(this);
                     }
-                    break;
+                    if (direction == FORWARD) {
+                        connected = edge.isEnd(this) ? null : edge.getEnd();
+                    } else {
+                        connected = edge.isStart(this) ? null : edge.getStart();
+                    }
+                } else {
+                    //bei allen ungerichteten Kanten wird davon ausgegangen, dass sie einfach immer beide Richtungen verbinden
+                    connected = edge.getOther(this);
                 }
             } else {
                 connected = edge.getEnd() == this ? edge.getStart() : edge.getEnd();
@@ -1962,9 +1987,9 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
 
     /**
      * Ruft einfach nur {@link #createPropertyDialog()} auf. Diese Funktion
-     * wurde notwendig, damit für den neuen {@link ElementPropertyDialogsContext}
-     * nicht die Sichtbarkeit von {@link #createPropertyDialog()} geändert
-     * werden musste.
+     * wurde notwendig, damit für den neuen
+     * {@link ElementPropertyDialogsContext} nicht die Sichtbarkeit von
+     * {@link #createPropertyDialog()} geändert werden musste.
      *
      * @return
      */
@@ -2223,25 +2248,25 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
     }
 
     /**
-     * join Element properties without connections this.hashstring =
-     * other.hashstring other will be not changed
+     * join Element properties without connections this.id = other.id other will
+     * be not changed
      *
      * @param other the element to join
-     * @param overwriteHashstring if <code>true</code> the result element will
-     *            have the hashString of the other element. If it is
-     *            <code>false</code>, then it keeps its hashString.
+     * @param overwriteID if <code>true</code> the result element will have the
+     *            id of the other element. If it is <code>false</code>, then it
+     *            keeps its id.
      * @param joinNameDescriptionAndUserfields If <code>true</code>, then the
      *            name and the description will also be merged. If
      *            <code>false</code>, then not.
      * @return the joined Element or <code>null</code> if an error occurs;
      */
-    public ModelElement join(final ModelElement other, final boolean overwriteHashstring, final boolean joinNameDescriptionAndUserfields) {
+    public ModelElement join(final ModelElement other, final boolean overwriteID, final boolean joinNameDescriptionAndUserfields) {
         if (other.getClass() != this.getClass() || this == other) {
             return null;
         }
 
-        if (overwriteHashstring) {
-            hashstring = other.getHashString();
+        if (overwriteID) {
+            id = other.getID();
         }
 
         String joined = null;
@@ -2294,15 +2319,15 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
     /**
      * @return
      */
-    public String getAssociatedDoc() {
-        return associatedSzenHashString;
+    public String getAssociatedSzenID() {
+        return associatedSzenID;
     }
 
     /**
-     * @param document
+     * @param docID
      */
-    public void setAssociatedDoc(final String document) {
-        associatedSzenHashString = document;
+    public void setAssociatedDoc(final String docID) {
+        associatedSzenID = docID;
     }
 
     /**

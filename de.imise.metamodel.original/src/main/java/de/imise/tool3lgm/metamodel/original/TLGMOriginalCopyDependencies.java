@@ -55,8 +55,9 @@ import de.imise.tool3lgm.metamodel.original.node.Standort;
 import de.imise.tool3lgm.metamodel.original.node.Subnetz;
 
 /**
- * Achtung: nur finale Klasse dürfen bzw. sollten hier eingetragen werden. Die Vererbungshierarchie wird nicht gecheckt.
- * Das hat Performancegrüde, weil man so nicht mit insatnceof alle Oberklassen einer Klasse durchchecken muss.
+ * Achtung: nur finale Klasse dürfen bzw. sollten hier eingetragen werden. Die
+ * Vererbungshierarchie wird nicht gecheckt. Das hat Performancegrüde, weil man
+ * so nicht mit insatnceof alle Oberklassen einer Klasse durchchecken muss.
  *
  * @author AXS (15.08.2017)
  */

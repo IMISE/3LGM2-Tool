@@ -2,7 +2,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "3LGM² Tool"
-#define MyAppVersion "4.3.0 (dev)"
+#define MyAppVersion "Tool3LGM_Version_4.3.2_(dev)-75-g2ff7883"
 #define MyAppPublisher "University Leipzig - IMISE"
 #define MyAppURL "http://www.3lgm2.de"
 #define MyAppExeName "3lgm2tool.exe"
@@ -23,7 +23,7 @@ DefaultDirName={pf}\3LGM2-Tool
 DefaultGroupName={#MyAppName}
 AllowNoIcons=yes
 OutputDir=C:\Users\sippe\git\3LGM\tool-3lgm2\de.imise.tool3lgm.deploy\DeployResults
-OutputBaseFilename=setup3lgm_V4.3.0_(dev)
+OutputBaseFilename=Tool3LGM_Version_4.3.2_(dev)-75-g2ff7883_setup
 SetupIconFile=C:\Users\sippe\git\3LGM\tool-3lgm2\de.imise.tool3lgm.deploy\DeployScriptsAndTools\Icons\toolIcon_gross.ico
 Compression=lzma
 SolidCompression=yes

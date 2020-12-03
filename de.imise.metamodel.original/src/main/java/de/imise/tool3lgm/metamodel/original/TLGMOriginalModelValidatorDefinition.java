@@ -59,8 +59,8 @@ public class TLGMOriginalModelValidatorDefinition extends ModelValidatorDefiniti
     }
 
     /**
-     * Liste aller Elementarten, die bei Unterschreitung der Anzahl der zugehörigen Kantenart sofort
-     * gelöscht werden.
+     * Liste aller Elementarten, die bei Unterschreitung der Anzahl der
+     * zugehörigen Kantenart sofort gelöscht werden.
      *
      * @return
      */

@@ -29,7 +29,7 @@ public class SectionMetaPath extends ParallelMetaPath {
     }
 
     @Override
-    protected boolean canBeRecursive() {
+    public boolean canBeRecursive() {
         //bei Schnittmengenpfaden müssen alle enthaltenen Pfade rekursiv sein, damit es Ergebniselemente geben kann
         for (MetaPath metaPath : subMetaPaths) {
             if (!metaPath.canBeRecursive()) {

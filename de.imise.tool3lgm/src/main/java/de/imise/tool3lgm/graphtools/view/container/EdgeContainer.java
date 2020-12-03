@@ -216,12 +216,12 @@ public class EdgeContainer extends ElementContainer {
      *
      */
     public void computeBorderPoints() {
-        // String h = getHashString();
+        // String h = getID();
         // if (h.equals("KAN_1061988438094_1409") || h.equals("KAN_1061988438094_1480") || h.equals("KAN_1061988438094_1426"))
         // System.err.println("jetzte");
 
         //		 if (ModelConstants.layerFor(getEdge().getClass()) == 4) System.err.println("EdgeContainer -> computeBorderPoints(): " + getGraphDocument()); for (ElementContainer c :
-        //		 getEdge().getContainerTable().values()) { EdgeContainer ec = (EdgeContainer) c; System.err.println(ec.getGraphDocument() + " " + ec.getHashString() + " " + ec.knickpunkte + " " +
+        //		 getEdge().getContainerTable().values()) { EdgeContainer ec = (EdgeContainer) c; System.err.println(ec.getGraphDocument() + " " + ec.getID() + " " + ec.knickpunkte + " " +
         //		 ec.getEdge() + " " + ModelConstants.getFullBackwardMetaAssociationName(ec.getEdge().getClass()) + " " + ec.hashCode()); }
 
         ElementContainer ec1 = getStartElementContainer();
@@ -681,7 +681,7 @@ public class EdgeContainer extends ElementContainer {
                     // System.err.println("1.) " + i + " von " + numKKnots); System.err.println(p2 + " " + CollectionUtils.toString(p2.xpoints) + " " + CollectionUtils.toString(p2.ypoints));
                     // System.err.println(ModelConstants.getFullBackwardMetaAssociationName(dlk.getClass()) + ": start=" + dlk.getStart() + " -> end=" + dlk.getEnd()); } catch (Exception e) {
                     // System.err.println("1.) " + i + " von " + numKKnots + " ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"); System.err.println(p2 + " " +
-                    // CollectionUtils.toString(p2.xpoints) + " " + CollectionUtils.toString(p2.ypoints)); System.err.println(getHashString() + " " +
+                    // CollectionUtils.toString(p2.xpoints) + " " + CollectionUtils.toString(p2.ypoints)); System.err.println(getID() + " " +
                     // ModelConstants.getFullBackwardMetaAssociationName(dlk.getClass()) + ": start=" + dlk.getStart() + " -> end=" + dlk.getEnd()); }
                     gc.rotate(-rad1, startx, starty);
                 }
@@ -706,7 +706,7 @@ public class EdgeContainer extends ElementContainer {
                     // System.err.println("2.) " + i + " von " + numKKnots); System.err.println(p1 + " " + CollectionUtils.toString(p1.xpoints) + " " + CollectionUtils.toString(p1.ypoints));
                     // System.err.println(ModelConstants.getFullBackwardMetaAssociationName(dlk.getClass()) + ": start=" + dlk.getStart() + " -> end=" + dlk.getEnd()); } catch (Exception e) {
                     // System.err.println("2.) " + i + " von " + numKKnots + " #######################################################################################"); System.err.println(p1 + " " +
-                    // CollectionUtils.toString(p1.xpoints) + " " + CollectionUtils.toString(p1.ypoints)); System.err.println(getHashString() + " " +
+                    // CollectionUtils.toString(p1.xpoints) + " " + CollectionUtils.toString(p1.ypoints)); System.err.println(getID() + " " +
                     // ModelConstants.getFullBackwardMetaAssociationName(dlk.getClass()) + ": start=" + dlk.getStart() + " -> end=" + dlk.getEnd()); }
                     gc.rotate(-rad2, endx, endy);
                 }

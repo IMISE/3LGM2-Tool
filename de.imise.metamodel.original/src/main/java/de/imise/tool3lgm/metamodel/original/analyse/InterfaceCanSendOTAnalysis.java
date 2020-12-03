@@ -133,8 +133,8 @@ public class InterfaceCanSendOTAnalysis extends AbstractAnalysis {
     }
 
     /**
-     * Liefert alle Objekttypen, die über Kommunikationsbeziehungen, die von der übergebenen
-     * Schnittstelle ausgehen, versendet werden können.
+     * Liefert alle Objekttypen, die über Kommunikationsbeziehungen, die von der
+     * übergebenen Schnittstelle ausgehen, versendet werden können.
      *
      * @param bs
      * @return
@@ -149,8 +149,8 @@ public class InterfaceCanSendOTAnalysis extends AbstractAnalysis {
     }
 
     /**
-     * Liefert für die übergebene Kommunikationsbeziehung alle Objekttypen, die die übergebene
-     * Schnittstelle über sie versendet.
+     * Liefert für die übergebene Kommunikationsbeziehung alle Objekttypen, die
+     * die übergebene Schnittstelle über sie versendet.
      *
      * @param bs
      * @param communicationLink
@@ -168,8 +168,8 @@ public class InterfaceCanSendOTAnalysis extends AbstractAnalysis {
     }
 
     /**
-     * Liefert für eine übergebene Schnittstelle alle Kommunikatinsbezeihungen, die die übergebenen
-     * Objekttypen versenden können.
+     * Liefert für eine übergebene Schnittstelle alle Kommunikatinsbezeihungen,
+     * die die übergebenen Objekttypen versenden können.
      *
      * @param bs
      * @param objectTypes

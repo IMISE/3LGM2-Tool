@@ -25,6 +25,7 @@ import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.model.LGMGraphDocument;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
+import de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty;
 
 /**
  * @author AXS (23.08.2019)
@@ -49,7 +50,7 @@ public class TemplateBrowserPanel extends JPanel implements PropertyChangeListen
      */
     public TemplateBrowserPanel() {
         setLayout(new BorderLayout());
-        tree = new TemplateBrowserTree();
+        tree = new TemplateBrowserTree(BooleanProperty.OPTION_ENABLE_EXPERT_MODE);
         treeScrollPane = new JScrollPane(tree);
         tree.addPropertyChangeListener(CONTENT_CHANGED, this);
     }
@@ -58,11 +59,11 @@ public class TemplateBrowserPanel extends JPanel implements PropertyChangeListen
      * @param selectionSource
      */
     public void updateSelection(final GraphDocument selectionSource) {
-        selectElementsWithSameHashAndInstaniationMasterElements(selectionSource);
+        selectElementsWithSameIDAndInstaniationMasterElements(selectionSource);
     }
 
     /**
-     * Selectes all elements in the templates with the same hashStrings like the
+     * Selectes all elements in the templates with the same IDs like the
      * selected elements in the given {@link GraphDocument}. Additionally all
      * instanciation master elements will be selected which are the same (same
      * id) like the master element of a selected instanciation instance element
@@ -72,7 +73,7 @@ public class TemplateBrowserPanel extends JPanel implements PropertyChangeListen
      *
      * @param source
      */
-    private void selectElementsWithSameHashAndInstaniationMasterElements(final GraphDocument source) {
+    private void selectElementsWithSameIDAndInstaniationMasterElements(final GraphDocument source) {
         Collection<GDCollection> displayedTemplateModels = tree.getDisplayedTemplates();
         Collection<GraphDocument> displayedTemplates = new ArrayList<>(displayedTemplateModels.size());
         for (GDCollection template : displayedTemplateModels) {
@@ -102,19 +103,30 @@ public class TemplateBrowserPanel extends JPanel implements PropertyChangeListen
     }
 
     /**
+     * @param templates
      * @param me
-     * @param elementHash
      */
     private void selectSameElementInTemplates(final Collection<GraphDocument> templates, final ModelElement me) {
-        String elementHash = me.getHashString();
+        String elementID = me.getID();
         for (GraphDocument template : templates) {
-            template.addToSelection(elementHash, STANDARD_PID);
+            template.addToSelection(elementID, STANDARD_PID);
         }
     }
 
     @Override
     public void propertyChange(final PropertyChangeEvent evt) {
+        refresh(false);
+    }
+
+    /**
+     * @param forceReloadTree
+     */
+    public void refresh(final boolean forceReloadTree) {
         checkSearchFieldVisibility();
+        if (searchPanel != null) {
+            searchPanel.refresh();
+        }
+        tree.reload(forceReloadTree);
     }
 
     /**

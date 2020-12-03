@@ -49,10 +49,9 @@ import de.imise.util.collections.ExtendedMap;
  * nach genau den Knoten- und Kantenklassen bzw. deren Instanzen im OWL-Model
  * und baut daraus ein äquivalentes 3LGM2-Modell zusammen. Der DataImporter wird
  * mit dem Typ &ltObject&gt initialisiert, weil anscheinend alle Objekte, die
- * man aus dem OntModel holen kann, immer als hashCode den hashCode der Uri
- * zurück liefern. Daher kann man in die Map der Source-Knoten auf die
- * Target-Knoten mit jedem Object fragen und nicht nur mit Objecten eines ganz
- * bestimmten Typs.
+ * man aus dem OntModel holen kann, immer als ID die URI zurück liefern. Daher
+ * kann man in die Map der Source-Knoten auf die Target-Knoten mit jedem Object
+ * fragen und nicht nur mit Objecten eines ganz bestimmten Typs.
  *
  * @author AXS (26 Jun 2019)
  */
@@ -312,8 +311,8 @@ public abstract class RDFDataImporter extends UrlSourceDataImporter<Object> impl
                     OntClass individualOntClass = individual.getOntClass();
                     String name = getName(ontNode, namePattern);
                     String description = descriptionPropertyResolver.getValue(ontNode);
-                    String hashString = ontNode.getURI(); //originale URI übernehmen
-                    Node lgmNode = addNode(ontNode, lgmNodeClass, name, description, hashString);
+                    String id = ontNode.getURI(); //originale URI übernehmen
+                    Node lgmNode = addNode(ontNode, lgmNodeClass, name, description, id);
                     print(i++ + "\t" + ontClassName + " -> " + ontNode + "  ->  " + lgmNode);
                     //Wenn die Ontologie nicht ganz richtig modelliert ist(oder irgendwas andere nicht stimmt), kann es vorkommen,
                     //dass ontClass.listInstances(true) auch Instanzen anderer als der eigentlichen Zielklasse zurück liefert.
@@ -380,19 +379,19 @@ public abstract class RDFDataImporter extends UrlSourceDataImporter<Object> impl
                     Node endNode = getTargetNode(objectNode);
                     if (endNode != null) {
                         //Predicate -> Edge
-                        String edgeHash = "[" + subjectResource.getURI() + "; " + predicate.getURI() + "; " + statement.getResource().getURI() + "]"; //URI aus Subject, Predicate und Object übernehmen
+                        String edgeID = "[" + subjectResource.getURI() + "; " + predicate.getURI() + "; " + statement.getResource().getURI() + "]"; //URI aus Subject, Predicate und Object übernehmen
                         OntProperty ontProperty = getOntProperty(predicate, importableObjectPropertiesToTargetEdgeClassName);
                         List<Object> namePattern = createRealPattern(ontModel, targetEdgeClassName);
                         String name = getName(ontProperty, namePattern);
                         String description = descriptionPropertyResolver.getValue(predicate);
                         try {
-                            Edge lgmEdge = addEdge(targetEdgeClassName, name, edgeHash, startNode, endNode);
+                            Edge lgmEdge = addEdge(targetEdgeClassName, name, edgeID, startNode, endNode);
                             lgmEdge.setDescription(description);
-                            String resultEdgeHash = lgmEdge.getHashString();
-                            print(i++ + "\t" + targetEdgeClassName + " (" + resultEdgeHash + ")" + " | Edge: StartNode=" + startNode + "  ->  EndNode=" + endNode + "  | EdgeName=" + lgmEdge + " | EdgeDescription=" + description);
-                            if (!edgeHash.equals(resultEdgeHash)) {
+                            String resultEdgeID = lgmEdge.getID();
+                            print(i++ + "\t" + targetEdgeClassName + " (" + resultEdgeID + ")" + " | Edge: StartNode=" + startNode + "  ->  EndNode=" + endNode + "  | EdgeName=" + lgmEdge + " | EdgeDescription=" + description);
+                            if (!edgeID.equals(resultEdgeID)) {
                                 printe("\tWARNING: Another edge hides this edge (statement predicate). Maybe you forgot to mark the edge class " + targetEdgeClassName + " as de.imise.tool3lgm.graphtools.metamodel.elements.MultipleEdge?");
-                                printe("\t" + edgeHash + "  IS HIDDEN BY  " + resultEdgeHash);
+                                printe("\t" + edgeID + "  IS HIDDEN BY  " + resultEdgeID);
                             }
                         } catch (Exception e) {
                             // hier kann es zu java.lang.InstantiationExceptions kommen, wenn die EdgeClass abstract ist, weil nur für Unterklassen der ObjectProperty Edges angelegt werden sollen

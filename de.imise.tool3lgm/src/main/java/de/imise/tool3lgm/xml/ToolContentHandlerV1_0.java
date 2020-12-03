@@ -84,15 +84,15 @@ public class ToolContentHandlerV1_0 implements ContentHandler {
      */
     protected StringBuilder elementValue = new StringBuilder();
 
-    /** HashString eines Bitmaps */
-    protected String iconKey = null;
+    /** ID of a Bitmap */
+    protected String iconID = null;
 
     /**
      * ArrayList mit allen Containern die ein Icon besitzen; da die Icons erst
-     * zu letzt eingelesen werden, wird den Containern zuerst nur der HashString
-     * des Icons mitgeteilt. Nach dem einlesen der Icons müssen diese Container
-     * noch das eigentliche Icon aus der Hashmap der Collection laden. Das
-     * passiert in der Methode setIcon();
+     * zu letzt eingelesen werden, wird den Containern zuerst nur die ID des
+     * Icons mitgeteilt. Nach dem einlesen der Icons müssen diese Container noch
+     * das eigentliche Icon aus der Hashmap der Collection laden. Das passiert
+     * in der Methode setIcon();
      */
     protected ArrayList<NodeContainer> containerWithIcon = new ArrayList<>();
 
@@ -160,7 +160,7 @@ public class ToolContentHandlerV1_0 implements ContentHandler {
             }
             element = metaModel.createElement(elementClass, false);
             if (element != null) {
-                element.setHashString(atts.getValue("hash"));
+                element.setID(atts.getValue("hash"));
             }
         } else if (qName.equals("container")) {
             element = doc.findElementCoded(atts.getValue("hash"));
@@ -252,7 +252,7 @@ public class ToolContentHandlerV1_0 implements ContentHandler {
 
         } else if (qName.equals("bitmap")) {
             if (atts.getValue("type").equals("gif/base64")) {
-                iconKey = atts.getValue("hash");
+                iconID = atts.getValue("hash");
             }
 
         } else if (qName.equals("images")) {
@@ -277,7 +277,7 @@ public class ToolContentHandlerV1_0 implements ContentHandler {
     public void endElement(final String namespaceURI, final String localName, final String qName) throws SAXException {
         if (qName.equals("field")) {
             if (element != null && !element.putXMLFieldString(field, elementValue.toString())) {
-                throw new SAXException("ModelElement konnte field nicht verarbeiten!\n ModelElement=" + element.getHashString() + "\n field=" + field + "\n Wert=" + elementValue);
+                throw new SAXException("ModelElement konnte field nicht verarbeiten!\n ModelElement=" + element.getID() + "\n field=" + field + "\n Wert=" + elementValue);
             }
 
             field = null;
@@ -403,7 +403,7 @@ public class ToolContentHandlerV1_0 implements ContentHandler {
             classType = null;
 
         } else if (qName.equals("icon")) {
-            layout.setIcon(elementValue.toString());
+            layout.setIconID(elementValue.toString());
             containerWithIcon.add((NodeContainer) container);
 
         } else if (qName.equals("layer")) {
@@ -422,11 +422,11 @@ public class ToolContentHandlerV1_0 implements ContentHandler {
             }
 
         } else if (qName.equals("bitmap")) {
-            if (iconKey != null) {
-                collection.getIconTable().put(iconKey, Base64.decode(elementValue.toString()));
+            if (iconID != null) {
+                collection.getIconTable().put(iconID, Base64.decode(elementValue.toString()));
             }
 
-            iconKey = null;
+            iconID = null;
 
         } else if (qName.equals("images")) {
 
@@ -452,12 +452,12 @@ public class ToolContentHandlerV1_0 implements ContentHandler {
             Static.setProgressDialogStatusLabel("labelConnectTraces");
 
             /*
-             * die HashStrings für das Start- bzw. End-Objekt einer Edge
-             * auflösen und die wirklichen Node setzten
+             * die IDs für das Start- bzw. End-Objekt einer Edge auflösen und
+             * die wirklichen Node setzten
              */
             for (int i = 0; i < ModelConstants.LAYERS.length; i++) {
                 for (EdgeContainer kc : doc.getLayer(ModelConstants.LAYERS[i]).getEdgeContainers()) {
-                    kc.getEdge().decodeHashStrings(doc);
+                    kc.getEdge().decodeIDs(doc);
                 }
             }
 

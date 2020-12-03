@@ -34,9 +34,10 @@ import de.imise.util.io.FileHandler;
 import de.imise.util.swing.dialog.ExtendedFileChooser;
 
 /**
- * Exportiert eine Tabelle mit den Spalten
- * "Aufgabe_ID", "Aufgabe", "Teilaufgabe_ID", "Teilaufgabe", "Beschreibung", "Ort der Durchführung", "Verantwortliche Rolle", "Anwendungssystem",
- * "Physischer DV-Baustein", "Benötiger Speicherplatz"
+ * Exportiert eine Tabelle mit den Spalten "Aufgabe_ID", "Aufgabe",
+ * "Teilaufgabe_ID", "Teilaufgabe", "Beschreibung", "Ort der Durchführung",
+ * "Verantwortliche Rolle", "Anwendungssystem", "Physischer DV-Baustein",
+ * "Benötiger Speicherplatz"
  *
  * @author AXS
  * @create 02.07.2012
@@ -105,7 +106,8 @@ public class B1ExportPlugin {
     }
 
     /**
-     * Schreibt die Zeile für die übergebene Aufgabe, die eine Blattaufgabe im Hierarchiebaum sein sollte
+     * Schreibt die Zeile für die übergebene Aufgabe, die eine Blattaufgabe im
+     * Hierarchiebaum sein sollte
      *
      * @param functionLeafEc
      */
@@ -137,7 +139,7 @@ public class B1ExportPlugin {
         for (int i = parentLists.size() - 1; i >= 0; i--) {
             parents = parentLists.get(i);
             Alphabetical.sort(parents);
-            linePartBuilder.append(getParseSaveString(getHashListColumn(parents), true));
+            linePartBuilder.append(getParseSaveString(getIDListColumn(parents), true));
             linePartBuilder.append("\t");
             linePartBuilder.append(getParseSaveString(getNamesListColumn(parents), true));
             linePartBuilder.append("\t");
@@ -262,9 +264,10 @@ public class B1ExportPlugin {
     }
 
     /**
-     * Fügt dem übergebenen {@link StringBuilder} die Info an, dass keine Organisationseinheit
-     * mit der Aufgabe aus dieser Zeile verknüpft ist und füllt die hinteren Spalten mit Leerspalten
-     * und schließt die Gesamtzeile mit einem Zeilenumbruch ab.
+     * Fügt dem übergebenen {@link StringBuilder} die Info an, dass keine
+     * Organisationseinheit mit der Aufgabe aus dieser Zeile verknüpft ist und
+     * füllt die hinteren Spalten mit Leerspalten und schließt die Gesamtzeile
+     * mit einem Zeilenumbruch ab.
      *
      * @param sb
      */
@@ -286,20 +289,20 @@ public class B1ExportPlugin {
      * @param containerList
      * @return
      */
-    private static final String getHashListColumn(final List<ElementContainer> containerList) {
+    private static final String getIDListColumn(final List<ElementContainer> containerList) {
         return getStringListColumn(containerList, true);
     }
 
     /**
      * @param containerList
-     * @param hash
+     * @param withID
      * @return
      */
-    private static final String getStringListColumn(final List<ElementContainer> containerList, final boolean hash) {
+    private static final String getStringListColumn(final List<ElementContainer> containerList, final boolean withID) {
         StringBuilder sb = new StringBuilder();
         for (ElementContainer ec : containerList) {
-            if (hash) {
-                sb.append(ec.getHashString());
+            if (withID) {
+                sb.append(ec.getID());
             } else {
                 sb.append(ec.getElement().getClearName());
             }
@@ -322,8 +325,7 @@ public class B1ExportPlugin {
     /**
      * Gibt den Tabellenkopf aus
      *
-     * @param hierarchyDepth
-     *            Tiefe der Aufgabenhierarchie
+     * @param hierarchyDepth Tiefe der Aufgabenhierarchie
      */
     private static final String getTableHead(final int hierarchyDepth) {
         StringBuilder sb = new StringBuilder();
@@ -348,8 +350,8 @@ public class B1ExportPlugin {
     }
 
     /**
-     * Liefert die Anzahl an mit Teil-Von-Beziehungen übergeordneten Elementen im selben {@link GraphDocument} des
-     * übergebenen Containers.
+     * Liefert die Anzahl an mit Teil-Von-Beziehungen übergeordneten Elementen
+     * im selben {@link GraphDocument} des übergebenen Containers.
      *
      * @param ec
      * @return

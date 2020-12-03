@@ -226,7 +226,12 @@
                     <generateGitPropertiesFilename>../de.imise.tool3lgm/version.info</generateGitPropertiesFilename>
 					<includeOnlyProperties>
 						<includeOnlyProperty>git.branch</includeOnlyProperty>
+						<includeOnlyProperty>git.closest.tag.name</includeOnlyProperty>
+						<includeOnlyProperty>git.closest.tag.commit.count</includeOnlyProperty>
+						<includeOnlyProperty>git.commit.id.abbrev</includeOnlyProperty>
 						<includeOnlyProperty>git.commit.id.describe</includeOnlyProperty>
+						<includeOnlyProperty>git.build.version</includeOnlyProperty>
+						<includeOnlyProperty>git.commit.time</includeOnlyProperty>
 					</includeOnlyProperties>
 					<gitDescribe>
                 		<skip>false</skip>

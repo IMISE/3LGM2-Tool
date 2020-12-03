@@ -74,14 +74,14 @@ public class GDCollectionPrinter {
         appendln(me.getClass().getSimpleName(), ": ", me);
         increaseIndent();
         appendIndent();
-        append("hash=", me.getHashString(), "    idMe=", System.identityHashCode(me), "\tidCont=", System.identityHashCode(ec));
+        append("ID=", me.getID(), "    idMe=", System.identityHashCode(me), "\tidCont=", System.identityHashCode(ec));
         if (me instanceof Edge) {
             Edge edge = (Edge) me;
             ModelElement start = edge.getStart();
-            String startHash = start == null ? "null" : start.getHashString();
+            String startID = start == null ? "null" : start.getID();
             ModelElement end = edge.getEnd();
-            String endHash = end == null ? "null" : end.getHashString();
-            append("\tstartHash=", startHash, "\tendHash=", endHash);
+            String endID = end == null ? "null" : end.getID();
+            append("\tstartID=", startID, "\tendID=", endID);
         }
         appendln();
         appendEdgesOfElement(me);
@@ -95,10 +95,10 @@ public class GDCollectionPrinter {
             increaseIndent();
             //appendIndent();
             ModelElement start = edge.getStart();
-            String startHash = start == null ? "null" : start.getHashString();
+            String startID = start == null ? "null" : start.getID();
             ModelElement end = edge.getEnd();
-            String endHash = end == null ? "null" : end.getHashString();
-            appendln("hash=", edge.getHashString(), "    idEdge=", System.identityHashCode(edge), "\tstartHash=", startHash, "\tendHash=", endHash);
+            String endID = end == null ? "null" : end.getID();
+            appendln("ID=", edge.getID(), "    idEdge=", System.identityHashCode(edge), "\tstartHash=", startID, "\tendHash=", endID);
             decreaseIndent();
         }
         return sb;

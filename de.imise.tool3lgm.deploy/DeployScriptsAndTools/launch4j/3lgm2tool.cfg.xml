@@ -22,9 +22,9 @@
     <cp>./Plugins/*</cp>
   </classPath>
   <jre>
-    <path></path>
+    <path>%JAVA_HOME%</path>
     <bundledJre64Bit>false</bundledJre64Bit>
-    <bundledJreAsFallback>false</bundledJreAsFallback>
+    <bundledJreAsFallback>true</bundledJreAsFallback>
     <minVersion>1.8</minVersion>
     <maxVersion></maxVersion>
     <jdkPreference>preferJre</jdkPreference>
@@ -37,7 +37,7 @@
     <fileDescription>Executable for 3LGM² Tool</fileDescription>
     <copyright>IMISE</copyright>
     <productVersion>4.0.0.0</productVersion>
-    <txtProductVersion>4.3.0 (dev)</txtProductVersion>
+    <txtProductVersion>Tool3LGM_Version_4.3.2_(dev)-73-g91e4427</txtProductVersion>
     <productName>3LGM² Tool</productName>
     <companyName>IMISE</companyName>
     <internalName>3lgm2tool</internalName>

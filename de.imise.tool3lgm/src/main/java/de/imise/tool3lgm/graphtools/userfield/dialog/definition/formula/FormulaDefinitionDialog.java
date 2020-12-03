@@ -75,17 +75,17 @@ import de.imise.util.swing.component.text.ExtendedTextArea;
  * Die Formel liegt danach in menschenlesbarer Form und als interne
  * Repräsentation, jeweils als String, vor. Die menschenlesbare Form besteht aus
  * den Namen der benutzten <code>userField</code>s und den Operatoren. Die
- * interne Repräsentation besteht aus den userField_Hash_codes und den
- * Operatoren. Zur Eingabe werden die OperatorButtons und OperandenListen
- * jeweils aktiviert, wenn diese als nächstes in der FOrmel "erlaubt" sind. Alle
- * eingaben werden auf einem Stack gespeichert. D.h.: A * B + () C - D > / E Zur
- * korrekten Auswerung in: A * + ( C - D ) / E Wird der Stack abgebaut und die
- * Elemente in die korrekte Position zueinander gebracht Das Klammersymbol liegt
- * wie ein Operand auf dem Stack. Alle nachfolgenden Elemente gehören damit in
- * die Klammer. Zum Kenntlichmachen, das der nächste Operand/Operator nicht mehr
- * in die Klammer gehört, wurde das Metazeichen " > "eingeührt. In diesem Dialog
+ * interne Repräsentation besteht aus den userFieldIDs und den Operatoren. Zur
+ * Eingabe werden die OperatorButtons und OperandenListen jeweils aktiviert,
+ * wenn diese als nächstes in der FOrmel "erlaubt" sind. Alle eingaben werden
+ * auf einem Stack gespeichert. D.h.: A * B + () C - D > / E Zur korrekten
+ * Auswerung in: A * + ( C - D ) / E Wird der Stack abgebaut und die Elemente in
+ * die korrekte Position zueinander gebracht Das Klammersymbol liegt wie ein
+ * Operand auf dem Stack. Alle nachfolgenden Elemente gehören damit in die
+ * Klammer. Zum Kenntlichmachen, das der nächste Operand/Operator nicht mehr in
+ * die Klammer gehört, wurde das Metazeichen " > "eingeührt. In diesem Dialog
  * kann die interne Repräsentation der Formal angezeigt werden. Dazu ist
- * <code>hashAreaVisible</code> auf true zu setzen. Andernfalls auf false.
+ * <code>idAreaVisible</code> auf true zu setzen. Andernfalls auf false.
  *
  * @author hboehme
  */
@@ -126,22 +126,21 @@ public class FormulaDefinitionDialog extends JDialog implements ActionListener {
 
     /**
      * <code>ExtendedTextArea</code> zum Anzeigen des FormelStrings in
-     * HashCode-Komination. Diese Area ist nicht Teil des Formeleditor. Sie ist
-     * nur so lang Bestandteil, wie die Arbeit am Editor dauert. Vor
-     * Auslieferung wird sie entfernt. Die Zugriffe darauf können gegen die
-     * Abfrage eines Strings ausgetauscht werden.
+     * ID-Kombination. Diese Area ist nicht Teil des Formeleditor. Sie ist nur
+     * so lang Bestandteil, wie die Arbeit am Editor dauert. Vor Auslieferung
+     * wird sie entfernt. Die Zugriffe darauf können gegen die Abfrage eines
+     * Strings ausgetauscht werden.
      */
-    private final ExtendedTextArea hashArea;
+    private final ExtendedTextArea idArea;
 
     private String formelString = "";
 
     /**
-     * Gibt an, ob die <code>hashArea</code> im Formeleditor angezeigt werden
-     * soll oder nicht. Da die <code>hashArea</code> in einem
-     * <code>JScrollPane</code> liegt, wird die <code>JScrollPane</code>
-     * angezeigt oder nicht
+     * Gibt an, ob die <code>idArea</code> im Formeleditor angezeigt werden soll
+     * oder nicht. Da die <code>idArea</code> in einem <code>JScrollPane</code>
+     * liegt, wird die <code>JScrollPane</code> angezeigt oder nicht
      */
-    private final boolean hashAreaVisible = false;
+    private final boolean idAreaVisible = false;
 
     /**
      * Ist die Liste, die die <code> userField<code>s anzeigt.
@@ -160,7 +159,7 @@ public class FormulaDefinitionDialog extends JDialog implements ActionListener {
 
     /**
      * Beim Bearbeiten einer Formel, der schon bestehende String in
-     * Hash-Ausdrücken.
+     * ID-Ausdrücken.
      */
     private String oldFormulaString = "";
 
@@ -224,7 +223,7 @@ public class FormulaDefinitionDialog extends JDialog implements ActionListener {
         operatorAndNumberInputPanel = new CalculatorStyledButtonPanel();
         formulaControlPanel = new FormulaControlButtonPanel();
         formulaArea = createFormulaTextArea();
-        hashArea = createFormulaTextArea();
+        idArea = createFormulaTextArea();
 
         init();
     }
@@ -264,12 +263,12 @@ public class FormulaDefinitionDialog extends JDialog implements ActionListener {
         JScrollPane formualAreaScrollPane = new JScrollPane(formulaArea, ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
         panel.add(formualAreaScrollPane, nextLine(gbc));
 
-        //Wenn die hashArea nicht sichtbar sein soll, darf ich nicht die ScrollPane eingefügt werden.
-        if (hashAreaVisible) {
+        //Wenn die idArea nicht sichtbar sein soll, darf ich nicht die ScrollPane eingefügt werden.
+        if (idAreaVisible) {
             gbc.gridheight = 1;
             gbc.weighty = 0.02;
             gbc.weightx = 1;
-            panel.add(new JScrollPane(hashArea), nextLine(gbc));
+            panel.add(new JScrollPane(idArea), nextLine(gbc));
         }
 
         gbc.weighty = 1;
@@ -304,7 +303,7 @@ public class FormulaDefinitionDialog extends JDialog implements ActionListener {
                 if (returnList.isEnabled() && e.getClickCount() > 0) {
                     UserField tmpUserField = returnList.getSelectedObject();
                     if (tmpUserField != null) {
-                        termStack.push(tmpUserField.getHashCode());
+                        termStack.push(tmpUserField.getID());
                     }
                 }
             }
@@ -400,7 +399,7 @@ public class FormulaDefinitionDialog extends JDialog implements ActionListener {
      * @param field
      * @param userFieldTargetClass
      * @param oldFormulaString
-     * @return dialog.retval String: Formel in Hash-Ausdrucksform
+     * @return dialog.retval String: Formel in ID-Ausdrucksform
      */
     public static String showDialog(final JDialog owner, final UserFieldDefinitions def, final UserField field, final String newUserFieldName) {
         if (owner == null || field == null) {
@@ -499,7 +498,7 @@ public class FormulaDefinitionDialog extends JDialog implements ActionListener {
      * Position der Cursor im Textfeld für die Formel angezeigt wird.
      *
      * @return String Die Formel in menschenlesbarer Form aber in
-     *         <code>UserField</code>-hashCode-schreibweise.
+     *         <code>UserField</code>-ID-schreibweise.
      */
     private String convertStackFormulaToOrdinaryFormula() {
         // Schreibt die Elemente aus dem Term-Stack in die <code>ArrayList</code> mit diesem Mechanismus kann evtl. auf den Stack ganz verzichtet
@@ -547,10 +546,10 @@ public class FormulaDefinitionDialog extends JDialog implements ActionListener {
 
     void update() {
         formulaArea.requestFocus();
-        String hashStringFormula = convertStackFormulaToOrdinaryFormula();
-        //        hashArea.setText(hashStringFormula);
-        hashArea.setText(termStack.toString());
-        formelString = CostingUtil.getHumanReadableFormulaString(hashStringFormula, definitions);
+        String idFormula = convertStackFormulaToOrdinaryFormula();
+        //        idArea.setText(idFormula);
+        idArea.setText(termStack.toString());
+        formelString = CostingUtil.getHumanReadableFormulaString(idFormula, definitions);
         formulaArea.setText(formelString);
         //Wenn ein Attribut ausgewählt wurde, darf nicht sofort ein neues hinzugefügt werden.
         updateButtonStates();
@@ -585,7 +584,7 @@ public class FormulaDefinitionDialog extends JDialog implements ActionListener {
             String preLastElement = termStack.getPreLastElement();
             boolean negateMinusBefore = minusBefore && (preLastElement.isEmpty() || isOperator(preLastElement));
             setFunctionButtonStates(!negateMinusBefore);
-        } else if (UserField.isAccountingFunction(extractFunctionName(lastTermElement)) || lastTermElement.startsWith(UserField.USERFIELD_HASH_STRING_PREFIX)) {
+        } else if (UserField.isAccountingFunction(extractFunctionName(lastTermElement)) || lastTermElement.startsWith(UserField.USERFIELD_ID_PREFIX)) {
             setOperatorAndNumberButtonStates(true, true, false, false, false);
             setFunctionButtonStates(false);
             formulaControlPanel.leaveBracketButton.setEnabled(leaveableBracketCounter > 0);
@@ -595,8 +594,8 @@ public class FormulaDefinitionDialog extends JDialog implements ActionListener {
             formulaControlPanel.leaveBracketButton.setEnabled(leaveableBracketCounter > 0);
         }
 
-        String hashFormula = convertStackFormulaToOrdinaryFormula();
-        boolean validFormula = !hashFormula.isEmpty() && CostingUtil.isFormulaValid(hashFormula);
+        String idFormula = convertStackFormulaToOrdinaryFormula();
+        boolean validFormula = !idFormula.isEmpty() && CostingUtil.isFormulaValid(idFormula);
         okButton.setEnabled(validFormula);
 
         //Setze den Cursor an die richtige Stelle. Speziell bei Klammerungen wichtig.

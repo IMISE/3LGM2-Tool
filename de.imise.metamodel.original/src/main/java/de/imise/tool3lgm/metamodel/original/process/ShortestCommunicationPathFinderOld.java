@@ -28,8 +28,8 @@ import de.imise.tool3lgm.metamodel.original.node.EreignisNachrichtenTyp;
 import de.imise.tool3lgm.metamodel.original.node.Objekttyp;
 
 /**
- * Mit dieser Klasse können für Objekttypen alle kürzesten Kommunikationspfade ermittelt werden.
- * Integer.MAX_VALUE
+ * Mit dieser Klasse können für Objekttypen alle kürzesten Kommunikationspfade
+ * ermittelt werden. Integer.MAX_VALUE
  *
  * @author AXS Created on 19.06.2008
  */
@@ -37,44 +37,49 @@ import de.imise.tool3lgm.metamodel.original.node.Objekttyp;
 public class ShortestCommunicationPathFinderOld {
 
     /**
-     * Unendlich als Maximaler Kostenwert. Dieser darf nicht in der Kostenmatrix (bzw. in der
-     * Distanzmatrix = Kostenmatrix nach FloydWarshall) als "echter Wert" auftauchen! (es ist extrem
-     * unwahrscheinlich, dass das mal passiert, da die Einzelkosten immer 1 sind)wenn man einen
-     * negativen Wert nehmen wollte, müsste man im Algorithmus mehr Vergleiche anstellen -> wär
+     * Unendlich als Maximaler Kostenwert. Dieser darf nicht in der Kostenmatrix
+     * (bzw. in der Distanzmatrix = Kostenmatrix nach FloydWarshall) als "echter
+     * Wert" auftauchen! (es ist extrem unwahrscheinlich, dass das mal passiert,
+     * da die Einzelkosten immer 1 sind)wenn man einen negativen Wert nehmen
+     * wollte, müsste man im Algorithmus mehr Vergleiche anstellen -> wär
      * langsamer
      */
     public final static int INFINITY = Integer.MAX_VALUE;
 
     /**
-     * Kostenmatrix für die Kommuniaktionswegberechnungen Indizes: 1. Objekttyp, 2.
-     * Zeilenschnittstelle, 3. Spaltenschnittstelle<br>
-     * Wert: Kosten, die Kommunikation von Zeilenschnittstelle zu Spaltenschnittstelle verursacht.
-     * Gibt es keine Kommunikationsweg, sind die Kosten <code>INFINITY</code>
+     * Kostenmatrix für die Kommuniaktionswegberechnungen Indizes: 1. Objekttyp,
+     * 2. Zeilenschnittstelle, 3. Spaltenschnittstelle<br>
+     * Wert: Kosten, die Kommunikation von Zeilenschnittstelle zu
+     * Spaltenschnittstelle verursacht. Gibt es keine Kommunikationsweg, sind
+     * die Kosten <code>INFINITY</code>
      */
     private int[][][] costMatrix;
 
     /**
-     * Pfadmatrix für die Kommuniaktionswegberechnungen Indizes: 1. Objekttyp, 2.
-     * Zeilenschnittstelle, 3. Spaltenschnittstelle<br>
-     * Wert: Pfad über alle Schnittstellen von Zeilenschnittstelle zu Spaltenschnittstelle, der
-     * durchlaufen werden muss, um den Objekttyp zu übgertragen (also Liste von Schnittstellen, die
-     * nacheinander durchlaufen werden müssen)
+     * Pfadmatrix für die Kommuniaktionswegberechnungen Indizes: 1. Objekttyp,
+     * 2. Zeilenschnittstelle, 3. Spaltenschnittstelle<br>
+     * Wert: Pfad über alle Schnittstellen von Zeilenschnittstelle zu
+     * Spaltenschnittstelle, der durchlaufen werden muss, um den Objekttyp zu
+     * übgertragen (also Liste von Schnittstellen, die nacheinander durchlaufen
+     * werden müssen)
      */
     private List<ModelElement>[][][] pathMatrix;
 
     /**
-     * Mapppt von einem Anwendungsbausteins auf eine Liste aller seiner eigenen Schnittstellen und
-     * die seiner Parts und Parents. Wir sehen die Teil-Von-Beziehung zwischen Anwendungsbausteinen
-     * als bidirektionale Kommunikationsbeziehung, über die jeder Objekttyp ausgetauscht werden
-     * kann. Das bedeutet, dass die Eigenschaften einer Schnittstelle, die ein AWB besitzt, an alle
-     * anderen AWBs übergehen, die mit dem AWB über einen beliebigen Pfad aus Teil-Von-Beziehungen
-     * verbunden sind.
+     * Mapppt von einem Anwendungsbausteins auf eine Liste aller seiner eigenen
+     * Schnittstellen und die seiner Parts und Parents. Wir sehen die
+     * Teil-Von-Beziehung zwischen Anwendungsbausteinen als bidirektionale
+     * Kommunikationsbeziehung, über die jeder Objekttyp ausgetauscht werden
+     * kann. Das bedeutet, dass die Eigenschaften einer Schnittstelle, die ein
+     * AWB besitzt, an alle anderen AWBs übergehen, die mit dem AWB über einen
+     * beliebigen Pfad aus Teil-Von-Beziehungen verbunden sind.
      */
     private Map<ModelElement, List<ModelElement>> awbToBSSList;
 
     /**
-     * Mappt für jeden <code>Anwendungsbaustein</code> auf die Liste aller seiner Eltern, Kinder und
-     * Geschwister - also aller Anwendungsbausteine, mit denen er eine Einheit bildet.
+     * Mappt für jeden <code>Anwendungsbaustein</code> auf die Liste aller
+     * seiner Eltern, Kinder und Geschwister - also aller Anwendungsbausteine,
+     * mit denen er eine Einheit bildet.
      */
     private Map<ModelElement, List<ModelElement>> awbToSameAWBList;
 
@@ -84,8 +89,9 @@ public class ShortestCommunicationPathFinderOld {
     private List<ModelElement> schnittstellen;
 
     /**
-     * Das GraphDocument in dem die Kommuniaktionswege analysiert werden sollen. Dies wird immer ein
-     * Hauptdokument, da die vollständige XMLAnalyse nur im Hauptdokument sinnvoll ist.
+     * Das GraphDocument in dem die Kommuniaktionswege analysiert werden sollen.
+     * Dies wird immer ein Hauptdokument, da die vollständige XMLAnalyse nur im
+     * Hauptdokument sinnvoll ist.
      */
     private GraphDocument mainDoc;
 
@@ -95,7 +101,8 @@ public class ShortestCommunicationPathFinderOld {
     private List<ModelElement> objectTypes;
 
     /**
-     * @param objekttypList Liste von Objekttypen, deren Kommunizierbarkeit untersucht werden soll
+     * @param objekttypList Liste von Objekttypen, deren Kommunizierbarkeit
+     *            untersucht werden soll
      */
     public ShortestCommunicationPathFinderOld(final List<ModelElement> objekttypList, final GDCollection gdcoll) {
         super();
@@ -107,7 +114,8 @@ public class ShortestCommunicationPathFinderOld {
     }
 
     /**
-     * @param objekttypList Liste von Objekttypen, deren Kommunizierbarkeit untersucht werden soll
+     * @param objekttypList Liste von Objekttypen, deren Kommunizierbarkeit
+     *            untersucht werden soll
      */
     public ShortestCommunicationPathFinderOld(final List<ModelElement> objekttypList, final ModelAnalyzerCache analyzerCache) {
         super();
@@ -170,8 +178,8 @@ public class ShortestCommunicationPathFinderOld {
     }
 
     /**
-     * Liefert alle Anwendungsbausteine, die mit dem übergebenen in irgendeiner Teil-Von-Beziehung
-     * stehen.
+     * Liefert alle Anwendungsbausteine, die mit dem übergebenen in irgendeiner
+     * Teil-Von-Beziehung stehen.
      *
      * @param awb
      * @return
@@ -181,8 +189,8 @@ public class ShortestCommunicationPathFinderOld {
     }
 
     /**
-     * Prüft, ob die Schnittstelle eine Kommunikationsbeziehunge besitzt, über die irgendein
-     * Objekttyp gesendet oder empfangen wird.
+     * Prüft, ob die Schnittstelle eine Kommunikationsbeziehunge besitzt, über
+     * die irgendein Objekttyp gesendet oder empfangen wird.
      *
      * @param bss
      * @return <code>true</code> wenn die Schnittstelle nicht kommunizieren kann
@@ -207,8 +215,9 @@ public class ShortestCommunicationPathFinderOld {
     }
 
     /**
-     * @param otIndex Index des Objekttypen, für den die Matrix ausgegeben werden soll. Wenn alle
-     *            ausgegeben werden sollen, muss Index < 0 sein.
+     * @param otIndex Index des Objekttypen, für den die Matrix ausgegeben
+     *            werden soll. Wenn alle ausgegeben werden sollen, muss Index <
+     *            0 sein.
      */
     public void printPathMatrix(final int otIndex) {
         int min, max;
@@ -245,8 +254,9 @@ public class ShortestCommunicationPathFinderOld {
     }
 
     /**
-     * @param otIndex Index des Objekttypen, für den die Matrix ausgegeben werden soll. Wenn alle
-     *            ausgegeben werden sollen, muss Index < 0 sein.
+     * @param otIndex Index des Objekttypen, für den die Matrix ausgegeben
+     *            werden soll. Wenn alle ausgegeben werden sollen, muss Index <
+     *            0 sein.
      */
     public void printCostMatrix(final int otIndex) {
         // Ausgabe der Kostenmatrizen, die nach Ausführen von findShortestPath(o) die
@@ -317,8 +327,8 @@ public class ShortestCommunicationPathFinderOld {
     /**
      * Das hier ist der Floyd-Warhall-Algorhytmus.
      *
-     * @param o Index des Objekttyps, für den die Pfadmatrix mit den kürzesten Pfaden aufgebaut
-     *            werden soll.
+     * @param o Index des Objekttyps, für den die Pfadmatrix mit den kürzesten
+     *            Pfaden aufgebaut werden soll.
      */
     private void findShortestPath(final int o) {
         // long ss= System.currentTimeMillis();
@@ -578,14 +588,14 @@ public class ShortestCommunicationPathFinderOld {
             // Distanzmatrix)
 
             /*
-             * if (o==0){ System.out.println(schnittstellen); printPathMatrix(0);
-             * System.out.println(
-             * "\n\n------------------------------------------------------------------------\n\n");
-             * printCostMatrix(0); findShortestPath(o); System.out.println(
-             * "\n\n------------------------------------------------------------------------\n\n");
+             * if (o==0){ System.out.println(schnittstellen);
              * printPathMatrix(0); System.out.println(
-             * "\n\n------------------------------------------------------------------------\n\n");
-             * printCostMatrix(0); }else
+             * "\n\n------------------------------------------------------------------------\n\n"
+             * ); printCostMatrix(0); findShortestPath(o); System.out.println(
+             * "\n\n------------------------------------------------------------------------\n\n"
+             * ); printPathMatrix(0); System.out.println(
+             * "\n\n------------------------------------------------------------------------\n\n"
+             * ); printCostMatrix(0); }else
              */findShortestPath(o);
 
         }
@@ -612,8 +622,9 @@ public class ShortestCommunicationPathFinderOld {
     }
 
     /*
-     * private class PathMatrixItem{ Bausteinschnittstelle s1; Bausteinschnittstelle s2; ArrayList
-     * path; int costs; private PathMatrixItem(Bausteinschnittstelle s1, Bausteinschnittstelle s2,
+     * private class PathMatrixItem{ Bausteinschnittstelle s1;
+     * Bausteinschnittstelle s2; ArrayList path; int costs; private
+     * PathMatrixItem(Bausteinschnittstelle s1, Bausteinschnittstelle s2,
      * ArrayList path, int costs){ } }
      */
 
@@ -664,11 +675,12 @@ public class ShortestCommunicationPathFinderOld {
         private int pathCosts = INFINITY;
 
         /**
-         * Länge des Pfades über die Schnittstellen. Wenn die erste und 2. Schnittstelle eines
-         * Pfades auf demselben Anwendungssystem liegen, so kann dieser Pfad von den Pfadkosten her
-         * trotzdem minimal sein, da die Kosten für Schnittstellen auf dem selebn Anwendungssystem
-         * immer 0 betragen. Ein wikrlich minimaler Pfad hat die geringsten Kosten bei geringster
-         * Länge.
+         * Länge des Pfades über die Schnittstellen. Wenn die erste und 2.
+         * Schnittstelle eines Pfades auf demselben Anwendungssystem liegen, so
+         * kann dieser Pfad von den Pfadkosten her trotzdem minimal sein, da die
+         * Kosten für Schnittstellen auf dem selebn Anwendungssystem immer 0
+         * betragen. Ein wikrlich minimaler Pfad hat die geringsten Kosten bei
+         * geringster Länge.
          */
         private int interfacePathLength = INFINITY;
 

@@ -470,10 +470,10 @@ public final class MetaModel extends CoreMetaModel {
         edgeClassToConditionMetaPath = CollectionUtils.ensureImmutable(metaPathsDefinition.getConditionMetaPaths());
         edgeClassToSoftConditionMetaPath = CollectionUtils.ensureImmutable(metaPathsDefinition.getSoftConditionMetaPaths());
         instanciationEdgeToAdditionalInstanciationMetaPaths = CollectionUtils.ensureImmutable(getInstanciationEdgeToAdditionalInstanciationNonAbstractMetaPaths(metaPathsDefinition.getInstanciationEdgeToAdditionalInstanciationMetaPaths()));
-        elementClassToCreatableMetaPaths = CollectionUtils.ensureImmutable(getCreatableMetaPathsMap(metaPathsDefinition.getCreatablePaths()));
-        elementClassToNameExtensionPath = CollectionUtils.ensureImmutable(metaPathsDefinition.getElementClassToNameExtensionPath());
+        elementClassToCreatableMetaPaths = CollectionUtils.ensureImmutable(getCreatableMetaPathsMap(metaPathsDefinition.getCreatableMetaPaths()));
+        elementClassToNameExtensionPath = CollectionUtils.ensureImmutable(metaPathsDefinition.getElementClassToNameExtensionMetaPath());
         elementClassesWithNameExtensions = CollectionUtils.ensureImmutable(elementClassToNameExtensionPath.keySet());
-        edgeClassToInitialCreatedNameSourcePath = CollectionUtils.ensureImmutable(metaPathsDefinition.getEdgeClassToInitialCreatedNameSourcePath());
+        edgeClassToInitialCreatedNameSourcePath = CollectionUtils.ensureImmutable(metaPathsDefinition.getEdgeClassToInitialCreatedNameSourceMetaPath());
 
         inferenceEdgeClassToConditionMetaPath = CollectionUtils.ensureImmutable(metaPathsDefinition.getInferenceEdgeToConditionMetaPath());
 
@@ -1063,7 +1063,7 @@ public final class MetaModel extends CoreMetaModel {
                 toElement, fromElement == null ? null : fromElement.getOtherDirection()
         };
         for (ElementaryMetaPath createdMetaPathToElement : createdElemebtaryMetaPathsToElement) {
-            if (createdMetaPathToElement != null) { // null abfangen, da es beim ersten und letzten Element in einem SequenceMetaPath nur einen Pfad gibt
+            if (createdMetaPathToElement != null) { // null abfangen, da es beim ersten und letzten Element in einem SerialMetaPath nur einen Pfad gibt
                 Class<? extends Edge> createdMetaPathToElementEdgeClass = createdMetaPathToElement.getEdgeClass();
                 if (edgeClass.isAssignableFrom(createdMetaPathToElementEdgeClass)) {
                     if (createdMetaPathToElement.getDirection() == directionToElement) {

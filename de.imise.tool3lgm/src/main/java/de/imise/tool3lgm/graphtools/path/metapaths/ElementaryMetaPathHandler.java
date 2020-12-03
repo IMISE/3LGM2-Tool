@@ -25,7 +25,7 @@ public final class ElementaryMetaPathHandler {
 
     /**
      * Platzhaltermetapfad für die Definition einer beliebigen Verbindung z. B.
-     * in einem {@link SequenceMetaPath}
+     * in einem {@link SerialMetaPath}
      */
     public final ElementaryMetaPath generalElementarySuperPath;
 
@@ -95,6 +95,18 @@ public final class ElementaryMetaPathHandler {
     public final ElementaryMetaPath getMetaPath(final Class<? extends ModelElement> startClass, final Class<? extends Edge> edgeClass) {
         Direction direction = CoreMetaModel.isStartClass(edgeClass, startClass) ? Direction.FORWARD : Direction.BACKWARD;
         ElementaryMetaPath returnMetaPath = getMetaPath(startClass, edgeClass, direction);
+        return returnMetaPath;
+    }
+
+    /**
+     * @param startClass
+     * @param edgeClass
+     * @param endClass
+     * @return
+     */
+    public final ElementaryMetaPath getMetaPath(final Class<? extends ModelElement> startClass, final Class<? extends Edge> edgeClass, final Class<? extends ModelElement> endClass) {
+        Direction direction = CoreMetaModel.isStartClass(edgeClass, startClass) ? Direction.FORWARD : Direction.BACKWARD;
+        ElementaryMetaPath returnMetaPath = getMetaPath(startClass, edgeClass, direction, endClass);
         return returnMetaPath;
     }
 

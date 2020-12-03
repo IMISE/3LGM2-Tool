@@ -146,11 +146,11 @@ public class DataImportModule {
     //        }
     //
     //        UserFieldDefinitions definitions = new UserFieldDefinitions(doc.getCollection());
-    //        ArrayList<String> userFieldHashStrings = new ArrayList<>(8);
+    //        ArrayList<String> userFieldIDs = new ArrayList<>(8);
     //        int nameIndex = -1;
     //        int descrIndex = -1;
-    //        int hashFieldIndex = -1;
-    //        int superHashFieldIndex = -1;
+    //        int idFieldIndex = -1;
+    //        int superIDFieldIndex = -1;
     //        ArrayList<Integer> extIDPoss = new ArrayList<>();
     //        ArrayList<String> extIDKeys = new ArrayList<>();
     //
@@ -176,12 +176,12 @@ public class DataImportModule {
     //                descrIndex = i;
     //                continue;
     //            }
-    //            if (name.equalsIgnoreCase("HashString")) {
-    //                hashFieldIndex = i;
+    //            if (name.equalsIgnoreCase("ID")) {
+    //                idFieldIndex = i;
     //                continue;
     //            }
-    //            if (name.equalsIgnoreCase("SuperHashString")) {
-    //                superHashFieldIndex = i;
+    //            if (name.equalsIgnoreCase("SuperID")) {
+    //                superIDFieldIndex = i;
     //                continue;
     //            }
     //            if (name.toLowerCase().startsWith("extid")) {
@@ -222,10 +222,10 @@ public class DataImportModule {
     //            userField.hasStyle(UserField.Style.SINGLE_LINE);
     //            UserField oldUserField = doc.getCollection().getUserFieldDefinitions().getUserField(userField.getTargetClass(), userField.getName());
     //            if (oldUserField == null) {
-    //                userFieldHashStrings.add(userField.getHashCode());
+    //                userFieldIDs.add(userField.getID());
     //                definitions.add(userField);
     //            } else {
-    //                userFieldHashStrings.add(oldUserField.getHashCode());
+    //                userFieldIDs.add(oldUserField.getID());
     //            }
     //        }
     //
@@ -252,10 +252,10 @@ public class DataImportModule {
     //
     //                String name = "\"\"";
     //                String descr = "\"\"";
-    //                String newHashString = "";
+    //                String newID = "";
     //                boolean newElement = false;
     //                //diese Variable wird nie gelesen, aber irgendwo gesetzt.
-    //                //            String superHashString = "";
+    //                //            String superID = "";
     //                String kommBezExtID = "";
     //                String sendAwbExtID = "";
     //                String recvAwbExtID = "";
@@ -269,12 +269,12 @@ public class DataImportModule {
     //                StringBuilder userFieldXMLStringBuilder = new StringBuilder(100000);
     //                int realIndex = 0;
     //                for (int j = 0; j < tokens.size(); j++) {
-    //                    if (j == hashFieldIndex) {
-    //                        newHashString = tokens.get(j);
+    //                    if (j == idFieldIndex) {
+    //                        newID = tokens.get(j);
     //                        continue;
     //                    }
-    //                    if (j == superHashFieldIndex) {
-    //                        /* superHashString = */tokens.get(j);
+    //                    if (j == superIDFieldIndex) {
+    //                        /* superID = */tokens.get(j);
     //                        continue;
     //                    }
     //                    if (j == nameIndex) {
@@ -319,7 +319,7 @@ public class DataImportModule {
     //                            continue;
     //                        }
     //                    }
-    //                    String hash = realIndex < userFieldHashStrings.size() ? userFieldHashStrings.get(realIndex) : "" + realIndex;
+    //                    String id = realIndex < userFieldIDs.size() ? userFieldIDs.get(realIndex) : "" + realIndex;
     //                    String value = tokens.get(j);
     //                    int index = value.indexOf("_rangedef_");
     //                    //AXS: die RangeDefs sind komplett rausgeflogen. Da ich die Konsequenzen von Änderungen an dieser Stelle nicht kenne, lasse
@@ -331,13 +331,13 @@ public class DataImportModule {
     //                        value = value.substring(0, index);
     //                    }
     //                    if (value.length() > 0 && !value.equals("\"\"") && !value.equalsIgnoreCase("__3LGM_DELETE__")) {
-    //                        userFieldXMLStringBuilder.append("<userField hash=\"" + hash + "\">" + XMLCharacterCoder.encodeString(value) + "</userField>");
+    //                        userFieldXMLStringBuilder.append("<userField hash=\"" + id + "\">" + XMLCharacterCoder.encodeString(value) + "</userField>");
     //                    } else {
-    //                        userFieldXMLStringBuilder.append("<userField hash=\"" + hash + "\">__3LGM_DELETE__</userField>");
+    //                        userFieldXMLStringBuilder.append("<userField hash=\"" + id + "\">__3LGM_DELETE__</userField>");
     //                    }
     //                    //
     //                    //				if (! rangeDef.equals(""))
-    //                    //					userFieldXMLStringBuilder.append("<userFieldRangeDef hash=\"" + hash + "\">" + rangeDef + "</userFieldRangeDef>");
+    //                    //					userFieldXMLStringBuilder.append("<userFieldRangeDef hash=\"" + id + "\">" + rangeDef + "</userFieldRangeDef>");
     //                    realIndex++;
     //                }
     //
@@ -373,7 +373,7 @@ public class DataImportModule {
     //                        doc.getCollection().setInteractiveMode(false);
     //                        if (sendBss == null && kommBez == null) {
     //                            sendBss = LGMGraphDocument.createAddicted(doc, sendAwb, AwbKommssVerbindung.class, Bausteinschnittstelle.class, sendBssExtID, PID);
-    //                            //						sendBss = doc.createBausteinSNforABS(sendAwb.getHashString(), sendBssExtID, null, PID);
+    //                            //						sendBss = doc.createBausteinSNforABS(sendAwb.getID(), sendBssExtID, null, PID);
     //                            if (sendBss == null) {
     //                                continue;
     //                            }
@@ -381,14 +381,14 @@ public class DataImportModule {
     //                        }
     //                        if (recvBss == null && kommBez == null) {
     //                            recvBss = LGMGraphDocument.createAddicted(doc, recvAwb, AwbKommssVerbindung.class, Bausteinschnittstelle.class, recvBssExtID, PID);
-    //                            //						recvBss = doc.createBausteinSNforABS(recvAwb.getHashString(), recvBssExtID, null, PID);
+    //                            //						recvBss = doc.createBausteinSNforABS(recvAwb.getID(), recvBssExtID, null, PID);
     //                            if (recvBss == null) {
     //                                continue;
     //                            }
     //                            recvBss.setExternalID("extID_BSS", recvBssExtID);
     //                        }
     //                        if (kommBez == null) {
-    //                            kommBez = doc.getCollection().link(KommBeziehung.class, newHashString, sendBss, recvBss, PID);
+    //                            kommBez = doc.getCollection().link(KommBeziehung.class, newID, sendBss, recvBss, PID);
     //                            if (kommBez == null) {
     //                                continue;
     //                            }
@@ -400,7 +400,7 @@ public class DataImportModule {
     //                            }
     //                        }
     //                        xmlOutStream.writeBytes("<element class=\"" + elementClass.getSimpleName() + "\" ");
-    //                        xmlOutStream.writeBytes("hash=\"" + kommBez.getHashString() + "\" ");
+    //                        xmlOutStream.writeBytes("hash=\"" + kommBez.getID() + "\" ");
     //                        xmlOutStream.writeBytes("layer=\"" + ModelConstants.layerFor(elementClass) + "\"");
     //                        xmlOutStream.writeBytes(">");
     //                        xmlOutStream.writeBytes(extIDStringBuilder.toString());
@@ -433,12 +433,12 @@ public class DataImportModule {
     //                        EtntEtdtKombination etnt = null;
     //                        //diese Variable wird nie gelesen, aber gesetzt. Wozu?
     //                        @SuppressWarnings("unused")
-    //                        String evtMsgTypHashString = "";
+    //                        String evtMsgTypID = "";
     //                        for (int j = 0; j < etnts.size(); j++) {
     //                            etnt = (EtntEtdtKombination) etnts.get(j);
     //                            if (etnt.isConnectedWith(evtTyp)) {
     //                                createEtnt = false;
-    //                                evtMsgTypHashString = etnt.getHashString();
+    //                                evtMsgTypID = etnt.getID();
     //                                break;
     //                            }
     //                        }
@@ -446,19 +446,19 @@ public class DataImportModule {
     //                            NodeContainer etntC = doc.createKnotenWithContainer(msgdocTyp instanceof Nachrichtentyp ? EreignisNachrichtenTyp.class : EreignisDokumentenTyp.class, PID);
     //                            doc.getCollection().link(EtntEtVerbindung.class, etntC.getElement(), evtTyp, PID);
     //                            doc.getCollection().link(msgdocTyp instanceof Nachrichtentyp ? EtntNatVerbindung.class : EtntDotVerbindung.class, etntC.getElement(), msgdocTyp, PID);
-    //                            evtMsgTypHashString = etntC.getHashString();
+    //                            evtMsgTypID = etntC.getID();
     //                            etnt = (EtntEtdtKombination) etntC.getElement();
     //                        }
     //
     //                        //diese Variable wird nie gelesen, aber gesetzt. Wozu?
     //                        @SuppressWarnings("unused")
-    //                        String vHashString = null;
+    //                        String vID = null;
     //                        @SuppressWarnings("unused")
     //                        KommbezEtntVerbindung v = null;
     //                        if (/* kommBez != null && */etnt != null) {
     //                            ArrayList<Edge> connections = kommBez.getEdgesWith(etnt);
     //                            if (connections.size() > 0) {
-    //                                vHashString = connections.get(0).getHashString();
+    //                                vID = connections.get(0).getID();
     //                            }
     //                        }
     //                        //					if (v == null) {
@@ -477,23 +477,23 @@ public class DataImportModule {
     //                        ex.printStackTrace();
     //                    }
     //                } else {
-    //                    if (newHashString == null || newHashString.equals("")) {
+    //                    if (newID == null || newID.equals("")) {
     //                        ModelElement el = null;
     //                        if (extIDKeys.size() > 0) {
     //                            el = doc.findElementWithExternalID(extIDKeys.get(0), extIDTable.get(extIDKeys.get(0)));
     //                        }
     //                        if (el != null) {
-    //                            newHashString = el.getHashString();
+    //                            newID = el.getID();
     //                        } else {
-    //                            newHashString = ModelElement.getNewHashString(elementClass);
+    //                            newID = ModelElement.getNewID(elementClass);
     //                            newElement = true;
     //                        }
     //                    } else {
-    //                        newElement = doc.findElementCoded(newHashString) == null;
+    //                        newElement = doc.findElementCoded(newID) == null;
     //                    }
     //
     //                    xmlOutStream.writeBytes("<element class=\"" + elementClass.getSimpleName() + "\" ");
-    //                    xmlOutStream.writeBytes("hash=\"" + newHashString + "\" ");
+    //                    xmlOutStream.writeBytes("hash=\"" + newID + "\" ");
     //                    xmlOutStream.writeBytes("layer=\"" + ModelConstants.layerFor(elementClass) + "\"");
     //                    xmlOutStream.writeBytes(">");
     //                    if (!name.equals("\"\"")) {
@@ -510,7 +510,7 @@ public class DataImportModule {
     //                if (!unique && doc instanceof Szenario) {
     //                    if (!(elementClass == KommBeziehung.class)) {
     //                        if (newElement) {
-    //                            xmlOutStream.writeBytes("<container hash=\"" + newHashString + "\">");
+    //                            xmlOutStream.writeBytes("<container hash=\"" + newID + "\">");
     //                            xmlOutStream.writeBytes("<expanded>true</expanded><visible>true</visible>");
     //                            GraphElementLayout l = new GraphElementLayout();
     //                            l.x = x;

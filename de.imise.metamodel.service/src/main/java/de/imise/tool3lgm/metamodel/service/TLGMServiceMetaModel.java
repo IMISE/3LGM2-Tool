@@ -36,6 +36,7 @@ import de.imise.tool3lgm.metamodel.service.edge.IheCommunicationLink_Edge;
 import de.imise.tool3lgm.metamodel.service.edge.IheCommunicationLink_IheActorInstanceCommunicationLink_Edge;
 import de.imise.tool3lgm.metamodel.service.edge.IheIntegrationProfile_IheActor_Edge;
 import de.imise.tool3lgm.metamodel.service.edge.IheIntegrationProfile_IheDomain_Edge;
+import de.imise.tool3lgm.metamodel.service.edge.IheInterface_IheTransaction_Edge;
 import de.imise.tool3lgm.metamodel.service.edge.IheInvokingInterface_IheActorInstanceInvokingInterface_Edge;
 import de.imise.tool3lgm.metamodel.service.edge.IheInvokingInterface_IheTransaction_Edge;
 import de.imise.tool3lgm.metamodel.service.edge.IheProvidingInterface_IheActorInstanceProvidingInterface_Edge;
@@ -53,13 +54,14 @@ import de.imise.tool3lgm.metamodel.service.edge.PhysicalDataProcessingComponent_
 import de.imise.tool3lgm.metamodel.service.edge.PhysicalDataProcessingComponent_Location_Edge;
 import de.imise.tool3lgm.metamodel.service.edge.Process_Function_Edge;
 import de.imise.tool3lgm.metamodel.service.edge.ServiceUses_Edge;
+import de.imise.tool3lgm.metamodel.service.edge.Service_CommunicationInterface_Edge;
 import de.imise.tool3lgm.metamodel.service.edge.Service_CommunicationLink_Edge;
 import de.imise.tool3lgm.metamodel.service.edge.Service_Function_Edge;
 import de.imise.tool3lgm.metamodel.service.edge.Service_InvokingInterface_Edge;
 import de.imise.tool3lgm.metamodel.service.edge.Service_ObjectType_Edge;
 import de.imise.tool3lgm.metamodel.service.edge.Service_ProvidingInterface_Edge;
 import de.imise.tool3lgm.metamodel.service.edge.Service_ServiceClass_Edge;
-import de.imise.tool3lgm.metamodel.service.edge.StorageLink_Edge;
+import de.imise.tool3lgm.metamodel.service.edge.ApplicationComponent_ObjectType_Edge;
 import de.imise.tool3lgm.metamodel.service.edge.TransmissionMedium_DataTransmissionLink_Edge;
 import de.imise.tool3lgm.metamodel.service.node.ApplicationComponent;
 import de.imise.tool3lgm.metamodel.service.node.ApplicationSystem;
@@ -203,7 +205,7 @@ public class TLGMServiceMetaModel extends MetaModelDefinition implements Regular
     /** Alle Node zw. FE und LWE als Array */
     private final Class[] ALL_INTER_DOMAIN_LOGICAL_LAYER_NODES = {
             //auch die Assoziationsklasse hier eintagen
-            StorageLink_Edge.class,
+            ApplicationComponent_ObjectType_Edge.class,
     };
 
     /** Alle Node der LWE als Array */
@@ -313,7 +315,7 @@ public class TLGMServiceMetaModel extends MetaModelDefinition implements Regular
                 Function_SoftwareProduct_Edge.class,
                 Service_Function_Edge.class,
                 Service_ObjectType_Edge.class,
-                StorageLink_Edge.class,
+                ApplicationComponent_ObjectType_Edge.class,
                 ApplicationComponent_Use_Edge.class,
                 //LWE
                 PartableApplicationComponent_HasPartEdge.class,
@@ -321,6 +323,7 @@ public class TLGMServiceMetaModel extends MetaModelDefinition implements Regular
                 ApplicationSystem_SoftwareProduct_Edge.class,
                 CommunicationLink_Edge.class,
                 Service_CommunicationLink_Edge.class,
+                Service_CommunicationInterface_Edge.class,
                 Service_InvokingInterface_Edge.class,
                 Service_ProvidingInterface_Edge.class,
                 Service_ServiceClass_Edge.class,
@@ -333,6 +336,7 @@ public class TLGMServiceMetaModel extends MetaModelDefinition implements Regular
                 IheCommunicationLink_IheActorInstanceCommunicationLink_Edge.class,
                 IheIntegrationProfile_IheDomain_Edge.class,
                 IheIntegrationProfile_IheActor_Edge.class,
+                IheInterface_IheTransaction_Edge.class,
                 IheInvokingInterface_IheTransaction_Edge.class,
                 IheProvidingInterface_IheTransaction_Edge.class,
                 IheInvokingInterface_IheActorInstanceInvokingInterface_Edge.class,

@@ -74,9 +74,12 @@ public class ToolContentHandlerV3_0 implements ContentHandler {
      * Hier kommen beim Anlegen der Elemente alle Elemente rein, die keinen
      * feststehenden Layer haben. Im Moment sind das Bendpoints und TextFields
      */
-    private final Map<String, ElementContainer> hashToMainDocContainer = new HashMap<>();
+    private final Map<String, ElementContainer> idToMainDocContainer = new HashMap<>();
 
-    private Map<String, BendpointContainer> hashToSzenarioBendpointContainer;
+    /**
+     *
+     */
+    private Map<String, BendpointContainer> idToSzenarioBendpointContainer;
 
     /**
      * Faktor, um den die Position von per Paste eingefügten Elementen in x und
@@ -91,14 +94,12 @@ public class ToolContentHandlerV3_0 implements ContentHandler {
     }
 
     /**
-     * gänderte Hashcodes (bei copyAndPaste) Schlüssel ist alter HashString,
-     * Wert ist neuer HashString
+     * gänderte IDs (bei copyAndPaste). Schlüssel ist alte ID, Wert ist neue ID.
      */
-    private Map<String, String> oldToNewHashString;
+    private Map<String, String> oldToNewID;
 
     /**
-     * Alle Kanten. Am Ende müssem deren hashStrings (start, end) aufgelöst
-     * werden.
+     * Alle Kanten. Am Ende müssem deren IDs (start, end) aufgelöst werden.
      */
     private final List<Edge> edges = new ArrayList<>();
 
@@ -149,15 +150,15 @@ public class ToolContentHandlerV3_0 implements ContentHandler {
      */
     protected StringBuilder elementValue = new StringBuilder();
 
-    /** HashString eines Bitmaps */
-    protected String iconKey = null;
+    /** ID einer Bitmaps */
+    protected String iconID = null;
 
     /**
      * ArrayList mit allen Containern die ein Icon besitzen; da die Icons erst
-     * zu letzt eingelesen werden, wird den Containern zuerst nur der HashString
-     * des Icons mitgeteilt. Nach dem einlesen der Icons müssen diese Container
-     * noch das eigentliche Icon aus der Hashmap der Collection laden. Das
-     * passiert in der Methode setIcon();
+     * zu letzt eingelesen werden, wird den Containern zuerst nur die ID des
+     * Icons mitgeteilt. Nach dem einlesen der Icons müssen diese Container noch
+     * das eigentliche Icon aus der Hashmap der Collection laden. Das passiert
+     * in der Methode setIcon();
      */
     protected List<NodeContainer> containerWithIcon = new ArrayList<>();
 
@@ -280,19 +281,19 @@ public class ToolContentHandlerV3_0 implements ContentHandler {
 
                 if (element != null) {
                     if (isCopyAndPaste()) {
-                        String originalElementHash = atts.getValue("hash");
-                        ModelElement existingElementWithSameHash = doc.findElementCoded(originalElementHash);
-                        if (existingElementWithSameHash == null) {
-                            element.setHashString(originalElementHash);
+                        String originalElementID = atts.getValue("hash");
+                        ModelElement existingElementWithSameID = doc.findElementCoded(originalElementID);
+                        if (existingElementWithSameID == null) {
+                            element.setID(originalElementID);
                         }
                     }
 
-                    String hashString = atts.getValue("hash");
+                    String id = atts.getValue("hash");
                     if (isCopyAndPaste()) {
-                        String newHashString = element.getHashString();
-                        oldToNewHashString.put(hashString, newHashString);
+                        String newID = element.getID();
+                        oldToNewID.put(id, newID);
                     } else {
-                        element.setHashString(hashString);
+                        element.setID(id);
                     }
 
                     if (element instanceof Edge) {
@@ -302,14 +303,14 @@ public class ToolContentHandlerV3_0 implements ContentHandler {
                     System.err.println("Could not proceed element!\n Name=" + qName + "\n UserField=" + attsToString(atts));
                 }
             } else if (qName.equals("container")) {
-                String hashString = atts.getValue("hash");
+                String id = atts.getValue("hash");
                 if (isCopyAndPaste()) {
-                    element = doc.findElementCoded(oldToNewHashString.get(hashString));
+                    element = doc.findElementCoded(oldToNewID.get(id));
                 } else {
-                    element = doc.findElementCoded(hashString);
+                    element = doc.findElementCoded(id);
                 }
                 if (element == null) {
-                    ElementContainer bendpointContainerOrTexField = hashToMainDocContainer.get(isCopyAndPaste() ? oldToNewHashString.get(hashString) : hashString);
+                    ElementContainer bendpointContainerOrTexField = idToMainDocContainer.get(isCopyAndPaste() ? oldToNewID.get(id) : id);
                     if (bendpointContainerOrTexField != null) {
                         element = bendpointContainerOrTexField.getElement();
                     }
@@ -410,7 +411,7 @@ public class ToolContentHandlerV3_0 implements ContentHandler {
                 if (!isCopyAndPaste()) {
                     szenario = collection.createSzenario(atts.getValue("titel"), false, "", atts.getValue("hash"), false);
                 }
-                hashToSzenarioBendpointContainer = new HashMap<>();
+                idToSzenarioBendpointContainer = new HashMap<>();
 
                 //            } else if (qName.equals("description")) {
                 //
@@ -422,7 +423,7 @@ public class ToolContentHandlerV3_0 implements ContentHandler {
 
             } else if (qName.equals("bitmap")) {
                 if (atts.getValue("type").equals("gif/base64")) {
-                    iconKey = atts.getValue("hash");
+                    iconID = atts.getValue("hash");
                 }
 
             } else if (qName.equals("images")) {
@@ -449,20 +450,20 @@ public class ToolContentHandlerV3_0 implements ContentHandler {
                     userField = new UserField(metaModel.getClassForName(elementClass), atts.getValue("hash"), collection.getUserFieldDefinitions());
                 }
             } else if (qName.equals("replacerEntry")) {
-                String elementHash = atts.getValue("elementHash");
-                String userFieldHash = atts.getValue("userFieldHash");
-                String replaceUserFieldHash = atts.getValue("replaceUserFieldHash");
+                String elementID = atts.getValue("elementHash");
+                String userFieldID = atts.getValue("userFieldHash");
+                String replaceUserFieldID = atts.getValue("replaceUserFieldHash");
                 WeightReplacer replacer = userFieldDefinitions.getWeightReplacer();
-                replacer.setReplacement(elementHash, userFieldHash, replaceUserFieldHash);
+                replacer.setReplacement(elementID, userFieldID, replaceUserFieldID);
 
             } else if (qName.equals("standardWeigthReplacerEntry")) {
-                String elementHash = atts.getValue("elementHash");
+                String elementID = atts.getValue("elementHash");
                 String edgeClassName = atts.getValue("edgeClass");
-                String replaceUserFieldHash = atts.getValue("replaceUserFieldHash");
+                String replaceUserFieldID = atts.getValue("replaceUserFieldHash");
                 WeightReplacer replacer = userFieldDefinitions.getWeightReplacer();
                 MetaModel metaModel = collection.getMetaModel();
                 Class<? extends Edge> edgeClass = metaModel.getClassForName(edgeClassName).asSubclass(Edge.class);
-                replacer.setUniformDistributionReplacement(elementHash, edgeClass, replaceUserFieldHash);
+                replacer.setUniformDistributionReplacement(elementID, edgeClass, replaceUserFieldID);
 
                 //            } else if (qName.equals("userFieldName")) {
                 //
@@ -498,7 +499,7 @@ public class ToolContentHandlerV3_0 implements ContentHandler {
                 doc = Static.getSelectedGDCollection().getMainDoc();
                 szenario = collection.getSelectedDoc();
                 szenario.clearSelection();
-                oldToNewHashString = new HashMap<>();
+                oldToNewID = new HashMap<>();
 
             } else if (qName.equals("objects")) {
                 Static.setProgressDialogStatusLabel("labelReadElements");
@@ -555,7 +556,7 @@ public class ToolContentHandlerV3_0 implements ContentHandler {
                             if (!field.equals("state")) {
                                 //Tue nichts bei state. Bei Modellen bis zur 3.6 hatten alle Kanten einen State = die Richtung. Jetzt haben nur noch DoubleMeaningEdges den State, da man ihn bei den anderen nicht braucht.
                                 //bei allen anderen nicht verarbeitbaren Values -> gib einen Fehler aus
-                                throw new SAXException("ModelElement konnte field nicht verarbeiten!\n ModelElement=" + element.getHashString() + "\n field=" + field + "\n Wert=" + elementValue);
+                                throw new SAXException("ModelElement konnte field nicht verarbeiten!\n ModelElement=" + element.getID() + "\n field=" + field + "\n Wert=" + elementValue);
                             }
                         }
                     }
@@ -584,12 +585,12 @@ public class ToolContentHandlerV3_0 implements ContentHandler {
                                 layer = element.layerFor();
                                 LayerContainer layerContainer = doc.getLayer(layer);
                                 //Knickpunkte werfen hier eine Exception, wenn sie noch keine Kante zugewiesen haben. Textfelder auch, wenn sie noch keinen Container auf einem Layer haben.
-                                //Auch die Kante Textfield_ModelElement_Edge wirft eine Exception, da ihr Layer noch nicht feststeht. Das tut er erst, wenn die Hashes der verbundenen
+                                //Auch die Kante Textfield_ModelElement_Edge wirft eine Exception, da ihr Layer noch nicht feststeht. Das tut er erst, wenn die IDs der verbundenen
                                 //Elemente aufgelöst wurden. Das kann erst ganz am Schluss passieren.
                                 layerContainer.add(container);
                             } catch (Exception e) {
                                 //merke die Container, die am Ende noch im Hauptdokument hinzugefügt werden müssen
-                                hashToMainDocContainer.put(element.getHashString(), container);
+                                idToMainDocContainer.put(element.getID(), container);
                             }
                         }
                         if (paste) {
@@ -615,7 +616,7 @@ public class ToolContentHandlerV3_0 implements ContentHandler {
                             layer.add(container);
                             //alle Elemente, bei denen beim Einlesen der Layer noch nicht feststand, können jetzt, da die verbundenen Elemente und der
                             //Layer nun bekannt sind, auch ins Hauptmodell eingetragen werden -> jetzt mainDocContainer zum mainDoc hinzufügen
-                            ElementContainer mainDocContainer = hashToMainDocContainer.get(me.getHashString());
+                            ElementContainer mainDocContainer = idToMainDocContainer.get(me.getID());
                             if (mainDocContainer != null) {
                                 LayerContainer mainDocLayer = doc.getLayer(layer.getLayerNumber());
                                 //an welcher Stelle der Container im MainDoc steht ist völlig egal, da das MainDoc nicht gezeichnet wird
@@ -624,7 +625,7 @@ public class ToolContentHandlerV3_0 implements ContentHandler {
                         }
                     }
                     if (container instanceof BendpointContainer) {
-                        hashToSzenarioBendpointContainer.put(container.getHashString(), (BendpointContainer) container);
+                        idToSzenarioBendpointContainer.put(container.getID(), (BendpointContainer) container);
                     }
                     if (isCopyAndPaste()) {
                         szenario.addSimpleToSelection(container);
@@ -786,7 +787,7 @@ public class ToolContentHandlerV3_0 implements ContentHandler {
                         //trotzdem auf BOTTOM gerendert. Damit das erhalten bleibt, wird das BOTTOM, das beim
                         //Einlesen des <icon>-Tags gesetzt wurde, nur durch ein anderes valign ersetzt, wenn
                         //wenn es mit Icon nicht auf dem Default CENTER stand.
-                        String icon = layout.getIcon();
+                        String icon = layout.getIconID();
                         if (icon == null || swingConstantValue != SwingConstants.CENTER) {
                             TextPositionVertical textPositionVertical = TextPositionVertical.getValueForSwingConstant(swingConstantValue);
                             layout.textPositionVertical = textPositionVertical;
@@ -823,7 +824,7 @@ public class ToolContentHandlerV3_0 implements ContentHandler {
                 classType = null;
 
             } else if (qName.equals("icon")) {
-                layout.setIcon(elementValue.toString());
+                layout.setIconID(elementValue.toString());
                 //in alten Dateien (< 3.8) ist das valign mit ints codiert und bei Elementen mit Icon zwar
                 //0, was eigentlich CENTER bedeutet, aber bei Icons auf BOTTOM uminterpretiert wurde ->
                 //das Icon wird hier vor dem valign eingelesen und wenn es ein Icon hat, dann erstmal
@@ -838,20 +839,20 @@ public class ToolContentHandlerV3_0 implements ContentHandler {
                 layer = null;
 
             } else if (qName.equals("szenario")) {
-                for (BendpointContainer benpointContainer : hashToSzenarioBendpointContainer.values()) {
+                for (BendpointContainer benpointContainer : idToSzenarioBendpointContainer.values()) {
                     Bendpoint bendpoint = benpointContainer.getBendpoint();
-                    String bendpointEdgeHash = bendpoint.getEdgeHash();
+                    String bendpointEdgeID = bendpoint.getEdgeID();
 
                     if (isCopyAndPaste()) {
-                        bendpointEdgeHash = oldToNewHashString.get(bendpointEdgeHash);
+                        bendpointEdgeID = oldToNewID.get(bendpointEdgeID);
                     }
-                    EdgeContainer kc = benpointContainer.getGraphDocument().findEdgeContainerCoded(bendpointEdgeHash);
+                    EdgeContainer kc = benpointContainer.getGraphDocument().findEdgeContainerCoded(bendpointEdgeID);
                     if (kc != null) {
                         bendpoint.addEdge(kc.getEdge());
                         bendpoint.setOwner(kc);
                         kc.setBendpointContainer(benpointContainer, bendpoint.getIndex());
                         int layer = bendpoint.layerFor();
-                        ElementContainer mainDocBendpointContainer = hashToMainDocContainer.get(bendpoint.getHashString());
+                        ElementContainer mainDocBendpointContainer = idToMainDocContainer.get(bendpoint.getID());
                         doc.getLayer(layer).add(mainDocBendpointContainer);
                         szenario.getLayer(layer).add(benpointContainer);
                     }
@@ -869,11 +870,11 @@ public class ToolContentHandlerV3_0 implements ContentHandler {
                 }
 
             } else if (qName.equals("bitmap")) {
-                if (iconKey != null && !collection.getIconTable().containsKey(iconKey)) {
-                    collection.getIconTable().put(iconKey, Base64.decode(elementValue.toString()));
+                if (iconID != null && !collection.getIconTable().containsKey(iconID)) {
+                    collection.getIconTable().put(iconID, Base64.decode(elementValue.toString()));
                 }
 
-                iconKey = null;
+                iconID = null;
 
             } else if (qName.equals("images")) {
 
@@ -907,10 +908,10 @@ public class ToolContentHandlerV3_0 implements ContentHandler {
                 userField.putXMLFieldString(qName, elementValue.toString());
 
             } else if (qName.equals("modell_3lgm_2") || qName.equals("tool3lgm_clipboard")) {
-                //jetzt erst ganz zum Schluss die HashStrings für das Start- bzw. End-Objekt einer Edge auflösen und die wirklichen Node setzten
+                //jetzt erst ganz zum Schluss die IDs für das Start- bzw. End-Objekt einer Edge auflösen und die wirklichen Node setzten
                 Static.setProgressDialogStatusLabel("labelConnectTraces2");
                 for (Edge edge : edges) {
-                    edge.decodeHashStrings(doc);
+                    edge.decodeIDs(doc);
                 }
 
                 /* Icons in den Container einlesen */
@@ -922,19 +923,19 @@ public class ToolContentHandlerV3_0 implements ContentHandler {
             } else if (qName.equals("objects")) {
                 if (isCopyAndPaste()) {
                     Static.setProgressDialogStatusLabel("labelAddBendpoints");
-                    for (ElementContainer ec : hashToMainDocContainer.values()) {
+                    for (ElementContainer ec : idToMainDocContainer.values()) {
                         if (ec instanceof BendpointContainer) {
                             Bendpoint bendpoint = ((BendpointContainer) ec).getBendpoint();
-                            bendpoint.putXMLFieldString("kanteHash", oldToNewHashString.get(bendpoint.getEdgeHash()));
+                            bendpoint.putXMLFieldString("kanteHash", oldToNewID.get(bendpoint.getEdgeID()));
                         }
                     }
                 }
-                //die HashStrings für das Start- bzw. End-Objekt einer Edge setzten
+                //die IDs für das Start- bzw. End-Objekt einer Edge setzten
                 Static.setProgressDialogStatusLabel("labelConnectTraces");
                 for (Edge edge : edges) {
                     if (isCopyAndPaste()) {
-                        edge.putXMLFieldString("start", oldToNewHashString.get(edge.getStartHash()));
-                        edge.putXMLFieldString("end", oldToNewHashString.get(edge.getEndHash()));
+                        edge.putXMLFieldString("start", oldToNewID.get(edge.getStartID()));
+                        edge.putXMLFieldString("end", oldToNewID.get(edge.getEndID()));
                     }
                 }
             }

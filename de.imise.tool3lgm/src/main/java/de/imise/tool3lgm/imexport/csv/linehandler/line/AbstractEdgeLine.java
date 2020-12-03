@@ -6,72 +6,71 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 
 public abstract class AbstractEdgeLine extends AbstractImportLine {
 
-    /** Hash of the element where this edge starts */
-    protected String startHash;
+    /** ID of the element where this edge starts */
+    protected String startID;
 
-    /** Hash of the element where this edge ends */
-    protected String endHash;
+    protected String endID;
 
     /**
      * @param elementClass The element type this line is defined for
      * @param elementType Value of the element type column in this line
      * @param name Value of the name column in this line
      * @param description Value of the description column in this line
-     * @param hash Value of the hash column in this line
-     * @param startHash Hash of the element where this edge starts
-     * @param endHash Hash of the element where this edge ends
+     * @param id Value of the ID column in this line
+     * @param startID ID of the element where this edge starts
+     * @param endID ID of the element where this edge ends
      * @param userFields List of all values for userFields in this line
      * @param row Row number of this line
      */
-    protected AbstractEdgeLine(final Class<? extends ModelElement> elementClass, final String elementType, final String name, final String description, final String hash, final String startHash, final String endHash, final List<String> userFields,
+    protected AbstractEdgeLine(final Class<? extends ModelElement> elementClass, final String elementType, final String name, final String description, final String id, final String startID, final String endID, final List<String> userFields,
             final int row) {
-        super(elementClass, elementType, name, description, hash, userFields, row);
-        this.startHash = startHash;
-        this.endHash = endHash;
+        super(elementClass, elementType, name, description, id, userFields, row);
+        this.startID = startID;
+        this.endID = endID;
     }
 
     //    /**
-    //     * @param startHash the startHash to set
+    //     * @param startID the startID to set
     //     */
-    //    public void setStartHash(final String startHash) {
-    //        this.startHash = startHash;
+    //    public void setStartID(final String startID) {
+    //        this.startID = startID;
     //    }
 
     /**
-     * @return the startHash
+     * @return the startID
      */
-    public String getStartHash() {
-        return startHash;
+    public String getStartID() {
+        return startID;
     }
 
     /**
-     * @return <code>true</code> if the value in the start hash column is not
+     * @return <code>true</code> if the value in the start ID column is not
      *         <code>null</code>
      */
-    public boolean hasStartHashColumn() {
-        return startHash != null;
+    public boolean hasStartIDColumn() {
+        return startID != null;
     }
 
     //    /**
-    //     * @param endHash the endHash to set
+    //     * @param endID the endID to set
     //     */
-    //    public void setEndHash(final String endHash) {
-    //        this.endHash = endHash;
+    //    public void setEndID(final String endID) {
+    //        this.endID = endID;
     //    }
 
     /**
-     * @return the endHash
+     * @return the endID
      */
-    public String getEndHash() {
-        return endHash;
+    public String getEndID() {
+        return endID;
     }
 
     /**
-     * @return <code>true</code> if the value in the end hash column is not
+     * @return <code>true</code> if the value in the end ID column is not
      *         <code>null</code>
      */
-    public boolean hasEndHashColumn() {
-        return endHash != null;
+    public boolean hasEndIDColumn() {
+        return endID != null;
     }
 
 }

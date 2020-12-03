@@ -74,7 +74,7 @@ public class MutipleCompositionPanel extends AbstractPathConnectionTreePanel {
             final Class<? extends CompositionEdge> edgeClass) {
         super(dialog, titleLabelOption, westLabelOption, dialog.createSimpleMetaPath(searchElementClass, edgeClass));
 
-        boolean editable = !dialog.isInfoDialog() && metaPath.isCreatable(true) && !metaPath.isFirstPathElementDependent(); // element to connect can be created new in this panel
+        boolean editable = !dialog.isInfoDialog() && metaPath.isCreatable(true) && !metaPath.isStartDependent(); // element to connect can be created new in this panel
 
         GridBagLayout gbl = new GridBagLayout();
         setLayout(gbl);

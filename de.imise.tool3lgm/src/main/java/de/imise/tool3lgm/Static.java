@@ -174,18 +174,18 @@ public class Static {
 
     /**
      * Searches all loaded a models and templates to find the main
-     * {@link GraphDocument} or {@link Szenario} with the given hashString.
+     * {@link GraphDocument} or {@link Szenario} with the given idString.
      *
-     * @param hashString hashString of the GraphDocument
+     * @param docID of the GraphDocument
      * @return the {@link GraphDocument} of a model or a template with the given
-     *         hashString or <code>null</code>
+     *         docID or <code>null</code>
      */
-    public static LGMGraphDocument getGraphDocument(final String hashString) {
+    public static LGMGraphDocument getGraphDocument(final String docID) {
         Iterable<GDCollection> allGDCollections = iterableCollections();
         Iterable<GDCollection> allTemplates = iterableTemplates();
         allGDCollections = CollectionUtils.getCommonIterable(allGDCollections, allTemplates);
         for (GDCollection gdcoll : allGDCollections) {
-            LGMGraphDocument doc = gdcoll.getGraphDocumentCoded(hashString);
+            LGMGraphDocument doc = gdcoll.getGraphDocumentCoded(docID);
             if (doc != null) {
                 return doc;
             }
@@ -264,8 +264,8 @@ public class Static {
         if (doc != selectedDoc) {
             ModelCategory modelCategory = doc.getModelCategory();
             if (modelCategory == ModelCategory.TEMPLATE) {
-                String elementHash = ec.getHashString();
-                ModelElement elementInSelectedDoc = selectedDoc.findElementCoded(elementHash);
+                String elementID = ec.getID();
+                ModelElement elementInSelectedDoc = selectedDoc.findElementCoded(elementID);
                 if (elementInSelectedDoc != null) {
                     doc = selectedDoc;
                     me = elementInSelectedDoc;
@@ -385,10 +385,10 @@ public class Static {
             return null;
         }
         Collection<GDCollection> templates = templateLibrariesManager.getTemplates(metaModelContext);
-        String elementHash = me.getHashString();
+        String elementID = me.getID();
         for (GDCollection template : templates) {
             LGMGraphDocument mainDoc = template.getMainDoc();
-            ModelElement templateElement = mainDoc.findElementCoded(elementHash);
+            ModelElement templateElement = mainDoc.findElementCoded(elementID);
             if (templateElement != null) {
                 return templateElement;
             }

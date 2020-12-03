@@ -96,8 +96,10 @@ import de.imise.tool3lgm.metamodel.original.node.Subnetz;
 public class TLGMOriginalMetaModel extends MetaModelDefinition implements RegularMetaModelDefinition {
 
     /**
-     * Muss jedes MetaModell angeben. Diese ID wird genutzt, um die Klasse eindeutig zu identifizieren. Diese ID wird nicht zur Serialisierung per
-     * Java genutzt, sondern zur Serialisierung in 3LGM-Modelldateien. Sie wird per Reflection abgefragt - daher findet man nirgends einen direkten
+     * Muss jedes MetaModell angeben. Diese ID wird genutzt, um die Klasse
+     * eindeutig zu identifizieren. Diese ID wird nicht zur Serialisierung per
+     * Java genutzt, sondern zur Serialisierung in 3LGM-Modelldateien. Sie wird
+     * per Reflection abgefragt - daher findet man nirgends einen direkten
      * Zugriff.
      */
     public static final long serialVersionUID = -6111172173611550491L;

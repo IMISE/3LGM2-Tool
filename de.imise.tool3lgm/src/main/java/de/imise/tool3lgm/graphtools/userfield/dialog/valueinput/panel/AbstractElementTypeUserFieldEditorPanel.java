@@ -351,7 +351,7 @@ public abstract class AbstractElementTypeUserFieldEditorPanel extends AbstractUs
                 // neuen Wert setzen
                 if (!newValue.equals(uf.getValue(me))) {
                     int pid = dialog.getTransactionID();
-                    doc.setUserFieldValue(me.getHashString(), uf.getHashCode(), newValue, pid);
+                    doc.setUserFieldValue(me.getID(), uf.getID(), newValue, pid);
                 }
             }
         }

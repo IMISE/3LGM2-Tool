@@ -21,12 +21,12 @@ public class NodeLine extends AbstractImportLine {
      * @param elementType Value of the element type column in this line
      * @param name Value of the name column in this line
      * @param description Value of the description column in this line
-     * @param hash Value of the hash column in this line
+     * @param id Value of the ID column in this line
      * @param userFields List of all values for userFields in this line
      * @param row Row number of this line
      */
-    public NodeLine(final NodeHeaderLine headerLine, final String name, final String description, final String hash, final List<String> userFields, final int row) {
-        super(headerLine == null ? null : headerLine.getElementClass(), "", name, description, hash, userFields, row);
+    public NodeLine(final NodeHeaderLine headerLine, final String name, final String description, final String id, final List<String> userFields, final int row) {
+        super(headerLine == null ? null : headerLine.getElementClass(), "", name, description, id, userFields, row);
         this.headerLine = headerLine;
     }
 

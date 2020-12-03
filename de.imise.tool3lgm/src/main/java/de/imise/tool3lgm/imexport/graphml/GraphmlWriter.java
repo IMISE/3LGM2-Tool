@@ -123,7 +123,7 @@ public abstract class GraphmlWriter extends IntendingXMLWriter {
     }
 
     protected void writeNode(final NodeContainer nc, final String idPrefix) throws XMLStreamException {
-        String id = Strings.isNullOrEmpty(idPrefix) ? nc.getHashString() : idPrefix + nc.getHashString();
+        String id = Strings.isNullOrEmpty(idPrefix) ? nc.getID() : idPrefix + nc.getID();
         writeStartElementNode(id); // start node
         writeNodeContent(nc);
         writeEndElement(); // end node
@@ -183,9 +183,9 @@ public abstract class GraphmlWriter extends IntendingXMLWriter {
         for (EdgeContainer ec : lc.getEdgeContainers()) {
             Edge edge = ec.getEdge();
             if (ec.isVisible(false, true)) {
-                String id = edge.getHashString();
-                String startId = edge.getStart().getHashString();
-                String endId = edge.getEnd().getHashString();
+                String id = edge.getID();
+                String startId = edge.getStart().getID();
+                String endId = edge.getEnd().getID();
                 if (!Strings.isNullOrEmpty(idPrefix)) {
                     id = fullIdPrefix + id;
                     startId = fullIdPrefix + startId;

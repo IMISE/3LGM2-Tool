@@ -8,6 +8,6 @@ Plugins
 de.imise.tool3lgm.deploy/Tool3lgm/lib
 de.imise.tool3lgm.deploy/Tool3lgm/Templates
 de.imise.tool3lgm.deploy/DeployResults
-bin
 .DS_Store
 de.imise.tool3lgm/version.info
+de.imise.tool3lgm.deploy/Tool3lgm/version.info

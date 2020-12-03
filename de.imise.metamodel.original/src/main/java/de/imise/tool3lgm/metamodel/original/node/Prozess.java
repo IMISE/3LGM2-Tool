@@ -11,8 +11,9 @@ import de.imise.tool3lgm.metamodel.original.edge.PrzAufVerbindung;
 import de.imise.tool3lgm.metamodel.original.process.ProzessStructurePanel;
 
 /**
- * @author AXS Ein Prozess ist ein Node der Kanten zu Aufgaben haelt. Die Reihenfolge der Kanten zu den Aufgaben in der ArrayList connections legt
- *         den Prozessablauf fest.
+ * @author AXS Ein Prozess ist ein Node der Kanten zu Aufgaben haelt. Die
+ *         Reihenfolge der Kanten zu den Aufgaben in der ArrayList connections
+ *         legt den Prozessablauf fest.
  */
 public final class Prozess extends Node {
 

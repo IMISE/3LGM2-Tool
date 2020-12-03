@@ -139,7 +139,7 @@ public enum GDCommands implements ActionSource {
     public static final int INVALID_HEIGHT = -1;
     public static final int INVALID_COLOR_RGB = -1;
     public static final SHAPE INVALID_SHAPE = null;
-    public static final String INVALID_HASH_STRING = "";
+    public static final String INVALID_ID_STRING = "";
     public static final String INVALID_NAME = "";
     public static final String INVALID_DESCRIPTION = "";
     public static final int INVALID_BENDPOINT_INDEX = -1;

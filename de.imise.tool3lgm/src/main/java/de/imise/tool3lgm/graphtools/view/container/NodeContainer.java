@@ -151,7 +151,7 @@ public class NodeContainer
         }
 
         if (me != null) {
-            linkWithSzenario(((Node) me).getAssociatedDoc() != null);
+            linkWithSzenario(((Node) me).getAssociatedSzenID() != null);
         }
     }
 
@@ -232,35 +232,35 @@ public class NodeContainer
     }
 
     /**
-     * @param name
+     * @param iconID
      * @param ImageTable
      */
-    public void setIcon(final String name, final Map<String, byte[]> ImageTable) {
+    public void setIcon(final String iconID, final Map<String, byte[]> ImageTable) {
         if (layout == null) {
             return;
         }
-        if (name == null || name.trim().equals("") || name.equals("none") || name.equals("null")) {
-            layout.setIcon(null);
+        if (iconID == null || iconID.trim().equals("") || iconID.equals("none") || iconID.equals("null")) {
+            layout.setIconID(null);
             super.setIcon(null);
             return;
         }
         ImageIcon icon = null;
         try {
-            byte[] imageData = ImageTable.get(name);
+            byte[] imageData = ImageTable.get(iconID);
             icon = new ImageIcon(imageData);
         } catch (Exception ex) {
             Log.show(Log.ERROR, getResString("FehlerAllgemein"), ex);
             JOptionPane.showMessageDialog(null, getResString("icon_kaputt"), getResString("fehler"), JOptionPane.ERROR_MESSAGE);
         }
-        layout.setIcon(icon != null ? name : null);
+        layout.setIconID(icon != null ? iconID : null);
         super.setIcon(icon);
     }
 
     /**
      * @return
      */
-    public String getIconString() {
-        return layout == null ? null : layout.getIcon();
+    public String getIconID() {
+        return layout == null ? null : layout.getIconID();
     }
 
     /**
@@ -358,7 +358,7 @@ public class NodeContainer
             return;
         }
         super.set3LGMLayout(l);
-        setIcon(l.getIcon(), doc.getCollection().getIconTable());
+        setIcon(l.getIconID(), doc.getCollection().getIconTable());
     }
 
     /**
@@ -445,7 +445,7 @@ public class NodeContainer
      */
     public void setIcon() {
         if (layout != null) {
-            setIcon(layout.getIcon(), doc.getCollection().getIconTable());
+            setIcon(layout.getIconID(), doc.getCollection().getIconTable());
         }
     }
 

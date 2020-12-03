@@ -30,14 +30,17 @@ import de.imise.util.io.FileHandler;
 import de.imise.util.swing.dialog.ExtendedFileChooser;
 
 /**
- * Exportiert eine Tabelle mit den Spalten
- * "Anwendungssystem", "Physische Datenverabeitungsbausteine", "Anzahl"
- * Für jedes Anwendungssystem steht in der ersten Spalte der Name. Alle mit diesem Anwendungssystem verknüpften physischen
- * Datenverabeitungsbausteine stehen dann untereinander in der 2 Spalte. Nach der letzten Zeile in der physischen
- * Datenverabeitungssystemspalte steht in der ersten Spalte das nächste Anwendungssystem usw. Die letzte Spalte enthält immer
- * die Anzahl der mit dem jeweiligen Anwendungssystem verknüpften phys. Datenverarbeitungsbausteine.
- * Die dargstellten Anwendungssysteme kommen aus dem aktuell selketierten Teilmodell, die verbundenen Phys.
- * Datenverabeitungsbausteine werden im Gesamtmodell gesucht.
+ * Exportiert eine Tabelle mit den Spalten "Anwendungssystem", "Physische
+ * Datenverabeitungsbausteine", "Anzahl" Für jedes Anwendungssystem steht in der
+ * ersten Spalte der Name. Alle mit diesem Anwendungssystem verknüpften
+ * physischen Datenverabeitungsbausteine stehen dann untereinander in der 2
+ * Spalte. Nach der letzten Zeile in der physischen
+ * Datenverabeitungssystemspalte steht in der ersten Spalte das nächste
+ * Anwendungssystem usw. Die letzte Spalte enthält immer die Anzahl der mit dem
+ * jeweiligen Anwendungssystem verknüpften phys. Datenverarbeitungsbausteine.
+ * Die dargstellten Anwendungssysteme kommen aus dem aktuell selketierten
+ * Teilmodell, die verbundenen Phys. Datenverabeitungsbausteine werden im
+ * Gesamtmodell gesucht.
  *
  * @author AXS
  * @create 07.09.2012
@@ -99,8 +102,8 @@ public class ExportPdvb4AwbPlugin {
     /**
      * Erzeugt den gesamten Eintrag für ein einzelnes Anwendungssystem.
      *
-     * @param applicationSystem
-     *            Anwendungssystem, für das alle Datenverabeitungsbausteine angehängt werden sollen.
+     * @param applicationSystem Anwendungssystem, für das alle
+     *            Datenverabeitungsbausteine angehängt werden sollen.
      * @param entryBuilder
      * @return
      */

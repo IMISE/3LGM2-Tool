@@ -112,7 +112,7 @@ public class ModelConverter {
     private void prepareTargetModel() {
         boolean oldBulkMode = targetModel.setBulkMode(true);
         for (Szenario sourceSzen : sourceModel.getSzenarios()) {
-            Szenario targetSzen = targetModel.createSzenario(sourceSzen.getTitle(), false, sourceSzen.getDescription(), sourceSzen.getHashString(), false);
+            Szenario targetSzen = targetModel.createSzenario(sourceSzen.getTitle(), false, sourceSzen.getDescription(), sourceSzen.getID(), false);
             sourceSzenToTargetSzen.put(sourceSzen, targetSzen);
         }
         targetModel.setBulkMode(oldBulkMode);
@@ -147,8 +147,8 @@ public class ModelConverter {
             List<ModelElement> sourceNodes = sourceMainDoc.getModelItems(sourceNodeClass, true);
             //für jeden dieser umzuwandelnden Knoten
             for (ModelElement sourceNode : sourceNodes) {
-                //lege im Hauptdokument des Zielmodells einen Knoten der neuen Art an mit gleichem Namen, gleicher Beschreibung und gleichem HashString, wie der entsprechende Knoten im Ausgangsmodell hatte
-                NodeContainer targetMainDocContainer = targetMainDoc.createNodeAndContainer(targetNodeClass, sourceNode.getName(), sourceNode.getDescription(), sourceNode.getHashString(), STANDARD_PID);
+                //lege im Hauptdokument des Zielmodells einen Knoten der neuen Art an mit gleichem Namen, gleicher Beschreibung und gleicher ID, wie der entsprechende Knoten im Ausgangsmodell hatte
+                NodeContainer targetMainDocContainer = targetMainDoc.createNodeAndContainer(targetNodeClass, sourceNode.getName(), sourceNode.getDescription(), sourceNode.getID(), STANDARD_PID);
                 //für alle Teilmodelle, in denen der umzuwandelnde Knoten im Ausgangsmodell vorkommt
                 for (GraphDocument sourceDoc : sourceNode.getMySzenarios()) {
                     //wenn es nicht das Hauptdokument ist
@@ -190,19 +190,19 @@ public class ModelConverter {
                 Edge sourceEdge = (Edge) sourceEdgeElement;
                 ModelElement sourceEdgeStartElement = sourceEdge.getStart();
                 ModelElement sourceEdgeEndElement = sourceEdge.getEnd();
-                String sourceStartElementHash = sourceEdgeStartElement.getHashString();
-                String sourceEndElementHash = sourceEdgeEndElement.getHashString();
-                ModelElement targetStartElement = targetMainDoc.findNodeCoded(sourceStartElementHash);
-                ModelElement targetEndElement = targetMainDoc.findNodeCoded(sourceEndElementHash);
+                String sourceStartElementID = sourceEdgeStartElement.getID();
+                String sourceEndElementID = sourceEdgeEndElement.getID();
+                ModelElement targetStartElement = targetMainDoc.findNodeCoded(sourceStartElementID);
+                ModelElement targetEndElement = targetMainDoc.findNodeCoded(sourceEndElementID);
                 int startElementEdgeIndex = sourceEdgeStartElement.getEdgeIndex(sourceEdge);
                 int endElementEdgeIndex = sourceEdgeEndElement.getEdgeIndex(sourceEdge);
-                String sourceEdgeHash = sourceEdge.getHashString();
+                String sourceEdgeID = sourceEdge.getID();
                 String targetEdgeClassName = targetEdgeClass.getName();
-                //linke die entsprechende Kante im Target-Modell mit demselben Hash und zwischen den Elementen mit demselben Hash
+                //linke die entsprechende Kante im Target-Modell mit derselben ID und zwischen den Elementen mit dermselben ID
                 if (!switchDirection) {
-                    targetModel.link(targetEdgeClassName, sourceEdgeHash, targetStartElement, targetEndElement, startElementEdgeIndex, endElementEdgeIndex, true, STANDARD_PID);
+                    targetModel.link(targetEdgeClassName, sourceEdgeID, targetStartElement, targetEndElement, startElementEdgeIndex, endElementEdgeIndex, true, STANDARD_PID);
                 } else {
-                    targetModel.link(targetEdgeClassName, sourceEdgeHash, targetEndElement, targetStartElement, endElementEdgeIndex, startElementEdgeIndex, true, STANDARD_PID);
+                    targetModel.link(targetEdgeClassName, sourceEdgeID, targetEndElement, targetStartElement, endElementEdgeIndex, startElementEdgeIndex, true, STANDARD_PID);
                 }
             }
         }
@@ -235,27 +235,27 @@ public class ModelConverter {
                     Edge sourceEdge = (Edge) sourceEdgeElement;
                     ModelElement sourceEdgeStartElement = sourceEdge.getStart();
                     ModelElement sourceEdgeEndElement = sourceEdge.getEnd();
-                    String sourceEdgeStartElementHash = sourceEdgeStartElement.getHashString();
-                    String sourceEdgeEndElementHash = sourceEdgeEndElement.getHashString();
-                    String sourceEdgeHash = sourceEdgeElement.getHashString();
-                    //System.err.println(sourceEdgeStartElement + " (" + sourceEdgeStartElement.getHashString() + ") " + sourceEdge.getClass().getSimpleName() + " (" + sourceEdge.getHashString() + ") " + " " + sourceEdgeEndElement + " ("
-                    //+ sourceEdgeEndElement.getHashString() + ") ");
-                    ModelElement targetStartElement = targetMainDoc.findNodeCoded(sourceEdgeStartElementHash);
-                    ModelElement targetEndElement = targetMainDoc.findNodeCoded(sourceEdgeEndElementHash);
+                    String sourceEdgeStartElementID = sourceEdgeStartElement.getID();
+                    String sourceEdgeEndElementID = sourceEdgeEndElement.getID();
+                    String sourceEdgeID = sourceEdgeElement.getID();
+                    //System.err.println(sourceEdgeStartElement + " (" + sourceEdgeStartElement.getID() + ") " + sourceEdge.getClass().getSimpleName() + " (" + sourceEdge.getID() + ") " + " " + sourceEdgeEndElement + " ("
+                    //+ sourceEdgeEndElement.getID() + ") ");
+                    ModelElement targetStartElement = targetMainDoc.findNodeCoded(sourceEdgeStartElementID);
+                    ModelElement targetEndElement = targetMainDoc.findNodeCoded(sourceEdgeEndElementID);
                     //lege den MetaPfad im Zielmodell an
                     SimplePath createdPath = targetMainDoc.createSimplePath(targetStartElement, targetEndElement, targetMetaPath, false, STANDARD_PID);
-                    // replace the generated 3LGM-hashStrings by derived
-                    // hashStrings from the source edge or join created
-                    // elements if the same element (same type with same hash
-                    // id prefix) already exists
-                    ModelConverterUtils.replaceGeneratedHashStringsAndJoinEqualsElements(createdPath, sourceEdgeHash);
+                    // replace the generated 3LGM-IDs by derived
+                    // IDs from the source edge or join created
+                    // elements if the same element (same type with
+                    // same IDprefix) already exists
+                    ModelConverterUtils.replaceGeneratedIDAndJoinEqualsElements(createdPath, sourceEdgeID);
                     // nach der Definiton der Umbenennungen die Namen der
                     // Elemente in Abhängigkeit von der Source-Edge umbenennen
                     //und ggf. zusammenführen, wenn sie identisch heißen
                     generatedRenamedElements = ModelConverterUtils.renameAndJoinEqualNamedElements(edgesMappingMetaPathsCreationDefinition, createdPath, sourceEdge, generatedRenamedElements);
-                    //am Ende alle untergeordneten Elemente, die nach dem obigen
-                    //join dieselben Elemente verbinden, auch joinen, wenn die
-                    //Definition das vorgibt
+                    // am Ende alle untergeordneten Elemente, die nach dem obigen
+                    // join dieselben Elemente verbinden, auch joinen, wenn die
+                    // Definition das vorgibt
                     if (edgesMappingMetaPathsCreationDefinition.joinSubordinatedBetweenEqualsElements) {
                         ModelConverterUtils.joinSubordinatedBetweenEqualsElements(createdPath);
                     }

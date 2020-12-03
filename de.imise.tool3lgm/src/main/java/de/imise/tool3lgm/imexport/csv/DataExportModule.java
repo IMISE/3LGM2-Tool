@@ -103,7 +103,7 @@ public class DataExportModule {
                         classElement = elementClass;
                         ElementsNameBuilder elementsNameBuilder = metaModel.getElementsNameBuilder();
                         String displayableClassName = CoreMetaModel.isEdgeType(elementClass) ? elementsNameBuilder.getFullForwardMetaAssociationName(elementClass.asSubclass(Edge.class)) : elementsNameBuilder.getDisplayableName(elementClass);
-                        caption = displayableClassName + "\tName\tDescription\tHashString";
+                        caption = displayableClassName + "\tName\tDescription\tID";
                         for (SimpleMetaPath metaPath : metaPaths2Export) {
                             if (metaPath.getStartClass().isAssignableFrom(elementClass)) {
                                 caption += "\t" + elementsNameBuilder.getDisplayableName(metaPath.getEndClass());
@@ -126,7 +126,7 @@ public class DataExportModule {
                         v = "\"\"";
                     }
                     lineBuf.append("\t" + v.replaceAll("\t", "\\\\t"));
-                    v = me.getHashString();
+                    v = me.getID();
                     if (v == null || v.equals("")) {
                         v = "\"\"";
                     }

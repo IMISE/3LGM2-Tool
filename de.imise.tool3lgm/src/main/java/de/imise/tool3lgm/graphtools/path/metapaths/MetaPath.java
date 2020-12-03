@@ -1,155 +1,36 @@
 package de.imise.tool3lgm.graphtools.path.metapaths;
 
-import static de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty.OPTION_ELEMENTS_RECEIVE_PROPERTIES_FROM_PARENTS;
-import static de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty.OPTION_ELEMENTS_RECEIVE_PROPERTIES_FROM_PARTS;
-
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.Set;
 
-import de.imise.tool3lgm.graphtools.metamodel.EdgeCardinality;
-import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
-import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
-import de.imise.tool3lgm.graphtools.metamodel.elements.InstanciationEdge;
+import com.google.common.collect.ImmutableList;
+
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.path.metapaths.PathFunctions.PathConnectionState;
 import de.imise.tool3lgm.graphtools.path.paths.PathResultTreeModel;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 
-/**
- * Oberklasse für alle Metapfade.
- *
- * @author AXS
- * @create 12.10.2010
- */
-public abstract class MetaPath extends BasicMetaPath {
+public interface MetaPath extends BasicMetaPath {
 
     /**
-     * @param metaModel
+     * Empty ElementaryMetaPath list
      */
-    public MetaPath(final MetaModel metaModel) {
-        super(metaModel);
-    }
+    ImmutableList<ElementaryMetaPath> EMPTY_ELEMENTARY_PATH_LIST = ImmutableList.of();
 
-    /**
-     * @param metaModel
-     * @param name Anzeigenamen
-     */
-    public MetaPath(final MetaModel metaModel, final String name) {
-        super(metaModel, name);
-    }
-
-    /**
-     * @param metaModel
-     * @param startElementClass
-     * @param endElementClass
-     */
-    public MetaPath(final MetaModel metaModel, final Class<? extends ModelElement> startElementClass, final Class<? extends ModelElement> endElementClass) {
-        super(metaModel, startElementClass, endElementClass);
-
-    }
-
-    /**
-     * @param metaModel
-     * @param startElementClass
-     * @param endElementClass
-     * @param name
-     */
-    public MetaPath(final MetaModel metaModel, final Class<? extends ModelElement> startElementClass, final Class<? extends ModelElement> endElementClass, final String name) {
-        super(metaModel, startElementClass, endElementClass, name);
-
-    }
-
-    /**
-     * @param metaModel
-     * @param startElementClasses
-     * @param endElementClasses
-     * @param name
-     */
-    public MetaPath(final MetaModel metaModel, final Set<Class<? extends ModelElement>> startElementClasses, final Set<Class<? extends ModelElement>> endElementClasses, final String name) {
-        super(metaModel, startElementClasses, endElementClasses, name);
-    }
-
-    /**
-     * Repräsentiert den Validitätszustand eines MetaPath. Ist der invalidReason
-     * <code>null</code>, dann gilt der MetaPath als valide, sonst nicht.
-     *
-     * @author AXS (6 Dec 2018)
-     */
-    public class InvalidityCheckResult {
-
-        /**
-         * Ein beliebiger Enum, der einen FehlerKey enthält. Über diesen
-         * Key-Name kann ein Ressourcenstring geladen werden, der dem Benutzer
-         * einen Hinweis auf den Fehler gibt.
-         */
-        public final Enum<?> invalidReason;
-
-        /**
-         * Falls der Fehler mit irgendeinem Index zusammen hängt, kann man
-         * diesen hier speichern (z.B. Index des Pfades mit dem Fehler)
-         */
-        public final int index1;
-
-        /**
-         * Falls der Fehler mit irgendeinem weiteren Index zusammen hängt, kann
-         * man diesen hier speichern (z.B. Index des Elementarpfades mit dem
-         * Fehler)
-         */
-        public final int index2;
-
-        public InvalidityCheckResult(final Enum<?> invalidReason) {
-            this(invalidReason, -1, -1);
-        }
-
-        public InvalidityCheckResult(final Enum<?> invalidReason, final int index1) {
-            this(invalidReason, index1, -1);
-        }
-
-        public InvalidityCheckResult(final Enum<?> invalidReason, final int index1, final int index2) {
-            this.invalidReason = invalidReason;
-            this.index1 = index1;
-            this.index2 = index2;
-        }
-
-    }
-
-    /**
-     *
-     */
-    public enum InvalidReason {
-        INVALID_START_CLASSES,
-        INVALID_END_CLASSES;
-    }
+    String getBaseResKeyOrName();
 
     /**
      * @return
      */
-    public InvalidityCheckResult getInvalidityCheckResult() {
-        if (invalidityCheckResult == null) {
-            InvalidReason invalidReason = null;
-            if (startElementClasses == null || startElementClasses.size() == 0) {
-                invalidReason = InvalidReason.INVALID_START_CLASSES;
-            } else if (endElementClasses == null || endElementClasses.size() == 0) {
-                invalidReason = InvalidReason.INVALID_END_CLASSES;
-            } else {
-                invalidReason = null;
-            }
-            invalidityCheckResult = new InvalidityCheckResult(invalidReason);
-        }
-        return invalidityCheckResult;
-    }
+    InvalidityCheckResult getInvalidityCheckResult();
 
     /**
      * Liefert <code>true</code>, wenn der Pfad keine Fehler enthält.
      *
      * @return
      */
-    public final boolean isValid() {
-        return getInvalidityCheckResult().invalidReason == null;
-    }
+    boolean isValid();
 
     /**
      * Liefert <code>true</code>, wenn der Pfad prinzipiell angelegt werden
@@ -164,7 +45,7 @@ public abstract class MetaPath extends BasicMetaPath {
      *            anderen Elemente, die sie für ihre Existenz brauchen).
      * @return <code>true</code> wenn dieser Pfad anlegbar ist
      */
-    public abstract boolean isCreatable(boolean checkCreateEndElement);
+    boolean isCreatable(boolean checkCreateEndElement);
 
     /**
      * Prüft, ob der Pfad ausgehend von der Startelementart entfernt werden
@@ -180,23 +61,14 @@ public abstract class MetaPath extends BasicMetaPath {
      *         auch das Endelement nicht inkonsistent und damit gelöscht werden,
      *         sonst <code>false</code>.
      */
-    public abstract boolean isRemoveable(boolean checkEndElement);
+    boolean isRemoveable(boolean checkEndElement);
 
     /**
      * Liefert <code>true</code>, wenn der Pfad eine einfache Assoziationsfolge
      * ist (also bei {@link #getElementaryMetaPaths()} nicht <code>null</code>
      * zurück gibt und jeder Einzelpfad die maximale Endkardinalität von 1 hat.
      */
-    public final boolean isSingleConnection() {
-        List<ElementaryMetaPath> elementaryMetaPaths = getElementaryMetaPaths();
-        for (ElementaryMetaPath elementaryMetaPath : elementaryMetaPaths) {
-            if (elementaryMetaPath.getForwardCardinality().max() != 1) {
-                return false;
-            }
-        }
-        //wenn der Pfad keine einfache Liste von Elementarpfaden ist, dann wird davon ausgegangen, dass mehrere Verbindungen mgl. sind
-        return !elementaryMetaPaths.isEmpty();
-    }
+    boolean isSingleConnection();
 
     /**
      * Liefert <code>true</code>, wenn das erste Element des Pfades nur
@@ -206,20 +78,7 @@ public abstract class MetaPath extends BasicMetaPath {
      *
      * @return
      */
-    public final boolean isFirstPathElementDependent() {
-        ElementaryMetaPath firstElementaryMetaPathInPath = getFirstElementaryMetaPath();
-        if (firstElementaryMetaPathInPath == null) {
-            return false;
-        }
-        //Verbindungen, die durch InstanciationEgdes bestehen, kann man nicht einfach lösen/ändern und gelten als existenznotwendig
-        Class<? extends Edge> edgeClass = firstElementaryMetaPathInPath.getEdgeClass();
-        if (InstanciationEdge.class.isAssignableFrom(edgeClass)) {
-            return true;
-        }
-        EdgeCardinality forwardCardinality = firstElementaryMetaPathInPath.getForwardCardinality();
-        int minCardinality = forwardCardinality.min();
-        return minCardinality > 0;
-    }
+    boolean isStartDependent();
 
     /**
      * Liefert <code>true</code>, wenn das letzte Element des Pfades nur
@@ -229,20 +88,7 @@ public abstract class MetaPath extends BasicMetaPath {
      *
      * @return
      */
-    public final boolean isLastPathElementDependent() {
-        ElementaryMetaPath lastElementaryMetaPathInPath = getLastElementaryMetaPath();
-        if (lastElementaryMetaPathInPath == null) {
-            return false;
-        }
-        //Verbindungen, die durch InstanciationEgdes bestehen, kann man nicht einfach lösen/ändern und gelten als existenznotwendig
-        Class<? extends Edge> edgeClass = lastElementaryMetaPathInPath.getEdgeClass();
-        if (InstanciationEdge.class.isAssignableFrom(edgeClass)) {
-            return true;
-        }
-        EdgeCardinality backwardCardinality = lastElementaryMetaPathInPath.getBackwardCardinality();
-        int minCardinality = backwardCardinality.min();
-        return minCardinality > 0;
-    }
+    boolean isEndElementDependent();
 
     /**
      * Liefert den MetaPfad der die Gegenricthung beschreibt oder
@@ -250,63 +96,92 @@ public abstract class MetaPath extends BasicMetaPath {
      *
      * @return the otherDirectionPath
      */
-    public MetaPath getOtherDirection() {
-        return otherDirection;
-    }
+    MetaPath getOtherDirection();
 
     /**
      * Liefert eine Folge von Elementarpfaden, wenn sich dieser Pfad so bilden
      * lässt, ansonsten kommt eine leere Liste zurück. Alle parallelen Pfade
-     * geben hier leere Liste zurück. {@link SequenceMetaPath} geben nur keine
+     * geben hier leere Liste zurück. {@link SerialMetaPath} geben nur keine
      * leere Liste zurück, wenn sie im innersten ein einzelner Pfad sind ohne
      * parallele oder rekursive Pfade sind.
      *
      * @return
      */
-    public List<ElementaryMetaPath> getElementaryMetaPaths() {
-        return EMPTY_ELEMENTARY_PATH_LIST;
-    }
+    List<ElementaryMetaPath> getElementaryMetaPaths();
+
+    /**
+     * @return The number of elementary metapaths, if this liset can be formed.
+     *         If the list of {@link #getElementaryMetaPaths()} is
+     *         <code>null</code> or empty, the 0 is returned.
+     * @see #getElementaryMetaPaths()
+     */
+    int getElementaryMetaPathCount();
 
     /**
      * @return den ersten ElementaryMetaPath aus
      *         {@link #getElementaryMetaPaths()}, wenn die Liste mind. einen
      *         solchen Elementarpfad enthält.
      */
-    public ElementaryMetaPath getFirstElementaryMetaPath() {
-        List<ElementaryMetaPath> elementaryMetaPaths = getElementaryMetaPaths();
-        //wenn der Pfad keine einfache Liste von Elementarpfaden ist, dann wird davon ausgegangen, dass das letzte Pfadelement gebraucht wird
-        if (elementaryMetaPaths.isEmpty()) {
-            return null;
-        }
-        ElementaryMetaPath lastElementaryMetaPath = elementaryMetaPaths.get(0);
-        return lastElementaryMetaPath;
-    }
+    ElementaryMetaPath getFirstElementaryMetaPath();
 
     /**
      * @return den letzten ElementaryMetaPath aus
      *         {@link #getElementaryMetaPaths()}, wenn die Liste mind. einen
      *         solchen Elementarpfad enthält.
      */
-    public ElementaryMetaPath getLastElementaryMetaPath() {
-        List<ElementaryMetaPath> elementaryMetaPaths = getElementaryMetaPaths();
-        //wenn der Pfad keine einfache Liste von Elementarpfaden ist, dann wird davon ausgegangen, dass das letzte Pfadelement gebraucht wird
-        if (elementaryMetaPaths == null || elementaryMetaPaths.isEmpty()) {
-            return null;
-        }
-        int lastElementaryMetaPathIndex = elementaryMetaPaths.size() - 1;
-        ElementaryMetaPath lastElementaryMetaPath = elementaryMetaPaths.get(lastElementaryMetaPathIndex);
-        return lastElementaryMetaPath;
-    }
+    ElementaryMetaPath getLastElementaryMetaPath();
+
+    /**
+     * Returns the connection class of the path step with the passed index in
+     * the element path list of this path. With index 0, this is the more
+     * special of the end class of the first elementary metapath and the start
+     * class of the next elementary metapath. The path step with the index of
+     * metapath length -1 is the end class of the last elementary metapath = end
+     * class of the whole elementary metapath list. The start class of the
+     * complete metapath is not accessible through this function.
+     *
+     * @param pathStepIndex
+     * @return
+     */
+    Class<? extends ModelElement> getElementaryMetaPathStepConnectingClass(int pathStepIndex);
+
+    /**
+     * Returns the connection class of the path step with the passed index in
+     * the element path list of this path. With index 0, this is the more
+     * special of the end class of the first submetapath and the start class of
+     * the next submetapath. The path step with the index of metapath length -1
+     * is the end class of the last submetapath = end class of the whole
+     * sunmetapath list. The start class of the complete metapath is not
+     * accessible through this function.
+     *
+     * @param pathStepIndex
+     * @return
+     */
+    Class<? extends ModelElement> getSubMetaPathStepConnectingClass(int pathStepIndex);
 
     /**
      * @return Liste aller {@link MetaPath}, die dieser MetaPfad enthält.
      */
-    public abstract List<MetaPath> getSubMetaPaths();
+    List<MetaPath> getSubMetaPaths();
+
+    /**
+     * @param index
+     * @return the sub metapath at the index
+     */
+    MetaPath getSubMetaPath(final int index);
 
     /**
      * @return the number of contained metapaths
      */
-    public abstract int getSubMetaPathCount();
+    int getSubMetaPathCount();
+
+    /**
+     * @param elementaryMetaPaths If <code>true</code>, then the list of
+     *            ElementaryMetaPaths is returned. If false, then the list of
+     *            SubMetaPaths is returned.
+     * @return
+     */
+    public List<MetaPath> getSubMetaPaths(final boolean elementaryMetaPaths);
 
     /**
      * Liefert <code>false</code>, wenn der Pfad in beide Richtungen dasselbe
@@ -316,7 +191,7 @@ public abstract class MetaPath extends BasicMetaPath {
      * sein. Diese Verbindung heißt in jede der beiden Richtungen "ist verbunden
      * mit" und verbindet dieselbe Elementart miteinander. Der dazugehörige
      * Elementarpfad ist also undirected. Dasselbe ist aber auch für
-     * {@link SequenceMetaPath}s möglich, wenn z.B. die beiden physischen
+     * {@link SerialMetaPath}s möglich, wenn z.B. die beiden physischen
      * DV-Bausteine Schnittstellen beitzen würden (was sie im aktuellen
      * Metamodell nicht haben) und diese dann über eine
      * Datenübertragungsverbindung mit der beidseitigen Bedeutung "ist verbunden
@@ -328,7 +203,7 @@ public abstract class MetaPath extends BasicMetaPath {
      * @return <code>true</code> wenn Vorwärts- und Rückwärtsrichtungen
      *         unterschiedliche Bedeutung haben
      */
-    public abstract boolean isDirected();
+    boolean isDirected();
 
     /**
      * Liefert <code>true</code>, wenn der Metapfad irgendwo eine
@@ -336,7 +211,7 @@ public abstract class MetaPath extends BasicMetaPath {
      *
      * @return
      */
-    public abstract boolean containsPropertyTransferEdge();
+    boolean containsPropertyTransferEdge();
 
     /**
      * @param other
@@ -346,15 +221,7 @@ public abstract class MetaPath extends BasicMetaPath {
      *         means that one of the class must be a subclass of the other
      *         (which is sub and which super dosn't matters).
      */
-    public boolean isAssignable(final MetaPath other) {
-        //Maybe there would be an useful expression here for general MetaPath too, but
-        //we only need this function for SimpleMetaPaths and ElementaryMetaPaths
-        return false;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////
-    //getConnectedElements(...) + getConnectedContainer(...) + getResultTree //
-    ///////////////////////////////////////////////////////////////////////////
+    boolean isAssignable(MetaPath other);
 
     /**
      * Liefert alle mit dem übergebenen Element über diesen MetaPfad verbundenen
@@ -366,19 +233,13 @@ public abstract class MetaPath extends BasicMetaPath {
      *            jedes Element nur einmal enthalten.
      * @return
      */
-    public List<ModelElement> getConnectedElements(final ModelElement me, final boolean multiple) {
-        List<ModelElement> modelElements = new ArrayList<>();
-        modelElements.add(me);
-        return getConnectedElements(modelElements, multiple);
-    }
+    List<ModelElement> getConnectedElements(ModelElement me, boolean multiple);
 
     /**
      * @param me
      * @return
      */
-    public List<ModelElement> getConnectedElements(final ModelElement me) {
-        return getConnectedElements(me, false);
-    }
+    List<ModelElement> getConnectedElements(ModelElement me);
 
     /**
      * Liefert eine Sammlung aller Elemente, die über diesen Pfad mit den
@@ -387,9 +248,7 @@ public abstract class MetaPath extends BasicMetaPath {
      * @param modelElements
      * @return
      */
-    public List<ModelElement> getConnectedElements(final Collection<ModelElement> modelElements) {
-        return getConnectedElements(modelElements, false);
-    }
+    List<ModelElement> getConnectedElements(Collection<ModelElement> modelElements);
 
     /**
      * Liefert eine Sammlung aller Elemente, die über diesen Pfad mit den
@@ -402,19 +261,14 @@ public abstract class MetaPath extends BasicMetaPath {
      *            <code>false</code> ist jedes Element nur einmal enthalten.
      * @return
      */
-    public List<ModelElement> getConnectedElements(final Collection<ModelElement> modelElements, final boolean multiple) {
-        PathResultTreeModel resultTree = getResultTree(modelElements);
-        return resultTree.getConnectedElements(multiple);
-    }
+    List<ModelElement> getConnectedElements(Collection<ModelElement> modelElements, boolean multiple);
 
     /**
      * @param me
      * @param doc
      * @return
      */
-    public List<ElementContainer> getConnectedContainer(final ModelElement me, final GraphDocument doc) {
-        return getConnectedContainer(me, doc, false);
-    }
+    List<ElementContainer> getConnectedContainer(ModelElement me, GraphDocument doc);
 
     /**
      * @param me
@@ -422,10 +276,8 @@ public abstract class MetaPath extends BasicMetaPath {
      * @param forlast
      * @return
      */
-    public List<ElementContainer> getConnectedContainer(final ModelElement me, final GraphDocument doc, final boolean forlast) {
-        PathResultTreeModel resultTree = getResultTree(me);
-        return resultTree.getConnectedContainer(doc, forlast);
-    }
+    List<ElementContainer> getConnectedContainer(ModelElement me, GraphDocument doc, boolean forlast);
+
     /**
      * @param startElement
      * @param endElement
@@ -433,36 +285,28 @@ public abstract class MetaPath extends BasicMetaPath {
      * @param searchParts
      * @return
      */
-    public PathConnectionState getPathConnectionState(final ModelElement startElement, final ModelElement endElement, final boolean searchParents, final boolean searchParts) {
-        return PathFunctions.getPathConnectionState(startElement, endElement, this, searchParents, searchParts);
-    }
+    PathConnectionState getPathConnectionState(ModelElement startElement, ModelElement endElement, boolean searchParents, boolean searchParts);
 
     /**
      * @param startElement
      * @param endElement
      * @return
      */
-    public PathConnectionState getPathConnectionState(final ModelElement startElement, final ModelElement endElement) {
-        return PathFunctions.getPathConnectionState(startElement, endElement, this, OPTION_ELEMENTS_RECEIVE_PROPERTIES_FROM_PARENTS.is(), OPTION_ELEMENTS_RECEIVE_PROPERTIES_FROM_PARTS.is());
-    }
+    PathConnectionState getPathConnectionState(ModelElement startElement, ModelElement endElement);
 
     /**
      * @param startElement
      * @param endElement
      * @return
      */
-    public boolean isConnected(final ModelElement startElement, final ModelElement endElement) {
-        return getPathConnectionState(startElement, endElement) != PathConnectionState.NOT_CONNECTED;
-    }
+    boolean isConnected(ModelElement startElement, ModelElement endElement);
 
     /**
      * @param startElement
      * @param endElement
      * @return
      */
-    public boolean isDirectConnected(final ModelElement startElement, final ModelElement endElement) {
-        return getPathConnectionState(startElement, endElement, false, false) != PathConnectionState.NOT_CONNECTED;
-    }
+    boolean isDirectConnected(ModelElement startElement, ModelElement endElement);
 
     /**
      * Liefert einen Ergebnisbaum, der alle eventuell vorhandenen Pfade
@@ -471,9 +315,7 @@ public abstract class MetaPath extends BasicMetaPath {
      * @param startElement
      * @return
      */
-    public PathResultTreeModel getResultTree(final ModelElement startElement) {
-        return new PathResultTreeModel(this, startElement);
-    }
+    PathResultTreeModel getResultTree(ModelElement startElement);
 
     /**
      * Liefert einen Ergebnisbaum, der alle eventuell vorhandenen Pfade
@@ -483,42 +325,32 @@ public abstract class MetaPath extends BasicMetaPath {
      * @param keepIncompleteBranches
      * @return
      */
-    public PathResultTreeModel getResultTree(final ModelElement startElement, final boolean keepIncompleteBranches) {
-        return new PathResultTreeModel(this, startElement, keepIncompleteBranches);
-    }
+    PathResultTreeModel getResultTree(ModelElement startElement, boolean keepIncompleteBranches);
 
     /**
      * @param startElements
      * @return
      */
-    public PathResultTreeModel getResultTree(final Collection<ModelElement> startElements) {
-        return new PathResultTreeModel(this, startElements);
-    }
+    PathResultTreeModel getResultTree(Collection<ModelElement> startElements);
 
     /**
      * @param startElements
      * @param keepIncompleteBranches
      * @return
      */
-    public PathResultTreeModel getResultTree(final Collection<ModelElement> startElements, final boolean keepIncompleteBranches) {
-        return new PathResultTreeModel(this, startElements, keepIncompleteBranches);
-    }
+    PathResultTreeModel getResultTree(Collection<ModelElement> startElements, boolean keepIncompleteBranches);
 
     /**
      * @param startElements
      * @return
      */
-    public PathResultTreeModel getResultTree(final List<Collection<ModelElement>> startElements) {
-        return new PathResultTreeModel(this, startElements);
-    }
+    PathResultTreeModel getResultTree(List<Collection<ModelElement>> startElements);
 
     /**
      * @param startElements
      * @param keepIncompleteBranches
      * @return
      */
-    public PathResultTreeModel getResultTree(final List<Collection<ModelElement>> startElements, final boolean keepIncompleteBranches) {
-        return new PathResultTreeModel(this, startElements, keepIncompleteBranches);
-    }
+    PathResultTreeModel getResultTree(List<Collection<ModelElement>> startElements, boolean keepIncompleteBranches);
 
 }

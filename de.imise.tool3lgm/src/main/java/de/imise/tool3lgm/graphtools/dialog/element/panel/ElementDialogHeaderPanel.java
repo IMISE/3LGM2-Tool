@@ -3,7 +3,7 @@ package de.imise.tool3lgm.graphtools.dialog.element.panel;
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
 import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.getEndClass;
 import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.getStartClass;
-import static de.imise.util.HashStringGenerator.getCreationTimeMedium;
+import static de.imise.util.IDStringGenerator.getCreationTimeMedium;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -117,8 +117,8 @@ public class ElementDialogHeaderPanel extends ElementDialogPanel {
             typeLabel.setText(displayableName);
             labelLabel.setText("<html><b>" + me.getClearName() + "</b></html>");
             GDCollection gdcoll = getCollection();
-            String associatedDocHash = me.getAssociatedDoc();
-            GraphDocument vdoc = gdcoll.getGraphDocumentCoded(associatedDocHash);
+            String associatedDocID = me.getAssociatedSzenID();
+            GraphDocument vdoc = gdcoll.getGraphDocumentCoded(associatedDocID);
             if (vdoc == null) {
                 subModelLabelLabel.setVisible(false);
                 submodelLabel.setVisible(false);
@@ -152,8 +152,8 @@ public class ElementDialogHeaderPanel extends ElementDialogPanel {
             nameLabel.setText("<html><b>" + startElementName + "</b>" + forwardEdgeClassName + "<b>" + endElementName + "</b></html>");
             labelLabel.setText("<html>" + me.getClearName() + "</html>");
         }
-        String hashString = me.getHashString();
-        idLabel.setText(hashString + "        " + getResString("created") + ": " + getCreationTimeMedium(hashString));
+        String meID = me.getID();
+        idLabel.setText(meID + "        " + getResString("created") + ": " + getCreationTimeMedium(meID));
     }
 
 }
