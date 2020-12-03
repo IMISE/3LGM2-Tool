@@ -25,6 +25,7 @@ import de.imise.tool3lgm.graphtools.path.metapaths.SimpleMetaPath;
 import de.imise.tool3lgm.metamodel.service.edge.ApplicationSystem_IheActorInstance_Edge;
 import de.imise.tool3lgm.metamodel.service.edge.ApplicationSystem_SoftwareProduct_Edge;
 import de.imise.tool3lgm.metamodel.service.edge.CommunicationLink_Edge;
+import de.imise.tool3lgm.metamodel.service.edge.Function_Use_Edge;
 import de.imise.tool3lgm.metamodel.service.edge.IheActorInstanceCommunicationLink_Edge;
 import de.imise.tool3lgm.metamodel.service.edge.IheActorInstance_IheActorInstanceInterface_Edge;
 import de.imise.tool3lgm.metamodel.service.edge.IheActor_IheActorInstance_Edge;
@@ -36,10 +37,12 @@ import de.imise.tool3lgm.metamodel.service.edge.IheInvokingInterface_IheTransact
 import de.imise.tool3lgm.metamodel.service.edge.IheProvidingInterface_IheActorInstanceProvidingInterface_Edge;
 import de.imise.tool3lgm.metamodel.service.edge.IheProvidingInterface_IheTransaction_Edge;
 import de.imise.tool3lgm.metamodel.service.edge.IheTransaction_IheCommunicationLink_Edge;
+import de.imise.tool3lgm.metamodel.service.edge.OrganisationalUnit_Use_Edge;
 import de.imise.tool3lgm.metamodel.service.edge.Service_CommunicationLink_Edge;
 import de.imise.tool3lgm.metamodel.service.edge.Service_InvokingInterface_Edge;
 import de.imise.tool3lgm.metamodel.service.edge.Service_ProvidingInterface_Edge;
 import de.imise.tool3lgm.metamodel.service.node.ApplicationSystem;
+import de.imise.tool3lgm.metamodel.service.node.Function;
 import de.imise.tool3lgm.metamodel.service.node.IheActor;
 import de.imise.tool3lgm.metamodel.service.node.IheActorInstance;
 import de.imise.tool3lgm.metamodel.service.node.IheActorInstanceInvokingInterface;
@@ -48,6 +51,7 @@ import de.imise.tool3lgm.metamodel.service.node.IheInvokingInterface;
 import de.imise.tool3lgm.metamodel.service.node.IheProvidingInterface;
 import de.imise.tool3lgm.metamodel.service.node.IheTransaction;
 import de.imise.tool3lgm.metamodel.service.node.InvokingInterface;
+import de.imise.tool3lgm.metamodel.service.node.OrganisationalUnit;
 import de.imise.tool3lgm.metamodel.service.node.ProvidingInterface;
 import de.imise.tool3lgm.metamodel.service.node.Service;
 import de.imise.tool3lgm.metamodel.service.node.SoftwareProduct;
@@ -68,6 +72,13 @@ public class TLGMServiceMetaPathsDefinition extends MetaPathDefinition {
      */
     public TLGMServiceMetaPathsDefinition(final MetaModel metaModel) {
         super(metaModel);
+    }
+
+    @Override
+    protected void init() {
+
+        putAll(getCreatableMetaPaths());
+
     }
 
     ///////////////////////////////////////////////////////////////////////////
@@ -116,14 +127,17 @@ public class TLGMServiceMetaPathsDefinition extends MetaPathDefinition {
 
     @Override
     public Collection<SimpleMetaPath> getCreatableMetaPaths() {
+        /* ApplicationSystem - IheActor */
         SimpleMetaPath metaPath1 = smp(ApplicationSystem.class, IheActor.class, "PATH_ApplicationSystem_IheActor", ApplicationSystem_IheActorInstance_Edge.class, IheActor_IheActorInstance_Edge.class);
+        /* Function - OrganisationalUnit */
+        SimpleMetaPath metaPath3 = smp(Function.class, OrganisationalUnit.class, "PATH_Function_OrganisationalUnit", Function_Use_Edge.class, OrganisationalUnit_Use_Edge.class);
         //        SimpleMetaPath metaPath2 = smp(IheActorInstance.class, IheActor.class, "PATH_IheActorInstance_ApplicationSystem_IheActor", ApplicationSystem_IheActorInstance_Edge.class, ApplicationSystem_IheActorInstance_Edge.class,
         //                IheActor_IheActorInstance_Edge.class);
         //        return ImmutableList.of(metaPath1, metaPath2);
         //das folgende muss in die Resourcen, sollte man den Pfad oben mal schrf schalten (bisher nur deutsch)
         //        PATH_IheActorInstance_ApplicationSystem_IheActor_f      muss gruppiert werden mit
         //        PATH_IheActorInstance_ApplicationSystem_IheActor_b      wird zur Gruppierung benötigt von
-        return ImmutableList.of(metaPath1);
+        return ImmutableList.of(metaPath1, metaPath3);
     }
 
     ////////////////////////////////////////////////////////////////////////

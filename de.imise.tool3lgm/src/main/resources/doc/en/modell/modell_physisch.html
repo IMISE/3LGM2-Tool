@@ -1,0 +1,72 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<html>
+<head>
+	<title>Static view of the physical tool layer</title>
+</head>
+
+<body>
+
+<h1>Static view of the physical tool layer</h1>
+<p>
+The physical tool layer consists of a set of <a name="dv_baustein">physical data processing components</a>. A physical data processing component of a hospital information system is either 
+<ul>
+<li>a system of people and conventional tools (such as archive shelves, incoming and outgoing mail baskets) of information processing (non-computer-based physical data processing module) or</li>
+<li>a computer-based physical data processing component, e.g. computer systems (PCs, servers), monitors, printers, switches, routers, subnets, network cards, network connection points). </li>
+</ul>
+
+<p>
+The physical data processing modules can communicate with each other via data transmission connections. Between computer-based physical data processing modules, these are typically data cables. However, if we look at radio networks, these data transmission connections are only virtual (i.e. not tangible) and are only defined by the two nodes between which they exist. The same applies to data transmission connections between non-computer-based data processing components.
+</p>
+
+<p>
+The constellation of these data transfer connections for to physical networks based on <a name="netzprotokoll">network protocols</a>. <a name="subnetz">Subnets</a> can be defined as projections onto the entire network. It should be noted that at the physical tool layer, both 'real' physical networks can be described, which only represent the existing data processing components and their data transmission connections, and 'logical networks', which take into account that certain data processing components also belong to certain zones in which certain access rights are assigned. 
+</p>
+
+<p>
+The physical tool layer thus provides the physical tools required for the operation of application components. Physical data processing components can be subdivided into physical data processing components.
+</p>
+
+<p>
+Especially computer systems can be described in more detail by the following attributes of the 'Physical Data Processing components' class (these attributes are not shown in the UML class diagram):
+<ul>
+<li>inventory number</li>
+<li>Serial number</li>
+<li>Type</li>
+<li>Operating system </li>
+<li>Hard disk space </li>
+<li>Working memory</li>
+<li>Processor</li>
+</ul>
+
+<a href="#abb1">Figure 1</a> shows the UML notation of the physical tool layer.
+<div align="center">
+<a name="abb1">
+<img src="../../bilder/metamodellPhysisch.gif" width=491 height=238 border=0 align="bottom" alt="">
+</a>
+<br>Fig. 1: Class diagram 'Physical tool layer'. Dotted lines and symbols represent inter-layer relationships.
+</div>
+
+<p><i>
+Note: The meta-model of the physical tool layer is much more open, i.e. it contains much less content than the meta-model of the logical tool layer. While interfaces are explicitly modeled there, interfaces (e.g., network cards) on the physical tool layer can be modeled as physical data processing components, which in turn are part of a computer system.
+</i></p>
+
+<p><i>
+Note: In the case of conventional data processing modules, the operating system can be understood as the intellectual abilities of the persons involved. For example, in a medical file archive, in addition to the rooms and shelving systems, people are needed who are able to master basic cultural techniques such as keeping order, friendly interaction with customers and employees, etc. Only on this basis can a functioning archive be realized as a non-computer-based application module with the help of an organization plan and the instructions of a management. 
+</i></p>
+s
+<p>
+<a href="#abb2">Fig. 2</a> shows an example of a physical tool layer. In this example there is one server each for the different application modules of the functional departments (one LIS server, one RIS server and the servers for the application modules not further specified and a central server on which the PVS and the hospital administration system are installed. Each server is connected to several PCs. The black dots represent network components through which the servers are connected to each other and thus form the overall network. The data transfer from and to the paper-based part of the HIS is only shown here using the LIS as an example. A laboratory request (as a document) goes via the outgoing mail basket of the clinical workstation to the incoming mail basket of the laboratory and is read by a form reader. The result (i.e. the findings) is printed out and goes via the outgoing basket of the laboratory to the incoming basket of the clinical workstation. In this example no subnets are specified and no information about the <a name="netztyp">network type</a>, network protocol or location is displayed.
+</p>
+
+<div align="center">
+<a name="abb2">
+<img src="../../bilder/bspPhysisch.gif" width=604 height=344 border=0 align="bottom" alt="">
+</a>
+<br>Fig. 2 Example of a physical tool layer
+</div>
+
+
+
+</body>
+</html>
