@@ -2,174 +2,107 @@
 
 <html>
 <head>
-	<title>FAQ zur Modellierung - Logische Werkzeugebene</title>
+	<title>FAQ on modeling - Logische Werkzeugebene</title>
 
 </head>
 
 <body>
-<h1>FAQ zur Modellierung - Logische Werkzeugebene</h1>
+<h1>FAQ on modeling - Logische Werkzeugebene</h1>
 
 <p align="left">
-<h2><a name="f1">1.</a> Wie modelliere ich eine Datenbank, die zu
-keinem Anwendungsbaustein geh&ouml;rt?</h2>
-Gemeint ist hier wohl ein <i>Datenbanksystem</i>.
-Ein <i>Datenbanksystem</i> kann im weitesten Sinne selbst Anwendungsbaustein sein. 
-In diesem Fall muss aber zun&auml;chst ein Anwendungsbaustein definiert werden, 
-der sozusagen als H&uuml;lle dient. Diesem Anwendungsbaustein wird dann ein Datenbanksystem
-zugeordnet. Der Anwendungsbaustein erh&auml;lt Bausteinschnittstellen,
-&uuml;ber die andere Anwendungsbausteine dann auf das Datenbanksystem
-zugreifen k&ouml;nnen. </p>
-
-<p align="left">
-<h2><a name="f2">2.</a> Besteht die M&ouml;glichkeit f&uuml;r einen
-Anwendungsbaustein mehrere Datenbank-
-systeme zu erstellen?</h2>
-Nach unserem Metamodell gibt es keine
-M&ouml;glichkeit, einem Anwendungsbaustein mehrere Datenbanksysteme
-zuzuordnen. Dies ist aus unserer Erfahrung heraus nicht notwendig, da
-die uns bekannten Anwendungsbausteine auch immer nur ein
-Datenbanksystem besitzen. Allerdings kann es durchaus m&ouml;glich
-sein, dass ein Anwendungsbaustein auf mehrere Datenbanksysteme
-zugreift. In diesem Fall sind zuerst die Datenbanksysteme und die sie
-besitzenden Anwendungsbausteine (siehe auch <a href="#f5">FAQ 5.</a>)
-zu modellieren. Der Zugriff muss dann &uuml;ber Bausteinschnittstellen
-und Kommunikationsbeziehungen modelliert werden. </p>
-
-<h2><a name="f3">3.</a> Gibt es Modellierungsrichtlinien auf der
-logischen Werkzeugebene f&uuml;r papierbasierte Anwendungsbausteine?</h2>
-
-<p align="left">
-<h2><a name="f4">4.</a> Wann ist eine Schnittstelle
-Benutzungsschnittstelle und wann Bausteinschnittstelle?</h2>
-Eine Schnittstelle ist immer dann eine
-Bausteinschnittstelle, wenn damit eine Kommunikationsbeziehung zu einem
-anderen Anwendungsbaustein modelliert werden soll. Eine
-Benutzungsschnittstelle bezieht sich auf die
-Mensch-Maschine-Interaktion und betrachtet mehr softwareergonomische
-Aspekte. </p>
-
-<p align="left">
-<h2><a name="f5">5.</a> Warum wird im Objekttyp/Eigenschaftendialog der
-Nachrichtentyp mit dem Objekttyp verbunden? Geh&ouml;rt der
-Nachrichtentyp nicht eher mit dem Datensatztyp bzw. dem Dokumententyp
-verbunden (z.B. Nachrichtentyp &#8222;ADT-Meldung&quot; &#8211; Datensatztyp
-&#8222;Patientenstammdaten&quot; anstelle von Objekt &#8222;Patient&quot;)</h2>
-Nach unserem Metamodell gibt es drei
-M&ouml;glichkeiten, wie ein Objekttyp auf der logischen Werkzeugebene
-repr&auml;sentiert werden kann: als Nachrichtentyp, als Datensatztyp
-oder als Dokumententyp. Die Repr&auml;sentation als Datensatztyp
-bezieht sich auf die Speicherung in einem Datenbanksystem. Die
-Repr&auml;sentation als Nachrichtentyp bezieht sich auf die
-Kommunikation zwischen zwei rechnerbasierten Anwendungsbausteinen. Die
-Repr&auml;sentation als Dokumententyp bezieht sich auf die Speicherung
-in einer Dokumentensammlung und die Kommunikation zwischen zwei
-Anwendungsbausteinen, von denen mindestens einer papierbasiert ist. </p>
-
-<p align="left">
-<h2><a name="f6">6.</a> Kann ich unter dem Master-DBS das
-Datenbankverwaltungssystem verstehen, wie es im Modellbrowser benannt
-ist?</h2>
-Nein. 
+<h2><a name="f1">1.</a> How do I model a database that does not belong to any application component?</h2>
+What is meant here is probably a <i>database system</i>. A <i>database system</i> can be an application component in the broadest sense. 
+In this case, however, an application component must first be defined, which serves as a shell, so to speak. A database system is 
+then assigned to this application block. The application block is provided with block interfaces via which other application blocks 
+can then access the database system.
 </p>
 
 <p align="left">
-<h2><a name="f7">7.</a> Wann ist es notwendig, nicht
-rechnerunterst&uuml;tzte Bausteinschnittstellen zu modellieren? (z. B.
-wenn zun&auml;chst etwas auf Papier dokumentiert und sp&auml;ter mit
-einen rechnerbasierten Anwendungsbaustein erfasst wird &#8211;
-Leistungsanordnung)</h2>
-Typisches Beispiel f&uuml;r die Datenkommunikation
-zwischen einem rechnerbasierten und einem papierbasierten
-Anwendungsbaustein ist das Auftreten von Medienbr&uuml;chen. Will man
-dieses modellieren/sehen, so sind f&uuml;r die Schnittstellen folgende
-Fragen zu stellen:
+<h2><a name="f2">2.</a> Is it possible to create several database systems for one application block?</h2>
+According to our meta model, there is no possibility of assigning several database systems to one application module. 
+In our experience, this is not necessary, since the application modules known to us always have only one database system. 
+However, it may well be possible for one application module to access several database systems. In this case, the database 
+systems and the application modules that own them (see also <a href="#f5">FAQ 5.</a>) must be modeled first. The access must then be modeled 
+via block interfaces and communication relationships.
+</p>
+
+<h2><a name="f3">3.</a> Are there modeling guidelines on the logical tool level for paper-based application modules?</h2>
+
+<p align="left">
+<h2><a name="f4">4.</a> When is an interface a user interface and when is it a component interface?</h2>
+An interface is always a component interface when it is used to model a communication relationship to another application component. 
+A user interface refers to the human-machine interaction and considers more software-ergonomic aspects.</p>
+
+<p align="left">
+<h2><a name="f5">5.</a> Why is the message type linked to the object type in the object type/property dialog? 
+Doesn't the message type belong to the record type or document type (e.g. message type "ADT message" - record type 
+"Patient master data" instead of object "Patient")
+</h2>
+According to our metamodel, there are three ways in which an object type can be represented at the logical tool level: 
+as a message type, as a record type or as a document type. The representation as record type refers to the storage in a 
+database system. The representation as message type refers to the communication between two computer-based application modules. 
+The representation as document type refers to the storage in a document collection and the communication between two application 
+modules, of which at least one is paper-based.</p>
+
+<p align="left">
+<h2><a name="f6">6.</a> can I understand the master DBS as the database management system as it is named in the model browser?</h2>
+No.
+</p>
+
+<p align="left">
+<h2><a name="f7">7.</a> when is it necessary to model non-computer supported building block interfaces? (e.g. if something is first 
+documented on paper and later captured with a computer-based application building block - power arrangement)</h2>
+A typical example of data communication between a computer-based and a paper-based application component is the occurrence of media breaks. 
+If one wants to model/see this, the following questions have to be asked for the interfaces:
 <ul>
-  <li>Werden Daten im papierbasierten Bereich erfasst, die
-anschlie&szlig;end manuell in ein rechnerbasiertes Anwendungssystem
-eingegeben werden?</li>
-  <li>Werden Daten aus einem rechnerbasierten Anwendungssystem
-ausgedruckt und auf Papier weiter verwendet?</li>
+  <li>Is data captured in the paper-based area, which is then manually entered into a computer-based application system?</li>
+  <li>Is data from a computer-based application system printed out and reused on paper?</li>
 </ul>
-Tipp: Da im 3LGM&sup2;-Baukasten in der Regel keine Benutzer modelliert
-werden, wird die Benutzung des rechnerbasierten Anwendungsbausteins
-nicht explizit modelliert. Wird also ein Papier ausgedruckt, gelesen
-und dann vernichtet, wird das in der Regel nicht modelliert. Das Lesen
-w&auml;re auch am Bildschirm m&ouml;glich gewesen. Soll dieser Fall
-modelliert werden, um z.B. den Verdacht des unn&ouml;tig hohen
-Papieraufkommens zu bekr&auml;ftigen, kann man einen papierbasierten
-Anwendungsbaustein &#8222;Betrieb&quot; modellieren mit einer Dokumentensammlung
-&#8222;Papierkorb&quot;.
+Tip: Since users are not usually modeled in the 3LGM² toolbox, the use of the computer-based application module is not explicitly modeled. 
+So if a paper is printed, read and then destroyed, it is usually not modeled. Reading would also have been possible on screen. If this 
+case is to be modeled, e.g. to confirm the suspicion of an unnecessarily high amount of paper, a paper-based application module "Operation" 
+can be modeled with a document collection "Recycle Bin".
 </p>
 
 <p align="left">
-<h2><a name="f8">8.</a> Nach meinem Verst&auml;ndnis gibt es keine
-Schnittstellen, die sowohl Sende- als auch Empfangsschnittstelle sein
-k&ouml;nnen. Trotzdem l&auml;sst das Meta-Modell und der Baukasten dies
-zu. Warum?</h2>
-Unser Metamodell l&auml;sst es zu, dass ein und
-dieselbe Schnittstelle sowohl Sende- als auch Empfangsschnittstelle
-sein kann. Dies ist zun&auml;chst nicht einsichtig, da realistische
-Schnittstellen i. a. entweder Sende- oder Empfangsschnittstelle sind.
-Allerdings ist zu bedenken, dass es w&uuml;nschenswert sein wird,
-abstrakter modellieren zu wollen. M&ouml;chte man beispielsweise
-lediglich darstellen, dass zwei Anwendungsbausteine in beide Richtungen
-miteinander kommunizieren, wird man f&uuml;r jeden AB eine
-Schnittstelle definieren und diese in beide Richtungen verbinden. Das
-Meta-Modell l&auml;sst hier bewusst M&ouml;glichkeiten offen, um es dem
-Modellierer zu erm&ouml;glichen sein IS unter verschiedenen
-Zielsetzungen und Abstraktionsgraden zu modellieren. </p>
+<h2><a name="f8">8.</a> In my understanding, there are no interfaces that can be both send and receive interfaces. Nevertheless, 
+the meta-model and the building set allow this. Why?</h2>
+Our meta model allows one and the same interface to be both a sending and receiving interface. This is not obvious at first, since 
+realistic interfaces are generally either send or receive interfaces. However, it should be considered that it will be desirable to 
+model more abstractly. For example, if you only want to show that two application blocks communicate with each other in both directions, 
+you will define an interface for each AB and connect them in both directions. The meta-model deliberately leaves open possibilities here, 
+in order to enable the modeler to model his IS under different objectives and degrees of abstraction.</p>
 
 <p align="left">
-<h2><a name="f9">9.</a> Wie kann ich auf der logischen Ebene meinem
-Datenbanksystem seine Master-
-DBS zuordnen?</h2>
-Das geht nicht. Siehe auch <a href="#f1">1.</a></p>
+<h2><a name="f9">9.</a> How can I assign its master DBS on the logical level to my database system?</h2>
+This is not possible. See also <a href="#f1">1.</a></p>
 
 <p align="left">
-<h2><a name="f10">10.</a> Beim Datensatztyp wird ETNT nicht angeboten,
-sondern nur beim Dokumententyp. Wie kann ich das dann bei zwei
-rechnerbasierten Anwendungsbausteinen modellieren?</h2>
-Das ist so gewollt. Dahinter steckt folgendes: Wenn
-wir uns im rein rechnerbasierten Bereich befinden, erfolgt die
-Kommunikation ausschlie&szlig;lich &uuml;ber Nachrichtentypen, eine
-ETNT-Kombination ist daher beim Datensatztyp gar nicht notwendig. Der
-Datensatztyp repr&auml;sentiert nur wie Objekttypen gespeichert werden.
-Im paper-basierten Bereich dagegen wird die Repr&auml;sentationsform
-Dokumententyp sowohl f&uuml;r die Kommunikation als auch f&uuml;r die
-Speicherung von Objekttypen verwendet. Daher ben&ouml;tigen wir auch
-eine ETNT-Kombination (, die eigentlich ETDT-Kombination hei&szlig;en
-m&uuml;sste). </p>
+<h2><a name="f10">10.</a> ETNT is not offered for the record type, only for the document type. How can 
+I then model this for two computer-based application modules?</h2>
+This is intended. Behind it is the following: If we are in the purely computer-based area, the communication 
+takes place exclusively via message types, an ETNT combination is therefore not necessary for the data record type. 
+The data record type only represents how object types are stored. In the paper-based area, on the other hand, the 
+representation form document type is used both for communication and for storing object types. Therefore, we also need 
+an ETNT combination ( which should actually be called ETDT combination ).</p>
 
 <p align="left">
-<h2><a name="f11">11.</a> Im Eigenschaftendialog f&uuml;r
-Softwareprodukte im Modellbrowser werden die Softwareprodukte Aufgaben
-und nicht Anwendungsbausteinen zugeordnet. Ist das richtig?</h2>
-Das ist so richtig. Im Metamodell entspricht das der
-Beziehung 'kann_unterst&uuml;tzen'. Damit ist man in der Lage eine
-Zusatzinformation zum Softwareprodukt selbst zu modellieren. Nicht alle
-Aufgaben, die ein Softwareprodukt unterst&uuml;tzen <b>kann</b>,
-werden nach der Installation auch tats&auml;chlich unterst&uuml;tzt.
-Dies h&auml;ngt beispielsweise von der Parametrierung ab. Dadurch ist
-es theoretisch m&ouml;glich, festzustellen, ob nicht weitere Aufgaben
-von einem auf einem bestimmten Softwareprodukt basierenden
-Anwendungsbaustein unterst&uuml;tzt werden sollten, beispielsweise um
-den Grad der Heterogenit&auml;t zu senken. </p>
+<h2><a name="f11">11.</a> In the properties dialog for software products in the model browser, the software products are 
+assigned to tasks and not to application modules. Is this correct?</h2>
+That is correct. In the metamodel this corresponds to the relationship 'can_support'. This enables you to model additional 
+information about the software product itself. Not all tasks that a software product <b>can</b> support are actually supported after 
+installation. This depends for example on the parameterization. Thus it is theoretically possible to determine whether additional 
+tasks should not be supported by an application component based on a certain software product, for example to reduce the degree of heterogeneity.
+</p>
 
 <p align="left">
-<h2><a name="f12">12.</a> Warum werden Anwendungsprogramme
-Softwareprodukten und Anwendungsbausteinen zugeordnet? Ich dachte
-Anwendungsprogramme sind adaptierte Softwareprodukte (spez.
-Parametereinstellungen,...)</h2>
-Ein Anwendungsbaustein wird gesteuert durch eine
-Anwendungsprogramm (Beziehung wird_gesteuert_durch im Metamodell.). Ein
-Anwendungsprogramm ist ein adaptiertes Softwareprodukt (Beziehung
-basiert_auf im Metamodell). Der Einfachheit halber kann man nun im
-Eigenschaftendialog eines Anwendungsbausteins direkt ein
-Softwareprodukt zuordnen, diese wird aber tats&auml;chlich dem
-Anwendungsprogramm dieses Anwendungsbausteins zugeordnet. Allerdings
-ist die Modellierung dieser Beziehungen ziemlich wenig intuitiv und
-dazu auch noch fehlerhaft. So kann man derzeit beispielsweise im
-Eigenschaftendialog eines Anwendungsbausteins mehrere Softwareprodukte
-zuordnen, ohne das man das im Eigenschaftendialog sieht.</p>
+<h2><a name="f12">12.</a> Why are application programs assigned to software products and application modules? I thought application programs are 
+adapted software products (esp. parameter settings,...)</h2>
+An application component is controlled by an application program (relationship is_controlled_by in the meta model.) An application program 
+is an adapted software product (relationship is based on in the metamodel). For the sake of simplicity, you can now assign a software 
+product directly in the properties dialog of an application component, but this product is actually assigned to the application program 
+of this application component. However, the modeling of these relationships is rather unintuitive and also incorrect. For example, it is 
+currently possible to assign several software products in the properties dialog of an application component without seeing this in the 
+properties dialog.</p>
 </body>
 </html>
