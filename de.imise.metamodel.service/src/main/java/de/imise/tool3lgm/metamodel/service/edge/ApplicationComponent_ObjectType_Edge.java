@@ -11,7 +11,7 @@ import de.imise.tool3lgm.metamodel.service.node.ObjectType;
 /**
  * @author AXS (07.01.2018)
  */
-public final class StorageLink_Edge extends BooleanAttributeEdge {
+public final class ApplicationComponent_ObjectType_Edge extends BooleanAttributeEdge {
 
     public static final Class<? extends ModelElement> STCL = ApplicationComponent.class;
 
@@ -21,7 +21,7 @@ public final class StorageLink_Edge extends BooleanAttributeEdge {
 
     public static final Class<? extends ModelElement> ETCL = ObjectType.class;
 
-    public StorageLink_Edge() {
+    public ApplicationComponent_ObjectType_Edge() {
         super("StorageEdge_isMaster_Attribute", 1);
     }
 

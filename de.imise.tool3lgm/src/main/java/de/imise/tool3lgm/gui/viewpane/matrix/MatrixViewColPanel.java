@@ -15,7 +15,7 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 /**
  * @author Thomas Rudert
  */
-public class ColPanel extends JPanel {
+public class MatrixViewColPanel extends JPanel {
 
     /** ArrayList mit den Strings der Namen der Spaltenelemente */
     private List<ModelElement> cols;
@@ -55,7 +55,7 @@ public class ColPanel extends JPanel {
      *
      * @param _cols ArrayList mit Strings der Spaltenüberschriften
      */
-    public ColPanel(final List<ModelElement> _cols) {
+    public MatrixViewColPanel(final List<ModelElement> _cols) {
         super();
         cols = _cols;
     }

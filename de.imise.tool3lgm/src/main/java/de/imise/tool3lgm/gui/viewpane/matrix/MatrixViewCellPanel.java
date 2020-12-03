@@ -11,16 +11,16 @@ import de.imise.util.swing.component.BlockScrollableJPanel;
 /**
  * @author Thomas Rudert
  */
-public class CellPanel extends BlockScrollableJPanel implements MouseMotionListener {
+public class MatrixViewCellPanel extends BlockScrollableJPanel implements MouseMotionListener {
 
     /** Das Model nach dem die Zellen sich aufbauen */
-    private final TableModel tableModel;
+    private final MatrixViewTableModel tableModel;
 
     /** Panel mit Spaltenüberschriften */
-    private final ColPanel colHeaderPanel;
+    private final MatrixViewColPanel colHeaderPanel;
 
     /** Panel mit Zeilenüberschriften */
-    private final RowPanel rowHeaderPanel;
+    private final MatrixViewRowPanel rowHeaderPanel;
 
     /** Parameter gesetzt ? */
     private boolean initialized = false;
@@ -32,7 +32,7 @@ public class CellPanel extends BlockScrollableJPanel implements MouseMotionListe
      * @param colHeaderPanel Panel mit Spaltenüberschriften
      * @param rowHeaderPanel Panel mit Zeilenüberschriften
      */
-    public CellPanel(final TableModel tableModel, final ColPanel colHeaderPanel, final RowPanel rowHeaderPanel) {
+    public MatrixViewCellPanel(final MatrixViewTableModel tableModel, final MatrixViewColPanel colHeaderPanel, final MatrixViewRowPanel rowHeaderPanel) {
         super();
 
         this.colHeaderPanel = colHeaderPanel;
@@ -74,7 +74,7 @@ public class CellPanel extends BlockScrollableJPanel implements MouseMotionListe
         int dx = (width - a) / 2;
         int dy = (height - a) / 2;
 
-        for (TableCell cell : tableModel) {
+        for (MatrixViewTableCell cell : tableModel) {
             x = cell.getColIndex() * width + dx;
             y = cell.getRowIndex() * height + dy;
             g.setColor(cell.getColor());

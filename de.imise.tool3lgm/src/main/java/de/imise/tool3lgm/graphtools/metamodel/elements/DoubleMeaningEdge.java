@@ -15,9 +15,29 @@ import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 public abstract class DoubleMeaningEdge extends Edge {
 
     public enum ConnectionState {
-        FORWARD,
-        BACKWARD,
-        DOUBLE
+        FORWARD {
+            @Override
+            public ConnectionState getBackwardEdgeDirectionEquivalentConnectionState() {
+                return BACKWARD;
+            }
+        },
+        BACKWARD {
+            @Override
+            public ConnectionState getBackwardEdgeDirectionEquivalentConnectionState() {
+                return FORWARD;
+            }
+        },
+        DOUBLE {
+            @Override
+            public ConnectionState getBackwardEdgeDirectionEquivalentConnectionState() {
+                return this;
+            }
+        };
+
+        /**
+         * @return the equivalent state for the other edge direction
+         */
+        public abstract ConnectionState getBackwardEdgeDirectionEquivalentConnectionState();
     }
 
     private ConnectionState connectionState = FORWARD; //null als Wert ist ausgeschlossen!
