@@ -1,6 +1,7 @@
 package de.imise.util.swing.component;
 
 import java.awt.Component;
+import java.awt.event.ItemEvent;
 import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
@@ -17,24 +18,22 @@ import de.imise.util.Alphabetical;
 import de.imise.util.NamedObjectContainer;
 
 /**
- * Combo box, which displays one or more separate lists of items
- * always sorted alphabetically.<br>
- * .
- * The sorting is done by the class {@link Alphabetical}.<br>
+ * Combo box, which displays one or more separate lists of items always sorted
+ * alphabetically.<br>
+ * . The sorting is done by the class {@link Alphabetical}.<br>
  * <br>
- * All entries of the selection list except Separators can be
- * indented to the right by any number of spaces. <br>
- * Separators can be added to the list either invisibly or as
- * non-selectable entries with their own label.
+ * All entries of the selection list except Separators can be indented to the
+ * right by any number of spaces. <br>
+ * Separators can be added to the list either invisibly or as non-selectable
+ * entries with their own label.
  *
- * @author AXS
- *         created on 15.08.2007
+ * @author AXS created on 15.08.2007
  */
 public class AlphabeticalComboBox<E> extends JComboBox<NamedObjectContainer<E>> {
 
     /**
-     * Reference to the vector of the combo box entries.
-     * (The parent vector has the visibility 'package').
+     * Reference to the vector of the combo box entries. (The parent vector has
+     * the visibility 'package').
      */
     private final Vector<NamedObjectContainer<E>> items = new Vector<>();
 
@@ -44,16 +43,16 @@ public class AlphabeticalComboBox<E> extends JComboBox<NamedObjectContainer<E>> 
     public final NamedObjectContainer<E> EMPTY_VALUE_ENTRY = new NamedObjectContainer<>(null, " ");
 
     /**
-     * Index from which new elements are sorted alphabetically.
-     * All entries before that remain unchanged in their order.
+     * Index from which new elements are sorted alphabetically. All entries
+     * before that remain unchanged in their order.
      */
     int newListStartIndex = 0;
 
     /**
      * Last selected index.<br>
-     * Since separators should not be selectable, the index that
-     * was selected before a separator was selected is noted in
-     * this variable and the selection is reset to this separator.
+     * Since separators should not be selectable, the index that was selected
+     * before a separator was selected is noted in this variable and the
+     * selection is reset to this separator.
      */
     private int lastCorrectSelectedIndex = -1;
 
@@ -67,8 +66,7 @@ public class AlphabeticalComboBox<E> extends JComboBox<NamedObjectContainer<E>> 
     /**
      * Creates a new ComboBox that sorts its entries alphabetically.
      *
-     * @param addEmptyItem
-     *            if true a blank item is added at the top
+     * @param addEmptyItem if true a blank item is added at the top
      */
     public AlphabeticalComboBox(final boolean addEmptyItem) {
         this(0);
@@ -81,8 +79,7 @@ public class AlphabeticalComboBox<E> extends JComboBox<NamedObjectContainer<E>> 
      * Creates a new ComboBox that sorts its entries alphabetically.<br>
      * The selection list is filled with the elements of the passed list.
      *
-     * @param objects
-     *            Initial elements in the drop-down list
+     * @param objects Initial elements in the drop-down list
      */
     public AlphabeticalComboBox(final Collection<E> objects) {
         this(objects, 0);
@@ -93,8 +90,7 @@ public class AlphabeticalComboBox<E> extends JComboBox<NamedObjectContainer<E>> 
      * All entries of the drop-down list that are added are preceded by
      * <code>shift</code> blanks in the display of the drop-down list.
      *
-     * @param shift
-     *            Number of spaces to be displayed before each list entry
+     * @param shift Number of spaces to be displayed before each list entry
      */
     public AlphabeticalComboBox(final int shift) {
         DefaultComboBoxModel<NamedObjectContainer<E>> model = new DefaultComboBoxModel<>(items);
@@ -106,14 +102,12 @@ public class AlphabeticalComboBox<E> extends JComboBox<NamedObjectContainer<E>> 
 
     /**
      * Creates a new ComboBox that sorts its entries alphabetically.<br>
-     * The selection list is filled with the elements of the passed list.
-     * All entries of the drop-down list that are added are preceded by
+     * The selection list is filled with the elements of the passed list. All
+     * entries of the drop-down list that are added are preceded by
      * <code>shift</code> spaces in the display of the drop-down list.
      *
-     * @param objects
-     *            Initial elements in the drop-down list
-     * @param shift
-     *            Number of spaces to be displayed before each list entry
+     * @param objects Initial elements in the drop-down list
+     * @param shift Number of spaces to be displayed before each list entry
      */
     public AlphabeticalComboBox(final Collection<E> objects, final int shift) {
         this(shift);
@@ -127,8 +121,7 @@ public class AlphabeticalComboBox<E> extends JComboBox<NamedObjectContainer<E>> 
      * Creates a new ComboBox that sorts its entries alphabetically.<br>
      * The selection list is filled with the elements of the passed list.
      *
-     * @param objects
-     *            Initial elements in the drop-down list
+     * @param objects Initial elements in the drop-down list
      */
     @SafeVarargs
     public AlphabeticalComboBox(final E... objects) {
@@ -137,14 +130,12 @@ public class AlphabeticalComboBox<E> extends JComboBox<NamedObjectContainer<E>> 
 
     /**
      * Creates a new ComboBox that sorts its entries alphabetically.<br>
-     * The selection list is filled with the elements of the passed list.
-     * All entries of the drop-down list that are added are preceded by
+     * The selection list is filled with the elements of the passed list. All
+     * entries of the drop-down list that are added are preceded by
      * <code>shift</code> spaces in the display of the drop-down list.
      *
-     * @param shift
-     *            Number of spaces to be displayed before each list entry
-     * @param objects
-     *            Initial elements in the drop-down list
+     * @param shift Number of spaces to be displayed before each list entry
+     * @param objects Initial elements in the drop-down list
      */
     @SafeVarargs
     public AlphabeticalComboBox(final int shift, final E... objects) {
@@ -156,8 +147,8 @@ public class AlphabeticalComboBox<E> extends JComboBox<NamedObjectContainer<E>> 
     }
 
     /**
-     * Encloses the passed object with a NamedObjectContainer.
-     * The string of this container is the String.valueOf(Object).
+     * Encloses the passed object with a NamedObjectContainer. The string of
+     * this container is the String.valueOf(Object).
      *
      * @param object
      */
@@ -228,11 +219,10 @@ public class AlphabeticalComboBox<E> extends JComboBox<NamedObjectContainer<E>> 
     }
 
     /**
-     * Creates a NamedObjectContainer for all passed objects and adds it
-     * to the item list.
+     * Creates a NamedObjectContainer for all passed objects and adds it to the
+     * item list.
      *
-     * @param entries
-     *            the objects to be added
+     * @param entries the objects to be added
      * @see #addObject(Object)
      */
     public void addAllObjects(final Iterable<E> objects) {
@@ -244,8 +234,7 @@ public class AlphabeticalComboBox<E> extends JComboBox<NamedObjectContainer<E>> 
     /**
      * Sets the given entries in this box (reomve all and then add all)
      *
-     * @param entries
-     *            Objects to be set as drop-down list
+     * @param entries Objects to be set as drop-down list
      */
     public void setAllObjects(final Iterable<E> objects) {
         removeAllItems();
@@ -253,13 +242,12 @@ public class AlphabeticalComboBox<E> extends JComboBox<NamedObjectContainer<E>> 
     }
 
     /**
-     * Selects the first occurrence of the passed object in the list.
-     * From the {@link NamedObjectContainer} in the list, the method
-     * <code>getObjectAt(int)<code> is called and the passed object is
-     * compared with it. If they are equal, the line is selected.
+     * Selects the first occurrence of the passed object in the list. From the
+     * {@link NamedObjectContainer} in the list, the method
+     * <code>getObjectAt(int)<code> is called and the passed object is compared
+     * with it. If they are equal, the line is selected.
      *
-     * @param o
-     *            Object that is equal to the object to be selected
+     * @param o Object that is equal to the object to be selected
      */
     public int setSelectedObject(final E o) {
         for (int i = 0; i < getItemCount(); i++) {
@@ -276,13 +264,12 @@ public class AlphabeticalComboBox<E> extends JComboBox<NamedObjectContainer<E>> 
     }
 
     /**
-     * Selects the first occurrence of the passed string in the list.
-     * From the {@link NamedObjectContainer} in the list, the method
-     * <code>toString()<code> is called and the passed string is
-     * compared with it. If they are equal, the line is selected.
+     * Selects the first occurrence of the passed string in the list. From the
+     * {@link NamedObjectContainer} in the list, the method
+     * <code>toString()<code> is called and the passed string is compared with
+     * it. If they are equal, the line is selected.
      *
-     * @param s
-     *            String that is equal to the string to be selected
+     * @param s String that is equal to the string to be selected
      */
     public int setSelectedString(final String s) {
         for (int i = 0; i < getItemCount(); i++) {
@@ -299,9 +286,9 @@ public class AlphabeticalComboBox<E> extends JComboBox<NamedObjectContainer<E>> 
     }
 
     /**
-     * @return The currently displayed text. This can be that
-     *         of a selected item or just the current text in
-     *         the editor, but not yet added to the list.
+     * @return The currently displayed text. This can be that of a selected item
+     *         or just the current text in the editor, but not yet added to the
+     *         list.
      */
     public String getText() {
         Object item = editor.getItem();
@@ -309,8 +296,8 @@ public class AlphabeticalComboBox<E> extends JComboBox<NamedObjectContainer<E>> 
     }
 
     /**
-     * @return The object of the selected item or
-     *         <code>null</code> if no item is selected.
+     * @return The object of the selected item or <code>null</code> if no item
+     *         is selected.
      */
     public E getSelectedObject() {
         int selectedIndex = getSelectedIndex();
@@ -321,8 +308,8 @@ public class AlphabeticalComboBox<E> extends JComboBox<NamedObjectContainer<E>> 
     }
 
     /**
-     * @return The string of the selected item or the current
-     *         text in the editor if no item is selected.
+     * @return The string of the selected item or the current text in the editor
+     *         if no item is selected.
      */
     public String getSelectedString() {
         int selectedIndex = getSelectedIndex();
@@ -334,8 +321,8 @@ public class AlphabeticalComboBox<E> extends JComboBox<NamedObjectContainer<E>> 
 
     /**
      * @param index
-     * @return the object of the {@link NamedObjectContainer} with
-     *         the index in the list of this ComboBox.
+     * @return the object of the {@link NamedObjectContainer} with the index in
+     *         the list of this ComboBox.
      */
     public E getObjectAt(final int index) {
         NamedObjectContainer<E> itemAtIndex = getItemAt(index);
@@ -347,8 +334,8 @@ public class AlphabeticalComboBox<E> extends JComboBox<NamedObjectContainer<E>> 
 
     /**
      * @param index
-     * @return the String of the {@link NamedObjectContainer} with
-     *         the index in the list of this ComboBox.
+     * @return the String of the {@link NamedObjectContainer} with the index in
+     *         the list of this ComboBox.
      */
     public String getStringAt(final int index) {
         NamedObjectContainer<E> itemAtIndex = getItemAt(index);
@@ -359,14 +346,13 @@ public class AlphabeticalComboBox<E> extends JComboBox<NamedObjectContainer<E>> 
     }
 
     /**
-     * Inserts a <code>SeparatorItem</code> at the end of the
-     * existing list and starts a new alphabetically sorted list.
-     * The parameter <code>showSeparatorLine</code> determines
-     * whether a line should be displayed between the last and
-     * the new list. If false is passed, no line is displayed.
+     * Inserts a <code>SeparatorItem</code> at the end of the existing list and
+     * starts a new alphabetically sorted list. The parameter
+     * <code>showSeparatorLine</code> determines whether a line should be
+     * displayed between the last and the new list. If false is passed, no line
+     * is displayed.
      *
-     * @param showSeparatorLine
-     *            Defines whether a line should be drawn over a
+     * @param showSeparatorLine Defines whether a line should be drawn over a
      *            new list or not.
      */
     public void addSeparator(final boolean showSeparatorLine) {
@@ -377,11 +363,11 @@ public class AlphabeticalComboBox<E> extends JComboBox<NamedObjectContainer<E>> 
     }
 
     /**
-     * Inserts a <code>SeparatorItem</code> at the end of the
-     * existing list and starts a new alphabetically sorted list.
+     * Inserts a <code>SeparatorItem</code> at the end of the existing list and
+     * starts a new alphabetically sorted list.
      *
-     * @name <code>String</code> to be displayed as separator. If
-     *       it is <code>null</code>, only a line is displayed.
+     * @name <code>String</code> to be displayed as separator. If it is
+     *       <code>null</code>, only a line is displayed.
      */
     public void addSeparator(final String name) {
         items.add(new SeparatorItem(name));
@@ -391,8 +377,7 @@ public class AlphabeticalComboBox<E> extends JComboBox<NamedObjectContainer<E>> 
     /**
      * Adds an entry to the drop-down list.
      *
-     * @param anObject
-     *            Object that is added to the drop-down list in a
+     * @param anObject Object that is added to the drop-down list in a
      *            {@link NamedObjectContainer}
      */
     public NamedObjectContainer<E> addObject(final E anObject) {
@@ -402,48 +387,61 @@ public class AlphabeticalComboBox<E> extends JComboBox<NamedObjectContainer<E>> 
     /**
      * Adds <code>NamedObjectContainer</code> to the list with
      * <code>anObject</code> as object and the display string
-     * <code>String.valueOf(anObject)</code>, preceded by
-     * <code>shift</code> spaces.
+     * <code>String.valueOf(anObject)</code>, preceded by <code>shift</code>
+     * spaces.
      *
-     * @param anObject
-     *            Object that is added to the drop-down list in a
+     * @param anObject Object that is added to the drop-down list in a
      *            {@link NamedObjectContainer}
-     * @param shift
-     *            Number of spaces to be displayed before the
-     *            list entry
+     * @param shift Number of spaces to be displayed before the list entry
      */
     public NamedObjectContainer<E> addObject(final E anObject, final int shift) {
         return addObject(anObject, String.valueOf(anObject), shift);
     }
 
     /**
-     * Add to the list <code>NamedObjectContainer</code> with
+     * Adds to the list <code>NamedObjectContainer</code> with
      * <code>anObject</code> as object and the display string
-     * <code>displayName</code>
-     * .
+     * <code>displayName</code> .
      *
-     * @param anObject
-     *            the object to be added
-     * @param displayName
-     *            the display name of the object in the list
+     * @param anObject the object to be added
+     * @param displayName the display name of the object in the list
      */
     public NamedObjectContainer<E> addObject(final E anObject, final String displayName) {
         return addObject(anObject, displayName, 0);
     }
 
     /**
-     * Add to the list <code>NamedObjectContainer</code> with
-     * <code>anObject</code> as object and the display string
-     * <code>displayName</code>. The display name is indented
-     * by <code>shift</code> positions.
+     * Adds an {@link NamedObjectContainer} with a <code>null</code> object and
+     * the given dipslay string.
      *
-     * @param anObject
-     *            the object to be added
      * @param displayName
-     *            the display name of the object in the list
-     * @param shift
-     *            Number of spaces to be displayed before the
-     *            list entry
+     * @return
+     */
+    public NamedObjectContainer<E> addString(final String displayName) {
+        return addObject(null, displayName);
+    }
+
+    /**
+     * Creates an item with the given display name and a <code>null</code>
+     * object. This item will not be added to the list. It only meets the
+     * requirements to be added.
+     *
+     * @param displayName
+     * @return
+     */
+    public NamedObjectContainer<E> createStringItem(final String displayName) {
+        return new NamedObjectContainer<>(null, displayName);
+    }
+
+    /**
+     * Adds to the list <code>NamedObjectContainer</code> with
+     * <code>anObject</code> as object and the display string
+     * <code>displayName</code>. The display name is indented by
+     * <code>shift</code> positions.
+     *
+     * @param anObject the object to be added
+     * @param displayName the display name of the object in the list
+     * @param shift Number of spaces to be displayed before the list entry
      */
     public NamedObjectContainer<E> addObject(final E anObject, String displayName, final int shift) {
         StringBuilder sb = new StringBuilder(displayName.length() + shift);
@@ -479,11 +477,11 @@ public class AlphabeticalComboBox<E> extends JComboBox<NamedObjectContainer<E>> 
 
     /**
      * A separator that can be added to the list of a
-     * {@link AlphabeticalComboBox} to separate multiple lists
-     * from each other.<br>
-     * If no own {@link String} is passed to the separator, it
-     * will be rendered as <code>JSeparator</code>. If a
-     * <code>String name</code> is passed, it will be displayed.
+     * {@link AlphabeticalComboBox} to separate multiple lists from each
+     * other.<br>
+     * If no own {@link String} is passed to the separator, it will be rendered
+     * as <code>JSeparator</code>. If a <code>String name</code> is passed, it
+     * will be displayed.
      *
      * @author AXS
      * @created 19.10.2007
@@ -508,8 +506,8 @@ public class AlphabeticalComboBox<E> extends JComboBox<NamedObjectContainer<E>> 
     }
 
     /**
-     * Makes separator items non-selectable and non-enabled.The rest of
-     * the list is rendered by default.
+     * Makes separator items non-selectable and non-enabled.The rest of the list
+     * is rendered by default.
      *
      * @author AXS
      * @created 19.10.2007
@@ -517,9 +515,9 @@ public class AlphabeticalComboBox<E> extends JComboBox<NamedObjectContainer<E>> 
     private class MyRenderer extends DefaultListCellRenderer {
 
         /**
-         * String consisting of blanks, which are placed in front of all
-         * entries except separators, if a number <code>shift > 0</code>
-         * was passed in the constructor.<br>
+         * String consisting of blanks, which are placed in front of all entries
+         * except separators, if a number <code>shift > 0</code> was passed in
+         * the constructor.<br>
          * The number of spaces is defined by <code>shift</code>.
          */
         private String shiftString = null;
@@ -528,8 +526,7 @@ public class AlphabeticalComboBox<E> extends JComboBox<NamedObjectContainer<E>> 
          * Creates a new renderer that shifts all entries that are not
          * separators by <code>shift</code> spaces to the right.
          *
-         * @param shift
-         *            Number of spaces by which entries should be shifted
+         * @param shift Number of spaces by which entries should be shifted
          */
         public MyRenderer(int shift) {
             super();
@@ -600,8 +597,8 @@ public class AlphabeticalComboBox<E> extends JComboBox<NamedObjectContainer<E>> 
 
     /**
      * @param anObject
-     * @return the index of the item in the list whose object is equal
-     *         to the passed one or -1 if no such item was found
+     * @return the index of the item in the list whose object is equal to the
+     *         passed one or -1 if no such item was found
      */
     public int getIndexOfObject(final E anObject) {
         int itemCount = getItemCount();
@@ -616,8 +613,8 @@ public class AlphabeticalComboBox<E> extends JComboBox<NamedObjectContainer<E>> 
 
     /**
      * @param item
-     * @return the index of the item in the list, which is equal to the
-     *         passed one or -1 if no such item was found
+     * @return the index of the item in the list, which is equal to the passed
+     *         one or -1 if no such item was found
      */
     public int getIndexOfItem(final NamedObjectContainer<E> item) {
         int itemCount = getItemCount();
@@ -632,8 +629,8 @@ public class AlphabeticalComboBox<E> extends JComboBox<NamedObjectContainer<E>> 
 
     /**
      * @param anObject
-     * @return <code>true</code> if the passed object is the object of
-     *         a contained item
+     * @return <code>true</code> if the passed object is the object of a
+     *         contained item
      */
     public boolean contains(final E anObject) {
         int index = getIndexOfObject(anObject);
@@ -655,8 +652,8 @@ public class AlphabeticalComboBox<E> extends JComboBox<NamedObjectContainer<E>> 
      * If the passed object is a NamedObjectContainer, an equal one (if
      * existing) will be removed from the item list. If it is not a
      * NamedObjectContainer itself, all elements (which are always
-     * NamedObjectContainers) are checked for equality of the object
-     * contained in them. If one is found, the object is removed.
+     * NamedObjectContainers) are checked for equality of the object contained
+     * in them. If one is found, the object is removed.
      */
     @Override
     public void removeItem(final Object anObject) {
@@ -690,6 +687,24 @@ public class AlphabeticalComboBox<E> extends JComboBox<NamedObjectContainer<E>> 
     @Override
     public String toString() {
         return getClass().getName() + items;
+    }
+
+    /**
+     * @param e
+     * @return
+     */
+    @SuppressWarnings("unchecked")
+    public E getObject(final ItemEvent itemEvent) {
+        Object item = itemEvent.getItem();
+        if (item instanceof NamedObjectContainer) {
+            NamedObjectContainer<?> noc = (NamedObjectContainer<?>) item;
+            item = noc.getObject();
+        }
+        try {
+            return (E) item;
+        } catch (Exception e) {
+            return null;
+        }
     }
 
 }

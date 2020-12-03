@@ -591,11 +591,11 @@ public final class ElementaryMetaPath extends MetaPathImpl implements SequenceMe
 
     @Override
     public boolean isRemoveable(final boolean checkEndElement) {
-        if (isFirstPathElementDependent()) {
+        if (isStartDependent()) {
             return false;
         }
         if (checkEndElement) {
-            if (isLastPathElementDependent()) {
+            if (isEndElementDependent()) {
                 return false;
             }
         }
@@ -662,10 +662,8 @@ public final class ElementaryMetaPath extends MetaPathImpl implements SequenceMe
     @Override
     public final List<ModelElement> getConnectedElements(final Collection<ModelElement> modelElements, final boolean multiple) {
         List<ModelElement> returnList = new ArrayList<>();
-        Direction direction = getDirection();
-        Class<? extends Edge> edgeClass = getEdgeClass();
         for (ModelElement me : modelElements) {
-            List<ModelElement> connectedElements = me.getConnectedElements(edgeClass, direction);
+            List<ModelElement> connectedElements = me.getConnectedElements(edgeClass, direction, connectionState);
             if (multiple) {
                 returnList.addAll(connectedElements);
             } else {

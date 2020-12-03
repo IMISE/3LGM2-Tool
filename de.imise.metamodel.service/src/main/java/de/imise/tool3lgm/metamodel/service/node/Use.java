@@ -20,8 +20,8 @@ public class Use extends Node {
     protected ElementPropertyDialog createPropertyDialog() {
         ElementPropertyDialog dialog = super.createPropertyDialog();
         dialog.addDescripPanel(Function_Use_Edge.class);
-        dialog.addDescripPanel(OrganisationalUnit_Use_Edge.class);
         dialog.addEdgePanel(ApplicationComponent_Use_Edge.class);
+        dialog.addEdgePanel(OrganisationalUnit_Use_Edge.class);
         return dialog;
     }
 

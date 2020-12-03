@@ -1,0 +1,81 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<html>
+<head>
+	<title>Static view of the logical tool layer</title>
+</head>
+
+<body>
+
+<h1>Static view of the logical tool layer</h1>
+<p>
+On the logical tool layer, the application components are the focus of attention. Application components support functions and process, store and transport data representing objects of certain <a name="objekttyp">object types</a>. A particularly important aspect of this layer is where object types are logically stored and how application building components must communicate to ensure that the required access to information is secured when performing functions.
+</p>
+<p>
+<i>Application components</i> are information processing tools that are used directly or indirectly by the users of the hospital information system to perform the functions of the hospital. An application component can support the completion of one or more functions either completely or only partially. In the latter case, several application components may jointly support the completion of a specific function. Application building components belong to the logical tools. Physical tools are required to realize a logical tool for information processing (see <a href="modell_physisch.html">Static View of the Physical Tool layer</a>). In contrast to the logical tools, these are - like e.g. a workstation computer - physically tangible - but directly, i.e. without an installed application component, not usable as a tool for the user.
+</p>
+
+An application component is realized by
+<ul>
+<li>Installation, adaptation and commissioning of <i><a name="softwareprodukt">software products</a></i> on computer systems or</li>
+<li>the adoption of <i>organizational plans</i> that are carried out with the help of a system of physical tools that are not computer systems (conventional tools).</li>
+</ul>
+
+If only the first case applies to an application component, the application component is called <i>computer-based</i>, otherwise it is called <i>paper-based</i>. Application components can be described in more detail by the following terms:
+<ul>
+<li>A computer-based application component is controlled by an <i><a name="anwendungsprogramm">application program</a></i> based on a <i>software product</i>. In other words, an application program is an adapted software product. A paper-based application component is controlled by an <i><a name="organisationsplan">organization plan</a></i>.</li>
+<li>A <i>software product</i> is a completed, acquired or self-developed program or program package that can be installed on computer systems (see <a href="modell_physisch.html">Static View of the Physical Tool layer</a>).</li>
+<li>An <i>organization plan</i> can be a written document that describes how certain functions are to be performed in the form of work instructions. In most cases, however, these will be more likely to be verbal agreements. </li>
+<li>If the <i>adaptation</i> of the software product does not change its construction and only table entries are made, it is called <i>adaptation by parameterization</i> or customizing. In this case, the application program of the application component is identical to the software product.</li>
+<li>An application component can have its own memory that allows data to be stored. The memory is described by a <i><a name="dbs">database system</a></i> if the application component is computer-based and by a <i><a name="dokumentensammlung">document collection</a></i> if the application component is paper-based.</li>
+<li>A database system stores records of certain <i><a name="datensatztyp">record types</a></i>. It is controlled by a <i><a name="db_system">database management system</a></i>. </li>
+<li>A document collection stores documents of certain <i><a name="dokumententyp">document types</a></i>. </li>
+<li>Application components can exchange data with users via <i><a name="benutzer_s">user interfaces</a></i>. </li>
+<li>Application components can exchange messages with each other via <i><a name="baustein_s">component interfaces</a></i>. A component interface is described by the supported <i><a name="komm_standard">communication standard</a></i> and the <i>event message types</i> or <i>event document types</i> that can be sent or received.</li>
+<li>Record type, document type and message type are <i>forms of representation</i> for object types and are therefore particularly important for certain inter-layer relationships (see section Inter-layer Relationships). A record type describes how object types are stored in a database system (of a computer-based application component). In relational databases, a record type corresponds to a relational schema. A <a name="nachrichtentyp">message type</a> describes a class of messages in case of message-based communication between computer-based application components. Message types are often defined in the context of communication standards (e.g. HL7 message types). A document type (e.g. the document type 'doctor's letter') describes a class of documents that are stored in document collections and/or communicated within the non-computer-based part of an information system. </li>
+<li>If an application component is able to send messages directly to another application component via component interfaces, a <i>communication relationship</i> exists between these application components. Directly' means that no third application component is used for the transport of the messages. Within a communication relationship, one component interface is in the role of the <i>sender</i> and the other component interface is in the role of the <i>recipient</i>. This also defines the direction of communication. For a communication relationship, it is also specified which event message types or event document types are actually exchanged. If both sender and recipient are computer-based application components, event message types are exchanged; if either sender or recipient is a paper-based application component, event document types are exchanged. </li>
+<li>A set of application components (<i><a name="awb_konf">application component configuration</a></i>) supports one or more functions (for a detailed description of application component configurations, see the section Inter-layer Relationships). Note: An application component configuration can also consist of only one application component. In this case, one application component supports one function completely.</li>
+</ul>
+
+
+<p><i>
+Note: The relationship between application component - application program - software product is illustrated by the following example: If a hospital buys, for example, an archive management system for patient file archives, let's call it ArchiMed, from the company Graecia GmbH, the archive management system is initially 'empty'. The diskettes or CD-ROMs that are delivered to other hospitals usually have the same content. The hospital-specific adaptations have yet to be made, e.g. parameters have to be set, i.e. 'filled' with data, how the files are sorted, which departments are available with which cost center numbers, and of course the hospital's name, so that the name can appear on the screen or on letters. After these adaptations - also known as adaption - the installation and commissioning, the ArchiMed software product from Graecia GmbH becomes an application component specific to this hospital, which can be called ARCHIVE. 
+</i></p>
+
+<p><i>
+Note: The same software product can be installed several times on the same or different computers. This results in different application components. In the case of multiple installations on different computers and identical adaptations, the application components can be distinguished (exclusively) by the physical computer systems on which they are installed. If a software product is installed several times with identical adaptation on the same computer, a distinction is not so easy. 
+</i></p>
+
+<p>
+<a href="#abb1">Fig. 1</a> shows the metamodel of the logical tool layer of a hospital information system. The dotted classes and associative relationships show the relationship between the domain layer and the logical tool layer (see <a href="modell_ebenen.html">Inter-layer Relationships</a>).
+<div align="center">
+<a name="abb1">
+<img src="../../bilder/metamodellLogisch.gif" width=643 height=457 border=0 align="bottom" alt="">
+</a>
+<br>Fig. 1: The metamodel of the logical tool layer. Dotted lines and symbols represent inter-layer relationships.
+</div>
+</p>
+
+<p>
+An example of a logical tool layer of a hospital information system is shown in <a href="#abb2">Fig. 2</a>. The rounded rectangles show application components, the small ovals within the application components show the component interfaces. The directed edges between component interfaces of different application components represent the communication relations. 
+</p>
+
+<p>
+The left part of the figure shows the computer-aided part of a hospital information system: a patient management system (PVS), a radiology information system (RIS), a laboratory information system (LIS), a communication server (KomServ), a hospital management system and other unspecified department information systems. The right part shows paper-based application components, the (paper-based) mail and a paper-based clinical workstation.
+</p>
+
+<p>
+This example is simplified and fictitious. However, it shows a very typical situation. While the hospital administration and functional areas are supported by computer-based application components, there are only paper-based application components for typical clinical tasks. A communication server is available for the communication between the computer-based application components, but obviously not all application components use or can use it. As a consequence, proprietary building block interfaces are also provided. The fact that typical clinical tasks are not supported by computer-based application components requires a large number of component interfaces between the computer-supported part of the HIS and the non-computer-supported part, which can lead to problems, for example, with regard to media breaks. Such digital-analogue interfaces are implemented, for example, by printers and document readers or the corresponding software.
+</p>
+
+<div align="center">
+<a name="abb2">
+<img src="../../bilder/bspLogisch.gif" width=478 height=255 border=0 alt="" align="bottom">
+</a>
+<br>  Fig. 2: Example of a logical tool layer
+</div>
+
+
+
+</body>
+</html>

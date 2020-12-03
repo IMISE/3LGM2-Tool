@@ -123,6 +123,10 @@ public class PathConnectionLeafPanel extends PathConnectionPanel {
                 }
                 return newLeafNodes.build();
             }
+        } else {
+            //maybe super.buildLeftTree() has added some incomplete paths -> remove them
+            LGMTreeNode lroot = ltree.getRoot();
+            lroot.removeAllChildren();
         }
         return leafNodes;
     }

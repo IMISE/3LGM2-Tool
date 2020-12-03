@@ -31,13 +31,13 @@ public class MatrixViewPane extends ViewPane implements MouseMotionListener, Mou
     private final ViewPaneToolbarManager toolbarManager;
 
     /** Panel für die Zeilenbeschriftungen (Elementnamen) */
-    private final RowPanel rowHeaderPanel;
+    private final MatrixViewRowPanel rowHeaderPanel;
 
     /** Panel für die Spaltenbeschriftungen (Elementnamen) */
-    private final ColPanel colHeaderPanel;
+    private final MatrixViewColPanel colHeaderPanel;
 
     /** Panel für die Darstellung der Verbindungen */
-    private final CellPanel cellPanel;
+    private final MatrixViewCellPanel cellPanel;
 
     /**
      * Panel, das angezeigt wird, solange kein korrekter MetaPfad ausgewählt
@@ -46,7 +46,7 @@ public class MatrixViewPane extends ViewPane implements MouseMotionListener, Mou
     private final JPanel msgPanel;
 
     /** Das Model nach dem die Tabelle aufgebaut wird */
-    private final TableModel tableModel;
+    private final MatrixViewTableModel tableModel;
 
     /**
      * Einstellungen, welche Klassen und welche Pfade in der Matrix dargestellt
@@ -73,13 +73,13 @@ public class MatrixViewPane extends ViewPane implements MouseMotionListener, Mou
         super(doc);
         this.toolbarManager = toolbarManager;
         this.titleIndex = titleIndex;
-        tableModel = new TableModel(getGraphDocument());
+        tableModel = new MatrixViewTableModel(getGraphDocument());
 
         msgPanel = new JPanel();
 
-        rowHeaderPanel = new RowPanel(tableModel.getRowHeaders());
-        colHeaderPanel = new ColPanel(tableModel.getColHeaders());
-        cellPanel = new CellPanel(tableModel, colHeaderPanel, rowHeaderPanel);
+        rowHeaderPanel = new MatrixViewRowPanel(tableModel.getRowHeaders());
+        colHeaderPanel = new MatrixViewColPanel(tableModel.getColHeaders());
+        cellPanel = new MatrixViewCellPanel(tableModel, colHeaderPanel, rowHeaderPanel);
         cellPanel.addMouseMotionListener(this);
         cellPanel.addMouseListener(this);
         setComponents();
@@ -179,7 +179,7 @@ public class MatrixViewPane extends ViewPane implements MouseMotionListener, Mou
         ModelElement rowElement = rowHeaderPanel.getRow(e.getY());
         if (toolbarManager.isMatrixViewToolbar()) {
             MatrixViewPaneToolbar matrixFrameToolbar = toolbarManager.getMatrixViewToolbar();
-            TableCell cell = tableModel.getCell(colHeaderPanel.getColIndex(e.getX()), rowHeaderPanel.getRowIndex(e.getY()));
+            MatrixViewTableCell cell = tableModel.getCell(colHeaderPanel.getColIndex(e.getX()), rowHeaderPanel.getRowIndex(e.getY()));
             String pathName = cell == null ? null : matrixFrameToolbar.getPathName(cell.getColor());
             matrixFrameToolbar.positionChanged(colElement, rowElement, pathName);
             if (cell == null) {

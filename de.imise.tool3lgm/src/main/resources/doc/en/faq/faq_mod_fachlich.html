@@ -1,67 +1,48 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 <html>
 <head>
-	<title>FAQ zur Modellierung - Fachliche Ebene</title>
+	<title>FAQ on modeling - Domain layer</title>
 
 </head>
 
 <body>
-<h1>FAQ zur Modellierung - Fachliche Ebene</h1>
+<h1>FAQ on modeling - Domain layer</h1>
 
 <p align="left">
-<h2><a name="f1">1.</a> Wie finde ich geeignete Objekttypen?</h2>
-Zwar ist das Metamodell der fachlichen Ebene sehr einfach, und dem ersten Anschein nach ist 
-es leicht ein geeignetes Modell zu erstellen. Allerdings ist es sehr anspruchsvoll geeignete 
-Objekttypen und Aufgaben zu finden. Die gr&ouml;&szlig;te Schwierigkeit wird darin liegen zu 
-verstehen, was eigentlich Objekttypen sind. Dabei ist es sehr empfehlenswert sich noch mal 
-die Definition des Begriffs Objekttyp klarzumachen: <i>&quot;...Durch Objekttypen kann 
-beschrieben werden, welcher Art Informationen sind, die zur Bearbeitung einer Aufgabe 
-ben&ouml;tigt werden oder nach Bearbeitung der Aufgabe bereitgestellt werden k&ouml;nnen.&quot;</i> Dies 
-f&uuml;hrt zu folgenden Konsequenzen: Soll beispielsweise ein Arztbrief als physisches Ding der 
-Welt modelliert werden, ist dabei zu bedenken, dass dieser auch Informationen &uuml;ber Patient, 
-Fall, Diagnosen ... enth&auml;lt, die in der Regel als eigene Objekttypen definiert werden. F&uuml;r eine 
-bestimmte Problemstellung kann es notwendig sein, diesen Zusammenhang (in Form von 
-ist_Teil_von Beziehungen) darzustellen. Erst dadurch gelingt es die Komplexit&auml;t der 
-Wirklichkeit ad&auml;quat darzustellen. Aus oben genannten Gr&uuml;nden empfehlen wir f&uuml;r die 
-Fachliche Ebene Referenzmodelle zu verwenden, soweit sie verf&uuml;gbar sind, z.B. das fachliche 
-Referenzmodell f&uuml;r ein Archiv.
+<h2><a name="f1">1.</a> How do I find suitable object types?</h2>
+Although the domain-oriented metamodel is very simple, and at first glance it seems easy to create a suitable model. 
+However, it is very demanding to find suitable object types and tasks. The biggest difficulty will be to understand what object types actually are. 
+It is highly recommended to remember the definition of the term object type: <i>&quot;...Object types can be used to describe the type of information 
+that is needed to complete a task or can be provided after the task has been completed.&quot;</i> This leads to the following consequences: 
+If, for example, a doctor's letter is to be modeled as a physical thing in the world, it must be taken into account that it also contains information 
+about the patient, case, diagnoses ... which are usually defined as separate object types. For a particular problem it may be necessary to represent 
+this relationship (in the form of is_part_of_relationships). Only then is it possible to adequately represent the complexity of reality. 
+For the reasons mentioned above, we recommend to use reference models for the domain-oriented level as far as they are available, e.g. the 
+domain-oriented reference model for an archive.
 </p>
 
 <p align="left">
-<h2><a name="f2">2.</a> Gibt es eine M&ouml;glichkeit die Organisationseinheiten grafisch darzustellen (z.B. 
-Darstellung der Organisationseinheiten mit den dazugeh&ouml;renden Aufgaben)? </h2>
-Derzeit gibt es keine M&ouml;glichkeit Organisationseinheiten grafisch darzustellen. Damit soll 
-vermieden werden, dass das graphische Modell '&uuml;berladen' wird.
+<h2><a name="f2">2.</a> Is there a possibility to represent the organizational units graphically 
+(e.g. presentation of the organizational units with the corresponding tasks)?</h2>
+Currently there is no possibility to display organizational units graphically. This is to avoid that the graphical model is 'overloaded'.
 </p>
 
 <p align="left">
-<h2><a name="f3">3.</a> Wieso sollen auf der fachlichen Ebene Nachrichtentypen, Dokumententypen 
-und Datensatztypen (Repr&auml;sentationsform) festgelegt werden, die doch eher der logischen 
-Werkzeugebene zugeh&ouml;ren?</h2>
-Nachrichtentypen, Dokumententypen und Datensatztypen geh&ouml;ren zur logischen 
-Werkzeugebene. Im Eigenschaftendialog eines Objekttyps kann lediglich festgelegt werden, 
-wie dieser auf der logischen Werkzeugebene repr&auml;sentiert wird. Um die Modellierung zu 
-vereinfachen, ist es in diesem Zusammenhang auch m&ouml;glich neue Nachrichtentypen, 
-Dokumententypen und Datensatztypen anzulegen, wenn die ben&ouml;tigten Instanzen einer 
-anderen Ebene bisher noch nicht modelliert wurden.
+<h2><a name="f3">3.</a> Why should message types, document types and data record types (form of representation) be defined on the technical level, 
+which belong more to the logical tool level?</h2>
+Message types, document types and record types belong to the logical tool level. In the properties dialog of an object type you can only define 
+how it is represented on the logical tool level. To simplify modeling, it is also possible to create new message types, document types and record 
+types in this context, if the required instances of another level have not yet been modeled.
 </p>
 
 <p align="left">
-<h2><a name="f4">4.</a> Was soll ich mit der Master-DBS beim 
-Objekttyp/Eigenschaftendialog/Allgemein auf der fachlichen Ebene anfangen?</h2>
-Einem Objekttyp kann zugeordnet werden, welches Datenbanksystem / welche 
-Dokumentensammlung f&uuml;r diesen Objekttyp Master ist (Beziehung hat_als_Master im 
-Metamodell). 'Master' hei&szlig;t in diesem Zusammenhang, dass nur in diesem Datenbanksystem / 
-dieser Dokumentensammlung Daten hinzugef&uuml;gt, ge&auml;ndert und gel&ouml;scht werden d&uuml;rfen. Alle 
-anderen Datenbanksysteme / Dokumentensammlungen, die diesen Objekttyp ebenfalls 
-speichern, m&uuml;ssen &uuml;ber Kommunikation zwischen den entsprechenden 
-Anwendungsbausteinen ihre Datenbest&auml;nde mit diesem Datenbanksystem / 
-Dokumentensammlung abgleichen wenn Daten ge&auml;ndert, hinzugef&uuml;gt oder gel&ouml;scht werden, 
-da sonst die Datenintegrit&auml;t nicht gew&auml;hrleistet ist. (Bei Dokumentensammlungen ist dies 
-nat&uuml;rlich besonders problematisch!). Der Abgleich von Datenbest&auml;nden erfolgt &uuml;ber die 
-Kommunikation zwischen Anwendungsbausteinen, sind beide Anwendungsbausteine 
-rechnerbasiert werden dabei Ereignis-Nachrichtentypen kommuniziert, ist einer der 
-Anwendungsbausteine papierbasiert werden Ereignis-Dokumententypen kommuniziert.
+<h2><a name="f4">4.</a> what should I do with the Master DBS in the Object Type/Properties Dialog/General on the domain layer?</h2>
+You can assign to an object type which database system / document collection is master for this object type (relationship has_as_master 
+in the meta model). Master' in this context means that data may only be added, changed and deleted in this database system / document collection. 
+All other database systems / document collections that also store this object type must use communication between the corresponding application 
+modules to compare their data with this database system / document collection when data is changed, added or deleted, otherwise data integrity 
+cannot be guaranteed. (This is of course particularly problematic with document collections!). If both application modules are computer-based, 
+event message types are communicated, if one of the application modules is paper-based, event document types are communicated.
 </p>
 </body>
 </html>
