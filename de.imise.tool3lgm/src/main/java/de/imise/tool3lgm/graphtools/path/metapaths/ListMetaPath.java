@@ -115,6 +115,7 @@ public abstract class ListMetaPath extends MetaPathImpl {
     /**
      * @return the the {@link #baseResKeyOrName}
      */
+    @Override
     public final String getBaseResKeyOrName() {
         return baseResKeyOrName;
     }

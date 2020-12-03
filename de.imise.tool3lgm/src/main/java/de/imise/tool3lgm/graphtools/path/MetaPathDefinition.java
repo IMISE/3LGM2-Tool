@@ -12,7 +12,6 @@ import com.google.common.collect.ImmutableListMultimap;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Multimap;
 
-import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.metamodel.CoreMetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModelSpecificAdapter;
@@ -152,17 +151,6 @@ public class MetaPathDefinition extends MetaModelSpecificAdapter {
     @SafeVarargs
     public final SimpleMetaPath smp(final Class<? extends ModelElement> startClass, final Class<? extends ModelElement> endClass, final String baseResKeyOrName, final Class<? extends Edge>... associations) throws IllegalArgumentException {
         return simpleMetaPathCreator.createSimpleMetaPath(startClass, endClass, baseResKeyOrName, associations);
-    }
-
-    /**
-     * Liefert <code>Tool3lgmConstants.getResString(resKey)</code>. Dient nur
-     * zur Verkürzung des Codes.
-     *
-     * @param resKey
-     * @return
-     */
-    public static final String _s(final String resKey) {
-        return Tool3lgmConstants.getResString(resKey);
     }
 
     /**
