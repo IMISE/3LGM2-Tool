@@ -201,16 +201,37 @@ public class MetaPathDefinition extends MetaModelSpecificAdapter {
      *
      * @param metaPaths
      */
-    protected final void put(final MetaPath... metaPaths) {
-        if (metaPaths == null) {
-            return;
+    protected final void put(final MetaPath metaPath) {
+        definedMetaPaths.add(metaPath);
+        MetaPath otherDirection = metaPath.getOtherDirection();
+        if (otherDirection != null) {
+            definedMetaPaths.add(otherDirection);
         }
+    }
+
+    /**
+     * Legt den übergebenen Metapfad für alle Startklassen und alle Unterklassen
+     * davon in die {@link #ELEMENT_CLASS_TO_START_PATHES}. Wenn der Metapfad
+     * eine Gegenrichtung hat, wird diese auch gleich für hinzugefügt.
+     *
+     * @param metaPaths
+     */
+    protected final void put(final MetaPath... metaPaths) {
         for (MetaPath metaPath : metaPaths) {
-            definedMetaPaths.add(metaPath);
-            metaPath = metaPath.getOtherDirection();
-            if (metaPath != null) {
-                definedMetaPaths.add(metaPath);
-            }
+            put(metaPath);
+        }
+    }
+
+    /**
+     * Legt den übergebenen Metapfad für alle Startklassen und alle Unterklassen
+     * davon in die {@link #ELEMENT_CLASS_TO_START_PATHES}. Wenn der Metapfad
+     * eine Gegenrichtung hat, wird diese auch gleich für hinzugefügt.
+     *
+     * @param metaPaths
+     */
+    protected final void putAll(final Iterable<? extends MetaPath> metaPaths) {
+        for (MetaPath metaPath : metaPaths) {
+            put(metaPath);
         }
     }
 
