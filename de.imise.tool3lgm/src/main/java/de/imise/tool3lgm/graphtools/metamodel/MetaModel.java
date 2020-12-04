@@ -443,7 +443,7 @@ public final class MetaModel extends CoreMetaModel {
         treeLogicalLayerVisibleAbstractNodes = metaModelDefinition.getTreeLogicalLayerVisibleAbstractNodes();
         treePhysicalLayerVisibleAbstractNodes = metaModelDefinition.getTreePhysicalLayerVisibleAbstractNodes();
         oldToNewClassName = CollectionUtils.ensureImmutable(metaModelDefinition.getOldToNewClassNameMap());
-        elementClassToSortedEdges = getElementClassToSortedEdges(); //muss nach den elementClassToRemovedEdgeClasses... und vor elementClassesWithSortedEdgesToPaintable, da für dessen init notwendig!
+        elementClassToSortedEdges = getElementClassToSortedEdges(); //muss vor elementClassesWithSortedEdgesToPaintable, da für dessen init notwendig!
         elementClassesWithSortedEdgesToPaintable = CollectionUtils.ensureImmutable(getElementClassesWithSortedEdgeClassesToPaintable()); //muss vor elementClassesWithLayout, da für dessen init notwendig!
         elementClassesWithLayout = CollectionUtils.ensureImmutable(getElementClassesWithLayout());
         // Die folgenden Arrays müssen hier unten initialisiert werden nachdem die Maps mit den Edges gefüllt sind, sonst InitialException
@@ -685,7 +685,7 @@ public final class MetaModel extends CoreMetaModel {
                 for (SimpleMetaPath metaPath : createableMetaPathsNonAbstract) {
                     Collection<Class<? extends ModelElement>> startClasses = getInstanciableAssignableClasses(metaPath.getStartClass());
                     for (Class<? extends ModelElement> startClass : startClasses) {
-                        if (metaPath.isStartClass(startClass)) { //checken, falls RemovedEdges dabei sind
+                        if (metaPath.isStartClass(startClass)) {
                             builder.put(startClass, metaPath);
                         }
                     }
@@ -693,7 +693,7 @@ public final class MetaModel extends CoreMetaModel {
                     metaPath = metaPath.getOtherDirection();
                     Collection<Class<? extends ModelElement>> endClasses = getInstanciableAssignableClasses(metaPath.getStartClass());
                     for (Class<? extends ModelElement> endClass : endClasses) {
-                        if (metaPath.isStartClass(endClass)) { //checken, falls RemovedEdges dabei sind
+                        if (metaPath.isStartClass(endClass)) {
                             builder.put(endClass, metaPath);
                         }
                     }
