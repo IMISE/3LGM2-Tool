@@ -16,8 +16,8 @@ public final class SoftwareProduct extends Node {
         ElementPropertyDialog dialog = super.createPropertyDialog();
         dialog.addEdgePanel(Function_SoftwareProduct_Edge.class);
         dialog.addMultiPanel(ApplicationSystem_SoftwareProduct_Edge.class);
-        dialog.addMultiPanelEdgePanel(ApplicationSystem_SoftwareProduct_Edge.class);
-        dialog.addMultiPanelEdgePanel(IheActorInstance_SoftwareProduct_Edge.class);
+        dialog.addMultiPanelPathPanel(ApplicationSystem_SoftwareProduct_Edge.class);
+        dialog.addMultiPanelPathPanel(IheActorInstance_SoftwareProduct_Edge.class);
         return dialog;
     }
 

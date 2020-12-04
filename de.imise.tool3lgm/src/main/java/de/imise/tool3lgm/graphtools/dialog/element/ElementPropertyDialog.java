@@ -244,24 +244,24 @@ public class ElementPropertyDialog extends AbstractElementPropertyDialog impleme
     /**
      * @param edgeClass
      */
-    public final void addMultiPanelEdgePanel(final Class<? extends Edge> edgeClass) {
-        addMultiPanelEdgePanel((Class<? extends ModelElement>) null, edgeClass);
+    public final void addMultiPanelPathPanel(final Class<? extends Edge> edgeClass) {
+        addMultiPanelPathPanel((Class<? extends ModelElement>) null, edgeClass);
     }
 
     /**
      * @param searchElementClass
      * @param edgeClass
      */
-    public final void addMultiPanelEdgePanel(final Class<? extends ModelElement> searchElementClass, final Class<? extends Edge> edgeClass) {
-        addMultiPanelEdgePanel(LABEL_END_ELEMENT_TYPE, searchElementClass, edgeClass);
+    public final void addMultiPanelPathPanel(final Class<? extends ModelElement> searchElementClass, final Class<? extends Edge> edgeClass) {
+        addMultiPanelPathPanel(LABEL_END_ELEMENT_TYPE, searchElementClass, edgeClass);
     }
 
     /**
      * @param panelLabelOption
      * @param edgeClass
      */
-    public final void addMultiPanelEdgePanel(final PanelLabelOption panelLabelOption, final Class<? extends Edge> edgeClass) {
-        addMultiPanelEdgePanel(panelLabelOption, null, edgeClass);
+    public final void addMultiPanelPathPanel(final PanelLabelOption panelLabelOption, final Class<? extends Edge> edgeClass) {
+        addMultiPanelPathPanel(panelLabelOption, null, edgeClass);
     }
 
     /**
@@ -270,7 +270,7 @@ public class ElementPropertyDialog extends AbstractElementPropertyDialog impleme
      * @param searchElementClass
      * @param edgeClass
      */
-    public final void addMultiPanelEdgePanel(final PanelLabelOption titleLabelOption, final Class<? extends ModelElement> searchElementClass, final Class<? extends Edge> edgeClass) {
+    public final void addMultiPanelPathPanel(final PanelLabelOption titleLabelOption, final Class<? extends ModelElement> searchElementClass, final Class<? extends Edge> edgeClass) {
         AbstractPathConnectionPanel addableEdgePanel = getAddableEdgePanel(titleLabelOption, titleLabelOption, searchElementClass, edgeClass); //das westLabel ist hier egal -> einfach auf dasselbe wie den title setzen
         lastAddedMultiPanel.addPanel(addableEdgePanel);
     }
