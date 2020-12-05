@@ -67,9 +67,11 @@ public class ExtendedJListUI extends BasicListUI {
     /**
      * Zeichnet die Liste.
      * <p>
-     * Funktioniert analog der Methode {@link BasicListUI#paintImpl(Graphics, JComponent)}
-     * und wurde hier neu eingeführt, da die Methode der Superklasse <code>private</code> ist.<br>
-     * {@link #paint(Graphics, JComponent)} wurde so überschrieben, dass nur diese Methode aufgerufen wird.
+     * Funktioniert analog der Methode
+     * {@link BasicListUI#paintImpl(Graphics, JComponent)} und wurde hier neu
+     * eingeführt, da die Methode der Superklasse <code>private</code> ist.<br>
+     * {@link #paint(Graphics, JComponent)} wurde so überschrieben, dass nur
+     * diese Methode aufgerufen wird.
      *
      * @param g
      * @param c
@@ -110,9 +112,8 @@ public class ExtendedJListUI extends BasicListUI {
     @Override
     protected void updateLayoutState() {
         /*
-         * If both JList fixedCellWidth and fixedCellHeight have been
-         * set, then initialize cellWidth and cellHeight, and set
-         * cellHeights to null.
+         * If both JList fixedCellWidth and fixedCellHeight have been set, then
+         * initialize cellWidth and cellHeight, and set cellHeights to null.
          */
 
         int fixedCellHeight = list.getFixedCellHeight();
@@ -127,11 +128,10 @@ public class ExtendedJListUI extends BasicListUI {
         }
 
         /*
-         * If either of JList fixedCellWidth and fixedCellHeight haven't
-         * been set, then initialize cellWidth and cellHeights by
-         * scanning through the entire model. Note: if the renderer is
-         * null, we just set cellWidth and cellHeights[*] to zero,
-         * if they're not set already.
+         * If either of JList fixedCellWidth and fixedCellHeight haven't been
+         * set, then initialize cellWidth and cellHeights by scanning through
+         * the entire model. Note: if the renderer is null, we just set
+         * cellWidth and cellHeights[*] to zero, if they're not set already.
          */
 
         if (fixedCellWidth == -1 || fixedCellHeight == -1) {

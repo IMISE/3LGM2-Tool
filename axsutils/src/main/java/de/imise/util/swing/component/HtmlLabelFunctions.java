@@ -18,9 +18,10 @@ public class HtmlLabelFunctions {
     private static JLabel renderDummy = new JLabel();
 
     /**
-     * Returns the minimum width in order to render the given htmltext as html string with the given
-     * font and size. The returned height of the rerun dimension is the preferred height if the label
-     * would be rendered with the given width.
+     * Returns the minimum width in order to render the given htmltext as html
+     * string with the given font and size. The returned height of the rerun
+     * dimension is the preferred height if the label would be rendered with the
+     * given width.
      *
      * @param htmlLabel the label with the html text and the designated size
      * @return

@@ -41,8 +41,8 @@ import javax.swing.SwingUtilities;
  * A subclass of Graphics2D that returns the correct FontMetrics but does not
  * actually paint anything.
  *
- * @see <a
- *      href="http://stackoverflow.com/questions/16227877/how-to-update-a-jcomponent-with-html-without-flickering">How
+ * @see <a href=
+ *      "http://stackoverflow.com/questions/16227877/how-to-update-a-jcomponent-with-html-without-flickering">How
  *      to update a JComponent with HTML without flickering?</a>
  */
 public class NoopGraphics extends Graphics2D {

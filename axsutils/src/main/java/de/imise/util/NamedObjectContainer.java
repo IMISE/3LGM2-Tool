@@ -5,9 +5,10 @@ import com.google.errorprone.annotations.CanIgnoreReturnValue;
 import de.imise.util.pair.Pair;
 
 /**
- * Hilfsklasse, um Objekte zu kapseln, deren <code>toString()</code>-Methode nicht
- * das zurückliefert, was angezeigt werden soll. Dieses Objekt speichert das
- * Originalobjekt und zusätzlich einen String, der über <code>toString()</code> zurückgeliefert wird.
+ * Hilfsklasse, um Objekte zu kapseln, deren <code>toString()</code>-Methode
+ * nicht das zurückliefert, was angezeigt werden soll. Dieses Objekt speichert
+ * das Originalobjekt und zusätzlich einen String, der über
+ * <code>toString()</code> zurückgeliefert wird.
  *
  * @author AXS
  * @created 17.10.2007
@@ -15,14 +16,17 @@ import de.imise.util.pair.Pair;
 public class NamedObjectContainer<E> extends Pair<E, String> {
 
     /**
-     * Wenn <code>true</code>, reicht bei {@link #equals(Object)} für Gleichheit Identität oder dass beide {@link #toString()}-Funktionen dasselbe
-     * liefern. Wenn <code>false</code> wird auch geprüft, ob das andere Objekt ebenfalls ein {@link NamedObjectContainer} ist und die enthaltenen
+     * Wenn <code>true</code>, reicht bei {@link #equals(Object)} für Gleichheit
+     * Identität oder dass beide {@link #toString()}-Funktionen dasselbe
+     * liefern. Wenn <code>false</code> wird auch geprüft, ob das andere Objekt
+     * ebenfalls ein {@link NamedObjectContainer} ist und die enthaltenen
      * Objekte auch equals ist.
      */
     protected final boolean equalsIfToStringIsEquals;
 
     /**
-     * Legt ein Obekt an, das über die <code>toString()</code> -Methode den <code>toString</code> zurück liefert und zusätzlich das Objekt
+     * Legt ein Obekt an, das über die <code>toString()</code> -Methode den
+     * <code>toString</code> zurück liefert und zusätzlich das Objekt
      * <code>modelElement</code> speichert.
      *
      * @param modelElement
@@ -33,15 +37,18 @@ public class NamedObjectContainer<E> extends Pair<E, String> {
     }
 
     /**
-     * Legt ein Obekt an, das über die <code>toString()</code> -Methode den <code>toString</code> zurück liefert und zusätzlich das Objekt
+     * Legt ein Obekt an, das über die <code>toString()</code> -Methode den
+     * <code>toString</code> zurück liefert und zusätzlich das Objekt
      * <code>modelElement</code> speichert.
      *
      * @param modelElement
      * @param toString
-     * @param equalsIfToStringIsEquals
-     *            Wenn <code>true</code>, reicht bei {@link #equals(Object)} für Gleichheit Identität oder dass beide {@link #toString()}-Funktionen
-     *            dasselbe liefern. Wenn <code>false</code> wird auch geprüft, ob das andere Objekt ebenfalls ein {@link NamedObjectContainer} ist und
-     *            die enthaltenen Objekte auch equals ist.
+     * @param equalsIfToStringIsEquals Wenn <code>true</code>, reicht bei
+     *            {@link #equals(Object)} für Gleichheit Identität oder dass
+     *            beide {@link #toString()}-Funktionen dasselbe liefern. Wenn
+     *            <code>false</code> wird auch geprüft, ob das andere Objekt
+     *            ebenfalls ein {@link NamedObjectContainer} ist und die
+     *            enthaltenen Objekte auch equals ist.
      */
     public NamedObjectContainer(final E object, final String toString, final boolean equalsIfToStringIsEquals) {
         super(object, toString);
@@ -49,7 +56,8 @@ public class NamedObjectContainer<E> extends Pair<E, String> {
     }
 
     /**
-     * Liefert einen {@link NamedObjectContainer} mit dem Object object und dem String toString.
+     * Liefert einen {@link NamedObjectContainer} mit dem Object object und dem
+     * String toString.
      *
      * @param object
      * @param toString
@@ -81,8 +89,9 @@ public class NamedObjectContainer<E> extends Pair<E, String> {
     /**
      * @param o
      * @param type
-     * @return <code>true</code> if the Object o is a {@link NamedObjectContainer} and
-     *         the type of the contained object is assignable from the given type.
+     * @return <code>true</code> if the Object o is a
+     *         {@link NamedObjectContainer} and the type of the contained object
+     *         is assignable from the given type.
      */
     public static final boolean isInstanceWithType(final Object o, final Class<?> type) {
         if (o instanceof NamedObjectContainer) {

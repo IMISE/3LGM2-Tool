@@ -7,8 +7,9 @@ public class PropertyChangeHandler {
 
     /**
      * Stellt Property-Change-Funktionalität zur Verfügung. <br>
-     * Zu der Klasse <code>PropertyChangeSupport</code> werden alle Property-Change-Listener
-     * hinzugefügt und in <code>firePorpertyChange()</code> werden alle Listener benachrichtigt.
+     * Zu der Klasse <code>PropertyChangeSupport</code> werden alle
+     * Property-Change-Listener hinzugefügt und in
+     * <code>firePorpertyChange()</code> werden alle Listener benachrichtigt.
      */
     protected PropertyChangeSupport changeSupport = null;
 
@@ -47,8 +48,8 @@ public class PropertyChangeHandler {
     }
 
     /**
-     * Sendet an alle <code>PropertyChangeListener</code> ein <code>PropertyChangeEvent</code>
-     * mit dem Namen <code>propertyName</code>.
+     * Sendet an alle <code>PropertyChangeListener</code> ein
+     * <code>PropertyChangeEvent</code> mit dem Namen <code>propertyName</code>.
      *
      * @param propertyName
      * @param oldValue
@@ -61,8 +62,8 @@ public class PropertyChangeHandler {
     }
 
     /**
-     * Sendet an alle <code>PropertyChangeListener</code> ein <code>PropertyChangeEvent</code>
-     * mit dem Namen <code>propertyName</code>.
+     * Sendet an alle <code>PropertyChangeListener</code> ein
+     * <code>PropertyChangeEvent</code> mit dem Namen <code>propertyName</code>.
      *
      * @param propertyName
      * @param oldValue
@@ -73,7 +74,8 @@ public class PropertyChangeHandler {
     }
 
     /**
-     * Sendet an alle <code>PropertyChangeListener</code> ein unspezifisches <code>PropertyChangeEvent</code>
+     * Sendet an alle <code>PropertyChangeListener</code> ein unspezifisches
+     * <code>PropertyChangeEvent</code>
      */
     protected void firePropertyChange() {
         firePropertyChange("", null, null);

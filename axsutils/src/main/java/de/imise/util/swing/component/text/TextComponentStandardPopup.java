@@ -35,7 +35,8 @@ public class TextComponentStandardPopup extends JPopupMenu implements MouseListe
     private JTextComponent myTargetComponent = null;
 
     /**
-     * Wird <code>true</code>, wenn das Menü initilisiert wurde (Einmalig vor dem ersten anzeigen)
+     * Wird <code>true</code>, wenn das Menü initilisiert wurde (Einmalig vor
+     * dem ersten anzeigen)
      */
     private boolean initialized = false;
 
@@ -233,8 +234,9 @@ public class TextComponentStandardPopup extends JPopupMenu implements MouseListe
     }
 
     /**
-     * Kontextmenü für Textkomponenten mit Cut, Copy, Insert, Delete, SelectAll. Wenn die Textkomponente nicht editable oder nicht enabled ist, wird
-     * nur SelectAll und Copy angeboten.
+     * Kontextmenü für Textkomponenten mit Cut, Copy, Insert, Delete, SelectAll.
+     * Wenn die Textkomponente nicht editable oder nicht enabled ist, wird nur
+     * SelectAll und Copy angeboten.
      *
      * @param textComponent
      * @return
@@ -244,13 +246,12 @@ public class TextComponentStandardPopup extends JPopupMenu implements MouseListe
     }
 
     /**
-     * Kontextmenü für Textkomponenten mit Cut, Copy, Insert, Delete, SelectAll, Find and Replace optional Wenn die Textkomponente nicht editable oder
-     * nicht enabled ist, wird nur SelectAll und Copy
-     * angeboten.
+     * Kontextmenü für Textkomponenten mit Cut, Copy, Insert, Delete, SelectAll,
+     * Find and Replace optional Wenn die Textkomponente nicht editable oder
+     * nicht enabled ist, wird nur SelectAll und Copy angeboten.
      *
      * @param textComponent
-     * @param extensionFindReplace
-     *            Find/Replace eingefügen
+     * @param extensionFindReplace Find/Replace eingefügen
      * @return
      */
     public static boolean addPopupMenuTo(final JTextComponent textComponent, final boolean extensionFindReplace) {
@@ -267,9 +268,9 @@ public class TextComponentStandardPopup extends JPopupMenu implements MouseListe
     }
 
     /**
-     * Kontextmenü für Textkomponenten mit Cut, Copy, Insert, Delete, SelectAll, Find and Replace optional Wenn die Textkomponente nicht editable oder
-     * nicht enabled ist, wird nur SelectAll und Copy
-     * angeboten.
+     * Kontextmenü für Textkomponenten mit Cut, Copy, Insert, Delete, SelectAll,
+     * Find and Replace optional Wenn die Textkomponente nicht editable oder
+     * nicht enabled ist, wird nur SelectAll und Copy angeboten.
      *
      * @param textComponent
      * @return
@@ -285,8 +286,9 @@ public class TextComponentStandardPopup extends JPopupMenu implements MouseListe
     }
 
     /**
-     * Sorgt dafür, dass für die übergebene Textkomponente auf einem MAC für die Standard-Aktionen SelectAll, Copy, Paste Cut auch die
-     * Shortcuts über die CMD-Taste funktionieren.
+     * Sorgt dafür, dass für die übergebene Textkomponente auf einem MAC für die
+     * Standard-Aktionen SelectAll, Copy, Paste Cut auch die Shortcuts über die
+     * CMD-Taste funktionieren.
      *
      * @param textComponent
      */
@@ -303,7 +305,8 @@ public class TextComponentStandardPopup extends JPopupMenu implements MouseListe
     /**
      * Liefert den aktuellen Inhalt des System-Clipboards als String.
      *
-     * @return String-Repräsentation des Inhalts oder <code>null</code>, wenn nichts enthalten ist.
+     * @return String-Repräsentation des Inhalts oder <code>null</code>, wenn
+     *         nichts enthalten ist.
      */
     private static final String getFromClipboard() {
         try {
@@ -328,7 +331,8 @@ public class TextComponentStandardPopup extends JPopupMenu implements MouseListe
     }
 
     /**
-     * Zeigt das Popupmenu für die SourceKomponente des übergebenen Ereignisses an, wenn es eine {@link JTextComponent} ist.
+     * Zeigt das Popupmenu für die SourceKomponente des übergebenen Ereignisses
+     * an, wenn es eine {@link JTextComponent} ist.
      *
      * @param e
      */

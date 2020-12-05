@@ -6,10 +6,11 @@ import java.io.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 /**
- * Ein {@link FileFilter}, der sich genauso verhält wie ein {@link FileNameExtensionFilter}, bei dem man aber
- * optional das Akzeptieren von Verzeichnissen abschalten kann, die der {@link FileNameExtensionFilter} in jedem
- * Fall akzeptiert.
- * Da {@link FileNameExtensionFilter} leider final ist, kann man ihn nicht direkt als Oberklasse nehmen.
+ * Ein {@link FileFilter}, der sich genauso verhält wie ein
+ * {@link FileNameExtensionFilter}, bei dem man aber optional das Akzeptieren
+ * von Verzeichnissen abschalten kann, die der {@link FileNameExtensionFilter}
+ * in jedem Fall akzeptiert. Da {@link FileNameExtensionFilter} leider final
+ * ist, kann man ihn nicht direkt als Oberklasse nehmen.
  * 
  * @author AXS
  * @create 06.07.2012
@@ -19,15 +20,20 @@ public class FileNameExtensionFilterAndFileFilter implements FileFilter {
     /** Der eigentliche FileNameExtensionFilter */
     private FileNameExtensionFilter fileNameExtensionFilter;
 
-    /** Wenn <code>true</code> werden auch Verzeichnisse zurück gegeben, sonst nur Dateien */
+    /**
+     * Wenn <code>true</code> werden auch Verzeichnisse zurück gegeben, sonst
+     * nur Dateien
+     */
     private final boolean acceptDirectories;
 
     /**
      * Creates a {@code FileNameExtensionFilterAndFileFilter} with the specified
-     * description and file name extensions. The returned {@code FileNameExtensionFilterAndFileFilter} will accept all directories and any
-     * file with a file name extension contained in {@code extensions}.
+     * description and file name extensions. The returned
+     * {@code FileNameExtensionFilterAndFileFilter} will accept all directories
+     * and any file with a file name extension contained in {@code extensions}.
      * 
-     * @param description textual description for the filter, may be {@code null}
+     * @param description textual description for the filter, may be
+     *            {@code null}
      * @param extensions the accepted file name extensions
      * @throws IllegalArgumentException if extensions is {@code null}, empty,
      *             contains {@code null}, or contains an empty string

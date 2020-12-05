@@ -69,8 +69,9 @@ public class ProgressDialog extends JDialog {
 
     /**
      * Thread dessen Progress der Dialog anzeigt.<br>
-     * Wenn der <code>null</code> bleibt, bezieht er sich auf den Haupt-Thread. Sonst schließt sich
-     * der ProgressDialog, wenn der <code>observedThread</code> nicht mehr läuft.
+     * Wenn der <code>null</code> bleibt, bezieht er sich auf den Haupt-Thread.
+     * Sonst schließt sich der ProgressDialog, wenn der
+     * <code>observedThread</code> nicht mehr läuft.
      */
     private Thread observedThread = null;
 

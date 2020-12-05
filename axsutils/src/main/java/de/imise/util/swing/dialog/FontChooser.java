@@ -1,21 +1,18 @@
 // adapted from salsa.font.FontChooser:
 
 /*
- ** Salsa - Swing Add-On Suite
- ** Copyright (c) 2001, 2002, 2003 by Gerald Bauer
- ** This program is free software.
- ** You may redistribute it and/or modify it under the terms of the GNU
- ** General Public License as published by the Free Software Foundation.
- ** Version 2 of the license should be included with this distribution in
- ** the file LICENSE, as well as License.html. If the license is not
- ** included with this distribution, you may find a copy at the FSF web
- ** site at 'www.gnu.org' or 'www.fsf.org', or you may write to the
- ** Free Software Foundation, 675 Mass Ave, Cambridge, MA 02139 USA.
- ** THIS SOFTWARE IS PROVIDED AS-IS WITHOUT WARRANTY OF ANY KIND,
- ** NOT EVEN THE IMPLIED WARRANTY OF MERCHANTABILITY. THE AUTHOR
- ** OF THIS SOFTWARE, ASSUMES _NO_ RESPONSIBILITY FOR ANY
- ** CONSEQUENCE RESULTING FROM THE USE, MODIFICATION, OR
- ** REDISTRIBUTION OF THIS SOFTWARE.
+ ** Salsa - Swing Add-On Suite Copyright (c) 2001, 2002, 2003 by Gerald Bauer
+ ** This program is free software. You may redistribute it and/or modify it under
+ * the terms of the GNU General Public License as published by the Free Software
+ * Foundation. Version 2 of the license should be included with this
+ * distribution in the file LICENSE, as well as License.html. If the license is
+ * not included with this distribution, you may find a copy at the FSF web site
+ * at 'www.gnu.org' or 'www.fsf.org', or you may write to the Free Software
+ * Foundation, 675 Mass Ave, Cambridge, MA 02139 USA. THIS SOFTWARE IS PROVIDED
+ * AS-IS WITHOUT WARRANTY OF ANY KIND, NOT EVEN THE IMPLIED WARRANTY OF
+ * MERCHANTABILITY. THE AUTHOR OF THIS SOFTWARE, ASSUMES _NO_ RESPONSIBILITY FOR
+ * ANY CONSEQUENCE RESULTING FROM THE USE, MODIFICATION, OR REDISTRIBUTION OF
+ * THIS SOFTWARE.
  */
 
 package de.imise.util.swing.dialog;
@@ -175,23 +172,15 @@ public class FontChooser extends JDialog {
 
         getContentPane().add(Box.createVerticalStrut(5));
         /*
-         * p = new JPanel();
-         * p.setLayout( new BoxLayout( p, BoxLayout.X_AXIS ) );
-         * p.add( Box.createHorizontalStrut( 10 ) );
-         * p.add( new JLabel( "Color:" ) );
-         * p.add( Box.createHorizontalStrut( 20 ) );
-         * _colorCombo = new JComboBox();
-         * int values[] = new int[]{0, 128, 192, 255};
-         * for( int r = 0; r < values.length; r++ )
-         * for( int g = 0; g < values.length; g++ )
-         * for( int b = 0; b < values.length; b++ )
-         * {
-         * Color color = new Color( values[r], values[g], values[b] );
-         * _colorCombo.addItem( color );
-         * }
-         * _colorCombo.setRenderer( new ColorListCellRenderer() );
-         * p.add( _colorCombo );
-         * p.add( Box.createHorizontalStrut( 10 ) );
+         * p = new JPanel(); p.setLayout( new BoxLayout( p, BoxLayout.X_AXIS )
+         * ); p.add( Box.createHorizontalStrut( 10 ) ); p.add( new JLabel(
+         * "Color:" ) ); p.add( Box.createHorizontalStrut( 20 ) ); _colorCombo =
+         * new JComboBox(); int values[] = new int[]{0, 128, 192, 255}; for( int
+         * r = 0; r < values.length; r++ ) for( int g = 0; g < values.length;
+         * g++ ) for( int b = 0; b < values.length; b++ ) { Color color = new
+         * Color( values[r], values[g], values[b] ); _colorCombo.addItem( color
+         * ); } _colorCombo.setRenderer( new ColorListCellRenderer() ); p.add(
+         * _colorCombo ); p.add( Box.createHorizontalStrut( 10 ) );
          * getContentPane().add( p );
          */
 
@@ -530,10 +519,6 @@ public class FontChooser extends JDialog {
             _list.addListSelectionListener(l);
         }
 
-        /*
-         * (non-Javadoc)
-         * @see java.awt.Container#doLayout()
-         */
         @Override
         public void doLayout() {
             Insets ins = getInsets();
@@ -554,10 +539,6 @@ public class FontChooser extends JDialog {
             _scroll.setBounds(x, y, w, h - y);
         }
 
-        /*
-         * (non-Javadoc)
-         * @see javax.swing.event.ListSelectionListener#valueChanged(javax.swing.event.ListSelectionEvent)
-         */
         @Override
         public void valueChanged(final ListSelectionEvent ev) {
             // sync textbox with listbox
