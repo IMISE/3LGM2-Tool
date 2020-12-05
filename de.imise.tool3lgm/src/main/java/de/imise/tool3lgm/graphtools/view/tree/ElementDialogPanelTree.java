@@ -25,7 +25,7 @@ import de.imise.util.ToolTipProvider;
 import de.imise.util.swing.component.tree.CorrectSelectionTree;
 
 /**
- * @author AXS (??.??.20??)
+ * @author AXS < (??.??.2010)
  */
 public class ElementDialogPanelTree extends CorrectSelectionTree {
 

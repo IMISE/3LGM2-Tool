@@ -61,44 +61,89 @@ import de.imise.util.swing.component.LimitedHeightScrollTreePane;
  */
 public class PathConnectionPanel extends AbstractExpandablePanel {
 
+    /**  */
     protected final ElementDialogPanelTree ltree;
 
+    /**  */
     protected final ElementDialogPanelTree rtree;
 
+    /**  */
     private final JLabel rLabel;
 
+    /**  */
     private final LimitedHeightScrollTreePane rScollPane;
 
+    /**  */
     private final JPanel buttonpanel;
 
+    /**  */
     private final boolean showRightTree;
 
+    /**  */
     private final LGMAction addAction;
 
+    /**  */
     private final LGMAction removeAction;
 
+    /**  */
     private final LGMAction newElementAction;
 
+    /**
+     * @param dialog
+     * @param metaPath
+     */
     public PathConnectionPanel(final AbstractElementPropertyDialog dialog, final MetaPath metaPath) {
         this(dialog, -1, metaPath);
     }
 
+    /**
+     * @param dialog
+     * @param titleLabelOption
+     * @param westLabelOption
+     * @param metaPath
+     */
     public PathConnectionPanel(final AbstractElementPropertyDialog dialog, final PanelLabelOption titleLabelOption, final PanelLabelOption westLabelOption, final MetaPath metaPath) {
         this(dialog, titleLabelOption, westLabelOption, false, metaPath);
     }
 
+    /**
+     * @param dialog
+     * @param maxLines
+     * @param metaPath
+     */
     public PathConnectionPanel(final AbstractElementPropertyDialog dialog, final int maxLines, final MetaPath metaPath) {
         this(dialog, LABEL_END_ELEMENT_TYPE, LABEL_END_ELEMENT_TYPE, maxLines, false, metaPath);
     }
 
+    /**
+     * @param dialog
+     * @param maxLines
+     * @param renderLeftTreeAsList
+     * @param metaPath
+     */
     public PathConnectionPanel(final AbstractElementPropertyDialog dialog, final int maxLines, final boolean renderLeftTreeAsList, final MetaPath metaPath) {
         this(dialog, LABEL_END_ELEMENT_TYPE, LABEL_END_ELEMENT_TYPE, maxLines, renderLeftTreeAsList, metaPath);
     }
 
+    /**
+     * @param dialog
+     * @param titleLabelOption
+     * @param westLabelOption
+     * @param renderLeftTreeAsList
+     * @param metaPath
+     */
     public PathConnectionPanel(final AbstractElementPropertyDialog dialog, final PanelLabelOption titleLabelOption, final PanelLabelOption westLabelOption, final boolean renderLeftTreeAsList, final MetaPath metaPath) {
         this(dialog, titleLabelOption, westLabelOption, -1, renderLeftTreeAsList, metaPath);
     }
 
+    /**
+     * @param dialog
+     * @param titleLabelOption
+     * @param westLabelOption
+     * @param maxLines
+     * @param renderLeftTreeAsList
+     * @param metaPath
+     */
     public PathConnectionPanel(final AbstractElementPropertyDialog dialog, final PanelLabelOption titleLabelOption, final PanelLabelOption westLabelOption, final int maxLines, final boolean renderLeftTreeAsList, final MetaPath metaPath) {
         super(dialog, titleLabelOption, westLabelOption, metaPath);
         showRightTree = isEditable();
@@ -285,6 +330,9 @@ public class PathConnectionPanel extends AbstractExpandablePanel {
         }
     }
 
+    /**
+     *
+     */
     private void updateLeftTree() {
         ltree.saveExpansionAndSelection();
         ltree.reset();
