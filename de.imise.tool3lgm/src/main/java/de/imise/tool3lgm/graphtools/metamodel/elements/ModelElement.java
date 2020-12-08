@@ -1162,7 +1162,7 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
      * @return List mit ElementContainer der gefundenen Node
      */
     public final List<ElementContainer> getConnectedContainers(final Class<? extends ModelElement> searchElementClass, final GraphDocument doc) {
-        return getConnectedContainers(searchElementClass, doc, null, null, true);
+        return getConnectedContainers(searchElementClass, doc, null, null, null, true);
     }
 
     /**
@@ -1188,7 +1188,7 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
      * @return List mit ElementContainer der gefundenen Node
      */
     public final List<ElementContainer> getConnectedContainers(final GraphDocument doc, final Class<? extends Edge> searchEdgeClass, final Direction direction) {
-        return getConnectedContainers(ModelElement.class, doc, searchEdgeClass, direction, true);
+        return getConnectedContainers(ModelElement.class, doc, searchEdgeClass, direction, null, true);
     }
 
     /**
@@ -1198,7 +1198,7 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
      * @return
      */
     public final List<ElementContainer> getConnectedContainers(final Class<? extends ModelElement> searchElementClass, final GraphDocument doc, final Class<? extends Edge> edgeClass) {
-        return getConnectedContainers(searchElementClass, doc, edgeClass, null, true);
+        return getConnectedContainers(searchElementClass, doc, edgeClass, null, null, true);
     }
 
     /**
@@ -1209,7 +1209,19 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
      * @return
      */
     public final List<ElementContainer> getConnectedContainers(final Class<? extends ModelElement> searchElementClass, final GraphDocument doc, final Class<? extends Edge> edgeClass, final Direction direction) {
-        return getConnectedContainers(searchElementClass, doc, edgeClass, direction, true);
+        return getConnectedContainers(searchElementClass, doc, edgeClass, direction, null);
+    }
+
+    /**
+     * @param searchElementClass
+     * @param doc
+     * @param edgeClass
+     * @param direction
+     * @param connectionState
+     * @return
+     */
+    public final List<ElementContainer> getConnectedContainers(final Class<? extends ModelElement> searchElementClass, final GraphDocument doc, final Class<? extends Edge> edgeClass, final Direction direction, final ConnectionState connectionState) {
+        return getConnectedContainers(searchElementClass, doc, edgeClass, direction, connectionState, true);
     }
 
     /**
@@ -1220,13 +1232,16 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
      * @param searchElementClass Elementklasse deren Objekte zurück gegeben
      *            werden sollen
      * @param doc Node aus diesem Dokument
-     * @param start true = Verbindungen beginnen nicht bei diesem Node
-     * @param end true = Verbindungen enden nicht bei diesem Node
+     * @param edgeClass
+     * @param direction
+     * @param connectionState
+     * @param alphabetical
      * @return List mit ElementContainer der gefundenen Node
      */
     @SuppressWarnings("unchecked")
-    public final List<ElementContainer> getConnectedContainers(final Class<? extends ModelElement> searchElementClass, final GraphDocument doc, final Class<? extends Edge> edgeClass, final Direction direction, final boolean alphabetical) {
-        return (List<ElementContainer>) getConnected(searchElementClass, doc, edgeClass, direction, null, true, alphabetical);
+    public final List<ElementContainer> getConnectedContainers(final Class<? extends ModelElement> searchElementClass, final GraphDocument doc, final Class<? extends Edge> edgeClass, final Direction direction, final ConnectionState connectionState,
+            final boolean alphabetical) {
+        return (List<ElementContainer>) getConnected(searchElementClass, doc, edgeClass, direction, connectionState, true, alphabetical);
     }
 
     ////////////////////
@@ -1269,12 +1284,32 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
      * @return Liste mit verbundenen <code>ModelElement</code>s
      */
     public final List<ElementContainer> getPartConnectedContainers(final Class<? extends ModelElement> searchElementClass, final GraphDocument doc, final Class<? extends Edge> edgeClass, final Direction direction) {
+        return getPartConnectedContainers(searchElementClass, doc, edgeClass, direction, null);
+    }
+
+    /**
+     * Liefert eine Liste aller Elemente, die über die angegebene Kantenart mit
+     * den direkten und indirekten Teilelementen dieses Elementes verbunden
+     * sind. Es wird nur in dem angegebenen <code>GraphDocument</code> gesucht
+     * und nur in der angegebenen Richtung der Edge.
+     *
+     * @param searchElementClass Elementart nach der gesucht werden soll
+     * @param doc <code>GraphDocument</code>, in dem nach verbundenen Elementen
+     *            gesucht wird
+     * @param edgeClass Art der Edge, über die Elemente mit den Teilen dieses
+     *            Elementes verbunden sein sollen
+     * @param direction Richtung, die die Kanten haben sollen, über die die
+     *            verbundenen Elemente gesucht werden
+     * @param connectionState
+     * @return Liste mit verbundenen <code>ModelElement</code>s
+     */
+    public final List<ElementContainer> getPartConnectedContainers(final Class<? extends ModelElement> searchElementClass, final GraphDocument doc, final Class<? extends Edge> edgeClass, final Direction direction, final ConnectionState connectionState) {
         //Rückgabeliste
         List<ElementContainer> connected = new ArrayList<>();
         //Liste aller Teile holen (direkte und indirekte)
         for (ModelElement me : getPartElements(false)) {
             //füge zur Rückgabeliste alle über die angegebene Art verbundenen Node hinzu
-            connected.addAll(me.getConnectedContainers(searchElementClass, doc, edgeClass, direction));
+            connected.addAll(me.getConnectedContainers(searchElementClass, doc, edgeClass, direction, connectionState));
         }
         return connected;
     }
@@ -1311,6 +1346,26 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
      * @return Liste mit verbundenen <code>ModelElement</code>s
      */
     public final List<ElementContainer> getParentConnectedContainers(final Class<? extends ModelElement> searchElementClass, final GraphDocument doc, final Class<? extends Edge> edgeClass, final Direction direction) {
+        return getParentConnectedContainers(searchElementClass, doc, edgeClass, direction, null);
+    }
+
+    /**
+     * Liefert eine Liste aller Elemente, die über die angegebene Kantenart mit
+     * den direkten und indirekten Oberelementen dieses Elementes verbunden
+     * sind. Es wird nur in dem angegebenen <code>GraphDocument</code> gesucht
+     * und nur in der angegebenen Richtung der Edge.
+     *
+     * @param searchElementClass Elementart nach der gesucht werden soll
+     * @param doc <code>GraphDocument</code>, in dem nach verbundenen Elementen
+     *            gesucht wird
+     * @param edgeClass Art der Edge, über die Elemente mit den Teilen dieses
+     *            Elementes verbunden sein sollen
+     * @param direction Richtung, die die Kanten haben sollen, über die die
+     *            verbundenen Elemente gesucht werden
+     * @param connectionState
+     * @return Liste mit verbundenen <code>ModelElement</code>s
+     */
+    public final List<ElementContainer> getParentConnectedContainers(final Class<? extends ModelElement> searchElementClass, final GraphDocument doc, final Class<? extends Edge> edgeClass, final Direction direction, final ConnectionState connectionState) {
         //Rückgabeliste
         List<ElementContainer> connected = new ArrayList<>();
         //für alle Oberelemente
@@ -1318,7 +1373,7 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
 
         for (ModelElement me : al) {
             //füge zur Rückgabeliste alle über die angegebene Art verbundenen Node hinzu
-            connected.addAll(me.getConnectedContainers(searchElementClass, doc, edgeClass, direction));
+            connected.addAll(me.getConnectedContainers(searchElementClass, doc, edgeClass, direction, connectionState));
         }
         return connected;
     }
