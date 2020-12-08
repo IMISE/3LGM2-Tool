@@ -2098,14 +2098,7 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
         Edge edge = null;
         List<Edge> edges = null;
 
-        Class<? extends ModelElement> me1Class = me1.getClass();
-        Class<? extends ModelElement> me2Class = me2.getClass();
-        boolean isDirectionImportent = CoreMetaModel.isDoubleMeaningEdge(edgeClass) || CoreMetaModel.isConnecting(edgeClass, me1Class, me2Class) && CoreMetaModel.isConnecting(edgeClass, me2Class, me1Class);
-        if (isDirectionImportent) {
-            edges = me1.getEdgesTo(me2, edgeClass, me1EdgeIndex);
-        } else {
-            edges = me1.getEdgesWith(me2, edgeClass, me1EdgeIndex);
-        }
+        edges = me1.getEdgesWith(me2, edgeClass, me1EdgeIndex);
         if (edges.isEmpty()) {
             return;
         } else if (edges.size() == 1) {
@@ -2137,7 +2130,7 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
         mainDoc.start_transaction(pid);
         mainDoc.addRedo(pid, MODEL_ACTION_UNLINK, me1, me2, edgeClassName, me1EdgeIndex);
         //Undo-Kommando wird in deleteElement gesetzt (s. u.)
-        //nur bei Kanten mit doppelter bedeutung kann man in bestimmten Richtungen unlinken. Bei allen anderen
+        //nur bei Kanten mit doppelter Bedeutung kann man in bestimmten Richtungen unlinken. Bei allen anderen
         //ist die Richtung egal und das Unlinken ist das Löschen der Edge
         Class<? extends Edge> absoluteEdgeClass = edge.getClass(); // die übergebene Kanten-Klasse kann null gewesen oder eine Oberklasse sein
         //InferenceEdge? -> delete condition paths
