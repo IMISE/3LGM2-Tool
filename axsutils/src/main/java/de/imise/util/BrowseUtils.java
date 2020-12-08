@@ -5,14 +5,16 @@ import java.io.File;
 import java.net.URI;
 
 /**
- * Stellt Funktionen zum Öffnen von Dateien, Verzeichnissen oder Webseiten bereit.
+ * Stellt Funktionen zum Öffnen von Dateien, Verzeichnissen oder Webseiten
+ * bereit.
  *
  * @author AXS (9 Apr 2010)
  */
 public class BrowseUtils {
 
     /**
-     * Öffnet die Datei oder das Verzeichnis mit dem zugehörigen Standard-Systemprogramm.
+     * Öffnet die Datei oder das Verzeichnis mit dem zugehörigen
+     * Standard-Systemprogramm.
      *
      * @param file Pfad zur Datei oder dem Verzeichnis
      */
@@ -22,7 +24,8 @@ public class BrowseUtils {
     }
 
     /**
-     * Öffnet die Datei, deren absoluter Pfad sich aus dem Pfad der Application und dem übergebenen relativen Pfad ergibt.
+     * Öffnet die Datei, deren absoluter Pfad sich aus dem Pfad der Application
+     * und dem übergebenen relativen Pfad ergibt.
      *
      * @param relativePath
      */
@@ -32,13 +35,13 @@ public class BrowseUtils {
     }
 
     /**
-     * Converts the passed object into a string (via String.valueOf(Object)).
-     * If this string describes a file, the file will be loaded. Relative
-     * paths are converted to absolute paths. If the file cannot be opened,
-     * the string is interpreted as URI and opened. If this does not work
-     * either, the string is preceded by "http://" and then again as an
-     * attempt to open it as a web page. If this does not work either,
-     * <code>false</code> returns, otherwise always <code>true</code>.
+     * Converts the passed object into a string (via String.valueOf(Object)). If
+     * this string describes a file, the file will be loaded. Relative paths are
+     * converted to absolute paths. If the file cannot be opened, the string is
+     * interpreted as URI and opened. If this does not work either, the string
+     * is preceded by "http://" and then again as an attempt to open it as a web
+     * page. If this does not work either, <code>false</code> returns, otherwise
+     * always <code>true</code>.
      *
      * @param urlOrPathObject the object intereted as file string or uri
      */
@@ -77,7 +80,8 @@ public class BrowseUtils {
     }
 
     /**
-     * Öffnet die übergebene URI, je nachdem was es ist als Datei, als Verzeichnis oder als Webseite.
+     * Öffnet die übergebene URI, je nachdem was es ist als Datei, als
+     * Verzeichnis oder als Webseite.
      *
      * @param uri
      */

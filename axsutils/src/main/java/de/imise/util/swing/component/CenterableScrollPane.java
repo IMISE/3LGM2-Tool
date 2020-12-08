@@ -19,7 +19,7 @@ import de.imise.util.resource.SimpleResourceIconSource;
 public class CenterableScrollPane extends JScrollPane {
 
     /**
-     * COMMENTME
+     *
      */
     private JButton centerViewButton;
 

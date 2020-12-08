@@ -19,7 +19,8 @@ import java.util.List;
 import com.google.common.base.Strings;
 
 /**
- * Diese Klasse stellt allgemeine Funktionen für den Umgang mit Dateien zur Verfügung.
+ * Diese Klasse stellt allgemeine Funktionen für den Umgang mit Dateien zur
+ * Verfügung.
  *
  * @author AXS
  * @created 17.04.06
@@ -27,17 +28,17 @@ import com.google.common.base.Strings;
 public class FileHandler {
 
     /**
-     * Liefert <code>true</code> zurück, wenn das übergebene {@link File} beschreibbar ist.
-     * Sollte die Datei noch nicht existieren und <code>testonly</code> ist <code>false</code>,
-     * dann wird die Datei angelegt.
-     * Achtung: Es werden immer Dateien und keine Verzeichnisse angelegt.
+     * Liefert <code>true</code> zurück, wenn das übergebene {@link File}
+     * beschreibbar ist. Sollte die Datei noch nicht existieren und
+     * <code>testonly</code> ist <code>false</code>, dann wird die Datei
+     * angelegt. Achtung: Es werden immer Dateien und keine Verzeichnisse
+     * angelegt.
      *
-     * @param file
-     *            Datei deren Beschreibbarkeit getestet werden soll
-     * @param testonly
-     *            wenn <code>false</code> wird die Datei angelegt, wenn sie noch nicht existiert
-     * @return
-     *         <code>true</code> wenn das übergebene {@link File} geschrieben werden kann
+     * @param file Datei deren Beschreibbarkeit getestet werden soll
+     * @param testonly wenn <code>false</code> wird die Datei angelegt, wenn sie
+     *            noch nicht existiert
+     * @return <code>true</code> wenn das übergebene {@link File} geschrieben
+     *         werden kann
      */
     public static boolean guaranteeWriteableFile(final File file, final boolean testonly) {
         if (file == null) {
@@ -68,9 +69,9 @@ public class FileHandler {
     }
 
     /**
-     * Liefert <code>true</code>, wenn der Pfad zum übergebenen Verzeichnis existiert und man daraus lesen darf. Wird ein File und kein Directory
-     * übergeben,
-     * dann wird das Directory dieses Files geprüft.
+     * Liefert <code>true</code>, wenn der Pfad zum übergebenen Verzeichnis
+     * existiert und man daraus lesen darf. Wird ein File und kein Directory
+     * übergeben, dann wird das Directory dieses Files geprüft.
      *
      * @param path
      * @return
@@ -88,9 +89,9 @@ public class FileHandler {
     }
 
     /**
-     * Liefert <code>true</code>, wenn der Pfad zum übergebenen Verzeichnis existiert und man daraus lesen darf. Wird ein File und kein Directory
-     * übergeben,
-     * dann wird das Directory dieses Files geprüft.
+     * Liefert <code>true</code>, wenn der Pfad zum übergebenen Verzeichnis
+     * existiert und man daraus lesen darf. Wird ein File und kein Directory
+     * übergeben, dann wird das Directory dieses Files geprüft.
      *
      * @param path
      * @return
@@ -103,8 +104,9 @@ public class FileHandler {
     }
 
     /**
-     * Liefert <code>true</code> zurück, wenn das übergebene {@link File} beschreibbar ist.
-     * Sollte die Datei noch nicht existieren, wird sie angelegt. <br>
+     * Liefert <code>true</code> zurück, wenn das übergebene {@link File}
+     * beschreibbar ist. Sollte die Datei noch nicht existieren, wird sie
+     * angelegt. <br>
      * Achtung: Es werden immer Dateien und keine Verzeichnisse angelegt.
      *
      * @param file
@@ -148,8 +150,8 @@ public class FileHandler {
     }
 
     /**
-     * Kopiert eine Datei in eine andere.
-     * Existiert die Zieldatei, wird sie überschrieben.
+     * Kopiert eine Datei in eine andere. Existiert die Zieldatei, wird sie
+     * überschrieben.
      *
      * @param source - die Quelldatei-URL
      * @param dest - die Zieldatei
@@ -167,8 +169,8 @@ public class FileHandler {
     }
 
     /**
-     * Kopiert eine Datei in eine andere.
-     * Existiert die Zieldatei, wird sie überschrieben.
+     * Kopiert eine Datei in eine andere. Existiert die Zieldatei, wird sie
+     * überschrieben.
      *
      * @param source - die Quelldatei-URL
      * @param dest - die Zieldatei
@@ -185,8 +187,8 @@ public class FileHandler {
     }
 
     /**
-     * Kopiert eine Datei in eine andere.
-     * Existiert die Zieldatei, wird sie überschrieben.
+     * Kopiert eine Datei in eine andere. Existiert die Zieldatei, wird sie
+     * überschrieben.
      *
      * @param source - die Quelldatei
      * @param dest - die Zieldatei
@@ -251,7 +253,8 @@ public class FileHandler {
     }
 
     /**
-     * Liest den Inhalt von <code>file</code> in einen String aus und gibt diesen wieder.
+     * Liest den Inhalt von <code>file</code> in einen String aus und gibt
+     * diesen wieder.
      *
      * @param file
      * @return
@@ -282,12 +285,14 @@ public class FileHandler {
     /**
      * Noch nicht korrekt implementiert!
      * <p>
-     * Gibt einfach ein Array wieder, das ausschließlich aus <code>file</code> besteht, falls die zulässige Zeichenanzahl nicht überschritten wird.
-     * <br>
+     * Gibt einfach ein Array wieder, das ausschließlich aus <code>file</code>
+     * besteht, falls die zulässige Zeichenanzahl nicht überschritten wird. <br>
      * Sonst wird eine Exception geworfen.
      * <p>
-     * Ziel: Zerlegt <code>file</code> in einzelne Dateien, sodass die Anzahl ihrer Zeichen kleiner als {@link Integer#MAX_VALUE} ist. Damit können
-     * dann alle Zeichen der einzelnen Dateien in jeweils einem <code>charArray</code> erfasst werden.
+     * Ziel: Zerlegt <code>file</code> in einzelne Dateien, sodass die Anzahl
+     * ihrer Zeichen kleiner als {@link Integer#MAX_VALUE} ist. Damit können
+     * dann alle Zeichen der einzelnen Dateien in jeweils einem
+     * <code>charArray</code> erfasst werden.
      *
      * @param file
      * @return
@@ -306,10 +311,8 @@ public class FileHandler {
     /**
      * Erzeugt eine tmporäre Datei
      *
-     * @param prefix
-     *            Dateiname
-     * @param suffix
-     *            Dateiendung
+     * @param prefix Dateiname
+     * @param suffix Dateiendung
      */
     public static File createTempFile(final String prefix, final String suffix) {
 
@@ -327,18 +330,16 @@ public class FileHandler {
     }
 
     /**
-     * Traversiert das gesamte Verzeichnis <code>parent</code> und gibt eine Liste aller
-     * enthaltenen Dateien wieder.<br>
-     * Es werden dabei nur Dateien mit dem spezifizierten Suffix in die Liste übernommen.<br>
-     * Diese Dateien werden an die übergebene Liste angefügt, welche am Ende der Traversierung
-     * zurückgegeben wird.
+     * Traversiert das gesamte Verzeichnis <code>parent</code> und gibt eine
+     * Liste aller enthaltenen Dateien wieder.<br>
+     * Es werden dabei nur Dateien mit dem spezifizierten Suffix in die Liste
+     * übernommen.<br>
+     * Diese Dateien werden an die übergebene Liste angefügt, welche am Ende der
+     * Traversierung zurückgegeben wird.
      *
-     * @param parent
-     *            zu durchsuchendes Verzeichnis
-     * @param fileExtension
-     *            Dateisuffix (z.B. <code>.java</code>)
-     * @param allFiles
-     *            zu füllende Liste
+     * @param parent zu durchsuchendes Verzeichnis
+     * @param fileExtension Dateisuffix (z.B. <code>.java</code>)
+     * @param allFiles zu füllende Liste
      * @return
      */
     public static List<File> traverse(final File parent, final String fileExtension, final List<File> allFiles) {
@@ -394,26 +395,34 @@ public class FileHandler {
     }
 
     /**
-     * Liefert die Endung der Datei, wenn wenigestens ein Punkt im Dateinamen steht. Ist der Punkt das letzte Zeichen,
-     * kommt ein leerer String zurück (bei withDot == false) oder nur der Punktt (bei withDot == true).
-     * Ist kein Punkt vorhanden, kommt immer <code>null</code> zurück.
+     * Liefert die Endung der Datei, wenn wenigestens ein Punkt im Dateinamen
+     * steht. Ist der Punkt das letzte Zeichen, kommt ein leerer String zurück
+     * (bei withDot == false) oder nur der Punktt (bei withDot == true). Ist
+     * kein Punkt vorhanden, kommt immer <code>null</code> zurück.
      *
      * @param file Datei deren Endung ermittelt werden soll
-     * @param withDot wenn <code>true</code>, dann enthält der Rückgabe-String am Anfang den Punkt (wenn der Dateiname mind. einen Punkt enthält)
-     * @return Endung der Datei mit oder ohne Punkt oder null, wenn kein Punkt vorhanden ist
+     * @param withDot wenn <code>true</code>, dann enthält der Rückgabe-String
+     *            am Anfang den Punkt (wenn der Dateiname mind. einen Punkt
+     *            enthält)
+     * @return Endung der Datei mit oder ohne Punkt oder null, wenn kein Punkt
+     *         vorhanden ist
      */
     public static String getExtension(final File file, final boolean withDot) {
         return getExtension(file.getName(), withDot);
     }
 
     /**
-     * Liefert die Endung des Dateinames, wenn wenigestens ein Punkt im Dateinamen steht. Ist der Punkt das letzte Zeichen,
-     * kommt ein leerer String zurück (bei withDot == false) oder nur der Punktt (bei withDot == true).
-     * Ist kein Punkt vorhanden, kommt immer <code>null</code> zurück.
+     * Liefert die Endung des Dateinames, wenn wenigestens ein Punkt im
+     * Dateinamen steht. Ist der Punkt das letzte Zeichen, kommt ein leerer
+     * String zurück (bei withDot == false) oder nur der Punktt (bei withDot ==
+     * true). Ist kein Punkt vorhanden, kommt immer <code>null</code> zurück.
      *
      * @param fileName Name der Datei deren Endung ermittelt werden soll
-     * @param withDot wenn <code>true</code>, dann enthält der Rückgabe-String am Anfang den Punkt (wenn der Dateiname mind. einen Punkt enthält)
-     * @return Endung der Datei mit oder ohne Punkt oder null, wenn kein Punkt vorhanden ist
+     * @param withDot wenn <code>true</code>, dann enthält der Rückgabe-String
+     *            am Anfang den Punkt (wenn der Dateiname mind. einen Punkt
+     *            enthält)
+     * @return Endung der Datei mit oder ohne Punkt oder null, wenn kein Punkt
+     *         vorhanden ist
      */
     public static String getExtension(final String fileName, final boolean withDot) {
         int dotIndex = fileName.lastIndexOf('.');
@@ -427,9 +436,11 @@ public class FileHandler {
     }
 
     /**
-     * Ersetzt alle für einen Dateinamen ungültigen Zeichen in dem übergebenen String durch Unterstriche "_".
+     * Ersetzt alle für einen Dateinamen ungültigen Zeichen in dem übergebenen
+     * String durch Unterstriche "_".
      *
-     * @param fileName Name einer Datei. Dies darf kein Pfad sein, da Pfadtrenner hier auch raus fliegen.
+     * @param fileName Name einer Datei. Dies darf kein Pfad sein, da
+     *            Pfadtrenner hier auch raus fliegen.
      * @return
      */
     public static String removeInvalidFileNameCharacters(final String fileName) {

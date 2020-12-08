@@ -12,8 +12,8 @@ public class PartableApplicationComponent extends ApplicationComponent {
     public ElementPropertyDialog createPropertyDialog() {
         ElementPropertyDialog dialog = super.createPropertyDialog();
         dialog.addMultiPanel(CommunicationInterface.class);
-        dialog.addMultiPanelEdgePanel(InvokingInterface.class, PartableApplicationComponent_CommunicationInterface_Edge.class);
-        dialog.addMultiPanelEdgePanel(ProvidingInterface.class, PartableApplicationComponent_CommunicationInterface_Edge.class);
+        dialog.addMultiPanelPathPanel(InvokingInterface.class, PartableApplicationComponent_CommunicationInterface_Edge.class);
+        dialog.addMultiPanelPathPanel(ProvidingInterface.class, PartableApplicationComponent_CommunicationInterface_Edge.class);
         return dialog;
     }
 

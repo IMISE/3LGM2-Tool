@@ -10,8 +10,8 @@ import java.awt.Rectangle;
 public class GraphicsFunctions {
 
     /**
-     * Draws the rectangle in the given Color if it is not <code>null</code>.
-     * If it is <code>null</code> nothing happens.
+     * Draws the rectangle in the given Color if it is not <code>null</code>. If
+     * it is <code>null</code> nothing happens.
      *
      * @param g
      * @param rect
@@ -25,13 +25,14 @@ public class GraphicsFunctions {
     }
 
     /**
-     * Draws the rectangle in the given Color if it is not <code>null</code>.
-     * If it is <code>null</code> nothing happens. The rectangles width and height
+     * Draws the rectangle in the given Color if it is not <code>null</code>. If
+     * it is <code>null</code> nothing happens. The rectangles width and height
      * are interpreted as the coordinates of the second point and not really the
      * width and height. So the width of
      *
      * @param g
-     * @param rect with coordinates for the second point too instead of height and width
+     * @param rect with coordinates for the second point too instead of height
+     *            and width
      * @param color
      */
     public static void drawPointRect(final Graphics g, final Rectangle rect, final Color color) {

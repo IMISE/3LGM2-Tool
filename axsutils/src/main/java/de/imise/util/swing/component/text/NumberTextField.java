@@ -25,7 +25,8 @@ public class NumberTextField extends ExtendedJFormattedTextField {
     /**
      * Diese AbstractFormatterFactory wird nur belegt, wenn ein String übergeben
      * wurde, der sich nicht nach Double parsen lässet. Diese Factory wird mit
-     * der NumberFormatFactory belegt, die das <code>NumberTextField</code> eigentlich besitzt Wenn dann in dem ElementPropertyDialog ein korrekter
+     * der NumberFormatFactory belegt, die das <code>NumberTextField</code>
+     * eigentlich besitzt Wenn dann in dem ElementPropertyDialog ein korrekter
      * Wert eingegeben wurde, wird genau diese zwishcengespeicherte Factory
      * zurückgespielt, damit nur noch gültige Wert möglich sind.
      */
@@ -123,7 +124,8 @@ public class NumberTextField extends ExtendedJFormattedTextField {
 
     /*
      * (non-Javadoc)
-     * @see javax.swing.JFormattedTextField#processFocusEvent(java.awt.event.FocusEvent)
+     * @see javax.swing.JFormattedTextField#processFocusEvent(java.awt.event.
+     * FocusEvent)
      */
     @Override
     protected void processFocusEvent(final FocusEvent e) {
@@ -183,8 +185,8 @@ public class NumberTextField extends ExtendedJFormattedTextField {
     }
 
     /**
-     * Führt, wenn das übergebene <code>Object</code> ungleich <code>null</code> ist die <code>toString()</code>-Methode aus und ersetzt in diesem
-     * String
+     * Führt, wenn das übergebene <code>Object</code> ungleich <code>null</code>
+     * ist die <code>toString()</code>-Methode aus und ersetzt in diesem String
      * alle Punkte gegen Kommas, wenn der DecimalSeparator ein Komma ist und
      * umgekehrt.
      *

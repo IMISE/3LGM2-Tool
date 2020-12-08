@@ -19,7 +19,8 @@ import java.util.Map;
 import javax.swing.JDialog;
 
 /**
- * Dialog, der seine Größe immer werder herstellen kann, wenn er neu geöffnet wird.
+ * Dialog, der seine Größe immer werder herstellen kann, wenn er neu geöffnet
+ * wird.
  *
  * @author Ich
  * @create 12.09.2015
@@ -158,9 +159,8 @@ public abstract class AbstractSizeAndPositionRestoringDialog extends JDialog {
     }
 
     /**
-     * @return the default position of this dialog.
-     *         A <code>null</code> value sets the dialog in
-     *         the center of its owner.
+     * @return the default position of this dialog. A <code>null</code> value
+     *         sets the dialog in the center of its owner.
      */
     public Point getDefaultPosition() {
         return null;

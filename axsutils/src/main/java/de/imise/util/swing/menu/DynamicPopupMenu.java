@@ -31,10 +31,12 @@ public class DynamicPopupMenu extends JPopupMenu {
     /**
      * Aktualisiert die Menu Einträge
      * <p>
-     * Diese Methode wird automatisch bei jedem Öffnen des Menus aufgerufen und sollte so benutzt
-     * werden, dass die Einträge neu gesetz bzw. reduziert oder erweitert werden. <br>
-     * Das Setzen der Attribute <code>isSelected</code> und <code>isEnabled</code> muss hier nicht
-     * implementiert werden, da dies bereits über {@link #fireMenuSelected()} erfolgt.
+     * Diese Methode wird automatisch bei jedem Öffnen des Menus aufgerufen und
+     * sollte so benutzt werden, dass die Einträge neu gesetz bzw. reduziert
+     * oder erweitert werden. <br>
+     * Das Setzen der Attribute <code>isSelected</code> und
+     * <code>isEnabled</code> muss hier nicht implementiert werden, da dies
+     * bereits über {@link #fireMenuSelected()} erfolgt.
      */
     protected void updateItems() {
     }

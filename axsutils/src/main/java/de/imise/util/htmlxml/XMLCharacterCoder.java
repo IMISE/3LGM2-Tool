@@ -4,8 +4,9 @@
 package de.imise.util.htmlxml;
 
 /**
- * TODO:AXS: prüfen, ob das über der HTMLConverter nicht dasselbe macht (macht er, aber er kann noch mehr, aber wahrscheinlich ist es besser es
- * einfach so zu lassen)
+ * TODO:AXS: prüfen, ob das über der HTMLConverter nicht dasselbe macht (macht
+ * er, aber er kann noch mehr, aber wahrscheinlich ist es besser es einfach so
+ * zu lassen)
  *
  * @author Thomas Rudert
  */

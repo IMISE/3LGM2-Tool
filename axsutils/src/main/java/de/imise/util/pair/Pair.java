@@ -7,13 +7,14 @@ package de.imise.util.pair;
  * @author AXS
  */
 public class Pair<T, S> {
+
     /**
-     * COMMENTME
+     *
      */
     protected T firstObject;
 
     /**
-     * COMMENTME
+     *
      */
     protected S secondObject;
 

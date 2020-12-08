@@ -10,21 +10,21 @@ import de.imise.util.ReflectionUtils;
 import de.imise.util.io.FileHandler;
 
 /**
- * TODO:AXS:20.11.2012 entfernen?
- * FUNKTIONIERT NICHT!
+ * TODO:AXS:20.11.2012 entfernen? FUNKTIONIERT NICHT!
  * <p>
  * Klasse zur Verarbeitung von Inhalten der System-Zwischenablage.
  * <p>
  * Probleme:<br>
- * Der in der Zwischenablage befindliche, durch Programme wie etwa Excel erzeugte html-String
- * ist nicht xml-konform. Damit ist das Erstellen eines Documents mittels des
- * {@link SAXBuilder}s nicht möglich. Demnach gibt es auch keine Möglichkeit eine xsl-
- * Transformation auf diesem html-Inhalt durchzuführen. <br>
- * Programme wie "HTMLCleaner" oder "CyberNeko" schaffen es auch nicht, die Inhalte
- * xml-konform zu machen.
+ * Der in der Zwischenablage befindliche, durch Programme wie etwa Excel
+ * erzeugte html-String ist nicht xml-konform. Damit ist das Erstellen eines
+ * Documents mittels des {@link SAXBuilder}s nicht möglich. Demnach gibt es auch
+ * keine Möglichkeit eine xsl- Transformation auf diesem html-Inhalt
+ * durchzuführen. <br>
+ * Programme wie "HTMLCleaner" oder "CyberNeko" schaffen es auch nicht, die
+ * Inhalte xml-konform zu machen.
  * <p>
- * Aus diesem Grund sollte vorerst die Klasse {@link SimpleContentParser} zum Verarbeiten von
- * Inhalten der System-Zwischenablage verwendet werden.
+ * Aus diesem Grund sollte vorerst die Klasse {@link SimpleContentParser} zum
+ * Verarbeiten von Inhalten der System-Zwischenablage verwendet werden.
  * <p>
  * Lösungsvorschläge:
  * <li>eventuell {@link CleanerProperties} besser konfigurieren
@@ -36,9 +36,10 @@ import de.imise.util.io.FileHandler;
 class XMLContentParser {
 
     /**
-     * Datei, die die Bezeichnung der Programme(z.b. excel, word, 3lgm.uerfieldtable, ...), und die
-     * Pfade der XSL-Dateien enthält, die für die Transformation der durch die Programme
-     * erzeugten Inhalte in der System-Zwischenablage zuständig sind.
+     * Datei, die die Bezeichnung der Programme(z.b. excel, word,
+     * 3lgm.uerfieldtable, ...), und die Pfade der XSL-Dateien enthält, die für
+     * die Transformation der durch die Programme erzeugten Inhalte in der
+     * System-Zwischenablage zuständig sind.
      */
     //	private static final File PARSER_MAP = new File("src/clipboard/XSL/ParserMap.txt");
     @SuppressWarnings("unused")
@@ -52,19 +53,18 @@ class XMLContentParser {
     private static XMLContentParser defaultParser;
 
     /**
-     * Temporäre Datei, die das Ergebnis der Umwandlung von
-     * <code>String</code> - Inhalten der Zwischenablage in CSV<code>String</code>s
-     * enthält. Es wird nur diese Datei für CSV-Inhalte verwendet um den
-     * Speicherplatzbedarf, der bei permanentem Erzeugen neuer temporärer Dateien entsteht,
-     * zu vermeiden.
+     * Temporäre Datei, die das Ergebnis der Umwandlung von <code>String</code>
+     * - Inhalten der Zwischenablage in CSV<code>String</code>s enthält. Es wird
+     * nur diese Datei für CSV-Inhalte verwendet um den Speicherplatzbedarf, der
+     * bei permanentem Erzeugen neuer temporärer Dateien entsteht, zu vermeiden.
      */
     private final File csvTempFile = FileHandler.createTempFile(TEMP_FILE_PREFIX, TEMP_FILE_SUFFIX_CSV);
 
     /**
-     * Temporäre Datei, in der die <code>String</code>-Inhalte der Zwischenablage
-     * gespeichert werden. Es wird nur diese Datei für die Speicherung verwendet, um den
-     * Speicherplatzbedarf, der bei permanentem Erzeugen neuer temporärer Dateien entsteht,
-     * zu vermeiden.
+     * Temporäre Datei, in der die <code>String</code>-Inhalte der
+     * Zwischenablage gespeichert werden. Es wird nur diese Datei für die
+     * Speicherung verwendet, um den Speicherplatzbedarf, der bei permanentem
+     * Erzeugen neuer temporärer Dateien entsteht, zu vermeiden.
      */
     private final File ccsTempFile = FileHandler.createTempFile(TEMP_FILE_PREFIX, TEMP_FILE_SUFFIX_CCS);
 
@@ -83,7 +83,8 @@ class XMLContentParser {
     }
 
     /**
-     * Wandelt <code>contentString</code>s der System-Zwischenablage in <code>String[][]</code> um.
+     * Wandelt <code>contentString</code>s der System-Zwischenablage in
+     * <code>String[][]</code> um.
      *
      * @param contentString
      * @return
@@ -106,7 +107,8 @@ class XMLContentParser {
     }
 
     /**
-     * Liest den Inhalt von <code>file</code> in einen String aus und gibt diesen wieder.
+     * Liest den Inhalt von <code>file</code> in einen String aus und gibt
+     * diesen wieder.
      *
      * @param file
      * @return
@@ -153,8 +155,8 @@ class XMLContentParser {
     }
 
     /**
-     * Wandelt den Inhalt von {@link #ccsTempFile} in CSV-Format um und speichert das
-     * Ergebnis in {@link #csvTempFile}
+     * Wandelt den Inhalt von {@link #ccsTempFile} in CSV-Format um und
+     * speichert das Ergebnis in {@link #csvTempFile}
      */
     private void ccsTOcsv() {
 
@@ -169,20 +171,17 @@ class XMLContentParser {
         //test1();
         //System.err.println(correct(toCSVString(csvTempFile)));
         /*
-         * HtmlCleaner cleaner = new HtmlCleaner();
-         * String s =(toString(ccsTempFile));
-         * s = s.replace(':', ' ');
-         * TagNode tn = cleaner.clean(s);
-         * CleanerProperties cp = new CleanerProperties();
-         * cp.setTreatUnknownTagsAsContent(true);
-         * JDomSerializer seri = new JDomSerializer(cp);
-         * Document doc = seri.createJDom(tn);
-         * System.err.println(doc.getContentSize());
-         * //Document doc = b.build(new File("src/clipboard/XSL/SampleXMLExcel.xml"));
+         * HtmlCleaner cleaner = new HtmlCleaner(); String s
+         * =(toString(ccsTempFile)); s = s.replace(':', ' '); TagNode tn =
+         * cleaner.clean(s); CleanerProperties cp = new CleanerProperties();
+         * cp.setTreatUnknownTagsAsContent(true); JDomSerializer seri = new
+         * JDomSerializer(cp); Document doc = seri.createJDom(tn);
+         * System.err.println(doc.getContentSize()); //Document doc =
+         * b.build(new File("src/clipboard/XSL/SampleXMLExcel.xml"));
          * //XSLTransformer trans = new XSLTransformer(parsers.get("excel"));
-         * //Document doc2 = trans.transform(doc);
-         * //XMLOutputter xmlOut = new XMLOutputter(Format.getPrettyFormat());
-         * //xmlOut.output(doc2, System.out);
+         * //Document doc2 = trans.transform(doc); //XMLOutputter xmlOut = new
+         * XMLOutputter(Format.getPrettyFormat()); //xmlOut.output(doc2,
+         * System.out);
          */
 
     }
@@ -206,15 +205,14 @@ class XMLContentParser {
     /**
      * Noch nicht korrekt implementiert!
      * <p>
-     * Gibt einfach ein Array wieder, das ausschließlich aus <code>file</code> besteht,
-     * falls die zulässige Zeichenanzahl nicht überschritten wird.
-     * <br>
+     * Gibt einfach ein Array wieder, das ausschließlich aus <code>file</code>
+     * besteht, falls die zulässige Zeichenanzahl nicht überschritten wird. <br>
      * Sonst wird eine Exception geworfen.
      * <p>
-     * Ziel:
-     * Zerlegt <code>file</code> in einzelne Dateien, sodass die Anzahl ihrer Zeichen kleiner
-     * als {@link Integer#MAX_VALUE} ist. Damit können dann alle Zeichen der einzelnen Dateien
-     * in jeweils einem <code>charArray</code> erfasst werden.
+     * Ziel: Zerlegt <code>file</code> in einzelne Dateien, sodass die Anzahl
+     * ihrer Zeichen kleiner als {@link Integer#MAX_VALUE} ist. Damit können
+     * dann alle Zeichen der einzelnen Dateien in jeweils einem
+     * <code>charArray</code> erfasst werden.
      *
      * @param file
      * @return
@@ -230,7 +228,8 @@ class XMLContentParser {
     }
 
     /**
-     * Setzt fehlende Anführungszeichen in den contentString und gibt das Ergebnis wieder.
+     * Setzt fehlende Anführungszeichen in den contentString und gibt das
+     * Ergebnis wieder.
      *
      * @param contentString
      * @return

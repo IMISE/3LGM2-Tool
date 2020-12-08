@@ -11,14 +11,14 @@ import javax.swing.event.MouseInputAdapter;
 import javax.swing.event.MouseInputListener;
 
 /**
- * Ein TabPane, bei dem man die Tabs per Maus-Drag in ihrer Reihenfolge ändern kann.
- * Außerdem hat es eine Funktion, über die man einfach per boolean umstellen kann, ob die
- * Tabs in einer Zeile dargestellt werden sollen oder gewrapped werden, wenn die Zeile
- * nicht mehr ausreicht.
+ * Ein TabPane, bei dem man die Tabs per Maus-Drag in ihrer Reihenfolge ändern
+ * kann. Außerdem hat es eine Funktion, über die man einfach per boolean
+ * umstellen kann, ob die Tabs in einer Zeile dargestellt werden sollen oder
+ * gewrapped werden, wenn die Zeile nicht mehr ausreicht.
  * http://forum.java.sun.com/thread.jsp?thread=263180&forum=57&message=2281801<br>
  * XTabbedPane<br>
  * funktioniert nicht mit SCROLL_TAB_LAYOUT
- * 
+ *
  * @author dsmalley (Dave)
  */
 public class ReorderableTabbedPane extends JTabbedPane {

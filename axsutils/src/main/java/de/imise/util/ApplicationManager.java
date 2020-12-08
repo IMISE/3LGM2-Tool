@@ -11,11 +11,15 @@ import com.google.common.base.Strings;
 public final class ApplicationManager {
 
     /**
-     * Gibt das Oberste Verzeichnis zurück, in dem sich Anwendungsdaten befinden, also das Installationsverzeichnis.<br>
+     * Gibt das Oberste Verzeichnis zurück, in dem sich Anwendungsdaten
+     * befinden, also das Installationsverzeichnis.<br>
      *
-     * @param ignoreSubDir falls die Anwendung aus einem Unterverzeichnis heraus gestartet wird, dann wird dieses Unterverzeichnis hier abgeschnitten
-     *            und nur das File auf das Oberverzeichnis zurück gegeben. Das passiert, wenn man die Applikation direkt über die jar-Datei z.B. aus
-     *            dem lib-Verzeichnis startet. Dann muss man eins hoch.
+     * @param ignoreSubDir falls die Anwendung aus einem Unterverzeichnis heraus
+     *            gestartet wird, dann wird dieses Unterverzeichnis hier
+     *            abgeschnitten und nur das File auf das Oberverzeichnis zurück
+     *            gegeben. Das passiert, wenn man die Applikation direkt über
+     *            die jar-Datei z.B. aus dem lib-Verzeichnis startet. Dann muss
+     *            man eins hoch.
      * @return Pfad zur Anwendung
      */
     public static File getApplicationDir(final String ignoreSubDir) {
@@ -36,7 +40,8 @@ public final class ApplicationManager {
     }
 
     /**
-     * Gibt das Oberste Verzeichnis zurück, in dem sich Anwendungsdaten befinden, also das Installationsverzeichnis.<br>
+     * Gibt das Oberste Verzeichnis zurück, in dem sich Anwendungsdaten
+     * befinden, also das Installationsverzeichnis.<br>
      *
      * @return Pfad zur Anwendung
      */

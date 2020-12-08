@@ -7,9 +7,10 @@ import java.util.IdentityHashMap;
 import java.util.Iterator;
 
 /**
- * Set-Implementierung, welche beim Vergleich der Objekte nicht Gleichheit, sondern Identität
- * fordert. <br>
- * In {@link #contains(Object)} wird also nicht "<code>equals</code>", sondern "<code>==</code>" verwendet.
+ * Set-Implementierung, welche beim Vergleich der Objekte nicht Gleichheit,
+ * sondern Identität fordert. <br>
+ * In {@link #contains(Object)} wird also nicht "<code>equals</code>", sondern
+ * "<code>==</code>" verwendet.
  *
  * @author fstephan
  * @param <E>
@@ -35,10 +36,8 @@ public class IdentityHashSet<E> extends AbstractSet<E> implements Cloneable {
      * initial capacity sufficient to contain the elements in the specified
      * collection.
      * 
-     * @param c
-     *            the collection whose elements are to be placed into this set
-     * @throws NullPointerException
-     *             if the specified collection is null
+     * @param c the collection whose elements are to be placed into this set
+     * @throws NullPointerException if the specified collection is null
      */
     public IdentityHashSet(final Collection<? extends E> c) {
         map = new IdentityHashMap<>(Math.max((int) (c.size() / .75f) + 1, 16));
@@ -49,10 +48,9 @@ public class IdentityHashSet<E> extends AbstractSet<E> implements Cloneable {
      * Constructs a new, empty set; the backing <tt>HashMap</tt> instance has
      * the specified initial capacity and default load factor (0.75).
      * 
-     * @param initialCapacity
-     *            the initial capacity of the hash table
-     * @throws IllegalArgumentException
-     *             if the initial capacity is less than zero
+     * @param initialCapacity the initial capacity of the hash table
+     * @throws IllegalArgumentException if the initial capacity is less than
+     *             zero
      */
     public IdentityHashSet(final int initialCapacity) {
         map = new IdentityHashMap<>(initialCapacity);
@@ -95,8 +93,7 @@ public class IdentityHashSet<E> extends AbstractSet<E> implements Cloneable {
      * element <tt>e</tt> such that
      * <tt>(o==null&nbsp;?&nbsp;e==null&nbsp;:&nbsp;o.equals(e))</tt>.
      * 
-     * @param o
-     *            element whose presence in this set is to be tested
+     * @param o element whose presence in this set is to be tested
      * @return <tt>true</tt> if this set contains the specified element
      * @see java.util.AbstractCollection#contains(java.lang.Object)
      */
@@ -113,8 +110,7 @@ public class IdentityHashSet<E> extends AbstractSet<E> implements Cloneable {
      * set already contains the element, the call leaves the set unchanged and
      * returns <tt>false</tt>.
      * 
-     * @param e
-     *            element to be added to this set
+     * @param e element to be added to this set
      * @return <tt>true</tt> if this set did not already contain the specified
      *         element
      * @see java.util.AbstractCollection#add(java.lang.Object)
@@ -132,8 +128,7 @@ public class IdentityHashSet<E> extends AbstractSet<E> implements Cloneable {
      * the element (or equivalently, if this set changed as a result of the
      * call). (This set will not contain the element once the call returns.)
      * 
-     * @param o
-     *            object to be removed from this set, if present
+     * @param o object to be removed from this set, if present
      * @return <tt>true</tt> if the set contained the specified element
      * @see java.util.AbstractCollection#remove(java.lang.Object)
      */

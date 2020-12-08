@@ -10,17 +10,21 @@ public class UniquePixelExtractor {
 
     public UniquePixelExtractor() {
         /*
-         * ArrayList <BufferedImage> al = ImageTools.getAllImages(IMConstants.IMAGE_DIRECTORY+"Digit", "png", 0, 10);
-         * System.out.println(getUniquePixelSet(al, 0, new Color(255, 255, 255)));
-         * System.out.println(getUniquePixelSet(al, 1, new Color(255, 255, 255)));
-         * System.out.println(getUniquePixelSet(al, 2, new Color(255, 255, 255)));
-         * System.out.println(getUniquePixelSet(al, 3, new Color(255, 255, 255)));
-         * System.out.println(getUniquePixelSet(al, 4, new Color(255, 255, 255)));
-         * System.out.println(getUniquePixelSet(al, 5, new Color(255, 255, 255)));
-         * System.out.println(getUniquePixelSet(al, 6, new Color(255, 255, 255)));
-         * System.out.println(getUniquePixelSet(al, 7, new Color(255, 255, 255)));
-         * System.out.println(getUniquePixelSet(al, 8, new Color(255, 255, 255)));
-         * System.out.println(getUniquePixelSet(al, 9, new Color(255, 255, 255)));
+         * ArrayList <BufferedImage> al =
+         * ImageTools.getAllImages(IMConstants.IMAGE_DIRECTORY+"Digit", "png",
+         * 0, 10); System.out.println(getUniquePixelSet(al, 0, new Color(255,
+         * 255, 255))); System.out.println(getUniquePixelSet(al, 1, new
+         * Color(255, 255, 255))); System.out.println(getUniquePixelSet(al, 2,
+         * new Color(255, 255, 255))); System.out.println(getUniquePixelSet(al,
+         * 3, new Color(255, 255, 255)));
+         * System.out.println(getUniquePixelSet(al, 4, new Color(255, 255,
+         * 255))); System.out.println(getUniquePixelSet(al, 5, new Color(255,
+         * 255, 255))); System.out.println(getUniquePixelSet(al, 6, new
+         * Color(255, 255, 255))); System.out.println(getUniquePixelSet(al, 7,
+         * new Color(255, 255, 255))); System.out.println(getUniquePixelSet(al,
+         * 8, new Color(255, 255, 255)));
+         * System.out.println(getUniquePixelSet(al, 9, new Color(255, 255,
+         * 255)));
          */
     }
 
@@ -117,54 +121,48 @@ public class UniquePixelExtractor {
     }
 
     /*
-     * private static final DifferencePixel[][] _getDifferencePixels(List<BufferedImage> images, int targetImageIndex, Color pixelColor, Color
-     * ignoreColor){
-     * BufferedImage targetImage = images.get(targetImageIndex);
-     * int w = targetImage.getWidth();
-     * int h = targetImage.getHeight();
-     * DifferencePixel[][] returnArray = new DifferencePixel[w][h];
-     * int colorRGB = pixelColor.getRGB();
-     * for (int x=0; x<w; x++){
-     * for (int y=0; y<h; y++){
-     * DifferencePixel differencePixel;
-     * if (ignoreColor!=null && targetImage.getRGB(x, y)==ignoreColor.getRGB())
-     * continue;
-     * if (targetImage.getRGB(x, y)==colorRGB)
-     * differencePixel = new DifferencePixel(x, y, pixelColor, false);
-     * else
-     * differencePixel = new DifferencePixel(x, y, pixelColor, true);
-     * for (int i=0; i<images.size(); i++){
-     * if (i==targetImageIndex)
-     * continue;
-     * differencePixel.add(images.get(i));
-     * }
-     * returnArray[x][y]=differencePixel;
-     * }
-     * }
-     * return returnArray;
-     * }
+     * private static final DifferencePixel[][]
+     * _getDifferencePixels(List<BufferedImage> images, int targetImageIndex,
+     * Color pixelColor, Color ignoreColor){ BufferedImage targetImage =
+     * images.get(targetImageIndex); int w = targetImage.getWidth(); int h =
+     * targetImage.getHeight(); DifferencePixel[][] returnArray = new
+     * DifferencePixel[w][h]; int colorRGB = pixelColor.getRGB(); for (int x=0;
+     * x<w; x++){ for (int y=0; y<h; y++){ DifferencePixel differencePixel; if
+     * (ignoreColor!=null && targetImage.getRGB(x, y)==ignoreColor.getRGB())
+     * continue; if (targetImage.getRGB(x, y)==colorRGB) differencePixel = new
+     * DifferencePixel(x, y, pixelColor, false); else differencePixel = new
+     * DifferencePixel(x, y, pixelColor, true); for (int i=0; i<images.size();
+     * i++){ if (i==targetImageIndex) continue;
+     * differencePixel.add(images.get(i)); } returnArray[x][y]=differencePixel;
+     * } } return returnArray; }
      */
 
     /**
-     * Pixel, der für übergebene Bilder entscheiden kann, ob dieses Bild den Pixel enthält.<br>
+     * Pixel, der für übergebene Bilder entscheiden kann, ob dieses Bild den
+     * Pixel enthält.<br>
      * Ein Pixel besteht aus einem Punkt und einer Farbe.<br>
-     * Ist <code>invers</code> nicht <code>true</code>, dann wird ein übergebenes Bild bei
-     * <code>add(BufferedImage)</code> zur Liste der Differenzbilder hinzugefügt, wenn es an diesem
-     * Punkt den Pixel nicht enthält.
+     * Ist <code>invers</code> nicht <code>true</code>, dann wird ein
+     * übergebenes Bild bei <code>add(BufferedImage)</code> zur Liste der
+     * Differenzbilder hinzugefügt, wenn es an diesem Punkt den Pixel nicht
+     * enthält.
      */
     private static class DifferencePixel extends Pixel {
 
         /**
-         * Liste, in die alle Bilder eingefügt werden, deren Farbwert in dem Bildpunkt, den dieser Pixel
-         * beschreibt bei <code>invers==true</code> nicht mit dem Farbwert dieses Pixel übereinstimmt
-         * oder bei <code>invers==false</code> mit dem Farbwert dieses Pixel übereinstimmt.
+         * Liste, in die alle Bilder eingefügt werden, deren Farbwert in dem
+         * Bildpunkt, den dieser Pixel beschreibt bei <code>invers==true</code>
+         * nicht mit dem Farbwert dieses Pixel übereinstimmt oder bei
+         * <code>invers==false</code> mit dem Farbwert dieses Pixel
+         * übereinstimmt.
          */
         private final List<BufferedImage> differenceImages;
 
         /**
-         * Liste, in die alle Bilder eingefügt werden, deren Farbwert in dem Bildpunkt, den dieser Pixel
-         * beschreibt bei <code>invers==true</code> mit dem Farbwert dieses Pixel übereinstimmt
-         * oder bei <code>invers==false</code> nicht mit dem Farbwert dieses Pixel übereinstimmt.
+         * Liste, in die alle Bilder eingefügt werden, deren Farbwert in dem
+         * Bildpunkt, den dieser Pixel beschreibt bei <code>invers==true</code>
+         * mit dem Farbwert dieses Pixel übereinstimmt oder bei
+         * <code>invers==false</code> nicht mit dem Farbwert dieses Pixel
+         * übereinstimmt.
          */
         private final List<BufferedImage> equalsImages;
 
@@ -234,8 +232,8 @@ public class UniquePixelExtractor {
 
         /**
          * Liefer ein DifferencePixel-Array für das Zielbild.<br>
-         * Alle Pixel im Zielbild mit der ignoreColor sind im Array <code>null</code>. Alle anderen sind normale
-         * Differenzpixel.
+         * Alle Pixel im Zielbild mit der ignoreColor sind im Array
+         * <code>null</code>. Alle anderen sind normale Differenzpixel.
          *
          * @param targetImage
          * @param images

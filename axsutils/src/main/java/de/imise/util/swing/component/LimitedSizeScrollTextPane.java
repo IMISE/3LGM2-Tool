@@ -1,6 +1,5 @@
 /*
- * Created on 02.09.2003
- * To change this generated comment go to
+ * Created on 02.09.2003 To change this generated comment go to
  * Window>Preferences>Java>Code Generation>Code and Comments
  */
 package de.imise.util.swing.component;
@@ -21,14 +20,15 @@ import javax.swing.text.JTextComponent;
 import de.imise.util.swing.component.text.ExtendedTextPane;
 
 /**
- * Wird maxLines >0 angegeben, dann wird das TextPane nie größer als diese Zeilenanzahl
- * sondern es erscheint ein ScrollPane. Bei maxLines kleiner 1 vergrößert sich das Pane
- * beliebig, ohne dass ein ScrollPane erscheint.
+ * Wird maxLines >0 angegeben, dann wird das TextPane nie größer als diese
+ * Zeilenanzahl sondern es erscheint ein ScrollPane. Bei maxLines kleiner 1
+ * vergrößert sich das Pane beliebig, ohne dass ein ScrollPane erscheint.
  */
 public class LimitedSizeScrollTextPane extends JScrollPane {
 
     /**
-     * Maximale Zeilenanzahl, auf die sich die Komponente vergrößert, bevor das ScrollPane angezeigt wird.
+     * Maximale Zeilenanzahl, auf die sich die Komponente vergrößert, bevor das
+     * ScrollPane angezeigt wird.
      */
     private final int maxLines;
 
