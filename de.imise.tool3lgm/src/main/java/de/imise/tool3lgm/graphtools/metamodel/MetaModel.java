@@ -1203,6 +1203,20 @@ public final class MetaModel extends CoreMetaModel {
     }
 
     /**
+     * Checks if the start and the end-element have assignable classes. If yes,
+     * thsi edge can connect the same elements in both directions.
+     *
+     * @param edgeClass the edge class to check
+     * @return <code>true</code> if the start and end class of the given edge
+     *         are assignable
+     */
+    public final boolean canConnectSameElementsInBothDirections(final Class<? extends Edge> edgeClass) {
+        Class<? extends ModelElement> startClass = Edge.getStartClass(edgeClass);
+        Class<? extends ModelElement> endClass = Edge.getEndClass(edgeClass);
+        return ReflectionUtils.isAssignable(startClass, endClass);
+    }
+
+    /**
      * Liefert für die übergebene Kantenklasse den MetaPfad, über den die
      * verbindbaren Elemente ebenfalls bereits verbunden sein müssen. Dieser
      * Mechanismus ist dafür gedacht, verbindbare Elemente einzuschränken auf

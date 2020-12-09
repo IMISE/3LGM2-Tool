@@ -1936,6 +1936,40 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
      */
     private final List<?> getConnected(final Class<? extends ModelElement> searchElementClass, final GraphDocument doc, final Class<? extends Edge> edgeClass, final Direction direction, final ConnectionState connectionState, final boolean container,
             final boolean alphabetical) {
+        List<Object> connected = getConnectedInternal(searchElementClass, doc, edgeClass, direction, connectionState, container, alphabetical);
+        //Special case: DoubleMeaningEdges which connect same element types must be checked in both directions
+        if (edgeClass != null && CoreMetaModel.isDoubleMeaningEdge(edgeClass) && metaModel.canConnectSameElementsInBothDirections(edgeClass)) {
+            Direction otherDirection = direction.getOther();
+            List<Object> otherDirectionConnected = getConnectedInternal(searchElementClass, doc, edgeClass, otherDirection, connectionState, container, alphabetical);
+            connected.addAll(otherDirectionConnected);
+        }
+        return connected;
+    }
+
+    /**
+     * Gibt alle mit diesem <code>ModelElement</code> verbundenen
+     * <code>ModelElement</code>s der Klasse <code>searchElementClass</code>
+     * zurueck oder deren <code>ElementContainer</code>.
+     *
+     * @param searchElementClass
+     * @param doc <code>GraphDocument</code> in dem verbundene Elemente gesucht
+     *            werden sollen. Wird <code>null</code> übergeben, werden alle
+     *            verbundenen Elemente zurück gegeben, was der Suche im
+     *            Hauptmodell entspricht. Will man aber
+     *            <code>ElementContainer</code> aus dem Hauptmodell haben, muss
+     *            man ein gültiges Haupt- <code>GraphDocument</code> übergeben.
+     * @param edgeClass
+     * @param direction
+     * @param connectionState
+     * @param container wenn <code>true</code>, werden die
+     *            <code>ElementContainer</code> der gefundenen Elemente zurück
+     *            gegeben; sonst die Elemente selbst
+     * @param alphabetical
+     * @return List mit allen verbundenen <code>ModelElement</code>s oder
+     *         <code>ElementContainer</code>n
+     */
+    private final List<Object> getConnectedInternal(final Class<? extends ModelElement> searchElementClass, final GraphDocument doc, final Class<? extends Edge> edgeClass, final Direction direction, final ConnectionState connectionState,
+            final boolean container, final boolean alphabetical) {
         List<Object> connectedElements = new ArrayList<>(getEdgesCount());
 
         if (doc == null && container) {
