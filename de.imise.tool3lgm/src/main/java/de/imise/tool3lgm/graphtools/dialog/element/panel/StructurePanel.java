@@ -45,7 +45,6 @@ public class StructurePanel extends AbstractPathOfOneEdgePanel {
     private JPanel control1;
     private JPanel control2;
     private JLabel rlabel;
-    private JScrollPane rscrollPane;
 
     /**
      * Liste aller ElementContainer, die nicht im rectne Baum angezeigt werden
@@ -80,7 +79,6 @@ public class StructurePanel extends AbstractPathOfOneEdgePanel {
         lotree.setShowsRootHandles(true);
         lotree.setCellRenderer(treeRenderer);
         lotree.getSelectionModel().setSelectionMode(TreeSelectionModel.DISCONTIGUOUS_TREE_SELECTION);
-        JScrollPane lotreeScrollPane = new JScrollPane(lotree);
 
         // lutree
         JLabel lulabel = new JLabel(getResString("unterg"));
@@ -88,7 +86,6 @@ public class StructurePanel extends AbstractPathOfOneEdgePanel {
         lutree.setName("lutree");
         lutree.setRootVisible(false);
         lutree.setCellRenderer(treeRenderer);
-        JScrollPane lutreeScrollPane = new JScrollPane(lutree);
 
         // PanelLayout
         GridBagLayout gbl = new GridBagLayout();
@@ -108,6 +105,8 @@ public class StructurePanel extends AbstractPathOfOneEdgePanel {
         constraints.fill = GridBagConstraints.BOTH;
         constraints.weightx = 1d;
         constraints.weighty = 1d;
+        JScrollPane lotreeScrollPane = lotree.getScrollPane();
+        JScrollPane lutreeScrollPane = lutree.getScrollPane();
         add(this, lotreeScrollPane, constraints, 0, 1, 1, 1);
         add(this, lutreeScrollPane, constraints, 0, 3, 1, 1);
 
@@ -120,7 +119,8 @@ public class StructurePanel extends AbstractPathOfOneEdgePanel {
         rtree.setShowsRootHandles(true);
         rtree.setCellRenderer(treeRenderer);
         rtree.getSelectionModel().setSelectionMode(TreeSelectionModel.DISCONTIGUOUS_TREE_SELECTION);
-        rscrollPane = new JScrollPane(rtree);
+
+        JScrollPane rtreeScrollPane = rtree.getScrollPane();
 
         /*
          * Start: Buttons & Actions erstellen und registrieren ...
@@ -143,7 +143,7 @@ public class StructurePanel extends AbstractPathOfOneEdgePanel {
         //alles dafür tun, dass beide Dialogseiten gleich breit sind. Das wird über die PreferredSize der breitesten Komponente gesteuert.
         SwingUtils.fillToSameLength(lolabel, lulabel, rlabel);
         SwingUtils.setSamePreferredSize(lolabel, lulabel, rlabel);
-        SwingUtils.setSamePreferredSize(lotreeScrollPane, lutreeScrollPane, rscrollPane);
+        SwingUtils.setSamePreferredSize(lotreeScrollPane, lutreeScrollPane, rtreeScrollPane);
 
         showFullDialog(true);
     }
@@ -204,7 +204,7 @@ public class StructurePanel extends AbstractPathOfOneEdgePanel {
         constraints.fill = GridBagConstraints.BOTH;
         constraints.weightx = 1d;
         constraints.weighty = 1d;
-        add(this, rscrollPane, constraints, 2, 1, 1, 3);
+        add(this, rtree.getScrollPane(), constraints, 2, 1, 1, 3);
     }
 
     @Override
@@ -212,7 +212,7 @@ public class StructurePanel extends AbstractPathOfOneEdgePanel {
         remove(control1);
         remove(control2);
         remove(rlabel);
-        remove(rscrollPane);
+        remove(rtree.getScrollPane());
     }
 
     /**

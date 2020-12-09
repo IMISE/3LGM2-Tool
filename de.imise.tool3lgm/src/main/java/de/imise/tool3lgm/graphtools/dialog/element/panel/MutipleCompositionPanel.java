@@ -15,7 +15,6 @@ import java.util.List;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
 import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
 
@@ -83,8 +82,6 @@ public class MutipleCompositionPanel extends AbstractPathConnectionTreePanel {
         JButton addButton = new JButton(getCreateNewElementAction());
         JButton removeButton = new JButton(getDisconnectAction());
 
-        JScrollPane sp = new JScrollPane(tree);
-
         if (editable) {
             constraints.anchor = GridBagConstraints.CENTER;
             buttonpanel = new JPanel();
@@ -98,7 +95,7 @@ public class MutipleCompositionPanel extends AbstractPathConnectionTreePanel {
         constraints.fill = GridBagConstraints.BOTH;
         constraints.weightx = 100;
         constraints.weighty = 100;
-        add(this, sp, constraints, 0, 0, 1, 1);
+        add(this, tree.getScrollPane(), constraints, 0, 0, 1, 1);
 
         update();
     }

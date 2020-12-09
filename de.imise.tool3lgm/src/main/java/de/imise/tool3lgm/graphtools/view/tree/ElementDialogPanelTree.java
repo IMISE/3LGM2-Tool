@@ -22,6 +22,7 @@ import de.imise.tool3lgm.graphtools.view.tree.node.ElementContainerTreeNode;
 import de.imise.tool3lgm.graphtools.view.tree.node.LGMTreeNode;
 import de.imise.tool3lgm.graphtools.view.tree.node.StringTreeNode;
 import de.imise.util.ToolTipProvider;
+import de.imise.util.swing.component.LimitedHeightScrollTreePane;
 import de.imise.util.swing.component.tree.CorrectSelectionTree;
 
 /**
@@ -37,6 +38,11 @@ public class ElementDialogPanelTree extends CorrectSelectionTree {
     /**
      *
      */
+    private final LimitedHeightScrollTreePane scrollPane;
+
+    /**
+     *
+     */
     private final Collection<ElementContainer> elementsAdded = new HashSet<>();
 
     /**
@@ -44,19 +50,48 @@ public class ElementDialogPanelTree extends CorrectSelectionTree {
      * @param doc
      */
     public ElementDialogPanelTree(final String rootObject, final GraphDocument doc) {
+        this(rootObject, doc, -1, false);
+    }
+
+    /**
+     * @param rootObject
+     * @param doc
+     * @param maxLines
+     */
+    public ElementDialogPanelTree(final String rootObject, final GraphDocument doc, final int maxLines) {
+        this(rootObject, doc, maxLines, false);
+    }
+
+    /**
+     * @param rootObject
+     * @param doc
+     * @param maxLines
+     * @param renderTreeAsList
+     */
+    public ElementDialogPanelTree(final String rootObject, final GraphDocument doc, final int maxLines, final boolean renderTreeAsList) {
         super(new DefaultTreeModel(new StringTreeNode(rootObject)));
         this.doc = doc;
-        setShowsRootHandles(true);
+        scrollPane = new LimitedHeightScrollTreePane(this, maxLines, renderTreeAsList);
     }
 
     /**
      * @param ec
      * @param sortRootChildren
+     * @param maxLines
+     * @param renderTreeAsList
      */
-    public ElementDialogPanelTree(final ElementContainer ec, final boolean sortRootChildren) {
+    public ElementDialogPanelTree(final ElementContainer ec, final boolean sortRootChildren, final int maxLines, final boolean renderTreeAsList) {
         super(new DefaultTreeModel(new ElementContainerTreeNode(ec, false, sortRootChildren)));
         doc = ec.getGraphDocument();
         setShowsRootHandles(true);
+        scrollPane = new LimitedHeightScrollTreePane(this, maxLines, renderTreeAsList);
+    }
+
+    /**
+     * @return the scrollPane
+     */
+    public final LimitedHeightScrollTreePane getScrollPane() {
+        return scrollPane;
     }
 
     /**

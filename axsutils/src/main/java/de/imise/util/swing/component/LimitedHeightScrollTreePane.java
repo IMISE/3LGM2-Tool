@@ -1,7 +1,3 @@
-/*
- * Created on 02.09.2003 To change this generated comment go to
- * Window>Preferences>Java>Code Generation>Code and Comments
- */
 package de.imise.util.swing.component;
 
 import java.awt.Component;
@@ -21,6 +17,9 @@ import javax.swing.tree.TreeModel;
  * Wird maxLines >0 angegeben, dann wird das TextPane nie größer als diese
  * Zeilenanzahl sondern es erscheint ein ScrollPane. Bei maxLines kleiner 1
  * vergrößert sich das Pane beliebig, ohne dass ein ScrollPane erscheint.
+ *
+ * @author AXS (05.04.2019)
+ * @param <T> type of the tree
  */
 public class LimitedHeightScrollTreePane extends JScrollPane {
 

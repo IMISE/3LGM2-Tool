@@ -71,9 +71,6 @@ public class PathConnectionPanel extends AbstractExpandablePanel {
     private final JLabel rLabel;
 
     /**  */
-    private final LimitedHeightScrollTreePane rScollPane;
-
-    /**  */
     private final JPanel buttonpanel;
 
     /**  */
@@ -160,12 +157,11 @@ public class PathConnectionPanel extends AbstractExpandablePanel {
         GraphDocument mainDoc = getMainDoc();
         ElementContainer ec = me.getContainer(mainDoc);
         boolean sortLeftTree = getSortLeftTreeRootChildrenAlphabetical();
-        ltree = new ElementDialogPanelTree(ec, sortLeftTree);
+        ltree = new ElementDialogPanelTree(ec, sortLeftTree, maxLines, renderLeftTreeAsList);
         ltree.setRootVisible(false);
         ltree.setShowsRootHandles(true);
         ltree.setCellRenderer(treeRenderer);
         ltree.getSelectionModel().setSelectionMode(getTreesSelectionModel());
-        LimitedHeightScrollTreePane lScrollPane = new LimitedHeightScrollTreePane(ltree, maxLines, renderLeftTreeAsList);
 
         constraints.anchor = GridBagConstraints.WEST;
         add(this, ltreeLabel, constraints, 0, 0, 2, 1);
@@ -173,7 +169,8 @@ public class PathConnectionPanel extends AbstractExpandablePanel {
         constraints.fill = GridBagConstraints.BOTH;
         constraints.weightx = 1d;
         constraints.weighty = 1d;
-        add(this, lScrollPane, constraints, 0, 1, 2, 4);
+        LimitedHeightScrollTreePane ltreeScrollPane = ltree.getScrollPane();
+        add(this, ltreeScrollPane, constraints, 0, 1, 2, 4);
 
         if (showRightTree) {
             constraints.anchor = GridBagConstraints.EAST;
@@ -187,13 +184,12 @@ public class PathConnectionPanel extends AbstractExpandablePanel {
             String rtreeLabelString = getResString("frei");
             rtreeLabelString = StringUtils.capitalizeFirstChar(rtreeLabelString);
             rLabel = new JLabel(rtreeLabelString);
-            rtree = new ElementDialogPanelTree(rtreeLabelString, mainDoc);
+            rtree = new ElementDialogPanelTree(rtreeLabelString, mainDoc, maxLines);
             rtree.getSelectionModel().setSelectionMode(getTreesSelectionModel());
             rtree.setRootVisible(false);
             rtree.setShowsRootHandles(true);
             TreeRenderer highlightErrorElementsTreeRenderer = new PanelTreeRenderer(this);
             rtree.setCellRenderer(highlightErrorElementsTreeRenderer);
-            rScollPane = new LimitedHeightScrollTreePane(rtree, maxLines, false);
 
             //Buttons & Actions erstellen, Actions setzen
             addAction = getConnectAction();
@@ -206,7 +202,7 @@ public class PathConnectionPanel extends AbstractExpandablePanel {
             //alles dafür tun, dass beide Dialogseiten gleich breit sind. Das wird über die PreferredSize der breitesten Komponente gesteuert.
             SwingUtils.fillToSameLength(westLabel, rLabel);
             SwingUtils.setSamePreferredSize(westLabel, rLabel);
-            SwingUtils.setSamePreferredSize(lScrollPane, rScollPane);
+            SwingUtils.setSamePreferredSize(ltreeScrollPane, rtree.getScrollPane());
 
         } else {
             rLabel = null;
@@ -214,7 +210,6 @@ public class PathConnectionPanel extends AbstractExpandablePanel {
             removeAction = null;
             newElementAction = null;
             buttonpanel = null;
-            rScollPane = null;
             rtree = null;
         }
         initTreeListenerAndDragNDrop();
@@ -288,7 +283,7 @@ public class PathConnectionPanel extends AbstractExpandablePanel {
             constraints.fill = GridBagConstraints.BOTH;
             constraints.weightx = 1d;
             constraints.weighty = 1d;
-            add(this, rScollPane, constraints, 3, 1, 1, 4);
+            add(this, rtree.getScrollPane(), constraints, 3, 1, 1, 4);
         }
     }
 
@@ -297,7 +292,7 @@ public class PathConnectionPanel extends AbstractExpandablePanel {
         if (showRightTree) {
             remove(buttonpanel);
             remove(rLabel);
-            remove(rScollPane);
+            remove(rtree.getScrollPane());
         }
     }
 

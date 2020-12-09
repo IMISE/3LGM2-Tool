@@ -14,7 +14,6 @@ import java.util.Collection;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
 import javax.swing.JTree;
 import javax.swing.tree.TreeSelectionModel;
 
@@ -35,6 +34,7 @@ import de.imise.tool3lgm.graphtools.view.tree.ElementDialogPanelTree;
 import de.imise.tool3lgm.graphtools.view.tree.node.LGMTreeNode;
 import de.imise.util.StringUtils;
 import de.imise.util.swing.SwingUtils;
+import de.imise.util.swing.component.LimitedHeightScrollTreePane;
 
 /**
  * Mit diesem Panel zeigen
@@ -53,7 +53,6 @@ public class DoubleMeaningEdgePanel extends AbstractPathOfOneEdgePanel {
     private ElementDialogPanelTree rotree, rutree;
     private JPanel buttonpanel1, buttonpanel2;
     private JLabel rolabel, rulabel;
-    private JScrollPane sp3, sp4;
 
     private LGMAction loaddAction;
     private LGMAction loremoveAction;
@@ -80,7 +79,6 @@ public class DoubleMeaningEdgePanel extends AbstractPathOfOneEdgePanel {
         lotree.setShowsRootHandles(showRootHandles);
         lotree.setCellRenderer(treeRenderer);
         lotree.getSelectionModel().setSelectionMode(TreeSelectionModel.DISCONTIGUOUS_TREE_SELECTION);
-        JScrollPane sp1 = new JScrollPane(lotree);
 
         String lulabeltext = StringUtils.capitalizeFirstChar(getEdgeDisplayName(ConnectionState.FORWARD));
         JLabel lulabel = new JLabel(lulabeltext);
@@ -90,8 +88,6 @@ public class DoubleMeaningEdgePanel extends AbstractPathOfOneEdgePanel {
         lutree.setShowsRootHandles(showRootHandles);
         lutree.setCellRenderer(treeRenderer);
         lutree.getSelectionModel().setSelectionMode(TreeSelectionModel.DISCONTIGUOUS_TREE_SELECTION);
-
-        JScrollPane sp2 = new JScrollPane(lutree);
 
         if (editable) {
             constraints.anchor = GridBagConstraints.EAST;
@@ -107,8 +103,10 @@ public class DoubleMeaningEdgePanel extends AbstractPathOfOneEdgePanel {
         constraints.fill = GridBagConstraints.BOTH;
         constraints.weightx = 100;
         constraints.weighty = 100;
-        add(this, sp1, constraints, 0, 1, 1, 1);
-        add(this, sp2, constraints, 0, 3, 1, 1);
+        LimitedHeightScrollTreePane lotreeScrollPane = lotree.getScrollPane();
+        LimitedHeightScrollTreePane lutreeScrollPane = lutree.getScrollPane();
+        add(this, lotreeScrollPane, constraints, 0, 1, 1, 1);
+        add(this, lutreeScrollPane, constraints, 0, 3, 1, 1);
 
         if (editable) {
             rotree = new ElementDialogPanelTree("roroot", mainDoc);
@@ -116,7 +114,6 @@ public class DoubleMeaningEdgePanel extends AbstractPathOfOneEdgePanel {
             rotree.setShowsRootHandles(showRootHandles);
             rotree.setCellRenderer(treeRenderer);
             rotree.getSelectionModel().setSelectionMode(TreeSelectionModel.DISCONTIGUOUS_TREE_SELECTION);
-            sp3 = new JScrollPane(rotree);
 
             String unconnected = getResString("frei");
             rolabel = new JLabel(unconnected);
@@ -126,7 +123,6 @@ public class DoubleMeaningEdgePanel extends AbstractPathOfOneEdgePanel {
             rutree.setShowsRootHandles(showRootHandles);
             rutree.setCellRenderer(treeRenderer);
             rutree.getSelectionModel().setSelectionMode(TreeSelectionModel.DISCONTIGUOUS_TREE_SELECTION);
-            sp4 = new JScrollPane(rutree);
 
             loaddAction = getConnectAction(rotree, lotree, BACKWARD);
             loremoveAction = getDisconnectAction(lotree, rotree, BACKWARD);
@@ -143,7 +139,9 @@ public class DoubleMeaningEdgePanel extends AbstractPathOfOneEdgePanel {
             //alles dafür tun, dass beide Dialogseiten gleich breit sind. Das wird über die PreferredSize der breitesten Komponente gesteuert.
             SwingUtils.fillToSameLength(lolabel, lulabel, rolabel, rulabel);
             SwingUtils.setSamePreferredSize(lolabel, lulabel, rolabel, rulabel);
-            SwingUtils.setSamePreferredSize(sp1, sp2, sp3, sp4);
+            LimitedHeightScrollTreePane rotreeScrollPane = rotree.getScrollPane();
+            LimitedHeightScrollTreePane rutreeScrollPane = rutree.getScrollPane();
+            SwingUtils.setSamePreferredSize(lotreeScrollPane, lutreeScrollPane, rotreeScrollPane, rutreeScrollPane);
 
             showFullDialog(true);
         }
@@ -286,8 +284,8 @@ public class DoubleMeaningEdgePanel extends AbstractPathOfOneEdgePanel {
         constraints.fill = GridBagConstraints.BOTH;
         constraints.weightx = 100;
         constraints.weighty = 100;
-        add(this, sp3, constraints, 2, 1, 1, 1);
-        add(this, sp4, constraints, 2, 3, 1, 1);
+        add(this, rotree.getScrollPane(), constraints, 2, 1, 1, 1);
+        add(this, rutree.getScrollPane(), constraints, 2, 3, 1, 1);
     }
 
     @Override
@@ -296,8 +294,8 @@ public class DoubleMeaningEdgePanel extends AbstractPathOfOneEdgePanel {
         remove(buttonpanel2);
         remove(rolabel);
         remove(rulabel);
-        remove(sp3);
-        remove(sp4);
+        remove(rotree.getScrollPane());
+        remove(rutree.getScrollPane());
     }
 
     @Override
