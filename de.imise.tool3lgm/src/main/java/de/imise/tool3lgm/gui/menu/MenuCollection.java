@@ -75,7 +75,7 @@ public class MenuCollection {
 
     /** Das Teilmodell-Menu */
     public static final JMenu SUBMODEL_MENU = createMenu("submodels", GDCommands.MODEL_ACTION_CREATE_SUBMODEL, GDCommands.MODEL_ACTION_DELETE_SUBMODEL, new JSeparator(), GDCommands.MODEL_ACTION_RENAME_SUBMODEL,
-            ContextActions.MODEL_ACTION_SET_INTERLAYER_CONNECTIONS_VISIBILITY_ON);
+            ContextActions.MODEL_ACTION_SET_INTERLAYER_CONNECTIONS_VISIBILITY_ON, ContextActions.MODEL_ACTION_SET_INTERLAYER_CONNECTIONS_VISIBILITY_OFF);
 
     /** Das XMLAnalyse-Menu */
     //    public static final JMenu ANALYSIS_MENU = new AnalysisMenu();

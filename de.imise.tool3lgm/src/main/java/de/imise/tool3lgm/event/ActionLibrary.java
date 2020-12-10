@@ -505,22 +505,18 @@ public class ActionLibrary {
             };
         }
 
-        public static final Action MODEL_ACTION_SET_INTERLAYER_CONNECTIONS_VISIBILITY_ON = new GraphSelectedRealNodeAction(GDCommands.MODEL_ACTION_SET_LAYER_INTERLAYER_CONNECTIONS_VISIBILITY_ON) {
-
+        public static final Action MODEL_ACTION_SET_INTERLAYER_CONNECTIONS_VISIBILITY_ON = new GraphSelectedRealNodeAction(GDCommands.MODEL_ACTION_SET_INTERLAYER_CONNECTIONS_VISIBILITY_ON) {
             @Override
             public boolean isEnabled() {
                 return MODEL_ACTION_SET_LAYER_INTERLAYER_CONNECTIONS_VISIBILITY_ON.isEnabled() || MODEL_ACTION_SET_ELEMENT_INTERLAYER_CONNECTIONS_VISIBILITY_ON.isEnabled();
             };
+        };
 
+        public static final Action MODEL_ACTION_SET_INTERLAYER_CONNECTIONS_VISIBILITY_OFF = new GraphSelectedRealNodeAction(GDCommands.MODEL_ACTION_SET_INTERLAYER_CONNECTIONS_VISIBILITY_OFF) {
             @Override
-            protected void actionPerformed() {
-                if (MODEL_ACTION_SET_ELEMENT_INTERLAYER_CONNECTIONS_VISIBILITY_ON.isEnabled()) {
-                    MODEL_ACTION_SET_ELEMENT_INTERLAYER_CONNECTIONS_VISIBILITY_ON.actionPerformed(null);
-                } else {
-                    MODEL_ACTION_SET_LAYER_INTERLAYER_CONNECTIONS_VISIBILITY_ON.actionPerformed(null);
-                }
+            public boolean isEnabled() {
+                return MODEL_ACTION_SET_LAYER_INTERLAYER_CONNECTIONS_VISIBILITY_OFF.isEnabled() || MODEL_ACTION_SET_ELEMENT_INTERLAYER_CONNECTIONS_VISIBILITY_OFF.isEnabled();
             };
-
         };
 
     }
