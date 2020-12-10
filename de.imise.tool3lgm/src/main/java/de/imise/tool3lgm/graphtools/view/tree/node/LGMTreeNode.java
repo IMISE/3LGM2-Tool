@@ -15,7 +15,7 @@ import de.imise.util.Alphabetical;
 /**
  * @author N.N. (< 2005), AXS (08.04.2019)
  */
-public class LGMTreeNode extends DefaultMutableTreeNode {
+public class LGMTreeNode<T> extends DefaultMutableTreeNode {
 
     /**
      * If you do not want to display the value of the toString() function of the
@@ -43,7 +43,7 @@ public class LGMTreeNode extends DefaultMutableTreeNode {
      * @param o
      * @param setTreeNode
      */
-    protected LGMTreeNode(final Object o) {
+    protected LGMTreeNode(final T o) {
         this(o, true);
     }
 
@@ -51,7 +51,7 @@ public class LGMTreeNode extends DefaultMutableTreeNode {
      * @param o
      * @param sort
      */
-    public LGMTreeNode(final Object o, final boolean sort) {
+    public LGMTreeNode(final T o, final boolean sort) {
         this(o, null, sort);
     }
 
@@ -60,10 +60,18 @@ public class LGMTreeNode extends DefaultMutableTreeNode {
      * @param visibleText
      * @param sort
      */
-    public LGMTreeNode(final Object o, final String visibleText, final boolean sort) {
+    public LGMTreeNode(final T o, final String visibleText, final boolean sort) {
         super(o);
         this.visibleText = visibleText;
         this.sort = sort;
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public T getUserObject() {
+        // If someone has set another UserObject that has
+        // the wrong type, this will of course go wrong.
+        return (T) super.getUserObject();
     }
 
     /**
@@ -113,7 +121,7 @@ public class LGMTreeNode extends DefaultMutableTreeNode {
     public void setSelectable(final boolean s) {
         selectable = s;
         for (int i = 0; i < getChildCount(); i++) {
-            ((LGMTreeNode) getChildAt(i)).setSelectable(s);
+            ((LGMTreeNode<?>) getChildAt(i)).setSelectable(s);
         }
     }
 
@@ -159,7 +167,7 @@ public class LGMTreeNode extends DefaultMutableTreeNode {
         //gibt!
         for (int i = 0; i < children.size(); i++) {
             Object tn = children.get(i);
-            LGMTreeNode child = (LGMTreeNode) tn;
+            LGMTreeNode<?> child = (LGMTreeNode<?>) tn;
             Color c = child.isLeaf() ? child.getForegroundColor() : child.getSignalColor();
             if (!c.equals(Color.black) && !colors.contains(c)) {
                 colors.add(c);
@@ -183,11 +191,12 @@ public class LGMTreeNode extends DefaultMutableTreeNode {
      * @param node
      * @return
      */
-    public final LGMTreeNode getEqualsChild(final LGMTreeNode node) {
+    @SuppressWarnings("unchecked")
+    public final <E> LGMTreeNode<E> getEqualsChild(final LGMTreeNode<E> node) {
         if (children != null) {
             for (TreeNode child : children) {
                 if (node.equals(child)) {
-                    return (LGMTreeNode) child;
+                    return (LGMTreeNode<E>) child;
                 }
             }
         }
@@ -213,7 +222,7 @@ public class LGMTreeNode extends DefaultMutableTreeNode {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        LGMTreeNode other = (LGMTreeNode) obj;
+        LGMTreeNode<?> other = (LGMTreeNode<?>) obj;
         if (userObject == null) {
             if (other.userObject != null) {
                 return false;

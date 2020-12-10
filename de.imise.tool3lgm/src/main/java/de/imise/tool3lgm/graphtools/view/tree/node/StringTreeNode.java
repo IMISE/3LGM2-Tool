@@ -5,7 +5,7 @@ import javax.swing.ImageIcon;
 /**
  * @author AXS (8 Apr 2019)
  */
-public class StringTreeNode extends IconifiedTreeNode {
+public class StringTreeNode extends IconifiedTreeNode<String> {
 
     /**
      * @param s
@@ -41,16 +41,13 @@ public class StringTreeNode extends IconifiedTreeNode {
 
     @Override
     public String getUserObject() {
-        return (String) super.getUserObject();
+        return super.getUserObject();
     }
 
     @Override
     public void setUserObject(final Object userObject) {
-        if (userObject instanceof String) {
-            super.setUserObject(userObject);
-        } else {
-            throw new UnsupportedOperationException();
-        }
+        String s = String.valueOf(userObject);
+        setUserObject(s);
     }
 
 }

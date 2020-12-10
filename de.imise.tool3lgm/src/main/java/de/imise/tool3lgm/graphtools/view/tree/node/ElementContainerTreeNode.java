@@ -10,7 +10,7 @@ import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
 /**
  * @author AXS (8 Apr 2019)
  */
-public class ElementContainerTreeNode extends IconifiedTreeNode implements GraphDocumentOwner {
+public class ElementContainerTreeNode extends IconifiedTreeNode<ElementContainer> implements GraphDocumentOwner {
 
     /**
      * @param ec
@@ -57,18 +57,25 @@ public class ElementContainerTreeNode extends IconifiedTreeNode implements Graph
 
     @Override
     public ElementContainer getUserObject() {
-        return (ElementContainer) super.getUserObject();
-    }
-
-    @Override
-    public void setUserObject(final Object userObject) {
-        throw new UnsupportedOperationException();
+        return super.getUserObject();
     }
 
     @Override
     public GraphDocument getGraphDocument() {
         ElementContainer ec = getUserObject();
         return ec == null ? null : ec.getGraphDocument();
+    }
+
+    @Override
+    public void setUserObject(final Object userObject) {
+        setUserObject((ElementContainer) userObject); //hard cast! if this is an ElementContainer, so don't call this function!
+    }
+
+    /**
+     * @param userObject
+     */
+    public void setUserObject(final ElementContainer userObject) {
+        super.setUserObject(userObject);
     }
 
     /**
