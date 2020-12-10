@@ -4,13 +4,13 @@
 glossar.xml
 help.hs
 help_de.hs
-impressum_de.html
 index.xml
 inhalt.xml
 index_de.xml
 inhalt_de.xml
 map.xml
-willkommen_de.html
+de\willkommen.html
+de\impressum_de.html
 de\faq\faq_bed_allgemein_de.html
 de\faq\faq_bed_ebenen_de.html
 de\faq\faq_bed_fachlich_de.html
@@ -68,8 +68,9 @@ de\ersteSchritte\neueElemente_de.html
 de\ersteSchritte\neuesModell_de.html
 de\ersteSchritte\vorwort_de.html
 de\beispieldateien\oeffnen_de.html
-de\de\glossar\anwendungsbaustein_de.html
+de\glossar\anwendungsbaustein_de.html
 en\willkommen.html
+de\impressum_de.html
 en\faq\faq_bed_allgemein.html
 en\faq\faq_bed_ebenen.html
 en\faq\faq_bed_fachlich.html

@@ -12,12 +12,14 @@ import de.imise.util.Alphabetical;
 /**
  * Set dessen Elemente immer alphabetisch sortiert sind.<br>
  * Kein Element kommt doppelt vor und <code>null</code> ist als Element erlaubt.
- * Zugriffszeit ist immer log(n). Vorteil gegenüber <code>HashSet</code> ist, dass die Reihenfolge der Elemente immer gleich ist, was das debuggen
- * erleichtert.
- * Wahrscheinlich gibt es mittlerweile in irgendeinem Collection-Framework (guava oder apache-commons) eine Klasse mit
- * derselben Funktionalität. Im Unterscheid zu TreeSet oder TreeBag wird hier der Alphabetical-Comparator nur fürs Ordering
- * genutzt und nicht um festzustellen, ob Elemente bereits vorhanden sidn oder nicht! Das wird hier über die equals-Methode
- * der enthaltenen Elemente entschieden.
+ * Zugriffszeit ist immer log(n). Vorteil gegenüber <code>HashSet</code> ist,
+ * dass die Reihenfolge der Elemente immer gleich ist, was das debuggen
+ * erleichtert. Wahrscheinlich gibt es mittlerweile in irgendeinem
+ * Collection-Framework (guava oder apache-commons) eine Klasse mit derselben
+ * Funktionalität. Im Unterscheid zu TreeSet oder TreeBag wird hier der
+ * Alphabetical-Comparator nur fürs Ordering genutzt und nicht um festzustellen,
+ * ob Elemente bereits vorhanden sidn oder nicht! Das wird hier über die
+ * equals-Methode der enthaltenen Elemente entschieden.
  *
  * @author AXS (26.10.2007)
  */

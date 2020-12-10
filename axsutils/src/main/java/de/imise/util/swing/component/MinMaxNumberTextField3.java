@@ -13,9 +13,11 @@ import javax.swing.text.DefaultFormatterFactory;
 import javax.swing.text.NumberFormatter;
 
 /**
- * Ein JTextField, das nur Zahlenwerte in einem bestimmten Bereich mit einer vorher festgeleten Genauigkeit als Eingabe akzeptiert.
- * Im Unterschied zu dem eigentlichen Verhalten eines {@link JFormattedTextField} wird hier schon die Eingabe ungültiger Werte
- * verhindert und nicht erst beim Beenden des Editierens (= Enter gedrückt oder Focus verloren).
+ * Ein JTextField, das nur Zahlenwerte in einem bestimmten Bereich mit einer
+ * vorher festgeleten Genauigkeit als Eingabe akzeptiert. Im Unterschied zu dem
+ * eigentlichen Verhalten eines {@link JFormattedTextField} wird hier schon die
+ * Eingabe ungültiger Werte verhindert und nicht erst beim Beenden des
+ * Editierens (= Enter gedrückt oder Focus verloren).
  *
  * @author AXS
  */

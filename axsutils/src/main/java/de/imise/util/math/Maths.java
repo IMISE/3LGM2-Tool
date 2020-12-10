@@ -34,8 +34,9 @@ public final class Maths {
      * @param value the value that should be checked to be between min and max
      * @param min the min of value
      * @param max the max of value
-     * @return the value if it is in the range of min and max. If it is below min
-     *         than min is returnes. If it is greater than max so max is returned.
+     * @return the value if it is in the range of min and max. If it is below
+     *         min than min is returnes. If it is greater than max so max is
+     *         returned.
      */
     public static int getValueInMinMax(final int value, final int min, final int max) {
         if (value < min) {

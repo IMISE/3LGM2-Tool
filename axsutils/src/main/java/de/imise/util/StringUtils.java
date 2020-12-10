@@ -15,15 +15,13 @@ import de.imise.util.pair.Pair;
 public class StringUtils {
 
     /**
-     * Gibt ein Array zurück, dass durch Aufteilen des übergebenen Strings entsteht.
+     * Gibt ein Array zurück, dass durch Aufteilen des übergebenen Strings
+     * entsteht.
      *
      * @see StringTokenizer
-     * @param str
-     *            aufzuteilender String
-     * @param delim
-     *            Zeichenkette, an der gesplittet wird
-     * @param returnDelims
-     *            delim wird zurückgegeben oder nicht
+     * @param str aufzuteilender String
+     * @param delim Zeichenkette, an der gesplittet wird
+     * @param returnDelims delim wird zurückgegeben oder nicht
      */
     public static String[] tokenize(final String str, final String delim, final boolean returnDelims) {
         StringTokenizer st = new StringTokenizer(str, delim, returnDelims);
@@ -36,10 +34,11 @@ public class StringUtils {
     }
 
     /**
-     * Gibt einen String zurück, der von jedem Wort in dem übergebenen String jeweils den ersten Buchstaben enthält
+     * Gibt einen String zurück, der von jedem Wort in dem übergebenen String
+     * jeweils den ersten Buchstaben enthält
      *
-     * @param str
-     *            String, von dessen Wörtern die Anfangsbuchstaben separiert werden sollen
+     * @param str String, von dessen Wörtern die Anfangsbuchstaben separiert
+     *            werden sollen
      */
     public static String getFirstChars(final String str) {
         StringTokenizer st = new StringTokenizer(str);
@@ -52,10 +51,10 @@ public class StringUtils {
     }
 
     /**
-     * Führt {@link String#trim()} für jeden Eintrag in <code>source</code> aus und gibt das resultierende <code>Array</code> zurück;
+     * Führt {@link String#trim()} für jeden Eintrag in <code>source</code> aus
+     * und gibt das resultierende <code>Array</code> zurück;
      *
-     * @param source
-     *            Quell-<code>Array</code>
+     * @param source Quell-<code>Array</code>
      */
     public static String[] trimAll(final String[] source) {
         int n = source.length;
@@ -67,10 +66,10 @@ public class StringUtils {
     }
 
     /**
-     * Führt {@link String#trim()} für jeden Eintrag in <code>source</code> aus und gibt das resultierende <code>Array</code> zurück;
+     * Führt {@link String#trim()} für jeden Eintrag in <code>source</code> aus
+     * und gibt das resultierende <code>Array</code> zurück;
      *
-     * @param source
-     *            Quell-<code>Array</code>
+     * @param source Quell-<code>Array</code>
      */
     public static String[][] trimAll(final String[][] source) {
         int m = source.length;
@@ -84,9 +83,11 @@ public class StringUtils {
     }
 
     /**
-     * Liefert ein Pair von String zurück, wobei der kürzere der beiden Strings mit Leerzeichen aufgefüllt wird, bis er genauso viele Zeichen hat, wie
-     * der längere. Der längere der beiden Strings kommt unverändert als dieselbe Instanz zurück, der andere nicht. Sind beide gleich lang, bleieben
-     * beide unverändert.
+     * Liefert ein Pair von String zurück, wobei der kürzere der beiden Strings
+     * mit Leerzeichen aufgefüllt wird, bis er genauso viele Zeichen hat, wie
+     * der längere. Der längere der beiden Strings kommt unverändert als
+     * dieselbe Instanz zurück, der andere nicht. Sind beide gleich lang,
+     * bleieben beide unverändert.
      *
      * @param s1
      * @param s2
@@ -100,7 +101,8 @@ public class StringUtils {
     }
 
     /**
-     * Füllt den übergebenen String, wenn er kürzer ist, bis zur übergebenen Länge auf. Ist seine Länge größer oder gleich der übergebenen Länge,
+     * Füllt den übergebenen String, wenn er kürzer ist, bis zur übergebenen
+     * Länge auf. Ist seine Länge größer oder gleich der übergebenen Länge,
      * bleibt er unverändert.
      *
      * @param s
@@ -120,32 +122,33 @@ public class StringUtils {
     }
 
     /**
-     * Liefert einen Bereich, an dem sich in dem übergebenen Text <code>text</code> der zu suchende String <code>searchString</code> befindet.
+     * Liefert einen Bereich, an dem sich in dem übergebenen Text
+     * <code>text</code> der zu suchende String <code>searchString</code>
+     * befindet.
      *
-     * @param text
-     *            Zu durchsuchender Text
-     * @param text2Find
-     *            Zu findender Text
-     * @param fromIndex
-     *            Startindex in <code>text</code>, ab dem gesucht wird
-     * @param ignoreCase
-     *            Wenn <code>true</code> wird die Groß- und Kleinschreibung ignoriert.
-     * @param searchForward
-     *            Wenn <code>true</code> wird ab dem Startindex in Vorwärtsrichtung gesucht, wenn <code>false</code> rückwärts.
-     * @param text2FindAsRegExp
-     *            Wenn <code>true</code> wird der <code>text2Find</code> als regulärer Ausdruck interpretiert, bei <code>false</code> wird er immer im
-     *            Original gesucht.
-     * @param wholeWord
-     *            Wenn <code>true</code> muss der zu suchende String als ganzes Wort gefunden werden. Das ist der Fall wenn der gefundene Textteil von
-     *            Whitespaces, Zeilenumbrüchen oder dem
+     * @param text Zu durchsuchender Text
+     * @param text2Find Zu findender Text
+     * @param fromIndex Startindex in <code>text</code>, ab dem gesucht wird
+     * @param ignoreCase Wenn <code>true</code> wird die Groß- und
+     *            Kleinschreibung ignoriert.
+     * @param searchForward Wenn <code>true</code> wird ab dem Startindex in
+     *            Vorwärtsrichtung gesucht, wenn <code>false</code> rückwärts.
+     * @param text2FindAsRegExp Wenn <code>true</code> wird der
+     *            <code>text2Find</code> als regulärer Ausdruck interpretiert,
+     *            bei <code>false</code> wird er immer im Original gesucht.
+     * @param wholeWord Wenn <code>true</code> muss der zu suchende String als
+     *            ganzes Wort gefunden werden. Das ist der Fall wenn der
+     *            gefundene Textteil von Whitespaces, Zeilenumbrüchen oder dem
      *            Stringanfang oder - ende eingerahmt ist.
-     * @param wrapSearch
-     *            Wenn <code>false</code> endet die Suche (je nach Suchrichtung) am Anfang oder Ende des zu durchsuchenden Strings. Bei
-     *            <code>true</code> wird die Suche (je nach Suchrichtung) dann
-     *            wieder am Ende bzw. Anfang forgesetzt.
-     * @return Position und Länge des gefundenen Suchstrings im zu duerchsuchenden Text oder <code>null</code>, wenn der Suchstring nicht gefunden
-     *         wurde. Die zurück gegebene Länge kann sich von der
-     *         Länge des <code>text2Find</code> unterscheiden, wenn mit regulären Ausdrücken gesucht wird.
+     * @param wrapSearch Wenn <code>false</code> endet die Suche (je nach
+     *            Suchrichtung) am Anfang oder Ende des zu durchsuchenden
+     *            Strings. Bei <code>true</code> wird die Suche (je nach
+     *            Suchrichtung) dann wieder am Ende bzw. Anfang forgesetzt.
+     * @return Position und Länge des gefundenen Suchstrings im zu
+     *         duerchsuchenden Text oder <code>null</code>, wenn der Suchstring
+     *         nicht gefunden wurde. Die zurück gegebene Länge kann sich von der
+     *         Länge des <code>text2Find</code> unterscheiden, wenn mit
+     *         regulären Ausdrücken gesucht wird.
      */
     public static final IntRange find(String text, String text2Find, final int fromIndex, final boolean ignoreCase, final boolean searchForward, final boolean text2FindAsRegExp, final boolean wholeWord, final boolean wrapSearch) {
         // eingeführt, um wholeWord Suche mit zu integrieren;
@@ -304,8 +307,9 @@ public class StringUtils {
     }
 
     /**
-     * Wandelt den ersten Buchstaben des übergebenen Strings in einen Großbuchstaben um und gibt diesen neuen String zurück. Ist er schon groß, kommt
-     * der originale String zurück.
+     * Wandelt den ersten Buchstaben des übergebenen Strings in einen
+     * Großbuchstaben um und gibt diesen neuen String zurück. Ist er schon groß,
+     * kommt der originale String zurück.
      *
      * @param s
      * @return
@@ -327,7 +331,8 @@ public class StringUtils {
     }
 
     /**
-     * Liefert <code>true</code>, wenn der übergebene String <code>null</code> ist, leer ist oder nur aus WhiteSpaces besteht.
+     * Liefert <code>true</code>, wenn der übergebene String <code>null</code>
+     * ist, leer ist oder nur aus WhiteSpaces besteht.
      *
      * @param s
      * @return
@@ -337,8 +342,9 @@ public class StringUtils {
     }
 
     /**
-     * Liefert <code>false</code>, wenn der übergebene String <code>null</code> ist, leer ist, nur aus WhiteSpaces besteht oder
-     * gleich einem der übergebenen invalidValues ist, sonst <code>true</code>.
+     * Liefert <code>false</code>, wenn der übergebene String <code>null</code>
+     * ist, leer ist, nur aus WhiteSpaces besteht oder gleich einem der
+     * übergebenen invalidValues ist, sonst <code>true</code>.
      *
      * @param s
      * @param invalidValues
@@ -357,10 +363,12 @@ public class StringUtils {
     }
 
     /**
-     * Hängt an den übergebenen StringBuilder kommasepariert die Strings der toString()-Methode der in der Collection enthaltenen Elemente
+     * Hängt an den übergebenen StringBuilder kommasepariert die Strings der
+     * toString()-Methode der in der Collection enthaltenen Elemente
      *
      * @param sb StringBuilder, an den angehängt werden soll
-     * @param collection Objecte, deren toString() kommasepariert angehänt werden soll
+     * @param collection Objecte, deren toString() kommasepariert angehänt
+     *            werden soll
      * @return den übergebenen {@link StringBuilder}
      */
     public static StringBuilder appendCollectionString(final StringBuilder sb, final Collection<?> collection) {
@@ -368,10 +376,12 @@ public class StringUtils {
     }
 
     /**
-     * Hängt an den übergebenen StringBuilder kommasepariert die Strings der toString()-Methode der in der Collection enthaltenen Elemente
+     * Hängt an den übergebenen StringBuilder kommasepariert die Strings der
+     * toString()-Methode der in der Collection enthaltenen Elemente
      *
      * @param stringBuilder StringBuilder, an den angehängt werden soll
-     * @param collection Objecte, deren toString() kommasepariert angehänt werden soll
+     * @param collection Objecte, deren toString() kommasepariert angehänt
+     *            werden soll
      * @param delimiter Trenner zwischen den Einzelstrings
      * @return den übergebenen {@link StringBuilder}
      */
@@ -390,7 +400,8 @@ public class StringUtils {
     }
 
     /**
-     * Gibt den verketteten String aller Objekte in der Collection zurück. Diese sind durch den angegebenen Delimiter getrennt.
+     * Gibt den verketteten String aller Objekte in der Collection zurück. Diese
+     * sind durch den angegebenen Delimiter getrennt.
      *
      * @param collection
      * @param delimiter
@@ -401,7 +412,8 @@ public class StringUtils {
     }
 
     /**
-     * Gibt den verketteten String aller Objekte in der Collection zurück. Diese sind durch den angegebenen Delimiter getrennt.
+     * Gibt den verketteten String aller Objekte in der Collection zurück. Diese
+     * sind durch den angegebenen Delimiter getrennt.
      *
      * @param collection
      * @param delimiter
@@ -412,7 +424,8 @@ public class StringUtils {
     }
 
     /**
-     * Returns a comma separated alphabetical sorted string of all objects in the collection
+     * Returns a comma separated alphabetical sorted string of all objects in
+     * the collection
      *
      * @param collection
      * @return

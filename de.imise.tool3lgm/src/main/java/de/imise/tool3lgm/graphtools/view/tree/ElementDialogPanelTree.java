@@ -20,55 +20,145 @@ import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
 import de.imise.tool3lgm.graphtools.view.tree.node.ElementContainerTreeNode;
 import de.imise.tool3lgm.graphtools.view.tree.node.LGMTreeNode;
+import de.imise.tool3lgm.graphtools.view.tree.node.StringTreeNode;
 import de.imise.util.ToolTipProvider;
 import de.imise.util.swing.component.tree.CorrectSelectionTree;
 
+/**
+ * @author AXS < (??.??.2010)
+ */
 public class ElementDialogPanelTree extends CorrectSelectionTree {
 
+    /**
+     *
+     */
     private final GraphDocument doc;
 
-    public ElementDialogPanelTree(final DefaultTreeModel treeModel, final GraphDocument doc) {
-        super(treeModel);
+    /**
+     *
+     */
+    private final Collection<ElementContainer> elementsAdded = new HashSet<>();
+
+    /**
+     * @param rootObject
+     * @param doc
+     */
+    public ElementDialogPanelTree(final String rootObject, final GraphDocument doc) {
+        super(new DefaultTreeModel(new StringTreeNode(rootObject)));
         this.doc = doc;
         setShowsRootHandles(true);
     }
 
-    Collection<ElementContainer> elementsAdded = new HashSet<>();
+    /**
+     * @param ec
+     * @param sortRootChildren
+     */
+    public ElementDialogPanelTree(final ElementContainer ec, final boolean sortRootChildren) {
+        super(new DefaultTreeModel(new ElementContainerTreeNode(ec, false, sortRootChildren)));
+        doc = ec.getGraphDocument();
+        setShowsRootHandles(true);
+    }
 
+    /**
+     *
+     */
     public final void reset() {
         LGMTreeNode root = getRoot();
         root.removeAllChildren();
         elementsAdded.clear();
     }
 
+    /**
+     * @param ec
+     * @param force
+     * @param childrenAreSelectable
+     * @return
+     */
     public LGMTreeNode addObject(final ElementContainer ec, final boolean force, final boolean childrenAreSelectable) {
         return addObject(ec, null, force, childrenAreSelectable);
     }
 
+    /**
+     * @param ec
+     * @param excludeChildren
+     * @param force
+     * @param childrenAreSelectable
+     * @return
+     */
     public LGMTreeNode addObject(final ElementContainer ec, final Collection<ElementContainer> excludeChildren, final boolean force, final boolean childrenAreSelectable) {
         return addObject(ec, null, excludeChildren, force, childrenAreSelectable);
     }
 
+    /**
+     * @param index
+     * @param ec
+     * @param excludeChildren
+     * @param force
+     * @param childrenAreSelectable
+     * @return
+     */
     public LGMTreeNode insertObject(final int index, final ElementContainer ec, final Collection<ElementContainer> excludeChildren, final boolean force, final boolean childrenAreSelectable) {
         return insertObject(index, ec, null, excludeChildren, force, true, childrenAreSelectable);
     }
 
+    /**
+     * @param ec
+     * @param parent
+     * @param excludeChildren
+     * @param force
+     * @param childrenAreSelectable
+     * @return
+     */
     private LGMTreeNode addObject(final ElementContainer ec, final LGMTreeNode parent, final Collection<ElementContainer> excludeChildren, final boolean force, final boolean childrenAreSelectable) {
         return addObject(ec, parent, excludeChildren, force, true, childrenAreSelectable);
     }
 
+    /**
+     * @param ec
+     * @param force
+     * @param checkAlreadyAdded
+     * @param childrenAreSelectable
+     * @return
+     */
     public LGMTreeNode addObject(final ElementContainer ec, final boolean force, final boolean checkAlreadyAdded, final boolean childrenAreSelectable) {
         return addObject(ec, null, force, checkAlreadyAdded, childrenAreSelectable);
     }
 
+    /**
+     * @param ec
+     * @param excludeChildren
+     * @param force
+     * @param checkAlreadyAdded
+     * @param childrenAreSelectable
+     * @return
+     */
     public LGMTreeNode addObject(final ElementContainer ec, final Collection<ElementContainer> excludeChildren, final boolean force, final boolean checkAlreadyAdded, final boolean childrenAreSelectable) {
         return addObject(ec, null, excludeChildren, force, checkAlreadyAdded, childrenAreSelectable);
     }
 
+    /**
+     * @param ec
+     * @param parent
+     * @param excludeChildren
+     * @param force
+     * @param checkAlreadyAdded
+     * @param childrenAreSelectable
+     * @return
+     */
     public LGMTreeNode addObject(final ElementContainer ec, final LGMTreeNode parent, final Collection<ElementContainer> excludeChildren, final boolean force, final boolean checkAlreadyAdded, final boolean childrenAreSelectable) {
         return insertObject(-1, ec, parent, excludeChildren, force, checkAlreadyAdded, childrenAreSelectable);
     }
 
+    /**
+     * @param index
+     * @param ec
+     * @param parent
+     * @param excludeChildren
+     * @param force
+     * @param checkAlreadyAdded
+     * @param childrenAreSelectable
+     * @return
+     */
     private LGMTreeNode insertObject(final int index, final ElementContainer ec, LGMTreeNode parent, final Collection<ElementContainer> excludeChildren, final boolean force, final boolean checkAlreadyAdded, final boolean childrenAreSelectable) {
         if (checkAlreadyAdded && elementsAdded.contains(ec)) {
             return null;
@@ -98,12 +188,21 @@ public class ElementDialogPanelTree extends CorrectSelectionTree {
         return elementNode;
     }
 
+    /**
+     * @return
+     */
     public LGMTreeNode getRoot() {
         TreeModel model = getModel();
         LGMTreeNode root = (LGMTreeNode) model.getRoot();
         return root;
     }
 
+    /**
+     * @param elementNode
+     * @param excludeChildren
+     * @param checkAlreadyAdded
+     * @param childrenAreSelectable
+     */
     private void addChildren(final LGMTreeNode elementNode, final Collection<ElementContainer> excludeChildren, final boolean checkAlreadyAdded, final boolean childrenAreSelectable) {
         Object elementNodeUserObject = elementNode.getUserObject();
         if (elementNodeUserObject instanceof NodeContainer) { //only Nodes can have parts
@@ -129,15 +228,29 @@ public class ElementDialogPanelTree extends CorrectSelectionTree {
         }
     }
 
+    /**
+     *
+     */
+    public void reloadModel() {
+        DefaultTreeModel model = (DefaultTreeModel) getModel();
+        model.reload();
+    }
+
     ////////////////////////////////////////////////////////////////
     // Model neu laden und Expansion + Selektion wiederherstellen //
     ////////////////////////////////////////////////////////////////
 
+    /**
+     *
+     */
     public final void saveExpansionAndSelection() {
         saveExpansion();
         saveSelection();
     }
 
+    /**
+     *
+     */
     public final void restoreExpansionAndSelection() {
         restoreExpansion();
         restoreSelection();

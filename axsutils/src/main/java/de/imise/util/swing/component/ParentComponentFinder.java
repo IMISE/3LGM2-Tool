@@ -44,7 +44,8 @@ public class ParentComponentFinder {
 
     /**
      * @param comp
-     * @return the {@link JDialog} or {@link JFrame} that contains the given component
+     * @return the {@link JDialog} or {@link JFrame} that contains the given
+     *         component
      */
     public static final Component getFrameOrDialog(final Component comp) {
         Component parent = comp.getParent();
@@ -59,7 +60,8 @@ public class ParentComponentFinder {
 
     /**
      * @param comp
-     * @return the {@link JDialog} or {@link JFrame} that contains the given component
+     * @return the {@link JDialog} or {@link JFrame} that contains the given
+     *         component
      */
     public static final Component getFrameOrDialog(final Object comp) {
         if (!(comp instanceof Component)) {

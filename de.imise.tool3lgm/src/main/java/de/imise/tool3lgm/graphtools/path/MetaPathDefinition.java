@@ -12,7 +12,6 @@ import com.google.common.collect.ImmutableListMultimap;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Multimap;
 
-import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.metamodel.CoreMetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModelSpecificAdapter;
@@ -155,17 +154,6 @@ public class MetaPathDefinition extends MetaModelSpecificAdapter {
     }
 
     /**
-     * Liefert <code>Tool3lgmConstants.getResString(resKey)</code>. Dient nur
-     * zur Verkürzung des Codes.
-     *
-     * @param resKey
-     * @return
-     */
-    public static final String _s(final String resKey) {
-        return Tool3lgmConstants.getResString(resKey);
-    }
-
-    /**
      * Liefert alle MetaPaths die für die übergebene Klasse definiert sind.
      *
      * @param startClass
@@ -213,16 +201,37 @@ public class MetaPathDefinition extends MetaModelSpecificAdapter {
      *
      * @param metaPaths
      */
-    protected final void put(final MetaPath... metaPaths) {
-        if (metaPaths == null) {
-            return;
+    protected final void put(final MetaPath metaPath) {
+        definedMetaPaths.add(metaPath);
+        MetaPath otherDirection = metaPath.getOtherDirection();
+        if (otherDirection != null) {
+            definedMetaPaths.add(otherDirection);
         }
+    }
+
+    /**
+     * Legt den übergebenen Metapfad für alle Startklassen und alle Unterklassen
+     * davon in die {@link #ELEMENT_CLASS_TO_START_PATHES}. Wenn der Metapfad
+     * eine Gegenrichtung hat, wird diese auch gleich für hinzugefügt.
+     *
+     * @param metaPaths
+     */
+    protected final void put(final MetaPath... metaPaths) {
         for (MetaPath metaPath : metaPaths) {
-            definedMetaPaths.add(metaPath);
-            metaPath = metaPath.getOtherDirection();
-            if (metaPath != null) {
-                definedMetaPaths.add(metaPath);
-            }
+            put(metaPath);
+        }
+    }
+
+    /**
+     * Legt den übergebenen Metapfad für alle Startklassen und alle Unterklassen
+     * davon in die {@link #ELEMENT_CLASS_TO_START_PATHES}. Wenn der Metapfad
+     * eine Gegenrichtung hat, wird diese auch gleich für hinzugefügt.
+     *
+     * @param metaPaths
+     */
+    protected final void putAll(final Iterable<? extends MetaPath> metaPaths) {
+        for (MetaPath metaPath : metaPaths) {
+            put(metaPath);
         }
     }
 

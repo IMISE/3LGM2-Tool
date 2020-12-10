@@ -19,8 +19,8 @@ public class IheActorInstance extends ApplicationComponent {
         dialog.addEdgePanel(IheActorInstance_SoftwareProduct_Edge.class);
 
         dialog.addMultiPanel(IheActorInstanceInterface.class);
-        dialog.addMultiPanelEdgePanel(IheActorInstanceInvokingInterface.class, IheActorInstance_IheActorInstanceInterface_Edge.class);
-        dialog.addMultiPanelEdgePanel(IheActorInstanceProvidingInterface.class, IheActorInstance_IheActorInstanceInterface_Edge.class);
+        dialog.addMultiPanelPathPanel(IheActorInstanceInvokingInterface.class, IheActorInstance_IheActorInstanceInterface_Edge.class);
+        dialog.addMultiPanelPathPanel(IheActorInstanceProvidingInterface.class, IheActorInstance_IheActorInstanceInterface_Edge.class);
 
         ConnectedElementsTableDefinition tableDefinition = new ConnectedElementsTableDefinition();
         tableDefinition.addColumnEndElement(300);

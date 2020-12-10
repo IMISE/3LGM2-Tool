@@ -30,7 +30,8 @@ public class ImageTools {
     /**
      * @param bi1
      * @param bi2
-     * @return true, wenn die übergebenen Bilder in allen Pixeln dieselben RGB-Farbwerte besitzen
+     * @return true, wenn die übergebenen Bilder in allen Pixeln dieselben
+     *         RGB-Farbwerte besitzen
      */
     public static final boolean equals(final BufferedImage bi1, final BufferedImage bi2) {
         int w1 = bi1.getWidth();
@@ -53,11 +54,13 @@ public class ImageTools {
     }
 
     /**
-     * Liefert ein Bild zurück, dass an allen Stellen, an denen mindestens eins der übergebenen
-     * Bilder die übergebenen Farbe hat, ebenfalls diese Farbe gesetzt ist, sowie auch an allen
-     * Stellen, an denen sich die übergebenen Bilder unterscheiden.<br>
-     * Alle anderen Stellen - also die, an denen alle Bilder die gleiche Farbe haben, die aber nicht
-     * mit der übergebenen Farbe identisch ist, behalten diese in allen Bildern gleiche Farbe.<br>
+     * Liefert ein Bild zurück, dass an allen Stellen, an denen mindestens eins
+     * der übergebenen Bilder die übergebenen Farbe hat, ebenfalls diese Farbe
+     * gesetzt ist, sowie auch an allen Stellen, an denen sich die übergebenen
+     * Bilder unterscheiden.<br>
+     * Alle anderen Stellen - also die, an denen alle Bilder die gleiche Farbe
+     * haben, die aber nicht mit der übergebenen Farbe identisch ist, behalten
+     * diese in allen Bildern gleiche Farbe.<br>
      * Alle Bilder müssen gleich groß sein!
      *
      * @param images
@@ -95,8 +98,9 @@ public class ImageTools {
     }
 
     /**
-     * Gibt ein Bild zurück, in dem an allen Stellen, an denen sich die übergebenen Bilder unterscheiden, die
-     * übergebene Farbe gesetzt ist und an allen anderen Stellen die Farbe, die dort in den Bildern vorkommt.<br>
+     * Gibt ein Bild zurück, in dem an allen Stellen, an denen sich die
+     * übergebenen Bilder unterscheiden, die übergebene Farbe gesetzt ist und an
+     * allen anderen Stellen die Farbe, die dort in den Bildern vorkommt.<br>
      * Alle Bilder in der übergebenen Liste müssen gleich groß sein.
      *
      * @param images
@@ -130,8 +134,9 @@ public class ImageTools {
     }
 
     /**
-     * Übersetzt das übergebene Bild in Pixel. Alle Pixel, die im Bild nicht die übergebene Farbe
-     * haben, sind invers. Alle, die diese Farbe haben, sind nicht invers.
+     * Übersetzt das übergebene Bild in Pixel. Alle Pixel, die im Bild nicht die
+     * übergebene Farbe haben, sind invers. Alle, die diese Farbe haben, sind
+     * nicht invers.
      *
      * @param image
      * @param color
@@ -155,9 +160,10 @@ public class ImageTools {
     }
 
     /**
-     * Liefert ein <code>Image</code> zurück, bei dem alle Punkte, die im übergebenen Bild die
-     * übergebene Farbe <code>fgColor</code> besitzen, auch im Ergebnisbild diese Farbe haben
-     * und alle anderen die Farbe <code>bgColor</code>.
+     * Liefert ein <code>Image</code> zurück, bei dem alle Punkte, die im
+     * übergebenen Bild die übergebene Farbe <code>fgColor</code> besitzen, auch
+     * im Ergebnisbild diese Farbe haben und alle anderen die Farbe
+     * <code>bgColor</code>.
      *
      * @param source
      * @param fgColor
@@ -183,9 +189,9 @@ public class ImageTools {
     }
 
     /**
-     * Liefert aus dem Bild an Index <code>targetImageIndex</code> in der übergebnenen Bilderliste
-     * einen Bildpunkt, der in keinem der anderen übergebenen Bilder bei diesen Koordinaten denselben
-     * Farbwert besitzt.<br>
+     * Liefert aus dem Bild an Index <code>targetImageIndex</code> in der
+     * übergebnenen Bilderliste einen Bildpunkt, der in keinem der anderen
+     * übergebenen Bilder bei diesen Koordinaten denselben Farbwert besitzt.<br>
      * Wird kein eindeutiger Punkt gefunden, kommt <code>null</code> zurück.<br>
      * Alle Bilder müssen gleich groß sein!<br>
      *
@@ -227,8 +233,9 @@ public class ImageTools {
     }
 
     /**
-     * Liefert ein Bild, in dem alle Pixel, die nur in dem Bild an der Stelle <code>targteImageIndex</code>
-     * in der übergebenen Bildliste einen für diese Pixelposition in allen anderen Bildern der Liste eindeutigen
+     * Liefert ein Bild, in dem alle Pixel, die nur in dem Bild an der Stelle
+     * <code>targteImageIndex</code> in der übergebenen Bildliste einen für
+     * diese Pixelposition in allen anderen Bildern der Liste eindeutigen
      * Farbwert besitzen weiß sind und alle nicht einmaligen Pxel schwarz.
      *
      * @param images
@@ -276,7 +283,8 @@ public class ImageTools {
     }
 
     /**
-     * Liefert das Bild am angegebenen Pfad oder <code>null</code>, wenn es nicht existierte.
+     * Liefert das Bild am angegebenen Pfad oder <code>null</code>, wenn es
+     * nicht existierte.
      *
      * @param filePath
      * @return
@@ -311,10 +319,11 @@ public class ImageTools {
     }
 
     /**
-     * Liefert alle Bilddateien, deren Pfadname und Dateiname mit <code>fullPathPrefix</code> beginnt,
-     * gefolgt von einem Index und der übergebenen Datei-Extension. Der Index im Namen der Bilder muss
-     * eine Zahl von <code>startIndex</code> bi <code>stopIndex</code>-1 sein.
-     * Es werden alle Bilder geladen, die existieren.
+     * Liefert alle Bilddateien, deren Pfadname und Dateiname mit
+     * <code>fullPathPrefix</code> beginnt, gefolgt von einem Index und der
+     * übergebenen Datei-Extension. Der Index im Namen der Bilder muss eine Zahl
+     * von <code>startIndex</code> bi <code>stopIndex</code>-1 sein. Es werden
+     * alle Bilder geladen, die existieren.
      *
      * @param fullPathPrefix
      * @param fileExtension
@@ -350,8 +359,8 @@ public class ImageTools {
     }
 
     /**
-     * Liefert einen Screenshot der übergebenen Ausmaße und speichert diesen, wenn gewünscht, im
-     * Standardbildpfad.
+     * Liefert einen Screenshot der übergebenen Ausmaße und speichert diesen,
+     * wenn gewünscht, im Standardbildpfad.
      *
      * @param r
      * @return
@@ -369,8 +378,9 @@ public class ImageTools {
     }
 
     /**
-     * Liefert den im übergebenen <code>Rectangle</code> befindlichen Bildausschnitt des Screenshots
-     * mit dem übergebenen Index und speichert diesen Bildausschnitt in eine Datei, wenn ein nicht-leerer
+     * Liefert den im übergebenen <code>Rectangle</code> befindlichen
+     * Bildausschnitt des Screenshots mit dem übergebenen Index und speichert
+     * diesen Bildausschnitt in eine Datei, wenn ein nicht-leerer
      * Dateinamensprefix <code>partImageFileName</code> angegeben wurde.
      *
      * @param sourceFileName
@@ -392,8 +402,10 @@ public class ImageTools {
     }
 
     /**
-     * Liefert die Position des <code>partImage</code> in dem Bild <code>fullImage</code>.<br>
-     * Es kommt <code>null</code> zurück, wenn das Teilbild nicht gefunden wurde.
+     * Liefert die Position des <code>partImage</code> in dem Bild
+     * <code>fullImage</code>.<br>
+     * Es kommt <code>null</code> zurück, wenn das Teilbild nicht gefunden
+     * wurde.
      *
      * @param fullImage
      * @param partImage
@@ -427,8 +439,10 @@ public class ImageTools {
     }
 
     /**
-     * Liefert die Position des <code>rgbArray</code>s in dem Bild <code>fullImage</code>.<br>
-     * Es kommt <code>null</code> zurück, wenn das <code>rgbArray</code> nicht gefunden wurde.
+     * Liefert die Position des <code>rgbArray</code>s in dem Bild
+     * <code>fullImage</code>.<br>
+     * Es kommt <code>null</code> zurück, wenn das <code>rgbArray</code> nicht
+     * gefunden wurde.
      *
      * @param fullImage
      * @param rgbArray
@@ -463,11 +477,14 @@ public class ImageTools {
     }
 
     /**
-     * Sucht die Position eines monochromen <tt>Pixel</tt>-Arrays in dem ubergebenen Bild.<br>
-     * Die Koordinaten der <tt>Pixel</tt> werden durch die Ausmaße des Arrays bestimmt, welches
-     * auch die <tt>invers</tt>-Eigenschaft des jeweiligen <tt>Pixel</tt>s fest. Die übergebene
-     * Farbe ist die Farbe, die die <tt>Pixel</tt> haben sollen bzw. nicht haben sollen.<br>
-     * Es kommt <code>null</code> zurück, wenn die <tt>Pixel</tt> nicht gefunden wurden.
+     * Sucht die Position eines monochromen <tt>Pixel</tt>-Arrays in dem
+     * ubergebenen Bild.<br>
+     * Die Koordinaten der <tt>Pixel</tt> werden durch die Ausmaße des Arrays
+     * bestimmt, welches auch die <tt>invers</tt>-Eigenschaft des jeweiligen
+     * <tt>Pixel</tt>s fest. Die übergebene Farbe ist die Farbe, die die
+     * <tt>Pixel</tt> haben sollen bzw. nicht haben sollen.<br>
+     * Es kommt <code>null</code> zurück, wenn die <tt>Pixel</tt> nicht gefunden
+     * wurden.
      *
      * @param fullImage
      * @param rgbArray
@@ -508,8 +525,9 @@ public class ImageTools {
     }
 
     /**
-     * Macht einen Screenshot und liefert den am weitesten links oben stehenden Bildpunkt mit dem
-     * angegebenen RGB-Wert oder <code>null</code>, wenn kein solcher Bildpunkt existiert.
+     * Macht einen Screenshot und liefert den am weitesten links oben stehenden
+     * Bildpunkt mit dem angegebenen RGB-Wert oder <code>null</code>, wenn kein
+     * solcher Bildpunkt existiert.
      *
      * @param rgb
      * @return
@@ -519,8 +537,9 @@ public class ImageTools {
     }
 
     /**
-     * Liefert vom übergebenen Bild den am weitesten links oben stehenden Bildpunkt mit dem angegebenen
-     * RGB-Wert oder <code>null</code>, wenn kein solcher Bildpunkt existiert.
+     * Liefert vom übergebenen Bild den am weitesten links oben stehenden
+     * Bildpunkt mit dem angegebenen RGB-Wert oder <code>null</code>, wenn kein
+     * solcher Bildpunkt existiert.
      *
      * @param image
      * @param rgb
@@ -540,8 +559,9 @@ public class ImageTools {
     }
 
     /**
-     * Macht einen Screenshot und liefert den am weitesten rechts unten stehenden Bildpunkt mit dem
-     * angegebenen RGB-Wert oder <code>null</code>, wenn kein solcher Bildpunkt existiert.
+     * Macht einen Screenshot und liefert den am weitesten rechts unten
+     * stehenden Bildpunkt mit dem angegebenen RGB-Wert oder <code>null</code>,
+     * wenn kein solcher Bildpunkt existiert.
      *
      * @param rgb
      * @return
@@ -551,8 +571,9 @@ public class ImageTools {
     }
 
     /**
-     * Liefert vom üvbergebenen Bild den am weitesten rechts unten stehenden Bildpunkt mit dem angegebenen
-     * RGB-Wert oder <code>null</code>, wenn kein solcher Bildpunkt existiert.
+     * Liefert vom üvbergebenen Bild den am weitesten rechts unten stehenden
+     * Bildpunkt mit dem angegebenen RGB-Wert oder <code>null</code>, wenn kein
+     * solcher Bildpunkt existiert.
      *
      * @param image
      * @param rgb
@@ -649,27 +670,26 @@ public class ImageTools {
     }
 
     /**
-     * Zu nutzenden Skalierungsvariante, wenn man ein Bild immer und immer wieder skalieren will.
+     * Zu nutzenden Skalierungsvariante, wenn man ein Bild immer und immer
+     * wieder skalieren will.
      * http://today.java.net/pub/a/today/2007/04/03/perils-of-image-getscaledinstance.html
-     * Convenience method that returns a scaled instance of the
-     * provided {@code BufferedImage}.
+     * Convenience method that returns a scaled instance of the provided
+     * {@code BufferedImage}.
      *
      * @param img the original image to be scaled
-     * @param targetWidth the desired width of the scaled instance,
-     *            in pixels
-     * @param targetHeight the desired height of the scaled instance,
-     *            in pixels
+     * @param targetWidth the desired width of the scaled instance, in pixels
+     * @param targetHeight the desired height of the scaled instance, in pixels
      * @param hint one of the rendering hints that corresponds to
      *            {@code RenderingHints.KEY_INTERPOLATION} (e.g.
      *            {@code RenderingHints.VALUE_INTERPOLATION_NEAREST_NEIGHBOR},
      *            {@code RenderingHints.VALUE_INTERPOLATION_BILINEAR},
      *            {@code RenderingHints.VALUE_INTERPOLATION_BICUBIC})
-     * @param higherQuality if true, this method will use a multi-step
-     *            scaling technique that provides higher quality than the usual
-     *            one-step technique (only useful in downscaling cases, where
-     *            {@code targetWidth} or {@code targetHeight} is
-     *            smaller than the original dimensions, and generally only when
-     *            the {@code BILINEAR} hint is specified)
+     * @param higherQuality if true, this method will use a multi-step scaling
+     *            technique that provides higher quality than the usual one-step
+     *            technique (only useful in downscaling cases, where
+     *            {@code targetWidth} or {@code targetHeight} is smaller than
+     *            the original dimensions, and generally only when the
+     *            {@code BILINEAR} hint is specified)
      * @return a scaled version of the original {@code BufferedImage}
      */
     public static final BufferedImage getScaledInstance(final BufferedImage img, final int targetWidth, final int targetHeight, final Object hint, final boolean higherQuality) {
@@ -758,7 +778,8 @@ public class ImageTools {
     /**
      * @param icon the icon to scale if necessary
      * @param height target height
-     * @param percentTolerance scale only if the size differs more than this in percent
+     * @param percentTolerance scale only if the size differs more than this in
+     *            percent
      * @return a scaled imgae if the icons height was different to the height
      */
     public static ImageIcon getScaledInstance(ImageIcon icon, final int height, final int percentTolerance) {

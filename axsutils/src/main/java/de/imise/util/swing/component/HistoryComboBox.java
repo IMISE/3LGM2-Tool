@@ -17,7 +17,8 @@ import javax.swing.text.JTextComponent;
 import de.imise.util.swing.component.text.TextComponentStandardPopup;
 
 /**
- * Editierbare JComboBox, die sich in der Liste die lestzetn Eingaben merken kann.
+ * Editierbare JComboBox, die sich in der Liste die lestzetn Eingaben merken
+ * kann.
  *
  * @author AXS, STKR
  */
@@ -58,10 +59,8 @@ public class HistoryComboBox extends JComboBox<String> implements KeyListener {
     }
 
     /**
-     * @param historyLength
-     *            Maximale Anzahl der Einträge in der History-Liste
-     * @param initialListValues
-     *            Am Anfang vorhandene Listenwerte
+     * @param historyLength Maximale Anzahl der Einträge in der History-Liste
+     * @param initialListValues Am Anfang vorhandene Listenwerte
      */
 
     public HistoryComboBox(final int historyLength, final String... initialListValues) {
@@ -75,16 +74,14 @@ public class HistoryComboBox extends JComboBox<String> implements KeyListener {
     }
 
     /**
-     * @param initialListValues
-     *            Am Anfang vorhandene Listenwerte
+     * @param initialListValues Am Anfang vorhandene Listenwerte
      */
     public HistoryComboBox(final String... initialListValues) {
         this(MAX_HISTORY_ENTRIES, initialListValues);
     }
 
     /**
-     * @param historyLength
-     *            Maximale Anzahl der Einträge in der History-Liste
+     * @param historyLength Maximale Anzahl der Einträge in der History-Liste
      */
     public HistoryComboBox(final int historyLength) {
         this(historyLength, (String[]) null);
@@ -99,8 +96,7 @@ public class HistoryComboBox extends JComboBox<String> implements KeyListener {
     }
 
     /**
-     * @param historyLength
-     *            Maximale Anzahl der Einträge in der History-Liste
+     * @param historyLength Maximale Anzahl der Einträge in der History-Liste
      * @param enterAction
      */
     public HistoryComboBox(final int historyLength, final Action enterAction) {

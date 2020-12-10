@@ -23,14 +23,16 @@ import com.google.common.collect.ImmutableList;
 import de.imise.util.pair.Pair;
 
 /**
- * Stellt einen Dialog bereit, der untereinander CheckBoxen für übergebene Optionen darstellt,
- * die alle einzeln selektiert werden können. Der Dialog gibt die Selektion der Optionen in
- * einem <code>boolean</code>-Array zurück, in der die Reihenfolge der einzelnen boolean-Werte
- * der Reihenfolge der übergebenen Optionen entspricht. Ein <code>true</code> an Stelle 0
- * im Rückgabe-Array bedeutet, dass die erste Option selektiert wurde.<br>
- * Der Dialog kann in seiner Anzeigebreite beschränkt werden, wenn man eine direkte Instanz von
- * dieser Klasse bildet und dann nicht über die statischen Funktionen von <code>JOptionPane</code>
- * sondern über die Instanzmethoden dieser Klasse Dialoge anzeigt.
+ * Stellt einen Dialog bereit, der untereinander CheckBoxen für übergebene
+ * Optionen darstellt, die alle einzeln selektiert werden können. Der Dialog
+ * gibt die Selektion der Optionen in einem <code>boolean</code>-Array zurück,
+ * in der die Reihenfolge der einzelnen boolean-Werte der Reihenfolge der
+ * übergebenen Optionen entspricht. Ein <code>true</code> an Stelle 0 im
+ * Rückgabe-Array bedeutet, dass die erste Option selektiert wurde.<br>
+ * Der Dialog kann in seiner Anzeigebreite beschränkt werden, wenn man eine
+ * direkte Instanz von dieser Klasse bildet und dann nicht über die statischen
+ * Funktionen von <code>JOptionPane</code> sondern über die Instanzmethoden
+ * dieser Klasse Dialoge anzeigt.
  *
  * @author AXS
  */
@@ -42,14 +44,16 @@ public class MultipleOptionPane extends JOptionPane {
     private int maxCharactersPerLineCount = 90;
 
     /**
-     * Ertsellt ein neues Pane, dessen Dialoge auf 90 Zeichen Breite beschränkt sind.
+     * Ertsellt ein neues Pane, dessen Dialoge auf 90 Zeichen Breite beschränkt
+     * sind.
      */
     public MultipleOptionPane() {
         super();
     }
 
     /**
-     * @param maxCharactersPerLineCount maximale Anzahl von Zeichen in einer Zeile
+     * @param maxCharactersPerLineCount maximale Anzahl von Zeichen in einer
+     *            Zeile
      */
     public MultipleOptionPane(final int maxCharactersPerLineCount) {
         super();
@@ -57,19 +61,16 @@ public class MultipleOptionPane extends JOptionPane {
     }
 
     /**
-     * Zeigt einen Dialog an, der oben eine Message und darunter die übergebene Komponente anzeigt.
+     * Zeigt einen Dialog an, der oben eine Message und darunter die übergebene
+     * Komponente anzeigt.
      *
-     * @param parentComponent
-     *            Besitzerkomponente des Dialoges
-     * @param title
-     *            Titel des Dialoges
-     * @param message
-     *            Nachricht des Dialoges
-     * @param component
-     *            Anzuzeigende Komponente
-     * @return
-     *         {@link JOptionPane#OK_OPTION} wenn OK gedrückt wurde. {@link JOptionPane#CANCEL_OPTION}, wenn etwas anderes (Schließen-Kreuz
-     *         oder Abbrechen) gedrückt wurde.
+     * @param parentComponent Besitzerkomponente des Dialoges
+     * @param title Titel des Dialoges
+     * @param message Nachricht des Dialoges
+     * @param component Anzuzeigende Komponente
+     * @return {@link JOptionPane#OK_OPTION} wenn OK gedrückt wurde.
+     *         {@link JOptionPane#CANCEL_OPTION}, wenn etwas anderes
+     *         (Schließen-Kreuz oder Abbrechen) gedrückt wurde.
      */
     public final int showComponentDialog(final Component parentComponent, final String title, final String message, final Component component) {
         Object msg[] = {
@@ -90,18 +91,13 @@ public class MultipleOptionPane extends JOptionPane {
     /**
      * Zeigt einen Ok-Cancel-Dialog mit einer Checkbox an.
      *
-     * @param parentComponent
-     *            Besitzerkomponente des Dialoges
-     * @param title
-     *            Titel des Dialoges
-     * @param message
-     *            Nachricht des Dialoges
-     * @param option
-     *            Option die zur Auswahl gestellt wird
-     * @param selected
-     *            Selektionszustand der Option beim Öffnen des Dialoges
-     * @return
-     *         Boolean-Wert mit der Selektion der angezeigten Chekcbox oder <code>null</code> bei Abbrechen oder Schließen über das Kreuz
+     * @param parentComponent Besitzerkomponente des Dialoges
+     * @param title Titel des Dialoges
+     * @param message Nachricht des Dialoges
+     * @param option Option die zur Auswahl gestellt wird
+     * @param selected Selektionszustand der Option beim Öffnen des Dialoges
+     * @return Boolean-Wert mit der Selektion der angezeigten Chekcbox oder
+     *         <code>null</code> bei Abbrechen oder Schließen über das Kreuz
      */
     public static final Boolean showSingleCheckboxDialog(final Component parentComponent, final String title, final String message, final String option, final boolean selected) {
         ImmutableList<String> options = ImmutableList.of(option);
@@ -114,11 +110,13 @@ public class MultipleOptionPane extends JOptionPane {
     }
 
     /**
-     * Das hier sollte man eigentlich über eine DropDown-Auswahl machen, statt über untereinander liegende Chekcboxen, aber das mit den Checkboxen war
-     * schon da.
-     * Zeigt einen Optionen-Dialog an, der für jede übergebene Option eine Checkbox darstellt.<br>
-     * Es kann immer nur eine Chekcbox gleichzeitig selektiert sein. Zusätlich kann separat in einer
-     * weiteren Checkbox eine Option wie "Diesen Dialog nicht mehr zeigen" angezeigt und der Eingabewert zurück geliefert werden.
+     * Das hier sollte man eigentlich über eine DropDown-Auswahl machen, statt
+     * über untereinander liegende Chekcboxen, aber das mit den Checkboxen war
+     * schon da. Zeigt einen Optionen-Dialog an, der für jede übergebene Option
+     * eine Checkbox darstellt.<br>
+     * Es kann immer nur eine Chekcbox gleichzeitig selektiert sein. Zusätlich
+     * kann separat in einer weiteren Checkbox eine Option wie "Diesen Dialog
+     * nicht mehr zeigen" angezeigt und der Eingabewert zurück geliefert werden.
      *
      * @param parentComponent
      * @param title
@@ -127,8 +125,11 @@ public class MultipleOptionPane extends JOptionPane {
      * @param selected
      * @param additionalSeparatedOption
      * @param additionalSeparatedOptionSelected
-     * @return <code>null</code> wenn nichts gewählt wurde sonst ein Paar, das als erstes Elenent die gewählte Option enthält und als zweites den
-     *         Selektionszustand der Zusatzfrage. Dieser ist immer <code>null</code>, wenn die Zusatzfrage gar nicht angezeigt werden sollte.
+     * @return <code>null</code> wenn nichts gewählt wurde sonst ein Paar, das
+     *         als erstes Elenent die gewählte Option enthält und als zweites
+     *         den Selektionszustand der Zusatzfrage. Dieser ist immer
+     *         <code>null</code>, wenn die Zusatzfrage gar nicht angezeigt
+     *         werden sollte.
      */
     public static final <T> Pair<T, Boolean> showSingleSelectionOptionDialog(final Component parentComponent, final String title, final String message, final List<T> options, final T selected, final String additionalSeparatedOption,
             final boolean additionalSeparatedOptionSelected) {
@@ -155,44 +156,43 @@ public class MultipleOptionPane extends JOptionPane {
     }
 
     /**
-     * Zeigt einen Optionen-Dialog an, der für jede übergebene Option eine Checkbox darstellt.<br>
+     * Zeigt einen Optionen-Dialog an, der für jede übergebene Option eine
+     * Checkbox darstellt.<br>
      * Alle Checkboxen sind nicht selektiert.
      *
-     * @param parentComponent
-     *            Besitzerkomponente des Dialoges
-     * @param title
-     *            Titel des Dialoges
-     * @param message
-     *            Nachricht des Dialoges
-     * @param options
-     *            Optionen, die über Checkboxen zur Auswahl gestellt werden sollen. Diese Optionen werden über
-     *            ihre toString()-Methode im Dialog angezeigt.
-     * @return Array der übergebenen Options. War die Option ausgewählt, ist sie nicht <code>null</code>, sost ist sie <code>null</code>
+     * @param parentComponent Besitzerkomponente des Dialoges
+     * @param title Titel des Dialoges
+     * @param message Nachricht des Dialoges
+     * @param options Optionen, die über Checkboxen zur Auswahl gestellt werden
+     *            sollen. Diese Optionen werden über ihre toString()-Methode im
+     *            Dialog angezeigt.
+     * @return Array der übergebenen Options. War die Option ausgewählt, ist sie
+     *         nicht <code>null</code>, sost ist sie <code>null</code>
      */
     public static final <T> List<T> showCheckBoxOptionDialog(final Component parentComponent, final String title, final String message, final List<T> options) {
         return showCheckBoxOptionDialog(parentComponent, title, message, options, null, false);
     }
 
     /**
-     * Zeigt einen Optionen-Dialog an, der für jede übergebene Option eine Checkbox darstellt.<br>
-     * Über das Array <code>selected</code> können bereits selektierte Checkboxen festgelegt werden.
-     * Dieses Array muss die gleiche Länge wie <code>options</code> haben oder kann <code>null</code>
-     * sein. Wenn es <code>null</code> ist, sind alle Checkboxen nicht selektiert.
+     * Zeigt einen Optionen-Dialog an, der für jede übergebene Option eine
+     * Checkbox darstellt.<br>
+     * Über das Array <code>selected</code> können bereits selektierte
+     * Checkboxen festgelegt werden. Dieses Array muss die gleiche Länge wie
+     * <code>options</code> haben oder kann <code>null</code> sein. Wenn es
+     * <code>null</code> ist, sind alle Checkboxen nicht selektiert.
      *
-     * @param parentComponent
-     *            Besitzerkomponente des Dialoges
-     * @param title
-     *            Titel des Dialoges
-     * @param message
-     *            Nachricht des Dialoges
-     * @param options
-     *            Optionen, die über Checkboxen zur Auswahl gestellt werden. Diese Optionen werden über
-     *            ihre toString()-Methode im Dialog angezeigt.
-     * @param selected
-     *            legt fest, ob Checkboxen der Optionen bereits angewählt sind oder nicht
-     * @param singleSelection
-     *            legt fest, ob immer nur eine Checkbox oder mehrere gleichzeitig selektiert sein können
-     * @return Array der übergebenen Options. War die Option ausgewählt, ist sie nicht <code>null</code>, sost ist sie <code>null</code>.
+     * @param parentComponent Besitzerkomponente des Dialoges
+     * @param title Titel des Dialoges
+     * @param message Nachricht des Dialoges
+     * @param options Optionen, die über Checkboxen zur Auswahl gestellt werden.
+     *            Diese Optionen werden über ihre toString()-Methode im Dialog
+     *            angezeigt.
+     * @param selected legt fest, ob Checkboxen der Optionen bereits angewählt
+     *            sind oder nicht
+     * @param singleSelection legt fest, ob immer nur eine Checkbox oder mehrere
+     *            gleichzeitig selektiert sein können
+     * @return Array der übergebenen Options. War die Option ausgewählt, ist sie
+     *         nicht <code>null</code>, sost ist sie <code>null</code>.
      */
     public static final <T> List<T> showCheckBoxOptionDialog(final Component parentComponent, final String title, final String message, final List<T> options, final List<Boolean> selected, final boolean singleSelection) {
         Pair<List<T>, Boolean> choosedOptions = showCheckBoxOptionDialog(parentComponent, title, message, options, selected, singleSelection, null, false);
@@ -200,34 +200,40 @@ public class MultipleOptionPane extends JOptionPane {
     }
 
     /**
-     * Zeigt einen Optionen-Dialog an, der für jede übergebene Option eine Checkbox darstellt.<br>
-     * Über das Array <code>selected</code> können bereits selektierte Checkboxen festgelegt werden.
-     * Dieses Array muss die gleiche Länge wie <code>options</code> haben oder kann <code>null</code>
-     * sein. Wenn es <code>null</code> ist, sind alle Checkboxen nicht selektiert.
+     * Zeigt einen Optionen-Dialog an, der für jede übergebene Option eine
+     * Checkbox darstellt.<br>
+     * Über das Array <code>selected</code> können bereits selektierte
+     * Checkboxen festgelegt werden. Dieses Array muss die gleiche Länge wie
+     * <code>options</code> haben oder kann <code>null</code> sein. Wenn es
+     * <code>null</code> ist, sind alle Checkboxen nicht selektiert.
      *
-     * @param parentComponent
-     *            Besitzerkomponente des Dialoges
-     * @param title
-     *            Titel des Dialoges
-     * @param message
-     *            Nachricht des Dialoges
-     * @param options
-     *            Optionen, die über Checkboxen zur Auswahl gestellt werden. Diese Optionen werden über
-     *            ihre toString()-Methode im Dialog angezeigt.
-     * @param selected
-     *            legt fest, ob Checkboxen der Optionen bereits angewählt sind oder nicht
-     * @param singleSelection
-     *            legt fest, ob immer nur eine Checkbox oder mehrere gleichzeitig selektiert sein können
-     * @param additionalSeparatedOption wenn nicht null oder leer, dann wird etwas separiert als letzte Option dieser String angezeigt. Das ist dafür
-     *            gedacht, eine Frage wie "Diesen Dialog nicht mehr anzeigen" oder "Zeige diesen Dialog beim Start" oder ... zusätzlich zu den
-     *            Optionen anzubieten
-     * @param additionalSeparatedOptionSelected
-     *            wenn <code>true</code>, dann wird die übergebene additionalSeparatedOption vorselektiert, sonst nicht
-     * @return Liste der übergebenen Options. War die Option ausgewählt, ist sie nicht <code>null</code>, sost ist sie <code>null</code>. Wurde ein
-     *         gültiger String bei additionalSeparatedOption übergeben, dann ist der letzte Wert in der Liste <code>null</code>, wenn diese Checkbox
-     *         nicht selektiert war oder immer die erste Option, wenn die Box selektiert war. Man sollte als in diesem Fall nur auf <code>null</code>
-     *         testen. Dieses Vorgehen ist nötig, um eine typisierte Liste zurück geben zu können. Der 2 Rückgabewert im Pair - der Boolean - gibt den
-     *         Wert des
+     * @param parentComponent Besitzerkomponente des Dialoges
+     * @param title Titel des Dialoges
+     * @param message Nachricht des Dialoges
+     * @param options Optionen, die über Checkboxen zur Auswahl gestellt werden.
+     *            Diese Optionen werden über ihre toString()-Methode im Dialog
+     *            angezeigt.
+     * @param selected legt fest, ob Checkboxen der Optionen bereits angewählt
+     *            sind oder nicht
+     * @param singleSelection legt fest, ob immer nur eine Checkbox oder mehrere
+     *            gleichzeitig selektiert sein können
+     * @param additionalSeparatedOption wenn nicht null oder leer, dann wird
+     *            etwas separiert als letzte Option dieser String angezeigt. Das
+     *            ist dafür gedacht, eine Frage wie "Diesen Dialog nicht mehr
+     *            anzeigen" oder "Zeige diesen Dialog beim Start" oder ...
+     *            zusätzlich zu den Optionen anzubieten
+     * @param additionalSeparatedOptionSelected wenn <code>true</code>, dann
+     *            wird die übergebene additionalSeparatedOption vorselektiert,
+     *            sonst nicht
+     * @return Liste der übergebenen Options. War die Option ausgewählt, ist sie
+     *         nicht <code>null</code>, sost ist sie <code>null</code>. Wurde
+     *         ein gültiger String bei additionalSeparatedOption übergeben, dann
+     *         ist der letzte Wert in der Liste <code>null</code>, wenn diese
+     *         Checkbox nicht selektiert war oder immer die erste Option, wenn
+     *         die Box selektiert war. Man sollte als in diesem Fall nur auf
+     *         <code>null</code> testen. Dieses Vorgehen ist nötig, um eine
+     *         typisierte Liste zurück geben zu können. Der 2 Rückgabewert im
+     *         Pair - der Boolean - gibt den Wert des
      */
     public static final <T> Pair<List<T>, Boolean> showCheckBoxOptionDialog(final Component parentComponent, final String title, final String message, final List<T> options, final List<Boolean> selected, final boolean singleSelection,
             final String additionalSeparatedOption, final boolean additionalSeparatedOptionSelected) {
@@ -345,7 +351,8 @@ public class MultipleOptionPane extends JOptionPane {
     }
 
     /**
-     * @return the pressed button as int value or {@link JOptionPane#CANCEL_OPTION} if the button is not clear
+     * @return the pressed button as int value or
+     *         {@link JOptionPane#CANCEL_OPTION} if the button is not clear
      */
     public int getAnswer() {
         Object value = super.getValue();

@@ -4,7 +4,6 @@
  */
 package de.imise.tool3lgm.metamodel.original.process;
 
-import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction.BACKWARD;
 import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction.FORWARD;
 
 import java.awt.GridBagConstraints;
@@ -260,7 +259,7 @@ public class ProzessStructurePanel extends PathConnectionLeafPanel implements Tr
     private void appendObjectTypes(final LGMTreeNode aufgabenContainerNode) {
         ModelElement me = ((NodeContainer) aufgabenContainerNode.getUserObject()).getElement();
         GraphDocument mainDoc = getMainDoc();
-        List<ElementContainer> ots = me.getConnectedContainers(Objekttyp.class, mainDoc, null, BACKWARD, false);
+        List<ElementContainer> ots = me.getConnectedContainers(Objekttyp.class, mainDoc, AufObjVerbindung.class, FORWARD, ConnectionState.BACKWARD, false);
         if (ots.size() > 0) {
             String typeNodeName = elementsNameBuilder.getForwardMetaAssociationName(AufObjVerbindung.class, ConnectionState.BACKWARD, false, false);
             LGMTreeNode tmpNode = new StringTreeNode(typeNodeName);
@@ -272,7 +271,7 @@ public class ProzessStructurePanel extends PathConnectionLeafPanel implements Tr
             }
             aufgabenContainerNode.add(tmpNode);
         }
-        ots = me.getConnectedContainers(Objekttyp.class, mainDoc, null, FORWARD, false);
+        ots = me.getConnectedContainers(Objekttyp.class, mainDoc, AufObjVerbindung.class, FORWARD, ConnectionState.FORWARD, false);
         if (ots.size() > 0) {
             String typeNodeName = elementsNameBuilder.getForwardMetaAssociationName(AufObjVerbindung.class, ConnectionState.FORWARD, false, false);
             LGMTreeNode tmpNode = new StringTreeNode(typeNodeName);
@@ -1307,6 +1306,7 @@ public class ProzessStructurePanel extends PathConnectionLeafPanel implements Tr
                 if (selPath != null && selPath.getPathCount() == 2) {
                     LGMTreeNode lroot = ltree.getRoot();
                     // Position der selektierten Aufgabe im Baum bzw. Prozess holen
+                    DefaultTreeModel lmodel = (DefaultTreeModel) ltree.getModel();
                     int pos1 = lmodel.getIndexOfChild(lroot, selPath.getLastPathComponent());
                     // wenn nicht die erste sondern eine Aufgabe dahinter selektiert ist
                     if (pos1 > 0) {

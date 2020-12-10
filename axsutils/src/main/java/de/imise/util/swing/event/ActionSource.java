@@ -10,9 +10,10 @@ import java.util.Set;
 import javax.swing.Action;
 
 /**
- * Interface das vorzugsweise an alle Enum-Klassen gehängt werden kann, die irgendwelche ActionIdentifiert
- * definieren. Damit können gleich die Actions definiert werden, wenn diese zur Initialisierung nur das
- * ActionSource-Object brauchen.
+ * Interface das vorzugsweise an alle Enum-Klassen gehängt werden kann, die
+ * irgendwelche ActionIdentifiert definieren. Damit können gleich die Actions
+ * definiert werden, wenn diese zur Initialisierung nur das ActionSource-Object
+ * brauchen.
  *
  * @author AXS (10.03.2018)
  */
@@ -21,13 +22,16 @@ public interface ActionSource {
     public static final String PPP = "...";
 
     /**
-     * Alle Actions, bei denen an den Namen im Menü noch 3 Punkte angehängt werden sollen, müssen im Namen ihres Enums am Ende diesen String haben.
-     * Das sollten alle Actions sein, bei denen eine Interaktion des Nutzers bei der Durchführung der Action nötig ist, also ein Dialog aufgeht.
+     * Alle Actions, bei denen an den Namen im Menü noch 3 Punkte angehängt
+     * werden sollen, müssen im Namen ihres Enums am Ende diesen String haben.
+     * Das sollten alle Actions sein, bei denen eine Interaktion des Nutzers bei
+     * der Durchführung der Action nötig ist, also ein Dialog aufgeht.
      */
     public static final String INTERACTIVE_ACTION_NAME_POSTFIX = "_PPP";
 
     /**
-     * Mappt von einer ActionSource auf die Action-Klasse, die für diese ActionSource initialisiert werden soll.
+     * Mappt von einer ActionSource auf die Action-Klasse, die für diese
+     * ActionSource initialisiert werden soll.
      */
     public static final Map<ActionSource, Class<? extends ExtendedAction>> ACTION_CLASS = new HashMap<>();
 
@@ -56,8 +60,9 @@ public interface ActionSource {
     }
 
     /**
-     * Speichert für die übergebenen ActionSources, welche ActionClass über die Methode {@link #getActionClass()} zurück
-     * geliefert werden soll (wenn die default implementierung bestehen bleibt).
+     * Speichert für die übergebenen ActionSources, welche ActionClass über die
+     * Methode {@link #getActionClass()} zurück geliefert werden soll (wenn die
+     * default implementierung bestehen bleibt).
      *
      * @param actionClass
      * @param actionSources
@@ -78,9 +83,10 @@ public interface ActionSource {
     }
 
     /**
-     * Actions bei denen irgendwie ein Dialog nach dem Aufruf angezeigt wird, sollten über diese put-Funktion geadded werden.
-     * Einzige Auswirkung ist, dass sie im Menü 3 Punkte hinter ihren Namen bekommen. Alternativ kann man den Namen der ActionSource am Ende mit
-     * "_PPP" versehen.
+     * Actions bei denen irgendwie ein Dialog nach dem Aufruf angezeigt wird,
+     * sollten über diese put-Funktion geadded werden. Einzige Auswirkung ist,
+     * dass sie im Menü 3 Punkte hinter ihren Namen bekommen. Alternativ kann
+     * man den Namen der ActionSource am Ende mit "_PPP" versehen.
      *
      * @param actionClass
      * @param actionSources
@@ -110,8 +116,8 @@ public interface ActionSource {
     }
 
     /**
-     * Bei allen Actions, die eine Benutzerinteraktion (z.B. über einen Dialog vorraussetzen,
-     * sollte hier <code>true</code> zurück kommen.
+     * Bei allen Actions, die eine Benutzerinteraktion (z.B. über einen Dialog
+     * vorraussetzen, sollte hier <code>true</code> zurück kommen.
      *
      * @return
      */

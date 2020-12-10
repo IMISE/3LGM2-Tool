@@ -45,11 +45,11 @@ public class ComponentAsImageExportHandler {
      * Possible types of FileFilters this dialog can display. For all these
      * types there are resource strings, whose key for the description results
      * from the assembled string {@link FILE_FILTER_RESOURCE_PREFIX} +
-     * {@link FileFilterType#toString()}.
-     * For the list of accepted extensions, the same key-string is formed and
-     * the {@link FILE_FILTER_RESOURCE_EXTENSION_POSTFIX} is appended.
-     * Furthermore, the names of these enum entries correspond exactly to the
-     * names ImageIO wants to have for identifying the codec to be used.
+     * {@link FileFilterType#toString()}. For the list of accepted extensions,
+     * the same key-string is formed and the
+     * {@link FILE_FILTER_RESOURCE_EXTENSION_POSTFIX} is appended. Furthermore,
+     * the names of these enum entries correspond exactly to the names ImageIO
+     * wants to have for identifying the codec to be used.
      */
     public static enum FileFilterType {
         JPG,
@@ -60,8 +60,9 @@ public class ComponentAsImageExportHandler {
     }
 
     /**
-     * Anfang des ResourceString, mit dem bei jedem über die Funktion zu ladenden FileFilter
-     * der Key-String der Beschreibung und der Dateierweiterungen beginnen muss.
+     * Anfang des ResourceString, mit dem bei jedem über die Funktion zu
+     * ladenden FileFilter der Key-String der Beschreibung und der
+     * Dateierweiterungen beginnen muss.
      */
     public static final String FILE_FILTER_RESOURCE_PREFIX = "FILE_FILTER_";
 
@@ -72,8 +73,9 @@ public class ComponentAsImageExportHandler {
     private final DialogResourceHandler drh = new DialogResourceHandler(ComponentAsImageExportHandler.class);
 
     /**
-     * Liefert für die übergebenen filterNamen ein Array von FileFiltern, wenn die Beschreibung und die Liste
-     * der Erweiterungen den Konventionen entsprechend in den Resoourcendateien abgelegt sind.
+     * Liefert für die übergebenen filterNamen ein Array von FileFiltern, wenn
+     * die Beschreibung und die Liste der Erweiterungen den Konventionen
+     * entsprechend in den Resoourcendateien abgelegt sind.
      *
      * @param filterNames
      * @return
@@ -172,9 +174,8 @@ public class ComponentAsImageExportHandler {
 
     /**
      * @param preferredSize
-     * @return a scaled size of the given size in the same aspect ratio
-     *         that will fit in memory when exporting an image of that
-     *         size
+     * @return a scaled size of the given size in the same aspect ratio that
+     *         will fit in memory when exporting an image of that size
      */
     private Dimension getMaxHeapAvailableSize(final Dimension preferredSize) {
         Dimension maxAvailableImageSize = preferredSize;
@@ -209,9 +210,9 @@ public class ComponentAsImageExportHandler {
     }
 
     /**
-     * Sets the maximum available size for the component so that the
-     * image to be exported fits in memory and the export process can
-     * be executed without memory overflow.
+     * Sets the maximum available size for the component so that the image to be
+     * exported fits in memory and the export process can be executed without
+     * memory overflow.
      *
      * @param comp
      */
@@ -238,10 +239,9 @@ public class ComponentAsImageExportHandler {
     }
 
     /**
-     * Calculates the size of the image in the memory. The size results
-     * from the width multiplied by the height multiplied by 3, since
-     * each pixel of a {@link BufferedImage#TYPE_3BYTE_BGR} consumes 3
-     * bytes per pixel.
+     * Calculates the size of the image in the memory. The size results from the
+     * width multiplied by the height multiplied by 3, since each pixel of a
+     * {@link BufferedImage#TYPE_3BYTE_BGR} consumes 3 bytes per pixel.
      *
      * @param preferredSize
      * @return
@@ -334,8 +334,8 @@ public class ComponentAsImageExportHandler {
     }
 
     /**
-     * Bei Unterklassen dieser Klasse kann beim Export ausgewählt werden,
-     * ob die Componente mit maximalem Zoom exportiert werden soll.
+     * Bei Unterklassen dieser Klasse kann beim Export ausgewählt werden, ob die
+     * Componente mit maximalem Zoom exportiert werden soll.
      *
      * @author astruebi
      * @create 20.02.2013

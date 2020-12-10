@@ -23,197 +23,216 @@ import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
 
-
 /**
- * <code>ScrollPane</code> mit einem <code>JTree</code>, der das Filesystem darstellen kann.
- * 
- * @author Thomas Rudert
- * created on 07.01.2004
+ * <code>ScrollPane</code> mit einem <code>JTree</code>, der das Filesystem
+ * darstellen kann.
+ *
+ * @author Thomas Rudert created on 07.01.2004
  */
-public class DirectoryTreePane extends JScrollPane	implements TreeWillExpandListener, TreeSelectionListener{
+public class DirectoryTreePane extends JScrollPane implements TreeWillExpandListener, TreeSelectionListener {
 
-	/**
-	 * COMMENTME
-	 */
-	private JTree directoryTree;
-	
-	/**
-	 * COMMENTME
-	 */
-	private DefaultTreeModel treeModel;
+    /**
+     * COMMENTME
+     */
+    private final JTree directoryTree;
 
-	/**
-	 * COMMENTME
-	 */
-	private FileSystemView fileSystemView = FileSystemView.getFileSystemView();
+    /**
+     * COMMENTME
+     */
+    private final DefaultTreeModel treeModel;
 
-	/**
-	 * 
-	 */
-	public DirectoryTreePane() {
-		super();
-		
-		TreeNode root = new DirectoryTreeNode("Roots", getRoots(), fileSystemView);
-		treeModel = new DefaultTreeModel(root);
-		directoryTree = new JTree(treeModel);
-		directoryTree.setRootVisible(false);
-		directoryTree.setShowsRootHandles(true);
-		directoryTree.getSelectionModel().setSelectionMode(TreeSelectionModel.DISCONTIGUOUS_TREE_SELECTION);
-		if (root.getChildCount() == 1)
-			directoryTree.expandRow(0);
-			
-		directoryTree.setCellRenderer(createDirectoryTreeRenderer());
-		directoryTree.addTreeSelectionListener(this);
-		directoryTree.addTreeWillExpandListener(this);
-		
-		setViewportView(directoryTree);
-	}
+    /**
+     * COMMENTME
+     */
+    private final FileSystemView fileSystemView = FileSystemView.getFileSystemView();
 
-	/* (non-Javadoc)
-	 * @see javax.swing.event.TreeWillExpandListener#treeWillCollapse(javax.swing.event.TreeExpansionEvent)
-	 */
-	@Override
-	public void treeWillCollapse(TreeExpansionEvent event) throws ExpandVetoException {
-	}
+    /**
+     * 
+     */
+    public DirectoryTreePane() {
+        super();
 
-	/* (non-Javadoc)
-	 * @see javax.swing.event.TreeWillExpandListener#treeWillExpand(javax.swing.event.TreeExpansionEvent)
-	 */
-	@Override
-	public void treeWillExpand(TreeExpansionEvent event) throws ExpandVetoException {
-		DirectoryTreeNode node = (DirectoryTreeNode) event.getPath().getLastPathComponent();
-		
-		setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-		node.ensureChildrenAreLoaded();
-		
-		setCursor(Cursor.getDefaultCursor());
-	}
+        TreeNode root = new DirectoryTreeNode("Roots", getRoots(), fileSystemView);
+        treeModel = new DefaultTreeModel(root);
+        directoryTree = new JTree(treeModel);
+        directoryTree.setRootVisible(false);
+        directoryTree.setShowsRootHandles(true);
+        directoryTree.getSelectionModel().setSelectionMode(TreeSelectionModel.DISCONTIGUOUS_TREE_SELECTION);
+        if (root.getChildCount() == 1) {
+            directoryTree.expandRow(0);
+        }
 
-	/**
-	 * @return
-	 */
-	private TreeCellRenderer createDirectoryTreeRenderer() {
-		return new DefaultTreeCellRenderer() {
-			
-			/* (non-Javadoc)
-			 * @see javax.swing.tree.DefaultTreeCellRenderer#getTreeCellRendererComponent(javax.swing.JTree, java.lang.Object, boolean, boolean, boolean, int, boolean)
-			 */
-			@Override
-			public Component getTreeCellRendererComponent(JTree tree, Object value,	boolean sel, boolean expanded, boolean leaf, int row, boolean hasFocus) {
-				super.getTreeCellRendererComponent(tree, value,	sel, expanded, false, row, hasFocus);
-				DefaultMutableTreeNode node = (DefaultMutableTreeNode) value;
-				if (!(node.getUserObject() instanceof File))
-					return this;
-					
-				File directory = (File) node.getUserObject();
-				setText(getSystemDisplayName(directory));
-				setIcon(getSystemIcon(directory));
-				return this;
-			}
+        directoryTree.setCellRenderer(createDirectoryTreeRenderer());
+        directoryTree.addTreeSelectionListener(this);
+        directoryTree.addTreeWillExpandListener(this);
 
-		};
-	}
-	
-	/**
-	 * @param directory
-	 * @return
-	 */
-	private String getSystemDisplayName(File directory) {
-		return fileSystemView.getSystemDisplayName(directory);
-	}
-	
-	/**
-	 * @param file
-	 * @return
-	 */
-	private Icon getSystemIcon(File file) {
-		return fileSystemView.getSystemIcon(file);
-	}
-	
-	/**
-	 * @return
-	 */
-	private File[] getRoots() {
-		return fileSystemView.getRoots();
-	}
+        setViewportView(directoryTree);
+    }
 
-	/**
-	 * @return
-	 */
-	public File[] getSelectedDirectories() {
-		TreePath[] selection = directoryTree.getSelectionPaths();
-		if (selection == null)
-			return new File[0];
+    /*
+     * (non-Javadoc)
+     * @see
+     * javax.swing.event.TreeWillExpandListener#treeWillCollapse(javax.swing.
+     * event.TreeExpansionEvent)
+     */
+    @Override
+    public void treeWillCollapse(final TreeExpansionEvent event) throws ExpandVetoException {
+    }
 
-		File[] returnValue = new File[selection.length];
-		for (int i = 0; i < selection.length; i++)
-			returnValue[i] = ((DirectoryTreeNode) selection[i].getLastPathComponent()).getDirectory();
-		return returnValue;
-	}
+    /*
+     * (non-Javadoc)
+     * @see
+     * javax.swing.event.TreeWillExpandListener#treeWillExpand(javax.swing.event
+     * .TreeExpansionEvent)
+     */
+    @Override
+    public void treeWillExpand(final TreeExpansionEvent event) throws ExpandVetoException {
+        DirectoryTreeNode node = (DirectoryTreeNode) event.getPath().getLastPathComponent();
 
-	/* (non-Javadoc)
-	 * @see javax.swing.event.TreeSelectionListener#valueChanged(javax.swing.event.TreeSelectionEvent)
-	 */
-	@Override
-	public void valueChanged(TreeSelectionEvent e) {
-//		File selectedDirectory = ((DirectoryTreeNode)e.getPath().getLastPathComponent()).getDirectory();
-		EventListener[] listeners = listenerList.getListeners(TreeSelectionListener.class);
-		for (int i = 0; i < listeners.length; i++)
-			((TreeSelectionListener) listeners[i]).valueChanged(e);
-		
-	}
-	
-	/**
-	 * @param listener
-	 */
-	public void addTreeSelectionListener(TreeSelectionListener listener) {
-		listenerList.add(TreeSelectionListener.class, listener);
-	}
-	
-	/**
-	 * @param listener
-	 */
-	public void removeTreeSelectionList(TreeSelectionListener listener) {
-		listenerList.remove(TreeSelectionListener.class, listener);
-	}
+        setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+        node.ensureChildrenAreLoaded();
 
-	/**
-	 * @param b
-	 */
-	public void setMultiSelection(boolean b) {
-		directoryTree.getSelectionModel().setSelectionMode(b ? TreeSelectionModel.DISCONTIGUOUS_TREE_SELECTION : TreeSelectionModel.SINGLE_TREE_SELECTION);
-	}
+        setCursor(Cursor.getDefaultCursor());
+    }
 
-	/**
-	 * @param dir
-	 */
-	public void createDir(String dirName) {
+    /**
+     * @return
+     */
+    private TreeCellRenderer createDirectoryTreeRenderer() {
+        return new DefaultTreeCellRenderer() {
 
-		if (dirName == null)
-			return;
+            /*
+             * (non-Javadoc)
+             * @see javax.swing.tree.DefaultTreeCellRenderer#
+             * getTreeCellRendererComponent(javax.swing.JTree, java.lang.Object,
+             * boolean, boolean, boolean, int, boolean)
+             */
+            @Override
+            public Component getTreeCellRendererComponent(final JTree tree, final Object value, final boolean sel, final boolean expanded, final boolean leaf, final int row, final boolean hasFocus) {
+                super.getTreeCellRendererComponent(tree, value, sel, expanded, false, row, hasFocus);
+                DefaultMutableTreeNode node = (DefaultMutableTreeNode) value;
+                if (!(node.getUserObject() instanceof File)) {
+                    return this;
+                }
 
-		DirectoryTreeNode parent = (DirectoryTreeNode) directoryTree.getSelectionModel().getSelectionPath().getLastPathComponent();
-		DirectoryTreeNode child;
-		
-		File dir = new File(parent.getDirectory(), dirName);
-		dir.mkdir();
-		if (!dir.isDirectory())
-			return;
+                File directory = (File) node.getUserObject();
+                setText(getSystemDisplayName(directory));
+                setIcon(getSystemIcon(directory));
+                return this;
+            }
 
-		Enumeration<DirectoryTreeNode> children = parent.children();
-		int index = 0;
-		while (children.hasMoreElements()) {
-			if (dir.equals((child = children.nextElement()).getDirectory())) {
-				directoryTree.getSelectionModel().setSelectionPath(new TreePath(child.getPath()));
-				return;
-			}
-			
-			if (dir.getName().compareToIgnoreCase(child.getDirectory().getName()) > 0)
-				index++;
-		}
-			
-		child = new DirectoryTreeNode(dir, parent.getFileSystemView(), true);
-		treeModel.insertNodeInto(child, parent, index);
-		directoryTree.getSelectionModel().setSelectionPath(new TreePath(child.getPath()));
-	}
+        };
+    }
+
+    /**
+     * @param directory
+     * @return
+     */
+    private String getSystemDisplayName(final File directory) {
+        return fileSystemView.getSystemDisplayName(directory);
+    }
+
+    /**
+     * @param file
+     * @return
+     */
+    private Icon getSystemIcon(final File file) {
+        return fileSystemView.getSystemIcon(file);
+    }
+
+    /**
+     * @return
+     */
+    private File[] getRoots() {
+        return fileSystemView.getRoots();
+    }
+
+    /**
+     * @return
+     */
+    public File[] getSelectedDirectories() {
+        TreePath[] selection = directoryTree.getSelectionPaths();
+        if (selection == null) {
+            return new File[0];
+        }
+
+        File[] returnValue = new File[selection.length];
+        for (int i = 0; i < selection.length; i++) {
+            returnValue[i] = ((DirectoryTreeNode) selection[i].getLastPathComponent()).getDirectory();
+        }
+        return returnValue;
+    }
+
+    /*
+     * (non-Javadoc)
+     * @see
+     * javax.swing.event.TreeSelectionListener#valueChanged(javax.swing.event.
+     * TreeSelectionEvent)
+     */
+    @Override
+    public void valueChanged(final TreeSelectionEvent e) {
+        //		File selectedDirectory = ((DirectoryTreeNode)e.getPath().getLastPathComponent()).getDirectory();
+        EventListener[] listeners = listenerList.getListeners(TreeSelectionListener.class);
+        for (int i = 0; i < listeners.length; i++) {
+            ((TreeSelectionListener) listeners[i]).valueChanged(e);
+        }
+
+    }
+
+    /**
+     * @param listener
+     */
+    public void addTreeSelectionListener(final TreeSelectionListener listener) {
+        listenerList.add(TreeSelectionListener.class, listener);
+    }
+
+    /**
+     * @param listener
+     */
+    public void removeTreeSelectionList(final TreeSelectionListener listener) {
+        listenerList.remove(TreeSelectionListener.class, listener);
+    }
+
+    /**
+     * @param b
+     */
+    public void setMultiSelection(final boolean b) {
+        directoryTree.getSelectionModel().setSelectionMode(b ? TreeSelectionModel.DISCONTIGUOUS_TREE_SELECTION : TreeSelectionModel.SINGLE_TREE_SELECTION);
+    }
+
+    /**
+     * @param dir
+     */
+    public void createDir(final String dirName) {
+
+        if (dirName == null) {
+            return;
+        }
+
+        DirectoryTreeNode parent = (DirectoryTreeNode) directoryTree.getSelectionModel().getSelectionPath().getLastPathComponent();
+        DirectoryTreeNode child;
+
+        File dir = new File(parent.getDirectory(), dirName);
+        dir.mkdir();
+        if (!dir.isDirectory()) {
+            return;
+        }
+
+        Enumeration<DirectoryTreeNode> children = parent.children();
+        int index = 0;
+        while (children.hasMoreElements()) {
+            if (dir.equals((child = children.nextElement()).getDirectory())) {
+                directoryTree.getSelectionModel().setSelectionPath(new TreePath(child.getPath()));
+                return;
+            }
+
+            if (dir.getName().compareToIgnoreCase(child.getDirectory().getName()) > 0) {
+                index++;
+            }
+        }
+
+        child = new DirectoryTreeNode(dir, parent.getFileSystemView(), true);
+        treeModel.insertNodeInto(child, parent, index);
+        directoryTree.getSelectionModel().setSelectionPath(new TreePath(child.getPath()));
+    }
 }

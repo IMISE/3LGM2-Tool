@@ -14,8 +14,7 @@ import de.imise.util.NamedObjectContainer;
 /**
  * JList, which always displays all items alphabetically sorted.
  *
- * @author AXS
- *         created on 15.08.2007
+ * @author AXS created on 15.08.2007
  */
 public class AlphabeticalJList<T> extends JList<NamedObjectContainer<T>> {
 
@@ -76,8 +75,9 @@ public class AlphabeticalJList<T> extends JList<NamedObjectContainer<T>> {
     }
 
     /**
-     * Fügt zur Liste ein <code>NamedObjectContainer</code> hinzu mit <code>anObject</code>
-     * als Objekt und dem Anzeige-String <code>displayName</code>.
+     * Fügt zur Liste ein <code>NamedObjectContainer</code> hinzu mit
+     * <code>anObject</code> als Objekt und dem Anzeige-String
+     * <code>displayName</code>.
      *
      * @param anObject
      */
@@ -86,8 +86,9 @@ public class AlphabeticalJList<T> extends JList<NamedObjectContainer<T>> {
     }
 
     /**
-     * Fügt zur Liste ein <code>NamedObjectContainer</code> hinzu mit <code>anObject</code>
-     * als Objekt und dem Anzeige-String <code>displayName</code>.
+     * Fügt zur Liste ein <code>NamedObjectContainer</code> hinzu mit
+     * <code>anObject</code> als Objekt und dem Anzeige-String
+     * <code>displayName</code>.
      *
      * @param anObject
      * @param displayName
@@ -99,7 +100,8 @@ public class AlphabeticalJList<T> extends JList<NamedObjectContainer<T>> {
 
     /**
      * Liefert das selektierte <code>Object</code>.<br>
-     * Wenn ein <code>NamedObjectContainer</code> selektiert ist, wird von diesem die Methode
+     * Wenn ein <code>NamedObjectContainer</code> selektiert ist, wird von
+     * diesem die Methode
      * <code>getObject()<code> aufgerufen und das Ergebnis zurück gegeben, sonst wird einfach
      * das <code>Object</code> am selektierten Index zurückgegeben.
      *
@@ -112,7 +114,8 @@ public class AlphabeticalJList<T> extends JList<NamedObjectContainer<T>> {
 
     /**
      * Liefert die selektierten <code>Object</code>s.<br>
-     * Wenn <code>NamedObjectContainer</code> selektiert sind, wird von diesem die Methode
+     * Wenn <code>NamedObjectContainer</code> selektiert sind, wird von diesem
+     * die Methode
      * <code>getObject()<code> aufgerufen und das Ergebnis zurück gegeben, sonst wird einfach
      * das <code>Object</code> am selektierten Index zurückgegeben.
      *
@@ -138,8 +141,9 @@ public class AlphabeticalJList<T> extends JList<NamedObjectContainer<T>> {
     }
 
     /**
-     * Listmodel, das alle Einträge immer alphabetisch einsortiert. Wird beim Hinzufügen ein Index
-     * mit angegeben, an dem das neue Element eingefügt werden soll, wird dieser ignoriert.
+     * Listmodel, das alle Einträge immer alphabetisch einsortiert. Wird beim
+     * Hinzufügen ein Index mit angegeben, an dem das neue Element eingefügt
+     * werden soll, wird dieser ignoriert.
      *
      * @author AXS
      */
@@ -154,6 +158,7 @@ public class AlphabeticalJList<T> extends JList<NamedObjectContainer<T>> {
             }
         }
 
+        @Override
         public void addAll(final Collection<? extends E> items) {
             for (Iterator<? extends E> it = items.iterator(); it.hasNext();) {
                 addElement(it.next());

@@ -87,9 +87,10 @@ public class ScrollableJPopupMenu extends JPopupMenu implements ChangeListener, 
     private JMenuItem nextItem = null;
 
     /**
-     * Liefert den Pixel-Wert, um den das Popupmenü verschoben werden müsste, damit man den nicht sichtbaren Eintrag
-     * dirkt über oder unter dem selektierten Eintrag sehen kann. Wenn beide angrenzenden Menüitems vollständig sichtbar
-     * sind, kommt 0 zurück.
+     * Liefert den Pixel-Wert, um den das Popupmenü verschoben werden müsste,
+     * damit man den nicht sichtbaren Eintrag dirkt über oder unter dem
+     * selektierten Eintrag sehen kann. Wenn beide angrenzenden Menüitems
+     * vollständig sichtbar sind, kommt 0 zurück.
      *
      * @return
      */
@@ -150,7 +151,8 @@ public class ScrollableJPopupMenu extends JPopupMenu implements ChangeListener, 
     }
 
     /**
-     * Scrollt ein Menü solange nach oben oder unten bis er angehalten wird oder es nichts mehr zu scrollen gibt.
+     * Scrollt ein Menü solange nach oben oder unten bis er angehalten wird oder
+     * es nichts mehr zu scrollen gibt.
      */
     private class ScrollThread extends Thread {
 
@@ -201,7 +203,8 @@ public class ScrollableJPopupMenu extends JPopupMenu implements ChangeListener, 
 
     /*
      * (non-Javadoc)
-     * @see java.awt.event.MouseWheelListener#mouseWheelMoved(java.awt.event.MouseWheelEvent)
+     * @see java.awt.event.MouseWheelListener#mouseWheelMoved(java.awt.event.
+     * MouseWheelEvent)
      */
     @Override
     public void mouseWheelMoved(final MouseWheelEvent e) {

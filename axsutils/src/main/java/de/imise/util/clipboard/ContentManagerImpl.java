@@ -9,8 +9,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 /**
- * Klasse zum Austausch von Daten zwischen dieser Software und anderen Desktop-Anwendungen über
- * die System-Zwischenablage.
+ * Klasse zum Austausch von Daten zwischen dieser Software und anderen
+ * Desktop-Anwendungen über die System-Zwischenablage.
  *
  * @author Frank
  */
@@ -81,9 +81,11 @@ public class ContentManagerImpl implements ClipboardConstants, ContentManager {
     }
 
     /**
-     * Gibt den String zurück der sich an der Position {@link ClipboardConstants#CONTENT_STRING_POSITION}
-     * der <code>String</code> - Inhalte der System-Zwischenablage befindet.<br>
-     * Falls keine <code>String</code> - Inhalte existieren, wird <code>null</code> zurückgegeben.
+     * Gibt den String zurück der sich an der Position
+     * {@link ClipboardConstants#CONTENT_STRING_POSITION} der
+     * <code>String</code> - Inhalte der System-Zwischenablage befindet.<br>
+     * Falls keine <code>String</code> - Inhalte existieren, wird
+     * <code>null</code> zurückgegeben.
      * 
      * @return
      * @see de.imise.util.clipboard.ContentManager#getClipboardContent()
@@ -110,18 +112,20 @@ public class ContentManagerImpl implements ClipboardConstants, ContentManager {
 
         /*
          * wenn Table auf seine in die Zwischenablage geschobenen Inhalte
-         * zurückgreift, kommt es zu einem Fehler. Das könnte daran liegen,
-         * dass sich an der Position 1 der Zwischenablage nichts mehr befindet.
-         * --> Eventuell ein Transferable aus zwei StringSelections erstellen
-         * und als content übergeben.
+         * zurückgreift, kommt es zu einem Fehler. Das könnte daran liegen, dass
+         * sich an der Position 1 der Zwischenablage nichts mehr befindet. -->
+         * Eventuell ein Transferable aus zwei StringSelections erstellen und
+         * als content übergeben.
          */
 
     }
 
     /**
-     * Methode holt sich die aktuelle System-Zwischenablage wieder und setzt {@link #clipboard}.
+     * Methode holt sich die aktuelle System-Zwischenablage wieder und setzt
+     * {@link #clipboard}.
      * 
-     * @see java.awt.datatransfer.ClipboardOwner#lostOwnership(java.awt.datatransfer.Clipboard, java.awt.datatransfer.Transferable)
+     * @see java.awt.datatransfer.ClipboardOwner#lostOwnership(java.awt.datatransfer.Clipboard,
+     *      java.awt.datatransfer.Transferable)
      */
     @Override
     public void lostOwnership(final Clipboard clipboard, final Transferable contents) {
@@ -142,9 +146,10 @@ public class ContentManagerImpl implements ClipboardConstants, ContentManager {
     }
 
     /**
-     * Repräsentation des im Konstruktor übergebenen <code>data</code> als {@link Transferable}.<br>
-     * Dabei wird immer <code>data.toString()</code> durch {@link #getTransferData(DataFlavor)}
-     * zurückgegeben.
+     * Repräsentation des im Konstruktor übergebenen <code>data</code> als
+     * {@link Transferable}.<br>
+     * Dabei wird immer <code>data.toString()</code> durch
+     * {@link #getTransferData(DataFlavor)} zurückgegeben.
      * 
      * @author fstephan
      */

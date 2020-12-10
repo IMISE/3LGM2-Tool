@@ -27,7 +27,8 @@ import de.imise.util.StringUtils;
 public class SwingUtils {
 
     /**
-     * Sets all the given components to the same size. The size is given by the largest width and height of the given components.
+     * Sets all the given components to the same size. The size is given by the
+     * largest width and height of the given components.
      *
      * @param components
      */
@@ -47,9 +48,11 @@ public class SwingUtils {
     }
 
     /**
-     * Sets the length of the text of the given labels to the same length by adding whitespaces to the shorter one until it has as near as possible
-     * the same size as the greater one. The length is computed by the {@link FontMetrics}. This function possibly makes only sense in combination
-     * with labes with the alignment {@link SwingConstants#WEST}.
+     * Sets the length of the text of the given labels to the same length by
+     * adding whitespaces to the shorter one until it has as near as possible
+     * the same size as the greater one. The length is computed by the
+     * {@link FontMetrics}. This function possibly makes only sense in
+     * combination with labes with the alignment {@link SwingConstants#WEST}.
      *
      * @param label1
      * @param label2
@@ -76,9 +79,12 @@ public class SwingUtils {
     }
 
     /**
-     * Sets the length of the text of the given labels to the same length by adding whitespaces to the shorter labels until they have as near as
-     * possible the same size as the label with the largest text. The length is computed by the {@link FontMetrics}. This function possibly makes only
-     * sense in combination with labes with the alignment {@link SwingConstants#WEST}.
+     * Sets the length of the text of the given labels to the same length by
+     * adding whitespaces to the shorter labels until they have as near as
+     * possible the same size as the label with the largest text. The length is
+     * computed by the {@link FontMetrics}. This function possibly makes only
+     * sense in combination with labes with the alignment
+     * {@link SwingConstants#WEST}.
      *
      * @param labels
      */
@@ -105,15 +111,21 @@ public class SwingUtils {
     }
 
     /**
-     * Convinience function to add a component to a container with specific {@link GridBagConstraints}.
+     * Convinience function to add a component to a container with specific
+     * {@link GridBagConstraints}.
      *
      * @param container the container which gets the component added
      * @param component the component to add
-     * @param gbc the {@link GridBagConstraints} used to add the component to the container
-     * @param x the gridx value that will be set to the constarints before the add
-     * @param y the gridy value that will be set to the constarints before the add
-     * @param w the gridwidth value that will be set to the constarints before the add
-     * @param h the gridheight value that will be set to the constarints before the add
+     * @param gbc the {@link GridBagConstraints} used to add the component to
+     *            the container
+     * @param x the gridx value that will be set to the constarints before the
+     *            add
+     * @param y the gridy value that will be set to the constarints before the
+     *            add
+     * @param w the gridwidth value that will be set to the constarints before
+     *            the add
+     * @param h the gridheight value that will be set to the constarints before
+     *            the add
      */
     public static void add(final Container container, final Component component, final GridBagConstraints gbc, final int x, final int y, final int w, final int h) {
         gbc.gridx = x;
@@ -164,12 +176,13 @@ public class SwingUtils {
     }
 
     /**
-     * For unknown reasons Windows places a frame posiotioned at (0, 0) not in the upper
-     * left corner. And the full screen size is in Windows not the whole wide. So we
-     * have to correct the points (0, 0) with the insets af o {@link JFrame} to
-     * (0 - insets.left, 0) and the point (xScreenMax, yScreenMax) to the point
-     * (xScreenMax + insets.right + insets.left, yScreenMax + insets.bottom).
-     * Only the insets.top = high of the frame title bar is irrelevant in this case.
+     * For unknown reasons Windows places a frame posiotioned at (0, 0) not in
+     * the upper left corner. And the full screen size is in Windows not the
+     * whole wide. So we have to correct the points (0, 0) with the insets af o
+     * {@link JFrame} to (0 - insets.left, 0) and the point (xScreenMax,
+     * yScreenMax) to the point (xScreenMax + insets.right + insets.left,
+     * yScreenMax + insets.bottom). Only the insets.top = high of the frame
+     * title bar is irrelevant in this case.
      *
      * @return the maxmumim frame bounds
      */

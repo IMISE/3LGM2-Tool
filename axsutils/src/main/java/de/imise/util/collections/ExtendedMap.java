@@ -19,11 +19,10 @@ public class ExtendedMap<K, V> extends HashMap<K, V> {
         super(map);
     }
     /**
-     * Konstruktor
-     * Erzeugt eine neue Map mit den Keys und Values aus <code>keysAndValues</code>.
+     * Konstruktor Erzeugt eine neue Map mit den Keys und Values aus
+     * <code>keysAndValues</code>.
      *
-     * @param keysAndValues
-     *            Folge von {@link K}s und jeweiligen {@link V}s.<br>
+     * @param keysAndValues Folge von {@link K}s und jeweiligen {@link V}s.<br>
      *            Form:
      *
      *            <pre>
