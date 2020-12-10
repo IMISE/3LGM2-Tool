@@ -44,7 +44,6 @@ import de.imise.tool3lgm.graphtools.view.pathtree.PathTreeModel;
 import de.imise.tool3lgm.graphtools.view.tree.DynamicTree;
 import de.imise.tool3lgm.graphtools.view.tree.TreeRenderer;
 import de.imise.tool3lgm.graphtools.view.tree.node.ElementContainerTreeNode;
-import de.imise.tool3lgm.graphtools.view.tree.node.LGMTreeNode;
 import de.imise.tool3lgm.gui.menu.ContextGenerator;
 import de.imise.util.BooleanOption;
 import de.imise.util.swing.component.ParentComponentFinder;
@@ -351,9 +350,11 @@ public class TemplateBrowserTree extends DynamicTree implements SearchResultView
             if (ec == null) {
                 ec = (NodeContainer) me.getContainer(mainDoc);
             }
-            LGMTreeNode node = ec.getTreeNode();
+            ElementContainerTreeNode node = ec.getTreeNode();
             if (node != null) {
-                path[m++] = new TreePath(((DefaultTreeModel) treeModel).getPathToRoot(node));
+                DefaultTreeModel treeModel = (DefaultTreeModel) super.treeModel;
+                TreeNode[] pathToRoot = treeModel.getPathToRoot(node);
+                path[m++] = new TreePath(pathToRoot);
             }
         }
         addSelectionPaths(path);

@@ -49,7 +49,7 @@ public class DynamicTreeMouseAdapter implements MouseListener {
     /**
      * für die Kommunikation zwischen mousePressed und mouseClicked
      */
-    private LGMTreeNode selectedNode = null;
+    private LGMTreeNode<?> selectedNode = null;
 
     @Override
     public void mouseClicked(final MouseEvent e) {
@@ -113,7 +113,7 @@ public class DynamicTreeMouseAdapter implements MouseListener {
         if (Tool3lgmConstants.isPopupTrigger(e)) {
             right_button = true;
             if (path != null) {
-                LGMTreeNode lastNode = (LGMTreeNode) path.getLastPathComponent();
+                LGMTreeNode<?> lastNode = (LGMTreeNode<?>) path.getLastPathComponent();
                 // Wenn eine ElementClass rechtsgeklickt wurde, wird schon ein anderes Kontextmenü geladen,
                 // so dass hier keine weiter Selektion erstellt werden muss.
                 if (!(lastNode.getUserObject() instanceof ElementContainer)) {
@@ -134,7 +134,7 @@ public class DynamicTreeMouseAdapter implements MouseListener {
             }
         }
         if (path != null) {
-            selectedNode = (LGMTreeNode) path.getLastPathComponent();
+            selectedNode = (LGMTreeNode<?>) path.getLastPathComponent();
             Object lastPathComponent = path.getLastPathComponent();
             if (tree.isLayerNode(lastPathComponent)) {
                 if (right_button) {

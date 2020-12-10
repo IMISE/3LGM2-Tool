@@ -48,6 +48,7 @@ import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.graphtools.view.tree.ElementDialogPanelTree;
 import de.imise.tool3lgm.graphtools.view.tree.PanelTreeRenderer;
 import de.imise.tool3lgm.graphtools.view.tree.TreeRenderer;
+import de.imise.tool3lgm.graphtools.view.tree.node.ElementContainerTreeNode;
 import de.imise.tool3lgm.graphtools.view.tree.node.LGMTreeNode;
 import de.imise.util.StringUtils;
 import de.imise.util.swing.SwingUtils;
@@ -341,7 +342,7 @@ public class PathConnectionPanel extends AbstractExpandablePanel {
      *
      * @return Collection aller Blätter im Baum
      */
-    protected Collection<LGMTreeNode> buildLeftTree() {
+    protected Collection<ElementContainerTreeNode> buildLeftTree() {
         int edgeIndex = 0;
         //Durch diesen Aufruf hier geht das erstmal nicht für parallele Pfade, zumindes nicht für Vereinigungspfade. Aber im Moment gibt es dafür keinen Anwendungsfall
         List<ElementaryMetaPath> elementaryMetaPaths = metaPath.getElementaryMetaPaths();
@@ -362,26 +363,26 @@ public class PathConnectionPanel extends AbstractExpandablePanel {
         if (OPTION_ELEMENTS_RECEIVE_PROPERTIES_FROM_PARENTS.is()) {
             all.addAll(me.getParentConnectedContainers(pathStepEndClass, mainDoc, edgeClass, direction));
         }
-        ImmutableList.Builder<LGMTreeNode> leafs = ImmutableList.builder();
-        List<LGMTreeNode> firstLevelNodes = new ArrayList<>(all.size());
+        ImmutableList.Builder<ElementContainerTreeNode> leafs = ImmutableList.builder();
+        List<ElementContainerTreeNode> firstLevelNodes = new ArrayList<>(all.size());
         for (ElementContainer ec : all) {
-            LGMTreeNode node = ltree.addObject(ec, true, false, false);
+            ElementContainerTreeNode node = ltree.addObject(ec, true, false, false);
             firstLevelNodes.add(node);
         }
-        List<LGMTreeNode> nextStepStartNodes = firstLevelNodes;
+        List<ElementContainerTreeNode> nextStepStartNodes = firstLevelNodes;
         for (edgeIndex = 1; edgeIndex < elemetaryMetaPathCount; edgeIndex++) {
             elementaryMetaPath = elementaryMetaPaths.get(edgeIndex);
             pathStepEndClass = elementaryMetaPath.getEndClass();
             edgeClass = elementaryMetaPath.getEdgeClass();
             direction = elementaryMetaPath.getDirection();
-            List<LGMTreeNode> newNextStartNodes = new ArrayList<>();
-            for (LGMTreeNode node : nextStepStartNodes) {
-                ElementContainer nodeElementContainer = (ElementContainer) node.getUserObject();
+            List<ElementContainerTreeNode> newNextStartNodes = new ArrayList<>();
+            for (ElementContainerTreeNode node : nextStepStartNodes) {
+                ElementContainer nodeElementContainer = node.getUserObject();
                 me = nodeElementContainer.getElement();
                 List<ElementContainer> connected = me.getConnectedContainers(pathStepEndClass, mainDoc, edgeClass, direction);
                 addChildrenToExcludeFromRtree(edgeIndex, connected, false);
                 for (ElementContainer ec : connected) {
-                    LGMTreeNode newNode = ltree.addObject(ec, node, null, true, false, false);
+                    ElementContainerTreeNode newNode = ltree.addObject(ec, node, null, true, false, false);
                     if (edgeIndex + 1 == elemetaryMetaPathCount) {
                         leafs.add(newNode);
                     }
@@ -406,7 +407,7 @@ public class PathConnectionPanel extends AbstractExpandablePanel {
         rtree.reset();
         //disable sorting -> we have 2 lists, which must both be sorted
         //independently of each other and must not be sorted into each other
-        LGMTreeNode root = rtree.getRoot();
+        LGMTreeNode<?> root = rtree.getRoot();
         root.setSort(false);
 
         //find all elements which should be connected to solve a missing path error
@@ -430,7 +431,7 @@ public class PathConnectionPanel extends AbstractExpandablePanel {
         //disable sorting during insert -> the connectable element stay at the beginning
         int errorSolutionElementInsertIndex = 0;
         for (ElementContainer ec : errorSolutionElementContainers) {
-            LGMTreeNode errorSulutionTreeNode = rtree.insertObject(errorSolutionElementInsertIndex++, ec, childrenToExcludeFromRtree, false, true);
+            ElementContainerTreeNode errorSulutionTreeNode = rtree.insertObject(errorSolutionElementInsertIndex++, ec, childrenToExcludeFromRtree, false, true);
             ModelElement me = ec.getElement();
             AbstractConsistencyError errorElementIsSolutionFor = getErrorElementIsSolutionFor(me);
             errorSulutionTreeNode.setConsistencyError(errorElementIsSolutionFor);
@@ -552,18 +553,8 @@ public class PathConnectionPanel extends AbstractExpandablePanel {
      * @return
      */
     protected static ModelElement getPathModelElement(final TreePath treePath) {
-        LGMTreeNode node = (LGMTreeNode) treePath.getLastPathComponent();
-        return getNodeModelElement(node);
-    }
-
-    /**
-     * @param node
-     * @return
-     */
-    protected static ModelElement getNodeModelElement(final LGMTreeNode node) {
-        ElementContainer ec = (ElementContainer) node.getUserObject();
-        ModelElement me = ec.getElement();
-        return me;
+        ElementContainerTreeNode node = (ElementContainerTreeNode) treePath.getLastPathComponent();
+        return node.getModelElement();
     }
 
     /**

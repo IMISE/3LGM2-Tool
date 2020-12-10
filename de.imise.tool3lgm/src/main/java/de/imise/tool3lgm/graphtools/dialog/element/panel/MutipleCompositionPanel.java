@@ -102,19 +102,19 @@ public class MutipleCompositionPanel extends AbstractPathConnectionTreePanel {
 
     @Override
     public void update() {
-        LGMTreeNode root = tree.getRoot();
+        LGMTreeNode<?> root = tree.getRoot();
         root.removeAllChildren();
         ModelElement me = getModelElement();
         GraphDocument mainDoc = getMainDoc();
         List<ElementContainer> all = me.getConnectedContainers(searchElementClass, mainDoc);
         for (int m = 0; m < all.size(); m++) {
-            LGMTreeNode node = new ElementContainerTreeNode(all.get(m), false, true);
+            ElementContainerTreeNode node = new ElementContainerTreeNode(all.get(m), false, true);
             root.add(node);
         }
         if (OPTION_ELEMENTS_RECEIVE_PROPERTIES_FROM_PARTS.is()) {
             all = ((Node) me).getPartConnectedContainers(searchElementClass, mainDoc);
             for (int m = 0; m < all.size(); m++) {
-                LGMTreeNode node = new ElementContainerTreeNode(all.get(m), false, true);
+                ElementContainerTreeNode node = new ElementContainerTreeNode(all.get(m), false, true);
                 node.setSelectable(false);
                 root.add(node);
             }
@@ -122,7 +122,7 @@ public class MutipleCompositionPanel extends AbstractPathConnectionTreePanel {
         if (OPTION_ELEMENTS_RECEIVE_PROPERTIES_FROM_PARENTS.is()) {
             all = ((Node) me).getParentConnectedContainers(searchElementClass, mainDoc);
             for (int m = 0; m < all.size(); m++) {
-                LGMTreeNode node = new ElementContainerTreeNode(all.get(m), false, true);
+                ElementContainerTreeNode node = new ElementContainerTreeNode(all.get(m), false, true);
                 node.setSelectable(false);
                 root.add(node);
             }
@@ -168,13 +168,11 @@ public class MutipleCompositionPanel extends AbstractPathConnectionTreePanel {
                 if (selpaths != null) {
                     for (int n = 0; n < selpaths.length; n++) {
                         // if(lomodel.getChildCount(loroot)>0) return;
-                        LGMTreeNode treeNode = (LGMTreeNode) selpaths[n].getLastPathComponent();
-                        ElementContainer ec = (ElementContainer) treeNode.getUserObject();
-
+                        ElementContainerTreeNode ecTreeNode = (ElementContainerTreeNode) selpaths[n].getLastPathComponent();
                         ModelElement topLevelElement;
                         topLevelElement = getModelElement();
                         GDCollection gdcoll = topLevelElement.getCollection();
-                        ModelElement treeNodeElement = ec.getElement();
+                        ModelElement treeNodeElement = ecTreeNode.getModelElement();
                         Class<? extends Edge> lastEdgeClassInPath = getLastEdgeClassInPath();
                         int pid = getTransactionID();
                         gdcoll.unlink(topLevelElement, treeNodeElement, lastEdgeClassInPath, MASTER_TO_SLAVE_DIRECTION, pid);

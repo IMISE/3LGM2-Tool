@@ -98,7 +98,7 @@ public abstract class DynamicTree extends JTree implements GraphDocumentOwner {
      * @param node
      * @return
      */
-    public boolean setActiveLayer(final LGMTreeNode node) {
+    public boolean setActiveLayer(final LGMTreeNode<?> node) {
         return false;
     }
 

@@ -31,7 +31,7 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.graphtools.view.tree.ElementDialogPanelTree;
-import de.imise.tool3lgm.graphtools.view.tree.node.LGMTreeNode;
+import de.imise.tool3lgm.graphtools.view.tree.node.ElementContainerTreeNode;
 import de.imise.util.StringUtils;
 import de.imise.util.swing.SwingUtils;
 import de.imise.util.swing.component.LimitedHeightScrollTreePane;
@@ -199,7 +199,7 @@ public class DoubleMeaningEdgePanel extends AbstractPathOfOneEdgePanel {
         }
         if (searchParts) {
             for (ElementContainer ec : modelElement.getPartConnectedContainers(searchElementClass, mainDoc, edgeClass, direction, ConnectionState.BACKWARD)) {
-                LGMTreeNode node = lotree.addObject(ec, true, false, false);
+                ElementContainerTreeNode node = lotree.addObject(ec, true, false, false);
                 if (node != null) {
                     node.setSelectable(false);
                 }
@@ -208,7 +208,7 @@ public class DoubleMeaningEdgePanel extends AbstractPathOfOneEdgePanel {
         }
         if (searchParents) {
             for (ElementContainer ec : modelElement.getParentConnectedContainers(searchElementClass, mainDoc, edgeClass, direction, ConnectionState.BACKWARD)) {
-                LGMTreeNode node = lotree.addObject(ec, true, false, false);
+                ElementContainerTreeNode node = lotree.addObject(ec, true, false, false);
                 if (node != null) {
                     node.setSelectable(false);
                 }
@@ -222,7 +222,7 @@ public class DoubleMeaningEdgePanel extends AbstractPathOfOneEdgePanel {
         }
         if (searchParts) {
             for (ElementContainer ec : modelElement.getPartConnectedContainers(searchElementClass, mainDoc, edgeClass, direction, ConnectionState.FORWARD)) {
-                LGMTreeNode node = lutree.addObject(ec, true, false, false);
+                ElementContainerTreeNode node = lutree.addObject(ec, true, false, false);
                 if (node != null) {
                     node.setSelectable(false);
                 }
@@ -231,7 +231,7 @@ public class DoubleMeaningEdgePanel extends AbstractPathOfOneEdgePanel {
         }
         if (searchParents) {
             for (ElementContainer ec : modelElement.getParentConnectedContainers(searchElementClass, mainDoc, edgeClass, direction, ConnectionState.FORWARD)) {
-                LGMTreeNode node = lutree.addObject(ec, true, false, false);
+                ElementContainerTreeNode node = lutree.addObject(ec, true, false, false);
                 if (node != null) {
                     node.setSelectable(false);
                 }

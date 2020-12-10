@@ -41,7 +41,7 @@ public class PathTreeModel extends DefaultTreeModel implements MetaModelSpecific
     private PathTreeDefinition treeDefinition;
 
     /** root node as {@link LGMTreeNode} */
-    private final LGMTreeNode root;
+    private final StringTreeNode root;
 
     /** Info that is displayed if there is nothing else to display */
     private final String emptyModelInfo;
@@ -78,7 +78,7 @@ public class PathTreeModel extends DefaultTreeModel implements MetaModelSpecific
      */
     public PathTreeModel(final String emptyModelInfo, final boolean showElementNamesWithSubmodels, final BooleanOption showAllElements) {
         super(new StringTreeNode("Root", true));
-        root = (LGMTreeNode) super.root;
+        root = (StringTreeNode) super.root;
         this.emptyModelInfo = emptyModelInfo;
         this.showElementNamesWithSubmodels = showElementNamesWithSubmodels;
         this.showAllElements = showAllElements;
@@ -105,9 +105,9 @@ public class PathTreeModel extends DefaultTreeModel implements MetaModelSpecific
      * @param icon
      * @return
      */
-    private LGMTreeNode getOrCreateHierarchyNode(final LGMTreeNode parent, final Object hierarchyDefinitionObject, final ImageIcon icon) {
+    private IconifiedTreeNode<?> getOrCreateHierarchyNode(final LGMTreeNode<?> parent, final Object hierarchyDefinitionObject, final ImageIcon icon) {
         for (int i = 0; i < parent.getChildCount(); i++) {
-            LGMTreeNode childNode = (LGMTreeNode) parent.getChildAt(i);
+            IconifiedTreeNode<?> childNode = (IconifiedTreeNode<?>) parent.getChildAt(i);
             Object childNodeUserObject = childNode.getUserObject();
             //check the UserObject is is equals to the current object in the hierarchy of the definition
             if (hierarchyDefinitionObject.equals(childNodeUserObject)) {
@@ -125,7 +125,7 @@ public class PathTreeModel extends DefaultTreeModel implements MetaModelSpecific
         }
         String hierarchyNodeTextResourceKey = hierarchyDefinitionObject.toString();
         String hierarchyNodeText = treeDefinition.getResStringWithoutError(hierarchyNodeTextResourceKey);
-        LGMTreeNode hierarchyNode = new IconifiedTreeNode(hierarchyDefinitionObject, hierarchyNodeText, true, icon);
+        IconifiedTreeNode<?> hierarchyNode = new IconifiedTreeNode<>(hierarchyDefinitionObject, hierarchyNodeText, true, icon);
         parent.add(hierarchyNode);
         return hierarchyNode;
     }
@@ -138,8 +138,8 @@ public class PathTreeModel extends DefaultTreeModel implements MetaModelSpecific
      * @return the last node of the hierarchy node defined by the given branch
      *         definition
      */
-    private LGMTreeNode getOrCreateBranchLastHierarchyNode(final PathTreeBranchDefinition branchDefinition) {
-        LGMTreeNode lastHierarchyNode = root;
+    private IconifiedTreeNode<?> getOrCreateBranchLastHierarchyNode(final PathTreeBranchDefinition branchDefinition) {
+        IconifiedTreeNode<?> lastHierarchyNode = root;
         for (Object hierarchyObject : branchDefinition.iterableHierarchyObjects()) {
             ImageIcon icon = branchDefinition.getIcon(hierarchyObject);
             //if String try to load a resource string for this string as key
@@ -155,7 +155,7 @@ public class PathTreeModel extends DefaultTreeModel implements MetaModelSpecific
      * @param branchDefinition
      */
     private void addBranch(final PathTreeBranchDefinition branchDefinition) {
-        LGMTreeNode lastHierarchyNode = getOrCreateBranchLastHierarchyNode(branchDefinition);
+        IconifiedTreeNode<?> lastHierarchyNode = getOrCreateBranchLastHierarchyNode(branchDefinition);
         SequenceMetaPath metaPath = branchDefinition.getElementsPath();
         MetaModelContext metaModelContext = getMetaModelContext();
         TemplateLibrariesManager templateLibrariesManager = Static.getTemplateLibrariesManager();
@@ -202,7 +202,7 @@ public class PathTreeModel extends DefaultTreeModel implements MetaModelSpecific
      * @param subMetaPath
      * @param branchDefinition
      */
-    private void getOrCreateNodes(final Collection<ElementContainerTreeNode> createdNodes, final Iterable<ElementContainer> elementContainers, final LGMTreeNode parent, final MetaPath subMetaPath, final PathTreeBranchDefinition branchDefinition) {
+    private void getOrCreateNodes(final Collection<ElementContainerTreeNode> createdNodes, final Iterable<ElementContainer> elementContainers, final LGMTreeNode<?> parent, final MetaPath subMetaPath, final PathTreeBranchDefinition branchDefinition) {
         for (ElementContainer ec : elementContainers) {
             ModelElement me = ec.getElement();
             Class<? extends ModelElement> meClass = me.getClass();
@@ -226,7 +226,7 @@ public class PathTreeModel extends DefaultTreeModel implements MetaModelSpecific
                     pathStepNode.setText(simpleName);
                 }
             }
-            LGMTreeNode existingEqualsNode = parent.getEqualsChild(pathStepNode);
+            LGMTreeNode<ElementContainer> existingEqualsNode = parent.getEqualsChild(pathStepNode);
             if (existingEqualsNode == null) {
                 parent.add(pathStepNode);
                 pathStepNode.setTreeNode(ec); //now set the new TreeNode to the ElementContainer (NodeContainer)
