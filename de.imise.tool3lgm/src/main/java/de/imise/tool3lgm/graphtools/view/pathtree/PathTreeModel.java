@@ -35,7 +35,7 @@ import de.imise.util.BooleanOption;
  *
  * @author AXS (01.09.2019)
  */
-public abstract class PathTreeModel extends DefaultTreeModel implements MetaModelSpecific {
+public class PathTreeModel extends DefaultTreeModel implements MetaModelSpecific {
 
     /** Definiton of the branches of the tree */
     private PathTreeDefinition treeDefinition;
@@ -63,6 +63,27 @@ public abstract class PathTreeModel extends DefaultTreeModel implements MetaMode
     final BooleanOption showAllElements;
 
     /**
+     * If this submodel is set, the model always uses this doc to fill itself.
+     * If it is <code>null</code> then the function
+     * {@link #getAllSourceModels()} will return a valid submodel.
+     */
+    private final Iterable<GraphDocument> sourceDocs;
+
+    /**
+     *
+     */
+    public boolean setRootVisible = false;
+
+    /**
+     * @param rootElement
+     * @param doc
+     * @param showAllElements
+     */
+    public PathTreeModel(final ElementContainer rootElement, final BooleanOption showAllElements) {
+        this(new ElementContainerTreeNode(rootElement, false, true), "", false, showAllElements);
+    }
+
+    /**
      * @param emptyModelInfo Info that is displayed if there is nothing else to
      *            display
      * @param showElementNamesWithSubmodels If <code>false</code> only the name
@@ -77,8 +98,27 @@ public abstract class PathTreeModel extends DefaultTreeModel implements MetaMode
      *            displayed
      */
     public PathTreeModel(final String emptyModelInfo, final boolean showElementNamesWithSubmodels, final BooleanOption showAllElements) {
-        super(new StringTreeNode("Root", true));
-        root = (StringTreeNode) super.root;
+        this(new StringTreeNode("Root", true), emptyModelInfo, showElementNamesWithSubmodels, showAllElements);
+    }
+
+    /**
+     * @param rootNode
+     * @param emptyModelInfo
+     * @param showElementNamesWithSubmodels
+     * @param showAllElements
+     */
+    private PathTreeModel(final IconifiedTreeNode<?> rootNode, final String emptyModelInfo, final boolean showElementNamesWithSubmodels, final BooleanOption showAllElements) {
+        super(rootNode);
+        if (super.root instanceof ElementContainerTreeNode) {
+            ElementContainerTreeNode elementContainerRootNode = (ElementContainerTreeNode) super.root;
+            ElementContainer ec = elementContainerRootNode.getUserObject();
+            GraphDocument sourceDoc = ec.getGraphDocument();
+            sourceDocs = ImmutableList.of(sourceDoc);
+        } else {
+            sourceDocs = null;
+        }
+        root = (IconifiedTreeNode<?>) super.root;
+
         this.emptyModelInfo = emptyModelInfo;
         this.showElementNamesWithSubmodels = showElementNamesWithSubmodels;
         this.showAllElements = showAllElements;
@@ -261,6 +301,9 @@ public abstract class PathTreeModel extends DefaultTreeModel implements MetaMode
      * @return all submodels to be queried to fill the model
      */
     private Iterable<GraphDocument> getAllSourceModels() {
+        if (sourceDocs != null) {
+            return sourceDocs;
+        }
         Iterable<GraphDocument> sourceModels = getSourceModels();
         if (sourceModels != null) {
             return sourceModels;
