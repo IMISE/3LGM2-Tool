@@ -107,7 +107,7 @@ public class TemplateBrowserTree extends DynamicTree implements SearchResultView
         setRootVisible(false);
         setShowsRootHandles(true);
         addAncestorListener(this);
-        pathTreeModel = new PathTreeModel(Tool3lgmConstants.getResString("TEMPLATE_BROWSER_NO_TEMPLATES_AVAILABLE"), true, showAllElements);
+        pathTreeModel = new TemplateBrowserTreeModel(Tool3lgmConstants.getResString("TEMPLATE_BROWSER_NO_TEMPLATES_AVAILABLE"), true, showAllElements);
         setModel(pathTreeModel);
 
         //analog ModelBrowser
