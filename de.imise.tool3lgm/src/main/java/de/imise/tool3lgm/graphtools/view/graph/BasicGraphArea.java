@@ -214,8 +214,8 @@ public class BasicGraphArea extends JComponent implements ZoomableComponent, Gra
             graphViewParameter.viewPositionY = viewPosition.y;
         }
         graphViewParameter.activeLayer = gdcoll.getActiveLayer();
-        graphViewParameter.layerAngle = layerAngle;
-        graphViewParameter.layerGap = layerGap;
+        graphViewParameter.layerAngle = getMultiViewLayerAngle();
+        graphViewParameter.layerGap = getMultiViewLayerGap();
         graphViewParameter.multiView = multiView;
         graphViewParameter.pageSizeFactor = szenario.getPageSizeFactor();
         graphViewParameter.zoom = zoom;
