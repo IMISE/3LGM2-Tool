@@ -1938,7 +1938,7 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
             final boolean alphabetical) {
         List<Object> connected = getConnectedInternal(searchElementClass, doc, edgeClass, direction, connectionState, container, alphabetical);
         //Special case: DoubleMeaningEdges which connect same element types must be checked in both directions
-        if (edgeClass != null && CoreMetaModel.isDoubleMeaningEdge(edgeClass) && metaModel.canConnectSameElementsInBothDirections(edgeClass)) {
+        if (connectionState != null && edgeClass != null && (CoreMetaModel.isDoubleMeaningEdge(edgeClass) && metaModel.canConnectSameElementsInBothDirections(edgeClass) || !metaModel.isDirectedEdge(edgeClass))) {
             Direction otherDirection = direction.getOther();
             List<Object> otherDirectionConnected = getConnectedInternal(searchElementClass, doc, edgeClass, otherDirection, connectionState, container, alphabetical);
             connected.addAll(otherDirectionConnected);
