@@ -28,6 +28,7 @@ import de.imise.tool3lgm.graphtools.dialog.element.panel.MultiPanelElementDialog
 import de.imise.tool3lgm.graphtools.dialog.element.panel.MutipleCompositionPanel;
 import de.imise.tool3lgm.graphtools.dialog.element.panel.PathConnectionLeafPanel;
 import de.imise.tool3lgm.graphtools.dialog.element.panel.PathConnectionPanel;
+import de.imise.tool3lgm.graphtools.dialog.element.panel.StructurePanel;
 import de.imise.tool3lgm.graphtools.dialog.element.panel.TabbedPanel;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.CompositionEdge;
