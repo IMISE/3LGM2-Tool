@@ -26,10 +26,10 @@ import de.imise.tool3lgm.graphtools.dialog.action.LGMAction;
 import de.imise.tool3lgm.graphtools.dialog.dragdrop.DragNDropInitializer;
 import de.imise.tool3lgm.graphtools.dialog.element.AbstractElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
-import de.imise.tool3lgm.graphtools.metamodel.elements.HasPartEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.LGMGraphDocument;
+import de.imise.tool3lgm.graphtools.path.metapaths.ElementaryMetaPath;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.graphtools.view.tree.ElementDialogPanelTree;
 import de.imise.util.swing.SwingUtils;
@@ -37,7 +37,7 @@ import de.imise.util.swing.SwingUtils;
 /**
  * @author fstephan
  */
-public class StructurePanel extends AbstractPathOfOneEdgePanel {
+public final class StructurePanel extends AbstractPathOfOneEdgePanel {
 
     private ElementDialogPanelTree lotree;
     private ElementDialogPanelTree lutree;
@@ -62,7 +62,7 @@ public class StructurePanel extends AbstractPathOfOneEdgePanel {
      * @param dialog
      * @param hasPartEdgeClass
      */
-    public StructurePanel(final AbstractElementPropertyDialog dialog, final Class<? extends HasPartEdge> hasPartEdgeClass) {
+    public StructurePanel(final AbstractElementPropertyDialog dialog, final Class<? extends Edge> hasPartEdgeClass) {
         super(dialog, LABEL_LAST_EDGE_CONNECTION_NAME, LABEL_LAST_EDGE_CONNECTION_NAME, Edge.getEndClass(hasPartEdgeClass), hasPartEdgeClass); //die beiden LabelOptions sind egal
         internalInit();
     }
@@ -158,7 +158,9 @@ public class StructurePanel extends AbstractPathOfOneEdgePanel {
         childrenToExcludeFromRtree.add(meContainer);
         lotree.saveExpansionAndSelection();
         lotree.reset();
-        for (ElementContainer ec : me.getDirectParentContainers(mainDoc)) {
+        ElementaryMetaPath backwardMetaPath = metaPath.getOtherDirection();
+        List<ElementContainer> backwardConnectedContainer = backwardMetaPath.getConnectedContainer(me, mainDoc);
+        for (ElementContainer ec : backwardConnectedContainer) {
             childrenToExcludeFromRtree.add(ec);
             lotree.addObject(ec, true, false, false);
         }
@@ -167,7 +169,8 @@ public class StructurePanel extends AbstractPathOfOneEdgePanel {
 
         lutree.saveExpansionAndSelection();
         lutree.reset();
-        for (ElementContainer ec : me.getDirectPartContainers(mainDoc)) {
+        List<ElementContainer> forwardConnectedContainer = metaPath.getConnectedContainer(me, mainDoc);
+        for (ElementContainer ec : forwardConnectedContainer) {
             childrenToExcludeFromRtree.add(ec);
             lutree.addObject(ec, true, false, false);
         }

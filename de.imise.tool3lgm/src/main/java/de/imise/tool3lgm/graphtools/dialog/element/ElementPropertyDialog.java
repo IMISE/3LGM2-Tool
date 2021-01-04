@@ -549,7 +549,7 @@ public class ElementPropertyDialog extends AbstractElementPropertyDialog impleme
                 panel2Add = new DoubleMeaningEdgePanel(this, titleLabelOption, searchElementClass, edgeClass);
                 //Kanten die nicht doppeltdeutig sind, aber dieselben Elementarten verbinden und in beide Richtungen unterschiedlich heißen, müssen auch in beiden Richtungen angeboten werden
             } else if (Edge.getStartClass(edgeClass) == Edge.getEndClass(edgeClass) && metaModel.isDirectedEdge(edgeClass)) {
-                panel2Add = new DoubleMeaningEdgePanel(this, titleLabelOption, searchElementClass, edgeClass);
+                panel2Add = new StructurePanel(this, edgeClass);
             }
         }
         if (panel2Add == null) {
