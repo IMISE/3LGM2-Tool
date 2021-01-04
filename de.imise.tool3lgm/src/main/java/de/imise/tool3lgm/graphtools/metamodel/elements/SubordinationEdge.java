@@ -144,11 +144,16 @@ public abstract class SubordinationEdge extends Edge {
         ModelElement k1 = getSuperElement();
         ModelElement k2 = getSubElement();
         if (k1 != null && k2 != null) {
-            boolean retVal = k2.isSuperElementOf(k1, getClass());
+            Class<? extends SubordinationEdge> subordinationEdgeClass = getClass();
+            boolean retVal = k2.isSuperElementOf(k1, subordinationEdgeClass);
             if (retVal) {
                 ElementsNameBuilder elementsNameBuilder = getMetaModel().getElementsNameBuilder();
-                Log.show(Log.INFO, getResString("part_of_circle_error") + "\n" + elementsNameBuilder.getDisplayablePluralName(ModelElement.class) + ":\n" + elementsNameBuilder.getDisplayableName(k1) + ": " + k1.getName() + "\n"
-                        + elementsNameBuilder.getDisplayableName(k2) + ": " + k2.getName());
+                String edgeClassPluralName = elementsNameBuilder.getDisplayablePluralName(subordinationEdgeClass);
+                String message = getResString("part_of_circle_error");
+                String elements = elementsNameBuilder.getDisplayablePluralName(ModelElement.class);
+                String elementType1 = elementsNameBuilder.getDisplayableName(k1);
+                String elementType2 = elementsNameBuilder.getDisplayableName(k2);
+                Log.show(Log.INFO, edgeClassPluralName + " " + message + "\n" + elements + ":\n" + elementType1 + ": " + k1.getName() + "\n" + elementType2 + ": " + k2.getName());
             }
             return retVal;
         }
