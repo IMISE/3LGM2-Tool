@@ -98,10 +98,6 @@ public abstract class SubordinationEdge extends Edge {
 
     @Override
     public void setNodesAndInsert(final ModelElement startElement, final int startElementEdgeIndex, final ModelElement endElement, final int endElementEdgeIndex) {
-        ModelElement oldStartElement = startElement;
-        ModelElement oldEndElement = endElement;
-        int oldStartElementEdgeIndex = oldStartElement == null ? 0 : oldStartElement.removeEdge(this);
-        int oldEndElementEdgeIndex = oldEndElement == null ? 0 : oldEndElement.removeEdge(this);
         this.startElement = startElement;
         this.endElement = endElement;
         startElement.insertEdge(this, startElementEdgeIndex);
@@ -109,31 +105,28 @@ public abstract class SubordinationEdge extends Edge {
         if (isInCircle()) {
             startElement.removeEdge(this);
             endElement.removeEdge(this);
-            super.setNodesAndInsert(oldStartElement, oldStartElementEdgeIndex, oldEndElement, oldEndElementEdgeIndex);
+            this.startElement = null;
+            this.endElement = null;
         }
     }
 
     @Override
     public final void setStartAndInsert(final ModelElement startElement) {
-        ModelElement oldStartElement = startElement;
-        oldStartElement.removeEdge(this);
         this.startElement = startElement;
         startElement.addEdge(this);
         if (isInCircle()) {
             startElement.removeEdge(this);
-            super.setStartAndInsert(oldStartElement);
+            this.startElement = null;
         }
     }
 
     @Override
     public final void setEndAndInsert(final ModelElement endElement) {
-        ModelElement oldEndElement = endElement;
-        oldEndElement.removeEdge(this);
         this.endElement = endElement;
         endElement.addEdge(this);
         if (isInCircle()) {
             endElement.removeEdge(this);
-            super.setEndAndInsert(oldEndElement);
+            this.endElement = null;
         }
     }
 
