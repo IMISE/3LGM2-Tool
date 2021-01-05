@@ -24,6 +24,7 @@ import de.imise.tool3lgm.graphtools.dialog.dragdrop.DragNDropInitializer;
 import de.imise.tool3lgm.graphtools.dialog.dragdrop.DragNDropInitializer.DragNDropActionChain;
 import de.imise.tool3lgm.graphtools.dialog.element.ElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
+import de.imise.tool3lgm.graphtools.metamodel.elements.DoubleMeaningEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.DoubleMeaningEdge.ConnectionState;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction;
@@ -59,7 +60,7 @@ public class DoubleMeaningEdgePanel extends AbstractPathOfOneEdgePanel {
     private LGMAction luaddAction;
     private LGMAction luremoveAction;
 
-    public DoubleMeaningEdgePanel(final ElementPropertyDialog dialog, final PanelLabelOption titleLabelOption, final Class<? extends ModelElement> searchElementClass, final Class<? extends Edge> edgeClass) {
+    public DoubleMeaningEdgePanel(final ElementPropertyDialog dialog, final PanelLabelOption titleLabelOption, final Class<? extends ModelElement> searchElementClass, final Class<? extends DoubleMeaningEdge> edgeClass) {
         super(dialog, titleLabelOption, titleLabelOption, searchElementClass, edgeClass); //westLabelOption ist egal, da sowieso eigene Kantennamen-Labels über die Bäume kommen
         boolean editable = !dialog.isInfoDialog() && metaPath.isCreatable(false);
         GridBagLayout gbl = new GridBagLayout();

@@ -28,9 +28,11 @@ import de.imise.tool3lgm.graphtools.dialog.element.panel.MultiPanelElementDialog
 import de.imise.tool3lgm.graphtools.dialog.element.panel.MutipleCompositionPanel;
 import de.imise.tool3lgm.graphtools.dialog.element.panel.PathConnectionLeafPanel;
 import de.imise.tool3lgm.graphtools.dialog.element.panel.PathConnectionPanel;
+import de.imise.tool3lgm.graphtools.dialog.element.panel.StructurePanel;
 import de.imise.tool3lgm.graphtools.dialog.element.panel.TabbedPanel;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.CompositionEdge;
+import de.imise.tool3lgm.graphtools.metamodel.elements.DoubleMeaningEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.path.metapaths.MetaPath;
@@ -546,10 +548,11 @@ public class ElementPropertyDialog extends AbstractElementPropertyDialog impleme
                 Class<? extends CompositionEdge> compositionEdgeClass = edgeClass.asSubclass(CompositionEdge.class);
                 panel2Add = new MutipleCompositionPanel(this, titleLabelOption, westLabelOption, searchElementClass, compositionEdgeClass);
             } else if (MetaModel.isDoubleMeaningEdge(edgeClass)) {
-                panel2Add = new DoubleMeaningEdgePanel(this, titleLabelOption, searchElementClass, edgeClass);
+                Class<? extends DoubleMeaningEdge> doubleMeaningEdgeClass = edgeClass.asSubclass(DoubleMeaningEdge.class);
+                panel2Add = new DoubleMeaningEdgePanel(this, titleLabelOption, searchElementClass, doubleMeaningEdgeClass);
                 //Kanten die nicht doppeltdeutig sind, aber dieselben Elementarten verbinden und in beide Richtungen unterschiedlich heißen, müssen auch in beiden Richtungen angeboten werden
             } else if (Edge.getStartClass(edgeClass) == Edge.getEndClass(edgeClass) && metaModel.isDirectedEdge(edgeClass)) {
-                panel2Add = new DoubleMeaningEdgePanel(this, titleLabelOption, searchElementClass, edgeClass);
+                panel2Add = new StructurePanel(this, edgeClass);
             }
         }
         if (panel2Add == null) {
