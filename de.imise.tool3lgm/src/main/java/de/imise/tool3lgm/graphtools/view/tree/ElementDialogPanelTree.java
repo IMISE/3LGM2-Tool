@@ -22,6 +22,7 @@ import de.imise.tool3lgm.graphtools.view.tree.node.ElementContainerTreeNode;
 import de.imise.tool3lgm.graphtools.view.tree.node.LGMTreeNode;
 import de.imise.tool3lgm.graphtools.view.tree.node.StringTreeNode;
 import de.imise.util.ToolTipProvider;
+import de.imise.util.swing.component.LimitedHeightScrollTreePane;
 import de.imise.util.swing.component.tree.CorrectSelectionTree;
 
 /**
@@ -37,6 +38,11 @@ public class ElementDialogPanelTree extends CorrectSelectionTree {
     /**
      *
      */
+    private final LimitedHeightScrollTreePane scrollPane;
+
+    /**
+     *
+     */
     private final Collection<ElementContainer> elementsAdded = new HashSet<>();
 
     /**
@@ -44,26 +50,55 @@ public class ElementDialogPanelTree extends CorrectSelectionTree {
      * @param doc
      */
     public ElementDialogPanelTree(final String rootObject, final GraphDocument doc) {
+        this(rootObject, doc, -1, false);
+    }
+
+    /**
+     * @param rootObject
+     * @param doc
+     * @param maxLines
+     */
+    public ElementDialogPanelTree(final String rootObject, final GraphDocument doc, final int maxLines) {
+        this(rootObject, doc, maxLines, false);
+    }
+
+    /**
+     * @param rootObject
+     * @param doc
+     * @param maxLines
+     * @param renderTreeAsList
+     */
+    public ElementDialogPanelTree(final String rootObject, final GraphDocument doc, final int maxLines, final boolean renderTreeAsList) {
         super(new DefaultTreeModel(new StringTreeNode(rootObject)));
         this.doc = doc;
-        setShowsRootHandles(true);
+        scrollPane = new LimitedHeightScrollTreePane(this, maxLines, renderTreeAsList);
     }
 
     /**
      * @param ec
      * @param sortRootChildren
+     * @param maxLines
+     * @param renderTreeAsList
      */
-    public ElementDialogPanelTree(final ElementContainer ec, final boolean sortRootChildren) {
+    public ElementDialogPanelTree(final ElementContainer ec, final boolean sortRootChildren, final int maxLines, final boolean renderTreeAsList) {
         super(new DefaultTreeModel(new ElementContainerTreeNode(ec, false, sortRootChildren)));
         doc = ec.getGraphDocument();
         setShowsRootHandles(true);
+        scrollPane = new LimitedHeightScrollTreePane(this, maxLines, renderTreeAsList);
+    }
+
+    /**
+     * @return the scrollPane
+     */
+    public final LimitedHeightScrollTreePane getScrollPane() {
+        return scrollPane;
     }
 
     /**
      *
      */
     public final void reset() {
-        LGMTreeNode root = getRoot();
+        LGMTreeNode<?> root = getRoot();
         root.removeAllChildren();
         elementsAdded.clear();
     }
@@ -74,7 +109,7 @@ public class ElementDialogPanelTree extends CorrectSelectionTree {
      * @param childrenAreSelectable
      * @return
      */
-    public LGMTreeNode addObject(final ElementContainer ec, final boolean force, final boolean childrenAreSelectable) {
+    public ElementContainerTreeNode addObject(final ElementContainer ec, final boolean force, final boolean childrenAreSelectable) {
         return addObject(ec, null, force, childrenAreSelectable);
     }
 
@@ -85,7 +120,7 @@ public class ElementDialogPanelTree extends CorrectSelectionTree {
      * @param childrenAreSelectable
      * @return
      */
-    public LGMTreeNode addObject(final ElementContainer ec, final Collection<ElementContainer> excludeChildren, final boolean force, final boolean childrenAreSelectable) {
+    public ElementContainerTreeNode addObject(final ElementContainer ec, final Collection<ElementContainer> excludeChildren, final boolean force, final boolean childrenAreSelectable) {
         return addObject(ec, null, excludeChildren, force, childrenAreSelectable);
     }
 
@@ -97,7 +132,7 @@ public class ElementDialogPanelTree extends CorrectSelectionTree {
      * @param childrenAreSelectable
      * @return
      */
-    public LGMTreeNode insertObject(final int index, final ElementContainer ec, final Collection<ElementContainer> excludeChildren, final boolean force, final boolean childrenAreSelectable) {
+    public ElementContainerTreeNode insertObject(final int index, final ElementContainer ec, final Collection<ElementContainer> excludeChildren, final boolean force, final boolean childrenAreSelectable) {
         return insertObject(index, ec, null, excludeChildren, force, true, childrenAreSelectable);
     }
 
@@ -109,7 +144,7 @@ public class ElementDialogPanelTree extends CorrectSelectionTree {
      * @param childrenAreSelectable
      * @return
      */
-    private LGMTreeNode addObject(final ElementContainer ec, final LGMTreeNode parent, final Collection<ElementContainer> excludeChildren, final boolean force, final boolean childrenAreSelectable) {
+    private ElementContainerTreeNode addObject(final ElementContainer ec, final LGMTreeNode<?> parent, final Collection<ElementContainer> excludeChildren, final boolean force, final boolean childrenAreSelectable) {
         return addObject(ec, parent, excludeChildren, force, true, childrenAreSelectable);
     }
 
@@ -120,7 +155,7 @@ public class ElementDialogPanelTree extends CorrectSelectionTree {
      * @param childrenAreSelectable
      * @return
      */
-    public LGMTreeNode addObject(final ElementContainer ec, final boolean force, final boolean checkAlreadyAdded, final boolean childrenAreSelectable) {
+    public ElementContainerTreeNode addObject(final ElementContainer ec, final boolean force, final boolean checkAlreadyAdded, final boolean childrenAreSelectable) {
         return addObject(ec, null, force, checkAlreadyAdded, childrenAreSelectable);
     }
 
@@ -132,7 +167,7 @@ public class ElementDialogPanelTree extends CorrectSelectionTree {
      * @param childrenAreSelectable
      * @return
      */
-    public LGMTreeNode addObject(final ElementContainer ec, final Collection<ElementContainer> excludeChildren, final boolean force, final boolean checkAlreadyAdded, final boolean childrenAreSelectable) {
+    public ElementContainerTreeNode addObject(final ElementContainer ec, final Collection<ElementContainer> excludeChildren, final boolean force, final boolean checkAlreadyAdded, final boolean childrenAreSelectable) {
         return addObject(ec, null, excludeChildren, force, checkAlreadyAdded, childrenAreSelectable);
     }
 
@@ -145,7 +180,7 @@ public class ElementDialogPanelTree extends CorrectSelectionTree {
      * @param childrenAreSelectable
      * @return
      */
-    public LGMTreeNode addObject(final ElementContainer ec, final LGMTreeNode parent, final Collection<ElementContainer> excludeChildren, final boolean force, final boolean checkAlreadyAdded, final boolean childrenAreSelectable) {
+    public ElementContainerTreeNode addObject(final ElementContainer ec, final LGMTreeNode<?> parent, final Collection<ElementContainer> excludeChildren, final boolean force, final boolean checkAlreadyAdded, final boolean childrenAreSelectable) {
         return insertObject(-1, ec, parent, excludeChildren, force, checkAlreadyAdded, childrenAreSelectable);
     }
 
@@ -159,7 +194,8 @@ public class ElementDialogPanelTree extends CorrectSelectionTree {
      * @param childrenAreSelectable
      * @return
      */
-    private LGMTreeNode insertObject(final int index, final ElementContainer ec, LGMTreeNode parent, final Collection<ElementContainer> excludeChildren, final boolean force, final boolean checkAlreadyAdded, final boolean childrenAreSelectable) {
+    private ElementContainerTreeNode insertObject(final int index, final ElementContainer ec, LGMTreeNode<?> parent, final Collection<ElementContainer> excludeChildren, final boolean force, final boolean checkAlreadyAdded,
+            final boolean childrenAreSelectable) {
         if (checkAlreadyAdded && elementsAdded.contains(ec)) {
             return null;
         }
@@ -167,7 +203,7 @@ public class ElementDialogPanelTree extends CorrectSelectionTree {
         if (showPartOfHierarchy && !force && !ec.getElement().getParentElements().isEmpty()) {
             return null;
         }
-        LGMTreeNode elementNode = new ElementContainerTreeNode(ec, false, true);
+        ElementContainerTreeNode elementNode = new ElementContainerTreeNode(ec, false, true);
         if (excludeChildren != null && excludeChildren.contains(ec)) {
             elementNode.setSelectable(false);
         }
@@ -191,9 +227,9 @@ public class ElementDialogPanelTree extends CorrectSelectionTree {
     /**
      * @return
      */
-    public LGMTreeNode getRoot() {
+    public LGMTreeNode<?> getRoot() {
         TreeModel model = getModel();
-        LGMTreeNode root = (LGMTreeNode) model.getRoot();
+        LGMTreeNode<?> root = (LGMTreeNode<?>) model.getRoot();
         return root;
     }
 
@@ -203,7 +239,7 @@ public class ElementDialogPanelTree extends CorrectSelectionTree {
      * @param checkAlreadyAdded
      * @param childrenAreSelectable
      */
-    private void addChildren(final LGMTreeNode elementNode, final Collection<ElementContainer> excludeChildren, final boolean checkAlreadyAdded, final boolean childrenAreSelectable) {
+    private void addChildren(final ElementContainerTreeNode elementNode, final Collection<ElementContainer> excludeChildren, final boolean checkAlreadyAdded, final boolean childrenAreSelectable) {
         Object elementNodeUserObject = elementNode.getUserObject();
         if (elementNodeUserObject instanceof NodeContainer) { //only Nodes can have parts
             NodeContainer kc = (NodeContainer) elementNodeUserObject;
@@ -216,7 +252,7 @@ public class ElementDialogPanelTree extends CorrectSelectionTree {
                     continue;
                 }
 
-                LGMTreeNode childNode = new ElementContainerTreeNode(pc, false, true);
+                ElementContainerTreeNode childNode = new ElementContainerTreeNode(pc, false, true);
                 childNode.setSelectable(childrenAreSelectable);
                 if (excludeChildren != null && excludeChildren.contains(pc)) {
                     childNode.setSelectable(false);
@@ -385,10 +421,10 @@ public class ElementDialogPanelTree extends CorrectSelectionTree {
     public final void restoreSelection(final ElementDialogPanelTree selectionSource) {
         TreePath[] sourceSelectedPaths = selectionSource.selectedPaths;
         for (int i = 0; i < sourceSelectedPaths.length; i++) {
-            LGMTreeNode sourceNode = (LGMTreeNode) sourceSelectedPaths[i].getLastPathComponent();
+            LGMTreeNode<?> sourceNode = (LGMTreeNode<?>) sourceSelectedPaths[i].getLastPathComponent();
             Object sourceElementContainer = sourceNode.getUserObject();
             for (int j = 0; j < getRowCount(); j++) {
-                LGMTreeNode node = (LGMTreeNode) getPathForRow(j).getLastPathComponent();
+                LGMTreeNode<?> node = (LGMTreeNode<?>) getPathForRow(j).getLastPathComponent();
                 Object elementContainer = node.getUserObject();
                 if (sourceElementContainer == elementContainer) {
                     addSelectionRow(j);

@@ -48,6 +48,7 @@ import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.graphtools.view.tree.ElementDialogPanelTree;
 import de.imise.tool3lgm.graphtools.view.tree.PanelTreeRenderer;
 import de.imise.tool3lgm.graphtools.view.tree.TreeRenderer;
+import de.imise.tool3lgm.graphtools.view.tree.node.ElementContainerTreeNode;
 import de.imise.tool3lgm.graphtools.view.tree.node.LGMTreeNode;
 import de.imise.util.StringUtils;
 import de.imise.util.swing.SwingUtils;
@@ -69,9 +70,6 @@ public class PathConnectionPanel extends AbstractExpandablePanel {
 
     /**  */
     private final JLabel rLabel;
-
-    /**  */
-    private final LimitedHeightScrollTreePane rScollPane;
 
     /**  */
     private final JPanel buttonpanel;
@@ -160,12 +158,11 @@ public class PathConnectionPanel extends AbstractExpandablePanel {
         GraphDocument mainDoc = getMainDoc();
         ElementContainer ec = me.getContainer(mainDoc);
         boolean sortLeftTree = getSortLeftTreeRootChildrenAlphabetical();
-        ltree = new ElementDialogPanelTree(ec, sortLeftTree);
+        ltree = new ElementDialogPanelTree(ec, sortLeftTree, maxLines, renderLeftTreeAsList);
         ltree.setRootVisible(false);
         ltree.setShowsRootHandles(true);
         ltree.setCellRenderer(treeRenderer);
         ltree.getSelectionModel().setSelectionMode(getTreesSelectionModel());
-        LimitedHeightScrollTreePane lScrollPane = new LimitedHeightScrollTreePane(ltree, maxLines, renderLeftTreeAsList);
 
         constraints.anchor = GridBagConstraints.WEST;
         add(this, ltreeLabel, constraints, 0, 0, 2, 1);
@@ -173,7 +170,8 @@ public class PathConnectionPanel extends AbstractExpandablePanel {
         constraints.fill = GridBagConstraints.BOTH;
         constraints.weightx = 1d;
         constraints.weighty = 1d;
-        add(this, lScrollPane, constraints, 0, 1, 2, 4);
+        LimitedHeightScrollTreePane ltreeScrollPane = ltree.getScrollPane();
+        add(this, ltreeScrollPane, constraints, 0, 1, 2, 4);
 
         if (showRightTree) {
             constraints.anchor = GridBagConstraints.EAST;
@@ -187,13 +185,12 @@ public class PathConnectionPanel extends AbstractExpandablePanel {
             String rtreeLabelString = getResString("frei");
             rtreeLabelString = StringUtils.capitalizeFirstChar(rtreeLabelString);
             rLabel = new JLabel(rtreeLabelString);
-            rtree = new ElementDialogPanelTree(rtreeLabelString, mainDoc);
+            rtree = new ElementDialogPanelTree(rtreeLabelString, mainDoc, maxLines);
             rtree.getSelectionModel().setSelectionMode(getTreesSelectionModel());
             rtree.setRootVisible(false);
             rtree.setShowsRootHandles(true);
             TreeRenderer highlightErrorElementsTreeRenderer = new PanelTreeRenderer(this);
             rtree.setCellRenderer(highlightErrorElementsTreeRenderer);
-            rScollPane = new LimitedHeightScrollTreePane(rtree, maxLines, false);
 
             //Buttons & Actions erstellen, Actions setzen
             addAction = getConnectAction();
@@ -206,7 +203,7 @@ public class PathConnectionPanel extends AbstractExpandablePanel {
             //alles dafür tun, dass beide Dialogseiten gleich breit sind. Das wird über die PreferredSize der breitesten Komponente gesteuert.
             SwingUtils.fillToSameLength(westLabel, rLabel);
             SwingUtils.setSamePreferredSize(westLabel, rLabel);
-            SwingUtils.setSamePreferredSize(lScrollPane, rScollPane);
+            SwingUtils.setSamePreferredSize(ltreeScrollPane, rtree.getScrollPane());
 
         } else {
             rLabel = null;
@@ -214,7 +211,6 @@ public class PathConnectionPanel extends AbstractExpandablePanel {
             removeAction = null;
             newElementAction = null;
             buttonpanel = null;
-            rScollPane = null;
             rtree = null;
         }
         initTreeListenerAndDragNDrop();
@@ -288,7 +284,7 @@ public class PathConnectionPanel extends AbstractExpandablePanel {
             constraints.fill = GridBagConstraints.BOTH;
             constraints.weightx = 1d;
             constraints.weighty = 1d;
-            add(this, rScollPane, constraints, 3, 1, 1, 4);
+            add(this, rtree.getScrollPane(), constraints, 3, 1, 1, 4);
         }
     }
 
@@ -297,7 +293,7 @@ public class PathConnectionPanel extends AbstractExpandablePanel {
         if (showRightTree) {
             remove(buttonpanel);
             remove(rLabel);
-            remove(rScollPane);
+            remove(rtree.getScrollPane());
         }
     }
 
@@ -346,7 +342,7 @@ public class PathConnectionPanel extends AbstractExpandablePanel {
      *
      * @return Collection aller Blätter im Baum
      */
-    protected Collection<LGMTreeNode> buildLeftTree() {
+    protected Collection<ElementContainerTreeNode> buildLeftTree() {
         int edgeIndex = 0;
         //Durch diesen Aufruf hier geht das erstmal nicht für parallele Pfade, zumindes nicht für Vereinigungspfade. Aber im Moment gibt es dafür keinen Anwendungsfall
         List<ElementaryMetaPath> elementaryMetaPaths = metaPath.getElementaryMetaPaths();
@@ -367,26 +363,26 @@ public class PathConnectionPanel extends AbstractExpandablePanel {
         if (OPTION_ELEMENTS_RECEIVE_PROPERTIES_FROM_PARENTS.is()) {
             all.addAll(me.getParentConnectedContainers(pathStepEndClass, mainDoc, edgeClass, direction));
         }
-        ImmutableList.Builder<LGMTreeNode> leafs = ImmutableList.builder();
-        List<LGMTreeNode> firstLevelNodes = new ArrayList<>(all.size());
+        ImmutableList.Builder<ElementContainerTreeNode> leafs = ImmutableList.builder();
+        List<ElementContainerTreeNode> firstLevelNodes = new ArrayList<>(all.size());
         for (ElementContainer ec : all) {
-            LGMTreeNode node = ltree.addObject(ec, true, false, false);
+            ElementContainerTreeNode node = ltree.addObject(ec, true, false, false);
             firstLevelNodes.add(node);
         }
-        List<LGMTreeNode> nextStepStartNodes = firstLevelNodes;
+        List<ElementContainerTreeNode> nextStepStartNodes = firstLevelNodes;
         for (edgeIndex = 1; edgeIndex < elemetaryMetaPathCount; edgeIndex++) {
             elementaryMetaPath = elementaryMetaPaths.get(edgeIndex);
             pathStepEndClass = elementaryMetaPath.getEndClass();
             edgeClass = elementaryMetaPath.getEdgeClass();
             direction = elementaryMetaPath.getDirection();
-            List<LGMTreeNode> newNextStartNodes = new ArrayList<>();
-            for (LGMTreeNode node : nextStepStartNodes) {
-                ElementContainer nodeElementContainer = (ElementContainer) node.getUserObject();
+            List<ElementContainerTreeNode> newNextStartNodes = new ArrayList<>();
+            for (ElementContainerTreeNode node : nextStepStartNodes) {
+                ElementContainer nodeElementContainer = node.getUserObject();
                 me = nodeElementContainer.getElement();
                 List<ElementContainer> connected = me.getConnectedContainers(pathStepEndClass, mainDoc, edgeClass, direction);
                 addChildrenToExcludeFromRtree(edgeIndex, connected, false);
                 for (ElementContainer ec : connected) {
-                    LGMTreeNode newNode = ltree.addObject(ec, node, null, true, false, false);
+                    ElementContainerTreeNode newNode = ltree.addObject(ec, node, null, true, false, false);
                     if (edgeIndex + 1 == elemetaryMetaPathCount) {
                         leafs.add(newNode);
                     }
@@ -411,7 +407,7 @@ public class PathConnectionPanel extends AbstractExpandablePanel {
         rtree.reset();
         //disable sorting -> we have 2 lists, which must both be sorted
         //independently of each other and must not be sorted into each other
-        LGMTreeNode root = rtree.getRoot();
+        LGMTreeNode<?> root = rtree.getRoot();
         root.setSort(false);
 
         //find all elements which should be connected to solve a missing path error
@@ -435,7 +431,7 @@ public class PathConnectionPanel extends AbstractExpandablePanel {
         //disable sorting during insert -> the connectable element stay at the beginning
         int errorSolutionElementInsertIndex = 0;
         for (ElementContainer ec : errorSolutionElementContainers) {
-            LGMTreeNode errorSulutionTreeNode = rtree.insertObject(errorSolutionElementInsertIndex++, ec, childrenToExcludeFromRtree, false, true);
+            ElementContainerTreeNode errorSulutionTreeNode = rtree.insertObject(errorSolutionElementInsertIndex++, ec, childrenToExcludeFromRtree, false, true);
             ModelElement me = ec.getElement();
             AbstractConsistencyError errorElementIsSolutionFor = getErrorElementIsSolutionFor(me);
             errorSulutionTreeNode.setConsistencyError(errorElementIsSolutionFor);
@@ -557,18 +553,8 @@ public class PathConnectionPanel extends AbstractExpandablePanel {
      * @return
      */
     protected static ModelElement getPathModelElement(final TreePath treePath) {
-        LGMTreeNode node = (LGMTreeNode) treePath.getLastPathComponent();
-        return getNodeModelElement(node);
-    }
-
-    /**
-     * @param node
-     * @return
-     */
-    protected static ModelElement getNodeModelElement(final LGMTreeNode node) {
-        ElementContainer ec = (ElementContainer) node.getUserObject();
-        ModelElement me = ec.getElement();
-        return me;
+        ElementContainerTreeNode node = (ElementContainerTreeNode) treePath.getLastPathComponent();
+        return node.getModelElement();
     }
 
     /**

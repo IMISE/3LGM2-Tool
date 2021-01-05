@@ -26,10 +26,10 @@ import de.imise.tool3lgm.graphtools.dialog.action.LGMAction;
 import de.imise.tool3lgm.graphtools.dialog.dragdrop.DragNDropInitializer;
 import de.imise.tool3lgm.graphtools.dialog.element.AbstractElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
-import de.imise.tool3lgm.graphtools.metamodel.elements.HasPartEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.LGMGraphDocument;
+import de.imise.tool3lgm.graphtools.path.metapaths.ElementaryMetaPath;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.graphtools.view.tree.ElementDialogPanelTree;
 import de.imise.util.swing.SwingUtils;
@@ -37,7 +37,7 @@ import de.imise.util.swing.SwingUtils;
 /**
  * @author fstephan
  */
-public class StructurePanel extends AbstractPathOfOneEdgePanel {
+public final class StructurePanel extends AbstractPathOfOneEdgePanel {
 
     private ElementDialogPanelTree lotree;
     private ElementDialogPanelTree lutree;
@@ -45,7 +45,6 @@ public class StructurePanel extends AbstractPathOfOneEdgePanel {
     private JPanel control1;
     private JPanel control2;
     private JLabel rlabel;
-    private JScrollPane rscrollPane;
 
     /**
      * Liste aller ElementContainer, die nicht im rectne Baum angezeigt werden
@@ -62,33 +61,35 @@ public class StructurePanel extends AbstractPathOfOneEdgePanel {
      * @param dialog
      * @param hasPartEdgeClass
      */
-    public StructurePanel(final AbstractElementPropertyDialog dialog, final Class<? extends HasPartEdge> hasPartEdgeClass) {
+    public StructurePanel(final AbstractElementPropertyDialog dialog, final Class<? extends Edge> hasPartEdgeClass) {
         super(dialog, LABEL_LAST_EDGE_CONNECTION_NAME, LABEL_LAST_EDGE_CONNECTION_NAME, Edge.getEndClass(hasPartEdgeClass), hasPartEdgeClass); //die beiden LabelOptions sind egal
         internalInit();
     }
 
+    /**
+     *
+     */
     private void internalInit() {
         ModelElement me = getModelElement();
         GDCollection gdcoll = me.getCollection();
         LGMGraphDocument mainDoc = gdcoll.getMainDoc();
         String name = me.getName();
         // lotree
-        JLabel lolabel = new JLabel(getResString("ueberg"));
+        ElementaryMetaPath backwardMetaPath = metaPath.getOtherDirection();
+        JLabel lolabel = new JLabel(backwardMetaPath.getName());
         lotree = new ElementDialogPanelTree(name, mainDoc);
         lotree.setName("lotree");
         lotree.setRootVisible(false);
         lotree.setShowsRootHandles(true);
         lotree.setCellRenderer(treeRenderer);
         lotree.getSelectionModel().setSelectionMode(TreeSelectionModel.DISCONTIGUOUS_TREE_SELECTION);
-        JScrollPane lotreeScrollPane = new JScrollPane(lotree);
 
         // lutree
-        JLabel lulabel = new JLabel(getResString("unterg"));
+        JLabel lulabel = new JLabel(metaPath.getName());
         lutree = new ElementDialogPanelTree(name, mainDoc);
         lutree.setName("lutree");
         lutree.setRootVisible(false);
         lutree.setCellRenderer(treeRenderer);
-        JScrollPane lutreeScrollPane = new JScrollPane(lutree);
 
         // PanelLayout
         GridBagLayout gbl = new GridBagLayout();
@@ -108,6 +109,8 @@ public class StructurePanel extends AbstractPathOfOneEdgePanel {
         constraints.fill = GridBagConstraints.BOTH;
         constraints.weightx = 1d;
         constraints.weighty = 1d;
+        JScrollPane lotreeScrollPane = lotree.getScrollPane();
+        JScrollPane lutreeScrollPane = lutree.getScrollPane();
         add(this, lotreeScrollPane, constraints, 0, 1, 1, 1);
         add(this, lutreeScrollPane, constraints, 0, 3, 1, 1);
 
@@ -120,7 +123,8 @@ public class StructurePanel extends AbstractPathOfOneEdgePanel {
         rtree.setShowsRootHandles(true);
         rtree.setCellRenderer(treeRenderer);
         rtree.getSelectionModel().setSelectionMode(TreeSelectionModel.DISCONTIGUOUS_TREE_SELECTION);
-        rscrollPane = new JScrollPane(rtree);
+
+        JScrollPane rtreeScrollPane = rtree.getScrollPane();
 
         /*
          * Start: Buttons & Actions erstellen und registrieren ...
@@ -143,7 +147,7 @@ public class StructurePanel extends AbstractPathOfOneEdgePanel {
         //alles dafür tun, dass beide Dialogseiten gleich breit sind. Das wird über die PreferredSize der breitesten Komponente gesteuert.
         SwingUtils.fillToSameLength(lolabel, lulabel, rlabel);
         SwingUtils.setSamePreferredSize(lolabel, lulabel, rlabel);
-        SwingUtils.setSamePreferredSize(lotreeScrollPane, lutreeScrollPane, rscrollPane);
+        SwingUtils.setSamePreferredSize(lotreeScrollPane, lutreeScrollPane, rtreeScrollPane);
 
         showFullDialog(true);
     }
@@ -158,7 +162,9 @@ public class StructurePanel extends AbstractPathOfOneEdgePanel {
         childrenToExcludeFromRtree.add(meContainer);
         lotree.saveExpansionAndSelection();
         lotree.reset();
-        for (ElementContainer ec : me.getDirectParentContainers(mainDoc)) {
+        ElementaryMetaPath backwardMetaPath = metaPath.getOtherDirection();
+        List<ElementContainer> backwardConnectedContainer = backwardMetaPath.getConnectedContainer(me, mainDoc);
+        for (ElementContainer ec : backwardConnectedContainer) {
             childrenToExcludeFromRtree.add(ec);
             lotree.addObject(ec, true, false, false);
         }
@@ -167,7 +173,8 @@ public class StructurePanel extends AbstractPathOfOneEdgePanel {
 
         lutree.saveExpansionAndSelection();
         lutree.reset();
-        for (ElementContainer ec : me.getDirectPartContainers(mainDoc)) {
+        List<ElementContainer> forwardConnectedContainer = metaPath.getConnectedContainer(me, mainDoc);
+        for (ElementContainer ec : forwardConnectedContainer) {
             childrenToExcludeFromRtree.add(ec);
             lutree.addObject(ec, true, false, false);
         }
@@ -204,7 +211,7 @@ public class StructurePanel extends AbstractPathOfOneEdgePanel {
         constraints.fill = GridBagConstraints.BOTH;
         constraints.weightx = 1d;
         constraints.weighty = 1d;
-        add(this, rscrollPane, constraints, 2, 1, 1, 3);
+        add(this, rtree.getScrollPane(), constraints, 2, 1, 1, 3);
     }
 
     @Override
@@ -212,7 +219,7 @@ public class StructurePanel extends AbstractPathOfOneEdgePanel {
         remove(control1);
         remove(control2);
         remove(rlabel);
-        remove(rscrollPane);
+        remove(rtree.getScrollPane());
     }
 
     /**

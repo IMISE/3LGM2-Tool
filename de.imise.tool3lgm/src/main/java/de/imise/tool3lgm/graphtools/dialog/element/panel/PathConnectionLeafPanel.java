@@ -20,6 +20,7 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.metamodel.elements.MultipleEdge;
 import de.imise.tool3lgm.graphtools.path.metapaths.MetaPath;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
+import de.imise.tool3lgm.graphtools.view.tree.node.ElementContainerTreeNode;
 import de.imise.tool3lgm.graphtools.view.tree.node.LGMTreeNode;
 
 /**
@@ -39,7 +40,7 @@ public class PathConnectionLeafPanel extends PathConnectionPanel {
      * linken Baum darüber liegenden Knotens. Das ist der Node, von dem aus ein
      * eventuell durchzuführendes Unlinken angestoßen werden muss.
      */
-    protected Map<LGMTreeNode, ModelElement> nodeToParentModelElement;
+    protected Map<ElementContainerTreeNode, ModelElement> nodeToParentModelElement;
 
     public PathConnectionLeafPanel(final AbstractElementPropertyDialog dialog, final MetaPath metaPath) {
         this(dialog, LABEL_END_ELEMENT_TYPE, LABEL_END_ELEMENT_TYPE, metaPath);
@@ -83,8 +84,8 @@ public class PathConnectionLeafPanel extends PathConnectionPanel {
      * Baut im linken Baum nur die Elemente der letzten Edge des Pfades auf
      */
     @Override
-    protected Collection<LGMTreeNode> buildLeftTree() {
-        Collection<LGMTreeNode> leafNodes = super.buildLeftTree();
+    protected Collection<ElementContainerTreeNode> buildLeftTree() {
+        Collection<ElementContainerTreeNode> leafNodes = super.buildLeftTree();
         //wenn dieses Panel mit einem Pfad der Länge 1 initialisiert wurde, dann gibt es hier nichts zu tun,
         //da es keine Zwischenelemente gibt, die nicht angezeigt werden sollen
         if (getEdgesInPathCount() == 1) {
@@ -94,28 +95,28 @@ public class PathConnectionLeafPanel extends PathConnectionPanel {
         if (!leafNodes.isEmpty()) {
             if (metaPath.isCreatable(false)) { //wenn der anlegbar ist, dann werden die Blätter sooft angezeigt, wie Pfade existeren (also Elemente evtl. auch doppelt)
                 //vor dem Umhängen der Blätter an den root für jedes Blatt das echte Vorgängerelement auf dem Pfad merken
-                for (LGMTreeNode leaf : leafNodes) {
-                    LGMTreeNode leafParent = (LGMTreeNode) leaf.getParent();
-                    ModelElement parentMe = getNodeModelElement(leafParent);
+                for (ElementContainerTreeNode leaf : leafNodes) {
+                    ElementContainerTreeNode leafParent = (ElementContainerTreeNode) leaf.getParent();
+                    ModelElement parentMe = leafParent.getModelElement();
                     nodeToParentModelElement.put(leaf, parentMe);
                 }
                 //alle Elemente vom root abhängen
-                LGMTreeNode lroot = ltree.getRoot();
+                LGMTreeNode<?> lroot = ltree.getRoot();
                 lroot.removeAllChildren();
                 //alle Blätter direkt an den root hängen
-                for (LGMTreeNode leaf : leafNodes) {
+                for (ElementContainerTreeNode leaf : leafNodes) {
                     lroot.add(leaf);
                 }
             } else { //der Pfad ist nicht anlegbar und somit werden die verbundenen Elemente nur angezeigt -> keins doppelt anzeigen! In diesem Fall ist nodeToParentModelElement egal!
-                ImmutableList.Builder<LGMTreeNode> newLeafNodes = ImmutableList.builder();
+                ImmutableList.Builder<ElementContainerTreeNode> newLeafNodes = ImmutableList.builder();
                 //alle Elemente vom root abhängen
                 ltree.reset(); //check von bereits hinzugefügten Elementen zurück setzen
                 //alle Blätter neu erzeugen und direkt an den root hängen
-                for (LGMTreeNode leaf : leafNodes) {
+                for (ElementContainerTreeNode leaf : leafNodes) {
                     Object userObject = leaf.getUserObject();
                     if (userObject instanceof ElementContainer) {
                         ElementContainer ec = (ElementContainer) userObject;
-                        LGMTreeNode node = ltree.addObject(ec, true, true, false);
+                        ElementContainerTreeNode node = ltree.addObject(ec, true, true, false);
                         if (node != null) {
                             newLeafNodes.add(node);
                         }
@@ -125,7 +126,7 @@ public class PathConnectionLeafPanel extends PathConnectionPanel {
             }
         } else {
             //maybe super.buildLeftTree() has added some incomplete paths -> remove them
-            LGMTreeNode lroot = ltree.getRoot();
+            LGMTreeNode<?> lroot = ltree.getRoot();
             lroot.removeAllChildren();
         }
         return leafNodes;
@@ -149,8 +150,8 @@ public class PathConnectionLeafPanel extends PathConnectionPanel {
                 TreePath[] path2disconnect = ltree.getSelectionPaths();
                 int treePathEdgeIndex = getEdgesInPathCount() - 1;
                 for (int i = 0; i < path2disconnect.length; i++) {
-                    LGMTreeNode node = (LGMTreeNode) path2disconnect[i].getLastPathComponent();
-                    ModelElement element2Disconnect = getNodeModelElement(node);
+                    ElementContainerTreeNode node = (ElementContainerTreeNode) path2disconnect[i].getLastPathComponent();
+                    ModelElement element2Disconnect = node.getModelElement();
                     //immer nur die letzte Edge im Pfad entfernen
                     //das ist der Index der Edge im Pfad, ab der entfernt werden soll
                     ModelElement parentOfElement2Disconnect = nodeToParentModelElement.get(node);

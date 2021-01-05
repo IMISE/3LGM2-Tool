@@ -20,6 +20,7 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.path.metapaths.ElementaryMetaPath;
 import de.imise.tool3lgm.graphtools.path.metapaths.MetaPath;
 import de.imise.tool3lgm.graphtools.path.metapaths.SimpleMetaPath;
+import de.imise.tool3lgm.graphtools.view.tree.node.ElementContainerTreeNode;
 import de.imise.tool3lgm.graphtools.view.tree.node.LGMTreeNode;
 
 /**
@@ -114,18 +115,18 @@ public class InstanciationPathPanel extends PathConnectionPanel {
      * Baut im linken Baum nur die Elemente der letzten Edge des Pfades auf
      */
     @Override
-    protected Collection<LGMTreeNode> buildLeftTree() {
-        Collection<LGMTreeNode> leafNodes = super.buildLeftTree();
+    protected Collection<ElementContainerTreeNode> buildLeftTree() {
+        Collection<ElementContainerTreeNode> leafNodes = super.buildLeftTree();
         if (!leafNodes.isEmpty()) {
             //if there are more thant 2 elementary metapaths in the whole metapath
             //all other nodes between the root and the seocnd last have to be removed
             //from the tree
-            LGMTreeNode lroot = ltree.getRoot();
+            LGMTreeNode<?> lroot = ltree.getRoot();
             if (elementaryMetaPathCount > 2) {
                 lroot.removeAllChildren();
             }
-            for (LGMTreeNode instanciationMasterNode : leafNodes) {
-                LGMTreeNode instanceNode = (LGMTreeNode) instanciationMasterNode.getParent();
+            for (ElementContainerTreeNode instanciationMasterNode : leafNodes) {
+                ElementContainerTreeNode instanceNode = (ElementContainerTreeNode) instanciationMasterNode.getParent();
                 instanceNode.removeAllChildren();
                 if (instanceNode.getParent() != lroot) {
                     lroot.add(instanceNode);

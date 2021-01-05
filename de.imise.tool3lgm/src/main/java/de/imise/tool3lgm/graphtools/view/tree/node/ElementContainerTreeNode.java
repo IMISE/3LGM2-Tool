@@ -2,6 +2,7 @@ package de.imise.tool3lgm.graphtools.view.tree.node;
 
 import javax.swing.ImageIcon;
 
+import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.model.GraphDocumentOwner;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
@@ -10,7 +11,7 @@ import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
 /**
  * @author AXS (8 Apr 2019)
  */
-public class ElementContainerTreeNode extends IconifiedTreeNode implements GraphDocumentOwner {
+public class ElementContainerTreeNode extends IconifiedTreeNode<ElementContainer> implements GraphDocumentOwner {
 
     /**
      * @param ec
@@ -57,18 +58,33 @@ public class ElementContainerTreeNode extends IconifiedTreeNode implements Graph
 
     @Override
     public ElementContainer getUserObject() {
-        return (ElementContainer) super.getUserObject();
+        return super.getUserObject();
     }
 
-    @Override
-    public void setUserObject(final Object userObject) {
-        throw new UnsupportedOperationException();
+    /**
+     * @return
+     */
+    public ModelElement getModelElement() {
+        ElementContainer ec = getUserObject();
+        return ec.getElement();
     }
 
     @Override
     public GraphDocument getGraphDocument() {
         ElementContainer ec = getUserObject();
         return ec == null ? null : ec.getGraphDocument();
+    }
+
+    @Override
+    public void setUserObject(final Object userObject) {
+        setUserObject((ElementContainer) userObject); //hard cast! if this is an ElementContainer, so don't call this function!
+    }
+
+    /**
+     * @param userObject
+     */
+    public void setUserObject(final ElementContainer userObject) {
+        super.setUserObject(userObject);
     }
 
     /**

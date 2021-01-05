@@ -8,7 +8,7 @@ import de.imise.util.pair.Pair;
 /**
  * @author AXS (8 Apr 2019)
  */
-public class UserFieldTreeNode extends IconifiedTreeNode {
+public class UserFieldTreeNode extends IconifiedTreeNode<Pair<UserField, ModelElement>> {
 
     /**
      * @param elementClass
@@ -17,17 +17,16 @@ public class UserFieldTreeNode extends IconifiedTreeNode {
         super(new Pair<>(userField, me), getLabel(userField, me), false); // da kommt nichts drunter -> sort = false
     }
 
-    @SuppressWarnings("unchecked")
-    @Override
-    public Pair<UserField, ModelElement> getUserObject() {
-        return (Pair<UserField, ModelElement>) super.getUserObject();
-    }
-
     @Override
     public void setUserObject(final Object userObject) {
         throw new UnsupportedOperationException();
     }
 
+    /**
+     * @param uf
+     * @param me
+     * @return
+     */
     private static final String getLabel(final UserField uf, final ModelElement me) {
         String label = null;
         if (uf.hasStyle(UserField.Style.HYPERLINK)) {
@@ -47,11 +46,17 @@ public class UserFieldTreeNode extends IconifiedTreeNode {
         return label;
     }
 
+    /**
+     * @return
+     */
     public final UserField getUserField() {
         Pair<UserField, ModelElement> userObject = getUserObject();
         return userObject.getFirstItem();
     }
 
+    /**
+     * @return
+     */
     public final ModelElement getModelElement() {
         Pair<UserField, ModelElement> userObject = getUserObject();
         return userObject.getSecondItem();
