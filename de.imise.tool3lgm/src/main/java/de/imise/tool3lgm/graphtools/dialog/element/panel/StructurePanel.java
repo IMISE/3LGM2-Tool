@@ -67,13 +67,17 @@ public final class StructurePanel extends AbstractPathOfOneEdgePanel {
         internalInit();
     }
 
+    /**
+     *
+     */
     private void internalInit() {
         ModelElement me = getModelElement();
         GDCollection gdcoll = me.getCollection();
         LGMGraphDocument mainDoc = gdcoll.getMainDoc();
         String name = me.getName();
         // lotree
-        JLabel lolabel = new JLabel(getResString("ueberg"));
+        ElementaryMetaPath backwardMetaPath = metaPath.getOtherDirection();
+        JLabel lolabel = new JLabel(backwardMetaPath.getName());
         lotree = new ElementDialogPanelTree(name, mainDoc);
         lotree.setName("lotree");
         lotree.setRootVisible(false);
@@ -83,7 +87,7 @@ public final class StructurePanel extends AbstractPathOfOneEdgePanel {
         JScrollPane lotreeScrollPane = new JScrollPane(lotree);
 
         // lutree
-        JLabel lulabel = new JLabel(getResString("unterg"));
+        JLabel lulabel = new JLabel(metaPath.getName());
         lutree = new ElementDialogPanelTree(name, mainDoc);
         lutree.setName("lutree");
         lutree.setRootVisible(false);
