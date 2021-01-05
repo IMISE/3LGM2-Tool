@@ -34,6 +34,7 @@ import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Bendpoint;
 import de.imise.tool3lgm.graphtools.metamodel.elements.CompositionEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
+import de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction;
 import de.imise.tool3lgm.graphtools.metamodel.elements.InstanciationEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.path.metapaths.ElementaryMetaPath;
@@ -845,7 +846,8 @@ public class LGMGraphDocument extends GraphDocument {
             }
         }
         if (!alreadyLinked) {
-            edge = gdcoll.link(edgeClass, startElement, endElement, pid);
+            Direction direction = elementaryMetaPath.getDirection();
+            edge = gdcoll.link(startElement, endElement, edgeClass, direction, pid);
         }
         if (CompositionEdge.class.isAssignableFrom(edgeClass)) {
             Class<? extends CompositionEdge> compositionEdgeClass = edgeClass.asSubclass(CompositionEdge.class);

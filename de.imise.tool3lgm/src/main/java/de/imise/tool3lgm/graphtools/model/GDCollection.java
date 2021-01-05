@@ -1604,12 +1604,12 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
      * @param direction
      * @param pid
      */
-    public void link(final ModelElement startElement, final ModelElement endElement, final Class<? extends Edge> edgeClass, final Direction direction, final int pid) {
+    public final Edge link(final ModelElement startElement, final ModelElement endElement, final Class<? extends Edge> edgeClass, final Direction direction, final int pid) {
         //das neue Element mit dem startElement verknüpfen
         if (direction == Direction.FORWARD) {
-            link(edgeClass, startElement, endElement, false, pid);
+            return link(edgeClass, startElement, endElement, false, pid);
         } else {
-            link(edgeClass, endElement, startElement, false, pid);
+            return link(edgeClass, endElement, startElement, false, pid);
         }
     }
 
