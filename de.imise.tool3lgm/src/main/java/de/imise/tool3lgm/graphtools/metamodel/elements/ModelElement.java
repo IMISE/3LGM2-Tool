@@ -735,7 +735,7 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
             int edgeIndex = edges.indexOf(edge);
             if (edgeIndex >= 0) {
                 edges.remove(edge);
-                if (edges.size() == 0) {
+                if (edges.isEmpty()) {
                     edges = null;
                 }
             }

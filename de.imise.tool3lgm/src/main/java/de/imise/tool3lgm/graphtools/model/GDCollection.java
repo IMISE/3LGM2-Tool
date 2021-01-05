@@ -1847,20 +1847,24 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
                 if (doubleMeaningEdge) {
                     ((DoubleMeaningEdge) edge).setConnectionState(connectionState);
                 }
+
                 edge.setNodesAndInsert(startElement, startElementEdgeIndex, endElement, endElementEdgeIndex);
-                if (edge.getStart() != null && edge.getEnd() != null) {
+                ModelElement start = edge.getStart();
+                ModelElement end = edge.getEnd();
+                if (start != null && end != null) {
                     kac = new EdgeContainer(edge, mainDoc);
                     String name = getNewEdgeName(edge);
                     edge.setName(name, false);
                     addEdge(kac, pid);
                 } else {
-                    if (edge.getStart() == null && edge.getEnd() != null) {
-                        edge.getEnd().removeEdge(edge);
+                    if (start != null) {
+                        start.removeEdge(edge);
                     }
-                    if (edge.getEnd() == null && edge.getStart() != null) {
-                        edge.getStart().removeEdge(edge);
+                    if (end != null) {
+                        end.removeEdge(edge);
                     }
                 }
+
                 //Falls bereits Beziehungen der anzulegenden Art bestehen und durch die neue Beziehung die Kardinalitäten
                 //verletzt wären -> lösche solange bestehende Beziehungen, bis die Kardinaltitäten eingehalten werden
                 //Dies muss nach dem Hinzufügen der anderen Undo-Komamndos erfolgen, sonst stimmt die Reihenfolge der Kommandos nicht.
