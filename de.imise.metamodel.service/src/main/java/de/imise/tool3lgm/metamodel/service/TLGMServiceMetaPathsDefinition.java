@@ -22,6 +22,8 @@ import de.imise.tool3lgm.graphtools.path.metapaths.ElementaryMetaPathHandler;
 import de.imise.tool3lgm.graphtools.path.metapaths.MetaPath;
 import de.imise.tool3lgm.graphtools.path.metapaths.SectionMetaPath;
 import de.imise.tool3lgm.graphtools.path.metapaths.SimpleMetaPath;
+import de.imise.tool3lgm.metamodel.service.edge.ApplicationComponent_PhysicalDataProcessingComponent_Edge;
+import de.imise.tool3lgm.metamodel.service.edge.ApplicationComponent_Use_Edge;
 import de.imise.tool3lgm.metamodel.service.edge.ApplicationSystem_IheActorInstance_Edge;
 import de.imise.tool3lgm.metamodel.service.edge.ApplicationSystem_SoftwareProduct_Edge;
 import de.imise.tool3lgm.metamodel.service.edge.CommunicationLink_Edge;
@@ -41,6 +43,7 @@ import de.imise.tool3lgm.metamodel.service.edge.OrganisationalUnit_Use_Edge;
 import de.imise.tool3lgm.metamodel.service.edge.Service_CommunicationLink_Edge;
 import de.imise.tool3lgm.metamodel.service.edge.Service_InvokingInterface_Edge;
 import de.imise.tool3lgm.metamodel.service.edge.Service_ProvidingInterface_Edge;
+import de.imise.tool3lgm.metamodel.service.node.ApplicationComponent;
 import de.imise.tool3lgm.metamodel.service.node.ApplicationSystem;
 import de.imise.tool3lgm.metamodel.service.node.Function;
 import de.imise.tool3lgm.metamodel.service.node.IheActor;
@@ -52,6 +55,7 @@ import de.imise.tool3lgm.metamodel.service.node.IheProvidingInterface;
 import de.imise.tool3lgm.metamodel.service.node.IheTransaction;
 import de.imise.tool3lgm.metamodel.service.node.InvokingInterface;
 import de.imise.tool3lgm.metamodel.service.node.OrganisationalUnit;
+import de.imise.tool3lgm.metamodel.service.node.PhysicalDataProcessingComponent;
 import de.imise.tool3lgm.metamodel.service.node.ProvidingInterface;
 import de.imise.tool3lgm.metamodel.service.node.Service;
 import de.imise.tool3lgm.metamodel.service.node.SoftwareProduct;
@@ -137,7 +141,16 @@ public class TLGMServiceMetaPathsDefinition extends MetaPathDefinition {
         //das folgende muss in die Resourcen, sollte man den Pfad oben mal schrf schalten (bisher nur deutsch)
         //        PATH_IheActorInstance_ApplicationSystem_IheActor_f      muss gruppiert werden mit
         //        PATH_IheActorInstance_ApplicationSystem_IheActor_b      wird zur Gruppierung benötigt von
-        return ImmutableList.of(metaPath1, metaPath3);
+        /* Function - ApplicationComponent */
+        SimpleMetaPath metaPath4 = smp(Function.class, ApplicationComponent.class, "PATH_Function_ApplicationComponent", Function_Use_Edge.class, ApplicationComponent_Use_Edge.class);
+        /* Function - PhysicalDataProcessingComponent */
+        SimpleMetaPath metaPath5 = smp(Function.class, PhysicalDataProcessingComponent.class, "PATH_Function_PhysicalDataProcessingComponent", Function_Use_Edge.class, ApplicationComponent_Use_Edge.class,
+                ApplicationComponent_PhysicalDataProcessingComponent_Edge.class);
+        /* OrganisationalUnit - ApplicationComponent */
+        SimpleMetaPath metaPath6 = smp(OrganisationalUnit.class, ApplicationComponent.class, "PATH_OrganisationalUnit_ApplicationComponent", OrganisationalUnit_Use_Edge.class, ApplicationComponent_Use_Edge.class);
+        /* ApplicationComponent - PhysicalDataProcessingComponent */
+        SimpleMetaPath metaPath7 = smp(ApplicationComponent.class, PhysicalDataProcessingComponent.class, "PATH_ApplicationComponent_PhysicalDataProcessingComponent", ApplicationComponent_PhysicalDataProcessingComponent_Edge.class);
+        return ImmutableList.of(metaPath1, metaPath3, metaPath4, metaPath5, metaPath6, metaPath7);
     }
 
     ////////////////////////////////////////////////////////////////////////
