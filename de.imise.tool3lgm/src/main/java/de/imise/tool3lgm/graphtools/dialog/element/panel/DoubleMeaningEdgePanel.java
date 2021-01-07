@@ -70,9 +70,9 @@ public class DoubleMeaningEdgePanel extends AbstractPathOfOneEdgePanel {
         String lolabeltext = StringUtils.capitalizeFirstChar(getEdgeDisplayName(ConnectionState.BACKWARD));
         JLabel lolabel = new JLabel(lolabeltext);
 
-        //hier niemals das this löschen, weil die globale searchElementClass im super-Konsturktor richtig gesetzt wird
-        MetaModel metaModel = getMetaModel();
-        boolean showRootHandles = metaModel.canHaveParts(this.searchElementClass);
+        //If you only show the root handles if the searchElementClass can have parts then
+        //you need to add a border -> simply always show root handles in all trees
+        boolean showRootHandles = true;
 
         GraphDocument mainDoc = getMainDoc();
         lotree = new ElementDialogPanelTree("loroot", mainDoc);
