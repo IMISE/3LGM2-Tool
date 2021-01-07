@@ -6,14 +6,13 @@ import java.util.ResourceBundle;
 import de.imise.util.resource.SimpleResourceBundleSourceAdapter;
 
 /**
- * Stellt für Dilaoge die Resourcen nach folgende Regeln bereit:
- * Zuererst wird nach einer Resourcendatei gesucht, die dem Klassennamen entspricht,
- * dann nach der allgemeinen Ressourcendatei mit dem <code>baseName</code>
- * CommonDialogResources. In dieser Reihenfolge wird auch nach jedem der Resourcenwerte
- * gesucht.
+ * Stellt für Dilaoge die Resourcen nach folgende Regeln bereit: Zuererst wird
+ * nach einer Resourcendatei gesucht, die dem Klassennamen entspricht, dann nach
+ * der allgemeinen Ressourcendatei mit dem <code>baseName</code>
+ * CommonDialogResources. In dieser Reihenfolge wird auch nach jedem der
+ * Resourcenwerte gesucht.
  *
- * @author AXS
- *         created on 21.08.2007
+ * @author AXS created on 21.08.2007
  */
 public class DialogResourceHandler extends SimpleResourceBundleSourceAdapter {
 
@@ -27,18 +26,20 @@ public class DialogResourceHandler extends SimpleResourceBundleSourceAdapter {
     private static final ResourceBundle COMMON_RESOURCE_BUNDLE = ResourceBundle.getBundle(BASE_NAME, Locale.ENGLISH);
 
     /**
-     * Erzeugt einen neuen Handler, der die Resourcen für die übergebene Klasse zurückgeben kann.
+     * Erzeugt einen neuen Handler, der die Resourcen für die übergebene Klasse
+     * zurückgeben kann.
      *
-     * @param ressourceNameClassSource
-     *            Klassenname, der den Namen der zu ladenden Ressorcendatei vorgibt.
+     * @param ressourceNameClassSource Klassenname, der den Namen der zu
+     *            ladenden Ressorcendatei vorgibt.
      */
     public DialogResourceHandler(final Class<?> ressourceNameClassSource) {
         super(ressourceNameClassSource);
     }
 
     /**
-     * Liefert den Resourcen-String zum übergebenen Schlüssel. Zuerst wird im speziellen RessoruceBundle mit dem
-     * Klassennamen gesucht und dann in den allgemeinen Ressourcen.
+     * Liefert den Resourcen-String zum übergebenen Schlüssel. Zuerst wird im
+     * speziellen RessoruceBundle mit dem Klassennamen gesucht und dann in den
+     * allgemeinen Ressourcen.
      *
      * @param key
      * @return
@@ -53,7 +54,8 @@ public class DialogResourceHandler extends SimpleResourceBundleSourceAdapter {
     }
 
     /**
-     * Liefert den Resourcen-String zum übergebenen Schlüssel aus dem gemeinsamen ResourceBundle zurück
+     * Liefert den Resourcen-String zum übergebenen Schlüssel aus dem
+     * gemeinsamen ResourceBundle zurück
      *
      * @param key
      * @return

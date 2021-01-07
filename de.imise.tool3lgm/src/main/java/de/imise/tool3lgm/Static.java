@@ -571,6 +571,15 @@ public class Static {
         return selectedDoc.getSelectedBendpointContainerIterable();
     }
 
+    /**
+     * @return <code>true</code> if there is an active model with an active
+     *         selection in it.
+     */
+    public static final boolean isSelection() {
+        LGMGraphDocument selectedDoc = getSelectedDoc();
+        return selectedDoc != null && selectedDoc.isSelection();
+    }
+
     // MessageDialoge //
 
     /**

@@ -16,15 +16,14 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.border.EtchedBorder;
 
-public class GridLayout2Demo extends JFrame
-{
+public class GridLayout2Demo extends JFrame {
     public GridLayout2Demo(GridLayout layout, JComponent[] component) {
         super(layout.getClass().getName());
         JPanel panel = new JPanel(layout);
         //--- code needed to add the components
         // less than using a GridBagLayout
-        for (int i = 0; i < component.length; i ++) {
-        	panel.add(component[i]);
+        for (int i = 0; i < component.length; i++) {
+            panel.add(component[i]);
         }
         //---
         panel.setBorder(new EtchedBorder());
@@ -32,7 +31,6 @@ public class GridLayout2Demo extends JFrame
         pack();
         setVisible(true);
     }
-
 
     public GridLayout2Demo(int columns, Insets insets, JComponent[] component) {
         super(GridBagLayout.class.getName());
@@ -43,11 +41,11 @@ public class GridLayout2Demo extends JFrame
         constraints.anchor = GridBagConstraints.WEST;
         constraints.insets = insets;
         constraints.fill = GridBagConstraints.BOTH;
-        for (int i = 0; i < component.length; i ++) {
-        	constraints.gridx = i % columns;
-	        constraints.gridy = i / columns;
-	        layout.setConstraints(component[i], constraints);
-        	panel.add(component[i]);
+        for (int i = 0; i < component.length; i++) {
+            constraints.gridx = i % columns;
+            constraints.gridy = i / columns;
+            layout.setConstraints(component[i], constraints);
+            panel.add(component[i]);
         }
         //---
         panel.setBorder(new EtchedBorder());
@@ -56,39 +54,39 @@ public class GridLayout2Demo extends JFrame
         setVisible(true);
     }
 
-	// Generate n components of random sizes
-	public static JComponent[] generateComponents(int n) {
-		Random r = new Random(0);
-		JComponent[] c = new JComponent[n];
-		int m = n;
-		while (m > 0) {
-			int i = r.nextInt(n);
-			if (c[i] == null) {
-				c[i] = new JLabel("Component " + i, null, SwingConstants.CENTER);
-				int w = 5 * (2 + r.nextInt(20));
-				int h = 5 * (2 + r.nextInt(20));
-				c[i].setPreferredSize(new Dimension(w, h));
-				c[i].setBorder(new EtchedBorder());
-				m --;
-			}
-		}
-		return c;
-	}
+    // Generate n components of random sizes
+    public static JComponent[] generateComponents(int n) {
+        Random r = new Random(0);
+        JComponent[] c = new JComponent[n];
+        int m = n;
+        while (m > 0) {
+            int i = r.nextInt(n);
+            if (c[i] == null) {
+                c[i] = new JLabel("Component " + i, null, SwingConstants.CENTER);
+                int w = 5 * (2 + r.nextInt(20));
+                int h = 5 * (2 + r.nextInt(20));
+                c[i].setPreferredSize(new Dimension(w, h));
+                c[i].setBorder(new EtchedBorder());
+                m--;
+            }
+        }
+        return c;
+    }
 
-	// Generate the components for the "change-password" panel
-	public static JComponent[] createPanelComponets() {
-		JComponent[] c = new JComponent[6];
-		c[0] = new JLabel("Login");
-		c[1] = new JTextField("", 20);
-		c[2] = new JLabel("Password");
-		c[3] = new JPasswordField("", 20);
-		c[4] = new JLabel("Re-enter Password");
-		c[5] = new JPasswordField("", 20);
-		return c;
-	}
+    // Generate the components for the "change-password" panel
+    public static JComponent[] createPanelComponets() {
+        JComponent[] c = new JComponent[6];
+        c[0] = new JLabel("Login");
+        c[1] = new JTextField("", 20);
+        c[2] = new JLabel("Password");
+        c[3] = new JPasswordField("", 20);
+        c[4] = new JLabel("Re-enter Password");
+        c[5] = new JPasswordField("", 20);
+        return c;
+    }
 
     @SuppressWarnings("unused")
-	public static void main(String[] args) {
+    public static void main(String[] args) {
         new GridLayout2Demo(new GridLayout(4, 4, 4, 2), generateComponents(14));
         new GridLayout2Demo(new GridLayout2(4, 4, 4, 2), generateComponents(14));
         new GridLayout2Demo(4, new Insets(1, 2, 1, 2), generateComponents(14));

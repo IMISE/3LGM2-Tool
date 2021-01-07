@@ -341,7 +341,7 @@ START %CLH% "%ISS_FILE%" "%ISS_FILE_LINE_FILEALL_SRT%" "%ISS_FILE_LINE_FILEALL_E
 
 SET "INKL_JRE=_inkl_JRE"
 ::voller Name der von Innosetup erzeugten Exe-Installationsdatei mit Version und Untertrichen statt Leerzeichen
-SET "WINDOWS_INSTALLER_EXE_BASE_NAME_PROZ=%WINDOWS_INSTALLER_EXE_BASE_NAME%%lgmVersion%_setup%inkl_JRE%" 
+SET "WINDOWS_INSTALLER_EXE_BASE_NAME_PROZ=%WINDOWS_INSTALLER_EXE_BASE_NAME%%lgmVersion%_setup%INKL_JRE%" 
 SET WINDOWS_INSTALLER_EXE_BASE_NAME_PROZ=!WINDOWS_INSTALLER_EXE_BASE_NAME_PROZ: =_!
 ::Basename der von Innosetup gebauten Installations-Exe-Datei in die ISS-Datei schreiben
 START %CLH% "%ISS_FILE%" "%ISS_FILE_LINE_OUTEXE__SRT%" "%ISS_FILE_LINE_OUTEXE__END%" "%WINDOWS_INSTALLER_EXE_BASE_NAME_PROZ%"
@@ -369,7 +369,7 @@ FOR /d %%X IN ("%DEPLOY_PROJECT_TOOL3LGM_DIR%") DO "%SEVENZIP_PROGRAM_FILE%" a "
 
 SET "INKL_JRE="
 ::voller Name der von Innosetup erzeugten Exe-Installationsdatei mit Version und Untertrichen statt Leerzeichen
-SET "WINDOWS_INSTALLER_EXE_BASE_NAME_PROZ=%WINDOWS_INSTALLER_EXE_BASE_NAME%%lgmVersion%_setup%inkl_JRE%" 
+SET "WINDOWS_INSTALLER_EXE_BASE_NAME_PROZ=%WINDOWS_INSTALLER_EXE_BASE_NAME%%lgmVersion%_setup%INKL_JRE%" 
 SET WINDOWS_INSTALLER_EXE_BASE_NAME_PROZ=!WINDOWS_INSTALLER_EXE_BASE_NAME_PROZ: =_!
 ::Basename der von Innosetup gebauten Installations-Exe-Datei in die ISS-Datei schreiben
 START %CLH% "%ISS_FILE%" "%ISS_FILE_LINE_OUTEXE__SRT%" "%ISS_FILE_LINE_OUTEXE__END%" "%WINDOWS_INSTALLER_EXE_BASE_NAME_PROZ%"

@@ -8,10 +8,10 @@ import javax.swing.Icon;
 import javax.swing.JTabbedPane;
 
 /**
- * A JTabbedPane which has a close ('X') icon on each tab.
- * To add a tab, use the method addTab(String, Component)
- * To have an extra icon on each tab (e.g. like in JBuilder, showing the file type) use
- * the method addTab(String, Component, Icon). Only clicking the 'X' closes the tab.
+ * A JTabbedPane which has a close ('X') icon on each tab. To add a tab, use the
+ * method addTab(String, Component) To have an extra icon on each tab (e.g. like
+ * in JBuilder, showing the file type) use the method addTab(String, Component,
+ * Icon). Only clicking the 'X' closes the tab.
  */
 public class JTabbedPaneWithCloseIconsRight extends JTabbedPane {
 

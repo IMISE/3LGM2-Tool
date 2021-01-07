@@ -5,7 +5,7 @@ import javax.swing.ImageIcon;
 /**
  * @author AXS (15.06.2020)
  */
-public class IconifiedTreeNode extends LGMTreeNode {
+public class IconifiedTreeNode<T> extends LGMTreeNode<T> {
 
     /**
      * @author AXS (15.06.2020)
@@ -28,7 +28,7 @@ public class IconifiedTreeNode extends LGMTreeNode {
     /**
      * @param o
      */
-    public IconifiedTreeNode(final Object o) {
+    public IconifiedTreeNode(final T o) {
         this(o, null);
     }
 
@@ -36,7 +36,7 @@ public class IconifiedTreeNode extends LGMTreeNode {
      * @param o
      * @param sort
      */
-    public IconifiedTreeNode(final Object o, final boolean sort) {
+    public IconifiedTreeNode(final T o, final boolean sort) {
         this(o, sort, null);
     }
 
@@ -45,7 +45,7 @@ public class IconifiedTreeNode extends LGMTreeNode {
      * @param visibleText
      * @param sort
      */
-    public IconifiedTreeNode(final Object o, final String visibleText, final boolean sort) {
+    public IconifiedTreeNode(final T o, final String visibleText, final boolean sort) {
         this(o, visibleText, sort, null);
     }
 
@@ -53,7 +53,7 @@ public class IconifiedTreeNode extends LGMTreeNode {
      * @param o
      * @param icon
      */
-    public IconifiedTreeNode(final Object o, final ImageIcon icon) {
+    public IconifiedTreeNode(final T o, final ImageIcon icon) {
         super(o);
         this.icon = icon;
     }
@@ -63,7 +63,7 @@ public class IconifiedTreeNode extends LGMTreeNode {
      * @param sort
      * @param icon
      */
-    public IconifiedTreeNode(final Object o, final boolean sort, final ImageIcon icon) {
+    public IconifiedTreeNode(final T o, final boolean sort, final ImageIcon icon) {
         super(o, sort);
         this.icon = icon;
     }
@@ -74,7 +74,7 @@ public class IconifiedTreeNode extends LGMTreeNode {
      * @param sort
      * @param icon
      */
-    public IconifiedTreeNode(final Object o, final String visibleText, final boolean sort, final ImageIcon icon) {
+    public IconifiedTreeNode(final T o, final String visibleText, final boolean sort, final ImageIcon icon) {
         super(o, visibleText, sort);
         this.icon = icon;
     }

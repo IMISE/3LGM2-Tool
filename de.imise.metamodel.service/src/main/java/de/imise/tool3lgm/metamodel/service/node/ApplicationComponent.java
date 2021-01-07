@@ -23,8 +23,8 @@ public abstract class ApplicationComponent extends Node {
         dialog.addPathConnectionPanel(ApplicationComponent_Use_Edge.class, OrganisationalUnit_Use_Edge.class);
         dialog.addEdgePanel(ApplicationComponent_ObjectType_Edge.class);
         dialog.addMultiPanel(PhysicalDataProcessingComponent.class);
-        dialog.addMultiPanelEdgePanel(LABEL_LAST_EDGE_CONNECTION_NAME, ApplicationComponent_PhysicalDataProcessingComponent_RequiresForFunctionality_Edge.class);
-        dialog.addMultiPanelEdgePanel(LABEL_LAST_EDGE_CONNECTION_NAME, ApplicationComponent_PhysicalDataProcessingComponent_RequiresForStorage_Edge.class);
+        dialog.addMultiPanelPathPanel(LABEL_LAST_EDGE_CONNECTION_NAME, ApplicationComponent_PhysicalDataProcessingComponent_RequiresForFunctionality_Edge.class);
+        dialog.addMultiPanelPathPanel(LABEL_LAST_EDGE_CONNECTION_NAME, ApplicationComponent_PhysicalDataProcessingComponent_RequiresForStorage_Edge.class);
         return dialog;
     }
 

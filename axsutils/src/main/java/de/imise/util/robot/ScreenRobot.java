@@ -58,10 +58,11 @@ public class ScreenRobot {
     }
 
     /**
-     * Setzt die Maus mit einer zufälligen Abweichung im Bereich <code>tolerance</code> an die
-     * angegebene Position.<br>
-     * Die <code>tolerance</code> gibt die Anzahl der Pixel an, um die der Punkt, an den die Maus
-     * dann tatsächlich bewegt wird, in positiver sowie negativer X- und Y-Richtung abweichen kann.
+     * Setzt die Maus mit einer zufälligen Abweichung im Bereich
+     * <code>tolerance</code> an die angegebene Position.<br>
+     * Die <code>tolerance</code> gibt die Anzahl der Pixel an, um die der
+     * Punkt, an den die Maus dann tatsächlich bewegt wird, in positiver sowie
+     * negativer X- und Y-Richtung abweichen kann.
      *
      * @param p
      * @param tolerance
@@ -130,7 +131,8 @@ public class ScreenRobot {
     }
 
     /**
-     * Liefert die Farbe des Punktes an der angegebenen Stelle auf dem Bildschirm
+     * Liefert die Farbe des Punktes an der angegebenen Stelle auf dem
+     * Bildschirm
      *
      * @param p
      * @return
@@ -157,8 +159,7 @@ public class ScreenRobot {
     }
 
     /**
-     * @param mask
-     *            KeyEvent id
+     * @param mask KeyEvent id
      */
     public static void pressKey(final int mask) {
         robot.keyPress(mask);
@@ -168,10 +169,8 @@ public class ScreenRobot {
     }
 
     /**
-     * @param mask1
-     *            KeyEvent id
-     * @param mask2
-     *            KeyEvent id
+     * @param mask1 KeyEvent id
+     * @param mask2 KeyEvent id
      */
     public static void pressKey(final int mask1, final int mask2) {
         robot.keyPress(mask1);
@@ -182,12 +181,9 @@ public class ScreenRobot {
     }
 
     /**
-     * @param mask1
-     *            KeyEvent id
-     * @param mask2
-     *            KeyEvent id
-     * @param mask3
-     *            KeyEvent id
+     * @param mask1 KeyEvent id
+     * @param mask2 KeyEvent id
+     * @param mask3 KeyEvent id
      */
     public static void pressKey(final int mask1, final int mask2, final int mask3) {
         robot.keyPress(mask1);

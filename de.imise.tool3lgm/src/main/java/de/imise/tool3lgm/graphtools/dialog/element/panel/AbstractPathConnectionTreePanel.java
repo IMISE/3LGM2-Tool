@@ -76,7 +76,7 @@ public abstract class AbstractPathConnectionTreePanel extends AbstractPathConnec
             }
             //set selection in tree
             tree.setSelectionPath(path);
-            LGMTreeNode node = (LGMTreeNode) path.getLastPathComponent();
+            LGMTreeNode<?> node = (LGMTreeNode<?>) path.getLastPathComponent();
             if (node == null) {
                 return null;
             }

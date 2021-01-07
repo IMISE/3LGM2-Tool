@@ -1,8 +1,3 @@
-/*
- * Created on 02.09.2003
- * To change this generated comment go to
- * Window>Preferences>Java>Code Generation>Code and Comments
- */
 package de.imise.util.swing.component;
 
 import java.awt.Component;
@@ -19,16 +14,20 @@ import javax.swing.tree.TreeCellRenderer;
 import javax.swing.tree.TreeModel;
 
 /**
- * Wird maxLines >0 angegeben, dann wird das TextPane nie größer als diese Zeilenanzahl
- * sondern es erscheint ein ScrollPane. Bei maxLines kleiner 1 vergrößert sich das Pane
- * beliebig, ohne dass ein ScrollPane erscheint.
+ * Wird maxLines >0 angegeben, dann wird das TextPane nie größer als diese
+ * Zeilenanzahl sondern es erscheint ein ScrollPane. Bei maxLines kleiner 1
+ * vergrößert sich das Pane beliebig, ohne dass ein ScrollPane erscheint.
+ *
+ * @author AXS (05.04.2019)
+ * @param <T> type of the tree
  */
 public class LimitedHeightScrollTreePane extends JScrollPane {
 
     private static int BORDER = 3;
 
     /**
-     * Maximale Zeilenanzahl, auf die sich die Komponente vergrößert, bevor das ScrollPane angezeigt wird.
+     * Maximale Zeilenanzahl, auf die sich die Komponente vergrößert, bevor das
+     * ScrollPane angezeigt wird.
      */
     private final int maxLines;
 
@@ -79,9 +78,10 @@ public class LimitedHeightScrollTreePane extends JScrollPane {
     /**
      * @param tree
      * @param maxLines
-     * @param renderTreeAsList
-     *            wenn <code>true</code>, zeigt der Baum alle Einträge ohne Einrückung wie in einer Liste an. Bei <code>false</code> bleibt die
-     *            originale Einrückung und Darstellung der Linien erhalten.
+     * @param renderTreeAsList wenn <code>true</code>, zeigt der Baum alle
+     *            Einträge ohne Einrückung wie in einer Liste an. Bei
+     *            <code>false</code> bleibt die originale Einrückung und
+     *            Darstellung der Linien erhalten.
      */
     public LimitedHeightScrollTreePane(final JTree tree, final int maxLines, final boolean renderTreeAsList) {
         this(tree, maxLines, tree.isEditable(), renderTreeAsList);
@@ -91,9 +91,10 @@ public class LimitedHeightScrollTreePane extends JScrollPane {
      * @param tree
      * @param maxLines
      * @param editable
-     * @param renderTreeAsList
-     *            wenn <code>true</code>, zeigt der Baum alle Einträge ohne Einrückung wie in einer Liste an. Bei <code>false</code> bleibt die
-     *            originale Einrückung und Darstellung der Linien erhalten.
+     * @param renderTreeAsList wenn <code>true</code>, zeigt der Baum alle
+     *            Einträge ohne Einrückung wie in einer Liste an. Bei
+     *            <code>false</code> bleibt die originale Einrückung und
+     *            Darstellung der Linien erhalten.
      */
     public LimitedHeightScrollTreePane(final JTree tree, final int maxLines, final boolean editable, final boolean renderTreeAsList) {
         super(tree, ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);

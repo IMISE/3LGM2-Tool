@@ -303,12 +303,13 @@ public class FindReplacePanel extends JPanel implements ActionListener {
     }
 
     /**
-     * Liefert die Action, über die man einen vorher über die Suche gefundenen String ersetzen kann.
+     * Liefert die Action, über die man einen vorher über die Suche gefundenen
+     * String ersetzen kann.
      *
      * @param elemFindEditor
      * @param targetComponent
-     * @param withSearch
-     *            wenn <code>true</code> wird nach dem eretzen erneut gesucht
+     * @param withSearch wenn <code>true</code> wird nach dem eretzen erneut
+     *            gesucht
      * @return
      */
     private Action getReplaceSearchAction(final JTextComponent elemFindEditor, final JTextComponent targetComponent, final boolean withSearch) {
@@ -389,7 +390,8 @@ public class FindReplacePanel extends JPanel implements ActionListener {
     }
 
     /**
-     * Liefert die Action, über die alle Vorkommen des Suchtextes in der targetComponent ersetzt werden.
+     * Liefert die Action, über die alle Vorkommen des Suchtextes in der
+     * targetComponent ersetzt werden.
      *
      * @param elemFindEditor
      * @param targetComponent
@@ -416,7 +418,8 @@ public class FindReplacePanel extends JPanel implements ActionListener {
     }
 
     /**
-     * Sucht das nächste Vorkommen im Zielfeld ab der aktuellen Cursorposition in die eingestellte Richtung
+     * Sucht das nächste Vorkommen im Zielfeld ab der aktuellen Cursorposition
+     * in die eingestellte Richtung
      */
     /**
      * @return <code>true</code> wenn etwas gefunden wurde
@@ -462,7 +465,8 @@ public class FindReplacePanel extends JPanel implements ActionListener {
 
     /*
      * (non-Javadoc)
-     * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
+     * @see
+     * java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
      */
     @Override
     public void actionPerformed(final ActionEvent e) {

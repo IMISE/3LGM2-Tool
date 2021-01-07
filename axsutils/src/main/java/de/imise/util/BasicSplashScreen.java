@@ -25,8 +25,8 @@ import javax.swing.JLabel;
 import de.imise.util.resource.SimpleResourceBundleSource;
 
 /**
- * Extracted general splash screen and about dialog functions from
- * the ToolSplashScreen of hboehme.
+ * Extracted general splash screen and about dialog functions from the
+ * ToolSplashScreen of hboehme.
  *
  * @author AXS (05.10.2020)
  */
@@ -56,48 +56,42 @@ public abstract class BasicSplashScreen {
     protected class SplashScreenLink {
 
         /**
-         * This object identifies the resource key string.
-         * It is the toString() result of the object or
-         * if it is an {@link Enum} then the name() result
-         * of the Enum.
+         * This object identifies the resource key string. It is the toString()
+         * result of the object or if it is an {@link Enum} then the name()
+         * result of the Enum.
          */
         private final Object resKey;
 
         /**
-         * An Object that identifies the link. If it is
-         * <code>null</code> then the resource string
-         * given by the resKey will be interpreted as
-         * the link. This object can be an {@link URI}
-         * or {@link File} or its toString() method can
-         * return a path or uri.
+         * An Object that identifies the link. If it is <code>null</code> then
+         * the resource string given by the resKey will be interpreted as the
+         * link. This object can be an {@link URI} or {@link File} or its
+         * toString() method can return a path or uri.
          */
         private final Object realLink;
 
         /**
-         * X-coordinate at which the link on the image
-         * should be drawn
+         * X-coordinate at which the link on the image should be drawn
          */
         private final int x;
 
         /**
-         * Y-coordinate at which the link on the image
-         * should be drawn
+         * Y-coordinate at which the link on the image should be drawn
          */
         private final int y;
 
         /**
-         * The position an the size of the link on the imgage.
-         * The rectangles x and y coordinates should be the same
-         * as the x and y of this. It's redundant because
-         * {@link FontMetrics#getStringBounds(String, Graphics)}
-         * returns a Rectangle2D.
+         * The position an the size of the link on the imgage. The rectangles x
+         * and y coordinates should be the same as the x and y of this. It's
+         * redundant because
+         * {@link FontMetrics#getStringBounds(String, Graphics)} returns a
+         * Rectangle2D.
          */
         private Rectangle2D sizeAndPosition;
 
         /**
-         * The font the link was first drawn with. You have to
-         * remember it to write with the same font for every
-         * further character.
+         * The font the link was first drawn with. You have to remember it to
+         * write with the same font for every further character.
          */
         private Font font;
 
@@ -258,7 +252,8 @@ public abstract class BasicSplashScreen {
     }
 
     /**
-     * Writes the link in the given color to the graphics object of the imageLabel.
+     * Writes the link in the given color to the graphics object of the
+     * imageLabel.
      *
      * @param link
      * @param color
@@ -268,9 +263,9 @@ public abstract class BasicSplashScreen {
     }
 
     /**
-     * Writes the link in the given color to the graphics object. If
-     * the graphics object is <code>null</code>, then it will be
-     * written to the graphics object of the imageLabel.
+     * Writes the link in the given color to the graphics object. If the
+     * graphics object is <code>null</code>, then it will be written to the
+     * graphics object of the imageLabel.
      *
      * @param g
      * @param link
@@ -331,8 +326,8 @@ public abstract class BasicSplashScreen {
     }
 
     /**
-     * Paints all information to the given Graphics object.
-     * This graphics object is the underlying image.
+     * Paints all information to the given Graphics object. This graphics object
+     * is the underlying image.
      *
      * @param g
      */

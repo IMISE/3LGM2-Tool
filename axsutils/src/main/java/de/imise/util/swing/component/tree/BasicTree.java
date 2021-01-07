@@ -51,8 +51,8 @@ public class BasicTree extends JTree {
     }
 
     /**
-     * Setzt das neue <code>TreeModel</code> und aktualisiert die Variablen <code>treeModel</code>
-     * und <code>root</code>.
+     * Setzt das neue <code>TreeModel</code> und aktualisiert die Variablen
+     * <code>treeModel</code> und <code>root</code>.
      *
      * @see javax.swing.JTree#setModel(javax.swing.tree.TreeModel)
      */
@@ -88,10 +88,12 @@ public class BasicTree extends JTree {
     }
 
     /**
-     * Fügt den übergebenen <code>node2Insert</code> dem <code>parent</code>-Knoten unter, nach den
-     * Regeln, die der Comparator vorgibt.<br>
-     * Vorrausetzung ist, dass alle Kindknoten unter dem Parent schon alphabetisch sortiert sind.
-     * Ist der Knoten bereits unter diesem Parent vorhanden wird er neu einsortiert.
+     * Fügt den übergebenen <code>node2Insert</code> dem
+     * <code>parent</code>-Knoten unter, nach den Regeln, die der Comparator
+     * vorgibt.<br>
+     * Vorrausetzung ist, dass alle Kindknoten unter dem Parent schon
+     * alphabetisch sortiert sind. Ist der Knoten bereits unter diesem Parent
+     * vorhanden wird er neu einsortiert.
      *
      * @param parent
      * @param node2Insert
@@ -101,12 +103,13 @@ public class BasicTree extends JTree {
     }
 
     /**
-     * Fügt den übergebenen <code>node2Insert</code> dem <code>parent</code>-Knoten unter, nach den
-     * Regeln, die der Comparator vorgibt.
-     * Der <code>startIndex</code> gibt an, beim wievielten Knoten mit dem einsortieren erst begonnen
-     * werden soll.<br>
-     * Vorrausetzung ist, dass alle Kindknoten unter dem Parent schon alphabetisch sortiert sind.
-     * Ist der Knoten bereits unter diesem Parent vorhanden wird er neu einsortiert.
+     * Fügt den übergebenen <code>node2Insert</code> dem
+     * <code>parent</code>-Knoten unter, nach den Regeln, die der Comparator
+     * vorgibt. Der <code>startIndex</code> gibt an, beim wievielten Knoten mit
+     * dem einsortieren erst begonnen werden soll.<br>
+     * Vorrausetzung ist, dass alle Kindknoten unter dem Parent schon
+     * alphabetisch sortiert sind. Ist der Knoten bereits unter diesem Parent
+     * vorhanden wird er neu einsortiert.
      *
      * @param parent
      * @param node2Insert
@@ -150,8 +153,8 @@ public class BasicTree extends JTree {
     }
 
     /**
-     * Entfernt den übergebenen Knoten aus dem Baum, baut den Baum neu auf und stellt von den
-     * verbliebenen Knoten die Expansion wieder her.
+     * Entfernt den übergebenen Knoten aus dem Baum, baut den Baum neu auf und
+     * stellt von den verbliebenen Knoten die Expansion wieder her.
      *
      * @param node2Remove
      */
@@ -169,8 +172,8 @@ public class BasicTree extends JTree {
     }
 
     /**
-     * Entfernt alle übergebenen Knoten aus dem Baum, baut den Baum neu auf und stellt von den
-     * verbliebenen Knoten die Expansion wieder her.
+     * Entfernt alle übergebenen Knoten aus dem Baum, baut den Baum neu auf und
+     * stellt von den verbliebenen Knoten die Expansion wieder her.
      *
      * @param nodes2Remove
      */
@@ -204,8 +207,8 @@ public class BasicTree extends JTree {
     }
 
     /**
-     * Setzt den übergebenen Knoten in den Editier-Modus, wenn der <code>TreeCellEditor</code> des
-     * Baumes nicht <code>null</code> ist.
+     * Setzt den übergebenen Knoten in den Editier-Modus, wenn der
+     * <code>TreeCellEditor</code> des Baumes nicht <code>null</code> ist.
      *
      * @param node
      */
@@ -234,8 +237,9 @@ public class BasicTree extends JTree {
         expansionEnum = getExpandedDescendants(new TreePath(treeModel.getRoot()));
     }
     /**
-     * Selektion wieder herstellen. Da sich wenn man die Selektion wieder herstellen möchte eigentlich
-     * immer das <code>TreeModel</code> geändert hat, wird es auch neu geladen.
+     * Selektion wieder herstellen. Da sich wenn man die Selektion wieder
+     * herstellen möchte eigentlich immer das <code>TreeModel</code> geändert
+     * hat, wird es auch neu geladen.
      */
     protected void restoreExpansionState() {
         treeModel.reload();

@@ -24,7 +24,8 @@ import de.imise.util.swing.event.OptionAction;
 /**
  * Util-Klasse zur Erzeugung von {@link JMenu}s.
  * <p>
- * Die häufig vorkommenden entry-<code>Objects</code> werden in allen Methoden wie folgt abgebildet:
+ * Die häufig vorkommenden entry-<code>Objects</code> werden in allen Methoden
+ * wie folgt abgebildet:
  * <table border="1">
  * <tr>
  * <th>entry-Object</th>
@@ -54,8 +55,9 @@ import de.imise.util.swing.event.OptionAction;
  * <tr>
  * <td>{@link NamedObjectContainer}</td>
  * <td>{@link JMenu}</td>
- * <td>Erzeugt ein Untermenu mit dem spezifizierten Namen({@link NamedObjectContainer#toString()}) und den
- * spezifizierten Einträgen ({@link NamedObjectContainer#getObject()})</td>
+ * <td>Erzeugt ein Untermenu mit dem spezifizierten
+ * Namen({@link NamedObjectContainer#toString()}) und den spezifizierten
+ * Einträgen ({@link NamedObjectContainer#getObject()})</td>
  * </tr>
  * </table>
  *
@@ -64,30 +66,33 @@ import de.imise.util.swing.event.OptionAction;
 public class MenuCreator {
 
     /**
-     * Erzeugt eine Array von Menu-Einträgen entsprechend der spezifizierten Werte.
+     * Erzeugt eine Array von Menu-Einträgen entsprechend der spezifizierten
+     * Werte.
      * <p>
-     * Diese Methode macht das gleiche wie {@link #createMenuEntries(Object[], boolean)}. Der Unterschied ist nur, dass
-     * hier eine einfachere Eingabe der entry-<code>Object</code>s möglich ist.
+     * Diese Methode macht das gleiche wie
+     * {@link #createMenuEntries(Object[], boolean)}. Der Unterschied ist nur,
+     * dass hier eine einfachere Eingabe der entry-<code>Object</code>s möglich
+     * ist.
      *
-     * @param setMnemonics
-     *            <code>true</code>: setze Mnemonics für die Einträge wenn möglich <br>
+     * @param setMnemonics <code>true</code>: setze Mnemonics für die Einträge
+     *            wenn möglich <br>
      *            <code>false</code>: es werden keine Mnemonics gesetzt.
-     * @param menuEntries
-     *            siehe Klassen-Doku
+     * @param menuEntries siehe Klassen-Doku
      */
     public static final Component[] createMenuEntries(final boolean setMnemonics, final Object... menuEntries) {
         return createMenuEntries(menuEntries, setMnemonics);
     }
 
     /**
-     * Erzeugt eine Array von Menu-Einträgen entsprechend der spezifizierten Werte.
+     * Erzeugt eine Array von Menu-Einträgen entsprechend der spezifizierten
+     * Werte.
      * <p>
-     * Diese Methode tut das gleiche wie {@link #createMenuEntries(boolean, Object...)}
+     * Diese Methode tut das gleiche wie
+     * {@link #createMenuEntries(boolean, Object...)}
      *
-     * @param menuEntries
-     *            siehe Klassen-Doku
-     * @param setMnemonics
-     *            <code>true</code>: setze Mnemonics für die Einträge wenn möglich <br>
+     * @param menuEntries siehe Klassen-Doku
+     * @param setMnemonics <code>true</code>: setze Mnemonics für die Einträge
+     *            wenn möglich <br>
      *            <code>false</code>: es werden keine Mnemonics gesetzt.
      */
     public static final Component[] createMenuEntries(final Object[] menuEntries, final boolean setMnemonics) {
@@ -95,14 +100,15 @@ public class MenuCreator {
     }
 
     /**
-     * Erzeugt eine Array von Menu-Einträgen entsprechend der spezifizierten Werte.
+     * Erzeugt eine Array von Menu-Einträgen entsprechend der spezifizierten
+     * Werte.
      * <p>
-     * Diese Methode tut das gleiche wie {@link #createMenuEntries(boolean, Object...)}
+     * Diese Methode tut das gleiche wie
+     * {@link #createMenuEntries(boolean, Object...)}
      *
-     * @param menuEntries
-     *            siehe Klassen-Doku
-     * @param setMnemonics
-     *            <code>true</code>: setze Mnemonics für die Einträge wenn möglich <br>
+     * @param menuEntries siehe Klassen-Doku
+     * @param setMnemonics <code>true</code>: setze Mnemonics für die Einträge
+     *            wenn möglich <br>
      *            <code>false</code>: es werden keine Mnemonics gesetzt.
      */
     public static final Component[] createMenuEntries(final Iterable<?> menuEntries, final boolean setMnemonics) {
@@ -139,10 +145,10 @@ public class MenuCreator {
     }
 
     /**
-     * Erzeugt einen einzelnen Eintrag für ein {@link JMenu} entsprechend des spezifizierten entry-<code>Object</code>s.
+     * Erzeugt einen einzelnen Eintrag für ein {@link JMenu} entsprechend des
+     * spezifizierten entry-<code>Object</code>s.
      *
-     * @param entry
-     *            siehe Klassen-Doku
+     * @param entry siehe Klassen-Doku
      */
     public static final Component createMenuEntry(final Object entry) {
         Component item = null;
@@ -178,7 +184,8 @@ public class MenuCreator {
     }
 
     /**
-     * Erzeugt ein {@link JCheckBoxMenuItem} mit der spezifizierten {@link Action}.
+     * Erzeugt ein {@link JCheckBoxMenuItem} mit der spezifizierten
+     * {@link Action}.
      *
      * @param a
      */
@@ -186,7 +193,10 @@ public class MenuCreator {
         return new JCheckBoxMenuItem(a);
     }
 
-    /** Erzeugt ein Array von {@link JCheckBoxMenuItem} mit der übergebenen {@link Action} */
+    /**
+     * Erzeugt ein Array von {@link JCheckBoxMenuItem} mit der übergebenen
+     * {@link Action}
+     */
     public static JCheckBoxMenuItem[] createCheckBoxItems(final Action... actions) {
         JCheckBoxMenuItem[] items = new JCheckBoxMenuItem[actions.length];
         for (int i = 0; i < items.length; i++) {
@@ -196,7 +206,8 @@ public class MenuCreator {
     }
 
     /**
-     * Erzeugt ein {@link JRadioButtonMenuItem} mit der spezifizierten {@link Action}.
+     * Erzeugt ein {@link JRadioButtonMenuItem} mit der spezifizierten
+     * {@link Action}.
      *
      * @param a
      */
@@ -205,27 +216,25 @@ public class MenuCreator {
     }
 
     /**
-     * Erzeugt ein {@link JMenu} mit dem entsprechenden Titel und den entsprechendnen Einträgen.
-     * Für alle Einträge, bei denen das möglich ist, werden Mnemonics gesetzt.
+     * Erzeugt ein {@link JMenu} mit dem entsprechenden Titel und den
+     * entsprechendnen Einträgen. Für alle Einträge, bei denen das möglich ist,
+     * werden Mnemonics gesetzt.
      *
-     * @param title
-     *            Titel des Menus
-     * @param menuEntries
-     *            siehe Klassen-Doku
+     * @param title Titel des Menus
+     * @param menuEntries siehe Klassen-Doku
      */
     public static final JMenu createMenu(final String title, final Object... menuEntries) {
         return createMenu(title, menuEntries, true);
     }
 
     /**
-     * Erzeugt ein {@link JMenu} mit dem entsprechenden Titel und den entsprechendnen Einträgen.
+     * Erzeugt ein {@link JMenu} mit dem entsprechenden Titel und den
+     * entsprechendnen Einträgen.
      *
-     * @param title
-     *            Titel des Menus
-     * @param menuEntries
-     *            siehe Klassen-Doku
-     * @param setMnemonics
-     *            <code>true</code>: setze Mnemonics für die Einträge wenn möglich <br>
+     * @param title Titel des Menus
+     * @param menuEntries siehe Klassen-Doku
+     * @param setMnemonics <code>true</code>: setze Mnemonics für die Einträge
+     *            wenn möglich <br>
      *            <code>false</code>: es werden keine Mnemonics gesetzt.
      */
     public static final JMenu createMenu(final String title, final Object[] menuEntries, final boolean setMnemonics) {
@@ -235,14 +244,13 @@ public class MenuCreator {
     }
 
     /**
-     * Erzeugt ein {@link JMenu} mit dem entsprechenden Titel und den entsprechendnen Einträgen.
+     * Erzeugt ein {@link JMenu} mit dem entsprechenden Titel und den
+     * entsprechendnen Einträgen.
      *
-     * @param title
-     *            Titel des Menus
-     * @param menuEntries
-     *            siehe Klassen-Doku
-     * @param setMnemonics
-     *            <code>true</code>: setze Mnemonics für die Einträge wenn möglich <br>
+     * @param title Titel des Menus
+     * @param menuEntries siehe Klassen-Doku
+     * @param setMnemonics <code>true</code>: setze Mnemonics für die Einträge
+     *            wenn möglich <br>
      *            <code>false</code>: es werden keine Mnemonics gesetzt.
      */
     public static final JMenu createMenu(final String title, final boolean setMnemonics, final Object... menuEntries) {
@@ -250,14 +258,13 @@ public class MenuCreator {
     }
 
     /**
-     * Erzeugt ein {@link JPopupMenu} mit dem entsprechenden Titel und den entsprechendnen Einträgen.
+     * Erzeugt ein {@link JPopupMenu} mit dem entsprechenden Titel und den
+     * entsprechendnen Einträgen.
      *
-     * @param title
-     *            Titel des Menus
-     * @param menuEntries
-     *            siehe Klassen-Doku
-     * @param setMnemonics
-     *            <code>true</code>: setze Mnemonics für die Einträge wenn möglich <br>
+     * @param title Titel des Menus
+     * @param menuEntries siehe Klassen-Doku
+     * @param setMnemonics <code>true</code>: setze Mnemonics für die Einträge
+     *            wenn möglich <br>
      *            <code>false</code>: es werden keine Mnemonics gesetzt.
      */
     public static final JPopupMenu createPopupMenu(final String title, final boolean setMnemonics, final Object... menuEntries) {
@@ -267,14 +274,13 @@ public class MenuCreator {
     }
 
     /**
-     * Erzeugt ein {@link JMenu} mit dem entsprechenden Titel und den entsprechendnen Einträgen.
+     * Erzeugt ein {@link JMenu} mit dem entsprechenden Titel und den
+     * entsprechendnen Einträgen.
      *
-     * @param title
-     *            Titel des Menus
-     * @param menuEntries
-     *            siehe Klassen-Doku
-     * @param setMnemonics
-     *            <code>true</code>: setze Mnemonics für die Einträge wenn möglich <br>
+     * @param title Titel des Menus
+     * @param menuEntries siehe Klassen-Doku
+     * @param setMnemonics <code>true</code>: setze Mnemonics für die Einträge
+     *            wenn möglich <br>
      *            <code>false</code>: es werden keine Mnemonics gesetzt.
      */
     public static final JPopupMenu createPopupMenu(final String title, final Object[] menuEntries, final boolean setMnemonics) {
@@ -282,12 +288,12 @@ public class MenuCreator {
     }
 
     /**
-     * Setzt für jeden der übergebenen Menü-Einträge, die Instanzen von <code>AbstractButton</code> sind, ein Mnemonic,
-     * wenn noch keins gesetzt wurde. Es wird immer der erste noch freie Buchstabe des Textes des Buttons als Mnemonic
-     * gesetzt.
+     * Setzt für jeden der übergebenen Menü-Einträge, die Instanzen von
+     * <code>AbstractButton</code> sind, ein Mnemonic, wenn noch keins gesetzt
+     * wurde. Es wird immer der erste noch freie Buchstabe des Textes des
+     * Buttons als Mnemonic gesetzt.
      *
-     * @param menuEntries
-     *            siehe Klassen-Doku
+     * @param menuEntries siehe Klassen-Doku
      */
     public final static void setMnemonics(final Component... menuEntries) {
         for (int i = 0; i < menuEntries.length; i++) {
@@ -335,12 +341,9 @@ public class MenuCreator {
     /**
      * Fügt alle Einträge ab der spezifizierten Position in das Menu ein.
      *
-     * @param parent
-     *            Menu, in das die Einträge eingefügt werden sollen
-     * @param pos
-     *            Position, ab der eingefügt werden soll
-     * @param children
-     *            Einträge, die in das Menu eingefügt werden sollen
+     * @param parent Menu, in das die Einträge eingefügt werden sollen
+     * @param pos Position, ab der eingefügt werden soll
+     * @param children Einträge, die in das Menu eingefügt werden sollen
      */
     public static void addAll(final JMenu parent, int pos, final Component... children) {
         for (Component child : children) {
@@ -351,10 +354,8 @@ public class MenuCreator {
     /**
      * Fügt alle Einträge an das Menu an.
      *
-     * @param parent
-     *            Menu, in das die Einträge eingefügt werden sollen
-     * @param children
-     *            Einträge, die in das Menu eingefügt werden sollen
+     * @param parent Menu, in das die Einträge eingefügt werden sollen
+     * @param children Einträge, die in das Menu eingefügt werden sollen
      */
     public static void addAll(final JMenu parent, final Component... children) {
         for (Component child : children) {
@@ -365,12 +366,9 @@ public class MenuCreator {
     /**
      * Fügt alle Einträge ab der spezifizierten Position in das Menu ein.
      *
-     * @param parent
-     *            Menu, in das die Einträge eingefügt werden sollen
-     * @param children
-     *            Einträge, die in das Menu eingefügt werden sollen
-     * @param pos
-     *            Position, ab der eingefügt werden soll
+     * @param parent Menu, in das die Einträge eingefügt werden sollen
+     * @param children Einträge, die in das Menu eingefügt werden sollen
+     * @param pos Position, ab der eingefügt werden soll
      */
     public static void addAll(final JPopupMenu parent, final Component[] children, int pos) {
         for (Component child : children) {
@@ -381,10 +379,8 @@ public class MenuCreator {
     /**
      * Fügt alle Einträge an das Menu an.
      *
-     * @param parent
-     *            Menu, in das die Einträge eingefügt werden sollen
-     * @param children
-     *            Einträge, die in das Menu eingefügt werden sollen
+     * @param parent Menu, in das die Einträge eingefügt werden sollen
+     * @param children Einträge, die in das Menu eingefügt werden sollen
      */
     public static void addAll(final JPopupMenu parent, final Component[] children) {
         for (Component child : children) {
@@ -422,24 +418,24 @@ public class MenuCreator {
     }
 
     /**
-     * Setzt die Attribute <code>isSelected</code> und <code>isEnabled</code> aller Einträge entsprechend der jeweiligen
-     * {@link Action}.
+     * Setzt die Attribute <code>isSelected</code> und <code>isEnabled</code>
+     * aller Einträge entsprechend der jeweiligen {@link Action}.
      */
     public static void checkEnabledAndSelected(final JPopupMenu menu) {
         checkEnabledAndSelected(getAllItems(menu));
     }
 
     /**
-     * Setzt die Attribute <code>isSelected</code> und <code>isEnabled</code> aller Einträge entsprechend der jeweiligen
-     * {@link Action}.
+     * Setzt die Attribute <code>isSelected</code> und <code>isEnabled</code>
+     * aller Einträge entsprechend der jeweiligen {@link Action}.
      */
     public static void checkEnabledAndSelected(final JMenu menu) {
         checkEnabledAndSelected(getAllItems(menu));
     }
 
     /**
-     * Setzt die Attribute <code>isSelected</code> und <code>isEnabled</code> aller Einträge entsprechend der jeweiligen
-     * {@link Action}.
+     * Setzt die Attribute <code>isSelected</code> und <code>isEnabled</code>
+     * aller Einträge entsprechend der jeweiligen {@link Action}.
      */
     private static void checkEnabledAndSelected(final JMenuItem[] items) {
         for (JMenuItem item : items) {

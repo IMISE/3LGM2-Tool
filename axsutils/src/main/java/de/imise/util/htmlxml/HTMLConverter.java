@@ -35,11 +35,12 @@ public class HTMLConverter {
     static final CharEncoder decimalHtmlEncoder = new CharEncoder("&#", ";", 10);
 
     /**
-     * Liefert <code>true</code>, wenn ein übergebenes Zeichen in HTML kodiert werden soll.
+     * Liefert <code>true</code>, wenn ein übergebenes Zeichen in HTML kodiert
+     * werden soll.
      *
      * @param ch
-     * @param encodeWhitespaces if <code>true</code> whitespaces will return <code>true</code>
-     *            otherwise false
+     * @param encodeWhitespaces if <code>true</code> whitespaces will return
+     *            <code>true</code> otherwise false
      * @return
      */
     private static boolean encode(final char ch, final boolean encodeWhitespaces) {
@@ -60,13 +61,14 @@ public class HTMLConverter {
     }
 
     /**
-     * Wandelt Sonderzeichen im übergebenen String HTML-konform um und hängt den Ergebnis-String
-     * an den übergebenen StringBuilder an.
+     * Wandelt Sonderzeichen im übergebenen String HTML-konform um und hängt den
+     * Ergebnis-String an den übergebenen StringBuilder an.
      *
      * @param sb
      * @param s
-     * @param encodeWhitespaces if <code>true</code> whitespaces will also be encoded html conform,
-     *            if <code>false</code> the original whitepace character will be appended.
+     * @param encodeWhitespaces if <code>true</code> whitespaces will also be
+     *            encoded html conform, if <code>false</code> the original
+     *            whitepace character will be appended.
      * @return
      */
     public static final StringBuilder appendDecimalEncodedHTMLString(final StringBuilder sb, final String s, final boolean encodeWhitespaces) {
@@ -121,11 +123,13 @@ public class HTMLConverter {
     }
 
     /**
-     * Wandelt Sonderzeichen im übergebenen String HTML-konform um und gibt den String zurück.
+     * Wandelt Sonderzeichen im übergebenen String HTML-konform um und gibt den
+     * String zurück.
      *
      * @param s
-     * @param encodeWhitespaces if <code>true</code> whitespaces will also be encoded html conform,
-     *            if <code>false</code> the original whitepace character will be appended.
+     * @param encodeWhitespaces if <code>true</code> whitespaces will also be
+     *            encoded html conform, if <code>false</code> the original
+     *            whitepace character will be appended.
      * @return
      */
     public static final String getDecimalEncodedHTMLString(final String s, final boolean encodeWhitespaces) {
@@ -135,7 +139,8 @@ public class HTMLConverter {
     }
 
     /**
-     * Hängt den HTML-Farbcode der uebergebenen Farbe in der Form "#rrggbb" an den übergebenen StringBuilder an.
+     * Hängt den HTML-Farbcode der uebergebenen Farbe in der Form "#rrggbb" an
+     * den übergebenen StringBuilder an.
      *
      * @param sb
      * @param col
@@ -146,7 +151,8 @@ public class HTMLConverter {
     }
 
     /**
-     * Hängt den HTML-Farbcode der uebergebenen Farbe in der Form "#rrggbb" an den übergebenen StringBuilder an.
+     * Hängt den HTML-Farbcode der uebergebenen Farbe in der Form "#rrggbb" an
+     * den übergebenen StringBuilder an.
      *
      * @param sb
      * @param col

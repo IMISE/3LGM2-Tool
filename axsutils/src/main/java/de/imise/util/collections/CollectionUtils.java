@@ -24,7 +24,8 @@ import com.google.common.collect.SetMultimap;
 import de.imise.util.Sys;
 
 /**
- * Stellt Funktionen für Objektsammlungen bereit, die <code>Arrays</code> und <code>Collections</code> nicht bieten.
+ * Stellt Funktionen für Objektsammlungen bereit, die <code>Arrays</code> und
+ * <code>Collections</code> nicht bieten.
  *
  * @author AXS
  * @version 0.0.7
@@ -32,8 +33,9 @@ import de.imise.util.Sys;
 public abstract class CollectionUtils {
 
     /**
-     * Liefert einen Namen zurück, der aus dem Prefix und einem mit Leerzeichen abgetrennten
-     * Index ab 1 besteht. Der erste Name dieser Form, der nicht in der übergebene <code>Collection</code> vorkommt, wird zurückgegeben.
+     * Liefert einen Namen zurück, der aus dem Prefix und einem mit Leerzeichen
+     * abgetrennten Index ab 1 besteht. Der erste Name dieser Form, der nicht in
+     * der übergebene <code>Collection</code> vorkommt, wird zurückgegeben.
      *
      * @param prefix
      * @param alreadyExistingNames
@@ -57,9 +59,9 @@ public abstract class CollectionUtils {
     }
 
     /**
-     * Liefert einen Namen zurück, der aus dem Prefix und einem Index ab 1 und dem übergebenen Postfix
-     * besteht. Der erste Name dieser Form, der nicht in der übergebene <code>Collection</code> vorkommt,
-     * wird zurückgegeben.
+     * Liefert einen Namen zurück, der aus dem Prefix und einem Index ab 1 und
+     * dem übergebenen Postfix besteht. Der erste Name dieser Form, der nicht in
+     * der übergebene <code>Collection</code> vorkommt, wird zurückgegeben.
      *
      * @param prefix
      * @param postfix
@@ -71,9 +73,9 @@ public abstract class CollectionUtils {
     }
 
     /**
-     * Liefert einen Namen zurück, der aus dem Prefix und einem Index ab 1 und dem übergebenen Postfix
-     * besteht. Der erste Name dieser Form, der nicht in der übergebene <code>Collection</code> vorkommt,
-     * wird zurückgegeben.
+     * Liefert einen Namen zurück, der aus dem Prefix und einem Index ab 1 und
+     * dem übergebenen Postfix besteht. Der erste Name dieser Form, der nicht in
+     * der übergebene <code>Collection</code> vorkommt, wird zurückgegeben.
      *
      * @param prefix
      * @param postfix
@@ -106,8 +108,9 @@ public abstract class CollectionUtils {
     }
 
     /**
-     * Liefert <code>true</code>, wenn ein Objekt in der Collection alreadyExistingNames über seine toString()-Funktion den
-     * übergebenen Namen zurück liefert.
+     * Liefert <code>true</code>, wenn ein Objekt in der Collection
+     * alreadyExistingNames über seine toString()-Funktion den übergebenen Namen
+     * zurück liefert.
      *
      * @param name
      * @param alreadyExistingNames
@@ -137,8 +140,9 @@ public abstract class CollectionUtils {
     }
 
     /**
-     * Liefert eine Liste der SimpleClassNames der übergebenen Objekte. Bei übergebenen Objekten, die selbst
-     * Klassen sind, wird der Name dieser Klasse zurück gegeben.
+     * Liefert eine Liste der SimpleClassNames der übergebenen Objekte. Bei
+     * übergebenen Objekten, die selbst Klassen sind, wird der Name dieser
+     * Klasse zurück gegeben.
      *
      * @param elements
      * @return
@@ -153,13 +157,11 @@ public abstract class CollectionUtils {
     }
 
     /**
-     * Fügt zwei Arrays zu einem zusammen. Zuerst kommen die Elemente
-     * des zuerst übergebenen Arrays, dann die des zweiten.
+     * Fügt zwei Arrays zu einem zusammen. Zuerst kommen die Elemente des zuerst
+     * übergebenen Arrays, dann die des zweiten.
      *
-     * @param array1
-     *            erstes Array
-     * @param array2
-     *            zweites Array
+     * @param array1 erstes Array
+     * @param array2 zweites Array
      * @return
      */
     @SuppressWarnings("unchecked")
@@ -171,13 +173,11 @@ public abstract class CollectionUtils {
     }
 
     /**
-     * Fügt zwei Class-Arrays zu einem zusammen. Zuerst kommen die Elemente
-     * des zuerst übergebenen Arrays, dann die des zweiten.
+     * Fügt zwei Class-Arrays zu einem zusammen. Zuerst kommen die Elemente des
+     * zuerst übergebenen Arrays, dann die des zweiten.
      *
-     * @param array1
-     *            erstes Array
-     * @param array2
-     *            zweites Array
+     * @param array1 erstes Array
+     * @param array2 zweites Array
      * @return
      */
     @SuppressWarnings("unchecked")
@@ -189,8 +189,9 @@ public abstract class CollectionUtils {
     }
 
     /**
-     * Fügt eine beliebige Anzahl von Arrays mti gleichen Typen zusammen.
-     * Diese Funktion ist die abgewandelte Variante aus org.apache.commons.lang3.ArrayUtils.
+     * Fügt eine beliebige Anzahl von Arrays mti gleichen Typen zusammen. Diese
+     * Funktion ist die abgewandelte Variante aus
+     * org.apache.commons.lang3.ArrayUtils.
      *
      * @param arrays
      * @return
@@ -212,9 +213,9 @@ public abstract class CollectionUtils {
             } catch (final ArrayStoreException ase) {
                 // Check if problem was due to incompatible types
                 /*
-                 * We do this here, rather than before the copy because:
-                 * - it would be a wasted check most of the time
-                 * - safer, in case check turns out to be too strict
+                 * We do this here, rather than before the copy because: - it
+                 * would be a wasted check most of the time - safer, in case
+                 * check turns out to be too strict
                  */
                 final Class<?> type2 = arrays[i].getClass().getComponentType();
                 if (!type1.isAssignableFrom(type2)) {
@@ -256,8 +257,8 @@ public abstract class CollectionUtils {
     }
 
     /**
-     * Liefert eine <code>Collection</code> aller Elemente deren Klassenname <b>genau</b> dem
-     * übergebenen entspricht.
+     * Liefert eine <code>Collection</code> aller Elemente deren Klassenname
+     * <b>genau</b> dem übergebenen entspricht.
      *
      * @param source
      * @param clazz
@@ -269,12 +270,13 @@ public abstract class CollectionUtils {
     }
 
     /**
-     * Liefert eine <code>Collection</code> aller Elemente die Insatnz einer Klasse des
-     * übergebenen Namens sind.
+     * Liefert eine <code>Collection</code> aller Elemente die Insatnz einer
+     * Klasse des übergebenen Namens sind.
      *
      * @param source
      * @param clazz
-     * @return <code>Collection</code> aller Elemente, die Instanz der angegebenen Klasse sind.
+     * @return <code>Collection</code> aller Elemente, die Instanz der
+     *         angegebenen Klasse sind.
      * @see #getAllElementsOf(Collection, Class, boolean)
      */
     public static final <T> List<T> getAllInstancesOf(final Collection<?> source, final Class<T> clazz) {
@@ -282,14 +284,13 @@ public abstract class CollectionUtils {
     }
 
     /**
-     * Gibt wieder, ob die spezifizierte Collection Instanzen der spezifizierten Klasse enthält.
+     * Gibt wieder, ob die spezifizierte Collection Instanzen der spezifizierten
+     * Klasse enthält.
      *
-     * @param source
-     *            zu durchsuchende Collection
-     * @param clazz
-     *            gesuchte Klasse
-     * @param includeSubClasses
-     *            <code>true</code>: auch Unterklassen werden bei der Suche einbezogen
+     * @param source zu durchsuchende Collection
+     * @param clazz gesuchte Klasse
+     * @param includeSubClasses <code>true</code>: auch Unterklassen werden bei
+     *            der Suche einbezogen
      * @return
      */
     public static boolean containsInstancesOf(final Collection<?> source, final Class<?> clazz, final boolean includeSubClasses) {
@@ -308,14 +309,13 @@ public abstract class CollectionUtils {
     }
 
     /**
-     * Gibt wieder, ob die spezifizierte Collection ausschließlich Instanzen der spezifizierten Klasse enthält.
+     * Gibt wieder, ob die spezifizierte Collection ausschließlich Instanzen der
+     * spezifizierten Klasse enthält.
      *
-     * @param source
-     *            zu durchsuchende Collection
-     * @param clazz
-     *            gesuchte Klasse
-     * @param includeSubClasses
-     *            <code>true</code>: auch Unterklassen werden bei der Suche einbezogen
+     * @param source zu durchsuchende Collection
+     * @param clazz gesuchte Klasse
+     * @param includeSubClasses <code>true</code>: auch Unterklassen werden bei
+     *            der Suche einbezogen
      * @return
      */
     public static boolean containsOnlyInstancesOf(final Collection<?> source, final Class<?> clazz, final boolean includeSubClasses) {
@@ -334,14 +334,13 @@ public abstract class CollectionUtils {
     }
 
     /**
-     * Gibt wieder, ob die spezifizierte Collection ausschließlich Instanzen der spezifizierten Klassen enthält.
+     * Gibt wieder, ob die spezifizierte Collection ausschließlich Instanzen der
+     * spezifizierten Klassen enthält.
      *
-     * @param source
-     *            zu durchsuchende Collection
-     * @param includeSubClasses
-     *            <code>true</code>: auch Unterklassen werden bei der Suche einbezogen
-     * @param classes
-     *            gesuchte Klassen
+     * @param source zu durchsuchende Collection
+     * @param includeSubClasses <code>true</code>: auch Unterklassen werden bei
+     *            der Suche einbezogen
+     * @param classes gesuchte Klassen
      * @return
      */
     public static boolean containsOnlyInstancesOf(final Collection<?> source, final boolean includeSubClasses, final Class<?>... classes) {
@@ -370,16 +369,18 @@ public abstract class CollectionUtils {
     }
 
     /**
-     * Liefert alle Elemente der angegebenen Klasse, die in der Source-<code>Collection</code> enthalten
-     * sind.<br>
-     * Wird strict == <code>true</code> uebergeben, dann sind die zurueckgegebenen Elemente
-     * unmittelbar Instanzen der Klasse, bei <code>false</code> sind sie Instanzen der Klasse
-     * oder Instanzen von abgeleiteten Klassen.
+     * Liefert alle Elemente der angegebenen Klasse, die in der
+     * Source-<code>Collection</code> enthalten sind.<br>
+     * Wird strict == <code>true</code> uebergeben, dann sind die
+     * zurueckgegebenen Elemente unmittelbar Instanzen der Klasse, bei
+     * <code>false</code> sind sie Instanzen der Klasse oder Instanzen von
+     * abgeleiteten Klassen.
      *
      * @param source
      * @param clazz
      * @param strict
-     * @return <code>Collection</code> aller Elemente oder aller Instanzen der angegebenen Klasse
+     * @return <code>Collection</code> aller Elemente oder aller Instanzen der
+     *         angegebenen Klasse
      */
     @SuppressWarnings("unchecked")
     private static final <T> List<T> getAllElementsOf(final Collection<?> source, final Class<T> clazz, final boolean strict) {
@@ -404,7 +405,8 @@ public abstract class CollectionUtils {
     }
 
     /**
-     * Liefert eine Immutable-Variante des übergebenen Sets. Ist es bereits immutable, dann kommt das Set selbst zurück.
+     * Liefert eine Immutable-Variante des übergebenen Sets. Ist es bereits
+     * immutable, dann kommt das Set selbst zurück.
      *
      * @param original
      * @return
@@ -417,7 +419,8 @@ public abstract class CollectionUtils {
     }
 
     /**
-     * Liefert eine Immutable-Variante der übergebenen List. Ist es bereits immutable, dann kommt die List selbst zurück.
+     * Liefert eine Immutable-Variante der übergebenen List. Ist es bereits
+     * immutable, dann kommt die List selbst zurück.
      *
      * @param original
      * @return
@@ -427,7 +430,8 @@ public abstract class CollectionUtils {
     }
 
     /**
-     * Liefert eine Immutable-Variante des übergebenen Sets. Ist es bereits immutable, dann kommt das Set selbst zurück.
+     * Liefert eine Immutable-Variante des übergebenen Sets. Ist es bereits
+     * immutable, dann kommt das Set selbst zurück.
      *
      * @param original
      * @return
@@ -454,7 +458,8 @@ public abstract class CollectionUtils {
     }
 
     /**
-     * Liefert eine Immutable-Variante der übergebenen Map. Ist es bereits immutable, dann kommt die Map selbst zurück.
+     * Liefert eine Immutable-Variante der übergebenen Map. Ist es bereits
+     * immutable, dann kommt die Map selbst zurück.
      *
      * @param original
      * @return
@@ -467,7 +472,8 @@ public abstract class CollectionUtils {
     }
 
     /**
-     * Liefert eine Immutable-Variante der übergebenen ListMultimap. Ist es bereits immutable, dann kommt die ListMultimap selbst zurück.
+     * Liefert eine Immutable-Variante der übergebenen ListMultimap. Ist es
+     * bereits immutable, dann kommt die ListMultimap selbst zurück.
      *
      * @param original
      * @return
@@ -480,7 +486,8 @@ public abstract class CollectionUtils {
     }
 
     /**
-     * Liefert eine Immutable-Variante der übergebenen SetMultimap. Ist es bereits immutable, dann kommt die SetMultimap selbst zurück.
+     * Liefert eine Immutable-Variante der übergebenen SetMultimap. Ist es
+     * bereits immutable, dann kommt die SetMultimap selbst zurück.
      *
      * @param original
      * @return
@@ -493,7 +500,8 @@ public abstract class CollectionUtils {
     }
 
     /**
-     * Liefert eine Immutable-Variante der übergebenen SetMultimap. Ist es bereits immutable, dann kommt die SetMultimap selbst zurück.
+     * Liefert eine Immutable-Variante der übergebenen SetMultimap. Ist es
+     * bereits immutable, dann kommt die SetMultimap selbst zurück.
      *
      * @param original
      * @return
@@ -506,8 +514,8 @@ public abstract class CollectionUtils {
     }
 
     /**
-     * Gibt eine neue <code>List</code> zurück, die jedes Element aus der übergebenen Liste
-     * genau einmal enthält.
+     * Gibt eine neue <code>List</code> zurück, die jedes Element aus der
+     * übergebenen Liste genau einmal enthält.
      *
      * @param list
      */
@@ -523,7 +531,8 @@ public abstract class CollectionUtils {
     }
 
     /**
-     * Löscht aus der übergebenen Liste jedes mehrfache Vorkommen des selben Elementes.
+     * Löscht aus der übergebenen Liste jedes mehrfache Vorkommen des selben
+     * Elementes.
      *
      * @param list
      */
@@ -539,13 +548,12 @@ public abstract class CollectionUtils {
     }
 
     /**
-     * Fügt der Sammlung <code>col1</code> alle Elemente aus <code>col2</code> einmal hinzu, die
-     * bisher nicht in <code>col1</code> vorkamen.
+     * Fügt der Sammlung <code>col1</code> alle Elemente aus <code>col2</code>
+     * einmal hinzu, die bisher nicht in <code>col1</code> vorkamen.
      *
      * @param col1
      * @param col2
-     * @return
-     *         col1
+     * @return col1
      */
     public static final <T> Collection<T> addNonMultiples(final Collection<T> col1, final Collection<T> col2) {
         for (Iterator<T> it = col2.iterator(); it.hasNext();) {
@@ -558,15 +566,19 @@ public abstract class CollectionUtils {
     }
 
     /**
-     * Wandelt <code>rows</code> in ein <code>Object[][]</code> um, falls es sich um eine gültige <code>Collection</code> handelt.<br>
+     * Wandelt <code>rows</code> in ein <code>Object[][]</code> um, falls es
+     * sich um eine gültige <code>Collection</code> handelt.<br>
      * Sonst wird <code>null</code> zurückgegeben.
      * <p>
-     * <code>rows</code> ist eine gültige <code>Collection</code>, falls ihre Elemente selbst wieder vom Typ {@link Collection} sind und alle die
+     * <code>rows</code> ist eine gültige <code>Collection</code>, falls ihre
+     * Elemente selbst wieder vom Typ {@link Collection} sind und alle die
      * gleiche Elementanzahl besitzen.<br>
-     * Das heißt, dass <code>rows</code> eine <code>Collection</code> aller Zeilen sein muss. Außerdem darf <code>rows</code> nicht <code>null</code>
+     * Das heißt, dass <code>rows</code> eine <code>Collection</code> aller
+     * Zeilen sein muss. Außerdem darf <code>rows</code> nicht <code>null</code>
      * sein.
      * <p>
-     * Diese Methode bildet dabei die Zeilen und Spalten von <code>rows</code> identisch auf die Zeilen und Spalten des zurückgegebenen Arrays ab.
+     * Diese Methode bildet dabei die Zeilen und Spalten von <code>rows</code>
+     * identisch auf die Zeilen und Spalten des zurückgegebenen Arrays ab.
      *
      * @throws ArrayIndexOutOfBoundsException
      * @throws IllegalArgumentException
@@ -608,9 +620,11 @@ public abstract class CollectionUtils {
     }
 
     /**
-     * Wandelt das <code>objectArray</code> in ein <code>String[][]</code> um.<br>
-     * Dabei wird auf jedes {@link Object} aus <code>objectArray</code> {@link Object#toString()} angewendet und das Resultat an die entsprechende
-     * Stelle im <code>String[][]</code> geschrieben.
+     * Wandelt das <code>objectArray</code> in ein <code>String[][]</code>
+     * um.<br>
+     * Dabei wird auf jedes {@link Object} aus <code>objectArray</code>
+     * {@link Object#toString()} angewendet und das Resultat an die
+     * entsprechende Stelle im <code>String[][]</code> geschrieben.
      * <p>
      * Ist <code>objectArray=null</code> wird <code>null</code> zurückgegeben.
      *
@@ -637,8 +651,9 @@ public abstract class CollectionUtils {
 
     /**
      * Wandelt das <code>objectArray</code> in ein <code>String[]</code> um.<br>
-     * Dabei wird auf jedes {@link Object} aus <code>objectArray</code> {@link Object#toString()} angewendet und das Resultat an die entsprechende
-     * Stelle im <code>String[]</code> geschrieben.
+     * Dabei wird auf jedes {@link Object} aus <code>objectArray</code>
+     * {@link Object#toString()} angewendet und das Resultat an die
+     * entsprechende Stelle im <code>String[]</code> geschrieben.
      * <p>
      * Ist <code>objectArray=null</code> wird <code>null</code> zurückgegeben.
      *
@@ -708,7 +723,8 @@ public abstract class CollectionUtils {
     }
 
     /**
-     * Liefert eine von eckicken Klammern eingerahmte und durch Kommas separierte Listendarstellung des übergebenen Arrays.
+     * Liefert eine von eckicken Klammern eingerahmte und durch Kommas
+     * separierte Listendarstellung des übergebenen Arrays.
      *
      * @param array
      * @return
@@ -718,7 +734,8 @@ public abstract class CollectionUtils {
     }
 
     /**
-     * Liefert einen String in dem einfach die Rückgabewerte der toString()-Methode aller übergebenen Objects aneinadergehängt wird.
+     * Liefert einen String in dem einfach die Rückgabewerte der
+     * toString()-Methode aller übergebenen Objects aneinadergehängt wird.
      *
      * @param array
      * @return
@@ -730,14 +747,10 @@ public abstract class CollectionUtils {
     /**
      * Allgemeine Funktion um einen Listenausdruck eines Arrays zu bekommen
      *
-     * @param array
-     *            Das aufzulistende Array
-     * @param suffix
-     *            Anfang des Rückgabestrings
-     * @param postfix
-     *            Ende des Rückgabestrings
-     * @param delimiter
-     *            Trenner zwischen den einzelnen Listenwerten
+     * @param array Das aufzulistende Array
+     * @param suffix Anfang des Rückgabestrings
+     * @param postfix Ende des Rückgabestrings
+     * @param delimiter Trenner zwischen den einzelnen Listenwerten
      * @return
      */
     public static final String toString(final Object[] array, final String suffix, final String postfix, final String delimiter) {
@@ -764,7 +777,8 @@ public abstract class CollectionUtils {
 
     /**
      * Berechnet das Maximum der Größen der {@link Collection}s.<br>
-     * Falls keine Collections enthalten sind, wird <code>-1</code> zurückgegeben.
+     * Falls keine Collections enthalten sind, wird <code>-1</code>
+     * zurückgegeben.
      *
      * @param allCollections
      * @return
@@ -793,7 +807,8 @@ public abstract class CollectionUtils {
     }
 
     /**
-     * Wraps the list wit an new Iterable. If the list ist <code>null</code> an empty iterable will be returned.
+     * Wraps the list wit an new Iterable. If the list ist <code>null</code> an
+     * empty iterable will be returned.
      *
      * @param <T>
      * @param list
@@ -904,7 +919,8 @@ public abstract class CollectionUtils {
     }
 
     /**
-     * Liefert ein Iterable-Objekt, das rückwärts durch die gegebene Liste iteriert.
+     * Liefert ein Iterable-Objekt, das rückwärts durch die gegebene Liste
+     * iteriert.
      *
      * @param list
      * @return

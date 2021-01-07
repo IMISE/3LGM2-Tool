@@ -1,8 +1,8 @@
 package de.imise.util;
 
 /**
- * Functions to calculate the available memory or print memory
- * information to the console.
+ * Functions to calculate the available memory or print memory information to
+ * the console.
  *
  * @author AXS (23.09.2020)
  */
@@ -43,8 +43,7 @@ public class MemoryHandler {
     }
 
     /**
-     * @param buffer
-     *            this percent value of the really available memory will be
+     * @param buffer this percent value of the really available memory will be
      *            substracted to ensure some memory for other processes
      * @return the available memory
      */

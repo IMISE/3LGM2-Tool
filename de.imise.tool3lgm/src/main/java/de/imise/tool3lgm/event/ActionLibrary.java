@@ -65,6 +65,7 @@ import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GDCollectionImExportHandler;
 import de.imise.tool3lgm.graphtools.model.GDCommands;
 import de.imise.tool3lgm.graphtools.model.LGMChangeListener.LGMChangeType;
+import de.imise.tool3lgm.graphtools.model.LGMGraphDocument;
 import de.imise.tool3lgm.graphtools.model.Szenario;
 import de.imise.tool3lgm.graphtools.path.metapaths.MetaPath;
 import de.imise.tool3lgm.graphtools.userfield.dialog.declaration.UserFieldDeclarationDialog;
@@ -444,11 +445,11 @@ public class ActionLibrary {
             }
         };
 
-        public static final Action MODEL_ACTION_SET_ELEMENT_INTERLAYER_CONNECTIONS_VISIBILITY_OFF = createMODEL_ACTION_SET_ELEMENT_INTERLAYER_CONNECTIONS_VISIBILITY(false);
+        public static final GraphSelectedRealNodeAction MODEL_ACTION_SET_ELEMENT_INTERLAYER_CONNECTIONS_VISIBILITY_OFF = createMODEL_ACTION_SET_ELEMENT_INTERLAYER_CONNECTIONS_VISIBILITY(false);
 
-        public static final Action MODEL_ACTION_SET_ELEMENT_INTERLAYER_CONNECTIONS_VISIBILITY_ON = createMODEL_ACTION_SET_ELEMENT_INTERLAYER_CONNECTIONS_VISIBILITY(true);
+        public static final GraphSelectedRealNodeAction MODEL_ACTION_SET_ELEMENT_INTERLAYER_CONNECTIONS_VISIBILITY_ON = createMODEL_ACTION_SET_ELEMENT_INTERLAYER_CONNECTIONS_VISIBILITY(true);
 
-        public static final Action createMODEL_ACTION_SET_ELEMENT_INTERLAYER_CONNECTIONS_VISIBILITY(final boolean show) {
+        public static final GraphSelectedRealNodeAction createMODEL_ACTION_SET_ELEMENT_INTERLAYER_CONNECTIONS_VISIBILITY(final boolean show) {
             return new GraphSelectedRealNodeAction(show ? GDCommands.MODEL_ACTION_SET_ELEMENT_INTERLAYER_CONNECTIONS_VISIBILITY_ON : GDCommands.MODEL_ACTION_SET_ELEMENT_INTERLAYER_CONNECTIONS_VISIBILITY_OFF) {
                 @Override
                 public boolean isEnabled() {
@@ -478,18 +479,19 @@ public class ActionLibrary {
             };
         }
 
-        public static final Action MODEL_ACTION_SET_LAYER_INTERLAYER_CONNECTIONS_VISIBILITY_ON = createMODEL_ACTION_SET_LAYER_INTERLAYER_CONNECTIONS_VISIBILITY(true);
+        public static final GraphFrameAction MODEL_ACTION_SET_LAYER_INTERLAYER_CONNECTIONS_VISIBILITY_ON = createMODEL_ACTION_SET_LAYER_INTERLAYER_CONNECTIONS_VISIBILITY(true);
 
-        public static final Action MODEL_ACTION_SET_LAYER_INTERLAYER_CONNECTIONS_VISIBILITY_OFF = createMODEL_ACTION_SET_LAYER_INTERLAYER_CONNECTIONS_VISIBILITY(false);
+        public static final GraphFrameAction MODEL_ACTION_SET_LAYER_INTERLAYER_CONNECTIONS_VISIBILITY_OFF = createMODEL_ACTION_SET_LAYER_INTERLAYER_CONNECTIONS_VISIBILITY(false);
 
-        private static final Action createMODEL_ACTION_SET_LAYER_INTERLAYER_CONNECTIONS_VISIBILITY(final boolean visible) {
+        private static final GraphFrameAction createMODEL_ACTION_SET_LAYER_INTERLAYER_CONNECTIONS_VISIBILITY(final boolean visible) {
             return new GraphFrameAction(visible ? GDCommands.MODEL_ACTION_SET_LAYER_INTERLAYER_CONNECTIONS_VISIBILITY_ON : GDCommands.MODEL_ACTION_SET_LAYER_INTERLAYER_CONNECTIONS_VISIBILITY_OFF) {
                 @Override
                 public boolean isEnabled() {
                     if (!super.isEnabled()) {
                         return false;
                     }
-                    LayerContainer lc = Static.getSelectedDoc().getActiveLayer();
+                    LGMGraphDocument selectedDoc = Static.getSelectedDoc();
+                    LayerContainer lc = selectedDoc.getActiveLayer();
                     MetaModel selectedMetaModel = Static.getSelectedMetaModel();
                     for (ElementContainer ec : lc.getGraphNodeContainers()) {
                         ModelElement me = ec.getElement();
@@ -504,6 +506,20 @@ public class ActionLibrary {
                 }
             };
         }
+
+        public static final Action MODEL_ACTION_SET_INTERLAYER_CONNECTIONS_VISIBILITY_ON = new GraphSelectedRealNodeAction(GDCommands.MODEL_ACTION_SET_INTERLAYER_CONNECTIONS_VISIBILITY_ON) {
+            @Override
+            public boolean isEnabled() {
+                return !Static.isSelection() && MODEL_ACTION_SET_LAYER_INTERLAYER_CONNECTIONS_VISIBILITY_ON.isEnabled() || MODEL_ACTION_SET_ELEMENT_INTERLAYER_CONNECTIONS_VISIBILITY_ON.isEnabled();
+            };
+        };
+
+        public static final Action MODEL_ACTION_SET_INTERLAYER_CONNECTIONS_VISIBILITY_OFF = new GraphSelectedRealNodeAction(GDCommands.MODEL_ACTION_SET_INTERLAYER_CONNECTIONS_VISIBILITY_OFF) {
+            @Override
+            public boolean isEnabled() {
+                return !Static.isSelection() && MODEL_ACTION_SET_LAYER_INTERLAYER_CONNECTIONS_VISIBILITY_OFF.isEnabled() || MODEL_ACTION_SET_ELEMENT_INTERLAYER_CONNECTIONS_VISIBILITY_OFF.isEnabled();
+            };
+        };
 
     }
 

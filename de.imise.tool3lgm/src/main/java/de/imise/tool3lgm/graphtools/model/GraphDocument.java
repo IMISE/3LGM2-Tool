@@ -24,6 +24,8 @@ import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_SET_ELE
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_SET_ELEMENT_FONT;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_SET_ELEMENT_ICON;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_SET_ELEMENT_ICON_NONE;
+import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_SET_ELEMENT_INTERLAYER_CONNECTIONS_VISIBILITY_OFF;
+import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_SET_ELEMENT_INTERLAYER_CONNECTIONS_VISIBILITY_ON;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_SET_ELEMENT_NAME;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_SET_ELEMENT_OPTIONAL;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_SET_ELEMENT_POSITION;
@@ -32,9 +34,12 @@ import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_SET_ELE
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_SET_ELEMENT_TEXT_POSITION_VERTICAL;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_SET_ELEMENT_VISIBILITY_OFF;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_SET_ELEMENT_VISIBILITY_ON;
+import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_SET_INTERLAYER_CONNECTIONS_VISIBILITY_ON;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_SET_LAYER_ALPHA;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_SET_LAYER_COLOR;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_SET_LAYER_DEFAULT_COLOR_AND_TRANSPARENCY;
+import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_SET_LAYER_INTERLAYER_CONNECTIONS_VISIBILITY_OFF;
+import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_SET_LAYER_INTERLAYER_CONNECTIONS_VISIBILITY_ON;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_SET_LAYER_SIZE_FACTOR;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_SET_USER_FIELD_VALUE;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_SET_USER_FIELD_WEIGHT_REPLACEMENT;
@@ -1466,7 +1471,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
         case MODEL_ACTION_SET_LAYER_INTERLAYER_CONNECTIONS_VISIBILITY_ON:
         case MODEL_ACTION_SET_LAYER_INTERLAYER_CONNECTIONS_VISIBILITY_OFF: {
             int activeLayer = gdcoll.getActiveLayer();
-            layer[activeLayer].setShowInterLayerConnections(command == GDCommands.MODEL_ACTION_SET_LAYER_INTERLAYER_CONNECTIONS_VISIBILITY_ON);
+            layer[activeLayer].setShowInterLayerConnections(command == MODEL_ACTION_SET_LAYER_INTERLAYER_CONNECTIONS_VISIBILITY_ON);
             distributeEvent(ELEMENT_GRAPHICS_CHANGED, pid);
             break;
         }
@@ -1476,10 +1481,22 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
                 ModelElement me = ec.getElement();
                 if (metaModel.hasInterLayerStartClass(me)) {
                     InterLayerConnectedNodeContainer interLayerEc = (InterLayerConnectedNodeContainer) ec;
-                    interLayerEc.setShowInterLayerConnections(command == GDCommands.MODEL_ACTION_SET_ELEMENT_INTERLAYER_CONNECTIONS_VISIBILITY_ON);
+                    interLayerEc.setShowInterLayerConnections(command == MODEL_ACTION_SET_ELEMENT_INTERLAYER_CONNECTIONS_VISIBILITY_ON);
                 }
             }
             distributeEvent(ELEMENT_GRAPHICS_CHANGED, pid);
+            break;
+        }
+        case MODEL_ACTION_SET_INTERLAYER_CONNECTIONS_VISIBILITY_ON:
+        case MODEL_ACTION_SET_INTERLAYER_CONNECTIONS_VISIBILITY_OFF: {
+            boolean on = command == MODEL_ACTION_SET_INTERLAYER_CONNECTIONS_VISIBILITY_ON;
+            GDCommands realCommand;
+            if (isSelectedAtLeastOneInterLayerNode()) {
+                realCommand = on ? MODEL_ACTION_SET_ELEMENT_INTERLAYER_CONNECTIONS_VISIBILITY_ON : MODEL_ACTION_SET_ELEMENT_INTERLAYER_CONNECTIONS_VISIBILITY_OFF;
+            } else {
+                realCommand = on ? MODEL_ACTION_SET_LAYER_INTERLAYER_CONNECTIONS_VISIBILITY_ON : MODEL_ACTION_SET_LAYER_INTERLAYER_CONNECTIONS_VISIBILITY_OFF;
+            }
+            dispatch_command(realCommand, argv, pid);
             break;
         }
         default:

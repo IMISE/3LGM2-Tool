@@ -8,8 +8,10 @@ import javax.swing.Icon;
 import javax.swing.JButton;
 
 /**
- * Button, dessen PreferredSize, MinSize und MaxSize genau die MaxSize des vorhandenen Icons oder eines übergebenen Wertes ist. Dadurch nehmen die
- * Buttons in einer wahlweise beiden Dimensionen nur soviel Platz, wie sie tatsächlich brauchen.
+ * Button, dessen PreferredSize, MinSize und MaxSize genau die MaxSize des
+ * vorhandenen Icons oder eines übergebenen Wertes ist. Dadurch nehmen die
+ * Buttons in einer wahlweise beiden Dimensionen nur soviel Platz, wie sie
+ * tatsächlich brauchen.
  *
  * @author AXS (26 Mar 2019)
  */
@@ -25,14 +27,16 @@ public class MinSizedIconButton extends JButton {
     }
 
     /**
-     * Legt einen Button mit der übergeben Action an. Die Breite des Buttons wird durch das in der Action enthaltene Icon bestimmt. Die Höhe ist
-     * immer das Maximum aus der Höhe des Icons und der übergebenen minHeight - also mindestens die minHeight.
+     * Legt einen Button mit der übergeben Action an. Die Breite des Buttons
+     * wird durch das in der Action enthaltene Icon bestimmt. Die Höhe ist immer
+     * das Maximum aus der Höhe des Icons und der übergebenen minHeight - also
+     * mindestens die minHeight.
      *
-     * @param a
-     *            Action des Buttons. Diese sollte ein Icon enthalten, damit der Button sich korrekt resizen kann. Hat er das nicht, wird die
+     * @param a Action des Buttons. Diese sollte ein Icon enthalten, damit der
+     *            Button sich korrekt resizen kann. Hat er das nicht, wird die
      *            super.getPreferredSize() als Größe gesetzt.
-     * @param minHeight
-     *            minimale Höhe des Buttons (wenn das Icon nicht höher ist)
+     * @param minHeight minimale Höhe des Buttons (wenn das Icon nicht höher
+     *            ist)
      * @return
      */
     public static JButton createLimitedWidthButton(final Action a, final int minHeight) {
@@ -40,14 +44,16 @@ public class MinSizedIconButton extends JButton {
     }
 
     /**
-     * Legt einen Button mit der übergeben Action an. Die Höhe des Buttons wird durch das in der Action enthaltene Icon bestimmt. Die Breite ist
-     * immer das Maximum aus der Breite des Icons und der übergebenen minWidth - also mindestens die minWidth.
+     * Legt einen Button mit der übergeben Action an. Die Höhe des Buttons wird
+     * durch das in der Action enthaltene Icon bestimmt. Die Breite ist immer
+     * das Maximum aus der Breite des Icons und der übergebenen minWidth - also
+     * mindestens die minWidth.
      *
-     * @param a
-     *            Action des Buttons. Diese sollte ein Icon enthalten, damit der Button sich korrekt resizen kann. Hat er das nicht, wird die
+     * @param a Action des Buttons. Diese sollte ein Icon enthalten, damit der
+     *            Button sich korrekt resizen kann. Hat er das nicht, wird die
      *            super.getPreferredSize() als Größe gesetzt.
-     * @param minWitdh
-     *            minimale Breite des Buttons (wenn das Icon nicht breiter ist)
+     * @param minWitdh minimale Breite des Buttons (wenn das Icon nicht breiter
+     *            ist)
      * @return
      */
     public static JButton createLimitedHeightButton(final Action a, final int minWitdh) {
@@ -55,17 +61,18 @@ public class MinSizedIconButton extends JButton {
     }
 
     /**
-     * Legt einen Button mit der übergeben Action an. Die Breite und Höhe des Buttons werden durch das in der Action enthaltene Icon bestimmt. Die
-     * Breite/Höhe ist immer das Maximum aus der Breite/Höhe des Icons und der übergebenen minWidth/minHeight - also mindestens diese übergebenen
-     * Werte.
+     * Legt einen Button mit der übergeben Action an. Die Breite und Höhe des
+     * Buttons werden durch das in der Action enthaltene Icon bestimmt. Die
+     * Breite/Höhe ist immer das Maximum aus der Breite/Höhe des Icons und der
+     * übergebenen minWidth/minHeight - also mindestens diese übergebenen Werte.
      *
-     * @param a
-     *            Action des Buttons. Diese sollte ein Icon enthalten, damit der Button sich korrekt resizen kann. Hat er das nicht, wird die
+     * @param a Action des Buttons. Diese sollte ein Icon enthalten, damit der
+     *            Button sich korrekt resizen kann. Hat er das nicht, wird die
      *            super.getPreferredSize() als Größe gesetzt.
-     * @param minWitdh
-     *            minimale Breite des Buttons (wenn das Icon nicht breiter ist)
-     * @param minHeight
-     *            minimale Höhe des Buttons (wenn das Icon nicht höher ist)
+     * @param minWitdh minimale Breite des Buttons (wenn das Icon nicht breiter
+     *            ist)
+     * @param minHeight minimale Höhe des Buttons (wenn das Icon nicht höher
+     *            ist)
      * @return
      */
     public static JButton createLimitedWidthAndHeightButton(final Action a, final int minWidth, final int minHeight) {
@@ -73,10 +80,11 @@ public class MinSizedIconButton extends JButton {
     }
 
     /**
-     * Legt einen Button mit der übergeben Action an. Die Breite und Höhe des Buttons werden durch das in der Action enthaltene Icon bestimmt
+     * Legt einen Button mit der übergeben Action an. Die Breite und Höhe des
+     * Buttons werden durch das in der Action enthaltene Icon bestimmt
      *
-     * @param a
-     *            Action des Buttons. Diese sollte ein Icon enthalten, damit der Button sich korrekt resizen kann. Hat er das nicht, wird die
+     * @param a Action des Buttons. Diese sollte ein Icon enthalten, damit der
+     *            Button sich korrekt resizen kann. Hat er das nicht, wird die
      *            super.getPreferredSize() als Größe gesetzt.
      * @return
      */

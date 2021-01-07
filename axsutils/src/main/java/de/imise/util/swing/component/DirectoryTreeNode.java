@@ -11,10 +11,10 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreeNode;
 
 /**
- * <code>TreeNode</code> der ein Objekt des Filesystems repräsentieren kann (Ordner, Laufwerke, Dateien, ...)
+ * <code>TreeNode</code> der ein Objekt des Filesystems repräsentieren kann
+ * (Ordner, Laufwerke, Dateien, ...)
  *
- * @author Thomas Rudert
- *         Created on 07.01.2004
+ * @author Thomas Rudert Created on 07.01.2004
  */
 public class DirectoryTreeNode extends DefaultMutableTreeNode {
 

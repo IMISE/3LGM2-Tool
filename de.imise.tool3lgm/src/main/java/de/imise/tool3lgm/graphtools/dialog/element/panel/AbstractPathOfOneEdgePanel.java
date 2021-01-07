@@ -16,7 +16,7 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.path.metapaths.ElementaryMetaPath;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
-import de.imise.tool3lgm.graphtools.view.tree.node.LGMTreeNode;
+import de.imise.tool3lgm.graphtools.view.tree.node.ElementContainerTreeNode;
 
 /**
  * Panel für alle einfachen Verbindungen zwischen 2 Elementen, also der
@@ -73,8 +73,8 @@ public abstract class AbstractPathOfOneEdgePanel extends AbstractExpandablePanel
                 TreePath[] selpaths = srcTree.getSelectionPaths();
                 if (selpaths != null) {
                     for (int n = 0; n < selpaths.length; n++) {
-                        LGMTreeNode node = (LGMTreeNode) selpaths[n].getLastPathComponent();
-                        ElementContainer ec = (ElementContainer) node.getUserObject();
+                        ElementContainerTreeNode node = (ElementContainerTreeNode) selpaths[n].getLastPathComponent();
+                        ElementContainer ec = node.getUserObject();
                         GDCollection gdcoll = ec.getCollection();
                         ModelElement me = ec.getElement();
                         ModelElement panelModelElement = getModelElement();
@@ -104,8 +104,8 @@ public abstract class AbstractPathOfOneEdgePanel extends AbstractExpandablePanel
                 TreePath[] selpaths = srcTree.getSelectionPaths();
                 if (selpaths != null) {
                     for (int n = 0; n < selpaths.length; n++) {
-                        LGMTreeNode node = (LGMTreeNode) selpaths[n].getLastPathComponent();
-                        ElementContainer ec = (ElementContainer) node.getUserObject();
+                        ElementContainerTreeNode node = (ElementContainerTreeNode) selpaths[n].getLastPathComponent();
+                        ElementContainer ec = node.getUserObject();
                         GDCollection gdcoll = ec.getCollection();
                         ModelElement me = ec.getElement();
                         ModelElement panelModelElement = getModelElement();

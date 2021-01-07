@@ -62,7 +62,7 @@ public class TreeRenderer extends DefaultTreeCellRenderer {
     @Override
     public Component getTreeCellRendererComponent(final JTree tree, final Object value, final boolean sel, final boolean expanded, final boolean leaf, final int row, final boolean hasFocus) {
         if (value instanceof LGMTreeNode) {
-            LGMTreeNode node = (LGMTreeNode) value;
+            LGMTreeNode<?> node = (LGMTreeNode<?>) value;
             Object userObject = node.getUserObject();
 
             if (!node.isSelectable()) {
@@ -82,7 +82,7 @@ public class TreeRenderer extends DefaultTreeCellRenderer {
             ImageIcon icon = (ImageIcon) getIcon(); //if set then it is an ImageIcon!
             IconState iconState = null;
             if (icon == null && node instanceof IconifiedTreeNode) {
-                IconifiedTreeNode iconNode = (IconifiedTreeNode) node;
+                IconifiedTreeNode<?> iconNode = (IconifiedTreeNode<?>) node;
                 icon = iconNode.getIcon();
                 iconState = iconNode.getIconState();
             }

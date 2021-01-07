@@ -42,10 +42,10 @@ public interface SimpleResourceIconSource extends SimpleResourceFileLoader {
     }
 
     /**
-     * Versucht ein {@link ImageIcon} aus dem spezifizierten Verzeichnis zu laden und es wiederzugeben
+     * Versucht ein {@link ImageIcon} aus dem spezifizierten Verzeichnis zu
+     * laden und es wiederzugeben
      *
-     * @param dir
-     *            Verzeichnis des tatsächlichen Bilds
+     * @param dir Verzeichnis des tatsächlichen Bilds
      * @return
      */
     public static ImageIcon getImageIcon(final String dir) {
@@ -60,12 +60,11 @@ public interface SimpleResourceIconSource extends SimpleResourceFileLoader {
     }
 
     /**
-     * Versucht ein {@link ImageIcon} aus dem spezifizierten Verzeichnis zu laden und es wiederzugeben
+     * Versucht ein {@link ImageIcon} aus dem spezifizierten Verzeichnis zu
+     * laden und es wiederzugeben
      *
-     * @param dir
-     *            Verzeichnis des tatsächlichen Bilds
-     * @param extension
-     *            Erweiterung des tatsächlichen Bilds
+     * @param dir Verzeichnis des tatsächlichen Bilds
+     * @param extension Erweiterung des tatsächlichen Bilds
      * @return
      */
     public static ImageIcon getImageIcon(final String dir, final String extension) {

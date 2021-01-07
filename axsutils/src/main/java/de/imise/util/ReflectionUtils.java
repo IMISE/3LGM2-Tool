@@ -13,10 +13,11 @@ import java.util.Set;
 public class ReflectionUtils {
 
     /**
-     * Liefert die gemeinsame Oberklasse beider Objekte. Wenn die Objekte selbst Klassen sind,
-     * dann werden ihre Oberklassen gesucht. Der Rückgabewert ist wenigstens {@link Object}, wenn beide
-     * übergebenen Objekte keine speziellere gemeinsame Oberklasse besitzen.
-     * <code>null</code> kommt nur zurück, wenn beide übergebenen Objekte <code>null</code> waren.
+     * Liefert die gemeinsame Oberklasse beider Objekte. Wenn die Objekte selbst
+     * Klassen sind, dann werden ihre Oberklassen gesucht. Der Rückgabewert ist
+     * wenigstens {@link Object}, wenn beide übergebenen Objekte keine
+     * speziellere gemeinsame Oberklasse besitzen. <code>null</code> kommt nur
+     * zurück, wenn beide übergebenen Objekte <code>null</code> waren.
      *
      * @param o1
      * @param o2
@@ -60,9 +61,11 @@ public class ReflectionUtils {
     }
 
     /**
-     * Liefert für die übergebenen Objekte die speziellste gemeinsame Klasse.<br>
-     * Ist die Liste <code>null</code> oder leer , kommt hier <code>null</code> zurück.
-     * Ansonsten wird mindestens <code>Object.class</code> zurückgeliefert.
+     * Liefert für die übergebenen Objekte die speziellste gemeinsame
+     * Klasse.<br>
+     * Ist die Liste <code>null</code> oder leer , kommt hier <code>null</code>
+     * zurück. Ansonsten wird mindestens <code>Object.class</code>
+     * zurückgeliefert.
      *
      * @param objectList
      * @return
@@ -85,9 +88,11 @@ public class ReflectionUtils {
     }
 
     /**
-     * Liefert für die übergebenen Klassen die speziellste gemeinsame Klasse.<br>
-     * Ist die Liste <code>null</code> oder leer , kommt hier <code>null</code> zurück.
-     * Ansonsten wird mindestens <code>Object.class</code> zurückgeliefert.
+     * Liefert für die übergebenen Klassen die speziellste gemeinsame
+     * Klasse.<br>
+     * Ist die Liste <code>null</code> oder leer , kommt hier <code>null</code>
+     * zurück. Ansonsten wird mindestens <code>Object.class</code>
+     * zurückgeliefert.
      *
      * @param objectList
      * @return
@@ -108,8 +113,9 @@ public class ReflectionUtils {
     }
 
     /**
-     * Liefert die speziellere Klasse der beiden Objekte, wenn das eine Objekt eine Unterklasse des anderen ist. Wenn sie vererbungstechnisch
-     * nicht zusammen hängen, dann kommt <code>null</code> zurück.
+     * Liefert die speziellere Klasse der beiden Objekte, wenn das eine Objekt
+     * eine Unterklasse des anderen ist. Wenn sie vererbungstechnisch nicht
+     * zusammen hängen, dann kommt <code>null</code> zurück.
      *
      * @param o1
      * @param o2
@@ -123,7 +129,9 @@ public class ReflectionUtils {
     }
 
     /**
-     * Liefert die speziellere von den beiden übergebenen Klassen oder <code>null</code>, wenn sie nicht in der Vererbungshierarchie zusammen hängen.
+     * Liefert die speziellere von den beiden übergebenen Klassen oder
+     * <code>null</code>, wenn sie nicht in der Vererbungshierarchie zusammen
+     * hängen.
      *
      * @param class1
      * @param class2
@@ -145,10 +153,12 @@ public class ReflectionUtils {
     }
 
     /**
-     * Removes all classes from the list if a super class is contained in the list too.
+     * Removes all classes from the list if a super class is contained in the
+     * list too.
      *
      * @param classList
-     * @throws NullPointerException if an element in the list is <code>null</code>
+     * @throws NullPointerException if an element in the list is
+     *             <code>null</code>
      */
     public static final <T> void removeSubClasses(final Collection<Class<? extends T>> classes) {
         List<Class<? extends T>> classList = classes instanceof List ? (List<Class<? extends T>>) classes : new ArrayList<>(classes);
@@ -172,10 +182,12 @@ public class ReflectionUtils {
     }
 
     /**
-     * Removes all classes from the list if a subclass is contained in the list too.
+     * Removes all classes from the list if a subclass is contained in the list
+     * too.
      *
      * @param classList
-     * @throws NullPointerException if an element in the list is <code>null</code>
+     * @throws NullPointerException if an element in the list is
+     *             <code>null</code>
      */
     public static final <T> void removeSuperClasses(final Collection<Class<? extends T>> classes) {
         List<Class<? extends T>> classList = classes instanceof List ? (List<Class<? extends T>>) classes : new ArrayList<>(classes);
@@ -199,7 +211,8 @@ public class ReflectionUtils {
     }
 
     /**
-     * Entfernt aus der übergebenen Liste alle Klassen, die nicht zuweisungskompatibel zur übergebenen Klasse sind.
+     * Entfernt aus der übergebenen Liste alle Klassen, die nicht
+     * zuweisungskompatibel zur übergebenen Klasse sind.
      *
      * @param classList
      * @param classOrSuperClass
@@ -215,10 +228,12 @@ public class ReflectionUtils {
     }
 
     /**
-     * Liefert für die übergebenen Klassen diese Klassen selbst und bis hin zur übergebenen excludeSuperClass
-     * auch alle Superklassen. Die excludeSuperClass selbst ist nicht mehr mit dabei. Wird als excludeSuperClass
-     * null übergeben, dann geht die Hierarchie hoch bis zu Object.class.
-     * ACHTUNG: Das hier funktionier nicht für Interfaces sondern nur für direkte Sub- und Superklassen.
+     * Liefert für die übergebenen Klassen diese Klassen selbst und bis hin zur
+     * übergebenen excludeSuperClass auch alle Superklassen. Die
+     * excludeSuperClass selbst ist nicht mehr mit dabei. Wird als
+     * excludeSuperClass null übergeben, dann geht die Hierarchie hoch bis zu
+     * Object.class. ACHTUNG: Das hier funktionier nicht für Interfaces sondern
+     * nur für direkte Sub- und Superklassen.
      *
      * @param class
      * @param excludeSuperClass
@@ -236,10 +251,12 @@ public class ReflectionUtils {
     }
 
     /**
-     * Liefert für die übergebene Klasse diese Klasse selbst und bis hin zur übergebenen excludeSuperClass
-     * auch alle Superklassen. Die excludeSuperClass selbst ist nicht mehr mit dabei. Wird als excludeSuperClass
-     * null übergeben, dann geht die Hierarchie hoch bis zu Object.class.
-     * ACHTUNG: Das hier funktionier nicht für Interfaces sondern nur für direkte Sub- und Superklassen.
+     * Liefert für die übergebene Klasse diese Klasse selbst und bis hin zur
+     * übergebenen excludeSuperClass auch alle Superklassen. Die
+     * excludeSuperClass selbst ist nicht mehr mit dabei. Wird als
+     * excludeSuperClass null übergeben, dann geht die Hierarchie hoch bis zu
+     * Object.class. ACHTUNG: Das hier funktionier nicht für Interfaces sondern
+     * nur für direkte Sub- und Superklassen.
      *
      * @param class
      * @param excludeSuperClass
@@ -255,7 +272,8 @@ public class ReflectionUtils {
     }
 
     /**
-     * Liefert true, wenn die Klassen nicht <code>null</code> und gleich sind oder eine die Oberklasse der anderen ist.
+     * Liefert true, wenn die Klassen nicht <code>null</code> und gleich sind
+     * oder eine die Oberklasse der anderen ist.
      *
      * @param class1
      * @param class2
@@ -278,8 +296,8 @@ public class ReflectionUtils {
     }
 
     /**
-     * Liefert den absoluten Pfad zum Verzeichnis, in dem sich die übergebene Klasse im
-     * Dateisystem befindet.
+     * Liefert den absoluten Pfad zum Verzeichnis, in dem sich die übergebene
+     * Klasse im Dateisystem befindet.
      *
      * @return
      */
@@ -310,10 +328,12 @@ public class ReflectionUtils {
     }
 
     /**
-     * Sucht ausgehend von der übergebenen Klasse über alle direkten Oberklassen (keine Interfaces)
-     * bis maximal zur Oberklasse maxSuperClass ein Feld mit dem übergebenen Namen und gibt dessen Wert zurück.
-     * Die Klasse maxSuperClass wird selbst nicht mehr durchsucht. Soll bis einschließlich Object.class durchsucht werden,
-     * muss als maxSuperClass null angegeben werden.
+     * Sucht ausgehend von der übergebenen Klasse über alle direkten Oberklassen
+     * (keine Interfaces) bis maximal zur Oberklasse maxSuperClass ein Feld mit
+     * dem übergebenen Namen und gibt dessen Wert zurück. Die Klasse
+     * maxSuperClass wird selbst nicht mehr durchsucht. Soll bis einschließlich
+     * Object.class durchsucht werden, muss als maxSuperClass null angegeben
+     * werden.
      *
      * @param clazz
      * @param maxSuperClass
@@ -351,10 +371,12 @@ public class ReflectionUtils {
     }
 
     /**
-     * Sucht ausgehend von der übergebenen Klasse über alle direkten Oberklassen (keine Interfaces)
-     * bis maximal zur Oberklasse maxSuperClass ein Feld mit dem übergebenen Namen und gibt dessen Wert zurück.
-     * Die Klasse maxSuperClass wird selbst nicht mehr durchsucht. Soll bis einschließlich Object.class durchsucht werden,
-     * muss als maxSuperClass null angegeben werden.
+     * Sucht ausgehend von der übergebenen Klasse über alle direkten Oberklassen
+     * (keine Interfaces) bis maximal zur Oberklasse maxSuperClass ein Feld mit
+     * dem übergebenen Namen und gibt dessen Wert zurück. Die Klasse
+     * maxSuperClass wird selbst nicht mehr durchsucht. Soll bis einschließlich
+     * Object.class durchsucht werden, muss als maxSuperClass null angegeben
+     * werden.
      *
      * @param clazz
      * @param maxSuperClass
@@ -367,11 +389,13 @@ public class ReflectionUtils {
     }
 
     /**
-     * Sucht in der übergebenen Klasse ein Feld mit dem übergebenen Namen und gibt dessen Wert zurück.
+     * Sucht in der übergebenen Klasse ein Feld mit dem übergebenen Namen und
+     * gibt dessen Wert zurück.
      *
      * @param clazz
      * @param fieldName
-     * @param type Typ des Feldes oder <code>null</code>, wenn der Typ automatisch bestimmt werden soll.
+     * @param type Typ des Feldes oder <code>null</code>, wenn der Typ
+     *            automatisch bestimmt werden soll.
      * @return <code>null</code>
      */
     public static final <T> T getField(final Class<?> clazz, final String fieldName, final Class<T> type) {
@@ -380,11 +404,13 @@ public class ReflectionUtils {
     }
 
     /**
-     * Sucht in der übergebenen Klasse ein Feld mit dem übergebenen Namen und gibt dessen Wert zurück.
+     * Sucht in der übergebenen Klasse ein Feld mit dem übergebenen Namen und
+     * gibt dessen Wert zurück.
      *
      * @param clazz
      * @param fieldName
-     * @param type Typ des Feldes oder <code>null</code>, wenn der Typ automatisch bestimmt werden soll.
+     * @param type Typ des Feldes oder <code>null</code>, wenn der Typ
+     *            automatisch bestimmt werden soll.
      * @return <code>null</code>
      */
     public static final <T> T getField(final Class<?> clazz, final String fieldName) {
@@ -392,7 +418,8 @@ public class ReflectionUtils {
     }
 
     /**
-     * Liefert auch im statischen Kontext das, was getClass() im Objekt-Kontext liefert.
+     * Liefert auch im statischen Kontext das, was getClass() im Objekt-Kontext
+     * liefert.
      */
     public static class CurrentClassGetter extends SecurityManager {
 

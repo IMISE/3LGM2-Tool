@@ -21,16 +21,18 @@ import javax.swing.filechooser.FileSystemView;
 import de.imise.util.StringUtils;
 
 /**
- * @author Thomas Rudert
- *         Dialog zum Auswählen/Öffnen eines Bitmaps mit Bildvorschau
+ * @author Thomas Rudert Dialog zum Auswählen/Öffnen eines Bitmaps mit
+ *         Bildvorschau
  */
 public class ImageChooser extends ExtendedFileChooser {
 
     /**
-     * Mögliche Typen der FileFilter, die dieser Dialog anzeigen kann. Für alle diese Typen gibt es
-     * Ressourcen-Strings, deren Key für die Beschreibung sich über den zusammengebausten String aus
-     * {@link FILE_FILTER_RESOURCE_PREFIX} + {@link FileFilterType#toString()} ergbibt.
-     * Für die Liste der akzeptierten Erweiterungen wird der gleiche Key-String gebildet und noch der
+     * Mögliche Typen der FileFilter, die dieser Dialog anzeigen kann. Für alle
+     * diese Typen gibt es Ressourcen-Strings, deren Key für die Beschreibung
+     * sich über den zusammengebausten String aus
+     * {@link FILE_FILTER_RESOURCE_PREFIX} + {@link FileFilterType#toString()}
+     * ergbibt. Für die Liste der akzeptierten Erweiterungen wird der gleiche
+     * Key-String gebildet und noch der
      * {@link FILE_FILTER_RESOURCE_EXTENSION_POSTFIX} angehängt.
      */
     public static enum FileFilterType {
@@ -41,8 +43,9 @@ public class ImageChooser extends ExtendedFileChooser {
     }
 
     /**
-     * Anfang des ResourceString, mit dem bei jedem über die Funktion zu ladenden FileFilter
-     * der Key-String der Beschreibung und der Dateierweiterungen beginnen muss.
+     * Anfang des ResourceString, mit dem bei jedem über die Funktion zu
+     * ladenden FileFilter der Key-String der Beschreibung und der
+     * Dateierweiterungen beginnen muss.
      */
     public static final String FILE_FILTER_RESOURCE_PREFIX = "FILE_FILTER_";
 
@@ -53,8 +56,9 @@ public class ImageChooser extends ExtendedFileChooser {
     private final DialogResourceHandler drh = new DialogResourceHandler(ImageChooser.class);
 
     /**
-     * Liefert für die übergebenen filterNamen ein Array von FileFiltern, wenn die Beschreibung und die Liste
-     * der Erweiterungen den Konventionen entsprechend in den Resoourcendateien abgelegt sind.
+     * Liefert für die übergebenen filterNamen ein Array von FileFiltern, wenn
+     * die Beschreibung und die Liste der Erweiterungen den Konventionen
+     * entsprechend in den Resoourcendateien abgelegt sind.
      *
      * @param filterNames
      * @return
@@ -62,7 +66,8 @@ public class ImageChooser extends ExtendedFileChooser {
     private final FileNameExtensionFilter[] getFileNameExtensionFilters(final FileFilterType... filterNames) {
         FileNameExtensionFilter[] returnFilter = new FileNameExtensionFilter[filterNames.length];
         for (int i = 0; i < filterNames.length; i++) {
-            returnFilter[i] = new FileNameExtensionFilter(drh.getResString(FILE_FILTER_RESOURCE_PREFIX + filterNames[i]), StringUtils.tokenize(drh.getResString(FILE_FILTER_RESOURCE_PREFIX + filterNames[i] + FILE_FILTER_RESOURCE_EXTENSION_POSTFIX), " ", false));
+            returnFilter[i] = new FileNameExtensionFilter(drh.getResString(FILE_FILTER_RESOURCE_PREFIX + filterNames[i]),
+                    StringUtils.tokenize(drh.getResString(FILE_FILTER_RESOURCE_PREFIX + filterNames[i] + FILE_FILTER_RESOURCE_EXTENSION_POSTFIX), " ", false));
         }
         return returnFilter;
     }
