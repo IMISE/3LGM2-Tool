@@ -11,7 +11,9 @@ import de.imise.tool3lgm.graphtools.dialog.action.LGMActionLibrary;
 import de.imise.tool3lgm.graphtools.dialog.action.LGMTreeSelectionListener;
 import de.imise.tool3lgm.graphtools.dialog.element.AbstractElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.path.metapaths.MetaPath;
+import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.graphtools.view.tree.TreeRenderer;
+import de.imise.tool3lgm.graphtools.view.tree.node.ElementContainerTreeNode;
 import de.imise.tool3lgm.graphtools.view.tree.node.LGMTreeNode;
 
 /**
@@ -84,6 +86,19 @@ public abstract class AbstractPathConnectionTreePanel extends AbstractPathConnec
             selection = node.getUserObject();
         }
         return selection;
+    }
+
+    /**
+     * @param node
+     * @param elementContainers
+     * @param selectable
+     */
+    protected void addNodes(final LGMTreeNode<?> node, final Iterable<ElementContainer> elementContainers, final boolean selectable) {
+        for (ElementContainer ec : elementContainers) {
+            ElementContainerTreeNode child = ElementContainerTreeNode.createDialogTreeNode(ec);
+            child.setSelectable(selectable);
+            node.add(child);
+        }
     }
 
 }

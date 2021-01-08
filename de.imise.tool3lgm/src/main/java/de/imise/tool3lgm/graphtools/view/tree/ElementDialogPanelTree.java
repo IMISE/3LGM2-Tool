@@ -81,7 +81,7 @@ public class ElementDialogPanelTree extends CorrectSelectionTree {
      * @param renderTreeAsList
      */
     public ElementDialogPanelTree(final ElementContainer ec, final boolean sortRootChildren, final int maxLines, final boolean renderTreeAsList) {
-        super(new DefaultTreeModel(new ElementContainerTreeNode(ec, false, sortRootChildren)));
+        super(new DefaultTreeModel(new ElementContainerTreeNode(ec, true, false, sortRootChildren)));
         doc = ec.getGraphDocument();
         setShowsRootHandles(true);
         scrollPane = new LimitedHeightScrollTreePane(this, maxLines, renderTreeAsList);
@@ -203,7 +203,7 @@ public class ElementDialogPanelTree extends CorrectSelectionTree {
         if (showPartOfHierarchy && !force && !ec.getElement().getParentElements().isEmpty()) {
             return null;
         }
-        ElementContainerTreeNode elementNode = new ElementContainerTreeNode(ec, false, true);
+        ElementContainerTreeNode elementNode = ElementContainerTreeNode.createDialogTreeNode(ec);
         if (excludeChildren != null && excludeChildren.contains(ec)) {
             elementNode.setSelectable(false);
         }
@@ -252,7 +252,7 @@ public class ElementDialogPanelTree extends CorrectSelectionTree {
                     continue;
                 }
 
-                ElementContainerTreeNode childNode = new ElementContainerTreeNode(pc, false, true);
+                ElementContainerTreeNode childNode = ElementContainerTreeNode.createDialogTreeNode(pc);
                 childNode.setSelectable(childrenAreSelectable);
                 if (excludeChildren != null && excludeChildren.contains(pc)) {
                     childNode.setSelectable(false);

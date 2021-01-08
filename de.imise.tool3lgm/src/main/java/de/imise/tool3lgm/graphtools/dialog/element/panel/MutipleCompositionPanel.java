@@ -106,25 +106,17 @@ public class MutipleCompositionPanel extends AbstractPathConnectionTreePanel {
         root.removeAllChildren();
         ModelElement me = getModelElement();
         GraphDocument mainDoc = getMainDoc();
-        List<ElementContainer> all = me.getConnectedContainers(searchElementClass, mainDoc);
-        for (int m = 0; m < all.size(); m++) {
-            ElementContainerTreeNode node = new ElementContainerTreeNode(all.get(m), false, true);
-            root.add(node);
-        }
-        if (OPTION_ELEMENTS_RECEIVE_PROPERTIES_FROM_PARTS.is()) {
-            all = ((Node) me).getPartConnectedContainers(searchElementClass, mainDoc);
-            for (int m = 0; m < all.size(); m++) {
-                ElementContainerTreeNode node = new ElementContainerTreeNode(all.get(m), false, true);
-                node.setSelectable(false);
-                root.add(node);
+
+        List<ElementContainer> elementContainers = me.getConnectedContainers(searchElementClass, mainDoc);
+        addNodes(root, elementContainers, true);
+        if (me instanceof Node) {
+            if (OPTION_ELEMENTS_RECEIVE_PROPERTIES_FROM_PARTS.is()) {
+                elementContainers = ((Node) me).getPartConnectedContainers(searchElementClass, mainDoc);
+                addNodes(root, elementContainers, false);
             }
-        }
-        if (OPTION_ELEMENTS_RECEIVE_PROPERTIES_FROM_PARENTS.is()) {
-            all = ((Node) me).getParentConnectedContainers(searchElementClass, mainDoc);
-            for (int m = 0; m < all.size(); m++) {
-                ElementContainerTreeNode node = new ElementContainerTreeNode(all.get(m), false, true);
-                node.setSelectable(false);
-                root.add(node);
+            if (OPTION_ELEMENTS_RECEIVE_PROPERTIES_FROM_PARENTS.is()) {
+                elementContainers = ((Node) me).getParentConnectedContainers(searchElementClass, mainDoc);
+                addNodes(root, elementContainers, false);
             }
         }
         tree.reloadModel();

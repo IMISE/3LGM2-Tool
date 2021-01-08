@@ -261,27 +261,19 @@ public class ProzessStructurePanel extends PathConnectionLeafPanel implements Tr
         ModelElement me = ((NodeContainer) aufgabenContainerNode.getUserObject()).getElement();
         GraphDocument mainDoc = getMainDoc();
         List<ElementContainer> ots = me.getConnectedContainers(Objekttyp.class, mainDoc, AufObjVerbindung.class, FORWARD, ConnectionState.BACKWARD, false);
-        if (ots.size() > 0) {
+        if (!ots.isEmpty()) {
             String typeNodeName = elementsNameBuilder.getForwardMetaAssociationName(AufObjVerbindung.class, ConnectionState.BACKWARD, false, false);
             StringTreeNode tmpNode = new StringTreeNode(typeNodeName);
             tmpNode.setSelectable(false);
-            for (ElementContainer ot : ots) {
-                ElementContainerTreeNode otNode = new ElementContainerTreeNode(ot, false, true);
-                otNode.setSelectable(false);
-                tmpNode.add(otNode);
-            }
+            addNodes(tmpNode, ots, false);
             aufgabenContainerNode.add(tmpNode);
         }
         ots = me.getConnectedContainers(Objekttyp.class, mainDoc, AufObjVerbindung.class, FORWARD, ConnectionState.FORWARD, false);
-        if (ots.size() > 0) {
+        if (!ots.isEmpty()) {
             String typeNodeName = elementsNameBuilder.getForwardMetaAssociationName(AufObjVerbindung.class, ConnectionState.FORWARD, false, false);
             StringTreeNode tmpNode = new StringTreeNode(typeNodeName);
             tmpNode.setSelectable(false);
-            for (ElementContainer ot : ots) {
-                ElementContainerTreeNode otNode = new ElementContainerTreeNode(ot, false, true);
-                otNode.setSelectable(false);
-                tmpNode.add(otNode);
-            }
+            addNodes(tmpNode, ots, false);
             aufgabenContainerNode.add(tmpNode);
         }
     }

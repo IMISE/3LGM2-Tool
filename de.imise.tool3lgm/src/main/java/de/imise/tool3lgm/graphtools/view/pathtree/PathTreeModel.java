@@ -80,7 +80,7 @@ public class PathTreeModel extends DefaultTreeModel implements MetaModelSpecific
      * @param showAllElements
      */
     public PathTreeModel(final ElementContainer rootElement, final BooleanOption showAllElements) {
-        this(new ElementContainerTreeNode(rootElement, false, true), "", false, showAllElements);
+        this(new ElementContainerTreeNode(rootElement, true, false, true), "", false, showAllElements);
     }
 
     /**
@@ -255,7 +255,7 @@ public class PathTreeModel extends DefaultTreeModel implements MetaModelSpecific
             }
             //setTreeNode is false. Set the treeNode only if there is no equals existing node
             boolean setTreeNodeInNodeContainer = false;
-            ElementContainerTreeNode pathStepNode = createSimpleNode ? new ElementContainerTreeNode(ec, setTreeNodeInNodeContainer, true, icon) : new PathStepTreeNode(ec, subMetaPath, setTreeNodeInNodeContainer, true, icon);
+            ElementContainerTreeNode pathStepNode = createSimpleNode ? new ElementContainerTreeNode(ec, true, setTreeNodeInNodeContainer, true, icon) : new PathStepTreeNode(ec, subMetaPath, setTreeNodeInNodeContainer, true, icon);
             if (!showElementNamesWithSubmodels) {
                 String simpleName = me.toString();
                 String currentToStringName = pathStepNode.toString();

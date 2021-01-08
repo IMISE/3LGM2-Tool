@@ -13,52 +13,69 @@ import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
  */
 public class ElementContainerTreeNode extends IconifiedTreeNode<ElementContainer> implements GraphDocumentOwner {
 
+    private final boolean equalsIfSameElementContainer;
+
     /**
      * @param ec
-     * @param setTreeNode
-     * @param sort
+     * @return
      */
-    public ElementContainerTreeNode(final ElementContainer ec, final boolean setTreeNode, final boolean sort) {
-        this(ec, setTreeNode, sort, null);
+    public static ElementContainerTreeNode createDialogTreeNode(final ElementContainer ec) {
+        return new ElementContainerTreeNode(ec, false, false, true);
     }
 
     /**
      * @param ec
-     * @param setTreeNode
-     * @param visibleText
-     * @param sort
+     * @return
      */
-    public ElementContainerTreeNode(final ElementContainer ec, final boolean setTreeNode, final String visibleText, final boolean sort) {
-        this(ec, setTreeNode, visibleText, sort, null);
+    public static ElementContainerTreeNode createModelBrowserTreeNode(final ElementContainer ec) {
+        return new ElementContainerTreeNode(ec, true, true, false);
     }
 
     /**
      * @param ec
+     * @param sortChildren
+     * @return
+     */
+    public static ElementContainerTreeNode createDialogRootTreeNode(final ElementContainer ec, final boolean sortChildren) {
+        //equalsIfSameElementContainer doesn't matter
+        return new ElementContainerTreeNode(ec, false, true, sortChildren);
+    }
+
+    /**
+     * @param ec
+     * @param equalsIfSameElementContainer
+     * @param setTreeNode
+     * @param sort
+     */
+    public ElementContainerTreeNode(final ElementContainer ec, final boolean equalsIfSameElementContainer, final boolean setTreeNode, final boolean sort) {
+        this(ec, equalsIfSameElementContainer, setTreeNode, sort, null);
+    }
+
+    /**
+     * @param ec
+     * @param equalsIfSameElementContainer
      * @param setTreeNode
      * @param sort
      * @param icon
      */
-    public ElementContainerTreeNode(final ElementContainer ec, final boolean setTreeNode, final boolean sort, final ImageIcon icon) {
-        this(ec, setTreeNode, null, sort, icon);
+    public ElementContainerTreeNode(final ElementContainer ec, final boolean equalsIfSameElementContainer, final boolean setTreeNode, final boolean sort, final ImageIcon icon) {
+        this(ec, equalsIfSameElementContainer, setTreeNode, null, sort, icon);
     }
 
     /**
      * @param ec
+     * @param equalsIfSameElementContainer
      * @param setTreeNode
      * @param visibleText
      * @param sort
      * @param icon
      */
-    public ElementContainerTreeNode(final ElementContainer ec, final boolean setTreeNode, final String visibleText, final boolean sort, final ImageIcon icon) {
+    protected ElementContainerTreeNode(final ElementContainer ec, final boolean equalsIfSameElementContainer, final boolean setTreeNode, final String visibleText, final boolean sort, final ImageIcon icon) {
         super(ec, visibleText, sort, icon);
         if (setTreeNode) {
             setTreeNode(ec);
         }
-    }
-
-    @Override
-    public ElementContainer getUserObject() {
-        return super.getUserObject();
+        this.equalsIfSameElementContainer = equalsIfSameElementContainer;
     }
 
     /**
@@ -94,6 +111,14 @@ public class ElementContainerTreeNode extends IconifiedTreeNode<ElementContainer
         if (ec instanceof NodeContainer) {
             ((NodeContainer) ec).setTreeNode(this);
         }
+    }
+
+    @Override
+    public boolean equals(final Object obj) {
+        if (!equalsIfSameElementContainer) {
+            return this == obj;
+        }
+        return super.equals(obj);
     }
 
 }

@@ -37,7 +37,7 @@ public class PathStepTreeNode extends ElementContainerTreeNode {
      * @param icon
      */
     public PathStepTreeNode(final ElementContainer ec, final MetaPath metaPath, final boolean setTreeNode, final boolean sort, final ImageIcon icon) {
-        super(ec, setTreeNode, getVisibleText(ec, metaPath), sort, icon);
+        super(ec, true, setTreeNode, getVisibleText(ec, metaPath), sort, icon);
         this.metaPath = metaPath;
     }
 

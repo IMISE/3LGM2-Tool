@@ -431,7 +431,7 @@ public final class ModelBrowserTree extends DynamicTree implements UserFieldList
             //				elementNode = new LGMTreeNode(kc, true, false);
             //			}
             if (elementNode == null) {
-                elementNode = new ElementContainerTreeNode(kc, true, false);
+                elementNode = ElementContainerTreeNode.createModelBrowserTreeNode(kc);
             } else {
                 elementNode.removeAllChildren();
             }
@@ -494,7 +494,7 @@ public final class ModelBrowserTree extends DynamicTree implements UserFieldList
                 }
             }
             if (childNode == null) {
-                childNode = new ElementContainerTreeNode(pc, true, false);
+                childNode = ElementContainerTreeNode.createModelBrowserTreeNode(pc);
             } else {
                 childNode.removeAllChildren();
             }
@@ -543,7 +543,7 @@ public final class ModelBrowserTree extends DynamicTree implements UserFieldList
                     slaveTreeNode = slaveNodeContainer.getTreeNode();
                 }
                 if (slaveTreeNode == null) {
-                    slaveTreeNode = new ElementContainerTreeNode(slaveContainer, true, false);
+                    slaveTreeNode = ElementContainerTreeNode.createModelBrowserTreeNode(slaveContainer);
                 } else {
                     slaveTreeNode.removeAllChildren();
                 }
