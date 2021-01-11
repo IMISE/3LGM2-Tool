@@ -42,8 +42,8 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.InstanciationEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.LayerNode;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElementInstanceCreator;
-import de.imise.tool3lgm.graphtools.metamodel.elements.MultipleEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
+import de.imise.tool3lgm.graphtools.metamodel.elements.OrderedEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.SubordinationEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Textfield;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
@@ -578,14 +578,25 @@ public final class MetaModel extends CoreMetaModel {
         return mapBuilder.build();
     }
 
+    /**
+     * @return
+     */
     private ImmutableSet<Class<? extends Edge>> getSortedEdges() {
         ImmutableSet.Builder<Class<? extends Edge>> sortedEdges = new ImmutableSet.Builder<>();
         for (Class<? extends Edge> edgeClass : allEdgesSet) {
-            if (MultipleEdge.class.isAssignableFrom(edgeClass)) {
+            if (isSortedEdgeClass(edgeClass)) {
                 sortedEdges.add(edgeClass);
             }
         }
         return sortedEdges.build();
+    }
+
+    /**
+     * @param edgeClass
+     * @return
+     */
+    public final boolean isSortedEdgeClass(final Class<? extends Edge> edgeClass) {
+        return OrderedEdge.class.isAssignableFrom(edgeClass);
     }
 
     /**

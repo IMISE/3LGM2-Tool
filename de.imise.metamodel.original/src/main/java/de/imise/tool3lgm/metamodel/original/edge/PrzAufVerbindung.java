@@ -5,13 +5,14 @@ import static de.imise.tool3lgm.graphtools.metamodel.EdgeCardinality.ZERO_UNLIMI
 import de.imise.tool3lgm.graphtools.metamodel.EdgeCardinality;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.metamodel.elements.MultipleEdge;
+import de.imise.tool3lgm.graphtools.metamodel.elements.OrderedEdge;
 import de.imise.tool3lgm.metamodel.original.node.Aufgabe;
 import de.imise.tool3lgm.metamodel.original.node.Prozess;
 
 /**
  * @author Thomas (16.01.2004)
  */
-public final class PrzAufVerbindung extends MultipleEdge {
+public final class PrzAufVerbindung extends MultipleEdge implements OrderedEdge {
 
     public static final Class<? extends ModelElement> STCL = Prozess.class;
 
