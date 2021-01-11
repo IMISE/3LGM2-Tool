@@ -157,8 +157,8 @@ public class PathConnectionPanel extends AbstractExpandablePanel {
         ModelElement me = getModelElement();
         GraphDocument mainDoc = getMainDoc();
         ElementContainer ec = me.getContainer(mainDoc);
-        boolean sortLeftTree = getSortLeftTreeRootChildrenAlphabetical();
-        ltree = new ElementDialogPanelTree(ec, sortLeftTree, maxLines, renderLeftTreeAsList);
+        boolean sortLeftTreeAlphabetical = sortLeftTreeRootChildrenAlphabetical();
+        ltree = new ElementDialogPanelTree(ec, sortLeftTreeAlphabetical, maxLines, renderLeftTreeAsList);
         ltree.setRootVisible(false);
         ltree.setShowsRootHandles(true);
         ltree.setCellRenderer(treeRenderer);
@@ -218,6 +218,24 @@ public class PathConnectionPanel extends AbstractExpandablePanel {
     }
 
     /**
+     * @return <code>true</code> if the left tree must be sorted alphabetical
+     *         and <code>false</code> if all connected elements should be
+     *         displayed in the same order in wich they are connected.
+     */
+    private boolean sortLeftTreeRootChildrenAlphabetical() {
+        List<ElementaryMetaPath> elementaryMetaPaths = metaPath.getElementaryMetaPaths();
+        if (elementaryMetaPaths.size() == 1) {
+            ElementaryMetaPath elementaryMetaPath = elementaryMetaPaths.get(0);
+            Class<? extends Edge> edgeClass = elementaryMetaPath.getEdgeClass();
+            MetaModel metaModel = getMetaModel();
+            if (metaModel.isSortedEdgeClass(edgeClass)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
      * @param c
      * @param gbc
      */
@@ -232,16 +250,6 @@ public class PathConnectionPanel extends AbstractExpandablePanel {
      */
     public void addSouth(final Component c, final GridBagConstraints gbc, final int gridwidth) {
         add(this, c, gbc, 0, 6, gridwidth, 1);
-    }
-
-    /**
-     * Wenn <code>true</code> werden die TreeNodes unter dem Root im linken Baum
-     * sortiert
-     *
-     * @return
-     */
-    protected boolean getSortLeftTreeRootChildrenAlphabetical() {
-        return true;
     }
 
     /**
@@ -353,15 +361,16 @@ public class PathConnectionPanel extends AbstractExpandablePanel {
         Direction direction = elementaryMetaPath.getDirection();
         ModelElement me = getModelElement();
         GraphDocument mainDoc = getMainDoc();
-        List<ElementContainer> all = me.getConnectedContainers(pathStepEndClass, mainDoc, edgeClass, direction);
+        boolean alphabetical = sortLeftTreeRootChildrenAlphabetical();
+        List<ElementContainer> all = me.getConnectedContainers(pathStepEndClass, mainDoc, edgeClass, direction, null, alphabetical);
         addChildrenToExcludeFromRtree(edgeIndex, all, true);
         // nur Node für Elemente in der all-Liste bis zur Größe der direkt verbundenen dürfen am Ende selektierbar sein
         int firstNonSelectableIndex = all.size();
         if (OPTION_ELEMENTS_RECEIVE_PROPERTIES_FROM_PARTS.is()) {
-            all.addAll(me.getPartConnectedContainers(pathStepEndClass, mainDoc, edgeClass, direction));
+            all.addAll(me.getPartConnectedContainers(pathStepEndClass, mainDoc, edgeClass, direction, null, alphabetical));
         }
         if (OPTION_ELEMENTS_RECEIVE_PROPERTIES_FROM_PARENTS.is()) {
-            all.addAll(me.getParentConnectedContainers(pathStepEndClass, mainDoc, edgeClass, direction));
+            all.addAll(me.getParentConnectedContainers(pathStepEndClass, mainDoc, edgeClass, direction, null, alphabetical));
         }
         ImmutableList.Builder<ElementContainerTreeNode> leafs = ImmutableList.builder();
         List<ElementContainerTreeNode> firstLevelNodes = new ArrayList<>(all.size());
@@ -379,7 +388,7 @@ public class PathConnectionPanel extends AbstractExpandablePanel {
             for (ElementContainerTreeNode node : nextStepStartNodes) {
                 ElementContainer nodeElementContainer = node.getUserObject();
                 me = nodeElementContainer.getElement();
-                List<ElementContainer> connected = me.getConnectedContainers(pathStepEndClass, mainDoc, edgeClass, direction);
+                List<ElementContainer> connected = me.getConnectedContainers(pathStepEndClass, mainDoc, edgeClass, direction, null, false);
                 addChildrenToExcludeFromRtree(edgeIndex, connected, false);
                 for (ElementContainer ec : connected) {
                     ElementContainerTreeNode newNode = ltree.addObject(ec, node, null, true, false, false);
