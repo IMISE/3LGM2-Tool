@@ -228,7 +228,7 @@ public class PathConnectionPanel extends AbstractExpandablePanel {
             ElementaryMetaPath elementaryMetaPath = elementaryMetaPaths.get(0);
             Class<? extends Edge> edgeClass = elementaryMetaPath.getEdgeClass();
             MetaModel metaModel = getMetaModel();
-            if (metaModel.isSortedEdgeClass(edgeClass)) {
+            if (metaModel.isOrderedEdgeClass(edgeClass)) {
                 return false;
             }
         }

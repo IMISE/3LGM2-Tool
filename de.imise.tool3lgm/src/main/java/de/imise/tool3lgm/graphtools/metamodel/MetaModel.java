@@ -136,7 +136,7 @@ public final class MetaModel extends CoreMetaModel {
      * von Instanzen dieser Kantenklasse für Elemente der Elementklasse eine
      * Bedeutung haben.
      */
-    private final SetMultimap<Class<? extends ModelElement>, Class<? extends Edge>> elementClassToSortedEdges;
+    private final SetMultimap<Class<? extends ModelElement>, Class<? extends Edge>> elementClassToOrderedEdges;
 
     /** Alle Klassen, die man über den Datenimport einlesen kann */
     private final Set<Class<? extends ModelElement>> importableNodes;
@@ -185,7 +185,7 @@ public final class MetaModel extends CoreMetaModel {
      * Grafik zu sehen sind (z.B. Prozesse können sortierte Kanten zu Aufgaben
      * haben)
      */
-    private final Set<Class<? extends ModelElement>> elementClassesWithSortedEdgesToPaintable;
+    private final Set<Class<? extends ModelElement>> elementClassesWithOrderedEdgesToPaintable;
 
     /** Alle abstracten Klassen, die im Baum aus der FE auftauchen sollen */
     private final Class<? extends ModelElement>[] treeDomainLayerVisibleAbstractNodes;
@@ -443,8 +443,8 @@ public final class MetaModel extends CoreMetaModel {
         treeLogicalLayerVisibleAbstractNodes = metaModelDefinition.getTreeLogicalLayerVisibleAbstractNodes();
         treePhysicalLayerVisibleAbstractNodes = metaModelDefinition.getTreePhysicalLayerVisibleAbstractNodes();
         oldToNewClassName = CollectionUtils.ensureImmutable(metaModelDefinition.getOldToNewClassNameMap());
-        elementClassToSortedEdges = getElementClassToSortedEdges(); //muss vor elementClassesWithSortedEdgesToPaintable, da für dessen init notwendig!
-        elementClassesWithSortedEdgesToPaintable = CollectionUtils.ensureImmutable(getElementClassesWithSortedEdgeClassesToPaintable()); //muss vor elementClassesWithLayout, da für dessen init notwendig!
+        elementClassToOrderedEdges = getElementClassToOrderedEdges(); //muss vor elementClassesWithOrderedEdgesToPaintable, da für dessen init notwendig!
+        elementClassesWithOrderedEdgesToPaintable = CollectionUtils.ensureImmutable(getElementClassesWithOrderedEdgeClassesToPaintable()); //muss vor elementClassesWithLayout, da für dessen init notwendig!
         elementClassesWithLayout = CollectionUtils.ensureImmutable(getElementClassesWithLayout());
         // Die folgenden Arrays müssen hier unten initialisiert werden nachdem die Maps mit den Edges gefüllt sind, sonst InitialException
         treeDomainLayerNodes = CollectionUtils.ensureImmutable(getTreeVisibleNodes(allDomainLayerNodesSet, false));
@@ -565,11 +565,11 @@ public final class MetaModel extends CoreMetaModel {
      * hier nicht eingtragen. D.h. es kommt <code>null</code> zurück, wenn man
      * nach solcher Elementklasse in der Map sucht und kein leeres Set.
      */
-    public final ImmutableSetMultimap<Class<? extends ModelElement>, Class<? extends Edge>> getElementClassToSortedEdges() {
+    public final ImmutableSetMultimap<Class<? extends ModelElement>, Class<? extends Edge>> getElementClassToOrderedEdges() {
         ImmutableSetMultimap.Builder<Class<? extends ModelElement>, Class<? extends Edge>> mapBuilder = ImmutableSetMultimap.builder();
-        Iterable<Class<? extends Edge>> sortedEdges = getSortedEdges();
+        Iterable<Class<? extends Edge>> orderedEdges = getOrderedEdges();
         for (Class<? extends ModelElement> elementClass : allNodesSet) {
-            for (Class<? extends Edge> edgeClass : sortedEdges) {
+            for (Class<? extends Edge> edgeClass : orderedEdges) {
                 if (isStartClass(edgeClass, elementClass)) {
                     mapBuilder.put(elementClass, edgeClass);
                 }
@@ -581,21 +581,21 @@ public final class MetaModel extends CoreMetaModel {
     /**
      * @return
      */
-    private ImmutableSet<Class<? extends Edge>> getSortedEdges() {
-        ImmutableSet.Builder<Class<? extends Edge>> sortedEdges = new ImmutableSet.Builder<>();
+    private ImmutableSet<Class<? extends Edge>> getOrderedEdges() {
+        ImmutableSet.Builder<Class<? extends Edge>> orderedEdges = new ImmutableSet.Builder<>();
         for (Class<? extends Edge> edgeClass : allEdgesSet) {
-            if (isSortedEdgeClass(edgeClass)) {
-                sortedEdges.add(edgeClass);
+            if (isOrderedEdgeClass(edgeClass)) {
+                orderedEdges.add(edgeClass);
             }
         }
-        return sortedEdges.build();
+        return orderedEdges.build();
     }
 
     /**
      * @param edgeClass
      * @return
      */
-    public final boolean isSortedEdgeClass(final Class<? extends Edge> edgeClass) {
+    public final boolean isOrderedEdgeClass(final Class<? extends Edge> edgeClass) {
         return OrderedEdge.class.isAssignableFrom(edgeClass);
     }
 
@@ -617,7 +617,7 @@ public final class MetaModel extends CoreMetaModel {
                 elementClassesWithLayoutBuilder.add(clazz);
                 continue;
             }
-            if (hasSortedEdgeClassesToPaintable(clazz)) {
+            if (hasOrderedEdgeClassesToPaintable(clazz)) {
                 elementClassesWithLayoutBuilder.add(clazz);
                 continue;
             }
@@ -635,22 +635,22 @@ public final class MetaModel extends CoreMetaModel {
      *
      * @return
      */
-    private final Set<Class<? extends ModelElement>> getElementClassesWithSortedEdgeClassesToPaintable() {
-        ImmutableSet.Builder<Class<? extends ModelElement>> elementClassesWithSortedEdgesBuilder = ImmutableSet.<Class<? extends ModelElement>> builder();
+    private final Set<Class<? extends ModelElement>> getElementClassesWithOrderedEdgeClassesToPaintable() {
+        ImmutableSet.Builder<Class<? extends ModelElement>> elementClassesWithOrderedEdgesBuilder = ImmutableSet.<Class<? extends ModelElement>> builder();
         for (Class<? extends ModelElement> clazz : allNodesSet) {
-            Set<Class<? extends Edge>> sortedEdgeClasses = getSortedEdgeClasses(clazz);
-            if (sortedEdgeClasses != null) {
+            Set<Class<? extends Edge>> orderedEdgeClasses = getOrderedEdgeClasses(clazz);
+            if (orderedEdgeClasses != null) {
                 GraphViewDefinition graphViewDefinition = getGraphViewDefinition();
-                for (Class<? extends Edge> edgeClass : sortedEdgeClasses) {
+                for (Class<? extends Edge> edgeClass : orderedEdgeClasses) {
                     Class<? extends ModelElement> other = getOther(edgeClass, clazz);
                     if (graphViewDefinition.isPaintable(other)) {
-                        elementClassesWithSortedEdgesBuilder.add(clazz);
+                        elementClassesWithOrderedEdgesBuilder.add(clazz);
                         break;
                     }
                 }
             }
         }
-        return elementClassesWithSortedEdgesBuilder.build();
+        return elementClassesWithOrderedEdgesBuilder.build();
     }
 
     /**
@@ -1122,8 +1122,8 @@ public final class MetaModel extends CoreMetaModel {
      *
      * @param elementClass
      */
-    public final Set<Class<? extends Edge>> getSortedEdgeClasses(final Class<? extends ModelElement> elementClass) {
-        return elementClassToSortedEdges.get(elementClass);
+    public final Set<Class<? extends Edge>> getOrderedEdgeClasses(final Class<? extends ModelElement> elementClass) {
+        return elementClassToOrderedEdges.get(elementClass);
     }
 
     /**
@@ -1159,8 +1159,8 @@ public final class MetaModel extends CoreMetaModel {
      *
      * @return
      */
-    public final boolean hasSortedEdgeClassesToPaintable(final Class<? extends ModelElement> elementClass) {
-        return elementClassesWithSortedEdgesToPaintable.contains(elementClass);
+    public final boolean hasOrderedEdgeClassesToPaintable(final Class<? extends ModelElement> elementClass) {
+        return elementClassesWithOrderedEdgesToPaintable.contains(elementClass);
     }
 
     /** Alle abstracten Klassen, die im Baum aus der FE auftauchen sollen */

@@ -383,7 +383,7 @@ public abstract class ElementContainer extends JLabel implements Cloneable, Grap
         super.setVisible(visible);
         MetaModel metaModel = me.getMetaModel();
         if (visible) {
-            Set<Class<? extends Edge>> sortedEdgeClasses = metaModel.getSortedEdgeClasses(me.getClass());
+            Set<Class<? extends Edge>> sortedEdgeClasses = metaModel.getOrderedEdgeClasses(me.getClass());
             if (sortedEdgeClasses != null) {
                 for (Class<? extends Edge> edgeClass : sortedEdgeClasses) {
                     if (additionalLabelTextGenerator == null) {

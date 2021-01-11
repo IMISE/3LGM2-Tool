@@ -812,7 +812,7 @@ public class ToolContentHandlerV3_0 implements ContentHandler {
                     ModelElement me = container.getElement();
                     Class<? extends ModelElement> elementClass = me.getClass();
                     MetaModel metaModel = me.getMetaModel();
-                    if (metaModel.hasSortedEdgeClassesToPaintable(elementClass)) {
+                    if (metaModel.hasOrderedEdgeClassesToPaintable(elementClass)) {
                         container.checkTreeIcon();
                     }
                 }

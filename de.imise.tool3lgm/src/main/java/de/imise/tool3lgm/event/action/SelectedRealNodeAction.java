@@ -44,7 +44,7 @@ public class SelectedRealNodeAction extends GraphDocumentAction {
         for (ElementContainer ec : Static.iterableSelectedRealElementContainer()) {
             //TODO: testen, ob visible hier reicht
             ModelElement me = ec.getElement();
-            if (me.isPaintable() && ec.isVisible() || me.getMetaModel().hasSortedEdgeClassesToPaintable(me.getClass())) {
+            if (me.isPaintable() && ec.isVisible() || me.getMetaModel().hasOrderedEdgeClassesToPaintable(me.getClass())) {
                 return true;
             }
         }

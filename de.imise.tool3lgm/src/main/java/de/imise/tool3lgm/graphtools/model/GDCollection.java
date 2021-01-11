@@ -725,7 +725,7 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
         ModelElement me = ec.getElement();
         while (true) {
             NameAndColorInputDialog d = new NameAndColorInputDialog(getMainFrame());
-            boolean showColorChooser = metaModel.hasSortedEdgeClassesToPaintable(me.getClass());
+            boolean showColorChooser = metaModel.hasOrderedEdgeClassesToPaintable(me.getClass());
             d.showDialogOnMousePointer(getResString("name_eing"), me.toString(), showColorChooser);
             String inputString = d.getInputString();
             if (inputString == null) {
