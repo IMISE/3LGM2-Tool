@@ -15,7 +15,6 @@ import java.util.List;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
 import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
 
@@ -83,8 +82,6 @@ public class MutipleCompositionPanel extends AbstractPathConnectionTreePanel {
         JButton addButton = new JButton(getCreateNewElementAction());
         JButton removeButton = new JButton(getDisconnectAction());
 
-        JScrollPane sp = new JScrollPane(tree);
-
         if (editable) {
             constraints.anchor = GridBagConstraints.CENTER;
             buttonpanel = new JPanel();
@@ -98,36 +95,28 @@ public class MutipleCompositionPanel extends AbstractPathConnectionTreePanel {
         constraints.fill = GridBagConstraints.BOTH;
         constraints.weightx = 100;
         constraints.weighty = 100;
-        add(this, sp, constraints, 0, 0, 1, 1);
+        add(this, tree.getScrollPane(), constraints, 0, 0, 1, 1);
 
         update();
     }
 
     @Override
     public void update() {
-        LGMTreeNode root = tree.getRoot();
+        LGMTreeNode<?> root = tree.getRoot();
         root.removeAllChildren();
         ModelElement me = getModelElement();
         GraphDocument mainDoc = getMainDoc();
-        List<ElementContainer> all = me.getConnectedContainers(searchElementClass, mainDoc);
-        for (int m = 0; m < all.size(); m++) {
-            LGMTreeNode node = new ElementContainerTreeNode(all.get(m), false, true);
-            root.add(node);
-        }
-        if (OPTION_ELEMENTS_RECEIVE_PROPERTIES_FROM_PARTS.is()) {
-            all = ((Node) me).getPartConnectedContainers(searchElementClass, mainDoc);
-            for (int m = 0; m < all.size(); m++) {
-                LGMTreeNode node = new ElementContainerTreeNode(all.get(m), false, true);
-                node.setSelectable(false);
-                root.add(node);
+
+        List<ElementContainer> elementContainers = me.getConnectedContainers(searchElementClass, mainDoc);
+        addNodes(root, elementContainers, true);
+        if (me instanceof Node) {
+            if (OPTION_ELEMENTS_RECEIVE_PROPERTIES_FROM_PARTS.is()) {
+                elementContainers = ((Node) me).getPartConnectedContainers(searchElementClass, mainDoc);
+                addNodes(root, elementContainers, false);
             }
-        }
-        if (OPTION_ELEMENTS_RECEIVE_PROPERTIES_FROM_PARENTS.is()) {
-            all = ((Node) me).getParentConnectedContainers(searchElementClass, mainDoc);
-            for (int m = 0; m < all.size(); m++) {
-                LGMTreeNode node = new ElementContainerTreeNode(all.get(m), false, true);
-                node.setSelectable(false);
-                root.add(node);
+            if (OPTION_ELEMENTS_RECEIVE_PROPERTIES_FROM_PARENTS.is()) {
+                elementContainers = ((Node) me).getParentConnectedContainers(searchElementClass, mainDoc);
+                addNodes(root, elementContainers, false);
             }
         }
         tree.reloadModel();
@@ -171,13 +160,11 @@ public class MutipleCompositionPanel extends AbstractPathConnectionTreePanel {
                 if (selpaths != null) {
                     for (int n = 0; n < selpaths.length; n++) {
                         // if(lomodel.getChildCount(loroot)>0) return;
-                        LGMTreeNode treeNode = (LGMTreeNode) selpaths[n].getLastPathComponent();
-                        ElementContainer ec = (ElementContainer) treeNode.getUserObject();
-
+                        ElementContainerTreeNode ecTreeNode = (ElementContainerTreeNode) selpaths[n].getLastPathComponent();
                         ModelElement topLevelElement;
                         topLevelElement = getModelElement();
                         GDCollection gdcoll = topLevelElement.getCollection();
-                        ModelElement treeNodeElement = ec.getElement();
+                        ModelElement treeNodeElement = ecTreeNode.getModelElement();
                         Class<? extends Edge> lastEdgeClassInPath = getLastEdgeClassInPath();
                         int pid = getTransactionID();
                         gdcoll.unlink(topLevelElement, treeNodeElement, lastEdgeClassInPath, MASTER_TO_SLAVE_DIRECTION, pid);

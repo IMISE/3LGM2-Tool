@@ -5,13 +5,14 @@ import static de.imise.tool3lgm.graphtools.metamodel.EdgeCardinality.ZERO_UNLIMI
 import de.imise.tool3lgm.graphtools.metamodel.EdgeCardinality;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.metamodel.elements.MultipleEdge;
+import de.imise.tool3lgm.graphtools.metamodel.elements.OrderedEdge;
 import de.imise.tool3lgm.metamodel.service.node.Function;
 import de.imise.tool3lgm.metamodel.service.node.Process;
 
 /**
  * @author AXS (31.12.2017)
  */
-public final class Process_Function_Edge extends MultipleEdge {
+public final class Process_Function_Edge extends MultipleEdge implements OrderedEdge {
 
     public static final Class<? extends ModelElement> STCL = Process.class;
 

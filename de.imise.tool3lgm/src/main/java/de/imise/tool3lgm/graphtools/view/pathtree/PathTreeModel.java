@@ -7,18 +7,15 @@ import java.util.List;
 import javax.swing.ImageIcon;
 import javax.swing.tree.DefaultTreeModel;
 
-import org.apache.jena.ext.com.google.common.base.Strings;
+import com.google.common.base.Strings;
+import com.google.common.collect.ImmutableList;
 
-import de.imise.tool3lgm.MetaModelContext;
 import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModelDefinition;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModelSpecific;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
-import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
-import de.imise.tool3lgm.graphtools.model.LGMGraphDocument;
-import de.imise.tool3lgm.graphtools.model.template.TemplateLibrariesManager;
 import de.imise.tool3lgm.graphtools.path.metapaths.ElementaryMetaPath;
 import de.imise.tool3lgm.graphtools.path.metapaths.MetaPath;
 import de.imise.tool3lgm.graphtools.path.metapaths.MetaPathFunctions;
@@ -33,6 +30,9 @@ import de.imise.tool3lgm.graphtools.view.tree.node.StringTreeNode;
 import de.imise.util.BooleanOption;
 
 /**
+ * A TreeModel that builds itself according to its underlying
+ * PathTreeDefinition.
+ *
  * @author AXS (01.09.2019)
  */
 public class PathTreeModel extends DefaultTreeModel implements MetaModelSpecific {
@@ -41,7 +41,7 @@ public class PathTreeModel extends DefaultTreeModel implements MetaModelSpecific
     private PathTreeDefinition treeDefinition;
 
     /** root node as {@link LGMTreeNode} */
-    private final LGMTreeNode root;
+    private final IconifiedTreeNode<?> root;
 
     /** Info that is displayed if there is nothing else to display */
     private final String emptyModelInfo;
@@ -63,6 +63,27 @@ public class PathTreeModel extends DefaultTreeModel implements MetaModelSpecific
     final BooleanOption showAllElements;
 
     /**
+     * If this submodel is set, the model always uses this doc to fill itself.
+     * If it is <code>null</code> then the function
+     * {@link #getAllSourceModels()} will return a valid submodel.
+     */
+    private final Iterable<GraphDocument> sourceDocs;
+
+    /**
+     *
+     */
+    public boolean setRootVisible = false;
+
+    /**
+     * @param rootElement
+     * @param doc
+     * @param showAllElements
+     */
+    public PathTreeModel(final ElementContainer rootElement, final BooleanOption showAllElements) {
+        this(new ElementContainerTreeNode(rootElement, true, false, true), "", false, showAllElements);
+    }
+
+    /**
      * @param emptyModelInfo Info that is displayed if there is nothing else to
      *            display
      * @param showElementNamesWithSubmodels If <code>false</code> only the name
@@ -77,8 +98,27 @@ public class PathTreeModel extends DefaultTreeModel implements MetaModelSpecific
      *            displayed
      */
     public PathTreeModel(final String emptyModelInfo, final boolean showElementNamesWithSubmodels, final BooleanOption showAllElements) {
-        super(new StringTreeNode("Root", true));
-        root = (LGMTreeNode) super.root;
+        this(new StringTreeNode("Root", true), emptyModelInfo, showElementNamesWithSubmodels, showAllElements);
+    }
+
+    /**
+     * @param rootNode
+     * @param emptyModelInfo
+     * @param showElementNamesWithSubmodels
+     * @param showAllElements
+     */
+    private PathTreeModel(final IconifiedTreeNode<?> rootNode, final String emptyModelInfo, final boolean showElementNamesWithSubmodels, final BooleanOption showAllElements) {
+        super(rootNode);
+        if (super.root instanceof ElementContainerTreeNode) {
+            ElementContainerTreeNode elementContainerRootNode = (ElementContainerTreeNode) super.root;
+            ElementContainer ec = elementContainerRootNode.getUserObject();
+            GraphDocument sourceDoc = ec.getGraphDocument();
+            sourceDocs = ImmutableList.of(sourceDoc);
+        } else {
+            sourceDocs = null;
+        }
+        root = (IconifiedTreeNode<?>) super.root;
+
         this.emptyModelInfo = emptyModelInfo;
         this.showElementNamesWithSubmodels = showElementNamesWithSubmodels;
         this.showAllElements = showAllElements;
@@ -105,9 +145,9 @@ public class PathTreeModel extends DefaultTreeModel implements MetaModelSpecific
      * @param icon
      * @return
      */
-    private LGMTreeNode getOrCreateHierarchyNode(final LGMTreeNode parent, final Object hierarchyDefinitionObject, final ImageIcon icon) {
+    private IconifiedTreeNode<?> getOrCreateHierarchyNode(final LGMTreeNode<?> parent, final Object hierarchyDefinitionObject, final ImageIcon icon) {
         for (int i = 0; i < parent.getChildCount(); i++) {
-            LGMTreeNode childNode = (LGMTreeNode) parent.getChildAt(i);
+            IconifiedTreeNode<?> childNode = (IconifiedTreeNode<?>) parent.getChildAt(i);
             Object childNodeUserObject = childNode.getUserObject();
             //check the UserObject is is equals to the current object in the hierarchy of the definition
             if (hierarchyDefinitionObject.equals(childNodeUserObject)) {
@@ -125,7 +165,7 @@ public class PathTreeModel extends DefaultTreeModel implements MetaModelSpecific
         }
         String hierarchyNodeTextResourceKey = hierarchyDefinitionObject.toString();
         String hierarchyNodeText = treeDefinition.getResStringWithoutError(hierarchyNodeTextResourceKey);
-        LGMTreeNode hierarchyNode = new IconifiedTreeNode(hierarchyDefinitionObject, hierarchyNodeText, true, icon);
+        IconifiedTreeNode<?> hierarchyNode = new IconifiedTreeNode<>(hierarchyDefinitionObject, hierarchyNodeText, true, icon);
         parent.add(hierarchyNode);
         return hierarchyNode;
     }
@@ -138,8 +178,8 @@ public class PathTreeModel extends DefaultTreeModel implements MetaModelSpecific
      * @return the last node of the hierarchy node defined by the given branch
      *         definition
      */
-    private LGMTreeNode getOrCreateBranchLastHierarchyNode(final PathTreeBranchDefinition branchDefinition) {
-        LGMTreeNode lastHierarchyNode = root;
+    protected IconifiedTreeNode<?> getOrCreateBranchLastHierarchyNode(final PathTreeBranchDefinition branchDefinition) {
+        IconifiedTreeNode<?> lastHierarchyNode = root;
         for (Object hierarchyObject : branchDefinition.iterableHierarchyObjects()) {
             ImageIcon icon = branchDefinition.getIcon(hierarchyObject);
             //if String try to load a resource string for this string as key
@@ -154,17 +194,14 @@ public class PathTreeModel extends DefaultTreeModel implements MetaModelSpecific
     /**
      * @param branchDefinition
      */
-    private void addBranch(final PathTreeBranchDefinition branchDefinition) {
-        LGMTreeNode lastHierarchyNode = getOrCreateBranchLastHierarchyNode(branchDefinition);
+    protected void addBranch(final PathTreeBranchDefinition branchDefinition) {
+        IconifiedTreeNode<?> lastHierarchyNode = getOrCreateBranchLastHierarchyNode(branchDefinition);
         SequenceMetaPath metaPath = branchDefinition.getElementsPath();
-        MetaModelContext metaModelContext = getMetaModelContext();
-        TemplateLibrariesManager templateLibrariesManager = Static.getTemplateLibrariesManager();
-        Collection<GDCollection> templates = templateLibrariesManager.getTemplates(metaModelContext);
         Class<? extends ModelElement> pathStepConnectionClass = metaPath.getStartClass();
         Collection<ElementContainerTreeNode> pathStepNodes = new ArrayList<>();
-        for (GDCollection template : templates) {
-            LGMGraphDocument mainGraphDocument = template.getMainDoc();
-            List<ElementContainer> elementContainers = mainGraphDocument.getElementContainers(pathStepConnectionClass);
+        Iterable<GraphDocument> allSourceModels = getAllSourceModels();
+        for (GraphDocument sourceModel : allSourceModels) {
+            List<ElementContainer> elementContainers = sourceModel.getElementContainers(pathStepConnectionClass);
             getOrCreateNodes(pathStepNodes, elementContainers, lastHierarchyNode, null, branchDefinition);
         }
         boolean showAllElements = this.showAllElements.is();
@@ -183,7 +220,7 @@ public class PathTreeModel extends DefaultTreeModel implements MetaModelSpecific
      * @param branchDefinition
      * @return
      */
-    private Collection<ElementContainerTreeNode> addPathStepNodes(final Iterable<ElementContainerTreeNode> parentNodes, final MetaPath subMetaPath, final PathTreeBranchDefinition branchDefinition) {
+    protected Collection<ElementContainerTreeNode> addPathStepNodes(final Iterable<ElementContainerTreeNode> parentNodes, final MetaPath subMetaPath, final PathTreeBranchDefinition branchDefinition) {
         Collection<ElementContainerTreeNode> nextPathStepNodes = new ArrayList<>();
         for (ElementContainerTreeNode parentNode : parentNodes) {
             ElementContainer parentEc = parentNode.getUserObject();
@@ -202,7 +239,7 @@ public class PathTreeModel extends DefaultTreeModel implements MetaModelSpecific
      * @param subMetaPath
      * @param branchDefinition
      */
-    private void getOrCreateNodes(final Collection<ElementContainerTreeNode> createdNodes, final Iterable<ElementContainer> elementContainers, final LGMTreeNode parent, final MetaPath subMetaPath, final PathTreeBranchDefinition branchDefinition) {
+    protected void getOrCreateNodes(final Collection<ElementContainerTreeNode> createdNodes, final Iterable<ElementContainer> elementContainers, final LGMTreeNode<?> parent, final MetaPath subMetaPath, final PathTreeBranchDefinition branchDefinition) {
         for (ElementContainer ec : elementContainers) {
             ModelElement me = ec.getElement();
             Class<? extends ModelElement> meClass = me.getClass();
@@ -218,7 +255,7 @@ public class PathTreeModel extends DefaultTreeModel implements MetaModelSpecific
             }
             //setTreeNode is false. Set the treeNode only if there is no equals existing node
             boolean setTreeNodeInNodeContainer = false;
-            ElementContainerTreeNode pathStepNode = createSimpleNode ? new ElementContainerTreeNode(ec, setTreeNodeInNodeContainer, true, icon) : new PathStepTreeNode(ec, subMetaPath, setTreeNodeInNodeContainer, true, icon);
+            ElementContainerTreeNode pathStepNode = createSimpleNode ? new ElementContainerTreeNode(ec, true, setTreeNodeInNodeContainer, true, icon) : new PathStepTreeNode(ec, subMetaPath, setTreeNodeInNodeContainer, true, icon);
             if (!showElementNamesWithSubmodels) {
                 String simpleName = me.toString();
                 String currentToStringName = pathStepNode.toString();
@@ -226,7 +263,7 @@ public class PathTreeModel extends DefaultTreeModel implements MetaModelSpecific
                     pathStepNode.setText(simpleName);
                 }
             }
-            LGMTreeNode existingEqualsNode = parent.getEqualsChild(pathStepNode);
+            LGMTreeNode<ElementContainer> existingEqualsNode = parent.getEqualsChild(pathStepNode);
             if (existingEqualsNode == null) {
                 parent.add(pathStepNode);
                 pathStepNode.setTreeNode(ec); //now set the new TreeNode to the ElementContainer (NodeContainer)
@@ -258,6 +295,50 @@ public class PathTreeModel extends DefaultTreeModel implements MetaModelSpecific
     @Override
     public Class<? extends MetaModelDefinition> getMetaModelDefinitionClass() {
         return treeDefinition == null ? null : treeDefinition.getMetaModelDefinitionClass();
+    }
+
+    /**
+     * @return all submodels to be queried to fill the model
+     */
+    private Iterable<GraphDocument> getAllSourceModels() {
+        if (sourceDocs != null) {
+            return sourceDocs;
+        }
+        Iterable<GraphDocument> sourceModels = getSourceModels();
+        if (sourceModels != null) {
+            return sourceModels;
+        }
+        GraphDocument sourceModel = getSourceModel();
+        if (sourceModel == null) {
+            sourceModel = Static.getSelectedDoc();
+        }
+        return ImmutableList.of(sourceModel);
+    }
+
+    /**
+     * Subclasses must override this function or {@link #getSourceModel()} so
+     * that the model knows which submodel or submodels to populate from. If
+     * neither function is overridden, the main model of the currently selected
+     * model is taken.
+     *
+     * @return the submodels to be queried to fill the model
+     * @see #getSourceModel()
+     */
+    protected Iterable<GraphDocument> getSourceModels() {
+        return null;
+    }
+
+    /**
+     * Subclasses must override this function or {@link #getSourceModels()} so
+     * that the model knows which submodel or submodels to populate from. If
+     * neither function is overridden, the main model of the currently selected
+     * model is taken.
+     *
+     * @return the submodel to be queried to fill the model
+     * @see #getSourceModels()
+     */
+    protected GraphDocument getSourceModel() {
+        return null;
     }
 
 }

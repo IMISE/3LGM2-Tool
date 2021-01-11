@@ -10,6 +10,7 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.view.container.BendpointContainer;
 import de.imise.tool3lgm.graphtools.view.container.EdgeContainer;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
+import de.imise.tool3lgm.graphtools.view.container.InterLayerConnectedNodeContainer;
 import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
 
 /**
@@ -294,6 +295,21 @@ public class ElementSelectionContext extends MetaModelSpecificAdapter {
      */
     public boolean isSelectedAtLeastOneRealNode() {
         return selectedContainer.getSelectedRealElementContainerCount() > 0;
+    }
+
+    /**
+     * Liefert <code>true</code>, wenn mind. ein
+     * {@link InterLayerConnectedNodeContainer} selektiert ist.
+     *
+     * @return
+     */
+    public boolean isSelectedAtLeastOneInterLayerNode() {
+        for (ElementContainer ec : getSelectedRealElementContainerIterable()) {
+            if (ec instanceof InterLayerConnectedNodeContainer) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**

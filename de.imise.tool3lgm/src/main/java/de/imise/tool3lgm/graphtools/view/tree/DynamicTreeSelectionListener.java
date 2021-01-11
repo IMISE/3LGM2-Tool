@@ -44,11 +44,11 @@ public class DynamicTreeSelectionListener implements TreeSelectionListener {
         doc.start_transaction(ModelBrowserTree.PID, false);
         doc.deselectAll(true);
         TreePath[] paths = tree.getSelectionPaths();
-        LGMTreeNode selectedLayerNode = null;
+        LGMTreeNode<?> selectedLayerNode = null;
         if (paths != null) {
-            LGMTreeNode node = null;
+            LGMTreeNode<?> node = null;
             for (int i = 0; i < paths.length; i++) {
-                node = (LGMTreeNode) paths[i].getLastPathComponent();
+                node = (LGMTreeNode<?>) paths[i].getLastPathComponent();
                 Object userObject = node.getUserObject();
                 if (userObject != null && userObject instanceof NodeContainer) {
                     if (node.isSelectable()) {
@@ -83,11 +83,11 @@ public class DynamicTreeSelectionListener implements TreeSelectionListener {
      * @param node
      * @return
      */
-    private LGMTreeNode getLayerNode(final LGMTreeNode node) {
+    private LGMTreeNode<?> getLayerNode(final LGMTreeNode<?> node) {
         TreeNode parent = node;
         while (parent != null) {
             if (tree.isLayerNode(parent)) {
-                return (LGMTreeNode) parent;
+                return (LGMTreeNode<?>) parent;
             }
             parent = parent.getParent();
         }

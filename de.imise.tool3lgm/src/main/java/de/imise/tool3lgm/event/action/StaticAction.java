@@ -266,9 +266,6 @@ public abstract class StaticAction extends ExtendedAction {
             perform = true;
         }
         if (perform) {
-            if (identifier instanceof GDCommands) {
-                Static.getSelectedDoc().exec(getActionCommand(), TransactionManager.STANDARD_PID);
-            }
             actionPerformed();
             actionPerformedWithEvent(e);
         }
@@ -280,6 +277,10 @@ public abstract class StaticAction extends ExtendedAction {
      * ist, wird das Event auch nicht durchgereicht
      */
     protected void actionPerformed() {
+        Object identifier = getValue(IDENTIFIER_KEY);
+        if (identifier instanceof GDCommands) {
+            Static.getSelectedDoc().exec(getActionCommand(), TransactionManager.STANDARD_PID);
+        }
     }
 
     /**

@@ -7,7 +7,7 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 /**
  * @author AXS (8 Apr 2019)
  */
-public class ElementClassTreeNode extends IconifiedTreeNode {
+public class ElementClassTreeNode extends IconifiedTreeNode<Class<? extends ModelElement>> {
 
     /**
      * @param elementClass
@@ -45,15 +45,22 @@ public class ElementClassTreeNode extends IconifiedTreeNode {
         super(elementClass, label, sort);
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     public Class<? extends ModelElement> getUserObject() {
-        return (Class<? extends ModelElement>) super.getUserObject();
+        return super.getUserObject();
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public void setUserObject(final Object userObject) {
-        throw new UnsupportedOperationException();
+        setUserObject((Class<? extends ModelElement>) userObject); //hard cast! if this is not such class, so don't call this function!
+    }
+
+    /**
+     * @param userObject
+     */
+    public void setUserObject(final Class<? extends ModelElement> userObject) {
+        super.setUserObject(userObject);
     }
 
 }

@@ -98,10 +98,6 @@ public abstract class SubordinationEdge extends Edge {
 
     @Override
     public void setNodesAndInsert(final ModelElement startElement, final int startElementEdgeIndex, final ModelElement endElement, final int endElementEdgeIndex) {
-        ModelElement oldStartElement = startElement;
-        ModelElement oldEndElement = endElement;
-        int oldStartElementEdgeIndex = oldStartElement == null ? 0 : oldStartElement.removeEdge(this);
-        int oldEndElementEdgeIndex = oldEndElement == null ? 0 : oldEndElement.removeEdge(this);
         this.startElement = startElement;
         this.endElement = endElement;
         startElement.insertEdge(this, startElementEdgeIndex);
@@ -109,31 +105,28 @@ public abstract class SubordinationEdge extends Edge {
         if (isInCircle()) {
             startElement.removeEdge(this);
             endElement.removeEdge(this);
-            super.setNodesAndInsert(oldStartElement, oldStartElementEdgeIndex, oldEndElement, oldEndElementEdgeIndex);
+            this.startElement = null;
+            this.endElement = null;
         }
     }
 
     @Override
     public final void setStartAndInsert(final ModelElement startElement) {
-        ModelElement oldStartElement = startElement;
-        oldStartElement.removeEdge(this);
         this.startElement = startElement;
         startElement.addEdge(this);
         if (isInCircle()) {
             startElement.removeEdge(this);
-            super.setStartAndInsert(oldStartElement);
+            this.startElement = null;
         }
     }
 
     @Override
     public final void setEndAndInsert(final ModelElement endElement) {
-        ModelElement oldEndElement = endElement;
-        oldEndElement.removeEdge(this);
         this.endElement = endElement;
         endElement.addEdge(this);
         if (isInCircle()) {
             endElement.removeEdge(this);
-            super.setEndAndInsert(oldEndElement);
+            this.endElement = null;
         }
     }
 
@@ -144,11 +137,16 @@ public abstract class SubordinationEdge extends Edge {
         ModelElement k1 = getSuperElement();
         ModelElement k2 = getSubElement();
         if (k1 != null && k2 != null) {
-            boolean retVal = k2.isSuperElementOf(k1, getClass());
+            Class<? extends SubordinationEdge> subordinationEdgeClass = getClass();
+            boolean retVal = k2.isSuperElementOf(k1, subordinationEdgeClass);
             if (retVal) {
                 ElementsNameBuilder elementsNameBuilder = getMetaModel().getElementsNameBuilder();
-                Log.show(Log.INFO, getResString("part_of_circle_error") + "\n" + elementsNameBuilder.getDisplayablePluralName(ModelElement.class) + ":\n" + elementsNameBuilder.getDisplayableName(k1) + ": " + k1.getName() + "\n"
-                        + elementsNameBuilder.getDisplayableName(k2) + ": " + k2.getName());
+                String edgeClassPluralName = elementsNameBuilder.getDisplayablePluralName(subordinationEdgeClass);
+                String message = getResString("part_of_circle_error");
+                String elements = elementsNameBuilder.getDisplayablePluralName(ModelElement.class);
+                String elementType1 = elementsNameBuilder.getDisplayableName(k1);
+                String elementType2 = elementsNameBuilder.getDisplayableName(k2);
+                Log.show(Log.INFO, edgeClassPluralName + " " + message + "\n" + elements + ":\n" + elementType1 + ": " + k1.getName() + "\n" + elementType2 + ": " + k2.getName());
             }
             return retVal;
         }

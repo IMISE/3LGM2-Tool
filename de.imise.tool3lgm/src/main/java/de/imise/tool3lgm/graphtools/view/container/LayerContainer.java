@@ -628,7 +628,7 @@ public class LayerContainer extends ElementContainer {
             Alphabetical.insert(treeNodeContainers, nc);
             Node node = nc.getNode();
             MetaModel metaModel = doc.getMetaModel();
-            if (metaModel.hasSortedEdgeClassesToPaintable(node.getClass())) {
+            if (metaModel.hasOrderedEdgeClassesToPaintable(node.getClass())) {
                 numberedEdgesNodeContainer.add(nc);
             }
         }

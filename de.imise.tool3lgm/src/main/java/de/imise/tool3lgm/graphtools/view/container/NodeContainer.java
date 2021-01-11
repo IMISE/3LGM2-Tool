@@ -129,7 +129,7 @@ public class NodeContainer
             return;
         }
         MetaModel metaModel = doc.getMetaModel();
-        if (metaModel.hasSortedEdgeClassesToPaintable(me.getClass())) {
+        if (metaModel.hasOrderedEdgeClassesToPaintable(me.getClass())) {
             //			registerAsGraphDocumentListener();
             if (layout == null) {
                 layout = new GraphElementLayout();

@@ -66,7 +66,7 @@ public class LGMActionLibrary {
                 if (paths != null) {
                     panel.removeHighLights();
                     for (int i = 0; i < paths.length; i++) {
-                        LGMTreeNode treeNode = (LGMTreeNode) paths[i].getLastPathComponent();
+                        LGMTreeNode<?> treeNode = (LGMTreeNode<?>) paths[i].getLastPathComponent();
                         if (!(treeNode.getUserObject() instanceof String)) {
                             if (treeNode.isSelectable()) {
                                 // das hier muss sein, falls im Baum ein Element

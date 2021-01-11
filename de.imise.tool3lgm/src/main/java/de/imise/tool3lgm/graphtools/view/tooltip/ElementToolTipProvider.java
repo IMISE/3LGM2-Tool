@@ -39,8 +39,8 @@ public class ElementToolTipProvider implements ToolTipProvider {
 
     @Override
     public String getToolTip(Object o) {
-        if (o instanceof LGMTreeNode) {
-            LGMTreeNode treeNode = (LGMTreeNode) o;
+        if (o instanceof LGMTreeNode<?>) {
+            LGMTreeNode<?> treeNode = (LGMTreeNode<?>) o;
             AbstractConsistencyError consistencyError = treeNode.getConsistencyError();
             if (consistencyError != null) {
                 String treeNodeToolTip = consistencyError.getLongMessage();

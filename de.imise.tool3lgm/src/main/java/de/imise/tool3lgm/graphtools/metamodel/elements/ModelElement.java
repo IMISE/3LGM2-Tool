@@ -735,7 +735,7 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
             int edgeIndex = edges.indexOf(edge);
             if (edgeIndex >= 0) {
                 edges.remove(edge);
-                if (edges.size() == 0) {
+                if (edges.isEmpty()) {
                     edges = null;
                 }
             }
@@ -1304,12 +1304,34 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
      * @return Liste mit verbundenen <code>ModelElement</code>s
      */
     public final List<ElementContainer> getPartConnectedContainers(final Class<? extends ModelElement> searchElementClass, final GraphDocument doc, final Class<? extends Edge> edgeClass, final Direction direction, final ConnectionState connectionState) {
+        return getPartConnectedContainers(searchElementClass, doc, edgeClass, direction, connectionState, true);
+    }
+
+    /**
+     * Liefert eine Liste aller Elemente, die über die angegebene Kantenart mit
+     * den direkten und indirekten Teilelementen dieses Elementes verbunden
+     * sind. Es wird nur in dem angegebenen <code>GraphDocument</code> gesucht
+     * und nur in der angegebenen Richtung der Edge.
+     *
+     * @param searchElementClass Elementart nach der gesucht werden soll
+     * @param doc <code>GraphDocument</code>, in dem nach verbundenen Elementen
+     *            gesucht wird
+     * @param edgeClass Art der Edge, über die Elemente mit den Teilen dieses
+     *            Elementes verbunden sein sollen
+     * @param direction Richtung, die die Kanten haben sollen, über die die
+     *            verbundenen Elemente gesucht werden
+     * @param connectionState
+     * @param alphabetical
+     * @return Liste mit verbundenen <code>ModelElement</code>s
+     */
+    public final List<ElementContainer> getPartConnectedContainers(final Class<? extends ModelElement> searchElementClass, final GraphDocument doc, final Class<? extends Edge> edgeClass, final Direction direction, final ConnectionState connectionState,
+            final boolean alphabetical) {
         //Rückgabeliste
         List<ElementContainer> connected = new ArrayList<>();
         //Liste aller Teile holen (direkte und indirekte)
         for (ModelElement me : getPartElements(false)) {
             //füge zur Rückgabeliste alle über die angegebene Art verbundenen Node hinzu
-            connected.addAll(me.getConnectedContainers(searchElementClass, doc, edgeClass, direction, connectionState));
+            connected.addAll(me.getConnectedContainers(searchElementClass, doc, edgeClass, direction, connectionState, alphabetical));
         }
         return connected;
     }
@@ -1366,6 +1388,28 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
      * @return Liste mit verbundenen <code>ModelElement</code>s
      */
     public final List<ElementContainer> getParentConnectedContainers(final Class<? extends ModelElement> searchElementClass, final GraphDocument doc, final Class<? extends Edge> edgeClass, final Direction direction, final ConnectionState connectionState) {
+        return getParentConnectedContainers(searchElementClass, doc, edgeClass, direction, connectionState, true);
+    }
+
+    /**
+     * Liefert eine Liste aller Elemente, die über die angegebene Kantenart mit
+     * den direkten und indirekten Oberelementen dieses Elementes verbunden
+     * sind. Es wird nur in dem angegebenen <code>GraphDocument</code> gesucht
+     * und nur in der angegebenen Richtung der Edge.
+     *
+     * @param searchElementClass Elementart nach der gesucht werden soll
+     * @param doc <code>GraphDocument</code>, in dem nach verbundenen Elementen
+     *            gesucht wird
+     * @param edgeClass Art der Edge, über die Elemente mit den Teilen dieses
+     *            Elementes verbunden sein sollen
+     * @param direction Richtung, die die Kanten haben sollen, über die die
+     *            verbundenen Elemente gesucht werden
+     * @param connectionState
+     * @param alphabetical
+     * @return Liste mit verbundenen <code>ModelElement</code>s
+     */
+    public final List<ElementContainer> getParentConnectedContainers(final Class<? extends ModelElement> searchElementClass, final GraphDocument doc, final Class<? extends Edge> edgeClass, final Direction direction, final ConnectionState connectionState,
+            final boolean alphabetical) {
         //Rückgabeliste
         List<ElementContainer> connected = new ArrayList<>();
         //für alle Oberelemente
@@ -1373,7 +1417,7 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
 
         for (ModelElement me : al) {
             //füge zur Rückgabeliste alle über die angegebene Art verbundenen Node hinzu
-            connected.addAll(me.getConnectedContainers(searchElementClass, doc, edgeClass, direction, connectionState));
+            connected.addAll(me.getConnectedContainers(searchElementClass, doc, edgeClass, direction, connectionState, alphabetical));
         }
         return connected;
     }
@@ -1938,7 +1982,7 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
             final boolean alphabetical) {
         List<Object> connected = getConnectedInternal(searchElementClass, doc, edgeClass, direction, connectionState, container, alphabetical);
         //Special case: DoubleMeaningEdges which connect same element types must be checked in both directions
-        if (edgeClass != null && CoreMetaModel.isDoubleMeaningEdge(edgeClass) && metaModel.canConnectSameElementsInBothDirections(edgeClass)) {
+        if (connectionState != null && edgeClass != null && (CoreMetaModel.isDoubleMeaningEdge(edgeClass) && metaModel.canConnectSameElementsInBothDirections(edgeClass) || !metaModel.isDirectedEdge(edgeClass))) {
             Direction otherDirection = direction.getOther();
             List<Object> otherDirectionConnected = getConnectedInternal(searchElementClass, doc, edgeClass, otherDirection, connectionState, container, alphabetical);
             connected.addAll(otherDirectionConnected);

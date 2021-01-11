@@ -725,7 +725,7 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
         ModelElement me = ec.getElement();
         while (true) {
             NameAndColorInputDialog d = new NameAndColorInputDialog(getMainFrame());
-            boolean showColorChooser = metaModel.hasSortedEdgeClassesToPaintable(me.getClass());
+            boolean showColorChooser = metaModel.hasOrderedEdgeClassesToPaintable(me.getClass());
             d.showDialogOnMousePointer(getResString("name_eing"), me.toString(), showColorChooser);
             String inputString = d.getInputString();
             if (inputString == null) {
@@ -1604,12 +1604,12 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
      * @param direction
      * @param pid
      */
-    public void link(final ModelElement startElement, final ModelElement endElement, final Class<? extends Edge> edgeClass, final Direction direction, final int pid) {
+    public final Edge link(final ModelElement startElement, final ModelElement endElement, final Class<? extends Edge> edgeClass, final Direction direction, final int pid) {
         //das neue Element mit dem startElement verknüpfen
         if (direction == Direction.FORWARD) {
-            link(edgeClass, startElement, endElement, false, pid);
+            return link(edgeClass, startElement, endElement, false, pid);
         } else {
-            link(edgeClass, endElement, startElement, false, pid);
+            return link(edgeClass, endElement, startElement, false, pid);
         }
     }
 
@@ -1847,20 +1847,24 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
                 if (doubleMeaningEdge) {
                     ((DoubleMeaningEdge) edge).setConnectionState(connectionState);
                 }
+
                 edge.setNodesAndInsert(startElement, startElementEdgeIndex, endElement, endElementEdgeIndex);
-                if (edge.getStart() != null && edge.getEnd() != null) {
+                ModelElement start = edge.getStart();
+                ModelElement end = edge.getEnd();
+                if (start != null && end != null) {
                     kac = new EdgeContainer(edge, mainDoc);
                     String name = getNewEdgeName(edge);
                     edge.setName(name, false);
                     addEdge(kac, pid);
                 } else {
-                    if (edge.getStart() == null && edge.getEnd() != null) {
-                        edge.getEnd().removeEdge(edge);
+                    if (start != null) {
+                        start.removeEdge(edge);
                     }
-                    if (edge.getEnd() == null && edge.getStart() != null) {
-                        edge.getStart().removeEdge(edge);
+                    if (end != null) {
+                        end.removeEdge(edge);
                     }
                 }
+
                 //Falls bereits Beziehungen der anzulegenden Art bestehen und durch die neue Beziehung die Kardinalitäten
                 //verletzt wären -> lösche solange bestehende Beziehungen, bis die Kardinaltitäten eingehalten werden
                 //Dies muss nach dem Hinzufügen der anderen Undo-Komamndos erfolgen, sonst stimmt die Reihenfolge der Kommandos nicht.
