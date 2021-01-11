@@ -40,8 +40,9 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.MultipleEdge;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GDCommands;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
-import de.imise.tool3lgm.graphtools.path.metapaths.SimpleMetaPath;
-import de.imise.tool3lgm.graphtools.path.metapaths.SimpleMetaPathCreator;
+import de.imise.tool3lgm.graphtools.path.metapaths.ElementaryMetaPath;
+import de.imise.tool3lgm.graphtools.path.metapaths.ElementaryMetaPathHandler;
+import de.imise.tool3lgm.graphtools.path.metapaths.SequenceMetaPath;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
 import de.imise.tool3lgm.graphtools.view.tree.ElementDialogPanelTree;
@@ -226,23 +227,13 @@ public class ProzessStructurePanel extends PathConnectionLeafPanel implements Tr
      * @param doubleMeaningEdgeClass
      * @return
      */
-    private static SimpleMetaPath createSimpleMetaPath(final ElementPropertyDialog dialog, final Class<? extends MultipleEdge> multipleConnectionEgdeClass, final Class<? extends Edge> doubleMeaningEdgeClass) {
+    private static SequenceMetaPath createSimpleMetaPath(final ElementPropertyDialog dialog, final Class<? extends MultipleEdge> multipleConnectionEgdeClass, final Class<? extends Edge> doubleMeaningEdgeClass) {
         ModelElement me = dialog.getModelElement();
         Class<? extends ModelElement> elementClass = me.getClass();
         MetaModel metaModel = dialog.getMetaModel();
-        SimpleMetaPath simpleMetaPath = SimpleMetaPathCreator.createSimpleMetaPath(metaModel, elementClass, MetaModel.getOther(multipleConnectionEgdeClass, elementClass), multipleConnectionEgdeClass);
-        return simpleMetaPath;
-    }
-
-    /**
-     * Die TreeNodes unter dem Root im linken Baum dürfen nicht sortiert werden
-     *
-     * @return false, damit die TreeNodes unter dem Root im linken Baum dürfen
-     *         nicht sortiert werden
-     */
-    @Override
-    protected final boolean getSortLeftTreeRootChildrenAlphabetical() {
-        return false;
+        ElementaryMetaPathHandler elementaryMetaPathHandler = metaModel.getElementaryMetaPathHandler();
+        ElementaryMetaPath metaPath = elementaryMetaPathHandler.getMetaPath(elementClass, multipleConnectionEgdeClass);
+        return metaPath;
     }
 
     @Override
