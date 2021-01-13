@@ -12,6 +12,7 @@ import de.imise.tool3lgm.graphtools.path.metapaths.SimpleMetaPath;
 import de.imise.tool3lgm.graphtools.path.metapaths.SimpleMetaPathCreator;
 import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout;
 import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout.SHAPE;
+import de.imise.tool3lgm.metamodel.service.edge.ApplicationComponent_ObjectType_Edge;
 import de.imise.tool3lgm.metamodel.service.edge.ApplicationComponent_PhysicalDataProcessingComponent_Edge;
 import de.imise.tool3lgm.metamodel.service.edge.ApplicationComponent_Use_Edge;
 import de.imise.tool3lgm.metamodel.service.edge.CommunicationLink_Edge;
@@ -89,6 +90,14 @@ public class TLGMServiceGraphViewDefinion extends GraphViewDefinition {
         setDefaultLayout(IheActorInstance.class, GraphElementLayout.SHAPE.rechteck, GraphElementLayout.COLORS[GraphElementLayout.LIGHTBLUE]);
         setDefaultLayout(IheActorInstanceInvokingInterface.class, GraphElementLayout.SHAPE.oval, GraphElementLayout.COLORS[GraphElementLayout.RED], 15, 15);
         setDefaultLayout(IheActorInstanceProvidingInterface.class, GraphElementLayout.SHAPE.dreieck, GraphElementLayout.COLORS[GraphElementLayout.GRAY], 20, 20);
+    }
+
+    @Override
+    protected List<AdditionalGraphShapeData> getAdditionalGraphShapeData() {
+        //Application Sytsems get a Database on its shape if they are connected to an ObjectType
+        SimpleMetaPath mp1 = SimpleMetaPathCreator.createSimpleMetaPath(metaModel, ApplicationSystem.class, ObjectType.class, ApplicationComponent_ObjectType_Edge.class);
+        SimpleMetaPath mp2 = SimpleMetaPathCreator.createSimpleMetaPath(metaModel, OrganisationSystem.class, ObjectType.class, ApplicationComponent_ObjectType_Edge.class);
+        return ImmutableList.of(new AdditionalGraphShapeData(mp1, SHAPE.tonne), new AdditionalGraphShapeData(mp1, SHAPE.ordner));
     }
 
 }

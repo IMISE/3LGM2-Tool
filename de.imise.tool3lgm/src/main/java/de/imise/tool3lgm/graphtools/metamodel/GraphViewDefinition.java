@@ -14,15 +14,43 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.Bendpoint;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Textfield;
+import de.imise.tool3lgm.graphtools.path.metapaths.MetaPath;
 import de.imise.tool3lgm.graphtools.path.metapaths.SimpleMetaPath;
 import de.imise.tool3lgm.graphtools.view.graph.ElementsLayoutDefinition;
 import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout;
+import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout.SHAPE;
 import de.imise.util.pair.Pair;
 
 /**
  * @author AXS
  */
 public abstract class GraphViewDefinition {
+
+    /**
+     * @author AXS (13.01.2021)
+     */
+    public static final class AdditionalGraphShapeData {
+
+        /**
+        *
+        */
+        public final MetaPath metaPath;
+
+        /**
+        *
+        */
+        public final GraphElementLayout.SHAPE shape;
+
+        /**
+         * @param metaPath
+         * @param shape
+         */
+        public AdditionalGraphShapeData(final MetaPath metaPath, final SHAPE shape) {
+            this.metaPath = metaPath;
+            this.shape = shape;
+        }
+
+    }
 
     /** Zu Grunde liegendes MetaModel */
     protected final MetaModel metaModel;
@@ -136,6 +164,36 @@ public abstract class GraphViewDefinition {
             }
         }
         return classToConfigurationPaths.get(elementClass);
+    }
+
+    /**
+     * @return
+     */
+    protected List<AdditionalGraphShapeData> getAdditionalGraphShapeData() {
+        return ImmutableList.of();
+    }
+
+    /**
+     * @param me
+     * @return
+     */
+    public final AdditionalGraphShapeData getAdditionalGraphShapeData(final ModelElement me) {
+        return getAdditionalGraphShapeData(me.getClass());
+    }
+
+    /**
+     * @param elementClass
+     * @return
+     */
+    public final AdditionalGraphShapeData getAdditionalGraphShapeData(final Class<? extends ModelElement> elementClass) {
+        List<AdditionalGraphShapeData> additionalGraphShapeData = getAdditionalGraphShapeData();
+        for (AdditionalGraphShapeData data : additionalGraphShapeData) {
+            MetaPath metaPath = data.metaPath;
+            if (metaPath.isStartClass(elementClass)) {
+                return data;
+            }
+        }
+        return null;
     }
 
     /**

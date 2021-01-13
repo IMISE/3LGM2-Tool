@@ -28,6 +28,7 @@ import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.graphtools.view.container.LayerContainer;
 import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
 import de.imise.tool3lgm.graphtools.view.graph.BasicGraphArea.PaintState;
+import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout.SHAPE;
 import de.imise.util.swing.component.HtmlLabelFunctions;
 import de.imise.util.swing.component.HtmlLabelFunctions.HtmlLabelDimension;
 
@@ -312,6 +313,12 @@ public final class NodeRenderer {
             g.translate(xm, ym);
             kc.paintSuperComponent(g);
             g.translate(-xm, -ym);
+        }
+
+        SHAPE additionalGraphShape = me.getAdditionalGraphShape();
+        if (additionalGraphShape != null) {
+            //male additionalShape
+            //Sys.err1(me + "   ->   " + additionalGraphShape);
         }
 
         // Symbol für Verlinkung mit Teilmodell

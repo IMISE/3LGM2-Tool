@@ -19,7 +19,7 @@ public abstract class Node extends ModelElement {
         } else {
             ec = new NodeContainer(this, doc);
         }
-        updateHTMLName(ec);
+        updateHTMLNameAndAdditionalShape(ec);
         return ec;
     }
 

@@ -89,7 +89,7 @@ public class Szenario extends LGMGraphDocument {
         }
         retVal.setVisible(true);
         retVal.refreshText();
-        me.updateHTMLName(retVal);
+        me.updateHTMLNameAndAdditionalShape(retVal);
         return retVal;
     }
 

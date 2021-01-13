@@ -4395,7 +4395,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
         addRedo(pid, MODEL_ACTION_SET_ELEMENT_TEXT_ALIGNMENT_HTML, szen, ec, mode);
         layout.textAlignmentHTML = mode;
         ModelElement me = ec.getElement();
-        me.updateHTMLName(ec);
+        me.updateHTMLNameAndAdditionalShape(ec);
         finish_transaction(pid);
         distributeEvent(ELEMENT_GRAPHICS_CHANGED, ec, pid);
     }
