@@ -4,7 +4,7 @@ import de.imise.tool3lgm.graphtools.dialog.element.ElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
 import de.imise.tool3lgm.metamodel.service.edge.ServiceUses_Edge;
 import de.imise.tool3lgm.metamodel.service.edge.Service_InvokingInterface_Edge;
-import de.imise.tool3lgm.metamodel.service.edge.Service_ObjectType_Edge;
+import de.imise.tool3lgm.metamodel.service.edge.Service_RepresentationForm_Edge;
 import de.imise.tool3lgm.metamodel.service.edge.Service_ProvidingInterface_Edge;
 import de.imise.tool3lgm.metamodel.service.edge.Service_ServiceClass_Edge;
 
@@ -18,7 +18,7 @@ public final class Service extends Node {
         ElementPropertyDialog dialog = super.createPropertyDialog();
         dialog.addDescripPanel(Service_ServiceClass_Edge.class);
         dialog.addEdgePanel(ServiceUses_Edge.class);
-        dialog.addEdgePanel(Service_ObjectType_Edge.class);
+        dialog.addEdgePanel(Service_RepresentationForm_Edge.class);
         dialog.addMultiPanel(CommunicationInterface.class);
         dialog.addMultiPanelPathPanel(Service_InvokingInterface_Edge.class);
         dialog.addMultiPanelPathPanel(Service_ProvidingInterface_Edge.class);

@@ -37,7 +37,7 @@ public final class CommunicationLink_Edge extends BooleanAttributeEdge {
         tableDefinition.addColumnPathStepName(1, "HEADER_ACCESS_TYPE", 300);
         tableDefinition.addColumnEndElement(300);
         //auch unnvollständige Pfade anzeigen!!! Also auch verbundene Services in der Tabelle anzeigen, die mit keinem Objekttyp verbunden sind
-        dialog.addTablePanel(tableDefinition, 0, Service_CommunicationLink_Edge.class, Service_ObjectType_Edge.class);
+        dialog.addTablePanel(tableDefinition, 0, Service_CommunicationLink_Edge.class, Service_RepresentationForm_Edge.class);
 
         return dialog;
     }

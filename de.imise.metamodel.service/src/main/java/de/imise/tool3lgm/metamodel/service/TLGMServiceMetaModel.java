@@ -16,6 +16,7 @@ import de.imise.tool3lgm.graphtools.path.MetaPathDefinition;
 import de.imise.tool3lgm.metamodel.service.edge.ApplicationComponent_PhysicalDataProcessingComponent_Edge;
 import de.imise.tool3lgm.metamodel.service.edge.ApplicationComponent_PhysicalDataProcessingComponent_RequiresForFunctionality_Edge;
 import de.imise.tool3lgm.metamodel.service.edge.ApplicationComponent_PhysicalDataProcessingComponent_RequiresForStorage_Edge;
+import de.imise.tool3lgm.metamodel.service.edge.ApplicationComponent_RepresentationForm_Edge;
 import de.imise.tool3lgm.metamodel.service.edge.ApplicationComponent_Use_Edge;
 import de.imise.tool3lgm.metamodel.service.edge.ApplicationSystem_IheActorInstance_Edge;
 import de.imise.tool3lgm.metamodel.service.edge.ApplicationSystem_SoftwareProduct_Edge;
@@ -44,6 +45,7 @@ import de.imise.tool3lgm.metamodel.service.edge.IheProvidingInterface_IheTransac
 import de.imise.tool3lgm.metamodel.service.edge.IheTransaction_IheCommunicationLink_Edge;
 import de.imise.tool3lgm.metamodel.service.edge.Location_HasPartEdge;
 import de.imise.tool3lgm.metamodel.service.edge.ObjectType_HasPartEdge;
+import de.imise.tool3lgm.metamodel.service.edge.ObjectType_RepresentationForm_Edge;
 import de.imise.tool3lgm.metamodel.service.edge.OrganisationalUnit_HasPartEdge;
 import de.imise.tool3lgm.metamodel.service.edge.OrganisationalUnit_Use_Edge;
 import de.imise.tool3lgm.metamodel.service.edge.PartableApplicationComponent_CommunicationInterface_Edge;
@@ -58,10 +60,9 @@ import de.imise.tool3lgm.metamodel.service.edge.Service_CommunicationInterface_E
 import de.imise.tool3lgm.metamodel.service.edge.Service_CommunicationLink_Edge;
 import de.imise.tool3lgm.metamodel.service.edge.Service_Function_Edge;
 import de.imise.tool3lgm.metamodel.service.edge.Service_InvokingInterface_Edge;
-import de.imise.tool3lgm.metamodel.service.edge.Service_ObjectType_Edge;
 import de.imise.tool3lgm.metamodel.service.edge.Service_ProvidingInterface_Edge;
+import de.imise.tool3lgm.metamodel.service.edge.Service_RepresentationForm_Edge;
 import de.imise.tool3lgm.metamodel.service.edge.Service_ServiceClass_Edge;
-import de.imise.tool3lgm.metamodel.service.edge.ApplicationComponent_ObjectType_Edge;
 import de.imise.tool3lgm.metamodel.service.edge.TransmissionMedium_DataTransmissionLink_Edge;
 import de.imise.tool3lgm.metamodel.service.node.ApplicationComponent;
 import de.imise.tool3lgm.metamodel.service.node.ApplicationSystem;
@@ -87,6 +88,7 @@ import de.imise.tool3lgm.metamodel.service.node.OrganisationalUnit;
 import de.imise.tool3lgm.metamodel.service.node.PhysicalDataProcessingComponent;
 import de.imise.tool3lgm.metamodel.service.node.Process;
 import de.imise.tool3lgm.metamodel.service.node.ProvidingInterface;
+import de.imise.tool3lgm.metamodel.service.node.RepresentationForm;
 import de.imise.tool3lgm.metamodel.service.node.Service;
 import de.imise.tool3lgm.metamodel.service.node.ServiceClass;
 import de.imise.tool3lgm.metamodel.service.node.SoftwareProduct;
@@ -203,15 +205,13 @@ public class TLGMServiceMetaModel extends MetaModelDefinition implements Regular
     };
 
     /** Alle Node zw. FE und LWE als Array */
-    private final Class[] ALL_INTER_DOMAIN_LOGICAL_LAYER_NODES = {
-            //auch die Assoziationsklasse hier eintagen
-            ApplicationComponent_ObjectType_Edge.class,
-    };
+    private final Class[] ALL_INTER_DOMAIN_LOGICAL_LAYER_NODES = {};
 
     /** Alle Node der LWE als Array */
     private final Class[] ALL_LOGICAL_LAYER_NODES = {
             ApplicationSystem.class,
             OrganisationSystem.class,
+            RepresentationForm.class,
             SoftwareProduct.class,
             InvokingInterface.class,
             ProvidingInterface.class,
@@ -314,14 +314,15 @@ public class TLGMServiceMetaModel extends MetaModelDefinition implements Regular
                 //FE - LWE
                 Function_SoftwareProduct_Edge.class,
                 Service_Function_Edge.class,
-                Service_ObjectType_Edge.class,
-                ApplicationComponent_ObjectType_Edge.class,
                 ApplicationComponent_Use_Edge.class,
+                ObjectType_RepresentationForm_Edge.class,
                 //LWE
                 PartableApplicationComponent_HasPartEdge.class,
                 PartableApplicationComponent_CommunicationInterface_Edge.class,
+                ApplicationComponent_RepresentationForm_Edge.class,
                 ApplicationSystem_SoftwareProduct_Edge.class,
                 CommunicationLink_Edge.class,
+                Service_RepresentationForm_Edge.class,
                 Service_CommunicationLink_Edge.class,
                 Service_CommunicationInterface_Edge.class,
                 Service_InvokingInterface_Edge.class,
