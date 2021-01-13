@@ -2016,6 +2016,7 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
             final boolean container, final boolean alphabetical) {
         List<Object> connectedElements = new ArrayList<>(getEdgesCount());
 
+        //
         if (doc == null && container) {
             System.err.println("Can't find ElementContainer with an null-GraphDocument");
             return connectedElements;
