@@ -9,12 +9,15 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.path.MetaPathDefinition;
 import de.imise.tool3lgm.graphtools.path.metapaths.MetaPath;
 import de.imise.tool3lgm.metamodel.original.edge.AufAufOrgVerbindung;
+import de.imise.tool3lgm.metamodel.original.edge.AufObjVerbindung;
 import de.imise.tool3lgm.metamodel.original.edge.AwbAwbkVerbindung;
 import de.imise.tool3lgm.metamodel.original.edge.AwbKommssVerbindung;
 import de.imise.tool3lgm.metamodel.original.edge.AwbkAufOrgVerbindung;
 import de.imise.tool3lgm.metamodel.original.edge.AwpSwpVerbindung;
 import de.imise.tool3lgm.metamodel.original.edge.BssKommstVerbindung;
 import de.imise.tool3lgm.metamodel.original.edge.DbsDatVerbindung;
+import de.imise.tool3lgm.metamodel.original.edge.DoksDokVerbindung;
+import de.imise.tool3lgm.metamodel.original.edge.KawbDoksVerbindung;
 import de.imise.tool3lgm.metamodel.original.edge.ObjLogspVerbindung;
 import de.imise.tool3lgm.metamodel.original.edge.ObjReprVerbindung;
 import de.imise.tool3lgm.metamodel.original.edge.OrgAufOrgVerbindung;
@@ -26,7 +29,9 @@ import de.imise.tool3lgm.metamodel.original.edge.RawbDbsVerbindung;
 import de.imise.tool3lgm.metamodel.original.node.Anwendungsbaustein;
 import de.imise.tool3lgm.metamodel.original.node.Aufgabe;
 import de.imise.tool3lgm.metamodel.original.node.Datenbanksystem;
+import de.imise.tool3lgm.metamodel.original.node.Dokumentensammlung;
 import de.imise.tool3lgm.metamodel.original.node.Kommunikationsstandard;
+import de.imise.tool3lgm.metamodel.original.node.KonAnwendungsbaustein;
 import de.imise.tool3lgm.metamodel.original.node.Objekttyp;
 import de.imise.tool3lgm.metamodel.original.node.Organisationseinheit;
 import de.imise.tool3lgm.metamodel.original.node.PhysischerDVBaustein;
@@ -82,7 +87,17 @@ public class TLGMOriginalPathsDefinition extends MetaPathDefinition {
         /* Objekttyp - RechAnwendungsbaustein */
         put(RechAnwendungsbaustein.class, Objekttyp.class, "PATH_is_master_of", RawbDbsVerbindung.class, ObjLogspVerbindung.class);
 
+        /* Objekttyp - Dokumentensammlung */
+        put(Objekttyp.class, Dokumentensammlung.class, "PATH_is_stored_in", ObjLogspVerbindung.class);
+
+        /* Objekttyp - Anwendungsbaustein */
+        put(Objekttyp.class, Anwendungsbaustein.class, "PATH_is_used_by", AufObjVerbindung.class, AufAufOrgVerbindung.class, AwbkAufOrgVerbindung.class, AwbAwbkVerbindung.class);
+
+        /* Objekttyp - Rechnerbasierter Anwendungsbaustein */
         put(Objekttyp.class, RechAnwendungsbaustein.class, "PATH_is_stored_in", ObjReprVerbindung.class, DbsDatVerbindung.class, RawbDbsVerbindung.class);
+
+        /* Objekttyp - Papierbasierter Anwendungsbaustein */
+        put(Objekttyp.class, KonAnwendungsbaustein.class, "PATH_is_stored_in", ObjReprVerbindung.class, DoksDokVerbindung.class, KawbDoksVerbindung.class);
 
         //        put(new MetaPath(Objekttyp.class, Anwendungsbaustein.class, new Class[][] {
         //                {
