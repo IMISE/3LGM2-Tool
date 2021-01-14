@@ -4,8 +4,8 @@ import de.imise.tool3lgm.graphtools.dialog.element.ElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
 import de.imise.tool3lgm.metamodel.service.edge.ServiceUses_Edge;
 import de.imise.tool3lgm.metamodel.service.edge.Service_InvokingInterface_Edge;
-import de.imise.tool3lgm.metamodel.service.edge.Service_RepresentationForm_Edge;
 import de.imise.tool3lgm.metamodel.service.edge.Service_ProvidingInterface_Edge;
+import de.imise.tool3lgm.metamodel.service.edge.Service_RepresentationForm_Edge;
 import de.imise.tool3lgm.metamodel.service.edge.Service_ServiceClass_Edge;
 
 /**
