@@ -6,13 +6,17 @@ import static de.imise.tool3lgm.Tool3lgmConstants.RESOUCE_BASE_XSL_SCRIPT_DIR_NA
 import java.util.ArrayList;
 import java.util.List;
 
-import de.imise.tool3lgm.LocaleDependingSubDirResourceHandler;
+import de.imise.tool3lgm.LocaleDependentSubDirResourceHandler;
 
-public class XSLTResourceHandler extends LocaleDependingSubDirResourceHandler {
+/**
+ * @author AXS (14.08.2014)
+ */
+public class XSLTResourceHandler extends LocaleDependentSubDirResourceHandler {
 
     /** URL with standard-scripts for xslt-export */
     private final List<XSLTScript> standardXSLT;
 
+    /** */
     private static final String DEV_RESOURCE_BASE_XSL_DIR_NAME = DEV_RESOURCE_BASE_DIR_NAME + RESOUCE_BASE_XSL_SCRIPT_DIR_NAME;
     private static final String JAR_RESOURCE_BASE_XSL_DIR_NAME = JAR_RESOURCE_DIR_NAME + RESOUCE_BASE_XSL_SCRIPT_DIR_NAME;
 

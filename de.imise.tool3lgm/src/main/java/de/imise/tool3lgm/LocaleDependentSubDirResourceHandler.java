@@ -23,7 +23,7 @@ import de.imise.tool3lgm.userproperties.UserProperties;
  *
  * @author AXS (14.06.2017)
  */
-public class LocaleDependingSubDirResourceHandler {
+public class LocaleDependentSubDirResourceHandler {
 
     public static final String DEV_RESOURCE_BASE_DIR_NAME = APPLICATION_DIR + DEV_RESOURCE_DIR_NAME;
 
