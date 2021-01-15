@@ -9,59 +9,69 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
+import java.util.Locale;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
 import de.imise.tool3lgm.userproperties.UserProperties;
 
 /**
- * Klasse zum Laden von Resourcen, die in sprachabhängigen Unterverzeichnissen
- * in den Resources liegen. Diese Klasse bietet im Grunde nur eine Funktion, die
- * den Zugriff auf diese Resourcen zur Laufzeit aus der Entwicklungsumgebung
- * heraus und aus dem deploiten jar-File heraus managed.
+ * Class for loading resources located in language-dependent subdirectories in
+ * the resources folder. This class basically just provides a function that
+ * manages access to these resources at runtime from within the development
+ * environment and from within the deploited jar file.
  *
- * @author AXS
+ * @author AXS (14.06.2017)
  */
 public class LocaleDependingSubDirResourceHandler {
 
     public static final String DEV_RESOURCE_BASE_DIR_NAME = APPLICATION_DIR + DEV_RESOURCE_DIR_NAME;
 
     /**
-     * Liefert eine Liste der relativen Pfade aller Dateien mit der übergebenen
-     * Endung im Resourcenverzeichnis der aktuellen Locale. Werden für die
-     * aktuelle Locale keine Dateien gefunden, werden die Pfade zu den
-     * englischen Dateien geladen.
+     * Returns a list of the relative paths of all files with the passed
+     * extension in the resource directory of the current locale. If no files
+     * are found for the current locale, the paths to the English files are
+     * loaded.
      *
-     * @return Liste aller Dateien mit der angegebenen Endung im angegebenen
-     *         Resourcenverzeichnis
+     * @param fileExtension the file extension of files to load
+     * @param devTimeResourceBaseDirName Folder from which the files are to be
+     *            loaded if they come from the file system at development time
+     * @param jarResourceBaseDirName Folder from which the files are to be
+     *            loaded, if they are to be inside a jar file for the
+     *            post-deploy process
+     * @return List of all files with the specified extension in the specified
+     *         resource directory
      */
     public static final String[] getFileNames(final String fileExtension, final String devTimeResourceBaseDirName, final String jarResourceBaseDirName) {
-        // Zur Entwicklungszeit liegen die Dateien in einem Ordner -> Dateien von dort laden, ABER
-        // bei Herausgabe des Tools liegen die Dateien in der jar-Datei im Resourcenpfad -> catch-Fall
+        Locale locale = UserProperties.getLocale();
+        String language = locale.getLanguage();
+        // At development time the files are in a folder -> load files from there, BUT when
+        // the tool is released the files are in the jar file in the resource path -> catch case
         try {
-            String language = UserProperties.getLocale().getLanguage();
             //            String baseDirName = DEV_RESOURCE_BASE_USERPROPERTIES_DIR_NAME;
             String path = devTimeResourceBaseDirName + language;
             File dir = new File(path);
             File[] files = dir.listFiles();
-            // wenn für die Locale keine Scripte gefunden wurde -> lade die Englischen
+            // if no scripts were found for the locale -> load the english ones
             if (files.length == 0) {
                 path = devTimeResourceBaseDirName + "en";
                 dir = new File(path);
             }
-            ArrayList<String> fileNameList = new ArrayList<>(files.length);
-            for (int i = 0; i < files.length; i++) {
-                String s = files[i].getCanonicalPath();
-                if (!s.endsWith("." + fileExtension)) {
+            List<String> fileNameList = new ArrayList<>(files.length);
+            for (File file : files) {
+                String filePath = file.getCanonicalPath();
+                if (!filePath.endsWith("." + fileExtension)) {
                     continue;
                 }
-                fileNameList.add(s.substring(DEV_RESOURCE_BASE_DIR_NAME.length()));
+                int baseDirNameLength = DEV_RESOURCE_BASE_DIR_NAME.length();
+                String fileName = filePath.substring(baseDirNameLength);
+                fileNameList.add(fileName);
             }
             String[] fileNames = new String[fileNameList.size()];
             System.arraycopy(fileNameList.toArray(), 0, fileNames, 0, fileNames.length);
             return fileNames;
-            // wenn der Ordner mit den Dateien nicht gefunden wurde, weil er sich sicherlich in der
-            // herausgegebenen Jar-Datei versteckt -> lies die Dateien aus der Jar-Datei
+            // if the folder with the files was not found, because it is surely located
+            // in the issued jar file -> read the files from the jar file
         } catch (Exception e) {
             Enumeration<JarEntry> entries = null;
             JarFile jarFile = null;
@@ -71,7 +81,7 @@ public class LocaleDependingSubDirResourceHandler {
             } catch (IOException e1) {
                 // e1.printStackTrace();
             }
-            String packagePattern = jarResourceBaseDirName + UserProperties.getLocale().getLanguage() + "/[^/]+\\." + fileExtension;
+            String packagePattern = getJarPackagePattern(jarResourceBaseDirName, language, fileExtension);
             List<JarEntry> jarEntries = new ArrayList<>();
 
             String[] fileNames = new String[0];
@@ -79,33 +89,46 @@ public class LocaleDependingSubDirResourceHandler {
             if (entries != null) {
                 while (entries.hasMoreElements()) {
                     JarEntry jarEntry = entries.nextElement();
-                    if (jarEntry.getName().matches(packagePattern)) {
+                    String jarEntryName = jarEntry.getName();
+                    if (jarEntryName.matches(packagePattern)) {
                         jarEntries.add(jarEntry);
                     }
                 }
-                // wenn für die aktuelle Locale-Sprache keine Dateien gefunden wurden -> lade die Englischen
-                if (jarEntries.size() == 0) {
-                    packagePattern = jarResourceBaseDirName + "en/[^/]+\\." + fileExtension;
+                // if no files are found for the current locale language -> load the English ones
+                if (jarEntries.isEmpty()) {
+                    packagePattern = getJarPackagePattern(jarResourceBaseDirName, "en", fileExtension);
                     while (entries.hasMoreElements()) {
                         JarEntry jarEntry = entries.nextElement();
-                        if (jarEntry.getName().matches(packagePattern)) {
+                        String jarEntryName = jarEntry.getName();
+                        if (jarEntryName.matches(packagePattern)) {
                             jarEntries.add(jarEntry);
                         }
                     }
                 }
                 fileNames = new String[jarEntries.size()];
-
                 for (int i = 0; i < fileNames.length; i++) {
-                    fileNames[i] = jarEntries.get(i).toString();
+                    JarEntry jarEntry = jarEntries.get(i);
+                    fileNames[i] = jarEntry.toString();
                 }
             }
             try {
                 jarFile.close();
             } catch (Exception ex) {
-                //mache nichts, egal ob NullPointer oder IOException
+                //do nothing, whether NullPointer or IOException
             }
             return fileNames;
         }
+    }
+
+    /**
+     * @param jarResourceBaseDirName base name of the jar file
+     * @param language the name of the language subdirectory in the jar file
+     * @param fileExtension the extension of the files to be loaded
+     * @return the full file pattern to load files from a jar file
+     */
+    protected static String getJarPackagePattern(final String jarResourceBaseDirName, final String language, final String fileExtension) {
+        String packagePattern = jarResourceBaseDirName + language + "/[^/]+\\." + fileExtension;
+        return packagePattern;
     }
 
 }
