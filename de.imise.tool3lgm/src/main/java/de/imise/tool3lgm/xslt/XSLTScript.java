@@ -54,53 +54,6 @@ public class XSLTScript {
      */
     private File file = null;
 
-    /**
-     *
-     */
-    public XSLTScript(final URL url) throws IOException {
-        //TODO:AXS: testen, ob der Kommentar unten noch stimmt
-        this.url = url;
-        //Aus irgendeinem Grund kommt die URL mit "%5c" und "/" als Dateitrenner gemischt rein
-        //und das obwohl File.separator einen Backslash ("\") liefert. Deswegen wird hier einfach
-        //jede Möglichkeit getestet, um an den letzten Namen innerhalb des Dateipfades zu kommen
-        int index = url.toString().lastIndexOf("%5c");
-        int offset = 0;
-        if (index < 0) {
-            index = url.toString().lastIndexOf(File.separator);
-        } else {
-            offset = "%5c".length();
-        }
-        if (offset == 0) {
-            if (index < 0) {
-                index = url.toString().lastIndexOf("/");
-            } else {
-                offset = 1;
-            }
-        }
-        if (offset == 0 && index >= 0) {
-            offset = 1;
-        }
-        source = url.toString().substring(index < 0 ? 0 : index + offset);
-
-        BufferedReader reader = new BufferedReader(new InputStreamReader(url.openStream()));
-        String line;
-        while ((line = reader.readLine()) != null) {
-            index = line.indexOf("-->");
-            if (line.startsWith("<!--name: ")) {
-                name = line.substring("<!--name: ".length(), index < 0 ? line.length() : index);
-            } else if (line.startsWith("<!--description: ")) {
-                description = line.substring("<!--description: ".length(), index < 0 ? line.length() : index);
-            } else if (line.startsWith("<!--type: ")) {
-                type = line.substring("<!--type: ".length(), index < 0 ? line.length() : index);
-            } else if (line.startsWith("<!--author: ")) {
-                author = line.substring("<!--author: ".length(), index < 0 ? line.length() : index);
-            }
-            if (name != null && description != null && type != null && author != null) {
-                break;
-            }
-        }
-    }
-
     public XSLTScript(final File file) {
         this.file = file;
         source = file.toString();
@@ -109,6 +62,65 @@ public class XSLTScript {
         type = content[2];
         description = content[3];
         author = content[4];
+    }
+
+    /**
+     *
+     */
+    public XSLTScript(final URL url) throws IOException {
+        this.url = url;
+        source = extractUrlSourceString();
+        BufferedReader reader = new BufferedReader(new InputStreamReader(url.openStream()));
+        String line;
+        while ((line = reader.readLine()) != null) {
+            int indexOfContentEnd = line.indexOf("-->");
+            if (indexOfContentEnd < 0) {
+                indexOfContentEnd = line.length();
+            }
+            if (line.startsWith("<!--name: ")) {
+                name = line.substring("<!--name: ".length(), indexOfContentEnd);
+            } else if (line.startsWith("<!--description: ")) {
+                description = line.substring("<!--description: ".length(), indexOfContentEnd);
+            } else if (line.startsWith("<!--type: ")) {
+                type = line.substring("<!--type: ".length(), indexOfContentEnd);
+            } else if (line.startsWith("<!--author: ")) {
+                author = line.substring("<!--author: ".length(), indexOfContentEnd);
+            }
+            if (name != null && description != null && type != null && author != null) {
+                break;
+            }
+        }
+        reader.close();
+    }
+
+    /**
+    *
+    */
+    private String extractUrlSourceString() {
+        //TODO:AXS: testen, ob der Kommentar unten noch stimmt
+        //Aus irgendeinem Grund kommt die URL mit "%5c" und "/" als Dateitrenner gemischt rein
+        //und das obwohl File.separator einen Backslash ("\") liefert. Deswegen wird hier einfach
+        //jede Möglichkeit getestet, um an den letzten Namen innerhalb des Dateipfades zu kommen
+        String urlName = url.toString();
+        int index = urlName.lastIndexOf("%5c");
+        int offset = 0;
+        if (index < 0) {
+            index = urlName.lastIndexOf(File.separator);
+        } else {
+            offset = "%5c".length();
+        }
+        if (offset == 0) {
+            if (index < 0) {
+                index = urlName.lastIndexOf("/");
+            } else {
+                offset = 1;
+            }
+        }
+        if (offset == 0 && index >= 0) {
+            offset = 1;
+        }
+        String source = urlName.substring(index < 0 ? 0 : index + offset);
+        return source;
     }
 
     public String getSource() {
