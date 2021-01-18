@@ -1847,22 +1847,11 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
                 if (doubleMeaningEdge) {
                     ((DoubleMeaningEdge) edge).setConnectionState(connectionState);
                 }
-
-                edge.setNodesAndInsert(startElement, startElementEdgeIndex, endElement, endElementEdgeIndex);
-                ModelElement start = edge.getStart();
-                ModelElement end = edge.getEnd();
-                if (start != null && end != null) {
+                if (edge.setNodesAndInsert(startElement, startElementEdgeIndex, endElement, endElementEdgeIndex)) {
                     kac = new EdgeContainer(edge, mainDoc);
                     String name = getNewEdgeName(edge);
                     edge.setName(name, false);
                     addEdge(kac, pid);
-                } else {
-                    if (start != null) {
-                        start.removeEdge(edge);
-                    }
-                    if (end != null) {
-                        end.removeEdge(edge);
-                    }
                 }
 
                 //Falls bereits Beziehungen der anzulegenden Art bestehen und durch die neue Beziehung die Kardinalitäten

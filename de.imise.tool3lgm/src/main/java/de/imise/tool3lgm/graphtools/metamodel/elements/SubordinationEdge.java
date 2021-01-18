@@ -85,68 +85,61 @@ public abstract class SubordinationEdge extends Edge {
     }
 
     @Override
-    public final void setNodes(final ModelElement superElement, final ModelElement subElement, final boolean registerInNodes) {
-        ModelElement start = startElement;
-        ModelElement end = endElement;
-        super.setNodes(superElement, subElement, registerInNodes);
-        if (isInCircle()) {
-            subElement.removeEdge(this);
-            superElement.removeEdge(this);
-            super.setNodes(start, end, registerInNodes);
+    public final boolean setNodes(final ModelElement superElement, final ModelElement subElement, final boolean registerInNodes) {
+        if (isAlreadyConnectedInOtherDirection(startElement, endElement)) {
+            return false;
         }
+        return super.setNodes(superElement, subElement, registerInNodes);
     }
 
     @Override
-    public void setNodesAndInsert(final ModelElement startElement, final int startElementEdgeIndex, final ModelElement endElement, final int endElementEdgeIndex) {
+    public boolean setNodesAndInsert(final ModelElement startElement, final int startElementEdgeIndex, final ModelElement endElement, final int endElementEdgeIndex) {
+        if (isAlreadyConnectedInOtherDirection(startElement, endElement)) {
+            return false;
+        }
         this.startElement = startElement;
         this.endElement = endElement;
         startElement.insertEdge(this, startElementEdgeIndex);
         endElement.insertEdge(this, endElementEdgeIndex);
-        if (isInCircle()) {
-            startElement.removeEdge(this);
-            endElement.removeEdge(this);
-            this.startElement = null;
-            this.endElement = null;
-        }
+        return true;
     }
 
     @Override
-    public final void setStartAndInsert(final ModelElement startElement) {
-        this.startElement = startElement;
-        startElement.addEdge(this);
-        if (isInCircle()) {
-            startElement.removeEdge(this);
-            this.startElement = null;
+    public final boolean setStartAndInsert(final ModelElement startElement) {
+        ModelElement endElement = getEnd();
+        if (!isAlreadyConnectedInOtherDirection(startElement, endElement)) {
+            this.startElement = startElement;
+            startElement.addEdge(this);
         }
+        return false;
     }
 
     @Override
-    public final void setEndAndInsert(final ModelElement endElement) {
-        this.endElement = endElement;
-        endElement.addEdge(this);
-        if (isInCircle()) {
-            endElement.removeEdge(this);
-            this.endElement = null;
+    public final boolean setEndAndInsert(final ModelElement endElement) {
+        ModelElement startElement = getStart();
+        if (!isAlreadyConnectedInOtherDirection(startElement, endElement)) {
+            this.endElement = endElement;
+            endElement.addEdge(this);
         }
+        return false;
     }
 
     /**
      * @return
      */
-    public final boolean isInCircle() {
-        ModelElement k1 = getSuperElement();
-        ModelElement k2 = getSubElement();
-        if (k1 != null && k2 != null) {
+    private final boolean isAlreadyConnectedInOtherDirection(final ModelElement start, final ModelElement end) {
+        if (start != null && end != null) {
             Class<? extends SubordinationEdge> subordinationEdgeClass = getClass();
-            boolean retVal = k2.isSuperElementOf(k1, subordinationEdgeClass);
+            boolean retVal = end.isSuperElementOf(start, subordinationEdgeClass);
             if (retVal) {
-                ElementsNameBuilder elementsNameBuilder = getMetaModel().getElementsNameBuilder();
+                MetaModel metaModel = getMetaModel();
+                ElementsNameBuilder elementsNameBuilder = metaModel.getElementsNameBuilder();
                 String edgeClassPluralName = elementsNameBuilder.getDisplayablePluralName(subordinationEdgeClass);
                 String message = getResString("part_of_circle_error");
                 String elements = elementsNameBuilder.getDisplayablePluralName(ModelElement.class);
-                String elementType1 = elementsNameBuilder.getDisplayableName(k1);
-                String elementType2 = elementsNameBuilder.getDisplayableName(k2);
-                Log.show(Log.INFO, edgeClassPluralName + " " + message + "\n" + elements + ":\n" + elementType1 + ": " + k1.getName() + "\n" + elementType2 + ": " + k2.getName());
+                String elementType1 = elementsNameBuilder.getDisplayableName(start);
+                String elementType2 = elementsNameBuilder.getDisplayableName(end);
+                Log.show(Log.INFO, edgeClassPluralName + " " + message + "\n" + elements + ":\n" + elementType1 + ": " + start.getName() + "\n" + elementType2 + ": " + end.getName());
             }
             return retVal;
         }

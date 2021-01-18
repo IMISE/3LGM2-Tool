@@ -135,8 +135,8 @@ public abstract class Edge extends ModelElement {
      * @param startElement
      * @param endElement
      */
-    public final void setNodes(final ModelElement startElement, final ModelElement endElement) {
-        setNodes(startElement, endElement, true);
+    public final boolean setNodes(final ModelElement startElement, final ModelElement endElement) {
+        return setNodes(startElement, endElement, true);
     }
 
     /**
@@ -144,25 +144,20 @@ public abstract class Edge extends ModelElement {
      * @param endElement
      * @param registerInNodes
      */
-    public void setNodes(final ModelElement startElement, final ModelElement endElement, final boolean registerInNodes) {
+    public boolean setNodes(final ModelElement startElement, final ModelElement endElement, final boolean registerInNodes) {
         this.startElement = startElement;
         this.endElement = endElement;
-        if (registerInNodes) {
-            if (startElement != null) {
-                startElement.addEdge(this);
-            }
-            if (endElement != null) {
-                endElement.addEdge(this);
-            }
-        }
         //Validität der Edge prüfen und dabei wenn nötig umdrehen (bis Version 3.2
         //ist teilweise die Reihenfolge der Start- und Endelemente von Kanten andersherum gewesen,
         //als sie in der Kantenklasse festgelegt sind. Das wird hier grade gebogen
-        checkValidity();
-        //		if (!checkValidity());
-        //			System.err.println(getClass().getSimpleName() + " : Edge with Node1 = "  + startElement.getClearName() + " and Node2 " + endElement.getClearName() + " is not valid. ");
-        //
-
+        if (!checkValidity()) {
+            return false;
+        }
+        if (registerInNodes) {
+            startElement.addEdge(this);
+            endElement.addEdge(this);
+        }
+        return true;
     }
 
     /**
@@ -179,37 +174,37 @@ public abstract class Edge extends ModelElement {
      *            EndElementes. Wenn der Wert größer oder kleiner als die
      *            aktuelle Liste ist, dann wird die Edge hinten angefügt.
      */
-    public void setNodesAndInsert(final ModelElement startElement, final int startElementEdgePos, final ModelElement endElement, final int endElementEdgePos) {
+    public boolean setNodesAndInsert(final ModelElement startElement, final int startElementEdgePos, final ModelElement endElement, final int endElementEdgePos) {
+        if (startElement == null || endElement == null) {
+            return false;
+        }
         this.startElement = startElement;
         this.endElement = endElement;
-        //wenn HasPartEdges im Kreis modelliert wurden, wird die falsche Beziehung gleich wieder entfernt
-        //und ihre alten Start- und Endelemente gesetzt, die bei einer neuen Edge immer null waren -> null hier abfangen
-        if (startElement != null) {
-            startElement.insertEdge(this, startElementEdgePos);
-        }
-        if (endElement != null) {
-            endElement.insertEdge(this, endElementEdgePos);
-        }
+        startElement.insertEdge(this, startElementEdgePos);
+        endElement.insertEdge(this, endElementEdgePos);
+        return true; //subclasses can overwrite this and return false
     }
 
     /**
      * @param start
      */
-    public void setStartAndInsert(final ModelElement start) {
+    public boolean setStartAndInsert(final ModelElement start) {
         startElement = start;
         if (startElement != null) {
-            startElement.addEdge(this);
+            return startElement.addEdge(this);
         }
+        return false;
     }
 
     /**
      * @param end
      */
-    public void setEndAndInsert(final ModelElement end) {
+    public boolean setEndAndInsert(final ModelElement end) {
         endElement = end;
         if (endElement != null) {
-            endElement.addEdge(this);
+            return endElement.addEdge(this);
         }
+        return false;
     }
 
     /**
@@ -301,8 +296,7 @@ public abstract class Edge extends ModelElement {
         if (startElement == null || endElement == null) {
             return false;
         }
-        setNodes(startElement, endElement);
-        return true;
+        return setNodes(startElement, endElement);
     }
 
     /**
@@ -355,26 +349,29 @@ public abstract class Edge extends ModelElement {
      * @return <code>true</code>, wenn die Edge vollständig richtig ist
      */
     public boolean checkValidity() {
-        boolean startClassOk = false, endClassOk = false;
-        boolean switchStart = false, switchEnd = false;
-        if (startElement != null && endElement != null) {
-            Class<? extends ModelElement> elementClass = startElement.getClass();
-            Class<? extends Edge> edgeClass = getClass();
-            //prüfen, ob das StartElement von einer der Startklassen ist
-            if (!CoreMetaModel.isStartClass(edgeClass, elementClass)) {
-                //wenn nicht
-                switchStart = isEndClass(elementClass);
-            } else {
-                startClassOk = true;
-            }
-            elementClass = endElement.getClass();
-            //prüfen, ob das EndElement von einer der Endklassen ist
-            if (!isEndClass(elementClass)) {
-                //wenn nicht
-                switchEnd = isStartClass(elementClass);
-            } else {
-                endClassOk = true;
-            }
+        if (startElement == null || endElement == null) {
+            return false;
+        }
+        boolean startClassOk = false;
+        boolean endClassOk = false;
+        boolean switchStart = false;
+        boolean switchEnd = false;
+        Class<? extends ModelElement> elementClass = startElement.getClass();
+        Class<? extends Edge> edgeClass = getClass();
+        //prüfen, ob das StartElement von einer der Startklassen ist
+        if (!CoreMetaModel.isStartClass(edgeClass, elementClass)) {
+            //wenn nicht
+            switchStart = isEndClass(elementClass);
+        } else {
+            startClassOk = true;
+        }
+        elementClass = endElement.getClass();
+        //prüfen, ob das EndElement von einer der Endklassen ist
+        if (!isEndClass(elementClass)) {
+            //wenn nicht
+            switchEnd = isStartClass(elementClass);
+        } else {
+            endClassOk = true;
         }
         boolean switchClasses = false;
         //wenn sich die Konsitenz herstellen lässt indem man beide Elemente vertaucht -> vertauschen
