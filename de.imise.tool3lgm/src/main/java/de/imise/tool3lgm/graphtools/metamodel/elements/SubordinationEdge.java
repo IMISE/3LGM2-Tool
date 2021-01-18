@@ -104,26 +104,6 @@ public abstract class SubordinationEdge extends Edge {
         return true;
     }
 
-    @Override
-    public final boolean setStartAndInsert(final ModelElement startElement) {
-        ModelElement endElement = getEnd();
-        if (!isAlreadyConnectedInOtherDirection(startElement, endElement)) {
-            this.startElement = startElement;
-            startElement.addEdge(this);
-        }
-        return false;
-    }
-
-    @Override
-    public final boolean setEndAndInsert(final ModelElement endElement) {
-        ModelElement startElement = getStart();
-        if (!isAlreadyConnectedInOtherDirection(startElement, endElement)) {
-            this.endElement = endElement;
-            endElement.addEdge(this);
-        }
-        return false;
-    }
-
     /**
      * @return
      */

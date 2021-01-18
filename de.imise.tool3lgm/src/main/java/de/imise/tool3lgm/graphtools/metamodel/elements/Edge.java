@@ -186,28 +186,6 @@ public abstract class Edge extends ModelElement {
     }
 
     /**
-     * @param start
-     */
-    public boolean setStartAndInsert(final ModelElement start) {
-        startElement = start;
-        if (startElement != null) {
-            return startElement.addEdge(this);
-        }
-        return false;
-    }
-
-    /**
-     * @param end
-     */
-    public boolean setEndAndInsert(final ModelElement end) {
-        endElement = end;
-        if (endElement != null) {
-            return endElement.addEdge(this);
-        }
-        return false;
-    }
-
-    /**
      * @return
      */
     public final ModelElement getStart() {

@@ -568,8 +568,7 @@ public class LGMGraphDocument extends GraphDocument {
 
                 oldEdge = edge;
                 edge = edge.clone();
-                edge.setStartAndInsert(me1);
-                edge.setEndAndInsert(me3);
+                edge.setNodes(me1, me3, true);
                 /* rueckwaerts */
             } else if (edge.getEnd().equals(me2)) {
                 me3 = findElementCoded(edge.getStart().getID());
@@ -582,8 +581,7 @@ public class LGMGraphDocument extends GraphDocument {
 
                 oldEdge = edge;
                 edge = edge.clone();
-                edge.setStartAndInsert(me3);
-                edge.setEndAndInsert(me1);
+                edge.setNodes(me3, me1, true);
             } else {
                 continue;
             }
