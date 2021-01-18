@@ -20,7 +20,6 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.DoubleMeaningEdge.Connect
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.HasPartEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
-import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.model.Szenario;
 import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout;
@@ -115,15 +114,6 @@ public class EdgeContainer extends ElementContainer {
             }
         }
         return retVal;
-    }
-
-    /**
-     * @param startNode
-     * @param endNode
-     * @param doc
-     */
-    public void setNodes(final Node startNode, final Node endNode, final GraphDocument doc) {
-        getEdge().setNodes(startNode, endNode);
     }
 
     /**
@@ -400,7 +390,9 @@ public class EdgeContainer extends ElementContainer {
                     continue;
                 }
                 Edge tmpEdge = (Edge) me.clone();
-                tmpEdge.setNodes(startC.getElement(), endC.getElement(), false);
+                ModelElement start = startC.getElement();
+                ModelElement end = endC.getElement();
+                tmpEdge.setNodes(start, end, false);
                 EdgeContainer tmpC = new EdgeContainer(tmpEdge, doc);
                 tmpC.setColor(Color.gray);
                 ((LayerContainer) containerParent).addTmpEdgeContainer(tmpC);
