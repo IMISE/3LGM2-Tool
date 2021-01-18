@@ -655,7 +655,7 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
     }
 
     /**
-     * set a property / field of the ModelElement possible fieldNames: name,
+     * Set a property / field of the ModelElement possible fieldNames: name,
      * description
      *
      * @author Thomas Rudert
@@ -685,13 +685,22 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
         return false;
     }
 
+    /**
+     * @param doc
+     * @return
+     */
     public abstract ElementContainer createContainer(GraphDocument doc);
 
     //ehemals in Node.java
 
     /* --- Funktionen im Netzwerk --- Anfang --- */
 
-    /** Fuegt diesem Node eine Edge zu. */
+    /**
+     * Adds an edge to this node
+     *
+     * @param edge
+     * @return
+     */
     public boolean addEdge(final Edge edge) {
         int pos = edges == null ? 0 : edges.size() - 1;
         return insertEdge(edge, pos);
@@ -700,6 +709,10 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
     /**
      * Fügt diesem Node in der List connections an der Position pos die Edge
      * kante hinzu.
+     *
+     * @param edge
+     * @param pos
+     * @return
      */
     public boolean insertEdge(final Edge edge, int pos) {
         if (edge == null || edges != null && edges.contains(edge)) {
@@ -715,6 +728,11 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
         return true;
     }
 
+    /**
+     * @param pos1
+     * @param pos2
+     * @return
+     */
     public boolean swapEdges(final int pos1, final int pos2) {
         if (!isValidEdgeIndex(pos1) || !isValidEdgeIndex(pos2) || pos1 == pos2) {
             return false;
