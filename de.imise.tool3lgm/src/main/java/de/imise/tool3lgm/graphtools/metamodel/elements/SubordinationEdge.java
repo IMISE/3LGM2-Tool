@@ -85,45 +85,23 @@ public abstract class SubordinationEdge extends Edge {
     }
 
     @Override
-    public final boolean setNodes(final ModelElement superElement, final ModelElement subElement, final boolean registerInNodes) {
-        if (isAlreadyConnectedInOtherDirection(startElement, endElement)) {
+    protected boolean checkValidity() {
+        if (!super.checkValidity()) {
             return false;
         }
-        return super.setNodes(superElement, subElement, registerInNodes);
-    }
-
-    @Override
-    public boolean setNodesAndInsert(final ModelElement startElement, final int startElementEdgeIndex, final ModelElement endElement, final int endElementEdgeIndex) {
-        if (isAlreadyConnectedInOtherDirection(startElement, endElement)) {
-            return false;
+        Class<? extends SubordinationEdge> subordinationEdgeClass = getClass();
+        boolean endElementIsSuperOfStartElement = endElement.isSuperElementOf(startElement, subordinationEdgeClass);
+        if (endElementIsSuperOfStartElement) {
+            MetaModel metaModel = getMetaModel();
+            ElementsNameBuilder elementsNameBuilder = metaModel.getElementsNameBuilder();
+            String edgeClassPluralName = elementsNameBuilder.getDisplayablePluralName(subordinationEdgeClass);
+            String message = getResString("part_of_circle_error");
+            String elements = elementsNameBuilder.getDisplayablePluralName(ModelElement.class);
+            String elementType1 = elementsNameBuilder.getDisplayableName(startElement);
+            String elementType2 = elementsNameBuilder.getDisplayableName(endElement);
+            Log.show(Log.INFO, edgeClassPluralName + " " + message + "\n" + elements + ":\n" + elementType1 + ": " + startElement.getName() + "\n" + elementType2 + ": " + endElement.getName());
         }
-        this.startElement = startElement;
-        this.endElement = endElement;
-        startElement.insertEdge(this, startElementEdgeIndex);
-        endElement.insertEdge(this, endElementEdgeIndex);
-        return true;
-    }
-
-    /**
-     * @return
-     */
-    private final boolean isAlreadyConnectedInOtherDirection(final ModelElement start, final ModelElement end) {
-        if (start != null && end != null) {
-            Class<? extends SubordinationEdge> subordinationEdgeClass = getClass();
-            boolean retVal = end.isSuperElementOf(start, subordinationEdgeClass);
-            if (retVal) {
-                MetaModel metaModel = getMetaModel();
-                ElementsNameBuilder elementsNameBuilder = metaModel.getElementsNameBuilder();
-                String edgeClassPluralName = elementsNameBuilder.getDisplayablePluralName(subordinationEdgeClass);
-                String message = getResString("part_of_circle_error");
-                String elements = elementsNameBuilder.getDisplayablePluralName(ModelElement.class);
-                String elementType1 = elementsNameBuilder.getDisplayableName(start);
-                String elementType2 = elementsNameBuilder.getDisplayableName(end);
-                Log.show(Log.INFO, edgeClassPluralName + " " + message + "\n" + elements + ":\n" + elementType1 + ": " + start.getName() + "\n" + elementType2 + ": " + end.getName());
-            }
-            return retVal;
-        }
-        return false;
+        return !endElementIsSuperOfStartElement;
     }
 
     /**

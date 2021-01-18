@@ -145,19 +145,7 @@ public abstract class Edge extends ModelElement {
      * @param registerInNodes
      */
     public boolean setNodes(final ModelElement startElement, final ModelElement endElement, final boolean registerInNodes) {
-        this.startElement = startElement;
-        this.endElement = endElement;
-        //Validität der Edge prüfen und dabei wenn nötig umdrehen (bis Version 3.2
-        //ist teilweise die Reihenfolge der Start- und Endelemente von Kanten andersherum gewesen,
-        //als sie in der Kantenklasse festgelegt sind. Das wird hier grade gebogen
-        if (!checkValidity()) {
-            return false;
-        }
-        if (registerInNodes) {
-            startElement.addEdge(this);
-            endElement.addEdge(this);
-        }
-        return true;
+        return setNodes(startElement, -1, endElement, -1, registerInNodes);
     }
 
     /**
@@ -175,14 +163,36 @@ public abstract class Edge extends ModelElement {
      *            aktuelle Liste ist, dann wird die Edge hinten angefügt.
      */
     public boolean setNodesAndInsert(final ModelElement startElement, final int startElementEdgePos, final ModelElement endElement, final int endElementEdgePos) {
-        if (startElement == null || endElement == null) {
-            return false;
-        }
+        return setNodes(startElement, startElementEdgePos, endElement, endElementEdgePos, true);
+    }
+
+    /**
+     * @param startElement
+     * @param startElementEdgePos
+     * @param endElement
+     * @param endElementEdgePos
+     * @param registerInNodes
+     * @return
+     */
+    private boolean setNodes(final ModelElement startElement, final int startElementEdgePos, final ModelElement endElement, final int endElementEdgePos, final boolean registerInNodes) {
         this.startElement = startElement;
         this.endElement = endElement;
-        startElement.insertEdge(this, startElementEdgePos);
-        endElement.insertEdge(this, endElementEdgePos);
-        return true; //subclasses can overwrite this and return false
+        //Validität der Edge prüfen und dabei wenn nötig umdrehen (bis Version 3.2
+        //ist teilweise die Reihenfolge der Start- und Endelemente von Kanten andersherum gewesen,
+        //als sie in der Kantenklasse festgelegt sind. Das wird hier grade gebogen
+        if (!checkValidity()) {
+            return false;
+        }
+        if (registerInNodes) {
+            if (!startElement.insertEdge(this, startElementEdgePos)) {
+                return false;
+            }
+            if (!endElement.insertEdge(this, endElementEdgePos)) {
+                startElement.removeEdge(this);
+                return false;
+            }
+        }
+        return true;
     }
 
     /**
@@ -326,7 +336,7 @@ public abstract class Edge extends ModelElement {
      *
      * @return <code>true</code>, wenn die Edge vollständig richtig ist
      */
-    public boolean checkValidity() {
+    protected boolean checkValidity() {
         if (startElement == null || endElement == null) {
             return false;
         }
