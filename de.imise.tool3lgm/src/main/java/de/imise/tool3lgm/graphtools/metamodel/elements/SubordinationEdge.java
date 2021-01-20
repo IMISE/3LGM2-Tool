@@ -3,8 +3,13 @@ package de.imise.tool3lgm.graphtools.metamodel.elements;
 import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction.BACKWARD;
 import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction.FORWARD;
 
+import java.util.List;
+
+import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
+import de.imise.tool3lgm.graphtools.path.metapaths.ElementaryMetaPath;
+import de.imise.tool3lgm.graphtools.path.metapaths.ElementaryMetaPathHandler;
 import de.imise.tool3lgm.log.Log;
 
 /**
@@ -90,18 +95,39 @@ public abstract class SubordinationEdge extends Edge {
             return false;
         }
         Class<? extends SubordinationEdge> subordinationEdgeClass = getClass();
-        boolean endElementIsSuperOfStartElement = endElement.isSuperElementOf(startElement, subordinationEdgeClass);
-        if (endElementIsSuperOfStartElement) {
+        List<ModelElement> pathElements = startElement.getPathElements(endElement, subordinationEdgeClass, SUB_TO_SUPER_DIRECTION);
+        //boolean endElementIsSuperOfStartElement = endElement.isSuperElementOf(startElement, subordinationEdgeClass);
+
+        //if (endElementIsSuperOfStartElement) {
+        if (!pathElements.isEmpty()) {
             MetaModel metaModel = getMetaModel();
+            ElementaryMetaPathHandler emph = getElementaryMetaPathHandler();
+            ElementaryMetaPath metaPath = emph.getMetaPath(subordinationEdgeClass, SUB_TO_SUPER_DIRECTION);
             ElementsNameBuilder elementsNameBuilder = metaModel.getElementsNameBuilder();
             String edgeClassPluralName = elementsNameBuilder.getDisplayablePluralName(subordinationEdgeClass);
-            String message = getResString("part_of_circle_error");
-            String elements = elementsNameBuilder.getDisplayablePluralName(ModelElement.class);
-            String elementType1 = elementsNameBuilder.getDisplayableName(startElement);
-            String elementType2 = elementsNameBuilder.getDisplayableName(endElement);
-            Log.show(Log.INFO, edgeClassPluralName + " " + message + "\n" + elements + ":\n" + elementType1 + ": " + startElement.getName() + "\n" + elementType2 + ": " + endElement.getName());
+            String message1 = Tool3lgmConstants.getReplacedResString("subordination_circle_error_1", edgeClassPluralName);
+            String message2 = Tool3lgmConstants.getReplacedResString("subordination_circle_error_2", startElement, endElement);
+
+            StringBuilder sb = new StringBuilder(message1);
+            sb.append("\n");
+            sb.append(metaPath.getFullName());
+            sb.append("\n");
+            sb.append(message2);
+            int size = pathElements.size();
+            for (int i = 0; i < size; i++) {
+                ModelElement modelElement = pathElements.get(size - 1 - i);
+                sb.append("\n");
+                for (int j = 0; j < i * 4; j++) {
+                    sb.append(" ");
+                }
+                String nameWithSzens = modelElement.getNameWithSzens();
+                sb.append(nameWithSzens);
+            }
+            //Log.show(Log.INFO, edgeClassPluralName + " " + message + "\n" + elements + ":\n" + elementType1 + ": " + startElement.getName() + "\n" + elementType2 + ": " + endElement.getName());
+            Log.show(Log.INFO, sb);
+            return false;
         }
-        return !endElementIsSuperOfStartElement;
+        return true;
     }
 
     /**

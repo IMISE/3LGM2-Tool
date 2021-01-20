@@ -4,6 +4,7 @@ import static de.imise.tool3lgm.Static.getMainFrame;
 import static de.imise.tool3lgm.Static.getSelectedDoc;
 import static de.imise.tool3lgm.Static.getSelectedGDCollection;
 import static de.imise.tool3lgm.Static.getTool;
+import static de.imise.tool3lgm.Tool3lgmConstants.getReplacedResString;
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
 import static de.imise.tool3lgm.event.action.StaticAction.PPP;
 import static de.imise.tool3lgm.userproperties.UserProperties.IntProperty.PROPERTY_INT_RENDER_SETTINGS;
@@ -865,7 +866,7 @@ public class ActionLibrary {
                     MetaPath metaPath = singleSimpleRedundancyDefinition.getMetaPath();
                     String startClassPluralName = elementsNameBuilder.getDisplayablePluralName(metaPath.getStartClasses());
                     String endClassPluralName = elementsNameBuilder.getDisplayablePluralName(metaPath.getEndClasses());
-                    String fullActionDisplayName = getResString(resKey, startClassPluralName, endClassPluralName);
+                    String fullActionDisplayName = getReplacedResString(resKey, startClassPluralName, endClassPluralName);
                     action.setText(fullActionDisplayName);
                     returnActions[i] = action;
                 }

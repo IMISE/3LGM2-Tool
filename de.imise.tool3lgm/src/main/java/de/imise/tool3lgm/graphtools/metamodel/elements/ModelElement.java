@@ -1655,6 +1655,48 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
     }
 
     /**
+     * @param pathEnd
+     * @param edgeClass
+     * @param direction
+     * @return
+     */
+    public final List<ModelElement> getPathElements(final ModelElement pathEnd, final Class<? extends Edge> edgeClass, final Direction direction) {
+        List<ModelElement> result = new ArrayList<>();
+        result.add(this);
+        if (!addPathElements(result, pathEnd, edgeClass, direction)) {
+            result.clear();
+        }
+        return result;
+    }
+
+    /**
+     * @param currentPathElements
+     * @param pathEnd
+     * @param edgeClass
+     * @param direction
+     */
+    private boolean addPathElements(final List<ModelElement> currentPathElements, final ModelElement pathEnd, final Class<? extends Edge> edgeClass, final Direction direction) {
+        int lastElementIndex = currentPathElements.size();
+        ModelElement lastPathElement = currentPathElements.get(lastElementIndex - 1);
+        List<ModelElement> connectedElements = lastPathElement.getConnectedElements(edgeClass, direction);
+        for (ModelElement connected : connectedElements) {
+            if (currentPathElements.contains(connected)) {
+                continue;
+            }
+            currentPathElements.add(connected);
+            if (connected == pathEnd) {
+                return true;
+            }
+            boolean endFound = addPathElements(currentPathElements, pathEnd, edgeClass, direction);
+            if (endFound) {
+                return true;
+            }
+            currentPathElements.remove(lastElementIndex);
+        }
+        return false;
+    }
+
+    /**
      * Liefert die direkten Teilelemente dieses Elements
      *
      * @return

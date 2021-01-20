@@ -111,8 +111,8 @@ public class Log {
      * @param level Level der Fehlermeldung (siehe Fehlerlevel)
      * @param meldung die Meldung, welche geloggt und angezeigt werden soll
      */
-    public static void show(final Level level, final String meldung) {
-        show(level, meldung, null);
+    public static void show(final Level level, final Object meldung) {
+        show(level, String.valueOf(meldung), null);
     }
 
     /**
