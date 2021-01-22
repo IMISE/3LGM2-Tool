@@ -5,7 +5,7 @@ import static de.imise.tool3lgm.Tool3lgmConstants.RESOUCE_BASE_DEFAULT_USERPROPE
 import java.net.URL;
 
 import de.imise.tool3lgm.LocaleDependentSubDirResourceHandler;
-import de.imise.tool3lgm.Tool3lgm;
+import de.imise.tool3lgm.graphtools.metamodel.MetaModelDefinition;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.log.Log;
 
@@ -15,7 +15,8 @@ import de.imise.tool3lgm.log.Log;
 public class UserfieldResourceHandler extends LocaleDependentSubDirResourceHandler {
 
     private UserfieldResourceHandler(final GDCollection gdcoll) {
-        String[] defaultUserpropertiesFileNames = getFileNames("ufd", RESOUCE_BASE_DEFAULT_USERPROPERTIES_DIR_NAME, Tool3lgm.class);
+        Class<? extends MetaModelDefinition> metaModelDefinitionClass = gdcoll.getMetaModelDefinitionClass();
+        String[] defaultUserpropertiesFileNames = getFileNames("ufd", RESOUCE_BASE_DEFAULT_USERPROPERTIES_DIR_NAME, metaModelDefinitionClass);
 
         UserFieldDefinitions definitions = gdcoll.getUserFieldDefinitions();
         for (String ufdFileName : defaultUserpropertiesFileNames) {
