@@ -1,11 +1,11 @@
 package de.imise.tool3lgm.graphtools.userfield;
 
-import static de.imise.tool3lgm.Tool3lgmConstants.JAR_RESOURCE_DIR_NAME;
 import static de.imise.tool3lgm.Tool3lgmConstants.RESOUCE_BASE_DEFAULT_USERPROPERTIES_DIR_NAME;
 
 import java.net.URL;
 
 import de.imise.tool3lgm.LocaleDependentSubDirResourceHandler;
+import de.imise.tool3lgm.Tool3lgm;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.log.Log;
 
@@ -14,12 +14,9 @@ import de.imise.tool3lgm.log.Log;
  */
 public class UserfieldResourceHandler extends LocaleDependentSubDirResourceHandler {
 
-    private static final String DEV_RESOURCE_BASE_USERPROPERTIES_DIR_NAME = DEV_RESOURCE_BASE_DIR_NAME + RESOUCE_BASE_DEFAULT_USERPROPERTIES_DIR_NAME;
-
-    private static final String JAR_RESOURCE_BASE_USERPROPERTIES_DIR_NAME = JAR_RESOURCE_DIR_NAME + RESOUCE_BASE_DEFAULT_USERPROPERTIES_DIR_NAME;
-
     private UserfieldResourceHandler(final GDCollection gdcoll) {
-        String[] defaultUserpropertiesFileNames = getFileNames("ufd", DEV_RESOURCE_BASE_USERPROPERTIES_DIR_NAME, JAR_RESOURCE_BASE_USERPROPERTIES_DIR_NAME);
+        String[] defaultUserpropertiesFileNames = getFileNames("ufd", RESOUCE_BASE_DEFAULT_USERPROPERTIES_DIR_NAME, Tool3lgm.class);
+
         UserFieldDefinitions definitions = gdcoll.getUserFieldDefinitions();
         for (String ufdFileName : defaultUserpropertiesFileNames) {
             try {
