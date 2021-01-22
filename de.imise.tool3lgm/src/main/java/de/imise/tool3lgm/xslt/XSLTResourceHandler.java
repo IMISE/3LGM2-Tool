@@ -2,7 +2,6 @@ package de.imise.tool3lgm.xslt;
 
 import static de.imise.tool3lgm.Tool3lgmConstants.RESOUCE_BASE_XSL_SCRIPT_DIR_NAME;
 
-import java.io.File;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -12,8 +11,6 @@ import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.Tool3lgm;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModelDefinition;
-import de.imise.util.ReflectionUtils;
-import de.imise.util.Sys;
 
 /**
  * @author AXS (14.08.2014)
@@ -30,19 +27,10 @@ public class XSLTResourceHandler extends LocaleDependentSubDirResourceHandler {
         this(getSelectedMetaModelDefinitionClass());
     }
 
-    private static void printFileInfo(final Class<?> clazz) {
-        String absoluteDirectory = ReflectionUtils.getAbsoluteDirectory(clazz);
-        File classFileLocation = ReflectionUtils.getClassMainSourceFolderOrJar(clazz);
-        Sys.err1(clazz + "\n\tabsuluteDirectory=" + absoluteDirectory + "\n\tclassFileLocation=" + classFileLocation + "\n\t");
-    }
-
     /**
      * @param classWithClassLoaderForXSLTResources
      */
     public XSLTResourceHandler(final Class<?> classWithClassLoaderForXSLTResources) {
-        printFileInfo(classWithClassLoaderForXSLTResources);
-        printFileInfo(getClass());
-
         // Standard-XSLT-Scripte laden
         String[] scriptFileNames = getFileNames("xsl", RESOUCE_BASE_XSL_SCRIPT_DIR_NAME, Tool3lgm.class);
 
