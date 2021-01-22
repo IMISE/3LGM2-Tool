@@ -12,49 +12,53 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
 
+import de.imise.util.Sys;
+
 /**
- * @author Thomas Rudert To change the template for this generated type comment
- *         go to Window&gt;Preferences&gt;Java&gt;Code Generation&gt;Code and
- *         Comments
+ * @author Thomas Rudert
  */
 public class XSLTScript {
 
     /**
-     * COMMENTME
+     *
      */
     private final String source;
 
     /**
-     * COMMENTME
+     *
      */
     private String name = null;
 
     /**
-     * COMMENTME
+     *
      */
     private String description = null;
 
     /**
-     * COMMENTME
+     *
      */
     private String type = null;
 
     /**
-     * COMMENTME
+     *
      */
     private String author = null;
 
     /**
-     * COMMENTME
+     *
      */
     private URL url = null;
 
     /**
-     * COMMENTME
+     *
      */
     private File file = null;
 
+    /**
+     * @param file
+     */
     public XSLTScript(final File file) {
+        Sys.err(file);
         this.file = file;
         source = file.toString();
         String[] content = XSLTFileHandler.checkContent(file);
@@ -65,12 +69,13 @@ public class XSLTScript {
     }
 
     /**
-     *
+     * @param url
+     * @throws IOException
      */
     public XSLTScript(final URL url) throws IOException {
         this.url = url;
         source = extractUrlSourceString();
-        BufferedReader reader = new BufferedReader(new InputStreamReader(url.openStream()));
+        BufferedReader reader = new BufferedReader(new InputStreamReader(url.openStream(), "ISO-8859-1"));
         String line;
         while ((line = reader.readLine()) != null) {
             int indexOfContentEnd = line.indexOf("-->");
