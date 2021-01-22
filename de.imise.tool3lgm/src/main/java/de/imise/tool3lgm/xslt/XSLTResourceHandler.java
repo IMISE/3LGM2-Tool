@@ -8,7 +8,6 @@ import java.util.List;
 
 import de.imise.tool3lgm.LocaleDependentSubDirResourceHandler;
 import de.imise.tool3lgm.Static;
-import de.imise.tool3lgm.Tool3lgm;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModelDefinition;
 
@@ -32,7 +31,7 @@ public class XSLTResourceHandler extends LocaleDependentSubDirResourceHandler {
      */
     public XSLTResourceHandler(final Class<?> classWithClassLoaderForXSLTResources) {
         // Standard-XSLT-Scripte laden
-        String[] scriptFileNames = getFileNames("xsl", RESOUCE_BASE_XSL_SCRIPT_DIR_NAME, Tool3lgm.class);
+        String[] scriptFileNames = getFileNames("xsl", RESOUCE_BASE_XSL_SCRIPT_DIR_NAME, classWithClassLoaderForXSLTResources);
 
         standardXSLT = new ArrayList<>();
         for (String scriptName : scriptFileNames) {
