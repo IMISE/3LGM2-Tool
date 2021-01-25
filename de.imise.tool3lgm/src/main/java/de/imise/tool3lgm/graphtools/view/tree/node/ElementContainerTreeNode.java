@@ -13,6 +13,9 @@ import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
  */
 public class ElementContainerTreeNode extends IconifiedTreeNode<ElementContainer> implements GraphDocumentOwner {
 
+    /**
+     *
+     */
     private final boolean equalsIfSameElementContainer;
 
     /**
@@ -21,6 +24,17 @@ public class ElementContainerTreeNode extends IconifiedTreeNode<ElementContainer
      */
     public static ElementContainerTreeNode createDialogTreeNode(final ElementContainer ec) {
         return new ElementContainerTreeNode(ec, false, false, true);
+    }
+
+    /**
+     * @param ec
+     * @param index
+     * @return
+     */
+    public static ElementContainerTreeNode createIndexedDialogTreeNode(final ElementContainer ec, final int index) {
+        ElementContainerTreeNode elementContainerTreeNode = new ElementContainerTreeNode(ec, false, false, null, false, null);
+        elementContainerTreeNode.setText(index);
+        return elementContainerTreeNode;
     }
 
     /**
@@ -119,6 +133,22 @@ public class ElementContainerTreeNode extends IconifiedTreeNode<ElementContainer
             return this == obj;
         }
         return super.equals(obj);
+    }
+
+    /**
+     * @param ec
+     * @return
+     */
+    private String getIndexedText(final int index) {
+        return "[" + (index + 1) + "] " + userObject;
+    }
+
+    /**
+     * @param index
+     */
+    public void setText(final int index) {
+        String indexedText = getIndexedText(index);
+        setText(indexedText);
     }
 
 }
