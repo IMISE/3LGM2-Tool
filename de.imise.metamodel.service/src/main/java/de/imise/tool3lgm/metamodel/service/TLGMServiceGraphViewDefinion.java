@@ -92,6 +92,10 @@ public class TLGMServiceGraphViewDefinion extends GraphViewDefinition {
         setDefaultLayout(IheActorInstanceProvidingInterface.class, GraphElementLayout.SHAPE.dreieck, GraphElementLayout.COLORS[GraphElementLayout.GRAY], 20, 20);
     }
 
+    /*
+     * in order to generate additional model shapes automatically, this function is created.
+     * through definition of certain paths, it is able to return the path and the corresponding model component
+     */
     @Override
     protected List<AdditionalGraphShapeData> getAdditionalGraphShapeData() {
         //Application Sytsems get a Database on its shape if they are connected to an ObjectType

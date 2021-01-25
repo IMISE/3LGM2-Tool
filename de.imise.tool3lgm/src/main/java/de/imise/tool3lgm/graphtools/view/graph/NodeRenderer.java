@@ -180,8 +180,7 @@ public final class NodeRenderer {
             kc.paintSuperComponent(g);
             g.translate(-xm, -ym);
         } else if (img == null || isResult) {
-            switch (form) {
-            case rechteck:
+            if (form == null) {
                 g.setColor(col);
                 g.fillRect(xm, ym, width, height);
                 g.translate(xm, ym);
@@ -189,125 +188,8 @@ public final class NodeRenderer {
                 g.translate(-xm, -ym);
                 g.setColor(isResult && analysisColor != null ? analysisColor : kc.getFrameColor());
                 g.drawRect(xm, ym, width, height);
-                break;
-
-            case dreieck:
-                xs[0] = xm;
-                xs[1] = x;
-                xs[2] = xp;
-                ys[0] = ym + height;
-                ys[1] = yp - height;
-                ys[2] = ym + height;
-                npoints = 3;
-                g.setColor(col);
-                g.fillPolygon(xs, ys, npoints);
-                g.translate(xm, ym);
-                kc.paintSuperComponent(g);
-                g.translate(-xm, -ym);
-                g.setColor(isResult && analysisColor != null ? analysisColor : kc.getFrameColor());
-                g.drawPolygon(xs, ys, npoints);
-                break;
-            case oval:
-                g.setColor(col);
-                g.fillOval(xm, ym, width, height);
-                g.translate(xm, ym);
-                kc.paintSuperComponent(g);
-                g.translate(-xm, -ym);
-                g.setColor(isResult && analysisColor != null ? analysisColor : kc.getFrameColor());
-                g.drawOval(xm, ym, width, height);
-                break;
-
-            case rundeck:
-                g.setColor(col);
-                g.fillRoundRect(xm, ym, width, height, width / 4, height / 4);
-                g.translate(xm, ym);
-                kc.paintSuperComponent(g);
-                g.translate(-xm, -ym);
-                g.setColor(isResult && analysisColor != null ? analysisColor : kc.getFrameColor());
-                g.drawRoundRect(xm, ym, width, height, width / 4, height / 4);
-                break;
-
-            case rhombus:
-                xs[0] = xm;
-                xs[1] = x;
-                xs[2] = xp;
-                xs[3] = x;
-                ys[0] = y;
-                ys[1] = yp;
-                ys[2] = y;
-                ys[3] = ym;
-                npoints = 4;
-                g.setColor(col);
-                g.fillPolygon(xs, ys, npoints);
-                g.translate(xm, ym);
-                kc.paintSuperComponent(g);
-                g.translate(-xm, -ym);
-                g.setColor(isResult && analysisColor != null ? analysisColor : kc.getFrameColor());
-                g.drawPolygon(xs, ys, npoints);
-                break;
-
-            case wabe:
-                xs[0] = xm;
-                xs[1] = x - width / 3;
-                xs[2] = x + width / 3;
-                xs[3] = xp;
-                xs[4] = x + width / 3;
-                xs[5] = x - width / 3;
-
-                ys[0] = y;
-                ys[1] = yp;
-                ys[2] = yp;
-                ys[3] = y;
-                ys[4] = ym;
-                ys[5] = ym;
-                npoints = 6;
-
-                g.setColor(col);
-                g.fillPolygon(xs, ys, npoints);
-                g.translate(xm, ym);
-                kc.paintSuperComponent(g);
-                g.translate(-xm, -ym);
-                g.setColor(isResult && analysisColor != null ? analysisColor : kc.getFrameColor());
-                g.drawPolygon(xs, ys, npoints);
-                break;
-
-            case tonne:
-                g.setColor(col);
-                g.fillArc(xm, ym, width, height_half + 1, 180, -180);
-                g.fillArc(xm, y, width, height_half, 180, 180);
-                g.fillRect(xm, y - height / 4, width, height_half);
-                g.translate(xm, ym);
-                kc.paintSuperComponent(g);
-                g.translate(-xm, -ym);
-                g.setColor(isResult && analysisColor != null ? analysisColor : kc.getFrameColor());
-                g.drawArc(xm, y, width, height_half, 180, 180);
-                g.drawLine(xm, y - height / 4, xm, y + height / 4);
-                g.drawLine(xp, y - height / 4, xp, y + height / 4);
-                g.drawOval(xm, ym, width, height_half);
-                break;
-
-            case ordner:
-                g.setColor(col);
-                g.fillRect(xm, ym, width_third, height);
-                g.fillRect(xm + width_third, ym, width_third, height);
-                g.fillRect(xm + 2 * width_third, ym, width_third, height);
-                g.translate(xm, ym);
-                kc.paintSuperComponent(g);
-                g.translate(-xm, -ym);
-                g.setColor(isResult && analysisColor != null ? analysisColor : kc.getFrameColor());
-                g.drawRect(xm, ym, width_third, height);
-                g.drawRect(xm + width_third, ym, width_third, height);
-                g.drawRect(xm + 2 * width_third, ym, width_third, height);
-                break;
-
-            default:
-                g.setColor(col);
-                g.fillRect(xm, ym, width, height);
-                g.translate(xm, ym);
-                kc.paintSuperComponent(g);
-                g.translate(-xm, -ym);
-                g.setColor(isResult && analysisColor != null ? analysisColor : kc.getFrameColor());
-                g.drawRect(xm, ym, width, height);
+            } else {
+                form.paint(g, kc, col, analysisColor, isResult, x, y, xm, ym, xp, yp, xs, ys, width, height, npoints);
             }
         } else /* if (img != null) */ {
             g.translate(xm, ym);
@@ -318,7 +200,8 @@ public final class NodeRenderer {
         SHAPE additionalGraphShape = me.getAdditionalGraphShape();
         if (additionalGraphShape != null) {
             //male additionalShape
-            //Sys.err1(me + "   ->   " + additionalGraphShape);
+            additionalGraphShape.paint(g, kc, col, analysisColor, isResult, x, y, xm, ym, xp, yp, xs, ys, width, height, npoints);
+            //            Sys.err1(me + "   ->   " + additionalGraphShape);
         }
 
         // Symbol für Verlinkung mit Teilmodell
