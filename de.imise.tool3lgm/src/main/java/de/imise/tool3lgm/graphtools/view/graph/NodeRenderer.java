@@ -120,7 +120,6 @@ public final class NodeRenderer {
         int y = kc.getY();
         int width = kc.getWidth();
         int width_half = width / 2;
-        int width_third = width / 3;
         int height = kc.getHeight();
         int height_half = height / 2;
         int xm = x - width_half;
@@ -200,8 +199,18 @@ public final class NodeRenderer {
         SHAPE additionalGraphShape = me.getAdditionalGraphShape();
         if (additionalGraphShape != null) {
             //male additionalShape
-            additionalGraphShape.paint(g, kc, col, analysisColor, isResult, x, y, xm, ym, xp, yp, xs, ys, width, height, npoints);
-            //            Sys.err1(me + "   ->   " + additionalGraphShape);
+            int addShapeX = x + width / 3;
+            int addShapeY = y + height / 3;
+            double diagonal = Math.sqrt(height * height + width * width);
+            int scalingFactor = (int) Math.ceil(diagonal / 100);
+            int addShapeWidth = 8 * scalingFactor;
+            int addShapeHeight = 8 * scalingFactor;
+            int addShapeXm = addShapeX;
+            int addShapeYm = addShapeY - addShapeHeight / 2;
+            int addShapeXp = addShapeX + addShapeWidth;
+            int addShapeYp = addShapeY + addShapeHeight / 2;
+            additionalGraphShape.paint(g, null, Color.YELLOW, Color.BLACK, isResult, addShapeX, addShapeY, addShapeXm, addShapeYm, addShapeXp, addShapeYp, xs, ys, addShapeWidth, addShapeHeight, npoints);
+
         }
 
         // Symbol für Verlinkung mit Teilmodell

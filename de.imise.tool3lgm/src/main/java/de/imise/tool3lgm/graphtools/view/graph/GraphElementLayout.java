@@ -151,9 +151,13 @@ public class GraphElementLayout implements SwingConstants, Cloneable {
                 g.fillArc(xm, y, width, height_half, 180, 180);
                 g.fillRect(xm, y - height / 4, width, height_half);
                 g.translate(xm, ym);
-                kc.paintSuperComponent(g);
+                if (kc != null) {
+                    kc.paintSuperComponent(g);
+                    g.setColor(isResult && analysisColor != null ? analysisColor : kc.getFrameColor());
+                } else {
+                    g.setColor(analysisColor);
+                }
                 g.translate(-xm, -ym);
-                g.setColor(isResult && analysisColor != null ? analysisColor : kc.getFrameColor());
                 g.drawArc(xm, y, width, height_half, 180, 180);
                 g.drawLine(xm, y - height / 4, xm, y + height / 4);
                 g.drawLine(xp, y - height / 4, xp, y + height / 4);
@@ -211,6 +215,7 @@ public class GraphElementLayout implements SwingConstants, Cloneable {
                 final int width, final int height, final int npoints) {
 
         }
+
     }
 
     public static final int WHITE = 0;
