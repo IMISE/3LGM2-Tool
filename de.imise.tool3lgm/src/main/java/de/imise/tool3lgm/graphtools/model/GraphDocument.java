@@ -2620,7 +2620,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
             }
             moveNodeContainer(nc, x, y, w, h, pid);
             if (OPTION_GRAPH_MOVE_SUBELEMENTS.is()) {
-                moveSlaveElements(nc, xOrg - x, yOrg - y, wOrg - w, hOrg - h, pid);
+                moveSlaveElements(nc, xOrg - x, yOrg - y, 0, 0, pid);
             }
         }
         //        setSelection(selection);
