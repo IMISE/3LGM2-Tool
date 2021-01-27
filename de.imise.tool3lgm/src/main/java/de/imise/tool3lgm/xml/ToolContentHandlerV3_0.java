@@ -849,7 +849,6 @@ public class ToolContentHandlerV3_0 implements ContentHandler {
                     EdgeContainer kc = benpointContainer.getGraphDocument().findEdgeContainerCoded(bendpointEdgeID);
                     if (kc != null) {
                         bendpoint.addEdge(kc.getEdge());
-                        bendpoint.setOwner(kc);
                         kc.setBendpointContainer(benpointContainer, bendpoint.getIndex());
                         int layer = bendpoint.layerFor();
                         ElementContainer mainDocBendpointContainer = idToMainDocContainer.get(bendpoint.getID());

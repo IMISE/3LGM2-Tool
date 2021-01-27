@@ -71,6 +71,7 @@ public final class Bendpoint extends Node {
     public void setOwner(final EdgeContainer kc) {
         this.kc = kc;
         edgeID = kc.getID();
+        index = kc.getIndexOfBendpoint(this);
     }
 
     /**
