@@ -72,6 +72,7 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.annotation.Nonnull;
 import javax.swing.JColorChooser;
@@ -101,6 +102,7 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.LayerNode;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
 import de.imise.tool3lgm.graphtools.metamodel.elements.OptionalEdge;
+import de.imise.tool3lgm.graphtools.metamodel.elements.SubordinationEdge;
 import de.imise.tool3lgm.graphtools.model.LGMChangeListener.LGMChangeType;
 import de.imise.tool3lgm.graphtools.path.metapaths.ElementaryMetaPath;
 import de.imise.tool3lgm.graphtools.undoredo.TransactionManager;
@@ -2567,15 +2569,25 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
         }
         start_transaction(pid);
         NodeContainer lastSelected = getLastSelectedGraphVisibleNodeOrBendpoint();
+        //Unterelemente ebenfalls selektieren, damit sie mitverschoben werden und ihr Verschieben
+        //dann auch als Undo gelogt wird
+        //        List<ElementContainer> selection = expandSelection(OPTION_GRAPH_MOVE_SUBELEMENTS.is());
         for (ElementContainer ec : selectedContainer) {
-            if (!(ec instanceof NodeContainer)) {
+            if (!(ec instanceof NodeContainer) || ec == lastSelected) {
                 continue;
             }
             NodeContainer nc = (NodeContainer) ec;
-            int x = nc.getX();
-            int y = nc.getY();
-            int w = nc.getWidth();
-            int h = nc.getHeight();
+            if (OPTION_GRAPH_MOVE_SUBELEMENTS.is() && isGraphicalSuperElementSelected(nc)) {
+                continue;
+            }
+            int xOrg = nc.getX();
+            int yOrg = nc.getY();
+            int wOrg = nc.getWidth();
+            int hOrg = nc.getHeight();
+            int x = xOrg;
+            int y = yOrg;
+            int w = wOrg;
+            int h = hOrg;
             switch (mode) {
             case MODEL_ACTION_SET_ELEMENTS_POSITION_VERTICAL_TOP:
                 y = lastSelected.getY() - lastSelected.getHeight() / 2 + h / 2;
@@ -2610,9 +2622,59 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
                 break;
             }
             moveNodeContainer(nc, x, y, w, h, pid);
+            if (OPTION_GRAPH_MOVE_SUBELEMENTS.is()) {
+                moveSlaveElements(nc, xOrg - x, yOrg - y, wOrg - w, hOrg - h, pid);
+            }
         }
+        //        setSelection(selection);
         finish_transaction(pid);
         distributeEvent(ELEMENT_GRAPHICS_CHANGED, pid);
+    }
+
+    /**
+     * @param nc
+     * @param xDiff
+     * @param yDiff
+     * @param wDiff
+     * @param hDiff
+     */
+    private void moveSlaveElements(final NodeContainer nc, final int xDiff, final int yDiff, final int wDiff, final int hDiff, final int pid) {
+        ModelElement master = nc.getElement();
+        Set<ElementContainer> subordinatedContainers = master.getSubordinatedContainers(this, true);
+        for (ElementContainer subContainer : subordinatedContainers) {
+            if (subContainer != nc) { //subContainer contains the master too
+                if (subContainer instanceof NodeContainer) { //should be alsways true but better safe than sorry
+                    int x = subContainer.getX() - xDiff;
+                    int y = subContainer.getY() - yDiff;
+                    int w = subContainer.getWidth() - wDiff;
+                    int h = subContainer.getHeight() - hDiff;
+                    moveNodeContainer((NodeContainer) subContainer, x, y, w, h, pid);
+                }
+            }
+        }
+    }
+
+    /**
+     * @param nc
+     * @return
+     */
+    private boolean isGraphicalSuperElementSelected(final NodeContainer nc) {
+        ModelElement me = nc.getElement();
+        Class<? extends ModelElement> elementClass = me.getClass();
+        List<Class<SubordinationEdge>> subordinationEdgeTypesAsSlave = metaModel.getSubordinationEdgeTypesAsSlave(elementClass, SubordinationEdge.class);
+        for (Class<? extends SubordinationEdge> subordinationEdgeClass : subordinationEdgeTypesAsSlave) {
+            List<ModelElement> masterElements = me.getConnectedElements(subordinationEdgeClass);
+            for (ModelElement masterElement : masterElements) {
+                Class<? extends ModelElement> masterElementClass = masterElement.getClass();
+                if (metaModel.isPaintable(masterElementClass)) {
+                    ElementContainer masterElementContainer = masterElement.getContainer(this);
+                    if (isSelected(masterElementContainer)) {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
     }
 
     /**

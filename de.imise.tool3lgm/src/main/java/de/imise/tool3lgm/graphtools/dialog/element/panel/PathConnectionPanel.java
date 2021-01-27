@@ -552,7 +552,6 @@ public class PathConnectionPanel extends AbstractExpandablePanel {
                 //TODO: das hier expandiert das neue überhaupt nicht, sondern nur bis zum vorher schon geöffneten Node. Das ist doof!
                 ltree.expandPath(targetTreeSelectionPath);
                 ltree.clearSelection();
-                return;
             }
         };
     }

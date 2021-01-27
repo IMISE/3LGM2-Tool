@@ -1549,7 +1549,7 @@ public final class MetaModel extends CoreMetaModel {
      * @param subordinationEdgeClass
      * @return
      */
-    private <T extends SubordinationEdge> List<Class<T>> getSubordinationEdgeTypesAsMaster(final Class<? extends ModelElement> elementClass, final Class<T> subordinationEdgeClass) {
+    public <T extends SubordinationEdge> List<Class<T>> getSubordinationEdgeTypesAsMaster(final Class<? extends ModelElement> elementClass, final Class<T> subordinationEdgeClass) {
         return getSubordinationEdgeTypes(elementClass, subordinationEdgeClass, true);
     }
 
@@ -1563,7 +1563,7 @@ public final class MetaModel extends CoreMetaModel {
      * @param subordinationEdgeClass
      * @return
      */
-    private <T extends SubordinationEdge> List<Class<T>> getSubordinationEdgeTypesAsSlave(final Class<? extends ModelElement> elementClass, final Class<T> subordinationEdgeClass) {
+    public <T extends SubordinationEdge> List<Class<T>> getSubordinationEdgeTypesAsSlave(final Class<? extends ModelElement> elementClass, final Class<T> subordinationEdgeClass) {
         return getSubordinationEdgeTypes(elementClass, subordinationEdgeClass, false);
     }
 

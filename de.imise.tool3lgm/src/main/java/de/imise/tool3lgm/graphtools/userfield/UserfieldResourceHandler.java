@@ -1,22 +1,23 @@
 package de.imise.tool3lgm.graphtools.userfield;
 
-import static de.imise.tool3lgm.Tool3lgmConstants.JAR_RESOURCE_DIR_NAME;
 import static de.imise.tool3lgm.Tool3lgmConstants.RESOUCE_BASE_DEFAULT_USERPROPERTIES_DIR_NAME;
 
 import java.net.URL;
 
-import de.imise.tool3lgm.LocaleDependingSubDirResourceHandler;
+import de.imise.tool3lgm.LocaleDependentSubDirResourceHandler;
+import de.imise.tool3lgm.graphtools.metamodel.MetaModelDefinition;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.log.Log;
 
-public class UserfieldResourceHandler extends LocaleDependingSubDirResourceHandler {
-
-    private static final String DEV_RESOURCE_BASE_USERPROPERTIES_DIR_NAME = DEV_RESOURCE_BASE_DIR_NAME + RESOUCE_BASE_DEFAULT_USERPROPERTIES_DIR_NAME;
-
-    private static final String JAR_RESOURCE_BASE_USERPROPERTIES_DIR_NAME = JAR_RESOURCE_DIR_NAME + RESOUCE_BASE_DEFAULT_USERPROPERTIES_DIR_NAME;
+/**
+ * @author AXS (14.06.2017)
+ */
+public class UserfieldResourceHandler extends LocaleDependentSubDirResourceHandler {
 
     private UserfieldResourceHandler(final GDCollection gdcoll) {
-        String[] defaultUserpropertiesFileNames = getFileNames("ufd", DEV_RESOURCE_BASE_USERPROPERTIES_DIR_NAME, JAR_RESOURCE_BASE_USERPROPERTIES_DIR_NAME);
+        Class<? extends MetaModelDefinition> metaModelDefinitionClass = gdcoll.getMetaModelDefinitionClass();
+        String[] defaultUserpropertiesFileNames = getFileNames("ufd", RESOUCE_BASE_DEFAULT_USERPROPERTIES_DIR_NAME, metaModelDefinitionClass);
+
         UserFieldDefinitions definitions = gdcoll.getUserFieldDefinitions();
         for (String ufdFileName : defaultUserpropertiesFileNames) {
             try {

@@ -97,11 +97,20 @@ public class GitVersionInfoHandler {
             if (gitTagObject != null) {
                 String gitTag = gitTagObject.toString();
                 int indexOfMinus = gitTag.indexOf("-");
-                versionInfo.version = gitTag.substring(0, indexOfMinus);
-                if (ignoreTagPrefix != null && versionInfo.version.startsWith(ignoreTagPrefix)) {
-                    versionInfo.version = versionInfo.version.substring(ignoreTagPrefix.length());
+                if (indexOfMinus >= 0) {
+                    versionInfo.version = gitTag.substring(0, indexOfMinus);
+                    if (ignoreTagPrefix != null && versionInfo.version.startsWith(ignoreTagPrefix)) {
+                        versionInfo.version = versionInfo.version.substring(ignoreTagPrefix.length());
+                    }
+                    versionInfo.commit = gitTag.substring(indexOfMinus + 1);
+                } else {
+                    int indexOfLastUnderLine = gitTag.lastIndexOf('_');
+                    if (indexOfLastUnderLine >= 0) {
+                        versionInfo.version = gitTag.substring(indexOfLastUnderLine + 1);
+                    } else {
+                        versionInfo.version = gitTag;
+                    }
                 }
-                versionInfo.commit = gitTag.substring(indexOfMinus + 1);
             }
             //Branch name
             Object branchName = properties.get(VERSION_INFO_LINE_PREFIX_BRANCH);

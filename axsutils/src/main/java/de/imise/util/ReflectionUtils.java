@@ -3,7 +3,11 @@ package de.imise.util;
 import java.io.File;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
+import java.security.CodeSource;
+import java.security.ProtectionDomain;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
@@ -293,6 +297,26 @@ public class ReflectionUtils {
             return true;
         }
         return false;
+    }
+
+    /**
+     * @param clazz
+     * @return
+     */
+    public static File getClassMainSourceFolderOrJar(final Class<?> clazz) {
+        try {
+            ProtectionDomain protectionDomain = clazz.getProtectionDomain();
+            CodeSource src = protectionDomain.getCodeSource();
+            if (src != null) {
+                URL classFileLocationUrl = src.getLocation();
+                URI classFileLocationUri = classFileLocationUrl.toURI();
+                File classFileLocation = new File(classFileLocationUri);
+                return classFileLocation;
+            }
+        } catch (URISyntaxException e) {
+            //ignore
+        }
+        return null;
     }
 
     /**
