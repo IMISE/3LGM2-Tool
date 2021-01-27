@@ -199,17 +199,16 @@ public final class NodeRenderer {
         SHAPE additionalGraphShape = me.getAdditionalGraphShape();
         if (additionalGraphShape != null) {
             //male additionalShape
-            int addShapeX = x + width / 3;
-            int addShapeY = y + height / 3;
-            double diagonal = Math.sqrt(height * height + width * width);
-            int scalingFactor = (int) Math.ceil(diagonal / 100);
-            int addShapeWidth = 8 * scalingFactor;
-            int addShapeHeight = 8 * scalingFactor;
+            int scalingFactor = (int) Math.ceil(Math.min(width, height) / 64);
+            int addShapeLength = Math.max(8, 16 * scalingFactor);
+            int addShapeX = x + width / 2 - addShapeLength * 3 / 2;
+            int addShapeY = y + height / 2 - addShapeLength;
             int addShapeXm = addShapeX;
-            int addShapeYm = addShapeY - addShapeHeight / 2;
-            int addShapeXp = addShapeX + addShapeWidth;
-            int addShapeYp = addShapeY + addShapeHeight / 2;
-            additionalGraphShape.paint(g, null, Color.YELLOW, Color.BLACK, isResult, addShapeX, addShapeY, addShapeXm, addShapeYm, addShapeXp, addShapeYp, xs, ys, addShapeWidth, addShapeHeight, npoints);
+            int addShapeYm = addShapeY - addShapeLength / 2;
+            int addShapeXp = addShapeX + addShapeLength;
+            int addShapeYp = addShapeY + addShapeLength / 2;
+
+            additionalGraphShape.paint(g, null, Color.YELLOW, Color.BLACK, isResult, addShapeX, addShapeY, addShapeXm, addShapeYm, addShapeXp, addShapeYp, xs, ys, addShapeLength, addShapeLength, npoints);
 
         }
 

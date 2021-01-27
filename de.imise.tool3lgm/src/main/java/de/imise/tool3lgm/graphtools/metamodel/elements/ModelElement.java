@@ -51,7 +51,6 @@ import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout.SHAPE;
 import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout.TextAlignmentHTML;
 import de.imise.util.Alphabetical;
 import de.imise.util.IDStringGenerator;
-import de.imise.util.Sys;
 import de.imise.util.htmlxml.HTMLConverter;
 
 public abstract class ModelElement extends UserFieldTarget implements MetaModelSpecific, GDCollectionOwner, IDSource {
@@ -387,7 +386,6 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
         nameBuffer.append("      ");
         nameBuffer.append(mySortedSzenarios);
         nameWithSzens = nameBuffer.toString();
-        return;
     }
 
     /**
@@ -527,9 +525,6 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
      *
      */
     private void updateAdditionalShape() {
-        if (this.getClass().getSimpleName().equals("ApplicationSystem")) {
-            Sys.err1(this);
-        }
         GraphViewDefinition graphViewDefinition = metaModel.getGraphViewDefinition();
         AdditionalGraphShapeData additionalGraphShapeData = graphViewDefinition.getAdditionalGraphShapeData(this);
         if (additionalGraphShapeData != null) {
@@ -1180,10 +1175,8 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
                 if (edge.getEnd() == this && elementClass.isAssignableFrom(edge.getStart().getClass())) {
                     edges.add(edge);
                 }
-            } else {
-                if (edge.getStart() == this && elementClass.isAssignableFrom(edge.getEnd().getClass()) || edge.getEnd() == this && elementClass.isAssignableFrom(edge.getStart().getClass())) {
-                    edges.add(edge);
-                }
+            } else if (edge.getStart() == this && elementClass.isAssignableFrom(edge.getEnd().getClass()) || edge.getEnd() == this && elementClass.isAssignableFrom(edge.getStart().getClass())) {
+                edges.add(edge);
             }
         }
         return edges;
