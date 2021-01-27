@@ -187,7 +187,6 @@ public class ToolContentHandlerV3_0 implements ContentHandler {
      * @param paste
      */
     public ToolContentHandlerV3_0(final GDCollection coll, final boolean paste) {
-        super();
         collection = coll;
         this.paste = paste;
         if (paste) {
@@ -305,7 +304,8 @@ public class ToolContentHandlerV3_0 implements ContentHandler {
             } else if (qName.equals("container")) {
                 String id = atts.getValue("hash");
                 if (isCopyAndPaste()) {
-                    element = doc.findElementCoded(oldToNewID.get(id));
+                    String newId = oldToNewID.get(id);
+                    element = doc.findElementCoded(newId);
                 } else {
                     element = doc.findElementCoded(id);
                 }

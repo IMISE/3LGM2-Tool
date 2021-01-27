@@ -61,7 +61,6 @@ public class EdgeContainer extends ElementContainer {
      *
      */
     public EdgeContainer() {
-        super();
     }
 
     /**
@@ -527,14 +526,25 @@ public class EdgeContainer extends ElementContainer {
         return bendpoints;
     }
 
+    /**
+     * @param bendpointContainer
+     * @return
+     */
     public int indexOfBendpointContainer(final BendpointContainer bendpointContainer) {
         return bendpoints.indexOf(bendpointContainer);
     }
 
+    /**
+     * @return
+     */
     public int getBendpointContainerCount() {
         return bendpoints.size();
     }
 
+    /**
+     * @param index
+     * @return
+     */
     public BendpointContainer getBendpointContainer(final int index) {
         return bendpoints.get(index);
     }
