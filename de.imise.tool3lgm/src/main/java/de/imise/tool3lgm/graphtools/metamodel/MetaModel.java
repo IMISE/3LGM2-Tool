@@ -1675,7 +1675,7 @@ public final class MetaModel extends CoreMetaModel {
      * @return
      */
     public final boolean hasInterLayerStartClass(final ModelElement me) {
-        return getGraphViewDefinition().getInterLayerMetaPath(me) != null;
+        return graphViewDefinition.getInterLayerMetaPath(me) != null;
     }
 
     /////////////////////////////////
@@ -1842,10 +1842,8 @@ public final class MetaModel extends CoreMetaModel {
                     if (isStartClass(edgeClass, elementClass)) {
                         subEdgeTypes.add(edgeClass);
                     }
-                } else {
-                    if (isEndClass(edgeClass, elementClass)) {
-                        subEdgeTypes.add(edgeClass);
-                    }
+                } else if (isEndClass(edgeClass, elementClass)) {
+                    subEdgeTypes.add(edgeClass);
                 }
             }
         }

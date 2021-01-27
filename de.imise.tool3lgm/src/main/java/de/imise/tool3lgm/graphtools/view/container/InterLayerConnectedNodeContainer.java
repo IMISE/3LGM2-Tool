@@ -58,7 +58,6 @@ public final class InterLayerConnectedNodeContainer extends NodeContainer {
      * {@link ElementContainer#clone(boolean, GraphDocument)}
      */
     public InterLayerConnectedNodeContainer() {
-        super();
     }
 
     /**
