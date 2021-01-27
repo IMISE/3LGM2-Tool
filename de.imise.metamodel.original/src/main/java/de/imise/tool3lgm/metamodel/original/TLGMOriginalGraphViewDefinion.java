@@ -16,6 +16,8 @@ import de.imise.tool3lgm.metamodel.original.edge.AufAufOrgVerbindung;
 import de.imise.tool3lgm.metamodel.original.edge.AwbAwbkVerbindung;
 import de.imise.tool3lgm.metamodel.original.edge.AwbkAufOrgVerbindung;
 import de.imise.tool3lgm.metamodel.original.edge.KommBeziehung;
+import de.imise.tool3lgm.metamodel.original.edge.LogspReprVerbindung;
+import de.imise.tool3lgm.metamodel.original.edge.ObjReprVerbindung;
 import de.imise.tool3lgm.metamodel.original.edge.PdvbPdvbkVerbindung;
 import de.imise.tool3lgm.metamodel.original.edge.PdvbkAwbVerbindung;
 import de.imise.tool3lgm.metamodel.original.node.Anwendungsbaustein;
@@ -25,6 +27,7 @@ import de.imise.tool3lgm.metamodel.original.node.Benutzungsschnittstelle;
 import de.imise.tool3lgm.metamodel.original.node.Datenbanksystem;
 import de.imise.tool3lgm.metamodel.original.node.Dokumentensammlung;
 import de.imise.tool3lgm.metamodel.original.node.KonAnwendungsbaustein;
+import de.imise.tool3lgm.metamodel.original.node.LogischerSpeicher;
 import de.imise.tool3lgm.metamodel.original.node.Objekttyp;
 import de.imise.tool3lgm.metamodel.original.node.Organisationsplan;
 import de.imise.tool3lgm.metamodel.original.node.PhysischerDVBaustein;
@@ -60,6 +63,7 @@ public class TLGMOriginalGraphViewDefinion extends GraphViewDefinition {
                 //Testpfad über alle Ebenen hinweg
                 //new MetaPath(Aufgabe.class, PhysischerDVBaustein.class, AufAufOrgVerbindung.class, AwbkAufOrgVerbindung.class, AwbAwbkVerbindung.class, PdvbkAwbVerbindung.class, PdvbPdvbkVerbindung.class),
                 SimpleMetaPathCreator.createSimpleMetaPath(metaModel, Aufgabe.class, Anwendungsbaustein.class, AufAufOrgVerbindung.class, AwbkAufOrgVerbindung.class, AwbAwbkVerbindung.class),
+                SimpleMetaPathCreator.createSimpleMetaPath(metaModel, Objekttyp.class, LogischerSpeicher.class, ObjReprVerbindung.class, LogspReprVerbindung.class),
                 SimpleMetaPathCreator.createSimpleMetaPath(metaModel, Anwendungsbaustein.class, PhysischerDVBaustein.class, PdvbkAwbVerbindung.class, PdvbPdvbkVerbindung.class),
         };
         return configurationPaths;

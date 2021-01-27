@@ -1,23 +1,15 @@
 package de.imise.tool3lgm.metamodel.original.edge;
 
-import static de.imise.tool3lgm.graphtools.metamodel.EdgeCardinality.ZERO_UNLIMITED;
-
-import de.imise.tool3lgm.graphtools.metamodel.EdgeCardinality;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
-import de.imise.tool3lgm.graphtools.metamodel.elements.SimpleEdge;
 import de.imise.tool3lgm.metamodel.original.node.Datenbanksystem;
 import de.imise.tool3lgm.metamodel.original.node.Datensatztyp;
 
 /**
  * @author Thomas (16.01.2004)
  */
-public final class DbsDatVerbindung extends SimpleEdge {
+public final class DbsDatVerbindung extends LogspReprVerbindung {
 
     public static final Class<? extends ModelElement> STCL = Datenbanksystem.class;
-
-    public static final EdgeCardinality SCARD = ZERO_UNLIMITED;
-
-    public static final EdgeCardinality ECARD = ZERO_UNLIMITED;
 
     public static final Class<? extends ModelElement> ETCL = Datensatztyp.class;
 
