@@ -202,9 +202,13 @@ public class GraphElementLayout implements SwingConstants, Cloneable {
                 g.fillRect(xm + width_third, ym, width_third, height);
                 g.fillRect(xm + 2 * width_third, ym, width_third, height);
                 g.translate(xm, ym);
-                kc.paintSuperComponent(g);
+                if (kc != null) {
+                    kc.paintSuperComponent(g);
+                    g.setColor(isResult && analysisColor != null ? analysisColor : kc.getFrameColor());
+                } else {
+                    g.setColor(analysisColor);
+                }
                 g.translate(-xm, -ym);
-                g.setColor(isResult && analysisColor != null ? analysisColor : kc.getFrameColor());
                 g.drawRect(xm, ym, width_third, height);
                 g.drawRect(xm + width_third, ym, width_third, height);
                 g.drawRect(xm + 2 * width_third, ym, width_third, height);

@@ -12,11 +12,12 @@ import de.imise.tool3lgm.graphtools.path.metapaths.SimpleMetaPath;
 import de.imise.tool3lgm.graphtools.path.metapaths.SimpleMetaPathCreator;
 import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout;
 import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout.SHAPE;
-import de.imise.tool3lgm.metamodel.service.edge.ApplicationComponent_ObjectType_Edge;
 import de.imise.tool3lgm.metamodel.service.edge.ApplicationComponent_PhysicalDataProcessingComponent_Edge;
+import de.imise.tool3lgm.metamodel.service.edge.ApplicationComponent_RepresentationForm_Edge;
 import de.imise.tool3lgm.metamodel.service.edge.ApplicationComponent_Use_Edge;
 import de.imise.tool3lgm.metamodel.service.edge.CommunicationLink_Edge;
 import de.imise.tool3lgm.metamodel.service.edge.Function_Use_Edge;
+import de.imise.tool3lgm.metamodel.service.edge.ObjectType_RepresentationForm_Edge;
 import de.imise.tool3lgm.metamodel.service.node.ApplicationComponent;
 import de.imise.tool3lgm.metamodel.service.node.ApplicationSystem;
 import de.imise.tool3lgm.metamodel.service.node.CommunicationInterface;
@@ -99,9 +100,9 @@ public class TLGMServiceGraphViewDefinion extends GraphViewDefinition {
     @Override
     protected List<AdditionalGraphShapeData> getAdditionalGraphShapeData() {
         //Application Sytsems get a Database on its shape if they are connected to an ObjectType
-        SimpleMetaPath mp1 = SimpleMetaPathCreator.createSimpleMetaPath(metaModel, ApplicationSystem.class, ObjectType.class, ApplicationComponent_ObjectType_Edge.class);
-        SimpleMetaPath mp2 = SimpleMetaPathCreator.createSimpleMetaPath(metaModel, OrganisationSystem.class, ObjectType.class, ApplicationComponent_ObjectType_Edge.class);
-        return ImmutableList.of(new AdditionalGraphShapeData(mp1, SHAPE.tonne), new AdditionalGraphShapeData(mp1, SHAPE.ordner));
+        SimpleMetaPath mp1 = SimpleMetaPathCreator.createSimpleMetaPath(metaModel, ApplicationSystem.class, ObjectType.class, ApplicationComponent_RepresentationForm_Edge.class, ObjectType_RepresentationForm_Edge.class);
+        SimpleMetaPath mp2 = SimpleMetaPathCreator.createSimpleMetaPath(metaModel, OrganisationSystem.class, ObjectType.class, ApplicationComponent_RepresentationForm_Edge.class, ObjectType_RepresentationForm_Edge.class);
+        return ImmutableList.of(new AdditionalGraphShapeData(mp1, SHAPE.tonne), new AdditionalGraphShapeData(mp2, SHAPE.ordner));
     }
 
 }
