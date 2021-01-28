@@ -1,5 +1,8 @@
 package de.imise.tool3lgm.metamodel.original;
 
+import static de.imise.tool3lgm.graphtools.metamodel.GraphViewDefinition.InterLayerLineRenderType.LINE_TYPE_DASHED;
+import static de.imise.tool3lgm.graphtools.metamodel.GraphViewDefinition.InterLayerLineRenderType.LINE_TYPE_SOLID;
+
 import java.util.List;
 
 import com.google.common.collect.ImmutableList;
@@ -67,6 +70,13 @@ public class TLGMOriginalGraphViewDefinion extends GraphViewDefinition {
                 SimpleMetaPathCreator.createSimpleMetaPath(metaModel, Anwendungsbaustein.class, PhysischerDVBaustein.class, PdvbkAwbVerbindung.class, PdvbPdvbkVerbindung.class),
         };
         return configurationPaths;
+    }
+
+    @Override
+    protected InterLayerLineRenderType[] getInterLayerLineRenderTypes() {
+        return new InterLayerLineRenderType[] {
+                LINE_TYPE_SOLID, LINE_TYPE_DASHED, LINE_TYPE_SOLID
+        };
     }
 
     @Override
