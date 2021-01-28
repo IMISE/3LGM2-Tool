@@ -30,7 +30,7 @@ public class SearchFunctions {
         if (!caseSensitive) {
             value = toNonNullLowserCaseString(value);
         }
-        value = value.replaceAll("\\*", ".*").replaceAll("\\?", ".");
+        value = value.replaceAll("\\*", ".*").replaceAll("\\?", ".").replaceAll("\\(", "\\\\(").replaceAll("\\)", "\\\\)");
 
         Pattern pattern = null;
         if (!value.equals("")) {
