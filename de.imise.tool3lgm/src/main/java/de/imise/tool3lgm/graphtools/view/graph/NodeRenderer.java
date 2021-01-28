@@ -204,7 +204,12 @@ public final class NodeRenderer {
         //paint additionalShape
         SHAPE additionalGraphShape = getAdditionalGraphShape(me);
         if (additionalGraphShape != null) {
-            int scalingFactor = (int) Math.ceil(Math.min(width, height) / 64);
+            //In the original GraphLayout nodes have a width of 90 and height of 60 and
+            //subordinated elements like databases have a height and witdh of 15
+            //so if scaling is activated the scale factor should be something like 90:15
+            //or 60:15
+            //int scalingFactor = (int) Math.ceil(Math.min(width, height) / 64);
+            int scalingFactor = 1; //at the moment without scaling
             int addShapeLength = Math.max(8, 16 * scalingFactor);
             int addShapeX = x + width / 2 - addShapeLength * 3 / 2;
             int addShapeY = y + height / 2 - addShapeLength;
