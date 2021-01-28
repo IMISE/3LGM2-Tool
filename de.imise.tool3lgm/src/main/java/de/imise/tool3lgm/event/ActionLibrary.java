@@ -505,7 +505,7 @@ public class ActionLibrary {
                             }
                         }
                     }
-                    return visible != lc.isShowInterLayerConnections();
+                    return false;
                 }
             };
         }
