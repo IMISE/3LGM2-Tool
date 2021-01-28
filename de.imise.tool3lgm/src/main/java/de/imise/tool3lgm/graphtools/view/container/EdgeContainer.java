@@ -55,13 +55,12 @@ public class EdgeContainer extends ElementContainer {
     /**
      * Liste aller BendpointContainer auf dieser Kante
      */
-    protected List<BendpointContainer> bendpoints = new ArrayList<>(1);
+    private final List<BendpointContainer> bendpoints = new ArrayList<>(1);
 
     /**
      *
      */
     public EdgeContainer() {
-        super();
     }
 
     /**
@@ -479,10 +478,10 @@ public class EdgeContainer extends ElementContainer {
      * Knickpunkte ein. Wird als Index -1 übergeben, dann wird der Index anhand
      * der Koordinaten berechnet.
      *
-     * @param kp
+     * @param bc
      * @param index
      */
-    public void setBendpointContainer(final BendpointContainer kp, int index) {
+    public void setBendpointContainer(final BendpointContainer bc, int index) {
         if (index == -1) {
             index = 0;
         }
@@ -490,8 +489,9 @@ public class EdgeContainer extends ElementContainer {
             bendpoints.add(null);
         }
         // System.err.println("AXS_AXSsetKnickpunkt " + getGraphDocument());
-        bendpoints.set(index, kp);
-        kp.getBendpoint().setOwner(this);
+        bendpoints.set(index, bc);
+        Bendpoint bendpoint = bc.getBendpoint();
+        bendpoint.setOwner(this);
     }
 
     /**
@@ -499,18 +499,19 @@ public class EdgeContainer extends ElementContainer {
      * Knickpunkte ein. Wird als Index -1 übergeben, dann wird der Index anhand
      * der Koordinaten berechnet.
      *
-     * @param kp
+     * @param bc
      * @param index
      */
-    public void addBendpoint(final BendpointContainer kp, int index) {
+    public void addBendpoint(final BendpointContainer bc, int index) {
         if (index < 0) {
-            index = getBendpointInsertIndex(kp.layout.x, kp.layout.y);
+            index = getBendpointInsertIndex(bc.layout.x, bc.layout.y);
         }
         if (index < 0) {
             index = 0;
         }
-        bendpoints.add(index, kp);
-        kp.getBendpoint().setOwner(this);
+        bendpoints.add(index, bc);
+        Bendpoint bendpoint = bc.getBendpoint();
+        bendpoint.setOwner(this);
     }
 
     /**
@@ -527,26 +528,41 @@ public class EdgeContainer extends ElementContainer {
         return bendpoints;
     }
 
+    /**
+     * @param bendpointContainer
+     * @return
+     */
     public int indexOfBendpointContainer(final BendpointContainer bendpointContainer) {
         return bendpoints.indexOf(bendpointContainer);
     }
 
+    /**
+     * @return
+     */
     public int getBendpointContainerCount() {
         return bendpoints.size();
     }
 
+    /**
+     * @param index
+     * @return
+     */
     public BendpointContainer getBendpointContainer(final int index) {
         return bendpoints.get(index);
     }
 
     /**
-     * @param kn
+     * @param bendpoint
      * @return
      */
-    public int getIndexOfBendpoint(final Bendpoint kn) {
+    public int getIndexOfBendpoint(final Bendpoint bendpoint) {
         for (int i = 0; i < bendpoints.size(); i++) {
-            if (bendpoints.get(i).getBendpoint() == kn) {
-                return i;
+            BendpointContainer bc = bendpoints.get(i);
+            if (bc != null) {
+                Bendpoint bendpointAtIndex = bc.getBendpoint();
+                if (bendpoint == bendpointAtIndex) {
+                    return i;
+                }
             }
         }
         return -1;

@@ -44,8 +44,8 @@ public class MainFrameToolBar extends UnfloatableToolBar implements MouseListene
         JButton open = new ToolbarButton(ActionLibrary.FileActions.ACTION_OPEN_MODEL);
         JButton save = new ToolbarButton(ActionLibrary.FileActions.ACTION_SAVE_MODEL);
 
-        JButton showConf = new ToolbarButton(ActionLibrary.ContextActions.MODEL_ACTION_SET_INTERLAYER_CONNECTIONS_VISIBILITY_ON);
-        JButton hideConf = new ToolbarButton(ActionLibrary.ContextActions.MODEL_ACTION_SET_INTERLAYER_CONNECTIONS_VISIBILITY_OFF);
+        JButton showConf = new ToolbarButton(ActionLibrary.ContextActions.MODEL_ACTION_SET_INTERLAYER_CONNECTIONS_VISIBILITY_ON, true);
+        JButton hideConf = new ToolbarButton(ActionLibrary.ContextActions.MODEL_ACTION_SET_INTERLAYER_CONNECTIONS_VISIBILITY_OFF, true);
 
         undo = new ToolbarButton(ActionLibrary.EditActions.ACTION_UNDO);
         undo.addMouseListener(this);

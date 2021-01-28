@@ -2100,7 +2100,7 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
         //        Sys.err("me1=" + me1 + " me2=" + me2 + " egdeClass=" + edgeClass + " endElement=" + me1EdgeIndex + " pid=" + pid);
 
         Edge edge = null;
-        List<Edge> edges = null;
+        List<Edge> edges;
 
         edges = me1.getEdgesWith(me2, edgeClass, me1EdgeIndex);
         if (edges.isEmpty()) {

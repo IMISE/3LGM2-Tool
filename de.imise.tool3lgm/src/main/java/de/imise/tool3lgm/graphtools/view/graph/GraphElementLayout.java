@@ -23,34 +23,35 @@ public class GraphElementLayout implements SwingConstants, Cloneable {
             Color.black, Color.blue, Color.cyan, Color.darkGray, Color.gray, Color.green, Color.magenta, Color.orange, Color.pink, Color.red, Color.yellow
     };
 
-    /**
-     * COMMENTME
-     */
+    /**  */
+    public static final Stroke NORMAL_STROKE = new BasicStroke(1);
+
+    /** 1 px Stroke with 3 px dots and dashes */
+    public static final Stroke NORMAL_STROKE_DOTTED = new BasicStroke(1f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, 1f, new float[] {
+            3f
+    }, 0f);
+
+    /** 1 px Stroke with 10 px dashes */
+    public static final Stroke NORMAL_STROKE_DASHED = new BasicStroke(1f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, 1f, new float[] {
+            10f
+    }, 0f);
+
+    /**  */
     public static final Stroke MEDUIM_STROKE = new BasicStroke(4);
 
-    /**
-     * COMMENTME
-     */
+    /**  */
     public static final Stroke FAT_STROKE = new BasicStroke(7);
 
-    /**
-     * The Stroke of the border of not selected layers
-     */
+    /** The Stroke of the border of not selected layers */
     public static final Stroke LAYER_STROKE_SELECTED = new BasicStroke(3);
 
-    /**
-     * Stroke for the border of collapsed elements in the graph
-     */
+    /** Stroke for the border of collapsed elements in the graph */
     public static final Stroke NOT_EXPANDED_BORDER_STROKE = new BasicStroke(4f, BasicStroke.CAP_SQUARE, BasicStroke.JOIN_MITER, 1f, new float[] {
             10
     }, 10f);
 
-    /**
-     * Stroke for {@link HasPartEdges} in the graph
-     */
-    public static final Stroke HAS_PART_EDGES_STROKE = new BasicStroke(1f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, 1f, new float[] {
-            10
-    }, 0f);
+    /** Stroke for {@link HasPartEdges} in the graph */
+    public static final Stroke HAS_PART_EDGES_STROKE = NORMAL_STROKE_DASHED;
 
     /**
      * Alle Standardformen. Die String-Repräsentation steht als Schlüssel auch

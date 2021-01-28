@@ -1895,7 +1895,6 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
         }
         finish_transaction(pid);
         distributeEvent(ELEMENT_GRAPHICS_CHANGED, pid);
-        return;
     }
 
     /**
@@ -1926,7 +1925,6 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
         }
         finish_transaction(pid);
         distributeEvent(ELEMENT_GRAPHICS_CHANGED, pid);
-        return;
     }
 
     /**
@@ -1942,7 +1940,6 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
         }
         finish_transaction(pid);
         distributeEvent(ELEMENT_GRAPHICS_CHANGED, pid);
-        return;
     }
 
     /**
@@ -2623,7 +2620,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
             }
             moveNodeContainer(nc, x, y, w, h, pid);
             if (OPTION_GRAPH_MOVE_SUBELEMENTS.is()) {
-                moveSlaveElements(nc, xOrg - x, yOrg - y, wOrg - w, hOrg - h, pid);
+                moveSlaveElements(nc, xOrg - x, yOrg - y, 0, 0, pid);
             }
         }
         //        setSelection(selection);
@@ -5305,24 +5302,27 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
      */
     public void initEdgeContainers() {
         for (int i = 0; i < layer.length; i++) {
-            for (BendpointContainer kpC : layer[i].getBendpointContainers()) {
-                if (kpC == null) {
+            LayerContainer lc = layer[i];
+            for (BendpointContainer bc : lc.getBendpointContainers()) {
+                if (bc == null) {
                     continue;
                 }
-                Bendpoint kp = kpC.getBendpoint();
-                if (kp == null) {
+                Bendpoint bendpoint = bc.getBendpoint();
+                if (bendpoint == null) {
                     continue;
                 }
-                EdgeContainer kc = layer[i].getEdgeContainer(kp.getEdgeID());
-                if (kc == null) {
+                String edgeID = bendpoint.getEdgeID();
+                EdgeContainer edgeC = lc.getEdgeContainer(edgeID);
+                if (edgeC == null) {
                     continue;
                 }
-                kc.setBendpointContainer(kpC, kp.getIndex());
-                kp.addEdge(kc.getEdge());
+                int index = bendpoint.getIndex();
+                edgeC.setBendpointContainer(bc, index);
+                bendpoint.addEdge(edgeC.getEdge());
             }
-            for (EdgeContainer kc : layer[i].getEdgeContainers()) {
-                if (kc != null) {
-                    kc.computeBorderPoints();
+            for (EdgeContainer edgeC : lc.getEdgeContainers()) {
+                if (edgeC != null) {
+                    edgeC.computeBorderPoints();
                 }
             }
             layer[i].revalidate();

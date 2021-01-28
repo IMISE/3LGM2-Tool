@@ -58,7 +58,6 @@ public final class InterLayerConnectedNodeContainer extends NodeContainer {
      * {@link ElementContainer#clone(boolean, GraphDocument)}
      */
     public InterLayerConnectedNodeContainer() {
-        super();
     }
 
     /**
@@ -107,7 +106,7 @@ public final class InterLayerConnectedNodeContainer extends NodeContainer {
     @Override
     protected void paintComponent(final Graphics g) {
         if (showInterLayerConnections) {
-            ConfigurationRenderer.render(g, this, doc);
+            ConfigurationRenderer.render(g, this);
         }
         super.paintComponent(g);
     }
