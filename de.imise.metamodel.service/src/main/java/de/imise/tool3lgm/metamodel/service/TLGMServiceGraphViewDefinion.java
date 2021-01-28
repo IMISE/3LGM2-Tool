@@ -1,5 +1,8 @@
 package de.imise.tool3lgm.metamodel.service;
 
+import static de.imise.tool3lgm.graphtools.metamodel.GraphViewDefinition.InterLayerLineRenderType.LINE_TYPE_DASHED;
+import static de.imise.tool3lgm.graphtools.metamodel.GraphViewDefinition.InterLayerLineRenderType.LINE_TYPE_SOLID;
+
 import java.util.List;
 
 import com.google.common.collect.ImmutableList;
@@ -13,9 +16,11 @@ import de.imise.tool3lgm.graphtools.path.metapaths.SimpleMetaPathCreator;
 import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout;
 import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout.SHAPE;
 import de.imise.tool3lgm.metamodel.service.edge.ApplicationComponent_PhysicalDataProcessingComponent_Edge;
+import de.imise.tool3lgm.metamodel.service.edge.ApplicationComponent_RepresentationForm_Edge;
 import de.imise.tool3lgm.metamodel.service.edge.ApplicationComponent_Use_Edge;
 import de.imise.tool3lgm.metamodel.service.edge.CommunicationLink_Edge;
 import de.imise.tool3lgm.metamodel.service.edge.Function_Use_Edge;
+import de.imise.tool3lgm.metamodel.service.edge.ObjectType_RepresentationForm_Edge;
 import de.imise.tool3lgm.metamodel.service.node.ApplicationComponent;
 import de.imise.tool3lgm.metamodel.service.node.ApplicationSystem;
 import de.imise.tool3lgm.metamodel.service.node.CommunicationInterface;
@@ -67,9 +72,17 @@ public class TLGMServiceGraphViewDefinion extends GraphViewDefinition {
                 //Testpfad über alle Ebenen hinweg
                 //new MetaPath(Aufgabe.class, PhysischerDVBaustein.class, AufAufOrgVerbindung.class, AwbkAufOrgVerbindung.class, AwbAwbkVerbindung.class, PdvbkAwbVerbindung.class, PdvbPdvbkVerbindung.class),
                 SimpleMetaPathCreator.createSimpleMetaPath(metaModel, Function.class, ApplicationComponent.class, Function_Use_Edge.class, ApplicationComponent_Use_Edge.class),
+                SimpleMetaPathCreator.createSimpleMetaPath(metaModel, ObjectType.class, ApplicationComponent.class, ObjectType_RepresentationForm_Edge.class, ApplicationComponent_RepresentationForm_Edge.class),
                 SimpleMetaPathCreator.createSimpleMetaPath(metaModel, ApplicationComponent.class, PhysicalDataProcessingComponent.class, ApplicationComponent_PhysicalDataProcessingComponent_Edge.class),
         };
         return configurationPaths;
+    }
+
+    @Override
+    protected InterLayerLineRenderType[] getInterLayerLineRenderTypes() {
+        return new InterLayerLineRenderType[] {
+                LINE_TYPE_SOLID, LINE_TYPE_DASHED, LINE_TYPE_SOLID
+        };
     }
 
     @Override
