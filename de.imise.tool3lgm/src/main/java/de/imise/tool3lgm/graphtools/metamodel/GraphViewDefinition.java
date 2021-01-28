@@ -104,7 +104,7 @@ public abstract class GraphViewDefinition {
      *
      * @return
      */
-    protected abstract SimpleMetaPath[] getConfigurationPaths();
+    protected abstract SimpleMetaPath[] getInterLayerMetaPaths();
 
     /**
      * Liefert den MetaPfade, der als Interebenenbeziehung dargestellt werden
@@ -129,7 +129,7 @@ public abstract class GraphViewDefinition {
         if (classToConfigurationPaths == null) {
             classToConfigurationPaths = new HashMap<>();
             //Map mit den Klassen zu ihren Konfigurationspfaden speichern
-            for (SimpleMetaPath metaPath : getConfigurationPaths()) {
+            for (SimpleMetaPath metaPath : getInterLayerMetaPaths()) {
                 Class<? extends ModelElement> startClass = metaPath.getStartClass();
                 for (Class<? extends ModelElement> instanciableElementClass : metaModel.getInstanciableAssignableClasses(startClass)) {
                     classToConfigurationPaths.put(instanciableElementClass, metaPath);
@@ -220,7 +220,7 @@ public abstract class GraphViewDefinition {
         }
 
         @Override
-        protected SimpleMetaPath[] getConfigurationPaths() {
+        protected SimpleMetaPath[] getInterLayerMetaPaths() {
             return new SimpleMetaPath[0];
         }
 

@@ -62,7 +62,7 @@ public class TLGMServiceGraphViewDefinion extends GraphViewDefinition {
     }
 
     @Override
-    protected final SimpleMetaPath[] getConfigurationPaths() {
+    protected final SimpleMetaPath[] getInterLayerMetaPaths() {
         SimpleMetaPath[] configurationPaths = {
                 //Testpfad über alle Ebenen hinweg
                 //new MetaPath(Aufgabe.class, PhysischerDVBaustein.class, AufAufOrgVerbindung.class, AwbkAufOrgVerbindung.class, AwbAwbkVerbindung.class, PdvbkAwbVerbindung.class, PdvbPdvbkVerbindung.class),
