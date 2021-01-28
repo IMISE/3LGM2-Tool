@@ -85,8 +85,6 @@ public class LayerContainer extends ElementContainer {
     //Strings, die oben und unten geschrieben werden (z.B. an Aufgaben und Objekttypen Redundanzfaktoren...)
     private KeyObjectStringMap additionalTextAbove, additionalTextDown;
 
-    private final boolean showInterLayerConnections = false;
-
     /**
      * Je nach State, werden einige Dinge (Raster + Selektionen) nicht
      * mitgezeichnet
