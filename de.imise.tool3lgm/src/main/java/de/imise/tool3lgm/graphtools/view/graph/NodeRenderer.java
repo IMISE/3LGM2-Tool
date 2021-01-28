@@ -15,15 +15,20 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.Stroke;
+import java.util.List;
 
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 
 import de.imise.tool3lgm.Tool3lgmConstants;
+import de.imise.tool3lgm.graphtools.metamodel.GraphViewDefinition;
+import de.imise.tool3lgm.graphtools.metamodel.GraphViewDefinition.AdditionalGraphShapeData;
+import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Textfield;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
+import de.imise.tool3lgm.graphtools.path.metapaths.MetaPath;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.graphtools.view.container.LayerContainer;
 import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
@@ -196,9 +201,9 @@ public final class NodeRenderer {
             g.translate(-xm, -ym);
         }
 
-        SHAPE additionalGraphShape = me.getAdditionalGraphShape();
+        //paint additionalShape
+        SHAPE additionalGraphShape = getAdditionalGraphShape(me);
         if (additionalGraphShape != null) {
-            //male additionalShape
             int scalingFactor = (int) Math.ceil(Math.min(width, height) / 64);
             int addShapeLength = Math.max(8, 16 * scalingFactor);
             int addShapeX = x + width / 2 - addShapeLength * 3 / 2;
@@ -333,6 +338,24 @@ public final class NodeRenderer {
                 g.drawString(additionalText[i], xp, yp + fontHeight * ++i);
             }
         }
+    }
+
+    /**
+     * @param nc
+     * @return
+     */
+    private static SHAPE getAdditionalGraphShape(final ModelElement me) {
+        MetaModel metaModel = me.getMetaModel();
+        GraphViewDefinition graphViewDefinition = metaModel.getGraphViewDefinition();
+        AdditionalGraphShapeData additionalGraphShapeData = graphViewDefinition.getAdditionalGraphShapeData(me);
+        if (additionalGraphShapeData != null) {
+            MetaPath metaPath = additionalGraphShapeData.metaPath;
+            List<ModelElement> connectedElements = metaPath.getConnectedElements(me);
+            if (!connectedElements.isEmpty()) {
+                return additionalGraphShapeData.shape;
+            }
+        }
+        return null;
     }
 
     /**

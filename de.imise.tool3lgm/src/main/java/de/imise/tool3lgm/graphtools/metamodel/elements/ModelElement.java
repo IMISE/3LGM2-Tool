@@ -28,7 +28,6 @@ import de.imise.tool3lgm.graphtools.dialog.element.ErrorDecoratedElementProperty
 import de.imise.tool3lgm.graphtools.dialog.element.panel.ElementDialogPanel;
 import de.imise.tool3lgm.graphtools.metamodel.CoreMetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.GraphViewDefinition;
-import de.imise.tool3lgm.graphtools.metamodel.GraphViewDefinition.AdditionalGraphShapeData;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModelDefinition;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModelSpecific;
@@ -47,7 +46,6 @@ import de.imise.tool3lgm.graphtools.view.container.LayerContainer;
 import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
 import de.imise.tool3lgm.graphtools.view.graph.ElementsLayoutDefinition;
 import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout;
-import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout.SHAPE;
 import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout.TextAlignmentHTML;
 import de.imise.util.Alphabetical;
 import de.imise.util.IDStringGenerator;
@@ -122,11 +120,6 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
      * nicht in diesem Teilmodell vorkommen.
      */
     private String associatedSzenID = null;
-
-    /**
-     *
-     */
-    private SHAPE additionalGraphShape;
 
     /**
      * Creates a new ModelElement with a new ID
@@ -518,24 +511,6 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
      */
     public void updateHTMLNameAndAdditionalShape(final ElementContainer targetContainer) {
         updateHTMLName(targetContainer);
-        updateAdditionalShape();
-    }
-
-    /**
-     *
-     */
-    private void updateAdditionalShape() {
-        GraphViewDefinition graphViewDefinition = metaModel.getGraphViewDefinition();
-        AdditionalGraphShapeData additionalGraphShapeData = graphViewDefinition.getAdditionalGraphShapeData(this);
-        if (additionalGraphShapeData != null) {
-            MetaPath metaPath = additionalGraphShapeData.metaPath;
-            List<ModelElement> connectedElements = metaPath.getConnectedElements(this);
-            if (!connectedElements.isEmpty()) {
-                additionalGraphShape = additionalGraphShapeData.shape;
-            } else {
-                additionalGraphShape = null;
-            }
-        }
     }
 
     /**
@@ -743,7 +718,6 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
             pos = edges.size();
         }
         edges.add(pos, edge);
-        updateAdditionalShape();
         return true;
     }
 
@@ -772,7 +746,6 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
                 }
             }
         }
-        updateAdditionalShape();
         return -1;
     }
 
@@ -2512,13 +2485,6 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
      */
     public String getHyperlink() {
         return hyperlink;
-    }
-
-    /**
-     * @return the additionalGraphShape
-     */
-    public final SHAPE getAdditionalGraphShape() {
-        return additionalGraphShape;
     }
 
 }
