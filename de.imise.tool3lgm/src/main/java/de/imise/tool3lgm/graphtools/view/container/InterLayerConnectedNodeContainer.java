@@ -106,7 +106,7 @@ public final class InterLayerConnectedNodeContainer extends NodeContainer {
     @Override
     protected void paintComponent(final Graphics g) {
         if (showInterLayerConnections) {
-            ConfigurationRenderer.render(g, this, doc);
+            ConfigurationRenderer.render(g, this);
         }
         super.paintComponent(g);
     }

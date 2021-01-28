@@ -17,7 +17,6 @@ import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.graphtools.metamodel.GraphViewDefinition;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
-import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.model.Szenario;
 import de.imise.tool3lgm.graphtools.path.metapaths.SimpleMetaPath;
 import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout;
@@ -41,10 +40,9 @@ public class ConfigurationRenderer {
      * @param g the target graphics objetct where the rendering is done
      * @param configurationStart the container whose configurations should be
      *            rendered
-     * @param doc the submodel in which the configurations should be shown
      */
-    public static final void render(final Graphics g, final InterLayerConnectedNodeContainer configurationStart, final GraphDocument doc) {
-        Szenario szen = (Szenario) doc; //wenn das kein Szenario ist, dann sollte dieser Renderer auch nicht aufgerufen werden
+    public static final void render(final Graphics g, final InterLayerConnectedNodeContainer configurationStart) {
+        Szenario szen = (Szenario) configurationStart.getGraphDocument(); //wenn das kein Szenario ist, dann sollte dieser Renderer auch nicht aufgerufen werden
         boolean configurationStartIsAnalysisResult = szen.isAnalysisResult(configurationStart);
         if (!configurationStart.isShowInterLayerConnections()) {
             if (!configurationStartIsAnalysisResult) {
