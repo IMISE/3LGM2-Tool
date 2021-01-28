@@ -54,7 +54,7 @@ public final class NodeRenderer {
     /**
      * Farbe mit der die Umrandungen von Analysergebnissen dargestellt werden
      */
-    public static Color analysisColor = null;
+    private static Color analysisColor = null;
 
     protected static int[] xs = new int[8];
     protected static int[] ys = new int[8];
@@ -610,5 +610,19 @@ public final class NodeRenderer {
     //  private D
     //
     //  public ResizeBox
+
+    /**
+     * @param c
+     */
+    public static void setAnalysisColor(final Color c) {
+        analysisColor = c;
+    }
+
+    /**
+     * @return
+     */
+    public static Color getAnalysisColor() {
+        return analysisColor == null ? Color.black : analysisColor;
+    }
 
 }

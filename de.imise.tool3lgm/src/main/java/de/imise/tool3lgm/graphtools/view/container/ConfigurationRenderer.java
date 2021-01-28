@@ -117,8 +117,9 @@ public class ConfigurationRenderer {
                             continue;
                         }
                         if (configurationStartIsAnalysisResult && szen.isAnalysisResult(connectedEc)) {
-                            g.setColor(Color.black);
                             gc.setStroke(GraphElementLayout.MEDUIM_STROKE);
+                            Color analysisColor = NodeRenderer.getAnalysisColor();
+                            g.setColor(analysisColor);
                             g.drawLine(kc1.getX(), kc1.getY(), kc2.getX() - x_shift, kc2.getY() - y_shift);
                             gc.setStroke(s);
                             g.setColor(elem_col);
