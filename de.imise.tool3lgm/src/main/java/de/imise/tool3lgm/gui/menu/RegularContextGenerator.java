@@ -388,10 +388,8 @@ public class RegularContextGenerator extends ElementSelectionContextGenerator im
             addMenuItem(menu, properties);
             menu.addSeparator();
 
-            Class<? extends ModelElement> meClass = me.getClass();
-
             //Anlegbare Pfade zu anderen Elementen anbieten
-            boolean connectMenuAdded = addConnectMenuItems(menu, me);
+            boolean connectMenuAdded = false;//addConnectMenuItems(menu, me);
 
             boolean newInstanciationInstanceMenuItemAdded = addNewInstanciationInstanceMenuItem(menu, me);
 
@@ -518,7 +516,7 @@ public class RegularContextGenerator extends ElementSelectionContextGenerator im
             for (Class<? extends ModelElement> me2Class : doc.getSelectedRealElementClasses()) {
                 List<Object> edgesAndPaths = new ArrayList<>();
                 edgesAndPaths.addAll(Arrays.asList(metaModel.getEdgeTypes(lastSelectedClass, me2Class)));
-                edgesAndPaths.addAll(metaModel.getCreatableMetaPaths(lastSelectedClass, me2Class));
+                //edgesAndPaths.addAll(metaModel.getCreatableMetaPaths(lastSelectedClass, me2Class));
                 for (Object edgeClassOrMetaPath : edgesAndPaths) {
                     if (edgeClassOrMetaPath instanceof Class) {
                         Class<? extends Edge> edgeClass = ((Class<?>) edgeClassOrMetaPath).asSubclass(Edge.class);
