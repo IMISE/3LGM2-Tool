@@ -23,6 +23,7 @@ import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.model.LGMChangeListenerSimple;
 import de.imise.tool3lgm.graphtools.model.LGMGraphDocument;
 import de.imise.tool3lgm.graphtools.undoredo.TransactionManager;
+import de.imise.util.swing.component.DropDownButtonSource;
 import de.imise.util.swing.component.UnfloatableToolBar;
 import de.imise.util.swing.event.ActionSource;
 import de.imise.util.swing.event.ExtendedAction;
@@ -79,7 +80,6 @@ public class MainFrameToolBar extends UnfloatableToolBar implements MouseListene
         addSeparator();
         add(showConf);
         add(hideConf);
-        addSeparator();
 
         ActionSource[][] alignmentAndPositionActions = {
                 {
@@ -109,16 +109,35 @@ public class MainFrameToolBar extends UnfloatableToolBar implements MouseListene
                         GDCommands.MODEL_ACTION_SET_ELEMENTS_POSITION_VERTICAL_BOTTOM, //elements position bottom
                 }
         };
-        int i = 0;
+
+        //bisheriger Code = alle Buttons nebeneinander (ohne DropdownButtons)
+        //        addSeparator();
+        //        int i = 0;
+        //        for (ActionSource[] alignmentActions : alignmentAndPositionActions) {
+        //            if (i++ > 0) {
+        //                addSeparator();
+        //            }
+        //            for (ActionSource actionSource : alignmentActions) {
+        //                add(new ToolbarButton(actionSource, true));
+        //            }
+        //        }
+
+        //neuer Code = alle Funktionen über DropdownButtons zur Verfügung stellen
         for (ActionSource[] alignmentActions : alignmentAndPositionActions) {
-            if (i++ > 0) {
-                addSeparator();
-            }
-            for (ActionSource actionSource : alignmentActions) {
-                add(new ToolbarButton(actionSource, true));
-            }
+            addDropDownButton(alignmentActions);
         }
+
         addAsToolChangeListener();
+    }
+
+    /**
+     * @param actionSources
+     */
+    private void addDropDownButton(final ActionSource[] actionSources) {
+        DropDownButtonSource dropDownButtonSource = new DropDownButtonSource(actionSources);
+        JButton button = dropDownButtonSource.getButtonComponent();
+        addSeparator();
+        add(button);
 
     }
 
@@ -239,7 +258,7 @@ public class MainFrameToolBar extends UnfloatableToolBar implements MouseListene
         }
 
         public ToolbarButton(final ActionSource actionSource, final boolean smallIcon) {
-            this(actionSource.createAction(), smallIcon);
+            this((Action) actionSource.createAction(), smallIcon);
         }
 
         @Override
