@@ -56,6 +56,9 @@ public interface SimpleResourceIconSource extends SimpleResourceFileLoader {
         if (imageIcon == null) {
             imageIcon = getImageIcon(dir, ".jpeg");
         }
+        if (imageIcon == null) {
+            imageIcon = getImageIcon(dir, ".png");
+        }
         return imageIcon;
     }
 
@@ -80,7 +83,7 @@ public interface SimpleResourceIconSource extends SimpleResourceFileLoader {
             icon = new ImageIcon(dir);
         }
         if (icon.getIconWidth() == -1 && icon.getIconHeight() == -1) {
-            if (!dir.endsWith(".gif")) {
+            if (!dir.endsWith(extension)) {
                 String nameWithGifEnding = dir + extension;
                 icon = new ImageIcon(nameWithGifEnding);
             }
