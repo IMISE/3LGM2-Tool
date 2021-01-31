@@ -47,9 +47,9 @@
 		</dependency>
 		<!-- https://mvnrepository.com/artifact/net.sf.saxon/Saxon-HE -->
 		<dependency>
-		    <groupId>net.sf.saxon</groupId>
-		    <artifactId>Saxon-HE</artifactId>
-		    <version>10.2</version>
+			<groupId>net.sf.saxon</groupId>
+			<artifactId>Saxon-HE</artifactId>
+			<version>10.2</version>
 		</dependency>
 		<dependency>
 			<groupId>de.axs</groupId>
@@ -109,7 +109,7 @@
 			<artifactId>AppleJavaExtensions</artifactId>
 			<version>1.4</version>
 		</dependency>
-		
+
 	</dependencies>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -147,7 +147,7 @@
 				<version>2.5</version>
 				<configuration>
 					<filesets>
-					
+
 						<!-- Plugins-Verzeichnis im Deploy-Projekt leeren -->
 						<!-- <fileset> -->
 						<!-- <directory>../de.imise.tool3lgm.deploy/Tool3lgm/Plugins</directory> -->
@@ -164,7 +164,7 @@
 						<!-- </includes> -->
 						<!-- <followSymlinks>false</followSymlinks> -->
 						<!-- </fileset> -->
-						
+
 						<!-- lib-Verzeichnis im Deploy-Projekt leeren -->
 						<fileset>
 							<directory>../de.imise.tool3lgm.deploy/Tool3lgm/lib</directory>
@@ -207,23 +207,24 @@
 					</execution>
 				</executions>
 			</plugin>
-			<!-- erstellt version.info datei und füllt sie mit Branchnamen und git describe tag -->
+			<!-- erstellt version.info datei und füllt sie mit Branchnamen und git 
+				describe tag -->
 			<plugin>
-                <groupId>pl.project13.maven</groupId>
-                <artifactId>git-commit-id-plugin</artifactId>
-                <version>4.0.3</version>
-                <executions>
-                    <execution>
-                        <id>get-the-git-infos</id>
-                        <goals>
-                            <goal>revision</goal>
-                        </goals>
-                        <phase>initialize</phase>
-                    </execution>
-                </executions>
-                <configuration>
-                    <generateGitPropertiesFile>true</generateGitPropertiesFile>
-                    <generateGitPropertiesFilename>../de.imise.tool3lgm/version.info</generateGitPropertiesFilename>
+				<groupId>pl.project13.maven</groupId>
+				<artifactId>git-commit-id-plugin</artifactId>
+				<version>4.0.3</version>
+				<executions>
+					<execution>
+						<id>get-the-git-infos</id>
+						<goals>
+							<goal>revision</goal>
+						</goals>
+						<phase>initialize</phase>
+					</execution>
+				</executions>
+				<configuration>
+					<generateGitPropertiesFile>true</generateGitPropertiesFile>
+					<generateGitPropertiesFilename>../de.imise.tool3lgm/version.info</generateGitPropertiesFilename>
 					<includeOnlyProperties>
 						<includeOnlyProperty>git.branch</includeOnlyProperty>
 						<includeOnlyProperty>git.closest.tag.name</includeOnlyProperty>
@@ -234,20 +235,20 @@
 						<includeOnlyProperty>git.commit.time</includeOnlyProperty>
 					</includeOnlyProperties>
 					<gitDescribe>
-                		<skip>false</skip>
-                		<always>true</always>
-                		<tags>false</tags>
-                	</gitDescribe>
-                	<replacementProperties>
-                	<!-- entfernen des -dirty Tags -->
+						<skip>false</skip>
+						<always>true</always>
+						<tags>false</tags>
+					</gitDescribe>
+					<replacementProperties>
+						<!-- entfernen des -dirty Tags -->
 						<replacementProperty>
 							<property>git.commit.id.describe</property>
 							<token>^(.*?)(-dirty)?$</token>
 							<value>$1</value>
 						</replacementProperty>
 					</replacementProperties>
-                </configuration>
-            </plugin>
+				</configuration>
+			</plugin>
 			<!-- per Ant die tool3lgm.jar und Template ins deploy kopieren -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -258,11 +259,9 @@
 						<phase>package</phase>
 						<configuration>
 							<target>
-								<copy
-									file="../de.imise.tool3lgm/version.info"
-									tofile="../de.imise.tool3lgm.deploy/Tool3lgm/version.info" />				
-								<copy
-									file="../de.imise.tool3lgm/thirdPartyLicense.html"
+								<copy file="../de.imise.tool3lgm/version.info"
+									tofile="../de.imise.tool3lgm.deploy/Tool3lgm/version.info" />
+								<copy file="../de.imise.tool3lgm/thirdPartyLicense.html"
 									tofile="../de.imise.tool3lgm.deploy/Tool3lgm/thirdPartyLicense.html" />
 								<!-- tool3lgm.jar aus dem target ins deploy kopieren -->
 								<copy
