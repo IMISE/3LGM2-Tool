@@ -41,6 +41,9 @@ public interface ActionSource {
      * @return
      */
     public default ExtendedAction createAction() {
+        if (this instanceof ExtendedAction) {
+            return (ExtendedAction) this;
+        }
         Class<? extends ExtendedAction> actionClass = getActionClass();
         Class<?> constructorParameterClass = getClass();
         ExtendedAction action = null;

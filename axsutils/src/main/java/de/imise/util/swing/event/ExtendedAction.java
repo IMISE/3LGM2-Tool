@@ -23,7 +23,7 @@ import de.imise.util.pair.Pair;
  *
  * @author fstephan, AXS
  */
-public abstract class ExtendedAction extends AbstractAction {
+public abstract class ExtendedAction extends AbstractAction implements ActionSource {
 
     /**
      * Konstruktor
