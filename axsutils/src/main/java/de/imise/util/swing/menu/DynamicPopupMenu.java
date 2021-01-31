@@ -9,8 +9,7 @@ import javax.swing.JPopupMenu;
 import javax.swing.JSeparator;
 
 /**
- * @author AXS?
- * @create ???
+ * @author AXS (??.??.2007)
  */
 public class DynamicPopupMenu extends JPopupMenu {
 
@@ -18,7 +17,6 @@ public class DynamicPopupMenu extends JPopupMenu {
      *
      */
     public DynamicPopupMenu() {
-        super();
     }
 
     /**
@@ -50,10 +48,6 @@ public class DynamicPopupMenu extends JPopupMenu {
         MenuCreator.addAll(this, MenuCreator.getAllItems(menu));
     }
 
-    /*
-     * (non-Javadoc)
-     * @see javax.swing.JPopupMenu#firePopupMenuWillBecomeVisible()
-     */
     @Override
     protected void firePopupMenuWillBecomeVisible() {
         super.firePopupMenuWillBecomeVisible();
