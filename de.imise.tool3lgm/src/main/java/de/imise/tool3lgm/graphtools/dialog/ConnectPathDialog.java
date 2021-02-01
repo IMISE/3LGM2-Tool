@@ -17,6 +17,7 @@ import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.path.metapaths.MetaPath;
+import de.imise.tool3lgm.graphtools.path.metapaths.ParallelMetaPath;
 import de.imise.tool3lgm.graphtools.path.metapaths.SimpleMetaPath;
 import de.imise.util.swing.component.AlphabeticalComboBox;
 
@@ -50,13 +51,24 @@ public class ConnectPathDialog implements ActionListener {
      *            sollte
      * @return
      */
-    private static final SimpleMetaPath[] getSimpleMetaPathArray(final MetaPath unionMetaPath) {
-        SimpleMetaPath[] simpleMetaPaths = new SimpleMetaPath[unionMetaPath.getSubMetaPathCount()];
-        int index = 0;
-        for (MetaPath metaPath : unionMetaPath.getSubMetaPaths()) {
-            simpleMetaPaths[index++] = metaPath instanceof SimpleMetaPath ? (SimpleMetaPath) metaPath : null;
+    private static final SimpleMetaPath[] getSimpleMetaPathArray(final MetaPath metaPath) {
+        if (metaPath instanceof SimpleMetaPath) {
+            return new SimpleMetaPath[] {
+                    (SimpleMetaPath) metaPath
+            };
         }
-        return simpleMetaPaths;
+        if (metaPath instanceof ParallelMetaPath) {
+            SimpleMetaPath[] simpleMetaPaths = new SimpleMetaPath[metaPath.getSubMetaPathCount()];
+            int index = 0;
+            for (MetaPath subMetaPath : metaPath.getSubMetaPaths()) {
+                if (!(subMetaPath instanceof SimpleMetaPath)) {
+                    return new SimpleMetaPath[] {};
+                }
+                simpleMetaPaths[index++] = subMetaPath instanceof SimpleMetaPath ? (SimpleMetaPath) metaPath : null;
+            }
+            return simpleMetaPaths;
+        }
+        return new SimpleMetaPath[] {};
     }
 
     /**
