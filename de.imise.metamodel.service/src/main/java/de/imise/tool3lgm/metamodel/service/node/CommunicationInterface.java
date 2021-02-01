@@ -19,12 +19,11 @@ public abstract class CommunicationInterface extends Node {
         dialog.addDescripPanel(LABEL_LAST_EDGE_CONNECTION_NAME, PartableApplicationComponent_CommunicationInterface_Edge.class);
 
         ConnectedElementsTableDefinition tableDefinition = new ConnectedElementsTableDefinition();
-        tableDefinition.addColumnPathStepEdge(0, 300);
         tableDefinition.addColumnPathStepName(0, 150);
         tableDefinition.addColumnPathStepEnd(0, 300);
-        //        tableDefinition.addColumnPathStepName(1, 150);
-        //        tableDefinition.addColumnEndElement(300);
-        dialog.addTablePanel(tableDefinition, 0, CommunicationLink_Edge.class/* , ApplicationComponent_CommunicationInterface_Edge.class */);
+        tableDefinition.addColumnPathStepName(1, 150);
+        tableDefinition.addColumnEndElement(300);
+        dialog.addTablePanel(tableDefinition, 0, CommunicationLink_Edge.class, PartableApplicationComponent_CommunicationInterface_Edge.class);
 
         return dialog;
     }

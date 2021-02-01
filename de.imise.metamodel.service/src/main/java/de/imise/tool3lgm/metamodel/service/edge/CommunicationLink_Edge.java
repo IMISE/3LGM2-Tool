@@ -3,6 +3,7 @@ package de.imise.tool3lgm.metamodel.service.edge;
 import static de.imise.tool3lgm.graphtools.metamodel.EdgeCardinality.ZERO_UNLIMITED;
 
 import de.imise.tool3lgm.graphtools.dialog.element.ElementPropertyDialog;
+import de.imise.tool3lgm.graphtools.dialog.element.panel.AbstractPathConnectionPanel.PanelLabelOption;
 import de.imise.tool3lgm.graphtools.dialog.element.panel.ConnectedElementsTableDefinition;
 import de.imise.tool3lgm.graphtools.metamodel.EdgeCardinality;
 import de.imise.tool3lgm.graphtools.metamodel.elements.BooleanAttributeEdge;
@@ -33,11 +34,14 @@ public final class CommunicationLink_Edge extends BooleanAttributeEdge {
         dialog.addEdgePanel(Service_CommunicationLink_Edge.class);
 
         ConnectedElementsTableDefinition tableDefinition = new ConnectedElementsTableDefinition();
+        tableDefinition.tablePanelLabelOption = PanelLabelOption.LABEL_LAST_EDGE_START_ELEMENT_TYPE;
         tableDefinition.addColumnPathStepEnd(0, 300);
         tableDefinition.addColumnPathStepName(1, "HEADER_ACCESS_TYPE", 300);
+        tableDefinition.addColumnPathStepEnd(1, 300);
+        tableDefinition.addColumnPathStepName(2, 300);
         tableDefinition.addColumnEndElement(300);
         //auch unnvollständige Pfade anzeigen!!! Also auch verbundene Services in der Tabelle anzeigen, die mit keinem Objekttyp verbunden sind
-        dialog.addTablePanel(tableDefinition, 0, Service_CommunicationLink_Edge.class, Service_RepresentationForm_Edge.class);
+        dialog.addTablePanel(tableDefinition, 0, Service_CommunicationLink_Edge.class, Service_RepresentationForm_Edge.class, ObjectType_RepresentationForm_Edge.class);
 
         return dialog;
     }
