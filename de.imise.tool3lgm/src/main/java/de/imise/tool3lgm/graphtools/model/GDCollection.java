@@ -1799,10 +1799,12 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
                     return edge;
                 }
             }
+            boolean checkConsistency = ensureConsistency;
             //wenn es schon eine Kante in der Gegenrichtung gibt und diese Kante eine Kante mit doppelter Bedeutung ist -> dann Richtung auf DOUBLE setzen
             boolean doubleMeaningEdge = CoreMetaModel.isDoubleMeaningEdge(edgeClass);
             if (doubleMeaningEdge) { //wenn es bei Kanten mit doppelter Bedeutung schon die Gegenrichtung gibt -> setzte auch die Hinrichtung
                 edge = startElement.getEdgeFrom(endElement, edgeClass, startElementEdgeIndex);
+                checkConsistency = false;
             }
             if (edge != null) { //die Kante kann hier nur nicht null sein, wenn die obige Bedingung mit der Kante mit doppelter Bedeutung zutraf
                 //bei doubleMeaningEdges jetzt auch die Gegenrichtung setzten
@@ -1864,7 +1866,14 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
                         end.removeEdge(edge);
                     }
                 }
-
+            }
+            mainDoc.addRedo(pid, MODEL_ACTION_LINK, edgeClassName, edge, startElement, endElement, startElementEdgeIndex, endElementEdgeIndex);
+            mainDoc.addUndo(pid, MODEL_ACTION_UNLINK, startElement, endElement, edgeClassName, startElementEdgeIndex);
+            //This must come after the main UNDO/REDO commands, because deleteElements()
+            //adds also UNDO/REDO commands and the an UNDO can delete the element to be
+            //reconnected (e.g. if you have reassigned a subordinated element to an other
+            //super element with an CompositionEdge between them and undo that).
+            if (checkConsistency) {
                 //Falls bereits Beziehungen der anzulegenden Art bestehen und durch die neue Beziehung die Kardinalitäten
                 //verletzt wären -> lösche solange bestehende Beziehungen, bis die Kardinaltitäten eingehalten werden
                 //Dies muss nach dem Hinzufügen der anderen Undo-Komamndos erfolgen, sonst stimmt die Reihenfolge der Kommandos nicht.
@@ -1887,9 +1896,8 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
                         deleteElement(edgeList.get(0), mainDoc, pid);
                     }
                 }
+
             }
-            mainDoc.addRedo(pid, MODEL_ACTION_LINK, edgeClassName, edge, startElement, endElement, startElementEdgeIndex, endElementEdgeIndex);
-            mainDoc.addUndo(pid, MODEL_ACTION_UNLINK, startElement, endElement, edgeClassName, startElementEdgeIndex);
         } catch (Exception e) {
             Log.show(ERROR, getResString("FehlerAllgemein"), e);
             mainDoc.undo(pid);
