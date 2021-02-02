@@ -912,7 +912,7 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
      * @param containerToRemove
      * @param pid
      */
-    private void simpleRemoveContainerFromSzenario(final Collection<ElementContainer> containerToRemove, final boolean logSubElements, final int pid) {
+    public void simpleRemoveContainerFromSzenario(final Collection<ElementContainer> containerToRemove, final boolean logSubElements, final int pid) {
         boolean transActionStarted = false;
         GraphDocument ecDoc = null;
         for (ElementContainer ec : containerToRemove) {
