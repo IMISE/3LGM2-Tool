@@ -1,5 +1,9 @@
 package de.imise.tool3lgm;
 
+import java.util.Collection;
+
+import com.google.common.collect.Lists;
+
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.model.LGMChangeListener;
 import de.imise.util.event.ListenerSupport;
@@ -91,18 +95,12 @@ public interface Tool3lgmChangeListener {
             }
             lastChangeType = this;
             lastDoc = source;
-
-            //das hier muss sein, weil es vorkommen kann, dass sich bei deliverEvent(l, source, last_elem); der aktuelle Listener aus der Listener-Liste löscht
-            //eine andere Variante wäre, die Liste vorher zu clonen und auf dem Clone zu iterieren
-            Tool3lgmChangeListener lastListener = null;
-            for (int i = 0; i < listeners.size();) {
-                Tool3lgmChangeListener l = listeners.get(i);
-                if (l == lastListener) {
-                    i++;
-                    continue;
-                }
-                lastListener = l;
-                //Sys.err(l.getClass().getSimpleName() + " " + source + " " + name());
+            //das hier muss sein, weil es vorkommen kann, dass sich bei
+            //deliverEvent(l, source, last_elem); der aktuelle Listener
+            //aus der Listener-Liste löscht und dann wieder hinzufügt
+            Collection<Tool3lgmChangeListener> listenersClone = Lists.newArrayList(listeners);
+            for (Tool3lgmChangeListener l : listenersClone) {
+                //Sys.err1(l.getClass().getSimpleName() + " " + source + " " + name());
                 deliverEvent(l, source);
             }
         }
