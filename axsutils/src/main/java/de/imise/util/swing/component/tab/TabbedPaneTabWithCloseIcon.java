@@ -26,7 +26,7 @@ import de.imise.util.resource.SimpleResourceBundleSourceAdapter;
 /**
  * @author Ich (10.08.2020)
  */
-public class FlexibleTabPaneTab extends JPanel {
+public class TabbedPaneTabWithCloseIcon extends JPanel {
 
     /**
      * The tabbed pane that uses this as a component to display a tab.
@@ -57,7 +57,7 @@ public class FlexibleTabPaneTab extends JPanel {
      * @param tabbedPane
      * @param activeForegroundColor
      */
-    public FlexibleTabPaneTab(final JTabbedPane tabbedPane, final Color activeForegroundColor) {
+    public TabbedPaneTabWithCloseIcon(final JTabbedPane tabbedPane, final Color activeForegroundColor) {
         this(tabbedPane, null, activeForegroundColor);
     }
 
@@ -66,7 +66,7 @@ public class FlexibleTabPaneTab extends JPanel {
      * @param icon
      * @param activeForegroundColor
      */
-    public FlexibleTabPaneTab(final JTabbedPane tabbedPane, final Icon icon, final Color activeForegroundColor) {
+    public TabbedPaneTabWithCloseIcon(final JTabbedPane tabbedPane, final Icon icon, final Color activeForegroundColor) {
         super(new FlowLayout(FlowLayout.LEFT, 0, 0));
         this.tabbedPane = tabbedPane;
         setOpaque(false);
@@ -90,7 +90,7 @@ public class FlexibleTabPaneTab extends JPanel {
 
             @Override
             public String getToolTipText() {
-                return FlexibleTabPaneTab.this.getToolTipText();
+                return TabbedPaneTabWithCloseIcon.this.getToolTipText();
             }
 
             /**
@@ -139,7 +139,7 @@ public class FlexibleTabPaneTab extends JPanel {
             //If we don't set an irrelevant default preferred size > 0 the paintComponent(g) will never be called
             int size = 17;
             setPreferredSize(new Dimension(size, size));
-            SimpleResourceBundleSourceAdapter resourceHandler = new SimpleResourceBundleSourceAdapter(FlexibleTabPaneTab.class);
+            SimpleResourceBundleSourceAdapter resourceHandler = new SimpleResourceBundleSourceAdapter(TabbedPaneTabWithCloseIcon.class);
             String toolTip = resourceHandler.getResString("close_tab");
             setToolTipText(toolTip);
             //the BasicButtonUI enables rollover and mouse clicked events
@@ -231,7 +231,7 @@ public class FlexibleTabPaneTab extends JPanel {
      * @return
      */
     private final int getTabIndex() {
-        int tabIndex = tabbedPane.indexOfTabComponent(FlexibleTabPaneTab.this);
+        int tabIndex = tabbedPane.indexOfTabComponent(TabbedPaneTabWithCloseIcon.this);
         return tabIndex;
     }
 
