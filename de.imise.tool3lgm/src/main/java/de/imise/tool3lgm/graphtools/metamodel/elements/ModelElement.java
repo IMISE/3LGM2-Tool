@@ -516,21 +516,17 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
         ElementsLayoutDefinition defaultElementsLayout = null;
         GraphElementLayout nameExtendsionClassLayout = null;
         Iterable<ElementContainer> targetContainers;
-        if (targetContainer == null) {
-            MetaPath nameExtension = getNameExtensionPath();
-            updateHTMLNameSuffixBuffer(nameExtension);
-            Class<? extends ModelElement> nameExtendsionClass;
-            GraphViewDefinition graphViewDefinition;
-            if (suffixBuf.length() > 0) {
-                nameExtendsionClass = nameExtension.getEndClass();
-                graphViewDefinition = metaModel.getGraphViewDefinition();
-                defaultElementsLayout = graphViewDefinition.getDefaultElementsLayout();
-                nameExtendsionClassLayout = defaultElementsLayout.getStandardElementLayout(nameExtendsionClass);
-            }
-            targetContainers = getElementContainers();
-        } else {
-            targetContainers = ImmutableList.of(targetContainer);
+        MetaPath nameExtension = getNameExtensionPath();
+        updateHTMLNameSuffixBuffer(nameExtension);
+        Class<? extends ModelElement> nameExtendsionClass;
+        GraphViewDefinition graphViewDefinition;
+        if (suffixBuf.length() > 0) {
+            nameExtendsionClass = nameExtension.getEndClass();
+            graphViewDefinition = metaModel.getGraphViewDefinition();
+            defaultElementsLayout = graphViewDefinition.getDefaultElementsLayout();
+            nameExtendsionClassLayout = defaultElementsLayout.getStandardElementLayout(nameExtendsionClass);
         }
+        targetContainers = targetContainer == null ? getElementContainers() : ImmutableList.of(targetContainer);
 
         htmlName = null;
         textBuf.setLength(0);
