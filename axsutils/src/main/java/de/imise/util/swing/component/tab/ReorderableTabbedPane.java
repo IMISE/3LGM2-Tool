@@ -23,14 +23,39 @@ import javax.swing.event.MouseInputListener;
  */
 public class ReorderableTabbedPane extends JTabbedPane {
 
+    /**
+     *
+     */
+    private final MouseInputListener mouseHandler;
+
+    /**
+     *
+     */
+    private Cursor defaultCursor;
+
+    /**
+     *
+     */
+    private Cursor handCursor;
+
+    /**
+     *
+     */
     public ReorderableTabbedPane() {
         this(TOP);
     }
 
+    /**
+     * @param tabPlacement
+     */
     public ReorderableTabbedPane(final int tabPlacement) {
         this(tabPlacement, WRAP_TAB_LAYOUT);
     }
 
+    /**
+     * @param tabPlacement
+     * @param tabLayoutPolicy
+     */
     public ReorderableTabbedPane(final int tabPlacement, final int tabLayoutPolicy) {
         super(tabPlacement, tabLayoutPolicy);
         mouseHandler = new MouseHandler();
@@ -38,9 +63,10 @@ public class ReorderableTabbedPane extends JTabbedPane {
         addMouseMotionListener(mouseHandler);
     }
 
-    private final MouseInputListener mouseHandler;
-    private Cursor defaultCursor, handCursor;
-
+    /**
+     * @param dragIndex
+     * @param tabIndex
+     */
     private void dragTab(final int dragIndex, final int tabIndex) {
         String title = getTitleAt(dragIndex);
         Icon icon = getIconAt(dragIndex);
@@ -62,6 +88,9 @@ public class ReorderableTabbedPane extends JTabbedPane {
         setEnabledAt(tabIndex, enabled);
     }
 
+    /**
+     * @return
+     */
     private Cursor getDefaultCursor() {
         if (defaultCursor == null) {
             defaultCursor = Cursor.getDefaultCursor();
@@ -69,6 +98,9 @@ public class ReorderableTabbedPane extends JTabbedPane {
         return defaultCursor;
     }
 
+    /**
+     * @return
+     */
     private Cursor getHandCursor() {
         if (handCursor == null) {
             handCursor = Cursor.getPredefinedCursor(Cursor.HAND_CURSOR);
@@ -76,10 +108,18 @@ public class ReorderableTabbedPane extends JTabbedPane {
         return handCursor;
     }
 
+    /**
+     * @param x
+     * @param y
+     * @return
+     */
     private int getTabIndex(final int x, final int y) {
         return getUI().tabForCoordinate(this, x, y);
     }
 
+    /**
+     *
+     */
     private void maybeSetDefaultCursor() {
         Cursor cursor = getDefaultCursor();
         if (getCursor() != cursor) {
@@ -87,6 +127,9 @@ public class ReorderableTabbedPane extends JTabbedPane {
         }
     }
 
+    /**
+     *
+     */
     private void maybeSetHandCursor() {
         Cursor cursor = getHandCursor();
         if (getCursor() != cursor) {
@@ -94,8 +137,12 @@ public class ReorderableTabbedPane extends JTabbedPane {
         }
     }
 
+    /**
+     *
+     */
     class MouseHandler extends MouseInputAdapter {
 
+        /** Index of the draged tab */
         private int dragIndex = -1;
 
         @Override
