@@ -423,7 +423,7 @@ public class LGMGraphDocument extends GraphDocument {
                             //bendpoints separately too
                             bendpoints.add((BendpointContainer) targetContainer);
                         } else {
-                            targetElement.updateHTMLNameAndAdditionalShape(targetContainer);
+                            targetElement.updateHTMLName(targetContainer);
                             //add the container to the layer of the szenario
                             targetContainer.refreshText();
                             LayerContainer targetDocLayer = targetDoc.getLayer(layer);
