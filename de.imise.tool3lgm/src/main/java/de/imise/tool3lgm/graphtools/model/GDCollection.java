@@ -2266,16 +2266,6 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
         }
     }
 
-    /**
-     *
-     */
-    private void updateElementNames() {
-        List<ModelElement> modelItemsWithNameExtensions = getModelItems(this, metaModel.getElementClassesWithNameExtensionPath());
-        for (ModelElement me : modelItemsWithNameExtensions) {
-            me.updateNameExtensions();
-        }
-    }
-
     //ENDE LINK //
     /////////////////////////////////////////////////////////////////////////////////////////////////
     //#############################################################################################//
