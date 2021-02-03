@@ -5283,13 +5283,16 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
      */
     public void initNodeContainers() {
         for (int i = 0; i < layer.length; i++) {
-            for (NodeContainer kc : layer[i].getGraphNodeContainers()) {
-                if (kc != null) {
-                    kc.refreshText();
-                    Font f = kc.getFont();
-                    if (!kc.isStandardFont(f)) {
-                        kc.setFont(f);
+            for (NodeContainer nc : layer[i].getGraphNodeContainers()) {
+                if (nc != null) {
+                    ModelElement me = nc.getElement();
+                    me.updateHTMLName(nc);
+                    nc.refreshText();
+                    Font f = nc.getFont();
+                    if (!nc.isStandardFont(f)) {
+                        nc.setFont(f);
                     }
+
                 }
             }
             layer[i].revalidate();
