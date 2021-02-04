@@ -2561,7 +2561,10 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
         //will produce a new ChangeEvent and alters the list changeEvents
         for (int i = 0; i < changeEvents.size(); i++) {
             LGMChangeEvent changeEvent = changeEvents.get(i);
+            //long start = System.currentTimeMillis();
             distribute(changeEvent.changeType, changeEvent.last_elem, changeEvent.source, changeEvent.pid);
+            //long end = System.currentTimeMillis();
+            //Sys.err1(end - start + "\t" + changeEvent);
         }
         changeEvents.clear();
     }

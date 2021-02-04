@@ -74,4 +74,31 @@ public class LGMChangeEvent {
         return true;
     }
 
+    private int changeTypeMaxStringLength = -1;
+
+    @Override
+    public String toString() {
+        if (changeTypeMaxStringLength < 0) {
+            for (LGMChangeType changeType : LGMChangeType.values()) {
+                int length = changeType.name().length();
+                if (length > changeTypeMaxStringLength) {
+                    changeTypeMaxStringLength = length;
+                }
+            }
+        }
+        StringBuilder sb = new StringBuilder();
+        int currentChangeTypeLength = changeType.name().length();
+        for (; currentChangeTypeLength < changeTypeMaxStringLength; currentChangeTypeLength++) {
+            sb.append(" ");
+        }
+        sb.append(changeType.name());
+        sb.append(" ");
+        sb.append(last_elem);
+        sb.append(" (");
+        sb.append(source);
+        sb.append(") ");
+        sb.append(pid);
+        return sb.toString();
+    }
+
 }
