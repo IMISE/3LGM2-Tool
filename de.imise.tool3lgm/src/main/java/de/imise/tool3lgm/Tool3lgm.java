@@ -294,6 +294,7 @@ public class Tool3lgm {
         //sollen die UNDO-REDO-Kommandos wieder geloggt werden.
         gdcoll.setBulkMode(false);
         gdcoll.setAutomaticMode(false);
+        Static.closeProgressDialog();
         return openModel;
     }
 
@@ -317,7 +318,6 @@ public class Tool3lgm {
         gdcoll.initSelectedDocByViewParameterFromFile();
         gdcoll.setUnchanged();
         System.gc();
-        Static.closeProgressDialog();
 
         //		System.err.println();
         //		System.err.println("###########################################################################");

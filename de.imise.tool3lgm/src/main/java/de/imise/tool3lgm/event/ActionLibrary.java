@@ -256,6 +256,7 @@ public class ActionLibrary {
                                 gdcoll = ModelConverter.convert(modelConverterDefinition, gdcoll);
                             }
                             Static.getTool().openModel(gdcoll);
+                            Static.closeProgressDialog();
                         }
                     }
                 };
