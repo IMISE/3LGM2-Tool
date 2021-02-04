@@ -196,7 +196,6 @@ public final class ModelBrowser extends ReorderableTabbedPane implements ChangeL
         for (int i = 0; i < getTabCount(); i++) {
             SubModelsBrowser subModelsBrowser = (SubModelsBrowser) getComponentAt(i);
             setTitleAt(i, subModelsBrowser.getTitle());
-            subModelsBrowser.update();
         }
     }
 
