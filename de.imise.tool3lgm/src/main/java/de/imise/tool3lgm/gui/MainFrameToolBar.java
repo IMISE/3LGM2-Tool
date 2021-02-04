@@ -107,6 +107,10 @@ public class MainFrameToolBar extends UnfloatableToolBar implements MouseListene
                         GDCommands.MODEL_ACTION_SET_ELEMENTS_POSITION_VERTICAL_TOP, //elements position top
                         GDCommands.MODEL_ACTION_SET_ELEMENTS_POSITION_VERTICAL_CENTER, //elements position center
                         GDCommands.MODEL_ACTION_SET_ELEMENTS_POSITION_VERTICAL_BOTTOM, //elements position bottom
+                }, {
+                        GDCommands.MODEL_ACTION_SET_ELEMENT_ALIGNMENT_SIZE_WIDTH, //elements get same width
+                        GDCommands.MODEL_ACTION_SET_ELEMENT_ALIGNMENT_SIZE_HEIGTH, //elements get same height
+                        GDCommands.MODEL_ACTION_SET_ELEMENT_ALIGNMENT_SIZE_WIDTH_AND_HEIGTH, //elements get same width and height
                 }
         };
 
