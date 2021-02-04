@@ -83,23 +83,23 @@ public class MainFrameToolBar extends UnfloatableToolBar implements MouseListene
 
         ActionSource[][] alignmentAndPositionActions = {
                 {
-                        GDCommands.MODEL_ACTION_SET_ELEMENT_TEXT_ALIGNMENT_HTML_LEFT, //text left aligned
                         GDCommands.MODEL_ACTION_SET_ELEMENT_TEXT_ALIGNMENT_HTML_CENTER, //text center aligned
+                        GDCommands.MODEL_ACTION_SET_ELEMENT_TEXT_ALIGNMENT_HTML_LEFT, //text left aligned
                         GDCommands.MODEL_ACTION_SET_ELEMENT_TEXT_ALIGNMENT_HTML_RIGHT, //text right aligned
                         GDCommands.MODEL_ACTION_SET_ELEMENT_TEXT_ALIGNMENT_HTML_JUSTIFY, //text justified
                 }, {
-                        GDCommands.MODEL_ACTION_SET_ELEMENT_TEXT_POSITION_HORIZONTAL_LEFT, //text position left
                         GDCommands.MODEL_ACTION_SET_ELEMENT_TEXT_POSITION_HORIZONTAL_CENTER, //text position center
+                        GDCommands.MODEL_ACTION_SET_ELEMENT_TEXT_POSITION_HORIZONTAL_LEFT, //text position left
                         GDCommands.MODEL_ACTION_SET_ELEMENT_TEXT_POSITION_HORIZONTAL_RIGHT, //text position right
                 }, {
-                        GDCommands.MODEL_ACTION_SET_ELEMENT_TEXT_POSITION_VERTICAL_TOP, //text position top
                         GDCommands.MODEL_ACTION_SET_ELEMENT_TEXT_POSITION_VERTICAL_CENTER, //text position center
+                        GDCommands.MODEL_ACTION_SET_ELEMENT_TEXT_POSITION_VERTICAL_TOP, //text position top
                         GDCommands.MODEL_ACTION_SET_ELEMENT_TEXT_POSITION_VERTICAL_BOTTOM, //text position bottom
                 }, {
-                        GDCommands.MODEL_ACTION_MOVE_ORDER_TO_FIRST_POSITION, //text position top
-                        GDCommands.MODEL_ACTION_MOVE_ORDER_ONE_POSITION_UP, //text position one up
-                        GDCommands.MODEL_ACTION_MOVE_ORDER_ONE_POSITION_DOWN, //text position one down
                         GDCommands.MODEL_ACTION_MOVE_ORDER_TO_LAST_POSITION, //text position last
+                        GDCommands.MODEL_ACTION_MOVE_ORDER_ONE_POSITION_DOWN, //text position one down
+                        GDCommands.MODEL_ACTION_MOVE_ORDER_ONE_POSITION_UP, //text position one up
+                        GDCommands.MODEL_ACTION_MOVE_ORDER_TO_FIRST_POSITION, //text position top
                 }, {
                         GDCommands.MODEL_ACTION_SET_ELEMENTS_POSITION_HORIZONTAL_LEFT, //elements position left
                         GDCommands.MODEL_ACTION_SET_ELEMENTS_POSITION_HORIZONTAL_CENTER, //elements psoition center
@@ -108,9 +108,9 @@ public class MainFrameToolBar extends UnfloatableToolBar implements MouseListene
                         GDCommands.MODEL_ACTION_SET_ELEMENTS_POSITION_VERTICAL_CENTER, //elements position center
                         GDCommands.MODEL_ACTION_SET_ELEMENTS_POSITION_VERTICAL_BOTTOM, //elements position bottom
                 }, {
+                        GDCommands.MODEL_ACTION_SET_ELEMENT_ALIGNMENT_SIZE_WIDTH_AND_HEIGTH, //elements get same width and height
                         GDCommands.MODEL_ACTION_SET_ELEMENT_ALIGNMENT_SIZE_WIDTH, //elements get same width
                         GDCommands.MODEL_ACTION_SET_ELEMENT_ALIGNMENT_SIZE_HEIGTH, //elements get same height
-                        GDCommands.MODEL_ACTION_SET_ELEMENT_ALIGNMENT_SIZE_WIDTH_AND_HEIGTH, //elements get same width and height
                 }
         };
 
