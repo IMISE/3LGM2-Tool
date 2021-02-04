@@ -701,7 +701,8 @@ public class Tool3lgm {
         mainFrame.toFront();
         if (command == null) {
             return;
-        } else if (command.equalsIgnoreCase("open")) {
+        }
+        if (command.equalsIgnoreCase("open")) {
             if (params == null || params.length < 1) {
                 return;
             }
