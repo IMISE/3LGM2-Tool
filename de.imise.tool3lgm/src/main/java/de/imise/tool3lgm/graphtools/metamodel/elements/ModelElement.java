@@ -509,35 +509,24 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
     }
 
     /**
-     * @param targetContainer
-     */
-    public void updateHTMLNameAndAdditionalShape(final ElementContainer targetContainer) {
-        updateHTMLName(targetContainer);
-    }
-
-    /**
      * @param targetContainer the single target container to update or
      *            <code>null</code> to update all containers
      */
-    private void updateHTMLName(final ElementContainer targetContainer) {
+    public void updateHTMLName(final ElementContainer targetContainer) {
         ElementsLayoutDefinition defaultElementsLayout = null;
         GraphElementLayout nameExtendsionClassLayout = null;
         Iterable<ElementContainer> targetContainers;
-        if (targetContainer == null) {
-            MetaPath nameExtension = getNameExtensionPath();
-            updateHTMLNameSuffixBuffer(nameExtension);
-            Class<? extends ModelElement> nameExtendsionClass;
-            GraphViewDefinition graphViewDefinition;
-            if (suffixBuf.length() > 0) {
-                nameExtendsionClass = nameExtension.getEndClass();
-                graphViewDefinition = metaModel.getGraphViewDefinition();
-                defaultElementsLayout = graphViewDefinition.getDefaultElementsLayout();
-                nameExtendsionClassLayout = defaultElementsLayout.getStandardElementLayout(nameExtendsionClass);
-            }
-            targetContainers = getElementContainers();
-        } else {
-            targetContainers = ImmutableList.of(targetContainer);
+        MetaPath nameExtension = getNameExtensionPath();
+        updateHTMLNameSuffixBuffer(nameExtension);
+        Class<? extends ModelElement> nameExtendsionClass;
+        GraphViewDefinition graphViewDefinition;
+        if (suffixBuf.length() > 0) {
+            nameExtendsionClass = nameExtension.getEndClass();
+            graphViewDefinition = metaModel.getGraphViewDefinition();
+            defaultElementsLayout = graphViewDefinition.getDefaultElementsLayout();
+            nameExtendsionClassLayout = defaultElementsLayout.getStandardElementLayout(nameExtendsionClass);
         }
+        targetContainers = targetContainer == null ? getElementContainers() : ImmutableList.of(targetContainer);
 
         htmlName = null;
         textBuf.setLength(0);
