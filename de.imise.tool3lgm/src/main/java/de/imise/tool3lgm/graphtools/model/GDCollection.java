@@ -581,7 +581,9 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
             mainDoc.finish_transaction(pid);
         }
         setChanged(true);
-        distribute(SZENARIO_ADDED, null, szenario, pid);
+        if (!isBulkMode()) {
+            distribute(SZENARIO_ADDED, null, szenario, pid);
+        }
         setActiveLayer(activeLayer);
         return szenario;
     }
@@ -2512,12 +2514,12 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
         if (!initialized && !bulk_mode) {
             initialized = true;
         }
-        boolean oldMode = this.bulk_mode;
+        boolean lastModeWasBulkMode = this.bulk_mode;
         this.bulk_mode = bulk_mode;
-        if (oldMode && !bulk_mode) {
+        if (lastModeWasBulkMode && !bulk_mode) {
             distributeChangeEvents();
         }
-        return oldMode;
+        return lastModeWasBulkMode;
     }
 
     /**
