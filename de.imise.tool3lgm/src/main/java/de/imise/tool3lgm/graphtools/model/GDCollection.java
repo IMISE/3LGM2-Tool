@@ -46,6 +46,7 @@ import static de.imise.tool3lgm.graphtools.model.GraphDocumentHandler.getModelIt
 import static de.imise.tool3lgm.graphtools.model.LGMChangeListener.LGMChangeType.ACTIVE_LAYER_CHANGED;
 import static de.imise.tool3lgm.graphtools.model.LGMChangeListener.LGMChangeType.DATA_CHANGED;
 import static de.imise.tool3lgm.graphtools.model.LGMChangeListener.LGMChangeType.MODEL_OR_SZENARIO_NAME_CHANGED;
+import static de.imise.tool3lgm.graphtools.model.LGMChangeListener.LGMChangeType.SELECTED_SZENARIO_CHANGED;
 import static de.imise.tool3lgm.graphtools.model.LGMChangeListener.LGMChangeType.SELECTION_CHANGED;
 import static de.imise.tool3lgm.graphtools.model.LGMChangeListener.LGMChangeType.SZENARIO_ADDED;
 import static de.imise.tool3lgm.graphtools.model.LGMChangeListener.LGMChangeType.SZENARIO_REMOVED;
@@ -581,7 +582,9 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
             mainDoc.finish_transaction(pid);
         }
         setChanged(true);
-        distribute(SZENARIO_ADDED, null, szenario, pid);
+        if (!isBulkMode()) {
+            distribute(SZENARIO_ADDED, null, szenario, pid);
+        }
         setActiveLayer(activeLayer);
         return szenario;
     }
@@ -668,7 +671,7 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
     public void setSelectedDoc(final GraphDocument doc) {
         activeGraphDocumentsList.remove(doc);
         activeGraphDocumentsList.add((LGMGraphDocument) doc);
-        distribute(LGMChangeType.SELECTED_SZENARIO_CHANGED, null, doc, STANDARD_PID);
+        distribute(SELECTED_SZENARIO_CHANGED, null, doc, STANDARD_PID);
     }
 
     /**
@@ -2512,12 +2515,12 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
         if (!initialized && !bulk_mode) {
             initialized = true;
         }
-        boolean oldMode = this.bulk_mode;
+        boolean lastModeWasBulkMode = this.bulk_mode;
         this.bulk_mode = bulk_mode;
-        if (oldMode && !bulk_mode) {
+        if (lastModeWasBulkMode && !bulk_mode) {
             distributeChangeEvents();
         }
-        return oldMode;
+        return lastModeWasBulkMode;
     }
 
     /**
@@ -2561,7 +2564,10 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
         //will produce a new ChangeEvent and alters the list changeEvents
         for (int i = 0; i < changeEvents.size(); i++) {
             LGMChangeEvent changeEvent = changeEvents.get(i);
+            //long start = System.currentTimeMillis();
             distribute(changeEvent.changeType, changeEvent.last_elem, changeEvent.source, changeEvent.pid);
+            //long end = System.currentTimeMillis();
+            //Sys.err1(end - start + "\t" + changeEvent);
         }
         changeEvents.clear();
     }
