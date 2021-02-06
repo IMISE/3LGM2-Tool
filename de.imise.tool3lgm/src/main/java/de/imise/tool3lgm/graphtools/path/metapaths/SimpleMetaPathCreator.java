@@ -892,6 +892,9 @@ public class SimpleMetaPathCreator extends MetaModelSpecificAdapter {
                 boolean replaceOriginalMetaPathInResultList = true;
                 //für alle gefundenen nicht-abstrakten Kantenarten zwischen der Start- und Endklasse des Original-MetaPfades
                 for (Class<? extends Edge> edgeType : edgeTypes) {
+                    if (CoreMetaModel.isAbstract(edgeType)) {
+                        continue;
+                    }
                     //wenn die nicht-abstrakte Kantenklasse eine Unterklasse der abstrakten des Original-MetaPfades ist
                     if (edgeClass.isAssignableFrom(edgeType)) {
                         //Erzeuge ein neues Array aus Elementarpfaden, bei dem der aktuelle Pfadschritt immer durch einen Elementarmetapfad mit der nicht-abstrakten Kantenklasse ersetzt wird
