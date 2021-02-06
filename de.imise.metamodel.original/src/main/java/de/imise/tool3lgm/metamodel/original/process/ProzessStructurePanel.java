@@ -4,7 +4,6 @@
  */
 package de.imise.tool3lgm.metamodel.original.process;
 
-import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
 import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction.FORWARD;
 import static de.imise.tool3lgm.graphtools.view.tree.node.ElementContainerTreeNode.createIndexedDialogTreeNode;
 
@@ -126,7 +125,7 @@ public class ProzessStructurePanel extends PathConnectionPanel implements TreeWi
     /**
      * COMMENTME
      */
-    private String errorTitle = "";
+    private final String errorTitle = "";
 
     /**
      * COMMENTME
@@ -579,44 +578,44 @@ public class ProzessStructurePanel extends PathConnectionPanel implements TreeWi
         // ,doc,-1,false,true, false);
         int size = aufgabenContainer.size();
         LGMTreeNode<?> lroot = ltree.getRoot();
+        //AXS: 06.02.2020: Diese beiden Fehler hier sind nach meiner heutigen Auffassung gar keine mehr -> die Resourcenschlüssel habe ich gelöscht, weil man sie hätte verallgemenern müssen (also weg von "Prozess" und "Aufgabe")
+        // errorTitle = getResString("process_error_title");
         // der Prozess ist leer
-        if (size == 0) {
-            errorTitle = getResString("process_error_no_function");
-            errorBuffer.append(getResString("process_error_no_function_1"));
+        //        if (size == 0) {
+        //            errorBuffer.append(getResString("process_error_no_function_1"));
+        //        }
+        //        // der Prozess hat nur eine Aufgabe
+        //        else if (size == 1) {
+        //            errorBuffer.append(getResString("process_error_single_function_1"));
+        //            ((IconifiedTreeNode<?>) lroot.getChildAt(0)).setIconState(IconState.SHOW_ERROR_ICON);
+        //            // der Prozess hat mind. 2 Aufgaben
+        //        } else {
+        // Reseten aller Icons auf normal
+        for (int i = 0; i < aufgabenContainer.size(); i++) {
+            ((IconifiedTreeNode<?>) lroot.getChildAt(i)).setIconState(IconState.SHOW_NORMAL_ICON);
         }
-        // der Prozess hat nur eine Aufgabe
-        else if (size == 1) {
-            errorTitle = getResString("process_error_single_function");
-            errorBuffer.append(getResString("process_error_single_function_1"));
-            ((IconifiedTreeNode<?>) lroot.getChildAt(0)).setIconState(IconState.SHOW_ERROR_ICON);
-            // der Prozess hat mind. 2 Aufgaben
-        } else {
-            // Reseten aller Icons auf normal
-            for (int i = 0; i < aufgabenContainer.size(); i++) {
-                ((IconifiedTreeNode<?>) lroot.getChildAt(i)).setIconState(IconState.SHOW_NORMAL_ICON);
-            }
-            ModelElement prozess = getModelElement();
-            // hole die Aufgaben des Prozesses
-            List<ModelElement> aufgaben = prozess.getConnectedElements(Aufgabe.class);
+        ModelElement prozess = getModelElement();
+        // hole die Aufgaben des Prozesses
+        List<ModelElement> aufgaben = prozess.getConnectedElements(Aufgabe.class);
 
-            // Kommunikationsprozesschritte werden im Moment (seit Version 3.3.0) nicht geprüft
+        // Kommunikationsprozesschritte werden im Moment (seit Version 3.3.0) nicht geprüft
 
-            // die Icons auf fehlerhaft setzen, deren Aufgabe kein
-            // Geschäftsprozessschritt von einer der vorherigen Aufgaben ist
-            //            for (int i = 1; i < size; i++) {
-            //                if (prozess.getProcessStepsForAufgabe(aufgaben, i, true).size() == 0) {
-            //                    if (errorBuffer.length() == 0) {
-            //                        errorTitle = getResString("process_error_no_process_step");
-            //                        errorBuffer.append(getResString("process_error_no_process_step_1"));
-            //                        errorBuffer.append(((NodeContainer) aufgabenContainer.get(i)).getElement());
-            //                        errorBuffer.append(getResString("process_error_no_process_step_2"));
-            //                        errorBuffer.append(i + 1);
-            //                        errorBuffer.append(getResString("process_error_no_process_step_3"));
-            //                    }
-            //                    ((LGMTreeNode) lroot.getChildAt(i)).setIconState(LGMTreeNode.SHOW_ERROR_ICON);
-            //                }
-            //            }
-        }
+        // die Icons auf fehlerhaft setzen, deren Aufgabe kein
+        // Geschäftsprozessschritt von einer der vorherigen Aufgaben ist
+        //            for (int i = 1; i < size; i++) {
+        //                if (prozess.getProcessStepsForAufgabe(aufgaben, i, true).size() == 0) {
+        //                    if (errorBuffer.length() == 0) {
+        //                        errorTitle = getResString("process_error_no_process_step");
+        //                        errorBuffer.append(getResString("process_error_no_process_step_1"));
+        //                        errorBuffer.append(((NodeContainer) aufgabenContainer.get(i)).getElement());
+        //                        errorBuffer.append(getResString("process_error_no_process_step_2"));
+        //                        errorBuffer.append(i + 1);
+        //                        errorBuffer.append(getResString("process_error_no_process_step_3"));
+        //                    }
+        //                    ((LGMTreeNode) lroot.getChildAt(i)).setIconState(LGMTreeNode.SHOW_ERROR_ICON);
+        //                }
+        //            }
+        //        }
         if (errorBuffer.length() > 0) {
             errorMessage = errorBuffer.toString();
             errorBut.setEnabled(true);
