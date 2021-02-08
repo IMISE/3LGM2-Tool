@@ -2716,7 +2716,8 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
                     ModelElement other = edge.getOther(me);
                     if (other == null) {
                         String startEnd = edge.isStart(me) ? "end" : "start";
-                        Sys.err1("Model: " + gdcoll.getName() + " Submodel: " + this + " Edge " + edge + " (" + edge.getClass().getSimpleName() + ") of element " + me + " (" + me.getClass().getSimpleName() + ") has null as " + startEnd + " element.");
+                        Sys.err1("Model: " + gdcoll.getName() + " --- Submodel: " + this + " --- Edge " + edge + " (" + edge.getClass().getSimpleName() + ") of element " + me + " (" + me.getClass().getSimpleName() + ") has null as " + startEnd
+                                + " element.");
                     }
                     if (other != null && other.isPaintable()) { //The null check is only for the symptoms not against the cause. Sometimes there are faulty edges where the other is null.
                         ElementContainer otherEc = other.getContainer(this);
