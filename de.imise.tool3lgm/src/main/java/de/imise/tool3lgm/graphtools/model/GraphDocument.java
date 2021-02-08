@@ -127,6 +127,7 @@ import de.imise.tool3lgm.log.Log;
 import de.imise.tool3lgm.userproperties.UserProperties;
 import de.imise.util.Alphabetical;
 import de.imise.util.OptionsSupport;
+import de.imise.util.Sys;
 import de.imise.util.collections.CollectionUtils;
 import de.imise.util.swing.dialog.ImageChooser;
 import de.imise.util.swing.dialog.MultipleOptionPane;
@@ -2713,8 +2714,11 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
             if (metaModel.isPaintable(elementClass)) {
                 for (Edge edge : me.getEdges()) {
                     ModelElement other = edge.getOther(me);
-                    Class<? extends ModelElement> otherElementClass = other.getClass();
-                    if (metaModel.isPaintable(otherElementClass)) {
+                    if (other == null) {
+                        String startEnd = edge.isStart(me) ? "end" : "start";
+                        Sys.err1("Model: " + gdcoll.getName() + " Submodel: " + this + " Edge " + edge + " (" + edge.getClass().getSimpleName() + ") of element " + me + " (" + me.getClass().getSimpleName() + ") has null as " + startEnd + " element.");
+                    }
+                    if (other != null && other.isPaintable()) { //The null check is only for the symptoms not against the cause. Sometimes there are faulty edges where the other is null.
                         ElementContainer otherEc = other.getContainer(this);
                         if (selectedContainer.contains(otherEc)) {
                             EdgeContainer edgeC = (EdgeContainer) edge.getContainer(this);
