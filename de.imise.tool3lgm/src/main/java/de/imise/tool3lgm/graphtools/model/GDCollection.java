@@ -46,6 +46,7 @@ import static de.imise.tool3lgm.graphtools.model.GraphDocumentHandler.getModelIt
 import static de.imise.tool3lgm.graphtools.model.LGMChangeListener.LGMChangeType.ACTIVE_LAYER_CHANGED;
 import static de.imise.tool3lgm.graphtools.model.LGMChangeListener.LGMChangeType.DATA_CHANGED;
 import static de.imise.tool3lgm.graphtools.model.LGMChangeListener.LGMChangeType.MODEL_OR_SZENARIO_NAME_CHANGED;
+import static de.imise.tool3lgm.graphtools.model.LGMChangeListener.LGMChangeType.SELECTED_SZENARIO_CHANGED;
 import static de.imise.tool3lgm.graphtools.model.LGMChangeListener.LGMChangeType.SELECTION_CHANGED;
 import static de.imise.tool3lgm.graphtools.model.LGMChangeListener.LGMChangeType.SZENARIO_ADDED;
 import static de.imise.tool3lgm.graphtools.model.LGMChangeListener.LGMChangeType.SZENARIO_REMOVED;
@@ -670,7 +671,7 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
     public void setSelectedDoc(final GraphDocument doc) {
         activeGraphDocumentsList.remove(doc);
         activeGraphDocumentsList.add((LGMGraphDocument) doc);
-        distribute(LGMChangeType.SELECTED_SZENARIO_CHANGED, null, doc, STANDARD_PID);
+        distribute(SELECTED_SZENARIO_CHANGED, null, doc, STANDARD_PID);
     }
 
     /**

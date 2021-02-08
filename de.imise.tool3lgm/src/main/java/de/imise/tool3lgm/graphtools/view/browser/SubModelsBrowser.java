@@ -15,6 +15,7 @@ import javax.swing.event.PopupMenuListener;
 import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
+import de.imise.tool3lgm.graphtools.model.LGMChangeListenerSimple;
 import de.imise.tool3lgm.graphtools.model.LGMGraphDocument;
 import de.imise.tool3lgm.graphtools.view.tree.ModelBrowserTree;
 import de.imise.tool3lgm.gui.viewpane.ViewPaneFrameComponentListener;
@@ -26,7 +27,7 @@ import de.imise.util.swing.component.AlphabeticalComboBox;
  *
  * @author AXS
  */
-public final class SubModelsBrowser extends JPanel implements FocusListener, ItemListener, PopupMenuListener {
+public final class SubModelsBrowser extends JPanel implements FocusListener, ItemListener, PopupMenuListener, LGMChangeListenerSimple {
 
     /**
      * Das Modell das über dieses Tab-Pane dargestellt wird
@@ -50,6 +51,7 @@ public final class SubModelsBrowser extends JPanel implements FocusListener, Ite
     public SubModelsBrowser(final GDCollection gdcoll) {
         super(new BorderLayout());
         this.gdcoll = gdcoll;
+        gdcoll.addClosedTransactionsListener(this);
         //Submodel ComboBox
         submodelBox = addFocusListener(new AlphabeticalComboBox<>());
         submodelBox.addItemListener(this);
@@ -134,19 +136,21 @@ public final class SubModelsBrowser extends JPanel implements FocusListener, Ite
     }
 
     /**
-     *
-     */
-    public void update() {
-        submodelBox.removeItemListener(this);
-        submodelBox.resort();
-        submodelBox.addItemListener(this);
-    }
-
-    /**
      * @return Namen des Modells, das dieser Browser darstellt
      */
     public final String getTitle() {
         return gdcoll.getName();
+    }
+
+    @Override
+    public void modelOrSzenarioNameChanged(final GraphDocument source) {
+        if (source != null) { //can be null -> prevent to add null
+            submodelBox.removeItemListener(this);
+            submodelBox.removeObject(source);
+            submodelBox.addObject(source);
+            submodelBox.setSelectedObject(source);
+            submodelBox.addItemListener(this);
+        }
     }
 
     /**
