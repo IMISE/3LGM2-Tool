@@ -87,6 +87,7 @@ import de.imise.tool3lgm.Tool3lgmModelType.ModelCategory;
 import de.imise.tool3lgm.event.action.UserPropertyBooleanChangeAction;
 import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
 import de.imise.tool3lgm.graphtools.IDSource;
+import de.imise.tool3lgm.graphtools.dialog.ElementAlignmentDialog;
 import de.imise.tool3lgm.graphtools.dialog.element.panel.ElementDialogPanel;
 import de.imise.tool3lgm.graphtools.dialog.tools.EasyDialogAccess;
 import de.imise.tool3lgm.graphtools.metamodel.CoreMetaModel;
@@ -1158,6 +1159,11 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
         case MODEL_ACTION_SET_ELEMENT_ALIGNMENT_SIZE_HEIGTH:
         case MODEL_ACTION_SET_ELEMENT_ALIGNMENT_SIZE_WIDTH_AND_HEIGTH: {
             align(command, pid);
+            break;
+        }
+        case MODEL_ACTION_SET_ELEMENTS_ALIGNMENT_GRID: {
+            ElementAlignmentDialog dialog = new ElementAlignmentDialog();
+            dialog.setVisible(true);
             break;
         }
         case MODEL_ACTION_SET_ELEMENT_TEXT_POSITION_HORIZONTAL_LEFT: {
