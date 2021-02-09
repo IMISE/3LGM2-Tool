@@ -4,7 +4,6 @@
  */
 package de.imise.tool3lgm.metamodel.original.process;
 
-import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
 import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction.FORWARD;
 import static de.imise.tool3lgm.graphtools.view.tree.node.ElementContainerTreeNode.createIndexedDialogTreeNode;
 
@@ -18,6 +17,7 @@ import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
+import javax.swing.JComponent;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTree;
@@ -29,6 +29,7 @@ import javax.swing.tree.TreeModel;
 import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
 
+import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.graphtools.dialog.action.ActionNotDefinedForClassException;
 import de.imise.tool3lgm.graphtools.dialog.action.LGMAction;
 import de.imise.tool3lgm.graphtools.dialog.action.LGMActionLibrary;
@@ -60,6 +61,7 @@ import de.imise.tool3lgm.graphtools.view.tree.node.LGMTreeNode;
 import de.imise.tool3lgm.graphtools.view.tree.node.StringTreeNode;
 import de.imise.tool3lgm.metamodel.original.edge.PrzAufVerbindung;
 import de.imise.tool3lgm.metamodel.original.node.Aufgabe;
+import de.imise.util.swing.dialog.GridBagConstrainsInputPanel;
 
 /**
  * 24.10.2018: Dieses Panel funktioniert im Moment überhaupt nicht mehr richtig.
@@ -126,7 +128,7 @@ public class ProzessStructurePanel extends PathConnectionPanel implements TreeWi
     /**
      * COMMENTME
      */
-    private String errorTitle = "";
+    private final String errorTitle = "";
 
     /**
      * COMMENTME
@@ -172,7 +174,7 @@ public class ProzessStructurePanel extends PathConnectionPanel implements TreeWi
         successorConditionMetaPath = getConditionElementaryMetaPath(doubleMeaningEdgeClass, ConnectionState.BACKWARD);
 
         // Panel für die Buttons zur Aenderung der Aufgabenreihenfolge anlegen
-        JPanel upDownControl = new JPanel(new GridLayout(1, 2));
+        JPanel upDownButtonsPanel = new JPanel(new GridLayout(1, 2));
 
         /*
          * Start: Buttons & Actions erstellen, Actions setzen ...
@@ -189,24 +191,16 @@ public class ProzessStructurePanel extends PathConnectionPanel implements TreeWi
          * ... end: Buttons & Actions erstellen, Actions setzen
          */
 
-        upDownControl.add(upButton);
-        upDownControl.add(downButton);
+        upDownButtonsPanel.add(upButton);
+        upDownButtonsPanel.add(downButton);
 
         // Panel für die Buttons zur Aenderung der Aufgabenreihenfolge
         // hinzufügen
         GridBagConstraints constraints = new GridBagConstraints();
         constraints.anchor = GridBagConstraints.CENTER;
-        constraints.fill = GridBagConstraints.NONE;
-        constraints.weightx = 0;
-        constraints.weighty = 0;
-        //Windows-spezifisch
-        //        constraints.ipadx = -60;
-        // constraints.ipady = - 10;
-        addUnderLeftTree(upDownControl, constraints);
+        add(upDownButtonsPanel, constraints, 1, 5, 1, 1, false);
 
-        /*
-         * Start: Aktionen für Verifikation und für FehlerButton setzen ...
-         */
+        // Start: Aktionen für Verifikation und für FehlerButton setzen ...
         try {
             verificationCheck = new JCheckBox();
             verificationCheck.setSelected(verify);
@@ -222,26 +216,43 @@ public class ProzessStructurePanel extends PathConnectionPanel implements TreeWi
         } catch (ActionNotDefinedForClassException andfce) {
             andfce.printStackTrace();
         }
-        /*
-         * End: Aktionen für Verifikation und für FehlerButton setzen
-         */
-
+        // End: Aktionen für Verifikation und für FehlerButton setzen
         constraints.anchor = GridBagConstraints.WEST;
         constraints.fill = GridBagConstraints.NONE;
-        // constraints.weightx = 0;
-        // constraints.weighty = 0;
-        constraints.ipadx = 0;
-        constraints.ipady = 0;
         JPanel tmpPanel = new JPanel();
         tmpPanel.add(verificationCheck);
 
         tmpPanel.add(errorBut);
         errorBut.setVisible(verify);
-
-        addSouth(tmpPanel, constraints, 2);
+        //AXS: 08.02.2021: erstmal das Verifizieren wieder weglassen, weil das sowieso nicht richtig funktioniert -> ProzessTickets -> wieder aktivieren!
+        //add(tmpPanel, constraints, 0, 6, 2, 1, false);
 
         update();
 
+    }
+
+    /**
+     * @param component
+     * @param constraints
+     * @param x
+     * @param y
+     * @param w
+     * @param h
+     * @param debugDialog use only <code>true</code> here while development! If
+     *            <code>true</code> there will be a dialog before the add where
+     *            you can change all values of the current
+     *            {@link GridBagConstraints}
+     */
+    private final void add(final JComponent component, final GridBagConstraints constraints, final int x, final int y, final int w, final int h, final boolean debugDialog) {
+        constraints.gridx = x;
+        constraints.gridy = y;
+        constraints.gridwidth = w;
+        constraints.gridheight = h;
+        if (debugDialog) {
+            GridBagConstrainsInputPanel.setConstraintsWithDialog(Static.getMainFrame(), constraints);
+        }
+        add(component, constraints);
+        setSamePreferredLeftRightSize(component);
     }
 
     /**
@@ -579,44 +590,44 @@ public class ProzessStructurePanel extends PathConnectionPanel implements TreeWi
         // ,doc,-1,false,true, false);
         int size = aufgabenContainer.size();
         LGMTreeNode<?> lroot = ltree.getRoot();
+        //AXS: 06.02.2020: Diese beiden Fehler hier sind nach meiner heutigen Auffassung gar keine mehr -> die Resourcenschlüssel habe ich gelöscht, weil man sie hätte verallgemenern müssen (also weg von "Prozess" und "Aufgabe")
+        // errorTitle = getResString("process_error_title");
         // der Prozess ist leer
-        if (size == 0) {
-            errorTitle = getResString("process_error_no_function");
-            errorBuffer.append(getResString("process_error_no_function_1"));
+        //        if (size == 0) {
+        //            errorBuffer.append(getResString("process_error_no_function_1"));
+        //        }
+        //        // der Prozess hat nur eine Aufgabe
+        //        else if (size == 1) {
+        //            errorBuffer.append(getResString("process_error_single_function_1"));
+        //            ((IconifiedTreeNode<?>) lroot.getChildAt(0)).setIconState(IconState.SHOW_ERROR_ICON);
+        //            // der Prozess hat mind. 2 Aufgaben
+        //        } else {
+        // Reseten aller Icons auf normal
+        for (int i = 0; i < aufgabenContainer.size(); i++) {
+            ((IconifiedTreeNode<?>) lroot.getChildAt(i)).setIconState(IconState.SHOW_NORMAL_ICON);
         }
-        // der Prozess hat nur eine Aufgabe
-        else if (size == 1) {
-            errorTitle = getResString("process_error_single_function");
-            errorBuffer.append(getResString("process_error_single_function_1"));
-            ((IconifiedTreeNode<?>) lroot.getChildAt(0)).setIconState(IconState.SHOW_ERROR_ICON);
-            // der Prozess hat mind. 2 Aufgaben
-        } else {
-            // Reseten aller Icons auf normal
-            for (int i = 0; i < aufgabenContainer.size(); i++) {
-                ((IconifiedTreeNode<?>) lroot.getChildAt(i)).setIconState(IconState.SHOW_NORMAL_ICON);
-            }
-            ModelElement prozess = getModelElement();
-            // hole die Aufgaben des Prozesses
-            List<ModelElement> aufgaben = prozess.getConnectedElements(Aufgabe.class);
+        ModelElement prozess = getModelElement();
+        // hole die Aufgaben des Prozesses
+        List<ModelElement> aufgaben = prozess.getConnectedElements(Aufgabe.class);
 
-            // Kommunikationsprozesschritte werden im Moment (seit Version 3.3.0) nicht geprüft
+        // Kommunikationsprozesschritte werden im Moment (seit Version 3.3.0) nicht geprüft
 
-            // die Icons auf fehlerhaft setzen, deren Aufgabe kein
-            // Geschäftsprozessschritt von einer der vorherigen Aufgaben ist
-            //            for (int i = 1; i < size; i++) {
-            //                if (prozess.getProcessStepsForAufgabe(aufgaben, i, true).size() == 0) {
-            //                    if (errorBuffer.length() == 0) {
-            //                        errorTitle = getResString("process_error_no_process_step");
-            //                        errorBuffer.append(getResString("process_error_no_process_step_1"));
-            //                        errorBuffer.append(((NodeContainer) aufgabenContainer.get(i)).getElement());
-            //                        errorBuffer.append(getResString("process_error_no_process_step_2"));
-            //                        errorBuffer.append(i + 1);
-            //                        errorBuffer.append(getResString("process_error_no_process_step_3"));
-            //                    }
-            //                    ((LGMTreeNode) lroot.getChildAt(i)).setIconState(LGMTreeNode.SHOW_ERROR_ICON);
-            //                }
-            //            }
-        }
+        // die Icons auf fehlerhaft setzen, deren Aufgabe kein
+        // Geschäftsprozessschritt von einer der vorherigen Aufgaben ist
+        //            for (int i = 1; i < size; i++) {
+        //                if (prozess.getProcessStepsForAufgabe(aufgaben, i, true).size() == 0) {
+        //                    if (errorBuffer.length() == 0) {
+        //                        errorTitle = getResString("process_error_no_process_step");
+        //                        errorBuffer.append(getResString("process_error_no_process_step_1"));
+        //                        errorBuffer.append(((NodeContainer) aufgabenContainer.get(i)).getElement());
+        //                        errorBuffer.append(getResString("process_error_no_process_step_2"));
+        //                        errorBuffer.append(i + 1);
+        //                        errorBuffer.append(getResString("process_error_no_process_step_3"));
+        //                    }
+        //                    ((LGMTreeNode) lroot.getChildAt(i)).setIconState(LGMTreeNode.SHOW_ERROR_ICON);
+        //                }
+        //            }
+        //        }
         if (errorBuffer.length() > 0) {
             errorMessage = errorBuffer.toString();
             errorBut.setEnabled(true);

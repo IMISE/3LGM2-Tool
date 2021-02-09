@@ -299,10 +299,8 @@ public abstract class CollectionUtils {
                 if (clazz.isAssignableFrom(o.getClass())) {
                     return true;
                 }
-            } else {
-                if (clazz.equals(o.getClass())) {
-                    return true;
-                }
+            } else if (clazz.equals(o.getClass())) {
+                return true;
             }
         }
         return false;
@@ -324,10 +322,8 @@ public abstract class CollectionUtils {
                 if (!clazz.isAssignableFrom(o.getClass())) {
                     return false;
                 }
-            } else {
-                if (!clazz.equals(o.getClass())) {
-                    return false;
-                }
+            } else if (!clazz.equals(o.getClass())) {
+                return false;
             }
         }
         return true;
@@ -916,6 +912,20 @@ public abstract class CollectionUtils {
                 currentIterator.remove();
             }
         };
+    }
+
+    /**
+     * @param <T>
+     * @param collection
+     * @return the first item in the {@link Collection} or <code>null</code> if
+     *         the collection is empty
+     */
+    public static <T> T getFirstItem(final Collection<T> collection) {
+        if (collection.isEmpty()) {
+            return null;
+        }
+        Iterator<T> iterator = collection.iterator();
+        return iterator.next();
     }
 
     /**

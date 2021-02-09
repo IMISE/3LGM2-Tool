@@ -48,7 +48,7 @@ public class SimpleMetaPath extends SerialMetaPath implements SequenceMetaPath {
      * @param metaPaths
      */
     public SimpleMetaPath(final int metaPathStepWithPathName, final ElementaryMetaPath... metaPaths) {
-        super(metaPathStepWithPathName < 0 ? null : metaPaths[metaPathStepWithPathName].toString(), metaPaths);
+        super(metaPathStepWithPathName < 0 ? null : metaPaths[metaPathStepWithPathName].getName(), metaPaths);
         this.metaPathStepWithPathName = metaPathStepWithPathName;
     }
 

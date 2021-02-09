@@ -112,7 +112,6 @@ public abstract class ElementContainer extends JLabel implements Cloneable, Grap
      *
      */
     public ElementContainer() {
-        super();
         listenerList = null;
         setHorizontalAlignment(CENTER);
         setVerticalAlignment(CENTER);
@@ -667,10 +666,10 @@ public abstract class ElementContainer extends JLabel implements Cloneable, Grap
         } else if (alpha > 255) {
             alpha = 255;
         }
-        if (alpha >= 0 && alpha < 256) {
-            layout.bg_color = new Color(layout.bg_color.getRed(), layout.bg_color.getGreen(), layout.bg_color.getBlue(), alpha);
+        layout.bg_color = new Color(layout.bg_color.getRed(), layout.bg_color.getGreen(), layout.bg_color.getBlue(), alpha);
+        if (frameColor != null) {
+            frameColor = new Color(frameColor.getRed(), frameColor.getGreen(), frameColor.getBlue(), alpha);
         }
-        frameColor = new Color(frameColor.getRed(), frameColor.getGreen(), frameColor.getBlue(), alpha);
     }
 
     /**

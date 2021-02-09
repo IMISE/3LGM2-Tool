@@ -1,5 +1,7 @@
 package de.imise.tool3lgm.graphtools.path.metapaths;
 
+import static de.imise.util.collections.CollectionUtils.getFirstItem;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
@@ -686,15 +688,13 @@ public class SimpleMetaPathCreator extends MetaModelSpecificAdapter {
                     }
                 }
             }
-        } else {
-            if (endClass != null) {
-                Class<? extends ModelElement> commonSuperEndAndEdgeClass = ReflectionUtils.getMostSpecialClass(endClass, edgeClass);
-                if (commonSuperEndAndEdgeClass != null) { // END_WITH_EDGE
-                    if (startClass == null || CoreMetaModel.isStartClassOrStartClassSuperclass(edgeClass, startClass)) {
-                        return emph.getStartElementToEdgeMetaPath(startClass, edgeClass);//FORWARD to edge
-                    } else if (CoreMetaModel.isEndClassOrEndClassSuperclass(edgeClass, startClass)) {
-                        return emph.getEndElementToEdgeMetaPath(startClass, edgeClass);//BACKWARD to edge
-                    }
+        } else if (endClass != null) {
+            Class<? extends ModelElement> commonSuperEndAndEdgeClass = ReflectionUtils.getMostSpecialClass(endClass, edgeClass);
+            if (commonSuperEndAndEdgeClass != null) { // END_WITH_EDGE
+                if (startClass == null || CoreMetaModel.isStartClassOrStartClassSuperclass(edgeClass, startClass)) {
+                    return emph.getStartElementToEdgeMetaPath(startClass, edgeClass);//FORWARD to edge
+                } else if (CoreMetaModel.isEndClassOrEndClassSuperclass(edgeClass, startClass)) {
+                    return emph.getEndElementToEdgeMetaPath(startClass, edgeClass);//BACKWARD to edge
                 }
             }
         }
@@ -713,10 +713,8 @@ public class SimpleMetaPathCreator extends MetaModelSpecificAdapter {
             if (isForward(metaModel, startClass, edgeClass, endClass)) {
                 return Direction.FORWARD;
             }
-        } else {
-            if (isBackward(metaModel, startClass, edgeClass, endClass)) {
-                return Direction.BACKWARD;
-            }
+        } else if (isBackward(metaModel, startClass, edgeClass, endClass)) {
+            return Direction.BACKWARD;
         }
         return null;
     }
@@ -809,13 +807,21 @@ public class SimpleMetaPathCreator extends MetaModelSpecificAdapter {
             Collection<Class<? extends ModelElement>> instanciableAssignableStartClasses = metaModel.getInstanciableAssignableClasses(pathStepConnectingStartClass, true);
             Collection<Class<? extends ModelElement>> instanciableAssignableEndClasses = metaModel.getInstanciableAssignableClasses(pathStepConnectingEndClass, true);
 
-            int startClassesCount = instanciableAssignableStartClasses.size();
-            int endClassesCount = instanciableAssignableEndClasses.size();
-            if (startClassesCount == 0 || endClassesCount == 0) {
+            if (instanciableAssignableStartClasses.isEmpty() || instanciableAssignableEndClasses.isEmpty()) {
                 simpleMetaPaths.remove(p--);
                 continue;
             }
-            if (startClassesCount > 1 || endClassesCount > 1 || instanciableAssignableStartClasses.iterator().next() != pathStepConnectingStartClass || instanciableAssignableEndClasses.iterator().next() != pathStepConnectingEndClass) {
+            boolean replace = false;
+            if (instanciableAssignableStartClasses.size() > 1) {
+                replace = true;
+            } else if (instanciableAssignableEndClasses.size() > 1) {
+                replace = true;
+            } else if (getFirstItem(instanciableAssignableStartClasses) != pathStepConnectingStartClass) {
+                replace = true;
+            } else if (getFirstItem(instanciableAssignableEndClasses) != pathStepConnectingEndClass) {
+                replace = true;
+            }
+            if (replace) {
                 List<ElementaryMetaPath> elementaryMetaPaths = simpleMetaPath.getElementaryMetaPaths();
                 ElementaryMetaPath originalElementaryMetaPath = elementaryMetaPaths.get(currentPathStepIndex);
                 boolean replaceOriginalMetaPathInResultList = true;
@@ -886,6 +892,9 @@ public class SimpleMetaPathCreator extends MetaModelSpecificAdapter {
                 boolean replaceOriginalMetaPathInResultList = true;
                 //für alle gefundenen nicht-abstrakten Kantenarten zwischen der Start- und Endklasse des Original-MetaPfades
                 for (Class<? extends Edge> edgeType : edgeTypes) {
+                    if (CoreMetaModel.isAbstract(edgeType)) {
+                        continue;
+                    }
                     //wenn die nicht-abstrakte Kantenklasse eine Unterklasse der abstrakten des Original-MetaPfades ist
                     if (edgeClass.isAssignableFrom(edgeType)) {
                         //Erzeuge ein neues Array aus Elementarpfaden, bei dem der aktuelle Pfadschritt immer durch einen Elementarmetapfad mit der nicht-abstrakten Kantenklasse ersetzt wird
