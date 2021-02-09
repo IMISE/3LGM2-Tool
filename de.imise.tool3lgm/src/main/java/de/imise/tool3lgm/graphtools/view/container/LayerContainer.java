@@ -85,8 +85,6 @@ public class LayerContainer extends ElementContainer {
     //Strings, die oben und unten geschrieben werden (z.B. an Aufgaben und Objekttypen Redundanzfaktoren...)
     private KeyObjectStringMap additionalTextAbove, additionalTextDown;
 
-    private boolean showInterLayerConnections = false;
-
     /**
      * Je nach State, werden einige Dinge (Raster + Selektionen) nicht
      * mitgezeichnet
@@ -868,7 +866,18 @@ public class LayerContainer extends ElementContainer {
      * @return the showInterLayerConnections
      */
     public boolean isShowInterLayerConnections() {
-        return showInterLayerConnections;
+        boolean show = false;
+        for (NodeContainer ec : graphNodeContainers) {
+            if (ec instanceof InterLayerConnectedNodeContainer) {
+                InterLayerConnectedNodeContainer interLayerEc = (InterLayerConnectedNodeContainer) ec;
+                if (!interLayerEc.isShowInterLayerConnections()) {
+                    show = false; //if at least one inter layer connection ist not shown -> return false
+                    break;
+                }
+                show = true; //only true if at least one inter layer connection is shown
+            }
+        }
+        return show; //only true if all inter layer connections are shown
     }
 
     /**
@@ -878,7 +887,6 @@ public class LayerContainer extends ElementContainer {
      * @param doc aktives GraphDocument
      */
     public void setShowInterLayerConnections(final boolean showInterLayerConnections) {
-        this.showInterLayerConnections = showInterLayerConnections;
         for (NodeContainer ec : graphNodeContainers) {
             setShowInterLayerConnections(showInterLayerConnections, ec);
         }

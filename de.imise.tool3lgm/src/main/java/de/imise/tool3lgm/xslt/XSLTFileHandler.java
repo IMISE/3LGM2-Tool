@@ -3,11 +3,11 @@ package de.imise.tool3lgm.xslt;
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
 
 import java.io.File;
+import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.imise.tool3lgm.log.Log;
 import de.imise.util.StringUtils;
 import de.imise.util.io.FileNameExtensionFilterAndFileFilter;
 
@@ -56,24 +56,22 @@ public class XSLTFileHandler {
      *         dateiname mit pfad, bezeichnung, beschreibung, autor }
      */
     public static String[] checkContent(final File arg0) {
-        if (!arg0.isFile()) {
-            return null;
-        }
-        if (!XSLT_FILE_FILTER.accept(arg0)) {
-            return null;
-        }
-        try {
-            RandomAccessFile file = new RandomAccessFile(arg0, "r");
-            String[] attr = check(file);
-            file.close();
-            if (attr != null) {
-                attr[0] = arg0.toString();
+        if (arg0.isFile()) {
+            if (XSLT_FILE_FILTER.accept(arg0)) {
+                try {
+                    RandomAccessFile file = new RandomAccessFile(arg0, "r");
+                    String[] attr = check(file);
+                    file.close();
+                    if (attr != null) {
+                        attr[0] = arg0.toString();
+                    }
+                    return attr;
+                } catch (IOException e) {
+                    //ignore -> return null
+                }
             }
-            return attr;
-        } catch (Exception e) {
-            Log.show(Log.ERROR, getResString("FehlerAllgemein"), e);
-            return null;
         }
+        return null;
     }
 
     /**
@@ -151,7 +149,6 @@ public class XSLTFileHandler {
 
             return attr;
         } catch (Exception e) {
-            Log.show(Log.ERROR, getResString("FehlerAllgemein"), e);
             return null;
         }
     }

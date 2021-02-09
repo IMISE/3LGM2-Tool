@@ -26,10 +26,11 @@ public abstract class EtntEtdtKombination extends Node {
         connected = getConnectedElements(Nachrichtentyp.class);
         if (!connected.isEmpty()) {
             name += ((Nachrichtentyp) connected.get(0)).getName();
-        }
-        connected = getConnectedElements(Dokumententyp.class);
-        if (!connected.isEmpty()) {
-            name += ((Dokumententyp) connected.get(0)).getName();
+        } else {
+            connected = getConnectedElements(Dokumententyp.class);
+            if (!connected.isEmpty()) {
+                name += ((Dokumententyp) connected.get(0)).getName();
+            }
         }
         return name;
     }

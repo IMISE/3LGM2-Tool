@@ -82,9 +82,9 @@ public final class ModelBrowser extends ReorderableTabbedPane implements ChangeL
         SubModelsBrowser subModelsBrowser = getCollectionPane(doc.getCollection());
         if (subModelsBrowser != null) {
             subModelsBrowser.removeGraphDocument(doc);
-        }
-        if (subModelsBrowser.getDocCount() == 0) {
-            remove(subModelsBrowser);
+            if (subModelsBrowser.getDocCount() == 0) {
+                remove(subModelsBrowser);
+            }
         }
     }
 
@@ -196,7 +196,6 @@ public final class ModelBrowser extends ReorderableTabbedPane implements ChangeL
         for (int i = 0; i < getTabCount(); i++) {
             SubModelsBrowser subModelsBrowser = (SubModelsBrowser) getComponentAt(i);
             setTitleAt(i, subModelsBrowser.getTitle());
-            subModelsBrowser.update();
         }
     }
 

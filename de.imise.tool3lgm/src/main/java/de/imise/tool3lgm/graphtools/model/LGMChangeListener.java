@@ -4,6 +4,7 @@ import static de.imise.tool3lgm.Tool3lgmChangeListener.Tool3lgmChangeType.MODEL_
 import static de.imise.tool3lgm.Tool3lgmChangeListener.Tool3lgmChangeType.MODEL_CHANGE_SZENARIO_ADDED;
 import static de.imise.tool3lgm.Tool3lgmChangeListener.Tool3lgmChangeType.MODEL_CHANGE_SZENARIO_REMOVED;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -149,21 +150,18 @@ public interface LGMChangeListener {
          *            {@link Tool3lgmChangeListener}
          */
         protected void deliverEvent(final List<LGMChangeListener> listeners, final GraphDocument source, final ElementContainer last_elem, final boolean deliverStatic) {
-            //das hier muss sein, weil es vorkommen kann, dass sich bei deliverEvent(l, source, last_elem); der aktuelle Listener aus der Listener-Liste löscht
-            //eine andere Variante wäre, die Liste vorher zu clonen und auf dem Clone zu iterieren
-            //            Sys.err1(
-            //                    "\n##################################################################################################################################################################################################################################################################\n##################################################################################################################################################################################################################################################################");
-            LGMChangeListener lastListener = null;
-            for (int i = 0; i < listeners.size();) {
-                LGMChangeListener l = listeners.get(i);
-                if (l == lastListener) {
-                    i++;
-                    continue;
-                }
-                lastListener = l;
-                //Sys.err(name() + " " + l.getClass() + "\n" + l);
+            //das hier muss sein, weil es vorkommen kann, dass sich bei
+            //deliverEvent(l, source, last_elem); der aktuelle Listener
+            //aus der Listener-Liste löscht und dann wieder hinzufügt
+            Collection<LGMChangeListener> listenersClone = new ArrayList<>(listeners);
+            for (LGMChangeListener l : listenersClone) {
                 deliverEvent(l, source, last_elem);
             }
+            //            for (LGMChangeListener l : listeners) {
+            //                Sys.err1(l);
+            //            }
+            //            System.err.println();
+
             //Das hier stellt die Verbindung zwischen dem globalen Listener des Tools und dem für ein
             //GraphDocument bzw. einer GDCollection her.
             //Die folgenden Ereignisse werden von beiden Listenern weiter geleitet.

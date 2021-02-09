@@ -30,7 +30,14 @@ public class SearchFunctions {
         if (!caseSensitive) {
             value = toNonNullLowserCaseString(value);
         }
-        value = value.replaceAll("\\*", ".*").replaceAll("\\?", ".");
+        // replaces special character \
+        value = value.replace("\\", "\\\\");
+        // replaces special characters *, ?, (, )
+        value = value.replaceAll("\\*", ".*").replaceAll("\\?", ".").replaceAll("\\(", "\\\\(").replaceAll("\\)", "\\\\)");
+        // replaces special characters {, }, [, ]
+        value = value.replaceAll("\\{", "\\\\{").replaceAll("\\}", "\\\\}").replaceAll("\\[", "\\\\[").replaceAll("\\]", "\\\\]");
+        // replaces special character +
+        value = value.replaceAll("\\+", "\\\\+");
 
         Pattern pattern = null;
         if (!value.equals("")) {

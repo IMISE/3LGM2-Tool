@@ -76,15 +76,11 @@ public abstract class Tool3lgmConstants {
     /** filename with path for internal clipboard */
     public static final String CLIPBOARD_PATH = System.getProperty("user.home") + File.separator + ".3lgm_clipboard";
 
-    /** Pfad zum Installationsverzeichnis der Anwendung */
+    /** Path to the installation directory of the application as file */
     public static final File APPLICATION_DIR = ApplicationManager.getApplicationDir("lib");
 
-    public static final String RELATIVE_TOOL_JAR_PATH = "lib/tool3lgm.jar";
-
-    /**
-     * Pfad zur Baukasten-Datei mit der Hauptklasse, wenn er ausgeliefert wird
-     */
-    public static final String ABSOLUTE_TOOL_JAR_PATH = APPLICATION_DIR.toURI().getPath() + RELATIVE_TOOL_JAR_PATH;
+    /** Path to the installation directory of the application as string */
+    public static final String APPLICATION_DIR_PATH = APPLICATION_DIR.toURI().getPath();
 
     /** Pfad ins Home-Verzeichnis des Benutzers */
     public static final String USER_HOME_DIR_NAME = System.getProperty("user.home");
@@ -167,17 +163,6 @@ public abstract class Tool3lgmConstants {
      * geladen werden.
      */
     private static final String RESOURCE_ICON_DIR_NAME = "icon/";
-
-    /**
-     * Name des Verzeichnisses in dem die lokalisierten Ressourcen ZUR
-     * ENTWICKLUNGSZEIT liegen bedinnend mit dem Hauptpackage
-     */
-    public static final String DEV_RESOURCE_DIR_NAME = "/src/main/resources/";
-    /**
-     * Name des Verzeichnisses in dem die lokalisierten Ressourcen IN DEM
-     * JAR-FILE liegen bedinnend mit dem Hauptpackage
-     */
-    public static final String JAR_RESOURCE_DIR_NAME = "";
 
     /**
      * Name des Verzeichnisses, in dem die lokalisierten XSLT-Scripte in den

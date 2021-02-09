@@ -184,6 +184,9 @@ public class TransactionManager {
      *            hinzugefügt, sonst als Redo-Kommando
      */
     private final void addUndoOrRedoCommand(final int pid, String command, final boolean undo) {
+        //        if (!command.isEmpty()) {
+        //            Sys.errn(16, (undo ? "UNDO " : "REDO ") + command);
+        //        }
         command = getValidCommand(command);
         if (command == null) {
             return;
@@ -427,7 +430,7 @@ public class TransactionManager {
             return false;
         }
 
-        int j = cur_pos;
+        int j;
         j = getTransactionIndexForPID(pid, true);
         if (j < 0) {
             return false;

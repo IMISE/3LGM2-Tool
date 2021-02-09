@@ -6,7 +6,7 @@ import de.imise.tool3lgm.metamodel.service.edge.PartableApplicationComponent_Com
 /**
  * @author AXS (03.03.2020)
  */
-public class PartableApplicationComponent extends ApplicationComponent {
+public abstract class PartableApplicationComponent extends ApplicationComponent {
 
     @Override
     public ElementPropertyDialog createPropertyDialog() {

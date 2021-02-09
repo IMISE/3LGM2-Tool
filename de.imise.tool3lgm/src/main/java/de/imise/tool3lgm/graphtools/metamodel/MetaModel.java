@@ -435,7 +435,8 @@ public final class MetaModel extends CoreMetaModel {
         elementClassNameToElementClass = CollectionUtils.ensureImmutable(getElementClassNameToElementClass());
 
         //jetzt die GraphViewDefinition, weil die gleich gebraucht wird
-        graphViewDefinition = getInstance(metaModelDefinition.getGraphViewDefinitionClass());
+        Class<? extends GraphViewDefinition> graphViewDefinitionClass = metaModelDefinition.getGraphViewDefinitionClass();
+        graphViewDefinition = getInstance(graphViewDefinitionClass);
         //spezielle Knoteneigenschaften
         pureTemplateElementClasses = CollectionUtils.ensureImmutable(metaModelDefinition.getPureTemplateSourceNodes());
         onlyExpertModeVisibleNodes = CollectionUtils.ensureImmutableCombined(metaModelDefinition.getOnlyExpertModeVisibleNodes());
@@ -1675,7 +1676,7 @@ public final class MetaModel extends CoreMetaModel {
      * @return
      */
     public final boolean hasInterLayerStartClass(final ModelElement me) {
-        return getGraphViewDefinition().getInterLayerMetaPath(me) != null;
+        return graphViewDefinition.getInterLayerMetaPath(me) != null;
     }
 
     /////////////////////////////////
@@ -1842,10 +1843,8 @@ public final class MetaModel extends CoreMetaModel {
                     if (isStartClass(edgeClass, elementClass)) {
                         subEdgeTypes.add(edgeClass);
                     }
-                } else {
-                    if (isEndClass(edgeClass, elementClass)) {
-                        subEdgeTypes.add(edgeClass);
-                    }
+                } else if (isEndClass(edgeClass, elementClass)) {
+                    subEdgeTypes.add(edgeClass);
                 }
             }
         }
@@ -2177,6 +2176,7 @@ public final class MetaModel extends CoreMetaModel {
                 Constructor<? extends T> emptyConstructor = metaModelDependentClass.getDeclaredConstructor();
                 instance = emptyConstructor.newInstance();
             } catch (Exception e2) {
+                e2.printStackTrace();
             }
         }
         return instance;

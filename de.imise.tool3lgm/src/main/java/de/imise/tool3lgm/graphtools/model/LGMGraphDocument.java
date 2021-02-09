@@ -224,7 +224,7 @@ public class LGMGraphDocument extends GraphDocument {
             addRedo(pid, MODEL_ACTION_PASTE);
             addUndo(pid, MODEL_ACTION_DELETE_FROM_MODEL);
             deselectAll(true);
-            getCollection().loadClipboard(file);
+            gdcoll.loadClipboard(file);
         } catch (Exception e) {
             Log.show(Log.ERROR, getResString("FehlerAllgemein"), e);
             Object[] buttons = new Object[] {
@@ -248,7 +248,7 @@ public class LGMGraphDocument extends GraphDocument {
         addUndo(pid, MODEL_ACTION_DELETE_FROM_MODEL);
         deselectAll(true);
         try {
-            getCollection().loadFile(istream);
+            gdcoll.loadFile(istream);
         } catch (Exception e) {
             undo(pid);
             Log.show(Log.ERROR, getResString("FehlerAllgemein"), e);

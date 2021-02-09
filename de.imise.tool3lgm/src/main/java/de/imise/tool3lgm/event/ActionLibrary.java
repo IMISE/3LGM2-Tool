@@ -10,6 +10,7 @@ import static de.imise.tool3lgm.event.action.StaticAction.PPP;
 import static de.imise.tool3lgm.userproperties.UserProperties.IntProperty.PROPERTY_INT_RENDER_SETTINGS;
 import static de.imise.tool3lgm.userproperties.UserProperties.IntProperty.PROPERTY_INT_RMI_PORT;
 
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.io.File;
@@ -256,6 +257,7 @@ public class ActionLibrary {
                                 gdcoll = ModelConverter.convert(modelConverterDefinition, gdcoll);
                             }
                             Static.getTool().openModel(gdcoll);
+                            Static.closeProgressDialog();
                         }
                     }
                 };
@@ -431,7 +433,9 @@ public class ActionLibrary {
         public static final Action ACTION_ANALYSIS_CHOOSE_GRAPH_ANALYSIS_RESULT_COLOR = new StaticAction(ActionIdentifier.ACTION_ANALYSIS_CHOOSE_GRAPH_ANALYSIS_RESULT_COLOR, PPP) {
             @Override
             public void actionPerformed() {
-                NodeRenderer.analysisColor = JColorChooser.showDialog(getMainFrame(), getText(), NodeRenderer.analysisColor);
+                Color analysisColor = NodeRenderer.getAnalysisColor();
+                analysisColor = JColorChooser.showDialog(getMainFrame(), getText(), analysisColor);
+                NodeRenderer.setAnalysisColor(analysisColor);
             }
         };
 
@@ -503,7 +507,7 @@ public class ActionLibrary {
                             }
                         }
                     }
-                    return visible != lc.isShowInterLayerConnections();
+                    return false;
                 }
             };
         }
@@ -689,7 +693,6 @@ public class ActionLibrary {
                 if (getSelectedDoc() != null) {
                     UserFieldEditorDialog.getDialog(getMainFrame(), getSelectedGDCollection()).setVisible(true);
                 }
-                return;
             }
         };
 

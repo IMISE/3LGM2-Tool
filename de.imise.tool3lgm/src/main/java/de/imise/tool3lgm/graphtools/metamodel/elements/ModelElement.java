@@ -7,6 +7,7 @@ import static de.imise.tool3lgm.graphtools.userfield.UserField.EMPTY_STRING;
 import java.awt.Color;
 import java.awt.Container;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
@@ -49,6 +50,7 @@ import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout;
 import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout.TextAlignmentHTML;
 import de.imise.util.Alphabetical;
 import de.imise.util.IDStringGenerator;
+import de.imise.util.ReflectionUtils;
 import de.imise.util.htmlxml.HTMLConverter;
 
 public abstract class ModelElement extends UserFieldTarget implements MetaModelSpecific, GDCollectionOwner, IDSource {
@@ -379,7 +381,6 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
         nameBuffer.append("      ");
         nameBuffer.append(mySortedSzenarios);
         nameWithSzens = nameBuffer.toString();
-        return;
     }
 
     /**
@@ -515,21 +516,17 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
         ElementsLayoutDefinition defaultElementsLayout = null;
         GraphElementLayout nameExtendsionClassLayout = null;
         Iterable<ElementContainer> targetContainers;
-        if (targetContainer == null) {
-            MetaPath nameExtension = getNameExtensionPath();
-            updateHTMLNameSuffixBuffer(nameExtension);
-            Class<? extends ModelElement> nameExtendsionClass;
-            GraphViewDefinition graphViewDefinition;
-            if (suffixBuf.length() > 0) {
-                nameExtendsionClass = nameExtension.getEndClass();
-                graphViewDefinition = metaModel.getGraphViewDefinition();
-                defaultElementsLayout = graphViewDefinition.getDefaultElementsLayout();
-                nameExtendsionClassLayout = defaultElementsLayout.getStandardElementLayout(nameExtendsionClass);
-            }
-            targetContainers = getElementContainers();
-        } else {
-            targetContainers = ImmutableList.of(targetContainer);
+        MetaPath nameExtension = getNameExtensionPath();
+        updateHTMLNameSuffixBuffer(nameExtension);
+        Class<? extends ModelElement> nameExtendsionClass;
+        GraphViewDefinition graphViewDefinition;
+        if (suffixBuf.length() > 0) {
+            nameExtendsionClass = nameExtension.getEndClass();
+            graphViewDefinition = metaModel.getGraphViewDefinition();
+            defaultElementsLayout = graphViewDefinition.getDefaultElementsLayout();
+            nameExtendsionClassLayout = defaultElementsLayout.getStandardElementLayout(nameExtendsionClass);
         }
+        targetContainers = targetContainer == null ? getElementContainers() : ImmutableList.of(targetContainer);
 
         htmlName = null;
         textBuf.setLength(0);
@@ -1160,10 +1157,8 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
                 if (edge.getEnd() == this && elementClass.isAssignableFrom(edge.getStart().getClass())) {
                     edges.add(edge);
                 }
-            } else {
-                if (edge.getStart() == this && elementClass.isAssignableFrom(edge.getEnd().getClass()) || edge.getEnd() == this && elementClass.isAssignableFrom(edge.getStart().getClass())) {
-                    edges.add(edge);
-                }
+            } else if (edge.getStart() == this && elementClass.isAssignableFrom(edge.getEnd().getClass()) || edge.getEnd() == this && elementClass.isAssignableFrom(edge.getStart().getClass())) {
+                edges.add(edge);
             }
         }
         return edges;
@@ -2072,10 +2067,41 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
      * @return List mit allen verbundenen <code>ModelElement</code>s oder
      *         <code>ElementContainer</code>n
      */
-    private final List<Object> getConnectedInternal(final Class<? extends ModelElement> searchElementClass, final GraphDocument doc, final Class<? extends Edge> edgeClass, final Direction direction, final ConnectionState connectionState,
-            final boolean container, final boolean alphabetical) {
+    private final List<Object> getConnectedInternal(final Class<? extends ModelElement> searchElementClass, final GraphDocument doc, Class<? extends Edge> edgeClass, final Direction direction, final ConnectionState connectionState, final boolean container,
+            final boolean alphabetical) {
         List<Object> connectedElements = new ArrayList<>(getEdgesCount());
 
+        //no edge class given -> get it by element classes and the direction
+        if (edgeClass == null || edgeClass == Edge.class) {
+            Class<? extends ModelElement> meClass = this.getClass();
+            Class<? extends Edge>[] edgeTypes = metaModel.getEdgeTypes(meClass, searchElementClass);
+            if (edgeTypes.length == 1) {
+                edgeClass = edgeTypes[0];
+            } else {
+                List<Class<? extends Edge>> edgeTypesList;
+                if (direction != null) {
+                    edgeTypesList = new ArrayList<>();
+                    for (Class<? extends Edge> allEdgesType : edgeTypes) {
+                        if (direction == FORWARD && MetaModel.isConnectingForward(allEdgesType, meClass, searchElementClass)) {
+                            edgeTypesList.add(edgeClass);
+                        } else if (direction == BACKWARD && MetaModel.isConnectingForward(allEdgesType, searchElementClass, meClass)) {
+                            edgeTypesList.add(edgeClass);
+                        }
+                    }
+                } else {
+                    edgeTypesList = Arrays.asList(edgeTypes);
+                }
+                if (edgeTypesList.isEmpty()) {
+                    return connectedElements; //this is ok! see abstract class EtntEtdtKombination#getName() and maybe for other backward compatibility
+                } else if (edgeTypesList.size() == 1) {
+                    edgeClass = edgeTypesList.get(0);
+                } else {
+                    edgeClass = ReflectionUtils.getCommonSuperClass(edgeTypesList).asSubclass(Edge.class);
+                }
+            }
+        }
+
+        //
         if (doc == null && container) {
             System.err.println("Can't find ElementContainer with an null-GraphDocument");
             return connectedElements;

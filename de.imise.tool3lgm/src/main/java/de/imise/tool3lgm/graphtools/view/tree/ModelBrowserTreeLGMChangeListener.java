@@ -1,10 +1,8 @@
 package de.imise.tool3lgm.graphtools.view.tree;
 
-import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.model.LGMChangeListener;
-import de.imise.tool3lgm.graphtools.model.LGMGraphDocument;
 import de.imise.tool3lgm.graphtools.userfield.UserFieldTarget;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 
@@ -66,17 +64,17 @@ public class ModelBrowserTreeLGMChangeListener implements LGMChangeListener {
     public void activeLayerChanged(final GraphDocument source) {
         if (active) {
             GraphDocument doc = tree.getGraphDocument();
-            int layer = doc.getCollection().getActiveLayer();
-            tree.selectLayerNode(layer);
+            if (doc == source) {
+                int layer = doc.getCollection().getActiveLayer();
+                tree.selectLayerNode(layer);
+            }
         }
     }
 
     @Override
     public void selectedSzenarioChanged(final GraphDocument source) {
         if (active) {
-            //      System.out.println("groupOrderChanged");
-            LGMGraphDocument selectedDoc = Static.getSelectedDoc();
-            tree.setGraphDocument(selectedDoc); //source geht hier nicht, weil das das Ereignis auslösende doc ist nicht (unbedingt) das neue selektierte
+            tree.updateSelectedDoc();
         }
     }
 
@@ -148,7 +146,7 @@ public class ModelBrowserTreeLGMChangeListener implements LGMChangeListener {
 
     @Override
     public String toString() {
-        return getClass().getName() + " " + tree.getGraphDocument();
+        return getClass().getName() + " " + tree.getGraphDocument() + " " + hashCode();
     }
 
 }

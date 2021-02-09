@@ -1,5 +1,6 @@
 package de.imise.tool3lgm.graphtools.view.container;
 
+import static de.imise.tool3lgm.graphtools.metamodel.GraphViewDefinition.InterLayerLineRenderType.LINE_TYPE_SOLID;
 import static de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout.STANDARD_COLORS;
 import static de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty.OPTION_ASSIGN_CONFIGURATION_COLORS;
 
@@ -15,13 +16,14 @@ import com.google.common.collect.ImmutableList;
 
 import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.graphtools.metamodel.GraphViewDefinition;
+import de.imise.tool3lgm.graphtools.metamodel.GraphViewDefinition.InterLayerLineRenderType;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
-import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.model.Szenario;
-import de.imise.tool3lgm.graphtools.path.metapaths.SimpleMetaPath;
+import de.imise.tool3lgm.graphtools.path.metapaths.MetaPath;
 import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout;
 import de.imise.tool3lgm.graphtools.view.graph.GraphViewParameter;
+import de.imise.tool3lgm.graphtools.view.graph.NodeRenderer;
 
 public class ConfigurationRenderer {
 
@@ -40,10 +42,9 @@ public class ConfigurationRenderer {
      * @param g the target graphics objetct where the rendering is done
      * @param configurationStart the container whose configurations should be
      *            rendered
-     * @param doc the submodel in which the configurations should be shown
      */
-    public static final void render(final Graphics g, final InterLayerConnectedNodeContainer configurationStart, final GraphDocument doc) {
-        Szenario szen = (Szenario) doc; //wenn das kein Szenario ist, dann sollte dieser Renderer auch nicht aufgerufen werden
+    public static final void render(final Graphics g, final InterLayerConnectedNodeContainer configurationStart) {
+        Szenario szen = (Szenario) configurationStart.getGraphDocument(); //wenn das kein Szenario ist, dann sollte dieser Renderer auch nicht aufgerufen werden
         boolean configurationStartIsAnalysisResult = szen.isAnalysisResult(configurationStart);
         if (!configurationStart.isShowInterLayerConnections()) {
             if (!configurationStartIsAnalysisResult) {
@@ -82,13 +83,14 @@ public class ConfigurationRenderer {
             }
             if (graphViewParameter.multiView) {
                 Graphics2D gc = (Graphics2D) g;
-                Stroke s = gc.getStroke();
+                Stroke oldStroke = gc.getStroke();
+                InterLayerLineRenderType interLayerLineRenderType = LINE_TYPE_SOLID;
                 if (configurationEndContainer == null) {
                     configurationEndContainer = new ArrayList<>();
                     ModelElement me = configurationStart.getElement();
-                    MetaModel metaModel = me.getMetaModel();
+                    MetaModel metaModel = szen.getMetaModel();
                     GraphViewDefinition graphViewDefinition = metaModel.getGraphViewDefinition();
-                    SimpleMetaPath interLayerMetaPath = graphViewDefinition.getInterLayerMetaPath(me);
+                    MetaPath interLayerMetaPath = graphViewDefinition.getInterLayerMetaPath(me);
                     Collection<ModelElement> interLayerConnectedElements = interLayerMetaPath.getConnectedElements(me);
                     for (ModelElement connected : interLayerConnectedElements) {
                         ElementContainer connectedEc = connected.getContainer(szen);
@@ -102,6 +104,7 @@ public class ConfigurationRenderer {
                     LayerContainer layer = szen.getLayer(layerOfEndElement);
                     x_shift = (int) layer.x_shift * shiftCount;
                     y_shift = (int) layer.y_shift * shiftCount;
+                    interLayerLineRenderType = graphViewDefinition.getInterLayerLineRenderType(interLayerMetaPath);
                 }
                 for (ElementContainer connectedEc : configurationEndContainer) {
                     List<ElementContainer> c2C = null;
@@ -117,16 +120,20 @@ public class ConfigurationRenderer {
                             continue;
                         }
                         if (configurationStartIsAnalysisResult && szen.isAnalysisResult(connectedEc)) {
-                            g.setColor(Color.black);
-                            gc.setStroke(GraphElementLayout.MEDUIM_STROKE);
+                            Color analysisColor = NodeRenderer.getAnalysisColor();
+                            g.setColor(analysisColor);
+                            Stroke configurationStroke = interLayerLineRenderType.getAnalysisResultStroke();
+                            gc.setStroke(configurationStroke);
                             g.drawLine(kc1.getX(), kc1.getY(), kc2.getX() - x_shift, kc2.getY() - y_shift);
-                            gc.setStroke(s);
                             g.setColor(elem_col);
                         } else {
+                            Stroke configurationStroke = interLayerLineRenderType.getStroke();
+                            gc.setStroke(configurationStroke);
                             g.drawLine(kc1.getX(), kc1.getY(), kc2.getX() - x_shift, kc2.getY() - y_shift);
                         }
                     }
                 }
+                gc.setStroke(oldStroke);
             }
         }
     }

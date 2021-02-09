@@ -247,4 +247,8 @@ public class LGMTreeNode<T> extends DefaultMutableTreeNode {
         this.consistencyError = consistencyError;
     }
 
+    @Override
+    public LGMTreeNode<?> getChildAt(final int index) {
+        return (LGMTreeNode<?>) super.getChildAt(index);
+    }
 }

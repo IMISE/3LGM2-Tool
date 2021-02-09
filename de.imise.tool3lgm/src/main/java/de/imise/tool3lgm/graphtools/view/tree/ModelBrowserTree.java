@@ -46,6 +46,7 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.Textfield;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.model.LGMChangeListener;
+import de.imise.tool3lgm.graphtools.model.LGMGraphDocument;
 import de.imise.tool3lgm.graphtools.userfield.UserField;
 import de.imise.tool3lgm.graphtools.userfield.UserFieldDefinitions;
 import de.imise.tool3lgm.graphtools.userfield.event.UserFieldListener;
@@ -226,13 +227,23 @@ public final class ModelBrowserTree extends DynamicTree implements UserFieldList
     }
 
     /**
+     *
+     */
+    void updateSelectedDoc() {
+        LGMGraphDocument gdcollSelectedDoc = getSelectedDoc();
+        if (doc != gdcollSelectedDoc) {
+            setGraphDocument(gdcollSelectedDoc);
+        }
+    }
+
+    /**
      * Setzt das übergebene {@link GraphDocument} für diesen Baum und fügt den
      * Baum als {@link LGMChangeListener} hinzu. Beim vorherigen
      * {@link GraphDocument} des Baumes wird der Baum als Listener entfernt.
      *
      * @param doc
      */
-    void setGraphDocument(final GraphDocument doc) {
+    private void setGraphDocument(final GraphDocument doc) {
         if (this.doc != null) {
             transactionListener.remove();
             this.doc = doc;

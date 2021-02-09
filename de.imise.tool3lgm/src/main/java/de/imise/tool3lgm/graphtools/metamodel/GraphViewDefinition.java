@@ -1,6 +1,10 @@
 package de.imise.tool3lgm.graphtools.metamodel;
 
+import static de.imise.tool3lgm.graphtools.metamodel.GraphViewDefinition.InterLayerLineRenderType.LINE_TYPE_SOLID;
+
+import java.awt.BasicStroke;
 import java.awt.Color;
+import java.awt.Stroke;
 import java.lang.reflect.Modifier;
 import java.util.HashMap;
 import java.util.List;
@@ -14,15 +18,90 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.Bendpoint;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Textfield;
+import de.imise.tool3lgm.graphtools.path.metapaths.MetaPath;
 import de.imise.tool3lgm.graphtools.path.metapaths.SimpleMetaPath;
 import de.imise.tool3lgm.graphtools.view.graph.ElementsLayoutDefinition;
 import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout;
+import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout.SHAPE;
 import de.imise.util.pair.Pair;
 
 /**
  * @author AXS
  */
 public abstract class GraphViewDefinition {
+
+    /**
+     * @author AXS (13.01.2021)
+     */
+    public static final class AdditionalGraphShapeData {
+
+        /**
+         *
+         */
+        public final MetaPath metaPath;
+
+        /**
+         *
+         */
+        public final GraphElementLayout.SHAPE shape;
+
+        /**
+         * @param metaPath
+         * @param shape
+         */
+        public AdditionalGraphShapeData(final MetaPath metaPath, final SHAPE shape) {
+            this.metaPath = metaPath;
+            this.shape = shape;
+        }
+    }
+
+    /**
+     * The way configurations (interplane relationships in the graph) should be
+     * rendered. That is, how the line should be drawn.
+     *
+     * @author AXS (27.01.2021)
+     */
+    public enum InterLayerLineRenderType {
+        LINE_TYPE_SOLID {
+            @Override
+            public Stroke getStroke() {
+                return GraphElementLayout.NORMAL_STROKE;
+            }
+        },
+        LINE_TYPE_DASHED {
+            @Override
+            public Stroke getStroke() {
+                return GraphElementLayout.NORMAL_STROKE_DASHED;
+            }
+        },
+        LINE_TYPE_DOTTED {
+            @Override
+            public Stroke getStroke() {
+                return GraphElementLayout.NORMAL_STROKE_DOTTED;
+            }
+        };
+
+        /**
+         * @return the stroke this type should be rendered
+         */
+        public abstract Stroke getStroke();
+
+        /**
+         * @return the stroke this type should be rendered if the configuration
+         *         is an analysis result
+         */
+        public Stroke getAnalysisResultStroke() {
+            Stroke stroke = getStroke();
+            if (!(stroke instanceof BasicStroke)) {
+                return stroke;
+            }
+            BasicStroke s = (BasicStroke) getStroke();
+            //ANalysis resualt has the same line style but 4 px more line width
+            s = new BasicStroke(s.getLineWidth() + 4, s.getEndCap(), s.getLineJoin(), s.getMiterLimit(), s.getDashArray(), s.getDashPhase());
+            return s;
+        }
+
+    }
 
     /** Zu Grunde liegendes MetaModel */
     protected final MetaModel metaModel;
@@ -49,7 +128,18 @@ public abstract class GraphViewDefinition {
      */
     private final List<Class<? extends ModelElement>> metaModelSpecificPaintableNodes;
 
-    private Map<Class<? extends ModelElement>, SimpleMetaPath> classToConfigurationPaths = null;
+    /**
+     * Maps from a class to the metapath which should be rendered to elements on
+     * the next layer.
+     */
+    private Map<Class<? extends ModelElement>, MetaPath> classToInterLayerMetaPath;
+
+    /**
+     * Maps from a metapath of values from {@link #classToInterLayerMetaPath} to
+     * the RenderType that specifies how such an interlayer relationship should
+     * be drawn.
+     */
+    private Map<MetaPath, InterLayerLineRenderType> interLayerMetaPathToRenderType;
 
     /**
      * @param metaModel
@@ -103,7 +193,20 @@ public abstract class GraphViewDefinition {
      *
      * @return
      */
-    protected abstract SimpleMetaPath[] getConfigurationPaths();
+    protected abstract MetaPath[] getInterLayerMetaPaths();
+
+    /**
+     * Returns an array of {@link InterLayerLineRenderType}. All metapaths on
+     * {@link #getInterLayerMetaPaths()} will be drawn with one of the specified
+     * render types in the order they are defined.
+     *
+     * @return the InterLayerLineRenderTypes
+     */
+    protected InterLayerLineRenderType[] getInterLayerLineRenderTypes() {
+        return new InterLayerLineRenderType[] {
+                LINE_TYPE_SOLID
+        };
+    }
 
     /**
      * Liefert den MetaPfade, der als Interebenenbeziehung dargestellt werden
@@ -112,30 +215,96 @@ public abstract class GraphViewDefinition {
      * @param me
      * @return
      */
-    public final SimpleMetaPath getInterLayerMetaPath(final ModelElement me) {
+    public final MetaPath getInterLayerMetaPath(final ModelElement me) {
         return getInterLayerMetaPath(me.getClass());
     }
 
     /**
-     * Liefert den MetaPfade, der als Interebenenbeziehung dargestellt werden
-     * soll, wenn es einen solchen gibt.
+     * We need this to fill the maps {@link #classToInterLayerMetaPath} and
+     * {@link #interLayerMetaPathToRenderType} with the same metapath objects.
+     * It will be initialized in {@link #getInterLayerMetaPath(Class)} and used
+     * in {@link #getInterLayerLineRenderType(MetaPath)}
+     */
+    private MetaPath[] originalDefinedInterLayerMetaPathObjects;
+
+    /**
+     * Returns the MetaPath for the given element class, which should be
+     * rendered as an interlevel relationship, if there is one.
      *
      * @param elementClass
      * @return
      */
-    public final SimpleMetaPath getInterLayerMetaPath(final Class<? extends ModelElement> elementClass) {
+    public final MetaPath getInterLayerMetaPath(final Class<? extends ModelElement> elementClass) {
         //es muss ein lazy-init sein, weil es sonst zu einer Init-Exception in der Reflection-Methode Edge.getStartClass(...)
-        if (classToConfigurationPaths == null) {
-            classToConfigurationPaths = new HashMap<>();
+        if (classToInterLayerMetaPath == null) {
+            classToInterLayerMetaPath = new HashMap<>();
+            // lazy init here too!
+            if (originalDefinedInterLayerMetaPathObjects == null) {
+                originalDefinedInterLayerMetaPathObjects = getInterLayerMetaPaths();
+            }
             //Map mit den Klassen zu ihren Konfigurationspfaden speichern
-            for (SimpleMetaPath metaPath : getConfigurationPaths()) {
+            for (MetaPath metaPath : originalDefinedInterLayerMetaPathObjects) {
                 Class<? extends ModelElement> startClass = metaPath.getStartClass();
                 for (Class<? extends ModelElement> instanciableElementClass : metaModel.getInstanciableAssignableClasses(startClass)) {
-                    classToConfigurationPaths.put(instanciableElementClass, metaPath);
+                    classToInterLayerMetaPath.put(instanciableElementClass, metaPath);
                 }
             }
         }
-        return classToConfigurationPaths.get(elementClass);
+        return classToInterLayerMetaPath.get(elementClass);
+    }
+
+    /**
+     * Returns the render type for a metapath drawn as an interlayer
+     * relationship.
+     *
+     * @param metaPath
+     * @return
+     */
+    public final InterLayerLineRenderType getInterLayerLineRenderType(final MetaPath metaPath) {
+        //must be lazy-init!
+        if (interLayerMetaPathToRenderType == null) {
+            interLayerMetaPathToRenderType = new HashMap<>();
+            InterLayerLineRenderType[] interLayerLineRenderTypes = getInterLayerLineRenderTypes();
+            // lazy init here too!
+            int j = 0;
+            for (int i = 0; i < originalDefinedInterLayerMetaPathObjects.length; i++) {
+                interLayerMetaPathToRenderType.put(originalDefinedInterLayerMetaPathObjects[i], interLayerLineRenderTypes[j++]);
+                if (j == interLayerLineRenderTypes.length) {
+                    j = 0;
+                }
+            }
+        }
+        return interLayerMetaPathToRenderType.get(metaPath);
+    }
+
+    /**
+     * @return
+     */
+    protected List<AdditionalGraphShapeData> getAdditionalGraphShapeData() {
+        return ImmutableList.of();
+    }
+
+    /**
+     * @param me
+     * @return
+     */
+    public final AdditionalGraphShapeData getAdditionalGraphShapeData(final ModelElement me) {
+        return getAdditionalGraphShapeData(me.getClass());
+    }
+
+    /**
+     * @param elementClass
+     * @return
+     */
+    public final AdditionalGraphShapeData getAdditionalGraphShapeData(final Class<? extends ModelElement> elementClass) {
+        List<AdditionalGraphShapeData> additionalGraphShapeData = getAdditionalGraphShapeData();
+        for (AdditionalGraphShapeData data : additionalGraphShapeData) {
+            MetaPath metaPath = data.metaPath;
+            if (metaPath.isStartClass(elementClass)) {
+                return data;
+            }
+        }
+        return null;
     }
 
     /**
@@ -148,16 +317,25 @@ public abstract class GraphViewDefinition {
         return null;
     }
 
+    /**
+     *
+     */
     private final void initDefaultElementLayoutInternal() {
-        setDefaultLayout(Textfield.class, GraphElementLayout.SHAPE.rechteck, new Color(0, 0, 0, 0));
+        setDefaultLayout(Textfield.class, SHAPE.rechteck, new Color(0, 0, 0, 0));
         defaultElementsLayoutDefinition.setStandardSize(Bendpoint.class, 10, 10);
     }
 
     /** Initialisiert die Defaults für das Layout der Elemente */
     protected abstract void initDefaultElementLayout();
 
+    /**
+     *
+     */
     private ElementsLayoutDefinition defaultElementsLayoutDefinition;
 
+    /**
+     * @return
+     */
     public ElementsLayoutDefinition getDefaultElementsLayout() {
         if (defaultElementsLayoutDefinition == null) {
             defaultElementsLayoutDefinition = new ElementsLayoutDefinition(null);
@@ -167,11 +345,23 @@ public abstract class GraphViewDefinition {
         return defaultElementsLayoutDefinition;
     }
 
-    protected final void setDefaultLayout(final Class<? extends ModelElement> elementClass, final GraphElementLayout.SHAPE defaultShape, final Color defaultBackground) {
+    /**
+     * @param elementClass
+     * @param defaultShape
+     * @param defaultBackground
+     */
+    protected final void setDefaultLayout(final Class<? extends ModelElement> elementClass, final SHAPE defaultShape, final Color defaultBackground) {
         setDefaultLayout(elementClass, defaultShape, defaultBackground, GraphElementLayout.STANDARD_WIDTH, GraphElementLayout.STANDARD_HEIGHT);
     }
 
-    protected final void setDefaultLayout(final Class<? extends ModelElement> elementClass, final GraphElementLayout.SHAPE defaultShape, final Color defaultBackground, final int defaultWidth, final int defaultHeight) {
+    /**
+     * @param elementClass
+     * @param defaultShape
+     * @param defaultBackground
+     * @param defaultWidth
+     * @param defaultHeight
+     */
+    protected final void setDefaultLayout(final Class<? extends ModelElement> elementClass, final SHAPE defaultShape, final Color defaultBackground, final int defaultWidth, final int defaultHeight) {
         defaultElementsLayoutDefinition.setStandardForm(elementClass, defaultShape);
         defaultElementsLayoutDefinition.setStandardBackGroundColor(elementClass, defaultBackground);
         defaultElementsLayoutDefinition.setStandardSize(elementClass, defaultWidth, defaultHeight);
@@ -198,7 +388,7 @@ public abstract class GraphViewDefinition {
         }
 
         @Override
-        protected SimpleMetaPath[] getConfigurationPaths() {
+        protected SimpleMetaPath[] getInterLayerMetaPaths() {
             return new SimpleMetaPath[0];
         }
 

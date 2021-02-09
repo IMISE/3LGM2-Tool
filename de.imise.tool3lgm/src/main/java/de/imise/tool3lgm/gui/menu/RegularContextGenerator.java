@@ -388,10 +388,8 @@ public class RegularContextGenerator extends ElementSelectionContextGenerator im
             addMenuItem(menu, properties);
             menu.addSeparator();
 
-            Class<? extends ModelElement> meClass = me.getClass();
-
             //Anlegbare Pfade zu anderen Elementen anbieten
-            boolean connectMenuAdded = addConnectMenuItems(menu, me);
+            boolean connectMenuAdded = false;//addConnectMenuItems(menu, me);
 
             boolean newInstanciationInstanceMenuItemAdded = addNewInstanciationInstanceMenuItem(menu, me);
 
@@ -518,7 +516,7 @@ public class RegularContextGenerator extends ElementSelectionContextGenerator im
             for (Class<? extends ModelElement> me2Class : doc.getSelectedRealElementClasses()) {
                 List<Object> edgesAndPaths = new ArrayList<>();
                 edgesAndPaths.addAll(Arrays.asList(metaModel.getEdgeTypes(lastSelectedClass, me2Class)));
-                edgesAndPaths.addAll(metaModel.getCreatableMetaPaths(lastSelectedClass, me2Class));
+                //edgesAndPaths.addAll(metaModel.getCreatableMetaPaths(lastSelectedClass, me2Class));
                 for (Object edgeClassOrMetaPath : edgesAndPaths) {
                     if (edgeClassOrMetaPath instanceof Class) {
                         Class<? extends Edge> edgeClass = ((Class<?>) edgeClassOrMetaPath).asSubclass(Edge.class);
@@ -542,17 +540,15 @@ public class RegularContextGenerator extends ElementSelectionContextGenerator im
                             if (CoreMetaModel.isConnecting(edgeClass, lastSelectedClass, me2Class, edgeDirection)) {
                                 if (edgeDirection == Direction.FORWARD) {
                                     addLinkMenuEntry = true;
-                                } else {
-                                    // Doppeldeutige Kanten mit identischer Start- und Endklasse brauchen nur 1x angeboten werden -> Rückrichtung nur, wenn die Klassen verschieden sind
-                                    if (CoreMetaModel.isDoubleMeaningEdge(edgeClass)) {
-                                        if (Edge.getStartClass(edgeClass) != Edge.getEndClass(edgeClass)) {
-                                            addLinkMenuEntry = true;
-                                        }
-                                        //bei alle anderen Kanten die Rückwärtsrichtung nur hinzufügen, wenn sie in beide Richtungen unterschiedliche Bedeutungen hat,
-                                        //also verscheidene Elemente verbindet oder die gleichen verbindet aber beide Richtungen unterschiedlich heißen
-                                    } else if (metaModel.isDirectedEdge(edgeClass)) {
+                                } else // Doppeldeutige Kanten mit identischer Start- und Endklasse brauchen nur 1x angeboten werden -> Rückrichtung nur, wenn die Klassen verschieden sind
+                                if (CoreMetaModel.isDoubleMeaningEdge(edgeClass)) {
+                                    if (Edge.getStartClass(edgeClass) != Edge.getEndClass(edgeClass)) {
                                         addLinkMenuEntry = true;
                                     }
+                                    //bei alle anderen Kanten die Rückwärtsrichtung nur hinzufügen, wenn sie in beide Richtungen unterschiedliche Bedeutungen hat,
+                                    //also verscheidene Elemente verbindet oder die gleichen verbindet aber beide Richtungen unterschiedlich heißen
+                                } else if (metaModel.isDirectedEdge(edgeClass)) {
+                                    addLinkMenuEntry = true;
                                 }
                             }
 
@@ -585,17 +581,15 @@ public class RegularContextGenerator extends ElementSelectionContextGenerator im
                                         }
                                         if (setConnectableTrue) {
                                             connectable = true;
-                                        } else {
-                                            //bei PartOfEdges darf immer nur einer der beiden disconnect-Einträge aktiv sein
-                                            if (CoreMetaModel.isHasPartEdge(edgeClass)) {
-                                                if (edgeDirection == HasPartEdge.PARENT_TO_PART_DIRECTION) {
-                                                    disconnectable = lastSelected.isDirectParentOf(me2);
-                                                } else {
-                                                    disconnectable = lastSelected.isDirectPartOf(me2);
-                                                }
+                                        } else //bei PartOfEdges darf immer nur einer der beiden disconnect-Einträge aktiv sein
+                                        if (CoreMetaModel.isHasPartEdge(edgeClass)) {
+                                            if (edgeDirection == HasPartEdge.PARENT_TO_PART_DIRECTION) {
+                                                disconnectable = lastSelected.isDirectParentOf(me2);
                                             } else {
-                                                disconnectable = true;
+                                                disconnectable = lastSelected.isDirectPartOf(me2);
                                             }
+                                        } else {
+                                            disconnectable = true;
                                         }
                                         if (connectable && disconnectable) {
                                             break;
@@ -744,12 +738,10 @@ public class RegularContextGenerator extends ElementSelectionContextGenerator im
             if (doc instanceof Szenario) {
                 menu.add(delete_selected_from_szenario);
             }
-        } else {
-            if (doc.isSingleSelection()) {
-                menu = getSingleNodeContextMenu(source, doc.getLastSelected());
-            } else if (doc.isMultipleSelection()) {
-                menu = getMultiNodeContextMenu(source);
-            }
+        } else if (doc.isSingleSelection()) {
+            menu = getSingleNodeContextMenu(source, doc.getLastSelected());
+        } else if (doc.isMultipleSelection()) {
+            menu = getMultiNodeContextMenu(source);
         }
         return menu;
     }
@@ -1312,7 +1304,6 @@ public class RegularContextGenerator extends ElementSelectionContextGenerator im
         }
         if (left_button && controlled) {
             left_ctrl_outside();
-            return;
         }
     }
 
@@ -1895,7 +1886,7 @@ public class RegularContextGenerator extends ElementSelectionContextGenerator im
      * @return
      */
     public static Class<? extends Edge> requestCurrentEdgeType(final MetaModel metaModel, final Class<? extends ModelElement> elementClass1, final Class<? extends ModelElement> elementClass2) {
-        Class<? extends Edge> edgeClass = null;
+        Class<? extends Edge> edgeClass;
         Class<? extends Edge>[] edgeClasses = metaModel.getEdgeTypes(elementClass1, elementClass2);
         if (edgeClasses == null || edgeClasses.length == 0) {
             return null;

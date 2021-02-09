@@ -276,6 +276,13 @@ public class ProgressDialog extends JDialog {
     }
 
     /**
+     * @return
+     */
+    public String getStausLabelText() {
+        return statusLabel.getText();
+    }
+
+    /**
      * Wird vom Thread aufgerufen.<br>
      * Der Dialog darf hierbei nicht auf ein ableben des Threads warten.
      */
@@ -338,4 +345,8 @@ public class ProgressDialog extends JDialog {
         }
     }
 
+    @Override
+    public String toString() {
+        return getClass().getSimpleName() + ": Title:" + getTitle() + "   Message: " + getStausLabelText();
+    }
 }

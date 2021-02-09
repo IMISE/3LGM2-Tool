@@ -9,6 +9,7 @@ import static de.imise.tool3lgm.graphtools.userfield.UserField.Style.COMBO_BOX;
 import static de.imise.tool3lgm.graphtools.userfield.UserField.Style.RADIO_BUTTON;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
@@ -56,7 +57,6 @@ public class ModelCleaner {
      * @param gdcoll
      */
     public ModelCleaner(final GDCollection gdcoll) {
-        super();
         this.gdcoll = gdcoll;
         metaModel = gdcoll.getMetaModel();
     }
@@ -221,7 +221,9 @@ public class ModelCleaner {
             }
         }
 
-        // Alle Node- und KantenContainer löschen, bei denen das zugehörige ModelElement null ist
+        // Alle Node- und KantenContainer löschen, bei denen das zugehörige ModelElement null ist und
+        // alle Kantencontainer aus einem Teilmodell entfernen, bei denen das Start- oder Endelement
+        //auch nicht im Teilmodell vorkommt.
         for (Szenario szen : gdcoll.getSzenarios()) {
             for (int i = 0; i < Integer.MAX_VALUE; i++) {
                 LayerContainer lc = szen.getLayer(i);
@@ -234,13 +236,17 @@ public class ModelCleaner {
                         gdcoll.removeContainerFromSubmodel(kc, STANDARD_PID);
                     }
                 }
+                Collection<ElementContainer> edgeContainer2Remove = new ArrayList<>();
                 for (int j = lc.getEdgeContainerCount() - 1; j >= 0; j--) {
                     EdgeContainer kc = lc.getEdgeContainer(j);
                     Edge edge = kc.getEdge();
                     if (edge == null || edge.getStart() == null || edge.getEnd() == null || edge.getStart().getContainer(szen) == null || edge.getEnd().getContainer(szen) == null) {
-                        gdcoll.removeContainerFromSubmodel(kc, STANDARD_PID);
+                        edgeContainer2Remove.add(kc);
                         continue;
                     }
+                }
+                if (!edgeContainer2Remove.isEmpty()) {
+                    gdcoll.simpleRemoveContainerFromSzenario(edgeContainer2Remove, false, STANDARD_PID);
                 }
             }
         }

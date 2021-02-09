@@ -15,19 +15,25 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.Stroke;
+import java.util.List;
 
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 
 import de.imise.tool3lgm.Tool3lgmConstants;
+import de.imise.tool3lgm.graphtools.metamodel.GraphViewDefinition;
+import de.imise.tool3lgm.graphtools.metamodel.GraphViewDefinition.AdditionalGraphShapeData;
+import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Textfield;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
+import de.imise.tool3lgm.graphtools.path.metapaths.MetaPath;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.graphtools.view.container.LayerContainer;
 import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
 import de.imise.tool3lgm.graphtools.view.graph.BasicGraphArea.PaintState;
+import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout.SHAPE;
 import de.imise.util.swing.component.HtmlLabelFunctions;
 import de.imise.util.swing.component.HtmlLabelFunctions.HtmlLabelDimension;
 
@@ -54,7 +60,7 @@ public final class NodeRenderer {
     /**
      * Farbe mit der die Umrandungen von Analysergebnissen dargestellt werden
      */
-    public static Color analysisColor = null;
+    private static Color analysisColor = null;
 
     protected static int[] xs = new int[8];
     protected static int[] ys = new int[8];
@@ -119,7 +125,6 @@ public final class NodeRenderer {
         int y = kc.getY();
         int width = kc.getWidth();
         int width_half = width / 2;
-        int width_third = width / 3;
         int height = kc.getHeight();
         int height_half = height / 2;
         int xm = x - width_half;
@@ -179,8 +184,7 @@ public final class NodeRenderer {
             kc.paintSuperComponent(g);
             g.translate(-xm, -ym);
         } else if (img == null || isResult) {
-            switch (form) {
-            case rechteck:
+            if (form == null) {
                 g.setColor(col);
                 g.fillRect(xm, ym, width, height);
                 g.translate(xm, ym);
@@ -188,130 +192,34 @@ public final class NodeRenderer {
                 g.translate(-xm, -ym);
                 g.setColor(isResult && analysisColor != null ? analysisColor : kc.getFrameColor());
                 g.drawRect(xm, ym, width, height);
-                break;
-
-            case dreieck:
-                xs[0] = xm;
-                xs[1] = x;
-                xs[2] = xp;
-                ys[0] = ym + height;
-                ys[1] = yp - height;
-                ys[2] = ym + height;
-                npoints = 3;
-                g.setColor(col);
-                g.fillPolygon(xs, ys, npoints);
-                g.translate(xm, ym);
-                kc.paintSuperComponent(g);
-                g.translate(-xm, -ym);
-                g.setColor(isResult && analysisColor != null ? analysisColor : kc.getFrameColor());
-                g.drawPolygon(xs, ys, npoints);
-                break;
-            case oval:
-                g.setColor(col);
-                g.fillOval(xm, ym, width, height);
-                g.translate(xm, ym);
-                kc.paintSuperComponent(g);
-                g.translate(-xm, -ym);
-                g.setColor(isResult && analysisColor != null ? analysisColor : kc.getFrameColor());
-                g.drawOval(xm, ym, width, height);
-                break;
-
-            case rundeck:
-                g.setColor(col);
-                g.fillRoundRect(xm, ym, width, height, width / 4, height / 4);
-                g.translate(xm, ym);
-                kc.paintSuperComponent(g);
-                g.translate(-xm, -ym);
-                g.setColor(isResult && analysisColor != null ? analysisColor : kc.getFrameColor());
-                g.drawRoundRect(xm, ym, width, height, width / 4, height / 4);
-                break;
-
-            case rhombus:
-                xs[0] = xm;
-                xs[1] = x;
-                xs[2] = xp;
-                xs[3] = x;
-                ys[0] = y;
-                ys[1] = yp;
-                ys[2] = y;
-                ys[3] = ym;
-                npoints = 4;
-                g.setColor(col);
-                g.fillPolygon(xs, ys, npoints);
-                g.translate(xm, ym);
-                kc.paintSuperComponent(g);
-                g.translate(-xm, -ym);
-                g.setColor(isResult && analysisColor != null ? analysisColor : kc.getFrameColor());
-                g.drawPolygon(xs, ys, npoints);
-                break;
-
-            case wabe:
-                xs[0] = xm;
-                xs[1] = x - width / 3;
-                xs[2] = x + width / 3;
-                xs[3] = xp;
-                xs[4] = x + width / 3;
-                xs[5] = x - width / 3;
-
-                ys[0] = y;
-                ys[1] = yp;
-                ys[2] = yp;
-                ys[3] = y;
-                ys[4] = ym;
-                ys[5] = ym;
-                npoints = 6;
-
-                g.setColor(col);
-                g.fillPolygon(xs, ys, npoints);
-                g.translate(xm, ym);
-                kc.paintSuperComponent(g);
-                g.translate(-xm, -ym);
-                g.setColor(isResult && analysisColor != null ? analysisColor : kc.getFrameColor());
-                g.drawPolygon(xs, ys, npoints);
-                break;
-
-            case tonne:
-                g.setColor(col);
-                g.fillArc(xm, ym, width, height_half + 1, 180, -180);
-                g.fillArc(xm, y, width, height_half, 180, 180);
-                g.fillRect(xm, y - height / 4, width, height_half);
-                g.translate(xm, ym);
-                kc.paintSuperComponent(g);
-                g.translate(-xm, -ym);
-                g.setColor(isResult && analysisColor != null ? analysisColor : kc.getFrameColor());
-                g.drawArc(xm, y, width, height_half, 180, 180);
-                g.drawLine(xm, y - height / 4, xm, y + height / 4);
-                g.drawLine(xp, y - height / 4, xp, y + height / 4);
-                g.drawOval(xm, ym, width, height_half);
-                break;
-
-            case ordner:
-                g.setColor(col);
-                g.fillRect(xm, ym, width_third, height);
-                g.fillRect(xm + width_third, ym, width_third, height);
-                g.fillRect(xm + 2 * width_third, ym, width_third, height);
-                g.translate(xm, ym);
-                kc.paintSuperComponent(g);
-                g.translate(-xm, -ym);
-                g.setColor(isResult && analysisColor != null ? analysisColor : kc.getFrameColor());
-                g.drawRect(xm, ym, width_third, height);
-                g.drawRect(xm + width_third, ym, width_third, height);
-                g.drawRect(xm + 2 * width_third, ym, width_third, height);
-                break;
-
-            default:
-                g.setColor(col);
-                g.fillRect(xm, ym, width, height);
-                g.translate(xm, ym);
-                kc.paintSuperComponent(g);
-                g.translate(-xm, -ym);
-                g.setColor(isResult && analysisColor != null ? analysisColor : kc.getFrameColor());
-                g.drawRect(xm, ym, width, height);
+            } else {
+                form.paint(g, kc, col, analysisColor, isResult, x, y, xm, ym, xp, yp, xs, ys, width, height, npoints);
             }
         } else /* if (img != null) */ {
             g.translate(xm, ym);
             kc.paintSuperComponent(g);
             g.translate(-xm, -ym);
+        }
+
+        //paint additionalShape
+        SHAPE additionalGraphShape = getAdditionalGraphShape(me);
+        if (additionalGraphShape != null) {
+            //In the original GraphLayout nodes have a width of 90 and height of 60 and
+            //subordinated elements like databases have a height and witdh of 15
+            //so if scaling is activated the scale factor should be something like 90:15
+            //or 60:15
+            //int scalingFactor = (int) Math.ceil(Math.min(width, height) / 64);
+            int scalingFactor = 1; //at the moment without scaling
+            int addShapeLength = Math.max(8, 16 * scalingFactor);
+            int addShapeX = x + width / 2 - addShapeLength * 3 / 2;
+            int addShapeY = y + height / 2 - addShapeLength;
+            int addShapeXm = addShapeX;
+            int addShapeYm = addShapeY - addShapeLength / 2;
+            int addShapeXp = addShapeX + addShapeLength;
+            int addShapeYp = addShapeY + addShapeLength / 2;
+
+            additionalGraphShape.paint(g, null, Color.YELLOW, Color.BLACK, isResult, addShapeX, addShapeY, addShapeXm, addShapeYm, addShapeXp, addShapeYp, xs, ys, addShapeLength, addShapeLength, npoints);
+
         }
 
         // Symbol für Verlinkung mit Teilmodell
@@ -435,6 +343,24 @@ public final class NodeRenderer {
                 g.drawString(additionalText[i], xp, yp + fontHeight * ++i);
             }
         }
+    }
+
+    /**
+     * @param nc
+     * @return
+     */
+    private static SHAPE getAdditionalGraphShape(final ModelElement me) {
+        MetaModel metaModel = me.getMetaModel();
+        GraphViewDefinition graphViewDefinition = metaModel.getGraphViewDefinition();
+        AdditionalGraphShapeData additionalGraphShapeData = graphViewDefinition.getAdditionalGraphShapeData(me);
+        if (additionalGraphShapeData != null) {
+            MetaPath metaPath = additionalGraphShapeData.metaPath;
+            List<ModelElement> connectedElements = metaPath.getConnectedElements(me);
+            if (!connectedElements.isEmpty()) {
+                return additionalGraphShapeData.shape;
+            }
+        }
+        return null;
     }
 
     /**
@@ -610,5 +536,19 @@ public final class NodeRenderer {
     //  private D
     //
     //  public ResizeBox
+
+    /**
+     * @param c
+     */
+    public static void setAnalysisColor(final Color c) {
+        analysisColor = c;
+    }
+
+    /**
+     * @return
+     */
+    public static Color getAnalysisColor() {
+        return analysisColor == null ? Color.black : analysisColor;
+    }
 
 }

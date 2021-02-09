@@ -46,15 +46,21 @@
 		</dependency>
 		<!-- https://mvnrepository.com/artifact/org.apache.xmlgraphics/batik-svggen -->
 		<dependency>
-		    <groupId>org.apache.xmlgraphics</groupId>
-		    <artifactId>batik-svggen</artifactId>
-		    <version>1.13</version>
+			<groupId>org.apache.xmlgraphics</groupId>
+			<artifactId>batik-svggen</artifactId>
+			<version>1.13</version>
 		</dependency>
-		<!-- https://mvnrepository.com/artifact/org.apache.xmlgraphics/batik-codec -->		
+		<!-- https://mvnrepository.com/artifact/org.apache.xmlgraphics/batik-codec -->
 		<dependency>
-		    <groupId>org.apache.xmlgraphics</groupId>
-		    <artifactId>batik-codec</artifactId>
-		    <version>1.13</version>
+			<groupId>org.apache.xmlgraphics</groupId>
+			<artifactId>batik-codec</artifactId>
+			<version>1.13</version>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/org.netbeans.api/org-openide-awt -->
+		<dependency>
+			<groupId>org.netbeans.api</groupId>
+			<artifactId>org-openide-awt</artifactId>
+			<version>RELEASE122</version>
 		</dependency>
 
 	</dependencies>

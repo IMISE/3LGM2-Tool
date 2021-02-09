@@ -30,12 +30,20 @@ public class MinMaxNumberTextField2 extends JFormattedTextField implements Caret
     /** Anzahl der zulässigen Nachkommastellen bei der Eingabe */
     private final int decimalPlaces;
 
+    /** The accepted minimum value */
+    private final double min;
+
+    /** The accepted maximum value */
+    private final double max;
+
     /**
      * @param min
      * @param max
      * @param decimalPlaces
      */
     public MinMaxNumberTextField2(final double min, final double max, final int decimalPlaces) {
+        this.min = min;
+        this.max = max;
         StringBuilder sb = new StringBuilder("#");
         if (decimalPlaces > 0) {
             sb.append(".");
@@ -106,6 +114,68 @@ public class MinMaxNumberTextField2 extends JFormattedTextField implements Caret
 
     @Override
     public void focusLost(final FocusEvent e) {
+    }
+
+    @Override
+    public void setValue(final Object value) {
+        super.setValue(value);
+        if (getText().trim().isEmpty()) {
+            String s = String.valueOf(value);
+            Double doubleValue = getDoubleValue(s);
+            if (doubleValue == null || doubleValue < min) {
+                super.setValue(min);
+            } else if (doubleValue > max) {
+                super.setValue(max);
+            }
+        }
+    }
+
+    /**
+     * @return
+     */
+    public int intValue() {
+        Integer integerValue = getIntegerValue();
+        return integerValue == null ? 0 : integerValue;
+    }
+
+    /**
+     * @return
+     */
+    public Integer getIntegerValue() {
+        Double doubleValue = getDoubleValue();
+        if (doubleValue == null) {
+            return null;
+        }
+        return doubleValue.intValue();
+    }
+
+    /**
+     * @return
+     */
+    public double doubleValue() {
+        Double doubleValue = getDoubleValue();
+        return doubleValue == null ? 0d : doubleValue;
+    }
+
+    /**
+     * @return
+     */
+    public Double getDoubleValue() {
+        String text = getText();
+        return getDoubleValue(text);
+    }
+
+    /**
+     * @param s
+     * @return
+     */
+    private Double getDoubleValue(final String s) {
+        try {
+            Double parsedDouble = Double.valueOf(s);
+            return parsedDouble;
+        } catch (Exception e) {
+        }
+        return null;
     }
 
 }

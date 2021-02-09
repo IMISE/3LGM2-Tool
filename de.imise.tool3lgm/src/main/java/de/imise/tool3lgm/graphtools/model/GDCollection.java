@@ -46,6 +46,7 @@ import static de.imise.tool3lgm.graphtools.model.GraphDocumentHandler.getModelIt
 import static de.imise.tool3lgm.graphtools.model.LGMChangeListener.LGMChangeType.ACTIVE_LAYER_CHANGED;
 import static de.imise.tool3lgm.graphtools.model.LGMChangeListener.LGMChangeType.DATA_CHANGED;
 import static de.imise.tool3lgm.graphtools.model.LGMChangeListener.LGMChangeType.MODEL_OR_SZENARIO_NAME_CHANGED;
+import static de.imise.tool3lgm.graphtools.model.LGMChangeListener.LGMChangeType.SELECTED_SZENARIO_CHANGED;
 import static de.imise.tool3lgm.graphtools.model.LGMChangeListener.LGMChangeType.SELECTION_CHANGED;
 import static de.imise.tool3lgm.graphtools.model.LGMChangeListener.LGMChangeType.SZENARIO_ADDED;
 import static de.imise.tool3lgm.graphtools.model.LGMChangeListener.LGMChangeType.SZENARIO_REMOVED;
@@ -581,7 +582,9 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
             mainDoc.finish_transaction(pid);
         }
         setChanged(true);
-        distribute(SZENARIO_ADDED, null, szenario, pid);
+        if (!isBulkMode()) {
+            distribute(SZENARIO_ADDED, null, szenario, pid);
+        }
         setActiveLayer(activeLayer);
         return szenario;
     }
@@ -668,7 +671,7 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
     public void setSelectedDoc(final GraphDocument doc) {
         activeGraphDocumentsList.remove(doc);
         activeGraphDocumentsList.add((LGMGraphDocument) doc);
-        distribute(LGMChangeType.SELECTED_SZENARIO_CHANGED, null, doc, STANDARD_PID);
+        distribute(SELECTED_SZENARIO_CHANGED, null, doc, STANDARD_PID);
     }
 
     /**
@@ -912,7 +915,7 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
      * @param containerToRemove
      * @param pid
      */
-    private void simpleRemoveContainerFromSzenario(final Collection<ElementContainer> containerToRemove, final boolean logSubElements, final int pid) {
+    public void simpleRemoveContainerFromSzenario(final Collection<ElementContainer> containerToRemove, final boolean logSubElements, final int pid) {
         boolean transActionStarted = false;
         GraphDocument ecDoc = null;
         for (ElementContainer ec : containerToRemove) {
@@ -1799,10 +1802,12 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
                     return edge;
                 }
             }
+            boolean checkConsistency = ensureConsistency;
             //wenn es schon eine Kante in der Gegenrichtung gibt und diese Kante eine Kante mit doppelter Bedeutung ist -> dann Richtung auf DOUBLE setzen
             boolean doubleMeaningEdge = CoreMetaModel.isDoubleMeaningEdge(edgeClass);
             if (doubleMeaningEdge) { //wenn es bei Kanten mit doppelter Bedeutung schon die Gegenrichtung gibt -> setzte auch die Hinrichtung
                 edge = startElement.getEdgeFrom(endElement, edgeClass, startElementEdgeIndex);
+                checkConsistency = false;
             }
             if (edge != null) { //die Kante kann hier nur nicht null sein, wenn die obige Bedingung mit der Kante mit doppelter Bedeutung zutraf
                 //bei doubleMeaningEdges jetzt auch die Gegenrichtung setzten
@@ -1853,7 +1858,14 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
                     edge.setName(name, false);
                     addEdge(kac, pid);
                 }
-
+            }
+            mainDoc.addRedo(pid, MODEL_ACTION_LINK, edgeClassName, edge, startElement, endElement, startElementEdgeIndex, endElementEdgeIndex);
+            mainDoc.addUndo(pid, MODEL_ACTION_UNLINK, startElement, endElement, edgeClassName, startElementEdgeIndex);
+            //This must come after the main UNDO/REDO commands, because deleteElements()
+            //adds also UNDO/REDO commands and the an UNDO can delete the element to be
+            //reconnected (e.g. if you have reassigned a subordinated element to an other
+            //super element with an CompositionEdge between them and undo that).
+            if (checkConsistency) {
                 //Falls bereits Beziehungen der anzulegenden Art bestehen und durch die neue Beziehung die Kardinalitäten
                 //verletzt wären -> lösche solange bestehende Beziehungen, bis die Kardinaltitäten eingehalten werden
                 //Dies muss nach dem Hinzufügen der anderen Undo-Komamndos erfolgen, sonst stimmt die Reihenfolge der Kommandos nicht.
@@ -1876,9 +1888,8 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
                         deleteElement(edgeList.get(0), mainDoc, pid);
                     }
                 }
+
             }
-            mainDoc.addRedo(pid, MODEL_ACTION_LINK, edgeClassName, edge, startElement, endElement, startElementEdgeIndex, endElementEdgeIndex);
-            mainDoc.addUndo(pid, MODEL_ACTION_UNLINK, startElement, endElement, edgeClassName, startElementEdgeIndex);
         } catch (Exception e) {
             Log.show(ERROR, getResString("FehlerAllgemein"), e);
             mainDoc.undo(pid);
@@ -2089,7 +2100,7 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
         //        Sys.err("me1=" + me1 + " me2=" + me2 + " egdeClass=" + edgeClass + " endElement=" + me1EdgeIndex + " pid=" + pid);
 
         Edge edge = null;
-        List<Edge> edges = null;
+        List<Edge> edges;
 
         edges = me1.getEdgesWith(me2, edgeClass, me1EdgeIndex);
         if (edges.isEmpty()) {
@@ -2244,16 +2255,6 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
                     }
                 }
             }
-        }
-    }
-
-    /**
-     *
-     */
-    private void updateElementNames() {
-        List<ModelElement> modelItemsWithNameExtensions = getModelItems(this, metaModel.getElementClassesWithNameExtensionPath());
-        for (ModelElement me : modelItemsWithNameExtensions) {
-            me.updateNameExtensions();
         }
     }
 
@@ -2503,12 +2504,12 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
         if (!initialized && !bulk_mode) {
             initialized = true;
         }
-        boolean oldMode = this.bulk_mode;
+        boolean lastModeWasBulkMode = this.bulk_mode;
         this.bulk_mode = bulk_mode;
-        if (oldMode && !bulk_mode) {
+        if (lastModeWasBulkMode && !bulk_mode) {
             distributeChangeEvents();
         }
-        return oldMode;
+        return lastModeWasBulkMode;
     }
 
     /**
@@ -2552,7 +2553,10 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
         //will produce a new ChangeEvent and alters the list changeEvents
         for (int i = 0; i < changeEvents.size(); i++) {
             LGMChangeEvent changeEvent = changeEvents.get(i);
+            //long start = System.currentTimeMillis();
             distribute(changeEvent.changeType, changeEvent.last_elem, changeEvent.source, changeEvent.pid);
+            //long end = System.currentTimeMillis();
+            //Sys.err1(end - start + "\t" + changeEvent);
         }
         changeEvents.clear();
     }

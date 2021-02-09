@@ -10,6 +10,7 @@ import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.view.container.EdgeContainer;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.util.ReflectionUtils;
+import de.imise.util.Sys;
 
 /**
  * @author N.N.
@@ -404,6 +405,12 @@ public abstract class Edge extends ModelElement {
     private static final Class<? extends ModelElement> getStartOrEndClass(final Class<? extends Edge> edgeClass, final boolean start) {
         String fieldName = start ? START_CLASS_FIELD_NAME : END_CLASS_FIELD_NAME;
         Object field = ReflectionUtils.getField(edgeClass, ModelElement.class, fieldName);
+        //this here may and should not occur at all, nevertheless there were exceptions
+        //here once, which arise however probably only, because before already some
+        //exception flew -> simply output the error
+        if (field == null) {
+            Sys.err1(edgeClass.getSimpleName() + ": " + (start ? "(start class)" : "(end class)") + "is null");
+        }
         Class<?> startOrEndClass = (Class<?>) field;
         Class<? extends ModelElement> startOrEndElementClass = startOrEndClass.asSubclass(ModelElement.class);
         return startOrEndElementClass;

@@ -5,7 +5,6 @@ import static de.imise.tool3lgm.graphtools.dialog.element.panel.AbstractPathConn
 import static de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty.OPTION_ELEMENTS_RECEIVE_PROPERTIES_FROM_PARENTS;
 import static de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty.OPTION_ELEMENTS_RECEIVE_PROPERTIES_FROM_PARTS;
 
-import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -202,9 +201,7 @@ public class PathConnectionPanel extends AbstractExpandablePanel {
 
             //alles dafür tun, dass beide Dialogseiten gleich breit sind. Das wird über die PreferredSize der breitesten Komponente gesteuert.
             SwingUtils.fillToSameLength(westLabel, rLabel);
-            SwingUtils.setSamePreferredSize(westLabel, rLabel);
-            SwingUtils.setSamePreferredSize(ltreeScrollPane, rtree.getScrollPane());
-
+            setSamePreferredLeftRightSize();
         } else {
             rLabel = null;
             addAction = null;
@@ -215,6 +212,29 @@ public class PathConnectionPanel extends AbstractExpandablePanel {
         }
         initTreeListenerAndDragNDrop();
         showFullDialog(true);
+    }
+
+    /**
+     * Ensure that both dialog sides have always the same width.
+     *
+     * @param components this components gets the same preferred width like both
+     *            trees and labels (maximum of all of their widths)
+     */
+    protected void setSamePreferredLeftRightSize(final JComponent... components) {
+        JComponent[] allComponents = new JComponent[components.length + 4];
+        allComponents[0] = westLabel;
+        allComponents[1] = rLabel;
+        allComponents[2] = ltree.getScrollPane();
+        allComponents[3] = rtree.getScrollPane();
+        System.arraycopy(components, 0, allComponents, 4, components.length);
+        SwingUtils.setSamePreferredSize(allComponents);
+        //        Sys.err1(westLabel.getPreferredSize());
+        //        Sys.err1(rLabel.getPreferredSize());
+        //        Sys.err1(ltree.getScrollPane().getPreferredSize());
+        //        Sys.err1(rtree.getScrollPane().getPreferredSize());
+        //        for (JComponent c : components) {
+        //            Sys.err1(c.getPreferredSize());
+        //        }
     }
 
     /**
@@ -233,23 +253,6 @@ public class PathConnectionPanel extends AbstractExpandablePanel {
             }
         }
         return true;
-    }
-
-    /**
-     * @param c
-     * @param gbc
-     */
-    public void addUnderLeftTree(final Component c, final GridBagConstraints gbc) {
-        add(this, c, gbc, 0, 5, 1, 1);
-    }
-
-    /**
-     * @param c
-     * @param gbc
-     * @param gridwidth
-     */
-    public void addSouth(final Component c, final GridBagConstraints gbc, final int gridwidth) {
-        add(this, c, gbc, 0, 6, gridwidth, 1);
     }
 
     /**
@@ -552,7 +555,6 @@ public class PathConnectionPanel extends AbstractExpandablePanel {
                 //TODO: das hier expandiert das neue überhaupt nicht, sondern nur bis zum vorher schon geöffneten Node. Das ist doof!
                 ltree.expandPath(targetTreeSelectionPath);
                 ltree.clearSelection();
-                return;
             }
         };
     }

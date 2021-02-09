@@ -23,6 +23,7 @@ import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.model.LGMChangeListenerSimple;
 import de.imise.tool3lgm.graphtools.model.LGMGraphDocument;
 import de.imise.tool3lgm.graphtools.undoredo.TransactionManager;
+import de.imise.util.swing.component.DropDownButtonSource;
 import de.imise.util.swing.component.UnfloatableToolBar;
 import de.imise.util.swing.event.ActionSource;
 import de.imise.util.swing.event.ExtendedAction;
@@ -44,8 +45,8 @@ public class MainFrameToolBar extends UnfloatableToolBar implements MouseListene
         JButton open = new ToolbarButton(ActionLibrary.FileActions.ACTION_OPEN_MODEL);
         JButton save = new ToolbarButton(ActionLibrary.FileActions.ACTION_SAVE_MODEL);
 
-        JButton showConf = new ToolbarButton(ActionLibrary.ContextActions.MODEL_ACTION_SET_INTERLAYER_CONNECTIONS_VISIBILITY_ON);
-        JButton hideConf = new ToolbarButton(ActionLibrary.ContextActions.MODEL_ACTION_SET_INTERLAYER_CONNECTIONS_VISIBILITY_OFF);
+        JButton showConf = new ToolbarButton(ActionLibrary.ContextActions.MODEL_ACTION_SET_INTERLAYER_CONNECTIONS_VISIBILITY_ON, true);
+        JButton hideConf = new ToolbarButton(ActionLibrary.ContextActions.MODEL_ACTION_SET_INTERLAYER_CONNECTIONS_VISIBILITY_OFF, true);
 
         undo = new ToolbarButton(ActionLibrary.EditActions.ACTION_UNDO);
         undo.addMouseListener(this);
@@ -79,27 +80,26 @@ public class MainFrameToolBar extends UnfloatableToolBar implements MouseListene
         addSeparator();
         add(showConf);
         add(hideConf);
-        addSeparator();
 
         ActionSource[][] alignmentAndPositionActions = {
                 {
-                        GDCommands.MODEL_ACTION_SET_ELEMENT_TEXT_ALIGNMENT_HTML_LEFT, //text left aligned
                         GDCommands.MODEL_ACTION_SET_ELEMENT_TEXT_ALIGNMENT_HTML_CENTER, //text center aligned
+                        GDCommands.MODEL_ACTION_SET_ELEMENT_TEXT_ALIGNMENT_HTML_LEFT, //text left aligned
                         GDCommands.MODEL_ACTION_SET_ELEMENT_TEXT_ALIGNMENT_HTML_RIGHT, //text right aligned
                         GDCommands.MODEL_ACTION_SET_ELEMENT_TEXT_ALIGNMENT_HTML_JUSTIFY, //text justified
                 }, {
-                        GDCommands.MODEL_ACTION_SET_ELEMENT_TEXT_POSITION_HORIZONTAL_LEFT, //text position left
                         GDCommands.MODEL_ACTION_SET_ELEMENT_TEXT_POSITION_HORIZONTAL_CENTER, //text position center
+                        GDCommands.MODEL_ACTION_SET_ELEMENT_TEXT_POSITION_HORIZONTAL_LEFT, //text position left
                         GDCommands.MODEL_ACTION_SET_ELEMENT_TEXT_POSITION_HORIZONTAL_RIGHT, //text position right
                 }, {
-                        GDCommands.MODEL_ACTION_SET_ELEMENT_TEXT_POSITION_VERTICAL_TOP, //text position top
                         GDCommands.MODEL_ACTION_SET_ELEMENT_TEXT_POSITION_VERTICAL_CENTER, //text position center
+                        GDCommands.MODEL_ACTION_SET_ELEMENT_TEXT_POSITION_VERTICAL_TOP, //text position top
                         GDCommands.MODEL_ACTION_SET_ELEMENT_TEXT_POSITION_VERTICAL_BOTTOM, //text position bottom
                 }, {
-                        GDCommands.MODEL_ACTION_MOVE_ORDER_TO_FIRST_POSITION, //text position top
-                        GDCommands.MODEL_ACTION_MOVE_ORDER_ONE_POSITION_UP, //text position one up
-                        GDCommands.MODEL_ACTION_MOVE_ORDER_ONE_POSITION_DOWN, //text position one down
                         GDCommands.MODEL_ACTION_MOVE_ORDER_TO_LAST_POSITION, //text position last
+                        GDCommands.MODEL_ACTION_MOVE_ORDER_ONE_POSITION_DOWN, //text position one down
+                        GDCommands.MODEL_ACTION_MOVE_ORDER_ONE_POSITION_UP, //text position one up
+                        GDCommands.MODEL_ACTION_MOVE_ORDER_TO_FIRST_POSITION, //text position top
                 }, {
                         GDCommands.MODEL_ACTION_SET_ELEMENTS_POSITION_HORIZONTAL_LEFT, //elements position left
                         GDCommands.MODEL_ACTION_SET_ELEMENTS_POSITION_HORIZONTAL_CENTER, //elements psoition center
@@ -107,18 +107,41 @@ public class MainFrameToolBar extends UnfloatableToolBar implements MouseListene
                         GDCommands.MODEL_ACTION_SET_ELEMENTS_POSITION_VERTICAL_TOP, //elements position top
                         GDCommands.MODEL_ACTION_SET_ELEMENTS_POSITION_VERTICAL_CENTER, //elements position center
                         GDCommands.MODEL_ACTION_SET_ELEMENTS_POSITION_VERTICAL_BOTTOM, //elements position bottom
+                }, {
+                        GDCommands.MODEL_ACTION_SET_ELEMENT_ALIGNMENT_SIZE_WIDTH_AND_HEIGTH, //elements get same width and height
+                        GDCommands.MODEL_ACTION_SET_ELEMENT_ALIGNMENT_SIZE_WIDTH, //elements get same width
+                        GDCommands.MODEL_ACTION_SET_ELEMENT_ALIGNMENT_SIZE_HEIGTH, //elements get same height
                 }
         };
-        int i = 0;
+
+        //bisheriger Code = alle Buttons nebeneinander (ohne DropdownButtons)
+        //        addSeparator();
+        //        int i = 0;
+        //        for (ActionSource[] alignmentActions : alignmentAndPositionActions) {
+        //            if (i++ > 0) {
+        //                addSeparator();
+        //            }
+        //            for (ActionSource actionSource : alignmentActions) {
+        //                add(new ToolbarButton(actionSource, true));
+        //            }
+        //        }
+
+        //neuer Code = alle Funktionen über DropdownButtons zur Verfügung stellen
         for (ActionSource[] alignmentActions : alignmentAndPositionActions) {
-            if (i++ > 0) {
-                addSeparator();
-            }
-            for (ActionSource actionSource : alignmentActions) {
-                add(new ToolbarButton(actionSource, true));
-            }
+            addDropDownButton(alignmentActions);
         }
+
         addAsToolChangeListener();
+    }
+
+    /**
+     * @param actionSources
+     */
+    private void addDropDownButton(final ActionSource[] actionSources) {
+        DropDownButtonSource dropDownButtonSource = new DropDownButtonSource(actionSources);
+        JButton button = dropDownButtonSource.getButtonComponent();
+        addSeparator();
+        add(button);
 
     }
 
@@ -239,7 +262,7 @@ public class MainFrameToolBar extends UnfloatableToolBar implements MouseListene
         }
 
         public ToolbarButton(final ActionSource actionSource, final boolean smallIcon) {
-            this(actionSource.createAction(), smallIcon);
+            this((Action) actionSource.createAction(), smallIcon);
         }
 
         @Override

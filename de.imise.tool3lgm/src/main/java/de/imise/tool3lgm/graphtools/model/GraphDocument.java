@@ -127,6 +127,7 @@ import de.imise.tool3lgm.log.Log;
 import de.imise.tool3lgm.userproperties.UserProperties;
 import de.imise.util.Alphabetical;
 import de.imise.util.OptionsSupport;
+import de.imise.util.Sys;
 import de.imise.util.collections.CollectionUtils;
 import de.imise.util.swing.dialog.ImageChooser;
 import de.imise.util.swing.dialog.MultipleOptionPane;
@@ -1895,7 +1896,6 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
         }
         finish_transaction(pid);
         distributeEvent(ELEMENT_GRAPHICS_CHANGED, pid);
-        return;
     }
 
     /**
@@ -1926,7 +1926,6 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
         }
         finish_transaction(pid);
         distributeEvent(ELEMENT_GRAPHICS_CHANGED, pid);
-        return;
     }
 
     /**
@@ -1942,7 +1941,6 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
         }
         finish_transaction(pid);
         distributeEvent(ELEMENT_GRAPHICS_CHANGED, pid);
-        return;
     }
 
     /**
@@ -2623,7 +2621,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
             }
             moveNodeContainer(nc, x, y, w, h, pid);
             if (OPTION_GRAPH_MOVE_SUBELEMENTS.is()) {
-                moveSlaveElements(nc, xOrg - x, yOrg - y, wOrg - w, hOrg - h, pid);
+                moveSlaveElements(nc, xOrg - x, yOrg - y, 0, 0, pid);
             }
         }
         //        setSelection(selection);
@@ -2716,8 +2714,12 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
             if (metaModel.isPaintable(elementClass)) {
                 for (Edge edge : me.getEdges()) {
                     ModelElement other = edge.getOther(me);
-                    Class<? extends ModelElement> otherElementClass = other.getClass();
-                    if (metaModel.isPaintable(otherElementClass)) {
+                    if (other == null) {
+                        String startEnd = edge.isStart(me) ? "end" : "start";
+                        Sys.err1("Model: " + gdcoll.getName() + " --- Submodel: " + this + " --- Edge " + edge + " (" + edge.getClass().getSimpleName() + ") of element " + me + " (" + me.getClass().getSimpleName() + ") has null as " + startEnd
+                                + " element.");
+                    }
+                    if (other != null && other.isPaintable()) { //The null check is only for the symptoms not against the cause. Sometimes there are faulty edges where the other is null.
                         ElementContainer otherEc = other.getContainer(this);
                         if (selectedContainer.contains(otherEc)) {
                             EdgeContainer edgeC = (EdgeContainer) edge.getContainer(this);
@@ -5286,13 +5288,16 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
      */
     public void initNodeContainers() {
         for (int i = 0; i < layer.length; i++) {
-            for (NodeContainer kc : layer[i].getGraphNodeContainers()) {
-                if (kc != null) {
-                    kc.refreshText();
-                    Font f = kc.getFont();
-                    if (!kc.isStandardFont(f)) {
-                        kc.setFont(f);
+            for (NodeContainer nc : layer[i].getGraphNodeContainers()) {
+                if (nc != null) {
+                    ModelElement me = nc.getElement();
+                    me.updateHTMLName(nc);
+                    nc.refreshText();
+                    Font f = nc.getFont();
+                    if (!nc.isStandardFont(f)) {
+                        nc.setFont(f);
                     }
+
                 }
             }
             layer[i].revalidate();
@@ -5305,24 +5310,27 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
      */
     public void initEdgeContainers() {
         for (int i = 0; i < layer.length; i++) {
-            for (BendpointContainer kpC : layer[i].getBendpointContainers()) {
-                if (kpC == null) {
+            LayerContainer lc = layer[i];
+            for (BendpointContainer bc : lc.getBendpointContainers()) {
+                if (bc == null) {
                     continue;
                 }
-                Bendpoint kp = kpC.getBendpoint();
-                if (kp == null) {
+                Bendpoint bendpoint = bc.getBendpoint();
+                if (bendpoint == null) {
                     continue;
                 }
-                EdgeContainer kc = layer[i].getEdgeContainer(kp.getEdgeID());
-                if (kc == null) {
+                String edgeID = bendpoint.getEdgeID();
+                EdgeContainer edgeC = lc.getEdgeContainer(edgeID);
+                if (edgeC == null) {
                     continue;
                 }
-                kc.setBendpointContainer(kpC, kp.getIndex());
-                kp.addEdge(kc.getEdge());
+                int index = bendpoint.getIndex();
+                edgeC.setBendpointContainer(bc, index);
+                bendpoint.addEdge(edgeC.getEdge());
             }
-            for (EdgeContainer kc : layer[i].getEdgeContainers()) {
-                if (kc != null) {
-                    kc.computeBorderPoints();
+            for (EdgeContainer edgeC : lc.getEdgeContainers()) {
+                if (edgeC != null) {
+                    edgeC.computeBorderPoints();
                 }
             }
             layer[i].revalidate();

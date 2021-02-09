@@ -5,15 +5,19 @@
 package de.imise.tool3lgm.metamodel.original.process;
 
 import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction.FORWARD;
+import static de.imise.tool3lgm.graphtools.view.tree.node.ElementContainerTreeNode.createIndexedDialogTreeNode;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridLayout;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Enumeration;
 import java.util.EventObject;
 import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
+import javax.swing.JComponent;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTree;
@@ -25,34 +29,39 @@ import javax.swing.tree.TreeModel;
 import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
 
+import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.graphtools.dialog.action.ActionNotDefinedForClassException;
 import de.imise.tool3lgm.graphtools.dialog.action.LGMAction;
 import de.imise.tool3lgm.graphtools.dialog.action.LGMActionLibrary;
 import de.imise.tool3lgm.graphtools.dialog.element.DialogActionCommands;
 import de.imise.tool3lgm.graphtools.dialog.element.ElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.dialog.element.panel.ElementDialogPanel;
-import de.imise.tool3lgm.graphtools.dialog.element.panel.PathConnectionLeafPanel;
+import de.imise.tool3lgm.graphtools.dialog.element.panel.PathConnectionPanel;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
+import de.imise.tool3lgm.graphtools.metamodel.elements.DoubleMeaningEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.DoubleMeaningEdge.ConnectionState;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
+import de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.metamodel.elements.MultipleEdge;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GDCommands;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
+import de.imise.tool3lgm.graphtools.model.LGMGraphDocument;
 import de.imise.tool3lgm.graphtools.path.metapaths.ElementaryMetaPath;
 import de.imise.tool3lgm.graphtools.path.metapaths.ElementaryMetaPathHandler;
-import de.imise.tool3lgm.graphtools.path.metapaths.SequenceMetaPath;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
+import de.imise.tool3lgm.graphtools.view.container.LayerContainer;
 import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
 import de.imise.tool3lgm.graphtools.view.tree.ElementDialogPanelTree;
 import de.imise.tool3lgm.graphtools.view.tree.node.ElementContainerTreeNode;
+import de.imise.tool3lgm.graphtools.view.tree.node.IconifiedTreeNode;
+import de.imise.tool3lgm.graphtools.view.tree.node.IconifiedTreeNode.IconState;
 import de.imise.tool3lgm.graphtools.view.tree.node.LGMTreeNode;
 import de.imise.tool3lgm.graphtools.view.tree.node.StringTreeNode;
-import de.imise.tool3lgm.metamodel.original.edge.AufObjVerbindung;
 import de.imise.tool3lgm.metamodel.original.edge.PrzAufVerbindung;
 import de.imise.tool3lgm.metamodel.original.node.Aufgabe;
-import de.imise.tool3lgm.metamodel.original.node.Objekttyp;
+import de.imise.util.swing.dialog.GridBagConstrainsInputPanel;
 
 /**
  * 24.10.2018: Dieses Panel funktioniert im Moment überhaupt nicht mehr richtig.
@@ -65,7 +74,7 @@ import de.imise.tool3lgm.metamodel.original.node.Objekttyp;
 @SuppressWarnings({
         "unused", "serial"
 })
-public class ProzessStructurePanel extends PathConnectionLeafPanel implements TreeWillExpandListener {
+public class ProzessStructurePanel extends PathConnectionPanel implements TreeWillExpandListener {
 
     /**
      * COMMENTME
@@ -88,7 +97,8 @@ public class ProzessStructurePanel extends PathConnectionLeafPanel implements Tr
      * während dieses Panel offen ist, NUR DANN muss aktualisiert werden, sonst
      * nicht
      */
-    private final int oldObjectCounter = -1, objectCounter = 0;
+    private int objectCounter = 0;
+    private int oldObjectCounter = -1;
 
     /**
      * COMMENTME
@@ -123,7 +133,7 @@ public class ProzessStructurePanel extends PathConnectionLeafPanel implements Tr
     /**
      * COMMENTME
      */
-    private final String errorMessage = "";
+    private String errorMessage = "";
 
     /**
      * COMMENTME
@@ -137,19 +147,34 @@ public class ProzessStructurePanel extends PathConnectionLeafPanel implements Tr
      */
     private final LGMAction downAction;
 
-    private final Class<? extends Edge> doubleMeaningEdgeClass;
+    /**
+     *
+     */
+    private final ElementaryMetaPath metaPath;
+
+    /**
+     *
+     */
+    private final ElementaryMetaPath predecessorConditionMetaPath;
+
+    /**
+     *
+     */
+    private final ElementaryMetaPath successorConditionMetaPath;
 
     /**
      * @param dialog
      * @param multipleConnectionEgdeClass
      * @param doubleMeaningEdgeClass
      */
-    public ProzessStructurePanel(final ElementPropertyDialog dialog, final Class<? extends MultipleEdge> multipleConnectionEgdeClass, final Class<? extends Edge> doubleMeaningEdgeClass) {
-        super(dialog, PanelLabelOption.LABEL_LAST_EDGE_CONNECTION_NAME, PanelLabelOption.LABEL_LAST_EDGE_CONNECTION_NAME, createSimpleMetaPath(dialog, multipleConnectionEgdeClass, doubleMeaningEdgeClass));
-        this.doubleMeaningEdgeClass = doubleMeaningEdgeClass;
+    public ProzessStructurePanel(final ElementPropertyDialog dialog, final Class<? extends MultipleEdge> multipleConnectionEgdeClass, final Class<? extends DoubleMeaningEdge> doubleMeaningEdgeClass) {
+        super(dialog, PanelLabelOption.LABEL_LAST_EDGE_CONNECTION_NAME, PanelLabelOption.LABEL_LAST_EDGE_CONNECTION_NAME, createSimpleMetaPath(dialog, multipleConnectionEgdeClass));
+        metaPath = (ElementaryMetaPath) super.metaPath;
+        predecessorConditionMetaPath = getConditionElementaryMetaPath(doubleMeaningEdgeClass, ConnectionState.FORWARD);
+        successorConditionMetaPath = getConditionElementaryMetaPath(doubleMeaningEdgeClass, ConnectionState.BACKWARD);
 
         // Panel für die Buttons zur Aenderung der Aufgabenreihenfolge anlegen
-        JPanel upDownControl = new JPanel(new GridLayout(1, 2));
+        JPanel upDownButtonsPanel = new JPanel(new GridLayout(1, 2));
 
         /*
          * Start: Buttons & Actions erstellen, Actions setzen ...
@@ -166,24 +191,16 @@ public class ProzessStructurePanel extends PathConnectionLeafPanel implements Tr
          * ... end: Buttons & Actions erstellen, Actions setzen
          */
 
-        upDownControl.add(upButton);
-        upDownControl.add(downButton);
+        upDownButtonsPanel.add(upButton);
+        upDownButtonsPanel.add(downButton);
 
         // Panel für die Buttons zur Aenderung der Aufgabenreihenfolge
         // hinzufügen
         GridBagConstraints constraints = new GridBagConstraints();
         constraints.anchor = GridBagConstraints.CENTER;
-        constraints.fill = GridBagConstraints.NONE;
-        constraints.weightx = 0;
-        constraints.weighty = 0;
-        //Windows-spezifisch
-        //        constraints.ipadx = -60;
-        // constraints.ipady = - 10;
-        addUnderLeftTree(upDownControl, constraints);
+        add(upDownButtonsPanel, constraints, 1, 5, 1, 1, false);
 
-        /*
-         * Start: Aktionen für Verifikation und für FehlerButton setzen ...
-         */
+        // Start: Aktionen für Verifikation und für FehlerButton setzen ...
         try {
             verificationCheck = new JCheckBox();
             verificationCheck.setSelected(verify);
@@ -199,35 +216,51 @@ public class ProzessStructurePanel extends PathConnectionLeafPanel implements Tr
         } catch (ActionNotDefinedForClassException andfce) {
             andfce.printStackTrace();
         }
-        /*
-         * End: Aktionen für Verifikation und für FehlerButton setzen
-         */
-
+        // End: Aktionen für Verifikation und für FehlerButton setzen
         constraints.anchor = GridBagConstraints.WEST;
         constraints.fill = GridBagConstraints.NONE;
-        // constraints.weightx = 0;
-        // constraints.weighty = 0;
-        constraints.ipadx = 0;
-        constraints.ipady = 0;
         JPanel tmpPanel = new JPanel();
         tmpPanel.add(verificationCheck);
 
         tmpPanel.add(errorBut);
         errorBut.setVisible(verify);
-
-        addSouth(tmpPanel, constraints, 2);
+        //AXS: 08.02.2021: erstmal das Verifizieren wieder weglassen, weil das sowieso nicht richtig funktioniert -> ProzessTickets -> wieder aktivieren!
+        //add(tmpPanel, constraints, 0, 6, 2, 1, false);
 
         update();
 
     }
 
     /**
+     * @param component
+     * @param constraints
+     * @param x
+     * @param y
+     * @param w
+     * @param h
+     * @param debugDialog use only <code>true</code> here while development! If
+     *            <code>true</code> there will be a dialog before the add where
+     *            you can change all values of the current
+     *            {@link GridBagConstraints}
+     */
+    private final void add(final JComponent component, final GridBagConstraints constraints, final int x, final int y, final int w, final int h, final boolean debugDialog) {
+        constraints.gridx = x;
+        constraints.gridy = y;
+        constraints.gridwidth = w;
+        constraints.gridheight = h;
+        if (debugDialog) {
+            GridBagConstrainsInputPanel.setConstraintsWithDialog(Static.getMainFrame(), constraints);
+        }
+        add(component, constraints);
+        setSamePreferredLeftRightSize(component);
+    }
+
+    /**
      * @param dialog
      * @param multipleConnectionEgdeClass
-     * @param doubleMeaningEdgeClass
      * @return
      */
-    private static SequenceMetaPath createSimpleMetaPath(final ElementPropertyDialog dialog, final Class<? extends MultipleEdge> multipleConnectionEgdeClass, final Class<? extends Edge> doubleMeaningEdgeClass) {
+    private static ElementaryMetaPath createSimpleMetaPath(final ElementPropertyDialog dialog, final Class<? extends MultipleEdge> multipleConnectionEgdeClass) {
         ModelElement me = dialog.getModelElement();
         Class<? extends ModelElement> elementClass = me.getClass();
         MetaModel metaModel = dialog.getMetaModel();
@@ -242,39 +275,66 @@ public class ProzessStructurePanel extends PathConnectionLeafPanel implements Tr
     }
 
     /**
+     * @param direction
+     * @param connectionState
+     * @return
+     */
+    private ElementaryMetaPath getConditionElementaryMetaPath(final Class<? extends DoubleMeaningEdge> doubleMeaningEdgeClass, final ConnectionState connectionState) {
+        MetaModel metaModel = getMetaModel();
+        ElementaryMetaPathHandler emph = metaModel.getElementaryMetaPathHandler();
+        ElementaryMetaPath conditionElementaryMetaPath = emph.getMetaPath(searchElementClass, doubleMeaningEdgeClass, FORWARD, connectionState, ModelElement.class);
+        return conditionElementaryMetaPath;
+    }
+
+    /**
      * Haengt an den uebergebenen LGMTreeNode neue LGMTreeNodes mit den
      * Objekttypen an, die von der Aufgabe (UserObject des uebergebenen
      * LGMTreeNode) bearbeitet und interpretiert werden.
      *
-     * @param aufgabenContainerNode
+     * @param connectedElementContainerTreeNode
      */
-    private void appendObjectTypes(final ElementContainerTreeNode aufgabenContainerNode) {
-        ModelElement me = ((NodeContainer) aufgabenContainerNode.getUserObject()).getElement();
-        GraphDocument mainDoc = getMainDoc();
-        List<ElementContainer> ots = me.getConnectedContainers(Objekttyp.class, mainDoc, AufObjVerbindung.class, FORWARD, ConnectionState.BACKWARD, false);
-        if (!ots.isEmpty()) {
-            String typeNodeName = elementsNameBuilder.getForwardMetaAssociationName(AufObjVerbindung.class, ConnectionState.BACKWARD, false, false);
+    private void appendObjectTypes(final ElementContainerTreeNode connectedElementContainerTreeNode) {
+        appendConditionElements(connectedElementContainerTreeNode, successorConditionMetaPath);
+        appendConditionElements(connectedElementContainerTreeNode, predecessorConditionMetaPath);
+    }
+
+    /**
+     * @param connectedElementContainer
+     * @param conditionMetaPath
+     */
+    private void appendConditionElements(final ElementContainerTreeNode connectedElementContainerTreeNode, final ElementaryMetaPath conditionMetaPath) {
+        if (conditionMetaPath != null) {
+            ModelElement me = connectedElementContainerTreeNode.getModelElement();
+            List<ElementContainer> connectedConditionElements = getConnectedContainers(me, conditionMetaPath);
+            String typeNodeName = conditionMetaPath.getName();
             StringTreeNode tmpNode = new StringTreeNode(typeNodeName);
             tmpNode.setSelectable(false);
-            addNodes(tmpNode, ots, false);
-            aufgabenContainerNode.add(tmpNode);
+            addNodes(tmpNode, connectedConditionElements, false);
+            connectedElementContainerTreeNode.add(tmpNode);
         }
-        ots = me.getConnectedContainers(Objekttyp.class, mainDoc, AufObjVerbindung.class, FORWARD, ConnectionState.FORWARD, false);
-        if (!ots.isEmpty()) {
-            String typeNodeName = elementsNameBuilder.getForwardMetaAssociationName(AufObjVerbindung.class, ConnectionState.FORWARD, false, false);
-            StringTreeNode tmpNode = new StringTreeNode(typeNodeName);
-            tmpNode.setSelectable(false);
-            addNodes(tmpNode, ots, false);
-            aufgabenContainerNode.add(tmpNode);
-        }
+    }
+
+    /**
+     * @param me
+     * @param conditionMetaPath
+     * @return
+     */
+    private List<ElementContainer> getConnectedContainers(final ModelElement me, final ElementaryMetaPath elementaryMetaPath) {
+        LGMGraphDocument mainDoc = getMainDoc();
+        Class<? extends ModelElement> conditionElementClass = elementaryMetaPath.getEndClass();
+        Class<? extends Edge> edgeClass = elementaryMetaPath.getEdgeClass();
+        Direction direction = elementaryMetaPath.getDirection();
+        ConnectionState connectionState = elementaryMetaPath.getConnectionState();
+        List<ElementContainer> connectedContainers = me.getConnectedContainers(conditionElementClass, mainDoc, edgeClass, direction, connectionState, false);
+        return connectedContainers;
     }
 
     //    /**
     //     * Baut im linken Baum nur die Elemente der letzten Edge des Pfades auf
     //     */
     //    @Override
-    //    protected Collection<LGMTreeNode> buildLeftTree() {
-    //        Collection<LGMTreeNode> leafNodes = super.buildLeftTree();
+    //    protected Collection<ElementContainerTreeNode> buildLeftTree() {
+    //        Collection<ElementContainerTreeNode> leafNodes = super.buildLeftTree();
     //        //wenn dieses Panel mit einem Pfad der Länge 1 initialisiert wurde, dann gibt es hier nichts zu tun,
     //        //da es keine Zwischenelemente gibt, die nicht angezeigt werden sollen
     //        if (edgeClasses.length == 1) {
@@ -302,445 +362,489 @@ public class ProzessStructurePanel extends PathConnectionLeafPanel implements Tr
     //        }
     //        return leafNodes;
     //    }
-    //
-    //    /**
-    //     * Baut den linken Baum auf.
-    //     */
-    //    @Override
-    //    private void buildLeftTree() {
-    //        // System.out.println("buildLeftTree");
-    //        // Die nicht alphabetisch sortierten Aufgaben holen
-    //        aufgabenContainer = prozess.getConnectedContainer(Aufgabe.class, doc, null, Doppelkante.ANY, false);
-    //        // System.out.println(aufgabenContainer);
-    //        // wenn sich die Anzahl der Aufgaben, Objekttypen oder die der
-    //        // Verbindungen zw. Auf und OTs geändert hat
-    //        // muss aktualisiert werden (und nur dann). Wenn der rechte Baum
-    //        // angezeigt wird, dann wurde objectCounter
-    //        // dort schon aktualisiert
-    //        if (!spRechts.isVisible()) {
-    //            objectCounter = doc.getLayer(ModelConstants.DOMAIN_LAYER).countType(Aufgabe.class);
-    //            objectCounter += doc.getLayer(ModelConstants.DOMAIN_LAYER).countType(Objekttyp.class);
-    //            objectCounter += doc.getLayer(ModelConstants.DOMAIN_LAYER).countType(AufObjVerbindung.class);
-    //        }
-    //        // wenn auf der FE eine Edge (Prozesskanten zählen nicht mit)
-    //        // hinzugekommen ist oder ein Objekttyp gelöscht
-    //        // wurde oder der Baum noch leer ist -> Baum einfach komplett neu
-    //        // aufbauen
-    //        if (objectCounter != oldObjectCounter || lroot.getChildCount() == 0) {
-    //            // buildLeftTree wird auf jeden Fall und immer nach buildRightTree
-    //            // aufgerufen
-    //            // -> buildLeftTree aktualisiert oldKantenCount und oldOTCount.
-    //            oldObjectCounter = objectCounter;
-    //            lroot.removeAllChildren();
-    //            for (int m = 0; m < aufgabenContainer.size(); m++) {
-    //                LGMTreeNode node = new LGMTreeNode(aufgabenContainer.get(m), "[" + (m + 1) + "] " + aufgabenContainer.get(m), false);
-    //                lroot.add(node);
-    //                appendObjectTypes(node);
-    //            }
-    //            lmodel.reload();
-    //            if (verify) {
-    //                check3LGMBuisnessProcess();
-    //            }
-    //            return;
-    //        }
-    //        // wenn dem Prozess eine neue Aufgabe hinzugefügt wurde muss der neue
-    //        // Node eingefügt werden
-    //        // (dies hat im Gegensatz zum kompletten Neuaufbau den Vorteil, dass
-    //        // expandierte Node expandiert bleiben und
-    //        // nur deswegen hier der ganze Aufwand)
-    //        else if (lroot.getChildCount() < aufgabenContainer.size()) {
-    //            // nach dem Node, welcher neu eingefügt wird, muss die
-    //            // Nummerierung aller folgenden Node
-    //            // um 1 erhöht werden. Das passiert erst ab da, wenn
-    //            // actualizeNodes==true ist.
-    //            boolean actualizeNodes = false;
-    //            for (int m = 0; m < aufgabenContainer.size(); m++) {
-    //                if (m >= lroot.getChildCount() || ((LGMTreeNode) lroot.getChildAt(m)).getUserObject() != aufgabenContainer.get(m)) {
-    //                    LGMTreeNode node = new LGMTreeNode(aufgabenContainer.get(m), "[" + (m + 1) + "] " + aufgabenContainer.get(m), false);
-    //                    appendObjectTypes(node);
-    //                    lmodel.insertNodeInto(node, lroot, m);
-    //                    actualizeNodes = true;
-    //                } else if (actualizeNodes) {
-    //                    ((LGMTreeNode) lroot.getChildAt(m)).setText("[" + (m + 1) + "] " + aufgabenContainer.get(m));
-    //                }
-    //            }
-    //        }
-    //        // es wurde mind. eine Aufgabe auf der FE gelöscht, die auch im Prozess
-    //        // vorkam
-    //        else if (lroot.getChildCount() > aufgabenContainer.size()) {
-    //            boolean actualizeNodes = false;
-    //            // für alle Aufgaben des Prozesses in sub
-    //            for (int m = 0; m < aufgabenContainer.size(); m++) {
-    //                // wenn im Baum eine andere Aufgabe steht als an der selben
-    //                // Position in sub
-    //                if (((LGMTreeNode) lroot.getChildAt(m)).getUserObject() != aufgabenContainer.get(m)) {
-    //                    // lösche diesen Node im Baum
-    //                    lmodel.removeNodeFromParent((LGMTreeNode) lroot.getChildAt(m));
-    //                    // dieselbe Position muss nochmal getestet werden
-    //                    m--;
-    //                    // ab jetzt muss für alle folgenden Node, die nicht auch
-    //                    // gelöscht werden, die Nummerierung angepasst werden
-    //                    actualizeNodes = true;
-    //                    // wenn die Aufgabe erhalten bleibt und hinter einer Aufgabe
-    //                    // stand, die gelöscht wurde
-    //                } else if (actualizeNodes) {
-    //                    // schreibe die Nummerierung neu
-    //                    ((LGMTreeNode) lroot.getChildAt(m)).setText("[" + (m + 1) + "] " + aufgabenContainer.get(m));
-    //                }
-    //            }
-    //            // am Ende alle Node löschen, die mehr im Baum sind, als in der
-    //            // Aufgabenliste sub
-    //            while (lroot.getChildCount() > aufgabenContainer.size()) {
-    //                lmodel.removeNodeFromParent((LGMTreeNode) lroot.getChildAt(lroot.getChildCount() - 1));
-    //            }
-    //        }
-    //        if (verify) {
-    //            check3LGMBuisnessProcess();
-    //        }
-    //        // stellt sicher, dass Namensänderungen von Aufgaben und Objekttypen
-    //        // angezeigt werden
-    //        ltree.repaint();
-    //    }
 
-    //    /**
-    //     * Prueft, wenn 3LGM-Geschaeftsprozesse angelegt werden sollen, welche Aufgaben im rechten Baum
-    //     * selektierbar sein dürfen. setSelectable(false) hat lediglich Auswirkungen auf die
-    //     * Darstellung.
-    //     */
-    //    public void checkRightPossibleTasks() {
-    //        // System.out.println("checkRightPossibleTasks");
-    //        if (!spRechts.isVisible()) {
-    //            return;
-    //        }
-    //        // wenn links gar keine Aufgabe steht, dann müssen rechts alle Aufgaben
-    //        // setSelectable(true) gesetzt werden
-    //        int lrootChildCount = lroot.getChildCount();
-    //        TreePath selPath = ltree.getSelectionPath();
-    //        // rechts alle Aufgaben verfügbar anzeigen, wenn links keine Aufgabe
-    //        // steht, nicht verifiziert werden soll oder die erste Aufgabe
-    //        // selektiert ist
-    //        if (lrootChildCount == 0 || !verificationCheck.isSelected() || selPath != null && ltree.getSelectionRows() != null && ltree.getSelectionRows()[0] == 1) {
-    //            for (int i = 1; i < rtree.getRowCount(); i++) {
-    //                TreePath path = rtree.getPathForRow(i);
-    //                if (path.getPathCount() == 2) {
-    //                    ((LGMTreeNode) path.getLastPathComponent()).setSelectable(true);
-    //                }
-    //            }
-    //            // links ist mind. eine Aufgabe vorhanden, es soll verifiziert
-    //            // werden und es ist nicht die erste Aufgabe selektiert
-    //        } else {
-    //            int selRow = -1;
-    //            // wenn links gar nichts selelktiert ist
-    //            if (selPath == null) {
-    //                selRow = aufgabenContainer.size();
-    //                // ansonsten, wenn der links selektierte Pfad eine Aufgabe ist
-    //            } else if (selPath.getPathCount() == 2) {
-    //                // selRow auf den Index der selektierten Aufgabe innerhalb des
-    //                // Prozesses setzen
-    //                selRow = lroot.getIndex((LGMTreeNode) selPath.getLastPathComponent());
-    //            }
-    //            // wenn links etwas selektiert war, was keine Aufgabe ist
-    //            if (selRow == -1) {
-    //                // rechts einfach alles setSelectable(false) setzen
-    //                for (int i = 1; i < rtree.getRowCount(); i++) {
-    //                    ((LGMTreeNode) rtree.getPathForRow(i).getLastPathComponent()).setSelectable(false);
-    //                    // wenn links gar nichts oder eine Aufgabe selektiert war
-    //                }
-    //            } else {
-    //                // hole die Aufgaben des Prozesses
-    //                List<ModelElement> aufgaben = prozess.getConnectedElements(Aufgabe.class);
-    //                // für alle Zeilen des rechten Baumes
-    //                for (int i = 1; i < rtree.getRowCount(); i++) {
-    //                    selPath = rtree.getPathForRow(i);
-    //                    // wenn der momentane Pfad eine Aufgabe ist
-    //                    if (selPath.getPathCount() == 2) {
-    //                        LGMTreeNode node = (LGMTreeNode) selPath.getLastPathComponent();
-    //                        // wenn von mind. einem Node VOR dem selektierten bzw.
-    //                        // (wenn nichts selektiert ist) dem
-    //                        // letzten Node mit der i-ten rechten Aufgabe einen
-    //                        // LGM-Buisness-Process-Step bildet, dann
-    //                        // soll die i-te rechte Aufgabe selektierbar sein
-    //                        List<LGMProzessStep> al = prozess.getProcessStepsForAufgabe(aufgaben, ((NodeContainer) node.getUserObject()).getElement(), selRow, true);
-    //                        node.setSelectable(al.size() > 0);
-    //                    }
-    //                }
-    //            }
-    //        }
-    //        rtree.repaint();
-    //    }
+    /**
+     * @param elementaryMetaPath
+     * @return
+     */
+    private int countModeElements(final ElementaryMetaPath elementaryMetaPath) {
+        Class<? extends ModelElement> startClass = elementaryMetaPath.getStartClass();
+        Class<? extends Edge> edgeClass = elementaryMetaPath.getEdgeClass();
+        Class<? extends ModelElement> endClass = elementaryMetaPath.getEndClass();
+        int objectCounter = countModeElements(startClass);
+        objectCounter += countModeElements(edgeClass);
+        objectCounter += countModeElements(endClass);
+        return objectCounter;
+    }
 
-    //    /**
-    //     * Prüft den Prozess, ob er ein 3LGM-Geschäftsprozess ist. Der erste spezifische Fehler, der
-    //     * Auftritt wird sich in errorMessage gemerkt. Alle fehlerhaften Positionen werden im linken
-    //     * Baum mit einem Error-Icon markiert.
-    //     */
-    //    public void check3LGMBuisnessProcess() {
-    //        // System.out.println("check3LGMBuisnessProcess");
-    //
-    //        StringBuilder errorBuffer = new StringBuilder();
-    //        errorMessage = "";
-    //        // Das deaktivieren von Aufgabe auf der rechten Seite ist rausgenommen,
-    //        // da beim Drag und Drop nicht von vornerein fest steht,
-    //        // an welcher Position die Aufgabe links hinzugefügt werden soll
-    //        // checkRightPossibleTasks();
-    //
-    //        // aufgabenContainer wird in buildLeftTree() aktualisiert
-    //        // aufgabenContainer =
-    //        // modelElement.getConnectedKnot(ModelConstants.AUFGABE
-    //        // ,doc,-1,false,true, false);
-    //        int size = aufgabenContainer.size();
-    //        // der Prozess ist leer
-    //        if (size == 0) {
-    //            errorTitle = getResString("process_error_no_function");
-    //            errorBuffer.append(getResString("process_error_no_function_1"));
-    //        }
-    //        // der Prozess hat nur eine Aufgabe
-    //        else if (size == 1) {
-    //            errorTitle = getResString("process_error_single_function");
-    //            errorBuffer.append(getResString("process_error_single_function_1"));
-    //            ((LGMTreeNode) lroot.getChildAt(0)).setIconState(LGMTreeNode.SHOW_ERROR_ICON);
-    //            // der Prozess hat mind. 2 Aufgaben
-    //        } else {
-    //            // Reseten aller Icons auf normal
-    //            for (int i = 0; i < aufgabenContainer.size(); i++) {
-    //                ((LGMTreeNode) lroot.getChildAt(i)).setIconState(LGMTreeNode.SHOW_NORMAL_ICON);
-    //            }
-    //            // hole die Aufgaben des Prozesses
-    //            List<ModelElement> aufgaben = prozess.getConnectedElements(Aufgabe.class);
-    //            // die Icons auf fehlerhaft setzen, deren Aufgabe kein
-    //            // Geschäftsprozessschritt von einer der vorherigen Aufgaben ist
-    //            for (int i = 1; i < size; i++) {
-    //                if (prozess.getProcessStepsForAufgabe(aufgaben, i, true).size() == 0) {
-    //                    if (errorBuffer.length() == 0) {
-    //                        errorTitle = getResString("process_error_no_process_step");
-    //                        errorBuffer.append(getResString("process_error_no_process_step_1"));
-    //                        errorBuffer.append(((NodeContainer) aufgabenContainer.get(i)).getElement());
-    //                        errorBuffer.append(getResString("process_error_no_process_step_2"));
-    //                        errorBuffer.append(i + 1);
-    //                        errorBuffer.append(getResString("process_error_no_process_step_3"));
-    //                    }
-    //                    ((LGMTreeNode) lroot.getChildAt(i)).setIconState(LGMTreeNode.SHOW_ERROR_ICON);
-    //                }
-    //            }
-    //        }
-    //        if (errorBuffer.length() > 0) {
-    //            errorMessage = errorBuffer.toString();
-    //            errorBut.setEnabled(true);
-    //        } else {
-    //            errorBut.setEnabled(false);
-    //        }
-    //    }
+    /**
+     * @param elementClass
+     * @return
+     */
+    private int countModeElements(final Class<? extends ModelElement> elementClass) {
+        MetaModel metaModel = getMetaModel();
+        int layer = metaModel.layerFor(elementClass);
+        GraphDocument mainDoc = getMainDoc();
+        LayerContainer lc = mainDoc.getLayer(layer);
+        return lc.countType(elementClass);
+    }
+
+    @Override
+    protected Collection<ElementContainerTreeNode> buildLeftTree() {
+        // System.out.println("buildLeftTree");
+        //This return list is for compatibility reasons but in this panel its always empty!
+        //There is actually no need to fill this list with the leaf and if we would do
+        //this would be difficult, because the tree is not refreshed at all to keep the expansion
+        List<ElementContainerTreeNode> alwaysEmptyReturnLeafsList = new ArrayList<>();
+
+        if (metaPath == null) {
+            return alwaysEmptyReturnLeafsList;
+        }
+
+        ModelElement prozess = getModelElement();
+        // Die nicht alphabetisch sortierten Aufgaben holen
+        ElementaryMetaPath elementaryMetaPath = metaPath;
+        aufgabenContainer = getConnectedContainers(prozess, elementaryMetaPath);
+        // System.out.println(aufgabenContainer);
+        // wenn sich die Anzahl der Aufgaben, Objekttypen oder die der
+        // Verbindungen zw. Auf und OTs geändert hat
+        // muss aktualisiert werden (und nur dann). Wenn der rechte Baum
+        // angezeigt wird, dann wurde objectCounter
+        // dort schon aktualisiert
+        GraphDocument doc = getMainDoc();
+        if (!isRightSideVisible()) {
+            objectCounter = countModeElements(elementaryMetaPath);
+        }
+        // wenn auf der FE eine Edge (Prozesskanten zählen nicht mit)
+        // hinzugekommen ist oder ein Objekttyp gelöscht
+        // wurde oder der Baum noch leer ist -> Baum einfach komplett neu
+        // aufbauen
+        LGMTreeNode<?> lroot = ltree.getRoot();
+        DefaultTreeModel lmodel = (DefaultTreeModel) ltree.getModel();
+        if (objectCounter != oldObjectCounter || lroot.getChildCount() == 0) {
+            // buildLeftTree wird auf jeden Fall und immer nach buildRightTree aufgerufen
+            // -> buildLeftTree aktualisiert oldKantenCount und oldOTCount.
+            oldObjectCounter = objectCounter;
+            lroot.removeAllChildren();
+            for (int m = 0; m < aufgabenContainer.size(); m++) {
+                ElementContainer connectedContainer = aufgabenContainer.get(m);
+                ElementContainerTreeNode node = createIndexedDialogTreeNode(connectedContainer, m);
+                lroot.add(node);
+                appendObjectTypes(node);
+            }
+            ltree.reloadModel();
+            if (verify) {
+                check3LGMBuisnessProcess();
+            }
+            return alwaysEmptyReturnLeafsList;
+        }
+        // wenn dem Prozess eine neue Aufgabe hinzugefügt wurde, muss der neue Node eingefügt werden
+        //(dies hat im Gegensatz zum kompletten Neuaufbau den Vorteil, dass expandierte Node
+        //expandiert bleiben und nur deswegen hier der ganze Aufwand)
+        else if (lroot.getChildCount() < aufgabenContainer.size()) {
+            // nach dem Node, welcher neu eingefügt wird, muss die Nummerierung aller folgenden Node
+            // um 1 erhöht werden. Das passiert erst ab da, wenn actualizeNodes==true ist.
+            boolean actualizeNodes = false;
+            for (int m = 0; m < aufgabenContainer.size(); m++) {
+                ElementContainer connectedContainer = aufgabenContainer.get(m);
+                ElementContainerTreeNode connectedTreeNode = (ElementContainerTreeNode) lroot.getChildAt(m);
+                if (m >= lroot.getChildCount() || connectedTreeNode.getUserObject() != connectedContainer) {
+                    ElementContainerTreeNode node = createIndexedDialogTreeNode(connectedContainer, m);
+                    appendObjectTypes(node);
+                    lmodel.insertNodeInto(node, lroot, m);
+                    actualizeNodes = true;
+                } else if (actualizeNodes) {
+                    connectedTreeNode.setText(m);
+                }
+            }
+        }
+        // es wurde mind. eine Aufgabe auf der FE gelöscht, die auch im Prozess vorkam
+        else if (lroot.getChildCount() > aufgabenContainer.size()) {
+            boolean actualizeNodes = false;
+            // für alle Aufgaben des Prozesses in sub
+            for (int m = 0; m < aufgabenContainer.size(); m++) {
+                ElementContainer connectedContainer = aufgabenContainer.get(m);
+                ElementContainerTreeNode connectedTreeNode = (ElementContainerTreeNode) lroot.getChildAt(m);
+                // wenn im Baum eine andere Aufgabe steht als an der selben
+                // Position in sub
+                if (connectedTreeNode.getUserObject() != connectedContainer) {
+                    // lösche diesen Node im Baum
+                    lmodel.removeNodeFromParent(connectedTreeNode);
+                    // dieselbe Position muss nochmal getestet werden
+                    m--;
+                    // ab jetzt muss für alle folgenden Node, die nicht auch
+                    // gelöscht werden, die Nummerierung angepasst werden
+                    actualizeNodes = true;
+                    // wenn die Aufgabe erhalten bleibt und hinter einer Aufgabe
+                    // stand, die gelöscht wurde
+                } else if (actualizeNodes) {
+                    // schreibe die Nummerierung neu
+                    connectedTreeNode.setText(m);
+                }
+            }
+            // am Ende alle Node löschen, die mehr im Baum sind, als in der
+            // Aufgabenliste sub
+            while (lroot.getChildCount() > aufgabenContainer.size()) {
+                int lastChildIndex = lroot.getChildCount() - 1;
+                ElementContainerTreeNode lastChild = (ElementContainerTreeNode) lroot.getChildAt(lastChildIndex);
+                lmodel.removeNodeFromParent(lastChild);
+            }
+        }
+        if (verify) {
+            check3LGMBuisnessProcess();
+        }
+        // stellt sicher, dass Namensänderungen von Aufgaben und Objekttypen
+        // angezeigt werden
+        ltree.repaint();
+        return alwaysEmptyReturnLeafsList;
+    }
+
+    /**
+     * Prueft, wenn 3LGM-Geschaeftsprozesse angelegt werden sollen, welche
+     * Aufgaben im rechten Baum selektierbar sein dürfen. setSelectable(false)
+     * hat lediglich Auswirkungen auf die Darstellung.
+     */
+    private void checkRightPossibleTasks() {
+        // System.out.println("checkRightPossibleTasks");
+        if (!isRightSideVisible()) {
+            return;
+        }
+        // wenn links gar keine Aufgabe steht, dann müssen rechts alle Aufgaben
+        // setSelectable(true) gesetzt werden
+        LGMTreeNode<?> lroot = ltree.getRoot();
+        int lrootChildCount = lroot.getChildCount();
+        TreePath selPath = ltree.getSelectionPath();
+        // rechts alle Aufgaben verfügbar anzeigen, wenn links keine Aufgabe
+        // steht, nicht verifiziert werden soll oder die erste Aufgabe
+        // selektiert ist
+        if (lrootChildCount == 0 || !verificationCheck.isSelected() || selPath != null && ltree.getSelectionRows() != null && ltree.getSelectionRows()[0] == 1) {
+            for (int i = 1; i < rtree.getRowCount(); i++) {
+                TreePath path = rtree.getPathForRow(i);
+                if (path.getPathCount() == 2) {
+                    ((LGMTreeNode<?>) path.getLastPathComponent()).setSelectable(true);
+                }
+            }
+            // links ist mind. eine Aufgabe vorhanden, es soll verifiziert
+            // werden und es ist nicht die erste Aufgabe selektiert
+        } else {
+            int selRow = -1;
+            // wenn links gar nichts selelktiert ist
+            if (selPath == null) {
+                selRow = aufgabenContainer.size();
+                // ansonsten, wenn der links selektierte Pfad eine Aufgabe ist
+            } else if (selPath.getPathCount() == 2) {
+                // selRow auf den Index der selektierten Aufgabe innerhalb des
+                // Prozesses setzen
+                selRow = lroot.getIndex((LGMTreeNode<?>) selPath.getLastPathComponent());
+            }
+            // wenn links etwas selektiert war, was keine Aufgabe ist
+            if (selRow == -1) {
+                // rechts einfach alles setSelectable(false) setzen
+                for (int i = 1; i < rtree.getRowCount(); i++) {
+                    ((LGMTreeNode<?>) rtree.getPathForRow(i).getLastPathComponent()).setSelectable(false);
+                    // wenn links gar nichts oder eine Aufgabe selektiert war
+                }
+            } else {
+                // hole die Aufgaben des Prozesses
+                ModelElement prozess = getModelElement();
+                List<ModelElement> aufgaben = prozess.getConnectedElements(Aufgabe.class);
+                // für alle Zeilen des rechten Baumes
+                for (int i = 1; i < rtree.getRowCount(); i++) {
+                    selPath = rtree.getPathForRow(i);
+                    // wenn der momentane Pfad eine Aufgabe ist
+                    if (selPath.getPathCount() == 2) {
+                        LGMTreeNode<?> node = (LGMTreeNode<?>) selPath.getLastPathComponent();
+                        // wenn von mind. einem Node VOR dem selektierten bzw. (wenn nichts selektiert ist) dem
+                        // letzten Node mit der i-ten rechten Aufgabe einen LGM-Buisness-Process-Step bildet, dann
+                        // soll die i-te rechte Aufgabe selektierbar sein
+                        List<LGMProzessStep> al = null; //prozess.getProcessStepsForAufgabe(aufgaben, ((NodeContainer) node.getUserObject()).getElement(), selRow, true);
+                        //node.setSelectable(al.size() > 0);
+
+                        //AUSKOMMENTIERT, WEILS NICHT MEHR FUNKTIONIERTE
+                    }
+                }
+            }
+        }
+        rtree.repaint();
+    }
+
+    /**
+     * Prüft den Prozess, ob er ein 3LGM-Geschäftsprozess ist. Der erste
+     * spezifische Fehler, der Auftritt wird sich in errorMessage gemerkt. Alle
+     * fehlerhaften Positionen werden im linken Baum mit einem Error-Icon
+     * markiert.
+     */
+    public void check3LGMBuisnessProcess() {
+        // System.out.println("check3LGMBuisnessProcess");
+
+        StringBuilder errorBuffer = new StringBuilder();
+        errorMessage = "";
+        // Das deaktivieren von Aufgabe auf der rechten Seite ist rausgenommen,
+        // da beim Drag und Drop nicht von vornerein fest steht,
+        // an welcher Position die Aufgabe links hinzugefügt werden soll
+        // checkRightPossibleTasks();
+
+        // aufgabenContainer wird in buildLeftTree() aktualisiert
+        // aufgabenContainer =
+        // modelElement.getConnectedKnot(ModelConstants.AUFGABE
+        // ,doc,-1,false,true, false);
+        int size = aufgabenContainer.size();
+        LGMTreeNode<?> lroot = ltree.getRoot();
+        //AXS: 06.02.2020: Diese beiden Fehler hier sind nach meiner heutigen Auffassung gar keine mehr -> die Resourcenschlüssel habe ich gelöscht, weil man sie hätte verallgemenern müssen (also weg von "Prozess" und "Aufgabe")
+        // errorTitle = getResString("process_error_title");
+        // der Prozess ist leer
+        //        if (size == 0) {
+        //            errorBuffer.append(getResString("process_error_no_function_1"));
+        //        }
+        //        // der Prozess hat nur eine Aufgabe
+        //        else if (size == 1) {
+        //            errorBuffer.append(getResString("process_error_single_function_1"));
+        //            ((IconifiedTreeNode<?>) lroot.getChildAt(0)).setIconState(IconState.SHOW_ERROR_ICON);
+        //            // der Prozess hat mind. 2 Aufgaben
+        //        } else {
+        // Reseten aller Icons auf normal
+        for (int i = 0; i < aufgabenContainer.size(); i++) {
+            ((IconifiedTreeNode<?>) lroot.getChildAt(i)).setIconState(IconState.SHOW_NORMAL_ICON);
+        }
+        ModelElement prozess = getModelElement();
+        // hole die Aufgaben des Prozesses
+        List<ModelElement> aufgaben = prozess.getConnectedElements(Aufgabe.class);
+
+        // Kommunikationsprozesschritte werden im Moment (seit Version 3.3.0) nicht geprüft
+
+        // die Icons auf fehlerhaft setzen, deren Aufgabe kein
+        // Geschäftsprozessschritt von einer der vorherigen Aufgaben ist
+        //            for (int i = 1; i < size; i++) {
+        //                if (prozess.getProcessStepsForAufgabe(aufgaben, i, true).size() == 0) {
+        //                    if (errorBuffer.length() == 0) {
+        //                        errorTitle = getResString("process_error_no_process_step");
+        //                        errorBuffer.append(getResString("process_error_no_process_step_1"));
+        //                        errorBuffer.append(((NodeContainer) aufgabenContainer.get(i)).getElement());
+        //                        errorBuffer.append(getResString("process_error_no_process_step_2"));
+        //                        errorBuffer.append(i + 1);
+        //                        errorBuffer.append(getResString("process_error_no_process_step_3"));
+        //                    }
+        //                    ((LGMTreeNode) lroot.getChildAt(i)).setIconState(LGMTreeNode.SHOW_ERROR_ICON);
+        //                }
+        //            }
+        //        }
+        if (errorBuffer.length() > 0) {
+            errorMessage = errorBuffer.toString();
+            errorBut.setEnabled(true);
+        } else {
+            errorBut.setEnabled(false);
+        }
+    }
 
     // ----------------------------------------------------------------------------------------------------------------------------------
 
     //    public void actionPerformed(final ActionEvent e) {
-    //        // System.out.println(); //
-    //        System.out.println("actionPerformed command: " + e.getActionCommand());
-    //        super.actionPerformed(e);
-    //        String str = e.getActionCommand();
-    //        if (str.equals("aufklappen")) {
-    //            if (verify) {
-    //                check3LGMBuisnessProcess();
-    //            }
-    //        }
-    //        if (str.equals("verifikation")) {
-    //            verify = verificationCheck.isSelected();
-    //            errorBut.setVisible(verify);
-    //            if (verify) {
-    //                check3LGMBuisnessProcess();
-    //            } else {
-    //                checkRightPossibleTasks();
-    //                for (int i = 0; i < lroot.getChildCount(); i++) {
-    //                    ((LGMTreeNode) lroot.getChildAt(i)).setIconState(LGMTreeNode.SHOW_NORMAL_ICON);
+    //            // System.out.println(); //
+    //            System.out.println("actionPerformed command: " + e.getActionCommand());
+    //            super.actionPerformed(e);
+    //            String str = e.getActionCommand();
+    //            if (str.equals("aufklappen")) {
+    //                if (verify) {
+    //                    check3LGMBuisnessProcess();
     //                }
     //            }
-    //            return;
-    //        }
-    //        if (str.equals("addueber")) {
-    //            synchronized (ltree.getTreeLock()) {
-    //                TreePath selPath = rtree.getSelectionPath();
-    //                //wenn rechts etwas selektiert war
-    //                if (selPath != null) {
-    //                    //den selektierten Node ermitteln
-    //                    LGMTreeNode node = (LGMTreeNode) selPath.getLastPathComponent();
-    //                    //wenn es sich bei dem rechts selektierten Node um eine Aufgabe handelt
-    //                    if (node.getUserObject() instanceof NodeContainer) { //seinen Container holen (diese muessen links im Baum geaddet werden)
-    //                        NodeContainer knot = (NodeContainer) node.getUserObject();
-    //                        if (knot.getElement() instanceof Aufgabe) {
-    //                            //wenn links was selektiert ist, dann muss die naechste Aufgabe ueber bzw. vor der selektierten eingefuegt werden
-    //                            selPath = ltree.getSelectionPath();
-    //                            boolean nothingSelected = true;
-    //                            //wenn links etwas selektiert war
-    //                            if (selPath != null) {
-    //                                nothingSelected = false;
-    //                                node = (LGMTreeNode) selPath.getLastPathComponent();
-    //                                //prüfen, ob eine Aufgabe selektiert ist
-    //                                if (node.getUserObject() instanceof NodeContainer && ((NodeContainer) node.getUserObject()).getElement() instanceof Aufgabe) {
-    //                                    int selRow = ltree.getRowForPath(selPath);
-    //                                    int index = lmodel.getIndexOfChild(lroot, node);
-    //                                    doc.exec("MODEL_ACTION_LINK " + "null" + " " + "null" + " " + modelElement.getID() + " " + knot.getID() + " " + index, dialog.getTransactionID());
-    //                                    // ((NodeContainer)modelElement.getContainer(doc)).addSpecialInfoTarget(index,knot);
-    //                                    selRow++;
-    //                                    while (ltree.getPathForRow(selRow).getPathCount() != 2) {
+    //            if (str.equals("verifikation")) {
+    //                verify = verificationCheck.isSelected();
+    //                errorBut.setVisible(verify);
+    //                if (verify) {
+    //                    check3LGMBuisnessProcess();
+    //                } else {
+    //                    checkRightPossibleTasks();
+    //                    for (int i = 0; i < lroot.getChildCount(); i++) {
+    //                        ((LGMTreeNode) lroot.getChildAt(i)).setIconState(LGMTreeNode.SHOW_NORMAL_ICON);
+    //                    }
+    //                }
+    //                return;
+    //            }
+    //            if (str.equals("addueber")) {
+    //                synchronized (ltree.getTreeLock()) {
+    //                    TreePath selPath = rtree.getSelectionPath();
+    //                    //wenn rechts etwas selektiert war
+    //                    if (selPath != null) {
+    //                        //den selektierten Node ermitteln
+    //                        LGMTreeNode node = (LGMTreeNode) selPath.getLastPathComponent();
+    //                        //wenn es sich bei dem rechts selektierten Node um eine Aufgabe handelt
+    //                        if (node.getUserObject() instanceof NodeContainer) { //seinen Container holen (diese muessen links im Baum geaddet werden)
+    //                            NodeContainer knot = (NodeContainer) node.getUserObject();
+    //                            if (knot.getElement() instanceof Aufgabe) {
+    //                                //wenn links was selektiert ist, dann muss die naechste Aufgabe ueber bzw. vor der selektierten eingefuegt werden
+    //                                selPath = ltree.getSelectionPath();
+    //                                boolean nothingSelected = true;
+    //                                //wenn links etwas selektiert war
+    //                                if (selPath != null) {
+    //                                    nothingSelected = false;
+    //                                    node = (LGMTreeNode) selPath.getLastPathComponent();
+    //                                    //prüfen, ob eine Aufgabe selektiert ist
+    //                                    if (node.getUserObject() instanceof NodeContainer && ((NodeContainer) node.getUserObject()).getElement() instanceof Aufgabe) {
+    //                                        int selRow = ltree.getRowForPath(selPath);
+    //                                        int index = lmodel.getIndexOfChild(lroot, node);
+    //                                        doc.exec("MODEL_ACTION_LINK " + "null" + " " + "null" + " " + modelElement.getID() + " " + knot.getID() + " " + index, dialog.getTransactionID());
+    //                                        // ((NodeContainer)modelElement.getContainer(doc)).addSpecialInfoTarget(index,knot);
     //                                        selRow++;
+    //                                        while (ltree.getPathForRow(selRow).getPathCount() != 2) {
+    //                                            selRow++;
+    //                                        }
+    //                                        setSelectionRow(ltree, selRow);
     //                                    }
-    //                                    setSelectionRow(ltree, selRow);
+    //                                }
+    //                                //wenn links nichts selektiert war -> einfach hinten anhaengen
+    //                                if (nothingSelected) {
+    //                                    //es wird eine neue ProzessKante angelegt, aber der rechte Baum braucht nicht aktualisiert werden
+    //                                    doc.exec("MODEL_ACTION_LINK " + "null" + " " + "null" + " " + modelElement.getID() + " " + knot.getID() + " " + modelElement.countConnections(), dialog.getTransactionID());
+    //                                    ltree.scrollRowToVisible(ltree.getRowCount() - 1);
     //                                }
     //                            }
-    //                            //wenn links nichts selektiert war -> einfach hinten anhaengen
-    //                            if (nothingSelected) {
-    //                                //es wird eine neue ProzessKante angelegt, aber der rechte Baum braucht nicht aktualisiert werden
-    //                                doc.exec("MODEL_ACTION_LINK " + "null" + " " + "null" + " " + modelElement.getID() + " " + knot.getID() + " " + modelElement.countConnections(), dialog.getTransactionID());
-    //                                ltree.scrollRowToVisible(ltree.getRowCount() - 1);
-    //                            }
-    //                        }
-    //                    }
-    //                }
-    //            }
-    //            return;
-    //        }
-    //        if (str.equals("removeueber")) {
-    //            synchronized (rtree.getTreeLock()) {
-    //                TreePath selPath = ltree.getSelectionPath();
-    //                //wenn links etwas selektiert war
-    //                if (selPath != null) {
-    //                    LGMTreeNode node = (LGMTreeNode) selPath.getLastPathComponent();
-    //                    //prüfen, ob eine Aufgabe selektiert ist
-    //                    Object knot = node.getUserObject();
-    //                    //auf keinen Fall hier gleich auf ElementContainer casten, weil es auch ein String sein kann !!!
-    //                    if (!(knot instanceof String) && ((ElementContainer) knot).getElement() instanceof Aufgabe) {
-    //                        //es wird eine neue ProzessKante angelegt, aber der rechte Baum braucht nicht aktualisiert werden
-    //                        int index = lmodel.getIndexOfChild(lroot, node);
-    //                        doc.exec("MODEL_ACTION_UNLINK " + modelElement.getID() + " " + ((ElementContainer) knot).getID() + " " + index, dialog.getTransactionID());
-    //                    }
-    //                    //####################################################################################################
-    //                    //Dies hier evtl. weglassen, da es auf nem lahmen Rechner und nem großen Modell rel. lange dauern kann
-    //                    //Die der auf der linken Seite entfernten Aufgabe auf der rechten Seite entsprechende wird selektiert.
-    //                    //Diese Funktion geht davon aus, dass der rechte Baum komplett expandiert ist, was er in dem Fall,
-    //                    //dass alle Kinder von rroot Blätter sind und rroot selbst nicht angezeigt wird immer automatisch ist.
-    //                    for (int i = 0; i < rtree.getRowCount(); i++) {
-    //                        if (((LGMTreeNode) rtree.getPathForRow(i).getLastPathComponent()).getUserObject() == knot) {
-    //                            setSelectionRow(rtree, i);
-    //                            break;
     //                        }
     //                    }
     //                }
     //                return;
     //            }
-    //        }
-    //        if (str.equals("moveup")) {
-    //            //Aufaben haben Pfadlänge 2 das nicht sichtbare root hat die 1)
-    //            TreePath selPath = ltree.getSelectionPath();
-    //            //wenn links eine Aufgabe selektiert ist
-    //            if (selPath != null && selPath.getPathCount() == 2) {
-    //                //Position der selektierten Aufgabe im Baum bzw. Prozess holen
-    //                int pos1 = lmodel.getIndexOfChild(lroot, selPath.getLastPathComponent());
-    //                //wenn nicht die erste sondern eine Aufgabe dahinter selektiert ist
-    //                if (pos1 > 0) {
-    //                    //jetzt die Position der über der selektierten Aufgabe liegenden Aufgabe holen
-    //                    //-> von dieser alle evtl. expandierten Unterknoten merken
-    //                    //-> sie removen und unter der selektierten wieder einfügen
-    //                    //-> alles was von ihr expandiert war, wieder expandieren
-    //                    int pos2 = ltree.getRowForPath(selPath) - 1;
-    //                    TreePath path = ltree.getPathForRow(pos2);
-    //                    while (path.getPathCount() > 2) {
-    //                        pos2--;
-    //                        path = ltree.getPathForRow(pos2);
-    //                    }
-    //                    //wenn die selektierte Aufgabe expandierte Unterknoten hat (können max. 2 sein, nämlich
-    //                    //"Interpretiert" und "Bearbeitet"), dann sind diese TreePathes jetzt in enum
-    //                    Enumeration en = ltree.getExpandedDescendants(path);
-    //                    //jetzt den Baum anpassen (DER WIRD IN DIESEM FALL IN buildLeftTree() NICHT VERÄNDERT)
-    //                    //und weil hier noch die Expasionen anpasst werden (über enum), soll das auch hier bleiben!
-    //                    LGMTreeNode node = (LGMTreeNode) lroot.getChildAt(pos1 - 1);
-    //                    //den oberen Node holen
-    //                    lmodel.removeNodeFromParent(node);
-    //                    //ihn entfernen
-    //                    lmodel.insertNodeInto(node, lroot, pos1);
-    //                    //ihn einen tiefer als vorher einfügen
-    //                    //wenn die selektierte Aufgabe expandiert war
-    //                    if (en != null) {
-    //                        expandFullPath = true;
-    //                        //muss sein wegen treeWillExpand, damits auch wirklich expandiert wird
-    //                        ltree.expandRow(pos1 + 1);
-    //                        //den Node wieder expandieren
-    //                        while (en.hasMoreElements()) {
-    //                            ltree.expandPath((TreePath) en.nextElement());
-    //                            //seine Unterknoten auch expandieren
+    //            if (str.equals("removeueber")) {
+    //                synchronized (rtree.getTreeLock()) {
+    //                    TreePath selPath = ltree.getSelectionPath();
+    //                    //wenn links etwas selektiert war
+    //                    if (selPath != null) {
+    //                        LGMTreeNode node = (LGMTreeNode) selPath.getLastPathComponent();
+    //                        //prüfen, ob eine Aufgabe selektiert ist
+    //                        Object knot = node.getUserObject();
+    //                        //auf keinen Fall hier gleich auf ElementContainer casten, weil es auch ein String sein kann !!!
+    //                        if (!(knot instanceof String) && ((ElementContainer) knot).getElement() instanceof Aufgabe) {
+    //                            //es wird eine neue ProzessKante angelegt, aber der rechte Baum braucht nicht aktualisiert werden
+    //                            int index = lmodel.getIndexOfChild(lroot, node);
+    //                            doc.exec("MODEL_ACTION_UNLINK " + modelElement.getID() + " " + ((ElementContainer) knot).getID() + " " + index, dialog.getTransactionID());
     //                        }
-    //                        //das muss immer nch einem Expandieren zurückgesetzt werden (siehe treeWillExpand)
-    //                        willExpand = false;
-    //                        expandFullPath = false;
+    //                        //####################################################################################################
+    //                        //Dies hier evtl. weglassen, da es auf nem lahmen Rechner und nem großen Modell rel. lange dauern kann
+    //                        //Die der auf der linken Seite entfernten Aufgabe auf der rechten Seite entsprechende wird selektiert.
+    //                        //Diese Funktion geht davon aus, dass der rechte Baum komplett expandiert ist, was er in dem Fall,
+    //                        //dass alle Kinder von rroot Blätter sind und rroot selbst nicht angezeigt wird immer automatisch ist.
+    //                        for (int i = 0; i < rtree.getRowCount(); i++) {
+    //                            if (((LGMTreeNode) rtree.getPathForRow(i).getLastPathComponent()).getUserObject() == knot) {
+    //                                setSelectionRow(rtree, i);
+    //                                break;
+    //                            }
+    //                        }
     //                    }
-    //                    ltree.scrollPathToVisible(selPath);
-    //                    //jetzt erst die Nummerierungen anpassen (auf keinen Fall vor dem Expandieren, weil sonst die Pfade nicht mehr stimmen)
-    //                    node.setText("[" + (pos1 + 1) + "] " + node.getUserObject());
-    //                    node = (LGMTreeNode) lroot.getChildAt(pos1 - 1);
-    //                    node.setText("[" + pos1 + "] " + node.getUserObject());
-    //                    //das switchen in den connections vom Prozess ausführen
-    //                    doc.swapEdgePositions(modelElement, pos1, pos1 - 1, dialog.getTransactionID())
+    //                    return;
     //                }
     //            }
-    //            ltree.repaint();
-    //            return;
-    //        }
-    //        if (str.equals("movedown")) {
-    //            //Aufaben haben Pfadlänge 2 (das nicht sichtbare root hat die 1)
-    //            TreePath selPath = ltree.getSelectionPath();
-    //            if (selPath != null && selPath.getPathCount() == 2) {
-    //                int pos1 = lmodel.getIndexOfChild(lroot, selPath.getLastPathComponent());
-    //                if (pos1 < lroot.getChildCount() - 1) {
-    //                    int pos2 = ltree.getRowForPath(selPath) + 1;
-    //                    TreePath path = ltree.getPathForRow(pos2);
-    //                    while (path.getPathCount() > 2) {
-    //                        pos2++;
-    //                        path = ltree.getPathForRow(pos2);
-    //                    }
-    //                    Enumeration en = ltree.getExpandedDescendants(path);
-    //                    LGMTreeNode node = (LGMTreeNode) lroot.getChildAt(pos1 + 1);
-    //                    lmodel.removeNodeFromParent(node);
-    //                    lmodel.insertNodeInto(node, lroot, pos1);
-    //                    if (en != null) {
-    //                        expandFullPath = true;
-    //                        ltree.expandRow(pos1 + 1);
-    //                        while (en.hasMoreElements()) {
-    //                            ltree.expandPath((TreePath) en.nextElement());
-    //                            //seine Unterknoten auch expandieren
+    //            if (str.equals("moveup")) {
+    //                //Aufaben haben Pfadlänge 2 das nicht sichtbare root hat die 1)
+    //                TreePath selPath = ltree.getSelectionPath();
+    //                //wenn links eine Aufgabe selektiert ist
+    //                if (selPath != null && selPath.getPathCount() == 2) {
+    //                    //Position der selektierten Aufgabe im Baum bzw. Prozess holen
+    //                    int pos1 = lmodel.getIndexOfChild(lroot, selPath.getLastPathComponent());
+    //                    //wenn nicht die erste sondern eine Aufgabe dahinter selektiert ist
+    //                    if (pos1 > 0) {
+    //                        //jetzt die Position der über der selektierten Aufgabe liegenden Aufgabe holen
+    //                        //-> von dieser alle evtl. expandierten Unterknoten merken
+    //                        //-> sie removen und unter der selektierten wieder einfügen
+    //                        //-> alles was von ihr expandiert war, wieder expandieren
+    //                        int pos2 = ltree.getRowForPath(selPath) - 1;
+    //                        TreePath path = ltree.getPathForRow(pos2);
+    //                        while (path.getPathCount() > 2) {
+    //                            pos2--;
+    //                            path = ltree.getPathForRow(pos2);
     //                        }
-    //                        willExpand = false;
-    //                        expandFullPath = false;
+    //                        //wenn die selektierte Aufgabe expandierte Unterknoten hat (können max. 2 sein, nämlich
+    //                        //"Interpretiert" und "Bearbeitet"), dann sind diese TreePathes jetzt in enum
+    //                        Enumeration en = ltree.getExpandedDescendants(path);
+    //                        //jetzt den Baum anpassen (DER WIRD IN DIESEM FALL IN buildLeftTree() NICHT VERÄNDERT)
+    //                        //und weil hier noch die Expasionen anpasst werden (über enum), soll das auch hier bleiben!
+    //                        LGMTreeNode node = (LGMTreeNode) lroot.getChildAt(pos1 - 1);
+    //                        //den oberen Node holen
+    //                        lmodel.removeNodeFromParent(node);
+    //                        //ihn entfernen
+    //                        lmodel.insertNodeInto(node, lroot, pos1);
+    //                        //ihn einen tiefer als vorher einfügen
+    //                        //wenn die selektierte Aufgabe expandiert war
+    //                        if (en != null) {
+    //                            expandFullPath = true;
+    //                            //muss sein wegen treeWillExpand, damits auch wirklich expandiert wird
+    //                            ltree.expandRow(pos1 + 1);
+    //                            //den Node wieder expandieren
+    //                            while (en.hasMoreElements()) {
+    //                                ltree.expandPath((TreePath) en.nextElement());
+    //                                //seine Unterknoten auch expandieren
+    //                            }
+    //                            //das muss immer nch einem Expandieren zurückgesetzt werden (siehe treeWillExpand)
+    //                            willExpand = false;
+    //                            expandFullPath = false;
+    //                        }
+    //                        ltree.scrollPathToVisible(selPath);
+    //                        //jetzt erst die Nummerierungen anpassen (auf keinen Fall vor dem Expandieren, weil sonst die Pfade nicht mehr stimmen)
+    //                        node.setText("[" + (pos1 + 1) + "] " + node.getUserObject());
+    //                        node = (LGMTreeNode) lroot.getChildAt(pos1 - 1);
+    //                        node.setText("[" + pos1 + "] " + node.getUserObject());
+    //                        //das switchen in den connections vom Prozess ausführen
+    //                        doc.swapEdgePositions(modelElement, pos1, pos1 - 1, dialog.getTransactionID())
     //                    }
-    //                    ltree.scrollPathToVisible(selPath);
-    //                    node.setText("[" + (pos1 + 1) + "] " + node.getUserObject());
-    //                    node = (LGMTreeNode) lroot.getChildAt(pos1 + 1);
-    //                    node.setText("[" + (pos1 + 2) + "] " + node.getUserObject());
-    //                    doc.swapEdgePositions(modelElement, pos1, pos1 + 1, dialog.getTransactionID())
+    //                }
+    //                ltree.repaint();
+    //                return;
+    //            }
+    //            if (str.equals("movedown")) {
+    //                //Aufaben haben Pfadlänge 2 (das nicht sichtbare root hat die 1)
+    //                TreePath selPath = ltree.getSelectionPath();
+    //                if (selPath != null && selPath.getPathCount() == 2) {
+    //                    int pos1 = lmodel.getIndexOfChild(lroot, selPath.getLastPathComponent());
+    //                    if (pos1 < lroot.getChildCount() - 1) {
+    //                        int pos2 = ltree.getRowForPath(selPath) + 1;
+    //                        TreePath path = ltree.getPathForRow(pos2);
+    //                        while (path.getPathCount() > 2) {
+    //                            pos2++;
+    //                            path = ltree.getPathForRow(pos2);
+    //                        }
+    //                        Enumeration en = ltree.getExpandedDescendants(path);
+    //                        LGMTreeNode node = (LGMTreeNode) lroot.getChildAt(pos1 + 1);
+    //                        lmodel.removeNodeFromParent(node);
+    //                        lmodel.insertNodeInto(node, lroot, pos1);
+    //                        if (en != null) {
+    //                            expandFullPath = true;
+    //                            ltree.expandRow(pos1 + 1);
+    //                            while (en.hasMoreElements()) {
+    //                                ltree.expandPath((TreePath) en.nextElement());
+    //                                //seine Unterknoten auch expandieren
+    //                            }
+    //                            willExpand = false;
+    //                            expandFullPath = false;
+    //                        }
+    //                        ltree.scrollPathToVisible(selPath);
+    //                        node.setText("[" + (pos1 + 1) + "] " + node.getUserObject());
+    //                        node = (LGMTreeNode) lroot.getChildAt(pos1 + 1);
+    //                        node.setText("[" + (pos1 + 2) + "] " + node.getUserObject());
+    //                        doc.swapEdgePositions(modelElement, pos1, pos1 + 1, dialog.getTransactionID())
+    //                    }
+    //                }
+    //                ltree.repaint();
+    //                return;
+    //            }
+    //            if (str.equals("fehler")) {
+    //                JOptionPane.showMessageDialog(this, errorMessage, errorTitle, JOptionPane.ERROR_MESSAGE);
+    //                return;
+    //            }
+    //
+    //            /*
+    //             * Das hier würde sich bei drücken auf Abbrechen nicht zurücknehmen lassen, da das
+    //             * UNDO für link nicht gesetzt wurde
+    //             */
+    //
+    //            if (str.equals("clear")) {
+    //                //diese Funktion geht davon aus, dass der Baum komplett expandiert ist, was er in dem Fall,
+    //                //dass alle Kinder von lroot Blätter sind und lroot selbst nicht angezeigt wird immer automatisch ist.
+    //                for (int i = ltree.getRowCount() - 1; i >= 0; i--) {
+    //                    NodeContainer knotCont = (NodeContainer) ((LGMTreeNode) lroot.getChildAt(i)).getUserObject();
+    //                    doc.exec("MODEL_ACTION_UNLINK " + prozess.getID() + " " + knotCont.getID(), dialog.getTransactionID());
+    //                    lroot.remove(i);
     //                }
     //            }
-    //            ltree.repaint();
-    //            return;
     //        }
-    //        if (str.equals("fehler")) {
-    //            JOptionPane.showMessageDialog(this, errorMessage, errorTitle, JOptionPane.ERROR_MESSAGE);
-    //            return;
-    //        }
-    //
-    //        /*
-    //         * Das hier würde sich bei drücken auf Abbrechen nicht zurücknehmen lassen, da das
-    //         * UNDO für link nicht gesetzt wurde
-    //         */
-    //
-    //        if (str.equals("clear")) {
-    //            //diese Funktion geht davon aus, dass der Baum komplett expandiert ist, was er in dem Fall,
-    //            //dass alle Kinder von lroot Blätter sind und lroot selbst nicht angezeigt wird immer automatisch ist.
-    //            for (int i = ltree.getRowCount() - 1; i >= 0; i--) {
-    //                NodeContainer knotCont = (NodeContainer) ((LGMTreeNode) lroot.getChildAt(i)).getUserObject();
-    //                doc.exec("MODEL_ACTION_UNLINK " + prozess.getID() + " " + knotCont.getID(), dialog.getTransactionID());
-    //                lroot.remove(i);
-    //            }
-    //            return;
-    //        }
-    //    }
 
     @Override
     public void treeWillExpand(final TreeExpansionEvent e) throws ExpandVetoException {
@@ -1089,15 +1193,6 @@ public class ProzessStructurePanel extends PathConnectionLeafPanel implements Tr
                     boolean verify = processPanel.getVerificationCheckBox().isSelected();
                     ProzessStructurePanel.verify(verify);
                     processPanel.getErrorButton().setVisible(verify);
-                    //                    if (verify) {
-                    //                        panel.check3LGMBuisnessProcess();
-                    //                    } else {
-                    //                        panel.checkRightPossibleTasks();
-                    //                        for (int i = 0; i < lroot.getChildCount(); i++) {
-                    //                            ((LGMTreeNode) lroot.getChildAt(i)).setIconState(LGMTreeNode.SHOW_NORMAL_ICON);
-                    //                        }
-                    //                    }
-                    return;
                 }
             };
         }
@@ -1260,7 +1355,6 @@ public class ProzessStructurePanel extends PathConnectionLeafPanel implements Tr
                             }
                         }
                     }
-                    return;
                 }
             }
         };
@@ -1311,7 +1405,7 @@ public class ProzessStructurePanel extends PathConnectionLeafPanel implements Tr
 
                         // jetzt den Baum anpassen (DER WIRD IN DIESEM FALL IN buildLeftTree() NICHT VERÄNDERT)
                         // und weil hier noch die Expasionen anpasst werden (über enum), soll das auch hier bleiben!
-                        LGMTreeNode<?> node = (LGMTreeNode<?>) lroot.getChildAt(pos1 - 1); // den
+                        LGMTreeNode<?> node = lroot.getChildAt(pos1 - 1); // den
                         // oberen Node holen
                         lmodel.removeNodeFromParent(node); // ihn entfernen
                         lmodel.insertNodeInto(node, lroot, pos1); // ihn einen tiefer als vorher einfügen, wenn die selektierte Aufgabe expandiert war
@@ -1331,7 +1425,7 @@ public class ProzessStructurePanel extends PathConnectionLeafPanel implements Tr
                         // jetzt erst die Nummerierungen anpassen (auf keinen Fall vor dem
                         // Expandieren, weil sonst die Pfade nicht mehr stimmen)
                         node.setText("[" + (pos1 + 1) + "] " + node.getUserObject());
-                        node = (LGMTreeNode<?>) lroot.getChildAt(pos1 - 1);
+                        node = lroot.getChildAt(pos1 - 1);
                         node.setText("[" + pos1 + "] " + node.getUserObject());
 
                         // das switchen in den connections vom Prozess ausführen
@@ -1376,7 +1470,7 @@ public class ProzessStructurePanel extends PathConnectionLeafPanel implements Tr
                             path = tree.getPathForRow(pos2);
                         }
                         Enumeration<TreePath> en = tree.getExpandedDescendants(path);
-                        LGMTreeNode<?> node = (LGMTreeNode<?>) lroot.getChildAt(pos1 + 1);
+                        LGMTreeNode<?> node = lroot.getChildAt(pos1 + 1);
                         lmodel.removeNodeFromParent(node);
                         lmodel.insertNodeInto(node, lroot, pos1);
 
@@ -1392,14 +1486,13 @@ public class ProzessStructurePanel extends PathConnectionLeafPanel implements Tr
                         }
                         tree.scrollPathToVisible(selPath);
                         node.setText("[" + (pos1 + 1) + "] " + node.getUserObject());
-                        node = (LGMTreeNode<?>) lroot.getChildAt(pos1 + 1);
+                        node = lroot.getChildAt(pos1 + 1);
                         node.setText("[" + (pos1 + 2) + "] " + node.getUserObject());
                         int pid = getTransactionID();
                         doc.swapEdgePositions(modelElement, pos1, pos1 + 1, pid);
                     }
                 }
                 tree.repaint();
-                return;
             }
         };
     }
