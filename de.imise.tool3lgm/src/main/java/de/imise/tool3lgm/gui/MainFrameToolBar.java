@@ -80,7 +80,9 @@ public class MainFrameToolBar extends UnfloatableToolBar implements MouseListene
         addSeparator();
         add(showConf);
         add(hideConf);
+        addSeparator();
 
+        // Definition of the buttons and the action group in every button. null values cerate a seperator in the buttons list
         ActionSource[][] alignmentAndPositionActions = {
                 {
                         GDCommands.MODEL_ACTION_SET_ELEMENT_TEXT_ALIGNMENT_HTML_LEFT, //text left aligned
@@ -95,23 +97,27 @@ public class MainFrameToolBar extends UnfloatableToolBar implements MouseListene
                         GDCommands.MODEL_ACTION_SET_ELEMENT_TEXT_POSITION_VERTICAL_TOP, //text position top
                         GDCommands.MODEL_ACTION_SET_ELEMENT_TEXT_POSITION_VERTICAL_CENTER, //text position center
                         GDCommands.MODEL_ACTION_SET_ELEMENT_TEXT_POSITION_VERTICAL_BOTTOM, //text position bottom
-                }, {
-                        GDCommands.MODEL_ACTION_MOVE_ORDER_TO_FIRST_POSITION, //text position top
-                        GDCommands.MODEL_ACTION_MOVE_ORDER_ONE_POSITION_UP, //text position one up
-                        GDCommands.MODEL_ACTION_MOVE_ORDER_ONE_POSITION_DOWN, //text position one down
-                        GDCommands.MODEL_ACTION_MOVE_ORDER_TO_LAST_POSITION, //text position last
+                }, { //Separator
                 }, {
                         GDCommands.MODEL_ACTION_SET_ELEMENTS_POSITION_HORIZONTAL_LEFT, //elements position left
                         GDCommands.MODEL_ACTION_SET_ELEMENTS_POSITION_HORIZONTAL_CENTER, //elements psoition center
                         GDCommands.MODEL_ACTION_SET_ELEMENTS_POSITION_HORIZONTAL_RIGHT, //elements position right
+                }, {
                         GDCommands.MODEL_ACTION_SET_ELEMENTS_POSITION_VERTICAL_TOP, //elements position top
                         GDCommands.MODEL_ACTION_SET_ELEMENTS_POSITION_VERTICAL_CENTER, //elements position center
                         GDCommands.MODEL_ACTION_SET_ELEMENTS_POSITION_VERTICAL_BOTTOM, //elements position bottom
+                }, {
                         GDCommands.MODEL_ACTION_SET_ELEMENTS_ALIGNMENT_GRID,
                 }, {
                         GDCommands.MODEL_ACTION_SET_ELEMENT_ALIGNMENT_SIZE_WIDTH, //elements get same width
                         GDCommands.MODEL_ACTION_SET_ELEMENT_ALIGNMENT_SIZE_HEIGTH, //elements get same height
                         GDCommands.MODEL_ACTION_SET_ELEMENT_ALIGNMENT_SIZE_WIDTH_AND_HEIGTH, //elements get same width and height
+                }, { //Separator
+                }, {
+                        GDCommands.MODEL_ACTION_MOVE_ORDER_TO_FIRST_POSITION, //text position top
+                        GDCommands.MODEL_ACTION_MOVE_ORDER_ONE_POSITION_UP, //text position one up
+                        GDCommands.MODEL_ACTION_MOVE_ORDER_ONE_POSITION_DOWN, //text position one down
+                        GDCommands.MODEL_ACTION_MOVE_ORDER_TO_LAST_POSITION, //text position last
                 }
         };
 
@@ -139,9 +145,12 @@ public class MainFrameToolBar extends UnfloatableToolBar implements MouseListene
      * @param actionSources
      */
     private void addDropDownButton(final ActionSource[] actionSources) {
+        if (actionSources.length == 0) {
+            addSeparator();
+            return;
+        }
         DropDownButtonSource dropDownButtonSource = new DropDownButtonSource(actionSources);
         JButton button = dropDownButtonSource.getButtonComponent();
-        addSeparator();
         add(button);
 
     }

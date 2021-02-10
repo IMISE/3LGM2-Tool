@@ -39,8 +39,10 @@ public class DropDownButtonSource implements ActionListener {
     }
 
     /**
-     * @param small
-     * @param actions
+     * @param smallIcons
+     * @param actionSources The action sources whcih can create the button
+     *            actions. If there is a <code>null</code> value in the list, so
+     *            a separator will be added
      */
     public DropDownButtonSource(final boolean smallIcons, final ActionSource... actionSources) {
         JPopupMenu popupMenu = createDropDownMenu(actionSources);
@@ -53,7 +55,9 @@ public class DropDownButtonSource implements ActionListener {
     }
 
     /**
-     * @param actions
+     * @param actionSources The action sources whcih can create the button
+     *            actions. If there is a <code>null</code> value in the list, so
+     *            a separator will be added
      * @return
      */
     private JPopupMenu createDropDownMenu(final ActionSource[] actionSources) {
@@ -62,9 +66,13 @@ public class DropDownButtonSource implements ActionListener {
         }
         JPopupMenu popupMenu = new DynamicPopupMenu();
         for (ActionSource actionSource : actionSources) {
-            Action action = actionSource.createAction();
-            JMenuItem popupMenuItem = popupMenu.add(action);
-            popupMenuItem.addActionListener(this);
+            if (actionSource == null) {
+                popupMenu.addSeparator();
+            } else {
+                Action action = actionSource.createAction();
+                JMenuItem popupMenuItem = popupMenu.add(action);
+                popupMenuItem.addActionListener(this);
+            }
         }
         return popupMenu;
     }
