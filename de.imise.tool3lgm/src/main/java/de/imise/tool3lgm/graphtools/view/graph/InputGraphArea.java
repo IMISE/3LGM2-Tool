@@ -378,20 +378,22 @@ public final class InputGraphArea extends BasicGraphArea implements MouseListene
                     continue;
                 }
                 grabbedElementsRealRect = getIncludingRectangle(grabbedElementsRealRect, kc);
-                for (ElementContainer ec : kc.getElement().getSubordinatedContainers(szenario, OPTION_GRAPH_MOVE_SUBELEMENTS.is())) {
-                    ModelElement me = ec.getElement();
-                    if (!me.isPaintable() || !ec.isVisible() || !multiView && kc.layerFor() != ebene) {
-                        continue;
-                    }
-                    if (grabbedElementsFullRect == null) {
-                        grabbedElementsFullRect = new Rectangle(grabbedElementsRealRect);
-                    }
-                    grabbedElementsFullRect = getIncludingRectangle(grabbedElementsFullRect, ec);
-                    for (Edge edge : me.getEdgesWith(clickedEc.getElement())) {
-                        EdgeContainer edgeC = (EdgeContainer) edge.getContainer(szenario);
-                        if (edgeC != null) {
-                            for (BendpointContainer bc : edgeC.iterateBendpointContainers()) {
-                                grabbedElementsFullRect = getIncludingRectangle(grabbedElementsFullRect, bc);
+                if (OPTION_GRAPH_MOVE_SUBELEMENTS.is()) {
+                    for (ElementContainer ec : kc.getElement().getSubordinatedContainers(szenario)) {
+                        ModelElement me = ec.getElement();
+                        if (!me.isPaintable() || !ec.isVisible() || !multiView && kc.layerFor() != ebene) {
+                            continue;
+                        }
+                        if (grabbedElementsFullRect == null) {
+                            grabbedElementsFullRect = new Rectangle(grabbedElementsRealRect);
+                        }
+                        grabbedElementsFullRect = getIncludingRectangle(grabbedElementsFullRect, ec);
+                        for (Edge edge : me.getEdgesWith(clickedEc.getElement())) {
+                            EdgeContainer edgeC = (EdgeContainer) edge.getContainer(szenario);
+                            if (edgeC != null) {
+                                for (BendpointContainer bc : edgeC.iterateBendpointContainers()) {
+                                    grabbedElementsFullRect = getIncludingRectangle(grabbedElementsFullRect, bc);
+                                }
                             }
                         }
                     }

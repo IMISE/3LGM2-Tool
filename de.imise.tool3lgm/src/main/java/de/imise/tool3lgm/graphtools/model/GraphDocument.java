@@ -2644,7 +2644,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
      */
     private void moveSlaveElements(final NodeContainer nc, final int xDiff, final int yDiff, final int wDiff, final int hDiff, final int pid) {
         ModelElement master = nc.getElement();
-        Set<ElementContainer> subordinatedContainers = master.getSubordinatedContainers(this, true);
+        Set<ElementContainer> subordinatedContainers = master.getSubordinatedContainers(this);
         for (ElementContainer subContainer : subordinatedContainers) {
             if (subContainer != nc) { //subContainer contains the master too
                 if (subContainer instanceof NodeContainer) { //should be alsways true but better safe than sorry
@@ -2691,13 +2691,15 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
      * @return <code>null</code>, wenn keine Erweiterung der bestehenden
      *         Selektion nötig war, sonst die alte Selektion
      */
-    private List<ElementContainer> expandSelection(final boolean addAllParts) {
+    private List<ElementContainer> expandSelection(final boolean addAllSubordinated) {
         Collection<ElementContainer> container2Select = new HashSet<>();
-        for (NodeContainer nc : selectedContainer.iterableRealElementContainer()) {
-            ModelElement me = nc.getElement();
-            for (ElementContainer partNc : me.getSubordinatedContainers(this, addAllParts)) {
-                if (!isSelected(partNc)) {
-                    container2Select.add(partNc);
+        if (addAllSubordinated) {
+            for (NodeContainer nc : selectedContainer.iterableRealElementContainer()) {
+                ModelElement me = nc.getElement();
+                for (ElementContainer partNc : me.getSubordinatedContainers(this)) {
+                    if (!isSelected(partNc)) {
+                        container2Select.add(partNc);
+                    }
                 }
             }
         }
