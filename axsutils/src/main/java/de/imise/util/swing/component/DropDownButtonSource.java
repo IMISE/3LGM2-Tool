@@ -32,6 +32,13 @@ public class DropDownButtonSource implements ActionListener {
     private final boolean smallIcons;
 
     /**
+     * Use this ActionSource in the button lists to indicate that the FOLLOWING
+     * ActionsSource is the default of the button
+     */
+    public static final ActionSource NEXT_ACTION_DEFAULT_INDICATOR = new ActionSource() {
+    };
+
+    /**
      * @param actionSources
      */
     public DropDownButtonSource(final ActionSource... actionSources) {
@@ -42,16 +49,32 @@ public class DropDownButtonSource implements ActionListener {
      * @param smallIcons
      * @param actionSources The action sources whcih can create the button
      *            actions. If there is a <code>null</code> value in the list, so
-     *            a separator will be added
+     *            a separator will be added. If there is a
+     *            DEFAULT_ACTION_INDICATOR in the list so the following action
+     *            will be set as default for this button.
      */
     public DropDownButtonSource(final boolean smallIcons, final ActionSource... actionSources) {
         JPopupMenu popupMenu = createDropDownMenu(actionSources);
-        ExtendedAction action = actionSources[0].createAction();
+        int defaultActionIndex = getDefaultActionIndex(actionSources);
+        ExtendedAction action = actionSources[defaultActionIndex].createAction();
         this.smallIcons = smallIcons;
         Icon icon = smallIcons ? action.getSmallIcon() : action.getLargeIcon();
         buttonComponent = DropDownButtonFactory.createDropDownButton(icon, popupMenu);
         buttonComponent.setAction(action);
         buttonComponent.setIcon(icon);
+    }
+
+    /**
+     * @param actionSources
+     * @return
+     */
+    private int getDefaultActionIndex(final ActionSource... actionSources) {
+        for (int i = 0; i < actionSources.length; i++) {
+            if (actionSources[i] == NEXT_ACTION_DEFAULT_INDICATOR) {
+                return i + 1;
+            }
+        }
+        return 0;
     }
 
     /**
@@ -66,6 +89,9 @@ public class DropDownButtonSource implements ActionListener {
         }
         JPopupMenu popupMenu = new DynamicPopupMenu();
         for (ActionSource actionSource : actionSources) {
+            if (actionSource == NEXT_ACTION_DEFAULT_INDICATOR) {
+                continue;
+            }
             if (actionSource == null) {
                 popupMenu.addSeparator();
             } else {

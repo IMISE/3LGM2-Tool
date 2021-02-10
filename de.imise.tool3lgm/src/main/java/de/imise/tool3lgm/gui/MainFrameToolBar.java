@@ -82,28 +82,34 @@ public class MainFrameToolBar extends UnfloatableToolBar implements MouseListene
         add(hideConf);
         addSeparator();
 
-        // Definition of the buttons and the action group in every button. null values cerate a seperator in the buttons list
+        // Definition of the buttons and the action group in every button. null values create a seperator in the buttons list
+        //and the DropDownButtonSource.DEFAULT_ACTION_INDICATOR defines the NEXT ActionSource as default for the button
         ActionSource[][] alignmentAndPositionActions = {
                 {
                         GDCommands.MODEL_ACTION_SET_ELEMENT_TEXT_ALIGNMENT_HTML_LEFT, //text left aligned
+                        DropDownButtonSource.NEXT_ACTION_DEFAULT_INDICATOR,
                         GDCommands.MODEL_ACTION_SET_ELEMENT_TEXT_ALIGNMENT_HTML_CENTER, //text center aligned
                         GDCommands.MODEL_ACTION_SET_ELEMENT_TEXT_ALIGNMENT_HTML_RIGHT, //text right aligned
                         GDCommands.MODEL_ACTION_SET_ELEMENT_TEXT_ALIGNMENT_HTML_JUSTIFY, //text justified
                 }, {
                         GDCommands.MODEL_ACTION_SET_ELEMENT_TEXT_POSITION_HORIZONTAL_LEFT, //text position left
+                        DropDownButtonSource.NEXT_ACTION_DEFAULT_INDICATOR,
                         GDCommands.MODEL_ACTION_SET_ELEMENT_TEXT_POSITION_HORIZONTAL_CENTER, //text position center
                         GDCommands.MODEL_ACTION_SET_ELEMENT_TEXT_POSITION_HORIZONTAL_RIGHT, //text position right
                 }, {
                         GDCommands.MODEL_ACTION_SET_ELEMENT_TEXT_POSITION_VERTICAL_TOP, //text position top
+                        DropDownButtonSource.NEXT_ACTION_DEFAULT_INDICATOR,
                         GDCommands.MODEL_ACTION_SET_ELEMENT_TEXT_POSITION_VERTICAL_CENTER, //text position center
                         GDCommands.MODEL_ACTION_SET_ELEMENT_TEXT_POSITION_VERTICAL_BOTTOM, //text position bottom
                 }, { //Separator
                 }, {
                         GDCommands.MODEL_ACTION_SET_ELEMENTS_POSITION_HORIZONTAL_LEFT, //elements position left
+                        DropDownButtonSource.NEXT_ACTION_DEFAULT_INDICATOR,
                         GDCommands.MODEL_ACTION_SET_ELEMENTS_POSITION_HORIZONTAL_CENTER, //elements psoition center
                         GDCommands.MODEL_ACTION_SET_ELEMENTS_POSITION_HORIZONTAL_RIGHT, //elements position right
                 }, {
                         GDCommands.MODEL_ACTION_SET_ELEMENTS_POSITION_VERTICAL_TOP, //elements position top
+                        DropDownButtonSource.NEXT_ACTION_DEFAULT_INDICATOR,
                         GDCommands.MODEL_ACTION_SET_ELEMENTS_POSITION_VERTICAL_CENTER, //elements position center
                         GDCommands.MODEL_ACTION_SET_ELEMENTS_POSITION_VERTICAL_BOTTOM, //elements position bottom
                 }, {
@@ -111,12 +117,14 @@ public class MainFrameToolBar extends UnfloatableToolBar implements MouseListene
                 }, {
                         GDCommands.MODEL_ACTION_SET_ELEMENT_ALIGNMENT_SIZE_WIDTH, //elements get same width
                         GDCommands.MODEL_ACTION_SET_ELEMENT_ALIGNMENT_SIZE_HEIGTH, //elements get same height
+                        DropDownButtonSource.NEXT_ACTION_DEFAULT_INDICATOR,
                         GDCommands.MODEL_ACTION_SET_ELEMENT_ALIGNMENT_SIZE_WIDTH_AND_HEIGTH, //elements get same width and height
                 }, { //Separator
                 }, {
                         GDCommands.MODEL_ACTION_MOVE_ORDER_TO_FIRST_POSITION, //text position top
                         GDCommands.MODEL_ACTION_MOVE_ORDER_ONE_POSITION_UP, //text position one up
                         GDCommands.MODEL_ACTION_MOVE_ORDER_ONE_POSITION_DOWN, //text position one down
+                        DropDownButtonSource.NEXT_ACTION_DEFAULT_INDICATOR,
                         GDCommands.MODEL_ACTION_MOVE_ORDER_TO_LAST_POSITION, //text position last
                 }
         };
