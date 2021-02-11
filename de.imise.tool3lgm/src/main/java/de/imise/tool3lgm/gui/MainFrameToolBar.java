@@ -82,7 +82,7 @@ public class MainFrameToolBar extends UnfloatableToolBar implements MouseListene
         add(hideConf);
         addSeparator();
 
-        // Definition of the buttons and the action group in every button. null values create a seperator in the buttons list
+        // Definition of the buttons and the action group in every button. null values create a separator in the buttons list
         //and the DropDownButtonSource.DEFAULT_ACTION_INDICATOR defines the NEXT ActionSource as default for the button
         ActionSource[][] alignmentAndPositionActions = {
                 {
@@ -126,6 +126,15 @@ public class MainFrameToolBar extends UnfloatableToolBar implements MouseListene
                         GDCommands.MODEL_ACTION_MOVE_ORDER_ONE_POSITION_DOWN, //text position one down
                         DropDownButtonSource.NEXT_ACTION_DEFAULT_INDICATOR,
                         GDCommands.MODEL_ACTION_MOVE_ORDER_TO_LAST_POSITION, //text position last
+                }, { //Separator
+                }, {
+                        GDCommands.MODEL_ACTION_SET_ELEMENT_FONT, //set text font
+                }, {
+                        GDCommands.MODEL_ACTION_SET_ELEMENT_COLOR, //set element color
+                }, {
+                        GDCommands.MODEL_ACTION_SET_ELEMENT_TRANSPARENCY_NONE, //set element transparency to non-transparent
+                        GDCommands.MODEL_ACTION_SET_ELEMENT_TRANSPARENCY_HALF, //set element transparency to half-transparent
+                        GDCommands.MODEL_ACTION_SET_ELEMENT_TRANSPARENCY_FULL, //set element transparency to full-transparent
                 }
         };
 
