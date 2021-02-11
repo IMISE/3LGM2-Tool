@@ -33,7 +33,6 @@ import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_SET_ELE
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_SET_ELEMENT_FONT;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_SET_ELEMENT_ICON;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_SET_ELEMENT_POSITION;
-import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_SET_ELEMENT_SHAPE;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_SET_ELEMENT_TEXT_ALIGNMENT_HTML;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_SET_ELEMENT_TEXT_POSITION_HORIZONTAL;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_SET_ELEMENT_TEXT_POSITION_VERTICAL;
@@ -764,9 +763,6 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
         if (ec.getColor() != null) {
             doc.addUndo(pid, MODEL_ACTION_SET_ELEMENT_COLOR, doc, ec, ec.getColor().getRGB());
             doc.addUndo(pid, MODEL_ACTION_SET_ELEMENT_ALPHA, doc, ec, ec.getAlpha());
-        }
-        if (ec.getForm() != null) {
-            doc.addUndo(pid, MODEL_ACTION_SET_ELEMENT_SHAPE, doc, ec, ec.getForm());
         }
         if (!ec.hasStandardFont()) {
             doc.addUndo(pid, MODEL_ACTION_SET_ELEMENT_FONT, doc, ec, ec.getFontName(), ec.getFontSize(), ec.getFontStyle());
