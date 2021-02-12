@@ -13,6 +13,9 @@ import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_LINK_EL
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_MOVE_ORDER;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_MOVE_ORDER_ONE_POSITION_DOWN;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_MOVE_ORDER_ONE_POSITION_UP;
+import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_SET_ELEMENT_ALIGNMENT_SIZE_HEIGTH;
+import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_SET_ELEMENT_ALIGNMENT_SIZE_WIDTH;
+import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_SET_ELEMENT_ALIGNMENT_SIZE_WIDTH_AND_HEIGTH;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_SET_ELEMENT_ALPHA;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_SET_ELEMENT_COLOR;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_SET_ELEMENT_DEFAULT_COLOR;
@@ -2552,15 +2555,23 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
      *
      * @return
      */
-    public boolean isAlignable() {
+    private boolean isAlignable(final GDCommands mode) {
         //Mehrfach selektierte Node, wobei der zuletzt selektierte ein richtiger Node sein muss (also
         //kein Knickpunkt) und der zuletzt selektierte Node zeichenbar sein muss
         if (!isMultipleNodeSelection()) {
             return false;
         }
         ElementContainer lastSelected = getLastSelectedGraphVisibleNodeOrBendpoint();
-        ModelElement me = lastSelected.getElement();
-        return me.isPaintable();
+        if (!lastSelected.isVisibleInGraph()) {
+            return false;
+        }
+        //don't make the resize actions if a bendpoint is the last selected element
+        if (lastSelected == null || lastSelected instanceof BendpointContainer) {
+            if (mode == MODEL_ACTION_SET_ELEMENT_ALIGNMENT_SIZE_WIDTH || mode == MODEL_ACTION_SET_ELEMENT_ALIGNMENT_SIZE_HEIGTH || mode == MODEL_ACTION_SET_ELEMENT_ALIGNMENT_SIZE_WIDTH_AND_HEIGTH) {
+                return false;
+            }
+        }
+        return true;
     }
 
     /**
@@ -2568,11 +2579,11 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
      * @param pid
      */
     public final void align(final GDCommands mode, final int pid) {
-        if (!isAlignable()) {
+        if (!isAlignable(mode)) {
             return;
         }
+        ElementContainer lastSelected = getLastSelectedGraphVisibleNodeOrBendpoint();
         start_transaction(pid);
-        NodeContainer lastSelected = getLastSelectedGraphVisibleNodeOrBendpoint();
         //Unterelemente ebenfalls selektieren, damit sie mitverschoben werden und ihr Verschieben
         //dann auch als Undo gelogt wird
         //        List<ElementContainer> selection = expandSelection(OPTION_GRAPH_MOVE_SUBELEMENTS.is());
@@ -2662,7 +2673,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
      * @param nc
      * @return
      */
-    private boolean isGraphicalSuperElementSelected(final NodeContainer nc) {
+    public boolean isGraphicalSuperElementSelected(final NodeContainer nc) {
         ModelElement me = nc.getElement();
         Class<? extends ModelElement> elementClass = me.getClass();
         List<Class<SubordinationEdge>> subordinationEdgeTypesAsSlave = metaModel.getSubordinationEdgeTypesAsSlave(elementClass, SubordinationEdge.class);
