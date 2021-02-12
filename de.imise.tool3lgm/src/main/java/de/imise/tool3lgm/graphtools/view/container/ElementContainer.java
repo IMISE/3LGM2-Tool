@@ -422,18 +422,20 @@ public abstract class ElementContainer extends JLabel implements Cloneable, Grap
      */
     @Override
     public String toString() {
-        return isFadedIn() ? me.toString() : getResString("ausgebl") + " " + me.toString();
+        return isVisibleInGraph() ? me.toString() : getResString("ausgebl") + " " + me.toString();
     }
 
     /**
-     * @return <code>true</code> if this element is visible
+     * @return <code>true</code> if the element {@link #isPaintable()} and
+     *         {@link #isVisible()} and the cossresponding {@link GraphDocument}
+     *         is a {@link Szenario}
      */
-    protected boolean isFadedIn() {
+    public boolean isVisibleInGraph() {
         return me.isPaintable() && isVisible() && doc instanceof Szenario;
     }
 
     /**
-     * @return
+     * @return <code>true</code> if the element can be painted in the graph
      */
     public boolean isPaintable() {
         return me.isPaintable();
@@ -441,7 +443,7 @@ public abstract class ElementContainer extends JLabel implements Cloneable, Grap
 
     /**
      * @param ec
-     * @return
+     * @return <code>true</code> if the element can be painted in the graph
      */
     public static boolean isPaintable(final ElementContainer ec) {
         return ec != null && ec.isPaintable();

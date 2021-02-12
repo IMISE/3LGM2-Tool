@@ -158,7 +158,7 @@ public class LayerContainer extends ElementContainer {
     }
 
     @Override
-    protected boolean isFadedIn() {
+    public boolean isVisibleInGraph() {
         return true; //gilt als immer sichtbar -> toString bekommt nicht das "(ausgeblendet)" vorangstellt
     }
 

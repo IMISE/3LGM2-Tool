@@ -118,7 +118,7 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
     /**
      * ID des Teilmodells, mit dem das Element verknüpft ist. Diese Verknüpfung
      * sagt einfach nur aus, dass das Element in dem Teilmodell näher
-     * berschrieben wird (z.B. duch seine Teile). Es kann, aber muss selbst
+     * berschrieben wird (z.B. durch seine Teile). Es kann, aber muss selbst
      * nicht in diesem Teilmodell vorkommen.
      */
     private String associatedSzenID = null;
