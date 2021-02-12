@@ -105,14 +105,14 @@ public class ModelSelection extends MetaModelSpecificAdapter implements Set<Elem
      *
      * @return
      */
-    public ElementContainer getLastSelected() {
+    public final ElementContainer getLastSelected() {
         return lastSelected;
     }
 
     /**
      * @return the last in the graph selected node or bendpoint container
      */
-    public NodeContainer getLastSelectedGraphVisibleNodeOrBendpoint() {
+    public final NodeContainer getLastSelectedGraphVisibleNodeOrBendpoint() {
         return lastSelectedGraphVisibleNodeOrBendpoint;
     }
 
