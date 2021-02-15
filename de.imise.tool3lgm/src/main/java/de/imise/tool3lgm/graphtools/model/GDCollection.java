@@ -79,6 +79,7 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 
 import com.google.common.base.Strings;
+import com.google.common.collect.Lists;
 
 import de.imise.tool3lgm.MetaModelContext;
 import de.imise.tool3lgm.Tool3lgmModelType;
@@ -851,9 +852,13 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
             }
             //dieser Container kann wirklich gelöscht werden -> merken
             reallyContainerToRemove.add(ec);
-            for (Edge edge : me.getEdges()) {
+            Iterable<Edge> edges = me.getEdges();
+            List<Edge> edges2Remove = Lists.newArrayList(edges);
+            for (int i = 0; i < edges2Remove.size(); i++) {
+                Edge edge = edges2Remove.get(i);
                 //den Container der Edge mit allen Knickpunkten im aktuellen Teilmodell löschen
-                if (!simpleRemoveEdgeContainer((EdgeContainer) edge.getContainer(szen), pid)) {
+                EdgeContainer edgeC = (EdgeContainer) edge.getContainer(szen);
+                if (!simpleRemoveEdgeContainer(edgeC, pid)) {
                     continue;
                 }
                 //alle untergeordneten ElementContainer ebenfalls löschen
@@ -864,9 +869,13 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
                 if (comp.getMaster() != me) {
                     continue;
                 }
-                ElementContainer slaveContainer = comp.getSlave().getContainer(szen);
+                ModelElement slave = comp.getSlave();
+                ElementContainer slaveContainer = slave.getContainer(szen);
                 if (slaveContainer != null) {
                     reallyContainerToRemove.add(slaveContainer);
+                    edges = slave.getEdges();
+                    List<Edge> slaveEdges = Lists.newArrayList(edges);
+                    edges2Remove.addAll(slaveEdges);
                 }
             }
         }
@@ -897,13 +906,17 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
         //die bendPointContainerList wird beim removeBendpoint-Aufruf selbst geändert -> daher einfach von hinten die
         //Knickpunkte löschen, dann muss nichts kopiert werden
         for (int k = edgeContainer.getBendpointContainerCount() - 1; k >= 0; k--) {
-            removeBendpoint(edgeContainer.getBendpointContainer(k).getBendpoint(), pid);
+            BendpointContainer bc = edgeContainer.getBendpointContainer(k);
+            Bendpoint bendpoint = bc.getBendpoint();
+            removeBendpoint(bendpoint, pid);
         }
         Edge edge = edgeContainer.getEdge();
         GraphDocument doc = edgeContainer.getGraphDocument();
         //jetzt den KantenContainer einfach löschen
         edge.removeContainer(doc);
-        doc.layer[edgeContainer.layerFor()].remove(edgeContainer);
+        int layerFor = edgeContainer.layerFor();
+        LayerContainer lc = doc.layer[layerFor];
+        lc.remove(edgeContainer);
         return true;
     }
 
