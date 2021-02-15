@@ -37,7 +37,7 @@ import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_SET_ELE
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_SET_ELEMENT_TEXT_ALIGNMENT_HTML;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_SET_ELEMENT_TEXT_POSITION_HORIZONTAL;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_SET_ELEMENT_TEXT_POSITION_VERTICAL;
-import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_SET_ELEMENT_VISIBILITY_OFF;
+import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_SET_ELEMENT_VISIBILITY_ON;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_SET_LAYER_ALPHA;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_SET_LAYER_COLOR;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_SET_LAYER_SIZE_FACTOR;
@@ -780,8 +780,8 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
             }
             doc.addUndo(pid, MODEL_ACTION_MOVE_ORDER, doc, ec, doc.layer[ec.layerFor()].indexOf(ec));
             doc.addUndo(pid, MODEL_ACTION_SET_ELEMENT_POSITION, doc, ec, ec.getX(), ec.getY(), ec.getWidth(), ec.getHeight());
-            if (!kc.isVisible()) {
-                doc.addUndo(pid, MODEL_ACTION_SET_ELEMENT_VISIBILITY_OFF, doc, ec);
+            if (kc.isVisible()) {
+                doc.addUndo(pid, MODEL_ACTION_SET_ELEMENT_VISIBILITY_ON, doc, ec);
             }
             if (ec.getTextPositionHorizontal() != STANDARD_ELEMENT_LAYOUT.textPositionHorizontal) {
                 doc.addUndo(pid, MODEL_ACTION_SET_ELEMENT_TEXT_POSITION_HORIZONTAL, doc, ec, kc.get3LGMLayout().textPositionHorizontal);
