@@ -176,7 +176,7 @@ public class LGMGraphDocument extends GraphDocument {
      *
      */
     private synchronized void copyToClipboard() {
-        if (selectedContainer.size() == 0) {
+        if (selectedContainer.isEmpty()) {
             return;
         }
         ToolXMLClipboardWriter.writeClipboard(this);

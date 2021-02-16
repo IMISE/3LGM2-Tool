@@ -1594,11 +1594,14 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
         if (!mainDoc.isMyElement(edge)) {
             EdgeContainer ec = new EdgeContainer(edgeContainer, mainDoc);
             int layer = edge.layerFor();
-            mainDoc.getLayer(layer).add(ec);
+            LayerContainer lc = mainDoc.getLayer(layer);
+            lc.add(ec);
         }
         boolean bulkMode = setBulkMode(true);
         for (Szenario szen : szenarios) {
-            szen.createEdgeContainer(edge.getStart().getContainer(szen), szen, false, pid);
+            ModelElement start = edge.getStart();
+            ElementContainer startEc = start.getContainer(szen);
+            szen.createEdgeContainer(startEc, szen, false, pid);
         }
         setBulkMode(bulkMode);
     }
