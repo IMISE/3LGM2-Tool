@@ -1516,14 +1516,12 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
      *
      * @param returnList Liste mit <code>ElementContainer</code>n
      * @param doc (Teil-)Modell in dem gesucht werden soll
-     * @param withParts
      */
-    private final void getSubordinatedContainers(final Set<ElementContainer> returnSet, final ModelElement lastAddedSubElement, final GraphDocument doc, final boolean withParts) {
-        Class<? extends SubordinationEdge> subordinationEdgeClass = withParts ? SubordinationEdge.class : CompositionEdge.class;
-        for (ElementContainer subEc : lastAddedSubElement.getConnectedContainers(ModelElement.class, doc, subordinationEdgeClass, SubordinationEdge.SUPER_TO_SUB_DIRECTION)) {
+    private final void getSubordinatedContainers(final Set<ElementContainer> returnSet, final ModelElement lastAddedSubElement, final GraphDocument doc) {
+        for (ElementContainer subEc : lastAddedSubElement.getConnectedContainers(ModelElement.class, doc, SubordinationEdge.class, SubordinationEdge.SUPER_TO_SUB_DIRECTION)) {
             if (!returnSet.contains(subEc)) {
                 returnSet.add(subEc);
-                getSubordinatedContainers(returnSet, subEc.getElement(), doc, withParts);
+                getSubordinatedContainers(returnSet, subEc.getElement(), doc);
             }
         }
     }
@@ -1533,17 +1531,16 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
      * Elemente zurück.
      *
      * @param doc
-     * @param withParts
      * @return Ein <code>Set</code> gefüllt mit <code>ElementContainer</code>n
      *         der untergeorndeten Elemente.
      */
-    public final Set<ElementContainer> getSubordinatedContainers(final GraphDocument doc, final boolean withParts) {
+    public final Set<ElementContainer> getSubordinatedContainers(final GraphDocument doc) {
         Set<ElementContainer> subordinated = new HashSet<>();
         ElementContainer ec = getContainer(doc);
         if (ec != null) {
             subordinated.add(ec);
         }
-        getSubordinatedContainers(subordinated, this, doc, withParts);
+        getSubordinatedContainers(subordinated, this, doc);
         return subordinated;
     }
 

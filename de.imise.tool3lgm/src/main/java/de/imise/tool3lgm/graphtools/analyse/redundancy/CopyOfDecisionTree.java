@@ -125,7 +125,6 @@ public class CopyOfDecisionTree {
      * @param resultToFill Analyseergebnis, das gefüllt werden soll
      */
     public CopyOfDecisionTree(final RedundancyAnalysisResult resultToFill) {
-        super();
         result = resultToFill;
         init();
         // RedundancyChecker.printData(data);
@@ -490,7 +489,7 @@ public class CopyOfDecisionTree {
             // der aktuelle AWB unterstützt mind. eine Aufgabe, die auch ein anderer AWB
             // unterstützt. Es können
             // jetzt noch 2 Fälle auftreten. Entweder alle Aufgaben des aktuellen AWB werden bereits
-            // duch AWB im
+            // durch AWB im
             // Baum bzw. andere Aufgaben exklusiv unterstützende AWB erledigt ODER es gibt mind.
             // eine nicht von
             // den Vorgänger-AWBs unterstützte Aufgabe. Diese kann dann nur noch von AWBs nach dem
@@ -573,7 +572,7 @@ public class CopyOfDecisionTree {
             }
 
             // wenn die Zahl der vom aktuellen AWB unterstützten Aufgaben kleiner ist als die Zahl
-            // der bereits duch die Vorgänger-AWBs unterstützten Aufgaben, dann unterstützt außer
+            // der bereits durch die Vorgänger-AWBs unterstützten Aufgaben, dann unterstützt außer
             // dem
             // aktuellen AWB mind. ein AWB danach auch die Aufgabe -> füge einen Plus und einen
             // Minus-
@@ -600,12 +599,10 @@ public class CopyOfDecisionTree {
                 // Alle Aufgaben des aktuellen AWB werden bereits von anderen AWBs unterstützt ->
                 // füge nur
                 // einen Minusknoten ein
+            } else if (awb == awbCount) {
+                actNode = actNode.addLeaf(false, pathCosts);
             } else {
-                if (awb == awbCount) {
-                    actNode = actNode.addLeaf(false, pathCosts);
-                } else {
-                    actNode = actNode.addChild(false);
-                }
+                actNode = actNode.addChild(false);
             }
 
             // Wenn nur noch 200000Bytes Speicher frei sind

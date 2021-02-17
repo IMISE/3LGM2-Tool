@@ -1,11 +1,14 @@
 package de.imise.util;
 
 import java.text.Collator;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
+
+import com.google.common.collect.Lists;
 
 /**
  * Klasse zum alphabetischen Sortieren von Objektlisten in Abhängigkeit von der
@@ -191,6 +194,19 @@ public class Alphabetical {
     public static final int binarySearch(final List<?> list, final Object o) {
         Comparator<Object> localizedComparator = getLocalizedComparator();
         return Collections.binarySearch(list, o, localizedComparator);
+    }
+
+    /**
+     * Returns the iterable as alphabetical sorted list.
+     *
+     * @param <T>
+     * @param elements
+     * @return
+     */
+    public static <T> List<T> getSorted(final Iterable<T> elements) {
+        ArrayList<T> elementsList = Lists.newArrayList(elements);
+        Alphabetical.sort(elementsList);
+        return elementsList;
     }
 
 }

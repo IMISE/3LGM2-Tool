@@ -228,7 +228,7 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
         String westLabelText;
         int labelEdgeIndex = getEdgesInPathCount() - 1;
         if (panelLabelOption == LABEL_LAST_EDGE_CONNECTION_NAME) {
-            if (labelEdgeIndex == 0) {
+            if (labelEdgeIndex > 0) {
                 Class<? extends Edge> edgeClass = getEdgeClassInPath(labelEdgeIndex);
                 Direction directionInPath = getDirectionInPath(labelEdgeIndex);
                 westLabelText = elementsNameBuilder.getMetaAssociationName(edgeClass, directionInPath);
@@ -519,7 +519,6 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
             if (i + 1 < elementaryMetaPathCount && !connectedElements.isEmpty()) {
                 //hole das erste
                 me = connectedElements.get(0);
-                continue;
             } else {
                 List<ModelElement> elements2Connect = element2Connect != null ? ImmutableList.of(element2Connect) : null;
                 connect(me, elements2Connect, i);

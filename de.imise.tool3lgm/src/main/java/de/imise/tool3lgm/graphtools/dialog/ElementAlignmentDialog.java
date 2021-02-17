@@ -11,7 +11,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.AbstractAction;
-import javax.swing.Action;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JDialog;
@@ -227,22 +226,6 @@ public class ElementAlignmentDialog extends JDialog implements ChangeListener {
     private int getCols() {
         int cols = colSpinner.getValue().intValue();
         return cols;
-    }
-
-    public static Action getElementAlignmentAction() {
-        return new AbstractAction(getResString("ALIGN_DIALOG_ACTION_TITLE")) {
-
-            @Override
-            public void actionPerformed(final ActionEvent e) {
-                ElementAlignmentDialog dialog = new ElementAlignmentDialog();
-                dialog.setVisible(true);
-            }
-
-            @Override
-            public boolean isEnabled() {
-                return Static.getSelectedDoc() != null;
-            }
-        };
     }
 
     @Override

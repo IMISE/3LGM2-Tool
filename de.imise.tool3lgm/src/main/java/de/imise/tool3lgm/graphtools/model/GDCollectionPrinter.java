@@ -5,12 +5,15 @@ import java.util.List;
 
 import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
+import de.imise.tool3lgm.graphtools.metamodel.elements.Bendpoint;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
+import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
 import de.imise.tool3lgm.graphtools.view.container.EdgeContainer;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.graphtools.view.container.LayerContainer;
 import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
+import de.imise.util.Alphabetical;
 import de.imise.util.Sys;
 
 public class GDCollectionPrinter {
@@ -154,6 +157,10 @@ public class GDCollectionPrinter {
         }
     }
 
+    public void print() {
+        Sys.outm(1, 1, this);
+    }
+
     @Override
     public String toString() {
         return sb.toString();
@@ -214,14 +221,100 @@ public class GDCollectionPrinter {
                     Collection<Class<? extends ModelElement>> instanciableElementClasses = metaModel.getInstanciableAssignableClasses(elementClass);
                     for (Class<? extends ModelElement> instanciableElementClass : instanciableElementClasses) {
                         List<ElementContainer> elements = doc.getElementContainers(instanciableElementClass);
-                        for (ElementContainer ec : elements) {
-                            printer.appendElementContainer(ec);
-                        }
+                        printer.appendElementContainers(elements);
                     }
                 }
             }
         }
         return printer;
+    }
+
+    /**
+     * @param doc
+     * @param simpleElementClassNames
+     * @return
+     */
+    public static GDCollectionPrinter getAllElenentsAllListsPrinter(final GraphDocument doc) {
+        MetaModel metaModel = doc.getMetaModel();
+        GDCollection gdcoll = doc.getCollection();
+        GDCollectionPrinter printer = new GDCollectionPrinter(gdcoll);
+        printer.removeNewLine();
+        printer.appendln(" (Sub-)Model: " + doc);
+        Collection<Class<? extends ModelElement>> instanciableAssignableClasses = metaModel.getInstanciableAssignableClasses(Node.class);
+        List<Class<? extends ModelElement>> instanciableAssignableClassesSorted = Alphabetical.getSorted(instanciableAssignableClasses);
+        for (Class<? extends ModelElement> elementClass : instanciableAssignableClassesSorted) {
+            printer.appendAllElenentsAllLists(doc, elementClass);
+        }
+        return printer;
+    }
+
+    /**
+     * @param doc
+     * @param elementClass
+     */
+    private void appendAllElenentsAllLists(final GraphDocument doc, final Class<? extends ModelElement> elementClass) {
+        MetaModel metaModel = doc.getMetaModel();
+        Collection<Class<? extends ModelElement>> instanciableAssignableClasses = metaModel.getInstanciableAssignableClasses(elementClass);
+        List<Class<? extends ModelElement>> instanciableAssignableClassesSorted = Alphabetical.getSorted(instanciableAssignableClasses);
+        for (int layer = ModelConstants.LAYERS.length - 1; layer >= 0; layer--) {
+            LayerContainer lc = doc.getLayer(layer);
+            for (Class<? extends ModelElement> clazz : instanciableAssignableClassesSorted) {
+                int elementClassLayer = metaModel.layerFor(clazz);
+                if (elementClassLayer != layer) {
+                    continue;
+                }
+                if (doc instanceof Szenario && !metaModel.isPaintable(clazz)) {
+                    continue;
+                }
+
+                if (Bendpoint.class.isAssignableFrom(clazz)) {
+                    //
+                } else if (Node.class.isAssignableFrom(clazz)) {
+                    List<NodeContainer> nodeContainersAlphabetical = lc.getNodeContainersAlphabetical();
+                    List<NodeContainer> graphNodeContainersAlphabetical = Alphabetical.getSorted(lc.getGraphNodeContainers());
+                    if (nodeContainersAlphabetical.isEmpty() && graphNodeContainersAlphabetical.isEmpty()) {
+                        continue;
+                    }
+
+                    String className = clazz.getSimpleName();
+                    appendln(className, "  Node Containers Alphabetical");
+                    increaseIndent();
+                    appendElementContainers(nodeContainersAlphabetical, clazz);
+                    decreaseIndent();
+
+                    appendln(className, "  Graph Node Containers Alphabetical");
+                    increaseIndent();
+                    appendElementContainers(graphNodeContainersAlphabetical, clazz);
+                    decreaseIndent();
+
+                } else if (Edge.class.isAssignableFrom(clazz)) {
+
+                }
+            }
+
+        }
+    }
+
+    /**
+     * @param elements
+     */
+    private void appendElementContainers(final List<ElementContainer> elements) {
+        for (ElementContainer ec : elements) {
+            appendElementContainer(ec);
+        }
+    }
+
+    /**
+     * @param elements
+     */
+    private void appendElementContainers(final List<? extends ElementContainer> elements, final Class<? extends ModelElement> elementClass) {
+        for (ElementContainer ec : elements) {
+            ModelElement me = ec.getElement();
+            Class<? extends ModelElement> meClass = me.getClass();
+            if (elementClass.isAssignableFrom(meClass)) {
+                appendElementContainer(ec);
+            }
+        }
     }
 
 }

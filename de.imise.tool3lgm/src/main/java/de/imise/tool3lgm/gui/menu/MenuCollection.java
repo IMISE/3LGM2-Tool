@@ -28,7 +28,6 @@ import de.imise.tool3lgm.event.ActionLibrary.ViewActions;
 import de.imise.tool3lgm.event.action.ChangeLocaleAction;
 import de.imise.tool3lgm.event.action.GraphFrameAction;
 import de.imise.tool3lgm.event.action.StaticAction;
-import de.imise.tool3lgm.graphtools.dialog.ElementAlignmentDialog;
 import de.imise.tool3lgm.graphtools.metamodel.AnalysesDefinition;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
@@ -172,7 +171,7 @@ public class MenuCollection {
                 "elementAlignmentMenu", GDCommands.MODEL_ACTION_SET_ELEMENTS_POSITION_HORIZONTAL_LEFT, GDCommands.MODEL_ACTION_SET_ELEMENTS_POSITION_HORIZONTAL_CENTER, GDCommands.MODEL_ACTION_SET_ELEMENTS_POSITION_HORIZONTAL_RIGHT, new JSeparator(),
                 GDCommands.MODEL_ACTION_SET_ELEMENTS_POSITION_VERTICAL_TOP, GDCommands.MODEL_ACTION_SET_ELEMENTS_POSITION_VERTICAL_CENTER, GDCommands.MODEL_ACTION_SET_ELEMENTS_POSITION_VERTICAL_BOTTOM, new JSeparator(),
                 GDCommands.MODEL_ACTION_SET_ELEMENT_ALIGNMENT_SIZE_WIDTH, GDCommands.MODEL_ACTION_SET_ELEMENT_ALIGNMENT_SIZE_HEIGTH, GDCommands.MODEL_ACTION_SET_ELEMENT_ALIGNMENT_SIZE_WIDTH_AND_HEIGTH, new JSeparator(),
-                ElementAlignmentDialog.getElementAlignmentAction());
+                GDCommands.MODEL_ACTION_SET_ELEMENTS_ALIGNMENT_GRID);
     }
 
     /** Sammlung der Unter-Menus des Optionen-Menus */

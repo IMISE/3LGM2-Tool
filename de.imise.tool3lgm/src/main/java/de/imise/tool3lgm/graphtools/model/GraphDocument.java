@@ -87,6 +87,7 @@ import de.imise.tool3lgm.Tool3lgmModelType.ModelCategory;
 import de.imise.tool3lgm.event.action.UserPropertyBooleanChangeAction;
 import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
 import de.imise.tool3lgm.graphtools.IDSource;
+import de.imise.tool3lgm.graphtools.dialog.ElementAlignmentDialog;
 import de.imise.tool3lgm.graphtools.dialog.element.panel.ElementDialogPanel;
 import de.imise.tool3lgm.graphtools.dialog.tools.EasyDialogAccess;
 import de.imise.tool3lgm.graphtools.metamodel.CoreMetaModel;
@@ -1158,6 +1159,11 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
         case MODEL_ACTION_SET_ELEMENT_ALIGNMENT_SIZE_HEIGTH:
         case MODEL_ACTION_SET_ELEMENT_ALIGNMENT_SIZE_WIDTH_AND_HEIGTH: {
             align(command, pid);
+            break;
+        }
+        case MODEL_ACTION_SET_ELEMENTS_ALIGNMENT_GRID: {
+            ElementAlignmentDialog dialog = new ElementAlignmentDialog();
+            dialog.setVisible(true);
             break;
         }
         case MODEL_ACTION_SET_ELEMENT_TEXT_POSITION_HORIZONTAL_LEFT: {
@@ -2638,7 +2644,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
      */
     private void moveSlaveElements(final NodeContainer nc, final int xDiff, final int yDiff, final int wDiff, final int hDiff, final int pid) {
         ModelElement master = nc.getElement();
-        Set<ElementContainer> subordinatedContainers = master.getSubordinatedContainers(this, true);
+        Set<ElementContainer> subordinatedContainers = master.getSubordinatedContainers(this);
         for (ElementContainer subContainer : subordinatedContainers) {
             if (subContainer != nc) { //subContainer contains the master too
                 if (subContainer instanceof NodeContainer) { //should be alsways true but better safe than sorry
@@ -2685,13 +2691,15 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
      * @return <code>null</code>, wenn keine Erweiterung der bestehenden
      *         Selektion nötig war, sonst die alte Selektion
      */
-    private List<ElementContainer> expandSelection(final boolean addAllParts) {
+    private List<ElementContainer> expandSelection(final boolean addAllSubordinated) {
         Collection<ElementContainer> container2Select = new HashSet<>();
-        for (NodeContainer nc : selectedContainer.iterableRealElementContainer()) {
-            ModelElement me = nc.getElement();
-            for (ElementContainer partNc : me.getSubordinatedContainers(this, addAllParts)) {
-                if (!isSelected(partNc)) {
-                    container2Select.add(partNc);
+        if (addAllSubordinated) {
+            for (NodeContainer nc : selectedContainer.iterableRealElementContainer()) {
+                ModelElement me = nc.getElement();
+                for (ElementContainer partNc : me.getSubordinatedContainers(this)) {
+                    if (!isSelected(partNc)) {
+                        container2Select.add(partNc);
+                    }
                 }
             }
         }
@@ -4798,9 +4806,23 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
     /**
      * @param targetSzenID
      * @param sourceContainer
+     * @param addNewContainerToSelection
      * @param pid
+     * @return
      */
     protected final NodeContainer addElementToSzenario(final String targetSzenID, final NodeContainer sourceContainer, final int pid) {
+        boolean select = true;
+        return addElementToSzenario(targetSzenID, sourceContainer, select, pid);
+    }
+
+    /**
+     * @param targetSzenID
+     * @param sourceContainer
+     * @param addNewContainerToSelection
+     * @param pid
+     * @return
+     */
+    protected final NodeContainer addElementToSzenario(final String targetSzenID, final NodeContainer sourceContainer, final boolean addNewContainerToSelection, final int pid) {
         if (sourceContainer == null) {
             return null;
         }
@@ -4825,9 +4847,11 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
                 targetSzenario.addUndo(pid, MODEL_ACTION_DELETE_FROM_SUBMODEL, targetSzenID, me);
                 //Argumente: 1.) Quell-GraphDoc 2.) Zielszenario 3.) ID des Elementes
                 targetSzenario.addRedo(pid, MODEL_ACTION_ADD_ELEMENT_TO_SUBMODEL, sourceDocID, targetSzenID, me);
-                targetSzenario.createEdgeContainer(targetContainer, sourceDoc, true, pid);
+                targetSzenario.createEdgeContainer(targetContainer, sourceDoc, addNewContainerToSelection, pid);
             }
-            targetSzenario.addToSelection(targetContainer, pid);
+            if (addNewContainerToSelection) {
+                targetSzenario.addToSelection(targetContainer, pid);
+            }
             targetSzenario.raiseSlaves(targetContainer);
         }
         targetSzenario.finish_transaction(pid);
