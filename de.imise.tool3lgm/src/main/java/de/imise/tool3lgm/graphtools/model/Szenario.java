@@ -118,7 +118,7 @@ public class Szenario extends LGMGraphDocument {
                 if (!(slaveCont instanceof NodeContainer)) {
                     return;
                 }
-                addElementToSzenario(getID(), (NodeContainer) slaveCont, TransactionManager.STANDARD_PID);
+                addElementToSzenario(getID(), (NodeContainer) slaveCont, false, TransactionManager.STANDARD_PID); //dont' change the selection because linkSelected(...) iterates over it
                 //wenn der Container aus dem Hauptdokument übernommen wurde -> initiale Grafik setzen
                 if (sourceDoc == getCollection().getMainDoc()) {
                     addict(id, edge.getClass().getName(), master, slave, TransactionManager.STANDARD_PID);

@@ -4817,9 +4817,23 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
     /**
      * @param targetSzenID
      * @param sourceContainer
+     * @param addNewContainerToSelection
      * @param pid
+     * @return
      */
     protected final NodeContainer addElementToSzenario(final String targetSzenID, final NodeContainer sourceContainer, final int pid) {
+        boolean select = true;
+        return addElementToSzenario(targetSzenID, sourceContainer, select, pid);
+    }
+
+    /**
+     * @param targetSzenID
+     * @param sourceContainer
+     * @param addNewContainerToSelection
+     * @param pid
+     * @return
+     */
+    protected final NodeContainer addElementToSzenario(final String targetSzenID, final NodeContainer sourceContainer, final boolean addNewContainerToSelection, final int pid) {
         if (sourceContainer == null) {
             return null;
         }
@@ -4844,9 +4858,11 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
                 targetSzenario.addUndo(pid, MODEL_ACTION_DELETE_FROM_SUBMODEL, targetSzenID, me);
                 //Argumente: 1.) Quell-GraphDoc 2.) Zielszenario 3.) ID des Elementes
                 targetSzenario.addRedo(pid, MODEL_ACTION_ADD_ELEMENT_TO_SUBMODEL, sourceDocID, targetSzenID, me);
-                targetSzenario.createEdgeContainer(targetContainer, sourceDoc, true, pid);
+                targetSzenario.createEdgeContainer(targetContainer, sourceDoc, addNewContainerToSelection, pid);
             }
-            targetSzenario.addToSelection(targetContainer, pid);
+            if (addNewContainerToSelection) {
+                targetSzenario.addToSelection(targetContainer, pid);
+            }
             targetSzenario.raiseSlaves(targetContainer);
         }
         targetSzenario.finish_transaction(pid);

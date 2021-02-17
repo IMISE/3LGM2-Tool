@@ -123,12 +123,11 @@ public class ModelSelection extends MetaModelSpecificAdapter implements Set<Elem
      * @param lastSelected
      */
     private void setLastSelected(final ElementContainer lastSelected) {
-        /*
-         * if (lastSelected instanceof EdgeContainer) { Edge edge = (Edge)
-         * lastSelected.getElement();
-         * System.err.println(ModelConstants.getDisplayableName(edge) +
-         * ": Start=" + edge.getStart() + " <-> End=" + edge.getEnd()); }
-         */
+        //        if (lastSelected instanceof EdgeContainer) {
+        //            Edge edge = (Edge) lastSelected.getElement();
+        //            ElementsNameBuilder elementsNameBuilder = getElementsNameBuilder();
+        //            Sys.err(elementsNameBuilder.getDisplayableName(edge) + ": Start=" + edge.getStart() + " <-> End=" + edge.getEnd());
+        //        }
         this.lastSelected = lastSelected;
         if (lastSelected == null) {
             lastSelectedGraphVisibleNodeOrBendpoint = null;
@@ -138,7 +137,7 @@ public class ModelSelection extends MetaModelSpecificAdapter implements Set<Elem
                 lastSelectedGraphVisibleNodeOrBendpoint = (NodeContainer) lastSelected;
             }
         }
-        //Sys.err1(lastSelected + " | " + lastSelectedGraphVisibleNodeOrBendpoint);
+        //Sys.errn(15, (lastSelected != null ? lastSelected.getGraphDocument() : "") + " " + lastSelected + " | " + lastSelectedGraphVisibleNodeOrBendpoint);
     }
 
     /**
