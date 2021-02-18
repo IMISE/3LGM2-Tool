@@ -139,28 +139,30 @@ public class Szenario extends LGMGraphDocument {
      * @param pid
      */
     public void createEdgeContainer(final ElementContainer egdeStartOrEndContainer, final GraphDocument sourceDoc, final boolean select, final int pid) {
+        if (egdeStartOrEndContainer == null) {
+            return;
+        }
+        ModelElement me = egdeStartOrEndContainer.getElement();
         //wenn das Element, dessen Kanten hinzugefügt werden sollen, nicht leer und nicht einmalig ist
-        if (egdeStartOrEndContainer != null && !egdeStartOrEndContainer.getElement().isUnique()) {
+        if (!me.isUnique()) {
             start_transaction(pid, false);
             //für alle Kanten des Elements
-            for (Edge ka : egdeStartOrEndContainer.getElement().getEdges()) {
+            for (Edge edge : me.getEdges()) {
                 //wenn die Edge nicht bereits in diesem Szenario vorkommt
-                boolean b = !isMyElement(ka);
-                if (b) {
+                if (!isMyElement(edge)) {
                     //bei Compositions auch das Slave-Element in dieses Szenario holen (wenn sie es nicht unique ist)
-                    if (ka instanceof CompositionEdge) {
+                    if (edge instanceof CompositionEdge) {
                         //hier werden mit Absicht identische Konstanten verglichen, falls sich MASTER_TO_SLAVE_DIRECTION mal auf BACKWARD ändert (was sehr unwarhscheinlich ist)
-                        updateSlaveContainers(ka, CompositionEdge.MASTER_TO_SLAVE_DIRECTION == Direction.FORWARD, sourceDoc);
+                        updateSlaveContainers(edge, CompositionEdge.MASTER_TO_SLAVE_DIRECTION == Direction.FORWARD, sourceDoc);
                     }
                     //wenn Start und End-Element der Edge einen Container in diesem Szenario haben
-
-                    b = endsAreMine(ka);
-                    if (b) {
+                    if (endsAreMine(edge)) {
                         //hole den Container der Edge aus dem Quelldokument
-                        EdgeContainer oldKC = (EdgeContainer) ka.getContainer(sourceDoc);
+                        EdgeContainer oldKC = (EdgeContainer) edge.getContainer(sourceDoc);
                         //wenn es keinen gibt, hole den Container aus dem Hauptmodell
                         if (oldKC == null) {
-                            oldKC = (EdgeContainer) ka.getContainer(sourceDoc.getCollection().getMainDoc());
+                            GraphDocument mainDoc = sourceDoc.getMainDoc();
+                            oldKC = (EdgeContainer) edge.getContainer(mainDoc);
                         }
                         //füge eine Kopie des Edge-Containers in dieses Szenario ein
                         EdgeContainer kc = (EdgeContainer) addContainerCopy(oldKC);
