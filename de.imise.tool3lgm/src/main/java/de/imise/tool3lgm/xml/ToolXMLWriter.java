@@ -383,11 +383,11 @@ public class ToolXMLWriter extends IntendingXMLWriter {
             }
         } else {
             LGMGraphDocument doc = gdcoll.getMainDoc();
+            doc.sortEdgeContainers();
             for (LayerContainer lc : doc.getLayers()) {
                 for (NodeContainer kc : lc.getNodeContainersAlphabetical()) {
                     writeModelElement(kc.getElement());
                 }
-                doc.sortEdgeContainers();
                 for (EdgeContainer kc : lc.getEdgeContainers()) {
                     writeModelElement(kc.getElement());
                 }
