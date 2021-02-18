@@ -25,17 +25,14 @@ import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout;
 import de.imise.tool3lgm.graphtools.view.graph.NodeRenderer;
 import de.imise.tool3lgm.graphtools.view.tree.node.ElementContainerTreeNode;
 import de.imise.tool3lgm.log.Log;
+import de.imise.util.Alphabetical.AlphabeticalSortTarget;
 import de.imise.util.swing.NoopGraphics;
 
 /**
  * @author N.N.
  * @create Very long time ago
  */
-public class NodeContainer
-        extends ElementContainer/*
-                                 * implements GraphDocumentListener,
-                                 * InTransactionListener
-                                 */ {
+public class NodeContainer extends ElementContainer implements AlphabeticalSortTarget {
 
     /**
      * COMMENTME
@@ -56,6 +53,9 @@ public class NodeContainer
      * COMMENTME
      */
     public static final int MAX_Y_SIZE = 2000;
+
+    /** Prefix for invisible graph elements in the tree */
+    private static final String HIDDEN_CONTAINER_TREE_STRING_PREFIX = Tool3lgmConstants.getResString("ausgebl") + " ";
 
     //dieser Wert steht für alles Mögliche zur Verfügung (daher der unspezifische Name)
     //Momentane Verwenung:
@@ -89,7 +89,6 @@ public class NodeContainer
      *
      */
     public NodeContainer() {
-        super();
         init();
     }
 
@@ -528,11 +527,10 @@ public class NodeContainer
     }
 
     @Override
-    public String toString() {
+    public final String toString() {
         String nameWithSzens = me.hasSzenarioContainer() ? me.getNameWithSzens() : me.toString();
-
         if (me.isPaintable() && !isVisible() && doc instanceof Szenario) {
-            nameWithSzens = getResString("ausgebl") + " " + nameWithSzens;
+            nameWithSzens = HIDDEN_CONTAINER_TREE_STRING_PREFIX + nameWithSzens;
         }
         if (additionalTextRightDownLines == null) {
             return nameWithSzens;
@@ -543,6 +541,11 @@ public class NodeContainer
         sb.append(additionalTextRightDown);
         sb.append(")");
         return sb.toString();
+    }
+
+    @Override
+    public String getSecondSortString() {
+        return getID();
     }
 
     /**
