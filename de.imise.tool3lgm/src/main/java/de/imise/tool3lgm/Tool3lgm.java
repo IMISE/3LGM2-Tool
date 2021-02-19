@@ -22,7 +22,6 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import de.imise.tool3lgm.Tool3lgmChangeListener.Tool3lgmChangeType;
 import de.imise.tool3lgm.Tool3lgmConstants.FileFilterType;
 import de.imise.tool3lgm.Tool3lgmModelType.ModelCategory;
-import de.imise.tool3lgm.graphtools.consistency.ModelCleaner;
 import de.imise.tool3lgm.graphtools.consistency.ModelValidatorDefinition;
 import de.imise.tool3lgm.graphtools.dialog.element.ElementPropertyDialogsContext;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
@@ -578,7 +577,6 @@ public class Tool3lgm {
         if (file == null) {
             return fileSave(true);
         }
-        new ModelCleaner(gdcoll).cleanModel();
         if (!saveToFile(gdcoll)) {
             return false;
         }

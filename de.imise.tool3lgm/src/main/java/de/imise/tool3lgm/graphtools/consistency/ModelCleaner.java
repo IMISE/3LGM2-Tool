@@ -56,9 +56,17 @@ public class ModelCleaner {
      *
      * @param gdcoll
      */
-    public ModelCleaner(final GDCollection gdcoll) {
+    private ModelCleaner(final GDCollection gdcoll) {
         this.gdcoll = gdcoll;
         metaModel = gdcoll.getMetaModel();
+    }
+
+    /**
+     * @param gdcoll
+     */
+    public static void cleanModel(final GDCollection gdcoll) {
+        ModelCleaner modelCleaner = new ModelCleaner(gdcoll);
+        modelCleaner.cleanModel();
     }
 
     /**

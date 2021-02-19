@@ -33,6 +33,7 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Table.Cell;
 
 import de.imise.tool3lgm.Static;
+import de.imise.tool3lgm.graphtools.consistency.ModelCleaner;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Bendpoint;
 import de.imise.tool3lgm.graphtools.metamodel.elements.DoubleMeaningEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
@@ -144,6 +145,7 @@ public class ToolXMLWriter extends IntendingXMLWriter {
      */
     public static boolean write(final GDCollection gdcoll, final File file, final String zipEntryName) {
         try {
+            ModelCleaner.cleanModel(gdcoll);
             ToolXMLWriter toolXMLWriter = new ToolXMLWriter(gdcoll, file, zipEntryName);
             toolXMLWriter.writeModel();
             toolXMLWriter.finish();

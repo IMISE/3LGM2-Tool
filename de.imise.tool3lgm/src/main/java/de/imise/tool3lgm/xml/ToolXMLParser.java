@@ -291,7 +291,7 @@ public class ToolXMLParser {
             ModelCleaner.switchIsEdgesToHasPartEdges(gdcoll);
         }
 
-        new ModelCleaner(gdcoll).cleanModel();
+        ModelCleaner.cleanModel(gdcoll);
 
         //beim Einlesen werden Elemente mit generierten Namen evtl. nicht richtig eingelesen, weil
         //die Elemente, aus denen ihr Name generiert wird evtl. nach ihnen eingelesen werden ->
