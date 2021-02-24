@@ -33,6 +33,7 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Table.Cell;
 
 import de.imise.tool3lgm.Static;
+import de.imise.tool3lgm.graphtools.consistency.ModelCleaner;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Bendpoint;
 import de.imise.tool3lgm.graphtools.metamodel.elements.DoubleMeaningEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
@@ -144,6 +145,7 @@ public class ToolXMLWriter extends IntendingXMLWriter {
      */
     public static boolean write(final GDCollection gdcoll, final File file, final String zipEntryName) {
         try {
+            ModelCleaner.cleanModel(gdcoll);
             ToolXMLWriter toolXMLWriter = new ToolXMLWriter(gdcoll, file, zipEntryName);
             toolXMLWriter.writeModel();
             toolXMLWriter.finish();
@@ -383,19 +385,45 @@ public class ToolXMLWriter extends IntendingXMLWriter {
             }
         } else {
             LGMGraphDocument doc = gdcoll.getMainDoc();
+            //layer 0 is Physical Tool Layer  -> Layer 4 is Logical Layer -> Iterate backward
+            List<LayerContainer> layers = doc.getLayers();
+            //Nodes
+            for (int i = layers.size() - 1; i >= 0; i--) {
+                LayerContainer lc = layers.get(i);
+                for (NodeContainer nc : lc.getNodeContainersAlphabetical()) {
+                    ModelElement node = nc.getElement();
+                    writeModelElement(node);
+                }
+            }
+            //Edges
             doc.sortEdgeContainers();
-            for (LayerContainer lc : doc.getLayers()) {
-                for (NodeContainer kc : lc.getNodeContainersAlphabetical()) {
-                    writeModelElement(kc.getElement());
+            for (int i = layers.size() - 1; i >= 0; i--) {
+                LayerContainer lc = layers.get(i);
+                for (EdgeContainer ec : lc.getEdgeContainers()) {
+
+                    writeModelElement(ec.getElement());
                 }
-                for (EdgeContainer kc : lc.getEdgeContainers()) {
-                    writeModelElement(kc.getElement());
-                }
+            }
+            //Bendpoints
+            for (int i = layers.size() - 1; i >= 0; i--) {
+                LayerContainer lc = layers.get(i);
                 for (BendpointContainer kc : lc.getBendpointContainers()) {
                     writeModelElement(kc.getElement());
                 }
             }
         }
+    }
+
+    /**
+     * Schreibt das Modellelement des übergebene ElementContainers in die
+     * XML-Datei
+     *
+     * @param me
+     * @throws XMLStreamException
+     */
+    public void writeModelElement(final ElementContainer ec) throws XMLStreamException {
+        ModelElement me = ec.getElement();
+        writeModelElement(me);
     }
 
     /**
