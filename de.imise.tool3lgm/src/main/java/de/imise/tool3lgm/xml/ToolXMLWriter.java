@@ -58,6 +58,7 @@ import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout;
 import de.imise.tool3lgm.graphtools.view.graph.GraphViewParameter;
 import de.imise.tool3lgm.log.Log;
 import de.imise.util.Alphabetical;
+import de.imise.util.Sys;
 import de.imise.util.collections.CollectionUtils;
 import de.imise.util.htmlxml.IntendingXMLWriter;
 import de.imise.util.io.FileHandler;
@@ -390,40 +391,37 @@ public class ToolXMLWriter extends IntendingXMLWriter {
             //Nodes
             for (int i = layers.size() - 1; i >= 0; i--) {
                 LayerContainer lc = layers.get(i);
-                for (NodeContainer nc : lc.getNodeContainersAlphabetical()) {
-                    ModelElement node = nc.getElement();
-                    writeModelElement(node);
-                }
+                List<NodeContainer> nodeContainersAlphabetical = lc.getNodeContainersAlphabetical();
+                writeModelElementsInternal(nodeContainersAlphabetical);
             }
             //Edges
             doc.sortEdgeContainers();
             for (int i = layers.size() - 1; i >= 0; i--) {
                 LayerContainer lc = layers.get(i);
-                for (EdgeContainer ec : lc.getEdgeContainers()) {
-
-                    writeModelElement(ec.getElement());
-                }
+                Iterable<EdgeContainer> edgeContainers = lc.getEdgeContainers();
+                writeModelElementsInternal(edgeContainers);
             }
             //Bendpoints
             for (int i = layers.size() - 1; i >= 0; i--) {
                 LayerContainer lc = layers.get(i);
-                for (BendpointContainer kc : lc.getBendpointContainers()) {
-                    writeModelElement(kc.getElement());
-                }
+                Iterable<BendpointContainer> bendpointContainers = lc.getBendpointContainers();
+                writeModelElementsInternal(bendpointContainers);
             }
         }
     }
 
     /**
-     * Schreibt das Modellelement des übergebene ElementContainers in die
+     * Schreibt die Modellelemente der übergebenen ElementContainer in die
      * XML-Datei
      *
-     * @param me
+     * @param elements
      * @throws XMLStreamException
      */
-    public void writeModelElement(final ElementContainer ec) throws XMLStreamException {
-        ModelElement me = ec.getElement();
-        writeModelElement(me);
+    private void writeModelElementsInternal(final Iterable<? extends ElementContainer> elements) throws XMLStreamException {
+        for (ElementContainer ec : elements) {
+            ModelElement me = ec.getElement();
+            writeModelElement(me);
+        }
     }
 
     /**
@@ -466,6 +464,11 @@ public class ToolXMLWriter extends IntendingXMLWriter {
         writeEndElement(); //</element>
     }
 
+    /**
+     * @param nameAttribute
+     * @param text
+     * @throws XMLStreamException
+     */
     private void writeModelElementField(final String nameAttribute, final String text) throws XMLStreamException {
         writeStartElement("field"); //<field>
         writeAttribute("name", nameAttribute);
@@ -473,6 +476,11 @@ public class ToolXMLWriter extends IntendingXMLWriter {
         writeEndElement(); //</field>
     }
 
+    /**
+     * @param nameAttribute
+     * @param intValue
+     * @throws XMLStreamException
+     */
     private void writeModelElementField(final String nameAttribute, final int intValue) throws XMLStreamException {
         writeModelElementField(nameAttribute, String.valueOf(intValue));
     }
