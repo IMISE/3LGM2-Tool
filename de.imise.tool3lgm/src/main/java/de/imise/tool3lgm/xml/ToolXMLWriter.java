@@ -223,9 +223,7 @@ public class ToolXMLWriter extends IntendingXMLWriter {
      * @throws XMLStreamException
      */
     private void writeModel(final String name, final List<Szenario> szenarios, final Collection<ModelElement> elements, final Iterable<UserField> userFields, final Iterable<String> iconIDs) throws XMLStreamException {
-        Static.showProgressDialog();
-        Static.setProgressDialogTitle("PROGRESS_SAVE_TITLE");
-        Static.setProgressDialogStatusLabel("PROGRESS_SAVE_LABEL_START", "...");
+        //Static.showProgressDialog();
         writeStartDocument();
         writeStartElement("modell_3lgm_2"); //<modell_3lgm_2>
         writeStartElement("header"); //<header>
@@ -233,7 +231,6 @@ public class ToolXMLWriter extends IntendingXMLWriter {
         writeElement("description", gdcoll.getMainDoc().getDescription());
         writeElement("version", gdcoll.getFileVersion());
         writeEndElement(); //</header>
-        Static.setProgressDialogStatusLabel("PROGRESS_SAVE_LABEL_USERFIELDS", "...");
         if (userFields == null) {
             writeUserFieldDefinitions(gdcoll.getUserFieldDefinitions(), true);
         } else {
@@ -243,17 +240,13 @@ public class ToolXMLWriter extends IntendingXMLWriter {
         writeStartElement("model"); //<model>
         writeUserFieldValues(gdcoll);
         writeEndElement(); //</model>
-        Static.setProgressDialogStatusLabel("PROGRESS_SAVE_LABEL_MODELELEMENTS", "...");
         writeModelElements(elements);
         writeEndElement(); //</objects>
-        Static.setProgressDialogStatusLabel("PROGRESS_SAVE_LABEL_MODELELEMENTS", "...");
         writeSzenarios(szenarios, elements);
-        Static.setProgressDialogStatusLabel("PROGRESS_SAVE_LABEL_ICONS", "...");
         writeStartElement("images"); //<images>
         writeImages(iconIDs == null ? gdcoll.getIconTable().keySet() : iconIDs);
         writeEndElement(); //</images>
         writeEndElement(); //</modell_3lgm_2>
-        Static.closeProgressDialog();
     }
 
     protected void writeStartDocument() throws XMLStreamException {
@@ -397,7 +390,6 @@ public class ToolXMLWriter extends IntendingXMLWriter {
             List<LayerContainer> layers = doc.getLayers();
             //Nodes
             for (int i = layers.size() - 1; i >= 0; i--) {
-                setProgressDialogStatusLabel("PROGRESS_SAVE_LABEL_MODELELEMENTS_NODES", i);
                 LayerContainer lc = layers.get(i);
                 for (NodeContainer nc : lc.getNodeContainersAlphabetical()) {
                     ModelElement node = nc.getElement();
@@ -407,7 +399,6 @@ public class ToolXMLWriter extends IntendingXMLWriter {
             //Edges
             doc.sortEdgeContainers();
             for (int i = layers.size() - 1; i >= 0; i--) {
-                setProgressDialogStatusLabel("PROGRESS_SAVE_LABEL_MODELELEMENTS_EDGES", i);
                 LayerContainer lc = layers.get(i);
                 for (EdgeContainer ec : lc.getEdgeContainers()) {
 
@@ -417,24 +408,11 @@ public class ToolXMLWriter extends IntendingXMLWriter {
             //Bendpoints
             for (int i = layers.size() - 1; i >= 0; i--) {
                 LayerContainer lc = layers.get(i);
-                setProgressDialogStatusLabel("PROGRESS_SAVE_LABEL_MODELELEMENTS_BENDPOINTS", i);
                 for (BendpointContainer kc : lc.getBendpointContainers()) {
                     writeModelElement(kc.getElement());
                 }
             }
         }
-    }
-
-    /**
-     * @param resKey
-     * @param i
-     */
-    private void setProgressDialogStatusLabel(final String resKey, final int i) {
-        LGMGraphDocument doc = gdcoll.getMainDoc();
-        List<LayerContainer> layers = doc.getLayers();
-        int size = layers.size();
-        int layer = (size - i + 1) / 2;
-        Static.setProgressDialogStatusLabel(resKey, layer + "...");
     }
 
     /**
@@ -533,7 +511,6 @@ public class ToolXMLWriter extends IntendingXMLWriter {
             if (szenarios != null && !szenarios.contains(szen)) {
                 continue;
             }
-            Static.setProgressDialogStatusLabel("PROGRESS_SAVE_LABEL_SZENARIO", szen.getTitle());
             writeStartElement("szenario"); //<szenario>
             writeAttribute("hash", szen.getID());
             writeAttribute("titel", szen.getTitle());
