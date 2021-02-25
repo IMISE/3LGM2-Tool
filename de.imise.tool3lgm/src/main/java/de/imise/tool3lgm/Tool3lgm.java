@@ -22,7 +22,6 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import de.imise.tool3lgm.Tool3lgmChangeListener.Tool3lgmChangeType;
 import de.imise.tool3lgm.Tool3lgmConstants.FileFilterType;
 import de.imise.tool3lgm.Tool3lgmModelType.ModelCategory;
-import de.imise.tool3lgm.graphtools.consistency.ModelCleaner;
 import de.imise.tool3lgm.graphtools.consistency.ModelValidatorDefinition;
 import de.imise.tool3lgm.graphtools.dialog.element.ElementPropertyDialogsContext;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
@@ -172,7 +171,7 @@ public class Tool3lgm {
                 }
             }
             Static.showProgressDialog(true);
-            Static.setProgressDialogTitle(getResString("load_model") + " " + file.getName());
+            Static.setProgressDialogTitle("load_model", file.getName());
             Static.setProgressDialogStatusLabel("read_progress");
             boolean retVal = fileHandler.loadFromRAF();
             return retVal ? gdcoll : null;
@@ -521,7 +520,7 @@ public class Tool3lgm {
         selDoc = gdcoll.getMainDoc();
 
         Static.showProgressDialog(true);
-        Static.setProgressDialogTitle(getResString("close_model") + " " + gdcoll.getName());
+        Static.setProgressDialogTitle("close_model", gdcoll.getName());
 
         ElementPropertyDialogsContext.closeAllDialogs(selDoc);
 
@@ -578,7 +577,6 @@ public class Tool3lgm {
         if (file == null) {
             return fileSave(true);
         }
-        new ModelCleaner(gdcoll).cleanModel();
         if (!saveToFile(gdcoll)) {
             return false;
         }

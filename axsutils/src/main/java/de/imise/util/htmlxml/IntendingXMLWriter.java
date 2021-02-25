@@ -1,5 +1,6 @@
 package de.imise.util.htmlxml;
 
+import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -63,6 +64,7 @@ public class IntendingXMLWriter {
      */
     protected IntendingXMLWriter(final File file, final String zipEntryName) throws XMLStreamException, IOException {
         outStream = new FileOutputStream(file);
+        outStream = new BufferedOutputStream(outStream, 1024 * 1024); // 1 MB Buffer
         if (!Strings.isNullOrEmpty(zipEntryName)) {
             zipOutStream = getOpenZipOutputStream(outStream, zipEntryName);
             outStream = zipOutStream;

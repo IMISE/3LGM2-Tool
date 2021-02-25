@@ -98,7 +98,7 @@ public final class GDCollectionImExportHandler {
         GDCollection sourceGDColl = new GDCollection(gdcoll.getModelType());
 
         Static.showProgressDialog();
-        Static.setProgressDialogTitle(getResString("load_model") + " " + file.getName());
+        Static.setProgressDialogTitle("load_model", file.getName());
         Static.setProgressDialogStatusLabel("read_progress");
 
         try {

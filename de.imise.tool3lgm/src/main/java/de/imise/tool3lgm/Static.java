@@ -483,43 +483,78 @@ public class Static {
     }
 
     /**
-     * Setzt einen neuen Titel des ProgressDialog, sofern dieser überhaupt
-     * existiert; ansonsten passiert nichts.
+     * Sets a new status title of the ProgressDialog, if it exists at all;
+     * otherwise nothing happens. If the passed string is found in the
+     * resources, then it will be replaced by the resource string, otherwise it
+     * will be displayed directly.
      *
-     * @param text String mit dem neuen Titel
+     * @param resourceKeyOrText
      */
-    public static void setProgressDialogTitle(final String text) {
-        if (progressDialog == null) {
-            return;
-        }
-        progressDialog.setTitle(text);
+    public static void setProgressDialogTitle(final String resourceKeyOrText) {
+        setProgressDialogTitle(resourceKeyOrText, null);
     }
 
     /**
-     * Setzt einen neuen Stautstext des ProgressDialog, sofern dieser überhaupt
-     * existiert; ansonsten passiert nichts. Wenn der übergebene String in den
-     * Resourcen gefunden wird, dann wird er durch den Resourcen-String eretzt,
-     * ansonsten wird er direkt angezeigt.
+     * Sets a new status title of the ProgressDialog, if it exists at all;
+     * otherwise nothing happens. If the passed string
+     * <code>resourceKeyOrText</code> is found in the resources, then it will be
+     * replaced by the resource string, otherwise it will be displayed directly.
+     * If the second parameter is not <code>null</code> it will be appended to
+     * the first string part divided by a whitespace.
      *
-     * @param text String mit neuen Statustext
+     * @param resourceKeyOrText
+     * @param text
+     */
+    public static void setProgressDialogTitle(final String resourceKeyOrText, final String text) {
+        setProgressDialogStatus(resourceKeyOrText, text, false);
+    }
+
+    /**
+     * Sets a new status text of the ProgressDialog, if it exists at all;
+     * otherwise nothing happens. If the passed string is found in the
+     * resources, then it will be replaced by the resource string, otherwise it
+     * will be displayed directly.
+     *
+     * @param resourceKeyOrText String or resource key with the new status text
      */
     public static void setProgressDialogStatusLabel(final String resourceKeyOrText) {
         setProgressDialogStatusLabel(resourceKeyOrText, null);
     }
 
     /**
-     * Setzt einen neuen Stautstext des ProgressDialog, sofern dieser überhaupt
-     * existiert; ansonsten passiert nichts.
+     * Sets a new status text of the ProgressDialog, if it exists at all;
+     * otherwise nothing happens. If the passed string
+     * <code>resourceKeyOrText</code> is found in the resources, then it will be
+     * replaced by the resource string, otherwise it will be displayed directly.
+     * If the second parameter is not <code>null</code> it will be appended to
+     * the first string part divided by a whitespace.
      *
      * @param resourceKey
      * @param text
      */
-    public static void setProgressDialogStatusLabel(final String resourceKey, final String text) {
+    public static void setProgressDialogStatusLabel(final String resourceKeyOrText, final String text) {
+        setProgressDialogStatus(resourceKeyOrText, text, true);
+    }
+
+    /**
+     * Sets a new status text or title of the ProgressDialog, if it exists at
+     * all; otherwise nothing happens. If the passed string
+     * <code>resourceKeyOrText</code> is found in the resources, then it will be
+     * replaced by the resource string, otherwise it will be displayed directly.
+     * If the second parameter is not <code>null</code> it will be appended to
+     * the first string part divided by a whitespace.
+     *
+     * @param resourceKey
+     * @param text
+     * @param setLabelAndNotTitle if <code>true</code> the text of the dialogs
+     *            label will be set; if <code>false</code> the title will be set
+     */
+    private static void setProgressDialogStatus(final String resourceKeyOrText, final String text, final boolean setLabelAndNotTitle) {
         if (progressDialog == null) {
             return;
         }
         //wenn null als resourceKey angegeben wurde, dann das Label leer initilaisieren, ansonsten mit dem resourceKey
-        String label = resourceKey == null ? "" : resourceKey;
+        String label = resourceKeyOrText == null ? "" : resourceKeyOrText;
         //wenn ein echter String als resoruceKey angegeben wurde
         if (!label.isEmpty()) {
             try {
@@ -540,7 +575,11 @@ public class Static {
                 label = text;
             }
         }
-        progressDialog.setStatusLabelText(label);
+        if (setLabelAndNotTitle) {
+            progressDialog.setStatusLabelText(label);
+        } else {
+            progressDialog.setTitle(label);
+        }
     }
 
     // Selektionen //
