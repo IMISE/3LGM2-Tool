@@ -791,7 +791,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
      * @param pid
      */
     protected void dispatch_command(final GDCommands command, final String[] argv, final int pid) {
-        //		System.err.println(command + " " + Arrays.asList(argv));
+        //        System.err.println(command + " " + Arrays.asList(argv));
         int argc = argv.length;
         MetaModel metaModel = getMetaModel();
 
@@ -1246,6 +1246,10 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
                 TextAlignmentHTML textAlignmentHTML = TextAlignmentHTML.valueOf(argv[2]);
                 szen.setTextAlignmentHTML(textAlignmentHTML, ec, pid);
             }
+            break;
+        }
+        case MODEL_ACTION_ADOPT_SAME_COLOR: {
+            setSameColor(pid);
             break;
         }
         case MODEL_ACTION_MOVE_ORDER_TO_FIRST_POSITION: {
@@ -2115,6 +2119,25 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
         distributeEvent(ELEMENT_GRAPHICS_CHANGED, pid);
     }
 
+    /**
+     * @param pid
+     */
+    private void setSameColor(final int pid) {
+        start_transaction(pid);
+        ElementContainer lastSelected = getLastSelected();
+        Color col = lastSelected.getColor();
+        if (col == null) {
+            GraphDocument selectedDoc = gdcoll.getSelectedDoc();
+            col = selectedDoc.getMapping().getStandardBackGroundColor(lastSelected);
+        }
+        for (ElementContainer ec : selectedContainer) {
+            if (ec != lastSelected) {
+                changeColor(ec, col, pid);
+            }
+        }
+        finish_transaction(pid);
+        distributeEvent(ELEMENT_GRAPHICS_CHANGED, pid);
+    }
     /**
      * @param ec
      * @param color
