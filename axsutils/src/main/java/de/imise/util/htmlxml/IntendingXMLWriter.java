@@ -236,10 +236,7 @@ public class IntendingXMLWriter {
     }
 
     /**
-     * Schreibt ein öffnendes und schließendes Tag und dazwischen den
-     * übergebenen Boolean. Z.B. element ist "komisch" und bool ist
-     * <code>true</code> ergibt in der XML-Datei
-     * "&ltkomisch&gttrue&lt/komisch&gt".
+     * Writes an opening and closing tag and in between the passed boolean.
      *
      * @param element Name des Tags
      * @param bool Boolean, dessen String-Value zwischen das öffnende und
@@ -249,6 +246,36 @@ public class IntendingXMLWriter {
      */
     protected final void writeElement(final String element, final boolean bool) throws XMLStreamException {
         writeElement(element, String.valueOf(bool));
+    }
+
+    /**
+     * Writes an opening and closing tag and in between the passed boolean. But
+     * the boolean is only written if it is <code>false</code>.
+     *
+     * @param element Name des Tags
+     * @param bool Boolean, dessen String-Value zwischen das öffnende und
+     *            schließende Tag geschrieben wird (<code>false</code>)
+     * @throws XMLStreamException
+     */
+    protected final void writeElementIfFalse(final String element, final boolean bool) throws XMLStreamException {
+        if (!bool) {
+            writeElement(element, bool);
+        }
+    }
+
+    /**
+     * Writes an opening and closing tag and in between the passed boolean. But
+     * the boolean is only written if it is <code>true</code>.
+     *
+     * @param element Name des Tags
+     * @param bool Boolean, dessen String-Value zwischen das öffnende und
+     *            schließende Tag geschrieben wird (<code>true</code>)
+     * @throws XMLStreamException
+     */
+    protected final void writeElementIfTrue(final String element, final boolean bool) throws XMLStreamException {
+        if (bool) {
+            writeElement(element, bool);
+        }
     }
 
     /**

@@ -83,7 +83,8 @@ public abstract class ElementContainer extends JLabel implements Cloneable, Grap
 
     /**
      * gibt an, ob dieses Element durch das Aufklappen seines (ggf.
-     * existierenden) übergeordneten Elements sichtbar gemacht wurde
+     * existierenden) übergeordneten Elements sichtbar gemacht wurde. Default
+     * ist true;
      */
     protected boolean expanded = true;
 

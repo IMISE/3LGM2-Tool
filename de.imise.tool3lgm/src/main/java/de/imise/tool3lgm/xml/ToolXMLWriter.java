@@ -609,8 +609,9 @@ public class ToolXMLWriter extends IntendingXMLWriter {
         writeStartElement("container"); //<container>
         writeAttribute("hash", ec.getID());
         if (!(ec instanceof EdgeContainer)) {
-            writeElement("expanded", ec.isExpanded());
-            writeElement("visible", ec.isVisible());
+            //write only if not default true
+            writeElementIfFalse("expanded", ec.isExpanded());
+            writeElementIfFalse("visible", ec.isVisible());
         }
         GraphElementLayout expandedLayout = ec.getE3LGMLayout();
         if (expandedLayout != null) {
