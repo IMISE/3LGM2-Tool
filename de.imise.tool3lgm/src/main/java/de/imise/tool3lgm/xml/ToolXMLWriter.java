@@ -58,7 +58,6 @@ import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout;
 import de.imise.tool3lgm.graphtools.view.graph.GraphViewParameter;
 import de.imise.tool3lgm.log.Log;
 import de.imise.util.Alphabetical;
-import de.imise.util.Sys;
 import de.imise.util.collections.CollectionUtils;
 import de.imise.util.htmlxml.IntendingXMLWriter;
 import de.imise.util.io.FileHandler;
@@ -435,7 +434,7 @@ public class ToolXMLWriter extends IntendingXMLWriter {
         writeAttribute("class", me.getClass().getSimpleName());
         writeAttribute("hash", me.getID());
         writeModelElementField("name", me.getName());
-        writeModelElementField("description", me.getDescription());
+        writeModelElementFieldIfNotNullOrEmpty("description", me.getDescription());
         String associatedSzenID = me.getAssociatedSzenID();
         if (!Strings.isNullOrEmpty(associatedSzenID)) {
             writeModelElementField("assoc_szen", associatedSzenID);
@@ -470,10 +469,32 @@ public class ToolXMLWriter extends IntendingXMLWriter {
      * @throws XMLStreamException
      */
     private void writeModelElementField(final String nameAttribute, final String text) throws XMLStreamException {
-        writeStartElement("field"); //<field>
-        writeAttribute("name", nameAttribute);
-        writeCharacters(getValidString(text));
-        writeEndElement(); //</field>
+        writeModelElementField(nameAttribute, text, true);
+    }
+
+    /**
+     * @param nameAttribute
+     * @param text
+     * @throws XMLStreamException
+     */
+    private void writeModelElementFieldIfNotNullOrEmpty(final String nameAttribute, final String text) throws XMLStreamException {
+        writeModelElementField(nameAttribute, text, false);
+    }
+
+    /**
+     * @param nameAttribute
+     * @param text
+     * @param writeIfNullOrEmpty only if <code>true</code> the tag will be
+     *            written if the text is {@link NullPointerException} or empty
+     * @throws XMLStreamException
+     */
+    private void writeModelElementField(final String nameAttribute, final String text, final boolean writeIfNullOrEmpty) throws XMLStreamException {
+        if (writeIfNullOrEmpty || !Strings.isNullOrEmpty(text)) {
+            writeStartElement("field"); //<field>
+            writeAttribute("name", nameAttribute);
+            writeCharacters(getValidString(text));
+            writeEndElement(); //</field>
+        }
     }
 
     /**
