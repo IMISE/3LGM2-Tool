@@ -151,7 +151,7 @@ public class MenuCollection {
                         "elementSetToStandardMenu", GDCommands.MODEL_ACTION_SET_ELEMENT_DEFAULT_FONT, GDCommands.MODEL_ACTION_SET_ELEMENT_DEFAULT_COLOR, GDCommands.MODEL_ACTION_SET_ELEMENT_DEFAULT_TRANSPARENCY,
                         GDCommands.MODEL_ACTION_SET_ELEMENT_DEFAULT_FULL_LAYOUT),
                 createMenu( // Adopt Styles
-                        "elementAdoptionMenu", GDCommands.MODEL_ACTION_ADOPT_SAME_COLOR),
+                        "elementAdoptionMenu", GDCommands.MODEL_ACTION_ADOPT_SAME_COLOR, GDCommands.MODEL_ACTION_ADOPT_SAME_TRANSPARENCY, GDCommands.MODEL_ACTION_ADOPT_SAME_FONT),
                 new JSeparator(), createMenu( // Icon-Menu
                         "icon", GDCommands.MODEL_ACTION_SET_ELEMENT_ICON, GDCommands.MODEL_ACTION_SET_ELEMENT_ICON_NONE),
                 new JSeparator(), createMenu( // Textausrichtungs-Menu (horizontal)

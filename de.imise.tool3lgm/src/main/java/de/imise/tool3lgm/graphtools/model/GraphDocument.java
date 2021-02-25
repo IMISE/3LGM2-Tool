@@ -1252,6 +1252,20 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
             setSameColor(pid);
             break;
         }
+        case MODEL_ACTION_ADOPT_SAME_TRANSPARENCY: {
+            setSameAlpha(pid);
+            break;
+        }
+        case MODEL_ACTION_ADOPT_SAME_FONT: {
+            setSameFont(pid);
+            break;
+        }
+        case MODEL_ACTION_ADOPT_SAME_ICON: {
+            break;
+        }
+        case MODEL_ACTION_ADOPT_SAME_ALL: {
+            break;
+        }
         case MODEL_ACTION_MOVE_ORDER_TO_FIRST_POSITION: {
             if (argc == 0) {
                 z_move_up(pid);
@@ -2233,6 +2247,27 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
     }
 
     /**
+     * Sets the transparency to the transparency of last selected element
+     *
+     * @param pid
+     */
+    private final void setSameAlpha(final int pid) {
+        start_transaction(pid);
+
+        ElementContainer lastSelected = getLastSelected();
+        int alphaValue = lastSelected.getAlpha();
+
+        for (ElementContainer ec : selectedContainer) {
+            if (ec != lastSelected) {
+                changeAlpha(ec, alphaValue, pid);
+            }
+        }
+
+        finish_transaction(pid);
+        distributeEvent(ELEMENT_GRAPHICS_CHANGED, pid);
+    }
+
+    /**
      * @param szenID
      * @param elementID
      * @param alphaMode
@@ -2387,6 +2422,27 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
         ec.refreshText();
         szen.finish_transaction(pid);
         szen.distributeEvent(ELEMENT_GRAPHICS_CHANGED, ec, pid);
+    }
+
+    /**
+     * Sets the font to the font of last selected element
+     *
+     * @param pid
+     */
+    private final void setSameFont(final int pid) {
+        start_transaction(pid);
+
+        ElementContainer lastSelected = getLastSelected();
+        Font font = lastSelected.getFont();
+
+        for (ElementContainer ec : selectedContainer) {
+            if (ec != lastSelected) {
+                changeFont(ec, font, pid);
+            }
+        }
+
+        finish_transaction(pid);
+        distributeEvent(ELEMENT_GRAPHICS_CHANGED, pid);
     }
 
     /**

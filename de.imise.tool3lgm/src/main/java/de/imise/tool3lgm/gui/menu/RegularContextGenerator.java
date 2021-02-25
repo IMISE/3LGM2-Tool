@@ -7,6 +7,8 @@ import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_ADD_SEL
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_ADD_SELECTED_TO_NEW_SUBMODEL;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_ADD_SELECTED_TO_SUBMODEL;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_ADOPT_SAME_COLOR;
+import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_ADOPT_SAME_FONT;
+import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_ADOPT_SAME_TRANSPARENCY;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_COMMAND_LINE;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_CREATE_ADDICTED;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_CREATE_NODE;
@@ -139,9 +141,9 @@ public class RegularContextGenerator extends ElementSelectionContextGenerator im
     private JMenuItem layer_transparencey_none, layer_transparencey_semi, layer_transparencey_full;
 
     /**
-     * Menu Options for adopting color
+     * Menu Options for adopting color, transparency
      */
-    private JMenuItem adopt_color;
+    private JMenuItem adopt_color, adopt_tranparency, adopt_font;
 
     /**
      * COMMENTME
@@ -251,6 +253,8 @@ public class RegularContextGenerator extends ElementSelectionContextGenerator im
         layer_transparencey_none = getItem(MODEL_ACTION_SET_LAYER_TRANSPARENCY_NONE);
         color_layer = getItem(MODEL_ACTION_SET_LAYER_COLOR);
         adopt_color = getItem(MODEL_ACTION_ADOPT_SAME_COLOR);
+        adopt_tranparency = getItem(MODEL_ACTION_ADOPT_SAME_TRANSPARENCY);
+        adopt_font = getItem(MODEL_ACTION_ADOPT_SAME_FONT);
 
         JMenu trans_layer = new JMenu(getResString("layerTransparencyMenu"));
         trans_layer.add(layer_transparencey_none);
@@ -259,6 +263,7 @@ public class RegularContextGenerator extends ElementSelectionContextGenerator im
 
         JMenu adopt_layer = new JMenu(getResString("elementAdoptionMenu"));
         adopt_layer.add(adopt_color);
+        adopt_layer.add(adopt_tranparency);
 
         layout_layer = new JMenu(getResString("layerLayoutMenu"));
         layout_layer.add(normalize_layer);
