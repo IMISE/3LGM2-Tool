@@ -466,28 +466,6 @@ public class GraphElementLayout implements SwingConstants, Cloneable {
     public static final int STANDARD_FONT_SIZE = 12;
     public static final Font STANDARD_FONT = new Font(STANDARD_FONT_NAME, STANDARD_FONT_STYLE, STANDARD_FONT_SIZE);
 
-    /**
-     * Standardlayout für alle Node und Kanten, die kein spezielles eigenes
-     * Layout haben
-     */
-    public static final GraphElementLayout STANDARD_ELEMENT_LAYOUT = new GraphElementLayout();
-    static {
-        STANDARD_ELEMENT_LAYOUT.fg_color = STANDARD_FONT_COLOR;
-        STANDARD_ELEMENT_LAYOUT.bg_color = STANDARD_NODE_COLOR;
-        STANDARD_ELEMENT_LAYOUT.border_color = STANDARD_BORDER_COLOR;
-        STANDARD_ELEMENT_LAYOUT.font = STANDARD_FONT;
-        STANDARD_ELEMENT_LAYOUT.iconID = null;
-
-        //TODO: den Standard-Linestyle aus den Containern hier her verlegen
-        //		STANDARD_ELEMENT_LAYOUT.line_style =
-        STANDARD_ELEMENT_LAYOUT.form = STANDARD_FORM;
-        STANDARD_ELEMENT_LAYOUT.textPositionHorizontal = STANDARD_TEXT_POSITION_HORIZONTAL;
-        STANDARD_ELEMENT_LAYOUT.textPositionVertical = STANDARD_TEXT_POSITION_VERTICAL;
-        STANDARD_ELEMENT_LAYOUT.textAlignmentHTML = STANDARD_TEXT_ALIGNMENT_HTML;
-        STANDARD_ELEMENT_LAYOUT.width = STANDARD_WIDTH;
-
-    }
-
     /** Hintergrundfarbe */
     public Color bg_color;
 

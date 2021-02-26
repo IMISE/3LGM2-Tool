@@ -51,7 +51,6 @@ import static de.imise.tool3lgm.graphtools.model.LGMChangeListener.LGMChangeType
 import static de.imise.tool3lgm.graphtools.model.LGMChangeListener.LGMChangeType.SZENARIO_ADDED;
 import static de.imise.tool3lgm.graphtools.model.LGMChangeListener.LGMChangeType.SZENARIO_REMOVED;
 import static de.imise.tool3lgm.graphtools.undoredo.TransactionManager.STANDARD_PID;
-import static de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout.STANDARD_ELEMENT_LAYOUT;
 import static de.imise.tool3lgm.log.Log.ERROR;
 import static de.imise.util.collections.CollectionUtils.getNextIndicatedName;
 import static de.imise.util.htmlxml.ParseSaveStringHandler.getDecodedParseSaveString;
@@ -119,6 +118,7 @@ import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.graphtools.view.container.InterLayerConnectedNodeContainer;
 import de.imise.tool3lgm.graphtools.view.container.LayerContainer;
 import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
+import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout;
 import de.imise.tool3lgm.graphtools.view.graph.GraphViewParameter;
 import de.imise.tool3lgm.log.Log;
 import de.imise.tool3lgm.xml.ToolXMLParser;
@@ -783,13 +783,13 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
             if (kc.isVisible()) {
                 doc.addUndo(pid, MODEL_ACTION_SET_ELEMENT_VISIBILITY_ON, doc, ec);
             }
-            if (ec.getTextPositionHorizontal() != STANDARD_ELEMENT_LAYOUT.textPositionHorizontal) {
+            if (ec.getTextPositionHorizontal() != GraphElementLayout.STANDARD_TEXT_POSITION_HORIZONTAL) {
                 doc.addUndo(pid, MODEL_ACTION_SET_ELEMENT_TEXT_POSITION_HORIZONTAL, doc, ec, kc.get3LGMLayout().textPositionHorizontal);
             }
-            if (ec.getTextPositionVertical() != STANDARD_ELEMENT_LAYOUT.textPositionVertical) {
+            if (ec.getTextPositionVertical() != GraphElementLayout.STANDARD_TEXT_POSITION_VERTICAL) {
                 doc.addUndo(pid, MODEL_ACTION_SET_ELEMENT_TEXT_POSITION_VERTICAL, doc, ec, kc.get3LGMLayout().textPositionVertical);
             }
-            if (ec.getTextAlignmentHTML() != STANDARD_ELEMENT_LAYOUT.textAlignmentHTML) {
+            if (ec.getTextAlignmentHTML() != GraphElementLayout.STANDARD_TEXT_ALIGNMENT_HTML) {
                 doc.addUndo(pid, MODEL_ACTION_SET_ELEMENT_TEXT_ALIGNMENT_HTML, doc, ec, kc.get3LGMLayout().textAlignmentHTML);
             }
         }

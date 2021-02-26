@@ -22,7 +22,25 @@ public class ElementsLayoutDefinition {
      * Standardelementlayout. Initial entspricht es dem Standardlayout aus
      * <code>GraphElementLayout</code>
      */
-    private GraphElementLayout standardElementLayout = (GraphElementLayout) GraphElementLayout.STANDARD_ELEMENT_LAYOUT.clone();
+    private GraphElementLayout standardElementLayout = createStandardElementLayout();
+
+    /**
+     * @return
+     */
+    private GraphElementLayout createStandardElementLayout() {
+        GraphElementLayout layout = new GraphElementLayout();
+        layout.fg_color = GraphElementLayout.STANDARD_FONT_COLOR;
+        layout.bg_color = GraphElementLayout.STANDARD_NODE_COLOR;
+        layout.border_color = GraphElementLayout.STANDARD_BORDER_COLOR;
+        layout.setFont(GraphElementLayout.STANDARD_FONT);
+        layout.setIconID(null);
+        layout.form = GraphElementLayout.STANDARD_FORM;
+        layout.textPositionHorizontal = GraphElementLayout.STANDARD_TEXT_POSITION_HORIZONTAL;
+        layout.textPositionVertical = GraphElementLayout.STANDARD_TEXT_POSITION_VERTICAL;
+        layout.textAlignmentHTML = GraphElementLayout.STANDARD_TEXT_ALIGNMENT_HTML;
+        layout.width = GraphElementLayout.STANDARD_WIDTH;
+        return layout;
+    }
 
     /**
      * @param loadDefaults
