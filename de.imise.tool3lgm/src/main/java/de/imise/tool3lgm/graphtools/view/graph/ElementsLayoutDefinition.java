@@ -214,7 +214,7 @@ public class ElementsLayoutDefinition {
      * @param ec
      * @return
      */
-    public final GraphElementLayout.SHAPE getStandardForm(final ElementContainer ec) {
+    public final Shape getStandardForm(final ElementContainer ec) {
         return getStandardElementLayout(ec).form;
     }
 
@@ -222,7 +222,7 @@ public class ElementsLayoutDefinition {
      * @param elementClass
      * @param form
      */
-    public final void setStandardForm(final Class<? extends ModelElement> elementClass, final GraphElementLayout.SHAPE form) {
+    public final void setStandardForm(final Class<? extends ModelElement> elementClass, final Shape form) {
         getElementClassSpecificLayout(elementClass).form = form;
     }
 

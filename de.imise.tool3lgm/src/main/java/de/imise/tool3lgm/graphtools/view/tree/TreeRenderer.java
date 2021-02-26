@@ -16,7 +16,7 @@ import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
-import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout;
+import de.imise.tool3lgm.graphtools.view.graph.Shape;
 import de.imise.tool3lgm.graphtools.view.tree.node.IconifiedTreeNode;
 import de.imise.tool3lgm.graphtools.view.tree.node.IconifiedTreeNode.IconState;
 import de.imise.tool3lgm.graphtools.view.tree.node.LGMTreeNode;
@@ -93,7 +93,7 @@ public class TreeRenderer extends DefaultTreeCellRenderer {
                     if (icon == null) {
                         GraphDocument doc = ec.getGraphDocument();
                         ModelElement me = ec.getElement();
-                        GraphElementLayout.SHAPE form = me.isPaintable() ? doc.getMapping().getStandardForm(ec) : null;
+                        Shape form = me.isPaintable() ? doc.getMapping().getStandardForm(ec) : null;
                         if (form != null) {
                             switch (form) {
                             case rechteck:

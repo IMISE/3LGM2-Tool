@@ -14,7 +14,7 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.path.metapaths.SimpleMetaPath;
 import de.imise.tool3lgm.graphtools.path.metapaths.SimpleMetaPathCreator;
 import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout;
-import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout.SHAPE;
+import de.imise.tool3lgm.graphtools.view.graph.Shape;
 import de.imise.tool3lgm.metamodel.service.edge.ApplicationComponent_PhysicalDataProcessingComponent_Edge;
 import de.imise.tool3lgm.metamodel.service.edge.ApplicationComponent_RepresentationForm_Edge;
 import de.imise.tool3lgm.metamodel.service.edge.ApplicationComponent_Use_Edge;
@@ -92,16 +92,16 @@ public class TLGMServiceGraphViewDefinion extends GraphViewDefinition {
 
     @Override
     protected void initDefaultElementLayout() {
-        setDefaultLayout(Function.class, SHAPE.rechteck, GraphElementLayout.COLORS[GraphElementLayout.RED]);
-        setDefaultLayout(ObjectType.class, GraphElementLayout.SHAPE.oval, GraphElementLayout.COLORS[GraphElementLayout.BLUE]);
-        setDefaultLayout(ApplicationSystem.class, GraphElementLayout.SHAPE.rundeck, GraphElementLayout.COLORS[GraphElementLayout.LIGHTRED]);
-        setDefaultLayout(OrganisationSystem.class, GraphElementLayout.SHAPE.rundeck, GraphElementLayout.COLORS[GraphElementLayout.BLUE]);
-        setDefaultLayout(InvokingInterface.class, GraphElementLayout.SHAPE.oval, GraphElementLayout.COLORS[GraphElementLayout.LIGHTGREEN], 15, 15);
-        setDefaultLayout(ProvidingInterface.class, GraphElementLayout.SHAPE.dreieck, GraphElementLayout.COLORS[GraphElementLayout.ORANGE], 20, 20);
-        setDefaultLayout(PhysicalDataProcessingComponent.class, GraphElementLayout.SHAPE.rechteck, GraphElementLayout.COLORS[GraphElementLayout.ORANGE]);
-        setDefaultLayout(IheActorInstance.class, GraphElementLayout.SHAPE.rechteck, GraphElementLayout.COLORS[GraphElementLayout.LIGHTBLUE]);
-        setDefaultLayout(IheActorInstanceInvokingInterface.class, GraphElementLayout.SHAPE.oval, GraphElementLayout.COLORS[GraphElementLayout.RED], 15, 15);
-        setDefaultLayout(IheActorInstanceProvidingInterface.class, GraphElementLayout.SHAPE.dreieck, GraphElementLayout.COLORS[GraphElementLayout.GRAY], 20, 20);
+        setDefaultLayout(Function.class, Shape.rechteck, GraphElementLayout.COLORS[GraphElementLayout.RED]);
+        setDefaultLayout(ObjectType.class, Shape.oval, GraphElementLayout.COLORS[GraphElementLayout.BLUE]);
+        setDefaultLayout(ApplicationSystem.class, Shape.rundeck, GraphElementLayout.COLORS[GraphElementLayout.LIGHTRED]);
+        setDefaultLayout(OrganisationSystem.class, Shape.rundeck, GraphElementLayout.COLORS[GraphElementLayout.BLUE]);
+        setDefaultLayout(InvokingInterface.class, Shape.oval, GraphElementLayout.COLORS[GraphElementLayout.LIGHTGREEN], 15, 15);
+        setDefaultLayout(ProvidingInterface.class, Shape.dreieck, GraphElementLayout.COLORS[GraphElementLayout.ORANGE], 20, 20);
+        setDefaultLayout(PhysicalDataProcessingComponent.class, Shape.rechteck, GraphElementLayout.COLORS[GraphElementLayout.ORANGE]);
+        setDefaultLayout(IheActorInstance.class, Shape.rechteck, GraphElementLayout.COLORS[GraphElementLayout.LIGHTBLUE]);
+        setDefaultLayout(IheActorInstanceInvokingInterface.class, Shape.oval, GraphElementLayout.COLORS[GraphElementLayout.RED], 15, 15);
+        setDefaultLayout(IheActorInstanceProvidingInterface.class, Shape.dreieck, GraphElementLayout.COLORS[GraphElementLayout.GRAY], 20, 20);
     }
 
     /*
@@ -113,7 +113,7 @@ public class TLGMServiceGraphViewDefinion extends GraphViewDefinition {
         //Application Sytsems get a Database on its shape if they are connected to an ObjectType
         SimpleMetaPath mp1 = SimpleMetaPathCreator.createSimpleMetaPath(metaModel, ApplicationSystem.class, ObjectType.class, ApplicationComponent_RepresentationForm_Edge.class, ObjectType_RepresentationForm_Edge.class);
         SimpleMetaPath mp2 = SimpleMetaPathCreator.createSimpleMetaPath(metaModel, OrganisationSystem.class, ObjectType.class, ApplicationComponent_RepresentationForm_Edge.class, ObjectType_RepresentationForm_Edge.class);
-        return ImmutableList.of(new AdditionalGraphShapeData(mp1, SHAPE.tonne), new AdditionalGraphShapeData(mp2, SHAPE.ordner));
+        return ImmutableList.of(new AdditionalGraphShapeData(mp1, Shape.tonne), new AdditionalGraphShapeData(mp2, Shape.ordner));
     }
 
 }

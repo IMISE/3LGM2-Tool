@@ -30,6 +30,7 @@ import de.imise.tool3lgm.graphtools.view.container.LayerContainer;
 import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
 import de.imise.tool3lgm.graphtools.view.graph.ElementsLayoutDefinition;
 import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout;
+import de.imise.tool3lgm.graphtools.view.graph.Shape;
 
 /**
  * @author Thomas Rudert Die Variablen sind auf protected Gesetzt, damit man
@@ -362,7 +363,7 @@ public class ToolContentHandlerV1_0 implements ContentHandler {
             color = null;
 
         } else if (qName.equals("form")) {
-            layout.form = GraphElementLayout.SHAPE.values()[Integer.parseInt(elementValue.toString())];
+            layout.form = Shape.values()[Integer.parseInt(elementValue.toString())];
 
         } else if (qName.equals("font_family")) {
             String name = elementValue.toString().trim();

@@ -40,6 +40,7 @@ import de.imise.tool3lgm.graphtools.model.LGMGraphDocument;
 import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
 import de.imise.tool3lgm.graphtools.view.graph.ElementsLayoutDefinition;
 import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout;
+import de.imise.tool3lgm.graphtools.view.graph.Shape;
 import de.imise.tool3lgm.log.Log;
 
 /**
@@ -131,7 +132,7 @@ public class LayoutEditor extends JDialog implements ActionListener {
             farbe_menu.add(farbe[c]);
         }
 
-        GraphElementLayout.SHAPE[] shapes = GraphElementLayout.SHAPE.values();
+        Shape[] shapes = Shape.values();
         form = new JMenuItem[shapes.length];
         for (c = 0; c < shapes.length; c++) {
             form[c] = new JMenuItem(getResString(shapes[c].toString()));
@@ -291,7 +292,7 @@ public class LayoutEditor extends JDialog implements ActionListener {
 
         if (e.getActionCommand().startsWith("form ")) {
             try {
-                my_mapping.setStandardForm(nodeContainers[aktuelles].getNode().getClass(), GraphElementLayout.SHAPE.valueOf(e.getActionCommand().substring("form ".length())));
+                my_mapping.setStandardForm(nodeContainers[aktuelles].getNode().getClass(), Shape.valueOf(e.getActionCommand().substring("form ".length())));
                 flaeche.repaint();
             } catch (Exception ne) {
                 Log.show(Log.ERROR, getResString("Fehler beim Form setzen."), ne);

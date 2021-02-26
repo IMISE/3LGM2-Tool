@@ -34,6 +34,7 @@ import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout;
 import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout.TextAlignmentHTML;
 import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout.TextPositionHorizontal;
 import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout.TextPositionVertical;
+import de.imise.tool3lgm.graphtools.view.graph.Shape;
 import de.imise.tool3lgm.graphtools.view.graph.SpecialInfoLabel;
 
 public abstract class ElementContainer extends JLabel implements Cloneable, GraphDocumentOwner, IDSource {
@@ -548,7 +549,7 @@ public abstract class ElementContainer extends JLabel implements Cloneable, Grap
     /**
      * Gibt die Form zurueck
      */
-    public final GraphElementLayout.SHAPE getForm() {
+    public final Shape getForm() {
         return layout == null ? null : layout.form;
     }
 
@@ -557,7 +558,7 @@ public abstract class ElementContainer extends JLabel implements Cloneable, Grap
      *
      * @param form
      */
-    public final void setForm(final GraphElementLayout.SHAPE form) {
+    public final void setForm(final Shape form) {
         if (layout != null) {
             layout.form = form;
         }

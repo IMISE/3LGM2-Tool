@@ -22,7 +22,7 @@ import de.imise.tool3lgm.graphtools.path.metapaths.MetaPath;
 import de.imise.tool3lgm.graphtools.path.metapaths.SimpleMetaPath;
 import de.imise.tool3lgm.graphtools.view.graph.ElementsLayoutDefinition;
 import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout;
-import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout.SHAPE;
+import de.imise.tool3lgm.graphtools.view.graph.Shape;
 import de.imise.util.pair.Pair;
 
 /**
@@ -43,13 +43,13 @@ public abstract class GraphViewDefinition {
         /**
          *
          */
-        public final GraphElementLayout.SHAPE shape;
+        public final Shape shape;
 
         /**
          * @param metaPath
          * @param shape
          */
-        public AdditionalGraphShapeData(final MetaPath metaPath, final SHAPE shape) {
+        public AdditionalGraphShapeData(final MetaPath metaPath, final Shape shape) {
             this.metaPath = metaPath;
             this.shape = shape;
         }
@@ -321,7 +321,7 @@ public abstract class GraphViewDefinition {
      *
      */
     private final void initDefaultElementLayoutInternal() {
-        setDefaultLayout(Textfield.class, SHAPE.rechteck, new Color(0, 0, 0, 0));
+        setDefaultLayout(Textfield.class, Shape.rechteck, new Color(0, 0, 0, 0));
         defaultElementsLayoutDefinition.setStandardSize(Bendpoint.class, 10, 10);
     }
 
@@ -350,7 +350,7 @@ public abstract class GraphViewDefinition {
      * @param defaultShape
      * @param defaultBackground
      */
-    protected final void setDefaultLayout(final Class<? extends ModelElement> elementClass, final SHAPE defaultShape, final Color defaultBackground) {
+    protected final void setDefaultLayout(final Class<? extends ModelElement> elementClass, final Shape defaultShape, final Color defaultBackground) {
         setDefaultLayout(elementClass, defaultShape, defaultBackground, GraphElementLayout.STANDARD_WIDTH, GraphElementLayout.STANDARD_HEIGHT);
     }
 
@@ -361,7 +361,7 @@ public abstract class GraphViewDefinition {
      * @param defaultWidth
      * @param defaultHeight
      */
-    protected final void setDefaultLayout(final Class<? extends ModelElement> elementClass, final SHAPE defaultShape, final Color defaultBackground, final int defaultWidth, final int defaultHeight) {
+    protected final void setDefaultLayout(final Class<? extends ModelElement> elementClass, final Shape defaultShape, final Color defaultBackground, final int defaultWidth, final int defaultHeight) {
         defaultElementsLayoutDefinition.setStandardForm(elementClass, defaultShape);
         defaultElementsLayoutDefinition.setStandardBackGroundColor(elementClass, defaultBackground);
         defaultElementsLayoutDefinition.setStandardSize(elementClass, defaultWidth, defaultHeight);

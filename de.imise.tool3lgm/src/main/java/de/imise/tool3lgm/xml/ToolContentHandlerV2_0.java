@@ -35,6 +35,7 @@ import de.imise.tool3lgm.graphtools.view.graph.ElementsLayoutDefinition;
 import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout;
 import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout.TextPositionHorizontal;
 import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout.TextPositionVertical;
+import de.imise.tool3lgm.graphtools.view.graph.Shape;
 import de.imise.tool3lgm.log.Log;
 
 /**
@@ -485,7 +486,7 @@ public class ToolContentHandlerV2_0 implements ContentHandler {
                 color = null;
 
             } else if (qName.equals("form")) {
-                layout.form = GraphElementLayout.SHAPE.values()[Integer.parseInt(elementValue.toString())];
+                layout.form = Shape.values()[Integer.parseInt(elementValue.toString())];
 
             } else if (qName.equals("font_family")) {
                 if (layout == null) {

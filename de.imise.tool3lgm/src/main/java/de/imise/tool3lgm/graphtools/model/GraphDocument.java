@@ -123,6 +123,7 @@ import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout.TextAlignmentH
 import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout.TextPositionHorizontal;
 import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout.TextPositionVertical;
 import de.imise.tool3lgm.graphtools.view.graph.GraphViewParameter;
+import de.imise.tool3lgm.graphtools.view.graph.Shape;
 import de.imise.tool3lgm.gui.MainFrame;
 import de.imise.tool3lgm.log.Log;
 import de.imise.tool3lgm.userproperties.UserProperties;
@@ -3384,7 +3385,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
      * @return
      */
     private NodeContainer createNodeAndContainer(final Class<? extends ModelElement> elementClass, final String name, final String description, final String elementID, int x, int y, final int width, final int height, final int rgb,
-            final GraphElementLayout.SHAPE form, final int bendpoint_index, final int pid) {
+            final Shape form, final int bendpoint_index, final int pid) {
         lastCreated = null;
         start_transaction(pid);
         if (Node.class.isAssignableFrom(elementClass)) {

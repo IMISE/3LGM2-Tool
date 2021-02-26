@@ -1,7 +1,7 @@
 package de.imise.tool3lgm.imexport.graphml;
 
 import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
-import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout;
+import de.imise.tool3lgm.graphtools.view.graph.Shape;
 import de.imise.util.htmlxml.HTMLConverter;
 
 public class YFilesGraphmlNodeStyle {
@@ -36,7 +36,7 @@ public class YFilesGraphmlNodeStyle {
     }
 
     private final Enum<?> getYGraphmlShape(final NodeContainer nc) {
-        GraphElementLayout.SHAPE shape = nc.getForm();
+        Shape shape = nc.getForm();
         if (shape == null) {
             shape = nc.getGraphDocument().getMapping().getStandardForm(nc);
         }
@@ -52,7 +52,7 @@ public class YFilesGraphmlNodeStyle {
         HEXAGON;
     }
 
-    private Enum<?> getYGraphmlShape(final GraphElementLayout.SHAPE shape) {
+    private Enum<?> getYGraphmlShape(final Shape shape) {
         switch (shape) {
         case dreieck:
             return YGraphShape.TRIANGLE;

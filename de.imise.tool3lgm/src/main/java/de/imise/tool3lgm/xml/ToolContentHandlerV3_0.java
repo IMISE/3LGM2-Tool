@@ -45,6 +45,7 @@ import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout;
 import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout.TextAlignmentHTML;
 import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout.TextPositionHorizontal;
 import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout.TextPositionVertical;
+import de.imise.tool3lgm.graphtools.view.graph.Shape;
 import de.imise.tool3lgm.log.Log;
 
 /**
@@ -707,7 +708,7 @@ public class ToolContentHandlerV3_0 implements ContentHandler {
                 }
                 String elementValueString = elementValue.toString();
                 int formIndex = Integer.parseInt(elementValueString);
-                GraphElementLayout.SHAPE[] shapes = GraphElementLayout.SHAPE.values();
+                Shape[] shapes = Shape.values();
                 layout.form = shapes[formIndex];
 
             } else if (qName.equals("font_family")) {
