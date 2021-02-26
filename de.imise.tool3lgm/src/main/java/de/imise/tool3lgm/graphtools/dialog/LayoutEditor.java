@@ -40,6 +40,7 @@ import de.imise.tool3lgm.graphtools.model.LGMGraphDocument;
 import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
 import de.imise.tool3lgm.graphtools.view.graph.ElementsLayoutDefinition;
 import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout;
+import de.imise.tool3lgm.graphtools.view.graph.LayoutColor;
 import de.imise.tool3lgm.graphtools.view.graph.Shape;
 import de.imise.tool3lgm.log.Log;
 
@@ -54,7 +55,7 @@ public class LayoutEditor extends JDialog implements ActionListener {
     private final NodeContainer[] nodeContainers;
     private final JButton[] form_trigger, farbe_trigger, font_trigger;
     private final JPopupMenu farbe_menu, form_menu, font_menu;
-    private JMenuItem[] farbe;
+    private final JMenuItem[] farbe;
     private final JMenuItem[] form;
     private final JMenuItem[] name;
     private final ElementsLayoutDefinition my_mapping;
@@ -121,13 +122,15 @@ public class LayoutEditor extends JDialog implements ActionListener {
         form_menu = new JPopupMenu(getResString("le_form"));
         font_menu = new JPopupMenu(getResString("le_schriftart"));
 
-        farbe = new JMenuItem[GraphElementLayout.COLORS.length];
-
-        farbe = new JMenuItem[GraphElementLayout.COLORS.length];
-        for (c = 0; c < GraphElementLayout.COLORS.length; c++) {
-            farbe[c] = new JMenuItem(GraphElementLayout.COLOR_NAMES[c]);
+        LayoutColor[] layoutColors = LayoutColor.values();
+        farbe = new JMenuItem[layoutColors.length];
+        for (c = 0; c < layoutColors.length; c++) {
+            LayoutColor layoutColor = layoutColors[c];
+            String colorName = layoutColor.toString();
+            farbe[c] = new JMenuItem(colorName);
             farbe[c].setActionCommand("farbe " + c);
-            farbe[c].setBackground(GraphElementLayout.COLORS[c]);
+            Color color = layoutColor.awtColor();
+            farbe[c].setBackground(color);
             farbe[c].addActionListener(this);
             farbe_menu.add(farbe[c]);
         }

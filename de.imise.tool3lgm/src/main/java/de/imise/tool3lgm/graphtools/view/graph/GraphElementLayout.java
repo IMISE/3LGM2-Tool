@@ -50,62 +50,6 @@ public class GraphElementLayout implements SwingConstants, Cloneable {
     /** Stroke for {@link HasPartEdges} in the graph */
     public static final Stroke HAS_PART_EDGES_STROKE = NORMAL_STROKE_DASHED;
 
-    public static final int WHITE = 0;
-
-    public static final int YELLOW = 1;
-
-    public static final int GREEN = 2;
-
-    public static final int BLUE = 3;
-
-    public static final int GRAY = 4;
-
-    public static final int RED = 5;
-
-    public static final int ORANGE = 6;
-
-    public static final int BLACK = 7;
-
-    public static final int LIGHTRED = 8;
-
-    public static final int LIGHTGREEN = 9;
-
-    public static final int LIGHTPURPLE = 10;
-
-    public static final int LIGHTBLUE = 11;
-
-    public static final Color[] COLORS = new Color[12];
-    static {
-        COLORS[WHITE] = Color.white;
-        COLORS[YELLOW] = Color.yellow;
-        COLORS[GREEN] = Color.green;
-        COLORS[BLUE] = new Color(100, 100, 255);
-        COLORS[GRAY] = Color.lightGray;
-        COLORS[RED] = new Color(255, 100, 100);
-        COLORS[ORANGE] = Color.orange;
-        COLORS[BLACK] = Color.black;
-        COLORS[LIGHTRED] = new Color(255, 153, 102);
-        COLORS[LIGHTGREEN] = new Color(204, 255, 204);
-        COLORS[LIGHTPURPLE] = new Color(229, 203, 255);
-        COLORS[LIGHTBLUE] = new Color(0, 204, 255);
-    }
-
-    public static final String[] COLOR_NAMES = new String[12];
-    static {
-        COLOR_NAMES[WHITE] = getResString("white");
-        COLOR_NAMES[YELLOW] = getResString("yellow");
-        COLOR_NAMES[GREEN] = getResString("green");
-        COLOR_NAMES[BLUE] = getResString("blue");
-        COLOR_NAMES[GRAY] = getResString("grey");
-        COLOR_NAMES[RED] = getResString("red");
-        COLOR_NAMES[ORANGE] = getResString("orange");
-        COLOR_NAMES[BLACK] = getResString("black");
-        COLOR_NAMES[LIGHTRED] = getResString("lightred");
-        COLOR_NAMES[LIGHTGREEN] = getResString("lightgreen");
-        COLOR_NAMES[LIGHTPURPLE] = getResString("lightpurple");
-        COLOR_NAMES[LIGHTBLUE] = getResString("lightblue");
-    }
-
     /** Transparenzwert für nicht transparent (Alpha = 255) */
     public static final int TRANSPARENCY_NONE = 255;
 
@@ -286,7 +230,7 @@ public class GraphElementLayout implements SwingConstants, Cloneable {
     public static final TextPositionHorizontal STANDARD_TEXT_POSITION_HORIZONTAL = TextPositionHorizontal.CENTER;
     //	public static final Color  STANDARD_TRACE_COLOR = Color.BLACK;
     public static final Color STANDARD_BORDER_COLOR = Color.BLACK;
-    public static final Color STANDARD_NODE_COLOR = COLORS[RED];
+    public static final Color STANDARD_NODE_COLOR = LayoutColor.RED.awtColor();
     public static final String STANDARD_FONT_NAME = "SansSerif";
     public static final int STANDARD_FONT_STYLE = Font.PLAIN;
     public static final Color STANDARD_FONT_COLOR = Color.BLACK;

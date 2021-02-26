@@ -2,6 +2,17 @@ package de.imise.tool3lgm.metamodel.service;
 
 import static de.imise.tool3lgm.graphtools.metamodel.GraphViewDefinition.InterLayerLineRenderType.LINE_TYPE_DASHED;
 import static de.imise.tool3lgm.graphtools.metamodel.GraphViewDefinition.InterLayerLineRenderType.LINE_TYPE_SOLID;
+import static de.imise.tool3lgm.graphtools.view.graph.LayoutColor.BLUE;
+import static de.imise.tool3lgm.graphtools.view.graph.LayoutColor.GRAY;
+import static de.imise.tool3lgm.graphtools.view.graph.LayoutColor.LIGHTBLUE;
+import static de.imise.tool3lgm.graphtools.view.graph.LayoutColor.LIGHTGREEN;
+import static de.imise.tool3lgm.graphtools.view.graph.LayoutColor.LIGHTRED;
+import static de.imise.tool3lgm.graphtools.view.graph.LayoutColor.ORANGE;
+import static de.imise.tool3lgm.graphtools.view.graph.LayoutColor.RED;
+import static de.imise.tool3lgm.graphtools.view.graph.Shape.dreieck;
+import static de.imise.tool3lgm.graphtools.view.graph.Shape.oval;
+import static de.imise.tool3lgm.graphtools.view.graph.Shape.rechteck;
+import static de.imise.tool3lgm.graphtools.view.graph.Shape.rundeck;
 
 import java.util.List;
 
@@ -13,7 +24,6 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.path.metapaths.SimpleMetaPath;
 import de.imise.tool3lgm.graphtools.path.metapaths.SimpleMetaPathCreator;
-import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout;
 import de.imise.tool3lgm.graphtools.view.graph.Shape;
 import de.imise.tool3lgm.metamodel.service.edge.ApplicationComponent_PhysicalDataProcessingComponent_Edge;
 import de.imise.tool3lgm.metamodel.service.edge.ApplicationComponent_RepresentationForm_Edge;
@@ -92,21 +102,22 @@ public class TLGMServiceGraphViewDefinion extends GraphViewDefinition {
 
     @Override
     protected void initDefaultElementLayout() {
-        setDefaultLayout(Function.class, Shape.rechteck, GraphElementLayout.COLORS[GraphElementLayout.RED]);
-        setDefaultLayout(ObjectType.class, Shape.oval, GraphElementLayout.COLORS[GraphElementLayout.BLUE]);
-        setDefaultLayout(ApplicationSystem.class, Shape.rundeck, GraphElementLayout.COLORS[GraphElementLayout.LIGHTRED]);
-        setDefaultLayout(OrganisationSystem.class, Shape.rundeck, GraphElementLayout.COLORS[GraphElementLayout.BLUE]);
-        setDefaultLayout(InvokingInterface.class, Shape.oval, GraphElementLayout.COLORS[GraphElementLayout.LIGHTGREEN], 15, 15);
-        setDefaultLayout(ProvidingInterface.class, Shape.dreieck, GraphElementLayout.COLORS[GraphElementLayout.ORANGE], 20, 20);
-        setDefaultLayout(PhysicalDataProcessingComponent.class, Shape.rechteck, GraphElementLayout.COLORS[GraphElementLayout.ORANGE]);
-        setDefaultLayout(IheActorInstance.class, Shape.rechteck, GraphElementLayout.COLORS[GraphElementLayout.LIGHTBLUE]);
-        setDefaultLayout(IheActorInstanceInvokingInterface.class, Shape.oval, GraphElementLayout.COLORS[GraphElementLayout.RED], 15, 15);
-        setDefaultLayout(IheActorInstanceProvidingInterface.class, Shape.dreieck, GraphElementLayout.COLORS[GraphElementLayout.GRAY], 20, 20);
+        setDefaultLayout(Function.class, rechteck, RED);
+        setDefaultLayout(ObjectType.class, oval, BLUE);
+        setDefaultLayout(ApplicationSystem.class, rundeck, LIGHTRED);
+        setDefaultLayout(OrganisationSystem.class, rundeck, BLUE);
+        setDefaultLayout(InvokingInterface.class, oval, LIGHTGREEN, 15, 15);
+        setDefaultLayout(ProvidingInterface.class, dreieck, ORANGE, 20, 20);
+        setDefaultLayout(PhysicalDataProcessingComponent.class, rechteck, ORANGE);
+        setDefaultLayout(IheActorInstance.class, rechteck, LIGHTBLUE);
+        setDefaultLayout(IheActorInstanceInvokingInterface.class, oval, RED, 15, 15);
+        setDefaultLayout(IheActorInstanceProvidingInterface.class, dreieck, GRAY, 20, 20);
     }
 
     /*
-     * in order to generate additional model shapes automatically, this function is created.
-     * through definition of certain paths, it is able to return the path and the corresponding model component
+     * in order to generate additional model shapes automatically, this function
+     * is created. through definition of certain paths, it is able to return the
+     * path and the corresponding model component
      */
     @Override
     protected List<AdditionalGraphShapeData> getAdditionalGraphShapeData() {

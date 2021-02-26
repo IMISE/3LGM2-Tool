@@ -22,6 +22,7 @@ import de.imise.tool3lgm.graphtools.path.metapaths.MetaPath;
 import de.imise.tool3lgm.graphtools.path.metapaths.SimpleMetaPath;
 import de.imise.tool3lgm.graphtools.view.graph.ElementsLayoutDefinition;
 import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout;
+import de.imise.tool3lgm.graphtools.view.graph.LayoutColor;
 import de.imise.tool3lgm.graphtools.view.graph.Shape;
 import de.imise.util.pair.Pair;
 
@@ -350,10 +351,29 @@ public abstract class GraphViewDefinition {
      * @param defaultShape
      * @param defaultBackground
      */
+    protected final void setDefaultLayout(final Class<? extends ModelElement> elementClass, final Shape defaultShape, final LayoutColor defaultBackground) {
+        setDefaultLayout(elementClass, defaultShape, defaultBackground.awtColor(), GraphElementLayout.STANDARD_WIDTH, GraphElementLayout.STANDARD_HEIGHT);
+    }
+
+    /**
+     * @param elementClass
+     * @param defaultShape
+     * @param defaultBackground
+     */
     protected final void setDefaultLayout(final Class<? extends ModelElement> elementClass, final Shape defaultShape, final Color defaultBackground) {
         setDefaultLayout(elementClass, defaultShape, defaultBackground, GraphElementLayout.STANDARD_WIDTH, GraphElementLayout.STANDARD_HEIGHT);
     }
 
+    /**
+     * @param elementClass
+     * @param defaultShape
+     * @param defaultBackground
+     * @param defaultWidth
+     * @param defaultHeight
+     */
+    protected final void setDefaultLayout(final Class<? extends ModelElement> elementClass, final Shape defaultShape, final LayoutColor defaultBackground, final int defaultWidth, final int defaultHeight) {
+        setDefaultLayout(elementClass, defaultShape, defaultBackground.awtColor(), defaultWidth, defaultHeight);
+    }
     /**
      * @param elementClass
      * @param defaultShape
