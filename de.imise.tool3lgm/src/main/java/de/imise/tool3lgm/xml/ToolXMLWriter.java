@@ -560,7 +560,7 @@ public class ToolXMLWriter extends IntendingXMLWriter {
             ElementsLayoutDefinition mapping = szen.getMapping();
             for (Class<? extends ModelElement> elementClass : getElementClassesWithStandardLayout(mapping)) {
                 GraphElementLayout standardElementLayout = mapping.getStandardElementLayout(elementClass);
-                writeGraphElementLayout(elementClass, standardElementLayout, true);
+                writeDefaultGraphElementLayout(elementClass, standardElementLayout);
             }
             writeEndElement(); //"</mapping>"
             writeLayerContainer(szen, elements);
@@ -585,7 +585,7 @@ public class ToolXMLWriter extends IntendingXMLWriter {
         for (LayerContainer lc : szen.getLayers()) {
             writeStartElement("layer"); //<layer>
             writeAttribute("number", lc.getLayerNumber());
-            writeGraphElementLayout(null, lc.get3LGMLayout(), true);
+            writeLayerLayout(lc.get3LGMLayout());
             for (NodeContainer kc : lc.getGraphNodeContainers()) {
                 if (elements == null || elements.contains(kc.getElement())) {
                     writeElementContainer(kc);
@@ -605,6 +605,10 @@ public class ToolXMLWriter extends IntendingXMLWriter {
         }
     }
 
+    /**
+     * @param ec
+     * @throws XMLStreamException
+     */
     protected void writeElementContainer(final ElementContainer ec) throws XMLStreamException {
         writeStartElement("container"); //<container>
         writeAttribute("hash", ec.getID());
@@ -614,12 +618,17 @@ public class ToolXMLWriter extends IntendingXMLWriter {
             writeElementIfFalse("visible", ec.isVisible());
         }
         GraphElementLayout expandedLayout = ec.getE3LGMLayout();
+        ModelElement me = ec.getElement();
+        Class<? extends ModelElement> elementClass = me.getClass();
+        GraphDocument doc = ec.getGraphDocument();
+        ElementsLayoutDefinition layoutDefinition = doc.getMapping();
+        GraphElementLayout defaultElementLayout = layoutDefinition.getStandardElementLayout(elementClass);
         if (expandedLayout != null) {
-            writeGraphElementLayout(ModelElement.class, expandedLayout, true);
+            writeGraphElementLayout(expandedLayout, defaultElementLayout, true);
         }
         GraphElementLayout nonExpandedLayout = ec.getNE3LGMLayout();
         if (nonExpandedLayout != null) {
-            writeGraphElementLayout(ModelElement.class, nonExpandedLayout, false);
+            writeGraphElementLayout(nonExpandedLayout, defaultElementLayout, false);
         }
         writeEndElement(); //</container>
     }
@@ -627,6 +636,15 @@ public class ToolXMLWriter extends IntendingXMLWriter {
     ////////////
     // Layout //
     ////////////
+
+    /**
+     * @param elementClass
+     * @param layout
+     * @throws XMLStreamException
+     */
+    private void writeDefaultGraphElementLayout(final Class<?> elementClass, final GraphElementLayout layout) throws XMLStreamException {
+        writeGraphElementLayout(elementClass, layout, null, true);
+    }
 
     /**
      * @param elementClass Elementklasse, für die das Layout geschrieben werden
@@ -637,37 +655,82 @@ public class ToolXMLWriter extends IntendingXMLWriter {
      *            Layout
      * @throws XMLStreamException
      */
-    private void writeGraphElementLayout(final Class<?> elementClass, final GraphElementLayout layout, final boolean expanded) throws XMLStreamException {
+    private void writeGraphElementLayout(final GraphElementLayout layout, final GraphElementLayout defaultLayout, final boolean expanded) throws XMLStreamException {
+        writeGraphElementLayout(null, layout, defaultLayout, expanded);
+    }
+
+    /**
+     * @param elementClass Elementklasse, für die das Layout geschrieben werden
+     *            soll (wenn null, dann für Layer)
+     * @param layout Layout zu diesr Elementklasse
+     * @param expanded wenn <code>true</code>, wird das normale Layout
+     *            geschrieben, wenn <code>false</code> das zusammengeklappte
+     *            Layout
+     * @throws XMLStreamException
+     */
+    private void writeLayerLayout(final GraphElementLayout layout) throws XMLStreamException {
+        writeGraphElementLayout(null, layout, null, true);
+    }
+
+    /**
+     * @param elementClass Elementklasse, für die das Layout geschrieben werden
+     *            soll (wenn null, dann für Layer)
+     * @param layout Layout zu diesr Elementklasse
+     * @param expanded wenn <code>true</code>, wird das normale Layout
+     *            geschrieben, wenn <code>false</code> das zusammengeklappte
+     *            Layout
+     * @param defaultLayout if this is <code>null</code> this indictates that
+     *            the layout parameter is an default layout for a type of
+     *            elements in the mapping section of a submodel. In this case
+     *            the elementClassParameter should never be <code>null</code>.
+     *            If the defaultLayout parameter it is not <code>null</code> but
+     *            different to the layout parameter this indicated that the
+     *            layout parameter is the layout of a single element
+     * @throws XMLStreamException
+     */
+    private void writeGraphElementLayout(final Class<?> elementClass, final GraphElementLayout layout, final GraphElementLayout defaultLayout, final boolean expanded) throws XMLStreamException {
         writeStartElement(expanded ? "layout" : "nelayout"); //<layout> oder <nelayout>
-        //ElementClass ist nur für Layer null
-        if (elementClass != null) {
+
+        boolean isDefaultElementClassLayout = elementClass != null && defaultLayout == null;
+        boolean isLayerLayout = elementClass == null && defaultLayout == null;
+        boolean writeFullLayout = isDefaultElementClassLayout || isLayerLayout;
+
+        if (isDefaultElementClassLayout) { //in this case elementClass should be never null!
             writeAttribute("class", elementClass.getSimpleName());
         }
-        writeGraphElementLayoutColor(layout.bg_color, "bg_color");
-        writeGraphElementLayoutColor(layout.fg_color, "fg_color");
-        writeGraphElementLayoutColor(layout.border_color, "border_color");
+        if (writeFullLayout || defaultLayout.bg_color != layout.bg_color) {
+            writeGraphElementLayoutColor(layout.bg_color, "bg_color");
+        }
+        if (writeFullLayout || defaultLayout.fg_color != layout.fg_color) {
+            writeGraphElementLayoutColor(layout.fg_color, "fg_color");
+        }
+        if (writeFullLayout || defaultLayout.border_color != layout.border_color) {
+            writeGraphElementLayoutColor(layout.border_color, "border_color");
+        }
 
-        if (layout.line_thickness != STANDARD_LINE_THICKNESS) {
+        if (isDefaultElementClassLayout && layout.line_thickness != STANDARD_LINE_THICKNESS) {
             writeElement("line_thickness", layout.line_thickness);
         }
-        if (layout.line_style != STANDARD_LINE_STYLE) {
+        if (defaultLayout == null && layout.line_style != STANDARD_LINE_STYLE) {
             writeElement("line_style", layout.line_style);
         }
-        if (layout.form != null/* && layout.form != STANDARD_FORM */) {
+        if (layout.form != null) { //only the default element layouts have a form != null (at the moment)
             writeElement("form", layout.form.ordinal());
         }
         Font font = layout.getFont();
-        if (font != null) {
+        if (isDefaultElementClassLayout && font != null || !isDefaultElementClassLayout && font != null && !font.equals(defaultLayout.getFont())) {
             writeElement("font_family", font.getName());
             writeElement("font_style", font.getStyle());
             writeElement("font_size", font.getSize());
         }
-        writeElement("x", layout.x);
-        writeElement("y", layout.y);
-        if (layout.width != -1) {
-            writeElement("width", layout.width);
+        if (layout.x != 0 || layout.y != 0) {
+            writeElement("x", layout.x);
+            writeElement("y", layout.y);
         }
-        if (layout.height != -1) {
+        //        if (layout.width != -1 || !writeFullLayout && layout.width != defaultLayout.width) {
+        //        if (layout.height != -1 || !writeFullLayout && layout.height != defaultLayout.height) {
+        if (isDefaultElementClassLayout || !isLayerLayout && (layout.width != defaultLayout.width || layout.height != defaultLayout.height)) {
+            writeElement("width", layout.width);
             writeElement("height", layout.height);
         }
         String icon = layout.getIconID();

@@ -144,7 +144,7 @@ public abstract class ElementContainer extends JLabel implements Cloneable, Grap
                 me.setContainer(this.doc, this);
             }
             if (me.hasLayout()) {
-                expandedLayout = new GraphElementLayout();
+                expandedLayout = new GraphElementLayout(me);
                 layout = expandedLayout;
                 setFont(layout.getFont());
                 frameColor = new Color(0, 0, 0, 255);
@@ -506,16 +506,6 @@ public abstract class ElementContainer extends JLabel implements Cloneable, Grap
      */
     public boolean hasDefaultSize() {
         return layout == null || layout.width == GraphElementLayout.STANDARD_WIDTH && layout.height == GraphElementLayout.STANDARD_HEIGHT;
-    }
-
-    /**
-     *
-     */
-    public final void resetLayout() {
-        if (layout != null) {
-            layout.reset();
-        }
-        setFont(layout.getFont());
     }
 
     @Override

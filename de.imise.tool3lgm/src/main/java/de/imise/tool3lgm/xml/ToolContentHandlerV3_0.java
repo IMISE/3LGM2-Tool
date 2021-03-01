@@ -378,11 +378,11 @@ public class ToolContentHandlerV3_0 implements ContentHandler {
 
                 if (container != null) {
                     layout = container.getE3LGMLayout();
-                    if (layout == null) {
+                    if (layout == null) { //Dieser Fall hier scheint nie einzutreten (Coverage-Test mit allelei Modellen laden + Copy&Paste)
                         layout = new GraphElementLayout();
                         container.setE3LGMLayout(layout);
                     }
-                } else if (layer != null) {
+                } else if (layer != null) { //Dieser Fall hier scheint nie einzutreten (Coverage-Test mit allelei Modellen laden + Copy&Paste)
                     layout = layer.get3LGMLayout();
                     if (layout == null) {
                         layout = new GraphElementLayout();

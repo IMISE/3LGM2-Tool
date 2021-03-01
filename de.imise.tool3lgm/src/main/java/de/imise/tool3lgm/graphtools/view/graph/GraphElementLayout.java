@@ -9,6 +9,10 @@ import java.awt.Stroke;
 
 import javax.swing.SwingConstants;
 
+import de.imise.tool3lgm.graphtools.metamodel.GraphViewDefinition;
+import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
+import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
+
 // TODO: Konzept der Klasse GraphElementLayout überarbeiten und
 // toXMLString-Methode verändern und nur GraphElementLayout-Informationen
 // speichern die
@@ -310,17 +314,30 @@ public class GraphElementLayout implements SwingConstants, Cloneable {
      *
      */
     public GraphElementLayout() {
-        x = 0;
-        y = 0;
-        reset();
+        init(STANDARD_WIDTH, STANDARD_HEIGHT);
+    }
+
+    /**
+     * @param me
+     */
+    public GraphElementLayout(final ModelElement me) {
+        MetaModel metaModel = me.getMetaModel();
+        GraphViewDefinition graphViewDefinition = metaModel.getGraphViewDefinition();
+        ElementsLayoutDefinition defaultElementsLayout = graphViewDefinition.getDefaultElementsLayout();
+        Class<? extends ModelElement> elementClass = me.getClass();
+        int defaultWidth = defaultElementsLayout.getStandardWidth(elementClass);
+        int defaultHeight = defaultElementsLayout.getStandardHeight(elementClass);
+        init(defaultWidth, defaultHeight);
     }
 
     /**
      *
      */
-    public void reset() {
-        width = STANDARD_WIDTH;
-        height = STANDARD_HEIGHT;
+    public void init(final int width, final int height) {
+        x = 0;
+        y = 0;
+        this.width = width;
+        this.height = height;
         bg_color = null; // default: wie im Mapping
         fg_color = null; // default: Color.black
         border_color = null; // default: Color.black
