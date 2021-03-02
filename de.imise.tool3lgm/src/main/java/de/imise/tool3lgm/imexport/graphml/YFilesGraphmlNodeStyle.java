@@ -38,7 +38,7 @@ public class YFilesGraphmlNodeStyle {
     private final Enum<?> getYGraphmlShape(final NodeContainer nc) {
         Shape shape = nc.getForm();
         if (shape == null) {
-            shape = nc.getGraphDocument().getMapping().getStandardForm(nc);
+            shape = nc.getGraphDocument().getDefaultElementsLayout().getStandardForm(nc);
         }
         return getYGraphmlShape(shape);
     }

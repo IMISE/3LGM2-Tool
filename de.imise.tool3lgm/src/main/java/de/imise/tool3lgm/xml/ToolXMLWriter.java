@@ -53,7 +53,7 @@ import de.imise.tool3lgm.graphtools.view.container.EdgeContainer;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.graphtools.view.container.LayerContainer;
 import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
-import de.imise.tool3lgm.graphtools.view.graph.ElementsLayoutDefinition;
+import de.imise.tool3lgm.graphtools.view.graph.DefaultElementsLayoutDefinition;
 import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout;
 import de.imise.tool3lgm.graphtools.view.graph.GraphViewParameter;
 import de.imise.tool3lgm.log.Log;
@@ -515,7 +515,7 @@ public class ToolXMLWriter extends IntendingXMLWriter {
      * @return a alphabetical sortet list of all element classes with standard
      *         layout
      */
-    private List<Class<? extends ModelElement>> getElementClassesWithStandardLayout(final ElementsLayoutDefinition mapping) {
+    private List<Class<? extends ModelElement>> getElementClassesWithStandardLayout(final DefaultElementsLayoutDefinition mapping) {
         Iterable<Class<? extends ModelElement>> elementClassesWithStandardLayout = mapping.getElementClassesWithStandardLayout();
         ArrayList<Class<? extends ModelElement>> elementClassesWithStandardLayoutAlphabetical = Lists.newArrayList(elementClassesWithStandardLayout);
         //to ensure that the order of element classes is the same independently of the systems locale we always sort here with english locale
@@ -557,7 +557,7 @@ public class ToolXMLWriter extends IntendingXMLWriter {
             writeElement("multiView", graphViewParameter.multiView);
             writeEndElement(); //</view>
             writeStartElement("mapping"); //"<mapping>"
-            ElementsLayoutDefinition mapping = szen.getMapping();
+            DefaultElementsLayoutDefinition mapping = szen.getDefaultElementsLayout();
             for (Class<? extends ModelElement> elementClass : getElementClassesWithStandardLayout(mapping)) {
                 GraphElementLayout standardElementLayout = mapping.getStandardElementLayout(elementClass);
                 writeDefaultGraphElementLayout(elementClass, standardElementLayout);
@@ -621,7 +621,7 @@ public class ToolXMLWriter extends IntendingXMLWriter {
         ModelElement me = ec.getElement();
         Class<? extends ModelElement> elementClass = me.getClass();
         GraphDocument doc = ec.getGraphDocument();
-        ElementsLayoutDefinition layoutDefinition = doc.getMapping();
+        DefaultElementsLayoutDefinition layoutDefinition = doc.getDefaultElementsLayout();
         GraphElementLayout defaultElementLayout = layoutDefinition.getStandardElementLayout(elementClass);
         if (expandedLayout != null) {
             writeGraphElementLayout(expandedLayout, defaultElementLayout, true);
@@ -727,6 +727,7 @@ public class ToolXMLWriter extends IntendingXMLWriter {
             writeElement("x", layout.x);
             writeElement("y", layout.y);
         }
+
         //        if (layout.width != -1 || !writeFullLayout && layout.width != defaultLayout.width) {
         //        if (layout.height != -1 || !writeFullLayout && layout.height != defaultLayout.height) {
         if (isDefaultElementClassLayout || !isLayerLayout && (layout.width != defaultLayout.width || layout.height != defaultLayout.height)) {

@@ -10,7 +10,7 @@ import java.util.Set;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 
-public class ElementsLayoutDefinition {
+public class DefaultElementsLayoutDefinition {
 
     /**
      * Mappt von der Elementklasse auf das zugehörige
@@ -45,7 +45,7 @@ public class ElementsLayoutDefinition {
     /**
      * @param loadDefaults
      */
-    public ElementsLayoutDefinition(final ElementsLayoutDefinition defaultElementsLayout) {
+    public DefaultElementsLayoutDefinition(final DefaultElementsLayoutDefinition defaultElementsLayout) {
         if (defaultElementsLayout != null) {
             adapt(defaultElementsLayout);
         }
@@ -57,7 +57,7 @@ public class ElementsLayoutDefinition {
      *
      * @param layout2Clone
      */
-    public final void adapt(final ElementsLayoutDefinition layout2Clone) {
+    public final void adapt(final DefaultElementsLayoutDefinition layout2Clone) {
         standardElementLayout = (GraphElementLayout) layout2Clone.standardElementLayout.clone();
         Set<Class<? extends ModelElement>> keySet = layout2Clone.elementClassToStandardLayoutMap.keySet();
         elementClassToStandardLayoutMap = new HashMap<>(keySet.size());

@@ -29,7 +29,7 @@ import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.model.GraphDocumentOwner;
 import de.imise.tool3lgm.graphtools.model.Szenario;
-import de.imise.tool3lgm.graphtools.view.graph.ElementsLayoutDefinition;
+import de.imise.tool3lgm.graphtools.view.graph.DefaultElementsLayoutDefinition;
 import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout;
 import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout.TextAlignmentHTML;
 import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout.TextPositionHorizontal;
@@ -488,7 +488,7 @@ public abstract class ElementContainer extends JLabel implements Cloneable, Grap
      * @return
      */
     public final boolean hasStandardFont() {
-        return layout == null || layout.getFont() == null; // || layout.font.equals(doc.getMapping().getStandardFont(me));
+        return layout == null || layout.getFont() == null; // || layout.font.equals(doc.getDefaultElementsLayout().getStandardFont(me));
     }
 
     /**
@@ -498,7 +498,7 @@ public abstract class ElementContainer extends JLabel implements Cloneable, Grap
         if (font == null) {
             return true;
         }
-        return font.equals(doc.getMapping().getStandardFont(this));
+        return font.equals(doc.getDefaultElementsLayout().getStandardFont(this));
     }
 
     /**
@@ -525,9 +525,9 @@ public abstract class ElementContainer extends JLabel implements Cloneable, Grap
         }
         Font font = null;
         if (doc != null) {
-            ElementsLayoutDefinition mapping = doc.getMapping();
-            if (mapping != null) {
-                font = mapping.getStandardFont(this);
+            DefaultElementsLayoutDefinition defaultElementsLayout = doc.getDefaultElementsLayout();
+            if (defaultElementsLayout != null) {
+                font = defaultElementsLayout.getStandardFont(this);
             }
         }
         if (font == null) {

@@ -17,14 +17,14 @@ import de.imise.tool3lgm.graphtools.view.container.EdgeContainer;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.graphtools.view.container.LayerContainer;
 import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
-import de.imise.tool3lgm.graphtools.view.graph.ElementsLayoutDefinition;
+import de.imise.tool3lgm.graphtools.view.graph.DefaultElementsLayoutDefinition;
 import de.imise.util.htmlxml.IntendingXMLWriter;
 
 public abstract class GraphmlWriter extends IntendingXMLWriter {
 
     protected final Szenario szenario;
 
-    protected final ElementsLayoutDefinition standardLayout;
+    protected final DefaultElementsLayoutDefinition standardLayout;
 
     protected final int layer;
 
@@ -46,7 +46,7 @@ public abstract class GraphmlWriter extends IntendingXMLWriter {
         super(file, null);
         this.szenario = szenario;
         this.layer = layer;
-        standardLayout = szenario.getMapping();
+        standardLayout = szenario.getDefaultElementsLayout();
     }
 
     public void write() throws XMLStreamException, IOException {
@@ -213,7 +213,7 @@ public abstract class GraphmlWriter extends IntendingXMLWriter {
         Color col = nc.getColor();
         if (col == null) {
             GraphDocument doc = nc.getGraphDocument();
-            col = doc.getMapping().getStandardBackGroundColor(nc);
+            col = doc.getDefaultElementsLayout().getStandardBackGroundColor(nc);
         }
         return col;
     }

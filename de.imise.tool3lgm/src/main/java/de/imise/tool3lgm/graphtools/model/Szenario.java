@@ -73,7 +73,9 @@ public class Szenario extends LGMGraphDocument {
             retVal.setFont(null);
             retVal.setAlpha(GraphElementLayout.TRANSPARENCY_NONE);
             retVal.setForm(null);
-            retVal.setSize(mapping.getStandardWidth(meClass), mapping.getStandardHeight(meClass));
+            int width = defaultElementsLayout.getStandardWidth(meClass);
+            int height = defaultElementsLayout.getStandardHeight(meClass);
+            retVal.setSize(defaultElementsLayout.getStandardWidth(meClass), defaultElementsLayout.getStandardHeight(meClass));
         }
 
         retVal.setParent(null);

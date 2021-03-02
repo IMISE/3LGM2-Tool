@@ -16,7 +16,7 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 // TODO: Konzept der Klasse GraphElementLayout überarbeiten und
 // toXMLString-Methode verändern und nur GraphElementLayout-Informationen
 // speichern die
-// nicht Standard aus Mapping entsprechen
+// nicht Standard aus DefaultElementsLayoutDefinition entsprechen
 
 public class GraphElementLayout implements SwingConstants, Cloneable {
 
@@ -323,7 +323,7 @@ public class GraphElementLayout implements SwingConstants, Cloneable {
     public GraphElementLayout(final ModelElement me) {
         MetaModel metaModel = me.getMetaModel();
         GraphViewDefinition graphViewDefinition = metaModel.getGraphViewDefinition();
-        ElementsLayoutDefinition defaultElementsLayout = graphViewDefinition.getDefaultElementsLayout();
+        DefaultElementsLayoutDefinition defaultElementsLayout = graphViewDefinition.getDefaultElementsLayout();
         Class<? extends ModelElement> elementClass = me.getClass();
         int defaultWidth = defaultElementsLayout.getStandardWidth(elementClass);
         int defaultHeight = defaultElementsLayout.getStandardHeight(elementClass);
@@ -338,7 +338,7 @@ public class GraphElementLayout implements SwingConstants, Cloneable {
         y = 0;
         this.width = width;
         this.height = height;
-        bg_color = null; // default: wie im Mapping
+        bg_color = null; // default: wie in DefaultElementsLayoutDefinition
         fg_color = null; // default: Color.black
         border_color = null; // default: Color.black
         line_thickness = STANDARD_LINE_THICKNESS;

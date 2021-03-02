@@ -22,7 +22,7 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Textfield;
 import de.imise.tool3lgm.graphtools.path.metapaths.MetaPath;
 import de.imise.tool3lgm.graphtools.path.metapaths.SimpleMetaPath;
-import de.imise.tool3lgm.graphtools.view.graph.ElementsLayoutDefinition;
+import de.imise.tool3lgm.graphtools.view.graph.DefaultElementsLayoutDefinition;
 import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout;
 import de.imise.tool3lgm.graphtools.view.graph.LayoutColor;
 import de.imise.tool3lgm.graphtools.view.graph.Shape;
@@ -337,14 +337,14 @@ public abstract class GraphViewDefinition {
     /**
      *
      */
-    private ElementsLayoutDefinition defaultElementsLayoutDefinition;
+    private DefaultElementsLayoutDefinition defaultElementsLayoutDefinition;
 
     /**
      * @return
      */
-    public ElementsLayoutDefinition getDefaultElementsLayout() {
+    public DefaultElementsLayoutDefinition getDefaultElementsLayout() {
         if (defaultElementsLayoutDefinition == null) {
-            defaultElementsLayoutDefinition = new ElementsLayoutDefinition(null);
+            defaultElementsLayoutDefinition = new DefaultElementsLayoutDefinition(null);
             initDefaultElementLayoutInternal();
             initDefaultElementLayout();
         }

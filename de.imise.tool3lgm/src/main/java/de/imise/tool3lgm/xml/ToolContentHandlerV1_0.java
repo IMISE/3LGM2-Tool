@@ -28,7 +28,7 @@ import de.imise.tool3lgm.graphtools.view.container.EdgeContainer;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.graphtools.view.container.LayerContainer;
 import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
-import de.imise.tool3lgm.graphtools.view.graph.ElementsLayoutDefinition;
+import de.imise.tool3lgm.graphtools.view.graph.DefaultElementsLayoutDefinition;
 import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout;
 import de.imise.tool3lgm.graphtools.view.graph.Shape;
 
@@ -226,7 +226,7 @@ public class ToolContentHandlerV1_0 implements ContentHandler {
                     container.set3LGMLayout(layout);
                 }
             } else if ((classType = szenario.getMetaModel().getClassForName(atts.getValue("class"))) != null) {
-                layout = szenario.getMapping().getStandardElementLayout(classType);
+                layout = szenario.getDefaultElementsLayout().getStandardElementLayout(classType);
             }
         } else if (qName.equals("nelayout")) {
             if (container != null) {
@@ -248,8 +248,8 @@ public class ToolContentHandlerV1_0 implements ContentHandler {
         } else if (qName.equals("mapping")) {
             MetaModel metaModel = szenario.getMetaModel();
             GraphViewDefinition graphViewDefinition = metaModel.getGraphViewDefinition();
-            ElementsLayoutDefinition defaultElementsLayout = graphViewDefinition.getDefaultElementsLayout();
-            szenario.setMapping(new ElementsLayoutDefinition(defaultElementsLayout));
+            DefaultElementsLayoutDefinition defaultElementsLayout = graphViewDefinition.getDefaultElementsLayout();
+            szenario.setDefaultElementsLayout(new DefaultElementsLayoutDefinition(defaultElementsLayout));
 
         } else if (qName.equals("bitmap")) {
             if (atts.getValue("type").equals("gif/base64")) {

@@ -117,7 +117,7 @@ public final class NodeRenderer {
 
         Color col = kc.getColor();
         if (col == null) {
-            col = doc.getMapping().getStandardBackGroundColor(kc);
+            col = doc.getDefaultElementsLayout().getStandardBackGroundColor(kc);
         }
 
         int x = kc.getX();
@@ -164,7 +164,7 @@ public final class NodeRenderer {
 
         Shape form = kc.getForm();
         if (form == null) {
-            form = doc.getMapping().getStandardForm(kc);
+            form = doc.getDefaultElementsLayout().getStandardForm(kc);
         }
 
         Stroke str = gc.getStroke();
@@ -393,7 +393,7 @@ public final class NodeRenderer {
 
         Shape form = k.getForm();
         if (form == null) {
-            form = k.getGraphDocument().getMapping().getStandardForm(k);
+            form = k.getGraphDocument().getDefaultElementsLayout().getStandardForm(k);
         }
 
         switch (form) {
