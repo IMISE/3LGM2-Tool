@@ -690,7 +690,7 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
 
     /** Fuegt diesem Node eine Edge zu. */
     public boolean addEdge(final Edge edge) {
-        int pos = edges == null ? 0 : edges.size() - 1;
+        int pos = edges == null ? 0 : edges.size();
         return insertEdge(edge, pos);
     }
 
