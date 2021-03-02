@@ -381,7 +381,7 @@ public class ActionLibrary {
             @Override
             protected void actionPerformed() {
                 Tool3lgm tool3lgm = getTool();
-                tool3lgm.close();
+                tool3lgm.close(true);
             }
         };
     }

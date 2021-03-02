@@ -270,7 +270,7 @@ public class Tool3lgmMain {
                 if (remote == null || !(remote instanceof Tool3lgmServer) || connectionRefused) {
                     connectionRefused = false;
                     // Wenn der Baukasten schon läuft, wird kein neuer instanziiert, sonst schon.
-                    if (Static.tool == null) {
+                    if (Static.tool == null || newInstance) {
                         //Static.tool wird im Constructor gesetzt
                         new Tool3lgm(visible);
                     }

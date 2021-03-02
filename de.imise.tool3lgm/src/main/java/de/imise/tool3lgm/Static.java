@@ -80,11 +80,11 @@ public class Static {
     }
 
     /** Beendet die Anwendung */
-    public static void close() {
-        if (tool == null) {
+    public static void close(final boolean withSystemExit) {
+        if (tool == null && withSystemExit) {
             System.exit(0);
         }
-        tool.close();
+        tool.close(withSystemExit);
     }
 
     /**
