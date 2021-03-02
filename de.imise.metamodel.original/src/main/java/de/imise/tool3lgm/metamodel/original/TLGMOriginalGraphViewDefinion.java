@@ -55,20 +55,6 @@ public class TLGMOriginalGraphViewDefinion extends GraphViewDefinition {
         super(metaModel);
     }
 
-    @SuppressWarnings({
-            "unchecked", "rawtypes"
-    })
-    @Override
-    protected final Class[] getPaintableNodes() {
-        //diese Funtkion wird nur ein einziges Mal aufgerufen, daher ist es ok,
-        //dass das Array hier in der Funktion immer wieder neu angelegt wird
-        //Die Reihenfolge in dieser Liste legt fest, in welcher Reihenfolge die Elemente in dem gloabeln LayoutEditor angezeigt werden
-        Class[] graphViewVisibleNodes = {
-                Aufgabe.class, Objekttyp.class, RechAnwendungsbaustein.class, KonAnwendungsbaustein.class, Datenbanksystem.class, Dokumentensammlung.class, Bausteinschnittstelle.class, Benutzungsschnittstelle.class, PhysischerDVBaustein.class
-        };
-        return graphViewVisibleNodes;
-    }
-
     @Override
     protected final SimpleMetaPath[] getInterLayerMetaPaths() {
         SimpleMetaPath[] configurationPaths = {

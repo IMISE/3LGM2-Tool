@@ -54,28 +54,6 @@ public class TLGMServiceGraphViewDefinion extends GraphViewDefinition {
         super(metaModel);
     }
 
-    @SuppressWarnings({
-            "unchecked", "rawtypes"
-    })
-    @Override
-    protected final Class[] getPaintableNodes() {
-        //diese Funtkion wird nur ein einziges Mal aufgerufen, daher ist es ok,
-        //dass das Array hier in der Funktion immer wieder neu angelegt wird
-        Class[] graphViewVisibleNodes = {
-                Function.class,
-                ObjectType.class,
-                ApplicationSystem.class,
-                OrganisationSystem.class,
-                InvokingInterface.class,
-                ProvidingInterface.class,
-                PhysicalDataProcessingComponent.class,
-                IheActorInstance.class,
-                IheActorInstanceInvokingInterface.class,
-                IheActorInstanceProvidingInterface.class,
-        };
-        return graphViewVisibleNodes;
-    }
-
     @Override
     protected final SimpleMetaPath[] getInterLayerMetaPaths() {
         SimpleMetaPath[] configurationPaths = {
