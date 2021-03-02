@@ -131,7 +131,7 @@ public class NodeContainer extends ElementContainer implements AlphabeticalSortT
         if (metaModel.hasOrderedEdgeClassesToPaintable(me.getClass())) {
             //			registerAsGraphDocumentListener();
             if (layout == null) {
-                layout = new GraphElementLayout();
+                layout = new GraphElementLayout(me);
             }
             if (layout.getFont() == null) {
                 layout.setFont(new Font(GraphElementLayout.STANDARD_FONT_NAME, GraphElementLayout.STANDARD_FONT_STYLE, GraphElementLayout.STANDARD_FONT_SIZE));

@@ -333,7 +333,7 @@ public class GraphElementLayout implements SwingConstants, Cloneable {
     /**
      *
      */
-    public void init(final int width, final int height) {
+    private void init(final int width, final int height) {
         x = 0;
         y = 0;
         this.width = width;
@@ -408,6 +408,12 @@ public class GraphElementLayout implements SwingConstants, Cloneable {
      */
     public boolean isDefaultTextAlignmentHTML() {
         return textAlignmentHTML == STANDARD_TEXT_ALIGNMENT_HTML;
+    }
+
+    @Override
+    public String toString() {
+        String s = "Default Layout form=" + form + " x=" + x + " y=" + y + " width=" + width + " height=" + height + " bg_color=" + bg_color + " fg_color=" + fg_color + " border_color=" + border_color + "font=" + font;
+        return s;
     }
 
 }

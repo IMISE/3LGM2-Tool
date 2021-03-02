@@ -3,12 +3,15 @@ package de.imise.tool3lgm.graphtools.view.graph;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
+import de.imise.util.Alphabetical;
 
 public class DefaultElementsLayoutDefinition {
 
@@ -240,6 +243,20 @@ public class DefaultElementsLayoutDefinition {
      */
     public final void setStandardFont(final Class<? extends ModelElement> elementClass, final Font font) {
         getElementClassSpecificLayout(elementClass).setFont(font);
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        List<Class<? extends ModelElement>> elementClasses = new ArrayList<>(elementClassToStandardLayoutMap.keySet());
+        Alphabetical.sort(elementClasses);
+        for (Class<? extends ModelElement> elementClass : elementClasses) {
+            sb.append(elementClass.getSimpleName());
+            sb.append(" ");
+            sb.append(elementClassToStandardLayoutMap.get(elementClass));
+            sb.append("\n");
+        }
+        return sb.toString();
     }
 
 }

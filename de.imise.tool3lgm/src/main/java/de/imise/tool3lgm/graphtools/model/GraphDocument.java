@@ -1774,6 +1774,15 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
     }
 
     /**
+     * @return
+     */
+    public final GraphElementLayout getDefaultElementLayout(final ElementContainer ec) {
+        ModelElement me = ec.getElement();
+        Class<? extends ModelElement> elementClass = me.getClass();
+        return defaultElementsLayout.getStandardElementLayout(elementClass);
+    }
+
+    /**
      * @param map
      */
     public final void adaptDefaultElementsLayout(final DefaultElementsLayoutDefinition map) {

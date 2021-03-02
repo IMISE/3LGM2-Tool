@@ -504,14 +504,18 @@ public abstract class ElementContainer extends JLabel implements Cloneable, Grap
     /**
      * @return
      */
-    public boolean hasDefaultSize() {
-        return layout == null || layout.width == GraphElementLayout.STANDARD_WIDTH && layout.height == GraphElementLayout.STANDARD_HEIGHT;
+    public final boolean hasDefaultSize() {
+        if (layout == null) {
+            return true;
+        }
+        GraphElementLayout defaultElementsLayout = doc.getDefaultElementLayout(this);
+        return layout.width == defaultElementsLayout.width && layout.height == defaultElementsLayout.height;
     }
 
     @Override
     public final void setFont(final Font font) {
         if (layout == null) {
-            layout = new GraphElementLayout();
+            layout = new GraphElementLayout(me);
         }
         layout.setFont(font);
         super.setFont(font);
