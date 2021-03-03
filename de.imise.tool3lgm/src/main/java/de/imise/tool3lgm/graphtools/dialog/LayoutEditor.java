@@ -38,8 +38,10 @@ import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.model.LGMGraphDocument;
 import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
-import de.imise.tool3lgm.graphtools.view.graph.ElementsLayoutDefinition;
+import de.imise.tool3lgm.graphtools.view.graph.DefaultElementsLayoutDefinition;
 import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout;
+import de.imise.tool3lgm.graphtools.view.graph.LayoutColor;
+import de.imise.tool3lgm.graphtools.view.graph.Shape;
 import de.imise.tool3lgm.log.Log;
 
 /**
@@ -53,10 +55,10 @@ public class LayoutEditor extends JDialog implements ActionListener {
     private final NodeContainer[] nodeContainers;
     private final JButton[] form_trigger, farbe_trigger, font_trigger;
     private final JPopupMenu farbe_menu, form_menu, font_menu;
-    private JMenuItem[] farbe;
+    private final JMenuItem[] farbe;
     private final JMenuItem[] form;
     private final JMenuItem[] name;
-    private final ElementsLayoutDefinition my_mapping;
+    private final DefaultElementsLayoutDefinition myDefaultElementsLayout;
     private final Insets insets;
     private int wieviele = 0, offset, c, counter, akt_x, akt_y, aktuelles = -1;
     private final JButton uebernehmen, abbrechen, beenden;
@@ -78,8 +80,8 @@ public class LayoutEditor extends JDialog implements ActionListener {
         Tool3lgmModelType modelType = new Tool3lgmModelType(metaModelContext, ModelCategory.REGULAR);
         gdcoll = new GDCollection(modelType);
         mydoc = new LGMGraphDocument(gdcoll);
-        my_mapping = mydoc.getMapping();
-        my_mapping.adapt(doc.getMapping());
+        myDefaultElementsLayout = mydoc.getDefaultElementsLayout();
+        myDefaultElementsLayout.adapt(doc.getDefaultElementsLayout());
         setTitle(getResString("layout_edit"));
 
         MetaModel metaModel = gdcoll.getMetaModel();
@@ -120,18 +122,20 @@ public class LayoutEditor extends JDialog implements ActionListener {
         form_menu = new JPopupMenu(getResString("le_form"));
         font_menu = new JPopupMenu(getResString("le_schriftart"));
 
-        farbe = new JMenuItem[GraphElementLayout.COLORS.length];
-
-        farbe = new JMenuItem[GraphElementLayout.COLORS.length];
-        for (c = 0; c < GraphElementLayout.COLORS.length; c++) {
-            farbe[c] = new JMenuItem(GraphElementLayout.COLOR_NAMES[c]);
+        LayoutColor[] layoutColors = LayoutColor.values();
+        farbe = new JMenuItem[layoutColors.length];
+        for (c = 0; c < layoutColors.length; c++) {
+            LayoutColor layoutColor = layoutColors[c];
+            String colorName = layoutColor.toString();
+            farbe[c] = new JMenuItem(colorName);
             farbe[c].setActionCommand("farbe " + c);
-            farbe[c].setBackground(GraphElementLayout.COLORS[c]);
+            Color color = layoutColor.awtColor();
+            farbe[c].setBackground(color);
             farbe[c].addActionListener(this);
             farbe_menu.add(farbe[c]);
         }
 
-        GraphElementLayout.SHAPE[] shapes = GraphElementLayout.SHAPE.values();
+        Shape[] shapes = Shape.values();
         form = new JMenuItem[shapes.length];
         for (c = 0; c < shapes.length; c++) {
             form[c] = new JMenuItem(getResString(shapes[c].toString()));
@@ -177,7 +181,7 @@ public class LayoutEditor extends JDialog implements ActionListener {
                 ElementsNameBuilder elementsNameBuilder = metaModel.getElementsNameBuilder();
                 kc.getNode().setName(elementsNameBuilder.getDisplayableName(paintbaleClass));
                 kc.setCoordinates(akt_x + 90, akt_y + 50, 100, 60);
-                kc.setFont(mydoc.getMapping().getStandardFont(kc));
+                kc.setFont(mydoc.getDefaultElementsLayout().getStandardFont(kc));
 
                 form_trigger[index] = new JButton(getResString("le_form"));
                 form_trigger[index].setMargin(insets);
@@ -245,17 +249,17 @@ public class LayoutEditor extends JDialog implements ActionListener {
     @Override
     public void actionPerformed(final ActionEvent e) {
         if (e.getSource() == abbrechen) {
-            my_mapping.adapt(doc.getMapping());
+            myDefaultElementsLayout.adapt(doc.getDefaultElementsLayout());
             dispose();
             return;
         }
         if (e.getSource() == uebernehmen) {
-            doc.adaptMapping(my_mapping);
+            doc.adaptDefaultElementsLayout(myDefaultElementsLayout);
             doc.distributeEvent(ELEMENT_GRAPHICS_CHANGED);
             return;
         }
         if (e.getSource() == beenden) {
-            doc.adaptMapping(my_mapping);
+            doc.adaptDefaultElementsLayout(myDefaultElementsLayout);
             doc.distributeEvent(ELEMENT_GRAPHICS_CHANGED);
             dispose();
             // setVisible(false);
@@ -266,13 +270,13 @@ public class LayoutEditor extends JDialog implements ActionListener {
             if (e.getSource() == farbe_trigger[c]) {
                 setAktuelles(c);
 
-                Color oldColor = my_mapping.getStandardBackGroundColor(nodeContainers[aktuelles]);
+                Color oldColor = myDefaultElementsLayout.getStandardBackGroundColor(nodeContainers[aktuelles]);
                 Color newColor = JColorChooser.showDialog(new JFrame(), getResString("farbe_ausw"), oldColor);
 
                 if (newColor == null) {
                     return;
                 }
-                my_mapping.setStandardBackGroundColor(nodeContainers[aktuelles].getNode().getClass(), newColor);
+                myDefaultElementsLayout.setStandardBackGroundColor(nodeContainers[aktuelles].getNode().getClass(), newColor);
                 flaeche.repaint();
             }
             if (e.getSource() == form_trigger[c]) {
@@ -283,15 +287,23 @@ public class LayoutEditor extends JDialog implements ActionListener {
                 setAktuelles(c);
                 Font font = EasyDialogAccess.getFontByChooser(this, nodeContainers[aktuelles].getFont());
                 if (font != null) {
-                    my_mapping.setStandardFont(nodeContainers[aktuelles].getNode().getClass(), font);
+                    myDefaultElementsLayout.setStandardFont(nodeContainers[aktuelles].getNode().getClass(), font);
                 }
                 flaeche.repaint();
             }
         }
 
-        if (e.getActionCommand().startsWith("form ")) {
+        String commandPrefix = "form ";
+        String actionCommand = e.getActionCommand();
+        if (actionCommand.startsWith(commandPrefix)) {
             try {
-                my_mapping.setStandardForm(nodeContainers[aktuelles].getNode().getClass(), GraphElementLayout.SHAPE.valueOf(e.getActionCommand().substring("form ".length())));
+                NodeContainer nc = nodeContainers[aktuelles];
+                Node node = nc.getNode();
+                Class<? extends Node> elementClass = node.getClass();
+                int commandPrefixLength = commandPrefix.length();
+                String shapeName = actionCommand.substring(commandPrefixLength);
+                Shape shape = Shape.valueOf(shapeName);
+                myDefaultElementsLayout.setStandardForm(elementClass, shape);
                 flaeche.repaint();
             } catch (Exception ne) {
                 Log.show(Log.ERROR, getResString("Fehler beim Form setzen."), ne);
@@ -307,7 +319,7 @@ public class LayoutEditor extends JDialog implements ActionListener {
             if (nodeContainers[c] == null) {
                 continue;
             }
-            nodeContainers[c].setFont(my_mapping.getStandardFont(nodeContainers[c]));
+            nodeContainers[c].setFont(myDefaultElementsLayout.getStandardFont(nodeContainers[c]));
             nodeContainers[c].refreshText();
             nodeContainers[c].paint(g);
         }

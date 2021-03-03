@@ -154,11 +154,11 @@ public class Tool3lgmMain {
 
         defaults.put("ColorChooser.cancelText", getResString("cancel"));
         defaults.put("ColorChooser.sampleText", getResString("sampleText"));
-        defaults.put("ColorChooser.rgbGreenText", getResString("green"));
+        defaults.put("ColorChooser.rgbGreenText", getResString("GREEN"));
         defaults.put("ColorChooser.previewText", getResString("previewText"));
-        defaults.put("ColorChooser.rgbRedText", getResString("red"));
+        defaults.put("ColorChooser.rgbRedText", getResString("RED"));
         defaults.put("ColorChooser.resetText", getResString("resetText"));
-        defaults.put("ColorChooser.rgbBlueText", getResString("blue"));
+        defaults.put("ColorChooser.rgbBlueText", getResString("BLUE"));
         defaults.put("ColorChooser.swatchesNameText", getResString("swatchesNameText"));
         defaults.put("ColorChooser.swatchesRecentText", getResString("swatchesRecentText"));
 
@@ -270,7 +270,7 @@ public class Tool3lgmMain {
                 if (remote == null || !(remote instanceof Tool3lgmServer) || connectionRefused) {
                     connectionRefused = false;
                     // Wenn der Baukasten schon läuft, wird kein neuer instanziiert, sonst schon.
-                    if (Static.tool == null) {
+                    if (Static.tool == null || newInstance) {
                         //Static.tool wird im Constructor gesetzt
                         new Tool3lgm(visible);
                     }
@@ -314,16 +314,11 @@ public class Tool3lgmMain {
                                     PROPERTY_INT_RMI_PORT.set(regPort);
                                 }
                             }
-                        }
-                        // Wenn schon nach einem neuen Port gescuht wird, wird der ErrorDialog nicht nochmal angezeigt sondern gleich hier weiter gemacht:
-                        else {
-                            // Es wird ein neuer Port bis 65500 gesucht, wenn bis dahin keiner frei ist, wird wieder beim standardPort begonnen
-                            if (regPort < 65500) {
-                                regPort++;
-                            } else {
-                                regPort = 1099;
-                            }
-
+                        } else // Es wird ein neuer Port bis 65500 gesucht, wenn bis dahin keiner frei ist, wird wieder beim standardPort begonnen
+                        if (regPort < 65500) {
+                            regPort++;
+                        } else {
+                            regPort = 1099;
                         }
                     }
                     // e.printStackTrace();

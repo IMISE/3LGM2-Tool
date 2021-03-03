@@ -5,17 +5,18 @@ import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Font;
-import java.awt.Graphics;
 import java.awt.Stroke;
 
 import javax.swing.SwingConstants;
 
-import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
+import de.imise.tool3lgm.graphtools.metamodel.GraphViewDefinition;
+import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
+import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 
 // TODO: Konzept der Klasse GraphElementLayout überarbeiten und
 // toXMLString-Methode verändern und nur GraphElementLayout-Informationen
 // speichern die
-// nicht Standard aus Mapping entsprechen
+// nicht Standard aus DefaultElementsLayoutDefinition entsprechen
 
 public class GraphElementLayout implements SwingConstants, Cloneable {
 
@@ -52,232 +53,6 @@ public class GraphElementLayout implements SwingConstants, Cloneable {
 
     /** Stroke for {@link HasPartEdges} in the graph */
     public static final Stroke HAS_PART_EDGES_STROKE = NORMAL_STROKE_DASHED;
-
-    /**
-     * Alle Standardformen. Die String-Repräsentation steht als Schlüssel auch
-     * in den Ressourcen. Die Position des Enum-Eintrages wird in der
-     * XML-Repräsentation des Modells gepsiechert. D.h. wer hier die Reihenfolge
-     * ändert, ändert das Layout der Elemente in Modellen, die vorher erstellt
-     * wurden.
-     */
-    public static enum SHAPE {
-        rechteck {
-            @Override
-            public void paint(final Graphics g, final NodeContainer kc, final Color col, final Color analysisColor, final Boolean isResult, final int x, final int y, final int xm, final int ym, final int xp, final int yp, final int[] xs, final int[] ys,
-                    final int width, final int height, final int npoints) {
-                g.setColor(col);
-                g.fillRect(xm, ym, width, height);
-                g.translate(xm, ym);
-                kc.paintSuperComponent(g);
-                g.translate(-xm, -ym);
-                g.setColor(isResult && analysisColor != null ? analysisColor : kc.getFrameColor());
-                g.drawRect(xm, ym, width, height);
-            }
-        },
-        oval {
-            @Override
-            public void paint(final Graphics g, final NodeContainer kc, final Color col, final Color analysisColor, final Boolean isResult, final int x, final int y, final int xm, final int ym, final int xp, final int yp, final int[] xs, final int[] ys,
-                    final int width, final int height, final int npoints) {
-                g.setColor(col);
-                g.fillOval(xm, ym, width, height);
-                g.translate(xm, ym);
-                kc.paintSuperComponent(g);
-                g.translate(-xm, -ym);
-                g.setColor(isResult && analysisColor != null ? analysisColor : kc.getFrameColor());
-                g.drawOval(xm, ym, width, height);
-            }
-        },
-        dreieck {
-            @Override
-            public void paint(final Graphics g, final NodeContainer kc, final Color col, final Color analysisColor, final Boolean isResult, final int x, final int y, final int xm, final int ym, final int xp, final int yp, final int[] xs, final int[] ys,
-                    final int width, final int height, int npoints) {
-                xs[0] = xm;
-                xs[1] = x;
-                xs[2] = xp;
-                ys[0] = ym + height;
-                ys[1] = yp - height;
-                ys[2] = ym + height;
-                npoints = 3;
-                g.setColor(col);
-                g.fillPolygon(xs, ys, npoints);
-                g.translate(xm, ym);
-                kc.paintSuperComponent(g);
-                g.translate(-xm, -ym);
-                g.setColor(isResult && analysisColor != null ? analysisColor : kc.getFrameColor());
-                g.drawPolygon(xs, ys, npoints);
-            }
-        },
-        rundeck {
-            @Override
-            public void paint(final Graphics g, final NodeContainer kc, final Color col, final Color analysisColor, final Boolean isResult, final int x, final int y, final int xm, final int ym, final int xp, final int yp, final int[] xs, final int[] ys,
-                    final int width, final int height, final int npoints) {
-                g.setColor(col);
-                g.fillRoundRect(xm, ym, width, height, width / 4, height / 4);
-                g.translate(xm, ym);
-                kc.paintSuperComponent(g);
-                g.translate(-xm, -ym);
-                g.setColor(isResult && analysisColor != null ? analysisColor : kc.getFrameColor());
-                g.drawRoundRect(xm, ym, width, height, width / 4, height / 4);
-            }
-        },
-        rhombus {
-            @Override
-            public void paint(final Graphics g, final NodeContainer kc, final Color col, final Color analysisColor, final Boolean isResult, final int x, final int y, final int xm, final int ym, final int xp, final int yp, final int[] xs, final int[] ys,
-                    final int width, final int height, int npoints) {
-                xs[0] = xm;
-                xs[1] = x;
-                xs[2] = xp;
-                xs[3] = x;
-                ys[0] = y;
-                ys[1] = yp;
-                ys[2] = y;
-                ys[3] = ym;
-                npoints = 4;
-                g.setColor(col);
-                g.fillPolygon(xs, ys, npoints);
-                g.translate(xm, ym);
-                kc.paintSuperComponent(g);
-                g.translate(-xm, -ym);
-                g.setColor(isResult && analysisColor != null ? analysisColor : kc.getFrameColor());
-                g.drawPolygon(xs, ys, npoints);
-            }
-        },
-        tonne {
-            @Override
-            public void paint(final Graphics g, final NodeContainer kc, final Color col, final Color analysisColor, final Boolean isResult, final int x, final int y, final int xm, final int ym, final int xp, final int yp, final int[] xs, final int[] ys,
-                    final int width, final int height, final int npoints) {
-                int height_half = height / 2;
-                g.setColor(col);
-                g.fillArc(xm, ym, width, height_half + 1, 180, -180);
-                g.fillArc(xm, y, width, height_half, 180, 180);
-                g.fillRect(xm, y - height / 4, width, height_half);
-                g.translate(xm, ym);
-                if (kc != null) {
-                    kc.paintSuperComponent(g);
-                    g.setColor(isResult && analysisColor != null ? analysisColor : kc.getFrameColor());
-                } else {
-                    g.setColor(analysisColor);
-                }
-                g.translate(-xm, -ym);
-                g.drawArc(xm, y, width, height_half, 180, 180);
-                g.drawLine(xm, y - height / 4, xm, y + height / 4);
-                g.drawLine(xp, y - height / 4, xp, y + height / 4);
-                g.drawOval(xm, ym, width, height_half);
-            }
-        },
-        wabe {
-            @Override
-            public void paint(final Graphics g, final NodeContainer kc, final Color col, final Color analysisColor, final Boolean isResult, final int x, final int y, final int xm, final int ym, final int xp, final int yp, final int[] xs, final int[] ys,
-                    final int width, final int height, int npoints) {
-                xs[0] = xm;
-                xs[1] = x - width / 3;
-                xs[2] = x + width / 3;
-                xs[3] = xp;
-                xs[4] = x + width / 3;
-                xs[5] = x - width / 3;
-
-                ys[0] = y;
-                ys[1] = yp;
-                ys[2] = yp;
-                ys[3] = y;
-                ys[4] = ym;
-                ys[5] = ym;
-                npoints = 6;
-
-                g.setColor(col);
-                g.fillPolygon(xs, ys, npoints);
-                g.translate(xm, ym);
-                kc.paintSuperComponent(g);
-                g.translate(-xm, -ym);
-                g.setColor(isResult && analysisColor != null ? analysisColor : kc.getFrameColor());
-                g.drawPolygon(xs, ys, npoints);
-            }
-        },
-        ordner {
-            @Override
-            public void paint(final Graphics g, final NodeContainer kc, final Color col, final Color analysisColor, final Boolean isResult, final int x, final int y, final int xm, final int ym, final int xp, final int yp, final int[] xs, final int[] ys,
-                    final int width, final int height, final int npoints) {
-                int width_third = width / 3;
-                g.setColor(col);
-                g.fillRect(xm, ym, width_third, height);
-                g.fillRect(xm + width_third, ym, width_third, height);
-                g.fillRect(xm + 2 * width_third, ym, width_third, height);
-                g.translate(xm, ym);
-                if (kc != null) {
-                    kc.paintSuperComponent(g);
-                    g.setColor(isResult && analysisColor != null ? analysisColor : kc.getFrameColor());
-                } else {
-                    g.setColor(analysisColor);
-                }
-                g.translate(-xm, -ym);
-                g.drawRect(xm, ym, width_third, height);
-                g.drawRect(xm + width_third, ym, width_third, height);
-                g.drawRect(xm + 2 * width_third, ym, width_third, height);
-            }
-        };
-
-        public void paint(final Graphics g, final NodeContainer kc, final Color col, final Color analysisColor, final Boolean isResult, final int x, final int y, final int xm, final int ym, final int xp, final int yp, final int[] xs, final int[] ys,
-                final int width, final int height, final int npoints) {
-
-        }
-
-    }
-
-    public static final int WHITE = 0;
-
-    public static final int YELLOW = 1;
-
-    public static final int GREEN = 2;
-
-    public static final int BLUE = 3;
-
-    public static final int GRAY = 4;
-
-    public static final int RED = 5;
-
-    public static final int ORANGE = 6;
-
-    public static final int BLACK = 7;
-
-    public static final int LIGHTRED = 8;
-
-    public static final int LIGHTGREEN = 9;
-
-    public static final int LIGHTPURPLE = 10;
-
-    public static final int LIGHTBLUE = 11;
-
-    public static final Color[] COLORS = new Color[12];
-    static {
-        COLORS[WHITE] = Color.white;
-        COLORS[YELLOW] = Color.yellow;
-        COLORS[GREEN] = Color.green;
-        COLORS[BLUE] = new Color(100, 100, 255);
-        COLORS[GRAY] = Color.lightGray;
-        COLORS[RED] = new Color(255, 100, 100);
-        COLORS[ORANGE] = Color.orange;
-        COLORS[BLACK] = Color.black;
-        COLORS[LIGHTRED] = new Color(255, 153, 102);
-        COLORS[LIGHTGREEN] = new Color(204, 255, 204);
-        COLORS[LIGHTPURPLE] = new Color(229, 203, 255);
-        COLORS[LIGHTBLUE] = new Color(0, 204, 255);
-    }
-
-    public static final String[] COLOR_NAMES = new String[12];
-    static {
-        COLOR_NAMES[WHITE] = getResString("white");
-        COLOR_NAMES[YELLOW] = getResString("yellow");
-        COLOR_NAMES[GREEN] = getResString("green");
-        COLOR_NAMES[BLUE] = getResString("blue");
-        COLOR_NAMES[GRAY] = getResString("grey");
-        COLOR_NAMES[RED] = getResString("red");
-        COLOR_NAMES[ORANGE] = getResString("orange");
-        COLOR_NAMES[BLACK] = getResString("black");
-        COLOR_NAMES[LIGHTRED] = getResString("lightred");
-        COLOR_NAMES[LIGHTGREEN] = getResString("lightgreen");
-        COLOR_NAMES[LIGHTPURPLE] = getResString("lightpurple");
-        COLOR_NAMES[LIGHTBLUE] = getResString("lightblue");
-    }
 
     /** Transparenzwert für nicht transparent (Alpha = 255) */
     public static final int TRANSPARENCY_NONE = 255;
@@ -448,7 +223,7 @@ public class GraphElementLayout implements SwingConstants, Cloneable {
         }
     }
 
-    public static final GraphElementLayout.SHAPE STANDARD_FORM = SHAPE.rechteck;
+    public static final Shape STANDARD_FORM = Shape.rechteck;
     public static final int STANDARD_WIDTH = 90;
     public static final int STANDARD_HEIGHT = 50;
     public static final int STANDARD_LINE_THICKNESS = 1;
@@ -459,34 +234,12 @@ public class GraphElementLayout implements SwingConstants, Cloneable {
     public static final TextPositionHorizontal STANDARD_TEXT_POSITION_HORIZONTAL = TextPositionHorizontal.CENTER;
     //	public static final Color  STANDARD_TRACE_COLOR = Color.BLACK;
     public static final Color STANDARD_BORDER_COLOR = Color.BLACK;
-    public static final Color STANDARD_NODE_COLOR = COLORS[RED];
+    public static final Color STANDARD_NODE_COLOR = LayoutColor.RED.awtColor();
     public static final String STANDARD_FONT_NAME = "SansSerif";
     public static final int STANDARD_FONT_STYLE = Font.PLAIN;
     public static final Color STANDARD_FONT_COLOR = Color.BLACK;
     public static final int STANDARD_FONT_SIZE = 12;
     public static final Font STANDARD_FONT = new Font(STANDARD_FONT_NAME, STANDARD_FONT_STYLE, STANDARD_FONT_SIZE);
-
-    /**
-     * Standardlayout für alle Node und Kanten, die kein spezielles eigenes
-     * Layout haben
-     */
-    public static final GraphElementLayout STANDARD_ELEMENT_LAYOUT = new GraphElementLayout();
-    static {
-        STANDARD_ELEMENT_LAYOUT.fg_color = STANDARD_FONT_COLOR;
-        STANDARD_ELEMENT_LAYOUT.bg_color = STANDARD_NODE_COLOR;
-        STANDARD_ELEMENT_LAYOUT.border_color = STANDARD_BORDER_COLOR;
-        STANDARD_ELEMENT_LAYOUT.font = STANDARD_FONT;
-        STANDARD_ELEMENT_LAYOUT.iconID = null;
-
-        //TODO: den Standard-Linestyle aus den Containern hier her verlegen
-        //		STANDARD_ELEMENT_LAYOUT.line_style =
-        STANDARD_ELEMENT_LAYOUT.form = STANDARD_FORM;
-        STANDARD_ELEMENT_LAYOUT.textPositionHorizontal = STANDARD_TEXT_POSITION_HORIZONTAL;
-        STANDARD_ELEMENT_LAYOUT.textPositionVertical = STANDARD_TEXT_POSITION_VERTICAL;
-        STANDARD_ELEMENT_LAYOUT.textAlignmentHTML = STANDARD_TEXT_ALIGNMENT_HTML;
-        STANDARD_ELEMENT_LAYOUT.width = STANDARD_WIDTH;
-
-    }
 
     /** Hintergrundfarbe */
     public Color bg_color;
@@ -501,7 +254,7 @@ public class GraphElementLayout implements SwingConstants, Cloneable {
     public int line_thickness;
 
     /** Form (momentan nur bei Node genutzt) */
-    public GraphElementLayout.SHAPE form;
+    public Shape form;
 
     /** Schriftart */
     private Font font;
@@ -561,18 +314,31 @@ public class GraphElementLayout implements SwingConstants, Cloneable {
      *
      */
     public GraphElementLayout() {
-        x = 0;
-        y = 0;
-        reset();
+        init(STANDARD_WIDTH, STANDARD_HEIGHT);
+    }
+
+    /**
+     * @param me
+     */
+    public GraphElementLayout(final ModelElement me) {
+        MetaModel metaModel = me.getMetaModel();
+        GraphViewDefinition graphViewDefinition = metaModel.getGraphViewDefinition();
+        DefaultElementsLayoutDefinition defaultElementsLayout = graphViewDefinition.getDefaultElementsLayout();
+        Class<? extends ModelElement> elementClass = me.getClass();
+        int defaultWidth = defaultElementsLayout.getStandardWidth(elementClass);
+        int defaultHeight = defaultElementsLayout.getStandardHeight(elementClass);
+        init(defaultWidth, defaultHeight);
     }
 
     /**
      *
      */
-    public void reset() {
-        width = STANDARD_WIDTH;
-        height = STANDARD_HEIGHT;
-        bg_color = null; // default: wie im Mapping
+    private void init(final int width, final int height) {
+        x = 0;
+        y = 0;
+        this.width = width;
+        this.height = height;
+        bg_color = null; // default: wie in DefaultElementsLayoutDefinition
         fg_color = null; // default: Color.black
         border_color = null; // default: Color.black
         line_thickness = STANDARD_LINE_THICKNESS;
@@ -642,6 +408,12 @@ public class GraphElementLayout implements SwingConstants, Cloneable {
      */
     public boolean isDefaultTextAlignmentHTML() {
         return textAlignmentHTML == STANDARD_TEXT_ALIGNMENT_HTML;
+    }
+
+    @Override
+    public String toString() {
+        String s = "Default Layout form=" + form + " x=" + x + " y=" + y + " width=" + width + " height=" + height + " bg_color=" + bg_color + " fg_color=" + fg_color + " border_color=" + border_color + "font=" + font;
+        return s;
     }
 
 }

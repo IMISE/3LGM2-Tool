@@ -29,11 +29,12 @@ import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.model.GraphDocumentOwner;
 import de.imise.tool3lgm.graphtools.model.Szenario;
-import de.imise.tool3lgm.graphtools.view.graph.ElementsLayoutDefinition;
+import de.imise.tool3lgm.graphtools.view.graph.DefaultElementsLayoutDefinition;
 import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout;
 import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout.TextAlignmentHTML;
 import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout.TextPositionHorizontal;
 import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout.TextPositionVertical;
+import de.imise.tool3lgm.graphtools.view.graph.Shape;
 import de.imise.tool3lgm.graphtools.view.graph.SpecialInfoLabel;
 
 public abstract class ElementContainer extends JLabel implements Cloneable, GraphDocumentOwner, IDSource {
@@ -83,7 +84,8 @@ public abstract class ElementContainer extends JLabel implements Cloneable, Grap
 
     /**
      * gibt an, ob dieses Element durch das Aufklappen seines (ggf.
-     * existierenden) übergeordneten Elements sichtbar gemacht wurde
+     * existierenden) übergeordneten Elements sichtbar gemacht wurde. Default
+     * ist true;
      */
     protected boolean expanded = true;
 
@@ -142,7 +144,7 @@ public abstract class ElementContainer extends JLabel implements Cloneable, Grap
                 me.setContainer(this.doc, this);
             }
             if (me.hasLayout()) {
-                expandedLayout = new GraphElementLayout();
+                expandedLayout = new GraphElementLayout(me);
                 layout = expandedLayout;
                 setFont(layout.getFont());
                 frameColor = new Color(0, 0, 0, 255);
@@ -486,7 +488,7 @@ public abstract class ElementContainer extends JLabel implements Cloneable, Grap
      * @return
      */
     public final boolean hasStandardFont() {
-        return layout == null || layout.getFont() == null; // || layout.font.equals(doc.getMapping().getStandardFont(me));
+        return layout == null || layout.getFont() == null; // || layout.font.equals(doc.getDefaultElementsLayout().getStandardFont(me));
     }
 
     /**
@@ -496,30 +498,24 @@ public abstract class ElementContainer extends JLabel implements Cloneable, Grap
         if (font == null) {
             return true;
         }
-        return font.equals(doc.getMapping().getStandardFont(this));
+        return font.equals(doc.getDefaultElementsLayout().getStandardFont(this));
     }
 
     /**
      * @return
      */
-    public boolean hasDefaultSize() {
-        return layout == null || layout.width == GraphElementLayout.STANDARD_WIDTH && layout.height == GraphElementLayout.STANDARD_HEIGHT;
-    }
-
-    /**
-     *
-     */
-    public final void resetLayout() {
-        if (layout != null) {
-            layout.reset();
+    public final boolean hasDefaultSize() {
+        if (layout == null) {
+            return true;
         }
-        setFont(layout.getFont());
+        GraphElementLayout defaultElementsLayout = doc.getDefaultElementLayout(this);
+        return layout.width == defaultElementsLayout.width && layout.height == defaultElementsLayout.height;
     }
 
     @Override
     public final void setFont(final Font font) {
         if (layout == null) {
-            layout = new GraphElementLayout();
+            layout = new GraphElementLayout(me);
         }
         layout.setFont(font);
         super.setFont(font);
@@ -533,9 +529,9 @@ public abstract class ElementContainer extends JLabel implements Cloneable, Grap
         }
         Font font = null;
         if (doc != null) {
-            ElementsLayoutDefinition mapping = doc.getMapping();
-            if (mapping != null) {
-                font = mapping.getStandardFont(this);
+            DefaultElementsLayoutDefinition defaultElementsLayout = doc.getDefaultElementsLayout();
+            if (defaultElementsLayout != null) {
+                font = defaultElementsLayout.getStandardFont(this);
             }
         }
         if (font == null) {
@@ -547,7 +543,7 @@ public abstract class ElementContainer extends JLabel implements Cloneable, Grap
     /**
      * Gibt die Form zurueck
      */
-    public final GraphElementLayout.SHAPE getForm() {
+    public final Shape getForm() {
         return layout == null ? null : layout.form;
     }
 
@@ -556,7 +552,7 @@ public abstract class ElementContainer extends JLabel implements Cloneable, Grap
      *
      * @param form
      */
-    public final void setForm(final GraphElementLayout.SHAPE form) {
+    public final void setForm(final Shape form) {
         if (layout != null) {
             layout.form = form;
         }

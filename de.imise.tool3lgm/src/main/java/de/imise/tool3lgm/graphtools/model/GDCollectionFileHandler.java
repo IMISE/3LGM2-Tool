@@ -369,16 +369,27 @@ public class GDCollectionFileHandler {
         if (fileChooser.showSaveDialog(Static.getMainFrame()) != JFileChooser.APPROVE_OPTION) {
             return false;
         }
-        File pfad = fileChooser.getSelectedFile();
+        isZipFile = fileChooser.getFileFilter() == lgmZippedFileFiler;
+        File file = fileChooser.getSelectedFile();
+        return setSaveFile(file, isZipFile);
+    }
 
+    /**
+     * @param file
+     * @param isZipFile
+     * @return
+     */
+    public boolean setSaveFile(final File file, final boolean isZipFile) {
         try {
-            setFile(pfad);
+            if (!setFile(file)) {
+                throw new IOException();
+            }
         } catch (IOException exp) {
             Log.show(Log.FATAL, getResString("FehlerAllgemein"), exp);
             exp.printStackTrace();
             return false;
         }
-        isZipFile = fileChooser.getFileFilter() == lgmZippedFileFiler;
+        this.isZipFile = isZipFile;
         return true;
     }
 

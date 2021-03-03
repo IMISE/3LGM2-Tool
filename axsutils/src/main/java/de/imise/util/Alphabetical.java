@@ -19,6 +19,22 @@ import com.google.common.collect.Lists;
 public class Alphabetical {
 
     /**
+     * Aplhabetical can sort every kind of object using the
+     * {@link Object#toString()} method. But if there is a need
+     *
+     * @author AXS (18.02.2021)
+     */
+    public interface AlphabeticalSortTarget {
+
+        /**
+         * @return a string used to compare 2 objects if the toString() method
+         *         of the objects return equal strings (second sort criterium)
+         */
+        public String getSecondSortString();
+
+    }
+
+    /**
      * Die Locale, dessen Comparator die Vergleiche herangezogen wird. Initial
      * ist das die Locale des Systems.
      */
@@ -91,17 +107,48 @@ public class Alphabetical {
 
         @Override
         public int compare(final Object arg0, final Object arg1) {
+            String s1 = getCleanString(arg0);
+            String s2 = getCleanString(arg1);
+            int compare = realComparator.compare(s1, s2);
+            if (compare == 0) {
+                s1 = getSecondCompareString(arg0);
+                s2 = getSecondCompareString(arg1);
+                compare = realComparator.compare(s1, s2);
+            }
+            return compare;
+        }
+
+        /**
+         * @param o
+         * @return
+         */
+        public String getSecondCompareString(Object o) {
+            if (o != null && o instanceof AlphabeticalSortTarget) {
+                o = ((AlphabeticalSortTarget) o).getSecondSortString();
+            }
+            return getCleanString(o);
+        }
+
+        /**
+         * @param o
+         * @return
+         */
+        private String getCleanString(final Object o) {
+            String s = String.valueOf(o);
             //Leerzeichen und auch alle anderen Zeichen <32 werden Default-mäßig nach allen anderen Zeichen
             //einsortiert (warum auch immer). Um Listen mit Zahlen der Form [1. a, 1.1. a, 1.2. a] in genau
             //dieser Reiehnfolge sortiert zu bekommen (und nicht [1.1. a, 1.2 a., 1. a]), muss man Leerzeichen
             //durch Ausrufezeichen mit char = 33 ersetzen. Die werden als erstes Zeichen "richtig" einsortiert.
-            String s1 = String.valueOf(arg0).replaceAll("[\\s]", STIRNG_CHAR_33);
-            String s2 = String.valueOf(arg1).replaceAll("[\\s]", STIRNG_CHAR_33);
-            return realComparator.compare(s1, s2);
+            s = s.replaceAll("[\\s]", STIRNG_CHAR_33);
+            return s;
         }
 
     }
 
+    /**
+     * @param locale
+     * @return
+     */
     public static final Comparator<Object> getComparator(final Locale locale) {
         Collator collator = Collator.getInstance(locale);
         Comparator<Object> localizedComparator = new ObjectToStringComparator(collator);

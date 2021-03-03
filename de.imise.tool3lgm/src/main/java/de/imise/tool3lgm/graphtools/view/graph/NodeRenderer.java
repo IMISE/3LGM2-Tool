@@ -33,7 +33,6 @@ import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.graphtools.view.container.LayerContainer;
 import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
 import de.imise.tool3lgm.graphtools.view.graph.BasicGraphArea.PaintState;
-import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout.SHAPE;
 import de.imise.util.swing.component.HtmlLabelFunctions;
 import de.imise.util.swing.component.HtmlLabelFunctions.HtmlLabelDimension;
 
@@ -118,7 +117,7 @@ public final class NodeRenderer {
 
         Color col = kc.getColor();
         if (col == null) {
-            col = doc.getMapping().getStandardBackGroundColor(kc);
+            col = doc.getDefaultElementsLayout().getStandardBackGroundColor(kc);
         }
 
         int x = kc.getX();
@@ -163,9 +162,9 @@ public final class NodeRenderer {
             kc.setVerticalTextPosition(verticalTextPostion);
         }
 
-        GraphElementLayout.SHAPE form = kc.getForm();
+        Shape form = kc.getForm();
         if (form == null) {
-            form = doc.getMapping().getStandardForm(kc);
+            form = doc.getDefaultElementsLayout().getStandardForm(kc);
         }
 
         Stroke str = gc.getStroke();
@@ -202,7 +201,7 @@ public final class NodeRenderer {
         }
 
         //paint additionalShape
-        SHAPE additionalGraphShape = getAdditionalGraphShape(me);
+        Shape additionalGraphShape = getAdditionalGraphShape(me);
         if (additionalGraphShape != null) {
             //In the original GraphLayout nodes have a width of 90 and height of 60 and
             //subordinated elements like databases have a height and witdh of 15
@@ -349,7 +348,7 @@ public final class NodeRenderer {
      * @param nc
      * @return
      */
-    private static SHAPE getAdditionalGraphShape(final ModelElement me) {
+    private static Shape getAdditionalGraphShape(final ModelElement me) {
         MetaModel metaModel = me.getMetaModel();
         GraphViewDefinition graphViewDefinition = metaModel.getGraphViewDefinition();
         AdditionalGraphShapeData additionalGraphShapeData = graphViewDefinition.getAdditionalGraphShapeData(me);
@@ -392,9 +391,9 @@ public final class NodeRenderer {
             return false;
         }
 
-        GraphElementLayout.SHAPE form = k.getForm();
+        Shape form = k.getForm();
         if (form == null) {
-            form = k.getGraphDocument().getMapping().getStandardForm(k);
+            form = k.getGraphDocument().getDefaultElementsLayout().getStandardForm(k);
         }
 
         switch (form) {

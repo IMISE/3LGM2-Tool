@@ -6,6 +6,7 @@ import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Stroke;
 import java.lang.reflect.Modifier;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -14,15 +15,17 @@ import java.util.Set;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 
+import de.imise.tool3lgm.graphtools.dialog.LayoutEditor;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Bendpoint;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Textfield;
 import de.imise.tool3lgm.graphtools.path.metapaths.MetaPath;
 import de.imise.tool3lgm.graphtools.path.metapaths.SimpleMetaPath;
-import de.imise.tool3lgm.graphtools.view.graph.ElementsLayoutDefinition;
+import de.imise.tool3lgm.graphtools.view.graph.DefaultElementsLayoutDefinition;
 import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout;
-import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout.SHAPE;
+import de.imise.tool3lgm.graphtools.view.graph.LayoutColor;
+import de.imise.tool3lgm.graphtools.view.graph.Shape;
 import de.imise.util.pair.Pair;
 
 /**
@@ -43,13 +46,13 @@ public abstract class GraphViewDefinition {
         /**
          *
          */
-        public final GraphElementLayout.SHAPE shape;
+        public final Shape shape;
 
         /**
          * @param metaPath
          * @param shape
          */
-        public AdditionalGraphShapeData(final MetaPath metaPath, final SHAPE shape) {
+        public AdditionalGraphShapeData(final MetaPath metaPath, final Shape shape) {
             this.metaPath = metaPath;
             this.shape = shape;
         }
@@ -107,24 +110,16 @@ public abstract class GraphViewDefinition {
     protected final MetaModel metaModel;
 
     /**
-     * Liefert eine Liste aller metamodellabhängigen Knoten, die in der Grafik
-     * dargestellt werden. Die Reihenfolge in dieser Liste legt fest, in welcher
-     * Reihenfolge die Elemente in dem gloabeln LayoutEditor angezeigt werden
-     *
-     * @return
-     */
-    protected abstract Class<? extends ModelElement>[] getPaintableNodes();
-
-    /**
-     * Liste aller Knoten, die in der Grafik sichtbar sind. Das sind alle Knoten
-     * metammodellabhängigen Knoten aus paintableNodes plus die
-     * metamodellunabhängigen Knickpunkte, Layer und Textfelder.
+     * Set of all node classes visible in the graphic. These are all nodes
+     * metamodel-dependent nodes plus the metamodel-independent breakpoints,
+     * layers and text fields.
      */
     private final Set<Class<? extends ModelElement>> allPaintableNodes;
 
     /**
-     * Liste aller metmodellabhängigen Knoten, die in der Grafik angezeigt
-     * werden
+     * List of all nodes classes on {@link #paintableNodesSet}, but in the order
+     * they were specified when they were defined. This is the order in which
+     * they are displayed in the {@link LayoutEditor}.
      */
     private final List<Class<? extends ModelElement>> metaModelSpecificPaintableNodes;
 
@@ -146,8 +141,10 @@ public abstract class GraphViewDefinition {
      */
     public GraphViewDefinition(final MetaModel metaModel) {
         this.metaModel = metaModel;
+        metaModelSpecificPaintableNodes = new ArrayList<>();
+        getDefaultElementsLayout(); //initializes the defaultElementsLayoutDefinition and fills the metaModelSpecificPaintableNodes
+
         ImmutableSet.Builder<Class<? extends ModelElement>> allPaintableNodesSetBuilder = ImmutableSet.<Class<? extends ModelElement>> builder();
-        metaModelSpecificPaintableNodes = ImmutableList.copyOf(getPaintableNodes());
         for (Class<? extends ModelElement> paintableNodeClass : metaModelSpecificPaintableNodes) {
             //alle Paintbale-Klassen müssen instanziierbar sein. Hier dürfen keine abstrakten Klassen angegeben werden
             if (Modifier.isAbstract(paintableNodeClass.getModifiers())) {
@@ -321,24 +318,33 @@ public abstract class GraphViewDefinition {
      *
      */
     private final void initDefaultElementLayoutInternal() {
-        setDefaultLayout(Textfield.class, SHAPE.rechteck, new Color(0, 0, 0, 0));
+        //do not add this via the setDefaultLayout(...) fuctions because this would add the Textfield or Bendpoits to the metaModelSpecificPaintableNodes
+        defaultElementsLayoutDefinition.setStandardForm(Textfield.class, Shape.rechteck);
+        defaultElementsLayoutDefinition.setStandardBackGroundColor(Textfield.class, new Color(0, 0, 0, 0));
+        defaultElementsLayoutDefinition.setStandardSize(Textfield.class, GraphElementLayout.STANDARD_WIDTH, GraphElementLayout.STANDARD_HEIGHT);
         defaultElementsLayoutDefinition.setStandardSize(Bendpoint.class, 10, 10);
     }
 
-    /** Initialisiert die Defaults für das Layout der Elemente */
+    /**
+     * Initializes the defaults for the layout of the elements. The order in
+     * which a DefaultLayout is added to an element class via the
+     * {@link #setDefaultLayout(Class, Shape, Color, int, int)} function of an
+     * element class determines the order in which the elements are displayed in
+     * the global layout editor.
+     */
     protected abstract void initDefaultElementLayout();
 
     /**
      *
      */
-    private ElementsLayoutDefinition defaultElementsLayoutDefinition;
+    private DefaultElementsLayoutDefinition defaultElementsLayoutDefinition;
 
     /**
      * @return
      */
-    public ElementsLayoutDefinition getDefaultElementsLayout() {
+    public DefaultElementsLayoutDefinition getDefaultElementsLayout() {
         if (defaultElementsLayoutDefinition == null) {
-            defaultElementsLayoutDefinition = new ElementsLayoutDefinition(null);
+            defaultElementsLayoutDefinition = new DefaultElementsLayoutDefinition(null);
             initDefaultElementLayoutInternal();
             initDefaultElementLayout();
         }
@@ -350,7 +356,16 @@ public abstract class GraphViewDefinition {
      * @param defaultShape
      * @param defaultBackground
      */
-    protected final void setDefaultLayout(final Class<? extends ModelElement> elementClass, final SHAPE defaultShape, final Color defaultBackground) {
+    protected final void setDefaultLayout(final Class<? extends ModelElement> elementClass, final Shape defaultShape, final LayoutColor defaultBackground) {
+        setDefaultLayout(elementClass, defaultShape, defaultBackground.awtColor(), GraphElementLayout.STANDARD_WIDTH, GraphElementLayout.STANDARD_HEIGHT);
+    }
+
+    /**
+     * @param elementClass
+     * @param defaultShape
+     * @param defaultBackground
+     */
+    protected final void setDefaultLayout(final Class<? extends ModelElement> elementClass, final Shape defaultShape, final Color defaultBackground) {
         setDefaultLayout(elementClass, defaultShape, defaultBackground, GraphElementLayout.STANDARD_WIDTH, GraphElementLayout.STANDARD_HEIGHT);
     }
 
@@ -361,7 +376,24 @@ public abstract class GraphViewDefinition {
      * @param defaultWidth
      * @param defaultHeight
      */
-    protected final void setDefaultLayout(final Class<? extends ModelElement> elementClass, final SHAPE defaultShape, final Color defaultBackground, final int defaultWidth, final int defaultHeight) {
+    protected final void setDefaultLayout(final Class<? extends ModelElement> elementClass, final Shape defaultShape, final LayoutColor defaultBackground, final int defaultWidth, final int defaultHeight) {
+        setDefaultLayout(elementClass, defaultShape, defaultBackground.awtColor(), defaultWidth, defaultHeight);
+    }
+    /**
+     * @param elementClass
+     * @param defaultShape
+     * @param defaultBackground
+     * @param defaultWidth
+     * @param defaultHeight
+     */
+    protected final void setDefaultLayout(final Class<? extends ModelElement> elementClass, final Shape defaultShape, final Color defaultBackground, final int defaultWidth, final int defaultHeight) {
+        //alle Paintbale-Klassen müssen instanziierbar sein. Hier dürfen keine abstrakten Klassen angegeben werden
+        if (Modifier.isAbstract(elementClass.getModifiers())) {
+            throw new Error("Only non abstract classes are allowed as paintable element classes! " + elementClass.getName() + " is abstract!");
+        }
+        if (!metaModelSpecificPaintableNodes.contains(elementClass)) { //the first add of an element class decides the order in this list -> the order for the LayoutEditor
+            metaModelSpecificPaintableNodes.add(elementClass);
+        }
         defaultElementsLayoutDefinition.setStandardForm(elementClass, defaultShape);
         defaultElementsLayoutDefinition.setStandardBackGroundColor(elementClass, defaultBackground);
         defaultElementsLayoutDefinition.setStandardSize(elementClass, defaultWidth, defaultHeight);
@@ -379,12 +411,6 @@ public abstract class GraphViewDefinition {
          */
         public DefaultGraphViewDefinitionAdapter(final MetaModel metaModel) {
             super(metaModel);
-        }
-
-        @SuppressWarnings("unchecked")
-        @Override
-        protected Class<? extends ModelElement>[] getPaintableNodes() {
-            return new Class[0];
         }
 
         @Override

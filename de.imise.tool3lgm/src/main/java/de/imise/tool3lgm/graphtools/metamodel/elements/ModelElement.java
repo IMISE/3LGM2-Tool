@@ -45,7 +45,7 @@ import de.imise.tool3lgm.graphtools.userfield.UserFieldTarget;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.graphtools.view.container.LayerContainer;
 import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
-import de.imise.tool3lgm.graphtools.view.graph.ElementsLayoutDefinition;
+import de.imise.tool3lgm.graphtools.view.graph.DefaultElementsLayoutDefinition;
 import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout;
 import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout.TextAlignmentHTML;
 import de.imise.util.Alphabetical;
@@ -513,7 +513,7 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
      *            <code>null</code> to update all containers
      */
     public void updateHTMLName(final ElementContainer targetContainer) {
-        ElementsLayoutDefinition defaultElementsLayout = null;
+        DefaultElementsLayoutDefinition defaultElementsLayout = null;
         GraphElementLayout nameExtendsionClassLayout = null;
         Iterable<ElementContainer> targetContainers;
         MetaPath nameExtension = getNameExtensionPath();
@@ -552,7 +552,7 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
      * @param nameExtendsionClassLayout
      * @return
      */
-    private String generateHTMLName(final ElementContainer ec, final ElementsLayoutDefinition defaultElementsLayout, final GraphElementLayout nameExtendsionClassLayout) {
+    private String generateHTMLName(final ElementContainer ec, final DefaultElementsLayoutDefinition defaultElementsLayout, final GraphElementLayout nameExtendsionClassLayout) {
         TextAlignmentHTML textAlignmentHTML = ec.getTextAlignmentHTML();
         textBuf.append("<HTML><P align=\"");
         textBuf.append(textAlignmentHTML.name());
@@ -690,7 +690,7 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
 
     /** Fuegt diesem Node eine Edge zu. */
     public boolean addEdge(final Edge edge) {
-        int pos = edges == null ? 0 : edges.size() - 1;
+        int pos = edges == null ? 0 : edges.size();
         return insertEdge(edge, pos);
     }
 

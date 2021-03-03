@@ -20,8 +20,8 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
-import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout;
 import de.imise.tool3lgm.graphtools.view.graph.InputGraphArea;
+import de.imise.tool3lgm.graphtools.view.graph.Shape;
 
 /**
  * @author N.N.
@@ -155,7 +155,7 @@ public class GraphAreaToolbarButton extends JToggleButton {
             paintedNodeContainer = new NodeContainer(paintedNode, doc);
             if (isEdgeButton) {
                 paintedNodeContainer.setSizeForButtons(18, 2);
-                paintedNodeContainer.setForm(GraphElementLayout.SHAPE.rechteck);
+                paintedNodeContainer.setForm(Shape.rechteck);
                 paintedNodeContainer.setColor(Color.BLACK);
             } else {
                 paintedNodeContainer.setSizeForButtons(18, 14);

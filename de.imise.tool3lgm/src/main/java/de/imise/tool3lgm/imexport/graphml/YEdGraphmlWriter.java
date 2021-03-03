@@ -27,9 +27,9 @@ import de.imise.tool3lgm.graphtools.model.Szenario;
 import de.imise.tool3lgm.graphtools.view.container.BendpointContainer;
 import de.imise.tool3lgm.graphtools.view.container.EdgeContainer;
 import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
-import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout;
 import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout.TextPositionHorizontal;
 import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout.TextPositionVertical;
+import de.imise.tool3lgm.graphtools.view.graph.Shape;
 import de.imise.util.htmlxml.HTMLConverter;
 import de.imise.util.image.ImageTools;
 
@@ -476,14 +476,14 @@ public class YEdGraphmlWriter extends GraphmlWriter {
     }
 
     private final Enum<?> getYGraphmlShape(final NodeContainer nc) {
-        GraphElementLayout.SHAPE shape = nc.getForm();
+        Shape shape = nc.getForm();
         if (shape == null) {
-            shape = nc.getGraphDocument().getMapping().getStandardForm(nc);
+            shape = nc.getGraphDocument().getDefaultElementsLayout().getStandardForm(nc);
         }
         return getYGraphmlShape(shape);
     }
 
-    private Enum<?> getYGraphmlShape(final GraphElementLayout.SHAPE shape) {
+    private Enum<?> getYGraphmlShape(final Shape shape) {
         switch (shape) {
         case dreieck:
             return YGraphShape.triangle;

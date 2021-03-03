@@ -2,6 +2,17 @@ package de.imise.tool3lgm.metamodel.service;
 
 import static de.imise.tool3lgm.graphtools.metamodel.GraphViewDefinition.InterLayerLineRenderType.LINE_TYPE_DASHED;
 import static de.imise.tool3lgm.graphtools.metamodel.GraphViewDefinition.InterLayerLineRenderType.LINE_TYPE_SOLID;
+import static de.imise.tool3lgm.graphtools.view.graph.LayoutColor.BLUE;
+import static de.imise.tool3lgm.graphtools.view.graph.LayoutColor.GRAY;
+import static de.imise.tool3lgm.graphtools.view.graph.LayoutColor.LIGHTBLUE;
+import static de.imise.tool3lgm.graphtools.view.graph.LayoutColor.LIGHTGREEN;
+import static de.imise.tool3lgm.graphtools.view.graph.LayoutColor.LIGHTRED;
+import static de.imise.tool3lgm.graphtools.view.graph.LayoutColor.ORANGE;
+import static de.imise.tool3lgm.graphtools.view.graph.LayoutColor.RED;
+import static de.imise.tool3lgm.graphtools.view.graph.Shape.dreieck;
+import static de.imise.tool3lgm.graphtools.view.graph.Shape.oval;
+import static de.imise.tool3lgm.graphtools.view.graph.Shape.rechteck;
+import static de.imise.tool3lgm.graphtools.view.graph.Shape.rundeck;
 
 import java.util.List;
 
@@ -13,8 +24,7 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.path.metapaths.SimpleMetaPath;
 import de.imise.tool3lgm.graphtools.path.metapaths.SimpleMetaPathCreator;
-import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout;
-import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout.SHAPE;
+import de.imise.tool3lgm.graphtools.view.graph.Shape;
 import de.imise.tool3lgm.metamodel.service.edge.ApplicationComponent_PhysicalDataProcessingComponent_Edge;
 import de.imise.tool3lgm.metamodel.service.edge.ApplicationComponent_RepresentationForm_Edge;
 import de.imise.tool3lgm.metamodel.service.edge.ApplicationComponent_Use_Edge;
@@ -44,28 +54,6 @@ public class TLGMServiceGraphViewDefinion extends GraphViewDefinition {
         super(metaModel);
     }
 
-    @SuppressWarnings({
-            "unchecked", "rawtypes"
-    })
-    @Override
-    protected final Class[] getPaintableNodes() {
-        //diese Funtkion wird nur ein einziges Mal aufgerufen, daher ist es ok,
-        //dass das Array hier in der Funktion immer wieder neu angelegt wird
-        Class[] graphViewVisibleNodes = {
-                Function.class,
-                ObjectType.class,
-                ApplicationSystem.class,
-                OrganisationSystem.class,
-                InvokingInterface.class,
-                ProvidingInterface.class,
-                PhysicalDataProcessingComponent.class,
-                IheActorInstance.class,
-                IheActorInstanceInvokingInterface.class,
-                IheActorInstanceProvidingInterface.class,
-        };
-        return graphViewVisibleNodes;
-    }
-
     @Override
     protected final SimpleMetaPath[] getInterLayerMetaPaths() {
         SimpleMetaPath[] configurationPaths = {
@@ -92,28 +80,29 @@ public class TLGMServiceGraphViewDefinion extends GraphViewDefinition {
 
     @Override
     protected void initDefaultElementLayout() {
-        setDefaultLayout(Function.class, SHAPE.rechteck, GraphElementLayout.COLORS[GraphElementLayout.RED]);
-        setDefaultLayout(ObjectType.class, GraphElementLayout.SHAPE.oval, GraphElementLayout.COLORS[GraphElementLayout.BLUE]);
-        setDefaultLayout(ApplicationSystem.class, GraphElementLayout.SHAPE.rundeck, GraphElementLayout.COLORS[GraphElementLayout.LIGHTRED]);
-        setDefaultLayout(OrganisationSystem.class, GraphElementLayout.SHAPE.rundeck, GraphElementLayout.COLORS[GraphElementLayout.BLUE]);
-        setDefaultLayout(InvokingInterface.class, GraphElementLayout.SHAPE.oval, GraphElementLayout.COLORS[GraphElementLayout.LIGHTGREEN], 15, 15);
-        setDefaultLayout(ProvidingInterface.class, GraphElementLayout.SHAPE.dreieck, GraphElementLayout.COLORS[GraphElementLayout.ORANGE], 20, 20);
-        setDefaultLayout(PhysicalDataProcessingComponent.class, GraphElementLayout.SHAPE.rechteck, GraphElementLayout.COLORS[GraphElementLayout.ORANGE]);
-        setDefaultLayout(IheActorInstance.class, GraphElementLayout.SHAPE.rechteck, GraphElementLayout.COLORS[GraphElementLayout.LIGHTBLUE]);
-        setDefaultLayout(IheActorInstanceInvokingInterface.class, GraphElementLayout.SHAPE.oval, GraphElementLayout.COLORS[GraphElementLayout.RED], 15, 15);
-        setDefaultLayout(IheActorInstanceProvidingInterface.class, GraphElementLayout.SHAPE.dreieck, GraphElementLayout.COLORS[GraphElementLayout.GRAY], 20, 20);
+        setDefaultLayout(Function.class, rechteck, RED);
+        setDefaultLayout(ObjectType.class, oval, BLUE);
+        setDefaultLayout(ApplicationSystem.class, rundeck, LIGHTRED);
+        setDefaultLayout(OrganisationSystem.class, rundeck, BLUE);
+        setDefaultLayout(InvokingInterface.class, oval, LIGHTGREEN, 15, 15);
+        setDefaultLayout(ProvidingInterface.class, dreieck, ORANGE, 20, 20);
+        setDefaultLayout(PhysicalDataProcessingComponent.class, rechteck, ORANGE);
+        setDefaultLayout(IheActorInstance.class, rechteck, LIGHTBLUE);
+        setDefaultLayout(IheActorInstanceInvokingInterface.class, oval, RED, 15, 15);
+        setDefaultLayout(IheActorInstanceProvidingInterface.class, dreieck, GRAY, 20, 20);
     }
 
     /*
-     * in order to generate additional model shapes automatically, this function is created.
-     * through definition of certain paths, it is able to return the path and the corresponding model component
+     * in order to generate additional model shapes automatically, this function
+     * is created. through definition of certain paths, it is able to return the
+     * path and the corresponding model component
      */
     @Override
     protected List<AdditionalGraphShapeData> getAdditionalGraphShapeData() {
         //Application Sytsems get a Database on its shape if they are connected to an ObjectType
         SimpleMetaPath mp1 = SimpleMetaPathCreator.createSimpleMetaPath(metaModel, ApplicationSystem.class, ObjectType.class, ApplicationComponent_RepresentationForm_Edge.class, ObjectType_RepresentationForm_Edge.class);
         SimpleMetaPath mp2 = SimpleMetaPathCreator.createSimpleMetaPath(metaModel, OrganisationSystem.class, ObjectType.class, ApplicationComponent_RepresentationForm_Edge.class, ObjectType_RepresentationForm_Edge.class);
-        return ImmutableList.of(new AdditionalGraphShapeData(mp1, SHAPE.tonne), new AdditionalGraphShapeData(mp2, SHAPE.ordner));
+        return ImmutableList.of(new AdditionalGraphShapeData(mp1, Shape.tonne), new AdditionalGraphShapeData(mp2, Shape.ordner));
     }
 
 }

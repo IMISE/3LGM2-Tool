@@ -333,29 +333,34 @@ public class Tool3lgm {
     }
 
     /**
-     *
+     * @param withSystemExit if <code>false</code> System.exit(0) will not be
+     *            called. Use this for tests where teh tool must be startet
+     *            mustiple times.
      */
-    public void close() {
-        //man muss die Liste Clonen, da sie sich durch setSelectedDoc() ändert
-        List<GDCollection> collections = new ArrayList<>(this.collections);
-        //die letzte ist immer die aktive
-        for (int i = collections.size() - 1; i >= 0; i--) {
-            GDCollection gdcoll = collections.get(i);
-            setSelectedDoc(gdcoll.getSelectedDoc());
-            if (!askUserCloseModel(gdcoll)) {
-                return;
+    public void close(final boolean withSystemExit) {
+        if (withSystemExit) { //tests should not change the list
+            //man muss die Liste Clonen, da sie sich durch setSelectedDoc() ändert
+            List<GDCollection> collections = new ArrayList<>(this.collections);
+            //die letzte ist immer die aktive
+            for (int i = collections.size() - 1; i >= 0; i--) {
+                GDCollection gdcoll = collections.get(i);
+                setSelectedDoc(gdcoll.getSelectedDoc());
+                if (!askUserCloseModel(gdcoll)) {
+                    return;
+                }
             }
-        }
 
-        //Liste der zuletzt geöffneten Dateien merken
-        for (int i = collections.size() - 1; i >= 0; i--) {
-            GDCollection gdcoll = collections.get(i);
-            try {
-                File file = gdcoll.getFile();
-                String path = file.getCanonicalPath();
-                UserProperties.addListValue(StringProperty.LAST_USED_MODEL_FILES, path);
-            } catch (Exception ex) {
+            //Liste der zuletzt geöffneten Dateien merken
+            for (int i = collections.size() - 1; i >= 0; i--) {
+                GDCollection gdcoll = collections.get(i);
+                try {
+                    File file = gdcoll.getFile();
+                    String path = file.getCanonicalPath();
+                    UserProperties.addListValue(StringProperty.LAST_USED_MODEL_FILES, path);
+                } catch (Exception ex) {
+                }
             }
+            UserProperties.save();
         }
         new File(Tool3lgmConstants.CLIPBOARD_PATH).delete();
 
@@ -364,8 +369,12 @@ public class Tool3lgm {
             temp.delete();
         }
 
-        UserProperties.save();
-        System.exit(0);
+        if (withSystemExit) {
+            System.exit(0);
+        } else {
+            mainFrame.disposeWithoutSystemExit();
+            Static.tool = null;
+        }
     }
 
     /**

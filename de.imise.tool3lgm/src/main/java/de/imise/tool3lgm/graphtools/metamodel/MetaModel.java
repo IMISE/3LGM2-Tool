@@ -614,7 +614,7 @@ public final class MetaModel extends CoreMetaModel {
         //alle Knoten die Paintable sind oder ihre Kantennummern an andere Knoten schreiben
         GraphViewDefinition graphViewDefinition = getGraphViewDefinition();
         for (Class<? extends ModelElement> clazz : allNodesSet) {
-            if (graphViewDefinition.isPaintable(clazz)) {
+            if (graphViewDefinition.isPaintable(clazz) && !Edge.class.isAssignableFrom(clazz)) { //Association classes are also in all nodes. But edges have (at the moment) no instance layout
                 elementClassesWithLayoutBuilder.add(clazz);
                 continue;
             }

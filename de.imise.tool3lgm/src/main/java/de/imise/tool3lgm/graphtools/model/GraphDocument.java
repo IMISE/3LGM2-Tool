@@ -117,12 +117,13 @@ import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.graphtools.view.container.InterLayerConnectedNodeContainer;
 import de.imise.tool3lgm.graphtools.view.container.LayerContainer;
 import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
-import de.imise.tool3lgm.graphtools.view.graph.ElementsLayoutDefinition;
+import de.imise.tool3lgm.graphtools.view.graph.DefaultElementsLayoutDefinition;
 import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout;
 import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout.TextAlignmentHTML;
 import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout.TextPositionHorizontal;
 import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout.TextPositionVertical;
 import de.imise.tool3lgm.graphtools.view.graph.GraphViewParameter;
+import de.imise.tool3lgm.graphtools.view.graph.Shape;
 import de.imise.tool3lgm.gui.MainFrame;
 import de.imise.tool3lgm.log.Log;
 import de.imise.tool3lgm.userproperties.UserProperties;
@@ -174,7 +175,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
     /**
      * COMMENTME
      */
-    protected ElementsLayoutDefinition mapping;
+    protected DefaultElementsLayoutDefinition defaultElementsLayout;
 
     /**
      * COMMENTME
@@ -255,8 +256,8 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
         analysisResult = new ArrayList<>();
         selectionHighlighter = new SelectionHighlighter(this);
         GraphViewDefinition graphViewDefinition = metaModel.getGraphViewDefinition();
-        ElementsLayoutDefinition defaultElementsLayout = graphViewDefinition.getDefaultElementsLayout();
-        mapping = new ElementsLayoutDefinition(defaultElementsLayout);
+        DefaultElementsLayoutDefinition defaultElementsLayout = graphViewDefinition.getDefaultElementsLayout();
+        this.defaultElementsLayout = new DefaultElementsLayoutDefinition(defaultElementsLayout);
 
         layer = new LayerContainer[LAYER_COUNT];
         for (int c = 0; c < layer.length; c++) {
@@ -1775,26 +1776,35 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
     // --- GraphElementLayout-Verwaltung --- Anfang ---
 
     /**
-     * @param map
+     * @param defaultElementsLayout
      */
-    public final void setMapping(final ElementsLayoutDefinition map) {
-        if (map != null) {
-            mapping = map;
+    public final void setDefaultElementsLayout(final DefaultElementsLayoutDefinition defaultElementsLayout) {
+        if (defaultElementsLayout != null) {
+            this.defaultElementsLayout = defaultElementsLayout;
         }
     }
 
     /**
      * @return
      */
-    public final ElementsLayoutDefinition getMapping() {
-        return mapping;
+    public final DefaultElementsLayoutDefinition getDefaultElementsLayout() {
+        return defaultElementsLayout;
+    }
+
+    /**
+     * @return
+     */
+    public final GraphElementLayout getDefaultElementLayout(final ElementContainer ec) {
+        ModelElement me = ec.getElement();
+        Class<? extends ModelElement> elementClass = me.getClass();
+        return defaultElementsLayout.getStandardElementLayout(elementClass);
     }
 
     /**
      * @param map
      */
-    public final void adaptMapping(final ElementsLayoutDefinition map) {
-        mapping.adapt(map);
+    public final void adaptDefaultElementsLayout(final DefaultElementsLayoutDefinition map) {
+        defaultElementsLayout.adapt(map);
         for (LayerContainer lc : layer) {
             for (NodeContainer kc : lc.getGraphNodeContainers()) {
                 kc.refreshFont();
@@ -2110,7 +2120,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
         for (ElementContainer ec : selectedContainer) {
             Color tmpcol = ec.getColor();
             if (tmpcol == null) {
-                tmpcol = mapping.getStandardBackGroundColor(ec);
+                tmpcol = defaultElementsLayout.getStandardBackGroundColor(ec);
             }
             if (oldcol == null) {
                 oldcol = tmpcol;
@@ -2302,7 +2312,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
 
         ecDoc.start_transaction(pid);
         if (ec.getColor() == null) {
-            Color standardBackGroundColor = mapping.getStandardBackGroundColor(ec);
+            Color standardBackGroundColor = defaultElementsLayout.getStandardBackGroundColor(ec);
             changeColor(ec, standardBackGroundColor, pid);
         }
 
@@ -3464,8 +3474,8 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
      * @param pid
      * @return
      */
-    private NodeContainer createNodeAndContainer(final Class<? extends ModelElement> elementClass, final String name, final String description, final String elementID, int x, int y, final int width, final int height, final int rgb,
-            final GraphElementLayout.SHAPE form, final int bendpoint_index, final int pid) {
+    private NodeContainer createNodeAndContainer(final Class<? extends ModelElement> elementClass, final String name, final String description, final String elementID, int x, int y, final int width, final int height, final int rgb, final Shape form,
+            final int bendpoint_index, final int pid) {
         lastCreated = null;
         start_transaction(pid);
         if (Node.class.isAssignableFrom(elementClass)) {
@@ -4766,7 +4776,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
         szen.adaptGraphViewParameter(graphViewParameter);
         double pageSizeFactor = getPageSizeFactor();
         szen.setPageSizeFactor(pageSizeFactor);
-        szen.getMapping().adapt(mapping);
+        szen.getDefaultElementsLayout().adapt(defaultElementsLayout);
         String otherID = szen.getID();
         addElementsToSzenario(otherID, elements, pid);
         finish_transaction(pid);

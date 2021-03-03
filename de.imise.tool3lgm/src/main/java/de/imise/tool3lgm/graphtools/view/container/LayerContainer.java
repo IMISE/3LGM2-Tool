@@ -671,15 +671,17 @@ public class LayerContainer extends ElementContainer {
      */
     public void sortEdgeContainers() {
         //fuer alle NodeContainer in numberedEdgesNodeContainer
-        for (NodeContainer kc : numberedEdgesNodeContainer) {
+        for (NodeContainer nc : numberedEdgesNodeContainer) {
             //fuer jede seiner Kanten
-            for (Edge egde : kc.getElement().getEdges()) {
+            ModelElement me = nc.getElement();
+            Iterable<Edge> edges = me.getEdges();
+            for (Edge egde : edges) {
                 //hole ihren Container
-                EdgeContainer kantCont = (EdgeContainer) egde.getContainer(doc);
+                EdgeContainer edgeC = (EdgeContainer) egde.getContainer(doc);
                 //loesche ihn aus kanten
-                edgeContainers.remove(kantCont);
+                edgeContainers.remove(edgeC);
                 //fuege ihn am Ende wieder hinzu
-                edgeContainers.add(kantCont);
+                edgeContainers.add(edgeC);
             }
         }
     }

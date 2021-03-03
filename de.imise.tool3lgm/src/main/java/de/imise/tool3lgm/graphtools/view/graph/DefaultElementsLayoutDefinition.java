@@ -3,14 +3,17 @@ package de.imise.tool3lgm.graphtools.view.graph;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
+import de.imise.util.Alphabetical;
 
-public class ElementsLayoutDefinition {
+public class DefaultElementsLayoutDefinition {
 
     /**
      * Mappt von der Elementklasse auf das zugehörige
@@ -22,12 +25,30 @@ public class ElementsLayoutDefinition {
      * Standardelementlayout. Initial entspricht es dem Standardlayout aus
      * <code>GraphElementLayout</code>
      */
-    private GraphElementLayout standardElementLayout = (GraphElementLayout) GraphElementLayout.STANDARD_ELEMENT_LAYOUT.clone();
+    private GraphElementLayout standardElementLayout = createStandardElementLayout();
+
+    /**
+     * @return
+     */
+    private GraphElementLayout createStandardElementLayout() {
+        GraphElementLayout layout = new GraphElementLayout();
+        layout.fg_color = GraphElementLayout.STANDARD_FONT_COLOR;
+        layout.bg_color = GraphElementLayout.STANDARD_NODE_COLOR;
+        layout.border_color = GraphElementLayout.STANDARD_BORDER_COLOR;
+        layout.setFont(GraphElementLayout.STANDARD_FONT);
+        layout.setIconID(null);
+        layout.form = GraphElementLayout.STANDARD_FORM;
+        layout.textPositionHorizontal = GraphElementLayout.STANDARD_TEXT_POSITION_HORIZONTAL;
+        layout.textPositionVertical = GraphElementLayout.STANDARD_TEXT_POSITION_VERTICAL;
+        layout.textAlignmentHTML = GraphElementLayout.STANDARD_TEXT_ALIGNMENT_HTML;
+        layout.width = GraphElementLayout.STANDARD_WIDTH;
+        return layout;
+    }
 
     /**
      * @param loadDefaults
      */
-    public ElementsLayoutDefinition(final ElementsLayoutDefinition defaultElementsLayout) {
+    public DefaultElementsLayoutDefinition(final DefaultElementsLayoutDefinition defaultElementsLayout) {
         if (defaultElementsLayout != null) {
             adapt(defaultElementsLayout);
         }
@@ -39,7 +60,7 @@ public class ElementsLayoutDefinition {
      *
      * @param layout2Clone
      */
-    public final void adapt(final ElementsLayoutDefinition layout2Clone) {
+    public final void adapt(final DefaultElementsLayoutDefinition layout2Clone) {
         standardElementLayout = (GraphElementLayout) layout2Clone.standardElementLayout.clone();
         Set<Class<? extends ModelElement>> keySet = layout2Clone.elementClassToStandardLayoutMap.keySet();
         elementClassToStandardLayoutMap = new HashMap<>(keySet.size());
@@ -196,7 +217,7 @@ public class ElementsLayoutDefinition {
      * @param ec
      * @return
      */
-    public final GraphElementLayout.SHAPE getStandardForm(final ElementContainer ec) {
+    public final Shape getStandardForm(final ElementContainer ec) {
         return getStandardElementLayout(ec).form;
     }
 
@@ -204,7 +225,7 @@ public class ElementsLayoutDefinition {
      * @param elementClass
      * @param form
      */
-    public final void setStandardForm(final Class<? extends ModelElement> elementClass, final GraphElementLayout.SHAPE form) {
+    public final void setStandardForm(final Class<? extends ModelElement> elementClass, final Shape form) {
         getElementClassSpecificLayout(elementClass).form = form;
     }
 
@@ -222,6 +243,20 @@ public class ElementsLayoutDefinition {
      */
     public final void setStandardFont(final Class<? extends ModelElement> elementClass, final Font font) {
         getElementClassSpecificLayout(elementClass).setFont(font);
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        List<Class<? extends ModelElement>> elementClasses = new ArrayList<>(elementClassToStandardLayoutMap.keySet());
+        Alphabetical.sort(elementClasses);
+        for (Class<? extends ModelElement> elementClass : elementClasses) {
+            sb.append(elementClass.getSimpleName());
+            sb.append(" ");
+            sb.append(elementClassToStandardLayoutMap.get(elementClass));
+            sb.append("\n");
+        }
+        return sb.toString();
     }
 
 }

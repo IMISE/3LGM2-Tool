@@ -10,7 +10,7 @@ import de.imise.tool3lgm.event.action.SelectedRealNodeAction;
 import de.imise.tool3lgm.event.action.SelectionAction;
 import de.imise.tool3lgm.event.action.SubmodelAction;
 import de.imise.tool3lgm.event.action.SubmodelSelectionAction;
-import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout.SHAPE;
+import de.imise.tool3lgm.graphtools.view.graph.Shape;
 import de.imise.util.swing.event.ActionSource;
 
 public enum GDCommands implements ActionSource {
@@ -147,7 +147,7 @@ public enum GDCommands implements ActionSource {
     public static final int INVALID_WIDTH = -1;
     public static final int INVALID_HEIGHT = -1;
     public static final int INVALID_COLOR_RGB = -1;
-    public static final SHAPE INVALID_SHAPE = null;
+    public static final Shape INVALID_SHAPE = null;
     public static final String INVALID_ID_STRING = "";
     public static final String INVALID_NAME = "";
     public static final String INVALID_DESCRIPTION = "";

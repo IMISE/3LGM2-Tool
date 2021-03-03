@@ -53,7 +53,7 @@ import de.imise.tool3lgm.graphtools.view.container.EdgeContainer;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.graphtools.view.container.LayerContainer;
 import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
-import de.imise.tool3lgm.graphtools.view.graph.ElementsLayoutDefinition;
+import de.imise.tool3lgm.graphtools.view.graph.DefaultElementsLayoutDefinition;
 import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout;
 import de.imise.tool3lgm.graphtools.view.graph.GraphViewParameter;
 import de.imise.tool3lgm.log.Log;
@@ -223,7 +223,6 @@ public class ToolXMLWriter extends IntendingXMLWriter {
      * @throws XMLStreamException
      */
     private void writeModel(final String name, final List<Szenario> szenarios, final Collection<ModelElement> elements, final Iterable<UserField> userFields, final Iterable<String> iconIDs) throws XMLStreamException {
-        //Static.showProgressDialog();
         writeStartDocument();
         writeStartElement("modell_3lgm_2"); //<modell_3lgm_2>
         writeStartElement("header"); //<header>
@@ -391,40 +390,37 @@ public class ToolXMLWriter extends IntendingXMLWriter {
             //Nodes
             for (int i = layers.size() - 1; i >= 0; i--) {
                 LayerContainer lc = layers.get(i);
-                for (NodeContainer nc : lc.getNodeContainersAlphabetical()) {
-                    ModelElement node = nc.getElement();
-                    writeModelElement(node);
-                }
+                List<NodeContainer> nodeContainersAlphabetical = lc.getNodeContainersAlphabetical();
+                writeModelElementsInternal(nodeContainersAlphabetical);
             }
             //Edges
             doc.sortEdgeContainers();
             for (int i = layers.size() - 1; i >= 0; i--) {
                 LayerContainer lc = layers.get(i);
-                for (EdgeContainer ec : lc.getEdgeContainers()) {
-
-                    writeModelElement(ec.getElement());
-                }
+                Iterable<EdgeContainer> edgeContainers = lc.getEdgeContainers();
+                writeModelElementsInternal(edgeContainers);
             }
             //Bendpoints
             for (int i = layers.size() - 1; i >= 0; i--) {
                 LayerContainer lc = layers.get(i);
-                for (BendpointContainer kc : lc.getBendpointContainers()) {
-                    writeModelElement(kc.getElement());
-                }
+                Iterable<BendpointContainer> bendpointContainers = lc.getBendpointContainers();
+                writeModelElementsInternal(bendpointContainers);
             }
         }
     }
 
     /**
-     * Schreibt das Modellelement des übergebene ElementContainers in die
+     * Schreibt die Modellelemente der übergebenen ElementContainer in die
      * XML-Datei
      *
-     * @param me
+     * @param elements
      * @throws XMLStreamException
      */
-    public void writeModelElement(final ElementContainer ec) throws XMLStreamException {
-        ModelElement me = ec.getElement();
-        writeModelElement(me);
+    private void writeModelElementsInternal(final Iterable<? extends ElementContainer> elements) throws XMLStreamException {
+        for (ElementContainer ec : elements) {
+            ModelElement me = ec.getElement();
+            writeModelElement(me);
+        }
     }
 
     /**
@@ -438,7 +434,7 @@ public class ToolXMLWriter extends IntendingXMLWriter {
         writeAttribute("class", me.getClass().getSimpleName());
         writeAttribute("hash", me.getID());
         writeModelElementField("name", me.getName());
-        writeModelElementField("description", me.getDescription());
+        writeModelElementFieldIfNotNullOrEmpty("description", me.getDescription());
         String associatedSzenID = me.getAssociatedSzenID();
         if (!Strings.isNullOrEmpty(associatedSzenID)) {
             writeModelElementField("assoc_szen", associatedSzenID);
@@ -467,13 +463,45 @@ public class ToolXMLWriter extends IntendingXMLWriter {
         writeEndElement(); //</element>
     }
 
+    /**
+     * @param nameAttribute
+     * @param text
+     * @throws XMLStreamException
+     */
     private void writeModelElementField(final String nameAttribute, final String text) throws XMLStreamException {
-        writeStartElement("field"); //<field>
-        writeAttribute("name", nameAttribute);
-        writeCharacters(getValidString(text));
-        writeEndElement(); //</field>
+        writeModelElementField(nameAttribute, text, true);
     }
 
+    /**
+     * @param nameAttribute
+     * @param text
+     * @throws XMLStreamException
+     */
+    private void writeModelElementFieldIfNotNullOrEmpty(final String nameAttribute, final String text) throws XMLStreamException {
+        writeModelElementField(nameAttribute, text, false);
+    }
+
+    /**
+     * @param nameAttribute
+     * @param text
+     * @param writeIfNullOrEmpty only if <code>true</code> the tag will be
+     *            written if the text is {@link NullPointerException} or empty
+     * @throws XMLStreamException
+     */
+    private void writeModelElementField(final String nameAttribute, final String text, final boolean writeIfNullOrEmpty) throws XMLStreamException {
+        if (writeIfNullOrEmpty || !Strings.isNullOrEmpty(text)) {
+            writeStartElement("field"); //<field>
+            writeAttribute("name", nameAttribute);
+            writeCharacters(getValidString(text));
+            writeEndElement(); //</field>
+        }
+    }
+
+    /**
+     * @param nameAttribute
+     * @param intValue
+     * @throws XMLStreamException
+     */
     private void writeModelElementField(final String nameAttribute, final int intValue) throws XMLStreamException {
         writeModelElementField(nameAttribute, String.valueOf(intValue));
     }
@@ -487,7 +515,7 @@ public class ToolXMLWriter extends IntendingXMLWriter {
      * @return a alphabetical sortet list of all element classes with standard
      *         layout
      */
-    private List<Class<? extends ModelElement>> getElementClassesWithStandardLayout(final ElementsLayoutDefinition mapping) {
+    private List<Class<? extends ModelElement>> getElementClassesWithStandardLayout(final DefaultElementsLayoutDefinition mapping) {
         Iterable<Class<? extends ModelElement>> elementClassesWithStandardLayout = mapping.getElementClassesWithStandardLayout();
         ArrayList<Class<? extends ModelElement>> elementClassesWithStandardLayoutAlphabetical = Lists.newArrayList(elementClassesWithStandardLayout);
         //to ensure that the order of element classes is the same independently of the systems locale we always sort here with english locale
@@ -529,10 +557,10 @@ public class ToolXMLWriter extends IntendingXMLWriter {
             writeElement("multiView", graphViewParameter.multiView);
             writeEndElement(); //</view>
             writeStartElement("mapping"); //"<mapping>"
-            ElementsLayoutDefinition mapping = szen.getMapping();
+            DefaultElementsLayoutDefinition mapping = szen.getDefaultElementsLayout();
             for (Class<? extends ModelElement> elementClass : getElementClassesWithStandardLayout(mapping)) {
                 GraphElementLayout standardElementLayout = mapping.getStandardElementLayout(elementClass);
-                writeGraphElementLayout(elementClass, standardElementLayout, true);
+                writeDefaultGraphElementLayout(elementClass, standardElementLayout);
             }
             writeEndElement(); //"</mapping>"
             writeLayerContainer(szen, elements);
@@ -557,7 +585,7 @@ public class ToolXMLWriter extends IntendingXMLWriter {
         for (LayerContainer lc : szen.getLayers()) {
             writeStartElement("layer"); //<layer>
             writeAttribute("number", lc.getLayerNumber());
-            writeGraphElementLayout(null, lc.get3LGMLayout(), true);
+            writeLayerLayout(lc.get3LGMLayout());
             for (NodeContainer kc : lc.getGraphNodeContainers()) {
                 if (elements == null || elements.contains(kc.getElement())) {
                     writeElementContainer(kc);
@@ -577,20 +605,30 @@ public class ToolXMLWriter extends IntendingXMLWriter {
         }
     }
 
+    /**
+     * @param ec
+     * @throws XMLStreamException
+     */
     protected void writeElementContainer(final ElementContainer ec) throws XMLStreamException {
         writeStartElement("container"); //<container>
         writeAttribute("hash", ec.getID());
         if (!(ec instanceof EdgeContainer)) {
-            writeElement("expanded", ec.isExpanded());
-            writeElement("visible", ec.isVisible());
+            //write only if not default true
+            writeElementIfFalse("expanded", ec.isExpanded());
+            writeElementIfFalse("visible", ec.isVisible());
         }
         GraphElementLayout expandedLayout = ec.getE3LGMLayout();
+        ModelElement me = ec.getElement();
+        Class<? extends ModelElement> elementClass = me.getClass();
+        GraphDocument doc = ec.getGraphDocument();
+        DefaultElementsLayoutDefinition layoutDefinition = doc.getDefaultElementsLayout();
+        GraphElementLayout defaultElementLayout = layoutDefinition.getStandardElementLayout(elementClass);
         if (expandedLayout != null) {
-            writeGraphElementLayout(ModelElement.class, expandedLayout, true);
+            writeGraphElementLayout(expandedLayout, defaultElementLayout, true);
         }
         GraphElementLayout nonExpandedLayout = ec.getNE3LGMLayout();
         if (nonExpandedLayout != null) {
-            writeGraphElementLayout(ModelElement.class, nonExpandedLayout, false);
+            writeGraphElementLayout(nonExpandedLayout, defaultElementLayout, false);
         }
         writeEndElement(); //</container>
     }
@@ -598,6 +636,15 @@ public class ToolXMLWriter extends IntendingXMLWriter {
     ////////////
     // Layout //
     ////////////
+
+    /**
+     * @param elementClass
+     * @param layout
+     * @throws XMLStreamException
+     */
+    private void writeDefaultGraphElementLayout(final Class<?> elementClass, final GraphElementLayout layout) throws XMLStreamException {
+        writeGraphElementLayout(elementClass, layout, null, true);
+    }
 
     /**
      * @param elementClass Elementklasse, für die das Layout geschrieben werden
@@ -608,37 +655,83 @@ public class ToolXMLWriter extends IntendingXMLWriter {
      *            Layout
      * @throws XMLStreamException
      */
-    private void writeGraphElementLayout(final Class<?> elementClass, final GraphElementLayout layout, final boolean expanded) throws XMLStreamException {
+    private void writeGraphElementLayout(final GraphElementLayout layout, final GraphElementLayout defaultLayout, final boolean expanded) throws XMLStreamException {
+        writeGraphElementLayout(null, layout, defaultLayout, expanded);
+    }
+
+    /**
+     * @param elementClass Elementklasse, für die das Layout geschrieben werden
+     *            soll (wenn null, dann für Layer)
+     * @param layout Layout zu diesr Elementklasse
+     * @param expanded wenn <code>true</code>, wird das normale Layout
+     *            geschrieben, wenn <code>false</code> das zusammengeklappte
+     *            Layout
+     * @throws XMLStreamException
+     */
+    private void writeLayerLayout(final GraphElementLayout layout) throws XMLStreamException {
+        writeGraphElementLayout(null, layout, null, true);
+    }
+
+    /**
+     * @param elementClass Elementklasse, für die das Layout geschrieben werden
+     *            soll (wenn null, dann für Layer)
+     * @param layout Layout zu diesr Elementklasse
+     * @param expanded wenn <code>true</code>, wird das normale Layout
+     *            geschrieben, wenn <code>false</code> das zusammengeklappte
+     *            Layout
+     * @param defaultLayout if this is <code>null</code> this indictates that
+     *            the layout parameter is an default layout for a type of
+     *            elements in the mapping section of a submodel. In this case
+     *            the elementClassParameter should never be <code>null</code>.
+     *            If the defaultLayout parameter it is not <code>null</code> but
+     *            different to the layout parameter this indicated that the
+     *            layout parameter is the layout of a single element
+     * @throws XMLStreamException
+     */
+    private void writeGraphElementLayout(final Class<?> elementClass, final GraphElementLayout layout, final GraphElementLayout defaultLayout, final boolean expanded) throws XMLStreamException {
         writeStartElement(expanded ? "layout" : "nelayout"); //<layout> oder <nelayout>
-        //ElementClass ist nur für Layer null
-        if (elementClass != null) {
+
+        boolean isDefaultElementClassLayout = elementClass != null && defaultLayout == null;
+        boolean isLayerLayout = elementClass == null && defaultLayout == null;
+        boolean writeFullLayout = isDefaultElementClassLayout || isLayerLayout;
+
+        if (isDefaultElementClassLayout) { //in this case elementClass should be never null!
             writeAttribute("class", elementClass.getSimpleName());
         }
-        writeGraphElementLayoutColor(layout.bg_color, "bg_color");
-        writeGraphElementLayoutColor(layout.fg_color, "fg_color");
-        writeGraphElementLayoutColor(layout.border_color, "border_color");
+        if (writeFullLayout || defaultLayout.bg_color != layout.bg_color) {
+            writeGraphElementLayoutColor(layout.bg_color, "bg_color");
+        }
+        if (writeFullLayout || defaultLayout.fg_color != layout.fg_color) {
+            writeGraphElementLayoutColor(layout.fg_color, "fg_color");
+        }
+        if (writeFullLayout || defaultLayout.border_color != layout.border_color) {
+            writeGraphElementLayoutColor(layout.border_color, "border_color");
+        }
 
-        if (layout.line_thickness != STANDARD_LINE_THICKNESS) {
+        if (isDefaultElementClassLayout && layout.line_thickness != STANDARD_LINE_THICKNESS) {
             writeElement("line_thickness", layout.line_thickness);
         }
-        if (layout.line_style != STANDARD_LINE_STYLE) {
+        if (defaultLayout == null && layout.line_style != STANDARD_LINE_STYLE) {
             writeElement("line_style", layout.line_style);
         }
-        if (layout.form != null/* && layout.form != STANDARD_FORM */) {
+        if (layout.form != null) { //only the default element layouts have a form != null (at the moment)
             writeElement("form", layout.form.ordinal());
         }
         Font font = layout.getFont();
-        if (font != null) {
+        if (isDefaultElementClassLayout && font != null || !isDefaultElementClassLayout && font != null && !font.equals(defaultLayout.getFont())) {
             writeElement("font_family", font.getName());
             writeElement("font_style", font.getStyle());
             writeElement("font_size", font.getSize());
         }
-        writeElement("x", layout.x);
-        writeElement("y", layout.y);
-        if (layout.width != -1) {
-            writeElement("width", layout.width);
+        if (layout.x != 0 || layout.y != 0) {
+            writeElement("x", layout.x);
+            writeElement("y", layout.y);
         }
-        if (layout.height != -1) {
+
+        //        if (layout.width != -1 || !writeFullLayout && layout.width != defaultLayout.width) {
+        //        if (layout.height != -1 || !writeFullLayout && layout.height != defaultLayout.height) {
+        if (isDefaultElementClassLayout || !isLayerLayout && (layout.width != defaultLayout.width || layout.height != defaultLayout.height)) {
+            writeElement("width", layout.width);
             writeElement("height", layout.height);
         }
         String icon = layout.getIconID();

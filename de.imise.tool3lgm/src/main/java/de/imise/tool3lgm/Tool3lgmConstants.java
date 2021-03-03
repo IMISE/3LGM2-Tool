@@ -225,7 +225,7 @@ public abstract class Tool3lgmConstants {
     public static final ImageIcon MATRIX_ICON_13 = getIcon("matrixIcon_13.gif");
 
     /** Anzahl der im Menü angezeigten zu letzt benutzen Dateien */
-    public static final int LAST_USED_MODEL_FILES_IN_MENU = 10;
+    public static final int LAST_USED_MODEL_FILES_IN_MENU = 25;
 
     /**
      * Anfang des ResourceString, mit dem bei jedem über die Funktion zu

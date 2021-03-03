@@ -90,9 +90,17 @@ public class MainFrame extends JFrame implements Tool3lgmChangeListener, Compone
         super.setVisible(b);
     }
 
+    /**
+     *
+     */
+    public void disposeWithoutSystemExit() {
+        super.dispose();
+    }
+
     @Override
     public void dispose() {
-        Static.close();
+        //never call super.dispose() here!
+        Static.close(true); //exits with System.exit(0)
     }
 
     /**
