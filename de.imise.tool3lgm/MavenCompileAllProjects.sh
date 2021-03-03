@@ -45,3 +45,6 @@ cd ../de.imise.tool3lgm.template.ihe/
 mvn -B -Dmaven.test.skip=true clean install
 
 cd $APPDIR
+
+# Versionsinfo ausgeben
+cat ../de.imise.tool3lgm.deploy/Tool3lgm/version.info
