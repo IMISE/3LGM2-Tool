@@ -1260,10 +1260,10 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
             setSameFont(pid);
             break;
         }
-        case MODEL_ACTION_ADOPT_SAME_ICON: {
-            break;
-        }
         case MODEL_ACTION_ADOPT_SAME_ALL: {
+            setSameFont(pid);
+            setSameAlpha(pid);
+            setSameColor(pid);
             break;
         }
         case MODEL_ACTION_MOVE_ORDER_TO_FIRST_POSITION: {
@@ -2138,6 +2138,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
      */
     private void setSameColor(final int pid) {
         start_transaction(pid);
+
         ElementContainer lastSelected = getLastSelected();
         Color col = lastSelected.getColor();
         if (col == null) {
@@ -2149,6 +2150,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
                 changeColor(ec, col, pid);
             }
         }
+
         finish_transaction(pid);
         distributeEvent(ELEMENT_GRAPHICS_CHANGED, pid);
     }

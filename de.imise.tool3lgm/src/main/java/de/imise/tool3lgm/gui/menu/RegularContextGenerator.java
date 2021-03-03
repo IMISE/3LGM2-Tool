@@ -6,6 +6,7 @@ import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_ADD_SELECTED_TO_ALL_SUBMODELS;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_ADD_SELECTED_TO_NEW_SUBMODEL;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_ADD_SELECTED_TO_SUBMODEL;
+import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_ADOPT_SAME_ALL;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_ADOPT_SAME_COLOR;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_ADOPT_SAME_FONT;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_ADOPT_SAME_TRANSPARENCY;
@@ -143,7 +144,7 @@ public class RegularContextGenerator extends ElementSelectionContextGenerator im
     /**
      * Menu Options for adopting color, transparency
      */
-    private JMenuItem adopt_color, adopt_tranparency, adopt_font;
+    private JMenuItem adopt_color, adopt_tranparency, adopt_font, adopt_all;
 
     /**
      * COMMENTME
@@ -255,6 +256,7 @@ public class RegularContextGenerator extends ElementSelectionContextGenerator im
         adopt_color = getItem(MODEL_ACTION_ADOPT_SAME_COLOR);
         adopt_tranparency = getItem(MODEL_ACTION_ADOPT_SAME_TRANSPARENCY);
         adopt_font = getItem(MODEL_ACTION_ADOPT_SAME_FONT);
+        adopt_all = getItem(MODEL_ACTION_ADOPT_SAME_ALL);
 
         JMenu trans_layer = new JMenu(getResString("layerTransparencyMenu"));
         trans_layer.add(layer_transparencey_none);
@@ -262,8 +264,10 @@ public class RegularContextGenerator extends ElementSelectionContextGenerator im
         trans_layer.add(layer_transparencey_full);
 
         JMenu adopt_layer = new JMenu(getResString("elementAdoptionMenu"));
-        adopt_layer.add(adopt_color);
+        adopt_layer.add(adopt_font);
         adopt_layer.add(adopt_tranparency);
+        adopt_layer.add(adopt_color);
+        adopt_layer.add(adopt_all);
 
         layout_layer = new JMenu(getResString("layerLayoutMenu"));
         layout_layer.add(normalize_layer);
