@@ -28,6 +28,7 @@ import de.imise.tool3lgm.graphtools.view.tree.node.LGMTreeNode;
 import de.imise.tool3lgm.graphtools.view.tree.node.PathStepTreeNode;
 import de.imise.tool3lgm.graphtools.view.tree.node.StringTreeNode;
 import de.imise.util.BooleanOption;
+import de.imise.util.swing.component.tree.TypedTreeNode;
 
 /**
  * A TreeModel that builds itself according to its underlying
@@ -263,7 +264,7 @@ public class PathTreeModel extends DefaultTreeModel implements MetaModelSpecific
                     pathStepNode.setText(simpleName);
                 }
             }
-            LGMTreeNode<ElementContainer> existingEqualsNode = parent.getEqualsChild(pathStepNode);
+            TypedTreeNode<ElementContainer> existingEqualsNode = parent.getEqualsChild(pathStepNode);
             if (existingEqualsNode == null) {
                 parent.add(pathStepNode);
                 pathStepNode.setTreeNode(ec); //now set the new TreeNode to the ElementContainer (NodeContainer)
