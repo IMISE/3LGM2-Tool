@@ -3,25 +3,14 @@ package de.imise.tool3lgm.graphtools.view.tree.node;
 import java.awt.Color;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.Vector;
-
-import javax.swing.tree.DefaultMutableTreeNode;
-import javax.swing.tree.MutableTreeNode;
-import javax.swing.tree.TreeNode;
 
 import de.imise.tool3lgm.graphtools.consistency.error.type.AbstractConsistencyError;
-import de.imise.util.Alphabetical;
+import de.imise.util.swing.component.tree.TypedTreeNode;
 
 /**
  * @author N.N. (< 2005), AXS (08.04.2019)
  */
-public class LGMTreeNode<T> extends DefaultMutableTreeNode {
-
-    /**
-     * If you do not want to display the value of the toString() function of the
-     * userObject, you can set this alternative display string.
-     */
-    private String visibleText = null;
+public class LGMTreeNode<T> extends TypedTreeNode<T> {
 
     /**
      * If this error is set, this node is rendered in a different way. The way
@@ -29,9 +18,6 @@ public class LGMTreeNode<T> extends DefaultMutableTreeNode {
      * element to solve the error.
      */
     private AbstractConsistencyError consistencyError;
-
-    /** If <code>true</code> the node will sort its children */
-    private boolean sort;
 
     /** selectable yes/no */
     private boolean selectable = true;
@@ -44,7 +30,7 @@ public class LGMTreeNode<T> extends DefaultMutableTreeNode {
      * @param setTreeNode
      */
     protected LGMTreeNode(final T o) {
-        this(o, true);
+        super(o);
     }
 
     /**
@@ -52,7 +38,7 @@ public class LGMTreeNode<T> extends DefaultMutableTreeNode {
      * @param sort
      */
     public LGMTreeNode(final T o, final boolean sort) {
-        this(o, null, sort);
+        super(o, sort);
     }
 
     /**
@@ -61,56 +47,7 @@ public class LGMTreeNode<T> extends DefaultMutableTreeNode {
      * @param sort
      */
     public LGMTreeNode(final T o, final String visibleText, final boolean sort) {
-        super(o);
-        this.visibleText = visibleText;
-        this.sort = sort;
-    }
-
-    @SuppressWarnings("unchecked")
-    @Override
-    public T getUserObject() {
-        // If someone has set another UserObject that has
-        // the wrong type, this will of course go wrong.
-        return (T) super.getUserObject();
-    }
-
-    /**
-     * @param sort
-     */
-    public void setSort(final boolean sort) {
-        this.sort = sort;
-    }
-
-    /**
-     * @param text
-     */
-    public void setText(final String text) {
-        visibleText = text;
-    }
-
-    /**
-     * @return
-     */
-    public String getText() {
-        return visibleText;
-    }
-
-    @Override
-    public String toString() {
-        if (visibleText != null) {
-            return visibleText;
-        } else if (userObject != null) {
-            return userObject.toString();
-        }
-        return "";
-    }
-
-    @Override
-    public void insert(final MutableTreeNode newChild, int childIndex) {
-        if (children != null && sort) {
-            childIndex = Alphabetical.getInsertPosition((Vector<?>) children, newChild);
-        }
-        super.insert(newChild, childIndex);
+        super(o, visibleText, sort);
     }
 
     /**
@@ -185,52 +122,6 @@ public class LGMTreeNode<T> extends DefaultMutableTreeNode {
         }
 
         return retVal;
-    }
-
-    /**
-     * @param node
-     * @return
-     */
-    @SuppressWarnings("unchecked")
-    public final <E> LGMTreeNode<E> getEqualsChild(final LGMTreeNode<E> node) {
-        if (children != null) {
-            for (TreeNode child : children) {
-                if (node.equals(child)) {
-                    return (LGMTreeNode<E>) child;
-                }
-            }
-        }
-        return null;
-    }
-
-    @Override
-    public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + (userObject == null ? 0 : userObject.hashCode());
-        return result;
-    }
-
-    @Override
-    public boolean equals(final Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        LGMTreeNode<?> other = (LGMTreeNode<?>) obj;
-        if (userObject == null) {
-            if (other.userObject != null) {
-                return false;
-            }
-        } else if (!userObject.equals(other.userObject)) {
-            return false;
-        }
-        return true;
     }
 
     /**
