@@ -2152,8 +2152,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
         ElementContainer lastSelected = getLastSelected();
         Color col = lastSelected.getColor();
         if (col == null) {
-            GraphDocument selectedDoc = gdcoll.getSelectedDoc();
-            col = selectedDoc.getMapping().getStandardBackGroundColor(lastSelected);
+            col = defaultElementsLayout.getStandardBackGroundColor(lastSelected);
         }
         for (ElementContainer ec : selectedContainer) {
             if (ec != lastSelected) {
