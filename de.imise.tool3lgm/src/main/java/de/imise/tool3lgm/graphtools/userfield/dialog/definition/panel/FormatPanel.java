@@ -434,12 +434,15 @@ public class FormatPanel extends AbstractInputPanel implements ActionListener, C
         }
         UserField formatUserField = (UserField) selectedFormat;
         //wenn sich im Spinner und im EinheitenTextfeld nichts geändert hat
-        if (((Integer) digitSpinner.getValue()).intValue() == formatUserField.getFormatFractionDigits() && unitBox.getSelectedObject().equals(formatUserField.getFormatUnit())) {
-            //keinen Refresh anbieten
-            refreshButton.setEnabled(false);
-        } else {
-            refreshButton.setEnabled(true);
+
+        int digits = (Integer) digitSpinner.getValue();
+        boolean enableRefresh = digits == formatUserField.getFormatFractionDigits();
+        if (enableRefresh) {
+            String userFieldFormatUnit = formatUserField.getFormatUnit();
+            String selectedUnit = unitBox.getSelectedObject(); //can be null
+            enableRefresh &= userFieldFormatUnit.equals(selectedUnit);
         }
+        refreshButton.setEnabled(enableRefresh);
     }
 
     @Override
