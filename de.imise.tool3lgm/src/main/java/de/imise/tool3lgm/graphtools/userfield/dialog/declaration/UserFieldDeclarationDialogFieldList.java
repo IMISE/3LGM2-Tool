@@ -30,7 +30,6 @@ public class UserFieldDeclarationDialogFieldList extends JList<NamedObjectContai
      * @param definitions
      */
     public UserFieldDeclarationDialogFieldList(final UserFieldDefinitions definitions) {
-        super();
         model = new DefaultListModel<>();
         setModel(model);
         this.definitions = definitions;

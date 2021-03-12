@@ -90,16 +90,6 @@ public final class UserFieldDefinitions extends UserFieldDefinitionChangeHandler
     public static final Class<? extends UserFieldTarget> GLOBAL_FORMAT_IDENTIFIER_CLASS = GlobalFormatIdentifierClass.class;
 
     /**
-     * Liefert einen anzeigbaren String für den globalen Identifier (da es
-     * Modellvariablen sind wird hier der Res-String für Model zurück gegeben)
-     *
-     * @return
-     */
-    public static String getDisplayableGlobalFieldIdentifierName() {
-        return getResString("userFieldEditor_global_number");
-    }
-
-    /**
      * Konstante um für <code>firstInconsistentUserFieldFormulaIndex</code>
      * anzugeben, dass alle darin befindlichen Formeln berechnet werden können.
      */

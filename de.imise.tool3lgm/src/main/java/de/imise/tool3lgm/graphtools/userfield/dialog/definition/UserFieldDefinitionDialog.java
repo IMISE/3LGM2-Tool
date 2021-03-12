@@ -134,16 +134,13 @@ public final class UserFieldDefinitionDialog extends AbstractPropertyDialog impl
             Class<? extends Node> nodeClass = targetClass.asSubclass(Node.class);
             String displayableClassName = elementsNameBuilder.getDisplayableName(nodeClass);
             sb.append(displayableClassName);
-        } else {
-            if (CoreMetaModel.isEdgeType(targetClass)) {
-                Class<? extends Edge> edgeClass = targetClass.asSubclass(Edge.class);
-                sb.append(elementsNameBuilder.getMetaAssociationName(edgeClass, Direction.FORWARD, ConnectionState.DOUBLE, true, true));
-            } else if (userField.isGlobalOrFormat()) {
-                sb.append(UserFieldDefinitions.getDisplayableGlobalFieldIdentifierName());
-            }
-
+        } else if (CoreMetaModel.isEdgeType(targetClass)) {
+            Class<? extends Edge> edgeClass = targetClass.asSubclass(Edge.class);
+            sb.append(elementsNameBuilder.getMetaAssociationName(edgeClass, Direction.FORWARD, ConnectionState.DOUBLE, true, true));
+        } else if (userField.isGlobalOrFormat()) {
+            sb.append(getResString("userFieldEditor_global"));
         }
-        sb.append("  ");
+        sb.append("      ");
         label = getResString("attribute_typ");
         sb.append(label);
         sb.append(":  ");
