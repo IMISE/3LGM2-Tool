@@ -211,7 +211,7 @@ public class UserFieldWeightTableModel extends AbstractUserFieldTableModel {
         if (value != null) {
             NamedObjectContainer<UserField> cellValue = (NamedObjectContainer<UserField>) value;
             UserField userField = cellValue.getObject();
-            if (userField.hasStyle(Style.CLASSIFICATION_NUMBER_FORMULA)) {
+            if (userField.hasStyle(Style.FORMULA)) {
                 return false;
             }
         }

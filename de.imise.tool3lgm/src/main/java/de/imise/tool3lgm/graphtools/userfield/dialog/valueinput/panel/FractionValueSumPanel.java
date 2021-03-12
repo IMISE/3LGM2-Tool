@@ -26,7 +26,7 @@ import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.table.model.Abst
 import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.table.model.FractionValueSumTableModel;
 import de.imise.util.swing.component.AlphabeticalComboBox;
 
-public class FractionValueSumPanel extends ClassificationNumberFormulaPanel {
+public class FractionValueSumPanel extends FormulaPanel {
 
     /**
      * Auswahlbox für ein konkretes Element, für das die Teilwertsummen angezigt
@@ -48,8 +48,8 @@ public class FractionValueSumPanel extends ClassificationNumberFormulaPanel {
      *            <code>UserField</code>s geprüft werden sollen.
      * @param definitions Die <code>UserFieldDefinition</code>s
      * @return Wenn mindestens ein <code>UserField</code> vom Typ Kennzahl
-     *         (<code>UserField.CLASSIFICATION_NUMBER_FORMULA</code>) ist und
-     *         die Formel selbst eine einfache Teilwertsumme ist
+     *         (<code>Style.NUMBER</code>) ist und die Formel selbst eine
+     *         einfache Teilwertsumme ist
      */
     @Override
     protected final InsertType getInsertType(final Class<? extends ModelElement> elementClass, final UserFieldDefinitions definitions) {

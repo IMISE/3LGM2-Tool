@@ -300,12 +300,12 @@ public class ToolXMLWriter extends IntendingXMLWriter {
 
         if (style == Style.FORMAT) {
             writeElement("userFieldFormatString", uf.getFormatExportString());
-        } else if (style == Style.CLASSIFICATION_NUMBER) {
+        } else if (style == Style.NUMBER) {
             UserField formatUserField = uf.getFormatUserField();
             if (formatUserField != null) {
                 writeElement("userFieldFormatHash", formatUserField.getID());
             }
-        } else if (style == Style.CLASSIFICATION_NUMBER_FORMULA) {
+        } else if (style == Style.FORMULA) {
             writeElement("userFieldFormula", uf.getFormula());
             UserField formatUserField = uf.getFormatUserField();
             if (formatUserField != null) {

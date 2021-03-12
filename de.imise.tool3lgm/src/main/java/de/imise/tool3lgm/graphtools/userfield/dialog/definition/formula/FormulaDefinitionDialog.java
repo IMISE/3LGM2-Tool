@@ -94,7 +94,7 @@ public class FormulaDefinitionDialog extends JDialog implements ActionListener {
     /**
      * COMMENTME
      */
-    public static final String CLASSIFICATION_NUMBER = "CLASSIFICATION_NUMBER";
+    public static final String NUMBER = "NUMBER";
 
     /**
      * Kenzeichen dafür, dass eine Klammer in einer Formel nach rechts Verlassen
@@ -374,13 +374,13 @@ public class FormulaDefinitionDialog extends JDialog implements ActionListener {
 
     /**
      * Lädt alle anderen <code>UserField</code>s (userFields, die vom STYLE
-     * CLASSIFICATION_NUMBER sind) in die JList.
+     * NUMBER sind) in die JList.
      *
      * @param elementClass
      */
     private void updateFieldList(final Class<? extends UserFieldTarget> elementClass) {
         for (UserField uf : definitions.getUserFields(elementClass)) {
-            if (uf != userField && uf.isClassificationUserField()) {
+            if (uf != userField && uf.isNumberUserField()) {
                 userFieldList.addObject(uf);
             }
         }

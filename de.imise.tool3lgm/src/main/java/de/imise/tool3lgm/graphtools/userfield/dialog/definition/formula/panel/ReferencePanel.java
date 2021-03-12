@@ -261,9 +261,9 @@ public class ReferencePanel extends JPanel implements ActionListener {
         UserFieldDefinitions definitions = userField.getDefinitions();
         Class<? extends ModelElement> selectedClass = ((Class<?>) classesList.getSelectedObject()).asSubclass(ModelElement.class);
         for (UserField uf : definitions.getUserFields(selectedClass)) {
-            if (uf.isClassificationUserField()) {
+            if (uf.isNumberUserField()) {
                 if (uf.getName().trim().equals("")) {
-                    String name = getResString("this_classification_number");
+                    String name = getResString("this_calculation_formula");
                     userFieldList.addObject(uf, name);
                 } else {
                     userFieldList.addObject(uf);

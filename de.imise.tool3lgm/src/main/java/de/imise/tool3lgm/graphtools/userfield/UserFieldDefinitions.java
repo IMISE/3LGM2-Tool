@@ -96,7 +96,7 @@ public final class UserFieldDefinitions extends UserFieldDefinitionChangeHandler
      * @return
      */
     public static String getDisplayableGlobalFieldIdentifierName() {
-        return getResString("userFieldEditor_classification_modelvariable");
+        return getResString("userFieldEditor_global_number");
     }
 
     /**
@@ -174,7 +174,7 @@ public final class UserFieldDefinitions extends UserFieldDefinitionChangeHandler
         ufl.add(userField);
         idToUserFieldMap.put(userField.getID(), userField);
         //Formeln extra merken
-        if (userField.hasStyle(UserField.Style.CLASSIFICATION_NUMBER_FORMULA)) {
+        if (userField.hasStyle(UserField.Style.FORMULA)) {
             formulaUserFieldList.add(userField);
             setConsistencyUnknown();
         }
@@ -195,7 +195,7 @@ public final class UserFieldDefinitions extends UserFieldDefinitionChangeHandler
         ufl.insert(userField, index);
         idToUserFieldMap.put(userField.getID(), userField);
         //Formeln extra merken
-        if (userField.hasStyle(UserField.Style.CLASSIFICATION_NUMBER_FORMULA)) {
+        if (userField.hasStyle(UserField.Style.FORMULA)) {
             formulaUserFieldList.add(userField);
             setConsistencyUnknown();
         }
@@ -214,7 +214,7 @@ public final class UserFieldDefinitions extends UserFieldDefinitionChangeHandler
      */
     public final boolean isInUse(final UserField userField) {
         //wenn es nichts mit Kennzahlen zu tun hat -> false
-        if (!userField.isClassificationUserField()) {
+        if (!userField.isNumberUserField()) {
             return false;
         }
         for (Class<? extends UserFieldTarget> c : getClassToUserFieldKeys()) {
@@ -253,7 +253,7 @@ public final class UserFieldDefinitions extends UserFieldDefinitionChangeHandler
             ufl.remove(userField);
             deleted.add(userField);
             //wenn das zu löschende UserField ein UserField ist, das bei einem anderen in der Formel vorkommen kann (Kennzahl, Kennzahlformel, Verteilungsgewicht)
-        } else if (userField.isClassificationUserField()) {
+        } else if (userField.isNumberUserField()) {
 
             ArrayList<UserField> userFieldsToDelete = new ArrayList<>();
             userFieldsToDelete.add(userField);
@@ -494,7 +494,7 @@ public final class UserFieldDefinitions extends UserFieldDefinitionChangeHandler
      * @return
      */
     public List<UserField> getFractionValueSumUserFields(final Class<? extends ModelElement> elementClass, final Class<? extends Edge> edgeClass) {
-        List<UserField> userFieldList = getUserFields(elementClass, UserField.Style.CLASSIFICATION_NUMBER_FORMULA);
+        List<UserField> userFieldList = getUserFields(elementClass, UserField.Style.FORMULA);
         for (int i = userFieldList.size() - 1; i >= 0; i--) {
             UserField userField = userFieldList.get(i);
             if (!userField.isSimplePartValueSumFormula()) {
@@ -815,7 +815,7 @@ public final class UserFieldDefinitions extends UserFieldDefinitionChangeHandler
                             continue;
                         }
                         //wenn das auch eine Formel ist
-                        if (dependingUserField != null && dependingUserField.hasStyle(UserField.Style.CLASSIFICATION_NUMBER_FORMULA)) {
+                        if (dependingUserField != null && dependingUserField.hasStyle(UserField.Style.FORMULA)) {
                             //wenn die abhängige Formel noch nicht in der Liste der berechenbaren Formeln vorkommt
                             if (!calculateableFormulaList.contains(dependingUserField)) {
                                 allDependingAreCalculateable = false;
@@ -938,7 +938,7 @@ public final class UserFieldDefinitions extends UserFieldDefinitionChangeHandler
         //          ArrayList elems = doc.getAllModelElements(RechAnwendungsbaustein.class, true);
         //          for (int i=0; i<getUserFieldCount(RechAnwendungsbaustein.class); i++){
         //              UserField userField = get(RechAnwendungsbaustein.class, i);
-        //              if (userField.getStyle()==UserField.CLASSIFICATION_NUMBER_STYLE){
+        //              if (userField.getStyle()==Style.NUMBER){
         //                  for (int j=0; j<elems.size(); j++){
         //                      UserFieldTarget uft = (UserFieldTarget)elems.get(j);
         //                      if (uft.getUserFieldInputValue(userField).equals(UserField.EMPTY_STRING))

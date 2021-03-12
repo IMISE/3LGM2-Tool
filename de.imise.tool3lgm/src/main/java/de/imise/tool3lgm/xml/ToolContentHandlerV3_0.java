@@ -33,6 +33,7 @@ import de.imise.tool3lgm.graphtools.model.GDCollectionFileHandler;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.model.Szenario;
 import de.imise.tool3lgm.graphtools.userfield.UserField;
+import de.imise.tool3lgm.graphtools.userfield.UserField.Style;
 import de.imise.tool3lgm.graphtools.userfield.UserFieldDefinitions;
 import de.imise.tool3lgm.graphtools.userfield.WeightReplacer;
 import de.imise.tool3lgm.graphtools.view.container.BendpointContainer;
@@ -905,7 +906,16 @@ public class ToolContentHandlerV3_0 implements ContentHandler {
                 if (userField == null) {
                     throw new SAXException("Error while parsing definition of userFields: userFiel shouldn't not be equals to null");
                 }
-                userField.putXMLFieldString(qName, elementValue.toString());
+                String value = elementValue.toString();
+                if (qName.equals("userFieldStyle")) {
+                    //Style.NUMER was Style.CLASSIFICATION_NUMBER and Style.FORMULA was Style.CLASSIFICATION_NUMBER_FORMULA
+                    if (value.equals("CLASSIFICATION_NUMBER")) {
+                        value = Style.NUMBER.name();
+                    } else if (value.equals("CLASSIFICATION_NUMBER_FORMULA")) {
+                        value = Style.FORMULA.name();
+                    }
+                }
+                userField.putXMLFieldString(qName, value);
 
             } else if (qName.equals("modell_3lgm_2") || qName.equals("tool3lgm_clipboard")) {
                 //jetzt erst ganz zum Schluss die IDs für das Start- bzw. End-Objekt einer Edge auflösen und die wirklichen Node setzten

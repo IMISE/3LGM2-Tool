@@ -162,11 +162,11 @@ public final class UserFieldDefinitionDialog extends AbstractPropertyDialog impl
         gbc.weighty = 0.0;
 
         //Kennzahl
-        if (style == UserField.Style.CLASSIFICATION_NUMBER) {
+        if (style == UserField.Style.NUMBER) {
             //Format-Panel
             panelList.add(new FormatPanel(this, userField, definitions));
             //Kennzahlformel
-        } else if (style == UserField.Style.CLASSIFICATION_NUMBER_FORMULA) {
+        } else if (style == UserField.Style.FORMULA) {
             //Formel-Panel
             panelList.add(new FormulaPanel(this, userField, definitions, nameDescripPanel.getNameTextField()));
             //Format-Panel

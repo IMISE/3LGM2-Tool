@@ -146,7 +146,7 @@ public class UserFieldActivatedTableCell implements IUserFieldTableCell {
      * Die Formatierung erfolgt dabei durch die Methoden von {@link #userField}.
      */
     protected void update() {
-        if (!(userField.getStyle() == Style.CLASSIFICATION_NUMBER_FORMULA) && value.toString().equals(UserField.EMPTY_STRING)) {
+        if (!(userField.getStyle() == Style.FORMULA) && value.toString().equals(UserField.EMPTY_STRING)) {
             text = RENDERER_EMPTY_STRING;
             value = new NamedObjectContainer<>(userField, EDITOR_EMPTY_STRING);
         } else {
@@ -195,7 +195,7 @@ public class UserFieldActivatedTableCell implements IUserFieldTableCell {
         Object newValue = editor.getCellEditorValue();
         String s = newValue == null ? "" : newValue.toString();
         //bei Kennzahlen die evtl. falschen Decimal-Separatoren ersetzen
-        if (userField.hasStyle(Style.CLASSIFICATION_NUMBER)) {
+        if (userField.hasStyle(Style.NUMBER)) {
             s = UserField.replaceWrongDecimalSeparator(s, EDITOR_DECIMAL_SEPARATOR);
         }
         value = new NamedObjectContainer<>(userField, s);

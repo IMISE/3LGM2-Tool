@@ -2462,7 +2462,7 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
                         //wenn es einen otherValue gibt, der sich vom value unterscheidet -> füge sie zusammen
                     } else if (!value.equals(otherValue)) {
                         //Bei Kennzahlen bleibt es einfach der Wert des ersten Elements
-                        if (!userField.isClassificationUserField()) {
+                        if (!userField.isNumberUserField()) {
                             setUserFieldInputValue(userField, value.toString().concat(" -" + joined + "- ").concat(otherValue.toString()));
                         }
                     }

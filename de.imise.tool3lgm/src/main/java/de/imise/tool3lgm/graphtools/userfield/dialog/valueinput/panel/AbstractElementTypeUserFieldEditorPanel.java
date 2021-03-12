@@ -161,8 +161,7 @@ public abstract class AbstractElementTypeUserFieldEditorPanel extends AbstractUs
     /**
      * Methode setzt den Inhalt der <code>elementTypeBox</code> Es werden nur
      * die Klassen von Knotenelementen aufgelistet, für die mindestens ein
-     * Kennzahl vom Typ <code>UserField.CLASSIFICATION_NUMBER_STYLE</code>
-     * definiert ist.
+     * Kennzahl vom Typ <code>Style.NUMBER</code> definiert ist.
      */
     private void setElementTypeBoxContent() {
         GraphDocument doc = dialog.getMainDoc();
@@ -225,8 +224,7 @@ public abstract class AbstractElementTypeUserFieldEditorPanel extends AbstractUs
      *            <code>UserField</code>s geprüft werden sollen.
      * @param definitions Die <code>UserFieldDefinition</code>s
      * @return Wenn mindestens ein <code>UserField</code> vom Typ Kennzahl
-     *         (<code>UserField.CLASSIFICATION_NUMBER_STYLE</code>) ist: true;
-     *         ansonsten false
+     *         (<code>Style.NUMBER_</code>) ist: true; ansonsten false
      */
     protected InsertType getInsertType(final Class<? extends ModelElement> elementClass, final UserFieldDefinitions definitions) {
         InsertType insertType = NO;

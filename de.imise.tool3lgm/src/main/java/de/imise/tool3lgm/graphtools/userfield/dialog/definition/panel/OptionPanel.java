@@ -32,7 +32,7 @@ public class OptionPanel extends AbstractInputPanel {
      * CheckBox zum Unstellen der Option, ob Kennzahlformeln tatsächlich
      * berechnet werden sollen
      */
-    private JCheckBox enableClassificationNumberCalculationCheckBox;
+    private JCheckBox enableFormulaCalculationCheckBox;
 
     /**
      * @param userField
@@ -45,9 +45,9 @@ public class OptionPanel extends AbstractInputPanel {
         add(treeVisCheckBox);
 
         //bei allen UserFields die mit Kennzahlen zu tun haben, die Option zum Einschalten der Berechnung anbieten
-        if (userField.isClassificationUserField()) {
-            enableClassificationNumberCalculationCheckBox = new JCheckBox(BooleanProperty.OPTION_ENABLE_CLASSIFICATION_NUMBER_CALCULATION.createAction());
-            add(enableClassificationNumberCalculationCheckBox);
+        if (userField.isNumberUserField()) {
+            enableFormulaCalculationCheckBox = new JCheckBox(BooleanProperty.OPTION_ENABLE_FORMULA_CALCULATION.createAction());
+            add(enableFormulaCalculationCheckBox);
         }
     }
 

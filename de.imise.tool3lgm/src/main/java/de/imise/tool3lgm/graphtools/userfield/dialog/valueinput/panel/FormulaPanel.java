@@ -19,13 +19,13 @@ import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.table.model.Abst
  * @see de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.panel.AbstractElementTypeUserFieldEditorPanel
  * @author fstephan
  */
-public class ClassificationNumberFormulaPanel extends AbstractElementTypeUserFieldEditorPanel {
+public class FormulaPanel extends AbstractElementTypeUserFieldEditorPanel {
 
     /**
      * @param dialog
      * @param name
      */
-    public ClassificationNumberFormulaPanel(final UserFieldEditorDialog dialog, final String name) {
+    public FormulaPanel(final UserFieldEditorDialog dialog, final String name) {
         this(dialog, Node.class, name);
     }
 
@@ -34,20 +34,20 @@ public class ClassificationNumberFormulaPanel extends AbstractElementTypeUserFie
      * @param selectableElementClass
      * @param name
      */
-    public ClassificationNumberFormulaPanel(final UserFieldEditorDialog dialog, final Class<? extends ModelElement> selectableElementClass, final String name) {
-        super(dialog, selectableElementClass, UserField.Style.CLASSIFICATION_NUMBER_FORMULA, name);
+    public FormulaPanel(final UserFieldEditorDialog dialog, final Class<? extends ModelElement> selectableElementClass, final String name) {
+        super(dialog, selectableElementClass, UserField.Style.FORMULA, name);
     }
 
     @Override
     protected UserFieldTableController getTableController(final AbstractUserFieldTableModel uftm) {
-        return UserFieldTableController.getNewClassificationNumberFormulaTableController(uftm);
+        return UserFieldTableController.getNewFormulaTableController(uftm);
     }
 
     @Override
     public boolean hasValues() {
         UserFieldDefinitions definitions = dialog.getUserFieldDefinitions();
         UserFieldDefinitionsAnalyzer analyzer = definitions.getAnalyzer();
-        boolean hasValues = analyzer.hasStyle(Style.CLASSIFICATION_NUMBER_FORMULA);
+        boolean hasValues = analyzer.hasStyle(Style.FORMULA);
         return hasValues;
     }
 }

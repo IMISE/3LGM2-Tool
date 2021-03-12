@@ -5,8 +5,8 @@ import static de.imise.tool3lgm.graphtools.userfield.UserField.CHECKBOX_FALSE;
 import static de.imise.tool3lgm.graphtools.userfield.UserField.CHECKBOX_TRUE;
 import static de.imise.tool3lgm.graphtools.userfield.UserField.EMPTY_STRING;
 import static de.imise.tool3lgm.graphtools.userfield.UserField.Style.CHECK_BOX;
-import static de.imise.tool3lgm.graphtools.userfield.UserField.Style.CLASSIFICATION_NUMBER;
-import static de.imise.tool3lgm.graphtools.userfield.UserField.Style.CLASSIFICATION_NUMBER_FORMULA;
+import static de.imise.tool3lgm.graphtools.userfield.UserField.Style.NUMBER;
+import static de.imise.tool3lgm.graphtools.userfield.UserField.Style.FORMULA;
 import static de.imise.tool3lgm.graphtools.userfield.UserField.Style.COMBO_BOX;
 import static de.imise.tool3lgm.graphtools.userfield.UserField.Style.HYPERLINK;
 import static de.imise.tool3lgm.graphtools.userfield.UserField.Style.ID;
@@ -163,7 +163,7 @@ public class PropertyDialogUserFieldPanel extends ElementDialogPanel implements 
     public static String getUserFieldValue(final ModelElement me, final UserField userField, final boolean format) {
         String value = format ? userField.getFormattedValue(me, true) : userField.getValue(me);
         UserField.Style style = userField.getStyle();
-        if (style != CLASSIFICATION_NUMBER_FORMULA) {
+        if (style != FORMULA) {
             if (value.equals(EMPTY_STRING)) {
                 value = "";
             }
@@ -285,7 +285,7 @@ public class PropertyDialogUserFieldPanel extends ElementDialogPanel implements 
             hyperlinkPanel.add(button, BorderLayout.EAST);
             editorComponent = hyperlinkPanel;
             //Kennzahlen:
-        } else if (style == CLASSIFICATION_NUMBER) {
+        } else if (style == NUMBER) {
             // Wenn für die Kennzazhl ein gültiger Wert eingegeben ist, dann kann hier ein NumberTextField initialisiert werden.
             // Sollte das Fehlschlagen, muss ein normales JTextField hinzugefügt werden, das keine Wertformatierung vornimmt.
             NumberFormat numberFormat = field.getNumberFormat();
@@ -295,7 +295,7 @@ public class PropertyDialogUserFieldPanel extends ElementDialogPanel implements 
                 numberTextField.setValue(value);
             }
             editorComponent = numberTextField;
-        } else if (style == CLASSIFICATION_NUMBER_FORMULA) {
+        } else if (style == FORMULA) {
             JTextField textField = new JTextField();
             textField.setEditable(false);
             ModelElement me = getModelElement();
@@ -350,7 +350,7 @@ public class PropertyDialogUserFieldPanel extends ElementDialogPanel implements 
     private void registerChangeListener(final JComponent component, final UserField userField) {
         if (component instanceof JTextComponent) {
             JTextComponent textComponent = (JTextComponent) component;
-            if (userField.hasStyle(CLASSIFICATION_NUMBER)) {
+            if (userField.hasStyle(NUMBER)) {
                 ModelElement me = getModelElement();
                 PropertyDialogUserFieldPanelNumberInputFocusListener inputFieldFocusListener = new PropertyDialogUserFieldPanelNumberInputFocusListener(changeHandler, me, userField);
                 textComponent.addFocusListener(inputFieldFocusListener);
@@ -410,7 +410,7 @@ public class PropertyDialogUserFieldPanel extends ElementDialogPanel implements 
 
     private JLabel getLabel(final UserField field) {
         Style style = field.getStyle();
-        if (style == CLASSIFICATION_NUMBER || style == CLASSIFICATION_NUMBER_FORMULA) {
+        if (style == NUMBER || style == FORMULA) {
             String unit = field.getFormatUnit();
             StringBuilder einheit = new StringBuilder("");
             if (unit != null) {
@@ -495,7 +495,7 @@ public class PropertyDialogUserFieldPanel extends ElementDialogPanel implements 
         for (int i = 0; i < fieldComponents.size(); i++) {
             UserFieldEditorComponent userFieldEditorComponent = fieldComponents.get(i);
             UserField userField = userFieldEditorComponent.userField;
-            if (userField.hasStyle(CLASSIFICATION_NUMBER_FORMULA)) {
+            if (userField.hasStyle(FORMULA)) {
                 JTextField formulaTextField = (JTextField) userFieldEditorComponent.editorComponent;
                 ModelElement me = getModelElement();
                 String formattedValue = userField.getFormattedValue(me, true);
@@ -558,7 +558,7 @@ public class PropertyDialogUserFieldPanel extends ElementDialogPanel implements 
         } else if (style == ID) {
             newValue = ((JTextComponent) editorComponent).getText();
 
-        } else if (style == CLASSIFICATION_NUMBER) {
+        } else if (style == NUMBER) {
             Object textFieldValue = "";
             NumberTextField textField = (NumberTextField) editorComponent;
             textFieldValue = textField.getText();

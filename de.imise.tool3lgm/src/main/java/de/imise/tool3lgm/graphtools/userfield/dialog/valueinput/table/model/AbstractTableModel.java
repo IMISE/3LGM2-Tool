@@ -36,9 +36,9 @@ public abstract class AbstractTableModel extends DefaultTableModel {
 
     ///////////////////////////////////////////////
     /// Konstanten für die Auswahl              ///
-    /// der im ClassificationNumberPanel        ///
+    /// der im NumberPanel                      ///
     /// anzuzeigenden Elemente.                 ///
-    /// Ist in createClassificationNumberModel( ///
+    /// Ist in createNumberModel(                  ///
     /// Class elementClass, GraphDocument doc,  ///
     /// int elementTypesToShow) für             ///
     /// "elementTypesToShow" anzuwenden         ///

@@ -193,9 +193,9 @@ public class OperatorInputPanel extends JPanel implements ActionListener {
                 if (uf == userField) {
                     found = true;
                 }
-                if (uf.isClassificationUserField()) {
+                if (uf.isNumberUserField()) {
                     if (uf.getName().trim().equals("")) {
-                        String name = getResString("this_classification_number");
+                        String name = getResString("this_calculation_formula");
                         connectedAttributesBox.addSeparator(true);
                         connectedAttributesBox.addObject(uf, name);
                     } else {
@@ -209,7 +209,7 @@ public class OperatorInputPanel extends JPanel implements ActionListener {
         } else if (!found && assignableClass) {
             String name = userField.getName().trim();
             if (name.equals("")) {
-                name = getResString("this_classification_number");
+                name = getResString("this_calculation_formula");
             }
             connectedAttributesBox.addSeparator(true);
             connectedAttributesBox.addObject(userField, name);

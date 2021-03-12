@@ -3,7 +3,7 @@ package de.imise.tool3lgm.graphtools.userfield;
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
 import static de.imise.tool3lgm.graphtools.userfield.UserFieldDefinitions.GLOBAL_FORMAT_IDENTIFIER_CLASS;
 import static de.imise.tool3lgm.graphtools.userfield.UserFieldDefinitions.GLOBAL_USERFIELD_IDENTIFIER_CLASS;
-import static de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty.OPTION_ENABLE_CLASSIFICATION_NUMBER_CALCULATION;
+import static de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty.OPTION_ENABLE_FORMULA_CALCULATION;
 
 import java.math.BigDecimal;
 import java.text.NumberFormat;
@@ -110,13 +110,13 @@ public final class UserField implements Cloneable, Comparator<UserFieldTarget>, 
                 return alphabeticalCompare(uf, me1, me2);
             }
         },
-        CLASSIFICATION_NUMBER {
+        NUMBER {
             @Override
             int compare(final UserField uf, final UserFieldTarget me1, final UserFieldTarget me2) {
                 return numberCompare(uf, me1, me2);
             }
         },
-        CLASSIFICATION_NUMBER_FORMULA {
+        FORMULA {
             @Override
             int compare(final UserField uf, final UserFieldTarget me1, final UserFieldTarget me2) {
                 return numberCompare(uf, me1, me2);
@@ -135,7 +135,7 @@ public final class UserField implements Cloneable, Comparator<UserFieldTarget>, 
          */
         ;
 
-        public static final Set<Style> CLASSIFICATION_NUMBER_STYLES = ImmutableSet.of(CLASSIFICATION_NUMBER, CLASSIFICATION_NUMBER_FORMULA);
+        public static final Set<Style> NUMBER_STYLES = ImmutableSet.of(NUMBER, FORMULA);
 
         /**
          * Vergleicht die beiden UserFields hinsichtlich ihres Wertes bezüglich
@@ -210,62 +210,6 @@ public final class UserField implements Cloneable, Comparator<UserFieldTarget>, 
             return getResString(name());
         }
     }
-
-    //Die Konstanten für die Styles
-    //	/**
-    //	 * Comment for <code>SEPARATOR_STYLE</code>
-    //	 * /
-    //	public static final int SEPARATOR_STYLE = 0;
-    //
-    //	/**
-    //	 * Comment for <code>SINGLE_LINE_STYLE</code>
-    //	 * /
-    //	public static final int SINGLE_LINE_STYLE = 1;
-    //
-    //	/**
-    //	 * Comment for <code>MULTI_LINE_STYLE</code>
-    //	 * /
-    //	public static final int MULTI_LINE_STYLE = 2;
-    //
-    //	/**
-    //	 * Comment for <code>CHECK_BOX_STYLE</code>
-    //	 * /
-    //	public static final int CHECK_BOX_STYLE = 3;
-    //
-    //	/**
-    //	 * Comment for <code>COMBO_BOX_STYLE</code>
-    //	 * /
-    //	public static final int COMBO_BOX_STYLE = 4;
-    //
-    //	/**
-    //	 * Comment for <code>RADIO_BUTTON_STYLE</code>
-    //	 * /
-    //	public static final int RADIO_BUTTON_STYLE = 5;
-    //
-    //	/**
-    //	 * Comment for <code>HYPERLINK_STYLE</code>
-    //	 * /
-    //	public static final int HYPERLINK_STYLE = 6;
-    //
-    //	/**
-    //	 * Comment for <code>CLASSIFICATION_NUMBER_STYLE</code>
-    //	 * /
-    //	public static final int CLASSIFICATION_NUMBER_STYLE = 7;
-    //
-    //	/**
-    //	 * Comment for <code>CLASSIFICATION_WEIGHTING_STYLE</code>
-    //	 * /
-    //	public static final int _CLASSIFICATION_WEIGHTING_STYLE = 8;
-    //
-    //	/**
-    //	 * Comment for <code>CLASSIFICATION_NUMBER_FORMULA_STYLE</code>
-    //	 * /
-    //	public static final int CLASSIFICATION_NUMBER_FORMULA_STYLE = 9;
-    //
-    //	/**
-    //	 * Comment for <code>FORMAT_STYLE</code>
-    //	 * /
-    //	public static final int FORMAT_STYLE = 10;
 
     /**
      * Wert eines UserFields vom Typ {@link Style#CHECK_BOX}: "Häkchen gesetzt"
@@ -572,7 +516,7 @@ public final class UserField implements Cloneable, Comparator<UserFieldTarget>, 
             addListValue(value);
         } else if (fieldName.equals("userFieldFormula")) {
             setFormula(value);
-            style = Style.CLASSIFICATION_NUMBER_FORMULA;
+            style = Style.FORMULA;
         } else if (fieldName.equals("userFieldFormatHash")) {
             setFormatUserField(definitions.getUserField(value));
         } else if (fieldName.equals("userFieldFormatString")) {
@@ -611,13 +555,12 @@ public final class UserField implements Cloneable, Comparator<UserFieldTarget>, 
 
     /**
      * Liefert <code>true</code>, wemm der Style dieses UserFields
-     * <code>CLASSIFICATION_NUMBER</code> oder
-     * <code>CLASSIFICATION_NUMBER_FORMULA</code> ist.
+     * <code>NUMBER</code> oder <code>FORMULA</code> ist.
      *
      * @return
      */
     public boolean hasClassfificationStyle() {
-        return isClassificationStyle(style);
+        return hasNumberStyle(style);
     }
 
     /**
@@ -668,8 +611,8 @@ public final class UserField implements Cloneable, Comparator<UserFieldTarget>, 
      *
      * @return
      */
-    public static boolean isClassificationStyle(final Style style) {
-        return Style.CLASSIFICATION_NUMBER_STYLES.contains(style);
+    public static boolean hasNumberStyle(final Style style) {
+        return Style.NUMBER_STYLES.contains(style);
     }
 
     /**
@@ -692,7 +635,7 @@ public final class UserField implements Cloneable, Comparator<UserFieldTarget>, 
      * @return
      */
     public final boolean isIndicatorFormula() {
-        return style == Style.CLASSIFICATION_NUMBER_FORMULA && formulaString != null && formulaString.trim().startsWith(ACCOUNTING_FUNCTION_INDI);
+        return style == Style.FORMULA && formulaString != null && formulaString.trim().startsWith(ACCOUNTING_FUNCTION_INDI);
     }
 
     public final boolean isSimplePartValueSumFormula() {
@@ -716,8 +659,8 @@ public final class UserField implements Cloneable, Comparator<UserFieldTarget>, 
      *
      * @return
      */
-    public boolean isClassificationUserField() {
-        return isClassificationStyle(style);
+    public boolean isNumberUserField() {
+        return hasNumberStyle(style);
     }
 
     /**
@@ -729,7 +672,7 @@ public final class UserField implements Cloneable, Comparator<UserFieldTarget>, 
      *         Kennzahlformeln repräsentiert - ansonsten false
      */
     public boolean setFormula(final String formulaString) {
-        if (style != Style.CLASSIFICATION_NUMBER_FORMULA) {
+        if (style != Style.FORMULA) {
             return false;
         }
         this.formulaString = formulaString;
@@ -1002,12 +945,10 @@ public final class UserField implements Cloneable, Comparator<UserFieldTarget>, 
         String retVal = null;
         if (style == Style.SEPARATOR) {
             retVal = "--- " + name + " ---";
+        } else if (Strings.isNullOrEmpty(description)) {
+            retVal = name;
         } else {
-            if (Strings.isNullOrEmpty(description)) {
-                retVal = name;
-            } else {
-                retVal = name + " (" + description + ")";
-            }
+            retVal = name + " (" + description + ")";
         }
         return retVal;
     }
@@ -1066,9 +1007,9 @@ public final class UserField implements Cloneable, Comparator<UserFieldTarget>, 
      */
     public String getValue(final UserFieldTarget target) {
         //wenn es eine Kennzahlformel ist, deren Wert ermittelt werden soll
-        if (style == Style.CLASSIFICATION_NUMBER_FORMULA) {
+        if (style == Style.FORMULA) {
             //wenn die globale Option der Berechnung eingeschaltet ist
-            if (OPTION_ENABLE_CLASSIFICATION_NUMBER_CALCULATION.is()) {
+            if (OPTION_ENABLE_FORMULA_CALCULATION.is()) {
                 //alle berechneten Kennzahl Werte löschen
                 definitions.reset();
                 //falls das reset nicht ausgeführt wurde, da sich nichts geändert
@@ -1296,7 +1237,7 @@ public final class UserField implements Cloneable, Comparator<UserFieldTarget>, 
         if (formatUserField == possibleUsedField) {
             return true;
         }
-        if (style == Style.CLASSIFICATION_NUMBER_FORMULA) {
+        if (style == Style.FORMULA) {
             Set<String> idsInFormula = getIDsInFormula();
             if (idsInFormula != null && getIDsInFormula().contains(possibleUsedField.id)) {
                 return true;

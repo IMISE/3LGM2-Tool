@@ -578,7 +578,7 @@ public final class ModelBrowserTree extends DynamicTree implements UserFieldList
         Class<? extends ModelElement> elementClass = me.getClass();
         for (UserField uf : ufDefs.getUserFields(elementClass)) {
             if (uf.isTreeVisibility()) {
-                if (uf.hasStyle(UserField.Style.HYPERLINK) || uf.hasStyle(UserField.Style.SEPARATOR) || uf.isClassificationUserField() || allOfThisElement.contains(uf)) {
+                if (uf.hasStyle(UserField.Style.HYPERLINK) || uf.hasStyle(UserField.Style.SEPARATOR) || uf.isNumberUserField() || allOfThisElement.contains(uf)) {
                     UserFieldTreeNode userFieldTreeNode = new UserFieldTreeNode(uf, me);
                     elementNode.add(userFieldTreeNode);
                 }

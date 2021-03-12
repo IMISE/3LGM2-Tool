@@ -36,7 +36,7 @@ public class WeightReplaceTableModel extends AbstractTableModel {
         //Elementklassen in den Zeilen
         List<ModelElement> allRowElements = doc.getModelItems(elementClass, false, true);
         //Alle KennzahluserFields in den Spalten
-        List<UserField> allColumnElements = definitions.getUserFields(edgeClass, UserField.Style.CLASSIFICATION_NUMBER_STYLES);
+        List<UserField> allColumnElements = definitions.getUserFields(edgeClass, UserField.Style.NUMBER_STYLES);
         //Platzhalter für die Gleichverteilung
         allColumnElements.add(0, null);
 

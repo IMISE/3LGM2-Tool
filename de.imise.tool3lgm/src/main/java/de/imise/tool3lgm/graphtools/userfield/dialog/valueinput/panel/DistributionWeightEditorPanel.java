@@ -94,7 +94,7 @@ public class DistributionWeightEditorPanel extends AbstractElementTypeUserFieldE
      * @param name
      */
     public DistributionWeightEditorPanel(final UserFieldEditorDialog dialog, final String name) {
-        super(dialog, Edge.class, UserField.Style.CLASSIFICATION_NUMBER_STYLES, name);
+        super(dialog, Edge.class, UserField.Style.NUMBER_STYLES, name);
         initWeightBox();
         initColumnFilterBox();
     }
@@ -192,7 +192,7 @@ public class DistributionWeightEditorPanel extends AbstractElementTypeUserFieldE
         weightBox.addSeparator(getResString("weighting"));
 
         for (UserField uf : definitions.getUserFields(elementTypeBoxSelection)) {
-            if (uf.isClassificationUserField()) {
+            if (uf.isNumberUserField()) {
                 weightBox.addObject(uf);
             }
         }

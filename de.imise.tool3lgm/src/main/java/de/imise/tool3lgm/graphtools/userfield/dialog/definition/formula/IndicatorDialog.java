@@ -148,7 +148,7 @@ public class IndicatorDialog extends JDialog implements ActionListener {
                 //die Funktion private String getIndi(final UserFieldTarget target, final String indicatorFormula) im Calculator
                 //setzt den Wert eines Indikators auf einen String, der sich nicht mehr in BigDecimal() umwandeln lässt. Daher kann
                 //man keine Inidikatoren für Indikatoren definieren, was aber auch nicht umbedingt notwendig ist.
-                if (uf.isClassificationUserField() && !uf.isIndicatorFormula()) {
+                if (uf.isNumberUserField() && !uf.isIndicatorFormula()) {
                     userFieldComboBox.addObject(uf);
                 }
             }
@@ -264,7 +264,7 @@ public class IndicatorDialog extends JDialog implements ActionListener {
      * Dialog mit schon vorhandenen Indikationsbereichen gefüllt.
      */
     private void fillIndiValues() {
-        if (userField.hasStyle(UserField.Style.CLASSIFICATION_NUMBER_FORMULA)) {
+        if (userField.hasStyle(UserField.Style.FORMULA)) {
             //	userFieldComboBox.setSelectedItem(definitions.getUserField());
             String indi = userField.getFormula();
             if (indi != null) {

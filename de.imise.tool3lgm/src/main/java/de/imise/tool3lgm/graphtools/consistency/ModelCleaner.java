@@ -4,7 +4,7 @@ import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
 import static de.imise.tool3lgm.graphtools.undoredo.TransactionManager.STANDARD_PID;
 import static de.imise.tool3lgm.graphtools.userfield.UserField.EMPTY_STRING;
 import static de.imise.tool3lgm.graphtools.userfield.UserField.Style.CHECK_BOX;
-import static de.imise.tool3lgm.graphtools.userfield.UserField.Style.CLASSIFICATION_NUMBER;
+import static de.imise.tool3lgm.graphtools.userfield.UserField.Style.NUMBER;
 import static de.imise.tool3lgm.graphtools.userfield.UserField.Style.COMBO_BOX;
 import static de.imise.tool3lgm.graphtools.userfield.UserField.Style.RADIO_BUTTON;
 
@@ -275,7 +275,7 @@ public class ModelCleaner {
                 if (uf == null) {
                     continue;
                 }
-                if (uf.getStyle() == RADIO_BUTTON || uf.getStyle() == COMBO_BOX || uf.getStyle() == CLASSIFICATION_NUMBER) {
+                if (uf.getStyle() == RADIO_BUTTON || uf.getStyle() == COMBO_BOX || uf.getStyle() == NUMBER) {
                     String value = me.getUserFieldInputValue(uf);
                     for (String superFlous : superflousStrings) {
                         int superFlousStart = value.indexOf(superFlous);

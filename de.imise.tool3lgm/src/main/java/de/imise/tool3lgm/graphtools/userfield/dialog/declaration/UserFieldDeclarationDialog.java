@@ -3,8 +3,8 @@ package de.imise.tool3lgm.graphtools.userfield.dialog.declaration;
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
 import static de.imise.tool3lgm.graphtools.model.LGMChangeListener.LGMChangeType.DATA_CHANGED;
 import static de.imise.tool3lgm.graphtools.userfield.UserField.Style.CHECK_BOX;
-import static de.imise.tool3lgm.graphtools.userfield.UserField.Style.CLASSIFICATION_NUMBER;
-import static de.imise.tool3lgm.graphtools.userfield.UserField.Style.CLASSIFICATION_NUMBER_FORMULA;
+import static de.imise.tool3lgm.graphtools.userfield.UserField.Style.NUMBER;
+import static de.imise.tool3lgm.graphtools.userfield.UserField.Style.FORMULA;
 import static de.imise.tool3lgm.graphtools.userfield.UserField.Style.COMBO_BOX;
 import static de.imise.tool3lgm.graphtools.userfield.UserField.Style.HYPERLINK;
 import static de.imise.tool3lgm.graphtools.userfield.UserField.Style.ID;
@@ -154,9 +154,9 @@ public final class UserFieldDeclarationDialog extends AbstractUserFieldDeclarati
 
         // Die Kennzahl kann immer zu Auswahl gestellt werden.
         //Nur wenn es sich um eine Modellvariable handelt, darf die Kennzahlformel nicht angeboten werden, sonst schon
-        addType(CLASSIFICATION_NUMBER);
+        addType(NUMBER);
         if (!classComboBox.isGlobalUserFieldClassSelected()) {
-            addType(CLASSIFICATION_NUMBER_FORMULA);
+            addType(FORMULA);
         }
     }
 
