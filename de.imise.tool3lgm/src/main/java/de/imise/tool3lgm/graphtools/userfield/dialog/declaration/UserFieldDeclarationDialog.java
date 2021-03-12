@@ -3,12 +3,12 @@ package de.imise.tool3lgm.graphtools.userfield.dialog.declaration;
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
 import static de.imise.tool3lgm.graphtools.model.LGMChangeListener.LGMChangeType.DATA_CHANGED;
 import static de.imise.tool3lgm.graphtools.userfield.UserField.Style.CHECK_BOX;
-import static de.imise.tool3lgm.graphtools.userfield.UserField.Style.NUMBER;
-import static de.imise.tool3lgm.graphtools.userfield.UserField.Style.FORMULA;
 import static de.imise.tool3lgm.graphtools.userfield.UserField.Style.COMBO_BOX;
+import static de.imise.tool3lgm.graphtools.userfield.UserField.Style.FORMULA;
 import static de.imise.tool3lgm.graphtools.userfield.UserField.Style.HYPERLINK;
 import static de.imise.tool3lgm.graphtools.userfield.UserField.Style.ID;
 import static de.imise.tool3lgm.graphtools.userfield.UserField.Style.MULTI_LINE;
+import static de.imise.tool3lgm.graphtools.userfield.UserField.Style.NUMBER;
 import static de.imise.tool3lgm.graphtools.userfield.UserField.Style.RADIO_BUTTON;
 import static de.imise.tool3lgm.graphtools.userfield.UserField.Style.SEPARATOR;
 import static de.imise.tool3lgm.graphtools.userfield.UserField.Style.SINGLE_LINE;
@@ -32,6 +32,7 @@ import javax.swing.event.ListSelectionListener;
 
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.userfield.UserField;
+import de.imise.tool3lgm.graphtools.userfield.UserField.Style;
 import de.imise.tool3lgm.graphtools.userfield.UserFieldDefinitions;
 import de.imise.tool3lgm.graphtools.userfield.UserFieldTarget;
 import de.imise.tool3lgm.graphtools.userfield.dialog.definition.UserFieldDefinitionDialog;
@@ -140,28 +141,47 @@ public final class UserFieldDeclarationDialog extends AbstractUserFieldDeclarati
      * Kostenmodell nicht braucht.
      */
     private void updateUserFieldTypeComboBox() {
-
         userFieldTypeComboBox.removeAllItems();
+        if (!classComboBox.isGlobalUserFieldClassSelected()) {
 
-        addType(CHECK_BOX);
-        addType(COMBO_BOX);
-        addType(HYPERLINK);
-        addType(MULTI_LINE);
-        addType(RADIO_BUTTON);
-        addType(SEPARATOR);
-        addType(SINGLE_LINE);
-        addType(ID);
+            addStyleCategory("STYLE_TYPE_TEXT");
+            addStyle(SINGLE_LINE);
+            addStyle(MULTI_LINE);
 
+            addStyleCategory("STYLE_TYPE_LIST");
+            addStyle(CHECK_BOX);
+            addStyle(COMBO_BOX);
+            addStyle(RADIO_BUTTON);
+        }
+
+        //Models have not an property dialog to present the properties
+        addStyleCategory("STYLE_TYPE_ACCOUNTING");
         // Die Kennzahl kann immer zu Auswahl gestellt werden.
         //Nur wenn es sich um eine Modellvariable handelt, darf die Kennzahlformel nicht angeboten werden, sonst schon
-        addType(NUMBER);
+        addStyle(NUMBER);
         if (!classComboBox.isGlobalUserFieldClassSelected()) {
-            addType(FORMULA);
+            addStyle(FORMULA);
+
+            addStyleCategory("STYLE_TYPE_SPECIAL");
+            addStyle(HYPERLINK);
+            addStyle(ID);
+            addStyle(SEPARATOR);
         }
     }
 
-    private void addType(final UserField.Style style) {
+    /**
+     * @param style
+     */
+    private void addStyle(final Style style) {
         userFieldTypeComboBox.addObject(style);
+    }
+
+    /**
+     * @param resKey
+     */
+    private void addStyleCategory(final String resKey) {
+        String separatorName = getResString(resKey);
+        userFieldTypeComboBox.addSeparator(separatorName);
     }
 
     private ActionEvent lastActionEvent = null;

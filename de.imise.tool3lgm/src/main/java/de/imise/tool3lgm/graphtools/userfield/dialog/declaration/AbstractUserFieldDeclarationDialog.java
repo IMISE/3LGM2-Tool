@@ -81,7 +81,7 @@ public abstract class AbstractUserFieldDeclarationDialog extends AbstractSizeAnd
         MetaModel metaModel = definitions.getMetaModel();
         classComboBox = new UserFieldDeclarationDialogClassComboBox(metaModel, 13);
         fieldList = new UserFieldDeclarationDialogFieldList(definitions);
-        userFieldTypeComboBox = new AlphabeticalComboBox<>();
+        userFieldTypeComboBox = new AlphabeticalComboBox<>(3);
 
         newButton = createButton("new");
         editButton = createDisabledButton("userFieldDeclarationDialog_editButtonText");
