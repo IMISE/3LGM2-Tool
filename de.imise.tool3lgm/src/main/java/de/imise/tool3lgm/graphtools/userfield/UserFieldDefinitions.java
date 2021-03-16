@@ -619,8 +619,6 @@ public final class UserFieldDefinitions extends UserFieldDefinitionChangeHandler
             }
             MultipleOptionPane.showInformationMessageDialog(Static.getMainFrame(), getResString("fehler"), sb.toString());
             return true;
-            //die Globale Option die Kennzahlen zu berechnen erstam abschalten
-            //          UserProperties.setEnableClassificationNumberCalculation(false);
         }
         return false;
     }

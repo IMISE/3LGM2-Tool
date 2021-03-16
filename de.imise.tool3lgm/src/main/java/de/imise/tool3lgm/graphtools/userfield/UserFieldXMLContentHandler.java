@@ -10,6 +10,7 @@ import org.xml.sax.Locator;
 import org.xml.sax.SAXException;
 
 import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
+import de.imise.tool3lgm.graphtools.userfield.UserField.Style;
 
 /**
  * Die Variablen sind auf protected Gesetzt, damit man einen neuen
@@ -25,7 +26,8 @@ import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 public class UserFieldXMLContentHandler implements ContentHandler {
 
     private final UserFieldDefinitions definitions;
-    private UserField field;
+
+    private UserField userField;
 
     /**
      * String der in der characters Methode ausgelesen wird (Werte eines Tags)
@@ -36,7 +38,6 @@ public class UserFieldXMLContentHandler implements ContentHandler {
      *
      */
     public UserFieldXMLContentHandler(final UserFieldDefinitions def) {
-        super();
         definitions = def;
     }
 
@@ -70,10 +71,10 @@ public class UserFieldXMLContentHandler implements ContentHandler {
             String elementClass = atts.getValue("elementClass");
             //bei Modellvariablen ist die Elementclass null
             if (elementClass == null) {
-                field = new UserField(atts.getValue("hash"), definitions);
+                userField = new UserField(atts.getValue("hash"), definitions);
             } else {
                 MetaModel metaModel = definitions.getMetaModel();
-                field = new UserField(metaModel.getClassForName(elementClass), atts.getValue("hash"), definitions);
+                userField = new UserField(metaModel.getClassForName(elementClass), atts.getValue("hash"), definitions);
             }
         } else if (qName.equals("userFieldName")) {
 
@@ -103,15 +104,24 @@ public class UserFieldXMLContentHandler implements ContentHandler {
     @Override
     public void endElement(final String namespaceURI, final String localName, final String qName) throws SAXException {
         if (qName.equals("userFieldDef")) {
-            definitions.add(field);
+            definitions.add(userField);
         } else if (qName.equals("userFieldDefinitions")) {
 
         } else if (qName.equals("userFieldName") || qName.equals("userFieldDescription") || qName.equals("userFieldStyle") || qName.equals("userFieldTreeVis") || qName.equals("userFieldStandardValue") || qName.equals("userFieldInternalAccounting")
                 || qName.equals("userFieldInternalAccountingWeightUserFieldHash") || qName.equals("userFieldFormula") || qName.equals("userFieldFormatString") || qName.equals("userFieldFormatHash")) {
-            if (field == null) {
+            if (userField == null) {
                 throw new SAXException("Error while parsing definition of userFields: userFiel shouldn't not be equals to null");
             }
-            field.putXMLFieldString(qName, elementValue.toString());
+            String value = elementValue.toString();
+            if (qName.equals("userFieldStyle")) {
+                //Style.NUMER was Style.CLASSIFICATION_NUMBER and Style.FORMULA was Style.CLASSIFICATION_NUMBER_FORMULA
+                if (value.equals("CLASSIFICATION_NUMBER")) {
+                    value = Style.NUMBER.name();
+                } else if (value.equals("CLASSIFICATION_NUMBER_FORMULA")) {
+                    value = Style.FORMULA.name();
+                }
+            }
+            userField.putXMLFieldString(qName, value);
         } else {
             throw new SAXException("Unknown xml-tag: " + qName);
         }
