@@ -117,7 +117,7 @@ public class ToolXMLParser {
         version = extractVersionAndMetaModel(parseStream);
         if (!paste) {
             Tool3lgmModelType modelType = new Tool3lgmModelType(version.metaModelContext, version.modelCategory);
-            gdcoll.setModelType(modelType);
+            gdcoll.setModelType(modelType, false);
         }
 
         /* XML Version */

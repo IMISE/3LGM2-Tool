@@ -298,7 +298,7 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
     private final List<LGMChangeEvent> changeEvents = new ArrayList<>();
 
     /**
-     * @param templateModel
+     * Creates a new Model without setting the model type
      */
     public GDCollection() {
         fileHandler = new GDCollectionFileHandler(this);
@@ -308,12 +308,28 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
     }
 
     /**
-     * @param metaModelContext
-     * @param templateModel
+     * Creates a new Model with the specified model type and without loading the
+     * default {@link UserFieldDefinitions}.
+     *
+     * @param modelype the context that contains the metamodel of this model and
+     *            the corresponding resource bundle and the type of the model
      */
     public GDCollection(@Nonnull final Tool3lgmModelType modelType) {
+        this(modelType, false);
+    }
+
+    /**
+     * Creates a new model with the specified model type and with optionally
+     * loading the default {@link UserFieldDefinitions}.
+     *
+     * @param modelype the context that contains the metamodel of this model and
+     *            the corresponding resource bundle and the type of the model
+     * @param loadDefaultUserFieldDefinition if <code>true</code> the default
+     *            {@link UserFieldDefinitions} will be loaded
+     */
+    public GDCollection(@Nonnull final Tool3lgmModelType modelType, final boolean loadDefaultUserFieldDefinition) {
         this();
-        setModelType(modelType);
+        setModelType(modelType, loadDefaultUserFieldDefinition);
     }
 
     /**
@@ -361,15 +377,19 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
      *
      * @param modelype the context that contains the metamodel of this model and
      *            the corresponding resource bundle and the type of the model
+     * @param loadDefaultUserFieldDefinition if <code>true</code> the default
+     *            {@link UserFieldDefinitions} will be loaded
      */
-    public void setModelType(final Tool3lgmModelType modelType) {
+    public void setModelType(final Tool3lgmModelType modelType, final boolean loadDefaultUserFieldDefinition) {
         this.modelType = modelType;
         metaModel = modelType.getMetaModel();
         mainDoc = new LGMGraphDocument(this);
         userFieldDefinitions = new UserFieldDefinitions(this);
         addClosedTransactionsListener(userFieldDefinitions);
         activeGraphDocumentsList.add(mainDoc);
-        UserfieldResourceHandler.loadDefaultUserfieldDefinition(this);
+        if (loadDefaultUserFieldDefinition) {
+            UserfieldResourceHandler.loadDefaultUserfieldDefinition(this);
+        }
     }
 
     /**
