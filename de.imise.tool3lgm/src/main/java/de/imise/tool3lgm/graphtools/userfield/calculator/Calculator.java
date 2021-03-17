@@ -142,7 +142,7 @@ public class Calculator {
 
     private String calculateInternal(final UserField userField, final UserFieldTarget userFieldTarget) {
         //Modellvariablen berechnen
-        if (userField.isGlobalOrFormat()) {
+        if (userField.isGlobal()) {
             //Modellvariablen berechnen (sowas gibts im Moment noch gar nicht,
             //aber wenn, dann muss das hier passieren)
             return "";
@@ -279,7 +279,7 @@ public class Calculator {
                      * UserField.EMPTY_STRING; /// TESTAUSGABE ENDE ///
                      */
                     String ufValue = "";
-                    if (tmp_userField != null && tmp_userField.isGlobalOrFormat()) {
+                    if (tmp_userField != null && tmp_userField.isGlobal()) {
                         ufValue = definitions.getCollection().getUserFieldInputValue(tmp_userField);
                     } else {
                         ufValue = tmp_userField.getValue(me);

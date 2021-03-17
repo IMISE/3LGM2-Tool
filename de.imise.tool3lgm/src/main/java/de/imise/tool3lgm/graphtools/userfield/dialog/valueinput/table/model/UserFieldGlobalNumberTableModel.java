@@ -35,9 +35,7 @@ public class UserFieldGlobalNumberTableModel extends AbstractUserFieldTableModel
         // Liste aller globalen UserFields erstellen
         ArrayList<UserField> userFieldList = new ArrayList<>();
         for (UserField uf : definitions.getGlobalUserFields()) {
-            if (!uf.hasStyle(UserField.Style.FORMAT)) {
-                userFieldList.add(uf);
-            }
+            userFieldList.add(uf);
         }
 
         // Wenn keine Modelldaten existieren, wird auch keine Table angezeigt

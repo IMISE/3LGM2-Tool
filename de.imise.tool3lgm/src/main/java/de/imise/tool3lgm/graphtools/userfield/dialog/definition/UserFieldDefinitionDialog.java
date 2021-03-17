@@ -137,7 +137,7 @@ public final class UserFieldDefinitionDialog extends AbstractPropertyDialog impl
         } else if (CoreMetaModel.isEdgeType(targetClass)) {
             Class<? extends Edge> edgeClass = targetClass.asSubclass(Edge.class);
             sb.append(elementsNameBuilder.getMetaAssociationName(edgeClass, Direction.FORWARD, ConnectionState.DOUBLE, true, true));
-        } else if (userField.isGlobalOrFormat()) {
+        } else if (userField.isGlobal()) {
             sb.append(getResString("userFieldEditor_global"));
         }
         sb.append("      ");

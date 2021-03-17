@@ -5,6 +5,7 @@ import java.math.BigDecimal;
 import com.google.common.base.Strings;
 
 import de.imise.tool3lgm.graphtools.userfield.UserField;
+import de.imise.tool3lgm.graphtools.userfield.UserFieldNumberFormat;
 import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.table.model.AbstractTableModel;
 import de.imise.util.NamedObjectContainer;
 
@@ -53,7 +54,8 @@ public class UserFieldTableSumHandler {
         if (lastCallHadValidValues) {
             String sum = sumValue.toString();
             if (formatSource != null) {
-                returnValue = UserField.getFormattedValue(sum, formatSource.getFormatUserField(), true);
+                UserFieldNumberFormat numberFormat = formatSource.getNumberFormat();
+                returnValue = UserField.getFormattedValue(sum, numberFormat, true);
             }
         }
         return returnValue;

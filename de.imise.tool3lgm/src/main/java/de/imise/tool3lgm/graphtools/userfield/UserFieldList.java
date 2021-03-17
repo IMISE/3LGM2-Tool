@@ -12,9 +12,4 @@ public class UserFieldList extends UserFieldTargetSpecificList<UserField> {
         super(targetClass);
     }
 
-    @Override
-    protected int getInsertIndex(final UserField userField) {
-        return userField.hasStyle(UserField.Style.FORMAT) ? 0 : super.getInsertIndex(userField);
-    }
-
 }

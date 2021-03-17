@@ -5,12 +5,12 @@ import static de.imise.tool3lgm.graphtools.userfield.UserField.CHECKBOX_FALSE;
 import static de.imise.tool3lgm.graphtools.userfield.UserField.CHECKBOX_TRUE;
 import static de.imise.tool3lgm.graphtools.userfield.UserField.EMPTY_STRING;
 import static de.imise.tool3lgm.graphtools.userfield.UserField.Style.CHECK_BOX;
-import static de.imise.tool3lgm.graphtools.userfield.UserField.Style.NUMBER;
-import static de.imise.tool3lgm.graphtools.userfield.UserField.Style.FORMULA;
 import static de.imise.tool3lgm.graphtools.userfield.UserField.Style.COMBO_BOX;
+import static de.imise.tool3lgm.graphtools.userfield.UserField.Style.FORMULA;
 import static de.imise.tool3lgm.graphtools.userfield.UserField.Style.HYPERLINK;
 import static de.imise.tool3lgm.graphtools.userfield.UserField.Style.ID;
 import static de.imise.tool3lgm.graphtools.userfield.UserField.Style.MULTI_LINE;
+import static de.imise.tool3lgm.graphtools.userfield.UserField.Style.NUMBER;
 import static de.imise.tool3lgm.graphtools.userfield.UserField.Style.RADIO_BUTTON;
 import static de.imise.tool3lgm.graphtools.userfield.UserField.Style.SEPARATOR;
 import static de.imise.tool3lgm.graphtools.userfield.UserField.Style.SINGLE_LINE;
@@ -288,9 +288,9 @@ public class PropertyDialogUserFieldPanel extends ElementDialogPanel implements 
         } else if (style == NUMBER) {
             // Wenn für die Kennzazhl ein gültiger Wert eingegeben ist, dann kann hier ein NumberTextField initialisiert werden.
             // Sollte das Fehlschlagen, muss ein normales JTextField hinzugefügt werden, das keine Wertformatierung vornimmt.
-            NumberFormat numberFormat = field.getNumberFormat();
+            NumberFormat javaNumberFormat = field.getJavaNumberFormat();
             // Kennzahlwerte in die Felder einfügen.
-            NumberTextField numberTextField = NumberTextField.getNumberTextField(numberFormat, field.isPositiveOnly());
+            NumberTextField numberTextField = NumberTextField.getNumberTextField(javaNumberFormat, field.isPositiveOnly());
             if (!UserField.isError(value)) {
                 numberTextField.setValue(value);
             }
@@ -559,7 +559,7 @@ public class PropertyDialogUserFieldPanel extends ElementDialogPanel implements 
             newValue = ((JTextComponent) editorComponent).getText();
 
         } else if (style == NUMBER) {
-            Object textFieldValue = "";
+            Object textFieldValue;
             NumberTextField textField = (NumberTextField) editorComponent;
             textFieldValue = textField.getText();
 

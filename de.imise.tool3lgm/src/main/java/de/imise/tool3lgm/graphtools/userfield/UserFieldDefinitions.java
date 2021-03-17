@@ -44,6 +44,9 @@ public final class UserFieldDefinitions extends UserFieldDefinitionChangeHandler
      */
     private Map<Class<? extends UserFieldTarget>, UserFieldList> classToUserFieldListMap = new HashMap<>();
 
+    /** Maps from the ID of a format to the format */
+    private final Map<String, UserFieldNumberFormat> formatIdToFormat = new HashMap<>();
+
     /** Mappt von den IDs der UserFields auf das UserField */
     private Map<String, UserField> idToUserFieldMap = new HashMap<>();
 
@@ -80,14 +83,6 @@ public final class UserFieldDefinitions extends UserFieldDefinitionChangeHandler
      * Gesamtmodell gelten und zur Verfügung stehen.
      */
     public static final Class<? extends UserFieldTarget> GLOBAL_USERFIELD_IDENTIFIER_CLASS = GDCollection.class;
-
-    /**
-     * Klasse, über die alle Formate identifiziert werden.
-     */
-    private static final class GlobalFormatIdentifierClass extends UserFieldTarget {
-    }
-
-    public static final Class<? extends UserFieldTarget> GLOBAL_FORMAT_IDENTIFIER_CLASS = GlobalFormatIdentifierClass.class;
 
     /**
      * Konstante um für <code>firstInconsistentUserFieldFormulaIndex</code>
@@ -144,6 +139,14 @@ public final class UserFieldDefinitions extends UserFieldDefinitionChangeHandler
     }
 
     /**
+     * @param format
+     */
+    public void add(final UserFieldNumberFormat format) {
+        String id = format.getID();
+        formatIdToFormat.put(id, format);
+    }
+
+    /**
      * Hängt der zuletzt benutzen Liste ein neues Element an. Die Methode
      * erwartet beim Aufruf ein <code>UserField</code>. Das
      * <code>UserField</code> wird an eine Liste, die sich in der
@@ -153,19 +156,24 @@ public final class UserFieldDefinitions extends UserFieldDefinitionChangeHandler
      * @param userField
      */
     public void add(final UserField userField) {
-        if (userField == null) {
-            return;
-        }
-        UserFieldList ufl = classToUserFieldListMap.get(userField.getTargetClass());
+        //TODO: #382: testen, ob das mit dem clone hier richtig ist
+        UserField clone = userField.clone();
+        UserFieldList ufl = classToUserFieldListMap.get(clone.getTargetClass());
         if (ufl == null) {
-            ufl = new UserFieldList(userField.getTargetClass());
-            classToUserFieldListMap.put(userField.getTargetClass(), ufl);
+            Class<? extends UserFieldTarget> targetClass = clone.getTargetClass();
+            ufl = new UserFieldList(targetClass);
+            classToUserFieldListMap.put(targetClass, ufl);
         }
-        ufl.add(userField);
-        idToUserFieldMap.put(userField.getID(), userField);
+        ufl.add(clone);
+        String id = clone.getID();
+        idToUserFieldMap.put(id, clone);
+        UserFieldNumberFormat numberFormat = clone.getNumberFormat();
+        if (numberFormat != null) {
+            add(numberFormat);
+        }
         //Formeln extra merken
-        if (userField.hasStyle(UserField.Style.FORMULA)) {
-            formulaUserFieldList.add(userField);
+        if (clone.hasStyle(UserField.Style.FORMULA)) {
+            formulaUserFieldList.add(clone);
             setConsistencyUnknown();
         }
     }
@@ -218,6 +226,21 @@ public final class UserFieldDefinitions extends UserFieldDefinitionChangeHandler
     }
 
     /**
+     * @param numberFormat
+     */
+    public void removeNumberFormat(final UserFieldNumberFormat numberFormat) {
+        for (Class<? extends UserFieldTarget> userFieldTargetClass : getClassToUserFieldKeys()) {
+            for (UserField userField : classToUserFieldListMap.get(userFieldTargetClass)) {
+                if (userField.hasNumberFormat(numberFormat)) {
+                    userField.removeNumberFormat();
+                }
+            }
+        }
+        String formatID = numberFormat.getID();
+        formatIdToFormat.remove(formatID);
+    }
+
+    /**
      * @param userField
      * @return Liste aller gelöschten <code>UserField</code>s
      */
@@ -228,23 +251,8 @@ public final class UserFieldDefinitions extends UserFieldDefinitionChangeHandler
             return deleted;
         }
         //wenn das userField irgendwo anders noch benutzt wird -> lösche die Referenzen ebenfalls
-        //wenn das zu löschende Field ein Format ist -> bei allen anderen Fields, bei denen es als Format gesetzt ist, das Format null setzen
-        if (userField.hasStyle(UserField.Style.FORMAT)) {
-            for (Class<? extends UserFieldTarget> c : getClassToUserFieldKeys()) {
-                Iterator<UserField> userFieldListIt = classToUserFieldListMap.get(c).iterator();
-                while (userFieldListIt.hasNext()) {
-                    UserField listField = userFieldListIt.next();
-                    if (listField.uses(userField)) {
-                        listField.setFormatUserField(null);
-                    }
-                }
-            }
-            idToUserFieldMap.remove(userField.getID());
-            ufl.remove(userField);
-            deleted.add(userField);
-            //wenn das zu löschende UserField ein UserField ist, das bei einem anderen in der Formel vorkommen kann (Kennzahl, Kennzahlformel, Verteilungsgewicht)
-        } else if (userField.isNumberUserField()) {
-
+        //wenn das zu löschende UserField ein UserField ist, das bei einem anderen in der Formel vorkommen kann (Kennzahl, Kennzahlformel, Verteilungsgewicht)
+        if (userField.isNumberUserField()) {
             ArrayList<UserField> userFieldsToDelete = new ArrayList<>();
             userFieldsToDelete.add(userField);
             for (int i = 0; i < userFieldsToDelete.size(); i++) {
@@ -509,14 +517,28 @@ public final class UserFieldDefinitions extends UserFieldDefinitionChangeHandler
     /**
      * @return
      */
-    public Iterable<UserField> getFormatUserFields() {
-        return getUserFields(GLOBAL_FORMAT_IDENTIFIER_CLASS);
+    public Iterable<UserFieldNumberFormat> getNumberFormats() {
+        return formatIdToFormat.values();
     }
 
+    /**
+     * @return
+     */
     private static final Predicate<Class<? extends UserFieldTarget>> isSimpleTargetClass() {
-        return c -> c != GLOBAL_FORMAT_IDENTIFIER_CLASS && c != GLOBAL_USERFIELD_IDENTIFIER_CLASS;
+        return c -> c != GLOBAL_USERFIELD_IDENTIFIER_CLASS;
     }
 
+    /**
+     * @param formatId
+     * @return
+     */
+    public UserFieldNumberFormat getNumberFormat(final String formatId) {
+        return formatIdToFormat.get(formatId);
+    }
+
+    /**
+     * @return
+     */
     public Iterable<UserField> getElementClassUserFields() {
         Set<Class<? extends UserFieldTarget>> keys = classToUserFieldListMap.keySet();
         ImmutableList.Builder<Iterable<UserField>> iterables = new ImmutableList.Builder<>();
@@ -894,7 +916,7 @@ public final class UserFieldDefinitions extends UserFieldDefinitionChangeHandler
             //Elementklasse des UserFields als bereits zurück gesetzt merken
             resetedElementClasses.add(userFieldTargetClass);
             //alle berechneten Modellvariablen zurück setzen
-            if (userField.isGlobalOrFormat()) {
+            if (userField.isGlobal()) {
                 gdcoll.resetCalculatedUserFieldMap();
                 continue;
             }
@@ -952,23 +974,15 @@ public final class UserFieldDefinitions extends UserFieldDefinitionChangeHandler
     }
 
     /**
-     * @param format Format-UserField, für das alle Kennzahlen zurück gegeben
-     *            werden sollen, die es benutzen
-     * @return Liste aller USerFields, die das übergebene Format-Userfield als
-     *         benutzen
+     * @param numberFormat Format, für das alle Kennzahlen zurück gegeben werden
+     *            sollen, die es benutzen
+     * @return Liste aller UserFields, die das übergebene Format benutzen
      */
-    public ArrayList<UserField> getFormatUser(final UserField format) {
+    public ArrayList<UserField> getUserFieldsWithNumberFormat(final UserFieldNumberFormat numberFormat) {
         ArrayList<UserField> returnList = new ArrayList<>();
-
-        if (!format.hasStyle(UserField.Style.FORMAT)) {
-            return returnList;
-        }
-
-        //Iterator aller Keys der Map von den Elementklassen auf die UserFields
-        // holen
         for (Class<? extends UserFieldTarget> elementClass : getClassToUserFieldKeys()) {
             for (UserField uf : getUserFields(elementClass)) {
-                if (format == uf.getFormatUserField()) {
+                if (uf.hasNumberFormat(numberFormat)) {
                     returnList.add(uf);
                 }
             }

@@ -35,6 +35,7 @@ import de.imise.tool3lgm.graphtools.model.Szenario;
 import de.imise.tool3lgm.graphtools.userfield.UserField;
 import de.imise.tool3lgm.graphtools.userfield.UserField.Style;
 import de.imise.tool3lgm.graphtools.userfield.UserFieldDefinitions;
+import de.imise.tool3lgm.graphtools.userfield.UserFieldNumberFormat;
 import de.imise.tool3lgm.graphtools.userfield.WeightReplacer;
 import de.imise.tool3lgm.graphtools.view.container.BendpointContainer;
 import de.imise.tool3lgm.graphtools.view.container.EdgeContainer;
@@ -169,6 +170,9 @@ public class ToolContentHandlerV3_0 implements ContentHandler {
      * Eigenschaftsfelder
      */
     protected UserField userField;
+
+    /** The currently loaded UserFieldNumberFormat */
+    protected UserFieldNumberFormat userFieldNumberFormat;
 
     /**
      * option beim Kopieren <br>
@@ -442,14 +446,17 @@ public class ToolContentHandlerV3_0 implements ContentHandler {
 
                 //            } else if (qName.equals("userFieldDefinitions")) {
                 //
+            } else if (qName.equals("userFieldFormat")) {
+                String id = atts.getValue("hash");
+                userFieldNumberFormat = new UserFieldNumberFormat(id);
             } else if (qName.equals("userFieldDef")) {
                 String elementClass = atts.getValue("elementClass");
                 //bei Modellvariablen ist die Elementclass null
                 if (elementClass == null) {
-                    userField = new UserField(atts.getValue("hash"), collection.getUserFieldDefinitions());
+                    userField = new UserField(atts.getValue("hash"), userFieldDefinitions);
                 } else {
                     MetaModel metaModel = collection.getMetaModel();
-                    userField = new UserField(metaModel.getClassForName(elementClass), atts.getValue("hash"), collection.getUserFieldDefinitions());
+                    userField = new UserField(metaModel.getClassForName(elementClass), atts.getValue("hash"), userFieldDefinitions);
                 }
             } else if (qName.equals("replacerEntry")) {
                 String elementID = atts.getValue("elementHash");
@@ -892,19 +899,27 @@ public class ToolContentHandlerV3_0 implements ContentHandler {
 
             } else if (qName.equals("userFieldDefinitions")) {
 
+            } else if (qName.equals("userFieldFormat")) {
+                if (userFieldNumberFormat == null) {
+                    throw new SAXException("Error while parsing definition of userFields: userFieldNumberFormat shouldn't not be null");
+                } else {
+                    userFieldDefinitions.add(userFieldNumberFormat);
+                }
+                userFieldNumberFormat = null;
+
             } else if (qName.equals("userFieldDef")) {
                 if (userField != null) {
-                    collection.getUserFieldDefinitions().add(userField);
-                } else {
-                    throw new SAXException("Error while parsing definition of userFields: userFiel shouldn't not be equals to null");
+                    userFieldDefinitions.add(userField);
+                } else if (userFieldNumberFormat == null) {
+                    throw new SAXException("Error while parsing definition of userFields: userFiel shouldn't not be null");
                 }
-
                 userField = null;
+                userFieldNumberFormat = null;
 
             } else if (qName.equals("userFieldName") || qName.equals("userFieldDescription") || qName.equals("userFieldStyle") || qName.equals("userFieldTreeVis") || qName.equals("userFieldStandardValue") || qName.equals("userFieldInternalAccounting")
-                    || qName.equals("userFieldInternalAccountingWeightUserFieldHash") || qName.equals("userFieldFormula") || qName.equals("userFieldFormatString") || qName.equals("userFieldFormatHash")) {
+                    || qName.equals("userFieldInternalAccountingWeightUserFieldHash") || qName.equals("userFieldFormula") || qName.equals("userFieldFormatHash")) {
                 if (userField == null) {
-                    throw new SAXException("Error while parsing definition of userFields: userFiel shouldn't not be equals to null");
+                    throw new SAXException("Error while parsing definition of userFields: userField shouldn't not be null");
                 }
                 String value = elementValue.toString();
                 if (qName.equals("userFieldStyle")) {
@@ -916,6 +931,19 @@ public class ToolContentHandlerV3_0 implements ContentHandler {
                     }
                 }
                 userField.putXMLFieldString(qName, value);
+
+            } else if (qName.equals("userFieldFormatString")) {
+                if (userField != null) { // File Version 3.8
+                    String id = userField.getID();
+                    userFieldNumberFormat = new UserFieldNumberFormat(id);
+                    userField = null;
+                }
+                //file Version 3.9
+                if (userFieldNumberFormat == null) {
+                    throw new SAXException("Error while parsing definition of userFields: userFieldNumberFormat shouldn't not be null");
+                }
+                String value = elementValue.toString();
+                userFieldNumberFormat.putXMLFieldString(qName, value);
 
             } else if (qName.equals("modell_3lgm_2") || qName.equals("tool3lgm_clipboard")) {
                 //jetzt erst ganz zum Schluss die IDs für das Start- bzw. End-Objekt einer Edge auflösen und die wirklichen Node setzten

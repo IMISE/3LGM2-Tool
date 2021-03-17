@@ -39,6 +39,8 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.DoubleMeaningEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.metamodel.elements.OptionalEdge;
+import de.imise.tool3lgm.graphtools.model.CopyDependencyResolver;
+import de.imise.tool3lgm.graphtools.model.CopyDependencyResolver.CopyDependencyResolverResultFull;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.model.LGMGraphDocument;
@@ -46,6 +48,7 @@ import de.imise.tool3lgm.graphtools.model.Szenario;
 import de.imise.tool3lgm.graphtools.userfield.UserField;
 import de.imise.tool3lgm.graphtools.userfield.UserField.Style;
 import de.imise.tool3lgm.graphtools.userfield.UserFieldDefinitions;
+import de.imise.tool3lgm.graphtools.userfield.UserFieldNumberFormat;
 import de.imise.tool3lgm.graphtools.userfield.UserFieldTarget;
 import de.imise.tool3lgm.graphtools.userfield.WeightReplacer;
 import de.imise.tool3lgm.graphtools.view.container.BendpointContainer;
@@ -174,20 +177,34 @@ public class ToolXMLWriter extends IntendingXMLWriter {
     }
 
     /**
+     * @param gdcoll
+     * @param file
+     * @param szenarios
+     * @param resolvedCopyDependencies
+     * @return
+     */
+    public static boolean writeExport(final GDCollection gdcoll, final File file, final List<Szenario> szenarios) {
+        CopyDependencyResolverResultFull resolvedCopyDependencies = CopyDependencyResolver.resolveCopyDependencies(szenarios);
+        return writeExport(gdcoll, file, szenarios, resolvedCopyDependencies.elements, resolvedCopyDependencies.userFieldNumberFormats, resolvedCopyDependencies.userFields, resolvedCopyDependencies.iconIDs);
+    }
+
+    /**
      * Schreibt nur einen Teil der Teilmodelle und Elemente eines Modells
      *
      * @param gdcoll
      * @param file
      * @param szenarios
      * @param elements
+     * @param userFieldNumberFormats
      * @param userFields
      * @param iconIDs
      * @return
      */
-    public static boolean writeExport(final GDCollection gdcoll, final File file, final List<Szenario> szenarios, final Collection<ModelElement> elements, final Iterable<UserField> userFields, final Iterable<String> iconIDs) {
+    private static boolean writeExport(final GDCollection gdcoll, final File file, final List<Szenario> szenarios, final Collection<ModelElement> elements, final Iterable<UserFieldNumberFormat> userFieldNumberFormats, final Iterable<UserField> userFields,
+            final Iterable<String> iconIDs) {
         try {
             ToolXMLWriter toolXMLWriter = new ToolXMLWriter(gdcoll, file);
-            toolXMLWriter.writeModel(gdcoll.getName() + " (export)", szenarios, elements, userFields, iconIDs);
+            toolXMLWriter.writeModel(gdcoll.getName() + " (export)", szenarios, elements, userFieldNumberFormats, userFields, iconIDs);
             toolXMLWriter.finish();
         } catch (Exception e) {
             Log.show(Log.ERROR, "Exception while exporting UserFieldFile", e);
@@ -201,7 +218,7 @@ public class ToolXMLWriter extends IntendingXMLWriter {
     /////////////////////////////////////////////
 
     private void writeModel() throws XMLStreamException {
-        writeModel(gdcoll.getName(), null, null, null, null);
+        writeModel(gdcoll.getName(), null, null, null, null, null);
     }
 
     /**
@@ -214,6 +231,7 @@ public class ToolXMLWriter extends IntendingXMLWriter {
      * @param elements Liste der Elemente, die geschrieben werden sollen. Ist
      *            diese Liste <code>null</code>, werden alle Elemente
      *            geschrieben.
+     * @param userFieldNumberFormats
      * @param userFields Alle UserFields, die geschrieben werden sollen. Ist
      *            dieses {@link Iterable} <code>null</code>, werden alle
      *            UserFields geschrieben.
@@ -222,7 +240,8 @@ public class ToolXMLWriter extends IntendingXMLWriter {
      *            geschrieben.
      * @throws XMLStreamException
      */
-    private void writeModel(final String name, final List<Szenario> szenarios, final Collection<ModelElement> elements, final Iterable<UserField> userFields, final Iterable<String> iconIDs) throws XMLStreamException {
+    private void writeModel(final String name, final List<Szenario> szenarios, final Collection<ModelElement> elements, final Iterable<UserFieldNumberFormat> userFieldNumberFormats, final Iterable<UserField> userFields, final Iterable<String> iconIDs)
+            throws XMLStreamException {
         writeStartDocument();
         writeStartElement("modell_3lgm_2"); //<modell_3lgm_2>
         writeStartElement("header"); //<header>
@@ -233,7 +252,7 @@ public class ToolXMLWriter extends IntendingXMLWriter {
         if (userFields == null) {
             writeUserFieldDefinitions(gdcoll.getUserFieldDefinitions(), true);
         } else {
-            writeUserFieldDefinitions(userFields);
+            writeUserFieldDefinitions(userFieldNumberFormats, userFields);
         }
         writeStartElement("objects"); //<objects>
         writeStartElement("model"); //<model>
@@ -263,29 +282,41 @@ public class ToolXMLWriter extends IntendingXMLWriter {
      * @throws XMLStreamException
      */
     private void writeUserFieldDefinitions(final UserFieldDefinitions definitions, final boolean appendWeightReplacer) throws XMLStreamException {
-        Iterable<UserField> userFields = CollectionUtils.getCommonIterable(definitions.getFormatUserFields(), definitions.getGlobalUserFields(), definitions.getElementClassUserFields());
-        writeUserFieldDefinitions(userFields, appendWeightReplacer ? definitions.getWeightReplacer() : null);
+        Iterable<UserFieldNumberFormat> numberFormats = definitions.getNumberFormats();
+        Iterable<UserField> userFields = CollectionUtils.getCommonIterable(definitions.getGlobalUserFields(), definitions.getElementClassUserFields());
+        WeightReplacer weightReplacer = appendWeightReplacer ? definitions.getWeightReplacer() : null;
+        writeUserFieldDefinitions(numberFormats, userFields, weightReplacer);
     }
 
-    protected void writeUserFieldDefinitions(final Iterable<UserField> userFields) throws XMLStreamException {
-        writeUserFieldDefinitions(userFields, null);
+    protected void writeUserFieldDefinitions(final Iterable<UserFieldNumberFormat> numberFormats, final Iterable<UserField> userFields) throws XMLStreamException {
+        writeUserFieldDefinitions(numberFormats, userFields, null);
     }
 
-    protected void writeUserFieldDefinitions(final Iterable<UserField> userFields, final WeightReplacer weightReplacer) throws XMLStreamException {
+    protected void writeUserFieldDefinitions(final Iterable<UserFieldNumberFormat> numberFormats, final Iterable<UserField> userFields, final WeightReplacer weightReplacer) throws XMLStreamException {
         writeStartElement("userFieldDefinitions");
         //Zuerst immer die Formate und dann immer die globalen Varialen rausschreiben
+        for (UserFieldNumberFormat numberFormat : numberFormats) {
+            writeNumberFormat(numberFormat);
+        }
         for (UserField uf : userFields) {
             writeUserField(uf);
         }
         writeUserFieldWeightReplacer(weightReplacer);
-        writeEndElement();
+        writeEndElement(); //userFieldDefinitions
+    }
+
+    protected void writeNumberFormat(final UserFieldNumberFormat numberFormat) throws XMLStreamException {
+        writeStartElement("userFieldFormat");
+        writeAttribute("hash", numberFormat.getID());
+        writeElement("userFieldFormatString", numberFormat.getExportString());
+        writeEndElement(); //userFieldFormat
     }
 
     protected void writeUserField(final UserField uf) throws XMLStreamException {
         writeStartElement("userFieldDef");
         //bei Modell-Attributen wird die targetClass nicht als UserField ins
         // Tag geschrieben
-        if (!uf.isGlobalOrFormat()) {
+        if (!uf.isGlobal()) {
             writeAttribute("elementClass", uf.getTargetClass().getSimpleName());
         }
         writeAttribute("hash", uf.getID());
@@ -298,21 +329,19 @@ public class ToolXMLWriter extends IntendingXMLWriter {
             writeElement("userFieldStandardValue", uf.getListValueAt(i));
         }
 
-        if (style == Style.FORMAT) {
-            writeElement("userFieldFormatString", uf.getFormatExportString());
-        } else if (style == Style.NUMBER) {
-            UserField formatUserField = uf.getFormatUserField();
-            if (formatUserField != null) {
-                writeElement("userFieldFormatHash", formatUserField.getID());
+        if (style == Style.NUMBER) {
+            UserFieldNumberFormat numberFormat = uf.getNumberFormat();
+            if (numberFormat != null) {
+                writeElement("userFieldFormatHash", numberFormat.getID());
             }
         } else if (style == Style.FORMULA) {
             writeElement("userFieldFormula", uf.getFormula());
-            UserField formatUserField = uf.getFormatUserField();
-            if (formatUserField != null) {
-                writeElement("userFieldFormatHash", formatUserField.getID());
+            UserFieldNumberFormat numberFormat = uf.getNumberFormat();
+            if (numberFormat != null) {
+                writeElement("userFieldFormatHash", numberFormat.getID());
             }
         }
-        writeEndElement();
+        writeEndElement(); //userFieldDef
     }
 
     private void writeUserFieldWeightReplacer(final WeightReplacer weightReplacer) throws XMLStreamException {

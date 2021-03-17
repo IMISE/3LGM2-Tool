@@ -344,9 +344,7 @@ public abstract class BasicSearchOptionsPanel extends JPanel implements ItemList
         userFieldStyleComboBox = new AlphabeticalComboBox<>();
         userFieldStyleComboBox.addObject(null, getResString("SEARCH_DIALOG_USERFIELD_type_all"));
         for (Style style : Style.values()) {
-            if (style != Style.FORMAT) {
-                userFieldStyleComboBox.addObject(style);
-            }
+            userFieldStyleComboBox.addObject(style);
         }
         userFieldStyleComboBox.setSelectedIndex(0);
 

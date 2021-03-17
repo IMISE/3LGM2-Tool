@@ -1,7 +1,6 @@
 package de.imise.tool3lgm.graphtools.userfield;
 
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
-import static de.imise.tool3lgm.graphtools.userfield.UserFieldDefinitions.GLOBAL_FORMAT_IDENTIFIER_CLASS;
 import static de.imise.tool3lgm.graphtools.userfield.UserFieldDefinitions.GLOBAL_USERFIELD_IDENTIFIER_CLASS;
 import static de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty.OPTION_ENABLE_FORMULA_CALCULATION;
 
@@ -121,19 +120,7 @@ public final class UserField implements Cloneable, Comparator<UserFieldTarget>, 
             int compare(final UserField uf, final UserFieldTarget me1, final UserFieldTarget me2) {
                 return numberCompare(uf, me1, me2);
             }
-        },
-        FORMAT {
-            @Override
-            int compare(final UserField uf, final UserFieldTarget me1, final UserFieldTarget me2) {
-                return alphabeticalCompare(uf, me1, me2);
-            }
-        },
-        /*
-         * PANEL {
-         * @Override int compare(UserField uf, ModelElement me1, ModelElement
-         * me2) { return alphabeticalCompare(uf, me1, me2); } }
-         */
-        ;
+        };
 
         public static final Set<Style> NUMBER_STYLES = ImmutableSet.of(NUMBER, FORMULA);
 
@@ -323,33 +310,6 @@ public final class UserField implements Cloneable, Comparator<UserFieldTarget>, 
     private static final Set<String> ACCOUNTING_FUNCTIONS_SET = ImmutableSet.of(ACCOUNTING_FUNCTION_SUM, ACCOUNTING_FUNCTION_TWSUM, ACCOUNTING_FUNCTION_MAX, ACCOUNTING_FUNCTION_MIN, ACCOUNTING_FUNCTION_MULT, ACCOUNTING_FUNCTION_AVG,
             ACCOUNTING_FUNCTION_INDI, ACCOUNTING_FUNCTION_REF);
 
-    ///////////////////////
-    // Format-UserFields //
-    ///////////////////////
-
-    /**
-     * Dieser String wird im Format den Nachkommastellen vorangestellt, damit
-     * man ihn von anderen Formatinformationen unterscheiden kann.
-     */
-    private static final String FORMAT_DECIMAL_PLACES_PREFIX = "d";
-
-    /**
-     * Dieser String wird im Format der Eiheit vorangestellt, damit man ihn von
-     * anderen Formatinformationen unterscheiden kann.
-     */
-    private static final String FORMAT_UNIT_PREFIX = "u";
-
-    /**
-     * String der als Einheit bei angezeigt werden soll
-     */
-    private String formatUnit = null;
-
-    /**
-     * Das eigentliche Format, wenn dieses <code>UserField</code> den Style
-     * <code>FORMAT_STYLE</code> besitzt.
-     */
-    private NumberFormat numberFormat = null;
-
     /**
      * ID des <code>UserField</code>s. Diese ist final, da UserFields nur
      * geclont werden, um eine Sicherheitskopie vor einer Änderung anzulegen,
@@ -413,7 +373,7 @@ public final class UserField implements Cloneable, Comparator<UserFieldTarget>, 
      * UserField mit dem Style <code>FORMAT_STYLE</code>, das vorgibt, wie der
      * Zahlenwert dieses UserFields formatiert werden soll.
      */
-    private UserField formatUserField;
+    private UserFieldNumberFormat numberFormat;
 
     /**
      * Wenn <code>true</code> werden nur positive Werte akzeptiert.
@@ -428,8 +388,7 @@ public final class UserField implements Cloneable, Comparator<UserFieldTarget>, 
      * @param definitions
      */
     public UserField(final Style style, final UserFieldDefinitions definitions) {
-        this(style == Style.FORMAT ? GLOBAL_FORMAT_IDENTIFIER_CLASS : GLOBAL_USERFIELD_IDENTIFIER_CLASS, definitions);
-        this.style = style;
+        this(GLOBAL_USERFIELD_IDENTIFIER_CLASS, style, definitions);
     }
 
     /**
@@ -502,14 +461,6 @@ public final class UserField implements Cloneable, Comparator<UserFieldTarget>, 
                 }
                 style = Style.values()[index];
             }
-            //beim Einlesen können Formate im ersten Schritt nur als globale Eigenschaften erkannt werden.
-            //Sie werden erstmal mit der TargetClass == GLOBAL_USERFIELD_IDENTIFIER_CLASS angelegt.
-            //Erst wenn hier der Style "FORMAT" erkannt werden konnte, wird die richtige TargetClass ==
-            //GLOBAL_FORMAT_IDENTIFIER_CLASS gesetzt.
-            if (style == Style.FORMAT) {
-                targetClass = GLOBAL_FORMAT_IDENTIFIER_CLASS;
-            }
-
         } else if (fieldName.equals("userFieldTreeVis")) {
             treeVisibility = Boolean.valueOf(value).booleanValue();
         } else if (fieldName.equals("userFieldStandardValue")) {
@@ -518,11 +469,10 @@ public final class UserField implements Cloneable, Comparator<UserFieldTarget>, 
             setFormula(value);
             style = Style.FORMULA;
         } else if (fieldName.equals("userFieldFormatHash")) {
-            setFormatUserField(definitions.getUserField(value));
-        } else if (fieldName.equals("userFieldFormatString")) {
-            setFormatFractionDigitsCountAndUnit(value);
+            setNumberFormat(definitions.getNumberFormat(value));
+        } else {
+            return false;
         }
-
         return true;
     }
 
@@ -564,6 +514,19 @@ public final class UserField implements Cloneable, Comparator<UserFieldTarget>, 
     }
 
     /**
+     * Gibt die Einheit des <code>UserField</code>s zurück. Ist das UserField
+     * selbst ein Format, gibt es seine eigene Einheit zurück, ist es ein
+     * UserField, dem ein Format zugewiesen ist (was für ein Format selbst nie
+     * zutreffen kann), dann gibt es die Nachkommstellen des Formates zurück.
+     *
+     * @return die Einheit des Formates. Wenn kein Format eingestellt ist, kommt
+     *         <code>null</code> zurück;
+     */
+    public String getFormatUnit() {
+        return numberFormat == null ? null : numberFormat.getUnit();
+    }
+
+    /**
      * Gibt den Namen des <code>UserField</code> s zurück.
      *
      * @return Name des <code>UserField</code> s
@@ -601,8 +564,8 @@ public final class UserField implements Cloneable, Comparator<UserFieldTarget>, 
      * @return <code>true</code>, wenn das UserField nicht für ein Element
      *         definiert ist sondern global fürs Modell oder ein Format ist
      */
-    public final boolean isGlobalOrFormat() {
-        return targetClass == UserFieldDefinitions.GLOBAL_USERFIELD_IDENTIFIER_CLASS || targetClass == UserFieldDefinitions.GLOBAL_FORMAT_IDENTIFIER_CLASS;
+    public final boolean isGlobal() {
+        return targetClass == UserFieldDefinitions.GLOBAL_USERFIELD_IDENTIFIER_CLASS;
     }
 
     /**
@@ -644,14 +607,12 @@ public final class UserField implements Cloneable, Comparator<UserFieldTarget>, 
 
     /**
      * Prüft, ob dieses {@link UserField} ein UserField ist, das einen Wert in
-     * sich tragen kann (also kein Format-, kein Separator- und kein
-     * Panel-USerfield ist).
+     * sich tragen kann und kein Separator ist
      *
-     * @param userField
      * @return
      */
     public final boolean isValueUserField() {
-        return style != Style.FORMAT && style != Style.SEPARATOR;
+        return style != Style.SEPARATOR;
     }
 
     /**
@@ -713,18 +674,34 @@ public final class UserField implements Cloneable, Comparator<UserFieldTarget>, 
      *
      * @return
      */
-    public UserField getFormatUserField() {
-        return formatUserField;
+    public UserFieldNumberFormat getNumberFormat() {
+        return numberFormat;
+    }
+
+    /**
+     * @return the encapsulated java internal number format of the
+     *         {@link UserFieldNumberFormat} if exists, otherwise
+     *         <code>null</code>
+     */
+    public NumberFormat getJavaNumberFormat() {
+        return numberFormat == null ? null : numberFormat.getNumberFormat();
     }
 
     /**
      * Setzt das Format, mit dem Zahlenwerte dieses Userfields formatiert werden
      * können.
      *
-     * @return
+     * @param numberFormat
      */
-    public void setFormatUserField(final UserField formatUserField) {
-        this.formatUserField = formatUserField;
+    public void setNumberFormat(final UserFieldNumberFormat numberFormat) {
+        this.numberFormat = numberFormat;
+    }
+
+    /**
+     * Removes the format of this UserField
+     */
+    public void removeNumberFormat() {
+        setNumberFormat(null);
     }
 
     /**
@@ -783,138 +760,6 @@ public final class UserField implements Cloneable, Comparator<UserFieldTarget>, 
         return listValues != null && listValues.contains(value);
     }
 
-    /**
-     * Liefert den <code>String</code>, der in Modeldatein oder in der Export
-     * von <code>UserField</code>s geschrieben wird.
-     *
-     * @return
-     */
-    public String getFormatExportString() {
-        StringBuilder sb = new StringBuilder(FORMAT_DECIMAL_PLACES_PREFIX);
-        if (numberFormat != null) {
-            sb.append(numberFormat.getMinimumFractionDigits());
-            sb.append(" ");
-        }
-        sb.append(FORMAT_UNIT_PREFIX);
-        if (formatUnit != null) {
-            sb.append(formatUnit);
-        }
-        return sb.toString();
-    }
-
-    /**
-     * Setzt die Nachkommastellenanzahl und die Einheit des Formates. Es wird
-     * ein String der Form "d### uXXX" erwartet, wobei d für den String
-     * {@link #FORMAT_DECIMAL_PLACES_PREFIX} und u für
-     * {@link #FORMAT_UNIT_PREFIX} steht. "###" steht für eine Zahl und "XXX"
-     * für eine beliebige Zeichenkette. Vor dem 'u' können beliebig viele
-     * Whitespaces (auch keins) stehen.
-     *
-     * @param formatStringWithPrefixes
-     */
-    private void setFormatFractionDigitsCountAndUnit(final String formatStringWithPrefixes) {
-        int decimalIndex = formatStringWithPrefixes.indexOf(FORMAT_DECIMAL_PLACES_PREFIX);
-        int unitIndex = formatStringWithPrefixes.indexOf(FORMAT_UNIT_PREFIX);
-        String decimalPlaces = formatStringWithPrefixes.substring(decimalIndex + FORMAT_DECIMAL_PLACES_PREFIX.length(), unitIndex).trim();
-        setFormatFractionDigits(Integer.parseInt(decimalPlaces));
-        String unit = formatStringWithPrefixes.substring(unitIndex + FORMAT_UNIT_PREFIX.length());
-        setFormatUnit(unit);
-    }
-
-    /**
-     * Liefert das <code>NumberFormat</code> des <code>UserField</code>s. Ist
-     * das <code>UserField</code> selbst ein Format, gibt es seine eigenen
-     * Nachkommastellen zurück, ist es ein UserField, dem ein Format zugewiesen
-     * ist (was für ein Format selbst nie zutreffen kann), dann gibt es die
-     * Nachkommstellen des Formates zurück.
-     *
-     * @param definitions die <code>UserFieldDefinitions</code>, in denen das
-     *            Format-<code>UserField</code> dieses <code>UserField</code>s
-     *            defniert ist oder <code>null</code>, wenn man diese
-     *            Information direkt für ein Format-<code>UserField</code>
-     *            abfragen möchte.
-     * @return die Anzahl der Nachkommastellen des Formates. Wenn kein Format
-     *         eingestellt ist, kommt -1 zurück;
-     */
-    public NumberFormat getNumberFormat() {
-        if (style != Style.FORMAT) {
-            if (formatUserField == null) {
-                return null;
-            }
-            return formatUserField.getNumberFormat();
-        }
-        return numberFormat;
-    }
-
-    /**
-     * Liefert die Anzahl der Nachkommastellen. Ist das UserField selbst ein
-     * Format, gibt es seine eigenen Nachkommastellen zurück, ist es ein
-     * UserField, dem ein Format zugewiesen ist (was für ein Format selbst nie
-     * zutreffen kann), dann gibt es die Nachkommstellen des Formates zurück.
-     *
-     * @return die Anzahl der Nachkommastellen des Formates. Wenn kein Format
-     *         eingestellt ist, kommt -1 zurück;
-     */
-    public int getFormatFractionDigits() {
-        NumberFormat numberFormat = getNumberFormat();
-        if (numberFormat == null) {
-            return -1;
-        }
-        return numberFormat.getMinimumFractionDigits();
-    }
-
-    /**
-     * Setzt bei Format-<code>UserField</code>s die Anzahl der Nachkommastellen.
-     *
-     * @param fractionDigits
-     */
-    public void setFormatFractionDigits(final int fractionDigits) {
-        if (style != Style.FORMAT || fractionDigits < 0) {
-            return;
-        }
-        if (numberFormat == null) {
-            numberFormat = NumberFormat.getNumberInstance();
-        }
-        numberFormat.setMinimumFractionDigits(fractionDigits);
-        numberFormat.setMaximumFractionDigits(fractionDigits);
-    }
-
-    /**
-     * Setzt die Einheit des <code>UserFields</code>, wenn es den Style
-     * <code>FORMAT_STYLE</code>.
-     *
-     * @param unitString
-     */
-    public void setFormatUnit(final String unitString) {
-        if (style != Style.FORMAT) {
-            return;
-        }
-        if (unitString.trim().equals("")) {
-            formatUnit = null;
-        } else {
-            formatUnit = unitString;
-        }
-    }
-
-    /**
-     * Gibt die Einheit des <code>UserField</code>s zurück. Ist das UserField
-     * selbst ein Format, gibt es seine eigene Einheit zurück, ist es ein
-     * UserField, dem ein Format zugewiesen ist (was für ein Format selbst nie
-     * zutreffen kann), dann gibt es die Nachkommstellen des Formates zurück.
-     *
-     * @return die Einheit des Formates. Wenn kein Format eingestellt ist, kommt
-     *         <code>null</code> zurück;
-     */
-    public String getFormatUnit() {
-        if (style != Style.FORMAT) {
-            if (formatUserField == null) {
-                return null;
-            }
-            return formatUserField.getFormatUnit();
-        }
-        return formatUnit;
-    }
-
     @Override
     public int hashCode() {
         return id.hashCode();
@@ -935,7 +780,7 @@ public final class UserField implements Cloneable, Comparator<UserFieldTarget>, 
             throw new InternalError(e);
         }
         //clonen aller Eigenschaften, die nicht auf dieselbe Object-Referenz zeigen sollen, die durch super.clone() hergestellt wurde
-        userField.numberFormat = numberFormat == null ? null : (NumberFormat) numberFormat.clone();
+        numberFormat = numberFormat == null ? null : (UserFieldNumberFormat) numberFormat.clone();
         userField.listValues = listValues == null ? null : new ArrayList<>(listValues);
         return userField;
     }
@@ -1092,7 +937,7 @@ public final class UserField implements Cloneable, Comparator<UserFieldTarget>, 
             return value;
         }
 
-        value = getFormattedValue(value, formatUserField, appendUnit);
+        value = getFormattedValue(value, numberFormat, appendUnit);
 
         // Falls positiveOnly=true und value mit "-" beginnt, wird errorString zurückgegeben
         if (positiveOnly == true && value.startsWith("-")) {
@@ -1104,27 +949,28 @@ public final class UserField implements Cloneable, Comparator<UserFieldTarget>, 
 
     /**
      * @param value
-     * @param formatUserField
+     * @param numberFormat
      * @param appendUnit
      * @return
      */
-    public static final String getFormattedValue(final String value, final UserField formatUserField, final boolean appendUnit) {
+    public static final String getFormattedValue(final String value, final UserFieldNumberFormat numberFormat, final boolean appendUnit) {
         // Falls sich der Wert-String nicht in einen BigDecimal umwandeln lässt, wird errorString NUMBER_FORMAT_ERROR zurückgegeben
         try {
             //hier prüfen, ob sich der String überhaupt in eine Zahl umwandeln lässt
             BigDecimal numberValue = new BigDecimal(value);
             //wenn kein Format gesetzt ist
-            if (formatUserField == null) {
+            if (numberFormat == null) {
                 return value;
             }
-            String v = formatUserField.numberFormat.format(numberValue);
+            String v = numberFormat.format(numberValue);
             if (!appendUnit) {
                 return v;
             }
             StringBuilder sb = new StringBuilder(v);
-            if (formatUserField.formatUnit != null) {
+            String unit = numberFormat.getUnit();
+            if (unit != null) {
                 sb.append(" ");
-                sb.append(formatUserField.formatUnit);
+                sb.append(unit);
             }
             return sb.toString();
         } catch (NumberFormatException nfe) {
@@ -1225,6 +1071,10 @@ public final class UserField implements Cloneable, Comparator<UserFieldTarget>, 
     // prüfen, ob ein UserField ein anderes referenziert //
     ///////////////////////////////////////////////////////
 
+    public boolean hasNumberFormat(final UserFieldNumberFormat numberFormat) {
+        return this.numberFormat == numberFormat;
+    }
+
     /**
      * Prüft, ob <code>this</code> das übergebenene <code>UserField</code>
      * <code>other</code> benutzt. Möglich ist als Format oder innerhalb einer
@@ -1233,9 +1083,6 @@ public final class UserField implements Cloneable, Comparator<UserFieldTarget>, 
     public boolean uses(final UserField possibleUsedField) {
         if (possibleUsedField == null) {
             return false;
-        }
-        if (formatUserField == possibleUsedField) {
-            return true;
         }
         if (style == Style.FORMULA) {
             Set<String> idsInFormula = getIDsInFormula();

@@ -7,11 +7,8 @@ import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
 import static de.imise.tool3lgm.graphtools.model.LGMChangeListener.LGMChangeType.DATA_CHANGED;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import javax.swing.JFileChooser;
 
@@ -24,6 +21,7 @@ import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Bendpoint;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
+import de.imise.tool3lgm.graphtools.model.CopyDependencyResolver.CopyDependencyResolverResultFull;
 import de.imise.tool3lgm.graphtools.undoredo.TransactionManager;
 import de.imise.tool3lgm.graphtools.userfield.UserField;
 import de.imise.tool3lgm.graphtools.userfield.UserFieldDefinitions;
@@ -136,29 +134,19 @@ public final class GDCollectionImExportHandler {
             size += lc.getNodeContainerCount() + lc.getEdgeContainerCount() + lc.getBendpointContainerCount();
         }
 
-        /* ModellElemente, die kopiert werden müssen */
-        List<ModelElement> elements = new ArrayList<>(size);
-
-        /* IDs aller Icons, die kopiert werden müssen */
-        Set<String> iconIDs = new HashSet<>();
-
-        iconIDs = new HashSet<>(sourceGDColl.getIconTable().size());
-        Set<UserField> userFields = new HashSet<>();
-
-        CopyDependencyResolver copyDependencyResolver = gdcoll.getCopyDependencyResolver();
-        copyDependencyResolver.resolveCopyDependencies(importSzenarios, elements, iconIDs, userFields);
+        CopyDependencyResolverResultFull resolvedCopyDependencies = CopyDependencyResolver.resolveCopyDependencies(importSzenarios);
         UserFieldDefinitions userFieldDefinitions = gdcoll.getUserFieldDefinitions();
-        for (UserField uf : userFields) {
+        for (UserField uf : resolvedCopyDependencies.userFields) {
             userFieldDefinitions.add(uf);
         }
 
         Map<String, byte[]> iconTable = gdcoll.getIconTable();
-        for (String iconID : iconIDs) {
+        for (String iconID : resolvedCopyDependencies.iconIDs) {
             iconTable.put(iconID, sourceGDColl.getIconTable().get(iconID));
         }
 
         LGMGraphDocument mainDoc = gdcoll.getMainDoc();
-        for (ModelElement element : elements) {
+        for (ModelElement element : resolvedCopyDependencies.elements) {
             element.removeAllContainer();
             ElementContainer container = element.createContainer(mainDoc);
             mainDoc.getLayer(element.layerFor()).add(container);
@@ -235,22 +223,7 @@ public final class GDCollectionImExportHandler {
         if (szenarios.size() == gdcoll.getSzenarioCount()) {
             exportModel(file);
         } else {
-            int size = 0;
-            GraphDocument mainDoc = gdcoll.getMainDoc();
-            for (int i = 0; i < ModelConstants.LAYERS.length; i++) {
-                LayerContainer lc = mainDoc.getLayer(ModelConstants.LAYERS[i]);
-                size += lc.getNodeContainerCount() + lc.getEdgeContainerCount() + lc.getBendpointContainerCount();
-            }
-            // hastStrings aller ModellElemente, die kopiert werden müssen
-            List<ModelElement> elements = new ArrayList<>(size);
-            // IDs aller Icons, die kopiert werden müssen
-            Map<String, byte[]> iconTable = gdcoll.getIconTable();
-            Set<String> iconIDs = new HashSet<>(iconTable.size());
-            // IDs aller benutzdefinierten Eigenschaftsfelder, die mit kopiert werden müssen
-            Set<UserField> userFields = new HashSet<>();
-            CopyDependencyResolver copyDependencyResolver = gdcoll.getCopyDependencyResolver();
-            copyDependencyResolver.resolveCopyDependencies(szenarios, elements, iconIDs, userFields);
-            ToolXMLWriter.writeExport(gdcoll, file, szenarios, elements, userFields, iconIDs);
+            ToolXMLWriter.writeExport(gdcoll, file, szenarios);
         }
     }
 

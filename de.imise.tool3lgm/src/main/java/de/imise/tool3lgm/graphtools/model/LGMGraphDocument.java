@@ -4,6 +4,7 @@ import static de.imise.tool3lgm.Static.getMainFrame;
 import static de.imise.tool3lgm.graphtools.dialog.OverwriteDialog.OverwriteOption.IGNORE;
 import static de.imise.tool3lgm.graphtools.dialog.OverwriteDialog.OverwriteOption.JOIN;
 import static de.imise.tool3lgm.graphtools.dialog.OverwriteDialog.OverwriteOption.OVERWRITE;
+import static de.imise.tool3lgm.graphtools.model.CopyDependencyResolver.resolveCopyDependencies;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_DELETE_FROM_MODEL;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_PASTE;
 import static de.imise.tool3lgm.graphtools.model.LGMChangeListener.LGMChangeType.DATA_CHANGED;
@@ -15,7 +16,6 @@ import java.io.File;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.List;
 
 import javax.swing.JOptionPane;
@@ -37,6 +37,7 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction;
 import de.imise.tool3lgm.graphtools.metamodel.elements.InstanciationEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
+import de.imise.tool3lgm.graphtools.model.CopyDependencyResolver.CopyDependencyResolverResultSimple;
 import de.imise.tool3lgm.graphtools.path.metapaths.ElementaryMetaPath;
 import de.imise.tool3lgm.graphtools.path.metapaths.ElementaryMetaPath.Type;
 import de.imise.tool3lgm.graphtools.path.metapaths.ElementaryMetaPathHandler;
@@ -49,6 +50,7 @@ import de.imise.tool3lgm.graphtools.path.paths.ParallelPath;
 import de.imise.tool3lgm.graphtools.path.paths.SimplePath;
 import de.imise.tool3lgm.graphtools.undoredo.TransactionManager;
 import de.imise.tool3lgm.graphtools.userfield.UserField;
+import de.imise.tool3lgm.graphtools.userfield.UserFieldDefinitions;
 import de.imise.tool3lgm.graphtools.view.container.BendpointContainer;
 import de.imise.tool3lgm.graphtools.view.container.EdgeContainer;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
@@ -337,17 +339,16 @@ public class LGMGraphDocument extends GraphDocument {
         sourceCollection.removeInferenceEdges(true, STANDARD_PID);
         targetCollection.removeInferenceEdges(true, STANDARD_PID);
 
-        List<ModelElement> sourceElementsAndDependents = new ArrayList<>();
-        HashSet<UserField> sourceUserFields = new HashSet<>();
-        CopyDependencyResolver copyDependencyResolver = sourceCollection.getCopyDependencyResolver();
-        copyDependencyResolver.resolveCopyDependencies(sourceElements, sourceElementsAndDependents, sourceUserFields);
+        CopyDependencyResolverResultSimple resolvedCopyDependencies = resolveCopyDependencies(sourceElements);
         //Liste aller Kanten, bei denen das das eine Endelement gerade kopiert werden soll und das
         //andere nicht kopiert werden soll aber bereits im Zielmodell vorkommt hinzufügen
-        addSplittedSourceEdgesToCopy(sourceElementsAndDependents, targetDoc);
+        addSplittedSourceEdgesToCopy(resolvedCopyDependencies.elements, targetDoc);
 
-        for (UserField uf : sourceUserFields) {
+        for (UserField uf : resolvedCopyDependencies.userFields) {
             if (uf != null) {
-                targetCollection.getUserFieldDefinitions().add(uf); // es könnte sein, dass hier Mist passiert und UserFields immer wieder geaddet werden, wenn man ein Element übernimmt
+                //TODO #382: hier müsen die Formate noch in die
+                UserFieldDefinitions ufd = targetCollection.getUserFieldDefinitions();
+                ufd.add(uf); // es könnte sein, dass hier Mist passiert und UserFields immer wieder geaddet werden, wenn man ein Element übernimmt
             }
         }
 
@@ -371,7 +372,7 @@ public class LGMGraphDocument extends GraphDocument {
             OverwriteOption defaultOverwriteOption = sourceModelCategory == ModelCategory.TEMPLATE ? JOIN : null;
             //bei Templates soll nicht nachgefragt (applyToAll == true) und immer gejoint werden
             OverwriteDialog.OverwriteQuestionAnswer answer = new OverwriteQuestionAnswer(defaultOverwriteOption, defaultOverwriteOption != null);
-            for (ModelElement sourceElement : sourceElementsAndDependents) {
+            for (ModelElement sourceElement : resolvedCopyDependencies.elements) {
                 ElementContainer sourceContainer = sourceElement.getContainer(sourceDoc);
                 if (sourceContainer == null) {
                     sourceContainer = sourceElement.getContainer(sourceMainDoc);

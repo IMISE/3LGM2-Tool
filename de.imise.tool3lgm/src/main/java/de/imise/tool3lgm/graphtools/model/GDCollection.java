@@ -192,9 +192,6 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
     /** Hauptdokument der Collection */
     private LGMGraphDocument mainDoc;
 
-    /** Resolves the dependencies of copied elements */
-    private CopyDependencyResolver copyDependencyResolver;
-
     /**
      * Alle {@link LGMChangeListener}, die immer benachrichtigt werden - egal ob
      * eine Transaktion durch einen Dialog offen ist oder nicht.
@@ -421,16 +418,6 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
      */
     public void setModelCategory(final Tool3lgmModelType.ModelCategory modelCategory) {
         modelType.setModelCategory(modelCategory);
-    }
-
-    /**
-     *
-     */
-    public final CopyDependencyResolver getCopyDependencyResolver() {
-        if (copyDependencyResolver == null) {
-            copyDependencyResolver = new CopyDependencyResolver(this);
-        }
-        return copyDependencyResolver;
     }
 
     /**
@@ -2869,7 +2856,7 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
      */
     public void removeUserFieldValues(final List<UserField> userFieldsToRemove) {
         for (UserField userField : userFieldsToRemove) {
-            if (userField.isGlobalOrFormat()) {
+            if (userField.isGlobal()) {
                 removeUserField(userField);
             } else {
                 Class<? extends ModelElement> elemClass = null;

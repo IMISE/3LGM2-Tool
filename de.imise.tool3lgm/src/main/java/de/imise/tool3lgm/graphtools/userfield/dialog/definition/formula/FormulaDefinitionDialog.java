@@ -385,9 +385,7 @@ public class FormulaDefinitionDialog extends JDialog implements ActionListener {
             }
         }
         for (UserField uf : definitions.getGlobalUserFields()) {
-            if (!uf.hasStyle(UserField.Style.FORMAT)) {
-                modelAttributes.addObject(uf);
-            }
+            modelAttributes.addObject(uf);
         }
     }
 
