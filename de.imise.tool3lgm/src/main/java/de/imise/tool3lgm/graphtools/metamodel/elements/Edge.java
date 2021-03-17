@@ -112,6 +112,15 @@ public abstract class Edge extends ModelElement {
         return retVal;
     }
 
+    /**
+     * @param doc
+     * @return
+     */
+    @Override
+    public final EdgeContainer getContainer(final GraphDocument doc) {
+        return (EdgeContainer) super.getContainer(doc);
+    }
+
     @Override
     public final int layerFor() {
         int layer = super.layerFor();

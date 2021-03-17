@@ -261,7 +261,7 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
      * @param doc
      * @return
      */
-    public final ElementContainer getContainer(final GraphDocument doc) {
+    public ElementContainer getContainer(final GraphDocument doc) {
         if (doc == null) {
             return null;
         }
