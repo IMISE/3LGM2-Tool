@@ -877,7 +877,7 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
             for (int i = 0; i < edges2Remove.size(); i++) {
                 Edge edge = edges2Remove.get(i);
                 //den Container der Edge mit allen Knickpunkten im aktuellen Teilmodell löschen
-                EdgeContainer edgeC = (EdgeContainer) edge.getContainer(szen);
+                EdgeContainer edgeC = edge.getContainer(szen);
                 if (!simpleRemoveEdgeContainer(edgeC, pid)) {
                     continue;
                 }
@@ -1241,7 +1241,7 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
      * @param pid
      */
     public final void removeBendpoint(final Bendpoint bendpoint, final int pid) {
-        BendpointContainer bc = bendpoint.getBendpointContainer();
+        BendpointContainer bc = bendpoint.getContainer();
         if (bc == null) {
             return;
         }
@@ -2432,8 +2432,8 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
             }
         }
         for (Szenario szen : szenarios) {
-            NodeContainer removeContainer = (NodeContainer) removeNode.getContainer(szen);
-            NodeContainer remainContainer = (NodeContainer) remainNode.getContainer(szen);
+            NodeContainer removeContainer = removeNode.getContainer(szen);
+            NodeContainer remainContainer = remainNode.getContainer(szen);
             // jetzt umhängen aller Container von knoten1 auf knoten2 in allen Teilmodellen
             if (remainContainer == null && removeContainer != null) {
                 //              szen.removeKnotContainer((NodeContainer) knoten1.getContainer(szen), pid);

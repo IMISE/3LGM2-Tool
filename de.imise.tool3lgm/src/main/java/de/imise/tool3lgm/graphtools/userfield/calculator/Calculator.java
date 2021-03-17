@@ -97,7 +97,6 @@ public class Calculator {
      *
      */
     public Calculator(final UserFieldDefinitions definitions) {
-        super();
         this.definitions = definitions;
     }
 
@@ -933,7 +932,7 @@ public class Calculator {
                 stack.push(tmp_str);
             } else if (tmp_str.equals(")")) {
                 while (!stack.empty()) {
-                    String tmp_element = "";
+                    String tmp_element;
                     tmp_element = stack.pop().toString();
                     if (!tmp_element.equals("(")) {
                         tmp_string_postfix.append(" ");

@@ -202,6 +202,7 @@ public class LGMGraphDocument extends GraphDocument {
     }
 
     public final SortedSelection getSortedSelection() {
+        @SuppressWarnings("unchecked")
         Iterable<NodeContainer>[] sortingElements = new Iterable[layer.length];
         for (int i = 0; i < layer.length; i++) {
             sortingElements[i] = layer[i].getGraphNodeContainers();
@@ -437,12 +438,12 @@ public class LGMGraphDocument extends GraphDocument {
                 if (!edge.reconnect(targetCollection)) {
                     targetCollection.deleteElement(edge, STANDARD_PID);
                 } else {
-                    EdgeContainer edgeCont = (EdgeContainer) edge.getContainer(targetMainDoc);
+                    EdgeContainer edgeCont = edge.getContainer(targetMainDoc);
                     //this call adds a edgeContainer to all szenarios where it mus be added
                     //the tarte mainDoc and the target szenarion already contain the edge container
                     targetCollection.addEdge(edgeCont, STANDARD_PID);
                     if (!edge.isUnique() && targetDoc instanceof Szenario) {
-                        EdgeContainer newC = (EdgeContainer) edge.getContainer(targetDoc);
+                        EdgeContainer newC = edge.getContainer(targetDoc);
                         if (newC == null) {
                             throw new Exception(sourceDoc.getResString("fehler"));
                         }

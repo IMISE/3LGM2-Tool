@@ -2463,7 +2463,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
         if (!(nc instanceof BendpointContainer)) {
             //bei allen Kanten dieser Node
             for (Edge edge : me.getEdges()) {
-                EdgeContainer edgeC = (EdgeContainer) edge.getContainer(this);
+                EdgeContainer edgeC = edge.getContainer(this);
                 //wenn die Edge keinen Container in diesem Teilmodell hat (dann wird sie
                 //auch nicht Grafisch dargestellt und es braucht nichts verschoben werden) -> weiter
                 if (edgeC == null) {
@@ -2740,7 +2740,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
                     if (other != null && other.isPaintable()) { //The null check is only for the symptoms not against the cause. Sometimes there are faulty edges where the other is null.
                         ElementContainer otherEc = other.getContainer(this);
                         if (selectedContainer.contains(otherEc)) {
-                            EdgeContainer edgeC = (EdgeContainer) edge.getContainer(this);
+                            EdgeContainer edgeC = edge.getContainer(this);
                             if (edgeC != null) {
                                 for (BendpointContainer bc : edgeC.iterateBendpointContainers()) {
                                     container2Select.add(bc);
@@ -2887,7 +2887,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
         }
         // Anpassen der Kanten
         for (Edge edge : me.getEdges()) {
-            EdgeContainer kc = (EdgeContainer) edge.getContainer(szen);
+            EdgeContainer kc = edge.getContainer(szen);
             if (kc == null) {
                 continue;
             }
@@ -3823,7 +3823,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
             slaveContainer.setCoordinates(pos.width, pos.height, slaveWidth, slaveHeight);
             raiseSlaves(masterContainer);
             for (Szenario szenario : gdcoll.getSzenarios()) {
-                EdgeContainer kac = (EdgeContainer) edge.getContainer(szenario);
+                EdgeContainer kac = edge.getContainer(szenario);
                 if (kac != null) {
                     kac.computeBorderPoints();
                 }
@@ -4960,7 +4960,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
             if (ec != null && ec instanceof NodeContainer) {
                 ModelElement me = ec.getElement();
                 for (Edge edge : me.getEdges()) {
-                    EdgeContainer kac = (EdgeContainer) edge.getContainer(this);
+                    EdgeContainer kac = edge.getContainer(this);
                     if (kac == null) {
                         continue;
                     }
