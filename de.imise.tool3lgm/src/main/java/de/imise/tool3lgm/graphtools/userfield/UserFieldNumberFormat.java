@@ -195,6 +195,16 @@ public class UserFieldNumberFormat implements IDSource, Cloneable {
     }
 
     @Override
+    public int hashCode() {
+        return id.hashCode();
+    }
+
+    @Override
+    public boolean equals(final Object obj) {
+        return obj instanceof UserFieldNumberFormat && ((UserFieldNumberFormat) obj).getID().equals(id);
+    }
+
+    @Override
     public String toString() {
         int minimumFractionDigits = getFractionDigits();
         StringBuilder sb = new StringBuilder("#0");
