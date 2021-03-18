@@ -159,11 +159,11 @@ public final class UserFieldDefinitions extends UserFieldDefinitionChangeHandler
      * @param userField
      */
     public void add(final UserField userField) {
-        //TODO: #382: testen, ob das mit dem clone hier richtig ist
         UserField clone = userField.clone();
-        UserFieldList ufl = classToUserFieldListMap.get(clone.getTargetClass());
+        clone.setDefinitions(this);
+        Class<? extends UserFieldTarget> targetClass = clone.getTargetClass();
+        UserFieldList ufl = classToUserFieldListMap.get(targetClass);
         if (ufl == null) {
-            Class<? extends UserFieldTarget> targetClass = clone.getTargetClass();
             ufl = new UserFieldList(targetClass);
             classToUserFieldListMap.put(targetClass, ufl);
         }
