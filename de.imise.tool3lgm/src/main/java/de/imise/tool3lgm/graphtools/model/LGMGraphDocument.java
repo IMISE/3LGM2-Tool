@@ -49,7 +49,6 @@ import de.imise.tool3lgm.graphtools.path.paths.ElementaryPath;
 import de.imise.tool3lgm.graphtools.path.paths.ParallelPath;
 import de.imise.tool3lgm.graphtools.path.paths.SimplePath;
 import de.imise.tool3lgm.graphtools.undoredo.TransactionManager;
-import de.imise.tool3lgm.graphtools.userfield.UserField;
 import de.imise.tool3lgm.graphtools.userfield.UserFieldDefinitions;
 import de.imise.tool3lgm.graphtools.view.container.BendpointContainer;
 import de.imise.tool3lgm.graphtools.view.container.EdgeContainer;
@@ -344,13 +343,8 @@ public class LGMGraphDocument extends GraphDocument {
         //andere nicht kopiert werden soll aber bereits im Zielmodell vorkommt hinzufügen
         addSplittedSourceEdgesToCopy(resolvedCopyDependencies.elements, targetDoc);
 
-        for (UserField uf : resolvedCopyDependencies.userFields) {
-            if (uf != null) {
-                //TODO #382: hier müsen die Formate noch in die
-                UserFieldDefinitions ufd = targetCollection.getUserFieldDefinitions();
-                ufd.add(uf); // es könnte sein, dass hier Mist passiert und UserFields immer wieder geaddet werden, wenn man ein Element übernimmt
-            }
-        }
+        UserFieldDefinitions ufd = targetCollection.getUserFieldDefinitions();
+        ufd.addAll(resolvedCopyDependencies.userFieldNumberFormats, resolvedCopyDependencies.userFields);
 
         List<ElementContainer> tmpActive = new ArrayList<>(sourceDoc.selectedContainer);
         List<Edge> edges = new ArrayList<>();

@@ -384,11 +384,27 @@ public final class UserFieldDefinitions extends UserFieldDefinitionChangeHandler
     /**
      * @param otherDef
      */
-    public void addAll(final UserFieldDefinitions otherDef) {
-        for (Class<? extends UserFieldTarget> clazz : classToUserFieldListMap.keySet()) {
-            for (UserField uf : classToUserFieldListMap.get(clazz)) {
+    public void _addAll(final UserFieldDefinitions otherDef) {
+        Iterable<UserField> elementClassUserFields = otherDef.getElementClassUserFields();
+        Iterable<UserFieldNumberFormat> numberFormats = otherDef.getNumberFormats();
+        addAll(numberFormats, elementClassUserFields);
+        for (Class<? extends UserFieldTarget> clazz : otherDef.classToUserFieldListMap.keySet()) {
+            for (UserField uf : otherDef.classToUserFieldListMap.get(clazz)) {
                 add(uf);
             }
+        }
+    }
+
+    /**
+     * @param numberFormats
+     * @param userFields
+     */
+    public void addAll(final Iterable<UserFieldNumberFormat> numberFormats, final Iterable<UserField> userFields) {
+        for (UserFieldNumberFormat numberFormat : numberFormats) {
+            add(numberFormat);
+        }
+        for (UserField userField : userFields) {
+            add(userField);
         }
     }
 
