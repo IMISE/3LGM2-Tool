@@ -20,6 +20,7 @@ import com.google.common.collect.ImmutableSet;
 import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
+import de.imise.tool3lgm.graphtools.model.CopyDependencyResolver.CopyDependencyResolverResultSimple;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.userfield.calculator.Calculator;
@@ -384,7 +385,7 @@ public final class UserFieldDefinitions extends UserFieldDefinitionChangeHandler
     /**
      * @param otherDef
      */
-    public void _addAll(final UserFieldDefinitions otherDef) {
+    public void addAll(final UserFieldDefinitions otherDef) {
         Iterable<UserField> elementClassUserFields = otherDef.getElementClassUserFields();
         Iterable<UserFieldNumberFormat> numberFormats = otherDef.getNumberFormats();
         addAll(numberFormats, elementClassUserFields);
@@ -393,6 +394,13 @@ public final class UserFieldDefinitions extends UserFieldDefinitionChangeHandler
                 add(uf);
             }
         }
+    }
+
+    /**
+     * @param otherDef
+     */
+    public void addAll(final CopyDependencyResolverResultSimple resolvedCopyDependencies) {
+        addAll(resolvedCopyDependencies.userFieldNumberFormats, resolvedCopyDependencies.userFields);
     }
 
     /**

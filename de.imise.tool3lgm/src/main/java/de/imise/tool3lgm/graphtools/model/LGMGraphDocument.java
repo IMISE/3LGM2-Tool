@@ -344,7 +344,7 @@ public class LGMGraphDocument extends GraphDocument {
         addSplittedSourceEdgesToCopy(resolvedCopyDependencies.elements, targetDoc);
 
         UserFieldDefinitions ufd = targetCollection.getUserFieldDefinitions();
-        ufd.addAll(resolvedCopyDependencies.userFieldNumberFormats, resolvedCopyDependencies.userFields);
+        ufd.addAll(resolvedCopyDependencies);
 
         List<ElementContainer> tmpActive = new ArrayList<>(sourceDoc.selectedContainer);
         List<Edge> edges = new ArrayList<>();
