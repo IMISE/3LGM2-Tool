@@ -910,7 +910,9 @@ public class ToolContentHandlerV3_0 implements ContentHandler {
             } else if (qName.equals("userFieldDef")) {
                 if (userField != null) {
                     userFieldDefinitions.add(userField);
-                } else if (userFieldNumberFormat == null) {
+                } else if (userFieldNumberFormat != null) {
+                    userFieldDefinitions.add(userFieldNumberFormat);
+                } else {
                     throw new SAXException("Error while parsing definition of userFields: userFiel shouldn't not be null");
                 }
                 userField = null;
