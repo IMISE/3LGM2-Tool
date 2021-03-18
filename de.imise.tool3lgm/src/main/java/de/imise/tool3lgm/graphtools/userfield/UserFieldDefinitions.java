@@ -27,7 +27,9 @@ import de.imise.tool3lgm.graphtools.userfield.calculator.PartValueSumFunction;
 import de.imise.tool3lgm.graphtools.userfield.calculator.PartValueSumFunction.TWSumArguments;
 import de.imise.tool3lgm.graphtools.userfield.calculator.PartValueSumSinglePartResults;
 import de.imise.tool3lgm.graphtools.userfield.event.UserFieldDefinitionChangeHandler;
+import de.imise.util.Alphabetical;
 import de.imise.util.collections.CollectionUtils;
+import de.imise.util.collections.ExtendedMap;
 import de.imise.util.swing.dialog.MultipleOptionPane;
 
 /**
@@ -1009,7 +1011,10 @@ public final class UserFieldDefinitions extends UserFieldDefinitionChangeHandler
      */
     public String getDebugString() {
         StringBuilder sb = new StringBuilder();
-        for (Class<?> keyClass : getClassToUserFieldKeys()) {
+        List<Class<? extends UserFieldTarget>> sortedKeys = Alphabetical.getSorted(getClassToUserFieldKeys());
+        sb.append("classToUserFieldListMap");
+        sb.append("\n-----------------------\n");
+        for (Class<?> keyClass : sortedKeys) {
             sb.append(keyClass.getSimpleName());
             sb.append("\n");
             for (Object o : classToUserFieldListMap.get(keyClass)) {
@@ -1025,6 +1030,12 @@ public final class UserFieldDefinitions extends UserFieldDefinitionChangeHandler
                 sb.append("\n");
             }
         }
+        sb.append("\nformatIdToFormat");
+        sb.append("\n----------------\n");
+        sb.append(ExtendedMap.toString(formatIdToFormat));
+        sb.append("idToUserFieldMap)");
+        sb.append("\n-----------------\n");
+        sb.append(ExtendedMap.toString(idToUserFieldMap));
         return sb.toString();
     }
 
