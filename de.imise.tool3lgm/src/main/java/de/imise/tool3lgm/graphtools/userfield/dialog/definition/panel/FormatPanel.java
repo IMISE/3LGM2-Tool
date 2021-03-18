@@ -80,7 +80,7 @@ public class FormatPanel extends AbstractInputPanel implements ActionListener, C
      * Also die ComboBox, das Einheiten-<code>JTextField</code>, die Übernehmen
      * und Abbrechen button..
      */
-    private final JPanel zahlenFormatPanel;
+    private final JPanel editFormatPanel;
 
     /**
      * In dieser AlphabeticalComboBox sind die schon bestehenden Formate
@@ -209,13 +209,13 @@ public class FormatPanel extends AbstractInputPanel implements ActionListener, C
         constraints.gridwidth = 2;
         constraints.insets.top = 10;
         constraints.insets.bottom = 5;
-        zahlenFormatPanel = new JPanel();
-        zahlenFormatPanel.setVisible(false);
-        zahlenFormatPanel.setLayout(new GridBagLayout());
+        editFormatPanel = new JPanel();
+        editFormatPanel.setVisible(false);
+        editFormatPanel.setLayout(new GridBagLayout());
         GridBagConstraints constraintsFormat = new GridBagConstraints();
         //		zahlenFormatPanel.setBorder(BorderFactory.createTitledBorder(getResString("new_format")));
-        zahlenFormatPanel.setBorder(BorderFactory.createEtchedBorder());
-        add(zahlenFormatPanel, constraints);
+        editFormatPanel.setBorder(BorderFactory.createEtchedBorder());
+        add(editFormatPanel, constraints);
         constraintsFormat.anchor = GridBagConstraints.WEST;
         constraintsFormat.insets.top = 5;
         constraintsFormat.insets.left = 3;
@@ -226,23 +226,23 @@ public class FormatPanel extends AbstractInputPanel implements ActionListener, C
         constraintsFormat.gridy = 0;
         constraintsFormat.fill = GridBagConstraints.NONE;
 
-        zahlenFormatPanel.add(new JLabel(getResString("nachkommastelle")), constraintsFormat);
+        editFormatPanel.add(new JLabel(getResString("nachkommastelle")), constraintsFormat);
 
         constraintsFormat.weightx = 1;
         constraintsFormat.gridx++;
         constraintsFormat.fill = GridBagConstraints.HORIZONTAL;
-        zahlenFormatPanel.add(digitSpinner, constraintsFormat);
+        editFormatPanel.add(digitSpinner, constraintsFormat);
 
         constraintsFormat.weightx = 0;
         constraintsFormat.gridx = 0;
         constraintsFormat.gridy++;
         constraintsFormat.fill = GridBagConstraints.NONE;
-        zahlenFormatPanel.add(new JLabel(getResString("einheit")), constraintsFormat);
+        editFormatPanel.add(new JLabel(getResString("einheit")), constraintsFormat);
 
         constraintsFormat.weightx = 1;
         constraintsFormat.gridx++;
         constraintsFormat.fill = GridBagConstraints.HORIZONTAL;
-        zahlenFormatPanel.add(unitBox, constraintsFormat);
+        editFormatPanel.add(unitBox, constraintsFormat);
 
         constraintsFormat.gridx = 1;
         constraintsFormat.gridy++;
@@ -253,7 +253,7 @@ public class FormatPanel extends AbstractInputPanel implements ActionListener, C
         buttonPanel.add(newButton);
         buttonPanel.add(deleteButton);
         buttonPanel.add(refreshButton);
-        zahlenFormatPanel.add(buttonPanel, constraintsFormat);
+        editFormatPanel.add(buttonPanel, constraintsFormat);
 
     }
 
@@ -435,18 +435,18 @@ public class FormatPanel extends AbstractInputPanel implements ActionListener, C
             digitSpinner.setValue(digits);
             deleteButton.setEnabled(true);
         } else if (e.getSource() == expandPanelButton) {
-            if (!zahlenFormatPanel.isVisible()) {
+            if (!editFormatPanel.isVisible()) {
                 Dimension d = owner.getSize();
-                d.height += zahlenFormatPanel.getPreferredSize().height;
+                d.height += editFormatPanel.getPreferredSize().height;
                 owner.setSize(d);
-                zahlenFormatPanel.setVisible(true);
+                editFormatPanel.setVisible(true);
                 expandPanelButton.setText("<<");
             } else {
                 Dimension d = owner.getSize();
                 //vor dem invisible setzen abfragen
-                d.height -= zahlenFormatPanel.getHeight();
+                d.height -= editFormatPanel.getHeight();
                 owner.setSize(d);
-                zahlenFormatPanel.setVisible(false);
+                editFormatPanel.setVisible(false);
                 expandPanelButton.setText(">>");
             }
         } else if (e.getSource() == newButton) {
