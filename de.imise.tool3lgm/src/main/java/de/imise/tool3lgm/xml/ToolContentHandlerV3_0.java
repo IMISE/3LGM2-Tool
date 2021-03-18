@@ -923,11 +923,17 @@ public class ToolContentHandlerV3_0 implements ContentHandler {
                 }
                 String value = elementValue.toString();
                 if (qName.equals("userFieldStyle")) {
-                    //Style.NUMER was Style.CLASSIFICATION_NUMBER and Style.FORMULA was Style.CLASSIFICATION_NUMBER_FORMULA
+                    //Style.NUMER was Style.CLASSIFICATION_NUMBER and
+                    //Style.FORMULA was Style.CLASSIFICATION_NUMBER_FORMULA
                     if (value.equals("CLASSIFICATION_NUMBER")) {
                         value = Style.NUMBER.name();
                     } else if (value.equals("CLASSIFICATION_NUMBER_FORMULA")) {
                         value = Style.FORMULA.name();
+                    } else if (value.equals("FORMAT")) {
+                        //formats are no longer UserFields, but if we load old
+                        //files with format userfields we have to set here an
+                        //(irrelevant but existing) style
+                        value = Style.NUMBER.name();
                     }
                 }
                 userField.putXMLFieldString(qName, value);

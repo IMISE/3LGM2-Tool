@@ -169,7 +169,8 @@ public class ToolXMLParser {
             //nicht kümmert)
         case 11: //Version 3.7 -> OptionalEdge.isOptional() wird gespeichert
         case 12: //Version 3.8 -> valign + halign über GraphElementLayout enums und nicht mehr über SwingConstants ints
-        case 13: //Version 3.9 -> Formats of UserFields are no longer UserFields themselves but now have their own type UserFieldNumberFormat
+        case 13: //Version 3.9 -> Formats of UserFields are no longer UserFields themselves but now have their own type UserFieldNumberFormat and
+                 //               Style.NUMER was Style.CLASSIFICATION_NUMBER and Style.FORMULA was Style.CLASSIFICATION_NUMBER_FORMULA
             return new ToolContentHandlerV3_1(gdcoll, paste);
         default:
             throw new SAXException("angegebenes Dateiformat wird nicht unterstützt");
