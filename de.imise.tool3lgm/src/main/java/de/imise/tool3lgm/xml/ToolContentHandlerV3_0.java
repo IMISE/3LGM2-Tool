@@ -909,11 +909,13 @@ public class ToolContentHandlerV3_0 implements ContentHandler {
 
             } else if (qName.equals("userFieldDef")) {
                 if (userField != null) {
-                    userFieldDefinitions.add(userField);
+                    if (userField.getStyle() != null) { //File Version 3.9 UserField.Style.FORMATS && UserField.Style.SEPARATOR are removed as UserField style -> ignore such UserFields
+                        userFieldDefinitions.add(userField);
+                    }
                 } else if (userFieldNumberFormat != null) {
                     userFieldDefinitions.add(userFieldNumberFormat);
                 } else {
-                    throw new SAXException("Error while parsing definition of userFields: userFiel shouldn't not be null");
+                    throw new SAXException("Error while parsing definition of userFields: userField shouldn't not be null");
                 }
                 userField = null;
                 userFieldNumberFormat = null;
@@ -931,14 +933,14 @@ public class ToolContentHandlerV3_0 implements ContentHandler {
                         value = Style.NUMBER.name();
                     } else if (value.equals("CLASSIFICATION_NUMBER_FORMULA")) {
                         value = Style.FORMULA.name();
-                    } else if (value.equals("FORMAT")) {
-                        //formats are no longer UserFields, but if we load old
-                        //files with format userfields we have to set here an
-                        //(irrelevant but existing) style
-                        value = Style.NUMBER.name();
+                    } else if (value.equals("FORMAT") || value.equals("SEPARATOR")) {
+                        //formats and separators are no longer UserFields
+                        value = null;
                     }
                 }
-                userField.putXMLFieldString(qName, value);
+                if (value != null) {
+                    userField.putXMLFieldString(qName, value);
+                }
 
             } else if (qName.equals("userFieldFormatString")) {
                 if (userField != null) { // File Version 3.8

@@ -35,8 +35,6 @@ public class UserFieldTreeNode extends IconifiedTreeNode<Pair<UserField, ModelEl
                 value = ""; //Bei nicht vorhandenen Links nichts statt EMPTY_VALUE anzeigen
             }
             label = uf.getName() + ": " + value;
-        } else if (uf.hasStyle(UserField.Style.SEPARATOR)) {
-            label = "--- " + uf.getName() + " ---------";
         } else if (uf.isNumberUserField()) {
             label = uf.getName() + ": " + uf.getFormattedValue(me, true);
         } else {

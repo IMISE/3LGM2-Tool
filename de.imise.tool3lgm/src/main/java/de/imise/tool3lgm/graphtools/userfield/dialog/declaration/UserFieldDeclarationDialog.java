@@ -10,7 +10,6 @@ import static de.imise.tool3lgm.graphtools.userfield.UserField.Style.ID;
 import static de.imise.tool3lgm.graphtools.userfield.UserField.Style.MULTI_LINE;
 import static de.imise.tool3lgm.graphtools.userfield.UserField.Style.NUMBER;
 import static de.imise.tool3lgm.graphtools.userfield.UserField.Style.RADIO_BUTTON;
-import static de.imise.tool3lgm.graphtools.userfield.UserField.Style.SEPARATOR;
 import static de.imise.tool3lgm.graphtools.userfield.UserField.Style.SINGLE_LINE;
 import static de.imise.tool3lgm.graphtools.userfield.dialog.declaration.UserFieldDeclarationImportExportHandler.exportDefinitions;
 import static de.imise.tool3lgm.graphtools.userfield.dialog.declaration.UserFieldDeclarationImportExportHandler.importDefinitions;
@@ -165,7 +164,6 @@ public final class UserFieldDeclarationDialog extends AbstractUserFieldDeclarati
             addStyleCategory("STYLE_TYPE_SPECIAL");
             addStyle(HYPERLINK);
             addStyle(ID);
-            addStyle(SEPARATOR);
         }
     }
 

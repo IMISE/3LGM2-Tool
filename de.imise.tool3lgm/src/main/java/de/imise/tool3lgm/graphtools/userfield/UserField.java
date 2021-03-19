@@ -33,12 +33,6 @@ import de.imise.util.IDStringGenerator;
 public final class UserField implements Cloneable, Comparator<UserFieldTarget>, IDSource {
 
     public static enum Style {
-        SEPARATOR {
-            @Override
-            int compare(final UserField uf, final UserFieldTarget me1, final UserFieldTarget me2) {
-                return 0;
-            }
-        },
         SINGLE_LINE {
             @Override
             int compare(final UserField uf, final UserFieldTarget me1, final UserFieldTarget me2) {
@@ -606,16 +600,6 @@ public final class UserField implements Cloneable, Comparator<UserFieldTarget>, 
     }
 
     /**
-     * Prüft, ob dieses {@link UserField} ein UserField ist, das einen Wert in
-     * sich tragen kann und kein Separator ist
-     *
-     * @return
-     */
-    public final boolean isValueUserField() {
-        return style != Style.SEPARATOR;
-    }
-
-    /**
      * Prüft, ob das UserField eine Kennzahl oder Kennzahlformel ist
      *
      * @return
@@ -788,9 +772,7 @@ public final class UserField implements Cloneable, Comparator<UserFieldTarget>, 
     @Override
     public String toString() {
         String retVal = null;
-        if (style == Style.SEPARATOR) {
-            retVal = "--- " + name + " ---";
-        } else if (Strings.isNullOrEmpty(description)) {
+        if (Strings.isNullOrEmpty(description)) {
             retVal = name;
         } else {
             retVal = name + " (" + description + ")";
