@@ -17,6 +17,7 @@ import com.google.common.collect.ImmutableSet;
 
 import de.imise.tool3lgm.graphtools.IDSource;
 import de.imise.util.IDStringGenerator;
+import de.imise.util.NameAndDescriptionTargetAdapter;
 
 /**
  * Ein <code>UserField</code> ist ein Element bzw. Objekt, dass Element- und
@@ -30,7 +31,7 @@ import de.imise.util.IDStringGenerator;
  *
  * @author Thomas Rudert
  */
-public final class UserField implements Cloneable, Comparator<UserFieldTarget>, IDSource {
+public final class UserField extends NameAndDescriptionTargetAdapter implements Cloneable, Comparator<UserFieldTarget>, IDSource {
 
     public static enum Style {
         SINGLE_LINE {
@@ -318,16 +319,6 @@ public final class UserField implements Cloneable, Comparator<UserFieldTarget>, 
     private Class<? extends UserFieldTarget> targetClass;
 
     /**
-     * Ist der Name des <code>UserField</code>s.
-     */
-    private String name = "";
-
-    /**
-     * Ist die Beschreibung des <code>UserField</code>s.
-     */
-    private String description = "";
-
-    /**
      * Gibt an, von welcher Form das <code>userField</code> sein soll. / private
      * int style = -1; /** Art dieses {@link UserField}s. Immer ein Wert aus
      * {@link Style}
@@ -518,40 +509,6 @@ public final class UserField implements Cloneable, Comparator<UserFieldTarget>, 
      */
     public String getFormatUnit() {
         return numberFormat == null ? null : numberFormat.getUnit();
-    }
-
-    /**
-     * Gibt den Namen des <code>UserField</code> s zurück.
-     *
-     * @return Name des <code>UserField</code> s
-     */
-    public String getName() {
-        return name;
-    }
-
-    /**
-     * Setzt den Namen des <code>UserField</code> s
-     *
-     * @param name
-     */
-    public void setName(final String name) {
-        this.name = name;
-    }
-
-    /**
-     * Gibt die Beschreibung des <code>UserField</code> s zurück.
-     *
-     * @return Beschreibung des <code>UserField</code> s
-     */
-    public String getDescription() {
-        return description;
-    }
-
-    /**
-     * Setzt die Beschreibung des <code>UserField</code> s.
-     */
-    public void setDescription(final String description) {
-        this.description = description;
     }
 
     /**
