@@ -24,20 +24,34 @@ import de.imise.util.image.ImageTools;
 
 public class TreeRenderer extends DefaultTreeCellRenderer {
 
-    static ImageIcon edgeIcon_up = Tool3lgmConstants.getIcon("trace2.gif");
-    static ImageIcon edgeIcon_down = Tool3lgmConstants.getIcon("trace.gif");
-    static ImageIcon edgeIcon_both = Tool3lgmConstants.getIcon("trace1.gif");
-    static ImageIcon rectIcon = Tool3lgmConstants.getIcon("knot.gif");
-    static ImageIcon circleIcon = Tool3lgmConstants.getIcon("circle.gif");
-    static ImageIcon triangleIcon = Tool3lgmConstants.getIcon("triangle.gif");
-    static ImageIcon rundeckIcon = Tool3lgmConstants.getIcon("roundeck.gif");
-    static ImageIcon rhombusIcon = Tool3lgmConstants.getIcon("raute.gif");
-    static ImageIcon tonneIcon = Tool3lgmConstants.getIcon("tonne.gif");
-    static ImageIcon wabeIcon = Tool3lgmConstants.getIcon("wabe.gif");
-    static ImageIcon dummyIcon = Tool3lgmConstants.getIcon("element.gif");
-    static ImageIcon rectErrorIcon = Tool3lgmConstants.getIcon("knot_error.gif");
-    //	static ImageIcon errorIcon = Tool3lgmConstants.getIcon("error.gif");
-    //	static ImageIcon warningIcon = Tool3lgmConstants.getIcon("warning.gif");
+    private enum TreeIcon {
+        knot,
+        circle,
+        triangle,
+        roundeck,
+        raute,
+        tonne,
+        wabe,
+        element,
+        knot_error,
+        //        trace,
+        //        trace1,
+        //        trace2,
+        //        error,
+        //        warning
+        ;
+
+        private ImageIcon icon;
+
+        private ImageIcon get(final int height) {
+            if (icon == null || icon.getIconHeight() != height) {
+                icon = Tool3lgmConstants.getIcon(name());
+                icon = ImageTools.getScaledInstance(icon, height, 10);
+            }
+            return icon;
+        }
+
+    }
 
     /**
      * Standard text color for all rendered trees
@@ -71,10 +85,8 @@ public class TreeRenderer extends DefaultTreeCellRenderer {
                 if (!ignoreColor) {
                     setTextNonSelectionColor(node.getSignalColor());
                 }
-            } else {
-                if (!ignoreColor) {
-                    setTextNonSelectionColor(standardColor);
-                }
+            } else if (!ignoreColor) {
+                setTextNonSelectionColor(standardColor);
             }
 
             super.getTreeCellRendererComponent(tree, value, sel, expanded, leaf, row, hasFocus);
@@ -94,32 +106,38 @@ public class TreeRenderer extends DefaultTreeCellRenderer {
                         GraphDocument doc = ec.getGraphDocument();
                         ModelElement me = ec.getElement();
                         Shape form = me.isPaintable() ? doc.getDefaultElementsLayout().getStandardForm(ec) : null;
+                        Dimension preferredSize = getPreferredSize();
+                        int iconHeight = preferredSize.height;
                         if (form != null) {
                             switch (form) {
                             case rechteck:
                                 if (iconState == SHOW_NORMAL_ICON) {
-                                    icon = rectIcon;
+                                    icon = TreeIcon.knot.get(iconHeight);
                                 } else if (iconState == SHOW_ERROR_ICON) {
-                                    setIcon(rectErrorIcon);
+                                    icon = TreeIcon.knot_error.get(iconHeight);
                                 }
                                 break;
                             case oval:
-                                icon = circleIcon;
+                                icon = TreeIcon.circle.get(iconHeight);
                                 break;
                             case dreieck:
-                                icon = triangleIcon;
+                                icon = TreeIcon.triangle.get(iconHeight);
                                 break;
                             case rundeck:
-                                icon = rundeckIcon;
+                                icon = TreeIcon.roundeck.get(iconHeight);
+                                ;
                                 break;
                             case rhombus:
-                                icon = rhombusIcon;
+                                icon = TreeIcon.raute.get(iconHeight);
+                                ;
                                 break;
                             case tonne:
-                                icon = tonneIcon;
+                                icon = TreeIcon.tonne.get(iconHeight);
+                                ;
                                 break;
                             case wabe:
-                                icon = wabeIcon;
+                                icon = TreeIcon.wabe.get(iconHeight);
+                                ;
                                 break;
                             default:
                             }
@@ -128,10 +146,6 @@ public class TreeRenderer extends DefaultTreeCellRenderer {
                         ec.checkTreeIcon();
                     }
                 }
-            }
-            if (icon != null) {
-                Dimension preferredSize = getPreferredSize();
-                icon = ImageTools.getScaledInstance(icon, preferredSize.height, 10);
             }
             setIcon(icon);
             return this;
