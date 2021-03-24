@@ -125,19 +125,15 @@ public class TreeRenderer extends DefaultTreeCellRenderer {
                                 break;
                             case rundeck:
                                 icon = TreeIcon.roundeck.get(iconHeight);
-                                ;
                                 break;
                             case rhombus:
                                 icon = TreeIcon.raute.get(iconHeight);
-                                ;
                                 break;
                             case tonne:
                                 icon = TreeIcon.tonne.get(iconHeight);
-                                ;
                                 break;
                             case wabe:
                                 icon = TreeIcon.wabe.get(iconHeight);
-                                ;
                                 break;
                             default:
                             }
