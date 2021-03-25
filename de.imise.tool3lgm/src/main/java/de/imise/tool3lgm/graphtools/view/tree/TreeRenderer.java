@@ -2,15 +2,19 @@ package de.imise.tool3lgm.graphtools.view.tree;
 
 import static de.imise.tool3lgm.graphtools.view.tree.node.IconifiedTreeNode.IconState.SHOW_ERROR_ICON;
 import static de.imise.tool3lgm.graphtools.view.tree.node.IconifiedTreeNode.IconState.SHOW_NORMAL_ICON;
+import static de.imise.tool3lgm.graphtools.view.tree.node.IconifiedTreeNode.IconState.SHOW_WARNING_ICON;
 import static de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty.OPTION_USE_PROPERTY_COLORS;
 
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
+import java.util.Map;
 
 import javax.swing.ImageIcon;
 import javax.swing.JTree;
 import javax.swing.tree.DefaultTreeCellRenderer;
+
+import org.apache.commons.collections4.map.HashedMap;
 
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
@@ -22,34 +26,49 @@ import de.imise.tool3lgm.graphtools.view.tree.node.IconifiedTreeNode.IconState;
 import de.imise.tool3lgm.graphtools.view.tree.node.LGMTreeNode;
 import de.imise.util.image.ImageTools;
 
+/**
+ * @author AXS (< 01.01.2017)
+ */
 public class TreeRenderer extends DefaultTreeCellRenderer {
 
-    private enum TreeIcon {
-        knot,
-        circle,
-        triangle,
-        roundeck,
-        raute,
-        tonne,
-        wabe,
-        element,
-        knot_error,
-        //        trace,
-        //        trace1,
-        //        trace2,
-        //        error,
-        //        warning
-        ;
+    /**
+     * Cache for the tree icons to prevent rescaling to the correct height all
+     * the time.
+     */
+    private static final Map<Shape, ImageIcon> shapeToTreeIcon = new HashedMap<>();
 
-        private ImageIcon icon;
+    /**
+     * Dummy-Icon to mark shapes with no icon image
+     */
+    private static final ImageIcon DUMMY_ICON = new ImageIcon();
 
-        private ImageIcon get(final int height) {
-            if (icon == null || icon.getIconHeight() != height) {
-                icon = Tool3lgmConstants.getIcon(name());
-                icon = ImageTools.getScaledInstance(icon, height, 10);
+    /**
+     * @param shape
+     * @param height
+     * @param error
+     * @return
+     */
+    private static ImageIcon getTreeIcon(final Shape shape, final int height, final IconState iconState) {
+        ImageIcon icon = null;
+        if (shape != null) {
+            icon = shapeToTreeIcon.get(shape);
+            if (icon == null || icon != DUMMY_ICON && icon.getIconHeight() != height) {
+                boolean errorIcon = iconState == SHOW_ERROR_ICON;
+                boolean warningIcon = iconState == SHOW_WARNING_ICON;
+                String iconName = "TREE_ICON_" + shape.name() + (errorIcon ? "_ERROR" : warningIcon ? "_WARNING" : "");
+                icon = Tool3lgmConstants.getIcon(iconName);
+                if (icon == null && (errorIcon || warningIcon)) { //at the moment an error icon only exists for rectangle (Shape.rechteck) -> fallback normal icon
+                    icon = getTreeIcon(shape, height, SHOW_NORMAL_ICON);
+                }
+                if (icon == null) { // no icon found for this shape in the resources -> store the dummy
+                    icon = DUMMY_ICON;
+                } else {
+                    icon = ImageTools.getScaledInstance(icon, height, 10);
+                }
+                shapeToTreeIcon.put(shape, icon);
             }
-            return icon;
         }
+        return icon == DUMMY_ICON ? null : icon;
 
     }
 
@@ -105,39 +124,10 @@ public class TreeRenderer extends DefaultTreeCellRenderer {
                     if (icon == null) {
                         GraphDocument doc = ec.getGraphDocument();
                         ModelElement me = ec.getElement();
-                        Shape form = me.isPaintable() ? doc.getDefaultElementsLayout().getStandardForm(ec) : null;
+                        Shape shape = me.isPaintable() ? doc.getDefaultElementsLayout().getStandardForm(ec) : null;
                         Dimension preferredSize = getPreferredSize();
                         int iconHeight = preferredSize.height;
-                        if (form != null) {
-                            switch (form) {
-                            case rechteck:
-                                if (iconState == SHOW_NORMAL_ICON) {
-                                    icon = TreeIcon.knot.get(iconHeight);
-                                } else if (iconState == SHOW_ERROR_ICON) {
-                                    icon = TreeIcon.knot_error.get(iconHeight);
-                                }
-                                break;
-                            case oval:
-                                icon = TreeIcon.circle.get(iconHeight);
-                                break;
-                            case dreieck:
-                                icon = TreeIcon.triangle.get(iconHeight);
-                                break;
-                            case rundeck:
-                                icon = TreeIcon.roundeck.get(iconHeight);
-                                break;
-                            case rhombus:
-                                icon = TreeIcon.raute.get(iconHeight);
-                                break;
-                            case tonne:
-                                icon = TreeIcon.tonne.get(iconHeight);
-                                break;
-                            case wabe:
-                                icon = TreeIcon.wabe.get(iconHeight);
-                                break;
-                            default:
-                            }
-                        }
+                        icon = getTreeIcon(shape, iconHeight, iconState);
                     } else {
                         ec.checkTreeIcon();
                     }
