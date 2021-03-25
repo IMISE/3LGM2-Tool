@@ -545,14 +545,20 @@ public class UserProperties extends AbstractUserProperties {
 
         /**
          * Bitpattern for Rendering-Hints (standard value: all bits are set to
-         * zero bit0: ANTIALIASING bit1: ALPHA_INTERPOLATION bit2:
-         * COLOR_RENDERING bit3: RENDERING bit4: DITHERING bit5:
-         * FRACTIONALMETRICS bit6: INTERPOLATION bit7: TEXT_ANTIALIASING
+         * zero)<br>
+         * bit0: ANTIALIASING<br>
+         * bit1: ALPHA_INTERPOLATION<br>
+         * bit2: COLOR_RENDERING<br>
+         * bit3: RENDERING<br>
+         * bit4: DITHERING<br>
+         * bit5: FRACTIONALMETRICS<br>
+         * bit6: INTERPOLATION<br>
+         * bit7: TEXT_ANTIALIASING
          */
         PROPERTY_INT_RENDER_SETTINGS {
             @Override
             public int getDefault() {
-                return 137;
+                return 255;
             }
         },
         PROPERTY_INT_RMI_PORT {
