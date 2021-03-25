@@ -6,6 +6,10 @@ import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_ADD_SELECTED_TO_ALL_SUBMODELS;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_ADD_SELECTED_TO_NEW_SUBMODEL;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_ADD_SELECTED_TO_SUBMODEL;
+import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_ADOPT_SAME_ALL;
+import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_ADOPT_SAME_COLOR;
+import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_ADOPT_SAME_FONT;
+import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_ADOPT_SAME_TRANSPARENCY;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_COMMAND_LINE;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_CREATE_ADDICTED;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_CREATE_NODE;
@@ -133,9 +137,14 @@ public class RegularContextGenerator extends ElementSelectionContextGenerator im
     private JMenuItem command_line;
 
     /**
-     * COMMENTME
+     * Menu Options for setting transparency to half, full, and non-transparent
      */
     private JMenuItem layer_transparencey_none, layer_transparencey_semi, layer_transparencey_full;
+
+    /**
+     * Menu Options for adopting color, transparency
+     */
+    private JMenuItem adopt_color, adopt_tranparency, adopt_font, adopt_all;
 
     /**
      * COMMENTME
@@ -238,22 +247,33 @@ public class RegularContextGenerator extends ElementSelectionContextGenerator im
         internals.add(queue);
         internals.add(consistency);
 
-        // weiter mit Grafik-Sachen
+        // From here on: graphical options
         normalize_layer = getItem(MODEL_ACTION_SET_LAYER_DEFAULT_COLOR_AND_TRANSPARENCY);
         layer_transparencey_full = getItem(MODEL_ACTION_SET_LAYER_TRANSPARENCY_FULL);
         layer_transparencey_semi = getItem(MODEL_ACTION_SET_LAYER_TRANSPARENCY_HALF);
         layer_transparencey_none = getItem(MODEL_ACTION_SET_LAYER_TRANSPARENCY_NONE);
         color_layer = getItem(MODEL_ACTION_SET_LAYER_COLOR);
+        adopt_color = getItem(MODEL_ACTION_ADOPT_SAME_COLOR);
+        adopt_tranparency = getItem(MODEL_ACTION_ADOPT_SAME_TRANSPARENCY);
+        adopt_font = getItem(MODEL_ACTION_ADOPT_SAME_FONT);
+        adopt_all = getItem(MODEL_ACTION_ADOPT_SAME_ALL);
 
         JMenu trans_layer = new JMenu(getResString("layerTransparencyMenu"));
         trans_layer.add(layer_transparencey_none);
         trans_layer.add(layer_transparencey_semi);
         trans_layer.add(layer_transparencey_full);
 
+        JMenu adopt_layer = new JMenu(getResString("elementAdoptionMenu"));
+        adopt_layer.add(adopt_font);
+        adopt_layer.add(adopt_tranparency);
+        adopt_layer.add(adopt_color);
+        adopt_layer.add(adopt_all);
+
         layout_layer = new JMenu(getResString("layerLayoutMenu"));
         layout_layer.add(normalize_layer);
         layout_layer.add(color_layer);
         layout_layer.add(trans_layer);
+        layout_layer.add(adopt_layer);
 
         show_configs = getItem(ActionLibrary.ContextActions.MODEL_ACTION_SET_ELEMENT_INTERLAYER_CONNECTIONS_VISIBILITY_ON);
         hide_configs = getItem(ActionLibrary.ContextActions.MODEL_ACTION_SET_ELEMENT_INTERLAYER_CONNECTIONS_VISIBILITY_OFF);

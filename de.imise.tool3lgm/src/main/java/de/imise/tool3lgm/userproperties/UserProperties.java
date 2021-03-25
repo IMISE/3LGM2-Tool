@@ -24,6 +24,7 @@ import org.apache.commons.collections4.map.Flat3Map;
 import com.google.common.collect.ImmutableSet;
 
 import de.imise.tool3lgm.Tool3lgmConstants;
+import de.imise.tool3lgm.Tool3lgmVersion;
 import de.imise.tool3lgm.event.action.ChangeLocaleAction;
 import de.imise.tool3lgm.event.action.UserPropertyBooleanChangeAction;
 import de.imise.util.BooleanOption;
@@ -34,6 +35,12 @@ import de.imise.util.swing.event.ActionSource;
  * @author AXS created on 16.08.2007
  */
 public class UserProperties extends AbstractUserProperties {
+
+    /**
+     * The prefix that is written directly in front of the tool version in the
+     * first line of the properties file as a comment
+     */
+    private static final String PROPERTY_FILE_VERSION_LINE_COMMENT_PREFIX = "Tool3lgm-Version ";
 
     /**
      * Pfad zur Default-Datei in den Ressourcen mit den Optionen für einen
@@ -303,7 +310,7 @@ public class UserProperties extends AbstractUserProperties {
             for (Object key : transientProperties.keySet()) {
                 properties.remove(key);
             }
-            properties.store(out, "Tool3lgm-Version " + TOOL_VERSION_INFO);
+            properties.store(out, PROPERTY_FILE_VERSION_LINE_COMMENT_PREFIX + TOOL_VERSION_INFO);
             properties.putAll(transientProperties);
         } catch (Exception e) {
             e.printStackTrace();
@@ -545,14 +552,20 @@ public class UserProperties extends AbstractUserProperties {
 
         /**
          * Bitpattern for Rendering-Hints (standard value: all bits are set to
-         * zero bit0: ANTIALIASING bit1: ALPHA_INTERPOLATION bit2:
-         * COLOR_RENDERING bit3: RENDERING bit4: DITHERING bit5:
-         * FRACTIONALMETRICS bit6: INTERPOLATION bit7: TEXT_ANTIALIASING
+         * zero)<br>
+         * bit0: ANTIALIASING<br>
+         * bit1: ALPHA_INTERPOLATION<br>
+         * bit2: COLOR_RENDERING<br>
+         * bit3: RENDERING<br>
+         * bit4: DITHERING<br>
+         * bit5: FRACTIONALMETRICS<br>
+         * bit6: INTERPOLATION<br>
+         * bit7: TEXT_ANTIALIASING
          */
         PROPERTY_INT_RENDER_SETTINGS {
             @Override
             public int getDefault() {
-                return 137;
+                return 255;
             }
         },
         PROPERTY_INT_RMI_PORT {
@@ -779,6 +792,17 @@ public class UserProperties extends AbstractUserProperties {
      */
     public static File getIconPath() {
         return iconPath;
+    }
+
+    /**
+     * @return
+     */
+    public static Tool3lgmVersion getFileVersion() {
+        //read the first line and extract the version
+        String versionString = FileHandler.getLine(USER_INFO_FILE, "#" + PROPERTY_FILE_VERSION_LINE_COMMENT_PREFIX, true);
+        Tool3lgmVersion version = Tool3lgmVersion.parseString(versionString);
+        version.suffix = ""; //remove "(dev)" and the git timestamp
+        return version;
     }
 
 }

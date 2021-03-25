@@ -2,6 +2,7 @@ package de.imise.tool3lgm;
 
 import static de.imise.tool3lgm.Static.getMainFrame;
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
+import static de.imise.tool3lgm.userproperties.UserProperties.IntProperty.PROPERTY_INT_RENDER_SETTINGS;
 import static de.imise.tool3lgm.userproperties.UserProperties.IntProperty.PROPERTY_INT_RMI_PORT;
 
 import java.awt.Image;
@@ -112,6 +113,17 @@ public class Tool3lgmMain {
 
         //UserProperties initialisieren, damit die richige Locale gesetzt ist
         UserProperties.init();
+
+        //correct the RenderOptions in Property-Files from ToolVersions < 4.4.1
+        //version < 4.4.1 have the value 137 for the rendering settings. With this
+        //value the font scaling is not correct for different zoom values -> in
+        //this cases set we set the new default 255 and the scaling is perfect
+        Tool3lgmVersion firstCorrectRenderOptionVersion = Tool3lgmVersion.parseString("4.4.1");
+        Tool3lgmVersion fileVersion = UserProperties.getFileVersion();
+        if (fileVersion.isLowerThan(firstCorrectRenderOptionVersion)) {
+            int renderingSetttingsDefault = PROPERTY_INT_RENDER_SETTINGS.getDefault();
+            PROPERTY_INT_RENDER_SETTINGS.set(renderingSetttingsDefault);
+        }
 
         setDockIcon();
 
