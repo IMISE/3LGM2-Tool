@@ -262,7 +262,7 @@ public class FileHandler {
     public static String readFile(final File file) {
 
         FileReader fr = null;
-        File[] files = null;
+        File[] files;
         String toString = "";
 
         files = splitFile(file);
@@ -446,6 +446,40 @@ public class FileHandler {
     public static String removeInvalidFileNameCharacters(final String fileName) {
         String newFileName = fileName.replaceAll("[^a-zA-Z0-9\\.\\-]", "_");
         return newFileName;
+    }
+
+    /**
+     * Searches the file for a line starting with the passed prefix. The first
+     * line that is found is returned.
+     *
+     * @param file The file that will be searched.
+     * @param linePrefix The prefix with which the line should begin.
+     * @param removePrefix If <code>true</code> then the line is returned
+     *            without the prefix.
+     * @return First line in the file with the specified prefix.
+     */
+    public static String getLine(final File file, final String linePrefix, final boolean removePrefix) {
+        String result = null;
+        try {
+            BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(file)));
+            String line = null;
+            int i = 0;
+            while ((line = reader.readLine()) != null) {
+                if (line.startsWith(linePrefix)) {
+                    result = line;
+                    if (removePrefix) {
+                        int linePrefixLength = linePrefix.length();
+                        result = result.substring(linePrefixLength);
+                    }
+                    break;
+                }
+            }
+            reader.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+        }
+        return result;
     }
 
 }

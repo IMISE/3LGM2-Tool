@@ -792,7 +792,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
      * @param pid
      */
     protected void dispatch_command(final GDCommands command, final String[] argv, final int pid) {
-        //		System.err.println(command + " " + Arrays.asList(argv));
+        //        System.err.println(command + " " + Arrays.asList(argv));
         int argc = argv.length;
         MetaModel metaModel = getMetaModel();
 
@@ -1247,6 +1247,24 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
                 TextAlignmentHTML textAlignmentHTML = TextAlignmentHTML.valueOf(argv[2]);
                 szen.setTextAlignmentHTML(textAlignmentHTML, ec, pid);
             }
+            break;
+        }
+        case MODEL_ACTION_ADOPT_SAME_COLOR: {
+            setSameColor(pid);
+            break;
+        }
+        case MODEL_ACTION_ADOPT_SAME_TRANSPARENCY: {
+            setSameAlpha(pid);
+            break;
+        }
+        case MODEL_ACTION_ADOPT_SAME_FONT: {
+            setSameFont(pid);
+            break;
+        }
+        case MODEL_ACTION_ADOPT_SAME_ALL: {
+            setSameFont(pid);
+            setSameAlpha(pid);
+            setSameColor(pid);
             break;
         }
         case MODEL_ACTION_MOVE_ORDER_TO_FIRST_POSITION: {
@@ -2126,6 +2144,26 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
     }
 
     /**
+     * @param pid
+     */
+    private void setSameColor(final int pid) {
+        start_transaction(pid);
+
+        ElementContainer lastSelected = getLastSelected();
+        Color col = lastSelected.getColor();
+        if (col == null) {
+            col = defaultElementsLayout.getStandardBackGroundColor(lastSelected);
+        }
+        for (ElementContainer ec : selectedContainer) {
+            if (ec != lastSelected) {
+                changeColor(ec, col, pid);
+            }
+        }
+
+        finish_transaction(pid);
+        distributeEvent(ELEMENT_GRAPHICS_CHANGED, pid);
+    }
+    /**
      * @param ec
      * @param color
      * @param pid
@@ -2215,6 +2253,27 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
         for (ElementContainer ec : selectedContainer) {
             changeAlpha(ec, alphaMode, pid);
         }
+        finish_transaction(pid);
+        distributeEvent(ELEMENT_GRAPHICS_CHANGED, pid);
+    }
+
+    /**
+     * Sets the transparency to the transparency of last selected element
+     *
+     * @param pid
+     */
+    private final void setSameAlpha(final int pid) {
+        start_transaction(pid);
+
+        ElementContainer lastSelected = getLastSelected();
+        int alphaValue = lastSelected.getAlpha();
+
+        for (ElementContainer ec : selectedContainer) {
+            if (ec != lastSelected) {
+                changeAlpha(ec, alphaValue, pid);
+            }
+        }
+
         finish_transaction(pid);
         distributeEvent(ELEMENT_GRAPHICS_CHANGED, pid);
     }
@@ -2374,6 +2433,27 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
         ec.refreshText();
         szen.finish_transaction(pid);
         szen.distributeEvent(ELEMENT_GRAPHICS_CHANGED, ec, pid);
+    }
+
+    /**
+     * Sets the font to the font of last selected element
+     *
+     * @param pid
+     */
+    private final void setSameFont(final int pid) {
+        start_transaction(pid);
+
+        ElementContainer lastSelected = getLastSelected();
+        Font font = lastSelected.getFont();
+
+        for (ElementContainer ec : selectedContainer) {
+            if (ec != lastSelected) {
+                changeFont(ec, font, pid);
+            }
+        }
+
+        finish_transaction(pid);
+        distributeEvent(ELEMENT_GRAPHICS_CHANGED, pid);
     }
 
     /**

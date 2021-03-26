@@ -135,6 +135,11 @@ public class MainFrameToolBar extends UnfloatableToolBar implements MouseListene
                         GDCommands.MODEL_ACTION_SET_ELEMENT_TRANSPARENCY_NONE, //set element transparency to non-transparent
                         GDCommands.MODEL_ACTION_SET_ELEMENT_TRANSPARENCY_HALF, //set element transparency to half-transparent
                         GDCommands.MODEL_ACTION_SET_ELEMENT_TRANSPARENCY_FULL, //set element transparency to full-transparent
+                }, {}, {
+                        GDCommands.MODEL_ACTION_ADOPT_SAME_FONT, //set selected elements' font to last selected
+                        GDCommands.MODEL_ACTION_ADOPT_SAME_TRANSPARENCY, //set selected elements' transparency to last selected
+                        GDCommands.MODEL_ACTION_ADOPT_SAME_COLOR, //set selected elements' color to last selected
+                        GDCommands.MODEL_ACTION_ADOPT_SAME_ALL //set selected elements' style to last selected
                 }
         };
 
