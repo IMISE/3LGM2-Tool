@@ -5,11 +5,11 @@ package de.imise.tool3lgm.graphtools.userfield.dialog.valueinput;
 
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
 import static de.imise.tool3lgm.graphtools.model.LGMChangeListener.LGMChangeType.DATA_CHANGED;
-import static de.imise.tool3lgm.graphtools.userfield.UserField.Style.COMBO_BOX;
-import static de.imise.tool3lgm.graphtools.userfield.UserField.Style.HYPERLINK;
-import static de.imise.tool3lgm.graphtools.userfield.UserField.Style.ID;
-import static de.imise.tool3lgm.graphtools.userfield.UserField.Style.NUMBER;
-import static de.imise.tool3lgm.graphtools.userfield.UserField.Style.SINGLE_LINE;
+import static de.imise.tool3lgm.graphtools.userfield.definition.UserField.Style.COMBO_BOX;
+import static de.imise.tool3lgm.graphtools.userfield.definition.UserField.Style.HYPERLINK;
+import static de.imise.tool3lgm.graphtools.userfield.definition.UserField.Style.ID;
+import static de.imise.tool3lgm.graphtools.userfield.definition.UserField.Style.NUMBER;
+import static de.imise.tool3lgm.graphtools.userfield.definition.UserField.Style.SINGLE_LINE;
 
 import java.awt.Color;
 import java.awt.Dimension;

@@ -17,7 +17,7 @@ import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
-import de.imise.tool3lgm.graphtools.userfield.UserField;
+import de.imise.tool3lgm.graphtools.userfield.definition.UserField;
 import de.imise.tool3lgm.graphtools.userfield.dialog.definition.formula.panel.OperatorInputPanel;
 import de.imise.tool3lgm.graphtools.userfield.dialog.definition.formula.panel.ReferencePanel;
 

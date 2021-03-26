@@ -1,7 +1,7 @@
 /*
  * Created on 30.10.2007
  */
-package de.imise.tool3lgm.graphtools.userfield;
+package de.imise.tool3lgm.graphtools.userfield.definition;
 
 import java.util.HashMap;
 import java.util.HashSet;

@@ -1,4 +1,4 @@
-package de.imise.tool3lgm.graphtools.userfield;
+package de.imise.tool3lgm.graphtools.userfield.definition;
 
 /**
  * @author Thomas Rudert

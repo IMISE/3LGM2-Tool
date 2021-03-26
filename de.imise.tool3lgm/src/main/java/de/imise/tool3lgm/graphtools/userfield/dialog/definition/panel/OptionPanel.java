@@ -8,7 +8,7 @@ import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
 import javax.swing.BorderFactory;
 import javax.swing.JCheckBox;
 
-import de.imise.tool3lgm.graphtools.userfield.UserField;
+import de.imise.tool3lgm.graphtools.userfield.definition.UserField;
 import de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty;
 
 /**

@@ -1,7 +1,7 @@
 package de.imise.tool3lgm.graphtools.view.tree.node;
 
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
-import de.imise.tool3lgm.graphtools.userfield.UserField;
+import de.imise.tool3lgm.graphtools.userfield.definition.UserField;
 import de.imise.util.BrowseUtils;
 import de.imise.util.pair.Pair;
 

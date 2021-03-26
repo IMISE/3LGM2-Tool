@@ -49,7 +49,7 @@ import de.imise.tool3lgm.graphtools.path.paths.ElementaryPath;
 import de.imise.tool3lgm.graphtools.path.paths.ParallelPath;
 import de.imise.tool3lgm.graphtools.path.paths.SimplePath;
 import de.imise.tool3lgm.graphtools.undoredo.TransactionManager;
-import de.imise.tool3lgm.graphtools.userfield.UserFieldDefinitions;
+import de.imise.tool3lgm.graphtools.userfield.definition.UserFieldDefinitions;
 import de.imise.tool3lgm.graphtools.view.container.BendpointContainer;
 import de.imise.tool3lgm.graphtools.view.container.EdgeContainer;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;

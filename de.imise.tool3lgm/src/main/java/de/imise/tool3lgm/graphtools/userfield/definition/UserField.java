@@ -1,7 +1,7 @@
-package de.imise.tool3lgm.graphtools.userfield;
+package de.imise.tool3lgm.graphtools.userfield.definition;
 
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
-import static de.imise.tool3lgm.graphtools.userfield.UserFieldDefinitions.GLOBAL_USERFIELD_IDENTIFIER_CLASS;
+import static de.imise.tool3lgm.graphtools.userfield.definition.UserFieldDefinitions.GLOBAL_USERFIELD_IDENTIFIER_CLASS;
 import static de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty.OPTION_ENABLE_FORMULA_CALCULATION;
 
 import java.math.BigDecimal;
@@ -16,6 +16,7 @@ import com.google.common.base.Strings;
 import com.google.common.collect.ImmutableSet;
 
 import de.imise.tool3lgm.graphtools.IDSource;
+import de.imise.tool3lgm.graphtools.userfield.CostingUtil;
 import de.imise.util.IDStringGenerator;
 import de.imise.util.NameAndDescriptionTargetAdapter;
 

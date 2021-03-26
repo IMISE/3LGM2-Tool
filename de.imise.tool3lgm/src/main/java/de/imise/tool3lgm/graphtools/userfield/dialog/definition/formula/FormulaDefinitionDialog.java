@@ -4,14 +4,6 @@
 package de.imise.tool3lgm.graphtools.userfield.dialog.definition.formula;
 
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
-import static de.imise.tool3lgm.graphtools.userfield.UserField.ACCOUNTING_FUNCTION_AVG;
-import static de.imise.tool3lgm.graphtools.userfield.UserField.ACCOUNTING_FUNCTION_INDI;
-import static de.imise.tool3lgm.graphtools.userfield.UserField.ACCOUNTING_FUNCTION_MAX;
-import static de.imise.tool3lgm.graphtools.userfield.UserField.ACCOUNTING_FUNCTION_MIN;
-import static de.imise.tool3lgm.graphtools.userfield.UserField.ACCOUNTING_FUNCTION_MULT;
-import static de.imise.tool3lgm.graphtools.userfield.UserField.ACCOUNTING_FUNCTION_REF;
-import static de.imise.tool3lgm.graphtools.userfield.UserField.ACCOUNTING_FUNCTION_SUM;
-import static de.imise.tool3lgm.graphtools.userfield.UserField.ACCOUNTING_FUNCTION_TWSUM;
 import static de.imise.tool3lgm.graphtools.userfield.calculator.Calculator.CLOSE_BRACKET;
 import static de.imise.tool3lgm.graphtools.userfield.calculator.Calculator.OPEN_BRACKET;
 import static de.imise.tool3lgm.graphtools.userfield.calculator.Calculator.OPERATOR_DIV;
@@ -20,6 +12,14 @@ import static de.imise.tool3lgm.graphtools.userfield.calculator.Calculator.OPERA
 import static de.imise.tool3lgm.graphtools.userfield.calculator.Calculator.OPERATOR_PLUS;
 import static de.imise.tool3lgm.graphtools.userfield.calculator.Calculator.WHITESPACE;
 import static de.imise.tool3lgm.graphtools.userfield.calculator.Calculator.isOperator;
+import static de.imise.tool3lgm.graphtools.userfield.definition.UserField.ACCOUNTING_FUNCTION_AVG;
+import static de.imise.tool3lgm.graphtools.userfield.definition.UserField.ACCOUNTING_FUNCTION_INDI;
+import static de.imise.tool3lgm.graphtools.userfield.definition.UserField.ACCOUNTING_FUNCTION_MAX;
+import static de.imise.tool3lgm.graphtools.userfield.definition.UserField.ACCOUNTING_FUNCTION_MIN;
+import static de.imise.tool3lgm.graphtools.userfield.definition.UserField.ACCOUNTING_FUNCTION_MULT;
+import static de.imise.tool3lgm.graphtools.userfield.definition.UserField.ACCOUNTING_FUNCTION_REF;
+import static de.imise.tool3lgm.graphtools.userfield.definition.UserField.ACCOUNTING_FUNCTION_SUM;
+import static de.imise.tool3lgm.graphtools.userfield.definition.UserField.ACCOUNTING_FUNCTION_TWSUM;
 import static java.awt.GridBagConstraints.BOTH;
 import static java.awt.GridBagConstraints.NORTHWEST;
 
@@ -61,10 +61,10 @@ import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.userfield.CostingUtil;
-import de.imise.tool3lgm.graphtools.userfield.UserField;
-import de.imise.tool3lgm.graphtools.userfield.UserFieldDefinitions;
-import de.imise.tool3lgm.graphtools.userfield.UserFieldTarget;
 import de.imise.tool3lgm.graphtools.userfield.calculator.Calculator;
+import de.imise.tool3lgm.graphtools.userfield.definition.UserField;
+import de.imise.tool3lgm.graphtools.userfield.definition.UserFieldDefinitions;
+import de.imise.tool3lgm.graphtools.userfield.definition.UserFieldTarget;
 import de.imise.util.swing.component.list.AlphabeticalJList;
 import de.imise.util.swing.component.text.ExtendedTextArea;
 

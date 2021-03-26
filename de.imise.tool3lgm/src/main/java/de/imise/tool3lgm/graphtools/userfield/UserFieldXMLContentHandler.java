@@ -10,7 +10,10 @@ import org.xml.sax.Locator;
 import org.xml.sax.SAXException;
 
 import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
-import de.imise.tool3lgm.graphtools.userfield.UserField.Style;
+import de.imise.tool3lgm.graphtools.userfield.definition.UserField;
+import de.imise.tool3lgm.graphtools.userfield.definition.UserFieldDefinitions;
+import de.imise.tool3lgm.graphtools.userfield.definition.UserFieldNumberFormat;
+import de.imise.tool3lgm.graphtools.userfield.definition.UserField.Style;
 
 /**
  * Die Variablen sind auf protected Gesetzt, damit man einen neuen

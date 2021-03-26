@@ -24,8 +24,8 @@ import javax.swing.border.EmptyBorder;
 
 import de.imise.tool3lgm.graphtools.dialog.tools.EasyComponents;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
-import de.imise.tool3lgm.graphtools.userfield.UserField;
-import de.imise.tool3lgm.graphtools.userfield.UserFieldDefinitions;
+import de.imise.tool3lgm.graphtools.userfield.definition.UserField;
+import de.imise.tool3lgm.graphtools.userfield.definition.UserFieldDefinitions;
 import de.imise.util.swing.component.AlphabeticalComboBox;
 import de.imise.util.swing.dialog.AbstractSizeAndPositionRestoringDialog;
 
