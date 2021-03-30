@@ -32,11 +32,11 @@ import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GDCollectionFileHandler;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.model.Szenario;
+import de.imise.tool3lgm.graphtools.userfield.WeightReplacer;
 import de.imise.tool3lgm.graphtools.userfield.definition.UserField;
+import de.imise.tool3lgm.graphtools.userfield.definition.UserField.Style;
 import de.imise.tool3lgm.graphtools.userfield.definition.UserFieldDefinitions;
 import de.imise.tool3lgm.graphtools.userfield.definition.UserFieldNumberFormat;
-import de.imise.tool3lgm.graphtools.userfield.definition.UserField.Style;
-import de.imise.tool3lgm.graphtools.userfield.WeightReplacer;
 import de.imise.tool3lgm.graphtools.view.container.BendpointContainer;
 import de.imise.tool3lgm.graphtools.view.container.EdgeContainer;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
@@ -939,7 +939,7 @@ public class ToolContentHandlerV3_0 implements ContentHandler {
                     }
                 }
                 if (value != null) {
-                    userField.putXMLFieldString(qName, value);
+                    userField.putXMLFieldString(qName, value, userFieldDefinitions);
                 }
 
             } else if (qName.equals("userFieldFormatString")) {

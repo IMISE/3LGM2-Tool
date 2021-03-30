@@ -6,6 +6,7 @@ import javax.swing.DefaultCellEditor;
 
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
+import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.userfield.WeightReplacer;
 import de.imise.tool3lgm.graphtools.userfield.definition.UserField;
 import de.imise.tool3lgm.graphtools.userfield.definition.UserFieldDefinitions;
@@ -14,15 +15,32 @@ import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.table.model.Weig
 import de.imise.util.NamedObjectContainer;
 import de.imise.util.swing.component.AlphabeticalComboBox;
 
+/**
+ * @author hboehme (13.03.2007)
+ */
 public class WeightReplaceTableCell extends UserFieldActivatedTableCell {
 
+    /**
+     *
+     */
     private final Class<? extends Edge> edgeClass;
 
-    private final String elementID;
+    /**
+     *
+     */
+    private final ModelElement me;
 
+    /**
+     * @param definitions
+     * @param noc
+     * @param table
+     * @param me
+     * @param edgeClass
+     * @param column
+     */
     public WeightReplaceTableCell(final NamedObjectContainer<UserField> noc, final UserFieldTable table, final ModelElement me, final Class<? extends Edge> edgeClass, final int column) {
         super(noc, table, column);
-        elementID = me.getID();
+        this.me = me;
         this.edgeClass = edgeClass;
     }
 
@@ -30,9 +48,9 @@ public class WeightReplaceTableCell extends UserFieldActivatedTableCell {
     protected void initEditor(final int column) {
         Vector<NamedObjectContainer<UserField>> columnIdentifiers = (Vector<NamedObjectContainer<UserField>>) table.getColumnIdentifiers();
         UserField thisCellColumnIdentifier = columnIdentifiers.get(column).getObject();
-
-        WeightReplacer replacer = extractReplacer(columnIdentifiers);
-
+        GDCollection gdcoll = me.getCollection();
+        UserFieldDefinitions definitions = gdcoll.getUserFieldDefinitions();
+        WeightReplacer replacer = definitions.getWeightReplacer();
         //true im Konstuktor bedeutet, dass man einen Leerwert zur Auswahl hat. Der Leerwert
         //steht für "keine Ersetzung"
         AlphabeticalComboBox<UserField> component = new AlphabeticalComboBox<>(false);
@@ -51,6 +69,7 @@ public class WeightReplaceTableCell extends UserFieldActivatedTableCell {
             component.addItem(replaceValue);
             //Item ggf. selektieren
             UserField userField = value.getObject();
+            String elementID = me.getID();
             if (colUserField == null) {
                 String replaceID = replacer.getUniformDistributionReplacement(elementID, edgeClass);
                 if (replaceID == null && userField == null) {
@@ -69,18 +88,6 @@ public class WeightReplaceTableCell extends UserFieldActivatedTableCell {
             }
         }
         editor = new DefaultCellEditor(component);
-    }
-
-    private WeightReplacer extractReplacer(final Vector<NamedObjectContainer<UserField>> columnIdentifiers) {
-        UserFieldDefinitions definitions = null;
-        for (NamedObjectContainer<UserField> container : columnIdentifiers) {
-            UserField colUserField = container.getObject();
-            if (colUserField != null) {
-                definitions = colUserField.getDefinitions();
-                break;
-            }
-        }
-        return definitions != null ? definitions.getWeightReplacer() : null;
     }
 
     /**

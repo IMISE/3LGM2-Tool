@@ -65,12 +65,10 @@ public class PartValueSumFunction {
             if (!UserField.NO_ELEMENTS_CONNECTED.equals(ergString)) {
                 if (UserField.isError(ergString)) {
                     fullErgString = ergString;
-                } else {
-                    //wenn noch kein Zwischenergebnis einen Fehler zurück gegeben hat
-                    if (fullErgString == null) {
-                        //das muss auf jeden Fall als BigDecimal umwandelbar sein
-                        erg = erg.add(new BigDecimal(ergString));
-                    }
+                } else //wenn noch kein Zwischenergebnis einen Fehler zurück gegeben hat
+                if (fullErgString == null) {
+                    //das muss auf jeden Fall als BigDecimal umwandelbar sein
+                    erg = erg.add(new BigDecimal(ergString));
                 }
             }
             if (resultUserField.isSimplePartValueSumFormula()) {
@@ -89,7 +87,7 @@ public class PartValueSumFunction {
         BigDecimal normalizedVG = BigDecimal.ONE;
         //wenn mit einem explizit angegebenen Verteilungsgewicht gerechnet werden soll
         if (vgUserField != null) {
-            String vgValueString = vgUserField.getValue(connectionTo);
+            String vgValueString = connectionTo.getValue(vgUserField);
             //wenn das Verteilungsgewicht noch nicht eingegeben wurde, kann das Ergebnis nicht berechnet werden
             if (vgValueString.equals(UserField.EMPTY_STRING)) {
                 //Gesamtergebnis ist EMPTY_STRING
@@ -110,7 +108,7 @@ public class PartValueSumFunction {
             connectedElement = connectionTo.getEnd();
         }
         //den aufzuteilenden eingegebenen Wert holen
-        String userFieldValueToSplit = args.kzUserField.getValue(connectedElement);
+        String userFieldValueToSplit = connectedElement.getValue(args.kzUserField);
 
         //Leere Eingaben und in Hierarchien Elemente, die keine Verbundenen
         // Elemente haben
@@ -148,7 +146,7 @@ public class PartValueSumFunction {
             for (int j = 0; j < connectionsFrom.size(); j++) {
                 Edge connectionFrom = connectionsFrom.get(j);
                 //den Wert des VG der aktuellen Edge holen
-                String vgValueString = vgUserField.getValue(connectionFrom);
+                String vgValueString = connectionFrom.getValue(vgUserField);
                 //wenn für eine Edge kein Verteilungsgewicht eingegeben
                 // wurde, wird es als 0 angenommen
                 if (vgValueString.equals(UserField.EMPTY_STRING)) {
@@ -219,15 +217,15 @@ public class PartValueSumFunction {
     /**
      * Liefert
      *
+     * @param definitions
      * @param userField
      * @return
      */
-    public static TWSumArguments getTWSumArguments(final UserField userField) {
+    public static TWSumArguments getTWSumArguments(final UserFieldDefinitions definitions, final UserField userField) {
         if (!CostingUtil.isSimpleFractionValueSumFormula(userField)) {
             return null;
         }
         String formula = userField.getFormula();
-        UserFieldDefinitions definitions = userField.getDefinitions();
         TWSumArguments arguments = new TWSumArguments(formula, definitions);
         return arguments;
     }

@@ -2,7 +2,6 @@ package de.imise.tool3lgm.graphtools.userfield.definition;
 
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
 import static de.imise.tool3lgm.graphtools.userfield.definition.UserFieldDefinitions.GLOBAL_USERFIELD_IDENTIFIER_CLASS;
-import static de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty.OPTION_ENABLE_FORMULA_CALCULATION;
 
 import java.math.BigDecimal;
 import java.text.NumberFormat;
@@ -37,21 +36,21 @@ public final class UserField extends NameAndDescriptionTargetAdapter implements 
     public static enum Style {
         SINGLE_LINE {
             @Override
-            int compare(final UserField uf, final UserFieldTarget me1, final UserFieldTarget me2) {
-                return alphabeticalCompare(uf, me1, me2);
+            int compare(final UserField userField, final UserFieldTarget me1, final UserFieldTarget me2) {
+                return alphabeticalCompare(userField, me1, me2);
             }
         },
         MULTI_LINE {
             @Override
-            int compare(final UserField uf, final UserFieldTarget me1, final UserFieldTarget me2) {
-                return alphabeticalCompare(uf, me1, me2);
+            int compare(final UserField userField, final UserFieldTarget me1, final UserFieldTarget me2) {
+                return alphabeticalCompare(userField, me1, me2);
             }
         },
         CHECK_BOX {
             @Override
-            int compare(final UserField uf, final UserFieldTarget me1, final UserFieldTarget me2) {
-                String v1 = uf.getValue(me1);
-                String v2 = uf.getValue(me2);
+            int compare(final UserField userField, final UserFieldTarget me1, final UserFieldTarget me2) {
+                String v1 = me1.getValue(userField);
+                String v2 = me2.getValue(userField);
                 if (v1 == null) {
                     return v2 == null ? 0 : -1;
                 }
@@ -68,15 +67,15 @@ public final class UserField extends NameAndDescriptionTargetAdapter implements 
         },
         COMBO_BOX {
             @Override
-            int compare(final UserField uf, final UserFieldTarget me1, final UserFieldTarget me2) {
-                return alphabeticalCompare(uf, me1, me2);
+            int compare(final UserField userField, final UserFieldTarget me1, final UserFieldTarget me2) {
+                return alphabeticalCompare(userField, me1, me2);
             }
         },
         RADIO_BUTTON {
             @Override
-            int compare(final UserField uf, final UserFieldTarget me1, final UserFieldTarget me2) {
-                String v1 = uf.getValue(me1);
-                String v2 = uf.getValue(me2);
+            int compare(final UserField userField, final UserFieldTarget me1, final UserFieldTarget me2) {
+                String v1 = me1.getValue(userField);
+                String v2 = me2.getValue(userField);
 
                 if (v1 == null || v1.isEmpty()) {
                     if (v2 == null || v2.isEmpty()) {
@@ -87,34 +86,34 @@ public final class UserField extends NameAndDescriptionTargetAdapter implements 
                 if (v2 == null || v2.isEmpty()) {
                     return 1;
                 }
-                Integer i1 = uf.listValues.indexOf(v1);
-                Integer i2 = uf.listValues.indexOf(v2);
+                Integer i1 = userField.listValues.indexOf(v1);
+                Integer i2 = userField.listValues.indexOf(v2);
                 int retval = i1.compareTo(i2);
                 return retval;
             }
         },
         HYPERLINK {
             @Override
-            int compare(final UserField uf, final UserFieldTarget me1, final UserFieldTarget me2) {
-                return alphabeticalCompare(uf, me1, me2);
+            int compare(final UserField userField, final UserFieldTarget me1, final UserFieldTarget me2) {
+                return alphabeticalCompare(userField, me1, me2);
             }
         },
         ID {
             @Override
-            int compare(final UserField uf, final UserFieldTarget me1, final UserFieldTarget me2) {
-                return alphabeticalCompare(uf, me1, me2);
+            int compare(final UserField userField, final UserFieldTarget me1, final UserFieldTarget me2) {
+                return alphabeticalCompare(userField, me1, me2);
             }
         },
         NUMBER {
             @Override
-            int compare(final UserField uf, final UserFieldTarget me1, final UserFieldTarget me2) {
-                return numberCompare(uf, me1, me2);
+            int compare(final UserField userField, final UserFieldTarget me1, final UserFieldTarget me2) {
+                return numberCompare(userField, me1, me2);
             }
         },
         FORMULA {
             @Override
-            int compare(final UserField uf, final UserFieldTarget me1, final UserFieldTarget me2) {
-                return numberCompare(uf, me1, me2);
+            int compare(final UserField userField, final UserFieldTarget me1, final UserFieldTarget me2) {
+                return numberCompare(userField, me1, me2);
             }
         };
 
@@ -138,10 +137,15 @@ public final class UserField extends NameAndDescriptionTargetAdapter implements 
         /**
          * Alphabetischer Vergleich der jeweiligen Werte (siehe
          * {@link String#compareTo(String)})
+         *
+         * @param userField
+         * @param me1
+         * @param me2
+         * @return
          */
-        private static int alphabeticalCompare(final UserField uf, final UserFieldTarget me1, final UserFieldTarget me2) {
-            String v1 = uf.getValue(me1);
-            String v2 = uf.getValue(me2);
+        private static int alphabeticalCompare(final UserField userField, final UserFieldTarget me1, final UserFieldTarget me2) {
+            String v1 = me1.getValue(userField);
+            String v2 = me2.getValue(userField);
             if (v1 == null) {
                 return v2 == null ? 0 : -1;
             }
@@ -152,9 +156,15 @@ public final class UserField extends NameAndDescriptionTargetAdapter implements 
         }
 
         /** Vergleich der jeweiligen Werte für Kennzahlen/Kennzahlformeln */
-        private static int numberCompare(final UserField uf, final UserFieldTarget me1, final UserFieldTarget me2) {
-            String v1 = uf.getValue(me1);
-            String v2 = uf.getValue(me2);
+        /**
+         * @param userField
+         * @param me1
+         * @param me2
+         * @return
+         */
+        private static int numberCompare(final UserField userField, final UserFieldTarget me1, final UserFieldTarget me2) {
+            String v1 = me1.getValue(userField);
+            String v2 = me2.getValue(userField);
             if (v1 == null) {
                 return v2 == null ? 0 : -1;
             }
@@ -350,12 +360,6 @@ public final class UserField extends NameAndDescriptionTargetAdapter implements 
     private boolean simplePartValueSumFormula = false;
 
     /**
-     * Die Definition in der sich dieses UserField befindet. Wird gebraucht, um
-     * z.B. das Format-<code>UserField</code> zu finden.
-     */
-    private UserFieldDefinitions definitions;
-
-    /**
      * UserField mit dem Style <code>FORMAT_STYLE</code>, das vorgibt, wie der
      * Zahlenwert dieses UserFields formatiert werden soll.
      */
@@ -409,7 +413,6 @@ public final class UserField extends NameAndDescriptionTargetAdapter implements 
         } else {
             this.targetClass = GLOBAL_USERFIELD_IDENTIFIER_CLASS;
         }
-        this.definitions = definitions;
     }
 
     /**
@@ -427,8 +430,10 @@ public final class UserField extends NameAndDescriptionTargetAdapter implements 
      *
      * @param fieldName Der Name der zu belegenden Variable des userFieldes
      * @param value Der Wert, mit der die Variable belegt werden soll.
+     * @param definitions
+     * @return
      */
-    public boolean putXMLFieldString(final String fieldName, final String value) {
+    public boolean putXMLFieldString(final String fieldName, final String value, final UserFieldDefinitions definitions) {
         if (fieldName.equals("userFieldName")) {
             name = value;
         } else if (fieldName.equals("userFieldDescription")) {
@@ -595,20 +600,6 @@ public final class UserField extends NameAndDescriptionTargetAdapter implements 
     @Override
     public String getID() {
         return id;
-    }
-
-    /**
-     * @return the definitions
-     */
-    public UserFieldDefinitions getDefinitions() {
-        return definitions;
-    }
-
-    /**
-     * @param definitions
-     */
-    public void setDefinitions(final UserFieldDefinitions definitions) {
-        this.definitions = definitions;
     }
 
     /**
@@ -784,42 +775,6 @@ public final class UserField extends NameAndDescriptionTargetAdapter implements 
     ////////////////////////////////////
 
     /**
-     * Liefert den unformatierten Wert einer Kennzahl.
-     *
-     * @param target Kennzahlwertträger, für das der Wert zurück gegeben werden
-     *            soll
-     * @return
-     */
-    public String getValue(final UserFieldTarget target) {
-        //wenn es eine Kennzahlformel ist, deren Wert ermittelt werden soll
-        if (style == Style.FORMULA) {
-            //wenn die globale Option der Berechnung eingeschaltet ist
-            if (OPTION_ENABLE_FORMULA_CALCULATION.is()) {
-                //alle berechneten Kennzahl Werte löschen
-                definitions.reset();
-                //falls das reset nicht ausgeführt wurde, da sich nichts geändert
-                //hatte -> value hat den bisherigen Wert
-                //falls das reset wirklich ausgeführt wurde -> value hat den Wert
-                //UserField.EMPTY_STRING
-                String value = target.getCalculatedUserFieldValue(this);
-                //wenn das reset ausgeführt wurde
-                if (value == EMPTY_STRING) {
-                    //berechne den Wert neu
-                    value = definitions.calculate(this, target);
-                    //setze ihn im UserFieldTarget
-                    target.setCalculatedUserFieldValue(this, value);
-                }
-                //gib den berechneten Wert zurück
-                return value;
-            }
-            //wenn nicht berechnet werden sollte -> gib einen leeren String zurück
-            return CALCULATION_DISABLED;
-        }
-        //gib den eingegebenen Wert des UserFields zurück
-        return target.getUserFieldInputValue(this);
-    }
-
-    /**
      * Formatiert einen übergenenen Wert mit der Formatvorlage.
      *
      * @param me Modellelement, für das der formatierte Wert zurück gegeben
@@ -840,7 +795,7 @@ public final class UserField extends NameAndDescriptionTargetAdapter implements 
      * @return
      */
     public String getFormattedValue(final UserFieldTarget me, final boolean appendUnit) {
-        String value = getValue(me);
+        String value = me.getValue(this);
         return getFormattedValue(value, appendUnit);
     }
 
@@ -923,9 +878,7 @@ public final class UserField extends NameAndDescriptionTargetAdapter implements 
      * Werte für dieses UserField.
      * <p>
      * Bedingungen für die Vergleichbarkeit sind:
-     * <li>Beide Modelemente sind Instanzen der selben Klasse</li>
-     * <li>Das UserField ist für diese Klasse definiert</li> <br>
-     * <br>
+     * <li>Beide Modelemente sind Instanzen der selben Klasse</li> <br>
      *
      * @param o1
      * @param o2
@@ -938,10 +891,6 @@ public final class UserField extends NameAndDescriptionTargetAdapter implements 
         if (!class1.equals(class2)) {
             throw new ClassCastException("Die Modelelemente sind Instanzen verschiedener Klassen.");
         }
-        if (!isUserFieldFor(class1)) {
-            throw new ClassCastException("Das UserField " + UserField.this + " ist für die Klasse " + class1.getSimpleName() + " nicht definiert.");
-        }
-
         return getStyle().compare(this, o1, o2);
     }
 
@@ -1027,22 +976,6 @@ public final class UserField extends NameAndDescriptionTargetAdapter implements 
         if (style == Style.FORMULA) {
             Set<String> idsInFormula = getIDsInFormula();
             if (idsInFormula != null && getIDsInFormula().contains(possibleUsedField.id)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    /**
-     * Gibt wieder, ob dieses UserField ein UserField für die spezfizierte
-     * Klasse ist.
-     *
-     * @param elementClass
-     * @return
-     */
-    public boolean isUserFieldFor(final Class<? extends UserFieldTarget> elementClass) {
-        for (UserField uf : definitions.getUserFields(elementClass)) {
-            if (uf == this) {
                 return true;
             }
         }

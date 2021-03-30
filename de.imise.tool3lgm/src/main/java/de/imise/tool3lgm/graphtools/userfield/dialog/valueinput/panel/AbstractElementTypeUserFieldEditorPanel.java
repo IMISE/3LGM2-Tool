@@ -29,8 +29,8 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.userfield.definition.UserField;
-import de.imise.tool3lgm.graphtools.userfield.definition.UserFieldDefinitions;
 import de.imise.tool3lgm.graphtools.userfield.definition.UserField.Style;
+import de.imise.tool3lgm.graphtools.userfield.definition.UserFieldDefinitions;
 import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.UserFieldEditorDialog;
 import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.table.UserFieldTable;
 import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.table.UserFieldTableController;
@@ -345,11 +345,11 @@ public abstract class AbstractElementTypeUserFieldEditorPanel extends AbstractUs
                 // Wert an der Stelle (i,k)
                 String newValue = uftm.getValueAt(i, k).toString();
                 // Die Kennzahl in der Spalte k
-                UserField uf = (UserField) columnIdentifiers.elementAt(k).getObject();
+                UserField userField = (UserField) columnIdentifiers.elementAt(k).getObject();
                 // neuen Wert setzen
-                if (!newValue.equals(uf.getValue(me))) {
+                if (!newValue.equals(me.getValue(userField))) {
                     int pid = dialog.getTransactionID();
-                    doc.setUserFieldValue(me.getID(), uf.getID(), newValue, pid);
+                    doc.setUserFieldValue(me.getID(), userField.getID(), newValue, pid);
                 }
             }
         }

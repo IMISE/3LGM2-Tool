@@ -41,6 +41,7 @@ import de.imise.tool3lgm.graphtools.model.GDCommands;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.path.metapaths.MetaPath;
 import de.imise.tool3lgm.graphtools.userfield.definition.UserField;
+import de.imise.tool3lgm.graphtools.userfield.definition.UserFieldDefinitions;
 import de.imise.tool3lgm.graphtools.userfield.definition.UserFieldTarget;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.graphtools.view.container.LayerContainer;
@@ -161,6 +162,12 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
     @Override
     public Class<? extends MetaModelDefinition> getMetaModelDefinitionClass() {
         return metaModel == null ? null : metaModel.getMetaModelDefinitionClass();
+    }
+
+    @Override
+    public UserFieldDefinitions getUserFieldDefinitions() {
+        GDCollection gdcoll = getCollection();
+        return gdcoll.getUserFieldDefinitions();
     }
 
     public void printContainer() {

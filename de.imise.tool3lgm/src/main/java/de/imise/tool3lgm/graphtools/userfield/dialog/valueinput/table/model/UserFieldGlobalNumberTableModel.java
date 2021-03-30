@@ -48,11 +48,11 @@ public class UserFieldGlobalNumberTableModel extends AbstractUserFieldTableModel
 
         Object[][] data = new Object[userFieldList.size()][1];
         for (int i = 0; i < userFieldList.size(); i++) {
-            UserField uf = userFieldList.get(i);
-            NamedObjectContainer<UserField> noc = new NamedObjectContainer<>(uf, uf.getName());
+            UserField userField = userFieldList.get(i);
+            NamedObjectContainer<UserField> noc = new NamedObjectContainer<>(userField, userField.getName());
             rowIdentifiers.add(noc);
-            String value = uf.getValue(gdcoll);
-            data[i][0] = new NamedObjectContainer<>(uf, value);
+            String value = gdcoll.getValue(userField);
+            data[i][0] = new NamedObjectContainer<>(userField, value);
         }
 
         // Daten setzen

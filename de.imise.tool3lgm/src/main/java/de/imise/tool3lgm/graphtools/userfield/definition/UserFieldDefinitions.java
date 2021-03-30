@@ -28,7 +28,6 @@ import de.imise.tool3lgm.graphtools.userfield.WeightReplacer;
 import de.imise.tool3lgm.graphtools.userfield.calculator.Calculator;
 import de.imise.tool3lgm.graphtools.userfield.calculator.PartValueSumFunction;
 import de.imise.tool3lgm.graphtools.userfield.calculator.PartValueSumFunction.TWSumArguments;
-import de.imise.tool3lgm.graphtools.userfield.definition.UserField.Style;
 import de.imise.tool3lgm.graphtools.userfield.calculator.PartValueSumSinglePartResults;
 import de.imise.tool3lgm.graphtools.userfield.event.UserFieldDefinitionChangeHandler;
 import de.imise.util.Alphabetical;
@@ -163,7 +162,6 @@ public final class UserFieldDefinitions extends UserFieldDefinitionChangeHandler
      */
     public void add(final UserField userField) {
         UserField clone = userField.clone();
-        clone.setDefinitions(this);
         Class<? extends UserFieldTarget> targetClass = clone.getTargetClass();
         UserFieldList ufl = classToUserFieldListMap.get(targetClass);
         if (ufl == null) {
@@ -322,7 +320,6 @@ public final class UserFieldDefinitions extends UserFieldDefinitionChangeHandler
         //jedes einzelne UserField clonen (erstmal nur in dieser Map)
         for (String key : idToUserFieldMap.keySet()) {
             UserField userFieldClone = def.idToUserFieldMap.get(key).clone();
-            userFieldClone.setDefinitions(def);
             def.idToUserFieldMap.put(key, userFieldClone);
         }
         //die Map, die von den UserFieldTargetClasses auf die Liste der dafür defnierten
@@ -527,7 +524,7 @@ public final class UserFieldDefinitions extends UserFieldDefinitionChangeHandler
             if (!userField.isSimplePartValueSumFormula()) {
                 userFieldList.remove(i);
             } else {
-                TWSumArguments arguments = PartValueSumFunction.getTWSumArguments(userField);
+                TWSumArguments arguments = PartValueSumFunction.getTWSumArguments(this, userField);
                 if (!edgeClass.isAssignableFrom(arguments.edgeClass)) {
                     userFieldList.remove(i);
                 }

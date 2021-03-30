@@ -42,6 +42,11 @@ public class OperatorInputPanel extends JPanel implements ActionListener {
     private final UserField userField;
 
     /**
+     * The {@link UserFieldDefinitions} that contains the userField
+     */
+    private final UserFieldDefinitions definitions;
+
+    /**
      * ist die <code>ComboBox</code>, die in alphabetischer Reihenfolge die
      * Assoziationen zwischen Start- und Endklasse anzeigt.
      */
@@ -73,14 +78,15 @@ public class OperatorInputPanel extends JPanel implements ActionListener {
     /**
      * Das Panel, dass die ComboBoxen darstellt.
      *
+     * @param definitions
      * @param vfOperator Eine der beiden Konstanten <code>UserField.SUM</code>
      *            oder <code>UserField.TWSUM</code>
      * @param classElement Elementklasse, die sich über die Verrechnungsfunktion
      *            irgendeinen Wert einer verbundenen Klasse holen soll
      * @param userField
      */
-    public OperatorInputPanel(final String vfOperator, final UserField userField) {
-        super();
+    public OperatorInputPanel(final UserFieldDefinitions definitions, final String vfOperator, final UserField userField) {
+        this.definitions = definitions;
         this.userField = userField;
         this.vfOperator = vfOperator;
         init();
@@ -149,8 +155,6 @@ public class OperatorInputPanel extends JPanel implements ActionListener {
      */
     private final void updateFieldListAttributesOfAssociatedClass(final Class<? extends ModelElement> elementClass) {
         clearBoxAttributsOfAssociatedClass();
-        //Manchmal hat das userfield nicht die aktuellen Definitions
-        UserFieldDefinitions definitions = userField.getDefinitions().getCollection().getUserFieldDefinitions();
         //wird true, wenn dieses UserField bereits in den Definitions vorkommt
         // (also nicht grade angelegt wurde)
         boolean found = false;
@@ -226,8 +230,6 @@ public class OperatorInputPanel extends JPanel implements ActionListener {
 
         vgBox.removeAllItems();
 
-        UserFieldDefinitions definitions = userField.getDefinitions();
-
         vgBox.addObject(null, UNIFORMLY_DISTRIBUTED);
         vgBox.addSeparator(false);
         for (UserField uf : definitions.getUserFields(edgeClass)) {
@@ -245,7 +247,6 @@ public class OperatorInputPanel extends JPanel implements ActionListener {
         associationBox.removeAllItems();
         //Die Assoziationen zur Box hinzufügenen, bei denen die Startklasse
         // gleich der Element-Klasse ist
-        UserFieldDefinitions definitions = userField.getDefinitions();
         GDCollection gdcoll = definitions.getCollection();
         MetaModel metaModel = gdcoll.getMetaModel();
 
@@ -348,7 +349,6 @@ public class OperatorInputPanel extends JPanel implements ActionListener {
             if (edgeClass == null) {
                 return;
             }
-            UserFieldDefinitions definitions = userField.getDefinitions();
             GDCollection gdcoll = definitions.getCollection();
             ElementsNameBuilder elementsNameBuilder = gdcoll.getElementsNameBuilder();
             String displayName = associationBox.getSelectedString();

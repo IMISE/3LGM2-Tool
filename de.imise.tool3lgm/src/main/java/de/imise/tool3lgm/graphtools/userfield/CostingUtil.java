@@ -57,22 +57,19 @@ public class CostingUtil {
                 s = idTok.nextToken();
                 if (isOperator(s) || s.equals(Calculator.OPEN_BRACKET) || s.equals(Calculator.CLOSE_BRACKET) || UserField.isAccountingFunction(s)) {
                     resultString.append(" " + s);
-                } else {
-                    if (s.contains(UserField.USERFIELD_ID_PREFIX)) {
-                        try {
-                            tmpField = definitions.getUserField(s);
-                            resultString.append(" " + tmpField.getName());
-                        } catch (Exception e) {
-                            JOptionPane.showMessageDialog(null, getResString("formula_integrity_err"), getResString("fehler"), JOptionPane.ERROR_MESSAGE);
-                        }
-                    } else if (s.contains(UserField.DIRECTION_FROM_PART_TO_WHOLE)) {
-                        resultString.append(" " + getResString("part_to_whole"));
-                    } else if (s.contains(UserField.DIRECTION_FROM_WHOLE_TO_PART)) {
-                        resultString.append(" " + getResString("whole_to_part"));
-                    } else {
-                        resultString.append(" " + s);
+                } else if (s.contains(UserField.USERFIELD_ID_PREFIX)) {
+                    try {
+                        tmpField = definitions.getUserField(s);
+                        resultString.append(" " + tmpField.getName());
+                    } catch (Exception e) {
+                        JOptionPane.showMessageDialog(null, getResString("formula_integrity_err"), getResString("fehler"), JOptionPane.ERROR_MESSAGE);
                     }
-
+                } else if (s.contains(UserField.DIRECTION_FROM_PART_TO_WHOLE)) {
+                    resultString.append(" " + getResString("part_to_whole"));
+                } else if (s.contains(UserField.DIRECTION_FROM_WHOLE_TO_PART)) {
+                    resultString.append(" " + getResString("whole_to_part"));
+                } else {
+                    resultString.append(" " + s);
                 }
             }
         }
@@ -252,6 +249,9 @@ public class CostingUtil {
     }
 
     /**
+     * AXS 29.03.2021: Das hier wird nirgends benutzt!? (Bemerkt beim Umstellen
+     * der UserFieldDefinitions)<br>
+     * <br>
      * Wenn das übergebene UserField eine einfache Teilwertsumme ist, dann wird
      * hier die Kantenklasse der Formel extrahiert.
      *
@@ -259,12 +259,10 @@ public class CostingUtil {
      * @return Kantenklasse der einfachenTeilwertsummenformel oder
      *         <code>null</code>
      */
-    public static final Class<? extends Edge> getSimpleFractionValueSumFormulaEdgeClass(final UserField userField) {
+    public static final Class<? extends Edge> getSimpleFractionValueSumFormulaEdgeClass(final MetaModel metaModel, final UserField userField) {
         Class<? extends Edge> edgeClass = null;
         String edgeClassName = extractSimpleFractionValueSumFormulaEdgeClassName(userField);
         if (edgeClassName != null) {
-            UserFieldDefinitions definitions = userField.getDefinitions();
-            MetaModel metaModel = definitions.getMetaModel();
             edgeClass = metaModel.getClassForName(edgeClassName).asSubclass(Edge.class);
         }
         return edgeClass;

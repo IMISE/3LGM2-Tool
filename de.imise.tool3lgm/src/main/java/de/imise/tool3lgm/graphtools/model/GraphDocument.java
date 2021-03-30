@@ -4647,7 +4647,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
     public void setUserFieldValue(final ModelElement me, final UserField userField, final String value, final int pid) {
         start_transaction(pid);
         String newValue = getParseSaveString(value, true);
-        String oldValue = userField.getValue(me);
+        String oldValue = me.getValue(userField);
         oldValue = getParseSaveString(oldValue, true);
         addRedoCommandOrReplace(pid, newValue, MODEL_ACTION_SET_USER_FIELD_VALUE, me, userField);
         addUndoCommandIfNotExist(pid, oldValue, MODEL_ACTION_SET_USER_FIELD_VALUE, me, userField);

@@ -106,7 +106,7 @@ public class UniqueIDChecker implements ConsistencyErrorChecker {
         for (int i = modelItems.size() - 1; i >= 0; i--) {
             ModelElement other = modelItems.get(i);
             if (other != me) {
-                String otherValue = userField.getValue(other);
+                String otherValue = other.getValue(userField);
                 boolean bothNull = value == null && value == otherValue;
                 boolean sameValue = value != null && !value.equals(otherValue);
                 if (!bothNull && !sameValue) {

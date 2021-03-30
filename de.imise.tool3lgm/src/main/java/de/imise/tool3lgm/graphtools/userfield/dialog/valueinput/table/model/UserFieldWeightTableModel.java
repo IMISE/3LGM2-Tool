@@ -179,7 +179,7 @@ public class UserFieldWeightTableModel extends AbstractUserFieldTableModel {
                     continue;
                 }
 
-                String value = field.getValue(edge);
+                String value = edge.getValue(field);
                 data[r][c] = new NamedObjectContainer<>(field, value);
 
             }

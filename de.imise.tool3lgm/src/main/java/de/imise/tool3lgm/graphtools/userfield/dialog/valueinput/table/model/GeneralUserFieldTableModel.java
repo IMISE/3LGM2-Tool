@@ -116,9 +116,9 @@ public class GeneralUserFieldTableModel extends AbstractUserFieldTableModel {
         for (int i = 0; i < data.length; i++) {
             ModelElement me = modelElements.get(i);
             for (int j = 0; j < data[0].length; j++) {
-                UserField uf = userFieldList.get(j);
-                String value = uf.getValue(me);
-                data[i][j] = new NamedObjectContainer<>(uf, value);
+                UserField userField = userFieldList.get(j);
+                String value = me.getValue(userField);
+                data[i][j] = new NamedObjectContainer<>(userField, value);
             }
         }
 

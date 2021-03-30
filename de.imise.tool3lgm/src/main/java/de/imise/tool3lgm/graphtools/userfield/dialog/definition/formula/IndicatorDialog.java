@@ -93,22 +93,22 @@ public class IndicatorDialog extends JDialog implements ActionListener {
     /**
      *
      */
-    private UserFieldDefinitions definitions;
+    private final UserFieldDefinitions definitions;
 
     /**
      * Instanz des Dialoges.
      *
      * @param owner des Dialoges
-     * @param classElement : für welches Klassenelement soll ein Indikator
-     *            angelegt werden.
+     * @param definitions
      * @param userField : wenn eine schon bestehende Indikationsdefinition
      *            bearbeitet werden soll, das entsprechende UserField übergeben
      *            <br>
      *            ansonsten null übergeben! wenn eine neue Indikatordefinitions
      *            angelegt werden soll: null übergeben!
      */
-    public IndicatorDialog(final JDialog owner, final UserField userField) {
+    public IndicatorDialog(final JDialog owner, final UserFieldDefinitions definitions, final UserField userField) {
         super(owner, UserField.getDisplayableFunctionName(UserField.ACCOUNTING_FUNCTION_INDI));
+        this.definitions = definitions;
         this.userField = userField;
         setModal(true);
         setLocationByPlatform(true);
@@ -135,9 +135,6 @@ public class IndicatorDialog extends JDialog implements ActionListener {
         JLabel currentValueLabel = new JLabel(getResString("attributeIndicate"));
         panel1.add(currentValueLabel, constraints);
         userFieldComboBox = new AlphabeticalComboBox<>();
-        if (userField != null) {
-            definitions = userField.getDefinitions();
-        }
 
         // Hier wird die ComboBox mit den indizierbaren userfields gefüllt.
         for (UserField uf : definitions.getUserFields(userField.getTargetClass())) {

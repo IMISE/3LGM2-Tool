@@ -16,6 +16,7 @@ import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.Collections;
 
 import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
@@ -47,6 +48,11 @@ public class ReferencePanel extends JPanel implements ActionListener {
      * <code>UserField</code>s gesucht werden.
      */
     private final Class<? extends Edge> edgeClass;
+
+    /**
+     * The {@link UserFieldDefinitions} that contains the userField
+     */
+    private final UserFieldDefinitions definitions;
 
     /**
      * Das neue <code>UserField</code>
@@ -90,10 +96,11 @@ public class ReferencePanel extends JPanel implements ActionListener {
     private AlphabeticalJList<Class<? extends ModelElement>> classesList;
 
     /**
+     * @param definitions
      * @param userField
      */
-    public ReferencePanel(final UserField userField) {
-        super();
+    public ReferencePanel(final UserFieldDefinitions definitions, final UserField userField) {
+        this.definitions = definitions;
         edgeClass = userField.getTargetClass().asSubclass(Edge.class);
         this.userField = userField;
         init();
@@ -112,9 +119,7 @@ public class ReferencePanel extends JPanel implements ActionListener {
 
         ArrayList<Class<? extends ModelElement>> tmpList = new ArrayList<>();
 
-        for (int i = 0; i < classes.length; i++) {
-            tmpList.add(classes[i]);
-        }
+        Collections.addAll(tmpList, classes);
 
         for (int i = 0; i < tmpClasses.length; i++) {
             if (!tmpList.contains(tmpClasses[i])) {
@@ -131,7 +136,6 @@ public class ReferencePanel extends JPanel implements ActionListener {
         add(new JLabel(getResString("headline_reference_panel")), gbc);
         gbc.gridy++;
 
-        UserFieldDefinitions definitions = userField.getDefinitions();
         MetaModel metaModel = definitions.getMetaModel();
         ElementsNameBuilder elementsNameBuilder = metaModel.getElementsNameBuilder();
         add(new JLabel(getResString("Edge") + ": " + elementsNameBuilder.getFullForwardMetaAssociationName(edgeClass)), gbc);
@@ -246,7 +250,6 @@ public class ReferencePanel extends JPanel implements ActionListener {
      * @param classesList
      */
     private void setClassesInLists(final AlphabeticalJList<Class<? extends ModelElement>> classesList) {
-        UserFieldDefinitions definitions = userField.getDefinitions();
         MetaModel metaModel = definitions.getMetaModel();
         ElementsNameBuilder elementsNameBuilder = metaModel.getElementsNameBuilder();
         for (int i = 0; i < classes.length; i++) {
@@ -258,7 +261,6 @@ public class ReferencePanel extends JPanel implements ActionListener {
      *
      */
     private void setUserFields() {
-        UserFieldDefinitions definitions = userField.getDefinitions();
         Class<? extends ModelElement> selectedClass = ((Class<?>) classesList.getSelectedObject()).asSubclass(ModelElement.class);
         for (UserField uf : definitions.getUserFields(selectedClass)) {
             if (uf.isNumberUserField()) {

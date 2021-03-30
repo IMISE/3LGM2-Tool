@@ -55,8 +55,8 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.userfield.definition.UserField;
-import de.imise.tool3lgm.graphtools.userfield.definition.UserFieldDefinitions;
 import de.imise.tool3lgm.graphtools.userfield.definition.UserField.Style;
+import de.imise.tool3lgm.graphtools.userfield.definition.UserFieldDefinitions;
 import de.imise.util.BrowseUtils;
 import de.imise.util.swing.component.AlphabeticalComboBox;
 import de.imise.util.swing.component.text.ExtendedTextArea;
@@ -159,7 +159,7 @@ public class PropertyDialogUserFieldPanel extends ElementDialogPanel implements 
      * @return
      */
     public static String getUserFieldValue(final ModelElement me, final UserField userField, final boolean format) {
-        String value = format ? userField.getFormattedValue(me, true) : userField.getValue(me);
+        String value = format ? userField.getFormattedValue(me, true) : me.getValue(userField);
         UserField.Style style = userField.getStyle();
         if (style != FORMULA) {
             if (value.equals(EMPTY_STRING)) {

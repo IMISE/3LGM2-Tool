@@ -282,7 +282,7 @@ public class Calculator {
                     if (tmp_userField != null && tmp_userField.isGlobal()) {
                         ufValue = definitions.getCollection().getUserFieldInputValue(tmp_userField);
                     } else {
-                        ufValue = tmp_userField.getValue(me);
+                        ufValue = me.getValue(tmp_userField);
 
                     }
 
@@ -540,7 +540,7 @@ public class Calculator {
             }
         }
         if (elementWithUserField != null && elementWithUserField.getClass() == elementClass) {
-            String value = userField.getValue(elementWithUserField);
+            String value = elementWithUserField.getValue(userField);
             //wenn der referenzierte Wert bereits ein Fehler ist, dann wird dieser Fehler zurück gegeben
             if (UserField.isError(value)) {
                 return value;
@@ -630,7 +630,7 @@ public class Calculator {
                 connectedElement = k.getEnd();
             }
             //den Eingabewert des aufzusummierenden Feldes holen
-            String value = userField.getValue(connectedElement);
+            String value = connectedElement.getValue(userField);
             if (accountingFunction.equals(UserField.ACCOUNTING_FUNCTION_SUM)) {
                 result = getResult(result, value, OPERATOR_PLUS);
             } else if (accountingFunction.equals(UserField.ACCOUNTING_FUNCTION_MULT)) {
@@ -745,7 +745,7 @@ public class Calculator {
                 connectedElement = edge.getEnd();
             }
             //den Eingabewert des aufzusummierenden Feldes holen
-            String value = userField.getValue(connectedElement);
+            String value = connectedElement.getValue(userField);
 
             if (UserField.isIgnoreableError(value)) {
                 return value;
@@ -848,7 +848,8 @@ public class Calculator {
         stacksize--;
 
         //Der aktuelle Wert des UserFields, das indiziert werden soll.
-        String tmp_value = definitions.getUserField(userFieldID).getValue(target);
+        UserField userField = definitions.getUserField(userFieldID);
+        String tmp_value = target.getValue(userField);
 
         if (UserField.isError(tmp_value)) {
             return tmp_value;
@@ -892,7 +893,8 @@ public class Calculator {
      * @return Der Wert des <code>userField</code>s.
      */
     private String getValueOfReferencedUserField(final String userFieldID, final UserFieldTarget target) {
-        String value = definitions.getUserField(userFieldID).getValue(target);
+        UserField userField = definitions.getUserField(userFieldID);
+        String value = target.getValue(userField);
         return value;
     }
 
