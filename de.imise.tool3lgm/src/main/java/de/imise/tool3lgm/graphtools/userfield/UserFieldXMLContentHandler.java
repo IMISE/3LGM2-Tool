@@ -29,10 +29,19 @@ import de.imise.tool3lgm.graphtools.userfield.definition.UserFieldNumberFormat;
  */
 public class UserFieldXMLContentHandler implements ContentHandler {
 
+    /**
+     *
+     */
     private final UserFieldDefinitions userFieldDefinitions;
 
+    /**
+     *
+     */
     private UserField userField;
 
+    /**
+     *
+     */
     private UserFieldNumberFormat userFieldNumberFormat;
 
     /**
