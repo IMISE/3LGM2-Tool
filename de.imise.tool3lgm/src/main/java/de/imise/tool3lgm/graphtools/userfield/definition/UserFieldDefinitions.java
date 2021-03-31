@@ -29,6 +29,7 @@ import de.imise.tool3lgm.graphtools.userfield.calculator.Calculator;
 import de.imise.tool3lgm.graphtools.userfield.calculator.PartValueSumFunction;
 import de.imise.tool3lgm.graphtools.userfield.calculator.PartValueSumFunction.TWSumArguments;
 import de.imise.tool3lgm.graphtools.userfield.calculator.PartValueSumSinglePartResults;
+import de.imise.tool3lgm.graphtools.userfield.definition.definitiontree.DefinitionUserFieldTargetClassNode;
 import de.imise.tool3lgm.graphtools.userfield.event.UserFieldDefinitionChangeHandler;
 import de.imise.util.Alphabetical;
 import de.imise.util.collections.CollectionUtils;
@@ -48,6 +49,12 @@ public final class UserFieldDefinitions extends UserFieldDefinitionChangeHandler
      * <code>UserField</code>s
      */
     private Map<Class<? extends UserFieldTarget>, UserFieldList> classToUserFieldListMap = new HashMap<>();
+
+    /**
+     * Maps from an element class to the tree node which describes the subtype,
+     * tab, userfield group and userfield structure of the element class.
+     */
+    private final Map<Class<? extends UserFieldTarget>, DefinitionUserFieldTargetClassNode> classToUserStructureNodeMap = new HashMap<>();
 
     /** Maps from the ID of a format to the format */
     private final Map<String, UserFieldNumberFormat> formatIdToFormat = new HashMap<>();

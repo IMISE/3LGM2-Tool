@@ -451,13 +451,11 @@ public class ToolContentHandlerV3_0 implements ContentHandler {
                 userFieldNumberFormat = new UserFieldNumberFormat(id);
             } else if (qName.equals("userFieldDef")) {
                 String elementClass = atts.getValue("elementClass");
+                String userFieldID = atts.getValue("hash");
+                MetaModel metaModel = collection.getMetaModel();
                 //bei Modellvariablen ist die Elementclass null
-                if (elementClass == null) {
-                    userField = new UserField(atts.getValue("hash"), userFieldDefinitions);
-                } else {
-                    MetaModel metaModel = collection.getMetaModel();
-                    userField = new UserField(metaModel.getClassForName(elementClass), atts.getValue("hash"), userFieldDefinitions);
-                }
+                Class<? extends ModelElement> userFieldTargetClass = metaModel.getClassForName(elementClass);
+                userField = new UserField(userFieldTargetClass, userFieldID);
             } else if (qName.equals("replacerEntry")) {
                 String elementID = atts.getValue("elementHash");
                 String userFieldID = atts.getValue("userFieldHash");
@@ -542,9 +540,10 @@ public class ToolContentHandlerV3_0 implements ContentHandler {
                         }
                         //falls es noch Modelle mit separaten external IDs gibt, werden diese hier in UserFields umgewandelt
                     } else if (field.toLowerCase().startsWith("extid")) {
-                        UserField userField = userFieldDefinitions.getUserField(element.getClass(), field);
+                        Class<? extends ModelElement> elementClass = element.getClass();
+                        UserField userField = userFieldDefinitions.getUserField(elementClass, field);
                         if (userField == null) {
-                            userField = new UserField(element.getClass(), UserField.Style.ID, userFieldDefinitions);
+                            userField = new UserField(elementClass, UserField.Style.ID);
                             userFieldDefinitions.add(userField);
                         }
                         element.setUserFieldInputValue(userField, elementValue.toString());

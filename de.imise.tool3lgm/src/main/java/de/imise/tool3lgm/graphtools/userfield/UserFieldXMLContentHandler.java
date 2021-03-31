@@ -10,6 +10,7 @@ import org.xml.sax.Locator;
 import org.xml.sax.SAXException;
 
 import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
+import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.userfield.definition.UserField;
 import de.imise.tool3lgm.graphtools.userfield.definition.UserField.Style;
 import de.imise.tool3lgm.graphtools.userfield.definition.UserFieldDefinitions;
@@ -78,13 +79,11 @@ public class UserFieldXMLContentHandler implements ContentHandler {
 
         } else if (qName.equals("userFieldDef")) {
             String elementClass = atts.getValue("elementClass");
+            String userFieldID = atts.getValue("hash");
+            MetaModel metaModel = userFieldDefinitions.getMetaModel();
+            Class<? extends ModelElement> userFieldTargetClass = metaModel.getClassForName(elementClass);
             //bei Modellvariablen ist die Elementclass null
-            if (elementClass == null) {
-                userField = new UserField(atts.getValue("hash"), userFieldDefinitions);
-            } else {
-                MetaModel metaModel = userFieldDefinitions.getMetaModel();
-                userField = new UserField(metaModel.getClassForName(elementClass), atts.getValue("hash"), userFieldDefinitions);
-            }
+            userField = new UserField(userFieldTargetClass, userFieldID);
         } else if (qName.equals("userFieldName")) {
 
         } else if (qName.equals("userFieldDescription")) {

@@ -377,8 +377,8 @@ public final class UserField extends NameAndDescriptionTargetAdapter implements 
      * @param style
      * @param definitions
      */
-    public UserField(final Style style, final UserFieldDefinitions definitions) {
-        this(GLOBAL_USERFIELD_IDENTIFIER_CLASS, style, definitions);
+    public UserField(final Style style) {
+        this(GLOBAL_USERFIELD_IDENTIFIER_CLASS, style);
     }
 
     /**
@@ -388,25 +388,23 @@ public final class UserField extends NameAndDescriptionTargetAdapter implements 
      * @param style
      * @param definitions
      */
-    public UserField(final Class<? extends UserFieldTarget> targetClass, final Style style, final UserFieldDefinitions definitions) {
-        this(targetClass, definitions);
+    public UserField(final Class<? extends UserFieldTarget> targetClass, final Style style) {
+        this(targetClass);
         this.style = style;
     }
 
     /**
      * @param targetClass
-     * @param definitions
      */
-    public UserField(final Class<? extends UserFieldTarget> targetClass, final UserFieldDefinitions definitions) {
-        this(targetClass, IDStringGenerator.createIDString(USERFIELD_ID_PREFIX), definitions);
+    public UserField(final Class<? extends UserFieldTarget> targetClass) {
+        this(targetClass, IDStringGenerator.createIDString(USERFIELD_ID_PREFIX));
     }
 
     /**
      * @param targetClass
      * @param id
-     * @param definitions
      */
-    public UserField(final Class<? extends UserFieldTarget> targetClass, final String id, final UserFieldDefinitions definitions) {
+    public UserField(final Class<? extends UserFieldTarget> targetClass, final String id) {
         this.id = id;
         if (targetClass != null) {
             this.targetClass = targetClass;
@@ -419,10 +417,9 @@ public final class UserField extends NameAndDescriptionTargetAdapter implements 
      * Erzeugt ein globales UserField
      *
      * @param id
-     * @param definitions
      */
-    public UserField(final String id, final UserFieldDefinitions definitions) {
-        this(null, id, definitions);
+    public UserField(final String id) {
+        this(null, id);
     }
 
     /**

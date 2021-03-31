@@ -31,9 +31,9 @@ import javax.swing.event.ListSelectionListener;
 
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.userfield.definition.UserField;
+import de.imise.tool3lgm.graphtools.userfield.definition.UserField.Style;
 import de.imise.tool3lgm.graphtools.userfield.definition.UserFieldDefinitions;
 import de.imise.tool3lgm.graphtools.userfield.definition.UserFieldTarget;
-import de.imise.tool3lgm.graphtools.userfield.definition.UserField.Style;
 import de.imise.tool3lgm.graphtools.userfield.dialog.definition.UserFieldDefinitionDialog;
 import de.imise.util.event.DoubleClickListener;
 import de.imise.util.swing.dialog.MultipleOptionPane;
@@ -228,7 +228,7 @@ public final class UserFieldDeclarationDialog extends AbstractUserFieldDeclarati
             }
             //jetzt kann nur noch ein Node- oder Kantentyp selektiert sein
             //-> neues userField für die selektierte Klassenart anlegen
-            UserField userField = new UserField(selectedClass, style, definitions);
+            UserField userField = new UserField(selectedClass, style);
             //das neu erzeugte UserField sofort zur ausgewählten Klasse hinzufügne
             definitions.add(userField);
             //solange den Dialog zur Definition der Eigenschaften des neuen UserFields zeigen, bis nur konsitente Werte eingegeben wurden
