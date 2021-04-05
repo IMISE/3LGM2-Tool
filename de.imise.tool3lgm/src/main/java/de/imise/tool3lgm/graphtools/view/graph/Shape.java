@@ -63,13 +63,14 @@ public enum Shape {
         @Override
         public void paint(final Graphics g, final NodeContainer kc, final Color col, final Color analysisColor, final Boolean isResult, final int x, final int y, final int xm, final int ym, final int xp, final int yp, final int[] xs, final int[] ys,
                 final int width, final int height, final int npoints) {
+            int cornerSize = roundRectCorner(width, height);
             g.setColor(col);
-            g.fillRoundRect(xm, ym, width, height, width / 4, height / 4);
+            g.fillRoundRect(xm, ym, width, height, cornerSize, cornerSize);
             g.translate(xm, ym);
             kc.paintSuperComponent(g);
             g.translate(-xm, -ym);
             g.setColor(isResult && analysisColor != null ? analysisColor : kc.getFrameColor());
-            g.drawRoundRect(xm, ym, width, height, width / 4, height / 4);
+            g.drawRoundRect(xm, ym, width, height, cornerSize, cornerSize);
         }
     },
     rhombus {
@@ -167,6 +168,13 @@ public enum Shape {
             g.drawRect(xm + 2 * width_third, ym, width_third, height);
         }
     };
+
+    private static int roundRectCorner(final int width, final int height) {
+        int min = Math.min(width, height);
+        int cornerSize = (int) Math.ceil(min / 10);
+
+        return cornerSize;
+    }
 
     /**
      * Paints the shape
