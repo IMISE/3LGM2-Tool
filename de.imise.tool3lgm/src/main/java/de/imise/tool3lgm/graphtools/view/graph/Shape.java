@@ -180,7 +180,7 @@ public enum Shape {
     private static int roundRectCorner(final int width, final int height) {
         int min = Math.min(width, height);
         int cornerSize = 20;
-        if (Math.min(height, width) < 20) {
+        if (Math.min(height, width) < 40) {
             cornerSize = 10;
         }
 
