@@ -173,6 +173,9 @@ public enum Shape {
         int min = Math.min(width, height);
         int cornerSize = (int) Math.ceil(min / 10);
 
+        cornerSize = Math.max(10, cornerSize);
+        cornerSize = Math.min(20, cornerSize);
+
         return cornerSize;
     }
 
