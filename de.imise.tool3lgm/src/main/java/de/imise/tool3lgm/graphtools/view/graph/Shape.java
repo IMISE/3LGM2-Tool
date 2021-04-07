@@ -169,12 +169,20 @@ public enum Shape {
         }
     };
 
+    /**
+     * returns a unified corner size
+     * for rectangles, that are too small, a smaller corner size is returned
+     *
+     * @param width
+     * @param height
+     * @return cornerSize
+     */
     private static int roundRectCorner(final int width, final int height) {
         int min = Math.min(width, height);
-        int cornerSize = (int) Math.ceil(min / 10);
-
-        cornerSize = Math.max(10, cornerSize);
-        cornerSize = Math.min(20, cornerSize);
+        int cornerSize = 20;
+        if (Math.min(height, width) < 20) {
+            cornerSize = 10;
+        }
 
         return cornerSize;
     }
