@@ -1,15 +1,24 @@
 #!/bin/bash
 
-#Test outputs
-#echo $SHELL
-#echo $PATH
-#mvn -version
-#exit 0
-
 SELF=$(realpath $0)
 APPDIR=$(dirname $SELF)
+
+echo '#############################################'
+echo '###   B U I L D  -  U M G E B U N G       ###'
+echo '#############################################'
+#Test outputs
+echo [INFO] SHELL=$SHELL
+echo [INFO] PATH=$PATH
+echo [INFO] SELF=$SELF
+echo [INFO] APPDIR=$APPDIR
+echo -n "[INFO] "
+java -version
+echo -n "[INFO] "
+mvn -version
+
 cd $APPDIR
 
+echo
 echo '#############################################'
 echo '###   A X S U T I L S  -  P R O J E K T   ###'
 echo '#############################################'
