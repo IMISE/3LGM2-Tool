@@ -206,12 +206,12 @@ public final class UserFieldDefinitions extends UserFieldDefinitionChangeHandler
 
     /**
      * @param elementClass
-     * @param id
      * @param name
      * @param description
+     * @param id
      * @return
      */
-    public DefinitionSubTypeNode addSubType(final Class<? extends ModelElement> elementClass, final String id, final String name, final String description) {
+    public DefinitionSubTypeNode addSubType(final Class<? extends ModelElement> elementClass, final String name, final String description, final String id) {
         DefinitionUserFieldTargetClassNode classNode = getOrCreateUserFieldTargetClassNode(elementClass);
         DefinitionSubTypeNode subTypeNode = new DefinitionSubTypeNode(name, description, id);
         classNode.add(subTypeNode);
@@ -239,46 +239,46 @@ public final class UserFieldDefinitions extends UserFieldDefinitionChangeHandler
 
     /**
      * @param elementClass
-     * @param id
      * @param name
      * @param description
+     * @param id
      * @return
      */
-    public DefinitionTabNode addTab(final Class<? extends ModelElement> elementClass, final String id, final String name, final String description) {
+    public DefinitionTabNode addTab(final Class<? extends ModelElement> elementClass, final String name, final String description, final String id) {
         DefinitionUserFieldTargetClassNode classNode = getOrCreateUserFieldTargetClassNode(elementClass);
-        return addTab(classNode, id, name, description);
+        return addTab(classNode, name, description, id);
     }
 
     /**
      * @param parent
-     * @param id
      * @param name
      * @param description
+     * @param id
      * @return
      */
-    public DefinitionTabNode addTab(final DefinitionUserFieldTargetClassNode parent, final String id, final String name, final String description) {
-        return addTab((IconifiedTreeNode<?>) parent, id, name, description);
+    public DefinitionTabNode addTab(final DefinitionUserFieldTargetClassNode parent, final String name, final String description, final String id) {
+        return addTab((IconifiedTreeNode<?>) parent, name, description, id);
     }
 
     /**
      * @param parent
-     * @param id
      * @param name
      * @param description
+     * @param id
      * @return
      */
-    public DefinitionTabNode addTab(final DefinitionSubTypeNode parent, final String id, final String name, final String description) {
-        return addTab((IconifiedTreeNode<?>) parent, id, name, description);
+    public DefinitionTabNode addTab(final DefinitionSubTypeNode parent, final String name, final String description, final String id) {
+        return addTab((IconifiedTreeNode<?>) parent, name, description, id);
     }
 
     /**
      * @param parent
-     * @param id
      * @param name
      * @param description
+     * @param id
      * @return
      */
-    private DefinitionTabNode addTab(final IconifiedTreeNode<?> parent, final String id, final String name, final String description) {
+    private DefinitionTabNode addTab(final IconifiedTreeNode<?> parent, final String name, final String description, final String id) {
         DefinitionTabNode tabNode = new DefinitionTabNode(name, description, id);
         parent.add(tabNode);
         return tabNode;
@@ -306,12 +306,12 @@ public final class UserFieldDefinitions extends UserFieldDefinitionChangeHandler
 
     /**
      * @param tabNode
-     * @param id
      * @param name
      * @param description
+     * @param id
      * @return
      */
-    public DefinitionGroupNode addGroup(final DefinitionTabNode tabNode, final String id, final String name, final String description) {
+    public DefinitionGroupNode addGroup(final DefinitionTabNode tabNode, final String name, final String description, final String id) {
         DefinitionGroupNode groupNode = new DefinitionGroupNode(name, description, id);
         tabNode.add(groupNode);
         return groupNode;
