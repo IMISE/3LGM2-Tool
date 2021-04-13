@@ -313,12 +313,12 @@ public final class UserFieldDeclarationDialog extends AbstractUserFieldDeclarati
             TreePath[] selectionPaths = declarationTree.getSelectionPaths();
             boolean isSelection = false;
             boolean isSingleUserFieldSelected = false;
-            if (selectionPaths.length > 0) {
+            if (selectionPaths != null && selectionPaths.length > 0) {
                 isSelection = true;
-                if (selectionPaths.length > 1) {
-
+                if (selectionPaths.length == 1) {
+                    UserField selectedUserField = declarationTree.getSelectedUserField();
+                    isSingleUserFieldSelected = selectedUserField != null;
                 }
-
             }
             setButtonsEnabled(isSelection, isSingleUserFieldSelected);
         }
