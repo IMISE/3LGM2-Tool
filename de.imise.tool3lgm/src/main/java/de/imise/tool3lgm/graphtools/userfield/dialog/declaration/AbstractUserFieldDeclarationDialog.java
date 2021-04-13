@@ -39,7 +39,7 @@ public abstract class AbstractUserFieldDeclarationDialog extends AbstractSizeAnd
      * genutzt, weil die Elemente in der Reinhenfolge angezeigt werden sollen,
      * die der User vorgibt.
      */
-    protected UserFieldDeclarationDialogFieldList fieldList;
+    protected UserFieldDeclarationDialogFieldTree declarationTree;
 
     /** button to edit a userField */
     protected JButton editButton;
@@ -80,7 +80,7 @@ public abstract class AbstractUserFieldDeclarationDialog extends AbstractSizeAnd
         super(owner, getResString("userfields"), true);
         MetaModel metaModel = definitions.getMetaModel();
         classComboBox = new UserFieldDeclarationDialogClassComboBox(metaModel, 13);
-        fieldList = new UserFieldDeclarationDialogFieldList(definitions);
+        declarationTree = new UserFieldDeclarationDialogFieldTree(definitions);
         userFieldTypeComboBox = new AlphabeticalComboBox<>(3);
 
         newButton = createButton("new");
@@ -106,7 +106,7 @@ public abstract class AbstractUserFieldDeclarationDialog extends AbstractSizeAnd
         Border border = new EmptyBorder(5, 5, 5, 5);
         centerPanel.setBorder(border);
         centerPanel.add(createLabel("userFieldDeclarationDialog_fields"), BorderLayout.NORTH);
-        centerPanel.add(createScrollPane(fieldList), BorderLayout.CENTER);
+        centerPanel.add(createScrollPane(declarationTree), BorderLayout.CENTER);
 
         JPanel buttonPanel = new JPanel(new GridBagLayout());
         buttonPanel.setBorder(border);

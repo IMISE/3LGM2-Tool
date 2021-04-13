@@ -967,9 +967,6 @@ public final class UserField extends NameAndDescriptionTargetAdapter implements 
      * Formel.
      */
     public boolean uses(final UserField possibleUsedField) {
-        if (possibleUsedField == null) {
-            return false;
-        }
         if (style == Style.FORMULA) {
             Set<String> idsInFormula = getIDsInFormula();
             if (idsInFormula != null && getIDsInFormula().contains(possibleUsedField.id)) {

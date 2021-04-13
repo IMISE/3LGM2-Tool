@@ -147,4 +147,23 @@ public class TypedTreeNode<T> extends DefaultMutableTreeNode {
         return true;
     }
 
+    @SuppressWarnings("unchecked")
+    @Override
+    public TypedTreeNode<T> clone() {
+        TypedTreeNode<T> clone;
+        try {
+            clone = (TypedTreeNode<T>) super.clone();
+            for (int i = 0; i < getChildCount(); i++) {
+                DefaultMutableTreeNode child = (DefaultMutableTreeNode) getChildAt(i);
+                //clone deep all children
+                DefaultMutableTreeNode childClone = (DefaultMutableTreeNode) child.clone();
+                clone.add(childClone);
+            }
+        } catch (Exception e) {
+            //this should never happen since we are cloneable
+            throw new InternalError(e);
+        }
+        return clone;
+    }
+
 }

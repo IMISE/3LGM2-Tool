@@ -357,8 +357,7 @@ public class FormatPanel extends AbstractInputPanel implements ActionListener, C
         UserFieldNumberFormat format = new UserFieldNumberFormat();
         format.setFractionDigits(fractionDigits);
         format.setUnit(unit);
-        definitions.add(format);
-
+        definitions.addNumberFormat(format);
         formatComboBox.addObject(format);
     }
 
@@ -381,7 +380,7 @@ public class FormatPanel extends AbstractInputPanel implements ActionListener, C
         format.setUnit(formatUnit);
         String unit = format.getUnit();
         unitBoxElements.add(unit);
-        definitions.add(format);
+        definitions.addNumberFormat(format);
         unitBox.setAllObjects(unitBoxElements);
         return format;
     }
@@ -463,7 +462,7 @@ public class FormatPanel extends AbstractInputPanel implements ActionListener, C
         } else if (e.getSource() == deleteButton) {
             UserFieldNumberFormat formatToDelete = getSelectedNumberFormat();
             //Warnen, wemm dieses Format noch woanders benutzt wird
-            ArrayList<UserField> formatUser = definitions.getUserFieldsWithNumberFormat(formatToDelete);
+            List<UserField> formatUser = definitions.getUserFieldsWithNumberFormat(formatToDelete);
 
             //für cancel() merken, wer das Format alles benutzt hat
             boolean selfUser = formatUser.remove(userField);
@@ -494,7 +493,7 @@ public class FormatPanel extends AbstractInputPanel implements ActionListener, C
         }
         //Cancel the delete of formats
         for (UserFieldNumberFormat format : deletedFormatToFormatUser.keySet()) {
-            definitions.add(format);
+            definitions.addNumberFormat(format);
             for (UserField formatUser : deletedFormatToFormatUser.get(format)) {
                 formatUser.setNumberFormat(format);
             }

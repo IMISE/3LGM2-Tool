@@ -26,8 +26,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JOptionPane;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
+import javax.swing.event.TreeSelectionEvent;
+import javax.swing.event.TreeSelectionListener;
+import javax.swing.tree.TreePath;
 
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.userfield.definition.UserField;
@@ -42,7 +43,7 @@ import de.imise.util.swing.dialog.MultipleOptionPane;
  * @author Thomas Rudert Dialog to create, edit, remove, import and export
  *         user-definied property-fields for model-elements
  */
-public final class UserFieldDeclarationDialog extends AbstractUserFieldDeclarationDialog implements ActionListener, ListSelectionListener {
+public final class UserFieldDeclarationDialog extends AbstractUserFieldDeclarationDialog implements ActionListener, TreeSelectionListener {
 
     /**
      * Die <code>GDCollection</code> in dessen Kontext gerade gearbeitet wird.
@@ -122,8 +123,8 @@ public final class UserFieldDeclarationDialog extends AbstractUserFieldDeclarati
             }
         });
         //ersten Eintrag selektieren (= globale Variablen)
-        fieldList.addListSelectionListener(this);
-        fieldList.addMouseListener(new DoubleClickListener(editButton));
+        declarationTree.addTreeSelectionListener(this);
+        declarationTree.addMouseListener(new DoubleClickListener(editButton));
         classComboBox.addActionListener(this);
         classComboBox.restoreSelection();
     }
@@ -212,7 +213,7 @@ public final class UserFieldDeclarationDialog extends AbstractUserFieldDeclarati
             dispose();
         } else if (is(importButton)) {
             if (importDefinitions(this, definitions)) {
-                fieldList.update(classComboBox.getSelectedClass());
+                declarationTree.update(classComboBox.getSelectedClass());
                 returnValue = 1;
             }
         } else if (is(exportButton)) {
@@ -230,7 +231,7 @@ public final class UserFieldDeclarationDialog extends AbstractUserFieldDeclarati
             //-> neues userField für die selektierte Klassenart anlegen
             UserField userField = new UserField(selectedClass, style);
             //das neu erzeugte UserField sofort zur ausgewählten Klasse hinzufügne
-            definitions.add(userField);
+            definitions.addUserField(userField);
             //solange den Dialog zur Definition der Eigenschaften des neuen UserFields zeigen, bis nur konsitente Werte eingegeben wurden
             int userDefinitionDialogReturnValue;
             do {
@@ -240,7 +241,7 @@ public final class UserFieldDeclarationDialog extends AbstractUserFieldDeclarati
             //wenn der Dialog über OK verlassen wurde
             if (userDefinitionDialogReturnValue == OK) {
                 //das neue UserField anzeigen
-                fieldList.addEntry(userField);
+                declarationTree.addUserField(userField);
                 returnValue = 1;
                 //den Definitions sagen, dass sich was geändert hat
                 definitions.getCollection().getUserFieldDefinitions().initReset();
@@ -250,14 +251,14 @@ public final class UserFieldDeclarationDialog extends AbstractUserFieldDeclarati
                 definitions.remove(userField);
             }
         } else if (is(editButton)) {
-            UserField userField = fieldList.getSelected(); // null-Check kann man sich sparen, weil die Buttons deaktiviert sind, wenn nichts selektiert ist
+            UserField userField = declarationTree.getSelectedUserField(); // null-Check kann man sich sparen, weil die Buttons deaktiviert sind, wenn nichts selektiert ist
             //die alte Formel des UserFields holen (die ist nur bei UserFields mit dem Formula-Style nicht null, aber das ist egal)
             String oldFormula = userField.getFormula();
             do {
                 gdcoll.getUserFieldDefinitions().setConsistencyUnknown();
                 //Definitionseditor für das zu bearbeitende userField anzeigen
                 if (UserFieldDefinitionDialog.showDialog(this, userField, gdcoll) == OK) {
-                    fieldList.refreshSelected();
+                    declarationTree.refresh();
                     returnValue = 1;
                 } else {
                     // Wenn der Definitionsdialog für Kennzahlformeln abgebrochen wurde, wird die alte Formel zurückgesetzt.
@@ -269,27 +270,17 @@ public final class UserFieldDeclarationDialog extends AbstractUserFieldDeclarati
 
         } else if (is(deleteButton)) {
             if (reallyDelete()) {
-                // null-Check kann man sich sparen, weil die Buttons deaktiviert sind, wenn nichts selektiert ist
-                int[] selectedIndices = fieldList.getSelectedIndices();
-                for (int selectedIndex : selectedIndices) {
-                    UserField userField = fieldList.get(selectedIndex);
-                    //das aktuelle UserField kann schon gelöscht worden sein, durch das löschen eines vorhergehenden in der Schleife
-                    if (!removedUserFields.contains(userField)) {
-                        //Alle gelöschten UserFields merken
-                        removedUserFields.addAll(definitions.remove(userField));
-                    }
-                }
-                fieldList.update(classComboBox.getSelectedClass());
+                declarationTree.deleteSelected();
                 returnValue = -1;
             }
         } else if (is(upButton)) {
-            fieldList.moveUp();
+            declarationTree.moveUp();
             returnValue = 1;
         } else if (is(downButton)) {
-            fieldList.moveDown();
+            declarationTree.moveDown();
             returnValue = 1;
         } else if (is(classComboBox)) {
-            fieldList.update(classComboBox.getSelectedClass());
+            declarationTree.update(classComboBox.getSelectedClass());
             updateUserFieldTypeComboBox();
         }
     }
@@ -317,16 +308,25 @@ public final class UserFieldDeclarationDialog extends AbstractUserFieldDeclarati
     }
 
     @Override
-    public void valueChanged(final ListSelectionEvent e) {
-        if (e.getSource() == fieldList) {
-            int selectionCount = fieldList.getSelectedIndices().length;
-            setButtonsEnabled(selectionCount == 1, selectionCount > 1);
+    public void valueChanged(final TreeSelectionEvent e) {
+        if (e.getSource() == declarationTree) {
+            TreePath[] selectionPaths = declarationTree.getSelectionPaths();
+            boolean isSelection = false;
+            boolean isSingleUserFieldSelected = false;
+            if (selectionPaths.length > 0) {
+                isSelection = true;
+                if (selectionPaths.length > 1) {
+
+                }
+
+            }
+            setButtonsEnabled(isSelection, isSingleUserFieldSelected);
         }
     }
 
-    private void setButtonsEnabled(final boolean isSingleUserFieldSelected, final boolean isMultiUserFieldSelected) {
+    private void setButtonsEnabled(final boolean isSelection, final boolean isSingleUserFieldSelected) {
         editButton.setEnabled(isSingleUserFieldSelected);
-        deleteButton.setEnabled(isSingleUserFieldSelected || isMultiUserFieldSelected);
+        deleteButton.setEnabled(isSelection);
         downButton.setEnabled(isSingleUserFieldSelected);
         upButton.setEnabled(isSingleUserFieldSelected);
     }

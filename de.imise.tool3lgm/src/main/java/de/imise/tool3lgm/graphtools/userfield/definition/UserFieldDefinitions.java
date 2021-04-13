@@ -1,7 +1,5 @@
 package de.imise.tool3lgm.graphtools.userfield.definition;
 
-import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -10,7 +8,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.StringTokenizer;
-import java.util.function.Predicate;
 
 import javax.swing.JOptionPane;
 
@@ -18,6 +15,8 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 
 import de.imise.tool3lgm.Static;
+import de.imise.tool3lgm.Tool3lgmConstants;
+import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.CopyDependencyResolver.CopyDependencyResolverResultSimple;
@@ -29,8 +28,16 @@ import de.imise.tool3lgm.graphtools.userfield.calculator.Calculator;
 import de.imise.tool3lgm.graphtools.userfield.calculator.PartValueSumFunction;
 import de.imise.tool3lgm.graphtools.userfield.calculator.PartValueSumFunction.TWSumArguments;
 import de.imise.tool3lgm.graphtools.userfield.calculator.PartValueSumSinglePartResults;
+import de.imise.tool3lgm.graphtools.userfield.definition.UserField.Style;
+import de.imise.tool3lgm.graphtools.userfield.definition.definitiontree.DefinitionGroupNode;
+import de.imise.tool3lgm.graphtools.userfield.definition.definitiontree.DefinitionStructureNode;
+import de.imise.tool3lgm.graphtools.userfield.definition.definitiontree.DefinitionSubTypeNode;
+import de.imise.tool3lgm.graphtools.userfield.definition.definitiontree.DefinitionTabNode;
+import de.imise.tool3lgm.graphtools.userfield.definition.definitiontree.DefinitionUserFieldNode;
 import de.imise.tool3lgm.graphtools.userfield.definition.definitiontree.DefinitionUserFieldTargetClassNode;
 import de.imise.tool3lgm.graphtools.userfield.event.UserFieldDefinitionChangeHandler;
+import de.imise.tool3lgm.graphtools.view.tree.node.IconifiedTreeNode;
+import de.imise.tool3lgm.graphtools.view.tree.node.LGMTreeNode;
 import de.imise.util.Alphabetical;
 import de.imise.util.collections.CollectionUtils;
 import de.imise.util.collections.ExtendedMap;
@@ -42,25 +49,26 @@ import de.imise.util.swing.dialog.MultipleOptionPane;
  *
  * @author Thomas Rudert
  */
-public final class UserFieldDefinitions extends UserFieldDefinitionChangeHandler implements Cloneable {
+public final class UserFieldDefinitions extends UserFieldDefinitionChangeHandler implements Cloneable, Iterable<UserField> {
 
     /**
-     * Mappt von der Elementklasse auf die dafür definierte Liste von
-     * <code>UserField</code>s
+     * We only need this node for iterating over all UserFields of all
+     * {@link DefinitionUserFieldTargetClassNode}s. This node will be not shown.
      */
-    private Map<Class<? extends UserFieldTarget>, UserFieldList> classToUserFieldListMap = new HashMap<>();
+    private DefinitionStructureNode definitionRoot = new DefinitionStructureNode("definitionRoot", "This node is only for having easy access to the Iterable<UserField> of all DefinitionUserFieldTargetClassNodes", "") {
+    };
 
     /**
      * Maps from an element class to the tree node which describes the subtype,
      * tab, userfield group and userfield structure of the element class.
      */
-    private final Map<Class<? extends UserFieldTarget>, DefinitionUserFieldTargetClassNode> classToUserStructureNodeMap = new HashMap<>();
+    private Map<Class<? extends UserFieldTarget>, DefinitionUserFieldTargetClassNode> classToStructureNodeMap = new HashMap<>();
 
     /** Maps from the ID of a format to the format */
     private final Map<String, UserFieldNumberFormat> formatIdToFormat = new HashMap<>();
 
     /** Mappt von den IDs der UserFields auf das UserField */
-    private Map<String, UserField> idToUserFieldMap = new HashMap<>();
+    private final Map<String, UserField> idToUserFieldMap = new HashMap<>();
 
     /** Berechnet für diese Defnition alle Kennzahlen der konkreten Elemente */
     private Calculator calculator;
@@ -153,10 +161,165 @@ public final class UserFieldDefinitions extends UserFieldDefinitionChangeHandler
     /**
      * @param format
      */
-    public void add(final UserFieldNumberFormat format) {
+    public void addNumberFormat(final UserFieldNumberFormat format) {
         String id = format.getID();
         formatIdToFormat.put(id, format);
     }
+
+    ///////////////
+    // ClassNode //
+    ///////////////
+
+    /**
+     * @param targetClass
+     * @return
+     */
+    public DefinitionUserFieldTargetClassNode getUserFieldTargetClassNode(final Class<? extends UserFieldTarget> targetClass) {
+        return getOrCreateUserFieldTargetClassNode(targetClass);
+    }
+
+    /**
+     * @param targetClass
+     * @return
+     */
+    private DefinitionUserFieldTargetClassNode getOrCreateUserFieldTargetClassNode(final Class<? extends UserFieldTarget> targetClass) {
+        DefinitionUserFieldTargetClassNode classNode = classToStructureNodeMap.get(targetClass);
+        if (classNode == null) {
+            String displayableName;
+            if (ModelElement.class.isAssignableFrom(targetClass)) {
+                ElementsNameBuilder elementsNameBuilder = getElementsNameBuilder();
+                Class<? extends ModelElement> elementClass = targetClass.asSubclass(ModelElement.class);
+                displayableName = elementsNameBuilder.getDisplayableName(elementClass);
+            } else {
+                displayableName = getResString("userFieldEditor_global");
+            }
+            classNode = new DefinitionUserFieldTargetClassNode(targetClass, displayableName);
+            classToStructureNodeMap.put(targetClass, classNode);
+            definitionRoot.add(classNode);
+        }
+        return classNode;
+    }
+
+    /////////////
+    // SubType //
+    /////////////
+
+    /**
+     * @param elementClass
+     * @param id
+     * @param name
+     * @param description
+     * @return
+     */
+    public DefinitionSubTypeNode addSubType(final Class<? extends ModelElement> elementClass, final String id, final String name, final String description) {
+        DefinitionUserFieldTargetClassNode classNode = getOrCreateUserFieldTargetClassNode(elementClass);
+        DefinitionSubTypeNode subTypeNode = new DefinitionSubTypeNode(name, description, id);
+        classNode.add(subTypeNode);
+        return subTypeNode;
+    }
+
+    //////////
+    // Tabs //
+    //////////
+
+    /**
+     * @param elementClass
+     * @return
+     */
+    private DefinitionTabNode getOrCreateDefaultTab(final Class<? extends UserFieldTarget> elementClass) {
+        DefinitionUserFieldTargetClassNode classNode = getOrCreateUserFieldTargetClassNode(elementClass);
+        for (int i = 0; i < classNode.getChildCount(); i++) {
+            LGMTreeNode<?> child = classNode.getChildAt(i);
+            if (child instanceof DefinitionTabNode) {
+                return (DefinitionTabNode) child;
+            }
+        }
+        return addTab(classNode, Tool3lgmConstants.getResString("userfields"), null, null);
+    }
+
+    /**
+     * @param elementClass
+     * @param id
+     * @param name
+     * @param description
+     * @return
+     */
+    public DefinitionTabNode addTab(final Class<? extends ModelElement> elementClass, final String id, final String name, final String description) {
+        DefinitionUserFieldTargetClassNode classNode = getOrCreateUserFieldTargetClassNode(elementClass);
+        return addTab(classNode, id, name, description);
+    }
+
+    /**
+     * @param parent
+     * @param id
+     * @param name
+     * @param description
+     * @return
+     */
+    public DefinitionTabNode addTab(final DefinitionUserFieldTargetClassNode parent, final String id, final String name, final String description) {
+        return addTab((IconifiedTreeNode<?>) parent, id, name, description);
+    }
+
+    /**
+     * @param parent
+     * @param id
+     * @param name
+     * @param description
+     * @return
+     */
+    public DefinitionTabNode addTab(final DefinitionSubTypeNode parent, final String id, final String name, final String description) {
+        return addTab((IconifiedTreeNode<?>) parent, id, name, description);
+    }
+
+    /**
+     * @param parent
+     * @param id
+     * @param name
+     * @param description
+     * @return
+     */
+    private DefinitionTabNode addTab(final IconifiedTreeNode<?> parent, final String id, final String name, final String description) {
+        DefinitionTabNode tabNode = new DefinitionTabNode(name, description, id);
+        parent.add(tabNode);
+        return tabNode;
+    }
+
+    ////////////////////////
+    // UserFieldGroupNode //
+    ////////////////////////
+
+    private DefinitionGroupNode getOrCreateDefaultGroup(final Class<? extends UserFieldTarget> elementClass) {
+        DefinitionTabNode defaultTabNode = getOrCreateDefaultTab(elementClass);
+        if (defaultTabNode.getChildCount() > 0) {
+            return defaultTabNode.getChildAt(0);
+        }
+        DefinitionGroupNode defaultGroupNode = addGroup(defaultTabNode, "", "", "");
+        defaultGroupNode.setShowGroupAsTitledBorderOnTab(false);
+        return defaultGroupNode;
+    }
+
+    public DefinitionGroupNode addGroup(final DefinitionTabNode tabNode) {
+        DefinitionGroupNode groupNode = addGroup(tabNode, "", "", "");
+        groupNode.setShowGroupAsTitledBorderOnTab(false);
+        return groupNode;
+    }
+
+    /**
+     * @param tabNode
+     * @param id
+     * @param name
+     * @param description
+     * @return
+     */
+    public DefinitionGroupNode addGroup(final DefinitionTabNode tabNode, final String id, final String name, final String description) {
+        DefinitionGroupNode groupNode = new DefinitionGroupNode(name, description, id);
+        tabNode.add(groupNode);
+        return groupNode;
+    }
+
+    ///////////////
+    // UserField //
+    ///////////////
 
     /**
      * Hängt der zuletzt benutzen Liste ein neues Element an. Die Methode
@@ -167,47 +330,103 @@ public final class UserFieldDefinitions extends UserFieldDefinitionChangeHandler
      *
      * @param userField
      */
-    public void add(final UserField userField) {
+    public DefinitionUserFieldNode addUserField(final UserField userField) {
+        Class<? extends UserFieldTarget> targetClass = userField.getTargetClass();
+        DefinitionGroupNode defaultGroupNode = getOrCreateDefaultGroup(targetClass);
+        return addUserField(defaultGroupNode, userField);
+    }
+
+    /**
+     * @param parent shoul be a {@link DefinitionGroupNode} or
+     *            {@link DefinitionTabNode}
+     * @param userField
+     * @return
+     */
+    public DefinitionUserFieldNode addUserField(final DefinitionGroupNode parent, final UserField userField) {
+        return addUserField(parent, userField, -1);
+    }
+
+    /**
+     * @param parent shoul be a {@link DefinitionGroupNode} or
+     *            {@link DefinitionTabNode}
+     * @param userField
+     * @param index
+     * @return
+     */
+    public DefinitionUserFieldNode addUserField(final DefinitionGroupNode parent, final UserField userField, final int index) {
         UserField clone = userField.clone();
-        Class<? extends UserFieldTarget> targetClass = clone.getTargetClass();
-        UserFieldList ufl = classToUserFieldListMap.get(targetClass);
-        if (ufl == null) {
-            ufl = new UserFieldList(targetClass);
-            classToUserFieldListMap.put(targetClass, ufl);
+        DefinitionUserFieldNode userFieldNode = new DefinitionUserFieldNode(clone);
+        if (index < 0 || index >= parent.getChildCount()) {
+            parent.add(userFieldNode);
+        } else {
+            parent.insert(userFieldNode, index);
         }
-        ufl.add(clone);
         String id = clone.getID();
         idToUserFieldMap.put(id, clone);
         UserFieldNumberFormat numberFormat = clone.getNumberFormat();
         if (numberFormat != null) {
-            add(numberFormat);
+            addNumberFormat(numberFormat);
         }
         //Formeln extra merken
         if (clone.hasStyle(UserField.Style.FORMULA)) {
             formulaUserFieldList.add(clone);
             setConsistencyUnknown();
         }
+        return userFieldNode;
+    }
+
+    /**
+     * @param sibling
+     * @param userField
+     * @return
+     */
+    public DefinitionUserFieldNode addUserFieldAfter(final DefinitionUserFieldNode sibling, final UserField userField) {
+        DefinitionGroupNode parent = sibling.getParent();
+        int index = parent.getIndex(sibling);
+        return addUserField(parent, userField, index);
     }
 
     /**
      * Fügt der zuletzt benutzen Liste ein neues Element ein. Positioniert am
      * übergebenen Index.
      *
+     * @param parent shoul be a {@link DefinitionGroupNode} or
+     *            {@link DefinitionTabNode}
      * @param userField
      * @param index
      */
-    public void insert(final UserField userField, final int index) {
-        UserFieldList ufl = classToUserFieldListMap.get(userField.getTargetClass());
-        if (ufl == null) {
-            return;
+    public void moveToPosition(final DefinitionStructureNode parent, final DefinitionUserFieldNode userFieldNode, final int index) {
+        DefinitionStructureNode oldParent = userFieldNode.getParent();
+        if (oldParent != null) {
+            oldParent.remove(userFieldNode);
         }
-        ufl.insert(userField, index);
-        idToUserFieldMap.put(userField.getID(), userField);
-        //Formeln extra merken
-        if (userField.hasStyle(UserField.Style.FORMULA)) {
-            formulaUserFieldList.add(userField);
-            setConsistencyUnknown();
+        if (index >= 0) {
+            parent.insert(userFieldNode, index);
+        } else {
+            parent.add(userFieldNode);
         }
+    }
+
+    ////////////
+    // Remove //
+    ////////////
+
+    /**
+     * @param userFieldNode
+     */
+    public void remove(final DefinitionUserFieldNode userFieldNode) {
+        UserField userField = userFieldNode.getUserObject();
+        remove(userField);
+    }
+
+    /**
+     * @param structureNode
+     */
+    public void remove(final DefinitionStructureNode structureNode) {
+        for (DefinitionUserFieldNode userFieldNode : structureNode.getUserFieldNodes()) {
+            remove(userFieldNode);
+        }
+        structureNode.removeFromParent();
     }
 
     /**
@@ -226,11 +445,9 @@ public final class UserFieldDefinitions extends UserFieldDefinitionChangeHandler
         if (!userField.isNumberUserField()) {
             return false;
         }
-        for (Class<? extends UserFieldTarget> c : getClassToUserFieldKeys()) {
-            for (UserField uf : classToUserFieldListMap.get(c)) {
-                if (uf.uses(userField)) {
-                    return true;
-                }
+        for (UserField formula : formulaUserFieldList) {
+            if (formula.uses(userField)) {
+                return true;
             }
         }
         return false;
@@ -240,11 +457,9 @@ public final class UserFieldDefinitions extends UserFieldDefinitionChangeHandler
      * @param numberFormat
      */
     public void removeNumberFormat(final UserFieldNumberFormat numberFormat) {
-        for (Class<? extends UserFieldTarget> userFieldTargetClass : getClassToUserFieldKeys()) {
-            for (UserField userField : classToUserFieldListMap.get(userFieldTargetClass)) {
-                if (userField.hasNumberFormat(numberFormat)) {
-                    userField.removeNumberFormat();
-                }
+        for (UserField userField : this) {
+            if (userField.hasNumberFormat(numberFormat)) {
+                userField.removeNumberFormat();
             }
         }
         String formatID = numberFormat.getID();
@@ -257,10 +472,6 @@ public final class UserFieldDefinitions extends UserFieldDefinitionChangeHandler
      */
     public List<UserField> remove(final UserField userField) {
         ArrayList<UserField> deleted = new ArrayList<>();
-        UserFieldList ufl = classToUserFieldListMap.get(userField.getTargetClass());
-        if (ufl == null) {
-            return deleted;
-        }
         //wenn das userField irgendwo anders noch benutzt wird -> lösche die Referenzen ebenfalls
         //wenn das zu löschende UserField ein UserField ist, das bei einem anderen in der Formel vorkommen kann (Kennzahl, Kennzahlformel, Verteilungsgewicht)
         if (userField.isNumberUserField()) {
@@ -298,115 +509,95 @@ public final class UserFieldDefinitions extends UserFieldDefinitionChangeHandler
             }
 
             for (UserField field : userFieldsToDelete) {
-                idToUserFieldMap.remove(field.getID());
-                ufl = classToUserFieldListMap.get(field.getTargetClass());
-                ufl.remove(field);
+                removeUserFieldInternal(field);
             }
             deleted.addAll(userFieldsToDelete);
             //bei allem, was nicht mit Kennzahlen zu tun hat -> einfach löschen
         } else {
-            idToUserFieldMap.remove(userField.getID());
-            ufl.remove(userField);
+            removeUserFieldInternal(userField);
             deleted.add(userField);
         }
         return deleted;
     }
 
+    /**
+     * @param userField
+     */
+    private void removeUserFieldInternal(final UserField userField) {
+        String id = userField.getID();
+        idToUserFieldMap.remove(id);
+        if (userField.hasStyle(Style.FORMULA)) {
+            formulaUserFieldList.remove(userField);
+        }
+        Class<? extends UserFieldTarget> targetClass = userField.getTargetClass();
+        DefinitionUserFieldTargetClassNode classNode = classToStructureNodeMap.get(targetClass);
+        classNode.removeChildNodesWith(userField);
+    }
+
     @Override
     public UserFieldDefinitions clone() {
-        UserFieldDefinitions def = null;
+        UserFieldDefinitions clone = null;
         try {
-            def = (UserFieldDefinitions) super.clone();
+            clone = (UserFieldDefinitions) super.clone();
+            //this deep clones all tree nodes and all userFields in the tree nodes
+            clone.definitionRoot = (DefinitionStructureNode) clone.definitionRoot.clone();
+            //set the deep clones in the main map
+            clone.classToStructureNodeMap = new HashMap<>();
+            for (int i = 0; i < clone.definitionRoot.getChildCount(); i++) {
+                DefinitionUserFieldTargetClassNode cloneTargetClassNode = (DefinitionUserFieldTargetClassNode) clone.definitionRoot.getChildAt(i);
+                Class<? extends UserFieldTarget> targetClass = cloneTargetClassNode.getUserObject();
+                clone.classToStructureNodeMap.put(targetClass, cloneTargetClassNode);
+            }
+            //deep clone all formats
+            for (String formatId : formatIdToFormat.keySet()) {
+                UserFieldNumberFormat format = formatIdToFormat.get(formatId);
+                format = format.clone();
+                clone.formatIdToFormat.put(formatId, format);
+            }
+            //replace all userFields in the ID-to-UserField-map by the clones
+            for (UserField clonedUserField : clone) {
+                String id = clonedUserField.getID();
+                idToUserFieldMap.put(id, clonedUserField);
+            }
+            //replace all original formula UserFields by the clones in the formula list in the same order like in the original list
+            for (int i = 0; i < formulaUserFieldList.size(); i++) {
+                UserField formula = formulaUserFieldList.get(i);
+                String formulaID = formula.getID();
+                UserField clonedFormula = idToUserFieldMap.get(formulaID);
+                formulaUserFieldList.set(i, clonedFormula);
+            }
+            //initialize the Calculator for the cloned definitions
+            clone.calculator = new Calculator(clone);
+            //initialize the Analyzer for the cloned definitions
+            clone.definitionsAnalyzer = new UserFieldDefinitionsAnalyzer(clone);
+            return clone;
+
         } catch (CloneNotSupportedException e) {
             //this should never happen since we are cloneable
             throw new InternalError(e);
-        }
-        //Alle Eigenschaften clonen, die ein anderes Object sein müssen, als beim Original
-        //die Map mit allen Userfields, die von ihren IDs auf das UserField mappt clonen
-        def.idToUserFieldMap = new HashMap<>(idToUserFieldMap);
-        //jedes einzelne UserField clonen (erstmal nur in dieser Map)
-        for (String key : idToUserFieldMap.keySet()) {
-            UserField userFieldClone = def.idToUserFieldMap.get(key).clone();
-            def.idToUserFieldMap.put(key, userFieldClone);
-        }
-        //die Map, die von den UserFieldTargetClasses auf die Liste der dafür defnierten
-        //UserFields mappt auch clonen und alle darin enthaltenen UserFields durch die
-        //oben erzeugten Clone ersetzen
-        def.classToUserFieldListMap = new HashMap<>(classToUserFieldListMap);
-        for (Class<? extends UserFieldTarget> targetClass : def.classToUserFieldListMap.keySet()) {
-            UserFieldList userFieldList = def.classToUserFieldListMap.get(targetClass);
-            //die Listen in der Map selbst müssen auch geclont werden
-            userFieldList = (UserFieldList) userFieldList.clone();
-            //Listen mit ihren clones ersetzen
-            def.classToUserFieldListMap.put(targetClass, userFieldList);
-            //in der geclonten Listen die UserFields mit den clones ersetzen
-            replaceWithClones(userFieldList, def.idToUserFieldMap);
-        }
-        //in der Liste mit allen Formel-UserFields auch die Original durch die clone ersetzen
-        def.formulaUserFieldList = new ArrayList<>(formulaUserFieldList);
-        replaceWithClones(def.formulaUserFieldList, def.idToUserFieldMap);
-
-        //eigenen Calculator für den clone initialisieren
-        def.calculator = new Calculator(def);
-        //den Analyzer ersetzen
-        def.definitionsAnalyzer = new UserFieldDefinitionsAnalyzer(def);
-        return def;
-    }
-
-    /**
-     * Ersetzt die UserFields in der übergebenen Liste durch die aus der
-     * übergebenen Map mit derselben ID. Weil UserFieldList nicht das Interface
-     * {@link List} implementiert muss man im Grunde dieselbe Funktion hier 2
-     * mal schreiben. Die UserFieldList soll aber nicht List implementieren,
-     * weil es zu aufwändig wäre, sie für alle darin enthaltenen Funktionen
-     * konsitent zu halten
-     *
-     * @param userFieldList
-     * @param idToClonedUserFieldMap
-     */
-    private static void replaceWithClones(final UserFieldList userFieldList, final Map<String, UserField> idToClonedUserFieldMap) {
-        for (int i = 0; i < userFieldList.size(); i++) {
-            UserField orgUserField = userFieldList.get(i);
-            String userFieldID = orgUserField.getID();
-            UserField cloneUserField = idToClonedUserFieldMap.get(userFieldID);
-            userFieldList.set(i, cloneUserField);
-        }
-    }
-
-    /**
-     * Ersetzt die UserFields in der übergebenen Liste durch die aus der
-     * übergebenen Map mit derselben ID.
-     *
-     * @param userFieldList
-     * @param idToClonedUserFieldMap
-     */
-    private static void replaceWithClones(final List<UserField> userFieldList, final Map<String, UserField> idToClonedUserFieldMap) {
-        for (int i = 0; i < userFieldList.size(); i++) {
-            UserField orgUserField = userFieldList.get(i);
-            String userFieldID = orgUserField.getID();
-            UserField cloneUserField = idToClonedUserFieldMap.get(userFieldID);
-            userFieldList.set(i, cloneUserField);
         }
     }
 
     /**
      * @param otherDef
      */
-    public void addAll(final UserFieldDefinitions otherDef) {
-        Iterable<UserField> elementClassUserFields = otherDef.getElementClassUserFields();
-        Iterable<UserFieldNumberFormat> numberFormats = otherDef.getNumberFormats();
-        addAll(numberFormats, elementClassUserFields);
-        for (Class<? extends UserFieldTarget> clazz : otherDef.classToUserFieldListMap.keySet()) {
-            for (UserField uf : otherDef.classToUserFieldListMap.get(clazz)) {
-                add(uf);
-            }
-        }
+    public void _addAll(final UserFieldDefinitions otherDef) {
+        //TODO: #382: prüfen, ob man das hier überhaupt braucht, es wird nirgends genutzt und müsste erst berichtigt werden
+        //        Iterable<UserField> elementClassUserFields = otherDef.getElementClassUserFields();
+        //        Iterable<UserFieldNumberFormat> numberFormats = otherDef.getNumberFormats();
+        //        addAll(numberFormats, elementClassUserFields);
+        //        for (Class<? extends UserFieldTarget> clazz : otherDef.classToUserFieldListMap.keySet()) {
+        //            for (UserField uf : otherDef.classToUserFieldListMap.get(clazz)) {
+        //                addUserField(uf);
+        //            }
+        //        }
     }
 
     /**
      * @param otherDef
      */
     public void addAll(final CopyDependencyResolverResultSimple resolvedCopyDependencies) {
+        //TODO: #382: das hier fügt die Benutzerdefinierten Eigenschaften immer auf dem Default-Tab ein. Das CopyDependencyResolverResultSimple müsste statt der UserFields die DefinitionUserFieldNode übernehmen und so die Tab-Position beachten
         addAll(resolvedCopyDependencies.userFieldNumberFormats, resolvedCopyDependencies.userFields);
     }
 
@@ -414,12 +605,12 @@ public final class UserFieldDefinitions extends UserFieldDefinitionChangeHandler
      * @param numberFormats
      * @param userFields
      */
-    public void addAll(final Iterable<UserFieldNumberFormat> numberFormats, final Iterable<UserField> userFields) {
+    private void addAll(final Iterable<UserFieldNumberFormat> numberFormats, final Iterable<UserField> userFields) {
         for (UserFieldNumberFormat numberFormat : numberFormats) {
-            add(numberFormat);
+            addNumberFormat(numberFormat);
         }
         for (UserField userField : userFields) {
-            add(userField);
+            addUserField(userField);
         }
     }
 
@@ -435,14 +626,12 @@ public final class UserFieldDefinitions extends UserFieldDefinitionChangeHandler
      *         <code>null</code>, wenn keins gefunden wurde
      */
     public UserField getUserField(final Class<? extends UserFieldTarget> userFieldTargetClass, final String name) {
-        for (Class<?> clazz : classToUserFieldListMap.keySet()) {
-            UserFieldList userFields = classToUserFieldListMap.get(clazz);
-            if (userFields == null) {
-                continue;
-            }
-            for (UserField uf : userFields) {
-                if (uf.getTargetClass().equals(userFieldTargetClass) && uf.getName().equals(name)) {
-                    return uf;
+        DefinitionUserFieldTargetClassNode targetClassNode = classToStructureNodeMap.get(userFieldTargetClass);
+        if (targetClassNode != null) {
+            for (UserField userField : targetClassNode) {
+                String userFieldName = userField.getName();
+                if (userFieldName.equals(name)) {
+                    return userField;
                 }
             }
         }
@@ -463,29 +652,11 @@ public final class UserFieldDefinitions extends UserFieldDefinitionChangeHandler
      * @return
      */
     public Iterable<UserField> getUserFields(final Class<? extends UserFieldTarget> userFieldTargetClass) {
-        final UserFieldList fieldList = classToUserFieldListMap.get(userFieldTargetClass);
-        if (fieldList == null) {
+        DefinitionUserFieldTargetClassNode targetClassNode = classToStructureNodeMap.get(userFieldTargetClass);
+        if (targetClassNode == null) {
             return ImmutableList.of();
         }
-        final Iterator<UserField> userFieldsIterator = fieldList.iterator();
-        Iterable<UserField> userFieldsIterable = () -> new Iterator<UserField>() {
-
-            @Override
-            public boolean hasNext() {
-                return userFieldsIterator.hasNext();
-            }
-
-            @Override
-            public UserField next() {
-                return userFieldsIterator.next();
-            }
-
-            @Override
-            public void remove() {
-                userFieldsIterator.remove();
-            }
-        };
-        return userFieldsIterable;
+        return targetClassNode;
     }
 
     /**
@@ -500,15 +671,15 @@ public final class UserFieldDefinitions extends UserFieldDefinitionChangeHandler
      * @param userFieldTargetClass
      * @return
      */
-    public List<UserField> getUserFields(final Class<? extends UserFieldTarget> userFieldTargetClass, final Set<UserField.Style> styles) {
-        if (styles == null || styles.size() == 0) {
-            UserFieldList fieldList = classToUserFieldListMap.get(userFieldTargetClass);
-            return fieldList != null ? fieldList.getData() : new ArrayList<>(0);
-        }
+    public List<UserField> getUserFields(final Class<? extends UserFieldTarget> userFieldTargetClass, Set<UserField.Style> styles) {
         ArrayList<UserField> returnList = new ArrayList<>();
-        for (UserField uf : getUserFields(userFieldTargetClass)) {
-            if (styles.contains(uf.getStyle())) {
-                returnList.add(uf);
+        if (styles != null && styles.isEmpty()) {
+            styles = null;
+        }
+        DefinitionUserFieldTargetClassNode targetClassNode = classToStructureNodeMap.get(userFieldTargetClass);
+        for (UserField userField : targetClassNode) {
+            if (styles == null || styles.contains(userField.getStyle())) {
+                returnList.add(userField);
             }
         }
         return returnList;
@@ -555,13 +726,6 @@ public final class UserFieldDefinitions extends UserFieldDefinitionChangeHandler
     }
 
     /**
-     * @return
-     */
-    private static final Predicate<Class<? extends UserFieldTarget>> isSimpleTargetClass() {
-        return c -> c != GLOBAL_USERFIELD_IDENTIFIER_CLASS;
-    }
-
-    /**
      * @param formatId
      * @return
      */
@@ -573,11 +737,12 @@ public final class UserFieldDefinitions extends UserFieldDefinitionChangeHandler
      * @return
      */
     public Iterable<UserField> getElementClassUserFields() {
-        Set<Class<? extends UserFieldTarget>> keys = classToUserFieldListMap.keySet();
         ImmutableList.Builder<Iterable<UserField>> iterables = new ImmutableList.Builder<>();
-        for (Class<? extends UserFieldTarget> key : keys) {
-            if (isSimpleTargetClass().test(key)) {
-                iterables.add(classToUserFieldListMap.get(key));
+        for (int i = 0; i < definitionRoot.getChildCount(); i++) {
+            DefinitionUserFieldTargetClassNode targetClassNode = (DefinitionUserFieldTargetClassNode) definitionRoot.getChildAt(i);
+            Class<? extends UserFieldTarget> targetClass = targetClassNode.getUserObject();
+            if (targetClass != GLOBAL_USERFIELD_IDENTIFIER_CLASS) {
+                iterables.add(targetClassNode);
             }
         }
         ImmutableList<Iterable<UserField>> build = iterables.build();
@@ -589,12 +754,9 @@ public final class UserFieldDefinitions extends UserFieldDefinitionChangeHandler
      */
     public List<UserField> getIDUserFields() {
         ArrayList<UserField> idUserFields = new ArrayList<>();
-        for (Class<? extends UserFieldTarget> userFieldTargetClass : classToUserFieldListMap.keySet()) {
-            UserFieldList userFields = classToUserFieldListMap.get(userFieldTargetClass);
-            for (UserField userField : userFields) {
-                if (userField.getStyle() == UserField.Style.ID) {
-                    idUserFields.add(userField);
-                }
+        for (UserField userField : this) {
+            if (userField.getStyle() == UserField.Style.ID) {
+                idUserFields.add(userField);
             }
         }
         return idUserFields;
@@ -812,7 +974,7 @@ public final class UserFieldDefinitions extends UserFieldDefinitionChangeHandler
      *         die für sie definierten UserFields mappt
      */
     public Set<Class<? extends UserFieldTarget>> getClassToUserFieldKeys() {
-        return classToUserFieldListMap.keySet();
+        return classToStructureNodeMap.keySet();
     }
 
     /////////////////////////////////////////////////////////////////////////////
@@ -1011,12 +1173,12 @@ public final class UserFieldDefinitions extends UserFieldDefinitionChangeHandler
      *            sollen, die es benutzen
      * @return Liste aller UserFields, die das übergebene Format benutzen
      */
-    public ArrayList<UserField> getUserFieldsWithNumberFormat(final UserFieldNumberFormat numberFormat) {
-        ArrayList<UserField> returnList = new ArrayList<>();
+    public List<UserField> getUserFieldsWithNumberFormat(final UserFieldNumberFormat numberFormat) {
+        List<UserField> returnList = new ArrayList<>();
         for (Class<? extends UserFieldTarget> elementClass : getClassToUserFieldKeys()) {
-            for (UserField uf : getUserFields(elementClass)) {
-                if (uf.hasNumberFormat(numberFormat)) {
-                    returnList.add(uf);
+            for (UserField userField : getUserFields(elementClass)) {
+                if (userField.hasNumberFormat(numberFormat)) {
+                    returnList.add(userField);
                 }
             }
         }
@@ -1034,7 +1196,7 @@ public final class UserFieldDefinitions extends UserFieldDefinitionChangeHandler
      * @return
      */
     public Set<Class<? extends UserFieldTarget>> getUserFieldTargets() {
-        return classToUserFieldListMap.keySet();
+        return classToStructureNodeMap.keySet();
     }
 
     /**
@@ -1048,7 +1210,7 @@ public final class UserFieldDefinitions extends UserFieldDefinitionChangeHandler
         for (Class<?> keyClass : sortedKeys) {
             sb.append(keyClass.getSimpleName());
             sb.append("\n");
-            for (Object o : classToUserFieldListMap.get(keyClass)) {
+            for (Object o : classToStructureNodeMap.get(keyClass)) {
                 UserField uf = (UserField) o;
                 if (uf == null) {
                     sb.append("null#############\n");
@@ -1068,6 +1230,11 @@ public final class UserFieldDefinitions extends UserFieldDefinitionChangeHandler
         sb.append("\n-----------------\n");
         sb.append(ExtendedMap.toString(idToUserFieldMap));
         return sb.toString();
+    }
+
+    @Override
+    public Iterator<UserField> iterator() {
+        return definitionRoot.iterator();
     }
 
 }

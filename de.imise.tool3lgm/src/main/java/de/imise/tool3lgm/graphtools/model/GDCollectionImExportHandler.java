@@ -137,7 +137,7 @@ public final class GDCollectionImExportHandler {
         CopyDependencyResolverResultFull resolvedCopyDependencies = CopyDependencyResolver.resolveCopyDependencies(importSzenarios);
         UserFieldDefinitions userFieldDefinitions = gdcoll.getUserFieldDefinitions();
         for (UserField uf : resolvedCopyDependencies.userFields) {
-            userFieldDefinitions.add(uf);
+            userFieldDefinitions.addUserField(uf);
         }
 
         Map<String, byte[]> iconTable = gdcoll.getIconTable();

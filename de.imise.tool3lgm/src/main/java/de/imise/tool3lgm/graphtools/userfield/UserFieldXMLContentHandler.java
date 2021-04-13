@@ -126,17 +126,17 @@ public class UserFieldXMLContentHandler implements ContentHandler {
             if (userFieldNumberFormat == null) {
                 throw new SAXException("Error while parsing definition of userFields: userFieldNumberFormat shouldn't not be null");
             } else {
-                userFieldDefinitions.add(userFieldNumberFormat);
+                userFieldDefinitions.addNumberFormat(userFieldNumberFormat);
             }
             userFieldNumberFormat = null;
 
         } else if (qName.equals("userFieldDef")) {
             if (userField != null) {
                 if (userField.getStyle() != null) { //File Version 3.9 UserField.Style.FORMATS && UserField.Style.SEPARATOR are removed as UserField style -> ignore such UserFields
-                    userFieldDefinitions.add(userField);
+                    userFieldDefinitions.addUserField(userField);
                 }
             } else if (userFieldNumberFormat != null) {
-                userFieldDefinitions.add(userFieldNumberFormat);
+                userFieldDefinitions.addNumberFormat(userFieldNumberFormat);
             } else {
                 throw new SAXException("Error while parsing definition of userFields: userField shouldn't not be null");
             }
