@@ -7,8 +7,12 @@ import java.util.Set;
 
 import javax.swing.JList;
 import javax.swing.JTree;
+import javax.swing.event.TreeExpansionEvent;
+import javax.swing.event.TreeWillExpandListener;
+import javax.swing.plaf.basic.BasicTreeUI;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
+import javax.swing.tree.ExpandVetoException;
 import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
@@ -51,6 +55,26 @@ public class UserFieldDeclarationDialogFieldTree extends JTree {
         setModel(model);
         setRootVisible(false);
         getSelectionModel().setSelectionMode(TreeSelectionModel.CONTIGUOUS_TREE_SELECTION);
+
+        setUI(new BasicTreeUI() {
+            @Override
+            protected boolean shouldPaintExpandControl(final TreePath path, final int row, final boolean isExpanded, final boolean hasBeenExpanded, final boolean isLeaf) {
+                boolean shouldDisplayExpandControl = false;
+                return shouldDisplayExpandControl;
+            }
+        });
+
+        addTreeWillExpandListener(new TreeWillExpandListener() {
+            @Override
+            public void treeWillExpand(final TreeExpansionEvent event) throws ExpandVetoException {
+
+            }
+
+            @Override
+            public void treeWillCollapse(final TreeExpansionEvent event) throws ExpandVetoException {
+                throw new ExpandVetoException(event, "Collapsing tree not allowed");
+            }
+        });
     }
 
     /**
@@ -59,6 +83,7 @@ public class UserFieldDeclarationDialogFieldTree extends JTree {
     public void update(final Class<? extends UserFieldTarget> selectedClass) {
         DefinitionUserFieldTargetClassNode root = definitions.getUserFieldTargetClassNode(selectedClass);
         model.setRoot(root);
+        refresh();
     }
 
     /**
@@ -69,7 +94,7 @@ public class UserFieldDeclarationDialogFieldTree extends JTree {
      */
     public void addUserField(final UserField userField) {
         definitions.addUserField(userField);
-        model.reload();
+        refresh();
     }
 
     /**
@@ -79,9 +104,9 @@ public class UserFieldDeclarationDialogFieldTree extends JTree {
      * @param userField
      * @param index
      */
-    public void addEntry(final DefinitionGroupNode parent, final UserField userField) {
+    public void addUserField(final DefinitionGroupNode parent, final UserField userField) {
         definitions.addUserField(parent, userField);
-        model.reload();
+        refresh();
     }
 
     /**
@@ -91,9 +116,9 @@ public class UserFieldDeclarationDialogFieldTree extends JTree {
      * @param userField
      * @param index
      */
-    public void addEntry(final DefinitionUserFieldNode sibling, final UserField userField) {
+    public void addUserField(final DefinitionUserFieldNode sibling, final UserField userField) {
         definitions.addUserFieldAfter(sibling, userField);
-        model.reload();
+        refresh();
     }
 
     /**
@@ -101,6 +126,9 @@ public class UserFieldDeclarationDialogFieldTree extends JTree {
      */
     public void refresh() {
         model.reload();
+        for (int i = 0; i < getRowCount(); i++) {
+            expandRow(i);
+        }
         revalidate();
         repaint();
 
