@@ -27,15 +27,15 @@ public class UserFieldList implements Cloneable, Iterable<UserField> {
     }
 
     /**
-     * @param element
+     * @param userField
      * @param index
      */
-    public final void insert(final UserField element, final int index) {
+    public final void insert(final UserField userField, final int index) {
         if (isEmpty()) {
-            add(element);
+            add(userField);
         } else {
-            list.remove(element);
-            list.add(index, element);
+            list.remove(userField);
+            list.add(index, userField);
         }
     }
 
@@ -58,29 +58,29 @@ public class UserFieldList implements Cloneable, Iterable<UserField> {
     }
 
     /**
-     * @param element
+     * @param userField
      */
-    public final void add(final UserField element) {
-        list.remove(element);
-        ensureDefaultTab(element);
-        list.add(element);
+    public final void add(final UserField userField) {
+        list.remove(userField);
+        ensureDefaultTab(userField);
+        list.add(userField);
     }
 
     /**
      * Ersetzt das element am gegebenen Index durch das übergebene.
      *
      * @param index
-     * @param element
+     * @param userField
      */
-    void set(final int index, final UserField element) {
-        list.set(index, element);
+    void set(final int index, final UserField userField) {
+        list.set(index, userField);
     }
 
     /**
-     * @param element
+     * @param userField
      */
-    public final void remove(final UserField element) {
-        list.remove(element);
+    public final void remove(final UserField userField) {
+        list.remove(userField);
     }
 
     /**
