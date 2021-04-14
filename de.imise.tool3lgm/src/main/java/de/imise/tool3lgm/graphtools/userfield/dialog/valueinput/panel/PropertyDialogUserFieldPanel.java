@@ -45,6 +45,7 @@ import javax.swing.JSeparator;
 import javax.swing.JTextField;
 import javax.swing.JViewport;
 import javax.swing.border.Border;
+import javax.swing.border.TitledBorder;
 import javax.swing.text.JTextComponent;
 
 import com.google.common.collect.ImmutableList;
@@ -180,13 +181,15 @@ public class PropertyDialogUserFieldPanel extends ElementDialogPanel implements 
         setLayout(new BorderLayout());
         Border mainPanelBorder = BorderFactory.createEmptyBorder(5, 5, 5, 5);
         setBorder(mainPanelBorder);
-        JPanel mp = new JPanel(new GridBagLayout());
+        JPanel mainPanel = new JPanel(new GridBagLayout());
         mainPanelBorder = BorderFactory.createEmptyBorder(0, 5, 5, 5);
-        mp.setBorder(mainPanelBorder);
-        JScrollPane sp = getScrollPane(mp);
-        add(sp);
+        mainPanel.setBorder(mainPanelBorder);
+        JScrollPane scrollPane = getScrollPane(mainPanel);
+        add(scrollPane);
 
         GridBagConstraints constraints = getDefaultConstraints();
+
+        JPanel currentPanel = mainPanel;
 
         //Attributdefinitionen des GraphDocumentes holen
         for (UserField userField : tabDefinition) {
@@ -194,20 +197,24 @@ public class PropertyDialogUserFieldPanel extends ElementDialogPanel implements 
                 String tabName = userField.getName();
                 setName(tabName);
             } else if (userField.hasStyle(Style.GROUP)) {
-
+                currentPanel = new JPanel(new GridBagLayout());
+                String name = userField.getName();
+                TitledBorder titledBorder = BorderFactory.createTitledBorder(name);
+                currentPanel.setBorder(titledBorder);
+                mainPanel.add(currentPanel, constraints);
             } else {
                 List<JComponent> labelAndEditor = createLabelAndEditor(userField);
                 JComponent label = labelAndEditor.get(0);
                 JComponent editor = labelAndEditor.get(1);
                 constraints.insets.top = 5;
-                mp.add(label, constraints);
+                currentPanel.add(label, constraints);
                 constraints.insets.top = 0;
                 constraints.gridy++;
-                mp.add(editor, constraints);
+                currentPanel.add(editor, constraints);
                 constraints.gridy += constraints.gridheight;
             }
         }
-        addFillSpacePanel(mp, constraints);
+        addFillSpacePanel(mainPanel, constraints);
     }
 
     /**
