@@ -1,5 +1,8 @@
 package de.imise.tool3lgm.graphtools.userfield.dialog.declaration;
 
+import static de.imise.tool3lgm.graphtools.userfield.definition.UserField.Style.GROUP;
+import static de.imise.tool3lgm.graphtools.userfield.definition.UserField.Style.TAB;
+
 import javax.swing.DefaultListModel;
 import javax.swing.JList;
 import javax.swing.ListSelectionModel;
@@ -8,6 +11,7 @@ import de.imise.tool3lgm.graphtools.userfield.definition.UserField;
 import de.imise.tool3lgm.graphtools.userfield.definition.UserFieldDefinitions;
 import de.imise.tool3lgm.graphtools.userfield.definition.UserFieldTarget;
 import de.imise.util.NamedObjectContainer;
+import de.imise.util.StringUtils;
 
 /**
  * {@link JList}, die UserFields anzeigen kann.
@@ -41,8 +45,17 @@ public class UserFieldDeclarationDialogFieldList extends JList<NamedObjectContai
      */
     public void update(final Class<? extends UserFieldTarget> selectedClass) {
         clear();
-        for (UserField uf : definitions.getUserFields(selectedClass)) {
-            addEntry(uf);
+        int indent = 0;
+        for (UserField userField : definitions.getUserFields(selectedClass)) {
+            if (userField.hasStyle(TAB)) {
+                addEntry(userField, 0);
+                indent = 1;
+            } else if (userField.hasStyle(GROUP)) {
+                addEntry(userField, 1);
+                indent = 2;
+            } else {
+                addEntry(userField, indent);
+            }
         }
     }
 
@@ -58,9 +71,10 @@ public class UserFieldDeclarationDialogFieldList extends JList<NamedObjectContai
      * <code>UserField</code> hinzu.
      *
      * @param userField
+     * @param indent
      */
-    public void addEntry(final UserField userField) {
-        addEntry(userField, model.getSize());
+    private void addEntry(final UserField userField, final int indent) {
+        addEntry(userField, model.getSize(), indent);
     }
 
     /**
@@ -69,9 +83,12 @@ public class UserFieldDeclarationDialogFieldList extends JList<NamedObjectContai
      *
      * @param userField
      * @param index
+     * @param indent
      */
-    public void addEntry(final UserField userField, final int index) {
-        String name = userField.getName() + "  ( " + userField.getStyle() + " )";
+    private void addEntry(final UserField userField, final int index, final int indent) {
+        int whiteSpaceCount = indent * 6;
+        String indentation = StringUtils.fillToMinLenght("", whiteSpaceCount);
+        String name = indentation + userField.getStyle() + ": " + userField.getName();
         NamedObjectContainer<UserField> noc = new NamedObjectContainer<>(userField, name);
         model.add(index, noc);
     }
