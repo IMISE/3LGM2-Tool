@@ -14,8 +14,8 @@ import java.util.StringTokenizer;
 import com.google.common.base.Strings;
 import com.google.common.collect.ImmutableSet;
 
+import de.imise.tool3lgm.graphtools.IDSource;
 import de.imise.tool3lgm.graphtools.userfield.CostingUtil;
-import de.imise.tool3lgm.graphtools.userfield.UserFieldListItem;
 import de.imise.util.IDStringGenerator;
 import de.imise.util.NameAndDescriptionTargetAdapter;
 
@@ -31,7 +31,7 @@ import de.imise.util.NameAndDescriptionTargetAdapter;
  *
  * @author Thomas Rudert
  */
-public final class UserField extends NameAndDescriptionTargetAdapter implements UserFieldListItem, Comparator<UserFieldTarget> {
+public final class UserField extends NameAndDescriptionTargetAdapter implements IDSource, Cloneable, Comparator<UserFieldTarget> {
 
     public static enum Style {
         SINGLE_LINE {
@@ -115,7 +115,37 @@ public final class UserField extends NameAndDescriptionTargetAdapter implements 
             int compare(final UserField userField, final UserFieldTarget me1, final UserFieldTarget me2) {
                 return numberCompare(userField, me1, me2);
             }
-        };
+        },
+        TAB {
+            @Override
+            int compare(final UserField uf, final UserFieldTarget me1, final UserFieldTarget me2) {
+                return 0;
+            }
+            @Override
+            public boolean isValueStyle() {
+                return false;
+            }
+        },
+        GROUP {
+            @Override
+            int compare(final UserField uf, final UserFieldTarget me1, final UserFieldTarget me2) {
+                return 0;
+            }
+            @Override
+            public boolean isValueStyle() {
+                return false;
+            }
+        },
+        SEPARATOR {
+            @Override
+            int compare(final UserField uf, final UserFieldTarget me1, final UserFieldTarget me2) {
+                return 0;
+            }
+            @Override
+            public boolean isValueStyle() {
+                return false;
+            }
+        },;
 
         public static final Set<Style> NUMBER_STYLES = ImmutableSet.of(NUMBER, FORMULA);
 
@@ -202,6 +232,23 @@ public final class UserField extends NameAndDescriptionTargetAdapter implements 
         public String toString() {
             return getResString(name());
         }
+
+        /**
+         * @return only <code>true</code> if the userfield with this style has
+         *         an input or derived value and is not a view defining style
+         */
+        public boolean isValueStyle() {
+            return true;
+        }
+
+        /**
+         * @return only <code>true</code> if the userfield with this style has
+         *         not an value and is a view defining style
+         */
+        public final boolean isViewDefiningStyle() {
+            return !isValueStyle();
+        }
+
     }
 
     /**
@@ -569,6 +616,14 @@ public final class UserField extends NameAndDescriptionTargetAdapter implements 
     }
 
     /**
+     * @return only <code>true</code> if the userfield with this style has an
+     *         input value and is not a view defining style
+     */
+    public boolean isValueUserField() {
+        return style.isValueStyle();
+    }
+
+    /**
      * Setzt die Kennzahlformel.
      *
      * @param formulaString
@@ -718,7 +773,9 @@ public final class UserField extends NameAndDescriptionTargetAdapter implements 
     @Override
     public String toString() {
         String retVal = null;
-        if (Strings.isNullOrEmpty(description)) {
+        if (style == Style.SEPARATOR) {
+            retVal = "--- " + name + " ---";
+        } else if (Strings.isNullOrEmpty(description)) {
             retVal = name;
         } else {
             retVal = name + " (" + description + ")";

@@ -908,7 +908,7 @@ public class ToolContentHandlerV3_0 implements ContentHandler {
 
             } else if (qName.equals("userFieldDef")) {
                 if (userField != null) {
-                    if (userField.getStyle() != null) { //File Version 3.9 UserField.Style.FORMATS && UserField.Style.SEPARATOR are removed as UserField style -> ignore such UserFields
+                    if (userField.getStyle() != null) { //File Version 3.9 UserField.Style.FORMAT is removed as UserField style -> ignore such UserFields
                         userFieldDefinitions.add(userField);
                     }
                 } else if (userFieldNumberFormat != null) {
@@ -932,8 +932,8 @@ public class ToolContentHandlerV3_0 implements ContentHandler {
                         value = Style.NUMBER.name();
                     } else if (value.equals("CLASSIFICATION_NUMBER_FORMULA")) {
                         value = Style.FORMULA.name();
-                    } else if (value.equals("FORMAT") || value.equals("SEPARATOR")) {
-                        //formats and separators are no longer UserFields
+                    } else if (value.equals("FORMAT")) {
+                        //formats are no longer UserFields
                         value = null;
                     }
                 }

@@ -5,12 +5,15 @@ import static de.imise.tool3lgm.graphtools.model.LGMChangeListener.LGMChangeType
 import static de.imise.tool3lgm.graphtools.userfield.definition.UserField.Style.CHECK_BOX;
 import static de.imise.tool3lgm.graphtools.userfield.definition.UserField.Style.COMBO_BOX;
 import static de.imise.tool3lgm.graphtools.userfield.definition.UserField.Style.FORMULA;
+import static de.imise.tool3lgm.graphtools.userfield.definition.UserField.Style.GROUP;
 import static de.imise.tool3lgm.graphtools.userfield.definition.UserField.Style.HYPERLINK;
 import static de.imise.tool3lgm.graphtools.userfield.definition.UserField.Style.ID;
 import static de.imise.tool3lgm.graphtools.userfield.definition.UserField.Style.MULTI_LINE;
 import static de.imise.tool3lgm.graphtools.userfield.definition.UserField.Style.NUMBER;
 import static de.imise.tool3lgm.graphtools.userfield.definition.UserField.Style.RADIO_BUTTON;
+import static de.imise.tool3lgm.graphtools.userfield.definition.UserField.Style.SEPARATOR;
 import static de.imise.tool3lgm.graphtools.userfield.definition.UserField.Style.SINGLE_LINE;
+import static de.imise.tool3lgm.graphtools.userfield.definition.UserField.Style.TAB;
 import static de.imise.tool3lgm.graphtools.userfield.dialog.declaration.UserFieldDeclarationImportExportHandler.exportDefinitions;
 import static de.imise.tool3lgm.graphtools.userfield.dialog.declaration.UserFieldDeclarationImportExportHandler.importDefinitions;
 import static de.imise.tool3lgm.graphtools.userfield.dialog.definition.UserFieldDefinitionDialog.OK;
@@ -164,6 +167,11 @@ public final class UserFieldDeclarationDialog extends AbstractUserFieldDeclarati
             addStyleCategory("STYLE_TYPE_SPECIAL");
             addStyle(HYPERLINK);
             addStyle(ID);
+
+            addStyleCategory("STYLE_TYPE_VIEW");
+            addStyle(TAB);
+            addStyle(GROUP);
+            addStyle(SEPARATOR);
         }
     }
 

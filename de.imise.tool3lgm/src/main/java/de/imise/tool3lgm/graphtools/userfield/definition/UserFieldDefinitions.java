@@ -23,7 +23,6 @@ import de.imise.tool3lgm.graphtools.model.CopyDependencyResolver.CopyDependencyR
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.userfield.UserFieldDefinitionsAnalyzer;
-import de.imise.tool3lgm.graphtools.userfield.UserFieldListItem;
 import de.imise.tool3lgm.graphtools.userfield.WeightReplacer;
 import de.imise.tool3lgm.graphtools.userfield.calculator.Calculator;
 import de.imise.tool3lgm.graphtools.userfield.calculator.PartValueSumFunction;
@@ -49,11 +48,6 @@ public final class UserFieldDefinitions extends UserFieldDefinitionChangeHandler
      * Gesamtmodell gelten und zur Verfügung stehen.
      */
     public static final Class<? extends UserFieldTarget> GLOBAL_USERFIELD_IDENTIFIER_CLASS = GDCollection.class;
-
-    /**
-     * All global userfields
-     */
-    private final UserFieldList globalUSerFields = new UserFieldList(GLOBAL_USERFIELD_IDENTIFIER_CLASS);
 
     /**
      * Mappt von der Elementklasse auf die dafür definierte Liste von
@@ -365,7 +359,7 @@ public final class UserFieldDefinitions extends UserFieldDefinitionChangeHandler
      */
     private static void replaceWithClones(final UserFieldList userFieldList, final Map<String, UserField> idToClonedUserFieldMap) {
         for (int i = 0; i < userFieldList.size(); i++) {
-            UserFieldListItem orgUserField = userFieldList.get(i);
+            UserField orgUserField = userFieldList.get(i);
             String userFieldID = orgUserField.getID();
             UserField cloneUserField = idToClonedUserFieldMap.get(userFieldID);
             userFieldList.set(i, cloneUserField);

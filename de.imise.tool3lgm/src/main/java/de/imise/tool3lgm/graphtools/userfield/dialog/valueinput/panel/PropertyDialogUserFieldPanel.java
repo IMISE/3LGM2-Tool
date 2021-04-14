@@ -12,6 +12,7 @@ import static de.imise.tool3lgm.graphtools.userfield.definition.UserField.Style.
 import static de.imise.tool3lgm.graphtools.userfield.definition.UserField.Style.MULTI_LINE;
 import static de.imise.tool3lgm.graphtools.userfield.definition.UserField.Style.NUMBER;
 import static de.imise.tool3lgm.graphtools.userfield.definition.UserField.Style.RADIO_BUTTON;
+import static de.imise.tool3lgm.graphtools.userfield.definition.UserField.Style.SEPARATOR;
 import static de.imise.tool3lgm.graphtools.userfield.definition.UserField.Style.SINGLE_LINE;
 
 import java.awt.BorderLayout;
@@ -39,6 +40,7 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
+import javax.swing.JSeparator;
 import javax.swing.JTextField;
 import javax.swing.JViewport;
 import javax.swing.border.Border;
@@ -220,7 +222,9 @@ public class PropertyDialogUserFieldPanel extends ElementDialogPanel implements 
         UserField.Style style = field.getStyle();
         JLabel label = getLabel(field);
         JComponent editorComponent = null;
-        if (style == SINGLE_LINE || style == ID) {
+        if (style == SEPARATOR) {
+            editorComponent = new JSeparator();
+        } else if (style == SINGLE_LINE || style == ID) {
             ExtendedTextField textField = new ExtendedTextField(value);
             editorComponent = textField;
         } else if (style == MULTI_LINE) {
