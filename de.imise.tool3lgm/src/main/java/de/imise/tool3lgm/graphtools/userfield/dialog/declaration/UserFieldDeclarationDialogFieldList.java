@@ -137,4 +137,11 @@ public class UserFieldDeclarationDialogFieldList extends JList<NamedObjectContai
         }
     }
 
+    /**
+     * @return the number of elements in this list
+     */
+    public int getElementCount() {
+        return model.size();
+    }
+
 }

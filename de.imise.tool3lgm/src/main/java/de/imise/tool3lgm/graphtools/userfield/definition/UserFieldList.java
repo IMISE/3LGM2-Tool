@@ -15,8 +15,14 @@ import de.imise.tool3lgm.Tool3lgmConstants;
  */
 public class UserFieldList implements Cloneable, Iterable<UserField> {
 
+    /**
+     *
+     */
     private final Class<? extends UserFieldTarget> targetClass;
 
+    /**
+     *
+     */
     private List<UserField> list = new ArrayList<>();
 
     /**
@@ -77,10 +83,33 @@ public class UserFieldList implements Cloneable, Iterable<UserField> {
     }
 
     /**
+     * @return
+     */
+    private boolean canRemoveTab() {
+        //if there is only one tab in the list -> you can remove it
+        if (list.size() == 1) {
+            return true;
+        }
+        //if there are more than 1 element in the list -> don't remove the last tab = return false
+        int tabCount = 0;
+        for (UserField userField : list) {
+            if (userField.hasStyle(TAB)) {
+                if (tabCount == 1) {
+                    return true;
+                }
+                tabCount++;
+            }
+        }
+        return false;
+    }
+
+    /**
      * @param userField
      */
     public final void remove(final UserField userField) {
-        list.remove(userField);
+        if (!userField.hasStyle(TAB) || canRemoveTab()) {
+            list.remove(userField);
+        }
     }
 
     /**

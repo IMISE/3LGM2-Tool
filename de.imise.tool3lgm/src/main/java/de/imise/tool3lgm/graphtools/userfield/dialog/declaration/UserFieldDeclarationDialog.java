@@ -284,7 +284,11 @@ public final class UserFieldDeclarationDialog extends AbstractUserFieldDeclarati
             if (reallyDelete()) {
                 // null-Check kann man sich sparen, weil die Buttons deaktiviert sind, wenn nichts selektiert ist
                 int[] selectedIndices = fieldList.getSelectedIndices();
+                boolean defaultTabShouldBeDeleted = false;
                 for (int selectedIndex : selectedIndices) {
+                    if (selectedIndex == 0) {
+                        defaultTabShouldBeDeleted = true;
+                    }
                     UserField userField = fieldList.get(selectedIndex);
                     //das aktuelle UserField kann schon gelöscht worden sein, durch das löschen eines vorhergehenden in der Schleife
                     if (!removedUserFields.contains(userField)) {
@@ -293,6 +297,13 @@ public final class UserFieldDeclarationDialog extends AbstractUserFieldDeclarati
                     }
                 }
                 fieldList.update(classComboBox.getSelectedClass());
+                //The UserFieldList never deletes the last tab if there is at least one other element in the list
+                // -> remove the tab now if all the other elements are deleted
+                if (defaultTabShouldBeDeleted && fieldList.getElementCount() == 1) {
+                    UserField defaultTab = fieldList.get(0);
+                    definitions.remove(defaultTab);
+                    fieldList.update(classComboBox.getSelectedClass());
+                }
                 returnValue = -1;
             }
         } else if (is(upButton)) {
