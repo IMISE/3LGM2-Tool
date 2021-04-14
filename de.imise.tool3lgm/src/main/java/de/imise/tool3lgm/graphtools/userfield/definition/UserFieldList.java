@@ -1,10 +1,14 @@
 package de.imise.tool3lgm.graphtools.userfield.definition;
 
+import static de.imise.tool3lgm.graphtools.userfield.definition.UserField.Style.TAB;
+
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
 import com.google.common.collect.ImmutableList;
+
+import de.imise.tool3lgm.Tool3lgmConstants;
 
 /**
  * @author Thomas Rudert
@@ -27,23 +31,38 @@ public class UserFieldList implements Cloneable, Iterable<UserField> {
      * @param index
      */
     public final void insert(final UserField element, final int index) {
-        list.remove(element);
-        list.add(index, element);
+        if (isEmpty()) {
+            add(element);
+        } else {
+            list.remove(element);
+            list.add(index, element);
+        }
     }
 
-    protected int getInsertIndex(final UserField element) {
-        return -1;
+    /**
+     * @param userFields
+     * @param userField
+     */
+    private void ensureDefaultTab(final UserField userField) {
+        if (userField.hasStyle(TAB)) {
+            return;
+        }
+        Class<? extends UserFieldTarget> targetClass = userField.getTargetClass();
+        if (targetClass != UserFieldDefinitions.GLOBAL_USERFIELD_IDENTIFIER_CLASS) {
+            if (isEmpty()) {
+                UserField defaultTab = new UserField(targetClass, TAB);
+                defaultTab.setName(Tool3lgmConstants.getResString("userfields"));
+                add(defaultTab);
+            }
+        }
     }
 
     /**
      * @param element
      */
     public final void add(final UserField element) {
-        int insertIndex = getInsertIndex(element);
-        if (insertIndex >= 0) {
-            insert(element, insertIndex);
-        }
         list.remove(element);
+        ensureDefaultTab(element);
         list.add(element);
     }
 
@@ -53,7 +72,7 @@ public class UserFieldList implements Cloneable, Iterable<UserField> {
      * @param index
      * @param element
      */
-    public void set(final int index, final UserField element) {
+    void set(final int index, final UserField element) {
         list.set(index, element);
     }
 
@@ -67,7 +86,7 @@ public class UserFieldList implements Cloneable, Iterable<UserField> {
     /**
      * @return
      */
-    public final int getSize() {
+    public final int size() {
         return list.size();
     }
 
@@ -119,20 +138,18 @@ public class UserFieldList implements Cloneable, Iterable<UserField> {
     }
 
     /**
-     * Kopie
-     *
-     * @return
+     * @return Immutable copy of the data
      */
     public final List<UserField> getData() {
         return ImmutableList.copyOf(list);
     }
 
-    public int size() {
-        return list.size();
-    }
-
     public boolean isValidIndex(final int index) {
         return index >= 0 && index < list.size();
+    }
+
+    public boolean isEmpty() {
+        return list.isEmpty();
     }
 
 }

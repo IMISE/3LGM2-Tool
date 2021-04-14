@@ -161,23 +161,22 @@ public final class UserFieldDefinitions extends UserFieldDefinitionChangeHandler
      * @param userField
      */
     public void add(final UserField userField) {
-        UserField clone = userField.clone();
-        Class<? extends UserFieldTarget> targetClass = clone.getTargetClass();
-        UserFieldList ufl = classToUserFieldTargetSpecificListMap.get(targetClass);
-        if (ufl == null) {
-            ufl = new UserFieldList(targetClass);
-            classToUserFieldTargetSpecificListMap.put(targetClass, ufl);
+        Class<? extends UserFieldTarget> targetClass = userField.getTargetClass();
+        UserFieldList userFields = classToUserFieldTargetSpecificListMap.get(targetClass);
+        if (userFields == null) {
+            userFields = new UserFieldList(targetClass);
+            classToUserFieldTargetSpecificListMap.put(targetClass, userFields);
         }
-        ufl.add(clone);
-        String id = clone.getID();
-        idToUserFieldMap.put(id, clone);
-        UserFieldNumberFormat numberFormat = clone.getNumberFormat();
+        userFields.add(userField);
+        String id = userField.getID();
+        idToUserFieldMap.put(id, userField);
+        UserFieldNumberFormat numberFormat = userField.getNumberFormat();
         if (numberFormat != null) {
             add(numberFormat);
         }
         //Formeln extra merken
-        if (clone.hasStyle(UserField.Style.FORMULA)) {
-            formulaUserFieldTargetSpecificList.add(clone);
+        if (userField.hasStyle(UserField.Style.FORMULA)) {
+            formulaUserFieldTargetSpecificList.add(userField);
             setConsistencyUnknown();
         }
     }
@@ -190,11 +189,12 @@ public final class UserFieldDefinitions extends UserFieldDefinitionChangeHandler
      * @param index
      */
     public void insert(final UserField userField, final int index) {
-        UserFieldList ufl = classToUserFieldTargetSpecificListMap.get(userField.getTargetClass());
-        if (ufl == null) {
+        Class<? extends UserFieldTarget> targetClass = userField.getTargetClass();
+        UserFieldList userFields = classToUserFieldTargetSpecificListMap.get(targetClass);
+        if (userFields == null) {
             return;
         }
-        ufl.insert(userField, index);
+        userFields.insert(userField, index);
         idToUserFieldMap.put(userField.getID(), userField);
         //Formeln extra merken
         if (userField.hasStyle(UserField.Style.FORMULA)) {
@@ -382,37 +382,30 @@ public final class UserFieldDefinitions extends UserFieldDefinitionChangeHandler
         }
     }
 
-    /**
-     * @param otherDef
-     */
-    public void addAll(final UserFieldDefinitions otherDef) {
-        Iterable<UserField> elementClassUserFields = otherDef.getElementClassUserFields();
-        Iterable<UserFieldNumberFormat> numberFormats = otherDef.getNumberFormats();
-        addAll(numberFormats, elementClassUserFields);
-        for (Class<? extends UserFieldTarget> clazz : otherDef.classToUserFieldTargetSpecificListMap.keySet()) {
-            for (UserField uf : otherDef.classToUserFieldTargetSpecificListMap.get(clazz)) {
-                add(uf);
-            }
-        }
-    }
-
+    // AXS: 14.04.2021 Scheint überflüssig zu sein
+    //    /**
+    //     * @param otherDef
+    //     */
+    //    private void addAll(final UserFieldDefinitions otherDef) {
+    //        Iterable<UserField> elementClassUserFields = otherDef.getElementClassUserFields();
+    //        Iterable<UserFieldNumberFormat> numberFormats = otherDef.getNumberFormats();
+    //        addAll(numberFormats, elementClassUserFields);
+    //        for (Class<? extends UserFieldTarget> clazz : otherDef.classToUserFieldTargetSpecificListMap.keySet()) {
+    //            for (UserField uf : otherDef.classToUserFieldTargetSpecificListMap.get(clazz)) {
+    //                add(uf);
+    //            }
+    //        }
+    //    }
+    //
     /**
      * @param otherDef
      */
     public void addAll(final CopyDependencyResolverResultSimple resolvedCopyDependencies) {
-        addAll(resolvedCopyDependencies.userFieldNumberFormats, resolvedCopyDependencies.userFields);
-    }
-
-    /**
-     * @param numberFormats
-     * @param userFields
-     */
-    public void addAll(final Iterable<UserFieldNumberFormat> numberFormats, final Iterable<UserField> userFields) {
-        for (UserFieldNumberFormat numberFormat : numberFormats) {
+        for (UserFieldNumberFormat numberFormat : resolvedCopyDependencies.userFieldNumberFormats) {
             add(numberFormat);
         }
-        for (UserField userField : userFields) {
-            add(userField);
+        for (UserField userField : resolvedCopyDependencies.userFields) {
+            add(userField.clone());
         }
     }
 

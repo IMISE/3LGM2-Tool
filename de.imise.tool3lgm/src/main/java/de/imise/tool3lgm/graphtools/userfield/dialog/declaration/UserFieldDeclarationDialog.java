@@ -33,6 +33,7 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
 import de.imise.tool3lgm.graphtools.model.GDCollection;
+import de.imise.tool3lgm.graphtools.model.LGMGraphDocument;
 import de.imise.tool3lgm.graphtools.userfield.definition.UserField;
 import de.imise.tool3lgm.graphtools.userfield.definition.UserField.Style;
 import de.imise.tool3lgm.graphtools.userfield.definition.UserFieldDefinitions;
@@ -207,7 +208,8 @@ public final class UserFieldDeclarationDialog extends AbstractUserFieldDeclarati
             }
             GDCollection gdcoll = definitions.getCollection();
             if (gdcoll != null) {
-                gdcoll.getMainDoc().distributeEvent(DATA_CHANGED);
+                LGMGraphDocument mainDoc = gdcoll.getMainDoc();
+                mainDoc.distributeEvent(DATA_CHANGED);
             }
         } else if (is(cancelButton)) {
             if (returnValue != 0) {
@@ -215,7 +217,8 @@ public final class UserFieldDeclarationDialog extends AbstractUserFieldDeclarati
                     return;
                 }
             }
-            definitions.getCollection().setUserFieldDefinitions(oldUserFieldDefionitions);
+            GDCollection gdcoll = definitions.getCollection();
+            gdcoll.setUserFieldDefinitions(oldUserFieldDefionitions);
             returnValue = -1;
             dispose();
         } else if (is(importButton)) {
@@ -231,13 +234,15 @@ public final class UserFieldDeclarationDialog extends AbstractUserFieldDeclarati
             //Definitionseditor für das neue userField anzeigen
             UserField.Style style = userFieldTypeComboBox.getSelectedObject();
             if (style == null) {
-                JOptionPane.showMessageDialog(this, getResString("userFieldDeclarationDialog_chooseType"), getResString("fehler"), JOptionPane.ERROR_MESSAGE);
+                String message = getResString("userFieldDeclarationDialog_chooseType");
+                String title = getResString("fehler");
+                JOptionPane.showMessageDialog(this, message, title, JOptionPane.ERROR_MESSAGE);
                 return;
             }
             //jetzt kann nur noch ein Node- oder Kantentyp selektiert sein
             //-> neues userField für die selektierte Klassenart anlegen
             UserField userField = new UserField(selectedClass, style);
-            //das neu erzeugte UserField sofort zur ausgewählten Klasse hinzufügne
+            //das neu erzeugte UserField sofort zur ausgewählten Klasse hinzufügen
             definitions.add(userField);
             //solange den Dialog zur Definition der Eigenschaften des neuen UserFields zeigen, bis nur konsitente Werte eingegeben wurden
             int userDefinitionDialogReturnValue;
@@ -248,7 +253,7 @@ public final class UserFieldDeclarationDialog extends AbstractUserFieldDeclarati
             //wenn der Dialog über OK verlassen wurde
             if (userDefinitionDialogReturnValue == OK) {
                 //das neue UserField anzeigen
-                fieldList.addEntry(userField);
+                fieldList.update(selectedClass);
                 returnValue = 1;
                 //den Definitions sagen, dass sich was geändert hat
                 definitions.getCollection().getUserFieldDefinitions().initReset();
