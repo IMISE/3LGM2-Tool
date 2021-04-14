@@ -15,7 +15,9 @@ import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.annotation.Nullable;
 import javax.swing.BorderFactory;
@@ -44,6 +46,7 @@ import de.imise.tool3lgm.graphtools.path.metapaths.ElementaryMetaPathHandler;
 import de.imise.tool3lgm.graphtools.path.metapaths.SequenceMetaPath;
 import de.imise.tool3lgm.graphtools.path.metapaths.SimpleMetaPathCreator;
 import de.imise.tool3lgm.graphtools.userfield.definition.UserFieldDefinitions;
+import de.imise.tool3lgm.graphtools.userfield.definition.UserFieldList;
 import de.imise.tool3lgm.graphtools.userfield.definition.UserFieldTarget;
 import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.panel.PropertyDialogUserFieldPanel;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
@@ -110,8 +113,8 @@ public class AbstractElementPropertyDialog extends AbstractTabbedPropertyDialog 
     /** Das Panel des Allgemein-Reiters */
     protected final DescripPanel descripPanel;
 
-    /** Das Panel für die benutzerdefinierten Eigenschaften */
-    private final PropertyDialogUserFieldPanel propertyDialogUserFieldPanel;
+    /** Die Panels für die benutzerdefinierten Eigenschaften */
+    private final Set<PropertyDialogUserFieldPanel> propertyDialogUserFieldPanels = new HashSet<>();
 
     /**
      * Panel in the south with the panel for the buttons OK, Take over and
@@ -155,11 +158,11 @@ public class AbstractElementPropertyDialog extends AbstractTabbedPropertyDialog 
         // wenn es mind ein Userfield für diese Klasse gibt -> zeige das USerFieldPanel
         UserFieldDefinitions userFieldDefinitions = gdcoll.getUserFieldDefinitions();
         Class<? extends ModelElement> modelElementClass = getModelElementClass();
-        if (userFieldDefinitions.hasUserFields(modelElementClass)) {
-            propertyDialogUserFieldPanel = new PropertyDialogUserFieldPanel(this);
-            addTab(getResString("userfields"), propertyDialogUserFieldPanel);
-        } else {
-            propertyDialogUserFieldPanel = null;
+        List<UserFieldList> tabSubLists = userFieldDefinitions.getTabSubLists(modelElementClass);
+        for (UserFieldList userFieldList : tabSubLists) {
+            PropertyDialogUserFieldPanel userFieldPanel = new PropertyDialogUserFieldPanel(this, userFieldList);
+            propertyDialogUserFieldPanels.add(userFieldPanel);
+            addTab(userFieldPanel);
         }
 
         JPanel standardButtonsPanel = new JPanel();
@@ -254,7 +257,7 @@ public class AbstractElementPropertyDialog extends AbstractTabbedPropertyDialog 
         if (getTabComponentAt(0) != descripPanel) {
             return false;
         }
-        if (tabCount == 2 && getTabComponentAt(1) != propertyDialogUserFieldPanel) {
+        if (tabCount == 2 && !propertyDialogUserFieldPanels.contains(getTabComponentAt(1))) {
             return false;
         }
         return true;

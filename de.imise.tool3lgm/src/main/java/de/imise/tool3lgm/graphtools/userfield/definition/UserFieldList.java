@@ -90,6 +90,28 @@ public class UserFieldList implements Cloneable, Iterable<UserField> {
     }
 
     /**
+     * @return for every tab in the whole list an own sub list
+     */
+    public List<UserFieldList> getTabSubLists() {
+        List<UserFieldList> tabSubLists = new ArrayList<>();
+        UserFieldList tabSubList = new UserFieldList(targetClass);
+        UserField fistTab = list.get(0);
+        tabSubList.add(fistTab);
+        for (int i = 1; i < list.size(); i++) {
+            UserField userField = list.get(i);
+            if (userField.hasStyle(TAB)) {
+                tabSubLists.add(tabSubList);
+                tabSubList = new UserFieldList(targetClass);
+            }
+            tabSubList.add(userField);
+            if (i == list.size() - 1) {
+                tabSubLists.add(tabSubList);
+            }
+        }
+        return tabSubLists;
+    }
+
+    /**
      * @return
      */
     private boolean canRemoveTab() {
@@ -186,6 +208,11 @@ public class UserFieldList implements Cloneable, Iterable<UserField> {
 
     public boolean isEmpty() {
         return list.isEmpty();
+    }
+
+    @Override
+    public String toString() {
+        return list.toString();
     }
 
 }

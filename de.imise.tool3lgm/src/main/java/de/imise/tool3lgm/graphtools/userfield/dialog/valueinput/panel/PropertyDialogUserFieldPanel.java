@@ -14,6 +14,7 @@ import static de.imise.tool3lgm.graphtools.userfield.definition.UserField.Style.
 import static de.imise.tool3lgm.graphtools.userfield.definition.UserField.Style.RADIO_BUTTON;
 import static de.imise.tool3lgm.graphtools.userfield.definition.UserField.Style.SEPARATOR;
 import static de.imise.tool3lgm.graphtools.userfield.definition.UserField.Style.SINGLE_LINE;
+import static de.imise.tool3lgm.graphtools.userfield.definition.UserField.Style.TAB;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
@@ -58,7 +59,7 @@ import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.userfield.definition.UserField;
 import de.imise.tool3lgm.graphtools.userfield.definition.UserField.Style;
-import de.imise.tool3lgm.graphtools.userfield.definition.UserFieldDefinitions;
+import de.imise.tool3lgm.graphtools.userfield.definition.UserFieldList;
 import de.imise.util.BrowseUtils;
 import de.imise.util.swing.component.AlphabeticalComboBox;
 import de.imise.util.swing.component.text.ExtendedTextArea;
@@ -98,11 +99,11 @@ public class PropertyDialogUserFieldPanel extends ElementDialogPanel implements 
     private final PropertyDialogUserFieldPanelChangeListener changeHandler = new PropertyDialogUserFieldPanelChangeListener(this);
 
     /**
-     * @param pd
+     * @param propertyDialog
      */
-    public PropertyDialogUserFieldPanel(final AbstractElementPropertyDialog pd) {
-        super(pd);
-        create();
+    public PropertyDialogUserFieldPanel(final AbstractElementPropertyDialog propertyDialog, final UserFieldList tabDefinition) {
+        super(propertyDialog);
+        create(tabDefinition);
     }
 
     /**
@@ -175,7 +176,7 @@ public class PropertyDialogUserFieldPanel extends ElementDialogPanel implements 
      * Visualisiert die UserField mit ihren entsprechenden Style-Vorgaben im
      * <code>JPanel</code>.
      */
-    private void create() {
+    private void create(final UserFieldList tabDefinition) {
         setLayout(new BorderLayout());
         Border mainPanelBorder = BorderFactory.createEmptyBorder(5, 5, 5, 5);
         setBorder(mainPanelBorder);
@@ -188,21 +189,23 @@ public class PropertyDialogUserFieldPanel extends ElementDialogPanel implements 
         GridBagConstraints constraints = getDefaultConstraints();
 
         //Attributdefinitionen des GraphDocumentes holen
-        GDCollection gdcoll = getCollection();
-        UserFieldDefinitions definitions = gdcoll.getUserFieldDefinitions();
-        ModelElement me = getModelElement();
-        Class<? extends ModelElement> meClass = me.getClass();
+        for (UserField userField : tabDefinition) {
+            if (userField.hasStyle(TAB)) {
+                String tabName = userField.getName();
+                setName(tabName);
+            } else if (userField.hasStyle(Style.GROUP)) {
 
-        for (UserField field : definitions.getUserFields(meClass)) {
-            List<JComponent> labelAndEditor = createLabelAndEditor(field);
-            JComponent label = labelAndEditor.get(0);
-            JComponent editor = labelAndEditor.get(1);
-            constraints.insets.top = 5;
-            mp.add(label, constraints);
-            constraints.insets.top = 0;
-            constraints.gridy++;
-            mp.add(editor, constraints);
-            constraints.gridy += constraints.gridheight;
+            } else {
+                List<JComponent> labelAndEditor = createLabelAndEditor(userField);
+                JComponent label = labelAndEditor.get(0);
+                JComponent editor = labelAndEditor.get(1);
+                constraints.insets.top = 5;
+                mp.add(label, constraints);
+                constraints.insets.top = 0;
+                constraints.gridy++;
+                mp.add(editor, constraints);
+                constraints.gridy += constraints.gridheight;
+            }
         }
         addFillSpacePanel(mp, constraints);
     }
