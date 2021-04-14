@@ -14,8 +14,8 @@ import java.util.StringTokenizer;
 import com.google.common.base.Strings;
 import com.google.common.collect.ImmutableSet;
 
-import de.imise.tool3lgm.graphtools.IDSource;
 import de.imise.tool3lgm.graphtools.userfield.CostingUtil;
+import de.imise.tool3lgm.graphtools.userfield.UserFieldListItem;
 import de.imise.util.IDStringGenerator;
 import de.imise.util.NameAndDescriptionTargetAdapter;
 
@@ -31,7 +31,7 @@ import de.imise.util.NameAndDescriptionTargetAdapter;
  *
  * @author Thomas Rudert
  */
-public final class UserField extends NameAndDescriptionTargetAdapter implements Cloneable, Comparator<UserFieldTarget>, IDSource {
+public final class UserField extends NameAndDescriptionTargetAdapter implements UserFieldListItem, Comparator<UserFieldTarget> {
 
     public static enum Style {
         SINGLE_LINE {
