@@ -49,7 +49,7 @@ public class UserProperties extends AbstractUserProperties {
     private static final URL DEFAULT_USER_INFO_FILE = ClassLoader.getSystemResource("DefaultUserProperties");
 
     /** Pfad zur Datei mit den Optionen eines Benutzers */
-    private static final File USER_INFO_FILE = new File(System.getProperty("user.home"), ".tool3lgm2UserInfo");
+    private static final File USER_INFO_FILE = new File(System.getProperty("user.home") + "/.3lgm" + "/.tool3lgm2UserInfo");
 
     /**
      * Liest die Benutzeroptionen ein.<br>
