@@ -46,7 +46,7 @@ public class UserFieldNumberFormat implements IDSource, Cloneable {
     }
 
     @Override
-    protected Object clone() {
+    protected UserFieldNumberFormat clone() {
         UserFieldNumberFormat clone = null;
         try {
             clone = (UserFieldNumberFormat) super.clone();

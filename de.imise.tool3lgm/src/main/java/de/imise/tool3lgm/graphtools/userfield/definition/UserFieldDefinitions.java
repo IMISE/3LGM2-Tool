@@ -56,7 +56,7 @@ public final class UserFieldDefinitions extends UserFieldDefinitionChangeHandler
     private Map<Class<? extends UserFieldTarget>, UserFieldList> classToUserFieldTargetSpecificListMap = new HashMap<>();
 
     /** Maps from the ID of a format to the format */
-    private final Map<String, UserFieldNumberFormat> formatIdToFormat = new HashMap<>();
+    private Map<String, UserFieldNumberFormat> formatIdToFormat = new HashMap<>();
 
     /** Mappt von den IDs der UserFields auf das UserField */
     private Map<String, UserField> idToUserFieldMap = new HashMap<>();
@@ -65,7 +65,7 @@ public final class UserFieldDefinitions extends UserFieldDefinitionChangeHandler
     private Calculator calculator;
 
     /** Enthält für alle einfachen Teilwertsummen alle Zwischenergebnisse **/
-    private final PartValueSumSinglePartResults partValueSumSinglePartResults;
+    private PartValueSumSinglePartResults partValueSumSinglePartResults;
 
     /**
      * Liste aller UserFields, die Formeln darstellen. Die Reihenfolge ist
@@ -80,7 +80,7 @@ public final class UserFieldDefinitions extends UserFieldDefinitionChangeHandler
      * Verteilungsgeweichtg in Verrechnungsfunktionen, die dieses
      * Verteilungsgewicht nutzen, durch ein anderes ersetzt werden soll.
      */
-    private final WeightReplacer weightReplacer;
+    private WeightReplacer weightReplacer;
 
     /**
      * Analyzer, über den der Zustand dieser {@link UserFieldDefinitions}
@@ -167,7 +167,13 @@ public final class UserFieldDefinitions extends UserFieldDefinitionChangeHandler
             userFields = new UserFieldList(targetClass);
             classToUserFieldTargetSpecificListMap.put(targetClass, userFields);
         }
-        userFields.add(userField);
+        UserField addedDefaultTabUserField = userFields.add(userField);
+        //if there was a default tab added -> store the id
+        if (addedDefaultTabUserField != null) {
+            String id = addedDefaultTabUserField.getID();
+            idToUserFieldMap.put(id, addedDefaultTabUserField);
+        }
+
         String id = userField.getID();
         idToUserFieldMap.put(id, userField);
         UserFieldNumberFormat numberFormat = userField.getNumberFormat();
@@ -339,6 +345,18 @@ public final class UserFieldDefinitions extends UserFieldDefinitionChangeHandler
         def.formulaUserFieldTargetSpecificList = new ArrayList<>(formulaUserFieldTargetSpecificList);
         replaceWithClones(def.formulaUserFieldTargetSpecificList, def.idToUserFieldMap);
 
+        //deep clone the map with all formats
+        def.formatIdToFormat = new HashMap<>(formatIdToFormat);
+        ArrayList<UserFieldNumberFormat> formats = new ArrayList<>(formatIdToFormat.values());
+        for (UserFieldNumberFormat format : formats) {
+            String formatID = format.getID();
+            UserFieldNumberFormat formatClone = format.clone();
+            formatIdToFormat.put(formatID, formatClone);
+        }
+
+        //deep clone the rest
+        def.partValueSumSinglePartResults = new PartValueSumSinglePartResults();
+        def.weightReplacer = new WeightReplacer();
         //eigenen Calculator für den clone initialisieren
         def.calculator = new Calculator(def);
         //den Analyzer ersetzen

@@ -46,30 +46,37 @@ public class UserFieldList implements Cloneable, Iterable<UserField> {
     }
 
     /**
-     * @param userFields
      * @param userField
+     * @return if a new default tab userField was added, this tab userfield will
+     *         be returned. If no new Tab was added <code>null</code> will be
+     *         returned.
      */
-    private void ensureDefaultTab(final UserField userField) {
-        if (userField.hasStyle(TAB)) {
-            return;
-        }
-        Class<? extends UserFieldTarget> targetClass = userField.getTargetClass();
-        if (targetClass != UserFieldDefinitions.GLOBAL_USERFIELD_IDENTIFIER_CLASS) {
-            if (isEmpty()) {
-                UserField defaultTab = new UserField(targetClass, TAB);
-                defaultTab.setName(Tool3lgmConstants.getResString("userfields"));
-                add(defaultTab);
+    private UserField ensureDefaultTab(final UserField userField) {
+        if (!userField.hasStyle(TAB)) {
+            Class<? extends UserFieldTarget> targetClass = userField.getTargetClass();
+            if (targetClass != UserFieldDefinitions.GLOBAL_USERFIELD_IDENTIFIER_CLASS) {
+                if (isEmpty()) {
+                    UserField defaultTab = new UserField(targetClass, TAB);
+                    defaultTab.setName(Tool3lgmConstants.getResString("userfields"));
+                    add(defaultTab);
+                    return defaultTab;
+                }
             }
         }
+        return null;
     }
 
     /**
      * @param userField
+     * @return if a new default tab userField was added, this tab userfield will
+     *         be returned. If no new Tab was added <code>null</code> will be
+     *         returned.
      */
-    public final void add(final UserField userField) {
+    public final UserField add(final UserField userField) {
         list.remove(userField);
-        ensureDefaultTab(userField);
+        UserField createdDefaultTabUserField = ensureDefaultTab(userField);
         list.add(userField);
+        return createdDefaultTabUserField;
     }
 
     /**
