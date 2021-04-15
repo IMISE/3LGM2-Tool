@@ -3,6 +3,8 @@ package de.imise.tool3lgm.graphtools.userfield.dialog.declaration;
 import static de.imise.tool3lgm.graphtools.userfield.definition.UserField.Style.GROUP;
 import static de.imise.tool3lgm.graphtools.userfield.definition.UserField.Style.TAB;
 
+import java.util.List;
+
 import javax.swing.DefaultListModel;
 import javax.swing.JList;
 import javax.swing.ListSelectionModel;
@@ -16,7 +18,7 @@ import de.imise.util.StringUtils;
 /**
  * {@link JList}, die UserFields anzeigen kann.
  *
- * @author astruebi
+ * @author AXS
  */
 public class UserFieldDeclarationDialogFieldList extends JList<NamedObjectContainer<UserField>> {
 
@@ -44,6 +46,7 @@ public class UserFieldDeclarationDialogFieldList extends JList<NamedObjectContai
      * Aktualisiert die Liste der {@link UserField}s für die selektierte Klasse
      */
     public void update(final Class<? extends UserFieldTarget> selectedClass) {
+        List<NamedObjectContainer<UserField>> selectedValuesList = getSelectedValuesList();
         clear();
         int indent = 0;
         for (UserField userField : definitions.getUserFields(selectedClass)) {
@@ -56,6 +59,28 @@ public class UserFieldDeclarationDialogFieldList extends JList<NamedObjectContai
             } else {
                 addEntry(userField, indent);
             }
+        }
+        restoreSelection(selectedValuesList);
+    }
+
+    /**
+     * @param selectedValuesList
+     */
+    private void restoreSelection(final List<NamedObjectContainer<UserField>> selectedValuesList) {
+        int[] selectedIndices = new int[selectedValuesList.size()];
+        int count = 0;
+        for (NamedObjectContainer<UserField> item : selectedValuesList) {
+            int index = model.indexOf(item);
+            if (index >= 0) {
+                selectedIndices[count++] = index;
+            }
+        }
+        if (count < selectedIndices.length) {
+            int[] newSelectedIndices = new int[count];
+            System.arraycopy(selectedIndices, 0, newSelectedIndices, 0, count);
+            setSelectedIndices(newSelectedIndices);
+        } else {
+            setSelectedIndices(selectedIndices);
         }
     }
 
@@ -93,18 +118,19 @@ public class UserFieldDeclarationDialogFieldList extends JList<NamedObjectContai
         model.add(index, noc);
     }
 
-    /**
-     *
-     */
-    public void refreshSelected() {
-        //aus der Liste entfernen und wieder hinzufügen, damit der Anzeigename korrekt aktualisert wird
-        int selectedIndex = getSelectedIndex();
-        //Das Element aus der Liste entfernen und an alter Stelle wieder neu hinzufügen,
-        //damit der evtl. geänderte korrekt Name angezeigt wird
-        NamedObjectContainer<UserField> removed = model.remove(selectedIndex);
-        addEntry(removed.getObject(), selectedIndex);
-        setSelectedIndex(selectedIndex);
-    }
+    //    /**
+    //     *
+    //     */
+    //    public void refreshSelected() {
+    //        //aus der Liste entfernen und wieder hinzufügen, damit der Anzeigename korrekt aktualisert wird
+    //        int selectedIndex = getSelectedIndex();
+    //
+    //        //Das Element aus der Liste entfernen und an alter Stelle wieder neu hinzufügen,
+    //        //damit der evtl. geänderte korrekt Name angezeigt wird
+    //        NamedObjectContainer<UserField> removed = model.remove(selectedIndex);
+    //        addEntry(removed.getObject(), selectedIndex);
+    //        setSelectedIndex(selectedIndex);
+    //    }
 
     /**
      * @return

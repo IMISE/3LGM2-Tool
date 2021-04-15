@@ -228,93 +228,94 @@ public final class UserFieldDeclarationDialog extends AbstractUserFieldDeclarati
             }
         } else if (is(exportButton)) {
             exportDefinitions(this, definitions);
-        } else if (is(newButton)) {
-            //Typ der seleketierten Klasse holen
-            Class<? extends UserFieldTarget> selectedClass = classComboBox.getSelectedClass();
-            //Definitionseditor für das neue userField anzeigen
-            UserField.Style style = userFieldTypeComboBox.getSelectedObject();
-            if (style == null) {
-                String message = getResString("userFieldDeclarationDialog_chooseType");
-                String title = getResString("fehler");
-                JOptionPane.showMessageDialog(this, message, title, JOptionPane.ERROR_MESSAGE);
-                return;
-            }
-            //jetzt kann nur noch ein Node- oder Kantentyp selektiert sein
-            //-> neues userField für die selektierte Klassenart anlegen
-            UserField userField = new UserField(selectedClass, style);
-            //das neu erzeugte UserField sofort zur ausgewählten Klasse hinzufügen
-            definitions.add(userField);
-            //solange den Dialog zur Definition der Eigenschaften des neuen UserFields zeigen, bis nur konsitente Werte eingegeben wurden
-            int userDefinitionDialogReturnValue;
-            do {
-                userDefinitionDialogReturnValue = UserFieldDefinitionDialog.showDialog(this, userField, gdcoll);
-            } while (userDefinitionDialogReturnValue == OK && definitions.hasCrossReferences());
-
-            //wenn der Dialog über OK verlassen wurde
-            if (userDefinitionDialogReturnValue == OK) {
-                //das neue UserField anzeigen
-                fieldList.update(selectedClass);
-                returnValue = 1;
-                //den Definitions sagen, dass sich was geändert hat
-                definitions.getCollection().getUserFieldDefinitions().initReset();
-                //wenn die Defnition der neuen Kennzahl oder Formel abgebrochen wurde
-            } else {
-                //wieder aus den Definitions entfernen
-                definitions.remove(userField);
-            }
-        } else if (is(editButton)) {
-            UserField userField = fieldList.getSelected(); // null-Check kann man sich sparen, weil die Buttons deaktiviert sind, wenn nichts selektiert ist
-            //die alte Formel des UserFields holen (die ist nur bei UserFields mit dem Formula-Style nicht null, aber das ist egal)
-            String oldFormula = userField.getFormula();
-            do {
-                gdcoll.getUserFieldDefinitions().setConsistencyUnknown();
-                //Definitionseditor für das zu bearbeitende userField anzeigen
-                if (UserFieldDefinitionDialog.showDialog(this, userField, gdcoll) == OK) {
-                    fieldList.refreshSelected();
-                    returnValue = 1;
-                } else {
-                    // Wenn der Definitionsdialog für Kennzahlformeln abgebrochen wurde, wird die alte Formel zurückgesetzt.
-                    userField.setFormula(oldFormula);
-                    break;
-                }
-                //den Formel-Editor-Dialog kann man solange nicht verlassen, wie sich Formeln im Kreis referenzieren
-            } while (definitions.hasCrossReferences());
-
-        } else if (is(deleteButton)) {
-            if (reallyDelete()) {
-                // null-Check kann man sich sparen, weil die Buttons deaktiviert sind, wenn nichts selektiert ist
-                int[] selectedIndices = fieldList.getSelectedIndices();
-                boolean defaultTabShouldBeDeleted = false;
-                for (int selectedIndex : selectedIndices) {
-                    if (selectedIndex == 0) {
-                        defaultTabShouldBeDeleted = true;
-                    }
-                    UserField userField = fieldList.get(selectedIndex);
-                    //das aktuelle UserField kann schon gelöscht worden sein, durch das löschen eines vorhergehenden in der Schleife
-                    if (!removedUserFields.contains(userField)) {
-                        //Alle gelöschten UserFields merken
-                        removedUserFields.addAll(definitions.remove(userField));
-                    }
-                }
-                fieldList.update(classComboBox.getSelectedClass());
-                //The UserFieldList never deletes the last tab if there is at least one other element in the list
-                // -> remove the tab now if all the other elements are deleted
-                if (defaultTabShouldBeDeleted && fieldList.getElementCount() == 1) {
-                    UserField defaultTab = fieldList.get(0);
-                    definitions.remove(defaultTab);
-                    fieldList.update(classComboBox.getSelectedClass());
-                }
-                returnValue = -1;
-            }
         } else if (is(upButton)) {
             fieldList.moveUp();
             returnValue = 1;
         } else if (is(downButton)) {
             fieldList.moveDown();
             returnValue = 1;
-        } else if (is(classComboBox)) {
-            fieldList.update(classComboBox.getSelectedClass());
-            updateUserFieldTypeComboBox();
+        } else {
+            Class<? extends UserFieldTarget> selectedClass = classComboBox.getSelectedClass();
+            if (is(newButton)) {
+                //Definitionseditor für das neue userField anzeigen
+                UserField.Style style = userFieldTypeComboBox.getSelectedObject();
+                if (style == null) {
+                    String message = getResString("userFieldDeclarationDialog_chooseType");
+                    String title = getResString("fehler");
+                    JOptionPane.showMessageDialog(this, message, title, JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+                //jetzt kann nur noch ein Node- oder Kantentyp selektiert sein
+                //-> neues userField für die selektierte Klassenart anlegen
+                UserField userField = new UserField(selectedClass, style);
+                //das neu erzeugte UserField sofort zur ausgewählten Klasse hinzufügen
+                definitions.add(userField);
+                //solange den Dialog zur Definition der Eigenschaften des neuen UserFields zeigen, bis nur konsitente Werte eingegeben wurden
+                int userDefinitionDialogReturnValue;
+                do {
+                    userDefinitionDialogReturnValue = UserFieldDefinitionDialog.showDialog(this, userField, gdcoll);
+                } while (userDefinitionDialogReturnValue == OK && definitions.hasCrossReferences());
+
+                //wenn der Dialog über OK verlassen wurde
+                if (userDefinitionDialogReturnValue == OK) {
+                    //das neue UserField anzeigen
+                    fieldList.update(selectedClass);
+                    returnValue = 1;
+                    //den Definitions sagen, dass sich was geändert hat
+                    definitions.getCollection().getUserFieldDefinitions().initReset();
+                    //wenn die Defnition der neuen Kennzahl oder Formel abgebrochen wurde
+                } else {
+                    //wieder aus den Definitions entfernen
+                    definitions.remove(userField);
+                }
+            } else if (is(editButton)) {
+                UserField userField = fieldList.getSelected(); // null-Check kann man sich sparen, weil die Buttons deaktiviert sind, wenn nichts selektiert ist
+                //die alte Formel des UserFields holen (die ist nur bei UserFields mit dem Formula-Style nicht null, aber das ist egal)
+                String oldFormula = userField.getFormula();
+                do {
+                    gdcoll.getUserFieldDefinitions().setConsistencyUnknown();
+                    //Definitionseditor für das zu bearbeitende userField anzeigen
+                    if (UserFieldDefinitionDialog.showDialog(this, userField, gdcoll) == OK) {
+                        fieldList.update(selectedClass);
+                        returnValue = 1;
+                    } else {
+                        // Wenn der Definitionsdialog für Kennzahlformeln abgebrochen wurde, wird die alte Formel zurückgesetzt.
+                        userField.setFormula(oldFormula);
+                        break;
+                    }
+                    //den Formel-Editor-Dialog kann man solange nicht verlassen, wie sich Formeln im Kreis referenzieren
+                } while (definitions.hasCrossReferences());
+
+            } else if (is(deleteButton)) {
+                if (reallyDelete()) {
+                    // null-Check kann man sich sparen, weil die Buttons deaktiviert sind, wenn nichts selektiert ist
+                    int[] selectedIndices = fieldList.getSelectedIndices();
+                    boolean defaultTabShouldBeDeleted = false;
+                    for (int selectedIndex : selectedIndices) {
+                        if (selectedIndex == 0) {
+                            defaultTabShouldBeDeleted = true;
+                        }
+                        UserField userField = fieldList.get(selectedIndex);
+                        //das aktuelle UserField kann schon gelöscht worden sein, durch das löschen eines vorhergehenden in der Schleife
+                        if (!removedUserFields.contains(userField)) {
+                            //Alle gelöschten UserFields merken
+                            removedUserFields.addAll(definitions.remove(userField));
+                        }
+                    }
+                    fieldList.update(selectedClass);
+                    //The UserFieldList never deletes the last tab if there is at least one other element in the list
+                    // -> remove the tab now if all the other elements are deleted
+                    if (defaultTabShouldBeDeleted && fieldList.getElementCount() == 1) {
+                        UserField defaultTab = fieldList.get(0);
+                        definitions.remove(defaultTab);
+                        fieldList.update(classComboBox.getSelectedClass());
+                    }
+                    returnValue = -1;
+                }
+            } else if (is(classComboBox)) {
+                fieldList.update(selectedClass);
+                updateUserFieldTypeComboBox();
+            }
         }
     }
 
