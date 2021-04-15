@@ -10,6 +10,7 @@ import java.awt.Frame;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Point;
+import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.BoxLayout;
@@ -26,10 +27,17 @@ import de.imise.tool3lgm.graphtools.dialog.tools.EasyComponents;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.userfield.definition.UserField;
 import de.imise.tool3lgm.graphtools.userfield.definition.UserFieldDefinitions;
+import de.imise.tool3lgm.graphtools.userfield.definition.UserFieldTarget;
 import de.imise.util.swing.component.AlphabeticalComboBox;
 import de.imise.util.swing.dialog.AbstractSizeAndPositionRestoringDialog;
 
 public abstract class AbstractUserFieldDeclarationDialog extends AbstractSizeAndPositionRestoringDialog implements ActionListener {
+
+    /**
+     * Stores the last selected class so if the dialog is reopend the last
+     * selected view can be restored.
+     */
+    private static Class<? extends UserFieldTarget> lastSelectedUserFieldTargetClass;
 
     /** combobox to select a model-class */
     protected UserFieldDeclarationDialogClassComboBox classComboBox;
@@ -79,7 +87,16 @@ public abstract class AbstractUserFieldDeclarationDialog extends AbstractSizeAnd
     public AbstractUserFieldDeclarationDialog(final Frame owner, final UserFieldDefinitions definitions) {
         super(owner, getResString("userfields"), true);
         MetaModel metaModel = definitions.getMetaModel();
-        classComboBox = new UserFieldDeclarationDialogClassComboBox(metaModel, 13);
+        classComboBox = new UserFieldDeclarationDialogClassComboBox(metaModel, 20);
+        if (lastSelectedUserFieldTargetClass != null) {
+            classComboBox.setSelectedObject(lastSelectedUserFieldTargetClass);
+        }
+        classComboBox.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(final ActionEvent e) {
+                lastSelectedUserFieldTargetClass = classComboBox.getSelectedClass();
+            }
+        });
         fieldList = new UserFieldDeclarationDialogFieldList(definitions);
         userFieldTypeComboBox = new AlphabeticalComboBox<>(3);
 
