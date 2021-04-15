@@ -154,8 +154,6 @@ public abstract class AbstractUserFieldDeclarationDialog extends AbstractSizeAnd
 
         pane.add(southPanel, BorderLayout.SOUTH);
 
-        restoreSizeAndPosition();
-
     }
 
     /**
