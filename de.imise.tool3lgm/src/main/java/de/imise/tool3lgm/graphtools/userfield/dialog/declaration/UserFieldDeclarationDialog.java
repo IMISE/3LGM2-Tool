@@ -248,7 +248,8 @@ public final class UserFieldDeclarationDialog extends AbstractUserFieldDeclarati
                 //-> neues userField für die selektierte Klassenart anlegen
                 UserField userField = new UserField(selectedClass, style);
                 //das neu erzeugte UserField sofort zur ausgewählten Klasse hinzufügen
-                definitions.add(userField);
+                int nextInsertIndex = fieldList.getNextInsertIndex();
+                definitions.insert(userField, nextInsertIndex);
                 //solange den Dialog zur Definition der Eigenschaften des neuen UserFields zeigen, bis nur konsitente Werte eingegeben wurden
                 int userDefinitionDialogReturnValue;
                 do {
@@ -262,6 +263,8 @@ public final class UserFieldDeclarationDialog extends AbstractUserFieldDeclarati
                     returnValue = 1;
                     //den Definitions sagen, dass sich was geändert hat
                     definitions.getCollection().getUserFieldDefinitions().initReset();
+                    //select the new UserField
+                    fieldList.setSelectedIndex(nextInsertIndex);
                     //wenn die Defnition der neuen Kennzahl oder Formel abgebrochen wurde
                 } else {
                     //wieder aus den Definitions entfernen

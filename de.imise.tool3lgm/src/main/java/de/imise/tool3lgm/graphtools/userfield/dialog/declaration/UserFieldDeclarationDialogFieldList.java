@@ -150,6 +150,18 @@ public class UserFieldDeclarationDialogFieldList extends JList<NamedObjectContai
     }
 
     /**
+     * @return the index where a new item will be inserted depending on the
+     *         selection.
+     */
+    public int getNextInsertIndex() {
+        int[] selectedIndices = getSelectedIndices();
+        if (selectedIndices.length == 0) { //nothing selected -> insert after last index
+            return getElementCount();
+        }
+        return selectedIndices[selectedIndices.length - 1] + 1;
+    }
+
+    /**
      * @param i
      * @return
      */
