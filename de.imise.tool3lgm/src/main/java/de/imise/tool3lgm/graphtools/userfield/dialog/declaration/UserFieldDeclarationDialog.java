@@ -228,12 +228,6 @@ public final class UserFieldDeclarationDialog extends AbstractUserFieldDeclarati
             }
         } else if (is(exportButton)) {
             exportDefinitions(this, definitions);
-        } else if (is(upButton)) {
-            fieldList.moveUp();
-            returnValue = 1;
-        } else if (is(downButton)) {
-            fieldList.moveDown();
-            returnValue = 1;
         } else {
             Class<? extends UserFieldTarget> selectedClass = classComboBox.getSelectedClass();
             if (is(newButton)) {
@@ -312,6 +306,14 @@ public final class UserFieldDeclarationDialog extends AbstractUserFieldDeclarati
                     }
                     returnValue = -1;
                 }
+            } else if (is(upButton)) {
+                fieldList.moveUp();
+                fieldList.update(selectedClass);
+                returnValue = 1;
+            } else if (is(downButton)) {
+                fieldList.moveDown();
+                fieldList.update(selectedClass);
+                returnValue = 1;
             } else if (is(classComboBox)) {
                 fieldList.update(selectedClass);
                 updateUserFieldTypeComboBox();

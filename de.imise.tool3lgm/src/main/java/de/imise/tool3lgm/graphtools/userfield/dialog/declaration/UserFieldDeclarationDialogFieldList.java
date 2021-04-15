@@ -66,11 +66,11 @@ public class UserFieldDeclarationDialogFieldList extends JList<NamedObjectContai
     /**
      * @param selectedValuesList
      */
-    private void restoreSelection(final List<NamedObjectContainer<UserField>> selectedValuesList) {
-        int[] selectedIndices = new int[selectedValuesList.size()];
+    private void restoreSelection(final List<NamedObjectContainer<UserField>> oldSelectedValuesList) {
+        int[] selectedIndices = new int[oldSelectedValuesList.size()];
         int count = 0;
-        for (NamedObjectContainer<UserField> item : selectedValuesList) {
-            int index = model.indexOf(item);
+        for (NamedObjectContainer<UserField> oldSelectedItem : oldSelectedValuesList) {
+            int index = indexOfEqualsUserField(oldSelectedItem);
             if (index >= 0) {
                 selectedIndices[count++] = index;
             }
@@ -82,6 +82,23 @@ public class UserFieldDeclarationDialogFieldList extends JList<NamedObjectContai
         } else {
             setSelectedIndices(selectedIndices);
         }
+    }
+
+    /**
+     * @param userFieldObjectContainer
+     * @return
+     */
+    private int indexOfEqualsUserField(final NamedObjectContainer<UserField> userFieldObjectContainer) {
+        int itemCount = model.getSize();
+        UserField userField = userFieldObjectContainer.getObject();
+        for (int i = 0; i < itemCount; i++) {
+            NamedObjectContainer<UserField> listUserFieldObjectContainer = model.get(i);
+            UserField listUserField = listUserFieldObjectContainer.getObject();
+            if (listUserField.equals(userField)) {
+                return i;
+            }
+        }
+        return -1;
     }
 
     /**
@@ -117,20 +134,6 @@ public class UserFieldDeclarationDialogFieldList extends JList<NamedObjectContai
         NamedObjectContainer<UserField> noc = new NamedObjectContainer<>(userField, name);
         model.add(index, noc);
     }
-
-    //    /**
-    //     *
-    //     */
-    //    public void refreshSelected() {
-    //        //aus der Liste entfernen und wieder hinzufügen, damit der Anzeigename korrekt aktualisert wird
-    //        int selectedIndex = getSelectedIndex();
-    //
-    //        //Das Element aus der Liste entfernen und an alter Stelle wieder neu hinzufügen,
-    //        //damit der evtl. geänderte korrekt Name angezeigt wird
-    //        NamedObjectContainer<UserField> removed = model.remove(selectedIndex);
-    //        addEntry(removed.getObject(), selectedIndex);
-    //        setSelectedIndex(selectedIndex);
-    //    }
 
     /**
      * @return
