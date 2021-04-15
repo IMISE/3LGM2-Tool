@@ -26,6 +26,7 @@ import javax.swing.border.EmptyBorder;
 import de.imise.tool3lgm.graphtools.dialog.tools.EasyComponents;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.userfield.definition.UserField;
+import de.imise.tool3lgm.graphtools.userfield.definition.UserField.Style;
 import de.imise.tool3lgm.graphtools.userfield.definition.UserFieldDefinitions;
 import de.imise.tool3lgm.graphtools.userfield.definition.UserFieldTarget;
 import de.imise.util.swing.component.AlphabeticalComboBox;
@@ -64,21 +65,23 @@ public abstract class AbstractUserFieldDeclarationDialog extends AbstractSizeAnd
     /** Buttons für den Im- und Export */
     protected final JButton importButton, exportButton;
 
-    /**
-     *
-     */
+    /** Dialogs Cancel button */
     protected final JButton cancelButton;
 
-    /**
-     *
-     */
+    /** Dialogs Ok button */
     protected final JButton okButton;
+
+    /**
+     * Stores the last selected {@link Style} so if the dialog is reopend the
+     * last selected view can be restored.
+     */
+    protected static Style lastSelectedUserFieldStyle;
 
     /**
      * ComboBox mit der die Art des neuen benutzerdefinierten Eigenschaftsfeldes
      * festgelegt wird
      */
-    protected AlphabeticalComboBox<UserField.Style> userFieldTypeComboBox;
+    protected AlphabeticalComboBox<Style> userFieldTypeComboBox;
 
     /**
      * @param owner
@@ -87,18 +90,9 @@ public abstract class AbstractUserFieldDeclarationDialog extends AbstractSizeAnd
     public AbstractUserFieldDeclarationDialog(final Frame owner, final UserFieldDefinitions definitions) {
         super(owner, getResString("userfields"), true);
         MetaModel metaModel = definitions.getMetaModel();
-        classComboBox = new UserFieldDeclarationDialogClassComboBox(metaModel, 20);
-        if (lastSelectedUserFieldTargetClass != null) {
-            classComboBox.setSelectedObject(lastSelectedUserFieldTargetClass);
-        }
-        classComboBox.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(final ActionEvent e) {
-                lastSelectedUserFieldTargetClass = classComboBox.getSelectedClass();
-            }
-        });
+        classComboBox = createClassCombobox(metaModel);
         fieldList = new UserFieldDeclarationDialogFieldList(definitions);
-        userFieldTypeComboBox = new AlphabeticalComboBox<>(3);
+        userFieldTypeComboBox = createStyleCombobox();
 
         newButton = createButton("new");
         editButton = createDisabledButton("userFieldDeclarationDialog_editButtonText");
@@ -164,6 +158,47 @@ public abstract class AbstractUserFieldDeclarationDialog extends AbstractSizeAnd
 
     }
 
+    /**
+     * @param metaModel
+     * @return
+     */
+    private UserFieldDeclarationDialogClassComboBox createClassCombobox(final MetaModel metaModel) {
+        UserFieldDeclarationDialogClassComboBox classComboBox = new UserFieldDeclarationDialogClassComboBox(metaModel, 20);
+        if (lastSelectedUserFieldTargetClass != null) {
+            classComboBox.setSelectedObject(lastSelectedUserFieldTargetClass);
+        }
+        classComboBox.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(final ActionEvent e) {
+                lastSelectedUserFieldTargetClass = classComboBox.getSelectedClass();
+            }
+        });
+        return classComboBox;
+    }
+
+    private AlphabeticalComboBox<UserField.Style> createStyleCombobox() {
+        AlphabeticalComboBox<UserField.Style> styleCombobox = new AlphabeticalComboBox<>(3);
+        styleCombobox.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(final ActionEvent e) {
+                Style selectedStyle = styleCombobox.getSelectedObject();
+                if (selectedStyle != null) {
+                    lastSelectedUserFieldStyle = selectedStyle;
+                }
+            }
+        });
+        return styleCombobox;
+    }
+
+    /**
+     * @param con
+     * @param gbc
+     * @param x
+     * @param y
+     * @param w
+     * @param h
+     * @param c
+     */
     protected void add(final Container con, final GridBagConstraints gbc, final int x, final int y, final int w, final int h, final Component c) {
         gbc.gridx = x;
         gbc.gridy = y;
@@ -172,20 +207,36 @@ public abstract class AbstractUserFieldDeclarationDialog extends AbstractSizeAnd
         con.add(c, gbc);
     }
 
+    /**
+     * @param resKey
+     * @return
+     */
     private JButton createButton(final String resKey) {
         return EasyComponents.createButton(this, resKey);
     }
 
+    /**
+     * @param resKey
+     * @return
+     */
     private JButton createDisabledButton(final String resKey) {
         JButton button = createButton(resKey);
         button.setEnabled(false);
         return button;
     }
 
+    /**
+     * @param resKey
+     * @return
+     */
     private JLabel createLabel(final String resKey) {
         return new JLabel(getResString(resKey) + ": ");
     }
 
+    /**
+     * @param view
+     * @return
+     */
     private JScrollPane createScrollPane(final JComponent view) {
         JScrollPane scrollPane = new JScrollPane(view);
         scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);

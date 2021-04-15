@@ -14,7 +14,6 @@ import static de.imise.tool3lgm.graphtools.userfield.definition.UserField.Style.
 import static de.imise.tool3lgm.graphtools.userfield.definition.UserField.Style.SEPARATOR;
 import static de.imise.tool3lgm.graphtools.userfield.definition.UserField.Style.SINGLE_LINE;
 import static de.imise.tool3lgm.graphtools.userfield.definition.UserField.Style.TAB;
-import static de.imise.tool3lgm.graphtools.userfield.definition.UserFieldDefinitions.GLOBAL_USERFIELD_IDENTIFIER_CLASS;
 import static de.imise.tool3lgm.graphtools.userfield.dialog.declaration.UserFieldDeclarationImportExportHandler.exportDefinitions;
 import static de.imise.tool3lgm.graphtools.userfield.dialog.declaration.UserFieldDeclarationImportExportHandler.importDefinitions;
 import static de.imise.tool3lgm.graphtools.userfield.dialog.definition.UserFieldDefinitionDialog.OK;
@@ -146,7 +145,8 @@ public final class UserFieldDeclarationDialog extends AbstractUserFieldDeclarati
      */
     private void updateUserFieldTypeComboBox() {
         userFieldTypeComboBox.removeAllItems();
-        if (!classComboBox.isGlobalUserFieldClassSelected()) {
+        boolean isShowGlobalUserFields = classComboBox.isGlobalUserFieldClassSelected();
+        if (!isShowGlobalUserFields) {
 
             addStyleCategory("STYLE_TYPE_TEXT");
             addStyle(SINGLE_LINE);
@@ -163,7 +163,7 @@ public final class UserFieldDeclarationDialog extends AbstractUserFieldDeclarati
         // Die Kennzahl kann immer zu Auswahl gestellt werden.
         //Nur wenn es sich um eine Modellvariable handelt, darf die Kennzahlformel nicht angeboten werden, sonst schon
         addStyle(NUMBER);
-        if (!classComboBox.isGlobalUserFieldClassSelected()) {
+        if (!isShowGlobalUserFields) {
             addStyle(FORMULA);
 
             addStyleCategory("STYLE_TYPE_SPECIAL");
@@ -175,6 +175,10 @@ public final class UserFieldDeclarationDialog extends AbstractUserFieldDeclarati
             addStyle(GROUP);
             addStyle(SEPARATOR);
         }
+        if (lastSelectedUserFieldStyle == null || isShowGlobalUserFields) {
+            lastSelectedUserFieldStyle = NUMBER;
+        }
+        userFieldTypeComboBox.setSelectedObject(lastSelectedUserFieldStyle);
     }
 
     /**
@@ -364,8 +368,7 @@ public final class UserFieldDeclarationDialog extends AbstractUserFieldDeclarati
                 boolean upButtonEnabled = continiuosSelection;
                 boolean downButtonEnabled = continiuosSelection;
                 if (continiuosSelection) {
-                    Class<? extends UserFieldTarget> selectedClass = classComboBox.getSelectedClass();
-                    boolean isShowGlobalUserFields = selectedClass == GLOBAL_USERFIELD_IDENTIFIER_CLASS;
+                    boolean isShowGlobalUserFields = classComboBox.isGlobalUserFieldClassSelected();
                     if (selectedIndices[0] == 0) { //first element selected -> no up
                         upButtonEnabled = false;
                     } else if (!isShowGlobalUserFields && selectedIndices[0] == 1 && !fieldList.hasStyle(1, TAB)) { //second element selected but it is not a tab -> no up
