@@ -3,13 +3,17 @@ package de.imise.tool3lgm.graphtools.userfield.dialog.declaration;
 import static de.imise.tool3lgm.graphtools.userfield.definition.UserField.Style.GROUP;
 import static de.imise.tool3lgm.graphtools.userfield.definition.UserField.Style.TAB;
 
+import java.util.Collections;
 import java.util.List;
 
 import javax.swing.DefaultListModel;
 import javax.swing.JList;
 import javax.swing.ListSelectionModel;
 
+import org.apache.jena.ext.com.google.common.primitives.Ints;
+
 import de.imise.tool3lgm.graphtools.userfield.definition.UserField;
+import de.imise.tool3lgm.graphtools.userfield.definition.UserField.Style;
 import de.imise.tool3lgm.graphtools.userfield.definition.UserFieldDefinitions;
 import de.imise.tool3lgm.graphtools.userfield.definition.UserFieldTarget;
 import de.imise.util.NamedObjectContainer;
@@ -64,6 +68,9 @@ public class UserFieldDeclarationDialogFieldList extends JList<NamedObjectContai
     }
 
     /**
+     * Restores an old selection. If the model was relaoded the old selected
+     * elementes ({@link NamedObjectContainer}) can be identified by the same
+     *
      * @param selectedValuesList
      */
     private void restoreSelection(final List<NamedObjectContainer<UserField>> oldSelectedValuesList) {
@@ -172,15 +179,23 @@ public class UserFieldDeclarationDialogFieldList extends JList<NamedObjectContai
      *
      * @param i
      */
-    private void move(final int i) {
-        int selectedIndex = getSelectedIndex();
-        int newIndex = selectedIndex + i;
-        if (0 <= newIndex && newIndex < model.size()) {
-            UserField userField = get(selectedIndex);
-            model.insertElementAt(model.remove(selectedIndex), newIndex);
-            definitions.insert(userField, newIndex);
-            setSelectedIndex(newIndex);
+    private void move(final int step) {
+        List<NamedObjectContainer<UserField>> selectedValuesList = getSelectedValuesList();
+        int[] selectedIndices = getSelectedIndices();
+        List<Integer> indices = Ints.asList(selectedIndices);
+        if (step > 0) {
+            Collections.reverse(indices);
         }
+        for (int i = 0; i < selectedIndices.length; i++) {
+            int newIndex = selectedIndices[i] + step;
+            if (0 <= newIndex && newIndex < model.size()) {
+                UserField userField = get(selectedIndices[i]);
+                NamedObjectContainer<UserField> element2Move = model.remove(selectedIndices[i]);
+                model.insertElementAt(element2Move, newIndex);
+                definitions.insert(userField, newIndex);
+            }
+        }
+        restoreSelection(selectedValuesList);
     }
 
     /**
@@ -188,6 +203,25 @@ public class UserFieldDeclarationDialogFieldList extends JList<NamedObjectContai
      */
     public int getElementCount() {
         return model.size();
+    }
+
+    /**
+     * @param index
+     * @return
+     */
+    public UserField getUserField(final int index) {
+        NamedObjectContainer<UserField> listItem = model.get(index);
+        return listItem.getObject();
+    }
+
+    /**
+     * @param index
+     * @param style
+     * @return
+     */
+    public boolean hasStyle(final int index, final Style style) {
+        UserField userField = getUserField(index);
+        return userField.hasStyle(style);
     }
 
 }

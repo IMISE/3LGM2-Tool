@@ -14,6 +14,7 @@ import static de.imise.tool3lgm.graphtools.userfield.definition.UserField.Style.
 import static de.imise.tool3lgm.graphtools.userfield.definition.UserField.Style.SEPARATOR;
 import static de.imise.tool3lgm.graphtools.userfield.definition.UserField.Style.SINGLE_LINE;
 import static de.imise.tool3lgm.graphtools.userfield.definition.UserField.Style.TAB;
+import static de.imise.tool3lgm.graphtools.userfield.definition.UserFieldDefinitions.GLOBAL_USERFIELD_IDENTIFIER_CLASS;
 import static de.imise.tool3lgm.graphtools.userfield.dialog.declaration.UserFieldDeclarationImportExportHandler.exportDefinitions;
 import static de.imise.tool3lgm.graphtools.userfield.dialog.declaration.UserFieldDeclarationImportExportHandler.importDefinitions;
 import static de.imise.tool3lgm.graphtools.userfield.dialog.definition.UserFieldDefinitionDialog.OK;
@@ -346,16 +347,41 @@ public final class UserFieldDeclarationDialog extends AbstractUserFieldDeclarati
     @Override
     public void valueChanged(final ListSelectionEvent e) {
         if (e.getSource() == fieldList) {
-            int selectionCount = fieldList.getSelectedIndices().length;
-            setButtonsEnabled(selectionCount == 1, selectionCount > 1);
-        }
-    }
+            int[] selectedIndices = fieldList.getSelectedIndices();
+            int selectionCount = selectedIndices.length;
+            editButton.setEnabled(selectionCount == 1);
+            if (selectionCount > 0) {
+                deleteButton.setEnabled(true);
 
-    private void setButtonsEnabled(final boolean isSingleUserFieldSelected, final boolean isMultiUserFieldSelected) {
-        editButton.setEnabled(isSingleUserFieldSelected);
-        deleteButton.setEnabled(isSingleUserFieldSelected || isMultiUserFieldSelected);
-        downButton.setEnabled(isSingleUserFieldSelected);
-        upButton.setEnabled(isSingleUserFieldSelected);
+                // update up and down buttons state
+                boolean continiuosSelection = true; //up and down are enabled only if continiuosSelection
+                for (int i = 0; i < selectionCount - 1; i++) { //check continious selection
+                    if (selectedIndices[i] + 1 != selectedIndices[i + 1]) {
+                        continiuosSelection = false;
+                        break;
+                    }
+                }
+                boolean upButtonEnabled = continiuosSelection;
+                boolean downButtonEnabled = continiuosSelection;
+                if (continiuosSelection) {
+                    Class<? extends UserFieldTarget> selectedClass = classComboBox.getSelectedClass();
+                    boolean isShowGlobalUserFields = selectedClass == GLOBAL_USERFIELD_IDENTIFIER_CLASS;
+                    if (selectedIndices[0] == 0) { //first element selected -> no up
+                        upButtonEnabled = false;
+                    } else if (!isShowGlobalUserFields && selectedIndices[0] == 1 && !fieldList.hasStyle(1, TAB)) { //second element selected but it is not a tab -> no up
+                        upButtonEnabled = false;
+                    }
+                    int elementCount = fieldList.getElementCount();
+                    if (selectedIndices[selectionCount - 1] == elementCount - 1) { //last list element selected -> no down
+                        downButtonEnabled = false;
+                    } else if (!isShowGlobalUserFields && selectedIndices[0] == 0 && !fieldList.hasStyle(selectedIndices[selectionCount - 1] + 1, TAB)) { // only enable down if the very first tab is selected if the selected element after the last selected is a tab too
+                        downButtonEnabled = false;
+                    }
+                }
+                upButton.setEnabled(upButtonEnabled);
+                downButton.setEnabled(downButtonEnabled);
+            }
+        }
     }
 
 }
