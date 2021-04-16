@@ -52,7 +52,7 @@ public class NameAndDescriptionTargetAdapter implements NameAndDescriptionTarget
 
     @Override
     public void setDescription(final String description) {
-        this.description = description;
+        this.description = description == null ? "" : description;
     }
 
 }

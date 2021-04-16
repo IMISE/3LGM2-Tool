@@ -123,6 +123,22 @@ public class HTMLConverter {
     }
 
     /**
+     * @param s
+     * @return
+     */
+    public static final String getTextAsHTMLLabelText(final String s) {
+        return "<HTML>" + getDecimalEncodedHTMLString(s, true) + "</HTML>";
+    }
+
+    /**
+     * @param s
+     * @return
+     */
+    public static final String getTextAsHTMLLabelTextBold(final String s) {
+        return "<HTML><B>" + getDecimalEncodedHTMLString(s, true) + "</B></HTML>";
+    }
+
+    /**
      * Wandelt Sonderzeichen im übergebenen String HTML-konform um und gibt den
      * String zurück.
      *
