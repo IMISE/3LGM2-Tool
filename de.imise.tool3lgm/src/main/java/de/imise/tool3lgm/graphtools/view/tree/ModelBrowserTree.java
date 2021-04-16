@@ -47,8 +47,8 @@ import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.model.LGMChangeListener;
 import de.imise.tool3lgm.graphtools.model.LGMGraphDocument;
-import de.imise.tool3lgm.graphtools.userfield.UserField;
-import de.imise.tool3lgm.graphtools.userfield.UserFieldDefinitions;
+import de.imise.tool3lgm.graphtools.userfield.definition.UserField;
+import de.imise.tool3lgm.graphtools.userfield.definition.UserFieldDefinitions;
 import de.imise.tool3lgm.graphtools.userfield.event.UserFieldListener;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
@@ -578,7 +578,7 @@ public final class ModelBrowserTree extends DynamicTree implements UserFieldList
         Class<? extends ModelElement> elementClass = me.getClass();
         for (UserField uf : ufDefs.getUserFields(elementClass)) {
             if (uf.isTreeVisibility()) {
-                if (uf.hasStyle(UserField.Style.HYPERLINK) || uf.hasStyle(UserField.Style.SEPARATOR) || uf.isClassificationUserField() || allOfThisElement.contains(uf)) {
+                if (uf.hasStyle(UserField.Style.HYPERLINK) || uf.hasStyle(UserField.Style.SEPARATOR) || uf.isNumberUserField() || allOfThisElement.contains(uf)) {
                     UserFieldTreeNode userFieldTreeNode = new UserFieldTreeNode(uf, me);
                     elementNode.add(userFieldTreeNode);
                 }

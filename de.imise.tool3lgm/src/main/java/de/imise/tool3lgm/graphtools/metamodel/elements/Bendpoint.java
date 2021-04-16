@@ -92,8 +92,8 @@ public final class Bendpoint extends Node {
      * @return Den Container in dem Szenario, in dem der Knickpunkt dargestellt
      *         wird
      */
-    public final BendpointContainer getBendpointContainer() {
-        return (BendpointContainer) getContainer(getGraphDocument());
+    public final BendpointContainer getContainer() {
+        return (BendpointContainer) super.getContainer(getGraphDocument());
     }
 
     @Override

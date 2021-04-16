@@ -29,7 +29,6 @@ public abstract class UserFieldDefinitionChangeHandler implements LGMChangeListe
      * @param gdcoll
      */
     public UserFieldDefinitionChangeHandler(final GDCollection gdcoll) {
-        super();
         this.gdcoll = gdcoll;
     }
 

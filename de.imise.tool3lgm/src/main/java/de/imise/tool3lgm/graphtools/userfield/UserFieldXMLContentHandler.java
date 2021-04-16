@@ -10,6 +10,11 @@ import org.xml.sax.Locator;
 import org.xml.sax.SAXException;
 
 import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
+import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
+import de.imise.tool3lgm.graphtools.userfield.definition.UserField;
+import de.imise.tool3lgm.graphtools.userfield.definition.UserField.Style;
+import de.imise.tool3lgm.graphtools.userfield.definition.UserFieldDefinitions;
+import de.imise.tool3lgm.graphtools.userfield.definition.UserFieldNumberFormat;
 
 /**
  * Die Variablen sind auf protected Gesetzt, damit man einen neuen
@@ -24,8 +29,20 @@ import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
  */
 public class UserFieldXMLContentHandler implements ContentHandler {
 
-    private final UserFieldDefinitions definitions;
-    private UserField field;
+    /**
+     *
+     */
+    private final UserFieldDefinitions userFieldDefinitions;
+
+    /**
+     *
+     */
+    private UserField userField;
+
+    /**
+     *
+     */
+    private UserFieldNumberFormat userFieldNumberFormat;
 
     /**
      * String der in der characters Methode ausgelesen wird (Werte eines Tags)
@@ -36,8 +53,7 @@ public class UserFieldXMLContentHandler implements ContentHandler {
      *
      */
     public UserFieldXMLContentHandler(final UserFieldDefinitions def) {
-        super();
-        definitions = def;
+        userFieldDefinitions = def;
     }
 
     @Override
@@ -66,15 +82,17 @@ public class UserFieldXMLContentHandler implements ContentHandler {
 
         if (qName.equals("userFieldDefinitions")) {
 
+        } else if (qName.equals("userFieldFormat")) {
+            String id = atts.getValue("hash");
+            userFieldNumberFormat = new UserFieldNumberFormat(id);
+
         } else if (qName.equals("userFieldDef")) {
             String elementClass = atts.getValue("elementClass");
+            String userFieldID = atts.getValue("hash");
+            MetaModel metaModel = userFieldDefinitions.getMetaModel();
+            Class<? extends ModelElement> userFieldTargetClass = metaModel.getClassForName(elementClass);
             //bei Modellvariablen ist die Elementclass null
-            if (elementClass == null) {
-                field = new UserField(atts.getValue("hash"), definitions);
-            } else {
-                MetaModel metaModel = definitions.getMetaModel();
-                field = new UserField(metaModel.getClassForName(elementClass), atts.getValue("hash"), definitions);
-            }
+            userField = new UserField(userFieldTargetClass, userFieldID);
         } else if (qName.equals("userFieldName")) {
 
         } else if (qName.equals("userFieldDescription")) {
@@ -84,6 +102,8 @@ public class UserFieldXMLContentHandler implements ContentHandler {
         } else if (qName.equals("userFieldStandardValue")) {
 
         } else if (qName.equals("userFieldTreeVis")) {
+
+        } else if (qName.equals("userFieldShowDescriptionInDialog")) {
 
         } else if (qName.equals("userFieldFormula")) {
 
@@ -102,16 +122,64 @@ public class UserFieldXMLContentHandler implements ContentHandler {
 
     @Override
     public void endElement(final String namespaceURI, final String localName, final String qName) throws SAXException {
-        if (qName.equals("userFieldDef")) {
-            definitions.add(field);
-        } else if (qName.equals("userFieldDefinitions")) {
+        if (qName.equals("userFieldDefinitions")) {
 
-        } else if (qName.equals("userFieldName") || qName.equals("userFieldDescription") || qName.equals("userFieldStyle") || qName.equals("userFieldTreeVis") || qName.equals("userFieldStandardValue") || qName.equals("userFieldInternalAccounting")
-                || qName.equals("userFieldInternalAccountingWeightUserFieldHash") || qName.equals("userFieldFormula") || qName.equals("userFieldFormatString") || qName.equals("userFieldFormatHash")) {
-            if (field == null) {
-                throw new SAXException("Error while parsing definition of userFields: userFiel shouldn't not be equals to null");
+        } else if (qName.equals("userFieldFormat")) {
+            if (userFieldNumberFormat == null) {
+                throw new SAXException("Error while parsing definition of userFields: userFieldNumberFormat shouldn't not be null");
+            } else {
+                userFieldDefinitions.add(userFieldNumberFormat);
             }
-            field.putXMLFieldString(qName, elementValue.toString());
+            userFieldNumberFormat = null;
+
+        } else if (qName.equals("userFieldDef")) {
+            if (userField != null) {
+                if (userField.getStyle() != null) { //File Version 3.9 UserField.Style.FORMAT is removed as UserField style -> ignore such UserFields
+                    userFieldDefinitions.add(userField);
+                }
+            } else if (userFieldNumberFormat != null) {
+                userFieldDefinitions.add(userFieldNumberFormat);
+            } else {
+                throw new SAXException("Error while parsing definition of userFields: userField shouldn't not be null");
+            }
+            userField = null;
+            userFieldNumberFormat = null;
+
+        } else if (qName.equals("userFieldName") || qName.equals("userFieldDescription") || qName.equals("userFieldStyle") || qName.equals("userFieldTreeVis") || qName.equals("userFieldShowDescriptionInDialog") || qName.equals("userFieldStandardValue")
+                || qName.equals("userFieldInternalAccounting") || qName.equals("userFieldInternalAccountingWeightUserFieldHash") || qName.equals("userFieldFormula") || qName.equals("userFieldFormatHash")) {
+            if (userField == null) {
+                throw new SAXException("Error while parsing definition of userFields: userFielsshouldn't not be equals to null");
+            }
+            String value = elementValue.toString();
+            if (qName.equals("userFieldStyle")) {
+                //Style.NUMER was Style.CLASSIFICATION_NUMBER and
+                //Style.FORMULA was Style.CLASSIFICATION_NUMBER_FORMULA
+                if (value.equals("CLASSIFICATION_NUMBER")) {
+                    value = Style.NUMBER.name();
+                } else if (value.equals("CLASSIFICATION_NUMBER_FORMULA")) {
+                    value = Style.FORMULA.name();
+                } else if (value.equals("FORMAT")) {
+                    //formats are no longer UserFields
+                    value = null;
+                }
+            }
+            if (value != null) {
+                userField.putXMLFieldString(qName, value, userFieldDefinitions);
+            }
+
+        } else if (qName.equals("userFieldFormatString")) {
+            if (userField != null) { // File Version 3.8
+                String id = userField.getID();
+                userFieldNumberFormat = new UserFieldNumberFormat(id);
+                userField = null;
+            }
+            //file Version 3.9
+            if (userFieldNumberFormat == null) {
+                throw new SAXException("Error while parsing definition of userFields: userFieldNumberFormat shouldn't not be null");
+            }
+            String value = elementValue.toString();
+            userFieldNumberFormat.putXMLFieldString(qName, value);
+
         } else {
             throw new SAXException("Unknown xml-tag: " + qName);
         }

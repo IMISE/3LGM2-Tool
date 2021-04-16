@@ -15,8 +15,8 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction;
 import de.imise.tool3lgm.graphtools.metamodel.elements.HasPartEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
-import de.imise.tool3lgm.graphtools.userfield.UserField;
-import de.imise.tool3lgm.graphtools.userfield.UserField.Style;
+import de.imise.tool3lgm.graphtools.userfield.definition.UserField;
+import de.imise.tool3lgm.graphtools.userfield.definition.UserField.Style;
 import de.imise.util.Alphabetical;
 import de.imise.util.NamedObjectContainer;
 import de.imise.util.pair.Pair;
@@ -179,7 +179,7 @@ public class UserFieldWeightTableModel extends AbstractUserFieldTableModel {
                     continue;
                 }
 
-                String value = field.getValue(edge);
+                String value = edge.getValue(field);
                 data[r][c] = new NamedObjectContainer<>(field, value);
 
             }
@@ -211,7 +211,7 @@ public class UserFieldWeightTableModel extends AbstractUserFieldTableModel {
         if (value != null) {
             NamedObjectContainer<UserField> cellValue = (NamedObjectContainer<UserField>) value;
             UserField userField = cellValue.getObject();
-            if (userField.hasStyle(Style.CLASSIFICATION_NUMBER_FORMULA)) {
+            if (userField.hasStyle(Style.FORMULA)) {
                 return false;
             }
         }

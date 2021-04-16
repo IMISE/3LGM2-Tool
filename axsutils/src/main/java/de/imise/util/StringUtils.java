@@ -102,8 +102,8 @@ public class StringUtils {
 
     /**
      * Füllt den übergebenen String, wenn er kürzer ist, bis zur übergebenen
-     * Länge auf. Ist seine Länge größer oder gleich der übergebenen Länge,
-     * bleibt er unverändert.
+     * Länge mit Leerzeichen auf. Ist seine Länge größer oder gleich der
+     * übergebenen Länge, bleibt er unverändert.
      *
      * @param s
      * @param newMinLenght

@@ -1,9 +1,12 @@
 package de.imise.util.collections;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import de.imise.util.Alphabetical;
 import de.imise.util.pair.Pair;
 
 /**
@@ -59,11 +62,17 @@ public class ExtendedMap<K, V> extends HashMap<K, V> {
         return toString(this);
     }
 
+    /**
+     * @param map
+     * @return
+     */
     public static String toString(final Map<?, ?> map) {
         StringBuilder sb = new StringBuilder();
         sb.append("Size=").append(map.size()).append("\n");
         int i = 0;
-        for (Object key : map.keySet()) {
+        List<?> keys = new ArrayList<>(map.keySet());
+        Alphabetical.sort(keys);
+        for (Object key : keys) {
             Object value = map.get(key);
             String hash = value == null ? "null" : String.valueOf(value.hashCode());
             sb.append(i++).append(": ").append("key=").append(key).append(" (").append(key.hashCode()).append(")").append("   ->   value=").append(value).append(" (").append(hash).append(")\n");

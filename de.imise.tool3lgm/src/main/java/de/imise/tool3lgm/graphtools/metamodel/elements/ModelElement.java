@@ -2,7 +2,7 @@ package de.imise.tool3lgm.graphtools.metamodel.elements;
 
 import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction.BACKWARD;
 import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction.FORWARD;
-import static de.imise.tool3lgm.graphtools.userfield.UserField.EMPTY_STRING;
+import static de.imise.tool3lgm.graphtools.userfield.definition.UserField.EMPTY_STRING;
 
 import java.awt.Color;
 import java.awt.Container;
@@ -40,8 +40,9 @@ import de.imise.tool3lgm.graphtools.model.GDCollectionOwner;
 import de.imise.tool3lgm.graphtools.model.GDCommands;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.path.metapaths.MetaPath;
-import de.imise.tool3lgm.graphtools.userfield.UserField;
-import de.imise.tool3lgm.graphtools.userfield.UserFieldTarget;
+import de.imise.tool3lgm.graphtools.userfield.definition.UserField;
+import de.imise.tool3lgm.graphtools.userfield.definition.UserFieldDefinitions;
+import de.imise.tool3lgm.graphtools.userfield.definition.UserFieldTarget;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.graphtools.view.container.LayerContainer;
 import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
@@ -163,6 +164,12 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
         return metaModel == null ? null : metaModel.getMetaModelDefinitionClass();
     }
 
+    @Override
+    public UserFieldDefinitions getUserFieldDefinitions() {
+        GDCollection gdcoll = getCollection();
+        return gdcoll.getUserFieldDefinitions();
+    }
+
     public void printContainer() {
         System.err.println(containerTable.size() + " " + containerTable.getClass().getSimpleName() + " " + this.getClass().getSimpleName());
     }
@@ -261,7 +268,7 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
      * @param doc
      * @return
      */
-    public final ElementContainer getContainer(final GraphDocument doc) {
+    public ElementContainer getContainer(final GraphDocument doc) {
         if (doc == null) {
             return null;
         }
@@ -2462,7 +2469,7 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
                         //wenn es einen otherValue gibt, der sich vom value unterscheidet -> füge sie zusammen
                     } else if (!value.equals(otherValue)) {
                         //Bei Kennzahlen bleibt es einfach der Wert des ersten Elements
-                        if (!userField.isClassificationUserField()) {
+                        if (!userField.isNumberUserField()) {
                             setUserFieldInputValue(userField, value.toString().concat(" -" + joined + "- ").concat(otherValue.toString()));
                         }
                     }

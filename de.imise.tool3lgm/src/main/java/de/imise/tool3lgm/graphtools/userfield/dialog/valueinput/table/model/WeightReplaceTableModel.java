@@ -11,8 +11,8 @@ import com.google.common.base.Strings;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
-import de.imise.tool3lgm.graphtools.userfield.UserField;
 import de.imise.tool3lgm.graphtools.userfield.WeightReplacer;
+import de.imise.tool3lgm.graphtools.userfield.definition.UserField;
 import de.imise.util.NamedObjectContainer;
 
 public class WeightReplaceTableModel extends AbstractTableModel {
@@ -36,7 +36,7 @@ public class WeightReplaceTableModel extends AbstractTableModel {
         //Elementklassen in den Zeilen
         List<ModelElement> allRowElements = doc.getModelItems(elementClass, false, true);
         //Alle KennzahluserFields in den Spalten
-        List<UserField> allColumnElements = definitions.getUserFields(edgeClass, UserField.Style.CLASSIFICATION_NUMBER_STYLES);
+        List<UserField> allColumnElements = definitions.getUserFields(edgeClass, UserField.Style.NUMBER_STYLES);
         //Platzhalter für die Gleichverteilung
         allColumnElements.add(0, null);
 

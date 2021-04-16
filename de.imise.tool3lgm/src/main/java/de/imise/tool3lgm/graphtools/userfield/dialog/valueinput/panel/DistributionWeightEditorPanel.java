@@ -21,9 +21,9 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
-import de.imise.tool3lgm.graphtools.userfield.UserField;
-import de.imise.tool3lgm.graphtools.userfield.UserFieldDefinitions;
 import de.imise.tool3lgm.graphtools.userfield.UserFieldDefinitionsAnalyzer;
+import de.imise.tool3lgm.graphtools.userfield.definition.UserField;
+import de.imise.tool3lgm.graphtools.userfield.definition.UserFieldDefinitions;
 import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.UserFieldEditorDialog;
 import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.table.UserFieldTable;
 import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.table.UserFieldTableController;
@@ -94,7 +94,7 @@ public class DistributionWeightEditorPanel extends AbstractElementTypeUserFieldE
      * @param name
      */
     public DistributionWeightEditorPanel(final UserFieldEditorDialog dialog, final String name) {
-        super(dialog, Edge.class, UserField.Style.CLASSIFICATION_NUMBER_STYLES, name);
+        super(dialog, Edge.class, UserField.Style.NUMBER_STYLES, name);
         initWeightBox();
         initColumnFilterBox();
     }
@@ -192,7 +192,7 @@ public class DistributionWeightEditorPanel extends AbstractElementTypeUserFieldE
         weightBox.addSeparator(getResString("weighting"));
 
         for (UserField uf : definitions.getUserFields(elementTypeBoxSelection)) {
-            if (uf.isClassificationUserField()) {
+            if (uf.isNumberUserField()) {
                 weightBox.addObject(uf);
             }
         }
