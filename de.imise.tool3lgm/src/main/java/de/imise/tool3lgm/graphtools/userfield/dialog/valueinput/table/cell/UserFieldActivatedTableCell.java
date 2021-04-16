@@ -1,6 +1,6 @@
 package de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.table.cell;
 
-import static de.imise.tool3lgm.graphtools.userfield.UserField.Style.COMBO_BOX;
+import static de.imise.tool3lgm.graphtools.userfield.definition.UserField.Style.COMBO_BOX;
 
 import java.awt.Component;
 import java.awt.Point;
@@ -15,8 +15,8 @@ import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableModel;
 import javax.swing.text.JTextComponent;
 
-import de.imise.tool3lgm.graphtools.userfield.UserField;
-import de.imise.tool3lgm.graphtools.userfield.UserField.Style;
+import de.imise.tool3lgm.graphtools.userfield.definition.UserField;
+import de.imise.tool3lgm.graphtools.userfield.definition.UserField.Style;
 import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.table.UserFieldTable;
 import de.imise.util.NamedObjectContainer;
 import de.imise.util.swing.component.AlphabeticalComboBox;
@@ -146,7 +146,7 @@ public class UserFieldActivatedTableCell implements IUserFieldTableCell {
      * Die Formatierung erfolgt dabei durch die Methoden von {@link #userField}.
      */
     protected void update() {
-        if (!(userField.getStyle() == Style.CLASSIFICATION_NUMBER_FORMULA) && value.toString().equals(UserField.EMPTY_STRING)) {
+        if (!(userField.getStyle() == Style.FORMULA) && value.toString().equals(UserField.EMPTY_STRING)) {
             text = RENDERER_EMPTY_STRING;
             value = new NamedObjectContainer<>(userField, EDITOR_EMPTY_STRING);
         } else {
@@ -195,7 +195,7 @@ public class UserFieldActivatedTableCell implements IUserFieldTableCell {
         Object newValue = editor.getCellEditorValue();
         String s = newValue == null ? "" : newValue.toString();
         //bei Kennzahlen die evtl. falschen Decimal-Separatoren ersetzen
-        if (userField.hasStyle(Style.CLASSIFICATION_NUMBER)) {
+        if (userField.hasStyle(Style.NUMBER)) {
             s = UserField.replaceWrongDecimalSeparator(s, EDITOR_DECIMAL_SEPARATOR);
         }
         value = new NamedObjectContainer<>(userField, s);

@@ -12,7 +12,7 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
-import de.imise.tool3lgm.graphtools.userfield.UserField;
+import de.imise.tool3lgm.graphtools.userfield.definition.UserField;
 import de.imise.util.NamedObjectContainer;
 
 public class FractionValueSumTableModel extends AbstractUserFieldTableModel {
@@ -88,7 +88,7 @@ public class FractionValueSumTableModel extends AbstractUserFieldTableModel {
             columnIdentifiers.add(columnUserFieldContainer);
             //der folgende Aufruf stellt sicher, dass immer die aktuellen Werte für die Teilwerte berechnte werden. Beim Abfragen des Wertes des UserFields
             //wird die Map mit den Teilwerten gefüllt, die unten beim Aufbau des Datenvektors abfragt wird.
-            userField.getValue(me);
+            me.getValue(userField);
         }
 
         //DataVector aufbauen

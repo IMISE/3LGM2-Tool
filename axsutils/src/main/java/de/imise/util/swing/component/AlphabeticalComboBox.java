@@ -13,6 +13,8 @@ import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JSeparator;
+import javax.swing.event.PopupMenuEvent;
+import javax.swing.event.PopupMenuListener;
 
 import de.imise.util.Alphabetical;
 import de.imise.util.NamedObjectContainer;
@@ -95,7 +97,7 @@ public class AlphabeticalComboBox<E> extends JComboBox<NamedObjectContainer<E>> 
     public AlphabeticalComboBox(final int shift) {
         DefaultComboBoxModel<NamedObjectContainer<E>> model = new DefaultComboBoxModel<>(items);
         setModel(model);
-        setRenderer(new MyRenderer(shift));
+        setRenderer(new MyRenderer(this, shift));
         //30 lines should actually always be displayable
         setMaximumRowCount(30);
     }
@@ -512,7 +514,7 @@ public class AlphabeticalComboBox<E> extends JComboBox<NamedObjectContainer<E>> 
      * @author AXS
      * @created 19.10.2007
      */
-    private class MyRenderer extends DefaultListCellRenderer {
+    private class MyRenderer extends DefaultListCellRenderer implements PopupMenuListener {
 
         /**
          * String consisting of blanks, which are placed in front of all entries
@@ -523,13 +525,18 @@ public class AlphabeticalComboBox<E> extends JComboBox<NamedObjectContainer<E>> 
         private String shiftString = null;
 
         /**
+         * Backups the shiftString during popupmenu is invisible to render the
+         * selected item without shift.
+         */
+        private final String shiftStringBackup;
+
+        /**
          * Creates a new renderer that shifts all entries that are not
          * separators by <code>shift</code> spaces to the right.
          *
          * @param shift Number of spaces by which entries should be shifted
          */
-        public MyRenderer(int shift) {
-            super();
+        public MyRenderer(final AlphabeticalComboBox<E> box, int shift) {
             //build shiftString from as few spaces as shift > 0
             if (shift > 0) {
                 StringBuilder sb = new StringBuilder();
@@ -537,7 +544,10 @@ public class AlphabeticalComboBox<E> extends JComboBox<NamedObjectContainer<E>> 
                     sb.append(' ');
                 } while (shift-- > 0);
                 shiftString = sb.toString();
+                box.addPopupMenuListener(this);
             }
+            shiftStringBackup = shiftString;
+            shiftString = null;
         }
 
         @Override
@@ -558,10 +568,13 @@ public class AlphabeticalComboBox<E> extends JComboBox<NamedObjectContainer<E>> 
                 //normal entries
             } else {
                 c = (JLabel) super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
-                //shift entries
+
+                //Set Text and maybe shift entries
+                String text = value == null ? "" : value.toString();
                 if (shiftString != null) {
-                    c.setText(shiftString + c.getText());
+                    text = shiftString + text;
                 }
+                c.setText(text);
 
                 //tooltips
                 if (isSelected) {
@@ -583,9 +596,23 @@ public class AlphabeticalComboBox<E> extends JComboBox<NamedObjectContainer<E>> 
                     setForeground(list.getForeground());
                 }
                 setFont(list.getFont());
-                setText(value == null ? "" : value.toString());
             }
             return c;
+        }
+
+        @Override
+        public void popupMenuWillBecomeVisible(final PopupMenuEvent e) {
+            shiftString = shiftStringBackup;
+        }
+
+        @Override
+        public void popupMenuWillBecomeInvisible(final PopupMenuEvent e) {
+            shiftString = null;
+        }
+
+        @Override
+        public void popupMenuCanceled(final PopupMenuEvent e) {
+            popupMenuWillBecomeInvisible(e);
         }
     }
 

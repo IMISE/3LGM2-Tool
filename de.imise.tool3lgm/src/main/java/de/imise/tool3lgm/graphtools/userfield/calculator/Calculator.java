@@ -19,9 +19,9 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.HasPartEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.userfield.CostingUtil;
-import de.imise.tool3lgm.graphtools.userfield.UserField;
-import de.imise.tool3lgm.graphtools.userfield.UserFieldDefinitions;
-import de.imise.tool3lgm.graphtools.userfield.UserFieldTarget;
+import de.imise.tool3lgm.graphtools.userfield.definition.UserField;
+import de.imise.tool3lgm.graphtools.userfield.definition.UserFieldDefinitions;
+import de.imise.tool3lgm.graphtools.userfield.definition.UserFieldTarget;
 
 /**
  * Die Klasse <code>Calculator</code> beinhaltet alle Methoden für die
@@ -97,7 +97,6 @@ public class Calculator {
      *
      */
     public Calculator(final UserFieldDefinitions definitions) {
-        super();
         this.definitions = definitions;
     }
 
@@ -143,7 +142,7 @@ public class Calculator {
 
     private String calculateInternal(final UserField userField, final UserFieldTarget userFieldTarget) {
         //Modellvariablen berechnen
-        if (userField.isGlobalOrFormat()) {
+        if (userField.isGlobal()) {
             //Modellvariablen berechnen (sowas gibts im Moment noch gar nicht,
             //aber wenn, dann muss das hier passieren)
             return "";
@@ -280,10 +279,10 @@ public class Calculator {
                      * UserField.EMPTY_STRING; /// TESTAUSGABE ENDE ///
                      */
                     String ufValue = "";
-                    if (tmp_userField != null && tmp_userField.isGlobalOrFormat()) {
+                    if (tmp_userField != null && tmp_userField.isGlobal()) {
                         ufValue = definitions.getCollection().getUserFieldInputValue(tmp_userField);
                     } else {
-                        ufValue = tmp_userField.getValue(me);
+                        ufValue = me.getValue(tmp_userField);
 
                     }
 
@@ -541,7 +540,7 @@ public class Calculator {
             }
         }
         if (elementWithUserField != null && elementWithUserField.getClass() == elementClass) {
-            String value = userField.getValue(elementWithUserField);
+            String value = elementWithUserField.getValue(userField);
             //wenn der referenzierte Wert bereits ein Fehler ist, dann wird dieser Fehler zurück gegeben
             if (UserField.isError(value)) {
                 return value;
@@ -631,7 +630,7 @@ public class Calculator {
                 connectedElement = k.getEnd();
             }
             //den Eingabewert des aufzusummierenden Feldes holen
-            String value = userField.getValue(connectedElement);
+            String value = connectedElement.getValue(userField);
             if (accountingFunction.equals(UserField.ACCOUNTING_FUNCTION_SUM)) {
                 result = getResult(result, value, OPERATOR_PLUS);
             } else if (accountingFunction.equals(UserField.ACCOUNTING_FUNCTION_MULT)) {
@@ -746,7 +745,7 @@ public class Calculator {
                 connectedElement = edge.getEnd();
             }
             //den Eingabewert des aufzusummierenden Feldes holen
-            String value = userField.getValue(connectedElement);
+            String value = connectedElement.getValue(userField);
 
             if (UserField.isIgnoreableError(value)) {
                 return value;
@@ -849,7 +848,8 @@ public class Calculator {
         stacksize--;
 
         //Der aktuelle Wert des UserFields, das indiziert werden soll.
-        String tmp_value = definitions.getUserField(userFieldID).getValue(target);
+        UserField userField = definitions.getUserField(userFieldID);
+        String tmp_value = target.getValue(userField);
 
         if (UserField.isError(tmp_value)) {
             return tmp_value;
@@ -893,7 +893,8 @@ public class Calculator {
      * @return Der Wert des <code>userField</code>s.
      */
     private String getValueOfReferencedUserField(final String userFieldID, final UserFieldTarget target) {
-        String value = definitions.getUserField(userFieldID).getValue(target);
+        UserField userField = definitions.getUserField(userFieldID);
+        String value = target.getValue(userField);
         return value;
     }
 
@@ -933,7 +934,7 @@ public class Calculator {
                 stack.push(tmp_str);
             } else if (tmp_str.equals(")")) {
                 while (!stack.empty()) {
-                    String tmp_element = "";
+                    String tmp_element;
                     tmp_element = stack.pop().toString();
                     if (!tmp_element.equals("(")) {
                         tmp_string_postfix.append(" ");

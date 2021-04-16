@@ -6,8 +6,8 @@ import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 
 import de.imise.tool3lgm.Tool3lgmConstants;
-import de.imise.tool3lgm.graphtools.userfield.UserFieldDefinitions;
 import de.imise.tool3lgm.graphtools.userfield.UserFieldXMLParser;
+import de.imise.tool3lgm.graphtools.userfield.definition.UserFieldDefinitions;
 import de.imise.util.swing.dialog.ExtendedFileChooser;
 
 public final class UserFieldDeclarationImportExportHandler {

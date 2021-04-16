@@ -98,7 +98,7 @@ public class MenuCollection {
 
     /** Das Extras-Menu */
     public static final JMenu EXTRAS_MENU = new DynamicMenu(getResString("extras"), ExtrasActions.ACTION_OPEN_USERFIELD_DEFINITION_DIALOG, ExtrasActions.ACTION_OPEN_USERFIELD_VALUE_EDITOR_DIALOG,
-            BooleanProperty.OPTION_ENABLE_CLASSIFICATION_NUMBER_CALCULATION, new JSeparator(), new DynamicMenuPlaceholder(), new JSeparator(), ExtrasSubMenus.PLUGIN_MENU) {
+            BooleanProperty.OPTION_ENABLE_FORMULA_CALCULATION, new JSeparator(), new DynamicMenuPlaceholder(), new JSeparator(), ExtrasSubMenus.PLUGIN_MENU) {
 
         @Override
         protected void updateItems(final DynamicMenuPlaceholder placeholder) { // es gibt nur einen Placeholder in diesem Menu -> es ist eindeutig, welcher es hier ist

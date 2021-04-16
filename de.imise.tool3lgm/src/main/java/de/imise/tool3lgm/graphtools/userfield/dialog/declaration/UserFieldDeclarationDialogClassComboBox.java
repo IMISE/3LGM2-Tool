@@ -1,14 +1,14 @@
 package de.imise.tool3lgm.graphtools.userfield.dialog.declaration;
 
-import static de.imise.tool3lgm.graphtools.userfield.UserFieldDefinitions.GLOBAL_USERFIELD_IDENTIFIER_CLASS;
-import static de.imise.tool3lgm.graphtools.userfield.UserFieldDefinitions.getDisplayableGlobalFieldIdentifierName;
+import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
+import static de.imise.tool3lgm.graphtools.userfield.definition.UserFieldDefinitions.GLOBAL_USERFIELD_IDENTIFIER_CLASS;
 
 import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
 import de.imise.tool3lgm.graphtools.metamodel.CoreMetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
-import de.imise.tool3lgm.graphtools.userfield.UserFieldTarget;
+import de.imise.tool3lgm.graphtools.userfield.definition.UserFieldTarget;
 import de.imise.util.swing.component.AlphabeticalComboBox;
 
 public class UserFieldDeclarationDialogClassComboBox extends AlphabeticalComboBox<Class<? extends UserFieldTarget>> {
@@ -20,9 +20,8 @@ public class UserFieldDeclarationDialogClassComboBox extends AlphabeticalComboBo
      * @param maxRowCount
      */
     public UserFieldDeclarationDialogClassComboBox(final MetaModel metaModel, final int maxRowCount) {
-        super();
         setMaximumRowCount(13);
-        addObject(GLOBAL_USERFIELD_IDENTIFIER_CLASS, getDisplayableGlobalFieldIdentifierName());
+        addObject(GLOBAL_USERFIELD_IDENTIFIER_CLASS, getResString("userFieldEditor_global"));
         addSeparator(true);
         ElementsNameBuilder elementsNameBuilder = metaModel.getElementsNameBuilder();
         //alle nicht abstracten Knotenklassen hinzufügen

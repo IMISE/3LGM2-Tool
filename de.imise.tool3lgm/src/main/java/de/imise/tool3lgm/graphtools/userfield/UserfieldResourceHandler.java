@@ -7,6 +7,7 @@ import java.net.URL;
 import de.imise.tool3lgm.LocaleDependentSubDirResourceHandler;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModelDefinition;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
+import de.imise.tool3lgm.graphtools.userfield.definition.UserFieldDefinitions;
 import de.imise.tool3lgm.log.Log;
 
 /**

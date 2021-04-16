@@ -14,9 +14,9 @@ import de.imise.tool3lgm.graphtools.consistency.error.type.IDNotUniqueError;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
-import de.imise.tool3lgm.graphtools.userfield.UserField;
-import de.imise.tool3lgm.graphtools.userfield.UserFieldDefinitions;
-import de.imise.tool3lgm.graphtools.userfield.UserFieldTarget;
+import de.imise.tool3lgm.graphtools.userfield.definition.UserField;
+import de.imise.tool3lgm.graphtools.userfield.definition.UserFieldDefinitions;
+import de.imise.tool3lgm.graphtools.userfield.definition.UserFieldTarget;
 
 /**
  * @author AXS (20.03.2016)
@@ -106,7 +106,7 @@ public class UniqueIDChecker implements ConsistencyErrorChecker {
         for (int i = modelItems.size() - 1; i >= 0; i--) {
             ModelElement other = modelItems.get(i);
             if (other != me) {
-                String otherValue = userField.getValue(other);
+                String otherValue = other.getValue(userField);
                 boolean bothNull = value == null && value == otherValue;
                 boolean sameValue = value != null && !value.equals(otherValue);
                 if (!bothNull && !sameValue) {

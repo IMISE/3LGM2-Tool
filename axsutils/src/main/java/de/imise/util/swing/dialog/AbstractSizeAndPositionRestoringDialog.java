@@ -184,9 +184,18 @@ public abstract class AbstractSizeAndPositionRestoringDialog extends JDialog {
     }
 
     /**
-     *
+     * @param minWidth
+     * @param minHeight
      */
     protected void restoreSizeAndPosition() {
+        restoreSizeAndPosition(-1, -1);
+    }
+
+    /**
+     * @param minWidth
+     * @param minHeight
+     */
+    protected void restoreSizeAndPosition(final int minWidth, final int minHeight) {
         Rectangle sizeAndPosition = DIALOG_CLASS_TO_SIZE_AND_POSITION_MAP.get(getClass());
         if (sizeAndPosition == null) {
             Dimension defaultSize = getDefaultSize();
@@ -194,6 +203,14 @@ public abstract class AbstractSizeAndPositionRestoringDialog extends JDialog {
                 setSize(defaultSize);
             } else {
                 pack();
+                Dimension size = getSize();
+                if (minWidth > size.width && minHeight > size.height) {
+                    setSize(minWidth, minHeight);
+                } else if (minWidth > size.width) {
+                    setSize(minWidth, size.height);
+                } else if (minHeight > size.height) {
+                    setSize(size.width, minHeight);
+                }
             }
             Point defaultPosition = getDefaultPosition();
             if (defaultPosition != null) {

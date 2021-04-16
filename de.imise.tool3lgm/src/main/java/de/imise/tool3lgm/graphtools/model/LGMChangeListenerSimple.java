@@ -1,6 +1,6 @@
 package de.imise.tool3lgm.graphtools.model;
 
-import de.imise.tool3lgm.graphtools.userfield.UserFieldTarget;
+import de.imise.tool3lgm.graphtools.userfield.definition.UserFieldTarget;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 
 /**

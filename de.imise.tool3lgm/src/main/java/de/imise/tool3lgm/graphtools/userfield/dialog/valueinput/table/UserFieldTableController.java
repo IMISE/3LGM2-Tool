@@ -606,7 +606,7 @@ public abstract class UserFieldTableController {
      *
      * @param uftm
      */
-    public static UserFieldTableController getNewClassificationNumberFormulaTableController(final AbstractTableModel uftm) {
+    public static UserFieldTableController getNewFormulaTableController(final AbstractTableModel uftm) {
 
         if (uftm.getRowCount() == 0 || uftm.getColumnCount() == 0) {
             return null;

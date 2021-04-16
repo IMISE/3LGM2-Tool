@@ -108,10 +108,10 @@ import de.imise.tool3lgm.graphtools.path.metapaths.MetaPath;
 import de.imise.tool3lgm.graphtools.path.paths.AbstractPath;
 import de.imise.tool3lgm.graphtools.undoredo.TransactionManager;
 import de.imise.tool3lgm.graphtools.undoredo.TransactionStackTable;
-import de.imise.tool3lgm.graphtools.userfield.UserField;
-import de.imise.tool3lgm.graphtools.userfield.UserFieldDefinitions;
-import de.imise.tool3lgm.graphtools.userfield.UserFieldTarget;
 import de.imise.tool3lgm.graphtools.userfield.UserfieldResourceHandler;
+import de.imise.tool3lgm.graphtools.userfield.definition.UserField;
+import de.imise.tool3lgm.graphtools.userfield.definition.UserFieldDefinitions;
+import de.imise.tool3lgm.graphtools.userfield.definition.UserFieldTarget;
 import de.imise.tool3lgm.graphtools.view.container.BendpointContainer;
 import de.imise.tool3lgm.graphtools.view.container.EdgeContainer;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
@@ -191,9 +191,6 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
 
     /** Hauptdokument der Collection */
     private LGMGraphDocument mainDoc;
-
-    /** Resolves the dependencies of copied elements */
-    private CopyDependencyResolver copyDependencyResolver;
 
     /**
      * Alle {@link LGMChangeListener}, die immer benachrichtigt werden - egal ob
@@ -298,7 +295,7 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
     private final List<LGMChangeEvent> changeEvents = new ArrayList<>();
 
     /**
-     * @param templateModel
+     * Creates a new Model without setting the model type
      */
     public GDCollection() {
         fileHandler = new GDCollectionFileHandler(this);
@@ -308,12 +305,28 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
     }
 
     /**
-     * @param metaModelContext
-     * @param templateModel
+     * Creates a new Model with the specified model type and without loading the
+     * default {@link UserFieldDefinitions}.
+     *
+     * @param modelype the context that contains the metamodel of this model and
+     *            the corresponding resource bundle and the type of the model
      */
     public GDCollection(@Nonnull final Tool3lgmModelType modelType) {
+        this(modelType, false);
+    }
+
+    /**
+     * Creates a new model with the specified model type and with optionally
+     * loading the default {@link UserFieldDefinitions}.
+     *
+     * @param modelype the context that contains the metamodel of this model and
+     *            the corresponding resource bundle and the type of the model
+     * @param loadDefaultUserFieldDefinition if <code>true</code> the default
+     *            {@link UserFieldDefinitions} will be loaded
+     */
+    public GDCollection(@Nonnull final Tool3lgmModelType modelType, final boolean loadDefaultUserFieldDefinition) {
         this();
-        setModelType(modelType);
+        setModelType(modelType, loadDefaultUserFieldDefinition);
     }
 
     /**
@@ -361,15 +374,19 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
      *
      * @param modelype the context that contains the metamodel of this model and
      *            the corresponding resource bundle and the type of the model
+     * @param loadDefaultUserFieldDefinition if <code>true</code> the default
+     *            {@link UserFieldDefinitions} will be loaded
      */
-    public void setModelType(final Tool3lgmModelType modelType) {
+    public void setModelType(final Tool3lgmModelType modelType, final boolean loadDefaultUserFieldDefinition) {
         this.modelType = modelType;
         metaModel = modelType.getMetaModel();
         mainDoc = new LGMGraphDocument(this);
         userFieldDefinitions = new UserFieldDefinitions(this);
         addClosedTransactionsListener(userFieldDefinitions);
         activeGraphDocumentsList.add(mainDoc);
-        UserfieldResourceHandler.loadDefaultUserfieldDefinition(this);
+        if (loadDefaultUserFieldDefinition) {
+            UserfieldResourceHandler.loadDefaultUserfieldDefinition(this);
+        }
     }
 
     /**
@@ -401,16 +418,6 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
      */
     public void setModelCategory(final Tool3lgmModelType.ModelCategory modelCategory) {
         modelType.setModelCategory(modelCategory);
-    }
-
-    /**
-     *
-     */
-    public final CopyDependencyResolver getCopyDependencyResolver() {
-        if (copyDependencyResolver == null) {
-            copyDependencyResolver = new CopyDependencyResolver(this);
-        }
-        return copyDependencyResolver;
     }
 
     /**
@@ -857,7 +864,7 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
             for (int i = 0; i < edges2Remove.size(); i++) {
                 Edge edge = edges2Remove.get(i);
                 //den Container der Edge mit allen Knickpunkten im aktuellen Teilmodell löschen
-                EdgeContainer edgeC = (EdgeContainer) edge.getContainer(szen);
+                EdgeContainer edgeC = edge.getContainer(szen);
                 if (!simpleRemoveEdgeContainer(edgeC, pid)) {
                     continue;
                 }
@@ -1221,7 +1228,7 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
      * @param pid
      */
     public final void removeBendpoint(final Bendpoint bendpoint, final int pid) {
-        BendpointContainer bc = bendpoint.getBendpointContainer();
+        BendpointContainer bc = bendpoint.getContainer();
         if (bc == null) {
             return;
         }
@@ -2412,8 +2419,8 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
             }
         }
         for (Szenario szen : szenarios) {
-            NodeContainer removeContainer = (NodeContainer) removeNode.getContainer(szen);
-            NodeContainer remainContainer = (NodeContainer) remainNode.getContainer(szen);
+            NodeContainer removeContainer = removeNode.getContainer(szen);
+            NodeContainer remainContainer = remainNode.getContainer(szen);
             // jetzt umhängen aller Container von knoten1 auf knoten2 in allen Teilmodellen
             if (remainContainer == null && removeContainer != null) {
                 //              szen.removeKnotContainer((NodeContainer) knoten1.getContainer(szen), pid);
@@ -2849,7 +2856,7 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
      */
     public void removeUserFieldValues(final List<UserField> userFieldsToRemove) {
         for (UserField userField : userFieldsToRemove) {
-            if (userField.isGlobalOrFormat()) {
+            if (userField.isGlobal()) {
                 removeUserField(userField);
             } else {
                 Class<? extends ModelElement> elemClass = null;

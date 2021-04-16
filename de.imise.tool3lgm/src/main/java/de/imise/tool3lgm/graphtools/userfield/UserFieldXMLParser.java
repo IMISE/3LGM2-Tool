@@ -14,6 +14,7 @@ import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 
+import de.imise.tool3lgm.graphtools.userfield.definition.UserFieldDefinitions;
 import de.imise.tool3lgm.log.Log;
 import de.imise.tool3lgm.xml.ToolXMLWriter;
 

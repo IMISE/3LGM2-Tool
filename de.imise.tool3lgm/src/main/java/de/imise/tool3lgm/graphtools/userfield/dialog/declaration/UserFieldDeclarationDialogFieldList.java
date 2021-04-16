@@ -1,18 +1,33 @@
 package de.imise.tool3lgm.graphtools.userfield.dialog.declaration;
 
+import static de.imise.tool3lgm.graphtools.userfield.definition.UserField.Style.GROUP;
+import static de.imise.tool3lgm.graphtools.userfield.definition.UserField.Style.TAB;
+import static de.imise.util.htmlxml.HTMLConverter.encode;
+import static de.imise.util.htmlxml.HTMLConverter.encodeBold;
+import static de.imise.util.htmlxml.HTMLConverter.getTextAsHTMLLabelText;
+
+import java.awt.Point;
+import java.awt.event.MouseEvent;
+import java.util.Collections;
+import java.util.List;
+
 import javax.swing.DefaultListModel;
 import javax.swing.JList;
 import javax.swing.ListSelectionModel;
 
-import de.imise.tool3lgm.graphtools.userfield.UserField;
-import de.imise.tool3lgm.graphtools.userfield.UserFieldDefinitions;
-import de.imise.tool3lgm.graphtools.userfield.UserFieldTarget;
+import org.apache.jena.ext.com.google.common.primitives.Ints;
+
+import de.imise.tool3lgm.graphtools.userfield.definition.UserField;
+import de.imise.tool3lgm.graphtools.userfield.definition.UserField.Style;
+import de.imise.tool3lgm.graphtools.userfield.definition.UserFieldDefinitions;
+import de.imise.tool3lgm.graphtools.userfield.definition.UserFieldTarget;
 import de.imise.util.NamedObjectContainer;
+import de.imise.util.StringUtils;
 
 /**
  * {@link JList}, die UserFields anzeigen kann.
  *
- * @author astruebi
+ * @author AXS
  */
 public class UserFieldDeclarationDialogFieldList extends JList<NamedObjectContainer<UserField>> {
 
@@ -30,7 +45,6 @@ public class UserFieldDeclarationDialogFieldList extends JList<NamedObjectContai
      * @param definitions
      */
     public UserFieldDeclarationDialogFieldList(final UserFieldDefinitions definitions) {
-        super();
         model = new DefaultListModel<>();
         setModel(model);
         this.definitions = definitions;
@@ -41,10 +55,62 @@ public class UserFieldDeclarationDialogFieldList extends JList<NamedObjectContai
      * Aktualisiert die Liste der {@link UserField}s für die selektierte Klasse
      */
     public void update(final Class<? extends UserFieldTarget> selectedClass) {
+        List<NamedObjectContainer<UserField>> selectedValuesList = getSelectedValuesList();
         clear();
-        for (UserField uf : definitions.getUserFields(selectedClass)) {
-            addEntry(uf);
+        int indent = 0;
+        for (UserField userField : definitions.getUserFields(selectedClass)) {
+            if (userField.hasStyle(TAB)) {
+                addEntry(userField, 0);
+                indent = 1;
+            } else if (userField.hasStyle(GROUP)) {
+                addEntry(userField, 1);
+                indent = 2;
+            } else {
+                addEntry(userField, indent);
+            }
         }
+        restoreSelection(selectedValuesList);
+    }
+
+    /**
+     * Restores an old selection. If the model was relaoded the old selected
+     * elementes ({@link NamedObjectContainer}) can be identified by the same
+     *
+     * @param selectedValuesList
+     */
+    private void restoreSelection(final List<NamedObjectContainer<UserField>> oldSelectedValuesList) {
+        int[] selectedIndices = new int[oldSelectedValuesList.size()];
+        int count = 0;
+        for (NamedObjectContainer<UserField> oldSelectedItem : oldSelectedValuesList) {
+            int index = indexOfEqualsUserField(oldSelectedItem);
+            if (index >= 0) {
+                selectedIndices[count++] = index;
+            }
+        }
+        if (count < selectedIndices.length) {
+            int[] newSelectedIndices = new int[count];
+            System.arraycopy(selectedIndices, 0, newSelectedIndices, 0, count);
+            setSelectedIndices(newSelectedIndices);
+        } else {
+            setSelectedIndices(selectedIndices);
+        }
+    }
+
+    /**
+     * @param userFieldObjectContainer
+     * @return
+     */
+    private int indexOfEqualsUserField(final NamedObjectContainer<UserField> userFieldObjectContainer) {
+        int itemCount = model.getSize();
+        UserField userField = userFieldObjectContainer.getObject();
+        for (int i = 0; i < itemCount; i++) {
+            NamedObjectContainer<UserField> listUserFieldObjectContainer = model.get(i);
+            UserField listUserField = listUserFieldObjectContainer.getObject();
+            if (listUserField.equals(userField)) {
+                return i;
+            }
+        }
+        return -1;
     }
 
     /**
@@ -59,9 +125,10 @@ public class UserFieldDeclarationDialogFieldList extends JList<NamedObjectContai
      * <code>UserField</code> hinzu.
      *
      * @param userField
+     * @param indent
      */
-    public void addEntry(final UserField userField) {
-        addEntry(userField, model.getSize());
+    private void addEntry(final UserField userField, final int indent) {
+        addEntry(userField, model.getSize(), indent);
     }
 
     /**
@@ -70,24 +137,14 @@ public class UserFieldDeclarationDialogFieldList extends JList<NamedObjectContai
      *
      * @param userField
      * @param index
+     * @param indent
      */
-    public void addEntry(final UserField userField, final int index) {
-        String name = userField.getName() + "  ( " + userField.getStyle() + " )";
+    private void addEntry(final UserField userField, final int index, final int indent) {
+        int whiteSpaceCount = indent * 6;
+        String indentation = StringUtils.fillToMinLenght("", whiteSpaceCount);
+        String name = "<HTML>" + encodeBold(indentation + userField.getStyle() + ": ") + encode(userField.getName()) + "</HTML>";
         NamedObjectContainer<UserField> noc = new NamedObjectContainer<>(userField, name);
         model.add(index, noc);
-    }
-
-    /**
-     *
-     */
-    public void refreshSelected() {
-        //aus der Liste entfernen und wieder hinzufügen, damit der Anzeigename korrekt aktualisert wird
-        int selectedIndex = getSelectedIndex();
-        //Das Element aus der Liste entfernen und an alter Stelle wieder neu hinzufügen,
-        //damit der evtl. geänderte korrekt Name angezeigt wird
-        NamedObjectContainer<UserField> removed = model.remove(selectedIndex);
-        addEntry(removed.getObject(), selectedIndex);
-        setSelectedIndex(selectedIndex);
     }
 
     /**
@@ -95,6 +152,18 @@ public class UserFieldDeclarationDialogFieldList extends JList<NamedObjectContai
      */
     public UserField getSelected() {
         return get(getSelectedIndex());
+    }
+
+    /**
+     * @return the index where a new item will be inserted depending on the
+     *         selection.
+     */
+    public int getNextInsertIndex() {
+        int[] selectedIndices = getSelectedIndices();
+        if (selectedIndices.length == 0) { //nothing selected -> insert after last index
+            return getElementCount();
+        }
+        return selectedIndices[selectedIndices.length - 1] + 1;
     }
 
     /**
@@ -127,15 +196,61 @@ public class UserFieldDeclarationDialogFieldList extends JList<NamedObjectContai
      *
      * @param i
      */
-    private void move(final int i) {
-        int selectedIndex = getSelectedIndex();
-        int newIndex = selectedIndex + i;
-        if (0 <= newIndex && newIndex < model.size()) {
-            UserField userField = get(selectedIndex);
-            model.insertElementAt(model.remove(selectedIndex), newIndex);
-            definitions.insert(userField, newIndex);
-            setSelectedIndex(newIndex);
+    private void move(final int step) {
+        List<NamedObjectContainer<UserField>> selectedValuesList = getSelectedValuesList();
+        int[] selectedIndices = getSelectedIndices();
+        List<Integer> indices = Ints.asList(selectedIndices);
+        if (step > 0) {
+            Collections.reverse(indices);
         }
+        for (int i = 0; i < selectedIndices.length; i++) {
+            int newIndex = selectedIndices[i] + step;
+            if (0 <= newIndex && newIndex < model.size()) {
+                UserField userField = get(selectedIndices[i]);
+                NamedObjectContainer<UserField> element2Move = model.remove(selectedIndices[i]);
+                model.insertElementAt(element2Move, newIndex);
+                definitions.insert(userField, newIndex);
+            }
+        }
+        restoreSelection(selectedValuesList);
+    }
+
+    /**
+     * @return the number of elements in this list
+     */
+    public int getElementCount() {
+        return model.size();
+    }
+
+    /**
+     * @param index
+     * @return
+     */
+    public UserField getUserField(final int index) {
+        NamedObjectContainer<UserField> listItem = model.get(index);
+        return listItem.getObject();
+    }
+
+    /**
+     * @param index
+     * @param style
+     * @return
+     */
+    public boolean hasStyle(final int index, final Style style) {
+        UserField userField = getUserField(index);
+        return userField.hasStyle(style);
+    }
+
+    @Override
+    public String getToolTipText(final MouseEvent e) {
+        Point point = e.getPoint();
+        int indexUnderMouse = locationToIndex(point);
+        NamedObjectContainer<UserField> item = model.get(indexUnderMouse);
+        UserField userField = item.getObject();
+        String description = userField.getDescription();
+        description = description.trim(); // is never null
+        description = description.isEmpty() ? null : getTextAsHTMLLabelText(description);
+        return description;
     }
 
 }

@@ -28,10 +28,10 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
-import de.imise.tool3lgm.graphtools.userfield.UserField;
-import de.imise.tool3lgm.graphtools.userfield.UserField.Style;
-import de.imise.tool3lgm.graphtools.userfield.UserFieldDefinitions;
-import de.imise.tool3lgm.graphtools.userfield.UserFieldTarget;
+import de.imise.tool3lgm.graphtools.userfield.definition.UserField;
+import de.imise.tool3lgm.graphtools.userfield.definition.UserField.Style;
+import de.imise.tool3lgm.graphtools.userfield.definition.UserFieldDefinitions;
+import de.imise.tool3lgm.graphtools.userfield.definition.UserFieldTarget;
 import de.imise.tool3lgm.graphtools.userfield.dialog.definition.panel.AbstractInputPanel;
 import de.imise.tool3lgm.graphtools.userfield.dialog.definition.panel.FormatPanel;
 import de.imise.tool3lgm.graphtools.userfield.dialog.definition.panel.FormulaPanel;
@@ -134,16 +134,13 @@ public final class UserFieldDefinitionDialog extends AbstractPropertyDialog impl
             Class<? extends Node> nodeClass = targetClass.asSubclass(Node.class);
             String displayableClassName = elementsNameBuilder.getDisplayableName(nodeClass);
             sb.append(displayableClassName);
-        } else {
-            if (CoreMetaModel.isEdgeType(targetClass)) {
-                Class<? extends Edge> edgeClass = targetClass.asSubclass(Edge.class);
-                sb.append(elementsNameBuilder.getMetaAssociationName(edgeClass, Direction.FORWARD, ConnectionState.DOUBLE, true, true));
-            } else if (userField.isGlobalOrFormat()) {
-                sb.append(UserFieldDefinitions.getDisplayableGlobalFieldIdentifierName());
-            }
-
+        } else if (CoreMetaModel.isEdgeType(targetClass)) {
+            Class<? extends Edge> edgeClass = targetClass.asSubclass(Edge.class);
+            sb.append(elementsNameBuilder.getMetaAssociationName(edgeClass, Direction.FORWARD, ConnectionState.DOUBLE, true, true));
+        } else if (userField.isGlobal()) {
+            sb.append(getResString("userFieldEditor_global"));
         }
-        sb.append("  ");
+        sb.append("      ");
         label = getResString("attribute_typ");
         sb.append(label);
         sb.append(":  ");
@@ -162,11 +159,11 @@ public final class UserFieldDefinitionDialog extends AbstractPropertyDialog impl
         gbc.weighty = 0.0;
 
         //Kennzahl
-        if (style == UserField.Style.CLASSIFICATION_NUMBER) {
+        if (style == UserField.Style.NUMBER) {
             //Format-Panel
             panelList.add(new FormatPanel(this, userField, definitions));
             //Kennzahlformel
-        } else if (style == UserField.Style.CLASSIFICATION_NUMBER_FORMULA) {
+        } else if (style == UserField.Style.FORMULA) {
             //Formel-Panel
             panelList.add(new FormulaPanel(this, userField, definitions, nameDescripPanel.getNameTextField()));
             //Format-Panel
@@ -177,8 +174,11 @@ public final class UserFieldDefinitionDialog extends AbstractPropertyDialog impl
             panelList.add(new ListValuePanel(userField));
         }
 
-        //Optionen-Panel
-        panelList.add(new OptionPanel(userField));
+        //Optionen-Panel (null if there are no options for this userField)
+        OptionPanel optionPanel = OptionPanel.getOptionPanel(userField);
+        if (optionPanel != null) {
+            panelList.add(optionPanel);
+        }
 
         //Alle Panels hinzufügen
         for (int i = 0; i < panelList.size(); i++) {

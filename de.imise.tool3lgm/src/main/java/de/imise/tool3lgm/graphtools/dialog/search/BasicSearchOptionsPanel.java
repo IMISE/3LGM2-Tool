@@ -40,8 +40,8 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.model.Szenario;
-import de.imise.tool3lgm.graphtools.userfield.UserField;
-import de.imise.tool3lgm.graphtools.userfield.UserField.Style;
+import de.imise.tool3lgm.graphtools.userfield.definition.UserField;
+import de.imise.tool3lgm.graphtools.userfield.definition.UserField.Style;
 import de.imise.tool3lgm.userproperties.UserProperties;
 import de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty;
 import de.imise.util.swing.component.AlphabeticalComboBox;
@@ -344,9 +344,7 @@ public abstract class BasicSearchOptionsPanel extends JPanel implements ItemList
         userFieldStyleComboBox = new AlphabeticalComboBox<>();
         userFieldStyleComboBox.addObject(null, getResString("SEARCH_DIALOG_USERFIELD_type_all"));
         for (Style style : Style.values()) {
-            if (style != Style.FORMAT) {
-                userFieldStyleComboBox.addObject(style);
-            }
+            userFieldStyleComboBox.addObject(style);
         }
         userFieldStyleComboBox.setSelectedIndex(0);
 

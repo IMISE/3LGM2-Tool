@@ -13,7 +13,7 @@ import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 import javax.swing.JScrollPane;
 
-import de.imise.tool3lgm.graphtools.userfield.UserField;
+import de.imise.tool3lgm.graphtools.userfield.definition.UserField;
 import de.imise.util.swing.component.text.ExtendedTextArea;
 import de.imise.util.swing.component.text.ExtendedTextField;
 
