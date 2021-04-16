@@ -118,7 +118,15 @@ public class ToolXMLParser {
         version = extractVersionAndMetaModel(parseStream);
         if (!paste) {
             Tool3lgmModelType modelType = new Tool3lgmModelType(version.metaModelContext, version.modelCategory);
-            gdcoll.setModelType(modelType, false);
+            //For new models of the original metamodel, the default UserProperties
+            //should not be loaded anymore, because they should already be included
+            //(by the new creation of the file) or already removed by the user.
+            //With files with an old version (< 3.6 = 10) they must be loaded
+            //however, since in such files these additional fields can still stand
+            //hardwired in the file and only afterwards to (deletable) user-defined
+            //properties were made.
+            boolean loadDefaultUserProperties = version.lgmVersionIndex < 10;
+            gdcoll.setModelType(modelType, loadDefaultUserProperties);
         }
 
         /* XML Version */
@@ -355,6 +363,9 @@ public class ToolXMLParser {
         return version.xmlVersionIndex >= 0 && version.lgmVersionIndex >= 0 && version.metaModelContext != null;
     }
 
+    /**
+     * @author AXS (16.04.2018)
+     */
     public static class FileVersion {
         public int xmlVersionIndex = -1;
         public int lgmVersionIndex = -1;
@@ -366,6 +377,14 @@ public class ToolXMLParser {
         }
     }
 
+    /**
+     * @param file
+     * @return
+     * @throws FileNotFoundException
+     * @throws IOException
+     * @throws LGMVersionException
+     * @throws XMLVersionException
+     */
     public static FileVersion extractVersionAndMetaModel(final File file) throws FileNotFoundException, IOException, LGMVersionException, XMLVersionException {
         FileInputStream fileInputStream = new FileInputStream(file);
         FileVersion fileVersion = extractVersionAndMetaModel(fileInputStream);
@@ -373,6 +392,11 @@ public class ToolXMLParser {
         return fileVersion;
     }
 
+    /**
+     * @param line
+     * @param prefix
+     * @return
+     */
     private static String getValueInLine(final String line, final String prefix) {
         //Lower case muss sein, weil es Modelle gab, bei denen die prefixe mit Großbuchstaben und dann später nur klein geschrieben wurden
         String lowerCaseLine = line.toLowerCase();
@@ -455,6 +479,10 @@ public class ToolXMLParser {
         return SUPPORTED_XML_VERSIONS[SUPPORTED_XML_VERSIONS.length - 1] + "\n" + getCurrentFileVersion(gdcoll) + "\n";
     }
 
+    /**
+     * @param gdcoll
+     * @return
+     */
     private static final String getCurrentFileVersion(final GDCollection gdcoll) {
         //"<!--Tool3lgmFile"
         StringBuilder sb = new StringBuilder(FILE_VERSION_LINE_START.trim()); //trim() removes the last whitespace
@@ -479,6 +507,10 @@ public class ToolXMLParser {
         return sb.toString();
     }
 
+    /**
+     * @param gdcoll
+     * @return
+     */
     public static final String getCurrentFileVersionBare(final GDCollection gdcoll) {
         String fileVersion = getCurrentFileVersion(gdcoll);
         if (fileVersion.startsWith("<!--")) {

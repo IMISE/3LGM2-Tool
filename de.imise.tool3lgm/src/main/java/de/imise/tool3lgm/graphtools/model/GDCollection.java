@@ -2825,6 +2825,7 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
     /**
      * @return
      */
+    @Override
     public UserFieldDefinitions getUserFieldDefinitions() {
         return userFieldDefinitions;
     }
