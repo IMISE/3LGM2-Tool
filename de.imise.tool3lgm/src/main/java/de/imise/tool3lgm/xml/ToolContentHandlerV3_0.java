@@ -919,8 +919,8 @@ public class ToolContentHandlerV3_0 implements ContentHandler {
                 userField = null;
                 userFieldNumberFormat = null;
 
-            } else if (qName.equals("userFieldName") || qName.equals("userFieldDescription") || qName.equals("userFieldStyle") || qName.equals("userFieldTreeVis") || qName.equals("userFieldStandardValue") || qName.equals("userFieldInternalAccounting")
-                    || qName.equals("userFieldInternalAccountingWeightUserFieldHash") || qName.equals("userFieldFormula") || qName.equals("userFieldFormatHash")) {
+            } else if (qName.equals("userFieldName") || qName.equals("userFieldDescription") || qName.equals("userFieldStyle") || qName.equals("userFieldTreeVis") || qName.equals("userFieldShowDescriptionInDialog") || qName.equals("userFieldStandardValue")
+                    || qName.equals("userFieldInternalAccounting") || qName.equals("userFieldInternalAccountingWeightUserFieldHash") || qName.equals("userFieldFormula") || qName.equals("userFieldFormatHash")) {
                 if (userField == null) {
                     throw new SAXException("Error while parsing definition of userFields: userField shouldn't not be null");
                 }

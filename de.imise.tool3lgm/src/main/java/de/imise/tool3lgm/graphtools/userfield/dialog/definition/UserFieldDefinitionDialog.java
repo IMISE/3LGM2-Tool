@@ -29,9 +29,9 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.userfield.definition.UserField;
+import de.imise.tool3lgm.graphtools.userfield.definition.UserField.Style;
 import de.imise.tool3lgm.graphtools.userfield.definition.UserFieldDefinitions;
 import de.imise.tool3lgm.graphtools.userfield.definition.UserFieldTarget;
-import de.imise.tool3lgm.graphtools.userfield.definition.UserField.Style;
 import de.imise.tool3lgm.graphtools.userfield.dialog.definition.panel.AbstractInputPanel;
 import de.imise.tool3lgm.graphtools.userfield.dialog.definition.panel.FormatPanel;
 import de.imise.tool3lgm.graphtools.userfield.dialog.definition.panel.FormulaPanel;
@@ -174,8 +174,11 @@ public final class UserFieldDefinitionDialog extends AbstractPropertyDialog impl
             panelList.add(new ListValuePanel(userField));
         }
 
-        //Optionen-Panel
-        panelList.add(new OptionPanel(userField));
+        //Optionen-Panel (null if there are no options for this userField)
+        OptionPanel optionPanel = OptionPanel.getOptionPanel(userField);
+        if (optionPanel != null) {
+            panelList.add(optionPanel);
+        }
 
         //Alle Panels hinzufügen
         for (int i = 0; i < panelList.size(); i++) {

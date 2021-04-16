@@ -103,6 +103,8 @@ public class UserFieldXMLContentHandler implements ContentHandler {
 
         } else if (qName.equals("userFieldTreeVis")) {
 
+        } else if (qName.equals("userFieldShowDescriptionInDialog")) {
+
         } else if (qName.equals("userFieldFormula")) {
 
         } else if (qName.equals("userFieldInternalAccounting")) {
@@ -143,8 +145,8 @@ public class UserFieldXMLContentHandler implements ContentHandler {
             userField = null;
             userFieldNumberFormat = null;
 
-        } else if (qName.equals("userFieldName") || qName.equals("userFieldDescription") || qName.equals("userFieldStyle") || qName.equals("userFieldTreeVis") || qName.equals("userFieldStandardValue") || qName.equals("userFieldInternalAccounting")
-                || qName.equals("userFieldInternalAccountingWeightUserFieldHash") || qName.equals("userFieldFormula") || qName.equals("userFieldFormatHash")) {
+        } else if (qName.equals("userFieldName") || qName.equals("userFieldDescription") || qName.equals("userFieldStyle") || qName.equals("userFieldTreeVis") || qName.equals("userFieldShowDescriptionInDialog") || qName.equals("userFieldStandardValue")
+                || qName.equals("userFieldInternalAccounting") || qName.equals("userFieldInternalAccountingWeightUserFieldHash") || qName.equals("userFieldFormula") || qName.equals("userFieldFormatHash")) {
             if (userField == null) {
                 throw new SAXException("Error while parsing definition of userFields: userFielsshouldn't not be equals to null");
             }

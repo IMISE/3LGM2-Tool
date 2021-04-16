@@ -390,6 +390,12 @@ public final class UserField extends NameAndDescriptionTargetAdapter implements 
     private boolean treeVisibility = true;
 
     /**
+     * Gibt an, ob das <code>UserField</code> im Modellbrowser sichtbar sein
+     * soll.
+     */
+    private boolean showDescriptionInDialog = false;
+
+    /**
      * Beinhaltet alle Einträge, die in UserFields mit den Styles ComboBox,
      * RadioButton und CheckBox auftauchen sollen.
      */
@@ -498,6 +504,8 @@ public final class UserField extends NameAndDescriptionTargetAdapter implements 
             }
         } else if (fieldName.equals("userFieldTreeVis")) {
             treeVisibility = Boolean.valueOf(value).booleanValue();
+        } else if (fieldName.equals("userFieldShowDescriptionInDialog")) {
+            showDescriptionInDialog = Boolean.valueOf(value).booleanValue();
         } else if (fieldName.equals("userFieldStandardValue")) {
             addListValue(value);
         } else if (fieldName.equals("userFieldFormula")) {
@@ -798,6 +806,13 @@ public final class UserField extends NameAndDescriptionTargetAdapter implements 
     }
 
     /**
+     * @return
+     */
+    public boolean isShowDescriptionInDialog() {
+        return showDescriptionInDialog;
+    }
+
+    /**
      * Gibt <code>true</code> zurück, falls nur positive Werte erlaubt sind,
      * sonst <code>false</code>
      *
@@ -822,6 +837,13 @@ public final class UserField extends NameAndDescriptionTargetAdapter implements 
      */
     public void setTreeVisibility(final boolean treeVisibility) {
         this.treeVisibility = treeVisibility;
+    }
+
+    /**
+     * @param showDescriptionInDialog
+     */
+    public void setShowDescriptionInDialog(final boolean showDescriptionInDialog) {
+        this.showDescriptionInDialog = showDescriptionInDialog;
     }
 
     ////////////////////////////////////

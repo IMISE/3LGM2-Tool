@@ -45,12 +45,12 @@ import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.model.LGMGraphDocument;
 import de.imise.tool3lgm.graphtools.model.Szenario;
+import de.imise.tool3lgm.graphtools.userfield.WeightReplacer;
 import de.imise.tool3lgm.graphtools.userfield.definition.UserField;
+import de.imise.tool3lgm.graphtools.userfield.definition.UserField.Style;
 import de.imise.tool3lgm.graphtools.userfield.definition.UserFieldDefinitions;
 import de.imise.tool3lgm.graphtools.userfield.definition.UserFieldNumberFormat;
 import de.imise.tool3lgm.graphtools.userfield.definition.UserFieldTarget;
-import de.imise.tool3lgm.graphtools.userfield.definition.UserField.Style;
-import de.imise.tool3lgm.graphtools.userfield.WeightReplacer;
 import de.imise.tool3lgm.graphtools.view.container.BendpointContainer;
 import de.imise.tool3lgm.graphtools.view.container.EdgeContainer;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
@@ -325,6 +325,7 @@ public class ToolXMLWriter extends IntendingXMLWriter {
         Style style = uf.getStyle();
         writeElement("userFieldStyle", style.name());
         writeElement("userFieldTreeVis", String.valueOf(uf.isTreeVisibility()));
+        writeElement("userFieldShowDescriptionInDialog", String.valueOf(uf.isShowDescriptionInDialog()));
         for (int i = 0; i < uf.getListValuesCount(); i++) {
             writeElement("userFieldStandardValue", uf.getListValueAt(i));
         }
