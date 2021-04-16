@@ -4,7 +4,10 @@ import static de.imise.tool3lgm.graphtools.userfield.definition.UserField.Style.
 import static de.imise.tool3lgm.graphtools.userfield.definition.UserField.Style.TAB;
 import static de.imise.util.htmlxml.HTMLConverter.encode;
 import static de.imise.util.htmlxml.HTMLConverter.encodeBold;
+import static de.imise.util.htmlxml.HTMLConverter.getTextAsHTMLLabelText;
 
+import java.awt.Point;
+import java.awt.event.MouseEvent;
 import java.util.Collections;
 import java.util.List;
 
@@ -236,6 +239,18 @@ public class UserFieldDeclarationDialogFieldList extends JList<NamedObjectContai
     public boolean hasStyle(final int index, final Style style) {
         UserField userField = getUserField(index);
         return userField.hasStyle(style);
+    }
+
+    @Override
+    public String getToolTipText(final MouseEvent e) {
+        Point point = e.getPoint();
+        int indexUnderMouse = locationToIndex(point);
+        NamedObjectContainer<UserField> item = model.get(indexUnderMouse);
+        UserField userField = item.getObject();
+        String description = userField.getDescription();
+        description = description.trim(); // is never null
+        description = description.isEmpty() ? null : getTextAsHTMLLabelText(description);
+        return description;
     }
 
 }
