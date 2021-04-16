@@ -123,19 +123,44 @@ public class HTMLConverter {
     }
 
     /**
-     * @param s
+     * @param o
      * @return
      */
-    public static final String getTextAsHTMLLabelText(final String s) {
-        return "<HTML>" + getDecimalEncodedHTMLString(s, true) + "</HTML>";
+    public static final String getTextAsHTMLLabelText(final Object o) {
+        String s = String.valueOf(o);
+        return "<HTML>" + encode(s) + "</HTML>";
     }
 
     /**
-     * @param s
+     * @param o
      * @return
      */
-    public static final String getTextAsHTMLLabelTextBold(final String s) {
-        return "<HTML><B>" + getDecimalEncodedHTMLString(s, true) + "</B></HTML>";
+    public static final String getTextAsHTMLLabelTextBold(final Object o) {
+        String s = String.valueOf(o);
+        return "<HTML>" + encodeBold(s) + "</HTML>";
+    }
+
+    /**
+     * @param o
+     * @return
+     */
+    public static final String encodeBold(final Object o) {
+        String s = String.valueOf(o);
+        return "<B>" + encode(s) + "</B>";
+    }
+
+    /**
+     * Convinience function for
+     * {@link #getDecimalEncodedHTMLString(String, boolean)} with the boolean
+     * <code>true</code>
+     *
+     * @param o
+     * @return
+     * @see #getDecimalEncodedHTMLString(String, boolean)
+     */
+    public static final String encode(final Object o) {
+        String s = String.valueOf(o);
+        return getDecimalEncodedHTMLString(s, true);
     }
 
     /**

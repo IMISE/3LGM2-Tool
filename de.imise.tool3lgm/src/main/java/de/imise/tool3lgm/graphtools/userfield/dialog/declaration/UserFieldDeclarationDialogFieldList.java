@@ -2,6 +2,8 @@ package de.imise.tool3lgm.graphtools.userfield.dialog.declaration;
 
 import static de.imise.tool3lgm.graphtools.userfield.definition.UserField.Style.GROUP;
 import static de.imise.tool3lgm.graphtools.userfield.definition.UserField.Style.TAB;
+import static de.imise.util.htmlxml.HTMLConverter.encode;
+import static de.imise.util.htmlxml.HTMLConverter.encodeBold;
 
 import java.util.Collections;
 import java.util.List;
@@ -137,7 +139,7 @@ public class UserFieldDeclarationDialogFieldList extends JList<NamedObjectContai
     private void addEntry(final UserField userField, final int index, final int indent) {
         int whiteSpaceCount = indent * 6;
         String indentation = StringUtils.fillToMinLenght("", whiteSpaceCount);
-        String name = indentation + userField.getStyle() + ": " + userField.getName();
+        String name = "<HTML>" + encodeBold(indentation + userField.getStyle() + ": ") + encode(userField.getName()) + "</HTML>";
         NamedObjectContainer<UserField> noc = new NamedObjectContainer<>(userField, name);
         model.add(index, noc);
     }
