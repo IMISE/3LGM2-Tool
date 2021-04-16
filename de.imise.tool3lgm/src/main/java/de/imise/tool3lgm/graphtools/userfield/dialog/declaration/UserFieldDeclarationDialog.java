@@ -263,8 +263,8 @@ public final class UserFieldDeclarationDialog extends AbstractUserFieldDeclarati
                     returnValue = 1;
                     //den Definitions sagen, dass sich was geändert hat
                     definitions.getCollection().getUserFieldDefinitions().initReset();
-                    //select the new UserField
-                    fieldList.setSelectedIndex(nextInsertIndex);
+                    //select the new UserField (if the default tab was added for the very first element in the list-> go to index 1)
+                    fieldList.setSelectedIndex(nextInsertIndex == 0 && !userField.hasStyle(TAB) ? 1 : nextInsertIndex);
                     //wenn die Defnition der neuen Kennzahl oder Formel abgebrochen wurde
                 } else {
                     //wieder aus den Definitions entfernen

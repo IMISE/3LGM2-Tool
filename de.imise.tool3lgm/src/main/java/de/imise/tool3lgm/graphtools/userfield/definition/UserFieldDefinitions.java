@@ -173,18 +173,7 @@ public final class UserFieldDefinitions extends UserFieldDefinitionChangeHandler
             String id = addedDefaultTabUserField.getID();
             idToUserFieldMap.put(id, addedDefaultTabUserField);
         }
-
-        String id = userField.getID();
-        idToUserFieldMap.put(id, userField);
-        UserFieldNumberFormat numberFormat = userField.getNumberFormat();
-        if (numberFormat != null) {
-            add(numberFormat);
-        }
-        //Formeln extra merken
-        if (userField.hasStyle(UserField.Style.FORMULA)) {
-            formulaUserFieldTargetSpecificList.add(userField);
-            setConsistencyUnknown();
-        }
+        registerInternal(userField);
     }
 
     /**
@@ -198,10 +187,23 @@ public final class UserFieldDefinitions extends UserFieldDefinitionChangeHandler
         Class<? extends UserFieldTarget> targetClass = userField.getTargetClass();
         UserFieldList userFields = classToUserFieldTargetSpecificListMap.get(targetClass);
         if (userFields == null) {
+            add(userField);
             return;
         }
         userFields.insert(userField, index);
-        idToUserFieldMap.put(userField.getID(), userField);
+        registerInternal(userField);
+    }
+
+    /**
+     * @param userField
+     */
+    private void registerInternal(final UserField userField) {
+        String id = userField.getID();
+        idToUserFieldMap.put(id, userField);
+        UserFieldNumberFormat numberFormat = userField.getNumberFormat();
+        if (numberFormat != null) {
+            add(numberFormat);
+        }
         //Formeln extra merken
         if (userField.hasStyle(UserField.Style.FORMULA)) {
             formulaUserFieldTargetSpecificList.add(userField);

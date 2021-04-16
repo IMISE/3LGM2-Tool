@@ -245,11 +245,14 @@ public class UserFieldDeclarationDialogFieldList extends JList<NamedObjectContai
     public String getToolTipText(final MouseEvent e) {
         Point point = e.getPoint();
         int indexUnderMouse = locationToIndex(point);
-        NamedObjectContainer<UserField> item = model.get(indexUnderMouse);
-        UserField userField = item.getObject();
-        String description = userField.getDescription();
-        description = description.trim(); // is never null
-        description = description.isEmpty() ? null : getTextAsHTMLLabelText(description);
+        String description = null;
+        if (indexUnderMouse >= 0) {
+            NamedObjectContainer<UserField> item = model.get(indexUnderMouse);
+            UserField userField = item.getObject();
+            description = userField.getDescription();
+            description = description.trim(); // is never null
+            description = description.isEmpty() ? null : getTextAsHTMLLabelText(description);
+        }
         return description;
     }
 
