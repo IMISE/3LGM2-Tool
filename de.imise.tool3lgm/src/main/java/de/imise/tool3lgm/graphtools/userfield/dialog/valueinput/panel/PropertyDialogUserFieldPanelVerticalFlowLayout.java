@@ -1,9 +1,9 @@
 package de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.panel;
 
 import static de.imise.tool3lgm.graphtools.userfield.definition.UserField.Style.GROUP;
+import static de.imise.tool3lgm.graphtools.userfield.definition.UserField.Style.SEPARATOR;
 import static de.imise.tool3lgm.graphtools.userfield.definition.UserField.Style.TAB;
 
-import java.awt.BorderLayout;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -11,12 +11,7 @@ import java.awt.GridBagLayout;
 import javax.swing.BorderFactory;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JSeparator;
-import javax.swing.border.Border;
 import javax.swing.border.TitledBorder;
-
-import com.google.common.base.Strings;
 
 import de.imise.tool3lgm.graphtools.dialog.element.AbstractElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.userfield.definition.UserField;
@@ -41,15 +36,7 @@ public class PropertyDialogUserFieldPanelVerticalFlowLayout extends PropertyDial
      */
     @Override
     protected void create(final UserFieldList tabDefinition) {
-        setLayout(new BorderLayout());
-        Border mainPanelBorder = BorderFactory.createEmptyBorder(5, 5, 5, 5);
-        setBorder(mainPanelBorder);
-        JPanel mainPanel = new JPanel(new GridBagLayout());
-        mainPanelBorder = BorderFactory.createEmptyBorder(5, 5, 5, 5);
-        mainPanel.setBorder(mainPanelBorder);
-        JScrollPane scrollPane = getScrollPane(mainPanel);
-        add(scrollPane);
-
+        JPanel mainPanel = createMainPanel();
         GridBagConstraints constraints = getDefaultConstraints();
 
         JPanel currentPanel = mainPanel;
@@ -69,13 +56,15 @@ public class PropertyDialogUserFieldPanelVerticalFlowLayout extends PropertyDial
                 titledBorder.setTitleFont(titleFont);
                 currentPanel.setBorder(titledBorder);
                 addDescriptionLabel(userField, currentPanel, constraints);
-                constraints.insets.top = 5;
+                constraints.insets.top = DEFAULT_INSETS;
                 mainPanel.add(currentPanel, constraints);
                 constraints.insets.top = 0;
+            } else if (userField.hasStyle(SEPARATOR)) {
+                addSeparator(userField, currentPanel, constraints);
             } else {
                 JComponent label = getTitleLabel(userField);
                 JComponent editor = getEditor(userField);
-                constraints.insets.top = 5;
+                constraints.insets.top = DEFAULT_INSETS;
                 currentPanel.add(label, constraints);
                 constraints.insets.top = 0;
                 constraints.gridy++;
@@ -85,27 +74,6 @@ public class PropertyDialogUserFieldPanelVerticalFlowLayout extends PropertyDial
             }
         }
         addFillSpacePanel(mainPanel, constraints);
-    }
-
-    /**
-     * @param userField
-     * @param panel
-     * @param constraints
-     */
-    private boolean addDescriptionLabel(final UserField userField, final JPanel panel, final GridBagConstraints constraints) {
-        String description = userField.getDescription();
-        if (!Strings.isNullOrEmpty(description)) {
-            if (userField.isShowDescriptionInDialog()) {
-                panel.add(getDescriptionLabel(description), constraints);
-                constraints.gridy++;
-                if (userField.hasStyle(TAB) || userField.hasStyle(GROUP)) {
-                    panel.add(new JSeparator(), constraints);
-                    constraints.gridy++;
-                }
-                return true;
-            }
-        }
-        return false;
     }
 
 }

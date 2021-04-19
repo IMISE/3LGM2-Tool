@@ -7,6 +7,7 @@ import static de.imise.tool3lgm.graphtools.userfield.definition.UserField.EMPTY_
 import static de.imise.tool3lgm.graphtools.userfield.definition.UserField.Style.CHECK_BOX;
 import static de.imise.tool3lgm.graphtools.userfield.definition.UserField.Style.COMBO_BOX;
 import static de.imise.tool3lgm.graphtools.userfield.definition.UserField.Style.FORMULA;
+import static de.imise.tool3lgm.graphtools.userfield.definition.UserField.Style.GROUP;
 import static de.imise.tool3lgm.graphtools.userfield.definition.UserField.Style.HYPERLINK;
 import static de.imise.tool3lgm.graphtools.userfield.definition.UserField.Style.ID;
 import static de.imise.tool3lgm.graphtools.userfield.definition.UserField.Style.MULTI_LINE;
@@ -14,11 +15,13 @@ import static de.imise.tool3lgm.graphtools.userfield.definition.UserField.Style.
 import static de.imise.tool3lgm.graphtools.userfield.definition.UserField.Style.RADIO_BUTTON;
 import static de.imise.tool3lgm.graphtools.userfield.definition.UserField.Style.SEPARATOR;
 import static de.imise.tool3lgm.graphtools.userfield.definition.UserField.Style.SINGLE_LINE;
+import static de.imise.tool3lgm.graphtools.userfield.definition.UserField.Style.TAB;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -43,7 +46,10 @@ import javax.swing.JSeparator;
 import javax.swing.JTextField;
 import javax.swing.JViewport;
 import javax.swing.UIManager;
+import javax.swing.border.Border;
 import javax.swing.text.JTextComponent;
+
+import com.google.common.base.Strings;
 
 import de.imise.tool3lgm.graphtools.consistency.error.type.AbstractConsistencyError;
 import de.imise.tool3lgm.graphtools.consistency.error.type.AbstractIDError;
@@ -86,6 +92,11 @@ import de.imise.util.swing.component.text.NumberTextField;
 public abstract class PropertyDialogUserFieldPanel extends ElementDialogPanel implements DisplayAndFixConsistencyErrorPanel {
 
     /**
+     * Default Insets and empty border spaces
+     */
+    protected static final int DEFAULT_INSETS = 5;
+
+    /**
      *
      */
     protected final List<UserFieldEditorComponent> fieldComponents = new ArrayList<>();
@@ -112,7 +123,7 @@ public abstract class PropertyDialogUserFieldPanel extends ElementDialogPanel im
         constraints.anchor = GridBagConstraints.NORTHWEST;
         constraints.gridx = 0;
         constraints.gridy = 0;
-        constraints.gridwidth = 1;
+        constraints.gridwidth = 3;
         constraints.weighty = 0d;
         constraints.weightx = 1d;
         return constraints;
@@ -175,6 +186,22 @@ public abstract class PropertyDialogUserFieldPanel extends ElementDialogPanel im
     protected abstract void create(final UserFieldList tabDefinition);
 
     /**
+     * @return the mainPanel with BridBagLayout in a scrollpane and with an
+     *         empty border
+     */
+    protected JPanel createMainPanel() {
+        setLayout(new BorderLayout());
+        Border mainPanelBorder = BorderFactory.createEmptyBorder(DEFAULT_INSETS, DEFAULT_INSETS, DEFAULT_INSETS, DEFAULT_INSETS);
+        setBorder(mainPanelBorder);
+        JPanel mainPanel = new JPanel(new GridBagLayout());
+        mainPanelBorder = BorderFactory.createEmptyBorder(DEFAULT_INSETS, DEFAULT_INSETS, DEFAULT_INSETS, DEFAULT_INSETS);
+        mainPanel.setBorder(mainPanelBorder);
+        JScrollPane scrollPane = getScrollPane(mainPanel);
+        add(scrollPane);
+        return mainPanel;
+    }
+
+    /**
      * @param field
      * @return
      */
@@ -189,6 +216,27 @@ public abstract class PropertyDialogUserFieldPanel extends ElementDialogPanel im
         }
         name = HTMLConverter.getTextAsHTMLLabelTextBold(name);
         return new JLabel(name);
+    }
+
+    /**
+     * @param userField
+     * @param panel
+     * @param constraints
+     */
+    protected boolean addDescriptionLabel(final UserField userField, final JPanel panel, final GridBagConstraints constraints) {
+        String description = userField.getDescription();
+        if (!Strings.isNullOrEmpty(description)) {
+            if (userField.isShowDescriptionInDialog()) {
+                panel.add(getDescriptionLabel(description), constraints);
+                constraints.gridy++;
+                if (userField.hasStyle(TAB) || userField.hasStyle(GROUP)) {
+                    panel.add(new JSeparator(), constraints);
+                    constraints.gridy++;
+                }
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
@@ -209,6 +257,36 @@ public abstract class PropertyDialogUserFieldPanel extends ElementDialogPanel im
         Font font = UIManager.getFont("Label.font");
         font = font.deriveFont(Font.ITALIC);
         return font;
+    }
+
+    /**
+     * @param userField
+     * @param panel
+     * @param constraints
+     */
+    protected void addSeparator(final UserField userField, final JPanel panel, final GridBagConstraints constraints) {
+        String name = userField.getName();
+        name = name == null ? "" : name.trim();
+        constraints.insets.top = DEFAULT_INSETS;
+        if (name.isEmpty()) {
+            panel.add(new JSeparator(), constraints);
+        } else {
+            constraints.anchor = GridBagConstraints.SOUTHWEST;
+            constraints.gridwidth = 1;
+            panel.add(new JSeparator(), constraints);
+            constraints.gridx++;
+            constraints.weightx = 0d;
+            panel.add(getTitleLabel(userField), constraints);
+            constraints.gridx++;
+            constraints.weightx = 1d;
+            panel.add(new JSeparator(), constraints);
+            constraints.gridx = 0;
+            constraints.gridwidth = 3;
+            constraints.anchor = GridBagConstraints.NORTHWEST;
+        }
+        constraints.gridy++;
+        addDescriptionLabel(userField, panel, constraints);
+        constraints.insets.top = 0;
     }
 
     /**
