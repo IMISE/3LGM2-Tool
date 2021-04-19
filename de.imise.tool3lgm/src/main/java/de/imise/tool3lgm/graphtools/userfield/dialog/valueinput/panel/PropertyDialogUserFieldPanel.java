@@ -47,6 +47,7 @@ import javax.swing.JTextField;
 import javax.swing.JViewport;
 import javax.swing.UIManager;
 import javax.swing.border.Border;
+import javax.swing.border.TitledBorder;
 import javax.swing.text.JTextComponent;
 
 import com.google.common.base.Strings;
@@ -89,7 +90,7 @@ import de.imise.util.swing.component.text.NumberTextField;
  *
  * @author Thomas Rudert, xhb, AXS
  */
-public abstract class PropertyDialogUserFieldPanel extends ElementDialogPanel implements DisplayAndFixConsistencyErrorPanel {
+public class PropertyDialogUserFieldPanel extends ElementDialogPanel implements DisplayAndFixConsistencyErrorPanel {
 
     /**
      * Default Insets and empty border spaces
@@ -107,10 +108,16 @@ public abstract class PropertyDialogUserFieldPanel extends ElementDialogPanel im
     private final PropertyDialogUserFieldPanelChangeListener changeHandler = new PropertyDialogUserFieldPanelChangeListener(this);
 
     /**
+     *
+     */
+    protected final JPanel mainPanel;
+
+    /**
      * @param propertyDialog
      */
     public PropertyDialogUserFieldPanel(final AbstractElementPropertyDialog propertyDialog, final UserFieldList tabDefinition) {
         super(propertyDialog);
+        mainPanel = createMainPanel();
         create(tabDefinition);
     }
 
@@ -183,7 +190,24 @@ public abstract class PropertyDialogUserFieldPanel extends ElementDialogPanel im
      * Visualisiert die UserField mit ihren entsprechenden Style-Vorgaben im
      * <code>JPanel</code>.
      */
-    protected abstract void create(final UserFieldList tabDefinition);
+    protected final void create(final UserFieldList tabDefinition) {
+        GridBagConstraints constraints = getDefaultConstraints();
+        JPanel currentPanel = mainPanel;
+
+        //Attributdefinitionen des GraphDocumentes holen
+        for (UserField userField : tabDefinition) {
+            if (userField.hasStyle(TAB)) {
+                addTab(userField, constraints);
+            } else if (userField.hasStyle(GROUP)) {
+                currentPanel = addGroup(userField, constraints);
+            } else if (userField.hasStyle(SEPARATOR)) {
+                addSeparator(userField, currentPanel, constraints);
+            } else {
+                addAttribute(userField, currentPanel, constraints);
+            }
+        }
+        addFillSpacePanel(mainPanel, constraints);
+    }
 
     /**
      * @return the mainPanel with BridBagLayout in a scrollpane and with an
@@ -199,6 +223,52 @@ public abstract class PropertyDialogUserFieldPanel extends ElementDialogPanel im
         JScrollPane scrollPane = getScrollPane(mainPanel);
         add(scrollPane);
         return mainPanel;
+    }
+
+    /**
+     * @param userField
+     * @param constraints
+     */
+    protected void addTab(final UserField userField, final GridBagConstraints constraints) {
+        String tabName = userField.getName();
+        setName(tabName);
+        addDescriptionLabel(userField, mainPanel, constraints);
+    }
+
+    /**
+     * @param userField
+     * @param constraints
+     */
+    protected JPanel addGroup(final UserField userField, final GridBagConstraints constraints) {
+        JPanel panel = new JPanel(new GridBagLayout());
+        String name = userField.getName();
+        TitledBorder titledBorder = BorderFactory.createTitledBorder(name);
+        Font titleFont = titledBorder.getTitleFont();
+        titleFont = deriveFont(titleFont, 1, true, true);
+        titledBorder.setTitleFont(titleFont);
+        panel.setBorder(titledBorder);
+        addDescriptionLabel(userField, panel, constraints);
+        constraints.insets.top = DEFAULT_INSETS;
+        mainPanel.add(panel, constraints);
+        constraints.insets.top = 0;
+        return panel;
+    }
+
+    /**
+     * @param userField
+     * @param panel
+     * @param constraints
+     */
+    protected void addAttribute(final UserField userField, final JPanel panel, final GridBagConstraints constraints) {
+        JComponent label = getTitleLabel(userField);
+        JComponent editor = getEditor(userField);
+        constraints.insets.top = DEFAULT_INSETS;
+        panel.add(label, constraints);
+        constraints.insets.top = 0;
+        constraints.gridy++;
+        addDescriptionLabel(userField, panel, constraints);
+        panel.add(editor, constraints);
+        constraints.gridy += constraints.gridheight;
     }
 
     /**
