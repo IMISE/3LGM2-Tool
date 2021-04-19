@@ -19,7 +19,6 @@ import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
-import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -113,10 +112,9 @@ public abstract class PropertyDialogUserFieldPanel extends ElementDialogPanel im
         constraints.anchor = GridBagConstraints.NORTHWEST;
         constraints.gridx = 0;
         constraints.gridy = 0;
-        constraints.gridwidth = 2;
+        constraints.gridwidth = 1;
         constraints.weighty = 0d;
         constraints.weightx = 1d;
-        constraints.insets = new Insets(1, 1, 1, 0);
         return constraints;
     }
 

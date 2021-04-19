@@ -45,13 +45,12 @@ public class PropertyDialogUserFieldPanelVerticalFlowLayout extends PropertyDial
         Border mainPanelBorder = BorderFactory.createEmptyBorder(5, 5, 5, 5);
         setBorder(mainPanelBorder);
         JPanel mainPanel = new JPanel(new GridBagLayout());
-        mainPanelBorder = BorderFactory.createEmptyBorder(0, 5, 5, 5);
+        mainPanelBorder = BorderFactory.createEmptyBorder(5, 5, 5, 5);
         mainPanel.setBorder(mainPanelBorder);
         JScrollPane scrollPane = getScrollPane(mainPanel);
         add(scrollPane);
 
         GridBagConstraints constraints = getDefaultConstraints();
-        constraints.insets.top = 5;
 
         JPanel currentPanel = mainPanel;
 
@@ -70,17 +69,19 @@ public class PropertyDialogUserFieldPanelVerticalFlowLayout extends PropertyDial
                 titledBorder.setTitleFont(titleFont);
                 currentPanel.setBorder(titledBorder);
                 addDescriptionLabel(userField, currentPanel, constraints);
+                constraints.insets.top = 5;
                 mainPanel.add(currentPanel, constraints);
+                constraints.insets.top = 0;
             } else {
                 JComponent label = getTitleLabel(userField);
                 JComponent editor = getEditor(userField);
+                constraints.insets.top = 5;
                 currentPanel.add(label, constraints);
-                constraints.gridy++;
                 constraints.insets.top = 0;
+                constraints.gridy++;
                 addDescriptionLabel(userField, currentPanel, constraints);
                 currentPanel.add(editor, constraints);
                 constraints.gridy += constraints.gridheight;
-                constraints.insets.top = 5;
             }
         }
         addFillSpacePanel(mainPanel, constraints);
