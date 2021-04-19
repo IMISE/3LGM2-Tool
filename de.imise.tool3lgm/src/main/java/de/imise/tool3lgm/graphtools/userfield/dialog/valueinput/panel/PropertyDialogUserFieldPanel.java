@@ -51,6 +51,8 @@ import javax.swing.border.Border;
 import javax.swing.border.TitledBorder;
 import javax.swing.text.JTextComponent;
 
+import com.google.common.base.Strings;
+
 import de.imise.tool3lgm.graphtools.consistency.error.type.AbstractConsistencyError;
 import de.imise.tool3lgm.graphtools.consistency.error.type.AbstractIDError;
 import de.imise.tool3lgm.graphtools.dialog.element.AbstractElementPropertyDialog;
@@ -248,14 +250,17 @@ public class PropertyDialogUserFieldPanel extends ElementDialogPanel implements 
      * @param constraints
      */
     private boolean addDescriptionLabel(final UserField userField, final JPanel panel, final GridBagConstraints constraints) {
-        if (userField.isShowDescriptionInDialog()) {
-            panel.add(getDescriptionLabel(userField), constraints);
-            constraints.gridy++;
-            if (userField.hasStyle(TAB) || userField.hasStyle(GROUP)) {
-                panel.add(new JSeparator(), constraints);
+        String description = userField.getDescription();
+        if (!Strings.isNullOrEmpty(description)) {
+            if (userField.isShowDescriptionInDialog()) {
+                panel.add(getDescriptionLabel(description), constraints);
                 constraints.gridy++;
+                if (userField.hasStyle(TAB) || userField.hasStyle(GROUP)) {
+                    panel.add(new JSeparator(), constraints);
+                    constraints.gridy++;
+                }
+                return true;
             }
-            return true;
         }
         return false;
     }
@@ -264,8 +269,7 @@ public class PropertyDialogUserFieldPanel extends ElementDialogPanel implements 
      * @param description
      * @return
      */
-    private JLabel getDescriptionLabel(final UserField userField) {
-        String description = userField.getDescription();
+    private JLabel getDescriptionLabel(String description) {
         description = HTMLConverter.getTextAsHTMLLabelText(description);
         JLabel label = new JLabel(description);
         label.setFont(getDescriptionFont());
