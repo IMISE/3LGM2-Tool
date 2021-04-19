@@ -45,6 +45,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
 import javax.swing.JTextField;
 import javax.swing.JViewport;
+import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 import javax.swing.border.Border;
 import javax.swing.border.TitledBorder;
@@ -64,6 +65,7 @@ import de.imise.tool3lgm.graphtools.userfield.definition.UserField;
 import de.imise.tool3lgm.graphtools.userfield.definition.UserField.Style;
 import de.imise.tool3lgm.graphtools.userfield.definition.UserFieldList;
 import de.imise.util.BrowseUtils;
+import de.imise.util.Sys;
 import de.imise.util.htmlxml.HTMLConverter;
 import de.imise.util.swing.component.AlphabeticalComboBox;
 import de.imise.util.swing.component.text.ExtendedTextArea;
@@ -93,9 +95,22 @@ import de.imise.util.swing.component.text.NumberTextField;
 public class PropertyDialogUserFieldPanel extends ElementDialogPanel implements DisplayAndFixConsistencyErrorPanel {
 
     /**
+     * These boolean could be an User-Option. If <code>true</code> the Attibutes
+     * in the PropertyDialogs will be displayed with the label and the editor
+     * always in one line. If <code>false</code> they will be presented one
+     * below the other.
+     */
+    private final boolean showAttributeLabelAndEditorSideBySide = true;
+
+    /**
      * Default Insets and empty border spaces
      */
     protected static final int DEFAULT_INSETS = 5;
+
+    /**
+     *
+     */
+    private static final int DEFAULT_CONTRAINTS_ANCHOR = GridBagConstraints.CENTER;
 
     /**
      *
@@ -127,10 +142,11 @@ public class PropertyDialogUserFieldPanel extends ElementDialogPanel implements 
     protected GridBagConstraints getDefaultConstraints() {
         GridBagConstraints constraints = new GridBagConstraints();
         constraints.fill = GridBagConstraints.HORIZONTAL;
-        constraints.anchor = GridBagConstraints.NORTHWEST;
+        constraints.anchor = DEFAULT_CONTRAINTS_ANCHOR;
         constraints.gridx = 0;
         constraints.gridy = 0;
-        constraints.gridwidth = 3;
+        constraints.gridwidth = 2;
+        constraints.gridheight = 1;
         constraints.weighty = 0d;
         constraints.weightx = 1d;
         return constraints;
@@ -263,12 +279,26 @@ public class PropertyDialogUserFieldPanel extends ElementDialogPanel implements 
         JComponent label = getTitleLabel(userField);
         JComponent editor = getEditor(userField);
         constraints.insets.top = DEFAULT_INSETS;
-        panel.add(label, constraints);
-        constraints.insets.top = 0;
-        constraints.gridy++;
-        addDescriptionLabel(userField, panel, constraints);
-        panel.add(editor, constraints);
-        constraints.gridy += constraints.gridheight;
+        if (showAttributeLabelAndEditorSideBySide) {
+            constraints.gridwidth = 1;
+            constraints.weightx = 0d;
+            constraints.insets.right = DEFAULT_INSETS;
+            panel.add(label, constraints);
+            constraints.gridx++;
+            constraints.weightx = 1d;
+            constraints.insets.right = 0;
+            panel.add(editor, constraints);
+            constraints.gridy++;
+            addDescriptionLabel(userField, panel, constraints);
+            constraints.gridx = 0;
+            constraints.gridwidth = 2;
+        } else {
+            panel.add(label, constraints);
+            constraints.gridy++;
+            addDescriptionLabel(userField, panel, constraints);
+            panel.add(editor, constraints);
+            constraints.gridy++;
+        }
     }
 
     /**
@@ -285,7 +315,8 @@ public class PropertyDialogUserFieldPanel extends ElementDialogPanel implements 
             }
         }
         name = HTMLConverter.getTextAsHTMLLabelTextBold(name);
-        return new JLabel(name);
+        JLabel label = new JLabel(name, showAttributeLabelAndEditorSideBySide ? SwingConstants.RIGHT : SwingConstants.LEFT);
+        return label;
     }
 
     /**
@@ -297,12 +328,14 @@ public class PropertyDialogUserFieldPanel extends ElementDialogPanel implements 
         String description = userField.getDescription();
         if (!Strings.isNullOrEmpty(description)) {
             if (userField.isShowDescriptionInDialog()) {
+                constraints.insets.top = 0;
                 panel.add(getDescriptionLabel(description), constraints);
                 constraints.gridy++;
                 if (userField.hasStyle(TAB) || userField.hasStyle(GROUP)) {
                     panel.add(new JSeparator(), constraints);
                     constraints.gridy++;
                 }
+                constraints.insets.top = DEFAULT_INSETS;
                 return true;
             }
         }
@@ -341,18 +374,20 @@ public class PropertyDialogUserFieldPanel extends ElementDialogPanel implements 
         if (name.isEmpty()) {
             panel.add(new JSeparator(), constraints);
         } else {
-            constraints.anchor = GridBagConstraints.SOUTHWEST;
-            constraints.gridwidth = 1;
-            panel.add(new JSeparator(), constraints);
-            constraints.gridx++;
-            constraints.weightx = 0d;
-            panel.add(getTitleLabel(userField), constraints);
-            constraints.gridx++;
-            constraints.weightx = 1d;
-            panel.add(new JSeparator(), constraints);
-            constraints.gridx = 0;
-            constraints.gridwidth = 3;
-            constraints.anchor = GridBagConstraints.NORTHWEST;
+            JPanel separatorPanel = new JPanel(new GridBagLayout());
+            GridBagConstraints gbc = getDefaultConstraints();
+            gbc.gridwidth = 1;
+            gbc.anchor = GridBagConstraints.SOUTH;
+            separatorPanel.add(new JSeparator(), gbc);
+            gbc.gridx++;
+            gbc.weightx = 0d;
+            gbc.anchor = DEFAULT_CONTRAINTS_ANCHOR;
+            separatorPanel.add(getTitleLabel(userField), gbc);
+            gbc.gridx++;
+            gbc.weightx = 1d;
+            gbc.anchor = GridBagConstraints.SOUTH;
+            separatorPanel.add(new JSeparator(), gbc);
+            panel.add(separatorPanel, constraints);
         }
         constraints.gridy++;
         addDescriptionLabel(userField, panel, constraints);
@@ -393,9 +428,7 @@ public class PropertyDialogUserFieldPanel extends ElementDialogPanel implements 
         String value = getFormattedValue(field);
         UserField.Style style = field.getStyle();
         JComponent editorComponent = null;
-        if (style == SEPARATOR) {
-            editorComponent = new JSeparator();
-        } else if (style == SINGLE_LINE || style == ID) {
+        if (style == SINGLE_LINE || style == ID) {
             ExtendedTextField textField = new ExtendedTextField(value);
             editorComponent = textField;
         } else if (style == MULTI_LINE) {
@@ -746,7 +779,7 @@ public class PropertyDialogUserFieldPanel extends ElementDialogPanel implements 
         System.err.println("ipady = " + c.ipady);
         System.err.println("weightx = " + c.weightx);
         System.err.println("weighty = " + c.weighty);
-        System.err.println();
+        Sys.errm(1, 1, null);
     }
 
 }
