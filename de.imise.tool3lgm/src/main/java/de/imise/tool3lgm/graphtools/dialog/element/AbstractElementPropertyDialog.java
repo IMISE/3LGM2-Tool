@@ -49,6 +49,7 @@ import de.imise.tool3lgm.graphtools.userfield.definition.UserFieldDefinitions;
 import de.imise.tool3lgm.graphtools.userfield.definition.UserFieldList;
 import de.imise.tool3lgm.graphtools.userfield.definition.UserFieldTarget;
 import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.panel.PropertyDialogUserFieldPanel;
+import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.panel.PropertyDialogUserFieldPanelVerticalFlowLayout;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 
 /**
@@ -160,7 +161,7 @@ public class AbstractElementPropertyDialog extends AbstractTabbedPropertyDialog 
         Class<? extends ModelElement> modelElementClass = getModelElementClass();
         List<UserFieldList> tabSubLists = userFieldDefinitions.getTabSubLists(modelElementClass);
         for (UserFieldList userFieldList : tabSubLists) {
-            PropertyDialogUserFieldPanel userFieldPanel = new PropertyDialogUserFieldPanel(this, userFieldList);
+            PropertyDialogUserFieldPanel userFieldPanel = new PropertyDialogUserFieldPanelVerticalFlowLayout(this, userFieldList);
             propertyDialogUserFieldPanels.add(userFieldPanel);
             addTab(userFieldPanel);
         }

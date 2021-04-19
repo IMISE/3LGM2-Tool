@@ -7,7 +7,6 @@ import static de.imise.tool3lgm.graphtools.userfield.definition.UserField.EMPTY_
 import static de.imise.tool3lgm.graphtools.userfield.definition.UserField.Style.CHECK_BOX;
 import static de.imise.tool3lgm.graphtools.userfield.definition.UserField.Style.COMBO_BOX;
 import static de.imise.tool3lgm.graphtools.userfield.definition.UserField.Style.FORMULA;
-import static de.imise.tool3lgm.graphtools.userfield.definition.UserField.Style.GROUP;
 import static de.imise.tool3lgm.graphtools.userfield.definition.UserField.Style.HYPERLINK;
 import static de.imise.tool3lgm.graphtools.userfield.definition.UserField.Style.ID;
 import static de.imise.tool3lgm.graphtools.userfield.definition.UserField.Style.MULTI_LINE;
@@ -15,13 +14,11 @@ import static de.imise.tool3lgm.graphtools.userfield.definition.UserField.Style.
 import static de.imise.tool3lgm.graphtools.userfield.definition.UserField.Style.RADIO_BUTTON;
 import static de.imise.tool3lgm.graphtools.userfield.definition.UserField.Style.SEPARATOR;
 import static de.imise.tool3lgm.graphtools.userfield.definition.UserField.Style.SINGLE_LINE;
-import static de.imise.tool3lgm.graphtools.userfield.definition.UserField.Style.TAB;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
@@ -47,11 +44,7 @@ import javax.swing.JSeparator;
 import javax.swing.JTextField;
 import javax.swing.JViewport;
 import javax.swing.UIManager;
-import javax.swing.border.Border;
-import javax.swing.border.TitledBorder;
 import javax.swing.text.JTextComponent;
-
-import com.google.common.base.Strings;
 
 import de.imise.tool3lgm.graphtools.consistency.error.type.AbstractConsistencyError;
 import de.imise.tool3lgm.graphtools.consistency.error.type.AbstractIDError;
@@ -91,12 +84,12 @@ import de.imise.util.swing.component.text.NumberTextField;
  *
  * @author Thomas Rudert, xhb, AXS
  */
-public class PropertyDialogUserFieldPanel extends ElementDialogPanel implements DisplayAndFixConsistencyErrorPanel {
+public abstract class PropertyDialogUserFieldPanel extends ElementDialogPanel implements DisplayAndFixConsistencyErrorPanel {
 
     /**
      *
      */
-    private final List<UserFieldEditorComponent> fieldComponents = new ArrayList<>();
+    protected final List<UserFieldEditorComponent> fieldComponents = new ArrayList<>();
 
     /**
      *
@@ -114,7 +107,7 @@ public class PropertyDialogUserFieldPanel extends ElementDialogPanel implements 
     /**
      * @return
      */
-    private GridBagConstraints getDefaultConstraints() {
+    protected GridBagConstraints getDefaultConstraints() {
         GridBagConstraints constraints = new GridBagConstraints();
         constraints.fill = GridBagConstraints.HORIZONTAL;
         constraints.anchor = GridBagConstraints.NORTHWEST;
@@ -131,7 +124,7 @@ public class PropertyDialogUserFieldPanel extends ElementDialogPanel implements 
      * @param content
      * @return
      */
-    private JScrollPane getScrollPane(final JComponent content) {
+    protected JScrollPane getScrollPane(final JComponent content) {
         JScrollPane scrollPane = new JScrollPane(content);
         JScrollBar scrollbar = scrollPane.getVerticalScrollBar();
         scrollbar.setBlockIncrement(20);
@@ -181,57 +174,13 @@ public class PropertyDialogUserFieldPanel extends ElementDialogPanel implements 
      * Visualisiert die UserField mit ihren entsprechenden Style-Vorgaben im
      * <code>JPanel</code>.
      */
-    private void create(final UserFieldList tabDefinition) {
-        setLayout(new BorderLayout());
-        Border mainPanelBorder = BorderFactory.createEmptyBorder(5, 5, 5, 5);
-        setBorder(mainPanelBorder);
-        JPanel mainPanel = new JPanel(new GridBagLayout());
-        mainPanelBorder = BorderFactory.createEmptyBorder(0, 5, 5, 5);
-        mainPanel.setBorder(mainPanelBorder);
-        JScrollPane scrollPane = getScrollPane(mainPanel);
-        add(scrollPane);
-
-        GridBagConstraints constraints = getDefaultConstraints();
-        constraints.insets.top = 5;
-
-        JPanel currentPanel = mainPanel;
-
-        //Attributdefinitionen des GraphDocumentes holen
-        for (UserField userField : tabDefinition) {
-            if (userField.hasStyle(TAB)) {
-                String tabName = userField.getName();
-                setName(tabName);
-                addDescriptionLabel(userField, mainPanel, constraints);
-            } else if (userField.hasStyle(GROUP)) {
-                currentPanel = new JPanel(new GridBagLayout());
-                String name = userField.getName();
-                TitledBorder titledBorder = BorderFactory.createTitledBorder(name);
-                Font titleFont = titledBorder.getTitleFont();
-                titleFont = deriveFont(titleFont, 1, true, true);
-                titledBorder.setTitleFont(titleFont);
-                currentPanel.setBorder(titledBorder);
-                addDescriptionLabel(userField, currentPanel, constraints);
-                mainPanel.add(currentPanel, constraints);
-            } else {
-                JComponent label = getTitleLabel(userField);
-                JComponent editor = getEditor(userField);
-                currentPanel.add(label, constraints);
-                constraints.gridy++;
-                constraints.insets.top = 0;
-                addDescriptionLabel(userField, currentPanel, constraints);
-                currentPanel.add(editor, constraints);
-                constraints.gridy += constraints.gridheight;
-                constraints.insets.top = 5;
-            }
-        }
-        addFillSpacePanel(mainPanel, constraints);
-    }
+    protected abstract void create(final UserFieldList tabDefinition);
 
     /**
      * @param field
      * @return
      */
-    private JLabel getTitleLabel(final UserField field) {
+    protected JLabel getTitleLabel(final UserField field) {
         Style style = field.getStyle();
         String name = field.getName();
         if (style == NUMBER || style == FORMULA) {
@@ -245,31 +194,10 @@ public class PropertyDialogUserFieldPanel extends ElementDialogPanel implements 
     }
 
     /**
-     * @param userField
-     * @param panel
-     * @param constraints
-     */
-    private boolean addDescriptionLabel(final UserField userField, final JPanel panel, final GridBagConstraints constraints) {
-        String description = userField.getDescription();
-        if (!Strings.isNullOrEmpty(description)) {
-            if (userField.isShowDescriptionInDialog()) {
-                panel.add(getDescriptionLabel(description), constraints);
-                constraints.gridy++;
-                if (userField.hasStyle(TAB) || userField.hasStyle(GROUP)) {
-                    panel.add(new JSeparator(), constraints);
-                    constraints.gridy++;
-                }
-                return true;
-            }
-        }
-        return false;
-    }
-
-    /**
      * @param description
      * @return
      */
-    private JLabel getDescriptionLabel(String description) {
+    protected JLabel getDescriptionLabel(String description) {
         description = HTMLConverter.getTextAsHTMLLabelText(description);
         JLabel label = new JLabel(description);
         label.setFont(getDescriptionFont());
@@ -292,7 +220,7 @@ public class PropertyDialogUserFieldPanel extends ElementDialogPanel implements 
      * @param addIalic
      * @return
      */
-    private Font deriveFont(final Font font, final int addDiff, final boolean addbold, final boolean addIalic) {
+    protected Font deriveFont(final Font font, final int addDiff, final boolean addbold, final boolean addIalic) {
         float size2d = font.getSize2D() + addDiff;
         Font returnFont = font.deriveFont(size2d);
         if (addbold && addIalic) {
@@ -315,7 +243,7 @@ public class PropertyDialogUserFieldPanel extends ElementDialogPanel implements 
      * @param field
      * @return
      */
-    private JComponent getEditor(final UserField field) {
+    protected JComponent getEditor(final UserField field) {
         String value = getFormattedValue(field);
         UserField.Style style = field.getStyle();
         JComponent editorComponent = null;
@@ -497,7 +425,7 @@ public class PropertyDialogUserFieldPanel extends ElementDialogPanel implements 
      * @param panel2Fill
      * @param constraints
      */
-    private void addFillSpacePanel(final JPanel panel2Fill, final GridBagConstraints constraints) {
+    protected void addFillSpacePanel(final JPanel panel2Fill, final GridBagConstraints constraints) {
         constraints.gridy++;
         constraints.fill = GridBagConstraints.BOTH;
         constraints.weighty = 1.0;
