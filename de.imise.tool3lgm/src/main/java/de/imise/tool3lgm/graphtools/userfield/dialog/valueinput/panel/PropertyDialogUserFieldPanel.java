@@ -105,7 +105,17 @@ public class PropertyDialogUserFieldPanel extends ElementDialogPanel implements 
     /**
      * Default Insets and empty border spaces
      */
-    protected static final int DEFAULT_INSETS = 5;
+    protected static final int BORDER_INSETS = 5;
+
+    /**
+    *
+    */
+    protected static final int STANDARD_HORIZONTAL_INSETS = 10;
+
+    /**
+    *
+    */
+    protected static final int STANDARD_VERTICAL_INSETS = 5;
 
     /**
      *
@@ -231,10 +241,10 @@ public class PropertyDialogUserFieldPanel extends ElementDialogPanel implements 
      */
     protected JPanel createMainPanel() {
         setLayout(new BorderLayout());
-        Border mainPanelBorder = BorderFactory.createEmptyBorder(DEFAULT_INSETS, DEFAULT_INSETS, DEFAULT_INSETS, DEFAULT_INSETS);
+        Border mainPanelBorder = BorderFactory.createEmptyBorder(BORDER_INSETS, BORDER_INSETS, BORDER_INSETS, BORDER_INSETS);
         setBorder(mainPanelBorder);
         JPanel mainPanel = new JPanel(new GridBagLayout());
-        mainPanelBorder = BorderFactory.createEmptyBorder(DEFAULT_INSETS, DEFAULT_INSETS, DEFAULT_INSETS, DEFAULT_INSETS);
+        mainPanelBorder = BorderFactory.createEmptyBorder(BORDER_INSETS, BORDER_INSETS, BORDER_INSETS, BORDER_INSETS);
         mainPanel.setBorder(mainPanelBorder);
         JScrollPane scrollPane = getScrollPane(mainPanel);
         add(scrollPane);
@@ -264,7 +274,7 @@ public class PropertyDialogUserFieldPanel extends ElementDialogPanel implements 
         titledBorder.setTitleFont(titleFont);
         panel.setBorder(titledBorder);
         addDescriptionLabel(userField, panel, constraints);
-        constraints.insets.top = DEFAULT_INSETS;
+        constraints.insets.top = STANDARD_HORIZONTAL_INSETS;
         mainPanel.add(panel, constraints);
         constraints.insets.top = 0;
         return panel;
@@ -278,11 +288,11 @@ public class PropertyDialogUserFieldPanel extends ElementDialogPanel implements 
     protected void addAttribute(final UserField userField, final JPanel panel, final GridBagConstraints constraints) {
         JComponent label = getTitleLabel(userField);
         JComponent editor = getEditor(userField);
-        constraints.insets.top = DEFAULT_INSETS;
+        constraints.insets.top = STANDARD_HORIZONTAL_INSETS;
         if (showAttributeLabelAndEditorSideBySide) {
             constraints.gridwidth = 1;
             constraints.weightx = 0d;
-            constraints.insets.right = DEFAULT_INSETS;
+            constraints.insets.right = STANDARD_VERTICAL_INSETS;
             panel.add(label, constraints);
             constraints.gridx++;
             constraints.weightx = 1d;
@@ -296,6 +306,7 @@ public class PropertyDialogUserFieldPanel extends ElementDialogPanel implements 
             panel.add(label, constraints);
             constraints.gridy++;
             addDescriptionLabel(userField, panel, constraints);
+            constraints.insets.top = 0;
             panel.add(editor, constraints);
             constraints.gridy++;
         }
@@ -331,11 +342,7 @@ public class PropertyDialogUserFieldPanel extends ElementDialogPanel implements 
                 constraints.insets.top = 0;
                 panel.add(getDescriptionLabel(description), constraints);
                 constraints.gridy++;
-                if (userField.hasStyle(TAB) || userField.hasStyle(GROUP)) {
-                    panel.add(new JSeparator(), constraints);
-                    constraints.gridy++;
-                }
-                constraints.insets.top = DEFAULT_INSETS;
+                constraints.insets.top = STANDARD_HORIZONTAL_INSETS;
                 return true;
             }
         }
@@ -370,7 +377,7 @@ public class PropertyDialogUserFieldPanel extends ElementDialogPanel implements 
     protected void addSeparator(final UserField userField, final JPanel panel, final GridBagConstraints constraints) {
         String name = userField.getName();
         name = name == null ? "" : name.trim();
-        constraints.insets.top = DEFAULT_INSETS;
+        constraints.insets.top = STANDARD_HORIZONTAL_INSETS;
         if (name.isEmpty()) {
             panel.add(new JSeparator(), constraints);
         } else {
