@@ -39,7 +39,6 @@ import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.HasPartEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
-import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.model.LGMChangeListenerSimple;
 import de.imise.tool3lgm.graphtools.path.metapaths.ElementaryMetaPathHandler;
@@ -321,8 +320,7 @@ public class AbstractElementPropertyDialog extends AbstractTabbedPropertyDialog 
      * @return
      */
     public final SequenceMetaPath createSequenceMetaPath(@Nullable final Class<? extends ModelElement> searchElementClass, final Class<? extends Edge> edgeClass) {
-        GDCollection gdcoll = getCollection();
-        ElementaryMetaPathHandler emph = gdcoll.getElementaryMetaPathHandler();
+        ElementaryMetaPathHandler emph = modelElement.getElementaryMetaPathHandler();
         Class<? extends ModelElement> metaPathStartClass = modelElement.getClass();
         return emph.getMetaPath(metaPathStartClass, edgeClass, searchElementClass);
     }
