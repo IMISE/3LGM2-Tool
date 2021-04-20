@@ -127,7 +127,7 @@ public final class UserFieldDefinitionDialog extends AbstractPropertyDialog impl
 
         //Label mit dem Namen und der Art des zu bearbeitenden Feldes
         StringBuilder sb = new StringBuilder();
-        String label = getResString("attribute");
+        String label = getResString("userFieldEditor_element_type");
         sb.append(label);
         sb.append(":  ");
         Class<? extends UserFieldTarget> targetClass = userField.getTargetClass();
@@ -144,7 +144,7 @@ public final class UserFieldDefinitionDialog extends AbstractPropertyDialog impl
             sb.append(getResString("userFieldEditor_global"));
         }
         sb.append("      ");
-        label = getResString("attribute_typ");
+        label = getResString("typ");
         sb.append(label);
         sb.append(":  ");
         Style style = userField.getStyle();
