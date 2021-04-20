@@ -19,11 +19,14 @@ import org.apache.commons.collections4.map.HashedMap;
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
+import de.imise.tool3lgm.graphtools.userfield.definition.UserField;
+import de.imise.tool3lgm.graphtools.userfield.definition.UserField.Style;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.graphtools.view.graph.Shape;
 import de.imise.tool3lgm.graphtools.view.tree.node.IconifiedTreeNode;
 import de.imise.tool3lgm.graphtools.view.tree.node.IconifiedTreeNode.IconState;
 import de.imise.tool3lgm.graphtools.view.tree.node.LGMTreeNode;
+import de.imise.tool3lgm.graphtools.view.tree.node.UserFieldTreeNode;
 import de.imise.util.image.ImageTools;
 
 /**
@@ -35,7 +38,7 @@ public class TreeRenderer extends DefaultTreeCellRenderer {
      * Cache for the tree icons to prevent rescaling to the correct height all
      * the time.
      */
-    private static final Map<Shape, ImageIcon> shapeToTreeIcon = new HashedMap<>();
+    private static final Map<Object, ImageIcon> keyToTreeIcon = new HashedMap<>();
 
     /**
      * Dummy-Icon to mark shapes with no icon image
@@ -51,7 +54,7 @@ public class TreeRenderer extends DefaultTreeCellRenderer {
     private static ImageIcon getTreeIcon(final Shape shape, final int height, final IconState iconState) {
         ImageIcon icon = null;
         if (shape != null) {
-            icon = shapeToTreeIcon.get(shape);
+            icon = keyToTreeIcon.get(shape);
             if (icon == null || icon != DUMMY_ICON && icon.getIconHeight() != height) {
                 boolean errorIcon = iconState == SHOW_ERROR_ICON;
                 boolean warningIcon = iconState == SHOW_WARNING_ICON;
@@ -65,11 +68,27 @@ public class TreeRenderer extends DefaultTreeCellRenderer {
                 } else {
                     icon = ImageTools.getScaledInstance(icon, height, 10);
                 }
-                shapeToTreeIcon.put(shape, icon);
+                keyToTreeIcon.put(shape, icon);
             }
         }
         return icon == DUMMY_ICON ? null : icon;
+    }
 
+    /**
+     * @param userFieldTreeNode
+     */
+    private ImageIcon getIcon(final UserFieldTreeNode userFieldTreeNode) {
+        UserField userField = userFieldTreeNode.getUserField();
+        Style style = userField.getStyle();
+        ImageIcon icon = keyToTreeIcon.get(style);
+        if (icon == null) {
+            String iconName = "TREE_ICON_USERFIELD";
+            if (style == Style.TAB || style == Style.GROUP) {
+                iconName += style.name();
+            }
+            icon = Tool3lgmConstants.getIcon(iconName);
+        }
+        return icon;
     }
 
     /**
@@ -131,7 +150,11 @@ public class TreeRenderer extends DefaultTreeCellRenderer {
                     } else {
                         ec.checkTreeIcon();
                     }
+                } else if (value instanceof UserFieldTreeNode) {
+                    UserFieldTreeNode userFieldTreeNode = (UserFieldTreeNode) value;
+                    icon = getIcon(userFieldTreeNode);
                 }
+
             }
             setIcon(icon);
             return this;
