@@ -12,15 +12,17 @@ import java.awt.Insets;
 import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 import javax.swing.JScrollPane;
+import javax.swing.text.JTextComponent;
 
+import de.imise.util.NameAndDescriptionSource;
 import de.imise.util.NameAndDescriptionTarget;
-import de.imise.util.swing.component.text.ExtendedTextField;
+import de.imise.util.swing.component.LimitedSizeScrollTextPane;
 import de.imise.util.swing.component.text.ExtendedTextPane;
 
 /**
  * @author AXS
  */
-public class NameDescripPanel extends AbstractInputPanel {
+public class NameDescripPanel extends AbstractInputPanel implements NameAndDescriptionSource {
 
     /**
      * Das UserField, dessen Eigenschaften mit diesem Panel geändert werden
@@ -31,7 +33,7 @@ public class NameDescripPanel extends AbstractInputPanel {
     /**
      * Comment for <code>nameTextField</code>
      */
-    private final ExtendedTextField nameTextField = new ExtendedTextField();
+    private final LimitedSizeScrollTextPane nameTextField = new LimitedSizeScrollTextPane();
 
     /**
      * Comment for <code>decsripArea</code>
@@ -71,8 +73,8 @@ public class NameDescripPanel extends AbstractInputPanel {
     /**
      * @return Returns the nameTextField.
      */
-    public ExtendedTextField getNameTextField() {
-        return nameTextField;
+    public JTextComponent getNameTextField() {
+        return nameTextField.getTextPane();
     }
 
     @Override
@@ -91,5 +93,15 @@ public class NameDescripPanel extends AbstractInputPanel {
             return getResString("empty_name");
         }
         return super.getError();
+    }
+
+    @Override
+    public String getName() {
+        return nameTextField.getText();
+    }
+
+    @Override
+    public String getDescription() {
+        return descripPane.getText();
     }
 }

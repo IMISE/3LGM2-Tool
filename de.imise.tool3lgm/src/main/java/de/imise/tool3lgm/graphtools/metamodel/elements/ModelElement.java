@@ -52,6 +52,7 @@ import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout.TextAlignmentH
 import de.imise.util.Alphabetical;
 import de.imise.util.IDStringGenerator;
 import de.imise.util.ReflectionUtils;
+import de.imise.util.StringUtils;
 import de.imise.util.htmlxml.HTMLConverter;
 
 public abstract class ModelElement extends UserFieldTarget implements MetaModelSpecific, GDCollectionOwner, IDSource {
@@ -328,36 +329,8 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
      * @return
      */
     public final String getClearName() {
-        nameBuffer.setLength(0);
-        nameBuffer.append(toString());
-        if (nameBuffer.length() == 0) {
-            return "";
-        }
-        while (nameBuffer.charAt(0) == '\n' || nameBuffer.charAt(0) == ' ' || nameBuffer.charAt(0) == '\t') {
-            nameBuffer.deleteCharAt(0);
-            //Diese zusätzliche Abfrage verhindert die Exception, die flog, wenn man den Eigenschaftendialog öffnete und die Bedingungen aus Bug-Meldung vom <08.11.06 LI> galt.
-            if (nameBuffer.length() == 0) {
-                return "";
-            }
-        }
-        while (true) {
-            int pos = nameBuffer.length() - 1;
-            if (nameBuffer.charAt(pos) == '\n' || nameBuffer.charAt(pos) == ' ' || nameBuffer.charAt(pos) == '\t') {
-                nameBuffer.deleteCharAt(pos);
-            } else {
-                break;
-            }
-        }
-        for (int i = 1; i < nameBuffer.length(); i++) {
-            if (nameBuffer.charAt(i) == '\n') {
-                if (nameBuffer.charAt(i - 1) == ' ') {
-                    nameBuffer.deleteCharAt(i--);
-                } else {
-                    nameBuffer.setCharAt(i, ' ');
-                }
-            }
-        }
-        return nameBuffer.toString();
+        String name = toString();
+        return StringUtils.trimAndRemoveNewLines(name);
     }
 
     /**
