@@ -84,7 +84,10 @@ public final class UserFieldDefinitionDialog extends AbstractPropertyDialog impl
      */
     private final UserField userField;
 
-    private static final Dimension DEFAULT_SIZE = new Dimension(500, 400);
+    /**
+     *
+     */
+    private static final Dimension DEFAULT_SIZE = new Dimension(640, 480);
 
     /**
      * Instanz des Dialogs zur Definition eines <code>UserField</code>
@@ -196,7 +199,6 @@ public final class UserFieldDefinitionDialog extends AbstractPropertyDialog impl
         buttonPane.add(cancelButton);
         gbc.gridy++;
         pane.add(buttonPane, gbc);
-        pack();
     }
 
     /**
