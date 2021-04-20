@@ -18,6 +18,7 @@ import static de.imise.tool3lgm.graphtools.userfield.definition.UserField.Style.
 import static de.imise.tool3lgm.graphtools.userfield.definition.UserField.Style.TAB;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
@@ -43,6 +44,7 @@ import javax.swing.JRadioButton;
 import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.JViewport;
 import javax.swing.SwingConstants;
@@ -340,9 +342,11 @@ public class PropertyDialogUserFieldPanel extends ElementDialogPanel implements 
         if (!Strings.isNullOrEmpty(description)) {
             if (userField.isShowDescriptionInDialog()) {
                 constraints.insets.top = 0;
+                constraints.weightx = 0d;
                 panel.add(getDescriptionLabel(description), constraints);
-                constraints.gridy++;
                 constraints.insets.top = STANDARD_HORIZONTAL_INSETS;
+                constraints.weightx = 1d;
+                constraints.gridy++;
                 return true;
             }
         }
@@ -353,11 +357,19 @@ public class PropertyDialogUserFieldPanel extends ElementDialogPanel implements 
      * @param description
      * @return
      */
-    protected JLabel getDescriptionLabel(String description) {
-        description = HTMLConverter.getTextAsHTMLLabelText(description);
-        JLabel label = new JLabel(description);
-        label.setFont(getDescriptionFont());
-        return label;
+    protected JComponent getDescriptionLabel(final String description) {
+        JTextArea textField = new JTextArea();
+        textField.setLineWrap(true);
+        textField.setWrapStyleWord(true);
+        textField.setEnabled(false);
+        Color textColor = UIManager.getColor("Label.foreground");
+        textField.setDisabledTextColor(textColor);
+        Color backgroundColor = UIManager.getColor("Label.background");
+        textField.setBackground(backgroundColor);
+        textField.setBorder(null);
+        textField.setFont(getDescriptionFont());
+        textField.setText(description);
+        return textField;
     }
 
     /**
