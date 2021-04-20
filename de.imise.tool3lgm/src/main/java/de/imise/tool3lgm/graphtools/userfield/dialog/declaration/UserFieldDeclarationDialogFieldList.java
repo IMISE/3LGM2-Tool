@@ -142,7 +142,9 @@ public class UserFieldDeclarationDialogFieldList extends JList<NamedObjectContai
     private void addEntry(final UserField userField, final int index, final int indent) {
         int whiteSpaceCount = indent * 6;
         String indentation = StringUtils.fillToMinLenght("", whiteSpaceCount);
-        String name = "<HTML>" + encodeBold(indentation + userField.getStyle() + ": ") + encode(userField.getName()) + "</HTML>";
+        String name = userField.getName();
+        name = StringUtils.trimAndRemoveNewLines(name);
+        name = "<HTML>" + encodeBold(indentation + userField.getStyle() + ": ") + encode(name) + "</HTML>";
         NamedObjectContainer<UserField> noc = new NamedObjectContainer<>(userField, name);
         model.add(index, noc);
     }
