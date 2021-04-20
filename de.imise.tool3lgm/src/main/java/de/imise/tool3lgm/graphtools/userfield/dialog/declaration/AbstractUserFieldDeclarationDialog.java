@@ -59,6 +59,9 @@ public abstract class AbstractUserFieldDeclarationDialog extends AbstractSizeAnd
     /** button to add new userField */
     protected JButton newButton;
 
+    /** Button to preview the definition for one type of model elements */
+    protected JButton previewButton;
+
     /** Buttons zum Vertauschen der Reihenfolge von Attributen */
     protected JButton upButton, downButton;
 
@@ -94,6 +97,7 @@ public abstract class AbstractUserFieldDeclarationDialog extends AbstractSizeAnd
         fieldList = new UserFieldDeclarationDialogFieldList(definitions);
         userFieldTypeComboBox = createStyleCombobox();
 
+        previewButton = createButton("userFieldDeclarationDialog_previewButtonText");
         newButton = createButton("new");
         editButton = createDisabledButton("userFieldDeclarationDialog_editButtonText");
         deleteButton = createDisabledButton("delete");
@@ -119,24 +123,28 @@ public abstract class AbstractUserFieldDeclarationDialog extends AbstractSizeAnd
         centerPanel.add(createLabel("userFieldDeclarationDialog_fields"), BorderLayout.NORTH);
         centerPanel.add(createScrollPane(fieldList), BorderLayout.CENTER);
 
-        JPanel buttonPanel = new JPanel(new GridBagLayout());
-        buttonPanel.setBorder(border);
+        JPanel buttonsPanel = new JPanel(new BorderLayout());
+        JPanel fieldButtonsPanel = new JPanel(new GridBagLayout());
+        fieldButtonsPanel.setBorder(border);
 
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.weightx = 1;
 
-        add(buttonPanel, gbc, 0, 0, 3, 1, userFieldTypeComboBox);
-        add(buttonPanel, gbc, 3, 0, 1, 1, newButton);
-        add(buttonPanel, gbc, 0, 1, 4, 1, editButton);
-        add(buttonPanel, gbc, 0, 2, 4, 1, deleteButton);
+        add(fieldButtonsPanel, gbc, 0, 0, 3, 1, userFieldTypeComboBox);
+        add(fieldButtonsPanel, gbc, 3, 0, 1, 1, newButton);
+        add(fieldButtonsPanel, gbc, 0, 1, 4, 1, editButton);
+        add(fieldButtonsPanel, gbc, 0, 2, 4, 1, deleteButton);
 
         JPanel upDownButtonPanel = new JPanel(new GridBagLayout());
         add(upDownButtonPanel, gbc, 0, 0, 1, 1, downButton);
         add(upDownButtonPanel, gbc, 1, 0, 1, 1, upButton);
 
-        add(buttonPanel, gbc, 0, 3, 4, 1, upDownButtonPanel);
-        centerPanel.add(buttonPanel, BorderLayout.EAST);
+        add(fieldButtonsPanel, gbc, 0, 3, 4, 1, upDownButtonPanel);
+
+        buttonsPanel.add(previewButton, BorderLayout.NORTH);
+        buttonsPanel.add(fieldButtonsPanel, BorderLayout.CENTER);
+        centerPanel.add(buttonsPanel, BorderLayout.EAST);
         pane.add(centerPanel, BorderLayout.CENTER);
 
         JPanel southPanel = new JPanel();
@@ -174,6 +182,9 @@ public abstract class AbstractUserFieldDeclarationDialog extends AbstractSizeAnd
         return classComboBox;
     }
 
+    /**
+     * @return
+     */
     private AlphabeticalComboBox<UserField.Style> createStyleCombobox() {
         AlphabeticalComboBox<UserField.Style> styleCombobox = new AlphabeticalComboBox<>(3);
         styleCombobox.addActionListener(new ActionListener() {

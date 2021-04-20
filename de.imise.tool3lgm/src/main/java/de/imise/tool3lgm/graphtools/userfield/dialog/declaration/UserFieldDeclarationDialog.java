@@ -28,10 +28,17 @@ import java.awt.event.WindowEvent;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.AbstractAction;
 import javax.swing.JOptionPane;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
+import de.imise.tool3lgm.Static;
+import de.imise.tool3lgm.Tool3lgmModelType;
+import de.imise.tool3lgm.graphtools.metamodel.CoreMetaModel;
+import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
+import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
+import de.imise.tool3lgm.graphtools.model.DummyGDCollection;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.LGMGraphDocument;
 import de.imise.tool3lgm.graphtools.userfield.definition.UserField;
@@ -130,6 +137,21 @@ public final class UserFieldDeclarationDialog extends AbstractUserFieldDeclarati
         fieldList.addMouseListener(new DoubleClickListener(editButton));
         classComboBox.addActionListener(this);
         classComboBox.restoreSelection();
+
+        //previewButton
+        String previewButtonText = previewButton.getText(); //the text is set by the superclass
+        AbstractAction previewButtonAction = new AbstractAction(previewButtonText) {
+            @Override
+            public void actionPerformed(final ActionEvent e) {
+                showPreview();
+            }
+
+            @Override
+            public boolean isEnabled() {
+                return isPreviewEnabeld();
+            }
+        };
+        previewButton.setAction(previewButtonAction);
     }
 
     /**
@@ -327,6 +349,7 @@ public final class UserFieldDeclarationDialog extends AbstractUserFieldDeclarati
                 updateUserFieldTypeComboBox();
             }
         }
+        previewButton.setEnabled(isPreviewEnabeld());
     }
 
     private boolean reallyDelete() {
@@ -349,6 +372,40 @@ public final class UserFieldDeclarationDialog extends AbstractUserFieldDeclarati
      */
     public UserFieldDefinitions getModifiedDefinitions() {
         return definitions;
+    }
+
+    /**
+     * @return
+     */
+    protected boolean isPreviewEnabeld() {
+        Class<? extends UserFieldTarget> selectedClass = classComboBox.getSelectedClass();
+        if (!Node.class.isAssignableFrom(selectedClass)) {
+            return false;
+        }
+        // at the moment no preview for abstract classes
+        // but we don't have such classes in the class list
+        if (CoreMetaModel.isAbstract(selectedClass)) {
+            return false;
+        }
+        //if we have subtypes this condition must be refitted
+        Iterable<UserField> userFields = definitions.getUserFields(selectedClass);
+        return userFields.iterator().hasNext();
+    }
+
+    /**
+     *
+     */
+    private void showPreview() {
+        if (!isPreviewEnabeld()) {
+            return;
+        }
+        Class<? extends ModelElement> selectedClass = classComboBox.getSelectedClass().asSubclass(ModelElement.class);
+        GDCollection selectedGDColl = Static.getSelectedGDCollection();
+        Tool3lgmModelType modelType = selectedGDColl.getModelType();
+        DummyGDCollection dummyGDCollection = new DummyGDCollection(modelType);
+        dummyGDCollection.setUserFieldDefinitions(definitions);
+        ModelElement dummyElement = dummyGDCollection.getDummyElement(selectedClass);
+        dummyElement.showPropertyDialog();
     }
 
     @Override
