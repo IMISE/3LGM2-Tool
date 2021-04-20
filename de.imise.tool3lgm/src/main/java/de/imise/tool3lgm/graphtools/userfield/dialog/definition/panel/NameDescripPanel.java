@@ -13,9 +13,9 @@ import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 import javax.swing.JScrollPane;
 
-import de.imise.tool3lgm.graphtools.userfield.definition.UserField;
-import de.imise.util.swing.component.text.ExtendedTextArea;
+import de.imise.util.NameAndDescriptionTarget;
 import de.imise.util.swing.component.text.ExtendedTextField;
+import de.imise.util.swing.component.text.ExtendedTextPane;
 
 /**
  * @author AXS
@@ -26,7 +26,7 @@ public class NameDescripPanel extends AbstractInputPanel {
      * Das UserField, dessen Eigenschaften mit diesem Panel geändert werden
      * sollen.
      */
-    private final UserField userField;
+    private final NameAndDescriptionTarget nameAndDescriptionTarget;
 
     /**
      * Comment for <code>nameTextField</code>
@@ -36,17 +36,17 @@ public class NameDescripPanel extends AbstractInputPanel {
     /**
      * Comment for <code>decsripArea</code>
      */
-    private final ExtendedTextArea descripArea = new ExtendedTextArea(8, 1);
+    private final ExtendedTextPane descripPane = new ExtendedTextPane();
 
     /**
-     * @param userField
+     * @param nameAndDescriptionTarget
      */
-    public NameDescripPanel(final UserField userField) {
+    public NameDescripPanel(final NameAndDescriptionTarget nameAndDescriptionTarget) {
         super(new GridBagLayout());
-        this.userField = userField;
+        this.nameAndDescriptionTarget = nameAndDescriptionTarget;
 
-        nameTextField.setText(userField.getName());
-        descripArea.setText(userField.getDescription());
+        nameTextField.setText(nameAndDescriptionTarget.getName());
+        descripPane.setText(nameAndDescriptionTarget.getDescription());
 
         setBorder(BorderFactory.createTitledBorder(getResString("general")));
         GridBagConstraints gbc = new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0, GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(3, 3, 3, 3), 0, 0);
@@ -64,8 +64,8 @@ public class NameDescripPanel extends AbstractInputPanel {
         //das Beschreibungsfeld unter das Namensfeld einfügen
         gbc.gridy = 1;
         gbc.weighty = 1.0;
-        add(new JScrollPane(descripArea), gbc);
-        descripArea.setFont(nameTextField.getFont());
+        add(new JScrollPane(descripPane), gbc);
+        descripPane.setFont(nameTextField.getFont());
     }
 
     /**
@@ -81,8 +81,8 @@ public class NameDescripPanel extends AbstractInputPanel {
 
     @Override
     public void commit() {
-        userField.setName(nameTextField.getText());
-        userField.setDescription(descripArea.getText());
+        nameAndDescriptionTarget.setName(nameTextField.getText());
+        nameAndDescriptionTarget.setDescription(descripPane.getText());
     }
 
     @Override
