@@ -304,13 +304,17 @@ public class PropertyDialogUserFieldPanel extends ElementDialogPanel implements 
             addDescriptionLabel(userField, panel, constraints);
             constraints.gridx = 0;
             constraints.gridwidth = 2;
-        } else {
+        } else if (!userField.hasStyle(CHECK_BOX)) {
             panel.add(label, constraints);
             constraints.gridy++;
             addDescriptionLabel(userField, panel, constraints);
             constraints.insets.top = 0;
             panel.add(editor, constraints);
             constraints.gridy++;
+        } else {
+            panel.add(editor, constraints);
+            constraints.gridy++;
+            addDescriptionLabel(userField, panel, constraints);
         }
     }
 
@@ -498,7 +502,9 @@ public class PropertyDialogUserFieldPanel extends ElementDialogPanel implements 
             }
             editorComponent = flowLayoutPanel;
         } else if (style == CHECK_BOX) {
-            editorComponent = new JCheckBox(field.getName(), value.equals(CHECKBOX_TRUE));
+            String label = showAttributeLabelAndEditorSideBySide ? "" : field.getName();
+            label = HTMLConverter.getTextAsHTMLLabelTextBold(label);
+            editorComponent = new JCheckBox(label, value.equals(CHECKBOX_TRUE));
         } else if (style == HYPERLINK) {
             final ExtendedTextField textField = new ExtendedTextField(value);
             JPanel hyperlinkPanel = new JPanel();
