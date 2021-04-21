@@ -482,7 +482,7 @@ public class StringUtils {
         while (buffer.charAt(0) == '\n' || buffer.charAt(0) == ' ' || buffer.charAt(0) == '\t') {
             buffer.deleteCharAt(0);
             //Diese zusätzliche Abfrage verhindert die Exception, die flog, wenn man den Eigenschaftendialog öffnete und die Bedingungen aus Bug-Meldung vom <08.11.06 LI> galt.
-            if (buffer.isEmpty()) {
+            if (buffer.length() == 0) {
                 return "";
             }
         }
