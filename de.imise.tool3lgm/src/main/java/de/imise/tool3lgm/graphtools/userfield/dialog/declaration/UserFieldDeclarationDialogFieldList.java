@@ -1,19 +1,28 @@
 package de.imise.tool3lgm.graphtools.userfield.dialog.declaration;
 
 import static de.imise.tool3lgm.graphtools.userfield.definition.UserField.Style.GROUP;
+import static de.imise.tool3lgm.graphtools.userfield.definition.UserField.Style.SINGLE_LINE;
 import static de.imise.tool3lgm.graphtools.userfield.definition.UserField.Style.TAB;
 import static de.imise.util.htmlxml.HTMLConverter.encode;
 import static de.imise.util.htmlxml.HTMLConverter.encodeBold;
 import static de.imise.util.htmlxml.HTMLConverter.getTextAsHTMLLabelText;
 
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Component;
 import java.awt.Point;
 import java.awt.event.MouseEvent;
 import java.util.Collections;
 import java.util.List;
 
+import javax.swing.DefaultListCellRenderer;
 import javax.swing.DefaultListModel;
+import javax.swing.ImageIcon;
+import javax.swing.JLabel;
 import javax.swing.JList;
+import javax.swing.JPanel;
 import javax.swing.ListSelectionModel;
+import javax.swing.UIManager;
 
 import org.apache.jena.ext.com.google.common.primitives.Ints;
 
@@ -21,6 +30,7 @@ import de.imise.tool3lgm.graphtools.userfield.definition.UserField;
 import de.imise.tool3lgm.graphtools.userfield.definition.UserField.Style;
 import de.imise.tool3lgm.graphtools.userfield.definition.UserFieldDefinitions;
 import de.imise.tool3lgm.graphtools.userfield.definition.UserFieldTarget;
+import de.imise.tool3lgm.graphtools.view.tree.TreeRenderer;
 import de.imise.util.NamedObjectContainer;
 import de.imise.util.StringUtils;
 
@@ -30,6 +40,11 @@ import de.imise.util.StringUtils;
  * @author AXS
  */
 public class UserFieldDeclarationDialogFieldList extends JList<NamedObjectContainer<UserField>> {
+
+    /**
+     * Number of whitespaces for one indentation step
+     */
+    private static final int INDENTATION_WITH = 6;
 
     /**
      *
@@ -47,6 +62,7 @@ public class UserFieldDeclarationDialogFieldList extends JList<NamedObjectContai
     public UserFieldDeclarationDialogFieldList(final UserFieldDefinitions definitions) {
         model = new DefaultListModel<>();
         setModel(model);
+        setCellRenderer(new MyListCellRenderer());
         this.definitions = definitions;
         setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
     }
@@ -144,7 +160,7 @@ public class UserFieldDeclarationDialogFieldList extends JList<NamedObjectContai
         String indentation = StringUtils.fillToMinLenght("", whiteSpaceCount);
         String name = userField.getName();
         name = StringUtils.trimAndRemoveNewLines(name);
-        name = "<HTML>" + encodeBold(indentation + userField.getStyle() + ": ") + encode(name) + "</HTML>";
+        name = indentation + "<HTML>" + encodeBold(userField.getStyle() + ": ") + encode(name) + "</HTML>";
         NamedObjectContainer<UserField> noc = new NamedObjectContainer<>(userField, name);
         model.add(index, noc);
     }
@@ -256,6 +272,83 @@ public class UserFieldDeclarationDialogFieldList extends JList<NamedObjectContai
             description = description.isEmpty() ? null : getTextAsHTMLLabelText(description);
         }
         return description;
+    }
+
+    /**
+     * @author AXS (21.04.2021)
+     */
+    private class MyListCellRenderer extends DefaultListCellRenderer {
+
+        private final JPanel panel;
+        private final JLabel icon_text_label;
+        private final JLabel indentation_label;
+
+        private final Color textSelectionColor = UIManager.getColor("List.selectionForeground");
+        private final Color backgroundSelectionColor = UIManager.getColor("List.selectionBackground");
+        private final Color textNonSelectionColor = UIManager.getColor("List.foreground");
+        private final Color backgroundNonSelectionColor = UIManager.getColor("List.background");
+
+        private final ImageIcon USERFIELD_ICON = TreeRenderer.getStyleIcon(SINGLE_LINE);
+        private final ImageIcon USERFIELD_GROUP_ICON = TreeRenderer.getStyleIcon(GROUP);
+        private final ImageIcon USERFIELD_TAB_ICON = TreeRenderer.getStyleIcon(TAB);
+
+        MyListCellRenderer() {
+            panel = new JPanel(new BorderLayout());
+            indentation_label = new JLabel();
+            indentation_label.setOpaque(true);
+            icon_text_label = new JLabel();
+            icon_text_label.setOpaque(true);
+
+            panel.add(indentation_label, BorderLayout.WEST);
+            panel.add(icon_text_label, BorderLayout.CENTER);
+
+        }
+
+        @Override
+        public Component getListCellRendererComponent(final JList<?> list, final Object value, final int index, final boolean isSelected, final boolean cellHasFocus) {
+            if (value instanceof NamedObjectContainer<?>) {
+                NamedObjectContainer<?> noc = (NamedObjectContainer<?>) value;
+                Object object = noc.getFirstItem();
+                if (object instanceof UserField) {
+                    UserField userField = (UserField) object;
+                    if (userField.hasStyle(TAB)) {
+                        icon_text_label.setIcon(USERFIELD_TAB_ICON);
+                    } else if (userField.hasStyle(GROUP)) {
+                        icon_text_label.setIcon(USERFIELD_GROUP_ICON);
+                    } else {
+                        icon_text_label.setIcon(USERFIELD_ICON);
+                    }
+                    String string = value.toString();
+                    int i = 0;
+                    String indent = "";
+                    String text = string;
+                    for (; i < string.length(); i += INDENTATION_WITH) {
+                        if (string.charAt(i) != ' ') {
+                            if (i == 0) {
+                                break;
+                            } else {
+                                indent = string.substring(0, i);
+                                text = string.substring(i);
+                                break;
+                            }
+                        }
+                    }
+                    indentation_label.setText(indent);
+                    icon_text_label.setText(text);
+                    if (isSelected) {
+                        indentation_label.setBackground(backgroundSelectionColor);
+                        icon_text_label.setBackground(backgroundSelectionColor);
+                        icon_text_label.setForeground(textSelectionColor);
+                    } else {
+                        indentation_label.setBackground(backgroundNonSelectionColor);
+                        icon_text_label.setBackground(backgroundNonSelectionColor);
+                        icon_text_label.setForeground(textNonSelectionColor);
+                    }
+                    return panel;
+                }
+            }
+            return super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+        }
     }
 
 }

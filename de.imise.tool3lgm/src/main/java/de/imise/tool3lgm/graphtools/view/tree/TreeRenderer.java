@@ -82,12 +82,21 @@ public class TreeRenderer extends DefaultTreeCellRenderer {
         Style style = userField.getStyle();
         ImageIcon icon = keyToTreeIcon.get(style);
         if (icon == null) {
-            String iconName = "TREE_ICON_USERFIELD";
-            if (style == Style.TAB || style == Style.GROUP) {
-                iconName += style.name();
-            }
-            icon = Tool3lgmConstants.getIcon(iconName);
+            icon = getStyleIcon(style);
         }
+        return icon;
+    }
+
+    /**
+     * @param style
+     * @return
+     */
+    public static final ImageIcon getStyleIcon(final Style style) {
+        String iconName = "TREE_ICON_USERFIELD";
+        if (style == Style.TAB || style == Style.GROUP) {
+            iconName += style.name();
+        }
+        ImageIcon icon = Tool3lgmConstants.getIcon(iconName);
         return icon;
     }
 
