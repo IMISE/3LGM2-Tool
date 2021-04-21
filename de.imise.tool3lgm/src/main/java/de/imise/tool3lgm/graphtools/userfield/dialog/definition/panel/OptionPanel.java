@@ -86,9 +86,11 @@ public class OptionPanel extends AbstractInputPanel {
     @Override
     public void commit() {
         if (treeVisCheckBox != null) {
-            userField.setTreeVisibility(treeVisCheckBox.isEnabled());
+            boolean isTreeVissible = treeVisCheckBox.isSelected();
+            userField.setTreeVisibility(isTreeVissible);
         }
-        userField.setShowDescriptionInDialog(showDescriptionInDialog.isEnabled());
+        boolean showDescription = showDescriptionInDialog.isSelected();
+        userField.setShowDescriptionInDialog(showDescription);
     }
 
     @Override
