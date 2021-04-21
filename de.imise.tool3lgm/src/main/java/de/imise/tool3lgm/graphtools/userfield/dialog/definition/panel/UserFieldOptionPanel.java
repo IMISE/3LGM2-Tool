@@ -4,8 +4,6 @@
 package de.imise.tool3lgm.graphtools.userfield.dialog.definition.panel;
 
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
-import static de.imise.tool3lgm.graphtools.userfield.definition.UserField.Style.GROUP;
-import static de.imise.tool3lgm.graphtools.userfield.definition.UserField.Style.TAB;
 import static de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty.OPTION_ENABLE_FORMULA_CALCULATION;
 
 import javax.swing.BorderFactory;
@@ -17,7 +15,7 @@ import de.imise.util.swing.component.StoreLastValueCheckbox;
 /**
  * @author AXS
  */
-public class OptionPanel extends AbstractInputPanel {
+public class UserFieldOptionPanel extends AbstractInputPanel {
 
     /**
      * Das UserField, dessem Eigenschaften mit diesem Panel geändert werden
@@ -29,7 +27,7 @@ public class OptionPanel extends AbstractInputPanel {
      * CheckBox zum Einstellen, ob ein Benutzerfeld im Baum angezeigt werden
      * soll
      */
-    private JCheckBox treeVisCheckBox;
+    private final JCheckBox treeVisCheckBox;
 
     /**
      * CheckBox zum Einstellen, ob ein Benutzerfeld im Baum angezeigt werden
@@ -46,15 +44,13 @@ public class OptionPanel extends AbstractInputPanel {
     /**
      * @param userField
      */
-    private OptionPanel(final UserField userField) {
+    private UserFieldOptionPanel(final UserField userField) {
         this.userField = userField;
         setBorder(BorderFactory.createTitledBorder(getResString("optionenButtonText")));
 
-        if (canBeTreeVissible(userField)) {
-            boolean isTreeVisisbility = userField.isTreeVisibility();
-            treeVisCheckBox = new JCheckBox(getResString("userFieldEditor_treevis"), isTreeVisisbility);
-            add(treeVisCheckBox);
-        }
+        boolean isTreeVisisbility = userField.isTreeVisibility();
+        treeVisCheckBox = new JCheckBox(getResString("userFieldEditor_treevis"), isTreeVisisbility);
+        add(treeVisCheckBox);
 
         boolean isShowDescriptionInDialog = userField.isShowDescriptionInDialog();
         showDescriptionInDialog = new JCheckBox(getResString("userFieldEditor_showDescriptionInDialog"), isShowDescriptionInDialog);
@@ -71,16 +67,8 @@ public class OptionPanel extends AbstractInputPanel {
      * @param userField
      * @return
      */
-    private boolean canBeTreeVissible(final UserField userField) {
-        return !userField.hasStyle(TAB) && !userField.hasStyle(GROUP);
-    }
-
-    /**
-     * @param userField
-     * @return
-     */
-    public static OptionPanel getOptionPanel(final UserField userField) {
-        return userField.isGlobal() ? null : new OptionPanel(userField);
+    public static UserFieldOptionPanel getOptionPanel(final UserField userField) {
+        return userField.isGlobal() ? null : new UserFieldOptionPanel(userField);
     }
 
     @Override

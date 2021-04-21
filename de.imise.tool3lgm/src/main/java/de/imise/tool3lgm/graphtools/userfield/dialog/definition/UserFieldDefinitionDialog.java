@@ -37,7 +37,7 @@ import de.imise.tool3lgm.graphtools.userfield.dialog.definition.panel.FormatPane
 import de.imise.tool3lgm.graphtools.userfield.dialog.definition.panel.FormulaPanel;
 import de.imise.tool3lgm.graphtools.userfield.dialog.definition.panel.ListValuePanel;
 import de.imise.tool3lgm.graphtools.userfield.dialog.definition.panel.NameDescripPanel;
-import de.imise.tool3lgm.graphtools.userfield.dialog.definition.panel.OptionPanel;
+import de.imise.tool3lgm.graphtools.userfield.dialog.definition.panel.UserFieldOptionPanel;
 import de.imise.util.swing.dialog.MultipleOptionPane;
 
 /**
@@ -178,7 +178,7 @@ public final class UserFieldDefinitionDialog extends AbstractPropertyDialog impl
         }
 
         //Optionen-Panel (null if there are no options for this userField)
-        OptionPanel optionPanel = OptionPanel.getOptionPanel(userField);
+        UserFieldOptionPanel optionPanel = UserFieldOptionPanel.getOptionPanel(userField);
         if (optionPanel != null) {
             panelList.add(optionPanel);
         }
