@@ -174,7 +174,7 @@ public final class UserFieldDeclarationDialog extends AbstractUserFieldDeclarati
             addStyle(SINGLE_LINE);
             addStyle(MULTI_LINE);
 
-            addStyleCategory("STYLE_TYPE_LIST");
+            addStyleCategory("STYLE_TYPE_SELECT");
             addStyle(CHECK_BOX);
             addStyle(COMBO_BOX);
             addStyle(RADIO_BUTTON);
