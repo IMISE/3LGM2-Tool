@@ -473,7 +473,7 @@ public class PropertyDialogUserFieldPanel extends ElementDialogPanel implements 
                 }
             }
             if (!foundEntry) {
-                if (value.length() > 0) {
+                if (!Strings.isNullOrEmpty(value)) {
                     field.addListValue(value);
                     comboBox.addObject(value);
                     comboBox.setSelectedObject(value);
@@ -487,7 +487,7 @@ public class PropertyDialogUserFieldPanel extends ElementDialogPanel implements 
             JPanel flowLayoutPanel = new JPanel();
             flowLayoutPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), ""));
             //den aktuellen Wert in die List-Values hinzufügen, falls er da aus irgendwelchen Gründen nicht drinsteht.
-            if (!field.containsListValue(value)) {
+            if (!Strings.isNullOrEmpty(value) && !field.containsListValue(value)) {
                 field.addListValue(value);
             }
             ButtonGroup group = new ButtonGroup();
