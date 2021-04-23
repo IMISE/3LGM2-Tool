@@ -508,10 +508,8 @@ public class ImageTools {
                             if (rgb == fullImage.getRGB(x + px, y + py)) {
                                 wrongPixelFound = true;
                             }
-                        } else {
-                            if (rgb != fullImage.getRGB(x + px, y + py)) {
-                                wrongPixelFound = true;
-                            }
+                        } else if (rgb != fullImage.getRGB(x + px, y + py)) {
+                            wrongPixelFound = true;
                         }
                     }
                 }
@@ -616,7 +614,7 @@ public class ImageTools {
                         c.getRed(), c.getGreen(), c.getBlue()
                 };
                 for (int i = 0; i < rgb.length; i++) {
-                    String s = new String("" + rgb[i]);
+                    String s = "" + rgb[i];
                     for (int t = 0; t < 3 - s.length(); t++) {
                         sb.append(' ');
                     }
@@ -637,6 +635,12 @@ public class ImageTools {
         return sb.toString();
     }
 
+    /**
+     * @param pixels
+     * @param color
+     * @param fieldName
+     * @return
+     */
     public static final String getSingleColorPixelArrayAsJavaCode(final Pixel[][] pixels, final Color color, final String fieldName) {
         StringBuilder sb = new StringBuilder("\tstatic final Color ");
         sb.append(fieldName);
@@ -735,15 +739,23 @@ public class ImageTools {
         return ret;
     }
 
+    /**
+     * @param icon
+     * @return
+     */
     public static BufferedImage toBufferedImage(final Icon icon) {
         BufferedImage bi = new BufferedImage(icon.getIconWidth(), icon.getIconHeight(), BufferedImage.TYPE_INT_RGB);
         Graphics g = bi.createGraphics();
         // paint the Icon to the BufferedImage.
-        icon.paintIcon(null, g, 0, 0);
+        icon.paintIcon(new JButton(), g, 0, 0);
         g.dispose();
         return bi;
     }
 
+    /**
+     * @param img
+     * @return
+     */
     public static BufferedImage toBufferedImage(final Image img) {
         BufferedImage bi = new BufferedImage(img.getWidth(null), img.getHeight(null), BufferedImage.TYPE_INT_RGB);
         Graphics g = bi.getGraphics();

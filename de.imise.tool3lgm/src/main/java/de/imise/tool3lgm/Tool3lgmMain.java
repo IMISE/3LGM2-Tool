@@ -221,9 +221,8 @@ public class Tool3lgmMain {
     }
 
     /**
-     * As the tool starts it should check the old location of the
-     * userproperties file and if it exists cut and paste it
-     * to the new .3lgm folder
+     * As the tool starts it should check the old location of the userproperties
+     * file and if it exists cut and paste it to the new .3lgm folder
      */
     private static void relocateUserInfo() {
         File source = new File(System.getProperty("user.home") + "/.tool3lgm2UserInfo");
