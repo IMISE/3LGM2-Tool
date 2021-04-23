@@ -29,6 +29,7 @@ import de.imise.tool3lgm.graphtools.userfield.definition.UserField;
 import de.imise.tool3lgm.graphtools.userfield.definition.UserField.Style;
 import de.imise.tool3lgm.graphtools.userfield.definition.UserFieldDefinitions;
 import de.imise.tool3lgm.graphtools.userfield.definition.UserFieldTarget;
+import de.imise.tool3lgm.graphtools.userfield.dialog.definition.panel.UserFieldOptionPanel;
 import de.imise.util.swing.component.AlphabeticalComboBox;
 import de.imise.util.swing.dialog.AbstractSizeAndPositionRestoringDialog;
 
@@ -74,6 +75,9 @@ public abstract class AbstractUserFieldDeclarationDialog extends AbstractSizeAnd
     /** Dialogs Ok button */
     protected final JButton okButton;
 
+    /** The panel to set the userfield ooptions */
+    protected final UserFieldOptionPanel optionPanel;
+
     /**
      * Stores the last selected {@link Style} so if the dialog is reopend the
      * last selected view can be restored.
@@ -96,6 +100,7 @@ public abstract class AbstractUserFieldDeclarationDialog extends AbstractSizeAnd
         classComboBox = createClassCombobox(metaModel);
         fieldList = new UserFieldDeclarationDialogFieldList(definitions);
         userFieldTypeComboBox = createStyleCombobox();
+        optionPanel = UserFieldOptionPanel.getOptionPanel();
 
         previewButton = createButton("userFieldDeclarationDialog_previewButtonText");
         newButton = createButton("new");
@@ -144,6 +149,7 @@ public abstract class AbstractUserFieldDeclarationDialog extends AbstractSizeAnd
 
         buttonsPanel.add(previewButton, BorderLayout.NORTH);
         buttonsPanel.add(fieldButtonsPanel, BorderLayout.CENTER);
+        buttonsPanel.add(optionPanel, BorderLayout.SOUTH);
         centerPanel.add(buttonsPanel, BorderLayout.EAST);
         pane.add(centerPanel, BorderLayout.CENTER);
 

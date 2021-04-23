@@ -6,11 +6,22 @@ package de.imise.tool3lgm.graphtools.userfield.dialog.definition.panel;
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
 import static de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty.OPTION_ENABLE_FORMULA_CALCULATION;
 
-import javax.swing.BorderFactory;
-import javax.swing.JCheckBox;
+import java.awt.FlowLayout;
+import java.awt.GridLayout;
+import java.awt.LayoutManager;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.List;
 
+import javax.swing.BorderFactory;
+
+import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
+import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
 import de.imise.tool3lgm.graphtools.userfield.definition.UserField;
+import de.imise.tool3lgm.graphtools.userfield.definition.UserFieldTarget;
 import de.imise.util.swing.component.StoreLastValueCheckbox;
+import de.imise.util.swing.component.TriStateCheckBox;
 
 /**
  * @author AXS
@@ -18,22 +29,21 @@ import de.imise.util.swing.component.StoreLastValueCheckbox;
 public class UserFieldOptionPanel extends AbstractInputPanel {
 
     /**
-     * Das UserField, dessem Eigenschaften mit diesem Panel geändert werden
-     * sollen.
+     * These are the UserFields whose options are changed by this panel.
      */
-    private final UserField userField;
+    private List<UserField> userFields = new ArrayList<>();
 
     /**
      * CheckBox zum Einstellen, ob ein Benutzerfeld im Baum angezeigt werden
      * soll
      */
-    private final JCheckBox treeVisCheckBox;
+    private final TriStateCheckBox treeVisCheckBox;
 
     /**
      * CheckBox zum Einstellen, ob ein Benutzerfeld im Baum angezeigt werden
      * soll
      */
-    private final JCheckBox showDescriptionInDialog;
+    private final TriStateCheckBox showDescriptionInDialog;
 
     /**
      * CheckBox zum Unstellen der Option, ob Kennzahlformeln tatsächlich
@@ -42,25 +52,44 @@ public class UserFieldOptionPanel extends AbstractInputPanel {
     private StoreLastValueCheckbox enableFormulaCalculationCheckBox;
 
     /**
-     * @param userField
+     * The panel for a real collection of UserFields
      */
-    private UserFieldOptionPanel(final UserField userField) {
-        this.userField = userField;
+    private UserFieldOptionPanel(final LayoutManager layout, final boolean addEnableCalculationOption) {
+        super(layout == null ? new FlowLayout() : layout);
         setBorder(BorderFactory.createTitledBorder(getResString("optionenButtonText")));
 
-        boolean isTreeVisisbility = userField.isTreeVisibility();
-        treeVisCheckBox = new JCheckBox(getResString("userFieldEditor_treevis"), isTreeVisisbility);
-        add(treeVisCheckBox);
+        ActionListener actionListener = new ActionListener() {
+            @Override
+            public void actionPerformed(final ActionEvent e) {
+                updateUserFields();
+            }
+        };
 
-        boolean isShowDescriptionInDialog = userField.isShowDescriptionInDialog();
-        showDescriptionInDialog = new JCheckBox(getResString("userFieldEditor_showDescriptionInDialog"), isShowDescriptionInDialog);
+        treeVisCheckBox = new TriStateCheckBox(getResString("userFieldEditor_treevis"));
+        treeVisCheckBox.addActionListener(actionListener);
+        add(treeVisCheckBox);
+        showDescriptionInDialog = new TriStateCheckBox(getResString("userFieldEditor_showDescriptionInDialog"));
+        showDescriptionInDialog.addActionListener(actionListener);
         add(showDescriptionInDialog);
 
         //bei allen UserFields die mit Kennzahlen zu tun haben, die Option zum Einschalten der Berechnung anbieten
-        if (userField.isNumberUserField()) {
+        if (addEnableCalculationOption) {
             enableFormulaCalculationCheckBox = new StoreLastValueCheckbox(OPTION_ENABLE_FORMULA_CALCULATION.createAction(), OPTION_ENABLE_FORMULA_CALCULATION.is());
             add(enableFormulaCalculationCheckBox);
         }
+    }
+
+    /**
+     * The Panel for a songle UserField dialog
+     *
+     * @param userField
+     */
+    private UserFieldOptionPanel(final UserField userField) {
+        this(null, userField.isNumberUserField());
+        userFields.add(userField);
+        setBorder(BorderFactory.createTitledBorder(getResString("optionenButtonText")));
+        Class<? extends UserFieldTarget> targetClass = userField.getTargetClass();
+        updateCheckBoxes(targetClass);
     }
 
     /**
@@ -71,20 +100,89 @@ public class UserFieldOptionPanel extends AbstractInputPanel {
         return userField.isGlobal() ? null : new UserFieldOptionPanel(userField);
     }
 
+    /**
+     * @param userField
+     * @return
+     */
+    public static UserFieldOptionPanel getOptionPanel() {
+        UserFieldOptionPanel optionPanel = new UserFieldOptionPanel(new GridLayout(3, 1), true);
+        ActionListener actionListener = new ActionListener() {
+            @Override
+            public void actionPerformed(final ActionEvent e) {
+                optionPanel.commit();
+            }
+        };
+        optionPanel.treeVisCheckBox.addActionListener(actionListener);
+        optionPanel.treeVisCheckBox.addActionListener(actionListener);
+        return optionPanel;
+    }
+
     @Override
     public void commit() {
-        if (treeVisCheckBox != null) {
+        for (UserField userField : userFields) {
             boolean isTreeVissible = treeVisCheckBox.isSelected();
             userField.setTreeVisibility(isTreeVissible);
+            boolean showDescription = showDescriptionInDialog.isSelected();
+            userField.setShowDescriptionInDialog(showDescription);
         }
-        boolean showDescription = showDescriptionInDialog.isSelected();
-        userField.setShowDescriptionInDialog(showDescription);
     }
 
     @Override
     public void cancel() {
         if (enableFormulaCalculationCheckBox != null) {
             OPTION_ENABLE_FORMULA_CALCULATION.set(enableFormulaCalculationCheckBox.isStoredState());
+        }
+    }
+
+    /**
+     * @param selectedUserFieldTargetClass
+     * @param userFields
+     */
+    public void setUserFields(final Class<? extends UserFieldTarget> selectedUserFieldTargetClass, final List<UserField> userFields) {
+        this.userFields = userFields;
+        updateCheckBoxes(selectedUserFieldTargetClass);
+    }
+
+    /**
+     * @param selectedUserFieldTargetClass
+     */
+    private void updateCheckBoxes(final Class<? extends UserFieldTarget> selectedUserFieldTargetClass) {
+        boolean isOneDisabledTreeVisibility = false;
+        boolean isOneEnabledTreeVisibility = false;
+        boolean isOneDisabledShowDescription = false;
+        boolean isOneEnabledShowDescription = false;
+        for (UserField userField : userFields) {
+            if (userField.isTreeVisibility()) {
+                isOneEnabledTreeVisibility = true;
+            } else {
+                isOneDisabledTreeVisibility = true;
+            }
+            if (userField.isShowDescriptionInDialog()) {
+                isOneEnabledShowDescription = true;
+            } else {
+                isOneDisabledShowDescription = true;
+            }
+        }
+        boolean userFieldsSelected = !userFields.isEmpty();
+
+        treeVisCheckBox.setEnabled(userFieldsSelected && Node.class.isAssignableFrom(selectedUserFieldTargetClass));
+        showDescriptionInDialog.setEnabled(userFieldsSelected && ModelElement.class.isAssignableFrom(selectedUserFieldTargetClass));
+        showDescriptionInDialog.setSelectionState(userFieldsSelected && isOneEnabledShowDescription, userFieldsSelected && isOneDisabledShowDescription);
+        treeVisCheckBox.setSelectionState(userFieldsSelected && isOneEnabledTreeVisibility, userFieldsSelected && isOneDisabledTreeVisibility);
+        if (enableFormulaCalculationCheckBox != null) {
+            enableFormulaCalculationCheckBox.setSelected(OPTION_ENABLE_FORMULA_CALCULATION.is());
+        }
+    }
+
+    /**
+     *
+     */
+    private void updateUserFields() {
+        boolean isTreeVisibility = treeVisCheckBox.isSelected();
+        boolean isShowDescription = showDescriptionInDialog.isSelected();
+        for (UserField userField : userFields) {
+            userField.setShowDescriptionInDialog(isShowDescription);
+            userField.setTreeVisibility(isTreeVisibility);
         }
     }
 

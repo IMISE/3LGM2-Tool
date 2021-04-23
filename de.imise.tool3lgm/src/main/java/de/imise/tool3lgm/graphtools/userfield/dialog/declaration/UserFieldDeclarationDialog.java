@@ -103,6 +103,7 @@ public final class UserFieldDeclarationDialog extends AbstractUserFieldDeclarati
         oldUserFieldDefionitions = definitions.clone();
         init();
         restoreSizeAndPosition(-1, 500);
+        updateOptionsPanel();
     }
 
     /**
@@ -347,6 +348,7 @@ public final class UserFieldDeclarationDialog extends AbstractUserFieldDeclarati
             } else if (is(classComboBox)) {
                 fieldList.update(selectedClass);
                 updateUserFieldTypeComboBox();
+                updateOptionsPanel();
             }
         }
         previewButton.setEnabled(isPreviewEnabeld());
@@ -444,7 +446,21 @@ public final class UserFieldDeclarationDialog extends AbstractUserFieldDeclarati
                 upButton.setEnabled(upButtonEnabled);
                 downButton.setEnabled(downButtonEnabled);
             }
+            updateOptionsPanel();
         }
+    }
+
+    /**
+     * @return
+     */
+    private void updateOptionsPanel() {
+        List<UserField> userFields = new ArrayList<>();
+        for (int i : fieldList.getSelectedIndices()) {
+            UserField userField = fieldList.getUserField(i);
+            userFields.add(userField);
+        }
+        Class<? extends UserFieldTarget> selectedClass = classComboBox.getSelectedClass();
+        optionPanel.setUserFields(selectedClass, userFields);
     }
 
 }
