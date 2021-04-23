@@ -17,6 +17,7 @@ import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
 import javax.swing.JComponent;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
@@ -290,7 +291,7 @@ public class ComponentAsImageExportHandler {
         JRadioButton saveMaximumSizeRBut = null;
         if (comp instanceof ZoomableComponent) {
             JPanel sizeOptionPanel = new JPanel(new BorderLayout());
-            sizeOptionPanel.setBorder(BorderFactory.createEmptyBorder(4, 4, 4, 4));
+            sizeOptionPanel.setBorder(BorderFactory.createEmptyBorder(8, 8, 8, 8));
 
             normalSizeRBut = new JRadioButton(drh.getResString("RADIO_BUTTON_NORMAL_SIZE"));
             mediumSizeRBut = new JRadioButton(drh.getResString("RADIO_BUTTON_MEDIUM_SIZE"));
@@ -300,21 +301,25 @@ public class ComponentAsImageExportHandler {
             saveMaximumSizeRBut = new JRadioButton(drh.getResString("RADIO_BUTTON_MAXIMUM_SIZE"));
             ButtonGroup buttonGroup = new ButtonGroup();
             buttonGroup.add(saveOriginalSizeRBut);
-            buttonGroup.add(saveMaximumSizeRBut);
             buttonGroup.add(normalSizeRBut);
             buttonGroup.add(mediumSizeRBut);
             buttonGroup.add(highSizeRBut);
+            buttonGroup.add(saveMaximumSizeRBut);
 
-            JPanel buttonPanel = new JPanel(new GridLayout(5, 1));
+            JLabel label = new JLabel("<html>" + drh.getResString("TITLE_RESOLUTION") + "</html>");
+            JPanel buttonPanel = new JPanel(new GridLayout(6, 1));
+            buttonPanel.add(label);
             buttonPanel.add(saveOriginalSizeRBut);
-            buttonPanel.add(saveMaximumSizeRBut);
             buttonPanel.add(normalSizeRBut);
             buttonPanel.add(mediumSizeRBut);
             buttonPanel.add(highSizeRBut);
+            buttonPanel.add(saveMaximumSizeRBut);
             saveOriginalSizeRBut.setSelected(true);
 
-            sizeOptionPanel.add(buttonPanel, BorderLayout.SOUTH);
+            sizeOptionPanel.add(buttonPanel, BorderLayout.NORTH);
             fc.setAccessory(sizeOptionPanel);
+            label.setMaximumSize(new Dimension(buttonPanel.getPreferredSize().width, Integer.MAX_VALUE));
+            label.setPreferredSize(new Dimension(label.getMaximumSize().width, label.getPreferredSize().height));
         }
 
         fc.setMultiSelectionEnabled(false);
