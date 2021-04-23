@@ -337,6 +337,32 @@ public final class UserFieldDeclarationDialog extends AbstractUserFieldDeclarati
                     }
                     returnValue = -1;
                 }
+            } else if (is(duplicateButton)) {
+                int[] selectedIndices = fieldList.getSelectedIndices();
+                int blockStart = -1;
+                int blockEnd = -1;
+                for (int i = selectedIndices.length - 1; i >= 0; i--) {
+                    if (blockEnd < selectedIndices[i]) {
+                        blockEnd = selectedIndices[i];
+                        blockStart = blockEnd;
+                        for (int j = i - 1; j >= 0; j--) {
+                            if (selectedIndices[j] + 1 != selectedIndices[j + 1]) {
+                                break;
+                            }
+                            blockStart--;
+                        }
+                    }
+                    int insertOffset = 1;
+                    for (int j = blockStart; j <= blockEnd; j++) {
+                        UserField userField = fieldList.getUserField(j);
+                        UserField duplicate = userField.clone(true);
+                        definitions.insert(duplicate, blockEnd + insertOffset++);
+                        i--;
+                    }
+                    blockEnd = -1;
+                    i++;
+                }
+                fieldList.update(selectedClass);
             } else if (is(upButton)) {
                 fieldList.moveUp();
                 fieldList.update(selectedClass);
@@ -416,9 +442,10 @@ public final class UserFieldDeclarationDialog extends AbstractUserFieldDeclarati
             int[] selectedIndices = fieldList.getSelectedIndices();
             int selectionCount = selectedIndices.length;
             editButton.setEnabled(selectionCount == 1);
-            if (selectionCount > 0) {
-                deleteButton.setEnabled(true);
-
+            boolean isSelection = selectionCount > 0;
+            deleteButton.setEnabled(isSelection);
+            duplicateButton.setEnabled(isSelection);
+            if (isSelection) {
                 // update up and down buttons state
                 boolean continiuosSelection = true; //up and down are enabled only if continiuosSelection
                 for (int i = 0; i < selectionCount - 1; i++) { //check continious selection

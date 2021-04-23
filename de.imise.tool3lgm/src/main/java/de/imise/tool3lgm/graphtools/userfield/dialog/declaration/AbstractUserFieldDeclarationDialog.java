@@ -60,6 +60,9 @@ public abstract class AbstractUserFieldDeclarationDialog extends AbstractSizeAnd
     /** button to add new userField */
     protected JButton newButton;
 
+    /** button to duplicate userFields */
+    protected JButton duplicateButton;
+
     /** Button to preview the definition for one type of model elements */
     protected JButton previewButton;
 
@@ -106,6 +109,7 @@ public abstract class AbstractUserFieldDeclarationDialog extends AbstractSizeAnd
         newButton = createButton("new");
         editButton = createDisabledButton("userFieldDeclarationDialog_editButtonText");
         deleteButton = createDisabledButton("delete");
+        duplicateButton = createDisabledButton("duplicate");
         downButton = createDisabledButton("runter2.gif");
         upButton = createDisabledButton("hoch2.gif");
         importButton = createButton("importButtonText");
@@ -136,16 +140,18 @@ public abstract class AbstractUserFieldDeclarationDialog extends AbstractSizeAnd
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.weightx = 1;
 
-        add(fieldButtonsPanel, gbc, 0, 0, 3, 1, userFieldTypeComboBox);
-        add(fieldButtonsPanel, gbc, 3, 0, 1, 1, newButton);
-        add(fieldButtonsPanel, gbc, 0, 1, 4, 1, editButton);
-        add(fieldButtonsPanel, gbc, 0, 2, 4, 1, deleteButton);
+        int y = 0;
+        add(fieldButtonsPanel, gbc, 0, y, 3, 1, userFieldTypeComboBox);
+        add(fieldButtonsPanel, gbc, 3, y++, 1, 1, newButton);
+        add(fieldButtonsPanel, gbc, 0, y++, 4, 1, editButton);
+        add(fieldButtonsPanel, gbc, 0, y++, 4, 1, deleteButton);
+        add(fieldButtonsPanel, gbc, 0, y++, 4, 1, duplicateButton);
 
         JPanel upDownButtonPanel = new JPanel(new GridBagLayout());
         add(upDownButtonPanel, gbc, 0, 0, 1, 1, downButton);
         add(upDownButtonPanel, gbc, 1, 0, 1, 1, upButton);
 
-        add(fieldButtonsPanel, gbc, 0, 3, 4, 1, upDownButtonPanel);
+        add(fieldButtonsPanel, gbc, 0, y++, 4, 1, upDownButtonPanel);
 
         buttonsPanel.add(previewButton, BorderLayout.NORTH);
         buttonsPanel.add(fieldButtonsPanel, BorderLayout.CENTER);
