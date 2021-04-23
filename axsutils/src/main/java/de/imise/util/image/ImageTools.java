@@ -3,6 +3,9 @@ package de.imise.util.image;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.GraphicsConfiguration;
+import java.awt.GraphicsDevice;
+import java.awt.GraphicsEnvironment;
 import java.awt.Image;
 import java.awt.Point;
 import java.awt.Rectangle;
@@ -19,6 +22,10 @@ import java.util.List;
 import javax.imageio.ImageIO;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JComponent;
+import javax.swing.JDialog;
+import javax.swing.JPanel;
 
 import de.imise.util.robot.ScreenRobot;
 
@@ -764,6 +771,53 @@ public class ImageTools {
         return bi;
     }
 
+    /**
+     * Creates an BufferedImage of the given component
+     *
+     * @param c
+     * @return BufferedImage of the component
+     */
+    public static BufferedImage createImage(final JComponent c) {
+        return createImage(c, null);
+    }
+
+    /**
+     * Creates an BufferedImage of the given component.
+     *
+     * @param c
+     * @param backgroud this color is set as backgorud color of the compoennt if
+     *            not <code>null</code>
+     * @return BufferedImage of the component
+     */
+    public static BufferedImage createImage(final JComponent c, final Color backgroud) {
+        JPanel panel = new JPanel();
+        panel.add(c);
+        JDialog d = new JDialog();
+        d.setUndecorated(true);
+        d.add(panel);
+        d.pack();
+        int w = c.getWidth();
+        int h = c.getHeight();
+
+        //BufferedImage bi = new BufferedImage(w, h, BufferedImage.TYPE_INT_RGB);
+        GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+        GraphicsDevice gd = ge.getDefaultScreenDevice();
+        GraphicsConfiguration gc = gd.getDefaultConfiguration();
+        BufferedImage image = gc.createCompatibleImage(w, h);
+
+        Graphics2D g = image.createGraphics();
+        if (backgroud != null) {
+            c.setBackground(backgroud);
+        }
+        c.paint(g);
+        g.dispose();
+        return image;
+    }
+
+    /**
+     * @param image
+     * @return
+     */
     public static String getBase64EncodedImage(final BufferedImage image) {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         String encodedImage = "";
