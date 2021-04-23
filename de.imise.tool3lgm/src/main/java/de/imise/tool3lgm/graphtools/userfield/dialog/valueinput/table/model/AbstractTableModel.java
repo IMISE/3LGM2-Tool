@@ -8,7 +8,7 @@ import java.util.Vector;
 import javax.swing.table.DefaultTableModel;
 
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
-import de.imise.tool3lgm.graphtools.userfield.UserFieldDefinitions;
+import de.imise.tool3lgm.graphtools.userfield.definition.UserFieldDefinitions;
 import de.imise.util.NamedObjectContainer;
 
 /**
@@ -36,9 +36,9 @@ public abstract class AbstractTableModel extends DefaultTableModel {
 
     ///////////////////////////////////////////////
     /// Konstanten für die Auswahl              ///
-    /// der im ClassificationNumberPanel        ///
+    /// der im NumberPanel                      ///
     /// anzuzeigenden Elemente.                 ///
-    /// Ist in createClassificationNumberModel( ///
+    /// Ist in createNumberModel(                  ///
     /// Class elementClass, GraphDocument doc,  ///
     /// int elementTypesToShow) für             ///
     /// "elementTypesToShow" anzuwenden         ///

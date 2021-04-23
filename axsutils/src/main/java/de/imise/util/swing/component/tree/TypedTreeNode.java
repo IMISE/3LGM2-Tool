@@ -7,7 +7,6 @@ import java.util.Vector;
 
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.MutableTreeNode;
-import javax.swing.tree.TreeNode;
 
 import de.imise.util.Alphabetical;
 
@@ -109,7 +108,7 @@ public class TypedTreeNode<T> extends DefaultMutableTreeNode {
     @SuppressWarnings("unchecked")
     public <E> TypedTreeNode<E> getEqualsChild(final TypedTreeNode<E> node) {
         if (children != null) {
-            for (TreeNode child : children) {
+            for (Object child : children) {
                 if (node.equals(child)) {
                     return (TypedTreeNode<E>) child;
                 }

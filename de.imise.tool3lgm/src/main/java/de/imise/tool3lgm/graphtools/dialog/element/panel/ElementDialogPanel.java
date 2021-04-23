@@ -30,7 +30,6 @@ import de.imise.tool3lgm.graphtools.dialog.element.AbstractElementPropertyDialog
 import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
-import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.model.LGMGraphDocument;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.graphtools.view.tooltip.ElementToolTipProvider;
@@ -116,8 +115,8 @@ public abstract class ElementDialogPanel extends JPanel {
     public ElementDialogPanel(final AbstractElementPropertyDialog dialog, final String name) {
         this.dialog = dialog;
         setName(name);
-        GraphDocument mainDoc = dialog.getMainDoc();
-        elementsNameBuilder = mainDoc.getElementsNameBuilder();
+        ModelElement modelElement = dialog.getModelElement();
+        elementsNameBuilder = modelElement.getElementsNameBuilder();
         init();
     }
 

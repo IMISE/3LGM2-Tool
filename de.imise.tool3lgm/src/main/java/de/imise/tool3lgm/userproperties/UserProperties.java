@@ -388,7 +388,7 @@ public class UserProperties extends AbstractUserProperties {
          */
         OPTION_CREATE_NEW_SUBMODEL_FOR_ANALYSIS_RESULT,
         /** Kennzahlberechnung an/aus */
-        OPTION_ENABLE_CLASSIFICATION_NUMBER_CALCULATION,
+        OPTION_ENABLE_FORMULA_CALCULATION,
         /** Mark inconsistent elements */
         OPTION_MARK_INCONSISTENT_ELEMENTS,
         /** Show consistency table */

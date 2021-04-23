@@ -111,7 +111,6 @@ public class ElementDialogHeaderPanel extends ElementDialogPanel {
     public void update() {
         ModelElement me = getModelElement();
         if (me instanceof Node) {
-            MetaModel metaModel = getMetaModel();
             Class<? extends ModelElement> dialogElementClass = me.getClass();
             String displayableName = elementsNameBuilder.getDisplayableFullName(dialogElementClass);
             typeLabel.setText(displayableName);

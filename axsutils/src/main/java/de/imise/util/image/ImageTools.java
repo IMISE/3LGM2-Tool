@@ -3,6 +3,9 @@ package de.imise.util.image;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.GraphicsConfiguration;
+import java.awt.GraphicsDevice;
+import java.awt.GraphicsEnvironment;
 import java.awt.Image;
 import java.awt.Point;
 import java.awt.Rectangle;
@@ -19,6 +22,10 @@ import java.util.List;
 import javax.imageio.ImageIO;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JComponent;
+import javax.swing.JDialog;
+import javax.swing.JPanel;
 
 import de.imise.util.robot.ScreenRobot;
 
@@ -508,10 +515,8 @@ public class ImageTools {
                             if (rgb == fullImage.getRGB(x + px, y + py)) {
                                 wrongPixelFound = true;
                             }
-                        } else {
-                            if (rgb != fullImage.getRGB(x + px, y + py)) {
-                                wrongPixelFound = true;
-                            }
+                        } else if (rgb != fullImage.getRGB(x + px, y + py)) {
+                            wrongPixelFound = true;
                         }
                     }
                 }
@@ -616,7 +621,7 @@ public class ImageTools {
                         c.getRed(), c.getGreen(), c.getBlue()
                 };
                 for (int i = 0; i < rgb.length; i++) {
-                    String s = new String("" + rgb[i]);
+                    String s = "" + rgb[i];
                     for (int t = 0; t < 3 - s.length(); t++) {
                         sb.append(' ');
                     }
@@ -637,6 +642,12 @@ public class ImageTools {
         return sb.toString();
     }
 
+    /**
+     * @param pixels
+     * @param color
+     * @param fieldName
+     * @return
+     */
     public static final String getSingleColorPixelArrayAsJavaCode(final Pixel[][] pixels, final Color color, final String fieldName) {
         StringBuilder sb = new StringBuilder("\tstatic final Color ");
         sb.append(fieldName);
@@ -735,15 +746,23 @@ public class ImageTools {
         return ret;
     }
 
+    /**
+     * @param icon
+     * @return
+     */
     public static BufferedImage toBufferedImage(final Icon icon) {
         BufferedImage bi = new BufferedImage(icon.getIconWidth(), icon.getIconHeight(), BufferedImage.TYPE_INT_RGB);
         Graphics g = bi.createGraphics();
         // paint the Icon to the BufferedImage.
-        icon.paintIcon(null, g, 0, 0);
+        icon.paintIcon(new JButton(), g, 0, 0);
         g.dispose();
         return bi;
     }
 
+    /**
+     * @param img
+     * @return
+     */
     public static BufferedImage toBufferedImage(final Image img) {
         BufferedImage bi = new BufferedImage(img.getWidth(null), img.getHeight(null), BufferedImage.TYPE_INT_RGB);
         Graphics g = bi.getGraphics();
@@ -752,6 +771,53 @@ public class ImageTools {
         return bi;
     }
 
+    /**
+     * Creates an BufferedImage of the given component
+     *
+     * @param c
+     * @return BufferedImage of the component
+     */
+    public static BufferedImage createImage(final JComponent c) {
+        return createImage(c, null);
+    }
+
+    /**
+     * Creates an BufferedImage of the given component.
+     *
+     * @param c
+     * @param backgroud this color is set as backgorud color of the compoennt if
+     *            not <code>null</code>
+     * @return BufferedImage of the component
+     */
+    public static BufferedImage createImage(final JComponent c, final Color backgroud) {
+        JPanel panel = new JPanel();
+        panel.add(c);
+        JDialog d = new JDialog();
+        d.setUndecorated(true);
+        d.add(panel);
+        d.pack();
+        int w = c.getWidth();
+        int h = c.getHeight();
+
+        //BufferedImage bi = new BufferedImage(w, h, BufferedImage.TYPE_INT_RGB);
+        GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+        GraphicsDevice gd = ge.getDefaultScreenDevice();
+        GraphicsConfiguration gc = gd.getDefaultConfiguration();
+        BufferedImage image = gc.createCompatibleImage(w, h);
+
+        Graphics2D g = image.createGraphics();
+        if (backgroud != null) {
+            c.setBackground(backgroud);
+        }
+        c.paint(g);
+        g.dispose();
+        return image;
+    }
+
+    /**
+     * @param image
+     * @return
+     */
     public static String getBase64EncodedImage(final BufferedImage image) {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         String encodedImage = "";

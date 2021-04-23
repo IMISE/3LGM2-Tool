@@ -4,14 +4,6 @@
 package de.imise.tool3lgm.graphtools.userfield.dialog.definition.formula;
 
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
-import static de.imise.tool3lgm.graphtools.userfield.UserField.ACCOUNTING_FUNCTION_AVG;
-import static de.imise.tool3lgm.graphtools.userfield.UserField.ACCOUNTING_FUNCTION_INDI;
-import static de.imise.tool3lgm.graphtools.userfield.UserField.ACCOUNTING_FUNCTION_MAX;
-import static de.imise.tool3lgm.graphtools.userfield.UserField.ACCOUNTING_FUNCTION_MIN;
-import static de.imise.tool3lgm.graphtools.userfield.UserField.ACCOUNTING_FUNCTION_MULT;
-import static de.imise.tool3lgm.graphtools.userfield.UserField.ACCOUNTING_FUNCTION_REF;
-import static de.imise.tool3lgm.graphtools.userfield.UserField.ACCOUNTING_FUNCTION_SUM;
-import static de.imise.tool3lgm.graphtools.userfield.UserField.ACCOUNTING_FUNCTION_TWSUM;
 import static de.imise.tool3lgm.graphtools.userfield.calculator.Calculator.CLOSE_BRACKET;
 import static de.imise.tool3lgm.graphtools.userfield.calculator.Calculator.OPEN_BRACKET;
 import static de.imise.tool3lgm.graphtools.userfield.calculator.Calculator.OPERATOR_DIV;
@@ -20,6 +12,14 @@ import static de.imise.tool3lgm.graphtools.userfield.calculator.Calculator.OPERA
 import static de.imise.tool3lgm.graphtools.userfield.calculator.Calculator.OPERATOR_PLUS;
 import static de.imise.tool3lgm.graphtools.userfield.calculator.Calculator.WHITESPACE;
 import static de.imise.tool3lgm.graphtools.userfield.calculator.Calculator.isOperator;
+import static de.imise.tool3lgm.graphtools.userfield.definition.UserField.ACCOUNTING_FUNCTION_AVG;
+import static de.imise.tool3lgm.graphtools.userfield.definition.UserField.ACCOUNTING_FUNCTION_INDI;
+import static de.imise.tool3lgm.graphtools.userfield.definition.UserField.ACCOUNTING_FUNCTION_MAX;
+import static de.imise.tool3lgm.graphtools.userfield.definition.UserField.ACCOUNTING_FUNCTION_MIN;
+import static de.imise.tool3lgm.graphtools.userfield.definition.UserField.ACCOUNTING_FUNCTION_MULT;
+import static de.imise.tool3lgm.graphtools.userfield.definition.UserField.ACCOUNTING_FUNCTION_REF;
+import static de.imise.tool3lgm.graphtools.userfield.definition.UserField.ACCOUNTING_FUNCTION_SUM;
+import static de.imise.tool3lgm.graphtools.userfield.definition.UserField.ACCOUNTING_FUNCTION_TWSUM;
 import static java.awt.GridBagConstraints.BOTH;
 import static java.awt.GridBagConstraints.NORTHWEST;
 
@@ -61,10 +61,10 @@ import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.userfield.CostingUtil;
-import de.imise.tool3lgm.graphtools.userfield.UserField;
-import de.imise.tool3lgm.graphtools.userfield.UserFieldDefinitions;
-import de.imise.tool3lgm.graphtools.userfield.UserFieldTarget;
 import de.imise.tool3lgm.graphtools.userfield.calculator.Calculator;
+import de.imise.tool3lgm.graphtools.userfield.definition.UserField;
+import de.imise.tool3lgm.graphtools.userfield.definition.UserFieldDefinitions;
+import de.imise.tool3lgm.graphtools.userfield.definition.UserFieldTarget;
 import de.imise.util.swing.component.list.AlphabeticalJList;
 import de.imise.util.swing.component.text.ExtendedTextArea;
 
@@ -94,7 +94,7 @@ public class FormulaDefinitionDialog extends JDialog implements ActionListener {
     /**
      * COMMENTME
      */
-    public static final String CLASSIFICATION_NUMBER = "CLASSIFICATION_NUMBER";
+    public static final String NUMBER = "NUMBER";
 
     /**
      * Kenzeichen dafür, dass eine Klammer in einer Formel nach rechts Verlassen
@@ -374,20 +374,18 @@ public class FormulaDefinitionDialog extends JDialog implements ActionListener {
 
     /**
      * Lädt alle anderen <code>UserField</code>s (userFields, die vom STYLE
-     * CLASSIFICATION_NUMBER sind) in die JList.
+     * NUMBER sind) in die JList.
      *
      * @param elementClass
      */
     private void updateFieldList(final Class<? extends UserFieldTarget> elementClass) {
         for (UserField uf : definitions.getUserFields(elementClass)) {
-            if (uf != userField && uf.isClassificationUserField()) {
+            if (uf != userField && uf.isNumberUserField()) {
                 userFieldList.addObject(uf);
             }
         }
         for (UserField uf : definitions.getGlobalUserFields()) {
-            if (!uf.hasStyle(UserField.Style.FORMAT)) {
-                modelAttributes.addObject(uf);
-            }
+            modelAttributes.addObject(uf);
         }
     }
 
@@ -435,7 +433,7 @@ public class FormulaDefinitionDialog extends JDialog implements ActionListener {
         } else if (source == accountingFunctionsButtonPanel.buttonindikator) {
             if (formulaArea.getText().isEmpty() || formulaArea.getText().trim().startsWith(ACCOUNTING_FUNCTION_INDI)) {
                 IndicatorDialog indiDialog;
-                indiDialog = new IndicatorDialog(this, userField);
+                indiDialog = new IndicatorDialog(this, definitions, userField);
                 String newIndi = indiDialog.showDialog();
                 newIndi = getIndikatorStackString(newIndi);
                 if (!newIndi.isEmpty()) {
@@ -445,7 +443,7 @@ public class FormulaDefinitionDialog extends JDialog implements ActionListener {
                 JOptionPane.showMessageDialog(this, getResString("indicator_in_formula"), getResString("fehler"), JOptionPane.ERROR_MESSAGE);
             }
         } else if (UserField.isAccountingFunction(cmd)) {
-            VfDialog vfd = new VfDialog(this, cmd, userField);
+            VfDialog vfd = new VfDialog(this, definitions, cmd, userField);
             String vfdResult = vfd.showDialog();
             if (!vfdResult.isEmpty()) {
                 termStack.push(vfdResult);

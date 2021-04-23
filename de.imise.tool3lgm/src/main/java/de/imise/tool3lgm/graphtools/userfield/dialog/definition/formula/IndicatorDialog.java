@@ -25,8 +25,8 @@ import javax.swing.JPanel;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
 
-import de.imise.tool3lgm.graphtools.userfield.UserField;
-import de.imise.tool3lgm.graphtools.userfield.UserFieldDefinitions;
+import de.imise.tool3lgm.graphtools.userfield.definition.UserField;
+import de.imise.tool3lgm.graphtools.userfield.definition.UserFieldDefinitions;
 import de.imise.util.swing.component.AlphabeticalComboBox;
 import de.imise.util.swing.component.text.ExtendedTextField;
 
@@ -93,22 +93,22 @@ public class IndicatorDialog extends JDialog implements ActionListener {
     /**
      *
      */
-    private UserFieldDefinitions definitions;
+    private final UserFieldDefinitions definitions;
 
     /**
      * Instanz des Dialoges.
      *
      * @param owner des Dialoges
-     * @param classElement : für welches Klassenelement soll ein Indikator
-     *            angelegt werden.
+     * @param definitions
      * @param userField : wenn eine schon bestehende Indikationsdefinition
      *            bearbeitet werden soll, das entsprechende UserField übergeben
      *            <br>
      *            ansonsten null übergeben! wenn eine neue Indikatordefinitions
      *            angelegt werden soll: null übergeben!
      */
-    public IndicatorDialog(final JDialog owner, final UserField userField) {
+    public IndicatorDialog(final JDialog owner, final UserFieldDefinitions definitions, final UserField userField) {
         super(owner, UserField.getDisplayableFunctionName(UserField.ACCOUNTING_FUNCTION_INDI));
+        this.definitions = definitions;
         this.userField = userField;
         setModal(true);
         setLocationByPlatform(true);
@@ -135,9 +135,6 @@ public class IndicatorDialog extends JDialog implements ActionListener {
         JLabel currentValueLabel = new JLabel(getResString("attributeIndicate"));
         panel1.add(currentValueLabel, constraints);
         userFieldComboBox = new AlphabeticalComboBox<>();
-        if (userField != null) {
-            definitions = userField.getDefinitions();
-        }
 
         // Hier wird die ComboBox mit den indizierbaren userfields gefüllt.
         for (UserField uf : definitions.getUserFields(userField.getTargetClass())) {
@@ -148,7 +145,7 @@ public class IndicatorDialog extends JDialog implements ActionListener {
                 //die Funktion private String getIndi(final UserFieldTarget target, final String indicatorFormula) im Calculator
                 //setzt den Wert eines Indikators auf einen String, der sich nicht mehr in BigDecimal() umwandeln lässt. Daher kann
                 //man keine Inidikatoren für Indikatoren definieren, was aber auch nicht umbedingt notwendig ist.
-                if (uf.isClassificationUserField() && !uf.isIndicatorFormula()) {
+                if (uf.isNumberUserField() && !uf.isIndicatorFormula()) {
                     userFieldComboBox.addObject(uf);
                 }
             }
@@ -264,7 +261,7 @@ public class IndicatorDialog extends JDialog implements ActionListener {
      * Dialog mit schon vorhandenen Indikationsbereichen gefüllt.
      */
     private void fillIndiValues() {
-        if (userField.hasStyle(UserField.Style.CLASSIFICATION_NUMBER_FORMULA)) {
+        if (userField.hasStyle(UserField.Style.FORMULA)) {
             //	userFieldComboBox.setSelectedItem(definitions.getUserField());
             String indi = userField.getFormula();
             if (indi != null) {

@@ -7,7 +7,7 @@ import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.Table;
 
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
-import de.imise.tool3lgm.graphtools.userfield.UserField;
+import de.imise.tool3lgm.graphtools.userfield.definition.UserField;
 
 /**
  * Hält für alle ModelElemente, denen eine einfache Teilwertsummenformel als

@@ -25,4 +25,13 @@ public abstract class Node extends ModelElement {
         return ec;
     }
 
+    /**
+     * @param doc
+     * @return
+     */
+    @Override
+    public NodeContainer getContainer(final GraphDocument doc) {
+        return (NodeContainer) super.getContainer(doc);
+    }
+
 }

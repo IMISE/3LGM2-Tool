@@ -278,7 +278,7 @@ public class Tool3lgm {
     private boolean openModel(final File file, final Tool3lgmModelType modelType) {
         GDCollection gdcoll;
         if (file == null) {
-            gdcoll = new GDCollection(modelType);
+            gdcoll = new GDCollection(modelType, true);
             gdcoll.createSzenario();
         } else {
             gdcoll = loadFile(file);

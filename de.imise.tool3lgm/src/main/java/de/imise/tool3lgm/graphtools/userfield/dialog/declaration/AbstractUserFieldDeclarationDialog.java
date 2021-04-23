@@ -10,6 +10,7 @@ import java.awt.Frame;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Point;
+import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.BoxLayout;
@@ -24,12 +25,21 @@ import javax.swing.border.EmptyBorder;
 
 import de.imise.tool3lgm.graphtools.dialog.tools.EasyComponents;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
-import de.imise.tool3lgm.graphtools.userfield.UserField;
-import de.imise.tool3lgm.graphtools.userfield.UserFieldDefinitions;
+import de.imise.tool3lgm.graphtools.userfield.definition.UserField;
+import de.imise.tool3lgm.graphtools.userfield.definition.UserField.Style;
+import de.imise.tool3lgm.graphtools.userfield.definition.UserFieldDefinitions;
+import de.imise.tool3lgm.graphtools.userfield.definition.UserFieldTarget;
+import de.imise.tool3lgm.graphtools.userfield.dialog.definition.panel.UserFieldOptionPanel;
 import de.imise.util.swing.component.AlphabeticalComboBox;
 import de.imise.util.swing.dialog.AbstractSizeAndPositionRestoringDialog;
 
 public abstract class AbstractUserFieldDeclarationDialog extends AbstractSizeAndPositionRestoringDialog implements ActionListener {
+
+    /**
+     * Stores the last selected class so if the dialog is reopend the last
+     * selected view can be restored.
+     */
+    private static Class<? extends UserFieldTarget> lastSelectedUserFieldTargetClass;
 
     /** combobox to select a model-class */
     protected UserFieldDeclarationDialogClassComboBox classComboBox;
@@ -50,27 +60,35 @@ public abstract class AbstractUserFieldDeclarationDialog extends AbstractSizeAnd
     /** button to add new userField */
     protected JButton newButton;
 
+    /** Button to preview the definition for one type of model elements */
+    protected JButton previewButton;
+
     /** Buttons zum Vertauschen der Reihenfolge von Attributen */
     protected JButton upButton, downButton;
 
     /** Buttons für den Im- und Export */
     protected final JButton importButton, exportButton;
 
-    /**
-     *
-     */
+    /** Dialogs Cancel button */
     protected final JButton cancelButton;
 
-    /**
-     *
-     */
+    /** Dialogs Ok button */
     protected final JButton okButton;
+
+    /** The panel to set the userfield ooptions */
+    protected final UserFieldOptionPanel optionPanel;
+
+    /**
+     * Stores the last selected {@link Style} so if the dialog is reopend the
+     * last selected view can be restored.
+     */
+    protected static Style lastSelectedUserFieldStyle;
 
     /**
      * ComboBox mit der die Art des neuen benutzerdefinierten Eigenschaftsfeldes
      * festgelegt wird
      */
-    protected AlphabeticalComboBox<UserField.Style> userFieldTypeComboBox;
+    protected AlphabeticalComboBox<Style> userFieldTypeComboBox;
 
     /**
      * @param owner
@@ -79,10 +97,12 @@ public abstract class AbstractUserFieldDeclarationDialog extends AbstractSizeAnd
     public AbstractUserFieldDeclarationDialog(final Frame owner, final UserFieldDefinitions definitions) {
         super(owner, getResString("userfields"), true);
         MetaModel metaModel = definitions.getMetaModel();
-        classComboBox = new UserFieldDeclarationDialogClassComboBox(metaModel, 13);
+        classComboBox = createClassCombobox(metaModel);
         fieldList = new UserFieldDeclarationDialogFieldList(definitions);
-        userFieldTypeComboBox = new AlphabeticalComboBox<>();
+        userFieldTypeComboBox = createStyleCombobox();
+        optionPanel = UserFieldOptionPanel.getOptionPanel();
 
+        previewButton = createButton("userFieldDeclarationDialog_previewButtonText");
         newButton = createButton("new");
         editButton = createDisabledButton("userFieldDeclarationDialog_editButtonText");
         deleteButton = createDisabledButton("delete");
@@ -108,24 +128,29 @@ public abstract class AbstractUserFieldDeclarationDialog extends AbstractSizeAnd
         centerPanel.add(createLabel("userFieldDeclarationDialog_fields"), BorderLayout.NORTH);
         centerPanel.add(createScrollPane(fieldList), BorderLayout.CENTER);
 
-        JPanel buttonPanel = new JPanel(new GridBagLayout());
-        buttonPanel.setBorder(border);
+        JPanel buttonsPanel = new JPanel(new BorderLayout());
+        JPanel fieldButtonsPanel = new JPanel(new GridBagLayout());
+        fieldButtonsPanel.setBorder(border);
 
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.weightx = 1;
 
-        add(buttonPanel, gbc, 0, 0, 3, 1, userFieldTypeComboBox);
-        add(buttonPanel, gbc, 3, 0, 1, 1, newButton);
-        add(buttonPanel, gbc, 0, 1, 4, 1, editButton);
-        add(buttonPanel, gbc, 0, 2, 4, 1, deleteButton);
+        add(fieldButtonsPanel, gbc, 0, 0, 3, 1, userFieldTypeComboBox);
+        add(fieldButtonsPanel, gbc, 3, 0, 1, 1, newButton);
+        add(fieldButtonsPanel, gbc, 0, 1, 4, 1, editButton);
+        add(fieldButtonsPanel, gbc, 0, 2, 4, 1, deleteButton);
 
         JPanel upDownButtonPanel = new JPanel(new GridBagLayout());
         add(upDownButtonPanel, gbc, 0, 0, 1, 1, downButton);
         add(upDownButtonPanel, gbc, 1, 0, 1, 1, upButton);
 
-        add(buttonPanel, gbc, 0, 3, 4, 1, upDownButtonPanel);
-        centerPanel.add(buttonPanel, BorderLayout.EAST);
+        add(fieldButtonsPanel, gbc, 0, 3, 4, 1, upDownButtonPanel);
+
+        buttonsPanel.add(previewButton, BorderLayout.NORTH);
+        buttonsPanel.add(fieldButtonsPanel, BorderLayout.CENTER);
+        buttonsPanel.add(optionPanel, BorderLayout.SOUTH);
+        centerPanel.add(buttonsPanel, BorderLayout.EAST);
         pane.add(centerPanel, BorderLayout.CENTER);
 
         JPanel southPanel = new JPanel();
@@ -143,10 +168,52 @@ public abstract class AbstractUserFieldDeclarationDialog extends AbstractSizeAnd
 
         pane.add(southPanel, BorderLayout.SOUTH);
 
-        restoreSizeAndPosition();
-
     }
 
+    /**
+     * @param metaModel
+     * @return
+     */
+    private UserFieldDeclarationDialogClassComboBox createClassCombobox(final MetaModel metaModel) {
+        UserFieldDeclarationDialogClassComboBox classComboBox = new UserFieldDeclarationDialogClassComboBox(metaModel, 20);
+        if (lastSelectedUserFieldTargetClass != null) {
+            classComboBox.setSelectedObject(lastSelectedUserFieldTargetClass);
+        }
+        classComboBox.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(final ActionEvent e) {
+                lastSelectedUserFieldTargetClass = classComboBox.getSelectedClass();
+            }
+        });
+        return classComboBox;
+    }
+
+    /**
+     * @return
+     */
+    private AlphabeticalComboBox<UserField.Style> createStyleCombobox() {
+        AlphabeticalComboBox<UserField.Style> styleCombobox = new AlphabeticalComboBox<>(3);
+        styleCombobox.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(final ActionEvent e) {
+                Style selectedStyle = styleCombobox.getSelectedObject();
+                if (selectedStyle != null) {
+                    lastSelectedUserFieldStyle = selectedStyle;
+                }
+            }
+        });
+        return styleCombobox;
+    }
+
+    /**
+     * @param con
+     * @param gbc
+     * @param x
+     * @param y
+     * @param w
+     * @param h
+     * @param c
+     */
     protected void add(final Container con, final GridBagConstraints gbc, final int x, final int y, final int w, final int h, final Component c) {
         gbc.gridx = x;
         gbc.gridy = y;
@@ -155,20 +222,36 @@ public abstract class AbstractUserFieldDeclarationDialog extends AbstractSizeAnd
         con.add(c, gbc);
     }
 
+    /**
+     * @param resKey
+     * @return
+     */
     private JButton createButton(final String resKey) {
         return EasyComponents.createButton(this, resKey);
     }
 
+    /**
+     * @param resKey
+     * @return
+     */
     private JButton createDisabledButton(final String resKey) {
         JButton button = createButton(resKey);
         button.setEnabled(false);
         return button;
     }
 
+    /**
+     * @param resKey
+     * @return
+     */
     private JLabel createLabel(final String resKey) {
         return new JLabel(getResString(resKey) + ": ");
     }
 
+    /**
+     * @param view
+     * @return
+     */
     private JScrollPane createScrollPane(final JComponent view) {
         JScrollPane scrollPane = new JScrollPane(view);
         scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);

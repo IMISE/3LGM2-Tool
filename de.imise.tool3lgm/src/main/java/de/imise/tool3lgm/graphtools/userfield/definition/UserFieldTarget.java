@@ -1,13 +1,16 @@
 /*
  * Created on 30.10.2007
  */
-package de.imise.tool3lgm.graphtools.userfield;
+package de.imise.tool3lgm.graphtools.userfield.definition;
+
+import static de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty.OPTION_ENABLE_FORMULA_CALCULATION;
 
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import de.imise.tool3lgm.graphtools.userfield.definition.UserField.Style;
 import de.imise.util.htmlxml.XMLCharacterCoder;
 
 /**
@@ -21,7 +24,7 @@ import de.imise.util.htmlxml.XMLCharacterCoder;
  * @author AXS
  * @created 30.10.2007
  */
-public class UserFieldTarget implements Cloneable {
+public abstract class UserFieldTarget implements Cloneable {
 
     /**
      * Mappt von den für das Modell definierten <code>UserField</code>s auf die
@@ -53,6 +56,11 @@ public class UserFieldTarget implements Cloneable {
 
         return retVal;
     }
+
+    /**
+     * @return the {@link UserFieldDefinitions}
+     */
+    public abstract UserFieldDefinitions getUserFieldDefinitions();
 
     /**
      * Ersetzt alle UserFields in der Map der Eingabewerte durch die in der
@@ -217,4 +225,46 @@ public class UserFieldTarget implements Cloneable {
             userFieldToCalculatedValuesMap.clear();
         }
     }
+
+    /////////////////////////////////////////////////////////////////////////
+    // AXS: 29.03.2021                                                     //
+    // Die folgenden getValue()-Funktionen waren ursprünglich in UserField //
+    /////////////////////////////////////////////////////////////////////////
+
+    /**
+     * Liefert den unformatierten Wert einer Kennzahl.
+     *
+     * @param userField UserField, für das der Wert zurück gegeben werden soll
+     * @return
+     */
+    public String getValue(final UserField userField) {
+        //wenn es eine Kennzahlformel ist, deren Wert ermittelt werden soll
+        if (userField.hasStyle(Style.FORMULA)) {
+            //wenn die globale Option der Berechnung eingeschaltet ist
+            if (OPTION_ENABLE_FORMULA_CALCULATION.is()) {
+                UserFieldDefinitions definitions = getUserFieldDefinitions();
+                //alle berechneten Kennzahl Werte löschen
+                definitions.reset();
+                //falls das reset nicht ausgeführt wurde, da sich nichts geändert
+                //hatte -> value hat den bisherigen Wert
+                //falls das reset wirklich ausgeführt wurde -> value hat den Wert
+                //UserField.EMPTY_STRING
+                String value = getCalculatedUserFieldValue(userField);
+                //wenn das reset ausgeführt wurde
+                if (value == UserField.EMPTY_STRING) {
+                    //berechne den Wert neu
+                    value = definitions.calculate(userField, this);
+                    //setze ihn im UserFieldTarget
+                    setCalculatedUserFieldValue(userField, value);
+                }
+                //gib den berechneten Wert zurück
+                return value;
+            }
+            //wenn nicht berechnet werden sollte -> gib einen leeren String zurück
+            return UserField.CALCULATION_DISABLED;
+        }
+        //gib den eingegebenen Wert des UserFields zurück
+        return getUserFieldInputValue(userField);
+    }
+
 }

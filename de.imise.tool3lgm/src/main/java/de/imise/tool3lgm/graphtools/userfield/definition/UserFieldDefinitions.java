@@ -1,4 +1,4 @@
-package de.imise.tool3lgm.graphtools.userfield;
+package de.imise.tool3lgm.graphtools.userfield.definition;
 
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
 
@@ -10,7 +10,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.StringTokenizer;
-import java.util.function.Predicate;
 
 import javax.swing.JOptionPane;
 
@@ -20,14 +19,19 @@ import com.google.common.collect.ImmutableSet;
 import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
+import de.imise.tool3lgm.graphtools.model.CopyDependencyResolver.CopyDependencyResolverResultSimple;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
+import de.imise.tool3lgm.graphtools.userfield.UserFieldDefinitionsAnalyzer;
+import de.imise.tool3lgm.graphtools.userfield.WeightReplacer;
 import de.imise.tool3lgm.graphtools.userfield.calculator.Calculator;
 import de.imise.tool3lgm.graphtools.userfield.calculator.PartValueSumFunction;
 import de.imise.tool3lgm.graphtools.userfield.calculator.PartValueSumFunction.TWSumArguments;
 import de.imise.tool3lgm.graphtools.userfield.calculator.PartValueSumSinglePartResults;
 import de.imise.tool3lgm.graphtools.userfield.event.UserFieldDefinitionChangeHandler;
+import de.imise.util.Alphabetical;
 import de.imise.util.collections.CollectionUtils;
+import de.imise.util.collections.ExtendedMap;
 import de.imise.util.swing.dialog.MultipleOptionPane;
 
 /**
@@ -39,10 +43,20 @@ import de.imise.util.swing.dialog.MultipleOptionPane;
 public final class UserFieldDefinitions extends UserFieldDefinitionChangeHandler implements Cloneable {
 
     /**
+     * Klasse, über die die sogenannten Modellvariablen identifiziert werden,
+     * also Variablen, die nicht für ein spezielles Element sondern für das
+     * Gesamtmodell gelten und zur Verfügung stehen.
+     */
+    public static final Class<? extends UserFieldTarget> GLOBAL_USERFIELD_IDENTIFIER_CLASS = GDCollection.class;
+
+    /**
      * Mappt von der Elementklasse auf die dafür definierte Liste von
      * <code>UserField</code>s
      */
-    private Map<Class<? extends UserFieldTarget>, UserFieldList> classToUserFieldListMap = new HashMap<>();
+    private Map<Class<? extends UserFieldTarget>, UserFieldList> classToUserFieldTargetSpecificListMap = new HashMap<>();
+
+    /** Maps from the ID of a format to the format */
+    private Map<String, UserFieldNumberFormat> formatIdToFormat = new HashMap<>();
 
     /** Mappt von den IDs der UserFields auf das UserField */
     private Map<String, UserField> idToUserFieldMap = new HashMap<>();
@@ -51,7 +65,7 @@ public final class UserFieldDefinitions extends UserFieldDefinitionChangeHandler
     private Calculator calculator;
 
     /** Enthält für alle einfachen Teilwertsummen alle Zwischenergebnisse **/
-    private final PartValueSumSinglePartResults partValueSumSinglePartResults;
+    private PartValueSumSinglePartResults partValueSumSinglePartResults;
 
     /**
      * Liste aller UserFields, die Formeln darstellen. Die Reihenfolge ist
@@ -59,45 +73,20 @@ public final class UserFieldDefinitions extends UserFieldDefinitionChangeHandler
      * referenzieren, dann müssen die referenzierten Formeln in der Liste immer
      * vor den Formeln stehen, durch die sie referenziert werden.
      */
-    private List<UserField> formulaUserFieldList = new ArrayList<>();
+    private List<UserField> formulaUserFieldTargetSpecificList = new ArrayList<>();
 
     /**
      * guava-Table für die Speicherung, bei welchem ModelElement welches
      * Verteilungsgeweichtg in Verrechnungsfunktionen, die dieses
      * Verteilungsgewicht nutzen, durch ein anderes ersetzt werden soll.
      */
-    private final WeightReplacer weightReplacer;
+    private WeightReplacer weightReplacer;
 
     /**
      * Analyzer, über den der Zustand dieser {@link UserFieldDefinitions}
      * abgefragt werden kann
      */
     private UserFieldDefinitionsAnalyzer definitionsAnalyzer;
-
-    /**
-     * Klasse, über die die sogenannten Modellvariablen identifiziert werden,
-     * also Variablen, die nicht für ein spezielles Element sondern für das
-     * Gesamtmodell gelten und zur Verfügung stehen.
-     */
-    public static final Class<? extends UserFieldTarget> GLOBAL_USERFIELD_IDENTIFIER_CLASS = GDCollection.class;
-
-    /**
-     * Klasse, über die alle Formate identifiziert werden.
-     */
-    private static final class GlobalFormatIdentifierClass extends UserFieldTarget {
-    }
-
-    public static final Class<? extends UserFieldTarget> GLOBAL_FORMAT_IDENTIFIER_CLASS = GlobalFormatIdentifierClass.class;
-
-    /**
-     * Liefert einen anzeigbaren String für den globalen Identifier (da es
-     * Modellvariablen sind wird hier der Res-String für Model zurück gegeben)
-     *
-     * @return
-     */
-    public static String getDisplayableGlobalFieldIdentifierName() {
-        return getResString("userFieldEditor_classification_modelvariable");
-    }
 
     /**
      * Konstante um für <code>firstInconsistentUserFieldFormulaIndex</code>
@@ -114,21 +103,22 @@ public final class UserFieldDefinitions extends UserFieldDefinitionChangeHandler
 
     /**
      * Konstante um für <code>firstInconsistentUserFieldFormulaIndex</code>
-     * anzugeben, dass die Liste <code>formulaUserFieldList</code> neu sortiert
-     * werden müsste, um festzustellen, ob sich alle Formeln berechnen lassen
-     * bzw. welche inkonsitent sind.
+     * anzugeben, dass die Liste <code>formulaUserFieldTargetSpecificList</code>
+     * neu sortiert werden müsste, um festzustellen, ob sich alle Formeln
+     * berechnen lassen bzw. welche inkonsitent sind.
      */
     private static final int FORMULA_INCONSITENCE_INDEX_UNKNOWN = -2;
 
     /**
-     * Die Liste <code>formulaUserFieldList</code> wird (wenn keine
-     * Kreisreferenzen in den Formeln vorkommen) so sortiert, dass sich jede
-     * Formel in der Liste berechnen lässt, wenn alle Formeln berechnet wurden,
-     * die sich in der Liste davor befinden. Sollte doch mind. eine
+     * Die Liste <code>formulaUserFieldTargetSpecificList</code> wird (wenn
+     * keine Kreisreferenzen in den Formeln vorkommen) so sortiert, dass sich
+     * jede Formel in der Liste berechnen lässt, wenn alle Formeln berechnet
+     * wurden, die sich in der Liste davor befinden. Sollte doch mind. eine
      * Kreisreferenz vorliegen, wird in dieser Variable hier der Index des
-     * ersten <code>UserField</code>s in <code>formulaUserFieldList</code>
-     * gespeichert, der sich nicht mehr berechnen lässt. Lassen sich alle
-     * Formeln berechnen, dann ist der Index -1.
+     * ersten <code>UserField</code>s in
+     * <code>formulaUserFieldTargetSpecificList</code> gespeichert, der sich
+     * nicht mehr berechnen lässt. Lassen sich alle Formeln berechnen, dann ist
+     * der Index -1.
      */
     private int firstInconsistentUserFieldFormulaIndex = FORMULA_INCONSITENCE_INDEX_UNKNOWN;
 
@@ -154,30 +144,36 @@ public final class UserFieldDefinitions extends UserFieldDefinitionChangeHandler
     }
 
     /**
+     * @param format
+     */
+    public void add(final UserFieldNumberFormat format) {
+        String id = format.getID();
+        formatIdToFormat.put(id, format);
+    }
+
+    /**
      * Hängt der zuletzt benutzen Liste ein neues Element an. Die Methode
      * erwartet beim Aufruf ein <code>UserField</code>. Das
      * <code>UserField</code> wird an eine Liste, die sich in der
-     * <code>classToUserFieldListMap</code>- HashMap befindet, angehangen.
-     * Methode wird beim Laden des Modells aufgerufen.
+     * <code>classToUserFieldTargetSpecificListMap</code>- HashMap befindet,
+     * angehangen. Methode wird beim Laden des Modells aufgerufen.
      *
      * @param userField
      */
     public void add(final UserField userField) {
-        if (userField == null) {
-            return;
+        Class<? extends UserFieldTarget> targetClass = userField.getTargetClass();
+        UserFieldList userFields = classToUserFieldTargetSpecificListMap.get(targetClass);
+        if (userFields == null) {
+            userFields = new UserFieldList(targetClass);
+            classToUserFieldTargetSpecificListMap.put(targetClass, userFields);
         }
-        UserFieldList ufl = classToUserFieldListMap.get(userField.getTargetClass());
-        if (ufl == null) {
-            ufl = new UserFieldList(userField.getTargetClass());
-            classToUserFieldListMap.put(userField.getTargetClass(), ufl);
+        UserField addedDefaultTabUserField = userFields.add(userField);
+        //if there was a default tab added -> store the id
+        if (addedDefaultTabUserField != null) {
+            String id = addedDefaultTabUserField.getID();
+            idToUserFieldMap.put(id, addedDefaultTabUserField);
         }
-        ufl.add(userField);
-        idToUserFieldMap.put(userField.getID(), userField);
-        //Formeln extra merken
-        if (userField.hasStyle(UserField.Style.CLASSIFICATION_NUMBER_FORMULA)) {
-            formulaUserFieldList.add(userField);
-            setConsistencyUnknown();
-        }
+        registerInternal(userField);
     }
 
     /**
@@ -188,15 +184,29 @@ public final class UserFieldDefinitions extends UserFieldDefinitionChangeHandler
      * @param index
      */
     public void insert(final UserField userField, final int index) {
-        UserFieldList ufl = classToUserFieldListMap.get(userField.getTargetClass());
-        if (ufl == null) {
+        Class<? extends UserFieldTarget> targetClass = userField.getTargetClass();
+        UserFieldList userFields = classToUserFieldTargetSpecificListMap.get(targetClass);
+        if (userFields == null) {
+            add(userField);
             return;
         }
-        ufl.insert(userField, index);
-        idToUserFieldMap.put(userField.getID(), userField);
+        userFields.insert(userField, index);
+        registerInternal(userField);
+    }
+
+    /**
+     * @param userField
+     */
+    private void registerInternal(final UserField userField) {
+        String id = userField.getID();
+        idToUserFieldMap.put(id, userField);
+        UserFieldNumberFormat numberFormat = userField.getNumberFormat();
+        if (numberFormat != null) {
+            add(numberFormat);
+        }
         //Formeln extra merken
-        if (userField.hasStyle(UserField.Style.CLASSIFICATION_NUMBER_FORMULA)) {
-            formulaUserFieldList.add(userField);
+        if (userField.hasStyle(UserField.Style.FORMULA)) {
+            formulaUserFieldTargetSpecificList.add(userField);
             setConsistencyUnknown();
         }
     }
@@ -214,11 +224,11 @@ public final class UserFieldDefinitions extends UserFieldDefinitionChangeHandler
      */
     public final boolean isInUse(final UserField userField) {
         //wenn es nichts mit Kennzahlen zu tun hat -> false
-        if (!userField.isClassificationUserField()) {
+        if (!userField.isNumberUserField()) {
             return false;
         }
         for (Class<? extends UserFieldTarget> c : getClassToUserFieldKeys()) {
-            for (UserField uf : classToUserFieldListMap.get(c)) {
+            for (UserField uf : classToUserFieldTargetSpecificListMap.get(c)) {
                 if (uf.uses(userField)) {
                     return true;
                 }
@@ -228,39 +238,39 @@ public final class UserFieldDefinitions extends UserFieldDefinitionChangeHandler
     }
 
     /**
+     * @param numberFormat
+     */
+    public void removeNumberFormat(final UserFieldNumberFormat numberFormat) {
+        for (Class<? extends UserFieldTarget> userFieldTargetClass : getClassToUserFieldKeys()) {
+            for (UserField userField : classToUserFieldTargetSpecificListMap.get(userFieldTargetClass)) {
+                if (userField.hasNumberFormat(numberFormat)) {
+                    userField.removeNumberFormat();
+                }
+            }
+        }
+        String formatID = numberFormat.getID();
+        formatIdToFormat.remove(formatID);
+    }
+
+    /**
      * @param userField
      * @return Liste aller gelöschten <code>UserField</code>s
      */
     public List<UserField> remove(final UserField userField) {
         ArrayList<UserField> deleted = new ArrayList<>();
-        UserFieldList ufl = classToUserFieldListMap.get(userField.getTargetClass());
+        UserFieldList ufl = classToUserFieldTargetSpecificListMap.get(userField.getTargetClass());
         if (ufl == null) {
             return deleted;
         }
         //wenn das userField irgendwo anders noch benutzt wird -> lösche die Referenzen ebenfalls
-        //wenn das zu löschende Field ein Format ist -> bei allen anderen Fields, bei denen es als Format gesetzt ist, das Format null setzen
-        if (userField.hasStyle(UserField.Style.FORMAT)) {
-            for (Class<? extends UserFieldTarget> c : getClassToUserFieldKeys()) {
-                Iterator<UserField> userFieldListIt = classToUserFieldListMap.get(c).iterator();
-                while (userFieldListIt.hasNext()) {
-                    UserField listField = userFieldListIt.next();
-                    if (listField.uses(userField)) {
-                        listField.setFormatUserField(null);
-                    }
-                }
-            }
-            idToUserFieldMap.remove(userField.getID());
-            ufl.remove(userField);
-            deleted.add(userField);
-            //wenn das zu löschende UserField ein UserField ist, das bei einem anderen in der Formel vorkommen kann (Kennzahl, Kennzahlformel, Verteilungsgewicht)
-        } else if (userField.isClassificationUserField()) {
-
+        //wenn das zu löschende UserField ein UserField ist, das bei einem anderen in der Formel vorkommen kann (Kennzahl, Kennzahlformel, Verteilungsgewicht)
+        if (userField.isNumberUserField()) {
             ArrayList<UserField> userFieldsToDelete = new ArrayList<>();
             userFieldsToDelete.add(userField);
             for (int i = 0; i < userFieldsToDelete.size(); i++) {
                 UserField uncheckedField = userFieldsToDelete.get(i);
-                for (int j = 0; j < formulaUserFieldList.size(); j++) {
-                    UserField formulaUserField = formulaUserFieldList.get(j);
+                for (int j = 0; j < formulaUserFieldTargetSpecificList.size(); j++) {
+                    UserField formulaUserField = formulaUserFieldTargetSpecificList.get(j);
                     if (userFieldsToDelete.contains(formulaUserField)) {
                         continue;
                     }
@@ -284,13 +294,13 @@ public final class UserFieldDefinitions extends UserFieldDefinitionChangeHandler
                     return deleted;
                 }
             }
-            if (formulaUserFieldList.removeAll(userFieldsToDelete)) {
+            if (formulaUserFieldTargetSpecificList.removeAll(userFieldsToDelete)) {
                 setConsistencyUnknown();
             }
 
             for (UserField field : userFieldsToDelete) {
                 idToUserFieldMap.remove(field.getID());
-                ufl = classToUserFieldListMap.get(field.getTargetClass());
+                ufl = classToUserFieldTargetSpecificListMap.get(field.getTargetClass());
                 ufl.remove(field);
             }
             deleted.addAll(userFieldsToDelete);
@@ -318,26 +328,37 @@ public final class UserFieldDefinitions extends UserFieldDefinitionChangeHandler
         //jedes einzelne UserField clonen (erstmal nur in dieser Map)
         for (String key : idToUserFieldMap.keySet()) {
             UserField userFieldClone = def.idToUserFieldMap.get(key).clone();
-            userFieldClone.setDefinitions(def);
             def.idToUserFieldMap.put(key, userFieldClone);
         }
         //die Map, die von den UserFieldTargetClasses auf die Liste der dafür defnierten
         //UserFields mappt auch clonen und alle darin enthaltenen UserFields durch die
         //oben erzeugten Clone ersetzen
-        def.classToUserFieldListMap = new HashMap<>(classToUserFieldListMap);
-        for (Class<? extends UserFieldTarget> targetClass : def.classToUserFieldListMap.keySet()) {
-            UserFieldList userFieldList = def.classToUserFieldListMap.get(targetClass);
+        def.classToUserFieldTargetSpecificListMap = new HashMap<>(classToUserFieldTargetSpecificListMap);
+        for (Class<? extends UserFieldTarget> targetClass : def.classToUserFieldTargetSpecificListMap.keySet()) {
+            UserFieldList userFieldList = def.classToUserFieldTargetSpecificListMap.get(targetClass);
             //die Listen in der Map selbst müssen auch geclont werden
-            userFieldList = (UserFieldList) userFieldList.clone();
+            userFieldList = userFieldList.clone();
             //Listen mit ihren clones ersetzen
-            def.classToUserFieldListMap.put(targetClass, userFieldList);
+            def.classToUserFieldTargetSpecificListMap.put(targetClass, userFieldList);
             //in der geclonten Listen die UserFields mit den clones ersetzen
             replaceWithClones(userFieldList, def.idToUserFieldMap);
         }
         //in der Liste mit allen Formel-UserFields auch die Original durch die clone ersetzen
-        def.formulaUserFieldList = new ArrayList<>(formulaUserFieldList);
-        replaceWithClones(def.formulaUserFieldList, def.idToUserFieldMap);
+        def.formulaUserFieldTargetSpecificList = new ArrayList<>(formulaUserFieldTargetSpecificList);
+        replaceWithClones(def.formulaUserFieldTargetSpecificList, def.idToUserFieldMap);
 
+        //deep clone the map with all formats
+        def.formatIdToFormat = new HashMap<>(formatIdToFormat);
+        ArrayList<UserFieldNumberFormat> formats = new ArrayList<>(formatIdToFormat.values());
+        for (UserFieldNumberFormat format : formats) {
+            String formatID = format.getID();
+            UserFieldNumberFormat formatClone = format.clone();
+            formatIdToFormat.put(formatID, formatClone);
+        }
+
+        //deep clone the rest
+        def.partValueSumSinglePartResults = new PartValueSumSinglePartResults();
+        def.weightReplacer = new WeightReplacer();
         //eigenen Calculator für den clone initialisieren
         def.calculator = new Calculator(def);
         //den Analyzer ersetzen
@@ -347,11 +368,11 @@ public final class UserFieldDefinitions extends UserFieldDefinitionChangeHandler
 
     /**
      * Ersetzt die UserFields in der übergebenen Liste durch die aus der
-     * übergebenen Map mit derselben ID. Weil UserFieldList nicht das Interface
-     * {@link List} implementiert muss man im Grunde dieselbe Funktion hier 2
-     * mal schreiben. Die UserFieldList soll aber nicht List implementieren,
-     * weil es zu aufwändig wäre, sie für alle darin enthaltenen Funktionen
-     * konsitent zu halten
+     * übergebenen Map mit derselben ID. Weil UserFieldTargetSpecificList nicht
+     * das Interface {@link List} implementiert muss man im Grunde dieselbe
+     * Funktion hier 2 mal schreiben. Die UserFieldTargetSpecificList soll aber
+     * nicht List implementieren, weil es zu aufwändig wäre, sie für alle darin
+     * enthaltenen Funktionen konsitent zu halten
      *
      * @param userFieldList
      * @param idToClonedUserFieldMap
@@ -381,14 +402,30 @@ public final class UserFieldDefinitions extends UserFieldDefinitionChangeHandler
         }
     }
 
+    // AXS: 14.04.2021 Scheint überflüssig zu sein
+    //    /**
+    //     * @param otherDef
+    //     */
+    //    private void addAll(final UserFieldDefinitions otherDef) {
+    //        Iterable<UserField> elementClassUserFields = otherDef.getElementClassUserFields();
+    //        Iterable<UserFieldNumberFormat> numberFormats = otherDef.getNumberFormats();
+    //        addAll(numberFormats, elementClassUserFields);
+    //        for (Class<? extends UserFieldTarget> clazz : otherDef.classToUserFieldTargetSpecificListMap.keySet()) {
+    //            for (UserField uf : otherDef.classToUserFieldTargetSpecificListMap.get(clazz)) {
+    //                add(uf);
+    //            }
+    //        }
+    //    }
+    //
     /**
      * @param otherDef
      */
-    public void addAll(final UserFieldDefinitions otherDef) {
-        for (Class<? extends UserFieldTarget> clazz : classToUserFieldListMap.keySet()) {
-            for (UserField uf : classToUserFieldListMap.get(clazz)) {
-                add(uf);
-            }
+    public void addAll(final CopyDependencyResolverResultSimple resolvedCopyDependencies) {
+        for (UserFieldNumberFormat numberFormat : resolvedCopyDependencies.userFieldNumberFormats) {
+            add(numberFormat);
+        }
+        for (UserField userField : resolvedCopyDependencies.userFields) {
+            add(userField.clone());
         }
     }
 
@@ -404,8 +441,8 @@ public final class UserFieldDefinitions extends UserFieldDefinitionChangeHandler
      *         <code>null</code>, wenn keins gefunden wurde
      */
     public UserField getUserField(final Class<? extends UserFieldTarget> userFieldTargetClass, final String name) {
-        for (Class<?> clazz : classToUserFieldListMap.keySet()) {
-            UserFieldList userFields = classToUserFieldListMap.get(clazz);
+        for (Class<?> clazz : classToUserFieldTargetSpecificListMap.keySet()) {
+            UserFieldList userFields = classToUserFieldTargetSpecificListMap.get(clazz);
             if (userFields == null) {
                 continue;
             }
@@ -419,12 +456,11 @@ public final class UserFieldDefinitions extends UserFieldDefinitionChangeHandler
     }
 
     /**
-     * @param userFieldTargetClass
-     * @return <code>true</code> if there is at least one {@link UserField}
-     *         defined for the userFieldTargetClass
+     * @return for every tab in the whole list an own sub list
      */
-    public boolean hasUserFields(final Class<? extends UserFieldTarget> userFieldTargetClass) {
-        return getUserFields(userFieldTargetClass).iterator().hasNext();
+    public List<UserFieldList> getTabSubLists(final Class<? extends UserFieldTarget> userFieldTargetClass) {
+        UserFieldList userFieldList = classToUserFieldTargetSpecificListMap.get(userFieldTargetClass);
+        return userFieldList == null ? new ArrayList<>() : userFieldList.getTabSubLists();
     }
 
     /**
@@ -432,7 +468,7 @@ public final class UserFieldDefinitions extends UserFieldDefinitionChangeHandler
      * @return
      */
     public Iterable<UserField> getUserFields(final Class<? extends UserFieldTarget> userFieldTargetClass) {
-        final UserFieldList fieldList = classToUserFieldListMap.get(userFieldTargetClass);
+        final UserFieldList fieldList = classToUserFieldTargetSpecificListMap.get(userFieldTargetClass);
         if (fieldList == null) {
             return ImmutableList.of();
         }
@@ -470,8 +506,8 @@ public final class UserFieldDefinitions extends UserFieldDefinitionChangeHandler
      * @return
      */
     public List<UserField> getUserFields(final Class<? extends UserFieldTarget> userFieldTargetClass, final Set<UserField.Style> styles) {
-        if (styles == null || styles.size() == 0) {
-            UserFieldList fieldList = classToUserFieldListMap.get(userFieldTargetClass);
+        if (styles == null || styles.isEmpty()) {
+            UserFieldList fieldList = classToUserFieldTargetSpecificListMap.get(userFieldTargetClass);
             return fieldList != null ? fieldList.getData() : new ArrayList<>(0);
         }
         ArrayList<UserField> returnList = new ArrayList<>();
@@ -494,13 +530,13 @@ public final class UserFieldDefinitions extends UserFieldDefinitionChangeHandler
      * @return
      */
     public List<UserField> getFractionValueSumUserFields(final Class<? extends ModelElement> elementClass, final Class<? extends Edge> edgeClass) {
-        List<UserField> userFieldList = getUserFields(elementClass, UserField.Style.CLASSIFICATION_NUMBER_FORMULA);
+        List<UserField> userFieldList = getUserFields(elementClass, UserField.Style.FORMULA);
         for (int i = userFieldList.size() - 1; i >= 0; i--) {
             UserField userField = userFieldList.get(i);
             if (!userField.isSimplePartValueSumFormula()) {
                 userFieldList.remove(i);
             } else {
-                TWSumArguments arguments = PartValueSumFunction.getTWSumArguments(userField);
+                TWSumArguments arguments = PartValueSumFunction.getTWSumArguments(this, userField);
                 if (!edgeClass.isAssignableFrom(arguments.edgeClass)) {
                     userFieldList.remove(i);
                 }
@@ -519,20 +555,27 @@ public final class UserFieldDefinitions extends UserFieldDefinitionChangeHandler
     /**
      * @return
      */
-    public Iterable<UserField> getFormatUserFields() {
-        return getUserFields(GLOBAL_FORMAT_IDENTIFIER_CLASS);
+    public Iterable<UserFieldNumberFormat> getNumberFormats() {
+        return formatIdToFormat.values();
     }
 
-    private static final Predicate<Class<? extends UserFieldTarget>> isSimpleTargetClass() {
-        return c -> c != GLOBAL_FORMAT_IDENTIFIER_CLASS && c != GLOBAL_USERFIELD_IDENTIFIER_CLASS;
+    /**
+     * @param formatId
+     * @return
+     */
+    public UserFieldNumberFormat getNumberFormat(final String formatId) {
+        return formatIdToFormat.get(formatId);
     }
 
+    /**
+     * @return
+     */
     public Iterable<UserField> getElementClassUserFields() {
-        Set<Class<? extends UserFieldTarget>> keys = classToUserFieldListMap.keySet();
+        Set<Class<? extends UserFieldTarget>> keys = classToUserFieldTargetSpecificListMap.keySet();
         ImmutableList.Builder<Iterable<UserField>> iterables = new ImmutableList.Builder<>();
         for (Class<? extends UserFieldTarget> key : keys) {
-            if (isSimpleTargetClass().test(key)) {
-                iterables.add(classToUserFieldListMap.get(key));
+            if (key != GLOBAL_USERFIELD_IDENTIFIER_CLASS) {
+                iterables.add(classToUserFieldTargetSpecificListMap.get(key));
             }
         }
         ImmutableList<Iterable<UserField>> build = iterables.build();
@@ -544,8 +587,8 @@ public final class UserFieldDefinitions extends UserFieldDefinitionChangeHandler
      */
     public List<UserField> getIDUserFields() {
         ArrayList<UserField> idUserFields = new ArrayList<>();
-        for (Class<? extends UserFieldTarget> userFieldTargetClass : classToUserFieldListMap.keySet()) {
-            UserFieldList userFields = classToUserFieldListMap.get(userFieldTargetClass);
+        for (Class<? extends UserFieldTarget> userFieldTargetClass : classToUserFieldTargetSpecificListMap.keySet()) {
+            UserFieldList userFields = classToUserFieldTargetSpecificListMap.get(userFieldTargetClass);
             for (UserField userField : userFields) {
                 if (userField.getStyle() == UserField.Style.ID) {
                     idUserFields.add(userField);
@@ -572,11 +615,11 @@ public final class UserFieldDefinitions extends UserFieldDefinitionChangeHandler
      * @param userFieldTargetClass
      * @param index
      * @return UserField / public UserField get(Class<?> userFieldTargetClass,
-     *         int index) { UserFieldList ufl =
-     *         classToUserFieldListMap.get(userFieldTargetClass); if (ufl !=
-     *         null) return ufl.get(index); return null; } /** Liefert das
-     *         globale {@link UserField} mit dem entsprechenden Index (oder
-     *         <code>null</code> wenn es kein solches gibt.
+     *         int index) { UserFieldTargetSpecificList ufl =
+     *         classToUserFieldTargetSpecificListMap.get(userFieldTargetClass);
+     *         if (ufl != null) return ufl.get(index); return null; } /**
+     *         Liefert das globale {@link UserField} mit dem entsprechenden
+     *         Index (oder <code>null</code> wenn es kein solches gibt.
      * @param index
      * @return
      * @see #get(Class, int) / public UserField getGlobal(int index) { return
@@ -598,7 +641,7 @@ public final class UserFieldDefinitions extends UserFieldDefinitionChangeHandler
      *         berechnet werden kann, sonst <code>false</code>
      */
     public boolean isCalculatable(final UserField formulaUserField) {
-        int index = formulaUserFieldList.indexOf(formulaUserField);
+        int index = formulaUserFieldTargetSpecificList.indexOf(formulaUserField);
         if (index >= 0 && index < firstInconsistentUserFieldFormulaIndex) {
             return false;
         }
@@ -615,13 +658,13 @@ public final class UserFieldDefinitions extends UserFieldDefinitionChangeHandler
     public boolean hasCrossReferences() {
         //wenn irgendwas an den Kennzahlformeldefinitionen geändert wurde -> prüfe die Kreisreferenzen in den Formeln
         if (firstInconsistentUserFieldFormulaIndex == FORMULA_INCONSITENCE_INDEX_UNKNOWN) {
-            ArrayList<UserField> inconsistentUserFields = makeFormulaUserFieldListConsistent();
+            ArrayList<UserField> inconsistentUserFields = makeFormulaUserFieldTargetSpecificListConsistent();
             if (inconsistentUserFields == null) {
                 firstInconsistentUserFieldFormulaIndex = NO_INCONSISTENCE_INDEX_FOUND;
                 return false;
             }
             //den Index des ersten nicht konsistenten UserFields in der Formel-UserField-Liste merken
-            firstInconsistentUserFieldFormulaIndex = formulaUserFieldList.size() - inconsistentUserFields.size();
+            firstInconsistentUserFieldFormulaIndex = formulaUserFieldTargetSpecificList.size() - inconsistentUserFields.size();
             StringBuilder sb = new StringBuilder(getResString("circuit_reference"));
             for (int i = 0; i < inconsistentUserFields.size(); i++) {
                 sb.append("\n");
@@ -629,8 +672,6 @@ public final class UserFieldDefinitions extends UserFieldDefinitionChangeHandler
             }
             MultipleOptionPane.showInformationMessageDialog(Static.getMainFrame(), getResString("fehler"), sb.toString());
             return true;
-            //die Globale Option die Kennzahlen zu berechnen erstam abschalten
-            //          UserProperties.setEnableClassificationNumberCalculation(false);
         }
         return false;
     }
@@ -769,7 +810,7 @@ public final class UserFieldDefinitions extends UserFieldDefinitionChangeHandler
      *         die für sie definierten UserFields mappt
      */
     public Set<Class<? extends UserFieldTarget>> getClassToUserFieldKeys() {
-        return classToUserFieldListMap.keySet();
+        return classToUserFieldTargetSpecificListMap.keySet();
     }
 
     /////////////////////////////////////////////////////////////////////////////
@@ -777,22 +818,22 @@ public final class UserFieldDefinitions extends UserFieldDefinitionChangeHandler
     /////////////////////////////////////////////////////////////////////////////
 
     /**
-     * Sortiert die Liste <code>formulaUserFieldList</code> so, dass sie
-     * konsistent ist. Siehe Kommentar zur Variable
-     * <code>formulaUserFieldList</code>.
+     * Sortiert die Liste <code>formulaUserFieldTargetSpecificList</code> so,
+     * dass sie konsistent ist. Siehe Kommentar zur Variable
+     * <code>formulaUserFieldTargetSpecificList</code>.
      *
      * @return Liste von <code>UserField</code>s, die sich im Kreus
      *         referenzieren oder von solchen Elementen abhängig sind bzw.
      *         <code>null</code>, wenn es keine Kreisreferenzen gibt
      */
-    private ArrayList<UserField> makeFormulaUserFieldListConsistent() {
-        ArrayList<UserField> calculateableFormulaList = new ArrayList<>(formulaUserFieldList.size());
+    private ArrayList<UserField> makeFormulaUserFieldTargetSpecificListConsistent() {
+        ArrayList<UserField> calculateableFormulaList = new ArrayList<>(formulaUserFieldTargetSpecificList.size());
         while (true) {
             //Größe der Liste der berechenbaren USerFields merken -> nur wenn sie in jedem
             //Durchlauf wächst, sind die Formeln konsistent
             int lastSortedListSize = calculateableFormulaList.size();
-            for (int i = 0; i < formulaUserFieldList.size(); i++) {
-                UserField u = formulaUserFieldList.get(i);
+            for (int i = 0; i < formulaUserFieldTargetSpecificList.size(); i++) {
+                UserField u = formulaUserFieldTargetSpecificList.get(i);
 
                 if (hasSimpleCrossReferences(u)) {
                     continue;
@@ -815,7 +856,7 @@ public final class UserFieldDefinitions extends UserFieldDefinitionChangeHandler
                             continue;
                         }
                         //wenn das auch eine Formel ist
-                        if (dependingUserField != null && dependingUserField.hasStyle(UserField.Style.CLASSIFICATION_NUMBER_FORMULA)) {
+                        if (dependingUserField != null && dependingUserField.hasStyle(UserField.Style.FORMULA)) {
                             //wenn die abhängige Formel noch nicht in der Liste der berechenbaren Formeln vorkommt
                             if (!calculateableFormulaList.contains(dependingUserField)) {
                                 allDependingAreCalculateable = false;
@@ -829,27 +870,27 @@ public final class UserFieldDefinitions extends UserFieldDefinitionChangeHandler
                     //füge diese Formel zur Liste der berechenbaren Formeln hinzu
                     calculateableFormulaList.add(u);
                     //das UserField aus der Urprungsliste entfernen und den Index dementsprechend verringern
-                    formulaUserFieldList.remove(i--);
+                    formulaUserFieldTargetSpecificList.remove(i--);
                     //prüfe das nächste UserField aus der unsortierten Liste
                     break;
                 }
 
             }
             //wenn alle Formeln in die Liste der berechenbaren einsortiert werden konnten
-            if (formulaUserFieldList.size() == 0) {
+            if (formulaUserFieldTargetSpecificList.size() == 0) {
                 //setzte die glovlae Liste auf die nun sortierte Liste
-                formulaUserFieldList = calculateableFormulaList;
+                formulaUserFieldTargetSpecificList = calculateableFormulaList;
                 return null;
             }
             //wenn die ganze Liste durchlaufen wurde, aber keine Kennzahlformel mehr zu den berechenbaren hinzugefügt
-            //werden konnte, obwohl noch welche in der unsortierten Liste sind -> die noch in der Liste formulaUserFieldList
+            //werden konnte, obwohl noch welche in der unsortierten Liste sind -> die noch in der Liste formulaUserFieldTargetSpecificList
             //enthaltenen UserFields refrenzieren sich an mindesten einer Stelle in ihren Formeln gegenseitig (es reicht
             //schon, dass sich 2 Formeln gegenseitig referenzieren, von denen dann der ganze Rest abhängt)
             if (lastSortedListSize == calculateableFormulaList.size()) {
-                ArrayList<UserField> inconsistentUserFields = new ArrayList<>(formulaUserFieldList);
+                ArrayList<UserField> inconsistentUserFields = new ArrayList<>(formulaUserFieldTargetSpecificList);
                 //füge zur globalen Liste wieder alle entfernten Elemente hinzu
-                calculateableFormulaList.addAll(formulaUserFieldList);
-                formulaUserFieldList = calculateableFormulaList;
+                calculateableFormulaList.addAll(formulaUserFieldTargetSpecificList);
+                formulaUserFieldTargetSpecificList = calculateableFormulaList;
                 //gib die Elemente zurück, in denen sich mind. ein Kreis befindet
                 return inconsistentUserFields;
             }
@@ -869,7 +910,7 @@ public final class UserFieldDefinitions extends UserFieldDefinitionChangeHandler
     //     */
     //    void MakeGlobalUserFieldToFormat(final UserField userField) {
     //        if (userField.getTargetClass() == GLOBAL_FORMAT_IDENTIFIER_CLASS) {
-    //            classToUserFieldListMap.get(GLOBAL_USERFIELD_IDENTIFIER_CLASS).remove(userField);
+    //            classToUserFieldTargetSpecificListMap.get(GLOBAL_USERFIELD_IDENTIFIER_CLASS).remove(userField);
     //            add(userField);
     //        }
     //    }
@@ -886,7 +927,7 @@ public final class UserFieldDefinitions extends UserFieldDefinitionChangeHandler
 
         //Menge alle Elementklassen, für die bereits alle UserFields gelöscht wurden (alle
         //FormelUserFields werden für alle Elemente einer Art immer komplett gelöscht, sobald
-        //in der Liste aller Formel-UserFields (formulaUserFieldList) ein UserField für die
+        //in der Liste aller Formel-UserFields (formulaUserFieldTargetSpecificList) ein UserField für die
         //betreffende Elementart gefunden wurde. Beim nächsten UserField für diese Elementart
         //braucht man nicht noch einmal alle UserFields zu löschen)
         Set<Class<?>> resetedElementClasses = new HashSet<>(15);
@@ -896,7 +937,7 @@ public final class UserFieldDefinitions extends UserFieldDefinitionChangeHandler
         GraphDocument doc = gdcoll.getMainDoc();
 
         //Für alle Kennzahlformel-UserFields
-        for (UserField userField : formulaUserFieldList) {
+        for (UserField userField : formulaUserFieldTargetSpecificList) {
             Class<? extends UserFieldTarget> userFieldTargetClass = userField.getTargetClass();
             //Wenn bereits alle Formel-UserFields der Elementart des aktuellen UserFields gelöscht wurden
             if (resetedElementClasses.contains(userFieldTargetClass)) {
@@ -906,7 +947,7 @@ public final class UserFieldDefinitions extends UserFieldDefinitionChangeHandler
             //Elementklasse des UserFields als bereits zurück gesetzt merken
             resetedElementClasses.add(userFieldTargetClass);
             //alle berechneten Modellvariablen zurück setzen
-            if (userField.isGlobalOrFormat()) {
+            if (userField.isGlobal()) {
                 gdcoll.resetCalculatedUserFieldMap();
                 continue;
             }
@@ -938,7 +979,7 @@ public final class UserFieldDefinitions extends UserFieldDefinitionChangeHandler
         //          ArrayList elems = doc.getAllModelElements(RechAnwendungsbaustein.class, true);
         //          for (int i=0; i<getUserFieldCount(RechAnwendungsbaustein.class); i++){
         //              UserField userField = get(RechAnwendungsbaustein.class, i);
-        //              if (userField.getStyle()==UserField.CLASSIFICATION_NUMBER_STYLE){
+        //              if (userField.getStyle()==Style.NUMBER){
         //                  for (int j=0; j<elems.size(); j++){
         //                      UserFieldTarget uft = (UserFieldTarget)elems.get(j);
         //                      if (uft.getUserFieldInputValue(userField).equals(UserField.EMPTY_STRING))
@@ -964,23 +1005,15 @@ public final class UserFieldDefinitions extends UserFieldDefinitionChangeHandler
     }
 
     /**
-     * @param format Format-UserField, für das alle Kennzahlen zurück gegeben
-     *            werden sollen, die es benutzen
-     * @return Liste aller USerFields, die das übergebene Format-Userfield als
-     *         benutzen
+     * @param numberFormat Format, für das alle Kennzahlen zurück gegeben werden
+     *            sollen, die es benutzen
+     * @return Liste aller UserFields, die das übergebene Format benutzen
      */
-    public ArrayList<UserField> getFormatUser(final UserField format) {
+    public ArrayList<UserField> getUserFieldsWithNumberFormat(final UserFieldNumberFormat numberFormat) {
         ArrayList<UserField> returnList = new ArrayList<>();
-
-        if (!format.hasStyle(UserField.Style.FORMAT)) {
-            return returnList;
-        }
-
-        //Iterator aller Keys der Map von den Elementklassen auf die UserFields
-        // holen
         for (Class<? extends UserFieldTarget> elementClass : getClassToUserFieldKeys()) {
             for (UserField uf : getUserFields(elementClass)) {
-                if (format == uf.getFormatUserField()) {
+                if (uf.hasNumberFormat(numberFormat)) {
                     returnList.add(uf);
                 }
             }
@@ -999,7 +1032,7 @@ public final class UserFieldDefinitions extends UserFieldDefinitionChangeHandler
      * @return
      */
     public Set<Class<? extends UserFieldTarget>> getUserFieldTargets() {
-        return classToUserFieldListMap.keySet();
+        return classToUserFieldTargetSpecificListMap.keySet();
     }
 
     /**
@@ -1007,10 +1040,13 @@ public final class UserFieldDefinitions extends UserFieldDefinitionChangeHandler
      */
     public String getDebugString() {
         StringBuilder sb = new StringBuilder();
-        for (Class<?> keyClass : getClassToUserFieldKeys()) {
+        List<Class<? extends UserFieldTarget>> sortedKeys = Alphabetical.getSorted(getClassToUserFieldKeys());
+        sb.append("classToUserFieldTargetSpecificListMap");
+        sb.append("\n-----------------------\n");
+        for (Class<?> keyClass : sortedKeys) {
             sb.append(keyClass.getSimpleName());
             sb.append("\n");
-            for (Object o : classToUserFieldListMap.get(keyClass)) {
+            for (Object o : classToUserFieldTargetSpecificListMap.get(keyClass)) {
                 UserField uf = (UserField) o;
                 if (uf == null) {
                     sb.append("null#############\n");
@@ -1023,6 +1059,12 @@ public final class UserFieldDefinitions extends UserFieldDefinitionChangeHandler
                 sb.append("\n");
             }
         }
+        sb.append("\nformatIdToFormat");
+        sb.append("\n----------------\n");
+        sb.append(ExtendedMap.toString(formatIdToFormat));
+        sb.append("idToUserFieldMap)");
+        sb.append("\n-----------------\n");
+        sb.append(ExtendedMap.toString(idToUserFieldMap));
         return sb.toString();
     }
 
