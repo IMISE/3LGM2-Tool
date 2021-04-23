@@ -24,6 +24,8 @@ import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.text.NumberFormat;
@@ -70,6 +72,7 @@ import de.imise.util.BrowseUtils;
 import de.imise.util.Sys;
 import de.imise.util.htmlxml.HTMLConverter;
 import de.imise.util.swing.component.AlphabeticalComboBox;
+import de.imise.util.swing.component.ParentComponentFinder;
 import de.imise.util.swing.component.text.ExtendedTextArea;
 import de.imise.util.swing.component.text.ExtendedTextField;
 import de.imise.util.swing.component.text.NumberTextField;
@@ -140,12 +143,34 @@ public class PropertyDialogUserFieldPanel extends ElementDialogPanel implements 
     protected final JPanel mainPanel;
 
     /**
+     *
+     */
+    private boolean scrollBackToTop = true;
+
+    /**
      * @param propertyDialog
      */
     public PropertyDialogUserFieldPanel(final AbstractElementPropertyDialog propertyDialog, final UserFieldList tabDefinition) {
         super(propertyDialog);
         mainPanel = createMainPanel();
         create(tabDefinition);
+        addComponentListener(new ComponentAdapter() {
+            @Override
+            public void componentShown(final ComponentEvent e) {
+                //For unclear reasons, when the dialog is opened and
+                //there are relatively many UserFields in (multiple)
+                //groups, the ScrollPanel is moved to an unpredictable
+                //location. Here the scroll position is set back to (0,0).
+                if (scrollBackToTop) {
+                    JScrollPane scrollPane = ParentComponentFinder.getParent(mainPanel, JScrollPane.class);
+                    JScrollBar scrollBar = scrollPane.getHorizontalScrollBar();
+                    scrollBar.setValue(0);
+                    scrollBar = scrollPane.getVerticalScrollBar();
+                    scrollBar.setValue(0);
+                    scrollBackToTop = false;
+                }
+            }
+        });
     }
 
     /**
@@ -276,7 +301,7 @@ public class PropertyDialogUserFieldPanel extends ElementDialogPanel implements 
         titledBorder.setTitleFont(titleFont);
         panel.setBorder(titledBorder);
         addDescriptionLabel(userField, panel, constraints);
-        constraints.insets.top = STANDARD_HORIZONTAL_INSETS;
+        constraints.insets.top = constraints.gridy > 0 ? STANDARD_HORIZONTAL_INSETS : 0;
         mainPanel.add(panel, constraints);
         constraints.insets.top = 0;
         return panel;
@@ -290,7 +315,7 @@ public class PropertyDialogUserFieldPanel extends ElementDialogPanel implements 
     protected void addAttribute(final UserField userField, final JPanel panel, final GridBagConstraints constraints) {
         JComponent label = getTitleLabel(userField);
         JComponent editor = getEditor(userField);
-        constraints.insets.top = STANDARD_HORIZONTAL_INSETS;
+        constraints.insets.top = constraints.gridy > 0 ? STANDARD_HORIZONTAL_INSETS : 0;
         if (showAttributeLabelAndEditorSideBySide) {
             constraints.gridwidth = 1;
             constraints.weightx = 0d;
