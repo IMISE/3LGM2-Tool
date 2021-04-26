@@ -15,6 +15,7 @@ import javax.xml.stream.XMLStreamException;
 import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
+import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.CopyDependencyResolver.CopyDependencyResolverResultSimple;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
@@ -70,6 +71,9 @@ public class ToolXMLClipboardWriter extends ToolXMLWriter {
             } else {
                 writeModelElement(me);
             }
+        }
+        for (Edge edge : resolvedCopyDependencies.additionalEdges) {
+            writeModelElement(edge);
         }
         writeEndElement(); //</objects>
         writeStartElement("szenario"); //<szenario>

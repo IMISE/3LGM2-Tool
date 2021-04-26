@@ -41,10 +41,14 @@ public class CopyDependencyResolver {
         public final Set<UserFieldNumberFormat> userFieldNumberFormats;
 
         /**  */
+        public final Set<Edge> additionalEdges;
+
+        /**  */
         public CopyDependencyResolverResultSimple() {
             elements = new ArrayList<>();
             userFields = new HashSet<>();
             userFieldNumberFormats = new HashSet<>();
+            additionalEdges = new HashSet<>();
         }
 
         /**
@@ -156,7 +160,7 @@ public class CopyDependencyResolver {
                     for (GraphDocument doc : export) {
                         NodeContainer nodeContainer = node.getContainer(doc);
                         if (result.add(nodeContainer)) {
-                            resolveCopyDependencies(node, null, result);
+                            resolveCopyDependencies(node, null, result, null);
                         }
                     }
                 }
@@ -165,7 +169,7 @@ public class CopyDependencyResolver {
                     for (GraphDocument doc : export) {
                         ElementContainer edgeContainer = edge.getContainer(doc);
                         if (result.add(edgeContainer)) {
-                            resolveCopyDependencies(edge, null, result);
+                            resolveCopyDependencies(edge, null, result, null);
                         }
                     }
                 }
@@ -190,7 +194,7 @@ public class CopyDependencyResolver {
         CopyDependencyResolverResultSimple result = new CopyDependencyResolverResultSimple();
         for (ElementContainer ec : elements) {
             ModelElement me = ec.getElement();
-            resolveCopyDependencies(me, null, result);
+            resolveCopyDependencies(me, null, result, elements);
         }
         return result;
     }
@@ -206,8 +210,9 @@ public class CopyDependencyResolver {
      *            least the given modelelement is contained in this list.
      * @param userFields all userfields of all elements in the filled elements
      *            list
+     * @param initialSelectedElements
      */
-    private static void resolveCopyDependencies(final ModelElement me, final Class<? extends ModelElement> ignoreClass, CopyDependencyResolverResultSimple result) {
+    private static void resolveCopyDependencies(final ModelElement me, final Class<? extends ModelElement> ignoreClass, CopyDependencyResolverResultSimple result, final Collection<ElementContainer> initialSelectedElements) {
         if (me instanceof Bendpoint || me instanceof InferenceEdge) {
             return;
         }
@@ -236,9 +241,9 @@ public class CopyDependencyResolver {
             }
             Edge edge = (Edge) me;
             ModelElement start = edge.getStart();
-            resolveCopyDependencies(start, elementClass, result);
+            resolveCopyDependencies(start, elementClass, result, initialSelectedElements);
             ModelElement end = edge.getEnd();
-            resolveCopyDependencies(end, elementClass, result);
+            resolveCopyDependencies(end, elementClass, result, initialSelectedElements);
         }
         MetaModel metaModel = gdcoll.getMetaModel();
         Collection<ElementaryMetaPath> copyDependencies = metaModel.getCopyDependencies(elementClass);
@@ -251,10 +256,10 @@ public class CopyDependencyResolver {
                 Collection<ElementContainer> connectedContainers = copyDependentElementaryMetaPath.getConnectedContainer(me, mainDoc);
                 for (ElementContainer ec : connectedContainers) {
                     ModelElement connected = ec.getElement();
-                    resolveCopyDependencies(connected, elementClass, result);
+                    resolveCopyDependencies(connected, elementClass, result, initialSelectedElements);
                     List<Edge> edgesWith = me.getEdgesWith(connected);
                     for (Edge edge : edgesWith) {
-                        resolveCopyDependencies(edge, elementClass, result);
+                        resolveCopyDependencies(edge, elementClass, result, initialSelectedElements);
                     }
                 }
             }
@@ -264,9 +269,18 @@ public class CopyDependencyResolver {
             ModelElement element = result.elements.get(i);
             List<Edge> edgesWith = me.getEdgesWith(element);
             for (Edge edge : edgesWith) {
-                resolveCopyDependencies(edge, elementClass, result);
+                resolveCopyDependencies(edge, elementClass, result, initialSelectedElements);
             }
         }
+
+        for (ModelElement element : result.elements) {
+            for (Edge edge : element.getEdges()) {
+                if (!result.elements.contains(edge)) {
+                    result.additionalEdges.add(edge);
+                }
+            }
+        }
+
     }
 
 }
