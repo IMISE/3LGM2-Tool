@@ -9,12 +9,12 @@ import static de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty.OP
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.LayoutManager;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.BorderFactory;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
@@ -58,18 +58,29 @@ public class UserFieldOptionPanel extends AbstractInputPanel {
         super(layout == null ? new FlowLayout() : layout);
         setBorder(BorderFactory.createTitledBorder(getResString("optionenButtonText")));
 
-        ChangeListener changeListener = new ChangeListener() {
+        ActionListener actionListener = new ActionListener() {
             @Override
-            public void stateChanged(final ChangeEvent e) {
-                commit();
+            public void actionPerformed(final ActionEvent e) {
+                Object source = e.getSource();
+                if (source == treeVisCheckBox) {
+                    boolean isTreeVisibility = treeVisCheckBox.isSelected();
+                    for (UserField userField : userFields) {
+                        userField.setTreeVisibility(isTreeVisibility);
+                    }
+                } else if (source == showDescriptionInDialog) {
+                    boolean isShowDescription = showDescriptionInDialog.isSelected();
+                    for (UserField userField : userFields) {
+                        userField.setShowDescriptionInDialog(isShowDescription);
+                    }
+                }
             }
         };
 
         treeVisCheckBox = new TriStateCheckBox(getResString("userFieldEditor_treevis"));
-        treeVisCheckBox.addChangeListener(changeListener);
+        treeVisCheckBox.addActionListener(actionListener);
         add(treeVisCheckBox);
         showDescriptionInDialog = new TriStateCheckBox(getResString("userFieldEditor_showDescriptionInDialog"));
-        showDescriptionInDialog.addChangeListener(changeListener);
+        showDescriptionInDialog.addActionListener(actionListener);
         add(showDescriptionInDialog);
 
         //bei allen UserFields die mit Kennzahlen zu tun haben, die Option zum Einschalten der Berechnung anbieten

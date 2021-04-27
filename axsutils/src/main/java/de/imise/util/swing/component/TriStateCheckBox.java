@@ -149,26 +149,18 @@ public class TriStateCheckBox extends JCheckBox implements Icon {
                 } else {
                     selectionState = selectionState == FULL ? NOT : FULL;
                 }
-
                 checkBox.putClientProperty("SelectionState", selectionState);
-
-                if (checkBox.getSelectionState() == NOT) {
-                    checkBox.setSelected(false);
-                }
-
-                fireStateChanged();
+                checkBox.removeActionListener(this);
+                checkBox.doClick();
+                checkBox.addActionListener(this);
             }
-
         };
-
     }
 
     @Override
     public boolean isSelected() {
-        if (MIDasSELECTED && getSelectionState() != SelectionState.NOT) {
-            return true;
-        }
-        return super.isSelected();
+        SelectionState selectionState = getSelectionState();
+        return MIDasSELECTED && selectionState != NOT;
     }
 
     /**
@@ -176,25 +168,17 @@ public class TriStateCheckBox extends JCheckBox implements Icon {
      */
     public SelectionState getSelectionState() {
         Object selectionState = getClientProperty("SelectionState");
-        return selectionState != null ? (SelectionState) selectionState : super.isSelected() ? SelectionState.FULL : SelectionState.NOT;
+        return selectionState != null ? (SelectionState) selectionState : super.isSelected() ? FULL : NOT;
     }
 
     /**
      * @param sel
      */
     public void setSelectionState(final SelectionState selectionState) {
-        switch (selectionState) {
-        case FULL:
-            setSelected(true);
-            break;
-        case HALF:
-        case NOT:
-            setSelected(false);
-            break;
-        default:
-            throw new IllegalArgumentException();
-        }
         putClientProperty("SelectionState", selectionState);
+        fireStateChanged();
+        revalidate();
+        repaint();
     }
 
     /**
@@ -211,8 +195,6 @@ public class TriStateCheckBox extends JCheckBox implements Icon {
         } else {
             setSelectionState(HALF);
         }
-        revalidate();
-        repaint();
     }
 
     ////////////////////////////
