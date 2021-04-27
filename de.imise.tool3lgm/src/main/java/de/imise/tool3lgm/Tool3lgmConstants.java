@@ -74,7 +74,7 @@ public abstract class Tool3lgmConstants {
     public static final boolean LOG_READABLE_UNDO_REDO_COMMANDS = false;
 
     /** filename with path for internal clipboard */
-    public static final String CLIPBOARD_PATH = System.getProperty("user.home") + File.separator + ".3lgm_clipboard";
+    public static final String CLIPBOARD_PATH = System.getProperty("user.home") + "/.tool3lgm2UserInfo" + File.separator + ".3lgm_clipboard";
 
     /** Path to the installation directory of the application as file */
     public static final File APPLICATION_DIR = ApplicationManager.getApplicationDir("lib");
