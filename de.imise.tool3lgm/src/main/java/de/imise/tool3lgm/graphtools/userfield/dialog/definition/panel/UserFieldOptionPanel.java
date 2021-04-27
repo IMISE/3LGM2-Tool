@@ -9,12 +9,12 @@ import static de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty.OP
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.LayoutManager;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.BorderFactory;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
@@ -58,18 +58,18 @@ public class UserFieldOptionPanel extends AbstractInputPanel {
         super(layout == null ? new FlowLayout() : layout);
         setBorder(BorderFactory.createTitledBorder(getResString("optionenButtonText")));
 
-        ActionListener actionListener = new ActionListener() {
+        ChangeListener changeListener = new ChangeListener() {
             @Override
-            public void actionPerformed(final ActionEvent e) {
-                updateUserFields();
+            public void stateChanged(final ChangeEvent e) {
+                commit();
             }
         };
 
         treeVisCheckBox = new TriStateCheckBox(getResString("userFieldEditor_treevis"));
-        treeVisCheckBox.addActionListener(actionListener);
+        treeVisCheckBox.addChangeListener(changeListener);
         add(treeVisCheckBox);
         showDescriptionInDialog = new TriStateCheckBox(getResString("userFieldEditor_showDescriptionInDialog"));
-        showDescriptionInDialog.addActionListener(actionListener);
+        showDescriptionInDialog.addChangeListener(changeListener);
         add(showDescriptionInDialog);
 
         //bei allen UserFields die mit Kennzahlen zu tun haben, die Option zum Einschalten der Berechnung anbieten
@@ -105,25 +105,16 @@ public class UserFieldOptionPanel extends AbstractInputPanel {
      * @return
      */
     public static UserFieldOptionPanel getOptionPanel() {
-        UserFieldOptionPanel optionPanel = new UserFieldOptionPanel(new GridLayout(3, 1), true);
-        ActionListener actionListener = new ActionListener() {
-            @Override
-            public void actionPerformed(final ActionEvent e) {
-                optionPanel.commit();
-            }
-        };
-        optionPanel.treeVisCheckBox.addActionListener(actionListener);
-        optionPanel.treeVisCheckBox.addActionListener(actionListener);
-        return optionPanel;
+        return new UserFieldOptionPanel(new GridLayout(3, 1), true);
     }
 
     @Override
     public void commit() {
+        boolean isTreeVisibility = treeVisCheckBox.isSelected();
+        boolean isShowDescription = showDescriptionInDialog.isSelected();
         for (UserField userField : userFields) {
-            boolean isTreeVissible = treeVisCheckBox.isSelected();
-            userField.setTreeVisibility(isTreeVissible);
-            boolean showDescription = showDescriptionInDialog.isSelected();
-            userField.setShowDescriptionInDialog(showDescription);
+            userField.setTreeVisibility(isTreeVisibility);
+            userField.setShowDescriptionInDialog(isShowDescription);
         }
     }
 
@@ -171,18 +162,6 @@ public class UserFieldOptionPanel extends AbstractInputPanel {
         treeVisCheckBox.setSelectionState(userFieldsSelected && isOneEnabledTreeVisibility, userFieldsSelected && isOneDisabledTreeVisibility);
         if (enableFormulaCalculationCheckBox != null) {
             enableFormulaCalculationCheckBox.setSelected(OPTION_ENABLE_FORMULA_CALCULATION.is());
-        }
-    }
-
-    /**
-     *
-     */
-    private void updateUserFields() {
-        boolean isTreeVisibility = treeVisCheckBox.isSelected();
-        boolean isShowDescription = showDescriptionInDialog.isSelected();
-        for (UserField userField : userFields) {
-            userField.setShowDescriptionInDialog(isShowDescription);
-            userField.setTreeVisibility(isTreeVisibility);
         }
     }
 
