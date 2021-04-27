@@ -45,7 +45,11 @@ public class UserFieldDeclarationDialogClassComboBox extends AlphabeticalComboBo
     }
 
     public void restoreSelection() {
-        setSelectedIndex(lastSelectedIndex);
+        try { //metamodel changed -> index maybe invalid
+            setSelectedIndex(lastSelectedIndex < 0 ? 0 : lastSelectedIndex);
+        } catch (Exception e) {
+            setSelectedIndex(0);
+        }
     }
 
     public Class<? extends UserFieldTarget> getSelectedClass() {

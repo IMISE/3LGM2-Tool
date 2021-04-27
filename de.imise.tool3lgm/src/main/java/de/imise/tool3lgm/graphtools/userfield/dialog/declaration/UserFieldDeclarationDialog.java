@@ -407,7 +407,7 @@ public final class UserFieldDeclarationDialog extends AbstractUserFieldDeclarati
      */
     protected boolean isPreviewEnabeld() {
         Class<? extends UserFieldTarget> selectedClass = classComboBox.getSelectedClass();
-        if (!Node.class.isAssignableFrom(selectedClass)) {
+        if (selectedClass == null || !Node.class.isAssignableFrom(selectedClass)) {
             return false;
         }
         // at the moment no preview for abstract classes
