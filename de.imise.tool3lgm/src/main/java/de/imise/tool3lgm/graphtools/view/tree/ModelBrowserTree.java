@@ -7,6 +7,8 @@ import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.MIN_LAYER_IN
 import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.PHYSICAL_LAYER;
 import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.isInterLayer;
 import static de.imise.tool3lgm.graphtools.undoredo.TransactionManager.STANDARD_PID;
+import static de.imise.tool3lgm.graphtools.userfield.definition.UserField.Style.GROUP;
+import static de.imise.tool3lgm.graphtools.userfield.definition.UserField.Style.TAB;
 import static de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty.OPTION_ENABLE_EXPERT_MODE;
 import static de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty.OPTION_ENABLE_SUBMODEL_BROWSER;
 import static de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty.OPTION_SHOW_PART_OF_HIERARCHY;
@@ -576,14 +578,41 @@ public final class ModelBrowserTree extends DynamicTree implements UserFieldList
         GDCollection gdcoll = doc.getCollection();
         UserFieldDefinitions ufDefs = gdcoll.getUserFieldDefinitions();
         Class<? extends ModelElement> elementClass = me.getClass();
-        for (UserField uf : ufDefs.getUserFields(elementClass)) {
-            if (uf.isTreeVisibility()) {
-                if (uf.hasStyle(UserField.Style.HYPERLINK) || uf.hasStyle(UserField.Style.SEPARATOR) || uf.isNumberUserField() || allOfThisElement.contains(uf)) {
-                    UserFieldTreeNode userFieldTreeNode = new UserFieldTreeNode(uf, me);
-                    elementNode.add(userFieldTreeNode);
+        UserFieldTreeNode currentTabNode = null;
+        UserFieldTreeNode currentGroupNode = null;
+        UserFieldTreeNode valueOrSeparatorNode = null;
+        for (UserField userField : ufDefs.getUserFields(elementClass)) {
+            if (userField.hasStyle(TAB)) {
+                if (userField.isTreeVisibility()) {
+                    currentTabNode = new UserFieldTreeNode(userField, me);
+                } else {
+                    currentTabNode = null;
                 }
+                currentGroupNode = null;
+                valueOrSeparatorNode = null;
+            } else if (userField.hasStyle(GROUP)) {
+                currentGroupNode = userField.isTreeVisibility() ? new UserFieldTreeNode(userField, me) : null;
+                valueOrSeparatorNode = null;
+            } else if (userField.hasStyle(UserField.Style.SEPARATOR) || allOfThisElement.contains(userField)) {
+                valueOrSeparatorNode = userField.isTreeVisibility() ? new UserFieldTreeNode(userField, me) : null;
             }
+            LGMTreeNode<?> parent = null;
+            LGMTreeNode<?> child = null;
+            if (valueOrSeparatorNode != null) {
+                parent = currentGroupNode != null ? currentGroupNode : currentTabNode != null ? currentTabNode : elementNode;
+                child = valueOrSeparatorNode;
+            } else if (currentGroupNode != null) {
+                parent = currentTabNode != null ? currentTabNode : elementNode;
+                child = currentGroupNode;
+            } else if (currentTabNode != null) {
+                parent = elementNode;
+                child = currentTabNode;
+            } else {
+                continue; // should never happen
+            }
+            parent.add(child);
         }
+
     }
 
     /**
