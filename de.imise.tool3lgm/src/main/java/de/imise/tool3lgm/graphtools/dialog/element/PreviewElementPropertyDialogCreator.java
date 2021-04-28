@@ -23,7 +23,7 @@ import de.imise.tool3lgm.graphtools.view.tree.ModelBrowserTree;
  *
  * @author AXS (28.04.2021)
  */
-public class PreviewElementPorpertyDialogCreator {
+public class PreviewElementPropertyDialogCreator {
 
     /**
      *
