@@ -573,8 +573,8 @@ public final class ModelBrowserTree extends DynamicTree implements UserFieldList
         ElementContainer ec = elementNode.getUserObject();
         ModelElement me = ec.getElement();
         Set<UserField> allOfThisElement = me.getUserFieldInputValueKeys();
-        GDCollection gdcol = doc.getCollection();
-        UserFieldDefinitions ufDefs = gdcol.getUserFieldDefinitions();
+        GDCollection gdcoll = doc.getCollection();
+        UserFieldDefinitions ufDefs = gdcoll.getUserFieldDefinitions();
         Class<? extends ModelElement> elementClass = me.getClass();
         for (UserField uf : ufDefs.getUserFields(elementClass)) {
             if (uf.isTreeVisibility()) {

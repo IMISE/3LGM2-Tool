@@ -35,6 +35,8 @@ import javax.swing.event.ListSelectionListener;
 
 import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.Tool3lgmModelType;
+import de.imise.tool3lgm.graphtools.dialog.element.ElementPropertyDialog;
+import de.imise.tool3lgm.graphtools.dialog.element.PreviewElementPorpertyDialogCreator;
 import de.imise.tool3lgm.graphtools.metamodel.CoreMetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
@@ -433,7 +435,8 @@ public final class UserFieldDeclarationDialog extends AbstractUserFieldDeclarati
         DummyGDCollection dummyGDCollection = new DummyGDCollection(modelType);
         dummyGDCollection.setUserFieldDefinitions(definitions);
         ModelElement dummyElement = dummyGDCollection.getDummyElement(selectedClass);
-        dummyElement.showPropertyDialog();
+        ElementPropertyDialog propertyDialog = dummyElement.getPropertyDialog();
+        PreviewElementPorpertyDialogCreator.showPreview(propertyDialog);
     }
 
     @Override

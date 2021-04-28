@@ -1,6 +1,5 @@
 package de.imise.tool3lgm.graphtools.dialog.element;
 
-import java.awt.Dialog.ModalityType;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
@@ -10,8 +9,6 @@ import java.util.List;
 import javax.swing.JComponent;
 
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
-import de.imise.tool3lgm.graphtools.model.DummyGDCollection;
-import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.view.tooltip.ElementToolTipProvider;
 import de.imise.tool3lgm.userproperties.UserProperties;
@@ -106,10 +103,6 @@ public class ElementPropertyDialogsContext {
             dialog = me.getNewPropertyDialogInsance();
             context.dialogs.add(dialog);
             context.addTooltipMouseListeners(dialog);
-        }
-        GDCollection gdcoll = me.getCollection();
-        if (gdcoll instanceof DummyGDCollection) {
-            dialog.setModalityType(ModalityType.APPLICATION_MODAL);
         }
         return dialog;
     }
