@@ -795,13 +795,27 @@ public class PropertyDialogUserFieldPanel extends ElementDialogPanel implements 
      */
     private class UserFieldEditorComponent {
 
+        /**  */
         private final JComponent editorComponent;
 
+        /**  */
         private final UserField userField;
 
+        /**
+         * @param userField
+         * @param editorComponent
+         */
         UserFieldEditorComponent(final UserField userField, final JComponent editorComponent) {
             this.editorComponent = editorComponent;
             this.userField = userField;
+        }
+
+        /**
+         * @param userField
+         * @return
+         */
+        private boolean hasUserField(final UserField userField) {
+            return this.userField.equals(userField);
         }
     }
 
@@ -809,10 +823,28 @@ public class PropertyDialogUserFieldPanel extends ElementDialogPanel implements 
     public ElementDialogPanel getResponsiblePanelForConsistencyError(final AbstractConsistencyError consistencyError) {
         ModelElement errorModelElement = consistencyError.getModelElement();
         ModelElement panelModelElement = getModelElement();
-        if (panelModelElement == errorModelElement && consistencyError instanceof AbstractIDError) {
-            return this;
+        if (panelModelElement == errorModelElement) {
+            if (consistencyError instanceof AbstractIDError) {
+                UserField errorUserField = ((AbstractIDError) consistencyError).getUserField();
+                if (hasUserField(errorUserField)) {
+                    return this;
+                }
+            }
         }
         return null;
+    }
+
+    /**
+     * @param userField
+     * @return only <code>true</code> if this panel shows the given userfield
+     */
+    public boolean hasUserField(final UserField userField) {
+        for (UserFieldEditorComponent editor : fieldComponents) {
+            if (editor.hasUserField(userField)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**

@@ -16,6 +16,8 @@ import de.imise.tool3lgm.graphtools.dialog.element.panel.ElementDialogPanel;
 import de.imise.tool3lgm.graphtools.dialog.element.panel.MultiPanelElementDialogPanel;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.path.metapaths.MetaPath;
+import de.imise.tool3lgm.graphtools.userfield.definition.UserField;
+import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.panel.PropertyDialogUserFieldPanel;
 import de.imise.util.swing.component.tab.ReorderableTabbedPane;
 
 /**
@@ -144,21 +146,22 @@ public abstract class AbstractTabbedPropertyDialog extends AbstractPropertyDialo
     }
 
     /**
-     * Selects the first tab of the contained tabbed pane where the component of
-     * this tab is an instance of the given class.
+     * Selects the first tab with an {@link PropertyDialogUserFieldPanel} which
+     * contains the given userfield.
      *
      * @param tabComponentClass
      * @return index of the selected tab
      * @see #selectTab(String, Class)
      */
-    public int selectTab(final Class<? extends Component> tabComponentClass) {
+    public int selectTab(final UserField userField) {
         for (int i = 0; i < tabbedPane.getComponentCount(); i++) {
             Component comp = tabbedPane.getComponent(i);
-            if (!tabComponentClass.isAssignableFrom(comp.getClass())) {
-                continue;
+            if (comp instanceof PropertyDialogUserFieldPanel) {
+                if (((PropertyDialogUserFieldPanel) comp).hasUserField(userField)) {
+                    tabbedPane.setSelectedIndex(i);
+                    return i;
+                }
             }
-            tabbedPane.setSelectedIndex(i);
-            return i;
         }
         return -1;
     }
