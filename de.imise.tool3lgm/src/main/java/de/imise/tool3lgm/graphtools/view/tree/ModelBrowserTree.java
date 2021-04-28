@@ -583,6 +583,9 @@ public final class ModelBrowserTree extends DynamicTree implements UserFieldList
         UserFieldTreeNode valueOrSeparatorNode = null;
         for (UserField userField : ufDefs.getUserFields(elementClass)) {
             if (userField.hasStyle(TAB)) {
+                if (currentTabNode != null && currentTabNode.getChildCount() == 0) { //remove empty tabs
+                    elementNode.remove(currentTabNode);
+                }
                 if (userField.isTreeVisibility()) {
                     currentTabNode = new UserFieldTreeNode(userField, me);
                 } else {
@@ -591,6 +594,10 @@ public final class ModelBrowserTree extends DynamicTree implements UserFieldList
                 currentGroupNode = null;
                 valueOrSeparatorNode = null;
             } else if (userField.hasStyle(GROUP)) {
+                if (currentGroupNode != null && currentGroupNode.getChildCount() == 0) { //remove empty groups
+                    DefaultMutableTreeNode parent = (DefaultMutableTreeNode) currentGroupNode.getParent();
+                    parent.remove(currentGroupNode);
+                }
                 currentGroupNode = userField.isTreeVisibility() ? new UserFieldTreeNode(userField, me) : null;
                 valueOrSeparatorNode = null;
             } else if (userField.hasStyle(UserField.Style.SEPARATOR) || allOfThisElement.contains(userField)) {
@@ -611,6 +618,13 @@ public final class ModelBrowserTree extends DynamicTree implements UserFieldList
                 continue; // should never happen
             }
             parent.add(child);
+        }
+        if (currentGroupNode != null && currentGroupNode.getChildCount() == 0) { //remove empty groups if it is the last node
+            DefaultMutableTreeNode parent = (DefaultMutableTreeNode) currentGroupNode.getParent();
+            parent.remove(currentGroupNode);
+        }
+        if (currentTabNode != null && currentTabNode.getChildCount() == 0) { //then remove empty tabs if it is the last node
+            elementNode.remove(currentTabNode);
         }
 
     }
