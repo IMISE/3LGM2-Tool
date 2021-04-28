@@ -5,6 +5,7 @@ import java.awt.event.MouseEvent;
 import java.util.Enumeration;
 
 import javax.swing.JTree;
+import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeModel;
 import javax.swing.tree.TreeNode;
@@ -142,6 +143,21 @@ public abstract class DynamicTree extends JTree implements GraphDocumentOwner {
                 bounds.x = 0;
                 scrollRectToVisible(bounds);
             }
+        }
+    }
+
+    /**
+     * Expands the given node full (recursive)
+     *
+     * @param node
+     */
+    public void expandNodeFull(final DefaultMutableTreeNode node) {
+        TreeNode[] path = node.getPath();
+        TreePath treePath = new TreePath(path);
+        expandPath(treePath);
+        for (int i = 0; i < node.getChildCount(); i++) {
+            DefaultMutableTreeNode child = (DefaultMutableTreeNode) node.getChildAt(i);
+            expandNodeFull(child);
         }
     }
 
