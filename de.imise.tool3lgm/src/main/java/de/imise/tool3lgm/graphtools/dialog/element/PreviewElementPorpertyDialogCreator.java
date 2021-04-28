@@ -3,16 +3,14 @@ package de.imise.tool3lgm.graphtools.dialog.element;
 import java.awt.BorderLayout;
 import java.awt.Container;
 import java.awt.Dialog.ModalityType;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
 import javax.swing.BorderFactory;
 import javax.swing.JComponent;
-import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
+import javax.swing.tree.TreePath;
 
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.LGMGraphDocument;
@@ -41,8 +39,12 @@ public class PreviewElementPorpertyDialogCreator {
         GDCollection gdcoll = originalDialog.getCollection();
         LGMGraphDocument mainDoc = gdcoll.getMainDoc();
         mainDoc.selectAll();
+        if (originalDialog.hasDefaultSize()) {
+            originalDialog.resize(1.8d, 1.0d);
+        }
         ModelBrowserTree modelBrowserTree = new ModelBrowserTree(mainDoc);
         modelBrowserTree.selectObjects();
+        TreePath selectionPath = modelBrowserTree.getSelectionPath();
 
         String dialogTitle = gdcoll.getResString("previewText");
         originalDialog.setTitle(dialogTitle);
@@ -80,35 +82,7 @@ public class PreviewElementPorpertyDialogCreator {
         });
 
         originalDialog.showDialog();
-    }
-
-    /**
-     * @param originalDialog
-     */
-    public static final void showPreviewOld(final ElementPropertyDialog originalDialog) {
-        originalDialog.setModalityType(ModalityType.APPLICATION_MODAL);
-        Container contentPane = originalDialog.getContentPane();
-        GDCollection gdcoll = originalDialog.getCollection();
-        LGMGraphDocument mainDoc = gdcoll.getMainDoc();
-        mainDoc.selectAll();
-        ModelBrowserTree modelBrowserTree = new ModelBrowserTree(mainDoc);
-        modelBrowserTree.selectObjects();
-
-        JScrollPane modelBrowserTreeScrollPane = new JScrollPane(modelBrowserTree);
-
-        JPanel propertyDialogContent = (JPanel) contentPane.getComponent(0);
-
-        contentPane.removeAll();
-        contentPane.setLayout(new GridBagLayout());
-        GridBagConstraints constraints = new GridBagConstraints();
-        constraints.fill = GridBagConstraints.BOTH;
-        constraints.weighty = 1d;
-        constraints.weightx = 0.5d;
-        contentPane.add(modelBrowserTreeScrollPane, constraints);
-        //        constraints.gridx++;
-        //        /constraints.weightx = 0.66d;
-        contentPane.add(propertyDialogContent, constraints);
-        originalDialog.showDialog();
+        modelBrowserTree.scrollPathToVisible(selectionPath);
     }
 
 }

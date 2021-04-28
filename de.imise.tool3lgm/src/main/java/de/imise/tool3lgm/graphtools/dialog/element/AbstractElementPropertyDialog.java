@@ -490,6 +490,28 @@ public class AbstractElementPropertyDialog extends AbstractTabbedPropertyDialog 
         return DEFAULT_SIZE;
     }
 
+    /**
+     * @return <code>true</code> if the dialog has the default size
+     */
+    public boolean hasDefaultSize() {
+        Dimension size = getSize();
+        Dimension defaultSize = getDefaultSize();
+        return size.equals(defaultSize);
+    }
+
+    /**
+     * @param xFactor Changes the width by multiplying the current width by the
+     *            passed xFactor.
+     * @param yFactor Changes the height by multiplying the current height by
+     *            the passed yFactor.
+     */
+    public void resize(final double xFactor, final double yFactor) {
+        Dimension size = getSize();
+        size.width *= xFactor;
+        size.height *= yFactor;
+        setSize(size);
+    }
+
     @Override
     public Point getDefaultPosition() {
         return DEFAULT_POSITION;
