@@ -10,6 +10,7 @@ import javax.swing.BorderFactory;
 import javax.swing.JComponent;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
+import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreePath;
 
 import de.imise.tool3lgm.graphtools.model.GDCollection;
@@ -45,6 +46,8 @@ public class PreviewElementPropertyDialogCreator {
         ModelBrowserTree modelBrowserTree = new ModelBrowserTree(mainDoc);
         modelBrowserTree.selectObjects();
         TreePath selectionPath = modelBrowserTree.getSelectionPath();
+        DefaultMutableTreeNode elementNode = (DefaultMutableTreeNode) selectionPath.getLastPathComponent();
+        modelBrowserTree.expandNodeFull(elementNode);
 
         String dialogTitle = gdcoll.getResString("previewText");
         originalDialog.setTitle(dialogTitle);
