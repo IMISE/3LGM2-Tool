@@ -150,11 +150,27 @@ public class TriStateCheckBox extends JCheckBox implements Icon {
                     selectionState = selectionState == FULL ? NOT : FULL;
                 }
                 checkBox.putClientProperty("SelectionState", selectionState);
+                // The following must be, because the order in which the
+                // action listeners are notified runs for inexplicable
+                // reasons exactly the other way around (backwards) with
+                // the OpenJDK, so with the OracleJDK (there forwards).
+                // This has the consequence that in the OpenJDK case
+                // later added listeners are notified before this one -
+                // thus before the state was actually changed. Therefore
+                // the notification of all other listeners must be
+                // triggered here again, so that they get the change of
+                // the state in any case.
                 checkBox.removeActionListener(this);
                 checkBox.doClick();
                 checkBox.addActionListener(this);
             }
         };
+    }
+
+    @Override
+    public void setSelected(final boolean b) {
+        //this does nothing -> use setSelectionState
+        throw new UnsupportedOperationException("use setSelectionState(SelectionState) instead");
     }
 
     @Override
