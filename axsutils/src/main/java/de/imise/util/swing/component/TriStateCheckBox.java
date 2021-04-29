@@ -27,7 +27,7 @@ import de.imise.util.image.ImageTools;
  *
  * @author AXS (21.04.2021)
  */
-public class TriStateCheckBox extends JCheckBox implements Icon, ActionListener {
+public class TriStateCheckBox extends JCheckBox implements Icon {
 
     /**
      * Enum for the thre possible selction states
@@ -54,6 +54,188 @@ public class TriStateCheckBox extends JCheckBox implements Icon, ActionListener 
      * and then every click only switches between full and not selected.
      */
     private final boolean rotateState;
+
+    /**
+     * Creates a checkbox with {@link #rotateState} <code>== false</code>
+     */
+    public TriStateCheckBox() {
+        this(false);
+    }
+
+    /**
+     * @param rotateState If <code>true</code> all 3 states will be set in
+     *            rotation if clicked. If <code>false</code> an initial medium
+     *            state will be set to full selected and then every click only
+     *            switches between full and not selected.
+     */
+    public TriStateCheckBox(final boolean rotateState) {
+        this("", rotateState);
+    }
+
+    /**
+     * Creates a checkbox with {@link #rotateState} <code>== false</code>.
+     *
+     * @param text
+     */
+    public TriStateCheckBox(final String text) {
+        this(text, false);
+    }
+
+    /**
+     * @param text
+     * @param rotateState If <code>true</code> all 3 states will be set in
+     *            rotation if clicked. If <code>false</code> an initial medium
+     *            state will be set to full selected and then every click only
+     *            switches between full and not selected.
+     */
+    public TriStateCheckBox(final String text, final boolean rotateState) {
+        this(text, SelectionState.NOT, rotateState);
+    }
+
+    /**
+     * Creates a checkbox with {@link #rotateState} <code>== false</code>.
+     *
+     * @param text
+     * @param selectionState
+     * @param rotateState If <code>true</code> all 3 states will be set in
+     *            rotation if clicked. If <code>false</code> an initial medium
+     *            state will be set to full selected and then every click only
+     *            switches between full and not selected.
+     */
+    public TriStateCheckBox(final String text, final SelectionState selectionState) {
+        this(text, selectionState, false);
+    }
+
+    /**
+     * @param text
+     * @param selectionState
+     * @param rotateState If <code>true</code> all 3 states will be set in
+     *            rotation if clicked. If <code>false</code> an initial medium
+     *            state will be set to full selected and then every click only
+     *            switches between full and not selected.
+     */
+    public TriStateCheckBox(final String text, final SelectionState selectionState, final boolean rotateState) {
+        // tri-state checkbox has 3 selection states: 0 unselected 1 mid-state
+        // selection 2 fully selected
+        super(text, selectionState != SelectionState.NOT);
+
+        switch (selectionState) {
+        case FULL:
+            setSelected(true);
+        case HALF:
+        case NOT:
+            putClientProperty("SelectionState", selectionState);
+            break;
+        default:
+            throw new IllegalArgumentException();
+        }
+        ActionListener stateListener = createStateListener();
+        addActionListener(stateListener);
+        setIcon(this);
+        this.rotateState = rotateState;
+    }
+
+    /**
+     * @return
+     */
+    private ActionListener createStateListener() {
+        return new ActionListener() {
+            @Override
+            public void actionPerformed(final ActionEvent e) {
+                TriStateCheckBox checkBox = TriStateCheckBox.this;
+                SelectionState selectionState = checkBox.getSelectionState();
+                if (rotateState) {
+                    selectionState = selectionState == FULL ? NOT : selectionState == HALF ? FULL : HALF;
+                } else {
+                    selectionState = selectionState == FULL ? NOT : FULL;
+                }
+                checkBox.putClientProperty("SelectionState", selectionState);
+                // The following must be, because the order in which the
+                // action listeners are notified runs for inexplicable
+                // reasons exactly the other way around (backwards) with
+                // the OpenJDK, so with the OracleJDK (there forwards).
+                // This has the consequence that in the OpenJDK case
+                // later added listeners are notified before this one -
+                // thus before the state was actually changed. Therefore
+                // the notification of all other listeners must be
+                // triggered here again, so that they get the change of
+                // the state in any case.
+                checkBox.removeActionListener(this);
+                checkBox.doClick();
+                checkBox.addActionListener(this);
+            }
+        };
+    }
+
+    @Override
+    public void setSelected(final boolean b) {
+        //this does nothing -> use setSelectionState
+        throw new UnsupportedOperationException("use setSelectionState(SelectionState) instead");
+    }
+
+    @Override
+    public boolean isSelected() {
+        SelectionState selectionState = getSelectionState();
+        return MIDasSELECTED && selectionState != NOT;
+    }
+
+    /**
+     * @return
+     */
+    public SelectionState getSelectionState() {
+        Object selectionState = getClientProperty("SelectionState");
+        return selectionState != null ? (SelectionState) selectionState : super.isSelected() ? FULL : NOT;
+    }
+
+    /**
+     * @param sel
+     */
+    public void setSelectionState(final SelectionState selectionState) {
+        putClientProperty("SelectionState", selectionState);
+        fireStateChanged();
+        revalidate();
+        repaint();
+    }
+
+    /**
+     * Sets the state depending on the booleans :)
+     *
+     * @param oneEnabled
+     * @param oneDisabled
+     */
+    public void setSelectionState(final boolean oneEnabled, final boolean oneDisabled) {
+        if (!oneEnabled) {
+            setSelectionState(NOT);
+        } else if (!oneDisabled) {
+            setSelectionState(FULL);
+        } else {
+            setSelectionState(HALF);
+        }
+    }
+
+    ////////////////////////////
+    // Icon  create, set, get //
+    ////////////////////////////
+
+    @Override
+    public void paintIcon(final Component c, final Graphics g, final int x, final int y) {
+        if (icons[0] == null) {
+            createIcons();
+        }
+
+        int iconIndex = getSelectionState().ordinal() + (isEnabled() ? 0 : 3);
+        icons[iconIndex].paintIcon(c, g, x, y);
+    }
+
+    @Override
+    public int getIconWidth() {
+        return icon.getIconWidth();
+    }
+
+    @Override
+    public int getIconHeight() {
+        return icon.getIconHeight();
+    }
 
     /**
      * @param source
@@ -143,177 +325,6 @@ public class TriStateCheckBox extends JCheckBox implements Icon, ActionListener 
 
     }
 
-    /**
-     * Creates a checkbox with {@link #rotateState} <code>== false</code>
-     */
-    public TriStateCheckBox() {
-        this(false);
-    }
-
-    /**
-     * @param rotateState If <code>true</code> all 3 states will be set in
-     *            rotation if clicked. If <code>false</code> an initial medium
-     *            state will be set to full selected and then every click only
-     *            switches between full and not selected.
-     */
-    public TriStateCheckBox(final boolean rotateState) {
-        this("", rotateState);
-    }
-
-    /**
-     * Creates a checkbox with {@link #rotateState} <code>== false</code>.
-     *
-     * @param text
-     */
-    public TriStateCheckBox(final String text) {
-        this(text, false);
-    }
-
-    /**
-     * @param text
-     * @param rotateState If <code>true</code> all 3 states will be set in
-     *            rotation if clicked. If <code>false</code> an initial medium
-     *            state will be set to full selected and then every click only
-     *            switches between full and not selected.
-     */
-    public TriStateCheckBox(final String text, final boolean rotateState) {
-        this(text, SelectionState.NOT, rotateState);
-    }
-
-    /**
-     * Creates a checkbox with {@link #rotateState} <code>== false</code>.
-     *
-     * @param text
-     * @param selectionState
-     * @param rotateState If <code>true</code> all 3 states will be set in
-     *            rotation if clicked. If <code>false</code> an initial medium
-     *            state will be set to full selected and then every click only
-     *            switches between full and not selected.
-     */
-    public TriStateCheckBox(final String text, final SelectionState selectionState) {
-        this(text, selectionState, false);
-    }
-
-    /**
-     * @param text
-     * @param selectionState
-     * @param rotateState If <code>true</code> all 3 states will be set in
-     *            rotation if clicked. If <code>false</code> an initial medium
-     *            state will be set to full selected and then every click only
-     *            switches between full and not selected.
-     */
-    public TriStateCheckBox(final String text, final SelectionState selectionState, final boolean rotateState) {
-        // tri-state checkbox has 3 selection states: 0 unselected 1 mid-state
-        // selection 2 fully selected
-        super(text, selectionState != SelectionState.NOT);
-
-        switch (selectionState) {
-        case FULL:
-            setSelected(true);
-        case HALF:
-        case NOT:
-            putClientProperty("SelectionState", selectionState);
-            break;
-        default:
-            throw new IllegalArgumentException();
-        }
-        addActionListener(this);
-        setIcon(this);
-        this.rotateState = rotateState;
-    }
-
-    @Override
-    public boolean isSelected() {
-        if (MIDasSELECTED && getSelectionState() != SelectionState.NOT) {
-            return true;
-        }
-        return super.isSelected();
-    }
-
-    /**
-     * @return
-     */
-    public SelectionState getSelectionState() {
-        Object selectionState = getClientProperty("SelectionState");
-        return selectionState != null ? (SelectionState) selectionState : super.isSelected() ? SelectionState.FULL : SelectionState.NOT;
-    }
-
-    /**
-     * @param sel
-     */
-    public void setSelectionState(final SelectionState selectionState) {
-        switch (selectionState) {
-        case FULL:
-            setSelected(true);
-            break;
-        case HALF:
-        case NOT:
-            setSelected(false);
-            break;
-        default:
-            throw new IllegalArgumentException();
-        }
-        putClientProperty("SelectionState", selectionState);
-    }
-
-    /**
-     * Sets the state depending on the booleans :)
-     *
-     * @param oneEnabled
-     * @param oneDisabled
-     */
-    public void setSelectionState(final boolean oneEnabled, final boolean oneDisabled) {
-        if (!oneEnabled) {
-            setSelectionState(NOT);
-        } else if (!oneDisabled) {
-            setSelectionState(FULL);
-        } else {
-            setSelectionState(HALF);
-        }
-        revalidate();
-        repaint();
-    }
-
-    @Override
-    public void paintIcon(final Component c, final Graphics g, final int x, final int y) {
-        if (icons[0] == null) {
-            createIcons();
-        }
-
-        int iconIndex = getSelectionState().ordinal() + (isEnabled() ? 0 : 3);
-        icons[iconIndex].paintIcon(c, g, x, y);
-    }
-
-    @Override
-    public int getIconWidth() {
-        return icon.getIconWidth();
-    }
-
-    @Override
-    public int getIconHeight() {
-        return icon.getIconHeight();
-    }
-
-    @Override
-    public void actionPerformed(final ActionEvent e) {
-        TriStateCheckBox checkBox = (TriStateCheckBox) e.getSource();
-        if (checkBox.getSelectionState() == NOT) {
-            checkBox.setSelected(false);
-        }
-        SelectionState selectionState = checkBox.getSelectionState();
-        if (rotateState) {
-            selectionState = selectionState == FULL ? NOT : selectionState == HALF ? FULL : HALF;
-        } else {
-            selectionState = selectionState == FULL ? NOT : FULL;
-        }
-
-        checkBox.putClientProperty("SelectionState", selectionState);
-
-        // test
-        //        System.out.println(">>>>IS SELECTED: " + tcb.isSelected());
-        //        System.out.println(">>>>IN MID STATE: " + (tcb.getSelectionState() == 1));
-    }
-
     //////////
     // Test //
     //////////
@@ -335,7 +346,7 @@ public class TriStateCheckBox extends JCheckBox implements Icon, ActionListener 
         }
     }
 
-    public static void main(final String[] args) {
+    public static void _main(final String[] args) {
         setLookAndFeel();
         JFrame frame = new JFrame();
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

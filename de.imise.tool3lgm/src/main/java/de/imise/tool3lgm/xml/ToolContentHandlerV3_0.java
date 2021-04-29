@@ -19,6 +19,8 @@ import org.xml.sax.ContentHandler;
 import org.xml.sax.Locator;
 import org.xml.sax.SAXException;
 
+import com.google.common.base.Strings;
+
 import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.graphtools.metamodel.GraphViewDefinition;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
@@ -302,7 +304,8 @@ public class ToolContentHandlerV3_0 implements ContentHandler {
                     }
 
                     if (element instanceof Edge) {
-                        edges.add((Edge) element);
+                        Edge edge = (Edge) element;
+                        edges.add(edge);
                     }
                 } else {
                     System.err.println("Could not proceed element!\n Name=" + qName + "\n UserField=" + attsToString(atts));
@@ -981,8 +984,18 @@ public class ToolContentHandlerV3_0 implements ContentHandler {
                 Static.setProgressDialogStatusLabel("labelConnectTraces");
                 for (Edge edge : edges) {
                     if (isCopyAndPaste()) {
-                        edge.putXMLFieldString("start", oldToNewID.get(edge.getStartID()));
-                        edge.putXMLFieldString("end", oldToNewID.get(edge.getEndID()));
+                        String startID = edge.getStartID();
+                        String newStartID = oldToNewID.get(startID);
+                        if (!Strings.isNullOrEmpty(newStartID)) {
+                            startID = newStartID;
+                        }
+                        String endID = edge.getEndID();
+                        String newEndID = oldToNewID.get(endID);
+                        if (!Strings.isNullOrEmpty(newEndID)) {
+                            endID = newEndID;
+                        }
+                        edge.putXMLFieldString("start", startID);
+                        edge.putXMLFieldString("end", endID);
                     }
                 }
             }

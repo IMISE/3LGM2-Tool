@@ -1,5 +1,9 @@
 package de.imise.tool3lgm.graphtools.view.tree.node;
 
+import static de.imise.tool3lgm.graphtools.userfield.definition.UserField.Style.GROUP;
+import static de.imise.tool3lgm.graphtools.userfield.definition.UserField.Style.HYPERLINK;
+import static de.imise.tool3lgm.graphtools.userfield.definition.UserField.Style.SEPARATOR;
+import static de.imise.tool3lgm.graphtools.userfield.definition.UserField.Style.TAB;
 import static de.imise.util.StringUtils.trimAndRemoveNewLines;
 
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
@@ -33,16 +37,18 @@ public class UserFieldTreeNode extends IconifiedTreeNode<Pair<UserField, ModelEl
         String label = null;
         String name = userField.getName();
         name = trimAndRemoveNewLines(name);
-        if (userField.hasStyle(UserField.Style.HYPERLINK)) {
+        if (userField.hasStyle(HYPERLINK)) {
             String value = me.getUserFieldInputValue(userField);
             if (UserField.isError(value)) {
                 value = ""; //Bei nicht vorhandenen Links nichts statt EMPTY_VALUE anzeigen
             }
             label = name + ": " + value;
-        } else if (userField.hasStyle(UserField.Style.SEPARATOR)) {
+        } else if (userField.hasStyle(SEPARATOR)) {
             label = "--- " + name + " ---------";
         } else if (userField.isNumberUserField()) {
             label = name + ": " + userField.getFormattedValue(me, true);
+        } else if (userField.hasStyle(TAB) || userField.hasStyle(GROUP)) {
+            label = name;
         } else {
             String value = me.getUserFieldInputValue(userField);
             label = name + ": " + value;

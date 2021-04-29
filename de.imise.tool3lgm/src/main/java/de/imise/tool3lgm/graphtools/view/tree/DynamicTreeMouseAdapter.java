@@ -18,6 +18,8 @@ import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
+import de.imise.tool3lgm.graphtools.model.DummyGDCollection;
+import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GDCommands;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
@@ -100,6 +102,11 @@ public class DynamicTreeMouseAdapter implements MouseListener {
 
     @Override
     public void mousePressed(final MouseEvent e) {
+        GraphDocument doc = tree.getGraphDocument();
+        GDCollection gdcoll = doc.getCollection();
+        if (gdcoll instanceof DummyGDCollection) {
+            return;
+        }
         if ((e.getModifiersEx() & InputEvent.CTRL_DOWN_MASK) != 0) {
             ContextGenerator contextGenerator = tree.getContextGenerator();
             contextGenerator.setControlled(true);
@@ -153,7 +160,6 @@ public class DynamicTreeMouseAdapter implements MouseListener {
                 if (right_button) {
                     if (selectedNode instanceof ElementClassTreeNode) { //Klassenknoten?
                         Class<? extends ModelElement> elementClass = ((ElementClassTreeNode) selectedNode).getUserObject();
-                        GraphDocument doc = tree.getGraphDocument();
                         if (doc != null) {
                             MetaModel metaModel = doc.getMetaModel();
                             if (metaModel.isCreatable(elementClass)) {
@@ -162,20 +168,19 @@ public class DynamicTreeMouseAdapter implements MouseListener {
                         }
                     }
                 }
-            } else { //ElementContainer ist selektiert
-                if (right_button) {
-                    ElementContainer ec = selectedElementContainerTreeNode.getUserObject();
-                    //wenn das Element schon in der Selektion war, wird es nur an die hinterste Position in der Selektiion verschoben
-                    //und ist somit das Element, bezüglich dessen für andere selektierte Elemente das Kontextmenü angeboten wird
-                    ec.getGraphDocument().addToSelection(ec, ModelBrowserTree.PID);
-                    ContextGenerator contextGenerator = tree.getContextGenerator();
-                    TreePath clickedTreePath = tree.getPathForLocation(xin, yin);
-                    if (clickedTreePath != null) {
-                        tree.addSelectionPath(clickedTreePath); // das muss sein, damit der ContextGenerator der Templates das Doc ermitteln kann
-                        JPopupMenu pm = contextGenerator.getNodeContextMenu(tree);
-                        if (pm != null) {
-                            pm.show(tree, xin + 3, yin + 3);
-                        }
+                //ElementContainer ist selektiert && Rechtsklick
+            } else if (right_button) {
+                ElementContainer ec = selectedElementContainerTreeNode.getUserObject();
+                //wenn das Element schon in der Selektion war, wird es nur an die hinterste Position in der Selektiion verschoben
+                //und ist somit das Element, bezüglich dessen für andere selektierte Elemente das Kontextmenü angeboten wird
+                ec.getGraphDocument().addToSelection(ec, ModelBrowserTree.PID);
+                ContextGenerator contextGenerator = tree.getContextGenerator();
+                TreePath clickedTreePath = tree.getPathForLocation(xin, yin);
+                if (clickedTreePath != null) {
+                    tree.addSelectionPath(clickedTreePath); // das muss sein, damit der ContextGenerator der Templates das Doc ermitteln kann
+                    JPopupMenu pm = contextGenerator.getNodeContextMenu(tree);
+                    if (pm != null) {
+                        pm.show(tree, xin + 3, yin + 3);
                     }
                 }
             }

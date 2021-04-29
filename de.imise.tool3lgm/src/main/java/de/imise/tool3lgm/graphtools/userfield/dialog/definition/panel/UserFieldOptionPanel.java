@@ -61,7 +61,18 @@ public class UserFieldOptionPanel extends AbstractInputPanel {
         ActionListener actionListener = new ActionListener() {
             @Override
             public void actionPerformed(final ActionEvent e) {
-                updateUserFields();
+                Object source = e.getSource();
+                if (source == treeVisCheckBox) {
+                    boolean isTreeVisibility = treeVisCheckBox.isSelected();
+                    for (UserField userField : userFields) {
+                        userField.setTreeVisibility(isTreeVisibility);
+                    }
+                } else if (source == showDescriptionInDialog) {
+                    boolean isShowDescription = showDescriptionInDialog.isSelected();
+                    for (UserField userField : userFields) {
+                        userField.setShowDescriptionInDialog(isShowDescription);
+                    }
+                }
             }
         };
 
@@ -105,25 +116,16 @@ public class UserFieldOptionPanel extends AbstractInputPanel {
      * @return
      */
     public static UserFieldOptionPanel getOptionPanel() {
-        UserFieldOptionPanel optionPanel = new UserFieldOptionPanel(new GridLayout(3, 1), true);
-        ActionListener actionListener = new ActionListener() {
-            @Override
-            public void actionPerformed(final ActionEvent e) {
-                optionPanel.commit();
-            }
-        };
-        optionPanel.treeVisCheckBox.addActionListener(actionListener);
-        optionPanel.treeVisCheckBox.addActionListener(actionListener);
-        return optionPanel;
+        return new UserFieldOptionPanel(new GridLayout(3, 1), true);
     }
 
     @Override
     public void commit() {
+        boolean isTreeVisibility = treeVisCheckBox.isSelected();
+        boolean isShowDescription = showDescriptionInDialog.isSelected();
         for (UserField userField : userFields) {
-            boolean isTreeVissible = treeVisCheckBox.isSelected();
-            userField.setTreeVisibility(isTreeVissible);
-            boolean showDescription = showDescriptionInDialog.isSelected();
-            userField.setShowDescriptionInDialog(showDescription);
+            userField.setTreeVisibility(isTreeVisibility);
+            userField.setShowDescriptionInDialog(isShowDescription);
         }
     }
 
@@ -171,18 +173,6 @@ public class UserFieldOptionPanel extends AbstractInputPanel {
         treeVisCheckBox.setSelectionState(userFieldsSelected && isOneEnabledTreeVisibility, userFieldsSelected && isOneDisabledTreeVisibility);
         if (enableFormulaCalculationCheckBox != null) {
             enableFormulaCalculationCheckBox.setSelected(OPTION_ENABLE_FORMULA_CALCULATION.is());
-        }
-    }
-
-    /**
-     *
-     */
-    private void updateUserFields() {
-        boolean isTreeVisibility = treeVisCheckBox.isSelected();
-        boolean isShowDescription = showDescriptionInDialog.isSelected();
-        for (UserField userField : userFields) {
-            userField.setShowDescriptionInDialog(isShowDescription);
-            userField.setTreeVisibility(isTreeVisibility);
         }
     }
 

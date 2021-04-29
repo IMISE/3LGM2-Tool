@@ -369,7 +369,7 @@ public final class UserField extends NameAndDescriptionTargetAdapter implements 
      * die eventuell zurück genommen wird, so dass die alte ID erhalten bleiben
      * muss.
      */
-    private final String id;
+    private String id;
 
     /**
      * Gibt an, zu welcher Klasse das <code>UserField</code> gehört.
@@ -765,17 +765,28 @@ public final class UserField extends NameAndDescriptionTargetAdapter implements 
 
     @Override
     public final UserField clone() {
-        UserField userField = null;
+        return clone(false);
+    }
+
+    /**
+     * @param changeID if <code>true</code> the clone gets a new generated id
+     * @return
+     */
+    public final UserField clone(final boolean changeID) {
+        UserField clone = null;
         try {
-            userField = (UserField) super.clone();
+            clone = (UserField) super.clone();
         } catch (Exception e) {
             //this should never happen since we are cloneable
             throw new InternalError(e);
         }
         //clonen aller Eigenschaften, die nicht auf dieselbe Object-Referenz zeigen sollen, die durch super.clone() hergestellt wurde
         numberFormat = numberFormat == null ? null : (UserFieldNumberFormat) numberFormat.clone();
-        userField.listValues = listValues == null ? null : new ArrayList<>(listValues);
-        return userField;
+        clone.listValues = listValues == null ? null : new ArrayList<>(listValues);
+        if (changeID) {
+            clone.id = createID(USERFIELD_ID_PREFIX);
+        }
+        return clone;
     }
 
     @Override

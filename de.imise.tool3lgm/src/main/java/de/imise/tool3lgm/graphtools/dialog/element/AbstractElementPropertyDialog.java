@@ -77,16 +77,6 @@ public class AbstractElementPropertyDialog extends AbstractTabbedPropertyDialog 
     private final ElementDialogHeaderPanel headerPanel;
 
     /**
-     * COMMENTME
-     */
-    static int lastWidth = -1;
-
-    /**
-     * COMMENTME
-     */
-    static int lastHeight = -1;
-
-    /**
      * Default size of this dialogs
      */
     private static final Dimension DEFAULT_SIZE = new Dimension(600, 500);
@@ -139,8 +129,6 @@ public class AbstractElementPropertyDialog extends AbstractTabbedPropertyDialog 
         tabbedPane.addChangeListener(this);
 
         setTitle(getResString("eigensch_dial"));
-        Container contentPane = getContentPane();
-        contentPane.setLayout(new BorderLayout());
         this.modelElement = modelElement;
         templateElementSource = Static.getTemplateElement(modelElement);
 
@@ -180,6 +168,11 @@ public class AbstractElementPropertyDialog extends AbstractTabbedPropertyDialog 
         }
 
         southButtonsPanel.add(standardButtonsPanel, BorderLayout.EAST);
+
+        Container realContentPane = getContentPane();
+        realContentPane.setLayout(new BorderLayout());
+        JPanel contentPane = new JPanel(new BorderLayout());
+        realContentPane.add(contentPane, BorderLayout.CENTER);
 
         contentPane.add(up, BorderLayout.NORTH);
         contentPane.add(tabbedPane, BorderLayout.CENTER);
@@ -495,6 +488,28 @@ public class AbstractElementPropertyDialog extends AbstractTabbedPropertyDialog 
     @Override
     public Dimension getDefaultSize() {
         return DEFAULT_SIZE;
+    }
+
+    /**
+     * @return <code>true</code> if the dialog has the default size
+     */
+    public boolean hasDefaultSize() {
+        Dimension size = getSize();
+        Dimension defaultSize = getDefaultSize();
+        return size.equals(defaultSize);
+    }
+
+    /**
+     * @param xFactor Changes the width by multiplying the current width by the
+     *            passed xFactor.
+     * @param yFactor Changes the height by multiplying the current height by
+     *            the passed yFactor.
+     */
+    public void resize(final double xFactor, final double yFactor) {
+        Dimension size = getSize();
+        size.width *= xFactor;
+        size.height *= yFactor;
+        setSize(size);
     }
 
     @Override
