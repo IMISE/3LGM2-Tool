@@ -6,7 +6,6 @@ import java.awt.Image;
 import java.awt.event.InputEvent;
 import java.awt.event.MouseEvent;
 import java.io.File;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -24,7 +23,6 @@ import com.google.common.collect.ImmutableList;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GDCommands;
-import de.imise.tool3lgm.log.Log;
 import de.imise.tool3lgm.userproperties.UserProperties;
 import de.imise.util.ApplicationManager;
 import de.imise.util.GitVersionInfoHandler;
@@ -295,7 +293,6 @@ public abstract class Tool3lgmConstants {
     public static final String ANALYSEN_FILE_NAME = UserProperties.getLocale().getLanguage().equals("en") ? "Tool3lgm.analysis" : "Tool3lgm_" + UserProperties.getLocale().getLanguage() + ".analysis";
 
     /** Absoluter Pfad zur Datei mit den Standardanalysen in den Resourcen */
-    //    public static final URL DEFAULT_ANALYSEN_RESOURCE_URL = pathToUrl(System.getProperty("user.home") + File.separator + ".3lgm" + File.separator + ANALYSEN_FILE_NAME);
     public static final URL DEFAULT_ANALYSEN_RESOURCE_URL = ClassLoader.getSystemResource(ANALYSEN_FILE_NAME);
 
     /** Locale, mit der der Baukasten gestartet wurde. */
@@ -359,22 +356,6 @@ public abstract class Tool3lgmConstants {
             returnFilters[i] = getFileNameExtensionFilter(fileFilterType[i]);
         }
         return returnFilters;
-    }
-
-    /**
-     * converts the String path into the URL
-     *
-     * @param path
-     * @return URL
-     */
-    public static URL pathToUrl(final String convertPath) {
-        URL convertedPath = null;
-        try {
-            convertedPath = new File(convertPath).toURI().toURL();
-        } catch (MalformedURLException e) {
-            Log.show(Log.INFO, getResString("analyse_pfad_fehler"), e);
-        }
-        return convertedPath;
     }
 
     /**

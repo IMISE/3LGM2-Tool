@@ -161,7 +161,7 @@ public class AnalysesRepository {
         if (file.exists()) {
             return file;
         }
-        file = new File(Tool3lgmConstants.APPLICATION_DIR, Tool3lgmConstants.ANALYSEN_FILE_NAME);
+        file = new File(Tool3lgmConstants.USER_HOME_3LGM_PATH, Tool3lgmConstants.ANALYSEN_FILE_NAME);
         // es ex. eine Analysendatei im Installationsverzeichnis
         if (file.exists()) {
             // die Datei aus dem Installationsverzeichnis ins Benutzerverzeichnis kopieren (lesen
