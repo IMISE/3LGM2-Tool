@@ -881,7 +881,7 @@ public abstract class CollectionUtils {
             Iterator<? extends T> currentIterator = null;
 
             private void init() {
-                if (iterables != null && iterables.size() != 0) {
+                if (iterables != null && !iterables.isEmpty()) {
                     if (currentIterator == null) {
                         if (currentIterableIndex < iterables.size()) {
                             currentIterator = iterables.get(currentIterableIndex).iterator();

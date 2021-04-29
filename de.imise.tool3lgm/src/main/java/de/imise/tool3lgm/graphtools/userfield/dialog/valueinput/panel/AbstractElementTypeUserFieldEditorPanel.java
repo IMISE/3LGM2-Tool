@@ -28,9 +28,9 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
-import de.imise.tool3lgm.graphtools.userfield.UserField;
-import de.imise.tool3lgm.graphtools.userfield.UserField.Style;
-import de.imise.tool3lgm.graphtools.userfield.UserFieldDefinitions;
+import de.imise.tool3lgm.graphtools.userfield.definition.UserField;
+import de.imise.tool3lgm.graphtools.userfield.definition.UserField.Style;
+import de.imise.tool3lgm.graphtools.userfield.definition.UserFieldDefinitions;
 import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.UserFieldEditorDialog;
 import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.table.UserFieldTable;
 import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.table.UserFieldTableController;
@@ -161,8 +161,7 @@ public abstract class AbstractElementTypeUserFieldEditorPanel extends AbstractUs
     /**
      * Methode setzt den Inhalt der <code>elementTypeBox</code> Es werden nur
      * die Klassen von Knotenelementen aufgelistet, für die mindestens ein
-     * Kennzahl vom Typ <code>UserField.CLASSIFICATION_NUMBER_STYLE</code>
-     * definiert ist.
+     * Kennzahl vom Typ <code>Style.NUMBER</code> definiert ist.
      */
     private void setElementTypeBoxContent() {
         GraphDocument doc = dialog.getMainDoc();
@@ -225,8 +224,7 @@ public abstract class AbstractElementTypeUserFieldEditorPanel extends AbstractUs
      *            <code>UserField</code>s geprüft werden sollen.
      * @param definitions Die <code>UserFieldDefinition</code>s
      * @return Wenn mindestens ein <code>UserField</code> vom Typ Kennzahl
-     *         (<code>UserField.CLASSIFICATION_NUMBER_STYLE</code>) ist: true;
-     *         ansonsten false
+     *         (<code>Style.NUMBER_</code>) ist: true; ansonsten false
      */
     protected InsertType getInsertType(final Class<? extends ModelElement> elementClass, final UserFieldDefinitions definitions) {
         InsertType insertType = NO;
@@ -347,11 +345,11 @@ public abstract class AbstractElementTypeUserFieldEditorPanel extends AbstractUs
                 // Wert an der Stelle (i,k)
                 String newValue = uftm.getValueAt(i, k).toString();
                 // Die Kennzahl in der Spalte k
-                UserField uf = (UserField) columnIdentifiers.elementAt(k).getObject();
+                UserField userField = (UserField) columnIdentifiers.elementAt(k).getObject();
                 // neuen Wert setzen
-                if (!newValue.equals(uf.getValue(me))) {
+                if (!newValue.equals(me.getValue(userField))) {
                     int pid = dialog.getTransactionID();
-                    doc.setUserFieldValue(me.getID(), uf.getID(), newValue, pid);
+                    doc.setUserFieldValue(me.getID(), userField.getID(), newValue, pid);
                 }
             }
         }

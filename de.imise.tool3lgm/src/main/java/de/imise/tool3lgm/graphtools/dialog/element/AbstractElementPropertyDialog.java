@@ -15,7 +15,9 @@ import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.annotation.Nullable;
 import javax.swing.BorderFactory;
@@ -37,14 +39,14 @@ import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.HasPartEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
-import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.model.LGMChangeListenerSimple;
 import de.imise.tool3lgm.graphtools.path.metapaths.ElementaryMetaPathHandler;
 import de.imise.tool3lgm.graphtools.path.metapaths.SequenceMetaPath;
 import de.imise.tool3lgm.graphtools.path.metapaths.SimpleMetaPathCreator;
-import de.imise.tool3lgm.graphtools.userfield.UserFieldDefinitions;
-import de.imise.tool3lgm.graphtools.userfield.UserFieldTarget;
+import de.imise.tool3lgm.graphtools.userfield.definition.UserFieldDefinitions;
+import de.imise.tool3lgm.graphtools.userfield.definition.UserFieldList;
+import de.imise.tool3lgm.graphtools.userfield.definition.UserFieldTarget;
 import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.panel.PropertyDialogUserFieldPanel;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 
@@ -75,16 +77,6 @@ public class AbstractElementPropertyDialog extends AbstractTabbedPropertyDialog 
     private final ElementDialogHeaderPanel headerPanel;
 
     /**
-     * COMMENTME
-     */
-    static int lastWidth = -1;
-
-    /**
-     * COMMENTME
-     */
-    static int lastHeight = -1;
-
-    /**
      * Default size of this dialogs
      */
     private static final Dimension DEFAULT_SIZE = new Dimension(600, 500);
@@ -110,8 +102,8 @@ public class AbstractElementPropertyDialog extends AbstractTabbedPropertyDialog 
     /** Das Panel des Allgemein-Reiters */
     protected final DescripPanel descripPanel;
 
-    /** Das Panel für die benutzerdefinierten Eigenschaften */
-    private final PropertyDialogUserFieldPanel propertyDialogUserFieldPanel;
+    /** Die Panels für die benutzerdefinierten Eigenschaften */
+    private final Set<PropertyDialogUserFieldPanel> propertyDialogUserFieldPanels = new HashSet<>();
 
     /**
      * Panel in the south with the panel for the buttons OK, Take over and
@@ -137,8 +129,6 @@ public class AbstractElementPropertyDialog extends AbstractTabbedPropertyDialog 
         tabbedPane.addChangeListener(this);
 
         setTitle(getResString("eigensch_dial"));
-        Container contentPane = getContentPane();
-        contentPane.setLayout(new BorderLayout());
         this.modelElement = modelElement;
         templateElementSource = Static.getTemplateElement(modelElement);
 
@@ -155,11 +145,11 @@ public class AbstractElementPropertyDialog extends AbstractTabbedPropertyDialog 
         // wenn es mind ein Userfield für diese Klasse gibt -> zeige das USerFieldPanel
         UserFieldDefinitions userFieldDefinitions = gdcoll.getUserFieldDefinitions();
         Class<? extends ModelElement> modelElementClass = getModelElementClass();
-        if (userFieldDefinitions.hasUserFields(modelElementClass)) {
-            propertyDialogUserFieldPanel = new PropertyDialogUserFieldPanel(this);
-            addTab(getResString("userfields"), propertyDialogUserFieldPanel);
-        } else {
-            propertyDialogUserFieldPanel = null;
+        List<UserFieldList> tabSubLists = userFieldDefinitions.getTabSubLists(modelElementClass);
+        for (UserFieldList userFieldList : tabSubLists) {
+            PropertyDialogUserFieldPanel userFieldPanel = new PropertyDialogUserFieldPanel(this, userFieldList);
+            propertyDialogUserFieldPanels.add(userFieldPanel);
+            addTab(userFieldPanel);
         }
 
         JPanel standardButtonsPanel = new JPanel();
@@ -178,6 +168,11 @@ public class AbstractElementPropertyDialog extends AbstractTabbedPropertyDialog 
         }
 
         southButtonsPanel.add(standardButtonsPanel, BorderLayout.EAST);
+
+        Container realContentPane = getContentPane();
+        realContentPane.setLayout(new BorderLayout());
+        JPanel contentPane = new JPanel(new BorderLayout());
+        realContentPane.add(contentPane, BorderLayout.CENTER);
 
         contentPane.add(up, BorderLayout.NORTH);
         contentPane.add(tabbedPane, BorderLayout.CENTER);
@@ -254,7 +249,7 @@ public class AbstractElementPropertyDialog extends AbstractTabbedPropertyDialog 
         if (getTabComponentAt(0) != descripPanel) {
             return false;
         }
-        if (tabCount == 2 && getTabComponentAt(1) != propertyDialogUserFieldPanel) {
+        if (tabCount == 2 && !propertyDialogUserFieldPanels.contains(getTabComponentAt(1))) {
             return false;
         }
         return true;
@@ -318,8 +313,7 @@ public class AbstractElementPropertyDialog extends AbstractTabbedPropertyDialog 
      * @return
      */
     public final SequenceMetaPath createSequenceMetaPath(@Nullable final Class<? extends ModelElement> searchElementClass, final Class<? extends Edge> edgeClass) {
-        GDCollection gdcoll = getCollection();
-        ElementaryMetaPathHandler emph = gdcoll.getElementaryMetaPathHandler();
+        ElementaryMetaPathHandler emph = modelElement.getElementaryMetaPathHandler();
         Class<? extends ModelElement> metaPathStartClass = modelElement.getClass();
         return emph.getMetaPath(metaPathStartClass, edgeClass, searchElementClass);
     }
@@ -494,6 +488,28 @@ public class AbstractElementPropertyDialog extends AbstractTabbedPropertyDialog 
     @Override
     public Dimension getDefaultSize() {
         return DEFAULT_SIZE;
+    }
+
+    /**
+     * @return <code>true</code> if the dialog has the default size
+     */
+    public boolean hasDefaultSize() {
+        Dimension size = getSize();
+        Dimension defaultSize = getDefaultSize();
+        return size.equals(defaultSize);
+    }
+
+    /**
+     * @param xFactor Changes the width by multiplying the current width by the
+     *            passed xFactor.
+     * @param yFactor Changes the height by multiplying the current height by
+     *            the passed yFactor.
+     */
+    public void resize(final double xFactor, final double yFactor) {
+        Dimension size = getSize();
+        size.width *= xFactor;
+        size.height *= yFactor;
+        setSize(size);
     }
 
     @Override

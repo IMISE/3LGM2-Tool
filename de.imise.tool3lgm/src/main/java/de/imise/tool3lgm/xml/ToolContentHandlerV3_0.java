@@ -19,6 +19,8 @@ import org.xml.sax.ContentHandler;
 import org.xml.sax.Locator;
 import org.xml.sax.SAXException;
 
+import com.google.common.base.Strings;
+
 import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.graphtools.metamodel.GraphViewDefinition;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
@@ -32,9 +34,11 @@ import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GDCollectionFileHandler;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.model.Szenario;
-import de.imise.tool3lgm.graphtools.userfield.UserField;
-import de.imise.tool3lgm.graphtools.userfield.UserFieldDefinitions;
 import de.imise.tool3lgm.graphtools.userfield.WeightReplacer;
+import de.imise.tool3lgm.graphtools.userfield.definition.UserField;
+import de.imise.tool3lgm.graphtools.userfield.definition.UserField.Style;
+import de.imise.tool3lgm.graphtools.userfield.definition.UserFieldDefinitions;
+import de.imise.tool3lgm.graphtools.userfield.definition.UserFieldNumberFormat;
 import de.imise.tool3lgm.graphtools.view.container.BendpointContainer;
 import de.imise.tool3lgm.graphtools.view.container.EdgeContainer;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
@@ -105,10 +109,10 @@ public class ToolContentHandlerV3_0 implements ContentHandler {
     private final List<Edge> edges = new ArrayList<>();
 
     /** GDCollection in die die Element geschrieben werden */
-    protected GDCollection collection;
+    protected GDCollection gdcoll;
 
     /** Haupt-GraphDokument der GDCollection */
-    protected GraphDocument doc = null;
+    protected GraphDocument mainDoc = null;
 
     /** Die Definition der UserFields der GDCollection */
     protected UserFieldDefinitions userFieldDefinitions;
@@ -169,6 +173,9 @@ public class ToolContentHandlerV3_0 implements ContentHandler {
      */
     protected UserField userField;
 
+    /** The currently loaded UserFieldNumberFormat */
+    protected UserFieldNumberFormat userFieldNumberFormat;
+
     /**
      * option beim Kopieren <br>
      *
@@ -184,18 +191,18 @@ public class ToolContentHandlerV3_0 implements ContentHandler {
     }
 
     /**
-     * @param coll
+     * @param gdcoll
      * @param paste
      */
-    public ToolContentHandlerV3_0(final GDCollection coll, final boolean paste) {
-        collection = coll;
+    public ToolContentHandlerV3_0(final GDCollection gdcoll, final boolean paste) {
+        this.gdcoll = gdcoll;
         this.paste = paste;
         if (paste) {
             pastedElements = new ArrayList<>();
         }
-        doc = collection.getMainDoc();
-        szenario = collection.getSelectedDoc();
-        userFieldDefinitions = coll.getUserFieldDefinitions();
+        mainDoc = gdcoll.getMainDoc();
+        szenario = gdcoll.getSelectedDoc();
+        userFieldDefinitions = gdcoll.getUserFieldDefinitions();
     }
 
     @Override
@@ -218,20 +225,20 @@ public class ToolContentHandlerV3_0 implements ContentHandler {
      */
     @Override
     public void endDocument() throws SAXException {
-        for (Szenario szen : collection.getSzenarios()) {
+        for (Szenario szen : gdcoll.getSzenarios()) {
             szen.initNodeContainers();
             szen.initEdgeContainers();
             //			collection.getSzenario(i).refreshSpecialInfoTargets();
         }
-        doc.deselectAll(true);
+        mainDoc.deselectAll(true);
         if (paste) {
             for (ElementContainer ec : pastedElements) {
-                doc.addToSelection(ec, 0);
+                mainDoc.addToSelection(ec, 0);
             }
         }
-        doc = null;
+        mainDoc = null;
         containerWithIcon = null;
-        collection = null;
+        gdcoll = null;
         elementValue = null;
     }
 
@@ -256,7 +263,7 @@ public class ToolContentHandlerV3_0 implements ContentHandler {
 
             } else if (qName.equals("element")) {
                 Class<? extends ModelElement> elementClass = null;
-                MetaModel metaModel = doc.getMetaModel();
+                MetaModel metaModel = mainDoc.getMetaModel();
                 try {
                     String className = atts.getValue("class");
                     if (className.startsWith("Knickpunkt")) { //KnickpunktKnoten umbenannt in Knickpunkt umbenannt in Bendpoint
@@ -271,7 +278,7 @@ public class ToolContentHandlerV3_0 implements ContentHandler {
                 }
 
                 if (avoidDuplicates) {
-                    element = doc.findElementCoded(atts.getValue("hash"));
+                    element = mainDoc.findElementCoded(atts.getValue("hash"));
                     if (element == null) {
                         element = metaModel.createElement(elementClass, false);
                     }
@@ -282,7 +289,7 @@ public class ToolContentHandlerV3_0 implements ContentHandler {
                 if (element != null) {
                     if (isCopyAndPaste()) {
                         String originalElementID = atts.getValue("hash");
-                        ModelElement existingElementWithSameID = doc.findElementCoded(originalElementID);
+                        ModelElement existingElementWithSameID = mainDoc.findElementCoded(originalElementID);
                         if (existingElementWithSameID == null) {
                             element.setID(originalElementID);
                         }
@@ -297,7 +304,8 @@ public class ToolContentHandlerV3_0 implements ContentHandler {
                     }
 
                     if (element instanceof Edge) {
-                        edges.add((Edge) element);
+                        Edge edge = (Edge) element;
+                        edges.add(edge);
                     }
                 } else {
                     System.err.println("Could not proceed element!\n Name=" + qName + "\n UserField=" + attsToString(atts));
@@ -306,9 +314,9 @@ public class ToolContentHandlerV3_0 implements ContentHandler {
                 String id = atts.getValue("hash");
                 if (isCopyAndPaste()) {
                     String newId = oldToNewID.get(id);
-                    element = doc.findElementCoded(newId);
+                    element = mainDoc.findElementCoded(newId);
                 } else {
-                    element = doc.findElementCoded(id);
+                    element = mainDoc.findElementCoded(id);
                 }
                 if (element == null) {
                     ElementContainer bendpointContainerOrTexField = idToMainDocContainer.get(isCopyAndPaste() ? oldToNewID.get(id) : id);
@@ -373,7 +381,7 @@ public class ToolContentHandlerV3_0 implements ContentHandler {
                 //
             } else if (qName.equals("layout")) {
                 if (container == null && element != null) {
-                    container = element.getContainer(doc);
+                    container = element.getContainer(mainDoc);
                 }
 
                 if (container != null) {
@@ -410,7 +418,7 @@ public class ToolContentHandlerV3_0 implements ContentHandler {
                 Static.setProgressDialogStatusLabel("labelReadSzenario", atts.getValue("titel") + " ...");
 
                 if (!isCopyAndPaste()) {
-                    szenario = collection.createSzenario(atts.getValue("titel"), false, "", atts.getValue("hash"), false);
+                    szenario = gdcoll.createSzenario(atts.getValue("titel"), false, "", atts.getValue("hash"), false);
                 }
                 idToSzenarioBendpointContainer = new HashMap<>();
 
@@ -441,15 +449,16 @@ public class ToolContentHandlerV3_0 implements ContentHandler {
 
                 //            } else if (qName.equals("userFieldDefinitions")) {
                 //
+            } else if (qName.equals("userFieldFormat")) {
+                String id = atts.getValue("hash");
+                userFieldNumberFormat = new UserFieldNumberFormat(id);
             } else if (qName.equals("userFieldDef")) {
                 String elementClass = atts.getValue("elementClass");
+                String userFieldID = atts.getValue("hash");
+                MetaModel metaModel = gdcoll.getMetaModel();
                 //bei Modellvariablen ist die Elementclass null
-                if (elementClass == null) {
-                    userField = new UserField(atts.getValue("hash"), collection.getUserFieldDefinitions());
-                } else {
-                    MetaModel metaModel = collection.getMetaModel();
-                    userField = new UserField(metaModel.getClassForName(elementClass), atts.getValue("hash"), collection.getUserFieldDefinitions());
-                }
+                Class<? extends ModelElement> userFieldTargetClass = metaModel.getClassForName(elementClass);
+                userField = new UserField(userFieldTargetClass, userFieldID);
             } else if (qName.equals("replacerEntry")) {
                 String elementID = atts.getValue("elementHash");
                 String userFieldID = atts.getValue("userFieldHash");
@@ -462,7 +471,7 @@ public class ToolContentHandlerV3_0 implements ContentHandler {
                 String edgeClassName = atts.getValue("edgeClass");
                 String replaceUserFieldID = atts.getValue("replaceUserFieldHash");
                 WeightReplacer replacer = userFieldDefinitions.getWeightReplacer();
-                MetaModel metaModel = collection.getMetaModel();
+                MetaModel metaModel = gdcoll.getMetaModel();
                 Class<? extends Edge> edgeClass = metaModel.getClassForName(edgeClassName).asSubclass(Edge.class);
                 replacer.setUniformDistributionReplacement(elementID, edgeClass, replaceUserFieldID);
 
@@ -487,18 +496,18 @@ public class ToolContentHandlerV3_0 implements ContentHandler {
                 //            } else if (qName.equals("userFieldFormatString")) {
                 //
             } else if (qName.equals("modell_3lgm_2")) {
-                doc = collection.getMainDoc();
+                mainDoc = gdcoll.getMainDoc();
 
             } else if (qName.equals("tool3lgm_clipboard")) {
                 String timeStamp = atts.getValue("time");
                 if (timeStamp == null || lastCopyFileTimeStamp.equals(timeStamp)) {
-                    copyAndPastePositionShift = collection.increasePasteCounter();
+                    copyAndPastePositionShift = gdcoll.increasePasteCounter();
                 } else {
-                    copyAndPastePositionShift = collection.resetPasteCounter();
+                    copyAndPastePositionShift = gdcoll.resetPasteCounter();
                     lastCopyFileTimeStamp = timeStamp;
                 }
-                doc = Static.getSelectedGDCollection().getMainDoc();
-                szenario = collection.getSelectedDoc();
+                mainDoc = Static.getSelectedGDCollection().getMainDoc();
+                szenario = gdcoll.getSelectedDoc();
                 szenario.clearSelection();
                 oldToNewID = new HashMap<>();
 
@@ -534,9 +543,10 @@ public class ToolContentHandlerV3_0 implements ContentHandler {
                         }
                         //falls es noch Modelle mit separaten external IDs gibt, werden diese hier in UserFields umgewandelt
                     } else if (field.toLowerCase().startsWith("extid")) {
-                        UserField userField = userFieldDefinitions.getUserField(element.getClass(), field);
+                        Class<? extends ModelElement> elementClass = element.getClass();
+                        UserField userField = userFieldDefinitions.getUserField(elementClass, field);
                         if (userField == null) {
-                            userField = new UserField(element.getClass(), UserField.Style.ID, userFieldDefinitions);
+                            userField = new UserField(elementClass, UserField.Style.ID);
                             userFieldDefinitions.add(userField);
                         }
                         element.setUserFieldInputValue(userField, elementValue.toString());
@@ -544,7 +554,7 @@ public class ToolContentHandlerV3_0 implements ContentHandler {
                         if (element instanceof OptionalEdge) {
                             OptionalEdge optionalEdge = (OptionalEdge) element;
                             if (Boolean.parseBoolean(elementValue.toString())) {
-                                collection.addOptional(optionalEdge);
+                                gdcoll.addOptional(optionalEdge);
                             }
                         }
                     } else if (field.equals("layer")) {
@@ -552,7 +562,7 @@ public class ToolContentHandlerV3_0 implements ContentHandler {
                         //aus den ModelConstants bzw. aus dem beim Einlesen der Elemente gerafde aktiven Layer ergibt.
                         //Weg lassen darf man die Abfrage hier aber auch nicht, weil wenn layer als Attribut angegeben ist und nicht hier ausgewertet
                         //wird, dann kommt es zu einem Fehler, wenn man dieses Attribut gar nicht auswertet
-                    } else if (!ToolContentHandlerV3_0_DeprecatedValuesHandler.putDeprecatedXMLFieldString(collection, element, field, elementValue.toString())) {
+                    } else if (!ToolContentHandlerV3_0_DeprecatedValuesHandler.putDeprecatedXMLFieldString(gdcoll, element, field, elementValue.toString())) {
                         if (!element.putXMLFieldString(field, elementValue.toString())) {
                             if (!field.equals("state")) {
                                 //Tue nichts bei state. Bei Modellen bis zur 3.6 hatten alle Kanten einen State = die Richtung. Jetzt haben nur noch DoubleMeaningEdges den State, da man ihn bei den anderen nicht braucht.
@@ -572,19 +582,19 @@ public class ToolContentHandlerV3_0 implements ContentHandler {
                 }
                 //Benutzerdefinierte Eigenschaft für das Modell (GDCollection)
                 else {
-                    collection.setUserFieldInputValue(userFieldDefinitions.getUserField(field), val);
+                    gdcoll.setUserFieldInputValue(userFieldDefinitions.getUserField(field), val);
                 }
                 field = null;
 
             } else if (qName.equals("element")) {
                 if (element != null) {
                     try {
-                        if (!avoidDuplicates || element.getContainer(doc) == null) {
-                            container = element.createContainer(doc);
+                        if (!avoidDuplicates || element.getContainer(mainDoc) == null) {
+                            container = element.createContainer(mainDoc);
                             int layer = ModelConstants.NO_LAYER;
                             try {
                                 layer = element.layerFor();
-                                LayerContainer layerContainer = doc.getLayer(layer);
+                                LayerContainer layerContainer = mainDoc.getLayer(layer);
                                 //Knickpunkte werfen hier eine Exception, wenn sie noch keine Kante zugewiesen haben. Textfelder auch, wenn sie noch keinen Container auf einem Layer haben.
                                 //Auch die Kante Textfield_ModelElement_Edge wirft eine Exception, da ihr Layer noch nicht feststeht. Das tut er erst, wenn die IDs der verbundenen
                                 //Elemente aufgelöst wurden. Das kann erst ganz am Schluss passieren.
@@ -610,7 +620,7 @@ public class ToolContentHandlerV3_0 implements ContentHandler {
                     tmp_container = null;
                 } else if (container != null) {
                     ModelElement me = container.getElement();
-                    if (isCopyAndPaste() || !szenario.equals(doc)) {
+                    if (isCopyAndPaste() || !szenario.equals(mainDoc)) {
                         //Knickpunkte werden erst zum Layer hinzugefügt, wenn die Kante zu dem sie gehören auch
                         //hinzugefügt wurde. Das passiert beim Ende des szenaro-Tags
                         if (!(me instanceof Bendpoint)) {
@@ -619,7 +629,7 @@ public class ToolContentHandlerV3_0 implements ContentHandler {
                             //Layer nun bekannt sind, auch ins Hauptmodell eingetragen werden -> jetzt mainDocContainer zum mainDoc hinzufügen
                             ElementContainer mainDocContainer = idToMainDocContainer.get(me.getID());
                             if (mainDocContainer != null) {
-                                LayerContainer mainDocLayer = doc.getLayer(layer.getLayerNumber());
+                                LayerContainer mainDocLayer = mainDoc.getLayer(layer.getLayerNumber());
                                 //an welcher Stelle der Container im MainDoc steht ist völlig egal, da das MainDoc nicht gezeichnet wird
                                 mainDocLayer.add(mainDocContainer);
                             }
@@ -853,7 +863,7 @@ public class ToolContentHandlerV3_0 implements ContentHandler {
                         kc.setBendpointContainer(benpointContainer, bendpoint.getIndex());
                         int layer = bendpoint.layerFor();
                         ElementContainer mainDocBendpointContainer = idToMainDocContainer.get(bendpoint.getID());
-                        doc.getLayer(layer).add(mainDocBendpointContainer);
+                        mainDoc.getLayer(layer).add(mainDocBendpointContainer);
                         szenario.getLayer(layer).add(benpointContainer);
                     }
                 }
@@ -865,13 +875,13 @@ public class ToolContentHandlerV3_0 implements ContentHandler {
             } else if (qName.equals("description")) {
                 if (szenario != null) {
                     szenario.setDescription(elementValue.toString());
-                } else if (doc != null) {
-                    doc.setDescription(elementValue.toString());
+                } else if (mainDoc != null) {
+                    mainDoc.setDescription(elementValue.toString());
                 }
 
             } else if (qName.equals("bitmap")) {
-                if (iconID != null && !collection.getIconTable().containsKey(iconID)) {
-                    collection.getIconTable().put(iconID, Base64.decode(elementValue.toString()));
+                if (iconID != null && !gdcoll.getIconTable().containsKey(iconID)) {
+                    gdcoll.getIconTable().put(iconID, Base64.decode(elementValue.toString()));
                 }
 
                 iconID = null;
@@ -883,7 +893,7 @@ public class ToolContentHandlerV3_0 implements ContentHandler {
             } else if (qName.equals("title")) {
 
             } else if (qName.equals("version")) {
-                GDCollectionFileHandler fileHandler = collection.getFileHandler();
+                GDCollectionFileHandler fileHandler = gdcoll.getFileHandler();
                 fileHandler.setFileVersion(elementValue.toString());
 
             } else if (qName.equals("avoidDuplicates")) {
@@ -891,27 +901,67 @@ public class ToolContentHandlerV3_0 implements ContentHandler {
 
             } else if (qName.equals("userFieldDefinitions")) {
 
+            } else if (qName.equals("userFieldFormat")) {
+                if (userFieldNumberFormat == null) {
+                    throw new SAXException("Error while parsing definition of userFields: userFieldNumberFormat shouldn't not be null");
+                } else {
+                    userFieldDefinitions.add(userFieldNumberFormat);
+                }
+                userFieldNumberFormat = null;
+
             } else if (qName.equals("userFieldDef")) {
                 if (userField != null) {
-                    collection.getUserFieldDefinitions().add(userField);
+                    if (userField.getStyle() != null) { //File Version 3.9 UserField.Style.FORMAT is removed as UserField style -> ignore such UserFields
+                        userFieldDefinitions.add(userField);
+                    }
+                } else if (userFieldNumberFormat != null) {
+                    userFieldDefinitions.add(userFieldNumberFormat);
                 } else {
-                    throw new SAXException("Error while parsing definition of userFields: userFiel shouldn't not be equals to null");
+                    throw new SAXException("Error while parsing definition of userFields: userField shouldn't not be null");
                 }
-
                 userField = null;
+                userFieldNumberFormat = null;
 
-            } else if (qName.equals("userFieldName") || qName.equals("userFieldDescription") || qName.equals("userFieldStyle") || qName.equals("userFieldTreeVis") || qName.equals("userFieldStandardValue") || qName.equals("userFieldInternalAccounting")
-                    || qName.equals("userFieldInternalAccountingWeightUserFieldHash") || qName.equals("userFieldFormula") || qName.equals("userFieldFormatString") || qName.equals("userFieldFormatHash")) {
+            } else if (qName.equals("userFieldName") || qName.equals("userFieldDescription") || qName.equals("userFieldStyle") || qName.equals("userFieldTreeVis") || qName.equals("userFieldShowDescriptionInDialog") || qName.equals("userFieldStandardValue")
+                    || qName.equals("userFieldInternalAccounting") || qName.equals("userFieldInternalAccountingWeightUserFieldHash") || qName.equals("userFieldFormula") || qName.equals("userFieldFormatHash")) {
                 if (userField == null) {
-                    throw new SAXException("Error while parsing definition of userFields: userFiel shouldn't not be equals to null");
+                    throw new SAXException("Error while parsing definition of userFields: userField shouldn't not be null");
                 }
-                userField.putXMLFieldString(qName, elementValue.toString());
+                String value = elementValue.toString();
+                if (qName.equals("userFieldStyle")) {
+                    //Style.NUMER was Style.CLASSIFICATION_NUMBER and
+                    //Style.FORMULA was Style.CLASSIFICATION_NUMBER_FORMULA
+                    if (value.equals("CLASSIFICATION_NUMBER")) {
+                        value = Style.NUMBER.name();
+                    } else if (value.equals("CLASSIFICATION_NUMBER_FORMULA")) {
+                        value = Style.FORMULA.name();
+                    } else if (value.equals("FORMAT")) {
+                        //formats are no longer UserFields
+                        value = null;
+                    }
+                }
+                if (value != null) {
+                    userField.putXMLFieldString(qName, value, userFieldDefinitions);
+                }
+
+            } else if (qName.equals("userFieldFormatString")) {
+                if (userField != null) { // File Version 3.8
+                    String id = userField.getID();
+                    userFieldNumberFormat = new UserFieldNumberFormat(id);
+                    userField = null;
+                }
+                //file Version 3.9
+                if (userFieldNumberFormat == null) {
+                    throw new SAXException("Error while parsing definition of userFields: userFieldNumberFormat shouldn't not be null");
+                }
+                String value = elementValue.toString();
+                userFieldNumberFormat.putXMLFieldString(qName, value);
 
             } else if (qName.equals("modell_3lgm_2") || qName.equals("tool3lgm_clipboard")) {
                 //jetzt erst ganz zum Schluss die IDs für das Start- bzw. End-Objekt einer Edge auflösen und die wirklichen Node setzten
                 Static.setProgressDialogStatusLabel("labelConnectTraces2");
                 for (Edge edge : edges) {
-                    edge.decodeIDs(doc);
+                    edge.decodeIDs(mainDoc);
                 }
 
                 /* Icons in den Container einlesen */
@@ -934,8 +984,18 @@ public class ToolContentHandlerV3_0 implements ContentHandler {
                 Static.setProgressDialogStatusLabel("labelConnectTraces");
                 for (Edge edge : edges) {
                     if (isCopyAndPaste()) {
-                        edge.putXMLFieldString("start", oldToNewID.get(edge.getStartID()));
-                        edge.putXMLFieldString("end", oldToNewID.get(edge.getEndID()));
+                        String startID = edge.getStartID();
+                        String newStartID = oldToNewID.get(startID);
+                        if (!Strings.isNullOrEmpty(newStartID)) {
+                            startID = newStartID;
+                        }
+                        String endID = edge.getEndID();
+                        String newEndID = oldToNewID.get(endID);
+                        if (!Strings.isNullOrEmpty(newEndID)) {
+                            endID = newEndID;
+                        }
+                        edge.putXMLFieldString("start", startID);
+                        edge.putXMLFieldString("end", endID);
                     }
                 }
             }

@@ -7,7 +7,7 @@ import java.util.Vector;
 
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
-import de.imise.tool3lgm.graphtools.userfield.UserField;
+import de.imise.tool3lgm.graphtools.userfield.definition.UserField;
 import de.imise.util.NamedObjectContainer;
 
 public class UserFieldGlobalNumberTableModel extends AbstractUserFieldTableModel {
@@ -35,9 +35,7 @@ public class UserFieldGlobalNumberTableModel extends AbstractUserFieldTableModel
         // Liste aller globalen UserFields erstellen
         ArrayList<UserField> userFieldList = new ArrayList<>();
         for (UserField uf : definitions.getGlobalUserFields()) {
-            if (!uf.hasStyle(UserField.Style.FORMAT)) {
-                userFieldList.add(uf);
-            }
+            userFieldList.add(uf);
         }
 
         // Wenn keine Modelldaten existieren, wird auch keine Table angezeigt
@@ -50,11 +48,11 @@ public class UserFieldGlobalNumberTableModel extends AbstractUserFieldTableModel
 
         Object[][] data = new Object[userFieldList.size()][1];
         for (int i = 0; i < userFieldList.size(); i++) {
-            UserField uf = userFieldList.get(i);
-            NamedObjectContainer<UserField> noc = new NamedObjectContainer<>(uf, uf.getName());
+            UserField userField = userFieldList.get(i);
+            NamedObjectContainer<UserField> noc = new NamedObjectContainer<>(userField, userField.getName());
             rowIdentifiers.add(noc);
-            String value = uf.getValue(gdcoll);
-            data[i][0] = new NamedObjectContainer<>(uf, value);
+            String value = gdcoll.getValue(userField);
+            data[i][0] = new NamedObjectContainer<>(userField, value);
         }
 
         // Daten setzen

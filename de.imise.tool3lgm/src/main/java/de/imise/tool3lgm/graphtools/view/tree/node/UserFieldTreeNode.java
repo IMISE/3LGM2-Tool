@@ -1,7 +1,13 @@
 package de.imise.tool3lgm.graphtools.view.tree.node;
 
+import static de.imise.tool3lgm.graphtools.userfield.definition.UserField.Style.GROUP;
+import static de.imise.tool3lgm.graphtools.userfield.definition.UserField.Style.HYPERLINK;
+import static de.imise.tool3lgm.graphtools.userfield.definition.UserField.Style.SEPARATOR;
+import static de.imise.tool3lgm.graphtools.userfield.definition.UserField.Style.TAB;
+import static de.imise.util.StringUtils.trimAndRemoveNewLines;
+
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
-import de.imise.tool3lgm.graphtools.userfield.UserField;
+import de.imise.tool3lgm.graphtools.userfield.definition.UserField;
 import de.imise.util.BrowseUtils;
 import de.imise.util.pair.Pair;
 
@@ -23,25 +29,29 @@ public class UserFieldTreeNode extends IconifiedTreeNode<Pair<UserField, ModelEl
     }
 
     /**
-     * @param uf
+     * @param userField
      * @param me
      * @return
      */
-    private static final String getLabel(final UserField uf, final ModelElement me) {
+    private static final String getLabel(final UserField userField, final ModelElement me) {
         String label = null;
-        if (uf.hasStyle(UserField.Style.HYPERLINK)) {
-            String value = me.getUserFieldInputValue(uf);
+        String name = userField.getName();
+        name = trimAndRemoveNewLines(name);
+        if (userField.hasStyle(HYPERLINK)) {
+            String value = me.getUserFieldInputValue(userField);
             if (UserField.isError(value)) {
                 value = ""; //Bei nicht vorhandenen Links nichts statt EMPTY_VALUE anzeigen
             }
-            label = uf.getName() + ": " + value;
-        } else if (uf.hasStyle(UserField.Style.SEPARATOR)) {
-            label = "--- " + uf.getName() + " ---------";
-        } else if (uf.isClassificationUserField()) {
-            label = uf.getName() + ": " + uf.getFormattedValue(me, true);
+            label = name + ": " + value;
+        } else if (userField.hasStyle(SEPARATOR)) {
+            label = "--- " + name + " ---------";
+        } else if (userField.isNumberUserField()) {
+            label = name + ": " + userField.getFormattedValue(me, true);
+        } else if (userField.hasStyle(TAB) || userField.hasStyle(GROUP)) {
+            label = name;
         } else {
-            String value = me.getUserFieldInputValue(uf);
-            label = uf.getName() + ": " + value;
+            String value = me.getUserFieldInputValue(userField);
+            label = name + ": " + value;
         }
         return label;
     }

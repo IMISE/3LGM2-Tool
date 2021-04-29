@@ -5,11 +5,11 @@ package de.imise.tool3lgm.graphtools.userfield.dialog.valueinput;
 
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
 import static de.imise.tool3lgm.graphtools.model.LGMChangeListener.LGMChangeType.DATA_CHANGED;
-import static de.imise.tool3lgm.graphtools.userfield.UserField.Style.CLASSIFICATION_NUMBER;
-import static de.imise.tool3lgm.graphtools.userfield.UserField.Style.COMBO_BOX;
-import static de.imise.tool3lgm.graphtools.userfield.UserField.Style.HYPERLINK;
-import static de.imise.tool3lgm.graphtools.userfield.UserField.Style.ID;
-import static de.imise.tool3lgm.graphtools.userfield.UserField.Style.SINGLE_LINE;
+import static de.imise.tool3lgm.graphtools.userfield.definition.UserField.Style.COMBO_BOX;
+import static de.imise.tool3lgm.graphtools.userfield.definition.UserField.Style.HYPERLINK;
+import static de.imise.tool3lgm.graphtools.userfield.definition.UserField.Style.ID;
+import static de.imise.tool3lgm.graphtools.userfield.definition.UserField.Style.NUMBER;
+import static de.imise.tool3lgm.graphtools.userfield.definition.UserField.Style.SINGLE_LINE;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -38,9 +38,9 @@ import de.imise.tool3lgm.graphtools.dialog.AbstractTabbedPropertyDialog;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.panel.AbstractUserFieldEditorPanel;
-import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.panel.ClassificationNumberFormulaPanel;
 import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.panel.DistributionWeightEditorPanel;
 import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.panel.DistributionWeightReplacePanel;
+import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.panel.FormulaPanel;
 import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.panel.FractionValueSumPanel;
 import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.panel.ModelVariableEditorPanel;
 import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.panel.NodeTypeUserFieldEditorPanel;
@@ -77,15 +77,15 @@ public class UserFieldEditorDialog extends AbstractTabbedPropertyDialog {
 
     private final ImmutableList<AbstractUserFieldEditorPanel> tablePanels = ImmutableList.of(
             //Kennzahlen
-            new NodeTypeUserFieldEditorPanel(this, CLASSIFICATION_NUMBER, getResString("CLASSIFICATION_NUMBER")),
+            new NodeTypeUserFieldEditorPanel(this, NUMBER, getResString("NUMBER")),
             //Verteilungsgewichte
-            new DistributionWeightEditorPanel(this, getResString("userFieldEditor_classification_weighting")),
+            new DistributionWeightEditorPanel(this, getResString("userFieldEditor_distribution_weighting")),
             //Verteilungsgewichtsersetzung
-            new DistributionWeightReplacePanel(this, getResString("userFieldEditor_classification_weighting_replace")),
+            new DistributionWeightReplacePanel(this, getResString("userFieldEditor_distribution_weighting_replace")),
             //Modellvariablen
-            new ModelVariableEditorPanel(this, getResString("userFieldEditor_classification_modelvariable")),
+            new ModelVariableEditorPanel(this, getResString("userFieldEditor_global_number")),
             //Kennzahlformeln
-            new ClassificationNumberFormulaPanel(this, getResString("CLASSIFICATION_NUMBER_FORMULA")),
+            new FormulaPanel(this, getResString("FORMULA")),
             //Teilwertsummen
             new FractionValueSumPanel(this, getResString("userFieldDialog_partValueSum")),
             //Weitere...

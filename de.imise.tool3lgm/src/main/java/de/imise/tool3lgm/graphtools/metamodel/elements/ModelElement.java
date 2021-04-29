@@ -2,7 +2,7 @@ package de.imise.tool3lgm.graphtools.metamodel.elements;
 
 import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction.BACKWARD;
 import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction.FORWARD;
-import static de.imise.tool3lgm.graphtools.userfield.UserField.EMPTY_STRING;
+import static de.imise.tool3lgm.graphtools.userfield.definition.UserField.EMPTY_STRING;
 
 import java.awt.Color;
 import java.awt.Container;
@@ -40,8 +40,9 @@ import de.imise.tool3lgm.graphtools.model.GDCollectionOwner;
 import de.imise.tool3lgm.graphtools.model.GDCommands;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.path.metapaths.MetaPath;
-import de.imise.tool3lgm.graphtools.userfield.UserField;
-import de.imise.tool3lgm.graphtools.userfield.UserFieldTarget;
+import de.imise.tool3lgm.graphtools.userfield.definition.UserField;
+import de.imise.tool3lgm.graphtools.userfield.definition.UserFieldDefinitions;
+import de.imise.tool3lgm.graphtools.userfield.definition.UserFieldTarget;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.graphtools.view.container.LayerContainer;
 import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
@@ -51,6 +52,7 @@ import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout.TextAlignmentH
 import de.imise.util.Alphabetical;
 import de.imise.util.IDStringGenerator;
 import de.imise.util.ReflectionUtils;
+import de.imise.util.StringUtils;
 import de.imise.util.htmlxml.HTMLConverter;
 
 public abstract class ModelElement extends UserFieldTarget implements MetaModelSpecific, GDCollectionOwner, IDSource {
@@ -163,6 +165,12 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
         return metaModel == null ? null : metaModel.getMetaModelDefinitionClass();
     }
 
+    @Override
+    public UserFieldDefinitions getUserFieldDefinitions() {
+        GDCollection gdcoll = getCollection();
+        return gdcoll.getUserFieldDefinitions();
+    }
+
     public void printContainer() {
         System.err.println(containerTable.size() + " " + containerTable.getClass().getSimpleName() + " " + this.getClass().getSimpleName());
     }
@@ -261,7 +269,7 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
      * @param doc
      * @return
      */
-    public final ElementContainer getContainer(final GraphDocument doc) {
+    public ElementContainer getContainer(final GraphDocument doc) {
         if (doc == null) {
             return null;
         }
@@ -321,36 +329,8 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
      * @return
      */
     public final String getClearName() {
-        nameBuffer.setLength(0);
-        nameBuffer.append(toString());
-        if (nameBuffer.length() == 0) {
-            return "";
-        }
-        while (nameBuffer.charAt(0) == '\n' || nameBuffer.charAt(0) == ' ' || nameBuffer.charAt(0) == '\t') {
-            nameBuffer.deleteCharAt(0);
-            //Diese zusätzliche Abfrage verhindert die Exception, die flog, wenn man den Eigenschaftendialog öffnete und die Bedingungen aus Bug-Meldung vom <08.11.06 LI> galt.
-            if (nameBuffer.length() == 0) {
-                return "";
-            }
-        }
-        while (true) {
-            int pos = nameBuffer.length() - 1;
-            if (nameBuffer.charAt(pos) == '\n' || nameBuffer.charAt(pos) == ' ' || nameBuffer.charAt(pos) == '\t') {
-                nameBuffer.deleteCharAt(pos);
-            } else {
-                break;
-            }
-        }
-        for (int i = 1; i < nameBuffer.length(); i++) {
-            if (nameBuffer.charAt(i) == '\n') {
-                if (nameBuffer.charAt(i - 1) == ' ') {
-                    nameBuffer.deleteCharAt(i--);
-                } else {
-                    nameBuffer.setCharAt(i, ' ');
-                }
-            }
-        }
-        return nameBuffer.toString();
+        String name = toString();
+        return StringUtils.trimAndRemoveNewLines(name);
     }
 
     /**
@@ -2462,7 +2442,7 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
                         //wenn es einen otherValue gibt, der sich vom value unterscheidet -> füge sie zusammen
                     } else if (!value.equals(otherValue)) {
                         //Bei Kennzahlen bleibt es einfach der Wert des ersten Elements
-                        if (!userField.isClassificationUserField()) {
+                        if (!userField.isNumberUserField()) {
                             setUserFieldInputValue(userField, value.toString().concat(" -" + joined + "- ").concat(otherValue.toString()));
                         }
                     }

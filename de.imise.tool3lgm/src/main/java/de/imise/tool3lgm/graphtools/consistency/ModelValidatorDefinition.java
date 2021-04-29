@@ -31,7 +31,7 @@ import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.path.metapaths.MetaPath;
 import de.imise.tool3lgm.graphtools.path.metapaths.SimpleMetaPath;
 import de.imise.tool3lgm.graphtools.undoredo.TransactionManager;
-import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.panel.PropertyDialogUserFieldPanel;
+import de.imise.tool3lgm.graphtools.userfield.definition.UserField;
 
 /**
  * Diese Klasse ist dazu da, im Fehlerfall an einen besseren Ort (Tab in einem
@@ -201,7 +201,8 @@ public class ModelValidatorDefinition implements MetaModelSpecific {
         } else if (error instanceof AbstractIDError) {
             ModelElement me = error.getModelElement();
             ElementPropertyDialog dialog = me.getPropertyDialog();
-            dialog.selectTab(PropertyDialogUserFieldPanel.class);
+            UserField userField = ((AbstractIDError) error).getUserField();
+            dialog.selectTab(userField);
             dialog.showDialog();
         }
     }

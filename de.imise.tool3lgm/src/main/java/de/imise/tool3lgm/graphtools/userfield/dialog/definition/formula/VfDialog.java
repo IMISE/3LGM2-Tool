@@ -17,7 +17,8 @@ import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
-import de.imise.tool3lgm.graphtools.userfield.UserField;
+import de.imise.tool3lgm.graphtools.userfield.definition.UserField;
+import de.imise.tool3lgm.graphtools.userfield.definition.UserFieldDefinitions;
 import de.imise.tool3lgm.graphtools.userfield.dialog.definition.formula.panel.OperatorInputPanel;
 import de.imise.tool3lgm.graphtools.userfield.dialog.definition.formula.panel.ReferencePanel;
 
@@ -65,12 +66,12 @@ public class VfDialog extends JDialog implements ActionListener {
      * komplettierten Dialog anzeigen.
      *
      * @param owner
+     * @param definitions
      * @param operator Eine der beiden Konstanten <code>UserField.SUM</code>
      *            oder <code>UserField.TWSUM</code>
-     * @param elementClass
      * @param userField
      */
-    public VfDialog(final Dialog owner, final String operator, final UserField userField) {
+    public VfDialog(final Dialog owner, final UserFieldDefinitions definitions, final String operator, final UserField userField) {
         super(owner);
         this.userField = userField;
         vfOperator = operator;
@@ -78,13 +79,13 @@ public class VfDialog extends JDialog implements ActionListener {
         setTitle(title);
         setModal(true);
         setLocationByPlatform(true);
-        init();
+        init(definitions);
     }
 
     /**
      *
      */
-    private void init() {
+    private void init(final UserFieldDefinitions definitions) {
         setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridx = 0;
@@ -97,10 +98,10 @@ public class VfDialog extends JDialog implements ActionListener {
         gbc.anchor = GridBagConstraints.NORTHWEST;
 
         if (vfOperator.equals(UserField.ACCOUNTING_FUNCTION_REF)) {
-            rp = new ReferencePanel(userField);
+            rp = new ReferencePanel(definitions, userField);
             add(rp, gbc);
         } else {
-            operatorInputPanel = new OperatorInputPanel(vfOperator, userField);
+            operatorInputPanel = new OperatorInputPanel(definitions, vfOperator, userField);
             add(operatorInputPanel, gbc);
         }
         gbc.weighty = 0;

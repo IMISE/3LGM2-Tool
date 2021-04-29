@@ -20,7 +20,7 @@ import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.model.LGMGraphDocument;
-import de.imise.tool3lgm.graphtools.userfield.UserFieldDefinitions;
+import de.imise.tool3lgm.graphtools.userfield.definition.UserFieldDefinitions;
 import de.imise.tool3lgm.help.Help;
 import de.imise.util.swing.SwingUtils;
 import de.imise.util.swing.dialog.AbstractSizeAndPositionRestoringDialog;

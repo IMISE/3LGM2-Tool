@@ -7,6 +7,8 @@ import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.MIN_LAYER_IN
 import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.PHYSICAL_LAYER;
 import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.isInterLayer;
 import static de.imise.tool3lgm.graphtools.undoredo.TransactionManager.STANDARD_PID;
+import static de.imise.tool3lgm.graphtools.userfield.definition.UserField.Style.GROUP;
+import static de.imise.tool3lgm.graphtools.userfield.definition.UserField.Style.TAB;
 import static de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty.OPTION_ENABLE_EXPERT_MODE;
 import static de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty.OPTION_ENABLE_SUBMODEL_BROWSER;
 import static de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty.OPTION_SHOW_PART_OF_HIERARCHY;
@@ -47,8 +49,8 @@ import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.model.LGMChangeListener;
 import de.imise.tool3lgm.graphtools.model.LGMGraphDocument;
-import de.imise.tool3lgm.graphtools.userfield.UserField;
-import de.imise.tool3lgm.graphtools.userfield.UserFieldDefinitions;
+import de.imise.tool3lgm.graphtools.userfield.definition.UserField;
+import de.imise.tool3lgm.graphtools.userfield.definition.UserFieldDefinitions;
 import de.imise.tool3lgm.graphtools.userfield.event.UserFieldListener;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
@@ -573,17 +575,58 @@ public final class ModelBrowserTree extends DynamicTree implements UserFieldList
         ElementContainer ec = elementNode.getUserObject();
         ModelElement me = ec.getElement();
         Set<UserField> allOfThisElement = me.getUserFieldInputValueKeys();
-        GDCollection gdcol = doc.getCollection();
-        UserFieldDefinitions ufDefs = gdcol.getUserFieldDefinitions();
+        GDCollection gdcoll = doc.getCollection();
+        UserFieldDefinitions ufDefs = gdcoll.getUserFieldDefinitions();
         Class<? extends ModelElement> elementClass = me.getClass();
-        for (UserField uf : ufDefs.getUserFields(elementClass)) {
-            if (uf.isTreeVisibility()) {
-                if (uf.hasStyle(UserField.Style.HYPERLINK) || uf.hasStyle(UserField.Style.SEPARATOR) || uf.isClassificationUserField() || allOfThisElement.contains(uf)) {
-                    UserFieldTreeNode userFieldTreeNode = new UserFieldTreeNode(uf, me);
-                    elementNode.add(userFieldTreeNode);
+        UserFieldTreeNode currentTabNode = null;
+        UserFieldTreeNode currentGroupNode = null;
+        UserFieldTreeNode valueOrSeparatorNode = null;
+        for (UserField userField : ufDefs.getUserFields(elementClass)) {
+            if (userField.hasStyle(TAB)) {
+                if (currentTabNode != null && currentTabNode.getChildCount() == 0) { //remove empty tabs
+                    elementNode.remove(currentTabNode);
                 }
+                if (userField.isTreeVisibility()) {
+                    currentTabNode = new UserFieldTreeNode(userField, me);
+                } else {
+                    currentTabNode = null;
+                }
+                currentGroupNode = null;
+                valueOrSeparatorNode = null;
+            } else if (userField.hasStyle(GROUP)) {
+                if (currentGroupNode != null && currentGroupNode.getChildCount() == 0) { //remove empty groups
+                    DefaultMutableTreeNode parent = (DefaultMutableTreeNode) currentGroupNode.getParent();
+                    parent.remove(currentGroupNode);
+                }
+                currentGroupNode = userField.isTreeVisibility() ? new UserFieldTreeNode(userField, me) : null;
+                valueOrSeparatorNode = null;
+            } else if (userField.hasStyle(UserField.Style.SEPARATOR) || allOfThisElement.contains(userField)) {
+                valueOrSeparatorNode = userField.isTreeVisibility() ? new UserFieldTreeNode(userField, me) : null;
             }
+            LGMTreeNode<?> parent = null;
+            LGMTreeNode<?> child = null;
+            if (valueOrSeparatorNode != null) {
+                parent = currentGroupNode != null ? currentGroupNode : currentTabNode != null ? currentTabNode : elementNode;
+                child = valueOrSeparatorNode;
+            } else if (currentGroupNode != null) {
+                parent = currentTabNode != null ? currentTabNode : elementNode;
+                child = currentGroupNode;
+            } else if (currentTabNode != null) {
+                parent = elementNode;
+                child = currentTabNode;
+            } else {
+                continue; // should never happen
+            }
+            parent.add(child);
         }
+        if (currentGroupNode != null && currentGroupNode.getChildCount() == 0) { //remove empty groups if it is the last node
+            DefaultMutableTreeNode parent = (DefaultMutableTreeNode) currentGroupNode.getParent();
+            parent.remove(currentGroupNode);
+        }
+        if (currentTabNode != null && currentTabNode.getChildCount() == 0) { //then remove empty tabs if it is the last node
+            elementNode.remove(currentTabNode);
+        }
+
     }
 
     /**

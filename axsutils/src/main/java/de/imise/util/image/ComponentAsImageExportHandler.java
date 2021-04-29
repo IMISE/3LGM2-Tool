@@ -103,7 +103,7 @@ public class ComponentAsImageExportHandler {
      * @param filename
      */
     public static final void createFile(final JComponent comp, final FileFilterType fileFormat, final String filename) {
-        new ComponentAsImageExportHandler().createFileInternal(comp, fileFormat, filename, false);
+        new ComponentAsImageExportHandler().createFileInternal(comp, fileFormat, filename, false, null);
     }
 
     /**
@@ -114,8 +114,8 @@ public class ComponentAsImageExportHandler {
      * @param filename
      * @param maximizeSize
      */
-    public static final void createFile(final JComponent comp, final FileFilterType fileFormat, final String filename, final boolean maximizeSize) {
-        new ComponentAsImageExportHandler().createFileInternal(comp, fileFormat, filename, maximizeSize);
+    public static final void createFile(final JComponent comp, final FileFilterType fileFormat, final String filename, final boolean maximizeSize, final Double zoomScale) {
+        new ComponentAsImageExportHandler().createFileInternal(comp, fileFormat, filename, maximizeSize, zoomScale);
     }
 
     /**
@@ -124,7 +124,7 @@ public class ComponentAsImageExportHandler {
      * @param filename
      * @param maximizeSize
      */
-    private final void createFileInternal(final JComponent comp, final FileFilterType fileFormat, final String filename, boolean maximizeSize) {
+    private final void createFileInternal(final JComponent comp, final FileFilterType fileFormat, final String filename, boolean maximizeSize, final Double zoomScale) {
         if (fileFormat == null) {
             return;
         }
@@ -146,6 +146,9 @@ public class ComponentAsImageExportHandler {
             if (fileFormat == FileFilterType.SVG) {
                 exportAsSVG(comp, filename);
             } else {
+                if (zoomScale != null) {
+                    zoomComp.setZoom(zoomScale);
+                }
                 Dimension preferredSize = comp.getPreferredSize();
                 //MemoryHandler.printMaxNowAvailableMemory();
                 //this here is the critical memory operation
@@ -282,25 +285,38 @@ public class ComponentAsImageExportHandler {
         fc.setFileSystemView(FileSystemView.getFileSystemView());
         fc.setAcceptAllFileFilterUsed(false);
 
+        JRadioButton normalSizeRBut = null;
+        JRadioButton mediumSizeRBut = null;
+        JRadioButton highSizeRBut = null;
         JRadioButton saveMaximumSizeRBut = null;
         if (comp instanceof ZoomableComponent) {
             JPanel sizeOptionPanel = new JPanel(new BorderLayout());
             sizeOptionPanel.setBorder(BorderFactory.createEmptyBorder(8, 8, 8, 8));
-            JLabel label = new JLabel("<html>" + drh.getResString("MESSAGE_OUT_OF_MEMORY") + "</html>");
-            sizeOptionPanel.add(label, BorderLayout.CENTER);
+
+            normalSizeRBut = new JRadioButton(drh.getResString("RADIO_BUTTON_NORMAL_SIZE"));
+            mediumSizeRBut = new JRadioButton(drh.getResString("RADIO_BUTTON_MEDIUM_SIZE"));
+            highSizeRBut = new JRadioButton(drh.getResString("RADIO_BUTTON_HIGH_SIZE"));
 
             JRadioButton saveOriginalSizeRBut = new JRadioButton(drh.getResString("RADIO_BUTTON_ORIGINAL_SIZE"));
             saveMaximumSizeRBut = new JRadioButton(drh.getResString("RADIO_BUTTON_MAXIMUM_SIZE"));
             ButtonGroup buttonGroup = new ButtonGroup();
             buttonGroup.add(saveOriginalSizeRBut);
+            buttonGroup.add(normalSizeRBut);
+            buttonGroup.add(mediumSizeRBut);
+            buttonGroup.add(highSizeRBut);
             buttonGroup.add(saveMaximumSizeRBut);
 
-            JPanel buttonPanel = new JPanel(new GridLayout(2, 1));
+            JLabel label = new JLabel("<html>" + drh.getResString("TITLE_RESOLUTION") + "</html>");
+            JPanel buttonPanel = new JPanel(new GridLayout(6, 1));
+            buttonPanel.add(label);
             buttonPanel.add(saveOriginalSizeRBut);
+            buttonPanel.add(normalSizeRBut);
+            buttonPanel.add(mediumSizeRBut);
+            buttonPanel.add(highSizeRBut);
             buttonPanel.add(saveMaximumSizeRBut);
             saveOriginalSizeRBut.setSelected(true);
 
-            sizeOptionPanel.add(buttonPanel, BorderLayout.SOUTH);
+            sizeOptionPanel.add(buttonPanel, BorderLayout.NORTH);
             fc.setAccessory(sizeOptionPanel);
             label.setMaximumSize(new Dimension(buttonPanel.getPreferredSize().width, Integer.MAX_VALUE));
             label.setPreferredSize(new Dimension(label.getMaximumSize().width, label.getPreferredSize().height));
@@ -323,7 +339,19 @@ public class ComponentAsImageExportHandler {
             return;
         }
 
-        createFile(comp, type, f.getPath(), maximizeImage);
+        //in case a zoomscale is selected
+        Double zoomScale = null;
+        if (!maximizeImage) {
+            if (normalSizeRBut.isSelected()) {
+                zoomScale = 1.0;
+            } else if (mediumSizeRBut.isSelected()) {
+                zoomScale = 2.0;
+            } else if (highSizeRBut.isSelected()) {
+                zoomScale = 5.0;
+            }
+        }
+
+        createFile(comp, type, f.getPath(), maximizeImage, zoomScale);
     }
 
     /**

@@ -4,7 +4,7 @@ import java.io.PrintStream;
 
 public class Sys {
 
-    /** Anzahl der StackTrace-Zeilen, die uasgegeben werden sollen */
+    /** Number of stacktrace lines to be output */
     public static int maxTraceSteps = 100;
 
     public static boolean insertBlankLineAfterOutput;

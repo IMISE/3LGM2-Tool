@@ -102,8 +102,8 @@ public class StringUtils {
 
     /**
      * Füllt den übergebenen String, wenn er kürzer ist, bis zur übergebenen
-     * Länge auf. Ist seine Länge größer oder gleich der übergebenen Länge,
-     * bleibt er unverändert.
+     * Länge mit Leerzeichen auf. Ist seine Länge größer oder gleich der
+     * übergebenen Länge, bleibt er unverändert.
      *
      * @param s
      * @param newMinLenght
@@ -455,6 +455,55 @@ public class StringUtils {
     public static final String createCollectionString(final String delimiter, final Object... objects) {
         List<Object> collection = Arrays.asList(objects);
         return createCollectionString(collection, delimiter);
+    }
+
+    ///////////////////////////
+    // trimAndRemoveNewLines //
+    ///////////////////////////
+
+    /**
+     * Buffer for the function
+     */
+    public static StringBuffer buffer = new StringBuffer(40);
+
+    /**
+     * This function is not synchronized!
+     *
+     * @param s
+     * @return the trimmed String wit all new lines and tabs replaced by a
+     *         whitespace
+     */
+    public static String trimAndRemoveNewLines(final String s) {
+        buffer.setLength(0);
+        buffer.append(s);
+        if (buffer.length() == 0) {
+            return "";
+        }
+        while (buffer.charAt(0) == '\n' || buffer.charAt(0) == ' ' || buffer.charAt(0) == '\t') {
+            buffer.deleteCharAt(0);
+            //Diese zusätzliche Abfrage verhindert die Exception, die flog, wenn man den Eigenschaftendialog öffnete und die Bedingungen aus Bug-Meldung vom <08.11.06 LI> galt.
+            if (buffer.length() == 0) {
+                return "";
+            }
+        }
+        while (true) {
+            int pos = buffer.length() - 1;
+            if (buffer.charAt(pos) == '\n' || buffer.charAt(pos) == ' ' || buffer.charAt(pos) == '\t') {
+                buffer.deleteCharAt(pos);
+            } else {
+                break;
+            }
+        }
+        for (int i = 1; i < buffer.length(); i++) {
+            if (buffer.charAt(i) == '\n') {
+                if (buffer.charAt(i - 1) == ' ') {
+                    buffer.deleteCharAt(i--);
+                } else {
+                    buffer.setCharAt(i, ' ');
+                }
+            }
+        }
+        return buffer.toString();
     }
 
 }
