@@ -157,7 +157,7 @@ public class AnalysesRepository {
         if (file != null) {
             return file;
         }
-        file = new File(Tool3lgmConstants.USER_HOME_DIR_NAME, Tool3lgmConstants.ANALYSEN_FILE_NAME);
+        file = new File(Tool3lgmConstants.USER_HOME_3LGM_PATH, Tool3lgmConstants.ANALYSEN_FILE_NAME);
         if (file.exists()) {
             return file;
         }
@@ -169,7 +169,7 @@ public class AnalysesRepository {
             // man file können, sonst könnte man den Baukasten im gleichen Verzeichnis auch nicht
             // ausführen)
             if (!file.canWrite()) {
-                File userHomeFile = new File(Tool3lgmConstants.USER_HOME_DIR_NAME, Tool3lgmConstants.ANALYSEN_FILE_NAME);
+                File userHomeFile = new File(Tool3lgmConstants.USER_HOME_3LGM_PATH, Tool3lgmConstants.ANALYSEN_FILE_NAME);
                 saveAnalyseFile(userHomeFile, loadAnalyseFile(file));
                 file = userHomeFile;
             }
@@ -182,11 +182,11 @@ public class AnalysesRepository {
                 // schreiben kann
                 if (!file.createNewFile()) {
                     // lege eine Datei im Benutzerverzeichnis an
-                    file = new File(Tool3lgmConstants.USER_HOME_DIR_NAME, Tool3lgmConstants.ANALYSEN_FILE_NAME);
+                    file = new File(Tool3lgmConstants.USER_HOME_3LGM_PATH, Tool3lgmConstants.ANALYSEN_FILE_NAME);
                 }
             } catch (IOException e) {
                 // das hier tritt ein, wenn es bei file.createNewFile() ne Exception gab
-                file = new File(Tool3lgmConstants.USER_HOME_DIR_NAME, Tool3lgmConstants.ANALYSEN_FILE_NAME);
+                file = new File(Tool3lgmConstants.USER_HOME_3LGM_PATH, Tool3lgmConstants.ANALYSEN_FILE_NAME);
             }
 
             // schreibe den Inhalt der Resourcendatei in file
