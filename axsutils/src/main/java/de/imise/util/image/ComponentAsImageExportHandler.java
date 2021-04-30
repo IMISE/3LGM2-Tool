@@ -139,6 +139,8 @@ public class ComponentAsImageExportHandler {
         if (maximizeSize) {
             //vollen Zoom setzen und alten zoom merken
             zoomComp.setZoomToMaximum();
+        } else if (zoomScale != null) {
+            zoomComp.setZoom(zoomScale);
         }
         setHeapAvailableMaximumExportSize(comp);
 
@@ -146,9 +148,6 @@ public class ComponentAsImageExportHandler {
             if (fileFormat == FileFilterType.SVG) {
                 exportAsSVG(comp, filename);
             } else {
-                if (zoomScale != null) {
-                    zoomComp.setZoom(zoomScale);
-                }
                 Dimension preferredSize = comp.getPreferredSize();
                 //MemoryHandler.printMaxNowAvailableMemory();
                 //this here is the critical memory operation
