@@ -25,7 +25,7 @@ public class DefaultElementsLayoutDefinition {
      * Standardelementlayout. Initial entspricht es dem Standardlayout aus
      * <code>GraphElementLayout</code>
      */
-    private GraphElementLayout standardElementLayout = createStandardElementLayout();
+    private GraphElementLayout defaultElementLayout = createStandardElementLayout();
 
     /**
      * @return
@@ -61,7 +61,7 @@ public class DefaultElementsLayoutDefinition {
      * @param layout2Clone
      */
     public final void adapt(final DefaultElementsLayoutDefinition layout2Clone) {
-        standardElementLayout = (GraphElementLayout) layout2Clone.standardElementLayout.clone();
+        defaultElementLayout = (GraphElementLayout) layout2Clone.defaultElementLayout.clone();
         Set<Class<? extends ModelElement>> keySet = layout2Clone.elementClassToStandardLayoutMap.keySet();
         elementClassToStandardLayoutMap = new HashMap<>(keySet.size());
         for (Class<? extends ModelElement> c : keySet) {
@@ -86,7 +86,7 @@ public class DefaultElementsLayoutDefinition {
      * @return Returns the standardElementLayout.
      */
     public GraphElementLayout getStandardElementLayout() {
-        return standardElementLayout;
+        return defaultElementLayout;
     }
 
     /**
@@ -115,7 +115,7 @@ public class DefaultElementsLayoutDefinition {
     public GraphElementLayout getStandardElementLayout(final Class<? extends ModelElement> elementClass) {
         GraphElementLayout layout = elementClassToStandardLayoutMap.get(elementClass);
         if (layout == null) {
-            layout = standardElementLayout;
+            layout = defaultElementLayout;
         }
         return layout;
     }
@@ -135,7 +135,7 @@ public class DefaultElementsLayoutDefinition {
      */
     private GraphElementLayout getElementClassSpecificLayout(final Class<? extends ModelElement> elementClass) {
         GraphElementLayout gel = getStandardElementLayout(elementClass);
-        if (gel == standardElementLayout) {
+        if (gel == defaultElementLayout) {
             gel = (GraphElementLayout) gel.clone();
             elementClassToStandardLayoutMap.put(elementClass, gel);
         }
@@ -149,7 +149,7 @@ public class DefaultElementsLayoutDefinition {
     public final Color getStandardBackGroundColor(final ElementContainer ec) {
         GraphElementLayout gel = getStandardElementLayout(ec);
         if (gel.bg_color == null) {
-            return standardElementLayout.bg_color;
+            return defaultElementLayout.bg_color;
         }
         return gel.bg_color;
     }
@@ -180,26 +180,10 @@ public class DefaultElementsLayoutDefinition {
 
     /**
      * @param elementClass
-     * @param width
-     */
-    public final void setStandardWidth(final Class<? extends ModelElement> elementClass, final int width) {
-        getElementClassSpecificLayout(elementClass).width = width;
-    }
-
-    /**
-     * @param elementClass
      * @return
      */
     public final int getStandardHeight(final Class<? extends ModelElement> elementClass) {
         return getStandardElementLayout(elementClass).height;
-    }
-
-    /**
-     * @param elementClass
-     * @param height
-     */
-    public final void setStandardHeight(final Class<? extends ModelElement> elementClass, final int height) {
-        getElementClassSpecificLayout(elementClass).height = height;
     }
 
     /**

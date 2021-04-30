@@ -75,7 +75,7 @@ public class Szenario extends LGMGraphDocument {
             retVal.setForm(null);
             int width = defaultElementsLayout.getStandardWidth(meClass);
             int height = defaultElementsLayout.getStandardHeight(meClass);
-            retVal.setSize(defaultElementsLayout.getStandardWidth(meClass), defaultElementsLayout.getStandardHeight(meClass));
+            retVal.setSize(width, height);
         }
 
         retVal.setParent(null);
@@ -160,11 +160,11 @@ public class Szenario extends LGMGraphDocument {
                     //wenn Start und End-Element der Edge einen Container in diesem Szenario haben
                     if (endsAreMine(edge)) {
                         //hole den Container der Edge aus dem Quelldokument
-                        EdgeContainer oldKC = (EdgeContainer) edge.getContainer(sourceDoc);
+                        EdgeContainer oldKC = edge.getContainer(sourceDoc);
                         //wenn es keinen gibt, hole den Container aus dem Hauptmodell
                         if (oldKC == null) {
                             GraphDocument mainDoc = sourceDoc.getMainDoc();
-                            oldKC = (EdgeContainer) edge.getContainer(mainDoc);
+                            oldKC = edge.getContainer(mainDoc);
                         }
                         //füge eine Kopie des Edge-Containers in dieses Szenario ein
                         EdgeContainer kc = (EdgeContainer) addContainerCopy(oldKC);
