@@ -160,22 +160,6 @@ public class AnalysesRepository {
         file = new File(Tool3lgmConstants.USER_HOME_3LGM_PATH, Tool3lgmConstants.ANALYSEN_FILE_NAME);
         if (file.exists()) {
             return file;
-        }
-        file = new File(Tool3lgmConstants.USER_HOME_3LGM_PATH, Tool3lgmConstants.ANALYSEN_FILE_NAME);
-        // es ex. eine Analysendatei im Installationsverzeichnis
-        if (file.exists()) {
-            // die Datei aus dem Installationsverzeichnis ins Benutzerverzeichnis kopieren (lesen
-            // sollte
-            // man file können, sonst könnte man den Baukasten im gleichen Verzeichnis auch nicht
-            // ausführen)
-            if (!file.canWrite()) {
-                File userHomeFile = new File(Tool3lgmConstants.USER_HOME_3LGM_PATH, Tool3lgmConstants.ANALYSEN_FILE_NAME);
-                saveAnalyseFile(userHomeFile, loadAnalyseFile(file));
-                file = userHomeFile;
-            }
-            // es ex. keine Analysendatei im Installationsverzeichnis -> Standardresourcendatei
-            // dahin oder, wenn
-            // das nicht geht, ins Benutzerverzeichnis kopieren
         } else {
             try {
                 // wenn es die Datei nicht im Installpfad gibt und man sie auch nicht dahin
