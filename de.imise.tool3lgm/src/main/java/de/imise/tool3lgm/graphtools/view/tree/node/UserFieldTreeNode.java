@@ -8,6 +8,7 @@ import static de.imise.util.StringUtils.trimAndRemoveNewLines;
 
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.userfield.definition.UserField;
+import de.imise.tool3lgm.graphtools.userfield.definition.UserField.Style;
 import de.imise.util.BrowseUtils;
 import de.imise.util.pair.Pair;
 
@@ -89,6 +90,15 @@ public class UserFieldTreeNode extends IconifiedTreeNode<Pair<UserField, ModelEl
             return true;
         }
         return false;
+    }
+
+    /**
+     * @param style
+     * @return
+     */
+    public boolean hasStyle(final Style style) {
+        UserField userField = getUserField();
+        return userField.hasStyle(style);
     }
 
 }

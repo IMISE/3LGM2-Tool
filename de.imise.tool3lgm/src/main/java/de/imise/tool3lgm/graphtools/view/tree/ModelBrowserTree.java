@@ -50,6 +50,7 @@ import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.model.LGMChangeListener;
 import de.imise.tool3lgm.graphtools.model.LGMGraphDocument;
 import de.imise.tool3lgm.graphtools.userfield.definition.UserField;
+import de.imise.tool3lgm.graphtools.userfield.definition.UserField.Style;
 import de.imise.tool3lgm.graphtools.userfield.definition.UserFieldDefinitions;
 import de.imise.tool3lgm.graphtools.userfield.event.UserFieldListener;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
@@ -583,9 +584,8 @@ public final class ModelBrowserTree extends DynamicTree implements UserFieldList
         UserFieldTreeNode valueOrSeparatorNode = null;
         for (UserField userField : ufDefs.getUserFields(elementClass)) {
             if (userField.hasStyle(TAB)) {
-                if (currentTabNode != null && currentTabNode.getChildCount() == 0) { //remove empty tabs
-                    elementNode.remove(currentTabNode);
-                }
+                removeNodeIfEmpty(currentGroupNode); //remove empty group
+                removeNodeIfEmpty(currentTabNode); //remove empty tab
                 if (userField.isTreeVisibility()) {
                     currentTabNode = new UserFieldTreeNode(userField, me);
                 } else {
@@ -594,6 +594,7 @@ public final class ModelBrowserTree extends DynamicTree implements UserFieldList
                 currentGroupNode = null;
                 valueOrSeparatorNode = null;
             } else if (userField.hasStyle(GROUP)) {
+                removeNodeIfEmpty(currentGroupNode); //remove empty group
                 if (currentGroupNode != null && currentGroupNode.getChildCount() == 0) { //remove empty groups
                     DefaultMutableTreeNode parent = (DefaultMutableTreeNode) currentGroupNode.getParent();
                     parent.remove(currentGroupNode);
@@ -619,14 +620,30 @@ public final class ModelBrowserTree extends DynamicTree implements UserFieldList
             }
             parent.add(child);
         }
-        if (currentGroupNode != null && currentGroupNode.getChildCount() == 0) { //remove empty groups if it is the last node
-            DefaultMutableTreeNode parent = (DefaultMutableTreeNode) currentGroupNode.getParent();
-            parent.remove(currentGroupNode);
-        }
-        if (currentTabNode != null && currentTabNode.getChildCount() == 0) { //then remove empty tabs if it is the last node
-            elementNode.remove(currentTabNode);
-        }
+        removeNodeIfEmpty(currentGroupNode); //remove empty group
+        removeNodeIfEmpty(currentTabNode); //remove empty tab
 
+    }
+
+    /**
+     * @param node
+     * @return <code>true</code> if the node can be removed. This is the case if
+     *         the node is a group node or tab node and has no
+     */
+    private void removeNodeIfEmpty(final UserFieldTreeNode node) {
+        if (node == null) {
+            return;
+        }
+        //remove empty groups or tabs. they are also empty if they contain only seperators
+        int childCount = node.getChildCount();
+        for (int i = 0; i < childCount; i++) {
+            UserFieldTreeNode child = (UserFieldTreeNode) node.getChildAt(i);
+            if (!child.hasStyle(Style.SEPARATOR)) {
+                return;
+            }
+        }
+        DefaultMutableTreeNode parent = (DefaultMutableTreeNode) node.getParent();
+        parent.remove(node);
     }
 
     /**
