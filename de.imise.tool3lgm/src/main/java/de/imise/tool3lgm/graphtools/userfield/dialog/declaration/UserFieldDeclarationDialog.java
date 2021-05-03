@@ -173,7 +173,6 @@ public final class UserFieldDeclarationDialog extends AbstractUserFieldDeclarati
         userFieldTypeComboBox.removeAllItems();
         boolean isShowGlobalUserFields = classComboBox.isGlobalUserFieldClassSelected();
         if (!isShowGlobalUserFields) {
-
             addStyleCategory("STYLE_TYPE_TEXT");
             addStyle(SINGLE_LINE);
             addStyle(MULTI_LINE);
@@ -195,7 +194,9 @@ public final class UserFieldDeclarationDialog extends AbstractUserFieldDeclarati
             addStyleCategory("STYLE_TYPE_SPECIAL");
             addStyle(HYPERLINK);
             addStyle(ID);
-            addStyle(SUBTYPE);
+            if (classComboBox.isNodeClassSelected()) {
+                addStyle(SUBTYPE);
+            }
 
             addStyleCategory("STYLE_TYPE_VIEW");
             addStyle(TAB);
