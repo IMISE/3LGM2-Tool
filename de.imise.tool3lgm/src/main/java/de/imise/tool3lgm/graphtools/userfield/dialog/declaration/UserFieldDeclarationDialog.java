@@ -13,6 +13,7 @@ import static de.imise.tool3lgm.graphtools.userfield.definition.UserField.Style.
 import static de.imise.tool3lgm.graphtools.userfield.definition.UserField.Style.RADIO_BUTTON;
 import static de.imise.tool3lgm.graphtools.userfield.definition.UserField.Style.SEPARATOR;
 import static de.imise.tool3lgm.graphtools.userfield.definition.UserField.Style.SINGLE_LINE;
+import static de.imise.tool3lgm.graphtools.userfield.definition.UserField.Style.SUBTYPE;
 import static de.imise.tool3lgm.graphtools.userfield.definition.UserField.Style.TAB;
 import static de.imise.tool3lgm.graphtools.userfield.dialog.declaration.UserFieldDeclarationImportExportHandler.exportDefinitions;
 import static de.imise.tool3lgm.graphtools.userfield.dialog.declaration.UserFieldDeclarationImportExportHandler.importDefinitions;
@@ -194,6 +195,7 @@ public final class UserFieldDeclarationDialog extends AbstractUserFieldDeclarati
             addStyleCategory("STYLE_TYPE_SPECIAL");
             addStyle(HYPERLINK);
             addStyle(ID);
+            addStyle(SUBTYPE);
 
             addStyleCategory("STYLE_TYPE_VIEW");
             addStyle(TAB);
@@ -463,14 +465,18 @@ public final class UserFieldDeclarationDialog extends AbstractUserFieldDeclarati
                     boolean isShowGlobalUserFields = classComboBox.isGlobalUserFieldClassSelected();
                     if (selectedIndices[0] == 0) { //first element selected -> no up
                         upButtonEnabled = false;
-                    } else if (!isShowGlobalUserFields && selectedIndices[0] == 1 && !fieldList.hasStyle(1, TAB)) { //second element selected but it is not a tab -> no up
-                        upButtonEnabled = false;
+                    } else if (!isShowGlobalUserFields && selectedIndices[0] == 1) {
+                        if (!fieldList.hasStyle(1, TAB, SUBTYPE)) { //second element selected but it is not a tab or subtype -> no up
+                            upButtonEnabled = false;
+                        }
                     }
                     int elementCount = fieldList.getElementCount();
                     if (selectedIndices[selectionCount - 1] == elementCount - 1) { //last list element selected -> no down
                         downButtonEnabled = false;
-                    } else if (!isShowGlobalUserFields && selectedIndices[0] == 0 && !fieldList.hasStyle(selectedIndices[selectionCount - 1] + 1, TAB)) { // only enable down if the very first tab is selected if the selected element after the last selected is a tab too
-                        downButtonEnabled = false;
+                    } else if (!isShowGlobalUserFields && selectedIndices[0] == 0) {
+                        if (!fieldList.hasStyle(selectedIndices[selectionCount - 1] + 1, TAB, SUBTYPE)) { // only enable down if the very first tab is selected if the selected element after the last selected is a tab too
+                            downButtonEnabled = false;
+                        }
                     }
                 }
                 upButton.setEnabled(upButtonEnabled);
@@ -478,6 +484,7 @@ public final class UserFieldDeclarationDialog extends AbstractUserFieldDeclarati
             }
             updateOptionsPanel();
         }
+
     }
 
     /**

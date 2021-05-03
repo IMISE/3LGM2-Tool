@@ -118,19 +118,11 @@ public final class UserField extends NameAndDescriptionTargetAdapter implements 
         },
         TAB {
             @Override
-            int compare(final UserField uf, final UserFieldTarget me1, final UserFieldTarget me2) {
-                return 0;
-            }
-            @Override
             public boolean isValueStyle() {
                 return false;
             }
         },
         GROUP {
-            @Override
-            int compare(final UserField uf, final UserFieldTarget me1, final UserFieldTarget me2) {
-                return 0;
-            }
             @Override
             public boolean isValueStyle() {
                 return false;
@@ -138,9 +130,11 @@ public final class UserField extends NameAndDescriptionTargetAdapter implements 
         },
         SEPARATOR {
             @Override
-            int compare(final UserField uf, final UserFieldTarget me1, final UserFieldTarget me2) {
-                return 0;
+            public boolean isValueStyle() {
+                return false;
             }
+        },
+        SUBTYPE {
             @Override
             public boolean isValueStyle() {
                 return false;
@@ -162,7 +156,9 @@ public final class UserField extends NameAndDescriptionTargetAdapter implements 
          * @param me
          * @return
          */
-        abstract int compare(UserField uf, UserFieldTarget me1, UserFieldTarget me2);
+        int compare(final UserField uf, final UserFieldTarget me1, final UserFieldTarget me2) {
+            return 0;
+        }
 
         /**
          * Alphabetischer Vergleich der jeweiligen Werte (siehe
