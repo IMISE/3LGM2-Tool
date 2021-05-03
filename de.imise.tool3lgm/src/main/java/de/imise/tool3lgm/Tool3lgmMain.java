@@ -234,6 +234,8 @@ public class Tool3lgmMain {
         if (source.exists()) {
             if (!destination.exists()) {
                 source.renameTo(destination);
+            } else {
+                source.delete();
             }
         }
 
