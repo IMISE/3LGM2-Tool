@@ -74,7 +74,7 @@ public abstract class Tool3lgmConstants {
     public static final boolean LOG_READABLE_UNDO_REDO_COMMANDS = false;
 
     /** filename with path for internal clipboard */
-    public static final String CLIPBOARD_PATH = System.getProperty("user.home") + File.separator + ".3lgm_clipboard";
+    public static final String CLIPBOARD_PATH = System.getProperty("user.home") + File.separator + ".3lgm" + File.separator + ".3lgm_clipboard";
 
     /** Path to the installation directory of the application as file */
     public static final File APPLICATION_DIR = ApplicationManager.getApplicationDir("lib");
@@ -84,6 +84,9 @@ public abstract class Tool3lgmConstants {
 
     /** Pfad ins Home-Verzeichnis des Benutzers */
     public static final String USER_HOME_DIR_NAME = System.getProperty("user.home");
+
+    /** Pfad ins Home-Verzeichnis .3lgm Ordner */
+    public static final String USER_HOME_3LGM_PATH = USER_HOME_DIR_NAME + File.separator + ".3lgm";
 
     /**
      * Name des Packages in dem alle Node-Klassen liegen, die allgemein
