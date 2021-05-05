@@ -8,10 +8,10 @@ import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
 import java.awt.BorderLayout;
 
 import javax.swing.BorderFactory;
-import javax.swing.JLabel;
 import javax.swing.JScrollPane;
 
 import de.imise.tool3lgm.graphtools.userfield.definition.UserField;
+import de.imise.util.htmlxml.HTMLConverter;
 import de.imise.util.swing.component.text.ExtendedTextPane;
 
 /**
@@ -34,11 +34,10 @@ public class ListValuePanel extends AbstractInputPanel {
      */
     public ListValuePanel(final UserField userField) {
         this.userField = userField;
-        setBorder(BorderFactory.createTitledBorder(getResString("userFieldEditor_values")));
+        String borderTitle = createBorderTitle();
+        setBorder(BorderFactory.createTitledBorder(borderTitle));
 
         setLayout(new BorderLayout());
-        add(new JLabel(getResString("userFieldEditor_values_hint")), BorderLayout.NORTH);
-
         JScrollPane valuesScrollPane = new JScrollPane(valueListTextField);
         add(valuesScrollPane, BorderLayout.CENTER);
 
@@ -48,6 +47,19 @@ public class ListValuePanel extends AbstractInputPanel {
             sb.append("\n");
         }
         valueListTextField.setText(sb.toString());
+    }
+
+    /**
+     * @return
+     */
+    private String createBorderTitle() {
+        String borderTitle = getResString("userFieldEditor_values") + " ";
+        borderTitle = HTMLConverter.encode(borderTitle);
+        String hint = getResString("userFieldEditor_values_hint");
+        hint = HTMLConverter.encodeItalic(hint);
+        borderTitle += hint;
+        borderTitle = HTMLConverter.html(borderTitle);
+        return borderTitle;
     }
 
     @Override
