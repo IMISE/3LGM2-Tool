@@ -72,7 +72,6 @@ import de.imise.tool3lgm.graphtools.userfield.definition.UserFieldList;
 import de.imise.util.BrowseUtils;
 import de.imise.util.Sys;
 import de.imise.util.htmlxml.HTMLConverter;
-import de.imise.util.swing.component.AlphabeticalComboBox;
 import de.imise.util.swing.component.ParentComponentFinder;
 import de.imise.util.swing.component.text.ExtendedTextArea;
 import de.imise.util.swing.component.text.ExtendedTextField;
@@ -490,21 +489,22 @@ public class PropertyDialogUserFieldPanel extends ElementDialogPanel implements 
             textArea.setText(value);
             editorComponent = new JScrollPane(textArea);
         } else if (style == COMBO_BOX) {
-            AlphabeticalComboBox<String> comboBox = new AlphabeticalComboBox<>(true);
+            JComboBox<String> comboBox = new JComboBox<>();
+            comboBox.addItem("");
             boolean foundEntry = false;
             for (int i = 0; i < field.getListValuesCount(); i++) {
                 String listValue = field.getListValueAt(i);
-                comboBox.addObject(listValue);
+                comboBox.addItem(listValue);
                 if (listValue.equals(value)) {
-                    comboBox.setSelectedObject(listValue);
+                    comboBox.setSelectedItem(listValue);
                     foundEntry = true;
                 }
             }
             if (!foundEntry) {
                 if (!Strings.isNullOrEmpty(value)) {
                     field.addListValue(value);
-                    comboBox.addObject(value);
-                    comboBox.setSelectedObject(value);
+                    comboBox.addItem(value);
+                    comboBox.setSelectedItem(value);
                     foundEntry = true;
                 } else {
                     comboBox.setSelectedIndex(-1);
