@@ -543,6 +543,16 @@ public final class UserField extends NameAndDescriptionTargetAdapter implements 
     }
 
     /**
+     * @param style1
+     * @param style2
+     * @return <code>true</code> if the style of this is the same like one of
+     *         the given styles
+     */
+    public boolean hasStyle(final Style style1, final Style style2) {
+        return style == style1 || style == style2;
+    }
+
+    /**
      * Liefert <code>true</code>, wemm der Style dieses UserFields
      * <code>NUMBER</code> oder <code>FORMULA</code> ist.
      *
@@ -571,6 +581,13 @@ public final class UserField extends NameAndDescriptionTargetAdapter implements 
      */
     public final boolean isGlobal() {
         return targetClass == UserFieldDefinitions.GLOBAL_USERFIELD_IDENTIFIER_CLASS;
+    }
+
+    /**
+     * @return style == Style.SUBTYPE
+     */
+    public boolean isSubtype() {
+        return style == Style.SUBTYPE;
     }
 
     /**

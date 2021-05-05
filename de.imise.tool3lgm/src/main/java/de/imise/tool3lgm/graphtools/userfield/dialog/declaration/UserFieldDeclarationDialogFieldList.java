@@ -181,12 +181,22 @@ public class UserFieldDeclarationDialogFieldList extends JList<NamedObjectContai
      * @return the index where a new item will be inserted depending on the
      *         selection.
      */
-    public int getNextInsertIndex() {
+    public int getNextInsertIndex(final Style style) {
         int[] selectedIndices = getSelectedIndices();
         if (selectedIndices.length == 0) { //nothing selected -> insert after last index
             return getElementCount();
         }
-        return selectedIndices[selectedIndices.length - 1] + 1;
+        int insertIndex = selectedIndices[selectedIndices.length - 1] + 1;
+        if (style == SUBTYPE) { // subtypes can be inserted only before TABs or other SUBTYPEs or as last
+            if (insertIndex != model.size()) { //something is selected but not the last element
+                NamedObjectContainer<UserField> itemAtInsertIndex = model.get(insertIndex);
+                UserField userfieldAtInsertIndex = itemAtInsertIndex.getObject();
+                if (!userfieldAtInsertIndex.hasStyle(SUBTYPE, TAB)) {
+                    return getElementCount();
+                }
+            }
+        }
+        return insertIndex;
     }
 
     /**
@@ -219,9 +229,38 @@ public class UserFieldDeclarationDialogFieldList extends JList<NamedObjectContai
      *
      * @param i
      */
-    private void move(final int step) {
-        List<NamedObjectContainer<UserField>> selectedValuesList = getSelectedValuesList();
+    private void move(int step) {
         int[] selectedIndices = getSelectedIndices();
+        if (step < 0) {
+            int firstSelectedIndex = selectedIndices[0];
+            NamedObjectContainer<UserField> firstSelectedItem = model.get(firstSelectedIndex);
+            UserField firstSelectedObject = firstSelectedItem.getObject();
+            if (firstSelectedObject.hasStyle(SUBTYPE)) {
+                for (int i = firstSelectedIndex - 1; i >= 0; i--) {
+                    NamedObjectContainer<UserField> topOfFirstSelectedItem = model.get(i);
+                    UserField topOfFirstSelectedObject = topOfFirstSelectedItem.getObject();
+                    if (topOfFirstSelectedObject.hasStyle(SUBTYPE, TAB)) {
+                        break;
+                    }
+                    step--;
+                }
+            }
+        } else {
+            int lastSelectedIndex = selectedIndices[selectedIndices.length - 1];
+            NamedObjectContainer<UserField> lastSelectedItem = model.get(lastSelectedIndex);
+            UserField lastSelectedObject = lastSelectedItem.getObject();
+            if (lastSelectedObject.hasStyle(SUBTYPE)) {
+                for (int i = lastSelectedIndex + 2; i < model.size(); i++) {
+                    NamedObjectContainer<UserField> bottomOfFirstSelectedItem = model.get(i);
+                    UserField bottomOfFirstSelectedObject = bottomOfFirstSelectedItem.getObject();
+                    if (bottomOfFirstSelectedObject.hasStyle(SUBTYPE, TAB)) {
+                        break;
+                    }
+                    step++;
+                }
+            }
+        }
+        List<NamedObjectContainer<UserField>> selectedValuesList = getSelectedValuesList();
         List<Integer> indices = Ints.asList(selectedIndices);
         if (step > 0) {
             Collections.reverse(indices);

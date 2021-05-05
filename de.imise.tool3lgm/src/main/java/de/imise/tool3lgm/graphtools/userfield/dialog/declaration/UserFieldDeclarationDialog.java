@@ -266,7 +266,7 @@ public final class UserFieldDeclarationDialog extends AbstractUserFieldDeclarati
             if (is(newButton)) {
                 //Definitionseditor für das neue userField anzeigen
                 UserField.Style style = userFieldTypeComboBox.getSelectedObject();
-                if (style == null) {
+                if (style == null) { //should never happen anymore, because we always set the first style in the list as selected
                     String message = getResString("userFieldDeclarationDialog_chooseType");
                     String title = getResString("fehler");
                     JOptionPane.showMessageDialog(this, message, title, JOptionPane.ERROR_MESSAGE);
@@ -276,7 +276,7 @@ public final class UserFieldDeclarationDialog extends AbstractUserFieldDeclarati
                 //-> neues userField für die selektierte Klassenart anlegen
                 UserField userField = new UserField(selectedClass, style);
                 //das neu erzeugte UserField sofort zur ausgewählten Klasse hinzufügen
-                int nextInsertIndex = fieldList.getNextInsertIndex();
+                int nextInsertIndex = fieldList.getNextInsertIndex(style);
                 definitions.insert(userField, nextInsertIndex);
                 //solange den Dialog zur Definition der Eigenschaften des neuen UserFields zeigen, bis nur konsitente Werte eingegeben wurden
                 int userDefinitionDialogReturnValue;
@@ -460,6 +460,7 @@ public final class UserFieldDeclarationDialog extends AbstractUserFieldDeclarati
                         break;
                     }
                 }
+                //discontinous selection -> disable up and down
                 boolean upButtonEnabled = continiuosSelection;
                 boolean downButtonEnabled = continiuosSelection;
                 if (continiuosSelection) {

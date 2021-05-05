@@ -15,6 +15,7 @@ import static de.imise.tool3lgm.graphtools.userfield.definition.UserField.Style.
 import static de.imise.tool3lgm.graphtools.userfield.definition.UserField.Style.RADIO_BUTTON;
 import static de.imise.tool3lgm.graphtools.userfield.definition.UserField.Style.SEPARATOR;
 import static de.imise.tool3lgm.graphtools.userfield.definition.UserField.Style.SINGLE_LINE;
+import static de.imise.tool3lgm.graphtools.userfield.definition.UserField.Style.SUBTYPE;
 import static de.imise.tool3lgm.graphtools.userfield.definition.UserField.Style.TAB;
 
 import java.awt.BorderLayout;
@@ -249,7 +250,9 @@ public class PropertyDialogUserFieldPanel extends ElementDialogPanel implements 
 
         //Attributdefinitionen des GraphDocumentes holen
         for (UserField userField : tabDefinition) {
-            if (userField.hasStyle(TAB)) {
+            if (userField.hasStyle(SUBTYPE)) {
+                continue;
+            } else if (userField.hasStyle(TAB)) {
                 addTab(userField, constraints);
             } else if (userField.hasStyle(GROUP)) {
                 currentPanel = addGroup(userField, constraints);
