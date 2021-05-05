@@ -188,7 +188,11 @@ public final class UserFieldDefinitionDialog extends AbstractPropertyDialog impl
             JPanel panel = panelList.get(i);
             if (!(panel instanceof NameDescripPanel)) {
                 gbc.gridy++;
+                if (panel instanceof ListValuePanel) {
+                    gbc.weighty = 1.0;
+                }
                 pane.add(panel, gbc);
+                gbc.weighty = 0.0;
             }
         }
         //Ok und Abbrechen-Buttons unten hinzufügen
