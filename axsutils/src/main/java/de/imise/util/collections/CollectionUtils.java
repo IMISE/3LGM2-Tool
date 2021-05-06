@@ -257,6 +257,20 @@ public abstract class CollectionUtils {
     }
 
     /**
+     * @param array
+     * @param element
+     * @return
+     */
+    public static boolean arrayContains(final char[] array, final char element) {
+        for (int i = 0; i < array.length; i++) {
+            if (array[i] == element) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
      * Liefert eine <code>Collection</code> aller Elemente deren Klassenname
      * <b>genau</b> dem übergebenen entspricht.
      *

@@ -13,6 +13,7 @@ import static de.imise.tool3lgm.graphtools.userfield.definition.UserField.Style.
 import static de.imise.tool3lgm.graphtools.userfield.definition.UserField.Style.RADIO_BUTTON;
 import static de.imise.tool3lgm.graphtools.userfield.definition.UserField.Style.SEPARATOR;
 import static de.imise.tool3lgm.graphtools.userfield.definition.UserField.Style.SINGLE_LINE;
+import static de.imise.tool3lgm.graphtools.userfield.definition.UserField.Style.SUBTYPE;
 import static de.imise.tool3lgm.graphtools.userfield.definition.UserField.Style.TAB;
 import static de.imise.tool3lgm.graphtools.userfield.dialog.declaration.UserFieldDeclarationImportExportHandler.exportDefinitions;
 import static de.imise.tool3lgm.graphtools.userfield.dialog.declaration.UserFieldDeclarationImportExportHandler.importDefinitions;
@@ -172,7 +173,6 @@ public final class UserFieldDeclarationDialog extends AbstractUserFieldDeclarati
         userFieldTypeComboBox.removeAllItems();
         boolean isShowGlobalUserFields = classComboBox.isGlobalUserFieldClassSelected();
         if (!isShowGlobalUserFields) {
-
             addStyleCategory("STYLE_TYPE_TEXT");
             addStyle(SINGLE_LINE);
             addStyle(MULTI_LINE);
@@ -194,6 +194,9 @@ public final class UserFieldDeclarationDialog extends AbstractUserFieldDeclarati
             addStyleCategory("STYLE_TYPE_SPECIAL");
             addStyle(HYPERLINK);
             addStyle(ID);
+            if (classComboBox.isNodeClassSelected()) {
+                addStyle(SUBTYPE);
+            }
 
             addStyleCategory("STYLE_TYPE_VIEW");
             addStyle(TAB);
@@ -263,7 +266,7 @@ public final class UserFieldDeclarationDialog extends AbstractUserFieldDeclarati
             if (is(newButton)) {
                 //Definitionseditor für das neue userField anzeigen
                 UserField.Style style = userFieldTypeComboBox.getSelectedObject();
-                if (style == null) {
+                if (style == null) { //should never happen anymore, because we always set the first style in the list as selected
                     String message = getResString("userFieldDeclarationDialog_chooseType");
                     String title = getResString("fehler");
                     JOptionPane.showMessageDialog(this, message, title, JOptionPane.ERROR_MESSAGE);
@@ -273,7 +276,7 @@ public final class UserFieldDeclarationDialog extends AbstractUserFieldDeclarati
                 //-> neues userField für die selektierte Klassenart anlegen
                 UserField userField = new UserField(selectedClass, style);
                 //das neu erzeugte UserField sofort zur ausgewählten Klasse hinzufügen
-                int nextInsertIndex = fieldList.getNextInsertIndex();
+                int nextInsertIndex = fieldList.getNextInsertIndex(style);
                 definitions.insert(userField, nextInsertIndex);
                 //solange den Dialog zur Definition der Eigenschaften des neuen UserFields zeigen, bis nur konsitente Werte eingegeben wurden
                 int userDefinitionDialogReturnValue;
@@ -289,7 +292,9 @@ public final class UserFieldDeclarationDialog extends AbstractUserFieldDeclarati
                     //den Definitions sagen, dass sich was geändert hat
                     definitions.getCollection().getUserFieldDefinitions().initReset();
                     //select the new UserField (if the default tab was added for the very first element in the list-> go to index 1)
-                    fieldList.setSelectedIndex(nextInsertIndex == 0 && !userField.hasStyle(TAB) ? 1 : nextInsertIndex);
+                    int newIndex = nextInsertIndex == 0 && !userField.hasStyle(TAB) ? 1 : nextInsertIndex;
+                    fieldList.setSelectedIndex(newIndex);
+                    fieldList.ensureIndexIsVisible(newIndex);
                     //wenn die Defnition der neuen Kennzahl oder Formel abgebrochen wurde
                 } else {
                     //wieder aus den Definitions entfernen
@@ -457,20 +462,25 @@ public final class UserFieldDeclarationDialog extends AbstractUserFieldDeclarati
                         break;
                     }
                 }
+                //discontinous selection -> disable up and down
                 boolean upButtonEnabled = continiuosSelection;
                 boolean downButtonEnabled = continiuosSelection;
                 if (continiuosSelection) {
                     boolean isShowGlobalUserFields = classComboBox.isGlobalUserFieldClassSelected();
                     if (selectedIndices[0] == 0) { //first element selected -> no up
                         upButtonEnabled = false;
-                    } else if (!isShowGlobalUserFields && selectedIndices[0] == 1 && !fieldList.hasStyle(1, TAB)) { //second element selected but it is not a tab -> no up
-                        upButtonEnabled = false;
+                    } else if (!isShowGlobalUserFields && selectedIndices[0] == 1) {
+                        if (!fieldList.hasStyle(1, TAB, SUBTYPE)) { //second element selected but it is not a tab or subtype -> no up
+                            upButtonEnabled = false;
+                        }
                     }
                     int elementCount = fieldList.getElementCount();
                     if (selectedIndices[selectionCount - 1] == elementCount - 1) { //last list element selected -> no down
                         downButtonEnabled = false;
-                    } else if (!isShowGlobalUserFields && selectedIndices[0] == 0 && !fieldList.hasStyle(selectedIndices[selectionCount - 1] + 1, TAB)) { // only enable down if the very first tab is selected if the selected element after the last selected is a tab too
-                        downButtonEnabled = false;
+                    } else if (!isShowGlobalUserFields && selectedIndices[0] == 0) {
+                        if (!fieldList.hasStyle(selectedIndices[selectionCount - 1] + 1, TAB, SUBTYPE)) { // only enable down if the very first tab is selected if the selected element after the last selected is a tab too
+                            downButtonEnabled = false;
+                        }
                     }
                 }
                 upButton.setEnabled(upButtonEnabled);
@@ -478,6 +488,7 @@ public final class UserFieldDeclarationDialog extends AbstractUserFieldDeclarati
             }
             updateOptionsPanel();
         }
+
     }
 
     /**

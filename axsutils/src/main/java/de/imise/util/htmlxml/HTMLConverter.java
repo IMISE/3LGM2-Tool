@@ -123,30 +123,125 @@ public class HTMLConverter {
     }
 
     /**
+     * Encodes the objects toString() and surrouns this string with <HTML>-Tags.
+     *
+     * @param o
+     * @param bold if <code>true</code> the encoded string will be additional
+     *            surrounded with <B>-Tags
+     * @param italic if <code>true</code> the encoded string will be additional
+     *            surrounded with <I>-Tags
+     * @return
+     */
+    public static final String getTextAsHTMLLabelText(final Object o, final boolean bold, final boolean italic) {
+        String s = String.valueOf(o);
+        s = encode(s);
+        if (italic) {
+            s = italic(s);
+        }
+        if (bold) {
+            s = bold(s);
+        }
+        return html(s);
+    }
+
+    /**
+     * Encodes the objects toString() and surrouns this string with <HTML>-Tags.
+     *
      * @param o
      * @return
      */
     public static final String getTextAsHTMLLabelText(final Object o) {
-        String s = String.valueOf(o);
-        return "<HTML>" + encode(s) + "</HTML>";
+        return getTextAsHTMLLabelText(o, false, false);
     }
 
     /**
+     * Encodes the objects toString() and surrouns this string with
+     * <HTML><B>-Tags (in this order).
+     *
      * @param o
      * @return
      */
     public static final String getTextAsHTMLLabelTextBold(final Object o) {
-        String s = String.valueOf(o);
-        return "<HTML>" + encodeBold(s) + "</HTML>";
+        return getTextAsHTMLLabelText(o, true, false);
     }
 
     /**
+     * Encodes the objects toString() and surrouns this string with
+     * <HTML><I>-Tags (in this order).
+     *
+     * @param o
+     * @return
+     */
+    public static final String getTextAsHTMLLabelTextItalic(final Object o) {
+        return getTextAsHTMLLabelText(o, false, true);
+    }
+
+    /**
+     * Encodes the objects toString() and surrouns this string with
+     * <HTML><B><I>-Tags (in this order).
+     *
+     * @param o
+     * @return
+     */
+    public static final String getTextAsHTMLLabelTextBoldItalic(final Object o) {
+        return getTextAsHTMLLabelText(o, true, true);
+    }
+
+    /**
+     * Encodes the objects toString() and puts this string in <B>-Tags.
+     *
      * @param o
      * @return
      */
     public static final String encodeBold(final Object o) {
         String s = String.valueOf(o);
-        return "<B>" + encode(s) + "</B>";
+        s = encode(s);
+        return bold(s);
+    }
+
+    /**
+     * Encodes the objects toString() and puts this string in <I>-Tags.
+     *
+     * @param o
+     * @return
+     */
+    public static final String encodeItalic(final Object o) {
+        String s = String.valueOf(o);
+        s = encode(s);
+        return italic(s);
+    }
+
+    /**
+     * Puts the objects toString() in <HTML>-Tags without encoding the string.
+     *
+     * @param o
+     * @return
+     */
+    public static final String html(final Object o) {
+        String s = String.valueOf(o);
+        return "<HTML>" + s + "</HTML>";
+    }
+
+    /**
+     * Puts the objects toString() in <B>-Tags without encoding the string.
+     *
+     * @param o
+     * @return
+     */
+    public static final String bold(final Object o) {
+        String s = String.valueOf(o);
+        return "<B>" + s + "</B>";
+    }
+
+    /**
+     * Puts the objects toString() in <I>-Tags without encoding the string.
+     *
+     * @param o
+     * @return
+     */
+    public static final String italic(final Object o) {
+        String s = String.valueOf(o);
+        return "<I>" + s + "</I>";
     }
 
     /**

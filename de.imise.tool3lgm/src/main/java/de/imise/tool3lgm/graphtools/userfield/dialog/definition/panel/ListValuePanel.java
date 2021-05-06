@@ -8,10 +8,11 @@ import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
 import java.awt.BorderLayout;
 
 import javax.swing.BorderFactory;
-import javax.swing.JLabel;
+import javax.swing.JScrollPane;
 
 import de.imise.tool3lgm.graphtools.userfield.definition.UserField;
-import de.imise.util.swing.component.text.ExtendedTextField;
+import de.imise.util.htmlxml.HTMLConverter;
+import de.imise.util.swing.component.text.ExtendedTextPane;
 
 /**
  * @author AXS
@@ -26,30 +27,39 @@ public class ListValuePanel extends AbstractInputPanel {
     /**
      * Eingabefeld für die Listenwerte
      */
-    private final ExtendedTextField valueListTextField = new ExtendedTextField();
+    private final ExtendedTextPane valueListTextField = new ExtendedTextPane();
 
     /**
      * @param userField
      */
     public ListValuePanel(final UserField userField) {
-        super();
         this.userField = userField;
+        String borderTitle = createBorderTitle();
+        setBorder(BorderFactory.createTitledBorder(borderTitle));
 
-        setBorder(BorderFactory.createTitledBorder(getResString("userFieldEditor_values")));
         setLayout(new BorderLayout());
-        add(new JLabel(getResString("userFieldEditor_values_hint")), BorderLayout.NORTH);
-
-        add(valueListTextField, BorderLayout.CENTER);
+        JScrollPane valuesScrollPane = new JScrollPane(valueListTextField);
+        add(valuesScrollPane, BorderLayout.CENTER);
 
         StringBuilder sb = new StringBuilder();
-        if (userField.getListValuesCount() > 0) {
-            sb.append(userField.getListValueAt(0));
-        }
-        for (int i = 1; i < userField.getListValuesCount(); i++) {
-            sb.append("; ");
+        for (int i = 0; i < userField.getListValuesCount(); i++) {
             sb.append(userField.getListValueAt(i));
+            sb.append("\n");
         }
         valueListTextField.setText(sb.toString());
+    }
+
+    /**
+     * @return
+     */
+    private String createBorderTitle() {
+        String borderTitle = getResString("userFieldEditor_values") + " ";
+        borderTitle = HTMLConverter.encode(borderTitle);
+        String hint = getResString("userFieldEditor_values_hint");
+        hint = HTMLConverter.encodeItalic(hint);
+        borderTitle += hint;
+        borderTitle = HTMLConverter.html(borderTitle);
+        return borderTitle;
     }
 
     @Override
@@ -59,9 +69,11 @@ public class ListValuePanel extends AbstractInputPanel {
     @Override
     public void commit() {
         userField.removeAllStandardValues();
-        String[] tokens = valueListTextField.getText().split(";");
+        String text = valueListTextField.getText();
+        text = text.replace("\r\n", "\n");
+        String[] tokens = text.split("\n");
         for (int i = 0; i < tokens.length; i++) {
-            userField.addListValue(tokens[i].trim());
+            userField.addListValue(tokens[i]);
         }
     }
 

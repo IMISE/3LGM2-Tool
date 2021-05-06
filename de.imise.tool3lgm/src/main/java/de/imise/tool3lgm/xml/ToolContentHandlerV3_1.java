@@ -68,35 +68,36 @@ public class ToolContentHandlerV3_1 extends ToolContentHandlerV3_0 {
     @Override
     public void endElement(final String namespaceURI, final String localName, final String qName) throws SAXException {
         try {
+            String value = valueBuilder.toString();
             if (qName.equals("x") && graphViewParameter != null) {
-                graphViewParameter.viewPositionX = Integer.parseInt(elementValue.toString());
+                graphViewParameter.viewPositionX = Integer.parseInt(value);
 
             } else if (qName.equals("y") && graphViewParameter != null) {
-                graphViewParameter.viewPositionY = Integer.parseInt(elementValue.toString());
+                graphViewParameter.viewPositionY = Integer.parseInt(value);
 
             } else if (qName.equals("zoom")) {
                 if (graphViewParameter == null) {
                     return;
                 }
-                graphViewParameter.zoom = Double.parseDouble(elementValue.toString());
+                graphViewParameter.zoom = Double.parseDouble(value);
 
             } else if (qName.equals("shift")) {
-                graphViewParameter.layerGap = Integer.parseInt(elementValue.toString());
+                graphViewParameter.layerGap = Integer.parseInt(value);
 
             } else if (qName.equals("degree")) {
-                graphViewParameter.layerAngle = Integer.parseInt(elementValue.toString());
+                graphViewParameter.layerAngle = Integer.parseInt(value);
 
             } else if (qName.equals("pageSizeFactor")) {
-                szenario.setPageSizeFactor(Double.parseDouble(elementValue.toString()));
+                szenario.setPageSizeFactor(Double.parseDouble(value));
 
             } else if (qName.equals("activeLayer")) {
-                graphViewParameter.activeLayer = Integer.parseInt(elementValue.toString());
+                graphViewParameter.activeLayer = Integer.parseInt(value);
 
             } else if (qName.equals("multiView")) {
-                graphViewParameter.multiView = Boolean.valueOf(elementValue.toString()).booleanValue();
+                graphViewParameter.multiView = Boolean.valueOf(value).booleanValue();
 
             } else if (qName.equals("selected")) {
-                graphViewParameter.selected = Boolean.valueOf(elementValue.toString()).booleanValue();
+                graphViewParameter.selected = Boolean.valueOf(value).booleanValue();
 
             } else if (qName.equals("view")) {
                 graphViewParameter = null;

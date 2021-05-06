@@ -8,11 +8,18 @@ import de.imise.tool3lgm.graphtools.metamodel.CoreMetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
+import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
 import de.imise.tool3lgm.graphtools.userfield.definition.UserFieldTarget;
 import de.imise.util.swing.component.AlphabeticalComboBox;
 
+/**
+ * @author AXS (03.05.2007)
+ */
 public class UserFieldDeclarationDialogClassComboBox extends AlphabeticalComboBox<Class<? extends UserFieldTarget>> {
 
+    /**
+     *
+     */
     private static int lastSelectedIndex = 0;
 
     /**
@@ -44,6 +51,9 @@ public class UserFieldDeclarationDialogClassComboBox extends AlphabeticalComboBo
         }
     }
 
+    /**
+     *
+     */
     public void restoreSelection() {
         try { //metamodel changed -> index maybe invalid
             setSelectedIndex(lastSelectedIndex < 0 ? 0 : lastSelectedIndex);
@@ -52,12 +62,26 @@ public class UserFieldDeclarationDialogClassComboBox extends AlphabeticalComboBo
         }
     }
 
+    /**
+     * @return
+     */
     public Class<? extends UserFieldTarget> getSelectedClass() {
         return getSelectedObject();
     }
 
+    /**
+     * @return
+     */
     public boolean isGlobalUserFieldClassSelected() {
         return getSelectedClass() == GLOBAL_USERFIELD_IDENTIFIER_CLASS;
+    }
+
+    /**
+     * @return
+     */
+    public boolean isNodeClassSelected() {
+        Class<? extends UserFieldTarget> selectedClass = getSelectedClass();
+        return Node.class.isAssignableFrom(selectedClass);
     }
 
     @Override

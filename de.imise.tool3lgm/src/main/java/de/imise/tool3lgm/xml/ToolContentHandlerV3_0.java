@@ -153,7 +153,7 @@ public class ToolContentHandlerV3_0 implements ContentHandler {
     /**
      * String der in der characters Methode ausgelesen wird (Werte eines Tags)
      */
-    protected StringBuilder elementValue = new StringBuilder();
+    protected StringBuilder valueBuilder = new StringBuilder();
 
     /** ID einer Bitmaps */
     protected String iconID = null;
@@ -239,7 +239,7 @@ public class ToolContentHandlerV3_0 implements ContentHandler {
         mainDoc = null;
         containerWithIcon = null;
         gdcoll = null;
-        elementValue = null;
+        valueBuilder = null;
     }
 
     @Override
@@ -253,7 +253,7 @@ public class ToolContentHandlerV3_0 implements ContentHandler {
     @Override
     public void startElement(final String namespaceURI, final String localName, final String qName, final Attributes atts) throws SAXException {
         try {
-            elementValue.setLength(0);
+            valueBuilder.setLength(0);
 
             if (qName.equals("field")) {
                 field = atts.getValue("name");
@@ -524,6 +524,7 @@ public class ToolContentHandlerV3_0 implements ContentHandler {
     public void endElement(final String namespaceURI, final String localName, final String qName) throws SAXException {
         //		System.out.println("end: " + qName);
         try {
+            String value = String.valueOf(valueBuilder);
             if (qName.equals("field")) {
                 if (element != null) {
                     //Bei Aufgaben gab es die Felder requirement und note. Sollten Modelle
@@ -532,7 +533,7 @@ public class ToolContentHandlerV3_0 implements ContentHandler {
                     //description, requirement und note stehen in genau dieser Reihenfolge
                     //in der Datei.
                     if (field.equals("requirement") || field.equals("note")) {
-                        String value = elementValue.toString().trim();
+                        value = value.trim();
                         if (!value.equals("")) {
                             StringBuilder sb = new StringBuilder(element.getDescription());
                             sb.append("\n\n\n##### ");
@@ -549,11 +550,11 @@ public class ToolContentHandlerV3_0 implements ContentHandler {
                             userField = new UserField(elementClass, UserField.Style.ID);
                             userFieldDefinitions.add(userField);
                         }
-                        element.setUserFieldInputValue(userField, elementValue.toString());
+                        element.setUserFieldInputValue(userField, value);
                     } else if (field.toLowerCase().startsWith("optional")) {
                         if (element instanceof OptionalEdge) {
                             OptionalEdge optionalEdge = (OptionalEdge) element;
-                            if (Boolean.parseBoolean(elementValue.toString())) {
+                            if (Boolean.parseBoolean(value)) {
                                 gdcoll.addOptional(optionalEdge);
                             }
                         }
@@ -562,12 +563,12 @@ public class ToolContentHandlerV3_0 implements ContentHandler {
                         //aus den ModelConstants bzw. aus dem beim Einlesen der Elemente gerafde aktiven Layer ergibt.
                         //Weg lassen darf man die Abfrage hier aber auch nicht, weil wenn layer als Attribut angegeben ist und nicht hier ausgewertet
                         //wird, dann kommt es zu einem Fehler, wenn man dieses Attribut gar nicht auswertet
-                    } else if (!ToolContentHandlerV3_0_DeprecatedValuesHandler.putDeprecatedXMLFieldString(gdcoll, element, field, elementValue.toString())) {
-                        if (!element.putXMLFieldString(field, elementValue.toString())) {
+                    } else if (!ToolContentHandlerV3_0_DeprecatedValuesHandler.putDeprecatedXMLFieldString(gdcoll, element, field, value)) {
+                        if (!element.putXMLFieldString(field, value)) {
                             if (!field.equals("state")) {
                                 //Tue nichts bei state. Bei Modellen bis zur 3.6 hatten alle Kanten einen State = die Richtung. Jetzt haben nur noch DoubleMeaningEdges den State, da man ihn bei den anderen nicht braucht.
                                 //bei allen anderen nicht verarbeitbaren Values -> gib einen Fehler aus
-                                throw new SAXException("ModelElement konnte field nicht verarbeiten!\n ModelElement=" + element.getID() + "\n field=" + field + "\n Wert=" + elementValue);
+                                throw new SAXException("ModelElement konnte field nicht verarbeiten!\n ModelElement=" + element.getID() + "\n field=" + field + "\n Wert=" + value);
                             }
                         }
                     }
@@ -575,14 +576,13 @@ public class ToolContentHandlerV3_0 implements ContentHandler {
                 field = null;
 
             } else if (qName.equals("userField")) {
-                String val = elementValue.toString();
                 //wenn eine Benutzerdefinierte Eigenschaft für ein Element eingelesen werden soll
                 if (element != null) {
-                    element.setUserFieldInputValue(userFieldDefinitions.getUserField(field), val);
+                    element.setUserFieldInputValue(userFieldDefinitions.getUserField(field), value);
                 }
                 //Benutzerdefinierte Eigenschaft für das Modell (GDCollection)
                 else {
-                    gdcoll.setUserFieldInputValue(userFieldDefinitions.getUserField(field), val);
+                    gdcoll.setUserFieldInputValue(userFieldDefinitions.getUserField(field), value);
                 }
                 field = null;
 
@@ -646,18 +646,18 @@ public class ToolContentHandlerV3_0 implements ContentHandler {
 
             } else if (qName.equals("expanded")) {
                 if (container != null) {
-                    container.setExpanded(Boolean.valueOf(elementValue.toString()).booleanValue());
+                    container.setExpanded(Boolean.valueOf(value).booleanValue());
                 }
 
             } else if (qName.equals("visible")) {
                 if (container != null) {
-                    container.setVisible(Boolean.valueOf(elementValue.toString()).booleanValue());
+                    container.setVisible(Boolean.valueOf(value).booleanValue());
                 }
             } else if (qName.equals("x")) {
                 if (layout == null) {
                     return;
                 }
-                layout.x = Integer.parseInt(elementValue.toString());
+                layout.x = Integer.parseInt(value);
 
                 if (isCopyAndPaste()) {
                     layout.x = layout.x + 10 * copyAndPastePositionShift;
@@ -667,7 +667,7 @@ public class ToolContentHandlerV3_0 implements ContentHandler {
                 if (layout == null) {
                     return;
                 }
-                layout.y = Integer.parseInt(elementValue.toString());
+                layout.y = Integer.parseInt(value);
 
                 if (isCopyAndPaste()) {
                     layout.y = layout.y + 10 * copyAndPastePositionShift;
@@ -677,25 +677,25 @@ public class ToolContentHandlerV3_0 implements ContentHandler {
                 if (layout == null) {
                     return;
                 }
-                layout.width = Integer.parseInt(elementValue.toString());
+                layout.width = Integer.parseInt(value);
 
             } else if (qName.equals("height")) {
                 if (layout == null) {
                     return;
                 }
-                layout.height = Integer.parseInt(elementValue.toString());
+                layout.height = Integer.parseInt(value);
 
             } else if (qName.equals("red")) {
-                color = new Color(Integer.parseInt(elementValue.toString()), color.getGreen(), color.getBlue(), color.getAlpha());
+                color = new Color(Integer.parseInt(value), color.getGreen(), color.getBlue(), color.getAlpha());
 
             } else if (qName.equals("green")) {
-                color = new Color(color.getRed(), Integer.parseInt(elementValue.toString()), color.getBlue(), color.getAlpha());
+                color = new Color(color.getRed(), Integer.parseInt(value), color.getBlue(), color.getAlpha());
 
             } else if (qName.equals("blue")) {
-                color = new Color(color.getRed(), color.getGreen(), Integer.parseInt(elementValue.toString()), color.getAlpha());
+                color = new Color(color.getRed(), color.getGreen(), Integer.parseInt(value), color.getAlpha());
 
             } else if (qName.equals("alpha")) {
-                color = new Color(color.getRed(), color.getGreen(), color.getBlue(), Integer.parseInt(elementValue.toString()));
+                color = new Color(color.getRed(), color.getGreen(), color.getBlue(), Integer.parseInt(value));
 
             } else if (qName.equals("color")) {
                 if (layout == null) {
@@ -716,8 +716,7 @@ public class ToolContentHandlerV3_0 implements ContentHandler {
                 if (layout == null) {
                     return;
                 }
-                String elementValueString = elementValue.toString();
-                int formIndex = Integer.parseInt(elementValueString);
+                int formIndex = Integer.parseInt(value);
                 Shape[] shapes = Shape.values();
                 layout.form = shapes[formIndex];
 
@@ -725,7 +724,7 @@ public class ToolContentHandlerV3_0 implements ContentHandler {
                 if (layout == null) {
                     return;
                 }
-                String name = elementValue.toString().trim();
+                String name = value.trim();
                 if (layout.getFont() == null) {
                     layout.setFont(new Font(name, GraphElementLayout.STANDARD_FONT_STYLE, GraphElementLayout.STANDARD_FONT_SIZE));
                 } else {
@@ -736,7 +735,7 @@ public class ToolContentHandlerV3_0 implements ContentHandler {
                 if (layout == null) {
                     return;
                 }
-                int size = Integer.parseInt(elementValue.toString());
+                int size = Integer.parseInt(value);
                 if (layout.getFont() == null) {
                     layout.setFont(new Font(GraphElementLayout.STANDARD_FONT_NAME, GraphElementLayout.STANDARD_FONT_STYLE, size));
                 } else {
@@ -747,7 +746,7 @@ public class ToolContentHandlerV3_0 implements ContentHandler {
                 if (layout == null) {
                     return;
                 }
-                int style = Integer.parseInt(elementValue.toString());
+                int style = Integer.parseInt(value);
                 if (layout.getFont() == null) {
                     layout.setFont(new Font(GraphElementLayout.STANDARD_FONT_NAME, style, GraphElementLayout.STANDARD_FONT_SIZE));
                 } else {
@@ -758,24 +757,23 @@ public class ToolContentHandlerV3_0 implements ContentHandler {
                 if (layout == null) {
                     return;
                 }
-                layout.line_style = Integer.parseInt(elementValue.toString());
+                layout.line_style = Integer.parseInt(value);
 
             } else if (qName.equals("line_thickness")) {
                 if (layout == null) {
                     return;
                 }
-                layout.line_thickness = Integer.parseInt(elementValue.toString());
+                layout.line_thickness = Integer.parseInt(value);
 
             } else if (qName.equals("halign")) {
                 if (layout == null) {
                     return;
                 }
-                String elementValueString = elementValue.toString();
                 try {
-                    layout.textPositionHorizontal = TextPositionHorizontal.valueOf(elementValueString);
+                    layout.textPositionHorizontal = TextPositionHorizontal.valueOf(value);
                 } catch (Exception e) { //alte Dateien -> SwingContstants
                     try {
-                        int swingConstantValue = Integer.parseInt(elementValueString);
+                        int swingConstantValue = Integer.parseInt(value);
                         TextPositionHorizontal textPositionHorizontal = TextPositionHorizontal.getValueForSwingConstant(swingConstantValue);
                         layout.textPositionHorizontal = textPositionHorizontal;
                     } catch (Exception ex) {
@@ -787,12 +785,11 @@ public class ToolContentHandlerV3_0 implements ContentHandler {
                 if (layout == null) {
                     return;
                 }
-                String elementValueString = elementValue.toString();
                 try {
-                    layout.textPositionVertical = TextPositionVertical.valueOf(elementValueString);
+                    layout.textPositionVertical = TextPositionVertical.valueOf(value);
                 } catch (Exception e) { //alte Dateien (< 3.8)-> SwingContstants, also int-Werte
                     try {
-                        int swingConstantValue = Integer.parseInt(elementValueString);
+                        int swingConstantValue = Integer.parseInt(value);
                         //bei alten Dateien, bei denen ein Icon für den Container gesetzt ist (das <icon>-Tag
                         //wird vor dem <valign>-Tag eingelesen) und das valign auf CENTER stand, wurde aber
                         //trotzdem auf BOTTOM gerendert. Damit das erhalten bleibt, wird das BOTTOM, das beim
@@ -811,9 +808,8 @@ public class ToolContentHandlerV3_0 implements ContentHandler {
                 if (layout == null) {
                     return;
                 }
-                String elementValueString = elementValue.toString();
                 try {
-                    layout.textAlignmentHTML = TextAlignmentHTML.valueOf(elementValueString);
+                    layout.textAlignmentHTML = TextAlignmentHTML.valueOf(value);
                 } catch (Exception e) { //alte Dateien haben diesen Eintrag nicht (ab "3.8", //"<!--Tool3lgmFile version='3.7'-->", //12 -> ab Tool-Version 4.1.0)
                     // ignore -> default alignment
                 }
@@ -835,7 +831,7 @@ public class ToolContentHandlerV3_0 implements ContentHandler {
                 classType = null;
 
             } else if (qName.equals("icon")) {
-                layout.setIconID(elementValue.toString());
+                layout.setIconID(value);
                 //in alten Dateien (< 3.8) ist das valign mit ints codiert und bei Elementen mit Icon zwar
                 //0, was eigentlich CENTER bedeutet, aber bei Icons auf BOTTOM uminterpretiert wurde ->
                 //das Icon wird hier vor dem valign eingelesen und wenn es ein Icon hat, dann erstmal
@@ -874,14 +870,14 @@ public class ToolContentHandlerV3_0 implements ContentHandler {
 
             } else if (qName.equals("description")) {
                 if (szenario != null) {
-                    szenario.setDescription(elementValue.toString());
+                    szenario.setDescription(value);
                 } else if (mainDoc != null) {
-                    mainDoc.setDescription(elementValue.toString());
+                    mainDoc.setDescription(value);
                 }
 
             } else if (qName.equals("bitmap")) {
                 if (iconID != null && !gdcoll.getIconTable().containsKey(iconID)) {
-                    gdcoll.getIconTable().put(iconID, Base64.decode(elementValue.toString()));
+                    gdcoll.getIconTable().put(iconID, Base64.decode(value));
                 }
 
                 iconID = null;
@@ -894,7 +890,7 @@ public class ToolContentHandlerV3_0 implements ContentHandler {
 
             } else if (qName.equals("version")) {
                 GDCollectionFileHandler fileHandler = gdcoll.getFileHandler();
-                fileHandler.setFileVersion(elementValue.toString());
+                fileHandler.setFileVersion(value);
 
             } else if (qName.equals("avoidDuplicates")) {
                 avoidDuplicates = false;
@@ -927,7 +923,6 @@ public class ToolContentHandlerV3_0 implements ContentHandler {
                 if (userField == null) {
                     throw new SAXException("Error while parsing definition of userFields: userField shouldn't not be null");
                 }
-                String value = elementValue.toString();
                 if (qName.equals("userFieldStyle")) {
                     //Style.NUMER was Style.CLASSIFICATION_NUMBER and
                     //Style.FORMULA was Style.CLASSIFICATION_NUMBER_FORMULA
@@ -954,7 +949,6 @@ public class ToolContentHandlerV3_0 implements ContentHandler {
                 if (userFieldNumberFormat == null) {
                     throw new SAXException("Error while parsing definition of userFields: userFieldNumberFormat shouldn't not be null");
                 }
-                String value = elementValue.toString();
                 userFieldNumberFormat.putXMLFieldString(qName, value);
 
             } else if (qName.equals("modell_3lgm_2") || qName.equals("tool3lgm_clipboard")) {
@@ -1006,7 +1000,7 @@ public class ToolContentHandlerV3_0 implements ContentHandler {
 
     @Override
     public void characters(final char[] arg0, final int arg1, final int arg2) throws SAXException {
-        elementValue.append(String.valueOf(arg0, arg1, arg2));
+        valueBuilder.append(String.valueOf(arg0, arg1, arg2));
     }
 
     @Override
