@@ -18,7 +18,7 @@ public class UrlInStringFinderTest {
         Assert.assertNull(result1.file);
         Assert.assertEquals(result1.url, "www.3lgm2.de");
         Assert.assertEquals(result1.startIndexInOriginal, 0);
-        Assert.assertEquals(result1.lengthInOriginal, s1.length());
+        Assert.assertEquals(result1.endIndexInOriginal, s1.length());
 
         String s2 = " \"www.3lgm2.de\";";
         UrlFinderResult result2 = finder.getResult(s2);
@@ -26,7 +26,7 @@ public class UrlInStringFinderTest {
         Assert.assertNull(result2.file);
         Assert.assertEquals(result2.url, "www.3lgm2.de");
         Assert.assertEquals(result2.startIndexInOriginal, 2);
-        Assert.assertEquals(result2.lengthInOriginal, result2.url.length());
+        Assert.assertEquals(result2.endIndexInOriginal, result2.startIndexInOriginal + result2.url.length());
 
     }
 
@@ -37,16 +37,18 @@ public class UrlInStringFinderTest {
         List<UrlFinderResult> results1 = finder.getResults(s1);
         //Sys.err1(results1);
         UrlFinderResult result1 = results1.get(0);
+        Assert.assertEquals(result1.original, s1);
         Assert.assertNull(result1.file);
         Assert.assertEquals(result1.url, "www.3lgm2.de");
-        Assert.assertEquals(result1.startIndexInOriginal, 0);
-        Assert.assertEquals(result1.lengthInOriginal, "www.3lgm2.de".length());
+        Assert.assertEquals(result1.startIndexInOriginal, "Weitere Infos unter ".length());
+        Assert.assertEquals(result1.endIndexInOriginal, result1.startIndexInOriginal + result1.url.length());
 
         UrlFinderResult result2 = results1.get(1);
+        Assert.assertEquals(result2.original, s1);
         Assert.assertNull(result2.file);
         Assert.assertEquals(result2.url, "https://www.wikipedia.de");
-        Assert.assertEquals(result2.startIndexInOriginal, 0);
-        Assert.assertEquals(result2.lengthInOriginal, "https://www.wikipedia.de".length());
+        Assert.assertEquals(result2.startIndexInOriginal, "Weitere Infos unter www.3lgm2.de oder unter ".length());
+        Assert.assertEquals(result2.endIndexInOriginal, result2.startIndexInOriginal + result2.url.length());
 
     }
 

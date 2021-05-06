@@ -28,11 +28,11 @@ public class UrlInStringFinder {
 
         public int startIndexInOriginal;
 
-        public int lengthInOriginal;
+        public int endIndexInOriginal;
 
         @Override
         public String toString() {
-            return "original=" + original + "\nurl=" + url + "\nfile=" + file + "\nstartIndexInOriginal=" + startIndexInOriginal + "\nlengthInOriginal=" + lengthInOriginal;
+            return "original=" + original + "\nurl=" + url + "\nfile=" + file + "\nstartIndexInOriginal=" + startIndexInOriginal + "\nendIndexInOriginal=" + endIndexInOriginal;
         }
 
         /**
@@ -51,7 +51,7 @@ public class UrlInStringFinder {
 
     /**  */
     private static final char[] removeEndChars = {
-            ' ', '\"', '\'', '.', ',', ';', ')', ']', '}',
+            ' ', '\"', '\'', '.', ',', ';', ')', ']', '}'
     };
 
     /**  */
@@ -113,7 +113,7 @@ public class UrlInStringFinder {
     private UrlFinderResult trim(final String s) {
         UrlFinderResult result = new UrlFinderResult();
         result.original = s;
-
+        result.endIndexInOriginal = s.length();
         StringBuilder sb = new StringBuilder(s);
         while (sb.length() != 0) {
             char firstChar = sb.charAt(0);
@@ -130,10 +130,8 @@ public class UrlInStringFinder {
                 break;
             }
             sb.deleteCharAt(lastIndex);
-            result.lengthInOriginal++; //temporarily store the number of deleted chares here
+            result.endIndexInOriginal--; //temporarily store the number of deleted chares here
         }
-        //calculate the correct result length in orifginal string
-        result.lengthInOriginal = result.original.length() - result.startIndexInOriginal - result.lengthInOriginal;
         result.url = sb == null ? s : sb.toString(); //here it is only the possible url (or file)
         return result;
     }
@@ -157,6 +155,9 @@ public class UrlInStringFinder {
                 String token = text.substring(startIndex, endIndex);
                 UrlFinderResult result = getResult(token);
                 if (result.hasUrlOrFile()) {
+                    result.original = text;
+                    result.startIndexInOriginal = startIndex;
+                    result.endIndexInOriginal = startIndex + result.url.length();
                     results.add(result);
                 }
                 startIndex = -1;
