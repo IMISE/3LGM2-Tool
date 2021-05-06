@@ -19,7 +19,6 @@ import static de.imise.tool3lgm.graphtools.userfield.definition.UserField.Style.
 import static de.imise.tool3lgm.graphtools.userfield.definition.UserField.Style.TAB;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Component;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
@@ -29,7 +28,6 @@ import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -49,11 +47,9 @@ import javax.swing.JRadioButton;
 import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
-import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.JViewport;
 import javax.swing.SwingConstants;
-import javax.swing.UIManager;
 import javax.swing.border.Border;
 import javax.swing.border.TitledBorder;
 import javax.swing.text.JTextComponent;
@@ -73,10 +69,7 @@ import de.imise.tool3lgm.graphtools.userfield.definition.UserField.Style;
 import de.imise.tool3lgm.graphtools.userfield.definition.UserFieldList;
 import de.imise.util.BrowseUtils;
 import de.imise.util.Sys;
-import de.imise.util.UrlInStringFinder;
-import de.imise.util.UrlInStringFinder.UrlFinderResult;
 import de.imise.util.htmlxml.HTMLConverter;
-import de.imise.util.pair.Pair;
 import de.imise.util.swing.component.ParentComponentFinder;
 import de.imise.util.swing.component.text.ExtendedTextArea;
 import de.imise.util.swing.component.text.ExtendedTextField;
@@ -151,9 +144,6 @@ public class PropertyDialogUserFieldPanel extends ElementDialogPanel implements 
      *
      */
     private boolean scrollBackToTop = true;
-
-    /** Extracts a link from a text */
-    private static final UrlInStringFinder urlFinder = new UrlInStringFinder();
 
     /**
      * @param propertyDialog
@@ -382,7 +372,8 @@ public class PropertyDialogUserFieldPanel extends ElementDialogPanel implements 
             if (userField.isShowDescriptionInDialog()) {
                 constraints.insets.top = 0;
                 constraints.weightx = 0d;
-                panel.add(getDescriptionLabel(description), constraints);
+                PropertyDialogUserFieldPanelDescriptionLabel label = new PropertyDialogUserFieldPanelDescriptionLabel(description);
+                panel.add(label, constraints);
                 constraints.insets.top = STANDARD_HORIZONTAL_INSETS;
                 constraints.weightx = 1d;
                 constraints.gridy++;
@@ -390,83 +381,6 @@ public class PropertyDialogUserFieldPanel extends ElementDialogPanel implements 
             }
         }
         return false;
-    }
-
-    /**
-     * @param description
-     * @return
-     */
-    protected JComponent getDescriptionLabel(final String description) {
-        JTextArea textField = new JTextArea();
-        textField.setLineWrap(true);
-        textField.setWrapStyleWord(true);
-        textField.setEnabled(false);
-        Color textColor = UIManager.getColor("Label.foreground");
-        textField.setDisabledTextColor(textColor);
-        Color backgroundColor = UIManager.getColor("Label.background");
-        textField.setBackground(backgroundColor);
-        textField.setBorder(null);
-        textField.setFont(getDescriptionFont());
-        textField.setText(description);
-        addDescriptionMouseListener(textField);
-        return textField;
-    }
-
-    /**
-     * @return the font used to write descriptions
-     */
-    private Font getDescriptionFont() {
-        Font font = UIManager.getFont("Label.font");
-        font = font.deriveFont(Font.ITALIC);
-        return font;
-    }
-
-    private void addDescriptionMouseListener(final JTextComponent descriptionLabel) {
-        String description = descriptionLabel.getText();
-        Pair<Action, String> descriptionBrowseActionAndUrl = getDescriptionBrowseAction(description);
-        if (descriptionBrowseActionAndUrl != null) {
-            Action descriptionBrowseAction = descriptionBrowseActionAndUrl.getFirstItem();
-            MouseListener descriptionMouseListener = getDoubleClickOrCtrlClickMouseListener(descriptionBrowseAction);
-            descriptionLabel.addMouseListener(descriptionMouseListener);
-            String tooltip = getResString("TOOLTIP_USERFIELD_LINK") + ": " + descriptionBrowseActionAndUrl.getSecondItem();
-            descriptionLabel.setToolTipText(tooltip);
-        }
-    }
-
-    /**
-     * @param s
-     * @return
-     */
-    private Pair<Action, String> getDescriptionBrowseAction(final String description) {
-        List<UrlFinderResult> results = urlFinder.getResults(description);
-        if (results.isEmpty()) {
-            return null;
-        }
-        String url = results.get(0).url;
-        Action browseAction = new AbstractAction(">>") {
-            @Override
-            public void actionPerformed(final ActionEvent e) {
-                if (!Strings.isNullOrEmpty(url)) {
-                    BrowseUtils.browse(url);
-                }
-            }
-        };
-        return new Pair<>(browseAction, url);
-    }
-
-    /**
-     * @param action
-     * @return
-     */
-    private MouseListener getDoubleClickOrCtrlClickMouseListener(final Action action) {
-        return new MouseAdapter() {
-            @Override
-            public void mouseClicked(final MouseEvent e) {
-                if (e.getClickCount() == 1 && e.isControlDown() || e.getClickCount() > 1) {
-                    action.actionPerformed(null);
-                }
-            }
-        };
     }
 
     /**
@@ -744,7 +658,7 @@ public class PropertyDialogUserFieldPanel extends ElementDialogPanel implements 
             //Das ist besonders bei Kennzahlen wichtig, da diese, wenn sie nicht den Focus haben, immer
             //den formatierten Wert (also evtl. mit Einheit und im Gegensatz zum eigentlichen Eingabewert
             //mit einer anderen Anzahl von Nachkommastellen) anzeigen. Das würde hier als Änderung erkannt
-            //werden und somit der formatierte Wert als Eingabewert gesetzt werden (was ei Einheiten zu
+            //werden und so)mit der formatierte Wert als Eingabewert gesetzt werden (was ei Einheiten zu
             //NUMBER_FORMAT_ERROR führt und ansonsten die Anzahl der angeblich eingegebenen Nachkommastellen
             //ändern kann.
             if (!editorComponent.hasFocus()) {

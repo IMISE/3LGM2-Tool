@@ -3,6 +3,9 @@ package de.imise.util;
 import java.awt.Desktop;
 import java.io.File;
 import java.net.URI;
+import java.net.URL;
+
+import javax.swing.event.HyperlinkEvent;
 
 /**
  * Stellt Funktionen zum Öffnen von Dateien, Verzeichnissen oder Webseiten
@@ -68,8 +71,10 @@ public class BrowseUtils {
                 URI uri = new URI(fullUri);
                 browse(uri);
             } catch (Exception ex) {
+                int protocelStartIndex = urlOrPath.indexOf("://") + 3;
+                String url = protocelStartIndex >= 0 ? urlOrPath.substring(protocelStartIndex) : urlOrPath;
                 try {
-                    URI uri = new URI("http://" + urlOrPath);
+                    URI uri = new URI("http://" + url);
                     browse(uri);
                 } catch (Exception exx) {
                     return false;
@@ -92,6 +97,22 @@ public class BrowseUtils {
             return false;
         }
         return true;
+    }
+
+    /**
+     * Öffnet die übergebene URI, je nachdem was es ist als Datei, als
+     * Verzeichnis oder als Webseite.
+     *
+     * @param uri
+     */
+    public static final boolean browse(final HyperlinkEvent event) {
+        URL url = event.getURL();
+        try {
+            URI uri = url.toURI();
+            return browse(uri);
+        } catch (Exception e) {
+            return browse(url);
+        }
     }
 
 }
