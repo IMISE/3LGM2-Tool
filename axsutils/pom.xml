@@ -39,6 +39,12 @@
 		<!-- <version>4.3</version> -->
 		<!-- </dependency> -->
 		<!-- https://mvnrepository.com/artifact/net.java.dev.stax-utils/stax-utils -->
+		<!-- https://mvnrepository.com/artifact/commons-validator/commons-validator -->
+		<dependency>
+			<groupId>commons-validator</groupId>
+			<artifactId>commons-validator</artifactId>
+			<version>1.7</version>
+		</dependency>
 		<dependency>
 			<groupId>net.java.dev.stax-utils</groupId>
 			<artifactId>stax-utils</artifactId>
