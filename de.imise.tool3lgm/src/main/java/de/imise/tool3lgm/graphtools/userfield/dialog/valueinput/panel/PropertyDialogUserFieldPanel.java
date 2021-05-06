@@ -315,8 +315,8 @@ public class PropertyDialogUserFieldPanel extends ElementDialogPanel implements 
      * @param constraints
      */
     protected void addAttribute(final UserField userField, final JPanel panel, final GridBagConstraints constraints) {
-        JComponent label = getTitleLabel(userField);
-        JComponent editor = getEditor(userField);
+        JLabel label = getTitleLabel(userField);
+        JComponent editor = getEditor(userField, label);
         constraints.insets.top = constraints.gridy > 0 ? STANDARD_HORIZONTAL_INSETS : 0;
         if (showAttributeLabelAndEditorSideBySide) {
             constraints.gridwidth = 1;
@@ -472,9 +472,10 @@ public class PropertyDialogUserFieldPanel extends ElementDialogPanel implements 
      * der Editor deaktiviert.
      *
      * @param field
+     * @param label
      * @return
      */
-    protected JComponent getEditor(final UserField field) {
+    protected JComponent getEditor(final UserField field, final JLabel label) {
         String value = getFormattedValue(field);
         UserField.Style style = field.getStyle();
         JComponent editorComponent = null;
@@ -530,15 +531,15 @@ public class PropertyDialogUserFieldPanel extends ElementDialogPanel implements 
             }
             editorComponent = flowLayoutPanel;
         } else if (style == CHECK_BOX) {
-            String label = showAttributeLabelAndEditorSideBySide ? "" : field.getName();
-            label = HTMLConverter.getTextAsHTMLLabelTextBold(label);
-            editorComponent = new JCheckBox(label, value.equals(CHECKBOX_TRUE));
+            String fieldLabel = showAttributeLabelAndEditorSideBySide ? "" : field.getName();
+            fieldLabel = HTMLConverter.getTextAsHTMLLabelTextBold(fieldLabel);
+            editorComponent = new JCheckBox(fieldLabel, value.equals(CHECKBOX_TRUE));
         } else if (style == HYPERLINK) {
             final ExtendedTextField textField = new ExtendedTextField(value);
             JPanel hyperlinkPanel = new JPanel();
             hyperlinkPanel.setLayout(new BorderLayout());
             hyperlinkPanel.add(textField, BorderLayout.CENTER);
-            final JButton button = getHyperlinkButton(textField);
+            final JButton button = getHyperlinkButtonAndInitListeners(label, textField);
             hyperlinkPanel.add(button, BorderLayout.EAST);
             editorComponent = hyperlinkPanel;
             //Kennzahlen:
@@ -624,14 +625,14 @@ public class PropertyDialogUserFieldPanel extends ElementDialogPanel implements 
     }
 
     /**
+     * @param label
      * @param hyperlinkText
      * @return
      */
-    private JButton getHyperlinkButton(final JTextComponent hyperlinkText) {
+    private JButton getHyperlinkButtonAndInitListeners(final JLabel label, final JTextComponent hyperlinkText) {
         // Der Button, der für einen Hyperlink das öffnen eines Browsers
         // ermöglicht.
         final JButton button = new JButton(new AbstractAction(">>") {
-
             @Override
             public void actionPerformed(final ActionEvent e) {
                 String urlOrPath = hyperlinkText.getText().trim();
@@ -640,16 +641,23 @@ public class PropertyDialogUserFieldPanel extends ElementDialogPanel implements 
                 }
             }
         });
-        //auch bei Doppelklick oder Klick mit STRG den Link öffnen
-        hyperlinkText.addMouseListener(new MouseAdapter() {
-
+        MouseAdapter mouseAdapter = new MouseAdapter() {
             @Override
             public void mouseClicked(final MouseEvent e) {
                 if (e.getClickCount() == 1 && e.isControlDown() || e.getClickCount() > 1) {
                     button.doClick();
                 }
             }
-        });
+        };
+
+        //auch bei Doppelklick oder Klick mit STRG den Link öffnen
+        label.addMouseListener(mouseAdapter);
+        hyperlinkText.addMouseListener(mouseAdapter);
+
+        String tooltip = getResString("TOOLTIP_USERFIELD_LINK");
+        label.setToolTipText(tooltip);
+        hyperlinkText.setToolTipText(tooltip);
+
         return button;
     }
 
