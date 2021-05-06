@@ -29,12 +29,14 @@ import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.AbstractAction;
 import javax.swing.AbstractButton;
+import javax.swing.Action;
 import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
@@ -71,7 +73,10 @@ import de.imise.tool3lgm.graphtools.userfield.definition.UserField.Style;
 import de.imise.tool3lgm.graphtools.userfield.definition.UserFieldList;
 import de.imise.util.BrowseUtils;
 import de.imise.util.Sys;
+import de.imise.util.UrlInStringFinder;
+import de.imise.util.UrlInStringFinder.UrlFinderResult;
 import de.imise.util.htmlxml.HTMLConverter;
+import de.imise.util.pair.Pair;
 import de.imise.util.swing.component.ParentComponentFinder;
 import de.imise.util.swing.component.text.ExtendedTextArea;
 import de.imise.util.swing.component.text.ExtendedTextField;
@@ -146,6 +151,9 @@ public class PropertyDialogUserFieldPanel extends ElementDialogPanel implements 
      *
      */
     private boolean scrollBackToTop = true;
+
+    /** Extracts a link from a text */
+    private static final UrlInStringFinder urlFinder = new UrlInStringFinder();
 
     /**
      * @param propertyDialog
@@ -400,6 +408,7 @@ public class PropertyDialogUserFieldPanel extends ElementDialogPanel implements 
         textField.setBorder(null);
         textField.setFont(getDescriptionFont());
         textField.setText(description);
+        addDescriptionMouseListener(textField);
         return textField;
     }
 
@@ -410,6 +419,54 @@ public class PropertyDialogUserFieldPanel extends ElementDialogPanel implements 
         Font font = UIManager.getFont("Label.font");
         font = font.deriveFont(Font.ITALIC);
         return font;
+    }
+
+    private void addDescriptionMouseListener(final JTextComponent descriptionLabel) {
+        String description = descriptionLabel.getText();
+        Pair<Action, String> descriptionBrowseActionAndUrl = getDescriptionBrowseAction(description);
+        if (descriptionBrowseActionAndUrl != null) {
+            Action descriptionBrowseAction = descriptionBrowseActionAndUrl.getFirstItem();
+            MouseListener descriptionMouseListener = getDoubleClickOrCtrlClickMouseListener(descriptionBrowseAction);
+            descriptionLabel.addMouseListener(descriptionMouseListener);
+            String tooltip = getResString("TOOLTIP_USERFIELD_LINK") + ": " + descriptionBrowseActionAndUrl.getSecondItem();
+            descriptionLabel.setToolTipText(tooltip);
+        }
+    }
+
+    /**
+     * @param s
+     * @return
+     */
+    private Pair<Action, String> getDescriptionBrowseAction(final String description) {
+        List<UrlFinderResult> results = urlFinder.getResults(description);
+        if (results.isEmpty()) {
+            return null;
+        }
+        String url = results.get(0).url;
+        Action browseAction = new AbstractAction(">>") {
+            @Override
+            public void actionPerformed(final ActionEvent e) {
+                if (!Strings.isNullOrEmpty(url)) {
+                    BrowseUtils.browse(url);
+                }
+            }
+        };
+        return new Pair<>(browseAction, url);
+    }
+
+    /**
+     * @param action
+     * @return
+     */
+    private MouseListener getDoubleClickOrCtrlClickMouseListener(final Action action) {
+        return new MouseAdapter() {
+            @Override
+            public void mouseClicked(final MouseEvent e) {
+                if (e.getClickCount() == 1 && e.isControlDown() || e.getClickCount() > 1) {
+                    action.actionPerformed(null);
+                }
+            }
+        };
     }
 
     /**
@@ -630,22 +687,25 @@ public class PropertyDialogUserFieldPanel extends ElementDialogPanel implements 
      * @return
      */
     private JButton getHyperlinkButtonAndInitListeners(final JLabel label, final JTextComponent hyperlinkText) {
-        // Der Button, der für einen Hyperlink das öffnen eines Browsers
-        // ermöglicht.
-        final JButton button = new JButton(new AbstractAction(">>") {
+        Action browseAction = new AbstractAction(">>") {
             @Override
             public void actionPerformed(final ActionEvent e) {
+                //always take the current value of the text property!
                 String urlOrPath = hyperlinkText.getText().trim();
-                if (!urlOrPath.isEmpty()) {
+                if (!Strings.isNullOrEmpty(urlOrPath)) {
                     BrowseUtils.browse(urlOrPath);
                 }
             }
-        });
+        };
+
+        // Der Button, der für einen Hyperlink das öffnen eines Browsers
+        // ermöglicht.
+        final JButton button = new JButton(browseAction);
         MouseAdapter mouseAdapter = new MouseAdapter() {
             @Override
             public void mouseClicked(final MouseEvent e) {
                 if (e.getClickCount() == 1 && e.isControlDown() || e.getClickCount() > 1) {
-                    button.doClick();
+                    browseAction.actionPerformed(null);
                 }
             }
         };
