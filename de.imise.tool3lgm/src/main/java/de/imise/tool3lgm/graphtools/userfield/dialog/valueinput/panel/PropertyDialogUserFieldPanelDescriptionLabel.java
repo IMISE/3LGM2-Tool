@@ -13,11 +13,12 @@ import de.imise.util.BrowseUtils;
 import de.imise.util.UrlInStringFinder;
 import de.imise.util.UrlInStringFinder.UrlFinderResult;
 import de.imise.util.htmlxml.HTMLConverter;
+import de.imise.util.swing.component.MinWidthComponent;
 
 /**
  * @author AXS (06.05.2021)
  */
-public class PropertyDialogUserFieldPanelDescriptionLabel extends JEditorPane {
+public class PropertyDialogUserFieldPanelDescriptionLabel extends JEditorPane implements MinWidthComponent {
 
     /** Extracts a link from a text */
     private static final UrlInStringFinder urlFinder = new UrlInStringFinder();
@@ -94,29 +95,23 @@ public class PropertyDialogUserFieldPanelDescriptionLabel extends JEditorPane {
     }
 
     @Override
-    public Dimension getSize() {
-        Dimension size = super.getSize();
-        return size;
-    }
-
-    @Override
     public Dimension getMaximumSize() {
         Dimension size = super.getMaximumSize();
-        size.width = 100;
+        size.width = getMinWidth();
         return size;
     }
 
     @Override
     public Dimension getPreferredSize() {
         Dimension size = super.getPreferredSize();
-        size.width = 100;
+        size.width = getMinWidth();
         return size;
     }
 
     @Override
     public Dimension getPreferredScrollableViewportSize() {
         Dimension size = super.getPreferredScrollableViewportSize();
-        size.width = 100;
+        size.width = getMinWidth();
         return size;
     }
 
