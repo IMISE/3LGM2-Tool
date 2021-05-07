@@ -248,6 +248,12 @@ public final class UserField extends NameAndDescriptionTargetAdapter implements 
     }
 
     /**
+     * This separator can be used with radio buttons in the list values to
+     * separate radio buttons that are to be displayed in one line.
+     */
+    public static final String LIST_VALUE_SEPARATOR = ";";
+
+    /**
      * Wert eines UserFields vom Typ {@link Style#CHECK_BOX}: "Häkchen gesetzt"
      */
     public static final String CHECKBOX_TRUE = "true";

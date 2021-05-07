@@ -4,6 +4,7 @@ import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
 import static de.imise.tool3lgm.graphtools.userfield.definition.UserField.CHECKBOX_FALSE;
 import static de.imise.tool3lgm.graphtools.userfield.definition.UserField.CHECKBOX_TRUE;
 import static de.imise.tool3lgm.graphtools.userfield.definition.UserField.EMPTY_STRING;
+import static de.imise.tool3lgm.graphtools.userfield.definition.UserField.LIST_VALUE_SEPARATOR;
 import static de.imise.tool3lgm.graphtools.userfield.definition.UserField.Style.CHECK_BOX;
 import static de.imise.tool3lgm.graphtools.userfield.definition.UserField.Style.COMBO_BOX;
 import static de.imise.tool3lgm.graphtools.userfield.definition.UserField.Style.FORMULA;
@@ -484,23 +485,38 @@ public class PropertyDialogUserFieldPanel extends ElementDialogPanel implements 
             }
             editorComponent = comboBox;
         } else if (style == RADIO_BUTTON) {
-            JPanel flowLayoutPanel = new JPanel();
-            flowLayoutPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), ""));
+            JPanel radioButtonPanel = new JPanel(new GridBagLayout());
+            GridBagConstraints constraints = new GridBagConstraints();
+            constraints.anchor = GridBagConstraints.WEST;
+            constraints.gridx = 0;
+            constraints.gridy = 0;
+            radioButtonPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), ""));
             //den aktuellen Wert in die List-Values hinzufügen, falls er da aus irgendwelchen Gründen nicht drinsteht.
             if (!Strings.isNullOrEmpty(value) && !field.containsListValue(value)) {
                 field.addListValue(value);
             }
             ButtonGroup group = new ButtonGroup();
             for (int i = 0; i < field.getListValuesCount(); i++) {
-                Object listValue = field.getListValueAt(i);
-                JRadioButton radioButton = new JRadioButton(listValue.toString());
+                Object listValueAt = field.getListValueAt(i);
+                String listValue = listValueAt.toString();
+                boolean newLine = !listValue.endsWith(LIST_VALUE_SEPARATOR);
+                if (!newLine) {
+                    listValue = listValue.substring(0, listValue.length() - 1);
+                }
+                JRadioButton radioButton = new JRadioButton(listValue);
                 group.add(radioButton);
-                flowLayoutPanel.add(radioButton);
+                radioButtonPanel.add(radioButton, constraints);
+                if (newLine) {
+                    constraints.gridx = 0;
+                    constraints.gridy++;
+                } else {
+                    constraints.gridx++;
+                }
                 if (listValue.equals(value)) {
                     radioButton.setSelected(true);
                 }
             }
-            editorComponent = flowLayoutPanel;
+            editorComponent = radioButtonPanel;
         } else if (style == CHECK_BOX) {
             String fieldLabel = showAttributeLabelAndEditorSideBySide ? "" : field.getName();
             fieldLabel = HTMLConverter.getTextAsHTMLLabelTextBold(fieldLabel);
