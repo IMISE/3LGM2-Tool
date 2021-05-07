@@ -7,7 +7,6 @@ import javax.swing.BorderFactory;
 import javax.swing.JEditorPane;
 import javax.swing.event.HyperlinkEvent;
 import javax.swing.event.HyperlinkListener;
-import javax.swing.text.html.HTMLEditorKit;
 
 import de.imise.util.BrowseUtils;
 import de.imise.util.UrlInStringFinder;
@@ -27,8 +26,9 @@ public class PropertyDialogUserFieldPanelDescriptionLabel extends JEditorPane im
      * @param description
      */
     public PropertyDialogUserFieldPanelDescriptionLabel(final String description) {
-        super(new HTMLEditorKit().getContentType(), getText(description));
+        super("text/html", getText(description));
 
+        setText(getText(description));
         addHyperlinkListener(new HyperlinkListener() {
             @Override
             public void hyperlinkUpdate(final HyperlinkEvent e) {
@@ -49,12 +49,9 @@ public class PropertyDialogUserFieldPanelDescriptionLabel extends JEditorPane im
     private static final String getText(final String description) {
 
         String text = encodeAndInsertLinks(description);
-
-        //Font font = UIManager.getFont("Label.font");
-        String fontfamily = "Arial Narrow";//font.getFamily();
-
-        //        text = "<html><body style=\"font-family:" + fontfamily + ";font-size:" + "1.0em" + ";\"><b><i>" + text + "</i></b>" + "</body></html>";
-        text = "<html><body style=\"font-family:" + fontfamily + ";font-size:" + "1.0em" + ";\"><b>" + text + "</b>" + "</body></html>";
+        String fontfamily = "DialogInput";
+        String fontSize = "1.0em";
+        text = "<html><body style=\"font-family:" + fontfamily + ";font-size:" + fontSize + "; \"><i>" + text + "</i>" + "</body></html>";
 
         return text;
     }
