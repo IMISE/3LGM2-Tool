@@ -92,7 +92,7 @@ public class PropertyDialogUserFieldPanelDescriptionLabel extends JEditorPane im
                 i--;
             }
         }
-        if (urlResult.endIndexInOriginal < description.length()) {
+        if (urlResult.endIndexInOriginal + 1 < description.length()) {
             String text = description.substring(urlResult.endIndexInOriginal);
             text = HTMLConverter.encode(text);
             sb.append(text);

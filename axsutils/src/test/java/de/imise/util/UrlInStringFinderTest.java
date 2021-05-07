@@ -25,15 +25,16 @@ public class UrlInStringFinderTest {
         //Sys.err1(result2);
         Assert.assertNull(result2.file);
         Assert.assertEquals(result2.url, "www.3lgm2.de");
-        Assert.assertEquals(result2.startIndexInOriginal, 2);
+        Assert.assertEquals(result2.startIndexInOriginal, " \"".length());
         Assert.assertEquals(result2.endIndexInOriginal, result2.startIndexInOriginal + result2.url.length());
+        Assert.assertEquals(result2.endIndexInOriginal, s2.length() - "\";".length());
 
     }
 
     @Test
     public void getResultsTest() {
         UrlInStringFinder finder = new UrlInStringFinder();
-        String s1 = "Weitere Infos unter www.3lgm2.de oder unter https://www.wikipedia.de.";
+        String s1 = "Weitere Infos unter www.3lgm2.de oder unter \"https://www.wikipedia.de.\" oder sonstwo.";
         List<UrlFinderResult> results1 = finder.getResults(s1);
         //Sys.err1(results1);
         UrlFinderResult result1 = results1.get(0);
@@ -47,8 +48,9 @@ public class UrlInStringFinderTest {
         Assert.assertEquals(result2.original, s1);
         Assert.assertNull(result2.file);
         Assert.assertEquals(result2.url, "https://www.wikipedia.de");
-        Assert.assertEquals(result2.startIndexInOriginal, "Weitere Infos unter www.3lgm2.de oder unter ".length());
+        Assert.assertEquals(result2.startIndexInOriginal, "Weitere Infos unter www.3lgm2.de oder unter \"".length());
         Assert.assertEquals(result2.endIndexInOriginal, result2.startIndexInOriginal + result2.url.length());
+        Assert.assertEquals(result2.original.substring(result2.endIndexInOriginal), ".\" oder sonstwo.");
 
     }
 

@@ -156,8 +156,8 @@ public class UrlInStringFinder {
                 UrlFinderResult result = getResult(token);
                 if (result.hasUrlOrFile()) {
                     result.original = text;
-                    result.startIndexInOriginal = startIndex;
-                    result.endIndexInOriginal = startIndex + result.url.length();
+                    result.startIndexInOriginal = startIndex + result.startIndexInOriginal;
+                    result.endIndexInOriginal = result.startIndexInOriginal + result.url.length();
                     results.add(result);
                 }
                 startIndex = -1;
@@ -167,7 +167,7 @@ public class UrlInStringFinder {
             } else if (startIndex >= 0) {
                 continue;
             }
-            startIndex = i + 1;
+            startIndex = i;
         }
         return results;
     }
