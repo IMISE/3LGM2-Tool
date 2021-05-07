@@ -141,6 +141,9 @@ public class UrlInStringFinder {
      * @return
      */
     public List<UrlFinderResult> getResults(final String text) {
+        if (text.startsWith("\"")) {
+            Sys.err1(text);
+        }
         List<UrlFinderResult> results = new ArrayList<>();
         int textLength = text.length();
         int startIndex = -1;
@@ -167,7 +170,7 @@ public class UrlInStringFinder {
             } else if (startIndex >= 0) {
                 continue;
             }
-            startIndex = i;
+            startIndex = i + 1;
         }
         return results;
     }

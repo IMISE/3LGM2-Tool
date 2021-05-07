@@ -10,6 +10,7 @@ import javax.swing.event.HyperlinkListener;
 import javax.swing.text.html.HTMLEditorKit;
 
 import de.imise.util.BrowseUtils;
+import de.imise.util.Sys;
 import de.imise.util.UrlInStringFinder;
 import de.imise.util.UrlInStringFinder.UrlFinderResult;
 import de.imise.util.htmlxml.HTMLConverter;
@@ -70,8 +71,9 @@ public class PropertyDialogUserFieldPanelDescriptionLabel extends JEditorPane im
         }
         int index = 0;
         StringBuilder sb = new StringBuilder();
+        UrlFinderResult urlResult = null;
         for (int i = 0; i < urlResults.size(); i++) {
-            UrlFinderResult urlResult = urlResults.get(i);
+            urlResult = urlResults.get(i);
             if (index == urlResult.startIndexInOriginal) {
                 sb.append("<a href=\"");
                 String url = urlResult.url;
@@ -91,6 +93,15 @@ public class PropertyDialogUserFieldPanelDescriptionLabel extends JEditorPane im
                 i--;
             }
         }
+        if (urlResult.endIndexInOriginal < description.length()) {
+            String text = description.substring(urlResult.endIndexInOriginal);
+            text = HTMLConverter.encode(text);
+            sb.append(text);
+        }
+
+        Sys.err1(description);
+        Sys.err1(sb);
+        System.err.println("###############################################################################################################################");
         return sb.toString();
     }
 
