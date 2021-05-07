@@ -10,7 +10,6 @@ import javax.swing.event.HyperlinkListener;
 import javax.swing.text.html.HTMLEditorKit;
 
 import de.imise.util.BrowseUtils;
-import de.imise.util.Sys;
 import de.imise.util.UrlInStringFinder;
 import de.imise.util.UrlInStringFinder.UrlFinderResult;
 import de.imise.util.htmlxml.HTMLConverter;
@@ -98,10 +97,6 @@ public class PropertyDialogUserFieldPanelDescriptionLabel extends JEditorPane im
             text = HTMLConverter.encode(text);
             sb.append(text);
         }
-
-        Sys.err1(description);
-        Sys.err1(sb);
-        System.err.println("###############################################################################################################################");
         return sb.toString();
     }
 
