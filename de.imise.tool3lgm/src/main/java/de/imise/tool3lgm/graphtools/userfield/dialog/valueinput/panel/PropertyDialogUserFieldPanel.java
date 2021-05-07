@@ -70,11 +70,11 @@ import de.imise.tool3lgm.graphtools.userfield.definition.UserFieldList;
 import de.imise.util.BrowseUtils;
 import de.imise.util.Sys;
 import de.imise.util.htmlxml.HTMLConverter;
-import de.imise.util.swing.WrapLayout;
 import de.imise.util.swing.component.ParentComponentFinder;
 import de.imise.util.swing.component.text.ExtendedTextArea;
 import de.imise.util.swing.component.text.ExtendedTextField;
 import de.imise.util.swing.component.text.NumberTextField;
+import de.imise.util.swing.layout.WrapLayout;
 
 /**
  * Panel für den Eigenschaftendialog von Elementen, in dem alle definierten

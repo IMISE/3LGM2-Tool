@@ -1,4 +1,4 @@
-package de.imise.util.swing;
+package de.imise.util.swing.layout;
 
 import java.awt.Component;
 import java.awt.Container;

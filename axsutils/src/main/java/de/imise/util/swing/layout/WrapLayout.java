@@ -1,4 +1,4 @@
-package de.imise.util.swing;
+package de.imise.util.swing.layout;
 
 import java.awt.Component;
 import java.awt.Container;
@@ -10,10 +10,13 @@ import javax.swing.JScrollPane;
 import javax.swing.SwingUtilities;
 
 /**
- * FlowLayout subclass that fully supports wrapping of components.
+ * FlowLayout subclass that fully supports wrapping of components.<br>
+ * Source: <a href=
+ * "https://tips4java.wordpress.com/2008/11/06/wrap-layout/">https://tips4java.wordpress.com/2008/11/06/wrap-layout/</a><br>
+ * Source: <a href=
+ * "http://www.camick.com/java/source/WrapLayout.java">http://www.camick.com/java/source/WrapLayout.java</a>
  */
 public class WrapLayout extends FlowLayout {
-    private Dimension preferredLayoutSize;
 
     /**
      * Constructs a new <code>WrapLayout</code> with a left alignment and a
