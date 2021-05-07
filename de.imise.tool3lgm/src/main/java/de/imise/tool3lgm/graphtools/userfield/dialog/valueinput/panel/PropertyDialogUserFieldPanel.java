@@ -70,6 +70,7 @@ import de.imise.tool3lgm.graphtools.userfield.definition.UserFieldList;
 import de.imise.util.BrowseUtils;
 import de.imise.util.Sys;
 import de.imise.util.htmlxml.HTMLConverter;
+import de.imise.util.swing.WrapLayout;
 import de.imise.util.swing.component.ParentComponentFinder;
 import de.imise.util.swing.component.text.ExtendedTextArea;
 import de.imise.util.swing.component.text.ExtendedTextField;
@@ -484,7 +485,7 @@ public class PropertyDialogUserFieldPanel extends ElementDialogPanel implements 
             }
             editorComponent = comboBox;
         } else if (style == RADIO_BUTTON) {
-            JPanel flowLayoutPanel = new JPanel();
+            JPanel flowLayoutPanel = new JPanel(new WrapLayout(WrapLayout.LEFT));
             flowLayoutPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), ""));
             //den aktuellen Wert in die List-Values hinzufügen, falls er da aus irgendwelchen Gründen nicht drinsteht.
             if (!Strings.isNullOrEmpty(value) && !field.containsListValue(value)) {
