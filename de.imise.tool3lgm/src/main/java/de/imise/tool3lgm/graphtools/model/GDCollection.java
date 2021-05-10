@@ -134,12 +134,6 @@ import de.imise.util.swing.dialog.NameAndColorInputDialog;
  *
  * @author thomas, AXS
  */
-/**
- * @author Steam
- */
-/**
- * @author Steam
- */
 public class GDCollection extends UserFieldTarget implements MetaModelSpecific {
 
     /**
