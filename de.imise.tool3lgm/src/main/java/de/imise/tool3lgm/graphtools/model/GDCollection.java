@@ -134,6 +134,12 @@ import de.imise.util.swing.dialog.NameAndColorInputDialog;
  *
  * @author thomas, AXS
  */
+/**
+ * @author Steam
+ */
+/**
+ * @author Steam
+ */
 public class GDCollection extends UserFieldTarget implements MetaModelSpecific {
 
     /**
@@ -547,7 +553,7 @@ public class GDCollection extends UserFieldTarget implements MetaModelSpecific {
      * @return
      */
     public Szenario createSzenario(final String title, final boolean askName, final String description, final String szenID, final int pid) {
-        return createSzenario(title, askName, description, szenID, true, pid);
+        return createSzenario(title, askName, description, szenID, true, pid, false);
     }
 
     /**
@@ -559,7 +565,7 @@ public class GDCollection extends UserFieldTarget implements MetaModelSpecific {
      * @return
      */
     public Szenario createSzenario(final String title, final boolean askName, final String description, final String szenID, final boolean logWithStandardPID) {
-        return createSzenario(title, askName, description, szenID, logWithStandardPID, STANDARD_PID);
+        return createSzenario(title, askName, description, szenID, logWithStandardPID, STANDARD_PID, false);
     }
 
     /**
@@ -569,7 +575,7 @@ public class GDCollection extends UserFieldTarget implements MetaModelSpecific {
      * @param pid
      * @return
      */
-    public Szenario createSzenario(String title, final boolean askName, final String description, final String szenID, final boolean log, final int pid) {
+    public Szenario createSzenario(String title, final boolean askName, final String description, final String szenID, final boolean log, final int pid, final boolean isImport) {
         if (title == null || title.trim().equals("")) {
             title = getNextIndicatedName(getResString("submodel") + " #", activeGraphDocumentsList);
         }
@@ -589,7 +595,9 @@ public class GDCollection extends UserFieldTarget implements MetaModelSpecific {
             mainDoc.addRedo(pid, MODEL_ACTION_CREATE_SUBMODEL, szenario.getTitle(), szenario.getDescription(), szenario);
             mainDoc.finish_transaction(pid);
         }
-        setChanged(true);
+        if (!isImport) {
+            setChanged(true);
+        }
         if (!isBulkMode()) {
             distribute(SZENARIO_ADDED, null, szenario, pid);
         }
@@ -2634,7 +2642,7 @@ public class GDCollection extends UserFieldTarget implements MetaModelSpecific {
             updateInferenceEdges(pid);
             bulk_mode = false;
         }
-        if (changeType != LGMChangeType.SELECTED_SZENARIO_CHANGED) {
+        if (changeType != LGMChangeType.SELECTED_SZENARIO_CHANGED && !isAutomaticMode()) {
             setChanged(true);
         }
     }
@@ -2699,11 +2707,18 @@ public class GDCollection extends UserFieldTarget implements MetaModelSpecific {
         }
     }
 
+    /**
+     * @param istream
+     */
     public void loadFile(final InputStream istream) {
         try {
+            // automatic mode is set, in order to prevent the changed variable to be set to true
+            // when loading a model
+            setAutomaticMode(true);
             setBulkMode(true);
             fileHandler.loadXMLFile(istream, true);
             setBulkMode(false);
+            setAutomaticMode(false);
         } catch (Exception e) {
             Log.show(ERROR, getResString("FehlerAllgemein"), e);
         }
@@ -2717,6 +2732,9 @@ public class GDCollection extends UserFieldTarget implements MetaModelSpecific {
         return pasteCounter;
     }
 
+    /**
+     * @return
+     */
     public int increasePasteCounter() {
         return ++pasteCounter;
     }
