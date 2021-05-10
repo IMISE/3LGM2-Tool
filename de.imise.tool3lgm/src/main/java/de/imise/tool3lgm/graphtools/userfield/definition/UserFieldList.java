@@ -1,5 +1,6 @@
 package de.imise.tool3lgm.graphtools.userfield.definition;
 
+import static de.imise.tool3lgm.graphtools.userfield.definition.UserField.Style.SUBTYPE;
 import static de.imise.tool3lgm.graphtools.userfield.definition.UserField.Style.TAB;
 
 import java.util.ArrayList;
@@ -37,8 +38,8 @@ public class UserFieldList implements Cloneable, Iterable<UserField> {
      * @param index
      */
     public final void insert(final UserField userField, final int index) {
-        if (isEmpty()) {
-            add(userField);
+        if (index == list.size()) {
+            add(userField); //this checks if a default tab must be added
         } else {
             list.remove(userField);
             list.add(index, userField);
@@ -51,19 +52,34 @@ public class UserFieldList implements Cloneable, Iterable<UserField> {
      *         be returned. If no new Tab was added <code>null</code> will be
      *         returned.
      */
-    private UserField ensureDefaultTab(final UserField userField) {
-        if (!userField.hasStyle(TAB)) {
+    /**
+     * @param userField
+     * @param index
+     * @return
+     */
+    private UserField ensureDefaultTab(final UserField userField, final int index) {
+        if (!userField.hasStyle(TAB, SUBTYPE)) {
             Class<? extends UserFieldTarget> targetClass = userField.getTargetClass();
             if (targetClass != UserFieldDefinitions.GLOBAL_USERFIELD_IDENTIFIER_CLASS) {
-                if (isEmpty()) {
+                if (isEmpty() || index == 0 || get(index - 1).hasStyle(SUBTYPE)) {
                     UserField defaultTab = new UserField(targetClass, TAB);
                     defaultTab.setName(Tool3lgmConstants.getResString("userfields"));
-                    add(defaultTab);
+                    insert(defaultTab, index);
                     return defaultTab;
                 }
             }
         }
         return null;
+    }
+
+    /**
+     *
+     */
+    public void ensureDefaultTabs() {
+        for (int i = 0; i < size(); i++) {
+            UserField userField = get(i);
+            ensureDefaultTab(userField, i);
+        }
     }
 
     /**
@@ -74,7 +90,7 @@ public class UserFieldList implements Cloneable, Iterable<UserField> {
      */
     public final UserField add(final UserField userField) {
         list.remove(userField);
-        UserField createdDefaultTabUserField = ensureDefaultTab(userField);
+        UserField createdDefaultTabUserField = ensureDefaultTab(userField, list.size());
         list.add(userField);
         return createdDefaultTabUserField;
     }

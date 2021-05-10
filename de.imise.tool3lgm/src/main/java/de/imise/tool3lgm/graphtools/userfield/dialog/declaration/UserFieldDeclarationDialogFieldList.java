@@ -115,6 +115,8 @@ public class UserFieldDeclarationDialogFieldList extends JList<NamedObjectContai
         } else {
             setSelectedIndices(selectedIndices);
         }
+        int maxSelectionIndex = getMaxSelectionIndex();
+        ensureIndexIsVisible(maxSelectionIndex);
     }
 
     /**
@@ -231,12 +233,12 @@ public class UserFieldDeclarationDialogFieldList extends JList<NamedObjectContai
      */
     private void move(int step) {
         int[] selectedIndices = getSelectedIndices();
-        if (step < 0) {
+        if (step < 0) { //move up?
             int firstSelectedIndex = selectedIndices[0];
             NamedObjectContainer<UserField> firstSelectedItem = model.get(firstSelectedIndex);
             UserField firstSelectedObject = firstSelectedItem.getObject();
-            if (firstSelectedObject.hasStyle(SUBTYPE)) {
-                for (int i = firstSelectedIndex - 1; i >= 0; i--) {
+            if (firstSelectedObject.hasStyle(SUBTYPE)) { //first selected is a subtype
+                for (int i = firstSelectedIndex - 1; i >= 0; i--) { //search next correct insert index for the subtype == just before a tab or another subtype
                     NamedObjectContainer<UserField> topOfFirstSelectedItem = model.get(i);
                     UserField topOfFirstSelectedObject = topOfFirstSelectedItem.getObject();
                     if (topOfFirstSelectedObject.hasStyle(SUBTYPE, TAB)) {
@@ -244,16 +246,34 @@ public class UserFieldDeclarationDialogFieldList extends JList<NamedObjectContai
                     }
                     step--;
                 }
+            } else if (!firstSelectedObject.hasStyle(TAB)) { //here are only "normal" userFields (no TAB and no SUBTYPE)
+                for (int i = firstSelectedIndex - 2; i >= 0; i--) { //search next correct insert index = never direct after subtype
+                    NamedObjectContainer<UserField> topOfFirstSelectedItem = model.get(i);
+                    UserField topOfFirstSelectedObject = topOfFirstSelectedItem.getObject();
+                    if (!topOfFirstSelectedObject.hasStyle(SUBTYPE)) {
+                        break;
+                    }
+                    step--;
+                }
             }
-        } else {
+        } else { //move down
             int lastSelectedIndex = selectedIndices[selectedIndices.length - 1];
             NamedObjectContainer<UserField> lastSelectedItem = model.get(lastSelectedIndex);
             UserField lastSelectedObject = lastSelectedItem.getObject();
             if (lastSelectedObject.hasStyle(SUBTYPE)) {
                 for (int i = lastSelectedIndex + 2; i < model.size(); i++) {
-                    NamedObjectContainer<UserField> bottomOfFirstSelectedItem = model.get(i);
-                    UserField bottomOfFirstSelectedObject = bottomOfFirstSelectedItem.getObject();
-                    if (bottomOfFirstSelectedObject.hasStyle(SUBTYPE, TAB)) {
+                    NamedObjectContainer<UserField> bottomOfLastSelectedItem = model.get(i);
+                    UserField bottomOfLastSelectedObject = bottomOfLastSelectedItem.getObject();
+                    if (bottomOfLastSelectedObject.hasStyle(SUBTYPE, TAB)) {
+                        break;
+                    }
+                    step++;
+                }
+            } else if (!lastSelectedObject.hasStyle(TAB)) { //here are only "normal" userFields (no TAB and no SUBTYPE)
+                for (int i = lastSelectedIndex + 1; i < model.size(); i++) {
+                    NamedObjectContainer<UserField> bottomOfLastSelectedItem = model.get(i);
+                    UserField bottomOfLastSelectedObject = bottomOfLastSelectedItem.getObject();
+                    if (!bottomOfLastSelectedObject.hasStyle(SUBTYPE)) {
                         break;
                     }
                     step++;
@@ -267,13 +287,18 @@ public class UserFieldDeclarationDialogFieldList extends JList<NamedObjectContai
         }
         for (int i = 0; i < selectedIndices.length; i++) {
             int newIndex = selectedIndices[i] + step;
-            if (0 <= newIndex && newIndex < model.size()) {
+            if (0 <= newIndex && newIndex <= model.size()) {
                 UserField userField = get(selectedIndices[i]);
                 NamedObjectContainer<UserField> element2Move = model.remove(selectedIndices[i]);
+                if (newIndex > model.size()) { //this can happen if the last elenent is an ampty tab after a subtype
+                    newIndex = model.size();
+                }
                 model.insertElementAt(element2Move, newIndex);
                 definitions.insert(userField, newIndex);
             }
         }
+        Class<? extends UserFieldTarget> targetClass = get(0).getTargetClass();
+        definitions.ensureDefaultTabs(targetClass);
         restoreSelection(selectedValuesList);
     }
 

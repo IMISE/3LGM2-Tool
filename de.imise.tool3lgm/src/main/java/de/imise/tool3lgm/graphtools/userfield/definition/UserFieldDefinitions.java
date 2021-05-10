@@ -238,6 +238,16 @@ public final class UserFieldDefinitions extends UserFieldDefinitionChangeHandler
     }
 
     /**
+     * @param targetClass
+     */
+    public void ensureDefaultTabs(final Class<? extends UserFieldTarget> targetClass) {
+        UserFieldList userFields = classToUserFieldTargetSpecificListMap.get(targetClass);
+        if (userFields != null) {
+            userFields.ensureDefaultTabs();
+        }
+    }
+
+    /**
      * @param numberFormat
      */
     public void removeNumberFormat(final UserFieldNumberFormat numberFormat) {
