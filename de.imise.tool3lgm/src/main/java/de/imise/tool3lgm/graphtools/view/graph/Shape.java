@@ -170,8 +170,8 @@ public enum Shape {
     };
 
     /**
-     * returns a unified corner size
-     * for rectangles, that are too small, a smaller corner size is returned
+     * returns a unified corner size for rectangles, that are too small, a
+     * smaller corner size is returned
      *
      * @param width
      * @param height

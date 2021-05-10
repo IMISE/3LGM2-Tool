@@ -3,8 +3,10 @@ package de.imise.util.swing.component;
 import java.awt.Component;
 import java.awt.event.ItemEvent;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 import java.util.Vector;
 
 import javax.swing.DefaultComboBoxModel;
@@ -38,6 +40,31 @@ public class AlphabeticalComboBox<E> extends JComboBox<NamedObjectContainer<E>> 
      * the visibility 'package').
      */
     private final Vector<NamedObjectContainer<E>> items = new Vector<>();
+
+    /**
+     * All objects in this list will be displayed as disabled
+     */
+    private final Set<E> disabledItems = new HashSet<>();
+
+    /**
+     * @param object
+     * @return
+     */
+    public boolean isEnabled(final Object object) {
+        return !disabledItems.contains(object);
+    }
+
+    /**
+     * @param object
+     * @param enabled
+     */
+    public void setEnabled(final E object, final boolean enabled) {
+        if (!enabled) {
+            disabledItems.add(object);
+        } else {
+            disabledItems.remove(object);
+        }
+    }
 
     /**
      * Entry for an empty line to make "no selection".
@@ -566,7 +593,7 @@ public class AlphabeticalComboBox<E> extends JComboBox<NamedObjectContainer<E>> 
                 c = (JLabel) super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
                 c.setEnabled(false);
                 //normal entries
-            } else {
+            } else { // value is instanceof NamedObjectContainer
                 c = (JLabel) super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
 
                 //Set Text and maybe shift entries
@@ -576,8 +603,15 @@ public class AlphabeticalComboBox<E> extends JComboBox<NamedObjectContainer<E>> 
                 }
                 c.setText(text);
 
+                boolean enabled = true;
+                if (value instanceof NamedObjectContainer<?>) {
+                    NamedObjectContainer<?> valueContainer = (NamedObjectContainer<?>) value;
+                    Object object = valueContainer.getObject();
+                    enabled = !disabledItems.contains(object);
+                }
+
                 //tooltips
-                if (isSelected) {
+                if (enabled && isSelected) {
                     setBackground(list.getSelectionBackground());
                     setForeground(list.getSelectionForeground());
                     if (index > -1) {
@@ -594,6 +628,9 @@ public class AlphabeticalComboBox<E> extends JComboBox<NamedObjectContainer<E>> 
                 } else {
                     setBackground(list.getBackground());
                     setForeground(list.getForeground());
+                    if (!enabled) {
+                        c.setEnabled(false);
+                    }
                 }
                 setFont(list.getFont());
             }

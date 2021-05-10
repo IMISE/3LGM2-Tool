@@ -2,6 +2,7 @@ package de.imise.tool3lgm.graphtools.userfield.dialog.declaration;
 
 import static de.imise.tool3lgm.graphtools.userfield.definition.UserField.Style.GROUP;
 import static de.imise.tool3lgm.graphtools.userfield.definition.UserField.Style.SINGLE_LINE;
+import static de.imise.tool3lgm.graphtools.userfield.definition.UserField.Style.SUBTYPE;
 import static de.imise.tool3lgm.graphtools.userfield.definition.UserField.Style.TAB;
 import static de.imise.util.htmlxml.HTMLConverter.encode;
 import static de.imise.util.htmlxml.HTMLConverter.encodeBold;
@@ -74,13 +75,17 @@ public class UserFieldDeclarationDialogFieldList extends JList<NamedObjectContai
         List<NamedObjectContainer<UserField>> selectedValuesList = getSelectedValuesList();
         clear();
         int indent = 0;
+        int subTypeIndent = 0;
         for (UserField userField : definitions.getUserFields(selectedClass)) {
-            if (userField.hasStyle(TAB)) {
+            if (userField.hasStyle(SUBTYPE)) {
                 addEntry(userField, 0);
-                indent = 1;
+                subTypeIndent = 1;
+            } else if (userField.hasStyle(TAB)) {
+                addEntry(userField, subTypeIndent);
+                indent = subTypeIndent + 1;
             } else if (userField.hasStyle(GROUP)) {
-                addEntry(userField, 1);
-                indent = 2;
+                addEntry(userField, subTypeIndent + 1);
+                indent = subTypeIndent + 2;
             } else {
                 addEntry(userField, indent);
             }
@@ -176,12 +181,22 @@ public class UserFieldDeclarationDialogFieldList extends JList<NamedObjectContai
      * @return the index where a new item will be inserted depending on the
      *         selection.
      */
-    public int getNextInsertIndex() {
+    public int getNextInsertIndex(final Style style) {
         int[] selectedIndices = getSelectedIndices();
         if (selectedIndices.length == 0) { //nothing selected -> insert after last index
             return getElementCount();
         }
-        return selectedIndices[selectedIndices.length - 1] + 1;
+        int insertIndex = selectedIndices[selectedIndices.length - 1] + 1;
+        if (style == SUBTYPE) { // subtypes can be inserted only before TABs or other SUBTYPEs or as last
+            if (insertIndex != model.size()) { //something is selected but not the last element
+                NamedObjectContainer<UserField> itemAtInsertIndex = model.get(insertIndex);
+                UserField userfieldAtInsertIndex = itemAtInsertIndex.getObject();
+                if (!userfieldAtInsertIndex.hasStyle(SUBTYPE, TAB)) {
+                    return getElementCount();
+                }
+            }
+        }
+        return insertIndex;
     }
 
     /**
@@ -214,9 +229,38 @@ public class UserFieldDeclarationDialogFieldList extends JList<NamedObjectContai
      *
      * @param i
      */
-    private void move(final int step) {
-        List<NamedObjectContainer<UserField>> selectedValuesList = getSelectedValuesList();
+    private void move(int step) {
         int[] selectedIndices = getSelectedIndices();
+        if (step < 0) {
+            int firstSelectedIndex = selectedIndices[0];
+            NamedObjectContainer<UserField> firstSelectedItem = model.get(firstSelectedIndex);
+            UserField firstSelectedObject = firstSelectedItem.getObject();
+            if (firstSelectedObject.hasStyle(SUBTYPE)) {
+                for (int i = firstSelectedIndex - 1; i >= 0; i--) {
+                    NamedObjectContainer<UserField> topOfFirstSelectedItem = model.get(i);
+                    UserField topOfFirstSelectedObject = topOfFirstSelectedItem.getObject();
+                    if (topOfFirstSelectedObject.hasStyle(SUBTYPE, TAB)) {
+                        break;
+                    }
+                    step--;
+                }
+            }
+        } else {
+            int lastSelectedIndex = selectedIndices[selectedIndices.length - 1];
+            NamedObjectContainer<UserField> lastSelectedItem = model.get(lastSelectedIndex);
+            UserField lastSelectedObject = lastSelectedItem.getObject();
+            if (lastSelectedObject.hasStyle(SUBTYPE)) {
+                for (int i = lastSelectedIndex + 2; i < model.size(); i++) {
+                    NamedObjectContainer<UserField> bottomOfFirstSelectedItem = model.get(i);
+                    UserField bottomOfFirstSelectedObject = bottomOfFirstSelectedItem.getObject();
+                    if (bottomOfFirstSelectedObject.hasStyle(SUBTYPE, TAB)) {
+                        break;
+                    }
+                    step++;
+                }
+            }
+        }
+        List<NamedObjectContainer<UserField>> selectedValuesList = getSelectedValuesList();
         List<Integer> indices = Ints.asList(selectedIndices);
         if (step > 0) {
             Collections.reverse(indices);
@@ -252,11 +296,17 @@ public class UserFieldDeclarationDialogFieldList extends JList<NamedObjectContai
     /**
      * @param index
      * @param style
-     * @return
+     * @return <code>true</code> if the style at the index in the list is one of
+     *         the paramter styles
      */
-    public boolean hasStyle(final int index, final Style style) {
+    public boolean hasStyle(final int index, final Style... styles) {
         UserField userField = getUserField(index);
-        return userField.hasStyle(style);
+        for (Style style : styles) {
+            if (userField.hasStyle(style)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     @Override
@@ -311,7 +361,9 @@ public class UserFieldDeclarationDialogFieldList extends JList<NamedObjectContai
                 Object object = noc.getFirstItem();
                 if (object instanceof UserField) {
                     UserField userField = (UserField) object;
-                    if (userField.hasStyle(TAB)) {
+                    if (userField.hasStyle(SUBTYPE)) {
+                        icon_text_label.setIcon(USERFIELD_TAB_ICON); //TODO: own icon for subtypes
+                    } else if (userField.hasStyle(TAB)) {
                         icon_text_label.setIcon(USERFIELD_TAB_ICON);
                     } else if (userField.hasStyle(GROUP)) {
                         icon_text_label.setIcon(USERFIELD_GROUP_ICON);

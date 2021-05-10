@@ -15,10 +15,10 @@ import static de.imise.tool3lgm.graphtools.userfield.definition.UserField.Style.
 import static de.imise.tool3lgm.graphtools.userfield.definition.UserField.Style.RADIO_BUTTON;
 import static de.imise.tool3lgm.graphtools.userfield.definition.UserField.Style.SEPARATOR;
 import static de.imise.tool3lgm.graphtools.userfield.definition.UserField.Style.SINGLE_LINE;
+import static de.imise.tool3lgm.graphtools.userfield.definition.UserField.Style.SUBTYPE;
 import static de.imise.tool3lgm.graphtools.userfield.definition.UserField.Style.TAB;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Component;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
@@ -34,6 +34,7 @@ import java.util.List;
 
 import javax.swing.AbstractAction;
 import javax.swing.AbstractButton;
+import javax.swing.Action;
 import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
@@ -46,11 +47,9 @@ import javax.swing.JRadioButton;
 import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
-import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.JViewport;
 import javax.swing.SwingConstants;
-import javax.swing.UIManager;
 import javax.swing.border.Border;
 import javax.swing.border.TitledBorder;
 import javax.swing.text.JTextComponent;
@@ -71,11 +70,11 @@ import de.imise.tool3lgm.graphtools.userfield.definition.UserFieldList;
 import de.imise.util.BrowseUtils;
 import de.imise.util.Sys;
 import de.imise.util.htmlxml.HTMLConverter;
-import de.imise.util.swing.component.AlphabeticalComboBox;
 import de.imise.util.swing.component.ParentComponentFinder;
 import de.imise.util.swing.component.text.ExtendedTextArea;
 import de.imise.util.swing.component.text.ExtendedTextField;
 import de.imise.util.swing.component.text.NumberTextField;
+import de.imise.util.swing.layout.WrapLayout;
 
 /**
  * Panel für den Eigenschaftendialog von Elementen, in dem alle definierten
@@ -249,7 +248,9 @@ public class PropertyDialogUserFieldPanel extends ElementDialogPanel implements 
 
         //Attributdefinitionen des GraphDocumentes holen
         for (UserField userField : tabDefinition) {
-            if (userField.hasStyle(TAB)) {
+            if (userField.hasStyle(SUBTYPE)) {
+                continue;
+            } else if (userField.hasStyle(TAB)) {
                 addTab(userField, constraints);
             } else if (userField.hasStyle(GROUP)) {
                 currentPanel = addGroup(userField, constraints);
@@ -313,8 +314,8 @@ public class PropertyDialogUserFieldPanel extends ElementDialogPanel implements 
      * @param constraints
      */
     protected void addAttribute(final UserField userField, final JPanel panel, final GridBagConstraints constraints) {
-        JComponent label = getTitleLabel(userField);
-        JComponent editor = getEditor(userField);
+        JLabel label = getTitleLabel(userField);
+        JComponent editor = getEditor(userField, label);
         constraints.insets.top = constraints.gridy > 0 ? STANDARD_HORIZONTAL_INSETS : 0;
         if (showAttributeLabelAndEditorSideBySide) {
             constraints.gridwidth = 1;
@@ -372,7 +373,8 @@ public class PropertyDialogUserFieldPanel extends ElementDialogPanel implements 
             if (userField.isShowDescriptionInDialog()) {
                 constraints.insets.top = 0;
                 constraints.weightx = 0d;
-                panel.add(getDescriptionLabel(description), constraints);
+                PropertyDialogUserFieldPanelDescriptionLabel label = new PropertyDialogUserFieldPanelDescriptionLabel(description);
+                panel.add(label, constraints);
                 constraints.insets.top = STANDARD_HORIZONTAL_INSETS;
                 constraints.weightx = 1d;
                 constraints.gridy++;
@@ -380,34 +382,6 @@ public class PropertyDialogUserFieldPanel extends ElementDialogPanel implements 
             }
         }
         return false;
-    }
-
-    /**
-     * @param description
-     * @return
-     */
-    protected JComponent getDescriptionLabel(final String description) {
-        JTextArea textField = new JTextArea();
-        textField.setLineWrap(true);
-        textField.setWrapStyleWord(true);
-        textField.setEnabled(false);
-        Color textColor = UIManager.getColor("Label.foreground");
-        textField.setDisabledTextColor(textColor);
-        Color backgroundColor = UIManager.getColor("Label.background");
-        textField.setBackground(backgroundColor);
-        textField.setBorder(null);
-        textField.setFont(getDescriptionFont());
-        textField.setText(description);
-        return textField;
-    }
-
-    /**
-     * @return the font used to write descriptions
-     */
-    private Font getDescriptionFont() {
-        Font font = UIManager.getFont("Label.font");
-        font = font.deriveFont(Font.ITALIC);
-        return font;
     }
 
     /**
@@ -470,9 +444,10 @@ public class PropertyDialogUserFieldPanel extends ElementDialogPanel implements 
      * der Editor deaktiviert.
      *
      * @param field
+     * @param label
      * @return
      */
-    protected JComponent getEditor(final UserField field) {
+    protected JComponent getEditor(final UserField field, final JLabel label) {
         String value = getFormattedValue(field);
         UserField.Style style = field.getStyle();
         JComponent editorComponent = null;
@@ -487,21 +462,22 @@ public class PropertyDialogUserFieldPanel extends ElementDialogPanel implements 
             textArea.setText(value);
             editorComponent = new JScrollPane(textArea);
         } else if (style == COMBO_BOX) {
-            AlphabeticalComboBox<String> comboBox = new AlphabeticalComboBox<>(true);
+            JComboBox<String> comboBox = new JComboBox<>();
+            comboBox.addItem("");
             boolean foundEntry = false;
             for (int i = 0; i < field.getListValuesCount(); i++) {
                 String listValue = field.getListValueAt(i);
-                comboBox.addObject(listValue);
+                comboBox.addItem(listValue);
                 if (listValue.equals(value)) {
-                    comboBox.setSelectedObject(listValue);
+                    comboBox.setSelectedItem(listValue);
                     foundEntry = true;
                 }
             }
             if (!foundEntry) {
                 if (!Strings.isNullOrEmpty(value)) {
                     field.addListValue(value);
-                    comboBox.addObject(value);
-                    comboBox.setSelectedObject(value);
+                    comboBox.addItem(value);
+                    comboBox.setSelectedItem(value);
                     foundEntry = true;
                 } else {
                     comboBox.setSelectedIndex(-1);
@@ -509,7 +485,7 @@ public class PropertyDialogUserFieldPanel extends ElementDialogPanel implements 
             }
             editorComponent = comboBox;
         } else if (style == RADIO_BUTTON) {
-            JPanel flowLayoutPanel = new JPanel();
+            JPanel flowLayoutPanel = new JPanel(new WrapLayout(WrapLayout.LEFT));
             flowLayoutPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), ""));
             //den aktuellen Wert in die List-Values hinzufügen, falls er da aus irgendwelchen Gründen nicht drinsteht.
             if (!Strings.isNullOrEmpty(value) && !field.containsListValue(value)) {
@@ -527,15 +503,15 @@ public class PropertyDialogUserFieldPanel extends ElementDialogPanel implements 
             }
             editorComponent = flowLayoutPanel;
         } else if (style == CHECK_BOX) {
-            String label = showAttributeLabelAndEditorSideBySide ? "" : field.getName();
-            label = HTMLConverter.getTextAsHTMLLabelTextBold(label);
-            editorComponent = new JCheckBox(label, value.equals(CHECKBOX_TRUE));
+            String fieldLabel = showAttributeLabelAndEditorSideBySide ? "" : field.getName();
+            fieldLabel = HTMLConverter.getTextAsHTMLLabelTextBold(fieldLabel);
+            editorComponent = new JCheckBox(fieldLabel, value.equals(CHECKBOX_TRUE));
         } else if (style == HYPERLINK) {
             final ExtendedTextField textField = new ExtendedTextField(value);
             JPanel hyperlinkPanel = new JPanel();
             hyperlinkPanel.setLayout(new BorderLayout());
             hyperlinkPanel.add(textField, BorderLayout.CENTER);
-            final JButton button = getHyperlinkButton(textField);
+            final JButton button = getHyperlinkButtonAndInitListeners(label, textField);
             hyperlinkPanel.add(button, BorderLayout.EAST);
             editorComponent = hyperlinkPanel;
             //Kennzahlen:
@@ -621,32 +597,42 @@ public class PropertyDialogUserFieldPanel extends ElementDialogPanel implements 
     }
 
     /**
+     * @param label
      * @param hyperlinkText
      * @return
      */
-    private JButton getHyperlinkButton(final JTextComponent hyperlinkText) {
-        // Der Button, der für einen Hyperlink das öffnen eines Browsers
-        // ermöglicht.
-        final JButton button = new JButton(new AbstractAction(">>") {
-
+    private JButton getHyperlinkButtonAndInitListeners(final JLabel label, final JTextComponent hyperlinkText) {
+        Action browseAction = new AbstractAction(">>") {
             @Override
             public void actionPerformed(final ActionEvent e) {
+                //always take the current value of the text property!
                 String urlOrPath = hyperlinkText.getText().trim();
-                if (!urlOrPath.isEmpty()) {
+                if (!Strings.isNullOrEmpty(urlOrPath)) {
                     BrowseUtils.browse(urlOrPath);
                 }
             }
-        });
-        //auch bei Doppelklick oder Klick mit STRG den Link öffnen
-        hyperlinkText.addMouseListener(new MouseAdapter() {
+        };
 
+        // Der Button, der für einen Hyperlink das öffnen eines Browsers
+        // ermöglicht.
+        final JButton button = new JButton(browseAction);
+        MouseAdapter mouseAdapter = new MouseAdapter() {
             @Override
             public void mouseClicked(final MouseEvent e) {
                 if (e.getClickCount() == 1 && e.isControlDown() || e.getClickCount() > 1) {
-                    button.doClick();
+                    browseAction.actionPerformed(null);
                 }
             }
-        });
+        };
+
+        //auch bei Doppelklick oder Klick mit STRG den Link öffnen
+        label.addMouseListener(mouseAdapter);
+        hyperlinkText.addMouseListener(mouseAdapter);
+
+        String tooltip = getResString("TOOLTIP_USERFIELD_LINK");
+        label.setToolTipText(tooltip);
+        hyperlinkText.setToolTipText(tooltip);
+
         return button;
     }
 
@@ -673,7 +659,7 @@ public class PropertyDialogUserFieldPanel extends ElementDialogPanel implements 
             //Das ist besonders bei Kennzahlen wichtig, da diese, wenn sie nicht den Focus haben, immer
             //den formatierten Wert (also evtl. mit Einheit und im Gegensatz zum eigentlichen Eingabewert
             //mit einer anderen Anzahl von Nachkommastellen) anzeigen. Das würde hier als Änderung erkannt
-            //werden und somit der formatierte Wert als Eingabewert gesetzt werden (was ei Einheiten zu
+            //werden und so)mit der formatierte Wert als Eingabewert gesetzt werden (was ei Einheiten zu
             //NUMBER_FORMAT_ERROR führt und ansonsten die Anzahl der angeblich eingegebenen Nachkommastellen
             //ändern kann.
             if (!editorComponent.hasFocus()) {
