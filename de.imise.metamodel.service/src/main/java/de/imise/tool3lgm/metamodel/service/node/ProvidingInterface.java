@@ -10,7 +10,7 @@ import de.imise.tool3lgm.metamodel.service.edge.Service_RepresentationForm_Edge;
 /**
  * @author AXS (26.12.2017)
  */
-public final class ProvidingInterface extends CommunicationInterface {
+public class ProvidingInterface extends CommunicationInterface {
 
     @Override
     public ElementPropertyDialog createPropertyDialog() {

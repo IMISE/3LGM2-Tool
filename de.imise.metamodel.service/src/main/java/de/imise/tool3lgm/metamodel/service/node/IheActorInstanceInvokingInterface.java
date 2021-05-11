@@ -9,7 +9,7 @@ import de.imise.tool3lgm.metamodel.service.edge.IheInvokingInterface_IheTransact
 /**
  * @author AXS (26.12.2017)
  */
-public final class IheActorInstanceInvokingInterface extends IheActorInstanceInterface {
+public class IheActorInstanceInvokingInterface extends IheActorInstanceInterface {
 
     @Override
     public ElementPropertyDialog createPropertyDialog() {

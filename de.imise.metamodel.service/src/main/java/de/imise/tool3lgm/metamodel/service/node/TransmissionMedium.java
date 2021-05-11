@@ -7,7 +7,7 @@ import de.imise.tool3lgm.metamodel.service.edge.TransmissionMedium_DataTransmiss
 /**
  * @author AXS (22.12.2017)
  */
-public final class TransmissionMedium extends Node {
+public class TransmissionMedium extends Node {
 
     @Override
     public ElementPropertyDialog createPropertyDialog() {

@@ -7,7 +7,7 @@ import de.imise.tool3lgm.metamodel.service.edge.PhysicalDataProcessingComponent_
 /**
  * @author AXS (22.12.2017)
  */
-public final class Location extends Node {
+public class Location extends Node {
 
     @Override
     public ElementPropertyDialog createPropertyDialog() {

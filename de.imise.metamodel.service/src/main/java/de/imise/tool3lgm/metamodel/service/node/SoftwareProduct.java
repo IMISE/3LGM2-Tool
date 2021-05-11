@@ -9,7 +9,7 @@ import de.imise.tool3lgm.metamodel.service.edge.IheActorInstance_SoftwareProduct
 /**
  * @author AXS (26.12.2017)
  */
-public final class SoftwareProduct extends Node {
+public class SoftwareProduct extends Node {
 
     @Override
     public ElementPropertyDialog createPropertyDialog() {
