@@ -32,7 +32,7 @@ public class ElementClassTreeNode extends IconifiedTreeNode<Class<? extends Mode
      * @param icon
      */
     public ElementClassTreeNode(final Class<? extends ModelElement> elementClass, final String label, final ImageIcon icon) {
-        super(elementClass, label, true);
+        super(elementClass, label, true, icon);
     }
 
     /**
@@ -42,7 +42,7 @@ public class ElementClassTreeNode extends IconifiedTreeNode<Class<? extends Mode
      * @param icon
      */
     public ElementClassTreeNode(final Class<? extends ModelElement> elementClass, final String label, final boolean sort, final ImageIcon icon) {
-        super(elementClass, label, sort);
+        super(elementClass, label, sort, icon);
     }
 
     @Override
