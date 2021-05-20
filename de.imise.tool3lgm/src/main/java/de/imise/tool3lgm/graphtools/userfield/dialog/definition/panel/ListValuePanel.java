@@ -10,7 +10,7 @@ import java.awt.BorderLayout;
 import javax.swing.BorderFactory;
 import javax.swing.JScrollPane;
 
-import de.imise.tool3lgm.graphtools.userfield.definition.UserField;
+import de.imise.tool3lgm.graphtools.userfield.definition.type.UserField;
 import de.imise.util.htmlxml.HTMLConverter;
 import de.imise.util.swing.component.text.ExtendedTextPane;
 

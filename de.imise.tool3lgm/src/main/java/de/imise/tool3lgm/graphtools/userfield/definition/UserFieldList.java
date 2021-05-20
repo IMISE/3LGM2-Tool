@@ -1,7 +1,7 @@
 package de.imise.tool3lgm.graphtools.userfield.definition;
 
-import static de.imise.tool3lgm.graphtools.userfield.definition.UserField.Style.SUBTYPE;
-import static de.imise.tool3lgm.graphtools.userfield.definition.UserField.Style.TAB;
+import static de.imise.tool3lgm.graphtools.userfield.definition.type.UserField.Style.SUBTYPE;
+import static de.imise.tool3lgm.graphtools.userfield.definition.type.UserField.Style.TAB;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -10,6 +10,7 @@ import java.util.List;
 import com.google.common.collect.ImmutableList;
 
 import de.imise.tool3lgm.Tool3lgmConstants;
+import de.imise.tool3lgm.graphtools.userfield.definition.type.UserField;
 
 /**
  * @author Thomas Rudert

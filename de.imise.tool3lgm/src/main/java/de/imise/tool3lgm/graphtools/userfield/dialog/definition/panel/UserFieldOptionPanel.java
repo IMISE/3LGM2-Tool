@@ -18,8 +18,8 @@ import javax.swing.BorderFactory;
 
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
-import de.imise.tool3lgm.graphtools.userfield.definition.UserField;
 import de.imise.tool3lgm.graphtools.userfield.definition.UserFieldTarget;
+import de.imise.tool3lgm.graphtools.userfield.definition.type.UserField;
 import de.imise.util.swing.component.StoreLastValueCheckbox;
 import de.imise.util.swing.component.TriStateCheckBox;
 

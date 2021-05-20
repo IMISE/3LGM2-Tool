@@ -9,7 +9,7 @@ import com.google.common.collect.ImmutableSet;
 
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
-import de.imise.tool3lgm.graphtools.userfield.definition.UserField;
+import de.imise.tool3lgm.graphtools.userfield.definition.type.UserField;
 import de.imise.util.NamedObjectContainer;
 
 /**

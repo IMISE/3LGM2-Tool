@@ -16,7 +16,7 @@ import de.imise.tool3lgm.graphtools.dialog.element.panel.ElementDialogPanel;
 import de.imise.tool3lgm.graphtools.dialog.element.panel.MultiPanelElementDialogPanel;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.path.metapaths.MetaPath;
-import de.imise.tool3lgm.graphtools.userfield.definition.UserField;
+import de.imise.tool3lgm.graphtools.userfield.definition.type.UserField;
 import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.panel.PropertyDialogUserFieldPanel;
 import de.imise.util.swing.component.tab.ReorderableTabbedPane;
 

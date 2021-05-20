@@ -5,6 +5,16 @@
 package de.imise.tool3lgm.graphtools.userfield.calculator;
 
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
+import static de.imise.tool3lgm.graphtools.userfield.definition.type.FormulaUserField.ACCOUNTING_FUNCTION_AVG;
+import static de.imise.tool3lgm.graphtools.userfield.definition.type.FormulaUserField.ACCOUNTING_FUNCTION_INDI;
+import static de.imise.tool3lgm.graphtools.userfield.definition.type.FormulaUserField.ACCOUNTING_FUNCTION_MAX;
+import static de.imise.tool3lgm.graphtools.userfield.definition.type.FormulaUserField.ACCOUNTING_FUNCTION_MIN;
+import static de.imise.tool3lgm.graphtools.userfield.definition.type.FormulaUserField.ACCOUNTING_FUNCTION_MULT;
+import static de.imise.tool3lgm.graphtools.userfield.definition.type.FormulaUserField.ACCOUNTING_FUNCTION_REF;
+import static de.imise.tool3lgm.graphtools.userfield.definition.type.FormulaUserField.ACCOUNTING_FUNCTION_SUM;
+import static de.imise.tool3lgm.graphtools.userfield.definition.type.FormulaUserField.ACCOUNTING_FUNCTION_TWSUM;
+import static de.imise.tool3lgm.graphtools.userfield.definition.type.FormulaUserField.DIRECTION_FROM_PART_TO_WHOLE;
+import static de.imise.tool3lgm.graphtools.userfield.definition.type.FormulaUserField.DIRECTION_FROM_WHOLE_TO_PART;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -19,9 +29,10 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.HasPartEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.userfield.CostingUtil;
-import de.imise.tool3lgm.graphtools.userfield.definition.UserField;
 import de.imise.tool3lgm.graphtools.userfield.definition.UserFieldDefinitions;
 import de.imise.tool3lgm.graphtools.userfield.definition.UserFieldTarget;
+import de.imise.tool3lgm.graphtools.userfield.definition.type.FormulaUserField;
+import de.imise.tool3lgm.graphtools.userfield.definition.type.UserField;
 
 /**
  * Die Klasse <code>Calculator</code> beinhaltet alle Methoden für die
@@ -105,7 +116,7 @@ public class Calculator {
      * @param userFieldTarget
      * @return
      */
-    public String calculate(final UserField userField, final UserFieldTarget userFieldTarget) {
+    public String calculate(final FormulaUserField userField, final UserFieldTarget userFieldTarget) {
         String result = calculateInternal(userField, userFieldTarget);
         //        System.err.print(result);
         //        System.err.print(" -> ");
@@ -140,7 +151,7 @@ public class Calculator {
      * @return Das Ergebnis als String
      */
 
-    private String calculateInternal(final UserField userField, final UserFieldTarget userFieldTarget) {
+    private String calculateInternal(final FormulaUserField userField, final UserFieldTarget userFieldTarget) {
         //Modellvariablen berechnen
         if (userField.isGlobal()) {
             //Modellvariablen berechnen (sowas gibts im Moment noch gar nicht,
@@ -167,49 +178,49 @@ public class Calculator {
 
         //Indikatorformeln haben keine weiteren Verrechnungsfunktionen in sich
         // und fangen immer mit dem Funktionsnamen an
-        if (infix.indexOf(UserField.ACCOUNTING_FUNCTION_INDI) == 1) {
+        if (infix.indexOf(ACCOUNTING_FUNCTION_INDI) == 1) {
             return getIndi(me, infix.toString());
         }
 
         //      Alle Teilwertsummen auflösen (das muss vor den Summen apssieren, da
         //      in TWSUM auch SUM steckt)
-        String erg = replaceInfixString(infix, userField, me, UserField.ACCOUNTING_FUNCTION_TWSUM);
+        String erg = replaceInfixString(infix, userField, me, ACCOUNTING_FUNCTION_TWSUM);
         if (UserField.isCriticalError(erg)) {
             return erg;
         }
 
         // Alle Summen
-        erg = replaceInfixString(infix, userField, me, UserField.ACCOUNTING_FUNCTION_SUM);
+        erg = replaceInfixString(infix, userField, me, ACCOUNTING_FUNCTION_SUM);
         if (UserField.isCriticalError(erg)) {
             return erg;
         }
 
         // Alle Multiplikationen
-        erg = replaceInfixString(infix, userField, me, UserField.ACCOUNTING_FUNCTION_MULT);
+        erg = replaceInfixString(infix, userField, me, ACCOUNTING_FUNCTION_MULT);
         if (UserField.isCriticalError(erg)) {
             return erg;
         }
 
         // Alle Minima
-        erg = replaceInfixString(infix, userField, me, UserField.ACCOUNTING_FUNCTION_MIN);
+        erg = replaceInfixString(infix, userField, me, ACCOUNTING_FUNCTION_MIN);
         if (UserField.isCriticalError(erg)) {
             return erg;
         }
 
         // Alle Maxima
-        erg = replaceInfixString(infix, userField, me, UserField.ACCOUNTING_FUNCTION_MAX);
+        erg = replaceInfixString(infix, userField, me, ACCOUNTING_FUNCTION_MAX);
         if (UserField.isCriticalError(erg)) {
             return erg;
         }
 
         // Alle Referenzen
-        erg = replaceInfixString(infix, userField, me, UserField.ACCOUNTING_FUNCTION_REF);
+        erg = replaceInfixString(infix, userField, me, ACCOUNTING_FUNCTION_REF);
         if (UserField.isCriticalError(erg)) {
             return erg;
         }
 
         // Alle Durchschnitte
-        erg = replaceInfixString(infix, userField, me, UserField.ACCOUNTING_FUNCTION_AVG);
+        erg = replaceInfixString(infix, userField, me, ACCOUNTING_FUNCTION_AVG);
 
         String infixString = infix.toString();
         //Wenn der Infix nur aus irgendeinem Fehlerwert besteht -> raus mit dem
@@ -367,25 +378,25 @@ public class Calculator {
 
             String value = "";
 
-            if (accountingFunction.equals(UserField.ACCOUNTING_FUNCTION_TWSUM)) {
+            if (accountingFunction.equals(ACCOUNTING_FUNCTION_TWSUM)) {
                 //jetzt berechnen der TeilwertSumme anstoßen
                 value = PartValueSumFunction.getTWSUM(definitions, userField, me, arguments);
-            } else if (accountingFunction.equals(UserField.ACCOUNTING_FUNCTION_SUM)) {
+            } else if (accountingFunction.equals(ACCOUNTING_FUNCTION_SUM)) {
                 //jetzt berechnen der Summe anstoßen
-                value = getSUM(userField, me, arguments, UserField.ACCOUNTING_FUNCTION_SUM);
-            } else if (accountingFunction.equals(UserField.ACCOUNTING_FUNCTION_MULT)) {
+                value = getSUM(userField, me, arguments, ACCOUNTING_FUNCTION_SUM);
+            } else if (accountingFunction.equals(ACCOUNTING_FUNCTION_MULT)) {
                 //jetzt berechnen des Produktes anstoßen
-                value = getMULT(userField, me, arguments, UserField.ACCOUNTING_FUNCTION_MULT);
-            } else if (accountingFunction.equals(UserField.ACCOUNTING_FUNCTION_MIN)) {
+                value = getMULT(userField, me, arguments, ACCOUNTING_FUNCTION_MULT);
+            } else if (accountingFunction.equals(ACCOUNTING_FUNCTION_MIN)) {
                 //jetzt Suches des Minimums anstoßen
                 value = getMIN(userField, me, arguments);
-            } else if (accountingFunction.equals(UserField.ACCOUNTING_FUNCTION_MAX)) {
+            } else if (accountingFunction.equals(ACCOUNTING_FUNCTION_MAX)) {
                 //jetzt Suchen des Maximums anstoßen
                 value = getMAX(userField, me, arguments);
-            } else if (accountingFunction.equals(UserField.ACCOUNTING_FUNCTION_REF)) {
+            } else if (accountingFunction.equals(ACCOUNTING_FUNCTION_REF)) {
                 //jetzt das Heraussuchen dees Referenzierten wertes anstoßen.
                 value = getREF(userField, me, arguments);
-            } else if (accountingFunction.equals(UserField.ACCOUNTING_FUNCTION_AVG)) {
+            } else if (accountingFunction.equals(ACCOUNTING_FUNCTION_AVG)) {
                 //jetzt berechnen des Durchschnittes anstoßen
                 value = getAvg(userField, me, arguments);
             }
@@ -528,9 +539,9 @@ public class Calculator {
         // Wenn es sich um eine Teil-von-Beziehung handelt
         if (HasPartEdge.class.isAssignableFrom(edge.getClass()) && direction != null) {
             HasPartEdge hasPartEdge = (HasPartEdge) edge;
-            if (UserField.DIRECTION_FROM_WHOLE_TO_PART.equals(direction)) {
+            if (DIRECTION_FROM_WHOLE_TO_PART.equals(direction)) {
                 elementWithUserField = hasPartEdge.getParent();
-            } else if (UserField.DIRECTION_FROM_PART_TO_WHOLE.equals(direction)) {
+            } else if (DIRECTION_FROM_PART_TO_WHOLE.equals(direction)) {
                 elementWithUserField = hasPartEdge.getPart();
             }
         } else { // Wenn es sich um keine Teil-Von-Beziehung handelt
@@ -570,9 +581,9 @@ public class Calculator {
     public static final List<Edge> getEdges(final ModelElement me, final Class<? extends ModelElement> elemClass, final Class<? extends Edge> edgeClass, final String direction) {
         List<Edge> edges = null;
         //Alle Kanten mit der richtigen Richtung holen
-        if (UserField.DIRECTION_FROM_WHOLE_TO_PART.equals(direction)) {
+        if (DIRECTION_FROM_WHOLE_TO_PART.equals(direction)) {
             edges = me.getEdgesTo(elemClass, edgeClass);
-        } else if (UserField.DIRECTION_FROM_PART_TO_WHOLE.equals(direction)) {
+        } else if (DIRECTION_FROM_PART_TO_WHOLE.equals(direction)) {
             edges = me.getEdgesFrom(elemClass, edgeClass);
         } else {
             edges = me.getEdgesWith(elemClass, edgeClass);
@@ -617,7 +628,7 @@ public class Calculator {
         }
 
         String result = ZERO;
-        if (accountingFunction.equals(UserField.ACCOUNTING_FUNCTION_MULT)) {
+        if (accountingFunction.equals(ACCOUNTING_FUNCTION_MULT)) {
             result = ONE;
         }
 
@@ -631,9 +642,9 @@ public class Calculator {
             }
             //den Eingabewert des aufzusummierenden Feldes holen
             String value = connectedElement.getValue(userField);
-            if (accountingFunction.equals(UserField.ACCOUNTING_FUNCTION_SUM)) {
+            if (accountingFunction.equals(ACCOUNTING_FUNCTION_SUM)) {
                 result = getResult(result, value, OPERATOR_PLUS);
-            } else if (accountingFunction.equals(UserField.ACCOUNTING_FUNCTION_MULT)) {
+            } else if (accountingFunction.equals(ACCOUNTING_FUNCTION_MULT)) {
                 result = getResult(result, value, OPERATOR_MULT);
             }
         }
@@ -679,7 +690,7 @@ public class Calculator {
      * @return Den kleinsten Wert.
      */
     private String getMIN(final UserField resultUserField, final ModelElement me, final String minFormula) {
-        return getMINMAX(resultUserField, me, minFormula, UserField.ACCOUNTING_FUNCTION_MIN);
+        return getMINMAX(resultUserField, me, minFormula, ACCOUNTING_FUNCTION_MIN);
 
     }
 
@@ -693,7 +704,7 @@ public class Calculator {
      * @return Den größten Wert.
      */
     private String getMAX(final UserField resultUserField, final ModelElement me, final String maxFormula) {
-        return getMINMAX(resultUserField, me, maxFormula, UserField.ACCOUNTING_FUNCTION_MAX);
+        return getMINMAX(resultUserField, me, maxFormula, ACCOUNTING_FUNCTION_MAX);
 
     }
 
@@ -762,10 +773,10 @@ public class Calculator {
                     return UserField.NUMBER_FORMAT_ERROR;
                 }
                 if (valueTwo.compareTo(valueOne) == -1) {
-                    if (accountingFunction.equals(UserField.ACCOUNTING_FUNCTION_MIN)) {
+                    if (accountingFunction.equals(ACCOUNTING_FUNCTION_MIN)) {
                         result = value;
                     }
-                } else if (accountingFunction.equals(UserField.ACCOUNTING_FUNCTION_MAX)) {
+                } else if (accountingFunction.equals(ACCOUNTING_FUNCTION_MAX)) {
                     result = value;
                 }
 
@@ -783,7 +794,7 @@ public class Calculator {
      * @return gibt das Ergebnis der Berechnung zurück.
      */
     private String getAvg(final UserField resultUserField, final ModelElement me, final String avgFormula) {
-        String sum = getSUM(resultUserField, me, avgFormula, UserField.ACCOUNTING_FUNCTION_SUM);
+        String sum = getSUM(resultUserField, me, avgFormula, ACCOUNTING_FUNCTION_SUM);
 
         if (UserField.isError(sum)) {
             return sum;

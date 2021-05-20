@@ -35,7 +35,7 @@ import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableModel;
 
-import de.imise.tool3lgm.graphtools.userfield.definition.UserField;
+import de.imise.tool3lgm.graphtools.userfield.definition.type.UserField;
 import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.table.cell.IUserFieldTableCell;
 import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.table.layout.AbstractUserFieldTableLayout;
 import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.table.model.AbstractTableModel;

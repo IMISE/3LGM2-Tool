@@ -4,7 +4,7 @@ import java.util.Set;
 
 import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
 import de.imise.tool3lgm.graphtools.userfield.definition.UserFieldDefinitions;
-import de.imise.tool3lgm.graphtools.userfield.definition.UserField.Style;
+import de.imise.tool3lgm.graphtools.userfield.definition.type.UserField.Style;
 import de.imise.tool3lgm.graphtools.userfield.UserFieldDefinitionsAnalyzer;
 import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.UserFieldEditorDialog;
 import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.table.UserFieldTableController;

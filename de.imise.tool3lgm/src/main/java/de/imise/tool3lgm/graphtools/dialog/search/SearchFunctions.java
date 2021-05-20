@@ -1,7 +1,7 @@
 package de.imise.tool3lgm.graphtools.dialog.search;
 
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
-import static de.imise.tool3lgm.graphtools.userfield.definition.UserField.Style.CHECK_BOX;
+import static de.imise.tool3lgm.graphtools.userfield.definition.type.UserField.Style.CHECK_BOX;
 
 import java.util.List;
 import java.util.regex.Matcher;
@@ -12,8 +12,8 @@ import de.imise.tool3lgm.graphtools.dialog.search.SearchOptions.UserFieldCheckBo
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
-import de.imise.tool3lgm.graphtools.userfield.definition.UserField;
-import de.imise.tool3lgm.graphtools.userfield.definition.UserField.Style;
+import de.imise.tool3lgm.graphtools.userfield.definition.type.UserField;
+import de.imise.tool3lgm.graphtools.userfield.definition.type.UserField.Style;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.log.Log;
 import de.imise.util.Alphabetical;

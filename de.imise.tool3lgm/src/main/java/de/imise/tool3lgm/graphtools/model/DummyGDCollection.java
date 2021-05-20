@@ -5,9 +5,9 @@ import static de.imise.tool3lgm.graphtools.undoredo.TransactionManager.STANDARD_
 import de.imise.tool3lgm.Tool3lgmModelType;
 import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
-import de.imise.tool3lgm.graphtools.userfield.definition.UserField;
-import de.imise.tool3lgm.graphtools.userfield.definition.UserField.Style;
 import de.imise.tool3lgm.graphtools.userfield.definition.UserFieldDefinitions;
+import de.imise.tool3lgm.graphtools.userfield.definition.type.UserField;
+import de.imise.tool3lgm.graphtools.userfield.definition.type.UserField.Style;
 import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
 
 /**

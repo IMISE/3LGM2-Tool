@@ -4,8 +4,8 @@
 package de.imise.tool3lgm.graphtools.userfield.dialog.definition.panel;
 
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
-import static de.imise.tool3lgm.graphtools.userfield.definition.UserField.ACCOUNTING_FUNCTION_SUM;
-import static de.imise.tool3lgm.graphtools.userfield.definition.UserField.ACCOUNTING_FUNCTION_TWSUM;
+import static de.imise.tool3lgm.graphtools.userfield.definition.type.UserField.ACCOUNTING_FUNCTION_SUM;
+import static de.imise.tool3lgm.graphtools.userfield.definition.type.UserField.ACCOUNTING_FUNCTION_TWSUM;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -23,9 +23,9 @@ import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.metamodel.elements.SubordinationEdge;
-import de.imise.tool3lgm.graphtools.userfield.definition.UserField;
 import de.imise.tool3lgm.graphtools.userfield.definition.UserFieldDefinitions;
 import de.imise.tool3lgm.graphtools.userfield.definition.UserFieldTarget;
+import de.imise.tool3lgm.graphtools.userfield.definition.type.UserField;
 import de.imise.util.swing.component.AlphabeticalComboBox;
 
 /**

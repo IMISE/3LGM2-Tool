@@ -7,7 +7,7 @@ import java.util.Vector;
 
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
-import de.imise.tool3lgm.graphtools.userfield.definition.UserField;
+import de.imise.tool3lgm.graphtools.userfield.definition.type.UserField;
 import de.imise.util.NamedObjectContainer;
 
 public class UserFieldGlobalNumberTableModel extends AbstractUserFieldTableModel {

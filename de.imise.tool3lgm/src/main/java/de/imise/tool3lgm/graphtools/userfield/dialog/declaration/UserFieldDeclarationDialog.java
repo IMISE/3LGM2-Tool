@@ -2,19 +2,6 @@ package de.imise.tool3lgm.graphtools.userfield.dialog.declaration;
 
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
 import static de.imise.tool3lgm.graphtools.model.LGMChangeListener.LGMChangeType.DATA_CHANGED;
-import static de.imise.tool3lgm.graphtools.userfield.definition.UserField.Style.CHECK_BOX;
-import static de.imise.tool3lgm.graphtools.userfield.definition.UserField.Style.COMBO_BOX;
-import static de.imise.tool3lgm.graphtools.userfield.definition.UserField.Style.FORMULA;
-import static de.imise.tool3lgm.graphtools.userfield.definition.UserField.Style.GROUP;
-import static de.imise.tool3lgm.graphtools.userfield.definition.UserField.Style.HYPERLINK;
-import static de.imise.tool3lgm.graphtools.userfield.definition.UserField.Style.ID;
-import static de.imise.tool3lgm.graphtools.userfield.definition.UserField.Style.MULTI_LINE;
-import static de.imise.tool3lgm.graphtools.userfield.definition.UserField.Style.NUMBER;
-import static de.imise.tool3lgm.graphtools.userfield.definition.UserField.Style.RADIO_BUTTON;
-import static de.imise.tool3lgm.graphtools.userfield.definition.UserField.Style.SEPARATOR;
-import static de.imise.tool3lgm.graphtools.userfield.definition.UserField.Style.SINGLE_LINE;
-import static de.imise.tool3lgm.graphtools.userfield.definition.UserField.Style.SUBTYPE;
-import static de.imise.tool3lgm.graphtools.userfield.definition.UserField.Style.TAB;
 import static de.imise.tool3lgm.graphtools.userfield.dialog.declaration.UserFieldDeclarationImportExportHandler.exportDefinitions;
 import static de.imise.tool3lgm.graphtools.userfield.dialog.declaration.UserFieldDeclarationImportExportHandler.importDefinitions;
 import static de.imise.tool3lgm.graphtools.userfield.dialog.definition.UserFieldDefinitionDialog.OK;
@@ -44,10 +31,9 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
 import de.imise.tool3lgm.graphtools.model.DummyGDCollection;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.LGMGraphDocument;
-import de.imise.tool3lgm.graphtools.userfield.definition.UserField;
-import de.imise.tool3lgm.graphtools.userfield.definition.UserField.Style;
 import de.imise.tool3lgm.graphtools.userfield.definition.UserFieldDefinitions;
 import de.imise.tool3lgm.graphtools.userfield.definition.UserFieldTarget;
+import de.imise.tool3lgm.graphtools.userfield.definition.type.UserField;
 import de.imise.tool3lgm.graphtools.userfield.dialog.definition.UserFieldDefinitionDialog;
 import de.imise.util.event.DoubleClickListener;
 import de.imise.util.swing.dialog.MultipleOptionPane;
@@ -212,7 +198,7 @@ public final class UserFieldDeclarationDialog extends AbstractUserFieldDeclarati
     /**
      * @param style
      */
-    private void addStyle(final Style style) {
+    private void addStyle(final Class<? extends UserField> style) {
         userFieldTypeComboBox.addObject(style);
     }
 
@@ -423,7 +409,7 @@ public final class UserFieldDeclarationDialog extends AbstractUserFieldDeclarati
             return false;
         }
         //if we have subtypes this condition must be refitted
-        Iterable<UserField> userFields = definitions.getUserFields(selectedClass);
+        Iterable<UserField> userFields = definitions.iterateUserFields(selectedClass);
         return userFields.iterator().hasNext();
     }
 

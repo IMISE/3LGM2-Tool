@@ -10,7 +10,8 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import de.imise.tool3lgm.graphtools.userfield.definition.UserField.Style;
+import de.imise.tool3lgm.graphtools.userfield.definition.type.UserField;
+import de.imise.tool3lgm.graphtools.userfield.definition.type.UserField.Style;
 import de.imise.util.htmlxml.XMLCharacterCoder;
 
 /**

@@ -1,9 +1,9 @@
 package de.imise.tool3lgm.graphtools.userfield.dialog.declaration;
 
-import static de.imise.tool3lgm.graphtools.userfield.definition.UserField.Style.GROUP;
-import static de.imise.tool3lgm.graphtools.userfield.definition.UserField.Style.SINGLE_LINE;
-import static de.imise.tool3lgm.graphtools.userfield.definition.UserField.Style.SUBTYPE;
-import static de.imise.tool3lgm.graphtools.userfield.definition.UserField.Style.TAB;
+import static de.imise.tool3lgm.graphtools.userfield.definition.type.UserField.Style.GROUP;
+import static de.imise.tool3lgm.graphtools.userfield.definition.type.UserField.Style.SINGLE_LINE;
+import static de.imise.tool3lgm.graphtools.userfield.definition.type.UserField.Style.SUBTYPE;
+import static de.imise.tool3lgm.graphtools.userfield.definition.type.UserField.Style.TAB;
 import static de.imise.util.htmlxml.HTMLConverter.encode;
 import static de.imise.util.htmlxml.HTMLConverter.encodeBold;
 import static de.imise.util.htmlxml.HTMLConverter.getTextAsHTMLLabelText;
@@ -27,10 +27,10 @@ import javax.swing.UIManager;
 
 import org.apache.jena.ext.com.google.common.primitives.Ints;
 
-import de.imise.tool3lgm.graphtools.userfield.definition.UserField;
-import de.imise.tool3lgm.graphtools.userfield.definition.UserField.Style;
 import de.imise.tool3lgm.graphtools.userfield.definition.UserFieldDefinitions;
 import de.imise.tool3lgm.graphtools.userfield.definition.UserFieldTarget;
+import de.imise.tool3lgm.graphtools.userfield.definition.type.UserField;
+import de.imise.tool3lgm.graphtools.userfield.definition.type.UserField.Style;
 import de.imise.tool3lgm.graphtools.view.tree.TreeRenderer;
 import de.imise.util.NamedObjectContainer;
 import de.imise.util.StringUtils;

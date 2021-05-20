@@ -35,10 +35,10 @@ import de.imise.tool3lgm.graphtools.model.GDCollectionFileHandler;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.model.Szenario;
 import de.imise.tool3lgm.graphtools.userfield.WeightReplacer;
-import de.imise.tool3lgm.graphtools.userfield.definition.UserField;
-import de.imise.tool3lgm.graphtools.userfield.definition.UserField.Style;
 import de.imise.tool3lgm.graphtools.userfield.definition.UserFieldDefinitions;
 import de.imise.tool3lgm.graphtools.userfield.definition.UserFieldNumberFormat;
+import de.imise.tool3lgm.graphtools.userfield.definition.type.UserField;
+import de.imise.tool3lgm.graphtools.userfield.definition.type.UserField.Style;
 import de.imise.tool3lgm.graphtools.view.container.BendpointContainer;
 import de.imise.tool3lgm.graphtools.view.container.EdgeContainer;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
@@ -171,7 +171,7 @@ public class ToolContentHandlerV3_0 implements ContentHandler {
      * aktuelles userField bei der Definition der benutzerdefinierten
      * Eigenschaftsfelder
      */
-    protected UserField userField;
+    protected DummyUserField userField;
 
     /** The currently loaded UserFieldNumberFormat */
     protected UserFieldNumberFormat userFieldNumberFormat;
@@ -458,7 +458,7 @@ public class ToolContentHandlerV3_0 implements ContentHandler {
                 MetaModel metaModel = gdcoll.getMetaModel();
                 //bei Modellvariablen ist die Elementclass null
                 Class<? extends ModelElement> userFieldTargetClass = metaModel.getClassForName(elementClass);
-                userField = new UserField(userFieldTargetClass, userFieldID);
+                userField = new DummyUserField(userFieldTargetClass, userFieldID);
             } else if (qName.equals("replacerEntry")) {
                 String elementID = atts.getValue("elementHash");
                 String userFieldID = atts.getValue("userFieldHash");
@@ -547,7 +547,7 @@ public class ToolContentHandlerV3_0 implements ContentHandler {
                         Class<? extends ModelElement> elementClass = element.getClass();
                         UserField userField = userFieldDefinitions.getUserField(elementClass, field);
                         if (userField == null) {
-                            userField = new UserField(elementClass, UserField.Style.ID);
+                            userField = DummyUserField.createIDUSerField(elementClass);
                             userFieldDefinitions.add(userField);
                         }
                         element.setUserFieldInputValue(userField, value);

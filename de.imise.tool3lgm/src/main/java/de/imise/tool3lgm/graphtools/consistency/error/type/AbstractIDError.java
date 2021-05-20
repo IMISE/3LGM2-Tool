@@ -1,7 +1,7 @@
 package de.imise.tool3lgm.graphtools.consistency.error.type;
 
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
-import de.imise.tool3lgm.graphtools.userfield.definition.UserField;
+import de.imise.tool3lgm.graphtools.userfield.definition.type.UserField;
 
 /**
  * Error for ID userFields where the ID is not unique.

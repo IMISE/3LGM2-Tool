@@ -26,8 +26,8 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.path.metapaths.SimpleMetaPath;
-import de.imise.tool3lgm.graphtools.userfield.definition.UserField;
 import de.imise.tool3lgm.graphtools.userfield.definition.UserFieldDefinitions;
+import de.imise.tool3lgm.graphtools.userfield.definition.type.UserField;
 import de.imise.tool3lgm.log.Log;
 import de.imise.util.Alphabetical;
 import de.imise.util.swing.dialog.ExtendedFileChooser;
@@ -82,8 +82,7 @@ public class DataExportModule {
 
             //Alle Elementklassen in der Reihenfolge zusammen sammeln, in der sie exportiert werden sollen (erst
             //alphabetisch alle Knotenklassen, dann alle Kantenklassen
-            ArrayList<Class<? extends ModelElement>> elementClasses = new ArrayList<>();
-            elementClasses.addAll(metaModel.allNodesSet);
+            ArrayList<Class<? extends ModelElement>> elementClasses = new ArrayList<>(metaModel.allNodesSet);
             Alphabetical.sort(elementClasses);
             ArrayList<Class<? extends ModelElement>> edgeClasses = new ArrayList<>();
             edgeClasses.addAll(metaModel.allEdgesSet);
@@ -109,7 +108,7 @@ public class DataExportModule {
                                 caption += "\t" + elementsNameBuilder.getDisplayableName(metaPath.getEndClass());
                             }
                         }
-                        for (UserField uf : ufDef.getUserFields(classElement)) {
+                        for (UserField uf : ufDef.iterateUserFields(classElement)) {
                             caption += "\t" + uf.getName().replaceAll("\t", "\\\\t");
                         }
                         writer.write(caption);
@@ -146,7 +145,7 @@ public class DataExportModule {
                         }
                     }
 
-                    for (UserField uf : ufDef.getUserFields(classElement)) {
+                    for (UserField uf : ufDef.iterateUserFields(classElement)) {
                         String value = "";
                         v = uf.getFormattedValue(me);
                         if (v != null && !v.equals("") && !v.equals(UserField.EMPTY_STRING)) {

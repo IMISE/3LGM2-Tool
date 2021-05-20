@@ -25,10 +25,9 @@ import javax.swing.border.EmptyBorder;
 
 import de.imise.tool3lgm.graphtools.dialog.tools.EasyComponents;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
-import de.imise.tool3lgm.graphtools.userfield.definition.UserField;
-import de.imise.tool3lgm.graphtools.userfield.definition.UserField.Style;
 import de.imise.tool3lgm.graphtools.userfield.definition.UserFieldDefinitions;
 import de.imise.tool3lgm.graphtools.userfield.definition.UserFieldTarget;
+import de.imise.tool3lgm.graphtools.userfield.definition.type.UserField;
 import de.imise.tool3lgm.graphtools.userfield.dialog.definition.panel.UserFieldOptionPanel;
 import de.imise.util.swing.component.AlphabeticalComboBox;
 import de.imise.util.swing.dialog.AbstractSizeAndPositionRestoringDialog;
@@ -85,13 +84,13 @@ public abstract class AbstractUserFieldDeclarationDialog extends AbstractSizeAnd
      * Stores the last selected {@link Style} so if the dialog is reopend the
      * last selected view can be restored.
      */
-    protected static Style lastSelectedUserFieldStyle;
+    protected static Class<? extends UserField> lastSelectedUserFieldStyle;
 
     /**
      * ComboBox mit der die Art des neuen benutzerdefinierten Eigenschaftsfeldes
      * festgelegt wird
      */
-    protected AlphabeticalComboBox<Style> userFieldTypeComboBox;
+    protected AlphabeticalComboBox<Class<? extends UserField>> userFieldTypeComboBox;
 
     /**
      * @param owner
@@ -197,12 +196,12 @@ public abstract class AbstractUserFieldDeclarationDialog extends AbstractSizeAnd
     /**
      * @return
      */
-    private AlphabeticalComboBox<UserField.Style> createStyleCombobox() {
-        AlphabeticalComboBox<UserField.Style> styleCombobox = new AlphabeticalComboBox<>(3);
+    private AlphabeticalComboBox<Class<? extends UserField>> createStyleCombobox() {
+        AlphabeticalComboBox<Class<? extends UserField>> styleCombobox = new AlphabeticalComboBox<>(3);
         styleCombobox.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(final ActionEvent e) {
-                Style selectedStyle = styleCombobox.getSelectedObject();
+                Class<? extends UserField> selectedStyle = styleCombobox.getSelectedObject();
                 if (selectedStyle != null) {
                     lastSelectedUserFieldStyle = selectedStyle;
                 }

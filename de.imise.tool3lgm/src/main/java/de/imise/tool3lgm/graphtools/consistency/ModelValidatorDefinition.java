@@ -31,7 +31,7 @@ import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.path.metapaths.MetaPath;
 import de.imise.tool3lgm.graphtools.path.metapaths.SimpleMetaPath;
 import de.imise.tool3lgm.graphtools.undoredo.TransactionManager;
-import de.imise.tool3lgm.graphtools.userfield.definition.UserField;
+import de.imise.tool3lgm.graphtools.userfield.definition.type.UserField;
 
 /**
  * Diese Klasse ist dazu da, im Fehlerfall an einen besseren Ort (Tab in einem

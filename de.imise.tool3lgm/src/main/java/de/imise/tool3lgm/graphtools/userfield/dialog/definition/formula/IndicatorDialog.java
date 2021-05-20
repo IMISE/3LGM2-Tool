@@ -4,6 +4,7 @@
 package de.imise.tool3lgm.graphtools.userfield.dialog.definition.formula;
 
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
+import static de.imise.tool3lgm.graphtools.userfield.definition.type.FormulaUserField.ACCOUNTING_FUNCTION_INDI;
 
 import java.awt.BorderLayout;
 import java.awt.Container;
@@ -25,8 +26,11 @@ import javax.swing.JPanel;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
 
-import de.imise.tool3lgm.graphtools.userfield.definition.UserField;
 import de.imise.tool3lgm.graphtools.userfield.definition.UserFieldDefinitions;
+import de.imise.tool3lgm.graphtools.userfield.definition.UserFieldTarget;
+import de.imise.tool3lgm.graphtools.userfield.definition.type.AccountingUserField;
+import de.imise.tool3lgm.graphtools.userfield.definition.type.FormulaUserField;
+import de.imise.tool3lgm.graphtools.userfield.definition.type.UserField;
 import de.imise.util.swing.component.AlphabeticalComboBox;
 import de.imise.util.swing.component.text.ExtendedTextField;
 
@@ -88,7 +92,7 @@ public class IndicatorDialog extends JDialog implements ActionListener {
      * Wenn eine Indikatordefinition bearbeitet werden soll, wird das UserField
      * gesetzt, damit sich der Dialog die definition holen kann.
      */
-    private final UserField userField;
+    private final FormulaUserField userField;
 
     /**
      *
@@ -106,8 +110,8 @@ public class IndicatorDialog extends JDialog implements ActionListener {
      *            ansonsten null übergeben! wenn eine neue Indikatordefinitions
      *            angelegt werden soll: null übergeben!
      */
-    public IndicatorDialog(final JDialog owner, final UserFieldDefinitions definitions, final UserField userField) {
-        super(owner, UserField.getDisplayableFunctionName(UserField.ACCOUNTING_FUNCTION_INDI));
+    public IndicatorDialog(final JDialog owner, final UserFieldDefinitions definitions, final FormulaUserField userField) {
+        super(owner, UserField.getDisplayableFunctionName(ACCOUNTING_FUNCTION_INDI));
         this.definitions = definitions;
         this.userField = userField;
         setModal(true);
@@ -137,7 +141,8 @@ public class IndicatorDialog extends JDialog implements ActionListener {
         userFieldComboBox = new AlphabeticalComboBox<>();
 
         // Hier wird die ComboBox mit den indizierbaren userfields gefüllt.
-        for (UserField uf : definitions.getUserFields(userField.getTargetClass())) {
+        Class<? extends UserFieldTarget> targetClass = userField.getTargetClass();
+        for (AccountingUserField uf : definitions.iterateUserFields(targetClass, AccountingUserField.class)) {
             //das UserField selbst soll nicht mit eingefügt werden (hier ist die Formual noch null, so dass die untere
             //Anfrage, isIndicatorFormula() noch nicht greift. Daher hier explizit ausschließen)
             if (uf != userField) {
@@ -145,7 +150,7 @@ public class IndicatorDialog extends JDialog implements ActionListener {
                 //die Funktion private String getIndi(final UserFieldTarget target, final String indicatorFormula) im Calculator
                 //setzt den Wert eines Indikators auf einen String, der sich nicht mehr in BigDecimal() umwandeln lässt. Daher kann
                 //man keine Inidikatoren für Indikatoren definieren, was aber auch nicht umbedingt notwendig ist.
-                if (uf.isNumberUserField() && !uf.isIndicatorFormula()) {
+                if (!(uf instanceof FormulaUserField) && !((FormulaUserField) uf).isIndicatorFormula()) {
                     userFieldComboBox.addObject(uf);
                 }
             }
@@ -261,7 +266,7 @@ public class IndicatorDialog extends JDialog implements ActionListener {
      * Dialog mit schon vorhandenen Indikationsbereichen gefüllt.
      */
     private void fillIndiValues() {
-        if (userField.hasStyle(UserField.Style.FORMULA)) {
+        if (userField instanceof FormulaUserField) {
             //	userFieldComboBox.setSelectedItem(definitions.getUserField());
             String indi = userField.getFormula();
             if (indi != null) {

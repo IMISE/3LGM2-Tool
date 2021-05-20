@@ -7,6 +7,9 @@ package de.imise.tool3lgm.graphtools.userfield.dialog.definition.formula.panel;
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
 import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.getEndClass;
 import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.getStartClass;
+import static de.imise.tool3lgm.graphtools.userfield.definition.type.FormulaUserField.ACCOUNTING_FUNCTION_REF;
+import static de.imise.tool3lgm.graphtools.userfield.definition.type.FormulaUserField.DIRECTION_FROM_PART_TO_WHOLE;
+import static de.imise.tool3lgm.graphtools.userfield.definition.type.FormulaUserField.DIRECTION_FROM_WHOLE_TO_PART;
 import static javax.swing.BorderFactory.createTitledBorder;
 
 import java.awt.BorderLayout;
@@ -31,8 +34,9 @@ import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.HasPartEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
-import de.imise.tool3lgm.graphtools.userfield.definition.UserField;
 import de.imise.tool3lgm.graphtools.userfield.definition.UserFieldDefinitions;
+import de.imise.tool3lgm.graphtools.userfield.definition.type.AccountingUserField;
+import de.imise.tool3lgm.graphtools.userfield.definition.type.UserField;
 import de.imise.util.swing.component.list.AlphabeticalJList;
 
 /**
@@ -225,7 +229,7 @@ public class ReferencePanel extends JPanel implements ActionListener {
         if (!verify()) {
             return null;
         }
-        StringBuilder resultString = new StringBuilder(UserField.ACCOUNTING_FUNCTION_REF);
+        StringBuilder resultString = new StringBuilder(ACCOUNTING_FUNCTION_REF);
         resultString.append(" ( ");
         if (classesList.getSelectedIndex() != -1) {
             resultString.append(((Class<?>) classesList.getSelectedObject()).getSimpleName());
@@ -236,10 +240,10 @@ public class ReferencePanel extends JPanel implements ActionListener {
 
         if (vgzmRB.isSelected()) {
             resultString.append(" | ");
-            resultString.append(UserField.DIRECTION_FROM_WHOLE_TO_PART);
+            resultString.append(DIRECTION_FROM_WHOLE_TO_PART);
         } else if (vtzmRB.isSelected()) {
             resultString.append(" | ");
-            resultString.append(UserField.DIRECTION_FROM_PART_TO_WHOLE);
+            resultString.append(DIRECTION_FROM_PART_TO_WHOLE);
         }
 
         resultString.append(" )");
@@ -262,14 +266,12 @@ public class ReferencePanel extends JPanel implements ActionListener {
      */
     private void setUserFields() {
         Class<? extends ModelElement> selectedClass = ((Class<?>) classesList.getSelectedObject()).asSubclass(ModelElement.class);
-        for (UserField uf : definitions.getUserFields(selectedClass)) {
-            if (uf.isNumberUserField()) {
-                if (uf.getName().trim().equals("")) {
-                    String name = getResString("this_calculation_formula");
-                    userFieldList.addObject(uf, name);
-                } else {
-                    userFieldList.addObject(uf);
-                }
+        for (AccountingUserField uf : definitions.iterateUserFields(selectedClass, AccountingUserField.class)) {
+            if (uf.getName().trim().equals("")) {
+                String name = getResString("this_calculation_formula");
+                userFieldList.addObject(uf, name);
+            } else {
+                userFieldList.addObject(uf);
             }
         }
     }

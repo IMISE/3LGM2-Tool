@@ -1,14 +1,14 @@
 package de.imise.tool3lgm.graphtools.view.tree.node;
 
-import static de.imise.tool3lgm.graphtools.userfield.definition.UserField.Style.GROUP;
-import static de.imise.tool3lgm.graphtools.userfield.definition.UserField.Style.HYPERLINK;
-import static de.imise.tool3lgm.graphtools.userfield.definition.UserField.Style.SEPARATOR;
-import static de.imise.tool3lgm.graphtools.userfield.definition.UserField.Style.TAB;
+import static de.imise.tool3lgm.graphtools.userfield.definition.type.UserField.Style.GROUP;
+import static de.imise.tool3lgm.graphtools.userfield.definition.type.UserField.Style.HYPERLINK;
+import static de.imise.tool3lgm.graphtools.userfield.definition.type.UserField.Style.SEPARATOR;
+import static de.imise.tool3lgm.graphtools.userfield.definition.type.UserField.Style.TAB;
 import static de.imise.util.StringUtils.trimAndRemoveNewLines;
 
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
-import de.imise.tool3lgm.graphtools.userfield.definition.UserField;
-import de.imise.tool3lgm.graphtools.userfield.definition.UserField.Style;
+import de.imise.tool3lgm.graphtools.userfield.definition.type.UserField;
+import de.imise.tool3lgm.graphtools.userfield.definition.type.UserField.Style;
 import de.imise.util.BrowseUtils;
 import de.imise.util.pair.Pair;
 

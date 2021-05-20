@@ -2,11 +2,11 @@ package de.imise.tool3lgm.graphtools.consistency;
 
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
 import static de.imise.tool3lgm.graphtools.undoredo.TransactionManager.STANDARD_PID;
-import static de.imise.tool3lgm.graphtools.userfield.definition.UserField.EMPTY_STRING;
-import static de.imise.tool3lgm.graphtools.userfield.definition.UserField.Style.CHECK_BOX;
-import static de.imise.tool3lgm.graphtools.userfield.definition.UserField.Style.COMBO_BOX;
-import static de.imise.tool3lgm.graphtools.userfield.definition.UserField.Style.NUMBER;
-import static de.imise.tool3lgm.graphtools.userfield.definition.UserField.Style.RADIO_BUTTON;
+import static de.imise.tool3lgm.graphtools.userfield.definition.type.UserField.EMPTY_STRING;
+import static de.imise.tool3lgm.graphtools.userfield.definition.type.UserField.Style.CHECK_BOX;
+import static de.imise.tool3lgm.graphtools.userfield.definition.type.UserField.Style.COMBO_BOX;
+import static de.imise.tool3lgm.graphtools.userfield.definition.type.UserField.Style.NUMBER;
+import static de.imise.tool3lgm.graphtools.userfield.definition.type.UserField.Style.RADIO_BUTTON;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -25,8 +25,8 @@ import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.model.LGMGraphDocument;
 import de.imise.tool3lgm.graphtools.model.Szenario;
-import de.imise.tool3lgm.graphtools.userfield.definition.UserField;
 import de.imise.tool3lgm.graphtools.userfield.definition.UserFieldDefinitions;
+import de.imise.tool3lgm.graphtools.userfield.definition.type.UserField;
 import de.imise.tool3lgm.graphtools.view.container.BendpointContainer;
 import de.imise.tool3lgm.graphtools.view.container.EdgeContainer;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;

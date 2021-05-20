@@ -15,8 +15,8 @@ import com.google.common.base.Strings;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.userfield.calculator.Calculator;
-import de.imise.tool3lgm.graphtools.userfield.definition.UserField;
 import de.imise.tool3lgm.graphtools.userfield.definition.UserFieldDefinitions;
+import de.imise.tool3lgm.graphtools.userfield.definition.type.UserField;
 
 /**
  * @author hboehme
@@ -166,11 +166,10 @@ public class CostingUtil {
      * dann kommt hier die Formel ohne alle WhiteSpaces und ohne die evtl.
      * vorhandenen und überflüssigen Klammern am Anfang und Endezurück.
      *
-     * @param userField
+     * @param formula
      * @return
      */
-    private static String getSimpleFractionValueSumFormula(final UserField userField) {
-        String formula = userField.getFormula().trim();
+    private static String getSimpleFractionValueSumFormula(String formula) {
         if (Strings.isNullOrEmpty(formula)) {
             return null;
         }
@@ -232,14 +231,33 @@ public class CostingUtil {
      * @param userField
      * @return
      */
-    public static final boolean isSimpleFractionValueSumFormula(final UserField userField) {
-        String formula = getSimpleFractionValueSumFormula(userField);
+    public static final boolean isSimpleFractionValueSumFormula(String formula) {
+        formula = getSimpleFractionValueSumFormula(formula);
         return formula != null;
     }
 
+    /**
+     * Prüft, ob die Formel des übergebenen UserFields eine einfache
+     * Teilwertsummenformel ist. Diese Funktion setzt vorraus, dass die Formel
+     * valide ist!
+     *
+     * @param userField
+     * @return
+     */
+    public static final boolean isSimpleFractionValueSumFormula(final UserField userField) {
+        String formula = userField.getFormula();
+        formula = getSimpleFractionValueSumFormula(formula);
+        return formula != null;
+    }
+
+    /**
+     * @param userField
+     * @return
+     */
     private static String extractSimpleFractionValueSumFormulaEdgeClassName(final UserField userField) {
         String edgeClassName = null;
-        String formula = getSimpleFractionValueSumFormula(userField);
+        String formula = userField.getFormula();
+        formula = getSimpleFractionValueSumFormula(formula);
         if (formula != null) {
             int startIndex = formula.indexOf(Calculator.OPEN_BRACKET) + 1;
             int endIndex = formula.indexOf(Calculator.OPERAND_DELIMITER);

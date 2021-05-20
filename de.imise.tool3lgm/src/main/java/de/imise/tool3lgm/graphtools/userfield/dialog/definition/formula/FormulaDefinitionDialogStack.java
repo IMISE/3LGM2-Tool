@@ -5,7 +5,7 @@ import static de.imise.tool3lgm.graphtools.userfield.calculator.Calculator.isOpe
 import java.util.Stack;
 import java.util.StringTokenizer;
 
-import de.imise.tool3lgm.graphtools.userfield.definition.UserField;
+import de.imise.tool3lgm.graphtools.userfield.definition.type.UserField;
 
 public class FormulaDefinitionDialogStack extends Stack<String> {
 

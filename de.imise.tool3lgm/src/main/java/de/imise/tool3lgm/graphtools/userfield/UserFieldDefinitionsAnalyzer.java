@@ -4,9 +4,11 @@ import java.util.Set;
 
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
-import de.imise.tool3lgm.graphtools.userfield.definition.UserField;
 import de.imise.tool3lgm.graphtools.userfield.definition.UserFieldDefinitions;
 import de.imise.tool3lgm.graphtools.userfield.definition.UserFieldTarget;
+import de.imise.tool3lgm.graphtools.userfield.definition.type.FormulaUserField;
+import de.imise.tool3lgm.graphtools.userfield.definition.type.NumberUserField;
+import de.imise.tool3lgm.graphtools.userfield.definition.type.UserField;
 
 public class UserFieldDefinitionsAnalyzer {
 
@@ -23,7 +25,7 @@ public class UserFieldDefinitionsAnalyzer {
      */
     public boolean hasNumberFields(final Class<? extends UserFieldTarget> userFieldTargetClass) {
         for (UserField uf : definitions.getUserFields(userFieldTargetClass)) {
-            if (uf.hasClassfificationStyle()) {
+            if (uf.hasStyle(NumberUserField.class, FormulaUserField.class)) {
                 return true;
             }
         }
@@ -37,7 +39,7 @@ public class UserFieldDefinitionsAnalyzer {
      *         dem übergebenen Style definiert ist, sonst <code>false</code>.
      *         Für Kantenklasse wird hier nicht geguckt.
      */
-    public boolean hasStyle(final UserField.Style style) {
+    public boolean hasStyle(final Class<? extends UserField> style) {
         Set<Class<? extends UserFieldTarget>> userFieldTargets = definitions.getUserFieldTargets();
         for (Class<? extends UserFieldTarget> userFieldTarget : userFieldTargets) {
             if (Node.class.isAssignableFrom(userFieldTarget)) {

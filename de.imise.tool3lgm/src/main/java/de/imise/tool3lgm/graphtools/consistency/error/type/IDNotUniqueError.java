@@ -3,7 +3,7 @@ package de.imise.tool3lgm.graphtools.consistency.error.type;
 import java.util.Collection;
 
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
-import de.imise.tool3lgm.graphtools.userfield.definition.UserField;
+import de.imise.tool3lgm.graphtools.userfield.definition.type.UserField;
 
 /**
  * ACHTUNG: Wenn der Name der Klasse refactored werden sollte, müssen die

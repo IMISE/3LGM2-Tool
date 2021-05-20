@@ -7,7 +7,7 @@ import javax.swing.event.DocumentListener;
 import javax.swing.text.BadLocationException;
 
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
-import de.imise.tool3lgm.graphtools.userfield.definition.UserField;
+import de.imise.tool3lgm.graphtools.userfield.definition.type.UserField;
 
 /**
  * Wird zur Zeit nicht genutzt. Wenn dann bei der Eingabe von IDs als

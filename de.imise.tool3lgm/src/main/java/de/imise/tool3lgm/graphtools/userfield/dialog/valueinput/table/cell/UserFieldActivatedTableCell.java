@@ -1,6 +1,6 @@
 package de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.table.cell;
 
-import static de.imise.tool3lgm.graphtools.userfield.definition.UserField.Style.COMBO_BOX;
+import static de.imise.tool3lgm.graphtools.userfield.definition.type.UserField.Style.COMBO_BOX;
 
 import java.awt.Component;
 import java.awt.Point;
@@ -15,8 +15,8 @@ import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableModel;
 import javax.swing.text.JTextComponent;
 
-import de.imise.tool3lgm.graphtools.userfield.definition.UserField;
-import de.imise.tool3lgm.graphtools.userfield.definition.UserField.Style;
+import de.imise.tool3lgm.graphtools.userfield.definition.type.UserField;
+import de.imise.tool3lgm.graphtools.userfield.definition.type.UserField.Style;
 import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.table.UserFieldTable;
 import de.imise.util.NamedObjectContainer;
 import de.imise.util.swing.component.AlphabeticalComboBox;

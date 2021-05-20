@@ -9,8 +9,8 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.userfield.CostingUtil;
 import de.imise.tool3lgm.graphtools.userfield.WeightReplacer;
-import de.imise.tool3lgm.graphtools.userfield.definition.UserField;
 import de.imise.tool3lgm.graphtools.userfield.definition.UserFieldDefinitions;
+import de.imise.tool3lgm.graphtools.userfield.definition.type.UserField;
 
 public class PartValueSumFunction {
 

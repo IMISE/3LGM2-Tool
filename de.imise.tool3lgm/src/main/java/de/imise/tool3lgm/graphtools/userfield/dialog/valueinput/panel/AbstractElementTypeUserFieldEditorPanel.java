@@ -28,9 +28,8 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
-import de.imise.tool3lgm.graphtools.userfield.definition.UserField;
-import de.imise.tool3lgm.graphtools.userfield.definition.UserField.Style;
 import de.imise.tool3lgm.graphtools.userfield.definition.UserFieldDefinitions;
+import de.imise.tool3lgm.graphtools.userfield.definition.type.UserField;
 import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.UserFieldEditorDialog;
 import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.table.UserFieldTable;
 import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.table.UserFieldTableController;
@@ -228,7 +227,7 @@ public abstract class AbstractElementTypeUserFieldEditorPanel extends AbstractUs
      */
     protected InsertType getInsertType(final Class<? extends ModelElement> elementClass, final UserFieldDefinitions definitions) {
         InsertType insertType = NO;
-        for (UserField uf : definitions.getUserFields(elementClass)) {
+        for (UserField uf : definitions.iterateUserFields(elementClass)) {
             if (visibleUserFields.contains(uf.getStyle())) {
                 boolean isEdgeType = Edge.class.isAssignableFrom(elementClass);
                 insertType = isEdgeType ? AS_EDGE_FORWARD_AND_BACKWARD : AS_MODELELEMENT;

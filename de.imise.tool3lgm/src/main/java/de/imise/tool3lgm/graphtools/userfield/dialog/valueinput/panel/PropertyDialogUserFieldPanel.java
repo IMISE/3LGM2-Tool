@@ -1,22 +1,25 @@
 package de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.panel;
 
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
-import static de.imise.tool3lgm.graphtools.userfield.definition.UserField.CHECKBOX_FALSE;
-import static de.imise.tool3lgm.graphtools.userfield.definition.UserField.CHECKBOX_TRUE;
-import static de.imise.tool3lgm.graphtools.userfield.definition.UserField.EMPTY_STRING;
-import static de.imise.tool3lgm.graphtools.userfield.definition.UserField.Style.CHECK_BOX;
-import static de.imise.tool3lgm.graphtools.userfield.definition.UserField.Style.COMBO_BOX;
-import static de.imise.tool3lgm.graphtools.userfield.definition.UserField.Style.FORMULA;
-import static de.imise.tool3lgm.graphtools.userfield.definition.UserField.Style.GROUP;
-import static de.imise.tool3lgm.graphtools.userfield.definition.UserField.Style.HYPERLINK;
-import static de.imise.tool3lgm.graphtools.userfield.definition.UserField.Style.ID;
-import static de.imise.tool3lgm.graphtools.userfield.definition.UserField.Style.MULTI_LINE;
-import static de.imise.tool3lgm.graphtools.userfield.definition.UserField.Style.NUMBER;
-import static de.imise.tool3lgm.graphtools.userfield.definition.UserField.Style.RADIO_BUTTON;
-import static de.imise.tool3lgm.graphtools.userfield.definition.UserField.Style.SEPARATOR;
-import static de.imise.tool3lgm.graphtools.userfield.definition.UserField.Style.SINGLE_LINE;
-import static de.imise.tool3lgm.graphtools.userfield.definition.UserField.Style.SUBTYPE;
-import static de.imise.tool3lgm.graphtools.userfield.definition.UserField.Style.TAB;
+import static de.imise.tool3lgm.graphtools.userfield.definition.type.CheckBoxUserField.CHECKBOX_FALSE;
+import static de.imise.tool3lgm.graphtools.userfield.definition.type.CheckBoxUserField.CHECKBOX_TRUE;
+import static de.imise.tool3lgm.graphtools.userfield.definition.type.UserField.EMPTY_STRING;
+import static de.imise.tool3lgm.graphtools.userfield.definition.type.UserFieldUtils.isCheckBox;
+import static de.imise.tool3lgm.graphtools.userfield.definition.type.UserFieldUtils.isComboBox;
+import static de.imise.tool3lgm.graphtools.userfield.definition.type.UserFieldUtils.isFormula;
+import static de.imise.tool3lgm.graphtools.userfield.definition.type.UserFieldUtils.isGroup;
+import static de.imise.tool3lgm.graphtools.userfield.definition.type.UserFieldUtils.isHyperlink;
+import static de.imise.tool3lgm.graphtools.userfield.definition.type.UserFieldUtils.isID;
+import static de.imise.tool3lgm.graphtools.userfield.definition.type.UserFieldUtils.isMultiLine;
+import static de.imise.tool3lgm.graphtools.userfield.definition.type.UserFieldUtils.isNumber;
+import static de.imise.tool3lgm.graphtools.userfield.definition.type.UserFieldUtils.isRadioButton;
+import static de.imise.tool3lgm.graphtools.userfield.definition.type.UserFieldUtils.isSeparator;
+import static de.imise.tool3lgm.graphtools.userfield.definition.type.UserFieldUtils.isSingleLine;
+import static de.imise.tool3lgm.graphtools.userfield.definition.type.UserFieldUtils.isSubtype;
+import static de.imise.tool3lgm.graphtools.userfield.definition.type.UserFieldUtils.isTab;
+import static de.imise.util.htmlxml.HTMLConverter.getTextAsHTMLLabelTextBold;
+import static java.awt.BorderLayout.CENTER;
+import static java.awt.BorderLayout.EAST;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
@@ -64,9 +67,13 @@ import de.imise.tool3lgm.graphtools.dialog.element.panel.ElementDialogPanel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
-import de.imise.tool3lgm.graphtools.userfield.definition.UserField;
-import de.imise.tool3lgm.graphtools.userfield.definition.UserField.Style;
 import de.imise.tool3lgm.graphtools.userfield.definition.UserFieldList;
+import de.imise.tool3lgm.graphtools.userfield.definition.type.AccountingUserField;
+import de.imise.tool3lgm.graphtools.userfield.definition.type.ComboBoxUserField;
+import de.imise.tool3lgm.graphtools.userfield.definition.type.NumberUserField;
+import de.imise.tool3lgm.graphtools.userfield.definition.type.RadioButtonUserField;
+import de.imise.tool3lgm.graphtools.userfield.definition.type.UserField;
+import de.imise.tool3lgm.graphtools.userfield.definition.type.UserFieldUtils;
 import de.imise.util.BrowseUtils;
 import de.imise.util.Sys;
 import de.imise.util.htmlxml.HTMLConverter;
@@ -229,8 +236,7 @@ public class PropertyDialogUserFieldPanel extends ElementDialogPanel implements 
      */
     public static String getUserFieldValue(final ModelElement me, final UserField userField, final boolean format) {
         String value = format ? userField.getFormattedValue(me, true) : me.getValue(userField);
-        UserField.Style style = userField.getStyle();
-        if (style != FORMULA) {
+        if (isFormula(userField)) {
             if (value.equals(EMPTY_STRING)) {
                 value = "";
             }
@@ -248,13 +254,13 @@ public class PropertyDialogUserFieldPanel extends ElementDialogPanel implements 
 
         //Attributdefinitionen des GraphDocumentes holen
         for (UserField userField : tabDefinition) {
-            if (userField.hasStyle(SUBTYPE)) {
+            if (isSubtype(userField)) {
                 continue;
-            } else if (userField.hasStyle(TAB)) {
+            } else if (isTab(userField)) {
                 addTab(userField, constraints);
-            } else if (userField.hasStyle(GROUP)) {
+            } else if (isGroup(userField)) {
                 currentPanel = addGroup(userField, constraints);
-            } else if (userField.hasStyle(SEPARATOR)) {
+            } else if (isSeparator(userField)) {
                 addSeparator(userField, currentPanel, constraints);
             } else {
                 addAttribute(userField, currentPanel, constraints);
@@ -330,7 +336,7 @@ public class PropertyDialogUserFieldPanel extends ElementDialogPanel implements 
             addDescriptionLabel(userField, panel, constraints);
             constraints.gridx = 0;
             constraints.gridwidth = 2;
-        } else if (!userField.hasStyle(CHECK_BOX)) {
+        } else if (!UserFieldUtils.isCheckBox(userField)) {
             panel.add(label, constraints);
             constraints.gridy++;
             addDescriptionLabel(userField, panel, constraints);
@@ -349,10 +355,9 @@ public class PropertyDialogUserFieldPanel extends ElementDialogPanel implements 
      * @return
      */
     protected JLabel getTitleLabel(final UserField field) {
-        Style style = field.getStyle();
         String name = field.getName();
-        if (style == NUMBER || style == FORMULA) {
-            String unit = field.getFormatUnit();
+        if (UserFieldUtils.isAccounting(field)) {
+            String unit = ((AccountingUserField) field).getFormatUnit();
             if (unit != null) {
                 name += " " + getResString("in") + " " + unit + " ";
             }
@@ -449,24 +454,24 @@ public class PropertyDialogUserFieldPanel extends ElementDialogPanel implements 
      */
     protected JComponent getEditor(final UserField field, final JLabel label) {
         String value = getFormattedValue(field);
-        UserField.Style style = field.getStyle();
         JComponent editorComponent = null;
-        if (style == SINGLE_LINE || style == ID) {
+        if (isSingleLine(field) || isID(field)) {
             ExtendedTextField textField = new ExtendedTextField(value);
             editorComponent = textField;
-        } else if (style == MULTI_LINE) {
+        } else if (isMultiLine(field)) {
             ExtendedTextArea textArea = new ExtendedTextArea(3, 10);
             textArea.setFont(new ExtendedTextField().getFont());
             textArea.setLineWrap(true);
             textArea.setWrapStyleWord(true);
             textArea.setText(value);
             editorComponent = new JScrollPane(textArea);
-        } else if (style == COMBO_BOX) {
+        } else if (isComboBox(field)) {
             JComboBox<String> comboBox = new JComboBox<>();
             comboBox.addItem("");
             boolean foundEntry = false;
-            for (int i = 0; i < field.getListValuesCount(); i++) {
-                String listValue = field.getListValueAt(i);
+            ComboBoxUserField comboBoxUserField = (ComboBoxUserField) field;
+            for (int i = 0; i < comboBoxUserField.getListValuesCount(); i++) {
+                String listValue = comboBoxUserField.getListValueAt(i);
                 comboBox.addItem(listValue);
                 if (listValue.equals(value)) {
                     comboBox.setSelectedItem(listValue);
@@ -475,7 +480,7 @@ public class PropertyDialogUserFieldPanel extends ElementDialogPanel implements 
             }
             if (!foundEntry) {
                 if (!Strings.isNullOrEmpty(value)) {
-                    field.addListValue(value);
+                    comboBoxUserField.addListValue(value);
                     comboBox.addItem(value);
                     comboBox.setSelectedItem(value);
                     foundEntry = true;
@@ -484,16 +489,17 @@ public class PropertyDialogUserFieldPanel extends ElementDialogPanel implements 
                 }
             }
             editorComponent = comboBox;
-        } else if (style == RADIO_BUTTON) {
+        } else if (isRadioButton(field)) {
             JPanel flowLayoutPanel = new JPanel(new WrapLayout(WrapLayout.LEFT));
             flowLayoutPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), ""));
+            RadioButtonUserField radioButtonUserField = (RadioButtonUserField) field;
             //den aktuellen Wert in die List-Values hinzufügen, falls er da aus irgendwelchen Gründen nicht drinsteht.
-            if (!Strings.isNullOrEmpty(value) && !field.containsListValue(value)) {
-                field.addListValue(value);
+            if (!Strings.isNullOrEmpty(value) && !radioButtonUserField.containsListValue(value)) {
+                radioButtonUserField.addListValue(value);
             }
             ButtonGroup group = new ButtonGroup();
-            for (int i = 0; i < field.getListValuesCount(); i++) {
-                Object listValue = field.getListValueAt(i);
+            for (int i = 0; i < radioButtonUserField.getListValuesCount(); i++) {
+                Object listValue = radioButtonUserField.getListValueAt(i);
                 JRadioButton radioButton = new JRadioButton(listValue.toString());
                 group.add(radioButton);
                 flowLayoutPanel.add(radioButton);
@@ -502,30 +508,31 @@ public class PropertyDialogUserFieldPanel extends ElementDialogPanel implements 
                 }
             }
             editorComponent = flowLayoutPanel;
-        } else if (style == CHECK_BOX) {
+        } else if (UserFieldUtils.isCheckBox(field)) {
             String fieldLabel = showAttributeLabelAndEditorSideBySide ? "" : field.getName();
-            fieldLabel = HTMLConverter.getTextAsHTMLLabelTextBold(fieldLabel);
+            fieldLabel = getTextAsHTMLLabelTextBold(fieldLabel);
             editorComponent = new JCheckBox(fieldLabel, value.equals(CHECKBOX_TRUE));
-        } else if (style == HYPERLINK) {
+        } else if (isHyperlink(field)) {
             final ExtendedTextField textField = new ExtendedTextField(value);
             JPanel hyperlinkPanel = new JPanel();
             hyperlinkPanel.setLayout(new BorderLayout());
-            hyperlinkPanel.add(textField, BorderLayout.CENTER);
+            hyperlinkPanel.add(textField, CENTER);
             final JButton button = getHyperlinkButtonAndInitListeners(label, textField);
-            hyperlinkPanel.add(button, BorderLayout.EAST);
+            hyperlinkPanel.add(button, EAST);
             editorComponent = hyperlinkPanel;
             //Kennzahlen:
-        } else if (style == NUMBER) {
+        } else if (isNumber(field)) {
             // Wenn für die Kennzazhl ein gültiger Wert eingegeben ist, dann kann hier ein NumberTextField initialisiert werden.
             // Sollte das Fehlschlagen, muss ein normales JTextField hinzugefügt werden, das keine Wertformatierung vornimmt.
-            NumberFormat javaNumberFormat = field.getJavaNumberFormat();
+            NumberUserField numberUserField = (NumberUserField) field;
+            NumberFormat javaNumberFormat = numberUserField.getJavaNumberFormat();
             // Kennzahlwerte in die Felder einfügen.
-            NumberTextField numberTextField = NumberTextField.getNumberTextField(javaNumberFormat, field.isPositiveOnly());
+            NumberTextField numberTextField = NumberTextField.getNumberTextField(javaNumberFormat, numberUserField.isPositiveOnly());
             if (!UserField.isError(value)) {
                 numberTextField.setValue(value);
             }
             editorComponent = numberTextField;
-        } else if (style == FORMULA) {
+        } else if (isFormula(field)) {
             JTextField textField = new JTextField();
             textField.setEditable(false);
             ModelElement me = getModelElement();
@@ -580,7 +587,7 @@ public class PropertyDialogUserFieldPanel extends ElementDialogPanel implements 
     private void registerChangeListener(final JComponent component, final UserField userField) {
         if (component instanceof JTextComponent) {
             JTextComponent textComponent = (JTextComponent) component;
-            if (userField.hasStyle(NUMBER)) {
+            if (isNumber(userField)) {
                 ModelElement me = getModelElement();
                 PropertyDialogUserFieldPanelNumberInputFocusListener inputFieldFocusListener = new PropertyDialogUserFieldPanelNumberInputFocusListener(changeHandler, me, userField);
                 textComponent.addFocusListener(inputFieldFocusListener);
@@ -666,8 +673,7 @@ public class PropertyDialogUserFieldPanel extends ElementDialogPanel implements 
                 continue;
             }
 
-            UserField.Style style = userField.getStyle();
-            String newValue = getNewValue(style, editorComponent);
+            String newValue = getNewValue(userField, editorComponent);
             //wenn bei RadioButtons noch gar nichts gesetzt war, kann newValue null sein
             //bei UserFields die Formeln sind, kommt auch null zurück -> dann nichts setzen
             if (newValue != null) {
@@ -703,7 +709,7 @@ public class PropertyDialogUserFieldPanel extends ElementDialogPanel implements 
         for (int i = 0; i < fieldComponents.size(); i++) {
             UserFieldEditorComponent userFieldEditorComponent = fieldComponents.get(i);
             UserField userField = userFieldEditorComponent.userField;
-            if (userField.hasStyle(FORMULA)) {
+            if (isFormula(userField)) {
                 JTextField formulaTextField = (JTextField) userFieldEditorComponent.editorComponent;
                 ModelElement me = getModelElement();
                 String formattedValue = userField.getFormattedValue(me, true);
@@ -734,39 +740,39 @@ public class PropertyDialogUserFieldPanel extends ElementDialogPanel implements 
      * Liefert in Abhängigkeit vom Style den aktuellen Wert der übergebenen
      * editorComponent.
      *
-     * @param style
+     * @param userField
      * @param editorComponent
      * @return
      */
-    private String getNewValue(final Style style, final JComponent editorComponent) {
+    private String getNewValue(final UserField userField, final JComponent editorComponent) {
         String newValue = null;
-        if (style == SINGLE_LINE) {
+        if (isSingleLine(userField)) {
             newValue = ((JTextComponent) editorComponent).getText();
 
-        } else if (style == MULTI_LINE) {
+        } else if (isMultiLine(userField)) {
             newValue = ((JTextComponent) editorComponent).getText();
 
-        } else if (style == COMBO_BOX) {
+        } else if (isComboBox(userField)) {
             Object selectedItem = ((JComboBox<?>) editorComponent).getSelectedItem();
             if (selectedItem != null) {
                 newValue = selectedItem.toString();
             }
 
-        } else if (style == CHECK_BOX) {
+        } else if (isCheckBox(userField)) {
             newValue = ((JCheckBox) editorComponent).isSelected() ? CHECKBOX_TRUE : CHECKBOX_FALSE;
 
-        } else if (style == RADIO_BUTTON) {
+        } else if (isRadioButton(userField)) {
             JRadioButton radioButton = (JRadioButton) editorComponent;
             //wenn nichts selektiert ist -> null zurück geben -> der Wert des UserFields wird nicht geändert
             newValue = radioButton.isSelected() ? radioButton.getText() : null;
 
-        } else if (style == HYPERLINK) {
+        } else if (isHyperlink(userField)) {
             newValue = ((JTextComponent) editorComponent).getText();
 
-        } else if (style == ID) {
+        } else if (isID(userField)) {
             newValue = ((JTextComponent) editorComponent).getText();
 
-        } else if (style == NUMBER) {
+        } else if (isNumber(userField)) {
             Object textFieldValue;
             NumberTextField textField = (NumberTextField) editorComponent;
             textFieldValue = textField.getText();

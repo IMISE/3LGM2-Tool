@@ -3,6 +3,9 @@ package de.imise.tool3lgm.graphtools.userfield.dialog.definition.formula.panel;
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
 import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.getEndClass;
 import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.getStartClass;
+import static de.imise.tool3lgm.graphtools.userfield.definition.type.FormulaUserField.ACCOUNTING_FUNCTION_TWSUM;
+import static de.imise.tool3lgm.graphtools.userfield.definition.type.FormulaUserField.DIRECTION_FROM_PART_TO_WHOLE;
+import static de.imise.tool3lgm.graphtools.userfield.definition.type.FormulaUserField.DIRECTION_FROM_WHOLE_TO_PART;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -21,9 +24,10 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.HasPartEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
-import de.imise.tool3lgm.graphtools.userfield.definition.UserField;
 import de.imise.tool3lgm.graphtools.userfield.definition.UserFieldDefinitions;
 import de.imise.tool3lgm.graphtools.userfield.definition.UserFieldTarget;
+import de.imise.tool3lgm.graphtools.userfield.definition.type.AccountingUserField;
+import de.imise.tool3lgm.graphtools.userfield.definition.type.UserField;
 import de.imise.util.swing.component.AlphabeticalComboBox;
 import de.imise.util.swing.component.list.AlphabeticalJList;
 
@@ -124,7 +128,7 @@ public class OperatorInputPanel extends JPanel implements ActionListener {
         gbc.gridy++;
         gbc.weighty = 1;
 
-        if (vfOperator.equals(UserField.ACCOUNTING_FUNCTION_TWSUM)) {
+        if (vfOperator.equals(ACCOUNTING_FUNCTION_TWSUM)) {
             gbc.gridy++;
             add(new JLabel(getResString("weighting") + ": "), gbc);
 
@@ -193,11 +197,11 @@ public class OperatorInputPanel extends JPanel implements ActionListener {
         allElementClassAssignable.add(elementClass);
 
         for (Class<? extends UserFieldTarget> assClass : allElementClassAssignable) {
-            for (UserField uf : definitions.getUserFields(assClass)) {
+            for (UserField uf : definitions.iterateUserFields(assClass)) {
                 if (uf == userField) {
                     found = true;
                 }
-                if (uf.isNumberUserField()) {
+                if (uf instanceof AccountingUserField) {
                     if (uf.getName().trim().equals("")) {
                         String name = getResString("this_calculation_formula");
                         connectedAttributesBox.addSeparator(true);
@@ -232,7 +236,7 @@ public class OperatorInputPanel extends JPanel implements ActionListener {
 
         vgBox.addObject(null, UNIFORMLY_DISTRIBUTED);
         vgBox.addSeparator(false);
-        for (UserField uf : definitions.getUserFields(edgeClass)) {
+        for (UserField uf : definitions.iterateUserFields(edgeClass)) {
             vgBox.addObject(uf);
         }
         vgBox.setSelectedObject(null); // = UNIFORMLY_DISTRIBUTED
@@ -331,9 +335,9 @@ public class OperatorInputPanel extends JPanel implements ActionListener {
             sb.append(" | ");
             String selectedAssociationBoxString = associationBox.getSelectedString();
             if (selectedAssociationBoxString.startsWith(getResString("part_to_whole"))) {
-                sb.append(UserField.DIRECTION_FROM_PART_TO_WHOLE);
+                sb.append(DIRECTION_FROM_PART_TO_WHOLE);
             } else {
-                sb.append(UserField.DIRECTION_FROM_WHOLE_TO_PART);
+                sb.append(DIRECTION_FROM_WHOLE_TO_PART);
             }
 
         }
@@ -358,7 +362,7 @@ public class OperatorInputPanel extends JPanel implements ActionListener {
             } else {
                 updateFieldListAttributesOfAssociatedClass(getStartClass(edgeClass));
             }
-            if (vfOperator.equals(UserField.ACCOUNTING_FUNCTION_TWSUM)) {
+            if (vfOperator.equals(ACCOUNTING_FUNCTION_TWSUM)) {
                 updateVGComboBoxItems(edgeClass);
             }
         }

@@ -12,14 +12,14 @@ import static de.imise.tool3lgm.graphtools.userfield.calculator.Calculator.OPERA
 import static de.imise.tool3lgm.graphtools.userfield.calculator.Calculator.OPERATOR_PLUS;
 import static de.imise.tool3lgm.graphtools.userfield.calculator.Calculator.WHITESPACE;
 import static de.imise.tool3lgm.graphtools.userfield.calculator.Calculator.isOperator;
-import static de.imise.tool3lgm.graphtools.userfield.definition.UserField.ACCOUNTING_FUNCTION_AVG;
-import static de.imise.tool3lgm.graphtools.userfield.definition.UserField.ACCOUNTING_FUNCTION_INDI;
-import static de.imise.tool3lgm.graphtools.userfield.definition.UserField.ACCOUNTING_FUNCTION_MAX;
-import static de.imise.tool3lgm.graphtools.userfield.definition.UserField.ACCOUNTING_FUNCTION_MIN;
-import static de.imise.tool3lgm.graphtools.userfield.definition.UserField.ACCOUNTING_FUNCTION_MULT;
-import static de.imise.tool3lgm.graphtools.userfield.definition.UserField.ACCOUNTING_FUNCTION_REF;
-import static de.imise.tool3lgm.graphtools.userfield.definition.UserField.ACCOUNTING_FUNCTION_SUM;
-import static de.imise.tool3lgm.graphtools.userfield.definition.UserField.ACCOUNTING_FUNCTION_TWSUM;
+import static de.imise.tool3lgm.graphtools.userfield.definition.type.FormulaUserField.ACCOUNTING_FUNCTION_AVG;
+import static de.imise.tool3lgm.graphtools.userfield.definition.type.FormulaUserField.ACCOUNTING_FUNCTION_INDI;
+import static de.imise.tool3lgm.graphtools.userfield.definition.type.FormulaUserField.ACCOUNTING_FUNCTION_MAX;
+import static de.imise.tool3lgm.graphtools.userfield.definition.type.FormulaUserField.ACCOUNTING_FUNCTION_MIN;
+import static de.imise.tool3lgm.graphtools.userfield.definition.type.FormulaUserField.ACCOUNTING_FUNCTION_MULT;
+import static de.imise.tool3lgm.graphtools.userfield.definition.type.FormulaUserField.ACCOUNTING_FUNCTION_REF;
+import static de.imise.tool3lgm.graphtools.userfield.definition.type.FormulaUserField.ACCOUNTING_FUNCTION_SUM;
+import static de.imise.tool3lgm.graphtools.userfield.definition.type.FormulaUserField.ACCOUNTING_FUNCTION_TWSUM;
 import static java.awt.GridBagConstraints.BOTH;
 import static java.awt.GridBagConstraints.NORTHWEST;
 
@@ -62,9 +62,11 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.userfield.CostingUtil;
 import de.imise.tool3lgm.graphtools.userfield.calculator.Calculator;
-import de.imise.tool3lgm.graphtools.userfield.definition.UserField;
 import de.imise.tool3lgm.graphtools.userfield.definition.UserFieldDefinitions;
 import de.imise.tool3lgm.graphtools.userfield.definition.UserFieldTarget;
+import de.imise.tool3lgm.graphtools.userfield.definition.type.AccountingUserField;
+import de.imise.tool3lgm.graphtools.userfield.definition.type.FormulaUserField;
+import de.imise.tool3lgm.graphtools.userfield.definition.type.UserField;
 import de.imise.util.swing.component.list.AlphabeticalJList;
 import de.imise.util.swing.component.text.ExtendedTextArea;
 
@@ -112,7 +114,7 @@ public class FormulaDefinitionDialog extends JDialog implements ActionListener {
     /**
      * Benutzerdefiniertes Eigenschaftsfeld, für das die Formel definiert wird.
      */
-    private final UserField userField;
+    private final FormulaUserField userField;
 
     /**
      * Button zum Bestätigen und schließen
@@ -202,7 +204,7 @@ public class FormulaDefinitionDialog extends JDialog implements ActionListener {
      * @param classelement
      * @param oldFormulaString
      */
-    private FormulaDefinitionDialog(final JDialog owner, final UserFieldDefinitions def, final UserField field, final String newUserFieldName) {
+    private FormulaDefinitionDialog(final JDialog owner, final UserFieldDefinitions def, final FormulaUserField field, final String newUserFieldName) {
         super(owner, true);
         definitions = def;
         userField = field;
@@ -379,8 +381,8 @@ public class FormulaDefinitionDialog extends JDialog implements ActionListener {
      * @param elementClass
      */
     private void updateFieldList(final Class<? extends UserFieldTarget> elementClass) {
-        for (UserField uf : definitions.getUserFields(elementClass)) {
-            if (uf != userField && uf.isNumberUserField()) {
+        for (UserField uf : definitions.iterateUserFields(elementClass)) {
+            if (uf != userField && uf instanceof AccountingUserField) {
                 userFieldList.addObject(uf);
             }
         }
@@ -399,7 +401,7 @@ public class FormulaDefinitionDialog extends JDialog implements ActionListener {
      * @param oldFormulaString
      * @return dialog.retval String: Formel in ID-Ausdrucksform
      */
-    public static String showDialog(final JDialog owner, final UserFieldDefinitions def, final UserField field, final String newUserFieldName) {
+    public static String showDialog(final JDialog owner, final UserFieldDefinitions def, final FormulaUserField field, final String newUserFieldName) {
         if (owner == null || field == null) {
             return "-1";
         }
@@ -479,7 +481,7 @@ public class FormulaDefinitionDialog extends JDialog implements ActionListener {
         StringBuilder sb = new StringBuilder();
         if (!Strings.isNullOrEmpty(orgIndicatorString)) {
             sb.append(" ");
-            sb.append(UserField.ACCOUNTING_FUNCTION_INDI);
+            sb.append(ACCOUNTING_FUNCTION_INDI);
             sb.append(" ( ");
             sb.append(orgIndicatorString);
             sb.append(" ) ");
