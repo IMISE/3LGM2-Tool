@@ -3,8 +3,8 @@ package de.imise.tool3lgm.metamodel.service.edge;
 import static de.imise.tool3lgm.graphtools.metamodel.EdgeCardinality.ZERO_UNLIMITED;
 
 import de.imise.tool3lgm.graphtools.dialog.element.ElementPropertyDialog;
-import de.imise.tool3lgm.graphtools.dialog.element.panel.AbstractPathConnectionPanel.PanelLabelOption;
 import de.imise.tool3lgm.graphtools.dialog.element.panel.ConnectedElementsTableDefinition;
+import de.imise.tool3lgm.graphtools.dialog.element.panel.PanelLabelOption;
 import de.imise.tool3lgm.graphtools.metamodel.EdgeCardinality;
 import de.imise.tool3lgm.graphtools.metamodel.elements.BooleanAttributeEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
