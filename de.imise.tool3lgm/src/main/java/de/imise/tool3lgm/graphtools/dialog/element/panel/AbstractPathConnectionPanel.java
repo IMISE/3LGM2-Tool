@@ -226,9 +226,10 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
      */
     private String getTextByPanelLabelOption(final PanelLabelOption panelLabelOption) {
         String westLabelText;
-        int labelEdgeIndex = getEdgesInPathCount() - 1;
+        int pathLength = getEdgesInPathCount();
+        int labelEdgeIndex = pathLength - 1;
         if (panelLabelOption == LABEL_LAST_EDGE_CONNECTION_NAME) {
-            if (labelEdgeIndex > 0) {
+            if (pathLength > 0) {
                 Class<? extends Edge> edgeClass = getEdgeClassInPath(labelEdgeIndex);
                 Direction directionInPath = getDirectionInPath(labelEdgeIndex);
                 westLabelText = elementsNameBuilder.getMetaAssociationName(edgeClass, directionInPath);
