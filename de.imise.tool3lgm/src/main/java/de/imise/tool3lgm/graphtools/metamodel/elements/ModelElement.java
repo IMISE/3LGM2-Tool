@@ -2013,7 +2013,7 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
                 } else if (edgeTypesList.size() == 1) {
                     edgeClass = edgeTypesList.get(0);
                 } else {
-                    edgeClass = ReflectionUtils.getCommonSuperClass(edgeTypesList).asSubclass(Edge.class);
+                    edgeClass = ReflectionUtils.getCommonSuperClassOfClasses(edgeTypesList).asSubclass(Edge.class);
                 }
             }
         }
