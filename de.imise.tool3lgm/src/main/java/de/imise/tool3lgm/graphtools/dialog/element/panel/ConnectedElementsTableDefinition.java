@@ -1,12 +1,11 @@
 package de.imise.tool3lgm.graphtools.dialog.element.panel;
 
-import static de.imise.tool3lgm.graphtools.dialog.element.panel.AbstractPathConnectionPanel.PanelLabelOption.LABEL_END_ELEMENT_TYPE;
+import static de.imise.tool3lgm.graphtools.dialog.element.panel.PanelLabelOption.LABEL_END_ELEMENT_TYPE;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import de.imise.tool3lgm.graphtools.dialog.element.panel.AbstractPathConnectionPanel.PanelLabelOption;
 import de.imise.tool3lgm.graphtools.dialog.element.panel.ConnectedElementsTableDefinition.SingleColumnDefinition;
 import de.imise.tool3lgm.graphtools.metamodel.elements.OptionalEdge;
 import de.imise.tool3lgm.graphtools.path.metapaths.SimpleMetaPath;

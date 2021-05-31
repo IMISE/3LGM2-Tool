@@ -8,7 +8,7 @@ import de.imise.tool3lgm.metamodel.service.edge.Function_SoftwareProduct_Edge;
 import de.imise.tool3lgm.metamodel.service.edge.Function_Use_Edge;
 import de.imise.tool3lgm.metamodel.service.edge.OrganisationalUnit_Use_Edge;
 
-public final class Function extends Node {
+public class Function extends Node {
 
     @Override
     public ElementPropertyDialog createPropertyDialog() {

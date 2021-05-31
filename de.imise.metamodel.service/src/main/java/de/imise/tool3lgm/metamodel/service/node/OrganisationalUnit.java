@@ -8,7 +8,7 @@ import de.imise.tool3lgm.metamodel.service.edge.OrganisationalUnit_Use_Edge;
 /**
  * @author AXS (26.12.2017)
  */
-public final class OrganisationalUnit extends Node {
+public class OrganisationalUnit extends Node {
 
     @Override
     public ElementPropertyDialog createPropertyDialog() {

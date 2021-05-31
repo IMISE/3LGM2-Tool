@@ -36,6 +36,7 @@ import de.imise.tool3lgm.graphtools.dialog.action.LGMActionLibrary;
 import de.imise.tool3lgm.graphtools.dialog.element.DialogActionCommands;
 import de.imise.tool3lgm.graphtools.dialog.element.ElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.dialog.element.panel.ElementDialogPanel;
+import de.imise.tool3lgm.graphtools.dialog.element.panel.PanelLabelOption;
 import de.imise.tool3lgm.graphtools.dialog.element.panel.PathConnectionPanel;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.DoubleMeaningEdge;

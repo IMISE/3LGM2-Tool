@@ -262,6 +262,9 @@ public final class ModelBrowserTree extends DynamicTree implements UserFieldList
         return Static.contextGenerator;
     }
 
+    /**
+     * @param classes
+     */
     private void sortedByAssignable(final List<Class<? extends ModelElement>> classes) {
         int classesCount = classes.size();
         for (int i = 0; i < classesCount - 1; i++) {

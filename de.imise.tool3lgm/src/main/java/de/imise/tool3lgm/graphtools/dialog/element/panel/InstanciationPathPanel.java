@@ -1,7 +1,7 @@
 package de.imise.tool3lgm.graphtools.dialog.element.panel;
 
-import static de.imise.tool3lgm.graphtools.dialog.element.panel.AbstractPathConnectionPanel.PanelLabelOption.LABEL_END_ELEMENT_TYPE;
-import static de.imise.tool3lgm.graphtools.dialog.element.panel.AbstractPathConnectionPanel.PanelLabelOption.LABEL_LAST_EDGE_START_ELEMENT_TYPE;
+import static de.imise.tool3lgm.graphtools.dialog.element.panel.PanelLabelOption.LABEL_END_ELEMENT_TYPE;
+import static de.imise.tool3lgm.graphtools.dialog.element.panel.PanelLabelOption.LABEL_LAST_EDGE_START_ELEMENT_TYPE;
 
 import java.util.Collection;
 import java.util.EventObject;

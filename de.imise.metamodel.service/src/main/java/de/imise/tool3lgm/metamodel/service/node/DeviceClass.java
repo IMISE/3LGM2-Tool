@@ -7,7 +7,7 @@ import de.imise.tool3lgm.metamodel.service.edge.PhysicalDataProcessingComponent_
 /**
  * @author AXS (22.12.2017)
  */
-public final class DeviceClass extends Node {
+public class DeviceClass extends Node {
 
     @Override
     public ElementPropertyDialog createPropertyDialog() {

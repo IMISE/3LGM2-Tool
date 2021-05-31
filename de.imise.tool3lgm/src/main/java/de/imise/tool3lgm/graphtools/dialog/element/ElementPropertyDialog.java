@@ -1,7 +1,7 @@
 package de.imise.tool3lgm.graphtools.dialog.element;
 
-import static de.imise.tool3lgm.graphtools.dialog.element.panel.AbstractPathConnectionPanel.PanelLabelOption.LABEL_END_ELEMENT_TYPE;
-import static de.imise.tool3lgm.graphtools.dialog.element.panel.AbstractPathConnectionPanel.PanelLabelOption.LABEL_LAST_EDGE_CONNECTION_NAME;
+import static de.imise.tool3lgm.graphtools.dialog.element.panel.PanelLabelOption.LABEL_END_ELEMENT_TYPE;
+import static de.imise.tool3lgm.graphtools.dialog.element.panel.PanelLabelOption.LABEL_LAST_EDGE_CONNECTION_NAME;
 
 import java.awt.Component;
 import java.awt.event.ActionListener;
@@ -17,7 +17,6 @@ import javax.swing.JPanel;
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
 import de.imise.tool3lgm.graphtools.dialog.element.panel.AbstractPathConnectionPanel;
-import de.imise.tool3lgm.graphtools.dialog.element.panel.AbstractPathConnectionPanel.PanelLabelOption;
 import de.imise.tool3lgm.graphtools.dialog.element.panel.ConnectedElementsTableDefinition;
 import de.imise.tool3lgm.graphtools.dialog.element.panel.ConnectedElementsTablePanel;
 import de.imise.tool3lgm.graphtools.dialog.element.panel.DescriptedSingleConnectionPanel;
@@ -26,6 +25,7 @@ import de.imise.tool3lgm.graphtools.dialog.element.panel.ElementDialogPanel;
 import de.imise.tool3lgm.graphtools.dialog.element.panel.InstanciationPathPanel;
 import de.imise.tool3lgm.graphtools.dialog.element.panel.MultiPanelElementDialogPanel;
 import de.imise.tool3lgm.graphtools.dialog.element.panel.MutipleCompositionPanel;
+import de.imise.tool3lgm.graphtools.dialog.element.panel.PanelLabelOption;
 import de.imise.tool3lgm.graphtools.dialog.element.panel.PathConnectionLeafPanel;
 import de.imise.tool3lgm.graphtools.dialog.element.panel.PathConnectionPanel;
 import de.imise.tool3lgm.graphtools.dialog.element.panel.StructurePanel;

@@ -1,6 +1,6 @@
 package de.imise.tool3lgm.graphtools.dialog.element.panel;
 
-import static de.imise.tool3lgm.graphtools.dialog.element.panel.AbstractPathConnectionPanel.PanelLabelOption.LABEL_END_ELEMENT_TYPE;
+import static de.imise.tool3lgm.graphtools.dialog.element.panel.PanelLabelOption.LABEL_END_ELEMENT_TYPE;
 
 import java.awt.Container;
 import java.awt.GridBagConstraints;
@@ -25,7 +25,6 @@ import de.imise.tool3lgm.graphtools.consistency.error.type.AbstractPathError;
 import de.imise.tool3lgm.graphtools.dialog.AbstractTabbedPropertyDialog;
 import de.imise.tool3lgm.graphtools.dialog.element.AbstractElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.dialog.element.ElementPropertyDialog;
-import de.imise.tool3lgm.graphtools.dialog.element.panel.AbstractPathConnectionPanel.PanelLabelOption;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.path.metapaths.MetaPath;
 import de.imise.tool3lgm.graphtools.path.metapaths.SequenceMetaPath;

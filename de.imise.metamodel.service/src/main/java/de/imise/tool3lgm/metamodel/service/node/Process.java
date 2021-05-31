@@ -12,7 +12,7 @@ import de.imise.tool3lgm.metamodel.service.edge.Process_Function_Edge;
  *         Reihenfolge der Kanten zu den Aufgaben in der ArrayList connections
  *         legt den Prozessablauf fest.
  */
-public final class Process extends Node {
+public class Process extends Node {
 
     @Override
     public ElementPropertyDialog createPropertyDialog() {

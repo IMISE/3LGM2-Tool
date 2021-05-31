@@ -11,7 +11,7 @@ import de.imise.tool3lgm.metamodel.service.edge.Service_ServiceClass_Edge;
 /**
  * @author AXS (26.12.2017)
  */
-public final class Service extends Node {
+public class Service extends Node {
 
     @Override
     public ElementPropertyDialog createPropertyDialog() {
