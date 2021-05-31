@@ -50,6 +50,16 @@ public class SectionMetaPath extends ParallelMetaPath {
     }
 
     @Override
+    public boolean isUnambiguousCreatable(final boolean checkCreateEndElement) {
+        for (MetaPath metaPath : getSubMetaPaths()) {
+            if (!metaPath.isUnambiguousCreatable(checkCreateEndElement)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    @Override
     public SectionMetaPath createInstance(final MetaPath... subMetaPaths) {
         return new SectionMetaPath(subMetaPaths);
     }
