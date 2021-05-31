@@ -509,12 +509,10 @@ public final class ElementaryMetaPath extends MetaPathImpl implements SequenceMe
                     } else if (!CoreMetaModel.isEndClass(edgeClass, endClass)) {
                         invalidReason = InvalidReason.INVALID_EDGE_ENDCLASS_AND_METAPATH_ENDCLASS;
                     }
-                } else { //direction == Direction.BACKWARD
-                    if (!CoreMetaModel.isStartClass(edgeClass, endClass)) {
-                        invalidReason = InvalidReason.INVALID_EDGE_STARTCLASS_AND_METAPATH_ENDCLASS;
-                    } else if (!CoreMetaModel.isEndClass(edgeClass, startClass)) {
-                        invalidReason = InvalidReason.INVALID_EDGE_ENDCLASS_AND_METAPATH_STARTCLASS;
-                    }
+                } else if (!CoreMetaModel.isStartClass(edgeClass, endClass)) {
+                    invalidReason = InvalidReason.INVALID_EDGE_STARTCLASS_AND_METAPATH_ENDCLASS;
+                } else if (!CoreMetaModel.isEndClass(edgeClass, startClass)) {
+                    invalidReason = InvalidReason.INVALID_EDGE_ENDCLASS_AND_METAPATH_STARTCLASS;
                 }
             } else if (type == Type.START_WITH_EDGE) {
                 if (startClass != edgeClass) {
@@ -526,10 +524,8 @@ public final class ElementaryMetaPath extends MetaPathImpl implements SequenceMe
                     if (!CoreMetaModel.isEndClass(edgeClass, endClass)) {
                         invalidReason = InvalidReason.INVALID_END_CLASS;
                     }
-                } else { //direction == Direction.BACKWARD
-                    if (!CoreMetaModel.isStartClass(edgeClass, endClass)) {
-                        invalidReason = InvalidReason.INVALID_END_CLASS;
-                    }
+                } else if (!CoreMetaModel.isStartClass(edgeClass, endClass)) {
+                    invalidReason = InvalidReason.INVALID_END_CLASS;
                 }
             } else if (type == Type.END_WITH_EDGE) {
                 if (endClass != edgeClass) {
@@ -541,10 +537,8 @@ public final class ElementaryMetaPath extends MetaPathImpl implements SequenceMe
                     if (!CoreMetaModel.isStartClass(edgeClass, startClass)) {
                         invalidReason = InvalidReason.INVALID_START_CLASS;
                     }
-                } else { //direction == Direction.BACKWARD
-                    if (!CoreMetaModel.isEndClass(edgeClass, startClass)) {
-                        invalidReason = InvalidReason.INVALID_START_CLASS;
-                    }
+                } else if (!CoreMetaModel.isEndClass(edgeClass, startClass)) {
+                    invalidReason = InvalidReason.INVALID_START_CLASS;
                 }
             }
             invalidityCheckResult = new InvalidityCheckResult(invalidReason);
@@ -587,6 +581,11 @@ public final class ElementaryMetaPath extends MetaPathImpl implements SequenceMe
             }
         }
         return true;
+    }
+
+    @Override
+    public boolean isUnambiguousCreatable(final boolean checkCreateEndElement) {
+        return isCreatable(checkCreateEndElement);
     }
 
     @Override

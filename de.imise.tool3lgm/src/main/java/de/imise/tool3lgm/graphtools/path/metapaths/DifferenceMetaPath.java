@@ -78,6 +78,11 @@ public class DifferenceMetaPath extends ParallelMetaPath {
     }
 
     @Override
+    public boolean isUnambiguousCreatable(final boolean checkCreateEndElement) {
+        return false;
+    }
+
+    @Override
     public DifferenceMetaPath createInstance(final MetaPath... subMetaPaths) {
         return new DifferenceMetaPath(subMetaPaths);
     }

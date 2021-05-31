@@ -8,6 +8,7 @@ import com.google.common.base.Strings;
 import com.google.common.collect.ImmutableList;
 
 import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
+import de.imise.tool3lgm.graphtools.metamodel.EdgeCardinality;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction;
 import de.imise.tool3lgm.graphtools.metamodel.elements.InstanciationEdge;
@@ -257,8 +258,12 @@ public class SerialMetaPath extends ListMetaPath {
         return super.isEndClass(elementClass);
     }
 
-    @Override
-    public final boolean isCreatable(final boolean checkCreateEndElement) {
+    /**
+     * @param checkCreateEndElement
+     * @param checkUnambiguousCreatable
+     * @return
+     */
+    private final boolean isCreatable(final boolean checkCreateEndElement, final boolean checkUnambiguousCreatable) {
         if (!isValid()) {
             return false;
         }
@@ -293,9 +298,16 @@ public class SerialMetaPath extends ListMetaPath {
             if (!metaModel.isCreatable(pathStepElementClass, elementaryMetaPath, nextElementaryMetaPath)) {
                 return false;
             }
+            if (checkUnambiguousCreatable && !isMaxCardOne(nextElementaryMetaPath, i != 0, true)) {
+                return false;
+            }
         }
         //jetzt den letzten holen ElementaryMetaPath und je nach Parameter checkCreateEndElement prüfen
         ElementaryMetaPath lastElementaryMetaPath = elementaryMetaPaths.get(maxElementaryMetaPathsIndex);
+        if (checkUnambiguousCreatable && !isMaxCardOne(lastElementaryMetaPath, true, false)) {
+            return false;
+        }
+
         if (checkCreateEndElement) {
             return metaModel.isCreatable(endClass, lastElementaryMetaPath, null);
         }
@@ -323,6 +335,44 @@ public class SerialMetaPath extends ListMetaPath {
             return false;
         }
         return lastElementaryMetaPath.isCreatable(false);
+    }
+
+    /**
+     * if it is to be checked whether the intermediate elements can have the
+     * edges in the path only 1 time (that they are uniquely and completely
+     * connected by the path)
+     *
+     * @param elementaryMetaPath
+     * @param checkStartElement
+     * @param checkEndElement
+     * @return
+     */
+    private boolean isMaxCardOne(final ElementaryMetaPath elementaryMetaPath, final boolean checkStartElement, final boolean checkEndElement) {
+        if (checkStartElement) {
+            EdgeCardinality backwardCardinality = elementaryMetaPath.getBackwardCardinality();
+            int max = backwardCardinality.max();
+            if (max > 1) {
+                return false;
+            }
+        }
+        if (checkEndElement) {
+            EdgeCardinality forwardCardinality = elementaryMetaPath.getForwardCardinality();
+            int max = forwardCardinality.max();
+            if (max > 1) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    @Override
+    public boolean isCreatable(final boolean checkCreateEndElement) {
+        return isCreatable(checkCreateEndElement, false);
+    }
+
+    @Override
+    public boolean isUnambiguousCreatable(final boolean checkCreateEndElement) {
+        return isCreatable(checkCreateEndElement, true);
     }
 
     @Override
