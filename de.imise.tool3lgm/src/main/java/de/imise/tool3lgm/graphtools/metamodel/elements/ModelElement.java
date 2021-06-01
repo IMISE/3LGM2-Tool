@@ -58,6 +58,13 @@ import de.imise.util.htmlxml.HTMLConverter;
 public abstract class ModelElement extends UserFieldTarget implements MetaModelSpecific, GDCollectionOwner, IDSource {
 
     /**
+     * Space between parts of the full element name. The parts are/can be the
+     * element name itself then the subtype (if exists) and then all submodels
+     * of the element (if not unique).
+     */
+    public static final String INNER_NAME_PARTS_SPACE = "     ";
+
+    /**
      * Die Ebene auf der sich dieses Element befindet
      */
     protected int layer = -1;
@@ -334,6 +341,14 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
     }
 
     /**
+     * @return the extension that is dispalyed in the name of the element as
+     *         postfix.
+     */
+    protected String getNameExtension() {
+        return "";
+    }
+
+    /**
      * @param doc
      * @return
      */
@@ -341,13 +356,20 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
         if (name == null) {
             return;
         }
+        String nameExtension = getNameExtension();
         if (isUnique()) {
             nameWithSzens = toString();
+            if (!nameExtension.isEmpty()) {
+                nameWithSzens += nameExtension;
+            }
             return;
         }
 
         nameBuffer.setLength(0);
         nameBuffer.append(toString());
+        if (!nameExtension.isEmpty()) {
+            nameBuffer.append(nameExtension);
+        }
 
         Set<GraphDocument> mySzenarios = getMySzenarios();
         //Beim Laden eines Modells liefert getCollection() null -> abfangen
@@ -358,7 +380,7 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
         mySzenarios.remove(gdcoll.getMainDoc());
         List<GraphDocument> mySortedSzenarios = new ArrayList<>(mySzenarios);
         Alphabetical.sort(mySortedSzenarios);
-        nameBuffer.append("      ");
+        nameBuffer.append(INNER_NAME_PARTS_SPACE);
         nameBuffer.append(mySortedSzenarios);
         nameWithSzens = nameBuffer.toString();
     }
