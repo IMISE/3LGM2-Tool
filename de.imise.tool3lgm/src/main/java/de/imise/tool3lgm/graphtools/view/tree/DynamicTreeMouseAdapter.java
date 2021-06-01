@@ -163,7 +163,7 @@ public class DynamicTreeMouseAdapter implements MouseListener {
                         if (doc != null) {
                             MetaModel metaModel = doc.getMetaModel();
                             if (metaModel.isCreatable(elementClass)) {
-                                showNewInstanceContextMenu(elementClass.getSimpleName(), xin + 3, yin + 3);
+                                showNewInstanceContextMenu(elementClass, xin + 3, yin + 3);
                             }
                         }
                     }
@@ -194,15 +194,16 @@ public class DynamicTreeMouseAdapter implements MouseListener {
     }
 
     /**
-     * @param str
+     * @param elementClass
+     * @param x
+     * @param y
      * @return
      */
-    private final JPopupMenu showNewInstanceContextMenu(final String str, final int x, final int y) {
+    private final JPopupMenu showNewInstanceContextMenu(final Class<? extends ModelElement> elementClass, final int x, final int y) {
         JPopupMenu menu = new JPopupMenu();
-
         ExtendedAction action = GDCommands.MODEL_ACTION_CREATE_NODE.createAction();
         String actionCommand = action.getActionCommand();
-        actionCommand += " " + str;
+        actionCommand += " " + elementClass.getSimpleName();
         action.setActionCommand(actionCommand);
         JMenuItem createNodeItem = new JMenuItem(action);
         menu.add(createNodeItem);
