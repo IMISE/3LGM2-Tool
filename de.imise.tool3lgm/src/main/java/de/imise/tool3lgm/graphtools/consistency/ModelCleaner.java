@@ -334,7 +334,7 @@ public class ModelCleaner {
                 continue;
             }
             for (ModelElement me : gdcoll.getMainDoc().getModelItems(elementClass, false)) {
-                gdcoll.createInitialSubtypes(me, STANDARD_PID);
+                gdcoll.createInitialAddicted(me, STANDARD_PID);
             }
         }
 
