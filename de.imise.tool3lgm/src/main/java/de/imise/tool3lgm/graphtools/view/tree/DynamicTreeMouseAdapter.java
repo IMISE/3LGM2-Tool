@@ -7,8 +7,11 @@ import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.AbstractAction;
+import javax.swing.JLabel;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 import javax.swing.JTree;
@@ -16,12 +19,15 @@ import javax.swing.tree.TreePath;
 
 import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.Tool3lgmConstants;
+import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.DummyGDCollection;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GDCommands;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
+import de.imise.tool3lgm.graphtools.userfield.definition.SubType;
+import de.imise.tool3lgm.graphtools.userfield.definition.UserFieldDefinitions;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.graphtools.view.tree.node.ElementClassTreeNode;
 import de.imise.tool3lgm.graphtools.view.tree.node.ElementContainerTreeNode;
@@ -200,16 +206,70 @@ public class DynamicTreeMouseAdapter implements MouseListener {
      * @return
      */
     private final JPopupMenu showNewInstanceContextMenu(final Class<? extends ModelElement> elementClass, final int x, final int y) {
+        JPopupMenu menu = getNewInstanceContextMenu(elementClass);
+        menu.show(tree, x, y);
+        return menu;
+    }
+
+    /**
+     * @param elementClass
+     * @return
+     */
+    private final JPopupMenu getNewInstanceContextMenu(final Class<? extends ModelElement> elementClass) {
         JPopupMenu menu = new JPopupMenu();
+        GraphDocument doc = tree.getGraphDocument();
+        UserFieldDefinitions userFieldDefinitions = doc.getUserFieldDefinitions();
+        List<SubType> subTypes = userFieldDefinitions.getSubTypes(elementClass);
+        if (subTypes.isEmpty()) {
+            JMenuItem createNodeItem = getCreateTypeItem(elementClass, null, null);
+            menu.add(createNodeItem);
+        } else {
+            String newString = getResString("new");
+            JLabel newLabel = new JLabel(newString);
+            menu.add(newLabel);
+            List<JMenuItem> menuItemsWithSubTypes = getMenuItemsWithSubTypes(elementClass, subTypes);
+            for (JMenuItem item : menuItemsWithSubTypes) {
+                menu.add(item);
+            }
+        }
+        return menu;
+    }
+
+    /**
+     * @param elementClass
+     * @return
+     */
+    private JMenuItem getCreateTypeItem(final Class<? extends ModelElement> elementClass, final SubType subType, final String itemText) {
         ExtendedAction action = GDCommands.MODEL_ACTION_CREATE_NODE.createAction();
         String actionCommand = action.getActionCommand();
         actionCommand += " " + elementClass.getSimpleName();
+        if (subType != null) {
+            actionCommand += " " + subType.getID();
+        }
         action.setActionCommand(actionCommand);
         JMenuItem createNodeItem = new JMenuItem(action);
-        menu.add(createNodeItem);
+        if (itemText != null) {
+            createNodeItem.setText(itemText);
+        }
+        return createNodeItem;
+    }
 
-        menu.show(tree, x, y);
-        return menu;
+    /**
+     * @param elementClass
+     * @param subTypes
+     * @return
+     */
+    private List<JMenuItem> getMenuItemsWithSubTypes(final Class<? extends ModelElement> elementClass, final List<SubType> subTypes) {
+        List<JMenuItem> items = new ArrayList<>();
+        ElementsNameBuilder elementsNameBuilder = tree.getElementsNameBuilder();
+        String superTypeName = elementsNameBuilder.getDisplayableName(elementClass);
+        JMenuItem createSuperTypeItem = getCreateTypeItem(elementClass, null, superTypeName);
+        items.add(createSuperTypeItem);
+        for (SubType subType : subTypes) {
+            JMenuItem createSubTypeItem = getCreateTypeItem(elementClass, subType, ContextGenerator.STANDARD_SUBITEMS_INDENTATION + subType.getName());
+            items.add(createSubTypeItem);
+        }
+        return items;
     }
 
 }

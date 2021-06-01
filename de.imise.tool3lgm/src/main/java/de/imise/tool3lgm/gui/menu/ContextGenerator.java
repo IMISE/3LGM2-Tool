@@ -38,6 +38,11 @@ import de.imise.util.swing.menu.MenuScroller;
 public abstract class ContextGenerator implements ActionListener {
 
     /**
+     *
+     */
+    public static final String STANDARD_SUBITEMS_INDENTATION = "      ";
+
+    /**
      * COMMENTME
      */
     private boolean controlled = false;
@@ -124,7 +129,7 @@ public abstract class ContextGenerator implements ActionListener {
      * @param item
      * @return
      */
-    protected final JMenuItem cloneItem(final JMenuItem item) {
+    public static final JMenuItem cloneItem(final JMenuItem item) {
         JMenuItem clone = new JMenuItem(item.getText(), item.getIcon());
         clone.setActionCommand(item.getActionCommand());
         clone.setEnabled(item.isEnabled());

@@ -333,7 +333,7 @@ public class RegularContextGenerator extends ElementSelectionContextGenerator im
             items.add(item);
             Class<? extends ModelElement> slaveClass = itemAndClassPair.getSecondItem();
             for (SubType subType : userFieldDefinitions.getSubTypes(slaveClass)) {
-                String slaveClassSubtypeDisplayName = "    " + subType;
+                String slaveClassSubtypeDisplayName = STANDARD_SUBITEMS_INDENTATION + subType;
                 JMenuItem subTypeMenuItem = cloneItem(item);
                 subTypeMenuItem.setText(slaveClassSubtypeDisplayName);
                 String actionCommand = subTypeMenuItem.getActionCommand();
@@ -915,7 +915,7 @@ public class RegularContextGenerator extends ElementSelectionContextGenerator im
      */
     private void addCreateNodeItem(final GraphDocument doc, final JMenu menu, final Class<? extends ModelElement> elementClass, final SubType subType) {
         ElementsNameBuilder elementsNameBuilder = doc.getElementsNameBuilder();
-        String itemName = subType == null ? elementsNameBuilder.getDisplayableName(elementClass) : "    " + subType;
+        String itemName = subType == null ? elementsNameBuilder.getDisplayableName(elementClass) : STANDARD_SUBITEMS_INDENTATION + subType;
         JMenuItem item = new JMenuItem(itemName);
         item.addActionListener(this);
         String actionCommand = MODEL_ACTION_CREATE_NODE + " " + elementClass.getName();
