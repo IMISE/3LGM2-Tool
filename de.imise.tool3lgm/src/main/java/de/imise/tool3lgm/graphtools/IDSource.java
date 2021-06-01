@@ -1,5 +1,7 @@
 package de.imise.tool3lgm.graphtools;
 
+import java.util.Objects;
+
 import de.imise.util.IDStringGenerator;
 
 /**
@@ -25,6 +27,15 @@ public interface IDSource {
      */
     public default String createID(final String idPrefix) {
         return IDStringGenerator.createIDString(idPrefix);
+    }
+
+    /**
+     * @param id
+     * @return <code>true</code> id is equals to {@link #getID()}
+     * @see Objects#equals(Object, Object)
+     */
+    public default boolean hasID(final String id) {
+        return Objects.equals(id, getID());
     }
 
 }
