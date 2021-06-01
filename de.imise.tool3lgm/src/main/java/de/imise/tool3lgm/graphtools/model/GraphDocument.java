@@ -109,6 +109,7 @@ import de.imise.tool3lgm.graphtools.path.metapaths.ElementaryMetaPath;
 import de.imise.tool3lgm.graphtools.undoredo.TransactionManager;
 import de.imise.tool3lgm.graphtools.undoredo.TransactionStackTable;
 import de.imise.tool3lgm.graphtools.userfield.WeightReplacer;
+import de.imise.tool3lgm.graphtools.userfield.definition.SubType;
 import de.imise.tool3lgm.graphtools.userfield.definition.UserField;
 import de.imise.tool3lgm.graphtools.userfield.definition.UserFieldDefinitions;
 import de.imise.tool3lgm.graphtools.view.container.BendpointContainer;
@@ -812,17 +813,21 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
         case MODEL_ACTION_CREATE_NODE: {
             String classname = argv[0];
             String name = GDCommands.INVALID_NAME;
+            String subTypeID = GDCommands.INVALID_ID_STRING;
             String description = GDCommands.INVALID_DESCRIPTION;
             String idString = GDCommands.INVALID_ID_STRING;
             try {
-                name = argv[1];
-                description = argv[2];
-                idString = argv[3];
+                subTypeID = argv[1];
+                name = argv[2];
+                description = argv[3];
+                idString = argv[4];
             } catch (Exception e) {
-                //Die Argumente 1-3 sind optional; deshalb keine Fehlermeldung, wenn das Parsen fehlschlägt
+                //Die Argumente 1-4 sind optional; deshalb keine Fehlermeldung, wenn das Parsen fehlschlägt
             }
             Class<? extends ModelElement> elementClass = metaModel.getClassForName(classname);
-            createNodeAndContainer(elementClass, name, description, idString, pid);
+            UserFieldDefinitions userFieldDefinitions = getUserFieldDefinitions();
+            SubType subType = subTypeID != GDCommands.INVALID_ID_STRING ? userFieldDefinitions.getSubType(elementClass, subTypeID) : null;
+            createNodeAndContainer(elementClass, subType, name, description, idString, pid);
             break;
         }
         case MODEL_ACTION_DELETE_FROM_MODEL: {
@@ -893,7 +898,15 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
             Class<? extends ModelElement> elementClass = metaModel.getClassForName(argv[2]);
             Class<? extends CompositionEdge> compositionEdgeClass = elementClass.asSubclass(CompositionEdge.class);
             Class<? extends ModelElement> slaveClass = metaModel.getClassForName(argv[3]);
-            createAddicted(doc, master, compositionEdgeClass, slaveClass, pid);
+            SubType subType = null;
+            try {
+                String subTypeID = argv[4];
+                UserFieldDefinitions userFieldDefinitions = doc.getUserFieldDefinitions();
+                subType = userFieldDefinitions.getSubType(elementClass, subTypeID);
+            } catch (Exception e) {
+                //Argument 4 SubType is optional
+            }
+            createAddicted(doc, master, compositionEdgeClass, slaveClass, subType, pid);
             break;
         }
         case MODEL_ACTION_SET_ELEMENT_COLOR: {
@@ -3410,9 +3423,19 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
      * @return
      */
     public NodeContainer createNodeAndContainer(final String elementClassName, final int pid) {
+        return createNodeAndContainer(elementClassName, (SubType) null, pid);
+    }
+
+    /**
+     * @param elementClassName
+     * @param subType
+     * @param pid
+     * @return
+     */
+    public NodeContainer createNodeAndContainer(final String elementClassName, final SubType subType, final int pid) {
         MetaModel metaModel = getMetaModel();
         Class<? extends ModelElement> elementClass = metaModel.getClassForName(elementClassName);
-        return createNodeAndContainer(elementClass, pid);
+        return createNodeAndContainer(elementClass, subType, pid);
     }
 
     /**
@@ -3421,7 +3444,17 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
      * @return
      */
     public NodeContainer createNodeAndContainer(final Class<? extends ModelElement> elementClass, final int pid) {
-        return createNodeAndContainer(elementClass, GDCommands.INVALID_NAME, GDCommands.INVALID_DESCRIPTION, GDCommands.INVALID_ID_STRING, pid);
+        return createNodeAndContainer(elementClass, (SubType) null, pid);
+    }
+
+    /**
+     * @param elementClass
+     * @param subType
+     * @param pid
+     * @return
+     */
+    public NodeContainer createNodeAndContainer(final Class<? extends ModelElement> elementClass, final SubType subType, final int pid) {
+        return createNodeAndContainer(elementClass, subType, GDCommands.INVALID_NAME, GDCommands.INVALID_DESCRIPTION, GDCommands.INVALID_ID_STRING, pid);
     }
 
     /**
@@ -3431,7 +3464,18 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
      * @return
      */
     public NodeContainer createNodeAndContainer(final Class<? extends ModelElement> elementClass, final String name, final int pid) {
-        return createNodeAndContainer(elementClass, name, GDCommands.INVALID_DESCRIPTION, GDCommands.INVALID_ID_STRING, pid);
+        return createNodeAndContainer(elementClass, (SubType) null, name, pid);
+    }
+
+    /**
+     * @param elementClass
+     * @param subType
+     * @param name
+     * @param pid
+     * @return
+     */
+    public NodeContainer createNodeAndContainer(final Class<? extends ModelElement> elementClass, final SubType subType, final String name, final int pid) {
+        return createNodeAndContainer(elementClass, subType, name, GDCommands.INVALID_DESCRIPTION, GDCommands.INVALID_ID_STRING, pid);
     }
 
     /**
@@ -3442,7 +3486,18 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
      * @return
      */
     public NodeContainer createNodeAndContainer(final Class<? extends ModelElement> elementClass, final String name, final String description, final int pid) {
-        return createNodeAndContainer(elementClass, name, description, GDCommands.INVALID_ID_STRING, pid);
+        return createNodeAndContainer(elementClass, (SubType) null, name, description, pid);
+    }
+    /**
+     * @param elementClass
+     * @param subType
+     * @param name
+     * @param description
+     * @param pid
+     * @return
+     */
+    public NodeContainer createNodeAndContainer(final Class<? extends ModelElement> elementClass, final SubType subType, final String name, final String description, final int pid) {
+        return createNodeAndContainer(elementClass, subType, name, description, GDCommands.INVALID_ID_STRING, pid);
     }
 
     /**
@@ -3454,12 +3509,26 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
      * @return
      */
     public NodeContainer createNodeAndContainer(final Class<? extends ModelElement> elementClass, final String name, final String description, final String elementID, final int pid) {
-        return createNodeAndContainer(elementClass, name, description, elementID, GDCommands.INVALID_POSITION_X, GDCommands.INVALID_POSITION_Y, GDCommands.INVALID_WIDTH, GDCommands.INVALID_HEIGHT, GDCommands.INVALID_COLOR_RGB, GDCommands.INVALID_SHAPE,
-                GDCommands.INVALID_BENDPOINT_INDEX, pid);
+        return createNodeAndContainer(elementClass, (SubType) null, name, description, elementID, pid);
     }
 
     /**
      * @param elementClass
+     * @param subType
+     * @param name
+     * @param description
+     * @param elementID
+     * @param pid
+     * @return
+     */
+    public NodeContainer createNodeAndContainer(final Class<? extends ModelElement> elementClass, final SubType subType, final String name, final String description, final String elementID, final int pid) {
+        return createNodeAndContainer(elementClass, subType, name, description, elementID, GDCommands.INVALID_POSITION_X, GDCommands.INVALID_POSITION_Y, GDCommands.INVALID_WIDTH, GDCommands.INVALID_HEIGHT, GDCommands.INVALID_COLOR_RGB,
+                GDCommands.INVALID_SHAPE, GDCommands.INVALID_BENDPOINT_INDEX, pid);
+    }
+
+    /**
+     * @param elementClass
+     * @param subType
      * @param name
      * @param description
      * @param elementID
@@ -3473,14 +3542,14 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
      * @param pid
      * @return
      */
-    private NodeContainer createNodeAndContainer(final Class<? extends ModelElement> elementClass, final String name, final String description, final String elementID, int x, int y, final int width, final int height, final int rgb, final Shape form,
-            final int bendpoint_index, final int pid) {
+    private NodeContainer createNodeAndContainer(final Class<? extends ModelElement> elementClass, final SubType subType, final String name, final String description, final String elementID, int x, int y, final int width, final int height, final int rgb,
+            final Shape form, final int bendpoint_index, final int pid) {
         lastCreated = null;
         start_transaction(pid);
         if (Node.class.isAssignableFrom(elementClass)) {
             Class<? extends Node> nodeClass = elementClass.asSubclass(Node.class);
             //das neue Element im Hauptdokument anlegen
-            lastCreated = gdcoll.createNodeAndContainer(nodeClass, name, description, elementID, pid);
+            lastCreated = gdcoll.createNodeAndContainer(nodeClass, subType, name, description, elementID, pid);
         }
         if (lastCreated != null) {
             ModelElement me = lastCreated.getElement();
@@ -3738,13 +3807,14 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
      * @param master
      * @param edgeClass
      * @param slaveClass
+     * @param subType
      * @param slaveName
      * @param slaveID
      * @param pid
      * @return
      */
-    private static final ModelElement createAddicted(final GraphDocument doc, final ModelElement master, final Class<? extends CompositionEdge> edgeClass, final Class<? extends ModelElement> slaveClass, final String slaveName, final String slaveID,
-            final int pid) {
+    private static final ModelElement createAddicted(final GraphDocument doc, final ModelElement master, final Class<? extends CompositionEdge> edgeClass, final Class<? extends ModelElement> slaveClass, final SubType subType, final String slaveName,
+            final String slaveID, final int pid) {
         if (master == null || edgeClass == null || slaveClass == null) {
             return null;
         }
@@ -3763,7 +3833,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
         }
         GDCollection gdcoll = doc.getCollection();
         GraphDocument mainDoc = gdcoll.getMainDoc();
-        NodeContainer slaveContainer = mainDoc.createNodeAndContainer(slaveClass, name, GDCommands.INVALID_DESCRIPTION, slaveID, pid);
+        NodeContainer slaveContainer = mainDoc.createNodeAndContainer(slaveClass, subType, name, GDCommands.INVALID_DESCRIPTION, slaveID, pid);
         if (slaveContainer == null) {
             doc.finish_transaction(pid);
             return null;
@@ -3799,12 +3869,14 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
      * @param master
      * @param edgeClass
      * @param slaveClass
+     * @param subType
      * @param slaveName
      * @param pid
      * @return
      */
-    public static final ModelElement createAddicted(final GraphDocument doc, final ModelElement master, final Class<? extends CompositionEdge> edgeClass, final Class<? extends ModelElement> slaveClass, final String slaveName, final int pid) {
-        return createAddicted(doc, master, edgeClass, slaveClass, slaveName, GDCommands.INVALID_ID_STRING, pid);
+    public static final ModelElement createAddicted(final GraphDocument doc, final ModelElement master, final Class<? extends CompositionEdge> edgeClass, final Class<? extends ModelElement> slaveClass, final SubType subType, final String slaveName,
+            final int pid) {
+        return createAddicted(doc, master, edgeClass, slaveClass, subType, slaveName, GDCommands.INVALID_ID_STRING, pid);
     }
 
     /**
@@ -3816,7 +3888,20 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
      * @return
      */
     public static final ModelElement createAddicted(final GraphDocument doc, final ModelElement master, final Class<? extends CompositionEdge> edgeClass, final Class<? extends ModelElement> slaveClass, final int pid) {
-        return createAddicted(doc, master, edgeClass, slaveClass, GDCommands.INVALID_NAME, pid);
+        return createAddicted(doc, master, edgeClass, slaveClass, null, pid);
+    }
+
+    /**
+     * @param doc
+     * @param master
+     * @param edgeClass
+     * @param slaveClass
+     * @param subType
+     * @param pid
+     * @return
+     */
+    public static final ModelElement createAddicted(final GraphDocument doc, final ModelElement master, final Class<? extends CompositionEdge> edgeClass, final Class<? extends ModelElement> slaveClass, final SubType subType, final int pid) {
+        return createAddicted(doc, master, edgeClass, slaveClass, subType, GDCommands.INVALID_NAME, pid);
     }
 
     /**

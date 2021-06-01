@@ -109,6 +109,7 @@ import de.imise.tool3lgm.graphtools.path.paths.AbstractPath;
 import de.imise.tool3lgm.graphtools.undoredo.TransactionManager;
 import de.imise.tool3lgm.graphtools.undoredo.TransactionStackTable;
 import de.imise.tool3lgm.graphtools.userfield.UserfieldResourceHandler;
+import de.imise.tool3lgm.graphtools.userfield.definition.SubType;
 import de.imise.tool3lgm.graphtools.userfield.definition.UserField;
 import de.imise.tool3lgm.graphtools.userfield.definition.UserFieldDefinitions;
 import de.imise.tool3lgm.graphtools.userfield.definition.UserFieldTarget;
@@ -1199,19 +1200,21 @@ public class GDCollection extends UserFieldTarget implements MetaModelSpecific {
         }
         //jetzt alle Node im Hauptmodell löschen
         for (ModelElement me : allElementsToDelete) {
-            if (me instanceof Edge || me instanceof Bendpoint) {
+            if (!(me instanceof Node) || me instanceof Bendpoint) {
                 continue;
             }
-            Class<? extends ModelElement> meClass = me.getClass();
-            mainDoc.addUndo(pid, MODEL_ACTION_CREATE_NODE, meClass.getName(), me.getName(), me.getDescription(), me);
+            Node node = (Node) me;
+            Class<? extends Node> nodeClass = node.getClass();
+            mainDoc.addUndo(pid, MODEL_ACTION_CREATE_NODE, nodeClass.getName(), node.getSubType(), node.getName(), node.getDescription(), node);
             if (!dependentDeletedElements.contains(me)) {
-                mainDoc.addRedo(pid, MODEL_ACTION_DELETE_FROM_MODEL, me);
+                mainDoc.addRedo(pid, MODEL_ACTION_DELETE_FROM_MODEL, node);
             }
             //den Container des zu löschenden Elementes im Hauptmodell holen
-            mainDoc.layer[me.layerFor()].remove(me.getContainer(mainDoc));
+            mainDoc.layer[node.layerFor()].remove(node.getContainer(mainDoc));
             //und danach erst im Table des Elements
             //das Löschen aus dem ContainerTbale des Elementes kann man sich sparen, da das Element nirgends mehr gespeichert werden sollte
             //me.removeContainer(this.doc);
+            //TODO: AXS 01.06.2021 das hier kann niemals eintreten, weil oben schon alle Kanten übergangen werden und kein Node OptionalEdge implementiert
             if (me instanceof OptionalEdge) {
                 removeOptional((OptionalEdge) me);
             }
@@ -1334,6 +1337,19 @@ public class GDCollection extends UserFieldTarget implements MetaModelSpecific {
      * @return
      */
     public NodeContainer createNodeAndContainer(final Class<? extends Node> elementClass, final String name, final String description, final String id, final int pid) {
+        return createNodeAndContainer(elementClass, (SubType) null, name, description, id, pid);
+    }
+
+    /**
+     * @param elementClass
+     * @param subType
+     * @param name
+     * @param description
+     * @param id
+     * @param pid
+     * @return
+     */
+    public NodeContainer createNodeAndContainer(final Class<? extends Node> elementClass, final SubType subType, final String name, final String description, final String id, final int pid) {
         //Knickpunkte kann man über diese Funktion nicht anlegen
         if (Bendpoint.class.isAssignableFrom(elementClass)) {
             return null;
@@ -1342,6 +1358,7 @@ public class GDCollection extends UserFieldTarget implements MetaModelSpecific {
         NodeContainer nc = null;
         try {
             me = metaModel.createElement(elementClass);
+            me.setSubType(subType);
             nc = (NodeContainer) me.createContainer(mainDoc);
         } catch (Exception ex) {
             Log.show(ERROR, getResString("FehlerAllgemein"), ex);
@@ -1367,7 +1384,7 @@ public class GDCollection extends UserFieldTarget implements MetaModelSpecific {
             me.setDescription(getDecodedParseSaveString(description));
         }
         mainDoc.start_transaction(pid);
-        mainDoc.addRedo(pid, MODEL_ACTION_CREATE_NODE, me.getClass().getName(), me.getName(), me.getDescription(), me);
+        mainDoc.addRedo(pid, MODEL_ACTION_CREATE_NODE, me.getClass().getName(), me.getSubType(), me.getName(), me.getDescription(), me);
         if (nc.getColor() != null) {
             mainDoc.addRedo(pid, MODEL_ACTION_SET_ELEMENT_COLOR, mainDoc, me, nc.getColor().getRGB());
         }
