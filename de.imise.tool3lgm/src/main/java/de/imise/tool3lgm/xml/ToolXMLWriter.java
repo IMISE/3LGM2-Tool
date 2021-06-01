@@ -38,6 +38,7 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.Bendpoint;
 import de.imise.tool3lgm.graphtools.metamodel.elements.DoubleMeaningEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
+import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
 import de.imise.tool3lgm.graphtools.metamodel.elements.OptionalEdge;
 import de.imise.tool3lgm.graphtools.model.CopyDependencyResolver;
 import de.imise.tool3lgm.graphtools.model.CopyDependencyResolver.CopyDependencyResolverResultFull;
@@ -46,6 +47,7 @@ import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.model.LGMGraphDocument;
 import de.imise.tool3lgm.graphtools.model.Szenario;
 import de.imise.tool3lgm.graphtools.userfield.WeightReplacer;
+import de.imise.tool3lgm.graphtools.userfield.definition.SubType;
 import de.imise.tool3lgm.graphtools.userfield.definition.UserField;
 import de.imise.tool3lgm.graphtools.userfield.definition.UserField.Style;
 import de.imise.tool3lgm.graphtools.userfield.definition.UserFieldDefinitions;
@@ -463,6 +465,12 @@ public class ToolXMLWriter extends IntendingXMLWriter {
         writeStartElement("element"); //<element>
         writeAttribute("class", me.getClass().getSimpleName());
         writeAttribute("hash", me.getID());
+        if (me instanceof Node) {
+            SubType subType = ((Node) me).getSubType();
+            if (subType != null) {
+                writeAttribute("subtype", subType.getID());
+            }
+        }
         writeModelElementField("name", me.getName());
         writeModelElementFieldIfNotNullOrEmpty("description", me.getDescription());
         String associatedSzenID = me.getAssociatedSzenID();

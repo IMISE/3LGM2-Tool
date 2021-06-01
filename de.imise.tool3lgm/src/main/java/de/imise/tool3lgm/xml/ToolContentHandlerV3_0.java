@@ -28,6 +28,7 @@ import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Bendpoint;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
+import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
 import de.imise.tool3lgm.graphtools.metamodel.elements.OptionalEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Textfield;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
@@ -35,6 +36,7 @@ import de.imise.tool3lgm.graphtools.model.GDCollectionFileHandler;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.model.Szenario;
 import de.imise.tool3lgm.graphtools.userfield.WeightReplacer;
+import de.imise.tool3lgm.graphtools.userfield.definition.SubType;
 import de.imise.tool3lgm.graphtools.userfield.definition.UserField;
 import de.imise.tool3lgm.graphtools.userfield.definition.UserField.Style;
 import de.imise.tool3lgm.graphtools.userfield.definition.UserFieldDefinitions;
@@ -307,6 +309,15 @@ public class ToolContentHandlerV3_0 implements ContentHandler {
                         Edge edge = (Edge) element;
                         edges.add(edge);
                     }
+
+                    if (element instanceof Node) {
+                        String subTypeID = atts.getValue("subtype");
+                        if (!Strings.isNullOrEmpty(subTypeID)) {
+                            SubType subType = userFieldDefinitions.getSubType(elementClass, subTypeID);
+                            ((Node) element).setSubType(subType);
+                        }
+                    }
+
                 } else {
                     System.err.println("Could not proceed element!\n Name=" + qName + "\n UserField=" + attsToString(atts));
                 }
