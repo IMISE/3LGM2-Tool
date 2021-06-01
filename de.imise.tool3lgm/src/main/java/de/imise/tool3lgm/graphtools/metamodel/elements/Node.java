@@ -27,7 +27,7 @@ public abstract class Node extends ModelElement {
         } else {
             ec = new NodeContainer(this, doc);
         }
-        updateHTMLName(ec);
+        updateGraphName(ec);
         return ec;
     }
 

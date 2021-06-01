@@ -65,7 +65,7 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
     /**
      * Name, Anzeigename in der Grafik und Beschreibung
      */
-    private String name = "", htmlName = "", descr = "";
+    private String name = "", graphName = "", descr = "";
 
     /**
      * ID of the element
@@ -398,7 +398,7 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
      * doch, dann muss das Feld GET_NAME_EXTENSION_METHOD_NAME ebenfalls
      * umbenannt werden.
      */
-    private final MetaPath getNameExtensionPath() {
+    private final MetaPath getGraphNameExtensionPath() {
         return metaModel.getNameExtensionPath(getClass());
     }
 
@@ -407,7 +407,7 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
      * Namen verbundener Elemente anzeigen soll
      */
     public void updateNameExtensions() {
-        if (getNameExtensionPath() != null) {
+        if (getGraphNameExtensionPath() != null) {
             setName(name);
         }
     }
@@ -444,23 +444,23 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
         }
         //HTML-Anzeigename für die Grafik -> im Moment nur für Knotencontainer
         if (isNodeType && isPaintable()) {
-            updateHTMLName(null);
+            updateGraphName(null);
         }
     }
 
     /**
      * @return
      */
-    public String getNameExtension() {
-        MetaPath nameExtensionPath = getNameExtensionPath();
-        updateHTMLNameSuffixBuffer(nameExtensionPath);
+    public String getGraphNameExtension() {
+        MetaPath nameExtensionPath = getGraphNameExtensionPath();
+        updateGraphNameSuffixBuffer(nameExtensionPath);
         return suffixBuf.toString();
     }
 
     /**
      * @param nameExtension
      */
-    private void updateHTMLNameSuffixBuffer(final MetaPath nameExtension) {
+    private void updateGraphNameSuffixBuffer(final MetaPath nameExtension) {
         suffixBuf.setLength(0);
         if (nameExtension != null) {
             Collection<ModelElement> directConnectedElements = nameExtension.getConnectedElements(this);
@@ -492,12 +492,12 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
      * @param targetContainer the single target container to update or
      *            <code>null</code> to update all containers
      */
-    public void updateHTMLName(final ElementContainer targetContainer) {
+    public void updateGraphName(final ElementContainer targetContainer) {
         DefaultElementsLayoutDefinition defaultElementsLayout = null;
         GraphElementLayout nameExtendsionClassLayout = null;
         Iterable<ElementContainer> targetContainers;
-        MetaPath nameExtension = getNameExtensionPath();
-        updateHTMLNameSuffixBuffer(nameExtension);
+        MetaPath nameExtension = getGraphNameExtensionPath();
+        updateGraphNameSuffixBuffer(nameExtension);
         Class<? extends ModelElement> nameExtendsionClass;
         GraphViewDefinition graphViewDefinition;
         if (suffixBuf.length() > 0) {
@@ -508,19 +508,19 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
         }
         targetContainers = targetContainer == null ? getElementContainers() : ImmutableList.of(targetContainer);
 
-        htmlName = null;
+        graphName = null;
         textBuf.setLength(0);
         for (ElementContainer ec : targetContainers) {
             GraphDocument doc = ec.getGraphDocument();
             if (!doc.isMainGraphDocument()) {
                 if (ec.isDefaultTextAlignmentHTML()) {
-                    if (htmlName == null) {
-                        htmlName = generateHTMLName(ec, defaultElementsLayout, nameExtendsionClassLayout);
+                    if (graphName == null) {
+                        graphName = generateGraphName(ec, defaultElementsLayout, nameExtendsionClassLayout);
                     }
-                    ec.setHTMLName(htmlName);
+                    ec.setGraphName(graphName);
                 } else {
-                    String notDefaultAlignmentHTMLName = generateHTMLName(ec, defaultElementsLayout, nameExtendsionClassLayout);
-                    ec.setHTMLName(notDefaultAlignmentHTMLName);
+                    String notDefaultAlignmentGraphName = generateGraphName(ec, defaultElementsLayout, nameExtendsionClassLayout);
+                    ec.setGraphName(notDefaultAlignmentGraphName);
                 }
             }
         }
@@ -532,7 +532,7 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
      * @param nameExtendsionClassLayout
      * @return
      */
-    private String generateHTMLName(final ElementContainer ec, final DefaultElementsLayoutDefinition defaultElementsLayout, final GraphElementLayout nameExtendsionClassLayout) {
+    private String generateGraphName(final ElementContainer ec, final DefaultElementsLayoutDefinition defaultElementsLayout, final GraphElementLayout nameExtendsionClassLayout) {
         TextAlignmentHTML textAlignmentHTML = ec.getTextAlignmentHTML();
         textBuf.append("<HTML><P align=\"");
         textBuf.append(textAlignmentHTML.name());
@@ -2425,7 +2425,7 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
                 }
             }
         }
-        updateHTMLName(null);
+        updateGraphName(null);
         refreshText();
 
         if (joinNameDescriptionAndUserfields) {

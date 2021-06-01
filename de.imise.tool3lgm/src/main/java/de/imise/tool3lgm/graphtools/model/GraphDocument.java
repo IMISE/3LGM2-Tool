@@ -3306,6 +3306,12 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
         //		ModelElement layerElemMe = mc.getElement();
         //		System.err.println("GraphDocument.addToSelection(): " + layerElemMe.getClass().getSimpleName() + " " + this + " " + layerElemMe.getClearName() + " " + layerElemMe.getID() + " " + layerElemMe.getCreationDate().toLocaleString());
 
+        if (mc instanceof NodeContainer) {
+            NodeContainer nc = (NodeContainer) mc;
+            Node node = nc.getNode();
+            Sys.err1(node + " -> " + node.getSubType());
+        }
+
         gdcoll.addToSelection(mc);
         distributeEvent(SELECTION_CHANGED, mc, pid);
     }
@@ -4642,7 +4648,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
         addRedo(pid, MODEL_ACTION_SET_ELEMENT_TEXT_ALIGNMENT_HTML, szen, ec, mode);
         layout.textAlignmentHTML = mode;
         ModelElement me = ec.getElement();
-        me.updateHTMLName(ec);
+        me.updateGraphName(ec);
         finish_transaction(pid);
         distributeEvent(ELEMENT_GRAPHICS_CHANGED, ec, pid);
     }
@@ -5490,7 +5496,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
             for (NodeContainer nc : layer[i].getGraphNodeContainers()) {
                 if (nc != null) {
                     ModelElement me = nc.getElement();
-                    me.updateHTMLName(nc);
+                    me.updateGraphName(nc);
                     nc.refreshText();
                     Font f = nc.getFont();
                     if (!nc.isStandardFont(f)) {

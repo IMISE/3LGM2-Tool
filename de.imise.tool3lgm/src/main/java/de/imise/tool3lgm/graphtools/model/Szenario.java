@@ -90,7 +90,7 @@ public class Szenario extends LGMGraphDocument {
             ((EdgeContainer) retVal).computeBorderPoints();
         }
         retVal.refreshText();
-        me.updateHTMLName(retVal);
+        me.updateGraphName(retVal);
         retVal.setVisible(ec.isVisible());
         return retVal;
     }
