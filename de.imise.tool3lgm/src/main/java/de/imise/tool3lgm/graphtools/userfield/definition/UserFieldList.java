@@ -37,11 +37,14 @@ public class UserFieldList implements Cloneable, Iterable<UserField> {
      * @param userField
      * @param index
      */
-    public final void insert(final UserField userField, final int index) {
+    public final void insert(final UserField userField, int index) {
         if (index == list.size()) {
             add(userField); //this checks if a default tab must be added
         } else {
             list.remove(userField);
+            if (ensureDefaultTab(userField, index) != null) {
+                index++;
+            }
             list.add(index, userField);
         }
     }
