@@ -63,7 +63,7 @@ public class ConnectedElementsTablePanel extends AbstractPathConnectionPanel {
         super(dialog, tableDefinition.tablePanelLabelOption, simpleMetaPath); // den muss es geben!
 
         this.tableDefinition = tableDefinition;
-        boolean editable = !dialog.isInfoDialog() && metaPath.isCreatable(true);
+        boolean editable = !dialog.isInfoDialog() && metaPath.isUnambiguousCreatable(true);
         ModelElement tableElement = getModelElement();
         table = new ConnectedElementsTable(tableElement, simpleMetaPath, tableDefinition, editable, mouseListener, dialog.getTransactionID());
 

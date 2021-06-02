@@ -155,7 +155,7 @@ public final class GDCollectionImExportHandler {
             if (!(importDoc instanceof Szenario)) {
                 continue;
             }
-            Szenario newSzenario = gdcoll.createSzenario(importDoc.getTitle() + " (import)", false, importDoc.getDescription(), importDoc.getID(), false, TransactionManager.STANDARD_PID);
+            Szenario newSzenario = gdcoll.createSzenario(importDoc.getTitle() + " (import)", false, importDoc.getDescription(), importDoc.getID(), false, TransactionManager.STANDARD_PID, true);
             for (int i = 0; i < ModelConstants.LAYERS.length; i++) {
                 LayerContainer importLayerContainer = importDoc.getLayer(ModelConstants.LAYERS[i]);
                 newSzenario.getLayer(ModelConstants.LAYERS[i]).set3LGMLayout(importLayerContainer.get3LGMLayout());

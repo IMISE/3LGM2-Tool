@@ -87,6 +87,8 @@ import de.imise.tool3lgm.graphtools.model.LGMGraphDocument;
 import de.imise.tool3lgm.graphtools.model.Szenario;
 import de.imise.tool3lgm.graphtools.path.metapaths.SimpleMetaPath;
 import de.imise.tool3lgm.graphtools.undoredo.TransactionManager;
+import de.imise.tool3lgm.graphtools.userfield.definition.SubType;
+import de.imise.tool3lgm.graphtools.userfield.definition.UserFieldDefinitions;
 import de.imise.tool3lgm.graphtools.view.container.BendpointContainer;
 import de.imise.tool3lgm.graphtools.view.container.EdgeContainer;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
@@ -310,22 +312,60 @@ public class RegularContextGenerator extends ElementSelectionContextGenerator im
                 slavePairs.add(new Pair<Class<? extends CompositionEdge>, Class<? extends ModelElement>>(compositionClass, instanciableSlaves));
             }
         }
-        if (slavePairs.size() == 0) {
+        if (slavePairs.isEmpty()) {
             return sub_elem;
         }
-        ArrayList<JMenuItem> items = new ArrayList<>(slavePairs.size());
+        ArrayList<Pair<JMenuItem, Class<? extends ModelElement>>> itemAndClassPairs = new ArrayList<>(slavePairs.size());
         for (Pair<Class<? extends CompositionEdge>, Class<? extends ModelElement>> slavePair : slavePairs) {
             Class<? extends CompositionEdge> compositionClass = slavePair.getFirstItem();
-            JMenuItem item = getItem(slavePair.getSecondItem().getSimpleName(), MODEL_ACTION_CREATE_ADDICTED, doc.getID() + " " + me.getID() + " " + compositionClass.getSimpleName() + " " + slavePair.getSecondItem().getSimpleName());
-            item.setEnabled(me.countConnections(compositionClass) < CoreMetaModel.getMaxMasterToSlaveCardinality(compositionClass));
-            items.add(item);
+            Class<? extends ModelElement> slaveClass = slavePair.getSecondItem();
+            String slaveClassName = slaveClass.getSimpleName();
+            JMenuItem item = getCreateAddictedItem(slaveClassName, doc, me, compositionClass, slaveClass);
+            Pair<JMenuItem, Class<? extends ModelElement>> itemAndClassPair = new Pair<>(item, slaveClass);
+            itemAndClassPairs.add(itemAndClassPair);
         }
-        Alphabetical.sort(items);
+        Alphabetical.sort(itemAndClassPairs);
+
+        ArrayList<JMenuItem> items = new ArrayList<>();
+        UserFieldDefinitions userFieldDefinitions = doc.getUserFieldDefinitions();
+        for (Pair<JMenuItem, Class<? extends ModelElement>> itemAndClassPair : itemAndClassPairs) {
+            JMenuItem item = itemAndClassPair.getFirstItem();
+            items.add(item);
+            Class<? extends ModelElement> slaveClass = itemAndClassPair.getSecondItem();
+            for (SubType subType : userFieldDefinitions.getSubTypes(slaveClass)) {
+                String slaveClassSubtypeDisplayName = STANDARD_SUBITEMS_INDENTATION + subType;
+                JMenuItem subTypeMenuItem = cloneItem(item);
+                subTypeMenuItem.setText(slaveClassSubtypeDisplayName);
+                String actionCommand = subTypeMenuItem.getActionCommand();
+                actionCommand += " " + subType.getID();
+                subTypeMenuItem.setActionCommand(actionCommand);
+                items.add(subTypeMenuItem);
+            }
+        }
+
         for (JMenuItem item : items) {
             sub_elem.add(item);
         }
         setMenuScroller(sub_elem);
         return sub_elem;
+    }
+
+    /**
+     * @param dispayableNameOrResKey
+     * @param doc
+     * @param master
+     * @param compositionClass
+     * @param slaveClass
+     * @param subType
+     * @return
+     */
+    private JMenuItem getCreateAddictedItem(final String dispayableNameOrResKey, final GraphDocument doc, final ModelElement master, final Class<? extends CompositionEdge> compositionClass, final Class<? extends ModelElement> slaveClass) {
+        String compositionClassName = compositionClass.getName();
+        String slaveClassName = slaveClass.getSimpleName();
+        String arguments = doc.getID() + " " + master.getID() + " " + compositionClassName + " " + slaveClassName;
+        JMenuItem item = getItem(dispayableNameOrResKey, MODEL_ACTION_CREATE_ADDICTED, arguments);
+        item.setEnabled(master.countConnections(compositionClass) < CoreMetaModel.getMaxMasterToSlaveCardinality(compositionClass));
+        return item;
     }
 
     /**
@@ -851,18 +891,39 @@ public class RegularContextGenerator extends ElementSelectionContextGenerator im
         GraphDocument doc = getDoc();
         int activeLayer = doc.getCollection().getActiveLayer();
         MetaModel metaModel = doc.getMetaModel();
-        ElementsNameBuilder elementsNameBuilder = metaModel.getElementsNameBuilder();
+        UserFieldDefinitions userFieldDefinitions = doc.getUserFieldDefinitions();
         Iterable<Class<? extends ModelElement>> creatableLayerNodes = metaModel.getCreatableLayerNodes(activeLayer);
         JMenu layerMenu = new JMenu(getResString("el_neu"));
         for (Class<? extends ModelElement> elementClass : creatableLayerNodes) {
             if (metaModel.isEditable(elementClass)) {
-                JMenuItem item = new JMenuItem(elementsNameBuilder.getDisplayableName(elementClass));
-                item.addActionListener(this);
-                item.setActionCommand(MODEL_ACTION_CREATE_NODE + " " + elementClass.getName());
-                layerMenu.add(item);
+                addCreateNodeItem(doc, layerMenu, elementClass, null);
+                //add subtypes
+                List<SubType> subTypes = userFieldDefinitions.getSubTypes(elementClass);
+                for (SubType subType : subTypes) {
+                    addCreateNodeItem(doc, layerMenu, elementClass, subType);
+                }
             }
         }
         return layerMenu;
+    }
+
+    /**
+     * @param doc
+     * @param menu
+     * @param elementClass
+     * @param subType
+     */
+    private void addCreateNodeItem(final GraphDocument doc, final JMenu menu, final Class<? extends ModelElement> elementClass, final SubType subType) {
+        ElementsNameBuilder elementsNameBuilder = doc.getElementsNameBuilder();
+        String itemName = subType == null ? elementsNameBuilder.getDisplayableName(elementClass) : STANDARD_SUBITEMS_INDENTATION + subType;
+        JMenuItem item = new JMenuItem(itemName);
+        item.addActionListener(this);
+        String actionCommand = MODEL_ACTION_CREATE_NODE + " " + elementClass.getName();
+        if (subType != null) {
+            actionCommand += " " + subType.getID();
+        }
+        item.setActionCommand(actionCommand);
+        menu.add(item);
     }
 
     /**

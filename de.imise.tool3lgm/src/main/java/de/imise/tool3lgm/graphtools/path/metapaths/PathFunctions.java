@@ -81,10 +81,8 @@ public class PathFunctions {
             if (!metaPath.isStartClass(modelElement.getClass())) {
                 return false;
             }
-        } else {
-            if (!metaPath.isEndClass(modelElement.getClass())) {
-                return false;
-            }
+        } else if (!metaPath.isEndClass(modelElement.getClass())) {
+            return false;
         }
         if (metaPath.getDirection() == Direction.FORWARD) {
             //für das Startelement ist die maximale Verbindungsanzahl bereits erreicht?
@@ -230,7 +228,7 @@ public class PathFunctions {
      * @return
      */
     static final PathConnectionState getPathConnectionState(final ModelElement startElement, final ModelElement endElement, final MetaPath metaPath, final boolean searchParents, final boolean searchParts) {
-        List<ModelElement> startElements = null;
+        List<ModelElement> startElements;
         startElements = new ArrayList<>(1);
         startElements.add(startElement);
         List<ModelElement> endElements = null;

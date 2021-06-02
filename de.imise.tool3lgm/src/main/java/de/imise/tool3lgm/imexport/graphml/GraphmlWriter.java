@@ -204,7 +204,7 @@ public abstract class GraphmlWriter extends IntendingXMLWriter {
 
     protected String getElementName(final ElementContainer ec) {
         ModelElement me = ec.getElement();
-        String nameExtension = me.getNameExtension();
+        String nameExtension = me.getGraphNameExtension();
         String name = nameExtension.isEmpty() ? me.getClearName() : me.getClearName() + "\n" + nameExtension;
         return name;
     }

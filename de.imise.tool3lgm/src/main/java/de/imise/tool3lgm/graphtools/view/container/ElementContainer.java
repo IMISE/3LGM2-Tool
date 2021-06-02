@@ -783,7 +783,7 @@ public abstract class ElementContainer extends JLabel implements Cloneable, Grap
     /**
      * @param htmlName
      */
-    public void setHTMLName(final String htmlName) {
+    public void setGraphName(final String htmlName) {
         this.htmlName = htmlName;
         refreshText();
         //Sys.err1(htmlName);

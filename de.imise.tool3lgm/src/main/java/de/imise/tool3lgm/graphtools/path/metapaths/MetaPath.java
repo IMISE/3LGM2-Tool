@@ -33,19 +33,37 @@ public interface MetaPath extends BasicMetaPath {
     boolean isValid();
 
     /**
-     * Liefert <code>true</code>, wenn der Pfad prinzipiell angelegt werden
-     * kann. Das ist der Fall, wenn es sich um eine einfache Assoziationsfolge
-     * ohne parallele Pfade oder Verweigungen zu Assoziationsklassen dazwischen
-     * handelt und alle Zwischenelementklassen nicht abstrakt sind.
+     * Returns <code>true</code> if the path can be created in principle. This
+     * is the case if it is a simple association sequence without parallel paths
+     * or branches to association classes in between and all intermediate
+     * element classes are not abstract.
      *
-     * @param checkCreateEndElement wenn <code>true</code>, dann wird auch
-     *            geprüft, ob das EndElement angelegt werden kann, wenn der Pfad
-     *            angelegt wird, ohne die Konsistenz zu verletzten (also nicht
-     *            abstract und durch den Pfad entstehen für alle Elemente alle
-     *            anderen Elemente, die sie für ihre Existenz brauchen).
-     * @return <code>true</code> wenn dieser Pfad anlegbar ist
+     * @param if <code>true</code>, then it also checks if the EndElement can be
+     *            created when the path is created without violating consistency
+     *            (i.e. not abstract and the path creates all other elements for
+     *            all elements to exist).
+     * @return <code>true</code> if this path is createable
      */
     boolean isCreatable(boolean checkCreateEndElement);
+
+    /**
+     * Returns <code>true</code> if the path is also
+     * {@link #isCreatable(boolean)} but in addition for each newly created
+     * intermediate element no other elements may be linked to it. Thus, the
+     * intermediate elements may have a maximum cardinality of 1 to all other
+     * elements, which is fully satisfied by this new path. For the newly
+     * created end element this does not apply, because here the weaker
+     * condition is sufficient that by the creation of the path all connections
+     * must be there, which the element needs for its existence. Translated with
+     * www.DeepL.com/Translator (free version)
+     *
+     * @param checkCreateEndElement if <code>true</code>, then it also checks if
+     *            the EndElement can be created when the path is created without
+     *            violating consistency (i.e. not abstract and the path creates
+     *            all other elements for all elements to exist).
+     * @return <code>true</code> if this path is createable
+     */
+    boolean isUnambiguousCreatable(boolean checkCreateEndElement);
 
     /**
      * Prüft, ob der Pfad ausgehend von der Startelementart entfernt werden

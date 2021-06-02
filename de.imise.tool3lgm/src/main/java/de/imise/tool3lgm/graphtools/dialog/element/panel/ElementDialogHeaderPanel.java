@@ -20,6 +20,7 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
+import de.imise.tool3lgm.graphtools.userfield.definition.SubType;
 
 /**
  * Panel das im Kopf jedes Eigenschaftsdialogs der Elemente deren Namen, ID usw.
@@ -111,8 +112,13 @@ public class ElementDialogHeaderPanel extends ElementDialogPanel {
     public void update() {
         ModelElement me = getModelElement();
         if (me instanceof Node) {
+            Node node = (Node) me;
             Class<? extends ModelElement> dialogElementClass = me.getClass();
             String displayableName = elementsNameBuilder.getDisplayableFullName(dialogElementClass);
+            SubType subType = node.getSubType();
+            if (subType != null) {
+                displayableName += "    ( " + subType + " )";
+            }
             typeLabel.setText(displayableName);
             labelLabel.setText("<html><b>" + me.getClearName() + "</b></html>");
             GDCollection gdcoll = getCollection();

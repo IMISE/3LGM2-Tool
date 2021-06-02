@@ -598,10 +598,6 @@ public final class ModelBrowserTree extends DynamicTree implements UserFieldList
                 valueOrSeparatorNode = null;
             } else if (userField.hasStyle(GROUP)) {
                 removeNodeIfEmpty(currentGroupNode); //remove empty group
-                if (currentGroupNode != null && currentGroupNode.getChildCount() == 0) { //remove empty groups
-                    DefaultMutableTreeNode parent = (DefaultMutableTreeNode) currentGroupNode.getParent();
-                    parent.remove(currentGroupNode);
-                }
                 currentGroupNode = userField.isTreeVisibility() ? new UserFieldTreeNode(userField, me) : null;
                 valueOrSeparatorNode = null;
             } else if (userField.hasStyle(UserField.Style.SEPARATOR) || allOfThisElement.contains(userField)) {

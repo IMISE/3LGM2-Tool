@@ -28,6 +28,7 @@ import de.imise.tool3lgm.graphtools.userfield.calculator.Calculator;
 import de.imise.tool3lgm.graphtools.userfield.calculator.PartValueSumFunction;
 import de.imise.tool3lgm.graphtools.userfield.calculator.PartValueSumFunction.TWSumArguments;
 import de.imise.tool3lgm.graphtools.userfield.calculator.PartValueSumSinglePartResults;
+import de.imise.tool3lgm.graphtools.userfield.definition.UserField.Style;
 import de.imise.tool3lgm.graphtools.userfield.event.UserFieldDefinitionChangeHandler;
 import de.imise.util.Alphabetical;
 import de.imise.util.collections.CollectionUtils;
@@ -466,11 +467,13 @@ public final class UserFieldDefinitions extends UserFieldDefinitionChangeHandler
     }
 
     /**
+     * @param userFieldTargetClass
+     * @param subType
      * @return for every tab in the whole list an own sub list
      */
-    public List<UserFieldList> getTabSubLists(final Class<? extends UserFieldTarget> userFieldTargetClass) {
+    public List<UserFieldList> getTabSubLists(final Class<? extends UserFieldTarget> userFieldTargetClass, final SubType subType) {
         UserFieldList userFieldList = classToUserFieldTargetSpecificListMap.get(userFieldTargetClass);
-        return userFieldList == null ? new ArrayList<>() : userFieldList.getTabSubLists();
+        return userFieldList == null ? new ArrayList<>() : userFieldList.getTabSubLists(subType);
     }
 
     /**
@@ -578,7 +581,7 @@ public final class UserFieldDefinitions extends UserFieldDefinitionChangeHandler
     }
 
     /**
-     * @return
+     * @return an iterable over all userfields which are not global
      */
     public Iterable<UserField> getElementClassUserFields() {
         Set<Class<? extends UserFieldTarget>> keys = classToUserFieldTargetSpecificListMap.keySet();
@@ -1076,6 +1079,35 @@ public final class UserFieldDefinitions extends UserFieldDefinitionChangeHandler
         sb.append("\n-----------------\n");
         sb.append(ExtendedMap.toString(idToUserFieldMap));
         return sb.toString();
+    }
+
+    /**
+     * @param elementClass
+     * @return
+     */
+    public List<SubType> getSubTypes(final Class<? extends ModelElement> elementClass) {
+        List<SubType> subTypes = new ArrayList<>();
+        for (UserField userField : getUserFields(elementClass)) {
+            if (userField.hasStyle(Style.SUBTYPE)) {
+                SubType subType = new SubType(userField);
+                subTypes.add(subType);
+            }
+        }
+        return subTypes;
+    }
+
+    /**
+     * @param elementClass
+     * @param subTypeID
+     * @return
+     */
+    public SubType getSubType(final Class<? extends ModelElement> elementClass, final String subTypeID) {
+        for (UserField userField : getUserFields(elementClass)) {
+            if (userField.hasStyle(Style.SUBTYPE) && userField.hasID(subTypeID)) {
+                return new SubType(userField);
+            }
+        }
+        return null;
     }
 
 }

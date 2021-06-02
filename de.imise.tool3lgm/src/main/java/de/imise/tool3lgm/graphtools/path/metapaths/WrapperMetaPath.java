@@ -107,6 +107,11 @@ public class WrapperMetaPath extends ListMetaPath {
     }
 
     @Override
+    public boolean isUnambiguousCreatable(final boolean checkCreateEndElement) {
+        return wrappedMetaPath.isUnambiguousCreatable(checkCreateEndElement);
+    }
+
+    @Override
     public boolean isRemoveable(final boolean checkEndElement) {
         return wrappedMetaPath.isRemoveable(checkEndElement);
     }

@@ -38,6 +38,11 @@ import de.imise.util.swing.menu.MenuScroller;
 public abstract class ContextGenerator implements ActionListener {
 
     /**
+     *
+     */
+    public static final String STANDARD_SUBITEMS_INDENTATION = "      ";
+
+    /**
      * COMMENTME
      */
     private boolean controlled = false;
@@ -106,6 +111,33 @@ public abstract class ContextGenerator implements ActionListener {
 
     /**
      * @param resKeyOrString
+     * @return
+     */
+    protected String loadResStringWithoutError(final String resKeyOrString) {
+        String string = null;
+        GraphDocument doc = getDoc();
+        if (doc != null) {
+            ElementsNameBuilder elementsNameBuilder = doc.getElementsNameBuilder();
+            string = elementsNameBuilder.getResStringWithoutError(resKeyOrString);
+        } else {
+            string = Tool3lgmConstants.getResStringWithoutError(resKeyOrString);
+        }
+        return string;
+    }
+
+    /**
+     * @param item
+     * @return
+     */
+    public static final JMenuItem cloneItem(final JMenuItem item) {
+        JMenuItem clone = new JMenuItem(item.getText(), item.getIcon());
+        clone.setActionCommand(item.getActionCommand());
+        clone.setEnabled(item.isEnabled());
+        return clone;
+    }
+
+    /**
+     * @param resKeyOrString
      * @param command
      * @param arguments
      * @param icon
@@ -114,14 +146,7 @@ public abstract class ContextGenerator implements ActionListener {
      * @return
      */
     protected final JMenuItem getItem(final String resKeyOrString, final GDCommands command, final String arguments, final ImageIcon icon, final boolean enabled, final String toolTip) {
-        String label = null;
-        GraphDocument doc = getDoc();
-        if (doc != null) {
-            ElementsNameBuilder elementsNameBuilder = doc.getElementsNameBuilder();
-            label = elementsNameBuilder.getResStringWithoutError(resKeyOrString);
-        } else {
-            label = Tool3lgmConstants.getResStringWithoutError(resKeyOrString);
-        }
+        String label = loadResStringWithoutError(resKeyOrString);
         JMenuItem item = new JMenuItem(label, icon);
         item.addActionListener(this);
         if (arguments == null) {
