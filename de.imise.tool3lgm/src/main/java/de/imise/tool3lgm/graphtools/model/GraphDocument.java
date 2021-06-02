@@ -3306,12 +3306,6 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
         //		ModelElement layerElemMe = mc.getElement();
         //		System.err.println("GraphDocument.addToSelection(): " + layerElemMe.getClass().getSimpleName() + " " + this + " " + layerElemMe.getClearName() + " " + layerElemMe.getID() + " " + layerElemMe.getCreationDate().toLocaleString());
 
-        if (mc instanceof NodeContainer) {
-            NodeContainer nc = (NodeContainer) mc;
-            Node node = nc.getNode();
-            Sys.err1(node + " -> " + node.getSubType());
-        }
-
         gdcoll.addToSelection(mc);
         distributeEvent(SELECTION_CHANGED, mc, pid);
     }
