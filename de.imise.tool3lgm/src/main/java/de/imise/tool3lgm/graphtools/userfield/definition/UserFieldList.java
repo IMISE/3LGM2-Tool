@@ -116,9 +116,16 @@ public class UserFieldList implements Cloneable, Iterable<UserField> {
         UserField lastSubTypeField = null;
         List<UserFieldList> tabSubLists = new ArrayList<>();
         UserFieldList tabSubList = new UserFieldList(targetClass);
-        UserField fistTab = list.get(0);
-        tabSubList.add(fistTab);
-        for (int i = 1; i < list.size(); i++) {
+        int i = 0;
+        UserField firstUserField = list.get(i);
+        if (firstUserField.hasStyle(SUBTYPE)) {
+            firstUserField = list.get(++i);
+        }
+        if (firstUserField.hasStyle(TAB)) {
+            tabSubList.add(firstUserField);
+            i++;
+        }
+        for (; i < list.size(); i++) {
             UserField userField = list.get(i);
             if (userField.hasStyle(SUBTYPE)) {
                 lastSubTypeField = userField;
