@@ -467,11 +467,13 @@ public final class UserFieldDefinitions extends UserFieldDefinitionChangeHandler
     }
 
     /**
+     * @param userFieldTargetClass
+     * @param subType
      * @return for every tab in the whole list an own sub list
      */
-    public List<UserFieldList> getTabSubLists(final Class<? extends UserFieldTarget> userFieldTargetClass) {
+    public List<UserFieldList> getTabSubLists(final Class<? extends UserFieldTarget> userFieldTargetClass, final SubType subType) {
         UserFieldList userFieldList = classToUserFieldTargetSpecificListMap.get(userFieldTargetClass);
-        return userFieldList == null ? new ArrayList<>() : userFieldList.getTabSubLists();
+        return userFieldList == null ? new ArrayList<>() : userFieldList.getTabSubLists(subType);
     }
 
     /**

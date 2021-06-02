@@ -39,11 +39,13 @@ import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.HasPartEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
+import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.model.LGMChangeListenerSimple;
 import de.imise.tool3lgm.graphtools.path.metapaths.ElementaryMetaPathHandler;
 import de.imise.tool3lgm.graphtools.path.metapaths.SequenceMetaPath;
 import de.imise.tool3lgm.graphtools.path.metapaths.SimpleMetaPathCreator;
+import de.imise.tool3lgm.graphtools.userfield.definition.SubType;
 import de.imise.tool3lgm.graphtools.userfield.definition.UserFieldDefinitions;
 import de.imise.tool3lgm.graphtools.userfield.definition.UserFieldList;
 import de.imise.tool3lgm.graphtools.userfield.definition.UserFieldTarget;
@@ -142,15 +144,7 @@ public class AbstractElementPropertyDialog extends AbstractTabbedPropertyDialog 
         addTab(getResString("general"), descripPanel);
         addPartOfStructurePanel();
 
-        // wenn es mind ein Userfield für diese Klasse gibt -> zeige das USerFieldPanel
-        UserFieldDefinitions userFieldDefinitions = gdcoll.getUserFieldDefinitions();
-        Class<? extends ModelElement> modelElementClass = getModelElementClass();
-        List<UserFieldList> tabSubLists = userFieldDefinitions.getTabSubLists(modelElementClass);
-        for (UserFieldList userFieldList : tabSubLists) {
-            PropertyDialogUserFieldPanel userFieldPanel = new PropertyDialogUserFieldPanel(this, userFieldList);
-            propertyDialogUserFieldPanels.add(userFieldPanel);
-            addTab(userFieldPanel);
-        }
+        addUserFieldTabs();
 
         JPanel standardButtonsPanel = new JPanel();
         southButtonsPanel.setLayout(new BorderLayout());
@@ -180,6 +174,20 @@ public class AbstractElementPropertyDialog extends AbstractTabbedPropertyDialog 
 
         restoreSizeAndPosition();
         opening = true;
+
+    }
+
+    private void addUserFieldTabs() {
+        // wenn es mind ein Userfield für diese Klasse gibt -> zeige das USerFieldPanel
+        UserFieldDefinitions userFieldDefinitions = gdcoll.getUserFieldDefinitions();
+        Class<? extends ModelElement> modelElementClass = getModelElementClass();
+        SubType subType = modelElement instanceof Node ? ((Node) modelElement).getSubType() : null;
+        List<UserFieldList> tabSubLists = userFieldDefinitions.getTabSubLists(modelElementClass, subType);
+        for (UserFieldList userFieldList : tabSubLists) {
+            PropertyDialogUserFieldPanel userFieldPanel = new PropertyDialogUserFieldPanel(this, userFieldList);
+            propertyDialogUserFieldPanels.add(userFieldPanel);
+            addTab(userFieldPanel);
+        }
 
     }
 

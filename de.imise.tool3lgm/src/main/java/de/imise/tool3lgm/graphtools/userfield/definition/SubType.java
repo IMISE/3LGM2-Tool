@@ -72,6 +72,14 @@ public class SubType implements NameAndDescriptionSource, IDSource {
         return subTypeUserField.getID();
     }
 
+    /**
+     * @param userField
+     * @return
+     */
+    public boolean hasUserField(final UserField userField) {
+        return subTypeUserField.equals(userField);
+    }
+
     @Override
     public int hashCode() {
         final int prime = 31;
