@@ -280,11 +280,30 @@ public class ToolXMLWriter extends IntendingXMLWriter {
 
     /**
      * @param definitions
+     * @return
+     */
+    private Iterable<UserFieldNumberFormat> getNumberFormatsSortedByIDs(final UserFieldDefinitions definitions) {
+        //add all formats sorted by their ID
+        List<String> formatIDs = new ArrayList<>();
+        for (UserFieldNumberFormat format : definitions.getNumberFormats()) {
+            formatIDs.add(format.getID());
+        }
+        Alphabetical.sort(formatIDs);
+        List<UserFieldNumberFormat> numberFormats = new ArrayList<>();
+        for (String formatID : formatIDs) {
+            UserFieldNumberFormat numberFormat = definitions.getNumberFormat(formatID);
+            numberFormats.add(numberFormat);
+        }
+        return numberFormats;
+    }
+
+    /**
+     * @param definitions
      * @param appendWeightReplacer
      * @throws XMLStreamException
      */
     private void writeUserFieldDefinitions(final UserFieldDefinitions definitions, final boolean appendWeightReplacer) throws XMLStreamException {
-        Iterable<UserFieldNumberFormat> numberFormats = definitions.getNumberFormats();
+        Iterable<UserFieldNumberFormat> numberFormats = getNumberFormatsSortedByIDs(definitions);
         Iterable<UserField> userFields = CollectionUtils.getCommonIterable(definitions.getGlobalUserFields(), definitions.getElementClassUserFields());
         WeightReplacer weightReplacer = appendWeightReplacer ? definitions.getWeightReplacer() : null;
         writeUserFieldDefinitions(numberFormats, userFields, weightReplacer);
@@ -467,7 +486,7 @@ public class ToolXMLWriter extends IntendingXMLWriter {
         writeAttribute("hash", me.getID());
         if (me instanceof Node) {
             SubType subType = ((Node) me).getSubType();
-            if (subType != null) {
+            if (!SubType.isDummy(subType)) {
                 writeAttribute("subtype", subType.getID());
             }
         }
