@@ -514,6 +514,49 @@ public final class UserFieldDefinitions extends UserFieldDefinitionChangeHandler
      * @param userFieldTargetClass
      * @return
      */
+    public Iterable<UserField> getUserFields(final ModelElement me) {
+        Class<? extends ModelElement> elementClass = me.getClass();
+        final UserFieldList fieldList = classToUserFieldTargetSpecificListMap.get(elementClass);
+        if (fieldList == null) {
+            return ImmutableList.of();
+        }
+        Iterable<UserField> userFieldsIterable = () -> new Iterator<UserField>() {
+
+            private UserField next = null;
+
+            private int index = 0;
+
+            @Override
+            public boolean hasNext() {
+                next = null;
+                for (; index < fieldList.size(); index++) {
+                    UserField userField = fieldList.get(index);
+                    if (isUserFieldOf(me, userField)) {
+                        next = userField;
+                        index++;
+                        break;
+                    }
+                }
+                return next != null;
+            }
+
+            @Override
+            public UserField next() {
+                return next;
+            }
+
+            @Override
+            public void remove() {
+
+            }
+        };
+        return userFieldsIterable;
+    }
+
+    /**
+     * @param userFieldTargetClass
+     * @return
+     */
     public List<UserField> getUserFields(final Class<? extends UserFieldTarget> userFieldTargetClass, final UserField.Style style) {
         return getUserFields(userFieldTargetClass, ImmutableSet.of(style));
     }
