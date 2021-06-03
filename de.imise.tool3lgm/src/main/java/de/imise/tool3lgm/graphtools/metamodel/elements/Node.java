@@ -16,7 +16,7 @@ public abstract class Node extends ModelElement {
     /**
      *
      */
-    private SubType subType = null;
+    private SubType subType = SubType.DUMMY_SUBTYPE;
 
     @Override
     public ElementContainer createContainer(final GraphDocument doc) {
@@ -43,6 +43,7 @@ public abstract class Node extends ModelElement {
     /**
      * @return the subType
      */
+    @Override
     public final SubType getSubType() {
         return subType;
     }
@@ -50,8 +51,9 @@ public abstract class Node extends ModelElement {
     /**
      * @param subType the subType to set
      */
+    @Override
     public final void setSubType(final SubType subType) {
-        this.subType = subType;
+        this.subType = subType == null ? SubType.DUMMY_SUBTYPE : subType;
     }
 
     @Override

@@ -380,6 +380,12 @@ public final class UserField extends NameAndDescriptionTargetAdapter implements 
     private Style style = null;
 
     /**
+     * The subtype this userfield is defined for. If <code>null</code> it's
+     * defined for the main class and not for a subtype
+     */
+    private SubType subTypeParent;
+
+    /**
      * Gibt an, ob das <code>UserField</code> im Modellbrowser sichtbar sein
      * soll.
      */
@@ -673,6 +679,27 @@ public final class UserField extends NameAndDescriptionTargetAdapter implements 
     @Override
     public String getID() {
         return id;
+    }
+
+    /**
+     * This should only called from {@link UserFieldDefinitions} or
+     * {@link UserFieldList}. To get this information ask
+     * {@link UserFieldDefinitions#getSubTypeParent(UserField)}
+     *
+     * @return the subTypeParent
+     */
+    final SubType getSubTypeParent() {
+        return subTypeParent;
+    }
+
+    /**
+     * This should only called from {@link UserFieldDefinitions} or
+     * {@link UserFieldList}.
+     *
+     * @param subTypeParent the subTypeParent to set
+     */
+    final void setSubTypeParent(final SubType subTypeParent) {
+        this.subTypeParent = subTypeParent;
     }
 
     /**

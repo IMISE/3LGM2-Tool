@@ -146,6 +146,29 @@ public class UserFieldList implements Cloneable, Iterable<UserField> {
     }
 
     /**
+     * Refreshes the subTypeParent property for every UserField so that every
+     * UserField knows for which subtype it is defined
+     */
+    public void refreshSubTypeParentsForUserFields() {
+        SubType subType = SubType.DUMMY_SUBTYPE;
+        for (UserField userField : list) {
+            if (userField.hasStyle(SUBTYPE)) {
+                subType = new SubType(userField);
+            }
+            userField.setSubTypeParent(subType);
+        }
+    }
+
+    /**
+     * Marks the subTypeParents of all userFields in this list as invalid
+     */
+    public void invalidateSubTypeParentsForUserFields() {
+        for (UserField userField : list) {
+            userField.setSubTypeParent(null);
+        }
+    }
+
+    /**
      * @return
      */
     private boolean canRemoveTab() {

@@ -374,6 +374,10 @@ public final class UserFieldDefinitions extends UserFieldDefinitionChangeHandler
         def.calculator = new Calculator(def);
         //den Analyzer ersetzen
         def.definitionsAnalyzer = new UserFieldDefinitionsAnalyzer(def);
+        //invalidate the subtype parent of all userFields to start the recalculation
+        //after changes. This clone method is called before everey changes of the
+        //userFieldDefinition after loading a model in the UserFieldDeclarationDialog
+        def.invalidateSubTypeParentsForUserFields();
         return def;
     }
 
@@ -1082,6 +1086,15 @@ public final class UserFieldDefinitions extends UserFieldDefinitionChangeHandler
     }
 
     /**
+     * Marks the subTypeParents of all userFields in this list as invalid
+     */
+    public void invalidateSubTypeParentsForUserFields() {
+        for (UserFieldList userFieldList : classToUserFieldTargetSpecificListMap.values()) {
+            userFieldList.invalidateSubTypeParentsForUserFields();
+        }
+    }
+
+    /**
      * @param elementClass
      * @return
      */
@@ -1108,6 +1121,38 @@ public final class UserFieldDefinitions extends UserFieldDefinitionChangeHandler
             }
         }
         return null;
+    }
+
+    /**
+     * @param userField
+     * @return
+     */
+    public SubType getSubTypeParent(final UserField userField) {
+        SubType subTypeParent = userField.getSubTypeParent();
+        if (subTypeParent == null) {
+            Class<? extends UserFieldTarget> targetClass = userField.getTargetClass();
+            UserFieldList userFieldList = classToUserFieldTargetSpecificListMap.get(targetClass);
+            userFieldList.refreshSubTypeParentsForUserFields();
+            subTypeParent = userField.getSubTypeParent();
+        }
+        return subTypeParent;
+    }
+
+    /**
+     * @param me
+     * @param userField
+     * @return <code>true</code> if the
+     */
+    public boolean isUserFieldOf(final ModelElement me, final UserField userField) {
+        Class<? extends UserFieldTarget> targetClass = userField.getTargetClass();
+        Class<? extends ModelElement> elementClass = me.getClass();
+        //check class
+        if (!targetClass.isAssignableFrom(elementClass)) {
+            return false;
+        }
+        //check subtype
+        SubType subTypeParent = getSubTypeParent(userField);
+        return me.hasSubType(subTypeParent);
     }
 
 }
