@@ -23,6 +23,7 @@ import com.google.common.collect.ImmutableList;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GDCommands;
+import de.imise.tool3lgm.log.Log;
 import de.imise.tool3lgm.userproperties.UserProperties;
 import de.imise.util.ApplicationManager;
 import de.imise.util.GitVersionInfoHandler;
@@ -79,8 +80,14 @@ public abstract class Tool3lgmConstants {
     /** Path to the installation directory of the application as file */
     public static final File APPLICATION_DIR = ApplicationManager.getApplicationDir("lib");
 
+    /** Path to the root of the installation directory */
+    public static final File APPLICATION_ROOT_DIR = ApplicationManager.getApplicationDir("de.imise.tool3lgm");
+
     /** Path to the installation directory of the application as string */
     public static final String APPLICATION_DIR_PATH = APPLICATION_DIR.toURI().getPath();
+
+    /** Path to the root of the installation directory of the application as string */
+    public static final String APPLICATION_ROOT_DIR_PATH = APPLICATION_ROOT_DIR.toURI().getPath();
 
     /** Pfad ins Home-Verzeichnis des Benutzers */
     public static final String USER_HOME_DIR_NAME = System.getProperty("user.home");
@@ -292,8 +299,16 @@ public abstract class Tool3lgmConstants {
      */
     public static final String ANALYSEN_FILE_NAME = UserProperties.getLocale().getLanguage().equals("en") ? "Tool3lgm.analysis" : "Tool3lgm_" + UserProperties.getLocale().getLanguage() + ".analysis";
 
+    public static final File ORIGINAL_ANALYSEN_FILE_PATH = new File(APPLICATION_ROOT_DIR_PATH + "de.imise.metamodel.original/src/main/resources/" + ANALYSEN_FILE_NAME);
+
+    public static final File SERVICE_ANALYSEN_FILE_PATH = new File(APPLICATION_ROOT_DIR_PATH + "de.imise.metamodel.service/src/main/resources/" + ANALYSEN_FILE_NAME);
+
     /** Absoluter Pfad zur Datei mit den Standardanalysen in den Resourcen */
     public static final URL DEFAULT_ANALYSEN_RESOURCE_URL = ClassLoader.getSystemResource(ANALYSEN_FILE_NAME);
+
+    public static final URL DEFAULT_ORIGINAL_ANALYSEN_RESSOURCE_URL = convertToURL(ORIGINAL_ANALYSEN_FILE_PATH);
+
+    public static final URL DEFAULT_SERVICE_ANALYSEN_RESSOURCE_URL = convertToURL(SERVICE_ANALYSEN_FILE_PATH);
 
     /** Locale, mit der der Baukasten gestartet wurde. */
     public static final Locale START_LOCALE = UserProperties.getLocale();
@@ -305,6 +320,20 @@ public abstract class Tool3lgmConstants {
      * für die Sanduhr...
      */
     protected static Cursor normalCursor = new Cursor(Cursor.DEFAULT_CURSOR), waitCursor = new Cursor(Cursor.WAIT_CURSOR), handCursor = new Cursor(Cursor.HAND_CURSOR);
+
+    /**
+     * @param path
+     * @return
+     */
+    public static URL convertToURL(final File file) {
+        URL outputURL = null;
+        try {
+            outputURL = file.toURI().toURL();
+        } catch (Exception e) {
+            Log.log(Log.ERROR, "Path could not be converted", e);
+        }
+        return outputURL;
+    }
 
     /**
      * Liefert <code>true</code>, wenn der übergebene String eine Extension

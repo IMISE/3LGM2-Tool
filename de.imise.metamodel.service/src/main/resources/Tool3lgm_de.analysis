@@ -1,0 +1,398 @@
+Content-Type: multipart/related; boundary=--multipart_3lgm_query_separator;
+--multipart_3lgm_query_separator
+Content-Type: text/xml
+Model-Type: TLGMServiceMetaModel@2388259974838049670
+Content-ID: [Service] Auf welchen phys. DV-Bausteinen ist er installiert?
+<?xml version="1.0" encoding="ISO-8559-15"?>
+<analyse>
+	<startknoten name="ApplicationComponent"/>
+	<suche>
+		<typ>
+			<eintrag>ApplicationComponent</eintrag>
+		</typ>
+		<verbundenstate>wahr</verbundenstate>
+	</suche>
+	<suche>
+		<typ>
+			<eintrag>PhysicalDataProcessingComponent</eintrag>
+		</typ>
+		<verbundenstate>true</verbundenstate>
+	</suche>
+</analyse>
+--multipart_3lgm_query_separator
+Content-Type: text/xml
+Model-Type: TLGMServiceMetaModel@2388259974838049670
+Content-ID: [Service] Welche Aufgaben werden damit unterstützt?
+<?xml version="1.0" encoding="ISO-8559-15"?>
+<analyse>
+	<startknoten name="ApplicationComponent"/>
+	<suche>
+		<typ>
+			<eintrag>ApplicationComponent</eintrag>
+		</typ>
+		<verbundenstate>wahr</verbundenstate>
+		<verbundene>
+			<eintrag>Use</eintrag>
+		</verbundene>
+	</suche>
+	<suche>
+		<typ>
+			<eintrag>Use</eintrag>
+		</typ>
+		<verbundenstate>true</verbundenstate>
+	</suche>
+	<suche>
+		<typ>
+			<eintrag>Function</eintrag>
+		</typ>
+		<verbundenstate>true</verbundenstate>
+	</suche>
+</analyse>
+--multipart_3lgm_query_separator
+Content-Type: text/xml
+Model-Type: TLGMServiceMetaModel@2388259974838049670
+Content-ID: [Service] Welche Objekttypen werden gespeichert?
+<?xml version="1.0" encoding="ISO-8559-15"?>
+<analyse>
+	<startknoten name="ApplicationComponent"/>
+	<suche>
+		<typ>
+			<eintrag>ApplicationComponent</eintrag>
+		</typ>
+		<verbundenstate>wahr</verbundenstate>
+	</suche>
+	<suche>
+		<typ>
+			<eintrag>RepresentationForm</eintrag>
+		</typ>
+		<verbundenstate>true</verbundenstate>
+	</suche>
+	<suche>
+		<typ>
+			<eintrag>ObjectType</eintrag>
+		</typ>
+		<verbundenstate>true</verbundenstate>
+	</suche>
+</analyse>
+--multipart_3lgm_query_separator
+Content-Type: text/xml
+Model-Type: TLGMServiceMetaModel@2388259974838049670
+Content-ID: [Service] Welche Anwendungsbausteine und welche Phys. DV-Bausteine werden zur Erfüllung benötigt?
+<?xml version="1.0" encoding="ISO-8559-15"?>
+<analyse>
+	<startknoten name="Function"/>
+	<suche>
+		<typ>
+			<eintrag>Function</eintrag>
+		</typ>
+		<verbundenstate>wahr</verbundenstate>
+	</suche>
+	<suche>
+		<typ>
+			<eintrag>Use</eintrag>
+		</typ>
+		<verbundenstate>true</verbundenstate>
+	</suche>
+	<suche>
+		<typ>
+			<eintrag>ApplicationSystem</eintrag>
+		</typ>
+		<verbundenstate>true</verbundenstate>
+	</suche>
+	<suche>
+		<typ>
+			<eintrag>PhysicalDataProcessingComponent</eintrag>
+		</typ>
+		<verbundenstate>true</verbundenstate>
+	</suche>
+</analyse>
+--multipart_3lgm_query_separator
+Content-Type: text/xml
+Model-Type: TLGMServiceMetaModel@2388259974838049670
+Content-ID: [Service] Welche Anwendungsbausteine werden zur Erfüllung benötigt?
+<?xml version="1.0" encoding="ISO-8559-15"?>
+<analyse>
+	<startknoten name="Function"/>
+	<suche>
+		<typ>
+			<eintrag>Function</eintrag>
+		</typ>
+		<verbundenstate>wahr</verbundenstate>
+	</suche>
+	<suche>
+		<typ>
+			<eintrag>Use</eintrag>
+		</typ>
+		<verbundenstate>true</verbundenstate>
+	</suche>
+	<suche>
+		<typ>
+			<eintrag>ApplicationSystem</eintrag>
+		</typ>
+		<verbundenstate>true</verbundenstate>
+	</suche>
+</analyse>
+--multipart_3lgm_query_separator
+Content-Type: text/xml
+Model-Type: TLGMServiceMetaModel@2388259974838049670
+Content-ID: [Service] Welche Objekttypen können gesendet oder empfangen werden?
+<?xml version="1.0" encoding="ISO-8559-15"?>
+<analyse>
+	<startknoten name="ApplicationSystem"/>
+	<suche>
+		<typ>
+			<eintrag>ApplicationSystem</eintrag>
+		</typ>
+		<verbundenstate>wahr</verbundenstate>
+	</suche>
+	<suche>
+		<typ>
+			<eintrag>InvokingInterface</eintrag>
+			<eintrag>ProvidingInterface</eintrag>
+		</typ>
+		<verbundenstate>true</verbundenstate>
+	</suche>
+	<suche>
+		<typ>
+			<eintrag>Service</eintrag>
+		</typ>
+		<verbundenstate>true</verbundenstate>
+	</suche>
+	<suche>
+		<typ>
+			<eintrag>RepresentationForm</eintrag>
+		</typ>
+		<verbundenstate>true</verbundenstate>
+	</suche>
+	<suche>
+		<typ>
+			<eintrag>ObjectType</eintrag>
+		</typ>
+		<verbundenstate>true</verbundenstate>
+	</suche>
+</analyse>
+--multipart_3lgm_query_separator
+Content-Type: text/xml
+Model-Type: TLGMServiceMetaModel@2388259974838049670
+Content-ID: [Service] Wo wird dieser Service verwendet?
+<?xml version="1.0" encoding="ISO-8559-15"?>
+<analyse>
+	<startknoten name="Service"/>
+	<suche>
+		<typ>
+			<eintrag>Service</eintrag>
+		</typ>
+		<verbundenstate>wahr</verbundenstate>
+	</suche>
+	<suche>
+		<typ>
+			<eintrag>CommunicationLink_Edge</eintrag>
+		</typ>
+		<verbundenstate>true</verbundenstate>
+	</suche>
+</analyse>
+--multipart_3lgm_query_separator
+Content-Type: text/xml
+Model-Type: TLGMServiceMetaModel@2388259974838049670
+Content-ID: [Service] Welche Bausteinschnittstellen können ihn kommunizieren?
+<?xml version="1.0" encoding="ISO-8559-15"?>
+<analyse>
+	<startknoten name="ObjectType"/>
+	<suche>
+		<typ>
+			<eintrag>ObjectType</eintrag>
+		</typ>
+		<verbundenstate>wahr</verbundenstate>
+	</suche>
+	<suche>
+		<typ>
+			<eintrag>RepresentationForm</eintrag>
+		</typ>
+		<verbundenstate>true</verbundenstate>
+	</suche>
+	<suche>
+		<typ>
+			<eintrag>Service</eintrag>
+		</typ>
+		<verbundenstate>true</verbundenstate>
+	</suche>
+	<suche>
+		<typ>
+			<eintrag>InvokingInterface</eintrag>
+			<eintrag>ProvidingInterface</eintrag>
+		</typ>
+		<verbundenstate>true</verbundenstate>
+	</suche>
+</analyse>
+--multipart_3lgm_query_separator
+Content-Type: text/xml
+Model-Type: TLGMServiceMetaModel@2388259974838049670
+Content-ID: [Service] Wo wird er gespeichert?
+<?xml version="1.0" encoding="ISO-8559-15"?>
+<analyse>
+	<startknoten name="ObjectType"/>
+	<suche>
+		<typ>
+			<eintrag>ObjectType</eintrag>
+		</typ>
+		<verbundenstate>wahr</verbundenstate>
+	</suche>
+	<suche>
+		<typ>
+			<eintrag>RepresentationForm</eintrag>
+		</typ>
+		<verbundenstate>true</verbundenstate>
+	</suche>
+	<suche>
+		<typ>
+			<eintrag>ApplicationSystem</eintrag>
+		</typ>
+		<verbundenstate>true</verbundenstate>
+	</suche>
+</analyse>
+--multipart_3lgm_query_separator
+Content-Type: text/xml
+Model-Type: TLGMServiceMetaModel@2388259974838049670
+Content-ID: [Service] Welche Phys. DV-Bausteine stehen dort?
+<?xml version="1.0" encoding="ISO-8559-15"?>
+<analyse>
+	<startknoten name="Location"/>
+	<suche>
+		<typ>
+			<eintrag>Location</eintrag>
+		</typ>
+		<verbundenstate>wahr</verbundenstate>
+	</suche>
+	<suche>
+		<typ>
+			<eintrag>PhysicalDataProcessingComponent</eintrag>
+		</typ>
+		<verbundenstate>true</verbundenstate>
+	</suche>
+</analyse>
+--multipart_3lgm_query_separator
+Content-Type: text/xml
+Model-Type: TLGMServiceMetaModel@2388259974838049670
+Content-ID: [Service] Wo wird er kommuniziert?
+<?xml version="1.0" encoding="ISO-8559-15"?>
+<analyse>
+	<startknoten name="ObjectType"/>
+	<suche>
+		<typ>
+			<eintrag>ObjectType</eintrag>
+		</typ>
+		<verbundenstate>wahr</verbundenstate>
+	</suche>
+	<suche>
+		<typ>
+			<eintrag>RepresentationForm</eintrag>
+		</typ>
+		<verbundenstate>true</verbundenstate>
+	</suche>
+	<suche>
+		<typ>
+			<eintrag>Service</eintrag>
+		</typ>
+		<verbundenstate>true</verbundenstate>
+	</suche>
+	<suche>
+		<typ>
+			<eintrag>CommunicationLink_Edge</eintrag>
+		</typ>
+		<verbundenstate>true</verbundenstate>
+	</suche>
+</analyse>
+--multipart_3lgm_query_separator
+Content-Type: text/xml
+Model-Type: TLGMServiceMetaModel@2388259974838049670
+Content-ID: [Service] Welche Bausteinschnittstellen können ihn kommunizieren?
+<?xml version="1.0" encoding="ISO-8559-15"?>
+<analyse>
+	<startknoten name="RepresentationForm"/>
+	<suche>
+		<typ>
+			<eintrag>RepresentationForm</eintrag>
+		</typ>
+		<verbundenstate>wahr</verbundenstate>
+	</suche>
+	<suche>
+		<typ>
+			<eintrag>Service</eintrag>
+		</typ>
+		<verbundenstate>true</verbundenstate>
+	</suche>
+	<suche>
+		<typ>
+			<eintrag>InvokingInterface</eintrag>
+			<eintrag>ProvidingInterface</eintrag>
+		</typ>
+		<verbundenstate>true</verbundenstate>
+	</suche>
+</analyse>
+--multipart_3lgm_query_separator
+Content-Type: text/xml
+Model-Type: TLGMServiceMetaModel@2388259974838049670
+Content-ID: [Service] Welche Services benutzen ihn?
+<?xml version="1.0" encoding="ISO-8559-15"?>
+<analyse>
+	<startknoten name="RepresentationForm"/>
+	<suche>
+		<typ>
+			<eintrag>RepresentationForm</eintrag>
+		</typ>
+		<verbundenstate>wahr</verbundenstate>
+	</suche>
+	<suche>
+		<typ>
+			<eintrag>Service</eintrag>
+		</typ>
+		<verbundenstate>true</verbundenstate>
+	</suche>
+</analyse>
+--multipart_3lgm_query_separator
+Content-Type: text/xml
+Model-Type: TLGMServiceMetaModel@2388259974838049670
+Content-ID: [Service] Welche Objekttypen werden repräsentiert?
+<?xml version="1.0" encoding="ISO-8559-15"?>
+<analyse>
+	<startknoten name="RepresentationForm"/>
+	<suche>
+		<typ>
+			<eintrag>RepresentationForm</eintrag>
+		</typ>
+		<verbundenstate>wahr</verbundenstate>
+	</suche>
+	<suche>
+		<typ>
+			<eintrag>ObjectType</eintrag>
+		</typ>
+		<verbundenstate>true</verbundenstate>
+	</suche>
+</analyse>
+--multipart_3lgm_query_separator
+Content-Type: text/xml
+Model-Type: TLGMServiceMetaModel@2388259974838049670
+Content-ID: [Service] Welche Objekttypen werden repräsentiert und welche Aufgaben werden durch ihn unterstützt?
+<?xml version="1.0" encoding="ISO-8559-15"?>
+<analyse>
+	<startknoten name="RepresentationForm"/>
+	<suche>
+		<typ>
+			<eintrag>RepresentationForm</eintrag>
+		</typ>
+		<verbundenstate>wahr</verbundenstate>
+	</suche>
+	<suche>
+		<typ>
+			<eintrag>ObjectType</eintrag>
+		</typ>
+		<verbundenstate>true</verbundenstate>
+	</suche>
+	<suche>
+		<typ>
+			<eintrag>Function</eintrag>
+		</typ>
+		<verbundenstate>true</verbundenstate>
+	</suche>
+</analyse>
+--multipart_3lgm_query_separator

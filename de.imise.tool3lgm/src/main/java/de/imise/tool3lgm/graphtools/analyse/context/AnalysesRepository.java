@@ -23,6 +23,7 @@ import de.imise.tool3lgm.graphtools.metamodel.AnalysesDefinition;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.log.Log;
+import de.imise.util.io.FileHandler;
 
 /**
  * Diese Klasse stellt Methoden zum speichern und laden der Analysen bereit.
@@ -159,6 +160,10 @@ public class AnalysesRepository {
         }
         file = new File(Tool3lgmConstants.USER_HOME_3LGM_PATH, Tool3lgmConstants.ANALYSEN_FILE_NAME);
         if (file.exists()) {
+            if (FileHandler.getLine(file, "Model-Type: TLGMServiceMetaModel@2388259974838049670", true) == null) {
+                List<XMLAnalysis> concatenatedAnalysis = concatXMLAnalyses();
+                saveAnalyseFile(file, concatenatedAnalysis);
+            }
             return file;
         } else {
             try {
@@ -174,11 +179,24 @@ public class AnalysesRepository {
             }
 
             // schreibe den Inhalt der Resourcendatei in file
-            saveAnalyseFile(file, loadAnalyseFile(Tool3lgmConstants.DEFAULT_ANALYSEN_RESOURCE_URL));
+            List<XMLAnalysis> concatenatedAnalysis = concatXMLAnalyses();
+            saveAnalyseFile(file, concatenatedAnalysis);
         }
         return file;
     }
 
+    /**
+     * merges the analysis from the message based and service based meta models
+     *
+     * @return
+     */
+    public static List<XMLAnalysis> concatXMLAnalyses() {
+        List<XMLAnalysis> originalAnalysis = loadAnalyseFile(Tool3lgmConstants.DEFAULT_ORIGINAL_ANALYSEN_RESSOURCE_URL);
+        List<XMLAnalysis> serviceAnalysis = loadAnalyseFile(Tool3lgmConstants.DEFAULT_SERVICE_ANALYSEN_RESSOURCE_URL);
+        List<XMLAnalysis> concatenatedAnalysis = new ArrayList<>(originalAnalysis);
+        concatenatedAnalysis.addAll(serviceAnalysis);
+        return concatenatedAnalysis;
+    }
     /**
      * Gibt alle Abfragen zurück, die sich im Analyserepository befinden.
      *
