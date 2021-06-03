@@ -404,9 +404,11 @@ public class ToolXMLWriter extends IntendingXMLWriter {
      * @throws XMLStreamException
      */
     private void writeUserFieldValues(final UserFieldTarget userFieldTarget) throws XMLStreamException {
+        UserFieldDefinitions userFieldDefinitions = gdcoll.getUserFieldDefinitions();
         for (UserField keyUserField : userFieldTarget.getUserFieldInputValueKeys()) {
-            //Hier muss geprüft werden, ob das rauszuschreibende userfield null ist, denn darf es nicht rausgeschrieben werden.
-            if (keyUserField != null) {
+            //write only userfields which still belongs to the userFieldTarget (maybe the userFieldDefintion was changed but
+            //the userFieldTarget (ModelElement) has still InputValues for UserFields that now belongs to an other subtype
+            if (userFieldDefinitions.isUserFieldOf(userFieldTarget, keyUserField)) {
                 writeStartElement("userField"); //<userField>
                 writeAttribute("hash", keyUserField.getID());
                 writeCharacters(userFieldTarget.getUserFieldInputValue(keyUserField));

@@ -1182,19 +1182,26 @@ public final class UserFieldDefinitions extends UserFieldDefinitionChangeHandler
     }
 
     /**
-     * @param me
+     * @param userFieldTarget
      * @param userField
      * @return <code>true</code> if the
      */
-    public boolean isUserFieldOf(final ModelElement me, final UserField userField) {
+    public boolean isUserFieldOf(final UserFieldTarget userFieldTarget, final UserField userField) {
+        if (userField == null) {
+            return false;
+        }
         Class<? extends UserFieldTarget> targetClass = userField.getTargetClass();
-        Class<? extends ModelElement> elementClass = me.getClass();
+        Class<? extends UserFieldTarget> elementClass = userFieldTarget.getClass();
         //check class
         if (!targetClass.isAssignableFrom(elementClass)) {
             return false;
         }
+        if (!(userFieldTarget instanceof ModelElement)) { //only fpr ModelElement we must check the subtype
+            return true;
+        }
         //check subtype
         SubType subTypeParent = getSubTypeParent(userField);
+        ModelElement me = (ModelElement) userFieldTarget;
         return me.hasSubType(subTypeParent);
     }
 
