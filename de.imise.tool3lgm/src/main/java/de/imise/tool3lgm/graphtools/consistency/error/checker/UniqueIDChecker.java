@@ -52,6 +52,9 @@ public class UniqueIDChecker implements ConsistencyErrorChecker {
             if (userFieldTargetClassElements != null) {
                 //für alle Elemente mit dem UserField
                 for (ModelElement me : userFieldTargetClassElements) {
+                    if (!ufd.isUserFieldOf(me, idUserField)) {
+                        continue;
+                    }
                     String idValue = me.getUserFieldInputValue(idUserField);
                     if (UserField.EMPTY_STRING.equals(idValue)) {
                         AbstractIDError idError = new IDEmptyError(me, idUserField);

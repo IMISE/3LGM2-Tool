@@ -213,6 +213,9 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
      * @return
      */
     public final boolean hasSubType(final SubType subType) {
+        if (subType == null || subType == SubType.DUMMY_SUBTYPE) {
+            return true;
+        }
         SubType thisSubType = getSubType();
         return Objects.equals(thisSubType, subType);
     }
