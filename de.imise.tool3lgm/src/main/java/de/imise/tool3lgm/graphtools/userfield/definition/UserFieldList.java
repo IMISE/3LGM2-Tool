@@ -37,11 +37,14 @@ public class UserFieldList implements Cloneable, Iterable<UserField> {
      * @param userField
      * @param index
      */
-    public final void insert(final UserField userField, final int index) {
+    public final void insert(final UserField userField, int index) {
         if (index == list.size()) {
             add(userField); //this checks if a default tab must be added
         } else {
             list.remove(userField);
+            if (ensureDefaultTab(userField, index) != null) {
+                index++;
+            }
             list.add(index, userField);
         }
     }
@@ -113,9 +116,16 @@ public class UserFieldList implements Cloneable, Iterable<UserField> {
         UserField lastSubTypeField = null;
         List<UserFieldList> tabSubLists = new ArrayList<>();
         UserFieldList tabSubList = new UserFieldList(targetClass);
-        UserField fistTab = list.get(0);
-        tabSubList.add(fistTab);
-        for (int i = 1; i < list.size(); i++) {
+        int i = 0;
+        UserField firstUserField = list.get(i);
+        if (firstUserField.hasStyle(SUBTYPE)) {
+            firstUserField = list.get(++i);
+        }
+        if (firstUserField.hasStyle(TAB)) {
+            tabSubList.add(firstUserField);
+            i++;
+        }
+        for (; i < list.size(); i++) {
             UserField userField = list.get(i);
             if (userField.hasStyle(SUBTYPE)) {
                 lastSubTypeField = userField;
@@ -133,6 +143,29 @@ public class UserFieldList implements Cloneable, Iterable<UserField> {
             }
         }
         return tabSubLists;
+    }
+
+    /**
+     * Refreshes the subTypeParent property for every UserField so that every
+     * UserField knows for which subtype it is defined
+     */
+    public void refreshSubTypeParentsForUserFields() {
+        SubType subType = SubType.DUMMY_SUBTYPE;
+        for (UserField userField : list) {
+            if (userField.hasStyle(SUBTYPE)) {
+                subType = new SubType(userField);
+            }
+            userField.setSubTypeParent(subType);
+        }
+    }
+
+    /**
+     * Marks the subTypeParents of all userFields in this list as invalid
+     */
+    public void invalidateSubTypeParentsForUserFields() {
+        for (UserField userField : list) {
+            userField.setSubTypeParent(null);
+        }
     }
 
     /**

@@ -18,6 +18,14 @@ import de.imise.util.NameAndDescriptionSource;
 public class SubType implements NameAndDescriptionSource, IDSource {
 
     /**
+     * Dummy subtype to mark UserFields for which the subtype has already been
+     * set, but which do not have a subtype at all (as opposed to
+     * <code>null</code>, which means that the subtype of the UserField has not
+     * yet been checked/set at all).
+     */
+    public static final SubType DUMMY_SUBTYPE = new SubType();
+
+    /**
      *
      */
     private final UserField subTypeUserField;
@@ -26,6 +34,14 @@ public class SubType implements NameAndDescriptionSource, IDSource {
      *
      */
     private final Class<? extends ModelElement> superClass;
+
+    /**
+     * This constructor should be used only for creating the DUMMY_SUBTYPE
+     */
+    private SubType() {
+        superClass = ModelElement.class;
+        subTypeUserField = new UserField(superClass, SUBTYPE);
+    }
 
     /**
      *
@@ -108,6 +124,14 @@ public class SubType implements NameAndDescriptionSource, IDSource {
             return false;
         }
         return true;
+    }
+
+    /**
+     * @param subType
+     * @return
+     */
+    public static final boolean isDummy(final SubType subType) {
+        return subType == null || DUMMY_SUBTYPE.equals(subType);
     }
 
 }

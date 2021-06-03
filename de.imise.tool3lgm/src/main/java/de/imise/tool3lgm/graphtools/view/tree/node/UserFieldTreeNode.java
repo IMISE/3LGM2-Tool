@@ -18,7 +18,8 @@ import de.imise.util.pair.Pair;
 public class UserFieldTreeNode extends IconifiedTreeNode<Pair<UserField, ModelElement>> {
 
     /**
-     * @param elementClass
+     * @param userField
+     * @param me
      */
     public UserFieldTreeNode(final UserField userField, final ModelElement me) {
         super(new Pair<>(userField, me), getLabel(userField, me), false); // da kommt nichts drunter -> sort = false

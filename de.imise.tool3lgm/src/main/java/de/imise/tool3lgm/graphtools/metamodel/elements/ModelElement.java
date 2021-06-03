@@ -12,6 +12,7 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 
 import org.apache.commons.collections4.map.Flat3Map;
@@ -40,6 +41,7 @@ import de.imise.tool3lgm.graphtools.model.GDCollectionOwner;
 import de.imise.tool3lgm.graphtools.model.GDCommands;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.path.metapaths.MetaPath;
+import de.imise.tool3lgm.graphtools.userfield.definition.SubType;
 import de.imise.tool3lgm.graphtools.userfield.definition.UserField;
 import de.imise.tool3lgm.graphtools.userfield.definition.UserFieldDefinitions;
 import de.imise.tool3lgm.graphtools.userfield.definition.UserFieldTarget;
@@ -190,6 +192,32 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
         retVal.initContainerTable();
         retVal.edges = null;
         return retVal;
+    }
+
+    /**
+     * @return the subType
+     */
+    public SubType getSubType() {
+        return SubType.DUMMY_SUBTYPE; //means no subtype
+    }
+
+    /**
+     * @param subType the subType to set
+     */
+    public void setSubType(final SubType subType) {
+        //do nothing here -> only nodes can be subtyped
+    }
+
+    /**
+     * @param subType
+     * @return
+     */
+    public final boolean hasSubType(final SubType subType) {
+        if (subType == null || subType == SubType.DUMMY_SUBTYPE) {
+            return true;
+        }
+        SubType thisSubType = getSubType();
+        return Objects.equals(thisSubType, subType);
     }
 
     /**

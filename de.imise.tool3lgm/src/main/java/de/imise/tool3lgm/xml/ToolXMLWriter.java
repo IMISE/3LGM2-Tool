@@ -33,6 +33,7 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Table.Cell;
 
 import de.imise.tool3lgm.Static;
+import de.imise.tool3lgm.graphtools.IDSource;
 import de.imise.tool3lgm.graphtools.consistency.ModelCleaner;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Bendpoint;
 import de.imise.tool3lgm.graphtools.metamodel.elements.DoubleMeaningEdge;
@@ -284,7 +285,8 @@ public class ToolXMLWriter extends IntendingXMLWriter {
      * @throws XMLStreamException
      */
     private void writeUserFieldDefinitions(final UserFieldDefinitions definitions, final boolean appendWeightReplacer) throws XMLStreamException {
-        Iterable<UserFieldNumberFormat> numberFormats = definitions.getNumberFormats();
+        Iterable<UserFieldNumberFormat> unsortedNumberFormats = definitions.getNumberFormats();
+        List<UserFieldNumberFormat> numberFormats = IDSource.getSortedByID(unsortedNumberFormats);
         Iterable<UserField> userFields = CollectionUtils.getCommonIterable(definitions.getGlobalUserFields(), definitions.getElementClassUserFields());
         WeightReplacer weightReplacer = appendWeightReplacer ? definitions.getWeightReplacer() : null;
         writeUserFieldDefinitions(numberFormats, userFields, weightReplacer);
@@ -385,9 +387,13 @@ public class ToolXMLWriter extends IntendingXMLWriter {
      * @throws XMLStreamException
      */
     private void writeUserFieldValues(final UserFieldTarget userFieldTarget) throws XMLStreamException {
-        for (UserField keyUserField : userFieldTarget.getUserFieldInputValueKeys()) {
-            //Hier muss geprüft werden, ob das rauszuschreibende userfield null ist, denn darf es nicht rausgeschrieben werden.
-            if (keyUserField != null) {
+        UserFieldDefinitions userFieldDefinitions = gdcoll.getUserFieldDefinitions();
+        Set<UserField> userFieldInputValueKeys = userFieldTarget.getUserFieldInputValueKeys();
+        List<UserField> sortedUserFields = IDSource.getSortedByID(userFieldInputValueKeys);
+        for (UserField keyUserField : sortedUserFields) {
+            //write only userfields which still belongs to the userFieldTarget (maybe the userFieldDefintion was changed but
+            //the userFieldTarget (ModelElement) has still InputValues for UserFields that now belongs to an other subtype
+            if (userFieldDefinitions.isUserFieldOf(userFieldTarget, keyUserField)) {
                 writeStartElement("userField"); //<userField>
                 writeAttribute("hash", keyUserField.getID());
                 writeCharacters(userFieldTarget.getUserFieldInputValue(keyUserField));
@@ -467,7 +473,7 @@ public class ToolXMLWriter extends IntendingXMLWriter {
         writeAttribute("hash", me.getID());
         if (me instanceof Node) {
             SubType subType = ((Node) me).getSubType();
-            if (subType != null) {
+            if (!SubType.isDummy(subType)) {
                 writeAttribute("subtype", subType.getID());
             }
         }

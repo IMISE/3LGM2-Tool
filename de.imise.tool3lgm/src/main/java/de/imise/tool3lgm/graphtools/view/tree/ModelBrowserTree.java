@@ -581,11 +581,10 @@ public final class ModelBrowserTree extends DynamicTree implements UserFieldList
         Set<UserField> allOfThisElement = me.getUserFieldInputValueKeys();
         GDCollection gdcoll = doc.getCollection();
         UserFieldDefinitions ufDefs = gdcoll.getUserFieldDefinitions();
-        Class<? extends ModelElement> elementClass = me.getClass();
         UserFieldTreeNode currentTabNode = null;
         UserFieldTreeNode currentGroupNode = null;
         UserFieldTreeNode valueOrSeparatorNode = null;
-        for (UserField userField : ufDefs.getUserFields(elementClass)) {
+        for (UserField userField : ufDefs.getUserFields(me)) {
             if (userField.hasStyle(TAB)) {
                 removeNodeIfEmpty(currentGroupNode); //remove empty group
                 removeNodeIfEmpty(currentTabNode); //remove empty tab

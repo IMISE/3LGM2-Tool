@@ -374,6 +374,10 @@ public final class UserFieldDefinitions extends UserFieldDefinitionChangeHandler
         def.calculator = new Calculator(def);
         //den Analyzer ersetzen
         def.definitionsAnalyzer = new UserFieldDefinitionsAnalyzer(def);
+        //invalidate the subtype parent of all userFields to start the recalculation
+        //after changes. This clone method is called before everey changes of the
+        //userFieldDefinition after loading a model in the UserFieldDeclarationDialog
+        def.invalidateSubTypeParentsForUserFields();
         return def;
     }
 
@@ -501,6 +505,49 @@ public final class UserFieldDefinitions extends UserFieldDefinitionChangeHandler
             @Override
             public void remove() {
                 userFieldsIterator.remove();
+            }
+        };
+        return userFieldsIterable;
+    }
+
+    /**
+     * @param userFieldTargetClass
+     * @return
+     */
+    public Iterable<UserField> getUserFields(final ModelElement me) {
+        Class<? extends ModelElement> elementClass = me.getClass();
+        final UserFieldList fieldList = classToUserFieldTargetSpecificListMap.get(elementClass);
+        if (fieldList == null) {
+            return ImmutableList.of();
+        }
+        Iterable<UserField> userFieldsIterable = () -> new Iterator<UserField>() {
+
+            private UserField next = null;
+
+            private int index = 0;
+
+            @Override
+            public boolean hasNext() {
+                next = null;
+                for (; index < fieldList.size(); index++) {
+                    UserField userField = fieldList.get(index);
+                    if (isUserFieldOf(me, userField)) {
+                        next = userField;
+                        index++;
+                        break;
+                    }
+                }
+                return next != null;
+            }
+
+            @Override
+            public UserField next() {
+                return next;
+            }
+
+            @Override
+            public void remove() {
+
             }
         };
         return userFieldsIterable;
@@ -1082,6 +1129,15 @@ public final class UserFieldDefinitions extends UserFieldDefinitionChangeHandler
     }
 
     /**
+     * Marks the subTypeParents of all userFields in this list as invalid
+     */
+    public void invalidateSubTypeParentsForUserFields() {
+        for (UserFieldList userFieldList : classToUserFieldTargetSpecificListMap.values()) {
+            userFieldList.invalidateSubTypeParentsForUserFields();
+        }
+    }
+
+    /**
      * @param elementClass
      * @return
      */
@@ -1108,6 +1164,45 @@ public final class UserFieldDefinitions extends UserFieldDefinitionChangeHandler
             }
         }
         return null;
+    }
+
+    /**
+     * @param userField
+     * @return
+     */
+    public SubType getSubTypeParent(final UserField userField) {
+        SubType subTypeParent = userField.getSubTypeParent();
+        if (subTypeParent == null) {
+            Class<? extends UserFieldTarget> targetClass = userField.getTargetClass();
+            UserFieldList userFieldList = classToUserFieldTargetSpecificListMap.get(targetClass);
+            userFieldList.refreshSubTypeParentsForUserFields();
+            subTypeParent = userField.getSubTypeParent();
+        }
+        return subTypeParent;
+    }
+
+    /**
+     * @param userFieldTarget
+     * @param userField
+     * @return <code>true</code> if the
+     */
+    public boolean isUserFieldOf(final UserFieldTarget userFieldTarget, final UserField userField) {
+        if (userField == null) {
+            return false;
+        }
+        Class<? extends UserFieldTarget> targetClass = userField.getTargetClass();
+        Class<? extends UserFieldTarget> elementClass = userFieldTarget.getClass();
+        //check class
+        if (!targetClass.isAssignableFrom(elementClass)) {
+            return false;
+        }
+        if (!(userFieldTarget instanceof ModelElement)) { //only fpr ModelElement we must check the subtype
+            return true;
+        }
+        //check subtype
+        SubType subTypeParent = getSubTypeParent(userField);
+        ModelElement me = (ModelElement) userFieldTarget;
+        return me.hasSubType(subTypeParent);
     }
 
 }
