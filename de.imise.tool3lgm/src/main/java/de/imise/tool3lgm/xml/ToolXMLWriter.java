@@ -33,6 +33,7 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Table.Cell;
 
 import de.imise.tool3lgm.Static;
+import de.imise.tool3lgm.graphtools.IDSource;
 import de.imise.tool3lgm.graphtools.consistency.ModelCleaner;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Bendpoint;
 import de.imise.tool3lgm.graphtools.metamodel.elements.DoubleMeaningEdge;
@@ -280,30 +281,12 @@ public class ToolXMLWriter extends IntendingXMLWriter {
 
     /**
      * @param definitions
-     * @return
-     */
-    private Iterable<UserFieldNumberFormat> getNumberFormatsSortedByIDs(final UserFieldDefinitions definitions) {
-        //add all formats sorted by their ID
-        List<String> formatIDs = new ArrayList<>();
-        for (UserFieldNumberFormat format : definitions.getNumberFormats()) {
-            formatIDs.add(format.getID());
-        }
-        Alphabetical.sort(formatIDs);
-        List<UserFieldNumberFormat> numberFormats = new ArrayList<>();
-        for (String formatID : formatIDs) {
-            UserFieldNumberFormat numberFormat = definitions.getNumberFormat(formatID);
-            numberFormats.add(numberFormat);
-        }
-        return numberFormats;
-    }
-
-    /**
-     * @param definitions
      * @param appendWeightReplacer
      * @throws XMLStreamException
      */
     private void writeUserFieldDefinitions(final UserFieldDefinitions definitions, final boolean appendWeightReplacer) throws XMLStreamException {
-        Iterable<UserFieldNumberFormat> numberFormats = getNumberFormatsSortedByIDs(definitions);
+        Iterable<UserFieldNumberFormat> unsortedNumberFormats = definitions.getNumberFormats();
+        List<UserFieldNumberFormat> numberFormats = IDSource.getSortedByID(unsortedNumberFormats);
         Iterable<UserField> userFields = CollectionUtils.getCommonIterable(definitions.getGlobalUserFields(), definitions.getElementClassUserFields());
         WeightReplacer weightReplacer = appendWeightReplacer ? definitions.getWeightReplacer() : null;
         writeUserFieldDefinitions(numberFormats, userFields, weightReplacer);
@@ -405,7 +388,9 @@ public class ToolXMLWriter extends IntendingXMLWriter {
      */
     private void writeUserFieldValues(final UserFieldTarget userFieldTarget) throws XMLStreamException {
         UserFieldDefinitions userFieldDefinitions = gdcoll.getUserFieldDefinitions();
-        for (UserField keyUserField : userFieldTarget.getUserFieldInputValueKeys()) {
+        Set<UserField> userFieldInputValueKeys = userFieldTarget.getUserFieldInputValueKeys();
+        List<UserField> sortedUserFields = IDSource.getSortedByID(userFieldInputValueKeys);
+        for (UserField keyUserField : sortedUserFields) {
             //write only userfields which still belongs to the userFieldTarget (maybe the userFieldDefintion was changed but
             //the userFieldTarget (ModelElement) has still InputValues for UserFields that now belongs to an other subtype
             if (userFieldDefinitions.isUserFieldOf(userFieldTarget, keyUserField)) {
