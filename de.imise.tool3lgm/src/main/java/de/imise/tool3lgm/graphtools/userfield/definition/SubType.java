@@ -126,4 +126,12 @@ public class SubType implements NameAndDescriptionSource, IDSource {
         return true;
     }
 
+    /**
+     * @param subType
+     * @return
+     */
+    public static final boolean isDummy(final SubType subType) {
+        return subType == null || DUMMY_SUBTYPE.equals(subType);
+    }
+
 }

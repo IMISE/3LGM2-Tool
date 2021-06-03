@@ -58,7 +58,7 @@ public abstract class Node extends ModelElement {
 
     @Override
     protected String getNameExtension() {
-        return subType == null ? super.getNameExtension() : INNER_NAME_PARTS_SPACE + "( " + subType + " )";
+        return SubType.isDummy(subType) ? super.getNameExtension() : INNER_NAME_PARTS_SPACE + "(" + subType + ")";
     }
 
 }

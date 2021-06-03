@@ -116,8 +116,8 @@ public class ElementDialogHeaderPanel extends ElementDialogPanel {
             Class<? extends ModelElement> dialogElementClass = me.getClass();
             String displayableName = elementsNameBuilder.getDisplayableFullName(dialogElementClass);
             SubType subType = node.getSubType();
-            if (subType != null) {
-                displayableName += "    ( " + subType + " )";
+            if (!SubType.isDummy(subType)) {
+                displayableName += "    (" + subType + ")";
             }
             typeLabel.setText(displayableName);
             labelLabel.setText("<html><b>" + me.getClearName() + "</b></html>");
