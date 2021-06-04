@@ -383,7 +383,7 @@ public final class UserField extends NameAndDescriptionTargetAdapter implements 
      * The subtype this userfield is defined for. If <code>null</code> it's
      * defined for the main class and not for a subtype
      */
-    private SubType subTypeParent;
+    private SubType parentSubType;
 
     /**
      * Gibt an, ob das <code>UserField</code> im Modellbrowser sichtbar sein
@@ -684,22 +684,22 @@ public final class UserField extends NameAndDescriptionTargetAdapter implements 
     /**
      * This should only called from {@link UserFieldDefinitions} or
      * {@link UserFieldList}. To get this information ask
-     * {@link UserFieldDefinitions#getSubTypeParent(UserField)}
+     * {@link UserFieldDefinitions#getParentSubType(UserField)}
      *
-     * @return the subTypeParent
+     * @return the parent subtype
      */
-    final SubType getSubTypeParent() {
-        return subTypeParent;
+    final SubType getParentSubType() {
+        return parentSubType;
     }
 
     /**
      * This should only called from {@link UserFieldDefinitions} or
      * {@link UserFieldList}.
      *
-     * @param subTypeParent the subTypeParent to set
+     * @param parentSubType the parent subtype to set
      */
-    final void setSubTypeParent(final SubType subTypeParent) {
-        this.subTypeParent = subTypeParent;
+    final void setParentSubType(final SubType parentSubType) {
+        this.parentSubType = parentSubType;
     }
 
     /**

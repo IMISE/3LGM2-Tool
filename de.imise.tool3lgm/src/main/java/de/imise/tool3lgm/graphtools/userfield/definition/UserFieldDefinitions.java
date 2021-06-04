@@ -377,7 +377,7 @@ public final class UserFieldDefinitions extends UserFieldDefinitionChangeHandler
         //invalidate the subtype parent of all userFields to start the recalculation
         //after changes. This clone method is called before everey changes of the
         //userFieldDefinition after loading a model in the UserFieldDeclarationDialog
-        def.invalidateSubTypeParentsForUserFields();
+        def.invalidateParentSubTypesForUserFields();
         return def;
     }
 
@@ -572,7 +572,8 @@ public final class UserFieldDefinitions extends UserFieldDefinitionChangeHandler
         }
         ArrayList<UserField> returnList = new ArrayList<>();
         for (UserField uf : getUserFields(userFieldTargetClass)) {
-            if (styles.contains(uf.getStyle())) {
+            Style style = uf.getStyle();
+            if (styles.contains(style)) {
                 returnList.add(uf);
             }
         }
@@ -1129,11 +1130,11 @@ public final class UserFieldDefinitions extends UserFieldDefinitionChangeHandler
     }
 
     /**
-     * Marks the subTypeParents of all userFields in this list as invalid
+     * Marks the parent subtypes of all userFields in this list as invalid
      */
-    public void invalidateSubTypeParentsForUserFields() {
+    public void invalidateParentSubTypesForUserFields() {
         for (UserFieldList userFieldList : classToUserFieldTargetSpecificListMap.values()) {
-            userFieldList.invalidateSubTypeParentsForUserFields();
+            userFieldList.invalidateParentSubTypesForUserFields();
         }
     }
 
@@ -1167,18 +1168,22 @@ public final class UserFieldDefinitions extends UserFieldDefinitionChangeHandler
     }
 
     /**
+     * Return the subtype or {@link SubType#DUMMY_SUBTYPE} if the userfield is
+     * declared on the first tab that belongs to no subtype. Subtype userfields
+     * itself return their own subtype resp. the subtype they define.
+     *
      * @param userField
-     * @return
+     * @return the subtype the given userfield belogs to
      */
-    public SubType getSubTypeParent(final UserField userField) {
-        SubType subTypeParent = userField.getSubTypeParent();
-        if (subTypeParent == null) {
+    public SubType getParentSubType(final UserField userField) {
+        SubType parentSubType = userField.getParentSubType();
+        if (parentSubType == null) {
             Class<? extends UserFieldTarget> targetClass = userField.getTargetClass();
             UserFieldList userFieldList = classToUserFieldTargetSpecificListMap.get(targetClass);
-            userFieldList.refreshSubTypeParentsForUserFields();
-            subTypeParent = userField.getSubTypeParent();
+            userFieldList.refreshParentSubTypesForUserFields();
+            parentSubType = userField.getParentSubType();
         }
-        return subTypeParent;
+        return parentSubType;
     }
 
     /**
@@ -1196,13 +1201,13 @@ public final class UserFieldDefinitions extends UserFieldDefinitionChangeHandler
         if (!targetClass.isAssignableFrom(elementClass)) {
             return false;
         }
-        if (!(userFieldTarget instanceof ModelElement)) { //only fpr ModelElement we must check the subtype
+        if (!(userFieldTarget instanceof ModelElement)) { //only for ModelElement we must check the subtype
             return true;
         }
         //check subtype
-        SubType subTypeParent = getSubTypeParent(userField);
+        SubType parentSubType = getParentSubType(userField);
         ModelElement me = (ModelElement) userFieldTarget;
-        return me.hasSubType(subTypeParent);
+        return me.hasSubType(parentSubType);
     }
 
 }
