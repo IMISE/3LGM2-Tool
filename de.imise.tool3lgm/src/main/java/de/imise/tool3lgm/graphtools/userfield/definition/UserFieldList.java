@@ -119,6 +119,10 @@ public class UserFieldList implements Cloneable, Iterable<UserField> {
         int i = 0;
         UserField firstUserField = list.get(i);
         if (firstUserField.hasStyle(SUBTYPE)) {
+            //first userfield is a subtype but we want to get the tab list for no subtype -> return the empty tab list
+            if (SubType.isDummy(subType)) {
+                return tabSubLists;
+            }
             firstUserField = list.get(++i);
         }
         if (firstUserField.hasStyle(TAB)) {
