@@ -221,6 +221,15 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
     }
 
     /**
+     * @return <code>true</code> if this has a subtype that is not the dummy
+     *         subtype or <code>null</code>
+     */
+    public final boolean hasSubType() {
+        SubType subType = getSubType();
+        return !SubType.isDummy(subType);
+    }
+
+    /**
      * Liefert den Index der Ebene, auf dem das Element liegt. Diese Funktion
      * wird von den konkreten Elementen überschrieben. Das braucht man neben den
      * der Möglichkeit das für eine Klasse über die {@link ModelConstants} zu
@@ -423,7 +432,7 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
     /**
      * @return
      */
-    public String getNameWithSzens() {
+    public final String getNameWithSzens() {
         if (nameWithSzens == null || metaModel.isGenerateName(getClass())) {
             updateNameWithSzens();
         }
