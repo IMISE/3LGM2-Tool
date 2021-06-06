@@ -41,6 +41,7 @@ public class SubType implements NameAndDescriptionSource, IDSource {
     private SubType() {
         superClass = ModelElement.class;
         subTypeUserField = new UserField(superClass, SUBTYPE);
+        subTypeUserField.setName("DUMMY_SUBTYPE_USERFIELD");
     }
 
     /**

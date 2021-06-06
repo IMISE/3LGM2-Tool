@@ -24,6 +24,7 @@ import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_PRINT_Q
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_SELECT_LINKED_SUBMODEL;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_SET_ELEMENT_EXPANSION_OFF;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_SET_ELEMENT_EXPANSION_ON;
+import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_SET_ELEMENT_SUBTYPE;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_SET_ELEMENT_VISIBILITY_OFF;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_SET_ELEMENT_VISIBILITY_ON;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_SET_LAYER_COLOR;
@@ -36,6 +37,8 @@ import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_UNLINK_
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_OPTION_GDCOLL_AUTOMATIC_MODE;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_OPTION_GDOC_VERIFICATION_MODE;
 import static de.imise.tool3lgm.graphtools.undoredo.TransactionManager.STANDARD_PID;
+import static de.imise.tool3lgm.graphtools.userfield.definition.SubType.DUMMY_SUBTYPE;
+import static de.imise.tool3lgm.graphtools.userfield.definition.UserField.Style.SUBTYPE;
 import static de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty.OPTION_ENABLE_SUBMODEL_BROWSER;
 import static javax.swing.BoxLayout.Y_AXIS;
 import static javax.swing.JOptionPane.DEFAULT_OPTION;
@@ -59,6 +62,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.JRadioButton;
+import javax.swing.JRadioButtonMenuItem;
 import javax.swing.event.PopupMenuEvent;
 import javax.swing.event.PopupMenuListener;
 
@@ -88,6 +92,7 @@ import de.imise.tool3lgm.graphtools.model.Szenario;
 import de.imise.tool3lgm.graphtools.path.metapaths.SimpleMetaPath;
 import de.imise.tool3lgm.graphtools.undoredo.TransactionManager;
 import de.imise.tool3lgm.graphtools.userfield.definition.SubType;
+import de.imise.tool3lgm.graphtools.userfield.definition.UserField;
 import de.imise.tool3lgm.graphtools.userfield.definition.UserFieldDefinitions;
 import de.imise.tool3lgm.graphtools.view.container.BendpointContainer;
 import de.imise.tool3lgm.graphtools.view.container.EdgeContainer;
@@ -369,6 +374,48 @@ public class RegularContextGenerator extends ElementSelectionContextGenerator im
     }
 
     /**
+     * @return
+     */
+    private JMenu getChangeSubTypeMenu() {
+        JMenu subTypeMenu = null;
+        GraphDocument doc = getDoc();
+        Class<? extends ModelElement> mostSpecialRealElementsClass = doc.getMostSpecialRealElementsClass();
+        UserFieldDefinitions userFieldDefinitions = doc.getUserFieldDefinitions();
+        List<UserField> subTypeUserFields = userFieldDefinitions.getUserFields(mostSpecialRealElementsClass, SUBTYPE);
+        if (!subTypeUserFields.isEmpty()) {
+
+            //collect the different subtypes of all selected elements
+            Set<SubType> selectedSubTypes = new HashSet<>();
+            for (ModelElement me : doc.getSelectedElements()) {
+                SubType subType = me.getSubType();
+                selectedSubTypes.add(subType);
+            }
+
+            SubType selectedSubType = null;
+            if (selectedSubTypes.size() == 1) {
+                selectedSubType = selectedSubTypes.iterator().next();
+            }
+
+            //create menu
+            ButtonGroup buttonGroup = new ButtonGroup();
+            subTypeMenu = new JMenu(getResString("CONTEXT_MENU_ELEMENT_SUBTYPE"));
+            boolean selected = DUMMY_SUBTYPE.equals(selectedSubType); //do not replace by SubType.isDummy(selectedSubType) because null here means nothing selected!!!
+            JRadioButtonMenuItem item = getRadioItem("CONTEXT_MENU_ELEMENT_NO_SUBTYPE", selected, MODEL_ACTION_SET_ELEMENT_SUBTYPE, DUMMY_SUBTYPE);
+            buttonGroup.add(item);
+            subTypeMenu.add(item);
+            for (UserField userField : subTypeUserFields) {
+                SubType subType = userFieldDefinitions.getParentSubType(userField);
+                selected = selectedSubType != null && selectedSubType.equals(subType);
+                String itemText = STANDARD_SUBITEMS_INDENTATION + subType.toString();
+                item = getRadioItem(itemText, "TOOLTIP_CONTEXT_MENU_ELEMENT_SUBTYPE_SELECTED", selected, MODEL_ACTION_SET_ELEMENT_SUBTYPE, subType);
+                buttonGroup.add(item);
+                subTypeMenu.add(item);
+            }
+        }
+        return subTypeMenu;
+    }
+
+    /**
      * Liefert das Menü, mit dem selektierte Elemente in andere Teilmodelle
      * übernommen werden können.
      *
@@ -458,8 +505,15 @@ public class RegularContextGenerator extends ElementSelectionContextGenerator im
             }
 
             JMenu subElems = getSubElemMenu();
+            JMenu subType = getChangeSubTypeMenu();
             if (subElems.getItemCount() > 0) {
                 menu.add(subElems);
+                if (subType == null) {
+                    menu.addSeparator();
+                }
+            }
+            if (subType != null) {
+                menu.add(subType);
                 menu.addSeparator();
             }
 
@@ -703,6 +757,13 @@ public class RegularContextGenerator extends ElementSelectionContextGenerator im
             }
 
             if (menu.getComponentCount() > 0) {
+                menu.addSeparator();
+            }
+
+            //SubType SubMenu
+            JMenu subType = getChangeSubTypeMenu();
+            if (subType != null) {
+                menu.add(subType);
                 menu.addSeparator();
             }
 

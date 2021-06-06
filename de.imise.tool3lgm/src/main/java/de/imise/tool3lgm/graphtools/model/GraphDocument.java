@@ -29,6 +29,7 @@ import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_SET_ELE
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_SET_ELEMENT_NAME;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_SET_ELEMENT_OPTIONAL;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_SET_ELEMENT_POSITION;
+import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_SET_ELEMENT_SUBTYPE;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_SET_ELEMENT_TEXT_ALIGNMENT_HTML;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_SET_ELEMENT_TEXT_POSITION_HORIZONTAL;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_SET_ELEMENT_TEXT_POSITION_VERTICAL;
@@ -1094,9 +1095,19 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
             break;
         }
         case MODEL_ACTION_SET_ELEMENT_DESCRIPTION: {
-            //[1] = ElementID, [2] = Beschreibung
+            //[0] = ElementID, [1] = Beschreibung
             ModelElement me = findElementCoded(argv[0]);
             setDescription(me, argv[1], pid);
+            break;
+        }
+        case MODEL_ACTION_SET_ELEMENT_SUBTYPE: {
+            if (argc == 1) {
+                //[0] subType
+                setSubType(argv[0], pid);
+            } else {
+                //[0] = ElementID, [1] = SubType-ID
+                setSubType(argv[0], argv[1], pid);
+            }
             break;
         }
         case MODEL_ACTION_SET_USER_FIELD_VALUE: {
@@ -4703,6 +4714,63 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
         addUndoCommandIfNotExist(pid, oldDescription, MODEL_ACTION_SET_ELEMENT_DESCRIPTION, me);
         newDescription = getDecodedParseSaveString(description);
         me.setDescription(newDescription);
+        finish_transaction(pid);
+        distributeEvent(DATA_CHANGED, pid);
+    }
+
+    /**
+     * Sets the given subype for all selected elements that have the same class
+     * or a superclass like the superclass of the subtype.
+     *
+     * @param subTypeID
+     * @param pid
+     */
+    private final void setSubType(final String subTypeID, final int pid) {
+        UserFieldDefinitions userFieldDefinitions = getUserFieldDefinitions();
+        SubType subType = userFieldDefinitions.getSubType(subTypeID);
+        if (subType != null) {
+            start_transaction(pid);
+            for (ElementContainer ec : getSelectedRealElementContainerIterable()) {
+                ModelElement me = ec.getElement();
+                setSubType(me, subType, pid);
+            }
+            finish_transaction(pid);
+            distributeEvent(ELEMENT_GRAPHICS_CHANGED, pid);
+        }
+    }
+
+    /**
+     * Sets the subtype of the element with the given elementID.
+     *
+     * @param elementID
+     * @param subTypeID
+     * @param pid
+     */
+    public final void setSubType(final String elementID, final String subTypeID, final int pid) {
+        GraphDocument mainDoc = gdcoll.getMainDoc();
+        ModelElement me = mainDoc.findElementCoded(elementID);
+        if (me == null) {
+            return;
+        }
+        Class<? extends ModelElement> elementClass = me.getClass();
+        UserFieldDefinitions userFieldDefinitions = gdcoll.getUserFieldDefinitions();
+        SubType subType = userFieldDefinitions.getSubType(elementClass, subTypeID);
+        setSubType(me, subType, pid);
+    }
+
+    /**
+     * Sets the subtype of the given element.
+     *
+     * @param me
+     * @param subType
+     * @param pid
+     */
+    public final void setSubType(final ModelElement me, final SubType subType, final int pid) {
+        start_transaction(pid);
+        SubType oldSubType = me.getSubType();
+        addRedoCommandOrReplace(pid, subType, MODEL_ACTION_SET_ELEMENT_SUBTYPE, me);
+        addUndoCommandIfNotExist(pid, oldSubType, MODEL_ACTION_SET_ELEMENT_SUBTYPE, me);
+        me.setSubType(subType);
         finish_transaction(pid);
         distributeEvent(DATA_CHANGED, pid);
     }
