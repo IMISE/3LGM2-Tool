@@ -1,5 +1,6 @@
 package de.imise.tool3lgm.gui.menu;
 
+import static de.imise.tool3lgm.Tool3lgmConstants.TOOLTIP_RESSOURCE_PREFIX;
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
 import static de.imise.tool3lgm.graphtools.undoredo.TransactionManager.STANDARD_PID;
 
@@ -16,8 +17,11 @@ import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
+import javax.swing.JRadioButtonMenuItem;
 import javax.swing.event.PopupMenuEvent;
 import javax.swing.event.PopupMenuListener;
+
+import com.google.common.base.Strings;
 
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.event.action.UserPropertyBooleanChangeAction;
@@ -27,6 +31,7 @@ import de.imise.tool3lgm.graphtools.model.GDCommands;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.model.LGMGraphDocument;
 import de.imise.tool3lgm.graphtools.model.Szenario;
+import de.imise.tool3lgm.graphtools.undoredo.CommandHandler;
 import de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty;
 import de.imise.util.swing.event.ExtendedAction;
 import de.imise.util.swing.menu.DynamicPopupMenu;
@@ -146,16 +151,50 @@ public abstract class ContextGenerator implements ActionListener {
      * @return
      */
     protected final JMenuItem getItem(final String resKeyOrString, final GDCommands command, final String arguments, final ImageIcon icon, final boolean enabled, final String toolTip) {
+        return getItem(JMenuItem.class, resKeyOrString, command, arguments, icon, enabled, toolTip, false);
+    }
+
+    /**
+     * @param itemType
+     * @param resKeyOrString
+     * @param command
+     * @param arguments
+     * @param icon
+     * @param enabled
+     * @param toolTip
+     * @param selected
+     * @return
+     */
+    private final <T extends JMenuItem> T getItem(final Class<T> itemType, final String resKeyOrString, final GDCommands command, final String arguments, final ImageIcon icon, final boolean enabled, String toolTip, final boolean selected) {
         String label = loadResStringWithoutError(resKeyOrString);
-        JMenuItem item = new JMenuItem(label, icon);
-        item.addActionListener(this);
-        if (arguments == null) {
-            item.setActionCommand(command.toString());
-        } else {
-            item.setActionCommand(command + " " + arguments);
+        T item = null;
+        try {
+            item = itemType.newInstance();
+        } catch (Exception e) {
+            e.printStackTrace(); //only relevant in development mode
         }
-        item.setEnabled(enabled);
-        item.setToolTipText(toolTip);
+        if (item != null) {
+            item.setText(label);
+            item.setIcon(icon);
+            item.addActionListener(this);
+            if (arguments == null) {
+                item.setActionCommand(command.toString());
+            } else {
+                item.setActionCommand(command + " " + arguments);
+            }
+            item.setEnabled(enabled);
+            if (Strings.isNullOrEmpty(toolTip)) {
+                String toolTipResKey = TOOLTIP_RESSOURCE_PREFIX + resKeyOrString;
+                toolTip = Tool3lgmConstants.getResStringWithoutError(toolTipResKey);
+                if (toolTipResKey == toolTip) {
+                    toolTip = null;
+                }
+            } else {
+                toolTip = Tool3lgmConstants.getResStringWithoutError(toolTip);
+            }
+            item.setToolTipText(toolTip);
+            item.setSelected(selected);
+        }
         return item;
     }
 
@@ -224,14 +263,57 @@ public abstract class ContextGenerator implements ActionListener {
         return new JMenuItem(action);
     }
 
+    /**
+     * @param resKeyOrString
+     * @param command
+     * @param arguments
+     * @param selected
+     * @return
+     */
+    protected final JRadioButtonMenuItem getRadioItem(final String resKeyOrString, final boolean selected, final GDCommands command, final Object... arguments) {
+        return getRadioItem(resKeyOrString, null, true, null, selected, command, arguments);
+    }
+
+    /**
+     * @param resKeyOrString
+     * @param toolTip
+     * @param selected
+     * @param command
+     * @param arguments
+     * @return
+     */
+    protected final JRadioButtonMenuItem getRadioItem(final String resKeyOrString, final String toolTip, final boolean selected, final GDCommands command, final Object... arguments) {
+        return getRadioItem(resKeyOrString, null, true, toolTip, selected, command, arguments);
+    }
+
+    /**
+     * @param resKeyOrString
+     * @param command
+     * @param arguments
+     * @param icon
+     * @param enabled
+     * @param toolTip
+     * @param selected
+     * @return
+     */
+    protected final JRadioButtonMenuItem getRadioItem(final String resKeyOrString, final ImageIcon icon, final boolean enabled, final String toolTip, final boolean selected, final GDCommands command, final Object... arguments) {
+        String argumentsString = CommandHandler.getArgumentsString(arguments);
+        return getItem(JRadioButtonMenuItem.class, resKeyOrString, command, argumentsString, icon, enabled, toolTip, selected);
+    }
+
     @Override
     public final void actionPerformed(final ActionEvent e) {
         GraphDocument doc = getDoc();
         if (doc != null) {
-            doc.exec(e.getActionCommand(), STANDARD_PID);
+            String actionCommand = e.getActionCommand();
+            doc.exec(actionCommand, STANDARD_PID);
         }
     }
 
+    /**
+     * @param menu
+     * @param item
+     */
     protected void addMenuItem(final JPopupMenu menu, final JMenuItem item) {
         menu.add(item);
         Action action = item.getAction();

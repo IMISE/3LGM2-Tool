@@ -86,7 +86,10 @@ public abstract class Tool3lgmConstants {
     /** Path to the installation directory of the application as string */
     public static final String APPLICATION_DIR_PATH = APPLICATION_DIR.toURI().getPath();
 
-    /** Path to the root of the installation directory of the application as string */
+    /**
+     * Path to the root of the installation directory of the application as
+     * string
+     */
     public static final String APPLICATION_ROOT_DIR_PATH = APPLICATION_ROOT_DIR.toURI().getPath();
 
     /** Pfad ins Home-Verzeichnis des Benutzers */
@@ -198,7 +201,7 @@ public abstract class Tool3lgmConstants {
 
     /** Prefixes of resources */
     private static final String CONFIRM_QUESTION_RESSOURCE_PREFIX = "CONFIRM_";
-    private static final String TOOLTIP_RESSOURCE_PREFIX = "TOOLTIP_";
+    public static final String TOOLTIP_RESSOURCE_PREFIX = "TOOLTIP_";
     private static final String ICON_LARGE_PREFIX = "ICON_LARGE_";
     private static final String ICON_SMALL_PREFIX = "ICON_SMALL_";
 
