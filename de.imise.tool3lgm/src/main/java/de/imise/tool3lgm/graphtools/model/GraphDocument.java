@@ -512,6 +512,10 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
         undoRedo(pid, true);
     }
 
+    /**
+     * @param pid
+     * @param undo
+     */
     private void undoRedo(final int pid, final boolean undo) {
         TransactionStackTable transStackTable = gdcoll.getTransStackTable();
         transStackTable.increase(pid);
@@ -587,7 +591,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
         if (!gdcoll.isBulkMode()) {
             TransactionManager transactionManager = gdcoll.getTman();
             String fullCommandPrefix = getCommandLine(command, commandPrefix);
-            String arguments = String.valueOf(commandArguments);
+            String arguments = getArgumentsString(commandArguments);
             transactionManager.addOrReplaceRedoCommand(pid, fullCommandPrefix, arguments);
         }
     }
@@ -607,7 +611,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
         if (!gdcoll.isBulkMode()) {
             TransactionManager transactionManager = gdcoll.getTman();
             String fullCommandPrefix = getCommandLine(command, commandPrefix);
-            String arguments = String.valueOf(commandArguments);
+            String arguments = getArgumentsString(commandArguments);
             transactionManager.addUndoCommandIfNotExist(pid, fullCommandPrefix, arguments);
         }
     }
