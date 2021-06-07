@@ -58,6 +58,7 @@ public abstract class Node extends ModelElement {
      */
     @Override
     public final void setSubType(final SubType subType) {
+        invalidateNameWithSzens();
         if (subType == null) {
             this.subType = DUMMY_SUBTYPE;
             return;
