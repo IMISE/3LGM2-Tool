@@ -123,7 +123,22 @@ public class UserFieldList implements Cloneable, Iterable<UserField> {
             if (SubType.isDummy(subType)) {
                 return tabSubLists;
             }
-            firstUserField = list.get(++i);
+            //first subtype definition matches the given subtype
+            if (subType.hasUserField(firstUserField)) {
+                firstUserField = list.get(++i);
+            } else {
+                //first subtype definition does not match the given subtype
+                for (i++; i < list.size(); i++) {
+                    //search for the first UserField after the UserField with the given subtype
+                    firstUserField = list.get(i);
+                    if (subType.hasUserField(firstUserField)) {
+                        if (++i < list.size()) {
+                            firstUserField = list.get(i);
+                            break;
+                        }
+                    }
+                }
+            }
         }
         if (firstUserField.hasStyle(TAB)) {
             tabSubList.add(firstUserField);
