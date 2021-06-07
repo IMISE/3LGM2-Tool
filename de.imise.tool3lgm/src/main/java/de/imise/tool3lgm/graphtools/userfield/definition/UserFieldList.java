@@ -148,6 +148,9 @@ public class UserFieldList implements Cloneable, Iterable<UserField> {
             UserField userField = list.get(i);
             if (userField.hasStyle(SUBTYPE)) {
                 lastSubTypeField = userField;
+                if (i == list.size() - 1 && !tabSubList.isEmpty()) {
+                    tabSubLists.add(tabSubList);
+                }
                 continue;
             }
             if (lastSubTypeField == null || subType != null && subType.hasUserField(lastSubTypeField)) {
@@ -157,7 +160,7 @@ public class UserFieldList implements Cloneable, Iterable<UserField> {
                 }
                 tabSubList.add(userField);
             }
-            if (i == list.size() - 1) {
+            if (i == list.size() - 1 && !tabSubList.isEmpty()) {
                 tabSubLists.add(tabSubList);
             }
         }
