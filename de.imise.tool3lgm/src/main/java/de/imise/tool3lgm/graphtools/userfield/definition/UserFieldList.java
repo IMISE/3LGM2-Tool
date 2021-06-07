@@ -119,7 +119,26 @@ public class UserFieldList implements Cloneable, Iterable<UserField> {
         int i = 0;
         UserField firstUserField = list.get(i);
         if (firstUserField.hasStyle(SUBTYPE)) {
-            firstUserField = list.get(++i);
+            //first userfield is a subtype but we want to get the tab list for no subtype -> return the empty tab list
+            if (SubType.isDummy(subType)) {
+                return tabSubLists;
+            }
+            //first subtype definition matches the given subtype
+            if (subType.hasUserField(firstUserField)) {
+                firstUserField = list.get(++i);
+            } else {
+                //first subtype definition does not match the given subtype
+                for (i++; i < list.size(); i++) {
+                    //search for the first UserField after the UserField with the given subtype
+                    firstUserField = list.get(i);
+                    if (subType.hasUserField(firstUserField)) {
+                        if (++i < list.size()) {
+                            firstUserField = list.get(i);
+                            break;
+                        }
+                    }
+                }
+            }
         }
         if (firstUserField.hasStyle(TAB)) {
             tabSubList.add(firstUserField);
@@ -129,6 +148,9 @@ public class UserFieldList implements Cloneable, Iterable<UserField> {
             UserField userField = list.get(i);
             if (userField.hasStyle(SUBTYPE)) {
                 lastSubTypeField = userField;
+                if (i == list.size() - 1 && !tabSubList.isEmpty()) {
+                    tabSubLists.add(tabSubList);
+                }
                 continue;
             }
             if (lastSubTypeField == null || subType != null && subType.hasUserField(lastSubTypeField)) {
@@ -138,7 +160,7 @@ public class UserFieldList implements Cloneable, Iterable<UserField> {
                 }
                 tabSubList.add(userField);
             }
-            if (i == list.size() - 1) {
+            if (i == list.size() - 1 && !tabSubList.isEmpty()) {
                 tabSubLists.add(tabSubList);
             }
         }

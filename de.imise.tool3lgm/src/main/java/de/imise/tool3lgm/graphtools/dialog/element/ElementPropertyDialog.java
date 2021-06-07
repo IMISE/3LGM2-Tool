@@ -47,7 +47,7 @@ import de.imise.util.swing.component.tab.ReorderableTabbedPane;
  *
  * @author N.N., AXS
  */
-public class ElementPropertyDialog extends AbstractElementPropertyDialog implements ActionListener {
+public abstract class ElementPropertyDialog extends AbstractElementPropertyDialog implements ActionListener {
 
     /**
      * @param modelElement

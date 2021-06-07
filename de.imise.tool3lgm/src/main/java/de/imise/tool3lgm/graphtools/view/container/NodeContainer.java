@@ -54,9 +54,6 @@ public class NodeContainer extends ElementContainer implements AlphabeticalSortT
      */
     public static final int MAX_Y_SIZE = 2000;
 
-    /** Prefix for invisible graph elements in the tree */
-    private static final String HIDDEN_CONTAINER_TREE_STRING_PREFIX = Tool3lgmConstants.getResString("ausgebl") + " ";
-
     //dieser Wert steht für alles Mögliche zur Verfügung (daher der unspezifische Name)
     //Momentane Verwenung:
     //	- AufgabenContainer:	Anzahl ihrer redundanten Konfigs
@@ -531,7 +528,7 @@ public class NodeContainer extends ElementContainer implements AlphabeticalSortT
 
     @Override
     public final String toString() {
-        String nameWithSzens = me.hasSzenarioContainer() ? me.getNameWithSzens() : me.toString();
+        String nameWithSzens = me.hasSubType() || me.hasSzenarioContainer() ? me.getNameWithSzens() : me.toString();
         if (me.isPaintable() && !isVisible() && doc instanceof Szenario) {
             nameWithSzens = HIDDEN_CONTAINER_TREE_STRING_PREFIX + nameWithSzens;
         }

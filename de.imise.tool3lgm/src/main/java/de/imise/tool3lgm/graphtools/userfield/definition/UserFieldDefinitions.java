@@ -1,6 +1,7 @@
 package de.imise.tool3lgm.graphtools.userfield.definition;
 
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
+import static de.imise.tool3lgm.graphtools.userfield.definition.SubType.DUMMY_SUBTYPE;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -1159,9 +1160,34 @@ public final class UserFieldDefinitions extends UserFieldDefinitionChangeHandler
      * @return
      */
     public SubType getSubType(final Class<? extends ModelElement> elementClass, final String subTypeID) {
+        if (DUMMY_SUBTYPE.hasID(subTypeID)) {
+            return DUMMY_SUBTYPE;
+        }
         for (UserField userField : getUserFields(elementClass)) {
             if (userField.hasStyle(Style.SUBTYPE) && userField.hasID(subTypeID)) {
                 return new SubType(userField);
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Searches all UserFieldLists of all SubTypes for a subtype with the given
+     * ID.
+     *
+     * @param elementClass
+     * @param subTypeID
+     * @return
+     */
+    public SubType getSubType(final String subTypeID) {
+        if (DUMMY_SUBTYPE.hasID(subTypeID)) {
+            return DUMMY_SUBTYPE;
+        }
+        for (UserFieldList userFieldList : classToUserFieldTargetSpecificListMap.values()) {
+            for (UserField userField : userFieldList) {
+                if (userField.hasStyle(Style.SUBTYPE) && userField.hasID(subTypeID)) {
+                    return new SubType(userField);
+                }
             }
         }
         return null;

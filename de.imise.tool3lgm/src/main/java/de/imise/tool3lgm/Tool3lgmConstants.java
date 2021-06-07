@@ -191,7 +191,7 @@ public abstract class Tool3lgmConstants {
 
     /** Prefixes of resources */
     private static final String CONFIRM_QUESTION_RESSOURCE_PREFIX = "CONFIRM_";
-    private static final String TOOLTIP_RESSOURCE_PREFIX = "TOOLTIP_";
+    public static final String TOOLTIP_RESSOURCE_PREFIX = "TOOLTIP_";
     private static final String ICON_LARGE_PREFIX = "ICON_LARGE_";
     private static final String ICON_SMALL_PREFIX = "ICON_SMALL_";
 
@@ -292,16 +292,28 @@ public abstract class Tool3lgmConstants {
      */
     public static final String ANALYSEN_FILE_NAME = UserProperties.getLocale().getLanguage().equals("en") ? "Tool3lgm.analysis" : "Tool3lgm_" + UserProperties.getLocale().getLanguage() + ".analysis";
 
-    /** Absoluter Pfad zur Datei mit den Standardanalysen der nachrichtenbasiertem Metamodell in den Resourcen */
+    /**
+     * Absoluter Pfad zur Datei mit den Standardanalysen der
+     * nachrichtenbasiertem Metamodell in den Resourcen
+     */
     public static final String ORIGINAL_ANALYSEN_FILE_NAME = UserProperties.getLocale().getLanguage().equals("en") ? "Original_Tool3lgm.analysis" : "Original_Tool3lgm_" + UserProperties.getLocale().getLanguage() + ".analysis";
 
-    /** Absoluter Pfad zur Datei mit den Standardanalysen der serviceorientiertem Metamodell in den Resourcen */
+    /**
+     * Absoluter Pfad zur Datei mit den Standardanalysen der serviceorientiertem
+     * Metamodell in den Resourcen
+     */
     public static final String SERVICE_ANALYSEN_FILE_NAME = UserProperties.getLocale().getLanguage().equals("en") ? "Service_Tool3lgm.analysis" : "Service_Tool3lgm_" + UserProperties.getLocale().getLanguage() + ".analysis";
 
-    /** Absoluter Pfad zur Datei mit den Standardanalysen für Nachrichtenbasierte Metamodelle in den Resourcen */
+    /**
+     * Absoluter Pfad zur Datei mit den Standardanalysen für Nachrichtenbasierte
+     * Metamodelle in den Resourcen
+     */
     public static final URL DEFAULT_ORIGINAL_ANALYSEN_RESSOURCE_URL = ClassLoader.getSystemResource(ORIGINAL_ANALYSEN_FILE_NAME);
 
-    /** Absoluter Pfad zur Datei mit den Standardanalysen für Service Metamodelle in den Resourcen */
+    /**
+     * Absoluter Pfad zur Datei mit den Standardanalysen für Service Metamodelle
+     * in den Resourcen
+     */
     public static final URL DEFAULT_SERVICE_ANALYSEN_RESSOURCE_URL = ClassLoader.getSystemResource(SERVICE_ANALYSEN_FILE_NAME);
 
     /** Locale, mit der der Baukasten gestartet wurde. */

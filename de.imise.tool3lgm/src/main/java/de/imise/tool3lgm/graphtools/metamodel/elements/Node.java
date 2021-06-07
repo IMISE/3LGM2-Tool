@@ -1,5 +1,7 @@
 package de.imise.tool3lgm.graphtools.metamodel.elements;
 
+import static de.imise.tool3lgm.graphtools.userfield.definition.SubType.DUMMY_SUBTYPE;
+
 import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.userfield.definition.SubType;
@@ -16,7 +18,7 @@ public abstract class Node extends ModelElement {
     /**
      *
      */
-    private SubType subType = SubType.DUMMY_SUBTYPE;
+    private SubType subType = DUMMY_SUBTYPE;
 
     @Override
     public ElementContainer createContainer(final GraphDocument doc) {
@@ -49,11 +51,23 @@ public abstract class Node extends ModelElement {
     }
 
     /**
+     * Sets the subtype of this. If the subtypes superclass is not assignable
+     * frim this class nothing happens (it will be ignored).
+     *
      * @param subType the subType to set
      */
     @Override
     public final void setSubType(final SubType subType) {
-        this.subType = subType == null ? SubType.DUMMY_SUBTYPE : subType;
+        invalidateNameWithSzens();
+        if (subType == null) {
+            this.subType = DUMMY_SUBTYPE;
+            return;
+        }
+        Class<? extends ModelElement> superClass = subType.getSuperClass();
+        Class<? extends Node> thisClass = getClass();
+        if (superClass.isAssignableFrom(thisClass)) {
+            this.subType = subType;
+        }
     }
 
     @Override

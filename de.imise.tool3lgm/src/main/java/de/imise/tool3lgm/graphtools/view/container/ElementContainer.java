@@ -20,6 +20,7 @@ import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 
 import de.imise.tool3lgm.Static;
+import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.IDSource;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.CompositionEdge;
@@ -38,6 +39,9 @@ import de.imise.tool3lgm.graphtools.view.graph.Shape;
 import de.imise.tool3lgm.graphtools.view.graph.SpecialInfoLabel;
 
 public abstract class ElementContainer extends JLabel implements Cloneable, GraphDocumentOwner, IDSource {
+
+    /** Prefix for invisible graph elements in the tree */
+    protected static final String HIDDEN_CONTAINER_TREE_STRING_PREFIX = Tool3lgmConstants.getResString("ausgebl") + " ";
 
     /**
      * COMMENTME
@@ -424,7 +428,7 @@ public abstract class ElementContainer extends JLabel implements Cloneable, Grap
      */
     @Override
     public String toString() {
-        return isFadedIn() ? me.toString() : getResString("ausgebl") + " " + me.toString();
+        return isFadedIn() ? me.toString() : HIDDEN_CONTAINER_TREE_STRING_PREFIX + " " + me.toString();
     }
 
     /**

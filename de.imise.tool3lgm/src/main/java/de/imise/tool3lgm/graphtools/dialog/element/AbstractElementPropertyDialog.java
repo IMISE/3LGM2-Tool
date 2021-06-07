@@ -51,6 +51,7 @@ import de.imise.tool3lgm.graphtools.userfield.definition.UserFieldList;
 import de.imise.tool3lgm.graphtools.userfield.definition.UserFieldTarget;
 import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.panel.PropertyDialogUserFieldPanel;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
+import de.imise.util.Sys;
 
 /**
  * @author AXS (02.12.2019)
@@ -61,6 +62,12 @@ public class AbstractElementPropertyDialog extends AbstractTabbedPropertyDialog 
      * ModelElement its properties are displayed or changable in this dialog.
      */
     private final ModelElement modelElement;
+
+    /**
+     * The subtype of the modelelement to detect the change of the subtype
+     * during this dialog is open.
+     */
+    private SubType subType;
 
     /**
      * If the modelElement is a copy from a template element so this variable
@@ -126,6 +133,9 @@ public class AbstractElementPropertyDialog extends AbstractTabbedPropertyDialog 
      */
     public AbstractElementPropertyDialog(final ModelElement modelElement) {
         super(modelElement.getCollection());
+
+        subType = modelElement.getSubType();
+
         //add changeListener for tab changes to updates the displayed panel depending buttons
         //must be added before adding the tabs to get the very first tab change event
         tabbedPane.addChangeListener(this);
@@ -177,6 +187,9 @@ public class AbstractElementPropertyDialog extends AbstractTabbedPropertyDialog 
 
     }
 
+    /**
+     *
+     */
     private void addUserFieldTabs() {
         // wenn es mind ein Userfield für diese Klasse gibt -> zeige das USerFieldPanel
         UserFieldDefinitions userFieldDefinitions = gdcoll.getUserFieldDefinitions();
@@ -188,7 +201,6 @@ public class AbstractElementPropertyDialog extends AbstractTabbedPropertyDialog 
             propertyDialogUserFieldPanels.add(userFieldPanel);
             addTab(userFieldPanel);
         }
-
     }
 
     /**
@@ -345,6 +357,14 @@ public class AbstractElementPropertyDialog extends AbstractTabbedPropertyDialog 
         if (closing) {
             return;
         }
+
+        SubType oldSubType = subType;
+        subType = modelElement.getSubType();
+
+        if (oldSubType != subType) {
+            Sys.err1("Jetzt alle Panels neu machen: Subtyp alt = " + oldSubType);
+        }
+
         headerPanel.update();
         for (int i = 0; i < getTabCount(); i++) {
             Component c = getTabComponentAt(i);

@@ -44,8 +44,8 @@ public final class ErrorDecoratedElementPropertyDialog extends ElementPropertyDi
 
     @Override
     public void update() {
-        updateDisplayedErrors();
         super.update();
+        updateDisplayedErrors();
     }
 
     /**
