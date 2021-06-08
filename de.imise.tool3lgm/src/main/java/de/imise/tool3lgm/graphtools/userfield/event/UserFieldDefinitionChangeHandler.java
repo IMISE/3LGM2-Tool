@@ -3,7 +3,8 @@
  */
 package de.imise.tool3lgm.graphtools.userfield.event;
 
-import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
+import de.imise.tool3lgm.graphtools.metamodel.MetaModelDefinition;
+import de.imise.tool3lgm.graphtools.metamodel.MetaModelSpecific;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.model.LGMChangeListener;
@@ -13,7 +14,7 @@ import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.panel.PropertyDi
 /**
  * @author AXS
  */
-public abstract class UserFieldDefinitionChangeHandler implements LGMChangeListenerSimple {
+public abstract class UserFieldDefinitionChangeHandler implements LGMChangeListenerSimple, MetaModelSpecific {
 
     /**
      * Wenn diese Variable <code>true</code> ist, wird bei der Abfrage
@@ -39,9 +40,9 @@ public abstract class UserFieldDefinitionChangeHandler implements LGMChangeListe
         return gdcoll;
     }
 
-    /** Liefert das MetaModel der zugehörigen {@link GDCollection} */
-    public MetaModel getMetaModel() {
-        return gdcoll.getMetaModel();
+    @Override
+    public final Class<? extends MetaModelDefinition> getMetaModelDefinitionClass() {
+        return gdcoll.getMetaModelDefinitionClass();
     }
 
     /**

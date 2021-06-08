@@ -17,8 +17,6 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 
 import de.imise.tool3lgm.Static;
-import de.imise.tool3lgm.graphtools.metamodel.MetaModelDefinition;
-import de.imise.tool3lgm.graphtools.metamodel.MetaModelSpecific;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.CopyDependencyResolver.CopyDependencyResolverResultSimple;
@@ -43,7 +41,7 @@ import de.imise.util.swing.dialog.MultipleOptionPane;
  *
  * @author Thomas Rudert
  */
-public final class UserFieldDefinitions extends UserFieldDefinitionChangeHandler implements Cloneable, MetaModelSpecific {
+public final class UserFieldDefinitions extends UserFieldDefinitionChangeHandler implements Cloneable {
 
     /**
      * Klasse, über die die sogenannten Modellvariablen identifiziert werden,
@@ -136,11 +134,6 @@ public final class UserFieldDefinitions extends UserFieldDefinitionChangeHandler
         partValueSumSinglePartResults = new PartValueSumSinglePartResults();
         weightReplacer = new WeightReplacer();
         definitionsAnalyzer = new UserFieldDefinitionsAnalyzer(this);
-    }
-
-    @Override
-    public Class<? extends MetaModelDefinition> getMetaModelDefinitionClass() {
-        return gdcoll.getMetaModelDefinitionClass();
     }
 
     /**
