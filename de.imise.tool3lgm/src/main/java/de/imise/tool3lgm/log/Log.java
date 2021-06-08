@@ -83,7 +83,7 @@ public class Log {
         log(level, meldung, null);
 
         //erweitert um was zu loggen
-        logger.log(level, meldung);
+        getLogger().log(level, meldung);
 
     }
 
