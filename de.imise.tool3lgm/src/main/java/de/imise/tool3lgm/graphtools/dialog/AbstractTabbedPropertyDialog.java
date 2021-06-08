@@ -62,7 +62,19 @@ public abstract class AbstractTabbedPropertyDialog extends AbstractPropertyDialo
      * @param component
      */
     protected void addTab(final Component component) {
-        addTab(component.getName(), component);
+        addTab(component, -1);
+    }
+
+    /**
+     * Fügt dem Dialog einen neuen Tab mit der übergebenen Componente hinzu. Der
+     * Titel des Tabs ist der wird über die getName()-Funktion der Componente
+     * ermittelt.
+     *
+     * @param component
+     * @param index
+     */
+    protected void addTab(final Component component, final int index) {
+        addTab(component.getName(), component, index);
     }
 
     /**
@@ -73,7 +85,19 @@ public abstract class AbstractTabbedPropertyDialog extends AbstractPropertyDialo
      * @param component
      */
     public void addTab(final String title, final Component component) {
-        addTab(title, null, component);
+        addTab(title, component, -1);
+    }
+
+    /**
+     * Fügt dem Dialog einen neuen Tab mit dem übergebenen Titel und der
+     * Komponente hinzu.
+     *
+     * @param title
+     * @param component
+     * @param index
+     */
+    public void addTab(final String title, final Component component, final int index) {
+        addTab(title, null, component, null, index);
     }
 
     /**
@@ -85,7 +109,37 @@ public abstract class AbstractTabbedPropertyDialog extends AbstractPropertyDialo
      * @param component
      */
     protected void addTab(final String title, final Icon icon, final Component component) {
-        tabbedPane.addTab(title, icon, component);
+        addTab(title, icon, component, -1);
+    }
+
+    /**
+     * Fügt dem Dialog einen neuen Tab mit dem übergebenen Titel, Icon und der
+     * Komponente hinzu.
+     *
+     * @param title
+     * @param icon
+     * @param component
+     * @param index
+     */
+    protected void addTab(final String title, final Icon icon, final Component component, final int index) {
+        addTab(title, icon, component, null, -1);
+    }
+
+    /**
+     * Fügt dem Dialog einen neuen Tab mit dem übergebenen Titel, Icon und der
+     * Komponente hinzu.
+     *
+     * @param title
+     * @param icon
+     * @param component
+     * @param tooltip
+     * @param index
+     */
+    protected void addTab(final String title, final Icon icon, final Component component, final String tooltip, int index) {
+        if (index < 0) {
+            index = tabbedPane.getTabCount();
+        }
+        tabbedPane.insertTab(title, icon, component, tooltip, index);
     }
 
     /**

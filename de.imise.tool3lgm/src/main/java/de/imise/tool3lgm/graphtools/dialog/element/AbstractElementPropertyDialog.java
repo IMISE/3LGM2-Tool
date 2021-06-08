@@ -51,7 +51,6 @@ import de.imise.tool3lgm.graphtools.userfield.definition.UserFieldList;
 import de.imise.tool3lgm.graphtools.userfield.definition.UserFieldTarget;
 import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.panel.PropertyDialogUserFieldPanel;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
-import de.imise.util.Sys;
 
 /**
  * @author AXS (02.12.2019)
@@ -154,7 +153,7 @@ public class AbstractElementPropertyDialog extends AbstractTabbedPropertyDialog 
         addTab(getResString("general"), descripPanel);
         addPartOfStructurePanel();
 
-        addUserFieldTabs();
+        addUserFieldTabs(-1);
 
         JPanel standardButtonsPanel = new JPanel();
         southButtonsPanel.setLayout(new BorderLayout());
@@ -190,7 +189,7 @@ public class AbstractElementPropertyDialog extends AbstractTabbedPropertyDialog 
     /**
      *
      */
-    private void addUserFieldTabs() {
+    private void addUserFieldTabs(int tabInsertIndex) {
         // wenn es mind ein Userfield für diese Klasse gibt -> zeige das USerFieldPanel
         UserFieldDefinitions userFieldDefinitions = gdcoll.getUserFieldDefinitions();
         Class<? extends ModelElement> modelElementClass = getModelElementClass();
@@ -199,7 +198,7 @@ public class AbstractElementPropertyDialog extends AbstractTabbedPropertyDialog 
         for (UserFieldList userFieldList : tabSubLists) {
             PropertyDialogUserFieldPanel userFieldPanel = new PropertyDialogUserFieldPanel(this, userFieldList);
             propertyDialogUserFieldPanels.add(userFieldPanel);
-            addTab(userFieldPanel);
+            addTab(userFieldPanel, tabInsertIndex >= 0 ? tabInsertIndex++ : tabInsertIndex);
         }
     }
 
@@ -358,12 +357,7 @@ public class AbstractElementPropertyDialog extends AbstractTabbedPropertyDialog 
             return;
         }
 
-        SubType oldSubType = subType;
-        subType = modelElement.getSubType();
-
-        if (oldSubType != subType) {
-            Sys.err1("Jetzt alle Panels neu machen: Subtyp alt = " + oldSubType);
-        }
+        checkSubTypeTabs();
 
         headerPanel.update();
         for (int i = 0; i < getTabCount(); i++) {
@@ -372,6 +366,26 @@ public class AbstractElementPropertyDialog extends AbstractTabbedPropertyDialog 
                 ((ElementDialogPanel) c).update();
             }
         }
+    }
+
+    /**
+     *
+     */
+    private void checkSubTypeTabs() {
+        SubType oldSubType = subType;
+        subType = modelElement.getSubType();
+        if (oldSubType == subType) {
+            return;
+        }
+        int tabInsertIndex = -1;
+        for (int i = getTabCount() - 1; i >= 0; i--) {
+            Component tab = getTabComponentAt(i);
+            if (propertyDialogUserFieldPanels.contains(tab)) {
+                removeTab(i);
+                tabInsertIndex = i;
+            }
+        }
+        addUserFieldTabs(tabInsertIndex);
     }
 
     /**

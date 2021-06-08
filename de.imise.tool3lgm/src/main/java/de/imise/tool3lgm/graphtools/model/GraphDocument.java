@@ -4735,7 +4735,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
                 setSubType(me, subType, pid);
             }
             finish_transaction(pid);
-            distributeEvent(ELEMENT_GRAPHICS_CHANGED, pid);
+            distributeEvent(DATA_CHANGED, pid);
         }
     }
 
