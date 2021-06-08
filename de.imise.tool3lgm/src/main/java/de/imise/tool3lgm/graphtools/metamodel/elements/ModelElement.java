@@ -415,10 +415,12 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
             return;
         }
         mySzenarios.remove(gdcoll.getMainDoc());
-        List<GraphDocument> mySortedSzenarios = new ArrayList<>(mySzenarios);
-        Alphabetical.sort(mySortedSzenarios);
-        nameBuffer.append(INNER_NAME_PARTS_SPACE);
-        nameBuffer.append(mySortedSzenarios);
+        if (!mySzenarios.isEmpty()) {
+            List<GraphDocument> mySortedSzenarios = new ArrayList<>(mySzenarios);
+            Alphabetical.sort(mySortedSzenarios);
+            nameBuffer.append(INNER_NAME_PARTS_SPACE);
+            nameBuffer.append(mySortedSzenarios);
+        }
         nameWithSzens = nameBuffer.toString();
     }
 
