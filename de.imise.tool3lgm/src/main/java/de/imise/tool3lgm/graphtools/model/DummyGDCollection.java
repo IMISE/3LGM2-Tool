@@ -5,6 +5,7 @@ import static de.imise.tool3lgm.graphtools.undoredo.TransactionManager.STANDARD_
 import de.imise.tool3lgm.Tool3lgmModelType;
 import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
+import de.imise.tool3lgm.graphtools.userfield.definition.SubType;
 import de.imise.tool3lgm.graphtools.userfield.definition.UserField;
 import de.imise.tool3lgm.graphtools.userfield.definition.UserField.Style;
 import de.imise.tool3lgm.graphtools.userfield.definition.UserFieldDefinitions;
@@ -26,24 +27,30 @@ public final class DummyGDCollection extends GDCollection {
     }
 
     /**
-     * @param <T>
      * @param elementClass
+     * @param subType
      * @return
      */
-    public ModelElement getDummyElement(final Class<? extends ModelElement> elementClass) {
+    public ModelElement createElement(final Class<? extends ModelElement> elementClass, final SubType subType) {
         LGMGraphDocument mainDoc = getMainDoc();
         ElementsNameBuilder elementsNameBuilder = getElementsNameBuilder();
         String displayableClassName = elementsNameBuilder.getDisplayableName(elementClass);
         String name = getResString("dummy_element_name") + " " + displayableClassName;
         String description = getResString("dummy_element_description");
-        NodeContainer dummyNc = mainDoc.createNodeAndContainer(elementClass, name, description, STANDARD_PID);
+        NodeContainer dummyNc = mainDoc.createNodeAndContainer(elementClass, subType, name, description, STANDARD_PID);
         ModelElement dummyMe = dummyNc.getElement();
         fillUSerFieldsWithDummyValues(dummyMe);
         return dummyMe;
     }
 
+    /**
+     *
+     */
     int numberValueCounter = 1;
 
+    /**
+     * @param me
+     */
     private void fillUSerFieldsWithDummyValues(final ModelElement me) {
         Class<? extends ModelElement> elementClass = me.getClass();
         UserFieldDefinitions userFieldDefinitions = getUserFieldDefinitions();

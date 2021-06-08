@@ -34,14 +34,10 @@ import javax.swing.JOptionPane;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
-import de.imise.tool3lgm.Static;
-import de.imise.tool3lgm.Tool3lgmModelType;
-import de.imise.tool3lgm.graphtools.dialog.element.ElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.dialog.element.PreviewElementPropertyDialogCreator;
 import de.imise.tool3lgm.graphtools.metamodel.CoreMetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
-import de.imise.tool3lgm.graphtools.model.DummyGDCollection;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.LGMGraphDocument;
 import de.imise.tool3lgm.graphtools.userfield.definition.UserField;
@@ -224,8 +220,15 @@ public final class UserFieldDeclarationDialog extends AbstractUserFieldDeclarati
         userFieldTypeComboBox.addSeparator(separatorName);
     }
 
+    /**
+     *
+     */
     private ActionEvent lastActionEvent = null;
 
+    /**
+     * @param commandSource
+     * @return
+     */
     private boolean is(final Object commandSource) {
         return lastActionEvent.getSource() == commandSource;
     }
@@ -391,6 +394,9 @@ public final class UserFieldDeclarationDialog extends AbstractUserFieldDeclarati
         previewButton.setEnabled(isPreviewEnabeld());
     }
 
+    /**
+     * @return
+     */
     private boolean reallyDelete() {
         //Bevor ein userField gelöscht wird, wird nochmal eine Sicherheitsabfrage gestellt.
         //Wenn die Siocherheitsabfrage nicht bestätigt wird, wird cancel true. D.h. das Löschen wird abgebrochen.
@@ -439,13 +445,7 @@ public final class UserFieldDeclarationDialog extends AbstractUserFieldDeclarati
             return;
         }
         Class<? extends ModelElement> selectedClass = classComboBox.getSelectedClass().asSubclass(ModelElement.class);
-        GDCollection selectedGDColl = Static.getSelectedGDCollection();
-        Tool3lgmModelType modelType = selectedGDColl.getModelType();
-        DummyGDCollection dummyGDCollection = new DummyGDCollection(modelType);
-        dummyGDCollection.setUserFieldDefinitions(definitions);
-        ModelElement dummyElement = dummyGDCollection.getDummyElement(selectedClass);
-        ElementPropertyDialog propertyDialog = dummyElement.getPropertyDialog();
-        PreviewElementPropertyDialogCreator.showPreview(propertyDialog);
+        PreviewElementPropertyDialogCreator.showPreview(gdcoll, selectedClass);
     }
 
     @Override
