@@ -161,4 +161,13 @@ public abstract class DynamicTree extends JTree implements GraphDocumentOwner {
         }
     }
 
+    /**
+     *
+     */
+    public final void expandAll() {
+        DefaultTreeModel model = (DefaultTreeModel) getModel();
+        DefaultMutableTreeNode root = (DefaultMutableTreeNode) model.getRoot();
+        expandNodeFull(root);
+    }
+
 }
