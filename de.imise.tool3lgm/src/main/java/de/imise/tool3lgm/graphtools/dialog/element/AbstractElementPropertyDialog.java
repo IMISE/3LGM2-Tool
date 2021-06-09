@@ -51,6 +51,7 @@ import de.imise.tool3lgm.graphtools.userfield.definition.UserFieldList;
 import de.imise.tool3lgm.graphtools.userfield.definition.UserFieldTarget;
 import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.panel.PropertyDialogUserFieldPanel;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
+import de.imise.util.swing.component.ParentComponentFinder;
 
 /**
  * @author AXS (02.12.2019)
@@ -471,17 +472,40 @@ public class AbstractElementPropertyDialog extends AbstractTabbedPropertyDialog 
         dispose();
     }
 
+    /**
+     * @param button
+     * @return
+     */
+    private AbstractElementPropertyDialog getParentDialog(final JButton button) {
+        Component dialog = ParentComponentFinder.getFrameOrDialog(button);
+        if (dialog instanceof AbstractElementPropertyDialog) {
+            return (AbstractElementPropertyDialog) dialog;
+        }
+        return null;
+    }
+
     @Override
     public void actionPerformed(final ActionEvent e) {
-        if (e.getSource() == okButton) {
-            closing = true;
-            commit(false);
-            close();
-        } else if (e.getSource() == cancelButton) {
-            closing = true;
-            cancel();
-        } else if (e.getSource() == applyButton) {
-            commit(true);
+        Object source = e.getSource();
+        if (source instanceof JButton) {
+            //the PreviewElementPropertyDialogCreator opens dialogs and adds the
+            //contentpane of the dialog to an other dialog. The buttons are on
+            //this content pane and they must close the other dialog where the
+            //buttons are displayed now. So we have to fin the real parent dialog.
+            AbstractElementPropertyDialog parentDialog = getParentDialog((JButton) source);
+            if (parentDialog == null) {
+                parentDialog = this;
+            }
+            if (source == okButton) {
+                parentDialog.closing = true;
+                parentDialog.commit(false);
+                parentDialog.close();
+            } else if (source == cancelButton) {
+                parentDialog.closing = true;
+                parentDialog.cancel();
+            } else if (source == applyButton) {
+                parentDialog.commit(true);
+            }
         }
         ElementContainer ec = modelElement.getContainer(mainDoc);
         mainDoc.select(ec, transactionID);

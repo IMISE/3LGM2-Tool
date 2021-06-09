@@ -166,14 +166,13 @@ public class ElementPropertyDialogsContext {
      * @param doc
      */
     public static void closeAllDialogs(final GraphDocument doc) {
+        final ElementPropertyDialogsContext contexts = context;
         for (int n = context.dialogs.size() - 1; n >= 0; n--) {
             ElementPropertyDialog dialog = context.dialogs.get(n);
             // wenn der Dialog zum zu schließenden Modell gehört
             if (doc.isMyElement(dialog.getModelElement())) {
                 // alle Änderungen der geöffneten Dialoge zurück rollen
                 dialog.cancel();
-                // in pd.cancel() wird die dialogs.size() um -1 geändert
-                n--;
             }
         }
     }

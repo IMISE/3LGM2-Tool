@@ -100,6 +100,13 @@ public class PreviewElementPropertyDialogCreator {
         ElementPropertyDialog previewDialog = initPreviewDialog(dummyGDCollection);
         //show the dialog
         previewDialog.showDialog();
+        previewDialog.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosed(final WindowEvent e) {
+                ElementPropertyDialogsContext.closeAllDialogs(mainDoc);
+            }
+
+        });
         TreePath selectionPath = modelBrowserTree.getSelectionPath();
         modelBrowserTree.scrollPathToVisible(selectionPath);
 
