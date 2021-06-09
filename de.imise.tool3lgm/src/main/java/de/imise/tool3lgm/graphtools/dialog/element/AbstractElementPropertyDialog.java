@@ -369,6 +369,25 @@ public class AbstractElementPropertyDialog extends AbstractTabbedPropertyDialog 
     }
 
     /**
+     * @return the index after the {@link StructurePanel} tab or the index after
+     *         the {@link DescripPanel} tab if the element has no
+     *         {@link HasPartEdge} and so no {@link StructurePanel} tab.
+     */
+    private int getStandardInsertIndexForUserFieldTabs() {
+        int index = -1;
+        for (int i = 0; i < getTabCount(); i++) {
+            Component tab = getTabComponentAt(i);
+            if (tab instanceof DescripPanel) {
+                index = i + 1;
+            } else if (tab instanceof StructurePanel) {
+                index = i + 1;
+                break;
+            }
+        }
+        return index;
+    }
+
+    /**
      *
      */
     private void checkSubTypeTabs() {
@@ -377,7 +396,8 @@ public class AbstractElementPropertyDialog extends AbstractTabbedPropertyDialog 
         if (oldSubType == subType) {
             return;
         }
-        int tabInsertIndex = -1;
+
+        int tabInsertIndex = getStandardInsertIndexForUserFieldTabs();
         for (int i = getTabCount() - 1; i >= 0; i--) {
             Component tab = getTabComponentAt(i);
             if (propertyDialogUserFieldPanels.contains(tab)) {
