@@ -294,12 +294,12 @@ public final class ModelBrowserTree extends DynamicTree implements UserFieldList
         List<ElementClassTreeNode> abstractClassNodes = new ArrayList<>();
         ElementsNameBuilder elementsNameBuilder = doc.getElementsNameBuilder();
         for (Class<? extends ModelElement> abstractClass : abstractClasses) {
-            String label = elementsNameBuilder.getDisplayableName(abstractClass);
+            String label = elementsNameBuilder.getDisplayablePluralFullName(abstractClass);
             abstractClassNodes.add(new ElementClassTreeNode(abstractClass, label));
         }
         //jetzt die ElementKnoten unter die abstrakten Knoten hängen oder unter den LayerKnoten selbst, wenn es keinen abstakten Oberklassenkoten gibt
         for (Class<? extends ModelElement> elementClass : treeLayerVisibleInstancialeNodes) {
-            String label = elementsNameBuilder.getDisplayableFullName(elementClass);
+            String label = elementsNameBuilder.getDisplayablePluralFullName(elementClass);
             ElementClassTreeNode instanciableClassNode = new ElementClassTreeNode(elementClass, label, false); // muss nicht selbst sortieren, weil die Elemente bereits sortiert reinkommen
             elementClassToParentNode.put(elementClass, instanciableClassNode);
             boolean superClassFound = false;
@@ -680,7 +680,7 @@ public final class ModelBrowserTree extends DynamicTree implements UserFieldList
     private ElementClassTreeNode getOrCreateTextFieldNode(final StringTreeNode layerNode, ElementClassTreeNode textFieldNode) {
         if (textFieldNode == null) {
             ElementsNameBuilder elementsNameBuilder = doc.getElementsNameBuilder();
-            String label = elementsNameBuilder.getDisplayableName(Textfield.class);
+            String label = elementsNameBuilder.getDisplayablePluralName(Textfield.class);
             textFieldNode = new ElementClassTreeNode(Textfield.class, label, false);
         }
         if (textFieldNode.getParent() == null) {
