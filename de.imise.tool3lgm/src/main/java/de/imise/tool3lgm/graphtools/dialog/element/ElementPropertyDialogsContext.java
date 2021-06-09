@@ -69,8 +69,8 @@ public class ElementPropertyDialogsContext {
      * @param obj Dialog zu diesem Objekt
      * @return ModelElement obj, wenn schon ein Dialog existiert, null sonst
      */
-    public static ElementPropertyDialog hasOpenDialog(final ModelElement obj) {
-        return context.hasOpenDialogInternal(obj);
+    public static ElementPropertyDialog getOpenDialog(final ModelElement obj) {
+        return context.getOpenDialogInternal(obj);
     }
 
     /**
@@ -80,7 +80,7 @@ public class ElementPropertyDialogsContext {
      * @param obj Dialog zu diesem Objekt
      * @return ModelElement obj, wenn schon ein Dialog existiert, null sonst
      */
-    private ElementPropertyDialog hasOpenDialogInternal(final ModelElement obj) {
+    private ElementPropertyDialog getOpenDialogInternal(final ModelElement obj) {
         for (ElementPropertyDialog dialog : dialogs) {
             if (obj == dialog.getModelElement()) {
                 return dialog;
@@ -98,7 +98,7 @@ public class ElementPropertyDialogsContext {
      * @return
      */
     public static ElementPropertyDialog getDialog(final ModelElement me) {
-        ElementPropertyDialog dialog = ElementPropertyDialogsContext.hasOpenDialog(me);
+        ElementPropertyDialog dialog = ElementPropertyDialogsContext.getOpenDialog(me);
         if (dialog == null) {
             dialog = me.getNewPropertyDialogInsance();
             context.dialogs.add(dialog);
@@ -188,6 +188,11 @@ public class ElementPropertyDialogsContext {
                 toolTipProvider.addToolTipMouseListeners(toolTipTarget);
             }
         }
+    }
+
+    @Override
+    public String toString() {
+        return getClass().getSimpleName() + ": " + dialogs;
     }
 
 }

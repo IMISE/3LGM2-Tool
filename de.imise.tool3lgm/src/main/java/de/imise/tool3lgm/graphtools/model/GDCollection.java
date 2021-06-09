@@ -1091,7 +1091,7 @@ public class GDCollection extends UserFieldTarget implements MetaModelSpecific {
                 continue;
             }
             //den evtl. geöffneten Dialog des Elementes scließen
-            ElementPropertyDialog dialog = ElementPropertyDialogsContext.hasOpenDialog(me);
+            ElementPropertyDialog dialog = ElementPropertyDialogsContext.getOpenDialog(me);
             if (dialog != null) {
                 dialog.performOK();
             }
