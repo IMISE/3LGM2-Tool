@@ -11,7 +11,6 @@ import de.imise.tool3lgm.metamodel.service.edge.ApplicationComponent_PhysicalDat
 import de.imise.tool3lgm.metamodel.service.edge.ApplicationComponent_RepresentationForm_Edge;
 import de.imise.tool3lgm.metamodel.service.edge.ApplicationComponent_Use_Edge;
 import de.imise.tool3lgm.metamodel.service.edge.Function_Use_Edge;
-import de.imise.tool3lgm.metamodel.service.edge.ObjectType_RepresentationForm_Edge;
 import de.imise.tool3lgm.metamodel.service.edge.OrganisationalUnit_Use_Edge;
 
 /**
@@ -24,7 +23,9 @@ public abstract class ApplicationComponent extends Node {
         ElementPropertyDialog dialog = super.createPropertyDialog();
         dialog.addPathConnectionPanel(ApplicationComponent_Use_Edge.class, Function_Use_Edge.class);
         dialog.addPathConnectionPanel(ApplicationComponent_Use_Edge.class, OrganisationalUnit_Use_Edge.class);
-        dialog.addPathConnectionPanel(LABEL_FIRST_EDGE_ELEMENT_NAME, LABEL_FIRST_EDGE_CONNECTION_NAME, ApplicationComponent_RepresentationForm_Edge.class, ObjectType_RepresentationForm_Edge.class);
+        //dialog.addPathConnectionPanel(LABEL_FIRST_EDGE_ELEMENT_NAME, LABEL_FIRST_EDGE_CONNECTION_NAME, ApplicationComponent_RepresentationForm_Edge.class, ObjectType_RepresentationForm_Edge.class);
+        //HIER nicht bis zu den Objekttypen gehen, weil man sonst keine vorhdándenen Repräsentationsformen auswählen kann
+        dialog.addPathConnectionPanel(LABEL_FIRST_EDGE_ELEMENT_NAME, LABEL_FIRST_EDGE_CONNECTION_NAME, ApplicationComponent_RepresentationForm_Edge.class);
         dialog.addMultiPanel(PhysicalDataProcessingComponent.class);
         dialog.addMultiPanelPathPanel(LABEL_LAST_EDGE_CONNECTION_NAME, ApplicationComponent_PhysicalDataProcessingComponent_RequiresForFunctionality_Edge.class);
         dialog.addMultiPanelPathPanel(LABEL_LAST_EDGE_CONNECTION_NAME, ApplicationComponent_PhysicalDataProcessingComponent_RequiresForStorage_Edge.class);
