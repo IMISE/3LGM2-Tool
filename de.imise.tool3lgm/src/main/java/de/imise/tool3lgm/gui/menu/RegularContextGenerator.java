@@ -36,6 +36,7 @@ import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_UNLINK;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_UNLINK_SELECTED_TO_SUBMODEL;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_OPTION_GDCOLL_AUTOMATIC_MODE;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_OPTION_GDOC_VERIFICATION_MODE;
+import static de.imise.tool3lgm.graphtools.undoredo.CommandHandler.getArgumentsString;
 import static de.imise.tool3lgm.graphtools.undoredo.TransactionManager.STANDARD_PID;
 import static de.imise.tool3lgm.graphtools.userfield.definition.SubType.DUMMY_SUBTYPE;
 import static de.imise.tool3lgm.graphtools.userfield.definition.UserField.Style.SUBTYPE;
@@ -365,10 +366,8 @@ public class RegularContextGenerator extends ElementSelectionContextGenerator im
      * @return
      */
     private JMenuItem getCreateAddictedItem(final String dispayableNameOrResKey, final GraphDocument doc, final ModelElement master, final Class<? extends CompositionEdge> compositionClass, final Class<? extends ModelElement> slaveClass) {
-        String compositionClassName = compositionClass.getName();
-        String slaveClassName = slaveClass.getSimpleName();
-        String arguments = doc.getID() + " " + master.getID() + " " + compositionClassName + " " + slaveClassName;
-        JMenuItem item = getItem(dispayableNameOrResKey, MODEL_ACTION_CREATE_ADDICTED, arguments);
+        String argumentsString = getArgumentsString(doc, master, compositionClass, slaveClass);
+        JMenuItem item = getItem(dispayableNameOrResKey, MODEL_ACTION_CREATE_ADDICTED, argumentsString);
         item.setEnabled(master.countConnections(compositionClass) < CoreMetaModel.getMaxMasterToSlaveCardinality(compositionClass));
         return item;
     }

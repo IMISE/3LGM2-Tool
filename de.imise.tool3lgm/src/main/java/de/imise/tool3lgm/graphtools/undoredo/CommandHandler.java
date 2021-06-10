@@ -174,6 +174,9 @@ public class CommandHandler {
             //IDSource ? -> replace arg-Object by its ID
             if (arg != null && arg instanceof IDSource) {
                 arg = ((IDSource) arg).getID();
+                //Class ? -> take the ClassName
+            } else if (arg != null && arg instanceof Class<?>) {
+                arg = ((Class<?>) arg).getName();
             }
             //not a Number? -> convert arg to String that the command parser
             //understands as one token (numbers are already one token)
