@@ -28,6 +28,7 @@ import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.beans.PropertyChangeEvent;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -70,6 +71,7 @@ import de.imise.tool3lgm.graphtools.userfield.definition.UserFieldList;
 import de.imise.util.BrowseUtils;
 import de.imise.util.Sys;
 import de.imise.util.htmlxml.HTMLConverter;
+import de.imise.util.swing.FormScroller;
 import de.imise.util.swing.component.ParentComponentFinder;
 import de.imise.util.swing.component.text.ExtendedTextArea;
 import de.imise.util.swing.component.text.ExtendedTextField;
@@ -147,12 +149,22 @@ public class PropertyDialogUserFieldPanel extends ElementDialogPanel implements 
     private boolean scrollBackToTop = true;
 
     /**
+     *
+     */
+    public final UserField tabUserField;
+
+    /**
+     *
+     */
+    private final FormScroller formScroller;
+
+    /**
      * @param propertyDialog
      */
     public PropertyDialogUserFieldPanel(final AbstractElementPropertyDialog propertyDialog, final UserFieldList tabDefinition) {
         super(propertyDialog);
         mainPanel = createMainPanel();
-        create(tabDefinition);
+        tabUserField = create(tabDefinition);
         addComponentListener(new ComponentAdapter() {
             @Override
             public void componentShown(final ComponentEvent e) {
@@ -161,7 +173,7 @@ public class PropertyDialogUserFieldPanel extends ElementDialogPanel implements 
                 //groups, the ScrollPanel is moved to an unpredictable
                 //location. Here the scroll position is set back to (0,0).
                 if (scrollBackToTop) {
-                    JScrollPane scrollPane = ParentComponentFinder.getParent(mainPanel, JScrollPane.class);
+                    JScrollPane scrollPane = getScrollPane();
                     JScrollBar scrollBar = scrollPane.getHorizontalScrollBar();
                     scrollBar.setValue(0);
                     scrollBar = scrollPane.getVerticalScrollBar();
@@ -170,6 +182,10 @@ public class PropertyDialogUserFieldPanel extends ElementDialogPanel implements 
                 }
             }
         });
+
+        JScrollPane scrollPane = getScrollPane();
+        formScroller = new FormScroller(scrollPane);
+
     }
 
     /**
@@ -186,6 +202,14 @@ public class PropertyDialogUserFieldPanel extends ElementDialogPanel implements 
         constraints.weighty = 0d;
         constraints.weightx = 1d;
         return constraints;
+    }
+
+    /**
+     * @return the scrollpane of the mainPanel if initialzed or
+     *         <code>null</code> otherwise
+     */
+    public JScrollPane getScrollPane() {
+        return ParentComponentFinder.getParent(mainPanel, JScrollPane.class);
     }
 
     /**
@@ -241,17 +265,21 @@ public class PropertyDialogUserFieldPanel extends ElementDialogPanel implements 
     /**
      * Visualisiert die UserField mit ihren entsprechenden Style-Vorgaben im
      * <code>JPanel</code>.
+     *
+     * @param tabDefinition
+     * @return the userField with the tab style which defines the tab
      */
-    protected final void create(final UserFieldList tabDefinition) {
+    protected final UserField create(final UserFieldList tabDefinition) {
         GridBagConstraints constraints = getDefaultConstraints();
         JPanel currentPanel = mainPanel;
-
+        UserField tabUserField = null;
         //Attributdefinitionen des GraphDocumentes holen
         for (UserField userField : tabDefinition) {
             if (userField.hasStyle(SUBTYPE)) {
                 continue;
             } else if (userField.hasStyle(TAB)) {
                 addTab(userField, constraints);
+                tabUserField = userField;
             } else if (userField.hasStyle(GROUP)) {
                 currentPanel = addGroup(userField, constraints);
             } else if (userField.hasStyle(SEPARATOR)) {
@@ -261,6 +289,7 @@ public class PropertyDialogUserFieldPanel extends ElementDialogPanel implements 
             }
         }
         addFillSpacePanel(mainPanel, constraints);
+        return tabUserField;
     }
 
     /**
@@ -287,6 +316,7 @@ public class PropertyDialogUserFieldPanel extends ElementDialogPanel implements 
         String tabName = userField.getName();
         setName(tabName);
         addDescriptionLabel(userField, mainPanel, constraints);
+        registerDialogComponentForUserField(userField, mainPanel);
     }
 
     /**
@@ -305,6 +335,7 @@ public class PropertyDialogUserFieldPanel extends ElementDialogPanel implements 
         constraints.insets.top = constraints.gridy > 0 ? STANDARD_HORIZONTAL_INSETS : 0;
         mainPanel.add(panel, constraints);
         constraints.insets.top = 0;
+        registerDialogComponentForUserField(userField, panel);
         return panel;
     }
 
@@ -393,8 +424,10 @@ public class PropertyDialogUserFieldPanel extends ElementDialogPanel implements 
         String name = userField.getName();
         name = name == null ? "" : name.trim();
         constraints.insets.top = STANDARD_HORIZONTAL_INSETS;
+        JComponent displayComponent;
         if (name.isEmpty()) {
-            panel.add(new JSeparator(), constraints);
+            displayComponent = new JSeparator();
+            panel.add(displayComponent, constraints);
         } else {
             JPanel separatorPanel = new JPanel(new GridBagLayout());
             GridBagConstraints gbc = getDefaultConstraints();
@@ -404,7 +437,8 @@ public class PropertyDialogUserFieldPanel extends ElementDialogPanel implements 
             gbc.gridx++;
             gbc.weightx = 0d;
             gbc.anchor = DEFAULT_CONTRAINTS_ANCHOR;
-            separatorPanel.add(getTitleLabel(userField), gbc);
+            displayComponent = getTitleLabel(userField);
+            separatorPanel.add(displayComponent, gbc);
             gbc.gridx++;
             gbc.weightx = 1d;
             gbc.anchor = GridBagConstraints.SOUTH;
@@ -414,6 +448,7 @@ public class PropertyDialogUserFieldPanel extends ElementDialogPanel implements 
         constraints.gridy++;
         addDescriptionLabel(userField, panel, constraints);
         constraints.insets.top = 0;
+        registerDialogComponentForUserField(userField, displayComponent);
     }
 
     /**
@@ -533,7 +568,7 @@ public class PropertyDialogUserFieldPanel extends ElementDialogPanel implements 
             textField.setText(formattedValue);
             editorComponent = textField;
         }
-        addEditorComponentsToList(field, editorComponent);
+        registerDialogComponentForUserField(field, editorComponent);
         return editorComponent;
     }
 
@@ -541,23 +576,23 @@ public class PropertyDialogUserFieldPanel extends ElementDialogPanel implements 
      * Speichert für jedes UserField alle Editoren als Eingabefelder.
      *
      * @param userField
-     * @param editorComponent
+     * @param component
      */
-    private void addEditorComponentsToList(final UserField userField, final JComponent editorComponent) {
-        if (editorComponent != null) {
-            JComponent realEditor = editorComponent;
+    private void registerDialogComponentForUserField(final UserField userField, final JComponent component) {
+        if (component != null) {
+            JComponent realEditor = component;
             //die übergebene Komponente ist ein Scrollpane -> das ist nur bei Multiline-Textfeldern
-            if (editorComponent instanceof JScrollPane) {
+            if (component instanceof JScrollPane) {
                 //hole das Multiline-TextFeld und speichere dieses als echten Editor
-                JViewport viewport = ((JScrollPane) editorComponent).getViewport();
+                JViewport viewport = ((JScrollPane) component).getViewport();
                 realEditor = (JComponent) viewport.getView();
                 fieldComponents.add(new UserFieldEditorComponent(userField, realEditor));
                 registerChangeListener(realEditor, userField);
                 //die übergebene Komponente ist ein Panel (bei RadioButtons und bei Hyperlinks)
-            } else if (editorComponent instanceof JPanel) {
+            } else if (component instanceof JPanel) {
                 //alle Komponenten des Panels durchgehen
-                for (int i = 0; i < editorComponent.getComponentCount(); i++) {
-                    Component comp = editorComponent.getComponent(i);
+                for (int i = 0; i < component.getComponentCount(); i++) {
+                    Component comp = component.getComponent(i);
                     //der JButton im Hyprlink-Panel darf nicht mitregistriert werden, daher nur JTextComponent und JRadioButtons
                     if (comp instanceof JRadioButton || comp instanceof JTextComponent) {
                         realEditor = (JComponent) comp;
@@ -568,7 +603,9 @@ public class PropertyDialogUserFieldPanel extends ElementDialogPanel implements 
             } else {
                 //die übergebene Kompoente muss selbst der Editor sein
                 fieldComponents.add(new UserFieldEditorComponent(userField, realEditor));
-                registerChangeListener(realEditor, userField);
+                if (userField.isValueUserField()) {
+                    registerChangeListener(realEditor, userField);
+                }
             }
         }
     }
@@ -822,15 +859,24 @@ public class PropertyDialogUserFieldPanel extends ElementDialogPanel implements 
 
     /**
      * @param userField
+     * @return the component with the editor for this userField or
+     *         <code>null</code> if such an editor not exists on this panel
+     */
+    public JComponent getEditor(final UserField userField) {
+        for (UserFieldEditorComponent editor : fieldComponents) {
+            if (editor.hasUserField(userField)) {
+                return editor.editorComponent;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * @param userField
      * @return only <code>true</code> if this panel shows the given userfield
      */
     public boolean hasUserField(final UserField userField) {
-        for (UserFieldEditorComponent editor : fieldComponents) {
-            if (editor.hasUserField(userField)) {
-                return true;
-            }
-        }
-        return false;
+        return getEditor(userField) != null;
     }
 
     /**
@@ -848,6 +894,18 @@ public class PropertyDialogUserFieldPanel extends ElementDialogPanel implements 
         System.err.println("weightx = " + c.weightx);
         System.err.println("weighty = " + c.weighty);
         Sys.errm(1, 1, null);
+    }
+
+    /**
+     * @param userField
+     */
+    public void scrollToDislayComponent(final UserField userField) {
+        JComponent editor = getEditor(userField);
+        if (editor != null) {
+            editor.requestFocus();
+        }
+        PropertyChangeEvent changeEvent = new PropertyChangeEvent(this, "focusChanged", null, editor);
+        formScroller.propertyChange(changeEvent);
     }
 
 }

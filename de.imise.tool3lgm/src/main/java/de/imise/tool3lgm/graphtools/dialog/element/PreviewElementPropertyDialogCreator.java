@@ -2,11 +2,14 @@ package de.imise.tool3lgm.graphtools.dialog.element;
 
 import static de.imise.tool3lgm.graphtools.undoredo.TransactionManager.STANDARD_PID;
 import static de.imise.tool3lgm.graphtools.userfield.definition.SubType.DUMMY_SUBTYPE;
+import static de.imise.tool3lgm.graphtools.userfield.definition.UserField.Style.TAB;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.Dialog.ModalityType;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
@@ -26,11 +29,14 @@ import de.imise.tool3lgm.graphtools.model.DummyGDCollection;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.LGMGraphDocument;
 import de.imise.tool3lgm.graphtools.userfield.definition.SubType;
+import de.imise.tool3lgm.graphtools.userfield.definition.UserField;
 import de.imise.tool3lgm.graphtools.userfield.definition.UserFieldDefinitions;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.graphtools.view.tree.ModelBrowserTree;
 import de.imise.tool3lgm.graphtools.view.tree.node.ElementContainerTreeNode;
 import de.imise.tool3lgm.graphtools.view.tree.node.LGMTreeNode;
+import de.imise.tool3lgm.graphtools.view.tree.node.UserFieldTreeNode;
+import de.imise.util.swing.component.ParentComponentFinder;
 
 /**
  * An preview ElementPropertyDialog to show the effects of defining or changing
@@ -220,36 +226,53 @@ public class PreviewElementPropertyDialogCreator {
     private void update(final LGMTreeNode<?> selectedNode) {
         if (selectedNode != null) {
             TreeNode[] path = selectedNode.getPath();
+
+            ModelElement selectedElement = null;
+            UserField selectedTabUserField = null;
+            UserField selectedValueUserField = null;
+
             for (int i = path.length - 1; i > 0; i--) {
                 TreeNode node = path[i];
                 if (node instanceof ElementContainerTreeNode) {
                     ElementContainerTreeNode elementTreeNode = (ElementContainerTreeNode) node;
-                    ModelElement me = elementTreeNode.getModelElement();
-                    if (me != lastDisplayedDialogElement) {
-                        //for subtype elements we must replace the dialogs content in the
-                        //dialog to get it back if the same element will be selected again
-                        if (lastDisplayedDialogElement.hasSubType()) {
-                            Component rightComponent = splitPane.getRightComponent();
-                            ElementPropertyDialog propertyDialog = lastDisplayedDialogElement.getPropertyDialog();
-                            setDialogContent(propertyDialog, rightComponent);
-                        }
-                        lastDisplayedDialogElement = me;
-                        JComponent dialogContent;
-                        //from subtype elements we take the dialog content
-                        if (me.hasSubType()) {
-                            ElementPropertyDialog dialog = me.getPropertyDialog();
-                            dialogContent = getDialogContent(dialog);
-                        } else {
-                            //the full dialog is the dialog of the element without subtypes -> set
-                            //this special stored dialog content component again as dialogs content
-                            dialogContent = standardElementDialogContent;
-                        }
-                        int dividerLocation = lastDividerLocation;
-                        splitPane.setRightComponent(dialogContent);
-                        splitPane.setDividerLocation(dividerLocation);
-
+                    selectedElement = elementTreeNode.getModelElement();
+                    break;
+                } else if (node instanceof UserFieldTreeNode) {
+                    UserFieldTreeNode userFieldTreeNode = (UserFieldTreeNode) node;
+                    UserField userField = userFieldTreeNode.getUserField();
+                    if (selectedTabUserField == null && userField.hasStyle(TAB)) {
+                        selectedTabUserField = userField;
+                    } else if (selectedValueUserField == null) {
+                        selectedValueUserField = userField;
                     }
                 }
+            }
+            if (selectedElement != null) {
+                //for subtype elements we must replace the dialogs content in the
+                //dialog to get it back if the same element will be selected again
+                if (lastDisplayedDialogElement.hasSubType()) {
+                    Component rightComponent = splitPane.getRightComponent();
+                    ElementPropertyDialog propertyDialog = lastDisplayedDialogElement.getPropertyDialog();
+                    setDialogContent(propertyDialog, rightComponent);
+                }
+                lastDisplayedDialogElement = selectedElement;
+                JComponent dialogContent;
+                //from subtype elements we take the dialog content
+                if (selectedElement.hasSubType()) {
+                    ElementPropertyDialog dialog = selectedElement.getPropertyDialog();
+                    dialogContent = getDialogContent(dialog);
+                } else {
+                    //the full dialog is the dialog of the element without subtypes -> set
+                    //this special stored dialog content component again as dialogs content
+                    dialogContent = standardElementDialogContent;
+                }
+                int dividerLocation = lastDividerLocation;
+                splitPane.setRightComponent(dialogContent);
+                splitPane.setDividerLocation(dividerLocation);
+                ElementPropertyDialog dialog = ParentComponentFinder.getParent(dialogContent, ElementPropertyDialog.class);
+                //tell the dialog that his reference to the tab pane has changed
+                dialog.updateTabPaneReference();
+                dialog.selectTab(selectedTabUserField, selectedValueUserField);
             }
         }
     }

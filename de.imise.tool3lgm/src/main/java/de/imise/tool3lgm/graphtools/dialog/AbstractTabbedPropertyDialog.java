@@ -7,10 +7,12 @@ import java.awt.Frame;
 import java.util.List;
 
 import javax.swing.Icon;
+import javax.swing.JComponent;
 import javax.swing.JTabbedPane;
 
 import com.google.common.collect.ImmutableList;
 
+import de.imise.tool3lgm.graphtools.dialog.element.PreviewElementPropertyDialogCreator;
 import de.imise.tool3lgm.graphtools.dialog.element.panel.AbstractPathConnectionPanel;
 import de.imise.tool3lgm.graphtools.dialog.element.panel.ElementDialogPanel;
 import de.imise.tool3lgm.graphtools.dialog.element.panel.MultiPanelElementDialogPanel;
@@ -18,6 +20,7 @@ import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.path.metapaths.MetaPath;
 import de.imise.tool3lgm.graphtools.userfield.definition.UserField;
 import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.panel.PropertyDialogUserFieldPanel;
+import de.imise.util.swing.component.ChildComponentFinder;
 import de.imise.util.swing.component.tab.ReorderableTabbedPane;
 
 /**
@@ -26,7 +29,7 @@ import de.imise.util.swing.component.tab.ReorderableTabbedPane;
 public abstract class AbstractTabbedPropertyDialog extends AbstractPropertyDialog {
 
     /** TabbedPane in das alle Panels kommen */
-    protected final ReorderableTabbedPane tabbedPane;
+    protected ReorderableTabbedPane tabbedPane;
 
     /**
      * @param gdcoll
@@ -203,17 +206,49 @@ public abstract class AbstractTabbedPropertyDialog extends AbstractPropertyDialo
      * Selects the first tab with an {@link PropertyDialogUserFieldPanel} which
      * contains the given userfield.
      *
-     * @param tabComponentClass
-     * @return index of the selected tab
-     * @see #selectTab(String, Class)
+     * @param userField
+     * @return
      */
     public int selectTab(final UserField userField) {
+        selectTab(null, userField);
         for (int i = 0; i < tabbedPane.getComponentCount(); i++) {
             Component comp = tabbedPane.getComponent(i);
             if (comp instanceof PropertyDialogUserFieldPanel) {
                 if (((PropertyDialogUserFieldPanel) comp).hasUserField(userField)) {
                     tabbedPane.setSelectedIndex(i);
                     return i;
+                }
+            }
+        }
+        return -1;
+    }
+
+    /**
+     * Selects the tab with an {@link PropertyDialogUserFieldPanel} which
+     * contains has the <code>tabUserField</code> as defining UserField and
+     * contains the given userfield.
+     *
+     * @param tabUserField
+     * @param userField
+     * @return
+     */
+    public int selectTab(final UserField tabUserField, final UserField userField) {
+        for (int i = 0; i < tabbedPane.getComponentCount(); i++) {
+            Component comp = tabbedPane.getComponent(i);
+            if (comp instanceof PropertyDialogUserFieldPanel) {
+                PropertyDialogUserFieldPanel panel = (PropertyDialogUserFieldPanel) comp;
+                boolean searchOnlyThisPanel = panel.tabUserField.equals(tabUserField);
+                boolean searchThisPanel = tabUserField == null || searchOnlyThisPanel;
+                if (searchThisPanel) {
+                    JComponent editor = panel.getEditor(userField);
+                    boolean panelHasEditor = editor != null;
+                    if (panelHasEditor || searchOnlyThisPanel) {
+                        tabbedPane.setSelectedIndex(i);
+                        if (panelHasEditor) {
+                            panel.scrollToDislayComponent(userField);
+                        }
+                        return i;
+                    }
                 }
             }
         }
@@ -303,6 +338,17 @@ public abstract class AbstractTabbedPropertyDialog extends AbstractPropertyDialo
      */
     protected Component getTabComponentAt(final int index) {
         return tabbedPane.getComponentAt(index);
+    }
+
+    /**
+     * The {@link PreviewElementPropertyDialogCreator} takes an
+     * {@link AbstractTabbedPropertyDialog} and replaces the content pane by the
+     * content pane of an other dialog. In this case this function must be
+     * called to update the reference to the tabbedPane.
+     */
+    public void updateTabPaneReference() {
+        Container contentPane = getContentPane();
+        tabbedPane = ChildComponentFinder.getFirstChild(contentPane, ReorderableTabbedPane.class);
     }
 
 }

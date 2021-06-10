@@ -491,7 +491,8 @@ public class AbstractElementPropertyDialog extends AbstractTabbedPropertyDialog 
             //the PreviewElementPropertyDialogCreator opens dialogs and adds the
             //contentpane of the dialog to an other dialog. The buttons are on
             //this content pane and they must close the other dialog where the
-            //buttons are displayed now. So we have to fin the real parent dialog.
+            //buttons are displayed now. So we have to find the real parent dialog
+            //of the buttons
             AbstractElementPropertyDialog parentDialog = getParentDialog((JButton) source);
             if (parentDialog == null) {
                 parentDialog = this;
