@@ -80,6 +80,7 @@ import javax.swing.JColorChooser;
 import javax.swing.JOptionPane;
 
 import com.google.common.base.Strings;
+import com.google.common.collect.ImmutableList;
 
 import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.Tool3lgm;
@@ -541,7 +542,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
      * @param command
      * @param args
      */
-    public final void addUndo(final int pid, final GDCommands command, final Object... args) {
+    final void addUndo(final int pid, final GDCommands command, final Object... args) {
         String commandString = getCommandLine(command, args);
         addUndoCommand(pid, commandString);
     }
@@ -551,7 +552,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
      * @param command
      * @param args
      */
-    public final void addRedo(final int pid, final GDCommands command, final Object... args) {
+    final void addRedo(final int pid, final GDCommands command, final Object... args) {
         String commandString = getCommandLine(command, args);
         addRedoCommand(pid, commandString);
     }
@@ -1866,7 +1867,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
         if (fontName != null) {
             int fontSize = ec.getFontSize();
             int fontStyle = ec.getFontStyle();
-            String arguments = getArgumentsString(fontName, fontSize, fontStyle);
+            List<?> arguments = ImmutableList.of(fontName, fontSize, fontStyle);
             addUndoCommandIfNotExist(pid, arguments, MODEL_ACTION_SET_ELEMENT_FONT, doc, ec);
             ec.setFont(null);
         }
@@ -2560,9 +2561,8 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
         }
         start_transaction(pid);
         GraphDocument ncDoc = nc.getGraphDocument();
-
-        String undoCommandArguments = getArgumentsString(nc.getX(), nc.getY(), nc.getWidth(), nc.getHeight());
-        String redoCommandArguments = getArgumentsString(x, y, width, height);
+        List<?> undoCommandArguments = ImmutableList.of(nc.getX(), nc.getY(), nc.getWidth(), nc.getHeight());
+        List<?> redoCommandArguments = ImmutableList.of(x, y, width, height);
         addUndoCommandIfNotExist(pid, undoCommandArguments, MODEL_ACTION_SET_ELEMENT_POSITION, ncDoc, nc);
         addRedoCommandOrReplace(pid, redoCommandArguments, MODEL_ACTION_SET_ELEMENT_POSITION, ncDoc, nc);
         nc.setCoordinates(x, y, width, height);
