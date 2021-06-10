@@ -134,10 +134,11 @@ public abstract class ContextGenerator implements ActionListener {
      * @param item
      * @return
      */
-    public static final JMenuItem cloneItem(final JMenuItem item) {
+    public final JMenuItem cloneItem(final JMenuItem item) {
         JMenuItem clone = new JMenuItem(item.getText(), item.getIcon());
         clone.setActionCommand(item.getActionCommand());
         clone.setEnabled(item.isEnabled());
+        clone.addActionListener(this);
         return clone;
     }
 

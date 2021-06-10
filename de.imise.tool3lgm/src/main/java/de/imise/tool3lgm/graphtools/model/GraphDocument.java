@@ -908,7 +908,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
             try {
                 String subTypeID = argv[4];
                 UserFieldDefinitions userFieldDefinitions = doc.getUserFieldDefinitions();
-                subType = userFieldDefinitions.getSubType(elementClass, subTypeID);
+                subType = userFieldDefinitions.getSubType(slaveClass, subTypeID);
             } catch (Exception e) {
                 //Argument 4 SubType is optional
             }
