@@ -13,7 +13,7 @@ import javax.swing.JTabbedPane;
  * in JBuilder, showing the file type) use the method addTab(String, Component,
  * Icon). Only clicking the 'X' closes the tab.
  */
-public class JTabbedPaneWithCloseIconsRight extends JTabbedPane {
+public class FlexibleTabPane extends JTabbedPane {
 
     /**
      *
@@ -23,7 +23,7 @@ public class JTabbedPaneWithCloseIconsRight extends JTabbedPane {
     /**
      * @param activeForegroundColor
      */
-    public JTabbedPaneWithCloseIconsRight(final Color activeForegroundColor) {
+    public FlexibleTabPane(final Color activeForegroundColor) {
         this.activeForegroundColor = activeForegroundColor;
     }
 
