@@ -1,6 +1,7 @@
 package de.imise.tool3lgm.gui.tabbedframe;
 
 import java.awt.Component;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Insets;
 import java.util.ArrayList;
@@ -42,7 +43,7 @@ public class MainFrameDesktopTabbedPane extends FlexibleTabPane implements ViewP
      *
      */
     public MainFrameDesktopTabbedPane() {
-        super(Tool3lgmConstants.ACTIVE_TAB_FOREGROUND_COLOR);
+        super(Tool3lgmConstants.ACTIVE_TAB_FOREGROUND_COLOR, Font.BOLD, true);
         setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);
         updateBorder();
     }

@@ -2,29 +2,74 @@ package de.imise.util.swing.component.tab;
 
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Font;
 
 import javax.swing.BorderFactory;
 import javax.swing.Icon;
 import javax.swing.JTabbedPane;
+import javax.swing.UIManager;
 
 /**
- * A JTabbedPane which has a close ('X') icon on each tab. To add a tab, use the
- * method addTab(String, Component) To have an extra icon on each tab (e.g. like
- * in JBuilder, showing the file type) use the method addTab(String, Component,
- * Icon). Only clicking the 'X' closes the tab.
+ * A JTabbedPane which can have a close ('X') icon on each tab. To add a tab,
+ * use the method addTab(String, Component) To have an extra icon on each tab
+ * (e.g. like in JBuilder, showing the file type) use the method addTab(String,
+ * Component, Icon). Only clicking the 'X' closes the tab.
  */
 public class FlexibleTabPane extends JTabbedPane {
 
     /**
      *
      */
-    private Color activeForegroundColor;
+    private final Color activeTabForegroundColor;
 
     /**
-     * @param activeForegroundColor
+     *
      */
-    public FlexibleTabPane(final Color activeForegroundColor) {
-        this.activeForegroundColor = activeForegroundColor;
+    private final int activeTabFontStyle;
+
+    /**
+     *
+     */
+    private final boolean withCloseButtons;
+
+    /**
+     * Creates a tab pane with standard foreground color and a plain font.
+     *
+     * @param withCloseButtons if <code>true</code> there are close buttons on
+     *            the right side of the tab, which close the tab via
+     *            {@link JTabbedPane#remove(int)} which subclasses can override
+     *            to react on this event.
+     */
+    public FlexibleTabPane(final boolean withCloseButtons) {
+        this(UIManager.getColor("TabbedPane.foreground"), Font.PLAIN, withCloseButtons);
+    }
+
+    /**
+     * @param withCloseButtons if <code>true</code> there are close buttons on
+     *            the right side of the tab, which close the tab via
+     *            {@link JTabbedPane#remove(int)} which subclasses can override
+     *            to react on this event.
+     * @param activeTabForegroundColor foregroud color of the active atb
+     * @param activeTabFontStyle {@link Font#PLAIN} or {@link Font#BOLD} or
+     *            {@link Font#BOLD} or {@link Font#BOLD} + {@link Font#ITALIC}
+     */
+    public FlexibleTabPane(final Color activeTabForegroundColor, final int activeTabFontStyle) {
+        this(activeTabForegroundColor, activeTabFontStyle, false);
+    }
+
+    /**
+     * @param activeTabForegroundColor foregroud color of the active atb
+     * @param activeTabFontStyle {@link Font#PLAIN} or {@link Font#BOLD} or
+     *            {@link Font#BOLD} or {@link Font#BOLD} + {@link Font#ITALIC}
+     * @param withCloseButtons if <code>true</code> there are close buttons on
+     *            the right side of the tab, which close the tab via
+     *            {@link JTabbedPane#remove(int)} which subclasses can override
+     *            to react on this event.
+     */
+    public FlexibleTabPane(final Color activeTabForegroundColor, final int activeTabFontStyle, final boolean withCloseButtons) {
+        this.withCloseButtons = withCloseButtons;
+        this.activeTabForegroundColor = activeTabForegroundColor;
+        this.activeTabFontStyle = activeTabFontStyle;
     }
 
     @Override
@@ -54,21 +99,7 @@ public class FlexibleTabPane extends JTabbedPane {
         setBorder(BorderFactory.createEmptyBorder());
         int lastTabComponentIndex = getTabCount() - 1;
         Icon tabIcon = getIconAt(lastTabComponentIndex);
-        setTabComponentAt(lastTabComponentIndex, new FlexibleTabPaneTab(this, tabIcon, activeForegroundColor));
-    }
-
-    /**
-     * @return
-     */
-    public Color getActiveForegroundColor() {
-        return activeForegroundColor;
-    }
-
-    /**
-     * @param activeForegroundColor
-     */
-    public void setActiveForegroundColor(final Color activeForegroundColor) {
-        this.activeForegroundColor = activeForegroundColor;
+        setTabComponentAt(lastTabComponentIndex, new FlexibleTabPaneTab(this, tabIcon, activeTabForegroundColor, activeTabFontStyle, withCloseButtons));
     }
 
 }

@@ -43,10 +43,10 @@ public class FlexibleTabPaneTab extends JPanel {
     private boolean isRollover;
 
     /**  */
-    private final Font normalFont;
+    private final Font normalTabFont;
 
     /**  */
-    private final Font boldFont;
+    private final Font activeTabFont;
 
     /**
      * The icon that is displayed on the tab
@@ -55,18 +55,12 @@ public class FlexibleTabPaneTab extends JPanel {
 
     /**
      * @param tabbedPane
-     * @param activeForegroundColor
-     */
-    public FlexibleTabPaneTab(final JTabbedPane tabbedPane, final Color activeForegroundColor) {
-        this(tabbedPane, null, activeForegroundColor);
-    }
-
-    /**
-     * @param tabbedPane
      * @param icon
      * @param activeForegroundColor
+     * @param fontStyle
+     * @param withCloseButton
      */
-    public FlexibleTabPaneTab(final JTabbedPane tabbedPane, final Icon icon, final Color activeForegroundColor) {
+    public FlexibleTabPaneTab(final JTabbedPane tabbedPane, final Icon icon, final Color activeForegroundColor, final int fontStyle, final boolean withCloseButton) {
         super(new FlowLayout(FlowLayout.LEFT, 0, 0));
         this.tabbedPane = tabbedPane;
         setOpaque(false);
@@ -79,7 +73,7 @@ public class FlexibleTabPaneTab extends JPanel {
                 if (tabIndex < 0) {
                     return null;
                 }
-                setFont(isSelectedTab() ? boldFont : normalFont);
+                setFont(isSelectedTab() ? activeTabFont : normalTabFont);
                 return tabbedPane.getTitleAt(tabIndex);
             }
 
@@ -104,8 +98,8 @@ public class FlexibleTabPaneTab extends JPanel {
 
         };
 
-        normalFont = tabLabel.getFont();
-        boldFont = normalFont.deriveFont(Font.BOLD);
+        normalTabFont = tabLabel.getFont();
+        activeTabFont = normalTabFont.deriveFont(fontStyle);
 
         //we must set an irrelevant  dummy tooltip to enable the
         //showing if tooltips on the label. Without that the
