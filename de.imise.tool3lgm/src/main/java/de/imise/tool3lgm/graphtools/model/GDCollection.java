@@ -485,11 +485,16 @@ public class GDCollection extends UserFieldTarget implements MetaModelSpecific {
      * @param gdl
      */
     public final void addAllTransactionsListener(final LGMChangeListener gdl) {
-        allListener.add(gdl); //Don't prevent adding multiple the same listener! The MainFrameDesktopTabbedPane needs to be added multiple
+        if (!allListener.contains(gdl)) { //Prevent adding multiple the same listener! The MainFrameDesktopTabbedPane would be added multiple
+            allListener.add(gdl);
+        }
+        //        System.err.println("addAllTransactionsListener " + this + ": " + gdl);
+        //        Sys.errn(5, gdl.getClass().getSimpleName());
         //        for (LGMChangeListener l : allListener) {
         //            System.err.println(l);
         //        }
-        //        Sys.err1("jetzt");
+        //        Sys.err1("Ende ADD");
+        //        System.err.println();
         //        System.err.println();
     }
 
@@ -497,9 +502,15 @@ public class GDCollection extends UserFieldTarget implements MetaModelSpecific {
      * @param gdl
      */
     public final void removeAllTransactionsListener(final LGMChangeListener gdl) {
-        //        System.err.println("removeAllTransactionsListener " + this);
-        //        Sys.errn(3, allListener.size() + " " + gdl);
         allListener.remove(gdl);
+        //        System.err.println("removeAllTransactionsListener " + this + ": " + gdl);
+        //        Sys.errn(5, gdl.getClass().getSimpleName());
+        //        for (LGMChangeListener l : allListener) {
+        //            System.err.println(l);
+        //        }
+        //        Sys.err1("Ende REMOVE");
+        //        System.err.println();
+        //        System.err.println();
     }
 
     /**

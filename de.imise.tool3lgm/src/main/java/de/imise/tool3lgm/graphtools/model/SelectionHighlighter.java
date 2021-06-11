@@ -17,7 +17,7 @@ import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
  *
  * @author AXS (05.06.2020)
  */
-public class SelectionHighlighter implements LGMChangeListenerSimple {
+public final class SelectionHighlighter implements LGMChangeListenerSimple {
 
     /**
      * Contains all {@link ElementContainer} which should be additionally

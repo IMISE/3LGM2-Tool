@@ -168,8 +168,6 @@ public class MainFrameDesktopTabbedPane extends JTabbedPaneWithCloseIconsRight i
             viewFrame = (ViewPaneFrameComponent) selectedComponent;
             mainFrameDesktopPane.viewDeactivated(viewFrame);
             mainFrameDesktopPane.viewClosing(viewFrame);
-            GraphDocument doc = viewFrame.getGraphDocument();
-            doc.addAllTransactionsListener(this); //this must be added to the same doc as views for this doc are opened, because closing a view always removes one listener!
         }
         super.removeTabAt(index);
         if (viewFrame != null) {

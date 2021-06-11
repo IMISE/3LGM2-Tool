@@ -3034,8 +3034,8 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
      * @param gdl
      */
     public final void addAllTransactionsListener(final LGMChangeListener gdl) {
-        //        System.err.println("addAllTransactionsListener " + this);
-        //        Sys.err(gdl.getClass().getSimpleName());
+        //        System.err.println("addAllTransactionsListener " + this + ": " + gdl);
+        //        Sys.errn(5, gdl.getClass().getSimpleName());
         gdcoll.addAllTransactionsListener(gdl);
     }
 
@@ -3043,8 +3043,8 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
      * @param gdl
      */
     public final void removeAllTransactionsListener(final LGMChangeListener gdl) {
-        //        System.err.println("removeAllTransactionsListener " + this);
-        //        Sys.err(gdl.getClass().getSimpleName());
+        //        System.err.println("removeAllTransactionsListener " + this + ": " + gdl);
+        //        Sys.errn(5, gdl.getClass().getSimpleName());
         gdcoll.removeAllTransactionsListener(gdl);
     }
 
