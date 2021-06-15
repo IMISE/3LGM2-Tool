@@ -31,16 +31,27 @@ import de.imise.tool3lgm.graphtools.userfield.definition.SubType;
  */
 public class ElementDialogHeaderPanel extends ElementDialogPanel {
 
-    private final JLabel typeLabel, labelLabel;
+    /**  */
+    private final JLabel typeLabel;
 
+    /**  */
+    private final JLabel labelLabel;
+
+    /**  */
     private JLabel nameLabel;
 
+    /**  */
     private final JLabel idLabel;
 
+    /**  */
     private JLabel submodelLabel;
 
+    /**  */
     private JLabel subModelLabelLabel;
 
+    /**
+     * @param dialog
+     */
     public ElementDialogHeaderPanel(final AbstractElementPropertyDialog dialog) {
         super(dialog);
         setLayout(new GridBagLayout());
