@@ -31,6 +31,7 @@ import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.LGMGraphDocument;
+import de.imise.tool3lgm.graphtools.userfield.definition.UserFieldDefinitions;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.graphtools.view.tooltip.ElementToolTipProvider;
 import de.imise.util.swing.SwingUtils;
@@ -345,6 +346,15 @@ public abstract class ElementDialogPanel extends JPanel {
         ModelElement me = getModelElement();
         GDCollection gdcoll = me.getCollection();
         return gdcoll;
+    }
+
+    /**
+     * @return
+     */
+    public UserFieldDefinitions getUserFieldDefinitions() {
+        GDCollection gdcoll = getCollection();
+        UserFieldDefinitions userFieldDefinitions = gdcoll.getUserFieldDefinitions();
+        return userFieldDefinitions;
     }
 
     /**
