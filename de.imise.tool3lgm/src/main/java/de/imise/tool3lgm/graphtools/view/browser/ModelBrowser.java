@@ -5,6 +5,7 @@ import static de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty.OP
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 
@@ -31,7 +32,7 @@ public final class ModelBrowser extends ReorderableTabbedPane implements ChangeL
      * Ein neuer Browser
      */
     protected ModelBrowser(final int tabLayoutPolicy) {
-        super(SwingConstants.TOP, tabLayoutPolicy);
+        super(SwingConstants.TOP, tabLayoutPolicy, Tool3lgmConstants.ACTIVE_TAB_FOREGROUND_COLOR, Font.BOLD, false);
         setMinimumSize(new Dimension(10, 10));
         addFocusListener(this);
         inactiveColor = getForeground();
@@ -181,12 +182,12 @@ public final class ModelBrowser extends ReorderableTabbedPane implements ChangeL
         }
         if (index >= 0) {
             lastActiveBrowser.setIconAt(index, null);
-            lastActiveBrowser.setForegroundAt(index, inactiveColor);
+            //            lastActiveBrowser.setForegroundAt(index, inactiveColor);
         }
         index = getSelectedIndex();
         if (index >= 0) {
             setIconAt(index, Tool3lgmConstants.TOOL_ICON_13);
-            setForegroundAt(index, ACTIVE_TAB_FOREGROUND_COLOR);
+            //            setForegroundAt(index, ACTIVE_TAB_FOREGROUND_COLOR);
         }
 
         lastActiveBrowser = this;
