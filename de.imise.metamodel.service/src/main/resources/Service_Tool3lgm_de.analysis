@@ -22,7 +22,7 @@ Content-ID: [Service] Auf welchen phys. DV-Bausteinen ist er installiert?
 --multipart_3lgm_query_separator
 Content-Type: text/xml
 Model-Type: TLGMServiceMetaModel@2388259974838049670
-Content-ID: [Service] Welche Aufgaben werden damit unterstÃ¼tzt?
+Content-ID: [Service] Welche Aufgaben werden damit unterstützt?
 <?xml version="1.0" encoding="ISO-8559-15"?>
 <analyse>
 	<startknoten name="ApplicationComponent"/>
@@ -77,7 +77,7 @@ Content-ID: [Service] Welche Objekttypen werden gespeichert?
 --multipart_3lgm_query_separator
 Content-Type: text/xml
 Model-Type: TLGMServiceMetaModel@2388259974838049670
-Content-ID: [Service] Welche Anwendungsbausteine und welche Phys. DV-Bausteine werden zur ErfÃ¼llung benÃ¶tigt?
+Content-ID: [Service] Welche Anwendungsbausteine und welche Phys. DV-Bausteine werden zur Erfüllung benötigt?
 <?xml version="1.0" encoding="ISO-8559-15"?>
 <analyse>
 	<startknoten name="Function"/>
@@ -109,7 +109,7 @@ Content-ID: [Service] Welche Anwendungsbausteine und welche Phys. DV-Bausteine w
 --multipart_3lgm_query_separator
 Content-Type: text/xml
 Model-Type: TLGMServiceMetaModel@2388259974838049670
-Content-ID: [Service] Welche Anwendungsbausteine werden zur ErfÃ¼llung benÃ¶tigt?
+Content-ID: [Service] Welche Anwendungsbausteine werden zur Erfüllung benötigt?
 <?xml version="1.0" encoding="ISO-8559-15"?>
 <analyse>
 	<startknoten name="Function"/>
@@ -135,7 +135,7 @@ Content-ID: [Service] Welche Anwendungsbausteine werden zur ErfÃ¼llung benÃ¶tigt
 --multipart_3lgm_query_separator
 Content-Type: text/xml
 Model-Type: TLGMServiceMetaModel@2388259974838049670
-Content-ID: [Service] Welche Objekttypen kÃ¶nnen gesendet oder empfangen werden?
+Content-ID: [Service] Welche Objekttypen können gesendet oder empfangen werden?
 <?xml version="1.0" encoding="ISO-8559-15"?>
 <analyse>
 	<startknoten name="ApplicationSystem"/>
@@ -194,7 +194,7 @@ Content-ID: [Service] Wo wird dieser Service verwendet?
 --multipart_3lgm_query_separator
 Content-Type: text/xml
 Model-Type: TLGMServiceMetaModel@2388259974838049670
-Content-ID: [Service] Welche Bausteinschnittstellen kÃ¶nnen ihn kommunizieren?
+Content-ID: [Service] Welche Bausteinschnittstellen können ihn kommunizieren?
 <?xml version="1.0" encoding="ISO-8559-15"?>
 <analyse>
 	<startknoten name="ObjectType"/>
@@ -305,7 +305,7 @@ Content-ID: [Service] Wo wird er kommuniziert?
 --multipart_3lgm_query_separator
 Content-Type: text/xml
 Model-Type: TLGMServiceMetaModel@2388259974838049670
-Content-ID: [Service] Welche Bausteinschnittstellen kÃ¶nnen ihn kommunizieren?
+Content-ID: [Service] Welche Bausteinschnittstellen können ihn kommunizieren?
 <?xml version="1.0" encoding="ISO-8559-15"?>
 <analyse>
 	<startknoten name="RepresentationForm"/>
@@ -352,7 +352,7 @@ Content-ID: [Service] Welche Services benutzen ihn?
 --multipart_3lgm_query_separator
 Content-Type: text/xml
 Model-Type: TLGMServiceMetaModel@2388259974838049670
-Content-ID: [Service] Welche Objekttypen werden reprÃ¤sentiert?
+Content-ID: [Service] Welche Objekttypen werden repräsentiert?
 <?xml version="1.0" encoding="ISO-8559-15"?>
 <analyse>
 	<startknoten name="RepresentationForm"/>
@@ -372,7 +372,7 @@ Content-ID: [Service] Welche Objekttypen werden reprÃ¤sentiert?
 --multipart_3lgm_query_separator
 Content-Type: text/xml
 Model-Type: TLGMServiceMetaModel@2388259974838049670
-Content-ID: [Service] Welche Objekttypen werden reprÃ¤sentiert und welche Aufgaben werden durch ihn unterstÃ¼tzt?
+Content-ID: [Service] Welche Objekttypen werden repräsentiert und welche Aufgaben werden durch ihn unterstützt?
 <?xml version="1.0" encoding="ISO-8559-15"?>
 <analyse>
 	<startknoten name="RepresentationForm"/>
