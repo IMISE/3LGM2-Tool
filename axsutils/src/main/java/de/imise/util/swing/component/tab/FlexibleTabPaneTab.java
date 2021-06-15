@@ -37,7 +37,7 @@ public class FlexibleTabPaneTab extends JPanel {
     private final JLabel tabLabel;
 
     /** The close button on the tab */
-    private final JButton closeButton;
+    private JButton closeButton;
 
     /** <code>true</code> if the mouse pointer is over the tab */
     private boolean isRollover;
@@ -108,13 +108,15 @@ public class FlexibleTabPaneTab extends JPanel {
 
         add(tabLabel);
         tabLabel.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 5));
-        closeButton = new CloseButton();
-        add(closeButton);
+        if (withCloseButton) {
+            closeButton = new CloseButton();
+            add(closeButton);
+            closeButton.addMouseListener(paintCloseButtonWhenMouseOverMouseListener);
+        }
         setBorder(BorderFactory.createEmptyBorder(2, 0, 0, 0));
 
         addMouseListener(selectTabWhenMousePressedMouseListener);
         tabLabel.addMouseListener(selectTabWhenMousePressedMouseListener);
-        closeButton.addMouseListener(paintCloseButtonWhenMouseOverMouseListener);
     }
 
     /**
