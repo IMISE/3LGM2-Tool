@@ -4,6 +4,7 @@ import static de.imise.tool3lgm.graphtools.userfield.definition.UserField.Style.
 
 import java.security.InvalidParameterException;
 
+import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.IDSource;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.util.NameAndDescriptionSource;
@@ -41,7 +42,8 @@ public class SubType implements NameAndDescriptionSource, IDSource {
     private SubType() {
         superClass = ModelElement.class;
         subTypeUserField = new UserField(superClass, SUBTYPE);
-        subTypeUserField.setName("DUMMY_SUBTYPE_USERFIELD");
+        String dummySubTypeDisplayName = Tool3lgmConstants.getResString("DUMMY_SUBTYPE_USERFIELD");
+        subTypeUserField.setName(dummySubTypeDisplayName);
     }
 
     /**
