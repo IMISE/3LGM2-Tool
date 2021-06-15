@@ -154,7 +154,14 @@ public class AbstractElementPropertyDialog extends AbstractTabbedPropertyDialog 
         headerPanel.addComponentListener(new ComponentAdapter() {
             @Override
             public void componentResized(final ComponentEvent e) {
-                tabbedPane.requestFocus();
+                //if the dialog is opened and the first tab is selected (this is the general tab)
+                //then we have to change the focus from the subtype combobox (if exists) to the
+                //currently selected tab component. If an other tab is selected, this is prpbably
+                //a userField tab. In these tabs the focus will set to the UserField-Editor of
+                //the userField the dialog is opened for.
+                if (tabbedPane.getSelectedIndex() == 0) {
+                    tabbedPane.requestFocus();
+                }
             }
         });
 

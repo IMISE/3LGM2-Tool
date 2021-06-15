@@ -168,7 +168,14 @@ public class PropertyDialogUserFieldPanel extends ElementDialogPanel implements 
         addComponentListener(new ComponentAdapter() {
             @Override
             public void componentShown(final ComponentEvent e) {
-                //For unclear reasons, when the dialog is opened and
+                //the focusOwner is null if the dialog is opened for a model
+                //element and not for a userFIeld of a model element
+                //If it is not null then the formScroller will scroll to the
+                //correct postion. If it is null we must explicitely scroll
+                //to the very top, because for unknown reasons the scrollbar
+                //is not on top
+                scrollBackToTop &= propertyDialog.getFocusOwner() != null;
+                //For unknown reasons, when the dialog is opened and
                 //there are relatively many UserFields in (multiple)
                 //groups, the ScrollPanel is moved to an unpredictable
                 //location. Here the scroll position is set back to (0,0).
