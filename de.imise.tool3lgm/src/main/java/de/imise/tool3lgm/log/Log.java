@@ -83,7 +83,10 @@ public class Log {
         log(level, meldung, null);
 
         //erweitert um was zu loggen
-        getLogger().log(level, meldung);
+        logger = getLogger();
+        if (logger != null) {
+            logger.log(level, meldung);
+        }
 
     }
 
@@ -97,20 +100,23 @@ public class Log {
     public static void log(final Level level, final String meldung, final Throwable t) {
         if (t != null) {
             t.printStackTrace();
-            if (level == DEBUG) {
-                getLogger().debug(meldung, t);
-            }
-            if (level == INFO) {
-                getLogger().info(meldung, t);
-            }
-            if (level == WARN) {
-                getLogger().warn(meldung, t);
-            }
-            if (level == ERROR) {
-                getLogger().error(meldung, t);
-            }
-            if (level == FATAL) {
-                getLogger().fatal(meldung, t);
+            logger = getLogger();
+            if (logger != null) {
+                if (level == DEBUG) {
+                    logger.debug(meldung, t);
+                }
+                if (level == INFO) {
+                    logger.info(meldung, t);
+                }
+                if (level == WARN) {
+                    logger.warn(meldung, t);
+                }
+                if (level == ERROR) {
+                    logger.error(meldung, t);
+                }
+                if (level == FATAL) {
+                    logger.fatal(meldung, t);
+                }
             }
         }
     }
@@ -144,30 +150,32 @@ public class Log {
      * @param t die Throwable, welche geloggt werden soll
      */
     public static void show(final Level level, final String meldung, final Throwable t) {
+        logger = getLogger();
+        if (logger != null) {
+            if (logger.isEnabledFor(level)) {
 
-        if (getLogger().isEnabledFor(level)) {
-
-            String titel = "";
-            int typ = JOptionPane.INFORMATION_MESSAGE;
-            if (level == DEBUG || level == INFO) {
-                log(level, meldung, t);
-                titel = getResString("information");
-                typ = JOptionPane.INFORMATION_MESSAGE;
-            }
-            if (level == WARN) {
-                log(level, meldung, t);
-                titel = getResString("warnung");
-                typ = JOptionPane.WARNING_MESSAGE;
-            }
-            if (level == ERROR || level == FATAL) {
-                log(level, meldung, t);
-                titel = getResString("fehler");
-                typ = JOptionPane.ERROR_MESSAGE;
-            }
-            if (showErrorDialog) {
-                Static.showErrorOutputDialog(meldung, t);
-            } else {
-                JOptionPane.showConfirmDialog(getParentComponent(), meldung, titel, JOptionPane.DEFAULT_OPTION, typ);
+                String titel = "";
+                int typ = JOptionPane.INFORMATION_MESSAGE;
+                if (level == DEBUG || level == INFO) {
+                    log(level, meldung, t);
+                    titel = getResString("information");
+                    typ = JOptionPane.INFORMATION_MESSAGE;
+                }
+                if (level == WARN) {
+                    log(level, meldung, t);
+                    titel = getResString("warnung");
+                    typ = JOptionPane.WARNING_MESSAGE;
+                }
+                if (level == ERROR || level == FATAL) {
+                    log(level, meldung, t);
+                    titel = getResString("fehler");
+                    typ = JOptionPane.ERROR_MESSAGE;
+                }
+                if (showErrorDialog) {
+                    Static.showErrorOutputDialog(meldung, t);
+                } else {
+                    JOptionPane.showConfirmDialog(getParentComponent(), meldung, titel, JOptionPane.DEFAULT_OPTION, typ);
+                }
             }
         }
     }
