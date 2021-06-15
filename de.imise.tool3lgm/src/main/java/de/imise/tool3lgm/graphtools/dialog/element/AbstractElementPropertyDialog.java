@@ -12,6 +12,8 @@ import java.awt.GridLayout;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 import java.awt.event.WindowEvent;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -148,6 +150,14 @@ public class AbstractElementPropertyDialog extends AbstractTabbedPropertyDialog 
 
         JPanel up = new JPanel(new GridLayout(1, 1));
         headerPanel = new ElementDialogHeaderPanel(this);
+
+        headerPanel.addComponentListener(new ComponentAdapter() {
+            @Override
+            public void componentResized(final ComponentEvent e) {
+                tabbedPane.requestFocus();
+            }
+        });
+
         up.add(headerPanel);
 
         descripPanel = new DescripPanel(this);
