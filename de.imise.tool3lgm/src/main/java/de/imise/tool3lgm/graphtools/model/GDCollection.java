@@ -78,6 +78,7 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 
 import com.google.common.base.Strings;
+import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Lists;
 
 import de.imise.tool3lgm.MetaModelContext;
@@ -228,6 +229,9 @@ public class GDCollection extends UserFieldTarget implements MetaModelSpecific {
 
     /** Dokument wurde geaendert */
     private boolean changed;
+
+    /** these change types should be ignored, because they aren't actual changes */
+    private final static Set<LGMChangeType> IGNORE_CHANGE_TYPES = ImmutableSet.of(ACTIVE_LAYER_CHANGED, SELECTION_CHANGED, SELECTED_SZENARIO_CHANGED);
 
     /**
      * Zeitpunkt der letzen Änderung
@@ -2664,7 +2668,7 @@ public class GDCollection extends UserFieldTarget implements MetaModelSpecific {
             updateInferenceEdges(pid);
             bulk_mode = false;
         }
-        if (changeType != LGMChangeType.SELECTED_SZENARIO_CHANGED && !isAutomaticMode()) {
+        if (!IGNORE_CHANGE_TYPES.contains(changeType) && !isAutomaticMode()) {
             setChanged(true);
         }
     }
