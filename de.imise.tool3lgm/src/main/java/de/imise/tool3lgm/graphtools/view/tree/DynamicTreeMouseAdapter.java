@@ -76,7 +76,7 @@ public class DynamicTreeMouseAdapter implements MouseListener {
         // Hyprlink öffnen
         tree.dispatchEvent(new KeyEvent(tree, KeyEvent.KEY_RELEASED, 0l, 0, KeyEvent.VK_ALT, KeyEvent.CHAR_UNDEFINED, KeyEvent.KEY_LOCATION_STANDARD));
         if (left_button && selectedNode != null && selectedNode instanceof UserFieldTreeNode) {
-            ((UserFieldTreeNode) selectedNode).openHyperlink();
+            ((UserFieldTreeNode) selectedNode).openUserFieldEditorOrTarget();
             return;
         }
         if ((e.getModifiersEx() & InputEvent.ALT_DOWN_MASK) != 0) {

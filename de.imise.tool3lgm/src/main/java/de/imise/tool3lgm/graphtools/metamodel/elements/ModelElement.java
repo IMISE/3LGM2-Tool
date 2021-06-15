@@ -2148,10 +2148,13 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
 
     /**
      * Shows the PropertyDialog
+     *
+     * @return the dialog
      */
-    public final void showPropertyDialog() {
+    public final ElementPropertyDialog showPropertyDialog() {
         ElementPropertyDialog propertyDialog = getPropertyDialog();
         propertyDialog.showDialog();
+        return propertyDialog;
     }
 
     /**
