@@ -294,4 +294,14 @@ public class UserFieldList implements Cloneable, Iterable<UserField> {
         return list.toString();
     }
 
+    /**
+     * @param userField
+     * @return the index of the given element in this or -1 if it is not in the
+     *         list
+     * @see List#indexOf(Object)
+     */
+    public int indexOf(final UserField userField) {
+        return list.indexOf(userField);
+    }
+
 }

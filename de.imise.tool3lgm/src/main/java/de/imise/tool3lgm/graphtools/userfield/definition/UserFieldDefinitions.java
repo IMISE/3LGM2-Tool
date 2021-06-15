@@ -1,6 +1,7 @@
 package de.imise.tool3lgm.graphtools.userfield.definition;
 
 import static de.imise.tool3lgm.graphtools.userfield.definition.SubType.DUMMY_SUBTYPE;
+import static de.imise.tool3lgm.graphtools.userfield.definition.UserField.Style.TAB;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -478,6 +479,52 @@ public final class UserFieldDefinitions extends UserFieldDefinitionChangeHandler
     public List<UserFieldList> getTabSubLists(final Class<? extends UserFieldTarget> userFieldTargetClass, final SubType subType) {
         UserFieldList userFieldList = classToUserFieldTargetSpecificListMap.get(userFieldTargetClass);
         return userFieldList == null ? new ArrayList<>() : userFieldList.getTabSubLists(subType);
+    }
+
+    /**
+     * Returns the next UserField with the style tab that is above the passed
+     * UserFIeld in its UserFieldList. If there is no such element, null is
+     * returned. If the UserField itself is of type Tab, then it returns itself.
+     *
+     * @param userField
+     * @return
+     */
+    public UserField getParentTab(final UserField userField) {
+        UserField parent = getParent(userField, TAB);
+        return parent.hasStyle(TAB) ? parent : null;
+    }
+
+    /**
+     * Returns the next UserField from the UserFieldList to which the UserField
+     * that is above/before the UserField in the list and has the passed type
+     * belongs. If the UserField itself has the type searched for, then it will
+     * return itself. If it does not have the type itself and also none with the
+     * searched type above it, then <code>null</code> returns.
+     *
+     * @param userField
+     * @param style
+     * @return
+     */
+    public UserField getParent(final UserField userField, final Style style) {
+        if (UserField.hasNumberStyle(style)) {
+            return userField;
+        }
+        if (!userField.hasStyle(Style.SUBTYPE)) {
+            Class<? extends UserFieldTarget> targetClass = userField.getTargetClass();
+            final UserFieldList fieldList = classToUserFieldTargetSpecificListMap.get(targetClass);
+            if (fieldList != null) {
+                int index = fieldList.indexOf(userField);
+                if (index >= 0) {
+                    for (index--; index >= 0; index--) {
+                        UserField upperUserField = fieldList.get(index);
+                        if (upperUserField.hasStyle(style)) {
+                            return upperUserField;
+                        }
+                    }
+                }
+            }
+        }
+        return null;
     }
 
     /**
