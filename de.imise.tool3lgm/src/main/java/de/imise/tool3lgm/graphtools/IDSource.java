@@ -67,4 +67,18 @@ public interface IDSource {
         return elementsList;
     }
 
+    /**
+     * @param idSources
+     * @param id
+     * @return
+     */
+    public static boolean containsID(final Iterable<? extends IDSource> idSources, final String id) {
+        for (IDSource idSource : idSources) {
+            if (idSource.hasID(id)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
 }

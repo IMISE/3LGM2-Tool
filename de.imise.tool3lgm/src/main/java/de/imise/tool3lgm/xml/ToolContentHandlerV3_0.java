@@ -638,9 +638,12 @@ public class ToolContentHandlerV3_0 implements ContentHandler {
                             layer.add(container);
                             //alle Elemente, bei denen beim Einlesen der Layer noch nicht feststand, können jetzt, da die verbundenen Elemente und der
                             //Layer nun bekannt sind, auch ins Hauptmodell eingetragen werden -> jetzt mainDocContainer zum mainDoc hinzufügen
-                            ElementContainer mainDocContainer = idToMainDocContainer.get(me.getID());
+                            String id = me.getID();
+                            ElementContainer mainDocContainer = idToMainDocContainer.get(id);
                             if (mainDocContainer != null) {
-                                LayerContainer mainDocLayer = mainDoc.getLayer(layer.getLayerNumber());
+                                int layerNumber = layer.getLayerNumber();
+                                LayerContainer mainDocLayer = mainDoc.getLayer(layerNumber);
+
                                 //an welcher Stelle der Container im MainDoc steht ist völlig egal, da das MainDoc nicht gezeichnet wird
                                 mainDocLayer.add(mainDocContainer);
                             }

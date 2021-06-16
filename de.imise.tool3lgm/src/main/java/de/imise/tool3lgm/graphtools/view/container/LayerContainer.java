@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
+import de.imise.tool3lgm.graphtools.IDSource;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Bendpoint;
 import de.imise.tool3lgm.graphtools.metamodel.elements.CompositionEdge;
@@ -564,22 +565,16 @@ public class LayerContainer extends ElementContainer {
      * @return
      */
     public boolean containsID(final String id) {
-        if (!doc.getCollection().isBulkMode()) {
-            for (NodeContainer ec : graphNodeContainers) {
-                if (ec.getID().equals(id)) {
-                    return true;
-                }
-            }
-            for (EdgeContainer ec : edgeContainers) {
-                if (ec.getID().equals(id)) {
-                    return true;
-                }
-            }
-            for (BendpointContainer ec : bendpointContainers) {
-                if (ec.getID().equals(id)) {
-                    return true;
-                }
-            }
+        //do not skip this in bulk mode because this will add texfields
+        //multiple if they are in more than one submodel
+        if (IDSource.containsID(graphNodeContainers, id)) {
+            return true;
+        }
+        if (IDSource.containsID(edgeContainers, id)) {
+            return true;
+        }
+        if (IDSource.containsID(bendpointContainers, id)) {
+            return true;
         }
         return false;
     }
@@ -600,7 +595,12 @@ public class LayerContainer extends ElementContainer {
 
     @Override
     public Component add(final Component comp, final int pos) {
-        if (containsID(((ElementContainer) comp).getID())) {
+        if (!(comp instanceof ElementContainer)) {
+            return null;
+        }
+        ElementContainer ec = (ElementContainer) comp;
+        String id = ec.getID();
+        if (containsID(id)) {
             return null;
         }
         //		comp = super.add(comp);
@@ -677,7 +677,7 @@ public class LayerContainer extends ElementContainer {
             Iterable<Edge> edges = me.getEdges();
             for (Edge egde : edges) {
                 //hole ihren Container
-                EdgeContainer edgeC = (EdgeContainer) egde.getContainer(doc);
+                EdgeContainer edgeC = egde.getContainer(doc);
                 //loesche ihn aus kanten
                 edgeContainers.remove(edgeC);
                 //fuege ihn am Ende wieder hinzu
