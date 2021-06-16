@@ -1,7 +1,5 @@
 package de.imise.util;
 
-import com.google.errorprone.annotations.CanIgnoreReturnValue;
-
 import de.imise.util.pair.Pair;
 
 /**
@@ -116,32 +114,33 @@ public class NamedObjectContainer<E> extends Pair<E, String> {
         return type.isAssignableFrom(objectType);
     }
 
-    /**
-     * Guaranteed to throw an exception and leave the list unmodified.
-     *
-     * @throws UnsupportedOperationException always
-     * @deprecated Unsupported operation.
-     */
-    @CanIgnoreReturnValue
-    @Deprecated
-    @Override
-    public final void setFirstItem(final E o) {
-        throw new UnsupportedOperationException();
-    }
-
-    /**
-     * Guaranteed to throw an exception and leave the toStringValue unmodified.
-     *
-     * @throws UnsupportedOperationException always
-     * @deprecated Unsupported operation.
-     */
-    @CanIgnoreReturnValue
-    @Deprecated
-    @Override
-    public void setSecondItem(final String o) {
-        throw new UnsupportedOperationException();
-    }
-
+    //AXS: 16.06.2021: ab jetzt lasse ich das ändern zu, weil eigentlich nichts dagegen spricht und ich es brauche
+    //    /**
+    //     * Guaranteed to throw an exception and leave the list unmodified.
+    //     *
+    //     * @throws UnsupportedOperationException always
+    //     * @deprecated Unsupported operation.
+    //     */
+    //    @CanIgnoreReturnValue
+    //    @Deprecated
+    //    @Override
+    //    public final void setFirstItem(final E o) {
+    //        throw new UnsupportedOperationException();
+    //    }
+    //
+    //    /**
+    //     * Guaranteed to throw an exception and leave the toStringValue unmodified.
+    //     *
+    //     * @throws UnsupportedOperationException always
+    //     * @deprecated Unsupported operation.
+    //     */
+    //    @CanIgnoreReturnValue
+    //    @Deprecated
+    //    @Override
+    //    public void setSecondItem(final String o) {
+    //        throw new UnsupportedOperationException();
+    //    }
+    //
     @Override
     public boolean equals(final Object other) {
         if (other == null) {
