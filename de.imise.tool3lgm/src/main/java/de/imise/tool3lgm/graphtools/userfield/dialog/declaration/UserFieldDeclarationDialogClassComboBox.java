@@ -9,7 +9,10 @@ import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
+import de.imise.tool3lgm.graphtools.userfield.definition.UserFieldDefinitions;
 import de.imise.tool3lgm.graphtools.userfield.definition.UserFieldTarget;
+import de.imise.util.NamedObjectContainer;
+import de.imise.util.htmlxml.HTMLConverter;
 import de.imise.util.swing.component.AlphabeticalComboBox;
 
 /**
@@ -23,18 +26,33 @@ public class UserFieldDeclarationDialogClassComboBox extends AlphabeticalComboBo
     private static int lastSelectedIndex = 0;
 
     /**
-     * @param metaModel
+     *
+     */
+    private final UserFieldDefinitions userFieldDefinitions;
+
+    /**
+     * @param userFieldDefinitions
      * @param maxRowCount
      */
-    public UserFieldDeclarationDialogClassComboBox(final MetaModel metaModel, final int maxRowCount) {
-        setMaximumRowCount(13);
+    public UserFieldDeclarationDialogClassComboBox(final UserFieldDefinitions userFieldDefinitions, final int maxRowCount) {
+        setMaximumRowCount(maxRowCount);
+        this.userFieldDefinitions = userFieldDefinitions;
+        addClasses();
+    }
+
+    /**
+     *
+     */
+    private void addClasses() {
         addObject(GLOBAL_USERFIELD_IDENTIFIER_CLASS, getResString("userFieldEditor_global"));
         addSeparator(true);
+        MetaModel metaModel = userFieldDefinitions.getMetaModel();
         ElementsNameBuilder elementsNameBuilder = metaModel.getElementsNameBuilder();
         //alle nicht abstracten Knotenklassen hinzufügen
         for (Class<? extends ModelElement> elementClass : metaModel.allNodesSet) {
-            if (!CoreMetaModel.isAbstract(elementClass)) {
-                addObject(elementClass, elementsNameBuilder.getDisplayableFullName(elementClass));
+            if (!CoreMetaModel.isAbstract(elementClass) && !CoreMetaModel.isEdgeType(elementClass)) { //some Edge classes are regisered as nodes too (all association classes)
+                String itemName = elementsNameBuilder.getDisplayableFullName(elementClass);
+                addObject(elementClass, itemName);
             }
         }
         addSeparator(true);
@@ -48,6 +66,40 @@ public class UserFieldDeclarationDialogClassComboBox extends AlphabeticalComboBo
                 addObject(edgeClass, elementsNameBuilder.getFullForwardMetaAssociationName(edgeClass));
                 addObject(edgeClass, elementsNameBuilder.getFullBackwardMetaAssociationName(edgeClass));
             }
+        }
+        updateClassHighLight();
+    }
+
+    /**
+     *
+     */
+    public void updateClassHighLight() {
+        MetaModel metaModel = userFieldDefinitions.getMetaModel();
+        ElementsNameBuilder elementsNameBuilder = metaModel.getElementsNameBuilder();
+        for (int i = 0; i < getItemCount(); i++) {
+            NamedObjectContainer<Class<? extends UserFieldTarget>> classItem = getItemAt(i);
+            Class<? extends UserFieldTarget> targetClass = classItem.getFirstItem();
+            if (targetClass == null) {
+                continue;
+            }
+            String itemName = "";
+            if (targetClass == GLOBAL_USERFIELD_IDENTIFIER_CLASS) {
+                itemName = getResString("userFieldEditor_global");
+            } else if (Edge.class.isAssignableFrom(targetClass)) {
+                Class<? extends Edge> edgeClass = targetClass.asSubclass(Edge.class);
+                itemName = elementsNameBuilder.getFullForwardMetaAssociationName(edgeClass);
+                String oldItemName = classItem.toString();
+                if (!oldItemName.contains(itemName)) {
+                    itemName = elementsNameBuilder.getFullBackwardMetaAssociationName(edgeClass);
+                }
+            } else { //Nodes
+                Class<? extends ModelElement> elementClass = targetClass.asSubclass(Node.class);
+                itemName = elementsNameBuilder.getDisplayableFullName(elementClass);
+            }
+            if (userFieldDefinitions.hasUserFields(targetClass)) {
+                itemName = HTMLConverter.getTextAsHTMLLabelTextBold(itemName);
+            }
+            classItem.setSecondItem(itemName);
         }
     }
 

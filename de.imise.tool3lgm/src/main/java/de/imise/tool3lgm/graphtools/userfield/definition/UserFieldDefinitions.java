@@ -529,6 +529,15 @@ public final class UserFieldDefinitions extends UserFieldDefinitionChangeHandler
 
     /**
      * @param userFieldTargetClass
+     * @return true if at least one {@link UserField} is defined for this type
+     */
+    public boolean hasUserFields(final Class<? extends UserFieldTarget> userFieldTargetClass) {
+        final UserFieldList fieldList = classToUserFieldTargetSpecificListMap.get(userFieldTargetClass);
+        return fieldList != null && !fieldList.isEmpty();
+    }
+
+    /**
+     * @param userFieldTargetClass
      * @return
      */
     public Iterable<UserField> getUserFields(final Class<? extends UserFieldTarget> userFieldTargetClass) {

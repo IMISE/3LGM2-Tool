@@ -50,7 +50,7 @@ public class UserFieldDeclarationDialogFieldList extends JList<NamedObjectContai
     /**
      *
      */
-    private final UserFieldDefinitions definitions;
+    private final UserFieldDefinitions userFieldDefinitions;
 
     /**
      *
@@ -58,13 +58,13 @@ public class UserFieldDeclarationDialogFieldList extends JList<NamedObjectContai
     private final DefaultListModel<NamedObjectContainer<UserField>> model;
 
     /**
-     * @param definitions
+     * @param userFieldDefinitions
      */
-    public UserFieldDeclarationDialogFieldList(final UserFieldDefinitions definitions) {
+    public UserFieldDeclarationDialogFieldList(final UserFieldDefinitions userFieldDefinitions) {
         model = new DefaultListModel<>();
         setModel(model);
         setCellRenderer(new MyListCellRenderer());
-        this.definitions = definitions;
+        this.userFieldDefinitions = userFieldDefinitions;
         setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
     }
 
@@ -76,7 +76,7 @@ public class UserFieldDeclarationDialogFieldList extends JList<NamedObjectContai
         clear();
         int indent = 0;
         int subTypeIndent = 0;
-        for (UserField userField : definitions.getUserFields(selectedClass)) {
+        for (UserField userField : userFieldDefinitions.getUserFields(selectedClass)) {
             if (userField.hasStyle(SUBTYPE)) {
                 addEntry(userField, 0);
                 subTypeIndent = 1;
@@ -294,11 +294,11 @@ public class UserFieldDeclarationDialogFieldList extends JList<NamedObjectContai
                     newIndex = model.size();
                 }
                 model.insertElementAt(element2Move, newIndex);
-                definitions.insert(userField, newIndex);
+                userFieldDefinitions.insert(userField, newIndex);
             }
         }
         Class<? extends UserFieldTarget> targetClass = get(0).getTargetClass();
-        definitions.ensureDefaultTabs(targetClass);
+        userFieldDefinitions.ensureDefaultTabs(targetClass);
         restoreSelection(selectedValuesList);
     }
 
@@ -426,6 +426,13 @@ public class UserFieldDeclarationDialogFieldList extends JList<NamedObjectContai
             }
             return super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
         }
+    }
+
+    /**
+     * @return the definitions
+     */
+    public final UserFieldDefinitions getUserFieldDefinitions() {
+        return userFieldDefinitions;
     }
 
 }

@@ -260,6 +260,7 @@ public final class UserFieldDeclarationDialog extends AbstractUserFieldDeclarati
         } else if (is(importButton)) {
             if (importDefinitions(this, definitions)) {
                 fieldList.update(classComboBox.getSelectedClass());
+                classComboBox.updateClassHighLight();
                 returnValue = 1;
             }
         } else if (is(exportButton)) {
@@ -307,6 +308,7 @@ public final class UserFieldDeclarationDialog extends AbstractUserFieldDeclarati
                     //wieder aus den Definitions entfernen
                     definitions.remove(userField);
                 }
+                classComboBox.updateClassHighLight();
             } else if (is(editButton)) {
                 UserField userField = fieldList.getSelected(); // null-Check kann man sich sparen, weil die Buttons deaktiviert sind, wenn nichts selektiert ist
                 //die alte Formel des UserFields holen (die ist nur bei UserFields mit dem Formula-Style nicht null, aber das ist egal)
@@ -349,6 +351,7 @@ public final class UserFieldDeclarationDialog extends AbstractUserFieldDeclarati
                         definitions.remove(defaultTab);
                         fieldList.update(classComboBox.getSelectedClass());
                     }
+                    classComboBox.updateClassHighLight();
                     returnValue = -1;
                 }
             } else if (is(duplicateButton)) {

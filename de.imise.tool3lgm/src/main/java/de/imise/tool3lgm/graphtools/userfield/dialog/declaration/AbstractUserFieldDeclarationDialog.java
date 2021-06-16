@@ -100,8 +100,8 @@ public abstract class AbstractUserFieldDeclarationDialog extends AbstractSizeAnd
     public AbstractUserFieldDeclarationDialog(final Frame owner, final UserFieldDefinitions definitions) {
         super(owner, getResString("userfields"), true);
         MetaModel metaModel = definitions.getMetaModel();
-        classComboBox = createClassCombobox(metaModel);
         fieldList = new UserFieldDeclarationDialogFieldList(definitions);
+        classComboBox = createClassCombobox(metaModel);
         userFieldTypeComboBox = createStyleCombobox();
         optionPanel = UserFieldOptionPanel.getOptionPanel();
 
@@ -181,7 +181,8 @@ public abstract class AbstractUserFieldDeclarationDialog extends AbstractSizeAnd
      * @return
      */
     private UserFieldDeclarationDialogClassComboBox createClassCombobox(final MetaModel metaModel) {
-        UserFieldDeclarationDialogClassComboBox classComboBox = new UserFieldDeclarationDialogClassComboBox(metaModel, 20);
+        UserFieldDefinitions userFieldDefinitions = fieldList.getUserFieldDefinitions();
+        UserFieldDeclarationDialogClassComboBox classComboBox = new UserFieldDeclarationDialogClassComboBox(userFieldDefinitions, 20);
         if (lastSelectedUserFieldTargetClass != null) {
             classComboBox.setSelectedObject(lastSelectedUserFieldTargetClass);
         }
