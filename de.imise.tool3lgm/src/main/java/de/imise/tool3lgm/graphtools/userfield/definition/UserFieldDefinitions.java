@@ -270,7 +270,8 @@ public final class UserFieldDefinitions extends UserFieldDefinitionChangeHandler
      */
     public List<UserField> remove(final UserField userField) {
         ArrayList<UserField> deleted = new ArrayList<>();
-        UserFieldList ufl = classToUserFieldTargetSpecificListMap.get(userField.getTargetClass());
+        Class<? extends UserFieldTarget> targetClass = userField.getTargetClass();
+        UserFieldList ufl = classToUserFieldTargetSpecificListMap.get(targetClass);
         if (ufl == null) {
             return deleted;
         }
@@ -312,8 +313,12 @@ public final class UserFieldDefinitions extends UserFieldDefinitionChangeHandler
 
             for (UserField field : userFieldsToDelete) {
                 idToUserFieldMap.remove(field.getID());
-                ufl = classToUserFieldTargetSpecificListMap.get(field.getTargetClass());
+                targetClass = field.getTargetClass();
+                ufl = classToUserFieldTargetSpecificListMap.get(targetClass);
                 ufl.remove(field);
+                if (ufl.isEmpty()) {
+                    classToUserFieldTargetSpecificListMap.remove(targetClass);
+                }
             }
             deleted.addAll(userFieldsToDelete);
             //bei allem, was nicht mit Kennzahlen zu tun hat -> einfach löschen
@@ -321,6 +326,9 @@ public final class UserFieldDefinitions extends UserFieldDefinitionChangeHandler
             idToUserFieldMap.remove(userField.getID());
             ufl.remove(userField);
             deleted.add(userField);
+            if (ufl.isEmpty()) {
+                classToUserFieldTargetSpecificListMap.remove(targetClass);
+            }
         }
         return deleted;
     }

@@ -113,8 +113,11 @@ public class UserFieldList implements Cloneable, Iterable<UserField> {
      * @return for every tab in the whole list an own sub list
      */
     public List<UserFieldList> getTabSubLists(final SubType subType) {
-        UserField lastSubTypeField = null;
         List<UserFieldList> tabSubLists = new ArrayList<>();
+        if (list.isEmpty()) {
+            return tabSubLists;
+        }
+        UserField lastSubTypeField = null;
         UserFieldList tabSubList = new UserFieldList(targetClass);
         int i = 0;
         UserField firstUserField = list.get(i);

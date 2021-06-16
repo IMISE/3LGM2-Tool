@@ -229,6 +229,15 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
         return !SubType.isDummy(subType);
     }
 
+    @Override
+    public Object removeUserField(final UserField userField) {
+        SubType subType = getSubType();
+        if (subType.hasUserField(userField)) {
+            setSubType(SubType.DUMMY_SUBTYPE);
+        }
+        return super.removeUserField(userField);
+    }
+
     /**
      * Liefert den Index der Ebene, auf dem das Element liegt. Diese Funktion
      * wird von den konkreten Elementen überschrieben. Das braucht man neben den
