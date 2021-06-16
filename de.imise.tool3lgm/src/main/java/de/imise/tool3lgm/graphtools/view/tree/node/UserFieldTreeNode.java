@@ -56,6 +56,22 @@ public class UserFieldTreeNode extends IconifiedTreeNode<Pair<UserField, ModelEl
             label = name;
         } else {
             String value = me.getUserFieldInputValue(userField);
+            String tmpValue = value.trim();
+            String htmlTag = "<html>";
+            if (tmpValue.startsWith("<")) {
+                tmpValue = value.toLowerCase();
+                int htmlStart = tmpValue.indexOf(htmlTag);
+                if (htmlStart < 0) {
+                    htmlTag = null;
+                } else {
+                    if (htmlStart == 0) {
+                        value = value.substring(htmlTag.length());
+                    } else {
+                        value = value.substring(0, htmlStart) + value.substring(htmlStart + htmlTag.length());
+                    }
+                    name = htmlTag + name;
+                }
+            }
             label = name + ": " + value;
         }
         return label;
