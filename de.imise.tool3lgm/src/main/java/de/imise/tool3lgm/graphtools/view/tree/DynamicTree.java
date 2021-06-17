@@ -11,6 +11,7 @@ import javax.swing.tree.TreeModel;
 import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
 
+import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.model.GraphDocumentOwner;
 import de.imise.tool3lgm.graphtools.view.tooltip.ElementToolTipProvider;
 import de.imise.tool3lgm.graphtools.view.tree.node.LGMTreeNode;
@@ -169,5 +170,12 @@ public abstract class DynamicTree extends JTree implements GraphDocumentOwner {
         DefaultMutableTreeNode root = (DefaultMutableTreeNode) model.getRoot();
         expandNodeFull(root);
     }
+
+    /**
+     * @param e
+     * @return the GraphDocument which is associated with the given mouse
+     *         position
+     */
+    public abstract GraphDocument getGraphDocument(final MouseEvent e);
 
 }

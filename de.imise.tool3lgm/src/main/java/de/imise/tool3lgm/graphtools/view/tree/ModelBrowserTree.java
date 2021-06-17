@@ -17,6 +17,7 @@ import static de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty.OP
 import static de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty.OPTION_SUBORDINATE_COMPOSITION_ELEMENTS_IN_MODEL_BROWSER;
 
 import java.awt.Image;
+import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -219,6 +220,11 @@ public final class ModelBrowserTree extends DynamicTree implements UserFieldList
     @Override
     public final GraphDocument getGraphDocument() {
         return doc;
+    }
+
+    @Override
+    public GraphDocument getGraphDocument(final MouseEvent e) {
+        return doc; //this Broser always shows only one GraphDocument so the mouse position is irrelevant
     }
 
     /**

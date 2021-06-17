@@ -106,7 +106,7 @@ public class DynamicTreeMouseAdapter implements MouseListener {
 
     @Override
     public void mousePressed(final MouseEvent e) {
-        GraphDocument doc = tree.getGraphDocument();
+        GraphDocument doc = tree.getGraphDocument(e);
         GDCollection gdcoll = doc.getCollection();
         if (gdcoll instanceof DummyGDCollection) {
             return;

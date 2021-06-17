@@ -6,6 +6,7 @@ import java.awt.Color;
 import java.awt.Point;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
+import java.awt.event.MouseEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
@@ -133,10 +134,27 @@ public class TemplateBrowserTree extends DynamicTree implements SearchResultView
 
     @Override
     public GraphDocument getGraphDocument() {
-        GraphDocument doc = null;
         TreePath leadSelectionPath = selectionModel.getLeadSelectionPath();
-        if (leadSelectionPath != null) {
-            Object lastPathComponent = leadSelectionPath.getLastPathComponent();
+        return getGraphDocument(leadSelectionPath);
+    }
+
+    @Override
+    public GraphDocument getGraphDocument(final MouseEvent e) {
+        int x = e.getX();
+        int y = e.getY();
+        TreePath closestPathForLocation = getClosestPathForLocation(x, y);
+        return getGraphDocument(closestPathForLocation);
+    }
+
+    /**
+     * @param treePath
+     * @return the GraphDocument that is associated with the last path component
+     *         of the given treepath
+     */
+    private GraphDocument getGraphDocument(final TreePath treePath) {
+        GraphDocument doc = null;
+        if (treePath != null) {
+            Object lastPathComponent = treePath.getLastPathComponent();
             if (lastPathComponent instanceof ElementContainerTreeNode) {
                 ElementContainerTreeNode elementContainerNode = (ElementContainerTreeNode) lastPathComponent;
                 doc = elementContainerNode.getGraphDocument();
