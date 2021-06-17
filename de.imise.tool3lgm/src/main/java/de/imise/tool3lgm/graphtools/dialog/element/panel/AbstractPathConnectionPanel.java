@@ -3,6 +3,7 @@ package de.imise.tool3lgm.graphtools.dialog.element.panel;
 import static de.imise.tool3lgm.Static.contextGenerator;
 import static de.imise.tool3lgm.graphtools.dialog.element.panel.PanelLabelOption.LABEL_END_ELEMENT_TYPE;
 import static de.imise.tool3lgm.graphtools.dialog.element.panel.PanelLabelOption.LABEL_LAST_EDGE_CONNECTION_NAME;
+import static de.imise.tool3lgm.graphtools.dialog.element.panel.PanelLabelOption.LABEL_LAST_EDGE_CONNECTION_NAME_WITH_CONNECTED_ELEMENT_TYPE;
 import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction.BACKWARD;
 import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction.FORWARD;
 
@@ -135,7 +136,7 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
      * @return
      */
     private String getTextByPanelLabelOption(final PanelLabelOption panelLabelOption) {
-        String westLabelText;
+        String westLabelText = "";
         int pathLength = getEdgesInPathCount();
         int labelEdgeIndex = panelLabelOption.getEdgeIndex();
         labelEdgeIndex = labelEdgeIndex < 0 ? pathLength - 1 : labelEdgeIndex;
@@ -147,7 +148,8 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
             } else {//the path does not consist of a simple elementary path list
                 westLabelText = Tool3lgmConstants.getResString("verb");
             }
-        } else {
+        }
+        if (!panelLabelOption.isEdgeConnectionNameOption() || panelLabelOption == LABEL_LAST_EDGE_CONNECTION_NAME_WITH_CONNECTED_ELEMENT_TYPE) {
             //Name of the class to display (end node or edge of metapath step)
             Class<? extends ModelElement> nameSourceClass;
             if (panelLabelOption.isEdgeElementNameOption()) {
@@ -173,7 +175,7 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
             } else {
                 plural = !metaPath.isSingleConnection();
             }
-            westLabelText = elementsNameBuilder.getDisplayableName(plural, nameSourceClass);
+            String newWestLabelText = elementsNameBuilder.getDisplayableName(plural, nameSourceClass);
             //if this is a connection from a regular element class to a pure template element
             //class so append "(Temlate)" to the westLabelText to mark the difference
             Class<? extends ModelElement> dialogModelElementClass = modelElement.getClass();
@@ -182,9 +184,14 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
                 if (metaModel.isPureTemplateElementClass(nameSourceClass)) {
                     String dialogElementDisplayableName = elementsNameBuilder.getDisplayableName(plural, dialogModelElementClass);
                     if (dialogElementDisplayableName.equals(westLabelText)) {
-                        westLabelText = elementsNameBuilder.getDisplayableFullName(plural, dialogModelElementClass);
+                        newWestLabelText = elementsNameBuilder.getDisplayableFullName(plural, dialogModelElementClass);
                     }
                 }
+            }
+            if (westLabelText.isEmpty()) {
+                westLabelText = newWestLabelText;
+            } else {
+                westLabelText += " " + newWestLabelText;
             }
         }
         westLabelText = StringUtils.capitalizeFirstChar(westLabelText); // Always capitalize the first letter of the label

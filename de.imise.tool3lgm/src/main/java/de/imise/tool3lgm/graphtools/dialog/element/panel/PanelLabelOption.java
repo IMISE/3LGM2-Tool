@@ -68,6 +68,13 @@ public enum PanelLabelOption {
      * the resources.
      */
     LABEL_LAST_EDGE_CONNECTION_NAME,
+
+    /**
+     * Indicator to label the panel with directed name of the connection and the
+     * type name of the connected element type from the resources.
+     */
+    LABEL_LAST_EDGE_CONNECTION_NAME_WITH_CONNECTED_ELEMENT_TYPE,
+
     /**
      * Indicator to label the panel with the start element type of the last edge
      * with the name from the resources. If the meta path is a single connection
@@ -105,7 +112,7 @@ public enum PanelLabelOption {
     }
 
     /**  */
-    private static final Set<PanelLabelOption> EDGE_CONNECTION_NAMES_OPTIONS = ImmutableSet.of(LABEL_FIRST_EDGE_CONNECTION_NAME, LABEL_LAST_EDGE_CONNECTION_NAME);
+    private static final Set<PanelLabelOption> EDGE_CONNECTION_NAMES_OPTIONS = ImmutableSet.of(LABEL_FIRST_EDGE_CONNECTION_NAME, LABEL_LAST_EDGE_CONNECTION_NAME, LABEL_LAST_EDGE_CONNECTION_NAME_WITH_CONNECTED_ELEMENT_TYPE);
 
     /**
      * @return
