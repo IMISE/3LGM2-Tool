@@ -6,7 +6,6 @@ import static org.testng.Assert.assertNotNull;
 import static org.testng.Assert.assertNotSame;
 import static org.testng.Assert.assertNull;
 import static org.testng.Assert.assertSame;
-import static org.testng.Assert.assertThrows;
 
 import org.testng.annotations.Test;
 
@@ -217,24 +216,6 @@ public class NamedObjectContainerTest {
         noc = new NamedObjectContainer<>(null, toString);
         assertNotEquals(ofNoc, noc);
         assertNotEquals(noc, ofNoc);
-    }
-
-    @SuppressWarnings("deprecation")
-    @Test
-    public final void setFirstItem() {
-        NamedObjectContainer<Object> noc = new NamedObjectContainer<>(new Object(), "Foo");
-        assertThrows(UnsupportedOperationException.class, () -> {
-            noc.setFirstItem(new Object());
-        });
-    }
-
-    @SuppressWarnings("deprecation")
-    @Test
-    public void setSecondItem() {
-        NamedObjectContainer<Object> noc = new NamedObjectContainer<>(new Object(), "Foo");
-        assertThrows(UnsupportedOperationException.class, () -> {
-            noc.setSecondItem("Bar");
-        });
     }
 
 }
