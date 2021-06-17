@@ -4,6 +4,6 @@
 
 [IHE/MustBeGroupedWith](IHE/MustBeGroupedWith "MustBeGroupedWith functionality")
 
-[Analysis of 3LGM² models](Analysis of 3LGM² models "Analysis of 3LGM² models")
+[Features/Analysis of 3LGM² models](Analysis of 3LGM² models "Analysis of 3LGM² models")
 
 [FAQ](FAQ "Frequently asked questions")
