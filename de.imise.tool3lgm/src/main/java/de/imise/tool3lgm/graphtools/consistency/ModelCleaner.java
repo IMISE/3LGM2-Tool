@@ -215,10 +215,16 @@ public class ModelCleaner {
             }
             // Kanten löschen, die nicht mehrfach vorkommen dürfen, aber mehrfach vorkommen
             // (alle bis auf eine löschen)
-            if (MetaModel.isMultipleEdgeClass(edge.getClass())) {
+            Class<? extends Edge> edgeClass = edge.getClass();
+            if (MetaModel.isMultipleEdgeClass(edgeClass)) {
                 continue;
             }
-            for (Edge edge2 : edge.getStart().getEdgesTo(edge.getEnd(), edge.getClass())) {
+            ModelElement start = edge.getStart();
+            ModelElement end = edge.getEnd();
+            //now find all edges via edgesWith(..) and not edgesTo(..) because we must find
+            //invalid multiple DoubleMeaningEgdes with backward direction or different directions
+            List<Edge> sameElementsEdges = start.getEdgesWith(end, edgeClass);
+            for (Edge edge2 : sameElementsEdges) {
                 if (edge != edge2) {
                     gdcoll.deleteElement(edge2, mainDoc, STANDARD_PID);
                     // edge2 befindet sich auf jeden Fall hinter edge in der Liste edges, sonst wäre
