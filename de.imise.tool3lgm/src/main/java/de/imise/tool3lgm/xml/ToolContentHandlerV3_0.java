@@ -213,6 +213,7 @@ public class ToolContentHandlerV3_0 implements ContentHandler {
 
     @Override
     public void startDocument() throws SAXException {
+        oldToNewID = new HashMap<>();
     }
 
     /**
@@ -316,14 +317,13 @@ public class ToolContentHandlerV3_0 implements ContentHandler {
                 }
             } else if (qName.equals("container")) {
                 String id = atts.getValue("hash");
-                if (isCopyAndPaste()) {
-                    String newId = oldToNewID.get(id);
-                    element = mainDoc.findElementCoded(newId);
-                } else {
-                    element = mainDoc.findElementCoded(id);
+                String newID = oldToNewID.get(id);
+                if (newID != null) {
+                    id = newID;
                 }
+                element = mainDoc.findElementCoded(id);
                 if (element == null) {
-                    ElementContainer bendpointContainerOrTexField = idToMainDocContainer.get(isCopyAndPaste() ? oldToNewID.get(id) : id);
+                    ElementContainer bendpointContainerOrTexField = idToMainDocContainer.get(id);
                     if (bendpointContainerOrTexField != null) {
                         element = bendpointContainerOrTexField.getElement();
                     }
@@ -513,7 +513,6 @@ public class ToolContentHandlerV3_0 implements ContentHandler {
                 mainDoc = Static.getSelectedGDCollection().getMainDoc();
                 szenario = gdcoll.getSelectedDoc();
                 szenario.clearSelection();
-                oldToNewID = new HashMap<>();
 
             } else if (qName.equals("objects")) {
                 Static.setProgressDialogStatusLabel("labelReadElements");
@@ -857,8 +856,9 @@ public class ToolContentHandlerV3_0 implements ContentHandler {
                     Bendpoint bendpoint = benpointContainer.getBendpoint();
                     String bendpointEdgeID = bendpoint.getEdgeID();
 
-                    if (isCopyAndPaste()) {
-                        bendpointEdgeID = oldToNewID.get(bendpointEdgeID);
+                    String newBendpointEdgeID = oldToNewID.get(bendpointEdgeID);
+                    if (newBendpointEdgeID != null) {
+                        bendpointEdgeID = newBendpointEdgeID;
                     }
                     EdgeContainer kc = benpointContainer.getGraphDocument().findEdgeContainerCoded(bendpointEdgeID);
                     if (kc != null) {
