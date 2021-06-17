@@ -289,20 +289,13 @@ public class ToolContentHandlerV3_0 implements ContentHandler {
                 }
 
                 if (element != null) {
-                    if (isCopyAndPaste()) {
-                        String originalElementID = atts.getValue("hash");
-                        ModelElement existingElementWithSameID = mainDoc.findElementCoded(originalElementID);
-                        if (existingElementWithSameID == null) {
-                            element.setID(originalElementID);
-                        }
-                    }
-
                     String id = atts.getValue("hash");
-                    if (isCopyAndPaste()) {
+                    //Copy&Paste and elenent with same ID already exists -> retain the new ID and store it in the map
+                    if (isCopyAndPaste() && mainDoc.findElementCoded(id) != null) {
                         String newID = element.getID();
                         oldToNewID.put(id, newID);
                     } else {
-                        element.setID(id);
+                        element.setID(id); //no Copy&Paste or no element with same ID found -> set the id
                     }
 
                     if (element instanceof Edge) {
