@@ -17,6 +17,7 @@ import java.util.zip.DataFormatException;
 import org.xml.sax.SAXException;
 
 import de.imise.tool3lgm.MetaModelContext;
+import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.Tool3lgmMetaModelContext;
 import de.imise.tool3lgm.graphtools.metamodel.AnalysesDefinition;
@@ -113,7 +114,8 @@ public class AnalysesRepository {
         List<AbstractAnalysis> analyses = new ArrayList<>();
         List<AbstractAnalysis> allAnalyses = new ArrayList<>(getXMLAnalyses());
         AnalysesDefinition analysesDefinition = metaModel.getAnalysesDefinition();
-        allAnalyses.addAll(metaModel.getAnalysesDefinition().getNodeAnalyses());
+        List<AbstractAnalysis> nodeAnalyses = analysesDefinition.getNodeAnalyses();
+        allAnalyses.addAll(nodeAnalyses);
         for (AbstractAnalysis ana : allAnalyses) {
             List<Class<? extends ModelElement>> startClasses = ana.getStartClasses();
             for (Class<? extends ModelElement> startClass : startClasses) {
@@ -266,9 +268,12 @@ public class AnalysesRepository {
                 //Model-Type ist die Metamodel-ID, die erst nach Version 3.4.0.4 eingeführt wurde und in den Modelldateien sowie den Analysen gespeichert wird
                 String metaModelIDLinePrefix = "Model-Type: ";
                 MetaModelContext metaModelContext = Tool3lgmMetaModelContext.getDefaultMetaModelContext();
+                String metaModelId = null;
+                String currentMetaModelID = null;
                 if (line.startsWith(metaModelIDLinePrefix)) {
-                    String metaModelId = line.substring(metaModelIDLinePrefix.length()).trim();
+                    metaModelId = line.substring(metaModelIDLinePrefix.length()).trim();
                     metaModelContext = Tool3lgmMetaModelContext.getMetaModelContextForID(metaModelId);
+                    currentMetaModelID = Static.getSelectedMetaModel().getMetaModelID();
                     line = dataStream.readLine();
                 }
                 String ananame = line.substring("Content-ID: ".length());
@@ -276,13 +281,16 @@ public class AnalysesRepository {
                 for (line = dataStream.readLine(); !line.equals("--multipart_3lgm_query_separator"); line = dataStream.readLine()) {
                     strbuf.append(line + "\n");
                 }
-                XMLAnalysis toadd = null;
-                try {
-                    toadd = XMLAnalysis.createAnalysis(metaModelContext, ananame, strbuf.toString());
-                } catch (SAXException ex) {
-                    Log.show(Log.ERROR, getResString("ANALYSIS_CANT_CREATE") + "\n" + ex.getMessage(), ex);
+                // this if statement makes sure, that only the relevant analyses are shown for the selected Meta-Model
+                if (metaModelId != null && currentMetaModelID != null && metaModelId.equals(currentMetaModelID)) {
+                    XMLAnalysis toadd = null;
+                    try {
+                        toadd = XMLAnalysis.createAnalysis(metaModelContext, ananame, strbuf.toString());
+                    } catch (SAXException ex) {
+                        Log.show(Log.ERROR, getResString("ANALYSIS_CANT_CREATE") + "\n" + ex.getMessage(), ex);
+                    }
+                    analysen.add(toadd);
                 }
-                analysen.add(toadd);
             }
             dataStream.close();
         } catch (Exception e) {
