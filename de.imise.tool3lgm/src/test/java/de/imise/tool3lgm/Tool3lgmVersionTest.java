@@ -2,13 +2,14 @@ package de.imise.tool3lgm;
 
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertFalse;
+import static org.testng.Assert.assertNull;
 import static org.testng.Assert.assertTrue;
 
 import org.testng.annotations.Test;
 
 public class Tool3lgmVersionTest {
 
-    @Test(expectedExceptions = IllegalArgumentException.class)
+    @Test
     public void parseStringTest() {
         Tool3lgmVersion version = Tool3lgmVersion.parseString("1.2.3");
         assertEquals(version.major, 1);
@@ -35,7 +36,16 @@ public class Tool3lgmVersionTest {
         assertEquals(version.patch, 6789);
         assertTrue(version.suffix.equals(""));
 
+        //the dot after the 2 is invalid
         version = Tool3lgmVersion.parseString("Tool3lgmVersion 1.2. (dev)");
+        assertNull(version);
+
+        //
+        version = Tool3lgmVersion.parseString("");
+        assertNull(version);
+
+        version = Tool3lgmVersion.parseString("Tool");
+        assertNull(version);
     }
 
     @Test

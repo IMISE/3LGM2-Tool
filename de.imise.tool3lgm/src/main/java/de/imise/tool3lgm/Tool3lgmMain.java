@@ -123,7 +123,7 @@ public class Tool3lgmMain {
         //this cases set we set the new default 255 and the scaling is perfect
         Tool3lgmVersion firstCorrectRenderOptionVersion = Tool3lgmVersion.parseString("4.4.1");
         Tool3lgmVersion fileVersion = UserProperties.getFileVersion();
-        if (fileVersion.isLowerThan(firstCorrectRenderOptionVersion)) {
+        if (fileVersion == null || fileVersion.isLowerThan(firstCorrectRenderOptionVersion)) {
             int renderingSetttingsDefault = PROPERTY_INT_RENDER_SETTINGS.getDefault();
             PROPERTY_INT_RENDER_SETTINGS.set(renderingSetttingsDefault);
         }
