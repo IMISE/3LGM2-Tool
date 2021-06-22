@@ -2,6 +2,7 @@ package de.imise.tool3lgm;
 
 import static de.imise.tool3lgm.Tool3lgmChangeListener.Tool3lgmChangeType.MODEL_CHANGE_MODEL_CLOSED;
 import static de.imise.tool3lgm.Tool3lgmChangeListener.Tool3lgmChangeType.MODEL_CHANGE_MODEL_OPENED;
+import static de.imise.tool3lgm.Tool3lgmConstants.CLIPBOARD_PATH;
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
 import static de.imise.tool3lgm.graphtools.model.LGMChangeListener.LGMChangeType.SELECTION_CHANGED;
 import static de.imise.tool3lgm.graphtools.undoredo.TransactionManager.STANDARD_PID;
@@ -362,7 +363,7 @@ public class Tool3lgm {
             }
             UserProperties.save();
         }
-        new File(Tool3lgmConstants.CLIPBOARD_PATH).delete();
+        CLIPBOARD_PATH.delete();
 
         File temp = new File(Tool3lgmConstants.TEMP_PATH + "temp_3lgm_export_file.html");
         if (temp.exists()) {

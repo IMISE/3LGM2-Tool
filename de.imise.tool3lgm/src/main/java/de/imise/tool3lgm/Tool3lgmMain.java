@@ -6,7 +6,6 @@ import static de.imise.tool3lgm.userproperties.UserProperties.IntProperty.PROPER
 import static de.imise.tool3lgm.userproperties.UserProperties.IntProperty.PROPERTY_INT_RMI_PORT;
 
 import java.awt.Image;
-import java.io.File;
 import java.rmi.Naming;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
@@ -112,7 +111,7 @@ public class Tool3lgmMain {
         //        }
         //        Sys.err1("####################################################################################################");
 
-        relocateUserInfo();
+        DeprecatedHandler.relocateUserInfo();
 
         //UserProperties initialisieren, damit die richige Locale gesetzt ist
         UserProperties.init();
@@ -218,27 +217,6 @@ public class Tool3lgmMain {
             Log.show(Log.FATAL, getResString("LookAndFeelLadenException"), ex);
             System.exit(-1);
         }
-    }
-
-    /**
-     * As the tool starts it should check the old location of the userproperties
-     * file and if it exists cut and paste it to the new .3lgm folder
-     */
-    private static void relocateUserInfo() {
-        File source = new File(System.getProperty("user.home") + "/.tool3lgm2UserInfo");
-        File destination = new File(System.getProperty("user.home") + "/.3lgm" + "/.tool3lgm2UserInfo");
-        File newFolder = new File(System.getProperty("user.home") + "/.3lgm");
-        if (!newFolder.exists()) {
-            newFolder.mkdirs();
-        }
-        if (source.exists()) {
-            if (!destination.exists()) {
-                source.renameTo(destination);
-            } else {
-                source.delete();
-            }
-        }
-
     }
 
     /**

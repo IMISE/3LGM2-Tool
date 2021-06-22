@@ -1,5 +1,7 @@
 package de.imise.tool3lgm.graphtools.analyse.context;
 
+import static de.imise.tool3lgm.Tool3lgmConstants.ANALYSEN_FILE_NAME;
+import static de.imise.tool3lgm.Tool3lgmConstants.USER_HOME_3LGM_DIR;
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
 
 import java.io.BufferedReader;
@@ -159,7 +161,7 @@ public class AnalysesRepository {
         if (file != null) {
             return file;
         }
-        file = new File(Tool3lgmConstants.USER_HOME_3LGM_PATH, Tool3lgmConstants.ANALYSEN_FILE_NAME);
+        file = new File(USER_HOME_3LGM_DIR, ANALYSEN_FILE_NAME);
         if (file.exists()) {
             if (FileHandler.getLine(file, "Model-Type: TLGMServiceMetaModel@2388259974838049670", true) == null) {
                 List<XMLAnalysis> concatenatedAnalysis = concatXMLAnalyses();
@@ -172,11 +174,11 @@ public class AnalysesRepository {
                 // schreiben kann
                 if (!file.createNewFile()) {
                     // lege eine Datei im Benutzerverzeichnis an
-                    file = new File(Tool3lgmConstants.USER_HOME_3LGM_PATH, Tool3lgmConstants.ANALYSEN_FILE_NAME);
+                    file = new File(USER_HOME_3LGM_DIR, ANALYSEN_FILE_NAME);
                 }
             } catch (IOException e) {
                 // das hier tritt ein, wenn es bei file.createNewFile() ne Exception gab
-                file = new File(Tool3lgmConstants.USER_HOME_3LGM_PATH, Tool3lgmConstants.ANALYSEN_FILE_NAME);
+                file = new File(USER_HOME_3LGM_DIR, ANALYSEN_FILE_NAME);
             }
 
             // schreibe den Inhalt der Resourcendatei in file

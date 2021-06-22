@@ -1,6 +1,7 @@
 package de.imise.tool3lgm.userproperties;
 
 import static de.imise.tool3lgm.Tool3lgmConstants.TOOL_VERSION_INFO;
+import static de.imise.tool3lgm.Tool3lgmConstants.USER_HOME_3LGM_DIR;
 
 import java.awt.Frame;
 import java.beans.PropertyChangeEvent;
@@ -49,7 +50,7 @@ public class UserProperties extends AbstractUserProperties {
     private static final URL DEFAULT_USER_INFO_FILE = ClassLoader.getSystemResource("DefaultUserProperties");
 
     /** Pfad zur Datei mit den Optionen eines Benutzers */
-    private static final File USER_INFO_FILE = new File(System.getProperty("user.home") + "/.3lgm" + "/.tool3lgm2UserInfo");
+    public static final File USER_INFO_FILE = new File(USER_HOME_3LGM_DIR, "tool3lgm2UserInfo.config");
 
     /**
      * Liest die Benutzeroptionen ein.<br>

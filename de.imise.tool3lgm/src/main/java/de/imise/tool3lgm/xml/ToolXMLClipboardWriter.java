@@ -1,9 +1,9 @@
 package de.imise.tool3lgm.xml;
 
+import static de.imise.tool3lgm.Tool3lgmConstants.CLIPBOARD_PATH;
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
 import static de.imise.tool3lgm.graphtools.model.CopyDependencyResolver.resolveCopyDependencies;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.Map;
@@ -13,7 +13,6 @@ import javax.xml.stream.FactoryConfigurationError;
 import javax.xml.stream.XMLStreamException;
 
 import de.imise.tool3lgm.Static;
-import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
@@ -30,7 +29,7 @@ public class ToolXMLClipboardWriter extends ToolXMLWriter {
     final GraphDocument selectedDoc;
 
     private ToolXMLClipboardWriter(final GraphDocument selectedDoc) throws XMLStreamException, FactoryConfigurationError, IOException {
-        super(selectedDoc.getCollection(), new File(Tool3lgmConstants.CLIPBOARD_PATH));
+        super(selectedDoc.getCollection(), CLIPBOARD_PATH);
         this.selectedDoc = selectedDoc;
     }
 

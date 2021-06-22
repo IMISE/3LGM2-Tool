@@ -1,6 +1,7 @@
 package de.imise.tool3lgm.graphtools.model;
 
 import static de.imise.tool3lgm.Static.getMainFrame;
+import static de.imise.tool3lgm.Tool3lgmConstants.CLIPBOARD_PATH;
 import static de.imise.tool3lgm.graphtools.dialog.OverwriteDialog.OverwriteOption.IGNORE;
 import static de.imise.tool3lgm.graphtools.dialog.OverwriteDialog.OverwriteOption.JOIN;
 import static de.imise.tool3lgm.graphtools.dialog.OverwriteDialog.OverwriteOption.OVERWRITE;
@@ -12,7 +13,6 @@ import static de.imise.tool3lgm.graphtools.model.LGMChangeListener.LGMChangeType
 import static de.imise.tool3lgm.graphtools.model.LGMChangeListener.LGMChangeType.SELECTION_CHANGED;
 import static de.imise.tool3lgm.graphtools.undoredo.TransactionManager.STANDARD_PID;
 
-import java.io.File;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -23,7 +23,6 @@ import javax.swing.JOptionPane;
 import com.google.common.collect.ImmutableList;
 
 import de.imise.tool3lgm.Static;
-import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.Tool3lgmModelType.ModelCategory;
 import de.imise.tool3lgm.graphtools.analyse.redundancy.SimpleRedundancyAnalysis;
 import de.imise.tool3lgm.graphtools.analyse.redundancy.SimpleRedundancyAnalysisDefinitions.SingleSimpleRedundancyAnalysisDefinition;
@@ -199,9 +198,12 @@ public class LGMGraphDocument extends GraphDocument {
      * @return
      */
     public static synchronized final boolean isClipboardAvailable() {
-        return new File(Tool3lgmConstants.CLIPBOARD_PATH).exists();
+        return CLIPBOARD_PATH.exists();
     }
 
+    /**
+     * @return
+     */
     public final SortedSelection getSortedSelection() {
         @SuppressWarnings("unchecked")
         Iterable<NodeContainer>[] sortingElements = new Iterable[layer.length];
@@ -215,8 +217,7 @@ public class LGMGraphDocument extends GraphDocument {
      *
      */
     private synchronized void pasteClipboard() {
-        File file = new File(Tool3lgmConstants.CLIPBOARD_PATH);
-        if (!file.exists()) {
+        if (!CLIPBOARD_PATH.exists()) {
             return;
         }
 
@@ -226,13 +227,13 @@ public class LGMGraphDocument extends GraphDocument {
             addRedo(pid, MODEL_ACTION_PASTE);
             addUndo(pid, MODEL_ACTION_DELETE_FROM_MODEL);
             deselectAll(true);
-            gdcoll.loadClipboard(file);
+            gdcoll.loadClipboard(CLIPBOARD_PATH);
         } catch (Exception e) {
             Log.show(Log.ERROR, getResString("FehlerAllgemein"), e);
             Object[] buttons = new Object[] {
                     getResString("ok")
             };
-            JOptionPane.showOptionDialog(Static.getMainFrame(), getResString("oeffnenfehler") + "\n" + file.getPath() + "\n" + e.getMessage(), getResString("tool3lgm"), JOptionPane.OK_OPTION, JOptionPane.ERROR_MESSAGE, null, buttons, null);
+            JOptionPane.showOptionDialog(Static.getMainFrame(), getResString("oeffnenfehler") + "\n" + CLIPBOARD_PATH.getPath() + "\n" + e.getMessage(), getResString("tool3lgm"), JOptionPane.OK_OPTION, JOptionPane.ERROR_MESSAGE, null, buttons, null);
             e.printStackTrace();
             return;
         }

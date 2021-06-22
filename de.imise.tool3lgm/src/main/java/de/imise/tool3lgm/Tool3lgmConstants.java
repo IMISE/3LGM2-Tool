@@ -73,9 +73,6 @@ public abstract class Tool3lgmConstants {
      */
     public static final boolean LOG_READABLE_UNDO_REDO_COMMANDS = false;
 
-    /** filename with path for internal clipboard */
-    public static final String CLIPBOARD_PATH = System.getProperty("user.home") + File.separator + ".3lgm" + File.separator + ".3lgm_clipboard";
-
     /** Path to the installation directory of the application as file */
     public static final File APPLICATION_DIR = ApplicationManager.getApplicationDir("lib");
 
@@ -86,7 +83,10 @@ public abstract class Tool3lgmConstants {
     public static final String USER_HOME_DIR_NAME = System.getProperty("user.home");
 
     /** Pfad ins Home-Verzeichnis .3lgm Ordner */
-    public static final String USER_HOME_3LGM_PATH = USER_HOME_DIR_NAME + File.separator + ".3lgm";
+    public static final File USER_HOME_3LGM_DIR = new File(USER_HOME_DIR_NAME, "3lgm");
+
+    /** filename with path for internal clipboard */
+    public static final File CLIPBOARD_PATH = new File(USER_HOME_3LGM_DIR, "3lgm_clipboard");
 
     /**
      * Name des Packages in dem alle Node-Klassen liegen, die allgemein
@@ -286,11 +286,19 @@ public abstract class Tool3lgmConstants {
     /**
      * Name der Datei mit Analysen. Unter diesem Namen ex. die Standarddatei in
      * den localisierten Resourcen. Wenn der Benutzer irgendeine XMLAnalyse mal
-     * aufgerufen hat, dann gibt es mit diesem Namen im APPLICATION_PATH eine
-     * Datei (wenn der Benutzer dort Schreibrecht hat) oder in seinem
-     * user.home-Pfad (wenn er im APPLICATION_PATH kein Schreibrecht hat)
+     * aufgerufen hat, dann gibt es im user.home-Pfad eine Datei mit diesem
+     * Namen.
      */
-    public static final String ANALYSEN_FILE_NAME = UserProperties.getLocale().getLanguage().equals("en") ? "Tool3lgm.analysis" : "Tool3lgm_" + UserProperties.getLocale().getLanguage() + ".analysis";
+    public static final String ANALYSEN_FILE_NAME = getAnlyseFileNameForLanguage(UserProperties.getLocale().getLanguage());
+
+    /**
+     * @param language language code like "en" or "de" or in general
+     *            {@link Locale#getLanguage()}
+     * @return
+     */
+    public static final String getAnlyseFileNameForLanguage(final String language) {
+        return language.equals("en") ? "Tool3lgm.analysis" : "Tool3lgm_" + language + ".analysis";
+    }
 
     /**
      * Absoluter Pfad zur Datei mit den Standardanalysen der
