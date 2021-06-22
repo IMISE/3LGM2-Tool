@@ -63,7 +63,8 @@ public class Tool3lgmVersion implements Comparable<Tool3lgmVersion> {
      * prefix and the suffix. The numbers must exist in this string.
      *
      * @param versionStr
-     * @return
+     * @return <code>null</code> if the version string is invali or the parsed
+     *         version if ot is valid.
      */
     public static Tool3lgmVersion parseString(final String versionStr) {
         Tool3lgmVersion ret = new Tool3lgmVersion();
@@ -102,7 +103,7 @@ public class Tool3lgmVersion implements Comparable<Tool3lgmVersion> {
                 ret.suffix = "";
             }
         } catch (Exception e) {
-            throw new IllegalArgumentException("Tool3lgm version is not in a right format: " + versionStr);
+            return null;
         }
         return ret;
     }
