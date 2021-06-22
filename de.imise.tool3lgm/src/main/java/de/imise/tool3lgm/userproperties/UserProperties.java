@@ -801,7 +801,9 @@ public class UserProperties extends AbstractUserProperties {
         //read the first line and extract the version
         String versionString = FileHandler.getLine(USER_INFO_FILE, "#" + PROPERTY_FILE_VERSION_LINE_COMMENT_PREFIX, true);
         Tool3lgmVersion version = Tool3lgmVersion.parseString(versionString);
-        version.suffix = ""; //remove "(dev)" and the git timestamp
+        if (version != null) {
+            version.suffix = ""; //remove "(dev)" and the git timestamp
+        }
         return version;
     }
 
