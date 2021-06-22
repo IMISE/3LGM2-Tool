@@ -660,13 +660,17 @@ public class UserProperties extends AbstractUserProperties {
     ////////////
 
     /** Locale, die der Benutzer gewählt hat */
-    private static Locale locale = setLocale(Locale.getDefault().getLanguage());
+    private static Locale locale = null;
 
     /**
      * Liefert die eingestellte Locale. Hat der Benutzer sie nicht geändert,
      * entspricht sie der des Systems.
      */
     public static final Locale getLocale() {
+        //lazy init! because the build crashes if it is not lazy
+        if (locale == null) {
+            setLocale(Locale.getDefault().getLanguage());
+        }
         return locale;
     }
 
