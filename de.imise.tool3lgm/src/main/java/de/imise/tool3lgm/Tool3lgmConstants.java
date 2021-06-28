@@ -184,6 +184,9 @@ public abstract class Tool3lgmConstants {
     /** Absoluter Name des Beispielmodells */
     public static final File EXAMPLE_MODEL_FILE = new File(TEMPLATE_DIR, "Beispiel.z3lgm");
 
+    /** Absoluter Name des Service-Beispielmodells */
+    public static final File EXAMPLE_SERVICE_MODEL_FILE = new File(TEMPLATE_DIR, "Beispiel_Service.3lgm");
+
     /**
      * Name des Verzeichnisses in dem die Ressourcen für den Webexport liegen
      */

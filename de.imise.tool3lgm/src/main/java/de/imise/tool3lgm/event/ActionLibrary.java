@@ -747,6 +747,14 @@ public class ActionLibrary {
             }
         };
 
+        /** Opens the Service-Model Example */
+        public static final ExtendedAction ACTION_OPEN_EXAMPLE_SERVICE_MODEL_FILE = new StaticAction(ActionIdentifier.ACTION_OPEN_EXAMPLE_SERVICE_MODEL_FILE) {
+            @Override
+            public void actionPerformed() {
+                Static.getTool().openModelFile(Tool3lgmConstants.EXAMPLE_SERVICE_MODEL_FILE);
+            }
+        };
+
         /**
          * Öffnet den Ordner mit dem Beispielmodellen bzw die sog.
          * Modellbibliothek mit Modellen von Standards

@@ -97,8 +97,8 @@ public class MenuCollection {
             OptionsActions.ACTION_OPEN_CHOOSE_DEFAULT_METAMODEL_DIALOG, OptionsSubMenus.LOCALE_MENU, UserProperties.BooleanProperty.OPTION_ENABLE_EXPERT_MODE);
 
     /** Das Extras-Menu */
-    public static final JMenu EXTRAS_MENU = new DynamicMenu(getResString("extras"), ExtrasActions.ACTION_OPEN_USERFIELD_DEFINITION_DIALOG, ExtrasActions.ACTION_OPEN_USERFIELD_VALUE_EDITOR_DIALOG,
-            BooleanProperty.OPTION_ENABLE_FORMULA_CALCULATION, new JSeparator(), new DynamicMenuPlaceholder(), new JSeparator(), ExtrasSubMenus.PLUGIN_MENU) {
+    public static final JMenu EXTRAS_MENU = new DynamicMenu(getResString("extras"), ExtrasActions.ACTION_OPEN_USERFIELD_DEFINITION_DIALOG, ExtrasActions.ACTION_OPEN_USERFIELD_VALUE_EDITOR_DIALOG, BooleanProperty.OPTION_ENABLE_FORMULA_CALCULATION,
+            new JSeparator(), new DynamicMenuPlaceholder(), new JSeparator(), ExtrasSubMenus.PLUGIN_MENU) {
 
         @Override
         protected void updateItems(final DynamicMenuPlaceholder placeholder) { // es gibt nur einen Placeholder in diesem Menu -> es ist eindeutig, welcher es hier ist
@@ -114,14 +114,14 @@ public class MenuCollection {
     /** Das Hilfe-Menu */
     public static final JMenu HELP_MENU = createMenu("help", ActionLibrary.HelpActions.ACTION_OPEN_HELP_DIALOG, ActionLibrary.HelpActions.ACTION_ACTIVATE_DIRECT_HELP, new JSeparator(),
             ActionLibrary.HelpActions.ACTION_SHOW_INFORMATION_SYSTEM_EVALUATION_TUTORIAL, new JSeparator(), ActionLibrary.HelpActions.ACTION_OPEN_URL_ONLINE_HELP, ActionLibrary.HelpActions.ACTION_OPEN_URL_3LGM_WEBSITE, new JSeparator(),
-            ActionLibrary.HelpActions.ACTION_OPEN_EXAMPLE_MODEL_FILE, ActionLibrary.HelpActions.ACTION_OPEN_FILE_CHOSSER_IN_MODEL_LIBRARY, new JSeparator(), ActionLibrary.HelpActions.ACTION_OPEN_URL_ISSUE_TRACKER,
-            ActionLibrary.HelpActions.ACTION_OPEN_ABOUT_DIALOG/*
-                                                               * , new
-                                                               * JSeparator() ,
-                                                               * ActionLibrary.
-                                                               * HelpActions.
-                                                               * ACTION_IMPORT_LICENSE_FILE
-                                                               */);
+            ActionLibrary.HelpActions.ACTION_OPEN_EXAMPLE_MODEL_FILE, ActionLibrary.HelpActions.ACTION_OPEN_EXAMPLE_SERVICE_MODEL_FILE, ActionLibrary.HelpActions.ACTION_OPEN_FILE_CHOSSER_IN_MODEL_LIBRARY, new JSeparator(),
+            ActionLibrary.HelpActions.ACTION_OPEN_URL_ISSUE_TRACKER, ActionLibrary.HelpActions.ACTION_OPEN_ABOUT_DIALOG/*
+                                                                                                                        * , new
+                                                                                                                        * JSeparator() ,
+                                                                                                                        * ActionLibrary.
+                                                                                                                        * HelpActions.
+                                                                                                                        * ACTION_IMPORT_LICENSE_FILE
+                                                                                                                        */);
 
     /** Sammlung der Unter-Menus des Datei-Menus */
     static class FileSubMenus {
