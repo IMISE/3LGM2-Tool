@@ -396,3 +396,87 @@ Content-ID: [Service] Welche Objekttypen werden repräsentiert und welche Aufgabe
 	</suche>
 </analyse>
 --multipart_3lgm_query_separator
+Content-Type: text/xml
+Model-Type: TLGMServiceMetaModel@2388259974838049670
+Content-ID: [Service] Welche Anwendungsbausteine sind darauf installiert?
+<?xml version="1.0" encoding="ISO-8559-15"?>
+<analyse>
+	<startknoten name="PhysicalDataProcessingComponent"/>
+	<suche>
+		<typ>
+			<eintrag>PhysicalDataProcessingComponent</eintrag>
+		</typ>
+		<verbundenstate>wahr</verbundenstate>
+	</suche>
+	<suche>
+		<typ>
+			<eintrag>ApplicationSystem</eintrag>
+		</typ>
+		<verbundenstate>true</verbundenstate>
+	</suche>
+</analyse>
+--multipart_3lgm_query_separator
+Content-Type: text/xml
+Model-Type: TLGMServiceMetaModel@2388259974838049670
+Content-ID: [Service] Welche Anwendungsbausteine sind darauf installiert und welche Aufgaben werden damit unterstützt?
+<?xml version="1.0" encoding="ISO-8559-15"?>
+<analyse>
+	<startknoten name="PhysicalDataProcessingComponent"/>
+	<suche>
+		<typ>
+			<eintrag>PhysicalDataProcessingComponent</eintrag>
+		</typ>
+		<verbundenstate>wahr</verbundenstate>
+	</suche>
+	<suche>
+		<typ>
+			<eintrag>ApplicationSystem</eintrag>
+		</typ>
+		<verbundenstate>true</verbundenstate>
+	</suche>
+	<suche>
+		<typ>
+			<eintrag>Use</eintrag>
+		</typ>
+		<verbundenstate>true</verbundenstate>
+	</suche>
+	<suche>
+		<typ>
+			<eintrag>Function</eintrag>
+		</typ>
+		<verbundenstate>true</verbundenstate>
+	</suche>
+</analyse>
+--multipart_3lgm_query_separator
+Content-Type: text/xml
+Model-Type: TLGMServiceMetaModel@2388259974838049670
+Content-ID: [Service] Welche Anwendungsbausteine sind darauf installiert und welche Objekttypen werden gespeichert?
+<?xml version="1.0" encoding="ISO-8559-15"?>
+<analyse>
+	<startknoten name="PhysicalDataProcessingComponent"/>
+	<suche>
+		<typ>
+			<eintrag>PhysicalDataProcessingComponent</eintrag>
+		</typ>
+		<verbundenstate>wahr</verbundenstate>
+	</suche>
+	<suche>
+		<typ>
+			<eintrag>ApplicationSystem</eintrag>
+		</typ>
+		<verbundenstate>true</verbundenstate>
+	</suche>
+	<suche>
+		<typ>
+			<eintrag>RepresentationForm</eintrag>
+		</typ>
+		<verbundenstate>true</verbundenstate>
+	</suche>
+	<suche>
+		<typ>
+			<eintrag>ObjectType</eintrag>
+		</typ>
+		<verbundenstate>true</verbundenstate>
+	</suche>
+</analyse>
+--multipart_3lgm_query_separator
