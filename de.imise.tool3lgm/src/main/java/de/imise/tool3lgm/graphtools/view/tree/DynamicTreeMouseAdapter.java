@@ -132,7 +132,8 @@ public class DynamicTreeMouseAdapter implements MouseListener {
                 }
             } else {
                 JPopupMenu menu = new JPopupMenu();
-                JMenuItem item = new JMenuItem(new AbstractAction(getResString("MODEL_BRWOSER_EXPAND_ALL")) {
+                // Menu item for expanding all trees
+                JMenuItem itemOpenAll = new JMenuItem(new AbstractAction(getResString("MODEL_BROWSER_EXPAND_ALL")) {
                     @Override
                     public void actionPerformed(final ActionEvent arg0) {
                         for (int i = 0; i < sourceTree.getRowCount(); i++) {
@@ -140,7 +141,17 @@ public class DynamicTreeMouseAdapter implements MouseListener {
                         }
                     }
                 });
-                menu.add(item);
+                // Menu item for closing all trees
+                JMenuItem itemCloseAll = new JMenuItem(new AbstractAction(getResString("MODEL_BROWSER_CLOSE_ALL")) {
+                    @Override
+                    public void actionPerformed(final ActionEvent arg0) {
+                        for (int i = sourceTree.getRowCount(); i >= 0; i--) {
+                            sourceTree.collapseRow(i);
+                        }
+                    }
+                });
+                menu.add(itemOpenAll);
+                menu.add(itemCloseAll);
                 menu.show(tree, xin + 3, yin + 3);
             }
         }
