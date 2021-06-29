@@ -6,4 +6,6 @@
 
 [Features/Analysis of 3LGM² models](Features/Analysis of 3LGM² models "Analysis of 3LGM² models")
 
+[Features / Userfields and Subtypes](Features/Userfields and Subtypes)
+
 [FAQ](FAQ "Frequently asked questions")
