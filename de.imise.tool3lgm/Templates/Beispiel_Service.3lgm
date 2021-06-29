@@ -4,17 +4,17 @@
   <header>
     <title>Beispiel_Service.3lgm</title>
     <description></description>
-    <version>41_Steam_1622638103906</version>
+    <version>42_hks_e_1624876498480</version>
   </header>
   <userFieldDefinitions>
+    <userFieldFormat hash="USERFIELD_1497433362070_2">
+      <userFieldFormatString>d0 uh / Jahr</userFieldFormatString>
+    </userFieldFormat>
     <userFieldFormat hash="USERFIELD_1497434059112_14">
       <userFieldFormatString>d1 uGB</userFieldFormatString>
     </userFieldFormat>
     <userFieldFormat hash="USERFIELD_1497434089887_15">
       <userFieldFormatString>d0 uMB</userFieldFormatString>
-    </userFieldFormat>
-    <userFieldFormat hash="USERFIELD_1497433362070_2">
-      <userFieldFormatString>d0 uh / Jahr</userFieldFormatString>
     </userFieldFormat>
     <userFieldDef hash="USERFIELD_1497434000226_12">
       <userFieldName>Inventarnummer</userFieldName>
@@ -64,11 +64,11 @@
   </userFieldDefinitions>
   <objects>
     <model>
+      <userField hash="USERFIELD_1497433330855_0">0</userField>
+      <userField hash="USERFIELD_1497433961756_10">SUN SOLARIS 2.7</userField>
+      <userField hash="USERFIELD_1497433989459_11">1432 - 1254</userField>
       <userField hash="USERFIELD_1497434000226_12">IV 765 5432</userField>
       <userField hash="USERFIELD_1497434038201_13">512</userField>
-      <userField hash="USERFIELD_1497433989459_11">1432 - 1254</userField>
-      <userField hash="USERFIELD_1497433961756_10">SUN SOLARIS 2.7</userField>
-      <userField hash="USERFIELD_1497433330855_0">0</userField>
       <userField hash="USERFIELD_1497434147788_18">5</userField>
     </model>
     <element class="ObjectType" hash="OTY_1620982091760_3660">
@@ -1811,6 +1811,51 @@ NUKVA	92829800	Ärzte (nicht bebuchbar)
       <field name="name">NUKA1</field>
       <field name="description">Klinik und Poliklinik für Nuklearmedizin - Nuklearmedizinische Ambulanz</field>
     </element>
+    <element class="Use" hash="USE_1621421446914_3974">
+      <field name="name">Nutzung 1</field>
+    </element>
+    <element class="Use" hash="Use_1621420700275_3951">
+      <field name="name">Nutzung 1</field>
+    </element>
+    <element class="Use" hash="USE_1621420758691_3958">
+      <field name="name">Nutzung 1</field>
+    </element>
+    <element class="Use" hash="USE_1622013601076_4498">
+      <field name="name">Usage 1</field>
+    </element>
+    <element class="Use" hash="USE_1621421482580_3978">
+      <field name="name">Nutzung 1</field>
+    </element>
+    <element class="Use" hash="USE_1621421563123_3988">
+      <field name="name">Nutzung 1</field>
+    </element>
+    <element class="Use" hash="USE_1621421578107_3991">
+      <field name="name">Nutzung 1</field>
+    </element>
+    <element class="Use" hash="USE_1622013789995_4506">
+      <field name="name">Usage 1</field>
+    </element>
+    <element class="Use" hash="USE_1622013814234_4509">
+      <field name="name">Usage 1</field>
+    </element>
+    <element class="Use" hash="USE_1622013834826_4512">
+      <field name="name">Usage 1</field>
+    </element>
+    <element class="Use" hash="USE_1622013883227_4518">
+      <field name="name">Usage 1</field>
+    </element>
+    <element class="Use" hash="USE_1622013957770_4525">
+      <field name="name">Usage 1</field>
+    </element>
+    <element class="Use" hash="USE_1621421592851_3994">
+      <field name="name">Nutzung 1</field>
+    </element>
+    <element class="Use" hash="USE_1621421611050_3997">
+      <field name="name">Nutzung 1</field>
+    </element>
+    <element class="Use" hash="USE_1622013933003_4522">
+      <field name="name">Usage 1</field>
+    </element>
     <element class="OrganisationalUnit" hash="OEH_1066899784758_797641">
       <field name="name">OKL</field>
       <field name="description">Operative Kliniken
@@ -2535,51 +2580,6 @@ URO-A	92415200	URO A</field>
       <field name="description">Klinik und Polyklinik für Urologie - OP-Saal
 92413100</field>
     </element>
-    <element class="Use" hash="USE_1621421446914_3974">
-      <field name="name">Nutzung 1</field>
-    </element>
-    <element class="Use" hash="Use_1621420700275_3951">
-      <field name="name">Nutzung 1</field>
-    </element>
-    <element class="Use" hash="USE_1621420758691_3958">
-      <field name="name">Nutzung 1</field>
-    </element>
-    <element class="Use" hash="USE_1622013601076_4498">
-      <field name="name">Usage 1</field>
-    </element>
-    <element class="Use" hash="USE_1621421482580_3978">
-      <field name="name">Nutzung 1</field>
-    </element>
-    <element class="Use" hash="USE_1621421563123_3988">
-      <field name="name">Nutzung 1</field>
-    </element>
-    <element class="Use" hash="USE_1621421578107_3991">
-      <field name="name">Nutzung 1</field>
-    </element>
-    <element class="Use" hash="USE_1622013789995_4506">
-      <field name="name">Usage 1</field>
-    </element>
-    <element class="Use" hash="USE_1622013814234_4509">
-      <field name="name">Usage 1</field>
-    </element>
-    <element class="Use" hash="USE_1622013834826_4512">
-      <field name="name">Usage 1</field>
-    </element>
-    <element class="Use" hash="USE_1622013883227_4518">
-      <field name="name">Usage 1</field>
-    </element>
-    <element class="Use" hash="USE_1622013957770_4525">
-      <field name="name">Usage 1</field>
-    </element>
-    <element class="Use" hash="USE_1621421592851_3994">
-      <field name="name">Nutzung 1</field>
-    </element>
-    <element class="Use" hash="USE_1621421611050_3997">
-      <field name="name">Nutzung 1</field>
-    </element>
-    <element class="Use" hash="USE_1622013933003_4522">
-      <field name="name">Usage 1</field>
-    </element>
     <element class="OrganisationalUnit" hash="OEH_1087990720671_22790">
       <field name="name">Virologie</field>
       <field name="description">Institut für Virologie</field>
@@ -3058,6 +3058,18 @@ Special codes in the Event Type record are used for updating.</field>
     <element class="ProvidingInterface" hash="PIN_1620990139433_3801">
       <field name="name">IS-H*MED-basiertes Klinisches Dokumentations- und Managementsystem [KDMS-ISH*MED] Schnittstelle (bereitstellend) 1</field>
     </element>
+    <element class="RepresentationForm" hash="RFO_1624876219404_4788">
+      <field name="name">IS-H*MED-Befunddatensatz</field>
+    </element>
+    <element class="RepresentationForm" hash="RFO_1624876245820_4795">
+      <field name="name">IS-H-Diagnosendatensatz</field>
+    </element>
+    <element class="RepresentationForm" hash="RFO_1624876279972_4803">
+      <field name="name">IS-H-Falldatensatz</field>
+    </element>
+    <element class="RepresentationForm" hash="RFO_1624876304884_4810">
+      <field name="name">IS-H-Prozedurendatensatz</field>
+    </element>
     <element class="ApplicationSystem" hash="ASY_1620984822318_3748">
       <field name="name">Kommunikationsserver</field>
       <field name="description">Zur Absicherung der Nachrichtenübermittlung:
@@ -3094,6 +3106,9 @@ Es konnte keine automatische Benachrichtigung der Systembetreuer bei Fehlernachr
     <element class="SoftwareProduct" hash="SOF_1060589919844_59326">
       <field name="name">LEDIS</field>
     </element>
+    <element class="RepresentationForm" hash="RFO_1624876454324_4842">
+      <field name="name">LEDIS-Datensatz</field>
+    </element>
     <element class="RepresentationForm" hash="NAC_1068715657556_6092">
       <field name="name">Leistung-LEDIS-Batch</field>
     </element>
@@ -3115,11 +3130,41 @@ Es konnte keine automatische Benachrichtigung der Systembetreuer bei Fehlernachr
     <element class="SoftwareProduct" hash="SOF_1060589919844_59355">
       <field name="name">MagicWeb</field>
     </element>
+    <element class="RepresentationForm" hash="RFO_1624876126868_4767">
+      <field name="name">MagicWeb-Befunddatensatz</field>
+    </element>
+    <element class="RepresentationForm" hash="RFO_1624876159804_4774">
+      <field name="name">MagicWeb-Bilddatensatz</field>
+    </element>
     <element class="SoftwareProduct" hash="SOF_1060589919844_59307">
       <field name="name">MEDOS</field>
     </element>
+    <element class="RepresentationForm" hash="RFO_1624875365492_4713">
+      <field name="name">MEDOS-Anforderungsdatensatz</field>
+    </element>
+    <element class="RepresentationForm" hash="RFO_1624875537851_4722">
+      <field name="name">MEDOS-Auftragsdatensatz</field>
+    </element>
+    <element class="RepresentationForm" hash="RFO_1624875885651_4724">
+      <field name="name">MEDOS-Befunddatensatz</field>
+    </element>
+    <element class="RepresentationForm" hash="RFO_1624875907908_4726">
+      <field name="name">MEDOS-Diagnosendatensatz</field>
+    </element>
     <element class="SoftwareProduct" hash="SOF_1086094321986_7258">
       <field name="name">MEDOS-MEDHOST</field>
+    </element>
+    <element class="RepresentationForm" hash="RFO_1624875379907_4714">
+      <field name="name">MEDOS-Patientendatensatz</field>
+    </element>
+    <element class="RepresentationForm" hash="RFO_1624875927643_4728">
+      <field name="name">MEDOS-Prozedurendatensatz</field>
+    </element>
+    <element class="RepresentationForm" hash="RFO_1624875949875_4730">
+      <field name="name">MEDOS-Untersuchungsdatensatz</field>
+    </element>
+    <element class="RepresentationForm" hash="RFO_1624875395900_4715">
+      <field name="name">MEDOS-Vorgangsdatensatz</field>
     </element>
     <element class="Service" hash="SER_1622632339138_4595">
       <field name="name">Merge patient record</field>
@@ -3297,6 +3342,9 @@ Langzeitarchiv</field>
     <element class="ProvidingInterface" hash="PIN_1620990776777_3869">
       <field name="name">PACS Digitales Bildarchiv RAD Schnittstelle (bereitstellend) 2</field>
     </element>
+    <element class="RepresentationForm" hash="RFO_1624876405820_4829">
+      <field name="name">PACS-Bilddatensatz</field>
+    </element>
     <element class="RepresentationForm" hash="NAC_1060589919844_59430">
       <field name="name">PATADM01</field>
     </element>
@@ -3406,6 +3454,9 @@ Basisbetreuung: Dr. Bratanow, Hr. Böttcher, Bereich Informationsmanagement</fie
     </element>
     <element class="SoftwareProduct" hash="SOF_1092059710031_18906">
       <field name="name">SAP/R3 - IS-H*MED</field>
+    </element>
+    <element class="RepresentationForm" hash="RFO_1624876325348_4817">
+      <field name="name">SAP-Patientenstammsatz</field>
     </element>
     <element class="SoftwareProduct" hash="SOF_1069149299667_5845">
       <field name="name">SIENET</field>
@@ -5223,6 +5274,86 @@ Josehphinenstr. 7</field>
       <field name="start">OTY_1620981888152_3656</field>
       <field name="end">NAC_1069142994641_6002</field>
     </element>
+    <element class="ObjectType_RepresentationForm_Edge" hash="DLK_1624875413349_4716">
+      <field name="name">Beziehung 2</field>
+      <field name="start">OTY_1620982246040_3669</field>
+      <field name="end">RFO_1624875379907_4714</field>
+    </element>
+    <element class="ObjectType_RepresentationForm_Edge" hash="DLK_1624875486853_4721">
+      <field name="name">Beziehung 3</field>
+      <field name="start">OTY_1620982396871_3672</field>
+      <field name="end">RFO_1624875395900_4715</field>
+    </element>
+    <element class="ObjectType_RepresentationForm_Edge" hash="DLK_1624875553558_4723">
+      <field name="name">Beziehung 4</field>
+      <field name="start">OTY_1620982103856_3661</field>
+      <field name="end">RFO_1624875537851_4722</field>
+    </element>
+    <element class="ObjectType_RepresentationForm_Edge" hash="DLK_1624875893333_4725">
+      <field name="name">Beziehung 5</field>
+      <field name="start">OTY_1620982151456_3664</field>
+      <field name="end">RFO_1624875885651_4724</field>
+    </element>
+    <element class="ObjectType_RepresentationForm_Edge" hash="DLK_1624875915141_4727">
+      <field name="name">Beziehung 6</field>
+      <field name="start">OTY_1620982180976_3666</field>
+      <field name="end">RFO_1624875907908_4726</field>
+    </element>
+    <element class="ObjectType_RepresentationForm_Edge" hash="DLK_1624875934406_4729">
+      <field name="name">Beziehung 7</field>
+      <field name="start">OTY_1620982172168_3665</field>
+      <field name="end">RFO_1624875927643_4728</field>
+    </element>
+    <element class="ObjectType_RepresentationForm_Edge" hash="DLK_1624875960909_4731">
+      <field name="name">Beziehung 8</field>
+      <field name="start">OTY_1620982049551_3658</field>
+      <field name="end">RFO_1624875949875_4730</field>
+    </element>
+    <element class="ObjectType_RepresentationForm_Edge" hash="DLK_1624875966029_4732">
+      <field name="name">Beziehung 9</field>
+      <field name="start">OTY_1620982672584_3677</field>
+      <field name="end">RFO_1624875949875_4730</field>
+    </element>
+    <element class="ObjectType_RepresentationForm_Edge" hash="DLK_1624876134165_4768">
+      <field name="name">Beziehung 1</field>
+      <field name="start">OTY_1620982151456_3664</field>
+      <field name="end">RFO_1624876126868_4767</field>
+    </element>
+    <element class="ObjectType_RepresentationForm_Edge" hash="DLK_1624876172358_4775">
+      <field name="name">Beziehung 10</field>
+      <field name="start">OTY_1620982135615_3663</field>
+      <field name="end">RFO_1624876159804_4774</field>
+    </element>
+    <element class="ObjectType_RepresentationForm_Edge" hash="DLK_1624876232550_4789">
+      <field name="name">Beziehung 11</field>
+      <field name="start">OTY_1620982151456_3664</field>
+      <field name="end">RFO_1624876219404_4788</field>
+    </element>
+    <element class="ObjectType_RepresentationForm_Edge" hash="DLK_1624876255045_4796">
+      <field name="name">Beziehung 12</field>
+      <field name="start">OTY_1620982180976_3666</field>
+      <field name="end">RFO_1624876245820_4795</field>
+    </element>
+    <element class="ObjectType_RepresentationForm_Edge" hash="DLK_1624876287726_4804">
+      <field name="name">Beziehung 13</field>
+      <field name="start">OTY_1620982396871_3672</field>
+      <field name="end">RFO_1624876279972_4803</field>
+    </element>
+    <element class="ObjectType_RepresentationForm_Edge" hash="DLK_1624876313166_4811">
+      <field name="name">Beziehung 14</field>
+      <field name="start">OTY_1620982172168_3665</field>
+      <field name="end">RFO_1624876304884_4810</field>
+    </element>
+    <element class="ObjectType_RepresentationForm_Edge" hash="DLK_1624876333286_4818">
+      <field name="name">Beziehung 15</field>
+      <field name="start">OTY_1620982246040_3669</field>
+      <field name="end">RFO_1624876325348_4817</field>
+    </element>
+    <element class="ObjectType_RepresentationForm_Edge" hash="DLK_1624876411805_4830">
+      <field name="name">Beziehung 16</field>
+      <field name="start">OTY_1620982135615_3663</field>
+      <field name="end">RFO_1624876405820_4829</field>
+    </element>
     <element class="PartableApplicationComponent_CommunicationInterface_Edge" hash="DLK_1620985412406_3774">
       <field name="name">Unterordunungsbeziehung 1</field>
       <field name="start">ASY_1620984907669_3762</field>
@@ -5877,21 +6008,6 @@ Josehphinenstr. 7</field>
       <field name="end">NAC_1068715533686_6072</field>
       <field name="state">DOUBLE</field>
     </element>
-    <element class="PartableApplicationComponent_HasPartEdge" hash="DLK_1620985019028_3770">
-      <field name="name">Hat-Teil-Beziehung 1</field>
-      <field name="start">ASY_1620984868798_3761</field>
-      <field name="end">ASY_1620984907669_3762</field>
-    </element>
-    <element class="PartableApplicationComponent_HasPartEdge" hash="DLK_1620985021884_3771">
-      <field name="name">Hat-Teil-Beziehung 2</field>
-      <field name="start">ASY_1620984868798_3761</field>
-      <field name="end">ASY_1620984923463_3763</field>
-    </element>
-    <element class="PartableApplicationComponent_HasPartEdge" hash="DLK_1620985024252_3772">
-      <field name="name">Hat-Teil-Beziehung 3</field>
-      <field name="start">ASY_1620984868798_3761</field>
-      <field name="end">ASY_1620984932421_3764</field>
-    </element>
     <element class="Service_RepresentationForm_Edge" hash="DLK_1622632209220_4590">
       <field name="name">Connection 4</field>
       <field name="start">SER_1622628444941_4589</field>
@@ -6249,6 +6365,116 @@ Josehphinenstr. 7</field>
       <field name="start">SER_1622638040485_4672</field>
       <field name="end">DLK_1620988399858_3785</field>
     </element>
+    <element class="PartableApplicationComponent_HasPartEdge" hash="DLK_1620985019028_3770">
+      <field name="name">Hat-Teil-Beziehung 1</field>
+      <field name="start">ASY_1620984868798_3761</field>
+      <field name="end">ASY_1620984907669_3762</field>
+    </element>
+    <element class="PartableApplicationComponent_HasPartEdge" hash="DLK_1620985021884_3771">
+      <field name="name">Hat-Teil-Beziehung 2</field>
+      <field name="start">ASY_1620984868798_3761</field>
+      <field name="end">ASY_1620984923463_3763</field>
+    </element>
+    <element class="PartableApplicationComponent_HasPartEdge" hash="DLK_1620985024252_3772">
+      <field name="name">Hat-Teil-Beziehung 3</field>
+      <field name="start">ASY_1620984868798_3761</field>
+      <field name="end">ASY_1620984932421_3764</field>
+    </element>
+    <element class="ApplicationComponent_RepresentationForm_Edge" hash="DLK_1624875437188_4718">
+      <field name="name">Speicherung 2</field>
+      <field name="start">ASY_1620984802902_3747</field>
+      <field name="end">RFO_1624875365492_4713</field>
+    </element>
+    <element class="ApplicationComponent_RepresentationForm_Edge" hash="DLK_1624875438477_4719">
+      <field name="name">Speicherung 3</field>
+      <field name="start">ASY_1620984802902_3747</field>
+      <field name="end">RFO_1624875379907_4714</field>
+    </element>
+    <element class="ApplicationComponent_RepresentationForm_Edge" hash="DLK_1624875440102_4720">
+      <field name="name">Speicherung 4</field>
+      <field name="start">ASY_1620984802902_3747</field>
+      <field name="end">RFO_1624875395900_4715</field>
+    </element>
+    <element class="ApplicationComponent_RepresentationForm_Edge" hash="DLK_1624875997789_4733">
+      <field name="name">Speicherung 5</field>
+      <field name="start">ASY_1620984786549_3745</field>
+      <field name="end">RFO_1624875537851_4722</field>
+    </element>
+    <element class="ApplicationComponent_RepresentationForm_Edge" hash="DLK_1624876007885_4734">
+      <field name="name">Speicherung 6</field>
+      <field name="start">ASY_1620984786549_3745</field>
+      <field name="end">RFO_1624875885651_4724</field>
+    </element>
+    <element class="ApplicationComponent_RepresentationForm_Edge" hash="DLK_1624876008597_4735">
+      <field name="name">Speicherung 7</field>
+      <field name="start">ASY_1620984786549_3745</field>
+      <field name="end">RFO_1624875907908_4726</field>
+    </element>
+    <element class="ApplicationComponent_RepresentationForm_Edge" hash="DLK_1624876009277_4736">
+      <field name="name">Speicherung 8</field>
+      <field name="start">ASY_1620984786549_3745</field>
+      <field name="end">RFO_1624875379907_4714</field>
+    </element>
+    <element class="ApplicationComponent_RepresentationForm_Edge" hash="DLK_1624876010398_4737">
+      <field name="name">Speicherung 9</field>
+      <field name="start">ASY_1620984786549_3745</field>
+      <field name="end">RFO_1624875927643_4728</field>
+    </element>
+    <element class="ApplicationComponent_RepresentationForm_Edge" hash="DLK_1624876011220_4738">
+      <field name="name">Speicherung 10</field>
+      <field name="start">ASY_1620984786549_3745</field>
+      <field name="end">RFO_1624875949875_4730</field>
+    </element>
+    <element class="ApplicationComponent_RepresentationForm_Edge" hash="DLK_1624876012261_4739">
+      <field name="name">Speicherung 11</field>
+      <field name="start">ASY_1620984786549_3745</field>
+      <field name="end">RFO_1624875395900_4715</field>
+    </element>
+    <element class="ApplicationComponent_RepresentationForm_Edge" hash="DLK_1624876184181_4776">
+      <field name="name">Speicherung 1</field>
+      <field name="start">ASY_1620984794550_3746</field>
+      <field name="end">RFO_1624876126868_4767</field>
+    </element>
+    <element class="ApplicationComponent_RepresentationForm_Edge" hash="DLK_1624876185221_4777">
+      <field name="name">Speicherung 12</field>
+      <field name="start">ASY_1620984794550_3746</field>
+      <field name="end">RFO_1624876159804_4774</field>
+    </element>
+    <element class="ApplicationComponent_RepresentationForm_Edge" hash="DLK_1624876353942_4819">
+      <field name="name">Speicherung 13</field>
+      <field name="start">ASY_1620984868798_3761</field>
+      <field name="end">RFO_1624876219404_4788</field>
+    </element>
+    <element class="ApplicationComponent_RepresentationForm_Edge" hash="DLK_1624876355336_4820">
+      <field name="name">Speicherung 14</field>
+      <field name="start">ASY_1620984868798_3761</field>
+      <field name="end">RFO_1624876245820_4795</field>
+    </element>
+    <element class="ApplicationComponent_RepresentationForm_Edge" hash="DLK_1624876356734_4821">
+      <field name="name">Speicherung 15</field>
+      <field name="start">ASY_1620984868798_3761</field>
+      <field name="end">RFO_1624876279972_4803</field>
+    </element>
+    <element class="ApplicationComponent_RepresentationForm_Edge" hash="DLK_1624876360654_4822">
+      <field name="name">Speicherung 16</field>
+      <field name="start">ASY_1620984868798_3761</field>
+      <field name="end">RFO_1624876304884_4810</field>
+    </element>
+    <element class="ApplicationComponent_RepresentationForm_Edge" hash="DLK_1624876379798_4823">
+      <field name="name">Speicherung 17</field>
+      <field name="start">ASY_1620984868798_3761</field>
+      <field name="end">RFO_1624876325348_4817</field>
+    </element>
+    <element class="ApplicationComponent_RepresentationForm_Edge" hash="DLK_1624876425637_4836">
+      <field name="name">Speicherung 18</field>
+      <field name="start">ASY_1620984767037_3744</field>
+      <field name="end">RFO_1624876405820_4829</field>
+    </element>
+    <element class="ApplicationComponent_RepresentationForm_Edge" hash="DLK_1624876463734_4843">
+      <field name="name">Speicherung 19</field>
+      <field name="start">ASY_1620984860653_3760</field>
+      <field name="end">RFO_1624876454324_4842</field>
+    </element>
     <element class="PhysicalDataProcessingComponent_HasPartEdge" hash="DLK_1621357913635_3879">
       <field name="name">Hat-Teil-Beziehung 1</field>
       <field name="start">PDP_1621356231287_3895</field>
@@ -6540,12 +6766,12 @@ Josehphinenstr. 7</field>
       <field name="index">0</field>
     </element>
   </objects>
-  <szenario hash="SZN_1620980349466_0" titel="Teilmodell #1">
+  <szenario hash="SZN_1620980349466_0" titel="KDMS-RIS-PACS">
     <description></description>
     <view>
       <selected>true</selected>
-      <x>57</x>
-      <y>21</y>
+      <x>0</x>
+      <y>120</y>
       <zoom>0.84</zoom>
       <degree>65</degree>
       <shift>200</shift>

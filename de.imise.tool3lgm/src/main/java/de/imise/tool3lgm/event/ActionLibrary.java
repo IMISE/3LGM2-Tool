@@ -740,10 +740,18 @@ public class ActionLibrary {
         public static final ExtendedAction ACTION_OPEN_URL_ISSUE_TRACKER = new OpenUrlAction(ActionIdentifier.ACTION_OPEN_URL_ISSUE_TRACKER);
 
         /** öffnet das Beispielmodell */
-        public static final ExtendedAction ACTION_OPEN_EXAMPLE_MODEL_FILE = new StaticAction(ActionIdentifier.ACTION_OPEN_EXAMPLE_MODEL_FILE) {
+        public static final ExtendedAction ACTION_OPEN_EXAMPLE_MESSAGE_BASED = new StaticAction(ActionIdentifier.ACTION_OPEN_EXAMPLE_MESSAGE_BASED) {
             @Override
             public void actionPerformed() {
                 Static.getTool().openModelFile(Tool3lgmConstants.EXAMPLE_MODEL_FILE);
+            }
+        };
+
+        /** Opens the Service-Model Example */
+        public static final ExtendedAction ACTION_OPEN_EXAMPLE_SERVICE_ORIENTED = new StaticAction(ActionIdentifier.ACTION_OPEN_EXAMPLE_SERVICE_ORIENTED) {
+            @Override
+            public void actionPerformed() {
+                Static.getTool().openModelFile(Tool3lgmConstants.EXAMPLE_SERVICE_MODEL_FILE);
             }
         };
 
