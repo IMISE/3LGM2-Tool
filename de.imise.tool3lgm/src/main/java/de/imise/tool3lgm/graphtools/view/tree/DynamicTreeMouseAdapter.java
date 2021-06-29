@@ -142,7 +142,7 @@ public class DynamicTreeMouseAdapter implements MouseListener {
                     }
                 });
                 // Menu item for closing all trees
-                JMenuItem itemCloseAll = new JMenuItem(new AbstractAction(getResString("MODEL_BROWSER_CLOSE_ALL")) {
+                JMenuItem itemCloseAll = new JMenuItem(new AbstractAction(getResString("MODEL_BROWSER_COLLAPSE_ALL")) {
                     @Override
                     public void actionPerformed(final ActionEvent arg0) {
                         for (int i = sourceTree.getRowCount(); i >= 0; i--) {
