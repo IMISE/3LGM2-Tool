@@ -32,6 +32,14 @@ public interface IDSource {
      * @return
      */
     public default String createID(final String idPrefix) {
+        return createIDString(idPrefix);
+    }
+
+    /**
+     * @param idPrefix
+     * @return
+     */
+    public static String createIDString(final String idPrefix) {
         return IDStringGenerator.createIDString(idPrefix);
     }
 
@@ -79,6 +87,15 @@ public interface IDSource {
             }
         }
         return false;
+    }
+
+    /**
+     * @param obj
+     * @return <code>true</code> if the objetc also is an IDSource and has the
+     *         same ID.
+     */
+    public default boolean hasEqualsID(final IDSource other) {
+        return other.hasID(getID());
     }
 
 }
