@@ -1,7 +1,43 @@
-Navigate the model
-This section will show you how to get an overview of a model. The best way to do this is to open the example model included in this help. 
-After opening the model, you will see a tab in the model browser with the name of the opened model, including a tab entitled <All Elements> and other tabs containing the names of the submodels of the opened model. The <All Elements> tab is selected, so the 3LGM² logo appears in the document window. In the Model Browser, click on the tab of a submodel. This is now displayed in the document window. Only the elements of that submodel are now listed in the model browser.
-In the following, we will take a closer look at the domain layer. Switch the document window view to single layer view in the standard toolbar by pressing the Multiview button and then select the domain layer (DL button in the standard toolbar). The Document window will now display only the domain layer. If you now expand the domain layer in the Model Browser and then select Task, you will see the tasks displayed in the Document window. Tasks can be superordinate or subordinate to other tasks. In the model browser, subordinate tasks are only displayed when you expand the parent task in the model browser. The same is true for all other elements in the 3LGM² kit that can be super- or subordinate.
+# Navigate the model #
+
+This section will show you how to get an overview of a model. The best way to do this is to open the example model included in this help.
+
+![ExampleModel.PNG](https://bitbucket.org/repo/9L6rMz/images/3021977281-ExampleModel.PNG)
+
+After opening the model, you will see a tab in the model browser with the name of the opened model, including a tab entitled *<All Elements>* and other tabs containing the names of the submodels of the opened model. 
+
+![ModelSelection.PNG](https://bitbucket.org/repo/9L6rMz/images/831384792-ModelSelection.PNG)
+
+The *<All Elements>* tab is selected, so the 3LGM² logo appears in the document window. In the Model Browser, click on the tab of a submodel. This is now displayed in the document window. Only the elements of that submodel are now listed in the model browser.
+
+![SubmodelTab.PNG](https://bitbucket.org/repo/9L6rMz/images/2296076631-SubmodelTab.PNG)
+
+-----
+
+In the following, we will take a closer look at the domain layer. Switch the document window view to single layer view in the standard toolbar by pressing the Multiview button 
+
+![SingleLayerSelection.PNG](https://bitbucket.org/repo/9L6rMz/images/2668001555-SingleLayerSelection.PNG)
+
+ and then select the domain layer (DL button in the standard toolbar).
+
+![DomainLayerSelection.PNG](https://bitbucket.org/repo/9L6rMz/images/905475637-DomainLayerSelection.PNG)
+
+The Document window will now display only the domain layer. 
+
+If you now expand the domain layer in the Model Browser and then select Function, you will see the functions displayed in the Document window. Functions can be superordinate or subordinate to other functions. In the model browser, subordinate functions are only displayed when you expand the parent function in the model browser. The same is true for all other elements in the 3LGM² kit that can be super- or subordinate.
+
+![functionsModelBrowser.PNG](https://bitbucket.org/repo/9L6rMz/images/2934816897-functionsModelBrowser.PNG)
+
 Note that not all elements that are visible in the Model Browser are also displayed in the Document Window. This applies, for example, to an organizational unit. This is visible in the model browser, but is not represented graphically in the document window.
+
 If you want to view or change the properties of a construction kit element, double-click on the corresponding element in the Model Browser or right-click on the element in the document window and select Properties from the context menu that appears.
-So-called inter-layer relationships can exist between the elements of the domain layer and the logical tool layer or between the logical and physical tool layers. These can be displayed in the view of all three layers in the document window. To do so, use the MultiView button on the standard toolbar to select the view of all three planes again. To display inter-layer relationships between the domain layer and the logical tool layer, right-click on the domain layer and select Show Interlayer Connections from the context menu that appears. To display inter-layer relationships between the Logical and Physical tool layers, right-click the Logical Tool layer and select Show Interlayer Connections from the shortcut menu that appears. For the theoretical basics of inter-layer relationships, please refer to the chapter Inter-layer Relationships between Static Components.
+
+So-called inter-layer relationships can exist between the elements of the domain layer and the logical tool layer or between the logical and physical tool layers. These can be displayed in the view of all three layers in the document window. To do so, use the MultiView button on the standard toolbar to select the view of all three planes again.
+
+![Multiview.PNG](https://bitbucket.org/repo/9L6rMz/images/3216415381-Multiview.PNG)
+
+To display inter-layer relationships between the domain layer and the logical tool layer, right-click on the domain layer and select Show Interlayer Connections from the context menu that appears or use the **Show interlayer connections** button in the standard toolbar. 
+
+![ShowInterlayer.PNG](https://bitbucket.org/repo/9L6rMz/images/3247557648-ShowInterlayer.PNG)
+
+To display inter-layer relationships between the Logical and Physical tool layers, right-click the Logical Tool layer and select Show Interlayer Connections from the shortcut menu that appears. For the theoretical basics of inter-layer relationships, please refer to the chapter Inter-layer Relationships between Static Components.
