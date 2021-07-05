@@ -753,6 +753,11 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
         if (isSelectedOnlySubmodelElements()) {
             dispatch_command(GDCommands.MODEL_ACTION_DELETE_FROM_SUBMODEL, argv, pid);
         }
+        // this case is only true if the user has only selected edges
+        // and pressed the delete key
+        else if (argv.length == 0 && isSelectedOnlyEdges()) {
+            unlinkSelectedEdges(pid);
+        }
         // Elemente sind nicht aus einem Teilmodell sondern nur aus dem Gesamtmodell löschbar, wenn
         // - aktuelles Modell = Hauptdokument
         // - alle selektierten Elemente sind unique (= ohne grafische Repräsentation sind sie immer in allen Teilmodellen)
@@ -4227,6 +4232,21 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
                 ModelElement me = ec.getElement();
                 gdcoll.unlink(lastSelecedElement, me, edgeClass, pid);
             }
+        }
+        finish_transaction(pid);
+        distributeEvent(DATA_CHANGED, pid);
+    }
+
+    /**
+     * Unlinks the selected Edges
+     *
+     * @param pid
+     */
+    private final void unlinkSelectedEdges(final int pid) {
+        start_transaction(pid);
+        for (EdgeContainer edgeC : getSelectedEdgeContainerIterable()) {
+            Edge edge = edgeC.getEdge();
+            gdcoll.unlink(edge, pid);
         }
         finish_transaction(pid);
         distributeEvent(DATA_CHANGED, pid);

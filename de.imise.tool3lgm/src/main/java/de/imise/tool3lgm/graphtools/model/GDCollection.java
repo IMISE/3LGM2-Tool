@@ -230,7 +230,9 @@ public class GDCollection extends UserFieldTarget implements MetaModelSpecific {
     /** Dokument wurde geaendert */
     private boolean changed;
 
-    /** these change types should be ignored, because they aren't actual changes */
+    /**
+     * these change types should be ignored, because they aren't actual changes
+     */
     private final static Set<LGMChangeType> IGNORE_CHANGE_TYPES = ImmutableSet.of(ACTIVE_LAYER_CHANGED, SELECTION_CHANGED, SELECTED_SZENARIO_CHANGED);
 
     /**
@@ -2097,34 +2099,35 @@ public class GDCollection extends UserFieldTarget implements MetaModelSpecific {
     }
 
     /**
-     * ACHTUNG: DIESE BEIDEN UNINK-FUNKTIONEN HABE ICH AM 24.10.2018
-     * HINZUGEFÜGT. DAS PROZESSSTRUKTURPANEL MÜSSTE ÜBER EINE SOLCHE FUNKTION
-     * ARBEITEN. DAS HIER IST DAZU DA, MICH DARAN ZU ERINNERN!
+     * Deletes the edge in both directions.
      *
      * @param edge
      * @param pid
      */
-    public final void _unlink(final Edge edge, final int pid) {
-        _unlink(edge, Direction.FORWARD, pid);
+    public final void unlink(final Edge edge, final int pid) {
+        unlink(edge, null, pid);
     }
 
     /**
-     * ACHTUNG: DIESE BEIDEN UNINK-FUNKTIONEN HABE ICH AM 24.10.2018
-     * HINZUGEFÜGT. DAS PROZESSSTRUKTURPANEL MÜSSTE ÜBER EINE SOLCHE FUNKTION
-     * ARBEITEN. DAS HIER IST DAZU DA, MICH DARAN ZU ERINNERN!
+     * Deletes the edge in given direction, if a <code>null</code> is given both
+     * directions are deleted.
      *
      * @param edge
      * @param direction
      * @param pid
      */
-    public final void _unlink(final Edge edge, final Direction direction, final int pid) {
+    public final void unlink(final Edge edge, final Direction direction, final int pid) {
         ModelElement start = edge.getStart();
         ModelElement end = edge.getEnd();
-        if (direction == Direction.FORWARD) {
+        mainDoc.start_transaction(pid);
+        if (direction == null || direction == Direction.FORWARD) {
             unlink(start, end, edge.getClass(), start.getEdgeIndex(edge), pid);
-        } else {
+        }
+        if (direction == null || direction == Direction.BACKWARD) {
             unlink(end, start, edge.getClass(), end.getEdgeIndex(edge), pid);
         }
+        mainDoc.finish_transaction(pid);
+        mainDoc.distributeEvent(DATA_CHANGED, pid);
     }
 
     /**

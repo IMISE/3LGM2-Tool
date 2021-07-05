@@ -643,7 +643,7 @@ public class ModelSelection extends MetaModelSpecificAdapter implements Set<Elem
      */
     public boolean isSelectedOnlyBendpointsAndTextfields() {
         Collection<?> elements = GDCollection.getModelElements(selectedRealNodeContainer);
-        return CollectionUtils.containsOnlyInstancesOf(elements, true, Textfield.class, Bendpoint.class);
+        return !elements.isEmpty() && CollectionUtils.containsOnlyInstancesOf(elements, true, Textfield.class, Bendpoint.class);
     }
 
     /**
