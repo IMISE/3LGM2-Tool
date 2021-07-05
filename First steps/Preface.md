@@ -1,3 +1,4 @@
-Before you start working with the 3LGM² kit, you should familiarize yourself with the theoretical principles, i.e., the 3LGM² metamodel. These can be found in the 'The 3LGM² Metamodel' section of this Help. The comprehensive functions of the kit can quickly make the inexperienced modeler lose track of what is going on. To prevent this from happening and to make it easier to start working with the construction kit, the chapter 'First Steps' has been included in this help.
+Before you start working with the 3LGM² kit, you should familiarize yourself with the theoretical principles, i.e., the 3LGM² metamodel. 
+These can be found in the 'The 3LGM² Metamodel' section of this Help. The comprehensive functions of the kit can quickly make the inexperienced modeler lose track of what is going on. To prevent this from happening and to make it easier to start working with the construction kit, the chapter 'First Steps' has been included in this help.
 
 An overview of the construction kit and the names of the individual graphic elements can be found in the chapter Overview.
