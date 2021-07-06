@@ -5,9 +5,12 @@ import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
 import static de.imise.tool3lgm.Tool3lgmMetaModelContext.getDefaultMetaModelContext;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.RandomAccessFile;
+import java.io.OutputStreamWriter;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
@@ -243,37 +246,39 @@ public class AnalysesRepository {
      * Speichert die Analysen in die übergebene Analysedatei. Die übergebene
      * Datei muss nicht existieren, aber erzeugbar und beschreibbar sein.
      *
-     * @param f die Datei, in die die Analysen gespeichert werden sollen.
+     * @param file die Datei, in die die Analysen gespeichert werden sollen.
      */
-    public static void saveAnalyseFile(final File f, final List<XMLAnalysis> analysen) {
-        if (f == null || analysen == null) {
+    public static void saveAnalyseFile(final File file, final List<XMLAnalysis> analysen) {
+        if (file == null || analysen == null) {
             return;
         }
         try {
-            if (f.exists()) {
-                f.delete();
+            if (file.exists()) {
+                file.delete();
             }
-            RandomAccessFile raf = new RandomAccessFile(f, "rw");
-            raf.writeBytes("Content-Type: multipart/related; boundary=--multipart_3lgm_query_separator;\n");
-            String line = "";
-            for (int i = 0; i < analysen.size(); i++) {
-                XMLAnalysis sp = analysen.get(i);
-                line = null;
-                if (sp != null) {
-                    line = sp.getXMLText();
-                }
-                if (line != null) {
-                    raf.writeBytes("--multipart_3lgm_query_separator\nContent-Type: text/xml\n");
-                    raf.writeBytes("Model-Type: " + sp.getMetaModelID() + "\n");
-                    raf.writeBytes("Content-ID: " + sp.getID() + "\n");
-                    raf.writeBytes(line);
-                    if (!line.endsWith("\n")) {
-                        raf.writeBytes("\n");
+            try (FileOutputStream fos = new FileOutputStream(file); OutputStreamWriter osw = new OutputStreamWriter(fos, StandardCharsets.UTF_8); BufferedWriter writer = new BufferedWriter(osw)) {
+                writer.append("Content-Type: multipart/related; boundary=--multipart_3lgm_query_separator;\n");
+                String line = "";
+                for (int i = 0; i < analysen.size(); i++) {
+                    XMLAnalysis sp = analysen.get(i);
+                    line = null;
+                    if (sp != null) {
+                        line = sp.getXMLText();
+                    }
+                    if (line != null) {
+                        writer.append("--multipart_3lgm_query_separator\nContent-Type: text/xml\n");
+                        writer.append("Model-Type: " + sp.getMetaModelID() + "\n");
+                        writer.append("Content-ID: " + sp.getID() + "\n");
+                        writer.append(line);
+                        if (!line.endsWith("\n")) {
+                            writer.append("\n");
+                        }
                     }
                 }
+                writer.append("--multipart_3lgm_query_separator");
+            } catch (IOException e) {
+                throw e;
             }
-            raf.writeBytes("--multipart_3lgm_query_separator");
-            raf.close();
         } catch (Exception e) {
             Log.show(Log.INFO, getResString("analyse_speicherfehler"), e);
         }
