@@ -1,6 +1,6 @@
 package de.imise.tool3lgm.imexport.graphml;
 
-import static de.imise.tool3lgm.Tool3lgmConstants.TOOL_VERSION_INFO;
+import static de.imise.tool3lgm.Tool3lgmConstants.TOOL_VERSION_GIT_INFO;
 
 import java.awt.Color;
 import java.awt.Font;
@@ -41,7 +41,7 @@ public class YEdGraphmlWriter extends GraphmlWriter {
 
     @Override
     protected String getCreatedByComment() {
-        return "Created by Tool3lgm " + TOOL_VERSION_INFO;
+        return "Created by Tool3lgm " + TOOL_VERSION_GIT_INFO;
     }
 
     @Override

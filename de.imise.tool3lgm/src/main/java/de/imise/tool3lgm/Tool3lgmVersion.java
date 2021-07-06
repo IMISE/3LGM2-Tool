@@ -1,5 +1,7 @@
 package de.imise.tool3lgm;
 
+import de.imise.util.GitVersionInfoHandler.GitVersionInfo;
+
 public class Tool3lgmVersion implements Comparable<Tool3lgmVersion> {
 
     /**
@@ -54,6 +56,14 @@ public class Tool3lgmVersion implements Comparable<Tool3lgmVersion> {
     @Override
     public String toString() {
         return major + "." + minor + "." + patch + (suffix == null ? "" : suffix);
+    }
+
+    /**
+     * @param gitVersionInfo
+     * @return
+     */
+    public static Tool3lgmVersion parseGitVersion(final GitVersionInfo gitVersionInfo) {
+        return parseString(gitVersionInfo.version);
     }
 
     /**

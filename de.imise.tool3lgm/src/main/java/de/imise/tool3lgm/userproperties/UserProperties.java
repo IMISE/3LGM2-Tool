@@ -1,6 +1,6 @@
 package de.imise.tool3lgm.userproperties;
 
-import static de.imise.tool3lgm.Tool3lgmConstants.TOOL_VERSION_INFO;
+import static de.imise.tool3lgm.Tool3lgmConstants.TOOL_VERSION_GIT_INFO;
 import static de.imise.tool3lgm.Tool3lgmConstants.USER_HOME_3LGM_DIR;
 
 import java.awt.Frame;
@@ -311,7 +311,7 @@ public class UserProperties extends AbstractUserProperties {
             for (Object key : transientProperties.keySet()) {
                 properties.remove(key);
             }
-            properties.store(out, PROPERTY_FILE_VERSION_LINE_COMMENT_PREFIX + TOOL_VERSION_INFO);
+            properties.store(out, PROPERTY_FILE_VERSION_LINE_COMMENT_PREFIX + TOOL_VERSION_GIT_INFO);
             properties.putAll(transientProperties);
         } catch (Exception e) {
             e.printStackTrace();

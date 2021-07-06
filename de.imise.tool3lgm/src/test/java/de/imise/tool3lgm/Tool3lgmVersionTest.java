@@ -107,4 +107,5 @@ public class Tool3lgmVersionTest {
         version = Tool3lgmVersion.parseString("12.345.6789_devvvvvvv");
         assertEquals(version.toString(), "12.345.6789_devvvvvvv");
     }
+
 }

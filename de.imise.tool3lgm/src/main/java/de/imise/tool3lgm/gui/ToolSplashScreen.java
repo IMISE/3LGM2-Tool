@@ -1,7 +1,7 @@
 package de.imise.tool3lgm.gui;
 
 import static de.imise.tool3lgm.Tool3lgmConstants.THIRD_PARTY_LICENSES_HTML_FILE;
-import static de.imise.tool3lgm.Tool3lgmConstants.TOOL_VERSION_INFO;
+import static de.imise.tool3lgm.Tool3lgmConstants.TOOL_VERSION_GIT_INFO;
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
 
 import java.awt.Color;
@@ -59,12 +59,12 @@ public class ToolSplashScreen extends BasicSplashScreen {
         drawString(g, "fullToolName1", 50);
         drawString(g, "fullToolName2", 70);
         setBoldFontSize(g, 13);
-        String versionString = getResString("version") + ": " + TOOL_VERSION_INFO.version;
+        String versionString = getResString("version") + ": " + TOOL_VERSION_GIT_INFO.version;
         drawString(g, versionString, 100);
-        if (TOOL_VERSION_INFO.isDevelopmentBuild()) {
-            String commitString = getResString("commit") + ": " + TOOL_VERSION_INFO.commit;
+        if (TOOL_VERSION_GIT_INFO.isDevelopmentBuild()) {
+            String commitString = getResString("commit") + ": " + TOOL_VERSION_GIT_INFO.commit + " +" + TOOL_VERSION_GIT_INFO.commitCount;
             drawString(g, commitString, 120);
-            String branchString = getResString("branch") + ": " + TOOL_VERSION_INFO.branch;
+            String branchString = getResString("branch") + ": " + TOOL_VERSION_GIT_INFO.branch;
             drawString(g, branchString, 140);
         }
         setBoldFontSize(g, 16);

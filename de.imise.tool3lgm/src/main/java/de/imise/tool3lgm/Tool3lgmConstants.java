@@ -128,7 +128,13 @@ public abstract class Tool3lgmConstants {
      * and commit in the version.info file.<br>
      * Our tags contain the string "(dev)" to mark a development branch.
      */
-    public static final GitVersionInfo TOOL_VERSION_INFO = GitVersionInfoHandler.getGitVersionInfo(GIT_VERSION_FILE, "Tool3LGM_Version_", "(dev)");
+    public static final GitVersionInfo TOOL_VERSION_GIT_INFO = GitVersionInfoHandler.getGitVersionInfo(GIT_VERSION_FILE, "Tool3LGM_Version_", "_(dev)");
+
+    /**
+     * The corresponding {@link Tool3lgmVersion} to the current
+     * {@link GitVersionInfo} to compare different version objects.
+     */
+    public static final Tool3lgmVersion TOOL_VERSION_INFO = Tool3lgmVersion.parseGitVersion(TOOL_VERSION_GIT_INFO);
 
     /**
      * Datei-Endung für große Icons.

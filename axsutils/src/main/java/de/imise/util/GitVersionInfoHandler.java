@@ -28,10 +28,20 @@ public class GitVersionInfoHandler {
      */
     private static final String VERSION_INFO_LINE_PREFIX_BRANCH = "git.branch";
 
+    /**
+     *
+     */
+    private static final String VERSION_INFO_COMMIT_COUNT_AFTER_LAST_TAG = "git.closest.tag.commit.count";
+
+    /**
+     *
+     */
+    private static final String VERSION_INFO_COMMIT_ID = "git.commit.id.abbrev";
+
     /** Git Version with tag and commit ID */
     public static class GitVersionInfo {
 
-        /** The tag name */
+        /** The version */
         public String version = "Unknown Version";
 
         /** The commit ID */
@@ -39,6 +49,9 @@ public class GitVersionInfoHandler {
 
         /** the branch name */
         public String branch = "Unknown Branch";
+
+        /** number of commits after last tag */
+        public int commitCount = -1;
 
         /**
          * If this string is contained in the version string, then the entire
@@ -51,7 +64,7 @@ public class GitVersionInfoHandler {
             if (isReleaseBuild()) {
                 return version;
             }
-            return version + " (" + commit + ")";
+            return version + " (" + commit + (commitCount == -1 ? ")" : " + " + commitCount + ")");
         }
 
         /**
@@ -87,38 +100,62 @@ public class GitVersionInfoHandler {
      *         in the file
      */
     public static final GitVersionInfo getGitVersionInfo(final File versionInfoFile, final String ignoreTagPrefix, final String devVersionIndicator) {
-        GitVersionInfo versionInfo = new GitVersionInfo();
-        versionInfo.devVersionIndicator = devVersionIndicator;
+        GitVersionInfo versionInfo;
         try (FileInputStream fileInputStream = new FileInputStream(versionInfoFile)) {
             Properties properties = new Properties();
             properties.load(fileInputStream);
             //Version and Commit ID
-            Object gitTagObject = properties.get(VERSION_INFO_LINE_PREFIX_TAG_AND_COMMIT);
-            if (gitTagObject != null) {
-                String gitTag = gitTagObject.toString();
-                int indexOfMinus = gitTag.indexOf("-");
-                if (indexOfMinus >= 0) {
-                    versionInfo.version = gitTag.substring(0, indexOfMinus);
-                    if (ignoreTagPrefix != null && versionInfo.version.startsWith(ignoreTagPrefix)) {
-                        versionInfo.version = versionInfo.version.substring(ignoreTagPrefix.length());
-                    }
-                    versionInfo.commit = gitTag.substring(indexOfMinus + 1);
-                } else {
-                    int indexOfLastUnderLine = gitTag.lastIndexOf('_');
-                    if (indexOfLastUnderLine >= 0) {
-                        versionInfo.version = gitTag.substring(indexOfLastUnderLine + 1);
-                    } else {
-                        versionInfo.version = gitTag;
-                    }
-                }
-            }
-            //Branch name
+            Object gitTag = properties.get(VERSION_INFO_LINE_PREFIX_TAG_AND_COMMIT);
             Object branchName = properties.get(VERSION_INFO_LINE_PREFIX_BRANCH);
+            Object commitID = properties.get(VERSION_INFO_COMMIT_ID);
+            Object commitCount = properties.get(VERSION_INFO_COMMIT_COUNT_AFTER_LAST_TAG);
+            versionInfo = parseGitVersion(gitTag, branchName, commitID, commitCount, ignoreTagPrefix, devVersionIndicator);
+        } catch (IOException e) {
+            versionInfo = new GitVersionInfo();
+        }
+        return versionInfo;
+    }
+
+    /**
+     * @param gitTag (String) object which has the form ignoreTahPrefix +
+     *            realVersionString + devVersionIndicatorPostfix, e.g.
+     *            "Tool3lgmVersion_" + "4.4.1" + "_dev". Some time the tag
+     *            contains the postfix "-commitCount-commitID" e.g.
+     *            "-306-g7038477".
+     * @param branchName
+     * @param commitID
+     * @param commitCount
+     * @param versionInfo
+     * @param ignoreTagPrefix
+     * @param devVersionIndicatorPostfix
+     */
+    public static GitVersionInfo parseGitVersion(final Object gitTag, final Object branchName, final Object commitID, final Object commitCount, final String ignoreTagPrefix, final String devVersionIndicatorPostfix) {
+        GitVersionInfo versionInfo = new GitVersionInfo();
+        versionInfo.devVersionIndicator = devVersionIndicatorPostfix;
+        if (gitTag != null) {
+            String gitTagString = gitTag.toString();
+            int indexOfMinus = gitTagString.indexOf("-");
+            if (indexOfMinus >= 0) {
+                gitTagString = gitTagString.substring(0, indexOfMinus);
+            }
+            versionInfo.version = ignoreTagPrefix == null ? gitTagString : gitTagString.substring(ignoreTagPrefix.length());
+
             if (branchName != null) {
                 versionInfo.branch = branchName.toString();
             }
 
-        } catch (IOException e) {
+            if (commitID != null) {
+                versionInfo.commit = commitID.toString();
+            }
+
+            if (commitCount != null) {
+                try {
+                    String count = commitCount.toString();
+                    versionInfo.commitCount = Integer.parseInt(count);
+                } catch (Exception e) {
+                    // ignore
+                }
+            }
         }
         return versionInfo;
     }
