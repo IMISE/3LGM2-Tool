@@ -1,12 +1,11 @@
 package de.imise.tool3lgm.graphtools.analyse.context;
 
-import static de.imise.tool3lgm.Tool3lgmConstants.ANALYSEN_FILE_NAME;
-import static de.imise.tool3lgm.Tool3lgmConstants.USER_HOME_3LGM_DIR;
+import static de.imise.tool3lgm.Tool3lgmConstants.USER_HOME_ANALYSES_FILE;
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
+import static de.imise.tool3lgm.Tool3lgmMetaModelContext.getDefaultMetaModelContext;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.RandomAccessFile;
 import java.net.MalformedURLException;
@@ -19,13 +18,11 @@ import java.util.zip.DataFormatException;
 import org.xml.sax.SAXException;
 
 import de.imise.tool3lgm.MetaModelContext;
-import de.imise.tool3lgm.Static;
-import de.imise.tool3lgm.Tool3lgmConstants;
+import de.imise.tool3lgm.Tool3lgmMetaModelContext;
 import de.imise.tool3lgm.graphtools.metamodel.AnalysesDefinition;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.log.Log;
-import de.imise.util.io.FileHandler;
 
 /**
  * Diese Klasse stellt Methoden zum speichern und laden der Analysen bereit.
@@ -36,12 +33,6 @@ import de.imise.util.io.FileHandler;
  * @author Thomas Wendt, Sebastian Weber, AXS
  */
 public class AnalysesRepository {
-
-    /**
-     * Datei, aus der zuletzt Analysen geladen oder in die zuletzt Analysen
-     * gespeichert wurden
-     */
-    private static File file;
 
     /**
      * Enthält alle Analysen, die im Modell audf Elemente angewendet werden
@@ -75,30 +66,17 @@ public class AnalysesRepository {
     }
 
     /**
-     * Prüft, ob der übergebene <code>name</code> bei irgend einer anderen als
-     * der einzeln übergebenen XMLAnalyse vorkommt.
-     *
-     * @param xmlAnalyses eine ArrayList der Analysen.
-     * @param xMLAnalysis die XMLAnalyse, der ein neuer Name gegeben werden
-     *            soll.
-     * @param name der Name für die übergebene XMLAnalyse.
-     * @return false, wenn der Name in der Liste der Analysen gar nicht
-     *         enthalten ist oder nur die einzeln übergebnen XMLAnalyse diesen
-     *         Namen besitzt.
+     * @param id
+     * @return the analysis with the given id or <code>null</code> if no
+     *         analysis exists
      */
-    public static boolean containsName(final List<XMLAnalysis> analyses, final XMLAnalysis xMLAnalysis, final String name) {
-        if (analyses == null) {
-            return false;
-        }
-        for (XMLAnalysis ana : analyses) {
-            if (ana.getName().equals(name)) {
-                if (xMLAnalysis != null && xMLAnalysis == ana) {
-                    continue;
-                }
-                return true;
+    public static XMLAnalysis getAnalysis(final String id) {
+        for (XMLAnalysis ana : xmlAnalyses) {
+            if (ana.hasID(id)) {
+                return ana;
             }
         }
-        return false;
+        return null;
     }
 
     /**
@@ -158,48 +136,10 @@ public class AnalysesRepository {
      * @return
      */
     public static File getRepositoryFile() {
-        if (file != null) {
-            return file;
-        }
-        file = new File(USER_HOME_3LGM_DIR, ANALYSEN_FILE_NAME);
-        if (file.exists()) {
-            if (FileHandler.getLine(file, "Model-Type: TLGMServiceMetaModel@2388259974838049670", true) == null) {
-                List<XMLAnalysis> concatenatedAnalysis = concatXMLAnalyses();
-                saveAnalyseFile(file, concatenatedAnalysis);
-            }
-            return file;
-        } else {
-            try {
-                // wenn es die Datei nicht im Installpfad gibt und man sie auch nicht dahin
-                // schreiben kann
-                if (!file.createNewFile()) {
-                    // lege eine Datei im Benutzerverzeichnis an
-                    file = new File(USER_HOME_3LGM_DIR, ANALYSEN_FILE_NAME);
-                }
-            } catch (IOException e) {
-                // das hier tritt ein, wenn es bei file.createNewFile() ne Exception gab
-                file = new File(USER_HOME_3LGM_DIR, ANALYSEN_FILE_NAME);
-            }
-
-            // schreibe den Inhalt der Resourcendatei in file
-            List<XMLAnalysis> concatenatedAnalysis = concatXMLAnalyses();
-            saveAnalyseFile(file, concatenatedAnalysis);
-        }
-        return file;
+        updateDefaultAnalysis(false); //ensure it exists
+        return USER_HOME_ANALYSES_FILE;
     }
 
-    /**
-     * merges the analysis from the message based and service based meta models
-     *
-     * @return
-     */
-    public static List<XMLAnalysis> concatXMLAnalyses() {
-        List<XMLAnalysis> originalAnalysis = loadAnalyseFile(Tool3lgmConstants.DEFAULT_ORIGINAL_ANALYSEN_RESSOURCE_URL);
-        List<XMLAnalysis> serviceAnalysis = loadAnalyseFile(Tool3lgmConstants.DEFAULT_SERVICE_ANALYSEN_RESSOURCE_URL);
-        List<XMLAnalysis> concatenatedAnalysis = new ArrayList<>(originalAnalysis);
-        concatenatedAnalysis.addAll(serviceAnalysis);
-        return concatenatedAnalysis;
-    }
     /**
      * Gibt alle Abfragen zurück, die sich im Analyserepository befinden.
      *
@@ -243,11 +183,11 @@ public class AnalysesRepository {
      * @param f
      * @return
      */
-    public static List<XMLAnalysis> loadAnalyseFile(final URL url) {
+    private static List<XMLAnalysis> loadAnalyseFile(final URL url) {
         String line = "";
         List<XMLAnalysis> analysen = null;
         try {
-            BufferedReader dataStream = new BufferedReader(new InputStreamReader(url.openStream(), StandardCharsets.ISO_8859_1));
+            BufferedReader dataStream = new BufferedReader(new InputStreamReader(url.openStream(), StandardCharsets.UTF_8));
             line = dataStream.readLine();
             if (!line.equals("Content-Type: multipart/related; boundary=--multipart_3lgm_query_separator;")) {
                 throw new DataFormatException();
@@ -269,31 +209,27 @@ public class AnalysesRepository {
                 //Model-Type ist die Metamodel-ID, die erst nach Version 3.4.0.4 eingeführt wurde und in den Modelldateien sowie den Analysen gespeichert wird
                 String metaModelIDLinePrefix = "Model-Type: ";
                 String metaModelId = null;
-                MetaModel currentMetaModel = Static.getSelectedMetaModel();
-                if (currentMetaModel == null) {
-                    break;
-                }
-                MetaModelContext currentMetaModelContext = currentMetaModel.getMetaModelContext();
-                String currentMetaModelID = currentMetaModel.getMetaModelID();
                 if (line.startsWith(metaModelIDLinePrefix)) {
-                    metaModelId = line.substring(metaModelIDLinePrefix.length()).trim();
+                    int idStartIndex = metaModelIDLinePrefix.length();
+                    metaModelId = line.substring(idStartIndex).trim();
                     line = dataStream.readLine();
+                } else {
+                    MetaModelContext defaultMetaModelContext = getDefaultMetaModelContext();
+                    metaModelId = defaultMetaModelContext.getMetaModelID();
                 }
-                String ananame = line.substring("Content-ID: ".length());
+                String analyseID = line.substring("Content-ID: ".length());
                 StringBuilder strbuf = new StringBuilder();
                 for (line = dataStream.readLine(); !line.equals("--multipart_3lgm_query_separator"); line = dataStream.readLine()) {
                     strbuf.append(line + "\n");
                 }
-                // this if statement makes sure, that only the relevant analyses are shown for the selected Meta-Model
-                if (metaModelId != null && metaModelId.equals(currentMetaModelID)) {
-                    XMLAnalysis toadd = null;
-                    try {
-                        toadd = XMLAnalysis.createAnalysis(currentMetaModelContext, ananame, strbuf.toString());
-                    } catch (SAXException ex) {
-                        Log.show(Log.ERROR, getResString("ANALYSIS_CANT_CREATE") + "\n" + ex.getMessage(), ex);
-                    }
-                    analysen.add(toadd);
+                XMLAnalysis toadd = null;
+                MetaModelContext currentMetaModelContext = Tool3lgmMetaModelContext.getMetaModelContextForID(metaModelId);
+                try {
+                    toadd = XMLAnalysis.createAnalysis(currentMetaModelContext, strbuf.toString(), analyseID);
+                } catch (SAXException ex) {
+                    Log.show(Log.ERROR, getResString("ANALYSIS_CANT_CREATE") + "\n" + ex.getMessage(), ex);
                 }
+                analysen.add(toadd);
             }
             dataStream.close();
         } catch (Exception e) {
@@ -310,7 +246,7 @@ public class AnalysesRepository {
      * @param f die Datei, in die die Analysen gespeichert werden sollen.
      */
     public static void saveAnalyseFile(final File f, final List<XMLAnalysis> analysen) {
-        if (file == null || analysen == null) {
+        if (f == null || analysen == null) {
             return;
         }
         try {
@@ -329,7 +265,7 @@ public class AnalysesRepository {
                 if (line != null) {
                     raf.writeBytes("--multipart_3lgm_query_separator\nContent-Type: text/xml\n");
                     raf.writeBytes("Model-Type: " + sp.getMetaModelID() + "\n");
-                    raf.writeBytes("Content-ID: " + sp.getName() + "\n");
+                    raf.writeBytes("Content-ID: " + sp.getID() + "\n");
                     raf.writeBytes(line);
                     if (!line.endsWith("\n")) {
                         raf.writeBytes("\n");
@@ -338,7 +274,6 @@ public class AnalysesRepository {
             }
             raf.writeBytes("--multipart_3lgm_query_separator");
             raf.close();
-            file = f;
         } catch (Exception e) {
             Log.show(Log.INFO, getResString("analyse_speicherfehler"), e);
         }
@@ -364,6 +299,35 @@ public class AnalysesRepository {
         }
         xmlAnalyses = newXMLAnalysen;
         return true;
+    }
+
+    /**
+     * @param checkNewerVersions
+     */
+    public static void updateDefaultAnalysis(final boolean checkNewerVersions) {
+        if (!USER_HOME_ANALYSES_FILE.exists()) {
+            xmlAnalyses = new ArrayList<>();
+            try {
+                for (MetaModelContext metaModelContext : Tool3lgmMetaModelContext.getRegularMetaModelContexts()) {
+                    try {
+                        MetaModel metaModel = metaModelContext.getMetaModel();
+                        AnalysesDefinition analysesDefinition = metaModel.getAnalysesDefinition();
+                        String xmlAnalysisRepositoryFileName = analysesDefinition.getXMLAnalysisRepositoryFileName();
+
+                        URL analysesFileURL = ClassLoader.getSystemResource(xmlAnalysisRepositoryFileName);
+                        List<XMLAnalysis> analyses = loadAnalyseFile(analysesFileURL);
+                        xmlAnalyses.addAll(analyses);
+                    } catch (Exception e) {
+                        continue;
+                    }
+                }
+                // schreibe den Inhalt der Resourcendatei in file
+                saveAnalyseFile(USER_HOME_ANALYSES_FILE, xmlAnalyses);
+            } catch (Exception e) {
+            }
+        } else if (checkNewerVersions) {
+            //TODO #516: updaten der Analysen, wenn sich die Tooversion geändert hat
+        }
     }
 
 }

@@ -1,6 +1,7 @@
 package de.imise.tool3lgm;
 
 import static de.imise.tool3lgm.Static.getMainFrame;
+import static de.imise.tool3lgm.Tool3lgmConstants.TOOL_VERSION;
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
 import static de.imise.tool3lgm.userproperties.UserProperties.IntProperty.PROPERTY_INT_RENDER_SETTINGS;
 import static de.imise.tool3lgm.userproperties.UserProperties.IntProperty.PROPERTY_INT_RMI_PORT;
@@ -23,6 +24,7 @@ import javax.swing.UIManager;
 
 import com.apple.eawt.Application;
 
+import de.imise.tool3lgm.graphtools.analyse.context.AnalysesRepository;
 import de.imise.tool3lgm.graphtools.dialog.RMIErrorPanel;
 import de.imise.tool3lgm.gui.ToolSplashScreen;
 import de.imise.tool3lgm.log.Log;
@@ -116,21 +118,23 @@ public class Tool3lgmMain {
         //UserProperties initialisieren, damit die richige Locale gesetzt ist
         UserProperties.init();
 
+        setDockIcon();
+
+        //In den <code>SplashScreen</code> die lokalisierten Informationen schreiben
+        new ToolSplashScreen().updateSplashScreen();
+
         //correct the RenderOptions in Property-Files from ToolVersions < 4.4.1
         //version < 4.4.1 have the value 137 for the rendering settings. With this
         //value the font scaling is not correct for different zoom values -> in
         //this cases set we set the new default 255 and the scaling is perfect
         Tool3lgmVersion firstCorrectRenderOptionVersion = Tool3lgmVersion.parseString("4.4.1");
-        Tool3lgmVersion fileVersion = UserProperties.getFileVersion();
-        if (fileVersion == null || fileVersion.isLowerThan(firstCorrectRenderOptionVersion)) {
+        Tool3lgmVersion lastUserpropertiesFileVersion = UserProperties.getFileVersion();
+        if (firstCorrectRenderOptionVersion.isHigherThan(lastUserpropertiesFileVersion)) {
             int renderingSetttingsDefault = PROPERTY_INT_RENDER_SETTINGS.getDefault();
             PROPERTY_INT_RENDER_SETTINGS.set(renderingSetttingsDefault);
         }
 
-        setDockIcon();
-
-        //In den <code>SplashScreen</code> die lokalisierten Informationen schreiben
-        new ToolSplashScreen().updateSplashScreen();
+        AnalysesRepository.updateDefaultAnalysis(TOOL_VERSION.isHigherThan(lastUserpropertiesFileVersion));
 
         setUIDefaults();
 

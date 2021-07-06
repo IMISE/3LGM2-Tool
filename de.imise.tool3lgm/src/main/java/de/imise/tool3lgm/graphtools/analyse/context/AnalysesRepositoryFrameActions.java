@@ -229,7 +229,7 @@ public class AnalysesRepositoryFrameActions {
             @Override
             public void actionPerformed(final ActionEvent e) {
                 try {
-                    AnalysesRepositoryFrame.addAnalysis(XMLAnalysis.createAnalysis(metaModelContext, "", ""), true);
+                    AnalysesRepositoryFrame.addAnalysis(XMLAnalysis.createAnalysis(metaModelContext), true);
                 } catch (SAXException ex) {
                     Log.show(Log.ERROR, getResString("ANALYSIS_CANT_CREATE") + "\n" + ex.getMessage(), ex);
                 }

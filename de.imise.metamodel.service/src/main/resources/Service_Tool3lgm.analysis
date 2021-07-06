@@ -2,9 +2,13 @@ Content-Type: multipart/related; boundary=--multipart_3lgm_query_separator;
 --multipart_3lgm_query_separator
 Content-Type: text/xml
 Model-Type: TLGMServiceMetaModel@2388259974838049670
-Content-ID: [Service] On which physical data processing components is it installed?
+Content-ID: ANA_1624859506420_1
 <?xml version="1.0" encoding="ISO-8559-15"?>
 <analyse>
+	<name>
+		<en>[Service] On which physical data processing components is it installed?</en>
+		<de>[Service] Auf welchen phys. DV-Bausteinen ist er installiert?</de>
+	</name>
 	<startknoten name="ApplicationComponent"/>
 	<suche>
 		<typ>
@@ -22,9 +26,13 @@ Content-ID: [Service] On which physical data processing components is it install
 --multipart_3lgm_query_separator
 Content-Type: text/xml
 Model-Type: TLGMServiceMetaModel@2388259974838049670
-Content-ID: [Service] Which enterprise functions does this application component support?
+Content-ID: ANA_1624859509964_2
 <?xml version="1.0" encoding="ISO-8559-15"?>
 <analyse>
+	<name>
+		<en>[Service] Which enterprise functions does this application component support?</en>
+		<de>[Service] Welche Aufgaben werden damit unterstützt?</de>
+	</name>
 	<startknoten name="ApplicationComponent"/>
 	<suche>
 		<typ>
@@ -51,9 +59,13 @@ Content-ID: [Service] Which enterprise functions does this application component
 --multipart_3lgm_query_separator
 Content-Type: text/xml
 Model-Type: TLGMServiceMetaModel@2388259974838049670
-Content-ID: [Service] Which object types are stored?
+Content-ID: ANA_1624859510964_3
 <?xml version="1.0" encoding="ISO-8559-15"?>
 <analyse>
+	<name>
+		<en>[Service] Which object types are stored?</en>
+		<de>[Service] Welche Objekttypen werden gespeichert?</de>
+	</name>
 	<startknoten name="ApplicationComponent"/>
 	<suche>
 		<typ>
@@ -77,9 +89,13 @@ Content-ID: [Service] Which object types are stored?
 --multipart_3lgm_query_separator
 Content-Type: text/xml
 Model-Type: TLGMServiceMetaModel@2388259974838049670
-Content-ID: [Service] Which application components and which physical data processing components are needed to achieve this enterprise function?
+Content-ID: ANA_1624859511964_4
 <?xml version="1.0" encoding="ISO-8559-15"?>
 <analyse>
+	<name>
+		<en>[Service] Which application components and which physical data processing components are needed to achieve this enterprise function?</en>
+		<de>[Service] Welche Anwendungsbausteine und welche Phys. DV-Bausteine werden zur Erfüllung benötigt?</de>
+	</name>
 	<startknoten name="Function"/>
 	<suche>
 		<typ>
@@ -109,9 +125,13 @@ Content-ID: [Service] Which application components and which physical data proce
 --multipart_3lgm_query_separator
 Content-Type: text/xml
 Model-Type: TLGMServiceMetaModel@2388259974838049670
-Content-ID: [Service] Which application components are needed to achieve this enterprise function?
+Content-ID: ANA_1624859512965_5
 <?xml version="1.0" encoding="ISO-8559-15"?>
 <analyse>
+	<name>
+		<en>[Service] Which application components are needed to achieve this enterprise function?</en>
+		<de>[Service] Welche Anwendungsbausteine werden zur Erfüllung benötigt?</de>
+	</name>
 	<startknoten name="Function"/>
 	<suche>
 		<typ>
@@ -135,9 +155,13 @@ Content-ID: [Service] Which application components are needed to achieve this en
 --multipart_3lgm_query_separator
 Content-Type: text/xml
 Model-Type: TLGMServiceMetaModel@2388259974838049670
-Content-ID: [Service] Which object types does this component send or receive?
+Content-ID: ANA_1624859513965_6
 <?xml version="1.0" encoding="ISO-8559-15"?>
 <analyse>
+	<name>
+		<en>[Service] Which object types does this component send or receive?</en>
+		<de>[Service] Welche Objekttypen können gesendet oder empfangen werden?</de>
+	</name>
 	<startknoten name="ApplicationSystem"/>
 	<suche>
 		<typ>
@@ -174,9 +198,13 @@ Content-ID: [Service] Which object types does this component send or receive?
 --multipart_3lgm_query_separator
 Content-Type: text/xml
 Model-Type: TLGMServiceMetaModel@2388259974838049670
-Content-ID: [Service] Where is this service being used?
+Content-ID: ANA_1624859514965_7
 <?xml version="1.0" encoding="ISO-8559-15"?>
 <analyse>
+	<name>
+		<en>[Service] Where is this service being used?</en>
+		<de>[Service] Wo wird dieser Service verwendet?</de>
+	</name>
 	<startknoten name="Service"/>
 	<suche>
 		<typ>
@@ -194,9 +222,13 @@ Content-ID: [Service] Where is this service being used?
 --multipart_3lgm_query_separator
 Content-Type: text/xml
 Model-Type: TLGMServiceMetaModel@2388259974838049670
-Content-ID: [Service] Which interfaces can communicate this object type?
+Content-ID: ANA_1624859515966_8
 <?xml version="1.0" encoding="ISO-8559-15"?>
 <analyse>
+	<name>
+		<en>[Service] Which interfaces can communicate this object type?</en>
+		<de>[Service] Welche Bausteinschnittstellen können ihn kommunizieren?</de>
+	</name>
 	<startknoten name="ObjectType"/>
 	<suche>
 		<typ>
@@ -227,9 +259,13 @@ Content-ID: [Service] Which interfaces can communicate this object type?
 --multipart_3lgm_query_separator
 Content-Type: text/xml
 Model-Type: TLGMServiceMetaModel@2388259974838049670
-Content-ID: [Service] Where is this object type stored?
+Content-ID: ANA_1624859516966_9
 <?xml version="1.0" encoding="ISO-8559-15"?>
 <analyse>
+	<name>
+		<en>[Service] Where is this object type stored?</en>
+		<de>[Service] Wo wird er gespeichert?</de>
+	</name>
 	<startknoten name="ObjectType"/>
 	<suche>
 		<typ>
@@ -253,9 +289,13 @@ Content-ID: [Service] Where is this object type stored?
 --multipart_3lgm_query_separator
 Content-Type: text/xml
 Model-Type: TLGMServiceMetaModel@2388259974838049670
-Content-ID: [Service] Which physical data processing components are located at this location?
+Content-ID: ANA_1624859517967_10
 <?xml version="1.0" encoding="ISO-8559-15"?>
 <analyse>
+	<name>
+		<en>[Service] Which physical data processing components are located at this location?</en>
+		<de>[Service] Welche Phys. DV-Bausteine stehen dort?</de>
+	</name>
 	<startknoten name="Location"/>
 	<suche>
 		<typ>
@@ -273,9 +313,13 @@ Content-ID: [Service] Which physical data processing components are located at t
 --multipart_3lgm_query_separator
 Content-Type: text/xml
 Model-Type: TLGMServiceMetaModel@2388259974838049670
-Content-ID: [Service] Where is this object type communicated?
+Content-ID: ANA_1624859518967_11
 <?xml version="1.0" encoding="ISO-8559-15"?>
 <analyse>
+	<name>
+		<en>[Service] Where is this object type communicated?</en>
+		<de>[Service] Wo wird er kommuniziert?</de>
+	</name>
 	<startknoten name="ObjectType"/>
 	<suche>
 		<typ>
@@ -305,9 +349,13 @@ Content-ID: [Service] Where is this object type communicated?
 --multipart_3lgm_query_separator
 Content-Type: text/xml
 Model-Type: TLGMServiceMetaModel@2388259974838049670
-Content-ID: [Service] Which interfaces communicate this representation form?
+Content-ID: ANA_1624859519967_12
 <?xml version="1.0" encoding="ISO-8559-15"?>
 <analyse>
+	<name>
+		<en>[Service] Which interfaces communicate this representation form?</en>
+		<de>[Service] Welche Bausteinschnittstellen können ihn kommunizieren?</de>
+	</name>
 	<startknoten name="RepresentationForm"/>
 	<suche>
 		<typ>
@@ -332,9 +380,13 @@ Content-ID: [Service] Which interfaces communicate this representation form?
 --multipart_3lgm_query_separator
 Content-Type: text/xml
 Model-Type: TLGMServiceMetaModel@2388259974838049670
-Content-ID: [Service] Which service uses this representation Form?
+Content-ID: ANA_1624859520968_13
 <?xml version="1.0" encoding="ISO-8559-15"?>
 <analyse>
+	<name>
+		<en>[Service] Which service uses this representation Form?</en>
+		<de>[Service] Welche Services benutzen diese Repräsentationsform?</de>
+	</name>
 	<startknoten name="RepresentationForm"/>
 	<suche>
 		<typ>
@@ -352,9 +404,13 @@ Content-ID: [Service] Which service uses this representation Form?
 --multipart_3lgm_query_separator
 Content-Type: text/xml
 Model-Type: TLGMServiceMetaModel@2388259974838049670
-Content-ID: [Service] Which object types are represented in this representation form?
+Content-ID: ANA_1624859521968_14
 <?xml version="1.0" encoding="ISO-8559-15"?>
 <analyse>
+	<name>
+		<en>[Service] Which object types are represented in this representation form?</en>
+		<de>[Service] Welche Objekttypen werden repräsentiert?</de>
+	</name>
 	<startknoten name="RepresentationForm"/>
 	<suche>
 		<typ>
@@ -372,9 +428,13 @@ Content-ID: [Service] Which object types are represented in this representation 
 --multipart_3lgm_query_separator
 Content-Type: text/xml
 Model-Type: TLGMServiceMetaModel@2388259974838049670
-Content-ID: [Service] Which object types are represented by this representation form, and which functions are supported?
+Content-ID: ANA_1624859522968_15
 <?xml version="1.0" encoding="ISO-8559-15"?>
 <analyse>
+	<name>
+		<en>[Service] Which object types are represented by this representation form, and which functions are supported?</en>
+		<de>[Service] Welche Objekttypen werden repräsentiert und welche Aufgaben werden durch ihn unterstützt?</de>
+	</name>
 	<startknoten name="RepresentationForm"/>
 	<suche>
 		<typ>
@@ -398,9 +458,13 @@ Content-ID: [Service] Which object types are represented by this representation 
 --multipart_3lgm_query_separator
 Content-Type: text/xml
 Model-Type: TLGMServiceMetaModel@2388259974838049670
-Content-ID: [Service] Which computer-based application components are installed on this physical data processing component?
+Content-ID: ANA_1624859523198_16
 <?xml version="1.0" encoding="ISO-8559-15"?>
 <analyse>
+	<name>
+		<en>[Service] Which computer-based application components are installed on this physical data processing component?</en>
+		<de>[Service] Welche Anwendungsbausteine sind darauf installiert?</de>
+	</name>
 	<startknoten name="PhysicalDataProcessingComponent"/>
 	<suche>
 		<typ>
@@ -418,9 +482,13 @@ Content-ID: [Service] Which computer-based application components are installed 
 --multipart_3lgm_query_separator
 Content-Type: text/xml
 Model-Type: TLGMServiceMetaModel@2388259974838049670
-Content-ID: [Service] Which computer-based application components are installed on this physical data processing component, and which enterprise functions do they support?
+Content-ID: ANA_1624859524978_17
 <?xml version="1.0" encoding="ISO-8559-15"?>
 <analyse>
+	<name>
+		<en>[Service] Which computer-based application components are installed on this physical data processing component, and which enterprise functions do they support?</en>
+		<de>[Service] Welche Anwendungsbausteine sind darauf installiert und welche Aufgaben werden damit unterstützt?</de>
+	</name>
 	<startknoten name="PhysicalDataProcessingComponent"/>
 	<suche>
 		<typ>
@@ -450,9 +518,13 @@ Content-ID: [Service] Which computer-based application components are installed 
 --multipart_3lgm_query_separator
 Content-Type: text/xml
 Model-Type: TLGMServiceMetaModel@2388259974838049670
-Content-ID: [Service] Which computer-based application components are installed on this physical data processing component, and which object types are stored in them?
+Content-ID: Content-ID: ANA_1624859525988_18
 <?xml version="1.0" encoding="ISO-8559-15"?>
 <analyse>
+	<name>
+		<en>[Service] Which computer-based application components are installed on this physical data processing component, and which object types are stored in them?</en>
+		<de>[Service] Welche Anwendungsbausteine sind darauf installiert und welche Objekttypen werden gespeichert?</de>
+	</name>
 	<startknoten name="PhysicalDataProcessingComponent"/>
 	<suche>
 		<typ>

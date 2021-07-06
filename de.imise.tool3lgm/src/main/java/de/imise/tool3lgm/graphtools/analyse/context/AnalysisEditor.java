@@ -31,7 +31,9 @@ import javax.swing.event.ListSelectionListener;
 
 import org.xml.sax.SAXException;
 
+import de.imise.tool3lgm.MetaModelContext;
 import de.imise.tool3lgm.Static;
+import de.imise.tool3lgm.graphtools.IDSource;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
@@ -107,7 +109,6 @@ public class AnalysisEditor extends JDialog implements ActionListener {
 
         /** @param listener */
         private PathStepComponent(final ActionListener listener) {
-            super();
             config(listener);
         }
 
@@ -390,7 +391,10 @@ public class AnalysisEditor extends JDialog implements ActionListener {
             PathStepComponent first = pathPanels.get(0);
             if (!(first.pathStepElementTypeList.isSelectionEmpty() && first.conditionElementTypeList.isSelectionEmpty())) {
                 try {
-                    XMLAnalysis.createAnalysis(selectedDoc.getMetaModelContext(), getAnalysisString()).setAnalysisResult(selectedDoc);
+                    MetaModelContext selectedMetaModelContext = selectedDoc.getMetaModelContext();
+                    String analysisString = getAnalysisString();
+                    XMLAnalysis analysis = XMLAnalysis.createAnalysis(selectedMetaModelContext, analysisString, IDSource.createIDString("ANA"));
+                    analysis.setAnalysisResult(selectedDoc);
                 } catch (SAXException e1) {
                     Log.log(Log.ERROR, "Can't execute analysis\n" + getAnalysisString());
                     // e1.printStackTrace();
@@ -434,7 +438,10 @@ public class AnalysisEditor extends JDialog implements ActionListener {
                 }
                 XMLAnalysis toadd = null;
                 try {
-                    toadd = XMLAnalysis.createAnalysis(Static.getSelectedMetaModelContext(), val, getAnalysisString());
+                    toadd = XMLAnalysis.createAnalysis(Static.getSelectedMetaModelContext());
+                    toadd.setName(val);
+                    String analysisString = getAnalysisString();
+                    toadd.setXMLText(analysisString);
                 } catch (SAXException ex) {
                     Log.show(Log.ERROR, getResString("ANALYSIS_CANT_CREATE") + "\n" + ex.getMessage(), ex);
                 }

@@ -50,8 +50,11 @@ public class Tool3lgmVersionTest {
 
     @Test
     public void compareToTest() {
+
+        Tool3lgmVersion version0 = null;
         Tool3lgmVersion version1 = Tool3lgmVersion.parseString("1.2.3");
         Tool3lgmVersion version2 = Tool3lgmVersion.parseString("1.2.4");
+        assertTrue(version1.compareTo(version0) == 1);
         assertTrue(version1.compareTo(version1) == 0);
         assertTrue(version2.compareTo(version2) == 0);
         assertTrue(version1.compareTo(version2) < 0);
@@ -69,6 +72,48 @@ public class Tool3lgmVersionTest {
         assertTrue(version1.compareTo(version1) == 0);
         assertTrue(version2.compareTo(version2) == 0);
         assertTrue(version1.compareTo(version2) == 0);
+    }
+
+    @Test
+    public void isLowerThanTest() {
+        Tool3lgmVersion version0 = null;
+        Tool3lgmVersion version1 = Tool3lgmVersion.parseString("1.2.3");
+        Tool3lgmVersion version2 = Tool3lgmVersion.parseString("1.2.4");
+        assertFalse(version1.isLowerThan(version0));
+        assertFalse(version2.isLowerThan(version0));
+        assertFalse(version1.isLowerThan(version1));
+        assertFalse(version2.isLowerThan(version2));
+        assertTrue(version1.isLowerThan(version2));
+        assertFalse(version2.isLowerThan(version1));
+
+        version1 = Tool3lgmVersion.parseString("1.2.3_dev");
+        version2 = Tool3lgmVersion.parseString("1.2.3");
+        assertTrue(version1.isLowerThan(version2));
+
+        version1 = Tool3lgmVersion.parseString("IrrelevantPrefix_1.2.3_dev");
+        version2 = Tool3lgmVersion.parseString("1.2.3_dev");
+        assertFalse(version1.isLowerThan(version2));
+    }
+
+    @Test
+    public void isHigherThanTest() {
+        Tool3lgmVersion version0 = null;
+        Tool3lgmVersion version1 = Tool3lgmVersion.parseString("1.2.3");
+        Tool3lgmVersion version2 = Tool3lgmVersion.parseString("1.2.4");
+        assertTrue(version1.isHigherThan(version0));
+        assertTrue(version2.isHigherThan(version0));
+        assertFalse(version1.isHigherThan(version1));
+        assertFalse(version2.isHigherThan(version2));
+        assertFalse(version1.isHigherThan(version2));
+        assertTrue(version2.isHigherThan(version1));
+
+        version1 = Tool3lgmVersion.parseString("1.2.3_dev");
+        version2 = Tool3lgmVersion.parseString("1.2.3");
+        assertFalse(version1.isHigherThan(version2));
+
+        version1 = Tool3lgmVersion.parseString("IrrelevantPrefix_1.2.3_dev");
+        version2 = Tool3lgmVersion.parseString("1.2.3_dev");
+        assertFalse(version1.isHigherThan(version2));
     }
 
     @Test

@@ -60,7 +60,6 @@ public class AnalysesRepositoryFrameTable extends JTable {
          *            dienen kann.
          */
         private AnalyseTableModel(final Component parent) {
-            super();
             this.parent = parent;
         }
 
@@ -105,14 +104,10 @@ public class AnalysesRepositoryFrameTable extends JTable {
         public void setValueAt(final Object o, final int row, final int column) {
             switch (column) {
             case 1: {
-                String neuerName = o != null ? o.toString() : "";
+                String name = o != null ? o.toString() : "";
                 XMLAnalysis ana = AnalysesRepositoryFrame.analysen.get(row);
-                if (!AnalysesRepository.containsName(AnalysesRepositoryFrame.analysen, ana, neuerName)) {
-                    ana.setName(neuerName);
-                    AnalysesRepositoryFrame.analysisChanged = true;
-                } else {
-                    JOptionPane.showConfirmDialog(parent, getResString("ANALYSIS_ALREADY_EXISTS"), getResString("fehler"), JOptionPane.DEFAULT_OPTION, JOptionPane.ERROR_MESSAGE);
-                }
+                ana.setName(name);
+                AnalysesRepositoryFrame.analysisChanged = true;
                 break;
             }
             case 2: {
@@ -143,7 +138,6 @@ public class AnalysesRepositoryFrameTable extends JTable {
          * @param txt
          */
         public TableCellButtonEdior() {
-            super();
         }
 
         @Override
@@ -216,7 +210,6 @@ public class AnalysesRepositoryFrameTable extends JTable {
      * @param analysen
      */
     public AnalysesRepositoryFrameTable() {
-        super();
         setModel(new AnalyseTableModel(this));
         getTableHeader().setReorderingAllowed(false);
         setShowGrid(true);
