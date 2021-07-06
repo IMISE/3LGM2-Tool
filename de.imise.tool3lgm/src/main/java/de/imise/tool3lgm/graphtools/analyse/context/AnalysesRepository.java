@@ -306,28 +306,50 @@ public class AnalysesRepository {
      */
     public static void updateDefaultAnalysis(final boolean checkNewerVersions) {
         if (!USER_HOME_ANALYSES_FILE.exists()) {
-            xmlAnalyses = new ArrayList<>();
-            try {
-                for (MetaModelContext metaModelContext : Tool3lgmMetaModelContext.getRegularMetaModelContexts()) {
-                    try {
-                        MetaModel metaModel = metaModelContext.getMetaModel();
-                        AnalysesDefinition analysesDefinition = metaModel.getAnalysesDefinition();
-                        String xmlAnalysisRepositoryFileName = analysesDefinition.getXMLAnalysisRepositoryFileName();
-
-                        URL analysesFileURL = ClassLoader.getSystemResource(xmlAnalysisRepositoryFileName);
-                        List<XMLAnalysis> analyses = loadAnalyseFile(analysesFileURL);
-                        xmlAnalyses.addAll(analyses);
-                    } catch (Exception e) {
-                        continue;
+            xmlAnalyses = getAllDefaultAnalyses();
+        } else if (checkNewerVersions) {
+            //replace old analyses by potencial updated or add them if not exists
+            List<XMLAnalysis> allDefaultAnalyses = getAllDefaultAnalyses();
+            List<XMLAnalysis> currentAnalyses = getXMLAnalyses();
+            for (XMLAnalysis defaultAnalysis : allDefaultAnalyses) {
+                boolean exists = false;
+                for (int i = 0; i < currentAnalyses.size(); i++) {
+                    XMLAnalysis currentAnalysis = currentAnalyses.get(i);
+                    if (currentAnalysis.hasEqualsID(defaultAnalysis)) {
+                        currentAnalyses.set(i, defaultAnalysis);
+                        exists = true;
+                        break;
                     }
                 }
-                // schreibe den Inhalt der Resourcendatei in file
-                saveAnalyseFile(USER_HOME_ANALYSES_FILE, xmlAnalyses);
-            } catch (Exception e) {
+                if (!exists) {
+                    currentAnalyses.add(defaultAnalysis);
+                }
             }
-        } else if (checkNewerVersions) {
-            //TODO #516: updaten der Analysen, wenn sich die Tooversion geändert hat
+            xmlAnalyses = currentAnalyses;
         }
+        // schreibe den Inhalt der Resourcendatei in file
+        saveAnalyseFile(USER_HOME_ANALYSES_FILE, xmlAnalyses);
+    }
+
+    /**
+     * @return
+     */
+    private static List<XMLAnalysis> getAllDefaultAnalyses() {
+        List<XMLAnalysis> xmlAnalyses = new ArrayList<>();
+        for (MetaModelContext metaModelContext : Tool3lgmMetaModelContext.getRegularMetaModelContexts()) {
+            try {
+                MetaModel metaModel = metaModelContext.getMetaModel();
+                AnalysesDefinition analysesDefinition = metaModel.getAnalysesDefinition();
+                String xmlAnalysisRepositoryFileName = analysesDefinition.getXMLAnalysisRepositoryFileName();
+
+                URL analysesFileURL = ClassLoader.getSystemResource(xmlAnalysisRepositoryFileName);
+                List<XMLAnalysis> analyses = loadAnalyseFile(analysesFileURL);
+                xmlAnalyses.addAll(analyses);
+            } catch (Exception e) {
+                continue;
+            }
+        }
+        return xmlAnalyses;
     }
 
 }
