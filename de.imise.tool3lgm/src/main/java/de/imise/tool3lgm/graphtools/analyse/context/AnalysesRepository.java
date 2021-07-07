@@ -26,6 +26,7 @@ import de.imise.tool3lgm.graphtools.metamodel.AnalysesDefinition;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.log.Log;
+import de.imise.util.io.FileHandler;
 
 /**
  * Diese Klasse stellt Methoden zum speichern und laden der Analysen bereit.
@@ -153,6 +154,19 @@ public class AnalysesRepository {
         // Analyses
         File repositoryFile = getRepositoryFile();
         xmlAnalyses = loadAnalyseFile(repositoryFile);
+        if (xmlAnalyses == null) { //an error occured while reading the existing file
+            try {
+                //make a backup of the unparseble old analysis file and create a new one with the default analyses
+                if (repositoryFile.exists()) {
+                    String backupFileName = repositoryFile.getAbsolutePath() + ".bak";
+                    File backupFile = new File(backupFileName);
+                    FileHandler.copyFile(repositoryFile, backupFile);
+                    setOrReplaceAnlysesByDefaults();
+                }
+            } catch (Exception ex) {
+                //ignore
+            }
+        }
         if (xmlAnalyses == null) {
             return new ArrayList<>();
         }
@@ -236,7 +250,7 @@ public class AnalysesRepository {
             }
             dataStream.close();
         } catch (Exception e) {
-            Log.show(Log.ERROR, getResString("fehler"), e);
+            analysen = null;
         }
         return analysen;
 
@@ -307,11 +321,16 @@ public class AnalysesRepository {
     }
 
     /**
+     * Updated das Repository. Das bedeutet, dass zuerst geprüft wird, ob im
+     * USER_HOME bereits eine Datei mit den Analsysen vorkommen. Wenn nicht,
+     * dann werden alle Standardanalysen aller Metamodelle in eine solche Datei
+     * kopiert. Wenn
+     *
      * @param checkNewerVersions
      */
     public static void updateDefaultAnalysis(final boolean checkNewerVersions) {
         if (!USER_HOME_ANALYSES_FILE.exists()) {
-            xmlAnalyses = getAllDefaultAnalyses();
+            setOrReplaceAnlysesByDefaults();
         } else if (checkNewerVersions) {
             //replace old analyses by potencial updated or add them if not exists
             List<XMLAnalysis> allDefaultAnalyses = getAllDefaultAnalyses();
@@ -331,7 +350,16 @@ public class AnalysesRepository {
                 }
             }
             xmlAnalyses = currentAnalyses;
+            // schreibe den Inhalt der Resourcendatei in file
+            saveAnalyseFile(USER_HOME_ANALYSES_FILE, xmlAnalyses);
         }
+    }
+
+    /**
+     *
+     */
+    private static void setOrReplaceAnlysesByDefaults() {
+        xmlAnalyses = getAllDefaultAnalyses();
         // schreibe den Inhalt der Resourcendatei in file
         saveAnalyseFile(USER_HOME_ANALYSES_FILE, xmlAnalyses);
     }
