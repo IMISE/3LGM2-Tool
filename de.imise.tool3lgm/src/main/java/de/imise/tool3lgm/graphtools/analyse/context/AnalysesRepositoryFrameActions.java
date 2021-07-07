@@ -74,7 +74,7 @@ public class AnalysesRepositoryFrameActions {
                     return;
                 }
                 List<XMLAnalysis> analysenToAdd = AnalysesRepository.loadAnalyseFile(fileToOpen);
-                if (analysenToAdd == null || analysenToAdd.size() == 0) {
+                if (analysenToAdd == null || analysenToAdd.isEmpty()) {
                     return;
                 }
                 int size = AnalysesRepositoryFrame.analysen.size();
