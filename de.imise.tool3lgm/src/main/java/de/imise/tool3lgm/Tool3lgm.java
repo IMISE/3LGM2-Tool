@@ -65,6 +65,7 @@ public class Tool3lgm {
     /** Das Hauptfenster */
     private final MainFrame mainFrame;
 
+    /** Manager for the loaded templates */
     private final TemplateLibrariesManager templateLibrariesManager;
 
     /**

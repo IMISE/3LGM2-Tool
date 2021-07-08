@@ -91,12 +91,12 @@ public class AnalysisXMLParser extends DefaultHandler {
 
     @Override
     public void endElement(final String namespaceURI, final String localName, final String rawName) {
-        /*
-         * System.out.println("endElement:");
-         * System.out.println("namespaceURI: "+namespaceURI);
-         * System.out.println("localName: "+localName);
-         * System.out.println("rawName: "+rawName);
-         */
+
+        // System.out.println("endElement:");
+        // System.out.println("namespaceURI: "+namespaceURI);
+        // System.out.println("localName: "+localName);
+        // System.out.println("rawName: "+rawName);
+
         if (state == UNKNOWN) {
             System.out.println("Ignoring unknown sub-elements.");
             if (unknown_depth > 1) {
@@ -200,7 +200,6 @@ public class AnalysisXMLParser extends DefaultHandler {
             elementTextBuf.setLength(0);
             state = file_state;
             file_state = IN_SUCHE;
-            return;
         }
     }
 
@@ -312,7 +311,6 @@ public class AnalysisXMLParser extends DefaultHandler {
         file_state = state;
         state = UNKNOWN;
         unknown_depth = 1;
-        return;
     }
 
 }

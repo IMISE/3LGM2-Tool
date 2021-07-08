@@ -3,6 +3,7 @@
  */
 package de.imise.tool3lgm.graphtools.analyse.context;
 
+import static de.imise.tool3lgm.Static.getMainFrame;
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
 
 import java.awt.BorderLayout;
@@ -141,7 +142,7 @@ public class AnalysesRepositoryFrame extends JFrame {
      */
     private AnalysesRepositoryFrame() {
         super(getResString("repository"));
-        setIconImage(Static.getMainFrame().getIconImage());
+        setIconImage(getMainFrame().getIconImage());
 
         JMenu menuFile = new JMenu(getResString("file"));
         menuFile.add(new JMenuItem(AnalysesRepositoryFrameActions.ACTION_LOAD_STANDARD_REPOSITORY));

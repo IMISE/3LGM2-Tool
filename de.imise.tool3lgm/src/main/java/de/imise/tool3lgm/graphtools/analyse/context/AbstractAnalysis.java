@@ -17,6 +17,9 @@ import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.undoredo.TransactionManager;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 
+/**
+ * @author AXS (08.07.2011)
+ */
 public abstract class AbstractAnalysis extends MetaModelSpecificAdapter implements IDSource {
 
     /** der Name der Analyse. */
