@@ -130,6 +130,11 @@ public class MetaModelSpecificAdapter implements MetaModelSpecific {
     }
 
     @Override
+    public final boolean hasMetaModel(final MetaModel metaModel) {
+        return MetaModelSpecific.super.hasMetaModel(metaModel);
+    }
+
+    @Override
     public final boolean hasMetaModelContext(final MetaModelContext metaModelContext) {
         return MetaModelSpecific.super.hasMetaModelContext(metaModelContext);
     }
