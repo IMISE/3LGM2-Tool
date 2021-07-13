@@ -4,6 +4,7 @@ import static de.imise.tool3lgm.Static.getMainFrame;
 import static de.imise.tool3lgm.Static.getSelectedDoc;
 import static de.imise.tool3lgm.Static.getSelectedGDCollection;
 import static de.imise.tool3lgm.Static.getTool;
+import static de.imise.tool3lgm.Tool3lgmConstants.getReplacedResString;
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
 import static de.imise.tool3lgm.event.action.StaticAction.PPP;
 import static de.imise.tool3lgm.userproperties.UserProperties.IntProperty.PROPERTY_INT_RENDER_SETTINGS;
@@ -737,7 +738,7 @@ public class ActionLibrary {
         public static final ExtendedAction ACTION_OPEN_URL_3LGM_WEBSITE = new OpenUrlAction(ActionIdentifier.ACTION_OPEN_URL_3LGM_WEBSITE);
 
         /** öffnet die Website mit dem IssueTracker */
-        public static final ExtendedAction ACTION_OPEN_URL_ISSUE_TRACKER = new OpenUrlAction(ActionIdentifier.ACTION_OPEN_URL_ISSUE_TRACKER);
+        public static final ExtendedAction ACTION_OPEN_URL_ISSUE_TRACKER = new OpenUrlAction(ActionIdentifier.ACTION_OPEN_URL_ISSUE_TRACKER, Tool3lgmConstants.TOOL_VERSION.toString());
 
         /** öffnet das Beispielmodell */
         public static final ExtendedAction ACTION_OPEN_EXAMPLE_MESSAGE_BASED = new StaticAction(ActionIdentifier.ACTION_OPEN_EXAMPLE_MESSAGE_BASED) {
@@ -876,7 +877,7 @@ public class ActionLibrary {
                     MetaPath metaPath = singleSimpleRedundancyDefinition.getMetaPath();
                     String startClassPluralName = elementsNameBuilder.getDisplayablePluralName(metaPath.getStartClasses());
                     String endClassPluralName = elementsNameBuilder.getDisplayablePluralName(metaPath.getEndClasses());
-                    String fullActionDisplayName = getResString(resKey, startClassPluralName, endClassPluralName);
+                    String fullActionDisplayName = getReplacedResString(resKey, startClassPluralName, endClassPluralName);
                     action.setText(fullActionDisplayName);
                     returnActions[i] = action;
                 }

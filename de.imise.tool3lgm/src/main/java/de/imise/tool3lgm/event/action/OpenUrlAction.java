@@ -27,11 +27,12 @@ public class OpenUrlAction extends StaticAction {
 
     /**
      * @param identifier
+     * @param replacements
      */
-    public OpenUrlAction(final Object identifier) {
+    public OpenUrlAction(final Object identifier, final String... replacements) {
         super(identifier, null, ""); //der Text der Action wird in super nicht gesetzt, weil ein leerer String und nicht null übergeben wurde
         String resKey = getActionCommand();
-        String actionNameAndLink = Tool3lgmConstants.getResStringWithoutError(resKey);
+        String actionNameAndLink = Tool3lgmConstants.getReplacedResString(resKey, replacements);
         int urlDelimiterIndex = actionNameAndLink.toUpperCase().indexOf(RESOURCE_NAME_AND_URL_DELIMITER);
         if (urlDelimiterIndex > -1) {
             setText(actionNameAndLink.substring(0, urlDelimiterIndex).trim() + PPP);
