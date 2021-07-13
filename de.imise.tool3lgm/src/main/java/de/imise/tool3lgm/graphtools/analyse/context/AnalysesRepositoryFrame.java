@@ -9,6 +9,7 @@ import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
 import java.awt.BorderLayout;
 import java.io.File;
 import java.util.List;
+import java.util.Objects;
 
 import javax.swing.AbstractButton;
 import javax.swing.JButton;
@@ -16,23 +17,36 @@ import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
 
+import de.imise.tool3lgm.MetaModelContext;
 import de.imise.tool3lgm.Static;
+import de.imise.tool3lgm.Tool3lgmChangeListener;
+import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.util.Alphabetical;
+import de.imise.util.swing.dialog.MultipleOptionPane;
 
 /**
  * @author Thomas, Sebastian Weber, AXS
  */
-public class AnalysesRepositoryFrame extends JFrame {
+public class AnalysesRepositoryFrame extends JFrame implements Tool3lgmChangeListener {
 
     /**
      * Tabelle, in der die Analysen angezeigt werden
      */
     static AnalysesRepositoryFrameTable table;
 
+    /**
+     * The selected {@link MetaModelContext} during start this frame
+     */
+    private final MetaModelContext currentMetaModelContext = null;
+
+    /**
+     *
+     */
     private static AbstractButton[] buttons = {
             new JButton(AnalysesRepositoryFrameActions.ACTION_START_ANALYSIS), new JButton(AnalysesRepositoryFrameActions.ACTION_RESET_ANALYSIS_RESULT), new JButton(AnalysesRepositoryFrameActions.ACTION_CLOSE_DIALOG),
     };
@@ -61,7 +75,7 @@ public class AnalysesRepositoryFrame extends JFrame {
      * Wenn sich die Analysen geändert haben, muss beim Schließen des Frames
      * gefragt werden, ob sie als Repository gespeichert werden sollen.
      */
-    static boolean analysisChanged = false;
+    static boolean analysesChanged = false;
 
     /**
      * Fügt die übergebene XMLAnalyse in die Liste der Analysen ein, wenn sie
@@ -77,6 +91,7 @@ public class AnalysesRepositoryFrame extends JFrame {
             return false;
         }
         Alphabetical.insert(analysen, toadd);
+        analysesChanged = true;
         return true;
     }
 
@@ -113,7 +128,9 @@ public class AnalysesRepositoryFrame extends JFrame {
      * Setzt die übergeben ArrayList als die Analysenliste dieses Dialoges und
      * sortiert sie für die Tabelle.
      */
-    static void setAnalyses(final List<XMLAnalysis> analysen) {
+    static void refreshAnalyses() {
+        MetaModelContext selectedMetaModelContext = Static.getSelectedMetaModelContext();
+        final List<XMLAnalysis> analysen = AnalysesRepository.getAnalyses(selectedMetaModelContext);
         Alphabetical.sort(analysen);
         for (int i = analysen.size() - 1; i >= 0; i--) {
             XMLAnalysis analyse = analysen.get(i);
@@ -122,6 +139,10 @@ public class AnalysesRepositoryFrame extends JFrame {
             }
         }
         AnalysesRepositoryFrame.analysen = analysen;
+        analysesChanged = false;
+        if (table != null) {
+            table.update();
+        }
     }
 
     /**
@@ -142,8 +163,8 @@ public class AnalysesRepositoryFrame extends JFrame {
      */
     private AnalysesRepositoryFrame() {
         super(getResString("repository"));
+        setAlwaysOnTop(true);
         setIconImage(getMainFrame().getIconImage());
-
         JMenu menuFile = new JMenu(getResString("file"));
         menuFile.add(new JMenuItem(AnalysesRepositoryFrameActions.ACTION_LOAD_STANDARD_REPOSITORY));
         menuFile.add(new JMenuItem(AnalysesRepositoryFrameActions.ACTION_SAVE_REPOSITORY));
@@ -162,8 +183,7 @@ public class AnalysesRepositoryFrame extends JFrame {
         menuBar.add(menuFile);
         menuBar.add(menuAnalysis);
         setJMenuBar(menuBar);
-
-        setAnalyses(AnalysesRepository.getXMLAnalyses());
+        refreshAnalyses();
         table = new AnalysesRepositoryFrameTable();
         JScrollPane tableScrollPane = new JScrollPane(table);
 
@@ -180,13 +200,36 @@ public class AnalysesRepositoryFrame extends JFrame {
         getContentPane().add(mainPanel);
         pack();
         setLocationRelativeTo(getOwner());
+        addAsToolChangeListener();
     }
 
     @Override
     public void dispose() {
+        removeAsToolChangeListener();
         super.dispose();
         // beim Schließen immer die Analysen wieder auf die des Repositories setzen
-        setAnalyses(AnalysesRepository.getXMLAnalyses());
-        analysisChanged = false;
+        refreshAnalyses();
+    }
+
+    /**
+     *
+     */
+    public static void askForSaveIfChanged() {
+        if (analysesChanged) {
+            int answer = MultipleOptionPane.showConfirmDialog(dialog, getResString("ana_close_repository_frame_question_title"), getResString("ana_close_repository_frame_question"), JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
+            if (answer == JOptionPane.YES_OPTION) {
+                AnalysesRepository.setXMLAnalysen(analysen);
+                AnalysesRepository.saveRepository();
+            }
+        }
+    }
+
+    @Override
+    public void model_change_selected_szenario_changed(final GraphDocument source) {
+        MetaModelContext newMetaModelContext = source == null ? null : source.getMetaModelContext();
+        if (!Objects.equals(currentMetaModelContext, newMetaModelContext)) {
+            askForSaveIfChanged();
+            refreshAnalyses();
+        }
     }
 }

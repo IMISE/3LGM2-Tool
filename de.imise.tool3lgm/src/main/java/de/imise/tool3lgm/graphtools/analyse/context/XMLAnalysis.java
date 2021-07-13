@@ -226,7 +226,7 @@ public final class XMLAnalysis extends AbstractAnalysis {
     public String toString() {
         // wird gebraucht, um die Analysen in der Tabelle des AnalysesRepositoryDialoges richtig
         // zu sortieren (das ganze is ne echte Krücke!)
-        return getStartClassesDisplayNames();
+        return getStartClassesDisplayNames() + " -> " + getName();
         // return startknoten.toString();
     }
 

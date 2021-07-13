@@ -437,8 +437,9 @@ public class AnalysisEditor extends JDialog implements ActionListener {
                     val = "(null)";
                 }
                 XMLAnalysis toadd = null;
+                MetaModelContext selectedMetaModelContext = Static.getSelectedMetaModelContext();
                 try {
-                    toadd = XMLAnalysis.createAnalysis(Static.getSelectedMetaModelContext());
+                    toadd = XMLAnalysis.createAnalysis(selectedMetaModelContext);
                     toadd.setName(val);
                     String analysisString = getAnalysisString();
                     toadd.setXMLText(analysisString);
@@ -450,7 +451,6 @@ public class AnalysisEditor extends JDialog implements ActionListener {
                     // gleich ins Standard-Repository übernommen, sondern erst ins
                     if (AnalysesRepositoryFrame.dialog.isVisible()) {
                         AnalysesRepositoryFrame.addAnalysis(toadd, false);
-                        AnalysesRepositoryFrame.analysisChanged = true;
                         AnalysesRepositoryFrame.table.update();
                         AnalysesRepositoryFrame.refreshActionStates();
                         // der Editor wurde ohne AnalysesRepositoryFrame gestartet -> neue XMLAnalyse
@@ -459,7 +459,7 @@ public class AnalysisEditor extends JDialog implements ActionListener {
                         AnalysesRepository.addAnalysis(toadd);
                         AnalysesRepository.saveRepository();
                         // die Kopie der Analysen des Repositories auch im Dialog updaten
-                        AnalysesRepositoryFrame.setAnalyses(AnalysesRepository.getXMLAnalyses());
+                        AnalysesRepositoryFrame.refreshAnalyses();
                     }
                 }
             }

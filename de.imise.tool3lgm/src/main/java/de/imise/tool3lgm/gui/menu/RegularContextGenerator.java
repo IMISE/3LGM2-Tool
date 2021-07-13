@@ -1920,7 +1920,7 @@ public class RegularContextGenerator extends ElementSelectionContextGenerator im
         if (ec != null && ec.getElement() instanceof Node) {
             // Alle Analysen für die ausgewählte Klasse holen
             Class<? extends ModelElement> elementClass = ec.getElement().getClass();
-            List<AbstractAnalysis> analysis = AnalysesRepository.getAnalyses(Static.getSelectedMetaModel(), elementClass);
+            List<AbstractAnalysis> analysis = AnalysesRepository.getAnalyses(Static.getSelectedMetaModelContext(), elementClass);
             // Analysen ins Menü eintragen
             for (final AbstractAnalysis ana : analysis) {
                 JMenuItem item = new JMenuItem(ana.getName());

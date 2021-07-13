@@ -91,7 +91,7 @@ public class AnalysesRepositoryFrameTable extends JTable {
                 String name = o != null ? o.toString() : "";
                 XMLAnalysis ana = AnalysesRepositoryFrame.analysen.get(row);
                 ana.setName(name);
-                AnalysesRepositoryFrame.analysisChanged = true;
+                AnalysesRepositoryFrame.analysesChanged = true;
                 break;
             }
             case 2: {
@@ -156,7 +156,7 @@ public class AnalysesRepositoryFrameTable extends JTable {
                 String val = dialog.getText();
                 if (val != null && !analyseText.equals(val)) {
                     analyseText = val;
-                    AnalysesRepositoryFrame.analysisChanged = true;
+                    AnalysesRepositoryFrame.analysesChanged = true;
                     table.setValueAt(val, row, col);
                 }
                 break;

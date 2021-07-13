@@ -19,7 +19,6 @@ import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.log.Log;
 import de.imise.util.swing.dialog.ExtendedFileChooser;
-import de.imise.util.swing.dialog.MultipleOptionPane;
 
 /**
  * @author AXS created on 21.08.2007
@@ -36,14 +35,7 @@ public class AnalysesRepositoryFrameActions {
     static final Action ACTION_CLOSE_DIALOG = new AbstractAction(getResString("close")) {
         @Override
         public void actionPerformed(final ActionEvent e) {
-            if (AnalysesRepositoryFrame.analysisChanged) {
-                int answer = MultipleOptionPane.showConfirmDialog(AnalysesRepositoryFrame.dialog, getResString("ana_close_repository_frame_question_title"), getResString("ana_close_repository_frame_question"), JOptionPane.YES_NO_OPTION,
-                        JOptionPane.WARNING_MESSAGE);
-                if (answer == JOptionPane.YES_OPTION) {
-                    AnalysesRepository.setXMLAnalysen(AnalysesRepositoryFrame.analysen);
-                    AnalysesRepository.saveRepository();
-                }
-            }
+            AnalysesRepositoryFrame.askForSaveIfChanged();
             if (AnalysisEditor.editor != null && AnalysisEditor.editor.getOwner() == AnalysesRepositoryFrame.dialog) {
                 AnalysisEditor.editor.dispose();
             }
@@ -73,7 +65,7 @@ public class AnalysesRepositoryFrameActions {
                 if (fileToOpen == null) {
                     return;
                 }
-                List<XMLAnalysis> analysenToAdd = AnalysesRepository.loadAnalyseFile(fileToOpen);
+                List<XMLAnalysis> analysenToAdd = AnalysesRepository.loadAnalysesFile(fileToOpen);
                 if (analysenToAdd == null || analysenToAdd.isEmpty()) {
                     return;
                 }
@@ -81,8 +73,6 @@ public class AnalysesRepositoryFrameActions {
                 for (XMLAnalysis xMLAnalyse : analysenToAdd) {
                     AnalysesRepositoryFrame.addAnalysis(xMLAnalyse, true);
                 }
-                // wenn mind. eine neue XMLAnalyse eingefügt wurde -> analysisChanged == true setzen
-                AnalysesRepositoryFrame.analysisChanged = size < AnalysesRepositoryFrame.analysen.size();
                 AnalysesRepositoryFrame.table.update();
                 AnalysesRepositoryFrame.refreshActionStates();
             }
@@ -142,11 +132,10 @@ public class AnalysesRepositoryFrameActions {
 
         @Override
         public void actionPerformed(final ActionEvent e) {
-            if (AnalysesRepositoryFrame.analysisChanged == true) {
+            if (AnalysesRepositoryFrame.analysesChanged == true) {
                 int answer = JOptionPane.showConfirmDialog(AnalysesRepositoryFrame.dialog, getResString("ana_load_standard_repository_question"), getResString("ana_load_standard_repository"), JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
                 if (answer == JOptionPane.YES_OPTION) {
-                    AnalysesRepositoryFrame.setAnalyses(AnalysesRepository.getXMLAnalyses());
-                    AnalysesRepositoryFrame.analysisChanged = false;
+                    AnalysesRepositoryFrame.refreshAnalyses();
                     AnalysesRepositoryFrame.table.update();
                     AnalysesRepositoryFrame.refreshActionStates();
                 }
@@ -155,7 +144,7 @@ public class AnalysesRepositoryFrameActions {
 
         @Override
         public boolean isEnabled() {
-            return AnalysesRepositoryFrame.analysisChanged;
+            return AnalysesRepositoryFrame.analysesChanged;
         }
     };
 
@@ -170,13 +159,13 @@ public class AnalysesRepositoryFrameActions {
                 return;
             }
             AnalysesRepository.saveRepository();
-            AnalysesRepositoryFrame.analysisChanged = false;
+            AnalysesRepositoryFrame.analysesChanged = false;
             AnalysesRepositoryFrame.refreshActionStates();
         }
 
         @Override
         public boolean isEnabled() {
-            return AnalysesRepositoryFrame.analysisChanged;
+            return AnalysesRepositoryFrame.analysesChanged;
         }
     };
 
@@ -233,7 +222,6 @@ public class AnalysesRepositoryFrameActions {
                 } catch (SAXException ex) {
                     Log.show(Log.ERROR, getResString("ANALYSIS_CANT_CREATE") + "\n" + ex.getMessage(), ex);
                 }
-                AnalysesRepositoryFrame.analysisChanged = true;
                 AnalysesRepositoryFrame.table.update();
                 AnalysesRepositoryFrame.refreshActionStates();
             }
@@ -250,7 +238,7 @@ public class AnalysesRepositoryFrameActions {
             for (int i = selection.length - 1; i >= 0; i--) {
                 AnalysesRepositoryFrame.analysen.remove(selection[i]);
             }
-            AnalysesRepositoryFrame.analysisChanged = true;
+            AnalysesRepositoryFrame.analysesChanged = true;
             AnalysesRepositoryFrame.table.update();
             AnalysesRepositoryFrame.refreshActionStates();
         }
