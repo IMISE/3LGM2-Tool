@@ -34,12 +34,14 @@ import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.CompositionEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.DoubleMeaningEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
+import de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.path.metapaths.MetaPath;
 import de.imise.tool3lgm.graphtools.path.metapaths.SequenceMetaPath;
 import de.imise.tool3lgm.graphtools.path.metapaths.SimpleMetaPath;
 import de.imise.tool3lgm.graphtools.path.metapaths.SimpleMetaPathCreator;
 import de.imise.tool3lgm.graphtools.view.tooltip.ElementToolTipProvider;
+import de.imise.util.StringUtils;
 import de.imise.util.swing.component.tab.ReorderableTabbedPane;
 
 /**
@@ -204,11 +206,22 @@ public abstract class ElementPropertyDialog extends AbstractElementPropertyDialo
     }
 
     /**
+     * @param edgeClass
+     * @param direction
+     */
+    public final void addMultiPanel(final Class<? extends Edge> edgeClass, final Direction direction) {
+        ElementsNameBuilder elementsNameBuilder = getElementsNameBuilder();
+        String displayablePluralName = elementsNameBuilder.getMetaAssociationName(edgeClass, direction);
+        addMultiPanel(displayablePluralName);
+    }
+
+    /**
      * @param nameResKey
      */
     public final void addMultiPanel(final String nameResKey) {
         lastAddedMultiPanel = new MultiPanelElementDialogPanel(this);
         String tabTitle = Tool3lgmConstants.getResStringWithoutError(nameResKey);
+        tabTitle = StringUtils.capitalizeFirstChar(tabTitle);
         lastAddedMultiPanel.setName(tabTitle);
         addTab(lastAddedMultiPanel);
     }
