@@ -2,8 +2,12 @@ package de.imise.util;
 
 import java.awt.Desktop;
 import java.io.File;
+import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URL;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+import java.util.StringTokenizer;
 
 import javax.swing.event.HyperlinkEvent;
 
@@ -66,15 +70,30 @@ public class BrowseUtils {
             file = new File(fullPath);
             Desktop.getDesktop().open(file);
         } catch (Exception e) {
+            String query = null;
+            int indexOfQueryStart = urlOrPath.indexOf('?') + 1;
+            if (indexOfQueryStart > 0) {
+                query = urlOrPath.substring(indexOfQueryStart);
+                query = encodeQuery(query);
+                urlOrPath = urlOrPath.substring(0, indexOfQueryStart);
+            }
             try {
                 String fullUri = urlOrPath.contains("://") ? urlOrPath : "https://" + urlOrPath; // if no protocel -> https
+                if (query != null) {
+                    fullUri += query;
+                }
                 URI uri = new URI(fullUri);
                 browse(uri);
             } catch (Exception ex) {
-                int protocelStartIndex = urlOrPath.indexOf("://") + 3;
-                String url = protocelStartIndex >= 0 ? urlOrPath.substring(protocelStartIndex) : urlOrPath;
+                ex.printStackTrace();
+                int protocolStartIndex = urlOrPath.indexOf("://") + 3;
+                String url = protocolStartIndex >= 0 ? urlOrPath.substring(protocolStartIndex) : urlOrPath;
                 try {
-                    URI uri = new URI("http://" + url);
+                    String fullUri = "http://" + url;
+                    if (query != null) {
+                        fullUri += query;
+                    }
+                    URI uri = new URI(fullUri);
                     browse(uri);
                 } catch (Exception exx) {
                     return false;
@@ -82,6 +101,49 @@ public class BrowseUtils {
             }
         }
         return true;
+    }
+
+    /**
+     * @param unencodedQuery
+     * @return
+     */
+    private static String encodeQuery(final String unencodedQuery) {
+        StringBuilder fullEncodedString = new StringBuilder();
+        StringTokenizer st = new StringTokenizer(unencodedQuery, "&", true);
+        while (st.hasMoreTokens()) {
+            String nextToken = st.nextToken();
+            if (nextToken.equals("&")) {
+                fullEncodedString.append(nextToken);
+                continue;
+            }
+            int indexOfEqualsSign = nextToken.indexOf('=') + 1;
+            String parameterName = "";
+            String parameterValue = "";
+            if (indexOfEqualsSign > 0) {
+                parameterName = nextToken.substring(0, indexOfEqualsSign);
+                parameterValue = nextToken.substring(indexOfEqualsSign);
+            } else {
+                parameterValue = nextToken;
+            }
+            parameterValue = encodeValue(parameterValue);
+            fullEncodedString.append(parameterName);
+            fullEncodedString.append(parameterValue);
+        }
+        return fullEncodedString.toString();
+    }
+
+    /**
+     * Method to encode a string value using `UTF-8` encoding scheme
+     *
+     * @param value
+     * @return
+     */
+    private static String encodeValue(final String value) {
+        try {
+            return URLEncoder.encode(value, StandardCharsets.UTF_8.toString());
+        } catch (UnsupportedEncodingException ex) {
+            throw new RuntimeException(ex.getCause());
+        }
     }
 
     /**
