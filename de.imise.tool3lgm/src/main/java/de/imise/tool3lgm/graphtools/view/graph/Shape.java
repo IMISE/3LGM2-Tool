@@ -1,6 +1,7 @@
 package de.imise.tool3lgm.graphtools.view.graph;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Graphics;
 
 import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
@@ -66,9 +67,7 @@ public enum Shape {
             int cornerSize = roundRectCorner(width, height);
             g.setColor(col);
             g.fillRoundRect(xm, ym, width, height, cornerSize, cornerSize);
-            g.translate(xm, ym);
-            kc.paintSuperComponent(g);
-            g.translate(-xm, -ym);
+            paintTextWithOffset(g, kc, 15, xm, ym);
             g.setColor(isResult && analysisColor != null ? analysisColor : kc.getFrameColor());
             g.drawRoundRect(xm, ym, width, height, cornerSize, cornerSize);
         }
@@ -180,11 +179,32 @@ public enum Shape {
     private static int roundRectCorner(final int width, final int height) {
         int min = Math.min(width, height);
         int cornerSize = 20;
-        if (Math.min(height, width) < 40) {
+        if (min < 40) {
             cornerSize = 10;
         }
-
         return cornerSize;
+    }
+
+    /**
+     * paints the Label of the element with an offset
+     * this method is mainly used to create a margin to the
+     * borders of the model element
+     *
+     * @param g
+     * @param kc
+     * @param offset
+     * @param xm
+     * @param ym
+     */
+    private static void paintTextWithOffset(final Graphics g, final NodeContainer kc, final int offset, final int xm, final int ym) {
+        int axisOffset = offset / 5 * 3;
+        Dimension size = kc.getSize();
+        Dimension reducedSize = new Dimension(size.width - offset, size.height - offset);
+        g.translate(xm + axisOffset, ym + axisOffset);
+        kc.setSize(reducedSize);
+        kc.paintSuperComponent(g);
+        kc.setSize(size);
+        g.translate(-(xm + axisOffset), -(ym + axisOffset));
     }
 
     /**
