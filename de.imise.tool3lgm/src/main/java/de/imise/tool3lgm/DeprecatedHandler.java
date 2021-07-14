@@ -57,11 +57,11 @@ public class DeprecatedHandler {
      * @param languageCode "en" or "de"
      */
     private static void renameAnalysisFile(final String languageCode) {
-        String anlyseFileName_en = Tool3lgmConstants.getAnlyseFileNameForLanguage(languageCode);
-        File deprecated_AnalysisFile_en = new File(USER_HOME_DIR_NAME, anlyseFileName_en);
-        if (deprecated_AnalysisFile_en.exists()) {
-            File new_AnalysisFile_en = new File(USER_HOME_3LGM_DIR, anlyseFileName_en);
-            deprecated_AnalysisFile_en.renameTo(new_AnalysisFile_en);
+        String anlyseFileName = "Tool3lgm_" + languageCode + ".analysis";//Tool3lgmConstants.getUserHomeAnlyseFileNameForLanguage(languageCode);
+        File deprecated_AnalysisFile = new File(USER_HOME_DIR_NAME, anlyseFileName);
+        if (deprecated_AnalysisFile.exists()) {
+            File new_AnalysisFile = new File(USER_HOME_3LGM_DIR, anlyseFileName);
+            deprecated_AnalysisFile.renameTo(new_AnalysisFile);
         }
     }
 

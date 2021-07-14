@@ -6,7 +6,6 @@ import java.awt.Image;
 import java.awt.event.InputEvent;
 import java.awt.event.MouseEvent;
 import java.io.File;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -134,7 +133,7 @@ public abstract class Tool3lgmConstants {
      * The corresponding {@link Tool3lgmVersion} to the current
      * {@link GitVersionInfo} to compare different version objects.
      */
-    public static final Tool3lgmVersion TOOL_VERSION_INFO = Tool3lgmVersion.parseGitVersion(TOOL_VERSION_GIT_INFO);
+    public static final Tool3lgmVersion TOOL_VERSION = Tool3lgmVersion.parseGitVersion(TOOL_VERSION_GIT_INFO);
 
     /**
      * Datei-Endung für große Icons.
@@ -298,40 +297,7 @@ public abstract class Tool3lgmConstants {
      * aufgerufen hat, dann gibt es im user.home-Pfad eine Datei mit diesem
      * Namen.
      */
-    public static final String ANALYSEN_FILE_NAME = getAnlyseFileNameForLanguage(UserProperties.getLocale().getLanguage());
-
-    /**
-     * @param language language code like "en" or "de" or in general
-     *            {@link Locale#getLanguage()}
-     * @return
-     */
-    public static final String getAnlyseFileNameForLanguage(final String language) {
-        return language.equals("en") ? "Tool3lgm.analysis" : "Tool3lgm_" + language + ".analysis";
-    }
-
-    /**
-     * Absoluter Pfad zur Datei mit den Standardanalysen der
-     * nachrichtenbasiertem Metamodell in den Resourcen
-     */
-    public static final String ORIGINAL_ANALYSEN_FILE_NAME = UserProperties.getLocale().getLanguage().equals("en") ? "Original_Tool3lgm.analysis" : "Original_Tool3lgm_" + UserProperties.getLocale().getLanguage() + ".analysis";
-
-    /**
-     * Absoluter Pfad zur Datei mit den Standardanalysen der serviceorientiertem
-     * Metamodell in den Resourcen
-     */
-    public static final String SERVICE_ANALYSEN_FILE_NAME = UserProperties.getLocale().getLanguage().equals("en") ? "Service_Tool3lgm.analysis" : "Service_Tool3lgm_" + UserProperties.getLocale().getLanguage() + ".analysis";
-
-    /**
-     * Absoluter Pfad zur Datei mit den Standardanalysen für Nachrichtenbasierte
-     * Metamodelle in den Resourcen
-     */
-    public static final URL DEFAULT_ORIGINAL_ANALYSEN_RESSOURCE_URL = ClassLoader.getSystemResource(ORIGINAL_ANALYSEN_FILE_NAME);
-
-    /**
-     * Absoluter Pfad zur Datei mit den Standardanalysen für Service Metamodelle
-     * in den Resourcen
-     */
-    public static final URL DEFAULT_SERVICE_ANALYSEN_RESSOURCE_URL = ClassLoader.getSystemResource(SERVICE_ANALYSEN_FILE_NAME);
+    public static final File USER_HOME_ANALYSES_FILE = new File(USER_HOME_3LGM_DIR, "Tool3lgm.analysis");
 
     /** Locale, mit der der Baukasten gestartet wurde. */
     public static final Locale START_LOCALE = UserProperties.getLocale();
@@ -592,7 +558,7 @@ public abstract class Tool3lgmConstants {
      * @param replacements Ersetzungen
      * @return String with value of resource
      */
-    public static String getResString(final Object key, final String... replacements) {
+    public static String getReplacedResString(final Object key, final String... replacements) {
         return getReplacedString(getResStringWithoutError(key.toString()), replacements);
     }
 

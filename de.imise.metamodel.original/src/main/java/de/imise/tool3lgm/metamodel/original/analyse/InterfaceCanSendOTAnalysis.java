@@ -13,6 +13,7 @@ import javax.swing.BorderFactory;
 
 import de.imise.tool3lgm.MetaModelContext;
 import de.imise.tool3lgm.Static;
+import de.imise.tool3lgm.graphtools.IDSource;
 import de.imise.tool3lgm.graphtools.analyse.context.AbstractAnalysis;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction;
@@ -44,7 +45,7 @@ public class InterfaceCanSendOTAnalysis extends AbstractAnalysis {
      * @param metaModelContext
      */
     public InterfaceCanSendOTAnalysis(final MetaModelContext metaModelContext) {
-        super(metaModelContext);
+        super(metaModelContext, IDSource.createIDString("ANA"));
         startClasses.add(Bausteinschnittstelle.class);
         SimpleResourceBundleSourceAdapter resHandler = new SimpleResourceBundleSourceAdapter(getClass());
         name = resHandler.getResString("ANALYSIS_NAME");
@@ -77,10 +78,7 @@ public class InterfaceCanSendOTAnalysis extends AbstractAnalysis {
         if (new MultipleOptionPane().showComponentDialog(Static.getMainFrame(), resHandler.getResString("CHOOSE_OBJECT_TYPE_DIALOG_TITLE"), resHandler.getResString("CHOOSE_OBJECT_TYPE_DIALOG_TITLE"), objectTypeList) != MultipleOptionPane.OK_OPTION) {
             return null;
         }
-        List<ModelElement> objectTypes = new ArrayList<>();
-        for (ModelElement o : objectTypeList.getSelectedObjects()) {
-            objectTypes.add(o);
-        }
+        List<ModelElement> objectTypes = new ArrayList<>(objectTypeList.getSelectedObjects());
         // nichts ausgewählt
         if (objectTypes.size() == 0) {
             return null;

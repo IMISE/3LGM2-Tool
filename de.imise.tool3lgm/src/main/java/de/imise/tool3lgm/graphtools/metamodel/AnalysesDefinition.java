@@ -74,4 +74,13 @@ public class AnalysesDefinition {
         return new Action[0];
     }
 
+    /**
+     * @return Returns the base name of the resource file containing the default
+     *         analyses for this metamodel. The default return value is the
+     *         empty String.
+     */
+    public String getXMLAnalysisRepositoryFileName() {
+        return "";
+    }
+
 }

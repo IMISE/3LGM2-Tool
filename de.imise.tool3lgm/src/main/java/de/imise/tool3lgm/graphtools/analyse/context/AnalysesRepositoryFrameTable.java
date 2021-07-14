@@ -17,6 +17,7 @@ import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
+import javax.swing.table.TableColumn;
 
 import org.xml.sax.SAXException;
 
@@ -40,29 +41,11 @@ public class AnalysesRepositoryFrameTable extends JTable {
     private class AnalyseTableModel extends AbstractTableModel {
 
         /**
-         * Irgendeine Komponente, die als Parent für einen Fehlerdialog dienen
-         * kann.
-         */
-        private final Component parent;
-
-        /**
          * Tabellen Kopfzeilenbeschriftungen
          */
         String[] colheads = {
                 getResString("start_element_type"), getResString("ana_name"), getResString("definition")
         };
-
-        /**
-         * Legt ein neues Model an. Die Parentkomponente wird gebraucht, wenn
-         * bei einem Fehler ein Infodialog ausgegeben werden muss.
-         *
-         * @param parent Komponente, die als Parent für einen Fehlerdialog
-         *            dienen kann.
-         */
-        private AnalyseTableModel(final Component parent) {
-            super();
-            this.parent = parent;
-        }
 
         @Override
         public int getColumnCount() {
@@ -105,14 +88,10 @@ public class AnalysesRepositoryFrameTable extends JTable {
         public void setValueAt(final Object o, final int row, final int column) {
             switch (column) {
             case 1: {
-                String neuerName = o != null ? o.toString() : "";
+                String name = o != null ? o.toString() : "";
                 XMLAnalysis ana = AnalysesRepositoryFrame.analysen.get(row);
-                if (!AnalysesRepository.containsName(AnalysesRepositoryFrame.analysen, ana, neuerName)) {
-                    ana.setName(neuerName);
-                    AnalysesRepositoryFrame.analysisChanged = true;
-                } else {
-                    JOptionPane.showConfirmDialog(parent, getResString("ANALYSIS_ALREADY_EXISTS"), getResString("fehler"), JOptionPane.DEFAULT_OPTION, JOptionPane.ERROR_MESSAGE);
-                }
+                ana.setName(name);
+                AnalysesRepositoryFrame.analysesChanged = true;
                 break;
             }
             case 2: {
@@ -143,7 +122,6 @@ public class AnalysesRepositoryFrameTable extends JTable {
          * @param txt
          */
         public TableCellButtonEdior() {
-            super();
         }
 
         @Override
@@ -178,7 +156,7 @@ public class AnalysesRepositoryFrameTable extends JTable {
                 String val = dialog.getText();
                 if (val != null && !analyseText.equals(val)) {
                     analyseText = val;
-                    AnalysesRepositoryFrame.analysisChanged = true;
+                    AnalysesRepositoryFrame.analysesChanged = true;
                     table.setValueAt(val, row, col);
                 }
                 break;
@@ -216,15 +194,18 @@ public class AnalysesRepositoryFrameTable extends JTable {
      * @param analysen
      */
     public AnalysesRepositoryFrameTable() {
-        super();
-        setModel(new AnalyseTableModel(this));
+        setModel(new AnalyseTableModel());
         getTableHeader().setReorderingAllowed(false);
         setShowGrid(true);
-        getColumnModel().getColumn(0).setPreferredWidth(100);
-        getColumnModel().getColumn(0).setMinWidth(100);
-        getColumnModel().getColumn(2).setPreferredWidth(60);
-        getColumnModel().getColumn(2).setMinWidth(60);
-        getColumnModel().getColumn(2).setMaxWidth(60);
+        //column 0
+        TableColumn col = columnModel.getColumn(0);
+        col.setPreferredWidth(100);
+        col.setMinWidth(100);
+        //column2
+        col = columnModel.getColumn(2);
+        col.setPreferredWidth(60);
+        col.setMinWidth(60);
+        col.setMaxWidth(60);
     }
 
     // //////////////

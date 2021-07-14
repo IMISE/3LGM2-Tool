@@ -28,8 +28,14 @@ import de.imise.tool3lgm.metamodel.original.node.Objekttyp;
 import de.imise.tool3lgm.metamodel.original.node.RechAnwendungsbaustein;
 import de.imise.tool3lgm.metamodel.original.node.Softwareprodukt;
 
+/**
+ * @author AXS (23.06.2017)
+ */
 public class TLGMOriginalAnalysesDefinition extends AnalysesDefinition {
 
+    /**
+     * @param metaModel
+     */
     public TLGMOriginalAnalysesDefinition(final MetaModel metaModel) {
         super(metaModel);
         initSimpleRedundancyAnalyses();
@@ -37,6 +43,14 @@ public class TLGMOriginalAnalysesDefinition extends AnalysesDefinition {
         initNodeAnalyses();
     }
 
+    @Override
+    public String getXMLAnalysisRepositoryFileName() {
+        return "Original_Tool3lgm.analysis";
+    }
+
+    /**
+     *
+     */
     private void initSimpleRedundancyAnalyses() {
         MetaPath functionToConfigurationRedundancy = createSimpleMetaPath(metaModel, Aufgabe.class, ABKonfiguration.class, AufAufOrgVerbindung.class, AwbkAufOrgVerbindung.class);
         MetaPath functionToConfigurationRedundancyDifference = createSimpleMetaPath(metaModel, ABKonfiguration.class, Anwendungsbaustein.class, AwbAwbkVerbindung.class);
@@ -45,6 +59,9 @@ public class TLGMOriginalAnalysesDefinition extends AnalysesDefinition {
         simpleRedundancyAnalysisDefinitions.add(objecttypeToStoreplaceRedundancy, true);
     }
 
+    /**
+     *
+     */
     private void initRedundancyAnalyses() {
         //Analyse 1: Anwendungsbausteine bezüglich Aufgaben
         SingleRedundancyAnalysisDefinition analyse = redundancyAnalysisDefinitions.add(createSimpleMetaPath(metaModel, Anwendungsbaustein.class, Aufgabe.class, AwbAwbkVerbindung.class, AwbkAufOrgVerbindung.class, AufAufOrgVerbindung.class));
@@ -70,6 +87,9 @@ public class TLGMOriginalAnalysesDefinition extends AnalysesDefinition {
         redundancyAnalysisDefinitions.add(createSimpleMetaPath(metaModel, Datenbanksystem.class, Objekttyp.class, ObjLogspVerbindung.class));
     }
 
+    /**
+     *
+     */
     private void initNodeAnalyses() {
         nodeAnalyses.add(new InterfaceCanSendOTAnalysis(metaModel.getMetaModelContext()));
     }

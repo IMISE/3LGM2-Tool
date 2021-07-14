@@ -172,8 +172,7 @@ public class TLGMServiceMetaModel extends MetaModelDefinition implements Regular
 
     @Override
     public final Class<? extends AnalysesDefinition> getAnalysesDefinitionClass() {
-        //im Moment hat dieses Metamodell keine eigene AnalysesDefinition. Man könnte diese Funktion auch weglassen.
-        return super.getAnalysesDefinitionClass();
+        return TLGMServiceAnalysisDefinition.class;
     }
 
     /////////////////////////////

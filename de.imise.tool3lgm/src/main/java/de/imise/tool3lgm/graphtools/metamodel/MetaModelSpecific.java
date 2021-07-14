@@ -127,6 +127,15 @@ public interface MetaModelSpecific {
     }
 
     /**
+     * @param metaModel
+     * @return
+     */
+    public default boolean hasMetaModel(final MetaModel metaModel) {
+        MetaModel thisMetaModel = getMetaModel();
+        return Objects.equals(metaModel, thisMetaModel);
+    }
+
+    /**
      * @param metaModelContext
      * @return
      */

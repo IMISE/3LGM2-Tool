@@ -29,7 +29,9 @@ public class Tool3lgmVersion implements Comparable<Tool3lgmVersion> {
         if (equals(o)) {
             return 0;
         }
-
+        if (o == null) {
+            return 1;
+        }
         if (major != o.major) {
             return major - o.major;
         }
@@ -51,6 +53,15 @@ public class Tool3lgmVersion implements Comparable<Tool3lgmVersion> {
      */
     public boolean isLowerThan(final Tool3lgmVersion other) {
         return compareTo(other) < 0;
+    }
+
+    /**
+     * @param version
+     * @return <code>true</code> if this is a lower version than the specified
+     *         version
+     */
+    public boolean isHigherThan(final Tool3lgmVersion other) {
+        return compareTo(other) > 0;
     }
 
     @Override

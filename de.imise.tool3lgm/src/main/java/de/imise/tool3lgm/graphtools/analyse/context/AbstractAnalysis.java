@@ -5,7 +5,10 @@ import static de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty.OP
 import java.util.ArrayList;
 import java.util.List;
 
+import com.google.common.base.Objects;
+
 import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
+import de.imise.tool3lgm.graphtools.IDSource;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModelSpecific;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModelSpecificAdapter;
@@ -14,19 +17,27 @@ import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.undoredo.TransactionManager;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 
-public abstract class AbstractAnalysis extends MetaModelSpecificAdapter {
+/**
+ * @author AXS (08.07.2011)
+ */
+public abstract class AbstractAnalysis extends MetaModelSpecificAdapter implements IDSource {
 
     /** der Name der Analyse. */
     protected String name;
+
+    /** ID of this analysis (extablished in Tool-Version 4.4.1 (dev) */
+    protected final String id;
 
     /** der Node, bei dem die Analyse beginnt. */
     protected List<Class<? extends ModelElement>> startClasses = new ArrayList<>();
 
     /**
      * @param metaModelSpecific
+     * @param id
      */
-    protected AbstractAnalysis(final MetaModelSpecific metaModelSpecific) {
+    protected AbstractAnalysis(final MetaModelSpecific metaModelSpecific, final String id) {
         super(metaModelSpecific);
+        this.id = id;
     }
 
     /**
@@ -122,21 +133,28 @@ public abstract class AbstractAnalysis extends MetaModelSpecificAdapter {
             return false;
         }
         AbstractAnalysis other = (AbstractAnalysis) obj;
-        if (name == null) {
-            if (other.name != null) {
-                return false;
-            }
-        } else if (!name.equals(other.name)) {
+        if (!hasEqualsID(other)) {
             return false;
         }
-        if (startClasses == null) {
-            if (other.startClasses != null) {
-                return false;
-            }
-        } else if (!startClasses.equals(other.startClasses)) {
+        return hasEqualsContent(other, true);
+    }
+
+    /**
+     * @param other
+     * @param checkNameEquality
+     * @return
+     */
+    public boolean hasEqualsContent(final AbstractAnalysis other, final boolean checkNameEquality) {
+        if (checkNameEquality && !Objects.equal(getName(), other.getName())) {
             return false;
         }
-        return true;
+        return Objects.equal(getStartClasses(), other.getStartClasses());
+
+    }
+
+    @Override
+    public String getID() {
+        return id;
     }
 
 }

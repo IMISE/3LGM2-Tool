@@ -1,9 +1,14 @@
 Content-Type: multipart/related; boundary=--multipart_3lgm_query_separator;
 --multipart_3lgm_query_separator
 Content-Type: text/xml
-Content-ID: On which physical data processing components is it installed?
-<?xml version="1.0" encoding="ISO-8559-15"?>
+Model-Type: TLGMOriginalMetaModel@-6111172173611550491
+Content-ID: ANA_1624634670413_1
+<?xml version="1.0" encoding="UTF-8"?>
 <analyse>
+	<name>
+		<en>On which physical data processing components is it installed?</en>
+		<de>Auf welchen phys. DV-Bausteinen ist er installiert?</de>
+	</name>
 	<startknoten name="Anwendungsbaustein"/>
 	<suche>		
 		<typ>
@@ -26,9 +31,14 @@ Content-ID: On which physical data processing components is it installed?
 </analyse>
 --multipart_3lgm_query_separator
 Content-Type: text/xml
-Content-ID: Which enterprise functions does this physical data processing component support?
-<?xml version="1.0" encoding="ISO-8559-15"?>
+Model-Type: TLGMOriginalMetaModel@-6111172173611550491
+Content-ID: ANA_1624634671858_2
+<?xml version="1.0" encoding="UTF-8"?>
 <analyse>
+	<name>
+		<en>Which enterprise functions does this application system support?</en>
+		<de>Welche Aufgaben unterstützt dieses Anwendungssystem?</de>
+	</name>
 	<startknoten name="Anwendungsbaustein"/>
 	<suche>
 		<typ>
@@ -57,9 +67,14 @@ Content-ID: Which enterprise functions does this physical data processing compon
 </analyse>
 --multipart_3lgm_query_separator
 Content-Type: text/xml
-Content-ID: Which object types are stored?
-<?xml version="1.0" encoding="ISO-8559-15"?>
+Model-Type: TLGMOriginalMetaModel@-6111172173611550491
+Content-ID: ANA_1624634672858_3
+<?xml version="1.0" encoding="UTF-8"?>
 <analyse>
+	<name>
+		<en>Which object types are stored?</en>
+		<de>Welche Objekttypen werden gespeichert?</de>
+	</name>
 	<startknoten name="Anwendungsbaustein"/>
 	<suche>		
 		<typ>
@@ -90,9 +105,14 @@ Content-ID: Which object types are stored?
 </analyse>
 --multipart_3lgm_query_separator
 Content-Type: text/xml
-Content-ID: Which object types does this component send or receive?
-<?xml version="1.0" encoding="ISO-8559-15"?>
+Model-Type: TLGMOriginalMetaModel@-6111172173611550491
+Content-ID: ANA_1624634673858_4
+<?xml version="1.0" encoding="UTF-8"?>
 <analyse>
+	<name>
+		<en>Which object types does this component send or receive?</en>
+		<de>Objekttypen können gesendet oder empfangen werden?</de>
+	</name>
 	<startknoten name="Anwendungsbaustein"/>
 	<suche>		
 		<typ>
@@ -129,9 +149,14 @@ Content-ID: Which object types does this component send or receive?
 </analyse>
 --multipart_3lgm_query_separator
 Content-Type: text/xml
-Content-ID: Which communication links does this component have?
-<?xml version="1.0" encoding="ISO-8559-15"?>
+Model-Type: TLGMOriginalMetaModel@-6111172173611550491
+Content-ID: ANA_1624634674859_5
+<?xml version="1.0" encoding="UTF-8"?>
 <analyse>
+	<name>
+		<en>Which communication links does this component have?</en>
+		<de>Kommunikationsbeziehungen hat er?</de>
+	</name>
 	<startknoten name="Anwendungsbaustein"/>
 	<suche>		
 		<typ>
@@ -163,9 +188,14 @@ Content-ID: Which communication links does this component have?
 </analyse>
 --multipart_3lgm_query_separator
 Content-Type: text/xml
-Content-ID: Which application components and which physical data processing components are needed to achieve this enterprise function?
-<?xml version="1.0" encoding="ISO-8559-15"?>
+Model-Type: TLGMOriginalMetaModel@-6111172173611550491
+Content-ID: ANA_1624634675859_6
+<?xml version="1.0" encoding="UTF-8"?>
 <analyse>
+	<name>
+		<en>Which application components and which physical data processing components are needed to achieve this enterprise function?</en>
+		<de>Welche Anwendungsbausteine und welche Phys. DV-Bausteine werden zur Erfüllung benötigt?</de>
+	</name>
 	<startknoten name="Aufgabe"/>
 	<suche>		
 		<typ>
@@ -208,9 +238,14 @@ Content-ID: Which application components and which physical data processing comp
 </analyse>
 --multipart_3lgm_query_separator
 Content-Type: text/xml
-Content-ID: Which application components are needed to achieve this enterprise function?
-<?xml version="1.0" encoding="ISO-8559-15"?>
+Model-Type: TLGMOriginalMetaModel@-6111172173611550491
+Content-ID: ANA_1624634676860_7
+<?xml version="1.0" encoding="UTF-8"?>
 <analyse>
+	<name>
+		<en>Which application components are needed to achieve this enterprise function?</en>
+		<de>Welche Anwendungsbausteine werden zur Erfüllung benötigt?</de>
+	</name>
 	<startknoten name="Aufgabe"/>
 	<suche>		
 		<typ>
@@ -241,9 +276,14 @@ Content-ID: Which application components are needed to achieve this enterprise f
 </analyse>
 --multipart_3lgm_query_separator
 Content-Type: text/xml
-Content-ID: Where are message types and document types connected to this event type transmitted, and which object types are communicated?
-<?xml version="1.0" encoding="ISO-8559-15"?>
+Model-Type: TLGMOriginalMetaModel@-6111172173611550491
+Content-ID: ANA_1624634677860_8
+<?xml version="1.0" encoding="UTF-8"?>
 <analyse>
+	<name>
+		<en>Where are message types and document types connected to this event type transmitted, and which object types are communicated?</en>
+		<de>Wo werden Nachrichtentypen/Dokumententypen dazu übermittelt und welche Objekttypen werden kommuniziert?</de>
+	</name>
 	<startknoten name="Ereignistyp"/>
 	<suche>		
 		<typ>
@@ -275,9 +315,14 @@ Content-ID: Where are message types and document types connected to this event t
 </analyse>
 --multipart_3lgm_query_separator
 Content-Type: text/xml
-Content-ID: Where is this ETNTCombination transmitted, and which object types are communicated?
-<?xml version="1.0" encoding="ISO-8559-15"?>
+Model-Type: TLGMOriginalMetaModel@-6111172173611550491
+Content-ID: ANA_1624634678860_9
+<?xml version="1.0" encoding="UTF-8"?>
 <analyse>
+	<name>
+		<en>Where is this ETNTCombination transmitted, and which object types are communicated?</en>
+		<de>Wo wird sie übermittelt und welche Objekttypen werden kommuniziert?</de>
+	</name>
 	<startknoten name="EreignisNachrichtenTyp"/>
 	<suche>		
 		<typ>
@@ -302,9 +347,14 @@ Content-ID: Where is this ETNTCombination transmitted, and which object types ar
 </analyse>
 --multipart_3lgm_query_separator
 Content-Type: text/xml
-Content-ID: Where is this ETDTCombination transmitted, and which object types are communicated?
-<?xml version="1.0" encoding="ISO-8559-15"?>
+Model-Type: TLGMOriginalMetaModel@-6111172173611550491
+Content-ID: ANA_1624634679860_10
+<?xml version="1.0" encoding="UTF-8"?>
 <analyse>
+	<name>
+		<en>Where is this ETDTCombination transmitted, and which object types are communicated?</en>
+		<de>Wo wird sie übermittelt und welche Objekttypen werden kommuniziert?</de>
+	</name>
 	<startknoten name="EreignisDokumentenTyp"/>
 	<suche>		
 		<typ>
@@ -329,9 +379,14 @@ Content-ID: Where is this ETDTCombination transmitted, and which object types ar
 </analyse>
 --multipart_3lgm_query_separator
 Content-Type: text/xml
-Content-ID: Where gets this communication standard applied?
-<?xml version="1.0" encoding="ISO-8559-15"?>
+Model-Type: TLGMOriginalMetaModel@-6111172173611550491
+Content-ID: ANA_1624634680861_11
+<?xml version="1.0" encoding="UTF-8"?>
 <analyse>
+	<name>
+		<en>Where gets this communication standard applied?</en>
+		<de>Wo wird dieser Kommunikationsstandard angewendet?</de>
+	</name>
 	<startknoten name="Kommunikationsstandard"/>
 	<suche>		
 		<typ>
@@ -357,9 +412,14 @@ Content-ID: Where gets this communication standard applied?
 </analyse>
 --multipart_3lgm_query_separator
 Content-Type: text/xml
-Content-ID: Where is this message or document type transmitted, and which object types are communicated?
-<?xml version="1.0" encoding="ISO-8559-15"?>
+Model-Type: TLGMOriginalMetaModel@-6111172173611550491
+Content-ID: ANA_1624634681861_12
+<?xml version="1.0" encoding="UTF-8"?>
 <analyse>
+	<name>
+		<en>Where is this message or document type transmitted, and which object types are communicated?</en>
+		<de>Wo wird er übermittelt und welche Objekttypen werden kommuniziert?</de>
+	</name>
 	<startknoten name="Nachrichtentyp"/>
 	<startknoten name="Dokumententyp"/>
 	<suche>
@@ -386,9 +446,14 @@ Content-ID: Where is this message or document type transmitted, and which object
 </analyse>
 --multipart_3lgm_query_separator
 Content-Type: text/xml
-Content-ID: Where is this object type communicated?
-<?xml version="1.0" encoding="ISO-8559-15"?>
+Model-Type: TLGMOriginalMetaModel@-6111172173611550491
+Content-ID: ANA_1624634682861_13
+<?xml version="1.0" encoding="UTF-8"?>
 <analyse>
+	<name>
+		<en>Where is this object type communicated?</en>
+		<de>Wo wird er kommuniziert?</de>
+	</name>
 	<startknoten name="Objekttyp"/>
 	<suche>
 		<typ>
@@ -419,9 +484,14 @@ Content-ID: Where is this object type communicated?
 </analyse>
 --multipart_3lgm_query_separator
 Content-Type: text/xml
-Content-ID: Which interfaces can communicate this object type?
-<?xml version="1.0" encoding="ISO-8559-15"?>
+Model-Type: TLGMOriginalMetaModel@-6111172173611550491
+Content-ID: ANA_1624634683861_14
+<?xml version="1.0" encoding="UTF-8"?>
 <analyse>
+	<name>
+		<en>Which interfaces can communicate this object type?</en>
+		<de>Welche Bausteinschnittstellen können ihn kommunizieren?</de>
+	</name>
 	<startknoten name="Objekttyp"/>
 	<suche>
 		<typ>
@@ -452,9 +522,14 @@ Content-ID: Which interfaces can communicate this object type?
 </analyse>
 --multipart_3lgm_query_separator
 Content-Type: text/xml
-Content-ID: Where is this object type stored?
-<?xml version="1.0" encoding="ISO-8559-15"?>
+Model-Type: TLGMOriginalMetaModel@-6111172173611550491
+Content-ID: ANA_1624634684861_15
+<?xml version="1.0" encoding="UTF-8"?>
 <analyse>
+	<name>
+		<en>Where is this object type stored?</en>
+		<de>Wo wird er gespeichert?</de>
+	</name>
 	<startknoten name="Objekttyp"/>
 	<suche>
 		<typ>
@@ -479,9 +554,14 @@ Content-ID: Where is this object type stored?
 </analyse>
 --multipart_3lgm_query_separator
 Content-Type: text/xml
-Content-ID: Which components belong to the data domain of this object type?
-<?xml version="1.0" encoding="ISO-8559-15"?>
+Model-Type: TLGMOriginalMetaModel@-6111172173611550491
+Content-ID: ANA_1624634685862_16
+<?xml version="1.0" encoding="UTF-8"?>
 <analyse>
+	<name>
+		<en>Which components belong to the data domain of this object type?</en>
+		<de>Datendomäne zum Objekttyp X</de>
+	</name>
 	<startknoten name="Objekttyp"/>
 	<suche>
 		<typ>
@@ -518,9 +598,14 @@ Content-ID: Which components belong to the data domain of this object type?
 </analyse>
 --multipart_3lgm_query_separator
 Content-Type: text/xml
-Content-ID: Which components belong to the scenario of this organizational unit?
-<?xml version="1.0" encoding="ISO-8559-15"?>
+Model-Type: TLGMOriginalMetaModel@-6111172173611550491
+Content-ID: ANA_1624634686862_17
+<?xml version="1.0" encoding="UTF-8"?>
 <analyse>
+	<name>
+		<en>Which components belong to the scenario of this organizational unit?</en>
+		<de>Szenario zur Organisationseinheit X</de>
+	</name>
 	<startknoten name="Organisationseinheit"/>
 	<suche>
 		<typ>
@@ -568,9 +653,14 @@ Content-ID: Which components belong to the scenario of this organizational unit?
 </analyse>
 --multipart_3lgm_query_separator
 Content-Type: text/xml
-Content-ID: Which database systems are installed on this physical data processing component, and which object types are stored in them?
-<?xml version="1.0" encoding="ISO-8559-15"?>
+Model-Type: TLGMOriginalMetaModel@-6111172173611550491
+Content-ID: ANA_1624634687862_18
+<?xml version="1.0" encoding="UTF-8"?>
 <analyse>
+	<name>
+		<en>Which database systems are installed on this physical data processing component, and which object types are stored in them?</en>
+		<de>Welche Datenbanksysteme sind darauf installiert und welche Objekttypen sind darin gespeichert?</de>
+	</name>
 	<startknoten name="PhysischerDVBaustein"/>
 	<suche>
 		<typ>
@@ -616,9 +706,14 @@ Content-ID: Which database systems are installed on this physical data processin
 </analyse>
 --multipart_3lgm_query_separator
 Content-Type: text/xml
-Content-ID: Which computer-based application components are installed on this physical data processing component?
-<?xml version="1.0" encoding="ISO-8559-15"?>
+Model-Type: TLGMOriginalMetaModel@-6111172173611550491
+Content-ID: ANA_1624634688863_19
+<?xml version="1.0" encoding="UTF-8"?>
 <analyse>
+	<name>
+		<en>Which computer-based application components are installed on this physical data processing component?</en>
+		<de>elche Anwendungsbausteine sind darauf installiert?</de>
+	</name>
 	<startknoten name="PhysischerDVBaustein"/>
 	<suche>
 		<typ>
@@ -643,9 +738,14 @@ Content-ID: Which computer-based application components are installed on this ph
 </analyse>
 --multipart_3lgm_query_separator
 Content-Type: text/xml
-Content-ID: Which computer-based application components are installed on this physical data processing component, and which enterprise functions do they support?
-<?xml version="1.0" encoding="ISO-8559-15"?>
+Model-Type: TLGMOriginalMetaModel@-6111172173611550491
+Content-ID: ANA_1624634689863_20
+<?xml version="1.0" encoding="UTF-8"?>
 <analyse>
+	<name>
+		<en>Which computer-based application components are installed on this physical data processing component, and which enterprise functions do they support?</en>
+		<de>Welche Anwendungsbausteine sind darauf installiert und welche Aufgaben werden damit unterstützt?</de>
+	</name>
 	<startknoten name="PhysischerDVBaustein"/>
 	<suche>
 		<typ>
@@ -688,9 +788,14 @@ Content-ID: Which computer-based application components are installed on this ph
 </analyse>
 --multipart_3lgm_query_separator
 Content-Type: text/xml
-Content-ID: Which physical data processing components are located at this location?
-<?xml version="1.0" encoding="ISO-8559-15"?>
+Model-Type: TLGMOriginalMetaModel@-6111172173611550491
+Content-ID: ANA_1624636431564_21
+<?xml version="1.0" encoding="UTF-8"?>
 <analyse>
+	<name>
+		<en>Which physical data processing components are located at this location?</en>
+		<de>Welche Phys. DV-Bausteine stehen dort?</de>
+	</name>
 	<startknoten name="Standort"/>
 	<suche>
 		<typ>
@@ -707,9 +812,14 @@ Content-ID: Which physical data processing components are located at this locati
 </analyse>
 --multipart_3lgm_query_separator
 Content-Type: text/xml
-Content-ID: On which application components it is installed?
-<?xml version="1.0" encoding="ISO-8559-15"?>
+Model-Type: TLGMOriginalMetaModel@-6111172173611550491
+Content-ID: ANA_1624636432564_22
+<?xml version="1.0" encoding="UTF-8"?>
 <analyse>
+	<name>
+		<en>On which application components it is installed?</en>
+		<de>Auf welchem Anwendungsbaustein ist es installiert?</de>
+	</name>
 	<startknoten name="Softwareprodukt"/>
 	<suche>
 		<typ>

@@ -2164,13 +2164,28 @@ public final class MetaModel extends CoreMetaModel {
      * schief, dann kommt ohne Exception <code>null</code> zurück.
      *
      * @param metaModelDependentClass
+     * @param metaModel
      * @return
      */
     private <T> T getInstance(final Class<? extends T> metaModelDependentClass) {
+        return getInstance(metaModelDependentClass, this);
+    }
+
+    /**
+     * Instanziiert die übergebene Klasse mit einem Kontruktor, der als Parmeter
+     * eine Instanz der Klasse {@link MetaModel} erwartet. Geht dabei irgendwas
+     * schief, versucht sie es mit dem leeren Constructor. Geht dabei auch etwas
+     * schief, dann kommt ohne Exception <code>null</code> zurück.
+     *
+     * @param metaModelDependentClass
+     * @param metaModel
+     * @return
+     */
+    public static <T> T getInstance(final Class<? extends T> metaModelDependentClass, final MetaModel metaModel) {
         T instance = null;
         try {
             Constructor<? extends T> constructor = metaModelDependentClass.getConstructor(MetaModel.class);
-            instance = constructor.newInstance(this);
+            instance = constructor.newInstance(metaModel);
         } catch (Exception e) {
             try {
                 Constructor<? extends T> emptyConstructor = metaModelDependentClass.getDeclaredConstructor();
