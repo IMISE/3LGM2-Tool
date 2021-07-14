@@ -23,6 +23,7 @@ import de.imise.tool3lgm.graphtools.path.metapaths.MetaPath;
 import de.imise.tool3lgm.graphtools.path.metapaths.SectionMetaPath;
 import de.imise.tool3lgm.graphtools.path.metapaths.SimpleMetaPath;
 import de.imise.tool3lgm.metamodel.service.edge.ApplicationComponent_PhysicalDataProcessingComponent_Edge;
+import de.imise.tool3lgm.metamodel.service.edge.ApplicationComponent_RepresentationForm_Edge;
 import de.imise.tool3lgm.metamodel.service.edge.ApplicationComponent_Use_Edge;
 import de.imise.tool3lgm.metamodel.service.edge.ApplicationSystem_IheActorInstance_Edge;
 import de.imise.tool3lgm.metamodel.service.edge.ApplicationSystem_SoftwareProduct_Edge;
@@ -40,12 +41,16 @@ import de.imise.tool3lgm.metamodel.service.edge.IheInvokingInterface_IheTransact
 import de.imise.tool3lgm.metamodel.service.edge.IheProvidingInterface_IheActorInstanceProvidingInterface_Edge;
 import de.imise.tool3lgm.metamodel.service.edge.IheProvidingInterface_IheTransaction_Edge;
 import de.imise.tool3lgm.metamodel.service.edge.IheTransaction_IheCommunicationLink_Edge;
+import de.imise.tool3lgm.metamodel.service.edge.ObjectType_RepresentationForm_Edge;
 import de.imise.tool3lgm.metamodel.service.edge.OrganisationalUnit_Use_Edge;
+import de.imise.tool3lgm.metamodel.service.edge.Service_CommunicationInterface_Edge;
 import de.imise.tool3lgm.metamodel.service.edge.Service_CommunicationLink_Edge;
 import de.imise.tool3lgm.metamodel.service.edge.Service_InvokingInterface_Edge;
 import de.imise.tool3lgm.metamodel.service.edge.Service_ProvidingInterface_Edge;
+import de.imise.tool3lgm.metamodel.service.edge.Service_RepresentationForm_Edge;
 import de.imise.tool3lgm.metamodel.service.node.ApplicationComponent;
 import de.imise.tool3lgm.metamodel.service.node.ApplicationSystem;
+import de.imise.tool3lgm.metamodel.service.node.CommunicationInterface;
 import de.imise.tool3lgm.metamodel.service.node.Function;
 import de.imise.tool3lgm.metamodel.service.node.IheActor;
 import de.imise.tool3lgm.metamodel.service.node.IheActorInstance;
@@ -56,6 +61,7 @@ import de.imise.tool3lgm.metamodel.service.node.IheInvokingInterface;
 import de.imise.tool3lgm.metamodel.service.node.IheProvidingInterface;
 import de.imise.tool3lgm.metamodel.service.node.IheTransaction;
 import de.imise.tool3lgm.metamodel.service.node.InvokingInterface;
+import de.imise.tool3lgm.metamodel.service.node.ObjectType;
 import de.imise.tool3lgm.metamodel.service.node.OrganisationalUnit;
 import de.imise.tool3lgm.metamodel.service.node.PhysicalDataProcessingComponent;
 import de.imise.tool3lgm.metamodel.service.node.ProvidingInterface;
@@ -85,8 +91,18 @@ public class TLGMServiceMetaPathsDefinition extends MetaPathDefinition {
 
         /* Application System - IHE Integration Profile */
         put(ApplicationSystem.class, IheIntegrationProfile.class, "PATH_ApplicationSystem_IheIntegrationProfile", ApplicationSystem_IheActorInstance_Edge.class, IheActor_IheActorInstance_Edge.class, IheIntegrationProfile_IheActor_Edge.class);
-        /* Software Product - Physical Data Processing Component */
+        /* ApplicationSystem - ObjectType */
+        put(ApplicationSystem.class, ObjectType.class, "PATH_is_stored_in", ApplicationComponent_RepresentationForm_Edge.class, ObjectType_RepresentationForm_Edge.class);
+        /* SoftwareProduct - PhysicalDataProcessingComponent */
         put(SoftwareProduct.class, PhysicalDataProcessingComponent.class, "PATH_SoftwareProduct_PhysicalDataProcessingComponent", ApplicationSystem_SoftwareProduct_Edge.class, ApplicationComponent_PhysicalDataProcessingComponent_Edge.class);
+        /* ObjectType - Service */
+        put(ObjectType.class, Service.class, "PATH_ObjectType_Service", ObjectType_RepresentationForm_Edge.class, Service_RepresentationForm_Edge.class);
+        /* ObjectType - CommunicationInterface */
+        put(ObjectType.class, CommunicationInterface.class, "PATH_is_communicated_by", ObjectType_RepresentationForm_Edge.class, Service_RepresentationForm_Edge.class, Service_CommunicationInterface_Edge.class);
+        /* ObjectType - CommunicationLink */
+        put(ObjectType.class, CommunicationLink_Edge.class, "PATH_is_communicated_by", ObjectType_RepresentationForm_Edge.class, Service_RepresentationForm_Edge.class, Service_CommunicationLink_Edge.class);
+        /* ObjectType - PhysicalDataProcessingComponent */
+        put(ObjectType.class, PhysicalDataProcessingComponent.class, "PATH_is_stored_in", ObjectType_RepresentationForm_Edge.class, ApplicationComponent_RepresentationForm_Edge.class, ApplicationComponent_PhysicalDataProcessingComponent_Edge.class);
 
         putAll(getCreatableMetaPaths());
 
@@ -139,7 +155,7 @@ public class TLGMServiceMetaPathsDefinition extends MetaPathDefinition {
     @Override
     public Collection<SimpleMetaPath> getCreatableMetaPaths() {
         /* ApplicationSystem - IheActor */
-        SimpleMetaPath metaPath1 = smp(ApplicationSystem.class, IheActor.class, "PATH_ApplicationSystem_IheActor", ApplicationSystem_IheActorInstance_Edge.class, IheActor_IheActorInstance_Edge.class);
+        //        SimpleMetaPath metaPath1 = smp(ApplicationSystem.class, IheActor.class, "PATH_ApplicationSystem_IheActor", ApplicationSystem_IheActorInstance_Edge.class, IheActor_IheActorInstance_Edge.class);
         /* Function - OrganisationalUnit */
         SimpleMetaPath metaPath3 = smp(Function.class, OrganisationalUnit.class, "PATH_Function_OrganisationalUnit", Function_Use_Edge.class, OrganisationalUnit_Use_Edge.class);
         //        SimpleMetaPath metaPath2 = smp(IheActorInstance.class, IheActor.class, "PATH_IheActorInstance_ApplicationSystem_IheActor", ApplicationSystem_IheActorInstance_Edge.class, ApplicationSystem_IheActorInstance_Edge.class,
@@ -157,7 +173,8 @@ public class TLGMServiceMetaPathsDefinition extends MetaPathDefinition {
         SimpleMetaPath metaPath6 = smp(OrganisationalUnit.class, ApplicationComponent.class, "PATH_OrganisationalUnit_ApplicationComponent", OrganisationalUnit_Use_Edge.class, ApplicationComponent_Use_Edge.class);
         /* ApplicationComponent - PhysicalDataProcessingComponent */
         //        SimpleMetaPath metaPath7 = smp(ApplicationComponent.class, PhysicalDataProcessingComponent.class, "PATH_ApplicationComponent_PhysicalDataProcessingComponent", ApplicationComponent_PhysicalDataProcessingComponent_Edge.class);
-        return ImmutableList.of(metaPath1, metaPath3, metaPath4, metaPath5, metaPath6);
+
+        return ImmutableList.of(metaPath3, metaPath4, metaPath5, metaPath6);
     }
 
     ////////////////////////////////////////////////////////////////////////
