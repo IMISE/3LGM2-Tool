@@ -23,6 +23,8 @@ import de.imise.tool3lgm.graphtools.path.metapaths.MetaPath;
 import de.imise.tool3lgm.graphtools.path.metapaths.SectionMetaPath;
 import de.imise.tool3lgm.graphtools.path.metapaths.SimpleMetaPath;
 import de.imise.tool3lgm.metamodel.service.edge.ApplicationComponent_PhysicalDataProcessingComponent_Edge;
+import de.imise.tool3lgm.metamodel.service.edge.ApplicationComponent_PhysicalDataProcessingComponent_RequiresForFunctionality_Edge;
+import de.imise.tool3lgm.metamodel.service.edge.ApplicationComponent_PhysicalDataProcessingComponent_RequiresForStorage_Edge;
 import de.imise.tool3lgm.metamodel.service.edge.ApplicationComponent_RepresentationForm_Edge;
 import de.imise.tool3lgm.metamodel.service.edge.ApplicationComponent_Use_Edge;
 import de.imise.tool3lgm.metamodel.service.edge.ApplicationSystem_IheActorInstance_Edge;
@@ -31,6 +33,7 @@ import de.imise.tool3lgm.metamodel.service.edge.CommunicationLink_Edge;
 import de.imise.tool3lgm.metamodel.service.edge.Function_Use_Edge;
 import de.imise.tool3lgm.metamodel.service.edge.IheActorInstanceCommunicationLink_Edge;
 import de.imise.tool3lgm.metamodel.service.edge.IheActorInstance_IheActorInstanceInterface_Edge;
+import de.imise.tool3lgm.metamodel.service.edge.IheActorInstance_SoftwareProduct_Edge;
 import de.imise.tool3lgm.metamodel.service.edge.IheActor_IheActorInstance_Edge;
 import de.imise.tool3lgm.metamodel.service.edge.IheActor_IheInterface_Edge;
 import de.imise.tool3lgm.metamodel.service.edge.IheCommunicationLink_Edge;
@@ -65,6 +68,7 @@ import de.imise.tool3lgm.metamodel.service.node.ObjectType;
 import de.imise.tool3lgm.metamodel.service.node.OrganisationalUnit;
 import de.imise.tool3lgm.metamodel.service.node.PhysicalDataProcessingComponent;
 import de.imise.tool3lgm.metamodel.service.node.ProvidingInterface;
+import de.imise.tool3lgm.metamodel.service.node.RepresentationForm;
 import de.imise.tool3lgm.metamodel.service.node.Service;
 import de.imise.tool3lgm.metamodel.service.node.SoftwareProduct;
 
@@ -103,6 +107,19 @@ public class TLGMServiceMetaPathsDefinition extends MetaPathDefinition {
         put(ObjectType.class, CommunicationLink_Edge.class, "PATH_is_communicated_by", ObjectType_RepresentationForm_Edge.class, Service_RepresentationForm_Edge.class, Service_CommunicationLink_Edge.class);
         /* ObjectType - PhysicalDataProcessingComponent */
         put(ObjectType.class, PhysicalDataProcessingComponent.class, "PATH_is_stored_in", ObjectType_RepresentationForm_Edge.class, ApplicationComponent_RepresentationForm_Edge.class, ApplicationComponent_PhysicalDataProcessingComponent_Edge.class);
+        /* IheActor - Function */
+        put(IheActor.class, Function.class, "PATH_IheActor_Function", IheActor_IheActorInstance_Edge.class, ApplicationComponent_Use_Edge.class, Function_Use_Edge.class);
+        /* IheActor - OrganisationalUnit */
+        put(IheActor.class, OrganisationalUnit.class, "PATH_IheActor_OrganisationalUnit", IheActor_IheActorInstance_Edge.class, ApplicationComponent_Use_Edge.class, OrganisationalUnit_Use_Edge.class);
+        /* IheActor - RepresentationForm */
+        put(IheActor.class, RepresentationForm.class, "PATH_IheActor_RepresentationForm", IheActor_IheActorInstance_Edge.class, ApplicationComponent_RepresentationForm_Edge.class);
+        /* IheActor - PhysicalDataProcessingComponent for functionality */
+        put(IheActor.class, PhysicalDataProcessingComponent.class, "PATH_IheActor_PhysicalDataProcessingComponent_Functionality", IheActor_IheActorInstance_Edge.class,
+                ApplicationComponent_PhysicalDataProcessingComponent_RequiresForFunctionality_Edge.class);
+        /* IheActor - PhysicalDataProcessingComponent for functionality */
+        put(IheActor.class, PhysicalDataProcessingComponent.class, "PATH_IheActor_PhysicalDataProcessingComponent_Storage", IheActor_IheActorInstance_Edge.class, ApplicationComponent_PhysicalDataProcessingComponent_RequiresForStorage_Edge.class);
+        /* IheActor - SoftwareProduct */
+        put(IheActor.class, SoftwareProduct.class, "PATH_IheActor_SoftwareProduct", IheActor_IheActorInstance_Edge.class, IheActorInstance_SoftwareProduct_Edge.class);
 
         putAll(getCreatableMetaPaths());
 
