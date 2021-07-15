@@ -59,6 +59,11 @@ public enum Shape {
             g.setColor(isResult && analysisColor != null ? analysisColor : kc.getFrameColor());
             g.drawPolygon(xs, ys, npoints);
         }
+
+        @Override
+        public int getLabelInsets() {
+            return DEFAULT_HTML_LABEL_INSETS * 5;
+        }
     },
     rundeck {
         @Override
@@ -67,7 +72,7 @@ public enum Shape {
             int cornerSize = roundRectCorner(width, height);
             g.setColor(col);
             g.fillRoundRect(xm, ym, width, height, cornerSize, cornerSize);
-            paintTextWithOffset(g, kc, 15, xm, ym);
+            paintTextWithOffset(g, kc, this, xm, ym);
             g.setColor(isResult && analysisColor != null ? analysisColor : kc.getFrameColor());
             g.drawRoundRect(xm, ym, width, height, cornerSize, cornerSize);
         }
@@ -92,6 +97,11 @@ public enum Shape {
             g.translate(-xm, -ym);
             g.setColor(isResult && analysisColor != null ? analysisColor : kc.getFrameColor());
             g.drawPolygon(xs, ys, npoints);
+        }
+
+        @Override
+        public int getLabelInsets() {
+            return DEFAULT_HTML_LABEL_INSETS * 4;
         }
     },
     tonne {
@@ -144,6 +154,11 @@ public enum Shape {
             g.setColor(isResult && analysisColor != null ? analysisColor : kc.getFrameColor());
             g.drawPolygon(xs, ys, npoints);
         }
+
+        @Override
+        public int getLabelInsets() {
+            return DEFAULT_HTML_LABEL_INSETS * 3;
+        }
     },
     ordner {
         @Override
@@ -169,6 +184,21 @@ public enum Shape {
     };
 
     /**
+     * Minimum distance between the HTML text and the margin, if the text was
+     * aligned to the margin. This value should be a value that fits the
+     * {@link GraphElementLayout#STANDARD_WIDTH} and
+     * {@link GraphElementLayout#STANDARD_HEIGHT}.
+     */
+    public static final int DEFAULT_HTML_LABEL_INSETS = 20;
+
+    /**
+     * @return the insets of the label inside the shape
+     */
+    public int getLabelInsets() {
+        return DEFAULT_HTML_LABEL_INSETS;
+    }
+
+    /**
      * returns a unified corner size for rectangles, that are too small, a
      * smaller corner size is returned
      *
@@ -186,9 +216,8 @@ public enum Shape {
     }
 
     /**
-     * paints the Label of the element with an offset
-     * this method is mainly used to create a margin to the
-     * borders of the model element
+     * paints the Label of the element with an offset this method is mainly used
+     * to create a margin to the borders of the model element
      *
      * @param g
      * @param kc
@@ -196,8 +225,9 @@ public enum Shape {
      * @param xm
      * @param ym
      */
-    private static void paintTextWithOffset(final Graphics g, final NodeContainer kc, final int offset, final int xm, final int ym) {
-        int axisOffset = offset / 5 * 3;
+    private static void paintTextWithOffset(final Graphics g, final NodeContainer kc, final Shape shape, final int xm, final int ym) {
+        int offset = shape.getLabelInsets();
+        int axisOffset = offset / 2;
         Dimension size = kc.getSize();
         Dimension reducedSize = new Dimension(size.width - offset, size.height - offset);
         g.translate(xm + axisOffset, ym + axisOffset);

@@ -80,24 +80,42 @@ public final class NodeRenderer {
      *
      * @param kc
      */
-    private static void resize(final NodeContainer kc) {
+    private static void resizeToFitTheLabel(final NodeContainer kc) {
         GraphElementLayout layout = kc.get3LGMLayout();
         if (layout != null) {
             if (kc.hasDefaultSize()) {
+                Shape shape = getShape(kc);
+                int labelInsets = shape.getLabelInsets();
                 Font font = kc.getFont();
                 String text = kc.getText();
                 HtmlLabelDimension htmlLabelDimension = HtmlLabelFunctions.getHtmlLabelDimension(font, text, layout.width);
-                if (htmlLabelDimension.minWidth > layout.width) {
-                    kc.setSize(htmlLabelDimension.minWidth, layout.height);
+                int minWidth = htmlLabelDimension.minWidth + labelInsets;
+                if (minWidth > layout.width) {
+                    kc.setSize(minWidth, layout.height);
                 }
                 htmlLabelDimension = HtmlLabelFunctions.getHtmlLabelDimension(font, text, layout.width);
-                if (htmlLabelDimension.preferredHeight > layout.height) {
-                    kc.setSize(layout.width, htmlLabelDimension.preferredHeight);
+                int minHeight = htmlLabelDimension.preferredHeight + labelInsets;
+                if (minHeight > layout.height) {
+                    kc.setSize(layout.width, minHeight);
                 }
                 //                System.err.println(layout.width + " " + layout.height);
                 //                Sys.err1(HtmlLabelFunctions.getHtmlLabelDimension(kc.getFont(), kc.getText(), kc.get3LGMLayout().width));
             }
         }
+    }
+
+    /**
+     * @param nc
+     * @return the graph shape for the {@link NodeContainer}
+     */
+    private static final Shape getShape(final NodeContainer nc) {
+        Shape shape = nc.getForm();
+        if (shape == null) {
+            GraphDocument doc = nc.getGraphDocument();
+            DefaultElementsLayoutDefinition defaultElementsLayout = doc.getDefaultElementsLayout();
+            shape = defaultElementsLayout.getStandardForm(nc);
+        }
+        return shape;
     }
 
     public static final void render(final Graphics g, final NodeContainer kc, final GraphDocument doc) {
@@ -106,7 +124,7 @@ public final class NodeRenderer {
             return;
         }
         //resize the initial container to enclose the html text
-        resize(kc);
+        resizeToFitTheLabel(kc);
         Graphics2D gc = (Graphics2D) g;
 
         PaintState paintState = PaintState.REGULAR;
@@ -162,10 +180,7 @@ public final class NodeRenderer {
             kc.setVerticalTextPosition(verticalTextPostion);
         }
 
-        Shape form = kc.getForm();
-        if (form == null) {
-            form = doc.getDefaultElementsLayout().getStandardForm(kc);
-        }
+        Shape form = getShape(kc);
 
         Stroke str = gc.getStroke();
         if (TRANSIENT_OPTION_SHOW_EXPANSION_SIGN.is() && !kc.isExpanded()) {
