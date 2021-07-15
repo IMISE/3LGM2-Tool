@@ -174,7 +174,7 @@ public class TLGMServiceMetaPathsDefinition extends MetaPathDefinition {
         /* ApplicationSystem - IheActor */
         //        SimpleMetaPath metaPath1 = smp(ApplicationSystem.class, IheActor.class, "PATH_ApplicationSystem_IheActor", ApplicationSystem_IheActorInstance_Edge.class, IheActor_IheActorInstance_Edge.class);
         /* Function - OrganisationalUnit */
-        SimpleMetaPath metaPath3 = smp(Function.class, OrganisationalUnit.class, "PATH_Function_OrganisationalUnit", Function_Use_Edge.class, OrganisationalUnit_Use_Edge.class);
+        SimpleMetaPath metaPath3 = smp(Function.class, OrganisationalUnit.class, "PATH_is_executed_by", Function_Use_Edge.class, OrganisationalUnit_Use_Edge.class);
         //        SimpleMetaPath metaPath2 = smp(IheActorInstance.class, IheActor.class, "PATH_IheActorInstance_ApplicationSystem_IheActor", ApplicationSystem_IheActorInstance_Edge.class, ApplicationSystem_IheActorInstance_Edge.class,
         //                IheActor_IheActorInstance_Edge.class);
         //        return ImmutableList.of(metaPath1, metaPath2);
@@ -182,10 +182,9 @@ public class TLGMServiceMetaPathsDefinition extends MetaPathDefinition {
         //        PATH_IheActorInstance_ApplicationSystem_IheActor_f      muss gruppiert werden mit
         //        PATH_IheActorInstance_ApplicationSystem_IheActor_b      wird zur Gruppierung benötigt von
         /* Function - ApplicationComponent */
-        SimpleMetaPath metaPath4 = smp(Function.class, ApplicationComponent.class, "PATH_Function_ApplicationComponent", Function_Use_Edge.class, ApplicationComponent_Use_Edge.class);
+        SimpleMetaPath metaPath4 = smp(Function.class, ApplicationComponent.class, "PATH_is_executed_by", Function_Use_Edge.class, ApplicationComponent_Use_Edge.class);
         /* Function - PhysicalDataProcessingComponent */
-        SimpleMetaPath metaPath5 = smp(Function.class, PhysicalDataProcessingComponent.class, "PATH_Function_PhysicalDataProcessingComponent", Function_Use_Edge.class, ApplicationComponent_Use_Edge.class,
-                ApplicationComponent_PhysicalDataProcessingComponent_Edge.class);
+        SimpleMetaPath metaPath5 = smp(Function.class, PhysicalDataProcessingComponent.class, "PATH_is_executed_by", Function_Use_Edge.class, ApplicationComponent_Use_Edge.class, ApplicationComponent_PhysicalDataProcessingComponent_Edge.class);
         /* OrganisationalUnit - ApplicationComponent */
         SimpleMetaPath metaPath6 = smp(OrganisationalUnit.class, ApplicationComponent.class, "PATH_OrganisationalUnit_ApplicationComponent", OrganisationalUnit_Use_Edge.class, ApplicationComponent_Use_Edge.class);
         /* ApplicationComponent - PhysicalDataProcessingComponent */
