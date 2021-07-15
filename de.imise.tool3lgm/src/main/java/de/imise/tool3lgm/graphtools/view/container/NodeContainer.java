@@ -403,7 +403,7 @@ public class NodeContainer extends ElementContainer implements AlphabeticalSortT
      *
      * @see https://stackoverflow.com/questions/16227877/how-to-update-a-jcomponent-with-html-without-flickering
      */
-    public static final Graphics NOOP_GRAPHICS = NoopGraphics.createNoopGraphics();
+    private static final Graphics NOOP_GRAPHICS = NoopGraphics.createNoopGraphics();
 
     /**
      * Paints the label.
