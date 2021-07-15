@@ -116,24 +116,23 @@ public class TLGMServiceMetaPathsDefinition extends MetaPathDefinition {
         /* IheActor - RepresentationForm */
         put(IheActor.class, RepresentationForm.class, "PATH_IheActor_RepresentationForm", IheActor_IheActorInstance_Edge.class, ApplicationComponent_RepresentationForm_Edge.class);
         /* IheActor - PhysicalDataProcessingComponent for functionality */
-        put(IheActor.class, PhysicalDataProcessingComponent.class, "PATH_IheActor_PhysicalDataProcessingComponent_Functionality", IheActor_IheActorInstance_Edge.class,
-                ApplicationComponent_PhysicalDataProcessingComponent_RequiresForFunctionality_Edge.class);
+        put(IheActor.class, PhysicalDataProcessingComponent.class, "PATH_requires_for_functionality", IheActor_IheActorInstance_Edge.class, ApplicationComponent_PhysicalDataProcessingComponent_RequiresForFunctionality_Edge.class);
         /* IheActor - PhysicalDataProcessingComponent for storage */
-        put(IheActor.class, PhysicalDataProcessingComponent.class, "PATH_IheActor_PhysicalDataProcessingComponent_Storage", IheActor_IheActorInstance_Edge.class, ApplicationComponent_PhysicalDataProcessingComponent_RequiresForStorage_Edge.class);
+        put(IheActor.class, PhysicalDataProcessingComponent.class, "PATH_requires_for_storage", IheActor_IheActorInstance_Edge.class, ApplicationComponent_PhysicalDataProcessingComponent_RequiresForStorage_Edge.class);
         /* IheActor - SoftwareProduct */
-        put(IheActor.class, SoftwareProduct.class, "PATH_IheActor_SoftwareProduct", IheActor_IheActorInstance_Edge.class, IheActorInstance_SoftwareProduct_Edge.class);
+        put(IheActor.class, SoftwareProduct.class, "PATH_bases_on", IheActor_IheActorInstance_Edge.class, IheActorInstance_SoftwareProduct_Edge.class);
         /* IheDomain - IheActor */
         put(IheDomain.class, IheActor.class, "PATH_IheDomain_IheActor", IheIntegrationProfile_IheDomain_Edge.class, IheIntegrationProfile_IheActor_Edge.class);
         /* IheDomain - ApplicationSystem */
         put(IheDomain.class, ApplicationSystem.class, "PATH_IheDomain_ApplicationSystem", IheIntegrationProfile_IheDomain_Edge.class, IheIntegrationProfile_IheActor_Edge.class, IheActor_IheActorInstance_Edge.class);
         /* IheDomain - PhysicalDataProcessingComponent for functionality */
-        put(IheDomain.class, PhysicalDataProcessingComponent.class, "PATH_IheDomain_PhysicalDataProcessingComponent_Functionality", IheIntegrationProfile_IheDomain_Edge.class, IheIntegrationProfile_IheActor_Edge.class, IheActor_IheActorInstance_Edge.class,
+        put(IheDomain.class, PhysicalDataProcessingComponent.class, "PATH_requires_for_functionality", IheIntegrationProfile_IheDomain_Edge.class, IheIntegrationProfile_IheActor_Edge.class, IheActor_IheActorInstance_Edge.class,
                 ApplicationComponent_PhysicalDataProcessingComponent_RequiresForFunctionality_Edge.class);
         /* IheDomain - PhysicalDataProcessingComponent for storage */
-        put(IheDomain.class, PhysicalDataProcessingComponent.class, "PATH_IheDomain_PhysicalDataProcessingComponent_Storage", IheIntegrationProfile_IheDomain_Edge.class, IheIntegrationProfile_IheActor_Edge.class, IheActor_IheActorInstance_Edge.class,
+        put(IheDomain.class, PhysicalDataProcessingComponent.class, "PATH_requires_for_storage", IheIntegrationProfile_IheDomain_Edge.class, IheIntegrationProfile_IheActor_Edge.class, IheActor_IheActorInstance_Edge.class,
                 ApplicationComponent_PhysicalDataProcessingComponent_RequiresForStorage_Edge.class);
         /* IheDomain - SoftwareProduct */
-        put(IheDomain.class, SoftwareProduct.class, "PATH_IheDomain_SoftwareProduct", IheIntegrationProfile_IheDomain_Edge.class, IheIntegrationProfile_IheActor_Edge.class, IheActor_IheActorInstance_Edge.class, IheActorInstance_SoftwareProduct_Edge.class);
+        put(IheDomain.class, SoftwareProduct.class, "PATH_bases_on", IheIntegrationProfile_IheDomain_Edge.class, IheIntegrationProfile_IheActor_Edge.class, IheActor_IheActorInstance_Edge.class, IheActorInstance_SoftwareProduct_Edge.class);
         /* IheDomain - Function */
         put(IheDomain.class, Function.class, "PATH_IheDomain_Function", IheIntegrationProfile_IheDomain_Edge.class, IheIntegrationProfile_IheActor_Edge.class, IheActor_IheActorInstance_Edge.class, ApplicationComponent_Use_Edge.class,
                 Function_Use_Edge.class);
