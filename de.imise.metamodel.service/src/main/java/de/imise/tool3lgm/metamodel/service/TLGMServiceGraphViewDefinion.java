@@ -84,12 +84,12 @@ public class TLGMServiceGraphViewDefinion extends GraphViewDefinition {
         setDefaultLayout(ObjectType.class, oval, BLUE);
         setDefaultLayout(ApplicationSystem.class, rundeck, LIGHTRED);
         setDefaultLayout(OrganisationSystem.class, rundeck, BLUE);
-        setDefaultLayout(InvokingInterface.class, oval, LIGHTGREEN, 15, 15);
-        setDefaultLayout(ProvidingInterface.class, dreieck, ORANGE, 20, 20);
+        setDefaultLayout(InvokingInterface.class, oval, LIGHTGREEN, 16, 16);
+        setDefaultLayout(ProvidingInterface.class, dreieck, ORANGE, 16, 16);
         setDefaultLayout(PhysicalDataProcessingComponent.class, rechteck, ORANGE);
         setDefaultLayout(IheActorInstance.class, rechteck, LIGHTBLUE);
-        setDefaultLayout(IheActorInstanceInvokingInterface.class, oval, RED, 15, 15);
-        setDefaultLayout(IheActorInstanceProvidingInterface.class, dreieck, GRAY, 20, 20);
+        setDefaultLayout(IheActorInstanceInvokingInterface.class, oval, RED, 16, 16);
+        setDefaultLayout(IheActorInstanceProvidingInterface.class, dreieck, GRAY, 16, 16);
     }
 
     /*
