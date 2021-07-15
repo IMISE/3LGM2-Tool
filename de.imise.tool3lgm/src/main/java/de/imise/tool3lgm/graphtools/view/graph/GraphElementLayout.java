@@ -228,6 +228,7 @@ public class GraphElementLayout implements SwingConstants, Cloneable {
     public static final int STANDARD_HEIGHT = 50;
     public static final int STANDARD_LINE_THICKNESS = 1;
     public static final int STANDARD_LINE_STYLE = 0;
+    public static final int STANDARD_ROUND_RECT_CONER_SIZE = 20;
     public static final TextAlignmentHTML STANDARD_TEXT_ALIGNMENT_HTML = TextAlignmentHTML.CENTER;
     public static final TextPositionVertical STANDARD_TEXT_POSITION_VERTICAL = TextPositionVertical.CENTER;
     public static final TextPositionVertical STANDARD_TEXT_POSITION_VERTICAL_WITH_ICON = TextPositionVertical.BOTTOM;

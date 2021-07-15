@@ -178,9 +178,9 @@ public enum Shape {
      */
     private static int roundRectCorner(final int width, final int height) {
         int min = Math.min(width, height);
-        int cornerSize = 20;
-        if (min < 40) {
-            cornerSize = 10;
+        int cornerSize = GraphElementLayout.STANDARD_ROUND_RECT_CONER_SIZE;
+        if (min < cornerSize * 2) { //very small roundrect get the half corner size, all the others the default
+            cornerSize /= 2;
         }
         return cornerSize;
     }
