@@ -2,9 +2,9 @@
 <!--Tool3lgmFile version='3.9' metamodel='TLGMServiceMetaModel@2388259974838049670' category='REGULAR'-->
 <modell_3lgm_2>
   <header>
-    <title>Beispiel_Service.3lgm</title>
+    <title>Beispiel_Service.3lgm #1</title>
     <description></description>
-    <version>49_Ich_1626767694224</version>
+    <version>50_Ich_1626770727087</version>
   </header>
   <userFieldDefinitions>
     <userFieldFormat hash="USERFIELD_1497433362070_2">
@@ -6690,6 +6690,11 @@ Josehphinenstr. 7</field>
       <field name="kantenHash">DLK_1620984162916_3725</field>
       <field name="index">1</field>
     </element>
+    <element class="Bendpoint" hash="BEN_1626767351956_3083">
+      <field name="name">Knickpunkt 20</field>
+      <field name="kantenHash">DLK_1620984162916_3725</field>
+      <field name="index">0</field>
+    </element>
     <element class="Bendpoint" hash="BEN_1620983774113_3701">
       <field name="name">Knickpunkt 2</field>
       <field name="kantenHash">DLK_1620983236317_3690</field>
@@ -6703,6 +6708,11 @@ Josehphinenstr. 7</field>
     <element class="Bendpoint" hash="BEN_1620983984541_3712">
       <field name="name">Knickpunkt 9</field>
       <field name="kantenHash">DLK_1620983930620_3710</field>
+      <field name="index">0</field>
+    </element>
+    <element class="Bendpoint" hash="BEN_1626767343124_3082">
+      <field name="name">Knickpunkt 19</field>
+      <field name="kantenHash">DLK_1620984165317_3726</field>
       <field name="index">0</field>
     </element>
     <element class="Bendpoint" hash="BEN_1620983853727_3703">
@@ -6740,16 +6750,6 @@ Josehphinenstr. 7</field>
       <field name="kantenHash">DLK_1620983332837_3691</field>
       <field name="index">0</field>
     </element>
-    <element class="Bendpoint" hash="BEN_1626767343124_3082">
-      <field name="name">Knickpunkt 19</field>
-      <field name="kantenHash">DLK_1620984165317_3726</field>
-      <field name="index">0</field>
-    </element>
-    <element class="Bendpoint" hash="BEN_1626767351956_3083">
-      <field name="name">Knickpunkt 20</field>
-      <field name="kantenHash">DLK_1620984162916_3725</field>
-      <field name="index">0</field>
-    </element>
     <element class="Bendpoint" hash="BEN_1620988596720_3799">
       <field name="name">Knickpunkt 17</field>
       <field name="kantenHash">DLK_1620988563554_3798</field>
@@ -6777,7 +6777,7 @@ Josehphinenstr. 7</field>
       <shift>200</shift>
       <pageSizeFactor>1.015625</pageSizeFactor>
       <activeLayer>4</activeLayer>
-      <multiView>false</multiView>
+      <multiView>true</multiView>
     </view>
     <mapping>
       <layout class="Bendpoint">
@@ -8569,6 +8569,18 @@ Josehphinenstr. 7</field>
           <y>273</y>
         </layout>
       </container>
+      <container hash="BEN_1626767351956_3083">
+        <layout>
+          <color name="bg_color">
+            <red>0</red>
+            <green>0</green>
+            <blue>0</blue>
+            <alpha>0</alpha>
+          </color>
+          <x>-270</x>
+          <y>273</y>
+        </layout>
+      </container>
       <container hash="BEN_1620983774113_3701">
         <layout>
           <color name="bg_color">
@@ -8603,6 +8615,18 @@ Josehphinenstr. 7</field>
           </color>
           <x>160</x>
           <y>40</y>
+        </layout>
+      </container>
+      <container hash="BEN_1626767343124_3082">
+        <layout>
+          <color name="bg_color">
+            <red>0</red>
+            <green>0</green>
+            <blue>0</blue>
+            <alpha>0</alpha>
+          </color>
+          <x>-270</x>
+          <y>273</y>
         </layout>
       </container>
       <container hash="BEN_1620983853727_3703">
@@ -8687,30 +8711,6 @@ Josehphinenstr. 7</field>
           </color>
           <x>185</x>
           <y>-190</y>
-        </layout>
-      </container>
-      <container hash="BEN_1626767343124_3082">
-        <layout>
-          <color name="bg_color">
-            <red>0</red>
-            <green>0</green>
-            <blue>0</blue>
-            <alpha>0</alpha>
-          </color>
-          <x>-270</x>
-          <y>273</y>
-        </layout>
-      </container>
-      <container hash="BEN_1626767351956_3083">
-        <layout>
-          <color name="bg_color">
-            <red>0</red>
-            <green>0</green>
-            <blue>0</blue>
-            <alpha>0</alpha>
-          </color>
-          <x>-270</x>
-          <y>273</y>
         </layout>
       </container>
     </layer>
