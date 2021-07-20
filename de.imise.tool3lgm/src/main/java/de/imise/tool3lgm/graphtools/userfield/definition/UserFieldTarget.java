@@ -115,7 +115,6 @@ public abstract class UserFieldTarget implements Cloneable {
      * @param value
      */
     public void setUserFieldInputValue(final UserField userField, String value) {
-
         if (userFieldToInputValuesMap == null) {
             userFieldToInputValuesMap = new HashMap<>(5);
         }

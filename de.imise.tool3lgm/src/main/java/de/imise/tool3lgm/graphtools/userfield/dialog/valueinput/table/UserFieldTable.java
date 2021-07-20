@@ -352,7 +352,8 @@ public class UserFieldTable extends JTable implements ContentExchanger {
             return;
         }
 
-        getCellEditor(row, column).stopCellEditing();
+        TableCellEditor editor = getCellEditor(row, column);
+        editor.stopCellEditing();
     }
 
     /**
