@@ -2,6 +2,7 @@ package de.imise.tool3lgm.graphtools.view.graph;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Graphics;
 
 import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
@@ -20,9 +21,7 @@ public enum Shape {
                 final int width, final int height, final int npoints) {
             g.setColor(col);
             g.fillRect(xm, ym, width, height);
-            g.translate(xm, ym);
-            kc.paintSuperComponent(g);
-            g.translate(-xm, -ym);
+            paintTextWithOffset(g, kc, this, xm, ym);
             g.setColor(isResult && analysisColor != null ? analysisColor : kc.getFrameColor());
             g.drawRect(xm, ym, width, height);
         }
@@ -33,9 +32,7 @@ public enum Shape {
                 final int width, final int height, final int npoints) {
             g.setColor(col);
             g.fillOval(xm, ym, width, height);
-            g.translate(xm, ym);
-            kc.paintSuperComponent(g);
-            g.translate(-xm, -ym);
+            paintTextWithOffset(g, kc, this, xm, ym);
             g.setColor(isResult && analysisColor != null ? analysisColor : kc.getFrameColor());
             g.drawOval(xm, ym, width, height);
         }
@@ -53,16 +50,9 @@ public enum Shape {
             npoints = 3;
             g.setColor(col);
             g.fillPolygon(xs, ys, npoints);
-            g.translate(xm, ym);
-            kc.paintSuperComponent(g);
-            g.translate(-xm, -ym);
+            paintTextWithOffset(g, kc, this, xm, ym);
             g.setColor(isResult && analysisColor != null ? analysisColor : kc.getFrameColor());
             g.drawPolygon(xs, ys, npoints);
-        }
-
-        @Override
-        public int getLabelInsets() {
-            return DEFAULT_HTML_LABEL_INSETS * 5;
         }
     },
     rundeck {
@@ -92,16 +82,9 @@ public enum Shape {
             npoints = 4;
             g.setColor(col);
             g.fillPolygon(xs, ys, npoints);
-            g.translate(xm, ym);
-            kc.paintSuperComponent(g);
-            g.translate(-xm, -ym);
+            paintTextWithOffset(g, kc, this, xm, ym);
             g.setColor(isResult && analysisColor != null ? analysisColor : kc.getFrameColor());
             g.drawPolygon(xs, ys, npoints);
-        }
-
-        @Override
-        public int getLabelInsets() {
-            return DEFAULT_HTML_LABEL_INSETS * 4;
         }
     },
     tonne {
@@ -113,14 +96,12 @@ public enum Shape {
             g.fillArc(xm, ym, width, height_half + 1, 180, -180);
             g.fillArc(xm, y, width, height_half, 180, 180);
             g.fillRect(xm, y - height / 4, width, height_half);
-            g.translate(xm, ym);
             if (kc != null) {
-                kc.paintSuperComponent(g);
+                paintTextWithOffset(g, kc, this, xm, ym);
                 g.setColor(isResult && analysisColor != null ? analysisColor : kc.getFrameColor());
             } else {
                 g.setColor(analysisColor);
             }
-            g.translate(-xm, -ym);
             g.drawArc(xm, y, width, height_half, 180, 180);
             g.drawLine(xm, y - height / 4, xm, y + height / 4);
             g.drawLine(xp, y - height / 4, xp, y + height / 4);
@@ -148,16 +129,9 @@ public enum Shape {
 
             g.setColor(col);
             g.fillPolygon(xs, ys, npoints);
-            g.translate(xm, ym);
-            kc.paintSuperComponent(g);
-            g.translate(-xm, -ym);
+            paintTextWithOffset(g, kc, this, xm, ym);
             g.setColor(isResult && analysisColor != null ? analysisColor : kc.getFrameColor());
             g.drawPolygon(xs, ys, npoints);
-        }
-
-        @Override
-        public int getLabelInsets() {
-            return DEFAULT_HTML_LABEL_INSETS * 3;
         }
     },
     ordner {
@@ -169,14 +143,12 @@ public enum Shape {
             g.fillRect(xm, ym, width_third, height);
             g.fillRect(xm + width_third, ym, width_third, height);
             g.fillRect(xm + 2 * width_third, ym, width_third, height);
-            g.translate(xm, ym);
             if (kc != null) {
-                kc.paintSuperComponent(g);
+                paintTextWithOffset(g, kc, this, xm, ym);
                 g.setColor(isResult && analysisColor != null ? analysisColor : kc.getFrameColor());
             } else {
                 g.setColor(analysisColor);
             }
-            g.translate(-xm, -ym);
             g.drawRect(xm, ym, width_third, height);
             g.drawRect(xm + width_third, ym, width_third, height);
             g.drawRect(xm + 2 * width_third, ym, width_third, height);
@@ -226,10 +198,22 @@ public enum Shape {
      * @param ym
      */
     private static void paintTextWithOffset(final Graphics g, final NodeContainer kc, final Shape shape, final int xm, final int ym) {
-        int offset = shape.getLabelInsets();
-        int axisOffset = offset / 2;
+        //if the whohle height is too small for the offset -> reduce the offset
+        //if the whole height is great enough -> take the original shape offset
         Dimension size = kc.getSize();
-        Dimension reducedSize = new Dimension(size.width - offset, size.height - offset);
+        Font font = kc.getFont();
+        int fontSize = font.getSize();
+        int offset = size.height - fontSize;
+        offset = Math.max(0, offset);
+        int shapeOffset = shape.getLabelInsets();
+        offset = Math.min(offset, shapeOffset);
+
+        int axisOffset = offset / 2;
+        int reducedSizeHeight = size.height - offset;
+        Dimension reducedSize = reducedSizeHeight <= fontSize ? size : new Dimension(size.width - offset, size.height - offset);
+        if (reducedSize == size) {
+            axisOffset = 0;
+        }
         g.translate(xm + axisOffset, ym + axisOffset);
         kc.setSize(reducedSize);
         kc.paintSuperComponent(g);
