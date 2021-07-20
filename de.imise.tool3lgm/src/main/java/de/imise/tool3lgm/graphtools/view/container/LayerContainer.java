@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
+import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.graphtools.IDSource;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Bendpoint;
@@ -31,6 +32,7 @@ import de.imise.tool3lgm.graphtools.view.graph.BasicGraphArea;
 import de.imise.tool3lgm.graphtools.view.graph.BasicGraphArea.PaintState;
 import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout;
 import de.imise.tool3lgm.graphtools.view.graph.InputGraphArea;
+import de.imise.tool3lgm.gui.MainFrame;
 import de.imise.util.Alphabetical;
 import de.imise.util.ReflectionUtils;
 import de.imise.util.collections.CollectionUtils;
@@ -356,6 +358,29 @@ public class LayerContainer extends ElementContainer {
     @Override
     public int getHeight() {
         return doc.getPageHeight();
+    }
+
+    /**
+     * detext the very first paint of this
+     */
+    public transient boolean isAlreadyPainted = false;
+
+    @Override
+    public void paint(final Graphics g) {
+        super.paint(g);
+        //if we paint this the very first time -> repaint the whole frame again!
+        //only this ensures that the JAVA-BUG with not correct HTML-text after
+        //the first paint doesn't occurs if we change the view from a single layer
+        //view to the three layer view. This works in combination with
+        //NodeContainer#paintSuperComponent(Graphics). The whole problem only
+        //occurs if the text offsets in the Shape are not null and the size of
+        //the component is changed during painting the html text with super.paint...
+        if (!isAlreadyPainted) {
+            isAlreadyPainted = true;
+            MainFrame mainFrame = Static.getMainFrame();
+            mainFrame.revalidate();
+            mainFrame.repaint();
+        }
     }
 
     @Override
