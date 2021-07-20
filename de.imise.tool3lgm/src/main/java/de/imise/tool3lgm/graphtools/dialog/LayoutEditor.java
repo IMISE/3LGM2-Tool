@@ -50,20 +50,29 @@ import de.imise.tool3lgm.log.Log;
  */
 public class LayoutEditor extends JDialog implements ActionListener {
 
-    private final JScrollPane jsp;
-    private final JPanel flaeche;
+    private final JScrollPane scrollPane;
+    private final JPanel panel;
     private final NodeContainer[] nodeContainers;
-    private final JButton[] form_trigger, farbe_trigger, font_trigger;
-    private final JPopupMenu farbe_menu, form_menu, font_menu;
-    private final JMenuItem[] farbe;
-    private final JMenuItem[] form;
-    private final JMenuItem[] name;
+    private final JButton[] buttonShape, buttonColor, buttonFont;
+    private final JPopupMenu menuColor, menuShape, menuFont;
+    private final JMenuItem[] menuItemColor;
+    private final JMenuItem[] menuItemShape;
+    private final JMenuItem[] menuItemFont;
     private final DefaultElementsLayoutDefinition myDefaultElementsLayout;
     private final Insets insets;
-    private int wieviele = 0, offset, c, counter, akt_x, akt_y, aktuelles = -1;
-    private final JButton uebernehmen, abbrechen, beenden;
+    private int paintableNodesCount = 0;
+    int offset;
+    int c;
+    int counter;
+    int currX;
+    int currY;
+    int selectedElementTypeIndex = -1;
+    private final JButton buttonApply;
+    private final JButton buttonOK;
+    private final JButton buttonCancel;
     private final GraphDocument doc, mydoc;
-    private final int x_abstand = 160, y_abstand = 140;
+    private final int offsetX = 160;
+    private final int offsetY = 140;
 
     /**
      * Initialisiert den Grafikdialog.
@@ -87,30 +96,30 @@ public class LayoutEditor extends JDialog implements ActionListener {
         MetaModel metaModel = gdcoll.getMetaModel();
         GraphViewDefinition graphViewDefinition = metaModel.getGraphViewDefinition();
 
-        wieviele = graphViewDefinition.getMetaModelSpecificPaintableNodes().size();
+        paintableNodesCount = graphViewDefinition.getMetaModelSpecificPaintableNodes().size();
 
         insets = new Insets(0, 0, 0, 0);
-        nodeContainers = new NodeContainer[wieviele];
-        form_trigger = new JButton[wieviele];
-        farbe_trigger = new JButton[wieviele];
-        font_trigger = new JButton[wieviele];
+        nodeContainers = new NodeContainer[paintableNodesCount];
+        buttonShape = new JButton[paintableNodesCount];
+        buttonColor = new JButton[paintableNodesCount];
+        buttonFont = new JButton[paintableNodesCount];
 
-        beenden = new JButton(getResString("ok"));
-        beenden.addActionListener(this);
-        beenden.setMargin(insets);
-        beenden.setPreferredSize(new Dimension(100, 30));
+        buttonOK = new JButton(getResString("ok"));
+        buttonOK.addActionListener(this);
+        buttonOK.setMargin(insets);
+        buttonOK.setPreferredSize(new Dimension(100, 30));
 
-        abbrechen = new JButton(getResString("cancel"));
-        abbrechen.addActionListener(this);
-        abbrechen.setMargin(insets);
-        abbrechen.setPreferredSize(new Dimension(100, 30));
+        buttonCancel = new JButton(getResString("cancel"));
+        buttonCancel.addActionListener(this);
+        buttonCancel.setMargin(insets);
+        buttonCancel.setPreferredSize(new Dimension(100, 30));
 
-        uebernehmen = new JButton(getResString("apply"));
-        uebernehmen.addActionListener(this);
-        uebernehmen.setMargin(insets);
-        uebernehmen.setPreferredSize(new Dimension(100, 30));
+        buttonApply = new JButton(getResString("apply"));
+        buttonApply.addActionListener(this);
+        buttonApply.setMargin(insets);
+        buttonApply.setPreferredSize(new Dimension(100, 30));
 
-        flaeche = new JPanel() {
+        panel = new JPanel() {
             @Override
             public void paintComponent(final Graphics g) {
                 super.paintComponent(g);
@@ -118,41 +127,41 @@ public class LayoutEditor extends JDialog implements ActionListener {
             }
         };
 
-        farbe_menu = new JPopupMenu(getResString("le_farbe"));
-        form_menu = new JPopupMenu(getResString("le_form"));
-        font_menu = new JPopupMenu(getResString("le_schriftart"));
+        menuColor = new JPopupMenu(getResString("le_farbe"));
+        menuShape = new JPopupMenu(getResString("le_form"));
+        menuFont = new JPopupMenu(getResString("le_schriftart"));
 
         LayoutColor[] layoutColors = LayoutColor.values();
-        farbe = new JMenuItem[layoutColors.length];
+        menuItemColor = new JMenuItem[layoutColors.length];
         for (c = 0; c < layoutColors.length; c++) {
             LayoutColor layoutColor = layoutColors[c];
             String colorName = layoutColor.toString();
-            farbe[c] = new JMenuItem(colorName);
-            farbe[c].setActionCommand("farbe " + c);
+            menuItemColor[c] = new JMenuItem(colorName);
+            menuItemColor[c].setActionCommand("farbe " + c);
             Color color = layoutColor.awtColor();
-            farbe[c].setBackground(color);
-            farbe[c].addActionListener(this);
-            farbe_menu.add(farbe[c]);
+            menuItemColor[c].setBackground(color);
+            menuItemColor[c].addActionListener(this);
+            menuColor.add(menuItemColor[c]);
         }
 
         Shape[] shapes = Shape.values();
-        form = new JMenuItem[shapes.length];
+        menuItemShape = new JMenuItem[shapes.length];
         for (c = 0; c < shapes.length; c++) {
-            form[c] = new JMenuItem(getResString(shapes[c].toString()));
-            form[c].setActionCommand("form " + shapes[c]);
-            form[c].addActionListener(this);
-            form_menu.add(form[c]);
+            menuItemShape[c] = new JMenuItem(getResString(shapes[c].toString()));
+            menuItemShape[c].setActionCommand("form " + shapes[c]);
+            menuItemShape[c].addActionListener(this);
+            menuShape.add(menuItemShape[c]);
         }
 
-        name = new JMenuItem[GraphElementLayout.FONT_NAMES.length];
+        menuItemFont = new JMenuItem[GraphElementLayout.FONT_NAMES.length];
         for (c = 0; c < GraphElementLayout.FONT_NAMES.length; c++) {
-            name[c] = new JMenuItem(GraphElementLayout.FONT_NAMES[c]);
-            name[c].setActionCommand("font " + c);
-            name[c].addActionListener(this);
-            font_menu.add(name[c]);
+            menuItemFont[c] = new JMenuItem(GraphElementLayout.FONT_NAMES[c]);
+            menuItemFont[c].setActionCommand("font " + c);
+            menuItemFont[c].addActionListener(this);
+            menuFont.add(menuItemFont[c]);
         }
 
-        flaeche.setLayout(null);
+        panel.setLayout(null);
 
         offset = 0;
         counter = 0;
@@ -161,74 +170,78 @@ public class LayoutEditor extends JDialog implements ActionListener {
         for (int l = 0; l < ModelConstants.VISIBLE_LAYERS.length; l++) {
             int currentLayer = ModelConstants.VISIBLE_LAYERS[l];
             for (int c = 0; c < metaModelSpecificPaintableNodes.size(); c++) {
-                Class<? extends ModelElement> paintbaleClass = metaModelSpecificPaintableNodes.get(c);
-                if (MetaModel.isAbstract(paintbaleClass)) {
+                Class<? extends ModelElement> paintableClass = metaModelSpecificPaintableNodes.get(c);
+                if (MetaModel.isAbstract(paintableClass)) {
                     continue;
                 }
                 // nur für Node kann man das Layout im Moment festlegen -> Kanten auslassen
-                if (!Node.class.isAssignableFrom(paintbaleClass)) {
+                if (!Node.class.isAssignableFrom(paintableClass)) {
                     continue;
                 }
-                if (metaModel.layerFor(paintbaleClass) != currentLayer) {
+                if (metaModel.layerFor(paintableClass) != currentLayer) {
                     continue;
                 }
+                Class<? extends Node> paintableNodeClass = paintableClass.asSubclass(Node.class);
+
                 if (c > maxInRow) {
                     maxInRow = c;
                 }
                 int index = counter + offset;
-                NodeContainer kc = new NodeContainer((Node) metaModel.createElement(paintbaleClass, true), mydoc);
+                Node node = metaModel.createElement(paintableNodeClass, true);
+                NodeContainer kc = new NodeContainer(node, mydoc);
                 nodeContainers[index] = kc;
                 ElementsNameBuilder elementsNameBuilder = metaModel.getElementsNameBuilder();
-                kc.getNode().setName(elementsNameBuilder.getDisplayableName(paintbaleClass));
-                kc.setCoordinates(akt_x + 90, akt_y + 50, 100, 60);
+                String name = elementsNameBuilder.getDisplayableName(paintableClass);
+                node.setName(name);
+                kc.setCoordinates(currX + 90, currY + 50, 100, 60);
                 kc.setFont(mydoc.getDefaultElementsLayout().getStandardFont(kc));
 
-                form_trigger[index] = new JButton(getResString("le_form"));
-                form_trigger[index].setMargin(insets);
-                form_trigger[index].setSize(50, 20);
-                form_trigger[index].addActionListener(this);
-                form_trigger[index].setLocation(akt_x + 40, akt_y + 95);
-                flaeche.add(form_trigger[index]);
+                buttonShape[index] = new JButton(getResString("le_form"));
+                buttonShape[index].setMargin(insets);
+                buttonShape[index].setSize(50, 20);
+                buttonShape[index].addActionListener(this);
+                buttonShape[index].setLocation(currX + 40, currY + 95);
+                panel.add(buttonShape[index]);
 
-                farbe_trigger[index] = new JButton(getResString("le_farbe"));
-                farbe_trigger[index].setMargin(insets);
-                farbe_trigger[index].setSize(50, 20);
-                farbe_trigger[index].addActionListener(this);
-                farbe_trigger[index].setLocation(akt_x + 90, akt_y + 95);
-                flaeche.add(farbe_trigger[index]);
+                buttonColor[index] = new JButton(getResString("le_farbe"));
+                buttonColor[index].setMargin(insets);
+                buttonColor[index].setSize(50, 20);
+                buttonColor[index].addActionListener(this);
+                buttonColor[index].setLocation(currX + 90, currY + 95);
+                panel.add(buttonColor[index]);
 
-                font_trigger[index] = new JButton(getResString("le_schrift"));
-                font_trigger[index].setMargin(insets);
-                font_trigger[index].setSize(50, 20);
-                font_trigger[index].addActionListener(this);
-                font_trigger[index].setLocation(akt_x + 140, akt_y + 95);
-                flaeche.add(font_trigger[index]);
+                buttonFont[index] = new JButton(getResString("le_schrift"));
+                buttonFont[index].setMargin(insets);
+                buttonFont[index].setSize(50, 20);
+                buttonFont[index].addActionListener(this);
+                buttonFont[index].setLocation(currX + 140, currY + 95);
+                panel.add(buttonFont[index]);
 
-                akt_x += x_abstand;
+                currX += offsetX;
                 counter++;
             }
 
             offset += counter;
             counter = 0;
-            akt_x = 0;
-            akt_y += y_abstand;
+            currX = 0;
+            currY += offsetY;
         }
-        akt_y -= y_abstand;
+        currY -= offsetY;
 
-        flaeche.setPreferredSize(new Dimension(maxInRow * x_abstand + 30, akt_y + 90));
+        panel.setPreferredSize(new Dimension(maxInRow * offsetX + 30, currY + 90));
 
         JPanel buttonPanel = new JPanel();
         buttonPanel.setPreferredSize(new Dimension(350, 30));
         buttonPanel.setLayout(new GridBagLayout());
-        buttonPanel.add(beenden);
-        buttonPanel.add(abbrechen);
-        buttonPanel.add(uebernehmen);
+        buttonPanel.add(buttonOK);
+        buttonPanel.add(buttonCancel);
+        buttonPanel.add(buttonApply);
 
-        jsp = new JScrollPane(flaeche);
-        jsp.setPreferredSize(new Dimension(790, akt_y + 90 + 50));
+        scrollPane = new JScrollPane(panel);
+        scrollPane.setPreferredSize(new Dimension(790, currY + 90 + 50));
 
         getContentPane().setLayout(new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));
-        getContentPane().add(jsp);
+        getContentPane().add(scrollPane);
 
         getContentPane().add(buttonPanel);
         pack();
@@ -237,28 +250,21 @@ public class LayoutEditor extends JDialog implements ActionListener {
     }
 
     /**
-     * @param z
-     */
-    private void setAktuelles(final int z) {
-        aktuelles = z;
-    }
-
-    /**
      *
      */
     @Override
     public void actionPerformed(final ActionEvent e) {
-        if (e.getSource() == abbrechen) {
+        if (e.getSource() == buttonCancel) {
             myDefaultElementsLayout.adapt(doc.getDefaultElementsLayout());
             dispose();
             return;
         }
-        if (e.getSource() == uebernehmen) {
+        if (e.getSource() == buttonApply) {
             doc.adaptDefaultElementsLayout(myDefaultElementsLayout);
             doc.distributeEvent(ELEMENT_GRAPHICS_CHANGED);
             return;
         }
-        if (e.getSource() == beenden) {
+        if (e.getSource() == buttonOK) {
             doc.adaptDefaultElementsLayout(myDefaultElementsLayout);
             doc.distributeEvent(ELEMENT_GRAPHICS_CHANGED);
             dispose();
@@ -267,29 +273,29 @@ public class LayoutEditor extends JDialog implements ActionListener {
         }
 
         for (c = 0; c < offset; c++) {
-            if (e.getSource() == farbe_trigger[c]) {
-                setAktuelles(c);
+            if (e.getSource() == buttonColor[c]) {
+                selectedElementTypeIndex = c;
 
-                Color oldColor = myDefaultElementsLayout.getStandardBackGroundColor(nodeContainers[aktuelles]);
+                Color oldColor = myDefaultElementsLayout.getStandardBackGroundColor(nodeContainers[selectedElementTypeIndex]);
                 Color newColor = JColorChooser.showDialog(new JFrame(), getResString("farbe_ausw"), oldColor);
 
                 if (newColor == null) {
                     return;
                 }
-                myDefaultElementsLayout.setStandardBackGroundColor(nodeContainers[aktuelles].getNode().getClass(), newColor);
-                flaeche.repaint();
+                myDefaultElementsLayout.setStandardBackGroundColor(nodeContainers[selectedElementTypeIndex].getNode().getClass(), newColor);
+                panel.repaint();
             }
-            if (e.getSource() == form_trigger[c]) {
-                setAktuelles(c);
-                form_menu.show(flaeche, nodeContainers[c].getX() - 50, nodeContainers[c].getY() + 45);
+            if (e.getSource() == buttonShape[c]) {
+                selectedElementTypeIndex = c;
+                menuShape.show(panel, nodeContainers[c].getX() - 50, nodeContainers[c].getY() + 45);
             }
-            if (e.getSource() == font_trigger[c]) {
-                setAktuelles(c);
-                Font font = EasyDialogAccess.getFontByChooser(this, nodeContainers[aktuelles].getFont());
+            if (e.getSource() == buttonFont[c]) {
+                selectedElementTypeIndex = c;
+                Font font = EasyDialogAccess.getFontByChooser(this, nodeContainers[selectedElementTypeIndex].getFont());
                 if (font != null) {
-                    myDefaultElementsLayout.setStandardFont(nodeContainers[aktuelles].getNode().getClass(), font);
+                    myDefaultElementsLayout.setStandardFont(nodeContainers[selectedElementTypeIndex].getNode().getClass(), font);
                 }
-                flaeche.repaint();
+                panel.repaint();
             }
         }
 
@@ -297,14 +303,14 @@ public class LayoutEditor extends JDialog implements ActionListener {
         String actionCommand = e.getActionCommand();
         if (actionCommand.startsWith(commandPrefix)) {
             try {
-                NodeContainer nc = nodeContainers[aktuelles];
+                NodeContainer nc = nodeContainers[selectedElementTypeIndex];
                 Node node = nc.getNode();
                 Class<? extends Node> elementClass = node.getClass();
                 int commandPrefixLength = commandPrefix.length();
                 String shapeName = actionCommand.substring(commandPrefixLength);
                 Shape shape = Shape.valueOf(shapeName);
                 myDefaultElementsLayout.setStandardForm(elementClass, shape);
-                flaeche.repaint();
+                panel.repaint();
             } catch (Exception ne) {
                 Log.show(Log.ERROR, getResString("Fehler beim Form setzen."), ne);
             }
@@ -315,7 +321,7 @@ public class LayoutEditor extends JDialog implements ActionListener {
      * @param g
      */
     public void mypaint(final Graphics2D g) {
-        for (int c = 0; c < wieviele; c++) {
+        for (int c = 0; c < paintableNodesCount; c++) {
             if (nodeContainers[c] == null) {
                 continue;
             }
