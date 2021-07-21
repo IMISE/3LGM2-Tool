@@ -705,7 +705,7 @@ public final class MetaModel extends CoreMetaModel {
                     metaPath = metaPath.getOtherDirection();
                     Collection<Class<? extends ModelElement>> endClasses = getInstanciableAssignableClasses(metaPath.getStartClass());
                     for (Class<? extends ModelElement> endClass : endClasses) {
-                        if (metaPath.isStartClass(endClass)) {
+                        if (metaPath.isStartClass(endClass) && !metaPath.isEndClass(endClass)) {
                             builder.put(endClass, metaPath);
                         }
                     }
