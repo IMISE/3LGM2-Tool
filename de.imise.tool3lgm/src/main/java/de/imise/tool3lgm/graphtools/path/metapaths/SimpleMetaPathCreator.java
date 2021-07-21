@@ -769,6 +769,9 @@ public class SimpleMetaPathCreator extends MetaModelSpecificAdapter {
         return simpleMetaPaths;
     }
 
+    /**
+     * @param simpleMetaPaths
+     */
     private static void removeInvalidMetaPaths(final List<SimpleMetaPath> simpleMetaPaths) {
         for (int i = simpleMetaPaths.size() - 1; i >= 0; i--) {
             SimpleMetaPath simpleMetaPath = simpleMetaPaths.get(i);

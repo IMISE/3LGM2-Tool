@@ -13,6 +13,9 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.util.ReflectionUtils;
 import de.imise.util.collections.CollectionUtils;
 
+/**
+ * @author AXS (21.08.2020
+ */
 abstract class BasicMetaPathImpl extends MetaModelSpecificAdapter implements BasicMetaPath {
 
     /**
@@ -26,7 +29,9 @@ abstract class BasicMetaPathImpl extends MetaModelSpecificAdapter implements Bas
     protected Set<Class<? extends ModelElement>> endElementClasses = null;
 
     /**
-     * Anzeigename des Pfades. Falls es ein
+     * Displayable name of this metaPath loaded from the resources. If there is
+     * no displayable name in the reosurces the generic name "is connected with"
+     * will be set.
      */
     protected String name = null;
 

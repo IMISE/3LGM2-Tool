@@ -39,12 +39,12 @@ import de.imise.tool3lgm.metamodel.original.node.RechAnwendungsbaustein;
 import de.imise.tool3lgm.metamodel.original.node.Softwareprodukt;
 import de.imise.tool3lgm.metamodel.original.node.Standort;
 
-public class TLGMOriginalPathsDefinition extends MetaPathDefinition {
+public class TLGMOriginalMetaPathsDefinition extends MetaPathDefinition {
 
     /**
      * @param metaModel
      */
-    public TLGMOriginalPathsDefinition(final MetaModel metaModel) {
+    public TLGMOriginalMetaPathsDefinition(final MetaModel metaModel) {
         super(metaModel);
     }
 

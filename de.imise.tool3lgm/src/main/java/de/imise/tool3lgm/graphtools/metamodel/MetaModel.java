@@ -2065,7 +2065,10 @@ public final class MetaModel extends CoreMetaModel {
      */
     public Collection<SimpleMetaPath> getCreatableMetaPaths(final Class<? extends ModelElement> elementClass) {
         Collection<SimpleMetaPath> creatablePaths = elementClassToCreatableMetaPaths.get(elementClass);
-        return creatablePaths == null ? ImmutableList.of() : creatablePaths;
+        if (creatablePaths == null) {
+            creatablePaths = ImmutableList.of();
+        }
+        return creatablePaths;
     }
 
     /**
@@ -2081,7 +2084,8 @@ public final class MetaModel extends CoreMetaModel {
      */
     public Collection<SimpleMetaPath> getCreatableMetaPaths(final Class<? extends ModelElement> elementClass1, final Class<? extends ModelElement> elementClass2) {
         ImmutableList.Builder<SimpleMetaPath> creatableMetaPaths = ImmutableList.builder();
-        for (SimpleMetaPath metaPath : getCreatableMetaPaths(elementClass1)) {
+        Collection<SimpleMetaPath> creatableMetaPathsForStartClass1 = getCreatableMetaPaths(elementClass1);
+        for (SimpleMetaPath metaPath : creatableMetaPathsForStartClass1) {
             Class<? extends ModelElement> endClass = metaPath.getEndClass();
             if (endClass.isAssignableFrom(elementClass2)) {
                 creatableMetaPaths.add(metaPath);
