@@ -766,6 +766,10 @@ public class SimpleMetaPathCreator extends MetaModelSpecificAdapter {
             replaceSimpleMetaPathsWithDoubleMeaningEdgesBothConnectionStates(simpleMetaPaths, i);
         }
         removeInvalidMetaPaths(simpleMetaPaths);
+        String name = simpleMetaPath.getName();
+        for (SimpleMetaPath nonAbstractSimpleMetaPath : simpleMetaPaths) {
+            nonAbstractSimpleMetaPath.setName(name);
+        }
         return simpleMetaPaths;
     }
 

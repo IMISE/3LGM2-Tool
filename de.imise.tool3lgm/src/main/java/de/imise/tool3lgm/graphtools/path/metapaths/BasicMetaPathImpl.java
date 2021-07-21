@@ -349,6 +349,11 @@ abstract class BasicMetaPathImpl extends MetaModelSpecificAdapter implements Bas
         return name;
     }
 
+    @Override
+    public void setName(final String name) {
+        this.name = name;
+    }
+
     /**
      * @return
      */

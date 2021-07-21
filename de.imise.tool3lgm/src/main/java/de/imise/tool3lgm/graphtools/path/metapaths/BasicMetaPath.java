@@ -127,6 +127,12 @@ public interface BasicMetaPath extends MetaModelSpecific {
     String getName();
 
     /**
+     * @param name
+     * @return
+     */
+    void setName(String name);
+
+    /**
      * @return
      */
     String getFullName();
