@@ -48,6 +48,7 @@ import static javax.swing.JOptionPane.PLAIN_MESSAGE;
 import java.awt.Component;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -628,8 +629,18 @@ public class RegularContextGenerator extends ElementSelectionContextGenerator im
 
             for (Class<? extends ModelElement> me2Class : doc.getSelectedRealElementClasses()) {
                 List<Object> edgesAndPaths = new ArrayList<>();
-                edgesAndPaths.addAll(Arrays.asList(metaModel.getEdgeTypes(lastSelectedClass, me2Class)));
-                //edgesAndPaths.addAll(metaModel.getCreatableMetaPaths(lastSelectedClass, me2Class));
+
+                //add all edges which are creatable between the last selected class
+                //and the superclass of all other selected elements
+                Class<? extends Edge>[] edgeTypes = metaModel.getEdgeTypes(lastSelectedClass, me2Class);
+                List<Class<? extends Edge>> creatableEdgeTypes = Arrays.asList(edgeTypes);
+                edgesAndPaths.addAll(creatableEdgeTypes);
+
+                //same as the edges only with in the metapath definition defined metapaths
+                Collection<SimpleMetaPath> creatableMetaPaths = metaModel.getCreatableMetaPaths(lastSelectedClass, me2Class);
+                edgesAndPaths.addAll(creatableMetaPaths);
+
+                //for every edge class and metapath
                 for (Object edgeClassOrMetaPath : edgesAndPaths) {
                     if (edgeClassOrMetaPath instanceof Class) {
                         Class<? extends Edge> edgeClass = ((Class<?>) edgeClassOrMetaPath).asSubclass(Edge.class);
