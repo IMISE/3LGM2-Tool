@@ -154,6 +154,24 @@ public class MetaPathDefinition extends MetaModelSpecificAdapter {
     }
 
     /**
+     * Convenience method for
+     * {@link SimpleMetaPathCreator#createSimpleMetaPath(Class, Class, int, Class...)}
+     *
+     * @param startClass
+     * @param endClass
+     * @param metaPathStepWithName
+     * @param associations
+     * @return
+     * @throws IllegalArgumentException
+     * @see SimpleMetaPathCreator#createSimpleMetaPath(Class, Class, String,
+     *      Class...)
+     */
+    @SafeVarargs
+    public final SimpleMetaPath smp(final Class<? extends ModelElement> startClass, final Class<? extends ModelElement> endClass, final int metaPathStepWithName, final Class<? extends Edge>... associations) throws IllegalArgumentException {
+        return simpleMetaPathCreator.createSimpleMetaPath(startClass, endClass, metaPathStepWithName, associations);
+    }
+
+    /**
      * Liefert alle MetaPaths die für die übergebene Klasse definiert sind.
      *
      * @param startClass

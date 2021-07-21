@@ -1,13 +1,16 @@
 package de.imise.tool3lgm.metamodel.original;
 
+import java.util.Collection;
 import java.util.Map;
 
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 
 import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.path.MetaPathDefinition;
 import de.imise.tool3lgm.graphtools.path.metapaths.MetaPath;
+import de.imise.tool3lgm.graphtools.path.metapaths.SimpleMetaPath;
 import de.imise.tool3lgm.metamodel.original.edge.AufAufOrgVerbindung;
 import de.imise.tool3lgm.metamodel.original.edge.AufObjVerbindung;
 import de.imise.tool3lgm.metamodel.original.edge.AwbAwbkVerbindung;
@@ -18,6 +21,7 @@ import de.imise.tool3lgm.metamodel.original.edge.BssKommstVerbindung;
 import de.imise.tool3lgm.metamodel.original.edge.DbsDatVerbindung;
 import de.imise.tool3lgm.metamodel.original.edge.DoksDokVerbindung;
 import de.imise.tool3lgm.metamodel.original.edge.KawbDoksVerbindung;
+import de.imise.tool3lgm.metamodel.original.edge.KommBeziehung;
 import de.imise.tool3lgm.metamodel.original.edge.ObjLogspVerbindung;
 import de.imise.tool3lgm.metamodel.original.edge.ObjReprVerbindung;
 import de.imise.tool3lgm.metamodel.original.edge.OrgAufOrgVerbindung;
@@ -28,6 +32,7 @@ import de.imise.tool3lgm.metamodel.original.edge.RawbAwpVerbindung;
 import de.imise.tool3lgm.metamodel.original.edge.RawbDbsVerbindung;
 import de.imise.tool3lgm.metamodel.original.node.Anwendungsbaustein;
 import de.imise.tool3lgm.metamodel.original.node.Aufgabe;
+import de.imise.tool3lgm.metamodel.original.node.Bausteinschnittstelle;
 import de.imise.tool3lgm.metamodel.original.node.Datenbanksystem;
 import de.imise.tool3lgm.metamodel.original.node.Dokumentensammlung;
 import de.imise.tool3lgm.metamodel.original.node.Kommunikationsstandard;
@@ -131,6 +136,18 @@ public class TLGMOriginalMetaPathsDefinition extends MetaPathDefinition {
     @Override
     public Map<Class<? extends ModelElement>, MetaPath> getElementClassToNameExtensionMetaPath() {
         return ImmutableMap.of(RechAnwendungsbaustein.class, simpleMetaPathCreator.createSimpleMetaPath(RechAnwendungsbaustein.class, Softwareprodukt.class, RawbAwpVerbindung.class, AwpSwpVerbindung.class));
+    }
+
+    @Override
+    public Collection<SimpleMetaPath> getCreatableMetaPaths() {
+        /*
+         * Anwendungsbaustein - Schnittstelle - KommBeziehung - Schnittstelle -
+         * Anwendungsbaustein
+         */
+        SimpleMetaPath metaPath1 = smp(Anwendungsbaustein.class, Anwendungsbaustein.class, 1, AwbKommssVerbindung.class, KommBeziehung.class, AwbKommssVerbindung.class);
+        /* Schnittstelle - KommBeziehung - Schnittstelle - Anwendungsbaustein */
+        SimpleMetaPath metaPath2 = smp(Bausteinschnittstelle.class, Anwendungsbaustein.class, 0, KommBeziehung.class, AwbKommssVerbindung.class);
+        return ImmutableList.of(metaPath1, metaPath2);
     }
 
 }
