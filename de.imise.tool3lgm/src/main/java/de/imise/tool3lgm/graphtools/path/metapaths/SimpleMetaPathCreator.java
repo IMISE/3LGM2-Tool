@@ -766,10 +766,6 @@ public class SimpleMetaPathCreator extends MetaModelSpecificAdapter {
             replaceSimpleMetaPathsWithDoubleMeaningEdgesBothConnectionStates(simpleMetaPaths, i);
         }
         removeInvalidMetaPaths(simpleMetaPaths);
-        String name = simpleMetaPath.getName();
-        for (SimpleMetaPath nonAbstractSimpleMetaPath : simpleMetaPaths) {
-            nonAbstractSimpleMetaPath.setName(name);
-        }
         return simpleMetaPaths;
     }
 
@@ -920,7 +916,7 @@ public class SimpleMetaPathCreator extends MetaModelSpecificAdapter {
                         elementaryMetaPathArray[currentPathStepIndex] = elementaryMetaPathHandler.getMetaPath(pathStepStartClass, edgeType, elementaryMetaPathDirection, pathStepEndClass);
                         //den neuen SimpleMetaPfad mit der nicht-abstrakten Kantenklasse analog zum original anlegen (also mit den Index der Kante, die den Namen festlegt übernehmen)
                         int metaPathStepWithPathName = simpleMetaPath.getMetaPathStepWithPathName();
-                        SimpleMetaPath newSimpleMetaPath = new SimpleMetaPath(metaPathStepWithPathName, elementaryMetaPathArray);
+                        SimpleMetaPath newSimpleMetaPath = metaPathStepWithPathName >= 0 ? new SimpleMetaPath(metaPathStepWithPathName, elementaryMetaPathArray) : new SimpleMetaPath(simpleMetaPath.getName(), elementaryMetaPathArray);
                         //bei der ersten nicht-abstrakten Kantenklasse wird der neue MetaPfad in der Ergebnisliste einfach über den neuen geschrieben
                         if (replaceOriginalMetaPathInResultList) {
                             replaceOriginalMetaPathInResultList = false;
