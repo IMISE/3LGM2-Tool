@@ -83,11 +83,11 @@ public class TLGMServiceMetaPathsDefinition extends MetaPathDefinition {
     @Override
     protected void init() {
 
-        /* Application System - IHE Integration Profile */
+        // Application System - IHE Integration Profile //
         put(ApplicationSystem.class, IheIntegrationProfile.class, "PATH_ApplicationSystem_IheIntegrationProfile", ApplicationSystem_IheActorInstance_Edge.class, IheActor_IheActorInstance_Edge.class, IheIntegrationProfile_IheActor_Edge.class);
-        /* Software Product - Physical Data Processing Component */
+        // Software Product - Physical Data Processing Component //
         put(SoftwareProduct.class, PhysicalDataProcessingComponent.class, "PATH_SoftwareProduct_PhysicalDataProcessingComponent", ApplicationSystem_SoftwareProduct_Edge.class, ApplicationComponent_PhysicalDataProcessingComponent_Edge.class);
-        /* Function - PhysicalDataProcessingComponent */
+        // Function - PhysicalDataProcessingComponent //
         //put(Function.class, PhysicalDataProcessingComponent.class, "PATH_Function_PhysicalDataProcessingComponent", Function_Use_Edge.class, ApplicationComponent_Use_Edge.class, ApplicationComponent_PhysicalDataProcessingComponent_Edge.class);
 
         putAll(getCreatableMetaPaths());
@@ -140,9 +140,9 @@ public class TLGMServiceMetaPathsDefinition extends MetaPathDefinition {
 
     @Override
     public Collection<SimpleMetaPath> getCreatableMetaPaths() {
-        /* ApplicationSystem - IheActor */
+        // ApplicationSystem - IheActor //
         SimpleMetaPath metaPath1 = smp(ApplicationSystem.class, IheActor.class, "PATH_ApplicationSystem_IheActor", ApplicationSystem_IheActorInstance_Edge.class, IheActor_IheActorInstance_Edge.class);
-        /* Function - OrganisationalUnit */
+        // Function - OrganisationalUnit //
         SimpleMetaPath metaPath3 = smp(Function.class, OrganisationalUnit.class, "PATH_Function_OrganisationalUnit", Function_Use_Edge.class, OrganisationalUnit_Use_Edge.class);
         //        SimpleMetaPath metaPath2 = smp(IheActorInstance.class, IheActor.class, "PATH_IheActorInstance_ApplicationSystem_IheActor", ApplicationSystem_IheActorInstance_Edge.class, ApplicationSystem_IheActorInstance_Edge.class,
         //                IheActor_IheActorInstance_Edge.class);
@@ -150,11 +150,11 @@ public class TLGMServiceMetaPathsDefinition extends MetaPathDefinition {
         //das folgende muss in die Resourcen, sollte man den Pfad oben mal scharf schalten (bisher nur deutsch)
         //        PATH_IheActorInstance_ApplicationSystem_IheActor_f      muss gruppiert werden mit
         //        PATH_IheActorInstance_ApplicationSystem_IheActor_b      wird zur Gruppierung benötigt von
-        /* Function - ApplicationComponent */
+        // Function - ApplicationComponent //
         SimpleMetaPath metaPath4 = smp(Function.class, ApplicationComponent.class, "PATH_Function_ApplicationComponent", Function_Use_Edge.class, ApplicationComponent_Use_Edge.class);
-        /* OrganisationalUnit - ApplicationComponent */
+        // OrganisationalUnit - ApplicationComponent //
         SimpleMetaPath metaPath5 = smp(OrganisationalUnit.class, ApplicationComponent.class, "PATH_OrganisationalUnit_ApplicationComponent", OrganisationalUnit_Use_Edge.class, ApplicationComponent_Use_Edge.class);
-        /* ApplicationComponent - PhysicalDataProcessingComponent */
+        // ApplicationComponent - PhysicalDataProcessingComponent //
         //        SimpleMetaPath metaPath7 = smp(ApplicationComponent.class, PhysicalDataProcessingComponent.class, "PATH_ApplicationComponent_PhysicalDataProcessingComponent", ApplicationComponent_PhysicalDataProcessingComponent_Edge.class);
         return ImmutableList.of(metaPath1, metaPath3, metaPath4, metaPath5);
     }
