@@ -766,7 +766,27 @@ public class SimpleMetaPathCreator extends MetaModelSpecificAdapter {
             replaceSimpleMetaPathsWithDoubleMeaningEdgesBothConnectionStates(simpleMetaPaths, i);
         }
         removeInvalidMetaPaths(simpleMetaPaths);
+        Class<? extends ModelElement> startClass = simpleMetaPath.getStartClass();
+        Class<? extends ModelElement> endClass = simpleMetaPath.getEndClass();
+        if (simpleMetaPath.isStartAndEndClass(endClass, startClass)) {
+            addOtherDirectionMetaPaths(simpleMetaPaths);
+        }
         return simpleMetaPaths;
+    }
+
+    /**
+     * @param simpleMetaPaths
+     */
+    private static void addOtherDirectionMetaPaths(final List<SimpleMetaPath> simpleMetaPaths) {
+        int size = simpleMetaPaths.size();
+        for (int i = 0; i < size; i++) {
+            SimpleMetaPath simpleMetaPath = simpleMetaPaths.get(i);
+            SimpleMetaPath otherDirection = simpleMetaPath.getOtherDirection();
+            //if the metapath is symmetrical then the other direction is equals to the simpleMetaPath -> check contains(..)
+            if (otherDirection != null && !simpleMetaPaths.contains(otherDirection)) {
+                simpleMetaPaths.add(otherDirection);
+            }
+        }
     }
 
     /**
