@@ -852,7 +852,7 @@ public class SimpleMetaPathCreator extends MetaModelSpecificAdapter {
                 for (Class<? extends ModelElement> startClass : instanciableAssignableStartClasses) {
                     for (Class<? extends ModelElement> endClass : instanciableAssignableEndClasses) {
                         ElementaryMetaPath newElementaryMetaPath = elementaryMetaPathHandler.getMetaPath(startClass, originalElementaryMetaPath, endClass);
-                        SimpleMetaPath newSimpleMetaPath = getPathStepReplacedMetaPath(elementaryMetaPaths, newElementaryMetaPath, currentPathStepIndex, simpleMetaPath.getName(), simpleMetaPath.getMetaPathStepWithPathName());
+                        SimpleMetaPath newSimpleMetaPath = getPathStepReplacedMetaPath(elementaryMetaPaths, newElementaryMetaPath, currentPathStepIndex, simpleMetaPath.getBaseResKeyOrName(), simpleMetaPath.getMetaPathStepWithPathName());
                         //bei der ersten nicht-abstrakten Kantenklasse wird der neue MetaPfad in der Ergebnisliste einfach über den neuen geschrieben
                         if (replaceOriginalMetaPathInResultList) {
                             replaceOriginalMetaPathInResultList = false;
