@@ -3996,7 +3996,6 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
         if (slaveContainer != null) {
             szen.start_transaction(pid);
             Dimension pos = calculateAddictPosition(masterContainer);
-            String edgeID = edge.getID();//eigentlich müsste der hier auch beim Undo auf diesen Wert gesetzt werden, aber das passiert im Moment nicht
             int slaveX = slaveContainer.getX();
             int slaveY = slaveContainer.getY();
             int slaveWidth = slaveContainer.getWidth();
