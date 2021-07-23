@@ -140,13 +140,21 @@ public class SimpleMetaPath extends SerialMetaPath implements SequenceMetaPath {
 
     @Override
     public SimpleMetaPath getOtherDirection() {
-        return (SimpleMetaPath) super.getOtherDirection();
+        SimpleMetaPath otherDirection = (SimpleMetaPath) super.getOtherDirection();
+        if (metaPathStepWithPathName >= 0) {
+            List<ElementaryMetaPath> elementaryMetaPaths = getElementaryMetaPaths();
+            ElementaryMetaPath elementaryMetaPath = elementaryMetaPaths.get(metaPathStepWithPathName);
+            ElementaryMetaPath elementaryMetaPathOtherDirection = elementaryMetaPath.getOtherDirection();
+            String otherDirectionName = elementaryMetaPathOtherDirection.getName();
+            otherDirection.setName(otherDirectionName);
+        }
+        return otherDirection;
     }
 
     @Override
     protected SimpleMetaPath createOtherDirection(final String baseResKeyOrName) {
         ElementaryMetaPath[] otherDirectionMetaPaths = getOtherDirectionMetaPaths();
-        return otherDirectionMetaPaths != null ? new SimpleMetaPath(baseResKeyOrName, Direction.BACKWARD, getOtherDirectionMetaPaths()) : null;
+        return otherDirectionMetaPaths != null ? new SimpleMetaPath(baseResKeyOrName, Direction.BACKWARD, otherDirectionMetaPaths) : null;
     }
 
     @Override
