@@ -41,6 +41,7 @@ import de.imise.tool3lgm.metamodel.service.edge.IheProvidingInterface_IheActorIn
 import de.imise.tool3lgm.metamodel.service.edge.IheProvidingInterface_IheTransaction_Edge;
 import de.imise.tool3lgm.metamodel.service.edge.IheTransaction_IheCommunicationLink_Edge;
 import de.imise.tool3lgm.metamodel.service.edge.OrganisationalUnit_Use_Edge;
+import de.imise.tool3lgm.metamodel.service.edge.PartableApplicationComponent_CommunicationInterface_Edge;
 import de.imise.tool3lgm.metamodel.service.edge.Service_CommunicationLink_Edge;
 import de.imise.tool3lgm.metamodel.service.edge.Service_InvokingInterface_Edge;
 import de.imise.tool3lgm.metamodel.service.edge.Service_ProvidingInterface_Edge;
@@ -57,6 +58,7 @@ import de.imise.tool3lgm.metamodel.service.node.IheProvidingInterface;
 import de.imise.tool3lgm.metamodel.service.node.IheTransaction;
 import de.imise.tool3lgm.metamodel.service.node.InvokingInterface;
 import de.imise.tool3lgm.metamodel.service.node.OrganisationalUnit;
+import de.imise.tool3lgm.metamodel.service.node.PartableApplicationComponent;
 import de.imise.tool3lgm.metamodel.service.node.PhysicalDataProcessingComponent;
 import de.imise.tool3lgm.metamodel.service.node.ProvidingInterface;
 import de.imise.tool3lgm.metamodel.service.node.Service;
@@ -142,21 +144,29 @@ public class TLGMServiceMetaPathsDefinition extends MetaPathDefinition {
     public Collection<SimpleMetaPath> getCreatableMetaPaths() {
         // ApplicationSystem - IheActor //
         SimpleMetaPath metaPath1 = smp(ApplicationSystem.class, IheActor.class, "PATH_ApplicationSystem_IheActor", ApplicationSystem_IheActorInstance_Edge.class, IheActor_IheActorInstance_Edge.class);
-        // Function - OrganisationalUnit //
-        SimpleMetaPath metaPath3 = smp(Function.class, OrganisationalUnit.class, "PATH_Function_OrganisationalUnit", Function_Use_Edge.class, OrganisationalUnit_Use_Edge.class);
+
         //        SimpleMetaPath metaPath2 = smp(IheActorInstance.class, IheActor.class, "PATH_IheActorInstance_ApplicationSystem_IheActor", ApplicationSystem_IheActorInstance_Edge.class, ApplicationSystem_IheActorInstance_Edge.class,
         //                IheActor_IheActorInstance_Edge.class);
         //        return ImmutableList.of(metaPath1, metaPath2);
         //das folgende muss in die Resourcen, sollte man den Pfad oben mal scharf schalten (bisher nur deutsch)
         //        PATH_IheActorInstance_ApplicationSystem_IheActor_f      muss gruppiert werden mit
         //        PATH_IheActorInstance_ApplicationSystem_IheActor_b      wird zur Gruppierung benötigt von
+
+        // Function - OrganisationalUnit //
+        SimpleMetaPath metaPath3 = smp(Function.class, OrganisationalUnit.class, "PATH_Function_OrganisationalUnit", Function_Use_Edge.class, OrganisationalUnit_Use_Edge.class);
         // Function - ApplicationComponent //
         SimpleMetaPath metaPath4 = smp(Function.class, ApplicationComponent.class, "PATH_Function_ApplicationComponent", Function_Use_Edge.class, ApplicationComponent_Use_Edge.class);
         // OrganisationalUnit - ApplicationComponent //
         SimpleMetaPath metaPath5 = smp(OrganisationalUnit.class, ApplicationComponent.class, "PATH_OrganisationalUnit_ApplicationComponent", OrganisationalUnit_Use_Edge.class, ApplicationComponent_Use_Edge.class);
+
         // ApplicationComponent - PhysicalDataProcessingComponent //
-        //        SimpleMetaPath metaPath7 = smp(ApplicationComponent.class, PhysicalDataProcessingComponent.class, "PATH_ApplicationComponent_PhysicalDataProcessingComponent", ApplicationComponent_PhysicalDataProcessingComponent_Edge.class);
-        return ImmutableList.of(metaPath1, metaPath3, metaPath4, metaPath5);
+        SimpleMetaPath metaPath6 = smp(ApplicationComponent.class, PhysicalDataProcessingComponent.class, "PATH_ApplicationComponent_PhysicalDataProcessingComponent", ApplicationComponent_PhysicalDataProcessingComponent_Edge.class);
+
+        // ApplicationSystem - ApplicationSystem //
+        SimpleMetaPath metaPath7 = smp(PartableApplicationComponent.class, PartableApplicationComponent.class, 1, PartableApplicationComponent_CommunicationInterface_Edge.class, CommunicationLink_Edge.class,
+                PartableApplicationComponent_CommunicationInterface_Edge.class);
+
+        return ImmutableList.of(metaPath1, metaPath3, metaPath4, metaPath5, metaPath6, metaPath7);
     }
 
     ////////////////////////////////////////////////////////////////////////
