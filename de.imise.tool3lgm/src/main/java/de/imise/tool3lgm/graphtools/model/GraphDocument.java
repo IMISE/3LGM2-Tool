@@ -3979,14 +3979,11 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
             return null;
         }
 
-        szen.start_transaction(pid);
-
         MetaModel metaModel = getMetaModel();
         Class<? extends ModelElement> elementClass = metaModel.getClassForName(edgeClassName);
         Class<? extends Edge> edgeClass = elementClass.asSubclass(Edge.class);
         List<Edge> edges = masterElement.getEdgesWith(slaveElement, edgeClass);
         if (edges.isEmpty() || !(szen instanceof Szenario)) {
-            finish_transaction(pid);
             return null;
         }
         Edge edge = edges.get(0);
@@ -3997,6 +3994,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
         NodeContainer slaveContainer = (NodeContainer) slaveElement.getContainer(szen);
         //slaveContainer ist null, wenn das untergeordnete Element unique ist und keinen Grafikcontainer in jedem Teilmodell hat
         if (slaveContainer != null) {
+            szen.start_transaction(pid);
             Dimension pos = calculateAddictPosition(masterContainer);
             String edgeID = edge.getID();//eigentlich müsste der hier auch beim Undo auf diesen Wert gesetzt werden, aber das passiert im Moment nicht
             int slaveX = slaveContainer.getX();
@@ -4007,16 +4005,18 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
             addUndo(pid, MODEL_ACTION_SET_ELEMENT_POSITION, szenID, slaveElement, slaveX, slaveY, slaveWidth, slaveHeight);
             slaveContainer.setCoordinates(pos.width, pos.height, slaveWidth, slaveHeight);
             raiseSlaves(masterContainer);
-            for (Szenario szenario : gdcoll.getSzenarios()) {
-                EdgeContainer kac = edge.getContainer(szenario);
-                if (kac != null) {
-                    kac.computeBorderPoints();
+            for (Edge slaveEdge : slaveElement.getEdges()) {
+                for (Szenario szenario : gdcoll.getSzenarios()) {
+                    EdgeContainer kac = slaveEdge.getContainer(szenario);
+                    if (kac != null) {
+                        kac.computeBorderPoints();
+                    }
                 }
             }
+            szen.finish_transaction(pid);
+            szen.distributeEvent(DATA_CHANGED, pid);
         }
 
-        szen.finish_transaction(pid);
-        szen.distributeEvent(DATA_CHANGED, pid);
         return edge;
     }
 
