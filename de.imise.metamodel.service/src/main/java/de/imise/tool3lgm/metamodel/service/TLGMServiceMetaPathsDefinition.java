@@ -166,7 +166,21 @@ public class TLGMServiceMetaPathsDefinition extends MetaPathDefinition {
         SimpleMetaPath metaPath7 = smp(PartableApplicationComponent.class, PartableApplicationComponent.class, 1, PartableApplicationComponent_CommunicationInterface_Edge.class, CommunicationLink_Edge.class,
                 PartableApplicationComponent_CommunicationInterface_Edge.class);
 
-        return ImmutableList.of(metaPath1, metaPath3, metaPath4, metaPath5, metaPath6, metaPath7);
+        // ApplicationSystem - CommunicationInterface //
+        //the following MetaPath doesn't work! So we must define the ElementaryMetaPaths
+        //SimpleMetaPath metaPath8 = smp(PartableApplicationComponent.class, CommunicationInterface.class, 1, PartableApplicationComponent_CommunicationInterface_Edge.class, CommunicationLink_Edge.class);
+        //we must define this metapath via defining ElementaryMetaPaths to get the other direction
+        //because CommunicationLink_Edge.class is definied from InvokingInterface to ProvidngInterface
+        MetaModel metaModel = getMetaModel();
+        ElementaryMetaPathHandler emph = metaModel.getElementaryMetaPathHandler();
+        ElementaryMetaPath pathStep1 = emph.getForwardMetaPath(PartableApplicationComponent_CommunicationInterface_Edge.class);
+        ElementaryMetaPath pathStep2a = emph.getForwardMetaPath(CommunicationLink_Edge.class);
+        ElementaryMetaPath pathStep2b = emph.getBackwardMetaPath(CommunicationLink_Edge.class);
+
+        SimpleMetaPath metaPath8a = new SimpleMetaPath(1, pathStep1, pathStep2a);
+        SimpleMetaPath metaPath8b = new SimpleMetaPath(1, pathStep1, pathStep2b);
+
+        return ImmutableList.of(metaPath1, metaPath3, metaPath4, metaPath5, metaPath6, metaPath7, metaPath8a, metaPath8b);
     }
 
     ////////////////////////////////////////////////////////////////////////
