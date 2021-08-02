@@ -804,9 +804,9 @@ public class LGMGraphDocument extends GraphDocument {
                 pathStepStartElement = createdElementaryPath.getEndElement();
             }
         }
+        SimplePath simplePath = createSubPath ? createdSubPath : SimplePath.create(createdElementaryPaths);
         finish_transaction(pid);
         distributeEvent(DATA_CHANGED, pid);
-        SimplePath simplePath = createSubPath ? createdSubPath : SimplePath.create(createdElementaryPaths);
         return simplePath;
     }
 
