@@ -695,7 +695,8 @@ public final class MetaModel extends CoreMetaModel {
                     Sys.errn(2, "Createable Path is not valid: " + definedCreateableMetaPath + " (" + definedCreateableMetaPath.getFullPathString() + ")");
                 }
                 for (SimpleMetaPath metaPath : createableMetaPathsNonAbstract) {
-                    Collection<Class<? extends ModelElement>> startClasses = getInstanciableAssignableClasses(metaPath.getStartClass());
+                    Class<? extends ModelElement> possibleAbstractStartClass = metaPath.getStartClass();
+                    Collection<Class<? extends ModelElement>> startClasses = getInstanciableAssignableClasses(possibleAbstractStartClass);
                     for (Class<? extends ModelElement> startClass : startClasses) {
                         if (metaPath.isStartClass(startClass)) {
                             builder.put(startClass, metaPath);
@@ -703,7 +704,8 @@ public final class MetaModel extends CoreMetaModel {
                     }
                     //Gegenrichtung des Pfades für die Endklasse als Startklasse hinzufügen
                     metaPath = metaPath.getOtherDirection();
-                    Collection<Class<? extends ModelElement>> endClasses = getInstanciableAssignableClasses(metaPath.getStartClass());
+                    possibleAbstractStartClass = metaPath.getStartClass();
+                    Collection<Class<? extends ModelElement>> endClasses = getInstanciableAssignableClasses(possibleAbstractStartClass);
                     for (Class<? extends ModelElement> endClass : endClasses) {
                         if (metaPath.isStartClass(endClass) && !metaPath.isEndClass(endClass)) {
                             builder.put(endClass, metaPath);
