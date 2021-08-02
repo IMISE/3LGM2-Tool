@@ -118,7 +118,8 @@ public class SerialMetaPath extends ListMetaPath {
         final int prime = 31;
         int result = super.hashCode();
         result = prime * result + (directed ? 1231 : 1237);
-        result = prime * result + (direction == null ? 0 : direction.hashCode());
+        //do not involve the direction here (see equals(...))
+        //result = prime * result + (direction == null ? 0 : direction.hashCode());
         result = prime * result + (subMetaPaths == null ? 0 : subMetaPaths.hashCode());
         result = prime * result + (elementaryMetaPaths == null ? 0 : elementaryMetaPaths.hashCode());
         return result;
@@ -139,9 +140,6 @@ public class SerialMetaPath extends ListMetaPath {
         if (directed != other.directed) {
             return false;
         }
-        if (direction != other.direction) {
-            return false;
-        }
         if (subMetaPaths == null) {
             if (other.subMetaPaths != null) {
                 return false;
@@ -155,6 +153,22 @@ public class SerialMetaPath extends ListMetaPath {
             }
         } else if (!elementaryMetaPaths.equals(other.elementaryMetaPaths)) {
             return false;
+        }
+        Class<? extends ModelElement> startClass = getStartClass();
+        Class<? extends ModelElement> endClass = getEndClass();
+        if (startClass != endClass) {
+            if (direction != other.direction) {
+                return false;
+            }
+        } else {
+            //if the startclass and endclass are the same then the
+            //direction is only indirect relevant if the name of the
+            //both (maybe different) directions is the same.
+            String toString = toString();
+            String otherToString = other.toString();
+            if (!toString.equals(otherToString)) {
+                return false;
+            }
         }
         return true;
     }

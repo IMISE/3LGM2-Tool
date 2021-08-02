@@ -454,12 +454,6 @@ public final class ElementaryMetaPath extends MetaPathImpl implements SequenceMe
             return false;
         }
         ElementaryMetaPath other = (ElementaryMetaPath) obj;
-        if (connectionState != other.connectionState) {
-            return false;
-        }
-        if (direction != other.direction) {
-            return false;
-        }
         if (edgeClass == null) {
             if (other.edgeClass != null) {
                 return false;
@@ -486,6 +480,23 @@ public final class ElementaryMetaPath extends MetaPathImpl implements SequenceMe
         }
         if (type != other.type) {
             return false;
+        }
+        if (connectionState != other.connectionState) {
+            return false;
+        }
+        if (startClass != endClass) {
+            if (direction != other.direction) {
+                return false;
+            }
+        } else {
+            //if the startclass and endclass are the same then the
+            //direction is only indirect relevant if the name of the
+            //both (maybe different) directions is the same.
+            String toString = toString();
+            String otherToString = other.toString();
+            if (!toString.equals(otherToString)) {
+                return false;
+            }
         }
         return true;
     }
