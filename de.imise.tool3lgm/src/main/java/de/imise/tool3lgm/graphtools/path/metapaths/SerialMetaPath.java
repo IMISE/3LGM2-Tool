@@ -121,6 +121,7 @@ public class SerialMetaPath extends ListMetaPath {
         //do not involve the direction here (see equals(...))
         //result = prime * result + (direction == null ? 0 : direction.hashCode());
         result = prime * result + (subMetaPaths == null ? 0 : subMetaPaths.hashCode());
+        List<ElementaryMetaPath> elementaryMetaPaths = getElementaryMetaPaths(); //must be the function to initialize it
         result = prime * result + (elementaryMetaPaths == null ? 0 : elementaryMetaPaths.hashCode());
         return result;
     }
@@ -147,11 +148,12 @@ public class SerialMetaPath extends ListMetaPath {
         } else if (!subMetaPaths.equals(other.subMetaPaths)) {
             return false;
         }
+        List<ElementaryMetaPath> elementaryMetaPaths = getElementaryMetaPaths();
         if (elementaryMetaPaths == null) {
-            if (other.elementaryMetaPaths != null) {
+            if (other.getElementaryMetaPaths() != null) { //call the function to ensure the initialization
                 return false;
             }
-        } else if (!elementaryMetaPaths.equals(other.elementaryMetaPaths)) {
+        } else if (!elementaryMetaPaths.equals(other.getElementaryMetaPaths())) {
             return false;
         }
         Class<? extends ModelElement> startClass = getStartClass();
