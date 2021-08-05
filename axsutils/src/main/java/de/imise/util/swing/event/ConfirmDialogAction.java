@@ -10,6 +10,7 @@ import javax.swing.FocusManager;
 import javax.swing.InputMap;
 import javax.swing.JComponent;
 import javax.swing.JDialog;
+import javax.swing.JFrame;
 import javax.swing.JRootPane;
 import javax.swing.KeyStroke;
 
@@ -38,22 +39,33 @@ public class ConfirmDialogAction extends AbstractAction {
         public void confirm();
 
         /**
-         * registers the CTRL+ENTER key-shortcut
+         * registers the CTRL+ENTER key-shortcut for the given Frame or Dialog
          * used to click on confirm (the ok-button in most cases)
          */
         public default void registerCtrlEnterKey() {
             if (this instanceof JDialog) {
                 JDialog dialog = (JDialog) this;
                 JRootPane rootPane = dialog.getRootPane();
-                InputMap im = rootPane.getInputMap();
-                ActionMap am = rootPane.getActionMap();
-                im.put(KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, KeyEvent.CTRL_MASK), CONFIRM_ACTION);
-                am.put(CONFIRM_ACTION, CONFIRM_ACTION);
-
-                rootPane.setInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT, im);
-                rootPane.setActionMap(am);
+                setMaps(rootPane);
+            } else if (this instanceof JFrame) {
+                JFrame frame = (JFrame) this;
+                JRootPane rootPane = frame.getRootPane();
+                setMaps(rootPane);
             }
         }
 
+        /**
+         * adds the CTRL+ENTER shortcut
+         *
+         * @param rootPane
+         */
+        public default void setMaps(final JRootPane rootPane) {
+            InputMap im = rootPane.getInputMap();
+            ActionMap am = rootPane.getActionMap();
+            im.put(KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, KeyEvent.CTRL_MASK), CONFIRM_ACTION);
+            am.put(CONFIRM_ACTION, CONFIRM_ACTION);
+            rootPane.setInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT, im);
+            rootPane.setActionMap(am);
+        }
     }
 }
