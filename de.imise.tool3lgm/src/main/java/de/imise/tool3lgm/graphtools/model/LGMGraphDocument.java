@@ -32,6 +32,8 @@ import de.imise.tool3lgm.graphtools.dialog.OverwriteDialog.OverwriteQuestionAnsw
 import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Bendpoint;
 import de.imise.tool3lgm.graphtools.metamodel.elements.CompositionEdge;
+import de.imise.tool3lgm.graphtools.metamodel.elements.DoubleMeaningEdge;
+import de.imise.tool3lgm.graphtools.metamodel.elements.DoubleMeaningEdge.ConnectionState;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction;
 import de.imise.tool3lgm.graphtools.metamodel.elements.InstanciationEdge;
@@ -845,6 +847,11 @@ public class LGMGraphDocument extends GraphDocument {
         if (!alreadyLinked) {
             Direction direction = elementaryMetaPath.getDirection();
             edge = gdcoll.link(startElement, endElement, edgeClass, direction, pid);
+            ConnectionState connectionState = elementaryMetaPath.getConnectionState();
+            if (connectionState != null && edge instanceof DoubleMeaningEdge) {
+                ((DoubleMeaningEdge) edge).setConnectionState(connectionState);
+            }
+
         }
         if (CompositionEdge.class.isAssignableFrom(edgeClass)) {
             Class<? extends CompositionEdge> compositionEdgeClass = edgeClass.asSubclass(CompositionEdge.class);
