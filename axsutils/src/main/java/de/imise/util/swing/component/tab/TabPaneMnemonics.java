@@ -4,10 +4,23 @@ import java.util.ArrayList;
 
 import javax.swing.JTabbedPane;
 
+/**
+ * Enables Tab panes to have ALT+<Character> Shortcuts for switching between
+ * tabs
+ *
+ * @author Hyeon Ung Kim
+ */
 public class TabPaneMnemonics extends JTabbedPane {
 
+    // this list contains the already set Characters for the mnemonics
     private final ArrayList<Character> usedMnemonics = new ArrayList<>();
 
+    /**
+     * redirects Constructor to JTabbedPane
+     *
+     * @param tabPlacement
+     * @param tabLayoutPolicy
+     */
     public TabPaneMnemonics(final int tabPlacement, final int tabLayoutPolicy) {
         super(tabPlacement, tabLayoutPolicy);
     }
