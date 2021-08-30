@@ -17,16 +17,17 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
 import de.imise.util.swing.component.SimpleXMLTextPane;
+import de.imise.util.swing.event.ConfirmDialogAction.ConfirmDialog;
 
 /**
  * AXS: eigentlich sollte sowas genau wie JOptionPane funktionieren, also das
  * hier wird ein JPanel namens XMLEditorPane und dieses Panel hat dann 2
  * statische Funktionen String showDialog(...) und String showFrame(...)
- * 
+ *
  * @author Sebastian Weber Stellt einen einfachen Editor für XML-Skripte zur
  *         Verfügung.
  */
-public class SimpleXMLEditor extends JDialog implements ActionListener {
+public class SimpleXMLEditor extends JDialog implements ActionListener, ConfirmDialog {
     /** eine TextPane zur anzeige des xml Textes mit Syntaxhervorhebung. */
     SimpleXMLTextPane pane;
     /**
@@ -50,34 +51,36 @@ public class SimpleXMLEditor extends JDialog implements ActionListener {
 
     /**
      * Der Konstruktor.
-     * 
+     *
      * @param owner Besitzerframe für diesen Dialog.
      * @param modal auf true setzen, wenn der Dialog die Ausführung des
      *            Besitzerframes blockieren soll.
      * @param title Titel für diesen Dialog.
      * @param xmlText Ein xmlText, der nach dem Öffnen angezeigt werden soll.
      */
-    public SimpleXMLEditor(Frame owner, boolean modal, String title, String xmlText) {
+    public SimpleXMLEditor(final Frame owner, final boolean modal, final String title, final String xmlText) {
         super(owner, title, modal);
         init(modal, title, xmlText);
     }
 
     /**
      * Der Konstruktor.
-     * 
+     *
      * @param owner Besitzerdialog für diesen Dialog.
      * @param modal auf true setzen, wenn der Dialog die Ausführung des
      *            Besitzerdialoges blockieren soll.
      * @param title Titel für diesen Dialog.
      * @param xmlText Ein xmlText, der nach dem Öffnen angezeigt werden soll.
      */
-    public SimpleXMLEditor(Dialog owner, boolean modal, String title, String xmlText) {
+    public SimpleXMLEditor(final Dialog owner, final boolean modal, final String title, final String xmlText) {
         super(owner, title, modal);
         init(modal, title, xmlText);
     }
 
-    private void init(boolean modal, String title, String xmlText) {
+    private void init(final boolean modal, final String title, final String xmlText) {
         pane = new SimpleXMLTextPane(xmlText);
+
+        registerCtrlEnterKey();
 
         Container contentPane = getContentPane();
         contentPane.setLayout(new BorderLayout());
@@ -102,22 +105,24 @@ public class SimpleXMLEditor extends JDialog implements ActionListener {
 
     /**
      * Wird intern aufgerufen, wenn einer der Knöpfe gedrückt wurde.
-     * 
+     *
      * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
      */
     @Override
-    public void actionPerformed(ActionEvent e) {
-        if (e.getSource() == okButton)
+    public void actionPerformed(final ActionEvent e) {
+        if (e.getSource() == okButton) {
             auswahl = OK;
-        if (e.getSource() == cancelButton)
+        }
+        if (e.getSource() == cancelButton) {
             auswahl = ABBRECHEN;
-        this.dispose();
+        }
+        dispose();
     }
 
     /**
      * Zweigt den Dialog an und gibt die Option zurück, mit der er geschlossen
      * wurde.
-     * 
+     *
      * @return die Option mit der der Dialog geschlossen wurde (OK oder
      *         ABBRECHEN).
      */
@@ -128,10 +133,15 @@ public class SimpleXMLEditor extends JDialog implements ActionListener {
 
     /**
      * Gibt den xml-Text der in diesem Dialog angezeigt wird, zurück.
-     * 
+     *
      * @return der angezeigte xml-Text.
      */
     public String getText() {
         return pane.getText();
+    }
+
+    @Override
+    public void confirm() {
+        okButton.doClick();
     }
 }

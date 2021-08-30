@@ -21,7 +21,7 @@ import javax.swing.event.MouseInputListener;
  *
  * @author dsmalley (Dave)
  */
-public class ReorderableTabbedPane extends JTabbedPane {
+public class ReorderableTabbedPane extends TabPaneMnemonics {
 
     public ReorderableTabbedPane() {
         this(TOP);
@@ -49,16 +49,12 @@ public class ReorderableTabbedPane extends JTabbedPane {
         Color background = getBackgroundAt(dragIndex);
         Color foreground = getForegroundAt(dragIndex);
         Icon disabledIcon = getDisabledIconAt(dragIndex);
-        int mnemonic = getMnemonicAt(dragIndex);
-        int displayedMnemonicIndex = getDisplayedMnemonicIndexAt(dragIndex);
         boolean enabled = isEnabledAt(dragIndex);
         remove(dragIndex);
         insertTab(title, icon, component, toolTipText, tabIndex);
         setBackgroundAt(tabIndex, background);
         setForegroundAt(tabIndex, foreground);
         setDisabledIconAt(tabIndex, disabledIcon);
-        setMnemonicAt(tabIndex, mnemonic);
-        setDisplayedMnemonicIndexAt(tabIndex, displayedMnemonicIndex);
         setEnabledAt(tabIndex, enabled);
     }
 

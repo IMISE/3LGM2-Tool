@@ -54,11 +54,12 @@ import de.imise.tool3lgm.graphtools.userfield.definition.UserFieldTarget;
 import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.panel.PropertyDialogUserFieldPanel;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.util.swing.component.ParentComponentFinder;
+import de.imise.util.swing.event.ConfirmDialogAction.ConfirmDialog;
 
 /**
  * @author AXS (02.12.2019)
  */
-public class AbstractElementPropertyDialog extends AbstractTabbedPropertyDialog implements ActionListener, LGMChangeListenerSimple, ChangeListener {
+public abstract class AbstractElementPropertyDialog extends AbstractTabbedPropertyDialog implements ActionListener, LGMChangeListenerSimple, ChangeListener, ConfirmDialog {
 
     /**
      * ModelElement its properties are displayed or changable in this dialog.
@@ -135,6 +136,8 @@ public class AbstractElementPropertyDialog extends AbstractTabbedPropertyDialog 
      */
     public AbstractElementPropertyDialog(final ModelElement modelElement) {
         super(modelElement.getCollection());
+
+        registerCtrlEnterKey();
 
         subType = modelElement.getSubType();
 

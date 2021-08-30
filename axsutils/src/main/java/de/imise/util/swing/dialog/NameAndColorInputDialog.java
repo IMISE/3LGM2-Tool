@@ -7,7 +7,6 @@ import java.awt.MouseInfo;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
 
 import javax.swing.JButton;
 import javax.swing.JColorChooser;
@@ -16,13 +15,14 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 import de.imise.util.swing.component.LimitedSizeScrollTextPane;
+import de.imise.util.swing.event.ConfirmDialogAction.ConfirmDialog;
 
 /**
  * Dialog zum Eingeben eines Namens und optional einer Farbe
  *
  * @author AXS created on 21.08.2004
  */
-public class NameAndColorInputDialog extends JDialog implements ActionListener {
+public class NameAndColorInputDialog extends JDialog implements ActionListener, ConfirmDialog {
 
     /**
      * COMMENTME
@@ -101,24 +101,7 @@ public class NameAndColorInputDialog extends JDialog implements ActionListener {
     private void init() {
         setModal(true);
         inputArea = new LimitedSizeScrollTextPane();
-        inputArea.addKeyListener(new java.awt.event.KeyListener() {
-            @Override
-            public void keyPressed(final KeyEvent e) {
-                if (e.getKeyCode() == 10) {//ENTER wurde gedrückt
-                    if (e.isControlDown() || e.isAltDown() || e.isShiftDown() || e.isMetaDown() || e.isAltGraphDown()) {
-                        ok_button.doClick();
-                    }
-                }
-            }
-
-            @Override
-            public void keyReleased(final KeyEvent e) {
-            }
-
-            @Override
-            public void keyTyped(final KeyEvent e) {
-            }
-        });
+        registerCtrlEnterKey();
 
         JPanel buttonpanel = new JPanel();
 
@@ -308,11 +291,6 @@ public class NameAndColorInputDialog extends JDialog implements ActionListener {
         return inputColor;
     }
 
-    /*
-     * (non-Javadoc)
-     * @see
-     * java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
-     */
     @Override
     public void actionPerformed(final ActionEvent e) {
         if (e.getSource() == ok_button) {
@@ -329,6 +307,11 @@ public class NameAndColorInputDialog extends JDialog implements ActionListener {
             inputColor = null;
             dispose();
         }
+    }
+
+    @Override
+    public void confirm() {
+        ok_button.doClick();
     }
 
 }
