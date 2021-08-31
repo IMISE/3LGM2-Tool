@@ -49,7 +49,7 @@ An interface is always a component interface when it is used to model a communic
 According to our metamodel, there are three ways in which an object type can be represented at the logical tool layer: as a message type, as a record type or as a document type. The representation as record type refers to the storage in a database system. The representation as message type refers to the communication between two computer-based application modules. The representation as document type refers to the storage in a document collection and the communication between two application components, of which at least one is paper-based.
 
 #### ***1.2.6    Can I understand the master DBS as the database management system as it is named in the model browser?*** ####
-No. See also [1.‎1.4](#markdown-header-114-what-should-i-do-with-the-master-dbs-in-the-bbject-typeproperties-dialoggeneral-on-the-domain-layer)
+No. See also [1.‎1.4](#markdown-header-114-what-should-i-do-with-the-master-dbs-in-the-object-typeproperties-dialoggeneral-on-the-domain-layer)
 
 #### ***1.2.7    When is it necessary to model non-computer supported application component interfaces? (e.g. if something is first documented on paper and later captured with a computer-based application component - Service arrangement)*** ####
 A typical example of data communication between a computer-based and a paper-based application component is the occurrence of media breaks. If one wants to model/see this, the following questions have to be asked for the interfaces:
@@ -63,7 +63,7 @@ Tip: Since users are not usually modeled in the 3LGM² toolbox, the use of the c
 Our meta model allows one and the same interface to be both a sending and receiving interface. This is not obvious at first, since realistic interfaces are generally either send or receive interfaces. However, it should be considered that it will be desirable to model more abstractly. For example, if you only want to show that two application components communicate with each other in both directions, you will define an interface for each application component and connect them in both directions. The meta-model deliberately leaves open possibilities here, in order to enable the modeler to model his IS under different objectives and degrees of abstraction.
 
 #### ***1.2.9    How can I assign its master DBS on the logical layer to my database system?*** ####
-This is not possible. See also [1.‎1.4](#markdown-header-114-what-should-i-do-with-the-Master-DBS-in-the-Object-TypeProperties-DialogGeneral-on-the-domain-layer)
+This is not possible. See also [1.‎1.4](#markdown-header-114-what-should-i-do-with-the-master-dbs-in-the-object-typeproperties-dialoggeneral-on-the-domain-layer)
 
 #### ***1.2.10    ETMT is not offered for the record type, only for the document type. How can I then model this for two computer-based application components?*** ####
 This is intended. Behind it is the following: If we are in the purely computer-based area, the communication takes place exclusively via message types, an ETMT combination is therefore not necessary for the data record type. The data record type only represents how object types are stored. In the paper-based area, on the other hand, the representation form document type is used both for communication and for storing object types. Therefore, we also need an ETMT combination ( which should actually be called ETDT combination ).
@@ -77,83 +77,80 @@ An application component is controlled by an application program (relationship i
 However, the modeling of these relations is rather unintuitive and in addition also faulty. For example, you can assign several software products in the properties dialog of an application component without seeing this in the properties dialog.
 
 ---------------------------
-## **1.3     Physische Werkzeugebene** ##
-#### ***1.3.1    Warum heißt das Subnetz nicht einfach Netz? Warum gibt es ein Subnetz wenn es kein Netz gibt?*** ####
-Dazu gibt es keine ausgefeilte Begründung. Die Betrachtung von Netzen/Subnetzen macht in den meisten Fällen nur Sinn im Zusammenhang mit Subnetzen. Die Information, dass alle Physischen DV-Bausteine eines Modells zu einem einzigen Netz gehören, hat oft keinen besonderen Wert.
+## **1.3     Physical Tool Layer** ##
+#### ***1.3.1    Why is the subnet not simply called net? Why is there a subnet if there is no net?*** ####
+There is no sophisticated rationale for this. The consideration of nets/subnets makes sense in most cases only in connection with subnets. The information that all physical data processiong components of a model belong to a single network often has no special value.
 
 ---------------------------
-## **1.4     Inter-Ebenen-Beziehungen** ##
-#### ***1.4.1    Warum sind die Anwendungsbausteinkonfigurationen an Organisationseinheiten gebunden?*** ####
-Häufig ist es so, dass es von der Organisationseinheit abhängt, welche Anwendungsbaustein­konfiguration welche Aufgabe unterstützt. Um darstellen zu können, in welchen Organisationseinheiten welche Anwendungsbausteinkonfigurationen genutzt werden, wurde diese Beziehung zwischen den drei Klassen Aufgabe, Organisationseinheit und Anwendungsbausteinkonfiguration eingeführt.
+## **1.4     Inter-Layer Relationships** ##
+#### ***1.4.1    Why are the application component configurations bound to organizational units?*** ####
+It is often the case that it depends on the organizational unit which application component configuration supports which function. In order to be able to represent in which organizational units which application component configurations are used, this relationship between the three classes task, organizational unit and application component configuration was introduced.
 
-#### ***1.4.2    Gibt es eine Möglichkeit, DB-Verwaltungssysteme zu DV-Baustein-Konfigurationen zuzuordnen?*** ####
-Das Metamodell sieht das nicht vor, und der Baukasten (dementsprechend) auch nicht. Eine Zuordnung findet nur indirekt statt, über das Datenbanksystem und den Anwendungsbaustein. Vielleicht können Sie uns ein kurzes Beispiel beschreiben, das die Anpassung motivieren könnte. Evtl. finden wir auch eine alternative Modellierungsmöglichkeit, die sich mit den vorhandenen Mitteln umsetzen lässt.
+#### ***1.4.2    Is there a possibility to assign DB management systems to data processing component configurations?*** ####
+The meta model does not provide for this, nor does the modelling tool (accordingly). An assignment takes place only indirectly, via the database system and the application component. Perhaps you can give us a short example that could motivate the adaptation. We might also find an alternative modelling possibility that can be implemented with the available resources.
 
 ---------------------------
-## **1.5     Allgemeines** ##
-#### ***1.5.1    Was bedeutet die Ist_Teil_von Beziehung zwischen Objekttypen?*** ####
-Diese ist_Teil_von Beziehung ist im Sinne einer Aggregation zu verstehen. Die sich hieraus ergebenden Konsequenzen für Beziehungen zwischen Modellkomponenten werden am Beispiel der Beziehung zwischen der Klasse Aufgabe und Objekttyp im folgenden verdeutlicht:
+## **1.5     General** ##
+#### ***1.5.1 What does the is_part_of relationship between object types mean?*** ####
+This is_part_of relationship is to be understood in the sense of an aggregation. The resulting consequences for relationships between model components are illustrated in the following using the example of the relationship between the class Function and Object Type:
 
 ![istTeilVon01.PNG](https://bitbucket.org/repo/9L6rMz/images/1072977069-istTeilVon01.PNG)
 
-1. Alle Teilaufgaben von PATIENTENAUFNAHME greifen interpretierend auf den Objekttyp FALL zu.
-2. Die Teilaufgabe ADMINISTRATIVE PATIENTENAUFNAHME greift bearbeitend auf alle Teil-Objekttypen zu.
-3. Die Teilaufgabe ÄRZTLICHE PATIENTENAUFNAHME greift bearbeitend auf den Objekttyp DIAGNOSE zu.
+1 All subtasks of PATIENT CALL access the object type CASE interpretatively.
+2. the subtask ADMINISTRATIVE PATIENT CALL accesses all subtask object types in an editing manner.
+The subtask MEDICAL PATIENT CALL accesses the object type DIAGNOSIS.
 
-#### ***1.5.2    Wie wirken sich die Ist-Teil_von Beziehungen beim Vergröbern und Verfeinern aus?*** ####
+
+#### ***1.5.2    How do the actual_part_of relationships affect coarsening and refining?*** ####
 ![istTeilVon02.PNG](https://bitbucket.org/repo/9L6rMz/images/3419780724-istTeilVon02.PNG)
 
-Beim Vergröbern einer Instanz werden die Beziehungen der untergeordneten Instanzen an die übergeordnete Instanz weitergegeben. In der Darstellung wird unterschieden, ob lediglich Teile berührt sind, oder die Instanz als Ganzes. Im Beispiel ist dies durch farblich unterschiedliche Pfeile ausgedrückt. 
+When coarsening an instance, the relationships of the subordinate instances are passed on to the parent instance. In the representation, a distinction is made between whether only parts are touched or the instance as a whole. In the example this is expressed by arrows of different colors. 
 
-Schwarzer Pfeil: Interpretiert / bearbeitet alle Teil-Objekttypen des Objekttyps PATIENT
+Black arrow: Interprets / processes all part object types of the object type PATIENT
 
-Roter Pfeil: Interpretiert / Bearbeitet Teile des Objekttyps PATIENT. Welche dies sind ist in der vergröberten Darstellung nicht relevant.
+Red arrow: Interprets / processes parts of the object type PATIENT. Which these are is not relevant in the coarsened representation.
 
-Für das Modellieren ist es wichtig, Beziehungen auf der feinst-möglichen Stufe zu modellieren, da diese Beziehungen dann richtig auf die übergeordneten Instanzen weitergegeben werden. Wird auf einer sehr groben Stufe modelliert greiftdie Annahme, dass die Beziehungen auch für alle Teile einer Instanz gelten.
+For modeling, it is important to model relationships at the finest possible level, because these relationships are then correctly passed on to the higher-level instances. If modeling is done on a very coarse level, the assumption that the relationships also apply to all parts of an instance is valid.
 
 
-#### ***1.5.3    Was bedeutet die Ist_Teil_von Beziehung zwischen Anwendungsbausteinen?*** ####
-Alle Anwendungsbausteine, die einem anderen Anwendungsbaustein durch ist_Teil_von Beziehungen untergeordnet sind, können miteinander beliebig kommunizieren. Die Modellierung der Kommunikation zwischen diesen Anwendungsbausteinen ist daher nicht notwendig. Es wird dringend empfohlen - auch im Sinne der Modellkonsistenz und möglicher Analysen - Kommunikation zwischen diesen Anwendungsbausteinen nicht zu modellieren, auch wenn dies derzeit im 3LGM2 und im 3LGM2 Baukasten zulässig ist. 
+#### ***1.5.3 What does the is_part_of relationship between application components mean?*** ####
+All application components, which are subordinated to another application component by is_part_of relations, can communicate with each other arbitrarily. Therefore, modeling the communication between these application components is not necessary. It is strongly recommended - also for the sake of model consistency and possible analyses - not to model communication between these application components, even if this is currently allowed in 3LGM² and the 3LGM² modelling tool. 
 
-Ist es notwendig die Kommunikation zwischen diesen Anwendungsbausteinen zu modellieren, ist das ein Indiz dafür die entsprechenden Ist-Teil_von Beziehungen aufzulösen und ggf. den übergeordneten Anwendungsbaustein aus dem entsprechenden Teilmodell zu entfernen.
-
----------------------------
-
-# **2. Fragen zur Bedienung des 3LGM²-Baukastens** #
+If it is necessary to model communication between these application components, this is an indication to resolve the corresponding actual part_of relationships and, if necessary, to remove the parent application component from the corresponding submodel.
 
 ---------------------------
-## **2.1     Fachliche Ebene** ##
+
+# **2. FAQ - 3LGM²-Tool** #
 
 ---------------------------
-## **2.2     Logische Werkzeugebene** ##
-#### ***2.2.1    Ist DBS im Eigenschaftendialog vom DB-Verwaltungssystem das Datenbanksystem?*** ####
-Ja. (zum besseren Verständnis sollte hier der Baukasten angepasst werden!)
-
-#### ***2.2.2    Werden Anwendungsprogramme automatisch benannt und wenn ja nach welchen Regeln?*** ####
-Anwendungsprogramme werden nicht automatisch benannt und auch nicht automatisch erzeugt. Erst durch Eingabe einer Bezeichnung für das Anwendungsprogramm im Eigenschaftendialog des Anwendungs­bausteins wird ein Anwendungsprogramm erzeugt.
-
-#### ***2.2.3    Warum kann man auf der logischen Werkzeugebene nicht für alle Elemente im Modellbrowser neue Instanzen anlegen?*** ####
-Es gibt Modellelemente im 3LGM2, die zu einem anderen Modellelement (meist ist dies auf der logischen Werkzeugebene der Anwendungsbaustein), in einer Abhängigkeitsbeziehung stehen, d. h. Instanzen dieser Modellelemente dürfen nur existieren, wenn der dazugehörige Anwendungsbaustein existiert Aus diesem Grund macht es keinen Sinn für diese Modellelemente Instanzen im Modellbrowser anlegen zu können.
+## **2.1     Domain Layer** ##
 
 ---------------------------
-## **2.3     Physische Werkzeugebene** ##
-#### ***2.3.1    Warum gibt es keine grafische Repräsentationsform für Netztypen?*** ####
-Es wurde noch kein geeignetes Visualisierungskonzept für Netztypen gefunden.
+## **2.2     Logical Tool Layer** ##
+#### ***2.2.1    Is DBS in the properties dialog of the DB Administration System the database system?*** ####
+Yes. (for a better understanding the modelling tool should be adapted here!)
+
+#### ***2.2.2    Are application programs named automatically and if so, according to which rules?*** ####
+Application programs are created automatically and also named automatically when you select a software product in the properties dialog of an application component. The selected software product is not directly assigned to the application component, but to its application program. If an application program does not yet exist, it is created and automatically named. The name currently consists of the name of the application component, to which the character string 'Application program' is appended. Otherwise, an application program is only created by entering a name for the application program in the properties dialog of the application component.
+
+#### ***2.2.3    Why is it not possible to create new instances for all elements in the Model Browser at the logical tool layer?*** ####
+There are model elements in the 3LGM², which are in a dependency relationship to another model element (mostly this is the application component on the logical tool layer), i.e. instances of these model elements may only exist, if the associated application component exists For this reason it does not make sense to be able to create instances for these model elements in the model browser.
+---------------------------
+## **2.3     Physical Tool Layer** ##
+#### ***2.3.1    Why is there no graphical representation form for network types?*** ####
+Network types are used to describe subnets in more detail and are therefore to be understood as properties of subnets. However, since different subnets can be of the same network type, it is useful to keep a catalog of network types. Therefore, the corresponding model element exists in the meta model. A visualization of individual net types using special symbols or icons did not seem helpful to us.
 
 ---------------------------
 ## **2.4     Inter-Ebenen-Beziehungen** ##
-#### ***2.4.1    Wie bildet man zu einer Aufgabe die Anwendungsbausteinkonfiguration?*** ####
-Über den Reiter Anwendungsbausteinkonfiguration im Eigenschaftendialog der Aufgabe. Anwendungsbausteinkonfigurationen beziehen sich immer auf eine Organisationseinheit (OE). Daher muss im linken Teil des Fensters zunächst eine OE ausgewählt werden. Danach kann meine eine Menge von Anwendungs­bausteinen ( = Anwendungsbausteinkonfiguration) im rechten Teil des Fensters auswählen und über die Pfeiltasten der ausgewählten OE zuordnen. Sind der Aufgabe noch keine OEs zugeordnet muss dies auf dem Reiter zunächst nachgeholt werden.
+#### ***2.4.1    How do you create the application component configuration for a function?*** ####
+Via the tab Application component Configuration in the properties dialog of the function. Application component configurations always refer to an organizational unit (OU). Therefore, an OU must first be selected in the left part of the window. Then a set of application components ( = Application Component Configuration) can be selected in the right part of the window and assigned to the selected OU using the arrow keys. If no OUs are assigned to the function yet, this must be done on the corresponding tab. 
 
-(Tipp: Will man die Organisationseinheiten nicht betrachten, aber trotzdem Anwendungs­bausteinkonfigurationen anlegen, so kann man sich beispielsweise eine Organisationseinheit 'Krankenhaus' anlegen und diese allen Aufgaben (als eine Art Dummy) zuordnen).
+*(Tip: If you do not want to view the organizational units, but still want to create application component configurations, you can, for example, create an organizational unit 'hospital' and assign it to all functions (as a kind of dummy).)*
 
 ---------------------------
-## **2.5     Allgemeines** ##
-#### ***2.5.1    Gibt es eine Möglichkeit, die Zeichenfläche zu vergrößern? Bei größeren Modellen könnte das durchaus notwendig werden.*** ####
-Um die Zeichenfläche zu vergrößern können Sie unten im Baukasten den Slider "Ebenengröße" verwenden.
+## **2.5     General** ##
+#### ***2.5.1    How do you establish the connection between two graphically represented model elements?*** ####
+You click the first model element with the left mouse button and the second model element with the right mouse button. With the second click a context menu opens automatically, with which you can model the relationship.
 
-#### ***2.5.2    Was für einen Sinn ergibt es, wenn man im Kontextmenü Elemente anlegen kann, die andere Elemente näher beschreiben (z.B. Softwareprodukt ...) und grafisch nicht dargestellt werden, sondern nur im Modellbrowser aufgelistet werden, wo sich ein Anfänger schwer tut diese später zuzuordnen?*** ####
-Die im Modellbrowser angelegten Instanzen eines Modellelementes werden nicht nur im Modellbrowser angezeigt, sondern stehen für die weitere Modellierung in den Eigenschaftendialogen zur Verfügung. Die Möglichkeit, Instanzen über das Kontextmenü des Modellbrowsers zu erzeugen, erweitert die Modellierungsstrategien. Es ist durchaus vorstellbar, dass sich ein Modellierer beispielsweise entschließt, zunächst alle ihm bekannten in seiner Organisation verwendeten Softwareprodukte zu erfassen, damit ihm diese anschließend bei der Modellierung der Anwendungsbausteine zur Verfügung stehen.
-
-#### ***2.5.3    Welche Inhalte verstecken sich im Kontextmenü „Internes (Verifizieren, interaktiv...)“?*** ####
-Die im Kontextmenü unter Internes zu findenden Befehle sind nur im Zusammenhang mit der Entwicklung des 3lgm Baukasten von Bedeutung und werden daher für die Anwendung des Baukastens nicht benötigt.
+#### ***2.5.2    What sense does it make if you can create elements in the context menu that describe other elements in more detail (e.g. software product ...) and are not displayed graphically, but are only listed in the model browser, where a beginner would have difficulty assigning them later?*** ####
+The instances of a model element created in the Model Browser are not only displayed in the Model Browser, but are also available for further modeling in the properties dialogs. The possibility to create instances via the context menu of the model browser extends the modeling strategies. It is quite conceivable, for example, that a modeler may decide to first capture all software products known to him that are used in his organization, so that these are subsequently available to him when modeling the application components.
