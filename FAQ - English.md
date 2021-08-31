@@ -2,7 +2,7 @@
 
 ---------------------------
 
-# **1. Fragen zur Modellierung** #
+# **1. FAQ - Modelling** #
 ---------------------------
 ## **1.1     Domain Layer** ##
 #### ***1.1.1        How do I find suitable object types?*** ####
@@ -49,7 +49,7 @@ An interface is always a component interface when it is used to model a communic
 According to our metamodel, there are three ways in which an object type can be represented at the logical tool layer: as a message type, as a record type or as a document type. The representation as record type refers to the storage in a database system. The representation as message type refers to the communication between two computer-based application modules. The representation as document type refers to the storage in a document collection and the communication between two application components, of which at least one is paper-based.
 
 #### ***1.2.6    Can I understand the master DBS as the database management system as it is named in the model browser?*** ####
-No. See also [1.‎1.4](#markdown-header-114-what-should-i-do-with-the-Master-DBS-in-the-Object-TypeProperties-DialogGeneral-on-the-domain-layer)
+No. See also [1.‎1.4](#markdown-header-114-what-should-i-do-with-the-master-dbs-in-the-bbject-typeproperties-dialoggeneral-on-the-domain-layer)
 
 #### ***1.2.7    When is it necessary to model non-computer supported application component interfaces? (e.g. if something is first documented on paper and later captured with a computer-based application component - Service arrangement)*** ####
 A typical example of data communication between a computer-based and a paper-based application component is the occurrence of media breaks. If one wants to model/see this, the following questions have to be asked for the interfaces:
@@ -62,19 +62,19 @@ Tip: Since users are not usually modeled in the 3LGM² toolbox, the use of the c
 #### ***1.2.8    In my understanding, there are no interfaces that can be both send and receive interfaces. Nevertheless, the meta-model and the modelling tool allow this. Why?*** ####
 Our meta model allows one and the same interface to be both a sending and receiving interface. This is not obvious at first, since realistic interfaces are generally either send or receive interfaces. However, it should be considered that it will be desirable to model more abstractly. For example, if you only want to show that two application components communicate with each other in both directions, you will define an interface for each application component and connect them in both directions. The meta-model deliberately leaves open possibilities here, in order to enable the modeler to model his IS under different objectives and degrees of abstraction.
 
-#### ***1.2.9    Wie kann ich auf der logischen Ebene meinem Datenbanksystem seine Master-DBS zuordnen?*** ####
-Das geht nicht. Siehe auch [1.‎1.4](#markdown-header-114-what-should-i-do-with-the-Master-DBS-in-the-Object-TypeProperties-DialogGeneral-on-the-domain-layer)
+#### ***1.2.9    How can I assign its master DBS on the logical layer to my database system?*** ####
+This is not possible. See also [1.‎1.4](#markdown-header-114-what-should-i-do-with-the-Master-DBS-in-the-Object-TypeProperties-DialogGeneral-on-the-domain-layer)
 
-#### ***1.2.10    Beim Datensatztyp wird ETNT nicht angeboten, sondern nur beim Dokumententyp. Wie kann ich das dann bei zwei rechnerbasierten Anwendungsbausteinen modellieren?*** ####
-Das ist so gewollt. Dahinter steckt folgendes: Wenn wir uns im rein rechnerbasierten Bereich befinden, erfolgt  die Kommunikation Ausschließlich über Nachrichtentypen, eine ETNT-Kombination ist daher beim Datensatztyp gar nicht notwendig. Der Datensatztyp repräsentiert nur wie Objekttypen gespeichert werden. Im papier-basierten Bereich dagegen wird die Repräsentationsform Dokumententyp sowohl für die Kommunikation als auch für die Speicherung von Objekttypen verwendet. Daher benötigen wir auch eine ETNT-Kombination (, die eigentlich ETDT-Kombination heißen müsste).
+#### ***1.2.10    ETMT is not offered for the record type, only for the document type. How can I then model this for two computer-based application components?*** ####
+This is intended. Behind it is the following: If we are in the purely computer-based area, the communication takes place exclusively via message types, an ETMT combination is therefore not necessary for the data record type. The data record type only represents how object types are stored. In the paper-based area, on the other hand, the representation form document type is used both for communication and for storing object types. Therefore, we also need an ETMT combination ( which should actually be called ETDT combination ).
 
-#### ***1.2.11    Im Eigenschaftendialog für Softwareprodukte im Modellbrowser werden die Softwareprodukte Aufgaben und nicht Anwendungsbausteinen zugeordnet. Ist das richtig?*** ####
-Das ist so richtig. Im Metamodell entspricht das der Beziehung 'kann_unterstützen'. Damit ist man in der Lage eine Zusatzinformation zum Softwareprodukt selbst zu modellieren. Nicht alle Aufgaben, die ein Softwareprodukt unterstützen kann, werden nach der Installation auch tatsächlich unterstützt. Dies hängt beispielsweise von der Parametrierung ab. Dadurch ist es theoretisch möglich, festzustellen, ob nicht weitere Aufgaben von einem auf einem bestimmten Softwareprodukt basierenden Anwendungsbaustein unterstützt werden sollten, beispielsweise um den Grad der Heterogenität zu senken.
+#### ***1.2.11    In the properties dialog for software products (in the model browser), the software products are assigned to functions and not to application components. Is this correct?*** ####
+That is correct. In the metamodel this corresponds to the relationship 'can_support'. This enables you to model additional information about the software product itself. Not all tasks that a software product can support are actually supported after installation. This depends for example on the parameterization. Thus it is theoretically possible to determine whether additional tasks should not be supported by an application component based on a certain software product, for example to reduce the degree of heterogeneity.
 
-#### ***1.2.12    Warum werden Anwendungsprogramme Softwareprodukten und Anwendungs­bausteinen zugeordnet? Ich dachte  Anwendungsprogramme sind adaptierte Softwareprodukte (spez. Parametereinstellungen,...)*** ####
-Ein Anwendungsbaustein wird gesteuert durch eine Anwendungsprogramm (Beziehung wird_gesteuert_durch im Metamodell.). Ein Anwendungsprogramm ist ein adaptiertes Softwareprodukt (Beziehung basiert_auf im Metamodell). Der Einfachheit halber kann man nun im Eigenschaftendialog eines Anwendungsbausteins direkt ein Softwareprodukt zuordnen, diese wird aber tatsächlich dem Anwendungsprogramm dieses Anwendungsbausteins zugeordnet.
+#### ***1.2.12   Why are application programs assigned to software products and application components? I thought application programs are adapted software products (esp. parameter settings,...)*** ####
+An application component is controlled by an application program (relationship is_controlled_by in the metamodel.). An application program is an adapted software product (relationship is_based_on in the metamodel). For the sake of simplicity, one can now directly assign a software product in the properties dialog of an application component, but this is actually assigned to the application program of this application component.
 
-Allerdings ist die Modellierung dieser Beziehungen ziemlich wenig intuitiv und dazu auch noch fehlerhaft. So kann man beispielsweise im Eigenschaftendialog eines Anwendungsbausteins mehrere Softwareprodukte zuordnen, ohne dass man das im Eigenschaftendialog sieht.
+However, the modeling of these relations is rather unintuitive and in addition also faulty. For example, you can assign several software products in the properties dialog of an application component without seeing this in the properties dialog.
 
 ---------------------------
 ## **1.3     Physische Werkzeugebene** ##
