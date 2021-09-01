@@ -456,9 +456,10 @@ public class SimpleMetaPathCreator extends MetaModelSpecificAdapter {
         Class<? extends ModelElement> start = startClass;
         for (int i = 0; i < associations.length; i++) {
             Class<? extends Edge> edgeClass = associations[i];
-            ElementaryMetaPath metaPath = createElementaryMetaPath(metaModel, start, edgeClass, i == associations.length - 1 ? endClass : null, tryForwardDirectionFirst); // bei der letzten Kante muss die Endklasse passen. Wenn bei einer Kante in der Mitte des Pfades die nächste Kante nicht passt, dann wird das unten druch Zurücklaufen erkannt
+            Class<? extends ModelElement> end = i == associations.length - 1 ? endClass : null;
+            ElementaryMetaPath metaPath = createElementaryMetaPath(metaModel, start, edgeClass, end, tryForwardDirectionFirst); // bei der letzten Kante muss die Endklasse passen. Wenn bei einer Kante in der Mitte des Pfades die nächste Kante nicht passt, dann wird das unten druch Zurücklaufen erkannt
             if (metaPath == null) {
-                metaPath = createElementaryMetaPath(metaModel, start, edgeClass, i == associations.length - 1 ? endClass : null, !tryForwardDirectionFirst); // bei der letzten Kante muss die Endklasse passen. Wenn bei einer Kante in der Mitte des Pfades die nächste Kante nicht passt, dann wird das unten druch Zurücklaufen erkannt
+                metaPath = createElementaryMetaPath(metaModel, start, edgeClass, end, !tryForwardDirectionFirst); // bei der letzten Kante muss die Endklasse passen. Wenn bei einer Kante in der Mitte des Pfades die nächste Kante nicht passt, dann wird das unten druch Zurücklaufen erkannt
             }
             //die Elementklasse passt nicht zur aktuellen Kante
             if (metaPath == null) {
@@ -466,7 +467,8 @@ public class SimpleMetaPathCreator extends MetaModelSpecificAdapter {
                 for (--i; i >= 0; i--) {
                     boolean isForward = metaPaths[i].hasDirectionForward();
                     if (tryForwardDirectionFirst && isForward || !tryForwardDirectionFirst && !isForward) {
-                        metaPath = createElementaryMetaPath(metaModel, start, edgeClass, i == associations.length - 1 ? endClass : null, !tryForwardDirectionFirst);
+                        end = i == associations.length - 1 ? endClass : null;
+                        metaPath = createElementaryMetaPath(metaModel, start, edgeClass, end, !tryForwardDirectionFirst);
                         if (metaPath != null) { //falls die Kante auch rückwärts im Pfad sein kann, also die Startklasse des Pfades auch die Endklasse der Kante sein könnte und somit die Richtung BACKWARD sein könnte
                             break;
                         }
@@ -738,7 +740,7 @@ public class SimpleMetaPathCreator extends MetaModelSpecificAdapter {
      * @return
      */
     private static boolean isBackward(final MetaModel metaModel, final Class<? extends ModelElement> startClass, final Class<? extends Edge> edgeClass, final Class<? extends ModelElement> endClass) {
-        return startClass == null || CoreMetaModel.isEndClassOrEndClassSuperclass(edgeClass, startClass) && endClass == null || CoreMetaModel.isStartClassOrStartClassSuperclass(edgeClass, endClass);
+        return (startClass == null || CoreMetaModel.isEndClassOrEndClassSuperclass(edgeClass, startClass)) && (endClass == null || CoreMetaModel.isStartClassOrStartClassSuperclass(edgeClass, endClass));
     }
 
     /**
