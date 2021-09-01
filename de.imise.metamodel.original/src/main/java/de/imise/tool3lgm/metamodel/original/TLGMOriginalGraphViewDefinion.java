@@ -87,8 +87,8 @@ public class TLGMOriginalGraphViewDefinion extends GraphViewDefinition {
         setDefaultLayout(KonAnwendungsbaustein.class, rundeck, BLUE);
         setDefaultLayout(Datenbanksystem.class, tonne, YELLOW, 20, 20);
         setDefaultLayout(Dokumentensammlung.class, ordner, WHITE, 20, 20);
-        setDefaultLayout(Bausteinschnittstelle.class, oval, LIGHTGREEN, 15, 15);
-        setDefaultLayout(Benutzungsschnittstelle.class, oval, ORANGE, 15, 15);
+        setDefaultLayout(Bausteinschnittstelle.class, oval, LIGHTGREEN, 16, 16);
+        setDefaultLayout(Benutzungsschnittstelle.class, oval, ORANGE, 16, 16);
         setDefaultLayout(PhysischerDVBaustein.class, rechteck, ORANGE);
     }
 

@@ -38,7 +38,6 @@ public class KeyStrokes {
         put(AnalysisActions.ACTION_ANALYSIS_OPEN_REPOSITORY, KeyEvent.VK_F7, 0);
         put(AnalysisActions.ACTION_ANALYSIS_OPEN_EDITOR, KeyEvent.VK_F9, 0);
         put(AnalysisActions.ACTION_ANALYSIS_RESET_RESULT, KeyEvent.VK_R, MENU_SHORTCUT_KEY_MASK);
-
     }
 
     private static void put(final GDCommands command, final int keyCode, final int modifiers) {
@@ -59,7 +58,7 @@ public class KeyStrokes {
         for (Action action : KEYSTROKES.keySet()) {
             KeyStroke keyStroke = KEYSTROKES.get(action);
             if (!CollectionUtils.arrayContains(ingnoreStrokes, keyStroke)) {
-                im.put(KEYSTROKES.get(action), action);
+                im.put(keyStroke, action);
             }
             am.put(action, action);
         }

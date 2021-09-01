@@ -51,13 +51,14 @@ import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyleConstants;
 
 import de.imise.util.swing.component.text.ExtendedTextField;
+import de.imise.util.swing.event.ConfirmDialogAction.ConfirmDialog;
 
 /**
  * Nicht kommentiert.
  *
  * @author N.N.
  */
-public class FontChooser extends JDialog {
+public class FontChooser extends JDialog implements ConfirmDialog {
 
     /**
      * COMMENTME
@@ -79,6 +80,11 @@ public class FontChooser extends JDialog {
      * COMMENTME
      */
     private JCheckBox _italicCheck;
+
+    /**
+     * Knopf zum Beenden des Dialoges. Die Variable Auswahl wird auf OK gesetzt.
+     */
+    JButton okButton;
 
     /**
      * COMMENTME
@@ -139,6 +145,8 @@ public class FontChooser extends JDialog {
 
         DialogResourceHandler drh = new DialogResourceHandler(FontChooser.class);
 
+        registerCtrlEnterKey();
+
         setTitle(drh.getResString("font"));
 
         getContentPane().setLayout(new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));
@@ -195,7 +203,7 @@ public class FontChooser extends JDialog {
         p.add(_preview, BorderLayout.CENTER);
         getContentPane().add(p);
 
-        JButton okButton = new JButton(drh.getResString("ok"));
+        okButton = new JButton(drh.getResString("ok"));
         okButton.addActionListener(ev -> {
             _option = JOptionPane.OK_OPTION;
             setVisible(false);
@@ -547,6 +555,11 @@ public class FontChooser extends JDialog {
                 _text.setText(obj.toString());
             }
         }
+    }
+
+    @Override
+    public void confirm() {
+        okButton.doClick();
     }
 
 }

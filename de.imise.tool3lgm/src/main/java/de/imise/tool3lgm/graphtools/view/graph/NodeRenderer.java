@@ -61,9 +61,9 @@ public final class NodeRenderer {
      */
     private static Color analysisColor = null;
 
-    protected static int[] xs = new int[8];
-    protected static int[] ys = new int[8];
-    protected static int npoints = 0;
+    private static int[] xs = new int[8];
+    private static int[] ys = new int[8];
+    private static int npoints = 0;
 
     public static Image linkIcon = Tool3lgmConstants.getIcon("link.gif").getImage();
 
@@ -78,62 +78,80 @@ public final class NodeRenderer {
      * default width/height and the width/height that is needed to enclose the
      * text.
      *
-     * @param kc
+     * @param nc
      */
-    private static void resize(final NodeContainer kc) {
-        GraphElementLayout layout = kc.get3LGMLayout();
+    private static void resizeToFitTheLabel(final NodeContainer nc) {
+        GraphElementLayout layout = nc.get3LGMLayout();
         if (layout != null) {
-            if (kc.hasDefaultSize()) {
-                Font font = kc.getFont();
-                String text = kc.getText();
+            if (nc.hasDefaultSize()) {
+                Shape shape = getShape(nc);
+                int labelInsets = shape.getLabelInsets();
+                Font font = nc.getFont();
+                String text = nc.getText();
                 HtmlLabelDimension htmlLabelDimension = HtmlLabelFunctions.getHtmlLabelDimension(font, text, layout.width);
-                if (htmlLabelDimension.minWidth > layout.width) {
-                    kc.setSize(htmlLabelDimension.minWidth, layout.height);
+                int minWidth = htmlLabelDimension.minWidth + labelInsets;
+                if (minWidth > layout.width) {
+                    nc.setSize(minWidth, layout.height);
                 }
                 htmlLabelDimension = HtmlLabelFunctions.getHtmlLabelDimension(font, text, layout.width);
-                if (htmlLabelDimension.preferredHeight > layout.height) {
-                    kc.setSize(layout.width, htmlLabelDimension.preferredHeight);
+                int minHeight = htmlLabelDimension.preferredHeight + labelInsets;
+                if (minHeight > layout.height) {
+                    nc.setSize(layout.width, minHeight);
                 }
                 //                System.err.println(layout.width + " " + layout.height);
-                //                Sys.err1(HtmlLabelFunctions.getHtmlLabelDimension(kc.getFont(), kc.getText(), kc.get3LGMLayout().width));
+                //                Sys.err1(HtmlLabelFunctions.getHtmlLabelDimension(nc.getFont(), nc.getText(), nc.get3LGMLayout().width));
             }
         }
     }
 
-    public static final void render(final Graphics g, final NodeContainer kc, final GraphDocument doc) {
-        ModelElement me = kc.getElement();
-        if (!me.isPaintable() || !kc.isVisible()) {
+    /**
+     * @param nc
+     * @return the graph shape for the {@link NodeContainer}
+     */
+    private static final Shape getShape(final NodeContainer nc) {
+        Shape shape = nc.getForm();
+        if (shape == null) {
+            GraphDocument doc = nc.getGraphDocument();
+            DefaultElementsLayoutDefinition defaultElementsLayout = doc.getDefaultElementsLayout();
+            shape = defaultElementsLayout.getStandardForm(nc);
+        }
+        return shape;
+    }
+
+    public static final void render(final Graphics g, final NodeContainer nc, final GraphDocument doc) {
+        ModelElement me = nc.getElement();
+        if (!me.isPaintable() || !nc.isVisible()) {
             return;
         }
         //resize the initial container to enclose the html text
-        resize(kc);
+        resizeToFitTheLabel(nc);
         Graphics2D gc = (Graphics2D) g;
 
         PaintState paintState = PaintState.REGULAR;
-        Component parent = kc.getParent();
+        Component parent = nc.getParent();
         if (parent instanceof LayerContainer) {
             paintState = ((LayerContainer) parent).getPaintState();
         }
 
-        Color col = kc.getColor();
+        Color col = nc.getColor();
         if (col == null) {
-            col = doc.getDefaultElementsLayout().getStandardBackGroundColor(kc);
+            col = doc.getDefaultElementsLayout().getStandardBackGroundColor(nc);
         }
 
-        int x = kc.getX();
-        int y = kc.getY();
-        int width = kc.getWidth();
+        int x = nc.getX();
+        int y = nc.getY();
+        int width = nc.getWidth();
         int width_half = width / 2;
-        int height = kc.getHeight();
+        int height = nc.getHeight();
         int height_half = height / 2;
         int xm = x - width_half;
         int ym = y - height_half;
         int xp = x + width_half + width % 2;
         int yp = y + height_half;
 
-        ImageIcon img = (ImageIcon) kc.getIcon();
-        int textPositionHorizontalSwingConstant = kc.getTextPositionHorizontal().getSwingConstant();
-        int textPositionVerticalSwingConstant = kc.getTextPositionVertical().getSwingConstant();
+        ImageIcon img = (ImageIcon) nc.getIcon();
+        int textPositionHorizontalSwingConstant = nc.getTextPositionHorizontal().getSwingConstant();
+        int textPositionVerticalSwingConstant = nc.getTextPositionVertical().getSwingConstant();
         int horizontalAlignment;
         int verticalAlignment;
         int horizontalTextPostion;
@@ -149,54 +167,51 @@ public final class NodeRenderer {
             horizontalTextPostion = SwingConstants.CENTER;
             verticalTextPostion = SwingConstants.CENTER;
         }
-        if (kc.getHorizontalAlignment() != horizontalAlignment) {
-            kc.setHorizontalAlignment(horizontalAlignment);
+        if (nc.getHorizontalAlignment() != horizontalAlignment) {
+            nc.setHorizontalAlignment(horizontalAlignment);
         }
-        if (kc.getVerticalAlignment() != verticalAlignment) {
-            kc.setVerticalAlignment(verticalAlignment);
+        if (nc.getVerticalAlignment() != verticalAlignment) {
+            nc.setVerticalAlignment(verticalAlignment);
         }
-        if (kc.getHorizontalTextPosition() != horizontalTextPostion) {
-            kc.setHorizontalTextPosition(horizontalTextPostion);
+        if (nc.getHorizontalTextPosition() != horizontalTextPostion) {
+            nc.setHorizontalTextPosition(horizontalTextPostion);
         }
-        if (kc.getVerticalTextPosition() != verticalTextPostion) {
-            kc.setVerticalTextPosition(verticalTextPostion);
+        if (nc.getVerticalTextPosition() != verticalTextPostion) {
+            nc.setVerticalTextPosition(verticalTextPostion);
         }
 
-        Shape form = kc.getForm();
-        if (form == null) {
-            form = doc.getDefaultElementsLayout().getStandardForm(kc);
-        }
+        Shape form = getShape(nc);
 
         Stroke str = gc.getStroke();
-        if (TRANSIENT_OPTION_SHOW_EXPANSION_SIGN.is() && !kc.isExpanded()) {
+        if (TRANSIENT_OPTION_SHOW_EXPANSION_SIGN.is() && !nc.isExpanded()) {
             gc.setStroke(NOT_EXPANDED_BORDER_STROKE);
         }
-        boolean isResult = doc.isAnalysisResult(kc);
-        if (isResult || kc.isHighLight()) {
+        boolean isResult = doc.isAnalysisResult(nc);
+        if (isResult || nc.isHighLight()) {
             gc.setStroke(FAT_STROKE);
-        } else if (doc.getLastSelectedGraphVisibleNodeOrBendpoint() == kc) {
+        } else if (doc.getLastSelectedGraphVisibleNodeOrBendpoint() == nc) {
             gc.setStroke(MEDUIM_STROKE);
         }
 
-        if (me instanceof Textfield && img == null && (kc.get3LGMLayout() == null || kc.get3LGMLayout().bg_color == null)) {
+        if (me instanceof Textfield && img == null && (nc.get3LGMLayout() == null || nc.get3LGMLayout().bg_color == null)) {
             g.translate(xm, ym);
-            kc.paintSuperComponent(g);
+            nc.paintSuperComponent(g);
             g.translate(-xm, -ym);
         } else if (img == null || isResult) {
             if (form == null) {
                 g.setColor(col);
                 g.fillRect(xm, ym, width, height);
                 g.translate(xm, ym);
-                kc.paintSuperComponent(g);
+                nc.paintSuperComponent(g);
                 g.translate(-xm, -ym);
-                g.setColor(isResult && analysisColor != null ? analysisColor : kc.getFrameColor());
+                g.setColor(isResult && analysisColor != null ? analysisColor : nc.getFrameColor());
                 g.drawRect(xm, ym, width, height);
             } else {
-                form.paint(g, kc, col, analysisColor, isResult, x, y, xm, ym, xp, yp, xs, ys, width, height, npoints);
+                form.paint(g, nc, col, analysisColor, isResult, x, y, xm, ym, xp, yp, xs, ys, width, height, npoints);
             }
         } else /* if (img != null) */ {
             g.translate(xm, ym);
-            kc.paintSuperComponent(g);
+            nc.paintSuperComponent(g);
             g.translate(-xm, -ym);
         }
 
@@ -222,20 +237,20 @@ public final class NodeRenderer {
         }
 
         // Symbol für Verlinkung mit Teilmodell
-        if (kc.getNode().getAssociatedSzenID() != null && OPTION_SHOW_LINKED_WITH_SUBMODEL_SYMBOLS.is()) {
-            g.drawImage(linkIcon, xm + 2, yp - 13, kc);
+        if (nc.getNode().getAssociatedSzenID() != null && OPTION_SHOW_LINKED_WITH_SUBMODEL_SYMBOLS.is()) {
+            g.drawImage(linkIcon, xm + 2, yp - 13, nc);
         }
 
         gc.setStroke(str);
 
         //wenn das Element selektiert ist -> schwarzen Rand drumrum und die 8 Anfasser zum ändern der Größe zeichnen
-        if (kc.isSelected() && paintState != PaintState.WEBEXPORT) {
+        if (nc.isSelected() && paintState != PaintState.WEBEXPORT) {
 
             //scharzes Rechteck um das Element zeichnen
             g.setColor(Color.black);
             if (me instanceof Textfield) {
                 NodeContainer lastSelectedGraphVisibleNodeOrBendpoint = doc.getLastSelectedGraphVisibleNodeOrBendpoint();
-                if (lastSelectedGraphVisibleNodeOrBendpoint == kc) {
+                if (lastSelectedGraphVisibleNodeOrBendpoint == nc) {
                     gc.setStroke(MEDUIM_STROKE);
                 }
             }
@@ -301,7 +316,7 @@ public final class NodeRenderer {
             g.drawLine(xs[2], ys[2], xs[2], yp - 1);
         }
 
-        JLabel label = kc.getNorthLabel();
+        JLabel label = nc.getNorthLabel();
 
         if (label != null) {
             //          System.out.println(northLabel.getText() + "\nnorthLabel.height="+northLabel.getPreferredSize().height + " northLabel.width="+northLabel.getPreferredSize().width);
@@ -310,32 +325,32 @@ public final class NodeRenderer {
             label.paint(g);
             g.translate(-xm, -dy);
         }
-        label = kc.getEastLabel();
+        label = nc.getEastLabel();
         if (label != null) {
             int dx = xm + width + 1;
             g.translate(dx, ym);
             label.paint(g);
             g.translate(-dx, -ym);
         }
-        label = kc.getSouthLabel();
+        label = nc.getSouthLabel();
         if (label != null) {
             int dy = ym + height;
             g.translate(xm, dy);
             label.paint(g);
             g.translate(-xm, -dy);
         }
-        label = kc.getWestLabel();
+        label = nc.getWestLabel();
         if (label != null) {
             int dx = xm - label.getPreferredSize().width - 1;
             g.translate(dx, ym);
             label.paint(g);
             g.translate(-dx, -ym);
         }
-        String[] additionalText = kc.getAdditionalTextRightDownLines();
+        String[] additionalText = nc.getAdditionalTextRightDownLines();
 
-        if (kc.getAdditionalTextRightDownLines() != null) {
+        if (nc.getAdditionalTextRightDownLines() != null) {
             g.setColor(Color.black);
-            Font font = kc.getFont();
+            Font font = nc.getFont();
             g.setFont(font);
             int fontHeight = font.getSize();
             for (int i = 0; i < additionalText.length;) {

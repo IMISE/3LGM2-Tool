@@ -976,11 +976,23 @@ public final class UserField extends NameAndDescriptionTargetAdapter implements 
      * @return
      */
     public static final String getFormattedValue(final String value, final UserFieldNumberFormat numberFormat, final boolean appendUnit) {
-        // Falls sich der Wert-String nicht in einen BigDecimal umwandeln lässt, wird errorString NUMBER_FORMAT_ERROR zurückgegeben
+        return getFormattedValue(value, numberFormat, appendUnit, true);
+    }
+
+    /**
+     * @param value
+     * @param numberFormat
+     * @param appendUnit
+     * @param tryWithOtherDecimalSeparator
+     * @return
+     */
+    private static final String getFormattedValue(final String value, final UserFieldNumberFormat numberFormat, final boolean appendUnit, final boolean tryWithOtherDecimalSeparator) {
         try {
-            //hier prüfen, ob sich der String überhaupt in eine Zahl umwandeln lässt
+            //Check here if the string can be converted to a number at all.
+            //But this is only possible if the decimal separator is a point.
+            //Therefore there is the 2nd conversion step below.
             BigDecimal numberValue = new BigDecimal(value);
-            //wenn kein Format gesetzt ist
+            //if no format is set
             if (numberFormat == null) {
                 return value;
             }
@@ -996,6 +1008,24 @@ public final class UserField extends NameAndDescriptionTargetAdapter implements 
             }
             return sb.toString();
         } catch (NumberFormatException nfe) {
+            if (tryWithOtherDecimalSeparator) {
+                try {
+                    //change all points to comma and vice versa and try format again
+                    StringBuilder sb = new StringBuilder();
+                    for (int i = 0; i < value.length(); i++) {
+                        char c = value.charAt(i);
+                        if (c == ',') {
+                            sb.append('.');
+                        } else if (c == '.') {
+                            sb.append(',');
+                        } else {
+                            sb.append(c);
+                        }
+                    }
+                    return getFormattedValue(sb.toString(), numberFormat, appendUnit, false);
+                } catch (Exception e) {
+                }
+            }
             return NUMBER_FORMAT_ERROR;
         }
     }

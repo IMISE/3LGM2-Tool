@@ -766,9 +766,32 @@ public class SimpleMetaPathCreator extends MetaModelSpecificAdapter {
             replaceSimpleMetaPathsWithDoubleMeaningEdgesBothConnectionStates(simpleMetaPaths, i);
         }
         removeInvalidMetaPaths(simpleMetaPaths);
+        Class<? extends ModelElement> startClass = simpleMetaPath.getStartClass();
+        Class<? extends ModelElement> endClass = simpleMetaPath.getEndClass();
+        if (simpleMetaPath.isStartAndEndClass(endClass, startClass)) {
+            addOtherDirectionMetaPaths(simpleMetaPaths);
+        }
         return simpleMetaPaths;
     }
 
+    /**
+     * @param simpleMetaPaths
+     */
+    private static void addOtherDirectionMetaPaths(final List<SimpleMetaPath> simpleMetaPaths) {
+        int size = simpleMetaPaths.size();
+        for (int i = 0; i < size; i++) {
+            SimpleMetaPath simpleMetaPath = simpleMetaPaths.get(i);
+            SimpleMetaPath otherDirection = simpleMetaPath.getOtherDirection();
+            //if the metapath is symmetrical then the other direction is equals to the simpleMetaPath -> check contains(..)
+            if (otherDirection != null && !simpleMetaPaths.contains(otherDirection)) {
+                simpleMetaPaths.add(otherDirection);
+            }
+        }
+    }
+
+    /**
+     * @param simpleMetaPaths
+     */
     private static void removeInvalidMetaPaths(final List<SimpleMetaPath> simpleMetaPaths) {
         for (int i = simpleMetaPaths.size() - 1; i >= 0; i--) {
             SimpleMetaPath simpleMetaPath = simpleMetaPaths.get(i);
@@ -829,7 +852,7 @@ public class SimpleMetaPathCreator extends MetaModelSpecificAdapter {
                 for (Class<? extends ModelElement> startClass : instanciableAssignableStartClasses) {
                     for (Class<? extends ModelElement> endClass : instanciableAssignableEndClasses) {
                         ElementaryMetaPath newElementaryMetaPath = elementaryMetaPathHandler.getMetaPath(startClass, originalElementaryMetaPath, endClass);
-                        SimpleMetaPath newSimpleMetaPath = getPathStepReplacedMetaPath(elementaryMetaPaths, newElementaryMetaPath, currentPathStepIndex, simpleMetaPath.getName(), simpleMetaPath.getMetaPathStepWithPathName());
+                        SimpleMetaPath newSimpleMetaPath = getPathStepReplacedMetaPath(elementaryMetaPaths, newElementaryMetaPath, currentPathStepIndex, simpleMetaPath.getBaseResKeyOrName(), simpleMetaPath.getMetaPathStepWithPathName());
                         //bei der ersten nicht-abstrakten Kantenklasse wird der neue MetaPfad in der Ergebnisliste einfach über den neuen geschrieben
                         if (replaceOriginalMetaPathInResultList) {
                             replaceOriginalMetaPathInResultList = false;
@@ -913,7 +936,7 @@ public class SimpleMetaPathCreator extends MetaModelSpecificAdapter {
                         elementaryMetaPathArray[currentPathStepIndex] = elementaryMetaPathHandler.getMetaPath(pathStepStartClass, edgeType, elementaryMetaPathDirection, pathStepEndClass);
                         //den neuen SimpleMetaPfad mit der nicht-abstrakten Kantenklasse analog zum original anlegen (also mit den Index der Kante, die den Namen festlegt übernehmen)
                         int metaPathStepWithPathName = simpleMetaPath.getMetaPathStepWithPathName();
-                        SimpleMetaPath newSimpleMetaPath = new SimpleMetaPath(metaPathStepWithPathName, elementaryMetaPathArray);
+                        SimpleMetaPath newSimpleMetaPath = metaPathStepWithPathName >= 0 ? new SimpleMetaPath(metaPathStepWithPathName, elementaryMetaPathArray) : new SimpleMetaPath(simpleMetaPath.getName(), elementaryMetaPathArray);
                         //bei der ersten nicht-abstrakten Kantenklasse wird der neue MetaPfad in der Ergebnisliste einfach über den neuen geschrieben
                         if (replaceOriginalMetaPathInResultList) {
                             replaceOriginalMetaPathInResultList = false;

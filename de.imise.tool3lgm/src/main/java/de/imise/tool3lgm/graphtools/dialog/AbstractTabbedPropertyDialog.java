@@ -143,6 +143,7 @@ public abstract class AbstractTabbedPropertyDialog extends AbstractPropertyDialo
             index = tabbedPane.getTabCount();
         }
         tabbedPane.insertTab(title, icon, component, tooltip, index);
+        tabbedPane.setMnemonic(index, title);
     }
 
     /**

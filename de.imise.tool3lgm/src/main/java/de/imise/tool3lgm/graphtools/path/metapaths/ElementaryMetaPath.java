@@ -265,9 +265,12 @@ public final class ElementaryMetaPath extends MetaPathImpl implements SequenceMe
                 otherDirection = this;
             } else {
                 Type otherDirectionType = type.getOtherDirection();
-                //TODO: testen, ob man den ConnectionState hier auch umdrehen muss!?
                 otherDirection = new ElementaryMetaPath(metaModel, endClass, edgeClass, startClass, direction.getOther(), connectionState, otherDirectionType);
                 otherDirection.otherDirection = this;
+            }
+            //same classes are connected with the same name -> this and otherDirection is the same
+            if (this.equals(otherDirection)) {
+                otherDirection = this;
             }
         }
         return (ElementaryMetaPath) otherDirection;
@@ -386,6 +389,14 @@ public final class ElementaryMetaPath extends MetaPathImpl implements SequenceMe
     }
 
     /**
+     * @param connectionState
+     * @return
+     */
+    public final boolean hasConnectionState(final ConnectionState connectionState) {
+        return this.connectionState == connectionState;
+    }
+
+    /**
      * @return the type
      */
     public Type getType() {
@@ -454,12 +465,6 @@ public final class ElementaryMetaPath extends MetaPathImpl implements SequenceMe
             return false;
         }
         ElementaryMetaPath other = (ElementaryMetaPath) obj;
-        if (connectionState != other.connectionState) {
-            return false;
-        }
-        if (direction != other.direction) {
-            return false;
-        }
         if (edgeClass == null) {
             if (other.edgeClass != null) {
                 return false;
@@ -486,6 +491,23 @@ public final class ElementaryMetaPath extends MetaPathImpl implements SequenceMe
         }
         if (type != other.type) {
             return false;
+        }
+        if (connectionState != other.connectionState) {
+            return false;
+        }
+        if (startClass != endClass) {
+            if (direction != other.direction) {
+                return false;
+            }
+        } else {
+            //if the startclass and endclass are the same then the
+            //direction is only indirect relevant if the name of the
+            //both (maybe different) directions is the same.
+            String toString = toString();
+            String otherToString = other.toString();
+            if (!toString.equals(otherToString)) {
+                return false;
+            }
         }
         return true;
     }

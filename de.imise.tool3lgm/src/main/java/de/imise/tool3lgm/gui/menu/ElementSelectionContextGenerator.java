@@ -200,6 +200,12 @@ public abstract class ElementSelectionContextGenerator extends ContextGenerator 
                     gdcoll.setAutomaticMode(lastAutomaticMode);
                 }
             }
+
+            @Override
+            public String toString() {
+                Object name = getValue(Action.NAME);
+                return String.valueOf(name);
+            }
         };
     }
 

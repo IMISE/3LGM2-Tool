@@ -466,7 +466,8 @@ public final class MetaModel extends CoreMetaModel {
         extrasActionsDefinition = getInstance(metaModelDefinition.getExtrasActionsDefinitionClass());
         modelValidatorDefinition = getInstance(metaModelDefinition.getModelValidatorDefinitionClass());
         // Die MetaPathsDefinition und die darauffolgend zu initialisierenden Maps
-        metaPathsDefinition = getInstance(metaModelDefinition.getMetaPathsDefinitionClass());
+        Class<? extends MetaPathDefinition> metaPathsDefinitionClass = metaModelDefinition.getMetaPathsDefinitionClass();
+        metaPathsDefinition = getInstance(metaPathsDefinitionClass);
         copyDependencies = getInstance(metaModelDefinition.getCopyDependenciesClass());
         edgeClassToConditionMetaPath = CollectionUtils.ensureImmutable(metaPathsDefinition.getConditionMetaPaths());
         edgeClassToSoftConditionMetaPath = CollectionUtils.ensureImmutable(metaPathsDefinition.getSoftConditionMetaPaths());
@@ -695,7 +696,8 @@ public final class MetaModel extends CoreMetaModel {
                     Sys.errn(2, "Createable Path is not valid: " + definedCreateableMetaPath + " (" + definedCreateableMetaPath.getFullPathString() + ")");
                 }
                 for (SimpleMetaPath metaPath : createableMetaPathsNonAbstract) {
-                    Collection<Class<? extends ModelElement>> startClasses = getInstanciableAssignableClasses(metaPath.getStartClass());
+                    Class<? extends ModelElement> possibleAbstractStartClass = metaPath.getStartClass();
+                    Collection<Class<? extends ModelElement>> startClasses = getInstanciableAssignableClasses(possibleAbstractStartClass);
                     for (Class<? extends ModelElement> startClass : startClasses) {
                         if (metaPath.isStartClass(startClass)) {
                             builder.put(startClass, metaPath);
@@ -703,9 +705,10 @@ public final class MetaModel extends CoreMetaModel {
                     }
                     //Gegenrichtung des Pfades für die Endklasse als Startklasse hinzufügen
                     metaPath = metaPath.getOtherDirection();
-                    Collection<Class<? extends ModelElement>> endClasses = getInstanciableAssignableClasses(metaPath.getStartClass());
+                    possibleAbstractStartClass = metaPath.getStartClass();
+                    Collection<Class<? extends ModelElement>> endClasses = getInstanciableAssignableClasses(possibleAbstractStartClass);
                     for (Class<? extends ModelElement> endClass : endClasses) {
-                        if (metaPath.isStartClass(endClass)) {
+                        if (metaPath.isStartClass(endClass) && !metaPath.isEndClass(endClass)) {
                             builder.put(endClass, metaPath);
                         }
                     }
@@ -2065,7 +2068,10 @@ public final class MetaModel extends CoreMetaModel {
      */
     public Collection<SimpleMetaPath> getCreatableMetaPaths(final Class<? extends ModelElement> elementClass) {
         Collection<SimpleMetaPath> creatablePaths = elementClassToCreatableMetaPaths.get(elementClass);
-        return creatablePaths == null ? ImmutableList.of() : creatablePaths;
+        if (creatablePaths == null) {
+            creatablePaths = ImmutableList.of();
+        }
+        return creatablePaths;
     }
 
     /**
@@ -2081,7 +2087,8 @@ public final class MetaModel extends CoreMetaModel {
      */
     public Collection<SimpleMetaPath> getCreatableMetaPaths(final Class<? extends ModelElement> elementClass1, final Class<? extends ModelElement> elementClass2) {
         ImmutableList.Builder<SimpleMetaPath> creatableMetaPaths = ImmutableList.builder();
-        for (SimpleMetaPath metaPath : getCreatableMetaPaths(elementClass1)) {
+        Collection<SimpleMetaPath> creatableMetaPathsForStartClass1 = getCreatableMetaPaths(elementClass1);
+        for (SimpleMetaPath metaPath : creatableMetaPathsForStartClass1) {
             Class<? extends ModelElement> endClass = metaPath.getEndClass();
             if (endClass.isAssignableFrom(elementClass2)) {
                 creatableMetaPaths.add(metaPath);

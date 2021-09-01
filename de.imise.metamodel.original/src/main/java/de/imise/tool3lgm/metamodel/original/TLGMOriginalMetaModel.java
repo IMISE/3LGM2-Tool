@@ -120,7 +120,7 @@ public class TLGMOriginalMetaModel extends MetaModelDefinition implements Regula
 
     @Override
     public final Class<? extends MetaPathDefinition> getMetaPathsDefinitionClass() {
-        return TLGMOriginalPathsDefinition.class;
+        return TLGMOriginalMetaPathsDefinition.class;
     }
 
     /////////////////////////

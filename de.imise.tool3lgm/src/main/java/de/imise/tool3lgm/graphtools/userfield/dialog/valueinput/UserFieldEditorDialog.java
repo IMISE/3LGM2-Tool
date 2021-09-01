@@ -143,53 +143,38 @@ public class UserFieldEditorDialog extends AbstractTabbedPropertyDialog {
      * Methode erzeugt die grafische Darstellung des Dialogs
      */
     private void init() {
-
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-
         final UserFieldEditorDialog finalDialog = this;
-
         // Action, die beim Abbruch ausgeführt wird
         cancelAction = new AbstractAction(getResString("cancel")) {
             @Override
             public void actionPerformed(final ActionEvent e) {
-
                 boolean dataChanged = false;
-
                 for (AbstractUserFieldEditorPanel tablePanel : tablePanels) {
-
-                    /*
-                     * Beendet das Editieren der aktuelle ausgewählten Zelle im
-                     * Table. Damit können Werte auch ohne Bestätigung mit
-                     * "Enter" übernommen werden.
-                     */
+                    // Beendet das Editieren der aktuelle ausgewählten Zelle im
+                    // Table. Damit können Werte auch ohne Bestätigung mit
+                    // "Enter" übernommen werden.
                     tablePanel.stopEditing();
-
                     // Falls in einem Table Änderungen aufgetreten sind, wird das in dataChanged festgehalten
                     dataChanged = dataChanged || tablePanel.dataChanged();
                 }
 
-                /*
-                 * Falls in einem Table Änderungen aufgetreten sind, wird eine
-                 * Datenverlust-Verwarnung angezeigt
-                 */
+                // Falls in einem Table Änderungen aufgetreten sind, wird eine
+                // Datenverlust-Verwarnung angezeigt
                 if (dataChanged == true) {
                     if (JOptionPane.YES_OPTION != JOptionPane.showConfirmDialog(finalDialog, getResString("userFieldDialog_warning_message"), getResString("userFieldDialog_warning"), JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE)) {
                         finalDialog.shouldDispose = false;
                         return;
                     }
                 }
-
                 // rückgängig machen der alten Transaktion
                 mainDoc.finish_transaction(getTransactionID());
                 mainDoc.undo(getTransactionID());
-
                 //finalDialog.dispose();
             }
         };
-
         // Anfügen von panelCN + panelDW + panelMV an das HauptPanel
         initTab();
-
         if (getTabCount() > 0) {
             initDialogWithTabContent();
         } else {
@@ -300,10 +285,8 @@ public class UserFieldEditorDialog extends AbstractTabbedPropertyDialog {
      */
     private void setDefaultActionsOfButtons() {
         final UserFieldEditorDialog finalDialog = this;
-        /*
-         * Übernimmt die Werte aus den Tabellen der Panels ins Model, falls sich
-         * die Daten in einer der Tabellen geändert haben.
-         */
+        // Übernimmt die Werte aus den Tabellen der Panels ins Model, falls sich
+        // die Daten in einer der Tabellen geändert haben.
         final AbstractAction applyAction = new AbstractAction(getResString("apply")) {
             @Override
             public void actionPerformed(final ActionEvent e) {
@@ -312,11 +295,9 @@ public class UserFieldEditorDialog extends AbstractTabbedPropertyDialog {
 
                 for (AbstractUserFieldEditorPanel tablePanel : tablePanels) {
 
-                    /*
-                     * Beendet das Editieren der aktuelle ausgewählten Zelle im
-                     * Table. Damit können Werte auch ohne Bestätigung mit
-                     * "Enter" übernommen werden.
-                     */
+                    // Beendet das Editieren der aktuelle ausgewählten Zelle im
+                    // Table. Damit können Werte auch ohne Bestätigung mit
+                    // "Enter" übernommen werden.
                     tablePanel.stopEditing();
 
                     // Falls in einem Table Änderungen aufgetreten sind, wird das in dataChanged festgehalten
@@ -340,15 +321,11 @@ public class UserFieldEditorDialog extends AbstractTabbedPropertyDialog {
             }
         };
 
-        /*
-         * Übernimmt die Werte in den Tabellen der Panels ins Model
-         */
+        // Übernimmt die Werte in den Tabellen der Panels ins Model
         applyButton.setAction(applyAction);
 
-        /*
-         * Übernimmt die Werte in den Tabellen der Panels ins Model und schließt
-         * diesen Dialog anschließend.
-         */
+        // Übernimmt die Werte in den Tabellen der Panels ins Model und schließt
+        // diesen Dialog anschließend.
         okButton.setAction(new AbstractAction(getResString("ok")) {
             @Override
             public void actionPerformed(final ActionEvent e) {
@@ -361,9 +338,7 @@ public class UserFieldEditorDialog extends AbstractTabbedPropertyDialog {
             }
         });
 
-        /*
-         * Macht Änderungen rückgängig und schließt diesen Dialog
-         */
+        // Macht Änderungen rückgängig und schließt diesen Dialog
         cancelButton.setAction(new AbstractAction(getResString("cancel")) {
             @Override
             public void actionPerformed(final ActionEvent e) {

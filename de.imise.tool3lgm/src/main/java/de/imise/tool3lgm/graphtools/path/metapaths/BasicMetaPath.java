@@ -6,6 +6,9 @@ import java.util.Set;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModelSpecific;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 
+/**
+ * @author AXS (21.08.2020)
+ */
 public interface BasicMetaPath extends MetaModelSpecific {
 
     /**
@@ -122,6 +125,12 @@ public interface BasicMetaPath extends MetaModelSpecific {
      * @return
      */
     String getName();
+
+    /**
+     * @param name
+     * @return
+     */
+    void setName(String name);
 
     /**
      * @return

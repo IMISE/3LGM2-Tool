@@ -28,11 +28,12 @@ import de.imise.tool3lgm.Tool3lgmChangeListener;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.util.Alphabetical;
 import de.imise.util.swing.dialog.MultipleOptionPane;
+import de.imise.util.swing.event.ConfirmDialogAction.ConfirmDialog;
 
 /**
  * @author Thomas, Sebastian Weber, AXS
  */
-public class AnalysesRepositoryFrame extends JFrame implements Tool3lgmChangeListener {
+public class AnalysesRepositoryFrame extends JFrame implements Tool3lgmChangeListener, ConfirmDialog {
 
     /**
      * Tabelle, in der die Analysen angezeigt werden
@@ -163,6 +164,7 @@ public class AnalysesRepositoryFrame extends JFrame implements Tool3lgmChangeLis
      */
     private AnalysesRepositoryFrame() {
         super(getResString("repository"));
+        registerCtrlEnterKey();
         setAlwaysOnTop(true);
         setIconImage(getMainFrame().getIconImage());
         JMenu menuFile = new JMenu(getResString("file"));
@@ -231,5 +233,11 @@ public class AnalysesRepositoryFrame extends JFrame implements Tool3lgmChangeLis
             askForSaveIfChanged();
             refreshAnalyses();
         }
+    }
+
+    @Override
+    public void confirm() {
+        // button for closing the Frame
+        buttons[2].doClick();
     }
 }

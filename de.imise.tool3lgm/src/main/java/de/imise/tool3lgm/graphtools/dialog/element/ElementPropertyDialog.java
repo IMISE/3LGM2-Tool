@@ -673,4 +673,9 @@ public abstract class ElementPropertyDialog extends AbstractElementPropertyDialo
         return toolTipTargets;
     }
 
+    @Override
+    public void confirm() {
+        okButton.doClick();
+    }
+
 }

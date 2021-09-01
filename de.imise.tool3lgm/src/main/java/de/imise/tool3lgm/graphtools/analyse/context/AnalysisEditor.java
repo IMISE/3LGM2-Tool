@@ -41,9 +41,10 @@ import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.log.Log;
 import de.imise.util.swing.component.list.AlphabeticalJList;
 import de.imise.util.swing.dialog.NameAndColorInputDialog;
+import de.imise.util.swing.event.ConfirmDialogAction.ConfirmDialog;
 
 /** @author thomas, AXS, xhb */
-public class AnalysisEditor extends JDialog implements ActionListener {
+public class AnalysisEditor extends JDialog implements ActionListener, ConfirmDialog {
 
     /** Das MetaModel, für das die Analsysen erstellt werden sollen */
     private final MetaModel metaModel;
@@ -333,15 +334,18 @@ public class AnalysisEditor extends JDialog implements ActionListener {
      * Button, mit dem das letzte Panel eines Pfadschrittes wieder entfernt
      * werden kann
      */
-    private final JButton addPathStepPanelBut = new JButton(
-            "+"/* getResString("erw") */);
+    private final JButton addPathStepPanelBut = new JButton("+"/* getResString("erw") */);
 
     /**
      * Button, mit dem ein weiteres Panel für einen Pfadschritt hinzugefügt
      * werden kann
      */
-    private final JButton removePathStepPanelBut = new JButton(
-            "-"/* getResString("vereinfachen") */);
+    private final JButton removePathStepPanelBut = new JButton("-"/* getResString("vereinfachen") */);
+
+    /**
+     * Button to exit the panel
+     */
+    private JButton exitButton;
 
     /** Panel, das alle <code>PathStepComponent</code>s enthält */
     private JPanel pathStepMainPanel;
@@ -563,6 +567,7 @@ public class AnalysisEditor extends JDialog implements ActionListener {
     /** Initialisiert die GUI-Kompnenten */
     private void init() {
         setTitle(getResString("analysis"));
+        registerCtrlEnterKey();
         mainPanel = new JPanel();
         /* Panel "Basis-XMLAnalyse" */
         pathStepMainPanel = new JPanel();
@@ -607,15 +612,20 @@ public class AnalysisEditor extends JDialog implements ActionListener {
         but = new JButton(getResString("ana_insert_to_repository"));
         but.addActionListener(this);
         buttons.add(but);
-        but = new JButton(getResString("exit"));
-        but.addActionListener(this);
-        buttons.add(but);
+        exitButton = new JButton(getResString("exit"));
+        exitButton.addActionListener(this);
+        buttons.add(exitButton);
         mainPanel.setLayout(new BorderLayout());
         mainPanel.add(panel, BorderLayout.CENTER);
         mainPanel.add(buttons, BorderLayout.SOUTH);
         getContentPane().add(mainPanel);
         pack();
         setLocationRelativeTo(getOwner());
+    }
+
+    @Override
+    public void confirm() {
+        exitButton.doClick();
     }
 
 }

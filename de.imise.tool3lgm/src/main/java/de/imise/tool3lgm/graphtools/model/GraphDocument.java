@@ -3979,14 +3979,11 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
             return null;
         }
 
-        szen.start_transaction(pid);
-
         MetaModel metaModel = getMetaModel();
         Class<? extends ModelElement> elementClass = metaModel.getClassForName(edgeClassName);
         Class<? extends Edge> edgeClass = elementClass.asSubclass(Edge.class);
         List<Edge> edges = masterElement.getEdgesWith(slaveElement, edgeClass);
         if (edges.isEmpty() || !(szen instanceof Szenario)) {
-            finish_transaction(pid);
             return null;
         }
         Edge edge = edges.get(0);
@@ -3997,8 +3994,8 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
         NodeContainer slaveContainer = (NodeContainer) slaveElement.getContainer(szen);
         //slaveContainer ist null, wenn das untergeordnete Element unique ist und keinen Grafikcontainer in jedem Teilmodell hat
         if (slaveContainer != null) {
+            szen.start_transaction(pid);
             Dimension pos = calculateAddictPosition(masterContainer);
-            String edgeID = edge.getID();//eigentlich müsste der hier auch beim Undo auf diesen Wert gesetzt werden, aber das passiert im Moment nicht
             int slaveX = slaveContainer.getX();
             int slaveY = slaveContainer.getY();
             int slaveWidth = slaveContainer.getWidth();
@@ -4007,16 +4004,18 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
             addUndo(pid, MODEL_ACTION_SET_ELEMENT_POSITION, szenID, slaveElement, slaveX, slaveY, slaveWidth, slaveHeight);
             slaveContainer.setCoordinates(pos.width, pos.height, slaveWidth, slaveHeight);
             raiseSlaves(masterContainer);
-            for (Szenario szenario : gdcoll.getSzenarios()) {
-                EdgeContainer kac = edge.getContainer(szenario);
-                if (kac != null) {
-                    kac.computeBorderPoints();
+            for (Edge slaveEdge : slaveElement.getEdges()) {
+                for (Szenario szenario : gdcoll.getSzenarios()) {
+                    EdgeContainer kac = slaveEdge.getContainer(szenario);
+                    if (kac != null) {
+                        kac.computeBorderPoints();
+                    }
                 }
             }
+            szen.finish_transaction(pid);
+            szen.distributeEvent(DATA_CHANGED, pid);
         }
 
-        szen.finish_transaction(pid);
-        szen.distributeEvent(DATA_CHANGED, pid);
         return edge;
     }
 
@@ -4047,142 +4046,150 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
 
         Dimension retVal = new Dimension(x, y);
 
-        switch (addictedCount % 34) {
+        switch (addictedCount % 36) {
         case 14:
-            retVal.width = x - w / 7;
-            retVal.height = y - h / 3;
+            retVal.width = x - w / 8;
+            retVal.height = y - h / 2;
             break;
         case 28:
-            retVal.width = x - w / 5;
-            retVal.height = y - h / 3;
+            retVal.width = x - w / 2;
+            retVal.height = y - h / 2 + h / 8;
             break;
         case 8:
             retVal.width = x - w / 4;
-            retVal.height = y - h / 3;
+            retVal.height = y - h / 2;
             break;
         case 20:
-            retVal.width = x - w / 3;
-            retVal.height = y - h / 3;
+            retVal.width = x - w / 2 + w / 8;
+            retVal.height = y - h / 2;
             break;
         case 0:
-            retVal.width = x - (int) (w / 2.5);
-            retVal.height = y - h / 3;
+            retVal.width = x - w / 2;
+            retVal.height = y - h / 4;
             break;
         case 15:
-            retVal.width = x + w / 7;
-            retVal.height = y + h / 3;
+            retVal.width = x + w / 8;
+            retVal.height = y + h / 2;
             break;
         case 29:
-            retVal.width = x + w / 5;
-            retVal.height = y + h / 3;
+            retVal.width = x + w / 2;
+            retVal.height = y + h / 2 - h / 8;
             break;
         case 9:
             retVal.width = x + w / 4;
-            retVal.height = y + h / 3;
+            retVal.height = y + h / 2;
             break;
         case 21:
-            retVal.width = x + w / 3;
-            retVal.height = y + h / 3;
+            retVal.width = x + w / 2 - w / 8;
+            retVal.height = y + h / 2;
             break;
         case 1:
-            retVal.width = x + (int) (w / 2.5);
-            retVal.height = y + h / 3;
+            retVal.width = x + w / 2;
+            retVal.height = y + h / 4;
             break;
         case 16:
-            retVal.width = x - w / 7;
-            retVal.height = y + h / 3;
+            retVal.width = x - w / 8;
+            retVal.height = y + h / 2;
             break;
         case 30:
-            retVal.width = x - w / 5;
-            retVal.height = y + h / 3;
+            retVal.width = x - w / 2;
+            retVal.height = y + h / 2 - h / 8;
             break;
         case 10:
             retVal.width = x - w / 4;
-            retVal.height = y + h / 3;
+            retVal.height = y + h / 2;
             break;
         case 22:
-            retVal.width = x - w / 3;
-            retVal.height = y + h / 3;
+            retVal.width = x - w / 2 + w / 8;
+            retVal.height = y + h / 2;
             break;
         case 2:
-            retVal.width = x - (int) (w / 2.5);
-            retVal.height = y + h / 3;
+            retVal.width = x - w / 2;
+            retVal.height = y + h / 4;
             break;
         case 17:
-            retVal.width = x + w / 7;
-            retVal.height = y - h / 3;
+            retVal.width = x + w / 8;
+            retVal.height = y - h / 2;
             break;
         case 31:
-            retVal.width = x + w / 5;
-            retVal.height = y - h / 3;
+            retVal.width = x + w / 2;
+            retVal.height = y - h / 2 + h / 8;
             break;
         case 11:
             retVal.width = x + w / 4;
-            retVal.height = y - h / 3;
+            retVal.height = y - h / 2;
             break;
         case 23:
-            retVal.width = x + w / 3;
-            retVal.height = y - h / 3;
+            retVal.width = x + w / 2 - w / 8;
+            retVal.height = y - h / 2;
             break;
         case 3:
-            retVal.width = x + (int) (w / 2.5);
-            retVal.height = y - h / 3;
+            retVal.width = x + w / 2;
+            retVal.height = y - h / 4;
             break;
         case 18:
-            retVal.width = x - w / 7;
-            retVal.height = y;
+            retVal.width = x - w / 2;
+            retVal.height = y - h / 2;
             break;
         case 32:
-            retVal.width = x - w / 5;
-            retVal.height = y;
+            retVal.width = x - w / 16;
+            retVal.height = y - h / 2;
             break;
         case 12:
-            retVal.width = x - w / 4;
-            retVal.height = y;
+            retVal.width = x - w / 2;
+            retVal.height = y + h / 2;
             break;
         case 24:
-            retVal.width = x - w / 3;
-            retVal.height = y;
+            retVal.width = x - w / 2;
+            retVal.height = y - h / 8;
             break;
         case 4:
-            retVal.width = x - (int) (w / 2.5);
+            retVal.width = x - w / 2;
             retVal.height = y;
             break;
         case 19:
-            retVal.width = x + w / 7;
-            retVal.height = y;
+            retVal.width = x + w / 2;
+            retVal.height = y + h / 2;
             break;
         case 33:
-            retVal.width = x + w / 5;
-            retVal.height = y;
+            retVal.width = x + w / 16;
+            retVal.height = y + h / 2;
             break;
         case 13:
-            retVal.width = x + w / 4;
-            retVal.height = y;
+            retVal.width = x + w / 2;
+            retVal.height = y - h / 2;
             break;
         case 25:
-            retVal.width = x + w / 3;
-            retVal.height = y;
+            retVal.width = x + w / 2;
+            retVal.height = y - h / 8;
             break;
         case 5:
-            retVal.width = x + (int) (w / 2.5);
+            retVal.width = x + w / 2;
             retVal.height = y;
             break;
         case 26:
-            retVal.width = x;
-            retVal.height = y + h / 5;
+            retVal.width = x - w / 2;
+            retVal.height = y + h / 8;
             break;
         case 6:
             retVal.width = x;
-            retVal.height = y + h / 3;
+            retVal.height = y + h / 2;
             break;
         case 27:
-            retVal.width = x;
-            retVal.height = y - h / 5;
+            retVal.width = x + w / 2;
+            retVal.height = y + h / 8;
             break;
         case 7:
             retVal.width = x;
-            retVal.height = y - h / 3;
+            retVal.height = y - h / 2;
+            break;
+        case 34:
+            retVal.width = x - w / 16;
+            retVal.height = y + h / 2;
+            break;
+        case 35:
+            retVal.width = x + w / 16;
+            retVal.height = y - h / 2;
             break;
         }
 
