@@ -8,4 +8,4 @@
 
 [Features/Userfields and Subtypes](Features/Userfields and Subtypes)
 
-[FAQ](FAQ "Frequently asked questions")
+[FAQ](FAQ - English "Frequently asked questions")
