@@ -265,9 +265,12 @@ public final class ElementaryMetaPath extends MetaPathImpl implements SequenceMe
                 otherDirection = this;
             } else {
                 Type otherDirectionType = type.getOtherDirection();
-                //TODO: testen, ob man den ConnectionState hier auch umdrehen muss!?
                 otherDirection = new ElementaryMetaPath(metaModel, endClass, edgeClass, startClass, direction.getOther(), connectionState, otherDirectionType);
                 otherDirection.otherDirection = this;
+            }
+            //same classes are connected with the same name -> this and otherDirection is the same
+            if (this.equals(otherDirection)) {
+                otherDirection = this;
             }
         }
         return (ElementaryMetaPath) otherDirection;
@@ -383,6 +386,14 @@ public final class ElementaryMetaPath extends MetaPathImpl implements SequenceMe
      */
     public ConnectionState getConnectionState() {
         return connectionState;
+    }
+
+    /**
+     * @param connectionState
+     * @return
+     */
+    public final boolean hasConnectionState(final ConnectionState connectionState) {
+        return this.connectionState == connectionState;
     }
 
     /**

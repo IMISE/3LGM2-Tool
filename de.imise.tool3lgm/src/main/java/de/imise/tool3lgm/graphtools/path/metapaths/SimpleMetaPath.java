@@ -148,6 +148,9 @@ public class SimpleMetaPath extends SerialMetaPath implements SequenceMetaPath {
             String otherDirectionName = elementaryMetaPathOtherDirection.getName();
             otherDirection.setName(otherDirectionName);
         }
+        if (this.equals(otherDirection)) {
+            return this;
+        }
         return otherDirection;
     }
 
