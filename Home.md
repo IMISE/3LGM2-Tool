@@ -1,6 +1,6 @@
 # Welcome to 3LGM² tool documentation
 
-[First steps](01. First steps)
+[First steps](Tool 3LGM2 / 01. First steps)
 [The Metamodel](02. 3LGM² Metamodel)
 [The 3LGM² Toolkit](03. The 3LGM² Toolkit)
 
