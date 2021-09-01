@@ -30,6 +30,7 @@ import de.imise.tool3lgm.graphtools.path.metapaths.SimpleMetaPath;
 import de.imise.tool3lgm.graphtools.path.metapaths.SimpleMetaPathCreator;
 import de.imise.tool3lgm.graphtools.path.metapaths.WrapperMetaPath;
 import de.imise.util.Alphabetical;
+import de.imise.util.Sys;
 
 /**
  * Definition von MetaPfaden.
@@ -220,10 +221,14 @@ public class MetaPathDefinition extends MetaModelSpecificAdapter {
      * @param metaPaths
      */
     protected final void put(final MetaPath metaPath) {
-        definedMetaPaths.add(metaPath);
-        MetaPath otherDirection = metaPath.getOtherDirection();
-        if (otherDirection != null) {
-            definedMetaPaths.add(otherDirection);
+        if (metaPath != null) {
+            definedMetaPaths.add(metaPath);
+            MetaPath otherDirection = metaPath.getOtherDirection();
+            if (otherDirection != null) {
+                definedMetaPaths.add(otherDirection);
+            }
+        } else {
+            Sys.err("MetaPath is null");
         }
     }
 
@@ -270,7 +275,11 @@ public class MetaPathDefinition extends MetaModelSpecificAdapter {
     @SafeVarargs
     protected final SimpleMetaPath put(final Class<? extends ModelElement> startClass, final Class<? extends ModelElement> endClass, final String baseResKeyOrName, final Class<? extends Edge>... associations) {
         SimpleMetaPath simpleMetaPath = simpleMetaPathCreator.createSimpleMetaPath(startClass, endClass, baseResKeyOrName, associations);
-        put(simpleMetaPath);
+        if (simpleMetaPath != null) {
+            put(simpleMetaPath);
+        } else {
+            Sys.err("Invalid Metapath defined by:", "   startClass: " + startClass, "   endClass: " + endClass, "   edges: " + Arrays.asList(associations), "   baseResKeyOrName: " + baseResKeyOrName);
+        }
         return simpleMetaPath;
     }
 
