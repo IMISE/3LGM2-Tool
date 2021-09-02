@@ -537,7 +537,8 @@ public final class UserFieldDefinitions extends UserFieldDefinitionChangeHandler
 
     /**
      * @param userFieldTargetClass
-     * @return true if at least one {@link UserField} is defined for this type
+     * @return <code>true</code> if at least one {@link UserField} is defined
+     *         for this type
      */
     public boolean hasUserFields(final Class<? extends UserFieldTarget> userFieldTargetClass) {
         final UserFieldList fieldList = classToUserFieldTargetSpecificListMap.get(userFieldTargetClass);
@@ -546,7 +547,9 @@ public final class UserFieldDefinitions extends UserFieldDefinitionChangeHandler
 
     /**
      * @param userFieldTargetClass
-     * @return
+     * @return all defined userFields for the given {@link UserFieldTarget}
+     *         inclusive all subtypes and all defined userFields of this
+     *         subtypes
      */
     public Iterable<UserField> getUserFields(final Class<? extends UserFieldTarget> userFieldTargetClass) {
         final UserFieldList fieldList = classToUserFieldTargetSpecificListMap.get(userFieldTargetClass);
@@ -576,7 +579,8 @@ public final class UserFieldDefinitions extends UserFieldDefinitionChangeHandler
 
     /**
      * @param userFieldTargetClass
-     * @return
+     * @return all defined userFields for the given modelelement with a specific
+     *         subtype. Only the userFields for the same subtype are returned.
      */
     public Iterable<UserField> getUserFields(final ModelElement me) {
         Class<? extends ModelElement> elementClass = me.getClass();
@@ -595,7 +599,7 @@ public final class UserFieldDefinitions extends UserFieldDefinitionChangeHandler
                 next = null;
                 for (; index < fieldList.size(); index++) {
                     UserField userField = fieldList.get(index);
-                    if (isUserFieldOf(me, userField)) {
+                    if (isUserFieldOf(me, userField)) { //this makes the difference to the upper function #getUserFields(Class<? extends UserFieldTarget>)
                         next = userField;
                         index++;
                         break;
@@ -619,7 +623,10 @@ public final class UserFieldDefinitions extends UserFieldDefinitionChangeHandler
 
     /**
      * @param userFieldTargetClass
-     * @return
+     * @return All {@link UserField}s for the given {@link UserFieldTarget}
+     *         class that have the given {@link Style}. If the style is
+     *         undefined (<code>null</code>), then all UserFields of the class
+     *         are returned.
      */
     public List<UserField> getUserFields(final Class<? extends UserFieldTarget> userFieldTargetClass, final UserField.Style style) {
         return getUserFields(userFieldTargetClass, ImmutableSet.of(style));
@@ -627,10 +634,13 @@ public final class UserFieldDefinitions extends UserFieldDefinitionChangeHandler
 
     /**
      * @param userFieldTargetClass
-     * @return
+     * @return All {@link UserField}s for the given {@link UserFieldTarget}
+     *         class that have one of the given {@link Style}s. If the set of
+     *         styles is undefined (<code>null</code>) or empty, then all
+     *         UserFields of the class are returned.
      */
     public List<UserField> getUserFields(final Class<? extends UserFieldTarget> userFieldTargetClass, final Set<UserField.Style> styles) {
-        if (styles == null || styles.isEmpty()) {
+        if (styles == null || styles.isEmpty() || styles.size() == 1 && styles.iterator().next() == null) {
             UserFieldList fieldList = classToUserFieldTargetSpecificListMap.get(userFieldTargetClass);
             return fieldList != null ? fieldList.getData() : new ArrayList<>(0);
         }
