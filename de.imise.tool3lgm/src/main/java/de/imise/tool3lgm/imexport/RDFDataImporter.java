@@ -196,7 +196,10 @@ public abstract class RDFDataImporter extends UrlSourceDataImporter<Object> impl
             importNodes(ontModel, descriptionPropertyResolver);
             importEdges(ontModel, descriptionPropertyResolver);
         } catch (Exception e) {
-            // Here you could (but don't have to) show a message that a/the template could not be loaded
+            // show a message that a/the template could not be loaded
+            if (isDebugErrors()) {
+                e.printStackTrace();
+            }
         }
         return true;
     }
