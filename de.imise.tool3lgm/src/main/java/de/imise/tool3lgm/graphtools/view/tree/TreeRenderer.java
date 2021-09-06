@@ -58,7 +58,7 @@ public class TreeRenderer extends DefaultTreeCellRenderer {
             if (icon == null || icon != DUMMY_ICON && icon.getIconHeight() != height) {
                 boolean errorIcon = iconState == SHOW_ERROR_ICON;
                 boolean warningIcon = iconState == SHOW_WARNING_ICON;
-                String iconName = "TREE_ICON_" + shape.name() + (errorIcon ? "_ERROR" : warningIcon ? "_WARNING" : "");
+                String iconName = "TREE_ICON_" + shape.name().toUpperCase() + (errorIcon ? "_ERROR" : warningIcon ? "_WARNING" : "");
                 icon = Tool3lgmConstants.getIcon(iconName);
                 if (icon == null && (errorIcon || warningIcon)) { //at the moment an error icon only exists for rectangle (Shape.rechteck) -> fallback normal icon
                     icon = getTreeIcon(shape, height, SHOW_NORMAL_ICON);
