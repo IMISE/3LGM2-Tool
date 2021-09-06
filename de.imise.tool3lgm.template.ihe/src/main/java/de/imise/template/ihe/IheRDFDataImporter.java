@@ -23,7 +23,7 @@ public class IheRDFDataImporter extends RDFDataImporter {
     public static final File TEST_FILE = getRdfFile();
     //     /Users/astruebi/Projekte/eclipse/IMISE/tool-3l gm2/de.imise.tool3lgm/Templates/IHE/iheDomain_Ontology_straight-forward_v2.rdf
 
-    public static final String IHE_RDF_FILE_NAME = "/IHE/iheDomain_Ontology_straight-forward_v2.rdf";
+    public static final String IHE_RDF_FILE_NAME = "/IHE/iheDomain_Ontology.rdf";
 
     static File getRdfFile() {
         File templateDir = Tool3lgmConstants.TEMPLATE_DIR;
