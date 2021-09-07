@@ -83,7 +83,6 @@ import de.imise.tool3lgm.gui.ToolSplashScreen;
 import de.imise.tool3lgm.gui.viewpane.ViewPane;
 import de.imise.tool3lgm.gui.viewpane.ViewPaneFrameComponent;
 import de.imise.tool3lgm.gui.viewpane.graph.GraphViewPaneFrameComponent;
-import de.imise.tool3lgm.help.Help;
 import de.imise.tool3lgm.imexport.DataImporter;
 import de.imise.tool3lgm.imexport.csv.DataExportModule;
 import de.imise.tool3lgm.imexport.csv.DataImportModule;
@@ -705,21 +704,28 @@ public class ActionLibrary {
      */
     public static class HelpActions {
 
-        /** Funktioniert nicht */
-        public static final ExtendedAction ACTION_OPEN_HELP_DIALOG = new StaticAction(ActionIdentifier.ACTION_OPEN_HELP_DIALOG, PPP) {
-            @Override
-            public void actionPerformed() {
-                Help.showHelp();
-            }
-        };
+        public static final ExtendedAction ACTION_OPEN_HELP_DIALOG = new OpenUrlAction(ActionIdentifier.ACTION_OPEN_HELP_DIALOG);
 
-        /** Aktiviert die Direkthilfe */
-        public static final ExtendedAction ACTION_ACTIVATE_DIRECT_HELP = new StaticAction(ActionIdentifier.ACTION_ACTIVATE_DIRECT_HELP) {
-            @Override
-            public void actionPerformedWithEvent(final ActionEvent e) {
-                Help.getHelp().getDisplayHelpAfterTracking().actionPerformed(e);
-            }
-        };
+        /**
+         * Following commented out code is for the former internal help
+         * we have changed the help to our Bitbucket Wiki, but this can still be reused
+         * to do this, you will have to remove the URL behind the ACTION_OPEN_HELP_DIALOG ressource
+         */
+        //        /** Funktioniert nicht */
+        //        public static final ExtendedAction ACTION_OPEN_HELP_DIALOG = new StaticAction(ActionIdentifier.ACTION_OPEN_HELP_DIALOG, PPP) {
+        //            @Override
+        //            public void actionPerformed() {
+        //                Help.showHelp();
+        //            }
+        //        };
+        //
+        //        /** Aktiviert die Direkthilfe */
+        //        public static final ExtendedAction ACTION_ACTIVATE_DIRECT_HELP = new StaticAction(ActionIdentifier.ACTION_ACTIVATE_DIRECT_HELP) {
+        //            @Override
+        //            public void actionPerformedWithEvent(final ActionEvent e) {
+        //                Help.getHelp().getDisplayHelpAfterTracking().actionPerformed(e);
+        //            }
+        //        };
 
         /**
          * Zeigt eine lokale Webseite mit Themen zur weiteren Modellnutzung an
