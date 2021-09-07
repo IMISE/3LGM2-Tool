@@ -15,6 +15,10 @@
 
 [IHE/MustBeGroupedWith](IHE/MustBeGroupedWith "MustBeGroupedWith functionality")
 
+-------------------
+
 [Features/Userfields and Subtypes](Features/Userfields and Subtypes)
+
+## Frequently asked questions
 
 [FAQ](FAQ - English "Frequently asked questions")
