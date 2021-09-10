@@ -58,13 +58,13 @@ import de.imise.util.collections.ExtendedMap;
 public abstract class RDFDataImporter extends UrlSourceDataImporter<Object> implements DataPrinter {
 
     /** If <code>true</code> the importer will log the progress. */
-    private final boolean logDebug = Tool3lgmMain.hasStartParameter("-log_rdf", "-log_all");
+    public boolean logDebug = Tool3lgmMain.hasStartParameter("-log_rdf", "-log_all");
 
     /**
      * If <code>true</code> all warnings and errors durcing the rdf import
      * process are logged
      */
-    private final boolean logWarningsAndErrors = Tool3lgmMain.hasStartParameter("-log_rdf_err");
+    public boolean logWarningsAndErrors = Tool3lgmMain.hasStartParameter("-log_rdf_err");
 
     /**
      * @author AXS (26 Jun 2019)
@@ -186,7 +186,7 @@ public abstract class RDFDataImporter extends UrlSourceDataImporter<Object> impl
     public abstract String getEdgeClassNamePostfix();
 
     @Override
-    public boolean importData(final URL url) {
+    protected boolean importData(final URL url) {
         OntModel ontModel = ModelFactory.createOntologyModel();
         String urlString = url.toString();
         try {
@@ -242,12 +242,15 @@ public abstract class RDFDataImporter extends UrlSourceDataImporter<Object> impl
      * @param ontNode
      * @return
      */
-    private String getLabel(final OntResource ontNode) {
+    protected static String getLabel(final OntResource ontNode) {
         Locale locale = Locale.getDefault();
         String language = locale.getLanguage();
         String name = ontNode.getLabel(language); //ontNode.getLocalName(); //label ist der Anzeigename und localName ist der techn. Bezeichner
         if (Strings.isNullOrEmpty(name)) {
             name = ontNode.getLabel(null);
+        }
+        if (Strings.isNullOrEmpty(name)) {
+            name = ontNode.getLocalName();
         }
         return name;
     }
@@ -259,11 +262,7 @@ public abstract class RDFDataImporter extends UrlSourceDataImporter<Object> impl
      */
     private String getName(final OntResource ontResource, final List<Object> namePattern) {
         if (namePattern == null || namePattern.isEmpty()) {
-            String name = getLabel(ontResource);
-            if (Strings.isNullOrEmpty(name)) {
-                name = ontResource.getLocalName();
-            }
-            return name;
+            return getLabel(ontResource);
         }
         StringBuilder sb = new StringBuilder();
         for (Object patternObject : namePattern) {
@@ -309,14 +308,17 @@ public abstract class RDFDataImporter extends UrlSourceDataImporter<Object> impl
                 int i = 1;
                 for (Iterator<? extends OntResource> ontNodes = ontClass.listInstances(true); ontNodes.hasNext();) {
                     OntResource ontNode = ontNodes.next();
-                    String uri = ontNode.getURI();
-                    Individual individual = ontModel.getIndividual(uri);
+                    Individual individual = ontNode.asIndividual();
                     OntClass individualOntClass = individual.getOntClass();
                     String name = getName(ontNode, namePattern);
                     String description = descriptionPropertyResolver.getValue(ontNode);
                     String id = ontNode.getURI(); //originale URI übernehmen
                     Node lgmNode = addNode(ontNode, lgmNodeClass, name, description, id);
-                    print(i++ + "\t" + ontClassName + " -> " + ontNode + "  ->  " + lgmNode);
+                    if (lgmNode == null) {
+                        printe(i++ + "\t" + ontClassName + " -> " + ontNode + "  ->  " + lgmNode);
+                    } else {
+                        print(i++ + "\t" + ontClassName + " -> " + ontNode + "  ->  " + lgmNode);
+                    }
                     //Wenn die Ontologie nicht ganz richtig modelliert ist(oder irgendwas andere nicht stimmt), kann es vorkommen,
                     //dass ontClass.listInstances(true) auch Instanzen anderer als der eigentlichen Zielklasse zurück liefert.
                     //Oder es kann vorkommen, dass Individuen bei getOntClass() nicht die Klasse zurück liefern, die sie müssten
