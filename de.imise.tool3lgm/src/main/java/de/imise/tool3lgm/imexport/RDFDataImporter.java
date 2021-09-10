@@ -303,16 +303,30 @@ public abstract class RDFDataImporter extends UrlSourceDataImporter<Object> impl
             if (classNames.contains(ontClassName)) {
                 Class<? extends ModelElement> lgmClass = metaModel.getClassForName(ontClassName);
                 Class<? extends Node> lgmNodeClass = lgmClass.asSubclass(Node.class);
-                print(ontClassName + " > " + lgmClass);
+                print(ontClassName + " >>>>>> " + lgmClass);
                 List<Object> namePattern = createRealPattern(ontModel, lgmClass);
                 int i = 1;
                 for (Iterator<? extends OntResource> ontNodes = ontClass.listInstances(true); ontNodes.hasNext();) {
                     OntResource ontNode = ontNodes.next();
                     Individual individual = ontNode.asIndividual();
                     OntClass individualOntClass = individual.getOntClass();
+                    String id = ontNode.getURI(); //originale URI übernehmen
+                    //Some individuals are listed for the wron class! They return by itself the correct class
+                    //but are listed in the correct class and also in another class. Th e
+                    if (!individualOntClass.equals(ontClass)) {
+                        String individualOntClassName = individualOntClass.getLocalName();
+                        if (!"NamedIndividual".equals(individualOntClassName)) {
+                            String originalElementName = getLabel(ontNode);
+                            printe(i++ + "\tWARNING:" + originalElementName + " (" + ontNode + ") is listed in " + ontClassName + " (" + ontClass + ") but returns itself " + individualOntClassName + " (" + individualOntClass + ")");
+                            continue;
+                        }
+                    }
+
                     String name = getName(ontNode, namePattern);
                     String description = descriptionPropertyResolver.getValue(ontNode);
-                    String id = ontNode.getURI(); //originale URI übernehmen
+
+                    //hier muss man die falsche Klasse abfangen
+
                     Node lgmNode = addNode(ontNode, lgmNodeClass, name, description, id);
                     if (lgmNode == null) {
                         printe(i++ + "\t" + ontClassName + " -> " + ontNode + "  ->  " + lgmNode);
