@@ -171,6 +171,29 @@ public class UserFieldList implements Cloneable, Iterable<UserField> {
     }
 
     /**
+     * All subtypes (and their sub userfields) have an order in this list. If
+     * the given subtype is in this list the function returns the count of other
+     * subtypes before this subtype.
+     *
+     * @param subType
+     * @return the index of the given subtype or -1 if it is not in the list
+     */
+    public int getSubTypeIndex(final SubType subType) {
+        int index = -1;
+        if (!SubType.isDummy(subType)) {
+            for (UserField userField : list) {
+                if (userField.hasStyle(SUBTYPE)) {
+                    index++;
+                }
+                if (subType.hasUserField(userField)) {
+                    break;
+                }
+            }
+        }
+        return index; fertig
+    }
+
+    /**
      * Refreshes the parent subtypes property for every UserField so that every
      * UserField knows for which subtype it is defined
      */

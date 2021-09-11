@@ -14,12 +14,14 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
 import de.imise.tool3lgm.graphtools.path.metapaths.ElementaryMetaPath;
 import de.imise.tool3lgm.graphtools.userfield.definition.UserField;
+import de.imise.tool3lgm.graphtools.userfield.definition.UserFieldDefinitions;
 import de.imise.tool3lgm.graphtools.userfield.definition.UserFieldNumberFormat;
 import de.imise.tool3lgm.graphtools.view.container.BendpointContainer;
 import de.imise.tool3lgm.graphtools.view.container.EdgeContainer;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.graphtools.view.container.LayerContainer;
 import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
+import de.imise.util.collections.ListSet;
 
 /**
  * @author AXS (30.03.2020)
@@ -35,20 +37,33 @@ public class CopyDependencyResolver {
         public final List<ModelElement> elements;
 
         /**  */
-        public final Set<UserField> userFields;
-
-        /**  */
-        public final Set<UserFieldNumberFormat> userFieldNumberFormats;
-
-        /**  */
         public final Set<Edge> additionalEdges;
 
         /**  */
-        public CopyDependencyResolverResultSimple() {
+        public final UserFieldDefinitions userFieldDefinitions;
+
+        /**  */
+        private final Set<UserField> userFields;
+
+        /**  */
+        private boolean userFieldDefinitionsIsExpanded = false;
+
+        /**
+         * @param gdcoll
+         */
+        public CopyDependencyResolverResultSimple(final GDCollection gdcoll) {
             elements = new ArrayList<>();
+            additionalEdges = new ListSet<>();
+            userFieldDefinitions = new UserFieldDefinitions(gdcoll);
             userFields = new HashSet<>();
-            userFieldNumberFormats = new HashSet<>();
-            additionalEdges = new HashSet<>();
+        }
+
+        /**
+         * @return the source {@link GDCollection} from which the elements to be
+         *         copied originate
+         */
+        public GDCollection getSourceCollection() {
+            return userFieldDefinitions.getCollection();
         }
 
         /**
@@ -60,11 +75,14 @@ public class CopyDependencyResolver {
                 return false;
             }
             Set<UserField> elementUserFields = me.getUserFieldInputValueKeys();
-            userFields.addAll(elementUserFields);
-            for (UserField userField : elementUserFields) {
-                UserFieldNumberFormat numberFormat = userField.getNumberFormat();
-                if (numberFormat != null) {
-                    userFieldNumberFormats.add(numberFormat);
+            if (!elementUserFields.isEmpty()) {
+                userFieldDefinitionsIsExpanded = false;
+                userFields.addAll(elementUserFields);
+                for (UserField userField : elementUserFields) {
+                    UserFieldNumberFormat numberFormat = userField.getNumberFormat();
+                    if (numberFormat != null) {
+                        userFieldDefinitions.add(numberFormat);
+                    }
                 }
             }
             return elements.add(me);
@@ -84,6 +102,21 @@ public class CopyDependencyResolver {
         public int size() {
             return elements.size();
         }
+
+        /**
+         * @return
+         */
+        public UserFieldDefinitions getUserFieldDefinitions() {
+            //expand before get
+            if (!userFieldDefinitionsIsExpanded) {
+                userFieldDefinitionsIsExpanded = true;
+                GDCollection sourceCollection = getSourceCollection();
+                UserFieldDefinitions sourceUserFieldDefinitions = sourceCollection.getUserFieldDefinitions();
+                sourceUserFieldDefinitions.setAllUserFields(userFieldDefinitions, userFields);
+            }
+            return userFieldDefinitions;
+        }
+
     }
 
     /**
@@ -101,6 +134,7 @@ public class CopyDependencyResolver {
          * @param export
          */
         public CopyDependencyResolverResultFull(final List<? extends GraphDocument> export) {
+            super(export.isEmpty() ? null : export.get(0).getCollection());
             this.export = export;
             iconIDs = new HashSet<>();
         }
@@ -191,7 +225,10 @@ public class CopyDependencyResolver {
      * @param userFields
      */
     public static CopyDependencyResolverResultSimple resolveCopyDependencies(final Collection<ElementContainer> elements) {
-        CopyDependencyResolverResultSimple result = new CopyDependencyResolverResultSimple();
+        ElementContainer firstEc = elements.isEmpty() ? null : elements.iterator().next();
+        ModelElement firstMe = firstEc == null ? null : firstEc.getElement();
+        GDCollection gdcoll = firstMe == null ? null : firstMe.getCollection();
+        CopyDependencyResolverResultSimple result = new CopyDependencyResolverResultSimple(gdcoll);
         for (ElementContainer ec : elements) {
             ModelElement me = ec.getElement();
             resolveCopyDependencies(me, null, result, elements);
@@ -217,7 +254,8 @@ public class CopyDependencyResolver {
             return;
         }
         if (result == null) {
-            result = new CopyDependencyResolverResultSimple();
+            GDCollection gdcoll = me.getCollection();
+            result = new CopyDependencyResolverResultSimple(gdcoll);
         }
         if (!result.add(me)) {
             return;
@@ -280,7 +318,6 @@ public class CopyDependencyResolver {
                 }
             }
         }
-
     }
 
 }

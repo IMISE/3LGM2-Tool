@@ -4,6 +4,7 @@ import static de.imise.tool3lgm.graphtools.userfield.definition.SubType.DUMMY_SU
 import static de.imise.tool3lgm.graphtools.userfield.definition.UserField.Style.TAB;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -20,7 +21,6 @@ import com.google.common.collect.ImmutableSet;
 import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
-import de.imise.tool3lgm.graphtools.model.CopyDependencyResolver.CopyDependencyResolverResultSimple;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.userfield.UserFieldDefinitionsAnalyzer;
@@ -151,6 +151,35 @@ public final class UserFieldDefinitions extends UserFieldDefinitionChangeHandler
     public void add(final UserFieldNumberFormat format) {
         String id = format.getID();
         formatIdToFormat.put(id, format);
+    }
+
+    /**
+     * @param format
+     * @return
+     */
+    public boolean contains(final UserFieldNumberFormat format) {
+        String id = format.getID();
+        return formatIdToFormat.containsKey(id);
+    }
+
+    /**
+     * @param userField
+     * @return the index of the UserField in the {@link UserFieldList} of the
+     *         type or -1 if ith not exists in this list
+     */
+    public int indexOf(final UserField userField) {
+        Class<? extends UserFieldTarget> targetClass = userField.getTargetClass();
+        UserFieldList userFieldList = classToUserFieldTargetSpecificListMap.get(targetClass);
+        return userFieldList.indexOf(userField);
+    }
+
+    /**
+     * @param userField
+     * @return <code>true</code> if this definition contains the given
+     *         {@link UserField}
+     */
+    public boolean contains(final UserField userField) {
+        return indexOf(userField) > 0;
     }
 
     /**
@@ -426,7 +455,58 @@ public final class UserFieldDefinitions extends UserFieldDefinitionChangeHandler
         }
     }
 
-    // AXS: 14.04.2021 Scheint überflüssig zu sein
+    /**
+     * Removes all elements from this definition and then adds Default Tabs and
+     * all subtypes with all their tabs containing one of the passed UserFields
+     * from the passed definition. So it always adds the Default Tabs and all
+     * the subtypes that are contained in the list of UserFields (and not just
+     * the one UserField itself).
+     *
+     * @param source
+     * @param userFieldsToAdd
+     */
+    public void setAllUserFields(final UserFieldDefinitions source, final Collection<UserField> userFieldsToAdd) {
+        Map<Class<? extends UserFieldTarget>, List<SubType>> targetClassToSubTypes = new HashMap<>();
+        for (UserField userField : userFieldsToAdd) {
+            Class<? extends UserFieldTarget> targetClass = userField.getTargetClass();
+            List<SubType> subtypes = targetClassToSubTypes.get(targetClass);
+            if (subtypes == null) {
+                subtypes = new ArrayList<>();
+                targetClassToSubTypes.put(targetClass, subtypes);
+            }
+            SubType parentSubType = userField.getParentSubType();
+            if (parentSubType != DUMMY_SUBTYPE) {
+                if (subtypes.isEmpty()) {
+                    subtypes.add(parentSubType);
+                } else if (!subtypes.contains(parentSubType)) {
+
+                }
+            }
+        }
+    }
+
+    //    /**
+    //     * Adds the tab with all userFields if not exists.
+    //     *
+    //     * @param tabOrSubTypeUserField
+    //     */
+    //    public void addTab(final UserFieldDefinitions sourceDef, final UserField tabUserField) {
+    //        if (tabUserField.hasStyle(TAB)) {
+    //
+    //
+    //
+    //            Class<? extends UserFieldTarget> targetClass = tabUserField.getTargetClass();
+    //            UserFieldList userFieldList = classToUserFieldTargetSpecificListMap.get(targetClass);
+    //
+    //            int tabIndexInTagtet = indexOf(tabUserField);
+    //            if (tabIndexInTagtet < 0) {
+    //                //find subtype of
+    //                UserField subTypeUserField = null;
+    //                sourceDef.getParent(tabUserField, SUBTYPE);
+    //            }
+    //        }
+    //    }
+    //
     //    /**
     //     * @param otherDef
     //     */
@@ -441,18 +521,23 @@ public final class UserFieldDefinitions extends UserFieldDefinitionChangeHandler
     //        }
     //    }
     //
-    /**
-     * @param otherDef
-     */
-    public void addAll(final CopyDependencyResolverResultSimple resolvedCopyDependencies) {
-        for (UserFieldNumberFormat numberFormat : resolvedCopyDependencies.userFieldNumberFormats) {
-            add(numberFormat);
-        }
-        for (UserField userField : resolvedCopyDependencies.userFields) {
-            add(userField.clone());
-        }
-    }
-
+    //    /**
+    //     * @param otherDef
+    //     */
+    //    public void addAll(final CopyDependencyResolverResultSimple resolvedCopyDependencies) {
+    //        UserFieldDefinitions userFieldDefinitions = resolvedCopyDependencies.getUserFieldDefinitions();
+    //
+    //
+    //
+    //
+    //        for (UserFieldNumberFormat numberFormat : resolvedCopyDependencies.userFieldNumberFormats) {
+    //            add(numberFormat);
+    //        }
+    //        for (UserField userField : resolvedCopyDependencies.userFields) {
+    //            add(userField.clone());
+    //        }
+    //    }
+    //
     /**
      * Liefert ein Benutzerfeld, das anhand des Namens herausgesucht wird.
      * ACHTUNG: Es wird immer nur das erste mit dem übergebenen Namen gefunden.
