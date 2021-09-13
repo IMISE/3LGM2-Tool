@@ -11,9 +11,9 @@
 -------------------
 ## 3LGM-IHE
 
-[IHE/1. Introduction](IHE/1. Introduction "Introduction IHE chapter")
+[Introduction in 3LGM² and IHE](IHE/1. Introduction "Introduction IHE chapter")
 
-[IHE/MustBeGroupedWith](IHE/MustBeGroupedWith "MustBeGroupedWith functionality")
+[Dependencies between IHE Actos (MustBeGroupedWith)](IHE/MustBeGroupedWith "MustBeGroupedWith functionality")
 
 -------------------
 
