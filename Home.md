@@ -2,7 +2,7 @@
 
 ## Fundamentals
 
-[First steps](01. First steps/home)
+[First steps](01. First steps)
 
 [The Metamodel](02. 3LGM² Metamodel)
 
