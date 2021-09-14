@@ -32,9 +32,10 @@ The authors assume no liability for possible errors and damage to software and h
 The copyright of the program remains with the University of Leipzig. Distribution, sale or other commercial use of the program is only allowed with the permission of the Institute of Medical Informatics, Statistics and Epidemiology (IMISE) of the University of Leipzig.
 
 For questions about the 3LGM² construction kit, please contact: 
-IMISE Härtelstraße 16 - 18 04107 Leipzig 
-Phone: (0341) 97 16100 
-E-Mail: Winter@imise.uni-leipzig.de
+
+* IMISE Härtelstraße 16 - 18 04107 Leipzig 
+* Phone: (0341) 97 16100 
+* E-Mail: Winter@imise.uni-leipzig.de
 
 The authors of the 3LGM² kit are:
 
