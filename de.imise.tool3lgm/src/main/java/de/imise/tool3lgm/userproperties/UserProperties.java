@@ -29,11 +29,15 @@ import de.imise.tool3lgm.Tool3lgmVersion;
 import de.imise.tool3lgm.event.action.ChangeLocaleAction;
 import de.imise.tool3lgm.event.action.UserPropertyBooleanChangeAction;
 import de.imise.util.BooleanOption;
+import de.imise.util.image.ComponentAsImageExportHandler.FileFilterType;
 import de.imise.util.io.FileHandler;
 import de.imise.util.swing.event.ActionSource;
 
 /**
  * @author AXS created on 16.08.2007
+ */
+/**
+ * @author Steam
  */
 public class UserProperties extends AbstractUserProperties {
 
@@ -608,6 +612,8 @@ public class UserProperties extends AbstractUserProperties {
     public static enum StringProperty {
         LOCALE,
         WORKING_DIRECTORY,
+        EXPORT_DIRECTORY,
+        EXPORT_FILE_TYPE,
         ICON_PATH,
         META_MODEL,
         MODEL_CATEGORY,
@@ -772,6 +778,62 @@ public class UserProperties extends AbstractUserProperties {
             FileSystemView.getFileSystemView().getDefaultDirectory();
         }
         return workingDirectory;
+    }
+
+    //////////////////////
+    // exportSettings //
+    //////////////////////
+
+    /**
+     * setzt das Standardverzeichnis zum Laden und Speichern von
+     * Exportdateien
+     *
+     * @param path File mit Pfandangabe
+     */
+    public static void setExportDirectory(final File path) {
+        File readableDirectory = FileHandler.getReadableDirectory(path);
+        if (readableDirectory == null) {
+            return;
+        }
+        set(StringProperty.EXPORT_DIRECTORY, readableDirectory.toString());
+    }
+
+    /**
+     * gibt das Standardverzeichnis zum Laden und Speichern von
+     * Exportdateien zurueck
+     *
+     * @return File des Standardverzeichnisses
+     */
+    public static File getExportDirectory() {
+        String exportDirectoryName = get(StringProperty.EXPORT_DIRECTORY);
+        File exportDirectory = FileHandler.getReadableDirectory(exportDirectoryName);
+        if (exportDirectory == null) {
+            FileSystemView.getFileSystemView().getDefaultDirectory();
+        }
+        return exportDirectory;
+    }
+
+    /**
+     * sets the last selected File type for exporting images
+     *
+     * @param fileType
+     */
+    public static void setExportType(final FileFilterType fileType) {
+        set(StringProperty.EXPORT_FILE_TYPE, fileType.toString());
+    }
+
+    /**
+     * gets the last file type for exporting images
+     *
+     * @return FileFilterType of last selected file type
+     */
+    public static FileFilterType getExportType() {
+        String exportTypeName = get(StringProperty.EXPORT_FILE_TYPE);
+        if (exportTypeName == null) {
+            exportTypeName = "JPG";
+        }
+        FileFilterType exportType = FileFilterType.valueOf(exportTypeName);
+        return exportType;
     }
 
     //////////////

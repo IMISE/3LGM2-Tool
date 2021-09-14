@@ -95,6 +95,7 @@ import de.imise.tool3lgm.xslt.XMLExportDialog;
 import de.imise.util.Alphabetical;
 import de.imise.util.BrowseUtils;
 import de.imise.util.image.ComponentAsImageExportHandler;
+import de.imise.util.image.ComponentAsImageExportHandler.FileFilterType;
 import de.imise.util.pair.Pair;
 import de.imise.util.swing.dialog.DirectoryChooser;
 import de.imise.util.swing.event.ExtendedAction;
@@ -278,11 +279,15 @@ public class ActionLibrary {
 
                 @Override
                 protected void actionPerformed() {
+                    FileFilterType filterType = UserProperties.getExportType();
+                    File exportDirectory = UserProperties.getExportDirectory();
+                    Pair<File, FileFilterType> fileAndType = null;
+
                     ViewPaneFrameComponent selframe = Static.getActiveFrame();
                     if (selframe instanceof GraphViewPaneFrameComponent) {
                         InputGraphArea iga = ((GraphViewPaneFrameComponent) selframe).getInputGraphArea();
                         iga.setPaintState(PaintState.SAVE_IMAGE_AS_FILE);
-                        ComponentAsImageExportHandler.createFile(iga);
+                        fileAndType = ComponentAsImageExportHandler.createFile(iga, exportDirectory, filterType);
                         iga.setPaintState(PaintState.REGULAR);
                     } else { //MatrixView
                         ViewPane viewPane = selframe.getViewPane();
@@ -290,10 +295,18 @@ public class ActionLibrary {
                         Dimension size = sp.getSize();
                         sp.setSize(sp.getMaximumSize());
                         sp.revalidate();
-                        ComponentAsImageExportHandler.createFile(sp);
+                        fileAndType = ComponentAsImageExportHandler.createFile(sp, exportDirectory, filterType);
                         sp.setSize(size);
                         sp.revalidate();
                     }
+
+                    exportDirectory = fileAndType.getFirstItem();
+                    filterType = fileAndType.getSecondItem();
+
+                    if (filterType != null) {
+                        UserProperties.setExportType(filterType);
+                    }
+                    UserProperties.setExportDirectory(exportDirectory);
                 }
 
                 @Override

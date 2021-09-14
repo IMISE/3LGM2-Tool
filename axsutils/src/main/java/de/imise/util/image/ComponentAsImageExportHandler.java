@@ -31,6 +31,7 @@ import org.w3c.dom.Document;
 
 import de.imise.util.MemoryHandler;
 import de.imise.util.StringUtils;
+import de.imise.util.pair.Pair;
 import de.imise.util.swing.component.ParentComponentFinder;
 import de.imise.util.swing.dialog.DialogResourceHandler;
 import de.imise.util.swing.dialog.ExtendedFileChooser;
@@ -83,8 +84,8 @@ public class ComponentAsImageExportHandler {
     private final FileNameExtensionFilter[] getFileNameExtensionFilters(final FileFilterType... filterNames) {
         FileNameExtensionFilter[] returnFilter = new FileNameExtensionFilter[filterNames.length];
         for (int i = 0; i < filterNames.length; i++) {
-            returnFilter[i] = new FileNameExtensionFilter(drh.getResString(FILE_FILTER_RESOURCE_PREFIX + filterNames[i]),
-                    StringUtils.tokenize(drh.getResString(FILE_FILTER_RESOURCE_PREFIX + filterNames[i] + FILE_FILTER_RESOURCE_EXTENSION_POSTFIX), " ", false));
+            String fileFilterResourceKey = FILE_FILTER_RESOURCE_PREFIX + filterNames[i];
+            returnFilter[i] = new FileNameExtensionFilter(drh.getResString(fileFilterResourceKey), StringUtils.tokenize(drh.getResString(fileFilterResourceKey + FILE_FILTER_RESOURCE_EXTENSION_POSTFIX), " ", false));
         }
         return returnFilter;
     }
@@ -278,9 +279,12 @@ public class ComponentAsImageExportHandler {
 
     /**
      * @param comp
+     * @param destination
+     * @param lastSelected
+     * @return Pair containing the destination of the exported file and the file type
      */
-    private final void createFileInternal(final JComponent comp) {
-        ExtendedFileChooser fc = new ExtendedFileChooser(ComponentAsImageExportHandler.class);
+    private final Pair<File, FileFilterType> createFileInternal(final JComponent comp, final File destination, final FileFilterType lastSelected) {
+        ExtendedFileChooser fc = new ExtendedFileChooser(ComponentAsImageExportHandler.class, destination);
         fc.setFileSystemView(FileSystemView.getFileSystemView());
         fc.setAcceptAllFileFilterUsed(false);
 
@@ -322,10 +326,14 @@ public class ComponentAsImageExportHandler {
         }
 
         fc.setMultiSelectionEnabled(false);
+
         FileNameExtensionFilter[] fileFilters = getFileNameExtensionFilters(FileFilterType.values());
-        fc.showSaveDialog(comp, drh.getResString("DIALOG_TITLE"), false, fileFilters);
+        FileNameExtensionFilter[] lastSelectedFileNameExtensionFilter = getFileNameExtensionFilters(lastSelected);
+        FileNameExtensionFilter selectedFileFilter = lastSelectedFileNameExtensionFilter.length > 0 ? lastSelectedFileNameExtensionFilter[0] : null;
+        fc.showSaveDialog(comp, drh.getResString("DIALOG_TITLE"), false, selectedFileFilter, fileFilters);
 
         boolean maximizeImage = saveMaximumSizeRBut != null && saveMaximumSizeRBut.isSelected();
+
         FileFilterType type = null;
         for (int c = 0; c < fileFilters.length; c++) {
             if (fc.getFileFilter() == fileFilters[c]) {
@@ -334,8 +342,9 @@ public class ComponentAsImageExportHandler {
             }
         }
         File f = fc.getSelectedFile();
+        Pair<File, FileFilterType> fileAndType = new Pair<>(f, type);
         if (f == null) {
-            return;
+            return fileAndType;
         }
 
         //in case a zoomscale is selected
@@ -351,13 +360,17 @@ public class ComponentAsImageExportHandler {
         }
 
         createFile(comp, type, f.getPath(), maximizeImage, zoomScale);
+        return fileAndType;
     }
 
     /**
      * @param comp
+     * @param destination
+     * @param lastSelected
+     * @return Pair containing the destination of the exported file and the file type
      */
-    public static final void createFile(final JComponent comp) {
-        new ComponentAsImageExportHandler().createFileInternal(comp);
+    public static final Pair<File, FileFilterType> createFile(final JComponent comp, final File destination, final FileFilterType lastSelected) {
+        return new ComponentAsImageExportHandler().createFileInternal(comp, destination, lastSelected);
     }
 
     /**
