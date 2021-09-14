@@ -280,7 +280,7 @@ public class ActionLibrary {
                 @Override
                 protected void actionPerformed() {
                     FileFilterType filterType = UserProperties.getExportType();
-                    File exportDirectory = UserProperties.getExportDirectory();
+                    File exportDirectory = UserProperties.getDirectory(StringProperty.EXPORT_DIRECTORY);
                     Pair<File, FileFilterType> fileAndType = null;
 
                     ViewPaneFrameComponent selframe = Static.getActiveFrame();
@@ -306,7 +306,7 @@ public class ActionLibrary {
                     if (filterType != null) {
                         UserProperties.setExportType(filterType);
                     }
-                    UserProperties.setExportDirectory(exportDirectory);
+                    UserProperties.setDirectory(exportDirectory, StringProperty.EXPORT_DIRECTORY);
                 }
 
                 @Override

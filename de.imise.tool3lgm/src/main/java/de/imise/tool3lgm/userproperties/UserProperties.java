@@ -748,7 +748,7 @@ public class UserProperties extends AbstractUserProperties {
     }
 
     //////////////////////
-    // workingDirectory //
+    //     directory    //
     //////////////////////
 
     /**
@@ -757,12 +757,12 @@ public class UserProperties extends AbstractUserProperties {
      *
      * @param path File mit Pfandangabe
      */
-    public static void setWorkingDirectory(final File path) {
+    public static void setDirectory(final File path, final StringProperty directoryType) {
         File readableDirectory = FileHandler.getReadableDirectory(path);
         if (readableDirectory == null) {
             return;
         }
-        set(StringProperty.WORKING_DIRECTORY, readableDirectory.toString());
+        set(directoryType, readableDirectory.toString());
     }
 
     /**
@@ -771,47 +771,18 @@ public class UserProperties extends AbstractUserProperties {
      *
      * @return File des Standardverzeichnisses
      */
-    public static File getWorkingDirectory() {
-        String workingDirectoryName = get(StringProperty.WORKING_DIRECTORY);
-        File workingDirectory = FileHandler.getReadableDirectory(workingDirectoryName);
-        if (workingDirectory == null) {
+    public static File getDirectory(final StringProperty directoryType) {
+        String directoryName = get(directoryType);
+        File directory = FileHandler.getReadableDirectory(directoryName);
+        if (directory == null) {
             FileSystemView.getFileSystemView().getDefaultDirectory();
         }
-        return workingDirectory;
+        return directory;
     }
 
     //////////////////////
-    // exportSettings //
+    //    exportType    //
     //////////////////////
-
-    /**
-     * setzt das Standardverzeichnis zum Laden und Speichern von
-     * Exportdateien
-     *
-     * @param path File mit Pfandangabe
-     */
-    public static void setExportDirectory(final File path) {
-        File readableDirectory = FileHandler.getReadableDirectory(path);
-        if (readableDirectory == null) {
-            return;
-        }
-        set(StringProperty.EXPORT_DIRECTORY, readableDirectory.toString());
-    }
-
-    /**
-     * gibt das Standardverzeichnis zum Laden und Speichern von
-     * Exportdateien zurueck
-     *
-     * @return File des Standardverzeichnisses
-     */
-    public static File getExportDirectory() {
-        String exportDirectoryName = get(StringProperty.EXPORT_DIRECTORY);
-        File exportDirectory = FileHandler.getReadableDirectory(exportDirectoryName);
-        if (exportDirectory == null) {
-            FileSystemView.getFileSystemView().getDefaultDirectory();
-        }
-        return exportDirectory;
-    }
 
     /**
      * sets the last selected File type for exporting images

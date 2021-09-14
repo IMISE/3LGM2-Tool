@@ -45,6 +45,7 @@ import de.imise.tool3lgm.graphtools.view.graph.BasicGraphArea;
 import de.imise.tool3lgm.graphtools.view.graph.BasicGraphArea.PaintState;
 import de.imise.tool3lgm.log.Log;
 import de.imise.tool3lgm.userproperties.UserProperties;
+import de.imise.tool3lgm.userproperties.UserProperties.StringProperty;
 import de.imise.util.BrowseUtils;
 import de.imise.util.htmlxml.XMLCharacterCoder;
 import de.imise.util.image.ComponentAsImageExportHandler;
@@ -136,7 +137,7 @@ public class WebExportDialog extends JDialog {
             modelName = modelName.substring(0, modelName.lastIndexOf("."));
         }
 
-        destination.setText(UserProperties.getWorkingDirectory().toString() + File.separator + "3LGM_export_" + modelName);
+        destination.setText(UserProperties.getDirectory(StringProperty.WORKING_DIRECTORY).toString() + File.separator + "3LGM_export_" + modelName);
         destination.setEditable(false);
         panel.add(new JButton(new AbstractAction(getResString("explore")) {
             @Override
@@ -187,7 +188,7 @@ public class WebExportDialog extends JDialog {
             path = new File(destination.getText());
         } catch (Exception e) {
             try {
-                path = new File(UserProperties.getWorkingDirectory().getCanonicalPath() + File.separator + "_tool3lgm_webexport");
+                path = new File(UserProperties.getDirectory(StringProperty.WORKING_DIRECTORY).getCanonicalPath() + File.separator + "_tool3lgm_webexport");
             } catch (Exception ex) {
                 Log.show(Log.ERROR, getResString("FehlerAllgemein"), ex);
                 return;
@@ -434,7 +435,6 @@ public class WebExportDialog extends JDialog {
          * @param xslScripts
          */
         public TableModel(final List<XSLTScript> xslScripts) {
-            super();
             this.xslScripts = xslScripts;
             selections = new Boolean[xslScripts.size()];
             for (int i = 0; i < xslScripts.size(); i++) {
