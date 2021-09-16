@@ -148,6 +148,18 @@ public class ElementSelectionContext extends MetaModelSpecificAdapter {
     }
 
     /**
+     * Prevents the execution of the cost intensive function
+     * {@link ModelSelection#updateSelectionState()} if the state is
+     * <code>false</code>. A call of this function with preventUpdate ==
+     * <code>false</code> calls {@link ModelSelection#updateSelectionState()}
+     *
+     * @param preventUpdate
+     */
+    public void setPreventModelSelectionStateUpdate(final boolean preventUpdate) {
+        selectedContainer.setPreventModelSelectionStateUpdate(preventUpdate);
+    }
+
+    /**
      * @param me
      */
     protected final void deselectInElementSelectionContext(final ModelElement me) {

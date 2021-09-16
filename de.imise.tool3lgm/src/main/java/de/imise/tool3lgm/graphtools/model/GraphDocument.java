@@ -3259,20 +3259,18 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
     public void selectAll() {
         final int PID = TransactionManager.STANDARD_PID;
         start_transaction(PID, false);
+        gdcoll.setBulkMode(true);
         deselectAll(true);
         for (int i = 0; i < layer.length; i++) {
             LayerContainer lc = layer[i];
-            for (ElementContainer ec : lc.getGraphNodeContainers()) {
-                gdcoll.addToSelection(ec);
-            }
-            for (ElementContainer ec : lc.getEdgeContainers()) {
-                gdcoll.addToSelection(ec);
-            }
-            for (ElementContainer ec : lc.getBendpointContainers()) {
-                gdcoll.addToSelection(ec);
-            }
+            Iterable<NodeContainer> graphNodeContainers = lc.getGraphNodeContainers();
+            Iterable<EdgeContainer> edgeContainers = lc.getEdgeContainers();
+            Iterable<BendpointContainer> bendpointContainers = lc.getBendpointContainers();
+            Iterable<ElementContainer> elementContainers = CollectionUtils.getCommonIterable(graphNodeContainers, edgeContainers, bendpointContainers);
+            gdcoll.addToSelection(elementContainers);
         }
         gdcoll.selectAllUniques();
+        gdcoll.setBulkMode(false);
         finish_transaction(PID, false);
         distributeEvent(SELECTION_CHANGED, PID);
     }

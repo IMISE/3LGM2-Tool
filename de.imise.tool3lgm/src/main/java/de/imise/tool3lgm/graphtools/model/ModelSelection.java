@@ -161,6 +161,7 @@ public class ModelSelection extends MetaModelSpecificAdapter implements Set<Elem
      * @param orderSources
      * @return
      */
+    @SafeVarargs
     public final SortedSelection getSortedSelection(final Iterable<NodeContainer>... orderSources) {
         SortedSelection returnList = new SortedSelection(size());
         returnList.addAll(selectedRealNodeContainer);
@@ -231,15 +232,26 @@ public class ModelSelection extends MetaModelSpecificAdapter implements Set<Elem
 
     @Override
     public boolean addAll(final Collection<? extends ElementContainer> selectedObjects) {
+        return addAll((Iterable<? extends ElementContainer>) selectedObjects);
+    }
+
+    /**
+     * @param selectedObjects
+     * @return
+     */
+    public boolean addAll(final Iterable<? extends ElementContainer> selectedObjects) {
         if (selectedObjects == null) {
             return false;
         }
+        preventUpdate = true;
         boolean returnValue = false;
         for (ElementContainer ec : selectedObjects) {
             if (add(ec)) {
                 returnValue = true;
             }
         }
+        preventUpdate = false;
+        updateSelectionState();
         return returnValue;
     }
 
@@ -530,6 +542,21 @@ public class ModelSelection extends MetaModelSpecificAdapter implements Set<Elem
         sb.append("\n");
         sb.append("\n");
         return sb.toString();
+    }
+
+    /**
+     * Prevents the execution of the cost intensive function
+     * {@link #updateSelectionState()} if the state is <code>false</code>. A
+     * call of this function with preventUpdate == <code>false</code> calls
+     * {@link #updateSelectionState()}
+     *
+     * @param preventUpdate
+     */
+    public void setPreventModelSelectionStateUpdate(final boolean preventUpdate) {
+        this.preventUpdate = preventUpdate;
+        if (!preventUpdate) {
+            updateSelectionState();
+        }
     }
 
     /**

@@ -665,7 +665,8 @@ public class ActionLibrary {
             @Override
             protected void actionPerformed() {
                 Static.showProgressDialog();
-                Static.setProgressDialogTitle(getResString("PROGRESS_SELECT_ALL"));
+                Static.setProgressDialogTitle("PROGRESS_SELECT_ALL_TITLE");
+                Static.setProgressDialogStatusLabel("PROGRESS_SELECT_ALL_MESSAGE");
                 getSelectedDoc().selectAll();
                 Static.closeProgressDialog();
             }

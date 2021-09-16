@@ -792,7 +792,9 @@ public final class ModelBrowserTree extends DynamicTree implements UserFieldList
             }
             LGMTreeNode<?> node = ec.getTreeNode();
             if (node != null) {
-                path[m++] = new TreePath(((DefaultTreeModel) treeModel).getPathToRoot(node));
+                DefaultTreeModel defaultTreeModel = (DefaultTreeModel) treeModel;
+                TreeNode[] pathToRoot = defaultTreeModel.getPathToRoot(node);
+                path[m++] = new TreePath(pathToRoot);
             }
         }
         setSelectionPaths(path);

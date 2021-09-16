@@ -2577,6 +2577,9 @@ public class GDCollection extends UserFieldTarget implements MetaModelSpecific {
         }
         boolean lastModeWasBulkMode = this.bulk_mode;
         this.bulk_mode = bulk_mode;
+        //prevent selection status update in bulk mode (is important
+        //during selection of all elements in large models
+        setPreventModelSelectionStateUpdate(bulk_mode);
         if (lastModeWasBulkMode && !bulk_mode) {
             distributeChangeEvents();
         }
@@ -2794,12 +2797,27 @@ public class GDCollection extends UserFieldTarget implements MetaModelSpecific {
     /**
      * @param elementContainers
      */
-    public void addToSelection(final Collection<ElementContainer> elementContainers) {
+    public void addToSelection(final Iterable<ElementContainer> elementContainers) {
         boolean oldBulkMode = setBulkMode(true);
         for (ElementContainer ec : elementContainers) {
             addToSelection(ec);
         }
         setBulkMode(oldBulkMode);
+    }
+
+    /**
+     * Prevents the execution of the cost intensive function
+     * {@link ModelSelection#updateSelectionState()} if the state is
+     * <code>false</code>. A call of this function with preventUpdate ==
+     * <code>false</code> calls {@link ModelSelection#updateSelectionState()}
+     *
+     * @param preventUpdate
+     */
+    private void setPreventModelSelectionStateUpdate(final boolean preventUpdate) {
+        mainDoc.setPreventModelSelectionStateUpdate(preventUpdate);
+        for (Szenario szen : szenarios) {
+            szen.setPreventModelSelectionStateUpdate(preventUpdate);
+        }
     }
 
     /**
