@@ -614,7 +614,7 @@ public class UserProperties extends AbstractUserProperties {
         WORKING_DIRECTORY,
         GRAPH_EXPORT_DIRECTORY,
         GRAPH_EXPORT_FILE_TYPE,
-        ICON_PATH,
+        ICON_DIRECTORY,
         META_MODEL,
         MODEL_CATEGORY,
         /** Liste der zuletzt benutzten ModellDateien */
@@ -808,30 +808,9 @@ public class UserProperties extends AbstractUserProperties {
         return exportType;
     }
 
-    //////////////
-    // iconPath //
-    //////////////
-
-    /** user path for importing icons */
-    private static File iconPath = FileSystemView.getFileSystemView().getDefaultDirectory();
-
-    /**
-     * setzt das Standardverzeichnis Importieren von Icons
-     *
-     * @param path File mit Icon-Pfandangabe
-     */
-    public static void setIconPath(final File path) {
-        iconPath = path;
-    }
-
-    /**
-     * gibt das Standardverzeichnis zum importieren von Icons zurueck
-     *
-     * @return File des Icon-Standardverzeichnisses
-     */
-    public static File getIconPath() {
-        return iconPath;
-    }
+    /////////////////
+    // FileVersion //
+    /////////////////
 
     /**
      * @return
