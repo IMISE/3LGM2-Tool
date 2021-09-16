@@ -302,18 +302,21 @@ public class GDCollection extends UserFieldTarget implements MetaModelSpecific {
     private final List<LGMChangeEvent> changeEvents = new ArrayList<>();
 
     /**
-     * Creates a new Model without setting the model type
+     * Creates a new Model without setting the model type. The new
+     * {@link GDCollection} start with {@link #bulk_mode} <code>true</code>.
      */
     public GDCollection() {
         fileHandler = new GDCollectionFileHandler(this);
         imExportHandler = new GDCollectionImExportHandler(this);
         modelValidator = new ModelValidator(this);
         tman = new TransactionManager(this);
+        bulk_mode = true;
     }
 
     /**
      * Creates a new Model with the specified model type and without loading the
-     * default {@link UserFieldDefinitions}.
+     * default {@link UserFieldDefinitions}. The new {@link GDCollection} start
+     * with {@link #bulk_mode} <code>true</code>.
      *
      * @param modelype the context that contains the metamodel of this model and
      *            the corresponding resource bundle and the type of the model
@@ -324,7 +327,8 @@ public class GDCollection extends UserFieldTarget implements MetaModelSpecific {
 
     /**
      * Creates a new model with the specified model type and with optionally
-     * loading the default {@link UserFieldDefinitions}.
+     * loading the default {@link UserFieldDefinitions}. The new
+     * {@link GDCollection} start with {@link #bulk_mode} <code>true</code>.
      *
      * @param modelype the context that contains the metamodel of this model and
      *            the corresponding resource bundle and the type of the model

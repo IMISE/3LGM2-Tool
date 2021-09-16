@@ -176,6 +176,7 @@ public class Tool3lgm {
             Static.setProgressDialogTitle("load_model", file.getName());
             Static.setProgressDialogStatusLabel("read_progress");
             boolean retVal = fileHandler.loadFromRAF();
+            gdcoll.setBulkMode(false);
             return retVal ? gdcoll : null;
         } catch (Exception e) {
             Log.show(Log.FATAL, getResString("FehlerAllgemein"), e);
