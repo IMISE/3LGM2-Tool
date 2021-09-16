@@ -1,6 +1,7 @@
 package de.imise.tool3lgm.graphtools.userfield.definition;
 
 import static de.imise.tool3lgm.graphtools.userfield.definition.SubType.DUMMY_SUBTYPE;
+import static de.imise.tool3lgm.graphtools.userfield.definition.UserField.Style.SUBTYPE;
 import static de.imise.tool3lgm.graphtools.userfield.definition.UserField.Style.TAB;
 
 import java.util.ArrayList;
@@ -21,6 +22,7 @@ import com.google.common.collect.ImmutableSet;
 import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
+import de.imise.tool3lgm.graphtools.model.CopyDependencyResolver;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.userfield.UserFieldDefinitionsAnalyzer;
@@ -42,7 +44,7 @@ import de.imise.util.swing.dialog.MultipleOptionPane;
  *
  * @author Thomas Rudert
  */
-public final class UserFieldDefinitions extends UserFieldDefinitionChangeHandler implements Cloneable {
+public class UserFieldDefinitions extends UserFieldDefinitionChangeHandler implements Cloneable {
 
     /**
      * Klasse, über die die sogenannten Modellvariablen identifiziert werden,
@@ -456,88 +458,247 @@ public final class UserFieldDefinitions extends UserFieldDefinitionChangeHandler
     }
 
     /**
+     * Adds a clone of the userField and its potential format clone to this
+     * definition.
+     *
+     * @param userField
+     */
+    private void addUserFieldCloneInclusiveFormat(final UserField userField) {
+        UserField userFieldClone = userField.clone();
+        add(userFieldClone);
+        UserFieldNumberFormat format = userField.getNumberFormat();
+        if (format != null) {
+            UserFieldNumberFormat formatClone = format.clone();
+            add(formatClone);
+        }
+    }
+
+    /**
      * Removes all elements from this definition and then adds Default Tabs and
      * all subtypes with all their tabs containing one of the passed UserFields
      * from the passed definition. So it always adds the Default Tabs and all
      * the subtypes that are contained in the list of UserFields (and not just
-     * the one UserField itself).
+     * the one UserField itself). This function shoul be used only by the
+     * {@link CopyDependencyResolver}.
      *
      * @param source
      * @param userFieldsToAdd
      */
     public void setAllUserFields(final UserFieldDefinitions source, final Collection<UserField> userFieldsToAdd) {
+        classToUserFieldTargetSpecificListMap.clear();
+        formatIdToFormat.clear();
+        //create a map of all classes and its subtypes we have to copy from the source collection to this
         Map<Class<? extends UserFieldTarget>, List<SubType>> targetClassToSubTypes = new HashMap<>();
-        for (UserField userField : userFieldsToAdd) {
-            Class<? extends UserFieldTarget> targetClass = userField.getTargetClass();
-            List<SubType> subtypes = targetClassToSubTypes.get(targetClass);
-            if (subtypes == null) {
-                subtypes = new ArrayList<>();
-                targetClassToSubTypes.put(targetClass, subtypes);
+        outerloop: for (UserField userField : userFieldsToAdd) {
+            //global userField -> simple add
+            if (userField.isGlobal()) {
+                addUserFieldCloneInclusiveFormat(userField);
+            } else {
+                Class<? extends ModelElement> targetClass = userField.getTargetClass().asSubclass(ModelElement.class);
+                List<SubType> subtypes = targetClassToSubTypes.get(targetClass);
+                if (subtypes == null) {
+                    subtypes = new ArrayList<>();
+                    targetClassToSubTypes.put(targetClass, subtypes);
+                }
+                SubType parentSubType = userField.getParentSubType();
+                if (parentSubType != DUMMY_SUBTYPE) {
+                    if (subtypes.isEmpty()) {
+                        subtypes.add(parentSubType);
+                    } else if (!subtypes.contains(parentSubType)) {
+                        UserFieldList sourceUserFieldList = source.classToUserFieldTargetSpecificListMap.get(targetClass);
+                        int subTypeIndexInSource = sourceUserFieldList.getSubTypeIndex(parentSubType);
+                        if (subTypeIndexInSource < 0) {
+                            subtypes.add(parentSubType);
+                        } else {
+                            for (int i = 0; i < subtypes.size(); i++) {
+                                SubType subType = subtypes.get(i);
+                                int otherSubTypeIndex = sourceUserFieldList.getSubTypeIndex(subType);
+                                if (otherSubTypeIndex > subTypeIndexInSource) {
+                                    subtypes.add(i, subType);
+                                    continue outerloop;
+                                }
+                            }
+                            subtypes.add(parentSubType);
+                        }
+                    }
+                }
             }
-            SubType parentSubType = userField.getParentSubType();
-            if (parentSubType != DUMMY_SUBTYPE) {
-                if (subtypes.isEmpty()) {
-                    subtypes.add(parentSubType);
-                } else if (!subtypes.contains(parentSubType)) {
-
+        }
+        //now really copy all correct sorted subtypes
+        for (Class<? extends UserFieldTarget> targetClass : targetClassToSubTypes.keySet()) {
+            UserFieldList sourceUserFieldList = source.classToUserFieldTargetSpecificListMap.get(targetClass);
+            //cpoy all tabs and userFields for all elements of the current type (not subtype specific userfields)
+            List<SubType> subTypes = targetClassToSubTypes.get(targetClass);
+            if (!subTypes.isEmpty()) {
+                for (int i = 0; i < sourceUserFieldList.size(); i++) {
+                    UserField sourceUserField = sourceUserFieldList.get(i);
+                    if (!sourceUserField.hasStyle(SUBTYPE)) {
+                        addUserFieldCloneInclusiveFormat(sourceUserField);
+                    } else {
+                        for (SubType subType : subTypes) {
+                            boolean copy = false;
+                            for (; i < sourceUserFieldList.size(); i++) {
+                                sourceUserField = sourceUserFieldList.get(i);
+                                if (sourceUserField.hasStyle(SUBTYPE)) {
+                                    SubType parentSubType = sourceUserField.getParentSubType();
+                                    if (subType.equals(parentSubType)) {
+                                        copy = true;
+                                    } else if (copy) {
+                                        break;
+                                    }
+                                }
+                                if (copy) {
+                                    addUserFieldCloneInclusiveFormat(sourceUserField);
+                                }
+                            }
+                        }
+                    }
                 }
             }
         }
     }
 
-    //    /**
-    //     * Adds the tab with all userFields if not exists.
-    //     *
-    //     * @param tabOrSubTypeUserField
-    //     */
-    //    public void addTab(final UserFieldDefinitions sourceDef, final UserField tabUserField) {
-    //        if (tabUserField.hasStyle(TAB)) {
-    //
-    //
-    //
-    //            Class<? extends UserFieldTarget> targetClass = tabUserField.getTargetClass();
-    //            UserFieldList userFieldList = classToUserFieldTargetSpecificListMap.get(targetClass);
-    //
-    //            int tabIndexInTagtet = indexOf(tabUserField);
-    //            if (tabIndexInTagtet < 0) {
-    //                //find subtype of
-    //                UserField subTypeUserField = null;
-    //                sourceDef.getParent(tabUserField, SUBTYPE);
-    //            }
-    //        }
-    //    }
-    //
-    //    /**
-    //     * @param otherDef
-    //     */
-    //    private void addAll(final UserFieldDefinitions otherDef) {
-    //        Iterable<UserField> elementClassUserFields = otherDef.getElementClassUserFields();
-    //        Iterable<UserFieldNumberFormat> numberFormats = otherDef.getNumberFormats();
-    //        addAll(numberFormats, elementClassUserFields);
-    //        for (Class<? extends UserFieldTarget> clazz : otherDef.classToUserFieldTargetSpecificListMap.keySet()) {
-    //            for (UserField uf : otherDef.classToUserFieldTargetSpecificListMap.get(clazz)) {
-    //                add(uf);
-    //            }
-    //        }
-    //    }
-    //
-    //    /**
-    //     * @param otherDef
-    //     */
-    //    public void addAll(final CopyDependencyResolverResultSimple resolvedCopyDependencies) {
-    //        UserFieldDefinitions userFieldDefinitions = resolvedCopyDependencies.getUserFieldDefinitions();
-    //
-    //
-    //
-    //
-    //        for (UserFieldNumberFormat numberFormat : resolvedCopyDependencies.userFieldNumberFormats) {
-    //            add(numberFormat);
-    //        }
-    //        for (UserField userField : resolvedCopyDependencies.userFields) {
-    //            add(userField.clone());
-    //        }
-    //    }
-    //
+    /**
+     * @param otherDef
+     */
+    public void addAll(final UserFieldDefinitions userFieldDefinition2Add) {
+        for (Class<? extends UserFieldTarget> clazz : userFieldDefinition2Add.classToUserFieldTargetSpecificListMap.keySet()) {
+            UserFieldList targetUserFieldList = classToUserFieldTargetSpecificListMap.get(clazz);
+            UserFieldList allUserFieldList2Add = userFieldDefinition2Add.classToUserFieldTargetSpecificListMap.get(clazz);
+            //construct a list with all userfields to add. This are all userfields
+            //which are not already present in the target list. All Tabs and Subtypes
+            //are replaced in this list by the object in the target list if they are already
+            //contained in the target list.
+            List<UserField> userFields2Add = new ArrayList<>();
+            for (UserField userField2Add : allUserFieldList2Add) {
+                String id = userField2Add.getID();
+                //userfield to add already exists in the target list?
+                UserField userField = targetUserFieldList.get(id);
+                if (userField != null) {
+                    if (userField.hasStyle(SUBTYPE, TAB)) {
+                        userFields2Add.add(userField);
+                    }
+                } else {
+                    userFields2Add.add(userField2Add);
+                }
+            }
+
+            //now remove 'emtpy' tabs and subytpes
+            for (int i = 0; i < userFields2Add.size(); i++) {
+                UserField userField2Add = userFields2Add.get(i);
+                //check empty tab = tab at the end of the list or followed by an
+                //other tab or subtype
+                if (userField2Add.hasStyle(TAB)) {
+                    if (i + 1 == userFields2Add.size()) {
+                        userFields2Add.remove(i);
+                    } else {
+                        UserField nextUserField = userFields2Add.get(i + 1);
+                        if (nextUserField.hasStyle(SUBTYPE, TAB)) {
+                            //after deleting go two steps back to check the upper
+                            //subtype if it is empty after deleting the tab
+                            userFields2Add.remove(i--);
+                            if (i > 0) {
+                                i--;
+                            }
+                        }
+                    }
+                } else if (userField2Add.hasStyle(SUBTYPE)) {
+                    if (i + 1 == userFields2Add.size()) {
+                        userFields2Add.remove(i);
+                    } else {
+                        UserField nextUserField = userFields2Add.get(i + 1);
+                        if (nextUserField.hasStyle(SUBTYPE)) {
+                            userFields2Add.remove(i--);
+                        }
+                    }
+                }
+            }
+
+            //add all userFields of existing tabs to the target
+            //list and remove it from the source list (this deals
+            //with the possibility that in the target model the
+            //same tabs can be present in other subtypes than in
+            //the target list
+            for (int sourceIndex = 0; sourceIndex < userFields2Add.size(); sourceIndex++) {
+                UserField userField2Add = userFields2Add.get(sourceIndex);
+                if (userField2Add.hasStyle(TAB)) {
+                    int insertIndex = targetUserFieldList.indexOf(userField2Add);
+                    //tab is already present in the destination list
+                    if (insertIndex >= 0) {
+                        //remove tab in the source list
+                        userFields2Add.remove(insertIndex);
+                        //find the last userField of the tab in the target list = new insert index
+                        for (; insertIndex < targetUserFieldList.size(); insertIndex++) {
+                            userField2Add = targetUserFieldList.get(insertIndex);
+                            if (userField2Add.hasStyle(SUBTYPE, TAB)) {
+                                break;
+                            }
+                        }
+                        sourceIndex++;
+                        while (sourceIndex < userFields2Add.size()) {
+                            userField2Add = userFields2Add.get(sourceIndex);
+                            if (userField2Add.hasStyle(SUBTYPE, TAB)) {
+                                break;
+                            }
+                            targetUserFieldList.add(userField2Add);
+                            //remove added userfields in the source list
+                            userFields2Add.remove(insertIndex);
+                        }
+                    }
+                }
+            }
+
+            //add all really new userfields to target list
+            int insertIndex = -1;
+            int sourceIndex = 0;
+            for (; sourceIndex < userFields2Add.size(); sourceIndex++) {
+                UserField userField2Add = userFields2Add.get(sourceIndex);
+                if (userField2Add.hasStyle(SUBTYPE)) {
+                    break;
+                }
+                //find the end index of the general user fields (no subtype)
+                if (insertIndex < 0) {
+                    for (insertIndex = 0; insertIndex < targetUserFieldList.size(); insertIndex++) {
+                        UserField existingTargetUserField = targetUserFieldList.get(insertIndex);
+                        if (existingTargetUserField.hasStyle(SUBTYPE)) {
+                            break;
+                        }
+                    }
+                }
+                targetUserFieldList.add(userField2Add);
+            }
+
+            //now add all subtypes and the really new tabs and theri userFields
+            for (sourceIndex--; sourceIndex < userFields2Add.size(); sourceIndex++) {
+                UserField userField2Add = userFields2Add.get(sourceIndex);
+                if (userField2Add.hasStyle(SUBTYPE)) {
+                    insertIndex = targetUserFieldList.indexOf(userField2Add);
+                    if (insertIndex < 0) {
+                        insertIndex = targetUserFieldList.size();
+                        targetUserFieldList.add(userField2Add);
+                        insertIndex++;
+                    } else {
+                        for (++insertIndex; insertIndex < targetUserFieldList.size(); insertIndex++) {
+                            UserField existingTargetUserField = targetUserFieldList.get(insertIndex);
+                            if (existingTargetUserField.hasStyle(SUBTYPE)) {
+                                break;
+                            }
+                        }
+                    }
+                    //add all sub userfields of the current subtype
+                    for (++sourceIndex; sourceIndex < userFields2Add.size(); sourceIndex++) {
+                        userField2Add = userFields2Add.get(sourceIndex);
+                        if (userField2Add.hasStyle(SUBTYPE)) {
+                            sourceIndex--;
+                            break;
+                        }
+                        targetUserFieldList.insert(userField2Add, insertIndex++);
+                    }
+                }
+            }
+        }
+    }
+
     /**
      * Liefert ein Benutzerfeld, das anhand des Namens herausgesucht wird.
      * ACHTUNG: Es wird immer nur das erste mit dem übergebenen Namen gefunden.
@@ -1392,6 +1553,11 @@ public final class UserFieldDefinitions extends UserFieldDefinitionChangeHandler
         SubType parentSubType = getParentSubType(userField);
         ModelElement me = (ModelElement) userFieldTarget;
         return me.hasSubType(parentSubType);
+    }
+
+    @Override
+    public String toString() {
+        return ExtendedMap.toString(classToUserFieldTargetSpecificListMap);
     }
 
 }

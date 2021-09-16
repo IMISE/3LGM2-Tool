@@ -190,7 +190,7 @@ public class UserFieldList implements Cloneable, Iterable<UserField> {
                 }
             }
         }
-        return index; fertig
+        return index;
     }
 
     /**

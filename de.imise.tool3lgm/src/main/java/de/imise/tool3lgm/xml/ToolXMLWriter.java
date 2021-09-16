@@ -188,7 +188,8 @@ public class ToolXMLWriter extends IntendingXMLWriter {
      */
     public static boolean writeExport(final GDCollection gdcoll, final File file, final List<Szenario> szenarios) {
         CopyDependencyResolverResultFull resolvedCopyDependencies = CopyDependencyResolver.resolveCopyDependencies(szenarios);
-        return writeExport(gdcoll, file, szenarios, resolvedCopyDependencies.elements, resolvedCopyDependencies.userFieldNumberFormats, resolvedCopyDependencies.userFields, resolvedCopyDependencies.iconIDs);
+        UserFieldDefinitions userFieldDefinitions = resolvedCopyDependencies.getUserFieldDefinitions();
+        return writeExport(gdcoll, file, szenarios, resolvedCopyDependencies.elements, userFieldDefinitions, resolvedCopyDependencies.iconIDs);
     }
 
     /**
@@ -198,16 +199,17 @@ public class ToolXMLWriter extends IntendingXMLWriter {
      * @param file
      * @param szenarios
      * @param elements
-     * @param userFieldNumberFormats
-     * @param userFields
+     * @param userFieldDefinitions Definition der benutzerdefinierten
+     *            Eigenschaften, die rausgeschrieben werden sollen. Ist diese
+     *            Definition <code>null</code>, werden alle UserFields
+     *            geschrieben.
      * @param iconIDs
      * @return
      */
-    private static boolean writeExport(final GDCollection gdcoll, final File file, final List<Szenario> szenarios, final Collection<ModelElement> elements, final Iterable<UserFieldNumberFormat> userFieldNumberFormats, final Iterable<UserField> userFields,
-            final Iterable<String> iconIDs) {
+    private static boolean writeExport(final GDCollection gdcoll, final File file, final List<Szenario> szenarios, final Collection<ModelElement> elements, final UserFieldDefinitions userFieldDefinitions, final Iterable<String> iconIDs) {
         try {
             ToolXMLWriter toolXMLWriter = new ToolXMLWriter(gdcoll, file);
-            toolXMLWriter.writeModel(gdcoll.getName() + " (export)", szenarios, elements, userFieldNumberFormats, userFields, iconIDs);
+            toolXMLWriter.writeModel(gdcoll.getName() + " (export)", szenarios, elements, userFieldDefinitions, iconIDs);
             toolXMLWriter.finish();
         } catch (Exception e) {
             Log.show(Log.ERROR, "Exception while exporting UserFieldFile", e);
@@ -221,7 +223,7 @@ public class ToolXMLWriter extends IntendingXMLWriter {
     /////////////////////////////////////////////
 
     private void writeModel() throws XMLStreamException {
-        writeModel(gdcoll.getName(), null, null, null, null, null);
+        writeModel(gdcoll.getName(), null, null, null, null);
     }
 
     /**
@@ -234,17 +236,16 @@ public class ToolXMLWriter extends IntendingXMLWriter {
      * @param elements Liste der Elemente, die geschrieben werden sollen. Ist
      *            diese Liste <code>null</code>, werden alle Elemente
      *            geschrieben.
-     * @param userFieldNumberFormats
-     * @param userFields Alle UserFields, die geschrieben werden sollen. Ist
-     *            dieses {@link Iterable} <code>null</code>, werden alle
-     *            UserFields geschrieben.
+     * @param userFieldDefinitions Definition der benutzerdefinierten
+     *            Eigenschaften, die rausgeschrieben werden sollen. Ist diese
+     *            Definition <code>null</code>, werden alle UserFields
+     *            geschrieben.
      * @param iconIDs IDs aller Icons, die geschrieben werden sollen. Ist dieses
      *            {@link Iterable} <code>null</code>, werden alle Icons
      *            geschrieben.
      * @throws XMLStreamException
      */
-    private void writeModel(final String name, final List<Szenario> szenarios, final Collection<ModelElement> elements, final Iterable<UserFieldNumberFormat> userFieldNumberFormats, final Iterable<UserField> userFields, final Iterable<String> iconIDs)
-            throws XMLStreamException {
+    private void writeModel(final String name, final List<Szenario> szenarios, final Collection<ModelElement> elements, UserFieldDefinitions userFieldDefinitions, final Iterable<String> iconIDs) throws XMLStreamException {
         writeStartDocument();
         writeStartElement("modell_3lgm_2"); //<modell_3lgm_2>
         writeStartElement("header"); //<header>
@@ -252,11 +253,11 @@ public class ToolXMLWriter extends IntendingXMLWriter {
         writeElement("description", gdcoll.getMainDoc().getDescription());
         writeElement("version", gdcoll.getFileVersion());
         writeEndElement(); //</header>
-        if (userFields == null) {
-            writeUserFieldDefinitions(gdcoll.getUserFieldDefinitions(), true);
-        } else {
-            writeUserFieldDefinitions(userFieldNumberFormats, userFields);
+        if (userFieldDefinitions == null) {
+            userFieldDefinitions = gdcoll.getUserFieldDefinitions();
         }
+        writeUserFieldDefinitions(userFieldDefinitions, true);
+
         writeStartElement("objects"); //<objects>
         writeStartElement("model"); //<model>
         writeUserFieldValues(gdcoll);
@@ -284,7 +285,7 @@ public class ToolXMLWriter extends IntendingXMLWriter {
      * @param appendWeightReplacer
      * @throws XMLStreamException
      */
-    private void writeUserFieldDefinitions(final UserFieldDefinitions definitions, final boolean appendWeightReplacer) throws XMLStreamException {
+    protected void writeUserFieldDefinitions(final UserFieldDefinitions definitions, final boolean appendWeightReplacer) throws XMLStreamException {
         Iterable<UserFieldNumberFormat> unsortedNumberFormats = definitions.getNumberFormats();
         List<UserFieldNumberFormat> numberFormats = IDSource.getSortedByID(unsortedNumberFormats);
         Iterable<UserField> userFields = CollectionUtils.getCommonIterable(definitions.getGlobalUserFields(), definitions.getElementClassUserFields());
@@ -292,11 +293,7 @@ public class ToolXMLWriter extends IntendingXMLWriter {
         writeUserFieldDefinitions(numberFormats, userFields, weightReplacer);
     }
 
-    protected void writeUserFieldDefinitions(final Iterable<UserFieldNumberFormat> numberFormats, final Iterable<UserField> userFields) throws XMLStreamException {
-        writeUserFieldDefinitions(numberFormats, userFields, null);
-    }
-
-    protected void writeUserFieldDefinitions(final Iterable<UserFieldNumberFormat> numberFormats, final Iterable<UserField> userFields, final WeightReplacer weightReplacer) throws XMLStreamException {
+    private void writeUserFieldDefinitions(final Iterable<UserFieldNumberFormat> numberFormats, final Iterable<UserField> userFields, final WeightReplacer weightReplacer) throws XMLStreamException {
         writeStartElement("userFieldDefinitions");
         //Zuerst immer die Formate und dann immer die globalen Varialen rausschreiben
         for (UserFieldNumberFormat numberFormat : numberFormats) {

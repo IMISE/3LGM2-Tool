@@ -20,6 +20,7 @@ import de.imise.tool3lgm.graphtools.model.CopyDependencyResolver.CopyDependencyR
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.model.LGMGraphDocument;
 import de.imise.tool3lgm.graphtools.model.SortedSelection;
+import de.imise.tool3lgm.graphtools.userfield.definition.UserFieldDefinitions;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout;
 import de.imise.tool3lgm.log.Log;
@@ -58,7 +59,8 @@ public class ToolXMLClipboardWriter extends ToolXMLWriter {
         writeStartDocument();
         writeStartElement("tool3lgm_clipboard"); //<tool3lgm_clipboard>
         writeAttribute("time", String.valueOf(System.currentTimeMillis()));
-        writeUserFieldDefinitions(resolvedCopyDependencies.userFieldNumberFormats, resolvedCopyDependencies.userFields);
+        UserFieldDefinitions userFieldDefinitions = resolvedCopyDependencies.getUserFieldDefinitions();
+        writeUserFieldDefinitions(userFieldDefinitions, true);
         writeStartElement("objects"); //<objects>
         MetaModel metaModel = gdcoll.getMetaModel();
         for (ModelElement me : resolvedCopyDependencies.elements) {

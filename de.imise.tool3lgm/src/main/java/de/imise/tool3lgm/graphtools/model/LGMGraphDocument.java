@@ -346,8 +346,9 @@ public class LGMGraphDocument extends GraphDocument {
         //andere nicht kopiert werden soll aber bereits im Zielmodell vorkommt hinzufügen
         addSplittedSourceEdgesToCopy(resolvedCopyDependencies.elements, targetDoc);
 
-        UserFieldDefinitions ufd = targetCollection.getUserFieldDefinitions();
-        ufd.addAll(resolvedCopyDependencies);
+        UserFieldDefinitions userFieldDefinitions = targetCollection.getUserFieldDefinitions();
+        UserFieldDefinitions userFieldDefinitions2Add = resolvedCopyDependencies.getUserFieldDefinitions();
+        userFieldDefinitions.addAll(userFieldDefinitions2Add);
 
         List<ElementContainer> tmpActive = new ArrayList<>(sourceDoc.selectedContainer);
         List<Edge> edges = new ArrayList<>();

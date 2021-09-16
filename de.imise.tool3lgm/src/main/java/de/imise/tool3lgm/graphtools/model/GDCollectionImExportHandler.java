@@ -23,7 +23,6 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.CopyDependencyResolver.CopyDependencyResolverResultFull;
 import de.imise.tool3lgm.graphtools.undoredo.TransactionManager;
-import de.imise.tool3lgm.graphtools.userfield.definition.UserField;
 import de.imise.tool3lgm.graphtools.userfield.definition.UserFieldDefinitions;
 import de.imise.tool3lgm.graphtools.view.container.BendpointContainer;
 import de.imise.tool3lgm.graphtools.view.container.EdgeContainer;
@@ -136,9 +135,8 @@ public final class GDCollectionImExportHandler {
 
         CopyDependencyResolverResultFull resolvedCopyDependencies = CopyDependencyResolver.resolveCopyDependencies(importSzenarios);
         UserFieldDefinitions userFieldDefinitions = gdcoll.getUserFieldDefinitions();
-        for (UserField uf : resolvedCopyDependencies.userFields) {
-            userFieldDefinitions.add(uf);
-        }
+        UserFieldDefinitions userFieldDefinitions2Add = resolvedCopyDependencies.getUserFieldDefinitions();
+        userFieldDefinitions.addAll(userFieldDefinitions2Add);
 
         Map<String, byte[]> iconTable = gdcoll.getIconTable();
         for (String iconID : resolvedCopyDependencies.iconIDs) {

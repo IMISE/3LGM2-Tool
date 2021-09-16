@@ -112,7 +112,7 @@ public class CopyDependencyResolver {
                 userFieldDefinitionsIsExpanded = true;
                 GDCollection sourceCollection = getSourceCollection();
                 UserFieldDefinitions sourceUserFieldDefinitions = sourceCollection.getUserFieldDefinitions();
-                sourceUserFieldDefinitions.setAllUserFields(userFieldDefinitions, userFields);
+                userFieldDefinitions.setAllUserFields(sourceUserFieldDefinitions, userFields);
             }
             return userFieldDefinitions;
         }
