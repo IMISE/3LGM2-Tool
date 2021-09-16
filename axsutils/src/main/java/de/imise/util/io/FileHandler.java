@@ -69,9 +69,10 @@ public class FileHandler {
     }
 
     /**
-     * Liefert <code>true</code>, wenn der Pfad zum übergebenen Verzeichnis
+     * Liefert das Verzeichnis, wenn der Pfad zum übergebenen Verzeichnis
      * existiert und man daraus lesen darf. Wird ein File und kein Directory
-     * übergeben, dann wird das Directory dieses Files geprüft.
+     * übergeben, dann wird das Directory dieses Files geprüft. Ist es nicht
+     * lesbar, kommt <code>null</code> zurück.
      *
      * @param path
      * @return

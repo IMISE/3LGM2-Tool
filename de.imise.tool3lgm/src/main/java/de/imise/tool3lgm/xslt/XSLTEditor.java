@@ -23,6 +23,7 @@ import javax.swing.JScrollPane;
 
 import de.imise.tool3lgm.log.Log;
 import de.imise.tool3lgm.userproperties.UserProperties;
+import de.imise.tool3lgm.userproperties.UserProperties.StringProperty;
 import de.imise.util.swing.component.text.ExtendedTextArea;
 import de.imise.util.swing.dialog.ExtendedFileChooser;
 
@@ -204,7 +205,7 @@ public class XSLTEditor extends JDialog implements ActionListener, WindowListene
      * @return boolean with true, if save was successful
      */
     private boolean saveAsFile() {
-        File lastUserDir = UserProperties.getWorkingDirectory();
+        File lastUserDir = UserProperties.getDirectory(StringProperty.WORKING_DIRECTORY);
         ExtendedFileChooser saveDialog = new ExtendedFileChooser(XSLTEditor.class);
         saveDialog.addChoosableFileFilter(XSLTFileHandler.XSLT_FILE_FILTER.getFileNameExtensionFilter());
         saveDialog.setFileFilter(XSLTFileHandler.XSLT_FILE_FILTER.getFileNameExtensionFilter());
@@ -217,10 +218,11 @@ public class XSLTEditor extends JDialog implements ActionListener, WindowListene
             return false;
         }
         file = saveDialog.getSelectedFile();
-        UserProperties.setWorkingDirectory(file.getParentFile());
+        file = file.getParentFile();
+        UserProperties.setDirectory(StringProperty.WORKING_DIRECTORY, file);
         readOnly = false;
         buttonSave.setEnabled(true);
-        UserProperties.addXslSearchDir(file.getParentFile());
+        UserProperties.addXslSearchDir(file);
         return saveToFile();
     }
 

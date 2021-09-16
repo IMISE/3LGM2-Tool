@@ -83,7 +83,6 @@ import de.imise.tool3lgm.gui.ToolSplashScreen;
 import de.imise.tool3lgm.gui.viewpane.ViewPane;
 import de.imise.tool3lgm.gui.viewpane.ViewPaneFrameComponent;
 import de.imise.tool3lgm.gui.viewpane.graph.GraphViewPaneFrameComponent;
-import de.imise.tool3lgm.help.Help;
 import de.imise.tool3lgm.imexport.DataImporter;
 import de.imise.tool3lgm.imexport.csv.DataExportModule;
 import de.imise.tool3lgm.imexport.csv.DataImportModule;
@@ -95,6 +94,7 @@ import de.imise.tool3lgm.xslt.XMLExportDialog;
 import de.imise.util.Alphabetical;
 import de.imise.util.BrowseUtils;
 import de.imise.util.image.ComponentAsImageExportHandler;
+import de.imise.util.image.ComponentAsImageExportHandler.FileFilterType;
 import de.imise.util.pair.Pair;
 import de.imise.util.swing.dialog.DirectoryChooser;
 import de.imise.util.swing.event.ExtendedAction;
@@ -278,11 +278,15 @@ public class ActionLibrary {
 
                 @Override
                 protected void actionPerformed() {
+                    FileFilterType filterType = UserProperties.getFileFilterType(StringProperty.GRAPH_EXPORT_FILE_TYPE, FileFilterType.JPG);
+                    File exportDirectory = UserProperties.getDirectory(StringProperty.GRAPH_EXPORT_DIRECTORY);
+                    Pair<File, FileFilterType> fileAndType = null;
+
                     ViewPaneFrameComponent selframe = Static.getActiveFrame();
                     if (selframe instanceof GraphViewPaneFrameComponent) {
                         InputGraphArea iga = ((GraphViewPaneFrameComponent) selframe).getInputGraphArea();
                         iga.setPaintState(PaintState.SAVE_IMAGE_AS_FILE);
-                        ComponentAsImageExportHandler.createFile(iga);
+                        fileAndType = ComponentAsImageExportHandler.createFile(iga, exportDirectory, filterType);
                         iga.setPaintState(PaintState.REGULAR);
                     } else { //MatrixView
                         ViewPane viewPane = selframe.getViewPane();
@@ -290,10 +294,18 @@ public class ActionLibrary {
                         Dimension size = sp.getSize();
                         sp.setSize(sp.getMaximumSize());
                         sp.revalidate();
-                        ComponentAsImageExportHandler.createFile(sp);
+                        fileAndType = ComponentAsImageExportHandler.createFile(sp, exportDirectory, filterType);
                         sp.setSize(size);
                         sp.revalidate();
                     }
+
+                    exportDirectory = fileAndType.getFirstItem();
+                    filterType = fileAndType.getSecondItem();
+
+                    if (filterType != null) {
+                        UserProperties.setFileFilterType(StringProperty.GRAPH_EXPORT_FILE_TYPE, filterType);
+                    }
+                    UserProperties.setDirectory(StringProperty.GRAPH_EXPORT_DIRECTORY, exportDirectory);
                 }
 
                 @Override
@@ -705,21 +717,29 @@ public class ActionLibrary {
      */
     public static class HelpActions {
 
-        /** Funktioniert nicht */
-        public static final ExtendedAction ACTION_OPEN_HELP_DIALOG = new StaticAction(ActionIdentifier.ACTION_OPEN_HELP_DIALOG, PPP) {
-            @Override
-            public void actionPerformed() {
-                Help.showHelp();
-            }
-        };
+        public static final ExtendedAction ACTION_OPEN_HELP_DIALOG = new OpenUrlAction(ActionIdentifier.ACTION_OPEN_HELP_DIALOG);
 
-        /** Aktiviert die Direkthilfe */
-        public static final ExtendedAction ACTION_ACTIVATE_DIRECT_HELP = new StaticAction(ActionIdentifier.ACTION_ACTIVATE_DIRECT_HELP) {
-            @Override
-            public void actionPerformedWithEvent(final ActionEvent e) {
-                Help.getHelp().getDisplayHelpAfterTracking().actionPerformed(e);
-            }
-        };
+        /**
+         * Following commented out code is for the former internal help we have
+         * changed the help to our Bitbucket Wiki, but this can still be reused
+         * to do this, you will have to remove the URL behind the
+         * ACTION_OPEN_HELP_DIALOG ressource
+         */
+        //        /** Funktioniert nicht */
+        //        public static final ExtendedAction ACTION_OPEN_HELP_DIALOG = new StaticAction(ActionIdentifier.ACTION_OPEN_HELP_DIALOG, PPP) {
+        //            @Override
+        //            public void actionPerformed() {
+        //                Help.showHelp();
+        //            }
+        //        };
+        //
+        //        /** Aktiviert die Direkthilfe */
+        //        public static final ExtendedAction ACTION_ACTIVATE_DIRECT_HELP = new StaticAction(ActionIdentifier.ACTION_ACTIVATE_DIRECT_HELP) {
+        //            @Override
+        //            public void actionPerformedWithEvent(final ActionEvent e) {
+        //                Help.getHelp().getDisplayHelpAfterTracking().actionPerformed(e);
+        //            }
+        //        };
 
         /**
          * Zeigt eine lokale Webseite mit Themen zur weiteren Modellnutzung an

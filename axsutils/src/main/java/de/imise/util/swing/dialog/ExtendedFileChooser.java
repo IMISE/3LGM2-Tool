@@ -102,7 +102,6 @@ public class ExtendedFileChooser extends JFileChooser {
      * @param fileName Name der Datei, der schon veriengestellt sein soll
      */
     public ExtendedFileChooser(final Object pathKey, final File defaultPath, final String fileName) {
-        super();
         setPathKey(pathKey);
         setFileSystemView(FileSystemView.getFileSystemView());
         File path = KEY_TO_PATH_MAP.get(pathKey);
@@ -189,22 +188,28 @@ public class ExtendedFileChooser extends JFileChooser {
      * @return
      */
     public int showSaveDialog(final Component parent, final boolean showAllFileFilter, final FileNameExtensionFilter... fileFilters) {
-        return showSaveDialog(parent, null, showAllFileFilter, fileFilters);
+        return showSaveDialog(parent, null, showAllFileFilter, null, fileFilters);
     }
 
     /**
      * @param parentComponent
      * @param title
      * @param showAllFileFilter
+     * @param selectedFilter
      * @param fileFilters
      * @return
      */
-    public int showSaveDialog(final Object parentComponent, final String title, final boolean showAllFileFilter, final FileNameExtensionFilter... fileFilters) {
+    public int showSaveDialog(final Object parentComponent, final String title, final boolean showAllFileFilter, final FileNameExtensionFilter selectedFilter, final FileNameExtensionFilter... fileFilters) {
         setDialogType(SAVE_DIALOG);
         if (title != null) {
             setDialogTitle(title);
         }
         setFileFilters(showAllFileFilter, fileFilters);
+
+        // if there was a previously selected file type set the selection to it
+        if (selectedFilter != null) {
+            setFileFilter(selectedFilter);
+        }
 
         boolean correctFileName = false;
         int returnValue = ERROR_OPTION;
@@ -217,7 +222,7 @@ public class ExtendedFileChooser extends JFileChooser {
             if (returnValue != APPROVE_OPTION) {
                 return returnValue;
             }
-
+            setPath(pathKey, getCurrentDirectory());
             //ausgewählte Datei holen
             File selectedFile = getSelectedFile();
 
@@ -287,7 +292,7 @@ public class ExtendedFileChooser extends JFileChooser {
 
     @Override
     public int showSaveDialog(final Component parent) throws HeadlessException {
-        return showSaveDialog(parent, (String) null, isAcceptAllFileFilterUsed(), (FileNameExtensionFilter[]) null);
+        return showSaveDialog(parent, (String) null, isAcceptAllFileFilterUsed(), null, (FileNameExtensionFilter[]) null);
     }
 
     /**

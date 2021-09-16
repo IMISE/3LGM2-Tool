@@ -130,6 +130,7 @@ import de.imise.tool3lgm.graphtools.view.graph.Shape;
 import de.imise.tool3lgm.gui.MainFrame;
 import de.imise.tool3lgm.log.Log;
 import de.imise.tool3lgm.userproperties.UserProperties;
+import de.imise.tool3lgm.userproperties.UserProperties.StringProperty;
 import de.imise.util.Alphabetical;
 import de.imise.util.OptionsSupport;
 import de.imise.util.Sys;
@@ -2052,8 +2053,9 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
      */
     private final void chooseIcon(final int pid) {
         MainFrame mainFrame = getMainFrame();
-        File iconPath = UserProperties.getIconPath();
+        File iconPath = UserProperties.getDirectory(StringProperty.ICON_DIRECTORY);
         File iconFile = ImageChooser.getImageFile(mainFrame, iconPath);
+        UserProperties.setDirectory(StringProperty.ICON_DIRECTORY, iconFile);
         if (iconFile != null) {
             setIcon(iconFile, pid);
         }

@@ -24,6 +24,7 @@ import de.imise.tool3lgm.Tool3lgmConstants.FileFilterType;
 import de.imise.tool3lgm.graphtools.userfield.definition.UserFieldDefinitions;
 import de.imise.tool3lgm.log.Log;
 import de.imise.tool3lgm.userproperties.UserProperties;
+import de.imise.tool3lgm.userproperties.UserProperties.StringProperty;
 import de.imise.tool3lgm.xml.LGMVersionException;
 import de.imise.tool3lgm.xml.ToolXMLParser;
 import de.imise.tool3lgm.xml.ToolXMLWriter;
@@ -358,7 +359,7 @@ public class GDCollectionFileHandler {
      * @return
      */
     public boolean chooseFile() {
-        ExtendedFileChooser fileChooser = new ExtendedFileChooser(null, UserProperties.getWorkingDirectory());
+        ExtendedFileChooser fileChooser = new ExtendedFileChooser(null, UserProperties.getDirectory(StringProperty.WORKING_DIRECTORY));
         FileNameExtensionFilter lgmZippedFileFiler = Tool3lgmConstants.getFileNameExtensionFilter(FileFilterType.LGM3_ZIP);
         FileNameExtensionFilter lgmUnzippedFileFiler = Tool3lgmConstants.getFileNameExtensionFilter(FileFilterType.LGM3_UNZIPPED);
         fileChooser.setFileFilters(false, lgmZippedFileFiler, lgmUnzippedFileFiler);
@@ -423,7 +424,7 @@ public class GDCollectionFileHandler {
             if (!ToolXMLWriter.write(gdcoll, tempFile, zipEntryName)) {
                 return false;
             }
-            UserProperties.setWorkingDirectory(file);
+            UserProperties.setDirectory(StringProperty.WORKING_DIRECTORY, file);
             copyTempToDestinationFile(tempFile, randomAccessFile, lockSupported, lock);
         } catch (Exception e) {
             Log.show(Log.FATAL, getResString("FehlerAllgemein") + "\n" + e, e);

@@ -29,11 +29,15 @@ import de.imise.tool3lgm.Tool3lgmVersion;
 import de.imise.tool3lgm.event.action.ChangeLocaleAction;
 import de.imise.tool3lgm.event.action.UserPropertyBooleanChangeAction;
 import de.imise.util.BooleanOption;
+import de.imise.util.image.ComponentAsImageExportHandler.FileFilterType;
 import de.imise.util.io.FileHandler;
 import de.imise.util.swing.event.ActionSource;
 
 /**
  * @author AXS created on 16.08.2007
+ */
+/**
+ * @author Steam
  */
 public class UserProperties extends AbstractUserProperties {
 
@@ -608,7 +612,9 @@ public class UserProperties extends AbstractUserProperties {
     public static enum StringProperty {
         LOCALE,
         WORKING_DIRECTORY,
-        ICON_PATH,
+        GRAPH_EXPORT_DIRECTORY,
+        GRAPH_EXPORT_FILE_TYPE,
+        ICON_DIRECTORY,
         META_MODEL,
         MODEL_CATEGORY,
         /** Liste der zuletzt benutzten ModellDateien */
@@ -741,9 +747,9 @@ public class UserProperties extends AbstractUserProperties {
         return xslSearchDirs.addAll(fileList);
     }
 
-    //////////////////////
-    // workingDirectory //
-    //////////////////////
+    ////////////////////////
+    //     directories    //
+    ////////////////////////
 
     /**
      * setzt das Standardverzeichnis zum Laden und Speichern von Modellen und
@@ -751,12 +757,12 @@ public class UserProperties extends AbstractUserProperties {
      *
      * @param path File mit Pfandangabe
      */
-    public static void setWorkingDirectory(final File path) {
+    public static void setDirectory(final StringProperty directoryPropertyKey, final File path) {
         File readableDirectory = FileHandler.getReadableDirectory(path);
         if (readableDirectory == null) {
             return;
         }
-        set(StringProperty.WORKING_DIRECTORY, readableDirectory.toString());
+        set(directoryPropertyKey, readableDirectory.toString());
     }
 
     /**
@@ -765,39 +771,46 @@ public class UserProperties extends AbstractUserProperties {
      *
      * @return File des Standardverzeichnisses
      */
-    public static File getWorkingDirectory() {
-        String workingDirectoryName = get(StringProperty.WORKING_DIRECTORY);
-        File workingDirectory = FileHandler.getReadableDirectory(workingDirectoryName);
-        if (workingDirectory == null) {
+    public static File getDirectory(final StringProperty directoryType) {
+        String directoryName = get(directoryType);
+        File directory = FileHandler.getReadableDirectory(directoryName);
+        if (directory == null) {
             FileSystemView.getFileSystemView().getDefaultDirectory();
         }
-        return workingDirectory;
+        return directory;
     }
 
-    //////////////
-    // iconPath //
-    //////////////
-
-    /** user path for importing icons */
-    private static File iconPath = FileSystemView.getFileSystemView().getDefaultDirectory();
+    ///////////////////////////
+    //    FileFilterTypes    //
+    ///////////////////////////
 
     /**
-     * setzt das Standardverzeichnis Importieren von Icons
+     * sets the last selected File type for the given key
      *
-     * @param path File mit Icon-Pfandangabe
+     * @param fileType
      */
-    public static void setIconPath(final File path) {
-        iconPath = path;
+    public static void setFileFilterType(final StringProperty fileFilterPropertyKey, final FileFilterType fileType) {
+        set(fileFilterPropertyKey, fileType.toString());
     }
 
     /**
-     * gibt das Standardverzeichnis zum importieren von Icons zurueck
+     * gets the last file type for given key
      *
-     * @return File des Icon-Standardverzeichnisses
+     * @param fileFilterPropertyKey
+     * @return FileFilterType of last selected file type
      */
-    public static File getIconPath() {
-        return iconPath;
+    public static FileFilterType getFileFilterType(final StringProperty fileFilterPropertyKey, final FileFilterType defaultType) {
+        String fileTypeName = get(fileFilterPropertyKey);
+        if (fileTypeName == null) {
+            return defaultType;
+        }
+        FileFilterType exportType = FileFilterType.valueOf(fileTypeName);
+        return exportType;
     }
+
+    /////////////////
+    // FileVersion //
+    /////////////////
 
     /**
      * @return

@@ -112,10 +112,9 @@ public class MenuCollection {
     public static final JMenu WINDOW_MENU = new WindowMenu();
 
     /** Das Hilfe-Menu */
-    public static final JMenu HELP_MENU = createMenu("help", ActionLibrary.HelpActions.ACTION_OPEN_HELP_DIALOG, ActionLibrary.HelpActions.ACTION_ACTIVATE_DIRECT_HELP, new JSeparator(),
-            ActionLibrary.HelpActions.ACTION_SHOW_INFORMATION_SYSTEM_EVALUATION_TUTORIAL, new JSeparator(), ActionLibrary.HelpActions.ACTION_OPEN_URL_ONLINE_HELP, ActionLibrary.HelpActions.ACTION_OPEN_URL_3LGM_WEBSITE, new JSeparator(),
-            ActionLibrary.HelpActions.ACTION_OPEN_EXAMPLE_MESSAGE_BASED, ActionLibrary.HelpActions.ACTION_OPEN_EXAMPLE_SERVICE_ORIENTED, ActionLibrary.HelpActions.ACTION_OPEN_FILE_CHOSSER_IN_MODEL_LIBRARY, new JSeparator(),
-            ActionLibrary.HelpActions.ACTION_OPEN_URL_ISSUE_TRACKER,
+    public static final JMenu HELP_MENU = createMenu("help", ActionLibrary.HelpActions.ACTION_OPEN_HELP_DIALOG, new JSeparator(), ActionLibrary.HelpActions.ACTION_SHOW_INFORMATION_SYSTEM_EVALUATION_TUTORIAL, new JSeparator(),
+            ActionLibrary.HelpActions.ACTION_OPEN_URL_ONLINE_HELP, ActionLibrary.HelpActions.ACTION_OPEN_URL_3LGM_WEBSITE, new JSeparator(), ActionLibrary.HelpActions.ACTION_OPEN_EXAMPLE_MESSAGE_BASED,
+            ActionLibrary.HelpActions.ACTION_OPEN_EXAMPLE_SERVICE_ORIENTED, ActionLibrary.HelpActions.ACTION_OPEN_FILE_CHOSSER_IN_MODEL_LIBRARY, new JSeparator(), ActionLibrary.HelpActions.ACTION_OPEN_URL_ISSUE_TRACKER,
             ActionLibrary.HelpActions.ACTION_OPEN_ABOUT_DIALOG/*
                                                                * , new
                                                                * JSeparator() ,
