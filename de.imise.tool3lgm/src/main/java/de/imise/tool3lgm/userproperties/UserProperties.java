@@ -612,8 +612,8 @@ public class UserProperties extends AbstractUserProperties {
     public static enum StringProperty {
         LOCALE,
         WORKING_DIRECTORY,
-        EXPORT_DIRECTORY,
-        EXPORT_FILE_TYPE,
+        GRAPH_EXPORT_DIRECTORY,
+        GRAPH_EXPORT_FILE_TYPE,
         ICON_PATH,
         META_MODEL,
         MODEL_CATEGORY,
@@ -785,25 +785,26 @@ public class UserProperties extends AbstractUserProperties {
     //////////////////////
 
     /**
-     * sets the last selected File type for exporting images
+     * sets the last selected File type for the given key
      *
      * @param fileType
      */
-    public static void setExportType(final FileFilterType fileType) {
-        set(StringProperty.EXPORT_FILE_TYPE, fileType.toString());
+    public static void setFileFilterType(final StringProperty fileFilterPropertyKey, final FileFilterType fileType) {
+        set(fileFilterPropertyKey, fileType.toString());
     }
 
     /**
-     * gets the last file type for exporting images
+     * gets the last file type for given key
      *
+     * @param fileFilterPropertyKey
      * @return FileFilterType of last selected file type
      */
-    public static FileFilterType getExportType() {
-        String exportTypeName = get(StringProperty.EXPORT_FILE_TYPE);
-        if (exportTypeName == null) {
-            exportTypeName = "JPG";
+    public static FileFilterType getFileFilterType(final StringProperty fileFilterPropertyKey, final FileFilterType defaultType) {
+        String fileTypeName = get(fileFilterPropertyKey);
+        if (fileTypeName == null) {
+            return defaultType;
         }
-        FileFilterType exportType = FileFilterType.valueOf(exportTypeName);
+        FileFilterType exportType = FileFilterType.valueOf(fileTypeName);
         return exportType;
     }
 

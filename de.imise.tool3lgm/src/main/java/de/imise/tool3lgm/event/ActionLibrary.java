@@ -278,8 +278,8 @@ public class ActionLibrary {
 
                 @Override
                 protected void actionPerformed() {
-                    FileFilterType filterType = UserProperties.getExportType();
-                    File exportDirectory = UserProperties.getDirectory(StringProperty.EXPORT_DIRECTORY);
+                    FileFilterType filterType = UserProperties.getFileFilterType(StringProperty.GRAPH_EXPORT_FILE_TYPE, FileFilterType.JPG);
+                    File exportDirectory = UserProperties.getDirectory(StringProperty.GRAPH_EXPORT_DIRECTORY);
                     Pair<File, FileFilterType> fileAndType = null;
 
                     ViewPaneFrameComponent selframe = Static.getActiveFrame();
@@ -303,9 +303,9 @@ public class ActionLibrary {
                     filterType = fileAndType.getSecondItem();
 
                     if (filterType != null) {
-                        UserProperties.setExportType(filterType);
+                        UserProperties.setFileFilterType(StringProperty.GRAPH_EXPORT_FILE_TYPE, filterType);
                     }
-                    UserProperties.setDirectory(exportDirectory, StringProperty.EXPORT_DIRECTORY);
+                    UserProperties.setDirectory(exportDirectory, StringProperty.GRAPH_EXPORT_DIRECTORY);
                 }
 
                 @Override
@@ -720,9 +720,10 @@ public class ActionLibrary {
         public static final ExtendedAction ACTION_OPEN_HELP_DIALOG = new OpenUrlAction(ActionIdentifier.ACTION_OPEN_HELP_DIALOG);
 
         /**
-         * Following commented out code is for the former internal help
-         * we have changed the help to our Bitbucket Wiki, but this can still be reused
-         * to do this, you will have to remove the URL behind the ACTION_OPEN_HELP_DIALOG ressource
+         * Following commented out code is for the former internal help we have
+         * changed the help to our Bitbucket Wiki, but this can still be reused
+         * to do this, you will have to remove the URL behind the
+         * ACTION_OPEN_HELP_DIALOG ressource
          */
         //        /** Funktioniert nicht */
         //        public static final ExtendedAction ACTION_OPEN_HELP_DIALOG = new StaticAction(ActionIdentifier.ACTION_OPEN_HELP_DIALOG, PPP) {
