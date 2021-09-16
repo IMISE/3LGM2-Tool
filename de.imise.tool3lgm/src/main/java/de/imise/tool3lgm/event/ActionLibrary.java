@@ -305,7 +305,7 @@ public class ActionLibrary {
                     if (filterType != null) {
                         UserProperties.setFileFilterType(StringProperty.GRAPH_EXPORT_FILE_TYPE, filterType);
                     }
-                    UserProperties.setDirectory(exportDirectory, StringProperty.GRAPH_EXPORT_DIRECTORY);
+                    UserProperties.setDirectory(StringProperty.GRAPH_EXPORT_DIRECTORY, exportDirectory);
                 }
 
                 @Override

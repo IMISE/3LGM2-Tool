@@ -424,7 +424,7 @@ public class GDCollectionFileHandler {
             if (!ToolXMLWriter.write(gdcoll, tempFile, zipEntryName)) {
                 return false;
             }
-            UserProperties.setDirectory(file, StringProperty.WORKING_DIRECTORY);
+            UserProperties.setDirectory(StringProperty.WORKING_DIRECTORY, file);
             copyTempToDestinationFile(tempFile, randomAccessFile, lockSupported, lock);
         } catch (Exception e) {
             Log.show(Log.FATAL, getResString("FehlerAllgemein") + "\n" + e, e);

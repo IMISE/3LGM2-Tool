@@ -218,10 +218,11 @@ public class XSLTEditor extends JDialog implements ActionListener, WindowListene
             return false;
         }
         file = saveDialog.getSelectedFile();
-        UserProperties.setDirectory(file.getParentFile(), StringProperty.WORKING_DIRECTORY);
+        file = file.getParentFile();
+        UserProperties.setDirectory(StringProperty.WORKING_DIRECTORY, file);
         readOnly = false;
         buttonSave.setEnabled(true);
-        UserProperties.addXslSearchDir(file.getParentFile());
+        UserProperties.addXslSearchDir(file);
         return saveToFile();
     }
 

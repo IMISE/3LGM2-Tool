@@ -747,9 +747,9 @@ public class UserProperties extends AbstractUserProperties {
         return xslSearchDirs.addAll(fileList);
     }
 
-    //////////////////////
-    //     directory    //
-    //////////////////////
+    ////////////////////////
+    //     directories    //
+    ////////////////////////
 
     /**
      * setzt das Standardverzeichnis zum Laden und Speichern von Modellen und
@@ -757,12 +757,12 @@ public class UserProperties extends AbstractUserProperties {
      *
      * @param path File mit Pfandangabe
      */
-    public static void setDirectory(final File path, final StringProperty directoryType) {
+    public static void setDirectory(final StringProperty directoryPropertyKey, final File path) {
         File readableDirectory = FileHandler.getReadableDirectory(path);
         if (readableDirectory == null) {
             return;
         }
-        set(directoryType, readableDirectory.toString());
+        set(directoryPropertyKey, readableDirectory.toString());
     }
 
     /**
@@ -780,9 +780,9 @@ public class UserProperties extends AbstractUserProperties {
         return directory;
     }
 
-    //////////////////////
-    //    exportType    //
-    //////////////////////
+    ///////////////////////////
+    //    FileFilterTypes    //
+    ///////////////////////////
 
     /**
      * sets the last selected File type for the given key

@@ -257,7 +257,8 @@ public class Tool3lgm {
         FileNameExtensionFilter[] lgmFileFilter = Tool3lgmConstants.getFileNameExtensionFilters(FileFilterType.LGM3, FileFilterType.LGM3_ZIP, FileFilterType.LGM3_UNZIPPED);
         int chooserAnswer = chooser.showOpenDialog(mainFrame, false, lgmFileFilter);
         if (fileChooserPathKey == null) {
-            UserProperties.setDirectory(chooser.getCurrentDirectory(), StringProperty.WORKING_DIRECTORY);
+            File currentDirectory = chooser.getCurrentDirectory();
+            UserProperties.setDirectory(StringProperty.WORKING_DIRECTORY, currentDirectory);
         }
         if (chooserAnswer == JFileChooser.APPROVE_OPTION) {
             file = chooser.getSelectedFile();
@@ -289,7 +290,7 @@ public class Tool3lgm {
                 return false;
             }
         }
-        UserProperties.setDirectory(file, StringProperty.WORKING_DIRECTORY);
+        UserProperties.setDirectory(StringProperty.WORKING_DIRECTORY, file);
         boolean openModel = openModel(gdcoll);
         //jede neue GDCollection wird mit bulk_mode true initialisiert, aber ab jetzt
         //sollen die UNDO-REDO-Kommandos wieder geloggt werden.
