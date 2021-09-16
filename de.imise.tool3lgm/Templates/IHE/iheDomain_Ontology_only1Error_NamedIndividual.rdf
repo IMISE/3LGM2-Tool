@@ -1,0 +1,338 @@
+<?xml version="1.0"?>
+<rdf:RDF xmlns="https://www.3lgm2.de/resource/ihe/"
+     xml:base="https://www.3lgm2.de/resource/ihe/"
+     xmlns:ov="http://open.vocab.org/terms/"
+     xmlns:ihe="https://www.3lgm2.de/resource/ihe/3"
+     xmlns:owl="http://www.w3.org/2002/07/owl#"
+     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+     xmlns:xml="http://www.w3.org/XML/1998/namespace"
+     xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+     xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+     xmlns:terms="http://purl.org/dc/terms/"
+     xmlns:dlgm2ihe="https://www.3lgm2.de/resource/ihe/"
+     xmlns:ontology="http://dbpedia.org/ontology/"
+     xmlns:saref4ee="https://w3id.org/saref4ee#">
+    <owl:Ontology rdf:about="https://www.3lgm2.de/resource/ihe">
+        <owl:versionIRI rdf:resource="https://www.3lgm2.de/resource/ihe/3.0.0"/>
+        <ov:defines rdf:resource="https://www.3lgm2.de/resource/ihe/Actor"/>
+        <ov:defines rdf:resource="https://www.3lgm2.de/resource/ihe/IHEConcept"/>
+        <rdfs:label xml:lang="en">IHE Ontology</rdfs:label>
+    </owl:Ontology>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Annotation properties
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://dbpedia.org/ontology/abbreviation -->
+
+    <owl:AnnotationProperty rdf:about="http://dbpedia.org/ontology/abbreviation"/>
+    
+
+
+    <!-- http://open.vocab.org/terms/defines -->
+
+    <owl:AnnotationProperty rdf:about="http://open.vocab.org/terms/defines"/>
+    
+
+
+    <!-- http://purl.org/dc/terms/description -->
+
+    <owl:AnnotationProperty rdf:about="http://purl.org/dc/terms/description"/>
+    
+
+
+    <!-- https://w3id.org/saref4ee#optionalSlot -->
+
+    <owl:AnnotationProperty rdf:about="https://w3id.org/saref4ee#optionalSlot"/>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Object Properties
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- https://www.3lgm2.de/resource/ihe/iheIntegrationProfile -->
+
+    <owl:ObjectProperty rdf:about="https://www.3lgm2.de/resource/ihe/iheIntegrationProfile">
+        <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topObjectProperty"/>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
+        <rdfs:domain rdf:resource="https://www.3lgm2.de/resource/ihe/Actor"/>
+        <rdfs:label xml:lang="en">IHE Integration Profile</rdfs:label>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- https://www.3lgm2.de/resource/ihe/iheTransaction -->
+
+    <owl:ObjectProperty rdf:about="https://www.3lgm2.de/resource/ihe/iheTransaction">
+        <rdfs:subPropertyOf rdf:resource="https://www.3lgm2.de/resource/ihe/usesActor"/>
+        <rdfs:domain rdf:resource="https://www.3lgm2.de/resource/ihe/Actor"/>
+        <rdfs:range rdf:resource="https://www.3lgm2.de/resource/ihe/Actor"/>
+        <rdfs:comment xml:lang="en">Convention: Only &quot;invoking&quot; is modeled! The &quot;reacting&quot; counterpart could be derived, later.</rdfs:comment>
+        <rdfs:label xml:lang="en">Transaction</rdfs:label>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- https://www.3lgm2.de/resource/ihe/iti -->
+
+    <owl:ObjectProperty rdf:about="https://www.3lgm2.de/resource/ihe/iti">
+        <rdfs:subPropertyOf rdf:resource="https://www.3lgm2.de/resource/ihe/iheTransaction"/>
+        <rdfs:label>ITI Transactions</rdfs:label>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- https://www.3lgm2.de/resource/ihe/iti-34 -->
+
+    <owl:ObjectProperty rdf:about="https://www.3lgm2.de/resource/ihe/iti-34">
+        <rdfs:subPropertyOf rdf:resource="https://www.3lgm2.de/resource/ihe/iti"/>
+        <ontology:abbreviation>ITI-34</ontology:abbreviation>
+        <terms:description>Retrieve Form</terms:description>
+        <rdfs:label>Retrieve Form</rdfs:label>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- https://www.3lgm2.de/resource/ihe/iti-35 -->
+
+    <owl:ObjectProperty rdf:about="https://www.3lgm2.de/resource/ihe/iti-35">
+        <rdfs:subPropertyOf rdf:resource="https://www.3lgm2.de/resource/ihe/iti"/>
+        <ontology:abbreviation>ITI-35</ontology:abbreviation>
+        <terms:description>Submit Form</terms:description>
+        <rdfs:label>Submit Form</rdfs:label>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- https://www.3lgm2.de/resource/ihe/iti-37 -->
+
+    <owl:ObjectProperty rdf:about="https://www.3lgm2.de/resource/ihe/iti-37">
+        <rdfs:subPropertyOf rdf:resource="https://www.3lgm2.de/resource/ihe/iti"/>
+        <ontology:abbreviation>ITI-37</ontology:abbreviation>
+        <terms:description>Retrieve Clarifications</terms:description>
+        <rdfs:label>Retrieve Clarifications</rdfs:label>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- https://www.3lgm2.de/resource/ihe/usesActor -->
+
+    <owl:ObjectProperty rdf:about="https://www.3lgm2.de/resource/ihe/usesActor">
+        <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topObjectProperty"/>
+        <rdfs:domain rdf:resource="https://www.3lgm2.de/resource/ihe/IHEConcept"/>
+        <rdfs:range rdf:resource="https://www.3lgm2.de/resource/ihe/Actor"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Data properties
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://ns.nature.com/terms/PdfAsset -->
+
+    <owl:DatatypeProperty rdf:about="http://ns.nature.com/terms/PdfAsset">
+        <rdfs:subPropertyOf rdf:resource="https://www.3lgm2.de/resource/ihe/Group_Actor"/>
+        <rdfs:subPropertyOf rdf:resource="https://www.3lgm2.de/resource/ihe/Group_IntegrationProfile"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- https://www.3lgm2.de/resource/ihe/Group_Actor -->
+
+    <owl:DatatypeProperty rdf:about="https://www.3lgm2.de/resource/ihe/Group_Actor">
+        <rdfs:subPropertyOf rdf:resource="https://www.3lgm2.de/resource/ihe/Tab_Actor"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- https://www.3lgm2.de/resource/ihe/Group_IntegrationProfile -->
+
+    <owl:DatatypeProperty rdf:about="https://www.3lgm2.de/resource/ihe/Group_IntegrationProfile">
+        <rdfs:subPropertyOf rdf:resource="https://www.3lgm2.de/resource/ihe/Tab_IntegrationProfile"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- https://www.3lgm2.de/resource/ihe/Tab_Actor -->
+
+    <owl:DatatypeProperty rdf:about="https://www.3lgm2.de/resource/ihe/Tab_Actor"/>
+    
+
+
+    <!-- https://www.3lgm2.de/resource/ihe/Tab_IntegrationProfile -->
+
+    <owl:DatatypeProperty rdf:about="https://www.3lgm2.de/resource/ihe/Tab_IntegrationProfile"/>
+    
+
+
+    <!-- https://www.3lgm2.de/resource/ihe/helper -->
+
+    <owl:DatatypeProperty rdf:about="https://www.3lgm2.de/resource/ihe/helper"/>
+    
+
+
+    <!-- https://www.3lgm2.de/resource/ihe/iheDomain_dataProperty -->
+
+    <owl:DatatypeProperty rdf:about="https://www.3lgm2.de/resource/ihe/iheDomain_dataProperty">
+        <rdfs:subPropertyOf rdf:resource="https://www.3lgm2.de/resource/ihe/helper"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- https://www.3lgm2.de/resource/ihe/integrationProfile_dataProperty -->
+
+    <owl:DatatypeProperty rdf:about="https://www.3lgm2.de/resource/ihe/integrationProfile_dataProperty">
+        <rdfs:subPropertyOf rdf:resource="https://www.3lgm2.de/resource/ihe/helper"/>
+        <rdfs:domain rdf:resource="https://www.3lgm2.de/resource/ihe/Actor"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- https://www.3lgm2.de/resource/ihe/status -->
+
+    <owl:DatatypeProperty rdf:about="https://www.3lgm2.de/resource/ihe/status">
+        <rdfs:subPropertyOf rdf:resource="https://www.3lgm2.de/resource/ihe/Group_Actor"/>
+        <rdfs:subPropertyOf rdf:resource="https://www.3lgm2.de/resource/ihe/Group_IntegrationProfile"/>
+        <rdfs:range>
+            <rdfs:Datatype>
+                <owl:oneOf>
+                    <rdf:Description>
+                        <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#List"/>
+                        <rdf:first>Deprecated</rdf:first>
+                        <rdf:rest>
+                            <rdf:Description>
+                                <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#List"/>
+                                <rdf:first>Final Text</rdf:first>
+                                <rdf:rest>
+                                    <rdf:Description>
+                                        <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#List"/>
+                                        <rdf:first>Trial Implementation</rdf:first>
+                                        <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+                                    </rdf:Description>
+                                </rdf:rest>
+                            </rdf:Description>
+                        </rdf:rest>
+                    </rdf:Description>
+                </owl:oneOf>
+            </rdfs:Datatype>
+        </rdfs:range>
+        <rdfs:label xml:lang="en">Status</rdfs:label>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Classes
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- https://www.3lgm2.de/resource/ihe/Actor -->
+
+    <owl:Class rdf:about="https://www.3lgm2.de/resource/ihe/Actor">
+        <rdfs:subClassOf rdf:resource="https://www.3lgm2.de/resource/ihe/IHEConcept"/>
+        <rdfs:label xml:lang="en">Actor</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- https://www.3lgm2.de/resource/ihe/IHEConcept -->
+
+    <owl:Class rdf:about="https://www.3lgm2.de/resource/ihe/IHEConcept">
+        <rdfs:label xml:lang="en">IHE Concept</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Individuals
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- https://www.3lgm2.de/resource/ihe/RFD_FORM_FILLER -->
+
+    <owl:NamedIndividual rdf:about="https://www.3lgm2.de/resource/ihe/RFD_FORM_FILLER">
+        <rdf:type rdf:resource="https://www.3lgm2.de/resource/ihe/Actor"/>
+        <iti-34 rdf:resource="https://www.3lgm2.de/resource/ihe/RFD_FORM_MANAGER"/>
+        <iti-34 rdf:resource="https://www.3lgm2.de/resource/ihe/RFD_FORM_PROCESSOR"/>
+        <iti-35 rdf:resource="https://www.3lgm2.de/resource/ihe/RFD_FORM_PROCESSOR"/>
+        <iti-37 rdf:resource="https://www.3lgm2.de/resource/ihe/RFD_FORM_MANAGER"/>
+        <integrationProfile_dataProperty rdf:datatype="http://www.w3.org/2001/XMLSchema#string">RFD</integrationProfile_dataProperty>
+        <ontology:abbreviation rdf:datatype="http://www.w3.org/2001/XMLSchema#string">FORM_FILLER</ontology:abbreviation>
+        <terms:description rdf:datatype="http://www.w3.org/2001/XMLSchema#string">The actor responsible for retrieving a form from a Form Manager, and for submitting form instance data to a Form Receiver.</terms:description>
+        <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Form Filler (RFD)</rdfs:label>
+    </owl:NamedIndividual>
+    <owl:Axiom>
+        <owl:annotatedSource rdf:resource="https://www.3lgm2.de/resource/ihe/RFD_FORM_FILLER"/>
+        <owl:annotatedProperty rdf:resource="https://www.3lgm2.de/resource/ihe/iti-37"/>
+        <owl:annotatedTarget rdf:resource="https://www.3lgm2.de/resource/ihe/RFD_FORM_MANAGER"/>
+        <saref4ee:optionalSlot rdf:datatype="http://www.w3.org/2000/01/rdf-schema#Literal">optional</saref4ee:optionalSlot>
+    </owl:Axiom>
+    
+
+
+    <!-- https://www.3lgm2.de/resource/ihe/RFD_FORM_MANAGER -->
+
+    <owl:NamedIndividual rdf:about="https://www.3lgm2.de/resource/ihe/RFD_FORM_MANAGER">
+        <rdf:type rdf:resource="https://www.3lgm2.de/resource/ihe/Actor"/>
+        <integrationProfile_dataProperty rdf:datatype="http://www.w3.org/2001/XMLSchema#string">RFD</integrationProfile_dataProperty>
+        <ontology:abbreviation rdf:datatype="http://www.w3.org/2001/XMLSchema#string">FORM_MANAGER</ontology:abbreviation>
+        <terms:description rdf:datatype="http://www.w3.org/2001/XMLSchema#string">The actor that supplies a form based upon a request that supplies a unique form identification.</terms:description>
+        <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Form Manager (RFD)</rdfs:label>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- https://www.3lgm2.de/resource/ihe/RFD_FORM_PROCESSOR -->
+
+    <owl:NamedIndividual rdf:about="https://www.3lgm2.de/resource/ihe/RFD_FORM_PROCESSOR">
+        <rdf:type rdf:resource="https://www.3lgm2.de/resource/ihe/Actor"/>
+        <integrationProfile_dataProperty rdf:datatype="http://www.w3.org/2001/XMLSchema#string">RFD</integrationProfile_dataProperty>
+        <ontology:abbreviation rdf:datatype="http://www.w3.org/2001/XMLSchema#string">FORM_PROCESSOR</ontology:abbreviation>
+        <terms:description rdf:datatype="http://www.w3.org/2001/XMLSchema#string">The Form Processor is an integrated Form Manager and From Receiver, supporting all of the transactions and options of those actors. The Form Processor constructs form such that form data is submitted back to itself.</terms:description>
+        <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Form Processor (RFD)</rdfs:label>
+    </owl:NamedIndividual>
+</rdf:RDF>
+
+
+
+<!-- Generated by the OWL API (version 4.5.9.2019-02-01T07:24:44Z) https://github.com/owlcs/owlapi -->
+

@@ -22,6 +22,7 @@ import de.imise.tool3lgm.graphtools.model.GDCollectionOwner;
 import de.imise.tool3lgm.graphtools.model.GDCollectionPrinter;
 import de.imise.tool3lgm.graphtools.undoredo.TransactionManager;
 import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
+import de.imise.util.Sys;
 
 /**
  * Oberklasse für Importer, die in ein Modell importieren.
@@ -176,6 +177,10 @@ public abstract class DataImporter<T> implements GDCollectionOwner, MetaModelSpe
      */
     protected Node addNode(final T sourceObject, final Class<? extends Node> nodeClass, final String name, final String description, final String id) {
         NodeContainer nodeContainer = gdcoll.createNodeAndContainer(nodeClass, name, description, id, STANDARD_PID);
+        if (nodeContainer == null) {
+            Sys.errn(5, "sourceObject=" + sourceObject, sourceObject == null ? null : sourceObject.getClass(), "name=" + name, "description=" + description, "id=" + id);
+            return null;
+        }
         Node node = nodeContainer.getNode();
         sourceInstanceToTargetNode.put(sourceObject, node);
         return node;

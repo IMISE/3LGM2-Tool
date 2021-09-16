@@ -1,0 +1,852 @@
+<?xml version="1.0"?>
+<rdf:RDF xmlns="https://www.3lgm2.de/resource/ihe/"
+     xml:base="https://www.3lgm2.de/resource/ihe/"
+     xmlns:ov="http://open.vocab.org/terms/"
+     xmlns:ihe="https://www.3lgm2.de/resource/ihe/3"
+     xmlns:owl="http://www.w3.org/2002/07/owl#"
+     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+     xmlns:xml="http://www.w3.org/XML/1998/namespace"
+     xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+     xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+     xmlns:terms="http://purl.org/dc/terms/"
+     xmlns:dlgm2ihe="https://www.3lgm2.de/resource/ihe/"
+     xmlns:ontology="http://dbpedia.org/ontology/"
+     xmlns:saref4ee="https://w3id.org/saref4ee#">
+    <owl:Ontology rdf:about="https://www.3lgm2.de/resource/ihe">
+        <owl:versionIRI rdf:resource="https://www.3lgm2.de/resource/ihe/3.0.0"/>
+        <ov:defines rdf:resource="https://www.3lgm2.de/resource/ihe/Actor"/>
+        <ov:defines rdf:resource="https://www.3lgm2.de/resource/ihe/ContentModule"/>
+        <ov:defines rdf:resource="https://www.3lgm2.de/resource/ihe/IHEConcept"/>
+        <ov:defines rdf:resource="https://www.3lgm2.de/resource/ihe/IntegrationProfile"/>
+        <rdfs:label xml:lang="en">IHE Ontology</rdfs:label>
+    </owl:Ontology>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Annotation properties
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://dbpedia.org/ontology/abbreviation -->
+
+    <owl:AnnotationProperty rdf:about="http://dbpedia.org/ontology/abbreviation"/>
+    
+
+
+    <!-- http://open.vocab.org/terms/defines -->
+
+    <owl:AnnotationProperty rdf:about="http://open.vocab.org/terms/defines"/>
+    
+
+
+    <!-- http://purl.org/dc/terms/description -->
+
+    <owl:AnnotationProperty rdf:about="http://purl.org/dc/terms/description"/>
+    
+
+
+    <!-- https://w3id.org/saref4ee#optionalSlot -->
+
+    <owl:AnnotationProperty rdf:about="https://w3id.org/saref4ee#optionalSlot"/>
+    
+
+
+    <!-- https://www.3lgm2.de/resource/ihe/3lgm-classname-edge -->
+
+    <owl:AnnotationProperty rdf:about="https://www.3lgm2.de/resource/ihe/3lgm-classname-edge"/>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Object Properties
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- https://www.3lgm2.de/resource/ihe/iheIntegrationProfile -->
+
+    <owl:ObjectProperty rdf:about="https://www.3lgm2.de/resource/ihe/iheIntegrationProfile">
+        <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topObjectProperty"/>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
+        <rdfs:domain rdf:resource="https://www.3lgm2.de/resource/ihe/Actor"/>
+        <rdfs:range rdf:resource="https://www.3lgm2.de/resource/ihe/IntegrationProfile"/>
+        <rdfs:label xml:lang="en">IHE Integration Profile</rdfs:label>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- https://www.3lgm2.de/resource/ihe/iheTransaction -->
+
+    <owl:ObjectProperty rdf:about="https://www.3lgm2.de/resource/ihe/iheTransaction">
+        <rdfs:subPropertyOf rdf:resource="https://www.3lgm2.de/resource/ihe/usesActor"/>
+        <rdfs:domain rdf:resource="https://www.3lgm2.de/resource/ihe/Actor"/>
+        <rdfs:range rdf:resource="https://www.3lgm2.de/resource/ihe/Actor"/>
+        <rdfs:comment xml:lang="en">Convention: Only &quot;invoking&quot; is modeled! The &quot;reacting&quot; counterpart could be derived, later.</rdfs:comment>
+        <rdfs:label xml:lang="en">Transaction</rdfs:label>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- https://www.3lgm2.de/resource/ihe/iti -->
+
+    <owl:ObjectProperty rdf:about="https://www.3lgm2.de/resource/ihe/iti">
+        <rdfs:subPropertyOf rdf:resource="https://www.3lgm2.de/resource/ihe/iheTransaction"/>
+        <rdfs:label>ITI Transactions</rdfs:label>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- https://www.3lgm2.de/resource/ihe/iti-18 -->
+
+    <owl:ObjectProperty rdf:about="https://www.3lgm2.de/resource/ihe/iti-18">
+        <rdfs:subPropertyOf rdf:resource="https://www.3lgm2.de/resource/ihe/iti"/>
+        <ontology:abbreviation>ITI-18</ontology:abbreviation>
+        <terms:description>The Query Registry transaction is issued by the Document Consumer Actor on behalf of a care provider (EHR-CR) to a Document Registry. The Document Registry Actor searches the registry to locate documents that meet the provider s specified query criteria. It will return a list of document entries that contain metadata found to meet the specified criteria including the locations and identifier of each corresponding document in one or more Document Repositories. The stored query uses parameters and not direct SQL</terms:description>
+        <rdfs:label>Registry Stored Query</rdfs:label>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- https://www.3lgm2.de/resource/ihe/iti-34 -->
+
+    <owl:ObjectProperty rdf:about="https://www.3lgm2.de/resource/ihe/iti-34">
+        <rdfs:subPropertyOf rdf:resource="https://www.3lgm2.de/resource/ihe/iti"/>
+        <ontology:abbreviation>ITI-34</ontology:abbreviation>
+        <terms:description>Retrieve Form</terms:description>
+        <rdfs:label>Retrieve Form</rdfs:label>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- https://www.3lgm2.de/resource/ihe/iti-35 -->
+
+    <owl:ObjectProperty rdf:about="https://www.3lgm2.de/resource/ihe/iti-35">
+        <rdfs:subPropertyOf rdf:resource="https://www.3lgm2.de/resource/ihe/iti"/>
+        <ontology:abbreviation>ITI-35</ontology:abbreviation>
+        <terms:description>Submit Form</terms:description>
+        <rdfs:label>Submit Form</rdfs:label>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- https://www.3lgm2.de/resource/ihe/iti-37 -->
+
+    <owl:ObjectProperty rdf:about="https://www.3lgm2.de/resource/ihe/iti-37">
+        <rdfs:subPropertyOf rdf:resource="https://www.3lgm2.de/resource/ihe/iti"/>
+        <ontology:abbreviation>ITI-37</ontology:abbreviation>
+        <terms:description>Retrieve Clarifications</terms:description>
+        <rdfs:label>Retrieve Clarifications</rdfs:label>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- https://www.3lgm2.de/resource/ihe/iti-43 -->
+
+    <owl:ObjectProperty rdf:about="https://www.3lgm2.de/resource/ihe/iti-43">
+        <rdfs:subPropertyOf rdf:resource="https://www.3lgm2.de/resource/ihe/iti"/>
+        <ontology:abbreviation>ITI-43</ontology:abbreviation>
+        <terms:description>Retrieve Document Set</terms:description>
+        <rdfs:label>Retrieve Document Set</rdfs:label>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- https://www.3lgm2.de/resource/ihe/iti-62 -->
+
+    <owl:ObjectProperty rdf:about="https://www.3lgm2.de/resource/ihe/iti-62">
+        <rdfs:subPropertyOf rdf:resource="https://www.3lgm2.de/resource/ihe/iti"/>
+        <ontology:abbreviation>ITI-62</ontology:abbreviation>
+        <terms:description>The Remove Metadata transaction is used by the Document Administrator to request removal of one or more metadata objects from a Document Registry.</terms:description>
+        <rdfs:label>Remove Metadata</rdfs:label>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- https://www.3lgm2.de/resource/ihe/mustBeGroupedWith -->
+
+    <owl:ObjectProperty rdf:about="https://www.3lgm2.de/resource/ihe/mustBeGroupedWith">
+        <rdfs:subPropertyOf rdf:resource="https://www.3lgm2.de/resource/ihe/usesActor"/>
+        <rdfs:domain rdf:resource="https://www.3lgm2.de/resource/ihe/Actor"/>
+        <rdfs:range rdf:resource="https://www.3lgm2.de/resource/ihe/Actor"/>
+        <rdfs:comment xml:lang="en">Convention: Only &quot;must be grouped with&quot; is modeled! The &quot;is required for grouping of&quot; counterpart could be derived, later.</rdfs:comment>
+        <rdfs:label xml:lang="en">must be grouped with</rdfs:label>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- https://www.3lgm2.de/resource/ihe/rad -->
+
+    <owl:ObjectProperty rdf:about="https://www.3lgm2.de/resource/ihe/rad">
+        <rdfs:subPropertyOf rdf:resource="https://www.3lgm2.de/resource/ihe/iheTransaction"/>
+        <rdfs:label>RAD Transactions</rdfs:label>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- https://www.3lgm2.de/resource/ihe/rad-17 -->
+
+    <owl:ObjectProperty rdf:about="https://www.3lgm2.de/resource/ihe/rad-17">
+        <rdfs:subPropertyOf rdf:resource="https://www.3lgm2.de/resource/ihe/rad"/>
+        <ontology:abbreviation>RAD-17</ontology:abbreviation>
+        <terms:description>An Image Display or an Imaging Document Consumer requests and retrieves the Grayscale Softcopy Presentation State (GSPS) information for a particular image or image set.</terms:description>
+        <rdfs:label>Retrieve Presentation States</rdfs:label>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- https://www.3lgm2.de/resource/ihe/rad-27 -->
+
+    <owl:ObjectProperty rdf:about="https://www.3lgm2.de/resource/ihe/rad-27">
+        <rdfs:subPropertyOf rdf:resource="https://www.3lgm2.de/resource/ihe/rad"/>
+        <ontology:abbreviation>RAD-27</ontology:abbreviation>
+        <terms:description>A Report Reader or an Imaging Document Consumer requests and retrieves a diagnostic report from the Report Repository, External Report Repository Access or an Imaging Document Source.</terms:description>
+        <rdfs:label>Retrieve Reports</rdfs:label>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- https://www.3lgm2.de/resource/ihe/rad-69 -->
+
+    <owl:ObjectProperty rdf:about="https://www.3lgm2.de/resource/ihe/rad-69">
+        <rdfs:subPropertyOf rdf:resource="https://www.3lgm2.de/resource/ihe/rad"/>
+        <ontology:abbreviation>RAD-69</ontology:abbreviation>
+        <terms:description>Retrieve Imaging Doc Set</terms:description>
+        <rdfs:label>Retrieve Imaging Doc Set</rdfs:label>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- https://www.3lgm2.de/resource/ihe/usesActor -->
+
+    <owl:ObjectProperty rdf:about="https://www.3lgm2.de/resource/ihe/usesActor">
+        <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topObjectProperty"/>
+        <rdfs:domain rdf:resource="https://www.3lgm2.de/resource/ihe/IHEConcept"/>
+        <rdfs:range rdf:resource="https://www.3lgm2.de/resource/ihe/Actor"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Data properties
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://ns.nature.com/terms/PdfAsset -->
+
+    <owl:DatatypeProperty rdf:about="http://ns.nature.com/terms/PdfAsset">
+        <rdfs:subPropertyOf rdf:resource="https://www.3lgm2.de/resource/ihe/Group_Actor"/>
+        <rdfs:subPropertyOf rdf:resource="https://www.3lgm2.de/resource/ihe/Group_IntegrationProfile"/>
+        <rdfs:domain rdf:resource="https://www.3lgm2.de/resource/ihe/IntegrationProfile"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- https://www.3lgm2.de/resource/ihe/Group_Actor -->
+
+    <owl:DatatypeProperty rdf:about="https://www.3lgm2.de/resource/ihe/Group_Actor">
+        <rdfs:subPropertyOf rdf:resource="https://www.3lgm2.de/resource/ihe/Tab_Actor"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- https://www.3lgm2.de/resource/ihe/Group_IntegrationProfile -->
+
+    <owl:DatatypeProperty rdf:about="https://www.3lgm2.de/resource/ihe/Group_IntegrationProfile">
+        <rdfs:subPropertyOf rdf:resource="https://www.3lgm2.de/resource/ihe/Tab_IntegrationProfile"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- https://www.3lgm2.de/resource/ihe/Tab_Actor -->
+
+    <owl:DatatypeProperty rdf:about="https://www.3lgm2.de/resource/ihe/Tab_Actor"/>
+    
+
+
+    <!-- https://www.3lgm2.de/resource/ihe/Tab_IntegrationProfile -->
+
+    <owl:DatatypeProperty rdf:about="https://www.3lgm2.de/resource/ihe/Tab_IntegrationProfile">
+        <rdfs:domain rdf:resource="https://www.3lgm2.de/resource/ihe/IntegrationProfile"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- https://www.3lgm2.de/resource/ihe/helper -->
+
+    <owl:DatatypeProperty rdf:about="https://www.3lgm2.de/resource/ihe/helper"/>
+    
+
+
+    <!-- https://www.3lgm2.de/resource/ihe/integrationProfile_dataProperty -->
+
+    <owl:DatatypeProperty rdf:about="https://www.3lgm2.de/resource/ihe/integrationProfile_dataProperty">
+        <rdfs:subPropertyOf rdf:resource="https://www.3lgm2.de/resource/ihe/helper"/>
+        <rdfs:domain rdf:resource="https://www.3lgm2.de/resource/ihe/Actor"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- https://www.3lgm2.de/resource/ihe/status -->
+
+    <owl:DatatypeProperty rdf:about="https://www.3lgm2.de/resource/ihe/status">
+        <rdfs:subPropertyOf rdf:resource="https://www.3lgm2.de/resource/ihe/Group_Actor"/>
+        <rdfs:subPropertyOf rdf:resource="https://www.3lgm2.de/resource/ihe/Group_IntegrationProfile"/>
+        <rdfs:domain>
+            <owl:Class>
+                <owl:unionOf rdf:parseType="Collection">
+                    <rdf:Description rdf:about="https://www.3lgm2.de/resource/ihe/Actor"/>
+                    <rdf:Description rdf:about="https://www.3lgm2.de/resource/ihe/IntegrationProfile"/>
+                </owl:unionOf>
+            </owl:Class>
+        </rdfs:domain>
+        <rdfs:range>
+            <rdfs:Datatype>
+                <owl:oneOf>
+                    <rdf:Description>
+                        <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#List"/>
+                        <rdf:first>Deprecated</rdf:first>
+                        <rdf:rest>
+                            <rdf:Description>
+                                <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#List"/>
+                                <rdf:first>Final Text</rdf:first>
+                                <rdf:rest>
+                                    <rdf:Description>
+                                        <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#List"/>
+                                        <rdf:first>Trial Implementation</rdf:first>
+                                        <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+                                    </rdf:Description>
+                                </rdf:rest>
+                            </rdf:Description>
+                        </rdf:rest>
+                    </rdf:Description>
+                </owl:oneOf>
+            </rdfs:Datatype>
+        </rdfs:range>
+        <rdfs:label xml:lang="en">Status</rdfs:label>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Classes
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- https://www.3lgm2.de/resource/ihe/Actor -->
+
+    <owl:Class rdf:about="https://www.3lgm2.de/resource/ihe/Actor">
+        <rdfs:subClassOf rdf:resource="https://www.3lgm2.de/resource/ihe/IHEConcept"/>
+        <rdfs:label xml:lang="en">Actor</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- https://www.3lgm2.de/resource/ihe/ContentModule -->
+
+    <owl:Class rdf:about="https://www.3lgm2.de/resource/ihe/ContentModule">
+        <rdfs:subClassOf rdf:resource="https://www.3lgm2.de/resource/ihe/IHEConcept"/>
+        <rdfs:label xml:lang="en">Content Module</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- https://www.3lgm2.de/resource/ihe/IHEConcept -->
+
+    <owl:Class rdf:about="https://www.3lgm2.de/resource/ihe/IHEConcept">
+        <rdfs:label xml:lang="en">IHE Concept</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- https://www.3lgm2.de/resource/ihe/IntegrationProfile -->
+
+    <owl:Class rdf:about="https://www.3lgm2.de/resource/ihe/IntegrationProfile">
+        <rdfs:subClassOf rdf:resource="https://www.3lgm2.de/resource/ihe/IHEConcept"/>
+        <rdfs:label xml:lang="en">Integration Profile</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Individuals
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- https://www.3lgm2.de/resource/ihe/APPC -->
+
+    <owl:NamedIndividual rdf:about="https://www.3lgm2.de/resource/ihe/APPC">
+        <rdf:type rdf:resource="https://www.3lgm2.de/resource/ihe/ContentModule"/>
+        <status rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Trial Implementation</status>
+        <ontology:abbreviation rdf:datatype="http://www.w3.org/2001/XMLSchema#string">APPC</ontology:abbreviation>
+        <terms:description rdf:datatype="http://www.w3.org/2001/XMLSchema#string">The Advanced Patient Privacy Consents (APPC) Profile defines a structural representation of a privacy consent policy. The definition allows for privacy consent policies that can include individualized parts, based on the patient’s choices.</terms:description>
+        <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Advanced Patient Privacy Consents</rdfs:label>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- https://www.3lgm2.de/resource/ihe/ATNA_SA -->
+
+    <owl:NamedIndividual rdf:about="https://www.3lgm2.de/resource/ihe/ATNA_SA">
+        <rdf:type rdf:resource="https://www.3lgm2.de/resource/ihe/Actor"/>
+        <ontology:abbreviation rdf:datatype="http://www.w3.org/2001/XMLSchema#string">ATNA_SA</ontology:abbreviation>
+        <terms:description rdf:datatype="http://www.w3.org/2001/XMLSchema#string">The difference between the Secure Node and the Secure Application is the extent to which the underlying operating system and other environment are secured. A Secure Node includes all aspects of user authentication, file system protections, and operating environment security. The Secure Application is a product that does not include the operating environment. The Secure Application provides security features only for the application features. See section 9.7 for the relationships among a Secure Node, Secure Application, and other actors.</terms:description>
+        <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Secure Application (ATNA)</rdfs:label>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- https://www.3lgm2.de/resource/ihe/ATNA_SN -->
+
+    <owl:NamedIndividual rdf:about="https://www.3lgm2.de/resource/ihe/ATNA_SN">
+        <rdf:type rdf:resource="https://www.3lgm2.de/resource/ihe/Actor"/>
+        <ontology:abbreviation rdf:datatype="http://www.w3.org/2001/XMLSchema#string">ATNA_SN</ontology:abbreviation>
+        <terms:description rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A system unit that validates the identity of any user and of any other node, and determines whether or not access to the system for this user and information exchange with the other node is allowed. Maintains the correct time.</terms:description>
+        <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Secure Node (ATNA)</rdfs:label>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- https://www.3lgm2.de/resource/ihe/BPPC -->
+
+    <owl:NamedIndividual rdf:about="https://www.3lgm2.de/resource/ihe/BPPC">
+        <rdf:type rdf:resource="https://www.3lgm2.de/resource/ihe/ContentModule"/>
+        <status>Final Text</status>
+        <ontology:abbreviation>BPPC</ontology:abbreviation>
+        <terms:description rdf:datatype="http://www.w3.org/2001/XMLSchema#string">The document sharing infrastructure provided by XD* allow for the publication and use of clinical documents associated with a patient. This profile allows for a Patient Privacy Policy Domain (e.g., an XDS Affinity Domain to have a number of Patient Privacy Policies that can be acknowledged (aka consent). This allows for more flexibility to support some patient concerns, while providing an important and useful dataset to the healthcare provider. Without BPPC, the XDS profile requires that the administrators of an XDS Affinity Domain creates and agrees to a single document publication and use policy (See ITI TF-1: Appendix L). Such a single XDS Affinity Domain Policy is enforced in a distributed way through the inherent access controls of the systems involved in the XDS Affinity Domain.</terms:description>
+        <rdfs:label>Basic Patient Privacy Consents</rdfs:label>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- https://www.3lgm2.de/resource/ihe/BPPC_CONTENT_CONSUMER -->
+
+    <owl:NamedIndividual rdf:about="https://www.3lgm2.de/resource/ihe/BPPC_CONTENT_CONSUMER">
+        <rdf:type rdf:resource="https://www.3lgm2.de/resource/ihe/Actor"/>
+        <iheIntegrationProfile rdf:resource="https://www.3lgm2.de/resource/ihe/BPPC"/>
+        <mustBeGroupedWith rdf:resource="https://www.3lgm2.de/resource/ihe/XDM_PMI"/>
+        <mustBeGroupedWith rdf:resource="https://www.3lgm2.de/resource/ihe/XDR_DOC_RECIPIENT"/>
+        <mustBeGroupedWith rdf:resource="https://www.3lgm2.de/resource/ihe/XDSB_DOC_CONSUMER"/>
+        <integrationProfile_dataProperty rdf:datatype="http://www.w3.org/2001/XMLSchema#string">BPPC</integrationProfile_dataProperty>
+        <ontology:abbreviation rdf:datatype="http://www.w3.org/2001/XMLSchema#string">CONTENT_CONSUMER</ontology:abbreviation>
+        <terms:description rdf:datatype="http://www.w3.org/2001/XMLSchema#string">The Content Consumer Actor views, imports, or performs other processing of content created by a Content Creator Actor.</terms:description>
+        <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Content Consumer (BPPC)</rdfs:label>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- https://www.3lgm2.de/resource/ihe/BPPC_CONTENT_CREATOR -->
+
+    <owl:NamedIndividual rdf:about="https://www.3lgm2.de/resource/ihe/BPPC_CONTENT_CREATOR">
+        <rdf:type rdf:resource="https://www.3lgm2.de/resource/ihe/Actor"/>
+        <iheIntegrationProfile rdf:resource="https://www.3lgm2.de/resource/ihe/BPPC"/>
+        <mustBeGroupedWith rdf:resource="https://www.3lgm2.de/resource/ihe/XDM_PMC"/>
+        <mustBeGroupedWith rdf:resource="https://www.3lgm2.de/resource/ihe/XDR_DOC_SOURCE"/>
+        <mustBeGroupedWith rdf:resource="https://www.3lgm2.de/resource/ihe/XDSB_DOC_SOURCE"/>
+        <integrationProfile_dataProperty rdf:datatype="http://www.w3.org/2001/XMLSchema#string">BPPC</integrationProfile_dataProperty>
+        <ontology:abbreviation rdf:datatype="http://www.w3.org/2001/XMLSchema#string">CONTENT_CREATOR</ontology:abbreviation>
+        <terms:description rdf:datatype="http://www.w3.org/2001/XMLSchema#string">The Content Creator Actor creates content and transmits to a Content Consumer.</terms:description>
+        <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Content Creator (BPPC)</rdfs:label>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- https://www.3lgm2.de/resource/ihe/RFD_FORM_FILLER -->
+
+    <owl:NamedIndividual rdf:about="https://www.3lgm2.de/resource/ihe/RFD_FORM_FILLER">
+        <rdf:type rdf:resource="https://www.3lgm2.de/resource/ihe/Actor"/>
+        <iti-34 rdf:resource="https://www.3lgm2.de/resource/ihe/RFD_FORM_MANAGER"/>
+        <iti-34 rdf:resource="https://www.3lgm2.de/resource/ihe/RFD_FORM_PROCESSOR"/>
+        <iti-35 rdf:resource="https://www.3lgm2.de/resource/ihe/RFD_FORM_PROCESSOR"/>
+        <iti-37 rdf:resource="https://www.3lgm2.de/resource/ihe/RFD_FORM_MANAGER"/>
+        <integrationProfile_dataProperty rdf:datatype="http://www.w3.org/2001/XMLSchema#string">RFD</integrationProfile_dataProperty>
+        <ontology:abbreviation rdf:datatype="http://www.w3.org/2001/XMLSchema#string">FORM_FILLER</ontology:abbreviation>
+        <terms:description rdf:datatype="http://www.w3.org/2001/XMLSchema#string">The actor responsible for retrieving a form from a Form Manager, and for submitting form instance data to a Form Receiver.</terms:description>
+        <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Form Filler (RFD)</rdfs:label>
+    </owl:NamedIndividual>
+    <owl:Axiom>
+        <owl:annotatedSource rdf:resource="https://www.3lgm2.de/resource/ihe/RFD_FORM_FILLER"/>
+        <owl:annotatedProperty rdf:resource="https://www.3lgm2.de/resource/ihe/iti-37"/>
+        <owl:annotatedTarget rdf:resource="https://www.3lgm2.de/resource/ihe/RFD_FORM_MANAGER"/>
+        <saref4ee:optionalSlot rdf:datatype="http://www.w3.org/2000/01/rdf-schema#Literal">optional</saref4ee:optionalSlot>
+    </owl:Axiom>
+    
+
+
+    <!-- https://www.3lgm2.de/resource/ihe/RFD_FORM_MANAGER -->
+
+    <owl:NamedIndividual rdf:about="https://www.3lgm2.de/resource/ihe/RFD_FORM_MANAGER">
+        <rdf:type rdf:resource="https://www.3lgm2.de/resource/ihe/Actor"/>
+        <integrationProfile_dataProperty rdf:datatype="http://www.w3.org/2001/XMLSchema#string">RFD</integrationProfile_dataProperty>
+        <ontology:abbreviation rdf:datatype="http://www.w3.org/2001/XMLSchema#string">FORM_MANAGER</ontology:abbreviation>
+        <terms:description rdf:datatype="http://www.w3.org/2001/XMLSchema#string">The actor that supplies a form based upon a request that supplies a unique form identification.</terms:description>
+        <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Form Manager (RFD)</rdfs:label>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- https://www.3lgm2.de/resource/ihe/RFD_FORM_PROCESSOR -->
+
+    <owl:NamedIndividual rdf:about="https://www.3lgm2.de/resource/ihe/RFD_FORM_PROCESSOR">
+        <rdf:type rdf:resource="https://www.3lgm2.de/resource/ihe/Actor"/>
+        <integrationProfile_dataProperty rdf:datatype="http://www.w3.org/2001/XMLSchema#string">RFD</integrationProfile_dataProperty>
+        <ontology:abbreviation rdf:datatype="http://www.w3.org/2001/XMLSchema#string">FORM_PROCESSOR</ontology:abbreviation>
+        <terms:description rdf:datatype="http://www.w3.org/2001/XMLSchema#string">The Form Processor is an integrated Form Manager and From Receiver, supporting all of the transactions and options of those actors. The Form Processor constructs form such that form data is submitted back to itself.</terms:description>
+        <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Form Processor (RFD)</rdfs:label>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- https://www.3lgm2.de/resource/ihe/RMD_DOC_ADMINISTRATOR -->
+
+    <owl:NamedIndividual rdf:about="https://www.3lgm2.de/resource/ihe/RMD_DOC_ADMINISTRATOR">
+        <rdf:type rdf:resource="https://www.3lgm2.de/resource/ihe/Actor"/>
+        <iti-18 rdf:resource="https://www.3lgm2.de/resource/ihe/RMD_DOC_REGISTRY"/>
+        <iti-62 rdf:resource="https://www.3lgm2.de/resource/ihe/RMD_DOC_REGISTRY"/>
+        <mustBeGroupedWith rdf:resource="https://www.3lgm2.de/resource/ihe/ATNA_SA"/>
+        <mustBeGroupedWith rdf:resource="https://www.3lgm2.de/resource/ihe/ATNA_SN"/>
+        <integrationProfile_dataProperty rdf:datatype="http://www.w3.org/2001/XMLSchema#string">RMD</integrationProfile_dataProperty>
+        <ontology:abbreviation rdf:datatype="http://www.w3.org/2001/XMLSchema#string">DOC_ADMINISTRATOR</ontology:abbreviation>
+        <terms:description rdf:datatype="http://www.w3.org/2001/XMLSchema#string">The Document Administrator is an actor capable of updating and/or removing metadata from the Document Registry. This actor may also be capable of removing associated documents from the Document Repository.</terms:description>
+        <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Document Administrator (RMD)</rdfs:label>
+    </owl:NamedIndividual>
+    <owl:Axiom>
+        <owl:annotatedSource rdf:resource="https://www.3lgm2.de/resource/ihe/RMD_DOC_ADMINISTRATOR"/>
+        <owl:annotatedProperty rdf:resource="https://www.3lgm2.de/resource/ihe/iti-62"/>
+        <owl:annotatedTarget rdf:resource="https://www.3lgm2.de/resource/ihe/RMD_DOC_REGISTRY"/>
+        <saref4ee:optionalSlot rdf:datatype="http://www.w3.org/2000/01/rdf-schema#Literal">optional</saref4ee:optionalSlot>
+    </owl:Axiom>
+    <owl:Axiom>
+        <owl:annotatedSource rdf:resource="https://www.3lgm2.de/resource/ihe/RMD_DOC_ADMINISTRATOR"/>
+        <owl:annotatedProperty rdf:resource="https://www.3lgm2.de/resource/ihe/iti-18"/>
+        <owl:annotatedTarget rdf:resource="https://www.3lgm2.de/resource/ihe/RMD_DOC_REGISTRY"/>
+        <saref4ee:optionalSlot rdf:datatype="http://www.w3.org/2000/01/rdf-schema#Literal">optional</saref4ee:optionalSlot>
+    </owl:Axiom>
+    
+
+
+    <!-- https://www.3lgm2.de/resource/ihe/RMD_DOC_REGISTRY -->
+
+    <owl:NamedIndividual rdf:about="https://www.3lgm2.de/resource/ihe/RMD_DOC_REGISTRY">
+        <rdf:type rdf:resource="https://www.3lgm2.de/resource/ihe/Actor"/>
+        <mustBeGroupedWith rdf:resource="https://www.3lgm2.de/resource/ihe/ATNA_SA"/>
+        <mustBeGroupedWith rdf:resource="https://www.3lgm2.de/resource/ihe/ATNA_SN"/>
+        <mustBeGroupedWith rdf:resource="https://www.3lgm2.de/resource/ihe/XDSB_DOC_REGISTRY"/>
+        <integrationProfile_dataProperty rdf:datatype="http://www.w3.org/2001/XMLSchema#string">RMD</integrationProfile_dataProperty>
+        <ontology:abbreviation rdf:datatype="http://www.w3.org/2001/XMLSchema#string">DOC_REGISTRY</ontology:abbreviation>
+        <terms:description rdf:datatype="http://www.w3.org/2001/XMLSchema#string">The Document Registry Actor maintains metadata about each registered document in a document entry. This includes a link to the Document in the Repository where it is stored. The Document Registry responds to queries from Document Consumer actors about documents meeting specific criteria. It also enforces some healthcare specific technical policies at the time of document registration.</terms:description>
+        <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Document Registry (RMD)</rdfs:label>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- https://www.3lgm2.de/resource/ihe/SeR_AUTH_DECISIONS_MGR -->
+
+    <owl:NamedIndividual rdf:about="https://www.3lgm2.de/resource/ihe/SeR_AUTH_DECISIONS_MGR">
+        <rdf:type rdf:resource="https://www.3lgm2.de/resource/ihe/Actor"/>
+        <mustBeGroupedWith rdf:resource="https://www.3lgm2.de/resource/ihe/ATNA_SA"/>
+        <mustBeGroupedWith rdf:resource="https://www.3lgm2.de/resource/ihe/ATNA_SN"/>
+        <mustBeGroupedWith rdf:resource="https://www.3lgm2.de/resource/ihe/XDSB_DOC_REGISTRY"/>
+        <mustBeGroupedWith rdf:resource="https://www.3lgm2.de/resource/ihe/XUA_X-SERVICE-PROVIDER"/>
+        <integrationProfile_dataProperty rdf:datatype="http://www.w3.org/2001/XMLSchema#string">SeR</integrationProfile_dataProperty>
+        <ontology:abbreviation rdf:datatype="http://www.w3.org/2001/XMLSchema#string">AUTH_DECISIONS_MGR</ontology:abbreviation>
+        <terms:description rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Actor that can perform Access Control decisions, evaluating requests for authorization. The result of this evaluation is the creation of an Authorization Decision that certifies the decision made.</terms:description>
+        <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Authorization Decisions Manager (SeR)</rdfs:label>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- https://www.3lgm2.de/resource/ihe/XDM_PMC -->
+
+    <owl:NamedIndividual rdf:about="https://www.3lgm2.de/resource/ihe/XDM_PMC">
+        <rdf:type rdf:resource="https://www.3lgm2.de/resource/ihe/Actor"/>
+        <mustBeGroupedWith rdf:resource="https://www.3lgm2.de/resource/ihe/ATNA_SA"/>
+        <mustBeGroupedWith rdf:resource="https://www.3lgm2.de/resource/ihe/ATNA_SN"/>
+        <integrationProfile_dataProperty rdf:datatype="http://www.w3.org/2001/XMLSchema#string">XDM</integrationProfile_dataProperty>
+        <ontology:abbreviation rdf:datatype="http://www.w3.org/2001/XMLSchema#string">PMC</ontology:abbreviation>
+        <terms:description rdf:datatype="http://www.w3.org/2001/XMLSchema#string">This actor assembles the content of the media and writes it to the physical medium.</terms:description>
+        <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Portable Media Creator (XDM)</rdfs:label>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- https://www.3lgm2.de/resource/ihe/XDM_PMI -->
+
+    <owl:NamedIndividual rdf:about="https://www.3lgm2.de/resource/ihe/XDM_PMI">
+        <rdf:type rdf:resource="https://www.3lgm2.de/resource/ihe/Actor"/>
+        <mustBeGroupedWith rdf:resource="https://www.3lgm2.de/resource/ihe/ATNA_SA"/>
+        <mustBeGroupedWith rdf:resource="https://www.3lgm2.de/resource/ihe/ATNA_SN"/>
+        <integrationProfile_dataProperty rdf:datatype="http://www.w3.org/2001/XMLSchema#string">XDM</integrationProfile_dataProperty>
+        <ontology:abbreviation rdf:datatype="http://www.w3.org/2001/XMLSchema#string">PMI</ontology:abbreviation>
+        <terms:description rdf:datatype="http://www.w3.org/2001/XMLSchema#string">This actor reads the DICOM information (DICOM FSR) contained on the media. This system provides the user the ability to select a set of DICOM instances and reconcile key patient and study attributes (when necessary) to facilitate inclusion of the imported data in the local information system(s).</terms:description>
+        <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Portable Media Importer (XDM)</rdfs:label>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- https://www.3lgm2.de/resource/ihe/XDR_DOC_RECIPIENT -->
+
+    <owl:NamedIndividual rdf:about="https://www.3lgm2.de/resource/ihe/XDR_DOC_RECIPIENT">
+        <rdf:type rdf:resource="https://www.3lgm2.de/resource/ihe/Actor"/>
+        <mustBeGroupedWith rdf:resource="https://www.3lgm2.de/resource/ihe/ATNA_SA"/>
+        <mustBeGroupedWith rdf:resource="https://www.3lgm2.de/resource/ihe/ATNA_SN"/>
+        <ontology:abbreviation rdf:datatype="http://www.w3.org/2001/XMLSchema#string">XDR_DOC_RECIPIENT</ontology:abbreviation>
+        <terms:description rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A system that receives documents and metadata sent by another actor.</terms:description>
+        <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Document Recipient (XDR)</rdfs:label>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- https://www.3lgm2.de/resource/ihe/XDR_DOC_SOURCE -->
+
+    <owl:NamedIndividual rdf:about="https://www.3lgm2.de/resource/ihe/XDR_DOC_SOURCE">
+        <rdf:type rdf:resource="https://www.3lgm2.de/resource/ihe/Actor"/>
+        <mustBeGroupedWith rdf:resource="https://www.3lgm2.de/resource/ihe/ATNA_SA"/>
+        <mustBeGroupedWith rdf:resource="https://www.3lgm2.de/resource/ihe/ATNA_SN"/>
+        <ontology:abbreviation rdf:datatype="http://www.w3.org/2001/XMLSchema#string">XDR_DOC_SOURCE</ontology:abbreviation>
+        <terms:description rdf:datatype="http://www.w3.org/2001/XMLSchema#string">The Document Source is the producer and publisher of documents and metadata.</terms:description>
+        <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Document Source (XDR)</rdfs:label>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- https://www.3lgm2.de/resource/ihe/XDS-IB_DOC_CONSUMER -->
+
+    <owl:NamedIndividual rdf:about="https://www.3lgm2.de/resource/ihe/XDS-IB_DOC_CONSUMER">
+        <rdf:type rdf:resource="https://www.3lgm2.de/resource/ihe/Actor"/>
+        <iti-18 rdf:resource="https://www.3lgm2.de/resource/ihe/XDS-IB_DOC_REGISTRY"/>
+        <iti-43 rdf:resource="https://www.3lgm2.de/resource/ihe/XDS-IB_DOC_REPOSITORY"/>
+        <mustBeGroupedWith rdf:resource="https://www.3lgm2.de/resource/ihe/ATNA_SA"/>
+        <mustBeGroupedWith rdf:resource="https://www.3lgm2.de/resource/ihe/ATNA_SN"/>
+        <integrationProfile_dataProperty rdf:datatype="http://www.w3.org/2001/XMLSchema#string">XDS-I.b</integrationProfile_dataProperty>
+        <ontology:abbreviation rdf:datatype="http://www.w3.org/2001/XMLSchema#string">DOC_CONSUMER</ontology:abbreviation>
+        <terms:description rdf:datatype="http://www.w3.org/2001/XMLSchema#string">The Document Consumer Actor queries a Document Registry Actor for documents meeting certain criteria, and retrieves selected documents from one or more Document Repository actors.</terms:description>
+        <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Document Consumer (XDS-I.b)</rdfs:label>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- https://www.3lgm2.de/resource/ihe/XDS-IB_DOC_REGISTRY -->
+
+    <owl:NamedIndividual rdf:about="https://www.3lgm2.de/resource/ihe/XDS-IB_DOC_REGISTRY">
+        <rdf:type rdf:resource="https://www.3lgm2.de/resource/ihe/Actor"/>
+        <mustBeGroupedWith rdf:resource="https://www.3lgm2.de/resource/ihe/ATNA_SA"/>
+        <mustBeGroupedWith rdf:resource="https://www.3lgm2.de/resource/ihe/ATNA_SN"/>
+        <integrationProfile_dataProperty rdf:datatype="http://www.w3.org/2001/XMLSchema#string">XDS-I.b</integrationProfile_dataProperty>
+        <ontology:abbreviation rdf:datatype="http://www.w3.org/2001/XMLSchema#string">DOC_REGISTRY</ontology:abbreviation>
+        <terms:description rdf:datatype="http://www.w3.org/2001/XMLSchema#string">The Document Registry Actor maintains metadata about each registered document in a document entry. This includes a link to the Document in the Repository where it is stored. The Document Registry responds to queries from Document Consumer actors about documents meeting specific criteria. It also enforces some healthcare specific technical policies at the time of document registration.</terms:description>
+        <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Document Registry (XDS-I.b)</rdfs:label>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- https://www.3lgm2.de/resource/ihe/XDS-IB_DOC_REPOSITORY -->
+
+    <owl:NamedIndividual rdf:about="https://www.3lgm2.de/resource/ihe/XDS-IB_DOC_REPOSITORY">
+        <rdf:type rdf:resource="https://www.3lgm2.de/resource/ihe/Actor"/>
+        <mustBeGroupedWith rdf:resource="https://www.3lgm2.de/resource/ihe/ATNA_SA"/>
+        <mustBeGroupedWith rdf:resource="https://www.3lgm2.de/resource/ihe/ATNA_SN"/>
+        <integrationProfile_dataProperty rdf:datatype="http://www.w3.org/2001/XMLSchema#string">XDS-I.b</integrationProfile_dataProperty>
+        <ontology:abbreviation rdf:datatype="http://www.w3.org/2001/XMLSchema#string">DOC_REPOSITORY</ontology:abbreviation>
+        <terms:description rdf:datatype="http://www.w3.org/2001/XMLSchema#string">The Document Repository is responsible for both the persistent storage of these documents as well as for their registration with the appropriate Document Registry. It assigns a URI to documents for subsequent retrieval by a Document Consumer.</terms:description>
+        <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Document Repository (XDS-I.b)</rdfs:label>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- https://www.3lgm2.de/resource/ihe/XDS-IB_IMG_DOC_CONSUMER -->
+
+    <owl:NamedIndividual rdf:about="https://www.3lgm2.de/resource/ihe/XDS-IB_IMG_DOC_CONSUMER">
+        <rdf:type rdf:resource="https://www.3lgm2.de/resource/ihe/Actor"/>
+        <mustBeGroupedWith rdf:resource="https://www.3lgm2.de/resource/ihe/RMD_DOC_ADMINISTRATOR"/>
+        <rad-17 rdf:resource="https://www.3lgm2.de/resource/ihe/XDS-IB_IMG_DOC_SOURCE"/>
+        <rad-27 rdf:resource="https://www.3lgm2.de/resource/ihe/XDS-IB_IMG_DOC_SOURCE"/>
+        <rad-69 rdf:resource="https://www.3lgm2.de/resource/ihe/XDS-IB_IMG_DOC_SOURCE"/>
+        <integrationProfile_dataProperty rdf:datatype="http://www.w3.org/2001/XMLSchema#string">XDS-I.b</integrationProfile_dataProperty>
+        <ontology:abbreviation rdf:datatype="http://www.w3.org/2001/XMLSchema#string">IMG_DOC_CONSUMER</ontology:abbreviation>
+        <terms:description rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A system that makes use of imaging data.</terms:description>
+        <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Imaging Document Consumer (XDS-I.b)</rdfs:label>
+    </owl:NamedIndividual>
+    <owl:Axiom>
+        <owl:annotatedSource rdf:resource="https://www.3lgm2.de/resource/ihe/XDS-IB_IMG_DOC_CONSUMER"/>
+        <owl:annotatedProperty rdf:resource="https://www.3lgm2.de/resource/ihe/rad-17"/>
+        <owl:annotatedTarget rdf:resource="https://www.3lgm2.de/resource/ihe/XDS-IB_IMG_DOC_SOURCE"/>
+        <saref4ee:optionalSlot rdf:datatype="http://www.w3.org/2000/01/rdf-schema#Literal">optional</saref4ee:optionalSlot>
+    </owl:Axiom>
+    <owl:Axiom>
+        <owl:annotatedSource rdf:resource="https://www.3lgm2.de/resource/ihe/XDS-IB_IMG_DOC_CONSUMER"/>
+        <owl:annotatedProperty rdf:resource="https://www.3lgm2.de/resource/ihe/rad-27"/>
+        <owl:annotatedTarget rdf:resource="https://www.3lgm2.de/resource/ihe/XDS-IB_IMG_DOC_SOURCE"/>
+        <saref4ee:optionalSlot rdf:datatype="http://www.w3.org/2000/01/rdf-schema#Literal">optional</saref4ee:optionalSlot>
+    </owl:Axiom>
+    <owl:Axiom>
+        <owl:annotatedSource rdf:resource="https://www.3lgm2.de/resource/ihe/XDS-IB_IMG_DOC_CONSUMER"/>
+        <owl:annotatedProperty rdf:resource="https://www.3lgm2.de/resource/ihe/rad-69"/>
+        <owl:annotatedTarget rdf:resource="https://www.3lgm2.de/resource/ihe/XDS-IB_IMG_DOC_SOURCE"/>
+        <saref4ee:optionalSlot rdf:datatype="http://www.w3.org/2000/01/rdf-schema#Literal">optional</saref4ee:optionalSlot>
+    </owl:Axiom>
+    
+
+
+    <!-- https://www.3lgm2.de/resource/ihe/XDS-IB_IMG_DOC_SOURCE -->
+
+    <owl:NamedIndividual rdf:about="https://www.3lgm2.de/resource/ihe/XDS-IB_IMG_DOC_SOURCE">
+        <rdf:type rdf:resource="https://www.3lgm2.de/resource/ihe/Actor"/>
+        <integrationProfile_dataProperty rdf:datatype="http://www.w3.org/2001/XMLSchema#string">XDS-I.b</integrationProfile_dataProperty>
+        <ontology:abbreviation rdf:datatype="http://www.w3.org/2001/XMLSchema#string">IMG_DOC_SOURCE</ontology:abbreviation>
+        <terms:description rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Publishes imaging data and makes it available for retrieval.</terms:description>
+        <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Imaging Document Source (XDS-I.b)</rdfs:label>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- https://www.3lgm2.de/resource/ihe/XDS-SD -->
+
+    <owl:NamedIndividual rdf:about="https://www.3lgm2.de/resource/ihe/XDS-SD">
+        <rdf:type rdf:resource="https://www.3lgm2.de/resource/ihe/ContentModule"/>
+        <status>Final Text</status>
+        <ontology:abbreviation>XDS-SD</ontology:abbreviation>
+        <terms:description>XDS-SD use a variety of legacy paper, film, electronic and scanner outputted formats to store and exchange clinical documents. These formats are not designed for healthcare documentation, and furthermore, do not have a uniform mechanism to store healthcare metadata associated with the documents, including patient identifiers, demographics, encounter, order or service information. The association of structured, healthcare metadata with this kind of document is important to maintain the integrity of the patient health record as managed by the source system. It is necessary to provide a mechanism that allows such source metadata to be stored with the document.</terms:description>
+        <rdfs:label>Cross-Enterprise Document Sharing of Scanned Documents</rdfs:label>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- https://www.3lgm2.de/resource/ihe/XDSB_DOC_ADMINISTRATOR -->
+
+    <owl:NamedIndividual rdf:about="https://www.3lgm2.de/resource/ihe/XDSB_DOC_ADMINISTRATOR">
+        <rdf:type rdf:resource="https://www.3lgm2.de/resource/ihe/Actor"/>
+        <iti-18 rdf:resource="https://www.3lgm2.de/resource/ihe/XDSB_DOC_REGISTRY"/>
+        <mustBeGroupedWith rdf:resource="https://www.3lgm2.de/resource/ihe/ATNA_SA"/>
+        <mustBeGroupedWith rdf:resource="https://www.3lgm2.de/resource/ihe/ATNA_SN"/>
+        <status>Trial Implementation</status>
+        <ontology:abbreviation>XDSB_DOC_ADMINISTRATOR</ontology:abbreviation>
+        <terms:description>The Document Administrator actor supports metadata update by issuing the Update Document Set transaction [ITI-57] and Delete Document Set [ITI-61 ] transaction to the Document Registry actor.</terms:description>
+        <rdfs:label>Document Administrator (XDS.b)</rdfs:label>
+    </owl:NamedIndividual>
+    <owl:Axiom>
+        <owl:annotatedSource rdf:resource="https://www.3lgm2.de/resource/ihe/XDSB_DOC_ADMINISTRATOR"/>
+        <owl:annotatedProperty rdf:resource="https://www.3lgm2.de/resource/ihe/iti-18"/>
+        <owl:annotatedTarget rdf:resource="https://www.3lgm2.de/resource/ihe/XDSB_DOC_REGISTRY"/>
+        <saref4ee:optionalSlot rdf:datatype="http://www.w3.org/2000/01/rdf-schema#Literal">optional</saref4ee:optionalSlot>
+    </owl:Axiom>
+    
+
+
+    <!-- https://www.3lgm2.de/resource/ihe/XDSB_DOC_CONSUMER -->
+
+    <owl:NamedIndividual rdf:about="https://www.3lgm2.de/resource/ihe/XDSB_DOC_CONSUMER">
+        <rdf:type rdf:resource="https://www.3lgm2.de/resource/ihe/Actor"/>
+        <iti-18 rdf:resource="https://www.3lgm2.de/resource/ihe/XDSB_DOC_REGISTRY"/>
+        <iti-43 rdf:resource="https://www.3lgm2.de/resource/ihe/XDSB_DOC_REPOSITORY"/>
+        <iti-43 rdf:resource="https://www.3lgm2.de/resource/ihe/XDSB_EMBED_REPOS"/>
+        <mustBeGroupedWith rdf:resource="https://www.3lgm2.de/resource/ihe/ATNA_SA"/>
+        <mustBeGroupedWith rdf:resource="https://www.3lgm2.de/resource/ihe/ATNA_SN"/>
+        <ontology:abbreviation>XDSB_DOC_CONSUMER</ontology:abbreviation>
+        <terms:description>The Document Consumer Actor queries a Document Registry Actor for documents meeting certain criteria, and retrieves selected documents from one or more Document Repository actors.</terms:description>
+        <rdfs:label>Document Consumer (XDS.b)</rdfs:label>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- https://www.3lgm2.de/resource/ihe/XDSB_DOC_REGISTRY -->
+
+    <owl:NamedIndividual rdf:about="https://www.3lgm2.de/resource/ihe/XDSB_DOC_REGISTRY">
+        <rdf:type rdf:resource="https://www.3lgm2.de/resource/ihe/Actor"/>
+        <mustBeGroupedWith rdf:resource="https://www.3lgm2.de/resource/ihe/ATNA_SA"/>
+        <mustBeGroupedWith rdf:resource="https://www.3lgm2.de/resource/ihe/ATNA_SN"/>
+        <ontology:abbreviation>XDSB_DOC_REGISTRY</ontology:abbreviation>
+        <terms:description>The Document Registry Actor maintains metadata about each registered document in a document entry. This includes a link to the Document in the Repository where it is stored. The Document Registry responds to queries from Document Consumer actors about documents meeting specific criteria. It also enforces some healthcare specific technical policies at the time of document registration.</terms:description>
+        <rdfs:label>Document Registry (XDS.b)</rdfs:label>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- https://www.3lgm2.de/resource/ihe/XDSB_DOC_REPOSITORY -->
+
+    <owl:NamedIndividual rdf:about="https://www.3lgm2.de/resource/ihe/XDSB_DOC_REPOSITORY">
+        <rdf:type rdf:resource="https://www.3lgm2.de/resource/ihe/Actor"/>
+        <mustBeGroupedWith rdf:resource="https://www.3lgm2.de/resource/ihe/ATNA_SA"/>
+        <mustBeGroupedWith rdf:resource="https://www.3lgm2.de/resource/ihe/ATNA_SN"/>
+        <ontology:abbreviation>XDSB_DOC_REPOSITORY</ontology:abbreviation>
+        <terms:description>The Document Repository is responsible for both the persistent storage of these documents as well as for their registration with the appropriate Document Registry. It assigns a URI to documents for subsequent retrieval by a Document Consumer.</terms:description>
+        <rdfs:label>Document Repository (XDS.b)</rdfs:label>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- https://www.3lgm2.de/resource/ihe/XDSB_DOC_SOURCE -->
+
+    <owl:NamedIndividual rdf:about="https://www.3lgm2.de/resource/ihe/XDSB_DOC_SOURCE">
+        <rdf:type rdf:resource="https://www.3lgm2.de/resource/ihe/Actor"/>
+        <mustBeGroupedWith rdf:resource="https://www.3lgm2.de/resource/ihe/ATNA_SA"/>
+        <mustBeGroupedWith rdf:resource="https://www.3lgm2.de/resource/ihe/ATNA_SN"/>
+        <ontology:abbreviation>XDSB_DOC_SOURCE</ontology:abbreviation>
+        <terms:description>The Document Source is the producer and publisher of documents and metadata.</terms:description>
+        <rdfs:label>Document Source (XDS.b)</rdfs:label>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- https://www.3lgm2.de/resource/ihe/XDSB_EMBED_REPOS -->
+
+    <owl:NamedIndividual rdf:about="https://www.3lgm2.de/resource/ihe/XDSB_EMBED_REPOS">
+        <rdf:type rdf:resource="https://www.3lgm2.de/resource/ihe/Actor"/>
+        <mustBeGroupedWith rdf:resource="https://www.3lgm2.de/resource/ihe/ATNA_SA"/>
+        <mustBeGroupedWith rdf:resource="https://www.3lgm2.de/resource/ihe/ATNA_SN"/>
+        <mustBeGroupedWith rdf:resource="https://www.3lgm2.de/resource/ihe/XDSB_DOC_REPOSITORY"/>
+        <mustBeGroupedWith rdf:resource="https://www.3lgm2.de/resource/ihe/XDSB_DOC_SOURCE"/>
+        <ontology:abbreviation>XDSB_EMBED_REPOS</ontology:abbreviation>
+        <terms:description>The Integrated Document Source / Repository is an XDS combination of Document Source and Document Repository that does not expose the interface between the Source and Repository. That is, this Source only publishes documents to its own Repository. It does register documents with a Document Registry</terms:description>
+        <rdfs:label>Integrated Document Source / Repository (XDS.b)</rdfs:label>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- https://www.3lgm2.de/resource/ihe/XUA_X-SERVICE-PROVIDER -->
+
+    <owl:NamedIndividual rdf:about="https://www.3lgm2.de/resource/ihe/XUA_X-SERVICE-PROVIDER">
+        <rdf:type rdf:resource="https://www.3lgm2.de/resource/ihe/Actor"/>
+        <mustBeGroupedWith rdf:resource="https://www.3lgm2.de/resource/ihe/ATNA_SA"/>
+        <mustBeGroupedWith rdf:resource="https://www.3lgm2.de/resource/ihe/ATNA_SN"/>
+        <integrationProfile_dataProperty rdf:datatype="http://www.w3.org/2001/XMLSchema#string">XUA</integrationProfile_dataProperty>
+        <ontology:abbreviation rdf:datatype="http://www.w3.org/2001/XMLSchema#string">X-SERVICE-PROVIDER</ontology:abbreviation>
+        <terms:description rdf:datatype="http://www.w3.org/2001/XMLSchema#string">X-Service Provider</terms:description>
+        <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">X-Service Provider (XUA)</rdfs:label>
+    </owl:NamedIndividual>
+</rdf:RDF>
+
+
+
+<!-- Generated by the OWL API (version 4.5.9.2019-02-01T07:24:44Z) https://github.com/owlcs/owlapi -->
+
