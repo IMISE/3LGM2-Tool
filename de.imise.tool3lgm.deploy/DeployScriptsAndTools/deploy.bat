@@ -261,8 +261,8 @@ ECHO.
 ::git pull
 ::CD /D %SCRIPT_LOCATION%
 ::IHE Domain Ontology aus git Repository aktualisieren (kopieren)
-ECHO "### Copy IHE Domain Ontology %METAMODEL3LGM2_DIR%\IHE\iheDomain_Ontology_straight-forward_v2.rdf -> %SCRIPT_LOCATION%\..\Tool3lgm\Templates\IHE\"
-COPY /Y %METAMODEL3LGM2_DIR%\IHE\iheDomain_Ontology_straight-forward_v2.rdf %SCRIPT_LOCATION%\..\Tool3lgm\Templates\IHE\
+ECHO "### Copy IHE Domain Ontology %METAMODEL3LGM2_DIR%\IHE\iheDomain_Ontology_straight-forward_v3.rdf -> %SCRIPT_LOCATION%\..\Tool3lgm\Templates\IHE\iheDomain_Ontology.rdf"
+COPY /Y %METAMODEL3LGM2_DIR%\IHE\iheDomain_Ontology_straight-forward_v3.rdf %SCRIPT_LOCATION%\..\Tool3lgm\Templates\IHE\iheDomain_Ontology.rdf
 
 
 ::Abkürzung für den Aufruf des Java-ChangeLineHandlers aus den Java-Deploy-Tools
