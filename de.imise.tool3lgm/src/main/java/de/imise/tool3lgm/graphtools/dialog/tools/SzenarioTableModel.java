@@ -74,7 +74,7 @@ public class SzenarioTableModel extends AbstractTableModel {
             break;
         case 1:
             if (row < getRowCount()) {
-                return collection.getSzenario(row).getTitle();
+                return collection.getSzenario(row).getName();
             }
             break;
         case 2:

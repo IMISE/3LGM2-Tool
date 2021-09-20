@@ -40,7 +40,7 @@ public class Szenario extends LGMGraphDocument {
      */
     public Szenario(final GDCollection _gdcoll, final String title, final String description, final String id) {
         super(_gdcoll);
-        setTitle(title == null ? "" : title);
+        setName(title == null ? "" : title);
         setDescription(description);
         //wenn die ID gültig und noch nicht vergeben ist -> setze ihn
         if (StringUtils.isValid(id, "null") && gdcoll.getGraphDocumentCoded(id) == null) {
@@ -207,8 +207,8 @@ public class Szenario extends LGMGraphDocument {
      * @param newTitle
      */
     @Override
-    public final void setTitle(final String newTitle) {
-        super.setTitle(newTitle);
+    public final void setName(final String newTitle) {
+        super.setName(newTitle);
         distributeEvent(MODEL_OR_SZENARIO_NAME_CHANGED);
     }
 

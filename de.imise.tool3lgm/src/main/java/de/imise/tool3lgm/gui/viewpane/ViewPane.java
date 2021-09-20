@@ -69,7 +69,7 @@ public abstract class ViewPane extends JPanel implements GraphDocumentOwner {
 
     @Override
     public String getName() {
-        return doc.getTitle();
+        return doc.getName();
     }
 
     @Override

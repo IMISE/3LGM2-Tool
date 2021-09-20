@@ -595,7 +595,7 @@ public class GDCollection extends UserFieldTarget implements MetaModelSpecific {
         if (log) {
             mainDoc.start_transaction(pid);
             mainDoc.addUndo(pid, MODEL_ACTION_DELETE_SUBMODEL, szenario);
-            mainDoc.addRedo(pid, MODEL_ACTION_CREATE_SUBMODEL, szenario.getTitle(), szenario.getDescription(), szenario);
+            mainDoc.addRedo(pid, MODEL_ACTION_CREATE_SUBMODEL, szenario.getName(), szenario.getDescription(), szenario);
             mainDoc.finish_transaction(pid);
         }
         if (!isImport) {
@@ -643,7 +643,7 @@ public class GDCollection extends UserFieldTarget implements MetaModelSpecific {
             mainDoc.addUndo(pid, MODEL_ACTION_SET_LAYER_ALPHA, szenID, layerIndex, lc.getAlpha());
             mainDoc.addUndo(pid, MODEL_ACTION_SET_LAYER_SIZE_FACTOR, szenID, szen.getPageSizeFactor());
         }
-        mainDoc.addUndo(pid, MODEL_ACTION_CREATE_SUBMODEL, szen.getTitle(), szen.getDescription(), szenID);
+        mainDoc.addUndo(pid, MODEL_ACTION_CREATE_SUBMODEL, szen.getName(), szen.getDescription(), szenID);
         mainDoc.addRedo(pid, MODEL_ACTION_DELETE_SUBMODEL, szenID, pid);
         mainDoc.finish_transaction(pid);
         setChanged(true);
@@ -662,9 +662,9 @@ public class GDCollection extends UserFieldTarget implements MetaModelSpecific {
         }
         String szenTitle = title;
         if (Strings.isNullOrEmpty(title)) {
-            szenTitle = askName(szen.getTitle());
+            szenTitle = askName(szen.getName());
         }
-        String oldTitle = szen.getTitle();
+        String oldTitle = szen.getName();
         if (szenTitle == null || szenTitle.equals(oldTitle)) {
             return;
         }
@@ -674,7 +674,7 @@ public class GDCollection extends UserFieldTarget implements MetaModelSpecific {
         mainDoc.addRedo(pid, MODEL_ACTION_RENAME_SUBMODEL, szenID, szenTitle);
         mainDoc.finish_transaction(pid);
 
-        szen.setTitle(szenTitle);
+        szen.setName(szenTitle);
         for (ModelElement me : szen.getModelItems(ModelElement.class, true)) {
             me.invalidateNameWithSzens();
         }

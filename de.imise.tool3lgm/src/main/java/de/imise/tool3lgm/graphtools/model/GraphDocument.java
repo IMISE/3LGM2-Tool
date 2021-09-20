@@ -132,6 +132,7 @@ import de.imise.tool3lgm.log.Log;
 import de.imise.tool3lgm.userproperties.UserProperties;
 import de.imise.tool3lgm.userproperties.UserProperties.StringProperty;
 import de.imise.util.Alphabetical;
+import de.imise.util.NameAndDescriptionTarget;
 import de.imise.util.OptionsSupport;
 import de.imise.util.Sys;
 import de.imise.util.collections.CollectionUtils;
@@ -144,7 +145,7 @@ import de.imise.util.swing.dialog.MultipleOptionPane;
  * oder ein Szenario (= eine beliebige Elementauswahl aus allen Elementen mit
  * einer grafischen Repräsentation)
  */
-public abstract class GraphDocument extends ElementSelectionContext implements GDCollectionOwner, IDSource {
+public abstract class GraphDocument extends ElementSelectionContext implements GDCollectionOwner, IDSource, NameAndDescriptionTarget {
 
     /**
      *
@@ -184,12 +185,12 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
     /**
      * COMMENTME
      */
-    protected String description = "";
+    private String name = "";
 
     /**
      * COMMENTME
      */
-    private String title = "";
+    protected String description = "";
 
     /**
      * COMMENTME
@@ -626,6 +627,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
     /**
      * @return String description
      */
+    @Override
     public String getDescription() {
         if (description == null) {
             description = "";
@@ -636,6 +638,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
     /**
      * @param String description
      */
+    @Override
     public void setDescription(final String string) {
         if (string == null) {
             return;
@@ -5237,9 +5240,6 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
         return joinedElement;
     }
 
-    /**
-     * @return
-     */
     @Override
     public final GDCollection getCollection() {
         return gdcoll;
@@ -5261,16 +5261,23 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
         return gdcoll.getUserFieldDefinitions();
     }
 
-    /**
-     * @return
-     */
-    public String getTitle() {
-        return title;
+    @Override
+    public final String getName() {
+        return name;
     }
 
     @Override
-    public String toString() {
-        return title;
+    public void setName(final String name) {
+        if (name == null) {
+            this.name = "";
+        } else {
+            this.name = getCleanString(name);
+        }
+    }
+
+    @Override
+    public final String toString() {
+        return name;
     }
 
     ////////////////////////////
@@ -5662,13 +5669,6 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
      */
     public void setLastActivePanel(final ElementDialogPanel panel) {
         lastActivePanel = panel;
-    }
-
-    /**
-     * @param newTitle
-     */
-    public void setTitle(final String newTitle) {
-        title = newTitle == null ? "" : newTitle;
     }
 
     /**

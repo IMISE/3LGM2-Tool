@@ -585,7 +585,7 @@ public class ToolXMLWriter extends IntendingXMLWriter {
             }
             writeStartElement("szenario"); //<szenario>
             writeAttribute("hash", szen.getID());
-            writeAttribute("titel", szen.getTitle());
+            writeAttribute("titel", szen.getName());
             writeElement("description", szen.getDescription());
             // Informationen über Ansicht speichern
             GraphViewParameter graphViewParameter = Static.getGraphViewParameter(szen);
