@@ -17,6 +17,12 @@ public class Sys {
         errInternal(1, true, message);
     }
 
+    public static void err1debug(final boolean reallyPrint, final Object... message) {
+        if (reallyPrint) {
+            errInternal(1, true, message);
+        }
+    }
+
     public static void out(final Object... message) {
         outInternal(maxTraceSteps, false, message);
     }

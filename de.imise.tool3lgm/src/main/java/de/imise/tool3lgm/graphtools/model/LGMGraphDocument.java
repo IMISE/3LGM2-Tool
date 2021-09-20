@@ -338,23 +338,46 @@ public class LGMGraphDocument extends GraphDocument {
         GDCollection targetCollection = targetDoc.getCollection();
         GraphDocument targetMainDoc = targetCollection.getMainDoc();
 
+        boolean debug = false; //enable if you want to debug the execution time
+        int iii = 0;
+        long start = System.currentTimeMillis();
         sourceCollection.removeInferenceEdges(true, STANDARD_PID);
         targetCollection.removeInferenceEdges(true, STANDARD_PID);
 
+        Sys.err1debug(debug, ++iii + " " + (System.currentTimeMillis() - start));
+        start = System.currentTimeMillis();
+
         CopyDependencyResolverResultSimple resolvedCopyDependencies = resolveCopyDependencies(sourceElements);
+
+        Sys.err1debug(debug, ++iii + " " + (System.currentTimeMillis() - start));
+        start = System.currentTimeMillis();
+
         //Liste aller Kanten, bei denen das das eine Endelement gerade kopiert werden soll und das
         //andere nicht kopiert werden soll aber bereits im Zielmodell vorkommt hinzufügen
         addSplittedSourceEdgesToCopy(resolvedCopyDependencies.elements, targetDoc);
+
+        Sys.err1debug(debug, ++iii + " " + (System.currentTimeMillis() - start));
+        start = System.currentTimeMillis();
 
         UserFieldDefinitions userFieldDefinitions = targetCollection.getUserFieldDefinitions();
         UserFieldDefinitions userFieldDefinitions2Add = resolvedCopyDependencies.getUserFieldDefinitions();
         userFieldDefinitions.addAll(userFieldDefinitions2Add);
 
+        Sys.err1debug(debug, ++iii + " " + (System.currentTimeMillis() - start));
+        start = System.currentTimeMillis();
+
+        //selection will be lost during copying ->
         List<ElementContainer> tmpActive = new ArrayList<>(sourceDoc.selectedContainer);
         List<Edge> edges = new ArrayList<>();
         List<BendpointContainer> bendpoints = new ArrayList<>();
 
+        Sys.err1debug(debug, ++iii + " " + (System.currentTimeMillis() - start));
+        start = System.currentTimeMillis();
+
         sourceMainDoc.deselectAll(false);
+
+        Sys.err1debug(debug, ++iii + " " + (System.currentTimeMillis() - start));
+        start = System.currentTimeMillis();
 
         targetMainDoc.start_transaction(STANDARD_PID);
 
@@ -370,6 +393,10 @@ public class LGMGraphDocument extends GraphDocument {
             OverwriteOption defaultOverwriteOption = sourceModelCategory == ModelCategory.TEMPLATE ? JOIN : null;
             //bei Templates soll nicht nachgefragt (applyToAll == true) und immer gejoint werden
             OverwriteDialog.OverwriteQuestionAnswer answer = new OverwriteQuestionAnswer(defaultOverwriteOption, defaultOverwriteOption != null);
+
+            Sys.err1debug(debug, ++iii + " " + (System.currentTimeMillis() - start));
+            start = System.currentTimeMillis();
+
             for (ModelElement sourceElement : resolvedCopyDependencies.elements) {
                 ElementContainer sourceContainer = sourceElement.getContainer(sourceDoc);
                 if (sourceContainer == null) {
@@ -433,6 +460,10 @@ public class LGMGraphDocument extends GraphDocument {
                     targetMainDoc.addToSelection(targetMainContainer, STANDARD_PID);
                 }
             }
+
+            Sys.err1debug(debug, ++iii + " " + (System.currentTimeMillis() - start));
+            start = System.currentTimeMillis();
+
             for (Edge edge : edges) {
                 if (!edge.reconnect(targetCollection)) {
                     targetCollection.deleteElement(edge, STANDARD_PID);
@@ -457,6 +488,10 @@ public class LGMGraphDocument extends GraphDocument {
                     targetMainDoc.addToSelection(edgeC, STANDARD_PID);
                 }
             }
+
+            Sys.err1debug(debug, ++iii + " " + (System.currentTimeMillis() - start));
+            start = System.currentTimeMillis();
+
             List<EdgeContainer> edgeConts = new ArrayList<>();
             while (!bendpoints.isEmpty()) {
                 BendpointContainer kp = bendpoints.remove(0);
@@ -488,22 +523,44 @@ public class LGMGraphDocument extends GraphDocument {
                     targetDocLayer.add(kp);
                 }
             }
+
+            Sys.err1debug(debug, ++iii + " " + (System.currentTimeMillis() - start));
+            start = System.currentTimeMillis();
+
             for (EdgeContainer edgeC : edgeConts) {
                 edgeC.computeBorderPoints();
             }
 
+            Sys.err1debug(debug, ++iii + " " + (System.currentTimeMillis() - start));
+            start = System.currentTimeMillis();
+
             targetMainDoc.finish_transaction(STANDARD_PID);
+
+            Sys.err1debug(debug, ++iii + " " + (System.currentTimeMillis() - start));
+            start = System.currentTimeMillis();
+
         } catch (Exception ex) {
             targetMainDoc.undo(STANDARD_PID);
             Log.show(Log.ERROR, sourceDoc.getResString("FehlerKorrupt") + "\n" + targetCollection.getName(), ex);
         }
         sourceDoc.start_transaction(STANDARD_PID, false);
+
+        Sys.err1debug(debug, ++iii + " " + (System.currentTimeMillis() - start));
+        start = System.currentTimeMillis();
+
         sourceDoc.deselectAll(true);
         for (int j = 0; j < tmpActive.size(); j++) {
             sourceDoc.addToSelection(tmpActive.get(j), STANDARD_PID);
         }
+
+        Sys.err1debug(debug, ++iii + " " + (System.currentTimeMillis() - start));
+        start = System.currentTimeMillis();
+
         sourceDoc.finish_transaction(TransactionManager.STANDARD_PID, false);
         sourceDoc.distributeEvent(SELECTION_CHANGED);
+
+        Sys.err1debug(debug, ++iii + " " + (System.currentTimeMillis() - start));
+        start = System.currentTimeMillis();
 
         sourceCollection.createInferenceEdges(true, STANDARD_PID);
         targetCollection.createInferenceEdges(true, STANDARD_PID);
@@ -511,7 +568,14 @@ public class LGMGraphDocument extends GraphDocument {
         //bei Bedarf anschalten, um zu sehen, wie das Modell danach aussieht
         //GDCollectionPrinter.print(targetCollection);
 
+
+        Sys.err1debug(debug, ++iii + " " + (System.currentTimeMillis() - start));
+        start = System.currentTimeMillis();
+
         targetDoc.distributeEvent(DATA_CHANGED);
+
+        Sys.err1debug(debug, ++iii + " " + (System.currentTimeMillis() - start));
+        start = System.currentTimeMillis();
 
     }
 
