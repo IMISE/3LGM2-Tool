@@ -1,7 +1,7 @@
 package de.imise.tool3lgm;
 
-import static de.imise.tool3lgm.Tool3lgmConstants.USER_HOME_3LGM_DIR;
-import static de.imise.tool3lgm.Tool3lgmConstants.USER_HOME_DIR_NAME;
+import static de.imise.tool3lgm.userproperties.UserProperties.USER_HOME_3LGM_DIR;
+import static de.imise.tool3lgm.userproperties.UserProperties.USER_HOME_DIR_NAME;
 import static de.imise.tool3lgm.userproperties.UserProperties.USER_INFO_FILE;
 
 import java.io.File;

@@ -1,7 +1,6 @@
 package de.imise.tool3lgm.userproperties;
 
 import static de.imise.tool3lgm.Tool3lgmConstants.TOOL_VERSION_GIT_INFO;
-import static de.imise.tool3lgm.Tool3lgmConstants.USER_HOME_3LGM_DIR;
 
 import java.awt.Frame;
 import java.beans.PropertyChangeEvent;
@@ -41,19 +40,32 @@ import de.imise.util.swing.event.ActionSource;
  */
 public class UserProperties extends AbstractUserProperties {
 
+    /////////////////////////////////////////////////////////////
+    //                                                         //
+    // DO NOT MOVE THE FOLLOWING FILE OBJECTS AND DIRRECTORY   //
+    // NAMES TO Tool3lgmConstansts.java BECAUSE THE CONSTANTS  //
+    // MUST BE INITIALIZED *AFTER* READING THE LOCALE FROM THE //
+    // USERPROPERTIES FILE AND THE DeprecatedHandler.java      //
+    // NEEDS THESE DIRECTORIES AS VERY FIRST.                  //
+    //                                                         //
+    /////////////////////////////////////////////////////////////
+
     /**
      * The prefix that is written directly in front of the tool version in the
      * first line of the properties file as a comment
      */
     private static final String PROPERTY_FILE_VERSION_LINE_COMMENT_PREFIX = "Tool3lgm-Version ";
 
-    /**
-     * Pfad zur Default-Datei in den Ressourcen mit den Optionen für einen
-     * Benutzer
-     */
+    /** Path to the default properties file with all default user options */
     private static final URL DEFAULT_USER_INFO_FILE = ClassLoader.getSystemResource("DefaultUserProperties");
 
-    /** Pfad zur Datei mit den Optionen eines Benutzers */
+    /** Path to the home directory of the user */
+    public static final String USER_HOME_DIR_NAME = System.getProperty("user.home");
+
+    /** Path to the 3lgm dirdctory in the home directory of the user */
+    public static final File USER_HOME_3LGM_DIR = new File(USER_HOME_DIR_NAME, "3lgm");
+
+    /** Path to the properties file with all user options */
     public static final File USER_INFO_FILE = new File(USER_HOME_3LGM_DIR, "tool3lgm2UserInfo.config");
 
     /**
