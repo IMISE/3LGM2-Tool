@@ -3254,14 +3254,17 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
     }
 
     /**
-     *
+     * @param selectOnylActiveLayer
      */
-    public void selectAll() {
+    public void selectAll(final boolean selectOnylActiveLayer) {
         final int PID = TransactionManager.STANDARD_PID;
         start_transaction(PID, false);
         deselectAll(true);
         for (int i = 0; i < layer.length; i++) {
             LayerContainer lc = layer[i];
+            if (selectOnylActiveLayer && gdcoll.getActiveLayer() != i) {
+                continue;
+            }
             for (ElementContainer ec : lc.getGraphNodeContainers()) {
                 gdcoll.addToSelection(ec);
             }
