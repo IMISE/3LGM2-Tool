@@ -18,6 +18,7 @@ import static de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty.OP
 import static de.imise.tool3lgm.userproperties.UserProperties.IntProperty.PROPERTY_INT_RASTER_WIDTH;
 import static java.awt.Cursor.DEFAULT_CURSOR;
 
+import java.awt.Component;
 import java.awt.Container;
 import java.awt.Cursor;
 import java.awt.Dimension;
@@ -389,7 +390,7 @@ public final class InputGraphArea extends BasicGraphArea implements MouseListene
                         }
                         grabbedElementsFullRect = getIncludingRectangle(grabbedElementsFullRect, ec);
                         for (Edge edge : me.getEdgesWith(clickedEc.getElement())) {
-                            EdgeContainer edgeC = (EdgeContainer) edge.getContainer(szenario);
+                            EdgeContainer edgeC = edge.getContainer(szenario);
                             if (edgeC != null) {
                                 for (BendpointContainer bc : edgeC.iterateBendpointContainers()) {
                                     grabbedElementsFullRect = getIncludingRectangle(grabbedElementsFullRect, bc);
@@ -468,6 +469,16 @@ public final class InputGraphArea extends BasicGraphArea implements MouseListene
 
     @Override
     public void mousePressed(final MouseEvent e) {
+        //we have to request the focus explicitely so that this
+        //component really gets the CTRL + A (Select all) key
+        //events after leaving the template browser. If we don't
+        //request the focus here then the template browser
+        //will execute the select all command.
+        Object source = e.getSource();
+        if (source instanceof Component) {
+            Component c = (Component) source;
+            c.requestFocus();
+        }
 
         boolean controlKeyPressed = InputEvents.isOperatingSystemDependentCTRLorCMDorSHIFTdown(e);
         contextGenerator.setControlled(controlKeyPressed);
