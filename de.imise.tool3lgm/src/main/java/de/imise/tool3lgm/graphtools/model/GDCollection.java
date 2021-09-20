@@ -240,9 +240,6 @@ public class GDCollection extends UserFieldTarget implements MetaModelSpecific {
      */
     private long lastModificationTime = System.currentTimeMillis();
 
-    /** Bezeichnung des Dokuments (Dateiname) */
-    private String name = "";
-
     /** Handler zum Speichern und Laden */
     private final GDCollectionFileHandler fileHandler;
 
@@ -348,15 +345,9 @@ public class GDCollection extends UserFieldTarget implements MetaModelSpecific {
         return getName();
     }
 
-    /**
-     * @return
-     */
-    public String getName() {
-        return name;
-    }
-
+    @Override
     public void setName(final String name) {
-        this.name = name;
+        super.setName(name);
         distribute(MODEL_OR_SZENARIO_NAME_CHANGED, null, getMainDoc(), STANDARD_PID);
     }
 

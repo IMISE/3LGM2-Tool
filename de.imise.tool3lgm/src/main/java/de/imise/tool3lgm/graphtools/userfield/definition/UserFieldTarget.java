@@ -11,6 +11,7 @@ import java.util.Map;
 import java.util.Set;
 
 import de.imise.tool3lgm.graphtools.userfield.definition.UserField.Style;
+import de.imise.util.NameAndDescriptionTargetAdapter;
 import de.imise.util.htmlxml.XMLCharacterCoder;
 
 /**
@@ -24,7 +25,7 @@ import de.imise.util.htmlxml.XMLCharacterCoder;
  * @author AXS
  * @created 30.10.2007
  */
-public abstract class UserFieldTarget implements Cloneable {
+public abstract class UserFieldTarget extends NameAndDescriptionTargetAdapter implements Cloneable {
 
     /**
      * Mappt von den für das Modell definierten <code>UserField</code>s auf die
