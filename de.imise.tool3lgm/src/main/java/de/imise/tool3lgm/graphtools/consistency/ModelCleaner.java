@@ -328,7 +328,7 @@ public class ModelCleaner {
                     continue;
                 }
                 szen.createEdgeContainer(ec, szen, false, STANDARD_PID);
-                szen.raiseSlaves(ec);
+                szen.raiseSlaves(ec, STANDARD_PID);
             }
         }
 

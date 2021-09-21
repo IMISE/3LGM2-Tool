@@ -201,6 +201,11 @@ public class LayerContainer extends ElementContainer {
         return counter;
     }
 
+    /**
+     * @param iterableContainers
+     * @param elementClass
+     * @return
+     */
     private static int countType(final Iterable<? extends ElementContainer> iterableContainers, final Class<? extends ModelElement> elementClass) {
         int counter = 0;
         for (ElementContainer nc : iterableContainers) {
@@ -224,20 +229,22 @@ public class LayerContainer extends ElementContainer {
 
     /**
      * @param ec
+     * @param pid
      */
-    public void z_move_up(final ElementContainer ec) {
+    public void z_move_up(final ElementContainer ec, final int pid) {
         boolean visible = ec.isVisible();
         remove(ec);
         add(ec, graphNodeContainers.size());
-        raiseSlaves(ec, 0);
+        raiseSlaves(ec, 0, pid);
         ec.setVisible(visible);
     }
 
     /**
      * @param ec
      * @param position
+     * @param pid
      */
-    public void z_move(final ElementContainer ec, final int position) {
+    public void z_move(final ElementContainer ec, final int position, final int pid) {
         if (!(ec instanceof NodeContainer)) {
             return;
         }
@@ -252,30 +259,31 @@ public class LayerContainer extends ElementContainer {
         remove(ec);
         add(ec, position);
         if (position > index) {
-            raiseSlaves(ec, 0);
+            raiseSlaves(ec, 0, pid);
         }
         ec.setVisible(visible);
     }
 
     /**
      * @param ec
+     * @param pid
      */
-    public void z_step_up(final ElementContainer ec) {
-        z_move(ec, indexOf(ec) + 1);
+    public void z_step_up(final ElementContainer ec, final int pid) {
+        z_move(ec, indexOf(ec) + 1, pid);
     }
 
     /**
      * @param ec
      */
-    public void z_step_down(final ElementContainer ec) {
-        z_move(ec, indexOf(ec) - 1);
+    public void z_step_down(final ElementContainer ec, final int pid) {
+        z_move(ec, indexOf(ec) - 1, pid);
     }
 
     /**
      * @param ec
      * @param stufe
      */
-    public final void raiseSlaves(final ElementContainer ec, int stufe) {
+    public final void raiseSlaves(final ElementContainer ec, int stufe, final int pid) {
         if (!(ec instanceof NodeContainer)) {
             return;
         }
@@ -295,19 +303,25 @@ public class LayerContainer extends ElementContainer {
             ModelElement slave = co.getSlave();
             if (slave != me && indexOf(slave) >= 0) {
                 // Umsortieren
-                ElementContainer tmp = slave.getContainer(doc);
-                if (!(tmp instanceof NodeContainer)) {
+                ElementContainer slaveC = slave.getContainer(doc);
+                if (!(slaveC instanceof NodeContainer)) {
                     return;
                 }
-                while (indexOf(tmp) < indexOf(ec)) {
-                    z_step_up(tmp);
+                while (indexOf(slaveC) < indexOf(ec)) {
+                    z_step_up(slaveC, pid);
                 }
 
                 // rekursiv die Unterelmente raisen
                 if (slave.hasEdges()) {
                     stufe++;
-                    raiseSlaves(slave.getContainer(doc), stufe);
+                    raiseSlaves(slave.getContainer(doc), stufe, pid);
                     stufe--;
+                }
+                int x = slaveC.getX();
+                int y = slaveC.getY();
+                if (x == 0 && y == 0) {
+                    Class<? extends CompositionEdge> compositionEdgeClass = co.getClass();
+                    doc.addict(me, slave, compositionEdgeClass, pid);
                 }
             }
         }

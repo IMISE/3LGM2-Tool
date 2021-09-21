@@ -3810,12 +3810,12 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
     /////////////////////////////////////////////////////////////////////////////////////////////////
 
     /**
-     * @param kn
+     * @param ec
      */
-    public final void raiseSlaves(final ElementContainer kn) {
-        int ebene = kn.layerFor();
+    public final void raiseSlaves(final ElementContainer ec, final int pid) {
+        int ebene = ec.layerFor();
         if (!ModelConstants.isInterLayer(ebene)) {
-            layer[ebene].raiseSlaves(kn, 0);
+            layer[ebene].raiseSlaves(ec, 0, pid);
             distributeEvent(GROUP_ORDER_CHANGED, layer[ebene], 0);
         }
     }
@@ -3930,27 +3930,27 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
     }
 
     /**
-     * @param me1
-     * @param me2
+     * @param master
+     * @param slave
      * @param edgeClass
      * @param pid
      * @return
      */
-    public final Edge addict(final ModelElement me1, final ModelElement me2, final Class<? extends CompositionEdge> edgeClass, final int pid) {
-        return addict(id, me1, me2, edgeClass, pid);
+    public final Edge addict(final ModelElement master, final ModelElement slave, final Class<? extends CompositionEdge> edgeClass, final int pid) {
+        return addict(id, master, slave, edgeClass, pid);
     }
 
     /**
      * @param szenID
-     * @param me1
-     * @param me2
+     * @param master
+     * @param slave
      * @param edgeClass
      * @param pid
      * @return
      */
-    public final Edge addict(final String szenID, final ModelElement me1, final ModelElement me2, final Class<? extends CompositionEdge> edgeClass, final int pid) {
+    public final Edge addict(final String szenID, final ModelElement master, final ModelElement slave, final Class<? extends CompositionEdge> edgeClass, final int pid) {
         String simpleEdgeClassName = edgeClass.getSimpleName();
-        return addict(szenID, simpleEdgeClassName, me1, me2, pid);
+        return addict(szenID, simpleEdgeClassName, master, slave, pid);
     }
 
     /**
@@ -4008,7 +4008,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
             addRedo(pid, MODEL_ACTION_ADDICT, szenID, edgeClassName, masterElement, slaveElement);
             addUndo(pid, MODEL_ACTION_SET_ELEMENT_POSITION, szenID, slaveElement, slaveX, slaveY, slaveWidth, slaveHeight);
             slaveContainer.setCoordinates(pos.width, pos.height, slaveWidth, slaveHeight);
-            raiseSlaves(masterContainer);
+            raiseSlaves(masterContainer, pid);
             for (Edge slaveEdge : slaveElement.getEdges()) {
                 for (Szenario szenario : gdcoll.getSzenarios()) {
                     EdgeContainer kac = slaveEdge.getContainer(szenario);
@@ -4334,7 +4334,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
         szen.start_transaction(pid);
         addRedo(pid, MODEL_ACTION_MOVE_ORDER_ONE_POSITION_UP, szen, ec);
         addUndo(pid, MODEL_ACTION_MOVE_ORDER, szen, ec, indexOnLayer);
-        lc.z_move_up(ec);
+        lc.z_move_up(ec, pid);
         szen.finish_transaction(pid);
         distributeEvent(GROUP_ORDER_CHANGED, lc, pid);
     }
@@ -4438,7 +4438,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
         szen.start_transaction(pid);
         addRedo(pid, MODEL_ACTION_MOVE_ORDER, szenID, elementID, position);
         addUndo(pid, MODEL_ACTION_MOVE_ORDER, szenID, elementID, indexOnLayer);
-        lc.z_move(ec, position);
+        lc.z_move(ec, position, pid);
         szen.finish_transaction(pid);
         distributeEvent(GROUP_ORDER_CHANGED, lc, pid);
     }
@@ -4481,7 +4481,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
             addUndo(pid, MODEL_ACTION_MOVE_ORDER_ONE_POSITION_DOWN, doc, ec);
         }
         LayerContainer lc = doc.layer[layer];
-        lc.z_step_up(ec);
+        lc.z_step_up(ec, pid);
         doc.finish_transaction(pid, log);
         distributeEvent(GROUP_ORDER_CHANGED, lc, pid);
     }
@@ -4516,7 +4516,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
         addRedo(pid, MODEL_ACTION_MOVE_ORDER_ONE_POSITION_DOWN, doc, ec);
         addUndo(pid, MODEL_ACTION_MOVE_ORDER_ONE_POSITION_UP, doc, ec);
         LayerContainer lc = doc.layer[layer];
-        lc.z_step_down(ec);
+        lc.z_step_down(ec, pid);
         doc.finish_transaction(pid);
         distributeEvent(GROUP_ORDER_CHANGED, lc, pid);
     }
@@ -5131,7 +5131,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
             if (addNewContainerToSelection) {
                 targetSzenario.addToSelection(targetContainer, pid);
             }
-            targetSzenario.raiseSlaves(targetContainer);
+            targetSzenario.raiseSlaves(targetContainer, pid);
         }
         targetSzenario.finish_transaction(pid);
         targetSzenario.distributeEvent(DATA_CHANGED, pid);
