@@ -201,6 +201,11 @@ public class LayerContainer extends ElementContainer {
         return counter;
     }
 
+    /**
+     * @param iterableContainers
+     * @param elementClass
+     * @return
+     */
     private static int countType(final Iterable<? extends ElementContainer> iterableContainers, final Class<? extends ModelElement> elementClass) {
         int counter = 0;
         for (ElementContainer nc : iterableContainers) {
@@ -224,20 +229,22 @@ public class LayerContainer extends ElementContainer {
 
     /**
      * @param ec
+     * @param pid
      */
-    public void z_move_up(final ElementContainer ec) {
+    public void z_move_up(final ElementContainer ec, final int pid) {
         boolean visible = ec.isVisible();
         remove(ec);
         add(ec, graphNodeContainers.size());
-        raiseSlaves(ec, 0);
+        raiseSlaves(ec, pid);
         ec.setVisible(visible);
     }
 
     /**
      * @param ec
      * @param position
+     * @param pid
      */
-    public void z_move(final ElementContainer ec, final int position) {
+    public void z_move(final ElementContainer ec, final int position, final int pid) {
         if (!(ec instanceof NodeContainer)) {
             return;
         }
@@ -252,62 +259,80 @@ public class LayerContainer extends ElementContainer {
         remove(ec);
         add(ec, position);
         if (position > index) {
-            raiseSlaves(ec, 0);
+            raiseSlaves(ec, pid);
         }
         ec.setVisible(visible);
     }
 
     /**
      * @param ec
+     * @param pid
      */
-    public void z_step_up(final ElementContainer ec) {
-        z_move(ec, indexOf(ec) + 1);
+    public void z_step_up(final ElementContainer ec, final int pid) {
+        z_move(ec, indexOf(ec) + 1, pid);
     }
 
     /**
      * @param ec
      */
-    public void z_step_down(final ElementContainer ec) {
-        z_move(ec, indexOf(ec) - 1);
+    public void z_step_down(final ElementContainer ec, final int pid) {
+        z_move(ec, indexOf(ec) - 1, pid);
     }
 
     /**
-     * @param ec
-     * @param stufe
+     * If the passed container has {@link CompositionEdge}s to slave elements,
+     * then this ensures that the slaves are drawn in the order of all elements
+     * above the master and not obscured by it.
+     *
+     * @param ec the container which can have
+     *            slave elements that must be raised
      */
-    public final void raiseSlaves(final ElementContainer ec, int stufe) {
+    public final void raiseSlaves(final ElementContainer ec, final int pid) {
         if (!(ec instanceof NodeContainer)) {
             return;
         }
 
-        NodeContainer kc = (NodeContainer) ec;
+        NodeContainer nc = (NodeContainer) ec;
 
-        int pos = indexOf(kc);
+        int pos = indexOf(nc);
         if (pos < 0) {
             return;
         }
-        ModelElement me = kc.getElement();
+        ModelElement me = nc.getElement();
         for (Edge edge : me.getEdges()) {
+            //only CompositionEdges where me is the master are relevant
             if (!(edge instanceof CompositionEdge)) {
                 continue;
             }
-            CompositionEdge co = (CompositionEdge) edge;
-            ModelElement slave = co.getSlave();
+            CompositionEdge compositionEdge = (CompositionEdge) edge;
+            ModelElement slave = compositionEdge.getSlave();
             if (slave != me && indexOf(slave) >= 0) {
-                // Umsortieren
-                ElementContainer tmp = slave.getContainer(doc);
-                if (!(tmp instanceof NodeContainer)) {
+                // raise the slave until it is just in front of the master
+                ElementContainer slaveC = slave.getContainer(doc);
+                if (!(slaveC instanceof NodeContainer)) {
                     return;
                 }
-                while (indexOf(tmp) < indexOf(ec)) {
-                    z_step_up(tmp);
+                while (indexOf(slaveC) < indexOf(ec)) {
+                    z_step_up(slaveC, pid);
                 }
 
                 // rekursiv die Unterelmente raisen
                 if (slave.hasEdges()) {
-                    stufe++;
-                    raiseSlaves(slave.getContainer(doc), stufe);
-                    stufe--;
+                    raiseSlaves(slave.getContainer(doc), pid);
+                }
+                //Quick and dirty but works fine in 99.9% of cases.
+                //If the new slave is positioned in the zero point,
+                //then it is repositioned on the master element.
+                //The probability that it is randomly positioned in
+                //the zero point by the user is vanishingly small.
+                //But if the slave was added from the mainDoc, then
+                //it lies always in the zero point and is shifted
+                //here on a useful position.
+                int x = slaveC.getX();
+                int y = slaveC.getY();
+                if (x == 0 && y == 0) {
+                    Class<? extends CompositionEdge> compositionEdgeClass = compositionEdge.getClass();
+                    doc.addict(me, slave, compositionEdgeClass, pid);
                 }
             }
         }

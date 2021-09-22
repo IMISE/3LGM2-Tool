@@ -128,7 +128,7 @@ public class GDCollectionFileHandler {
         try {
             raf = new RandomAccessFile(_file, "rw");
         } catch (IOException e) {
-            File writableFile = new File(Tool3lgmConstants.USER_HOME_DIR_NAME + "/3LGM2Tool", _file.getName());
+            File writableFile = new File(UserProperties.USER_HOME_DIR_NAME + "/3LGM2Tool", _file.getName());
             FileHandler.copyFile(_file, writableFile);
             setFile(writableFile);
             copiedToUserDir = true;

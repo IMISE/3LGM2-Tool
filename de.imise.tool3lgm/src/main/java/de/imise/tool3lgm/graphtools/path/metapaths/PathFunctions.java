@@ -433,7 +433,7 @@ public class PathFunctions {
             if (createdContainer == null) {
                 createdContainer = createdDependent.getContainer(doc);
             }
-            doc.raiseSlaves(createdContainer);
+            doc.raiseSlaves(createdContainer, pid);
         }
 
         //alle Kantentpyen der neu angelegten Elementart holen

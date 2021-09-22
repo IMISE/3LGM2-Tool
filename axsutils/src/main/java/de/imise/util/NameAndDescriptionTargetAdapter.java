@@ -42,7 +42,7 @@ public class NameAndDescriptionTargetAdapter implements NameAndDescriptionTarget
 
     @Override
     public void setName(final String name) {
-        this.name = name;
+        this.name = getCleanString(name);
     }
 
     @Override
@@ -52,7 +52,7 @@ public class NameAndDescriptionTargetAdapter implements NameAndDescriptionTarget
 
     @Override
     public void setDescription(final String description) {
-        this.description = description == null ? "" : description;
+        this.description = description == null ? "" : getCleanString(description);
     }
 
 }

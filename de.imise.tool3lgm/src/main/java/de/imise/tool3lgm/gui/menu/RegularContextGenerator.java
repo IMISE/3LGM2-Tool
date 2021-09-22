@@ -429,7 +429,7 @@ public class RegularContextGenerator extends ElementSelectionContextGenerator im
         GDCollection gdcoll = getSelectedGDCollection();
 
         for (Szenario szen : gdcoll.getSzenarios()) {
-            item = new JMenuItem(szen.getTitle());
+            item = new JMenuItem(szen.getName());
 
             szenario_menu.add(item);
 
@@ -461,7 +461,7 @@ public class RegularContextGenerator extends ElementSelectionContextGenerator im
 
         GDCollection gdcoll = getSelectedGDCollection();
         for (Szenario szen : gdcoll.getSzenarios()) {
-            item = new JMenuItem(szen.getTitle());
+            item = new JMenuItem(szen.getName());
             /* ist Node schon mit diesem Szenario verknüpft */
             if (ec != null) {
                 ModelElement me = ec.getElement();

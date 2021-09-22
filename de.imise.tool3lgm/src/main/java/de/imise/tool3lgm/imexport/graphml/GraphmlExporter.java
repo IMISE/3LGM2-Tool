@@ -93,7 +93,7 @@ public class GraphmlExporter {
 
     private static File getValidFile(final Szenario szenario, final int layer, final File dir, final String fileNameEnd) {
         String layerName = layer < 0 ? "" : StringUtils.getFirstChars(ModelConstants.getVisibleLayerName(layer)) + "_";
-        String fileName = szenario.getCollection().getName() + "_" + szenario.getTitle() + "_" + layerName + fileNameEnd + ".graphml";
+        String fileName = szenario.getCollection().getName() + "_" + szenario.getName() + "_" + layerName + fileNameEnd + ".graphml";
         fileName = FileHandler.removeInvalidFileNameCharacters(fileName);
         return new File(dir, fileName);
     }

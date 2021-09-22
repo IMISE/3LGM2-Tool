@@ -186,7 +186,7 @@ public final class ModelPropertyDialog extends AbstractPropertyDialog implements
         String descriptionLabel = getResString("description");
         String modelName = gdcoll.getName();
         if (doc != null) {
-            setTitle(descriptionLabel + " - " + modelName + " - " + doc.getTitle());
+            setTitle(descriptionLabel + " - " + modelName + " - " + doc.getName());
         } else {
             setTitle(descriptionLabel + " - " + modelName + " - " + getResString("uebersicht"));
         }

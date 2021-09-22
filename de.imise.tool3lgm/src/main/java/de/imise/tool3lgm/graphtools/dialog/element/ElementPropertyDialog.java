@@ -10,7 +10,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import javax.annotation.Nullable;
-import javax.swing.Icon;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 
@@ -72,19 +71,6 @@ public abstract class ElementPropertyDialog extends AbstractElementPropertyDialo
                 addEdgePanel(edgeClass);
             }
         }
-    }
-
-    //////////////////////////////
-    // this -> add Panel as Tab //
-    //////////////////////////////
-
-    @Override
-    protected void addTab(final String title, final Icon icon, final Component component) {
-        if (component instanceof DescriptedSingleConnectionPanel) {
-            DescriptedSingleConnectionPanel panel = (DescriptedSingleConnectionPanel) component;
-            panel.addSelf();
-        }
-        super.addTab(title, icon, component);
     }
 
     //////////////////////////////////////////////////////
@@ -367,6 +353,7 @@ public abstract class ElementPropertyDialog extends AbstractElementPropertyDialo
      */
     public final void addDescriptedSingleConnectionPanel(final MetaPath metaPath) {
         DescriptedSingleConnectionPanel panel = new DescriptedSingleConnectionPanel(this, metaPath);
+        panel.addSubComponentsToItself();
         addTab(panel);
     }
 

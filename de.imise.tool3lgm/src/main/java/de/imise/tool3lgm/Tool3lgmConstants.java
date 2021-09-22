@@ -1,5 +1,8 @@
 package de.imise.tool3lgm;
 
+import static de.imise.tool3lgm.userproperties.UserProperties.USER_HOME_3LGM_DIR;
+import static de.imise.tool3lgm.userproperties.UserProperties.USER_HOME_DIR_NAME;
+
 import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Image;
@@ -77,12 +80,6 @@ public abstract class Tool3lgmConstants {
 
     /** Path to the installation directory of the application as string */
     public static final String APPLICATION_DIR_PATH = APPLICATION_DIR.toURI().getPath();
-
-    /** Pfad ins Home-Verzeichnis des Benutzers */
-    public static final String USER_HOME_DIR_NAME = System.getProperty("user.home");
-
-    /** Pfad ins Home-Verzeichnis .3lgm Ordner */
-    public static final File USER_HOME_3LGM_DIR = new File(USER_HOME_DIR_NAME, "3lgm");
 
     /** filename with path for internal clipboard */
     public static final File CLIPBOARD_PATH = new File(USER_HOME_3LGM_DIR, "3lgm_clipboard");

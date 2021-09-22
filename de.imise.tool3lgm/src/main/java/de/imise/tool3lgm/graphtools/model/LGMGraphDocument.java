@@ -58,6 +58,7 @@ import de.imise.tool3lgm.graphtools.view.container.LayerContainer;
 import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
 import de.imise.tool3lgm.log.Log;
 import de.imise.tool3lgm.xml.ToolXMLClipboardWriter;
+import de.imise.util.Sys;
 
 /**
  * @author thomas
@@ -70,7 +71,7 @@ public class LGMGraphDocument extends GraphDocument {
      */
     public LGMGraphDocument(final GDCollection _gdcoll) {
         super(_gdcoll);
-        setTitle(getResString("uebersicht"));
+        setName(getResString("uebersicht"));
     }
 
     @Override
@@ -567,7 +568,6 @@ public class LGMGraphDocument extends GraphDocument {
 
         //bei Bedarf anschalten, um zu sehen, wie das Modell danach aussieht
         //GDCollectionPrinter.print(targetCollection);
-
 
         Sys.err1debug(debug, ++iii + " " + (System.currentTimeMillis() - start));
         start = System.currentTimeMillis();

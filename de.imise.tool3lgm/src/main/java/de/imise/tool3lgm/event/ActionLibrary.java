@@ -667,7 +667,8 @@ public class ActionLibrary {
                 Static.showProgressDialog();
                 Static.setProgressDialogTitle("PROGRESS_SELECT_ALL_TITLE");
                 Static.setProgressDialogStatusLabel("PROGRESS_SELECT_ALL_MESSAGE");
-                getSelectedDoc().selectAll();
+                LGMGraphDocument selectedDoc = getSelectedDoc();
+                selectedDoc.selectAll();
                 Static.closeProgressDialog();
             }
         };

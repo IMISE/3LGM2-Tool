@@ -50,7 +50,7 @@ public final class GraphViewPane extends ViewPane {
     public String getFullName() {
         GDCollection gdcoll = getCollection();
         String gdcollName = gdcoll.getName();
-        String docName = getGraphDocument().getTitle();
+        String docName = getGraphDocument().getName();
         MetaModelContext metaModelContext = gdcoll.getMetaModelContext();
         String metaModelDisplayName = metaModelContext.getMetaModelDisplayName();
         String fullName = gdcollName + " - " + docName + "   (" + metaModelDisplayName + ")";
