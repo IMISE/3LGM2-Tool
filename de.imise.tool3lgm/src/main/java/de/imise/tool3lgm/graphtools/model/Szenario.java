@@ -7,9 +7,7 @@ import java.util.Date;
 
 import de.imise.tool3lgm.graphtools.metamodel.elements.CompositionEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
-import de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
-import de.imise.tool3lgm.graphtools.undoredo.TransactionManager;
 import de.imise.tool3lgm.graphtools.view.container.BendpointContainer;
 import de.imise.tool3lgm.graphtools.view.container.EdgeContainer;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
@@ -96,35 +94,43 @@ public class Szenario extends LGMGraphDocument {
     }
 
     /**
-     * Holt das Slave-Element der übergegebenen <code>Composition</code> in
-     * dieses Szenario
+     * Brings the slave element of the given {@link CompositionEdge} into this
+     * scenario if it does not already occur in it.
      *
-     * @param k
+     * @param compositionEdge
      * @param sourceDoc
+     * @param pid
      */
-    private final void updateSlaveContainers(final CompositionEdge compositionEdge, final boolean forward, final GraphDocument sourceDoc) {
-        ModelElement master = forward ? compositionEdge.getStart() : compositionEdge.getEnd();
+    private final void updateSlaveContainers(final CompositionEdge compositionEdge, final GraphDocument sourceDoc, final int pid) {
+        ModelElement master = compositionEdge.getMaster();
         if (master == null || master.isUnique()) {
             return;
         }
-        ModelElement slave = compositionEdge.getOther(master);
+        ModelElement slave = compositionEdge.getSlave();
         if (slave == null || slave.isUnique()) {
             return;
         }
         if (isMyElement(master)) {
             if (!isMyElement(slave)) {
+                //we add the container from the mainDoc to this szenario
+                //because this container should have the default layout
+                //but is invisible by default
                 ElementContainer slaveCont = slave.getContainer(sourceDoc);
                 if (slaveCont == null) {
-                    slaveCont = slave.getContainer(gdcoll.getMainDoc());
+                    GraphDocument mainDoc = gdcoll.getMainDoc();
+                    slaveCont = slave.getContainer(mainDoc);
                 }
                 if (!(slaveCont instanceof NodeContainer)) {
                     return;
                 }
-                addElementToSzenario(getID(), (NodeContainer) slaveCont, false, TransactionManager.STANDARD_PID); //dont' change the selection because linkSelected(...) iterates over it
-                //wenn der Container aus dem Hauptdokument übernommen wurde -> initiale Grafik setzen
-                if (sourceDoc == getCollection().getMainDoc()) {
-                    addict(id, compositionEdge.getClass().getName(), master, slave, TransactionManager.STANDARD_PID);
-                }
+                //add a copy of the mainDoc container to this szenario
+                NodeContainer addedSlaveContainer = addElementToSzenario(getID(), (NodeContainer) slaveCont, false, pid); //dont' change the selection because linkSelected(...) iterates over it
+                //set the container visible
+                addedSlaveContainer.setVisible(true);
+
+                //raiseSlaves(..) brings '
+                ElementContainer masterInSourceDocContainer = master.getContainer(sourceDoc);
+                raiseSlaves(masterInSourceDocContainer, pid);
             }
         }
     }
@@ -154,8 +160,7 @@ public class Szenario extends LGMGraphDocument {
                 if (!isMyElement(edge)) {
                     //bei Compositions auch das Slave-Element in dieses Szenario holen (wenn sie es nicht unique ist)
                     if (edge instanceof CompositionEdge) {
-                        //hier werden mit Absicht identische Konstanten verglichen, falls sich MASTER_TO_SLAVE_DIRECTION mal auf BACKWARD ändert (was sehr unwarhscheinlich ist)
-                        updateSlaveContainers((CompositionEdge) edge, CompositionEdge.MASTER_TO_SLAVE_DIRECTION == Direction.FORWARD, sourceDoc);
+                        updateSlaveContainers((CompositionEdge) edge, sourceDoc, pid);
                     }
                     //wenn Start und End-Element der Edge einen Container in diesem Szenario haben
                     if (endsAreMine(edge)) {

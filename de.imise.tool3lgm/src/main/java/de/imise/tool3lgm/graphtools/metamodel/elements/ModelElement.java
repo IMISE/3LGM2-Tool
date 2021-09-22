@@ -1807,29 +1807,57 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
     ////////////////////////
 
     /**
-     * Liefert eine Liste aller Container der Slaveelemente dieses Elementes,
-     * also aller Elemente, die mit diesem Element über eine
-     * {@link CompositionEdge} verbunden sind, wobei das verbundene Element
-     * diesem Element übergeordnet ist.
+     * Returns a list of all containers of slave elements of this element, i.e.
+     * all elements that are linked to this element via a
+     * {@link CompositionEdge}, where the linked element is subordinate to this
+     * element.
      *
-     * @param doc {@link GraphDocument} in dem die Container liegen sollen
+     * @param doc {@link GraphDocument} which should contain the elements
      * @return
      */
     public final List<ElementContainer> getDirectCompositionSlaveContainer(final GraphDocument doc) {
-        List<ElementContainer> retVal = new ArrayList<>();
+        List<ElementContainer> allSlaveContainers = new ArrayList<>();
         for (Edge edge : getEdges()) {
             if (edge instanceof CompositionEdge) {
-                CompositionEdge comp = (CompositionEdge) edge;
-                if (comp.getMaster() == this) {
-                    ModelElement slave = comp.getSlave();
+                CompositionEdge composition = (CompositionEdge) edge;
+                if (composition.getMaster() == this) {
+                    ModelElement slave = composition.getSlave();
                     ElementContainer slaveContainer = slave.getContainer(doc);
                     if (slaveContainer != null) {
-                        retVal.add(slaveContainer);
+                        allSlaveContainers.add(slaveContainer);
                     }
                 }
             }
         }
-        return retVal;
+        return allSlaveContainers;
+    }
+
+    /**
+     * Returns a list of all containers of this element's master elements, i.e.
+     * all elements that are linked to this element via a
+     * {@link CompositionEdge} of the given type, where the linked element is
+     * superordinated to this element.
+     *
+     * @param compositionEdgeClass
+     * @param doc
+     * @return
+     */
+    public final List<ElementContainer> getDirectCompositionMasterContainer(final Class<? extends CompositionEdge> compositionEdgeClass, final GraphDocument doc) {
+        List<ElementContainer> allMasterContainers = new ArrayList<>();
+        for (Edge edge : getEdges()) {
+            Class<? extends Edge> edgeClass = edge.getClass();
+            if (compositionEdgeClass.isAssignableFrom(edgeClass)) {
+                CompositionEdge composition = (CompositionEdge) edge;
+                if (composition.getSlave() == this) {
+                    ModelElement master = composition.getMaster();
+                    ElementContainer masterContainer = master.getContainer(doc);
+                    if (masterContainer != null) {
+                        allMasterContainers.add(masterContainer);
+                    }
+                }
+            }
+        }
+        return allMasterContainers;
     }
 
     //////////////////////

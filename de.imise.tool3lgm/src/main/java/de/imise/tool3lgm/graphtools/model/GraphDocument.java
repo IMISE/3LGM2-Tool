@@ -3810,12 +3810,16 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
     /////////////////////////////////////////////////////////////////////////////////////////////////
 
     /**
-     * @param ec
+     * Calls {@link LayerContainer#raiseSlaves(ElementContainer, int)} for the
+     * given {@link ElementContainer}.
+     *
+     * @param ec the container which can have slave elements that must be raised
+     * @see LayerContainer#raiseSlaves(ElementContainer, int)
      */
     public final void raiseSlaves(final ElementContainer ec, final int pid) {
         int ebene = ec.layerFor();
         if (!ModelConstants.isInterLayer(ebene)) {
-            layer[ebene].raiseSlaves(ec, 0, pid);
+            layer[ebene].raiseSlaves(ec, pid);
             distributeEvent(GROUP_ORDER_CHANGED, layer[ebene], 0);
         }
     }
