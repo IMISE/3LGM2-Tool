@@ -112,7 +112,7 @@ public class ModelConverter {
     private void prepareTargetModel() {
         boolean oldBulkMode = targetModel.setBulkMode(true);
         for (Szenario sourceSzen : sourceModel.getSzenarios()) {
-            Szenario targetSzen = targetModel.createSzenario(sourceSzen.getTitle(), false, sourceSzen.getDescription(), sourceSzen.getID(), false);
+            Szenario targetSzen = targetModel.createSzenario(sourceSzen.getName(), false, sourceSzen.getDescription(), sourceSzen.getID(), false);
             sourceSzenToTargetSzen.put(sourceSzen, targetSzen);
         }
         targetModel.setBulkMode(oldBulkMode);

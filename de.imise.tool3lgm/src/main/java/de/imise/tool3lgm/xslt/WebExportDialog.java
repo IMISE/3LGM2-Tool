@@ -254,7 +254,7 @@ public class WebExportDialog extends JDialog {
             int j = 0;
             for (Szenario szen : collection.getSzenarios()) {
                 ImmutableList<Szenario> szenarios = ImmutableList.of(szen);
-                Static.setProgressDialogStatusLabel("webExport", ": " + szen.getTitle());
+                Static.setProgressDialogStatusLabel("webExport", ": " + szen.getName());
 
                 raf = new RandomAccessFile(new File(filesDir, "szen" + j + "_description.html"), "rw");
                 raf.setLength(0);
@@ -353,18 +353,18 @@ public class WebExportDialog extends JDialog {
         returnValue.append("</ul>");
         int j = 0;
         for (Szenario szen : collection.getSzenarios()) {
-            returnValue.append("<li>" + XMLCharacterCoder.encodeString(szen.getTitle()) + "<ul><li><a href=\"javascript:changeSelection('szen" + j + "_description.html','/" + XMLCharacterCoder.encodeString(collection.getName()) + "/"
-                    + XMLCharacterCoder.encodeString(szen.getTitle()) + "/Beschreibung')\">Beschreibung</a></li>\n");
+            returnValue.append("<li>" + XMLCharacterCoder.encodeString(szen.getName()) + "<ul><li><a href=\"javascript:changeSelection('szen" + j + "_description.html','/" + XMLCharacterCoder.encodeString(collection.getName()) + "/"
+                    + XMLCharacterCoder.encodeString(szen.getName()) + "/Beschreibung')\">Beschreibung</a></li>\n");
             returnValue.append(
-                    "<li><a href=\"javascript:showPicture('szen" + j + "_3layerView.jpg','/" + XMLCharacterCoder.encodeString(collection.getName()) + "/" + XMLCharacterCoder.encodeString(szen.getTitle()) + "/3-EbenenSicht')\">3-Ebenen-Sicht</a></li>\n");
-            returnValue.append("<li><a href=\"javascript:showPicture('szen" + j + "_domainLayer.jpg','/" + XMLCharacterCoder.encodeString(collection.getName()) + "/" + XMLCharacterCoder.encodeString(szen.getTitle())
+                    "<li><a href=\"javascript:showPicture('szen" + j + "_3layerView.jpg','/" + XMLCharacterCoder.encodeString(collection.getName()) + "/" + XMLCharacterCoder.encodeString(szen.getName()) + "/3-EbenenSicht')\">3-Ebenen-Sicht</a></li>\n");
+            returnValue.append("<li><a href=\"javascript:showPicture('szen" + j + "_domainLayer.jpg','/" + XMLCharacterCoder.encodeString(collection.getName()) + "/" + XMLCharacterCoder.encodeString(szen.getName())
                     + "/Fachliche Ebene')\">Fachliche Ebene</a></li>\n");
-            returnValue.append("<li><a href=\"javascript:showPicture('szen" + j + "_logicalLayer.jpg','/" + XMLCharacterCoder.encodeString(collection.getName()) + "/" + XMLCharacterCoder.encodeString(szen.getTitle())
+            returnValue.append("<li><a href=\"javascript:showPicture('szen" + j + "_logicalLayer.jpg','/" + XMLCharacterCoder.encodeString(collection.getName()) + "/" + XMLCharacterCoder.encodeString(szen.getName())
                     + "/Logische Werkzeugebene')\">Logische Werkzeugebene</a></li>\n");
-            returnValue.append("<li><a href=\"javascript:showPicture('szen" + j + "_physicalLayer.jpg','/" + XMLCharacterCoder.encodeString(collection.getName()) + "/" + XMLCharacterCoder.encodeString(szen.getTitle())
+            returnValue.append("<li><a href=\"javascript:showPicture('szen" + j + "_physicalLayer.jpg','/" + XMLCharacterCoder.encodeString(collection.getName()) + "/" + XMLCharacterCoder.encodeString(szen.getName())
                     + "/Physische Werkzeugebene')\">Physische Werkzeugebene</a></li>\n");
             for (int i = 0; i < xslScriptNames.length; i++) {
-                returnValue.append("<li><a href=\"javascript:changeSelection('szen" + j + "_xslt" + i + ".html','/" + XMLCharacterCoder.encodeString(collection.getName()) + "/" + szen.getTitle() + "/" + XMLCharacterCoder.encodeString(xslScriptNames[i])
+                returnValue.append("<li><a href=\"javascript:changeSelection('szen" + j + "_xslt" + i + ".html','/" + XMLCharacterCoder.encodeString(collection.getName()) + "/" + szen.getName() + "/" + XMLCharacterCoder.encodeString(xslScriptNames[i])
                         + "')\">" + XMLCharacterCoder.encodeString(xslScriptNames[i]) + "</a></li>\n");
             }
             returnValue.append("</ul></li>\n");

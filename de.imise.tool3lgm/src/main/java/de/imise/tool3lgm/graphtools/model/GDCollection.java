@@ -78,6 +78,7 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 
 import com.google.common.base.Strings;
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Lists;
 
@@ -240,9 +241,6 @@ public class GDCollection extends UserFieldTarget implements MetaModelSpecific {
      */
     private long lastModificationTime = System.currentTimeMillis();
 
-    /** Bezeichnung des Dokuments (Dateiname) */
-    private String name = "";
-
     /** Handler zum Speichern und Laden */
     private final GDCollectionFileHandler fileHandler;
 
@@ -348,15 +346,9 @@ public class GDCollection extends UserFieldTarget implements MetaModelSpecific {
         return getName();
     }
 
-    /**
-     * @return
-     */
-    public String getName() {
-        return name;
-    }
-
+    @Override
     public void setName(final String name) {
-        this.name = name;
+        super.setName(name);
         distribute(MODEL_OR_SZENARIO_NAME_CHANGED, null, getMainDoc(), STANDARD_PID);
     }
 
@@ -604,7 +596,7 @@ public class GDCollection extends UserFieldTarget implements MetaModelSpecific {
         if (log) {
             mainDoc.start_transaction(pid);
             mainDoc.addUndo(pid, MODEL_ACTION_DELETE_SUBMODEL, szenario);
-            mainDoc.addRedo(pid, MODEL_ACTION_CREATE_SUBMODEL, szenario.getTitle(), szenario.getDescription(), szenario);
+            mainDoc.addRedo(pid, MODEL_ACTION_CREATE_SUBMODEL, szenario.getName(), szenario.getDescription(), szenario);
             mainDoc.finish_transaction(pid);
         }
         if (!isImport) {
@@ -652,7 +644,7 @@ public class GDCollection extends UserFieldTarget implements MetaModelSpecific {
             mainDoc.addUndo(pid, MODEL_ACTION_SET_LAYER_ALPHA, szenID, layerIndex, lc.getAlpha());
             mainDoc.addUndo(pid, MODEL_ACTION_SET_LAYER_SIZE_FACTOR, szenID, szen.getPageSizeFactor());
         }
-        mainDoc.addUndo(pid, MODEL_ACTION_CREATE_SUBMODEL, szen.getTitle(), szen.getDescription(), szenID);
+        mainDoc.addUndo(pid, MODEL_ACTION_CREATE_SUBMODEL, szen.getName(), szen.getDescription(), szenID);
         mainDoc.addRedo(pid, MODEL_ACTION_DELETE_SUBMODEL, szenID, pid);
         mainDoc.finish_transaction(pid);
         setChanged(true);
@@ -671,9 +663,9 @@ public class GDCollection extends UserFieldTarget implements MetaModelSpecific {
         }
         String szenTitle = title;
         if (Strings.isNullOrEmpty(title)) {
-            szenTitle = askName(szen.getTitle());
+            szenTitle = askName(szen.getName());
         }
-        String oldTitle = szen.getTitle();
+        String oldTitle = szen.getName();
         if (szenTitle == null || szenTitle.equals(oldTitle)) {
             return;
         }
@@ -683,7 +675,7 @@ public class GDCollection extends UserFieldTarget implements MetaModelSpecific {
         mainDoc.addRedo(pid, MODEL_ACTION_RENAME_SUBMODEL, szenID, szenTitle);
         mainDoc.finish_transaction(pid);
 
-        szen.setTitle(szenTitle);
+        szen.setName(szenTitle);
         for (ModelElement me : szen.getModelItems(ModelElement.class, true)) {
             me.invalidateNameWithSzens();
         }
@@ -1947,7 +1939,10 @@ public class GDCollection extends UserFieldTarget implements MetaModelSpecific {
                     List<Edge> edgeList = startElement.getEdgesTo(edgeEndClass, edgeClass);
                     edgeList.remove(edge);
                     if (edgeList.size() == maxForwardCardinality) {
-                        deleteElement(edgeList.get(0), mainDoc, pid);
+                        Edge oldestEdgeOfSameType = edgeList.get(0);
+                        deleteElement(oldestEdgeOfSameType, mainDoc, pid);
+                        //remove subordinated elements from all submodels where the (now new) master is not present in the submodel
+                        removeUnlinkedSubordinatedContainersFromSzenarios(oldestEdgeOfSameType, pid);
                     }
                     //beim Endelement dasselbe nur in Rückwärtsrichtung
                     Class<? extends ModelElement> edgeStartClass = edge.getStartClass();
@@ -1955,10 +1950,12 @@ public class GDCollection extends UserFieldTarget implements MetaModelSpecific {
                     edgeList = endElement.getEdgesFrom(edgeStartClass, edgeClass);
                     edgeList.remove(edge);
                     if (edgeList.size() == maxBackwardCardinality) {
+                        Edge oldestEdgeOfSameType = edgeList.get(0);
                         deleteElement(edgeList.get(0), mainDoc, pid);
+                        //remove subordinated elements from all submodesls where the (now new) master is not present in the szenario
+                        removeUnlinkedSubordinatedContainersFromSzenarios(oldestEdgeOfSameType, pid);
                     }
                 }
-
             }
         } catch (Exception e) {
             Log.show(ERROR, getResString("FehlerAllgemein"), e);
@@ -1970,6 +1967,35 @@ public class GDCollection extends UserFieldTarget implements MetaModelSpecific {
         mainDoc.finish_transaction(pid);
         mainDoc.distributeEvent(DATA_CHANGED, pid);
         return edge;
+    }
+
+    /**
+     * It is possible that the container of a subordinated element is still in
+     * the submodel after it has been reassigned to another master element that
+     * does not occur in the same submodels and now is unconnected in the
+     * submodel. Here we remove such subordinated elements from the submodels
+     * where the parent element is not present.
+     *
+     * @param me1
+     * @param me2
+     * @param edgeClass
+     */
+    private void removeUnlinkedSubordinatedContainersFromSzenarios(final Edge removedEdge, final int pid) {
+        if (removedEdge instanceof CompositionEdge) {
+            CompositionEdge compositionEdge = (CompositionEdge) removedEdge;
+            ModelElement slave = compositionEdge.getSlave();
+            for (Szenario szen : szenarios) {
+                ElementContainer slaveContainer = szen.getElementContainer(slave);
+                if (slaveContainer != null) {
+                    List<ElementContainer> mastersOfSlaveInSzenario = slave.getDirectCompositionMasterContainer(CompositionEdge.class, szen);
+                    //there are no master elements of the slave element in this
+                    //szenario so remove the slave from the szenario
+                    if (mastersOfSlaveInSzenario.isEmpty()) {
+                        simpleRemoveContainerFromSzenario(ImmutableList.of(slaveContainer), true, pid); //must be logged to don't crash the undo redo mechanism -> log = true
+                    }
+                }
+            }
+        }
     }
 
     /**

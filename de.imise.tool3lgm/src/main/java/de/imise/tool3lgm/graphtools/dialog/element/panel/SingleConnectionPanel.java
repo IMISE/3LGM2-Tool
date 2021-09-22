@@ -122,7 +122,7 @@ public class SingleConnectionPanel extends AbstractPathConnectionPanel {
         if (!editable) {
             connectedElementsBox = null;
             itemListener = null;
-            connectedElementName = new LimitedSizeScrollTextPane(4, false); //wenn man hier true übergibt, kann man den Namen des verbundenen Elementes ändern. Aber dann funktionieren die Maus-Actions nicht mehr, weil dann die Komponente eigene Mausaktionen für den Text macht
+            connectedElementName = new LimitedSizeScrollTextPane(4, true); //wenn man hier true übergibt, kann man den Namen des verbundenen Elementes ändern. Aber dann funktionieren die Maus-Actions nicht mehr, weil dann die Komponente eigene Mausaktionen für den Text macht
             connectedElementViewComponent = connectedElementName;
             //Doppelklick-Action und Kontextmenü anghängen
             addMouseActions(connectedElementName);

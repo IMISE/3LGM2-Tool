@@ -160,7 +160,7 @@ public class ElementDialogHeaderPanel extends ElementDialogPanel {
             } else {
                 subModelLabelLabel.setVisible(true);
                 submodelLabel.setVisible(true);
-                submodelLabel.setText(vdoc != null ? "<html>" + vdoc.getTitle() + "</html>" : "----------");
+                submodelLabel.setText(vdoc != null ? "<html>" + vdoc.getName() + "</html>" : "----------");
             }
         } else if (me instanceof Edge) {
             Edge edge = (Edge) me;

@@ -24,8 +24,10 @@ import de.imise.util.swing.component.text.ExtendedTextPane;
  */
 public class DescriptedSingleConnectionPanel extends SingleConnectionPanel {
 
+    /** Sub component to show the elements description */
     private final ExtendedTextPane descriptionTextPane = new ExtendedTextPane();
 
+    /** Sub component label for the elements description text pane */
     private final JLabel descriptionWestLabel = new JLabel(getResString("description"));
 
     /**
@@ -97,7 +99,15 @@ public class DescriptedSingleConnectionPanel extends SingleConnectionPanel {
         connectedElement.refreshText();
     }
 
-    public int addMe(final Container parent, final GridBagConstraints gbc, final int gridy) {
+    /**
+     * Adds all sub components of this component to the given parent.
+     *
+     * @param parent
+     * @param gbc
+     * @param gridy
+     * @return
+     */
+    public int addSubComponentsToOtherParent(final Container parent, final GridBagConstraints gbc, final int gridy) {
         int newGridy = gridy;
         gbc.anchor = GridBagConstraints.WEST;
         gbc.fill = GridBagConstraints.NONE;
@@ -115,12 +125,17 @@ public class DescriptedSingleConnectionPanel extends SingleConnectionPanel {
         return newGridy;
     }
 
-    public Component addSelf() {
+    /**
+     * Adds all sub component of this really to this.
+     *
+     * @return
+     */
+    public Component addSubComponentsToItself() {
         GridBagConstraints gbc = new GridBagConstraints();
         //wenn das Panel als alleine steht, dann soll vor dem Westlabel nur "Bezeichnung" stehen
         westLabel.setText(getResString("bez"));
         setLayout(new GridBagLayout());
-        addMe(this, gbc, 0);
+        addSubComponentsToOtherParent(this, gbc, 0);
         return this;
     }
 

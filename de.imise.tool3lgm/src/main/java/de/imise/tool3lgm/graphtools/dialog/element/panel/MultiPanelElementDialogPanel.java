@@ -138,7 +138,7 @@ public class MultiPanelElementDialogPanel extends ElementDialogPanel implements 
         Border topBorder = BorderFactory.createEmptyBorder(3, 0, 0, 0);
         westLabel.setBorder(topBorder);
         panel.setBorder(topBorder);
-        gridy = panel.addMe(this, gbc, gridy);
+        gridy = panel.addSubComponentsToOtherParent(this, gbc, gridy);
     }
 
     public void addMutipleCompositionPanel(final MutipleCompositionPanel panel) {

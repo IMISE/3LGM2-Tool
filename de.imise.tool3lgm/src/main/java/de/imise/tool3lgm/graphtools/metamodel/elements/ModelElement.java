@@ -53,11 +53,12 @@ import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout;
 import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout.TextAlignmentHTML;
 import de.imise.util.Alphabetical;
 import de.imise.util.IDStringGenerator;
+import de.imise.util.NameAndDescriptionTarget;
 import de.imise.util.ReflectionUtils;
 import de.imise.util.StringUtils;
 import de.imise.util.htmlxml.HTMLConverter;
 
-public abstract class ModelElement extends UserFieldTarget implements MetaModelSpecific, GDCollectionOwner, IDSource {
+public abstract class ModelElement extends UserFieldTarget implements MetaModelSpecific, GDCollectionOwner, IDSource, NameAndDescriptionTarget {
 
     /**
      * Space between parts of the full element name. The parts are/can be the
@@ -74,7 +75,7 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
     /**
      * Name, Anzeigename in der Grafik und Beschreibung
      */
-    private String name = "", graphName = "", descr = "";
+    private String graphName = "";
 
     /**
      * ID of the element
@@ -355,6 +356,7 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
     }
 
     /** Gibt den Namen des Objektes zurueck */
+    @Override
     public String getName() {
         return name;
     }
@@ -456,6 +458,7 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
      *
      * @param name
      */
+    @Override
     public void setName(final String name) {
         setName(name, true);
     }
@@ -489,12 +492,13 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
      * @param name
      * @param sort
      */
-    public void setName(final String name, final boolean sort) {
+    public final void setName(final String name, final boolean sort) {
         toStringName = null;
         if (name == null) {
             return;
         }
-        this.name = name.equalsIgnoreCase("null") ? "" : name;
+        super.setName(name.equalsIgnoreCase("null") ? "" : name);
+
         updateNameWithSzens();
 
         //Node der Layer neu sortieren
@@ -640,33 +644,29 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
         }
     }
 
-    /** Gibt die Beschreibung des Objektes zurueck */
-    public final String getDescription() {
-        return descr;
-    }
-
     /** Setzt die Beschreibung des Objektes */
+    @Override
     public final void setDescription(final String descr) {
         if (descr != null) {
             if (descr.equalsIgnoreCase("null")) {
-                this.descr = "";
+                description = "";
             } else {
-                this.descr = descr;
+                super.setDescription(descr);
             }
         }
         hyperlink = null;
-        if (this.descr != null) {
-            String descrLow = descr.toLowerCase();
+        if (description != null) {
+            String descrLow = description.toLowerCase();
             int i1 = descrLow.indexOf("hyperlink:");
             if (i1 == -1) {
             } else {
                 i1 += 10;
-                int i2 = this.descr.indexOf('\n', i1);
+                int i2 = description.indexOf('\n', i1);
                 if (i2 == -1) {
-                    i2 = this.descr.length();
+                    i2 = description.length();
                 }
                 if (i2 > i1) {
-                    hyperlink = this.descr.substring(i1, i2).trim();
+                    hyperlink = description.substring(i1, i2).trim();
                 }
             }
         }
@@ -1807,29 +1807,57 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
     ////////////////////////
 
     /**
-     * Liefert eine Liste aller Container der Slaveelemente dieses Elementes,
-     * also aller Elemente, die mit diesem Element über eine
-     * {@link CompositionEdge} verbunden sind, wobei das verbundene Element
-     * diesem Element übergeordnet ist.
+     * Returns a list of all containers of slave elements of this element, i.e.
+     * all elements that are linked to this element via a
+     * {@link CompositionEdge}, where the linked element is subordinate to this
+     * element.
      *
-     * @param doc {@link GraphDocument} in dem die Container liegen sollen
+     * @param doc {@link GraphDocument} which should contain the elements
      * @return
      */
     public final List<ElementContainer> getDirectCompositionSlaveContainer(final GraphDocument doc) {
-        List<ElementContainer> retVal = new ArrayList<>();
+        List<ElementContainer> allSlaveContainers = new ArrayList<>();
         for (Edge edge : getEdges()) {
             if (edge instanceof CompositionEdge) {
-                CompositionEdge comp = (CompositionEdge) edge;
-                if (comp.getMaster() == this) {
-                    ModelElement slave = comp.getSlave();
+                CompositionEdge composition = (CompositionEdge) edge;
+                if (composition.getMaster() == this) {
+                    ModelElement slave = composition.getSlave();
                     ElementContainer slaveContainer = slave.getContainer(doc);
                     if (slaveContainer != null) {
-                        retVal.add(slaveContainer);
+                        allSlaveContainers.add(slaveContainer);
                     }
                 }
             }
         }
-        return retVal;
+        return allSlaveContainers;
+    }
+
+    /**
+     * Returns a list of all containers of this element's master elements, i.e.
+     * all elements that are linked to this element via a
+     * {@link CompositionEdge} of the given type, where the linked element is
+     * superordinated to this element.
+     *
+     * @param compositionEdgeClass
+     * @param doc
+     * @return
+     */
+    public final List<ElementContainer> getDirectCompositionMasterContainer(final Class<? extends CompositionEdge> compositionEdgeClass, final GraphDocument doc) {
+        List<ElementContainer> allMasterContainers = new ArrayList<>();
+        for (Edge edge : getEdges()) {
+            Class<? extends Edge> edgeClass = edge.getClass();
+            if (compositionEdgeClass.isAssignableFrom(edgeClass)) {
+                CompositionEdge composition = (CompositionEdge) edge;
+                if (composition.getSlave() == this) {
+                    ModelElement master = composition.getMaster();
+                    ElementContainer masterContainer = master.getContainer(doc);
+                    if (masterContainer != null) {
+                        allMasterContainers.add(masterContainer);
+                    }
+                }
+            }
+        }
+        return allMasterContainers;
     }
 
     //////////////////////
@@ -2484,17 +2512,17 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
             if (!name.trim().equals(other.name.trim())) {
                 name = name.concat("\n-" + joined + "-\n" + other.name);
             }
-            String descrip = descr.trim();
+            String descrip = description.trim();
             //es gibt keine Beschreibung bei this
             if (Strings.isNullOrEmpty(descrip)) {
                 //egal, was in der Beschreibung für other steht -> setze sie bei this
-                descr = other.descr;
+                description = other.description;
                 //es gibt eine Beschreibung bei this
             } else {
-                String otherDescrip = other.descr.trim();
+                String otherDescrip = other.description.trim();
                 //wenn es auch eine Beschreibung für other gibt, die sich von der von this unterscheidet -> hänge sie zusammen
                 if (!descrip.equals(otherDescrip) && !Strings.isNullOrEmpty(otherDescrip)) {
-                    descr = descr.concat("\n-" + joined + "-\n" + other.descr);
+                    description = description.concat("\n-" + joined + "-\n" + other.description);
                 }
             }
         }

@@ -70,7 +70,7 @@ public class LGMGraphDocument extends GraphDocument {
      */
     public LGMGraphDocument(final GDCollection _gdcoll) {
         super(_gdcoll);
-        setTitle(getResString("uebersicht"));
+        setName(getResString("uebersicht"));
     }
 
     @Override

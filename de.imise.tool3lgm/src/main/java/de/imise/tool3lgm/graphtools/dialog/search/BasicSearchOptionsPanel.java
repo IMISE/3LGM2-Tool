@@ -328,7 +328,7 @@ public abstract class BasicSearchOptionsPanel extends JPanel implements ItemList
             return;
         }
         GraphDocument mainDoc = gdcoll.getMainDoc();
-        subModelBox.addObject(mainDoc, mainDoc.getTitle());
+        subModelBox.addObject(mainDoc, mainDoc.getName());
         for (Szenario szen : gdcoll.getSzenarios()) {
             subModelBox.addObject(szen);
         }
