@@ -30,7 +30,7 @@ public class SimplePath extends SerialPath {
      * @param simpleMetaPath
      * @param elementaryPaths
      */
-    private SimplePath(final SimpleMetaPath simpleMetaPath, final List<ElementaryPath> elementaryPaths) {
+    protected SimplePath(final SimpleMetaPath simpleMetaPath, final List<ElementaryPath> elementaryPaths) {
         super(simpleMetaPath, elementaryPaths);
         this.simpleMetaPath = simpleMetaPath;
         this.elementaryPaths = CollectionUtils.ensureImmutable(elementaryPaths);
@@ -40,7 +40,7 @@ public class SimplePath extends SerialPath {
      * @param simpleMetaPath
      * @param elementaryPaths
      */
-    private SimplePath(final SimpleMetaPath simpleMetaPath, final ElementaryPath... elementaryPaths) {
+    protected SimplePath(final SimpleMetaPath simpleMetaPath, final ElementaryPath... elementaryPaths) {
         this(simpleMetaPath, Arrays.asList(elementaryPaths));
     }
 
@@ -68,18 +68,33 @@ public class SimplePath extends SerialPath {
     }
 
     /**
-     * Erzeugt aus den übergebenen Elementarpfaden einen Gesamtpfad.
-     *
-     * @param elementaryPaths
-     * @return
+     * @param metaPath
      */
-    public static SimplePath create(final List<ElementaryPath> elementaryPaths) {
+    protected static final SimpleMetaPath extractSimpleMetaPath(final ElementaryPath... elementaryPaths) {
+        return extractSimpleMetaPath(Arrays.asList(elementaryPaths));
+    }
+
+    /**
+     * @param metaPath
+     */
+    protected static final SimpleMetaPath extractSimpleMetaPath(final List<ElementaryPath> elementaryPaths) {
         ElementaryMetaPath[] elementaryMetaPaths = new ElementaryMetaPath[elementaryPaths.size()];
         for (int i = 0; i < elementaryMetaPaths.length; i++) {
             ElementaryPath elementaryPath = elementaryPaths.get(i);
             elementaryMetaPaths[i] = elementaryPath.getMetaPath();
         }
         SimpleMetaPath simpleMetaPath = new SimpleMetaPath(elementaryMetaPaths);
+        return simpleMetaPath;
+    }
+
+    /**
+     * Erzeugt aus den übergebenen Elementarpfaden einen Gesamtpfad.
+     *
+     * @param elementaryPaths
+     * @return
+     */
+    public static SimplePath create(final List<ElementaryPath> elementaryPaths) {
+        SimpleMetaPath simpleMetaPath = extractSimpleMetaPath(elementaryPaths);
         return new SimplePath(simpleMetaPath, elementaryPaths);
     }
 
@@ -111,7 +126,7 @@ public class SimplePath extends SerialPath {
     }
 
     /**
-     * Erzeugt aus den übergebenen Elementarpfaden einen Gesamtpfad.
+     * Creates an overall path from the elementary paths passed.
      *
      * @param elementaryPaths
      * @return
@@ -120,21 +135,49 @@ public class SimplePath extends SerialPath {
         return create(Arrays.asList(elementaryPaths));
     }
 
+    /**
+     * @return the list of the {@link ElementaryPath}
+     */
     public List<ElementaryPath> getElementaryPaths() {
         return elementaryPaths;
+    }
+
+    /**
+     * @param pathIndex
+     * @return the contained {@link ElementaryMetaPath} with the given index
+     */
+    public ElementaryPath getPathAt(final int pathIndex) {
+        return elementaryPaths.get(pathIndex);
+    }
+
+    /**
+     * @return the first {@link ElementaryPath} from the list of all
+     *         ElementaryPaths or <code>null</code> if the list is empty
+     */
+    public ElementaryPath getFirstElementaryPath() {
+        if (elementaryPaths.isEmpty()) {
+            return null;
+        }
+        ElementaryPath firstElementaryPath = elementaryPaths.get(0);
+        return firstElementaryPath;
+    }
+
+    /**
+     * @return the last {@link ElementaryPath} from the list of all
+     *         ElementaryPaths or <code>null</code> if the list is empty
+     */
+    public ElementaryPath getLastElementaryPath() {
+        if (elementaryPaths.isEmpty()) {
+            return null;
+        }
+        int lastPathIndex = elementaryPaths.size() - 1;
+        ElementaryPath lastElementaryPath = elementaryPaths.get(lastPathIndex);
+        return lastElementaryPath;
     }
 
     @Override
     public SimpleMetaPath getMetaPath() {
         return simpleMetaPath;
-    }
-
-    /**
-     * @param pathStepIndex
-     * @return the path step with the given index
-     */
-    public ElementaryPath getPathStep(final int pathStepIndex) {
-        return elementaryPaths.get(pathStepIndex);
     }
 
 }

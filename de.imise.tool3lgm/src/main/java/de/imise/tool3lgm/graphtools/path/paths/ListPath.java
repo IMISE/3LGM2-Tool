@@ -46,7 +46,7 @@ public abstract class ListPath extends AbstractPath implements Iterable<Abstract
     /**
      * @return
      */
-    public int size() {
+    public int length() {
         return paths.size();
     }
 
