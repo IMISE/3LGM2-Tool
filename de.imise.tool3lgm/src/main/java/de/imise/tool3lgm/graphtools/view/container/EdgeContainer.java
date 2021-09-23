@@ -7,6 +7,7 @@ import static de.imise.tool3lgm.graphtools.metamodel.elements.DoubleMeaningEdge.
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Point;
 import java.awt.Polygon;
 import java.awt.Stroke;
 import java.awt.geom.Line2D;
@@ -32,28 +33,26 @@ import de.imise.tool3lgm.graphtools.view.graph.NodeRenderer;
  */
 public class EdgeContainer extends ElementContainer {
 
-    /**
-     * COMMENTME
-     */
-    protected int startx = 0, starty = 0, endx = 0, endy = 0;
+    /**  */
+    protected Point start = new Point(0, 0);
 
-    /**
-     * COMMENTME
-     */
-    public Polygon p1 = new Polygon(), p2 = new Polygon();
+    /**  */
+    protected Point end = new Point(0, 0);
 
-    /**
-     * COMMENTME
-     */
+    /**  */
+    public Polygon p1 = new Polygon();
+
+    /**  */
+    public Polygon p2 = new Polygon();
+
+    /**  */
     protected boolean over_lapping = false;
 
-    /**
-     * COMMENTME
-     */
+    /**  */
     protected double rad1 = 0, rad2 = 0;
 
     /**
-     * Liste aller BendpointContainer auf dieser Kante
+     * List of all {@link BendpointContainer} on this {@link EdgeContainer}
      */
     private final List<BendpointContainer> bendpoints = new ArrayList<>(1);
 
@@ -64,30 +63,30 @@ public class EdgeContainer extends ElementContainer {
     }
 
     /**
-     * @param neu
+     * @param edge
      * @param doc
      */
-    public EdgeContainer(final Edge neu, final GraphDocument doc) {
-        super(neu, doc);
+    public EdgeContainer(final Edge edge, final GraphDocument doc) {
+        super(edge, doc);
         computeBorderPoints();
     }
 
     /**
-     * @param neu
-     * @param l
+     * @param edge
+     * @param layout
      * @param doc
      */
-    public EdgeContainer(final Edge neu, final GraphElementLayout l, final GraphDocument doc) {
-        super(neu, l, doc);
+    public EdgeContainer(final Edge edge, final GraphElementLayout layout, final GraphDocument doc) {
+        super(edge, layout, doc);
         computeBorderPoints();
     }
 
     /**
-     * @param alt
+     * @param edgeContainer
      * @param doc
      */
-    public EdgeContainer(final EdgeContainer alt, final GraphDocument doc) {
-        super(alt, doc);
+    public EdgeContainer(final EdgeContainer edgeContainer, final GraphDocument doc) {
+        super(edgeContainer, doc);
         computeBorderPoints();
     }
 
@@ -96,10 +95,8 @@ public class EdgeContainer extends ElementContainer {
         EdgeContainer retVal;
         retVal = (EdgeContainer) super.clone(cloneModelElement, _doc);
         if (retVal != null) {
-            retVal.startx = startx;
-            retVal.starty = starty;
-            retVal.endx = endx;
-            retVal.endy = endy;
+            retVal.start = new Point(start);
+            retVal.end = new Point(end);
             retVal.over_lapping = over_lapping;
             retVal.p1 = new Polygon(p1.xpoints, p1.ypoints, 3);
             retVal.p2 = new Polygon(p2.xpoints, p2.ypoints, 3);
@@ -134,51 +131,22 @@ public class EdgeContainer extends ElementContainer {
 
     @Override
     public int getX() {
-        return Math.min(startx, endx) - 10;
+        return Math.min(start.x, end.x) - 10;
     }
 
     @Override
     public int getY() {
-        return Math.min(starty, endy) - 10;
+        return Math.min(start.y, end.y) - 10;
     }
 
     @Override
     public int getWidth() {
-        return Math.abs(endx - startx) + 20;
+        return Math.abs(end.x - start.x) + 20;
     }
 
     @Override
     public int getHeight() {
-        return Math.abs(endy - starty) + 20;
-    }
-
-    // Komplett aus Edge
-    /**
-     * @return
-     */
-    public final int getStartX() {
-        return startx;
-    }
-
-    /**
-     * @return
-     */
-    public final int getStartY() {
-        return starty;
-    }
-
-    /**
-     * @return
-     */
-    public final int getEndX() {
-        return endx;
-    }
-
-    /**
-     * @return
-     */
-    public final int getEndY() {
-        return endy;
+        return Math.abs(end.y - start.y) + 20;
     }
 
     /**
@@ -208,6 +176,39 @@ public class EdgeContainer extends ElementContainer {
             }
         }
         return null;
+    }
+
+    /**
+     * @param left_x
+     * @param left_y
+     * @param middle_x
+     * @param middle_y
+     * @param right_x
+     * @param right_y
+     * @param ec
+     * @param result Point for the result coordinates. If not <code>null</code>
+     *            this point will be returned. Otherwise a new Point is created.
+     * @return the given Point or if the given Point is <code>null</code> a new
+     *         Point
+     */
+    private Point getNextCoordinates(int left_x, int left_y, int right_x, int right_y, final ElementContainer ec, Point result) {
+        if (result == null) {
+            result = new Point();
+        }
+        result.x = left_x;
+        result.y = left_y;
+        while (Math.abs(left_x - right_x) > 1 || Math.abs(left_y - right_y) > 1) {
+            result.x = (left_x + right_x) / 2;
+            result.y = (left_y + right_y) / 2;
+            if (NodeRenderer.isInside(ec, result.x, result.y)) {
+                left_x = result.x;
+                left_y = result.y;
+            } else {
+                right_x = result.x;
+                right_y = result.y;
+            }
+        }
+        return result;
     }
 
     // Komplett aus Edge
@@ -240,124 +241,39 @@ public class EdgeContainer extends ElementContainer {
             }
         }
 
-        if (!bendpoints.isEmpty()) {
-            int i = bendpoints.size() - 1;
-            int left_x = ec1.getX();
-            int left_y = ec1.getY();
-            BendpointContainer bendpointContainer = bendpoints.get(0);
-            int right_x = bendpointContainer.getX();
-            int right_y = bendpointContainer.getY();
+        boolean hasBendpoints = !bendpoints.isEmpty();
 
-            int middle_x = right_x, middle_y = right_y;
+        int left_x = ec1.getX();
+        int left_y = ec1.getY();
+        //if there is no bendpoint then this container is the edge end container
+        ElementContainer firstBendpointContainer = hasBendpoints ? bendpoints.get(0) : ec2;
+        int firstBendpointcontainerX = firstBendpointContainer.getX();
+        int firstBendpointcontainerY = firstBendpointContainer.getY();
 
-            while (Math.abs(left_x - right_x) > 1 || Math.abs(left_y - right_y) > 1) {
-                middle_x = (left_x + right_x) / 2;
-                middle_y = (left_y + right_y) / 2;
-                if (NodeRenderer.isInside(ec1, middle_x, middle_y)) {
-                    left_x = middle_x;
-                    left_y = middle_y;
-                } else {
-                    right_x = middle_x;
-                    right_y = middle_y;
-                }
-            }
-            startx = middle_x;
-            starty = middle_y;
+        getNextCoordinates(left_x, left_y, firstBendpointcontainerX, firstBendpointcontainerY, ec1, start);
 
-            left_x = ec2.getX();
-            left_y = ec2.getY();
-            right_x = bendpoints.get(i).getX();
-            right_y = bendpoints.get(i).getY();
+        left_x = ec2.getX();
+        left_y = ec2.getY();
+        //if there is no bendpoint then this container is the edge start container
+        ElementContainer lastBendpointContainer = hasBendpoints ? bendpoints.get(bendpoints.size() - 1) : ec1;
+        int lastBendpointcontainerX = lastBendpointContainer.getX();
+        int lastBendpointcontainerY = lastBendpointContainer.getY();
 
-            middle_x = left_x;
-            middle_y = left_y;
+        getNextCoordinates(left_x, left_y, lastBendpointcontainerX, lastBendpointcontainerY, ec2, end);
 
-            while (Math.abs(left_x - right_x) > 1 || Math.abs(left_y - right_y) > 1) {
-                middle_x = (left_x + right_x) / 2;
-                middle_y = (left_y + right_y) / 2;
-                if (NodeRenderer.isInside(ec2, middle_x, middle_y)) {
-                    left_x = middle_x;
-                    left_y = middle_y;
-                } else {
-                    right_x = middle_x;
-                    right_y = middle_y;
-                }
-            }
-            endx = middle_x;
-            endy = middle_y;
-        } else {
-            int left_x = ec1.getX();
-            int left_y = ec1.getY();
-            int right_x = ec2.getX();
-            int right_y = ec2.getY();
+        rad2 = Math.atan2(end.y - lastBendpointcontainerY, end.x - lastBendpointcontainerX) + Math.PI / 2;
+        rad1 = Math.atan2(firstBendpointcontainerY - start.y, firstBendpointcontainerX - start.x) + Math.PI / 2;
 
-            int middle_x = left_x, middle_y = left_y;
-
-            while (Math.abs(left_x - right_x) > 1 || Math.abs(left_y - right_y) > 1) {
-                middle_x = (left_x + right_x) / 2;
-                middle_y = (left_y + right_y) / 2;
-                if (NodeRenderer.isInside(ec1, middle_x, middle_y)) {
-                    left_x = middle_x;
-                    left_y = middle_y;
-                } else {
-                    right_x = middle_x;
-                    right_y = middle_y;
-                }
-            }
-            startx = middle_x;
-            starty = middle_y;
-
-            left_x = ec2.getX();
-            left_y = ec2.getY();
-            right_x = ec1.getX();
-            right_y = ec1.getY();
-
-            while (Math.abs(left_x - right_x) > 1 || Math.abs(left_y - right_y) > 1) {
-                middle_x = (left_x + right_x) / 2;
-                middle_y = (left_y + right_y) / 2;
-                if (NodeRenderer.isInside(ec2, middle_x, middle_y)) {
-                    left_x = middle_x;
-                    left_y = middle_y;
-                } else {
-                    right_x = middle_x;
-                    right_y = middle_y;
-                }
-            }
-            endx = middle_x;
-            endy = middle_y;
-        }
-
-        int lstartx = 0;
-        int lstarty = 0;
-        int lendx = 0;
-        int lendy = 0;
-        if (bendpoints.size() > 0) {
-            int i = bendpoints.size() - 1;
-            lstartx = bendpoints.get(i).getX();
-            lstarty = bendpoints.get(i).getY();
-            rad2 = Math.atan2(endy - lstarty, endx - lstartx) + Math.PI / 2;
-            lendx = bendpoints.get(0).getX();
-            lendy = bendpoints.get(0).getY();
-            rad1 = Math.atan2(lendy - starty, lendx - startx) + Math.PI / 2;
-        } else {
-            rad2 = Math.atan2(endy - starty, endx - startx) + Math.PI / 2;
-            rad1 = rad2;
-        }
-
-        if (NodeRenderer.isInside(ec1, endx, endy) || NodeRenderer.isInside(ec2, startx, starty)) {
-            over_lapping = true;
-        } else {
-            over_lapping = false;
-        }
+        over_lapping = NodeRenderer.isInside(ec1, end.x, end.y) || NodeRenderer.isInside(ec2, start.x, start.y);
 
         p1.reset();
         p2.reset();
-        p1.addPoint(endx - 4, endy + 12);
-        p1.addPoint(endx, endy);
-        p1.addPoint(endx + 4, endy + 12);
-        p2.addPoint(startx + 4, starty - 12);
-        p2.addPoint(startx, starty);
-        p2.addPoint(startx - 4, starty - 12);
+        p1.addPoint(end.x - 4, end.y + 12);
+        p1.addPoint(end.x, end.y);
+        p1.addPoint(end.x + 4, end.y + 12);
+        p2.addPoint(start.x + 4, start.y - 12);
+        p2.addPoint(start.x, start.y);
+        p2.addPoint(start.x - 4, start.y - 12);
     }
 
     /**
@@ -451,14 +367,14 @@ public class EdgeContainer extends ElementContainer {
      */
     private int getBendpointInsertIndex(final int x, final int y, final int tolerance) {
         int index = -1;
-        int startx = getStartX();
-        int starty = getStartY();
+        int startx = start.x;
+        int starty = start.y;
         int bendpointCount = bendpoints.size();
         for (int i = 0; i <= bendpointCount; i++) {
             int endx = 0, endy = 0;
             if (i == bendpointCount) {
-                endx = getEndX();
-                endy = getEndY();
+                endx = end.x;
+                endy = end.y;
             } else {
                 endx = bendpoints.get(i).getX();
                 endy = bendpoints.get(i).getY();
@@ -650,14 +566,14 @@ public class EdgeContainer extends ElementContainer {
         boolean isHighLight = isHighLight();
 
         int startx = 0, starty = 0, endx = 0, endy = 0;
-        startx = getStartX();
-        starty = getStartY();
+        startx = start.x;
+        starty = start.y;
 
         int bendpointCount = bendpoints.size();
         for (int i = 0; i <= bendpointCount; i++) {
             if (i == bendpointCount) {
-                endx = getEndX();
-                endy = getEndY();
+                endx = end.x;
+                endy = end.y;
             } else {
                 endx = bendpoints.get(i).getX();
                 endy = bendpoints.get(i).getY();

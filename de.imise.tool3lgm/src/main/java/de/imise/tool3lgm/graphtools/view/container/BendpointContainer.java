@@ -22,7 +22,6 @@ public class BendpointContainer extends NodeContainer {
      *
      */
     public BendpointContainer() {
-        super();
     }
 
     public BendpointContainer(final Bendpoint kp, final GraphDocument doc) {
@@ -97,7 +96,7 @@ public class BendpointContainer extends NodeContainer {
             return null;
         }
         if (pos == 0) {
-            return new Point(edgeC.startx, edgeC.starty);
+            return new Point(edgeC.start); //we must copy the point!
         }
         BendpointContainer bc = edgeC.getBendpointContainer(pos - 1);
         return new Point(bc.getX(), bc.getY());
@@ -118,7 +117,7 @@ public class BendpointContainer extends NodeContainer {
             return null;
         }
         if (pos == edgeC.getBendpointContainerCount() - 1) {
-            return new Point(edgeC.endx, edgeC.endy);
+            return new Point(edgeC.end); //we must copy the point!
         }
         BendpointContainer bc = edgeC.getBendpointContainer(pos + 1);
         return new Point(bc.getX(), bc.getY());
