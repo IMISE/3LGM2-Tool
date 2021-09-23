@@ -40,10 +40,10 @@ public class EdgeContainer extends ElementContainer {
     protected Point end = new Point(0, 0);
 
     /**  */
-    public Polygon p1 = new Polygon();
+    public Polygon startArrow = new Polygon();
 
     /**  */
-    public Polygon p2 = new Polygon();
+    public Polygon endArrow = new Polygon();
 
     /**  */
     protected boolean over_lapping = false;
@@ -98,8 +98,8 @@ public class EdgeContainer extends ElementContainer {
             retVal.start = new Point(start);
             retVal.end = new Point(end);
             retVal.over_lapping = over_lapping;
-            retVal.p1 = new Polygon(p1.xpoints, p1.ypoints, 3);
-            retVal.p2 = new Polygon(p2.xpoints, p2.ypoints, 3);
+            retVal.startArrow = new Polygon(startArrow.xpoints, startArrow.ypoints, 3);
+            retVal.endArrow = new Polygon(endArrow.xpoints, endArrow.ypoints, 3);
             retVal.bendpoints.clear();
             if (_doc instanceof Szenario) {
                 for (int i = 0; i < bendpoints.size(); i++) {
@@ -211,7 +211,6 @@ public class EdgeContainer extends ElementContainer {
         return result;
     }
 
-    // Komplett aus Edge
     /**
      *
      */
@@ -266,14 +265,23 @@ public class EdgeContainer extends ElementContainer {
 
         over_lapping = NodeRenderer.isInside(ec1, end.x, end.y) || NodeRenderer.isInside(ec2, start.x, start.y);
 
-        p1.reset();
-        p2.reset();
-        p1.addPoint(end.x - 4, end.y + 12);
-        p1.addPoint(end.x, end.y);
-        p1.addPoint(end.x + 4, end.y + 12);
-        p2.addPoint(start.x + 4, start.y - 12);
-        p2.addPoint(start.x, start.y);
-        p2.addPoint(start.x - 4, start.y - 12);
+        createArrow(startArrow, end, true);
+        createArrow(endArrow, start, false);
+
+    }
+
+    /**
+     * @param point the position the arrow points to
+     * @param arrow the polygon to fill with the points that will be rendered to
+     *            an arrow
+     * @param forward
+     */
+    private static void createArrow(final Polygon arrow, final Point point, final boolean forward) {
+        int minus = forward ? 1 : -1;
+        arrow.reset();
+        arrow.addPoint(point.x - 4, point.y + 12 * minus);
+        arrow.addPoint(point.x, point.y);
+        arrow.addPoint(point.x + 4, point.y + 12 * minus);
     }
 
     /**
@@ -283,10 +291,11 @@ public class EdgeContainer extends ElementContainer {
         return over_lapping;
     }
 
-    /**
-     * COMMENTME
-     */
-    int x_shift = 0, y_shift = 0;
+    /**  */
+    int x_shift = 0;
+
+    /**  */
+    int y_shift = 0;
 
     /**
      * @param x
@@ -607,8 +616,8 @@ public class EdgeContainer extends ElementContainer {
                 if (backward) {
                     gc.rotate(rad1, startx, starty);
                     // try {
-                    g.drawPolygon(p2);
-                    g.fillPolygon(p2);
+                    g.drawPolygon(endArrow);
+                    g.fillPolygon(endArrow);
 
                     // System.err.println("1.) " + i + " von " + numKKnots); System.err.println(p2 + " " + CollectionUtils.toString(p2.xpoints) + " " + CollectionUtils.toString(p2.ypoints));
                     // System.err.println(ModelConstants.getFullBackwardMetaAssociationName(dlk.getClass()) + ": start=" + dlk.getStart() + " -> end=" + dlk.getEnd()); } catch (Exception e) {
@@ -632,8 +641,8 @@ public class EdgeContainer extends ElementContainer {
                 if (forward) {
                     gc.rotate(rad2, endx, endy);
                     // try {
-                    g.drawPolygon(p1);
-                    g.fillPolygon(p1);
+                    g.drawPolygon(startArrow);
+                    g.fillPolygon(startArrow);
 
                     // System.err.println("2.) " + i + " von " + numKKnots); System.err.println(p1 + " " + CollectionUtils.toString(p1.xpoints) + " " + CollectionUtils.toString(p1.ypoints));
                     // System.err.println(ModelConstants.getFullBackwardMetaAssociationName(dlk.getClass()) + ": start=" + dlk.getStart() + " -> end=" + dlk.getEnd()); } catch (Exception e) {
