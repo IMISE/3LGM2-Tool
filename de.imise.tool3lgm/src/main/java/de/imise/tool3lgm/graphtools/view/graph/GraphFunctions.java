@@ -1,16 +1,18 @@
 package de.imise.tool3lgm.graphtools.view.graph;
 
 import java.awt.Dimension;
+import java.awt.Point;
 
 import de.imise.tool3lgm.graphtools.metamodel.elements.CompositionEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
+import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
 
 /**
  * @author AXS (23.09.2021)
  */
-public class GraphFuntions {
+public class GraphFunctions {
 
     /**
      * Berechnet die Position untergeordneter Elemente auf einem
@@ -31,14 +33,14 @@ public class GraphFuntions {
                 }
             }
         }
-    
+
         int x = master.getX();
         int y = master.getY();
         int w = master.getWidth();
         int h = master.getHeight();
-    
+
         Dimension retVal = new Dimension(x, y);
-    
+
         switch (addictedCount % 36) {
         case 14:
             retVal.width = x - w / 8;
@@ -185,8 +187,55 @@ public class GraphFuntions {
             retVal.height = y - h / 2;
             break;
         }
-    
+
         return retVal;
+    }
+
+    /**
+     * @param ec1
+     * @param ec2
+     * @param result
+     * @return
+     */
+    public static Point getClosestCoordinatesOnBorderOfContainerToOther(final ElementContainer container, final ElementContainer other, final Point result) {
+        int left_x = container.getX();
+        int left_y = container.getY();
+        int right_x = other.getX();
+        int right_y = other.getY();
+        return getNextCoordinates(left_x, left_y, right_x, right_y, container, result);
+    }
+
+    /**
+     * @param left_x
+     * @param left_y
+     * @param middle_x
+     * @param middle_y
+     * @param right_x
+     * @param right_y
+     * @param ec
+     * @param result Point for the result coordinates. If not <code>null</code>
+     *            this point will be returned. Otherwise a new Point is created.
+     * @return the given Point or if the given Point is <code>null</code> a new
+     *         Point
+     */
+    private static Point getNextCoordinates(int left_x, int left_y, int right_x, int right_y, final ElementContainer ec, Point result) {
+        if (result == null) {
+            result = new Point();
+        }
+        result.x = left_x;
+        result.y = left_y;
+        while (Math.abs(left_x - right_x) > 1 || Math.abs(left_y - right_y) > 1) {
+            result.x = (left_x + right_x) / 2;
+            result.y = (left_y + right_y) / 2;
+            if (NodeRenderer.isInside(ec, result.x, result.y)) {
+                left_x = result.x;
+                left_y = result.y;
+            } else {
+                right_x = result.x;
+                right_y = result.y;
+            }
+        }
+        return result;
     }
 
 }

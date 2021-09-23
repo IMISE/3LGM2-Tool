@@ -3,6 +3,7 @@ package de.imise.tool3lgm.graphtools.view.container;
 import static de.imise.tool3lgm.graphtools.metamodel.elements.DoubleMeaningEdge.ConnectionState.BACKWARD;
 import static de.imise.tool3lgm.graphtools.metamodel.elements.DoubleMeaningEdge.ConnectionState.DOUBLE;
 import static de.imise.tool3lgm.graphtools.metamodel.elements.DoubleMeaningEdge.ConnectionState.FORWARD;
+import static de.imise.tool3lgm.graphtools.view.graph.GraphFunctions.getClosestCoordinatesOnBorderOfContainerToOther;
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -179,50 +180,9 @@ public class EdgeContainer extends ElementContainer {
     }
 
     /**
-     * @param left_x
-     * @param left_y
-     * @param middle_x
-     * @param middle_y
-     * @param right_x
-     * @param right_y
-     * @param ec
-     * @param result Point for the result coordinates. If not <code>null</code>
-     *            this point will be returned. Otherwise a new Point is created.
-     * @return the given Point or if the given Point is <code>null</code> a new
-     *         Point
-     */
-    private Point getNextCoordinates(int left_x, int left_y, int right_x, int right_y, final ElementContainer ec, Point result) {
-        if (result == null) {
-            result = new Point();
-        }
-        result.x = left_x;
-        result.y = left_y;
-        while (Math.abs(left_x - right_x) > 1 || Math.abs(left_y - right_y) > 1) {
-            result.x = (left_x + right_x) / 2;
-            result.y = (left_y + right_y) / 2;
-            if (NodeRenderer.isInside(ec, result.x, result.y)) {
-                left_x = result.x;
-                left_y = result.y;
-            } else {
-                right_x = result.x;
-                right_y = result.y;
-            }
-        }
-        return result;
-    }
-
-    /**
      *
      */
     public void computeBorderPoints() {
-        // String h = getID();
-        // if (h.equals("KAN_1061988438094_1409") || h.equals("KAN_1061988438094_1480") || h.equals("KAN_1061988438094_1426"))
-        // System.err.println("jetzte");
-
-        //		 if (ModelConstants.layerFor(getEdge().getClass()) == 4) System.err.println("EdgeContainer -> computeBorderPoints(): " + getGraphDocument()); for (ElementContainer c :
-        //		 getEdge().getContainerTable().values()) { EdgeContainer ec = (EdgeContainer) c; System.err.println(ec.getGraphDocument() + " " + ec.getID() + " " + ec.knickpunkte + " " +
-        //		 ec.getEdge() + " " + ModelConstants.getFullBackwardMetaAssociationName(ec.getEdge().getClass()) + " " + ec.hashCode()); }
-
         ElementContainer ec1 = getStartElementContainer();
         ElementContainer ec2 = getEndElementContainer();
 
@@ -242,26 +202,16 @@ public class EdgeContainer extends ElementContainer {
 
         boolean hasBendpoints = !bendpoints.isEmpty();
 
-        int left_x = ec1.getX();
-        int left_y = ec1.getY();
         //if there is no bendpoint then this container is the edge end container
         ElementContainer firstBendpointContainer = hasBendpoints ? bendpoints.get(0) : ec2;
-        int firstBendpointcontainerX = firstBendpointContainer.getX();
-        int firstBendpointcontainerY = firstBendpointContainer.getY();
+        getClosestCoordinatesOnBorderOfContainerToOther(ec1, firstBendpointContainer, start);
 
-        getNextCoordinates(left_x, left_y, firstBendpointcontainerX, firstBendpointcontainerY, ec1, start);
-
-        left_x = ec2.getX();
-        left_y = ec2.getY();
         //if there is no bendpoint then this container is the edge start container
         ElementContainer lastBendpointContainer = hasBendpoints ? bendpoints.get(bendpoints.size() - 1) : ec1;
-        int lastBendpointcontainerX = lastBendpointContainer.getX();
-        int lastBendpointcontainerY = lastBendpointContainer.getY();
+        getClosestCoordinatesOnBorderOfContainerToOther(ec2, lastBendpointContainer, end);
 
-        getNextCoordinates(left_x, left_y, lastBendpointcontainerX, lastBendpointcontainerY, ec2, end);
-
-        rad2 = Math.atan2(end.y - lastBendpointcontainerY, end.x - lastBendpointcontainerX) + Math.PI / 2;
-        rad1 = Math.atan2(firstBendpointcontainerY - start.y, firstBendpointcontainerX - start.x) + Math.PI / 2;
+        rad2 = Math.atan2(end.y - lastBendpointContainer.getY(), end.x - lastBendpointContainer.getX()) + Math.PI / 2;
+        rad1 = Math.atan2(firstBendpointContainer.getY() - start.y, firstBendpointContainer.getX() - start.x) + Math.PI / 2;
 
         over_lapping = NodeRenderer.isInside(ec1, end.x, end.y) || NodeRenderer.isInside(ec2, start.x, start.y);
 

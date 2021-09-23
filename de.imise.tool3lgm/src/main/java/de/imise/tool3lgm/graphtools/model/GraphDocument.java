@@ -125,7 +125,7 @@ import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout;
 import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout.TextAlignmentHTML;
 import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout.TextPositionHorizontal;
 import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout.TextPositionVertical;
-import de.imise.tool3lgm.graphtools.view.graph.GraphFuntions;
+import de.imise.tool3lgm.graphtools.view.graph.GraphFunctions;
 import de.imise.tool3lgm.graphtools.view.graph.GraphViewParameter;
 import de.imise.tool3lgm.graphtools.view.graph.Shape;
 import de.imise.tool3lgm.gui.MainFrame;
@@ -4005,7 +4005,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
         //slaveContainer ist null, wenn das untergeordnete Element unique ist und keinen Grafikcontainer in jedem Teilmodell hat
         if (slaveContainer != null) {
             szen.start_transaction(pid);
-            Dimension pos = GraphFuntions.calculateAddictPosition(masterContainer);
+            Dimension pos = GraphFunctions.calculateAddictPosition(masterContainer);
             int slaveX = slaveContainer.getX();
             int slaveY = slaveContainer.getY();
             int slaveWidth = slaveContainer.getWidth();
