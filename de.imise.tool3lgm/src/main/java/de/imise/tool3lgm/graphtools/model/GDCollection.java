@@ -1411,7 +1411,7 @@ public class GDCollection extends UserFieldTarget implements MetaModelSpecific {
             return null;
         }
         boolean oldAutomaticMode = setAutomaticMode(true);
-        createInitialAddicted(me, pid);
+        createInitialSubordinates(me, pid);
         setAutomaticMode(oldAutomaticMode);
         mainDoc.finish_transaction(pid);
         mainDoc.distributeEvent(DATA_CHANGED, pid);
@@ -1425,7 +1425,7 @@ public class GDCollection extends UserFieldTarget implements MetaModelSpecific {
      * @param me
      * @param pid
      */
-    public void createInitialAddicted(final ModelElement me, final int pid) {
+    public void createInitialSubordinates(final ModelElement me, final int pid) {
         Class<? extends ModelElement> elementClass = me.getClass();
         for (Class<? extends Edge> subTypeEdgeClass : metaModel.getInitialSubtypes(elementClass)) {
             Class<? extends ModelElement> subType = CoreMetaModel.isStartClass(subTypeEdgeClass, elementClass) ? getEndClass(subTypeEdgeClass) : getStartClass(subTypeEdgeClass);

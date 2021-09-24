@@ -6,7 +6,7 @@ import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.MAX_LAYER_IN
 import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.MIN_LAYER_INDEX;
 import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.NO_LAYER;
 import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction.BACKWARD;
-import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_ADDICT;
+import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_SUBORDINATE;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_ADD_ELEMENT_TO_SUBMODEL;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_DELETE_FROM_SUBMODEL;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_LINK_ELEMENT_TO_SUBMODEL;
@@ -903,11 +903,11 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
             }
             break;
         }
-        case MODEL_ACTION_ADDICT: {
-            addict(argv[0], argv[1], argv[2], argv[3], pid);
+        case MODEL_ACTION_SUBORDINATE: {
+            subordinate(argv[0], argv[1], argv[2], argv[3], pid);
             break;
         }
-        case MODEL_ACTION_CREATE_ADDICTED: {
+        case MODEL_ACTION_CREATE_SUBORDINATED: {
             GraphDocument doc = gdcoll.getGraphDocumentCoded(argv[0]);
             ModelElement master = doc.findElementCoded(argv[1]);
 
@@ -922,7 +922,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
             } catch (Exception e) {
                 //Argument 4 SubType is optional
             }
-            createAddicted(doc, master, compositionEdgeClass, slaveClass, subType, pid);
+            createSubordinated(doc, master, compositionEdgeClass, slaveClass, subType, pid);
             break;
         }
         case MODEL_ACTION_SET_ELEMENT_COLOR: {
@@ -3853,7 +3853,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
      * @param pid
      * @return
      */
-    private static final ModelElement createAddicted(final GraphDocument doc, final ModelElement master, final Class<? extends CompositionEdge> edgeClass, final Class<? extends ModelElement> slaveClass, final SubType subType, final String slaveName,
+    private static final ModelElement createSubordinated(final GraphDocument doc, final ModelElement master, final Class<? extends CompositionEdge> edgeClass, final Class<? extends ModelElement> slaveClass, final SubType subType, final String slaveName,
             final String slaveID, final int pid) {
         if (master == null || edgeClass == null || slaveClass == null) {
             return null;
@@ -3890,7 +3890,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
                 szen.addElementToSzenario(szenID, slaveContainer, pid);
                 times1.add(System.currentTimeMillis() - l);
                 l = System.currentTimeMillis();
-                szen.addict(master, slave, edgeClass, pid);
+                szen.subordinate(master, slave, edgeClass, pid);
                 times2.add(System.currentTimeMillis() - l);
             }
         }
@@ -3914,9 +3914,9 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
      * @param pid
      * @return
      */
-    public static final ModelElement createAddicted(final GraphDocument doc, final ModelElement master, final Class<? extends CompositionEdge> edgeClass, final Class<? extends ModelElement> slaveClass, final SubType subType, final String slaveName,
+    public static final ModelElement createSubordinated(final GraphDocument doc, final ModelElement master, final Class<? extends CompositionEdge> edgeClass, final Class<? extends ModelElement> slaveClass, final SubType subType, final String slaveName,
             final int pid) {
-        return createAddicted(doc, master, edgeClass, slaveClass, subType, slaveName, GDCommands.INVALID_ID_STRING, pid);
+        return createSubordinated(doc, master, edgeClass, slaveClass, subType, slaveName, GDCommands.INVALID_ID_STRING, pid);
     }
 
     /**
@@ -3927,8 +3927,8 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
      * @param pid
      * @return
      */
-    public static final ModelElement createAddicted(final GraphDocument doc, final ModelElement master, final Class<? extends CompositionEdge> edgeClass, final Class<? extends ModelElement> slaveClass, final int pid) {
-        return createAddicted(doc, master, edgeClass, slaveClass, null, pid);
+    public static final ModelElement createSubordinated(final GraphDocument doc, final ModelElement master, final Class<? extends CompositionEdge> edgeClass, final Class<? extends ModelElement> slaveClass, final int pid) {
+        return createSubordinated(doc, master, edgeClass, slaveClass, null, pid);
     }
 
     /**
@@ -3940,8 +3940,8 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
      * @param pid
      * @return
      */
-    public static final ModelElement createAddicted(final GraphDocument doc, final ModelElement master, final Class<? extends CompositionEdge> edgeClass, final Class<? extends ModelElement> slaveClass, final SubType subType, final int pid) {
-        return createAddicted(doc, master, edgeClass, slaveClass, subType, GDCommands.INVALID_NAME, pid);
+    public static final ModelElement createSubordinated(final GraphDocument doc, final ModelElement master, final Class<? extends CompositionEdge> edgeClass, final Class<? extends ModelElement> slaveClass, final SubType subType, final int pid) {
+        return createSubordinated(doc, master, edgeClass, slaveClass, subType, GDCommands.INVALID_NAME, pid);
     }
 
     /**
@@ -3951,8 +3951,8 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
      * @param pid
      * @return
      */
-    public final Edge addict(final ModelElement master, final ModelElement slave, final Class<? extends CompositionEdge> edgeClass, final int pid) {
-        return addict(id, master, slave, edgeClass, pid);
+    public final Edge subordinate(final ModelElement master, final ModelElement slave, final Class<? extends CompositionEdge> edgeClass, final int pid) {
+        return subordinate(id, master, slave, edgeClass, pid);
     }
 
     /**
@@ -3963,9 +3963,9 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
      * @param pid
      * @return
      */
-    public final Edge addict(final String szenID, final ModelElement master, final ModelElement slave, final Class<? extends CompositionEdge> edgeClass, final int pid) {
+    public final Edge subordinate(final String szenID, final ModelElement master, final ModelElement slave, final Class<? extends CompositionEdge> edgeClass, final int pid) {
         String simpleEdgeClassName = edgeClass.getSimpleName();
-        return addict(szenID, simpleEdgeClassName, master, slave, pid);
+        return subordinate(szenID, simpleEdgeClassName, master, slave, pid);
     }
 
     /**
@@ -3976,10 +3976,10 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
      * @param pid
      * @return
      */
-    public final Edge addict(final String szenID, final String edgeClassName, final String masterID, final String slaveID, final int pid) {
+    public final Edge subordinate(final String szenID, final String edgeClassName, final String masterID, final String slaveID, final int pid) {
         ModelElement master = findElementCoded(masterID);
         ModelElement slave = findElementCoded(slaveID);
-        return addict(szenID, edgeClassName, master, slave, pid);
+        return subordinate(szenID, edgeClassName, master, slave, pid);
     }
 
     /**
@@ -3990,7 +3990,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
      * @param pid
      * @return
      */
-    protected final Edge addict(final String szenID, final String edgeClassName, final ModelElement masterElement, final ModelElement slaveElement, final int pid) {
+    protected final Edge subordinate(final String szenID, final String edgeClassName, final ModelElement masterElement, final ModelElement slaveElement, final int pid) {
         if (masterElement == null || slaveElement == null) {
             return null;
         }
@@ -4015,12 +4015,12 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
         //slaveContainer ist null, wenn das untergeordnete Element unique ist und keinen Grafikcontainer in jedem Teilmodell hat
         if (slaveContainer != null) {
             szen.start_transaction(pid);
-            Dimension pos = GraphFunctions.calculateAddictPosition(masterContainer);
+            Dimension pos = GraphFunctions.calculateSubordinatedPosition(masterContainer);
             int slaveX = slaveContainer.getX();
             int slaveY = slaveContainer.getY();
             int slaveWidth = slaveContainer.getWidth();
             int slaveHeight = slaveContainer.getHeight();
-            addRedo(pid, MODEL_ACTION_ADDICT, szenID, edgeClassName, masterElement, slaveElement);
+            addRedo(pid, MODEL_ACTION_SUBORDINATE, szenID, edgeClassName, masterElement, slaveElement);
             addUndo(pid, MODEL_ACTION_SET_ELEMENT_POSITION, szenID, slaveElement, slaveX, slaveY, slaveWidth, slaveHeight);
             slaveContainer.setCoordinates(pos.width, pos.height, slaveWidth, slaveHeight);
             raiseSlaves(masterContainer, pid);

@@ -332,7 +332,7 @@ public class LayerContainer extends ElementContainer {
                 int y = slaveC.getY();
                 if (x == 0 && y == 0) {
                     Class<? extends CompositionEdge> compositionEdgeClass = compositionEdge.getClass();
-                    doc.addict(me, slave, compositionEdgeClass, pid);
+                    doc.subordinate(me, slave, compositionEdgeClass, pid);
                 }
             }
         }

@@ -22,14 +22,14 @@ public class GraphFunctions {
      *            positioniert werden sollen
      * @return
      */
-    public static final Dimension calculateAddictPosition(final NodeContainer master) {
-        int addictedCount = -1;
+    public static final Dimension calculateSubordinatedPosition(final NodeContainer master) {
+        int subordinatedCount = -1;
         ModelElement me = master.getElement();
         for (Edge edge : me.getEdges()) {
             if (edge instanceof CompositionEdge) {
                 ModelElement slave = ((CompositionEdge) edge).getSlave();
                 if (slave != me && slave.isPaintable()) {
-                    addictedCount++;
+                    subordinatedCount++;
                 }
             }
         }
@@ -41,7 +41,7 @@ public class GraphFunctions {
 
         Dimension retVal = new Dimension(x, y);
 
-        switch (addictedCount % 36) {
+        switch (subordinatedCount % 36) {
         case 14:
             retVal.width = x - w / 8;
             retVal.height = y - h / 2;

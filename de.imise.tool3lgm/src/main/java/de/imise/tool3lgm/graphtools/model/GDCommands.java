@@ -21,9 +21,9 @@ public enum GDCommands implements ActionSource {
     MODEL_ACTION_DELETE_FROM_MODEL,
     MODEL_ACTION_LINK,
     MODEL_ACTION_UNLINK,
-    MODEL_ACTION_CREATE_ADDICTED, //Das hier ist eine Kombination aus MODEL_ACTION_CREATE_NODE und MODEL_ACTION_ADDICT. Hat keinen ResourceKey, weil die Actions nach dem Element benannt sind, das man unterordnet
-    MODEL_ACTION_CREATE_INSTANCIATION, //Das hier ist eine Kombination aus MODEL_ACTION_CREATE_NODE und MODEL_ACTION_ADDICT. Hat einen ResourceKey, weil die Actions nach dem Element benannt sind, das man unterordnet
-    MODEL_ACTION_ADDICT, //das ist eine interne ModelAction, d.h. sie wird nicht direkt vom Benutzer ausgelöst sondern nur über eine andere ModelAction
+    MODEL_ACTION_CREATE_SUBORDINATED, //Das hier ist eine Kombination aus MODEL_ACTION_CREATE_NODE und MODEL_ACTION_SUBORDINATE. Hat keinen ResourceKey, weil die Actions nach dem Element benannt sind, das man unterordnet
+    MODEL_ACTION_CREATE_INSTANCIATION, //Das hier ist eine Kombination aus MODEL_ACTION_CREATE_NODE und MODEL_ACTION_SUBORDINATE. Hat einen ResourceKey, weil die Actions nach dem Element benannt sind, das man unterordnet
+    MODEL_ACTION_SUBORDINATE, //das ist eine interne ModelAction, d.h. sie wird nicht direkt vom Benutzer ausgelöst sondern nur über eine andere ModelAction
     MODEL_ACTION_SWAP_EDGE_POSITIONS,
     //9
     MODEL_ACTION_SET_ELEMENT_NAME,

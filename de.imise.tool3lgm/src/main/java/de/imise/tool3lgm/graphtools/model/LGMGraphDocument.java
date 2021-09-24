@@ -861,9 +861,9 @@ public class LGMGraphDocument extends GraphDocument {
         if (CompositionEdge.class.isAssignableFrom(edgeClass)) {
             Class<? extends CompositionEdge> compositionEdgeClass = edgeClass.asSubclass(CompositionEdge.class);
             if (elementaryMetaPath.hasDirectionForward()) {
-                addict(startElement, endElement, compositionEdgeClass, pid);
+                subordinate(startElement, endElement, compositionEdgeClass, pid);
             } else {
-                addict(endElement, startElement, compositionEdgeClass, pid);
+                subordinate(endElement, startElement, compositionEdgeClass, pid);
             }
         }
         if (edge == null) {
