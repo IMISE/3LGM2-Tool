@@ -18,8 +18,8 @@ import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.path.metapaths.DifferenceMetaPath;
 import de.imise.tool3lgm.graphtools.path.metapaths.ElementaryMetaPath;
 import de.imise.tool3lgm.graphtools.path.metapaths.ElementaryMetaPath.Type;
-import de.imise.tool3lgm.graphtools.path.metapaths.MetaPath;
 import de.imise.tool3lgm.graphtools.path.metapaths.ListMetaPath;
+import de.imise.tool3lgm.graphtools.path.metapaths.MetaPath;
 import de.imise.tool3lgm.graphtools.path.metapaths.ParallelMetaPath;
 import de.imise.tool3lgm.graphtools.path.metapaths.SectionMetaPath;
 import de.imise.tool3lgm.graphtools.path.metapaths.SerialMetaPath;
@@ -496,7 +496,7 @@ public class PathResultTreeModel extends DefaultTreeModel {
             List<PathResultTreeNode> actStartNodes = new ArrayList<>(resultNodes);
             resultNodes.clear();
             for (PathResultTreeNode actStartNode : actStartNodes) {
-                List<PathResultTreeNode> subMetaPathEndNodes = null;
+                List<PathResultTreeNode> subMetaPathEndNodes;
                 subMetaPathEndNodes = addPath(actStartNode, subMetaPath, subMetaPath instanceof ElementaryMetaPath ? isSubStep : true);
                 if (subMetaPathEndNodes == null || subMetaPathEndNodes.size() == 0) {
                     if (!keepIncompleteBranches) {
