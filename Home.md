@@ -40,7 +40,7 @@ For questions about the 3LGM² construction kit, please contact:
 The authors of the 3LGM² kit are:
 
 * Prof. Alfred Winter
-* Dr. MedInf. Thomas Wendt
+* Dr. Thomas Wendt
 * Alexander Strübing
 * Frank Stephan
 * Heiko Böhme
