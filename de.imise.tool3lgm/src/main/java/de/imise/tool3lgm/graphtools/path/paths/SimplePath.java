@@ -180,4 +180,21 @@ public class SimplePath extends SerialPath {
         return simpleMetaPath;
     }
 
+    /**
+     * TODO: this function and some others should be treated analogous to
+     * metapaths
+     *
+     * @return the path in the other direction
+     */
+    public SimplePath getOtherDirection() {
+        List<ElementaryPath> elementaryPaths = new ArrayList<>();
+        for (int i = this.elementaryPaths.size() - 1; i >= 0; i--) {
+            ElementaryPath elementaryPath = this.elementaryPaths.get(i);
+            elementaryPath = elementaryPath.getOtherDirection();
+            elementaryPaths.add(elementaryPath);
+        }
+        SimpleMetaPath metaPath = simpleMetaPath.getOtherDirection();
+        return new SimplePath(metaPath, elementaryPaths);
+    }
+
 }

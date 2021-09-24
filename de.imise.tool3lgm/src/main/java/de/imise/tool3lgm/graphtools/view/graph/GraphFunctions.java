@@ -192,6 +192,15 @@ public class GraphFunctions {
     }
 
     /**
+     * @param container
+     * @param other
+     * @return
+     */
+    public static Point getClosestCoordinatesOnBorderOfContainerToOther(final ElementContainer container, final ElementContainer other) {
+        return getClosestCoordinatesOnBorderOfContainerToOther(container, other, null);
+    }
+
+    /**
      * @param ec1
      * @param ec2
      * @param result

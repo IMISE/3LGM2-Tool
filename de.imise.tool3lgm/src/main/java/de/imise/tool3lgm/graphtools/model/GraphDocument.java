@@ -2558,6 +2558,16 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
      * @param nc
      * @param x
      * @param y
+     * @param pid
+     */
+    public final void moveNodeContainer(final NodeContainer nc, final int x, final int y, final int pid) {
+        moveNodeContainer(nc, x, y, nc.getWidth(), nc.getHeight(), pid);
+    }
+
+    /**
+     * @param nc
+     * @param x
+     * @param y
      * @param width
      * @param height
      * @param pid
