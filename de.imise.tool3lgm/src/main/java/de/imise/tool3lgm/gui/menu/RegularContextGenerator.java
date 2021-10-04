@@ -11,7 +11,7 @@ import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_ADOPT_S
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_ADOPT_SAME_FONT;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_ADOPT_SAME_TRANSPARENCY;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_COMMAND_LINE;
-import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_CREATE_ADDICTED;
+import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_CREATE_SUBORDINATED;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_CREATE_NODE;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_DELETE_FROM_MODEL;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_DELETE_FROM_SUBMODEL;
@@ -327,7 +327,7 @@ public class RegularContextGenerator extends ElementSelectionContextGenerator im
             Class<? extends CompositionEdge> compositionClass = slavePair.getFirstItem();
             Class<? extends ModelElement> slaveClass = slavePair.getSecondItem();
             String slaveClassName = slaveClass.getSimpleName();
-            JMenuItem item = getCreateAddictedItem(slaveClassName, doc, me, compositionClass, slaveClass);
+            JMenuItem item = getCreateSubordinatedItem(slaveClassName, doc, me, compositionClass, slaveClass);
             Pair<JMenuItem, Class<? extends ModelElement>> itemAndClassPair = new Pair<>(item, slaveClass);
             itemAndClassPairs.add(itemAndClassPair);
         }
@@ -366,9 +366,9 @@ public class RegularContextGenerator extends ElementSelectionContextGenerator im
      * @param subType
      * @return
      */
-    private JMenuItem getCreateAddictedItem(final String dispayableNameOrResKey, final GraphDocument doc, final ModelElement master, final Class<? extends CompositionEdge> compositionClass, final Class<? extends ModelElement> slaveClass) {
+    private JMenuItem getCreateSubordinatedItem(final String dispayableNameOrResKey, final GraphDocument doc, final ModelElement master, final Class<? extends CompositionEdge> compositionClass, final Class<? extends ModelElement> slaveClass) {
         String argumentsString = getArgumentsString(doc, master, compositionClass, slaveClass);
-        JMenuItem item = getItem(dispayableNameOrResKey, MODEL_ACTION_CREATE_ADDICTED, argumentsString);
+        JMenuItem item = getItem(dispayableNameOrResKey, MODEL_ACTION_CREATE_SUBORDINATED, argumentsString);
         item.setEnabled(master.countConnections(compositionClass) < CoreMetaModel.getMaxMasterToSlaveCardinality(compositionClass));
         return item;
     }

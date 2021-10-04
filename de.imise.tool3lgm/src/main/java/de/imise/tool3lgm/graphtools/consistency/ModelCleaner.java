@@ -340,7 +340,7 @@ public class ModelCleaner {
                 continue;
             }
             for (ModelElement me : gdcoll.getMainDoc().getModelItems(elementClass, false)) {
-                gdcoll.createInitialAddicted(me, STANDARD_PID);
+                gdcoll.createInitialSubordinates(me, STANDARD_PID);
             }
         }
 

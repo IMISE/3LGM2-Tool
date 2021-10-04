@@ -140,7 +140,7 @@ public class MutipleCompositionPanel extends AbstractPathConnectionTreePanel {
                 mainDoc.select(ec, pid);
                 Class<? extends Edge> lastEdgeClassInPath = getLastEdgeClassInPath();
                 Class<? extends CompositionEdge> lastEdgeClassInPathAsComposition = lastEdgeClassInPath.asSubclass(CompositionEdge.class);
-                GraphDocument.createAddicted(selectedDoc, me, lastEdgeClassInPathAsComposition, searchElementClass, pid);
+                GraphDocument.createSubordinated(selectedDoc, me, lastEdgeClassInPathAsComposition, searchElementClass, pid);
                 mainDoc.select(ec, pid);
             }
         };

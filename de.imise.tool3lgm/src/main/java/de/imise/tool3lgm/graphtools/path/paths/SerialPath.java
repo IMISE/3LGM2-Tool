@@ -58,7 +58,7 @@ public class SerialPath extends ListPath {
         if (startElement != firstPathStartElement) {
             return false;
         }
-        int pathCount = size();
+        int pathCount = length();
         //endElement fits last path endElement?
         AbstractPath lastPath = get(pathCount - 1);
         if (lastPath == null) {
@@ -106,7 +106,7 @@ public class SerialPath extends ListPath {
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        int pathCount = size();
+        int pathCount = length();
         for (int i = 0; i < pathCount; i++) {
             AbstractPath path = get(i);
             sb.append(path);

@@ -51,9 +51,9 @@ public class ModelConverterUtils {
         int counter = setIDOrJoinElementIfEqualsExists(gdcoll, middleElement, null, id, path, 0);
         middleElement = getMiddleElement(path); // if joined -> middle element
                                                 // has changed
-        int pathLength = path.size();
+        int pathLength = path.length();
         for (int i = 0; i < pathLength; i++) {
-            ElementaryPath pathStep = path.getPathStep(i);
+            ElementaryPath pathStep = path.getPathAt(i);
             // edge
             Edge edge = pathStep.getEdge();
             // Do not join edges, because the same kind of edge in the path can
@@ -77,11 +77,11 @@ public class ModelConverterUtils {
      * @param path
      */
     static void joinSubordinatedBetweenEqualsElements(final SimplePath path) {
-        int pathLength = path.size();
+        int pathLength = path.length();
         GDCollection gdcoll = null;
         for (int i = 0; i < pathLength - 1; i++) {
-            ElementaryPath pathStep = path.getPathStep(i);
-            ElementaryPath nextPathStep = path.getPathStep(i + 1);
+            ElementaryPath pathStep = path.getPathAt(i);
+            ElementaryPath nextPathStep = path.getPathAt(i + 1);
             Edge edge = pathStep.getEdge();
             Edge nextPathStepEdge = nextPathStep.getEdge();
             ModelElement slaveElementCandidate = pathStep.getEndElement();
@@ -217,9 +217,9 @@ public class ModelConverterUtils {
      * @return
      */
     private static ModelElement getMiddleElement(final SimplePath path) {
-        int pathLength = path.size();
+        int pathLength = path.length();
         int middlePathStep = pathLength / 2;
-        ElementaryPath pathStep = path.getPathStep(middlePathStep);
+        ElementaryPath pathStep = path.getPathAt(middlePathStep);
         // even path step count -> node in the middle; odd pathStepCount -> edge
         // in the middle
         ModelElement middleElement = pathLength % 2 == 0 ? pathStep.getStartElement() : pathStep.getEdge();

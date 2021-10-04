@@ -145,16 +145,16 @@ public abstract class ElementSelectionContextGenerator extends ContextGenerator 
     }
 
     /**
-     * Liefert eine Action zu einem SimpleMetaPath der zwischen dem zuletzt
-     * selektierten Element und allen zum Endelement des Pfades passenden
-     * anderen übergebenen Elementen angelegt wird.
+     * Returns an action for a SimpleMetaPath that is created between the last
+     * selected element and all other passed elements matching the end element
+     * of the path.
      *
      * @param startElement
-     * @param path2create Pfad der angelegt werden soll
-     * @param endElements Elemente, zu denen der Pfad vom zuletzt selektierten
-     *            Element aus angelegt werden soll
-     * @param name Name der Action
-     * @param icon Icon der Sction
+     * @param path2create Path that should be created
+     * @param endElements Elements to which the path is to be created from the
+     *            last selected element
+     * @param name Name of the action
+     * @param icon Icon of the action
      * @return
      */
     private static Action createPathAction(final ModelElement startElement, final SimpleMetaPath path2create, final Collection<ModelElement> endElements, final String name, final Icon icon) {
