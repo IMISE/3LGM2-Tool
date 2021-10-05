@@ -842,7 +842,20 @@ public abstract class CollectionUtils {
      */
     @SafeVarargs
     public static <T> Iterable<T> getCommonIterable(final Iterable<? extends T>... iterables) {
-        return () -> new Iterator<T>() {
+        return () -> getCommonIterator(iterables);
+    }
+
+    /**
+     * An Iterator that returns all elements of all single iterables in the
+     * given order.
+     *
+     * @param <T>
+     * @param iterables
+     * @return
+     */
+    @SafeVarargs
+    public static <T> Iterator<T> getCommonIterator(final Iterable<? extends T>... iterables) {
+        return new Iterator<T>() {
 
             int currentIterableIndex = 0;
 
@@ -888,7 +901,15 @@ public abstract class CollectionUtils {
      * @return
      */
     public static <T> Iterable<T> getCommonIterable(final List<Iterable<T>> iterables) {
-        return () -> new Iterator<T>() {
+        return () -> getCommonIterator(iterables);
+    }
+
+    /**
+     * @param iterables
+     * @return
+     */
+    public static <T> Iterator<T> getCommonIterator(final List<Iterable<T>> iterables) {
+        return new Iterator<T>() {
 
             int currentIterableIndex = 0;
 

@@ -400,7 +400,7 @@ public class EdgeContainer extends ElementContainer {
      * @return
      */
     public Iterable<BendpointContainer> iterateBendpointContainers() {
-        return bendpoints;
+        return () -> bendpoints.iterator();
     }
 
     /**

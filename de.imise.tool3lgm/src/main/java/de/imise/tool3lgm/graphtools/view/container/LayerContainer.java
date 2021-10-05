@@ -16,6 +16,7 @@ import java.awt.Graphics2D;
 import java.awt.Stroke;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 
 import de.imise.tool3lgm.Static;
@@ -38,9 +39,12 @@ import de.imise.util.ReflectionUtils;
 import de.imise.util.collections.CollectionUtils;
 
 /**
+ * Container for all elements on a layer. The iterable returns all elements on
+ * this layer (first all nodes, then all edges and as last all bendpoints).
+ *
  * @author Thomas (15.06.2003), AXS
  */
-public class LayerContainer extends ElementContainer {
+public class LayerContainer extends ElementContainer implements Iterable<ElementContainer> {
 
     /**
      *
@@ -284,8 +288,7 @@ public class LayerContainer extends ElementContainer {
      * then this ensures that the slaves are drawn in the order of all elements
      * above the master and not obscured by it.
      *
-     * @param ec the container which can have
-     *            slave elements that must be raised
+     * @param ec the container which can have slave elements that must be raised
      */
     public final void raiseSlaves(final ElementContainer ec, final int pid) {
         if (!(ec instanceof NodeContainer)) {
@@ -1054,6 +1057,14 @@ public class LayerContainer extends ElementContainer {
         return layerNumber;
     }
 
+    @Override
+    public Iterator<ElementContainer> iterator() {
+        return CollectionUtils.getCommonIterator(graphNodeContainers, edgeContainers, bendpointContainers);
+    }
+
+    /**
+     *
+     */
     public void printStatistics() {
         System.err.println("Layer " + layerNumber + "    nodeContainer: " + graphNodeContainers.size() + " -> " + ReflectionUtils.getCommonSuperClass(graphNodeContainers));
     }
