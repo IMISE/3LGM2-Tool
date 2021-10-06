@@ -824,7 +824,7 @@ public class LGMGraphDocument extends GraphDocument {
      * @param pid
      * @return
      */
-    private ElementaryPath createElementaryPath(final ModelElement startElement, ModelElement endElement, final ElementaryMetaPath elementaryMetaPath, final int pid) {
+    public ElementaryPath createElementaryPath(final ModelElement startElement, ModelElement endElement, final ElementaryMetaPath elementaryMetaPath, final int pid) {
         //wenn ein endElement angegeben wurde, dann das im letzten Pfadschritt verknüpfen
         boolean alreadyLinked = false;
         Class<? extends Edge> edgeClass = elementaryMetaPath.getEdgeClass();
@@ -871,6 +871,55 @@ public class LGMGraphDocument extends GraphDocument {
         }
         ElementaryPath resultPath = new ElementaryPath(elementaryMetaPath, startElement, endElement, edge);
         return resultPath;
+    }
+
+    /**
+     * @param startElement
+     * @param endElement
+     * @param metaPath
+     * @param pid
+     */
+    public final void removePath(final ModelElement startElement, final ModelElement endElement, final MetaPath metaPath, final int pid) {
+        if (metaPath instanceof SimpleMetaPath) {
+            removeSimplePath(startElement, endElement, (SimpleMetaPath) metaPath, pid);
+        } else if (metaPath instanceof ParallelMetaPath) {
+            ParallelMetaPath parallelMetaPath = (ParallelMetaPath) metaPath;
+            for (MetaPath internalMetaPath : parallelMetaPath.iterableSubMetaPaths()) {
+                removePath(startElement, endElement, internalMetaPath, pid);
+            }
+        }
+    }
+
+    /**
+     * @param startElement
+     * @param endElement
+     * @param metaPath
+     * @param pid
+     */
+    public final void removeSimplePath(final ModelElement startElement, final ModelElement endElement, final SimpleMetaPath metaPath, final int pid) {
+        List<SimplePath> simplePaths = metaPath.getSimplePaths(startElement, endElement);
+        for (SimplePath simplePath : simplePaths) {
+            removeSimplePath(simplePath, pid);
+        }
+    }
+
+    /**
+     * @param simplePath
+     * @param pid
+     */
+    public final void removeSimplePath(final SimplePath simplePath, final int pid) {
+        start_transaction(pid);
+        //at the moment this funtion only removes the edges. If the elements
+        //in the path are not invalid through the removing of the edges they
+        //will not be deleted. Maybe in future we need the functionality to
+        //delete the inner path elements too. Then this function needs one
+        //more parameter.
+        List<ElementaryPath> elementaryPaths = simplePath.getElementaryPaths();
+        for (ElementaryPath elementaryPath : elementaryPaths) {
+            Edge edge = elementaryPath.getEdge();
+            gdcoll.deleteElement(edge, pid);
+        }
+        finish_transaction(pid);
     }
 
     /**

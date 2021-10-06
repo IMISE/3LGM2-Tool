@@ -16,6 +16,7 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.path.metapaths.PathFunctions.PathConnectionState;
 import de.imise.tool3lgm.graphtools.path.paths.PathResultTreeModel;
+import de.imise.tool3lgm.graphtools.path.paths.SimplePath;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 
 /**
@@ -282,6 +283,11 @@ abstract class MetaPathImpl extends BasicMetaPathImpl implements MetaPath {
     }
 
     @Override
+    public PathResultTreeModel getResultTree(final ModelElement startElement, final ModelElement endElement) {
+        return new PathResultTreeModel(this, startElement, endElement);
+    }
+
+    @Override
     public PathResultTreeModel getResultTree(final ModelElement startElement, final boolean keepIncompleteBranches) {
         return new PathResultTreeModel(this, startElement, keepIncompleteBranches);
     }
@@ -304,6 +310,12 @@ abstract class MetaPathImpl extends BasicMetaPathImpl implements MetaPath {
     @Override
     public PathResultTreeModel getResultTree(final List<Collection<ModelElement>> startElements, final boolean keepIncompleteBranches) {
         return new PathResultTreeModel(this, startElements, keepIncompleteBranches);
+    }
+
+    @Override
+    public List<SimplePath> getSimplePaths(final ModelElement startElement, final ModelElement endElement) {
+        PathResultTreeModel resultTree = getResultTree(startElement, endElement);
+        return resultTree.getCompletePaths();
     }
 
 }
