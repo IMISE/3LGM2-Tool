@@ -128,7 +128,7 @@ public class PathResultTreeModel extends DefaultTreeModel {
      */
     public PathResultTreeModel(final MetaPath metaPath, final ModelElement startElement) {
         this(metaPath);
-        setStartElements(startElement);
+        setStartElement(startElement);
     }
 
     /**
@@ -196,7 +196,7 @@ public class PathResultTreeModel extends DefaultTreeModel {
      */
     public PathResultTreeModel(final MetaPath metaPath, final ModelElement startElement, final boolean keepIncompleteBranches, final boolean keepMultipleEqualsBranches) {
         this(metaPath, keepIncompleteBranches);
-        setStartElements(startElement);
+        setStartElement(startElement);
     }
 
     /**
@@ -271,7 +271,7 @@ public class PathResultTreeModel extends DefaultTreeModel {
      *
      * @param startElement
      */
-    public void setStartElements(final ModelElement startElement) {
+    public void setStartElement(final ModelElement startElement) {
         setStartAndEndElement(startElement, null);
     }
 
