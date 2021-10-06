@@ -167,9 +167,10 @@ public class UserFieldEditorDialog extends AbstractTabbedPropertyDialog {
                         return;
                     }
                 }
+                int pid = getTransactionID();
                 // rückgängig machen der alten Transaktion
-                mainDoc.finish_transaction(getTransactionID());
-                mainDoc.undo(getTransactionID());
+                mainDoc.finish_transaction(pid);
+                mainDoc.undo(pid);
                 //finalDialog.dispose();
             }
         };

@@ -196,8 +196,7 @@ public class LGMGraphDocument extends GraphDocument {
         copyToClipboard();
         //man muss die Selektion clonen, da sie sich wärend des Löschens ändert
         gdcoll.deleteElements(getSelectedElements(), this, STANDARD_PID);
-        finish_transaction(STANDARD_PID);
-        distributeEvent(DATA_CHANGED);
+        finish_transaction(STANDARD_PID, DATA_CHANGED);
     }
 
     /**
@@ -243,9 +242,7 @@ public class LGMGraphDocument extends GraphDocument {
             e.printStackTrace();
             return;
         }
-
-        finish_transaction(pid);
-        distributeEvent(DATA_CHANGED, pid);
+        finish_transaction(pid, DATA_CHANGED);
     }
 
     /**
@@ -268,9 +265,7 @@ public class LGMGraphDocument extends GraphDocument {
             e.printStackTrace();
             return;
         }
-
-        finish_transaction(pid);
-        distributeEvent(DATA_CHANGED, pid);
+        finish_transaction(pid, DATA_CHANGED);
     }
 
     /**
@@ -494,7 +489,6 @@ public class LGMGraphDocument extends GraphDocument {
             for (EdgeContainer edgeC : edgeConts) {
                 edgeC.computeBorderPoints();
             }
-
             targetMainDoc.finish_transaction(STANDARD_PID);
         } catch (Exception ex) {
             targetMainDoc.undo(STANDARD_PID);
@@ -505,7 +499,7 @@ public class LGMGraphDocument extends GraphDocument {
         for (int j = 0; j < tmpActive.size(); j++) {
             sourceDoc.addToSelection(tmpActive.get(j), STANDARD_PID);
         }
-        sourceDoc.finish_transaction(TransactionManager.STANDARD_PID, false);
+        sourceDoc.finish_transaction(STANDARD_PID, false);
         sourceDoc.distributeEvent(SELECTION_CHANGED);
 
         sourceCollection.createInferenceEdges(true, STANDARD_PID);
@@ -687,8 +681,7 @@ public class LGMGraphDocument extends GraphDocument {
                 }
             }
         }
-        targetDoc.finish_transaction(pid);
-        targetDoc.distributeEvent(DATA_CHANGED, pid);
+        targetDoc.finish_transaction(pid, DATA_CHANGED);
         return instanceContainer;
     }
 
@@ -812,8 +805,7 @@ public class LGMGraphDocument extends GraphDocument {
         }
         SimplePath simplePath = createSubPath ? createdSubPath : SimplePath.create(createdElementaryPaths);
         repositioningOfSubordniatedInGraph(simplePath, pid);
-        finish_transaction(pid);
-        distributeEvent(DATA_CHANGED, pid);
+        finish_transaction(pid, DATA_CHANGED);
         return simplePath;
     }
 
