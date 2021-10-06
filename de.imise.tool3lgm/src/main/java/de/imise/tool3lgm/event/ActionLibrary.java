@@ -11,6 +11,7 @@ import static de.imise.tool3lgm.userproperties.UserProperties.IntProperty.PROPER
 import static de.imise.tool3lgm.userproperties.UserProperties.IntProperty.PROPERTY_INT_RMI_PORT;
 
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.io.File;
@@ -78,6 +79,7 @@ import de.imise.tool3lgm.graphtools.view.container.LayerContainer;
 import de.imise.tool3lgm.graphtools.view.graph.BasicGraphArea.PaintState;
 import de.imise.tool3lgm.graphtools.view.graph.InputGraphArea;
 import de.imise.tool3lgm.graphtools.view.graph.NodeRenderer;
+import de.imise.tool3lgm.gui.MainFrame;
 import de.imise.tool3lgm.gui.Tool3lgmMetaModelContextChooser;
 import de.imise.tool3lgm.gui.ToolSplashScreen;
 import de.imise.tool3lgm.gui.viewpane.ViewPane;
@@ -667,7 +669,12 @@ public class ActionLibrary {
                 Static.showProgressDialog();
                 Static.setProgressDialogTitle(getResString("PROGRESS_SELECT_ALL"));
                 LGMGraphDocument selectedDoc = getSelectedDoc();
-                selectedDoc.selectAll();
+
+                MainFrame mainFrame = Static.getMainFrame();
+                Component focusOwner = mainFrame == null ? null : mainFrame.getFocusOwner();
+                InputGraphArea area = focusOwner != null && focusOwner instanceof InputGraphArea ? (InputGraphArea) focusOwner : null;
+                boolean selectOnylActiveLayer = area != null && !area.isMultiView();
+                selectedDoc.selectAll(selectOnylActiveLayer);
                 Static.closeProgressDialog();
             }
         };

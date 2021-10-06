@@ -3268,25 +3268,35 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
     }
 
     /**
-     *
+     * @param selectOnylActiveLayerVisibleElements
      */
-    public void selectAll() {
+    public void selectAll(final boolean selectOnylActiveLayerVisibleElements) {
         final int PID = TransactionManager.STANDARD_PID;
         start_transaction(PID, false);
         deselectAll(true);
         for (int i = 0; i < layer.length; i++) {
-            LayerContainer lc = layer[i];
-            for (ElementContainer ec : lc.getGraphNodeContainers()) {
-                gdcoll.addToSelection(ec);
+            LayerContainer layerContainer = layer[i];
+            if (selectOnylActiveLayerVisibleElements && gdcoll.getActiveLayer() != i) {
+                continue;
             }
-            for (ElementContainer ec : lc.getEdgeContainers()) {
-                gdcoll.addToSelection(ec);
+            for (ElementContainer ec : layerContainer.getGraphNodeContainers()) {
+                if (!selectOnylActiveLayerVisibleElements || ec.isVisible()) {
+                    gdcoll.addToSelection(ec);
+                }
             }
-            for (ElementContainer ec : lc.getBendpointContainers()) {
-                gdcoll.addToSelection(ec);
+            for (ElementContainer ec : layerContainer.getEdgeContainers()) {
+                if (!selectOnylActiveLayerVisibleElements || ec.isVisible()) {
+                    gdcoll.addToSelection(ec);
+                    EdgeContainer edgeC = (EdgeContainer) ec;
+                    for (BendpointContainer bc : edgeC.iterateBendpointContainers()) {
+                        gdcoll.addToSelection(bc);
+                    }
+                }
             }
         }
-        gdcoll.selectAllUniques();
+        if (!selectOnylActiveLayerVisibleElements) {
+            gdcoll.selectAllUniques();
+        }
         finish_transaction(PID, false);
         distributeEvent(SELECTION_CHANGED, PID);
     }
