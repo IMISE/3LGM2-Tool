@@ -154,10 +154,16 @@ public final class MetaModel extends CoreMetaModel {
     public final List<Class<? extends Node>> compositionSlaveNodes;
 
     /**
-     * Alle Knotenklassen, bei denen in der Grafik zusätzlich zum eigenen Namen
-     * noch die Namen verbundener Elemente angezeigt werden sollen
+     * All node classes for which the names of connected elements are to be
+     * displayed in the graphic in addition to their own names.
      */
-    public final Set<Class<? extends ModelElement>> elementClassesWithNameExtensions;
+    public final Set<Class<? extends ModelElement>> elementClassesWithNameExtensionsAsNameTarget;
+
+    /**
+     * All node classes whose name is to be displayed in the graphic in addition
+     * to their own name for connected elements.
+     */
+    public final Set<Class<? extends ModelElement>> elementClassesWithNameExtensionsAsNameSource;
 
     /**
      * Alle Elementklassen, die nur im ExpertMode
@@ -297,11 +303,18 @@ public final class MetaModel extends CoreMetaModel {
     private final Multimap<Class<? extends ModelElement>, SimpleMetaPath> elementClassToCreatableMetaPaths;
 
     /**
-     * Mappt von Elementklassen, bei denen der Name verbundendener Elemente in
-     * der Grafik in Klammern unter der eigentlichen Elementart angezeigt werden
-     * soll, auf den MetaPfad zu den anzuzeigenden, verbundenen Elementen.
+     * Mapping of element classes, where the name of connected elements should
+     * be displayed in the graphic in brackets below the actual element type, to
+     * the MetaPath to the connected elements to be displayed.
      */
-    private final Map<Class<? extends ModelElement>, MetaPath> elementClassToNameExtensionPath;
+    private final Map<Class<? extends ModelElement>, SimpleMetaPath> elementClassToNameExtensionPathAsNameTarget;
+
+    /**
+     * Mapps element classes whose name is to be displayed in brackets (below
+     * the actual element name) in the graphic for elements connected to them to
+     * the MetaPath to the connected elements.
+     */
+    private final Map<Class<? extends ModelElement>, SimpleMetaPath> elementClassToNameExtensionPathAsNameSource;
 
     /**
      * Mappt von einer InferenceEdge-Klasse auf den MetaPath, aus dem diese
@@ -473,8 +486,10 @@ public final class MetaModel extends CoreMetaModel {
         edgeClassToSoftConditionMetaPath = CollectionUtils.ensureImmutable(metaPathsDefinition.getSoftConditionMetaPaths());
         instanciationEdgeToAdditionalInstanciationMetaPaths = CollectionUtils.ensureImmutable(getInstanciationEdgeToAdditionalInstanciationNonAbstractMetaPaths(metaPathsDefinition.getInstanciationEdgeToAdditionalInstanciationMetaPaths()));
         elementClassToCreatableMetaPaths = CollectionUtils.ensureImmutable(getCreatableMetaPathsMap(metaPathsDefinition.getCreatableMetaPaths()));
-        elementClassToNameExtensionPath = CollectionUtils.ensureImmutable(metaPathsDefinition.getElementClassToNameExtensionMetaPath());
-        elementClassesWithNameExtensions = CollectionUtils.ensureImmutable(elementClassToNameExtensionPath.keySet());
+        elementClassToNameExtensionPathAsNameTarget = CollectionUtils.ensureImmutable(metaPathsDefinition.getElementClassToNameExtensionMetaPath());
+        elementClassesWithNameExtensionsAsNameTarget = CollectionUtils.ensureImmutable(elementClassToNameExtensionPathAsNameTarget.keySet());
+        elementClassToNameExtensionPathAsNameSource = getElementClassToNameExtensionPathAsNameSource(elementClassToNameExtensionPathAsNameTarget);
+        elementClassesWithNameExtensionsAsNameSource = CollectionUtils.ensureImmutable(elementClassToNameExtensionPathAsNameSource.keySet());
         edgeClassToInitialCreatedNameSourcePath = CollectionUtils.ensureImmutable(metaPathsDefinition.getEdgeClassToInitialCreatedNameSourceMetaPath());
 
         inferenceEdgeClassToConditionMetaPath = CollectionUtils.ensureImmutable(metaPathsDefinition.getInferenceEdgeToConditionMetaPath());
@@ -839,6 +854,28 @@ public final class MetaModel extends CoreMetaModel {
             }
         }
         return uniqueNodes.build();
+    }
+
+    /**
+     * Creates a map from an element type to the metapath by which elements are
+     * linked, appending to their own name the name of the source element. This
+     * is the reverse map to
+     * {@link #elementClassToNameExtensionPathAsNameTarget}. Mapps element
+     * classes whose name is to be displayed in brackets (below the actual
+     * element name) in the graphic for elements connected to them to the
+     * MetaPath to the connected elements.
+     *
+     * @param elementClassToNameExtensionPathAsNameTarget
+     * @return
+     */
+    private Map<Class<? extends ModelElement>, SimpleMetaPath> getElementClassToNameExtensionPathAsNameSource(final Map<Class<? extends ModelElement>, SimpleMetaPath> elementClassToNameExtensionPathAsNameTarget) {
+        ImmutableMap.Builder<Class<? extends ModelElement>, SimpleMetaPath> builder = ImmutableMap.builder();
+        for (SimpleMetaPath metaPathToNameSource : elementClassToNameExtensionPathAsNameTarget.values()) {
+            SimpleMetaPath metaPathToNameTarget = metaPathToNameSource.getOtherDirection();
+            Class<? extends ModelElement> nameSourceClass = metaPathToNameTarget.getStartClass();
+            builder.put(nameSourceClass, metaPathToNameTarget);
+        }
+        return builder.build();
     }
 
     ////////////////////////////////////////////
@@ -2098,23 +2135,41 @@ public final class MetaModel extends CoreMetaModel {
     }
 
     /**
-     * Liefert für alle Elementklassen, bei denen der Name verbundendener
-     * Elemente in der Grafik in Klammern unter der eigentlichen Elementart
-     * angezeigt werden soll, den MetaPfad zu den anzuzeigenden verbundenen
-     * Elementen.
+     * Returns the MetaPath to the connected elements to be displayed for all
+     * element classes where the name of connected elements is to be displayed
+     * in the graphic in brackets below the actual element name.
      *
      * @return
      */
-    public MetaPath getNameExtensionPath(final Class<? extends ModelElement> elementClass) {
-        return elementClassToNameExtensionPath.get(elementClass);
+    public SimpleMetaPath getNameExtensionPathAsNameTarget(final Class<? extends ModelElement> elementClass) {
+        return elementClassToNameExtensionPathAsNameTarget.get(elementClass);
     }
 
     /**
-     * @return Iterable über alle Klassen, bei denen verbundene Elemente an den
-     *         Namen angehängt werden sollen
+     * Returns the MetaPath for all element classes whose name is to be
+     * displayed in brackets below the actual element name for connected
+     * elements in the graphic.
+     *
+     * @return
      */
-    public Collection<Class<? extends ModelElement>> getElementClassesWithNameExtensionPath() {
-        return elementClassesWithNameExtensions;
+    public SimpleMetaPath getNameExtensionPathAsNameSource(final Class<? extends ModelElement> elementClass) {
+        return elementClassToNameExtensionPathAsNameSource.get(elementClass);
+    }
+
+    /**
+     * @return Collection of all classes where connected elements are to be
+     *         appended to the name
+     */
+    public Collection<Class<? extends ModelElement>> getElementClassesWithNameExtensionPathAsNameTarget() {
+        return elementClassesWithNameExtensionsAsNameTarget;
+    }
+
+    /**
+     * @return Collection aller Klassen, bei deren Name an mit ihnen verbundenen
+     *         Elementen angehängt werden soll
+     */
+    public Collection<Class<? extends ModelElement>> getElementClassesWithNameExtensionPathAsNameSource() {
+        return elementClassesWithNameExtensionsAsNameTarget;
     }
 
     // die weiteren zum Metamodell gehörigen Definitionen
