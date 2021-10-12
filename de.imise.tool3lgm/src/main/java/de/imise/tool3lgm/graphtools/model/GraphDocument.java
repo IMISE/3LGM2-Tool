@@ -6,6 +6,7 @@ import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.MAX_LAYER_IN
 import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.MIN_LAYER_INDEX;
 import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.NO_LAYER;
 import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction.BACKWARD;
+import static de.imise.tool3lgm.graphtools.metamodel.elements.SubordinationEdge.SUPER_TO_SUB_DIRECTION;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_ADD_ELEMENT_TO_SUBMODEL;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_DELETE_FROM_SUBMODEL;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_LINK_ELEMENT_TO_SUBMODEL;
@@ -2573,6 +2574,19 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
      * @param pid
      */
     public final void moveNodeContainer(final NodeContainer nc, final int x, final int y, final int width, final int height, final int pid) {
+        moveNodeContainer(nc, x, y, width, height, true, pid);
+    }
+
+    /**
+     * @param nc
+     * @param x
+     * @param y
+     * @param width
+     * @param height
+     * @param moveSubelements
+     * @param pid
+     */
+    public final void moveNodeContainer(final NodeContainer nc, final int x, final int y, final int width, final int height, final boolean moveSubelements, final int pid) {
         if (nc == null) {
             return;
         }
@@ -2582,6 +2596,13 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
         }
         start_transaction(pid);
         GraphDocument ncDoc = nc.getGraphDocument();
+
+        if (moveSubelements) {
+            // retrieves all subordinated elements in this submodel
+            List<ElementContainer> subordinatedContainers = me.getConnectedContainers(this, SubordinationEdge.class, SUPER_TO_SUB_DIRECTION);
+            moveSubElements(nc, subordinatedContainers, x, y, width, height, pid);
+        }
+
         List<?> undoCommandArguments = ImmutableList.of(nc.getX(), nc.getY(), nc.getWidth(), nc.getHeight());
         List<?> redoCommandArguments = ImmutableList.of(x, y, width, height);
         addUndoCommandIfNotExist(pid, undoCommandArguments, MODEL_ACTION_SET_ELEMENT_POSITION, ncDoc, nc);
@@ -2589,7 +2610,20 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
         nc.setCoordinates(x, y, width, height);
 
         //wenn NodeContainer verschoben werden (keine BendpointContainer)
+        updateEdgeOrBendpoint(nc);
+
+        finish_transaction(pid);
+        distributeEvent(ELEMENT_GRAPHICS_CHANGED, nc, pid);
+    }
+
+    /**
+     * updates the edges and bendpoints, when model elements are moved
+     *
+     * @param nc
+     */
+    private final void updateEdgeOrBendpoint(final NodeContainer nc) {
         if (!(nc instanceof BendpointContainer)) {
+            ModelElement me = nc.getElement();
             //bei allen Kanten dieser Node
             for (Edge edge : me.getEdges()) {
                 EdgeContainer edgeC = edge.getContainer(this);
@@ -2607,8 +2641,80 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
             EdgeContainer edgeC = bendpoint.getOwner();
             edgeC.computeBorderPoints();
         }
-        finish_transaction(pid);
-        distributeEvent(ELEMENT_GRAPHICS_CHANGED, nc, pid);
+    }
+
+    /**
+     * moves all subelements in relation of the superordinate elements, which
+     * has been moved
+     *
+     * @param nc
+     * @param subordinatedContainers
+     * @param x
+     * @param y
+     * @param width
+     * @param height
+     * @param pid
+     */
+    private final void moveSubElements(final NodeContainer nc, final List<ElementContainer> subordinatedContainers, final int x, final int y, final int width, final int height, final int pid) {
+        int oldX = nc.getX();
+        int oldY = nc.getY();
+        int oldWidth = nc.getWidth();
+        int oldHeight = nc.getHeight();
+
+        int leftBorder = oldX - oldWidth / 2;
+        int rightBorder = oldX + oldWidth / 2;
+        int bottomBorder = oldY - oldHeight / 2;
+        int topBorder = oldY + oldHeight / 2;
+
+        GraphDocument ncDoc = nc.getGraphDocument();
+
+        for (ElementContainer ec : subordinatedContainers) {
+            NodeContainer nec = (NodeContainer) ec;
+            ModelElement nme = nec.getElement();
+
+            if (!nme.isPaintable()) {
+                continue;
+            }
+
+            int oldSubX = nec.getX();
+            int oldSubY = nec.getY();
+            int newSubPosX;
+            int newSubPosY;
+            int horizontalDistanceToBorder;
+            int verticalDistanceToBorder;
+
+            boolean isLeftSide = oldSubX < oldX;
+            boolean isBottomSide = oldSubY < oldY;
+
+            int newLeftBorder = x - width / 2;
+            int newRightBorder = x + width / 2;
+            int newBottomBorder = y - height / 2;
+            int newTopBorder = y + height / 2;
+
+            if (isLeftSide) {
+                horizontalDistanceToBorder = leftBorder - oldSubX;
+                newSubPosX = newLeftBorder - horizontalDistanceToBorder;
+            } else {
+                horizontalDistanceToBorder = rightBorder - oldSubX;
+                newSubPosX = newRightBorder - horizontalDistanceToBorder;
+            }
+
+            if (isBottomSide) {
+                verticalDistanceToBorder = bottomBorder - oldSubY;
+                newSubPosY = newBottomBorder - verticalDistanceToBorder;
+            } else {
+                verticalDistanceToBorder = topBorder - oldSubY;
+                newSubPosY = newTopBorder - verticalDistanceToBorder;
+            }
+
+            List<?> undoCommandArguments = ImmutableList.of(nec.getX(), nec.getY(), nec.getWidth(), nec.getHeight());
+            List<?> redoCommandArguments = ImmutableList.of(newSubPosX, newSubPosY, nec.getWidth(), nec.getHeight());
+            addUndoCommandIfNotExist(pid, undoCommandArguments, MODEL_ACTION_SET_ELEMENT_POSITION, ncDoc, nec);
+            addRedoCommandOrReplace(pid, redoCommandArguments, MODEL_ACTION_SET_ELEMENT_POSITION, ncDoc, nec);
+
+            nec.setCoordinates(newSubPosX, newSubPosY, nec.getWidth(), nec.getHeight());
+            updateEdgeOrBendpoint(nec);
+        }
     }
 
     /**
@@ -2653,7 +2759,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
                 int y = nc.getY();
                 int width = nc.getWidth();
                 int height = nc.getHeight();
-                moveNodeContainer(nc, x + deltaX, y + deltaY, width, height, pid);
+                moveNodeContainer(nc, x + deltaX, y + deltaY, width, height, false, pid);
             }
         }
         setSelection(selection);
