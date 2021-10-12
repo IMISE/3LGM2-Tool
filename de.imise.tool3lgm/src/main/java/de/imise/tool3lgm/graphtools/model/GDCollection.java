@@ -903,9 +903,7 @@ public class GDCollection extends UserFieldTarget implements MetaModelSpecific {
             return;
         }
         simpleRemoveContainerFromSzenario(reallyContainerToRemove, false, pid);
-        szen.finish_transaction(pid);
-        szen.distributeEvent(DATA_CHANGED, pid);
-        szen.distributeEvent(SELECTION_CHANGED, pid);
+        szen.finish_transaction(pid, DATA_CHANGED, SELECTION_CHANGED);
     }
 
     /**
@@ -973,9 +971,7 @@ public class GDCollection extends UserFieldTarget implements MetaModelSpecific {
         if (!transActionStarted) {
             return;
         }
-        ecDoc.finish_transaction(pid);
-        ecDoc.distributeEvent(DATA_CHANGED, pid);
-        ecDoc.distributeEvent(SELECTION_CHANGED, pid);
+        ecDoc.finish_transaction(pid, DATA_CHANGED, SELECTION_CHANGED);
     }
 
     /**
@@ -1147,9 +1143,7 @@ public class GDCollection extends UserFieldTarget implements MetaModelSpecific {
             }
         }
         if (allElementsToDelete.isEmpty()) {
-            doc.finish_transaction(pid);
-            doc.distributeEvent(DATA_CHANGED, pid);
-            doc.distributeEvent(SELECTION_CHANGED, pid);
+            doc.finish_transaction(pid, DATA_CHANGED, SELECTION_CHANGED);
             return;
         }
         //alle Elemente einfach aus den Szenarien löschen
@@ -1228,9 +1222,7 @@ public class GDCollection extends UserFieldTarget implements MetaModelSpecific {
                 removeOptional((OptionalEdge) me);
             }
         }
-        doc.finish_transaction(pid);
-        doc.distributeEvent(DATA_CHANGED, pid);
-        doc.distributeEvent(SELECTION_CHANGED, pid);
+        doc.finish_transaction(pid, DATA_CHANGED, SELECTION_CHANGED);
     }
 
     /**
@@ -1264,9 +1256,7 @@ public class GDCollection extends UserFieldTarget implements MetaModelSpecific {
         mainDoc.getLayer(layerIndex).remove(bendpoint.getContainer(mainDoc));
         szen.addRedo(pid, MODEL_ACTION_DELETE_FROM_MODEL, bendpoint);
         szen.addUndo(pid, MODEL_ACTION_INSERT_BENDING_POINT, szen, edgeC, bc, bc.getX(), bc.getY(), oldIndex);
-        szen.finish_transaction(pid);
-        szen.distributeEvent(DATA_CHANGED, bc, pid);
-        szen.distributeEvent(SELECTION_CHANGED, bc, pid);
+        szen.finish_transaction(pid, DATA_CHANGED, SELECTION_CHANGED);
     }
 
     //ENDE REMOVE //
@@ -1330,9 +1320,7 @@ public class GDCollection extends UserFieldTarget implements MetaModelSpecific {
             bendpointContainer.setLocation(x, y);
         }
         szen.select(bendpointContainer, pid);
-        szen.finish_transaction(pid);
-        szen.distributeEvent(DATA_CHANGED, pid);
-        szen.distributeEvent(SELECTION_CHANGED, pid);
+        szen.finish_transaction(pid, DATA_CHANGED, SELECTION_CHANGED);
         edgeContainer.computeBorderPoints();
         return bendpointContainer;
     }
@@ -1413,8 +1401,7 @@ public class GDCollection extends UserFieldTarget implements MetaModelSpecific {
         boolean oldAutomaticMode = setAutomaticMode(true);
         createInitialSubordinates(me, pid);
         setAutomaticMode(oldAutomaticMode);
-        mainDoc.finish_transaction(pid);
-        mainDoc.distributeEvent(DATA_CHANGED, pid);
+        mainDoc.finish_transaction(pid, DATA_CHANGED);
         return nc;
     }
 
@@ -2152,8 +2139,7 @@ public class GDCollection extends UserFieldTarget implements MetaModelSpecific {
         if (direction == null || direction == Direction.BACKWARD) {
             unlink(end, start, edge.getClass(), end.getEdgeIndex(edge), pid);
         }
-        mainDoc.finish_transaction(pid);
-        mainDoc.distributeEvent(DATA_CHANGED, pid);
+        mainDoc.finish_transaction(pid, DATA_CHANGED);
     }
 
     /**
@@ -2189,7 +2175,7 @@ public class GDCollection extends UserFieldTarget implements MetaModelSpecific {
      * @param ignoreElementIfIconosistent
      * @param pid
      */
-    public final void unlink(final ModelElement me1, ModelElement me2, final Class<? extends Edge> edgeClass, final int me1EdgeIndex, final ModelElement ignoreElementIfIconosistent, final int pid) {
+    private final void unlink(final ModelElement me1, ModelElement me2, final Class<? extends Edge> edgeClass, final int me1EdgeIndex, final ModelElement ignoreElementIfIconosistent, final int pid) {
         if (me1 == null || me2 == null) {
             return;
         }
@@ -2229,25 +2215,25 @@ public class GDCollection extends UserFieldTarget implements MetaModelSpecific {
         }
         String edgeClassName = edgeClass == null ? "null" : edgeClass.getName();
         mainDoc.start_transaction(pid);
+        //set the bulk mode because this function can be recursive if we remove
+        //inference edges condition paths and in the bulk mode we prevent that
+        //the inference edges are recalculated during the removing of the
+        //condition paths
+        boolean oldBulkMode = setBulkMode(true);
         mainDoc.addRedo(pid, MODEL_ACTION_UNLINK, me1, me2, edgeClassName, me1EdgeIndex);
         //Undo-Kommando wird in deleteElement gesetzt (s. u.)
         //nur bei Kanten mit doppelter Bedeutung kann man in bestimmten Richtungen unlinken. Bei allen anderen
         //ist die Richtung egal und das Unlinken ist das Löschen der Edge
         Class<? extends Edge> absoluteEdgeClass = edge.getClass(); // die übergebene Kanten-Klasse kann null gewesen oder eine Oberklasse sein
-        //InferenceEdge? -> delete condition paths
+
+        //InferenceEdge? -> delete condition paths?
         if (InferenceEdge.class.isAssignableFrom(absoluteEdgeClass)) {
             OutParamObject<ModelElement> inferenceEdgeConditionMetaPathStartElement = new OutParamObject<>(me1);
             OutParamObject<ModelElement> inferenceEdgeConditionMetaPathEndElement = new OutParamObject<>(me2);
             MetaPath inferenceEdgeConditionMetaPath = getInferenceEdgeConditionMetaPathWithCorrectElementOrder(edgeClass, inferenceEdgeConditionMetaPathStartElement, inferenceEdgeConditionMetaPathEndElement);
-
-            //TODO: Remove Inference Egdes implementieren
-            ///////////////////////////////////////////////////////////////////////////////////////////
-            ///////////////////////////////////////////////////////////////////////////////////////////
-            /// ACHTUNG: hier fehlt jetzt das REMOVE von InferenceEdges bzw. deren Bedingungspfaden ///
-            ///////////////////////////////////////////////////////////////////////////////////////////
-            ///////////////////////////////////////////////////////////////////////////////////////////
-
+            mainDoc.removePath(inferenceEdgeConditionMetaPathStartElement.value, inferenceEdgeConditionMetaPathEndElement.value, inferenceEdgeConditionMetaPath, pid);
         }
+
         if (CoreMetaModel.isDoubleMeaningEdge(absoluteEdgeClass)) {
             DoubleMeaningEdge doubleMeaningEdge = (DoubleMeaningEdge) edge;
             if (doubleMeaningEdge.getConnectionState() == DOUBLE) {
@@ -2264,8 +2250,8 @@ public class GDCollection extends UserFieldTarget implements MetaModelSpecific {
         } else {
             deleteElement(edge, mainDoc, ignoreElementIfIconosistent, pid);
         }
-        mainDoc.finish_transaction(pid);
-        mainDoc.distributeEvent(DATA_CHANGED, pid);
+        setBulkMode(oldBulkMode);
+        mainDoc.finish_transaction(pid, DATA_CHANGED);
     }
 
     /**
@@ -2504,9 +2490,9 @@ public class GDCollection extends UserFieldTarget implements MetaModelSpecific {
                 szen.createEdgeContainer(nc, szen, false, pid);
                 nc.refreshText();
                 // alle abhängigen Node vor den zusammengeführten stellen
-                szen.start_transaction(TransactionManager.STANDARD_PID, false);
-                szen.moveDependentNodeContainersUp(nc, TransactionManager.STANDARD_PID, false);
-                szen.finish_transaction(TransactionManager.STANDARD_PID, false);
+                szen.start_transaction(STANDARD_PID, false);
+                szen.moveDependentNodeContainersUp(nc, STANDARD_PID, false);
+                szen.finish_transaction(STANDARD_PID, false);
             }
         }
         deleteElement(removeNode, mainDoc, pid);

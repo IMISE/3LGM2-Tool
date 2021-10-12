@@ -41,7 +41,7 @@ public class PathResultTreeNode extends DefaultMutableTreeNode {
          * nicht-Elementarpfad ist.
          */
         SUBSTEP
-    };
+    }
 
     /**
      * Iterable dieses Objektes wird zurück gegeben, wenn dieser Knoten keine
@@ -49,17 +49,15 @@ public class PathResultTreeNode extends DefaultMutableTreeNode {
      */
     private static final Vector<PathResultTreeNode> EMPTY_CHILDREN = new Vector<>(0);
 
-    /**
-     * Typ des Knotens
-     */
+    /** Type of node */
     private NodeType type = null;
 
     /**
-     * @param userObject
+     * @param elementaryPath
      * @param type
      */
-    public PathResultTreeNode(final ElementaryPath path, final NodeType type) {
-        super(path);
+    public PathResultTreeNode(final ElementaryPath elementaryPath, final NodeType type) {
+        super(elementaryPath);
         this.type = type;
     }
 
@@ -81,7 +79,7 @@ public class PathResultTreeNode extends DefaultMutableTreeNode {
     /**
      * Liefert das userObejct als {@link Path}
      */
-    public ElementaryPath getPathObject() {
+    public ElementaryPath getElementaryPath() {
         return (ElementaryPath) userObject;
     }
 
@@ -90,23 +88,23 @@ public class PathResultTreeNode extends DefaultMutableTreeNode {
      * @see tool3lgm.graphtools.newpath.pathmodel.Path#getEndElement()
      */
     public final ModelElement getEndElement() {
-        ElementaryPath path = getPathObject();
-        if (path == null) {
+        ElementaryPath elementaryPath = getElementaryPath();
+        if (elementaryPath == null) {
             return null;
         }
-        return path.getEndElement();
+        return elementaryPath.getEndElement();
     }
 
     /**
      * @return
-     * @see tool3lgm.graphtools.newpath.pathmodel.Path#getMetaPath()
+     * @see tool3lgm.graphtools.newpath.pathmodel.Path#getElementaryMetaPath()
      */
-    public final ElementaryMetaPath getMetaPath() {
-        ElementaryPath path = getPathObject();
-        if (path == null) {
+    public final ElementaryMetaPath getElementaryMetaPath() {
+        ElementaryPath elementaryPath = getElementaryPath();
+        if (elementaryPath == null) {
             return null;
         }
-        return path.getMetaPath();
+        return elementaryPath.getMetaPath();
     }
 
     /**
@@ -114,7 +112,7 @@ public class PathResultTreeNode extends DefaultMutableTreeNode {
      * @see tool3lgm.graphtools.newpath.pathmodel.Path#getStartElement()
      */
     public final ModelElement getStartElement() {
-        ElementaryPath path = getPathObject();
+        ElementaryPath path = getElementaryPath();
         if (path == null) {
             return null;
         }
@@ -126,7 +124,7 @@ public class PathResultTreeNode extends DefaultMutableTreeNode {
      * @see tool3lgm.graphtools.newpath.pathmodel.Path#getEgde()
      */
     public final Edge getEdge() {
-        ElementaryPath path = getPathObject();
+        ElementaryPath path = getElementaryPath();
         if (path == null) {
             return null;
         }

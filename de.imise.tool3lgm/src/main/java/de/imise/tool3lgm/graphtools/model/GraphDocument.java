@@ -52,11 +52,13 @@ import static de.imise.tool3lgm.graphtools.model.LGMChangeListener.LGMChangeType
 import static de.imise.tool3lgm.graphtools.model.LGMChangeListener.LGMChangeType.ELEMENT_GRAPHICS_CHANGED;
 import static de.imise.tool3lgm.graphtools.model.LGMChangeListener.LGMChangeType.ELEMENT_NAME_CHANGED;
 import static de.imise.tool3lgm.graphtools.model.LGMChangeListener.LGMChangeType.GROUP_ORDER_CHANGED;
+import static de.imise.tool3lgm.graphtools.model.LGMChangeListener.LGMChangeType.LAYOUT_CHANGED;
 import static de.imise.tool3lgm.graphtools.model.LGMChangeListener.LGMChangeType.SELECTION_CHANGED;
 import static de.imise.tool3lgm.graphtools.model.LGMChangeListener.LGMChangeType.USER_FIELD_VALUE_CHANGED;
 import static de.imise.tool3lgm.graphtools.undoredo.CommandHandler.getArgumentsString;
 import static de.imise.tool3lgm.graphtools.undoredo.CommandHandler.getCommandLine;
 import static de.imise.tool3lgm.graphtools.undoredo.CommandHandler.parseCommandLine;
+import static de.imise.tool3lgm.graphtools.undoredo.TransactionManager.STANDARD_PID;
 import static de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty.OPTION_GRAPH_MOVE_SUBELEMENTS;
 import static de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty.OPTION_SHOW_REMOVE_WARNING;
 import static de.imise.util.htmlxml.ParseSaveStringHandler.getDecodedParseSaveString;
@@ -376,7 +378,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
             addRedoCommandOrReplace(pid, newPageSizeFactor, MODEL_ACTION_SET_LAYER_SIZE_FACTOR, id);
             finish_transaction(pid);
         }
-        distributeEvent(LGMChangeType.LAYOUT_CHANGED);
+        distributeEvent(LAYOUT_CHANGED);
     }
 
     /**
@@ -1701,8 +1703,11 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
     /**
      * @param pid
      */
-    public void finish_transaction(final int pid) {
+    public void finish_transaction(final int pid, final LGMChangeType... eventTypesToDistribute) {
         finish_transaction(pid, true);
+        for (LGMChangeType eventType : eventTypesToDistribute) {
+            distributeEvent(eventType, pid);
+        }
     }
 
     @SuppressWarnings("unused")
@@ -1968,8 +1973,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
         for (ElementContainer ec : selectedContainer) {
             normalizeElement(ec, pid);
         }
-        finish_transaction(pid);
-        distributeEvent(ELEMENT_GRAPHICS_CHANGED, pid);
+        finish_transaction(pid, ELEMENT_GRAPHICS_CHANGED);
     }
 
     /**
@@ -1983,8 +1987,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
         for (ElementContainer ec : selectedContainer) {
             normalizeFontElement(ec, pid);
         }
-        finish_transaction(pid);
-        distributeEvent(ELEMENT_GRAPHICS_CHANGED, pid);
+        finish_transaction(pid, ELEMENT_GRAPHICS_CHANGED);
     }
 
     /**
@@ -1998,8 +2001,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
         for (ElementContainer ec : selectedContainer) {
             normalizeColorElement(ec, pid);
         }
-        finish_transaction(pid);
-        distributeEvent(ELEMENT_GRAPHICS_CHANGED, pid);
+        finish_transaction(pid, ELEMENT_GRAPHICS_CHANGED);
     }
 
     /**
@@ -2013,8 +2015,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
         for (ElementContainer ec : selectedContainer) {
             normalizeTransparencyElement(ec, pid);
         }
-        finish_transaction(pid);
-        distributeEvent(ELEMENT_GRAPHICS_CHANGED, pid);
+        finish_transaction(pid, ELEMENT_GRAPHICS_CHANGED);
     }
 
     /**
@@ -2077,8 +2078,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
             String elementID = me.getID();
             setIcon(id, elementID, iconKey, pid);
         }
-        finish_transaction(pid);
-        distributeEvent(ELEMENT_GRAPHICS_CHANGED, pid);
+        finish_transaction(pid, ELEMENT_GRAPHICS_CHANGED);
     }
 
     /**
@@ -2128,8 +2128,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
             String elementID = ec.getID();
             unsetIcon(id, elementID, pid);
         }
-        finish_transaction(pid);
-        distributeEvent(ELEMENT_GRAPHICS_CHANGED, pid);
+        finish_transaction(pid, ELEMENT_GRAPHICS_CHANGED);
     }
 
     /**
@@ -2180,8 +2179,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
         for (ElementContainer ec : selectedContainer) {
             changeColor(ec, col, pid);
         }
-        finish_transaction(pid);
-        distributeEvent(ELEMENT_GRAPHICS_CHANGED, pid);
+        finish_transaction(pid, ELEMENT_GRAPHICS_CHANGED);
     }
 
     /**
@@ -2201,8 +2199,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
             }
         }
 
-        finish_transaction(pid);
-        distributeEvent(ELEMENT_GRAPHICS_CHANGED, pid);
+        finish_transaction(pid, ELEMENT_GRAPHICS_CHANGED);
     }
     /**
      * @param ec
@@ -2294,8 +2291,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
         for (ElementContainer ec : selectedContainer) {
             changeAlpha(ec, alphaMode, pid);
         }
-        finish_transaction(pid);
-        distributeEvent(ELEMENT_GRAPHICS_CHANGED, pid);
+        finish_transaction(pid, ELEMENT_GRAPHICS_CHANGED);
     }
 
     /**
@@ -2305,7 +2301,6 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
      */
     private final void setSameAlpha(final int pid) {
         start_transaction(pid);
-
         ElementContainer lastSelected = getLastSelected();
         int alphaValue = lastSelected.getAlpha();
 
@@ -2314,9 +2309,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
                 changeAlpha(ec, alphaValue, pid);
             }
         }
-
-        finish_transaction(pid);
-        distributeEvent(ELEMENT_GRAPHICS_CHANGED, pid);
+        finish_transaction(pid, ELEMENT_GRAPHICS_CHANGED);
     }
 
     /**
@@ -2493,8 +2486,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
             }
         }
 
-        finish_transaction(pid);
-        distributeEvent(ELEMENT_GRAPHICS_CHANGED, pid);
+        finish_transaction(pid, ELEMENT_GRAPHICS_CHANGED);
     }
 
     /**
@@ -2523,8 +2515,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
         Font font = invalidFontName ? null : new Font(name, style, size);
         ElementContainer ec = szen.findContainerCoded(elementID);
         changeFont(ec, font, pid);
-        szen.finish_transaction(pid);
-        szen.distributeEvent(ELEMENT_GRAPHICS_CHANGED, pid);
+        szen.finish_transaction(pid, ELEMENT_GRAPHICS_CHANGED);
     }
 
     /**
@@ -2547,8 +2538,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
                 changeFont(ec, font, pid);
             }
         }
-        finish_transaction(pid);
-        distributeEvent(ELEMENT_GRAPHICS_CHANGED, pid);
+        finish_transaction(pid, ELEMENT_GRAPHICS_CHANGED);
     }
 
     // --- GraphElementLayout-Verwaltung --- Ende ---
@@ -2876,8 +2866,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
             }
         }
         //        setSelection(selection);
-        finish_transaction(pid);
-        distributeEvent(ELEMENT_GRAPHICS_CHANGED, pid);
+        finish_transaction(pid, ELEMENT_GRAPHICS_CHANGED);
     }
 
     /**
@@ -3030,8 +3019,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
             String elementID = ec.getID();
             setExpanded(expand, gdcoll, id, elementID, !expand, pid);
         }
-        finish_transaction(pid);
-        distributeEvent(ELEMENT_GRAPHICS_CHANGED, pid);
+        finish_transaction(pid, ELEMENT_GRAPHICS_CHANGED);
     }
 
     /**
@@ -3046,8 +3034,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
             String elementID = ec.getID();
             setExpanded(expand, gdcoll, id, elementID, !expand, pid);
         }
-        finish_transaction(pid);
-        distributeEvent(ELEMENT_GRAPHICS_CHANGED, pid);
+        finish_transaction(pid, ELEMENT_GRAPHICS_CHANGED);
     }
 
     /**
@@ -3097,8 +3084,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
             collapse(szen, ec, doCollapse, pid);
         }
 
-        szen.finish_transaction(pid);
-        szen.distributeEvent(ELEMENT_GRAPHICS_CHANGED, pid);
+        szen.finish_transaction(pid, ELEMENT_GRAPHICS_CHANGED);
 
         tmpExpansionLevel--;
     }
@@ -3271,8 +3257,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
         }
         szen.addUndo(pid, visible ? MODEL_ACTION_SET_ELEMENT_VISIBILITY_OFF : MODEL_ACTION_SET_ELEMENT_VISIBILITY_ON, szenID, containers);
         szen.addRedo(pid, visible ? MODEL_ACTION_SET_ELEMENT_VISIBILITY_ON : MODEL_ACTION_SET_ELEMENT_VISIBILITY_OFF, szenID, containers);
-        szen.finish_transaction(pid);
-        szen.distributeEvent(DATA_CHANGED, pid);
+        szen.finish_transaction(pid, DATA_CHANGED);
     }
 
     /**
@@ -3364,21 +3349,20 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
      */
     public final void deselectAll(final boolean insideTransaction) {
         if (!insideTransaction) {
-            start_transaction(TransactionManager.STANDARD_PID, false);
+            start_transaction(STANDARD_PID, false);
         }
         gdcoll.deselectAll();
         if (!insideTransaction) {
-            finish_transaction(TransactionManager.STANDARD_PID, false);
+            finish_transaction(STANDARD_PID, false);
         }
-        distributeEvent(SELECTION_CHANGED, TransactionManager.STANDARD_PID);
+        distributeEvent(SELECTION_CHANGED, STANDARD_PID);
     }
 
     /**
      * @param selectOnylActiveLayerVisibleElements
      */
     public void selectAll(final boolean selectOnylActiveLayerVisibleElements) {
-        final int PID = TransactionManager.STANDARD_PID;
-        start_transaction(PID, false);
+        start_transaction(STANDARD_PID, false);
         deselectAll(true);
         for (int i = 0; i < layer.length; i++) {
             LayerContainer layerContainer = layer[i];
@@ -3403,8 +3387,8 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
         if (!selectOnylActiveLayerVisibleElements) {
             gdcoll.selectAllUniques();
         }
-        finish_transaction(PID, false);
-        distributeEvent(SELECTION_CHANGED, PID);
+        finish_transaction(STANDARD_PID, false);
+        distributeEvent(SELECTION_CHANGED, STANDARD_PID);
     }
 
     /**
@@ -3717,8 +3701,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
         if (!gdcoll.isBulkMode()) {
             select(lastCreated, pid);
         }
-        finish_transaction(pid);
-        distributeEvent(DATA_CHANGED);
+        finish_transaction(pid, DATA_CHANGED);
         return lastCreated;
     }
 
@@ -4148,8 +4131,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
                     }
                 }
             }
-            szen.finish_transaction(pid);
-            szen.distributeEvent(DATA_CHANGED, pid);
+            szen.finish_transaction(pid, DATA_CHANGED);
         }
 
         return edge;
@@ -4175,8 +4157,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
                 gdcoll.link(edgeClass, lastSelecedElement, me, pid);
             }
         }
-        finish_transaction(pid);
-        distributeEvent(DATA_CHANGED, pid);
+        finish_transaction(pid, DATA_CHANGED);
     }
 
     /**
@@ -4199,8 +4180,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
                 gdcoll.unlink(lastSelecedElement, me, edgeClass, pid);
             }
         }
-        finish_transaction(pid);
-        distributeEvent(DATA_CHANGED, pid);
+        finish_transaction(pid, DATA_CHANGED);
     }
 
     /**
@@ -4214,8 +4194,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
             Edge edge = edgeC.getEdge();
             gdcoll.unlink(edge, pid);
         }
-        finish_transaction(pid);
-        distributeEvent(DATA_CHANGED, pid);
+        finish_transaction(pid, DATA_CHANGED);
     }
 
     /**
@@ -4269,8 +4248,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
          * knot.getContainer(this); kc.switchSpecialInfoTartgets(pos1, pos2,
          * kc.isSelected()); }
          */
-        finish_transaction(pid);
-        distributeEvent(DATA_CHANGED, pid);
+        finish_transaction(pid, DATA_CHANGED);
     }
 
     /**
@@ -4367,8 +4345,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
                     z_move_down(ec, pid);
                 }
             }
-            finish_transaction(pid);
-            distributeEvent(GROUP_ORDER_CHANGED, pid);
+            finish_transaction(pid, GROUP_ORDER_CHANGED);
         }
     }
 
@@ -4451,8 +4428,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
                     z_step_up(ec, pid);
                 }
             }
-            finish_transaction(pid);
-            distributeEvent(GROUP_ORDER_CHANGED, pid);
+            finish_transaction(pid, GROUP_ORDER_CHANGED);
         }
     }
 
@@ -4499,8 +4475,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
                     z_step_down(ec, pid);
                 }
             }
-            finish_transaction(pid);
-            distributeEvent(GROUP_ORDER_CHANGED, pid);
+            finish_transaction(pid, GROUP_ORDER_CHANGED);
         }
     }
 
@@ -4565,8 +4540,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
         for (ElementContainer ec : selectedContainer) {
             setTextPositionVertical(mode, ec, pid);
         }
-        finish_transaction(pid);
-        distributeEvent(ELEMENT_GRAPHICS_CHANGED, pid);
+        finish_transaction(pid, ELEMENT_GRAPHICS_CHANGED);
     }
 
     /**
@@ -4611,8 +4585,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
         for (ElementContainer ec : selectedContainer) {
             setTextAlignmentHTML(mode, ec, pid);
         }
-        finish_transaction(pid);
-        distributeEvent(ELEMENT_GRAPHICS_CHANGED, pid);
+        finish_transaction(pid, ELEMENT_GRAPHICS_CHANGED);
     }
 
     /**
@@ -4700,8 +4673,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
         addUndoCommandIfNotExist(pid, oldDescription, MODEL_ACTION_SET_ELEMENT_DESCRIPTION, me);
         newDescription = getDecodedParseSaveString(description);
         me.setDescription(newDescription);
-        finish_transaction(pid);
-        distributeEvent(DATA_CHANGED, pid);
+        finish_transaction(pid, DATA_CHANGED);
     }
 
     /**
@@ -4720,8 +4692,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
                 ModelElement me = ec.getElement();
                 setSubType(me, subType, pid);
             }
-            finish_transaction(pid);
-            distributeEvent(DATA_CHANGED, pid);
+            finish_transaction(pid, DATA_CHANGED);
         }
     }
 
@@ -4757,8 +4728,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
         addRedoCommandOrReplace(pid, subType, MODEL_ACTION_SET_ELEMENT_SUBTYPE, me);
         addUndoCommandIfNotExist(pid, oldSubType, MODEL_ACTION_SET_ELEMENT_SUBTYPE, me);
         me.setSubType(subType);
-        finish_transaction(pid);
-        distributeEvent(DATA_CHANGED, pid);
+        finish_transaction(pid, DATA_CHANGED);
     }
 
     /**
@@ -4796,8 +4766,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
         addUndoCommandIfNotExist(pid, oldValue, MODEL_ACTION_SET_USER_FIELD_VALUE, me, userField);
         newValue = getDecodedParseSaveString(value);
         me.setUserFieldInputValue(userField, newValue);
-        finish_transaction(pid);
-        distributeEvent(USER_FIELD_VALUE_CHANGED, pid);
+        finish_transaction(pid, USER_FIELD_VALUE_CHANGED);
     }
 
     /**
@@ -4863,7 +4832,6 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
         addRedoCommandOrReplace(pid, idReplacement, MODEL_ACTION_SET_USER_FIELD_WEIGHT_REPLACEMENT, elementID, userFieldIDToReplaceOrSimpleEdgeClassName);
         addUndoCommandIfNotExist(pid, oldUserFieldIDReplacement, MODEL_ACTION_SET_USER_FIELD_WEIGHT_REPLACEMENT, elementID, userFieldIDToReplaceOrSimpleEdgeClassName);
         finish_transaction(pid);
-
     }
 
     /**
@@ -4921,9 +4889,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
         szen.getDefaultElementsLayout().adapt(defaultElementsLayout);
         String otherID = szen.getID();
         addElementsToSzenario(otherID, elements, pid);
-        finish_transaction(pid);
-        szen.distributeEvent(ACTIVE_LAYER_CHANGED, pid);
-        szen.distributeEvent(DATA_CHANGED, pid);
+        finish_transaction(pid, ACTIVE_LAYER_CHANGED, DATA_CHANGED);
     }
 
     /**
@@ -4953,8 +4919,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
             finish_transaction(pid, false);
             distributeEvent(SELECTION_CHANGED, pid);
         }
-        finish_transaction(pid);
-        distributeEvent(DATA_CHANGED, pid);
+        finish_transaction(pid, DATA_CHANGED);
     }
 
     /**
@@ -4969,8 +4934,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
                 addElementToSzenario(szenID, (NodeContainer) ec, pid);
             }
         }
-        finish_transaction(pid);
-        distributeEvent(DATA_CHANGED, pid);
+        finish_transaction(pid, DATA_CHANGED);
     }
 
     /**
@@ -4988,8 +4952,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
             String elementID = ec.getID();
             linkElementToSzenario(szenID, elementID, pid);
         }
-        finish_transaction(pid);
-        distributeEvent(DATA_CHANGED, pid);
+        finish_transaction(pid, DATA_CHANGED);
     }
 
     /**
@@ -5002,8 +4965,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
             String elementID = ec.getID();
             linkElementToSzenario(szenID, elementID, pid);
         }
-        finish_transaction(pid);
-        distributeEvent(DATA_CHANGED, pid);
+        finish_transaction(pid, DATA_CHANGED);
     }
 
     /**
@@ -5087,8 +5049,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
             }
             targetSzenario.raiseSlaves(targetContainer, pid);
         }
-        targetSzenario.finish_transaction(pid);
-        targetSzenario.distributeEvent(DATA_CHANGED, pid);
+        targetSzenario.finish_transaction(pid, DATA_CHANGED);
         return targetContainer;
     }
 
@@ -5110,7 +5071,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
         addUndo(pid, MODEL_ACTION_LINK_ELEMENT_TO_SUBMODEL, oldSzenID, me);
         addRedo(pid, MODEL_ACTION_LINK_ELEMENT_TO_SUBMODEL, szenID, me);
         finish_transaction(pid);
-        distributeEvent(DATA_CHANGED, ec, 0);
+        distributeEvent(DATA_CHANGED, ec, pid);
     }
 
     /**

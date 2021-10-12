@@ -693,6 +693,11 @@ public class LayerContainer extends ElementContainer implements Iterable<Element
 
     @Override
     public void remove(final Component comp) {
+        //Debug -> print deleted element informations
+        //        if (comp instanceof ElementContainer) {
+        //            ElementContainer ec = (ElementContainer) comp;
+        //            Sys.err(ec + " (" + ec.getGraphDocument() + ")   " + ec.getID() + "  " + ec.getElement().getClass().getSimpleName());
+        //        }
         if (comp == null) {
             return;
         }

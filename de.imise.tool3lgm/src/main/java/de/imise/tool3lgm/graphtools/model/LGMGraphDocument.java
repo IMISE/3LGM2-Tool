@@ -196,8 +196,7 @@ public class LGMGraphDocument extends GraphDocument {
         copyToClipboard();
         //man muss die Selektion clonen, da sie sich wärend des Löschens ändert
         gdcoll.deleteElements(getSelectedElements(), this, STANDARD_PID);
-        finish_transaction(STANDARD_PID);
-        distributeEvent(DATA_CHANGED);
+        finish_transaction(STANDARD_PID, DATA_CHANGED);
     }
 
     /**
@@ -243,9 +242,7 @@ public class LGMGraphDocument extends GraphDocument {
             e.printStackTrace();
             return;
         }
-
-        finish_transaction(pid);
-        distributeEvent(DATA_CHANGED, pid);
+        finish_transaction(pid, DATA_CHANGED);
     }
 
     /**
@@ -268,9 +265,7 @@ public class LGMGraphDocument extends GraphDocument {
             e.printStackTrace();
             return;
         }
-
-        finish_transaction(pid);
-        distributeEvent(DATA_CHANGED, pid);
+        finish_transaction(pid, DATA_CHANGED);
     }
 
     /**
@@ -494,7 +489,6 @@ public class LGMGraphDocument extends GraphDocument {
             for (EdgeContainer edgeC : edgeConts) {
                 edgeC.computeBorderPoints();
             }
-
             targetMainDoc.finish_transaction(STANDARD_PID);
         } catch (Exception ex) {
             targetMainDoc.undo(STANDARD_PID);
@@ -505,7 +499,7 @@ public class LGMGraphDocument extends GraphDocument {
         for (int j = 0; j < tmpActive.size(); j++) {
             sourceDoc.addToSelection(tmpActive.get(j), STANDARD_PID);
         }
-        sourceDoc.finish_transaction(TransactionManager.STANDARD_PID, false);
+        sourceDoc.finish_transaction(STANDARD_PID, false);
         sourceDoc.distributeEvent(SELECTION_CHANGED);
 
         sourceCollection.createInferenceEdges(true, STANDARD_PID);
@@ -687,8 +681,7 @@ public class LGMGraphDocument extends GraphDocument {
                 }
             }
         }
-        targetDoc.finish_transaction(pid);
-        targetDoc.distributeEvent(DATA_CHANGED, pid);
+        targetDoc.finish_transaction(pid, DATA_CHANGED);
         return instanceContainer;
     }
 
@@ -812,8 +805,7 @@ public class LGMGraphDocument extends GraphDocument {
         }
         SimplePath simplePath = createSubPath ? createdSubPath : SimplePath.create(createdElementaryPaths);
         repositioningOfSubordniatedInGraph(simplePath, pid);
-        finish_transaction(pid);
-        distributeEvent(DATA_CHANGED, pid);
+        finish_transaction(pid, DATA_CHANGED);
         return simplePath;
     }
 
@@ -824,7 +816,7 @@ public class LGMGraphDocument extends GraphDocument {
      * @param pid
      * @return
      */
-    private ElementaryPath createElementaryPath(final ModelElement startElement, ModelElement endElement, final ElementaryMetaPath elementaryMetaPath, final int pid) {
+    public ElementaryPath createElementaryPath(final ModelElement startElement, ModelElement endElement, final ElementaryMetaPath elementaryMetaPath, final int pid) {
         //wenn ein endElement angegeben wurde, dann das im letzten Pfadschritt verknüpfen
         boolean alreadyLinked = false;
         Class<? extends Edge> edgeClass = elementaryMetaPath.getEdgeClass();
@@ -871,6 +863,55 @@ public class LGMGraphDocument extends GraphDocument {
         }
         ElementaryPath resultPath = new ElementaryPath(elementaryMetaPath, startElement, endElement, edge);
         return resultPath;
+    }
+
+    /**
+     * @param startElement
+     * @param endElement
+     * @param metaPath
+     * @param pid
+     */
+    public final void removePath(final ModelElement startElement, final ModelElement endElement, final MetaPath metaPath, final int pid) {
+        if (metaPath instanceof SimpleMetaPath) {
+            removeSimplePath(startElement, endElement, (SimpleMetaPath) metaPath, pid);
+        } else if (metaPath instanceof ParallelMetaPath) {
+            ParallelMetaPath parallelMetaPath = (ParallelMetaPath) metaPath;
+            for (MetaPath internalMetaPath : parallelMetaPath.iterableSubMetaPaths()) {
+                removePath(startElement, endElement, internalMetaPath, pid);
+            }
+        }
+    }
+
+    /**
+     * @param startElement
+     * @param endElement
+     * @param metaPath
+     * @param pid
+     */
+    public final void removeSimplePath(final ModelElement startElement, final ModelElement endElement, final SimpleMetaPath metaPath, final int pid) {
+        List<SimplePath> simplePaths = metaPath.getSimplePaths(startElement, endElement);
+        for (SimplePath simplePath : simplePaths) {
+            removeSimplePath(simplePath, pid);
+        }
+    }
+
+    /**
+     * @param simplePath
+     * @param pid
+     */
+    public final void removeSimplePath(final SimplePath simplePath, final int pid) {
+        start_transaction(pid);
+        //at the moment this funtion only removes the edges. If the elements
+        //in the path are not invalid through the removing of the edges they
+        //will not be deleted. Maybe in future we need the functionality to
+        //delete the inner path elements too. Then this function needs one
+        //more parameter.
+        List<ElementaryPath> elementaryPaths = simplePath.getElementaryPaths();
+        for (ElementaryPath elementaryPath : elementaryPaths) {
+            Edge edge = elementaryPath.getEdge();
+            gdcoll.deleteElement(edge, pid);
+        }
+        finish_transaction(pid);
     }
 
     /**
