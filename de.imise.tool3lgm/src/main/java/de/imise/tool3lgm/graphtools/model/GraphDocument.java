@@ -71,6 +71,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -138,6 +139,7 @@ import de.imise.util.NameAndDescriptionTarget;
 import de.imise.util.OptionsSupport;
 import de.imise.util.Sys;
 import de.imise.util.collections.CollectionUtils;
+import de.imise.util.pair.Pair;
 import de.imise.util.swing.dialog.ImageChooser;
 import de.imise.util.swing.dialog.MultipleOptionPane;
 
@@ -248,6 +250,15 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
      * COMMENTME
      */
     protected NodeContainer lastCreated = null;
+
+    // holds initial positions of subelements, when master element is resized
+    private Map<ElementContainer, Pair<Integer, Integer>> originalPositions;
+
+    // holds original position of master element for resizing
+    private Pair<Integer, Integer> originalMasterPosition;
+
+    //holds original dimensions of master element when resizing
+    private Pair<Integer, Integer> originalMasterDimension;
 
     /**
      * @param _gdcoll
@@ -1151,7 +1162,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
                     int y = Integer.parseInt(argv[3]);
                     int width = Integer.parseInt(argv[4]);
                     int height = Integer.parseInt(argv[5]);
-                    moveNodeContainer(gdcoll, szenID, elementID, x, y, width, height, false, pid);
+                    moveNodeContainer(gdcoll, szenID, elementID, x, y, width, height, pid);
                 } catch (Exception e) {
                     Log(e);
                 }
@@ -2595,9 +2606,9 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
             return;
         }
         start_transaction(pid);
-        if (moveSubelements) {
+        if (moveSubelements && OPTION_GRAPH_MOVE_SUBELEMENTS.is()) {
             // retrieves all subordinated elements in this submodel
-            List<ElementContainer> subordinatedContainers = me.getConnectedContainers(this, SubordinationEdge.class, SUPER_TO_SUB_DIRECTION);
+            List<ElementContainer> subordinatedContainers = me.getConnectedContainers(this, CompositionEdge.class, SUPER_TO_SUB_DIRECTION);
             moveSubElements(nc, subordinatedContainers, x, y, width, height, pid);
         }
         GraphDocument ncDoc = nc.getGraphDocument();
@@ -2642,8 +2653,8 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
     }
 
     /**
-     * moves all subelements in relation of the superordinate elements, which
-     * has been moved
+     * moves all subelements in relation of the masterelement, which
+     * has been resized (and moved by the grid layout function)
      *
      * @param nc
      * @param subordinatedContainers
@@ -2659,10 +2670,33 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
         int oldWidth = nc.getWidth();
         int oldHeight = nc.getHeight();
 
+        // used when, model element is resized via dragging option
+        // it will calculate the repositioning with the original position and dimension
+        // this is done, so that the subelements won't overlap
+        if (!originalPositions.isEmpty()) {
+            oldX = originalMasterPosition.getFirstItem();
+            oldY = originalMasterPosition.getSecondItem();
+            oldWidth = originalMasterDimension.getFirstItem();
+            oldHeight = originalMasterDimension.getSecondItem();
+        } else {
+            oldX = nc.getX();
+            oldY = nc.getY();
+            oldWidth = nc.getWidth();
+            oldHeight = nc.getHeight();
+        }
+
         int leftBorder = oldX - oldWidth / 2;
         int rightBorder = oldX + oldWidth / 2;
         int bottomBorder = oldY - oldHeight / 2;
         int topBorder = oldY + oldHeight / 2;
+
+        int newLeftBorder = x - width / 2;
+        int newRightBorder = x + width / 2;
+        int newBottomBorder = y - height / 2;
+        int newTopBorder = y + height / 2;
+
+        float widthScale = (float) width / (float) oldWidth;
+        float heightScale = (float) height / (float) oldHeight;
 
         GraphDocument ncDoc = nc.getGraphDocument();
 
@@ -2670,41 +2704,69 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
             NodeContainer nec = (NodeContainer) ec;
             ModelElement nme = nec.getElement();
 
+            //will skip all Subelements, that aren't displayed
             if (!nme.isPaintable()) {
                 continue;
             }
 
-            int oldSubX = nec.getX();
-            int oldSubY = nec.getY();
+            int oldSubX;
+            int oldSubY;
+            int relativeX;
+            int relativeY;
             int newSubPosX;
             int newSubPosY;
             int horizontalDistanceToBorder;
             int verticalDistanceToBorder;
 
+            if (!originalPositions.isEmpty()) {
+                Pair<Integer, Integer> originalPosition = originalPositions.get(ec);
+                oldSubX = originalPosition.getFirstItem();
+                oldSubY = originalPosition.getSecondItem();
+            } else {
+                oldSubX = nec.getX();
+                oldSubY = nec.getY();
+            }
+
             boolean isLeftSide = oldSubX < oldX;
             boolean isBottomSide = oldSubY < oldY;
 
-            int newLeftBorder = x - width / 2;
-            int newRightBorder = x + width / 2;
-            int newBottomBorder = y - height / 2;
-            int newTopBorder = y + height / 2;
-
-            // the distance between the horizontal borders and the subelements will stay the same
-            // this is done in order to prevent the subelements converging to the middle of the element
             if (isLeftSide) {
                 horizontalDistanceToBorder = leftBorder - oldSubX;
-                newSubPosX = newLeftBorder - horizontalDistanceToBorder;
             } else {
                 horizontalDistanceToBorder = rightBorder - oldSubX;
-                newSubPosX = newRightBorder - horizontalDistanceToBorder;
             }
 
             if (isBottomSide) {
                 verticalDistanceToBorder = bottomBorder - oldSubY;
-                newSubPosY = newBottomBorder - verticalDistanceToBorder;
             } else {
                 verticalDistanceToBorder = topBorder - oldSubY;
-                newSubPosY = newTopBorder - verticalDistanceToBorder;
+            }
+
+            // the subelements will stick to the border it is closest to this is done in order to
+            // prevent the subelements converging to the middle of the model
+            if (Math.abs(horizontalDistanceToBorder) <= Math.abs(verticalDistanceToBorder)) {
+                if (isLeftSide) {
+                    newSubPosX = newLeftBorder - horizontalDistanceToBorder;
+                } else {
+                    newSubPosX = newRightBorder - horizontalDistanceToBorder;
+                }
+                if (isBottomSide) {
+
+                }
+                relativeY = oldSubY - oldY;
+                newSubPosY = (int) (y + relativeY * heightScale);
+                //                newSubPosY = oldSubY + (int) (height * heightScale / 2);
+                //                newSubPosY = oldSubY;
+            } else {
+                if (isBottomSide) {
+                    newSubPosY = newBottomBorder - verticalDistanceToBorder;
+                } else {
+                    newSubPosY = newTopBorder - verticalDistanceToBorder;
+                }
+                relativeX = oldSubX - oldX;
+                newSubPosX = (int) (x + relativeX * widthScale);
+                //                                newSubPosX = oldSubX + (int) (width * widthScale / 2);
+                //                newSubPosX = oldSubX;
             }
 
             List<?> undoCommandArguments = ImmutableList.of(nec.getX(), nec.getY(), nec.getWidth(), nec.getHeight());
@@ -2714,6 +2776,31 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
 
             nec.setCoordinates(newSubPosX, newSubPosY, nec.getWidth(), nec.getHeight());
             updateEdgeOrBendpoint(nec);
+        }
+    }
+
+    /**
+     * will set the original positions of the subelements and the position and dimension of the masterelement
+     *
+     * @param subordinatedContainers
+     * @param masterContainer
+     */
+    public final void setOriginalPositions(final List<ElementContainer> subordinatedContainers, final ElementContainer masterContainer) {
+        originalPositions = new HashMap<>();
+        if (subordinatedContainers != null) {
+            for (ElementContainer ec : subordinatedContainers) {
+                NodeContainer nec = (NodeContainer) ec;
+                int originalX = nec.getX();
+                int originalY = nec.getY();
+                Pair<Integer, Integer> originalPosition = new Pair<>(originalX, originalY);
+                originalPositions.put(ec, originalPosition);
+            }
+            int originalMasterX = masterContainer.getX();
+            int originalMasterY = masterContainer.getY();
+            int originalMasterWidth = masterContainer.getWidth();
+            int originalMasterHeight = masterContainer.getHeight();
+            originalMasterPosition = new Pair<>(originalMasterX, originalMasterY);
+            originalMasterDimension = new Pair<>(originalMasterWidth, originalMasterHeight);
         }
     }
 
@@ -2775,7 +2862,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
      * @param height
      * @param pid
      */
-    private static final void moveNodeContainer(final GDCollection gdcoll, final String szenID, final String elementID, final int x, final int y, final int width, final int height, final boolean moveSubElements, final int pid) {
+    private static final void moveNodeContainer(final GDCollection gdcoll, final String szenID, final String elementID, final int x, final int y, final int width, final int height, final int pid) {
         GraphDocument szen = gdcoll.getGraphDocumentCoded(szenID);
         if (!(szen instanceof Szenario)) {
             return;
@@ -2788,7 +2875,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
             return;
         }
         NodeContainer k = mc;
-        szen.moveNodeContainer(k, x, y, width, height, moveSubElements, pid);
+        szen.moveNodeContainer(k, x, y, width, height, false, pid);
     }
 
     /**

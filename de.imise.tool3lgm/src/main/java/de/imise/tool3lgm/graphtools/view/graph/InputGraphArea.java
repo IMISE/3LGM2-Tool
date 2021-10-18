@@ -8,6 +8,7 @@ import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.MIN_LAYER_IN
 import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.NO_LAYER;
 import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.isInterLayer;
 import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction.BACKWARD;
+import static de.imise.tool3lgm.graphtools.metamodel.elements.SubordinationEdge.SUPER_TO_SUB_DIRECTION;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.INVALID_BENDPOINT_INDEX;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.INVALID_ID_STRING;
 import static de.imise.tool3lgm.graphtools.model.LGMChangeListener.LGMChangeType.ELEMENT_GRAPHICS_CHANGED;
@@ -31,6 +32,7 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
+import java.util.List;
 import java.util.Set;
 
 import javax.swing.JScrollBar;
@@ -40,6 +42,7 @@ import javax.swing.JViewport;
 import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Bendpoint;
+import de.imise.tool3lgm.graphtools.metamodel.elements.CompositionEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
@@ -539,6 +542,14 @@ public final class InputGraphArea extends BasicGraphArea implements MouseListene
                     }
                     setCursor(new Cursor(NodeRenderer.getLastResizeCursor()));
                     sized = true;
+
+                    // when resizing elements, the original positions of the element and its subelements
+                    // are saved while resizing, and the repositioning is calculated with these
+                    // original positions
+                    ModelElement clickedMe = clickedEc.getElement();
+                    List<ElementContainer> subordinatedContainers = clickedMe.getConnectedContainers(doc, CompositionEdge.class, SUPER_TO_SUB_DIRECTION);
+                    doc.setOriginalPositions(subordinatedContainers, clickedEc);
+
                     contextGenerator.processMouseEvent(left_button, right_button, this, xin, yin);
                     break;
                 }
@@ -661,6 +672,7 @@ public final class InputGraphArea extends BasicGraphArea implements MouseListene
                 if (contextGenerator.isResizing()) {
                     contextGenerator.setResizing(false);
                     sized = false;
+                    doc.setOriginalPositions(null, null);
                     break;
                 }
                 // 2. Ob man in ein Objekt direkt getroffen hat: Node oder Edge
@@ -974,7 +986,7 @@ public final class InputGraphArea extends BasicGraphArea implements MouseListene
             } else if (yreal[ebene] > layerHeight / 2) {
                 yreal[ebene] = layerHeight / 2;
             }
-            boolean isMoveSubElements = OPTION_GRAPH_MOVE_SUBELEMENTS.set(false);
+            //            boolean isMoveSubElements = OPTION_GRAPH_MOVE_SUBELEMENTS.set(false);
             switch (getCursor().getType()) {
             case Cursor.DEFAULT_CURSOR:
                 break;
@@ -1049,7 +1061,7 @@ public final class InputGraphArea extends BasicGraphArea implements MouseListene
             default:
                 break;
             }
-            OPTION_GRAPH_MOVE_SUBELEMENTS.set(isMoveSubElements);
+            //            OPTION_GRAPH_MOVE_SUBELEMENTS.set(isMoveSubElements);
         }
         if (grabbed) {
             if (clickedEc instanceof NodeContainer) {
