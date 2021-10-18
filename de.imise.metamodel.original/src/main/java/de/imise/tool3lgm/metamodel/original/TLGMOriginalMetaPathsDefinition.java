@@ -9,7 +9,6 @@ import com.google.common.collect.ImmutableMap;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.path.MetaPathDefinition;
-import de.imise.tool3lgm.graphtools.path.metapaths.MetaPath;
 import de.imise.tool3lgm.graphtools.path.metapaths.SimpleMetaPath;
 import de.imise.tool3lgm.metamodel.original.edge.AufAufOrgVerbindung;
 import de.imise.tool3lgm.metamodel.original.edge.AufObjVerbindung;
@@ -56,52 +55,52 @@ public class TLGMOriginalMetaPathsDefinition extends MetaPathDefinition {
     @Override
     protected final void init() {
 
-        /* Aufgabe - Organisationseinheit */
+        //Aufgabe - Organisationseinheit
         put(Aufgabe.class, Organisationseinheit.class, "PATH_is_executed_by", AufAufOrgVerbindung.class, OrgAufOrgVerbindung.class);
 
-        /* Aufgabe - Anwendungsbaustein */
+        // Aufgabe - Anwendungsbaustein
         put(Aufgabe.class, Anwendungsbaustein.class, "PATH_is_supported_by", AufAufOrgVerbindung.class, AwbkAufOrgVerbindung.class, AwbAwbkVerbindung.class);
 
-        /* Aufgabe - PhyDVBaustein */
+        // Aufgabe - PhyDVBaustein
         put(Aufgabe.class, PhysischerDVBaustein.class, "PATH_is_supported_by", AufAufOrgVerbindung.class, AwbkAufOrgVerbindung.class, AwbAwbkVerbindung.class, PdvbkAwbVerbindung.class, PdvbPdvbkVerbindung.class);
 
-        /* Aufgabe - Standort */
+        // Aufgabe - Standort
         put(Aufgabe.class, Standort.class, "PATH_is_executed_at", AufAufOrgVerbindung.class, AwbkAufOrgVerbindung.class, AwbAwbkVerbindung.class, PdvbkAwbVerbindung.class, PdvbPdvbkVerbindung.class, PdvbStoVerbindung.class);
 
-        /* Objekttyp - Datenbanksystem */
+        // Objekttyp - Datenbanksystem
         put(Objekttyp.class, Datenbanksystem.class, "PATH_is_stored_in", ObjReprVerbindung.class, DbsDatVerbindung.class);
 
-        /* Anwendungsbaustein - PhyDVBaustein */
+        // Anwendungsbaustein - PhyDVBaustein
         put(Anwendungsbaustein.class, PhysischerDVBaustein.class, "PATH_is_installed_on", PdvbkAwbVerbindung.class, PdvbPdvbkVerbindung.class);
 
-        /* Organisationseinheit - PhyDVBaustein */
+        //* Organisationseinheit - PhyDVBaustein
         put(PhysischerDVBaustein.class, Organisationseinheit.class, "PATH_is_used_by", PdvbPdvbkVerbindung.class, PdvbkAwbVerbindung.class, AwbAwbkVerbindung.class, AwbkAufOrgVerbindung.class, OrgAufOrgVerbindung.class);
 
-        /* Organisationseinheit - Anwendungsbaustein */
+        // Organisationseinheit - Anwendungsbaustein
         put(Anwendungsbaustein.class, Organisationseinheit.class, "PATH_is_used_by", AwbAwbkVerbindung.class, AwbkAufOrgVerbindung.class, OrgAufOrgVerbindung.class);
 
-        /* Organisationseinheit - Softwareprodukt */
+        // Organisationseinheit - Softwareprodukt
         put(Softwareprodukt.class, Organisationseinheit.class, "PATH_is_used_by", AwpSwpVerbindung.class, RawbAwpVerbindung.class, AwbAwbkVerbindung.class, AwbkAufOrgVerbindung.class, OrgAufOrgVerbindung.class);
 
-        /* Anwendungsbaustein - Kommunikationsstandard */
+        // Anwendungsbaustein - Kommunikationsstandard
         put(Kommunikationsstandard.class, Anwendungsbaustein.class, "PATH_is_used_by", BssKommstVerbindung.class, AwbKommssVerbindung.class);
 
-        /* RechAnwendungsbaustein - Softwareprodukt */
+        // RechAnwendungsbaustein - Softwareprodukt
         put(RechAnwendungsbaustein.class, Softwareprodukt.class, "PATH_is_controlled_by", RawbAwpVerbindung.class, AwpSwpVerbindung.class);
 
-        /* Objekttyp - RechAnwendungsbaustein */
+        // Objekttyp - RechAnwendungsbaustein
         put(RechAnwendungsbaustein.class, Objekttyp.class, "PATH_is_master_of", RawbDbsVerbindung.class, ObjLogspVerbindung.class);
 
-        /* Objekttyp - Dokumentensammlung */
+        // Objekttyp - Dokumentensammlung
         put(Objekttyp.class, Dokumentensammlung.class, "PATH_is_stored_in", ObjLogspVerbindung.class);
 
-        /* Objekttyp - Anwendungsbaustein */
+        // Objekttyp - Anwendungsbaustein
         put(Objekttyp.class, Anwendungsbaustein.class, "PATH_is_used_by", AufObjVerbindung.class, AufAufOrgVerbindung.class, AwbkAufOrgVerbindung.class, AwbAwbkVerbindung.class);
 
-        /* Objekttyp - Rechnerbasierter Anwendungsbaustein */
+        // Objekttyp - Rechnerbasierter Anwendungsbaustein
         put(Objekttyp.class, RechAnwendungsbaustein.class, "PATH_is_stored_in", ObjReprVerbindung.class, DbsDatVerbindung.class, RawbDbsVerbindung.class);
 
-        /* Objekttyp - Papierbasierter Anwendungsbaustein */
+        // Objekttyp - Papierbasierter Anwendungsbaustein
         put(Objekttyp.class, KonAnwendungsbaustein.class, "PATH_is_stored_in", ObjReprVerbindung.class, DoksDokVerbindung.class, KawbDoksVerbindung.class);
 
         //        put(new MetaPath(Objekttyp.class, Anwendungsbaustein.class, new Class[][] {
@@ -112,7 +111,7 @@ public class TLGMOriginalMetaPathsDefinition extends MetaPathDefinition {
         //                }
         //        }, "text_kommuniziert"));
         //
-        //        /* Anwendungsbaustein - Anwendungsbaustein */
+        //        // Anwendungsbaustein - Anwendungsbaustein
         //        put(new MetaPath(Anwendungsbaustein.class, Anwendungsbaustein.class, new Class[][] {
         //                {
         //                        RawbRawbVerbindung.class
@@ -129,25 +128,25 @@ public class TLGMOriginalMetaPathsDefinition extends MetaPathDefinition {
 
     }
 
+    @Override
+    public Collection<SimpleMetaPath> getCreatableMetaPaths() {
+
+        // Anwendungsbaustein - Schnittstelle - KommBeziehung - Schnittstelle - Anwendungsbaustein
+        SimpleMetaPath metaPath1 = smp(Anwendungsbaustein.class, Anwendungsbaustein.class, 1, AwbKommssVerbindung.class, KommBeziehung.class, AwbKommssVerbindung.class);
+
+        // Schnittstelle - KommBeziehung - Schnittstelle - Anwendungsbaustein
+        SimpleMetaPath metaPath2 = smp(Bausteinschnittstelle.class, Anwendungsbaustein.class, 0, KommBeziehung.class, AwbKommssVerbindung.class);
+
+        return ImmutableList.of(metaPath1, metaPath2);
+    }
+
     ////////////////////////////////////////////////////////////////////////
     // Map auf die in der Grafik anzuzeigenden Namen verbundener Elemente //
     ////////////////////////////////////////////////////////////////////////
 
     @Override
-    public Map<Class<? extends ModelElement>, MetaPath> getElementClassToNameExtensionMetaPath() {
+    public Map<Class<? extends ModelElement>, SimpleMetaPath> getElementClassToNameExtensionMetaPath() {
         return ImmutableMap.of(RechAnwendungsbaustein.class, simpleMetaPathCreator.createSimpleMetaPath(RechAnwendungsbaustein.class, Softwareprodukt.class, RawbAwpVerbindung.class, AwpSwpVerbindung.class));
-    }
-
-    @Override
-    public Collection<SimpleMetaPath> getCreatableMetaPaths() {
-        /*
-         * Anwendungsbaustein - Schnittstelle - KommBeziehung - Schnittstelle -
-         * Anwendungsbaustein
-         */
-        SimpleMetaPath metaPath1 = smp(Anwendungsbaustein.class, Anwendungsbaustein.class, 1, AwbKommssVerbindung.class, KommBeziehung.class, AwbKommssVerbindung.class);
-        /* Schnittstelle - KommBeziehung - Schnittstelle - Anwendungsbaustein */
-        SimpleMetaPath metaPath2 = smp(Bausteinschnittstelle.class, Anwendungsbaustein.class, 0, KommBeziehung.class, AwbKommssVerbindung.class);
-        return ImmutableList.of(metaPath1, metaPath2);
     }
 
 }

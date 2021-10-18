@@ -468,8 +468,7 @@ public abstract class AbstractElementPropertyDialog extends AbstractTabbedProper
                 selectedElementDialogPanel.update();
             }
         }
-        mainDoc.finish_transaction(transactionID);
-        mainDoc.distributeEvent(DATA_CHANGED, transactionID);
+        mainDoc.finish_transaction(transactionID, DATA_CHANGED);
         mainDoc.start_transaction(createNewTransactionID());
     }
 

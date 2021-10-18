@@ -300,12 +300,12 @@ public abstract class Edge extends ModelElement {
         }
         startElement = doc.findElementCoded(startID);
         if (startElement == null) {
-            System.out.println("Error decoding start element ID \"" + startID + "\"" + getClass());
+            Sys.out1("Error decoding start element ID \"" + startID + "\"" + getClass());
         }
 
         endElement = doc.findElementCoded(endID);
         if (endElement == null) {
-            System.out.println("Error decoding end element ID \"" + endID + "\"" + getClass());
+            Sys.out1("Error decoding end element ID \"" + endID + "\"" + getClass());
         }
 
         if (startElement == null || endElement == null) {

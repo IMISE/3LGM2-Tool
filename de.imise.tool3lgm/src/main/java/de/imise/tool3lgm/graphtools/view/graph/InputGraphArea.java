@@ -622,8 +622,7 @@ public final class InputGraphArea extends BasicGraphArea implements MouseListene
             setCursor(new Cursor(DEFAULT_CURSOR));
         }
         if (mouse_dragged) {
-            szenario.finish_transaction(STANDARD_PID);
-            szenario.distributeEvent(ELEMENT_GRAPHICS_CHANGED);
+            szenario.finish_transaction(STANDARD_PID, ELEMENT_GRAPHICS_CHANGED);
         }
         xin = e.getX();
         yin = e.getY();

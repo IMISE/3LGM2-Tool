@@ -41,6 +41,7 @@ import de.imise.tool3lgm.graphtools.model.GDCollectionOwner;
 import de.imise.tool3lgm.graphtools.model.GDCommands;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.path.metapaths.MetaPath;
+import de.imise.tool3lgm.graphtools.path.metapaths.SimpleMetaPath;
 import de.imise.tool3lgm.graphtools.userfield.definition.SubType;
 import de.imise.tool3lgm.graphtools.userfield.definition.UserField;
 import de.imise.tool3lgm.graphtools.userfield.definition.UserFieldDefinitions;
@@ -464,15 +465,27 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
     }
 
     /**
-     * Liefert für alle Elementklassen, bei denen der Name verbundendener
-     * Elemente in der Grafik in Klammern unter der eigentlichen Elementart
-     * angezeigt werden soll, den MetaPfad zu den anzuzeigenden verbundenen
-     * Elementen. Diese Funktion darf nicht einfach refactored werden und wenn
-     * doch, dann muss das Feld GET_NAME_EXTENSION_METHOD_NAME ebenfalls
-     * umbenannt werden.
+     * @returnthe MetaPath to the connected elements to be displayed for all
+     *            element classes where the name of connected elements is to be
+     *            displayed in the graphic in brackets below the actual element
+     *            type.
      */
-    private final MetaPath getGraphNameExtensionPath() {
-        return metaModel.getNameExtensionPath(getClass());
+    private final MetaPath getGraphNameExtensionPathAsNameTarget() {
+        return metaModel.getNameExtensionPathAsNameTarget(getClass());
+    }
+
+    /**
+     * Updates the name of connected elenents to whose name the name of this
+     * element should be appended.
+     */
+    private final void updateGraphNameExtensionsOnMyNameTargets() {
+        SimpleMetaPath nameExtensionPathAsNameSource = metaModel.getNameExtensionPathAsNameSource(getClass());
+        if (nameExtensionPathAsNameSource != null) {
+            List<ModelElement> nameTargets = nameExtensionPathAsNameSource.getConnectedElements(this);
+            for (ModelElement nameTarget : nameTargets) {
+                nameTarget.updateNameExtensions();
+            }
+        }
     }
 
     /**
@@ -480,7 +493,7 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
      * Namen verbundener Elemente anzeigen soll
      */
     public void updateNameExtensions() {
-        if (getGraphNameExtensionPath() != null) {
+        if (getGraphNameExtensionPathAsNameTarget() != null) {
             setName(name);
         }
     }
@@ -520,13 +533,16 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
         if (isNodeType && isPaintable()) {
             updateGraphName(null);
         }
+
+        updateGraphNameExtensionsOnMyNameTargets();
+
     }
 
     /**
      * @return
      */
     public String getGraphNameExtension() {
-        MetaPath nameExtensionPath = getGraphNameExtensionPath();
+        MetaPath nameExtensionPath = getGraphNameExtensionPathAsNameTarget();
         updateGraphNameSuffixBuffer(nameExtensionPath);
         return suffixBuf.toString();
     }
@@ -570,7 +586,7 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
         DefaultElementsLayoutDefinition defaultElementsLayout = null;
         GraphElementLayout nameExtendsionClassLayout = null;
         Iterable<ElementContainer> targetContainers;
-        MetaPath nameExtension = getGraphNameExtensionPath();
+        MetaPath nameExtension = getGraphNameExtensionPathAsNameTarget();
         updateGraphNameSuffixBuffer(nameExtension);
         Class<? extends ModelElement> nameExtendsionClass;
         GraphViewDefinition graphViewDefinition;

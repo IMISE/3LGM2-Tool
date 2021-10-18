@@ -187,7 +187,7 @@ public class ConnectedElementsTableModel extends DefaultTableModel {
                             } else if (columnType == ColumnType.PATH_STEP_NAME || columnType == ColumnType.PATH_STEP_BACKWARD_NAME) {
                                 Edge edge = currentPathNode.getEdge();
                                 if (edge != null) {
-                                    ElementaryMetaPath metaPath = currentPathNode.getMetaPath();
+                                    ElementaryMetaPath metaPath = currentPathNode.getElementaryMetaPath();
                                     Class<? extends Edge> edgeClass = edge.getClass();
                                     //der Metapfad kann auf einer abstrakten Oberklasse der konkreten Kante definiert sein. Ist das der Fall, muss der Name aber von der konkreten Kantenklasse abgeleitet werden!
                                     if (edgeClass != metaPath.getEdgeClass()) {
