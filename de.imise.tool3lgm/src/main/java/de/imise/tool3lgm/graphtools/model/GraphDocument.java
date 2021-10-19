@@ -2575,7 +2575,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
      * @param pid
      */
     public final void moveNodeContainer(final NodeContainer nc, final int x, final int y, final int width, final int height, final int pid) {
-        moveNodeContainer(nc, x, y, width, height, true, pid);
+        moveNodeContainer(nc, x, y, width, height, true, pid, false);
     }
 
     /**
@@ -2588,6 +2588,32 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
      * @param pid
      */
     public final void moveNodeContainer(final NodeContainer nc, final int x, final int y, final int width, final int height, final boolean moveSubelements, final int pid) {
+        moveNodeContainer(nc, x, y, width, height, moveSubelements, pid, false);
+    }
+
+    /**
+     * @param nc
+     * @param x
+     * @param y
+     * @param width
+     * @param height
+     * @param pid
+     * @param shiftKeyPressed
+     */
+    public final void moveNodeContainer(final NodeContainer nc, final int x, final int y, final int width, final int height, final int pid, final boolean shiftKeyPressed) {
+        moveNodeContainer(nc, x, y, width, height, true, pid, shiftKeyPressed);
+    }
+
+    /**
+     * @param nc
+     * @param x
+     * @param y
+     * @param width
+     * @param height
+     * @param moveSubelements
+     * @param pid
+     */
+    public final void moveNodeContainer(final NodeContainer nc, final int x, final int y, final int width, final int height, final boolean moveSubelements, final int pid, final boolean shiftKeyPressed) {
         if (nc == null) {
             return;
         }
@@ -2596,7 +2622,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
             return;
         }
         start_transaction(pid);
-        if (moveSubelements && OPTION_GRAPH_MOVE_SUBELEMENTS.is()) {
+        if (moveSubelements && OPTION_GRAPH_MOVE_SUBELEMENTS.is() && !shiftKeyPressed || moveSubelements && !OPTION_GRAPH_MOVE_SUBELEMENTS.is() && shiftKeyPressed) {
             // retrieves all subordinated elements in this submodel
             List<ElementContainer> subordinatedContainers = me.getConnectedContainers(this, CompositionEdge.class, SUPER_TO_SUB_DIRECTION);
             moveSubElements(nc, subordinatedContainers, x, y, width, height, pid);
