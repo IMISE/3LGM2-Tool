@@ -77,7 +77,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import javax.annotation.Nonnull;
 import javax.swing.JColorChooser;
@@ -254,7 +253,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
     protected NodeContainer lastCreated = null;
 
     // holds initial positions of subelements, when master element is resized
-    private Map<ElementContainer, Pair<Integer, Integer>> originalPositions;
+    private Map<ElementContainer, Pair<Integer, Integer>> originalPositions = new HashMap<>();
 
     // holds original position of master element for resizing
     private Pair<Integer, Integer> originalMasterPosition;
@@ -2974,35 +2973,9 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
                 break;
             }
             moveNodeContainer(nc, x, y, w, h, pid);
-            if (OPTION_GRAPH_MOVE_SUBELEMENTS.is()) {
-                moveSlaveElements(nc, xOrg - x, yOrg - y, 0, 0, pid);
-            }
         }
         //        setSelection(selection);
         finish_transaction(pid, ELEMENT_GRAPHICS_CHANGED);
-    }
-
-    /**
-     * @param nc
-     * @param xDiff
-     * @param yDiff
-     * @param wDiff
-     * @param hDiff
-     */
-    private void moveSlaveElements(final NodeContainer nc, final int xDiff, final int yDiff, final int wDiff, final int hDiff, final int pid) {
-        ModelElement master = nc.getElement();
-        Set<ElementContainer> subordinatedContainers = master.getSubordinatedContainers(this);
-        for (ElementContainer subContainer : subordinatedContainers) {
-            if (subContainer != nc) { //subContainer contains the master too
-                if (subContainer instanceof NodeContainer) { //should be alsways true but better safe than sorry
-                    int x = subContainer.getX() - xDiff;
-                    int y = subContainer.getY() - yDiff;
-                    int w = subContainer.getWidth() - wDiff;
-                    int h = subContainer.getHeight() - hDiff;
-                    moveNodeContainer((NodeContainer) subContainer, x, y, w, h, pid);
-                }
-            }
-        }
     }
 
     /**
