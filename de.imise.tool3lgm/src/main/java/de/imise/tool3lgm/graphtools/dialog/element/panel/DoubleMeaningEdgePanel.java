@@ -247,7 +247,6 @@ public class DoubleMeaningEdgePanel extends AbstractPathOfOneEdgePanel {
                 if (node != null) {
                     node.setSelectable(false);
                 }
-                childrenToExcludeFromUpperRighttree.add(ec);
             }
         }
         if (searchParents) {
@@ -256,7 +255,6 @@ public class DoubleMeaningEdgePanel extends AbstractPathOfOneEdgePanel {
                 if (node != null) {
                     node.setSelectable(false);
                 }
-                childrenToExcludeFromUpperRighttree.add(ec);
             }
         }
 
@@ -270,7 +268,6 @@ public class DoubleMeaningEdgePanel extends AbstractPathOfOneEdgePanel {
                 if (node != null) {
                     node.setSelectable(false);
                 }
-                childrenToExcludeFromBottomRighttree.add(ec);
             }
         }
         if (searchParents) {
@@ -279,7 +276,6 @@ public class DoubleMeaningEdgePanel extends AbstractPathOfOneEdgePanel {
                 if (node != null) {
                     node.setSelectable(false);
                 }
-                childrenToExcludeFromBottomRighttree.add(ec);
             }
         }
         upperLeftTree.reloadModel();
