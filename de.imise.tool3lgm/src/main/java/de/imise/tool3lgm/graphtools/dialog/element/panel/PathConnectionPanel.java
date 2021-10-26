@@ -403,6 +403,17 @@ public class PathConnectionPanel extends AbstractExpandablePanel {
             }
             nextStepStartNodes = newNextStartNodes;
         }
+        if (elementaryMetaPathCount > 1) {
+            //in the right tree there must be all elements connactable that are not
+            //direct connected to the dialog element. If the metapath has the lengt 1
+            //this condition is already met because the function
+            //addChildrenToExcludeFromRtree(..) is called before the parts an d parents
+            //are added to the all list. If the metapath has more than one edge then
+            //we have here to ensure that only the direct connected elements are
+            //diabled in the right tree.
+            List<ElementContainer> directConnectedContainer = metaPath.getConnectedContainer(me, mainDoc);
+            childrenToExcludeFromRtree.retainAll(directConnectedContainer);
+        }
         // alle Elemente die von den Parts oder Parents kamen, nichtselektierbar setzen
         for (int i = firstLevelNodes.size() - 1; i >= firstNonSelectableIndex; i--) {
             firstLevelNodes.get(i).setSelectable(false);
