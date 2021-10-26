@@ -357,7 +357,7 @@ public class PathConnectionPanel extends AbstractExpandablePanel {
         int edgeIndex = 0;
         //Durch diesen Aufruf hier geht das erstmal nicht für parallele Pfade, zumindes nicht für Vereinigungspfade. Aber im Moment gibt es dafür keinen Anwendungsfall
         List<ElementaryMetaPath> elementaryMetaPaths = metaPath.getElementaryMetaPaths();
-        int elemetaryMetaPathCount = elementaryMetaPaths.size();
+        int elementaryMetaPathCount = elementaryMetaPaths.size();
         ElementaryMetaPath elementaryMetaPath = elementaryMetaPaths.get(edgeIndex);
         Class<? extends ModelElement> pathStepEndClass = elementaryMetaPath.getEndClass();
         Class<? extends Edge> edgeClass = elementaryMetaPath.getEdgeClass();
@@ -382,7 +382,7 @@ public class PathConnectionPanel extends AbstractExpandablePanel {
             firstLevelNodes.add(node);
         }
         List<ElementContainerTreeNode> nextStepStartNodes = firstLevelNodes;
-        for (edgeIndex = 1; edgeIndex < elemetaryMetaPathCount; edgeIndex++) {
+        for (edgeIndex = 1; edgeIndex < elementaryMetaPathCount; edgeIndex++) {
             elementaryMetaPath = elementaryMetaPaths.get(edgeIndex);
             pathStepEndClass = elementaryMetaPath.getEndClass();
             edgeClass = elementaryMetaPath.getEdgeClass();
@@ -395,7 +395,7 @@ public class PathConnectionPanel extends AbstractExpandablePanel {
                 addChildrenToExcludeFromRtree(edgeIndex, connected, false);
                 for (ElementContainer ec : connected) {
                     ElementContainerTreeNode newNode = ltree.addObject(ec, node, null, true, false, false);
-                    if (edgeIndex + 1 == elemetaryMetaPathCount) {
+                    if (edgeIndex + 1 == elementaryMetaPathCount) {
                         leafs.add(newNode);
                     }
                     newNextStartNodes.add(newNode);
