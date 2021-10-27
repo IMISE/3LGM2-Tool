@@ -13,6 +13,7 @@ import static de.imise.tool3lgm.userproperties.UserProperties.IntProperty.PROPER
 import static de.imise.tool3lgm.userproperties.UserProperties.IntProperty.PROPERTY_INT_MODELBRWOSER_GRAPHVIEW_DIVIDER_LOCATION;
 
 import java.awt.BorderLayout;
+import java.awt.Component;
 import java.awt.Container;
 import java.awt.Cursor;
 import java.awt.Dimension;
@@ -304,15 +305,13 @@ public final class MainFrameDesktopPane extends JPanel implements PropertyChange
                 consistencyErrorTablePane = null;
             }
             workarea.add(topComponent, BorderLayout.CENTER);
-        } else {
-            if (bottomSplitPane == null) {
-                consistencyErrorTableBorderPanel = new JPanel(new BorderLayout());
-                bottomSplitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, topComponent, consistencyErrorTableBorderPanel);
-                bottomSplitPane.setOneTouchExpandable(true);
-                bottomSplitPane.setDividerSize(10);
-                workarea.add(bottomSplitPane, BorderLayout.CENTER);
-                restorePositionAndSizeFromUserProperties();
-            }
+        } else if (bottomSplitPane == null) {
+            consistencyErrorTableBorderPanel = new JPanel(new BorderLayout());
+            bottomSplitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, topComponent, consistencyErrorTableBorderPanel);
+            bottomSplitPane.setOneTouchExpandable(true);
+            bottomSplitPane.setDividerSize(10);
+            workarea.add(bottomSplitPane, BorderLayout.CENTER);
+            restorePositionAndSizeFromUserProperties();
         }
         //remove the table of the consistency error view
         if (consistencyErrorTableBorderPanel != null) {
@@ -322,11 +321,9 @@ public final class MainFrameDesktopPane extends JPanel implements PropertyChange
                     consistencyErrorTablePane.dispose(); //remove the ConsistencyErrorTableGenerator as PropertyChangeListener of global ModelValidator
                     consistencyErrorTablePane = null;
                 }
-            } else {
-                if (consistencyErrorTablePane == null) {
-                    consistencyErrorTablePane = new ConsistencyErrorTablePane(); //adds the ConsistencyErrorTableGenerator as PropertyChangeListener of global ModelValidator
-                    consistencyErrorTableBorderPanel.add(consistencyErrorTablePane, BorderLayout.CENTER);
-                }
+            } else if (consistencyErrorTablePane == null) {
+                consistencyErrorTablePane = new ConsistencyErrorTablePane(); //adds the ConsistencyErrorTableGenerator as PropertyChangeListener of global ModelValidator
+                consistencyErrorTableBorderPanel.add(consistencyErrorTablePane, BorderLayout.CENTER);
             }
         }
         revalidate();
@@ -378,7 +375,10 @@ public final class MainFrameDesktopPane extends JPanel implements PropertyChange
             leftSplitPane.setLeftComponent(modelBrowserPanel);
             restorePositionAndSizeFromUserProperties();
         } else {
-            leftSplitPane.remove(leftSplitPane.getLeftComponent());
+            Component modelBrowserPanel = leftSplitPane.getLeftComponent();
+            if (modelBrowserPanel != null) { //already removed?
+                leftSplitPane.remove(modelBrowserPanel);
+            }
         }
         revalidate();
     }
