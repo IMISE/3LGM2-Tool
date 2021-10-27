@@ -161,7 +161,7 @@ public class MainFrameDesktopTabbedPane extends JTabbedPaneWithCloseIconsRight i
 
     @Override
     public void removeTabAt(final int index) {
-        Component selectedComponent = getSelectedComponent();
+        Component selectedComponent = getTabComponentAt(index);
         ViewPaneFrameComponent viewFrame = null;
         ViewPaneFrameComponentListener mainFrameDesktopPane = Static.getMainFrameDesktopPane();
         if (selectedComponent instanceof ViewPaneFrameComponent) {
