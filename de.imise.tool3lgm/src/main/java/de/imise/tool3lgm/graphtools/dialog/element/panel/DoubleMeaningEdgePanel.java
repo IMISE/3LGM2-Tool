@@ -92,13 +92,13 @@ public class DoubleMeaningEdgePanel extends AbstractPathOfOneEdgePanel {
      * all elemenrt container which are already connected directly to the
      * element and must be disabled in the upper right tree
      */
-    ArrayList<ElementContainer> childrenToExcludeFromUpperRighttree = new ArrayList<>();
+    ArrayList<ElementContainer> childrenToExcludeFromUpperRightTree = new ArrayList<>();
 
     /**
      * all elemenrt container which are already connected directly to the
      * element and must be disabled in the bottom right tree
      */
-    ArrayList<ElementContainer> childrenToExcludeFromBottomRighttree = new ArrayList<>();
+    ArrayList<ElementContainer> childrenToExcludeFromBottomRightTree = new ArrayList<>();
 
     /**
      * @param dialog
@@ -213,100 +213,101 @@ public class DoubleMeaningEdgePanel extends AbstractPathOfOneEdgePanel {
 
     @Override
     public void update() {
+        saveExpansionAndSelectionAndReset(upperLeftTree, bottomLeftTree);
 
-        upperLeftTree.saveExpansion();
-        upperLeftTree.saveSelection();
-        bottomLeftTree.saveExpansion();
-        bottomLeftTree.saveSelection();
-
-        upperLeftTree.reset();
-        bottomLeftTree.reset();
-        childrenToExcludeFromUpperRighttree.clear();
-        childrenToExcludeFromBottomRighttree.clear();
-
-        boolean searchParts = OPTION_ELEMENTS_RECEIVE_PROPERTIES_FROM_PARTS.is();
-        boolean searchParents = OPTION_ELEMENTS_RECEIVE_PROPERTIES_FROM_PARENTS.is();
+        childrenToExcludeFromUpperRightTree.clear();
+        childrenToExcludeFromBottomRightTree.clear();
 
         GraphDocument mainDoc = getMainDoc();
         ModelElement modelElement = getModelElement();
         ElementContainer elementContainer = modelElement.getContainer(mainDoc);
         //egal welche Kante: es ist (im Moment) nicht erlaubt, sich selbst zu verbinden
         //-> eigenen Container niemals anbieten (was nur bei Kanten zw. derselben Elementklasse einen Effekt hat)
-        childrenToExcludeFromUpperRighttree.add(elementContainer);
-        childrenToExcludeFromBottomRighttree.add(elementContainer);
+        childrenToExcludeFromUpperRightTree.add(elementContainer);
+        childrenToExcludeFromBottomRightTree.add(elementContainer);
 
-        Class<? extends Edge> edgeClass = metaPath.getEdgeClass();
-        Direction direction = metaPath.getDirection();
-        for (ElementContainer ec : modelElement.getConnectedContainers(searchElementClass, mainDoc, edgeClass, direction, ConnectionState.BACKWARD)) {
-            upperLeftTree.addObject(ec, true, false, false);
-            childrenToExcludeFromUpperRighttree.add(ec);
-        }
-        if (searchParts) {
-            for (ElementContainer ec : modelElement.getPartConnectedContainers(searchElementClass, mainDoc, edgeClass, direction, ConnectionState.BACKWARD)) {
-                ElementContainerTreeNode node = upperLeftTree.addObject(ec, true, false, false);
-                if (node != null) {
-                    node.setSelectable(false);
-                }
-            }
-        }
-        if (searchParents) {
-            for (ElementContainer ec : modelElement.getParentConnectedContainers(searchElementClass, mainDoc, edgeClass, direction, ConnectionState.BACKWARD)) {
-                ElementContainerTreeNode node = upperLeftTree.addObject(ec, true, false, false);
-                if (node != null) {
-                    node.setSelectable(false);
-                }
-            }
-        }
+        //the upper panel shows the connecionState BACKWARD, the bottom panel FORWARD
+        addNodes(upperLeftTree, childrenToExcludeFromUpperRightTree, ConnectionState.BACKWARD);
+        addNodes(bottomLeftTree, childrenToExcludeFromBottomRightTree, ConnectionState.FORWARD);
 
-        for (ElementContainer ec : modelElement.getConnectedContainers(searchElementClass, mainDoc, edgeClass, direction, ConnectionState.FORWARD)) {
-            bottomLeftTree.addObject(ec, true, false, false);
-            childrenToExcludeFromBottomRighttree.add(ec);
-        }
-        if (searchParts) {
-            for (ElementContainer ec : modelElement.getPartConnectedContainers(searchElementClass, mainDoc, edgeClass, direction, ConnectionState.FORWARD)) {
-                ElementContainerTreeNode node = bottomLeftTree.addObject(ec, true, false, false);
-                if (node != null) {
-                    node.setSelectable(false);
-                }
-            }
-        }
-        if (searchParents) {
-            for (ElementContainer ec : modelElement.getParentConnectedContainers(searchElementClass, mainDoc, edgeClass, direction, ConnectionState.FORWARD)) {
-                ElementContainerTreeNode node = bottomLeftTree.addObject(ec, true, false, false);
-                if (node != null) {
-                    node.setSelectable(false);
-                }
-            }
-        }
-        upperLeftTree.reloadModel();
-        upperLeftTree.restoreExpansion();
-        bottomLeftTree.reloadModel();
-        bottomLeftTree.restoreExpansion();
+        reloadModelAndRestoreExpansion(upperLeftTree, bottomLeftTree);
 
         if (isRightSideVisible()) {
-            upperRightTree.saveExpansion();
-            bottomRightTree.saveExpansion();
-            upperRightTree.saveSelection();
-            bottomRightTree.saveSelection();
-
-            upperRightTree.reset();
-            bottomRightTree.reset();
-
+            saveExpansionAndSelectionAndReset(upperRightTree, bottomRightTree);
             for (ElementContainer ec : mainDoc.getElementContainers(searchElementClass)) {
-                upperRightTree.addObject(ec, childrenToExcludeFromUpperRighttree, false, true);
-                bottomRightTree.addObject(ec, childrenToExcludeFromBottomRighttree, false, true);
+                upperRightTree.addObject(ec, childrenToExcludeFromUpperRightTree, false, true);
+                bottomRightTree.addObject(ec, childrenToExcludeFromBottomRightTree, false, true);
             }
-            upperRightTree.reloadModel();
-            // expandTree(rotree);
-            bottomRightTree.reloadModel();
-            // expandTree(rutree);
-            upperRightTree.restoreExpansion();
-            bottomRightTree.restoreExpansion();
+            reloadModelAndRestoreExpansion(upperRightTree, bottomRightTree);
         }
 
         repaint();
         revalidate();
 
+    }
+
+    /**
+     * Adds the nodes to the given left tree.
+     *
+     * @param LetfTree the left tree that will get the added nodes
+     * @param childrenToExcludeFromRightTree the list from where the
+     *            corresponding right tree nows which elements must be disabled
+     *            because they are already connected directly
+     * @param connectionState the inner direction of the connection that should
+     *            be shown in the current left tree and its corresponding right
+     *            tree
+     */
+    private void addNodes(final ElementDialogPanelTree LetfTree, final ArrayList<ElementContainer> childrenToExcludeFromRightTree, final ConnectionState connectionState) {
+        Class<? extends Edge> edgeClass = metaPath.getEdgeClass();
+        Direction direction = metaPath.getDirection();
+
+        boolean searchParts = OPTION_ELEMENTS_RECEIVE_PROPERTIES_FROM_PARTS.is();
+        boolean searchParents = OPTION_ELEMENTS_RECEIVE_PROPERTIES_FROM_PARENTS.is();
+
+        GraphDocument mainDoc = getMainDoc();
+        ModelElement modelElement = getModelElement();
+
+        for (ElementContainer ec : modelElement.getConnectedContainers(searchElementClass, mainDoc, edgeClass, direction, connectionState)) {
+            LetfTree.addObject(ec, true, false, false);
+            childrenToExcludeFromRightTree.add(ec);
+        }
+        if (searchParts) {
+            for (ElementContainer ec : modelElement.getPartConnectedContainers(searchElementClass, mainDoc, edgeClass, direction, connectionState)) {
+                ElementContainerTreeNode node = LetfTree.addObject(ec, true, false, false);
+                if (node != null) {
+                    node.setSelectable(false);
+                }
+            }
+        }
+        if (searchParents) {
+            for (ElementContainer ec : modelElement.getParentConnectedContainers(searchElementClass, mainDoc, edgeClass, direction, connectionState)) {
+                ElementContainerTreeNode node = LetfTree.addObject(ec, true, false, false);
+                if (node != null) {
+                    node.setSelectable(false);
+                }
+            }
+        }
+    }
+
+    /**
+     * @param trees
+     */
+    private void saveExpansionAndSelectionAndReset(final ElementDialogPanelTree... trees) {
+        for (ElementDialogPanelTree tree : trees) {
+            tree.saveExpansion();
+            tree.saveSelection();
+            tree.reset();
+        }
+    }
+
+    /**
+     * @param trees
+     */
+    private void reloadModelAndRestoreExpansion(final ElementDialogPanelTree... trees) {
+        for (ElementDialogPanelTree tree : trees) {
+            tree.reloadModel();
+            tree.restoreExpansion();
+        }
     }
 
     @Override
