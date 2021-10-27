@@ -50,16 +50,62 @@ import de.imise.util.swing.component.LimitedHeightScrollTreePane;
  */
 public class DoubleMeaningEdgePanel extends AbstractPathOfOneEdgePanel {
 
-    private final ElementDialogPanelTree lotree, lutree;
-    private ElementDialogPanelTree rotree, rutree;
-    private JPanel buttonpanel1, buttonpanel2;
-    private JLabel rolabel, rulabel;
+    /** the upper left tree */
+    private final ElementDialogPanelTree upperLeftTree;
 
-    private LGMAction loaddAction;
-    private LGMAction loremoveAction;
-    private LGMAction luaddAction;
-    private LGMAction luremoveAction;
+    /** the down left tree */
+    private final ElementDialogPanelTree bottomLeftTree;
 
+    /** the upper right tree */
+    private ElementDialogPanelTree upperRightTree;
+
+    /** the down right tree */
+    private ElementDialogPanelTree bottomRightTree;
+
+    /** the upper button panel */
+    private JPanel upperButtonPanel;
+
+    /** the down button panel */
+    private JPanel bottomButtonPanel;
+
+    /** the upper right label */
+    private JLabel upperRightLabel;
+
+    /** the down right label */
+    private JLabel bottomRightLabel;
+
+    /** the connect action for the button in the {@link #upperButtonPanel} */
+    private LGMAction upperConnectAction;
+
+    /** the disconnect action for the button in the {@link #upperButtonPanel} */
+    private LGMAction upperDisconnectAction;
+
+    /** the connect action for the button in the {@link #bottomButtonPanel} */
+    private LGMAction bottomConnectAction;
+
+    /**
+     * the disconnect action for the button in the {@link #bottomButtonPanel}
+     */
+    private LGMAction bottomDisconnectAction;
+
+    /**
+     * all elemenrt container which are already connected directly to the
+     * element and must be disabled in the upper right tree
+     */
+    ArrayList<ElementContainer> childrenToExcludeFromUpperRightTree = new ArrayList<>();
+
+    /**
+     * all elemenrt container which are already connected directly to the
+     * element and must be disabled in the bottom right tree
+     */
+    ArrayList<ElementContainer> childrenToExcludeFromBottomRightTree = new ArrayList<>();
+
+    /**
+     * @param dialog
+     * @param titleLabelOption
+     * @param searchElementClass
+     * @param edgeClass
+     */
     public DoubleMeaningEdgePanel(final ElementPropertyDialog dialog, final PanelLabelOption titleLabelOption, final Class<? extends ModelElement> searchElementClass, final Class<? extends DoubleMeaningEdge> edgeClass) {
         super(dialog, titleLabelOption, titleLabelOption, searchElementClass, edgeClass); //westLabelOption ist egal, da sowieso eigene Kantennamen-Labels über die Bäume kommen
         boolean editable = !dialog.isInfoDialog() && metaPath.isCreatable(false);
@@ -75,20 +121,20 @@ public class DoubleMeaningEdgePanel extends AbstractPathOfOneEdgePanel {
         boolean showRootHandles = true;
 
         GraphDocument mainDoc = getMainDoc();
-        lotree = new ElementDialogPanelTree("loroot", mainDoc);
-        lotree.setRootVisible(false);
-        lotree.setShowsRootHandles(showRootHandles);
-        lotree.setCellRenderer(treeRenderer);
-        lotree.getSelectionModel().setSelectionMode(TreeSelectionModel.DISCONTIGUOUS_TREE_SELECTION);
+        upperLeftTree = new ElementDialogPanelTree("loroot", mainDoc);
+        upperLeftTree.setRootVisible(false);
+        upperLeftTree.setShowsRootHandles(showRootHandles);
+        upperLeftTree.setCellRenderer(treeRenderer);
+        upperLeftTree.getSelectionModel().setSelectionMode(TreeSelectionModel.DISCONTIGUOUS_TREE_SELECTION);
 
         String lulabeltext = StringUtils.capitalizeFirstChar(getEdgeDisplayName(ConnectionState.FORWARD));
         JLabel lulabel = new JLabel(lulabeltext);
 
-        lutree = new ElementDialogPanelTree("luroot", mainDoc);
-        lutree.setRootVisible(false);
-        lutree.setShowsRootHandles(showRootHandles);
-        lutree.setCellRenderer(treeRenderer);
-        lutree.getSelectionModel().setSelectionMode(TreeSelectionModel.DISCONTIGUOUS_TREE_SELECTION);
+        bottomLeftTree = new ElementDialogPanelTree("luroot", mainDoc);
+        bottomLeftTree.setRootVisible(false);
+        bottomLeftTree.setShowsRootHandles(showRootHandles);
+        bottomLeftTree.setCellRenderer(treeRenderer);
+        bottomLeftTree.getSelectionModel().setSelectionMode(TreeSelectionModel.DISCONTIGUOUS_TREE_SELECTION);
 
         if (editable) {
             constraints.anchor = GridBagConstraints.EAST;
@@ -104,44 +150,44 @@ public class DoubleMeaningEdgePanel extends AbstractPathOfOneEdgePanel {
         constraints.fill = GridBagConstraints.BOTH;
         constraints.weightx = 100;
         constraints.weighty = 100;
-        LimitedHeightScrollTreePane lotreeScrollPane = lotree.getScrollPane();
-        LimitedHeightScrollTreePane lutreeScrollPane = lutree.getScrollPane();
+        LimitedHeightScrollTreePane lotreeScrollPane = upperLeftTree.getScrollPane();
+        LimitedHeightScrollTreePane lutreeScrollPane = bottomLeftTree.getScrollPane();
         add(this, lotreeScrollPane, constraints, 0, 1, 1, 1);
         add(this, lutreeScrollPane, constraints, 0, 3, 1, 1);
 
         if (editable) {
-            rotree = new ElementDialogPanelTree("roroot", mainDoc);
-            rotree.setRootVisible(false);
-            rotree.setShowsRootHandles(showRootHandles);
-            rotree.setCellRenderer(treeRenderer);
-            rotree.getSelectionModel().setSelectionMode(TreeSelectionModel.DISCONTIGUOUS_TREE_SELECTION);
+            upperRightTree = new ElementDialogPanelTree("roroot", mainDoc);
+            upperRightTree.setRootVisible(false);
+            upperRightTree.setShowsRootHandles(showRootHandles);
+            upperRightTree.setCellRenderer(treeRenderer);
+            upperRightTree.getSelectionModel().setSelectionMode(TreeSelectionModel.DISCONTIGUOUS_TREE_SELECTION);
 
             String unconnected = getResString("frei");
-            rolabel = new JLabel(unconnected);
-            rulabel = new JLabel(unconnected);
-            rutree = new ElementDialogPanelTree("ruroot", mainDoc);
-            rutree.setRootVisible(false);
-            rutree.setShowsRootHandles(showRootHandles);
-            rutree.setCellRenderer(treeRenderer);
-            rutree.getSelectionModel().setSelectionMode(TreeSelectionModel.DISCONTIGUOUS_TREE_SELECTION);
+            upperRightLabel = new JLabel(unconnected);
+            bottomRightLabel = new JLabel(unconnected);
+            bottomRightTree = new ElementDialogPanelTree("ruroot", mainDoc);
+            bottomRightTree.setRootVisible(false);
+            bottomRightTree.setShowsRootHandles(showRootHandles);
+            bottomRightTree.setCellRenderer(treeRenderer);
+            bottomRightTree.getSelectionModel().setSelectionMode(TreeSelectionModel.DISCONTIGUOUS_TREE_SELECTION);
 
-            loaddAction = getConnectAction(rotree, lotree, BACKWARD);
-            loremoveAction = getDisconnectAction(lotree, rotree, BACKWARD);
-            luaddAction = getConnectAction(rutree, lutree, FORWARD);
-            luremoveAction = getDisconnectAction(lutree, rutree, FORWARD);
+            upperConnectAction = getConnectAction(upperRightTree, upperLeftTree, BACKWARD);
+            upperDisconnectAction = getDisconnectAction(upperLeftTree, upperRightTree, BACKWARD);
+            bottomConnectAction = getConnectAction(bottomRightTree, bottomLeftTree, FORWARD);
+            bottomDisconnectAction = getDisconnectAction(bottomLeftTree, bottomRightTree, FORWARD);
 
             /*
              * ... end: Buttons & Actions erstellen und registrieren
              */
 
-            buttonpanel1 = createBetweenTreesButtonPanel(loaddAction, loremoveAction);
-            buttonpanel2 = createBetweenTreesButtonPanel(luaddAction, luremoveAction);
+            upperButtonPanel = createBetweenTreesButtonPanel(upperConnectAction, upperDisconnectAction);
+            bottomButtonPanel = createBetweenTreesButtonPanel(bottomConnectAction, bottomDisconnectAction);
 
             //alles dafür tun, dass beide Dialogseiten gleich breit sind. Das wird über die PreferredSize der breitesten Komponente gesteuert.
-            SwingUtils.fillToSameLength(lolabel, lulabel, rolabel, rulabel);
-            SwingUtils.setSamePreferredSize(lolabel, lulabel, rolabel, rulabel);
-            LimitedHeightScrollTreePane rotreeScrollPane = rotree.getScrollPane();
-            LimitedHeightScrollTreePane rutreeScrollPane = rutree.getScrollPane();
+            SwingUtils.fillToSameLength(lolabel, lulabel, upperRightLabel, bottomRightLabel);
+            SwingUtils.setSamePreferredSize(lolabel, lulabel, upperRightLabel, bottomRightLabel);
+            LimitedHeightScrollTreePane rotreeScrollPane = upperRightTree.getScrollPane();
+            LimitedHeightScrollTreePane rutreeScrollPane = bottomRightTree.getScrollPane();
             SwingUtils.setSamePreferredSize(lotreeScrollPane, lutreeScrollPane, rotreeScrollPane, rutreeScrollPane);
 
             showFullDialog(true);
@@ -165,104 +211,34 @@ public class DoubleMeaningEdgePanel extends AbstractPathOfOneEdgePanel {
         return forward ? elementsNameBuilder.getForwardMetaAssociationName(edgeClass, connectionState, false, false) : elementsNameBuilder.getBackwardMetaAssociationName(edgeClass, connectionState, false, false);
     }
 
-    ArrayList<ElementContainer> childrenToExcludeFromRotree = new ArrayList<>();
-    ArrayList<ElementContainer> childrenToExcludeFromRutree = new ArrayList<>();
-
     @Override
     public void update() {
+        saveExpansionAndSelectionAndReset(upperLeftTree, bottomLeftTree);
 
-        lotree.saveExpansion();
-        lotree.saveSelection();
-        lutree.saveExpansion();
-        lutree.saveSelection();
-
-        lotree.reset();
-        lutree.reset();
-        childrenToExcludeFromRotree.clear();
-        childrenToExcludeFromRutree.clear();
-
-        boolean searchParts = OPTION_ELEMENTS_RECEIVE_PROPERTIES_FROM_PARTS.is();
-        boolean searchParents = OPTION_ELEMENTS_RECEIVE_PROPERTIES_FROM_PARENTS.is();
+        childrenToExcludeFromUpperRightTree.clear();
+        childrenToExcludeFromBottomRightTree.clear();
 
         GraphDocument mainDoc = getMainDoc();
         ModelElement modelElement = getModelElement();
         ElementContainer elementContainer = modelElement.getContainer(mainDoc);
         //egal welche Kante: es ist (im Moment) nicht erlaubt, sich selbst zu verbinden
         //-> eigenen Container niemals anbieten (was nur bei Kanten zw. derselben Elementklasse einen Effekt hat)
-        childrenToExcludeFromRotree.add(elementContainer);
-        childrenToExcludeFromRutree.add(elementContainer);
+        childrenToExcludeFromUpperRightTree.add(elementContainer);
+        childrenToExcludeFromBottomRightTree.add(elementContainer);
 
-        Class<? extends Edge> edgeClass = metaPath.getEdgeClass();
-        Direction direction = metaPath.getDirection();
-        for (ElementContainer ec : modelElement.getConnectedContainers(searchElementClass, mainDoc, edgeClass, direction, ConnectionState.BACKWARD)) {
-            lotree.addObject(ec, true, false, false);
-            childrenToExcludeFromRotree.add(ec);
-        }
-        if (searchParts) {
-            for (ElementContainer ec : modelElement.getPartConnectedContainers(searchElementClass, mainDoc, edgeClass, direction, ConnectionState.BACKWARD)) {
-                ElementContainerTreeNode node = lotree.addObject(ec, true, false, false);
-                if (node != null) {
-                    node.setSelectable(false);
-                }
-                childrenToExcludeFromRotree.add(ec);
-            }
-        }
-        if (searchParents) {
-            for (ElementContainer ec : modelElement.getParentConnectedContainers(searchElementClass, mainDoc, edgeClass, direction, ConnectionState.BACKWARD)) {
-                ElementContainerTreeNode node = lotree.addObject(ec, true, false, false);
-                if (node != null) {
-                    node.setSelectable(false);
-                }
-                childrenToExcludeFromRotree.add(ec);
-            }
-        }
+        //the upper panel shows the connecionState BACKWARD, the bottom panel FORWARD
+        addNodes(upperLeftTree, childrenToExcludeFromUpperRightTree, ConnectionState.BACKWARD);
+        addNodes(bottomLeftTree, childrenToExcludeFromBottomRightTree, ConnectionState.FORWARD);
 
-        for (ElementContainer ec : modelElement.getConnectedContainers(searchElementClass, mainDoc, edgeClass, direction, ConnectionState.FORWARD)) {
-            lutree.addObject(ec, true, false, false);
-            childrenToExcludeFromRutree.add(ec);
-        }
-        if (searchParts) {
-            for (ElementContainer ec : modelElement.getPartConnectedContainers(searchElementClass, mainDoc, edgeClass, direction, ConnectionState.FORWARD)) {
-                ElementContainerTreeNode node = lutree.addObject(ec, true, false, false);
-                if (node != null) {
-                    node.setSelectable(false);
-                }
-                childrenToExcludeFromRutree.add(ec);
-            }
-        }
-        if (searchParents) {
-            for (ElementContainer ec : modelElement.getParentConnectedContainers(searchElementClass, mainDoc, edgeClass, direction, ConnectionState.FORWARD)) {
-                ElementContainerTreeNode node = lutree.addObject(ec, true, false, false);
-                if (node != null) {
-                    node.setSelectable(false);
-                }
-                childrenToExcludeFromRutree.add(ec);
-            }
-        }
-        lotree.reloadModel();
-        lotree.restoreExpansion();
-        lutree.reloadModel();
-        lutree.restoreExpansion();
+        reloadModelAndRestoreExpansion(upperLeftTree, bottomLeftTree);
 
         if (isRightSideVisible()) {
-            rotree.saveExpansion();
-            rutree.saveExpansion();
-            rotree.saveSelection();
-            rutree.saveSelection();
-
-            rotree.reset();
-            rutree.reset();
-
+            saveExpansionAndSelectionAndReset(upperRightTree, bottomRightTree);
             for (ElementContainer ec : mainDoc.getElementContainers(searchElementClass)) {
-                rotree.addObject(ec, childrenToExcludeFromRotree, false, true);
-                rutree.addObject(ec, childrenToExcludeFromRutree, false, true);
+                upperRightTree.addObject(ec, childrenToExcludeFromUpperRightTree, false, true);
+                bottomRightTree.addObject(ec, childrenToExcludeFromBottomRightTree, false, true);
             }
-            rotree.reloadModel();
-            // expandTree(rotree);
-            rutree.reloadModel();
-            // expandTree(rutree);
-            rotree.restoreExpansion();
-            rutree.restoreExpansion();
+            reloadModelAndRestoreExpansion(upperRightTree, bottomRightTree);
         }
 
         repaint();
@@ -270,41 +246,105 @@ public class DoubleMeaningEdgePanel extends AbstractPathOfOneEdgePanel {
 
     }
 
+    /**
+     * Adds the nodes to the given left tree.
+     *
+     * @param LetfTree the left tree that will get the added nodes
+     * @param childrenToExcludeFromRightTree the list from where the
+     *            corresponding right tree nows which elements must be disabled
+     *            because they are already connected directly
+     * @param connectionState the inner direction of the connection that should
+     *            be shown in the current left tree and its corresponding right
+     *            tree
+     */
+    private void addNodes(final ElementDialogPanelTree LetfTree, final ArrayList<ElementContainer> childrenToExcludeFromRightTree, final ConnectionState connectionState) {
+        Class<? extends Edge> edgeClass = metaPath.getEdgeClass();
+        Direction direction = metaPath.getDirection();
+
+        boolean searchParts = OPTION_ELEMENTS_RECEIVE_PROPERTIES_FROM_PARTS.is();
+        boolean searchParents = OPTION_ELEMENTS_RECEIVE_PROPERTIES_FROM_PARENTS.is();
+
+        GraphDocument mainDoc = getMainDoc();
+        ModelElement modelElement = getModelElement();
+
+        for (ElementContainer ec : modelElement.getConnectedContainers(searchElementClass, mainDoc, edgeClass, direction, connectionState)) {
+            LetfTree.addObject(ec, true, false, false);
+            childrenToExcludeFromRightTree.add(ec);
+        }
+        if (searchParts) {
+            for (ElementContainer ec : modelElement.getPartConnectedContainers(searchElementClass, mainDoc, edgeClass, direction, connectionState)) {
+                ElementContainerTreeNode node = LetfTree.addObject(ec, true, false, false);
+                if (node != null) {
+                    node.setSelectable(false);
+                }
+            }
+        }
+        if (searchParents) {
+            for (ElementContainer ec : modelElement.getParentConnectedContainers(searchElementClass, mainDoc, edgeClass, direction, connectionState)) {
+                ElementContainerTreeNode node = LetfTree.addObject(ec, true, false, false);
+                if (node != null) {
+                    node.setSelectable(false);
+                }
+            }
+        }
+    }
+
+    /**
+     * @param trees
+     */
+    private void saveExpansionAndSelectionAndReset(final ElementDialogPanelTree... trees) {
+        for (ElementDialogPanelTree tree : trees) {
+            tree.saveExpansion();
+            tree.saveSelection();
+            tree.reset();
+        }
+    }
+
+    /**
+     * @param trees
+     */
+    private void reloadModelAndRestoreExpansion(final ElementDialogPanelTree... trees) {
+        for (ElementDialogPanelTree tree : trees) {
+            tree.reloadModel();
+            tree.restoreExpansion();
+        }
+    }
+
     @Override
     protected void showFullDialog() {
         GridBagConstraints constraints = new GridBagConstraints();
         constraints.fill = GridBagConstraints.NONE;
-        add(this, buttonpanel1, constraints, 1, 1, 1, 2);
+        add(this, upperButtonPanel, constraints, 1, 1, 1, 2);
         constraints.fill = GridBagConstraints.NONE;
-        add(this, buttonpanel2, constraints, 1, 3, 1, 2);
+        add(this, bottomButtonPanel, constraints, 1, 3, 1, 2);
 
         constraints.anchor = GridBagConstraints.WEST;
-        add(this, rolabel, constraints, 2, 0, 1, 1);
-        add(this, rulabel, constraints, 2, 2, 1, 1);
+        add(this, upperRightLabel, constraints, 2, 0, 1, 1);
+        add(this, bottomRightLabel, constraints, 2, 2, 1, 1);
         constraints.anchor = GridBagConstraints.CENTER;
         constraints.fill = GridBagConstraints.BOTH;
         constraints.weightx = 100;
         constraints.weighty = 100;
-        add(this, rotree.getScrollPane(), constraints, 2, 1, 1, 1);
-        add(this, rutree.getScrollPane(), constraints, 2, 3, 1, 1);
+        add(this, upperRightTree.getScrollPane(), constraints, 2, 1, 1, 1);
+        add(this, bottomRightTree.getScrollPane(), constraints, 2, 3, 1, 1);
     }
 
     @Override
     protected void showPartlyDialog() {
-        remove(buttonpanel1);
-        remove(buttonpanel2);
-        remove(rolabel);
-        remove(rulabel);
-        remove(rotree.getScrollPane());
-        remove(rutree.getScrollPane());
+        remove(upperButtonPanel);
+        remove(bottomButtonPanel);
+        remove(upperRightLabel);
+        remove(bottomRightLabel);
+        remove(upperRightTree.getScrollPane());
+        remove(bottomRightTree.getScrollPane());
     }
 
     @Override
     protected DragNDropActionChain[] collectDragNDropActionChains() {
-        DragNDropActionChain tac1 = DragNDropInitializer.createNewDragNDropActionChain(rotree, lotree, loaddAction);
-        DragNDropActionChain tac2 = DragNDropInitializer.createNewDragNDropActionChain(lotree, rotree, loremoveAction);
-        DragNDropActionChain tac3 = DragNDropInitializer.createNewDragNDropActionChain(rutree, lutree, luaddAction);
-        DragNDropActionChain tac4 = DragNDropInitializer.createNewDragNDropActionChain(lutree, rutree, luremoveAction);
+        DragNDropActionChain tac1 = DragNDropInitializer.createNewDragNDropActionChain(upperRightTree, upperLeftTree, upperConnectAction);
+        DragNDropActionChain tac2 = DragNDropInitializer.createNewDragNDropActionChain(upperLeftTree, upperRightTree, upperDisconnectAction);
+        DragNDropActionChain tac3 = DragNDropInitializer.createNewDragNDropActionChain(bottomRightTree, bottomLeftTree, bottomConnectAction);
+        DragNDropActionChain tac4 = DragNDropInitializer.createNewDragNDropActionChain(bottomLeftTree, bottomRightTree, bottomDisconnectAction);
 
         return new DragNDropActionChain[] {
                 tac1, tac2, tac3, tac4
@@ -314,13 +354,13 @@ public class DoubleMeaningEdgePanel extends AbstractPathOfOneEdgePanel {
     @Override
     public JTree[] getAllDragNDropTrees() {
         return new JTree[] {
-                lotree, rotree, lutree, rutree
+                upperLeftTree, upperRightTree, bottomLeftTree, bottomRightTree
         };
     }
 
     @Override
     public Collection<JComponent> getToolTipTargets() {
-        return Lists.newArrayList(lotree, lutree, rotree, rutree);
+        return Lists.newArrayList(upperLeftTree, bottomLeftTree, upperRightTree, bottomRightTree);
     }
 
 }

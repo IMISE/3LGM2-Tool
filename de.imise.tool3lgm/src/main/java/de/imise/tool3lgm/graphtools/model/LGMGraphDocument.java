@@ -804,7 +804,9 @@ public class LGMGraphDocument extends GraphDocument {
             }
         }
         SimplePath simplePath = createSubPath ? createdSubPath : SimplePath.create(createdElementaryPaths);
-        repositioningOfSubordniatedInGraph(simplePath, pid);
+        if (simplePath != null) { //is null if the function is called with null as endElement (in dialogs)
+            repositioningOfSubordniatedInGraph(simplePath, pid);
+        }
         finish_transaction(pid, DATA_CHANGED);
         return simplePath;
     }

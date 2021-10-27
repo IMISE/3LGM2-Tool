@@ -42,18 +42,40 @@ public class PathConnectionLeafPanel extends PathConnectionPanel {
      */
     protected Map<ElementContainerTreeNode, ModelElement> nodeToParentModelElement;
 
+    /**
+     * @param dialog
+     * @param metaPath
+     */
     public PathConnectionLeafPanel(final AbstractElementPropertyDialog dialog, final MetaPath metaPath) {
         this(dialog, LABEL_END_ELEMENT_TYPE, LABEL_END_ELEMENT_TYPE, metaPath);
     }
 
+    /**
+     * @param dialog
+     * @param titleLabelOption
+     * @param westLabelOption
+     * @param metaPath
+     */
     public PathConnectionLeafPanel(final AbstractElementPropertyDialog dialog, final PanelLabelOption titleLabelOption, final PanelLabelOption westLabelOption, final MetaPath metaPath) {
         this(dialog, titleLabelOption, westLabelOption, -1, metaPath);
     }
 
+    /**
+     * @param dialog
+     * @param maxLines
+     * @param metaPath
+     */
     public PathConnectionLeafPanel(final AbstractElementPropertyDialog dialog, final int maxLines, final MetaPath metaPath) {
         this(dialog, LABEL_END_ELEMENT_TYPE, LABEL_END_ELEMENT_TYPE, maxLines, metaPath);
     }
 
+    /**
+     * @param dialog
+     * @param titleLabelOption
+     * @param westLabelOption
+     * @param maxLines
+     * @param metaPath
+     */
     public PathConnectionLeafPanel(final AbstractElementPropertyDialog dialog, final PanelLabelOption titleLabelOption, final PanelLabelOption westLabelOption, final int maxLines, final MetaPath metaPath) {
         super(dialog, titleLabelOption, westLabelOption, maxLines, false, metaPath);
         //die Treenodes nicht einrücken, da ja nur eine Liste dargestellt werden soll
