@@ -6,12 +6,10 @@ import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Rectangle;
-import java.util.Map;
 import java.util.StringTokenizer;
 
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 
 import com.google.common.base.Strings;
 
@@ -19,12 +17,12 @@ import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
+import de.imise.tool3lgm.graphtools.model.GDCollectionIconTable;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.model.Szenario;
 import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout;
 import de.imise.tool3lgm.graphtools.view.graph.NodeRenderer;
 import de.imise.tool3lgm.graphtools.view.tree.node.ElementContainerTreeNode;
-import de.imise.tool3lgm.log.Log;
 import de.imise.util.Alphabetical.AlphabeticalSortTarget;
 import de.imise.util.swing.NoopGraphics;
 
@@ -229,9 +227,9 @@ public class NodeContainer extends ElementContainer implements AlphabeticalSortT
 
     /**
      * @param iconID
-     * @param ImageTable
+     * @param imageTable
      */
-    public void setIcon(final String iconID, final Map<String, byte[]> ImageTable) {
+    public void setIcon(final String iconID, final GDCollectionIconTable imageTable) {
         if (layout == null) {
             return;
         }
@@ -240,14 +238,7 @@ public class NodeContainer extends ElementContainer implements AlphabeticalSortT
             super.setIcon(null);
             return;
         }
-        ImageIcon icon = null;
-        try {
-            byte[] imageData = ImageTable.get(iconID);
-            icon = new ImageIcon(imageData);
-        } catch (Exception ex) {
-            Log.show(Log.ERROR, getResString("FehlerAllgemein"), ex);
-            JOptionPane.showMessageDialog(null, getResString("icon_kaputt"), getResString("fehler"), JOptionPane.ERROR_MESSAGE);
-        }
+        ImageIcon icon = imageTable.getIcon(iconID);
         layout.setIconID(icon != null ? iconID : null);
         super.setIcon(icon);
     }

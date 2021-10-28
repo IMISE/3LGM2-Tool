@@ -9,6 +9,9 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 
+import javax.swing.ImageIcon;
+import javax.swing.JOptionPane;
+
 import de.imise.tool3lgm.log.Log;
 
 /**
@@ -20,12 +23,6 @@ public class GDCollectionIconTable extends HashMap<String, byte[]> {
      * COMMENTME
      */
     private int iconCounter = 0;
-
-    /**
-     *
-     */
-    public GDCollectionIconTable() {
-    }
 
     /**
      * @param iconPath
@@ -62,4 +59,19 @@ public class GDCollectionIconTable extends HashMap<String, byte[]> {
         return null;
     }
 
+    /**
+     * @param iconID
+     * @return
+     */
+    public ImageIcon getIcon(final String iconID) {
+        ImageIcon icon = null;
+        try {
+            byte[] imageData = get(iconID);
+            icon = new ImageIcon(imageData);
+        } catch (Exception ex) {
+            Log.show(Log.ERROR, getResString("FehlerAllgemein"), ex);
+            JOptionPane.showMessageDialog(null, getResString("icon_kaputt"), getResString("fehler"), JOptionPane.ERROR_MESSAGE);
+        }
+        return icon;
+    }
 }

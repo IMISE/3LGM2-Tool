@@ -27,6 +27,8 @@ import de.imise.tool3lgm.graphtools.metamodel.GraphViewDefinition.AdditionalGrap
 import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Textfield;
+import de.imise.tool3lgm.graphtools.model.GDCollection;
+import de.imise.tool3lgm.graphtools.model.GDCollectionIconTable;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.path.metapaths.MetaPath;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
@@ -118,6 +120,11 @@ public final class NodeRenderer {
         return shape;
     }
 
+    /**
+     * @param g
+     * @param nc
+     * @param doc
+     */
     public static final void render(final Graphics g, final NodeContainer nc, final GraphDocument doc) {
         ModelElement me = nc.getElement();
         if (!me.isPaintable() || !nc.isVisible()) {
@@ -149,7 +156,7 @@ public final class NodeRenderer {
         int xp = x + width_half + width % 2;
         int yp = y + height_half;
 
-        ImageIcon img = (ImageIcon) nc.getIcon();
+        ImageIcon img = setScaledIcon(nc);
         int textPositionHorizontalSwingConstant = nc.getTextPositionHorizontal().getSwingConstant();
         int textPositionVerticalSwingConstant = nc.getTextPositionVertical().getSwingConstant();
         int horizontalAlignment;
@@ -357,6 +364,31 @@ public final class NodeRenderer {
                 g.drawString(additionalText[i], xp, yp + fontHeight * ++i);
             }
         }
+    }
+
+    /**
+     * @param nc
+     * @return
+     */
+    private static ImageIcon setScaledIcon(final NodeContainer nc) {
+        ImageIcon icon = (ImageIcon) nc.getIcon();
+        if (icon != null) {
+            int iconWidth = icon.getIconWidth();
+            int iconHeight = icon.getIconHeight();
+            int containerWidth = nc.getWidth();
+            int containerHeight = nc.getHeight();
+            if (containerWidth != iconWidth || containerHeight != iconHeight) {
+                String iconID = nc.getIconID();
+                GDCollection gdcoll = nc.getCollection();
+                GDCollectionIconTable iconTable = gdcoll.getIconTable();
+                icon = iconTable.getIcon(iconID);
+                Image image = icon.getImage();
+                image = image.getScaledInstance(containerWidth, containerHeight, Image.SCALE_SMOOTH);
+                icon = new ImageIcon(image);
+                nc.setIcon(icon);
+            }
+        }
+        return icon;
     }
 
     /**
