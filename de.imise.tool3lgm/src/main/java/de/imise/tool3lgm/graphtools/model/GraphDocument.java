@@ -2612,7 +2612,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
      * @param moveSubelements
      * @param pid
      */
-    public final void moveNodeContainer(final NodeContainer nc, final int x, final int y, final int width, final int height, final boolean moveSubelements, final int pid, final boolean shiftKeyPressed) {
+    public final void moveNodeContainer(final NodeContainer nc, final int x, final int y, final int width, final int height, final boolean moveSubelements, final int pid, final boolean controlKeyPressed) {
         if (nc == null) {
             return;
         }
@@ -2621,7 +2621,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
             return;
         }
         start_transaction(pid);
-        if (moveSubelements && OPTION_GRAPH_MOVE_SUBELEMENTS.is() && !shiftKeyPressed || moveSubelements && !OPTION_GRAPH_MOVE_SUBELEMENTS.is() && shiftKeyPressed) {
+        if (moveSubelements && OPTION_GRAPH_MOVE_SUBELEMENTS.is() && !controlKeyPressed || moveSubelements && !OPTION_GRAPH_MOVE_SUBELEMENTS.is() && controlKeyPressed) {
             // retrieves all subordinated elements in this submodel
             List<ElementContainer> subordinatedContainers = me.getConnectedContainers(this, CompositionEdge.class, SUPER_TO_SUB_DIRECTION);
             moveSubElements(nc, subordinatedContainers, x, y, width, height, pid);
@@ -2845,13 +2845,13 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
      *            </ul>
      * @param pid ID der Transaktion
      */
-    public final void moveSelectedNodeContainer(final int deltaX, final int deltaY, final int layer, final int pid) {
+    public final void moveSelectedNodeContainer(final int deltaX, final int deltaY, final int layer, final boolean controlKeyPressed, final int pid) {
         if (deltaX == 0 && deltaY == 0) {
             return;
         }
         //Unterelemente ebenfalls selektieren, damit sie mitverschoben werden und ihr Verschieben
         //dann auch als Undo gelogt wird
-        List<ElementContainer> selection = expandSelection(OPTION_GRAPH_MOVE_SUBELEMENTS.is());
+        List<ElementContainer> selection = expandSelection(OPTION_GRAPH_MOVE_SUBELEMENTS.is() && !controlKeyPressed || !OPTION_GRAPH_MOVE_SUBELEMENTS.is() && controlKeyPressed);
         Iterable<NodeContainer> nodeContainers = getSelectedRealElementContainerIterable();
         Iterable<BendpointContainer> bendpointContainers = getSelectedBendpointContainerIterable();
         Iterable<NodeContainer> allNodeContainers = CollectionUtils.getCommonIterable(nodeContainers, bendpointContainers);

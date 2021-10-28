@@ -1175,10 +1175,12 @@ public final class InputGraphArea extends BasicGraphArea implements MouseListene
                 grabbedElementsFullRect.width -= deltaX;
                 grabbedElementsFullRect.y -= deltaY;
                 grabbedElementsFullRect.height -= deltaY;
+
+                boolean controlKeyPressed = InputEvents.isOperatingSystemDependentCTRLorCMDorSHIFTdown(e);
                 if (multiView) {
-                    szenario.moveSelectedNodeContainer(-deltaX, -deltaY, NO_LAYER, STANDARD_PID);
+                    szenario.moveSelectedNodeContainer(-deltaX, -deltaY, NO_LAYER, controlKeyPressed, STANDARD_PID);
                 } else {
-                    szenario.moveSelectedNodeContainer(-deltaX, -deltaY, ebene, STANDARD_PID);
+                    szenario.moveSelectedNodeContainer(-deltaX, -deltaY, ebene, controlKeyPressed, STANDARD_PID);
                 }
                 //wenn nicht irgendwelche Elemente gedragged werden mussten, kann hier nur noch auf einer Edge gedragged werden, da grabbed
                 // nur bei Node oder Kanten true gesetzt wird
