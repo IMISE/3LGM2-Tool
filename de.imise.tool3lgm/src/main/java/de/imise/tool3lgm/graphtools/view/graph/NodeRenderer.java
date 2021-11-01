@@ -373,11 +373,16 @@ public final class NodeRenderer {
     private static ImageIcon setScaledIcon(final NodeContainer nc) {
         ImageIcon icon = (ImageIcon) nc.getIcon();
         if (icon != null) {
-            int iconWidth = icon.getIconWidth();
-            int iconHeight = icon.getIconHeight();
+            float iconWidth = icon.getIconWidth();
+            float iconHeight = icon.getIconHeight();
             int containerWidth = nc.getWidth();
             int containerHeight = nc.getHeight();
             if (containerWidth != iconWidth || containerHeight != iconHeight) {
+                if (containerWidth < containerHeight) {
+                    containerHeight = (int) (iconHeight / iconWidth * containerWidth);
+                } else {
+                    containerWidth = (int) (iconWidth / iconHeight * containerHeight);
+                }
                 String iconID = nc.getIconID();
                 GDCollection gdcoll = nc.getCollection();
                 GDCollectionIconTable iconTable = gdcoll.getIconTable();
