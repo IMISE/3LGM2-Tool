@@ -2,6 +2,7 @@ package de.imise.tool3lgm.graphtools.view.container;
 
 import static de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout.STANDARD_COLORS;
 
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Image;
@@ -250,24 +251,19 @@ public class NodeContainer extends ElementContainer implements AlphabeticalSortT
         return layout == null ? null : layout.getIconID();
     }
 
-    /**
-     * Gibt die Breite zurueck
-     *
-     * @see javax.swing.JComponent#getWidth()
-     */
     @Override
     public int getWidth() {
         return layout == null ? 0 : layout.width;
     }
 
-    /**
-     * Gibt die Hoehe zurueck
-     *
-     * @see javax.swing.JComponent#getHeight()
-     */
     @Override
     public int getHeight() {
         return layout == null ? 0 : layout.height;
+    }
+
+    @Override
+    public Dimension getSize() {
+        return new Dimension(getWidth(), getHeight());
     }
 
     /**
@@ -295,7 +291,7 @@ public class NodeContainer extends ElementContainer implements AlphabeticalSortT
      */
     @Override
     public final void setSize(final int w, final int h) {
-        //		System.err.println(w + " " + h);
+        //        System.err.println(w + " " + h);
         if (layout == null) {
             return;
         }
