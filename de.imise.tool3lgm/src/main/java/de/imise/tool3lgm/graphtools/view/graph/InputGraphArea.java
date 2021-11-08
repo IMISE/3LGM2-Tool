@@ -35,6 +35,7 @@ import java.awt.event.MouseWheelListener;
 import java.util.List;
 import java.util.Set;
 
+import javax.swing.ImageIcon;
 import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
 import javax.swing.JViewport;
@@ -312,6 +313,14 @@ public final class InputGraphArea extends BasicGraphArea implements MouseListene
         int h = ec.getHeight();
         int x = ec.getX();
         int y = ec.getY();
+        NodeContainer nc = (NodeContainer) ec;
+        if (!nc.hideText() && nc.getIcon() != null) {
+            int prefferedHeight = nc.getPreferredSize().height;
+            ImageIcon img = (ImageIcon) nc.getIcon();
+            int iconHeight = img.getIconHeight();
+            int offset = (prefferedHeight - iconHeight) / 2;
+            y -= offset;
+        }
         int realx1 = x - (w >> 1);
         int realy1 = y - (h >> 1);
         int realx2 = realx1 + w;
@@ -922,7 +931,7 @@ public final class InputGraphArea extends BasicGraphArea implements MouseListene
             if (!k.isVisible()) {
                 continue;
             }
-            if (NodeRenderer.isInside(k, x, y)) {
+            if (NodeRenderer.isInside(k, x, y, true)) {
                 return k;
             }
         }
