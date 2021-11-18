@@ -156,7 +156,8 @@ public final class NodeRenderer {
         int xp = x + width_half + width % 2;
         int yp = y + height_half;
 
-        ImageIcon img = setScaledIcon(nc);
+        String iconID = nc.getIconID();
+        ImageIcon img = setScaledIcon(iconID, nc);
         int textPositionHorizontalSwingConstant = nc.getTextPositionHorizontal().getSwingConstant();
         int textPositionVerticalSwingConstant = nc.getTextPositionVertical().getSwingConstant();
         int horizontalAlignment;
@@ -261,7 +262,6 @@ public final class NodeRenderer {
                     gc.setStroke(MEDUIM_STROKE);
                 }
             }
-
             if (!nc.hideText() && img != null) {
                 int prefferedHeight = nc.getPreferredSize().height;
                 int iconHeight = img.getIconHeight();
@@ -276,7 +276,6 @@ public final class NodeRenderer {
                     yp -= offset;
                 }
                 nc.setHeight(iconHeight);
-                //                Sys.out1(iconHeight);
                 g.drawRect(xm, ym, width, iconHeight);
             } else {
                 g.drawRect(xm, ym, width, height);
@@ -387,28 +386,24 @@ public final class NodeRenderer {
     }
 
     /**
+     * @param iconID
      * @param nc
      * @return
      */
-    private static ImageIcon setScaledIcon(final NodeContainer nc) {
-        ImageIcon icon = (ImageIcon) nc.getIcon();
-        if (icon != null) {
+    private static ImageIcon setScaledIcon(final String iconID, final NodeContainer nc) {
+        ImageIcon icon = null;
+        if (iconID != null) {
+            GDCollection gdcoll = nc.getCollection();
+            GDCollectionIconTable iconTable = gdcoll.getIconTable();
+            icon = iconTable.getIcon(iconID);
+            Image image = icon.getImage();
             float iconWidth = icon.getIconWidth();
             float iconHeight = icon.getIconHeight();
-            int containerWidth = nc.getWidth();
-            int containerHeight = nc.getHeight();
+            float containerWidth = nc.getWidth();
+            float containerHeight = nc.getHeight();
             if (containerWidth != iconWidth || containerHeight != iconHeight) {
-                if (containerWidth < containerHeight) {
-                    containerHeight = (int) (iconHeight / iconWidth * containerWidth);
-                } else {
-                    containerWidth = (int) (iconWidth / iconHeight * containerHeight);
-                }
-                String iconID = nc.getIconID();
-                GDCollection gdcoll = nc.getCollection();
-                GDCollectionIconTable iconTable = gdcoll.getIconTable();
-                icon = iconTable.getIcon(iconID);
-                Image image = icon.getImage();
-                image = image.getScaledInstance(containerWidth, containerHeight, Image.SCALE_SMOOTH);
+                containerWidth = (int) (iconWidth / iconHeight * containerHeight);
+                image = image.getScaledInstance((int) containerWidth, (int) containerHeight, Image.SCALE_SMOOTH);
                 icon = new ImageIcon(image);
                 nc.setIcon(icon);
             }
