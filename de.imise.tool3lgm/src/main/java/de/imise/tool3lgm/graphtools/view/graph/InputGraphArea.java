@@ -319,7 +319,11 @@ public final class InputGraphArea extends BasicGraphArea implements MouseListene
             ImageIcon img = (ImageIcon) nc.getIcon();
             int iconHeight = img.getIconHeight();
             int offset = (prefferedHeight - iconHeight) / 2;
-            y -= offset;
+            if (nc.getVerticalTextPosition() == 1) {
+                y += offset;
+            } else {
+                y -= offset;
+            }
         }
         int realx1 = x - (w >> 1);
         int realy1 = y - (h >> 1);

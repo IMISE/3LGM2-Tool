@@ -35,6 +35,7 @@ import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.graphtools.view.container.LayerContainer;
 import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
 import de.imise.tool3lgm.graphtools.view.graph.BasicGraphArea.PaintState;
+import de.imise.util.Sys;
 import de.imise.util.swing.component.HtmlLabelFunctions;
 import de.imise.util.swing.component.HtmlLabelFunctions.HtmlLabelDimension;
 
@@ -267,7 +268,12 @@ public final class NodeRenderer {
                 int iconHeight = img.getIconHeight();
                 int offset = (prefferedHeight - iconHeight) / 2;
                 int iconHeightHalf = iconHeight / 2;
-                y -= offset;
+                Sys.out1(nc.getVerticalTextPosition());
+                if (nc.getVerticalTextPosition() == 1) {
+                    y += offset;
+                } else {
+                    y -= offset;
+                }
                 if (width < height) {
                     ym = y - iconHeightHalf;
                     yp = y + iconHeightHalf;
@@ -472,7 +478,12 @@ public final class NodeRenderer {
                 ImageIcon img = (ImageIcon) k.getIcon();
                 int iconHeight = img.getIconHeight();
                 int offset = (prefferedHeight - iconHeight) / 2;
-                y -= offset;
+                // if vertical text position is top
+                if (k.getVerticalTextPosition() == 1) {
+                    y += offset;
+                } else { // bottom or mid
+                    y -= offset;
+                }
                 height = iconHeight;
                 yd = Math.abs(yi - y);
             }
@@ -600,7 +611,11 @@ public final class NodeRenderer {
             ImageIcon img = (ImageIcon) container.getIcon();
             int iconHeight = img.getIconHeight();
             int offset = (prefferedHeight - iconHeight) / 2;
-            y -= offset;
+            if (container.getVerticalTextPosition() == 1) {
+                y += offset;
+            } else {
+                y -= offset;
+            }
             half_height = iconHeight / 2;
         }
 
