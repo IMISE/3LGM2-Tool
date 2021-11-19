@@ -281,7 +281,8 @@ public class ComponentAsImageExportHandler {
      * @param comp
      * @param destination
      * @param lastSelected
-     * @return Pair containing the destination of the exported file and the file type
+     * @return Pair containing the destination of the exported file and the file
+     *         type
      */
     private final Pair<File, FileFilterType> createFileInternal(final JComponent comp, final File destination, final FileFilterType lastSelected) {
         ExtendedFileChooser fc = new ExtendedFileChooser(ComponentAsImageExportHandler.class, destination);
@@ -333,14 +334,18 @@ public class ComponentAsImageExportHandler {
         fc.showSaveDialog(comp, drh.getResString("DIALOG_TITLE"), false, selectedFileFilter, fileFilters);
 
         boolean maximizeImage = saveMaximumSizeRBut != null && saveMaximumSizeRBut.isSelected();
-
         FileFilterType type = null;
-        for (int c = 0; c < fileFilters.length; c++) {
-            if (fc.getFileFilter() == fileFilters[c]) {
-                type = FileFilterType.values()[c];
-                break;
+        if (lastSelected != null) {
+            type = lastSelected;
+        } else {
+            for (int c = 0; c < fileFilters.length; c++) {
+                if (fc.getFileFilter() == fileFilters[c]) {
+                    type = FileFilterType.values()[c];
+                    break;
+                }
             }
         }
+
         File f = fc.getSelectedFile();
         Pair<File, FileFilterType> fileAndType = new Pair<>(f, type);
         if (f == null) {
@@ -367,7 +372,8 @@ public class ComponentAsImageExportHandler {
      * @param comp
      * @param destination
      * @param lastSelected
-     * @return Pair containing the destination of the exported file and the file type
+     * @return Pair containing the destination of the exported file and the file
+     *         type
      */
     public static final Pair<File, FileFilterType> createFile(final JComponent comp, final File destination, final FileFilterType lastSelected) {
         return new ComponentAsImageExportHandler().createFileInternal(comp, destination, lastSelected);

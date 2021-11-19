@@ -1443,7 +1443,7 @@ public class GDCollection extends UserFieldTarget implements MetaModelSpecific {
      * @param pid
      */
     public void updateInferenceEdges(final int pid) {
-        removeInferenceEdges(pid); //first remove, so there must not be checked all potential new created inferenceEgdes if they are superflous
+        removeInferenceEdges(false, pid); //first remove, so there must not be checked all potential new created inferenceEgdes if they are superflous
         createInferenceEdges(pid);
     }
 
@@ -1452,14 +1452,6 @@ public class GDCollection extends UserFieldTarget implements MetaModelSpecific {
      */
     private boolean lockInferenceEgdeCreation = false;
 
-    /**
-     * Removes all superflous {@link InferenceEdge}s.
-     *
-     * @param pid
-     */
-    void removeInferenceEdges(final int pid) {
-        removeInferenceEdges(false, pid);
-    }
     /**
      * Removes all superflous {@link InferenceEdge}s.
      *
@@ -1515,7 +1507,7 @@ public class GDCollection extends UserFieldTarget implements MetaModelSpecific {
                     }
                     //if not -> remove the InferenceEdge
                     if (remove) {
-                        unlink(edgeStart, edgeEnd, edgeClass, pid);
+                        unlink(edgeStart, edgeEnd, edgeClass, false, pid);
                     }
                 }
             }
@@ -2097,7 +2089,18 @@ public class GDCollection extends UserFieldTarget implements MetaModelSpecific {
      * @param pid
      */
     public final void unlink(final ModelElement me1, final ModelElement me2, final Class<? extends Edge> edgeClass, final int pid) {
-        unlink(me1, me2, edgeClass, INVALID_EDGE_INDEX, pid);
+        unlink(me1, me2, edgeClass, true, pid);
+    }
+
+    /**
+     * @param me1
+     * @param me2
+     * @param edgeClass
+     * @param removeInferenceEdgeConditionPaths
+     * @param pid
+     */
+    public final void unlink(final ModelElement me1, final ModelElement me2, final Class<? extends Edge> edgeClass, boolean removeInferenceEdgeConditionPaths, final int pid) {
+        unlink(me1, me2, edgeClass, INVALID_EDGE_INDEX, removeInferenceEdgeConditionPaths, pid);
     }
 
     /**
@@ -2108,7 +2111,7 @@ public class GDCollection extends UserFieldTarget implements MetaModelSpecific {
      * @param pid
      */
     public final void unlink(final ModelElement me1, final ModelElement me2, final Class<? extends Edge> edgeClass, final ModelElement ignoreElementIfIconosistent, final int pid) {
-        unlink(me1, me2, edgeClass, INVALID_EDGE_INDEX, ignoreElementIfIconosistent, pid);
+        unlink(me1, me2, edgeClass, INVALID_EDGE_INDEX, ignoreElementIfIconosistent, true, pid);
     }
 
     /**
@@ -2157,7 +2160,26 @@ public class GDCollection extends UserFieldTarget implements MetaModelSpecific {
      * @param pid
      */
     public final void unlink(final ModelElement me1, final ModelElement me2, final Class<? extends Edge> edgeClass, final int me1EdgeIndex, final int pid) {
-        unlink(me1, me2, edgeClass, me1EdgeIndex, null, pid);
+        unlink(me1, me2, edgeClass, me1EdgeIndex, true, pid);
+    }
+
+    /**
+     * Anders als bei link() ist hier die Richtung, also die Reihenfolge der
+     * beiden ModelElemente nur wichtig, wenn es eine {@link DoubleMeaningEdge}
+     * ist oder die übergebenen Elemente beide jeweils Start- und EndElement der
+     * Kantenklasse sein können. In allen anderen Fällen wird sonst auch einfach
+     * versucht irgendeine Kante dieser Art zwischen den beiden übergebenen
+     * Elementen zu löschen.
+     *
+     * @param me1
+     * @param me2
+     * @param edgeClass
+     * @param me1EdgeIndex
+     * @param removeInferenceEdgeConditionPaths
+     * @param pid
+     */
+    public final void unlink(final ModelElement me1, final ModelElement me2, final Class<? extends Edge> edgeClass, final int me1EdgeIndex, boolean removeInferenceEdgeConditionPaths, final int pid) {
+        unlink(me1, me2, edgeClass, me1EdgeIndex, null, removeInferenceEdgeConditionPaths, pid);
     }
 
     /**
@@ -2173,9 +2195,10 @@ public class GDCollection extends UserFieldTarget implements MetaModelSpecific {
      * @param edgeClass
      * @param me1EdgeIndex
      * @param ignoreElementIfIconosistent
+     * @param removeInferenceEdgeConditionPaths
      * @param pid
      */
-    private final void unlink(final ModelElement me1, ModelElement me2, final Class<? extends Edge> edgeClass, final int me1EdgeIndex, final ModelElement ignoreElementIfIconosistent, final int pid) {
+    private final void unlink(final ModelElement me1, ModelElement me2, final Class<? extends Edge> edgeClass, final int me1EdgeIndex, final ModelElement ignoreElementIfIconosistent, boolean removeInferenceEdgeConditionPaths, final int pid) {
         if (me1 == null || me2 == null) {
             return;
         }
@@ -2227,7 +2250,7 @@ public class GDCollection extends UserFieldTarget implements MetaModelSpecific {
         Class<? extends Edge> absoluteEdgeClass = edge.getClass(); // die übergebene Kanten-Klasse kann null gewesen oder eine Oberklasse sein
 
         //InferenceEdge? -> delete condition paths?
-        if (InferenceEdge.class.isAssignableFrom(absoluteEdgeClass)) {
+        if (removeInferenceEdgeConditionPaths && InferenceEdge.class.isAssignableFrom(absoluteEdgeClass)) {
             OutParamObject<ModelElement> inferenceEdgeConditionMetaPathStartElement = new OutParamObject<>(me1);
             OutParamObject<ModelElement> inferenceEdgeConditionMetaPathEndElement = new OutParamObject<>(me2);
             MetaPath inferenceEdgeConditionMetaPath = getInferenceEdgeConditionMetaPathWithCorrectElementOrder(edgeClass, inferenceEdgeConditionMetaPathStartElement, inferenceEdgeConditionMetaPathEndElement);
