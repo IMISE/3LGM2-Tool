@@ -5,6 +5,7 @@ package de.imise.tool3lgm.graphtools.userfield.dialog.definition.panel;
 
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
 import static de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty.OPTION_ENABLE_FORMULA_CALCULATION;
+import static de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty.OPTION_SHOW_USER_DEFINED_PROPERTIES_IN_MODEL_BROWSER;
 
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
@@ -64,6 +65,11 @@ public class UserFieldOptionPanel extends AbstractInputPanel {
                 Object source = e.getSource();
                 if (source == treeVisCheckBox) {
                     boolean isTreeVisibility = treeVisCheckBox.isSelected();
+                    // when the option to show the user defined property is selected
+                    // the option to show these in the model browser is activated
+                    if (isTreeVisibility) {
+                        OPTION_SHOW_USER_DEFINED_PROPERTIES_IN_MODEL_BROWSER.set(true);
+                    }
                     for (UserField userField : userFields) {
                         userField.setTreeVisibility(isTreeVisibility);
                     }
