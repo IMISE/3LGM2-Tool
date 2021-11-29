@@ -35,7 +35,6 @@ import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.graphtools.view.container.LayerContainer;
 import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
 import de.imise.tool3lgm.graphtools.view.graph.BasicGraphArea.PaintState;
-import de.imise.util.Sys;
 import de.imise.util.swing.component.HtmlLabelFunctions;
 import de.imise.util.swing.component.HtmlLabelFunctions.HtmlLabelDimension;
 
@@ -268,7 +267,6 @@ public final class NodeRenderer {
                 int iconHeight = img.getIconHeight();
                 int offset = (prefferedHeight - iconHeight) / 2;
                 int iconHeightHalf = iconHeight / 2;
-                Sys.out1(nc.getVerticalTextPosition());
                 if (nc.getVerticalTextPosition() == 1) {
                     y += offset;
                 } else {
