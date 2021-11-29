@@ -27,12 +27,15 @@ import de.imise.tool3lgm.graphtools.metamodel.GraphViewDefinition.AdditionalGrap
 import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Textfield;
+import de.imise.tool3lgm.graphtools.model.GDCollection;
+import de.imise.tool3lgm.graphtools.model.GDCollectionIconTable;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.path.metapaths.MetaPath;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.graphtools.view.container.LayerContainer;
 import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
 import de.imise.tool3lgm.graphtools.view.graph.BasicGraphArea.PaintState;
+import de.imise.util.Sys;
 import de.imise.util.swing.component.HtmlLabelFunctions;
 import de.imise.util.swing.component.HtmlLabelFunctions.HtmlLabelDimension;
 
@@ -118,6 +121,11 @@ public final class NodeRenderer {
         return shape;
     }
 
+    /**
+     * @param g
+     * @param nc
+     * @param doc
+     */
     public static final void render(final Graphics g, final NodeContainer nc, final GraphDocument doc) {
         ModelElement me = nc.getElement();
         if (!me.isPaintable() || !nc.isVisible()) {
@@ -149,7 +157,8 @@ public final class NodeRenderer {
         int xp = x + width_half + width % 2;
         int yp = y + height_half;
 
-        ImageIcon img = (ImageIcon) nc.getIcon();
+        String iconID = nc.getIconID();
+        ImageIcon img = setScaledIcon(iconID, nc);
         int textPositionHorizontalSwingConstant = nc.getTextPositionHorizontal().getSwingConstant();
         int textPositionVerticalSwingConstant = nc.getTextPositionVertical().getSwingConstant();
         int horizontalAlignment;
@@ -254,7 +263,29 @@ public final class NodeRenderer {
                     gc.setStroke(MEDUIM_STROKE);
                 }
             }
-            g.drawRect(xm, ym, width, height);
+            if (!nc.hideText() && img != null) {
+                int prefferedHeight = nc.getPreferredSize().height;
+                int iconHeight = img.getIconHeight();
+                int offset = (prefferedHeight - iconHeight) / 2;
+                int iconHeightHalf = iconHeight / 2;
+                Sys.out1(nc.getVerticalTextPosition());
+                if (nc.getVerticalTextPosition() == 1) {
+                    y += offset;
+                } else {
+                    y -= offset;
+                }
+                if (width < height) {
+                    ym = y - iconHeightHalf;
+                    yp = y + iconHeightHalf;
+                } else {
+                    ym -= offset;
+                    yp -= offset;
+                }
+                nc.setHeight(iconHeight);
+                g.drawRect(xm, ym, width, iconHeight);
+            } else {
+                g.drawRect(xm, ym, width, height);
+            }
 
             //Stroke wieder zurück setzen, falls das zuletzt selktierte ein Textfeld war
             gc.setStroke(str);
@@ -314,6 +345,7 @@ public final class NodeRenderer {
             g.drawLine(xs[3], ys[3], xs[2], ys[2]);
             g.drawLine(xs[2], ys[2], xp - 1, ys[2]);
             g.drawLine(xs[2], ys[2], xs[2], yp - 1);
+
         }
 
         JLabel label = nc.getNorthLabel();
@@ -360,6 +392,32 @@ public final class NodeRenderer {
     }
 
     /**
+     * @param iconID
+     * @param nc
+     * @return
+     */
+    private static ImageIcon setScaledIcon(final String iconID, final NodeContainer nc) {
+        ImageIcon icon = null;
+        if (iconID != null) {
+            GDCollection gdcoll = nc.getCollection();
+            GDCollectionIconTable iconTable = gdcoll.getIconTable();
+            icon = iconTable.getIcon(iconID);
+            Image image = icon.getImage();
+            float iconWidth = icon.getIconWidth();
+            float iconHeight = icon.getIconHeight();
+            float containerWidth = nc.getWidth();
+            float containerHeight = nc.getHeight();
+            if (containerWidth != iconWidth || containerHeight != iconHeight) {
+                containerWidth = (int) (iconWidth / iconHeight * containerHeight);
+                image = image.getScaledInstance((int) containerWidth, (int) containerHeight, Image.SCALE_SMOOTH);
+                icon = new ImageIcon(image);
+                nc.setIcon(icon);
+            }
+        }
+        return icon;
+    }
+
+    /**
      * @param nc
      * @return
      */
@@ -378,6 +436,16 @@ public final class NodeRenderer {
     }
 
     /**
+     * @param ec
+     * @param xi
+     * @param yi
+     * @return
+     */
+    public static final boolean isInside(final ElementContainer ec, final double xi, final double yi) {
+        return isInside(ec, xi, yi, false);
+    }
+
+    /**
      * Gibt <code>true</code> zurück, wenn die übergebenen Koordinaten innerhalb
      * des Darstellungsbereiches des übergebenen Containers liegen, sonst
      * <code>false</code>.
@@ -388,7 +456,7 @@ public final class NodeRenderer {
      * @param yi Y-Koordinate
      * @return
      */
-    public static final boolean isInside(final ElementContainer ec, final double xi, final double yi) {
+    public static final boolean isInside(final ElementContainer ec, final double xi, final double yi, final boolean checkIcon) {
         if (ec == null || !(ec instanceof NodeContainer) || !ec.isVisible()) {
             return false;
         }
@@ -401,6 +469,25 @@ public final class NodeRenderer {
         double prozent;
         double xd = Math.abs(xi - x);
         double yd = Math.abs(yi - y);
+
+        // if the modelelement contains an icon, the selectable field for the element
+        // will be moved to the icon
+        if (checkIcon) {
+            if (!k.hideText() && k.getIcon() != null) {
+                int prefferedHeight = k.getPreferredSize().height;
+                ImageIcon img = (ImageIcon) k.getIcon();
+                int iconHeight = img.getIconHeight();
+                int offset = (prefferedHeight - iconHeight) / 2;
+                // if vertical text position is top
+                if (k.getVerticalTextPosition() == 1) {
+                    y += offset;
+                } else { // bottom or mid
+                    y -= offset;
+                }
+                height = iconHeight;
+                yd = Math.abs(yi - y);
+            }
+        }
 
         if (xd > width / 2.0 || yd > height / 2.0) {
             return false;
@@ -518,6 +605,19 @@ public final class NodeRenderer {
         int y = container.getY();
         int half_width = container.getWidth() / 2;
         int half_height = container.getHeight() / 2;
+
+        if (!container.hideText() && container.getIcon() != null) {
+            int prefferedHeight = container.getPreferredSize().height;
+            ImageIcon img = (ImageIcon) container.getIcon();
+            int iconHeight = img.getIconHeight();
+            int offset = (prefferedHeight - iconHeight) / 2;
+            if (container.getVerticalTextPosition() == 1) {
+                y += offset;
+            } else {
+                y -= offset;
+            }
+            half_height = iconHeight / 2;
+        }
 
         lastResizeCursor = Cursor.DEFAULT_CURSOR;
 
