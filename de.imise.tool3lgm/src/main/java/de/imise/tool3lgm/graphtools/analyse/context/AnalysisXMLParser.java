@@ -2,7 +2,6 @@ package de.imise.tool3lgm.graphtools.analyse.context;
 
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
 import static de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty.OPTION_ELEMENTS_RECEIVE_PROPERTIES_FROM_PARENTS;
-import static de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty.OPTION_ELEMENTS_RECEIVE_PROPERTIES_FROM_PARTS;
 
 import java.io.Reader;
 import java.io.StringReader;
@@ -126,8 +125,14 @@ public class AnalysisXMLParser extends DefaultHandler {
                 return;
             }
             state = IN_ANALYSE;
-            boolean searchParts = OPTION_ELEMENTS_RECEIVE_PROPERTIES_FROM_PARTS.is();
             boolean searchParents = OPTION_ELEMENTS_RECEIVE_PROPERTIES_FROM_PARENTS.is();
+
+            // This option is actually always set to false (and can't be changed by the user at the moment,
+            // because that's way too confusing). But Sebastian Stäubert (in V4.4.2) wanted that with
+            // analyses also upper elements are found, with which lower elements have the connection.
+            // Therefore here with the analyses now this solution, simply to set both variables equal.
+            boolean searchParts = searchParents; //OPTION_ELEMENTS_RECEIVE_PROPERTIES_FROM_PARTS.is();
+
             if (suchcnt == 0) {
                 if (doc.getSelectionSize() > 0) {
                     Collection<ElementContainer> selection = doc.getSelectedContainer();
