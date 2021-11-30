@@ -32,6 +32,8 @@ import de.imise.tool3lgm.graphtools.dialog.dragdrop.DragNDropInitializer;
 import de.imise.tool3lgm.graphtools.dialog.dragdrop.DragNDropInitializer.DragNDropActionChain;
 import de.imise.tool3lgm.graphtools.dialog.element.AbstractElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.dialog.element.DialogActionCommands;
+import de.imise.tool3lgm.graphtools.dialog.search.BasicSearchOptionsPanel;
+import de.imise.tool3lgm.graphtools.dialog.search.ConnectionSearchOptionsPanel;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction;
@@ -84,6 +86,9 @@ public class PathConnectionPanel extends AbstractExpandablePanel {
 
     /**  */
     private final LGMAction newElementAction;
+
+    /**  */
+    private BasicSearchOptionsPanel searchPanel;
 
     /**
      * @param dialog
@@ -167,17 +172,17 @@ public class PathConnectionPanel extends AbstractExpandablePanel {
         add(this, ltreeLabel, constraints, 0, 0, 2, 1);
         constraints.anchor = GridBagConstraints.CENTER;
         constraints.fill = GridBagConstraints.BOTH;
-        constraints.weightx = 1d;
+        constraints.weightx = 0.5;
         constraints.weighty = 1d;
         LimitedHeightScrollTreePane ltreeScrollPane = ltree.getScrollPane();
-        add(this, ltreeScrollPane, constraints, 0, 1, 2, 4);
+        add(this, ltreeScrollPane, constraints, 0, 1, 4, 4);
 
         if (showRightTree) {
             constraints.anchor = GridBagConstraints.EAST;
             constraints.weightx = 0d;
             constraints.weighty = 0d;
             constraints.fill = GridBagConstraints.NONE;
-            add(this, viewButton, constraints, 1, 5, 1, 1);
+            add(this, viewButton, constraints, 5, 5, 1, 1);
             constraints.weightx = 1d;
             constraints.weighty = 1d;
             constraints.fill = GridBagConstraints.BOTH;
@@ -190,6 +195,8 @@ public class PathConnectionPanel extends AbstractExpandablePanel {
             rtree.setShowsRootHandles(true);
             TreeRenderer highlightErrorElementsTreeRenderer = new PanelTreeRenderer(this);
             rtree.setCellRenderer(highlightErrorElementsTreeRenderer);
+            //Suchleiste erstellen
+            searchPanel = new ConnectionSearchOptionsPanel(rtree);
 
             //Buttons & Actions erstellen, Actions setzen
             addAction = getConnectAction();
@@ -288,14 +295,19 @@ public class PathConnectionPanel extends AbstractExpandablePanel {
         if (showRightTree) {
             GridBagConstraints constraints = new GridBagConstraints();
             constraints.fill = GridBagConstraints.NONE;
-            add(this, buttonpanel, constraints, 2, 3, 1, 2);
+            constraints.weightx = 0;
+            add(this, buttonpanel, constraints, 5, 3, 1, 2);
             constraints.anchor = GridBagConstraints.WEST;
-            add(this, rLabel, constraints, 3, 0, 1, 1);
+            add(this, rLabel, constraints, 6, 0, 0, 1);
+            constraints.anchor = GridBagConstraints.EAST;
+            constraints.weighty = 0.5;
+            add(this, searchPanel, constraints, 7, 0, 3, 1);
+
             constraints.anchor = GridBagConstraints.WEST;
             constraints.fill = GridBagConstraints.BOTH;
-            constraints.weightx = 1d;
+            constraints.weightx = 0.5;
             constraints.weighty = 1d;
-            add(this, rtree.getScrollPane(), constraints, 3, 1, 1, 4);
+            add(this, rtree.getScrollPane(), constraints, 6, 1, 4, 4);
         }
     }
 
