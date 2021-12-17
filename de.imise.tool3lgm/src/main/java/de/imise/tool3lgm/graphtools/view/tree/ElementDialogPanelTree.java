@@ -16,6 +16,9 @@ import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeModel;
 import javax.swing.tree.TreePath;
 
+import com.google.common.collect.ImmutableSet;
+
+import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
 import de.imise.tool3lgm.graphtools.dialog.element.ElementPropertyDialogsContext;
 import de.imise.tool3lgm.graphtools.dialog.search.SearchFunctions;
 import de.imise.tool3lgm.graphtools.dialog.search.SearchOptions;
@@ -525,5 +528,15 @@ public class ElementDialogPanelTree extends CorrectSelectionTree implements Sear
             }
         }
         setSelectionPaths(selectedSearchPaths);
+    }
+
+    @Override
+    public Set<Class<? extends ModelElement>> getSearchableElementClasses() {
+        return ImmutableSet.of(ModelElement.class);
+    }
+
+    @Override
+    public ElementsNameBuilder getElementsNameBuilder() {
+        return doc.getElementsNameBuilder();
     }
 }

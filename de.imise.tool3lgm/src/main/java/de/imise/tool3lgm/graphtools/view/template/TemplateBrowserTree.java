@@ -16,6 +16,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
 
 import javax.swing.JScrollPane;
 import javax.swing.JViewport;
@@ -30,6 +31,7 @@ import javax.swing.tree.TreePath;
 import de.imise.tool3lgm.MetaModelContext;
 import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.Tool3lgmConstants;
+import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
 import de.imise.tool3lgm.graphtools.dialog.search.SearchFunctions;
 import de.imise.tool3lgm.graphtools.dialog.search.SearchOptions;
 import de.imise.tool3lgm.graphtools.dialog.search.SearchResultView;
@@ -46,6 +48,7 @@ import de.imise.tool3lgm.graphtools.view.tree.DynamicTree;
 import de.imise.tool3lgm.graphtools.view.tree.TreeRenderer;
 import de.imise.tool3lgm.graphtools.view.tree.node.ElementContainerTreeNode;
 import de.imise.tool3lgm.gui.menu.ContextGenerator;
+import de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty;
 import de.imise.util.BooleanOption;
 import de.imise.util.swing.component.ParentComponentFinder;
 
@@ -398,6 +401,20 @@ public class TemplateBrowserTree extends DynamicTree implements SearchResultView
         for (int i = getRowCount() - 1; i > 0; i--) {
             collapseRow(i);
         }
+    }
+
+    @Override
+    public Set<Class<? extends ModelElement>> getSearchableElementClasses() {
+        PathTreeModel model = getModel();
+        PathTreeDefinition pathTreeDefinition = model.getPathTreeDefinition();
+        boolean showAllElementaryMetaPaths = BooleanProperty.OPTION_ENABLE_EXPERT_MODE.is();
+        Set<Class<? extends ModelElement>> visibleElementTypes = pathTreeDefinition.getVisibleElementTypes(showAllElementaryMetaPaths);
+        return visibleElementTypes;
+    }
+
+    @Override
+    public ElementsNameBuilder getElementsNameBuilder() {
+        return getModel().getElementsNameBuilder();
     }
 
 }

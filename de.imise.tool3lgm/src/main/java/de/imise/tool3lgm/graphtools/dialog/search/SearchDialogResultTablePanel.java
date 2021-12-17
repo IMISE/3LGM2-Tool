@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Set;
 
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
@@ -34,6 +35,7 @@ import javax.swing.table.TableRowSorter;
 
 import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
+import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
@@ -289,6 +291,17 @@ public class SearchDialogResultTablePanel extends JPanel implements SearchResult
         this.searchOptions = searchOptions;
         List<ElementContainer> result = doc == null ? new ArrayList<>() : SearchFunctions.getResult(doc, searchOptions);
         setSearchResult(result);
+    }
+
+    @Override
+    public Set<Class<? extends ModelElement>> getSearchableElementClasses() {
+        MetaModel metaModel = doc.getMetaModel();
+        return metaModel.allModelElementClassesWithSuperClasses;
+    }
+
+    @Override
+    public ElementsNameBuilder getElementsNameBuilder() {
+        return doc.getElementsNameBuilder();
     }
 
 }

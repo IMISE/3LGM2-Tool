@@ -33,7 +33,7 @@ import de.imise.tool3lgm.graphtools.dialog.dragdrop.DragNDropInitializer.DragNDr
 import de.imise.tool3lgm.graphtools.dialog.element.AbstractElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.dialog.element.DialogActionCommands;
 import de.imise.tool3lgm.graphtools.dialog.search.BasicSearchOptionsPanel;
-import de.imise.tool3lgm.graphtools.dialog.search.ConnectionSearchOptionsPanel;
+import de.imise.tool3lgm.graphtools.dialog.search.TreeSearchOptionsPanel;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction;
@@ -196,7 +196,7 @@ public class PathConnectionPanel extends AbstractExpandablePanel {
             TreeRenderer highlightErrorElementsTreeRenderer = new PanelTreeRenderer(this);
             rtree.setCellRenderer(highlightErrorElementsTreeRenderer);
             //Suchleiste erstellen
-            searchPanel = new ConnectionSearchOptionsPanel(rtree);
+            searchPanel = new TreeSearchOptionsPanel(rtree);
 
             //Buttons & Actions erstellen, Actions setzen
             addAction = getConnectAction();

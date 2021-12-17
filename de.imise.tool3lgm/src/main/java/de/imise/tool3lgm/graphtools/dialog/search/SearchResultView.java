@@ -1,7 +1,10 @@
 package de.imise.tool3lgm.graphtools.dialog.search;
 
 import java.awt.Component;
+import java.util.Set;
 
+import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
+import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 
 /**
@@ -32,5 +35,16 @@ public interface SearchResultView {
     public default void showResult(final SearchOptions options) {
         showResult(null, options);
     }
+
+    /**
+     * @return all element classes that can be foudn in this view
+     */
+    public abstract Set<Class<? extends ModelElement>> getSearchableElementClasses();
+
+    /**
+     * @return the {@link ElementsNameBuilder} for the metamodel this view is
+     *         showing
+     */
+    public ElementsNameBuilder getElementsNameBuilder();
 
 }
