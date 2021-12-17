@@ -58,6 +58,11 @@ public final class StructurePanel extends AbstractPathOfOneEdgePanel {
     private LGMAction luremoveAction;
 
     /**
+     * <code>true</code> if in this dialog something in the model can be changed
+     */
+    private boolean editable;
+
+    /**
      * @param dialog
      * @param hasPartEdgeClass
      */
@@ -74,6 +79,7 @@ public final class StructurePanel extends AbstractPathOfOneEdgePanel {
         GDCollection gdcoll = me.getCollection();
         LGMGraphDocument mainDoc = gdcoll.getMainDoc();
         String name = me.getName();
+        editable = !dialog.isInfoDialog() && metaPath.isCreatable(false);
         // lotree
         ElementaryMetaPath backwardMetaPath = metaPath.getOtherDirection();
         JLabel lolabel = new JLabel(backwardMetaPath.getName());
@@ -96,10 +102,6 @@ public final class StructurePanel extends AbstractPathOfOneEdgePanel {
         setLayout(gbl);
         GridBagConstraints constraints = new GridBagConstraints();
         constraints.anchor = GridBagConstraints.EAST;
-        boolean editable = !dialog.isInfoDialog() && metaPath.isCreatable(false);
-        if (editable) {
-            add(this, viewButton, constraints, 0, 6, 1, 1);
-        }
 
         constraints.anchor = GridBagConstraints.WEST;
         add(this, lolabel, constraints, 0, 0, 1, 1);
@@ -195,6 +197,11 @@ public final class StructurePanel extends AbstractPathOfOneEdgePanel {
         }
         revalidate();
         repaint();
+    }
+
+    @Override
+    protected boolean isExpandable() {
+        return editable;
     }
 
     @Override

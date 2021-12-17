@@ -101,6 +101,11 @@ public class DoubleMeaningEdgePanel extends AbstractPathOfOneEdgePanel {
     ArrayList<ElementContainer> childrenToExcludeFromBottomRightTree = new ArrayList<>();
 
     /**
+     * <code>true</code> if in this dialog something in the model can be changed
+     */
+    private final boolean editable;
+
+    /**
      * @param dialog
      * @param titleLabelOption
      * @param searchElementClass
@@ -108,7 +113,7 @@ public class DoubleMeaningEdgePanel extends AbstractPathOfOneEdgePanel {
      */
     public DoubleMeaningEdgePanel(final ElementPropertyDialog dialog, final PanelLabelOption titleLabelOption, final Class<? extends ModelElement> searchElementClass, final Class<? extends DoubleMeaningEdge> edgeClass) {
         super(dialog, titleLabelOption, titleLabelOption, searchElementClass, edgeClass); //westLabelOption ist egal, da sowieso eigene Kantennamen-Labels über die Bäume kommen
-        boolean editable = !dialog.isInfoDialog() && metaPath.isCreatable(false);
+        editable = !dialog.isInfoDialog() && metaPath.isCreatable(false);
         GridBagLayout gbl = new GridBagLayout();
         setLayout(gbl);
         GridBagConstraints constraints = new GridBagConstraints();
@@ -136,14 +141,6 @@ public class DoubleMeaningEdgePanel extends AbstractPathOfOneEdgePanel {
         bottomLeftTree.setCellRenderer(treeRenderer);
         bottomLeftTree.getSelectionModel().setSelectionMode(TreeSelectionModel.DISCONTIGUOUS_TREE_SELECTION);
 
-        if (editable) {
-            constraints.anchor = GridBagConstraints.EAST;
-            add(this, viewButton, constraints, 0, 6, 1, 1);
-        } else {
-            viewButton = null;
-        }
-
-        constraints.anchor = GridBagConstraints.WEST;
         add(this, lolabel, constraints, 0, 0, 1, 1);
         add(this, lulabel, constraints, 0, 2, 1, 1);
         constraints.anchor = GridBagConstraints.CENTER;
@@ -195,6 +192,11 @@ public class DoubleMeaningEdgePanel extends AbstractPathOfOneEdgePanel {
 
         initTreeListenerAndDragNDrop();
 
+    }
+
+    @Override
+    protected boolean isExpandable() {
+        return editable;
     }
 
     /**

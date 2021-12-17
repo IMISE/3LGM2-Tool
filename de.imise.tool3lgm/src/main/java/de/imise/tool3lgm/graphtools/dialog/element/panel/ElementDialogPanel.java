@@ -174,7 +174,7 @@ public abstract class ElementDialogPanel extends JPanel {
      * @return a button that the dialog will show beside the OK,Cancel, TakeOver
      *         buttons
      */
-    public JButton getPanelButton() {
+    public JButton getExpandOrCollapseViewButton() {
         return null;//Subclasses that will show e.g. a view button beside the OK,Cancel, TakeOver buttons can return the button here
     }
 

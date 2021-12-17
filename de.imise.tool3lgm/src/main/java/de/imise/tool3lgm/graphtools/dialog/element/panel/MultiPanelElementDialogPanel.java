@@ -59,12 +59,12 @@ public class MultiPanelElementDialogPanel extends ElementDialogPanel implements 
 
     /**
      * Liste mit allen Buttons, die die geaddeten Panels jeweils über ihre
-     * {@link #getPanelButton()} Methode zurück liefern.
+     * {@link #getExpandOrCollapseViewButton()} Methode zurück liefern.
      */
     private final List<JButton> panelButtons = new ArrayList<>();
 
     /**
-     * The button this panel accumulates of the {@link #getPanelButton()} result
+     * The button this panel accumulates of the {@link #getExpandOrCollapseViewButton()} result
      * buttons of the panels in this multi panel.
      */
     private JButton panelButton;
@@ -124,7 +124,7 @@ public class MultiPanelElementDialogPanel extends ElementDialogPanel implements 
             addWestLabelPanel(panel);
         }
         //nur LGMDragNDropPanels, die editierbar sind, haben eine rechte Seite und diesen Button
-        JButton panelButton = panel.getPanelButton();
+        JButton panelButton = panel.getExpandOrCollapseViewButton();
         if (panelButton != null) {
             addPanelButton(panelButton);
         }
@@ -220,7 +220,7 @@ public class MultiPanelElementDialogPanel extends ElementDialogPanel implements 
     }
 
     @Override
-    public JButton getPanelButton() {
+    public JButton getExpandOrCollapseViewButton() {
         return panelButton;
     }
 

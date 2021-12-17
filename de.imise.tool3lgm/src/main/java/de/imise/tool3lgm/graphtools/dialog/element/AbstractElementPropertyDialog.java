@@ -128,7 +128,7 @@ public abstract class AbstractElementPropertyDialog extends AbstractTabbedProper
      * One additional button of the currently displayed panel to add to the
      * button panel with the OK, Cancel, TakeOver buttons.
      */
-    private JButton panelButton = null;
+    private JButton expandOrCollapseVieweButton = null;
 
     /**
      * @param modelElement
@@ -573,21 +573,23 @@ public abstract class AbstractElementPropertyDialog extends AbstractTabbedProper
         //tab changed -> change the view collapse/expand button in the west of the south panel
         if (e.getSource() == tabbedPane) {
             Component selectedTabComponent = tabbedPane.getSelectedComponent();
-            if (panelButton != null) {
-                southButtonsPanel.remove(panelButton);
-                panelButton = null;
-                //revalidateRepaint is needed to really remove the button of the last panel
-                southButtonsPanel.revalidate();
-                southButtonsPanel.repaint();
+            if (expandOrCollapseVieweButton != null) {
+                southButtonsPanel.remove(expandOrCollapseVieweButton);
+                expandOrCollapseVieweButton = null;
             }
             if (selectedTabComponent instanceof ElementDialogPanel) {
                 ElementDialogPanel elementDialogPanel = (ElementDialogPanel) selectedTabComponent;
-                JButton currentPanelButton = elementDialogPanel.getPanelButton();
+                JButton currentPanelButton = elementDialogPanel.getExpandOrCollapseViewButton();
                 if (currentPanelButton != null) {
-                    panelButton = currentPanelButton;
-                    southButtonsPanel.add(panelButton, BorderLayout.WEST);
+                    expandOrCollapseVieweButton = currentPanelButton;
+                    southButtonsPanel.add(expandOrCollapseVieweButton, BorderLayout.WEST);
+                    revalidate();
+                    repaint();
                 }
             }
+            //revalidateRepaint is needed to really remove or add the button of the last panel
+            southButtonsPanel.revalidate();
+            southButtonsPanel.repaint();
         }
     }
 

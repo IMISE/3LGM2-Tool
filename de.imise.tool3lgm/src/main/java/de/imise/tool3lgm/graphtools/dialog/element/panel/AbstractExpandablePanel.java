@@ -25,7 +25,7 @@ public abstract class AbstractExpandablePanel extends LGMDragNDropPanel {
     /**
      * Button zu Auf- und Zuklappen der rechten Seite
      */
-    protected JButton viewButton;
+    private JButton expandOrCollapseViewButton;
 
     /**
      * Action zum Aufklappen der rechten Seite
@@ -61,7 +61,7 @@ public abstract class AbstractExpandablePanel extends LGMDragNDropPanel {
         super.init();
         // Aktionen für den button setzen
         showPartlyAction = getShowAction(this, false);
-        viewButton = MinSizedIconButton.createLimitedHeightButton(showPartlyAction, MIN_ADD_REMOVE_NEW_BUTTON_WIDTH);
+        expandOrCollapseViewButton = MinSizedIconButton.createLimitedHeightButton(showPartlyAction, MIN_ADD_REMOVE_NEW_BUTTON_WIDTH);
         showAllAction = getShowAction(this, true);
     }
 
@@ -74,6 +74,7 @@ public abstract class AbstractExpandablePanel extends LGMDragNDropPanel {
         } else {
             showPartlyDialog();
         }
+        JButton viewButton = getExpandOrCollapseViewButton();
         if (viewButton != null) {
             viewButton.setAction(full ? showPartlyAction : showAllAction);
         }
@@ -84,6 +85,7 @@ public abstract class AbstractExpandablePanel extends LGMDragNDropPanel {
      * @return
      */
     protected final boolean isRightSideVisible() {
+        JButton viewButton = getExpandOrCollapseViewButton();
         return viewButton != null && viewButton.getAction() == showPartlyAction;
     }
 
@@ -98,17 +100,18 @@ public abstract class AbstractExpandablePanel extends LGMDragNDropPanel {
     protected abstract void showPartlyDialog();
 
     @Override
-    public JButton getPanelButton() {
-        return viewButton;
+    public JButton getExpandOrCollapseViewButton() {
+        if (isExpandable()) {
+            return expandOrCollapseViewButton;
+        }
+        return null;
     }
 
     /**
      * Sets the state, that the panel cannot be expaded by setting the
      * viewButton to <code>null</code>
      */
-    protected void setUnexpandable() {
-        viewButton = null;
-    }
+    protected abstract boolean isExpandable();
 
     /**
      * Methode liefert eine <code>LGMAction</code> zurück, die das gesamte oder

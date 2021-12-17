@@ -149,9 +149,7 @@ public class PathConnectionPanel extends AbstractExpandablePanel {
     public PathConnectionPanel(final AbstractElementPropertyDialog dialog, final PanelLabelOption titleLabelOption, final PanelLabelOption westLabelOption, final int maxLines, final boolean renderLeftTreeAsList, final MetaPath metaPath) {
         super(dialog, titleLabelOption, westLabelOption, metaPath);
         showRightTree = isEditable();
-        if (!showRightTree) {
-            setUnexpandable();
-        }
+
         setPreferredSize(new Dimension(550, 350));
         GridBagLayout gbl = new GridBagLayout();
         setLayout(gbl);
@@ -178,14 +176,6 @@ public class PathConnectionPanel extends AbstractExpandablePanel {
         add(this, ltreeScrollPane, constraints, 0, 1, 4, 4);
 
         if (showRightTree) {
-            constraints.anchor = GridBagConstraints.EAST;
-            constraints.weightx = 0d;
-            constraints.weighty = 0d;
-            constraints.fill = GridBagConstraints.NONE;
-            add(this, viewButton, constraints, 5, 5, 1, 1);
-            constraints.weightx = 1d;
-            constraints.weighty = 1d;
-            constraints.fill = GridBagConstraints.BOTH;
             String rtreeLabelString = getResString("frei");
             rtreeLabelString = StringUtils.capitalizeFirstChar(rtreeLabelString);
             rLabel = new JLabel(rtreeLabelString);
@@ -219,6 +209,11 @@ public class PathConnectionPanel extends AbstractExpandablePanel {
         }
         initTreeListenerAndDragNDrop();
         showFullDialog(true);
+    }
+
+    @Override
+    protected boolean isExpandable() {
+        return isEditable();
     }
 
     /**
@@ -285,9 +280,8 @@ public class PathConnectionPanel extends AbstractExpandablePanel {
      * @return <code>true</code> if the panel's path
      */
     protected boolean isEditable() {
-        return metaPath.isCreatable(false);// && metaPath.isRemoveable(true);//isRemoveable(...) prüft, ob sich das Element des Dialoges in Luft auflöst, wenn man die
+        return !dialog.isInfoDialog() && metaPath.isCreatable(false);// && metaPath.isRemoveable(true);//isRemoveable(...) prüft, ob sich das Element des Dialoges in Luft auflöst, wenn man die
         //MinCardinality unterschreitet. Das soll hier aber explizit zugelassen werden!
-
     }
 
     @Override
