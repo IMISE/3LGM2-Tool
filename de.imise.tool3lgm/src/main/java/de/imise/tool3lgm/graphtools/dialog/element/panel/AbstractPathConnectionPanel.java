@@ -8,6 +8,7 @@ import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction.BAC
 import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction.FORWARD;
 
 import java.awt.Component;
+import java.awt.Insets;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
@@ -48,6 +49,7 @@ import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.util.Alphabetical;
 import de.imise.util.ReflectionUtils;
 import de.imise.util.StringUtils;
+import de.imise.util.swing.component.FixedMinHeightLabel;
 import de.imise.util.swing.component.ParentComponentFinder;
 
 /**
@@ -72,9 +74,10 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
      */
     protected final boolean isConnectionPointUnique;
 
-    /**
-     *
-     */
+    /** Insets for the labels */
+    protected Insets labelInsets = new Insets(3, 5, 0, 5);
+
+    /**  */
     private final ModelElement modelElement;
 
     /**
@@ -115,7 +118,7 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
         isConnectionPointUnique = isConnectionPointUnique();
 
         // Make sure to initialize the WestLabel, because it can be added by other panels
-        westLabel = new JLabel();
+        westLabel = new FixedMinHeightLabel();
         //with all SingleConnectionPanels the west label can also get the MouseActions, so that
         //you can get to the connected element with a double click or the context menu on the label
         if (metaPath.isSingleConnection()) {
@@ -436,14 +439,13 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
             //hole die mit dem aktuellen me verbundenen Elemente der aktuellen Kantenart
             List<ModelElement> connectedElements = me.getConnectedElements(ModelElement.class, edgeClass, direction);
             //wenn bereits mind. ein verbundenes Element ex.
-            if (i + 1 < elementaryMetaPathCount && !connectedElements.isEmpty()) {
-                //hole das erste
-                me = connectedElements.get(0);
-            } else {
+            if (i + 1 >= elementaryMetaPathCount || connectedElements.isEmpty()) {
                 List<ModelElement> elements2Connect = element2Connect != null ? ImmutableList.of(element2Connect) : null;
                 connect(me, elements2Connect, i);
                 break;
             }
+            //hole das erste
+            me = connectedElements.get(0);
         }
     }
 

@@ -7,6 +7,7 @@ package de.imise.tool3lgm.graphtools.dialog.element.panel;
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.GridBagConstraints;
+import java.awt.Insets;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.EventObject;
@@ -166,8 +167,15 @@ public abstract class ElementDialogPanel extends JPanel {
      * @param h
      */
     protected final void add(final Container con, final Component c, final GridBagConstraints gbc, final int x, final int y, final int w, final int h) {
+        add(con, c, gbc, x, y, w, h, gbc.insets);
+    }
+
+    protected final void add(final Container con, final Component c, final GridBagConstraints gbc, final int x, final int y, final int w, final int h, Insets insets) {
         //der Static import funktioniert nicht mit der add-Funktion, weil das mit den add-Funktionen aus Container kollidiert
+        Insets oldInsets = gbc.insets;
+        gbc.insets = insets;
         SwingUtils.add(con, c, gbc, x, y, w, h);
+        gbc.insets = oldInsets;
     }
 
     /**

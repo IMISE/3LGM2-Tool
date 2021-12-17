@@ -5,6 +5,7 @@ import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction.BAC
 import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction.FORWARD;
 import static de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty.OPTION_ELEMENTS_RECEIVE_PROPERTIES_FROM_PARENTS;
 import static de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty.OPTION_ELEMENTS_RECEIVE_PROPERTIES_FROM_PARTS;
+import static de.imise.util.StringUtils.capitalizeFirstChar;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -141,8 +142,9 @@ public class DoubleMeaningEdgePanel extends AbstractPathOfOneEdgePanel {
         bottomLeftTree.setCellRenderer(treeRenderer);
         bottomLeftTree.getSelectionModel().setSelectionMode(TreeSelectionModel.DISCONTIGUOUS_TREE_SELECTION);
 
-        add(this, lolabel, constraints, 0, 0, 1, 1);
-        add(this, lulabel, constraints, 0, 2, 1, 1);
+        constraints.anchor = GridBagConstraints.WEST;
+        add(this, lolabel, constraints, 0, 0, 1, 1, labelInsets);
+        add(this, lulabel, constraints, 0, 2, 1, 1, labelInsets);
         constraints.anchor = GridBagConstraints.CENTER;
         constraints.fill = GridBagConstraints.BOTH;
         constraints.weightx = 100;
@@ -159,7 +161,7 @@ public class DoubleMeaningEdgePanel extends AbstractPathOfOneEdgePanel {
             upperRightTree.setCellRenderer(treeRenderer);
             upperRightTree.getSelectionModel().setSelectionMode(TreeSelectionModel.DISCONTIGUOUS_TREE_SELECTION);
 
-            String unconnected = getResString("frei");
+            String unconnected = capitalizeFirstChar(getResString("frei"));
             upperRightLabel = new JLabel(unconnected);
             bottomRightLabel = new JLabel(unconnected);
             bottomRightTree = new ElementDialogPanelTree("ruroot", mainDoc);
@@ -321,8 +323,8 @@ public class DoubleMeaningEdgePanel extends AbstractPathOfOneEdgePanel {
         add(this, bottomButtonPanel, constraints, 1, 3, 1, 2);
 
         constraints.anchor = GridBagConstraints.WEST;
-        add(this, upperRightLabel, constraints, 2, 0, 1, 1);
-        add(this, bottomRightLabel, constraints, 2, 2, 1, 1);
+        add(this, upperRightLabel, constraints, 2, 0, 1, 1, labelInsets);
+        add(this, bottomRightLabel, constraints, 2, 2, 1, 1, labelInsets);
         constraints.anchor = GridBagConstraints.CENTER;
         constraints.fill = GridBagConstraints.BOTH;
         constraints.weightx = 100;

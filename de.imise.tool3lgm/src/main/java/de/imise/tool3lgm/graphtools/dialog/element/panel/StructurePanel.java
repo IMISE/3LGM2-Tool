@@ -7,6 +7,7 @@ import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
 import static de.imise.tool3lgm.graphtools.dialog.element.panel.PanelLabelOption.LABEL_LAST_EDGE_CONNECTION_NAME;
 import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction.BACKWARD;
 import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction.FORWARD;
+import static de.imise.util.StringUtils.capitalizeFirstChar;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -82,7 +83,7 @@ public final class StructurePanel extends AbstractPathOfOneEdgePanel {
         editable = !dialog.isInfoDialog() && metaPath.isCreatable(false);
         // lotree
         ElementaryMetaPath backwardMetaPath = metaPath.getOtherDirection();
-        JLabel lolabel = new JLabel(backwardMetaPath.getName());
+        JLabel lolabel = new JLabel(capitalizeFirstChar(backwardMetaPath.getName()));
         lotree = new ElementDialogPanelTree(name, mainDoc);
         lotree.setName("lotree");
         lotree.setRootVisible(false);
@@ -91,7 +92,7 @@ public final class StructurePanel extends AbstractPathOfOneEdgePanel {
         lotree.getSelectionModel().setSelectionMode(TreeSelectionModel.DISCONTIGUOUS_TREE_SELECTION);
 
         // lutree
-        JLabel lulabel = new JLabel(metaPath.getName());
+        JLabel lulabel = new JLabel(capitalizeFirstChar(metaPath.getName()));
         lutree = new ElementDialogPanelTree(name, mainDoc);
         lutree.setName("lutree");
         lutree.setRootVisible(false);
@@ -104,8 +105,8 @@ public final class StructurePanel extends AbstractPathOfOneEdgePanel {
         constraints.anchor = GridBagConstraints.EAST;
 
         constraints.anchor = GridBagConstraints.WEST;
-        add(this, lolabel, constraints, 0, 0, 1, 1);
-        add(this, lulabel, constraints, 0, 2, 1, 1);
+        add(this, lolabel, constraints, 0, 0, 1, 1, labelInsets);
+        add(this, lulabel, constraints, 0, 2, 1, 1, labelInsets);
 
         constraints.anchor = GridBagConstraints.CENTER;
         constraints.fill = GridBagConstraints.BOTH;
@@ -117,8 +118,8 @@ public final class StructurePanel extends AbstractPathOfOneEdgePanel {
         add(this, lutreeScrollPane, constraints, 0, 3, 1, 1);
 
         // rtree
-        rlabel = new JLabel(getResString("frei"));
-        String rtreeRootString = getResString("frei");
+        rlabel = new JLabel(capitalizeFirstChar(getResString("frei")));
+        String rtreeRootString = rlabel.getText();
         rtree = new ElementDialogPanelTree(rtreeRootString, mainDoc);
         rtree.setName("rtree");
         rtree.setRootVisible(false);
@@ -213,7 +214,7 @@ public final class StructurePanel extends AbstractPathOfOneEdgePanel {
         add(this, control1, constraints, 1, 1, 1, 1);
         add(this, control2, constraints, 1, 3, 1, 1);
         constraints.anchor = GridBagConstraints.WEST;
-        add(this, rlabel, constraints, 2, 0, 1, 1);
+        add(this, rlabel, constraints, 2, 0, 1, 1, labelInsets);
         constraints.anchor = GridBagConstraints.CENTER;
         constraints.fill = GridBagConstraints.BOTH;
         constraints.weightx = 1d;

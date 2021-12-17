@@ -4,6 +4,7 @@ import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
 import static de.imise.tool3lgm.graphtools.dialog.element.panel.PanelLabelOption.LABEL_END_ELEMENT_TYPE;
 import static de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty.OPTION_ELEMENTS_RECEIVE_PROPERTIES_FROM_PARENTS;
 import static de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty.OPTION_ELEMENTS_RECEIVE_PROPERTIES_FROM_PARTS;
+import static de.imise.util.StringUtils.capitalizeFirstChar;
 
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
@@ -51,8 +52,8 @@ import de.imise.tool3lgm.graphtools.view.tree.PanelTreeRenderer;
 import de.imise.tool3lgm.graphtools.view.tree.TreeRenderer;
 import de.imise.tool3lgm.graphtools.view.tree.node.ElementContainerTreeNode;
 import de.imise.tool3lgm.graphtools.view.tree.node.LGMTreeNode;
-import de.imise.util.StringUtils;
 import de.imise.util.swing.SwingUtils;
+import de.imise.util.swing.component.FixedMinHeightLabel;
 import de.imise.util.swing.component.LimitedHeightScrollTreePane;
 
 /**
@@ -89,6 +90,8 @@ public class PathConnectionPanel extends AbstractExpandablePanel {
 
     /**  */
     private BasicSearchOptionsPanel searchPanel;
+    /** GridBagLayout constraints for the whole panel */
+    GridBagConstraints constraints = new GridBagConstraints();
 
     /**
      * @param dialog
@@ -153,7 +156,6 @@ public class PathConnectionPanel extends AbstractExpandablePanel {
         setPreferredSize(new Dimension(550, 350));
         GridBagLayout gbl = new GridBagLayout();
         setLayout(gbl);
-        GridBagConstraints constraints = new GridBagConstraints();
 
         JLabel ltreeLabel = westLabel;
         ModelElement me = getModelElement();
@@ -166,27 +168,29 @@ public class PathConnectionPanel extends AbstractExpandablePanel {
         ltree.setCellRenderer(treeRenderer);
         ltree.getSelectionModel().setSelectionMode(getTreesSelectionModel());
 
+        //left tree label
         constraints.anchor = GridBagConstraints.WEST;
-        add(this, ltreeLabel, constraints, 0, 0, 2, 1);
+        constraints.fill = GridBagConstraints.NONE;
+        constraints.weightx = 0d;
+        constraints.weighty = 0d;
+        add(this, ltreeLabel, constraints, 0, 0, 1, 1, labelInsets);
+        //left tree
         constraints.anchor = GridBagConstraints.CENTER;
         constraints.fill = GridBagConstraints.BOTH;
-        constraints.weightx = 0.5;
+        constraints.weightx = 1d;
         constraints.weighty = 1d;
         LimitedHeightScrollTreePane ltreeScrollPane = ltree.getScrollPane();
-        add(this, ltreeScrollPane, constraints, 0, 1, 4, 4);
+        add(this, ltreeScrollPane, constraints, 0, 1, 1, 1);
 
         if (showRightTree) {
-            String rtreeLabelString = getResString("frei");
-            rtreeLabelString = StringUtils.capitalizeFirstChar(rtreeLabelString);
-            rLabel = new JLabel(rtreeLabelString);
+            String rtreeLabelString = capitalizeFirstChar(getResString("frei"));
+            rLabel = new FixedMinHeightLabel(rtreeLabelString);
             rtree = new ElementDialogPanelTree(rtreeLabelString, mainDoc, maxLines);
             rtree.getSelectionModel().setSelectionMode(getTreesSelectionModel());
             rtree.setRootVisible(false);
             rtree.setShowsRootHandles(true);
             TreeRenderer highlightErrorElementsTreeRenderer = new PanelTreeRenderer(this);
             rtree.setCellRenderer(highlightErrorElementsTreeRenderer);
-            //Suchleiste erstellen
-            searchPanel = new TreeSearchOptionsPanel(rtree);
 
             //Buttons & Actions erstellen, Actions setzen
             addAction = getConnectAction();
@@ -287,21 +291,18 @@ public class PathConnectionPanel extends AbstractExpandablePanel {
     @Override
     protected final void showFullDialog() {
         if (showRightTree) {
-            GridBagConstraints constraints = new GridBagConstraints();
+            constraints.anchor = GridBagConstraints.CENTER;
             constraints.fill = GridBagConstraints.NONE;
-            constraints.weightx = 0;
-            add(this, buttonpanel, constraints, 5, 3, 1, 2);
+            constraints.weightx = 0d;
+            constraints.weighty = 0d;
+            add(this, buttonpanel, constraints, 1, 1, 1, 1);
             constraints.anchor = GridBagConstraints.WEST;
-            add(this, rLabel, constraints, 6, 0, 0, 1);
-            constraints.anchor = GridBagConstraints.EAST;
-            constraints.weighty = 0.5;
-            add(this, searchPanel, constraints, 7, 0, 3, 1);
-
-            constraints.anchor = GridBagConstraints.WEST;
+            add(this, rLabel, constraints, 2, 0, 1, 1, labelInsets);
+            constraints.anchor = GridBagConstraints.CENTER;
             constraints.fill = GridBagConstraints.BOTH;
-            constraints.weightx = 0.5;
+            constraints.weightx = 1d;
             constraints.weighty = 1d;
-            add(this, rtree.getScrollPane(), constraints, 6, 1, 4, 4);
+            add(this, rtree.getScrollPane(), constraints, 2, 1, 1, 1);
         }
     }
 
