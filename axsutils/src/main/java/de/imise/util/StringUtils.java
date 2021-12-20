@@ -12,6 +12,9 @@ import com.google.common.base.Strings;
 
 import de.imise.util.pair.Pair;
 
+/**
+ * @author AXS (22.11.2012)
+ */
 public class StringUtils {
 
     /**
@@ -110,11 +113,25 @@ public class StringUtils {
      * @return String mit der Minimallänge newLength
      */
     public static String fillToMinLenght(final String s, final int newMinLenght) {
+        return fillToMinLenght(s, ' ', newMinLenght);
+    }
+
+    /**
+     * Fills the passed string, if it is shorter, up to the passed length with
+     * the passed character. If its length is greater than or equal to the
+     * passed length, it remains unchanged.
+     *
+     * @param s
+     * @param c
+     * @param newMinLenght
+     * @return
+     */
+    public static String fillToMinLenght(final String s, char c, final int newMinLenght) {
         int lengthDiff = newMinLenght - s.length();
         if (lengthDiff > 0) {
             StringBuilder sb = new StringBuilder(s);
             char[] whiteSpaces = new char[lengthDiff];
-            Arrays.fill(whiteSpaces, ' ');
+            Arrays.fill(whiteSpaces, c);
             sb.append(whiteSpaces);
             return sb.toString();
         }
@@ -202,14 +219,13 @@ public class StringUtils {
                 }
                 if (endIndex <= startIndex) {
                     // SK:
-                    if (wrapSearch) {
-                        startIndex = 0;
-                        endIndex = text.length();
-                    } else {
+                    if (!wrapSearch) {
                         // bei raussprung letztes range ungültig
                         range = null;
                         break;
                     }
+                    startIndex = 0;
+                    endIndex = text.length();
                 }
                 // wenn die Suche wieder von vorne bzw. hinten beginnen soll
                 // immer vom Anfang bis zum Ende suchen!!! Damit der Suchstring in jedem Fall gefunden wird
@@ -238,20 +254,19 @@ public class StringUtils {
                 // wenn vorwärts gesucht werden soll, dann fängt er bei Index 0 an und sucht nur 1 mal. Rückwärt fängt er am Ende an
                 // und sucht nach vorne durch
                 for (int start = searchForward ? startIndex : textPart.length() - 1; start >= 0; start--) {
-                    if (!m.find(start)) {
-                        // bleibt sonst hängen am letzten Wort bei Wrap
-                        // ->
-                        // - bei Vorwärtssuche wenn nichts gefunden wird im ersten Lauf, muss startIndex auf 0 gesetzt werden.
-                        // - gleichzeitig wird sich gemerkt, dass gewrapped wurde mittels wrappedInMode_regExpr, damit nicht unendlich wieder auf 0 gesetzt wird...
-                        if (searchForward && wrapSearch && !wrappedInMode_regExpr) {
-                            startIndex = 0;
-                            wrappedInMode_regExpr = true;
-                            range = null;
-                            continue outerloop;
-                        }
-                    } else {
+                    if (m.find(start)) {
                         range = IntRange.minToLength(m.start(), m.end() - m.start());
                         break;
+                    }
+                    // bleibt sonst hängen am letzten Wort bei Wrap
+                    // ->
+                    // - bei Vorwärtssuche wenn nichts gefunden wird im ersten Lauf, muss startIndex auf 0 gesetzt werden.
+                    // - gleichzeitig wird sich gemerkt, dass gewrapped wurde mittels wrappedInMode_regExpr, damit nicht unendlich wieder auf 0 gesetzt wird...
+                    if (searchForward && wrapSearch && !wrappedInMode_regExpr) {
+                        startIndex = 0;
+                        wrappedInMode_regExpr = true;
+                        range = null;
+                        continue outerloop;
                     }
                 }
             }
@@ -261,9 +276,8 @@ public class StringUtils {
                 if (i == 0 && wrapSearch) {
                     continue;
                     // wenn nichts gefunden nach 1ter Schleife, aufhören
-                } else {
-                    break;
                 }
+                break;
             }
             //TODO:AXS:20121122: das hier hinter ist dead Code! oben ist break oder continue. auch oben das SurpressWarnings heraus nehmen und Testen
             // Hinweise zu wholeword:
@@ -488,11 +502,10 @@ public class StringUtils {
         }
         while (true) {
             int pos = buffer.length() - 1;
-            if (buffer.charAt(pos) == '\n' || buffer.charAt(pos) == ' ' || buffer.charAt(pos) == '\t') {
-                buffer.deleteCharAt(pos);
-            } else {
+            if (buffer.charAt(pos) != '\n' && buffer.charAt(pos) != ' ' && buffer.charAt(pos) != '\t') {
                 break;
             }
+            buffer.deleteCharAt(pos);
         }
         for (int i = 1; i < buffer.length(); i++) {
             if (buffer.charAt(i) == '\n') {
