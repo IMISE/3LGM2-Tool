@@ -11,7 +11,6 @@ import java.awt.GridBagConstraints;
 import java.awt.Insets;
 import java.awt.Rectangle;
 
-import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
@@ -34,7 +33,7 @@ public class SwingUtils {
      * @param height
      * @param components
      */
-    private static final void setSamePreferredSize(boolean width, boolean height, final JComponent... components) {
+    private static final void setSamePreferredSize(boolean width, boolean height, final Component... components) {
         setSamePreferredSize(width, height, 0, 0, components);
     }
 
@@ -48,7 +47,7 @@ public class SwingUtils {
      * @param deltaHeight
      * @param components
      */
-    private static final void setSamePreferredSize(boolean width, boolean height, int deltaWidth, int deltaHeight, final JComponent... components) {
+    private static final void setSamePreferredSize(boolean width, boolean height, int deltaWidth, int deltaHeight, final Component... components) {
         if (components == null || components.length == 0) {
             return;
         }
@@ -84,7 +83,7 @@ public class SwingUtils {
      * @param height
      * @param components
      */
-    public static final void setSamePreferredSize(final JComponent... components) {
+    public static final void setSamePreferredSize(final Component... components) {
         setSamePreferredSize(true, true, components);
     }
 
@@ -94,7 +93,7 @@ public class SwingUtils {
      *
      * @param components
      */
-    public static final void setSamePreferredWidth(final JComponent... components) {
+    public static final void setSamePreferredWidth(final Component... components) {
         setSamePreferredSize(true, false, components);
     }
 
@@ -104,8 +103,19 @@ public class SwingUtils {
      *
      * @param components
      */
-    public static final void setSamePreferredHeight(final JComponent... components) {
-        setSamePreferredSize(false, true, components);
+    public static final void setSamePreferredHeight(final Component... components) {
+        setSamePreferredHeight(0, components);
+    }
+
+    /**
+     * Sets all the given components to the same height. The size is given by
+     * the largest height of the given components.
+     *
+     * @param deltaHeight
+     * @param components
+     */
+    public static final void setSamePreferredHeight(int deltaHeight, final Component... components) {
+        setSamePreferredSize(false, true, 0, deltaHeight, components);
     }
 
     /**

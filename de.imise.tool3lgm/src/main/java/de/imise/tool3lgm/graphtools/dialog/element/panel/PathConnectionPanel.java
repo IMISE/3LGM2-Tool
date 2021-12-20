@@ -228,9 +228,6 @@ public class PathConnectionPanel extends AbstractExpandablePanel {
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.weightx = 1d;
         add(rsearchPanel, rtreeSearchPanel.getElementName(), gbc, 1, 0, 1, 1);
-        gbc.fill = GridBagConstraints.NONE;
-        gbc.weightx = 0d;
-        add(rsearchPanel, rtreeSearchPanel.getSearchButton(), gbc, 2, 0, 1, 1);
         return rsearchPanel;
     }
 
@@ -244,6 +241,9 @@ public class PathConnectionPanel extends AbstractExpandablePanel {
      */
     protected void setSamePreferredLeftRightSize() {
         SwingUtils.setSamePreferredWidth(westLabel, rsearchPanel, ltree.getScrollPane(), rtree.getScrollPane());
+        //the searchPanel contains the rLabel (0) and then the HistoryComboBox for the name search (1)
+        //the Combobox default preferred size is 4 pixel to large (on Windows) -> reduce it and TODO test it on Linux
+        SwingUtils.setSamePreferredHeight(-4, westLabel, rsearchPanel.getComponent(0), rsearchPanel.getComponent(1));
         SwingUtils.setSamePreferredSize(westLabel, rsearchPanel);
         SwingUtils.setSamePreferredSize(ltree.getScrollPane(), rtree.getScrollPane());
     }
