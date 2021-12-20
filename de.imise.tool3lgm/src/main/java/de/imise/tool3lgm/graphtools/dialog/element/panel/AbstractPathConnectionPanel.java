@@ -49,7 +49,6 @@ import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.util.Alphabetical;
 import de.imise.util.ReflectionUtils;
 import de.imise.util.StringUtils;
-import de.imise.util.swing.component.FixedMinHeightLabel;
 import de.imise.util.swing.component.ParentComponentFinder;
 
 /**
@@ -118,7 +117,7 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
         isConnectionPointUnique = isConnectionPointUnique();
 
         // Make sure to initialize the WestLabel, because it can be added by other panels
-        westLabel = new FixedMinHeightLabel();
+        westLabel = new JLabel();
         //with all SingleConnectionPanels the west label can also get the MouseActions, so that
         //you can get to the connected element with a double click or the context menu on the label
         if (metaPath.isSingleConnection()) {

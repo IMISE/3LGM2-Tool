@@ -115,7 +115,7 @@ public abstract class AbstractPropertyDialog extends AbstractSizeAndPositionRest
         okButton = new JButton(getResString("ok"));
         cancelButton = new JButton(getResString("cancel"));
         applyButton = new JButton(getResString("apply"));
-        SwingUtils.setSamePreferredSize(okButton, cancelButton, applyButton);
+        SwingUtils.setSamePreferredWidth(okButton, cancelButton, applyButton);
         String helpID = Help.getHelp().getHelpID(this);
         if (helpID != null && helpID.length() > 0) {
             helpButton = new JButton(getResString("hilfeButtonText"));

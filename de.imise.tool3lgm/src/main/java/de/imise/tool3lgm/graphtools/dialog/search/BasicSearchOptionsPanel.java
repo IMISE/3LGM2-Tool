@@ -508,4 +508,17 @@ public abstract class BasicSearchOptionsPanel extends JPanel implements ItemList
         addComboboxListenersAndActions();
     }
 
+    /**
+     * @return
+     */
+    public HistoryComboBox getElementName() {
+        return elementName;
+    }
+
+    /**
+     * @return
+     */
+    public JButton getSearchButton() {
+        return searchButton;
+    }
 }

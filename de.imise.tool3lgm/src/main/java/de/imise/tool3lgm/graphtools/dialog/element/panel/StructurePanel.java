@@ -149,8 +149,8 @@ public final class StructurePanel extends AbstractPathOfOneEdgePanel {
 
         //alles dafür tun, dass beide Dialogseiten gleich breit sind. Das wird über die PreferredSize der breitesten Komponente gesteuert.
         SwingUtils.fillToSameLength(lolabel, lulabel, rlabel);
-        SwingUtils.setSamePreferredSize(lolabel, lulabel, rlabel);
-        SwingUtils.setSamePreferredSize(lotreeScrollPane, lutreeScrollPane, rtreeScrollPane);
+        SwingUtils.setSamePreferredWidth(lolabel, lulabel, rlabel);
+        SwingUtils.setSamePreferredWidth(lotreeScrollPane, lutreeScrollPane, rtreeScrollPane);
 
         showFullDialog(true);
     }

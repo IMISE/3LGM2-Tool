@@ -9,6 +9,7 @@ import static de.imise.util.StringUtils.capitalizeFirstChar;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.EventObject;
@@ -19,6 +20,7 @@ import java.util.Set;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JTree;
 import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
 
@@ -33,7 +35,6 @@ import de.imise.tool3lgm.graphtools.dialog.dragdrop.DragNDropInitializer;
 import de.imise.tool3lgm.graphtools.dialog.dragdrop.DragNDropInitializer.DragNDropActionChain;
 import de.imise.tool3lgm.graphtools.dialog.element.AbstractElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.dialog.element.DialogActionCommands;
-import de.imise.tool3lgm.graphtools.dialog.search.BasicSearchOptionsPanel;
 import de.imise.tool3lgm.graphtools.dialog.search.TreeSearchOptionsPanel;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
@@ -53,7 +54,6 @@ import de.imise.tool3lgm.graphtools.view.tree.TreeRenderer;
 import de.imise.tool3lgm.graphtools.view.tree.node.ElementContainerTreeNode;
 import de.imise.tool3lgm.graphtools.view.tree.node.LGMTreeNode;
 import de.imise.util.swing.SwingUtils;
-import de.imise.util.swing.component.FixedMinHeightLabel;
 import de.imise.util.swing.component.LimitedHeightScrollTreePane;
 
 /**
@@ -89,7 +89,8 @@ public class PathConnectionPanel extends AbstractExpandablePanel {
     private final LGMAction newElementAction;
 
     /**  */
-    private BasicSearchOptionsPanel searchPanel;
+    private final JPanel rsearchPanel;
+
     /** GridBagLayout constraints for the whole panel */
     GridBagConstraints constraints = new GridBagConstraints();
 
@@ -184,7 +185,7 @@ public class PathConnectionPanel extends AbstractExpandablePanel {
 
         if (showRightTree) {
             String rtreeLabelString = capitalizeFirstChar(getResString("frei"));
-            rLabel = new FixedMinHeightLabel(rtreeLabelString);
+            rLabel = new JLabel(rtreeLabelString);
             rtree = new ElementDialogPanelTree(rtreeLabelString, mainDoc, maxLines);
             rtree.getSelectionModel().setSelectionMode(getTreesSelectionModel());
             rtree.setRootVisible(false);
@@ -192,16 +193,16 @@ public class PathConnectionPanel extends AbstractExpandablePanel {
             TreeRenderer highlightErrorElementsTreeRenderer = new PanelTreeRenderer(this);
             rtree.setCellRenderer(highlightErrorElementsTreeRenderer);
 
+            rsearchPanel = createTreeSearchPanel(westLabel, rtree);
+
             //Buttons & Actions erstellen, Actions setzen
             addAction = getConnectAction();
             removeAction = getDisconnectAction();
             boolean supportNewElementAction = metaPath.isCreatable(true);
             newElementAction = supportNewElementAction ? getNewConnectedElementAction() : null;
-
             buttonpanel = createBetweenTreesButtonPanel(addAction, removeAction, newElementAction);
 
-            //alles dafür tun, dass beide Dialogseiten gleich breit sind. Das wird über die PreferredSize der breitesten Komponente gesteuert.
-            SwingUtils.fillToSameLength(westLabel, rLabel);
+            //both dialog sides should have the same widh and height
             setSamePreferredLeftRightSize();
         } else {
             rLabel = null;
@@ -210,9 +211,27 @@ public class PathConnectionPanel extends AbstractExpandablePanel {
             newElementAction = null;
             buttonpanel = null;
             rtree = null;
+            rsearchPanel = null;
         }
         initTreeListenerAndDragNDrop();
         showFullDialog(true);
+    }
+
+    /**
+     * @return
+     */
+    protected JPanel createTreeSearchPanel(JLabel label, JTree tree) {
+        TreeSearchOptionsPanel rtreeSearchPanel = new TreeSearchOptionsPanel(rtree);
+        JPanel rsearchPanel = new JPanel(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+        add(rsearchPanel, rLabel, gbc, 0, 0, 1, 1, new Insets(0, 0, 0, 20));
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.weightx = 1d;
+        add(rsearchPanel, rtreeSearchPanel.getElementName(), gbc, 1, 0, 1, 1);
+        gbc.fill = GridBagConstraints.NONE;
+        gbc.weightx = 0d;
+        add(rsearchPanel, rtreeSearchPanel.getSearchButton(), gbc, 2, 0, 1, 1);
+        return rsearchPanel;
     }
 
     @Override
@@ -222,25 +241,11 @@ public class PathConnectionPanel extends AbstractExpandablePanel {
 
     /**
      * Ensure that both dialog sides have always the same width.
-     *
-     * @param components this components gets the same preferred width like both
-     *            trees and labels (maximum of all of their widths)
      */
-    protected void setSamePreferredLeftRightSize(final JComponent... components) {
-        JComponent[] allComponents = new JComponent[components.length + 4];
-        allComponents[0] = westLabel;
-        allComponents[1] = rLabel;
-        allComponents[2] = ltree.getScrollPane();
-        allComponents[3] = rtree.getScrollPane();
-        System.arraycopy(components, 0, allComponents, 4, components.length);
-        SwingUtils.setSamePreferredSize(allComponents);
-        //        Sys.err1(westLabel.getPreferredSize());
-        //        Sys.err1(rLabel.getPreferredSize());
-        //        Sys.err1(ltree.getScrollPane().getPreferredSize());
-        //        Sys.err1(rtree.getScrollPane().getPreferredSize());
-        //        for (JComponent c : components) {
-        //            Sys.err1(c.getPreferredSize());
-        //        }
+    protected void setSamePreferredLeftRightSize() {
+        SwingUtils.setSamePreferredWidth(westLabel, rsearchPanel, ltree.getScrollPane(), rtree.getScrollPane());
+        SwingUtils.setSamePreferredSize(westLabel, rsearchPanel);
+        SwingUtils.setSamePreferredSize(ltree.getScrollPane(), rtree.getScrollPane());
     }
 
     /**
@@ -296,9 +301,9 @@ public class PathConnectionPanel extends AbstractExpandablePanel {
             constraints.weightx = 0d;
             constraints.weighty = 0d;
             add(this, buttonpanel, constraints, 1, 1, 1, 1);
-            constraints.anchor = GridBagConstraints.WEST;
-            add(this, rLabel, constraints, 2, 0, 1, 1, labelInsets);
-            constraints.anchor = GridBagConstraints.CENTER;
+            constraints.fill = GridBagConstraints.HORIZONTAL;
+            constraints.weightx = 1d;
+            add(this, rsearchPanel, constraints, 2, 0, 1, 1, labelInsets);
             constraints.fill = GridBagConstraints.BOTH;
             constraints.weightx = 1d;
             constraints.weighty = 1d;

@@ -184,7 +184,7 @@ public class DoubleMeaningEdgePanel extends AbstractPathOfOneEdgePanel {
 
             //alles dafür tun, dass beide Dialogseiten gleich breit sind. Das wird über die PreferredSize der breitesten Komponente gesteuert.
             SwingUtils.fillToSameLength(lolabel, lulabel, upperRightLabel, bottomRightLabel);
-            SwingUtils.setSamePreferredSize(lolabel, lulabel, upperRightLabel, bottomRightLabel);
+            SwingUtils.setSamePreferredWidth(lolabel, lulabel, upperRightLabel, bottomRightLabel);
             LimitedHeightScrollTreePane rotreeScrollPane = upperRightTree.getScrollPane();
             LimitedHeightScrollTreePane rutreeScrollPane = bottomRightTree.getScrollPane();
             SwingUtils.setSamePreferredSize(lotreeScrollPane, lutreeScrollPane, rotreeScrollPane, rutreeScrollPane);
