@@ -127,7 +127,7 @@ public class DoubleMeaningEdgePanel extends AbstractPathOfOneEdgePanel {
         boolean showRootHandles = true;
 
         GraphDocument mainDoc = getMainDoc();
-        upperLeftTree = new ElementDialogPanelTree("loroot", mainDoc);
+        upperLeftTree = new ElementDialogPanelTree(searchElementClass, mainDoc);
         upperLeftTree.setRootVisible(false);
         upperLeftTree.setShowsRootHandles(showRootHandles);
         upperLeftTree.setCellRenderer(treeRenderer);
@@ -136,7 +136,7 @@ public class DoubleMeaningEdgePanel extends AbstractPathOfOneEdgePanel {
         String lulabeltext = StringUtils.capitalizeFirstChar(getEdgeDisplayName(ConnectionState.FORWARD));
         JLabel lulabel = new JLabel(lulabeltext);
 
-        bottomLeftTree = new ElementDialogPanelTree("luroot", mainDoc);
+        bottomLeftTree = new ElementDialogPanelTree(searchElementClass, mainDoc);
         bottomLeftTree.setRootVisible(false);
         bottomLeftTree.setShowsRootHandles(showRootHandles);
         bottomLeftTree.setCellRenderer(treeRenderer);
@@ -155,7 +155,7 @@ public class DoubleMeaningEdgePanel extends AbstractPathOfOneEdgePanel {
         add(this, lutreeScrollPane, constraints, 0, 3, 1, 1);
 
         if (editable) {
-            upperRightTree = new ElementDialogPanelTree("roroot", mainDoc);
+            upperRightTree = new ElementDialogPanelTree(searchElementClass, mainDoc);
             upperRightTree.setRootVisible(false);
             upperRightTree.setShowsRootHandles(showRootHandles);
             upperRightTree.setCellRenderer(treeRenderer);
@@ -164,7 +164,7 @@ public class DoubleMeaningEdgePanel extends AbstractPathOfOneEdgePanel {
             String unconnected = capitalizeFirstChar(getResString("frei"));
             upperRightLabel = new JLabel(unconnected);
             bottomRightLabel = new JLabel(unconnected);
-            bottomRightTree = new ElementDialogPanelTree("ruroot", mainDoc);
+            bottomRightTree = new ElementDialogPanelTree(searchElementClass, mainDoc);
             bottomRightTree.setRootVisible(false);
             bottomRightTree.setShowsRootHandles(showRootHandles);
             bottomRightTree.setCellRenderer(treeRenderer);

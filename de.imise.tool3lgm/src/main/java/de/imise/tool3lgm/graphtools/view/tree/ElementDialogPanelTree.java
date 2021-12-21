@@ -27,9 +27,9 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
+import de.imise.tool3lgm.graphtools.view.tree.node.ElementClassTreeNode;
 import de.imise.tool3lgm.graphtools.view.tree.node.ElementContainerTreeNode;
 import de.imise.tool3lgm.graphtools.view.tree.node.LGMTreeNode;
-import de.imise.tool3lgm.graphtools.view.tree.node.StringTreeNode;
 import de.imise.util.ReflectionUtils;
 import de.imise.util.ToolTipProvider;
 import de.imise.util.swing.component.LimitedHeightScrollTreePane;
@@ -53,34 +53,40 @@ public class ElementDialogPanelTree extends CorrectSelectionTree implements Sear
     /**
      *
      */
+    private final Class<? extends ModelElement> containedElementClass;
+
+    /**
+     *
+     */
     private final Collection<ElementContainer> elementsAdded = new HashSet<>();
 
     /**
-     * @param rootObject
+     * @param containedElementClass
      * @param doc
      */
-    public ElementDialogPanelTree(final String rootObject, final GraphDocument doc) {
-        this(rootObject, doc, -1, false);
+    public ElementDialogPanelTree(Class<? extends ModelElement> containedElementClass, final GraphDocument doc) {
+        this(containedElementClass, doc, -1, false);
     }
 
     /**
-     * @param rootObject
+     * @param containedElementClass
      * @param doc
      * @param maxLines
      */
-    public ElementDialogPanelTree(final String rootObject, final GraphDocument doc, final int maxLines) {
-        this(rootObject, doc, maxLines, false);
+    public ElementDialogPanelTree(Class<? extends ModelElement> containedElementClass, final GraphDocument doc, final int maxLines) {
+        this(containedElementClass, doc, maxLines, false);
     }
 
     /**
-     * @param rootObject
+     * @param containedElementClass
      * @param doc
      * @param maxLines
      * @param renderTreeAsList
      */
-    public ElementDialogPanelTree(final String rootObject, final GraphDocument doc, final int maxLines, final boolean renderTreeAsList) {
-        super(new DefaultTreeModel(new StringTreeNode(rootObject)));
+    public ElementDialogPanelTree(Class<? extends ModelElement> containedElementClass, final GraphDocument doc, final int maxLines, final boolean renderTreeAsList) {
+        super(new DefaultTreeModel(new ElementClassTreeNode(containedElementClass, "root")));
         this.doc = doc;
+        this.containedElementClass = containedElementClass;
         scrollPane = new LimitedHeightScrollTreePane(this, maxLines, renderTreeAsList);
     }
 
@@ -92,6 +98,7 @@ public class ElementDialogPanelTree extends CorrectSelectionTree implements Sear
      */
     public ElementDialogPanelTree(final ElementContainer ec, final boolean sortRootChildren, final int maxLines, final boolean renderTreeAsList) {
         super(new DefaultTreeModel(new ElementContainerTreeNode(ec, true, false, sortRootChildren)));
+        containedElementClass = ModelElement.class;
         doc = ec.getGraphDocument();
         setShowsRootHandles(true);
         scrollPane = new LimitedHeightScrollTreePane(this, maxLines, renderTreeAsList);
@@ -532,7 +539,7 @@ public class ElementDialogPanelTree extends CorrectSelectionTree implements Sear
 
     @Override
     public Set<Class<? extends ModelElement>> getSearchableElementClasses() {
-        return ImmutableSet.of(ModelElement.class);
+        return ImmutableSet.of(containedElementClass);
     }
 
     @Override

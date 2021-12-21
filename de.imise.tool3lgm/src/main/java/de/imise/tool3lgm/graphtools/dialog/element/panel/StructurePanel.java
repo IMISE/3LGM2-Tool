@@ -79,12 +79,12 @@ public final class StructurePanel extends AbstractPathOfOneEdgePanel {
         ModelElement me = getModelElement();
         GDCollection gdcoll = me.getCollection();
         LGMGraphDocument mainDoc = gdcoll.getMainDoc();
-        String name = me.getName();
         editable = !dialog.isInfoDialog() && metaPath.isCreatable(false);
+
         // lotree
         ElementaryMetaPath backwardMetaPath = metaPath.getOtherDirection();
         JLabel lolabel = new JLabel(capitalizeFirstChar(backwardMetaPath.getName()));
-        lotree = new ElementDialogPanelTree(name, mainDoc);
+        lotree = new ElementDialogPanelTree(searchElementClass, mainDoc);
         lotree.setName("lotree");
         lotree.setRootVisible(false);
         lotree.setShowsRootHandles(true);
@@ -93,7 +93,7 @@ public final class StructurePanel extends AbstractPathOfOneEdgePanel {
 
         // lutree
         JLabel lulabel = new JLabel(capitalizeFirstChar(metaPath.getName()));
-        lutree = new ElementDialogPanelTree(name, mainDoc);
+        lutree = new ElementDialogPanelTree(searchElementClass, mainDoc);
         lutree.setName("lutree");
         lutree.setRootVisible(false);
         lutree.setCellRenderer(treeRenderer);
@@ -119,8 +119,7 @@ public final class StructurePanel extends AbstractPathOfOneEdgePanel {
 
         // rtree
         rlabel = new JLabel(capitalizeFirstChar(getResString("frei")));
-        String rtreeRootString = rlabel.getText();
-        rtree = new ElementDialogPanelTree(rtreeRootString, mainDoc);
+        rtree = new ElementDialogPanelTree(searchElementClass, mainDoc);
         rtree.setName("rtree");
         rtree.setRootVisible(false);
         rtree.setShowsRootHandles(true);

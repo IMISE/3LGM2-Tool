@@ -186,7 +186,7 @@ public class PathConnectionPanel extends AbstractExpandablePanel {
         if (showRightTree) {
             String rtreeLabelString = capitalizeFirstChar(getResString("frei"));
             rLabel = new JLabel(rtreeLabelString);
-            rtree = new ElementDialogPanelTree(rtreeLabelString, mainDoc, maxLines);
+            rtree = new ElementDialogPanelTree(searchElementClass, mainDoc, maxLines);
             rtree.getSelectionModel().setSelectionMode(getTreesSelectionModel());
             rtree.setRootVisible(false);
             rtree.setShowsRootHandles(true);

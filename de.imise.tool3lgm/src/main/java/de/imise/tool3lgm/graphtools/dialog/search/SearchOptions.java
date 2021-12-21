@@ -36,6 +36,14 @@ public class SearchOptions {
     /** */
     public Class<? extends ModelElement> searchedElementType;
 
+    /**
+     * If this element type is the same like the searchedElementType and all
+     * patterns are <code>null</code> then nothing is returned. We need this
+     * parameter only to recognize that if all patterns are null also not to be
+     * searched for the element type. Default is {@link ModelElement}.
+     */
+    public Class<? extends ModelElement> baseSearchedElementType = ModelElement.class;
+
     /** */
     public String inputStringName;
 

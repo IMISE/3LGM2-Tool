@@ -70,8 +70,7 @@ public class MutipleCompositionPanel extends AbstractPathConnectionTreePanel {
         GridBagConstraints constraints = new GridBagConstraints();
 
         LGMGraphDocument mainDoc = getMainDoc();
-        String rootString = getResString("verb");
-        tree = new ElementDialogPanelTree(rootString, mainDoc);
+        tree = new ElementDialogPanelTree(searchElementClass, mainDoc);
         tree.setRootVisible(false);
         tree.setCellRenderer(treeRenderer);
         tree.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);

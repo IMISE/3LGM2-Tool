@@ -37,7 +37,7 @@ public interface SearchResultView {
     }
 
     /**
-     * @return all element classes that can be foudn in this view
+     * @return all element classes that can be found in this view
      */
     public abstract Set<Class<? extends ModelElement>> getSearchableElementClasses();
 

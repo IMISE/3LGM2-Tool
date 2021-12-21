@@ -3,6 +3,7 @@ package de.imise.tool3lgm.graphtools.dialog.search;
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
 import static de.imise.tool3lgm.graphtools.userfield.definition.UserField.Style.CHECK_BOX;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -106,7 +107,7 @@ public class SearchFunctions {
      */
     public static List<ElementContainer> getResult(final GraphDocument doc, final HistoryComboBox namePatternSource) {
         Pattern namePattern = getInputSearchPattern(namePatternSource, false);
-        return getResult(doc, ModelElement.class, namePattern, false, null, false, null, false, null, null);
+        return getResult(doc, ModelElement.class, ModelElement.class, namePattern, false, null, false, null, false, null, null);
     }
 
     /**
@@ -135,35 +136,46 @@ public class SearchFunctions {
         String inputStringUserFields = searchOptions.inputStringUserFields;
         boolean caseSensitiveUserField = searchOptions.caseSensitiveUserFields;
         Pattern patternUserFields = compilePattern(inputStringUserFields, caseSensitiveUserField);
-        return getResult(doc, searchOptions.searchedElementType, patternName, caseSensitiveName, patternDescription, caseSensitiveDescription, patternUserFields, caseSensitiveUserField, searchOptions.userFieldStyle, searchOptions.userFieldCheckBoxState);
+        return getResult(doc, searchOptions.searchedElementType, searchOptions.baseSearchedElementType, patternName, caseSensitiveName, patternDescription, caseSensitiveDescription, patternUserFields, caseSensitiveUserField, searchOptions.userFieldStyle,
+                searchOptions.userFieldCheckBoxState);
     }
 
     /**
      * @param doc
-     * @param searchedElementType
-     * @param patternName
-     * @param caseSensitiveName
-     * @param patternDescription
-     * @param caseSensitiveDescription
-     * @param patternUserFields
-     * @param caseSensitiveUserFields
-     * @param userFieldStyle
-     * @param checkBoxMode
+     * @param searchedElementType The element type that should be searched for
+     * @param baseSearchedElementType If this element type is the same like the
+     *            searchedElementType and all patterns are <code>null</code>
+     *            then nothing is returned. We need this parameter only to
+     *            recognize that if all patterns are null also not to be
+     *            searched for the element type.
+     * @param patternName pattern for element names
+     * @param caseSensitiveName if <code>true</code> then the patternName is
+     *            used case sensitive
+     * @param patternDescription pattern for element descriptions
+     * @param caseSensitiveDescription if <code>true</code> then the
+     *            patternDescription is used case sensitive
+     * @param patternUserFields pattern for the elements userFields
+     * @param caseSensitiveUserFields if <code>true</code> then the
+     *            patternUserFields is used case sensitive
+     * @param userFieldStyle style of accepted userFields
+     * @param checkBoxMode state of chekcbox userfields (if searched for)
      * @return
      */
-    public static List<ElementContainer> getResult(final GraphDocument doc, final Class<? extends ModelElement> searchedElementType, final Pattern patternName, final boolean caseSensitiveName, final Pattern patternDescription,
-            final boolean caseSensitiveDescription, final Pattern patternUserFields, final boolean caseSensitiveUserFields, final UserField.Style userFieldStyle, final UserFieldCheckBoxState checkBoxMode) {
+    public static List<ElementContainer> getResult(final GraphDocument doc, final Class<? extends ModelElement> searchedElementType, final Class<? extends ModelElement> baseSearchedElementType, final Pattern patternName, final boolean caseSensitiveName,
+            final Pattern patternDescription, final boolean caseSensitiveDescription, final Pattern patternUserFields, final boolean caseSensitiveUserFields, final UserField.Style userFieldStyle, final UserFieldCheckBoxState checkBoxMode) {
+        //if there are no search parameter changes to the default and all patterns empty -> return empty result
+        if (patternName == null && patternDescription == null && patternUserFields == null && patternUserFields == null && searchedElementType == baseSearchedElementType && userFieldStyle == null
+                && checkBoxMode == UserFieldCheckBoxState.CHECKBOX_STATE_ALL) {
+            return new ArrayList<>();
+        }
         List<ElementContainer> searchSet = getInitialTargetElements(doc, searchedElementType);
         for (int i = searchSet.size() - 1; i >= 0; i--) {
             ElementContainer ec = searchSet.get(i);
-
             if (!matchesAnd(ec, patternName, caseSensitiveName, patternDescription, caseSensitiveDescription, patternUserFields, caseSensitiveUserFields, userFieldStyle, checkBoxMode)) {
                 searchSet.remove(i);
                 continue;
             }
-
         }
-
         return searchSet;
     }
 
@@ -216,9 +228,11 @@ public class SearchFunctions {
                     if (matchNameOfCheckBox.find()) {
                         if (checkBoxMode == UserFieldCheckBoxState.CHECKBOX_STATE_CHECKED && userFieldInputValue.equals("true")) {
                             return true;
-                        } else if (checkBoxMode == UserFieldCheckBoxState.CHECKBOX_STATE_NOT_CHECKED && userFieldInputValue.equals("false")) {
+                        }
+                        if (checkBoxMode == UserFieldCheckBoxState.CHECKBOX_STATE_NOT_CHECKED && userFieldInputValue.equals("false")) {
                             return true;
-                        } else if (checkBoxMode == UserFieldCheckBoxState.CHECKBOX_STATE_ALL) {
+                        }
+                        if (checkBoxMode == UserFieldCheckBoxState.CHECKBOX_STATE_ALL) {
                             return true;
                         }
                     }
