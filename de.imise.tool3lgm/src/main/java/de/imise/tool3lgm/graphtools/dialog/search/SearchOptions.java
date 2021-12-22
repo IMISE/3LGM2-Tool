@@ -86,4 +86,11 @@ public class SearchOptions {
      */
     public List<String> inputHistoryUserFields;
 
+    @Override
+    public String toString() {
+        return "SearchOptions [searchedElementType=" + searchedElementType + ", baseSearchedElementType=" + baseSearchedElementType + ", inputStringName=" + inputStringName + ", caseSensitiveName=" + caseSensitiveName + ", inputStringDescription="
+                + inputStringDescription + ", caseSensitiveDescription=" + caseSensitiveDescription + ", inputStringUserFields=" + inputStringUserFields + ", caseSensitiveUserFields=" + caseSensitiveUserFields + ", userFieldStyle=" + userFieldStyle
+                + ", userFieldCheckBoxState=" + userFieldCheckBoxState + ", inputHistoryName=" + inputHistoryName + ", inputHistoryDescription=" + inputHistoryDescription + ", inputHistoryUserFields=" + inputHistoryUserFields + "]";
+    }
+
 }

@@ -12,6 +12,7 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.KeyEvent;
 import java.lang.reflect.Modifier;
+import java.util.Set;
 import java.util.regex.Pattern;
 
 import javax.swing.AbstractAction;
@@ -27,7 +28,13 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import javax.swing.plaf.ActionMapUIResource;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.Document;
+
+import com.google.common.base.Strings;
 
 import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.Tool3lgmConstants;
@@ -44,6 +51,7 @@ import de.imise.tool3lgm.graphtools.userfield.definition.UserField;
 import de.imise.tool3lgm.graphtools.userfield.definition.UserField.Style;
 import de.imise.tool3lgm.userproperties.UserProperties;
 import de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty;
+import de.imise.util.ReflectionUtils;
 import de.imise.util.swing.component.AlphabeticalComboBox;
 import de.imise.util.swing.component.HistoryComboBox;
 
@@ -116,6 +124,49 @@ public abstract class BasicSearchOptionsPanel extends JPanel implements ItemList
     protected JLabel labelDescription = new JLabel(getResString("SEARCH_DIALOG_description"));
 
     /**
+     * This thread will be startet after changes in the {@link #elementName} and
+     * starts the search after short delay.
+     */
+    private StartSearchThread startSearchThread;
+
+    /** The {@link ItemListener} that starts the {@link #startSearchThread} */
+    private final DocumentListener startSearchThreadStarter = new DocumentListener() {
+
+        @Override
+        public void removeUpdate(DocumentEvent e) {
+            callSearch(e);
+        }
+
+        @Override
+        public void insertUpdate(DocumentEvent e) {
+            callSearch(e);
+        }
+
+        @Override
+        public void changedUpdate(DocumentEvent e) {
+            callSearch(e);
+        }
+
+        private void callSearch(DocumentEvent e) {
+            Document document = e.getDocument();
+            int length = document.getLength();
+            try {
+                String text = document.getText(0, length);
+                if (!Strings.isNullOrEmpty(text)) {
+                    if (startSearchThread == null) {
+                        startSearchThread = new StartSearchThread();
+                        startSearchThread.start();
+                    } else {
+                        startSearchThread.restartDelay();
+                    }
+                }
+            } catch (BadLocationException e1) {
+                e1.printStackTrace();
+            }
+        }
+    };
+
+    /**
      * The defalut action that will only perform the search (where the action
      * source is irrelevant)
      */
@@ -143,6 +194,7 @@ public abstract class BasicSearchOptionsPanel extends JPanel implements ItemList
     public BasicSearchOptionsPanel(final SearchResultView resultTargetView, final LayoutManager layout) {
         super(layout);
         this.resultTargetView = resultTargetView;
+
         // Selectboxen befüllen
         fillModelBox();
         addSearchButtonKeyListener();
@@ -185,8 +237,8 @@ public abstract class BasicSearchOptionsPanel extends JPanel implements ItemList
      * Teilmodels landen in <code>searchSet</code> Nicht erfüllte Suchkriterium
      * werden herausgefiltert mittels <code>searchSet.remove</code>
      */
-    public void callSearch() {
-        callSearch(false);
+    public void callSearch(boolean addToHistory) {
+        callSearch(false, addToHistory);
     }
 
     /**
@@ -196,11 +248,12 @@ public abstract class BasicSearchOptionsPanel extends JPanel implements ItemList
      *
      * @param refreshSubModelAndClassBox
      */
-    private void callSearch(final boolean refreshSubModelAndClassBox) {
-        HistoryComboBox.addToHistory(elementName);
-        HistoryComboBox.addToHistory(elementUserField);
-        HistoryComboBox.addToHistory(elementDescription);
-
+    private void callSearch(final boolean refreshSubModelAndClassBox, boolean addToHistory) {
+        if (addToHistory) {
+            HistoryComboBox.addToHistory(elementName);
+            HistoryComboBox.addToHistory(elementUserField);
+            HistoryComboBox.addToHistory(elementDescription);
+        }
         GraphDocument doc = subModelBox.getSelectedObject();
         if (refreshSubModelAndClassBox) {
             fillSubModelBox();
@@ -375,7 +428,7 @@ public abstract class BasicSearchOptionsPanel extends JPanel implements ItemList
                 userFieldCheckBoxState = UserFieldCheckBoxState.CHECKBOX_STATE_ALL;
             }
         }
-        callSearch();
+        callSearch(true);
     }
 
     ////////////////////////////////////////////////
@@ -398,7 +451,7 @@ public abstract class BasicSearchOptionsPanel extends JPanel implements ItemList
      */
     private void saveCheckBoxStateInUserPropertiesAndCallSearch(final JCheckBox checkbox, final BooleanProperty booleanProperty) {
         booleanProperty.set(checkbox.isSelected());
-        callSearch();
+        callSearch(true);
     }
 
     private void addComboboxListenersAndActions() {
@@ -422,6 +475,7 @@ public abstract class BasicSearchOptionsPanel extends JPanel implements ItemList
         elementDescription.setEnterAction(enterAction);
         elementUserField.setEnterAction(enterAction);
         if (remove) {
+            elementName.removeDocumentListener(startSearchThreadStarter);
             elementName.removeItemListener(this);
             elementDescription.removeItemListener(this);
             elementUserField.removeItemListener(this);
@@ -433,6 +487,7 @@ public abstract class BasicSearchOptionsPanel extends JPanel implements ItemList
             modelBox.setAction(null);
             subModelBox.setAction(null);
         } else {
+            elementName.addDocumentListener(startSearchThreadStarter);
             elementName.addItemListener(this);
             elementDescription.addItemListener(this);
             elementUserField.addItemListener(this);
@@ -481,6 +536,8 @@ public abstract class BasicSearchOptionsPanel extends JPanel implements ItemList
             searchOptions.inputHistoryUserFields = elementUserField.getHistory();
         }
 
+        Set<Class<? extends ModelElement>> searchableElementClasses = resultTargetView.getSearchableElementClasses();
+        searchOptions.baseSearchedElementType = ReflectionUtils.getCommonSuperClassOfClasses(searchableElementClasses);
         return searchOptions;
     }
 
@@ -521,4 +578,52 @@ public abstract class BasicSearchOptionsPanel extends JPanel implements ItemList
     public JButton getSearchButton() {
         return searchButton;
     }
+
+    /**
+     * @author AXS (20.12.2021)
+     */
+    public class StartSearchThread extends Thread {
+
+        /**  */
+        public boolean restartDelay;
+
+        /**  */
+        private final int fullDelay = 1000;
+
+        /**  */
+        private final int checkRestartDelay = 100;
+
+        /**
+         *
+         */
+        public StartSearchThread() {
+            setPriority(Thread.MIN_PRIORITY);
+        }
+
+        @Override
+        public void run() {
+            try {
+                int rounds = fullDelay / checkRestartDelay;
+                for (int i = 0; i < rounds; i++) {
+                    Thread.sleep(checkRestartDelay);
+                    if (restartDelay) {
+                        i = 0;
+                        restartDelay = false;
+                    }
+                }
+                callSearch(false);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            startSearchThread = null;
+        }
+
+        /**
+         *
+         */
+        public void restartDelay() {
+            restartDelay = true;
+        }
+    }
+
 }
