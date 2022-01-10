@@ -242,6 +242,16 @@ public abstract class BasicSearchOptionsPanel extends JPanel implements ItemList
     }
 
     /**
+     *
+     */
+    private static long lastSearchTime = System.currentTimeMillis();
+
+    /**
+     *
+     */
+    private static SearchOptions lastSearchOptions = null;
+
+    /**
      * Die zentrale Suchmethode die aufgerufen wird. Prinzip: Alle Elemente des
      * Teilmodels landen in <code>searchSet</code> Nicht erfüllte Suchkriterium
      * werden herausgefiltert mittels <code>searchSet.remove</code>
@@ -249,19 +259,30 @@ public abstract class BasicSearchOptionsPanel extends JPanel implements ItemList
      * @param refreshSubModelAndClassBox
      */
     private void callSearch(final boolean refreshSubModelAndClassBox, boolean addToHistory) {
-        if (addToHistory) {
+        long searchTime = System.currentTimeMillis();
+        SearchOptions searchOptions = getSearchOptions(false);
+        boolean reallySearch = true;
+        if (!addToHistory) {
+            if (searchTime - lastSearchTime < StartSearchThread.FULL_DELAY * 2) {
+                if (lastSearchOptions.equals(searchOptions)) {
+                    reallySearch = false;
+                }
+            }
+        } else {
             HistoryComboBox.addToHistory(elementName);
             HistoryComboBox.addToHistory(elementUserField);
             HistoryComboBox.addToHistory(elementDescription);
         }
-        GraphDocument doc = subModelBox.getSelectedObject();
-        if (refreshSubModelAndClassBox) {
-            fillSubModelBox();
-            fillElementClassBox();
+        if (reallySearch) {
+            GraphDocument doc = subModelBox.getSelectedObject();
+            if (refreshSubModelAndClassBox) {
+                fillSubModelBox();
+                fillElementClassBox();
+            }
+            resultTargetView.showResult(doc, searchOptions);
         }
-
-        SearchOptions searchOptions = getSearchOptions(false);
-        resultTargetView.showResult(doc, searchOptions);
+        lastSearchTime = searchTime;
+        lastSearchOptions = searchOptions;
     }
 
     /**
@@ -588,10 +609,10 @@ public abstract class BasicSearchOptionsPanel extends JPanel implements ItemList
         public boolean restartDelay;
 
         /**  */
-        private final int fullDelay = 1000;
+        private static final int FULL_DELAY = 1000;
 
         /**  */
-        private final int checkRestartDelay = 100;
+        private static final int CHECK_RESTART_DELAY = 100;
 
         /**
          *
@@ -603,9 +624,9 @@ public abstract class BasicSearchOptionsPanel extends JPanel implements ItemList
         @Override
         public void run() {
             try {
-                int rounds = fullDelay / checkRestartDelay;
+                int rounds = FULL_DELAY / CHECK_RESTART_DELAY;
                 for (int i = 0; i < rounds; i++) {
-                    Thread.sleep(checkRestartDelay);
+                    Thread.sleep(CHECK_RESTART_DELAY);
                     if (restartDelay) {
                         i = 0;
                         restartDelay = false;
