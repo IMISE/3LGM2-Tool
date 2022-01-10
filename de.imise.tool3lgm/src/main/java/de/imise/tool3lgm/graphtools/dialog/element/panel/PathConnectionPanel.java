@@ -92,7 +92,7 @@ public class PathConnectionPanel extends AbstractExpandablePanel {
     private final JPanel rsearchPanel;
 
     /** GridBagLayout constraints for the whole panel */
-    GridBagConstraints constraints = new GridBagConstraints();
+    final GridBagConstraints constraints = new GridBagConstraints();
 
     /**
      * @param dialog

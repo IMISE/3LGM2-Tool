@@ -74,7 +74,7 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
     protected final boolean isConnectionPointUnique;
 
     /** Insets for the labels */
-    protected Insets labelInsets = new Insets(3, 5, 0, 5);
+    protected Insets labelInsets = new Insets(0, 5, 0, 5);
 
     /**  */
     private final ModelElement modelElement;

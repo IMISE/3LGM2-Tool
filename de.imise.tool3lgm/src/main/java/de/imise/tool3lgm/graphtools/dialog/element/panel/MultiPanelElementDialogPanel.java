@@ -64,8 +64,9 @@ public class MultiPanelElementDialogPanel extends ElementDialogPanel implements 
     private final List<JButton> panelButtons = new ArrayList<>();
 
     /**
-     * The button this panel accumulates of the {@link #getExpandOrCollapseViewButton()} result
-     * buttons of the panels in this multi panel.
+     * The button this panel accumulates of the
+     * {@link #getExpandOrCollapseViewButton()} result buttons of the panels in
+     * this multi panel.
      */
     private JButton panelButton;
 
@@ -142,21 +143,23 @@ public class MultiPanelElementDialogPanel extends ElementDialogPanel implements 
     }
 
     public void addMutipleCompositionPanel(final MutipleCompositionPanel panel) {
-        gbc.insets = new Insets(5, 0, 0, 0);
-        gbc.anchor = GridBagConstraints.CENTER;
-        gbc.weighty = 1;
-        gbc.weightx = 1;
-        TitledBorder panelBorder = BorderFactory.createTitledBorder(panel.getName());
-        panel.setBorder(panelBorder);
-        add(this, panel, gbc, 0, gridy++, 1, 1);
+        addPanel(panel, 1, panel.getName());
     }
 
     public void addLGMDragNDropPanel(final LGMDragNDropPanel panel) {
-        gbc.insets = new Insets(5, 0, 0, 0);
+        addPanel(panel, 2, null); //2 breit, falls man das mal auf einem DescripPanel hinzufügen möchte (bsiher nicht ausprobiert)
+    }
+
+    private void addPanel(AbstractPathConnectionPanel panel, int griddWidth, String borderTitle) {
+        gbc.insets = new Insets(getComponentCount() > 0 ? 3 : 0, 0, 0, 0); //set top insets only for the second panel
         gbc.anchor = GridBagConstraints.CENTER;
         gbc.weighty = 1;
         gbc.weightx = 1;
-        add(this, panel, gbc, 0, gridy++, 2, 1); //2 breit, falls man das mal auf einem DescripPanel hinzufügen möchte (bsiher nicht ausprobiert)
+        if (borderTitle != null) {
+            TitledBorder panelBorder = BorderFactory.createTitledBorder(panel.getName());
+            panel.setBorder(panelBorder);
+        }
+        add(this, panel, gbc, 0, gridy++, griddWidth, 1);
     }
 
     public void addWestLabelPanel(final AbstractPathConnectionPanel panel) {
