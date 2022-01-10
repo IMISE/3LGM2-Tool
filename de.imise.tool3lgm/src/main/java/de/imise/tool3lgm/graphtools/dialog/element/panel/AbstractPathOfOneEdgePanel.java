@@ -27,6 +27,7 @@ import de.imise.tool3lgm.graphtools.view.tree.node.ElementContainerTreeNode;
  */
 public abstract class AbstractPathOfOneEdgePanel extends AbstractExpandablePanel {
 
+    /** The ElementaryMetaPath that can be modeled in this panel */
     protected final ElementaryMetaPath metaPath;
 
     /**

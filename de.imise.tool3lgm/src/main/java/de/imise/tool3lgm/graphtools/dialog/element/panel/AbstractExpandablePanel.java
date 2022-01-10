@@ -1,15 +1,21 @@
 package de.imise.tool3lgm.graphtools.dialog.element.panel;
 
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.GridLayout;
+import java.awt.Insets;
 import java.util.EventObject;
 
 import javax.swing.Action;
 import javax.swing.JButton;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import de.imise.tool3lgm.graphtools.dialog.action.LGMAction;
 import de.imise.tool3lgm.graphtools.dialog.element.AbstractElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.dialog.element.DialogActionCommands;
+import de.imise.tool3lgm.graphtools.dialog.search.SearchResultView;
+import de.imise.tool3lgm.graphtools.dialog.search.TreeSearchOptionsPanel;
 import de.imise.tool3lgm.graphtools.path.metapaths.MetaPath;
 import de.imise.util.swing.component.MinSizedIconButton;
 
@@ -160,6 +166,20 @@ public abstract class AbstractExpandablePanel extends LGMDragNDropPanel {
             }
         }
         return buttonpanel;
+    }
+
+    /**
+     * @return
+     */
+    protected static final JPanel createTreeSearchPanel(JLabel label, SearchResultView tree) {
+        TreeSearchOptionsPanel rtreeSearchPanel = new TreeSearchOptionsPanel(tree);
+        JPanel rsearchPanel = new JPanel(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+        add(rsearchPanel, label, gbc, 0, 0, 1, 1, new Insets(0, 0, 0, 20));
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.weightx = 1d;
+        add(rsearchPanel, rtreeSearchPanel.getElementName(), gbc, 1, 0, 1, 1);
+        return rsearchPanel;
     }
 
 }

@@ -166,11 +166,11 @@ public abstract class ElementDialogPanel extends JPanel {
      * @param w
      * @param h
      */
-    protected final void add(final Container con, final Component c, final GridBagConstraints gbc, final int x, final int y, final int w, final int h) {
+    protected static final void add(final Container con, final Component c, final GridBagConstraints gbc, final int x, final int y, final int w, final int h) {
         add(con, c, gbc, x, y, w, h, gbc.insets);
     }
 
-    protected final void add(final Container con, final Component c, final GridBagConstraints gbc, final int x, final int y, final int w, final int h, Insets insets) {
+    protected static final void add(final Container con, final Component c, final GridBagConstraints gbc, final int x, final int y, final int w, final int h, Insets insets) {
         //der Static import funktioniert nicht mit der add-Funktion, weil das mit den add-Funktionen aus Container kollidiert
         Insets oldInsets = gbc.insets;
         gbc.insets = insets;

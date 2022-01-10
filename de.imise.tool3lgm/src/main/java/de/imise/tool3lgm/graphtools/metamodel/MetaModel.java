@@ -12,6 +12,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 
 import javax.swing.Action;
@@ -1855,7 +1856,7 @@ public final class MetaModel extends CoreMetaModel {
      */
     public final int layerFor(final Class<? extends ModelElement> elementClass) {
         Integer layer = elementClassToLayer.get(elementClass);
-        return layer == null ? ModelConstants.NO_LAYER : layer.intValue();
+        return layer == null ? ModelConstants.NO_LAYER : layer;
     }
 
     /**
@@ -2320,11 +2321,7 @@ public final class MetaModel extends CoreMetaModel {
         MetaModel other = (MetaModel) obj;
         MetaModelContext metaModelContext = getMetaModelContext();
         MetaModelContext otherMetaModelContext = other.getMetaModelContext();
-        if (metaModelContext == null) {
-            if (otherMetaModelContext != null) {
-                return false;
-            }
-        } else if (!metaModelContext.equals(otherMetaModelContext)) {
+        if (!Objects.equals(metaModelContext, otherMetaModelContext)) {
             return false;
         }
         return true;

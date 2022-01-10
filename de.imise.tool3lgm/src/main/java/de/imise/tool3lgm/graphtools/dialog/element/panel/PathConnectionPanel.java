@@ -9,7 +9,6 @@ import static de.imise.util.StringUtils.capitalizeFirstChar;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.Insets;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.EventObject;
@@ -20,7 +19,6 @@ import java.util.Set;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JTree;
 import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
 
@@ -35,7 +33,6 @@ import de.imise.tool3lgm.graphtools.dialog.dragdrop.DragNDropInitializer;
 import de.imise.tool3lgm.graphtools.dialog.dragdrop.DragNDropInitializer.DragNDropActionChain;
 import de.imise.tool3lgm.graphtools.dialog.element.AbstractElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.dialog.element.DialogActionCommands;
-import de.imise.tool3lgm.graphtools.dialog.search.TreeSearchOptionsPanel;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction;
@@ -193,7 +190,7 @@ public class PathConnectionPanel extends AbstractExpandablePanel {
             TreeRenderer highlightErrorElementsTreeRenderer = new PanelTreeRenderer(this);
             rtree.setCellRenderer(highlightErrorElementsTreeRenderer);
 
-            rsearchPanel = createTreeSearchPanel(westLabel, rtree);
+            rsearchPanel = createTreeSearchPanel(rLabel, rtree);
 
             //Buttons & Actions erstellen, Actions setzen
             addAction = getConnectAction();
@@ -215,20 +212,6 @@ public class PathConnectionPanel extends AbstractExpandablePanel {
         }
         initTreeListenerAndDragNDrop();
         showFullDialog(true);
-    }
-
-    /**
-     * @return
-     */
-    protected JPanel createTreeSearchPanel(JLabel label, JTree tree) {
-        TreeSearchOptionsPanel rtreeSearchPanel = new TreeSearchOptionsPanel(rtree);
-        JPanel rsearchPanel = new JPanel(new GridBagLayout());
-        GridBagConstraints gbc = new GridBagConstraints();
-        add(rsearchPanel, rLabel, gbc, 0, 0, 1, 1, new Insets(0, 0, 0, 20));
-        gbc.fill = GridBagConstraints.HORIZONTAL;
-        gbc.weightx = 1d;
-        add(rsearchPanel, rtreeSearchPanel.getElementName(), gbc, 1, 0, 1, 1);
-        return rsearchPanel;
     }
 
     @Override
