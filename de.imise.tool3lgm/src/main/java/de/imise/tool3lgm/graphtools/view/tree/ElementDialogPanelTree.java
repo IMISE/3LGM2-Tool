@@ -504,7 +504,9 @@ public class ElementDialogPanelTree extends CorrectSelectionTree implements Sear
         if (rowCount < 0) {
             return;
         }
-        options.searchedElementType = getContainedElementsSuperClass();
+
+        Class<? extends ModelElement> containedElementsSuperClass = getContainedElementsSuperClass();
+        options.setSearchedElementType(containedElementsSuperClass);
 
         TreePath[] selectedSearchPaths = null;
         List<ElementContainer> searchResults = doc == null ? new ArrayList<>() : SearchFunctions.getResult(doc, options);

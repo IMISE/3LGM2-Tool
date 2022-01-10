@@ -544,7 +544,7 @@ public abstract class BasicSearchOptionsPanel extends JPanel implements ItemList
         searchOptions.caseSensitiveUserFields = checkUserFieldCaseSensitive.isSelected();
 
         Object selectedElementClass = elementClassBox.getSelectedObject();
-        searchOptions.searchedElementType = selectedElementClass instanceof Class<?> ? ((Class<?>) selectedElementClass).asSubclass(ModelElement.class) : ModelElement.class;
+        searchOptions.setSearchedElementType(selectedElementClass instanceof Class<?> ? ((Class<?>) selectedElementClass).asSubclass(ModelElement.class) : null);
 
         Object userFieldStyle = userFieldStyleComboBox == null ? null : userFieldStyleComboBox.getSelectedObject();
         searchOptions.userFieldStyle = userFieldStyle != null && userFieldStyle instanceof Style ? (Style) userFieldStyle : null;
@@ -572,7 +572,7 @@ public abstract class BasicSearchOptionsPanel extends JPanel implements ItemList
         checkNameCaseSensitive.setSelected(searchOptions.caseSensitiveName);
         checkDescriptionCaseSensitive.setSelected(searchOptions.caseSensitiveDescription);
         checkUserFieldCaseSensitive.setSelected(searchOptions.caseSensitiveUserFields);
-        elementClassBox.setSelectedObject(searchOptions.searchedElementType);
+        elementClassBox.setSelectedObject(searchOptions.getSearchedElementType());
         if (userFieldStyleComboBox != null) {
             userFieldStyleComboBox.setSelectedObject(searchOptions.userFieldStyle);
         }

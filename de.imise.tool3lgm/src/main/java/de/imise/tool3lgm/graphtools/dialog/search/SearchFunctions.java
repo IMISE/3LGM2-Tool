@@ -136,8 +136,8 @@ public class SearchFunctions {
         String inputStringUserFields = searchOptions.inputStringUserFields;
         boolean caseSensitiveUserField = searchOptions.caseSensitiveUserFields;
         Pattern patternUserFields = compilePattern(inputStringUserFields, caseSensitiveUserField);
-        return getResult(doc, searchOptions.searchedElementType, searchOptions.baseSearchedElementType, patternName, caseSensitiveName, patternDescription, caseSensitiveDescription, patternUserFields, caseSensitiveUserField, searchOptions.userFieldStyle,
-                searchOptions.userFieldCheckBoxState);
+        return getResult(doc, searchOptions.getSearchedElementType(), searchOptions.baseSearchedElementType, patternName, caseSensitiveName, patternDescription, caseSensitiveDescription, patternUserFields, caseSensitiveUserField,
+                searchOptions.userFieldStyle, searchOptions.userFieldCheckBoxState);
     }
 
     /**

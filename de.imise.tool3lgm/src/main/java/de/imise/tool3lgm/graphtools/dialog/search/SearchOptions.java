@@ -35,7 +35,25 @@ public class SearchOptions {
     }
 
     /** */
-    public Class<? extends ModelElement> searchedElementType;
+    private Class<? extends ModelElement> searchedElementType = ModelElement.class;
+
+    /**
+     * @param searchedElementType
+     */
+    public void setSearchedElementType(Class<? extends ModelElement> searchedElementType) {
+        if (searchedElementType == null) {
+            searchedElementType = ModelElement.class; // prevent null
+        } else {
+            this.searchedElementType = searchedElementType;
+        }
+    }
+
+    /**
+     * @return
+     */
+    public Class<? extends ModelElement> getSearchedElementType() {
+        return searchedElementType;
+    }
 
     /**
      * If this element type is the same like the searchedElementType and all
