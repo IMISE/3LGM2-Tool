@@ -253,7 +253,7 @@ public class ProzessStructurePanel extends PathConnectionPanel implements TreeWi
             GridBagConstrainsInputPanel.setConstraintsWithDialog(Static.getMainFrame(), constraints);
         }
         add(component, constraints);
-        setSamePreferredLeftRightSize(component);
+        setSamePreferredLeftRightSize();
     }
 
     /**
@@ -439,10 +439,7 @@ public class ProzessStructurePanel extends PathConnectionPanel implements TreeWi
             }
             return alwaysEmptyReturnLeafsList;
         }
-        // wenn dem Prozess eine neue Aufgabe hinzugefügt wurde, muss der neue Node eingefügt werden
-        //(dies hat im Gegensatz zum kompletten Neuaufbau den Vorteil, dass expandierte Node
-        //expandiert bleiben und nur deswegen hier der ganze Aufwand)
-        else if (lroot.getChildCount() < aufgabenContainer.size()) {
+        if (lroot.getChildCount() < aufgabenContainer.size()) {
             // nach dem Node, welcher neu eingefügt wird, muss die Nummerierung aller folgenden Node
             // um 1 erhöht werden. Das passiert erst ab da, wenn actualizeNodes==true ist.
             boolean actualizeNodes = false;
