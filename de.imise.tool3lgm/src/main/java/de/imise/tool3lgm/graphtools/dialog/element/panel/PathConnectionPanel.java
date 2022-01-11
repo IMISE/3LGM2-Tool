@@ -190,7 +190,7 @@ public class PathConnectionPanel extends AbstractExpandablePanel {
             TreeRenderer highlightErrorElementsTreeRenderer = new PanelTreeRenderer(this);
             rtree.setCellRenderer(highlightErrorElementsTreeRenderer);
 
-            rsearchPanel = createTreeSearchPanel(rLabel, rtree);
+            rsearchPanel = createTreeSearchPanel(rLabel, rtree, ltreeLabel);
 
             //Buttons & Actions erstellen, Actions setzen
             addAction = getConnectAction();

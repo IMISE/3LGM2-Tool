@@ -1,5 +1,7 @@
 package de.imise.tool3lgm.graphtools.dialog.element.panel;
 
+import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
@@ -169,11 +171,37 @@ public abstract class AbstractExpandablePanel extends LGMDragNDropPanel {
     }
 
     /**
+     * @param label label in frtont of the search combobox
+     * @param tree the tree in which elements should be searched for
+     * @param witdhSource sub panels should give here the left tree label to
+     *            ensure that the search combobox will never be resized larger
+     *            than this component (because of Swings Bugs). This ensures
+     *            that both dialog sides have always the same width.
      * @return
      */
-    protected static final JPanel createTreeSearchPanel(JLabel label, SearchResultView tree) {
+    protected static final JPanel createTreeSearchPanel(JLabel label, SearchResultView tree, Component widthSource) {
         TreeSearchOptionsPanel rtreeSearchPanel = new TreeSearchOptionsPanel(tree);
-        JPanel rsearchPanel = new JPanel(new GridBagLayout());
+        JPanel rsearchPanel = new JPanel(new GridBagLayout()) {
+            @Override
+            public Dimension getSize() {
+                return widthSource == null ? super.getSize() : widthSource.getSize();
+            }
+
+            @Override
+            public Dimension getMinimumSize() {
+                return widthSource == null ? super.getMinimumSize() : widthSource.getMinimumSize();
+            }
+
+            @Override
+            public Dimension getMaximumSize() {
+                return widthSource == null ? super.getMaximumSize() : widthSource.getMaximumSize();
+            }
+
+            @Override
+            public Dimension getPreferredSize() {
+                return widthSource == null ? super.getPreferredSize() : widthSource.getPreferredSize();
+            }
+        };
         GridBagConstraints gbc = new GridBagConstraints();
         add(rsearchPanel, label, gbc, 0, 0, 1, 1, new Insets(0, 0, 0, 20));
         gbc.fill = GridBagConstraints.HORIZONTAL;

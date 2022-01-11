@@ -152,7 +152,7 @@ public final class StructurePanel extends AbstractPathOfOneEdgePanel {
         rtree.setShowsRootHandles(true);
         rtree.setCellRenderer(treeRenderer);
         rtree.getSelectionModel().setSelectionMode(TreeSelectionModel.DISCONTIGUOUS_TREE_SELECTION);
-        rsearchPanel = createTreeSearchPanel(rlabel, rtree);
+        rsearchPanel = createTreeSearchPanel(rlabel, rtree, lolabel);
 
         JScrollPane rtreeScrollPane = rtree.getScrollPane();
 
@@ -237,7 +237,7 @@ public final class StructurePanel extends AbstractPathOfOneEdgePanel {
         //the Combobox default preferred size is 4 pixel to large (on Windows) -> reduce it and TODO test it on Linux
         SwingUtils.setSamePreferredHeight(-4, lolabel, rsearchPanel.getComponent(0), rsearchPanel.getComponent(1));
         SwingUtils.setSamePreferredSize(lolabel, rsearchPanel);
-        SwingUtils.setSamePreferredSize(lotree.getScrollPane(), lutree.getScrollPane(), rtree.getScrollPane());
+        SwingUtils.setSamePreferredSize(lotree.getScrollPane(), lutree.getScrollPane());
     }
 
     @Override
