@@ -24,6 +24,7 @@ import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_CREATE_
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_DELETE_FROM_MODEL;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_DELETE_FROM_SUBMODEL;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_DELETE_SUBMODEL;
+import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_DUPLICATE_SUBMODEL;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_INSERT_BENDING_POINT;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_LINK;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_MOVE_ORDER;
@@ -645,10 +646,48 @@ public class GDCollection extends UserFieldTarget implements MetaModelSpecific {
             mainDoc.addUndo(pid, MODEL_ACTION_SET_LAYER_SIZE_FACTOR, szenID, szen.getPageSizeFactor());
         }
         mainDoc.addUndo(pid, MODEL_ACTION_CREATE_SUBMODEL, szen.getName(), szen.getDescription(), szenID);
-        mainDoc.addRedo(pid, MODEL_ACTION_DELETE_SUBMODEL, szenID, pid);
+        mainDoc.addRedo(pid, MODEL_ACTION_DELETE_SUBMODEL, szenID);
         mainDoc.finish_transaction(pid);
         setChanged(true);
         distribute(SZENARIO_REMOVED, null, szen, pid);
+    }
+
+    /**
+     * @param sourceSzenID
+     * @param targetSzenID
+     * @param title
+     * @param pid
+     * @return
+     */
+    public Szenario duplicateSzenario(String sourceSzenID, String targetSzenID, String title, final int pid) {
+        GraphDocument sourceDoc = getGraphDocumentCoded(sourceSzenID);
+        if (sourceDoc == null || !(sourceDoc instanceof Szenario)) {
+            return null;
+        }
+        Szenario sourceSzen = (Szenario) sourceDoc;
+        if (Strings.isNullOrEmpty(title)) {
+            title = getNextIndicatedName(sourceSzen.getName() + " #", activeGraphDocumentsList);
+        }
+        if (!isAutomaticMode()) {
+            title = askName(title);
+        }
+        if (Strings.isNullOrEmpty(title)) {
+            return null;
+        }
+        int activeLayer = getActiveLayer();
+        Szenario duplicate = sourceSzen.duplicate(targetSzenID);
+        duplicate.setName(title);
+        szenarios.add(duplicate);
+        activeGraphDocumentsList.add(duplicate);
+        setChanged(true);
+        setActiveLayer(activeLayer);
+        //log undo redo
+        mainDoc.start_transaction(pid);
+        mainDoc.addUndo(pid, MODEL_ACTION_DELETE_SUBMODEL, duplicate.id);
+        mainDoc.addRedo(pid, MODEL_ACTION_DUPLICATE_SUBMODEL, sourceSzenID, duplicate.id, title);
+        mainDoc.finish_transaction(pid);
+        distribute(SZENARIO_ADDED, null, duplicate, pid);
+        return duplicate;
     }
 
     /**
@@ -1109,7 +1148,8 @@ public class GDCollection extends UserFieldTarget implements MetaModelSpecific {
                 removeBendpoint((Bendpoint) me, pid);
                 allElementsToDelete.remove(i--);
                 continue;
-            } else if (me instanceof Edge) {
+            }
+            if (me instanceof Edge) {
                 Edge edge = (Edge) me;
                 edgesToDelete.add(edge);
                 //wenn durch das Löschen der Edge auch die Kardinalität für eins oder beide der durch die Edge verbundenen
@@ -1641,9 +1681,8 @@ public class GDCollection extends UserFieldTarget implements MetaModelSpecific {
         //das neue Element mit dem startElement verknüpfen
         if (direction == Direction.FORWARD) {
             return link(edgeClass, startElement, endElement, false, pid);
-        } else {
-            return link(edgeClass, endElement, startElement, false, pid);
         }
+        return link(edgeClass, endElement, startElement, false, pid);
     }
 
     /**
@@ -2211,7 +2250,8 @@ public class GDCollection extends UserFieldTarget implements MetaModelSpecific {
         edges = me1.getEdgesWith(me2, edgeClass, me1EdgeIndex);
         if (edges.isEmpty()) {
             return;
-        } else if (edges.size() == 1) {
+        }
+        if (edges.size() == 1) {
             edge = edges.get(0);
         } else {
             //TODO: statt des OptionPanes hier sollten einfach alle Kanten gelöscht werden. Beim Join muss das OptionPane auch raus, da sowas in der Kernklasse hier nichts zu suchen hat!

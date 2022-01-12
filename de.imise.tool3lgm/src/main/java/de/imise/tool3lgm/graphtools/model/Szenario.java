@@ -40,7 +40,7 @@ public class Szenario extends LGMGraphDocument {
         super(_gdcoll);
         setName(title == null ? "" : title);
         setDescription(description);
-        //wenn die ID gültig und noch nicht vergeben ist -> setze ihn
+        //if the ID is valid and not used already -> set it. Else generate a new one.
         if (StringUtils.isValid(id, "null") && gdcoll.getGraphDocumentCoded(id) == null) {
             this.id = id;
         } else {
@@ -229,6 +229,30 @@ public class Szenario extends LGMGraphDocument {
      */
     public void adaptGraphViewParameter(final GraphViewParameter graphViewParameter) {
         this.graphViewParameter.adapt(graphViewParameter);
+    }
+
+    /**
+     * @param name
+     * @return
+     */
+    public Szenario duplicate(String duplicateID) {
+        Szenario duplicate = new Szenario(gdcoll, name, description, duplicateID);
+        for (LayerContainer sourceLayer : layer) {
+            for (ElementContainer ec : sourceLayer.getGraphNodeContainers()) {
+                duplicate.addContainerCopy(ec);
+            }
+        }
+        for (LayerContainer sourceLayer : layer) {
+            for (ElementContainer ec : sourceLayer.getEdgeContainers()) {
+                duplicate.addContainerCopy(ec);
+            }
+            for (ElementContainer ec : sourceLayer.getBendpointContainers()) {
+                duplicate.addContainerCopy(ec);
+            }
+        }
+        duplicate.adaptGraphViewParameter(graphViewParameter);
+        duplicate.adaptDefaultElementsLayout(defaultElementsLayout);
+        return duplicate;
     }
 
 }

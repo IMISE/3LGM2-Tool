@@ -107,41 +107,42 @@ public enum GDCommands implements ActionSource {
     //77
     MODEL_ACTION_CREATE_SUBMODEL,
     MODEL_ACTION_DELETE_SUBMODEL,
+    MODEL_ACTION_DUPLICATE_SUBMODEL,
     MODEL_ACTION_RENAME_SUBMODEL,
-    //81
+    //82
     MODEL_ACTION_ADD_ELEMENT_TO_SUBMODEL, //internal model action -> braucht keinen ResKey, da nur bei Undo-Redo gebraucht
     MODEL_ACTION_ADD_SELECTED_TO_SUBMODEL,
     MODEL_ACTION_ADD_SELECTED_TO_NEW_SUBMODEL,
     MODEL_ACTION_ADD_SELECTED_TO_ALL_SUBMODELS,
-    //85
+    //86
     MODEL_ACTION_LINK_SELECTED_TO_NEW_SUBMODEL,
     MODEL_ACTION_LINK_SELECTED_TO_SUBMODEL,
     MODEL_ACTION_UNLINK_SELECTED_TO_SUBMODEL,
     MODEL_ACTION_LINK_ELEMENT_TO_SUBMODEL,
     MODEL_ACTION_SELECT_LINKED_SUBMODEL,
-    //88
-    MODEL_ACTION_JOIN_SELECTED,
     //89
+    MODEL_ACTION_JOIN_SELECTED,
+    //90
     MODEL_ACTION_SET_ELEMENT_INTERLAYER_CONNECTIONS_VISIBILITY_ON,
     MODEL_ACTION_SET_ELEMENT_INTERLAYER_CONNECTIONS_VISIBILITY_OFF,
     MODEL_ACTION_SET_INTERLAYER_CONNECTIONS_VISIBILITY_ON,
     MODEL_ACTION_SET_INTERLAYER_CONNECTIONS_VISIBILITY_OFF,
-    //93
+    //94
     //Die Kommandos ab hier werden in LGMGraphDocument ausgewertet
     MODEL_ACTION_COPY,
     MODEL_ACTION_CUT,
     MODEL_ACTION_PASTE,
-    //96
+    //97
     MODEL_ACTION_HIDE_UNASSOCIATED,
     MODEL_ACTION_UNHIDE_ALL,
-    //98
+    //99
     //spezielle Kommandos
     MODEL_ACTION_COMMAND_LINE,
     MODEL_ACTION_PRINT_QUEUE,
     MODEL_ACTION_INTERNAL_CHECK_CONSISTENCY,
     MODEL_OPTION_GDCOLL_AUTOMATIC_MODE,
     MODEL_OPTION_GDOC_VERIFICATION_MODE;
-    //103
+    //104
     //Ungültige Werte für alle Kommandos
     public static final int INVALID_POSITION_X = -1;
     public static final int INVALID_POSITION_Y = -1;
@@ -242,6 +243,7 @@ public enum GDCommands implements ActionSource {
         ActionSource.put(GraphSelectedRealNodeAction.class, MODEL_ACTION_MOVE_ORDER_TO_LAST_POSITION);
         ActionSource.putInteractive(GraphDocumentAction.class, MODEL_ACTION_CREATE_SUBMODEL); //diaalog submodel name
         ActionSource.putInteractive(SubmodelAction.class, MODEL_ACTION_DELETE_SUBMODEL); //dialog really delete
+        ActionSource.put(SubmodelAction.class, MODEL_ACTION_DUPLICATE_SUBMODEL);
         ActionSource.putInteractive(SubmodelAction.class, MODEL_ACTION_RENAME_SUBMODEL); //dialog submodel name
         ActionSource.put(ModelOptionAction.class, MODEL_OPTION_GDOC_VERIFICATION_MODE);
         ActionSource.put(ModelOptionAction.class, MODEL_OPTION_GDCOLL_AUTOMATIC_MODE);

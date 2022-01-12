@@ -77,6 +77,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import javax.annotation.Nonnull;
 import javax.swing.JColorChooser;
@@ -190,7 +191,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
     /**
      * COMMENTME
      */
-    private String name = "";
+    protected String name = "";
 
     /**
      * COMMENTME
@@ -309,18 +310,10 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
             return false;
         }
         GraphDocument other = (GraphDocument) obj;
-        if (gdcoll == null) {
-            if (other.gdcoll != null) {
-                return false;
-            }
-        } else if (!gdcoll.equals(other.gdcoll)) {
+        if (!Objects.equals(gdcoll, other.gdcoll)) {
             return false;
         }
-        if (id == null) {
-            if (other.id != null) {
-                return false;
-            }
-        } else if (!id.equals(other.id)) {
+        if (!Objects.equals(id, other.id)) {
             return false;
         }
         return true;
@@ -1438,6 +1431,24 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
             gdcoll.deleteSzenario(szenID, pid);
             break;
         }
+        case MODEL_ACTION_DUPLICATE_SUBMODEL: {
+            String sourceSzenID = null;
+            String targetSzenID = null;
+            String targetName = null;
+            if (argc == 0) {
+                GraphDocument selectedDoc = gdcoll.getSelectedDoc();
+                sourceSzenID = selectedDoc != null ? selectedDoc.id : null;
+                if (sourceSzenID == null) {
+                    break;
+                }
+            } else {
+                sourceSzenID = argv[0];
+                targetSzenID = argv[1];
+                targetName = argv[2];
+            }
+            gdcoll.duplicateSzenario(sourceSzenID, targetSzenID, targetName, pid);
+            break;
+        }
         case MODEL_ACTION_RENAME_SUBMODEL: {
             String szenID = null;
             String newName = null;
@@ -1687,7 +1698,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
         if (transStackInteger == null) {
             transStackInteger = 0;
         }
-        int transStackInt = transStackInteger.intValue();
+        int transStackInt = transStackInteger;
         transStackInt++;
         transStackTable.put(pid, transStackInt);
 
@@ -1740,7 +1751,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
         if (transStackInteger == null) {
             transStackInteger = 0;
         }
-        int transStackInt = transStackInteger.intValue();
+        int transStackInt = transStackInteger;
         transStackInt--;
         if (transStackInt > 0) {
             transStackInteger = transStackInt;
@@ -2668,8 +2679,8 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
     }
 
     /**
-     * moves all subelements in relation of the masterelement, which
-     * has been resized (and moved by the grid layout function)
+     * moves all subelements in relation of the masterelement, which has been
+     * resized (and moved by the grid layout function)
      *
      * @param nc
      * @param subordinatedContainers
@@ -2795,7 +2806,8 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
     }
 
     /**
-     * will set the original positions of the subelements and the position and dimension of the masterelement
+     * will set the original positions of the subelements and the position and
+     * dimension of the masterelement
      *
      * @param subordinatedContainers
      * @param masterContainer
