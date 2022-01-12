@@ -407,9 +407,12 @@ public class TemplateBrowserTree extends DynamicTree implements SearchResultView
     public Set<Class<? extends ModelElement>> getSearchableElementClasses() {
         PathTreeModel model = getModel();
         PathTreeDefinition pathTreeDefinition = model.getPathTreeDefinition();
-        boolean showAllElementaryMetaPaths = BooleanProperty.OPTION_ENABLE_EXPERT_MODE.is();
-        Set<Class<? extends ModelElement>> visibleElementTypes = pathTreeDefinition.getVisibleElementTypes(showAllElementaryMetaPaths);
-        return visibleElementTypes;
+        if (pathTreeDefinition != null) { //can be null if the last model is closed
+            boolean showAllElementaryMetaPaths = BooleanProperty.OPTION_ENABLE_EXPERT_MODE.is();
+            Set<Class<? extends ModelElement>> visibleElementTypes = pathTreeDefinition.getVisibleElementTypes(showAllElementaryMetaPaths);
+            return visibleElementTypes;
+        }
+        return null;
     }
 
     @Override
