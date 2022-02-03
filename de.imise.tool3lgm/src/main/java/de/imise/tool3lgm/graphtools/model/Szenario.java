@@ -246,9 +246,6 @@ public class Szenario extends LGMGraphDocument {
             for (ElementContainer ec : sourceLayer.getEdgeContainers()) {
                 duplicate.addContainerCopy(ec);
             }
-            for (ElementContainer ec : sourceLayer.getBendpointContainers()) {
-                duplicate.addContainerCopy(ec);
-            }
         }
         duplicate.adaptGraphViewParameter(graphViewParameter);
         duplicate.adaptDefaultElementsLayout(defaultElementsLayout);
