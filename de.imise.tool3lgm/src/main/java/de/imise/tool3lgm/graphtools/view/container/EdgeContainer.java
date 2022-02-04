@@ -15,6 +15,7 @@ import java.awt.geom.Line2D;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.imise.tool3lgm.graphtools.consistency.ModelCleaner;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Bendpoint;
 import de.imise.tool3lgm.graphtools.metamodel.elements.DoubleMeaningEdge;
@@ -392,8 +393,25 @@ public class EdgeContainer extends ElementContainer {
     /**
      * @param kp
      */
-    public void removeBendpoint(final Bendpoint kp) {
-        bendpoints.remove(kp.getContainer(doc));
+    public boolean removeBendpoint(final Bendpoint kp) {
+        return bendpoints.remove(kp.getContainer(doc));
+    }
+
+    /**
+     * Called by the {@link ModelCleaner} to make the model valid
+     */
+    public void removeInvalidBendpoints() {
+        for (int i = bendpoints.size() - 1; i >= 0; i--) {
+            BendpointContainer bpc = bendpoints.get(i);
+            if (bpc == null) {
+                bendpoints.remove(i);
+            } else {
+                Bendpoint bp = bpc.getBendpoint();
+                if (bp == null) {
+                    bendpoints.remove(i);
+                }
+            }
+        }
     }
 
     /**
