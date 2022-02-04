@@ -652,12 +652,12 @@ public class ToolContentHandlerV3_0 implements ContentHandler {
 
             } else if (qName.equals("expanded")) {
                 if (container != null) {
-                    container.setExpanded(Boolean.valueOf(value).booleanValue());
+                    container.setExpanded(Boolean.valueOf(value));
                 }
 
             } else if (qName.equals("visible")) {
                 if (container != null) {
-                    container.setVisible(Boolean.valueOf(value).booleanValue());
+                    container.setVisible(Boolean.valueOf(value));
                 }
             } else if (qName.equals("x")) {
                 if (layout == null) {
@@ -907,9 +907,8 @@ public class ToolContentHandlerV3_0 implements ContentHandler {
             } else if (qName.equals("userFieldFormat")) {
                 if (userFieldNumberFormat == null) {
                     throw new SAXException("Error while parsing definition of userFields: userFieldNumberFormat shouldn't not be null");
-                } else {
-                    userFieldDefinitions.add(userFieldNumberFormat);
                 }
+                userFieldDefinitions.add(userFieldNumberFormat);
                 userFieldNumberFormat = null;
 
             } else if (qName.equals("userFieldDef")) {

@@ -54,7 +54,6 @@ public class ToolXMLClipboardWriter extends ToolXMLWriter {
         LGMGraphDocument lgmDoc = (LGMGraphDocument) selectedDoc;
         SortedSelection sortedSelection = lgmDoc.getSortedSelection();
         CopyDependencyResolverResultSimple resolvedCopyDependencies = resolveCopyDependencies(sortedSelection);
-
         writeStartDocument();
         writeStartElement("tool3lgm_clipboard"); //<tool3lgm_clipboard>
         writeAttribute("time", String.valueOf(System.currentTimeMillis()));
@@ -62,13 +61,15 @@ public class ToolXMLClipboardWriter extends ToolXMLWriter {
         writeStartElement("objects"); //<objects>
         MetaModel metaModel = gdcoll.getMetaModel();
         for (ModelElement me : resolvedCopyDependencies.elements) {
-            Class<? extends ModelElement> elementClass = me.getClass();
-            if (metaModel.avoidDuplicates(elementClass) && !sortedSelection.contains(me) || !Static.isExpertMode() && metaModel.isPureTemplateElementClass(elementClass)) {
-                writeStartElement("avoidDuplicates"); //<avoidDuplicates>
-                writeModelElement(me);
-                writeEndElement(); //</avoidDuplicates>
-            } else {
-                writeModelElement(me);
+            if (!(me instanceof Edge)) { //edges will be written in the next for loop
+                Class<? extends ModelElement> elementClass = me.getClass();
+                if (metaModel.avoidDuplicates(elementClass) && !sortedSelection.contains(me) || !Static.isExpertMode() && metaModel.isPureTemplateElementClass(elementClass)) {
+                    writeStartElement("avoidDuplicates"); //<avoidDuplicates>
+                    writeModelElement(me);
+                    writeEndElement(); //</avoidDuplicates>
+                } else {
+                    writeModelElement(me);
+                }
             }
         }
         for (Edge edge : resolvedCopyDependencies.additionalEdges) {

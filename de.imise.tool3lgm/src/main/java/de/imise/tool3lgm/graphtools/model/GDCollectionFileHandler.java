@@ -254,29 +254,28 @@ public class GDCollectionFileHandler {
         try {
             randomAccessFile.seek(0);
             String line = randomAccessFile.readLine();
-            if (line != null) {
-                randomAccessFileInputStream = new StayOpenFileInputStream(randomAccessFile.getFD());
-                if (line.startsWith("<!--ziped Tool3lgmFile-->")) {
-                    readingSuccessful = loadZipFile(randomAccessFileInputStream);
-                    if (readingSuccessful) {
-                        isZipFile = true;
-                    }
-                } else if (line.startsWith("PK")) {
-                    randomAccessFileInputStream.getChannel().position(0);
-                    readingSuccessful = loadZipFile(randomAccessFileInputStream);
-                    if (readingSuccessful) {
-                        isZipFile = true;
-                    }
-                } else {
-                    randomAccessFileInputStream.getChannel().position(0);
-                    readingSuccessful = loadFromFileInputStream(randomAccessFileInputStream);
-                    if (readingSuccessful) {
-                        isZipFile = false;
-                    }
-                }
-            } else {
+            if (line == null) {
                 randomAccessFile.close();
                 throw new IOException("Could not read file...");
+            }
+            randomAccessFileInputStream = new StayOpenFileInputStream(randomAccessFile.getFD());
+            if (line.startsWith("<!--ziped Tool3lgmFile-->")) {
+                readingSuccessful = loadZipFile(randomAccessFileInputStream);
+                if (readingSuccessful) {
+                    isZipFile = true;
+                }
+            } else if (line.startsWith("PK")) {
+                randomAccessFileInputStream.getChannel().position(0);
+                readingSuccessful = loadZipFile(randomAccessFileInputStream);
+                if (readingSuccessful) {
+                    isZipFile = true;
+                }
+            } else {
+                randomAccessFileInputStream.getChannel().position(0);
+                readingSuccessful = loadFromFileInputStream(randomAccessFileInputStream);
+                if (readingSuccessful) {
+                    isZipFile = false;
+                }
             }
         } catch (Exception e) {
             if (file != null) {

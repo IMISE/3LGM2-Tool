@@ -664,10 +664,12 @@ public class LayerContainer extends ElementContainer implements Iterable<Element
                 bendpointContainers.add((BendpointContainer) comp);
             }
         } else if (comp instanceof EdgeContainer) {
+            EdgeContainer edgeC = (EdgeContainer) comp;
+            //            Sys.err(edgeC.getGraphDocument() + ": " + edgeC + " " + edgeC.getID());
             if (pos != -1) {
-                edgeContainers.add(pos, (EdgeContainer) comp);
+                edgeContainers.add(pos, edgeC);
             } else {
-                edgeContainers.add((EdgeContainer) comp);
+                edgeContainers.add(edgeC);
             }
         } else {
             NodeContainer nc = (NodeContainer) comp;
