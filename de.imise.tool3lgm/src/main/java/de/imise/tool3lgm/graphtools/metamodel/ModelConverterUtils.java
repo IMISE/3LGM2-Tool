@@ -85,8 +85,8 @@ public class ModelConverterUtils {
             Edge edge = pathStep.getEdge();
             Edge nextPathStepEdge = nextPathStep.getEdge();
             ModelElement slaveElementCandidate = pathStep.getEndElement();
-            boolean compositionSlaveOfPathStep = MetaModel.isCompositionSlave(edge, slaveElementCandidate);
-            boolean compositionSlaveOfNextPathStep = !compositionSlaveOfPathStep && MetaModel.isCompositionSlave(nextPathStepEdge, slaveElementCandidate);
+            boolean compositionSlaveOfPathStep = CoreMetaModel.isCompositionSlave(edge, slaveElementCandidate);
+            boolean compositionSlaveOfNextPathStep = !compositionSlaveOfPathStep && CoreMetaModel.isCompositionSlave(nextPathStepEdge, slaveElementCandidate);
             if (!(compositionSlaveOfPathStep || compositionSlaveOfNextPathStep)) {
                 continue;
             }

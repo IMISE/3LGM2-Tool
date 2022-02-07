@@ -447,7 +447,7 @@ public class UserFieldTable extends JTable implements ContentExchanger {
         }
 
         saveValues();
-        if (((AbstractTableModel) dataModel).setValuesAt(internalContent, leadingPoint.x, leadingPoint.y) == false) {
+        if (!((AbstractTableModel) dataModel).setValuesAt(internalContent, leadingPoint.x, leadingPoint.y)) {
             // Einfügen nicht erfolgreich
             showWarningMessage("userFieldTable_paste_warning");
             undo();

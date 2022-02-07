@@ -24,7 +24,7 @@ public class WeightReplaceTableLayout extends AbstractUserFieldTableLayout {
         IUserFieldTableCell[][] tableCells = null;
         // Falls das Model keine Daten enthält, werden headers nicht gesetzt
         if (table.hasUserFieldTableModel() && table.hasData()) {
-            if (table.isFormattingActive() == true) {
+            if (table.isFormattingActive()) {
                 tableCells = new IUserFieldTableCell[table.getRowCount()][table.getColumnCount()];
                 for (int row = 0; row < tableCells.length; row++) {
                     for (int col = 0; col < tableCells[0].length; col++) {

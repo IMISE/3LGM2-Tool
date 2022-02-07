@@ -110,15 +110,15 @@ public class DragNDropInitializer {
             @Override
             public void drop(final DropTargetDropEvent dtde) {
 
-                if (dndAC.isValid() == false) {
+                if (!dndAC.isValid()) {
                     return;
                 }
 
-                while (dndAC.isEmpty() == false) {
+                while (!dndAC.isEmpty()) {
 
                     DragNDropActionChain.DragNDropAction dndA = dndAC.getNextDragNDropAction();
 
-                    if (dndA.isValid() == false) {
+                    if (!dndA.isValid()) {
                         return;
                     }
 
@@ -130,7 +130,7 @@ public class DragNDropInitializer {
                     TreePath[] selectedPaths = dndSrcTree.getSelectionPaths();
 
                     // ActionEvent ausführen
-                    if (executeAction(action, dtde) == true) { // Ausführung erfolgreich
+                    if (executeAction(action, dtde)) { // Ausführung erfolgreich
                         dtde.dropComplete(true);
 
                         /*

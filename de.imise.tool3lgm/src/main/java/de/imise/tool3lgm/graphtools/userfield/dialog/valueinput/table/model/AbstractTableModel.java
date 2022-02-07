@@ -373,7 +373,7 @@ public abstract class AbstractTableModel extends DefaultTableModel {
      */
     public void dataChanged(final boolean b) {
         dataChanged = b;
-        if (b == true) {
+        if (b) {
             fireTableDataChanged();
         }
     }

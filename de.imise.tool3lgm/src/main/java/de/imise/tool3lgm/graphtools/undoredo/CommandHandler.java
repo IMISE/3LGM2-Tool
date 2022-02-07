@@ -79,13 +79,11 @@ public class CommandHandler {
                                 //raus aus der inneren for-Schleife für das Einzelwort
                                 break;
                                 //wenn hinter dem nächsten Leerzeichen noch etwas kommt
-                            } else {
-                                //beginnt dort ein neues Argument
-                                wordStart = w + 2;
-                                //i wird beim nächsten Schleifendurchlauf auf denselben Wert gesetzt und alles steht wie auf Anfang
-                                i = w + 1;
                             }
-                            //wenn das nächste Zeichen nach dem schließenden Hochkomma kein Leezeichen war (das ist eigentlich nicht korrekt, würde aber trotzdem gehen)
+                            //beginnt dort ein neues Argument
+                            wordStart = w + 2;
+                            //i wird beim nächsten Schleifendurchlauf auf denselben Wert gesetzt und alles steht wie auf Anfang
+                            i = w + 1;
                         } else {
                             //hier geht das nächste Wort los
                             wordStart = w + 1;

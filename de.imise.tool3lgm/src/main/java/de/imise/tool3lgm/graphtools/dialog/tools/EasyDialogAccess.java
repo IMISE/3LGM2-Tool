@@ -21,10 +21,12 @@ import de.imise.util.swing.dialog.FontChooser;
 public class EasyDialogAccess {
 
     /**
-     * Zeigt einen <code>FontChooser</code> an und gibt den gewählten Font zurück.
+     * Zeigt einen <code>FontChooser</code> an und gibt den gewählten Font
+     * zurück.
      *
      * @param parent Parent des <code>FontChooser</code>s
-     * @param initialFont Beim Anzeigen des <code>FontChooser</code>s zurerst ausgewählter Font
+     * @param initialFont Beim Anzeigen des <code>FontChooser</code>s zurerst
+     *            ausgewählter Font
      * @return
      */
     public static final Font getFontByChooser(final JDialog parent, final Font initialFont) {
@@ -33,10 +35,12 @@ public class EasyDialogAccess {
     }
 
     /**
-     * Zeigt einen <code>FontChooser</code> an und gibt den gewählten Font zurück.
+     * Zeigt einen <code>FontChooser</code> an und gibt den gewählten Font
+     * zurück.
      *
      * @param parent Parent des <code>FontChooser</code>s
-     * @param initialFont Beim Anzeigen des <code>FontChooser</code>s zurerst ausgewählter Font
+     * @param initialFont Beim Anzeigen des <code>FontChooser</code>s zurerst
+     *            ausgewählter Font
      * @return
      */
     public static final Font getFontByChooser(final JFrame parent, final Font initialFont) {

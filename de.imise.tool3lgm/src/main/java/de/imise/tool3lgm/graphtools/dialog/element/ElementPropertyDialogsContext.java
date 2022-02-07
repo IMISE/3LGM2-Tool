@@ -11,7 +11,7 @@ import javax.swing.JComponent;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.view.tooltip.ElementToolTipProvider;
-import de.imise.tool3lgm.userproperties.UserProperties;
+import de.imise.tool3lgm.userproperties.AbstractUserProperties;
 import de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty;
 import de.imise.util.ToolTipProvider;
 
@@ -41,7 +41,7 @@ public class ElementPropertyDialogsContext {
         PropertyChangeListener optionsChangeListener = new PropertyChangeListener() {
             @Override
             public void propertyChange(final PropertyChangeEvent event) {
-                if (UserProperties.isPropertyChange(BooleanProperty.OPTION_MARK_INCONSISTENT_ELEMENTS, event)) {
+                if (AbstractUserProperties.isPropertyChange(BooleanProperty.OPTION_MARK_INCONSISTENT_ELEMENTS, event)) {
                     for (ElementPropertyDialog dialog : dialogs) {
                         if (dialog instanceof ErrorDecoratedElementPropertyDialog) {
                             ErrorDecoratedElementPropertyDialog errorDecoratedDialog = (ErrorDecoratedElementPropertyDialog) dialog;
@@ -51,7 +51,7 @@ public class ElementPropertyDialogsContext {
                 }
             }
         };
-        UserProperties.addPropertyChangeListener(optionsChangeListener);
+        AbstractUserProperties.addPropertyChangeListener(optionsChangeListener);
         toolTipProvider = new ElementToolTipProvider();
     }
 

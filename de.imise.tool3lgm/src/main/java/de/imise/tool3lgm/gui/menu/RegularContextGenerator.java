@@ -11,8 +11,8 @@ import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_ADOPT_S
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_ADOPT_SAME_FONT;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_ADOPT_SAME_TRANSPARENCY;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_COMMAND_LINE;
-import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_CREATE_SUBORDINATED;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_CREATE_NODE;
+import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_CREATE_SUBORDINATED;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_DELETE_FROM_MODEL;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_DELETE_FROM_SUBMODEL;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_INTERNAL_CHECK_CONSISTENCY;

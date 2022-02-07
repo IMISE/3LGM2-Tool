@@ -502,7 +502,7 @@ public class Tool3lgm {
 
         if (answer == JOptionPane.YES_OPTION) {
             boolean retVal = fileSave(false);
-            if (retVal == false || gdcoll.isChanged()) {
+            if (!retVal || gdcoll.isChanged()) {
                 return false;
             }
             //} else if (answer == JOptionPane.NO_OPTION) {

@@ -161,7 +161,7 @@ public class UserFieldEditorDialog extends AbstractTabbedPropertyDialog {
 
                 // Falls in einem Table Änderungen aufgetreten sind, wird eine
                 // Datenverlust-Verwarnung angezeigt
-                if (dataChanged == true) {
+                if (dataChanged) {
                     if (JOptionPane.YES_OPTION != JOptionPane.showConfirmDialog(finalDialog, getResString("userFieldDialog_warning_message"), getResString("userFieldDialog_warning"), JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE)) {
                         finalDialog.shouldDispose = false;
                         return;
@@ -313,7 +313,7 @@ public class UserFieldEditorDialog extends AbstractTabbedPropertyDialog {
                 mainDoc.finish_transaction(finalDialog.getTransactionID());
 
                 // Falls in einem Table Änderungen aufgetreten sind, wird das dem GraphDocument mitgeteilt
-                if (dataChanged == true) {
+                if (dataChanged) {
                     mainDoc.distributeEvent(DATA_CHANGED, getTransactionID());
                 }
 
@@ -476,9 +476,9 @@ public class UserFieldEditorDialog extends AbstractTabbedPropertyDialog {
     public void dispose() {
         // Änderungen übernommen --> Schließe einfach
         // Sonst zeige Datenverlust-Warnung und mache u.U. Änderungen rückgängig
-        if (okButtonPressed != true) {
+        if (!okButtonPressed) {
             cancelAction.actionPerformed(null);
-            if (shouldDispose == false) {
+            if (!shouldDispose) {
                 shouldDispose = true;
                 return;
             }

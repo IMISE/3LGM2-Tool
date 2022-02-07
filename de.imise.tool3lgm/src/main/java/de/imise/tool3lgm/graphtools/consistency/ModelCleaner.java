@@ -16,6 +16,7 @@ import java.util.Set;
 
 import com.google.common.collect.Lists;
 
+import de.imise.tool3lgm.graphtools.metamodel.CoreMetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Bendpoint;
@@ -270,7 +271,7 @@ public class ModelCleaner {
             // Kanten löschen, die nicht mehrfach vorkommen dürfen, aber mehrfach vorkommen
             // (alle bis auf eine löschen)
             Class<? extends Edge> edgeClass = edge.getClass();
-            if (MetaModel.isMultipleEdgeClass(edgeClass)) {
+            if (CoreMetaModel.isMultipleEdgeClass(edgeClass)) {
                 continue;
             }
             ModelElement start = edge.getStart();

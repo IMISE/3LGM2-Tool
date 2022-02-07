@@ -12,8 +12,8 @@ import de.imise.tool3lgm.Tool3lgmConstants;
 public class EasyComponents {
 
     /**
-     * Funktion, die einen Button anlegt, dessen ActionCommand der übergebene resKey ist und den übergebenen {@link ActionListener}
-     * anhängt.
+     * Funktion, die einen Button anlegt, dessen ActionCommand der übergebene
+     * resKey ist und den übergebenen {@link ActionListener} anhängt.
      *
      * @param actionListener
      * @param resKey

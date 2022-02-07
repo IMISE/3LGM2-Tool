@@ -154,9 +154,9 @@ public class MatrixViewTableModel implements Iterable<MatrixViewTableCell> {
     }
 
     /**
-     * Liefert die {@link MatrixViewTableCell} an mit den Koordinaten col und row.
-     * ACHTUNG: Da diese Funktion über den Iterator aller Cells läuft, ist sie
-     * bei vielen Zellen sehr 'teuer'.
+     * Liefert die {@link MatrixViewTableCell} an mit den Koordinaten col und
+     * row. ACHTUNG: Da diese Funktion über den Iterator aller Cells läuft, ist
+     * sie bei vielen Zellen sehr 'teuer'.
      *
      * @param col
      * @param row

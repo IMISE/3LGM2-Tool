@@ -31,6 +31,7 @@ import de.imise.tool3lgm.graphtools.consistency.error.type.MissingPathError;
 import de.imise.tool3lgm.graphtools.dialog.action.LGMAction;
 import de.imise.tool3lgm.graphtools.dialog.action.LGMMouseListener;
 import de.imise.tool3lgm.graphtools.dialog.element.AbstractElementPropertyDialog;
+import de.imise.tool3lgm.graphtools.metamodel.CoreMetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction;
@@ -591,9 +592,9 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
                 Class<? extends ModelElement> elementClass = availableMe.getClass();
                 boolean remove = false;
                 if (elementaryMetaPath.getDirection() == FORWARD) {
-                    remove = !MetaModel.isEndClass(edgeClass, elementClass);
+                    remove = !CoreMetaModel.isEndClass(edgeClass, elementClass);
                 } else { // if (elementaryMetaPath.getDirection() == BACKWARD) {
-                    remove = !MetaModel.isStartClass(edgeClass, elementClass);
+                    remove = !CoreMetaModel.isStartClass(edgeClass, elementClass);
                 }
                 if (remove) {
                     available.remove(i);

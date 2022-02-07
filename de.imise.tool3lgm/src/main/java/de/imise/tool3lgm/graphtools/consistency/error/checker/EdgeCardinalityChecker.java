@@ -11,6 +11,7 @@ import de.imise.tool3lgm.graphtools.consistency.error.type.AbstractCardinalityEr
 import de.imise.tool3lgm.graphtools.consistency.error.type.AbstractConsistencyError;
 import de.imise.tool3lgm.graphtools.consistency.error.type.MaxCardinalityError;
 import de.imise.tool3lgm.graphtools.consistency.error.type.MinCardinalityError;
+import de.imise.tool3lgm.graphtools.metamodel.CoreMetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.EdgeCardinality;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
@@ -105,8 +106,8 @@ public class EdgeCardinalityChecker implements ConsistencyErrorChecker {
             int maxStartCard = forwardCardinality.max();
             int minEndCard = backwardCardinality.min();
             int maxEndCard = backwardCardinality.max();
-            boolean meHasStartClass = MetaModel.isStartClass(edgeClass, meClass);
-            boolean meHasEndClass = MetaModel.isEndClass(edgeClass, meClass);
+            boolean meHasStartClass = CoreMetaModel.isStartClass(edgeClass, meClass);
+            boolean meHasEndClass = CoreMetaModel.isEndClass(edgeClass, meClass);
 
             ElementaryMetaPath forwardElementaryMetaPath = elementaryMetaPathHandler.getForwardMetaPath(edgeClass);
             // Bei Teil-Von-Beziehungen oder Beziehungen bei denen meClass

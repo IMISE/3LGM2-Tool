@@ -29,6 +29,7 @@ import de.imise.tool3lgm.graphtools.dialog.element.panel.PathConnectionLeafPanel
 import de.imise.tool3lgm.graphtools.dialog.element.panel.PathConnectionPanel;
 import de.imise.tool3lgm.graphtools.dialog.element.panel.StructurePanel;
 import de.imise.tool3lgm.graphtools.dialog.element.panel.TabbedPanel;
+import de.imise.tool3lgm.graphtools.metamodel.CoreMetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.CompositionEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.DoubleMeaningEdge;
@@ -544,10 +545,10 @@ public abstract class ElementPropertyDialog extends AbstractElementPropertyDialo
         AbstractPathConnectionPanel panel2Add = null;
         if (edgeClasses.length == 1) {
             Class<? extends Edge> edgeClass = edgeClasses[0];
-            if (MetaModel.isComposition(edgeClass)) {
+            if (CoreMetaModel.isComposition(edgeClass)) {
                 Class<? extends CompositionEdge> compositionEdgeClass = edgeClass.asSubclass(CompositionEdge.class);
                 panel2Add = new MutipleCompositionPanel(this, titleLabelOption, westLabelOption, searchElementClass, compositionEdgeClass);
-            } else if (MetaModel.isDoubleMeaningEdge(edgeClass)) {
+            } else if (CoreMetaModel.isDoubleMeaningEdge(edgeClass)) {
                 Class<? extends DoubleMeaningEdge> doubleMeaningEdgeClass = edgeClass.asSubclass(DoubleMeaningEdge.class);
                 panel2Add = new DoubleMeaningEdgePanel(this, titleLabelOption, searchElementClass, doubleMeaningEdgeClass);
                 //Kanten die nicht doppeltdeutig sind, aber dieselben Elementarten verbinden und in beide Richtungen unterschiedlich heißen, müssen auch in beiden Richtungen angeboten werden

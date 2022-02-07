@@ -132,7 +132,7 @@ public class AnalysesRepositoryFrameActions {
 
         @Override
         public void actionPerformed(final ActionEvent e) {
-            if (AnalysesRepositoryFrame.analysesChanged == true) {
+            if (AnalysesRepositoryFrame.analysesChanged) {
                 int answer = JOptionPane.showConfirmDialog(AnalysesRepositoryFrame.dialog, getResString("ana_load_standard_repository_question"), getResString("ana_load_standard_repository"), JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
                 if (answer == JOptionPane.YES_OPTION) {
                     AnalysesRepositoryFrame.refreshAnalyses();

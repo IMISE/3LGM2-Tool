@@ -16,8 +16,8 @@ import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.Szenario;
 
 /**
- * @author Thomas Rudert Tabellenmodell zum auflisten der Szenarios (mit Titel und Beschreibung)
- *         eines GDCollection und auswahl einzelner Szenarios
+ * @author Thomas Rudert Tabellenmodell zum auflisten der Szenarios (mit Titel
+ *         und Beschreibung) eines GDCollection und auswahl einzelner Szenarios
  */
 public class SzenarioTableModel extends AbstractTableModel {
 
