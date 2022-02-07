@@ -4,9 +4,9 @@ import static com.google.common.base.Strings.isNullOrEmpty;
 import static de.imise.tool3lgm.Static.getMainFrame;
 import static de.imise.tool3lgm.Tool3lgmConstants.isExtension;
 import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.DOMAIN_LAYER;
-import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.LAYERS;
 import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.MAX_LAYER_INDEX;
 import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.MIN_LAYER_INDEX;
+import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.VISIBLE_LAYERS;
 import static de.imise.tool3lgm.graphtools.metamodel.elements.DoubleMeaningEdge.ConnectionState.BACKWARD;
 import static de.imise.tool3lgm.graphtools.metamodel.elements.DoubleMeaningEdge.ConnectionState.DOUBLE;
 import static de.imise.tool3lgm.graphtools.metamodel.elements.DoubleMeaningEdge.ConnectionState.FORWARD;
@@ -122,6 +122,7 @@ import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.graphtools.view.container.InterLayerConnectedNodeContainer;
 import de.imise.tool3lgm.graphtools.view.container.LayerContainer;
 import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
+import de.imise.tool3lgm.graphtools.view.graph.DefaultElementsLayoutDefinition;
 import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout;
 import de.imise.tool3lgm.graphtools.view.graph.GraphViewParameter;
 import de.imise.tool3lgm.log.Log;
@@ -639,17 +640,29 @@ public class GDCollection extends UserFieldTarget implements MetaModelSpecific {
         removeContainerFromSubmodel(elementsToDelete, pid);
         szenarios.remove(szen);
         activeGraphDocumentsList.remove(szen);
-        for (int layerIndex : LAYERS) {
+        for (int layerIndex : VISIBLE_LAYERS) {
             LayerContainer lc = szen.layer[layerIndex];
             mainDoc.addUndo(pid, MODEL_ACTION_SET_LAYER_COLOR, szenID, layerIndex, lc.getColor().getRGB());
             mainDoc.addUndo(pid, MODEL_ACTION_SET_LAYER_ALPHA, szenID, layerIndex, lc.getAlpha());
             mainDoc.addUndo(pid, MODEL_ACTION_SET_LAYER_SIZE_FACTOR, szenID, szen.getPageSizeFactor());
         }
+        addUndoDefaultElementLayout(szen, pid);
         mainDoc.addUndo(pid, MODEL_ACTION_CREATE_SUBMODEL, szen.getName(), szen.getDescription(), szenID);
         mainDoc.addRedo(pid, MODEL_ACTION_DELETE_SUBMODEL, szenID);
         mainDoc.finish_transaction(pid);
         setChanged(true);
         distribute(SZENARIO_REMOVED, null, szen, pid);
+    }
+
+    /**
+     * @param szen
+     */
+    private void addUndoDefaultElementLayout(GraphDocument szen, int pid) {
+        DefaultElementsLayoutDefinition defaultElementsLayout = szen.getDefaultElementsLayout();
+        for (Class<? extends ModelElement> elementClass : defaultElementsLayout.getElementClassesWithStandardLayout()) {
+            GraphElementLayout standardElementLayout = defaultElementsLayout.getStandardElementLayout(elementClass);
+            mainDoc.addUndo(pid, MODEL_ACTION_SET_ELEMENT_COLOR, szen, elementClass, standardElementLayout.bg_color);
+        }
     }
 
     /**

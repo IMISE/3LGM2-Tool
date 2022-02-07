@@ -2153,17 +2153,23 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
 
     /**
      * @param docID
-     * @param elementID
+     * @param elementClassOrID
      * @param color
      * @param pid
      */
-    private final void changeColor(final String docID, final String elementID, final Color color, final int pid) {
+    private final void changeColor(final String docID, final String elementClassOrID, final Color color, final int pid) {
         GraphDocument doc = gdcoll.getGraphDocumentCoded(docID);
         if (doc == null) {
             return;
         }
-        ElementContainer ec = doc.findContainerCoded(elementID);
-        changeColor(ec, color, pid);
+        Class<? extends ModelElement> elementClass = metaModel.getClassForName(elementClassOrID);
+        if (elementClass != null) {
+            GraphElementLayout standardElementLayout = doc.defaultElementsLayout.getStandardElementLayout(elementClass);
+            standardElementLayout.bg_color = color;
+        } else {
+            ElementContainer ec = doc.findContainerCoded(elementClassOrID);
+            changeColor(ec, color, pid);
+        }
     }
 
     /**

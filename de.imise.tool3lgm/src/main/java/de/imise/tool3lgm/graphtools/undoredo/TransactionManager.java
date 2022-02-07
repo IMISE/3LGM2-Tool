@@ -616,7 +616,8 @@ public class TransactionManager {
         for (int i = 0; i < TRANSQ_SIZE; i++) {
             if (trans_q[i] == null) {
                 return false;
-            } else if (trans_q[i].isOpenStandardPidTransaction() || trans_q[i].isOpenDialogTransaction()) {
+            }
+            if (trans_q[i].isOpenStandardPidTransaction() || trans_q[i].isOpenDialogTransaction()) {
                 return true;
             }
         }
