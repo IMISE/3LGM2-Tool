@@ -24,7 +24,6 @@ import com.google.common.collect.ImmutableList;
 
 import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
-import de.imise.tool3lgm.graphtools.model.GDCommands;
 import de.imise.tool3lgm.userproperties.UserProperties;
 import de.imise.util.ApplicationManager;
 import de.imise.util.GitVersionInfoHandler;
@@ -62,18 +61,6 @@ public abstract class Tool3lgmConstants {
         CSV,
         JAR
     }
-
-    /**
-     * Wenn <code>true</code>, liefern die {@link GDCommands} in ihrer
-     * toString()-Methode den Namen des Kommandos zurück. Wenn
-     * <code>false</code>, dann liefert die toString()-Methode die Nummer des
-     * Kommandos in der values()-Liste der {@link GDCommands} als String. Man
-     * braucht die lesbaren Namen im Grunde nur zum Debuggen. Im Regelbetrieb
-     * sollte der Parameter auf <code>false</code> stehen, damit die Kommandos,
-     * von denen potenziell sehr viele im Undo-Redo-Stack geloggt werden, nicht
-     * so riesig werden.
-     */
-    public static final boolean LOG_READABLE_UNDO_REDO_COMMANDS = false;
 
     /** Path to the installation directory of the application as file */
     public static final File APPLICATION_DIR = ApplicationManager.getApplicationDir("lib");

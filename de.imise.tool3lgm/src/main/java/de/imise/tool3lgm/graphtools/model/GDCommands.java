@@ -1,6 +1,7 @@
 package de.imise.tool3lgm.graphtools.model;
 
-import de.imise.tool3lgm.Tool3lgmConstants;
+import static de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty.TRANSIENT_OPTION_LOG_READABLE_UNOD_REDO_COMMANDS;
+
 import de.imise.tool3lgm.event.action.GraphDocumentAction;
 import de.imise.tool3lgm.event.action.GraphFrameAction;
 import de.imise.tool3lgm.event.action.GraphMultipleSelectedRealNodeOrBendpointAction;
@@ -160,7 +161,7 @@ public enum GDCommands implements ActionSource {
     @Override
     public String toString() {
         //wenn lesbare Undo-Kommandos ausgegeben werden sollen
-        if (Tool3lgmConstants.LOG_READABLE_UNDO_REDO_COMMANDS) {
+        if (TRANSIENT_OPTION_LOG_READABLE_UNOD_REDO_COMMANDS.is()) {
             //den normalen Kommando-String zurück geben
             return super.toString();
         }

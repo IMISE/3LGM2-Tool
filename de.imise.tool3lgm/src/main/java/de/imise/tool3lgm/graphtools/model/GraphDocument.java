@@ -88,7 +88,6 @@ import com.google.common.collect.ImmutableList;
 
 import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.Tool3lgm;
-import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.Tool3lgmModelType.ModelCategory;
 import de.imise.tool3lgm.event.action.UserPropertyBooleanChangeAction;
 import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
@@ -1779,7 +1778,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
      * @return
      */
     public boolean isVerificationMode() {
-        return optionsSupport.isOptionTrue(GDCommands.MODEL_OPTION_GDOC_VERIFICATION_MODE) || Tool3lgmConstants.LOG_READABLE_UNDO_REDO_COMMANDS;
+        return optionsSupport.isOptionTrue(GDCommands.MODEL_OPTION_GDOC_VERIFICATION_MODE);
     }
 
     // --- Transaktions-Verwaltung --- Ende ---

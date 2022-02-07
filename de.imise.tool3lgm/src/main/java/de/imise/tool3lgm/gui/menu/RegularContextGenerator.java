@@ -240,6 +240,7 @@ public class RegularContextGenerator extends ElementSelectionContextGenerator im
         JMenuItem interactive = getItem(MODEL_OPTION_GDCOLL_AUTOMATIC_MODE);
         JMenuItem debugGraph = getItem(BooleanProperty.TRANSIENT_OPTION_DEBUG_GRAPH);
         JMenuItem expertMode = getItem(BooleanProperty.OPTION_ENABLE_EXPERT_MODE);
+        JMenuItem logUndoRedoReadable = getItem(BooleanProperty.TRANSIENT_OPTION_LOG_READABLE_UNOD_REDO_COMMANDS);
 
         command_line = getItem(MODEL_ACTION_COMMAND_LINE);
         queue = getItem(MODEL_ACTION_PRINT_QUEUE);
@@ -248,6 +249,7 @@ public class RegularContextGenerator extends ElementSelectionContextGenerator im
         internals = new JMenu(getResString("intern"));
         internals.add(verify);
         internals.add(debugGraph);
+        internals.add(logUndoRedoReadable);
         internals.add(interactive);
         internals.add(expertMode);
         internals.addSeparator();
@@ -1319,7 +1321,8 @@ public class RegularContextGenerator extends ElementSelectionContextGenerator im
                     return;
                 }
                 return;
-            } else if (ec instanceof EdgeContainer) {
+            }
+            if (ec instanceof EdgeContainer) {
                 // nichts selektiert
                 if (!doc.isSelection()) {
                     if (left_button && !controlled) {

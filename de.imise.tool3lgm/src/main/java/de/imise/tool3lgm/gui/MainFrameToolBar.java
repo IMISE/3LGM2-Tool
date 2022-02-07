@@ -1,6 +1,7 @@
 package de.imise.tool3lgm.gui;
 
 import static de.imise.tool3lgm.Tool3lgmConstants.getToolTipResString;
+import static de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty.TRANSIENT_OPTION_LOG_READABLE_UNOD_REDO_COMMANDS;
 
 import java.awt.Component;
 import java.awt.event.MouseEvent;
@@ -250,8 +251,8 @@ public class MainFrameToolBar extends UnfloatableToolBar implements MouseListene
     private void updateUndoRedoToolTips() {
         GraphDocument selectedDoc = Static.getSelectedDoc();
         //die ToolTips auf den Undo-Redo-Buttons sollen den Queue anzeigen, wenn das aktuelle doc auf verfificationMode gestellt wurde oder der globale Code-Schalter an ist
-        boolean showQueueAsToolTip = selectedDoc != null && selectedDoc.getCollection().getTman() != null && selectedDoc.isVerificationMode();
-        if (showQueueAsToolTip) {
+
+        if (TRANSIENT_OPTION_LOG_READABLE_UNOD_REDO_COMMANDS.is()) {
             TransactionManager tman = selectedDoc.getCollection().getTman();
             String queue = tman.getQueue(10);
             queue = queue.replaceAll("\n", "<br>");
