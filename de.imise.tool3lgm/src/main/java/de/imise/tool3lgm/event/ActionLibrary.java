@@ -166,6 +166,20 @@ public class ActionLibrary {
             }
         };
 
+        /**
+         * Closes a tab in the main view (should be a submodel graph view or a
+         * matrix view.
+         */
+        public static final Action ACTION_CLOSE_ACTIVE_VIEW = new GraphDocumentAction(ActionIdentifier.ACTION_CLOSE_ACTIVE_VIEW) {
+            @Override
+            protected void actionPerformed() {
+                MainFrame mainFrame = Static.getMainFrame();
+                if (mainFrame != null) {
+                    mainFrame.closeActiveViewComponent();
+                }
+            }
+        };
+
         /** Zeigt die Beschreibung des Tools an */
         public static final Action ACTION_SHOW_MODEL_DESCRIPTION_FRAME = new GraphDocumentAction(ActionIdentifier.ACTION_SHOW_MODEL_DESCRIPTION_FRAME, PPP) {
             @Override

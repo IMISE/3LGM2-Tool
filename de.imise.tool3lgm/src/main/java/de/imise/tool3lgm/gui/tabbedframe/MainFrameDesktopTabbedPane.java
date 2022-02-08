@@ -218,4 +218,10 @@ public class MainFrameDesktopTabbedPane extends JTabbedPaneWithCloseIconsRight i
         }
     }
 
+    @Override
+    public void closeSelected() {
+        Component selectedComponent = getSelectedComponent();
+        remove(selectedComponent);
+    }
+
 }

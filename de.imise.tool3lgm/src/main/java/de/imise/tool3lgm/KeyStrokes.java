@@ -27,6 +27,7 @@ public class KeyStrokes {
         put(FileActions.ACTION_NEW_MODEL, KeyEvent.VK_N, MENU_SHORTCUT_KEY_MASK);
         put(FileActions.ACTION_OPEN_MODEL, KeyEvent.VK_O, MENU_SHORTCUT_KEY_MASK);
         put(FileActions.ACTION_SAVE_MODEL, KeyEvent.VK_S, MENU_SHORTCUT_KEY_MASK);
+        put(FileActions.ACTION_CLOSE_ACTIVE_VIEW, KeyEvent.VK_W, MENU_SHORTCUT_KEY_MASK);
         put(GDCommands.MODEL_ACTION_DELETE, KeyEvent.VK_DELETE, 0);
         put(EditActions.ACTION_REDO, KeyEvent.VK_Y, MENU_SHORTCUT_KEY_MASK);
         put(EditActions.ACTION_UNDO, KeyEvent.VK_Z, MENU_SHORTCUT_KEY_MASK);

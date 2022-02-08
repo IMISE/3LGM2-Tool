@@ -60,6 +60,9 @@ public interface ViewPaneFrameComponentParent {
      */
     public void setSelected(ViewPaneFrameComponent viewPaneFrameComponent);
 
+    /** Closes the currently active view */
+    public void closeSelected();
+
     /**
      * @param doc
      * @return

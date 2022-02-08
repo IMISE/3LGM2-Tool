@@ -639,6 +639,13 @@ public final class MainFrameDesktopPane extends JPanel implements PropertyChange
         checkViewComponentsVisibility();
     }
 
+    /**
+     *
+     */
+    public void closeActiveFrame() {
+        desktop.closeSelected();
+    }
+
     ////////////////////////////////////
     // ViewPaneFrameComponentListener //
     ////////////////////////////////////

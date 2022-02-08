@@ -110,6 +110,14 @@ public class MainFrameDesktopInternalFramesPane extends JDesktopPane implements 
         internalFrame.setSelected(true);
     }
 
+    @Override
+    public void closeSelected() {
+        JInternalFrame selectedFrame = getSelectedFrame();
+        if (selectedFrame != null) {
+            selectedFrame.dispose();
+        }
+    }
+
     //////////////////////////////////////////////
     // resize desktop -> resize internal frames //
     //////////////////////////////////////////////

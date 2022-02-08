@@ -79,6 +79,13 @@ public class MainFrame extends JFrame implements Tool3lgmChangeListener, Compone
         return contentPane;
     }
 
+    /**
+     *
+     */
+    public void closeActiveViewComponent() {
+        contentPane.closeActiveFrame();
+    }
+
     @Override
     public void setVisible(final boolean b) {
         if (b) {
