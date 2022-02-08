@@ -735,7 +735,8 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
             }
 
             return true;
-        } else if (fieldName.equals("description")) {
+        }
+        if (fieldName.equals("description")) {
             if (value == null) {
                 setDescription("");
             } else {
@@ -2124,7 +2125,8 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
                 }
                 if (edgeTypesList.isEmpty()) {
                     return connectedElements; //this is ok! see abstract class EtntEtdtKombination#getName() and maybe for other backward compatibility
-                } else if (edgeTypesList.size() == 1) {
+                }
+                if (edgeTypesList.size() == 1) {
                     edgeClass = edgeTypesList.get(0);
                 } else {
                     edgeClass = ReflectionUtils.getCommonSuperClassOfClasses(edgeTypesList).asSubclass(Edge.class);

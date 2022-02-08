@@ -235,7 +235,7 @@ public class Szenario extends LGMGraphDocument {
      * @param name
      * @return
      */
-    public Szenario duplicate(String duplicateID) {
+    public Szenario duplicate(String duplicateID, String name) {
         Szenario duplicate = new Szenario(gdcoll, name, description, duplicateID);
         for (LayerContainer sourceLayer : layer) {
             for (ElementContainer ec : sourceLayer.getGraphNodeContainers()) {

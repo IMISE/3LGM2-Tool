@@ -688,8 +688,7 @@ public class GDCollection extends UserFieldTarget implements MetaModelSpecific {
             return null;
         }
         int activeLayer = getActiveLayer();
-        Szenario duplicate = sourceSzen.duplicate(targetSzenID);
-        duplicate.setName(title);
+        Szenario duplicate = sourceSzen.duplicate(targetSzenID, title);
         szenarios.add(duplicate);
         activeGraphDocumentsList.add(duplicate);
         setChanged(true);
