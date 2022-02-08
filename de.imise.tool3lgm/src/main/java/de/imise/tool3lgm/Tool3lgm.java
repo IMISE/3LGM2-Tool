@@ -497,7 +497,9 @@ public class Tool3lgm {
                 getResString("yes"), getResString("no"), getResString("cancel")
         };
         File file = gdcoll.getFile();
-        int answer = JOptionPane.showOptionDialog(getMainFrame(), getResString("speicherfrage") + "\n" + (file == null ? gdcoll.getName() : file.getName()), getResString("tool3lgm"), JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null,
+        int answer = JOptionPane.showOptionDialog(getMainFrame(), getResString("quest_close_model") + "\n" + (file == null ? gdcoll.getName() : file.getName()), getResString("title_close_model"), JOptionPane.YES_NO_CANCEL_OPTION,
+                JOptionPane.QUESTION_MESSAGE,
+                null,
                 buttons, null);
 
         if (answer == JOptionPane.YES_OPTION) {

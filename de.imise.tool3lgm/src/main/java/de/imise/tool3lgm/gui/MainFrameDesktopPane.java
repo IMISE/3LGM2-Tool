@@ -642,8 +642,14 @@ public final class MainFrameDesktopPane extends JPanel implements PropertyChange
     /**
      *
      */
-    public void closeActiveFrame() {
-        desktop.closeSelected();
+    public void closeActiveView() {
+        GraphDocument doc = desktop.closeActiveView(); //get the GraphDocument of the closed view
+        if (doc != null) {
+            GDCollection gdcoll = doc.getCollection();
+            if (!desktop.containsViews(gdcoll)) {
+                Static.getTool().fileClose(doc);
+            }
+        }
     }
 
     ////////////////////////////////////
@@ -671,7 +677,7 @@ public final class MainFrameDesktopPane extends JPanel implements PropertyChange
     public void viewClosed(final ViewPaneFrameComponent source) {
         //Sys.err1(source);
         LastAndNextViewManager.removeWindow(source);
-        if (!desktop.hasViewPaneFrameComponents()) {
+        if (!desktop.containsViews()) {
             activeFrame = null;
         }
         workarea.revalidate();

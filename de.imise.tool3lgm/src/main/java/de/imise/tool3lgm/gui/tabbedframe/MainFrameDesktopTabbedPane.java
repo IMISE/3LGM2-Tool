@@ -219,9 +219,15 @@ public class MainFrameDesktopTabbedPane extends JTabbedPaneWithCloseIconsRight i
     }
 
     @Override
-    public void closeSelected() {
+    public GraphDocument closeActiveView() {
         Component selectedComponent = getSelectedComponent();
-        remove(selectedComponent);
+        if (selectedComponent != null) {
+            remove(selectedComponent);
+            if (selectedComponent instanceof ViewPaneFrameComponent) {
+                return ((ViewPaneFrameComponent) selectedComponent).getGraphDocument();
+            }
+        }
+        return null;
     }
 
 }

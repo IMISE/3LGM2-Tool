@@ -111,11 +111,15 @@ public class MainFrameDesktopInternalFramesPane extends JDesktopPane implements 
     }
 
     @Override
-    public void closeSelected() {
+    public GraphDocument closeActiveView() {
         JInternalFrame selectedFrame = getSelectedFrame();
         if (selectedFrame != null) {
             selectedFrame.dispose();
+            if (selectedFrame instanceof ViewPaneFrameComponent) {
+                return ((ViewPaneFrameComponent) selectedFrame).getGraphDocument();
+            }
         }
+        return null;
     }
 
     //////////////////////////////////////////////

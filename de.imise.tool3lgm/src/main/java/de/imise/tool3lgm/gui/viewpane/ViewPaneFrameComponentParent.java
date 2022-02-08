@@ -4,6 +4,7 @@ import java.awt.Component;
 import java.awt.Container;
 import java.util.List;
 
+import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.gui.viewpane.graph.GraphViewPane;
 import de.imise.tool3lgm.gui.viewpane.graph.GraphViewPaneFrameComponent;
@@ -60,8 +61,13 @@ public interface ViewPaneFrameComponentParent {
      */
     public void setSelected(ViewPaneFrameComponent viewPaneFrameComponent);
 
-    /** Closes the currently active view */
-    public void closeSelected();
+    /**
+     * Closes the currently active view
+     *
+     * @return the GraphDocument that was presented in the closed view or
+     *         <code>null</code> if it was not a model view.
+     */
+    public GraphDocument closeActiveView();
 
     /**
      * @param doc
@@ -83,9 +89,23 @@ public interface ViewPaneFrameComponentParent {
     /**
      * @return
      */
-    public default boolean hasViewPaneFrameComponents() {
+    public default boolean containsViews() {
         List<ViewPaneFrameComponent> children = getAllViewPaneFrameComponents();
         return !children.isEmpty();
+    }
+
+    /**
+     * @param gdcoll
+     * @return
+     */
+    public default boolean containsViews(GDCollection gdcoll) {
+        List<ViewPaneFrameComponent> children = getAllViewPaneFrameComponents();
+        for (ViewPaneFrameComponent child : children) {
+            if (gdcoll == child.getCollection()) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**

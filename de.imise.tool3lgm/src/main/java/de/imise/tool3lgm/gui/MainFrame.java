@@ -83,7 +83,7 @@ public class MainFrame extends JFrame implements Tool3lgmChangeListener, Compone
      *
      */
     public void closeActiveViewComponent() {
-        contentPane.closeActiveFrame();
+        contentPane.closeActiveView();
     }
 
     @Override
