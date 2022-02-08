@@ -513,6 +513,9 @@ public class Tool3lgm {
         return true;
     }
 
+    /**
+     * @return
+     */
     public boolean fileClose() {
         return fileClose(getSelectedDoc());
     }
