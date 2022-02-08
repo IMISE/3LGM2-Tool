@@ -497,7 +497,7 @@ public class NodeContainer extends ElementContainer implements AlphabeticalSortT
      * @return
      */
     public boolean hideText() {
-        return layout.width < 35 && layout.height < 30;
+        return layout != null && layout.width < 35 && layout.height < 30;
     }
 
     @Override

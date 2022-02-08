@@ -24,15 +24,29 @@ import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout;
 import de.imise.tool3lgm.log.Log;
 
+/**
+ * @author N.N. (< 2007)
+ */
 public class ToolXMLClipboardWriter extends ToolXMLWriter {
 
+    /**  */
     final GraphDocument selectedDoc;
 
+    /**
+     * @param selectedDoc
+     * @throws XMLStreamException
+     * @throws FactoryConfigurationError
+     * @throws IOException
+     */
     private ToolXMLClipboardWriter(final GraphDocument selectedDoc) throws XMLStreamException, FactoryConfigurationError, IOException {
         super(selectedDoc.getCollection(), CLIPBOARD_PATH);
         this.selectedDoc = selectedDoc;
     }
 
+    /**
+     * @param selectedDoc
+     * @return
+     */
     public static boolean writeClipboard(final GraphDocument selectedDoc) {
         try {
             ToolXMLClipboardWriter clipboardWriter = new ToolXMLClipboardWriter(selectedDoc);
@@ -61,17 +75,17 @@ public class ToolXMLClipboardWriter extends ToolXMLWriter {
         writeStartElement("objects"); //<objects>
         MetaModel metaModel = gdcoll.getMetaModel();
         for (ModelElement me : resolvedCopyDependencies.elements) {
-            if (!(me instanceof Edge)) { //edges will be written in the next for loop
-                Class<? extends ModelElement> elementClass = me.getClass();
-                if (metaModel.avoidDuplicates(elementClass) && !sortedSelection.contains(me) || !Static.isExpertMode() && metaModel.isPureTemplateElementClass(elementClass)) {
-                    writeStartElement("avoidDuplicates"); //<avoidDuplicates>
-                    writeModelElement(me);
-                    writeEndElement(); //</avoidDuplicates>
-                } else {
-                    writeModelElement(me);
-                }
+            Class<? extends ModelElement> elementClass = me.getClass();
+            if (metaModel.avoidDuplicates(elementClass) && !sortedSelection.contains(me) || !Static.isExpertMode() && metaModel.isPureTemplateElementClass(elementClass)) {
+                writeStartElement("avoidDuplicates"); //<avoidDuplicates>
+                writeModelElement(me);
+                writeEndElement(); //</avoidDuplicates>
+            } else {
+                writeModelElement(me);
             }
         }
+        // this are all edges of selected elements which are not selected itself
+        // (only HasPart-Edges from master to slave are not in this set)
         for (Edge edge : resolvedCopyDependencies.additionalEdges) {
             writeModelElement(edge);
         }
