@@ -424,29 +424,23 @@ public class RegularContextGenerator extends ElementSelectionContextGenerator im
      * @return
      */
     private JMenu getAddToSzenarioMenu() {
-        JMenu szenario_menu = new JMenu(getResString("inszenario"));
+        JMenu szenario_menu = new JMenu(getResString("ADD_TO_SZENARIO"));
         JMenuItem item = getItem(MODEL_ACTION_ADD_SELECTED_TO_NEW_SUBMODEL);
         szenario_menu.add(item);
-
         GDCollection gdcoll = getSelectedGDCollection();
-
         for (Szenario szen : gdcoll.getSzenarios()) {
             item = new JMenuItem(szen.getName());
-
             szenario_menu.add(item);
-
             if (OPTION_ENABLE_SUBMODEL_BROWSER.is() && szen == Static.getSelectedDoc()) {
                 item.setEnabled(false);
                 continue;
             }
-
-            item.addActionListener(this);
             item.setActionCommand(MODEL_ACTION_ADD_SELECTED_TO_SUBMODEL + " " + szen.getID());
+            item.addActionListener(this);
         }
 
         item = getItem(MODEL_ACTION_ADD_SELECTED_TO_ALL_SUBMODELS);
         szenario_menu.add(item);
-
         setMenuScroller(szenario_menu, 1, 1);
         return szenario_menu;
     }

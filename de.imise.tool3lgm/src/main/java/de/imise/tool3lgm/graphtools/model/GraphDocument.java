@@ -3594,14 +3594,35 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
     private List<ElementContainer> getSelectionInGraphOrder() {
         List<ElementContainer> returnList = new ArrayList<>(selectedContainer.size());
         List<ElementContainer> nodeContainers = getElementContainers(Node.class, true, false);
+        // add all selected node containers of the selected submodel
         for (ElementContainer nc : nodeContainers) {
             if (selectedContainer.contains(nc)) {
                 returnList.add(nc);
             }
         }
         for (ElementContainer ec : selectedContainer) {
+            // add all selected edge containers and bendpoint containers
             Class<? extends ElementContainer> ecClass = ec.getClass();
-            if (BendpointContainer.class.isAssignableFrom(ecClass) || EdgeContainer.class.isAssignableFrom(ecClass)) {
+            if (CoreMetaModel.isEdgeType(ecClass) || CoreMetaModel.isBendpointType(ecClass)) {
+                returnList.add(ec);
+            } else if (!returnList.contains(ec)) { // this must be a real node type
+                // (Ticket #455)
+                // if the model browser shows all elements (and not only the elements
+                // from the currently selected submodel) then the selection can contain
+                // elements with no container in the selected submodel. Then we add the
+                // first found container of an other submodel or the main doc container
+                // if the element has no submodel container
+                GraphDocument doc = ec.getGraphDocument();
+                ModelElement me = ec.getElement();
+                if (!(doc instanceof Szenario)) {
+                    for (GraphDocument ecDoc : me.getMySzenarios()) {
+                        if (ecDoc instanceof Szenario) {
+                            doc = ecDoc;
+                            break;
+                        }
+                    }
+                }
+                ec = me.getContainer(doc);
                 returnList.add(ec);
             }
         }
