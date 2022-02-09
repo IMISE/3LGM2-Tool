@@ -21,6 +21,7 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
+import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.filechooser.FileSystemView;
 
@@ -335,15 +336,15 @@ public class ComponentAsImageExportHandler {
 
         boolean maximizeImage = saveMaximumSizeRBut != null && saveMaximumSizeRBut.isSelected();
         FileFilterType type = null;
-        if (lastSelected != null) {
-            type = lastSelected;
-        } else {
-            for (int c = 0; c < fileFilters.length; c++) {
-                if (fc.getFileFilter() == fileFilters[c]) {
-                    type = FileFilterType.values()[c];
-                    break;
-                }
+        FileFilter choosedFileFilter = fc.getFileFilter();
+        for (int c = 0; c < fileFilters.length; c++) {
+            if (choosedFileFilter == fileFilters[c]) {
+                type = FileFilterType.values()[c];
+                break;
             }
+        }
+        if (type == null) {
+            type = lastSelected;
         }
 
         File f = fc.getSelectedFile();
