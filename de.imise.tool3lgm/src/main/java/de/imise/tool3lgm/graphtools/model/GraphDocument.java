@@ -4886,15 +4886,12 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
         if (userField.hasClassfificationStyle()) {
             value = value.trim();
         }
-        //String newValue = getParseSaveString(value, true);
         String oldValue = me.getValue(userField);
         if (UserField.EMPTY_STRING.equals(oldValue)) {
             oldValue = "";
         }
-        //oldValue = getParseSaveString(oldValue, true);
         addRedoCommandOrReplace(pid, value, MODEL_ACTION_SET_USER_FIELD_VALUE, me, userField);
         addUndoCommandIfNotExist(pid, oldValue, MODEL_ACTION_SET_USER_FIELD_VALUE, me, userField);
-        //newValue = getDecodedParseSaveString(value);
         me.setUserFieldInputValue(userField, value);
         finish_transaction(pid, USER_FIELD_VALUE_CHANGED);
     }
