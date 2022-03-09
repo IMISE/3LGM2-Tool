@@ -6,6 +6,7 @@ import java.util.Vector;
 import javax.swing.JTree;
 import javax.swing.tree.TreeModel;
 import javax.swing.tree.TreeNode;
+import javax.swing.tree.TreePath;
 
 public class CorrectSelectionTree extends JTree {
 
@@ -45,6 +46,23 @@ public class CorrectSelectionTree extends JTree {
 
     private void init() {
         setSelectionModel(new CorrectTreeSelectionModel(this));
+    }
+
+    @Override
+    public void setSelectionPaths(TreePath[] paths) {
+        super.setSelectionPaths(paths);
+        int[] selectionRows = getSelectionRows();
+        int minSelectedRow = Integer.MAX_VALUE;
+        for (int i = 0; i < selectionRows.length; i++) {
+            if (selectionRows[i] < minSelectedRow) {
+                minSelectedRow = selectionRows[i];
+            }
+        }
+        int rowCount = getRowCount();
+        if (minSelectedRow < rowCount) {
+            TreePath minSelectedPath = getPathForRow(minSelectedRow);
+            scrollPathToVisible(minSelectedPath);
+        }
     }
 
 }
