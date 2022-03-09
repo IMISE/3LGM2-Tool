@@ -190,7 +190,7 @@ public class PathConnectionPanel extends AbstractExpandablePanel {
             TreeRenderer highlightErrorElementsTreeRenderer = new PanelTreeRenderer(this);
             rtree.setCellRenderer(highlightErrorElementsTreeRenderer);
 
-            rsearchPanel = createTreeSearchPanel(rLabel, rtree, ltreeLabel);
+            rsearchPanel = createTreeSearchPanel(rLabel, rtree);
 
             //Buttons & Actions erstellen, Actions setzen
             addAction = getConnectAction();
@@ -225,8 +225,7 @@ public class PathConnectionPanel extends AbstractExpandablePanel {
     protected void setSamePreferredLeftRightSize() {
         SwingUtils.setSamePreferredWidth(westLabel, rsearchPanel, ltree.getScrollPane(), rtree.getScrollPane());
         //the searchPanel contains the rLabel (0) and then the HistoryComboBox for the name search (1)
-        //the Combobox default preferred size is 4 pixel to large (on Windows) -> reduce it and TODO test it on Linux
-        SwingUtils.setSamePreferredHeight(-4, westLabel, rsearchPanel.getComponent(0), rsearchPanel.getComponent(1));
+        SwingUtils.setSamePreferredHeight(0, westLabel, rsearchPanel.getComponent(0), rsearchPanel.getComponent(1));
         SwingUtils.setSamePreferredSize(westLabel, rsearchPanel);
         SwingUtils.setSamePreferredSize(ltree.getScrollPane(), rtree.getScrollPane());
     }

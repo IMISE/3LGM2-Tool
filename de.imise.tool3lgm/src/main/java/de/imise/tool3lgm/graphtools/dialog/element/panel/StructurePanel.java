@@ -152,7 +152,7 @@ public final class StructurePanel extends AbstractPathOfOneEdgePanel {
         rtree.setShowsRootHandles(true);
         rtree.setCellRenderer(treeRenderer);
         rtree.getSelectionModel().setSelectionMode(TreeSelectionModel.DISCONTIGUOUS_TREE_SELECTION);
-        rsearchPanel = createTreeSearchPanel(rlabel, rtree, lolabel);
+        rsearchPanel = createTreeSearchPanel(rlabel, rtree);
 
         JScrollPane rtreeScrollPane = rtree.getScrollPane();
 
@@ -234,8 +234,7 @@ public final class StructurePanel extends AbstractPathOfOneEdgePanel {
     protected void setSamePreferredLeftRightSize() {
         SwingUtils.setSamePreferredWidth(lolabel, lulabel, rsearchPanel, lotree.getScrollPane(), lutree.getScrollPane(), rtree.getScrollPane());
         //the searchPanel contains the rLabel (0) and then the HistoryComboBox for the name search (1)
-        //the Combobox default preferred size is 4 pixel to large (on Windows) -> reduce it and TODO test it on Linux
-        SwingUtils.setSamePreferredHeight(-4, lolabel, rsearchPanel.getComponent(0), rsearchPanel.getComponent(1));
+        SwingUtils.setSamePreferredHeight(lolabel, rsearchPanel.getComponent(0), rsearchPanel.getComponent(1));
         SwingUtils.setSamePreferredSize(lolabel, rsearchPanel);
         SwingUtils.setSamePreferredSize(lotree.getScrollPane(), lutree.getScrollPane());
     }
