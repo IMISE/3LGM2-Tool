@@ -659,6 +659,11 @@ public class ToolContentHandlerV3_0 implements ContentHandler {
                 if (container != null) {
                     container.setVisible(Boolean.valueOf(value));
                 }
+            } else if (qName.equals("showConnectedNames")) { //Option if the names of connected elements should be shown in graph (see Metamodel#elementClassToNameExtensionPathAsNameSource)
+                if (container != null && container instanceof NodeContainer) {
+                    NodeContainer nc = (NodeContainer) container;
+                    nc.setShowConnectedAsNameExtensionInGraph(Boolean.valueOf(value));
+                }
             } else if (qName.equals("x")) {
                 if (layout == null) {
                     return;

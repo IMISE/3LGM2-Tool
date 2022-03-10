@@ -656,10 +656,12 @@ public class ToolXMLWriter extends IntendingXMLWriter {
     protected void writeElementContainer(final ElementContainer ec) throws XMLStreamException {
         writeStartElement("container"); //<container>
         writeAttribute("hash", ec.getID());
-        if (!(ec instanceof EdgeContainer)) {
+        if (ec instanceof NodeContainer) {
+            NodeContainer nc = (NodeContainer) ec;
             //write only if not default true
-            writeElementIfFalse("expanded", ec.isExpanded());
-            writeElementIfFalse("visible", ec.isVisible());
+            writeElementIfFalse("expanded", nc.isExpanded());
+            writeElementIfFalse("visible", nc.isVisible());
+            writeElementIfFalse("showConnectedNamed", nc.isShowConnectedAsNameExtensionInGraph());
         }
         GraphElementLayout expandedLayout = ec.getE3LGMLayout();
         ModelElement me = ec.getElement();

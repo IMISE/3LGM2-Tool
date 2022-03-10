@@ -84,6 +84,7 @@ public class ToolXMLParser {
             "3.7", //"<!--Tool3lgmFile version='3.7'-->", //11 -> nach Tool-Version 3.4.0.2 (Beta)
             "3.8", //"<!--Tool3lgmFile version='3.8'-->", //12 -> ab Tool-Version 4.1.0
             "3.9", //"<!--Tool3lgmFile version='3.9'-->", //13 -> ab Tool-Version 4.1.1
+            "3.10", //"<!--Tool3lgmFile version='3.10'-->", //14 -> ab Tool-Version 4.4.3
     };
 
     /**
@@ -178,7 +179,8 @@ public class ToolXMLParser {
         case 11: //Version 3.7 -> OptionalEdge.isOptional() wird gespeichert
         case 12: //Version 3.8 -> valign + halign über GraphElementLayout enums und nicht mehr über SwingConstants ints
         case 13: //Version 3.9 -> Formats of UserFields are no longer UserFields themselves but now have their own type UserFieldNumberFormat and
-                 //               Style.NUMER was Style.CLASSIFICATION_NUMBER and Style.FORMULA was Style.CLASSIFICATION_NUMBER_FORMULA
+            //               Style.NUMER was Style.CLASSIFICATION_NUMBER and Style.FORMULA was Style.CLASSIFICATION_NUMBER_FORMULA
+        case 14: //Version 3.9 -> Aus-/Einbelenden der Namen verbundener Elemente in der Grafik wird gespeichert
             return new ToolContentHandlerV3_1(gdcoll, paste);
         default:
             throw new SAXException("angegebenes Dateiformat wird nicht unterstützt");
