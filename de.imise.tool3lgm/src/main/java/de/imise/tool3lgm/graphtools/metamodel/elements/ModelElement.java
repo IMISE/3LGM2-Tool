@@ -118,6 +118,11 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
 
     private static final StringBuilder textBuf = new StringBuilder("");
 
+    /**
+     * <code>true</code> if this element has a name extension on its graph name
+     */
+    private boolean hasGraphNameExtension = false;
+
     /** MetaModel aus dem die Klasse dieses Elementes stammt. */
     private MetaModel metaModel;
 
@@ -541,7 +546,7 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
     /**
      * @return
      */
-    public String getGraphNameExtension() {
+    public final String getGraphNameExtension() {
         MetaPath nameExtensionPath = getGraphNameExtensionPathAsNameTarget();
         updateGraphNameSuffixBuffer(nameExtensionPath);
         return suffixBuf.toString();
@@ -556,6 +561,7 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
             Collection<ModelElement> directConnectedElements = nameExtension.getConnectedElements(this);
             //Kein Element, dessen Namen in Klammern angezeigt werden soll verbunden -> weiter
             if (!directConnectedElements.isEmpty()) {
+                hasGraphNameExtension = true;
                 //genau ein Element verbunden, das denselben Namen hat wie dieses Element -> weiter (damit in der Grafik nicht
                 //2 mal dasselbe steht)
                 ModelElement firstConnected = directConnectedElements.iterator().next();
@@ -574,6 +580,8 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
                     suffixBuf.setLength(suffixBuf.length() - 2);
                     suffixBuf.append(")");
                 }
+            } else {
+                hasGraphNameExtension = false;
             }
         }
     }
@@ -634,21 +642,30 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
         if (isHyperlink()) {
             textBuf.append("</U>");
         }
-        textBuf.append(suffixBuf.length() > 0 ? "<BR>" : "");
         if (suffixBuf.length() > 0) {
-            Color bg_color = nameExtendsionClassLayout == null || nameExtendsionClassLayout == defaultElementsLayout.getStandardElementLayout() ? null : nameExtendsionClassLayout.bg_color;
-            if (bg_color != null) {
-                textBuf.append("<span style=\"background-color: #");
-                HTMLConverter.appendHTMLColor(textBuf, bg_color);
-                textBuf.append("\">");
-            }
-            HTMLConverter.appendDecimalEncodedHTMLString(textBuf, suffixBuf.toString(), false);
-            if (bg_color != null) {
-                textBuf.append("</span>");
+            if (ec instanceof NodeContainer && ((NodeContainer) ec).isShowConnectedAsNameExtensionInGraph()) {
+                textBuf.append("<BR>");
+                Color bg_color = nameExtendsionClassLayout == null || nameExtendsionClassLayout == defaultElementsLayout.getStandardElementLayout() ? null : nameExtendsionClassLayout.bg_color;
+                if (bg_color != null) {
+                    textBuf.append("<span style=\"background-color: #");
+                    HTMLConverter.appendHTMLColor(textBuf, bg_color);
+                    textBuf.append("\">");
+                }
+                HTMLConverter.appendDecimalEncodedHTMLString(textBuf, suffixBuf.toString(), false);
+                if (bg_color != null) {
+                    textBuf.append("</span>");
+                }
             }
         }
         textBuf.append("</P></HTML>");
         return textBuf.toString();
+    }
+
+    /**
+     * @return <code>true</code> if this element shows a name extension in graph
+     */
+    public boolean hasGraphNameExtension() {
+        return hasGraphNameExtension;
     }
 
     /**

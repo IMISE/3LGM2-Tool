@@ -946,26 +946,23 @@ public class LayerContainer extends ElementContainer implements Iterable<Element
      * (De-)Aktiviert das Anzeigen aller Interebenenbeziehungen
      *
      * @param showInterLayerConnections aktiviren / deaktivieren
-     * @param doc aktives GraphDocument
      */
     public void setShowInterLayerConnections(final boolean showInterLayerConnections) {
-        for (NodeContainer ec : graphNodeContainers) {
-            setShowInterLayerConnections(showInterLayerConnections, ec);
+        for (NodeContainer nc : graphNodeContainers) {
+            if (nc instanceof InterLayerConnectedNodeContainer) {
+                ((InterLayerConnectedNodeContainer) nc).setShowInterLayerConnections(showInterLayerConnections);
+            }
         }
     }
 
     /**
-     * (De-)Aktiviert das Anzeigen der Interebenenbeziehungen für den
-     * spezifizierten {@link ElementContainer}
+     * (De-)Activates the display of name extensions of elements in the graph
      *
-     * @param showInterLayerConnections aktiviren / deaktivieren
-     * @param doc aktives GraphDocument
-     * @param ec Container, dessen Interebenenbeziehungen (de-)aktiviert werden
-     *            sollen
+     * @param showNameExtensions activate / deactivate
      */
-    public void setShowInterLayerConnections(final boolean showInterLayerConnections, final ElementContainer ec) {
-        if (ec instanceof InterLayerConnectedNodeContainer) {
-            ((InterLayerConnectedNodeContainer) ec).setShowInterLayerConnections(showInterLayerConnections);
+    public void setShowConnectedAsNameExtensionInGraph(final boolean showNameExtensions) {
+        for (NodeContainer nc : graphNodeContainers) {
+            nc.setShowConnectedAsNameExtensionInGraph(showNameExtensions);
         }
     }
 

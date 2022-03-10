@@ -76,6 +76,7 @@ import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.UserFieldEditorD
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.graphtools.view.container.InterLayerConnectedNodeContainer;
 import de.imise.tool3lgm.graphtools.view.container.LayerContainer;
+import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
 import de.imise.tool3lgm.graphtools.view.graph.BasicGraphArea.PaintState;
 import de.imise.tool3lgm.graphtools.view.graph.InputGraphArea;
 import de.imise.tool3lgm.graphtools.view.graph.NodeRenderer;
@@ -479,10 +480,8 @@ public class ActionLibrary {
         };
 
         public static final GraphSelectedRealNodeAction MODEL_ACTION_SET_ELEMENT_INTERLAYER_CONNECTIONS_VISIBILITY_OFF = createMODEL_ACTION_SET_ELEMENT_INTERLAYER_CONNECTIONS_VISIBILITY(false);
-
         public static final GraphSelectedRealNodeAction MODEL_ACTION_SET_ELEMENT_INTERLAYER_CONNECTIONS_VISIBILITY_ON = createMODEL_ACTION_SET_ELEMENT_INTERLAYER_CONNECTIONS_VISIBILITY(true);
-
-        public static final GraphSelectedRealNodeAction createMODEL_ACTION_SET_ELEMENT_INTERLAYER_CONNECTIONS_VISIBILITY(final boolean show) {
+        private static final GraphSelectedRealNodeAction createMODEL_ACTION_SET_ELEMENT_INTERLAYER_CONNECTIONS_VISIBILITY(final boolean show) {
             return new GraphSelectedRealNodeAction(show ? GDCommands.MODEL_ACTION_SET_ELEMENT_INTERLAYER_CONNECTIONS_VISIBILITY_ON : GDCommands.MODEL_ACTION_SET_ELEMENT_INTERLAYER_CONNECTIONS_VISIBILITY_OFF) {
                 @Override
                 public boolean isEnabled() {
@@ -513,9 +512,7 @@ public class ActionLibrary {
         }
 
         public static final GraphFrameAction MODEL_ACTION_SET_LAYER_INTERLAYER_CONNECTIONS_VISIBILITY_ON = createMODEL_ACTION_SET_LAYER_INTERLAYER_CONNECTIONS_VISIBILITY(true);
-
         public static final GraphFrameAction MODEL_ACTION_SET_LAYER_INTERLAYER_CONNECTIONS_VISIBILITY_OFF = createMODEL_ACTION_SET_LAYER_INTERLAYER_CONNECTIONS_VISIBILITY(false);
-
         private static final GraphFrameAction createMODEL_ACTION_SET_LAYER_INTERLAYER_CONNECTIONS_VISIBILITY(final boolean visible) {
             return new GraphFrameAction(visible ? GDCommands.MODEL_ACTION_SET_LAYER_INTERLAYER_CONNECTIONS_VISIBILITY_ON : GDCommands.MODEL_ACTION_SET_LAYER_INTERLAYER_CONNECTIONS_VISIBILITY_OFF) {
                 @Override
@@ -553,6 +550,85 @@ public class ActionLibrary {
                 return !Static.isSelection() && MODEL_ACTION_SET_LAYER_INTERLAYER_CONNECTIONS_VISIBILITY_OFF.isEnabled() || MODEL_ACTION_SET_ELEMENT_INTERLAYER_CONNECTIONS_VISIBILITY_OFF.isEnabled();
             };
         };
+
+        public static final GraphSelectedRealNodeAction MODEL_ACTION_SET_ELEMENT_SHOW_CONNECTED_AS_NAME_EXTENSION_IN_GRAPH_OFF = createMODEL_ACTION_SET_ELEMENT_SHOW_CONNECTED_AS_NAME_EXTENSION_IN_GRAPH(false);
+        public static final GraphSelectedRealNodeAction MODEL_ACTION_SET_ELEMENT_SHOW_CONNECTED_AS_NAME_EXTENSION_IN_GRAPH_ON = createMODEL_ACTION_SET_ELEMENT_SHOW_CONNECTED_AS_NAME_EXTENSION_IN_GRAPH(true);
+        private static final GraphSelectedRealNodeAction createMODEL_ACTION_SET_ELEMENT_SHOW_CONNECTED_AS_NAME_EXTENSION_IN_GRAPH(final boolean show) {
+            return new GraphSelectedRealNodeAction(show ? GDCommands.MODEL_ACTION_SET_ELEMENT_SHOW_CONNECTED_AS_NAME_EXTENSION_IN_GRAPH_ON : GDCommands.MODEL_ACTION_SET_ELEMENT_SHOW_CONNECTED_AS_NAME_EXTENSION_IN_GRAPH_OFF) {
+                @Override
+                public boolean isEnabled() {
+                    if (super.isEnabled()) {
+                        for (ElementContainer ec : Static.iterableSelectedRealElementContainer()) {
+                            if (ec instanceof NodeContainer) {
+                                ModelElement me = ec.getElement();
+                                if (me.hasGraphNameExtension()) {
+                                    boolean isShowingNameExtension = ((NodeContainer) ec).isShowConnectedAsNameExtensionInGraph();
+                                    if (isShowingNameExtension != show) {
+                                        return true;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    return false;
+                }
+            };
+        }
+
+        public static final GraphFrameAction MODEL_ACTION_SET_LAYER_SHOW_CONNECTED_AS_NAME_EXTENSION_IN_GRAPH_ON = createMODEL_ACTION_SET_LAYER_SHOW_CONNECTED_AS_NAME_EXTENSION_IN_GRAPH(true);
+        public static final GraphFrameAction MODEL_ACTION_SET_LAYER_SHOW_CONNECTED_AS_NAME_EXTENSION_IN_GRAPH_OFF = createMODEL_ACTION_SET_LAYER_SHOW_CONNECTED_AS_NAME_EXTENSION_IN_GRAPH(false);
+        private static final GraphFrameAction createMODEL_ACTION_SET_LAYER_SHOW_CONNECTED_AS_NAME_EXTENSION_IN_GRAPH(final boolean show) {
+            return new GraphFrameAction(show ? GDCommands.MODEL_ACTION_SET_LAYER_SHOW_CONNECTED_AS_NAME_EXTENSION_IN_GRAPH_ON : GDCommands.MODEL_ACTION_SET_LAYER_SHOW_CONNECTED_AS_NAME_EXTENSION_IN_GRAPH_OFF) {
+                @Override
+                public boolean isEnabled() {
+                    if (super.isEnabled()) {
+                        LGMGraphDocument selectedDoc = Static.getSelectedDoc();
+                        LayerContainer lc = selectedDoc.getActiveLayer();
+                        return hasLayerElementsThatNotIsShowingConnectedAsNameExtensionInGraph(lc, show);
+                    }
+                    return false;
+                }
+            };
+        }
+
+        public static final Action MODEL_ACTION_SET_SHOW_CONNECTED_AS_NAME_EXTENSION_IN_GRAPH_ON = createMODEL_ACTION_SET_SHOW_CONNECTED_AS_NAME_EXTENSION_IN_GRAPH(true);
+        public static final Action MODEL_ACTION_SET_SHOW_CONNECTED_AS_NAME_EXTENSION_IN_GRAPH_OFF = createMODEL_ACTION_SET_SHOW_CONNECTED_AS_NAME_EXTENSION_IN_GRAPH(false);
+        private static final GraphFrameAction createMODEL_ACTION_SET_SHOW_CONNECTED_AS_NAME_EXTENSION_IN_GRAPH(final boolean show) {
+            return new GraphFrameAction(show ? GDCommands.MODEL_ACTION_SET_SHOW_CONNECTED_AS_NAME_EXTENSION_IN_GRAPH_ON : GDCommands.MODEL_ACTION_SET_SHOW_CONNECTED_AS_NAME_EXTENSION_IN_GRAPH_OFF) {
+                @Override
+                public boolean isEnabled() {
+                    if (super.isEnabled()) {
+                        LGMGraphDocument selectedDoc = Static.getSelectedDoc();
+                        for (LayerContainer lc : selectedDoc.getLayers()) {
+                            if (hasLayerElementsThatNotIsShowingConnectedAsNameExtensionInGraph(lc, show)) {
+                                return true;
+                            }
+                        }
+                    }
+                    return false;
+                }
+            };
+        }
+
+        /**
+         * @param lc
+         * @param isShowing
+         * @return
+         */
+        private static boolean hasLayerElementsThatNotIsShowingConnectedAsNameExtensionInGraph(LayerContainer lc, boolean isShowing) {
+            for (ElementContainer ec : lc.getGraphNodeContainers()) {
+                if (ec instanceof NodeContainer) {
+                    ModelElement me = ec.getElement();
+                    if (me.hasGraphNameExtension()) {
+                        boolean isShowingNameExtension = ((NodeContainer) ec).isShowConnectedAsNameExtensionInGraph();
+                        if (isShowingNameExtension != isShowing) {
+                            return true;
+                        }
+                    }
+                }
+            }
+            return false;
+        }
 
     }
 

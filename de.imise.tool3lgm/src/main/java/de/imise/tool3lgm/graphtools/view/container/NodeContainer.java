@@ -82,6 +82,15 @@ public class NodeContainer extends ElementContainer implements AlphabeticalSortT
     protected ElementContainerTreeNode treeNode = null;
 
     /**
+     * If this node is visible in graph and should show the name of connected
+     * elements as an extension of its own name then this extension will be only
+     * shown if this boolean is <code>true</code>.<br>
+     * For example Application systems can show their connected software
+     * products.
+     */
+    private boolean showConnectedAsNameExtensionInGraph = true;
+
+    /**
      *
      */
     public NodeContainer() {
@@ -589,6 +598,22 @@ public class NodeContainer extends ElementContainer implements AlphabeticalSortT
      */
     public void setVariable(final int f) {
         variable = f;
+    }
+
+    /**
+     * @return the showConnectedAsNameExtensionInGraph
+     */
+    public final boolean isShowConnectedAsNameExtensionInGraph() {
+        return showConnectedAsNameExtensionInGraph;
+    }
+
+    /**
+     * @param showConnectedAsNameExtensionInGraph the
+     *            showConnectedAsNameExtensionInGraph to set
+     */
+    public final void setShowConnectedAsNameExtensionInGraph(boolean showConnectedAsNameExtensionInGraph) {
+        this.showConnectedAsNameExtensionInGraph = showConnectedAsNameExtensionInGraph;
+        me.updateGraphName(this);
     }
 
 }
