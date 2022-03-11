@@ -12,8 +12,10 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Set;
 
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
@@ -34,9 +36,11 @@ import javax.swing.table.TableRowSorter;
 
 import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
+import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
+import de.imise.tool3lgm.graphtools.model.LGMGraphDocument;
 import de.imise.tool3lgm.graphtools.undoredo.TransactionManager;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 
@@ -59,9 +63,6 @@ public class SearchDialogResultTablePanel extends JPanel implements SearchResult
 
     /** TableModel der Ergebnistabelle */
     private DefaultTableModel tableModel;
-
-    /** GraphDocument currently being searched */
-    private GraphDocument doc;
 
     /** The options for the search */
     private SearchOptions searchOptions;
@@ -161,6 +162,7 @@ public class SearchDialogResultTablePanel extends JPanel implements SearchResult
 
             @Override
             public void mouseClicked(final MouseEvent e) {
+                LGMGraphDocument doc = Static.getSelectedDoc();
                 if (doc == null) {
                     return;
                 }
@@ -285,10 +287,26 @@ public class SearchDialogResultTablePanel extends JPanel implements SearchResult
 
     @Override
     public void showResult(final GraphDocument doc, final SearchOptions searchOptions) {
-        this.doc = doc;
         this.searchOptions = searchOptions;
         List<ElementContainer> result = doc == null ? new ArrayList<>() : SearchFunctions.getResult(doc, searchOptions);
         setSearchResult(result);
+    }
+
+    @Override
+    public Set<Class<? extends ModelElement>> getSearchableElementClasses() {
+        LGMGraphDocument doc = Static.getSelectedDoc();
+        if (doc == null) {
+            return Collections.emptySet();
+        }
+        MetaModel metaModel = doc.getMetaModel();
+        return metaModel.allModelElementClassesWithSuperClasses;
+    }
+
+    @Override
+    public ElementsNameBuilder getElementsNameBuilder() {
+        LGMGraphDocument doc = Static.getSelectedDoc();
+
+        return doc != null ? doc.getElementsNameBuilder() : null;
     }
 
 }

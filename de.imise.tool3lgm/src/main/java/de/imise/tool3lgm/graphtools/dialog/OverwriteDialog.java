@@ -20,6 +20,7 @@ import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.WindowConstants;
 
 import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
@@ -54,7 +55,7 @@ public class OverwriteDialog extends JDialog implements ActionListener {
         super(owner);
 
         setModal(true);
-        setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
+        setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
 
         getContentPane().setLayout(new BorderLayout(5, 5));
         getContentPane().add(new JLabel(getResString("overwriteDialog_text")), BorderLayout.NORTH);

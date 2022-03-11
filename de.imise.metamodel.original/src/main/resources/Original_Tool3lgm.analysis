@@ -712,7 +712,7 @@ Content-ID: ANA_1624634688863_19
 <analyse>
 	<name>
 		<en>Which computer-based application components are installed on this physical data processing component?</en>
-		<de>elche Anwendungsbausteine sind darauf installiert?</de>
+		<de>Welche Anwendungsbausteine sind darauf installiert?</de>
 	</name>
 	<startknoten name="PhysischerDVBaustein"/>
 	<suche>

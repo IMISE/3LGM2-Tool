@@ -9,6 +9,7 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.path.metapaths.PathFunctions.PathConnectionState;
 import de.imise.tool3lgm.graphtools.path.paths.PathResultTreeModel;
+import de.imise.tool3lgm.graphtools.path.paths.SimplePath;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 
 public interface MetaPath extends BasicMetaPath {
@@ -336,6 +337,13 @@ public interface MetaPath extends BasicMetaPath {
     PathResultTreeModel getResultTree(ModelElement startElement);
 
     /**
+     * @param startElement
+     * @param endElement
+     * @return All paths in a treemodel which exist between the given elements.
+     */
+    PathResultTreeModel getResultTree(final ModelElement startElement, final ModelElement endElement);
+
+    /**
      * Liefert einen Ergebnisbaum, der alle eventuell vorhandenen Pfade
      * ausgehend vom übergebenen Element aufspannt
      *
@@ -370,5 +378,16 @@ public interface MetaPath extends BasicMetaPath {
      * @return
      */
     PathResultTreeModel getResultTree(List<Collection<ModelElement>> startElements, boolean keepIncompleteBranches);
+
+    /**
+     * Return the Paths between the startElement and endElement specified by the
+     * given metaPath if it exists.
+     *
+     * @param startElement
+     * @param endElement
+     * @param simpleMetaPath
+     * @return
+     */
+    List<SimplePath> getSimplePaths(final ModelElement startElement, final ModelElement endElement);
 
 }

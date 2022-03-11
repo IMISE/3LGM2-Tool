@@ -18,8 +18,8 @@ import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.path.metapaths.DifferenceMetaPath;
 import de.imise.tool3lgm.graphtools.path.metapaths.ElementaryMetaPath;
 import de.imise.tool3lgm.graphtools.path.metapaths.ElementaryMetaPath.Type;
-import de.imise.tool3lgm.graphtools.path.metapaths.MetaPath;
 import de.imise.tool3lgm.graphtools.path.metapaths.ListMetaPath;
+import de.imise.tool3lgm.graphtools.path.metapaths.MetaPath;
 import de.imise.tool3lgm.graphtools.path.metapaths.ParallelMetaPath;
 import de.imise.tool3lgm.graphtools.path.metapaths.SectionMetaPath;
 import de.imise.tool3lgm.graphtools.path.metapaths.SerialMetaPath;
@@ -68,6 +68,13 @@ public class PathResultTreeModel extends DefaultTreeModel {
      * eine Collection an Index 0 in der Liste.
      */
     private List<Collection<ModelElement>> startElementsCollections = new ArrayList<>();
+
+    /**
+     * If these endelements are set so only paths to these elements counts as
+     * complete. If it is empty then all paths with all metapath steps are
+     * complete paths.
+     */
+    private final Collection<ModelElement> endElements = new HashSet<>();
 
     /**
      * Alle Blattknoten, die ausgehend von einem Startknoten im Ergebnisbaum
@@ -121,7 +128,17 @@ public class PathResultTreeModel extends DefaultTreeModel {
      */
     public PathResultTreeModel(final MetaPath metaPath, final ModelElement startElement) {
         this(metaPath);
-        setStartElements(startElement);
+        setStartElement(startElement);
+    }
+
+    /**
+     * @param metaPath
+     * @param startElement
+     * @param endElement
+     */
+    public PathResultTreeModel(final MetaPath metaPath, final ModelElement startElement, final ModelElement endElement) {
+        this(metaPath);
+        setStartAndEndElement(startElement, endElement);
     }
 
     /**
@@ -179,7 +196,7 @@ public class PathResultTreeModel extends DefaultTreeModel {
      */
     public PathResultTreeModel(final MetaPath metaPath, final ModelElement startElement, final boolean keepIncompleteBranches, final boolean keepMultipleEqualsBranches) {
         this(metaPath, keepIncompleteBranches);
-        setStartElements(startElement);
+        setStartElement(startElement);
     }
 
     /**
@@ -245,11 +262,7 @@ public class PathResultTreeModel extends DefaultTreeModel {
      * @param startElements
      */
     public void setStartElements(final Collection<ModelElement> startElements) {
-        startElementsCollections.clear();
-        if (startElements != null && startElements.size() > 0) {
-            startElementsCollections.add(startElements);
-        }
-        reload();
+        setStartAndEndElements(startElements, null);
     }
 
     /**
@@ -258,10 +271,33 @@ public class PathResultTreeModel extends DefaultTreeModel {
      *
      * @param startElement
      */
-    public void setStartElements(final ModelElement startElement) {
-        Collection<ModelElement> startElements = new ArrayList<>();
-        startElements.add(startElement);
-        setStartElements(startElements);
+    public void setStartElement(final ModelElement startElement) {
+        setStartAndEndElement(startElement, null);
+    }
+
+    /**
+     * @param startElement
+     * @param endElement
+     */
+    public void setStartAndEndElement(final ModelElement startElement, final ModelElement endElement) {
+        Collection<ModelElement> startElements = List.of(startElement);
+        Collection<ModelElement> endElements = endElement == null ? null : List.of(endElement);
+        setStartAndEndElements(startElements, endElements);
+    }
+
+    /**
+     * @param startElements
+     */
+    public void setStartAndEndElements(final Collection<ModelElement> startElements, final Collection<ModelElement> endElements) {
+        startElementsCollections.clear();
+        this.endElements.clear();
+        if (startElements != null && !startElements.isEmpty()) {
+            startElementsCollections.add(startElements);
+        }
+        if (endElements != null && !endElements.isEmpty()) {
+            this.endElements.addAll(endElements);
+        }
+        reload();
     }
 
     /**
@@ -368,7 +404,7 @@ public class PathResultTreeModel extends DefaultTreeModel {
      */
     public final List<ElementContainer> getConnectedContainer(final GraphDocument doc, final boolean forlast) {
         List<ElementContainer> returnCollection = new ArrayList<>();
-        for (PathResultTreeNode node : getCompletePathLeafs()) {
+        for (PathResultTreeNode node : completePathLeafs) {
             ModelElement endElement = forlast ? node.getStartElement() : node.getEndElement();
             ElementContainer ec = endElement.getContainer(doc);
             if (ec != null && !returnCollection.contains(ec)) {
@@ -376,6 +412,27 @@ public class PathResultTreeModel extends DefaultTreeModel {
             }
         }
         return returnCollection;
+    }
+
+    /**
+     * @return a list of all {@link SimplePath}s from root the complete path
+     *         leafs
+     */
+    public final List<SimplePath> getCompletePaths() {
+        List<SimplePath> simplePaths = new ArrayList<>();
+        List<PathResultTreeNode> completePathLeafs = getCompletePathLeafs();
+        for (PathResultTreeNode leaf : completePathLeafs) {
+            PathResultTreeNode[] pathToRoot = leaf.getPathToRoot();
+            List<ElementaryPath> elementaryPaths = new ArrayList<>();
+            for (int i = 2; i < pathToRoot.length; i++) { //the first node is root and the secont the startelement node -> start with third node
+                PathResultTreeNode node = pathToRoot[i];
+                ElementaryPath elementaryPath = node.getElementaryPath();
+                elementaryPaths.add(elementaryPath);
+            }
+            SimplePath simplePath = SimplePath.create(elementaryPaths);
+            simplePaths.add(simplePath);
+        }
+        return simplePaths;
     }
 
     //Aufbau des Models
@@ -496,7 +553,7 @@ public class PathResultTreeModel extends DefaultTreeModel {
             List<PathResultTreeNode> actStartNodes = new ArrayList<>(resultNodes);
             resultNodes.clear();
             for (PathResultTreeNode actStartNode : actStartNodes) {
-                List<PathResultTreeNode> subMetaPathEndNodes = null;
+                List<PathResultTreeNode> subMetaPathEndNodes;
                 subMetaPathEndNodes = addPath(actStartNode, subMetaPath, subMetaPath instanceof ElementaryMetaPath ? isSubStep : true);
                 if (subMetaPathEndNodes == null || subMetaPathEndNodes.size() == 0) {
                     if (!keepIncompleteBranches) {
@@ -625,9 +682,23 @@ public class PathResultTreeModel extends DefaultTreeModel {
      * @return
      */
     private void addLeaf(final PathResultTreeNode leafNode, final List<PathResultTreeNode> resultList) {
-        if (keepMultipleEqualsBranches || !listContainsNodeEqualsTo(leafNode, resultList)) {
+        if (nodeElementIsDefinedEndElement(leafNode) && (keepMultipleEqualsBranches || !listContainsNodeEqualsTo(leafNode, resultList))) {
             resultList.add(leafNode);
         }
+    }
+
+    /**
+     * @param node
+     * @return <code>true</code> if the nodes endElement is contained in the
+     *         defined {@value #endElements} or the defined endElements are
+     *         empty
+     */
+    private boolean nodeElementIsDefinedEndElement(final PathResultTreeNode node) {
+        if (endElements.isEmpty()) {
+            return true;
+        }
+        ModelElement endElement = node.getEndElement();
+        return endElements.contains(endElement);
     }
 
     /**

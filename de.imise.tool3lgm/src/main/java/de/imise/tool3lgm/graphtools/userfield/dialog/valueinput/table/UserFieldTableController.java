@@ -336,7 +336,7 @@ public abstract class UserFieldTableController {
 
         for (int i = 0; i < rangeSelectionMatrix.length; i++) {
             for (int j = 0; j < rangeSelectionMatrix[0].length; j++) {
-                if (rangeSelectionMatrix[i][j] == true || singleSelectionMatrix[i][j] == true) {
+                if (rangeSelectionMatrix[i][j] || singleSelectionMatrix[i][j]) {
                     selectionCount++;
                 }
                 if (selectionCount >= 2) {
@@ -461,7 +461,7 @@ public abstract class UserFieldTableController {
         anchorPoint = new Point(row, col);
         leadingPoint = new Point(row, col);
 
-        if (singleSelectionMatrix[row][col] == true || rangeSelectionMatrix[row][col] == true) {
+        if (singleSelectionMatrix[row][col] || rangeSelectionMatrix[row][col]) {
             singleSelectionMatrix[row][col] = false;
             rangeSelectionMatrix[row][col] = false;
         } else {
@@ -492,7 +492,7 @@ public abstract class UserFieldTableController {
     private void clearSingleSelections() {
         for (int i = 0; i < singleSelectionMatrix.length; i++) {
             for (int j = 0; j < singleSelectionMatrix[0].length; j++) {
-                if (ignoreClearingMatrix[i][j] == false) {
+                if (!ignoreClearingMatrix[i][j]) {
                     singleSelectionMatrix[i][j] = false;
                 }
             }
@@ -506,7 +506,7 @@ public abstract class UserFieldTableController {
     private void clearRangeSelections() {
         for (int i = 0; i < rangeSelectionMatrix.length; i++) {
             for (int j = 0; j < rangeSelectionMatrix[0].length; j++) {
-                if (ignoreClearingMatrix[i][j] == false) {
+                if (!ignoreClearingMatrix[i][j]) {
                     rangeSelectionMatrix[i][j] = false;
                 }
             }
@@ -686,13 +686,13 @@ public abstract class UserFieldTableController {
             }
         }
 
-        if (firstRowEditable == false) {// Oberste Reihe nicht editierbar
+        if (!firstRowEditable) {// Oberste Reihe nicht editierbar
             for (int j = 0; j < editMatrix[0].length; j++) {
                 editMatrix[0][j] = false;
             }
         }
 
-        if (firstColumnEditable == false) {// Linke Spalte nicht editierbar
+        if (!firstColumnEditable) {// Linke Spalte nicht editierbar
             for (int i = 0; i < editMatrix.length; i++) {
                 editMatrix[i][0] = false;
             }
@@ -762,7 +762,7 @@ public abstract class UserFieldTableController {
         @Override
         public void keyPressed(final KeyEvent e) {
 
-            if (isDragging == true) {
+            if (isDragging) {
                 return;
             }
 

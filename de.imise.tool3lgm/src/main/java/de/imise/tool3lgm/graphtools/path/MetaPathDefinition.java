@@ -445,7 +445,7 @@ public class MetaPathDefinition extends MetaModelSpecificAdapter {
      *
      * @return
      */
-    public Map<Class<? extends ModelElement>, MetaPath> getElementClassToNameExtensionMetaPath() {
+    public Map<Class<? extends ModelElement>, SimpleMetaPath> getElementClassToNameExtensionMetaPath() {
         return ImmutableMap.of();
     }
 

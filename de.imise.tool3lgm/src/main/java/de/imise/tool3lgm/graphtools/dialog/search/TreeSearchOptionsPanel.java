@@ -14,15 +14,11 @@ import javax.swing.event.AncestorListener;
 
 import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
-import de.imise.tool3lgm.graphtools.view.pathtree.PathTreeDefinition;
-import de.imise.tool3lgm.graphtools.view.pathtree.PathTreeModel;
-import de.imise.tool3lgm.graphtools.view.template.TemplateBrowserTree;
-import de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty;
 
 /**
  * @author AXS (31.07.2020)
  */
-public class TemplateTreeSearchOptionsPanel extends BasicSearchOptionsPanel {
+public class TreeSearchOptionsPanel extends BasicSearchOptionsPanel {
 
     /**  */
     private final JButton expandButton;
@@ -39,11 +35,11 @@ public class TemplateTreeSearchOptionsPanel extends BasicSearchOptionsPanel {
     /**
      * @param tree
      */
-    public TemplateTreeSearchOptionsPanel(final TemplateBrowserTree tree) {
+    public TreeSearchOptionsPanel(final SearchResultView tree) {
         super(tree, new GridBagLayout());
         expanded = false;
         expandButton = new JButton("|");
-        expandButton.setToolTipText(getResString("SEARCH_TEMPLATE_TOOLTIP_more_options"));
+        expandButton.setToolTipText(getResString("SEARCH_TREE_OPTIONS_PANEL_TOOLTIP_more_options"));
 
         GridBagConstraints constraints = new GridBagConstraints();
 
@@ -99,10 +95,10 @@ public class TemplateTreeSearchOptionsPanel extends BasicSearchOptionsPanel {
     public final void showFullPanel(final boolean full) {
         if (expanded) {
             showPartlyPanel();
-            expandButton.setToolTipText(getResString("SEARCH_TEMPLATE_TOOLTIP_more_options"));
+            expandButton.setToolTipText(getResString("SEARCH_TREE_OPTIONS_PANEL_TOOLTIP_more_options"));
         } else {
             showFullPanel();
-            expandButton.setToolTipText(getResString("SEARCH_TEMPLATE_TOOLTIP_less_options"));
+            expandButton.setToolTipText(getResString("SEARCH_TREE_OPTIONS_PANEL_TOOLTIP_less_options"));
         }
         revalidate();
         repaint();
@@ -210,17 +206,18 @@ public class TemplateTreeSearchOptionsPanel extends BasicSearchOptionsPanel {
     @Override
     protected void fillElementClassBox() {
         elementClassBox.removeAllItems();
+        Set<Class<? extends ModelElement>> searchableElementClasses = resultTargetView.getSearchableElementClasses();
         elementClassBox.addObject(ModelElement.class, getResString("SEARCH_DIALOG_all_element_types"));
-        elementClassBox.addSeparator(true);
-
-        PathTreeModel model = ((TemplateBrowserTree) resultTargetView).getModel();
-        PathTreeDefinition pathTreeDefinition = model.getPathTreeDefinition();
-        ElementsNameBuilder elementsNameBuilder = pathTreeDefinition.getElementsNameBuilder();
-        boolean showAllElementaryMetaPaths = BooleanProperty.OPTION_ENABLE_EXPERT_MODE.is();
-        Set<Class<? extends ModelElement>> visibleElementTypes = pathTreeDefinition.getVisibleElementTypes(showAllElementaryMetaPaths);
-        for (Class<? extends ModelElement> elementClass : visibleElementTypes) {
-            String displayableFullName = elementsNameBuilder.getDisplayableFullName(elementClass);
-            elementClassBox.addObject(elementClass, displayableFullName);
+        boolean searchClassIsOnlyModelElement = searchableElementClasses.size() == 1 && searchableElementClasses.iterator().next() == ModelElement.class;
+        if (!searchableElementClasses.isEmpty() && !searchClassIsOnlyModelElement) {
+            elementClassBox.addSeparator(true);
+        }
+        ElementsNameBuilder elementsNameBuilder = resultTargetView.getElementsNameBuilder();
+        for (Class<? extends ModelElement> elementClass : searchableElementClasses) {
+            if (elementClass != ModelElement.class) {
+                String displayableFullName = elementsNameBuilder.getDisplayableFullName(elementClass);
+                elementClassBox.addObject(elementClass, displayableFullName);
+            }
         }
         elementClassBox.setSelectedObject(ModelElement.class);
     }

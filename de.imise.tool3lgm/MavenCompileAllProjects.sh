@@ -23,6 +23,8 @@ echo '#############################################'
 echo '###   A X S U T I L S  -  P R O J E K T   ###'
 echo '#############################################'
 cd ../axsutils/
+wget -N http://svn.apache.org/repos/asf/servicemix/m2-repo/com/bea/xml/jsr173-ri/1.0/jsr173-ri-1.0.jar
+mvn install:install-file -Dfile=jsr173-ri-1.0.jar -DpomFile=jsr173.pom
 mvn -B -Dmaven.test.skip=true clean install
 
 echo

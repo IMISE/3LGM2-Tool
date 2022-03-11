@@ -9,6 +9,7 @@ import java.util.Set;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Bendpoint;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
+import de.imise.tool3lgm.graphtools.metamodel.elements.HasPartEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.InferenceEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
@@ -216,6 +217,7 @@ public class CopyDependencyResolver {
                 }
             }
         }
+        addNotSelectedEdgesOfSelectedElements(result);
         return result;
     }
 
@@ -233,6 +235,7 @@ public class CopyDependencyResolver {
             ModelElement me = ec.getElement();
             resolveCopyDependencies(me, null, result, elements);
         }
+        addNotSelectedEdgesOfSelectedElements(result);
         return result;
     }
 
@@ -311,10 +314,25 @@ public class CopyDependencyResolver {
             }
         }
 
+    }
+
+    /**
+     * Adds all edges of selected elements to the set additionalEdges in the
+     * given result which are not selected itself.<br>
+     * After testing the functionality: PartOf-Edges to subordinated elements
+     * are not added, because the copy is placed on top in graph and will always
+     * hide its parts which are parts of the original element too. And if you
+     * move the copied element the hidden parts will move too.
+     *
+     * @param result
+     */
+    private static void addNotSelectedEdgesOfSelectedElements(CopyDependencyResolverResultSimple result) {
         for (ModelElement element : result.elements) {
             for (Edge edge : element.getEdges()) {
-                if (!result.elements.contains(edge)) {
-                    result.additionalEdges.add(edge);
+                if (!(edge instanceof HasPartEdge) || ((HasPartEdge) edge).getPart() == element) {
+                    if (!result.elements.contains(edge)) {
+                        result.additionalEdges.add(edge);
+                    }
                 }
             }
         }

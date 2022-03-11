@@ -518,7 +518,7 @@ Content-ID: ANA_1624859524978_17
 --multipart_3lgm_query_separator
 Content-Type: text/xml
 Model-Type: TLGMServiceMetaModel@2388259974838049670
-Content-ID: Content-ID: ANA_1624859525988_18
+Content-ID: ANA_1624859525988_18
 <?xml version="1.0" encoding="ISO-8559-15"?>
 <analyse>
 	<name>
@@ -547,6 +547,30 @@ Content-ID: Content-ID: ANA_1624859525988_18
 	<suche>
 		<typ>
 			<eintrag>ObjectType</eintrag>
+		</typ>
+		<verbundenstate>true</verbundenstate>
+	</suche>
+</analyse>
+--multipart_3lgm_query_separator
+Content-Type: text/xml
+Model-Type: TLGMServiceMetaModel@2388259974838049670
+Content-ID: ANA_1634729959635_5012
+<?xml version="1.0" encoding="ISO-8559-15"?>
+<analyse>
+	<name>
+		<en>[Service] On which application component is this software product installed?</en>
+		<de>[Service] Auf welchem Anwendungsbausteine ist dieses Softwareprodukt installiert?</de>
+	</name>
+	<startknoten name="SoftwareProduct"/>
+	<suche>
+		<typ>
+			<eintrag>SoftwareProduct</eintrag>
+		</typ>
+		<verbundenstate>wahr</verbundenstate>
+	</suche>
+	<suche>
+		<typ>
+			<eintrag>ApplicationSystem</eintrag>
 		</typ>
 		<verbundenstate>true</verbundenstate>
 	</suche>

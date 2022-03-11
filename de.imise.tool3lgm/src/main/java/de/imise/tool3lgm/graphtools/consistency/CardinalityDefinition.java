@@ -3,6 +3,7 @@ package de.imise.tool3lgm.graphtools.consistency;
 import java.util.HashMap;
 import java.util.Map;
 
+import de.imise.tool3lgm.graphtools.metamodel.CoreMetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.EdgeCardinality;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
@@ -137,7 +138,7 @@ public class CardinalityDefinition {
         //Wenn für die Kante neue Kardinalitäten angegeben wurden, gib diese zurück. Wenn keien neuen da sind und gefltert werden soll (= nur neue
         //Kardinalitäten sollen zu Konsistenzfehlern führen), dann gibt für alle Kanten ohne neue Kardinalitäten ZERO_UNLIMITED zurück (-> keine Fehler bei diesen Kanten).
         //Wenn aber nicht gefiltert werden soll und keine neuen Kardinalitäten definiert wurden, dann gib die originalen Kantenkardinalitäten zurück.
-        return newForwardCardinality != null ? newForwardCardinality : filterNewCardinalities ? EdgeCardinality.ZERO_UNLIMITED : MetaModel.getForwardCardinality(edgeClass);
+        return newForwardCardinality != null ? newForwardCardinality : filterNewCardinalities ? EdgeCardinality.ZERO_UNLIMITED : CoreMetaModel.getForwardCardinality(edgeClass);
     }
 
     /**
@@ -149,7 +150,7 @@ public class CardinalityDefinition {
         //Wenn für die Kante neue Kardinalitäten angegeben wurden, gib diese zurück. Wenn keien neuen da sind und gefltert werden soll (= nur neue
         //Kardinalitäten sollen zu Konsistenzfehlern führen), dann gibt für alle Kanten ohne neue Kardinalitäten ZERO_UNLIMITED zurück (-> keine Fehler bei diesen Kanten).
         //Wenn aber nicht gefiltert werden soll und keine neuen Kardinalitäten definiert wurden, dann gib die originalen Kantenkardinalitäten zurück.
-        return newBackwardCardinality != null ? newBackwardCardinality : filterNewCardinalities ? EdgeCardinality.ZERO_UNLIMITED : MetaModel.getBackwardCardinality(edgeClass);
+        return newBackwardCardinality != null ? newBackwardCardinality : filterNewCardinalities ? EdgeCardinality.ZERO_UNLIMITED : CoreMetaModel.getBackwardCardinality(edgeClass);
     }
 
 }

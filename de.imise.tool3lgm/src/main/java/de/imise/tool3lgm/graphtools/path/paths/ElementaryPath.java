@@ -71,6 +71,36 @@ public final class ElementaryPath extends AbstractPath {
         return edge;
     }
 
+    /**
+     * @return the direction of the metaPath
+     * @see ElementaryMetaPath#getDirection()
+     */
+    public Direction getDirection() {
+        ElementaryMetaPath metaPath = getMetaPath();
+        Direction direction = metaPath.getDirection();
+        return direction;
+    }
+
+    /**
+     * @param direction
+     * @return <code>true</code> if the direction of the metaPath is the same as
+     *         the given direction
+     * @see ElementaryMetaPath#hasDirection(Direction)
+     */
+    public boolean hasDirection(final Direction direction) {
+        ElementaryMetaPath metaPath = getMetaPath();
+        return metaPath.hasDirection(direction);
+    }
+
+    /**
+     * @return <code>true</code> the direction of the metaPath is not
+     *         {@link Direction#BACKWARD}
+     */
+    public boolean hasDirectionForward() {
+        ElementaryMetaPath metaPath = getMetaPath();
+        return metaPath.hasDirectionForward();
+    }
+
     @Override
     public boolean isValid() {
         //das ganze hier könnte man bei Bedarf analog zum public InvalidityCheckResult getInvalidityCheckResult() bei den MetaPfaden machen
@@ -166,10 +196,8 @@ public final class ElementaryPath extends AbstractPath {
                     if (endElement != edgeStart) {
                         return false;
                     }
-                } else {
-                    if (startElement != edgeStart && endElement != edgeEnd || startElement != edgeEnd && endElement != edgeStart) {
-                        return false;
-                    }
+                } else if (startElement != edgeStart && endElement != edgeEnd || startElement != edgeEnd && endElement != edgeStart) {
+                    return false;
                 }
             } else {
                 return false;

@@ -3,6 +3,10 @@ package de.imise.tool3lgm.gui.menu;
 import static de.imise.tool3lgm.Static.getPreSelectedGDCollection;
 import static de.imise.tool3lgm.Static.getSelectedGDCollection;
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
+import static de.imise.tool3lgm.event.ActionLibrary.ContextActions.MODEL_ACTION_SET_ELEMENT_INTERLAYER_CONNECTIONS_VISIBILITY_OFF;
+import static de.imise.tool3lgm.event.ActionLibrary.ContextActions.MODEL_ACTION_SET_ELEMENT_INTERLAYER_CONNECTIONS_VISIBILITY_ON;
+import static de.imise.tool3lgm.event.ActionLibrary.ContextActions.MODEL_ACTION_SET_LAYER_INTERLAYER_CONNECTIONS_VISIBILITY_OFF;
+import static de.imise.tool3lgm.event.ActionLibrary.ContextActions.MODEL_ACTION_SET_LAYER_INTERLAYER_CONNECTIONS_VISIBILITY_ON;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_ADD_SELECTED_TO_ALL_SUBMODELS;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_ADD_SELECTED_TO_NEW_SUBMODEL;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_ADD_SELECTED_TO_SUBMODEL;
@@ -11,8 +15,8 @@ import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_ADOPT_S
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_ADOPT_SAME_FONT;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_ADOPT_SAME_TRANSPARENCY;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_COMMAND_LINE;
-import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_CREATE_ADDICTED;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_CREATE_NODE;
+import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_CREATE_SUBORDINATED;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_DELETE_FROM_MODEL;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_DELETE_FROM_SUBMODEL;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_INTERNAL_CHECK_CONSISTENCY;
@@ -71,6 +75,7 @@ import javax.swing.event.PopupMenuListener;
 import de.imise.tool3lgm.MetaModelContext;
 import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.event.ActionLibrary;
+import de.imise.tool3lgm.event.ActionLibrary.ContextActions;
 import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
 import de.imise.tool3lgm.graphtools.analyse.context.AbstractAnalysis;
 import de.imise.tool3lgm.graphtools.analyse.context.AnalysesRepository;
@@ -171,6 +176,30 @@ public class RegularContextGenerator extends ElementSelectionContextGenerator im
     private JMenuItem layer_show_configs, layer_hide_configs;
 
     /**
+     * MenuItem for the Action
+     * {@link GDCommands#MODEL_ACTION_SET_LAYER_SHOW_CONNECTED_AS_NAME_EXTENSION_IN_GRAPH_ON}
+     */
+    private JMenuItem layer_show_connected_names;
+
+    /**
+     * MenuItem for the Action
+     * {@link GDCommands#MODEL_ACTION_SET_LAYER_SHOW_CONNECTED_AS_NAME_EXTENSION_IN_GRAPH_OFF}
+     */
+    private JMenuItem layer_hide_connected_names;
+
+    /**
+     * MenuItem for the Action
+     * {@link GDCommands#MODEL_ACTION_SET_ELEMENT_SHOW_CONNECTED_AS_NAME_EXTENSION_IN_GRAPH_ON}
+     */
+    private JMenuItem show_connected_names;
+
+    /**
+     * MenuItem for the Action
+     * {@link GDCommands#MODEL_ACTION_SET_ELEMENT_SHOW_CONNECTED_AS_NAME_EXTENSION_IN_GRAPH_OFF}
+     */
+    private JMenuItem hide_connected_names;
+
+    /**
      * COMMENTME
      */
     private JMenuItem expand, collapse;
@@ -240,6 +269,7 @@ public class RegularContextGenerator extends ElementSelectionContextGenerator im
         JMenuItem interactive = getItem(MODEL_OPTION_GDCOLL_AUTOMATIC_MODE);
         JMenuItem debugGraph = getItem(BooleanProperty.TRANSIENT_OPTION_DEBUG_GRAPH);
         JMenuItem expertMode = getItem(BooleanProperty.OPTION_ENABLE_EXPERT_MODE);
+        JMenuItem logUndoRedoReadable = getItem(BooleanProperty.TRANSIENT_OPTION_LOG_READABLE_UNOD_REDO_COMMANDS);
 
         command_line = getItem(MODEL_ACTION_COMMAND_LINE);
         queue = getItem(MODEL_ACTION_PRINT_QUEUE);
@@ -248,6 +278,7 @@ public class RegularContextGenerator extends ElementSelectionContextGenerator im
         internals = new JMenu(getResString("intern"));
         internals.add(verify);
         internals.add(debugGraph);
+        internals.add(logUndoRedoReadable);
         internals.add(interactive);
         internals.add(expertMode);
         internals.addSeparator();
@@ -284,15 +315,20 @@ public class RegularContextGenerator extends ElementSelectionContextGenerator im
         layout_layer.add(trans_layer);
         layout_layer.add(adopt_layer);
 
-        show_configs = getItem(ActionLibrary.ContextActions.MODEL_ACTION_SET_ELEMENT_INTERLAYER_CONNECTIONS_VISIBILITY_ON);
-        hide_configs = getItem(ActionLibrary.ContextActions.MODEL_ACTION_SET_ELEMENT_INTERLAYER_CONNECTIONS_VISIBILITY_OFF);
+        show_configs = getItem(MODEL_ACTION_SET_ELEMENT_INTERLAYER_CONNECTIONS_VISIBILITY_ON);
+        hide_configs = getItem(MODEL_ACTION_SET_ELEMENT_INTERLAYER_CONNECTIONS_VISIBILITY_OFF);
         set_visible = getItem(MODEL_ACTION_SET_ELEMENT_VISIBILITY_ON);
         set_invisible = getItem(MODEL_ACTION_SET_ELEMENT_VISIBILITY_OFF);
 
-        layer_show_configs = getItem(ActionLibrary.ContextActions.MODEL_ACTION_SET_LAYER_INTERLAYER_CONNECTIONS_VISIBILITY_ON);
-        layer_hide_configs = getItem(ActionLibrary.ContextActions.MODEL_ACTION_SET_LAYER_INTERLAYER_CONNECTIONS_VISIBILITY_OFF);
+        layer_show_configs = getItem(MODEL_ACTION_SET_LAYER_INTERLAYER_CONNECTIONS_VISIBILITY_ON);
+        layer_hide_configs = getItem(MODEL_ACTION_SET_LAYER_INTERLAYER_CONNECTIONS_VISIBILITY_OFF);
         expand = getItem(MODEL_ACTION_SET_ELEMENT_EXPANSION_ON);
         collapse = getItem(MODEL_ACTION_SET_ELEMENT_EXPANSION_OFF);
+
+        show_connected_names = getItem(ContextActions.MODEL_ACTION_SET_ELEMENT_SHOW_CONNECTED_AS_NAME_EXTENSION_IN_GRAPH_ON);
+        hide_connected_names = getItem(ContextActions.MODEL_ACTION_SET_ELEMENT_SHOW_CONNECTED_AS_NAME_EXTENSION_IN_GRAPH_OFF);
+        layer_show_connected_names = getItem(ContextActions.MODEL_ACTION_SET_LAYER_SHOW_CONNECTED_AS_NAME_EXTENSION_IN_GRAPH_ON);
+        layer_hide_connected_names = getItem(ContextActions.MODEL_ACTION_SET_LAYER_SHOW_CONNECTED_AS_NAME_EXTENSION_IN_GRAPH_OFF);
 
     }
 
@@ -327,7 +363,7 @@ public class RegularContextGenerator extends ElementSelectionContextGenerator im
             Class<? extends CompositionEdge> compositionClass = slavePair.getFirstItem();
             Class<? extends ModelElement> slaveClass = slavePair.getSecondItem();
             String slaveClassName = slaveClass.getSimpleName();
-            JMenuItem item = getCreateAddictedItem(slaveClassName, doc, me, compositionClass, slaveClass);
+            JMenuItem item = getCreateSubordinatedItem(slaveClassName, doc, me, compositionClass, slaveClass);
             Pair<JMenuItem, Class<? extends ModelElement>> itemAndClassPair = new Pair<>(item, slaveClass);
             itemAndClassPairs.add(itemAndClassPair);
         }
@@ -366,9 +402,9 @@ public class RegularContextGenerator extends ElementSelectionContextGenerator im
      * @param subType
      * @return
      */
-    private JMenuItem getCreateAddictedItem(final String dispayableNameOrResKey, final GraphDocument doc, final ModelElement master, final Class<? extends CompositionEdge> compositionClass, final Class<? extends ModelElement> slaveClass) {
+    private JMenuItem getCreateSubordinatedItem(final String dispayableNameOrResKey, final GraphDocument doc, final ModelElement master, final Class<? extends CompositionEdge> compositionClass, final Class<? extends ModelElement> slaveClass) {
         String argumentsString = getArgumentsString(doc, master, compositionClass, slaveClass);
-        JMenuItem item = getItem(dispayableNameOrResKey, MODEL_ACTION_CREATE_ADDICTED, argumentsString);
+        JMenuItem item = getItem(dispayableNameOrResKey, MODEL_ACTION_CREATE_SUBORDINATED, argumentsString);
         item.setEnabled(master.countConnections(compositionClass) < CoreMetaModel.getMaxMasterToSlaveCardinality(compositionClass));
         return item;
     }
@@ -422,29 +458,23 @@ public class RegularContextGenerator extends ElementSelectionContextGenerator im
      * @return
      */
     private JMenu getAddToSzenarioMenu() {
-        JMenu szenario_menu = new JMenu(getResString("inszenario"));
+        JMenu szenario_menu = new JMenu(getResString("ADD_TO_SZENARIO"));
         JMenuItem item = getItem(MODEL_ACTION_ADD_SELECTED_TO_NEW_SUBMODEL);
         szenario_menu.add(item);
-
         GDCollection gdcoll = getSelectedGDCollection();
-
         for (Szenario szen : gdcoll.getSzenarios()) {
             item = new JMenuItem(szen.getName());
-
             szenario_menu.add(item);
-
             if (OPTION_ENABLE_SUBMODEL_BROWSER.is() && szen == Static.getSelectedDoc()) {
                 item.setEnabled(false);
                 continue;
             }
-
-            item.addActionListener(this);
             item.setActionCommand(MODEL_ACTION_ADD_SELECTED_TO_SUBMODEL + " " + szen.getID());
+            item.addActionListener(this);
         }
 
         item = getItem(MODEL_ACTION_ADD_SELECTED_TO_ALL_SUBMODELS);
         szenario_menu.add(item);
-
         setMenuScroller(szenario_menu, 1, 1);
         return szenario_menu;
     }
@@ -534,10 +564,19 @@ public class RegularContextGenerator extends ElementSelectionContextGenerator im
             }
             GraphDocument doc = getDoc();
             if (doc instanceof Szenario) {
-                if (ec instanceof InterLayerConnectedNodeContainer && contextSource instanceof InputGraphArea) {
-                    menu.addSeparator();
-                    addMenuItem(menu, show_configs);
-                    addMenuItem(menu, hide_configs);
+                if (contextSource instanceof InputGraphArea) {
+                    boolean separatorAdded = false;
+                    if (ec instanceof InterLayerConnectedNodeContainer) {
+                        menu.addSeparator();
+                        separatorAdded = true;
+                        addMenuItem(menu, ((InterLayerConnectedNodeContainer) ec).isShowInterLayerConnections() ? hide_configs : show_configs);
+                    }
+                    if (ec instanceof NodeContainer && me.hasGraphNameExtension()) {
+                        if (!separatorAdded) {
+                            menu.addSeparator();
+                        }
+                        addMenuItem(menu, ((NodeContainer) ec).isShowConnectedAsNameExtensionInGraph() ? hide_connected_names : show_connected_names);
+                    }
                 }
                 MetaModel metaModel = me.getMetaModel();
                 if (metaModel.hasLayout(me.getClass())) {
@@ -789,6 +828,8 @@ public class RegularContextGenerator extends ElementSelectionContextGenerator im
                 }
                 addMenuItem(menu, show_configs);
                 addMenuItem(menu, hide_configs);
+                addMenuItem(menu, show_connected_names);
+                addMenuItem(menu, hide_connected_names);
             }
             if (menu.getComponentCount() > 0) {
                 menu.addSeparator();
@@ -1027,6 +1068,8 @@ public class RegularContextGenerator extends ElementSelectionContextGenerator im
 
         addMenuItem(menu, layer_show_configs);
         addMenuItem(menu, layer_hide_configs);
+        addMenuItem(menu, layer_show_connected_names);
+        addMenuItem(menu, layer_hide_connected_names);
 
         menu.addSeparator();
         menu.add(layout_layer);
@@ -1319,7 +1362,8 @@ public class RegularContextGenerator extends ElementSelectionContextGenerator im
                     return;
                 }
                 return;
-            } else if (ec instanceof EdgeContainer) {
+            }
+            if (ec instanceof EdgeContainer) {
                 // nichts selektiert
                 if (!doc.isSelection()) {
                     if (left_button && !controlled) {

@@ -1,15 +1,21 @@
 package de.imise.tool3lgm.graphtools.dialog.element.panel;
 
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.GridLayout;
+import java.awt.Insets;
 import java.util.EventObject;
 
 import javax.swing.Action;
 import javax.swing.JButton;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import de.imise.tool3lgm.graphtools.dialog.action.LGMAction;
 import de.imise.tool3lgm.graphtools.dialog.element.AbstractElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.dialog.element.DialogActionCommands;
+import de.imise.tool3lgm.graphtools.dialog.search.SearchResultView;
+import de.imise.tool3lgm.graphtools.dialog.search.TreeSearchOptionsPanel;
 import de.imise.tool3lgm.graphtools.path.metapaths.MetaPath;
 import de.imise.util.swing.component.MinSizedIconButton;
 
@@ -25,7 +31,7 @@ public abstract class AbstractExpandablePanel extends LGMDragNDropPanel {
     /**
      * Button zu Auf- und Zuklappen der rechten Seite
      */
-    protected JButton viewButton;
+    private JButton expandOrCollapseViewButton;
 
     /**
      * Action zum Aufklappen der rechten Seite
@@ -61,7 +67,7 @@ public abstract class AbstractExpandablePanel extends LGMDragNDropPanel {
         super.init();
         // Aktionen für den button setzen
         showPartlyAction = getShowAction(this, false);
-        viewButton = MinSizedIconButton.createLimitedHeightButton(showPartlyAction, MIN_ADD_REMOVE_NEW_BUTTON_WIDTH);
+        expandOrCollapseViewButton = MinSizedIconButton.createLimitedHeightButton(showPartlyAction, MIN_ADD_REMOVE_NEW_BUTTON_WIDTH);
         showAllAction = getShowAction(this, true);
     }
 
@@ -74,6 +80,7 @@ public abstract class AbstractExpandablePanel extends LGMDragNDropPanel {
         } else {
             showPartlyDialog();
         }
+        JButton viewButton = getExpandOrCollapseViewButton();
         if (viewButton != null) {
             viewButton.setAction(full ? showPartlyAction : showAllAction);
         }
@@ -84,6 +91,7 @@ public abstract class AbstractExpandablePanel extends LGMDragNDropPanel {
      * @return
      */
     protected final boolean isRightSideVisible() {
+        JButton viewButton = getExpandOrCollapseViewButton();
         return viewButton != null && viewButton.getAction() == showPartlyAction;
     }
 
@@ -98,17 +106,18 @@ public abstract class AbstractExpandablePanel extends LGMDragNDropPanel {
     protected abstract void showPartlyDialog();
 
     @Override
-    public JButton getPanelButton() {
-        return viewButton;
+    public JButton getExpandOrCollapseViewButton() {
+        if (isExpandable()) {
+            return expandOrCollapseViewButton;
+        }
+        return null;
     }
 
     /**
      * Sets the state, that the panel cannot be expaded by setting the
      * viewButton to <code>null</code>
      */
-    protected void setUnexpandable() {
-        viewButton = null;
-    }
+    protected abstract boolean isExpandable();
 
     /**
      * Methode liefert eine <code>LGMAction</code> zurück, die das gesamte oder
@@ -157,6 +166,22 @@ public abstract class AbstractExpandablePanel extends LGMDragNDropPanel {
             }
         }
         return buttonpanel;
+    }
+
+    /**
+     * @param label label in frtont of the search combobox
+     * @param tree the tree in which elements should be searched for
+     * @return
+     */
+    protected static final JPanel createTreeSearchPanel(JLabel label, SearchResultView tree) {
+        TreeSearchOptionsPanel rtreeSearchPanel = new TreeSearchOptionsPanel(tree);
+        JPanel rsearchPanel = new JPanel(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+        add(rsearchPanel, label, gbc, 0, 0, 1, 1, new Insets(0, 0, 0, 20));
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.weightx = 1d;
+        add(rsearchPanel, rtreeSearchPanel.getElementName(), gbc, 1, 0, 1, 1);
+        return rsearchPanel;
     }
 
 }

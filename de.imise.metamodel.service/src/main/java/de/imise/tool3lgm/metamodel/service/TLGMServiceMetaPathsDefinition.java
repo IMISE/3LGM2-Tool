@@ -231,7 +231,7 @@ public class TLGMServiceMetaPathsDefinition extends MetaPathDefinition {
     ////////////////////////////////////////////////////////////////////////
 
     @Override
-    public Map<Class<? extends ModelElement>, MetaPath> getElementClassToNameExtensionMetaPath() {
+    public Map<Class<? extends ModelElement>, SimpleMetaPath> getElementClassToNameExtensionMetaPath() {
         SimpleMetaPath applicationsSystemNameExtensionPath = smp(ApplicationSystem.class, SoftwareProduct.class, ApplicationSystem_SoftwareProduct_Edge.class);
         SimpleMetaPath iheActorInstanceNameExtensionPath = smp(IheActorInstance.class, IheActor.class, IheActor_IheActorInstance_Edge.class);
         return ImmutableMap.of(ApplicationSystem.class, applicationsSystemNameExtensionPath, IheActorInstance.class, iheActorInstanceNameExtensionPath);

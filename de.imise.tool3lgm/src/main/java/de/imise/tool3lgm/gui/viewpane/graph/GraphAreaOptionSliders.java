@@ -1,8 +1,12 @@
 package de.imise.tool3lgm.gui.viewpane.graph;
 
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
+import static de.imise.tool3lgm.graphtools.model.LGMChangeListener.LGMChangeType.DATA_CHANGED;
+import static de.imise.tool3lgm.graphtools.undoredo.TransactionManager.STANDARD_PID;
 
 import java.awt.Dimension;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 import javax.swing.JLabel;
 import javax.swing.JSlider;
@@ -12,6 +16,7 @@ import javax.swing.event.ChangeListener;
 
 import com.google.common.base.Strings;
 
+import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.model.Szenario;
 import de.imise.tool3lgm.graphtools.view.graph.BasicGraphArea;
@@ -120,7 +125,14 @@ public class GraphAreaOptionSliders implements ChangeListener {
             InputGraphArea area = frame.getInputGraphArea();
             area.setZoom((double) sliderZoom.getValue() / 100);
         } else if (e.getSource() == sliderPageSizeFactor) {
-            frame.getGraphDocument().setPageSizeFactor(sliderPageSizeFactor.getValue() / 100d);
+            GraphDocument doc = frame.getGraphDocument();
+            int pageSizeFactor = (int) (doc.getPageSizeFactor() * 100d);
+            int sliderValue = sliderPageSizeFactor.getValue();
+            // Preventing the destruction of the UNDO-REDO chain. The PageSizeFactor
+            // of the doc can differ by a fraction (<0.01) from the value of the slider.
+            if (pageSizeFactor != sliderValue) {
+                doc.setPageSizeFactor(sliderValue / 100d, true, STANDARD_PID);
+            }
         }
     }
 
@@ -137,6 +149,32 @@ public class GraphAreaOptionSliders implements ChangeListener {
             }
             valueTextField = new MinMaxNumberTextField3(min, max, 0);
             label = Strings.isNullOrEmpty(labelResKey) ? null : new JLabel(getResString(labelResKey));
+
+            addMouseListener(new MouseAdapter() {
+
+                GraphDocument doc = null;
+
+                @Override
+                public void mouseReleased(MouseEvent e) {
+                    if (doc != null) {
+                        //fire data changed to update the undo redo buttons
+                        doc.finish_transaction(STANDARD_PID, DATA_CHANGED);
+                        doc = null;
+                    }
+                }
+
+                @Override
+                public void mousePressed(MouseEvent e) {
+                    //start transaction to prevent every single mini slider change
+                    // will be logged as a single Undo-Redo command
+                    doc = Static.getSelectedDoc();
+                    if (doc != null) {
+                        doc.start_transaction(STANDARD_PID);
+                    }
+                }
+
+            });
+
         }
 
         public JTextField getTextField() {

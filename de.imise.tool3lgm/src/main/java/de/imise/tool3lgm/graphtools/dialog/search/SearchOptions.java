@@ -3,6 +3,7 @@ package de.imise.tool3lgm.graphtools.dialog.search;
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
 
 import java.util.List;
+import java.util.Objects;
 
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.userfield.definition.UserField;
@@ -34,7 +35,33 @@ public class SearchOptions {
     }
 
     /** */
-    public Class<? extends ModelElement> searchedElementType;
+    private Class<? extends ModelElement> searchedElementType = ModelElement.class;
+
+    /**
+     * @param searchedElementType
+     */
+    public void setSearchedElementType(Class<? extends ModelElement> searchedElementType) {
+        if (searchedElementType == null) {
+            searchedElementType = ModelElement.class; // prevent null
+        } else {
+            this.searchedElementType = searchedElementType;
+        }
+    }
+
+    /**
+     * @return
+     */
+    public Class<? extends ModelElement> getSearchedElementType() {
+        return searchedElementType;
+    }
+
+    /**
+     * If this element type is the same like the searchedElementType and all
+     * patterns are <code>null</code> then nothing is returned. We need this
+     * parameter only to recognize that if all patterns are null also not to be
+     * searched for the element type. Default is {@link ModelElement}.
+     */
+    public Class<? extends ModelElement> baseSearchedElementType = ModelElement.class;
 
     /** */
     public String inputStringName;
@@ -77,5 +104,62 @@ public class SearchOptions {
      * userfields
      */
     public List<String> inputHistoryUserFields;
+
+    @Override
+    public String toString() {
+        return "SearchOptions [searchedElementType=" + searchedElementType + ", baseSearchedElementType=" + baseSearchedElementType + ", inputStringName=" + inputStringName + ", caseSensitiveName=" + caseSensitiveName + ", inputStringDescription="
+                + inputStringDescription + ", caseSensitiveDescription=" + caseSensitiveDescription + ", inputStringUserFields=" + inputStringUserFields + ", caseSensitiveUserFields=" + caseSensitiveUserFields + ", userFieldStyle=" + userFieldStyle
+                + ", userFieldCheckBoxState=" + userFieldCheckBoxState + ", inputHistoryName=" + inputHistoryName + ", inputHistoryDescription=" + inputHistoryDescription + ", inputHistoryUserFields=" + inputHistoryUserFields + "]";
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(baseSearchedElementType, caseSensitiveDescription, caseSensitiveName, caseSensitiveUserFields, inputStringDescription, inputStringName, inputStringUserFields, searchedElementType, userFieldCheckBoxState, userFieldStyle);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        SearchOptions other = (SearchOptions) obj;
+        if (!Objects.equals(baseSearchedElementType, other.baseSearchedElementType)) {
+            return false;
+        }
+        if (caseSensitiveDescription != other.caseSensitiveDescription) {
+            return false;
+        }
+        if (caseSensitiveName != other.caseSensitiveName) {
+            return false;
+        }
+        if (caseSensitiveUserFields != other.caseSensitiveUserFields) {
+            return false;
+        }
+        if (!Objects.equals(inputStringDescription, other.inputStringDescription)) {
+            return false;
+        }
+        if (!Objects.equals(inputStringName, other.inputStringName)) {
+            return false;
+        }
+        if (!Objects.equals(inputStringUserFields, other.inputStringUserFields)) {
+            return false;
+        }
+        if (!Objects.equals(searchedElementType, other.searchedElementType)) {
+            return false;
+        }
+        if (userFieldCheckBoxState != other.userFieldCheckBoxState) {
+            return false;
+        }
+        if (userFieldStyle != other.userFieldStyle) {
+            return false;
+        }
+        return true;
+    }
 
 }

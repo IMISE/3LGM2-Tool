@@ -22,6 +22,7 @@ import javax.swing.JComponent;
 import javax.swing.JLabel;
 
 import de.imise.tool3lgm.graphtools.dialog.element.AbstractElementPropertyDialog;
+import de.imise.tool3lgm.graphtools.metamodel.CoreMetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.DoubleMeaningEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
@@ -179,7 +180,7 @@ public class ElementDialogHeaderPanel extends ElementDialogPanel {
 
             String startElementName = edge.getStart().getClearName();
             // bei DoubleMeaning-Edges nur die tatsächliche Richtung hinschreiben
-            if (MetaModel.isDoubleMeaningEdge(edgeClass)) {
+            if (CoreMetaModel.isDoubleMeaningEdge(edgeClass)) {
                 forwardEdgeClassName = "&nbsp;&nbsp;<i>" + elementsNameBuilder.getMetaAssociationName(edgeClass, Direction.FORWARD, ((DoubleMeaningEdge) edge).getConnectionState()) + "</i>&nbsp;&nbsp;";
             }
             String endElementName = edge.getEnd().getClearName();

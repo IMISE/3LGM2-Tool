@@ -94,10 +94,10 @@ public class ToolContentHandlerV3_1 extends ToolContentHandlerV3_0 {
                 graphViewParameter.activeLayer = Integer.parseInt(value);
 
             } else if (qName.equals("multiView")) {
-                graphViewParameter.multiView = Boolean.valueOf(value).booleanValue();
+                graphViewParameter.multiView = Boolean.valueOf(value);
 
             } else if (qName.equals("selected")) {
-                graphViewParameter.selected = Boolean.valueOf(value).booleanValue();
+                graphViewParameter.selected = Boolean.valueOf(value);
 
             } else if (qName.equals("view")) {
                 graphViewParameter = null;

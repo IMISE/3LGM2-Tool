@@ -69,8 +69,8 @@ public final class DummyGDCollection extends GDCollection {
                 }
                 break;
             case NUMBER:
-                Double d = numberValueCounter + numberValueCounter / 2d + numberValueCounter++ / 3d;
-                me.setUserFieldInputValue(userField, d.toString());
+                double d = numberValueCounter + numberValueCounter / 2d + numberValueCounter++ / 3d;
+                me.setUserFieldInputValue(userField, Double.toString(d));
                 break;
             case HYPERLINK:
                 me.setUserFieldInputValue(userField, "https://www.3lgm2.de");

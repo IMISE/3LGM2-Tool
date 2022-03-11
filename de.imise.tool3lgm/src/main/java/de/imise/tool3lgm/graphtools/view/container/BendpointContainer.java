@@ -8,12 +8,15 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.Stroke;
+import java.util.Objects;
 
 import de.imise.tool3lgm.graphtools.metamodel.elements.Bendpoint;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout;
 
 /**
+ * {@link BendpointContainer} are equals if they have the same Bendpoint.
+ *
  * @author imi0wendt
  */
 public class BendpointContainer extends NodeContainer {
@@ -22,9 +25,12 @@ public class BendpointContainer extends NodeContainer {
      *
      */
     public BendpointContainer() {
-        super();
     }
 
+    /**
+     * @param kp
+     * @param doc
+     */
     public BendpointContainer(final Bendpoint kp, final GraphDocument doc) {
         super(kp, new GraphElementLayout(), doc);
         layout.bg_color = new Color(0, 0, 0, 0);
@@ -71,6 +77,14 @@ public class BendpointContainer extends NodeContainer {
     }
 
     /**
+     * @return
+     */
+    public EdgeContainer getOwner() {
+        Bendpoint bendpoint = getBendpoint();
+        return bendpoint == null ? null : bendpoint.getOwner();
+    }
+
+    /**
      * Liefert den Punkt, an dem sich der Knickpunkt vor diesem befindet. Ist es
      * der erste Knickpunkt dieser Edge, dann kommt der Startpunkt der Edge
      * zurück.
@@ -97,7 +111,7 @@ public class BendpointContainer extends NodeContainer {
             return null;
         }
         if (pos == 0) {
-            return new Point(edgeC.startx, edgeC.starty);
+            return new Point(edgeC.start); //we must copy the point!
         }
         BendpointContainer bc = edgeC.getBendpointContainer(pos - 1);
         return new Point(bc.getX(), bc.getY());
@@ -118,10 +132,33 @@ public class BendpointContainer extends NodeContainer {
             return null;
         }
         if (pos == edgeC.getBendpointContainerCount() - 1) {
-            return new Point(edgeC.endx, edgeC.endy);
+            return new Point(edgeC.end); //we must copy the point!
         }
         BendpointContainer bc = edgeC.getBendpointContainer(pos + 1);
         return new Point(bc.getX(), bc.getY());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(me);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        BendpointContainer other = (BendpointContainer) obj;
+        if (!Objects.equals(me, other.me)) {
+            return false;
+        }
+        return true;
     }
 
 }

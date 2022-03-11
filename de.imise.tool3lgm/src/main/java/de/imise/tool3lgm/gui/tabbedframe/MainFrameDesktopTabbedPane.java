@@ -161,7 +161,7 @@ public class MainFrameDesktopTabbedPane extends JTabbedPaneWithCloseIconsRight i
 
     @Override
     public void removeTabAt(final int index) {
-        Component selectedComponent = getSelectedComponent();
+        Component selectedComponent = getComponentAt(index);
         ViewPaneFrameComponent viewFrame = null;
         ViewPaneFrameComponentListener mainFrameDesktopPane = Static.getMainFrameDesktopPane();
         if (selectedComponent instanceof ViewPaneFrameComponent) {
@@ -216,6 +216,18 @@ public class MainFrameDesktopTabbedPane extends JTabbedPaneWithCloseIconsRight i
                 }
             }
         }
+    }
+
+    @Override
+    public GraphDocument closeActiveView() {
+        Component selectedComponent = getSelectedComponent();
+        if (selectedComponent != null) {
+            remove(selectedComponent);
+            if (selectedComponent instanceof ViewPaneFrameComponent) {
+                return ((ViewPaneFrameComponent) selectedComponent).getGraphDocument();
+            }
+        }
+        return null;
     }
 
 }

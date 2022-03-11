@@ -402,7 +402,7 @@ public class PathFunctions {
         if (startElement != null && MetaPathFunctions.isCompositionFromMasterToSlave(edgeClassToNewElement, directionToNewElement)) {
             //erzeuge ein untergeordnetes Element
             Class<? extends CompositionEdge> compositionEdgeClass = edgeClassToNewElement.asSubclass(CompositionEdge.class);
-            createdDependent = GraphDocument.createAddicted(doc, startElement, compositionEdgeClass, newElementClass, pid);
+            createdDependent = GraphDocument.createSubordinated(doc, startElement, compositionEdgeClass, newElementClass, pid);
         } else if (startElement != null && MetaPathFunctions.isInstanciationFromMasterToInstance(edgeClassToNewElement, directionToNewElement)) {
             //erzeuge eine Instanz aus dem Master
             Class<? extends InstanciationEdge> instanciationEdgeClass = edgeClassToNewElement.asSubclass(InstanciationEdge.class);

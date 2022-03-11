@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import de.imise.tool3lgm.graphtools.consistency.CardinalityDefinition;
+import de.imise.tool3lgm.graphtools.metamodel.CoreMetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.EdgeCardinality;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModelSpecificAdapter;
@@ -100,8 +101,8 @@ public final class RedundancyAnalysisDefinitions extends MetaPathDefinition {
             //alle Standardkardinalitäten der Kanten des MetaPfades zur cardinalityDefinition hinzufügen
             for (ElementaryMetaPath elementaryMetaPath : metaPath.getElementaryMetaPaths()) {
                 Class<? extends Edge> edgeClass = elementaryMetaPath.getEdgeClass();
-                cardinalityDefinition.setNewForwardCardinality(edgeClass, MetaModel.getForwardCardinality(edgeClass));
-                cardinalityDefinition.setNewBackwardCardinality(edgeClass, MetaModel.getBackwardCardinality(edgeClass));
+                cardinalityDefinition.setNewForwardCardinality(edgeClass, CoreMetaModel.getForwardCardinality(edgeClass));
+                cardinalityDefinition.setNewBackwardCardinality(edgeClass, CoreMetaModel.getBackwardCardinality(edgeClass));
             }
         }
 

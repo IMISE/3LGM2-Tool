@@ -4,9 +4,9 @@ import static com.google.common.base.Strings.isNullOrEmpty;
 import static de.imise.tool3lgm.Static.getMainFrame;
 import static de.imise.tool3lgm.Tool3lgmConstants.isExtension;
 import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.DOMAIN_LAYER;
-import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.LAYERS;
 import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.MAX_LAYER_INDEX;
 import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.MIN_LAYER_INDEX;
+import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.VISIBLE_LAYERS;
 import static de.imise.tool3lgm.graphtools.metamodel.elements.DoubleMeaningEdge.ConnectionState.BACKWARD;
 import static de.imise.tool3lgm.graphtools.metamodel.elements.DoubleMeaningEdge.ConnectionState.DOUBLE;
 import static de.imise.tool3lgm.graphtools.metamodel.elements.DoubleMeaningEdge.ConnectionState.FORWARD;
@@ -24,6 +24,7 @@ import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_CREATE_
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_DELETE_FROM_MODEL;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_DELETE_FROM_SUBMODEL;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_DELETE_SUBMODEL;
+import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_DUPLICATE_SUBMODEL;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_INSERT_BENDING_POINT;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_LINK;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_MOVE_ORDER;
@@ -121,6 +122,7 @@ import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.graphtools.view.container.InterLayerConnectedNodeContainer;
 import de.imise.tool3lgm.graphtools.view.container.LayerContainer;
 import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
+import de.imise.tool3lgm.graphtools.view.graph.DefaultElementsLayoutDefinition;
 import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout;
 import de.imise.tool3lgm.graphtools.view.graph.GraphViewParameter;
 import de.imise.tool3lgm.log.Log;
@@ -642,17 +644,66 @@ public class GDCollection extends UserFieldTarget implements MetaModelSpecific {
         removeContainerFromSubmodel(elementsToDelete, pid);
         szenarios.remove(szen);
         activeGraphDocumentsList.remove(szen);
-        for (int layerIndex : LAYERS) {
+        for (int layerIndex : VISIBLE_LAYERS) {
             LayerContainer lc = szen.layer[layerIndex];
             mainDoc.addUndo(pid, MODEL_ACTION_SET_LAYER_COLOR, szenID, layerIndex, lc.getColor().getRGB());
             mainDoc.addUndo(pid, MODEL_ACTION_SET_LAYER_ALPHA, szenID, layerIndex, lc.getAlpha());
             mainDoc.addUndo(pid, MODEL_ACTION_SET_LAYER_SIZE_FACTOR, szenID, szen.getPageSizeFactor());
         }
+        addUndoDefaultElementLayout(szen, pid);
         mainDoc.addUndo(pid, MODEL_ACTION_CREATE_SUBMODEL, szen.getName(), szen.getDescription(), szenID);
-        mainDoc.addRedo(pid, MODEL_ACTION_DELETE_SUBMODEL, szenID, pid);
+        mainDoc.addRedo(pid, MODEL_ACTION_DELETE_SUBMODEL, szenID);
         mainDoc.finish_transaction(pid);
         setChanged(true);
         distribute(SZENARIO_REMOVED, null, szen, pid);
+    }
+
+    /**
+     * @param szen
+     */
+    private void addUndoDefaultElementLayout(GraphDocument szen, int pid) {
+        DefaultElementsLayoutDefinition defaultElementsLayout = szen.getDefaultElementsLayout();
+        for (Class<? extends ModelElement> elementClass : defaultElementsLayout.getElementClassesWithStandardLayout()) {
+            GraphElementLayout standardElementLayout = defaultElementsLayout.getStandardElementLayout(elementClass);
+            mainDoc.addUndo(pid, MODEL_ACTION_SET_ELEMENT_COLOR, szen, elementClass, standardElementLayout.bg_color);
+        }
+    }
+
+    /**
+     * @param sourceSzenID
+     * @param targetSzenID
+     * @param title
+     * @param pid
+     * @return
+     */
+    public Szenario duplicateSzenario(String sourceSzenID, String targetSzenID, String title, final int pid) {
+        GraphDocument sourceDoc = getGraphDocumentCoded(sourceSzenID);
+        if (sourceDoc == null || !(sourceDoc instanceof Szenario)) {
+            return null;
+        }
+        Szenario sourceSzen = (Szenario) sourceDoc;
+        if (Strings.isNullOrEmpty(title)) {
+            title = getNextIndicatedName(sourceSzen.getName() + " #", activeGraphDocumentsList);
+        }
+        if (!isAutomaticMode()) {
+            title = askName(title);
+        }
+        if (Strings.isNullOrEmpty(title)) {
+            return null;
+        }
+        int activeLayer = getActiveLayer();
+        Szenario duplicate = sourceSzen.duplicate(targetSzenID, title);
+        szenarios.add(duplicate);
+        activeGraphDocumentsList.add(duplicate);
+        setChanged(true);
+        setActiveLayer(activeLayer);
+        //log undo redo
+        mainDoc.start_transaction(pid);
+        mainDoc.addUndo(pid, MODEL_ACTION_DELETE_SUBMODEL, duplicate.id);
+        mainDoc.addRedo(pid, MODEL_ACTION_DUPLICATE_SUBMODEL, sourceSzenID, duplicate.id, title);
+        mainDoc.finish_transaction(pid);
+        distribute(SZENARIO_ADDED, null, duplicate, pid);
+        return duplicate;
     }
 
     /**
@@ -907,9 +958,7 @@ public class GDCollection extends UserFieldTarget implements MetaModelSpecific {
             return;
         }
         simpleRemoveContainerFromSzenario(reallyContainerToRemove, false, pid);
-        szen.finish_transaction(pid);
-        szen.distributeEvent(DATA_CHANGED, pid);
-        szen.distributeEvent(SELECTION_CHANGED, pid);
+        szen.finish_transaction(pid, DATA_CHANGED, SELECTION_CHANGED);
     }
 
     /**
@@ -977,9 +1026,7 @@ public class GDCollection extends UserFieldTarget implements MetaModelSpecific {
         if (!transActionStarted) {
             return;
         }
-        ecDoc.finish_transaction(pid);
-        ecDoc.distributeEvent(DATA_CHANGED, pid);
-        ecDoc.distributeEvent(SELECTION_CHANGED, pid);
+        ecDoc.finish_transaction(pid, DATA_CHANGED, SELECTION_CHANGED);
     }
 
     /**
@@ -1117,7 +1164,8 @@ public class GDCollection extends UserFieldTarget implements MetaModelSpecific {
                 removeBendpoint((Bendpoint) me, pid);
                 allElementsToDelete.remove(i--);
                 continue;
-            } else if (me instanceof Edge) {
+            }
+            if (me instanceof Edge) {
                 Edge edge = (Edge) me;
                 edgesToDelete.add(edge);
                 //wenn durch das Löschen der Edge auch die Kardinalität für eins oder beide der durch die Edge verbundenen
@@ -1151,9 +1199,7 @@ public class GDCollection extends UserFieldTarget implements MetaModelSpecific {
             }
         }
         if (allElementsToDelete.isEmpty()) {
-            doc.finish_transaction(pid);
-            doc.distributeEvent(DATA_CHANGED, pid);
-            doc.distributeEvent(SELECTION_CHANGED, pid);
+            doc.finish_transaction(pid, DATA_CHANGED, SELECTION_CHANGED);
             return;
         }
         //alle Elemente einfach aus den Szenarien löschen
@@ -1232,9 +1278,7 @@ public class GDCollection extends UserFieldTarget implements MetaModelSpecific {
                 removeOptional((OptionalEdge) me);
             }
         }
-        doc.finish_transaction(pid);
-        doc.distributeEvent(DATA_CHANGED, pid);
-        doc.distributeEvent(SELECTION_CHANGED, pid);
+        doc.finish_transaction(pid, DATA_CHANGED, SELECTION_CHANGED);
     }
 
     /**
@@ -1268,9 +1312,7 @@ public class GDCollection extends UserFieldTarget implements MetaModelSpecific {
         mainDoc.getLayer(layerIndex).remove(bendpoint.getContainer(mainDoc));
         szen.addRedo(pid, MODEL_ACTION_DELETE_FROM_MODEL, bendpoint);
         szen.addUndo(pid, MODEL_ACTION_INSERT_BENDING_POINT, szen, edgeC, bc, bc.getX(), bc.getY(), oldIndex);
-        szen.finish_transaction(pid);
-        szen.distributeEvent(DATA_CHANGED, bc, pid);
-        szen.distributeEvent(SELECTION_CHANGED, bc, pid);
+        szen.finish_transaction(pid, DATA_CHANGED, SELECTION_CHANGED);
     }
 
     //ENDE REMOVE //
@@ -1334,9 +1376,7 @@ public class GDCollection extends UserFieldTarget implements MetaModelSpecific {
             bendpointContainer.setLocation(x, y);
         }
         szen.select(bendpointContainer, pid);
-        szen.finish_transaction(pid);
-        szen.distributeEvent(DATA_CHANGED, pid);
-        szen.distributeEvent(SELECTION_CHANGED, pid);
+        szen.finish_transaction(pid, DATA_CHANGED, SELECTION_CHANGED);
         edgeContainer.computeBorderPoints();
         return bendpointContainer;
     }
@@ -1415,10 +1455,9 @@ public class GDCollection extends UserFieldTarget implements MetaModelSpecific {
             return null;
         }
         boolean oldAutomaticMode = setAutomaticMode(true);
-        createInitialAddicted(me, pid);
+        createInitialSubordinates(me, pid);
         setAutomaticMode(oldAutomaticMode);
-        mainDoc.finish_transaction(pid);
-        mainDoc.distributeEvent(DATA_CHANGED, pid);
+        mainDoc.finish_transaction(pid, DATA_CHANGED);
         return nc;
     }
 
@@ -1429,7 +1468,7 @@ public class GDCollection extends UserFieldTarget implements MetaModelSpecific {
      * @param me
      * @param pid
      */
-    public void createInitialAddicted(final ModelElement me, final int pid) {
+    public void createInitialSubordinates(final ModelElement me, final int pid) {
         Class<? extends ModelElement> elementClass = me.getClass();
         for (Class<? extends Edge> subTypeEdgeClass : metaModel.getInitialSubtypes(elementClass)) {
             Class<? extends ModelElement> subType = CoreMetaModel.isStartClass(subTypeEdgeClass, elementClass) ? getEndClass(subTypeEdgeClass) : getStartClass(subTypeEdgeClass);
@@ -1460,7 +1499,7 @@ public class GDCollection extends UserFieldTarget implements MetaModelSpecific {
      * @param pid
      */
     public void updateInferenceEdges(final int pid) {
-        removeInferenceEdges(pid); //first remove, so there must not be checked all potential new created inferenceEgdes if they are superflous
+        removeInferenceEdges(false, pid); //first remove, so there must not be checked all potential new created inferenceEgdes if they are superflous
         createInferenceEdges(pid);
     }
 
@@ -1469,14 +1508,6 @@ public class GDCollection extends UserFieldTarget implements MetaModelSpecific {
      */
     private boolean lockInferenceEgdeCreation = false;
 
-    /**
-     * Removes all superflous {@link InferenceEdge}s.
-     *
-     * @param pid
-     */
-    void removeInferenceEdges(final int pid) {
-        removeInferenceEdges(false, pid);
-    }
     /**
      * Removes all superflous {@link InferenceEdge}s.
      *
@@ -1532,7 +1563,7 @@ public class GDCollection extends UserFieldTarget implements MetaModelSpecific {
                     }
                     //if not -> remove the InferenceEdge
                     if (remove) {
-                        unlink(edgeStart, edgeEnd, edgeClass, pid);
+                        unlink(edgeStart, edgeEnd, edgeClass, false, pid);
                     }
                 }
             }
@@ -1666,9 +1697,8 @@ public class GDCollection extends UserFieldTarget implements MetaModelSpecific {
         //das neue Element mit dem startElement verknüpfen
         if (direction == Direction.FORWARD) {
             return link(edgeClass, startElement, endElement, false, pid);
-        } else {
-            return link(edgeClass, endElement, startElement, false, pid);
         }
+        return link(edgeClass, endElement, startElement, false, pid);
     }
 
     /**
@@ -2114,7 +2144,18 @@ public class GDCollection extends UserFieldTarget implements MetaModelSpecific {
      * @param pid
      */
     public final void unlink(final ModelElement me1, final ModelElement me2, final Class<? extends Edge> edgeClass, final int pid) {
-        unlink(me1, me2, edgeClass, INVALID_EDGE_INDEX, pid);
+        unlink(me1, me2, edgeClass, true, pid);
+    }
+
+    /**
+     * @param me1
+     * @param me2
+     * @param edgeClass
+     * @param removeInferenceEdgeConditionPaths
+     * @param pid
+     */
+    public final void unlink(final ModelElement me1, final ModelElement me2, final Class<? extends Edge> edgeClass, boolean removeInferenceEdgeConditionPaths, final int pid) {
+        unlink(me1, me2, edgeClass, INVALID_EDGE_INDEX, removeInferenceEdgeConditionPaths, pid);
     }
 
     /**
@@ -2125,7 +2166,7 @@ public class GDCollection extends UserFieldTarget implements MetaModelSpecific {
      * @param pid
      */
     public final void unlink(final ModelElement me1, final ModelElement me2, final Class<? extends Edge> edgeClass, final ModelElement ignoreElementIfIconosistent, final int pid) {
-        unlink(me1, me2, edgeClass, INVALID_EDGE_INDEX, ignoreElementIfIconosistent, pid);
+        unlink(me1, me2, edgeClass, INVALID_EDGE_INDEX, ignoreElementIfIconosistent, true, pid);
     }
 
     /**
@@ -2156,8 +2197,7 @@ public class GDCollection extends UserFieldTarget implements MetaModelSpecific {
         if (direction == null || direction == Direction.BACKWARD) {
             unlink(end, start, edge.getClass(), end.getEdgeIndex(edge), pid);
         }
-        mainDoc.finish_transaction(pid);
-        mainDoc.distributeEvent(DATA_CHANGED, pid);
+        mainDoc.finish_transaction(pid, DATA_CHANGED);
     }
 
     /**
@@ -2175,7 +2215,26 @@ public class GDCollection extends UserFieldTarget implements MetaModelSpecific {
      * @param pid
      */
     public final void unlink(final ModelElement me1, final ModelElement me2, final Class<? extends Edge> edgeClass, final int me1EdgeIndex, final int pid) {
-        unlink(me1, me2, edgeClass, me1EdgeIndex, null, pid);
+        unlink(me1, me2, edgeClass, me1EdgeIndex, true, pid);
+    }
+
+    /**
+     * Anders als bei link() ist hier die Richtung, also die Reihenfolge der
+     * beiden ModelElemente nur wichtig, wenn es eine {@link DoubleMeaningEdge}
+     * ist oder die übergebenen Elemente beide jeweils Start- und EndElement der
+     * Kantenklasse sein können. In allen anderen Fällen wird sonst auch einfach
+     * versucht irgendeine Kante dieser Art zwischen den beiden übergebenen
+     * Elementen zu löschen.
+     *
+     * @param me1
+     * @param me2
+     * @param edgeClass
+     * @param me1EdgeIndex
+     * @param removeInferenceEdgeConditionPaths
+     * @param pid
+     */
+    public final void unlink(final ModelElement me1, final ModelElement me2, final Class<? extends Edge> edgeClass, final int me1EdgeIndex, boolean removeInferenceEdgeConditionPaths, final int pid) {
+        unlink(me1, me2, edgeClass, me1EdgeIndex, null, removeInferenceEdgeConditionPaths, pid);
     }
 
     /**
@@ -2191,9 +2250,10 @@ public class GDCollection extends UserFieldTarget implements MetaModelSpecific {
      * @param edgeClass
      * @param me1EdgeIndex
      * @param ignoreElementIfIconosistent
+     * @param removeInferenceEdgeConditionPaths
      * @param pid
      */
-    public final void unlink(final ModelElement me1, ModelElement me2, final Class<? extends Edge> edgeClass, final int me1EdgeIndex, final ModelElement ignoreElementIfIconosistent, final int pid) {
+    private final void unlink(final ModelElement me1, ModelElement me2, final Class<? extends Edge> edgeClass, final int me1EdgeIndex, final ModelElement ignoreElementIfIconosistent, boolean removeInferenceEdgeConditionPaths, final int pid) {
         if (me1 == null || me2 == null) {
             return;
         }
@@ -2206,7 +2266,8 @@ public class GDCollection extends UserFieldTarget implements MetaModelSpecific {
         edges = me1.getEdgesWith(me2, edgeClass, me1EdgeIndex);
         if (edges.isEmpty()) {
             return;
-        } else if (edges.size() == 1) {
+        }
+        if (edges.size() == 1) {
             edge = edges.get(0);
         } else {
             //TODO: statt des OptionPanes hier sollten einfach alle Kanten gelöscht werden. Beim Join muss das OptionPane auch raus, da sowas in der Kernklasse hier nichts zu suchen hat!
@@ -2233,25 +2294,25 @@ public class GDCollection extends UserFieldTarget implements MetaModelSpecific {
         }
         String edgeClassName = edgeClass == null ? "null" : edgeClass.getName();
         mainDoc.start_transaction(pid);
+        //set the bulk mode because this function can be recursive if we remove
+        //inference edges condition paths and in the bulk mode we prevent that
+        //the inference edges are recalculated during the removing of the
+        //condition paths
+        boolean oldBulkMode = setBulkMode(true);
         mainDoc.addRedo(pid, MODEL_ACTION_UNLINK, me1, me2, edgeClassName, me1EdgeIndex);
         //Undo-Kommando wird in deleteElement gesetzt (s. u.)
         //nur bei Kanten mit doppelter Bedeutung kann man in bestimmten Richtungen unlinken. Bei allen anderen
         //ist die Richtung egal und das Unlinken ist das Löschen der Edge
         Class<? extends Edge> absoluteEdgeClass = edge.getClass(); // die übergebene Kanten-Klasse kann null gewesen oder eine Oberklasse sein
-        //InferenceEdge? -> delete condition paths
-        if (InferenceEdge.class.isAssignableFrom(absoluteEdgeClass)) {
+
+        //InferenceEdge? -> delete condition paths?
+        if (removeInferenceEdgeConditionPaths && InferenceEdge.class.isAssignableFrom(absoluteEdgeClass)) {
             OutParamObject<ModelElement> inferenceEdgeConditionMetaPathStartElement = new OutParamObject<>(me1);
             OutParamObject<ModelElement> inferenceEdgeConditionMetaPathEndElement = new OutParamObject<>(me2);
             MetaPath inferenceEdgeConditionMetaPath = getInferenceEdgeConditionMetaPathWithCorrectElementOrder(edgeClass, inferenceEdgeConditionMetaPathStartElement, inferenceEdgeConditionMetaPathEndElement);
-
-            //TODO: Remove Inference Egdes implementieren
-            ///////////////////////////////////////////////////////////////////////////////////////////
-            ///////////////////////////////////////////////////////////////////////////////////////////
-            /// ACHTUNG: hier fehlt jetzt das REMOVE von InferenceEdges bzw. deren Bedingungspfaden ///
-            ///////////////////////////////////////////////////////////////////////////////////////////
-            ///////////////////////////////////////////////////////////////////////////////////////////
-
+            mainDoc.removePath(inferenceEdgeConditionMetaPathStartElement.value, inferenceEdgeConditionMetaPathEndElement.value, inferenceEdgeConditionMetaPath, pid);
         }
+
         if (CoreMetaModel.isDoubleMeaningEdge(absoluteEdgeClass)) {
             DoubleMeaningEdge doubleMeaningEdge = (DoubleMeaningEdge) edge;
             if (doubleMeaningEdge.getConnectionState() == DOUBLE) {
@@ -2268,8 +2329,8 @@ public class GDCollection extends UserFieldTarget implements MetaModelSpecific {
         } else {
             deleteElement(edge, mainDoc, ignoreElementIfIconosistent, pid);
         }
-        mainDoc.finish_transaction(pid);
-        mainDoc.distributeEvent(DATA_CHANGED, pid);
+        setBulkMode(oldBulkMode);
+        mainDoc.finish_transaction(pid, DATA_CHANGED);
     }
 
     /**
@@ -2508,9 +2569,9 @@ public class GDCollection extends UserFieldTarget implements MetaModelSpecific {
                 szen.createEdgeContainer(nc, szen, false, pid);
                 nc.refreshText();
                 // alle abhängigen Node vor den zusammengeführten stellen
-                szen.start_transaction(TransactionManager.STANDARD_PID, false);
-                szen.moveDependentNodeContainersUp(nc, TransactionManager.STANDARD_PID, false);
-                szen.finish_transaction(TransactionManager.STANDARD_PID, false);
+                szen.start_transaction(STANDARD_PID, false);
+                szen.moveDependentNodeContainersUp(nc, STANDARD_PID, false);
+                szen.finish_transaction(STANDARD_PID, false);
             }
         }
         deleteElement(removeNode, mainDoc, pid);

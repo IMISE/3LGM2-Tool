@@ -70,8 +70,7 @@ public class MutipleCompositionPanel extends AbstractPathConnectionTreePanel {
         GridBagConstraints constraints = new GridBagConstraints();
 
         LGMGraphDocument mainDoc = getMainDoc();
-        String rootString = getResString("verb");
-        tree = new ElementDialogPanelTree(rootString, mainDoc);
+        tree = new ElementDialogPanelTree(searchElementClass, mainDoc);
         tree.setRootVisible(false);
         tree.setCellRenderer(treeRenderer);
         tree.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
@@ -140,7 +139,7 @@ public class MutipleCompositionPanel extends AbstractPathConnectionTreePanel {
                 mainDoc.select(ec, pid);
                 Class<? extends Edge> lastEdgeClassInPath = getLastEdgeClassInPath();
                 Class<? extends CompositionEdge> lastEdgeClassInPathAsComposition = lastEdgeClassInPath.asSubclass(CompositionEdge.class);
-                GraphDocument.createAddicted(selectedDoc, me, lastEdgeClassInPathAsComposition, searchElementClass, pid);
+                GraphDocument.createSubordinated(selectedDoc, me, lastEdgeClassInPathAsComposition, searchElementClass, pid);
                 mainDoc.select(ec, pid);
             }
         };

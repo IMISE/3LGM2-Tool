@@ -5,6 +5,8 @@ import static de.imise.tool3lgm.Tool3lgmConstants.CLIPBOARD_PATH;
 import static de.imise.tool3lgm.graphtools.dialog.OverwriteDialog.OverwriteOption.IGNORE;
 import static de.imise.tool3lgm.graphtools.dialog.OverwriteDialog.OverwriteOption.JOIN;
 import static de.imise.tool3lgm.graphtools.dialog.OverwriteDialog.OverwriteOption.OVERWRITE;
+import static de.imise.tool3lgm.graphtools.metamodel.elements.CompositionEdge.MASTER_TO_SLAVE_DIRECTION;
+import static de.imise.tool3lgm.graphtools.metamodel.elements.CompositionEdge.SLAVE_TO_MASTER_DIRECTION;
 import static de.imise.tool3lgm.graphtools.model.CopyDependencyResolver.resolveCopyDependencies;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_DELETE_FROM_MODEL;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_PASTE;
@@ -13,6 +15,7 @@ import static de.imise.tool3lgm.graphtools.model.LGMChangeListener.LGMChangeType
 import static de.imise.tool3lgm.graphtools.model.LGMChangeListener.LGMChangeType.SELECTION_CHANGED;
 import static de.imise.tool3lgm.graphtools.undoredo.TransactionManager.STANDARD_PID;
 
+import java.awt.Point;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -56,6 +59,7 @@ import de.imise.tool3lgm.graphtools.view.container.EdgeContainer;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.graphtools.view.container.LayerContainer;
 import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
+import de.imise.tool3lgm.graphtools.view.graph.GraphFunctions;
 import de.imise.tool3lgm.log.Log;
 import de.imise.tool3lgm.xml.ToolXMLClipboardWriter;
 import de.imise.util.Sys;
@@ -193,8 +197,7 @@ public class LGMGraphDocument extends GraphDocument {
         copyToClipboard();
         //man muss die Selektion clonen, da sie sich wärend des Löschens ändert
         gdcoll.deleteElements(getSelectedElements(), this, STANDARD_PID);
-        finish_transaction(STANDARD_PID);
-        distributeEvent(DATA_CHANGED);
+        finish_transaction(STANDARD_PID, DATA_CHANGED);
     }
 
     /**
@@ -240,9 +243,7 @@ public class LGMGraphDocument extends GraphDocument {
             e.printStackTrace();
             return;
         }
-
-        finish_transaction(pid);
-        distributeEvent(DATA_CHANGED, pid);
+        finish_transaction(pid, DATA_CHANGED);
     }
 
     /**
@@ -265,9 +266,7 @@ public class LGMGraphDocument extends GraphDocument {
             e.printStackTrace();
             return;
         }
-
-        finish_transaction(pid);
-        distributeEvent(DATA_CHANGED, pid);
+        finish_transaction(pid, DATA_CHANGED);
     }
 
     /**
@@ -557,7 +556,7 @@ public class LGMGraphDocument extends GraphDocument {
         Sys.err1debug(debug, ++iii + " " + (System.currentTimeMillis() - start));
         start = System.currentTimeMillis();
 
-        sourceDoc.finish_transaction(TransactionManager.STANDARD_PID, false);
+        sourceDoc.finish_transaction(STANDARD_PID, false);
         sourceDoc.distributeEvent(SELECTION_CHANGED);
 
         Sys.err1debug(debug, ++iii + " " + (System.currentTimeMillis() - start));
@@ -748,8 +747,7 @@ public class LGMGraphDocument extends GraphDocument {
                 }
             }
         }
-        targetDoc.finish_transaction(pid);
-        targetDoc.distributeEvent(DATA_CHANGED, pid);
+        targetDoc.finish_transaction(pid, DATA_CHANGED);
         return instanceContainer;
     }
 
@@ -775,7 +773,8 @@ public class LGMGraphDocument extends GraphDocument {
     public final AbstractPath createPath(final ModelElement startElement, final ModelElement endElement, final MetaPath metaPath, final boolean askNameForNewEndElement, final int pid) {
         if (metaPath instanceof SimpleMetaPath) {
             return createSimplePath(startElement, endElement, (SimpleMetaPath) metaPath, askNameForNewEndElement, pid);
-        } else if (metaPath instanceof ParallelMetaPath) {
+        }
+        if (metaPath instanceof ParallelMetaPath) {
             ParallelMetaPath parallelMetaPath = (ParallelMetaPath) metaPath;
             List<AbstractPath> paths = new ArrayList<>();
             for (MetaPath internalMetaPath : parallelMetaPath.iterableSubMetaPaths()) {
@@ -872,8 +871,10 @@ public class LGMGraphDocument extends GraphDocument {
             }
         }
         SimplePath simplePath = createSubPath ? createdSubPath : SimplePath.create(createdElementaryPaths);
-        finish_transaction(pid);
-        distributeEvent(DATA_CHANGED, pid);
+        if (simplePath != null) { //is null if the function is called with null as endElement (in dialogs)
+            repositioningOfSubordniatedInGraph(simplePath, pid);
+        }
+        finish_transaction(pid, DATA_CHANGED);
         return simplePath;
     }
 
@@ -884,7 +885,7 @@ public class LGMGraphDocument extends GraphDocument {
      * @param pid
      * @return
      */
-    private ElementaryPath createElementaryPath(final ModelElement startElement, ModelElement endElement, final ElementaryMetaPath elementaryMetaPath, final int pid) {
+    public ElementaryPath createElementaryPath(final ModelElement startElement, ModelElement endElement, final ElementaryMetaPath elementaryMetaPath, final int pid) {
         //wenn ein endElement angegeben wurde, dann das im letzten Pfadschritt verknüpfen
         boolean alreadyLinked = false;
         Class<? extends Edge> edgeClass = elementaryMetaPath.getEdgeClass();
@@ -921,9 +922,9 @@ public class LGMGraphDocument extends GraphDocument {
         if (CompositionEdge.class.isAssignableFrom(edgeClass)) {
             Class<? extends CompositionEdge> compositionEdgeClass = edgeClass.asSubclass(CompositionEdge.class);
             if (elementaryMetaPath.hasDirectionForward()) {
-                addict(startElement, endElement, compositionEdgeClass, pid);
+                subordinate(startElement, endElement, compositionEdgeClass, pid);
             } else {
-                addict(endElement, startElement, compositionEdgeClass, pid);
+                subordinate(endElement, startElement, compositionEdgeClass, pid);
             }
         }
         if (edge == null) {
@@ -931,6 +932,136 @@ public class LGMGraphDocument extends GraphDocument {
         }
         ElementaryPath resultPath = new ElementaryPath(elementaryMetaPath, startElement, endElement, edge);
         return resultPath;
+    }
+
+    /**
+     * @param startElement
+     * @param endElement
+     * @param metaPath
+     * @param pid
+     */
+    public final void removePath(final ModelElement startElement, final ModelElement endElement, final MetaPath metaPath, final int pid) {
+        if (metaPath instanceof SimpleMetaPath) {
+            removeSimplePath(startElement, endElement, (SimpleMetaPath) metaPath, pid);
+        } else if (metaPath instanceof ParallelMetaPath) {
+            ParallelMetaPath parallelMetaPath = (ParallelMetaPath) metaPath;
+            for (MetaPath internalMetaPath : parallelMetaPath.iterableSubMetaPaths()) {
+                removePath(startElement, endElement, internalMetaPath, pid);
+            }
+        }
+    }
+
+    /**
+     * @param startElement
+     * @param endElement
+     * @param metaPath
+     * @param pid
+     */
+    public final void removeSimplePath(final ModelElement startElement, final ModelElement endElement, final SimpleMetaPath metaPath, final int pid) {
+        List<SimplePath> simplePaths = metaPath.getSimplePaths(startElement, endElement);
+        for (SimplePath simplePath : simplePaths) {
+            removeSimplePath(simplePath, pid);
+        }
+    }
+
+    /**
+     * @param simplePath
+     * @param pid
+     */
+    public final void removeSimplePath(final SimplePath simplePath, final int pid) {
+        start_transaction(pid);
+        //at the moment this funtion only removes the edges. If the elements
+        //in the path are not invalid through the removing of the edges they
+        //will not be deleted. Maybe in future we need the functionality to
+        //delete the inner path elements too. Then this function needs one
+        //more parameter.
+        List<ElementaryPath> elementaryPaths = simplePath.getElementaryPaths();
+        for (ElementaryPath elementaryPath : elementaryPaths) {
+            Edge edge = elementaryPath.getEdge();
+            gdcoll.deleteElement(edge, pid);
+        }
+        finish_transaction(pid);
+    }
+
+    /**
+     * If the given path contains subordinated elements that are visible in the
+     * graphic and have a visible connection between them, then these
+     * subordinated elements are rearranged so that they lie on the edge of
+     * their superordinated elements but in the shortest available distance to
+     * the connected element.
+     *
+     * @param simplePath
+     * @param pid
+     */
+    private void repositioningOfSubordniatedInGraph(final SimplePath simplePath, final int pid) {
+        //If there are 2 subordinated elements in the path then in
+        //the first round the first subordinated is repositioned
+        //relatively to old position of the second subordinated.
+        //So we simply have to call the same function at least twice.
+        //In general this function converges to the ideal points
+        //after 3 rounds if there are 2 subordinated elements
+        //in the path. But we only take 2 rounds, because the
+        //subordinate elements then land slightly offset due to their
+        //different starting positions and not directly on top of
+        //each other.
+        //If there is only 1 subordinated element then one round
+        //would be enough but it is very fast -> always two rounds.
+        repositioningOfSubordniatedInGraph(simplePath, true, pid);
+        repositioningOfSubordniatedInGraph(simplePath, true, pid);
+    }
+
+    /**
+     * If the given path contains subordinated elements that are visible in the
+     * graphic and have a visible connection between them, then these
+     * subordinated elements are rearranged so that they lie on the edge of
+     * their superordinated elements but in the shortest available distance to
+     * each other.
+     *
+     * @param simplePath The path with elements that can potentially be
+     *            rearranged.
+     * @param checkOtherDirection
+     * @param pid
+     */
+    private void repositioningOfSubordniatedInGraph(final SimplePath simplePath, final boolean checkOtherDirection, final int pid) {
+        List<ElementaryPath> elementaryPaths = simplePath.getElementaryPaths();
+        for (int i = 1; i < elementaryPaths.size(); i++) {
+            ElementaryPath elementaryPath = elementaryPaths.get(i - 1);
+            Edge edge = elementaryPath.getEdge();
+            //If the first edge in the graph is displayed and is a subordination from master to slave
+            if (edge.isPaintable() && edge instanceof CompositionEdge && elementaryPath.hasDirection(MASTER_TO_SLAVE_DIRECTION)) {
+
+                ElementaryPath nextElementaryPath = elementaryPaths.get(i);
+                Edge nextEdge = nextElementaryPath.getEdge();
+                //Check the next edge if it paintable too but not a subordination
+                //for the same element.
+                //(It wouldn't make much sense, but an element could theoretical
+                //be subordinated to more than one other element in the graph in
+                //a metamodel -> reposition only if it is subordinated to only
+                //one graph displayed element.)
+                if (nextEdge.isPaintable() && !(nextEdge instanceof CompositionEdge && nextElementaryPath.hasDirection(SLAVE_TO_MASTER_DIRECTION))) {
+                    CompositionEdge compositionEdge = (CompositionEdge) edge;
+                    ModelElement master = compositionEdge.getMaster();
+                    ModelElement slave = compositionEdge.getSlave();
+                    ModelElement other = nextElementaryPath.getEndElement();
+                    ElementContainer slaveContainer = slave.getContainer(this);
+                    if (slaveContainer instanceof NodeContainer) {
+                        ElementContainer masterContainer = master.getContainer(this);
+                        ElementContainer otherContainer = other.getContainer(this);
+                        //we point from the middle of the master of the element that should
+                        //be repositioned to the middle of the connected other element
+                        Point closestCoordinatesOnBorderOfContainerToOther = GraphFunctions.getClosestCoordinatesOnBorderOfContainerToOther(masterContainer, otherContainer);
+                        NodeContainer slaveNodeContainer = (NodeContainer) slaveContainer;
+                        moveNodeContainer(slaveNodeContainer, closestCoordinatesOnBorderOfContainerToOther.x, closestCoordinatesOnBorderOfContainerToOther.y, pid);
+                    }
+                }
+            }
+        }
+        //check the path in the other direction if there is an
+        //element that must be repositioned, too
+        if (checkOtherDirection) {
+            SimplePath otherDirection = simplePath.getOtherDirection();
+            repositioningOfSubordniatedInGraph(otherDirection, false, pid);
+        }
     }
 
 }

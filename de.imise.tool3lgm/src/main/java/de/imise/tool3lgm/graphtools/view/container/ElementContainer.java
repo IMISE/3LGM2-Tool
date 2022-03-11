@@ -655,10 +655,7 @@ public abstract class ElementContainer extends JLabel implements Cloneable, Grap
      * @param alpha
      */
     public final void setAlpha(int alpha) {
-        if (layout == null) {
-            return;
-        }
-        if (layout.bg_color == null) {
+        if (layout == null || layout.bg_color == null) {
             return;
         }
         if (alpha < 0) {
@@ -765,7 +762,8 @@ public abstract class ElementContainer extends JLabel implements Cloneable, Grap
             //			System.err.println("me ist unpaintable \"" + text + "\" " + me.getClass().getSimpleName() + " " + me + " " + doc);
             //		} else if (layout == null) {
             //			System.err.println("layout ist null \"" + text + "\" " + me.getClass().getSimpleName() + " " + me + " " + doc);
-        } else if (text != null && getWidth() < 35 && getHeight() < 30) {
+        }
+        if (text != null && getWidth() < 35 && getHeight() < 30) {
             //System.err.println("Element zu klein \"" + text + "\" " + me.getClass().getSimpleName() + " " + me + " " + doc);
         }
         super.setText(text);
@@ -787,7 +785,7 @@ public abstract class ElementContainer extends JLabel implements Cloneable, Grap
     /**
      * @param htmlName
      */
-    public void setGraphName(final String htmlName) {
+    public final void setGraphName(final String htmlName) {
         this.htmlName = htmlName;
         refreshText();
         //Sys.err1(htmlName);
@@ -947,10 +945,7 @@ public abstract class ElementContainer extends JLabel implements Cloneable, Grap
      * @param addInNewLine
      */
     public void addSpecialInfoToThisContainer(final AdditionalLabelTextGenerator infoOwner, final String info, final int preferredPosition, final boolean addInNewLine) {
-        if (!me.isPaintable()) {
-            return;
-        }
-        if (infoOwner == null) {
+        if (!me.isPaintable() || infoOwner == null) {
             return;
         }
 

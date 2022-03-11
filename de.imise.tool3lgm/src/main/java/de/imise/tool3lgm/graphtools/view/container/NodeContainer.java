@@ -2,16 +2,15 @@ package de.imise.tool3lgm.graphtools.view.container;
 
 import static de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout.STANDARD_COLORS;
 
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Rectangle;
-import java.util.Map;
 import java.util.StringTokenizer;
 
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 
 import com.google.common.base.Strings;
 
@@ -19,12 +18,12 @@ import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
+import de.imise.tool3lgm.graphtools.model.GDCollectionIconTable;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.model.Szenario;
 import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout;
 import de.imise.tool3lgm.graphtools.view.graph.NodeRenderer;
 import de.imise.tool3lgm.graphtools.view.tree.node.ElementContainerTreeNode;
-import de.imise.tool3lgm.log.Log;
 import de.imise.util.Alphabetical.AlphabeticalSortTarget;
 import de.imise.util.swing.NoopGraphics;
 
@@ -81,6 +80,15 @@ public class NodeContainer extends ElementContainer implements AlphabeticalSortT
      * COMMENTME
      */
     protected ElementContainerTreeNode treeNode = null;
+
+    /**
+     * If this node is visible in graph and should show the name of connected
+     * elements as an extension of its own name then this extension will be only
+     * shown if this boolean is <code>true</code>.<br>
+     * For example Application systems can show their connected software
+     * products.
+     */
+    private boolean showConnectedAsNameExtensionInGraph = true;
 
     /**
      *
@@ -229,9 +237,9 @@ public class NodeContainer extends ElementContainer implements AlphabeticalSortT
 
     /**
      * @param iconID
-     * @param ImageTable
+     * @param imageTable
      */
-    public void setIcon(final String iconID, final Map<String, byte[]> ImageTable) {
+    public void setIcon(final String iconID, final GDCollectionIconTable imageTable) {
         if (layout == null) {
             return;
         }
@@ -240,14 +248,7 @@ public class NodeContainer extends ElementContainer implements AlphabeticalSortT
             super.setIcon(null);
             return;
         }
-        ImageIcon icon = null;
-        try {
-            byte[] imageData = ImageTable.get(iconID);
-            icon = new ImageIcon(imageData);
-        } catch (Exception ex) {
-            Log.show(Log.ERROR, getResString("FehlerAllgemein"), ex);
-            JOptionPane.showMessageDialog(null, getResString("icon_kaputt"), getResString("fehler"), JOptionPane.ERROR_MESSAGE);
-        }
+        ImageIcon icon = imageTable.getIcon(iconID);
         layout.setIconID(icon != null ? iconID : null);
         super.setIcon(icon);
     }
@@ -259,24 +260,19 @@ public class NodeContainer extends ElementContainer implements AlphabeticalSortT
         return layout == null ? null : layout.getIconID();
     }
 
-    /**
-     * Gibt die Breite zurueck
-     *
-     * @see javax.swing.JComponent#getWidth()
-     */
     @Override
     public int getWidth() {
         return layout == null ? 0 : layout.width;
     }
 
-    /**
-     * Gibt die Hoehe zurueck
-     *
-     * @see javax.swing.JComponent#getHeight()
-     */
     @Override
     public int getHeight() {
         return layout == null ? 0 : layout.height;
+    }
+
+    @Override
+    public Dimension getSize() {
+        return new Dimension(getWidth(), getHeight());
     }
 
     /**
@@ -304,7 +300,7 @@ public class NodeContainer extends ElementContainer implements AlphabeticalSortT
      */
     @Override
     public final void setSize(final int w, final int h) {
-        //		System.err.println(w + " " + h);
+        //        System.err.println(w + " " + h);
         if (layout == null) {
             return;
         }
@@ -510,7 +506,7 @@ public class NodeContainer extends ElementContainer implements AlphabeticalSortT
      * @return
      */
     public boolean hideText() {
-        return layout.width < 35 && layout.height < 30;
+        return layout != null && layout.width < 35 && layout.height < 30;
     }
 
     @Override
@@ -602,6 +598,22 @@ public class NodeContainer extends ElementContainer implements AlphabeticalSortT
      */
     public void setVariable(final int f) {
         variable = f;
+    }
+
+    /**
+     * @return the showConnectedAsNameExtensionInGraph
+     */
+    public final boolean isShowConnectedAsNameExtensionInGraph() {
+        return showConnectedAsNameExtensionInGraph;
+    }
+
+    /**
+     * @param showConnectedAsNameExtensionInGraph the
+     *            showConnectedAsNameExtensionInGraph to set
+     */
+    public final void setShowConnectedAsNameExtensionInGraph(boolean showConnectedAsNameExtensionInGraph) {
+        this.showConnectedAsNameExtensionInGraph = showConnectedAsNameExtensionInGraph;
+        me.updateGraphName(this);
     }
 
 }

@@ -20,6 +20,7 @@ import static de.imise.tool3lgm.graphtools.userfield.definition.UserField.Style.
 
 import java.awt.BorderLayout;
 import java.awt.Component;
+import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -527,7 +528,7 @@ public class PropertyDialogUserFieldPanel extends ElementDialogPanel implements 
             }
             editorComponent = comboBox;
         } else if (style == RADIO_BUTTON) {
-            JPanel flowLayoutPanel = new JPanel(new WrapLayout(WrapLayout.LEFT));
+            JPanel flowLayoutPanel = new JPanel(new WrapLayout(FlowLayout.LEFT));
             flowLayoutPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), ""));
             //den aktuellen Wert in die List-Values hinzufügen, falls er da aus irgendwelchen Gründen nicht drinsteht.
             if (!Strings.isNullOrEmpty(value) && !field.containsListValue(value)) {

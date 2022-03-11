@@ -17,6 +17,7 @@ import java.util.List;
 import javax.swing.AbstractAction;
 import javax.swing.JButton;
 import javax.swing.JDialog;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -189,7 +190,7 @@ public class SzenarioDialog extends JDialog {
         saveDialog.setFileFilters(false, Tool3lgmConstants.getFileNameExtensionFilter(FileFilterType.LGM3_UNZIPPED));
         File file = new File(destination.getText());
         saveDialog.setCurrentDirectory(file);
-        if (saveDialog.showSaveDialog(this) != ExtendedFileChooser.APPROVE_OPTION) {
+        if (saveDialog.showSaveDialog(this) != JFileChooser.APPROVE_OPTION) {
             return;
         }
         file = saveDialog.getSelectedFile();

@@ -291,8 +291,7 @@ public class SingleConnectionPanel extends AbstractPathConnectionPanel {
                 }
                 ElementContainer ec = me.getContainer(mainDoc);
                 ec.refreshText();
-                mainDoc.finish_transaction(pid);
-                mainDoc.distributeEvent(DATA_CHANGED, pid);
+                mainDoc.finish_transaction(pid, DATA_CHANGED);
             }
         };
     }

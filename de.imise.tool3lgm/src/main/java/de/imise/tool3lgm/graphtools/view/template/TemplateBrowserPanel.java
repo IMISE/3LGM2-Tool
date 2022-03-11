@@ -18,7 +18,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
 import de.imise.tool3lgm.Static;
-import de.imise.tool3lgm.graphtools.dialog.search.TemplateTreeSearchOptionsPanel;
+import de.imise.tool3lgm.graphtools.dialog.search.TreeSearchOptionsPanel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.InstanciationEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
@@ -38,7 +38,7 @@ public class TemplateBrowserPanel extends JPanel implements PropertyChangeListen
     /**
      *
      */
-    private TemplateTreeSearchOptionsPanel searchPanel;
+    private TreeSearchOptionsPanel searchPanel;
 
     /**
      *
@@ -136,7 +136,7 @@ public class TemplateBrowserPanel extends JPanel implements PropertyChangeListen
         boolean showSearchPanel = tree.hasContent();
         if (showSearchPanel) {
             if (searchPanel == null) {
-                searchPanel = new TemplateTreeSearchOptionsPanel(tree);
+                searchPanel = new TreeSearchOptionsPanel(tree);
                 add(searchPanel, BorderLayout.NORTH);
             }
         } else {

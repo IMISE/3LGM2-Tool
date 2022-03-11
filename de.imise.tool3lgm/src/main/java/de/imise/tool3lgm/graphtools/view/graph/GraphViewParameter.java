@@ -20,7 +20,7 @@ public class GraphViewParameter {
 
     public static final double INITIAL_PAGE_SIZE_FACTOR = 1d;
 
-    public static final int INITILA_ACTIVE_LAYER = ModelConstants.DOMAIN_LAYER;
+    public static final int INITIAL_ACTIVE_LAYER = ModelConstants.DOMAIN_LAYER;
 
     public int viewPositionX = INITIAL_VIEW_POSITION_X;
     public int viewPositionY = INITIAL_VIEW_POSITION_Y;
@@ -29,7 +29,7 @@ public class GraphViewParameter {
     public boolean multiView = true;
     public double zoom = INITIAL_MIN_ZOOM;
     public double pageSizeFactor = INITIAL_PAGE_SIZE_FACTOR;
-    public int activeLayer = INITILA_ACTIVE_LAYER;
+    public int activeLayer = INITIAL_ACTIVE_LAYER;
     public boolean selected = true; //ensure that a new created submodel is selected
 
     public GraphViewParameter() {
@@ -48,6 +48,7 @@ public class GraphViewParameter {
         multiView = other.multiView;
         zoom = other.zoom;
         pageSizeFactor = other.pageSizeFactor;
+        activeLayer = other.activeLayer;
     }
 
 }

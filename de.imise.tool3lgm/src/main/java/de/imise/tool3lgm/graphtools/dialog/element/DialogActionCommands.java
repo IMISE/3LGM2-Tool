@@ -4,10 +4,9 @@ import de.imise.tool3lgm.graphtools.dialog.action.LGMAction;
 import de.imise.util.swing.event.ActionSource;
 
 /**
- * Action command identifier for dialog actions with icons.
- * Dialog action without icons but only text should be
- * {@link LGMAction}s which are initialised with the text
- * to be displayed.
+ * Action command identifier for dialog actions with icons. Dialog action
+ * without icons but only text should be {@link LGMAction}s which are
+ * initialised with the text to be displayed.
  *
  * @author AXS (15.02.2020)
  */

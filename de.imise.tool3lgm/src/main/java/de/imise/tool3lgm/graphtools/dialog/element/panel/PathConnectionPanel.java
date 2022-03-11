@@ -4,6 +4,7 @@ import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
 import static de.imise.tool3lgm.graphtools.dialog.element.panel.PanelLabelOption.LABEL_END_ELEMENT_TYPE;
 import static de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty.OPTION_ELEMENTS_RECEIVE_PROPERTIES_FROM_PARENTS;
 import static de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty.OPTION_ELEMENTS_RECEIVE_PROPERTIES_FROM_PARTS;
+import static de.imise.util.StringUtils.capitalizeFirstChar;
 
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
@@ -49,7 +50,6 @@ import de.imise.tool3lgm.graphtools.view.tree.PanelTreeRenderer;
 import de.imise.tool3lgm.graphtools.view.tree.TreeRenderer;
 import de.imise.tool3lgm.graphtools.view.tree.node.ElementContainerTreeNode;
 import de.imise.tool3lgm.graphtools.view.tree.node.LGMTreeNode;
-import de.imise.util.StringUtils;
 import de.imise.util.swing.SwingUtils;
 import de.imise.util.swing.component.LimitedHeightScrollTreePane;
 
@@ -84,6 +84,12 @@ public class PathConnectionPanel extends AbstractExpandablePanel {
 
     /**  */
     private final LGMAction newElementAction;
+
+    /**  */
+    private final JPanel rsearchPanel;
+
+    /** GridBagLayout constraints for the whole panel */
+    final GridBagConstraints constraints = new GridBagConstraints();
 
     /**
      * @param dialog
@@ -144,13 +150,10 @@ public class PathConnectionPanel extends AbstractExpandablePanel {
     public PathConnectionPanel(final AbstractElementPropertyDialog dialog, final PanelLabelOption titleLabelOption, final PanelLabelOption westLabelOption, final int maxLines, final boolean renderLeftTreeAsList, final MetaPath metaPath) {
         super(dialog, titleLabelOption, westLabelOption, metaPath);
         showRightTree = isEditable();
-        if (!showRightTree) {
-            setUnexpandable();
-        }
+
         setPreferredSize(new Dimension(550, 350));
         GridBagLayout gbl = new GridBagLayout();
         setLayout(gbl);
-        GridBagConstraints constraints = new GridBagConstraints();
 
         JLabel ltreeLabel = westLabel;
         ModelElement me = getModelElement();
@@ -163,44 +166,40 @@ public class PathConnectionPanel extends AbstractExpandablePanel {
         ltree.setCellRenderer(treeRenderer);
         ltree.getSelectionModel().setSelectionMode(getTreesSelectionModel());
 
+        //left tree label
         constraints.anchor = GridBagConstraints.WEST;
-        add(this, ltreeLabel, constraints, 0, 0, 2, 1);
+        constraints.fill = GridBagConstraints.NONE;
+        constraints.weightx = 0d;
+        constraints.weighty = 0d;
+        add(this, ltreeLabel, constraints, 0, 0, 1, 1, labelInsets);
+        //left tree
         constraints.anchor = GridBagConstraints.CENTER;
         constraints.fill = GridBagConstraints.BOTH;
         constraints.weightx = 1d;
         constraints.weighty = 1d;
         LimitedHeightScrollTreePane ltreeScrollPane = ltree.getScrollPane();
-        add(this, ltreeScrollPane, constraints, 0, 1, 2, 4);
+        add(this, ltreeScrollPane, constraints, 0, 1, 1, 1);
 
         if (showRightTree) {
-            constraints.anchor = GridBagConstraints.EAST;
-            constraints.weightx = 0d;
-            constraints.weighty = 0d;
-            constraints.fill = GridBagConstraints.NONE;
-            add(this, viewButton, constraints, 1, 5, 1, 1);
-            constraints.weightx = 1d;
-            constraints.weighty = 1d;
-            constraints.fill = GridBagConstraints.BOTH;
-            String rtreeLabelString = getResString("frei");
-            rtreeLabelString = StringUtils.capitalizeFirstChar(rtreeLabelString);
+            String rtreeLabelString = capitalizeFirstChar(getResString("frei"));
             rLabel = new JLabel(rtreeLabelString);
-            rtree = new ElementDialogPanelTree(rtreeLabelString, mainDoc, maxLines);
+            rtree = new ElementDialogPanelTree(searchElementClass, mainDoc, maxLines);
             rtree.getSelectionModel().setSelectionMode(getTreesSelectionModel());
             rtree.setRootVisible(false);
             rtree.setShowsRootHandles(true);
             TreeRenderer highlightErrorElementsTreeRenderer = new PanelTreeRenderer(this);
             rtree.setCellRenderer(highlightErrorElementsTreeRenderer);
 
+            rsearchPanel = createTreeSearchPanel(rLabel, rtree);
+
             //Buttons & Actions erstellen, Actions setzen
             addAction = getConnectAction();
             removeAction = getDisconnectAction();
             boolean supportNewElementAction = metaPath.isCreatable(true);
             newElementAction = supportNewElementAction ? getNewConnectedElementAction() : null;
-
             buttonpanel = createBetweenTreesButtonPanel(addAction, removeAction, newElementAction);
 
-            //alles dafür tun, dass beide Dialogseiten gleich breit sind. Das wird über die PreferredSize der breitesten Komponente gesteuert.
-            SwingUtils.fillToSameLength(westLabel, rLabel);
+            //both dialog sides should have the same widh and height
             setSamePreferredLeftRightSize();
         } else {
             rLabel = null;
@@ -209,32 +208,26 @@ public class PathConnectionPanel extends AbstractExpandablePanel {
             newElementAction = null;
             buttonpanel = null;
             rtree = null;
+            rsearchPanel = null;
         }
         initTreeListenerAndDragNDrop();
         showFullDialog(true);
     }
 
+    @Override
+    protected boolean isExpandable() {
+        return isEditable();
+    }
+
     /**
      * Ensure that both dialog sides have always the same width.
-     *
-     * @param components this components gets the same preferred width like both
-     *            trees and labels (maximum of all of their widths)
      */
-    protected void setSamePreferredLeftRightSize(final JComponent... components) {
-        JComponent[] allComponents = new JComponent[components.length + 4];
-        allComponents[0] = westLabel;
-        allComponents[1] = rLabel;
-        allComponents[2] = ltree.getScrollPane();
-        allComponents[3] = rtree.getScrollPane();
-        System.arraycopy(components, 0, allComponents, 4, components.length);
-        SwingUtils.setSamePreferredSize(allComponents);
-        //        Sys.err1(westLabel.getPreferredSize());
-        //        Sys.err1(rLabel.getPreferredSize());
-        //        Sys.err1(ltree.getScrollPane().getPreferredSize());
-        //        Sys.err1(rtree.getScrollPane().getPreferredSize());
-        //        for (JComponent c : components) {
-        //            Sys.err1(c.getPreferredSize());
-        //        }
+    protected void setSamePreferredLeftRightSize() {
+        SwingUtils.setSamePreferredWidth(westLabel, rsearchPanel, ltree.getScrollPane(), rtree.getScrollPane());
+        //the searchPanel contains the rLabel (0) and then the HistoryComboBox for the name search (1)
+        SwingUtils.setSamePreferredHeight(0, westLabel, rsearchPanel.getComponent(0), rsearchPanel.getComponent(1));
+        SwingUtils.setSamePreferredSize(westLabel, rsearchPanel);
+        SwingUtils.setSamePreferredSize(ltree.getScrollPane(), rtree.getScrollPane());
     }
 
     /**
@@ -278,24 +271,25 @@ public class PathConnectionPanel extends AbstractExpandablePanel {
      * @return <code>true</code> if the panel's path
      */
     protected boolean isEditable() {
-        return metaPath.isCreatable(false);// && metaPath.isRemoveable(true);//isRemoveable(...) prüft, ob sich das Element des Dialoges in Luft auflöst, wenn man die
+        return !dialog.isInfoDialog() && metaPath.isCreatable(false);// && metaPath.isRemoveable(true);//isRemoveable(...) prüft, ob sich das Element des Dialoges in Luft auflöst, wenn man die
         //MinCardinality unterschreitet. Das soll hier aber explizit zugelassen werden!
-
     }
 
     @Override
     protected final void showFullDialog() {
         if (showRightTree) {
-            GridBagConstraints constraints = new GridBagConstraints();
+            constraints.anchor = GridBagConstraints.CENTER;
             constraints.fill = GridBagConstraints.NONE;
-            add(this, buttonpanel, constraints, 2, 3, 1, 2);
-            constraints.anchor = GridBagConstraints.WEST;
-            add(this, rLabel, constraints, 3, 0, 1, 1);
-            constraints.anchor = GridBagConstraints.WEST;
+            constraints.weightx = 0d;
+            constraints.weighty = 0d;
+            add(this, buttonpanel, constraints, 1, 1, 1, 1);
+            constraints.fill = GridBagConstraints.HORIZONTAL;
+            constraints.weightx = 1d;
+            add(this, rsearchPanel, constraints, 2, 0, 1, 1, labelInsets);
             constraints.fill = GridBagConstraints.BOTH;
             constraints.weightx = 1d;
             constraints.weighty = 1d;
-            add(this, rtree.getScrollPane(), constraints, 3, 1, 1, 4);
+            add(this, rtree.getScrollPane(), constraints, 2, 1, 1, 1);
         }
     }
 
@@ -357,7 +351,7 @@ public class PathConnectionPanel extends AbstractExpandablePanel {
         int edgeIndex = 0;
         //Durch diesen Aufruf hier geht das erstmal nicht für parallele Pfade, zumindes nicht für Vereinigungspfade. Aber im Moment gibt es dafür keinen Anwendungsfall
         List<ElementaryMetaPath> elementaryMetaPaths = metaPath.getElementaryMetaPaths();
-        int elemetaryMetaPathCount = elementaryMetaPaths.size();
+        int elementaryMetaPathCount = elementaryMetaPaths.size();
         ElementaryMetaPath elementaryMetaPath = elementaryMetaPaths.get(edgeIndex);
         Class<? extends ModelElement> pathStepEndClass = elementaryMetaPath.getEndClass();
         Class<? extends Edge> edgeClass = elementaryMetaPath.getEdgeClass();
@@ -382,7 +376,7 @@ public class PathConnectionPanel extends AbstractExpandablePanel {
             firstLevelNodes.add(node);
         }
         List<ElementContainerTreeNode> nextStepStartNodes = firstLevelNodes;
-        for (edgeIndex = 1; edgeIndex < elemetaryMetaPathCount; edgeIndex++) {
+        for (edgeIndex = 1; edgeIndex < elementaryMetaPathCount; edgeIndex++) {
             elementaryMetaPath = elementaryMetaPaths.get(edgeIndex);
             pathStepEndClass = elementaryMetaPath.getEndClass();
             edgeClass = elementaryMetaPath.getEdgeClass();
@@ -395,13 +389,24 @@ public class PathConnectionPanel extends AbstractExpandablePanel {
                 addChildrenToExcludeFromRtree(edgeIndex, connected, false);
                 for (ElementContainer ec : connected) {
                     ElementContainerTreeNode newNode = ltree.addObject(ec, node, null, true, false, false);
-                    if (edgeIndex + 1 == elemetaryMetaPathCount) {
+                    if (edgeIndex + 1 == elementaryMetaPathCount) {
                         leafs.add(newNode);
                     }
                     newNextStartNodes.add(newNode);
                 }
             }
             nextStepStartNodes = newNextStartNodes;
+        }
+        if (elementaryMetaPathCount > 1) {
+            //in the right tree there must be all elements connactable that are not
+            //direct connected to the dialog element. If the metapath has the lengt 1
+            //this condition is already met because the function
+            //addChildrenToExcludeFromRtree(..) is called before the parts an d parents
+            //are added to the all list. If the metapath has more than one edge then
+            //we have here to ensure that only the direct connected elements are
+            //diabled in the right tree.
+            List<ElementContainer> directConnectedContainer = metaPath.getConnectedContainer(me, mainDoc);
+            childrenToExcludeFromRtree.retainAll(directConnectedContainer);
         }
         // alle Elemente die von den Parts oder Parents kamen, nichtselektierbar setzen
         for (int i = firstLevelNodes.size() - 1; i >= firstNonSelectableIndex; i--) {

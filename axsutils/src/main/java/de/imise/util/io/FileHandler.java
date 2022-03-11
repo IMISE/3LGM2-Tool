@@ -4,7 +4,6 @@ import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -160,10 +159,12 @@ public class FileHandler {
      */
     public static final boolean copyFile(final URL source, final File dest) {
         dest.getParentFile().mkdirs();
-        try {
-            InputStream is = source.openStream();
-            OutputStream os = new FileOutputStream(dest);
-            return copy(is, os);
+        try (InputStream is = source.openStream()) {
+            try (OutputStream os = new FileOutputStream(dest)) {
+                return copy(is, os);
+            } catch (Exception e) {
+                return false;
+            }
         } catch (IOException e) {
             return false;
         }
@@ -179,8 +180,7 @@ public class FileHandler {
      */
     public static final boolean copyFile(final InputStream source, final File dest) {
         dest.getParentFile().mkdirs();
-        try {
-            OutputStream target = new FileOutputStream(dest);
+        try (OutputStream target = new FileOutputStream(dest)) {
             return copy(source, target);
         } catch (IOException e) {
             return false;
@@ -197,9 +197,9 @@ public class FileHandler {
      */
     public static boolean copyFile(final File source, final File dest) {
         dest.getParentFile().mkdirs();
-        try {
-            return copy(new FileInputStream(source), new FileOutputStream(dest));
-        } catch (FileNotFoundException e) {
+        try (FileInputStream in = new FileInputStream(source); FileOutputStream out = new FileOutputStream(dest)) {
+            return copy(in, out);
+        } catch (IOException e) {
             e.printStackTrace();
             return false;
         }
@@ -261,16 +261,11 @@ public class FileHandler {
      * @return
      */
     public static String readFile(final File file) {
-
-        FileReader fr = null;
         File[] files;
         String toString = "";
-
         files = splitFile(file);
-
         for (File f : files) {
-            try {
-                fr = new FileReader(f);
+            try (FileReader fr = new FileReader(f)) {
                 char[] chars = new char[(int) f.length()];
                 fr.read(chars);
                 fr.close();
@@ -279,7 +274,6 @@ public class FileHandler {
                 e.printStackTrace();
             }
         }
-
         return toString;
     }
 
@@ -464,7 +458,6 @@ public class FileHandler {
         try {
             BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(file)));
             String line = null;
-            int i = 0;
             while ((line = reader.readLine()) != null) {
                 if (line.startsWith(linePrefix)) {
                     result = line;

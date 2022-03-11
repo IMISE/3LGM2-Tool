@@ -6,7 +6,7 @@ import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.MAX_LAYER_IN
 import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.MIN_LAYER_INDEX;
 import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.NO_LAYER;
 import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction.BACKWARD;
-import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_ADDICT;
+import static de.imise.tool3lgm.graphtools.metamodel.elements.SubordinationEdge.SUPER_TO_SUB_DIRECTION;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_ADD_ELEMENT_TO_SUBMODEL;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_DELETE_FROM_SUBMODEL;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_LINK_ELEMENT_TO_SUBMODEL;
@@ -29,6 +29,7 @@ import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_SET_ELE
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_SET_ELEMENT_NAME;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_SET_ELEMENT_OPTIONAL;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_SET_ELEMENT_POSITION;
+import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_SET_ELEMENT_SHOW_CONNECTED_AS_NAME_EXTENSION_IN_GRAPH_ON;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_SET_ELEMENT_SUBTYPE;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_SET_ELEMENT_TEXT_ALIGNMENT_HTML;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_SET_ELEMENT_TEXT_POSITION_HORIZONTAL;
@@ -41,9 +42,12 @@ import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_SET_LAY
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_SET_LAYER_DEFAULT_COLOR_AND_TRANSPARENCY;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_SET_LAYER_INTERLAYER_CONNECTIONS_VISIBILITY_OFF;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_SET_LAYER_INTERLAYER_CONNECTIONS_VISIBILITY_ON;
+import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_SET_LAYER_SHOW_CONNECTED_AS_NAME_EXTENSION_IN_GRAPH_ON;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_SET_LAYER_SIZE_FACTOR;
+import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_SET_SHOW_CONNECTED_AS_NAME_EXTENSION_IN_GRAPH_ON;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_SET_USER_FIELD_VALUE;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_SET_USER_FIELD_WEIGHT_REPLACEMENT;
+import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_SUBORDINATE;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_SWAP_EDGE_POSITIONS;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_OPTION_GDOC_VERIFICATION_MODE;
 import static de.imise.tool3lgm.graphtools.model.LGMChangeListener.LGMChangeType.ACTIVE_LAYER_CHANGED;
@@ -51,11 +55,13 @@ import static de.imise.tool3lgm.graphtools.model.LGMChangeListener.LGMChangeType
 import static de.imise.tool3lgm.graphtools.model.LGMChangeListener.LGMChangeType.ELEMENT_GRAPHICS_CHANGED;
 import static de.imise.tool3lgm.graphtools.model.LGMChangeListener.LGMChangeType.ELEMENT_NAME_CHANGED;
 import static de.imise.tool3lgm.graphtools.model.LGMChangeListener.LGMChangeType.GROUP_ORDER_CHANGED;
+import static de.imise.tool3lgm.graphtools.model.LGMChangeListener.LGMChangeType.LAYOUT_CHANGED;
 import static de.imise.tool3lgm.graphtools.model.LGMChangeListener.LGMChangeType.SELECTION_CHANGED;
 import static de.imise.tool3lgm.graphtools.model.LGMChangeListener.LGMChangeType.USER_FIELD_VALUE_CHANGED;
 import static de.imise.tool3lgm.graphtools.undoredo.CommandHandler.getArgumentsString;
 import static de.imise.tool3lgm.graphtools.undoredo.CommandHandler.getCommandLine;
 import static de.imise.tool3lgm.graphtools.undoredo.CommandHandler.parseCommandLine;
+import static de.imise.tool3lgm.graphtools.undoredo.TransactionManager.STANDARD_PID;
 import static de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty.OPTION_GRAPH_MOVE_SUBELEMENTS;
 import static de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty.OPTION_SHOW_REMOVE_WARNING;
 import static de.imise.util.htmlxml.ParseSaveStringHandler.getDecodedParseSaveString;
@@ -70,10 +76,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
+import java.util.Objects;
 
 import javax.annotation.Nonnull;
 import javax.swing.JColorChooser;
@@ -84,7 +91,6 @@ import com.google.common.collect.ImmutableList;
 
 import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.Tool3lgm;
-import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.Tool3lgmModelType.ModelCategory;
 import de.imise.tool3lgm.event.action.UserPropertyBooleanChangeAction;
 import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
@@ -125,6 +131,7 @@ import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout;
 import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout.TextAlignmentHTML;
 import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout.TextPositionHorizontal;
 import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout.TextPositionVertical;
+import de.imise.tool3lgm.graphtools.view.graph.GraphFunctions;
 import de.imise.tool3lgm.graphtools.view.graph.GraphViewParameter;
 import de.imise.tool3lgm.graphtools.view.graph.Shape;
 import de.imise.tool3lgm.gui.MainFrame;
@@ -136,6 +143,7 @@ import de.imise.util.NameAndDescriptionTarget;
 import de.imise.util.OptionsSupport;
 import de.imise.util.Sys;
 import de.imise.util.collections.CollectionUtils;
+import de.imise.util.pair.Pair;
 import de.imise.util.swing.dialog.ImageChooser;
 import de.imise.util.swing.dialog.MultipleOptionPane;
 
@@ -185,7 +193,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
     /**
      * COMMENTME
      */
-    private String name = "";
+    protected String name = "";
 
     /**
      * COMMENTME
@@ -247,6 +255,15 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
      */
     protected NodeContainer lastCreated = null;
 
+    // holds initial positions of subelements, when master element is resized
+    private Map<ElementContainer, Pair<Integer, Integer>> originalPositions = new HashMap<>();
+
+    // holds original position of master element for resizing
+    private Pair<Integer, Integer> originalMasterPosition;
+
+    //holds original dimensions of master element when resizing
+    private Pair<Integer, Integer> originalMasterDimension;
+
     /**
      * @param _gdcoll
      */
@@ -295,18 +312,10 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
             return false;
         }
         GraphDocument other = (GraphDocument) obj;
-        if (gdcoll == null) {
-            if (other.gdcoll != null) {
-                return false;
-            }
-        } else if (!gdcoll.equals(other.gdcoll)) {
+        if (!Objects.equals(gdcoll, other.gdcoll)) {
             return false;
         }
-        if (id == null) {
-            if (other.id != null) {
-                return false;
-            }
-        } else if (!id.equals(other.id)) {
+        if (!Objects.equals(id, other.id)) {
             return false;
         }
         return true;
@@ -354,7 +363,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
      * @param logUndoRedo
      * @param pid
      */
-    private void setPageSizeFactor(double newPageSizeFactor, final boolean logUndoRedo, final int pid) {
+    public void setPageSizeFactor(double newPageSizeFactor, final boolean logUndoRedo, final int pid) {
         final double oldPageSizeFactor = getPageSizeFactor();
         double minPageSizeFactor = getMinimalPageSizeFactor();
         if (minPageSizeFactor > newPageSizeFactor) {
@@ -374,7 +383,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
             addRedoCommandOrReplace(pid, newPageSizeFactor, MODEL_ACTION_SET_LAYER_SIZE_FACTOR, id);
             finish_transaction(pid);
         }
-        distributeEvent(LGMChangeType.LAYOUT_CHANGED);
+        distributeEvent(LAYOUT_CHANGED);
     }
 
     /**
@@ -902,11 +911,11 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
             }
             break;
         }
-        case MODEL_ACTION_ADDICT: {
-            addict(argv[0], argv[1], argv[2], argv[3], pid);
+        case MODEL_ACTION_SUBORDINATE: {
+            subordinate(argv[0], argv[1], argv[2], argv[3], pid);
             break;
         }
-        case MODEL_ACTION_CREATE_ADDICTED: {
+        case MODEL_ACTION_CREATE_SUBORDINATED: {
             GraphDocument doc = gdcoll.getGraphDocumentCoded(argv[0]);
             ModelElement master = doc.findElementCoded(argv[1]);
 
@@ -921,7 +930,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
             } catch (Exception e) {
                 //Argument 4 SubType is optional
             }
-            createAddicted(doc, master, compositionEdgeClass, slaveClass, subType, pid);
+            createSubordinated(doc, master, compositionEdgeClass, slaveClass, subType, pid);
             break;
         }
         case MODEL_ACTION_SET_ELEMENT_COLOR: {
@@ -1424,6 +1433,24 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
             gdcoll.deleteSzenario(szenID, pid);
             break;
         }
+        case MODEL_ACTION_DUPLICATE_SUBMODEL: {
+            String sourceSzenID = null;
+            String targetSzenID = null;
+            String targetName = null;
+            if (argc == 0) {
+                GraphDocument selectedDoc = gdcoll.getSelectedDoc();
+                sourceSzenID = selectedDoc != null ? selectedDoc.id : null;
+                if (sourceSzenID == null) {
+                    break;
+                }
+            } else {
+                sourceSzenID = argv[0];
+                targetSzenID = argv[1];
+                targetName = argv[2];
+            }
+            gdcoll.duplicateSzenario(sourceSzenID, targetSzenID, targetName, pid);
+            break;
+        }
         case MODEL_ACTION_RENAME_SUBMODEL: {
             String szenID = null;
             String newName = null;
@@ -1565,6 +1592,30 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
             dispatch_command(realCommand, argv, pid);
             break;
         }
+        case MODEL_ACTION_SET_LAYER_SHOW_CONNECTED_AS_NAME_EXTENSION_IN_GRAPH_ON:
+        case MODEL_ACTION_SET_LAYER_SHOW_CONNECTED_AS_NAME_EXTENSION_IN_GRAPH_OFF: {
+            int activeLayer = gdcoll.getActiveLayer();
+            layer[activeLayer].setShowConnectedAsNameExtensionInGraph(command == MODEL_ACTION_SET_LAYER_SHOW_CONNECTED_AS_NAME_EXTENSION_IN_GRAPH_ON);
+            distributeEvent(ELEMENT_GRAPHICS_CHANGED, pid);
+            break;
+        }
+        case MODEL_ACTION_SET_ELEMENT_SHOW_CONNECTED_AS_NAME_EXTENSION_IN_GRAPH_ON:
+        case MODEL_ACTION_SET_ELEMENT_SHOW_CONNECTED_AS_NAME_EXTENSION_IN_GRAPH_OFF: {
+            for (NodeContainer nc : selectedContainer.iterableRealElementContainer()) {
+                nc.setShowConnectedAsNameExtensionInGraph(command == MODEL_ACTION_SET_ELEMENT_SHOW_CONNECTED_AS_NAME_EXTENSION_IN_GRAPH_ON);
+            }
+            distributeEvent(ELEMENT_GRAPHICS_CHANGED, pid);
+            break;
+        }
+        case MODEL_ACTION_SET_SHOW_CONNECTED_AS_NAME_EXTENSION_IN_GRAPH_ON:
+        case MODEL_ACTION_SET_SHOW_CONNECTED_AS_NAME_EXTENSION_IN_GRAPH_OFF: {
+            boolean on = command == MODEL_ACTION_SET_SHOW_CONNECTED_AS_NAME_EXTENSION_IN_GRAPH_ON;
+            for (LayerContainer lc : layer) {
+                lc.setShowConnectedAsNameExtensionInGraph(on);
+            }
+            distributeEvent(ELEMENT_GRAPHICS_CHANGED, pid);
+            break;
+        }
         default:
             break;
         }
@@ -1673,7 +1724,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
         if (transStackInteger == null) {
             transStackInteger = 0;
         }
-        int transStackInt = transStackInteger.intValue();
+        int transStackInt = transStackInteger;
         transStackInt++;
         transStackTable.put(pid, transStackInt);
 
@@ -1699,8 +1750,11 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
     /**
      * @param pid
      */
-    public void finish_transaction(final int pid) {
+    public void finish_transaction(final int pid, final LGMChangeType... eventTypesToDistribute) {
         finish_transaction(pid, true);
+        for (LGMChangeType eventType : eventTypesToDistribute) {
+            distributeEvent(eventType, pid);
+        }
     }
 
     @SuppressWarnings("unused")
@@ -1723,7 +1777,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
         if (transStackInteger == null) {
             transStackInteger = 0;
         }
-        int transStackInt = transStackInteger.intValue();
+        int transStackInt = transStackInteger;
         transStackInt--;
         if (transStackInt > 0) {
             transStackInteger = transStackInt;
@@ -1751,7 +1805,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
      * @return
      */
     public boolean isVerificationMode() {
-        return optionsSupport.isOptionTrue(GDCommands.MODEL_OPTION_GDOC_VERIFICATION_MODE) || Tool3lgmConstants.LOG_READABLE_UNDO_REDO_COMMANDS;
+        return optionsSupport.isOptionTrue(GDCommands.MODEL_OPTION_GDOC_VERIFICATION_MODE);
     }
 
     // --- Transaktions-Verwaltung --- Ende ---
@@ -1966,8 +2020,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
         for (ElementContainer ec : selectedContainer) {
             normalizeElement(ec, pid);
         }
-        finish_transaction(pid);
-        distributeEvent(ELEMENT_GRAPHICS_CHANGED, pid);
+        finish_transaction(pid, ELEMENT_GRAPHICS_CHANGED);
     }
 
     /**
@@ -1981,8 +2034,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
         for (ElementContainer ec : selectedContainer) {
             normalizeFontElement(ec, pid);
         }
-        finish_transaction(pid);
-        distributeEvent(ELEMENT_GRAPHICS_CHANGED, pid);
+        finish_transaction(pid, ELEMENT_GRAPHICS_CHANGED);
     }
 
     /**
@@ -1996,8 +2048,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
         for (ElementContainer ec : selectedContainer) {
             normalizeColorElement(ec, pid);
         }
-        finish_transaction(pid);
-        distributeEvent(ELEMENT_GRAPHICS_CHANGED, pid);
+        finish_transaction(pid, ELEMENT_GRAPHICS_CHANGED);
     }
 
     /**
@@ -2011,8 +2062,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
         for (ElementContainer ec : selectedContainer) {
             normalizeTransparencyElement(ec, pid);
         }
-        finish_transaction(pid);
-        distributeEvent(ELEMENT_GRAPHICS_CHANGED, pid);
+        finish_transaction(pid, ELEMENT_GRAPHICS_CHANGED);
     }
 
     /**
@@ -2075,8 +2125,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
             String elementID = me.getID();
             setIcon(id, elementID, iconKey, pid);
         }
-        finish_transaction(pid);
-        distributeEvent(ELEMENT_GRAPHICS_CHANGED, pid);
+        finish_transaction(pid, ELEMENT_GRAPHICS_CHANGED);
     }
 
     /**
@@ -2126,23 +2175,28 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
             String elementID = ec.getID();
             unsetIcon(id, elementID, pid);
         }
-        finish_transaction(pid);
-        distributeEvent(ELEMENT_GRAPHICS_CHANGED, pid);
+        finish_transaction(pid, ELEMENT_GRAPHICS_CHANGED);
     }
 
     /**
      * @param docID
-     * @param elementID
+     * @param elementClassOrID
      * @param color
      * @param pid
      */
-    private final void changeColor(final String docID, final String elementID, final Color color, final int pid) {
+    private final void changeColor(final String docID, final String elementClassOrID, final Color color, final int pid) {
         GraphDocument doc = gdcoll.getGraphDocumentCoded(docID);
         if (doc == null) {
             return;
         }
-        ElementContainer ec = doc.findContainerCoded(elementID);
-        changeColor(ec, color, pid);
+        Class<? extends ModelElement> elementClass = metaModel.getClassForName(elementClassOrID);
+        if (elementClass != null) {
+            GraphElementLayout standardElementLayout = doc.defaultElementsLayout.getStandardElementLayout(elementClass);
+            standardElementLayout.bg_color = color;
+        } else {
+            ElementContainer ec = doc.findContainerCoded(elementClassOrID);
+            changeColor(ec, color, pid);
+        }
     }
 
     /**
@@ -2178,8 +2232,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
         for (ElementContainer ec : selectedContainer) {
             changeColor(ec, col, pid);
         }
-        finish_transaction(pid);
-        distributeEvent(ELEMENT_GRAPHICS_CHANGED, pid);
+        finish_transaction(pid, ELEMENT_GRAPHICS_CHANGED);
     }
 
     /**
@@ -2199,8 +2252,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
             }
         }
 
-        finish_transaction(pid);
-        distributeEvent(ELEMENT_GRAPHICS_CHANGED, pid);
+        finish_transaction(pid, ELEMENT_GRAPHICS_CHANGED);
     }
     /**
      * @param ec
@@ -2292,8 +2344,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
         for (ElementContainer ec : selectedContainer) {
             changeAlpha(ec, alphaMode, pid);
         }
-        finish_transaction(pid);
-        distributeEvent(ELEMENT_GRAPHICS_CHANGED, pid);
+        finish_transaction(pid, ELEMENT_GRAPHICS_CHANGED);
     }
 
     /**
@@ -2303,7 +2354,6 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
      */
     private final void setSameAlpha(final int pid) {
         start_transaction(pid);
-
         ElementContainer lastSelected = getLastSelected();
         int alphaValue = lastSelected.getAlpha();
 
@@ -2312,9 +2362,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
                 changeAlpha(ec, alphaValue, pid);
             }
         }
-
-        finish_transaction(pid);
-        distributeEvent(ELEMENT_GRAPHICS_CHANGED, pid);
+        finish_transaction(pid, ELEMENT_GRAPHICS_CHANGED);
     }
 
     /**
@@ -2491,8 +2539,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
             }
         }
 
-        finish_transaction(pid);
-        distributeEvent(ELEMENT_GRAPHICS_CHANGED, pid);
+        finish_transaction(pid, ELEMENT_GRAPHICS_CHANGED);
     }
 
     /**
@@ -2521,8 +2568,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
         Font font = invalidFontName ? null : new Font(name, style, size);
         ElementContainer ec = szen.findContainerCoded(elementID);
         changeFont(ec, font, pid);
-        szen.finish_transaction(pid);
-        szen.distributeEvent(ELEMENT_GRAPHICS_CHANGED, pid);
+        szen.finish_transaction(pid, ELEMENT_GRAPHICS_CHANGED);
     }
 
     /**
@@ -2545,8 +2591,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
                 changeFont(ec, font, pid);
             }
         }
-        finish_transaction(pid);
-        distributeEvent(ELEMENT_GRAPHICS_CHANGED, pid);
+        finish_transaction(pid, ELEMENT_GRAPHICS_CHANGED);
     }
 
     // --- GraphElementLayout-Verwaltung --- Ende ---
@@ -2557,11 +2602,60 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
      * @param nc
      * @param x
      * @param y
+     * @param pid
+     */
+    public final void moveNodeContainer(final NodeContainer nc, final int x, final int y, final int pid) {
+        moveNodeContainer(nc, x, y, nc.getWidth(), nc.getHeight(), pid);
+    }
+
+    /**
+     * @param nc
+     * @param x
+     * @param y
      * @param width
      * @param height
      * @param pid
      */
     public final void moveNodeContainer(final NodeContainer nc, final int x, final int y, final int width, final int height, final int pid) {
+        moveNodeContainer(nc, x, y, width, height, true, pid, false);
+    }
+
+    /**
+     * @param nc
+     * @param x
+     * @param y
+     * @param width
+     * @param height
+     * @param moveSubelements
+     * @param pid
+     */
+    public final void moveNodeContainer(final NodeContainer nc, final int x, final int y, final int width, final int height, final boolean moveSubelements, final int pid) {
+        moveNodeContainer(nc, x, y, width, height, moveSubelements, pid, false);
+    }
+
+    /**
+     * @param nc
+     * @param x
+     * @param y
+     * @param width
+     * @param height
+     * @param pid
+     * @param shiftKeyPressed
+     */
+    public final void moveNodeContainer(final NodeContainer nc, final int x, final int y, final int width, final int height, final int pid, final boolean shiftKeyPressed) {
+        moveNodeContainer(nc, x, y, width, height, true, pid, shiftKeyPressed);
+    }
+
+    /**
+     * @param nc
+     * @param x
+     * @param y
+     * @param width
+     * @param height
+     * @param moveSubelements
+     * @param pid
+     */
+    public final void moveNodeContainer(final NodeContainer nc, final int x, final int y, final int width, final int height, final boolean moveSubelements, final int pid, final boolean controlKeyPressed) {
         if (nc == null) {
             return;
         }
@@ -2570,6 +2664,11 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
             return;
         }
         start_transaction(pid);
+        if (moveSubelements && OPTION_GRAPH_MOVE_SUBELEMENTS.is() && !controlKeyPressed || moveSubelements && !OPTION_GRAPH_MOVE_SUBELEMENTS.is() && controlKeyPressed) {
+            // retrieves all subordinated elements in this submodel
+            List<ElementContainer> subordinatedContainers = me.getConnectedContainers(this, CompositionEdge.class, SUPER_TO_SUB_DIRECTION);
+            moveSubElements(nc, subordinatedContainers, x, y, width, height, pid);
+        }
         GraphDocument ncDoc = nc.getGraphDocument();
         List<?> undoCommandArguments = ImmutableList.of(nc.getX(), nc.getY(), nc.getWidth(), nc.getHeight());
         List<?> redoCommandArguments = ImmutableList.of(x, y, width, height);
@@ -2578,7 +2677,20 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
         nc.setCoordinates(x, y, width, height);
 
         //wenn NodeContainer verschoben werden (keine BendpointContainer)
+        updateEdgeOrBendpoint(nc);
+
+        finish_transaction(pid);
+        distributeEvent(ELEMENT_GRAPHICS_CHANGED, nc, pid);
+    }
+
+    /**
+     * updates the edges and bendpoints, when model elements are moved
+     *
+     * @param nc
+     */
+    private final void updateEdgeOrBendpoint(final NodeContainer nc) {
         if (!(nc instanceof BendpointContainer)) {
+            ModelElement me = nc.getElement();
             //bei allen Kanten dieser Node
             for (Edge edge : me.getEdges()) {
                 EdgeContainer edgeC = edge.getContainer(this);
@@ -2596,8 +2708,159 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
             EdgeContainer edgeC = bendpoint.getOwner();
             edgeC.computeBorderPoints();
         }
-        finish_transaction(pid);
-        distributeEvent(ELEMENT_GRAPHICS_CHANGED, nc, pid);
+    }
+
+    /**
+     * moves all subelements in relation of the masterelement, which has been
+     * resized (and moved by the grid layout function)
+     *
+     * @param nc
+     * @param subordinatedContainers
+     * @param x
+     * @param y
+     * @param width
+     * @param height
+     * @param pid
+     */
+    private final void moveSubElements(final NodeContainer nc, final List<ElementContainer> subordinatedContainers, final int x, final int y, final int width, final int height, final int pid) {
+        int oldX = nc.getX();
+        int oldY = nc.getY();
+        int oldWidth = nc.getWidth();
+        int oldHeight = nc.getHeight();
+
+        // used when, model element is resized via dragging option
+        // it will calculate the repositioning with the original position and dimension
+        // this is done, so that the subelements won't overlap
+        if (!originalPositions.isEmpty()) {
+            oldX = originalMasterPosition.getFirstItem();
+            oldY = originalMasterPosition.getSecondItem();
+            oldWidth = originalMasterDimension.getFirstItem();
+            oldHeight = originalMasterDimension.getSecondItem();
+        } else {
+            oldX = nc.getX();
+            oldY = nc.getY();
+            oldWidth = nc.getWidth();
+            oldHeight = nc.getHeight();
+        }
+
+        int leftBorder = oldX - oldWidth / 2;
+        int rightBorder = oldX + oldWidth / 2;
+        int bottomBorder = oldY - oldHeight / 2;
+        int topBorder = oldY + oldHeight / 2;
+
+        int newLeftBorder = x - width / 2;
+        int newRightBorder = x + width / 2;
+        int newBottomBorder = y - height / 2;
+        int newTopBorder = y + height / 2;
+
+        float widthScale = (float) width / (float) oldWidth;
+        float heightScale = (float) height / (float) oldHeight;
+
+        GraphDocument ncDoc = nc.getGraphDocument();
+
+        for (ElementContainer ec : subordinatedContainers) {
+            NodeContainer nec = (NodeContainer) ec;
+            ModelElement nme = nec.getElement();
+
+            //will skip all Subelements, that aren't displayed
+            if (!nme.isPaintable()) {
+                continue;
+            }
+
+            int oldSubX;
+            int oldSubY;
+            int relativeX;
+            int relativeY;
+            int newSubPosX;
+            int newSubPosY;
+            int horizontalDistanceToBorder;
+            int verticalDistanceToBorder;
+
+            if (!originalPositions.isEmpty()) {
+                Pair<Integer, Integer> originalPosition = originalPositions.get(ec);
+                oldSubX = originalPosition.getFirstItem();
+                oldSubY = originalPosition.getSecondItem();
+            } else {
+                oldSubX = nec.getX();
+                oldSubY = nec.getY();
+            }
+
+            boolean isLeftSide = oldSubX < oldX;
+            boolean isBottomSide = oldSubY < oldY;
+
+            if (isLeftSide) {
+                horizontalDistanceToBorder = leftBorder - oldSubX;
+            } else {
+                horizontalDistanceToBorder = rightBorder - oldSubX;
+            }
+
+            if (isBottomSide) {
+                verticalDistanceToBorder = bottomBorder - oldSubY;
+            } else {
+                verticalDistanceToBorder = topBorder - oldSubY;
+            }
+
+            // the subelements will stick to the border it is closest to this is done in order to
+            // prevent the subelements converging to the middle of the model
+            if (Math.abs(horizontalDistanceToBorder) <= Math.abs(verticalDistanceToBorder)) {
+                if (isLeftSide) {
+                    newSubPosX = newLeftBorder - horizontalDistanceToBorder;
+                } else {
+                    newSubPosX = newRightBorder - horizontalDistanceToBorder;
+                }
+                if (isBottomSide) {
+
+                }
+                relativeY = oldSubY - oldY;
+                newSubPosY = (int) (y + relativeY * heightScale);
+                //                newSubPosY = oldSubY + (int) (height * heightScale / 2);
+                //                newSubPosY = oldSubY;
+            } else {
+                if (isBottomSide) {
+                    newSubPosY = newBottomBorder - verticalDistanceToBorder;
+                } else {
+                    newSubPosY = newTopBorder - verticalDistanceToBorder;
+                }
+                relativeX = oldSubX - oldX;
+                newSubPosX = (int) (x + relativeX * widthScale);
+                //                                newSubPosX = oldSubX + (int) (width * widthScale / 2);
+                //                newSubPosX = oldSubX;
+            }
+
+            List<?> undoCommandArguments = ImmutableList.of(nec.getX(), nec.getY(), nec.getWidth(), nec.getHeight());
+            List<?> redoCommandArguments = ImmutableList.of(newSubPosX, newSubPosY, nec.getWidth(), nec.getHeight());
+            addUndoCommandIfNotExist(pid, undoCommandArguments, MODEL_ACTION_SET_ELEMENT_POSITION, ncDoc, nec);
+            addRedoCommandOrReplace(pid, redoCommandArguments, MODEL_ACTION_SET_ELEMENT_POSITION, ncDoc, nec);
+
+            nec.setCoordinates(newSubPosX, newSubPosY, nec.getWidth(), nec.getHeight());
+            updateEdgeOrBendpoint(nec);
+        }
+    }
+
+    /**
+     * will set the original positions of the subelements and the position and
+     * dimension of the masterelement
+     *
+     * @param subordinatedContainers
+     * @param masterContainer
+     */
+    public final void setOriginalPositions(final List<ElementContainer> subordinatedContainers, final ElementContainer masterContainer) {
+        originalPositions = new HashMap<>();
+        if (subordinatedContainers != null) {
+            for (ElementContainer ec : subordinatedContainers) {
+                NodeContainer nec = (NodeContainer) ec;
+                int originalX = nec.getX();
+                int originalY = nec.getY();
+                Pair<Integer, Integer> originalPosition = new Pair<>(originalX, originalY);
+                originalPositions.put(ec, originalPosition);
+            }
+            int originalMasterX = masterContainer.getX();
+            int originalMasterY = masterContainer.getY();
+            int originalMasterWidth = masterContainer.getWidth();
+            int originalMasterHeight = masterContainer.getHeight();
+            originalMasterPosition = new Pair<>(originalMasterX, originalMasterY);
+            originalMasterDimension = new Pair<>(originalMasterWidth, originalMasterHeight);
+        }
     }
 
     /**
@@ -2626,13 +2889,13 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
      *            </ul>
      * @param pid ID der Transaktion
      */
-    public final void moveSelectedNodeContainer(final int deltaX, final int deltaY, final int layer, final int pid) {
+    public final void moveSelectedNodeContainer(final int deltaX, final int deltaY, final int layer, final boolean controlKeyPressed, final int pid) {
         if (deltaX == 0 && deltaY == 0) {
             return;
         }
         //Unterelemente ebenfalls selektieren, damit sie mitverschoben werden und ihr Verschieben
         //dann auch als Undo gelogt wird
-        List<ElementContainer> selection = expandSelection(OPTION_GRAPH_MOVE_SUBELEMENTS.is());
+        List<ElementContainer> selection = expandSelection(OPTION_GRAPH_MOVE_SUBELEMENTS.is() && !controlKeyPressed || !OPTION_GRAPH_MOVE_SUBELEMENTS.is() && controlKeyPressed);
         Iterable<NodeContainer> nodeContainers = getSelectedRealElementContainerIterable();
         Iterable<BendpointContainer> bendpointContainers = getSelectedBendpointContainerIterable();
         Iterable<NodeContainer> allNodeContainers = CollectionUtils.getCommonIterable(nodeContainers, bendpointContainers);
@@ -2642,7 +2905,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
                 int y = nc.getY();
                 int width = nc.getWidth();
                 int height = nc.getHeight();
-                moveNodeContainer(nc, x + deltaX, y + deltaY, width, height, pid);
+                moveNodeContainer(nc, x + deltaX, y + deltaY, width, height, false, pid);
             }
         }
         setSelection(selection);
@@ -2671,7 +2934,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
             return;
         }
         NodeContainer k = mc;
-        szen.moveNodeContainer(k, x, y, width, height, pid);
+        szen.moveNodeContainer(k, x, y, width, height, false, pid);
     }
 
     /**
@@ -2754,36 +3017,9 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
                 break;
             }
             moveNodeContainer(nc, x, y, w, h, pid);
-            if (OPTION_GRAPH_MOVE_SUBELEMENTS.is()) {
-                moveSlaveElements(nc, xOrg - x, yOrg - y, 0, 0, pid);
-            }
         }
         //        setSelection(selection);
-        finish_transaction(pid);
-        distributeEvent(ELEMENT_GRAPHICS_CHANGED, pid);
-    }
-
-    /**
-     * @param nc
-     * @param xDiff
-     * @param yDiff
-     * @param wDiff
-     * @param hDiff
-     */
-    private void moveSlaveElements(final NodeContainer nc, final int xDiff, final int yDiff, final int wDiff, final int hDiff, final int pid) {
-        ModelElement master = nc.getElement();
-        Set<ElementContainer> subordinatedContainers = master.getSubordinatedContainers(this);
-        for (ElementContainer subContainer : subordinatedContainers) {
-            if (subContainer != nc) { //subContainer contains the master too
-                if (subContainer instanceof NodeContainer) { //should be alsways true but better safe than sorry
-                    int x = subContainer.getX() - xDiff;
-                    int y = subContainer.getY() - yDiff;
-                    int w = subContainer.getWidth() - wDiff;
-                    int h = subContainer.getHeight() - hDiff;
-                    moveNodeContainer((NodeContainer) subContainer, x, y, w, h, pid);
-                }
-            }
-        }
+        finish_transaction(pid, ELEMENT_GRAPHICS_CHANGED);
     }
 
     /**
@@ -2913,8 +3149,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
             String elementID = ec.getID();
             setExpanded(expand, gdcoll, id, elementID, !expand, pid);
         }
-        finish_transaction(pid);
-        distributeEvent(ELEMENT_GRAPHICS_CHANGED, pid);
+        finish_transaction(pid, ELEMENT_GRAPHICS_CHANGED);
     }
 
     /**
@@ -2929,8 +3164,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
             String elementID = ec.getID();
             setExpanded(expand, gdcoll, id, elementID, !expand, pid);
         }
-        finish_transaction(pid);
-        distributeEvent(ELEMENT_GRAPHICS_CHANGED, pid);
+        finish_transaction(pid, ELEMENT_GRAPHICS_CHANGED);
     }
 
     /**
@@ -2980,8 +3214,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
             collapse(szen, ec, doCollapse, pid);
         }
 
-        szen.finish_transaction(pid);
-        szen.distributeEvent(ELEMENT_GRAPHICS_CHANGED, pid);
+        szen.finish_transaction(pid, ELEMENT_GRAPHICS_CHANGED);
 
         tmpExpansionLevel--;
     }
@@ -3154,8 +3387,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
         }
         szen.addUndo(pid, visible ? MODEL_ACTION_SET_ELEMENT_VISIBILITY_OFF : MODEL_ACTION_SET_ELEMENT_VISIBILITY_ON, szenID, containers);
         szen.addRedo(pid, visible ? MODEL_ACTION_SET_ELEMENT_VISIBILITY_ON : MODEL_ACTION_SET_ELEMENT_VISIBILITY_OFF, szenID, containers);
-        szen.finish_transaction(pid);
-        szen.distributeEvent(DATA_CHANGED, pid);
+        szen.finish_transaction(pid, DATA_CHANGED);
     }
 
     /**
@@ -3247,13 +3479,13 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
      */
     public final void deselectAll(final boolean insideTransaction) {
         if (!insideTransaction) {
-            start_transaction(TransactionManager.STANDARD_PID, false);
+            start_transaction(STANDARD_PID, false);
         }
         gdcoll.deselectAll();
         if (!insideTransaction) {
-            finish_transaction(TransactionManager.STANDARD_PID, false);
+            finish_transaction(STANDARD_PID, false);
         }
-        distributeEvent(SELECTION_CHANGED, TransactionManager.STANDARD_PID);
+        distributeEvent(SELECTION_CHANGED, STANDARD_PID);
     }
 
     /**
@@ -3276,6 +3508,39 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
         gdcoll.setBulkMode(false);
         finish_transaction(PID, false);
         distributeEvent(SELECTION_CHANGED, PID);
+    }
+
+    /**
+     * @param selectOnylActiveLayerVisibleElements
+     */
+    public void selectAll(final boolean selectOnylActiveLayerVisibleElements) {
+        start_transaction(STANDARD_PID, false);
+        deselectAll(true);
+        for (int i = 0; i < layer.length; i++) {
+            LayerContainer layerContainer = layer[i];
+            if (selectOnylActiveLayerVisibleElements && gdcoll.getActiveLayer() != i) {
+                continue;
+            }
+            for (ElementContainer ec : layerContainer.getGraphNodeContainers()) {
+                if (!selectOnylActiveLayerVisibleElements || ec.isVisible()) {
+                    gdcoll.addToSelection(ec);
+                }
+            }
+            for (ElementContainer ec : layerContainer.getEdgeContainers()) {
+                if (!selectOnylActiveLayerVisibleElements || ec.isVisible()) {
+                    gdcoll.addToSelection(ec);
+                    EdgeContainer edgeC = (EdgeContainer) ec;
+                    for (BendpointContainer bc : edgeC.iterateBendpointContainers()) {
+                        gdcoll.addToSelection(bc);
+                    }
+                }
+            }
+        }
+        if (!selectOnylActiveLayerVisibleElements) {
+            gdcoll.selectAllUniques();
+        }
+        finish_transaction(STANDARD_PID, false);
+        distributeEvent(SELECTION_CHANGED, STANDARD_PID);
     }
 
     /**
@@ -3378,14 +3643,35 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
     private List<ElementContainer> getSelectionInGraphOrder() {
         List<ElementContainer> returnList = new ArrayList<>(selectedContainer.size());
         List<ElementContainer> nodeContainers = getElementContainers(Node.class, true, false);
+        // add all selected node containers of the selected submodel
         for (ElementContainer nc : nodeContainers) {
             if (selectedContainer.contains(nc)) {
                 returnList.add(nc);
             }
         }
         for (ElementContainer ec : selectedContainer) {
+            // add all selected edge containers and bendpoint containers
             Class<? extends ElementContainer> ecClass = ec.getClass();
-            if (BendpointContainer.class.isAssignableFrom(ecClass) || EdgeContainer.class.isAssignableFrom(ecClass)) {
+            if (CoreMetaModel.isEdgeType(ecClass) || CoreMetaModel.isBendpointType(ecClass)) {
+                returnList.add(ec);
+            } else if (!returnList.contains(ec)) { // this must be a real node type
+                // (Ticket #455)
+                // if the model browser shows all elements (and not only the elements
+                // from the currently selected submodel) then the selection can contain
+                // elements with no container in the selected submodel. Then we add the
+                // first found container of an other submodel or the main doc container
+                // if the element has no submodel container
+                GraphDocument doc = ec.getGraphDocument();
+                ModelElement me = ec.getElement();
+                if (!(doc instanceof Szenario)) {
+                    for (GraphDocument ecDoc : me.getMySzenarios()) {
+                        if (ecDoc instanceof Szenario) {
+                            doc = ecDoc;
+                            break;
+                        }
+                    }
+                }
+                ec = me.getContainer(doc);
                 returnList.add(ec);
             }
         }
@@ -3588,8 +3874,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
         if (!gdcoll.isBulkMode()) {
             select(lastCreated, pid);
         }
-        finish_transaction(pid);
-        distributeEvent(DATA_CHANGED);
+        finish_transaction(pid, DATA_CHANGED);
         return lastCreated;
     }
 
@@ -3840,7 +4125,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
      * @param pid
      * @return
      */
-    private static final ModelElement createAddicted(final GraphDocument doc, final ModelElement master, final Class<? extends CompositionEdge> edgeClass, final Class<? extends ModelElement> slaveClass, final SubType subType, final String slaveName,
+    private static final ModelElement createSubordinated(final GraphDocument doc, final ModelElement master, final Class<? extends CompositionEdge> edgeClass, final Class<? extends ModelElement> slaveClass, final SubType subType, final String slaveName,
             final String slaveID, final int pid) {
         if (master == null || edgeClass == null || slaveClass == null) {
             return null;
@@ -3877,7 +4162,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
                 szen.addElementToSzenario(szenID, slaveContainer, pid);
                 times1.add(System.currentTimeMillis() - l);
                 l = System.currentTimeMillis();
-                szen.addict(master, slave, edgeClass, pid);
+                szen.subordinate(master, slave, edgeClass, pid);
                 times2.add(System.currentTimeMillis() - l);
             }
         }
@@ -3901,9 +4186,9 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
      * @param pid
      * @return
      */
-    public static final ModelElement createAddicted(final GraphDocument doc, final ModelElement master, final Class<? extends CompositionEdge> edgeClass, final Class<? extends ModelElement> slaveClass, final SubType subType, final String slaveName,
+    public static final ModelElement createSubordinated(final GraphDocument doc, final ModelElement master, final Class<? extends CompositionEdge> edgeClass, final Class<? extends ModelElement> slaveClass, final SubType subType, final String slaveName,
             final int pid) {
-        return createAddicted(doc, master, edgeClass, slaveClass, subType, slaveName, GDCommands.INVALID_ID_STRING, pid);
+        return createSubordinated(doc, master, edgeClass, slaveClass, subType, slaveName, GDCommands.INVALID_ID_STRING, pid);
     }
 
     /**
@@ -3914,8 +4199,8 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
      * @param pid
      * @return
      */
-    public static final ModelElement createAddicted(final GraphDocument doc, final ModelElement master, final Class<? extends CompositionEdge> edgeClass, final Class<? extends ModelElement> slaveClass, final int pid) {
-        return createAddicted(doc, master, edgeClass, slaveClass, null, pid);
+    public static final ModelElement createSubordinated(final GraphDocument doc, final ModelElement master, final Class<? extends CompositionEdge> edgeClass, final Class<? extends ModelElement> slaveClass, final int pid) {
+        return createSubordinated(doc, master, edgeClass, slaveClass, null, pid);
     }
 
     /**
@@ -3927,8 +4212,8 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
      * @param pid
      * @return
      */
-    public static final ModelElement createAddicted(final GraphDocument doc, final ModelElement master, final Class<? extends CompositionEdge> edgeClass, final Class<? extends ModelElement> slaveClass, final SubType subType, final int pid) {
-        return createAddicted(doc, master, edgeClass, slaveClass, subType, GDCommands.INVALID_NAME, pid);
+    public static final ModelElement createSubordinated(final GraphDocument doc, final ModelElement master, final Class<? extends CompositionEdge> edgeClass, final Class<? extends ModelElement> slaveClass, final SubType subType, final int pid) {
+        return createSubordinated(doc, master, edgeClass, slaveClass, subType, GDCommands.INVALID_NAME, pid);
     }
 
     /**
@@ -3938,8 +4223,8 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
      * @param pid
      * @return
      */
-    public final Edge addict(final ModelElement master, final ModelElement slave, final Class<? extends CompositionEdge> edgeClass, final int pid) {
-        return addict(id, master, slave, edgeClass, pid);
+    public final Edge subordinate(final ModelElement master, final ModelElement slave, final Class<? extends CompositionEdge> edgeClass, final int pid) {
+        return subordinate(id, master, slave, edgeClass, pid);
     }
 
     /**
@@ -3950,9 +4235,9 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
      * @param pid
      * @return
      */
-    public final Edge addict(final String szenID, final ModelElement master, final ModelElement slave, final Class<? extends CompositionEdge> edgeClass, final int pid) {
+    public final Edge subordinate(final String szenID, final ModelElement master, final ModelElement slave, final Class<? extends CompositionEdge> edgeClass, final int pid) {
         String simpleEdgeClassName = edgeClass.getSimpleName();
-        return addict(szenID, simpleEdgeClassName, master, slave, pid);
+        return subordinate(szenID, simpleEdgeClassName, master, slave, pid);
     }
 
     /**
@@ -3963,10 +4248,10 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
      * @param pid
      * @return
      */
-    public final Edge addict(final String szenID, final String edgeClassName, final String masterID, final String slaveID, final int pid) {
+    public final Edge subordinate(final String szenID, final String edgeClassName, final String masterID, final String slaveID, final int pid) {
         ModelElement master = findElementCoded(masterID);
         ModelElement slave = findElementCoded(slaveID);
-        return addict(szenID, edgeClassName, master, slave, pid);
+        return subordinate(szenID, edgeClassName, master, slave, pid);
     }
 
     /**
@@ -3977,7 +4262,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
      * @param pid
      * @return
      */
-    protected final Edge addict(final String szenID, final String edgeClassName, final ModelElement masterElement, final ModelElement slaveElement, final int pid) {
+    protected final Edge subordinate(final String szenID, final String edgeClassName, final ModelElement masterElement, final ModelElement slaveElement, final int pid) {
         if (masterElement == null || slaveElement == null) {
             return null;
         }
@@ -4002,12 +4287,12 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
         //slaveContainer ist null, wenn das untergeordnete Element unique ist und keinen Grafikcontainer in jedem Teilmodell hat
         if (slaveContainer != null) {
             szen.start_transaction(pid);
-            Dimension pos = calculateAddictPosition(masterContainer);
+            Dimension pos = GraphFunctions.calculateSubordinatedPosition(masterContainer);
             int slaveX = slaveContainer.getX();
             int slaveY = slaveContainer.getY();
             int slaveWidth = slaveContainer.getWidth();
             int slaveHeight = slaveContainer.getHeight();
-            addRedo(pid, MODEL_ACTION_ADDICT, szenID, edgeClassName, masterElement, slaveElement);
+            addRedo(pid, MODEL_ACTION_SUBORDINATE, szenID, edgeClassName, masterElement, slaveElement);
             addUndo(pid, MODEL_ACTION_SET_ELEMENT_POSITION, szenID, slaveElement, slaveX, slaveY, slaveWidth, slaveHeight);
             slaveContainer.setCoordinates(pos.width, pos.height, slaveWidth, slaveHeight);
             raiseSlaves(masterContainer, pid);
@@ -4019,188 +4304,10 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
                     }
                 }
             }
-            szen.finish_transaction(pid);
-            szen.distributeEvent(DATA_CHANGED, pid);
+            szen.finish_transaction(pid, DATA_CHANGED);
         }
 
         return edge;
-    }
-
-    /**
-     * Berechnet die Position untergeordneter Elemente auf einem
-     * Oberelementcontainer.
-     *
-     * @param nc Oberelementcontainer auf dem untergeordnete Elemente
-     *            positioniert werden sollen
-     * @return
-     */
-    private static final Dimension calculateAddictPosition(final NodeContainer nc) {
-        int addictedCount = -1;
-        ModelElement me = nc.getElement();
-        for (Edge edge : me.getEdges()) {
-            if (edge instanceof CompositionEdge) {
-                ModelElement slave = ((CompositionEdge) edge).getSlave();
-                if (slave != me && slave.isPaintable()) {
-                    addictedCount++;
-                }
-            }
-        }
-
-        int x = nc.getX();
-        int y = nc.getY();
-        int w = nc.getWidth();
-        int h = nc.getHeight();
-
-        Dimension retVal = new Dimension(x, y);
-
-        switch (addictedCount % 36) {
-        case 14:
-            retVal.width = x - w / 8;
-            retVal.height = y - h / 2;
-            break;
-        case 28:
-            retVal.width = x - w / 2;
-            retVal.height = y - h / 2 + h / 8;
-            break;
-        case 8:
-            retVal.width = x - w / 4;
-            retVal.height = y - h / 2;
-            break;
-        case 20:
-            retVal.width = x - w / 2 + w / 8;
-            retVal.height = y - h / 2;
-            break;
-        case 0:
-            retVal.width = x - w / 2;
-            retVal.height = y - h / 4;
-            break;
-        case 15:
-            retVal.width = x + w / 8;
-            retVal.height = y + h / 2;
-            break;
-        case 29:
-            retVal.width = x + w / 2;
-            retVal.height = y + h / 2 - h / 8;
-            break;
-        case 9:
-            retVal.width = x + w / 4;
-            retVal.height = y + h / 2;
-            break;
-        case 21:
-            retVal.width = x + w / 2 - w / 8;
-            retVal.height = y + h / 2;
-            break;
-        case 1:
-            retVal.width = x + w / 2;
-            retVal.height = y + h / 4;
-            break;
-        case 16:
-            retVal.width = x - w / 8;
-            retVal.height = y + h / 2;
-            break;
-        case 30:
-            retVal.width = x - w / 2;
-            retVal.height = y + h / 2 - h / 8;
-            break;
-        case 10:
-            retVal.width = x - w / 4;
-            retVal.height = y + h / 2;
-            break;
-        case 22:
-            retVal.width = x - w / 2 + w / 8;
-            retVal.height = y + h / 2;
-            break;
-        case 2:
-            retVal.width = x - w / 2;
-            retVal.height = y + h / 4;
-            break;
-        case 17:
-            retVal.width = x + w / 8;
-            retVal.height = y - h / 2;
-            break;
-        case 31:
-            retVal.width = x + w / 2;
-            retVal.height = y - h / 2 + h / 8;
-            break;
-        case 11:
-            retVal.width = x + w / 4;
-            retVal.height = y - h / 2;
-            break;
-        case 23:
-            retVal.width = x + w / 2 - w / 8;
-            retVal.height = y - h / 2;
-            break;
-        case 3:
-            retVal.width = x + w / 2;
-            retVal.height = y - h / 4;
-            break;
-        case 18:
-            retVal.width = x - w / 2;
-            retVal.height = y - h / 2;
-            break;
-        case 32:
-            retVal.width = x - w / 16;
-            retVal.height = y - h / 2;
-            break;
-        case 12:
-            retVal.width = x - w / 2;
-            retVal.height = y + h / 2;
-            break;
-        case 24:
-            retVal.width = x - w / 2;
-            retVal.height = y - h / 8;
-            break;
-        case 4:
-            retVal.width = x - w / 2;
-            retVal.height = y;
-            break;
-        case 19:
-            retVal.width = x + w / 2;
-            retVal.height = y + h / 2;
-            break;
-        case 33:
-            retVal.width = x + w / 16;
-            retVal.height = y + h / 2;
-            break;
-        case 13:
-            retVal.width = x + w / 2;
-            retVal.height = y - h / 2;
-            break;
-        case 25:
-            retVal.width = x + w / 2;
-            retVal.height = y - h / 8;
-            break;
-        case 5:
-            retVal.width = x + w / 2;
-            retVal.height = y;
-            break;
-        case 26:
-            retVal.width = x - w / 2;
-            retVal.height = y + h / 8;
-            break;
-        case 6:
-            retVal.width = x;
-            retVal.height = y + h / 2;
-            break;
-        case 27:
-            retVal.width = x + w / 2;
-            retVal.height = y + h / 8;
-            break;
-        case 7:
-            retVal.width = x;
-            retVal.height = y - h / 2;
-            break;
-        case 34:
-            retVal.width = x - w / 16;
-            retVal.height = y + h / 2;
-            break;
-        case 35:
-            retVal.width = x + w / 16;
-            retVal.height = y - h / 2;
-            break;
-        }
-
-        return retVal;
     }
 
     /**
@@ -4223,8 +4330,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
                 gdcoll.link(edgeClass, lastSelecedElement, me, pid);
             }
         }
-        finish_transaction(pid);
-        distributeEvent(DATA_CHANGED, pid);
+        finish_transaction(pid, DATA_CHANGED);
     }
 
     /**
@@ -4247,8 +4353,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
                 gdcoll.unlink(lastSelecedElement, me, edgeClass, pid);
             }
         }
-        finish_transaction(pid);
-        distributeEvent(DATA_CHANGED, pid);
+        finish_transaction(pid, DATA_CHANGED);
     }
 
     /**
@@ -4262,8 +4367,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
             Edge edge = edgeC.getEdge();
             gdcoll.unlink(edge, pid);
         }
-        finish_transaction(pid);
-        distributeEvent(DATA_CHANGED, pid);
+        finish_transaction(pid, DATA_CHANGED);
     }
 
     /**
@@ -4317,8 +4421,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
          * knot.getContainer(this); kc.switchSpecialInfoTartgets(pos1, pos2,
          * kc.isSelected()); }
          */
-        finish_transaction(pid);
-        distributeEvent(DATA_CHANGED, pid);
+        finish_transaction(pid, DATA_CHANGED);
     }
 
     /**
@@ -4415,8 +4518,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
                     z_move_down(ec, pid);
                 }
             }
-            finish_transaction(pid);
-            distributeEvent(GROUP_ORDER_CHANGED, pid);
+            finish_transaction(pid, GROUP_ORDER_CHANGED);
         }
     }
 
@@ -4499,8 +4601,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
                     z_step_up(ec, pid);
                 }
             }
-            finish_transaction(pid);
-            distributeEvent(GROUP_ORDER_CHANGED, pid);
+            finish_transaction(pid, GROUP_ORDER_CHANGED);
         }
     }
 
@@ -4547,8 +4648,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
                     z_step_down(ec, pid);
                 }
             }
-            finish_transaction(pid);
-            distributeEvent(GROUP_ORDER_CHANGED, pid);
+            finish_transaction(pid, GROUP_ORDER_CHANGED);
         }
     }
 
@@ -4613,8 +4713,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
         for (ElementContainer ec : selectedContainer) {
             setTextPositionVertical(mode, ec, pid);
         }
-        finish_transaction(pid);
-        distributeEvent(ELEMENT_GRAPHICS_CHANGED, pid);
+        finish_transaction(pid, ELEMENT_GRAPHICS_CHANGED);
     }
 
     /**
@@ -4659,8 +4758,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
         for (ElementContainer ec : selectedContainer) {
             setTextAlignmentHTML(mode, ec, pid);
         }
-        finish_transaction(pid);
-        distributeEvent(ELEMENT_GRAPHICS_CHANGED, pid);
+        finish_transaction(pid, ELEMENT_GRAPHICS_CHANGED);
     }
 
     /**
@@ -4748,8 +4846,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
         addUndoCommandIfNotExist(pid, oldDescription, MODEL_ACTION_SET_ELEMENT_DESCRIPTION, me);
         newDescription = getDecodedParseSaveString(description);
         me.setDescription(newDescription);
-        finish_transaction(pid);
-        distributeEvent(DATA_CHANGED, pid);
+        finish_transaction(pid, DATA_CHANGED);
     }
 
     /**
@@ -4768,8 +4865,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
                 ModelElement me = ec.getElement();
                 setSubType(me, subType, pid);
             }
-            finish_transaction(pid);
-            distributeEvent(DATA_CHANGED, pid);
+            finish_transaction(pid, DATA_CHANGED);
         }
     }
 
@@ -4805,8 +4901,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
         addRedoCommandOrReplace(pid, subType, MODEL_ACTION_SET_ELEMENT_SUBTYPE, me);
         addUndoCommandIfNotExist(pid, oldSubType, MODEL_ACTION_SET_ELEMENT_SUBTYPE, me);
         me.setSubType(subType);
-        finish_transaction(pid);
-        distributeEvent(DATA_CHANGED, pid);
+        finish_transaction(pid, DATA_CHANGED);
     }
 
     /**
@@ -4835,17 +4930,19 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
      * @param value
      * @param pid
      */
-    public void setUserFieldValue(final ModelElement me, final UserField userField, final String value, final int pid) {
+    public void setUserFieldValue(final ModelElement me, final UserField userField, String value, final int pid) {
         start_transaction(pid);
-        String newValue = getParseSaveString(value, true);
+        if (userField.hasClassfificationStyle()) {
+            value = value.trim();
+        }
         String oldValue = me.getValue(userField);
-        oldValue = getParseSaveString(oldValue, true);
-        addRedoCommandOrReplace(pid, newValue, MODEL_ACTION_SET_USER_FIELD_VALUE, me, userField);
+        if (UserField.EMPTY_STRING.equals(oldValue)) {
+            oldValue = "";
+        }
+        addRedoCommandOrReplace(pid, value, MODEL_ACTION_SET_USER_FIELD_VALUE, me, userField);
         addUndoCommandIfNotExist(pid, oldValue, MODEL_ACTION_SET_USER_FIELD_VALUE, me, userField);
-        newValue = getDecodedParseSaveString(value);
-        me.setUserFieldInputValue(userField, newValue);
-        finish_transaction(pid);
-        distributeEvent(USER_FIELD_VALUE_CHANGED, pid);
+        me.setUserFieldInputValue(userField, value);
+        finish_transaction(pid, USER_FIELD_VALUE_CHANGED);
     }
 
     /**
@@ -4911,7 +5008,6 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
         addRedoCommandOrReplace(pid, idReplacement, MODEL_ACTION_SET_USER_FIELD_WEIGHT_REPLACEMENT, elementID, userFieldIDToReplaceOrSimpleEdgeClassName);
         addUndoCommandIfNotExist(pid, oldUserFieldIDReplacement, MODEL_ACTION_SET_USER_FIELD_WEIGHT_REPLACEMENT, elementID, userFieldIDToReplaceOrSimpleEdgeClassName);
         finish_transaction(pid);
-
     }
 
     /**
@@ -4965,13 +5061,11 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
         GraphViewParameter graphViewParameter = Static.getGraphViewParameter(szen);
         szen.adaptGraphViewParameter(graphViewParameter);
         double pageSizeFactor = getPageSizeFactor();
-        szen.setPageSizeFactor(pageSizeFactor);
+        szen.setPageSizeFactor(pageSizeFactor, true, pid);
         szen.getDefaultElementsLayout().adapt(defaultElementsLayout);
         String otherID = szen.getID();
         addElementsToSzenario(otherID, elements, pid);
-        finish_transaction(pid);
-        szen.distributeEvent(ACTIVE_LAYER_CHANGED, pid);
-        szen.distributeEvent(DATA_CHANGED, pid);
+        finish_transaction(pid, ACTIVE_LAYER_CHANGED, DATA_CHANGED);
     }
 
     /**
@@ -5001,8 +5095,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
             finish_transaction(pid, false);
             distributeEvent(SELECTION_CHANGED, pid);
         }
-        finish_transaction(pid);
-        distributeEvent(DATA_CHANGED, pid);
+        finish_transaction(pid, DATA_CHANGED);
     }
 
     /**
@@ -5017,8 +5110,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
                 addElementToSzenario(szenID, (NodeContainer) ec, pid);
             }
         }
-        finish_transaction(pid);
-        distributeEvent(DATA_CHANGED, pid);
+        finish_transaction(pid, DATA_CHANGED);
     }
 
     /**
@@ -5036,8 +5128,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
             String elementID = ec.getID();
             linkElementToSzenario(szenID, elementID, pid);
         }
-        finish_transaction(pid);
-        distributeEvent(DATA_CHANGED, pid);
+        finish_transaction(pid, DATA_CHANGED);
     }
 
     /**
@@ -5050,8 +5141,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
             String elementID = ec.getID();
             linkElementToSzenario(szenID, elementID, pid);
         }
-        finish_transaction(pid);
-        distributeEvent(DATA_CHANGED, pid);
+        finish_transaction(pid, DATA_CHANGED);
     }
 
     /**
@@ -5135,8 +5225,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
             }
             targetSzenario.raiseSlaves(targetContainer, pid);
         }
-        targetSzenario.finish_transaction(pid);
-        targetSzenario.distributeEvent(DATA_CHANGED, pid);
+        targetSzenario.finish_transaction(pid, DATA_CHANGED);
         return targetContainer;
     }
 
@@ -5158,7 +5247,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
         addUndo(pid, MODEL_ACTION_LINK_ELEMENT_TO_SUBMODEL, oldSzenID, me);
         addRedo(pid, MODEL_ACTION_LINK_ELEMENT_TO_SUBMODEL, szenID, me);
         finish_transaction(pid);
-        distributeEvent(DATA_CHANGED, ec, 0);
+        distributeEvent(DATA_CHANGED, ec, pid);
     }
 
     /**

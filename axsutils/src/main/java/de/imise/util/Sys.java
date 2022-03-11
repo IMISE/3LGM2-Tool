@@ -72,7 +72,7 @@ public class Sys {
             print(stackTrace[i], stream, !(appendFistTraceStepToLastMessageLine && i == hideTraceSteps), true);
         }
         if (insertBlankLineAfterOutput) {
-            System.err.println();
+            stream.println();
         }
     }
 

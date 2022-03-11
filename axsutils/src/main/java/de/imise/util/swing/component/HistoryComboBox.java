@@ -59,6 +59,13 @@ public class HistoryComboBox extends JComboBox<String> implements KeyListener {
     }
 
     /**
+     * @param documentListener
+     */
+    public synchronized void removeDocumentListener(final DocumentListener documentListener) {
+        ((JTextComponent) getEditor().getEditorComponent()).getDocument().removeDocumentListener(documentListener);
+    }
+
+    /**
      * @param historyLength Maximale Anzahl der Einträge in der History-Liste
      * @param initialListValues Am Anfang vorhandene Listenwerte
      */
@@ -194,17 +201,15 @@ public class HistoryComboBox extends JComboBox<String> implements KeyListener {
      * @return the string of the selected icon in the combobox
      */
     public static String getText(final JComboBox<?> comboBox) {
-        Object selectedItem = comboBox.getSelectedItem();
+        Object selectedItem = null;
+        ComboBoxEditor editor = comboBox.getEditor();
+        Component editorComponent = editor.getEditorComponent();
+        if (editorComponent instanceof JTextComponent) {
+            JTextComponent textEditorComponent = (JTextComponent) editorComponent;
+            selectedItem = textEditorComponent.getText();
+        }
         if (selectedItem == null) {
-            ComboBoxEditor editor = comboBox.getEditor();
-            Component editorComponent = editor.getEditorComponent();
-            if (editorComponent instanceof JTextComponent) {
-                JTextComponent textEditorComponent = (JTextComponent) editorComponent;
-                selectedItem = textEditorComponent.getText();
-            }
-            if (selectedItem == null) {
-                return null;
-            }
+            selectedItem = comboBox.getSelectedItem();
         }
         String value = String.valueOf(selectedItem);
         return value;

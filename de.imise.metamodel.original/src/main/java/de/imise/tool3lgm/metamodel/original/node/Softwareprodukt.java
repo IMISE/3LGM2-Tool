@@ -1,7 +1,6 @@
 package de.imise.tool3lgm.metamodel.original.node;
 
 import de.imise.tool3lgm.graphtools.dialog.element.ElementPropertyDialog;
-import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
 import de.imise.tool3lgm.metamodel.original.edge.AwpSwpVerbindung;
 import de.imise.tool3lgm.metamodel.original.edge.SwpAufVerbindung;
@@ -11,22 +10,6 @@ import de.imise.tool3lgm.metamodel.original.edge.SwpAufVerbindung;
  * @create Long time ago
  */
 public final class Softwareprodukt extends Node {
-
-    @Override
-    public void setName(final String name) {
-        super.setName(name);
-        for (int c = 0; c < getEdgesCount(); c++) {
-            ModelElement awp = getEdge(c).getOther(this);
-            if (awp.getClass() == Anwendungsprogramm.class) {
-                for (int a = 0; a < awp.getEdgesCount(); a++) {
-                    ModelElement awb = awp.getEdge(a).getOther(awp);
-                    if (awb.getClass() == RechAnwendungsbaustein.class) {
-                        awb.setName(awb.getName());
-                    }
-                }
-            }
-        }
-    }
 
     @Override
     public ElementPropertyDialog createPropertyDialog() {

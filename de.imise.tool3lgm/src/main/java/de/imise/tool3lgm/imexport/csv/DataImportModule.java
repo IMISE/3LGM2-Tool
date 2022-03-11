@@ -372,7 +372,7 @@ public class DataImportModule {
     //                        boolean interactiveMode = doc.getCollection().isInteractiveMode();
     //                        doc.getCollection().setInteractiveMode(false);
     //                        if (sendBss == null && kommBez == null) {
-    //                            sendBss = LGMGraphDocument.createAddicted(doc, sendAwb, AwbKommssVerbindung.class, Bausteinschnittstelle.class, sendBssExtID, PID);
+    //                            sendBss = LGMGraphDocument.createSubordinated(doc, sendAwb, AwbKommssVerbindung.class, Bausteinschnittstelle.class, sendBssExtID, PID);
     //                            //						sendBss = doc.createBausteinSNforABS(sendAwb.getID(), sendBssExtID, null, PID);
     //                            if (sendBss == null) {
     //                                continue;
@@ -380,7 +380,7 @@ public class DataImportModule {
     //                            sendBss.setExternalID("extID_BSS", sendBssExtID);
     //                        }
     //                        if (recvBss == null && kommBez == null) {
-    //                            recvBss = LGMGraphDocument.createAddicted(doc, recvAwb, AwbKommssVerbindung.class, Bausteinschnittstelle.class, recvBssExtID, PID);
+    //                            recvBss = LGMGraphDocument.createSubordinated(doc, recvAwb, AwbKommssVerbindung.class, Bausteinschnittstelle.class, recvBssExtID, PID);
     //                            //						recvBss = doc.createBausteinSNforABS(recvAwb.getID(), recvBssExtID, null, PID);
     //                            if (recvBss == null) {
     //                                continue;

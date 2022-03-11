@@ -311,7 +311,7 @@ public abstract class AbstractUserFieldTableLayout {
         layoutContainer.setColumnHeaderView(h);
 
         // Erzeugen und Setzen des RowHeaders
-        if (hasRowHeader == true) {
+        if (hasRowHeader) {
             setRowHeader(table, layoutContainer);
             initResizableRowHeader(layoutContainer);
         }
@@ -501,7 +501,7 @@ public abstract class AbstractUserFieldTableLayout {
         @Override
         public void mouseMoved(final MouseEvent e) {
 
-            if (isResizing == true) {
+            if (isResizing) {
                 return;
             }
 
@@ -534,7 +534,7 @@ public abstract class AbstractUserFieldTableLayout {
         @Override
         public void mouseDragged(final MouseEvent e) {
 
-            if (canResize == false) {
+            if (!canResize) {
                 return;
             }
 

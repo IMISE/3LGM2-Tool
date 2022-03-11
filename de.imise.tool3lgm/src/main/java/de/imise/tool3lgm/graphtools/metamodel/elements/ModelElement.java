@@ -41,6 +41,7 @@ import de.imise.tool3lgm.graphtools.model.GDCollectionOwner;
 import de.imise.tool3lgm.graphtools.model.GDCommands;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.path.metapaths.MetaPath;
+import de.imise.tool3lgm.graphtools.path.metapaths.SimpleMetaPath;
 import de.imise.tool3lgm.graphtools.userfield.definition.SubType;
 import de.imise.tool3lgm.graphtools.userfield.definition.UserField;
 import de.imise.tool3lgm.graphtools.userfield.definition.UserFieldDefinitions;
@@ -116,6 +117,11 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
     private static final StringBuilder suffixBuf = new StringBuilder("");
 
     private static final StringBuilder textBuf = new StringBuilder("");
+
+    /**
+     * <code>true</code> if this element has a name extension on its graph name
+     */
+    private boolean hasGraphNameExtension = false;
 
     /** MetaModel aus dem die Klasse dieses Elementes stammt. */
     private MetaModel metaModel;
@@ -464,15 +470,27 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
     }
 
     /**
-     * Liefert für alle Elementklassen, bei denen der Name verbundendener
-     * Elemente in der Grafik in Klammern unter der eigentlichen Elementart
-     * angezeigt werden soll, den MetaPfad zu den anzuzeigenden verbundenen
-     * Elementen. Diese Funktion darf nicht einfach refactored werden und wenn
-     * doch, dann muss das Feld GET_NAME_EXTENSION_METHOD_NAME ebenfalls
-     * umbenannt werden.
+     * @returnthe MetaPath to the connected elements to be displayed for all
+     *            element classes where the name of connected elements is to be
+     *            displayed in the graphic in brackets below the actual element
+     *            type.
      */
-    private final MetaPath getGraphNameExtensionPath() {
-        return metaModel.getNameExtensionPath(getClass());
+    private final MetaPath getGraphNameExtensionPathAsNameTarget() {
+        return metaModel.getNameExtensionPathAsNameTarget(getClass());
+    }
+
+    /**
+     * Updates the name of connected elenents to whose name the name of this
+     * element should be appended.
+     */
+    private final void updateGraphNameExtensionsOnMyNameTargets() {
+        SimpleMetaPath nameExtensionPathAsNameSource = metaModel.getNameExtensionPathAsNameSource(getClass());
+        if (nameExtensionPathAsNameSource != null) {
+            List<ModelElement> nameTargets = nameExtensionPathAsNameSource.getConnectedElements(this);
+            for (ModelElement nameTarget : nameTargets) {
+                nameTarget.updateNameExtensions();
+            }
+        }
     }
 
     /**
@@ -480,7 +498,7 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
      * Namen verbundener Elemente anzeigen soll
      */
     public void updateNameExtensions() {
-        if (getGraphNameExtensionPath() != null) {
+        if (getGraphNameExtensionPathAsNameTarget() != null) {
             setName(name);
         }
     }
@@ -520,13 +538,16 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
         if (isNodeType && isPaintable()) {
             updateGraphName(null);
         }
+
+        updateGraphNameExtensionsOnMyNameTargets();
+
     }
 
     /**
      * @return
      */
-    public String getGraphNameExtension() {
-        MetaPath nameExtensionPath = getGraphNameExtensionPath();
+    public final String getGraphNameExtension() {
+        MetaPath nameExtensionPath = getGraphNameExtensionPathAsNameTarget();
         updateGraphNameSuffixBuffer(nameExtensionPath);
         return suffixBuf.toString();
     }
@@ -540,6 +561,7 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
             Collection<ModelElement> directConnectedElements = nameExtension.getConnectedElements(this);
             //Kein Element, dessen Namen in Klammern angezeigt werden soll verbunden -> weiter
             if (!directConnectedElements.isEmpty()) {
+                hasGraphNameExtension = true;
                 //genau ein Element verbunden, das denselben Namen hat wie dieses Element -> weiter (damit in der Grafik nicht
                 //2 mal dasselbe steht)
                 ModelElement firstConnected = directConnectedElements.iterator().next();
@@ -558,6 +580,8 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
                     suffixBuf.setLength(suffixBuf.length() - 2);
                     suffixBuf.append(")");
                 }
+            } else {
+                hasGraphNameExtension = false;
             }
         }
     }
@@ -570,7 +594,7 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
         DefaultElementsLayoutDefinition defaultElementsLayout = null;
         GraphElementLayout nameExtendsionClassLayout = null;
         Iterable<ElementContainer> targetContainers;
-        MetaPath nameExtension = getGraphNameExtensionPath();
+        MetaPath nameExtension = getGraphNameExtensionPathAsNameTarget();
         updateGraphNameSuffixBuffer(nameExtension);
         Class<? extends ModelElement> nameExtendsionClass;
         GraphViewDefinition graphViewDefinition;
@@ -618,21 +642,30 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
         if (isHyperlink()) {
             textBuf.append("</U>");
         }
-        textBuf.append(suffixBuf.length() > 0 ? "<BR>" : "");
         if (suffixBuf.length() > 0) {
-            Color bg_color = nameExtendsionClassLayout == null || nameExtendsionClassLayout == defaultElementsLayout.getStandardElementLayout() ? null : nameExtendsionClassLayout.bg_color;
-            if (bg_color != null) {
-                textBuf.append("<span style=\"background-color: #");
-                HTMLConverter.appendHTMLColor(textBuf, bg_color);
-                textBuf.append("\">");
-            }
-            HTMLConverter.appendDecimalEncodedHTMLString(textBuf, suffixBuf.toString(), false);
-            if (bg_color != null) {
-                textBuf.append("</span>");
+            if (ec instanceof NodeContainer && ((NodeContainer) ec).isShowConnectedAsNameExtensionInGraph()) {
+                textBuf.append("<BR>");
+                Color bg_color = nameExtendsionClassLayout == null || nameExtendsionClassLayout == defaultElementsLayout.getStandardElementLayout() ? null : nameExtendsionClassLayout.bg_color;
+                if (bg_color != null) {
+                    textBuf.append("<span style=\"background-color: #");
+                    HTMLConverter.appendHTMLColor(textBuf, bg_color);
+                    textBuf.append("\">");
+                }
+                HTMLConverter.appendDecimalEncodedHTMLString(textBuf, suffixBuf.toString(), false);
+                if (bg_color != null) {
+                    textBuf.append("</span>");
+                }
             }
         }
         textBuf.append("</P></HTML>");
         return textBuf.toString();
+    }
+
+    /**
+     * @return <code>true</code> if this element shows a name extension in graph
+     */
+    public boolean hasGraphNameExtension() {
+        return hasGraphNameExtension;
     }
 
     /**
@@ -719,7 +752,8 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
             }
 
             return true;
-        } else if (fieldName.equals("description")) {
+        }
+        if (fieldName.equals("description")) {
             if (value == null) {
                 setDescription("");
             } else {
@@ -2108,7 +2142,8 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
                 }
                 if (edgeTypesList.isEmpty()) {
                     return connectedElements; //this is ok! see abstract class EtntEtdtKombination#getName() and maybe for other backward compatibility
-                } else if (edgeTypesList.size() == 1) {
+                }
+                if (edgeTypesList.size() == 1) {
                     edgeClass = edgeTypesList.get(0);
                 } else {
                     edgeClass = ReflectionUtils.getCommonSuperClassOfClasses(edgeTypesList).asSubclass(Edge.class);

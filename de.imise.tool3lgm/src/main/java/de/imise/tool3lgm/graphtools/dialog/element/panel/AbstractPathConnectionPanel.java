@@ -8,6 +8,7 @@ import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction.BAC
 import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction.FORWARD;
 
 import java.awt.Component;
+import java.awt.Insets;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
@@ -30,6 +31,7 @@ import de.imise.tool3lgm.graphtools.consistency.error.type.MissingPathError;
 import de.imise.tool3lgm.graphtools.dialog.action.LGMAction;
 import de.imise.tool3lgm.graphtools.dialog.action.LGMMouseListener;
 import de.imise.tool3lgm.graphtools.dialog.element.AbstractElementPropertyDialog;
+import de.imise.tool3lgm.graphtools.metamodel.CoreMetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction;
@@ -72,9 +74,10 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
      */
     protected final boolean isConnectionPointUnique;
 
-    /**
-     *
-     */
+    /** Insets for the labels */
+    protected Insets labelInsets = new Insets(0, 5, 0, 5);
+
+    /**  */
     private final ModelElement modelElement;
 
     /**
@@ -436,14 +439,13 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
             //hole die mit dem aktuellen me verbundenen Elemente der aktuellen Kantenart
             List<ModelElement> connectedElements = me.getConnectedElements(ModelElement.class, edgeClass, direction);
             //wenn bereits mind. ein verbundenes Element ex.
-            if (i + 1 < elementaryMetaPathCount && !connectedElements.isEmpty()) {
-                //hole das erste
-                me = connectedElements.get(0);
-            } else {
+            if (i + 1 >= elementaryMetaPathCount || connectedElements.isEmpty()) {
                 List<ModelElement> elements2Connect = element2Connect != null ? ImmutableList.of(element2Connect) : null;
                 connect(me, elements2Connect, i);
                 break;
             }
+            //hole das erste
+            me = connectedElements.get(0);
         }
     }
 
@@ -590,9 +592,9 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
                 Class<? extends ModelElement> elementClass = availableMe.getClass();
                 boolean remove = false;
                 if (elementaryMetaPath.getDirection() == FORWARD) {
-                    remove = !MetaModel.isEndClass(edgeClass, elementClass);
+                    remove = !CoreMetaModel.isEndClass(edgeClass, elementClass);
                 } else { // if (elementaryMetaPath.getDirection() == BACKWARD) {
-                    remove = !MetaModel.isStartClass(edgeClass, elementClass);
+                    remove = !CoreMetaModel.isStartClass(edgeClass, elementClass);
                 }
                 if (remove) {
                     available.remove(i);

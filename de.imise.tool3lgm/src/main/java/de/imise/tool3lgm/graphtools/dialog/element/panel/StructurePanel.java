@@ -7,6 +7,7 @@ import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
 import static de.imise.tool3lgm.graphtools.dialog.element.panel.PanelLabelOption.LABEL_LAST_EDGE_CONNECTION_NAME;
 import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction.BACKWARD;
 import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction.FORWARD;
+import static de.imise.util.StringUtils.capitalizeFirstChar;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -39,12 +40,32 @@ import de.imise.util.swing.SwingUtils;
  */
 public final class StructurePanel extends AbstractPathOfOneEdgePanel {
 
+    /**  */
+    private JLabel lolabel;
+
+    /**  */
     private ElementDialogPanelTree lotree;
+
+    /**  */
+    private JLabel lulabel;
+
+    /**  */
     private ElementDialogPanelTree lutree;
-    private ElementDialogPanelTree rtree;
-    private JPanel control1;
-    private JPanel control2;
+
+    /**  */
     private JLabel rlabel;
+
+    /**  */
+    private ElementDialogPanelTree rtree;
+
+    /**  */
+    private JPanel control1;
+
+    /**  */
+    private JPanel control2;
+
+    /**  */
+    private JPanel rsearchPanel;
 
     /**
      * Liste aller ElementContainer, die nicht im rectne Baum angezeigt werden
@@ -52,10 +73,22 @@ public final class StructurePanel extends AbstractPathOfOneEdgePanel {
      */
     private final Collection<ElementContainer> childrenToExcludeFromRtree = new HashSet<>();
 
+    /**  */
     private LGMAction loaddAction;
+
+    /**  */
     private LGMAction loremoveAction;
+
+    /**  */
     private LGMAction luaddAction;
+
+    /**  */
     private LGMAction luremoveAction;
+
+    /**
+     * <code>true</code> if in this dialog something in the model can be changed
+     */
+    private boolean editable;
 
     /**
      * @param dialog
@@ -73,11 +106,12 @@ public final class StructurePanel extends AbstractPathOfOneEdgePanel {
         ModelElement me = getModelElement();
         GDCollection gdcoll = me.getCollection();
         LGMGraphDocument mainDoc = gdcoll.getMainDoc();
-        String name = me.getName();
+        editable = !dialog.isInfoDialog() && metaPath.isCreatable(false);
+
         // lotree
         ElementaryMetaPath backwardMetaPath = metaPath.getOtherDirection();
-        JLabel lolabel = new JLabel(backwardMetaPath.getName());
-        lotree = new ElementDialogPanelTree(name, mainDoc);
+        lolabel = new JLabel(capitalizeFirstChar(backwardMetaPath.getName()));
+        lotree = new ElementDialogPanelTree(searchElementClass, mainDoc);
         lotree.setName("lotree");
         lotree.setRootVisible(false);
         lotree.setShowsRootHandles(true);
@@ -85,8 +119,8 @@ public final class StructurePanel extends AbstractPathOfOneEdgePanel {
         lotree.getSelectionModel().setSelectionMode(TreeSelectionModel.DISCONTIGUOUS_TREE_SELECTION);
 
         // lutree
-        JLabel lulabel = new JLabel(metaPath.getName());
-        lutree = new ElementDialogPanelTree(name, mainDoc);
+        lulabel = new JLabel(capitalizeFirstChar(metaPath.getName()));
+        lutree = new ElementDialogPanelTree(searchElementClass, mainDoc);
         lutree.setName("lutree");
         lutree.setRootVisible(false);
         lutree.setCellRenderer(treeRenderer);
@@ -96,14 +130,10 @@ public final class StructurePanel extends AbstractPathOfOneEdgePanel {
         setLayout(gbl);
         GridBagConstraints constraints = new GridBagConstraints();
         constraints.anchor = GridBagConstraints.EAST;
-        boolean editable = !dialog.isInfoDialog() && metaPath.isCreatable(false);
-        if (editable) {
-            add(this, viewButton, constraints, 0, 6, 1, 1);
-        }
 
         constraints.anchor = GridBagConstraints.WEST;
-        add(this, lolabel, constraints, 0, 0, 1, 1);
-        add(this, lulabel, constraints, 0, 2, 1, 1);
+        add(this, lolabel, constraints, 0, 0, 1, 1, labelInsets);
+        add(this, lulabel, constraints, 0, 2, 1, 1, labelInsets);
 
         constraints.anchor = GridBagConstraints.CENTER;
         constraints.fill = GridBagConstraints.BOTH;
@@ -115,14 +145,14 @@ public final class StructurePanel extends AbstractPathOfOneEdgePanel {
         add(this, lutreeScrollPane, constraints, 0, 3, 1, 1);
 
         // rtree
-        rlabel = new JLabel(getResString("frei"));
-        String rtreeRootString = getResString("frei");
-        rtree = new ElementDialogPanelTree(rtreeRootString, mainDoc);
+        rlabel = new JLabel(capitalizeFirstChar(getResString("frei")));
+        rtree = new ElementDialogPanelTree(searchElementClass, mainDoc);
         rtree.setName("rtree");
         rtree.setRootVisible(false);
         rtree.setShowsRootHandles(true);
         rtree.setCellRenderer(treeRenderer);
         rtree.getSelectionModel().setSelectionMode(TreeSelectionModel.DISCONTIGUOUS_TREE_SELECTION);
+        rsearchPanel = createTreeSearchPanel(rlabel, rtree);
 
         JScrollPane rtreeScrollPane = rtree.getScrollPane();
 
@@ -146,8 +176,8 @@ public final class StructurePanel extends AbstractPathOfOneEdgePanel {
 
         //alles dafür tun, dass beide Dialogseiten gleich breit sind. Das wird über die PreferredSize der breitesten Komponente gesteuert.
         SwingUtils.fillToSameLength(lolabel, lulabel, rlabel);
-        SwingUtils.setSamePreferredSize(lolabel, lulabel, rlabel);
-        SwingUtils.setSamePreferredSize(lotreeScrollPane, lutreeScrollPane, rtreeScrollPane);
+        SwingUtils.setSamePreferredWidth(lolabel, lulabel, rlabel);
+        SwingUtils.setSamePreferredWidth(lotreeScrollPane, lutreeScrollPane, rtreeScrollPane);
 
         showFullDialog(true);
     }
@@ -192,22 +222,40 @@ public final class StructurePanel extends AbstractPathOfOneEdgePanel {
             }
             rtree.reloadModel();
             rtree.restoreExpansionAndSelection();
+            setSamePreferredLeftRightSize();
         }
         revalidate();
         repaint();
     }
 
+    /**
+     * Ensure that both dialog sides have always the same width.
+     */
+    protected void setSamePreferredLeftRightSize() {
+        SwingUtils.setSamePreferredWidth(lolabel, lulabel, rsearchPanel, lotree.getScrollPane(), lutree.getScrollPane(), rtree.getScrollPane());
+        //the searchPanel contains the rLabel (0) and then the HistoryComboBox for the name search (1)
+        SwingUtils.setSamePreferredHeight(lolabel, rsearchPanel.getComponent(0), rsearchPanel.getComponent(1));
+        SwingUtils.setSamePreferredSize(lolabel, rsearchPanel);
+        SwingUtils.setSamePreferredSize(lotree.getScrollPane(), lutree.getScrollPane());
+    }
+
+    @Override
+    protected boolean isExpandable() {
+        return editable;
+    }
+
     @Override
     protected void showFullDialog() {
         GridBagConstraints constraints = new GridBagConstraints();
-        constraints.fill = GridBagConstraints.CENTER;
+        constraints.anchor = GridBagConstraints.CENTER;
+        constraints.fill = GridBagConstraints.NONE;
         constraints.weightx = 0d;
         constraints.weighty = 0d;
         add(this, control1, constraints, 1, 1, 1, 1);
         add(this, control2, constraints, 1, 3, 1, 1);
-        constraints.anchor = GridBagConstraints.WEST;
-        add(this, rlabel, constraints, 2, 0, 1, 1);
-        constraints.anchor = GridBagConstraints.CENTER;
+        constraints.fill = GridBagConstraints.HORIZONTAL;
+        constraints.weightx = 1d;
+        add(this, rsearchPanel, constraints, 2, 0, 1, 1, labelInsets);
         constraints.fill = GridBagConstraints.BOTH;
         constraints.weightx = 1d;
         constraints.weighty = 1d;
@@ -218,7 +266,7 @@ public final class StructurePanel extends AbstractPathOfOneEdgePanel {
     protected void showPartlyDialog() {
         remove(control1);
         remove(control2);
-        remove(rlabel);
+        remove(rsearchPanel);
         remove(rtree.getScrollPane());
     }
 

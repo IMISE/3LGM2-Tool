@@ -174,31 +174,30 @@ public class UserProperties extends AbstractUserProperties {
         int maxSize = property.getMaxListSize();
         if (maxSize == 1) {
             return set(property, value);
-        } else {
-            String propertyName = property.toString();
-            Integer sizeI = listKeyToListSize.get(property);
-            int size = sizeI == null ? 0 : sizeI;
-            int currentIndex = -1;
-            for (int i = 0; i < size; i++) {
-                String existingValue = properties.getProperty(propertyName + i);
-                if (value.equals(existingValue)) {
-                    currentIndex = i;
-                    break;
-                }
-            }
-            if (currentIndex < 0 && size < maxSize) {
-                size++;
-                listKeyToListSize.put(property, size);
-            }
-            String currentValue = value;
-            int maxIndexToSwap = currentIndex < 0 ? size : currentIndex + 1;
-            for (int i = 0; i < maxIndexToSwap; i++) {
-                Object oldValue = put(propertyName + i, currentValue);
-                currentValue = String.valueOf(oldValue);
-            }
-            //gib des jetzt zweiten Listenwert als alten Wert zurück
-            return size > 1 ? properties.getProperty(propertyName + "1") : null;
         }
+        String propertyName = property.toString();
+        Integer sizeI = listKeyToListSize.get(property);
+        int size = sizeI == null ? 0 : sizeI;
+        int currentIndex = -1;
+        for (int i = 0; i < size; i++) {
+            String existingValue = properties.getProperty(propertyName + i);
+            if (value.equals(existingValue)) {
+                currentIndex = i;
+                break;
+            }
+        }
+        if (currentIndex < 0 && size < maxSize) {
+            size++;
+            listKeyToListSize.put(property, size);
+        }
+        String currentValue = value;
+        int maxIndexToSwap = currentIndex < 0 ? size : currentIndex + 1;
+        for (int i = 0; i < maxIndexToSwap; i++) {
+            Object oldValue = put(propertyName + i, currentValue);
+            currentValue = String.valueOf(oldValue);
+        }
+        //gib des jetzt zweiten Listenwert als alten Wert zurück
+        return size > 1 ? properties.getProperty(propertyName + "1") : null;
     }
 
     /**
@@ -471,7 +470,13 @@ public class UserProperties extends AbstractUserProperties {
          * selektierten Elemente in der Grafik ein- oder ausschalten kann. Nur
          * für Debug-Zwecke.
          */
-        TRANSIENT_OPTION_DEBUG_GRAPH;
+        TRANSIENT_OPTION_DEBUG_GRAPH,
+
+        /**
+         * Internal option to log readable undo/redo commands (and not only the
+         * numbers)
+         */
+        TRANSIENT_OPTION_LOG_READABLE_UNOD_REDO_COMMANDS;
 
         /**
          * Alle BooleanProperties, deren Default-Wert <code>true</code> ist

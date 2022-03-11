@@ -25,15 +25,29 @@ import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout;
 import de.imise.tool3lgm.log.Log;
 
+/**
+ * @author N.N. (< 2007)
+ */
 public class ToolXMLClipboardWriter extends ToolXMLWriter {
 
+    /**  */
     final GraphDocument selectedDoc;
 
+    /**
+     * @param selectedDoc
+     * @throws XMLStreamException
+     * @throws FactoryConfigurationError
+     * @throws IOException
+     */
     private ToolXMLClipboardWriter(final GraphDocument selectedDoc) throws XMLStreamException, FactoryConfigurationError, IOException {
         super(selectedDoc.getCollection(), CLIPBOARD_PATH);
         this.selectedDoc = selectedDoc;
     }
 
+    /**
+     * @param selectedDoc
+     * @return
+     */
     public static boolean writeClipboard(final GraphDocument selectedDoc) {
         try {
             ToolXMLClipboardWriter clipboardWriter = new ToolXMLClipboardWriter(selectedDoc);
@@ -55,7 +69,6 @@ public class ToolXMLClipboardWriter extends ToolXMLWriter {
         LGMGraphDocument lgmDoc = (LGMGraphDocument) selectedDoc;
         SortedSelection sortedSelection = lgmDoc.getSortedSelection();
         CopyDependencyResolverResultSimple resolvedCopyDependencies = resolveCopyDependencies(sortedSelection);
-
         writeStartDocument();
         writeStartElement("tool3lgm_clipboard"); //<tool3lgm_clipboard>
         writeAttribute("time", String.valueOf(System.currentTimeMillis()));
@@ -73,6 +86,8 @@ public class ToolXMLClipboardWriter extends ToolXMLWriter {
                 writeModelElement(me);
             }
         }
+        // this are all edges of selected elements which are not selected itself
+        // (only HasPart-Edges from master to slave are not in this set)
         for (Edge edge : resolvedCopyDependencies.additionalEdges) {
             writeModelElement(edge);
         }

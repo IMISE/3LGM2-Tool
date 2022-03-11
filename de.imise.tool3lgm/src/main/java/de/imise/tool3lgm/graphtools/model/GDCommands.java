@@ -1,6 +1,7 @@
 package de.imise.tool3lgm.graphtools.model;
 
-import de.imise.tool3lgm.Tool3lgmConstants;
+import static de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty.TRANSIENT_OPTION_LOG_READABLE_UNOD_REDO_COMMANDS;
+
 import de.imise.tool3lgm.event.action.GraphDocumentAction;
 import de.imise.tool3lgm.event.action.GraphFrameAction;
 import de.imise.tool3lgm.event.action.GraphMultipleSelectedRealNodeOrBendpointAction;
@@ -21,9 +22,9 @@ public enum GDCommands implements ActionSource {
     MODEL_ACTION_DELETE_FROM_MODEL,
     MODEL_ACTION_LINK,
     MODEL_ACTION_UNLINK,
-    MODEL_ACTION_CREATE_ADDICTED, //Das hier ist eine Kombination aus MODEL_ACTION_CREATE_NODE und MODEL_ACTION_ADDICT. Hat keinen ResourceKey, weil die Actions nach dem Element benannt sind, das man unterordnet
-    MODEL_ACTION_CREATE_INSTANCIATION, //Das hier ist eine Kombination aus MODEL_ACTION_CREATE_NODE und MODEL_ACTION_ADDICT. Hat einen ResourceKey, weil die Actions nach dem Element benannt sind, das man unterordnet
-    MODEL_ACTION_ADDICT, //das ist eine interne ModelAction, d.h. sie wird nicht direkt vom Benutzer ausgelöst sondern nur über eine andere ModelAction
+    MODEL_ACTION_CREATE_SUBORDINATED, //Das hier ist eine Kombination aus MODEL_ACTION_CREATE_NODE und MODEL_ACTION_SUBORDINATE. Hat keinen ResourceKey, weil die Actions nach dem Element benannt sind, das man unterordnet
+    MODEL_ACTION_CREATE_INSTANCIATION, //Das hier ist eine Kombination aus MODEL_ACTION_CREATE_NODE und MODEL_ACTION_SUBORDINATE. Hat einen ResourceKey, weil die Actions nach dem Element benannt sind, das man unterordnet
+    MODEL_ACTION_SUBORDINATE, //das ist eine interne ModelAction, d.h. sie wird nicht direkt vom Benutzer ausgelöst sondern nur über eine andere ModelAction
     MODEL_ACTION_SWAP_EDGE_POSITIONS,
     //9
     MODEL_ACTION_SET_ELEMENT_NAME,
@@ -85,6 +86,8 @@ public enum GDCommands implements ActionSource {
     //58
     MODEL_ACTION_SET_LAYER_INTERLAYER_CONNECTIONS_VISIBILITY_ON,
     MODEL_ACTION_SET_LAYER_INTERLAYER_CONNECTIONS_VISIBILITY_OFF,
+    MODEL_ACTION_SET_LAYER_SHOW_CONNECTED_AS_NAME_EXTENSION_IN_GRAPH_ON,
+    MODEL_ACTION_SET_LAYER_SHOW_CONNECTED_AS_NAME_EXTENSION_IN_GRAPH_OFF,
     MODEL_ACTION_SET_LAYER_COLOR,
     MODEL_ACTION_SET_LAYER_ALPHA, //Für diesen Identifier gibt es keine Action, weil das über SetColor läuft. Man braucht ihn nur für das UNDO von MODEL_ACTION_SET_LAYER_TRANSPARENCY_XXX
     MODEL_ACTION_SET_LAYER_TRANSPARENCY_NONE,
@@ -107,41 +110,47 @@ public enum GDCommands implements ActionSource {
     //77
     MODEL_ACTION_CREATE_SUBMODEL,
     MODEL_ACTION_DELETE_SUBMODEL,
+    MODEL_ACTION_DUPLICATE_SUBMODEL,
     MODEL_ACTION_RENAME_SUBMODEL,
-    //81
+    //82
     MODEL_ACTION_ADD_ELEMENT_TO_SUBMODEL, //internal model action -> braucht keinen ResKey, da nur bei Undo-Redo gebraucht
     MODEL_ACTION_ADD_SELECTED_TO_SUBMODEL,
     MODEL_ACTION_ADD_SELECTED_TO_NEW_SUBMODEL,
     MODEL_ACTION_ADD_SELECTED_TO_ALL_SUBMODELS,
-    //85
+    //86
     MODEL_ACTION_LINK_SELECTED_TO_NEW_SUBMODEL,
     MODEL_ACTION_LINK_SELECTED_TO_SUBMODEL,
     MODEL_ACTION_UNLINK_SELECTED_TO_SUBMODEL,
     MODEL_ACTION_LINK_ELEMENT_TO_SUBMODEL,
     MODEL_ACTION_SELECT_LINKED_SUBMODEL,
-    //88
-    MODEL_ACTION_JOIN_SELECTED,
     //89
+    MODEL_ACTION_JOIN_SELECTED,
+    //90
     MODEL_ACTION_SET_ELEMENT_INTERLAYER_CONNECTIONS_VISIBILITY_ON,
     MODEL_ACTION_SET_ELEMENT_INTERLAYER_CONNECTIONS_VISIBILITY_OFF,
     MODEL_ACTION_SET_INTERLAYER_CONNECTIONS_VISIBILITY_ON,
     MODEL_ACTION_SET_INTERLAYER_CONNECTIONS_VISIBILITY_OFF,
-    //93
+    //94
+    MODEL_ACTION_SET_ELEMENT_SHOW_CONNECTED_AS_NAME_EXTENSION_IN_GRAPH_ON,
+    MODEL_ACTION_SET_ELEMENT_SHOW_CONNECTED_AS_NAME_EXTENSION_IN_GRAPH_OFF,
+    MODEL_ACTION_SET_SHOW_CONNECTED_AS_NAME_EXTENSION_IN_GRAPH_ON,
+    MODEL_ACTION_SET_SHOW_CONNECTED_AS_NAME_EXTENSION_IN_GRAPH_OFF,
+    //98
     //Die Kommandos ab hier werden in LGMGraphDocument ausgewertet
     MODEL_ACTION_COPY,
     MODEL_ACTION_CUT,
     MODEL_ACTION_PASTE,
-    //96
+    //101
     MODEL_ACTION_HIDE_UNASSOCIATED,
     MODEL_ACTION_UNHIDE_ALL,
-    //98
+    //103
     //spezielle Kommandos
     MODEL_ACTION_COMMAND_LINE,
     MODEL_ACTION_PRINT_QUEUE,
     MODEL_ACTION_INTERNAL_CHECK_CONSISTENCY,
     MODEL_OPTION_GDCOLL_AUTOMATIC_MODE,
     MODEL_OPTION_GDOC_VERIFICATION_MODE;
-    //103
+    //108
     //Ungültige Werte für alle Kommandos
     public static final int INVALID_POSITION_X = -1;
     public static final int INVALID_POSITION_Y = -1;
@@ -159,7 +168,7 @@ public enum GDCommands implements ActionSource {
     @Override
     public String toString() {
         //wenn lesbare Undo-Kommandos ausgegeben werden sollen
-        if (Tool3lgmConstants.LOG_READABLE_UNDO_REDO_COMMANDS) {
+        if (TRANSIENT_OPTION_LOG_READABLE_UNOD_REDO_COMMANDS.is()) {
             //den normalen Kommando-String zurück geben
             return super.toString();
         }
@@ -242,6 +251,7 @@ public enum GDCommands implements ActionSource {
         ActionSource.put(GraphSelectedRealNodeAction.class, MODEL_ACTION_MOVE_ORDER_TO_LAST_POSITION);
         ActionSource.putInteractive(GraphDocumentAction.class, MODEL_ACTION_CREATE_SUBMODEL); //diaalog submodel name
         ActionSource.putInteractive(SubmodelAction.class, MODEL_ACTION_DELETE_SUBMODEL); //dialog really delete
+        ActionSource.put(SubmodelAction.class, MODEL_ACTION_DUPLICATE_SUBMODEL);
         ActionSource.putInteractive(SubmodelAction.class, MODEL_ACTION_RENAME_SUBMODEL); //dialog submodel name
         ActionSource.put(ModelOptionAction.class, MODEL_OPTION_GDOC_VERIFICATION_MODE);
         ActionSource.put(ModelOptionAction.class, MODEL_OPTION_GDCOLL_AUTOMATIC_MODE);

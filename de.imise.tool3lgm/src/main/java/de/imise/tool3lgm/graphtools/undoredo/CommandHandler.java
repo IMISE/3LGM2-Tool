@@ -2,6 +2,7 @@ package de.imise.tool3lgm.graphtools.undoredo;
 
 import static de.imise.util.htmlxml.ParseSaveStringHandler.getParseSaveString;
 
+import java.awt.Color;
 import java.util.Collection;
 import java.util.List;
 
@@ -79,13 +80,11 @@ public class CommandHandler {
                                 //raus aus der inneren for-Schleife für das Einzelwort
                                 break;
                                 //wenn hinter dem nächsten Leerzeichen noch etwas kommt
-                            } else {
-                                //beginnt dort ein neues Argument
-                                wordStart = w + 2;
-                                //i wird beim nächsten Schleifendurchlauf auf denselben Wert gesetzt und alles steht wie auf Anfang
-                                i = w + 1;
                             }
-                            //wenn das nächste Zeichen nach dem schließenden Hochkomma kein Leezeichen war (das ist eigentlich nicht korrekt, würde aber trotzdem gehen)
+                            //beginnt dort ein neues Argument
+                            wordStart = w + 2;
+                            //i wird beim nächsten Schleifendurchlauf auf denselben Wert gesetzt und alles steht wie auf Anfang
+                            i = w + 1;
                         } else {
                             //hier geht das nächste Wort los
                             wordStart = w + 1;
@@ -171,17 +170,21 @@ public class CommandHandler {
                 appendArgument(sb, innerArg); //Collections of collections are not allowed
             }
         } else {
-            //IDSource ? -> replace arg-Object by its ID
-            if (arg != null && arg instanceof IDSource) {
-                arg = ((IDSource) arg).getID();
-                //Class ? -> take the ClassName
-            } else if (arg != null && arg instanceof Class<?>) {
-                arg = ((Class<?>) arg).getName();
-            }
-            //not a Number? -> convert arg to String that the command parser
-            //understands as one token (numbers are already one token)
-            if (arg != null && !(arg instanceof Number)) {
-                arg = getParseSaveString(arg);
+            if (arg != null) {
+                //IDSource ? -> replace arg-Object by its ID
+                if (arg instanceof IDSource) {
+                    arg = ((IDSource) arg).getID();
+                    //Class ? -> take the ClassName
+                } else if (arg instanceof Class<?>) {
+                    arg = ((Class<?>) arg).getName();
+                } else if (arg instanceof Color) {
+                    arg = ((Color) arg).getRGB();
+                }
+                //not a Number? -> convert arg to String that the command parser
+                //understands as one token (numbers are already one token)
+                if (arg != null && !(arg instanceof Number)) {
+                    arg = getParseSaveString(arg);
+                }
             }
             sb.append(arg);
         }

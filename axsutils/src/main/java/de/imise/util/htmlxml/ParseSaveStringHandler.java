@@ -65,8 +65,12 @@ public class ParseSaveStringHandler {
         if (s.isEmpty()) {
             return "";
         }
-        if (s.charAt(0) == TEXT_SURROUNDER && s.charAt(s.length() - 1) == TEXT_SURROUNDER) {
-            s = s.substring(1, s.length() - 1);
+        char c = s.charAt(0);
+        if (c == TEXT_SURROUNDER) {
+            c = s.charAt(s.length() - 1);
+            if (c == TEXT_SURROUNDER) {
+                s = s.substring(1, s.length() - 1);
+            }
         }
         return s.replace('\u001e', '\n');
     }

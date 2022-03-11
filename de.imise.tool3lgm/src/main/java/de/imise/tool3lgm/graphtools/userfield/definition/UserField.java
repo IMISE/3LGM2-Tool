@@ -951,18 +951,14 @@ public final class UserField extends NameAndDescriptionTargetAdapter implements 
             return "";
         }
 
-        if (isCriticalError(value)) {
-            return value;
-        }
-
-        if (isIgnoreableError(value)) {
+        if (isCriticalError(value) || isIgnoreableError(value)) {
             return value;
         }
 
         value = getFormattedValue(value, numberFormat, appendUnit);
 
         // Falls positiveOnly=true und value mit "-" beginnt, wird errorString zurückgegeben
-        if (positiveOnly == true && value.startsWith("-")) {
+        if (positiveOnly && value.startsWith("-")) {
             return POSITIVE_VALUES_ONLY;
         }
 

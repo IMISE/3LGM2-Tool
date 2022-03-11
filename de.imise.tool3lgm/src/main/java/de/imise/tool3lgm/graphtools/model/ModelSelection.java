@@ -294,7 +294,8 @@ public class ModelSelection extends MetaModelSpecificAdapter implements Set<Elem
     public boolean contains(final Object o) {
         if (o instanceof BendpointContainer) {
             return selectedBendpointContainer.contains(o);
-        } else if (o instanceof NodeContainer) {
+        }
+        if (o instanceof NodeContainer) {
             return selectedRealNodeContainer.contains(o);
         } else if (o instanceof EdgeContainer) {
             return selectedEdgeContainer.contains(o);

@@ -10,12 +10,15 @@ import static de.imise.tool3lgm.graphtools.userfield.definition.UserField.Style.
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 import com.google.common.collect.Lists;
 
+import de.imise.tool3lgm.graphtools.metamodel.CoreMetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
+import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Bendpoint;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.HasPartEdge;
@@ -43,7 +46,7 @@ import de.imise.util.IDStringGenerator;
 public class ModelCleaner {
 
     /** Wenn <code>true</code> werden einige berichtigte Fehler ausgegeben */
-    private final boolean PRINT_ERRORS = false;
+    private final boolean PRINT_ERRORS = true;
 
     /** Das Modell, das bereinigt werden soll */
     private final GDCollection gdcoll;
@@ -161,43 +164,95 @@ public class ModelCleaner {
             }
         }
 
-        // Alle Knickpunkte löschen, die keiner Edge zugeordnet sind. So etwas trat in alten Modellen
-        // auf und sollte gleich am Anfang ausgeschlossen werden
         List<GraphDocument> allDocs = Lists.newArrayList(gdcoll.getSzenarios());
-        allDocs.add(mainDoc);
+        allDocs.add(0, mainDoc); // the very first is the main Doc
+
+        Set<BendpointContainer> mainDocBendpointContainers = new HashSet<>();
+
+        // Bei allen Knickpunkten aller Layer prüfen, ob die Kante, zu der der Knickpunkt
+        // gehört, auch auf dem Layer liegt. Hier fliegen auch alle Knickpunkte raus, die
+        // gar keiner Kante zugeordnet sind.
         for (GraphDocument doc : allDocs) {
             for (LayerContainer lc : doc.getLayers()) {
                 for (int i = lc.getBendpointContainerCount() - 1; i >= 0; i--) {
-                    boolean ok = true;
                     BendpointContainer bpc = lc.getBendpointContainer(i);
-                    Bendpoint bp = bpc.getBendpoint(); //das hier ist der Container aus dem Hauptdokument
-                    if (bp.getContainerCount() != 2) {
-                        ok = false;
-                    } else {
-                        EdgeContainer ec = bp.getOwner(); //das hier ist der Container aus dem (einzigen) Szenario, in dem der Knickpunkt vorkommt
-                        // wenn der Owner null ist oder der Knickpunktcontainer nicht richtig in der
-                        // KnickpunktContainerListe seines Owners steht -> löschen
-                        if (ec == null) {
-                            // System.err.println("nullllll");
-                            // System.err.println(gdcoll.getSzenario(i));
-                            ok = false;
-                        } else {
-                            GraphDocument ecDoc = ec.getGraphDocument(); // das hier muss ein Szeario sein, weil der Owner des Knickpunktes nur in einem Szenario sein kann
-                            if (ecDoc == null || !(ecDoc instanceof Szenario)) {
-                                ok = false;
-                            } else {
-                                ElementContainer szenBpc = bp.getContainer(ecDoc);
-                                if (ec.indexOfBendpointContainer((BendpointContainer) szenBpc) == -1) {
-                                    // System.err.println("owner kennt den nicht");
-                                    // System.err.println(gdcoll.getSzenario(i));
-                                    ok = false;
+                    if (doc == mainDoc) {
+                        mainDocBendpointContainers.add(bpc);
+                    }
+                    EdgeContainer edgeC = bpc.getOwner();
+                    Edge edge = edgeC.getEdge();
+                    if (!lc.isMyElement(edge)) { //Edge has no Container at the same layer (don't ask for the EdgeContainer here!)
+                        lc.remove(bpc);
+                    } else { //the owner edge does not know the bendpoint?
+                        int indexOfBendpoint = edgeC.indexOfBendpointContainer(bpc);
+                        if (indexOfBendpoint < 0) {
+                            lc.remove(bpc);
+                        } else if (doc != mainDoc) { //is a valid bendpoint of a submodel
+                            mainDocBendpointContainers.remove(bpc);
+                        }
+                    }
+                }
+            }
+        }
+        // all bendpointContainers left in mainDocBendpointContainers are invalid
+        // because they exist only in the maindoc and not in a submodel
+        for (BendpointContainer onlyInMainDocBendpointContainer : mainDocBendpointContainers) {
+            int layer = onlyInMainDocBendpointContainer.layerFor();
+            LayerContainer lc = mainDoc.getLayer(layer);
+            lc.remove(onlyInMainDocBendpointContainer);
+        }
+
+        // Bei allen Kanten prüfen, ob alle Knickpunkte der Kante auch im Teilmodell der Kante und im Hauptmodell vorkommen.
+        // Wenn nicht, dann werden sie dort nachgetragen. Sind Knickpunkte null, werden sie gelöscht.
+        for (GraphDocument doc : allDocs) {
+            for (int l : ModelConstants.LAYERS) {
+                LayerContainer lc = doc.getLayer(l);
+                for (int i = lc.getEdgeContainerCount() - 1; i >= 0; i--) {
+                    EdgeContainer edgeC = lc.getEdgeContainer(i);
+                    edgeC.removeInvalidBendpoints(); //ensure only not null bendpoint containers with a not null bendpoint as modelelement
+                    for (int b = edgeC.getBendpointContainerCount() - 1; b >= 0; b--) {
+                        BendpointContainer bpc = edgeC.getBendpointContainer(b);
+                        if (!lc.isMyElement(bpc)) {
+                            lc.add(bpc);
+                        }
+                        if (doc != mainDoc) {
+                            LayerContainer mainDocLayerContainer = mainDoc.getLayer(l);
+                            if (!mainDocLayerContainer.isMyElement(bpc)) {
+                                mainDocLayerContainer.add(bpc); //can be the same like in the submodel
+                            }
+                        }
+                        Bendpoint bendpoint = bpc.getBendpoint();
+                        if (bendpoint.getContainer(doc) == null) {
+                            bendpoint.setContainer(mainDoc, bpc);
+                        }
+                    }
+                }
+            }
+        }
+
+        // Bei allen Knickpunkte dafür sorgen, dass sie immer genau 2 Container
+        // haben: einen im Hauptmodell und einen im Teilmodell der Kante.
+        for (GraphDocument doc : allDocs) {
+            for (int l : ModelConstants.LAYERS) {
+                LayerContainer lc = doc.getLayer(l);
+                for (int i = lc.getBendpointContainerCount() - 1; i >= 0; i--) {
+                    BendpointContainer bpc = lc.getBendpointContainer(i);
+                    Bendpoint bp = bpc.getBendpoint();
+                    // at this point every bendpoint should have at least 2 containers and
+                    // one of this should be in the mainDoc
+                    // now detect bendpoint which have more than 2 containers
+                    int bpContainerCount = bp.getContainerCount();
+                    if (bpContainerCount > 2) {
+                        boolean deleteSzenContainer = false; //ignore one szen container and delete all the others
+                        for (GraphDocument bpDoc : bp.getMySzenarios()) {
+                            if (bpDoc instanceof Szenario) {
+                                if (!deleteSzenContainer) {
+                                    deleteSzenContainer = true;
+                                } else {
+                                    bp.removeContainer(bpDoc);
                                 }
                             }
                         }
-                    }
-
-                    if (!ok) {
-                        lc.remove(bpc);
                     }
                 }
             }
@@ -216,7 +271,7 @@ public class ModelCleaner {
             // Kanten löschen, die nicht mehrfach vorkommen dürfen, aber mehrfach vorkommen
             // (alle bis auf eine löschen)
             Class<? extends Edge> edgeClass = edge.getClass();
-            if (MetaModel.isMultipleEdgeClass(edgeClass)) {
+            if (CoreMetaModel.isMultipleEdgeClass(edgeClass)) {
                 continue;
             }
             ModelElement start = edge.getStart();
@@ -340,7 +395,7 @@ public class ModelCleaner {
                 continue;
             }
             for (ModelElement me : gdcoll.getMainDoc().getModelItems(elementClass, false)) {
-                gdcoll.createInitialAddicted(me, STANDARD_PID);
+                gdcoll.createInitialSubordinates(me, STANDARD_PID);
             }
         }
 

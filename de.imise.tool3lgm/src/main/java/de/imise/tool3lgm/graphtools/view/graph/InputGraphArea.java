@@ -8,6 +8,7 @@ import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.MIN_LAYER_IN
 import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.NO_LAYER;
 import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.isInterLayer;
 import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction.BACKWARD;
+import static de.imise.tool3lgm.graphtools.metamodel.elements.SubordinationEdge.SUPER_TO_SUB_DIRECTION;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.INVALID_BENDPOINT_INDEX;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.INVALID_ID_STRING;
 import static de.imise.tool3lgm.graphtools.model.LGMChangeListener.LGMChangeType.ELEMENT_GRAPHICS_CHANGED;
@@ -31,8 +32,10 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
+import java.util.List;
 import java.util.Set;
 
+import javax.swing.ImageIcon;
 import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
 import javax.swing.JViewport;
@@ -40,6 +43,7 @@ import javax.swing.JViewport;
 import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Bendpoint;
+import de.imise.tool3lgm.graphtools.metamodel.elements.CompositionEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
@@ -309,6 +313,18 @@ public final class InputGraphArea extends BasicGraphArea implements MouseListene
         int h = ec.getHeight();
         int x = ec.getX();
         int y = ec.getY();
+        NodeContainer nc = (NodeContainer) ec;
+        if (!nc.hideText() && nc.getIcon() != null) {
+            int prefferedHeight = nc.getPreferredSize().height;
+            ImageIcon img = (ImageIcon) nc.getIcon();
+            int iconHeight = img.getIconHeight();
+            int offset = (prefferedHeight - iconHeight) / 2;
+            if (nc.getVerticalTextPosition() == 1) {
+                y += offset;
+            } else {
+                y -= offset;
+            }
+        }
         int realx1 = x - (w >> 1);
         int realy1 = y - (h >> 1);
         int realx2 = realx1 + w;
@@ -539,6 +555,14 @@ public final class InputGraphArea extends BasicGraphArea implements MouseListene
                     }
                     setCursor(new Cursor(NodeRenderer.getLastResizeCursor()));
                     sized = true;
+
+                    // when resizing elements, the original positions of the element and its subelements
+                    // are saved while resizing, and the repositioning is calculated with these
+                    // original positions
+                    ModelElement clickedMe = clickedEc.getElement();
+                    List<ElementContainer> subordinatedContainers = clickedMe.getConnectedContainers(doc, CompositionEdge.class, SUPER_TO_SUB_DIRECTION);
+                    doc.setOriginalPositions(subordinatedContainers, clickedEc);
+
                     contextGenerator.processMouseEvent(left_button, right_button, this, xin, yin);
                     break;
                 }
@@ -611,8 +635,7 @@ public final class InputGraphArea extends BasicGraphArea implements MouseListene
             setCursor(new Cursor(DEFAULT_CURSOR));
         }
         if (mouse_dragged) {
-            szenario.finish_transaction(STANDARD_PID);
-            szenario.distributeEvent(ELEMENT_GRAPHICS_CHANGED);
+            szenario.finish_transaction(STANDARD_PID, ELEMENT_GRAPHICS_CHANGED);
         }
         xin = e.getX();
         yin = e.getY();
@@ -661,6 +684,7 @@ public final class InputGraphArea extends BasicGraphArea implements MouseListene
                 if (contextGenerator.isResizing()) {
                     contextGenerator.setResizing(false);
                     sized = false;
+                    doc.setOriginalPositions(null, null);
                     break;
                 }
                 // 2. Ob man in ein Objekt direkt getroffen hat: Node oder Edge
@@ -911,7 +935,7 @@ public final class InputGraphArea extends BasicGraphArea implements MouseListene
             if (!k.isVisible()) {
                 continue;
             }
-            if (NodeRenderer.isInside(k, x, y)) {
+            if (NodeRenderer.isInside(k, x, y, true)) {
                 return k;
             }
         }
@@ -950,6 +974,9 @@ public final class InputGraphArea extends BasicGraphArea implements MouseListene
             return;
         }
         if (sized) {
+            boolean controlKeyPressed = InputEvents.isOperatingSystemDependentCTRLorCMDorSHIFTdown(e);
+            //            contextGenerator.setControlled(controlKeyPressed);
+
             NodeContainer kc = (NodeContainer) clickedEc;
             int xm = kc.getX();
             int ym = kc.getY();
@@ -974,7 +1001,7 @@ public final class InputGraphArea extends BasicGraphArea implements MouseListene
             } else if (yreal[ebene] > layerHeight / 2) {
                 yreal[ebene] = layerHeight / 2;
             }
-            boolean isMoveSubElements = OPTION_GRAPH_MOVE_SUBELEMENTS.set(false);
+            //            boolean isMoveSubElements = OPTION_GRAPH_MOVE_SUBELEMENTS.set(false);
             switch (getCursor().getType()) {
             case Cursor.DEFAULT_CURSOR:
                 break;
@@ -983,7 +1010,7 @@ public final class InputGraphArea extends BasicGraphArea implements MouseListene
                 xd = r_bound - xreal[ebene];
                 yd = h;
                 if (xd >= NodeContainer.MIN_X_SIZE && xd <= NodeContainer.MAX_X_SIZE) {
-                    szenario.moveNodeContainer(kc, r_bound - xd / 2, ym, xd, yd, STANDARD_PID);
+                    szenario.moveNodeContainer(kc, r_bound - xd / 2, ym, xd, yd, STANDARD_PID, controlKeyPressed);
                 }
                 break;
             case Cursor.N_RESIZE_CURSOR:
@@ -991,7 +1018,7 @@ public final class InputGraphArea extends BasicGraphArea implements MouseListene
                 xd = w;
                 yd = d_bound - yreal[ebene];
                 if (yd >= NodeContainer.MIN_Y_SIZE && yd <= NodeContainer.MAX_Y_SIZE) {
-                    szenario.moveNodeContainer(kc, xm, d_bound - yd / 2, xd, yd, STANDARD_PID);
+                    szenario.moveNodeContainer(kc, xm, d_bound - yd / 2, xd, yd, STANDARD_PID, controlKeyPressed);
                 }
                 break;
             case Cursor.E_RESIZE_CURSOR:
@@ -999,7 +1026,7 @@ public final class InputGraphArea extends BasicGraphArea implements MouseListene
                 xd = xreal[ebene] - l_bound;
                 yd = h;
                 if (xd >= NodeContainer.MIN_X_SIZE && xd <= NodeContainer.MAX_X_SIZE) {
-                    szenario.moveNodeContainer(kc, l_bound + xd / 2, ym, xd, yd, STANDARD_PID);
+                    szenario.moveNodeContainer(kc, l_bound + xd / 2, ym, xd, yd, STANDARD_PID, controlKeyPressed);
                 }
                 break;
             case Cursor.S_RESIZE_CURSOR:
@@ -1007,7 +1034,7 @@ public final class InputGraphArea extends BasicGraphArea implements MouseListene
                 xd = w;
                 yd = yreal[ebene] - u_bound;
                 if (yd >= NodeContainer.MIN_Y_SIZE && yd <= NodeContainer.MAX_Y_SIZE) {
-                    szenario.moveNodeContainer(kc, xm, u_bound + yd / 2, xd, yd, STANDARD_PID);
+                    szenario.moveNodeContainer(kc, xm, u_bound + yd / 2, xd, yd, STANDARD_PID, controlKeyPressed);
                 }
                 break;
             case Cursor.SW_RESIZE_CURSOR:
@@ -1016,7 +1043,7 @@ public final class InputGraphArea extends BasicGraphArea implements MouseListene
                 xd = Math.abs(r_bound - xreal[ebene]);
                 yd = Math.abs(yreal[ebene] - u_bound);
                 if (xd >= NodeContainer.MIN_X_SIZE && xd <= NodeContainer.MAX_X_SIZE && yd >= NodeContainer.MIN_Y_SIZE && yd <= NodeContainer.MAX_Y_SIZE) {
-                    szenario.moveNodeContainer(kc, r_bound - xd / 2, u_bound + yd / 2, xd, yd, STANDARD_PID);
+                    szenario.moveNodeContainer(kc, r_bound - xd / 2, u_bound + yd / 2, xd, yd, STANDARD_PID, controlKeyPressed);
                 }
                 break;
             case Cursor.NW_RESIZE_CURSOR:
@@ -1025,7 +1052,7 @@ public final class InputGraphArea extends BasicGraphArea implements MouseListene
                 xd = Math.abs(r_bound - xreal[ebene]);
                 yd = Math.abs(d_bound - yreal[ebene]);
                 if (xd >= NodeContainer.MIN_X_SIZE && xd <= NodeContainer.MAX_X_SIZE && yd >= NodeContainer.MIN_Y_SIZE && yd <= NodeContainer.MAX_Y_SIZE) {
-                    szenario.moveNodeContainer(kc, r_bound - xd / 2, d_bound - yd / 2, xd, yd, STANDARD_PID);
+                    szenario.moveNodeContainer(kc, r_bound - xd / 2, d_bound - yd / 2, xd, yd, STANDARD_PID, controlKeyPressed);
                 }
                 break;
             case Cursor.NE_RESIZE_CURSOR:
@@ -1034,7 +1061,7 @@ public final class InputGraphArea extends BasicGraphArea implements MouseListene
                 xd = Math.abs(l_bound - xreal[ebene]);
                 yd = Math.abs(d_bound - yreal[ebene]);
                 if (xd >= NodeContainer.MIN_X_SIZE && xd <= NodeContainer.MAX_X_SIZE && yd >= NodeContainer.MIN_Y_SIZE && yd <= NodeContainer.MAX_Y_SIZE) {
-                    szenario.moveNodeContainer(kc, l_bound + xd / 2, d_bound - yd / 2, xd, yd, STANDARD_PID);
+                    szenario.moveNodeContainer(kc, l_bound + xd / 2, d_bound - yd / 2, xd, yd, STANDARD_PID, controlKeyPressed);
                 }
                 break;
             case Cursor.SE_RESIZE_CURSOR:
@@ -1043,13 +1070,13 @@ public final class InputGraphArea extends BasicGraphArea implements MouseListene
                 xd = Math.abs(l_bound - xreal[ebene]);
                 yd = Math.abs(u_bound - yreal[ebene]);
                 if (xd >= NodeContainer.MIN_X_SIZE && xd <= NodeContainer.MAX_X_SIZE && yd >= NodeContainer.MIN_Y_SIZE && yd <= NodeContainer.MAX_Y_SIZE) {
-                    szenario.moveNodeContainer(kc, l_bound + xd / 2, u_bound + yd / 2, xd, yd, STANDARD_PID);
+                    szenario.moveNodeContainer(kc, l_bound + xd / 2, u_bound + yd / 2, xd, yd, STANDARD_PID, controlKeyPressed);
                 }
                 break;
             default:
                 break;
             }
-            OPTION_GRAPH_MOVE_SUBELEMENTS.set(isMoveSubElements);
+            //            OPTION_GRAPH_MOVE_SUBELEMENTS.set(isMoveSubElements);
         }
         if (grabbed) {
             if (clickedEc instanceof NodeContainer) {
@@ -1161,10 +1188,12 @@ public final class InputGraphArea extends BasicGraphArea implements MouseListene
                 grabbedElementsFullRect.width -= deltaX;
                 grabbedElementsFullRect.y -= deltaY;
                 grabbedElementsFullRect.height -= deltaY;
+
+                boolean controlKeyPressed = InputEvents.isOperatingSystemDependentCTRLorCMDorSHIFTdown(e);
                 if (multiView) {
-                    szenario.moveSelectedNodeContainer(-deltaX, -deltaY, NO_LAYER, STANDARD_PID);
+                    szenario.moveSelectedNodeContainer(-deltaX, -deltaY, NO_LAYER, controlKeyPressed, STANDARD_PID);
                 } else {
-                    szenario.moveSelectedNodeContainer(-deltaX, -deltaY, ebene, STANDARD_PID);
+                    szenario.moveSelectedNodeContainer(-deltaX, -deltaY, ebene, controlKeyPressed, STANDARD_PID);
                 }
                 //wenn nicht irgendwelche Elemente gedragged werden mussten, kann hier nur noch auf einer Edge gedragged werden, da grabbed
                 // nur bei Node oder Kanten true gesetzt wird

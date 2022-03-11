@@ -191,7 +191,7 @@ public class Tool3lgmMain {
      */
     private static void setDockIcon() {
         try {
-            if (OperatingSystem.isMacOs()) {
+            if (OperatingSystem.isMacOs() || !OperatingSystem.isARMArchtecture()) {
                 Application application = Application.getApplication();
                 ImageIcon icon = Tool3lgmConstants.TOOL_ICON_TRANSPARENT_128;
                 Image image = icon.getImage();

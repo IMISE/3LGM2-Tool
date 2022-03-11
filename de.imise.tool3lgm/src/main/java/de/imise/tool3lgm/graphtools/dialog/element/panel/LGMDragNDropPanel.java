@@ -183,7 +183,7 @@ public abstract class LGMDragNDropPanel extends AbstractPathConnectionTreePanel 
              * @param me
              */
             private void mouseEntered(final MouseEvent me) {
-                if (blockDragNDropInitializing == false && me.getSource() instanceof JTree) {
+                if (!blockDragNDropInitializing && me.getSource() instanceof JTree) {
                     activateDragNDrop((JTree) me.getSource());
                 }
             }
