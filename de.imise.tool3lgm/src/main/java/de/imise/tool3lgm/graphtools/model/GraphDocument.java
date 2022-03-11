@@ -363,7 +363,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
      * @param logUndoRedo
      * @param pid
      */
-    private void setPageSizeFactor(double newPageSizeFactor, final boolean logUndoRedo, final int pid) {
+    public void setPageSizeFactor(double newPageSizeFactor, final boolean logUndoRedo, final int pid) {
         final double oldPageSizeFactor = getPageSizeFactor();
         double minPageSizeFactor = getMinimalPageSizeFactor();
         if (minPageSizeFactor > newPageSizeFactor) {
@@ -5039,7 +5039,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
         GraphViewParameter graphViewParameter = Static.getGraphViewParameter(szen);
         szen.adaptGraphViewParameter(graphViewParameter);
         double pageSizeFactor = getPageSizeFactor();
-        szen.setPageSizeFactor(pageSizeFactor);
+        szen.setPageSizeFactor(pageSizeFactor, true, pid);
         szen.getDefaultElementsLayout().adapt(defaultElementsLayout);
         String otherID = szen.getID();
         addElementsToSzenario(otherID, elements, pid);
