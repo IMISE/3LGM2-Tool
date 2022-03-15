@@ -34,6 +34,7 @@ import de.imise.tool3lgm.Tool3lgmModelType.ModelCategory;
 import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
 import de.imise.tool3lgm.graphtools.consistency.ModelValidatorDefinition;
 import de.imise.tool3lgm.graphtools.consistency.error.condition.MissingPathErrorCheckCondition;
+import de.imise.tool3lgm.graphtools.metamodel.elements.Bendpoint;
 import de.imise.tool3lgm.graphtools.metamodel.elements.CompositionEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction;
@@ -1189,7 +1190,7 @@ public final class MetaModel extends CoreMetaModel {
      * @return
      */
     public final boolean hasLayout(final Class<? extends ModelElement> elementClass) {
-        return elementClassesWithLayout.contains(elementClass) || Textfield.class.isAssignableFrom(elementClass);
+        return elementClassesWithLayout.contains(elementClass) || Textfield.class.isAssignableFrom(elementClass) || Bendpoint.class.isAssignableFrom(elementClass);
     }
 
     /**

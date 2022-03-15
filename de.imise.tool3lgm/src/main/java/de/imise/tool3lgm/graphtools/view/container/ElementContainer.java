@@ -252,7 +252,6 @@ public abstract class ElementContainer extends JLabel implements Cloneable, Grap
         targetContainer.setVisible(isVisible());
         targetContainer.expanded = expanded;
         targetContainer.highlight = highlight;
-        targetContainer.layout = (GraphElementLayout) (layout == null ? null : layout.clone());
         targetContainer.expandedLayout = (GraphElementLayout) (expandedLayout == null ? null : expandedLayout.clone());
         targetContainer.nonExpandedLayout = (GraphElementLayout) (nonExpandedLayout == null ? null : nonExpandedLayout.clone());
         targetContainer.set3LGMLayout(targetContainer.expanded ? targetContainer.expandedLayout : targetContainer.nonExpandedLayout);
