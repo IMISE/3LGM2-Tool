@@ -31,7 +31,6 @@ import de.imise.tool3lgm.graphtools.path.metapaths.MetaPath;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.util.NamedObjectContainer;
 import de.imise.util.htmlxml.HTMLConverter;
-import de.imise.util.htmlxml.ParseSaveStringHandler;
 import de.imise.util.swing.component.AlphabeticalComboBox;
 import de.imise.util.swing.component.LimitedSizeScrollTextPane;
 
@@ -245,7 +244,6 @@ public class SingleConnectionPanel extends AbstractPathConnectionPanel {
         if (newName != null && !oldname.equals(newName)) {
             GraphDocument mainDoc = getMainDoc();
             int pid = getTransactionID();
-            newName = ParseSaveStringHandler.getParseSaveString(newName);
             mainDoc.setName(connectedElement, newName, pid);
         }
         connectedElement.refreshText();
