@@ -42,7 +42,7 @@ fi
 if [ $# -gt 0 ]; then
 for param in "$@";
 	do
-		if [ $param = "--debug" ]; then
+		if [ $param = "--debug" -o $param = "-debug" ]; then
 			echo Parameters=$@
 			echo MEMORY32=$MEMORY32
 			echo MEMORY64=$MEMORY64
@@ -54,14 +54,27 @@ for param in "$@";
 			$java -version
 			echo JAVA_HOME=$JAVA_HOME
 		fi
-		if [ $param = "--scale=2" ]; then
+		if [ $param = "--scale=2" -o $param = "-scale=2" ]; then
 			SCALE=-Dsun.java2d.uiScale='2'
 			# does not work
 			# SCALE=-Dsun.java2d.win.uiScaleX=120dpi -Dsun.java2d.win.uiScaleY=120dpi
 			echo SCALE=$SCALE
 		fi
-		if [ $param = "--help" ]; then
-			echo Commandline Parameters
+		if [ $param = "--help" -o $param = "-help" ]; then
+			echo Call: ./3lgm2tool.sh [Parameters]
+			echo ""
+			echo Parameters handled by this script:
+			echo "-help, --help			show this List and exit"
+			echo "-scale=2, --scale=2		scales the 3LGM² tool by factor of 2, which is useful for high resolution monitors, e.g. 32 zoll 4k monitors"
+			echo ""
+			echo Parameters handled by 3glm java process:
+			echo "-n				allow multiple instances of 3LGM² tool (default: only one instance is allowed)"
+			echo "-i				start 3LGM² tool invisible"
+			echo "-debug, --debug			shows debugging information, e.g. environment variables or java version"
+			echo "-log_rdf, -log_all		activates logging (all)"
+			echo "-log_rdf_err			activates logging (only errors and warnings of RDF import process)"
+			echo ""
+			echo Please report bugs and feature request via https://bitbucket.org/imise/tool-3lgm2/issues/new
 			exit 0
 		fi
 	done
