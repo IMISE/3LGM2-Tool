@@ -65,7 +65,6 @@ import static de.imise.tool3lgm.graphtools.undoredo.TransactionManager.STANDARD_
 import static de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty.OPTION_GRAPH_MOVE_SUBELEMENTS;
 import static de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty.OPTION_SHOW_REMOVE_WARNING;
 import static de.imise.util.htmlxml.ParseSaveStringHandler.getDecodedParseSaveString;
-import static de.imise.util.htmlxml.ParseSaveStringHandler.getParseSaveString;
 
 import java.awt.Color;
 import java.awt.Component;
@@ -4804,11 +4803,9 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
             return;
         }
         start_transaction(pid);
-        String newName = getParseSaveString(name);
         String oldName = me.getName();
-        oldName = getParseSaveString(oldName);
         //falls in derselben Transaction der Name mehrfach geändert wird, soll das nur 1 Mal geloggt werden
-        addRedoCommandOrReplace(pid, newName, MODEL_ACTION_SET_ELEMENT_NAME, me);
+        addRedoCommandOrReplace(pid, name, MODEL_ACTION_SET_ELEMENT_NAME, me);
         addUndoCommandIfNotExist(pid, oldName, MODEL_ACTION_SET_ELEMENT_NAME, me);
         //	Das hier sollte man nicht einfach ohne Nachfragen machen! Wenn dann nur mit Bestätigungsdialog
         //      Verbundene Elemente die den Namen dieses Elementes in sich tragen auch updaten
@@ -4821,8 +4818,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
         //			}
         //		}
 
-        newName = getDecodedParseSaveString(name);
-        me.setName(newName);
+        me.setName(name);
         //irgendein Container dieses Elementes muss ins Event gapackt werden. Welcher ist egal, da eigentlich das Element selbst wichtig wäre
         ElementContainer ec = me.getContainer(this);
         finish_transaction(pid);
@@ -4839,13 +4835,10 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
             return;
         }
         start_transaction(pid);
-        String newDescription = getParseSaveString(description);
         String oldDescription = me.getDescription();
-        oldDescription = getParseSaveString(oldDescription);
-        addRedoCommandOrReplace(pid, newDescription, MODEL_ACTION_SET_ELEMENT_DESCRIPTION, me);
+        addRedoCommandOrReplace(pid, description, MODEL_ACTION_SET_ELEMENT_DESCRIPTION, me);
         addUndoCommandIfNotExist(pid, oldDescription, MODEL_ACTION_SET_ELEMENT_DESCRIPTION, me);
-        newDescription = getDecodedParseSaveString(description);
-        me.setDescription(newDescription);
+        me.setDescription(description);
         finish_transaction(pid, DATA_CHANGED);
     }
 

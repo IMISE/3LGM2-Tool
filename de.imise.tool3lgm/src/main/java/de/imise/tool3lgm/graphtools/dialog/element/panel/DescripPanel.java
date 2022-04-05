@@ -17,7 +17,6 @@ import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.path.metapaths.ElementaryMetaPath;
 import de.imise.tool3lgm.graphtools.path.metapaths.ElementaryMetaPathHandler;
 import de.imise.tool3lgm.graphtools.path.metapaths.SimpleMetaPath;
-import de.imise.util.htmlxml.ParseSaveStringHandler;
 import de.imise.util.swing.component.LimitedSizeScrollTextPane;
 import de.imise.util.swing.component.text.ExtendedTextPane;
 
@@ -157,7 +156,7 @@ public final class DescripPanel
         if (newDescrip != null && !newDescrip.equals(descrip)) {
             GraphDocument mainDoc = getMainDoc();
             int pid = getTransactionID();
-            mainDoc.setDescription(me, ParseSaveStringHandler.getParseSaveString(newDescrip), pid);
+            mainDoc.setDescription(me, newDescrip, pid);
         }
         me.refreshText();
         super.commit();

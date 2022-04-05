@@ -33,7 +33,8 @@ public class ParseSaveStringHandler {
         if (trim) {
             s = s.trim();
         }
-        return TEXT_SURROUNDER + s.replace("\r", "").replace('\n', '\u001e').replace(TEXT_SURROUNDER, '´').replaceAll("\\\\", "\\\\\\\\") + TEXT_SURROUNDER;
+        s = TEXT_SURROUNDER + s.replace("\r", "").replace('\n', '\u001e').replace(TEXT_SURROUNDER, '´').replaceAll("\\\\", "\\\\\\\\") + TEXT_SURROUNDER;
+        return s;
     }
 
     /**
@@ -72,7 +73,8 @@ public class ParseSaveStringHandler {
                 s = s.substring(1, s.length() - 1);
             }
         }
-        return s.replace('\u001e', '\n');
+        s = s.replace('\u001e', '\n');
+        return s;
     }
 
 }
