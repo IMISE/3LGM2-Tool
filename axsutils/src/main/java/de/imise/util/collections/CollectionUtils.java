@@ -608,12 +608,11 @@ public abstract class CollectionUtils {
         int i = 0, j = 0;
 
         for (Object nextRow : rows) {
-            Collection<? extends T> row = null;
-            if (nextRow instanceof Collection<?>) { // rows ist mehrdimensional
-                row = (Collection<? extends T>) nextRow;
-            } else { // rows ist nicht 2-dimensional
+            Collection<? extends T> row;
+            if (!(nextRow instanceof Collection<?>)) { // rows ist nicht 2-dimensional
                 throw new IllegalArgumentException("The given Collection is not 2 dimensional");
             }
+            row = (Collection<? extends T>) nextRow;
 
             if (array == null) {
                 array = (T[][]) new Object[rows.size()][row.size()];
@@ -825,14 +824,11 @@ public abstract class CollectionUtils {
      * @return
      */
     public static <T> Iterable<T> iterable(final List<T> list) {
-        return new Iterable<T>() {
-            @Override
-            public Iterator<T> iterator() {
-                if (list == null) {
-                    return Collections.emptyIterator();
-                }
-                return list.iterator();
+        return () -> {
+            if (list == null) {
+                return Collections.emptyIterator();
             }
+            return list.iterator();
         };
     }
 
@@ -921,7 +917,8 @@ public abstract class CollectionUtils {
                         if (currentIterableIndex < iterables.size()) {
                             currentIterator = iterables.get(currentIterableIndex).iterator();
                         }
-                    } else if (!currentIterator.hasNext()) {
+                    }
+                    if (currentIterator != null && !currentIterator.hasNext()) {
                         currentIterableIndex++;
                         currentIterator = null;
                         init();
