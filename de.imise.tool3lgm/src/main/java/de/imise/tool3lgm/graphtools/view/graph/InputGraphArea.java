@@ -421,11 +421,13 @@ public final class InputGraphArea extends BasicGraphArea implements MouseListene
                     grabbedElementsRealRect = getIncludingRectangle(grabbedElementsRealRect, kc);
                 }
             }
-            grabbedElementsRasteredRect = new Rectangle(grabbedElementsRealRect);
-            if (grabbedElementsFullRect == null) {
-                grabbedElementsFullRect = new Rectangle(grabbedElementsRealRect);
-            } else {
-                grabbedElementsFullRect = getIncludingRectangle(grabbedElementsFullRect, grabbedElementsRealRect.x, grabbedElementsRealRect.y, grabbedElementsRealRect.width, grabbedElementsRealRect.height);
+            if (grabbedElementsRealRect != null) {
+                grabbedElementsRasteredRect = new Rectangle(grabbedElementsRealRect);
+                if (grabbedElementsFullRect == null) {
+                    grabbedElementsFullRect = new Rectangle(grabbedElementsRealRect);
+                } else {
+                    grabbedElementsFullRect = getIncludingRectangle(grabbedElementsFullRect, grabbedElementsRealRect.x, grabbedElementsRealRect.y, grabbedElementsRealRect.width, grabbedElementsRealRect.height);
+                }
             }
         }
     }
