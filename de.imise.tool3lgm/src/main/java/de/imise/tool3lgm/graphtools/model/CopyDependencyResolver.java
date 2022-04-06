@@ -41,13 +41,10 @@ public class CopyDependencyResolver {
         public final Set<Edge> additionalEdges;
 
         /**  */
-        public final UserFieldDefinitions userFieldDefinitions;
+        public UserFieldDefinitions userFieldDefinitions;
 
         /**  */
-        private final Set<UserField> userFields;
-
-        /**  */
-        private boolean userFieldDefinitionsIsExpanded = false;
+        public final Set<UserField> usedUserFields;
 
         /**
          * @param gdcoll
@@ -56,7 +53,7 @@ public class CopyDependencyResolver {
             elements = new ArrayList<>();
             additionalEdges = new ListSet<>();
             userFieldDefinitions = new UserFieldDefinitions(gdcoll);
-            userFields = new HashSet<>();
+            usedUserFields = new HashSet<>();
         }
 
         /**
@@ -77,8 +74,7 @@ public class CopyDependencyResolver {
             }
             Set<UserField> elementUserFields = me.getUserFieldInputValueKeys();
             if (!elementUserFields.isEmpty()) {
-                userFieldDefinitionsIsExpanded = false;
-                userFields.addAll(elementUserFields);
+                usedUserFields.addAll(elementUserFields);
                 for (UserField userField : elementUserFields) {
                     UserFieldNumberFormat numberFormat = userField.getNumberFormat();
                     if (numberFormat != null) {
@@ -108,13 +104,6 @@ public class CopyDependencyResolver {
          * @return
          */
         public UserFieldDefinitions getUserFieldDefinitions() {
-            //expand before get
-            if (!userFieldDefinitionsIsExpanded) {
-                userFieldDefinitionsIsExpanded = true;
-                GDCollection sourceCollection = getSourceCollection();
-                UserFieldDefinitions sourceUserFieldDefinitions = sourceCollection.getUserFieldDefinitions();
-                userFieldDefinitions.setAllUserFields(sourceUserFieldDefinitions, userFields);
-            }
             return userFieldDefinitions;
         }
 
@@ -177,8 +166,8 @@ public class CopyDependencyResolver {
      *            werden
      * @param bitmaps Set, in welches die IDs der zu kopierenden Icons
      *            geschrieben werden
-     * @param userFields Set, in welches die zu kopierenden benutzdefinierten
-     *            Eigenschaftsfelder geschrieben werden
+     * @param usedUserFields Set, in welches die zu kopierenden
+     *            benutzdefinierten Eigenschaftsfelder geschrieben werden
      */
     public static CopyDependencyResolverResultFull resolveCopyDependencies(final List<? extends GraphDocument> export) {
         Set<GDCollection> models2Export = new HashSet<>(); //usually the GDCollection of all GraphDocuments in export is the same, but this is the general way
@@ -224,7 +213,7 @@ public class CopyDependencyResolver {
     /**
      * @param elements ArrayList with ElementContainer
      * @param result ArrayList with hastStrings
-     * @param userFields
+     * @param usedUserFields
      */
     public static CopyDependencyResolverResultSimple resolveCopyDependencies(final Collection<ElementContainer> elements) {
         ElementContainer firstEc = elements.isEmpty() ? null : elements.iterator().next();
@@ -248,8 +237,8 @@ public class CopyDependencyResolver {
      *            class will be ignored
      * @param elements the recursive filled retuern list with all elements. At
      *            least the given modelelement is contained in this list.
-     * @param userFields all userfields of all elements in the filled elements
-     *            list
+     * @param usedUserFields all userfields of all elements in the filled
+     *            elements list
      * @param initialSelectedElements
      */
     private static void resolveCopyDependencies(final ModelElement me, final Class<? extends ModelElement> ignoreClass, CopyDependencyResolverResultSimple result, final Collection<ElementContainer> initialSelectedElements) {

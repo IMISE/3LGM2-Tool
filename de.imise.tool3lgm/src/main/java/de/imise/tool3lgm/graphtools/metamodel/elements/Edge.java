@@ -7,6 +7,7 @@ import de.imise.tool3lgm.graphtools.metamodel.EdgeCardinality;
 import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
+import de.imise.tool3lgm.graphtools.model.LGMGraphDocument;
 import de.imise.tool3lgm.graphtools.view.container.EdgeContainer;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.util.ReflectionUtils;
@@ -155,16 +156,22 @@ public abstract class Edge extends ModelElement {
      * @param registerInNodes
      */
     public void setNodes(final ModelElement startElement, final ModelElement endElement, final boolean registerInNodes) {
-        this.startElement = startElement;
-        this.endElement = endElement;
         if (registerInNodes) {
+            if (this.startElement != null) {
+                this.startElement.removeEdge(this);
+            }
             if (startElement != null) {
                 startElement.addEdge(this);
+            }
+            if (this.endElement != null) {
+                this.endElement.removeEdge(this);
             }
             if (endElement != null) {
                 endElement.addEdge(this);
             }
         }
+        this.startElement = startElement;
+        this.endElement = endElement;
         //Validität der Edge prüfen und dabei wenn nötig umdrehen (bis Version 3.2
         //ist teilweise die Reihenfolge der Start- und Endelemente von Kanten andersherum gewesen,
         //als sie in der Kantenklasse festgelegt sind. Das wird hier grade gebogen
@@ -287,6 +294,18 @@ public abstract class Edge extends ModelElement {
             return true;
         }
         return super.putXMLFieldString(field, value);
+    }
+
+    /**
+     * @param startID
+     * @param endID
+     * @param doc
+     * @return
+     */
+    public final boolean setStartAndEndByIDs(String startID, String endID, GraphDocument doc) {
+        this.startID = startID;
+        this.endID = endID;
+        return decodeIDs(doc);
     }
 
     /**
@@ -549,11 +568,20 @@ public abstract class Edge extends ModelElement {
         if (startElement == null || endElement == null) {
             return false;
         }
+        LGMGraphDocument mainDoc = coll.getMainDoc();
 
-        startElement = coll.getMainDoc().findElementCoded(startElement.getID());
-        endElement = coll.getMainDoc().findElementCoded(endElement.getID());
+        String startID = startElement.getID();
+        String endID = endElement.getID();
 
-        if (startElement == null || endElement == null || coll.getMainDoc().findElementCoded(getID()) == null) {
+        startElement = mainDoc.findElementCoded(startID);
+        endElement = mainDoc.findElementCoded(endID);
+
+        if (startElement == null || endElement == null) {
+            return false;
+        }
+
+        ModelElement meInMainDoc = mainDoc.findElementCoded(id);
+        if (meInMainDoc == null) {
             return false;
         }
 

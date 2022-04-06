@@ -2,6 +2,7 @@ package de.imise.tool3lgm.graphtools.model;
 
 import static de.imise.tool3lgm.Static.getMainFrame;
 import static de.imise.tool3lgm.Tool3lgmConstants.CLIPBOARD_PATH;
+import static de.imise.tool3lgm.Tool3lgmModelType.ModelCategory.CLIPBOARD;
 import static de.imise.tool3lgm.graphtools.dialog.OverwriteDialog.OverwriteOption.IGNORE;
 import static de.imise.tool3lgm.graphtools.dialog.OverwriteDialog.OverwriteOption.JOIN;
 import static de.imise.tool3lgm.graphtools.dialog.OverwriteDialog.OverwriteOption.OVERWRITE;
@@ -9,7 +10,6 @@ import static de.imise.tool3lgm.graphtools.metamodel.elements.CompositionEdge.MA
 import static de.imise.tool3lgm.graphtools.metamodel.elements.CompositionEdge.SLAVE_TO_MASTER_DIRECTION;
 import static de.imise.tool3lgm.graphtools.model.CopyDependencyResolver.resolveCopyDependencies;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_DELETE_FROM_MODEL;
-import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_PASTE;
 import static de.imise.tool3lgm.graphtools.model.LGMChangeListener.LGMChangeType.DATA_CHANGED;
 import static de.imise.tool3lgm.graphtools.model.LGMChangeListener.LGMChangeType.ELEMENT_GRAPHICS_CHANGED;
 import static de.imise.tool3lgm.graphtools.model.LGMChangeListener.LGMChangeType.SELECTION_CHANGED;
@@ -23,10 +23,13 @@ import java.util.List;
 
 import javax.swing.JOptionPane;
 
+import org.apache.commons.collections4.bidimap.DualHashBidiMap;
+
 import com.google.common.collect.ImmutableList;
 
 import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.Tool3lgmModelType.ModelCategory;
+import de.imise.tool3lgm.graphtools.ModelCopyAndPasteHandler;
 import de.imise.tool3lgm.graphtools.analyse.redundancy.SimpleRedundancyAnalysis;
 import de.imise.tool3lgm.graphtools.analyse.redundancy.SimpleRedundancyAnalysisDefinitions.SingleSimpleRedundancyAnalysisDefinition;
 import de.imise.tool3lgm.graphtools.dialog.OverwriteDialog;
@@ -41,6 +44,7 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction;
 import de.imise.tool3lgm.graphtools.metamodel.elements.InstanciationEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
+import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
 import de.imise.tool3lgm.graphtools.model.CopyDependencyResolver.CopyDependencyResolverResultSimple;
 import de.imise.tool3lgm.graphtools.path.metapaths.ElementaryMetaPath;
 import de.imise.tool3lgm.graphtools.path.metapaths.ElementaryMetaPath.Type;
@@ -61,7 +65,6 @@ import de.imise.tool3lgm.graphtools.view.container.LayerContainer;
 import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
 import de.imise.tool3lgm.graphtools.view.graph.GraphFunctions;
 import de.imise.tool3lgm.log.Log;
-import de.imise.tool3lgm.xml.ToolXMLClipboardWriter;
 import de.imise.util.Sys;
 
 /**
@@ -186,7 +189,7 @@ public class LGMGraphDocument extends GraphDocument {
         if (selectedContainer.isEmpty()) {
             return;
         }
-        ToolXMLClipboardWriter.writeClipboard(this);
+        ModelCopyAndPasteHandler.copy();
     }
 
     /**
@@ -223,17 +226,18 @@ public class LGMGraphDocument extends GraphDocument {
      *
      */
     private synchronized void pasteClipboard() {
-        if (!CLIPBOARD_PATH.exists()) {
-            return;
-        }
+        //        if (!CLIPBOARD_PATH.exists()) {
+        //            return;
+        //        }
 
         int pid = TransactionManager.STANDARD_PID;
         try {
             start_transaction(pid);
-            addRedo(pid, MODEL_ACTION_PASTE);
-            addUndo(pid, MODEL_ACTION_DELETE_FROM_MODEL);
+            //            addRedo(pid, MODEL_ACTION_PASTE);
+            //            addUndo(pid, MODEL_ACTION_DELETE_FROM_MODEL);
             deselectAll(true);
-            gdcoll.loadClipboard(CLIPBOARD_PATH);
+            ModelCopyAndPasteHandler.paste();
+            //gdcoll.loadClipboard(CLIPBOARD_PATH);
         } catch (Exception e) {
             Log.show(Log.ERROR, getResString("FehlerAllgemein"), e);
             Object[] buttons = new Object[] {
@@ -332,15 +336,30 @@ public class LGMGraphDocument extends GraphDocument {
      * @param targetDoc
      */
     private static final void copyToModel(final Collection<ElementContainer> sourceElements, final GraphDocument sourceDoc, final LGMGraphDocument targetDoc) {
-
+        if (sourceElements.size() > 100) {
+            Static.showProgressDialog();
+            Static.setProgressDialogTitle("Kopiere Elemente (AUSLAGERN)");
+            Static.setProgressDialogStatusLabel("Ermittle Referenzen...(AUSLAGERN)");
+        }
         GDCollection sourceCollection = sourceDoc.getCollection();
         GraphDocument sourceMainDoc = sourceCollection.getMainDoc();
         GDCollection targetCollection = targetDoc.getCollection();
         GraphDocument targetMainDoc = targetCollection.getMainDoc();
 
+        //        Sys.out1("\n##############\n# STARTZUSTAND #\n##############");
+        //        GDCollectionPrinter.print(sourceCollection, true, true);
+        //        GDCollectionPrinter.print(targetCollection, true, true);
+        //
         boolean debug = false; //enable if you want to debug the execution time
         int iii = 0;
         long start = System.currentTimeMillis();
+        //set both collections to bulk mode to prevent any selection update events
+        boolean sourceBulkMode = sourceCollection.setBulkMode(true);
+        boolean targetBulkMode = targetCollection.setBulkMode(true);
+
+        Sys.err1debug(debug, ++iii + " " + (System.currentTimeMillis() - start));
+        start = System.currentTimeMillis();
+
         sourceCollection.removeInferenceEdges(true, STANDARD_PID);
         targetCollection.removeInferenceEdges(true, STANDARD_PID);
 
@@ -348,7 +367,6 @@ public class LGMGraphDocument extends GraphDocument {
         start = System.currentTimeMillis();
 
         CopyDependencyResolverResultSimple resolvedCopyDependencies = resolveCopyDependencies(sourceElements);
-
         Sys.err1debug(debug, ++iii + " " + (System.currentTimeMillis() - start));
         start = System.currentTimeMillis();
 
@@ -359,9 +377,18 @@ public class LGMGraphDocument extends GraphDocument {
         Sys.err1debug(debug, ++iii + " " + (System.currentTimeMillis() - start));
         start = System.currentTimeMillis();
 
-        UserFieldDefinitions userFieldDefinitions = targetCollection.getUserFieldDefinitions();
-        UserFieldDefinitions userFieldDefinitions2Add = resolvedCopyDependencies.getUserFieldDefinitions();
-        userFieldDefinitions.addAll(userFieldDefinitions2Add);
+        if (targetCollection.hasModelCategory(CLIPBOARD)) { //copy to clipboard
+            UserFieldDefinitions sourceUserFieldDefinitions = sourceCollection.getUserFieldDefinitions();
+            UserFieldDefinitions clonedSourceUserFieldDefinitions = sourceUserFieldDefinitions.cloneForTargetCollection(targetCollection);
+            clonedSourceUserFieldDefinitions.retain(resolvedCopyDependencies.usedUserFields);
+            targetCollection.setUserFieldDefinitions(clonedSourceUserFieldDefinitions);
+        } else if (sourceCollection.hasModelCategory(CLIPBOARD)) { //copy from clipboard
+
+        } else { // copy from model to model
+            UserFieldDefinitions userFieldDefinitions = targetCollection.getUserFieldDefinitions();
+            UserFieldDefinitions userFieldDefinitions2Add = resolvedCopyDependencies.getUserFieldDefinitions();
+            userFieldDefinitions.addAll(userFieldDefinitions2Add);
+        }
 
         Sys.err1debug(debug, ++iii + " " + (System.currentTimeMillis() - start));
         start = System.currentTimeMillis();
@@ -397,27 +424,44 @@ public class LGMGraphDocument extends GraphDocument {
             Sys.err1debug(debug, ++iii + " " + (System.currentTimeMillis() - start));
             start = System.currentTimeMillis();
 
+            /**
+             * changed IDs (with copyAndPaste). Key is old ID, value is new ID.
+             */
+            DualHashBidiMap<String, String> oldToNewID = new DualHashBidiMap<>();
+
             for (ModelElement sourceElement : resolvedCopyDependencies.elements) {
                 ElementContainer sourceContainer = sourceElement.getContainer(sourceDoc);
                 if (sourceContainer == null) {
                     sourceContainer = sourceElement.getContainer(sourceMainDoc);
                 }
 
+                //we need the layer index in every case -> use
+                //this index to find the elements faster than
+                //with the general function targetMainDoc.findElementCoded(id)
+                int layer = sourceElement.layerFor();
                 String sourceID = sourceElement.getID();
-                ModelElement targetElement = targetMainDoc.findElementCoded(sourceID);
-                if (targetElement != null) {
+                ModelElement existingTargetElement = null;
+                if (sourceElement instanceof Bendpoint) {
+                    existingTargetElement = targetMainDoc.findBendpointCoded(sourceID, layer);
+                } else if (sourceElement instanceof Node) {
+                    existingTargetElement = targetMainDoc.findNodeCoded(sourceID, layer);
+                } else if (sourceElement instanceof Edge) {
+                    existingTargetElement = targetMainDoc.findEdgeCoded(sourceID, layer);
+                }
+
+                if (existingTargetElement != null && !sourceCollection.hasModelCategory(CLIPBOARD)) {
                     if (!answer.applyToAll) {
                         sourceDoc.select(sourceContainer, STANDARD_PID);
                         sourceDoc.distributeEvent(SELECTION_CHANGED, sourceContainer, STANDARD_PID);
-                        answer = OverwriteDialog.showDialog(targetElement, sourceElement);
+                        answer = OverwriteDialog.showDialog(existingTargetElement, sourceElement);
                     }
 
                     if (answer.overwriteOption == OVERWRITE) {
                         //hier müsste das alte evtl. noch gelöscht werden !?
                     } else if (answer.overwriteOption == JOIN) {
-                        targetDoc.joinElements(targetElement, sourceElement, sourceDoc, true);
-                        if (targetElement instanceof Edge) {
-                            Edge edge = (Edge) targetElement;
+                        targetDoc.joinElements(existingTargetElement, sourceElement, sourceDoc, true);
+                        if (existingTargetElement instanceof Edge) {
+                            Edge edge = (Edge) existingTargetElement;
                             edge.reconnect(targetCollection);
                             edge.refreshText();
                         }
@@ -426,25 +470,63 @@ public class LGMGraphDocument extends GraphDocument {
                     }
                     //wenn die ID des zu kopierenden Elementes noch nicht im Modell vorkommt
                 } else {
+                    //                    Sys.out1("\nVOR EINFÜGEN VON ELEMENT " + sourceContainer);
+                    //                    GDCollectionPrinter.print(targetCollection, true, true);
+
                     //first create the element in the mainDoc
                     ElementContainer targetMainContainer = sourceContainer.clone(true, targetMainDoc);
-                    targetElement = targetMainContainer.getElement();
-                    targetElement.setID(sourceID);
-                    targetMainContainer.setVisible(true);
-                    targetMainContainer.setExpanded(true);
-                    targetMainContainer.setHighLight(false);
-                    targetMainContainer.refreshText();
-                    int layer = targetElement.layerFor();
+                    ModelElement targetElement = targetMainContainer.getElement();
                     LayerContainer targetMainDocLayer = targetMainDoc.getLayer(layer);
+                    if (existingTargetElement == null) {
+                        targetElement.setID(sourceID);
+                    } else {
+                        String targetID = targetElement.getID();
+                        oldToNewID.put(sourceID, targetID);
+                    }
+                    if (targetElement instanceof Bendpoint) {
+                        Bendpoint bendpoint = (Bendpoint) targetElement;
+                        String edgeID = bendpoint.getEdgeID();
+                        edgeID = oldToNewID.getOrDefault(edgeID, edgeID);
+                        EdgeContainer edgeC = targetMainDocLayer.getEdgeContainer(edgeID);
+                        Edge edge = edgeC.getEdge();
+                        bendpoint.addEdge(edge);
+                    }
+
                     targetMainDocLayer.add(targetMainContainer);
+
+                    //                    Sys.out1("\nNACH EINFÜGEN VON ELEMENT " + targetMainContainer + " (" + targetMainContainer.getID() + ")");
+                    //                    GDCollectionPrinter.print(targetCollection, true, true);
+
                     if (targetElement instanceof Edge) {
+                        Edge edge = (Edge) targetElement;
+
+                        ModelElement targetEdgeStart = edge.getStart();
+                        ModelElement targetEdgeEnd = edge.getEnd();
+                        String targetEdgeStartID = targetEdgeStart.getID();
+                        String targetEdgeEndID = targetEdgeEnd.getID();
+                        String newStartID = oldToNewID.get(targetEdgeStartID);
+                        String newEndID = oldToNewID.get(targetEdgeEndID);
+                        if (newStartID != null || newEndID != null) {
+                            if (newStartID == null) {
+                                newStartID = targetEdgeStartID;
+                            }
+                            if (newEndID == null) {
+                                newEndID = targetEdgeEndID;
+                            }
+                            edge.setStartAndEndByIDs(newStartID, newEndID, targetMainDoc);
+                        }
+
                         //edges are inserted in the szenario separately
-                        edges.add((Edge) targetElement);
+                        edges.add(edge);
+
+                        //                        Sys.out1("\nNACH UMHÄNGEN DER EDGE " + targetMainContainer);
+                        //                        GDCollectionPrinter.print(targetCollection, true, true);
+
                         //all not unique elements must be inserted to the szenario
                     } else if (!targetElement.isUnique() && targetDoc instanceof Szenario) {
                         //create container for the szenario and adds this container to the
                         //container map of the element
-                        ElementContainer targetContainer = sourceContainer.clone(false, targetDoc);
+                        ElementContainer targetContainer = targetMainContainer.clone(false, targetDoc);
                         targetContainer.setElement(targetElement);
                         if (targetElement instanceof Bendpoint) {
                             //bendpoints separately too
@@ -455,79 +537,99 @@ public class LGMGraphDocument extends GraphDocument {
                             targetContainer.refreshText();
                             LayerContainer targetDocLayer = targetDoc.getLayer(layer);
                             targetDocLayer.add(targetContainer);
+                            targetDoc.addSimpleToSelection(targetContainer);
                         }
                     }
-                    targetMainDoc.addToSelection(targetMainContainer, STANDARD_PID);
+                    targetMainContainer.setVisible(true);
+                    targetMainContainer.setExpanded(true);
+                    targetMainContainer.setHighLight(false);
+                    targetMainContainer.refreshText();
+                    targetMainDoc.addSimpleToSelection(targetMainContainer);
                 }
             }
+
+            //            Sys.out1("\n##############\n# 1 VOR ENDZUSTAND #\n##############");
+            //            GDCollectionPrinter.print(targetCollection, true, true);
 
             Sys.err1debug(debug, ++iii + " " + (System.currentTimeMillis() - start));
             start = System.currentTimeMillis();
 
             for (Edge edge : edges) {
                 if (!edge.reconnect(targetCollection)) {
+
+                    //                    Sys.out1("\n##############\n# 1a VOR ENDZUSTAND #\n##############");
+                    //                    GDCollectionPrinter.print(targetCollection, true, true);
+
                     targetCollection.deleteElement(edge, STANDARD_PID);
+
+                    //                    Sys.out1("\n##############\n# 1b VOR ENDZUSTAND #\n##############");
+                    //                    GDCollectionPrinter.print(targetCollection, true, true);
+
                 } else {
                     EdgeContainer edgeCont = edge.getContainer(targetMainDoc);
                     //this call adds a edgeContainer to all szenarios where it mus be added
                     //the tarte mainDoc and the target szenarion already contain the edge container
                     targetCollection.addEdge(edgeCont, STANDARD_PID);
-                    if (!edge.isUnique() && targetDoc instanceof Szenario) {
-                        EdgeContainer newC = edge.getContainer(targetDoc);
-                        if (newC == null) {
-                            throw new Exception(sourceDoc.getResString("fehler"));
-                        }
-                        for (BendpointContainer bc : newC.iterateBendpointContainers()) {
-                            int layer = edge.layerFor();
-                            LayerContainer targetDocLayer = targetDoc.getLayer(layer);
-                            targetDocLayer.add(bc);
-                        }
-                        newC.computeBorderPoints();
-                    }
+
+                    //                    Sys.out1("\n##############\n# 1c VOR ENDZUSTAND #\n##############");
+                    //                    GDCollectionPrinter.print(targetCollection, true, true);
+
                     ElementContainer edgeC = edge.getContainer(targetMainDoc);
-                    targetMainDoc.addToSelection(edgeC, STANDARD_PID);
+                    targetMainDoc.addSimpleToSelection(edgeC);
                 }
             }
+
+            //            Sys.out1("\n##############\n# 2 VOR ENDZUSTAND #\n##############");
+            //            GDCollectionPrinter.print(targetCollection, true, true);
 
             Sys.err1debug(debug, ++iii + " " + (System.currentTimeMillis() - start));
             start = System.currentTimeMillis();
 
             List<EdgeContainer> edgeConts = new ArrayList<>();
             while (!bendpoints.isEmpty()) {
-                BendpointContainer kp = bendpoints.remove(0);
-                BendpointContainer oldKP = sourceDoc.findBendpointContainerCoded(kp.getID());
+                BendpointContainer targetBpc = bendpoints.remove(0);
+                String targetBendpointID = targetBpc.getID();
+                String sourceBendpointID = oldToNewID.getKey(targetBendpointID);
+                if (sourceBendpointID == null) {
+                    sourceBendpointID = targetBendpointID;
+                }
+                BendpointContainer sourceBpc = sourceDoc.findBendpointContainerCoded(sourceBendpointID);
                 //der Container kann null sein, wenn die zu kopierende Kante auch noch mind. einen Knickpunkt in einem
                 //anderen Teilmodell hat, denn es werden beim resolven der CopyDependencies alle Knickpunkte der Kante aus
                 //allen Teilmodellen eingesammelt
-                if (oldKP == null) {
+                if (sourceBpc == null) {
                     continue;
                 }
-                Bendpoint bendpoint = kp.getBendpoint();
-                String edgeID = bendpoint.getEdgeID();
-                EdgeContainer kC = targetDoc.findEdgeContainerCoded(edgeID);
+                Bendpoint targetBendpoint = targetBpc.getBendpoint();
+                String targetEdgeID = targetBendpoint.getEdgeID();
+                targetEdgeID = oldToNewID.getOrDefault(targetEdgeID, targetEdgeID);
+                EdgeContainer targetEdgeC = targetDoc.findEdgeContainerCoded(targetEdgeID);
 
-                Bendpoint oldBendpoint = oldKP.getBendpoint();
-                EdgeContainer oldKC = oldBendpoint.getOwner();
-                if (oldKC == null) {
-                    oldKC = sourceDoc.findEdgeContainerCoded(kC.getID());
+                Bendpoint sourceBendpoint = sourceBpc.getBendpoint();
+                EdgeContainer sourceEdgeC = sourceBendpoint.getOwner();
+                if (sourceEdgeC == null) {
+                    sourceEdgeC = sourceDoc.findEdgeContainerCoded(targetEdgeC.getID());
                 }
-                if (kC != null) {
-                    if (!edges.contains(kC.getElement())) {
-                        edgeConts.add(kC);
-                    }
-                    bendpoint.setOwner(kC);
-                    int indexOfBendpoint = oldKC.getIndexOfBendpoint(oldBendpoint);
-                    kC.setBendpointContainer(kp, indexOfBendpoint);
-                    int layer = kC.layerFor();
+                if (targetEdgeC != null) {
+                    edgeConts.add(targetEdgeC);
+                    int indexOfBendpoint = sourceEdgeC.getIndexOfBendpoint(sourceBendpoint);
+                    targetEdgeC.setBendpointContainer(targetBpc, indexOfBendpoint);
+                    //                    Sys.out1(targetEdgeC + " (EdgeContainerID=" + System.identityHashCode(targetEdgeC) + ")   " + targetBpc + " (" + System.identityHashCode(targetBpc) + ")");
+                    int layer = targetEdgeC.layerFor();
                     LayerContainer targetDocLayer = targetDoc.getLayer(layer);
-                    targetDocLayer.add(kp);
+                    targetDocLayer.add(targetBpc);
                 }
+
+                //                Sys.out1("\n##############\n# 3 VOR ENDZUSTAND #\n##############");
+                //                GDCollectionPrinter.print(targetCollection, true, true);
+
             }
 
             Sys.err1debug(debug, ++iii + " " + (System.currentTimeMillis() - start));
             start = System.currentTimeMillis();
 
             for (EdgeContainer edgeC : edgeConts) {
+                //                Sys.out1(edgeC + " AXS=" + System.identityHashCode(edgeC));
                 edgeC.computeBorderPoints();
             }
 
@@ -550,7 +652,8 @@ public class LGMGraphDocument extends GraphDocument {
 
         sourceDoc.deselectAll(true);
         for (int j = 0; j < tmpActive.size(); j++) {
-            sourceDoc.addToSelection(tmpActive.get(j), STANDARD_PID);
+            ElementContainer ec = tmpActive.get(j);
+            sourceDoc.addSimpleToSelection(ec);
         }
 
         Sys.err1debug(debug, ++iii + " " + (System.currentTimeMillis() - start));
@@ -568,6 +671,13 @@ public class LGMGraphDocument extends GraphDocument {
         //bei Bedarf anschalten, um zu sehen, wie das Modell danach aussieht
         //GDCollectionPrinter.print(targetCollection);
 
+        sourceCollection.setBulkMode(sourceBulkMode);
+
+        Sys.err1debug(debug, ++iii + " " + (System.currentTimeMillis() - start));
+        start = System.currentTimeMillis();
+
+        targetCollection.setBulkMode(targetBulkMode);
+
         Sys.err1debug(debug, ++iii + " " + (System.currentTimeMillis() - start));
         start = System.currentTimeMillis();
 
@@ -576,6 +686,11 @@ public class LGMGraphDocument extends GraphDocument {
         Sys.err1debug(debug, ++iii + " " + (System.currentTimeMillis() - start));
         start = System.currentTimeMillis();
 
+        Static.closeProgressDialog();
+
+        //        Sys.out1("\n##############\n# ENDZUSTAND #\n##############");
+        //        GDCollectionPrinter.print(sourceCollection, true, true);
+        //        GDCollectionPrinter.print(targetCollection, true, true);
     }
 
     /**

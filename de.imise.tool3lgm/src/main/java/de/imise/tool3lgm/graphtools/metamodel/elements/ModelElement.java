@@ -198,6 +198,7 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
         retVal.id = getNewID(this);
         retVal.initContainerTable();
         retVal.edges = null;
+        retVal.nameWithSzens = null;
         return retVal;
     }
 
@@ -783,12 +784,15 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
      * kante hinzu.
      */
     public boolean insertEdge(final Edge edge, int pos) {
-        if (edge == null || edges != null && edges.contains(edge)) {
+        if (edge == null) {
             return false;
         }
         if (edges == null) {
             edges = new ArrayList<>(3); // die meisten Elemente, die überhaupt Kanten haben, haben fast nie mehr als 3
+        } else {
+            edges.remove(edge);
         }
+
         if (pos < 0 || pos > edges.size()) {
             pos = edges.size();
         }

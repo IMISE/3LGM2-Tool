@@ -30,6 +30,10 @@ public class Tool3lgmModelType extends MetaModelSpecificAdapter {
          * model explorer.
          */
         TEMPLATE,
+        /**
+         * Type of the model used as clipboard
+         */
+        CLIPBOARD,
     }
 
     /** Modell-Kategorie dieses Typs */

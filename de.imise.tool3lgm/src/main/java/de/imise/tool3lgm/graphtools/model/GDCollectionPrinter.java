@@ -9,6 +9,7 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.Bendpoint;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
+import de.imise.tool3lgm.graphtools.view.container.BendpointContainer;
 import de.imise.tool3lgm.graphtools.view.container.EdgeContainer;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.graphtools.view.container.LayerContainer;
@@ -24,12 +25,44 @@ public class GDCollectionPrinter {
 
     private int indent = 0;
 
+    /**
+     * If <code>true</code> the for all elements and containers the
+     * <code>System.identityHashCode(object)</code> will be shown too.
+     */
+    private final boolean withSystemID;
+
+    /**
+     * If <code>true</code> the bendpoints will be printed with all detail
+     * informations regarding their edges and IDs.
+     */
+    private final boolean withBendpointDetails;
+
     public GDCollectionPrinter(final GDCollection gdcoll) {
-        this(gdcoll, false);
+        this(gdcoll, false, true, true);
     }
 
-    public GDCollectionPrinter(final GDCollection gdcoll, final boolean appendMainModelInformation) {
+    /**
+     * @param gdcoll
+     * @param withSystemID if <code>true</code> the for all elements and
+     *            containers the <code>System.identityHashCode(object)</code>
+     *            will be shown too.
+     */
+    public GDCollectionPrinter(final GDCollection gdcoll, boolean withSystemID, boolean withBendpointDetails) {
+        this(gdcoll, false, withSystemID, withBendpointDetails);
+    }
+
+    /**
+     * @param gdcoll
+     * @param appendMainModelInformation
+     * @param withSystemID if <code>true</code> the for all elements and
+     *            containers the <code>System.identityHashCode(object)</code>
+     *            will be shown too.
+     * @param withBendpointDetails
+     */
+    public GDCollectionPrinter(final GDCollection gdcoll, final boolean appendMainModelInformation, boolean withSystemID, boolean withBendpointDetails) {
         this.gdcoll = gdcoll;
+        this.withSystemID = withSystemID;
+        this.withBendpointDetails = withBendpointDetails;
         appendln("Model name=", gdcoll.getName() + " (" + gdcoll.getModelCategory().name() + ")");
         if (appendMainModelInformation) {
             appendMainModelInformation();
@@ -52,20 +85,33 @@ public class GDCollectionPrinter {
         appendln();
         for (int layerIndex : ModelConstants.LAYERS) {
             LayerContainer lc = doc.getLayer(layerIndex);
-            appendln("Layer ", layerIndex, "    Knoten: ", lc.getNodeContainerCount(), "    Kanten: ", lc.getEdgeContainerCount(), "    Knickpunkte: ", lc.getBendpointContainerCount());
+            appendln("Layer ", layerIndex, "    Knoten: ", lc.getNodeContainerCount(), "    Kanten: ", lc.getEdgeContainerCount(), "    Knickpunkte: ", lc.getBendpointContainerCount(), "   (", lc, ")");
+            List<NodeContainer> nodeContainersAlphabetical = lc.getNodeContainersAlphabetical();
             increaseIndent();
-            appendln("Knoten");
-            increaseIndent();
-            for (NodeContainer nc : lc.getNodeContainersAlphabetical()) {
-                appendElementContainer(nc);
+            if (!nodeContainersAlphabetical.isEmpty()) {
+                appendln("Knoten");
+                increaseIndent();
+                for (NodeContainer nc : nodeContainersAlphabetical) {
+                    appendElementContainer(nc);
+                }
+                decreaseIndent();
             }
-            decreaseIndent();
-            appendln("Kanten");
-            increaseIndent();
-            for (EdgeContainer ec : lc.getEdgeContainers()) {
-                appendElementContainer(ec);
+            if (lc.getEdgeContainerCount() > 0) {
+                appendln("Kanten");
+                increaseIndent();
+                for (EdgeContainer ec : lc.getEdgeContainers()) {
+                    appendElementContainer(ec);
+                }
+                decreaseIndent();
             }
-            decreaseIndent();
+            if (lc.getBendpointContainerCount() > 0) {
+                appendln("Knickpunkte");
+                increaseIndent();
+                for (BendpointContainer bc : lc.getBendpointContainers()) {
+                    appendElementContainer(bc);
+                }
+                decreaseIndent();
+            }
             decreaseIndent();
         }
         resetIndent();
@@ -74,17 +120,37 @@ public class GDCollectionPrinter {
 
     private StringBuilder appendElementContainer(final ElementContainer ec) {
         ModelElement me = ec.getElement();
-        appendln(me.getClass().getSimpleName(), ": ", me);
+        appendln(me.getClass().getSimpleName(), ": ", ec);
         increaseIndent();
         appendIndent();
-        append("ID=", me.getID(), "    idMe=", System.identityHashCode(me), "\tidCont=", System.identityHashCode(ec));
+        if (withSystemID) {
+            append("ID=", me.getID(), "    idMe=", System.identityHashCode(me), "\tidCont=", System.identityHashCode(ec));
+        } else {
+            append("ID=", me.getID());
+        }
         if (me instanceof Edge) {
             Edge edge = (Edge) me;
             ModelElement start = edge.getStart();
             String startID = start == null ? "null" : start.getID();
+            String idStart = withSystemID ? " (idStart=" + System.identityHashCode(start) + ")" : "";
             ModelElement end = edge.getEnd();
             String endID = end == null ? "null" : end.getID();
-            append("\tstartID=", startID, "\tendID=", endID);
+            String idEnd = withSystemID ? " (idEnd=" + System.identityHashCode(end) + ")" : "";
+            append("\tstartID=", startID, idStart, "\tendID=", endID, idEnd);
+            if (withBendpointDetails) {
+                EdgeContainer edgeC = (EdgeContainer) ec;
+                for (BendpointContainer bc : edgeC.iterateBendpointContainers()) {
+                    if (bc != null) {
+                        appendElementContainer(bc);
+                    } else {
+                        appendln(BendpointContainer.class.getSimpleName(), ": ", bc);
+                    }
+                }
+            }
+        }
+        if (me instanceof Bendpoint) {
+            Bendpoint bendpoint = (Bendpoint) me;
+            append("\tedgeID=", bendpoint.getEdgeID());
         }
         appendln();
         appendEdgesOfElement(me);
@@ -95,13 +161,16 @@ public class GDCollectionPrinter {
     private StringBuilder appendEdgesOfElement(final ModelElement me) {
         for (Edge edge : me.getEdges()) {
             appendln("--> ", edge.getClass().getSimpleName(), ": ", edge);
+            String idEdge = withSystemID ? "    (idEdge=" + System.identityHashCode(edge) + ")" : "";
             increaseIndent();
             //appendIndent();
             ModelElement start = edge.getStart();
             String startID = start == null ? "null" : start.getID();
+            String idStart = withSystemID ? " (idStart=" + System.identityHashCode(start) + ")" : "";
             ModelElement end = edge.getEnd();
             String endID = end == null ? "null" : end.getID();
-            appendln("ID=", edge.getID(), "    idEdge=", System.identityHashCode(edge), "\tstartHash=", startID, "\tendHash=", endID);
+            String idEnd = withSystemID ? " (idEnd=" + System.identityHashCode(end) + ")" : "";
+            appendln("ID=", edge.getID(), idEdge, "\tstartID=", startID, idStart, "\tendID=", endID, idEnd);
             decreaseIndent();
         }
         return sb;
@@ -167,12 +236,16 @@ public class GDCollectionPrinter {
     }
 
     public static final void print(final GDCollection gdcoll) {
-        Sys.outm(1, 1, new GDCollectionPrinter(gdcoll, true));
+        Sys.outm(1, 1, new GDCollectionPrinter(gdcoll, true, true));
+    }
+
+    public static final void print(final GDCollection gdcoll, boolean withSystemID, boolean withBendpointDetails) {
+        Sys.outm(1, 1, new GDCollectionPrinter(gdcoll, true, withSystemID, withBendpointDetails));
     }
 
     public static final void print(final GDCollectionOwner gdcollOwner) {
         GDCollection gdcoll = gdcollOwner.getCollection();
-        Sys.outn(2, new GDCollectionPrinter(gdcoll, true));
+        Sys.outn(2, new GDCollectionPrinter(gdcoll, true, true));
     }
 
     @SafeVarargs

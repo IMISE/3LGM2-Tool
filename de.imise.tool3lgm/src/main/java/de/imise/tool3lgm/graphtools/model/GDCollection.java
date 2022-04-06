@@ -78,6 +78,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 
+import com.github.jsonldjava.shaded.com.google.common.base.Objects;
 import com.google.common.base.Strings;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
@@ -401,6 +402,14 @@ public class GDCollection extends UserFieldTarget implements MetaModelSpecific {
         return modelType;
     }
 
+    /**
+     * @param modelType
+     * @return
+     */
+    public boolean hasModelType(final Tool3lgmModelType modelType) {
+        return Objects.equal(this.modelType, modelType);
+    }
+
     @Override
     public MetaModel getMetaModel() {
         return metaModel;
@@ -423,6 +432,14 @@ public class GDCollection extends UserFieldTarget implements MetaModelSpecific {
      */
     public void setModelCategory(final Tool3lgmModelType.ModelCategory modelCategory) {
         modelType.setModelCategory(modelCategory);
+    }
+
+    /**
+     * @param modelCategory
+     * @return
+     */
+    public boolean hasModelCategory(ModelCategory modelCategory) {
+        return Objects.equal(modelCategory, getModelCategory());
     }
 
     /**

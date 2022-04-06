@@ -4031,12 +4031,35 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
             return mainDoc.findNodeCoded(elementID);
         }
         if (elementID != null) {
-            for (LayerContainer lc : layer) {
-                for (NodeContainer ec : lc.getNodeContainersAlphabetical()) {
-                    String id = ec.getID();
-                    if (elementID.equals(id)) {
-                        return ec.getNode();
-                    }
+            for (int layerIndex : ModelConstants.LAYERS) {
+                Node node = findNodeCoded(elementID, layerIndex);
+                if (node != null) {
+                    return node;
+                }
+            }
+        }
+        return null;
+    }
+
+    /**
+     * @param elementID
+     * @param layer
+     * @return
+     */
+    public Node findNodeCoded(final String elementID, final int layerIndex) {
+        if (layerIndex < 0) {
+            return findNodeCoded(elementID);
+        }
+        GraphDocument mainDoc = gdcoll.getMainDoc();
+        if (mainDoc != this) {
+            return mainDoc.findNodeCoded(elementID, layerIndex);
+        }
+        if (elementID != null) {
+            LayerContainer lc = layer[layerIndex];
+            for (NodeContainer ec : lc.getNodeContainersAlphabetical()) {
+                String id = ec.getID();
+                if (elementID.equals(id)) {
+                    return ec.getNode();
                 }
             }
         }
@@ -4053,12 +4076,35 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
             return mainDoc.findEdgeCoded(idString);
         }
         if (idString != null) {
-            for (LayerContainer lc : layer) {
-                for (EdgeContainer edgeC : lc.getEdgeContainers()) {
-                    String id = edgeC.getID();
-                    if (idString.equals(id)) {
-                        return edgeC.getEdge();
-                    }
+            for (int layerIndex : ModelConstants.LAYERS) {
+                Edge edge = findEdgeCoded(idString, layerIndex);
+                if (edge != null) {
+                    return edge;
+                }
+            }
+        }
+        return null;
+    }
+
+    /**
+     * @param idString
+     * @param layerIndex
+     * @return
+     */
+    public Edge findEdgeCoded(final String idString, final int layerIndex) {
+        if (layerIndex < 0) {
+            return findEdgeCoded(idString);
+        }
+        if (idString != null) {
+            GraphDocument mainDoc = gdcoll.getMainDoc();
+            if (mainDoc != this) {
+                return mainDoc.findEdgeCoded(idString, layerIndex);
+            }
+            LayerContainer lc = layer[layerIndex];
+            for (EdgeContainer edgeC : lc.getEdgeContainers()) {
+                String id = edgeC.getID();
+                if (idString.equals(id)) {
+                    return edgeC.getEdge();
                 }
             }
         }
@@ -4075,12 +4121,35 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
             return mainDoc.findBendpointCoded(elementID);
         }
         if (elementID != null) {
-            for (LayerContainer lc : layer) {
-                for (BendpointContainer bc : lc.getBendpointContainers()) {
-                    String id = bc.getID();
-                    if (elementID.equals(id)) {
-                        return bc.getBendpoint();
-                    }
+            for (int layerIndex : ModelConstants.LAYERS) {
+                Bendpoint bendpoint = findBendpointCoded(elementID, layerIndex);
+                if (bendpoint != null) {
+                    return bendpoint;
+                }
+            }
+        }
+        return null;
+    }
+
+    /**
+     * @param elementID
+     * @param layerIndex
+     * @return
+     */
+    public Bendpoint findBendpointCoded(final String elementID, final int layerIndex) {
+        if (layerIndex < 0) {
+            return findBendpointCoded(elementID);
+        }
+        GraphDocument mainDoc = gdcoll.getMainDoc();
+        if (mainDoc != this) {
+            return mainDoc.findBendpointCoded(elementID, layerIndex);
+        }
+        if (elementID != null) {
+            LayerContainer lc = layer[layerIndex];
+            for (BendpointContainer bc : lc.getBendpointContainers()) {
+                String id = bc.getID();
+                if (elementID.equals(id)) {
+                    return bc.getBendpoint();
                 }
             }
         }
