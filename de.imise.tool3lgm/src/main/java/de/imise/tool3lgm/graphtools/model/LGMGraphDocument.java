@@ -10,6 +10,7 @@ import static de.imise.tool3lgm.graphtools.metamodel.elements.CompositionEdge.MA
 import static de.imise.tool3lgm.graphtools.metamodel.elements.CompositionEdge.SLAVE_TO_MASTER_DIRECTION;
 import static de.imise.tool3lgm.graphtools.model.CopyDependencyResolver.resolveCopyDependencies;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_DELETE_FROM_MODEL;
+import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_PASTE;
 import static de.imise.tool3lgm.graphtools.model.LGMChangeListener.LGMChangeType.DATA_CHANGED;
 import static de.imise.tool3lgm.graphtools.model.LGMChangeListener.LGMChangeType.ELEMENT_GRAPHICS_CHANGED;
 import static de.imise.tool3lgm.graphtools.model.LGMChangeListener.LGMChangeType.SELECTION_CHANGED;
@@ -56,7 +57,6 @@ import de.imise.tool3lgm.graphtools.path.paths.AbstractPath;
 import de.imise.tool3lgm.graphtools.path.paths.ElementaryPath;
 import de.imise.tool3lgm.graphtools.path.paths.ParallelPath;
 import de.imise.tool3lgm.graphtools.path.paths.SimplePath;
-import de.imise.tool3lgm.graphtools.undoredo.TransactionManager;
 import de.imise.tool3lgm.graphtools.userfield.definition.UserFieldDefinitions;
 import de.imise.tool3lgm.graphtools.view.container.BendpointContainer;
 import de.imise.tool3lgm.graphtools.view.container.EdgeContainer;
@@ -229,12 +229,9 @@ public class LGMGraphDocument extends GraphDocument {
         //        if (!CLIPBOARD_PATH.exists()) {
         //            return;
         //        }
+        start_transaction(STANDARD_PID);
 
-        int pid = TransactionManager.STANDARD_PID;
         try {
-            start_transaction(pid);
-            //            addRedo(pid, MODEL_ACTION_PASTE);
-            //            addUndo(pid, MODEL_ACTION_DELETE_FROM_MODEL);
             deselectAll(true);
             ModelCopyAndPasteHandler.paste();
             //gdcoll.loadClipboard(CLIPBOARD_PATH);
@@ -247,21 +244,22 @@ public class LGMGraphDocument extends GraphDocument {
             e.printStackTrace();
             return;
         }
-        finish_transaction(pid, DATA_CHANGED);
+        addRedo(STANDARD_PID, MODEL_ACTION_PASTE);
+        addUndo(STANDARD_PID, MODEL_ACTION_DELETE_FROM_MODEL);
+        finish_transaction(STANDARD_PID, DATA_CHANGED);
     }
 
     /**
      * @param istream
      */
     public synchronized void pasteInputStream(final InputStream istream) {
-        int pid = TransactionManager.STANDARD_PID;
-        start_transaction(pid);
-        addUndo(pid, MODEL_ACTION_DELETE_FROM_MODEL);
+        start_transaction(STANDARD_PID);
+        addUndo(STANDARD_PID, MODEL_ACTION_DELETE_FROM_MODEL);
         deselectAll(true);
         try {
             gdcoll.loadFile(istream);
         } catch (Exception e) {
-            undo(pid);
+            undo(STANDARD_PID);
             Log.show(Log.ERROR, getResString("FehlerAllgemein"), e);
             Object[] buttons = new Object[] {
                     getResString("ok")
@@ -270,7 +268,7 @@ public class LGMGraphDocument extends GraphDocument {
             e.printStackTrace();
             return;
         }
-        finish_transaction(pid, DATA_CHANGED);
+        finish_transaction(STANDARD_PID, DATA_CHANGED);
     }
 
     /**
