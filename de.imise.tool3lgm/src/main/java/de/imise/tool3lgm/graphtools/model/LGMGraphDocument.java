@@ -226,21 +226,14 @@ public class LGMGraphDocument extends GraphDocument {
      *
      */
     private synchronized void pasteClipboard() {
-        //        if (!CLIPBOARD_PATH.exists()) {
-        //            return;
-        //        }
+        if (!ModelCopyAndPasteHandler.canPaste()) {
+            return;
+        }
         start_transaction(STANDARD_PID);
-
         try {
             deselectAll(true);
             ModelCopyAndPasteHandler.paste();
-            //gdcoll.loadClipboard(CLIPBOARD_PATH);
         } catch (Exception e) {
-            Log.show(Log.ERROR, getResString("FehlerAllgemein"), e);
-            Object[] buttons = new Object[] {
-                    getResString("ok")
-            };
-            JOptionPane.showOptionDialog(Static.getMainFrame(), getResString("oeffnenfehler") + "\n" + CLIPBOARD_PATH.getPath() + "\n" + e.getMessage(), getResString("tool3lgm"), JOptionPane.OK_OPTION, JOptionPane.ERROR_MESSAGE, null, buttons, null);
             e.printStackTrace();
             return;
         }
