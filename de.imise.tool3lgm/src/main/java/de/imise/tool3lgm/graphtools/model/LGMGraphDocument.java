@@ -609,6 +609,7 @@ public class LGMGraphDocument extends GraphDocument {
                     int layer = targetEdgeC.layerFor();
                     LayerContainer targetDocLayer = targetDoc.getLayer(layer);
                     targetDocLayer.add(targetBpc);
+                    targetDoc.addSimpleToSelection(targetBpc);
                 }
 
                 //                Sys.out1("\n##############\n# 3 VOR ENDZUSTAND #\n##############");
