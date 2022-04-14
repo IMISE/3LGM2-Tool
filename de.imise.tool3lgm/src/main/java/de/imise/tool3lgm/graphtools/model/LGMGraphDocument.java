@@ -20,6 +20,7 @@ import java.awt.Point;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 
 import javax.swing.JOptionPane;
@@ -420,11 +421,10 @@ public class LGMGraphDocument extends GraphDocument {
              */
             DualHashBidiMap<String, String> oldToNewID = new DualHashBidiMap<>();
 
-            for (ModelElement sourceElement : resolvedCopyDependencies.elements) {
-                ElementContainer sourceContainer = sourceElement.getContainer(sourceDoc);
-                if (sourceContainer == null) {
-                    sourceContainer = sourceElement.getContainer(sourceMainDoc);
-                }
+            List<ElementContainer> elementContainerssInGraphOrder = getElementsInGraphOrder(resolvedCopyDependencies.elements, sourceDoc);
+
+            for (ElementContainer sourceContainer : elementContainerssInGraphOrder) {
+                ModelElement sourceElement = sourceContainer.getElement();
 
                 //we need the layer index in every case -> use
                 //this index to find the elements faster than
@@ -682,6 +682,47 @@ public class LGMGraphDocument extends GraphDocument {
         //        Sys.out1("\n##############\n# ENDZUSTAND #\n##############");
         //        GDCollectionPrinter.print(sourceCollection, true, true);
         //        GDCollectionPrinter.print(targetCollection, true, true);
+    }
+
+    /**
+     * In the function the containers of all passed nodes are searched in the
+     * passed sourceDoc and inserted first of all in the return list in exactly
+     * the order in which they also are present in the soureDoc in the graphic.
+     * After that, all other main model containers of the elements that do not
+     * occur in the partial model (unique nodes, edges and inflection points)
+     * are added to this list.
+     *
+     * @param elements
+     * @param sourceDoc
+     * @return a list of element containers. The first elements are all
+     *         NodeContainers
+     */
+    private static List<ElementContainer> getElementsInGraphOrder(List<ModelElement> elements, GraphDocument sourceDoc) {
+        HashSet<ModelElement> elementsCopyAsSet = new HashSet<>(elements);
+        List<ElementContainer> elementsInGraphOrder = new ArrayList<>();
+        //first add all real graph node containers from the submodel in the correct graph order
+        for (ElementContainer ec : sourceDoc.getNodeContainersInGraphOrder()) {
+            ModelElement me = ec.getElement();
+            if (elementsCopyAsSet.contains(me)) {
+                elementsInGraphOrder.add(ec);
+            }
+        }
+        //now add all
+        for (ModelElement me : elements) {
+            ElementContainer ec = me.getContainer(sourceDoc);
+            if (ec != null) {
+                if (ec instanceof BendpointContainer || ec instanceof EdgeContainer) {
+                    elementsInGraphOrder.add(ec);
+                }
+            } else {
+                GraphDocument sourceMainDoc = sourceDoc.getMainDoc();
+                ec = me.getContainer(sourceMainDoc);
+                if (ec != null) { // ec == null should never happen if the model is correct :)
+                    elementsInGraphOrder.add(ec);
+                }
+            }
+        }
+        return elementsInGraphOrder;
     }
 
     /**

@@ -5838,4 +5838,16 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
         return next_y_pos;
     }
 
+    /**
+     * @return
+     */
+    public Iterable<NodeContainer> getNodeContainersInGraphOrder() {
+        List<Iterable<NodeContainer>> layerGraphNodeContainers = new ArrayList<>();
+        for (LayerContainer lc : layer) {
+            Iterable<NodeContainer> graphNodeContainers = lc.getGraphNodeContainers();
+            layerGraphNodeContainers.add(graphNodeContainers);
+        }
+        return CollectionUtils.getCommonIterable(layerGraphNodeContainers);
+    }
+
 }
