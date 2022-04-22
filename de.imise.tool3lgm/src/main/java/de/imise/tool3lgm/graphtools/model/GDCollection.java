@@ -62,7 +62,6 @@ import static javax.swing.JOptionPane.INFORMATION_MESSAGE;
 import static javax.swing.JOptionPane.PLAIN_MESSAGE;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -127,7 +126,6 @@ import de.imise.tool3lgm.graphtools.view.graph.DefaultElementsLayoutDefinition;
 import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout;
 import de.imise.tool3lgm.graphtools.view.graph.GraphViewParameter;
 import de.imise.tool3lgm.log.Log;
-import de.imise.tool3lgm.xml.ToolXMLParser;
 import de.imise.util.StringUtils;
 import de.imise.util.collections.AlphabeticalSet;
 import de.imise.util.outparam.OutParamObject;
@@ -2799,52 +2797,6 @@ public class GDCollection extends UserFieldTarget implements MetaModelSpecific {
      */
     public GDCollectionIconTable getIconTable() {
         return iconTable;
-    }
-
-    //	/*
-    //	nach getCopyDependencies() suchen
-    //
-    //	Aufgabe
-    //	AufOrgKombination
-    //
-    //Organisationseinheit
-    //
-    //
-    //Input: Liste aller Elemente, die kopiert werden sollen
-    //
-    //Rekursive Funktion mit der Liste aller bereits kopierten Elemente
-    //
-    //
-    //
-    //
-    //Beim Kopieren muss man immer eine Liste aller bereits neu angelegten Elemente mitführen und damit evtl. Kreise prüfen
-    //
-    //lege neues Element an
-    //für alle Verbindungen des alten Elementes
-    //	prüfe ob eine weitere Verbindung dieser Art die Card überschreitet
-    //	wenn nein
-    //		lege neue Verbindung zum gleichen Element an
-    //	wenn ja
-    //		kopiere das ganze Element rekursiv
-    //
-    //*/
-    /**
-     * @param file
-     */
-    public void loadClipboard(final File file) {
-        //		System.err.println(file);
-        try {
-            setBulkMode(true);
-            FileInputStream clipStream = new FileInputStream(file);
-            if (ToolXMLParser.isParsableXMLFile(clipStream)) {
-                clipStream.getChannel().position(0);
-                fileHandler.loadXMLFile(clipStream, true);
-            }
-            clipStream.close();
-            setBulkMode(false);
-        } catch (Exception e) {
-            Log.show(ERROR, getResString("FehlerAllgemein"), e);
-        }
     }
 
     /**

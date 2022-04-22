@@ -1,6 +1,5 @@
 package de.imise.tool3lgm.graphtools.model;
 
-import static de.imise.tool3lgm.Static.getMainFrame;
 import static de.imise.tool3lgm.Tool3lgmConstants.CLIPBOARD_PATH;
 import static de.imise.tool3lgm.Tool3lgmModelType.ModelCategory.CLIPBOARD;
 import static de.imise.tool3lgm.graphtools.dialog.OverwriteDialog.OverwriteOption.IGNORE;
@@ -17,13 +16,10 @@ import static de.imise.tool3lgm.graphtools.model.LGMChangeListener.LGMChangeType
 import static de.imise.tool3lgm.graphtools.undoredo.TransactionManager.STANDARD_PID;
 
 import java.awt.Point;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
-
-import javax.swing.JOptionPane;
 
 import org.apache.commons.collections4.bidimap.DualHashBidiMap;
 
@@ -240,28 +236,6 @@ public class LGMGraphDocument extends GraphDocument {
         }
         addRedo(STANDARD_PID, MODEL_ACTION_PASTE);
         addUndo(STANDARD_PID, MODEL_ACTION_DELETE_FROM_MODEL);
-        finish_transaction(STANDARD_PID, DATA_CHANGED);
-    }
-
-    /**
-     * @param istream
-     */
-    public synchronized void pasteInputStream(final InputStream istream) {
-        start_transaction(STANDARD_PID);
-        addUndo(STANDARD_PID, MODEL_ACTION_DELETE_FROM_MODEL);
-        deselectAll(true);
-        try {
-            gdcoll.loadFile(istream);
-        } catch (Exception e) {
-            undo(STANDARD_PID);
-            Log.show(Log.ERROR, getResString("FehlerAllgemein"), e);
-            Object[] buttons = new Object[] {
-                    getResString("ok")
-            };
-            JOptionPane.showOptionDialog(getMainFrame(), "", getResString("tool3lgm"), JOptionPane.OK_OPTION, JOptionPane.ERROR_MESSAGE, null, buttons, null);
-            e.printStackTrace();
-            return;
-        }
         finish_transaction(STANDARD_PID, DATA_CHANGED);
     }
 
