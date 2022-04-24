@@ -297,7 +297,8 @@ public class ModelSelection extends MetaModelSpecificAdapter implements Set<Elem
         }
         if (o instanceof NodeContainer) {
             return selectedRealNodeContainer.contains(o);
-        } else if (o instanceof EdgeContainer) {
+        }
+        if (o instanceof EdgeContainer) {
             return selectedEdgeContainer.contains(o);
         }
         return false;
@@ -502,12 +503,11 @@ public class ModelSelection extends MetaModelSpecificAdapter implements Set<Elem
     @Override
     public Object[] toArray() {
         Object[] array = new Object[size()];
-        System.arraycopy(selectedRealNodeContainer.toArray(), 0, array, 0, selectedRealNodeContainer.size());
-        System.arraycopy(selectedEdgeContainer.toArray(), 0, array, selectedRealNodeContainer.size(), selectedEdgeContainer.size());
-        int destPos = selectedRealNodeContainer.size() + selectedEdgeContainer.size() - 1;
-        if (destPos < 0) {
-            destPos = 0;
-        }
+        int nodeCount = selectedRealNodeContainer.size();
+        int edgeCount = selectedEdgeContainer.size();
+        System.arraycopy(selectedRealNodeContainer.toArray(), 0, array, 0, nodeCount);
+        System.arraycopy(selectedEdgeContainer.toArray(), 0, array, nodeCount, edgeCount);
+        int destPos = nodeCount + edgeCount;
         System.arraycopy(selectedBendpointContainer.toArray(), 0, array, destPos, selectedBendpointContainer.size());
         return array;
     }

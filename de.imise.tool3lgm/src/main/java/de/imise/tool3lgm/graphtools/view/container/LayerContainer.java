@@ -803,7 +803,7 @@ public class LayerContainer extends ElementContainer implements Iterable<Element
     }
 
     public Iterable<NodeContainer> getGraphNodeContainers() {
-        return () -> graphNodeContainers.listIterator();
+        return () -> graphNodeContainers.iterator();
     }
 
     public Iterable<NodeContainer> getNodeContainersBackward() {
@@ -811,7 +811,7 @@ public class LayerContainer extends ElementContainer implements Iterable<Element
     }
 
     public Iterable<EdgeContainer> getEdgeContainers() {
-        return () -> edgeContainers.listIterator();
+        return () -> edgeContainers.iterator();
     }
 
     public Iterable<EdgeContainer> getEdgeContainersBackward() {
@@ -819,7 +819,7 @@ public class LayerContainer extends ElementContainer implements Iterable<Element
     }
 
     public Iterable<BendpointContainer> getBendpointContainers() {
-        return () -> bendpointContainers.listIterator();
+        return () -> bendpointContainers.iterator();
     }
 
     /**

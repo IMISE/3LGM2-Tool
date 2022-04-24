@@ -2,6 +2,7 @@ package de.imise.tool3lgm.graphtools.model;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 
 import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
@@ -423,11 +424,7 @@ public class ElementSelectionContext extends MetaModelSpecificAdapter {
             return false;
         }
         ElementSelectionContext other = (ElementSelectionContext) obj;
-        if (selectedContainer == null) {
-            if (other.selectedContainer != null) {
-                return false;
-            }
-        } else if (!selectedContainer.equals(other.selectedContainer)) {
+        if (!Objects.equals(selectedContainer, other.selectedContainer)) {
             return false;
         }
         return true;
