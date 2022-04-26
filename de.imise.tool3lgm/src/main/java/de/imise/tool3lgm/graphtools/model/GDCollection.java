@@ -1198,10 +1198,16 @@ public class GDCollection extends UserFieldTarget implements MetaModelSpecific {
                     //schließt, dass sich dann der Dialog des Elementes einfach schlließt, weil das Element inkonsistent geworden ist
                     //und somit hier gelöscht wurde.
                     Class<? extends Edge> edgeClass = edge.getClass();
-                    if (elem != null && elem != ignoreElementIfIconosistent && elem.countConnections(edgeClass) <= CoreMetaModel.getMinCardinality(elem.getClass(), edgeClass)) {
-                        if (!allElementsToDelete.contains(elem)) {
-                            allElementsToDelete.add(elem);
-                            dependentDeletedElements.add(elem);
+                    if (elem != null && elem != ignoreElementIfIconosistent) {
+                        Class<? extends ModelElement> elementClass = elem.getClass();
+                        if (elem.countConnections(edgeClass) <= CoreMetaModel.getMinCardinality(elementClass, edgeClass)) {
+                            //do not delete unselected master elements even if they are inconsistent. Only inconsistent slaves are deleted too
+                            if (CoreMetaModel.isCompositionSlave(edge, elem)) {
+                                if (!allElementsToDelete.contains(elem)) {
+                                    allElementsToDelete.add(elem);
+                                    dependentDeletedElements.add(elem);
+                                }
+                            }
                         }
                     }
                 }
