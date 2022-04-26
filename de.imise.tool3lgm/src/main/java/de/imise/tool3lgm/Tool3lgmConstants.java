@@ -95,8 +95,11 @@ public abstract class Tool3lgmConstants {
      */
     static final File LIB_DIR = new File(APPLICATION_DIR, "lib");
 
-    /** Template-Verzeichnis */
+    /** Templates directory */
     public static final File TEMPLATE_DIR = new File(APPLICATION_DIR, "Templates");
+
+    /** Model examples directory */
+    public static final File EXAMPLES_DIR = new File(APPLICATION_DIR, "Examples");
 
     /** Third party licenses html file */
     public static final File THIRD_PARTY_LICENSES_HTML_FILE = new File(APPLICATION_DIR, "thirdPartyLicense.html");
@@ -169,12 +172,6 @@ public abstract class Tool3lgmConstants {
      * sind.
      */
     public static final String RESOUCE_BASE_DEFAULT_USERPROPERTIES_DIR_NAME = "userfield/";
-
-    /** Absoluter Name des Beispielmodells */
-    public static final File EXAMPLE_MODEL_FILE = new File(TEMPLATE_DIR, "Beispiel.z3lgm");
-
-    /** Absoluter Name des Service-Beispielmodells */
-    public static final File EXAMPLE_SERVICE_MODEL_FILE = new File(TEMPLATE_DIR, "Beispiel_Service.3lgm");
 
     /**
      * Name des Verzeichnisses in dem die Ressourcen für den Webexport liegen

@@ -16,6 +16,7 @@ import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
@@ -660,10 +661,39 @@ public class ActionLibrary {
                     //nichts machen
                 }
             }
+            return getOpenFileActions(files, false);
+        }
+
+        /**
+         * @return Array of Actions to open the model example files
+         */
+        public static final Action[] getModelExampleFilesOpenActions() {
+            try {
+                File[] listFiles = Tool3lgmConstants.EXAMPLES_DIR.listFiles();
+                List<File> files = Arrays.asList(listFiles);
+                return getOpenFileActions(files, true);
+            } catch (Exception e) {
+                return new Action[0];
+            }
+        }
+
+        /**
+         * @param files
+         * @param removeFileExtension
+         * @return
+         */
+        private static final Action[] getOpenFileActions(List<File> files, boolean removeFileExtension) {
             ExtendedAction[] actions = new ExtendedAction[files.size()];
             for (int i = 0; i < actions.length; i++) {
                 final File file = files.get(i);
-                actions[i] = new ExtendedAction(file.getName()) {
+                String actionName = file.getName();
+                if (removeFileExtension) {
+                    int lastPointPos = actionName.lastIndexOf('.');
+                    if (lastPointPos > 0) {
+                        actionName = actionName.substring(0, lastPointPos);
+                    }
+                }
+                actions[i] = new ExtendedAction(actionName) {
                     @Override
                     public void actionPerformed(final ActionEvent e) {
                         Static.getTool().openModelFile(file);
@@ -858,22 +888,6 @@ public class ActionLibrary {
 
         /** öffnet die Website mit dem IssueTracker */
         public static final ExtendedAction ACTION_OPEN_URL_ISSUE_TRACKER = new OpenUrlAction(ActionIdentifier.ACTION_OPEN_URL_ISSUE_TRACKER, Tool3lgmConstants.TOOL_VERSION.toString());
-
-        /** öffnet das Beispielmodell */
-        public static final ExtendedAction ACTION_OPEN_EXAMPLE_MESSAGE_BASED = new StaticAction(ActionIdentifier.ACTION_OPEN_EXAMPLE_MESSAGE_BASED) {
-            @Override
-            public void actionPerformed() {
-                Static.getTool().openModelFile(Tool3lgmConstants.EXAMPLE_MODEL_FILE);
-            }
-        };
-
-        /** Opens the Service-Model Example */
-        public static final ExtendedAction ACTION_OPEN_EXAMPLE_SERVICE_ORIENTED = new StaticAction(ActionIdentifier.ACTION_OPEN_EXAMPLE_SERVICE_ORIENTED) {
-            @Override
-            public void actionPerformed() {
-                Static.getTool().openModelFile(Tool3lgmConstants.EXAMPLE_SERVICE_MODEL_FILE);
-            }
-        };
 
         /**
          * Öffnet den Ordner mit dem Beispielmodellen bzw die sog.

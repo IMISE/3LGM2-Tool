@@ -416,7 +416,7 @@ public final class MainFrameDesktopPane extends JPanel implements PropertyChange
             setWorkArea(graphView);
         }
         if (doc instanceof Szenario) {
-            setBettterDefaultZoom(graphView);
+            setBetterDefaultZoom(graphView);
         }
         return graphView;
     }
@@ -483,7 +483,7 @@ public final class MainFrameDesktopPane extends JPanel implements PropertyChange
     /**
      * @param frame
      */
-    private void setBettterDefaultZoom(final GraphViewPaneFrameComponent frame) {
+    private void setBetterDefaultZoom(final GraphViewPaneFrameComponent frame) {
         //raise default zoom to fill the whole screen
         InputGraphArea inputGraphArea = frame.getInputGraphArea();
         double zoom = inputGraphArea.getZoom();
@@ -493,7 +493,7 @@ public final class MainFrameDesktopPane extends JPanel implements PropertyChange
         if (!adjustZoom) {
             GDCollection gdcoll = frame.getCollection();
             File file = gdcoll.getFile();
-            adjustZoom = Tool3lgmConstants.EXAMPLE_MODEL_FILE.equals(file);
+            adjustZoom = isExampleFile(file);
         }
 
         if (adjustZoom) {
@@ -515,6 +515,16 @@ public final class MainFrameDesktopPane extends JPanel implements PropertyChange
             zoom = Math.max(zoom, GraphViewParameter.INITIAL_MIN_ZOOM);
             inputGraphArea.setZoom(zoom);
         }
+    }
+
+    /**
+     * @param file
+     * @return <code>true</code> if the given file is an model example file
+     */
+    private boolean isExampleFile(File file) {
+        String examplesDirPath = Tool3lgmConstants.EXAMPLES_DIR.getPath();
+        String filePath = file.getPath();
+        return filePath.startsWith(examplesDirPath);
     }
 
     @Override

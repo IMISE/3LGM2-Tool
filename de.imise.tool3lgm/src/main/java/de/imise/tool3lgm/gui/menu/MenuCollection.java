@@ -114,8 +114,8 @@ public class MenuCollection {
 
     /** Das Hilfe-Menu */
     public static final JMenu HELP_MENU = createMenu("help", ActionLibrary.HelpActions.ACTION_OPEN_HELP_DIALOG, new JSeparator(), ActionLibrary.HelpActions.ACTION_SHOW_INFORMATION_SYSTEM_EVALUATION_TUTORIAL, new JSeparator(),
-            ActionLibrary.HelpActions.ACTION_OPEN_URL_ONLINE_HELP, ActionLibrary.HelpActions.ACTION_OPEN_URL_3LGM_WEBSITE, new JSeparator(), ActionLibrary.HelpActions.ACTION_OPEN_EXAMPLE_MESSAGE_BASED,
-            ActionLibrary.HelpActions.ACTION_OPEN_EXAMPLE_SERVICE_ORIENTED, ActionLibrary.HelpActions.ACTION_OPEN_FILE_CHOSSER_IN_MODEL_LIBRARY, new JSeparator(), ActionLibrary.HelpActions.ACTION_OPEN_URL_ISSUE_TRACKER,
+            ActionLibrary.HelpActions.ACTION_OPEN_URL_ONLINE_HELP, ActionLibrary.HelpActions.ACTION_OPEN_URL_3LGM_WEBSITE, new JSeparator(), new ExampleFilesMenu(), ActionLibrary.HelpActions.ACTION_OPEN_FILE_CHOSSER_IN_MODEL_LIBRARY, new JSeparator(),
+            ActionLibrary.HelpActions.ACTION_OPEN_URL_ISSUE_TRACKER,
             ActionLibrary.HelpActions.ACTION_OPEN_ABOUT_DIALOG/*
                                                                * , new
                                                                * JSeparator() ,
@@ -255,6 +255,23 @@ public class MenuCollection {
         @Override
         protected void updateItems(final DynamicMenuPlaceholder placeholder) { // es gibt nur einen Placeholder in diesem Menu -> es ist eindeutig, welcher es hier ist
             Action[] actions = ActionLibrary.DynamicActions.getLastUsedFilesOpenActions();
+            placeholder.addAll(actions);
+        }
+    }
+
+    /** Das Datei-Menu */
+    private static class ExampleFilesMenu extends DynamicMenu {
+
+        /** Name dieses Menus */
+        public static final String title = getResString("MENU_HELP_MODEL_EXAMPLES");
+
+        public ExampleFilesMenu() {
+            super(title, new DynamicMenuPlaceholder());
+        }
+
+        @Override
+        protected void updateItems(final DynamicMenuPlaceholder placeholder) { // es gibt nur einen Placeholder in diesem Menu -> es ist eindeutig, welcher es hier ist
+            Action[] actions = ActionLibrary.DynamicActions.getModelExampleFilesOpenActions();
             placeholder.addAll(actions);
         }
     }
