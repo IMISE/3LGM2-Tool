@@ -3081,22 +3081,24 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
         MetaModel metaModel = getMetaModel();
         for (ElementContainer ec : selectedContainer) {
             ModelElement me = ec.getElement();
-            Class<? extends ModelElement> elementClass = me.getClass();
-            if (metaModel.isPaintable(elementClass)) {
-                for (Edge edge : me.getEdges()) {
-                    ModelElement other = edge.getOther(me);
-                    if (other == null) {
-                        String startEnd = edge.isStart(me) ? "end" : "start";
-                        Sys.err1("Model: " + gdcoll.getName() + " --- Submodel: " + this + " --- Edge " + edge + " (" + edge.getClass().getSimpleName() + ") of element " + me + " (" + me.getClass().getSimpleName() + ") has null as " + startEnd
-                                + " element.");
-                    }
-                    if (other != null && other.isPaintable()) { //The null check is only for the symptoms not against the cause. Sometimes there are faulty edges where the other is null.
-                        ElementContainer otherEc = other.getContainer(this);
-                        if (selectedContainer.contains(otherEc)) {
-                            EdgeContainer edgeC = edge.getContainer(this);
-                            if (edgeC != null) {
-                                for (BendpointContainer bc : edgeC.iterateBendpointContainers()) {
-                                    container2Select.add(bc);
+            if (!(me instanceof Bendpoint)) { //we must ignore bendpoints itself here
+                Class<? extends ModelElement> elementClass = me.getClass();
+                if (metaModel.isPaintable(elementClass)) {
+                    for (Edge edge : me.getEdges()) {
+                        ModelElement other = edge.getOther(me);
+                        if (other == null) {
+                            String startEnd = edge.isStart(me) ? "end" : "start";
+                            Sys.err1("Model: " + gdcoll.getName() + " --- Submodel: " + this + " --- Edge " + edge + " (" + edge.getClass().getSimpleName() + ") of element " + me + " (" + me.getClass().getSimpleName() + ") has null as " + startEnd
+                                    + " element.");
+                        }
+                        if (other != null && other.isPaintable()) { //The null check is only for the symptoms not against the cause. Sometimes there are faulty edges where the other is null.
+                            ElementContainer otherEc = other.getContainer(this);
+                            if (selectedContainer.contains(otherEc)) {
+                                EdgeContainer edgeC = edge.getContainer(this);
+                                if (edgeC != null) {
+                                    for (BendpointContainer bc : edgeC.iterateBendpointContainers()) {
+                                        container2Select.add(bc);
+                                    }
                                 }
                             }
                         }
