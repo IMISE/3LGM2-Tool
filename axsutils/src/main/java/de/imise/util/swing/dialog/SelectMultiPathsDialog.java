@@ -1,12 +1,7 @@
-/*
- * Created on 17.12.2003 To change the template for this generated file go to
- * Window&gt;Preferences&gt;Java&gt;Code Generation&gt;Code and Comments
- */
-package de.imise.tool3lgm.graphtools.dialog.search;
-
-import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
+package de.imise.util.swing.dialog;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -18,6 +13,7 @@ import java.util.List;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.DefaultListModel;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JDialog;
@@ -27,37 +23,56 @@ import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
-import de.imise.tool3lgm.Tool3lgmConstants;
-import de.imise.tool3lgm.userproperties.UserProperties;
+import de.imise.util.resource.SimpleResourceIconSource;
 import de.imise.util.swing.component.DirectoryTreePane;
 
 /**
- * @author Thomas Rudert TODO:AXS: Verallgemeinern und ab ins utils-package
- *         (also von allen tool3lgm-Zeug außerhalb des util-Packages befreien)
- *         To change the template for this generated type comment go to
- *         Window&gt;Preferences&gt;Java&gt;Code Generation&gt;Code and Comments
+ * @author Thomas Rudert (17.12.2003), AXS
  */
-public class SearchPathDialog extends JDialog implements ActionListener {
-    private final JList searchList = new JList(new DefaultListModel() {
+public class SelectMultiPathsDialog extends AbstractSizeAndPositionRestoringDialog implements ActionListener {
+
+    /** The resoruce bundle handler */
+    private static final DialogResourceHandler drh = new DialogResourceHandler(SelectMultiPathsDialog.class);
+
+    /** Checkbox to enable the option to include sub directories */
+    private final JCheckBox includeSubDir = new JCheckBox(drh.getResString("trans_subdir"));
+
+    /** Treepane to display the paths */
+    private DirectoryTreePane pathTree;
+
+    /**
+     * Exit code of the dialog. Is only changed to 1 if the dialog is closed by
+     * the Close button
+     */
+    private int exitCode = -1;
+
+    /** The list that displays all selected paths */
+    private final JList<File> searchList = new JList<>(new DefaultListModel<File>() {
         @Override
-        public void addElement(final Object obj) {
-            if (obj instanceof File && !contains(obj)) {
+        public void addElement(final File obj) {
+            if (!contains(obj)) {
                 super.addElement(obj);
             }
         }
     });
 
-    private final JCheckBox includeSubDir = new JCheckBox(getResString("trans_subdir"));
-
-    private DirectoryTreePane pathTree;
-
-    public SearchPathDialog(final JDialog owner, final List<File> importPath) {
-        super(owner, getResString("trans_path"), true);
+    /**
+     * @param owner
+     * @param title
+     * @param importPath
+     */
+    public SelectMultiPathsDialog(final JDialog owner, String title, final List<File> importPath) {
+        super(owner, title, true);
         init(importPath);
     }
 
-    public SearchPathDialog(final JFrame owner, final List<File> importPath) {
-        super(owner, getResString("trans_path"), true);
+    /**
+     * @param owner
+     * @param title
+     * @param importPath
+     */
+    public SelectMultiPathsDialog(final JFrame owner, String title, final List<File> importPath) {
+        super(owner, title, true);
         init(importPath);
     }
 
@@ -68,7 +83,7 @@ public class SearchPathDialog extends JDialog implements ActionListener {
 
             for (int i = 0; i < selection.length; i++) {
                 if (selection[i].isDirectory()) {
-                    ((DefaultListModel) searchList.getModel()).addElement(selection[i]);
+                    ((DefaultListModel<File>) searchList.getModel()).addElement(selection[i]);
                 }
             }
         }
@@ -76,7 +91,7 @@ public class SearchPathDialog extends JDialog implements ActionListener {
         if (e.getActionCommand().equals("entfernen")) {
             int[] indices = searchList.getSelectedIndices();
             for (int i = indices.length - 1; i >= 0; i--) {
-                ((DefaultListModel) searchList.getModel()).removeElementAt(indices[i]);
+                ((DefaultListModel<File>) searchList.getModel()).removeElementAt(indices[i]);
             }
         }
 
@@ -86,26 +101,53 @@ public class SearchPathDialog extends JDialog implements ActionListener {
 
     }
 
+    @Override
+    public Dimension getDefaultSize() {
+        return new Dimension(600, 400);
+    }
+
+    /**
+     *
+     */
     private void commit() {
-        UserProperties.clearXslSearchDir();
-        if (includeSubDir.isSelected()) {
-            UserProperties.addAllXslSearchDir(rekAddSubDir(getSelectedPath().toArray()));
-        } else {
-            UserProperties.addAllXslSearchDir(getSelectedPath());
-        }
+        exitCode = 1;
         dispose();
     }
 
-    private List<File> getSelectedPath() {
+    /**
+     * @return
+     */
+    public List<File> getResultPaths() {
+        List<File> selectedPaths = getSelectedPaths();
+        if (includeSubDir.isSelected()) {
+            return rekAddSubDir(selectedPaths.toArray());
+        }
+        return selectedPaths;
+    }
+
+    /**
+     * @return <code>true</code> the dilaog was closed by the Close button. In
+     *         all other cases it returns <code>false</code>.
+     */
+    public boolean isDisposedViaCloseButton() {
+        return exitCode == 1;
+    }
+
+    /**
+     * @return
+     */
+    private List<File> getSelectedPaths() {
         List<File> fileArray = new ArrayList<>(searchList.getModel().getSize());
         for (int i = 0; i < searchList.getModel().getSize(); i++) {
-            fileArray.add((File) searchList.getModel().getElementAt(i));
+            fileArray.add(searchList.getModel().getElementAt(i));
         }
         return fileArray;
     }
 
+    /**
+     * @param importPath
+     */
     private void init(final List<File> importPath) {
-        setSize(400, 400);
         getContentPane().setLayout(new BorderLayout());
 
         JPanel panel1 = new JPanel();
@@ -113,18 +155,20 @@ public class SearchPathDialog extends JDialog implements ActionListener {
 
         JPanel panel = new JPanel(new BorderLayout(0, 3));
         panel.add(pathTree = new DirectoryTreePane(), BorderLayout.CENTER);
-        panel.add(new JLabel(getResString("trans_dir") + ":"), BorderLayout.NORTH);
+        panel.add(new JLabel(drh.getResString("trans_dir_struct") + ":"), BorderLayout.NORTH);
         panel.setPreferredSize(getPreferredSize());
         panel1.add(panel);
         panel1.add(Box.createHorizontalStrut(5));
 
         panel = new JPanel();
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-        JButton button = new JButton(Tool3lgmConstants.getIcon("arrow_right2.gif"));
+        ImageIcon icon = SimpleResourceIconSource.getIcon(getClass(), "ICON_LARGE_ARROW_RIGHT");
+        JButton button = new JButton(icon);
         button.addActionListener(this);
         button.setActionCommand("hinzufuegen");
         panel.add(button);
-        button = new JButton(Tool3lgmConstants.getIcon("arrow_left2.gif"));
+        icon = SimpleResourceIconSource.getIcon(getClass(), "ICON_LARGE_ARROW_LEFT");
+        button = new JButton(icon);
         button.addActionListener(this);
         button.setActionCommand("entfernen");
         panel.add(button);
@@ -133,7 +177,7 @@ public class SearchPathDialog extends JDialog implements ActionListener {
 
         panel = new JPanel(new BorderLayout(0, 3));
         panel.add(new JScrollPane(searchList), BorderLayout.CENTER);
-        panel.add(new JLabel(getResString("trans_path") + ":"), BorderLayout.NORTH);
+        panel.add(new JLabel(drh.getResString("trans_dirs") + ":"), BorderLayout.NORTH);
         panel.setPreferredSize(getPreferredSize());
         panel1.add(panel);
         getContentPane().add(panel1, BorderLayout.CENTER);
@@ -141,17 +185,21 @@ public class SearchPathDialog extends JDialog implements ActionListener {
         panel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 10));
 
         panel.add(includeSubDir);
-        button = new JButton(getResString("trans_close"));
+        button = new JButton(drh.getResString("trans_close"));
         button.addActionListener(this);
         button.setActionCommand("close");
         panel.add(button);
         getContentPane().add(panel, BorderLayout.SOUTH);
 
         for (int i = 0; i < importPath.size(); i++) {
-            ((DefaultListModel) searchList.getModel()).addElement(importPath.get(i));
+            ((DefaultListModel<File>) searchList.getModel()).addElement(importPath.get(i));
         }
     }
 
+    /**
+     * @param path
+     * @return
+     */
     private List<File> rekAddSubDir(final Object[] path) {
         if (path == null || path.length == 0) {
             return new ArrayList<>(0);

@@ -15,7 +15,6 @@ import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
-import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -29,7 +28,6 @@ import javax.swing.table.DefaultTableModel;
 
 import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.Tool3lgmConstants;
-import de.imise.tool3lgm.graphtools.dialog.search.SearchPathDialog;
 import de.imise.tool3lgm.graphtools.dialog.tools.SzenarioTableModel;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GDCollectionImExportHandler;
@@ -38,13 +36,15 @@ import de.imise.tool3lgm.log.Log;
 import de.imise.tool3lgm.userproperties.UserProperties;
 import de.imise.util.Alphabetical;
 import de.imise.util.BrowseUtils;
+import de.imise.util.swing.dialog.AbstractSizeAndPositionRestoringDialog;
 import de.imise.util.swing.dialog.ExtendedFileChooser;
 import de.imise.util.swing.dialog.ProgressDialog;
+import de.imise.util.swing.dialog.SelectMultiPathsDialog;
 
 /**
  * @author Thomas Rudert Dialog zum Export von Modellen ueber XSLT
  */
-public class XMLExportDialog extends JDialog implements ActionListener {
+public class XMLExportDialog extends AbstractSizeAndPositionRestoringDialog implements ActionListener {
 
     /**
      * COMMENTME
@@ -189,19 +189,20 @@ public class XMLExportDialog extends JDialog implements ActionListener {
             buttonChange.setEnabled(true);
         });
 
-        Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
-
-        setSize(dim.width < 1024 ? dim.width : 1024, dim.height < 768 ? dim.height : 768);
-        setResizable(true);
-
         progressDialog.dispose();
 
         super.setVisible(true);
 
     }
 
+    @Override
+    public Dimension getDefaultSize() {
+        Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+        return new Dimension(dim.width < 1024 ? dim.width : 1024, dim.height < 768 ? dim.height : 768);
+    }
+
     /**
-     * erzeugt einen neuen Button, und fuegt den Dialog als ActionListener zum
+     * Erzeugt einen neuen Button, und fuegt den Dialog als ActionListener zum
      * Button hinzu
      *
      * @param text, Schluessel fuer Resourcenpaket fuer die Beschriftung des
@@ -215,17 +216,15 @@ public class XMLExportDialog extends JDialog implements ActionListener {
         return button;
     }
 
-    /**
-     * Abfangen der ActionEvents und Behandlung dieser
-     *
-     * @see java.awt.event.ActionListener#actionPerformed(ActionEvent)
-     */
     @Override
     public void actionPerformed(final ActionEvent e) {
         int selectedRow = table.getSelectedRow();
         if (e.getActionCommand().equals("trans_path")) {
-            SearchPathDialog pathDialog = new SearchPathDialog(this, UserProperties.getXSLSearchDirs());
+            SelectMultiPathsDialog pathDialog = new SelectMultiPathsDialog(Static.getMainFrame(), getResString("trans_path"), UserProperties.getXSLSearchDirs());
             pathDialog.setVisible(true);
+            if (pathDialog.isDisposedViaCloseButton()) {
+                UserProperties.setAllXslSearchDirs(pathDialog.getResultPaths());
+            }
             updateTable();
         }
 
@@ -328,6 +327,9 @@ public class XMLExportDialog extends JDialog implements ActionListener {
 
     /* --- tabelle ende --- */
 
+    /**
+     * @return
+     */
     private static final String getDefaultXSLFile() {
         //total ineffizient, wird aber nicht sooft aufgerufen. Daher kann man auf das
         //Zusammenbauen per StringBuilder verzichten
@@ -348,6 +350,9 @@ public class XMLExportDialog extends JDialog implements ActionListener {
                 "<xsl:template match=\"/\">\n\n\n" + "</xsl:template>\n\n" + "</xsl:stylesheet>\n";
     }
 
+    /**
+     *
+     */
     private class TableModel extends DefaultTableModel {
         private final List<XSLTScript> xslScripts;
 
@@ -369,7 +374,6 @@ public class XMLExportDialog extends JDialog implements ActionListener {
         }
 
         public TableModel(final List<XSLTScript> xslScripts) {
-            super();
             this.xslScripts = xslScripts;
         }
 

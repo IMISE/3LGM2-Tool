@@ -752,15 +752,20 @@ public class UserProperties extends AbstractUserProperties {
         return new ArrayList<>(xslSearchDirs);
     }
 
+    /**
+     * @param file
+     * @return
+     */
     public static boolean addXslSearchDir(final File file) {
         return xslSearchDirs.add(file);
     }
 
-    public static void clearXslSearchDir() {
+    /**
+     * @param fileList
+     * @return
+     */
+    public static boolean setAllXslSearchDirs(final Collection<File> fileList) {
         xslSearchDirs.clear();
-    }
-
-    public static boolean addAllXslSearchDir(final Collection<File> fileList) {
         return xslSearchDirs.addAll(fileList);
     }
 

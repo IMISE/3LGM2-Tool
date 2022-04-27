@@ -6,6 +6,7 @@ package de.imise.tool3lgm.xslt;
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.HeadlessException;
 import java.awt.event.ActionEvent;
@@ -19,7 +20,6 @@ import java.util.List;
 import javax.swing.AbstractAction;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
-import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -35,7 +35,6 @@ import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.Tool3lgmConstants.FileFilterType;
 import de.imise.tool3lgm.graphtools.consistency.ModelValidator;
-import de.imise.tool3lgm.graphtools.dialog.search.SearchPathDialog;
 import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GDCollectionImExportHandler;
@@ -51,13 +50,15 @@ import de.imise.util.htmlxml.XMLCharacterCoder;
 import de.imise.util.image.ComponentAsImageExportHandler;
 import de.imise.util.io.FileHandler;
 import de.imise.util.swing.component.text.ExtendedTextField;
+import de.imise.util.swing.dialog.AbstractSizeAndPositionRestoringDialog;
 import de.imise.util.swing.dialog.DirectoryChooser;
 import de.imise.util.swing.dialog.ProgressDialog;
+import de.imise.util.swing.dialog.SelectMultiPathsDialog;
 
 /**
  * @author Thomas Rudert
  */
-public class WebExportDialog extends JDialog {
+public class WebExportDialog extends AbstractSizeAndPositionRestoringDialog {
 
     /**
      * Rssourcendateien, die der Webexportdialog braucht. Achtung: die
@@ -103,10 +104,15 @@ public class WebExportDialog extends JDialog {
             }
         }));
 
-        panel.add(new JButton(new AbstractAction(getResString("trans_path")) {
+        String title = getResString("trans_path");
+        panel.add(new JButton(new AbstractAction(title) {
             @Override
             public void actionPerformed(final ActionEvent e) {
-                new SearchPathDialog(owner, UserProperties.getXSLSearchDirs()).setVisible(true);
+                SelectMultiPathsDialog pathDialog = new SelectMultiPathsDialog(Static.getMainFrame(), title, UserProperties.getXSLSearchDirs());
+                pathDialog.setVisible(true);
+                if (pathDialog.isDisposedViaCloseButton()) {
+                    UserProperties.setAllXslSearchDirs(pathDialog.getResultPaths());
+                }
                 tableModel.clear();
                 tableModel.addScripts(xsltResourceHandler.getStandardScripts());
                 tableModel.addScripts(XSLTFileHandler.getXSLTScripts(UserProperties.getXSLSearchDirs()));
@@ -163,15 +169,7 @@ public class WebExportDialog extends JDialog {
         table.getColumnModel().getColumn(2).setPreferredWidth(200);
         table.getColumnModel().getColumn(3).setPreferredWidth(500);
 
-        pack();
-
-        int x = getOwner().getX() + (getOwner().getWidth() - getWidth()) / 2;
-        int y = getOwner().getY() + (getOwner().getHeight() - getHeight()) / 2;
-        x = x > 0 ? x : 0;
-        y = y > 0 ? y : 0;
-        x = x + getHeight() < getGraphicsConfiguration().getDevice().getDisplayMode().getWidth() ? x : getGraphicsConfiguration().getDevice().getDisplayMode().getWidth() - getWidth();
-        y = y + getHeight() < getGraphicsConfiguration().getDevice().getDisplayMode().getHeight() ? y : getGraphicsConfiguration().getDevice().getDisplayMode().getHeight() - getHeight();
-        setLocation(x, y);
+        restoreSizeAndPosition();
 
         progressDialog.dispose();
 
@@ -180,6 +178,11 @@ public class WebExportDialog extends JDialog {
     public static void showWebExportDialog(final JFrame owner, final GDCollection collection) {
         new WebExportDialog(owner, collection).setVisible(true);
 
+    }
+
+    @Override
+    public Dimension getDefaultSize() {
+        return super.getDefaultSize();
     }
 
     private void commit() {
@@ -438,7 +441,7 @@ public class WebExportDialog extends JDialog {
             this.xslScripts = xslScripts;
             selections = new Boolean[xslScripts.size()];
             for (int i = 0; i < xslScripts.size(); i++) {
-                selections[i] = Boolean.valueOf(true);
+                selections[i] = true;
             }
         }
 
@@ -457,7 +460,7 @@ public class WebExportDialog extends JDialog {
                 newSelections[i] = selections[i];
             }
             for (; i < newSelections.length; i++) {
-                newSelections[i] = Boolean.valueOf(true);
+                newSelections[i] = true;
             }
             selections = newSelections;
         }
@@ -543,7 +546,7 @@ public class WebExportDialog extends JDialog {
         public ArrayList<XSLTScript> getSelectedScripts() {
             ArrayList<XSLTScript> selected = new ArrayList<>();
             for (int i = 0; i < selections.length; i++) {
-                if (selections[i].booleanValue()) {
+                if (selections[i]) {
                     selected.add(xslScripts.get(i));
                 }
             }
