@@ -37,6 +37,7 @@ import de.imise.tool3lgm.graphtools.view.container.LayerContainer;
 import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
 import de.imise.tool3lgm.xml.ToolXMLParser;
 import de.imise.util.IDStringGenerator;
+import de.imise.util.Sys;
 
 /**
  * Stellt Funktionen, mit denen das Modell bereinigt werden kann.
@@ -423,7 +424,7 @@ public class ModelCleaner {
     private void print(final ModelElement me, final GraphDocument doc, final int id) {
         if (PRINT_ERRORS) {
             String meID = me.getID();
-            System.err.println(id + ": " + me.getClass().getSimpleName() + " " + doc + " " + me.getClearName() + " " + meID + " " + IDStringGenerator.getCreationTimeMedium(meID));
+            Sys.errm(1, 1, id + ": " + me.getClass().getSimpleName() + " " + doc + " " + me.getClearName() + " " + meID + " " + IDStringGenerator.getCreationTimeMedium(meID));
         }
     }
 
