@@ -1,11 +1,13 @@
 package de.imise.tool3lgm.graphtools.metamodel;
 
+import java.util.Objects;
+
 import de.imise.tool3lgm.MetaModelContext;
 import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
 import de.imise.util.Sys;
 
 /**
- * Adapter for the interface {@link MetaModelSpecific}. Thsi Adapter makes all
+ * Adapter for the interface {@link MetaModelSpecific}. This adapter makes all
  * interface functions final.
  *
  * @author AXS (04.09.2019)
@@ -146,10 +148,7 @@ public class MetaModelSpecificAdapter implements MetaModelSpecific {
 
     @Override
     public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + (metaModelDefintionClass == null ? 0 : metaModelDefintionClass.hashCode());
-        return result;
+        return Objects.hash(metaModelDefintionClass);
     }
 
     @Override
@@ -164,11 +163,7 @@ public class MetaModelSpecificAdapter implements MetaModelSpecific {
             return false;
         }
         MetaModelSpecificAdapter other = (MetaModelSpecificAdapter) obj;
-        if (metaModelDefintionClass == null) {
-            if (other.metaModelDefintionClass != null) {
-                return false;
-            }
-        } else if (!metaModelDefintionClass.equals(other.metaModelDefintionClass)) {
+        if (!Objects.equals(metaModelDefintionClass, other.metaModelDefintionClass)) {
             return false;
         }
         return true;

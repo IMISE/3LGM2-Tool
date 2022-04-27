@@ -3,7 +3,6 @@ package de.imise.tool3lgm.xml;
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
 
 import java.io.DataInputStream;
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -97,24 +96,32 @@ public class ToolXMLParser {
 
     private static final String FILE_VERSION_MODEL_CATEGORY_PREFIX = " category='";
 
-    private final SAXParser parser;
+    private SAXParser parser;
 
     private FileVersion version = new FileVersion();
 
     private final InputStream parseStream;
 
     /**
-     *
+     * @param collection
+     * @param inputStream
+     * @param paste
+     * @param loadContent only if this parameter is <code>true</code> then the
+     *            file content will be really loaded/parsed. If
+     *            <code>false</code> then only the {@link FileVersion} and the
+     *            {@link Tool3lgmModelType} will be loaded.
+     * @throws SAXException
+     * @throws ParserConfigurationException
+     * @throws FileNotFoundException
+     * @throws IOException
+     * @throws LGMVersionException
+     * @throws XMLVersionException
      */
-    public ToolXMLParser(final GDCollection collection, final InputStream inputStream, final boolean paste) throws SAXException, ParserConfigurationException, FileNotFoundException, IOException, LGMVersionException, XMLVersionException {
+    public ToolXMLParser(final GDCollection collection, final InputStream inputStream, final boolean paste, boolean loadContent) throws SAXException, ParserConfigurationException, FileNotFoundException, IOException, LGMVersionException,
+            XMLVersionException {
 
         parseStream = inputStream;
         gdcoll = collection;
-
-        SAXParserFactory factory = SAXParserFactory.newInstance();
-
-        parser = factory.newSAXParser();
-        parser.getXMLReader().setDTDHandler(new ToolDTDHandler());
 
         version = extractVersionAndMetaModel(parseStream);
         if (!paste) {
@@ -141,11 +148,16 @@ public class ToolXMLParser {
         //            String toolMetaModelName = Tool3lgmMetaModelContext.getMetaModelDisplayableName(Tool3lgmMetaModelContext.getMetaModelClass());
         //            JOptionPane.showMessageDialog(Static.getTool(), getResString("wrong_metamodel_open_warning", fileMetaModelName, toolMetaModelName), getResString("warnung"), JOptionPane.WARNING_MESSAGE);
         //        }
+        if (loadContent) {
+            SAXParserFactory factory = SAXParserFactory.newInstance();
+            parser = factory.newSAXParser();
+            parser.getXMLReader().setDTDHandler(new ToolDTDHandler());
 
-        /* Tool3lgm2-Datei-Version */
-        ContentHandler contentHandler = getContentHandler(collection, version, paste);
-        XMLReader xmlReader = parser.getXMLReader();
-        xmlReader.setContentHandler(contentHandler);
+            /* Tool3lgm2-Datei-Version */
+            ContentHandler contentHandler = getContentHandler(collection, version, paste);
+            XMLReader xmlReader = parser.getXMLReader();
+            xmlReader.setContentHandler(contentHandler);
+        }
     }
 
     /**
@@ -377,21 +389,6 @@ public class ToolXMLParser {
         public String toString() {
             return "MetaModel=" + metaModelContext + " xmlVersion='" + SUPPORTED_XML_VERSIONS[xmlVersionIndex] + "' lgmVersion='" + FILE_VERSION_SUPPORTED_NUMBERS[lgmVersionIndex] + "'";
         }
-    }
-
-    /**
-     * @param file
-     * @return
-     * @throws FileNotFoundException
-     * @throws IOException
-     * @throws LGMVersionException
-     * @throws XMLVersionException
-     */
-    public static FileVersion extractVersionAndMetaModel(final File file) throws FileNotFoundException, IOException, LGMVersionException, XMLVersionException {
-        FileInputStream fileInputStream = new FileInputStream(file);
-        FileVersion fileVersion = extractVersionAndMetaModel(fileInputStream);
-        fileInputStream.close();
-        return fileVersion;
     }
 
     /**

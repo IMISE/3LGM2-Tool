@@ -62,7 +62,6 @@ import static javax.swing.JOptionPane.INFORMATION_MESSAGE;
 import static javax.swing.JOptionPane.PLAIN_MESSAGE;
 
 import java.io.File;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
@@ -2803,23 +2802,6 @@ public class GDCollection extends UserFieldTarget implements MetaModelSpecific {
      */
     public GDCollectionIconTable getIconTable() {
         return iconTable;
-    }
-
-    /**
-     * @param istream
-     */
-    public void loadFile(final InputStream istream) {
-        try {
-            // automatic mode is set, in order to prevent the changed variable to be set to true
-            // when loading a model
-            setAutomaticMode(true);
-            setBulkMode(true);
-            fileHandler.loadXMLFile(istream, true);
-            setBulkMode(false);
-            setAutomaticMode(false);
-        } catch (Exception e) {
-            Log.show(ERROR, getResString("FehlerAllgemein"), e);
-        }
     }
 
     /**

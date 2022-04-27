@@ -21,6 +21,7 @@ import javax.xml.stream.XMLStreamException;
 import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.Tool3lgmConstants.FileFilterType;
+import de.imise.tool3lgm.Tool3lgmModelType;
 import de.imise.tool3lgm.graphtools.userfield.definition.UserFieldDefinitions;
 import de.imise.tool3lgm.log.Log;
 import de.imise.tool3lgm.userproperties.UserProperties;
@@ -232,6 +233,18 @@ public class GDCollectionFileHandler {
     }
 
     /**
+     * @param file
+     * @return
+     * @throws Exception
+     */
+    public Tool3lgmModelType getModelType(File file) throws Exception {
+        if (loadFromRAF(file, false)) {
+            return gdcoll.getModelType();
+        }
+        return null;
+    }
+
+    /**
      * Load collection from file which is specified in field file
      *
      * @param file File to load/import in the corresponding model. If
@@ -242,6 +255,23 @@ public class GDCollectionFileHandler {
      * @author Thomas Rudert
      */
     public boolean loadFromRAF(final File file) throws Exception {
+        return loadFromRAF(file, true);
+    }
+
+    /**
+     * Load collection from file which is specified in field file
+     *
+     * @param file File to load/import in the corresponding model. If
+     *            <code>null</code>, the randomAccesFile of this will be loaded
+     *            in this model.
+     * @param loadContent only if this parameter is <code>true</code> then the
+     *            file content will be really loaded. If <code>false</code> then
+     *            only the FileVersion will be loaded.
+     * @return true if reading was successful
+     * @throws Exception; throws all exceptions happen during reading
+     * @author Thomas Rudert
+     */
+    private boolean loadFromRAF(final File file, boolean loadContent) throws Exception {
         Static.getTool().setCursor(Tool3lgmConstants.getWaitCursor());
 
         RandomAccessFile randomAccessFile;
@@ -260,19 +290,19 @@ public class GDCollectionFileHandler {
             }
             randomAccessFileInputStream = new StayOpenFileInputStream(randomAccessFile.getFD());
             if (line.startsWith("<!--ziped Tool3lgmFile-->")) {
-                readingSuccessful = loadZipFile(randomAccessFileInputStream);
+                readingSuccessful = loadZipFile(randomAccessFileInputStream, loadContent);
                 if (readingSuccessful) {
                     isZipFile = true;
                 }
             } else if (line.startsWith("PK")) {
                 randomAccessFileInputStream.getChannel().position(0);
-                readingSuccessful = loadZipFile(randomAccessFileInputStream);
+                readingSuccessful = loadZipFile(randomAccessFileInputStream, loadContent);
                 if (readingSuccessful) {
                     isZipFile = true;
                 }
             } else {
                 randomAccessFileInputStream.getChannel().position(0);
-                readingSuccessful = loadFromFileInputStream(randomAccessFileInputStream);
+                readingSuccessful = loadFromFileInputStream(randomAccessFileInputStream, loadContent);
                 if (readingSuccessful) {
                     isZipFile = false;
                 }
@@ -289,19 +319,21 @@ public class GDCollectionFileHandler {
         }
         Static.getTool().setCursor(Tool3lgmConstants.getNormalCursor());
         return readingSuccessful;
-
     }
 
     /**
      * load collection from packed zipFile
      *
      * @param fileStream the FileInputStream to the file which will be read
+     * @param loadContent only if this parameter is <code>true</code> then the
+     *            file content will be really loaded. If <code>false</code> then
+     *            only the FileVersion will be loaded.
      * @return true, if reading was successful
      * @throws IOException if something wrong with the FileInputStream or the
      *             zip-format
      * @author Thomas Rudert
      */
-    public boolean loadZipFile(final InputStream fileStream) throws IOException {
+    private boolean loadZipFile(final InputStream fileStream, boolean loadContent) throws IOException {
         ZipInputStream zipStream = new ZipInputStream(fileStream) {
 
             @Override
@@ -309,8 +341,7 @@ public class GDCollectionFileHandler {
             }
         };
         zipStream.getNextEntry();
-        boolean retVal = loadXMLFile(zipStream, false);
-        //      zipStream.close();
+        boolean retVal = loadXMLFile(zipStream, false, loadContent);
         return retVal;
     }
 
@@ -318,6 +349,9 @@ public class GDCollectionFileHandler {
      * load collection from (not packed) file
      *
      * @param fileStream the FileInputStream to the File to load
+     * @param loadContent only if this parameter is <code>true</code> then the
+     *            file content will be really loaded. If <code>false</code> then
+     *            only the FileVersion will be loaded.
      * @return true, if reading was successful
      * @throws IOException
      * @throws LGMVersionException, if file-version is not readable
@@ -326,31 +360,39 @@ public class GDCollectionFileHandler {
      * @throws DataFormatException
      * @author Thomas Rudert
      */
-    private boolean loadFromFileInputStream(final FileInputStream fileStream) throws IOException, LGMVersionException, XMLVersionException, FileNotFoundException {
+    private boolean loadFromFileInputStream(final FileInputStream fileStream, boolean loadContent) throws IOException, LGMVersionException, XMLVersionException, FileNotFoundException {
         if (!ToolXMLParser.isParsableXMLFile(fileStream)) {
             throw new LGMVersionException(getResString("to_old_file_format"));
         }
         fileStream.getChannel().position(0);
-        return loadXMLFile(fileStream, false);
+        return loadXMLFile(fileStream, false, loadContent);
     }
 
     /**
      * load collection from xml-source
      *
      * @param inputStream an InputStream to the xml-source
+     * @param paste
+     * @param loadContent only if this parameter is <code>true</code> then the
+     *            file content will be really loaded. If <code>false</code> then
+     *            only the FileVersion will be loaded.
      * @return true, if reading was successful
      * @author Thomas Rudert
      */
-    public boolean loadXMLFile(final InputStream inputStream, final boolean paste) {
+    private boolean loadXMLFile(final InputStream inputStream, final boolean paste, boolean loadContent) {
         try {
-            ToolXMLParser parser = new ToolXMLParser(gdcoll, inputStream, paste);
-            parser.parseDocument();
+            ToolXMLParser parser = new ToolXMLParser(gdcoll, inputStream, paste, loadContent);
+            if (loadContent) {
+                parser.parseDocument();
+            }
         } catch (Exception exp) {
             Log.show(Log.ERROR, getResString("FehlerAllgemein") + exp, exp);
             return false;
         }
-        UserFieldDefinitions userFieldDefinitions = gdcoll.getUserFieldDefinitions();
-        userFieldDefinitions.hasCrossReferences();
+        if (loadContent) {
+            UserFieldDefinitions userFieldDefinitions = gdcoll.getUserFieldDefinitions();
+            userFieldDefinitions.hasCrossReferences();
+        }
         return true;
     }
 
@@ -432,6 +474,13 @@ public class GDCollectionFileHandler {
         return true;
     }
 
+    /**
+     * @param tempFile
+     * @param randomAccessFile
+     * @param lockSupported
+     * @param lock
+     * @throws IOException
+     */
     private static void copyTempToDestinationFile(final File tempFile, final RandomAccessFile randomAccessFile, final boolean lockSupported, final FileLock lock) throws IOException {
         if (tempFile.length() <= 0) {
             throw new IOException("Empty file!");
