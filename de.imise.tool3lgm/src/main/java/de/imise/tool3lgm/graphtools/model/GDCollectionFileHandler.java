@@ -311,7 +311,9 @@ public class GDCollectionFileHandler {
             if (file != null) {
                 randomAccessFile.close();
             }
-            Log.show(Log.FATAL, getResString("FehlerAllgemein") + e, e);
+            if (loadContent) {
+                Log.show(Log.FATAL, getResString("FehlerAllgemein") + e, e);
+            }
         }
 
         if (file != null) {
@@ -361,7 +363,7 @@ public class GDCollectionFileHandler {
      * @author Thomas Rudert
      */
     private boolean loadFromFileInputStream(final FileInputStream fileStream, boolean loadContent) throws IOException, LGMVersionException, XMLVersionException, FileNotFoundException {
-        if (!ToolXMLParser.isParsableXMLFile(fileStream)) {
+        if (!ToolXMLParser.isParsableXMLFile(fileStream, !loadContent)) {
             throw new LGMVersionException(getResString("to_old_file_format"));
         }
         fileStream.getChannel().position(0);

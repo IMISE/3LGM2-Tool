@@ -1,22 +1,30 @@
 package de.imise.tool3lgm.graphtools.model.template;
 
+import static de.imise.tool3lgm.Tool3lgmConstants.TEMPLATE_DIR;
 import static de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty.OPTION_SHOW_TEMPLATE_BROWSER;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import com.google.common.base.Objects;
+import com.google.common.collect.ImmutableList;
+
 import de.imise.tool3lgm.MetaModelContext;
 import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.Tool3lgmChangeListener;
+import de.imise.tool3lgm.Tool3lgmModelType;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModelDefinition;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
+import de.imise.tool3lgm.graphtools.model.GDCollectionFileHandler;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.view.pathtree.PathTreeBranchDefinition;
 import de.imise.tool3lgm.graphtools.view.pathtree.PathTreeDefinition;
 import de.imise.tool3lgm.userproperties.AbstractUserProperties;
+import de.imise.util.Sys;
 import de.imise.util.event.PropertyChangeHandler;
 
 /**
@@ -139,7 +147,79 @@ public class TemplateLibrariesManager extends PropertyChangeHandler implements P
         Class<? extends MetaModelDefinition> metaModelDefinitionClass = selectedMetaModelContext.getMetaModelDefinitionClass();
         List<TemplateLibraryProvider> templateLibraryProviders = Static.loadPlugins(TemplateLibraryProvider.class);
         removeUnfittingTemplateLibraryProviders(templateLibraryProviders, metaModelDefinitionClass);
+        List<TemplateLibraryProvider> loadedModelTemplates = loadModelTemplates(selectedMetaModelContext);
+        Sys.err1("\n" + selectedMetaModelContext + " Count=" + loadedModelTemplates.size());
+        for (TemplateLibraryProvider templateLibraryProvider : loadedModelTemplates) {
+            Sys.err1(templateLibraryProvider);
+        }
         return templateLibraryProviders;
+    }
+
+    /**
+     * @return
+     */
+    private List<File> getTemplateDirectories() {
+        return ImmutableList.of(TEMPLATE_DIR); //TODO: expand with user defined directories
+    }
+
+    /**
+     * @param metaModelContext
+     * @return
+     */
+    private List<TemplateLibraryProvider> loadModelTemplates(MetaModelContext metaModelContext) {
+        List<TemplateLibraryProvider> templateLibraryProviders = new ArrayList<>();
+        List<File> templateDirectories = getTemplateDirectories();
+        for (File templateDirectory : templateDirectories) {
+            if (templateDirectory.isDirectory()) {
+                loadModelTemplates(metaModelContext, templateDirectory, templateLibraryProviders);
+            } else {
+                TemplateLibraryProvider templateLibraryProvider = loadModelTemplate(metaModelContext, templateDirectory);
+                if (templateLibraryProvider != null) {
+                    templateLibraryProviders.add(templateLibraryProvider);
+                }
+            }
+        }
+        return templateLibraryProviders;
+    }
+
+    /**
+     * @param metaModelContext
+     * @param dir
+     * @param templateLibraryProviders
+     * @return
+     */
+    private List<TemplateLibraryProvider> loadModelTemplates(MetaModelContext metaModelContext, File dir, List<TemplateLibraryProvider> templateLibraryProviders) {
+        for (File file : dir.listFiles()) {
+            if (file.isDirectory()) {
+                loadModelTemplates(metaModelContext, file, templateLibraryProviders);
+            } else {
+                TemplateLibraryProvider templateLibraryProvider = loadModelTemplate(metaModelContext, file);
+                if (templateLibraryProvider != null) {
+                    templateLibraryProviders.add(templateLibraryProvider);
+                }
+            }
+        }
+        return templateLibraryProviders;
+    }
+
+    /**
+     * @param metaModelContext
+     * @param file
+     * @return
+     */
+    private TemplateLibraryProvider loadModelTemplate(MetaModelContext metaModelContext, File file) {
+        try {
+            GDCollection testGdcoll = new GDCollection();
+            GDCollectionFileHandler fh = testGdcoll.getFileHandler();
+            Tool3lgmModelType modelType = fh.getModelType(file);
+            //Sys.err1(modelType.getMetaModelID() + " " + modelType.getModelCategory());
+            if (Objects.equal(metaModelContext, modelType.getMetaModelContext())) {
+                return new ModelTemplatLibraryProvider(metaModelContext, file);
+            }
+        } catch (Exception e) {
+            //ignore
+        }
+        return null;
     }
 
     /**

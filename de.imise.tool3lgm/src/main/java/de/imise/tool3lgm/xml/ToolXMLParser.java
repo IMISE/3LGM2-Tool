@@ -346,7 +346,7 @@ public class ToolXMLParser {
      * @param fileStream
      * @return
      */
-    public static boolean isParsableXMLFile(final FileInputStream fileStream) {
+    public static boolean isParsableXMLFile(final FileInputStream fileStream, boolean ignoreError) {
         String line = "";
         try {
             fileStream.getChannel().position(0);
@@ -357,7 +357,9 @@ public class ToolXMLParser {
 
             }
         } catch (Exception e) {
-            Log.show(Log.ERROR, getResString("FehlerAllgemein"), e);
+            if (!ignoreError) {
+                Log.show(Log.ERROR, getResString("FehlerAllgemein"), e);
+            }
             return false;
         }
         if (line.startsWith("<?xml") || line.startsWith("<graph>")) {
