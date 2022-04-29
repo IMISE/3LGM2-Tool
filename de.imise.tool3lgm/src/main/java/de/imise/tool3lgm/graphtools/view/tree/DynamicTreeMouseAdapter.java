@@ -36,14 +36,24 @@ import de.imise.tool3lgm.graphtools.view.tree.node.UserFieldTreeNode;
 import de.imise.tool3lgm.gui.menu.ContextGenerator;
 import de.imise.util.swing.event.ExtendedAction;
 
+/**
+ * @author N.N. (??.??.200?), AXS
+ */
 public class DynamicTreeMouseAdapter implements MouseListener {
 
+    /** The target tree for this mouse adapter */
     private final DynamicTree tree;
 
+    /**
+     * @param tree
+     */
     private DynamicTreeMouseAdapter(final DynamicTree tree) {
         this.tree = tree;
     }
 
+    /**
+     * @param tree
+     */
     public static void addAdapter(final DynamicTree tree) {
         for (MouseListener listener : tree.getMouseListeners()) {
             if (listener instanceof DynamicTreeMouseAdapter) {
@@ -118,90 +128,55 @@ public class DynamicTreeMouseAdapter implements MouseListener {
             ContextGenerator contextGenerator = tree.getContextGenerator();
             contextGenerator.setControlled(true);
         }
-        boolean right_button = false;
-        int xin = e.getX();
-        int yin = e.getY();
-        final JTree sourceTree = (JTree) e.getComponent();
-        TreePath path = sourceTree.getPathForLocation(xin, yin);
-        //Wenn die rechte Maustaste gedrückt wurde, wird <code>right_button</code> true;
         if (Tool3lgmConstants.isPopupTrigger(e)) {
-            right_button = true;
-            if (path != null) {
+            JPopupMenu menu = null;
+            int xin = e.getX();
+            int yin = e.getY();
+            final JTree sourceTree = (JTree) e.getComponent();
+            TreePath path = sourceTree.getPathForLocation(xin, yin);
+            //Wenn die rechte Maustaste gedrückt wurde, wird <code>right_button</code> true;
+            if (path == null) { //right click to an empty space in the tree (and not to a tree path)
+                menu = getExpandCollapseTreeContectMenu(sourceTree);
+            } else {
+                // we must explicitely select the tree node if it was only right clicked
                 LGMTreeNode<?> lastNode = (LGMTreeNode<?>) path.getLastPathComponent();
-                // Wenn eine ElementClass rechtsgeklickt wurde, wird schon ein anderes Kontextmenü geladen,
-                // so dass hier keine weiter Selektion erstellt werden muss.
                 if (!(lastNode.getUserObject() instanceof ElementContainer)) {
                     tree.getSelectionModel().setSelectionPath(tree.getPathForLocation(xin, yin));
                 }
-            } else {
-                JPopupMenu menu = new JPopupMenu();
-                // Menu item for expanding all trees
-                JMenuItem itemOpenAll = new JMenuItem(new AbstractAction(getResString("MODEL_BROWSER_EXPAND_ALL")) {
-                    @Override
-                    public void actionPerformed(final ActionEvent arg0) {
-                        for (int i = 0; i < sourceTree.getRowCount(); i++) {
-                            sourceTree.expandRow(i);
-                        }
-                    }
-                });
-                // Menu item for closing all trees
-                JMenuItem itemCloseAll = new JMenuItem(new AbstractAction(getResString("MODEL_BROWSER_COLLAPSE_ALL")) {
-                    @Override
-                    public void actionPerformed(final ActionEvent arg0) {
-                        for (int i = sourceTree.getRowCount(); i >= 0; i--) {
-                            sourceTree.collapseRow(i);
-                        }
-                    }
-                });
-                menu.add(itemOpenAll);
-                menu.add(itemCloseAll);
-                menu.show(tree, xin + 3, yin + 3);
-            }
-        }
-        if (path != null) {
-            selectedNode = (LGMTreeNode<?>) path.getLastPathComponent();
-            Object lastPathComponent = path.getLastPathComponent();
-            if (tree.isLayerNode(lastPathComponent)) {
-                if (right_button) {
+                selectedNode = (LGMTreeNode<?>) path.getLastPathComponent();
+                Object lastPathComponent = path.getLastPathComponent();
+                if (tree.isLayerNode(lastPathComponent)) {
                     ContextGenerator contextGenerator = tree.getContextGenerator();
-                    JPopupMenu pm = contextGenerator.getLayerContextMenu();
-                    if (pm != null) {
-                        pm.show(tree, xin + 3, yin + 3);
-                    }
-                }
-                return;
-            }
-
-            //wenn der selektierte Knoten kein ElementContainer-Knoten ist, bleibt die Variable null
-            ElementContainerTreeNode selectedElementContainerTreeNode = selectedNode instanceof ElementContainerTreeNode ? (ElementContainerTreeNode) selectedNode : null;
-            if (selectedElementContainerTreeNode == null) { //kein ElementContainer selektiert, sondern etwas anderes
-                if (right_button) {
-                    if (selectedNode instanceof ElementClassTreeNode) { //Klassenknoten?
-                        Class<? extends ModelElement> elementClass = ((ElementClassTreeNode) selectedNode).getUserObject();
-                        if (doc != null) {
-                            MetaModel metaModel = doc.getMetaModel();
-                            if (metaModel.isCreatable(elementClass)) {
-                                showNewInstanceContextMenu(elementClass, xin + 3, yin + 3);
+                    menu = contextGenerator.getLayerContextMenu();
+                } else {
+                    //wenn der selektierte Knoten kein ElementContainer-Knoten ist, bleibt die Variable null
+                    ElementContainerTreeNode selectedElementContainerTreeNode = selectedNode instanceof ElementContainerTreeNode ? (ElementContainerTreeNode) selectedNode : null;
+                    if (selectedElementContainerTreeNode == null) { //kein ElementContainer selektiert, sondern etwas anderes
+                        if (selectedNode instanceof ElementClassTreeNode) { //Klassenknoten?
+                            Class<? extends ModelElement> elementClass = ((ElementClassTreeNode) selectedNode).getUserObject();
+                            if (doc != null) {
+                                MetaModel metaModel = doc.getMetaModel();
+                                if (metaModel.isCreatable(elementClass)) {
+                                    menu = getNewInstanceContextMenu(elementClass);
+                                }
                             }
                         }
-                    }
-                }
-                //ElementContainer ist selektiert && Rechtsklick
-            } else if (right_button) {
-                ElementContainer ec = selectedElementContainerTreeNode.getUserObject();
-                //wenn das Element schon in der Selektion war, wird es nur an die hinterste Position in der Selektiion verschoben
-                //und ist somit das Element, bezüglich dessen für andere selektierte Elemente das Kontextmenü angeboten wird
-                ec.getGraphDocument().addToSelection(ec, ModelBrowserTree.PID);
-                ContextGenerator contextGenerator = tree.getContextGenerator();
-                TreePath clickedTreePath = tree.getPathForLocation(xin, yin);
-                if (clickedTreePath != null) {
-                    tree.addSelectionPath(clickedTreePath); // das muss sein, damit der ContextGenerator der Templates das Doc ermitteln kann
-                    JPopupMenu pm = contextGenerator.getNodeContextMenu(tree);
-                    if (pm != null) {
-                        pm.show(tree, xin + 3, yin + 3);
+                        //ElementContainer ist selektiert && Rechtsklick
+                    } else {
+                        ElementContainer ec = selectedElementContainerTreeNode.getUserObject();
+                        //wenn das Element schon in der Selektion war, wird es nur an die hinterste Position in der Selektiion verschoben
+                        //und ist somit das Element, bezüglich dessen für andere selektierte Elemente das Kontextmenü angeboten wird
+                        ec.getGraphDocument().addToSelection(ec, ModelBrowserTree.PID);
+                        ContextGenerator contextGenerator = tree.getContextGenerator();
+                        TreePath clickedTreePath = tree.getPathForLocation(xin, yin);
+                        if (clickedTreePath != null) {
+                            tree.addSelectionPath(clickedTreePath); // das muss sein, damit der ContextGenerator der Templates das Doc ermitteln kann
+                            menu = contextGenerator.getNodeContextMenu(tree);
+                        }
                     }
                 }
             }
+            showMenu(menu, xin, yin);
         }
     }
 
@@ -212,14 +187,43 @@ public class DynamicTreeMouseAdapter implements MouseListener {
     }
 
     /**
-     * @param elementClass
-     * @param x
-     * @param y
+     * @param menu
+     * @param xin
+     * @param yin
      * @return
      */
-    private final JPopupMenu showNewInstanceContextMenu(final Class<? extends ModelElement> elementClass, final int x, final int y) {
-        JPopupMenu menu = getNewInstanceContextMenu(elementClass);
-        menu.show(tree, x, y);
+    private final void showMenu(JPopupMenu menu, int xin, int yin) {
+        if (menu != null) {
+            menu.show(tree, xin + 3, yin + 3);
+        }
+    }
+
+    /**
+     * @param sourceTree
+     * @return
+     */
+    protected JPopupMenu getExpandCollapseTreeContectMenu(final JTree sourceTree) {
+        JPopupMenu menu = new JPopupMenu();
+        // Menu item for expanding all trees
+        JMenuItem itemOpenAll = new JMenuItem(new AbstractAction(getResString("MODEL_BROWSER_EXPAND_ALL")) {
+            @Override
+            public void actionPerformed(final ActionEvent arg0) {
+                for (int i = 0; i < sourceTree.getRowCount(); i++) {
+                    sourceTree.expandRow(i);
+                }
+            }
+        });
+        // Menu item for closing all trees
+        JMenuItem itemCloseAll = new JMenuItem(new AbstractAction(getResString("MODEL_BROWSER_COLLAPSE_ALL")) {
+            @Override
+            public void actionPerformed(final ActionEvent arg0) {
+                for (int i = sourceTree.getRowCount(); i >= 0; i--) {
+                    sourceTree.collapseRow(i);
+                }
+            }
+        });
+        menu.add(itemOpenAll);
+        menu.add(itemCloseAll);
         return menu;
     }
 

@@ -47,6 +47,7 @@ import de.imise.tool3lgm.graphtools.view.pathtree.PathTreeModel;
 import de.imise.tool3lgm.graphtools.view.tree.DynamicTree;
 import de.imise.tool3lgm.graphtools.view.tree.TreeRenderer;
 import de.imise.tool3lgm.graphtools.view.tree.node.ElementContainerTreeNode;
+import de.imise.tool3lgm.graphtools.view.tree.node.GDCollectionTreeNode;
 import de.imise.tool3lgm.gui.menu.ContextGenerator;
 import de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty;
 import de.imise.util.BooleanOption;
@@ -161,6 +162,9 @@ public class TemplateBrowserTree extends DynamicTree implements SearchResultView
             if (lastPathComponent instanceof ElementContainerTreeNode) {
                 ElementContainerTreeNode elementContainerNode = (ElementContainerTreeNode) lastPathComponent;
                 doc = elementContainerNode.getGraphDocument();
+            } else if (lastPathComponent instanceof GDCollectionTreeNode) {
+                GDCollection gdcoll = ((GDCollectionTreeNode) lastPathComponent).getUserObject();
+                doc = gdcoll.getSelectedDoc();
             }
         }
         return doc;
