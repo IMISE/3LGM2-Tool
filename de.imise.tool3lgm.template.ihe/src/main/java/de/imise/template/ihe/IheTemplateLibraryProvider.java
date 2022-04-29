@@ -59,8 +59,8 @@ public class IheTemplateLibraryProvider extends TemplateLibraryProvider {
     public TemplateViewDefinition getViewDefinition() {
         return new TemplateViewDefinition(resourceHandler) {
             @Override
-            public String getMainCategoryResStringAndIconKey() {
-                return "MAIN_CATEGORY_NAME";
+            public Object[] getMainCategoryResStringAndIconKeys() {
+                return new Object[] {"MAIN_CATEGORY_NAME"};
             }
 
             @SuppressWarnings("unchecked")

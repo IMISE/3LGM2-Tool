@@ -15,6 +15,7 @@ import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModelDefinition;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModelSpecific;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
+import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.path.metapaths.ElementaryMetaPath;
 import de.imise.tool3lgm.graphtools.path.metapaths.MetaPath;
@@ -23,6 +24,7 @@ import de.imise.tool3lgm.graphtools.path.metapaths.SequenceMetaPath;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.graphtools.view.tree.node.ElementClassTreeNode;
 import de.imise.tool3lgm.graphtools.view.tree.node.ElementContainerTreeNode;
+import de.imise.tool3lgm.graphtools.view.tree.node.GDCollectionTreeNode;
 import de.imise.tool3lgm.graphtools.view.tree.node.IconifiedTreeNode;
 import de.imise.tool3lgm.graphtools.view.tree.node.LGMTreeNode;
 import de.imise.tool3lgm.graphtools.view.tree.node.PathStepTreeNode;
@@ -155,18 +157,23 @@ public class PathTreeModel extends DefaultTreeModel implements MetaModelSpecific
                 return childNode;
             }
         }
+        IconifiedTreeNode<?> hierarchyNode = null;
         if (hierarchyDefinitionObject instanceof Class) {
             try {
                 Class<? extends ModelElement> elementClass = ((Class<?>) hierarchyDefinitionObject).asSubclass(ModelElement.class);
                 ElementsNameBuilder elementsNameBuilder = treeDefinition.getElementsNameBuilder();
                 String elementClassName = elementsNameBuilder.getDisplayableName(elementClass);
-                return new ElementClassTreeNode(elementClass, elementClassName, icon);
+                hierarchyNode = new ElementClassTreeNode(elementClass, elementClassName, icon);
             } catch (Exception e) {
             }
+        } else if (hierarchyDefinitionObject instanceof GDCollection) {
+            hierarchyNode = new GDCollectionTreeNode((GDCollection) hierarchyDefinitionObject);
         }
-        String hierarchyNodeTextResourceKey = hierarchyDefinitionObject.toString();
-        String hierarchyNodeText = treeDefinition.getResStringWithoutError(hierarchyNodeTextResourceKey);
-        IconifiedTreeNode<?> hierarchyNode = new IconifiedTreeNode<>(hierarchyDefinitionObject, hierarchyNodeText, true, icon);
+        if (hierarchyNode == null) {
+            String hierarchyNodeTextResourceKey = hierarchyDefinitionObject.toString();
+            String hierarchyNodeText = treeDefinition.getResStringWithoutError(hierarchyNodeTextResourceKey);
+            hierarchyNode = new IconifiedTreeNode<>(hierarchyDefinitionObject, hierarchyNodeText, true, icon);
+        }
         parent.add(hierarchyNode);
         return hierarchyNode;
     }
@@ -198,20 +205,22 @@ public class PathTreeModel extends DefaultTreeModel implements MetaModelSpecific
     protected void addBranch(final PathTreeBranchDefinition branchDefinition) {
         IconifiedTreeNode<?> lastHierarchyNode = getOrCreateBranchLastHierarchyNode(branchDefinition);
         SequenceMetaPath metaPath = branchDefinition.getElementsPath();
-        Class<? extends ModelElement> pathStepConnectionClass = metaPath.getStartClass();
-        Collection<ElementContainerTreeNode> pathStepNodes = new ArrayList<>();
-        Iterable<GraphDocument> allSourceModels = getAllSourceModels();
-        for (GraphDocument sourceModel : allSourceModels) {
-            List<ElementContainer> elementContainers = sourceModel.getElementContainers(pathStepConnectionClass);
-            getOrCreateNodes(pathStepNodes, elementContainers, lastHierarchyNode, null, branchDefinition);
-        }
-        boolean showAllElements = this.showAllElements.is();
-        List<MetaPath> subMetaPaths = metaPath.getSubMetaPaths(showAllElements);
-        int pathLength = subMetaPaths.size();
-        for (int i = 0; i < pathLength; i++) {
-            pathStepConnectionClass = MetaPathFunctions.getMetaPathsConnectingClass(subMetaPaths, i);
-            MetaPath subMetaPath = subMetaPaths.get(i);
-            pathStepNodes = addPathStepNodes(pathStepNodes, subMetaPath, branchDefinition);
+        if (metaPath != null) {
+            Class<? extends ModelElement> pathStepConnectionClass = metaPath.getStartClass();
+            Collection<ElementContainerTreeNode> pathStepNodes = new ArrayList<>();
+            Iterable<GraphDocument> allSourceModels = getAllSourceModels();
+            for (GraphDocument sourceModel : allSourceModels) {
+                List<ElementContainer> elementContainers = sourceModel.getElementContainers(pathStepConnectionClass);
+                getOrCreateNodes(pathStepNodes, elementContainers, lastHierarchyNode, null, branchDefinition);
+            }
+            boolean showAllElements = this.showAllElements.is();
+            List<MetaPath> subMetaPaths = metaPath.getSubMetaPaths(showAllElements);
+            int pathLength = subMetaPaths.size();
+            for (int i = 0; i < pathLength; i++) {
+                pathStepConnectionClass = MetaPathFunctions.getMetaPathsConnectingClass(subMetaPaths, i);
+                MetaPath subMetaPath = subMetaPaths.get(i);
+                pathStepNodes = addPathStepNodes(pathStepNodes, subMetaPath, branchDefinition);
+            }
         }
     }
 

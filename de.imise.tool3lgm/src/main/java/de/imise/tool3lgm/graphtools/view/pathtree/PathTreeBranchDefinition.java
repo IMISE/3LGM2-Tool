@@ -2,12 +2,14 @@ package de.imise.tool3lgm.graphtools.view.pathtree;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.ResourceBundle;
 import java.util.Set;
 
 import javax.swing.ImageIcon;
 
-import de.imise.tool3lgm.graphtools.metamodel.MetaModelSpecificAdapter;
+import com.google.common.collect.ImmutableSet;
+
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.path.metapaths.SequenceMetaPath;
 import de.imise.tool3lgm.graphtools.view.tree.node.ElementClassTreeNode;
@@ -22,7 +24,7 @@ import de.imise.util.resource.SimpleResourceSource;
  *
  * @author AXS (02.09.2019)
  */
-public final class PathTreeBranchDefinition extends MetaModelSpecificAdapter implements SimpleResourceSource {
+public final class PathTreeBranchDefinition implements SimpleResourceSource {
 
     /**
      * Alle Objekte in dieser Liste geben vor, welche Hierarchie-Knoten
@@ -50,10 +52,27 @@ public final class PathTreeBranchDefinition extends MetaModelSpecificAdapter imp
      * @param elementsPath
      * @param hierarchyObjects
      */
+    public PathTreeBranchDefinition(final SimpleResourceSource resourceHandler, final Object... hierarchyObjects) {
+        this.resourceHandler = resourceHandler;
+        elementsPath = null;
+        initHierarchyObjects(hierarchyObjects);
+    }
+
+    /**
+     * @param resourceHandler
+     * @param elementsPath
+     * @param hierarchyObjects
+     */
     public PathTreeBranchDefinition(final SimpleResourceSource resourceHandler, final SequenceMetaPath elementsPath, final Object... hierarchyObjects) {
-        super(elementsPath);
         this.resourceHandler = resourceHandler;
         this.elementsPath = elementsPath;
+        initHierarchyObjects(hierarchyObjects);
+    }
+
+    /**
+     * @param hierarchyObjects
+     */
+    private void initHierarchyObjects(Object... hierarchyObjects) {
         for (Object hierarchyObject : hierarchyObjects) {
             this.hierarchyObjects.add(hierarchyObject);
         }
@@ -76,7 +95,7 @@ public final class PathTreeBranchDefinition extends MetaModelSpecificAdapter imp
     @Override
     public final ImageIcon getIcon(final String name) {
         //TODO: PathTreeModel macht diesen Aufruf bei jedem Knoten (z.B. beim Aufbau des TemplateBrowsers). Da sollte man die Icons evtl. cachen in einer Map.
-        return resourceHandler.getIcon(name);
+        return resourceHandler == null ? null : resourceHandler.getIcon(name);
     }
 
     /**
@@ -97,26 +116,17 @@ public final class PathTreeBranchDefinition extends MetaModelSpecificAdapter imp
 
     @Override
     public final String getResString(final String resKey) {
-        return resourceHandler.getResString(resKey);
-    }
-
-    @Override
-    public final String getResStringWithoutError(final String resKey) {
-        return resourceHandler.getResStringWithoutError(resKey);
+        return resourceHandler == null ? resKey : resourceHandler.getResString(resKey);
     }
 
     @Override
     public ResourceBundle getResourceBundle() {
-        return resourceHandler.getResourceBundle();
+        return resourceHandler == null ? null : resourceHandler.getResourceBundle();
     }
 
     @Override
     public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + (elementsPath == null ? 0 : elementsPath.hashCode());
-        result = prime * result + (hierarchyObjects == null ? 0 : hierarchyObjects.hashCode());
-        return result;
+        return Objects.hash(elementsPath, hierarchyObjects);
     }
 
     @Override
@@ -131,18 +141,10 @@ public final class PathTreeBranchDefinition extends MetaModelSpecificAdapter imp
             return false;
         }
         PathTreeBranchDefinition other = (PathTreeBranchDefinition) obj;
-        if (elementsPath == null) {
-            if (other.elementsPath != null) {
-                return false;
-            }
-        } else if (!elementsPath.equals(other.elementsPath)) {
+        if (!Objects.equals(elementsPath, other.elementsPath)) {
             return false;
         }
-        if (hierarchyObjects == null) {
-            if (other.hierarchyObjects != null) {
-                return false;
-            }
-        } else if (!hierarchyObjects.equals(other.hierarchyObjects)) {
+        if (!Objects.equals(hierarchyObjects, other.hierarchyObjects)) {
             return false;
         }
         return true;
@@ -160,6 +162,9 @@ public final class PathTreeBranchDefinition extends MetaModelSpecificAdapter imp
      *         tree branch
      */
     public final Set<Class<? extends ModelElement>> getVisibleElementTypes(final boolean allElementaryMetaPaths) {
+        if (elementsPath == null) {
+            return ImmutableSet.of();
+        }
         if (allElementaryMetaPaths) {
             return elementsPath.getAllElementaryPathsStartAndEndClasses();
         }

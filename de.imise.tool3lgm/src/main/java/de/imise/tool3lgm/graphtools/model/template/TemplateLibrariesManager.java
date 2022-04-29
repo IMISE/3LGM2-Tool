@@ -24,7 +24,6 @@ import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.view.pathtree.PathTreeBranchDefinition;
 import de.imise.tool3lgm.graphtools.view.pathtree.PathTreeDefinition;
 import de.imise.tool3lgm.userproperties.AbstractUserProperties;
-import de.imise.util.Sys;
 import de.imise.util.event.PropertyChangeHandler;
 
 /**
@@ -147,18 +146,14 @@ public class TemplateLibrariesManager extends PropertyChangeHandler implements P
         Class<? extends MetaModelDefinition> metaModelDefinitionClass = selectedMetaModelContext.getMetaModelDefinitionClass();
         List<TemplateLibraryProvider> templateLibraryProviders = Static.loadPlugins(TemplateLibraryProvider.class);
         removeUnfittingTemplateLibraryProviders(templateLibraryProviders, metaModelDefinitionClass);
-        List<TemplateLibraryProvider> loadedModelTemplates = loadModelTemplates(selectedMetaModelContext);
-        Sys.err1("\n" + selectedMetaModelContext + " Count=" + loadedModelTemplates.size());
-        for (TemplateLibraryProvider templateLibraryProvider : loadedModelTemplates) {
-            Sys.err1(templateLibraryProvider);
-        }
+        templateLibraryProviders.addAll(loadModelTemplates(selectedMetaModelContext));
         return templateLibraryProviders;
     }
 
     /**
      * @return
      */
-    private List<File> getTemplateDirectories() {
+    public static List<File> getTemplateDirectories() {
         return ImmutableList.of(TEMPLATE_DIR); //TODO: expand with user defined directories
     }
 

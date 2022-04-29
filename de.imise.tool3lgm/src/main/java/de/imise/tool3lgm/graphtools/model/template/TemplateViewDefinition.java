@@ -21,6 +21,13 @@ public abstract class TemplateViewDefinition {
     private final SimpleResourceSource resourceHandler;
 
     /**
+     *
+     */
+    public TemplateViewDefinition() {
+        this(null);
+    }
+
+    /**
      * @param resourceHandler
      */
     public TemplateViewDefinition(final SimpleResourceSource resourceHandler) {
@@ -32,8 +39,8 @@ public abstract class TemplateViewDefinition {
      *         "HL7". More than one template library can be in the same
      *         category. If <code>null</code> it will be ignored.
      */
-    protected String getMainCategoryResStringAndIconKey() {
-        return null;
+    protected Object[] getMainCategoryResStringAndIconKeys() {
+        return new Object[0];
     }
 
     /**
@@ -50,9 +57,15 @@ public abstract class TemplateViewDefinition {
      */
     public final List<PathTreeBranchDefinition> getTreeBranchDefinition() {
         List<PathTreeBranchDefinition> treeBranchDefinitions = new ArrayList<>();
-        String mainCategoryResStringAndIconKey = getMainCategoryResStringAndIconKey();
-        for (SequenceMetaPath viewMetaPath : getViewMetaPaths()) {
-            PathTreeBranchDefinition pathTreeBranchDefinition = new PathTreeBranchDefinition(resourceHandler, viewMetaPath, mainCategoryResStringAndIconKey);
+        Object[] mainCategoryResStringAndIconKey = getMainCategoryResStringAndIconKeys();
+        List<SequenceMetaPath> viewMetaPaths = getViewMetaPaths();
+        if (viewMetaPaths != null && !viewMetaPaths.isEmpty()) {
+            for (SequenceMetaPath viewMetaPath : getViewMetaPaths()) {
+                PathTreeBranchDefinition pathTreeBranchDefinition = new PathTreeBranchDefinition(resourceHandler, viewMetaPath, mainCategoryResStringAndIconKey);
+                treeBranchDefinitions.add(pathTreeBranchDefinition);
+            }
+        } else {
+            PathTreeBranchDefinition pathTreeBranchDefinition = new PathTreeBranchDefinition(resourceHandler, mainCategoryResStringAndIconKey);
             treeBranchDefinitions.add(pathTreeBranchDefinition);
         }
         return treeBranchDefinitions;

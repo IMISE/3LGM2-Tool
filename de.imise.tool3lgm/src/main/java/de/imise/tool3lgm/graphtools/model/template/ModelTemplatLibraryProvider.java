@@ -1,13 +1,34 @@
 package de.imise.tool3lgm.graphtools.model.template;
 
 import java.io.File;
+import java.util.List;
+
+import com.google.common.collect.ImmutableList;
 
 import de.imise.tool3lgm.MetaModelContext;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
+import de.imise.tool3lgm.graphtools.model.GDCollectionFileHandler;
+import de.imise.tool3lgm.graphtools.path.metapaths.SequenceMetaPath;
 
+/**
+ * @author AXS (28.04.2022)
+ */
 public class ModelTemplatLibraryProvider extends TemplateLibraryProvider {
 
-    private final File file;
+    /**
+     *
+     */
+    private final File templateFile;
+
+    /**
+     *
+     */
+    private final GDCollection gdcoll;
+
+    /**
+     *
+     */
+    private boolean couldBeLoaded = false;
 
     /**
      * @param metaModelContext
@@ -15,17 +36,60 @@ public class ModelTemplatLibraryProvider extends TemplateLibraryProvider {
      */
     public ModelTemplatLibraryProvider(MetaModelContext metaModelContext, File templateFile) {
         super(metaModelContext.getMetaModelDefinitionClass());
-        file = templateFile;
+        this.templateFile = templateFile;
+        gdcoll = loadTemplateFile();
+    }
+
+    /**
+     *
+     */
+    private GDCollection loadTemplateFile() {
+        GDCollection gdcoll = new GDCollection();
+        GDCollectionFileHandler fileHandler = gdcoll.getFileHandler();
+        try {
+            fileHandler.setFile(templateFile);
+            couldBeLoaded = fileHandler.loadFromRAF();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return gdcoll;
     }
 
     @Override
     public GDCollection getTemplateLibrary() {
-        return null;
+        return gdcoll;
     }
 
     @Override
     public TemplateViewDefinition getViewDefinition() {
-        return null;
+        return new TemplateViewDefinition() {
+            @Override
+            protected Object[] getMainCategoryResStringAndIconKeys() {
+                List<File> templateDirectories = TemplateLibrariesManager.getTemplateDirectories();
+                String templateFilePath = templateFile.getPath();
+                for (File templateDirectory : templateDirectories) {
+                    String templateDirectoryPath = templateDirectory.getPath();
+                    if (!templateDirectoryPath.endsWith(File.separator)) {
+                        templateDirectoryPath += File.separator;
+                    }
+                    if (templateFilePath.startsWith(templateDirectoryPath)) {
+                        templateFilePath = templateFilePath.substring(templateDirectoryPath.length());
+                        break;
+                    }
+                }
+                String[] modelTemplateFileHieraryNames = templateFilePath.split("\\" + File.separator);
+                Object[] modelTemplateFileHierary = new Object[modelTemplateFileHieraryNames.length];
+                System.arraycopy(modelTemplateFileHieraryNames, 0, modelTemplateFileHierary, 0, modelTemplateFileHieraryNames.length - 1);
+                modelTemplateFileHierary[modelTemplateFileHierary.length - 1] = gdcoll;
+                return modelTemplateFileHierary;
+            }
+
+            @Override
+            protected List<SequenceMetaPath> getViewMetaPaths() {
+                return ImmutableList.of();
+            }
+
+        };
     }
 
     @Override
@@ -35,7 +99,21 @@ public class ModelTemplatLibraryProvider extends TemplateLibraryProvider {
 
     @Override
     public String toString() {
-        return file.getPath();
+        return templateFile.getPath();
+    }
+
+    /**
+     * @return
+     */
+    public boolean couldBeLoaded() {
+        return couldBeLoaded;
+    }
+
+    /**
+     * @return
+     */
+    public boolean isValid() {
+        return couldBeLoaded(); //maybe in future there are some more criterias for validity such as hasValidUsageDefinition
     }
 
 }
