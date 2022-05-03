@@ -707,7 +707,8 @@ public final class ModelBrowserTree extends DynamicTree implements UserFieldList
             if (layer == DOMAIN_LAYER) {
                 textFieldDomainLayer = getOrCreateTextFieldNode(domainLayer, textFieldDomainLayer);
                 return textFieldDomainLayer;
-            } else if (layer == LOGICAL_LAYER) {
+            }
+            if (layer == LOGICAL_LAYER) {
                 textFieldLogicalLayer = getOrCreateTextFieldNode(logicalLayer, textFieldLogicalLayer);
                 return textFieldLogicalLayer;
             } else if (layer == PHYSICAL_LAYER) {

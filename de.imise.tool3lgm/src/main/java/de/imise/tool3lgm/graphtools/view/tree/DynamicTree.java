@@ -33,6 +33,12 @@ public abstract class DynamicTree extends JTree implements GraphDocumentOwner {
     private ToolTipProvider toolTipProvider;
 
     /**
+     * The TreePath that was clicked left or right (it must not be selected and
+     * can be <code>null</code>).
+     */
+    private TreePath clickedTreePath = null;
+
+    /**
      * @param newModel
      */
     public DynamicTree(final TreeModel newModel) {
@@ -177,5 +183,36 @@ public abstract class DynamicTree extends JTree implements GraphDocumentOwner {
      *         position
      */
     public abstract GraphDocument getGraphDocument(final MouseEvent e);
+
+    /**
+     * @return The TreePath that was clicked left or right (it must not be
+     *         selected and can be <code>null</code>).
+     */
+    public TreePath getClickedTreePath() {
+        return clickedTreePath;
+    }
+
+    /**
+     * @param clickedTreePath the clickedTreePath to set. This is the TreePath
+     *            that was clicked left or right (it must not be selected and
+     *            can be <code>null</code>).
+     */
+    public final void setClickedTreePath(TreePath clickedTreePath) {
+        this.clickedTreePath = clickedTreePath;
+    }
+
+    /**
+     * @param x
+     * @param y
+     * @return the clicked TreePath
+     */
+    public final TreePath setClickedTreePathForLocation(int x, int y) {
+        TreePath pathForLocation = getPathForLocation(x, y);
+        if (clickedTreePath != null) {
+            addSelectionPath(pathForLocation);
+        }
+        setClickedTreePath(pathForLocation);
+        return clickedTreePath;
+    }
 
 }

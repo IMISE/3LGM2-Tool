@@ -117,10 +117,7 @@ public class DynamicTreeMouseAdapter implements MouseListener {
     @Override
     public void mousePressed(final MouseEvent e) {
         GraphDocument doc = tree.getGraphDocument(e);
-        if (doc == null) {
-            return;
-        }
-        GDCollection gdcoll = doc.getCollection();
+        GDCollection gdcoll = doc == null ? null : doc.getCollection();
         if (gdcoll instanceof DummyGDCollection) {
             return;
         }
@@ -151,33 +148,38 @@ public class DynamicTreeMouseAdapter implements MouseListener {
                 } else {
                     //wenn der selektierte Knoten kein ElementContainer-Knoten ist, bleibt die Variable null
                     ElementContainerTreeNode selectedElementContainerTreeNode = selectedNode instanceof ElementContainerTreeNode ? (ElementContainerTreeNode) selectedNode : null;
-                    if (selectedElementContainerTreeNode == null) { //kein ElementContainer selektiert, sondern etwas anderes
-                        if (selectedNode instanceof ElementClassTreeNode) { //Klassenknoten?
-                            Class<? extends ModelElement> elementClass = ((ElementClassTreeNode) selectedNode).getUserObject();
-                            if (doc != null) {
-                                MetaModel metaModel = doc.getMetaModel();
-                                if (metaModel.isCreatable(elementClass)) {
-                                    menu = getNewInstanceContextMenu(elementClass);
-                                }
+                    if (selectedNode instanceof ElementClassTreeNode) {
+                        Class<? extends ModelElement> elementClass = ((ElementClassTreeNode) selectedNode).getUserObject();
+                        if (doc != null) {
+                            MetaModel metaModel = doc.getMetaModel();
+                            if (metaModel.isCreatable(elementClass)) {
+                                menu = getNewInstanceContextMenu(elementClass);
                             }
                         }
-                        //ElementContainer ist selektiert && Rechtsklick
                     } else {
-                        ElementContainer ec = selectedElementContainerTreeNode.getUserObject();
-                        //wenn das Element schon in der Selektion war, wird es nur an die hinterste Position in der Selektiion verschoben
-                        //und ist somit das Element, bezüglich dessen für andere selektierte Elemente das Kontextmenü angeboten wird
-                        ec.getGraphDocument().addToSelection(ec, ModelBrowserTree.PID);
-                        ContextGenerator contextGenerator = tree.getContextGenerator();
-                        TreePath clickedTreePath = tree.getPathForLocation(xin, yin);
-                        if (clickedTreePath != null) {
-                            tree.addSelectionPath(clickedTreePath); // das muss sein, damit der ContextGenerator der Templates das Doc ermitteln kann
-                            menu = contextGenerator.getNodeContextMenu(tree);
+                        if (selectedElementContainerTreeNode != null) {
+                            ElementContainer ec = selectedElementContainerTreeNode.getUserObject();
+                            //wenn das Element schon in der Selektion war, wird es nur an die hinterste Position in der Selektiion verschoben
+                            //und ist somit das Element, bezüglich dessen für andere selektierte Elemente das Kontextmenü angeboten wird
+                            ec.getGraphDocument().addToSelection(ec, ModelBrowserTree.PID);
                         }
+                        menu = callContextGenerator(xin, yin);
                     }
                 }
             }
             showMenu(menu, xin, yin);
         }
+    }
+
+    /**
+     * @param xin
+     * @param yin
+     * @return
+     */
+    private JPopupMenu callContextGenerator(int xin, int yin) {
+        tree.setClickedTreePathForLocation(xin, yin);
+        ContextGenerator contextGenerator = tree.getContextGenerator();
+        return contextGenerator.getNodeContextMenu(tree);
     }
 
     @Override

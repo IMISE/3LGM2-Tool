@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Enumeration;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -155,7 +156,7 @@ public class TemplateBrowserTree extends DynamicTree implements SearchResultView
      * @return the GraphDocument that is associated with the last path component
      *         of the given treepath
      */
-    private GraphDocument getGraphDocument(final TreePath treePath) {
+    public GraphDocument getGraphDocument(final TreePath treePath) {
         GraphDocument doc = null;
         if (treePath != null) {
             Object lastPathComponent = treePath.getLastPathComponent();
@@ -168,6 +169,22 @@ public class TemplateBrowserTree extends DynamicTree implements SearchResultView
             }
         }
         return doc;
+    }
+
+    /**
+     * @return all GraphDocuments of selected nodes. A template tree can contain
+     *         multiple GDCollections and so multiple docs can be selected. ome
+     *         Nodes does not have / represent an GraphDocment (e.g. String
+     *         nodes). If they are selected then the return set will also
+     *         contain null as value.
+     */
+    public Set<GraphDocument> getSelectedGraphDocuments() {
+        Set<GraphDocument> selectedGraphDocuments = new HashSet<>();
+        for (TreePath selectedPath : getSelectionPaths()) {
+            GraphDocument doc = getGraphDocument(selectedPath);
+            selectedGraphDocuments.add(doc);
+        }
+        return selectedGraphDocuments;
     }
 
     @Override

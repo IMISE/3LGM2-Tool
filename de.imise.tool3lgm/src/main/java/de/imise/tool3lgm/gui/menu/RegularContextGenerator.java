@@ -898,10 +898,6 @@ public class RegularContextGenerator extends ElementSelectionContextGenerator im
         return menu;
     }
 
-    /**
-     * @param source
-     * @return
-     */
     @Override
     public final JPopupMenu getNodeContextMenu(final Component source) {
         JPopupMenu menu = createUpdatingPopupMenu();
