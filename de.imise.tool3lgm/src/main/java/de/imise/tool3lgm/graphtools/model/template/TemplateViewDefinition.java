@@ -24,17 +24,17 @@ public abstract class TemplateViewDefinition {
      * If this value is not <code>null</code> then only models with a name with
      * this prefix will be displayed with this view definition.
      */
-    private final String templateNamePrefix;
+    private final String templatesNamePrefix;
 
     /**
      * @param resourceHandler
-     * @param templateNamePrefix If this value is not <code>null</code> then
+     * @param templatesNamePrefix If this value is not <code>null</code> then
      *            only models with a name with this prefix will be displayed
      *            with this view definition.
      */
-    public TemplateViewDefinition(final SimpleResourceSource resourceHandler, String templateNamePrefix) {
+    public TemplateViewDefinition(final SimpleResourceSource resourceHandler, String templatesNamePrefix) {
         this.resourceHandler = resourceHandler;
-        this.templateNamePrefix = templateNamePrefix;
+        this.templatesNamePrefix = templatesNamePrefix;
     }
 
     /**
@@ -64,11 +64,11 @@ public abstract class TemplateViewDefinition {
         List<SequenceMetaPath> viewMetaPaths = getViewMetaPaths();
         if (viewMetaPaths != null && !viewMetaPaths.isEmpty()) {
             for (SequenceMetaPath viewMetaPath : getViewMetaPaths()) {
-                PathTreeBranchDefinition pathTreeBranchDefinition = new PathTreeBranchDefinition(resourceHandler, templateNamePrefix, viewMetaPath, mainCategoryResStringAndIconKey);
+                PathTreeBranchDefinition pathTreeBranchDefinition = new PathTreeBranchDefinition(resourceHandler, templatesNamePrefix, viewMetaPath, mainCategoryResStringAndIconKey);
                 treeBranchDefinitions.add(pathTreeBranchDefinition);
             }
         } else {
-            PathTreeBranchDefinition pathTreeBranchDefinition = new PathTreeBranchDefinition(resourceHandler, templateNamePrefix, mainCategoryResStringAndIconKey);
+            PathTreeBranchDefinition pathTreeBranchDefinition = new PathTreeBranchDefinition(resourceHandler, templatesNamePrefix, mainCategoryResStringAndIconKey);
             treeBranchDefinitions.add(pathTreeBranchDefinition);
         }
         return treeBranchDefinitions;
