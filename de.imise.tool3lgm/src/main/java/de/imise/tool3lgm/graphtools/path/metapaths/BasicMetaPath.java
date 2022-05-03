@@ -144,6 +144,11 @@ public interface BasicMetaPath extends MetaModelSpecific {
      */
     String getName(boolean withStartClasses, boolean withEndClasses);
 
+    /**
+     * @return
+     */
+    String getDebugName();
+
     @Override
     String toString();
 

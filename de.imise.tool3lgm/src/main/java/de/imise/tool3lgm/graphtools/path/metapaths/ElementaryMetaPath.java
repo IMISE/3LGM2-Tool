@@ -6,6 +6,7 @@ import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 
 import com.google.common.collect.ImmutableList;
 
@@ -441,16 +442,7 @@ public final class ElementaryMetaPath extends MetaPathImpl implements SequenceMe
 
     @Override
     public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + (connectionState == null ? 0 : connectionState.hashCode());
-        result = prime * result + (direction == null ? 0 : direction.hashCode());
-        result = prime * result + (edgeClass == null ? 0 : edgeClass.hashCode());
-        result = prime * result + (endClass == null ? 0 : endClass.hashCode());
-        result = prime * result + (directed ? 1231 : 1237);
-        result = prime * result + (startClass == null ? 0 : startClass.hashCode());
-        result = prime * result + (type == null ? 0 : type.hashCode());
-        return result;
+        return Objects.hash(connectionState, direction, edgeClass, endClass, directed, startClass, type);
     }
 
     @Override
@@ -465,28 +457,16 @@ public final class ElementaryMetaPath extends MetaPathImpl implements SequenceMe
             return false;
         }
         ElementaryMetaPath other = (ElementaryMetaPath) obj;
-        if (edgeClass == null) {
-            if (other.edgeClass != null) {
-                return false;
-            }
-        } else if (!edgeClass.equals(other.edgeClass)) {
+        if (!Objects.equals(edgeClass, other.edgeClass)) {
             return false;
         }
-        if (endClass == null) {
-            if (other.endClass != null) {
-                return false;
-            }
-        } else if (!endClass.equals(other.endClass)) {
+        if (!Objects.equals(endClass, other.endClass)) {
             return false;
         }
         if (directed != other.directed) {
             return false;
         }
-        if (startClass == null) {
-            if (other.startClass != null) {
-                return false;
-            }
-        } else if (!startClass.equals(other.startClass)) {
+        if (!Objects.equals(startClass, other.startClass)) {
             return false;
         }
         if (type != other.type) {
@@ -677,6 +657,11 @@ public final class ElementaryMetaPath extends MetaPathImpl implements SequenceMe
 
     @Override
     public String toString() {
+        return getFullName();
+    }
+
+    @Override
+    public String getDebugName() {
         return getFullName();
     }
 

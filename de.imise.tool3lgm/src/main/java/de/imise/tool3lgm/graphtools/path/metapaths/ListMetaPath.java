@@ -176,4 +176,19 @@ public abstract class ListMetaPath extends MetaPathImpl {
         return subMetaPaths.get(getSubMetaPathCount() - 1);
     }
 
+    @Override
+    public String getDebugName() {
+        StringBuilder sb = new StringBuilder("[");
+        for (MetaPath subMetaPath : subMetaPaths) {
+            sb.append(subMetaPath.getDebugName());
+            sb.append(", ");
+        }
+        int length = sb.length();
+        if (length > 1) {
+            sb.setLength(length - 2);
+        }
+        sb.append("]");
+        return sb.toString();
+    }
+
 }
