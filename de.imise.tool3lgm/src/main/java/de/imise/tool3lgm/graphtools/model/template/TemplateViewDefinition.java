@@ -21,17 +21,20 @@ public abstract class TemplateViewDefinition {
     private final SimpleResourceSource resourceHandler;
 
     /**
-     *
+     * If this value is not <code>null</code> then only models with a name with
+     * this prefix will be displayed with this view definition.
      */
-    public TemplateViewDefinition() {
-        this(null);
-    }
+    private final String templateNamePrefix;
 
     /**
      * @param resourceHandler
+     * @param templateNamePrefix If this value is not <code>null</code> then
+     *            only models with a name with this prefix will be displayed
+     *            with this view definition.
      */
-    public TemplateViewDefinition(final SimpleResourceSource resourceHandler) {
+    public TemplateViewDefinition(final SimpleResourceSource resourceHandler, String templateNamePrefix) {
         this.resourceHandler = resourceHandler;
+        this.templateNamePrefix = templateNamePrefix;
     }
 
     /**
@@ -61,11 +64,11 @@ public abstract class TemplateViewDefinition {
         List<SequenceMetaPath> viewMetaPaths = getViewMetaPaths();
         if (viewMetaPaths != null && !viewMetaPaths.isEmpty()) {
             for (SequenceMetaPath viewMetaPath : getViewMetaPaths()) {
-                PathTreeBranchDefinition pathTreeBranchDefinition = new PathTreeBranchDefinition(resourceHandler, viewMetaPath, mainCategoryResStringAndIconKey);
+                PathTreeBranchDefinition pathTreeBranchDefinition = new PathTreeBranchDefinition(resourceHandler, templateNamePrefix, viewMetaPath, mainCategoryResStringAndIconKey);
                 treeBranchDefinitions.add(pathTreeBranchDefinition);
             }
         } else {
-            PathTreeBranchDefinition pathTreeBranchDefinition = new PathTreeBranchDefinition(resourceHandler, mainCategoryResStringAndIconKey);
+            PathTreeBranchDefinition pathTreeBranchDefinition = new PathTreeBranchDefinition(resourceHandler, templateNamePrefix, mainCategoryResStringAndIconKey);
             treeBranchDefinitions.add(pathTreeBranchDefinition);
         }
         return treeBranchDefinitions;

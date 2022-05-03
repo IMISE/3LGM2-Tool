@@ -48,23 +48,36 @@ public final class PathTreeBranchDefinition implements SimpleResourceSource {
     private final SimpleResourceSource resourceHandler;
 
     /**
+     * If this value is not <code>null</code> then only models with a name with
+     * this prefix will be displayed with this tree branch definition.
+     */
+    private final String displayedModelsNamePrefix;
+
+    /**
      * @param resourceHandler
-     * @param elementsPath
+     * @param displayedModelsNamePrefix If this value is not <code>null</code>
+     *            then only models with a name with this prefix will be
+     *            displayed with this tree branch definition.
      * @param hierarchyObjects
      */
-    public PathTreeBranchDefinition(final SimpleResourceSource resourceHandler, final Object... hierarchyObjects) {
+    public PathTreeBranchDefinition(final SimpleResourceSource resourceHandler, final String displayedModelsNamePrefix, final Object... hierarchyObjects) {
         this.resourceHandler = resourceHandler;
+        this.displayedModelsNamePrefix = displayedModelsNamePrefix;
         elementsPath = null;
         initHierarchyObjects(hierarchyObjects);
     }
 
     /**
      * @param resourceHandler
+     * @param displayedModelsNamePrefix If this value is not <code>null</code>
+     *            then only models with a name with this prefix will be
+     *            displayed with this tree branch definition.
      * @param elementsPath
      * @param hierarchyObjects
      */
-    public PathTreeBranchDefinition(final SimpleResourceSource resourceHandler, final SequenceMetaPath elementsPath, final Object... hierarchyObjects) {
+    public PathTreeBranchDefinition(final SimpleResourceSource resourceHandler, final String displayedModelsNamePrefix, final SequenceMetaPath elementsPath, final Object... hierarchyObjects) {
         this.resourceHandler = resourceHandler;
+        this.displayedModelsNamePrefix = displayedModelsNamePrefix;
         this.elementsPath = elementsPath;
         initHierarchyObjects(hierarchyObjects);
     }
@@ -169,6 +182,20 @@ public final class PathTreeBranchDefinition implements SimpleResourceSource {
             return elementsPath.getAllElementaryPathsStartAndEndClasses();
         }
         return elementsPath.getAllFirstLevelSubMetaPathsStartAndEndClasses();
+    }
+
+    @Override
+    public String toString() {
+        return getClass().getSimpleName() + ": hierarchy=" + hierarchyObjects + " metaPath=" + (elementsPath == null ? null : elementsPath.getDebugName());
+    }
+
+    /**
+     * @return the displayedModelsNamePrefix If this value is not
+     *         <code>null</code> then only models with a name with this prefix
+     *         will be displayed with this tree branch definition.
+     */
+    public final String getDisplayedModelsNamePrefix() {
+        return displayedModelsNamePrefix;
     }
 
 }

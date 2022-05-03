@@ -51,13 +51,8 @@ public class IheTemplateLibraryProvider extends TemplateLibraryProvider {
     }
 
     @Override
-    public String getDisplayName() {
-        return super.getDisplayName();
-    }
-
-    @Override
     public TemplateViewDefinition getViewDefinition() {
-        return new TemplateViewDefinition(resourceHandler) {
+        return new TemplateViewDefinition(resourceHandler, IheRDFDataImporter.IHE_RDF_FILE_NAME) {
             @Override
             public Object[] getMainCategoryResStringAndIconKeys() {
                 return new Object[] {"MAIN_CATEGORY_NAME"};

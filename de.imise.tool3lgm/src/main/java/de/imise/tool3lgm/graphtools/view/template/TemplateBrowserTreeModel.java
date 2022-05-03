@@ -28,14 +28,17 @@ public class TemplateBrowserTreeModel extends PathTreeModel {
     }
 
     @Override
-    protected Iterable<GraphDocument> getSourceModels() {
+    protected Iterable<GraphDocument> getSourceModels(String modelNamePrefix) {
         MetaModelContext metaModelContext = getMetaModelContext();
         TemplateLibrariesManager templateLibrariesManager = Static.getTemplateLibrariesManager();
         Collection<GDCollection> templates = templateLibrariesManager.getTemplates(metaModelContext);
         List<GraphDocument> templateMainModels = new ArrayList<>();
         for (GDCollection template : templates) {
-            LGMGraphDocument templateMainDoc = template.getMainDoc();
-            templateMainModels.add(templateMainDoc);
+            String modelName = template.getName();
+            if (modelName.startsWith(modelNamePrefix)) {
+                LGMGraphDocument templateMainDoc = template.getMainDoc();
+                templateMainModels.add(templateMainDoc);
+            }
         }
         return templateMainModels;
     }

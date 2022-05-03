@@ -1,5 +1,7 @@
 package de.imise.tool3lgm.graphtools.model.template;
 
+import static de.imise.tool3lgm.Tool3lgmModelType.ModelCategory.TEMPLATE;
+
 import java.io.File;
 import java.util.List;
 
@@ -52,6 +54,7 @@ public class ModelTemplatLibraryProvider extends TemplateLibraryProvider {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        gdcoll.setModelCategory(TEMPLATE);
         return gdcoll;
     }
 
@@ -62,7 +65,7 @@ public class ModelTemplatLibraryProvider extends TemplateLibraryProvider {
 
     @Override
     public TemplateViewDefinition getViewDefinition() {
-        return new TemplateViewDefinition() {
+        return new TemplateViewDefinition(null, null) {
             @Override
             protected Object[] getMainCategoryResStringAndIconKeys() {
                 List<File> templateDirectories = TemplateLibrariesManager.getTemplateDirectories();

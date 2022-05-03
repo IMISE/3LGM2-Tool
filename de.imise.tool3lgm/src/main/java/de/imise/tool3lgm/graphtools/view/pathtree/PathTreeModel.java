@@ -208,7 +208,8 @@ public class PathTreeModel extends DefaultTreeModel implements MetaModelSpecific
         if (metaPath != null) {
             Class<? extends ModelElement> pathStepConnectionClass = metaPath.getStartClass();
             Collection<ElementContainerTreeNode> pathStepNodes = new ArrayList<>();
-            Iterable<GraphDocument> allSourceModels = getAllSourceModels();
+            String modelsNamePrefix = branchDefinition.getDisplayedModelsNamePrefix();
+            Iterable<GraphDocument> allSourceModels = getAllSourceModels(modelsNamePrefix);
             for (GraphDocument sourceModel : allSourceModels) {
                 List<ElementContainer> elementContainers = sourceModel.getElementContainers(pathStepConnectionClass);
                 getOrCreateNodes(pathStepNodes, elementContainers, lastHierarchyNode, null, branchDefinition);
@@ -308,19 +309,23 @@ public class PathTreeModel extends DefaultTreeModel implements MetaModelSpecific
     }
 
     /**
+     * @param modelsNamePrefix
      * @return all submodels to be queried to fill the model
      */
-    private Iterable<GraphDocument> getAllSourceModels() {
+    private Iterable<GraphDocument> getAllSourceModels(String modelsNamePrefix) {
         if (sourceDocs != null) {
             return sourceDocs;
         }
-        Iterable<GraphDocument> sourceModels = getSourceModels();
+        Iterable<GraphDocument> sourceModels = getSourceModels(modelsNamePrefix);
         if (sourceModels != null) {
             return sourceModels;
         }
-        GraphDocument sourceModel = getSourceModel();
+        GraphDocument sourceModel = getSourceModel(modelsNamePrefix);
         if (sourceModel == null) {
             sourceModel = Static.getSelectedDoc();
+        }
+        if (sourceModel == null) {
+            return ImmutableList.of();
         }
         return ImmutableList.of(sourceModel);
     }
@@ -331,10 +336,11 @@ public class PathTreeModel extends DefaultTreeModel implements MetaModelSpecific
      * neither function is overridden, the main model of the currently selected
      * model is taken.
      *
+     * @param modelsNamePrefix
      * @return the submodels to be queried to fill the model
      * @see #getSourceModel()
      */
-    protected Iterable<GraphDocument> getSourceModels() {
+    protected Iterable<GraphDocument> getSourceModels(String modelsNamePrefix) {
         return null;
     }
 
@@ -344,10 +350,11 @@ public class PathTreeModel extends DefaultTreeModel implements MetaModelSpecific
      * neither function is overridden, the main model of the currently selected
      * model is taken.
      *
+     * @param modelNamePrefix
      * @return the submodel to be queried to fill the model
-     * @see #getSourceModels()
+     * @see #getSourceModels(String)
      */
-    protected GraphDocument getSourceModel() {
+    protected GraphDocument getSourceModel(String modelNamePrefix) {
         return null;
     }
 
