@@ -60,7 +60,7 @@ public class TemplateLibrariesContext {
      * @param metaModelContext
      */
     public void remove(final MetaModelContext metaModelContext) {
-        Set<GDCollection> templates = templateToTreeDefinition.keySet();
+        List<GDCollection> templates = new ArrayList<>(templateToTreeDefinition.keySet()); // we need a copy!
         for (GDCollection template : templates) {
             if (template.hasMetaModelContext(metaModelContext)) {
                 templateToTreeDefinition.remove(template);
