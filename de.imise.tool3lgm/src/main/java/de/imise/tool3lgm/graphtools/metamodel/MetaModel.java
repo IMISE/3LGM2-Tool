@@ -917,7 +917,7 @@ public final class MetaModel extends CoreMetaModel {
     /**
      * @param elementClass
      * @return <code>true</code>if this element class is a class that can be
-     *         only added via en template to a model
+     *         only added via a template to a model
      */
     public final boolean isPureTemplateElementClass(final Class<? extends ModelElement> elementClass) {
         if (Edge.class.isAssignableFrom(elementClass)) {

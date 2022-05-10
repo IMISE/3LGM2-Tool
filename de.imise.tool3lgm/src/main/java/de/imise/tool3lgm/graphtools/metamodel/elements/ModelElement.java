@@ -5,7 +5,6 @@ import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction.FOR
 import static de.imise.tool3lgm.graphtools.userfield.definition.UserField.EMPTY_STRING;
 
 import java.awt.Color;
-import java.awt.Container;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -58,6 +57,7 @@ import de.imise.util.NameAndDescriptionTarget;
 import de.imise.util.ReflectionUtils;
 import de.imise.util.StringUtils;
 import de.imise.util.htmlxml.HTMLConverter;
+import de.imise.util.swing.component.ParentComponentFinder;
 
 public abstract class ModelElement extends UserFieldTarget implements MetaModelSpecific, GDCollectionOwner, IDSource, NameAndDescriptionTarget {
 
@@ -258,9 +258,9 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
         int layer = metaModel.layerFor(getClass());
         if (layer == ModelConstants.NO_LAYER) {
             for (ElementContainer ec : containerTable.values()) {
-                Container parent = ec.getParent();
-                if (parent instanceof LayerContainer) {
-                    layer = ((LayerContainer) parent).getLayerNumber();
+                LayerContainer parent = ParentComponentFinder.getParent(ec, LayerContainer.class);
+                if (parent != null) {
+                    layer = parent.getLayerNumber();
                     break;
                 }
             }

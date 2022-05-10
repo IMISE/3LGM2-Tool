@@ -1382,8 +1382,8 @@ public class GDCollection extends UserFieldTarget implements MetaModelSpecific {
             bendpointIndex = edgeContainer.getBendpointInsertIndex(x, y);
         }
         //[0] = SzenID, [1] = ID der Edge, [2] = ID des Knickpunktes, [3] = X-Position, [4] = Y-Position, [5] = Index des Knickpuntes auf der Edge,
-        szen.addRedo(pid, MODEL_ACTION_INSERT_BENDING_POINT, szenID, edgeContainer.getID(), bendpoint.getID(), x, y, bendpointIndex);
-        szen.addUndo(pid, MODEL_ACTION_DELETE_FROM_MODEL, bendpoint.getID());
+        szen.addRedo(pid, MODEL_ACTION_INSERT_BENDING_POINT, szenID, edgeContainer, bendpoint, x, y, bendpointIndex);
+        szen.addUndo(pid, MODEL_ACTION_DELETE_FROM_MODEL, bendpoint);
         // den Layer bestimmen auf dem der Knickpunkt eingefügt werden soll (= der Layer der Edge)
         int layerNumber = edgeContainer.getElement().layerFor();
         if (szen.getLayer(layerNumber).add(bendpointContainer) == null) {
