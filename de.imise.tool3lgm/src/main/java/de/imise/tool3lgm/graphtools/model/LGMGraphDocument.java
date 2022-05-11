@@ -975,7 +975,7 @@ public class LGMGraphDocument extends GraphDocument {
      * @param pid
      * @return
      */
-    private static ElementContainer copyEdgeContainer(EdgeContainer sourceContainer, LGMGraphDocument targetDoc, String targetEdgeID, DualHashBidiMap<String, String> oldToNewID, int pid) {
+    private static EdgeContainer copyEdgeContainer(EdgeContainer sourceContainer, LGMGraphDocument targetDoc, String targetEdgeID, DualHashBidiMap<String, String> oldToNewID, int pid) {
         Edge sourceEdge = sourceContainer.getEdge();
         ModelElement sourceEdgeStart = sourceEdge.getStart();
         ModelElement sourceEdgeEnd = sourceEdge.getEnd();
@@ -988,7 +988,7 @@ public class LGMGraphDocument extends GraphDocument {
         String targetEdgeClassName = sourceEdge.getClass().getSimpleName();
         GDCollection targetCollection = targetDoc.getCollection();
         Edge targetEdge = targetCollection.link(targetEdgeClassName, targetEdgeID, targetEdgeStartID, targetEdgeEndID, targetEdgeStartEdgeIndex, targetEdgeEndEdgeIndex, pid);
-        ElementContainer targetContainer = null;
+        EdgeContainer targetContainer = null;
         if (targetEdge != null) {
             targetDoc.setName(targetEdge, sourceEdge.getName(), pid);
             targetDoc.setDescription(targetEdge, sourceEdge.getDescription(), pid);
@@ -998,7 +998,32 @@ public class LGMGraphDocument extends GraphDocument {
                 targetContainer = targetEdge.getContainer(mainDoc);
             }
         }
+        if (targetContainer != null) {
+            addBendpoints(sourceContainer, targetContainer, pid);
+        }
         return targetContainer;
+    }
+
+    /**
+     * @param sourceContainer
+     * @param targetContainer
+     * @param pid
+     */
+    private static void addBendpoints(EdgeContainer sourceContainer, EdgeContainer targetContainer, int pid) {
+        GraphDocument targetDoc = targetContainer.getGraphDocument();
+        GDCollection targetGDColl = targetDoc.getCollection();
+        if (targetDoc instanceof Szenario) {
+            for (int i = 0; i < sourceContainer.getBendpointContainerCount(); i++) {
+                BendpointContainer sourceBendpointContainer = sourceContainer.getBendpointContainer(i);
+                GraphElementLayout bendpointLayout = sourceBendpointContainer.get3LGMLayout();
+                String targetBendpointID = sourceBendpointContainer.getIconID();
+                Bendpoint existingBendpoint = targetDoc.findBendpointCoded(targetBendpointID);
+                if (existingBendpoint != null) {
+                    targetBendpointID = null;
+                }
+                targetGDColl.insertBendingPoint(targetDoc.id, targetContainer.getID(), targetBendpointID, bendpointLayout.x, bendpointLayout.y, i, pid);
+            }
+        }
     }
 
     /**
