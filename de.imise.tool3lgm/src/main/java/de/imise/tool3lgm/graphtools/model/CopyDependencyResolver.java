@@ -22,6 +22,7 @@ import de.imise.tool3lgm.graphtools.view.container.EdgeContainer;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.graphtools.view.container.LayerContainer;
 import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
+import de.imise.util.Alphabetical;
 import de.imise.util.collections.ListSet;
 
 /**
@@ -105,6 +106,13 @@ public class CopyDependencyResolver {
          */
         public UserFieldDefinitions getUserFieldDefinitions() {
             return userFieldDefinitions;
+        }
+
+        @Override
+        public String toString() {
+            ArrayList<Edge> edges = new ArrayList<>(additionalEdges);
+            Alphabetical.sort(edges);
+            return getClass().getSimpleName() + ": \n\telements=" + elements + "\n\tadditionalEdges=" + edges + "\n\tusedUserFields=" + usedUserFields + "\n\tuserFieldDefinitions=" + userFieldDefinitions;
         }
 
     }
