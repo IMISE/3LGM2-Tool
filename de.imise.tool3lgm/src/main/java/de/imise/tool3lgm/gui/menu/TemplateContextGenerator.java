@@ -1,6 +1,7 @@
 package de.imise.tool3lgm.gui.menu;
 
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
+import static de.imise.tool3lgm.graphtools.undoredo.TransactionManager.STANDARD_PID;
 
 import java.awt.Component;
 import java.util.Set;
@@ -81,7 +82,7 @@ public class TemplateContextGenerator extends ElementSelectionContextGenerator {
             GDCollection selectedGDcoll = Static.getSelectedGDCollection();
             GDCollection selectedTemplate = selectedTemplateDoc.getCollection();
             if (selectedGDcoll != null && selectedGDcoll != selectedTemplate) {
-                //TODO: hier das Kontextmenü für einen einzelnes Template-Modell zusammenbauen
+                menu = getTemplateModelContextMenu(source, selectedTemplateDoc);
             }
         }
 
@@ -114,11 +115,10 @@ public class TemplateContextGenerator extends ElementSelectionContextGenerator {
     /**
      * @return
      */
-    private final JMenuItem createCopyToModelItem() {
+    private final JMenuItem createCopyToModelItem(GraphDocument template) {
         JMenuItem item = new JMenuItem(getResString("inmodel"));
-        GraphDocument template = getDoc();
         LGMGraphDocument selectedDoc = Static.getSelectedDoc();
-        item.addActionListener(e -> LGMGraphDocument.copySelectedToModel(template, selectedDoc));
+        item.addActionListener(e -> LGMGraphDocument.copySelectedToModel(template, selectedDoc, STANDARD_PID));
         return item;
     }
 
@@ -130,14 +130,14 @@ public class TemplateContextGenerator extends ElementSelectionContextGenerator {
      * @return
      */
     private JPopupMenu getSingleNodeContextMenu(final Component contextSource, final GraphDocument template) {
-        //      System.err.println("ContextGenerator.getSingleNodeContextMenu()");
+        //Sys.err1("ContextGenerator.getSingleNodeContextMenu()");
         JPopupMenu menu = createUpdatingPopupMenu();
         ElementContainer ec = template.getLastSelected();
         if (!(ec instanceof BendpointContainer)) {
             addMenuItem(menu, properties);
             ModelElement me = ec.getElement();
             if (!me.isPureTemplateElement()) {
-                addMenuItem(menu, createCopyToModelItem());
+                addMenuItem(menu, createCopyToModelItem(template));
             }
             //Anlegbare Pfade zu anderen Elementen anbieten
             menu.addSeparator();
@@ -149,15 +149,30 @@ public class TemplateContextGenerator extends ElementSelectionContextGenerator {
 
     /**
      * @param contextSource
+     * @param template
      * @return
      */
     private JPopupMenu getMultiNodeContextMenu(final Component contextSource, final GraphDocument template) {
-        //      System.err.println("ContextGenerator.getSingleNodeContextMenu()");
+        //Sys.err1("ContextGenerator.getMultiNodeContextMenu()");
         JPopupMenu menu = createUpdatingPopupMenu();
         ElementContainer ec = template.getLastSelected();
         //        if (!(ec instanceof BendpointContainer)) {
-        //            addMenuItem(menu, createCopyToModelItem());
+        //            addMenuItem(menu, createCopyToModelItem(template));
         //        }
+        return menu;
+    }
+
+    /**
+     * @param contextSource
+     * @param template
+     * @return
+     */
+    private JPopupMenu getTemplateModelContextMenu(final Component contextSource, final GraphDocument template) {
+        //Sys.err1("ContextGenerator.getTemplateModelContextMenu()");
+        JPopupMenu menu = createUpdatingPopupMenu();
+        LGMGraphDocument selectedTemplateDoc = template.getSelectedDoc();
+        selectedTemplateDoc.selectAll();
+        addMenuItem(menu, createCopyToModelItem(template));
         return menu;
     }
 

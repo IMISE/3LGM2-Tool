@@ -132,7 +132,6 @@ import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout.TextPositionHo
 import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout.TextPositionVertical;
 import de.imise.tool3lgm.graphtools.view.graph.GraphFunctions;
 import de.imise.tool3lgm.graphtools.view.graph.GraphViewParameter;
-import de.imise.tool3lgm.graphtools.view.graph.Shape;
 import de.imise.tool3lgm.gui.MainFrame;
 import de.imise.tool3lgm.log.Log;
 import de.imise.tool3lgm.userproperties.UserProperties;
@@ -1710,7 +1709,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
      * @param log
      */
     public void start_transaction(final int pid, final boolean log) {
-        //Sys.err("start " + gdcoll.isBulkMode() + " " + pid + " " + log);
+        //        Sys.errn(10, "Call start: " + (gdcoll.isBulkMode() ? "BUT IS BULK MODE " : "will start... ") + " " + pid + " " + log + " " + gdcoll);
         if (gdcoll.isBulkMode()) {
             return;
         }
@@ -1743,7 +1742,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
                 }
             }
         }
-        //Sys.err("start " + " " + pid + " " + log);
+        //        Sys.errn(10, "start " + " " + pid + " " + log + " counter=" + transStackInt + " " + gdcoll);
     }
 
     /**
@@ -1767,7 +1766,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
      * @param log
      */
     public void finish_transaction(final int pid, final boolean log) {
-        //Sys.err("finish " + gdcoll.isBulkMode() + " " + pid + " " + log);
+        //        Sys.errn(10, "Call finish: " + (gdcoll.isBulkMode() ? "BUT IS BULK MODE " : "will finish... ") + " " + pid + " " + log + " " + gdcoll);
         if (gdcoll.isBulkMode()) {
             return;
         }
@@ -1797,7 +1796,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
             }
             transactionManager.finishTransaction(pid);
         }
-        //Sys.err("finish " + pid + "  " + log);
+        //        Sys.errn(10, "finish " + " " + pid + " " + log + " counter=" + transStackInt + " " + gdcoll);
     }
 
     /**
@@ -3338,6 +3337,18 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
     // --- Event-Verwaltung --- Ende ---
 
     /**
+     * @param ec
+     * @param visible
+     * @param pid
+     */
+    protected final void setVisible(ElementContainer ec, boolean visible, int pid) {
+        boolean currentVisible = ec.isVisible();
+        if (currentVisible != visible) {
+            setVisible(currentVisible, id, List.of(ec), pid);
+        }
+    }
+
+    /**
      * @param args
      * @param pid
      */
@@ -3828,12 +3839,47 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
      * @param name
      * @param description
      * @param elementID
+     * @param layout2Adapt
      * @param pid
      * @return
      */
-    public NodeContainer createNodeAndContainer(final Class<? extends ModelElement> elementClass, final SubType subType, final String name, final String description, final String elementID, final int pid) {
-        return createNodeAndContainer(elementClass, subType, name, description, elementID, GDCommands.INVALID_POSITION_X, GDCommands.INVALID_POSITION_Y, GDCommands.INVALID_WIDTH, GDCommands.INVALID_HEIGHT, GDCommands.INVALID_COLOR_RGB,
-                GDCommands.INVALID_SHAPE, GDCommands.INVALID_BENDPOINT_INDEX, pid);
+    public NodeContainer createNodeAndContainer(final Class<? extends ModelElement> elementClass, final SubType subType, final String name, final String description, final String elementID, GraphElementLayout layout2Adapt, boolean selectCreated,
+            final int pid) {
+        start_transaction(pid);
+        lastCreated = createNodeAndContainer(elementClass, subType, name, description, elementID, selectCreated, pid);
+        if (lastCreated != null) {
+            ModelElement me = lastCreated.getElement();
+            if (!me.isUnique()) {
+                if (this instanceof Szenario) {
+                    if (layout2Adapt != null) {
+                        moveNodeContainer(lastCreated, layout2Adapt.x, layout2Adapt.y, layout2Adapt.width, layout2Adapt.height, pid);
+                        //Color
+                        Color color = layout2Adapt.bg_color;
+                        if (color != null) {
+                            changeColor(lastCreated, color, pid); //this does not adapt the alpha value so we have to do it separately
+                            int alpha = color.getAlpha(); //default alpha value of a new Color is 255
+                            if (alpha != 255) {
+                                changeAlpha(lastCreated, alpha, pid);
+                            }
+                        }
+                        //Font
+                        GraphElementLayout targetLayout = lastCreated.get3LGMLayout();
+                        Font font2Set = layout2Adapt.getFont();
+                        Font targetFont = targetLayout.getFont();
+                        if (!Objects.equals(font2Set, targetFont)) {
+                            changeFont(lastCreated, font2Set, pid);
+                        }
+                        //Icon
+                        String iconID = layout2Adapt.getIconID();
+                        if (iconID != null) {
+                            setIcon(id, lastCreated.getID(), iconID, pid);
+                        }
+                    }
+                }
+            }
+        }
+        finish_transaction(pid, DATA_CHANGED);
+        return lastCreated;
     }
 
     /**
@@ -3842,18 +3888,24 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
      * @param name
      * @param description
      * @param elementID
-     * @param x
-     * @param y
-     * @param width
-     * @param height
-     * @param rgb
-     * @param form
-     * @param bendpoint_index
      * @param pid
      * @return
      */
-    private NodeContainer createNodeAndContainer(final Class<? extends ModelElement> elementClass, final SubType subType, final String name, final String description, final String elementID, int x, int y, final int width, final int height, final int rgb,
-            final Shape form, final int bendpoint_index, final int pid) {
+    public NodeContainer createNodeAndContainer(final Class<? extends ModelElement> elementClass, final SubType subType, final String name, final String description, final String elementID, final int pid) {
+        return createNodeAndContainer(elementClass, subType, name, description, elementID, !gdcoll.isBulkMode(), pid);
+    }
+
+    /**
+     * @param elementClass
+     * @param subType
+     * @param name
+     * @param description
+     * @param elementID
+     * @param addToSelection
+     * @param pid
+     * @return
+     */
+    public NodeContainer createNodeAndContainer(final Class<? extends ModelElement> elementClass, final SubType subType, final String name, final String description, final String elementID, boolean selectCreated, final int pid) {
         lastCreated = null;
         start_transaction(pid);
         if (Node.class.isAssignableFrom(elementClass)) {
@@ -3866,13 +3918,10 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
             if (!me.isUnique()) {
                 if (this instanceof Szenario) {
                     lastCreated = addElementToSzenario(id, lastCreated, pid);
-                    x = x != GDCommands.INVALID_POSITION_X ? x : next_x_pos;
-                    y = y != GDCommands.INVALID_POSITION_Y ? y : next_y_pos;
-                    moveNodeContainer(lastCreated, x, y, width, height, pid);
                 }
             }
         }
-        if (!gdcoll.isBulkMode()) {
+        if (selectCreated) {
             select(lastCreated, pid);
         }
         finish_transaction(pid, DATA_CHANGED);
@@ -4890,8 +4939,10 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
         //		}
 
         me.setName(name);
-        //irgendein Container dieses Elementes muss ins Event gapackt werden. Welcher ist egal, da eigentlich das Element selbst wichtig wäre
-        ElementContainer ec = me.getContainer(this);
+        //irgendein Container dieses Elementes muss ins Event gapackt werden. Welcher ist egal, da eigentlich
+        //das Element selbst wichtig wäre. Aber da nicht alle Elemente in this einen Container haben, muss man
+        //den aus dem Hauptdokument nehmen.
+        ElementContainer ec = me.getContainer(gdcoll.getMainDoc());
         finish_transaction(pid);
         distributeEvent(ELEMENT_NAME_CHANGED, ec, pid);
     }

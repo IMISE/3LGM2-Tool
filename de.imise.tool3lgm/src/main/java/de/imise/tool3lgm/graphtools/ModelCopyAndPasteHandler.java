@@ -1,5 +1,7 @@
 package de.imise.tool3lgm.graphtools;
 
+import static de.imise.tool3lgm.graphtools.undoredo.TransactionManager.STANDARD_PID;
+
 import de.imise.tool3lgm.MetaModelContext;
 import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.Tool3lgmModelType;
@@ -35,7 +37,7 @@ public class ModelCopyAndPasteHandler {
             clipboardGDCollection.setSelectedDoc(szen);
         }
         LGMGraphDocument targetDoc = clipboardGDCollection.getSelectedDoc();
-        LGMGraphDocument.copySelectedToModel(sourceDoc, targetDoc);
+        LGMGraphDocument.copySelectedToModel(sourceDoc, targetDoc, STANDARD_PID);
     }
 
     /**
@@ -48,7 +50,7 @@ public class ModelCopyAndPasteHandler {
         LGMGraphDocument targetDoc = Static.getSelectedDoc();
         GDCollection targetCollection = targetDoc.getCollection();
         LGMGraphDocument sourceDoc = clipboardGDCollection.getSelectedDoc();
-        LGMGraphDocument.copySelectedToModel(sourceDoc, targetDoc);
+        LGMGraphDocument.copySelectedToModel(sourceDoc, targetDoc, STANDARD_PID);
         targetCollection.increasePasteCounter();
     }
 

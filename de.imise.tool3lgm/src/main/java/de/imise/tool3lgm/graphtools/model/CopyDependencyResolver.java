@@ -69,7 +69,7 @@ public class CopyDependencyResolver {
          * @return
          */
         public boolean add(final ModelElement me) {
-            if (contains(me)) {
+            if (me instanceof Bendpoint || contains(me)) {
                 return false;
             }
             Set<UserField> elementUserFields = me.getUserFieldInputValueKeys();

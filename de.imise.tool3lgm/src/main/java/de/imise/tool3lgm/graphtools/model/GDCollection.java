@@ -16,8 +16,6 @@ import static de.imise.tool3lgm.graphtools.model.GDCommands.INVALID_BENDPOINT_IN
 import static de.imise.tool3lgm.graphtools.model.GDCommands.INVALID_EDGE_CLASS_NAME;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.INVALID_EDGE_INDEX;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.INVALID_ID_STRING;
-import static de.imise.tool3lgm.graphtools.model.GDCommands.INVALID_POSITION_X;
-import static de.imise.tool3lgm.graphtools.model.GDCommands.INVALID_POSITION_Y;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_ADD_ELEMENT_TO_SUBMODEL;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_CREATE_NODE;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_CREATE_SUBMODEL;
@@ -1392,9 +1390,7 @@ public class GDCollection extends UserFieldTarget implements MetaModelSpecific {
         }
         mainDoc.getLayer(layerNumber).add(new BendpointContainer(bendpoint, mainDoc));
         edgeContainer.addBendpoint(bendpointContainer, bendpointIndex);
-        if (x != INVALID_POSITION_X && y != INVALID_POSITION_Y) {
-            bendpointContainer.setLocation(x, y);
-        }
+        bendpointContainer.setLocation(x, y);
         szen.select(bendpointContainer, pid);
         szen.finish_transaction(pid, DATA_CHANGED, SELECTION_CHANGED);
         edgeContainer.computeBorderPoints();
@@ -2681,7 +2677,7 @@ public class GDCollection extends UserFieldTarget implements MetaModelSpecific {
      * @return the previous bulk mode
      */
     public boolean setBulkMode(final boolean bulk_mode) {
-        //Sys.err("bulk_mode: " + this.bulk_mode + " -> " + bulk_mode);
+        //Sys.errn(10, toString() + " BULKMODE: " + this.bulk_mode + " -> " + bulk_mode);
         //das erste Setzten des bulk_mode auf false beendet die Initialisierung
         if (!initialized && !bulk_mode) {
             initialized = true;

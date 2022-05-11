@@ -411,6 +411,22 @@ public class GraphElementLayout implements SwingConstants, Cloneable {
         return textAlignmentHTML == STANDARD_TEXT_ALIGNMENT_HTML;
     }
 
+    /**
+     * @return the rgb value of the background color or -1 if this color is not
+     *         set
+     */
+    public int rgb() {
+        return bg_color == null ? -1 : bg_color.getRGB();
+    }
+
+    /**
+     * @return the alpha value of the background color or -1 if this color is
+     *         not set
+     */
+    public int alpha() {
+        return bg_color == null ? -1 : bg_color.getAlpha();
+    }
+
     @Override
     public String toString() {
         String s = "Default Layout form=" + form + " x=" + x + " y=" + y + " width=" + width + " height=" + height + " bg_color=" + bg_color + " fg_color=" + fg_color + " border_color=" + border_color + "font=" + font;

@@ -171,7 +171,7 @@ public abstract class ElementSelectionContextGenerator extends ContextGenerator 
                 //and all of its dependent to the selected model
                 ModelElement realStartElement = null;
                 if (startElementGDColl != selectedGDColl) {
-                    LGMGraphDocument.copyToModel(startElement, selectedDoc);
+                    LGMGraphDocument.copyToModel(startElement, selectedDoc, STANDARD_PID);
                     String startElementID = startElement.getID();
                     realStartElement = selectedDoc.findElementCoded(startElementID);
                 }
