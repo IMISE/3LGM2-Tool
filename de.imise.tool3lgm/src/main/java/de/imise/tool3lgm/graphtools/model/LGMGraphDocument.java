@@ -2,6 +2,7 @@ package de.imise.tool3lgm.graphtools.model;
 
 import static de.imise.tool3lgm.Tool3lgmConstants.CLIPBOARD_PATH;
 import static de.imise.tool3lgm.Tool3lgmModelType.ModelCategory.CLIPBOARD;
+import static de.imise.tool3lgm.Tool3lgmModelType.ModelCategory.REGULAR;
 import static de.imise.tool3lgm.graphtools.dialog.OverwriteDialog.OverwriteOption.IGNORE;
 import static de.imise.tool3lgm.graphtools.dialog.OverwriteDialog.OverwriteOption.JOIN;
 import static de.imise.tool3lgm.graphtools.dialog.OverwriteDialog.OverwriteOption.OVERWRITE;
@@ -637,10 +638,6 @@ public class LGMGraphDocument extends GraphDocument {
 
         CopyDependencyResolverResultSimple resolvedCopyDependencies = resolveCopyDependencies(sourceElements);
 
-        //Liste aller Kanten, bei denen das das eine Endelement gerade kopiert werden soll und das
-        //andere nicht kopiert werden soll aber bereits im Zielmodell vorkommt hinzufügen
-        addSplittedSourceEdgesToCopy(resolvedCopyDependencies.elements, targetDoc);
-
         if (targetCollection.hasModelCategory(CLIPBOARD)) { //copy to clipboard
             UserFieldDefinitions sourceUserFieldDefinitions = sourceCollection.getUserFieldDefinitions();
             UserFieldDefinitions clonedSourceUserFieldDefinitions = sourceUserFieldDefinitions.cloneForTargetCollection(targetCollection);
@@ -658,7 +655,6 @@ public class LGMGraphDocument extends GraphDocument {
         List<ElementContainer> selectedSourceElements = new ArrayList<>(sourceDoc.selectedContainer);
         sourceDoc.deselectAll(false);
 
-        sourceDoc.start_transaction(pid);
         targetDoc.start_transaction(pid);
 
         try {
@@ -678,6 +674,8 @@ public class LGMGraphDocument extends GraphDocument {
             GDCollectionIconTable targetIconTable = targetCollection.getIconTable();
             targetIconTable.putAll(iconTable);
 
+            MetaModel metaModel = sourceCollection.getMetaModel();
+
             for (int i = 0; i < elementContainersInGraphOrder.size(); i++) {
                 ElementContainer sourceContainer = elementContainersInGraphOrder.get(i);
                 ModelElement sourceElement = sourceContainer.getElement();
@@ -695,7 +693,15 @@ public class LGMGraphDocument extends GraphDocument {
                     existingTargetElement = targetMainDoc.findEdgeCoded(sourceID, layer);
                 }
 
-                if (existingTargetElement != null && !sourceCollection.hasModelCategory(CLIPBOARD)) {
+                // Always copy (and not join or override) if the same element id does not exist in the target
+                // model OR the source model is a TEMPLATE or CLIPBOARD model , but never copy pure template
+                // elements. This means that a direct transfer of elements from a regular model to another
+                // model, in which these elements already exist, NEVER creates copies. In this case, a
+                // join/override is always offered. If you want to copy, you have to go via Copy&Paste, where
+                // the source model is always a CLIPBOARD model.
+                boolean copy = existingTargetElement == null || !sourceCollection.hasModelCategory(REGULAR) && !metaModel.isPureTemplateElementClass(existingTargetElement.getClass());
+
+                if (!copy) {
                     if (!answer.applyToAll) {
                         sourceDoc.select(sourceContainer, pid);
                         sourceDoc.distributeEvent(SELECTION_CHANGED, sourceContainer, pid);
@@ -930,12 +936,11 @@ public class LGMGraphDocument extends GraphDocument {
 
         sourceCollection.setBulkMode(sourceBulkMode);
 
-        targetDoc.finish_transaction(pid, true);
-        targetDoc.distributeEvent(SELECTION_CHANGED);
+        targetDoc.finish_transaction(pid, SELECTION_CHANGED);
 
         sourceCollection.createInferenceEdges(true, pid);
         targetCollection.createInferenceEdges(true, pid);
-
+        sourceDoc.distributeEvent(DATA_CHANGED);
         targetDoc.distributeEvent(DATA_CHANGED);
 
         Static.closeProgressDialog();
