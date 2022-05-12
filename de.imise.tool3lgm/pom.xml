@@ -182,6 +182,14 @@
 							</includes>
 							<followSymlinks>false</followSymlinks>
 						</fileset>
+						<!-- Examples-Ordner im Deploy-Projekt leeren -->
+						<fileset>
+							<directory>../de.imise.tool3lgm.deploy/Tool3lgm/Examples</directory>
+							<includes>
+								<include>**/*</include>
+							</includes>
+							<followSymlinks>false</followSymlinks>
+						</fileset>
 					</filesets>
 				</configuration>
 			</plugin>
