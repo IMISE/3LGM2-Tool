@@ -45,6 +45,11 @@ public class DynamicTreeMouseAdapter implements MouseListener {
     private final DynamicTree tree;
 
     /**
+     * für die Kommunikation zwischen mousePressed und mouseClicked
+     */
+    private LGMTreeNode<?> selectedNode = null;
+
+    /**
      * @param tree
      */
     private DynamicTreeMouseAdapter(final DynamicTree tree) {
@@ -63,11 +68,6 @@ public class DynamicTreeMouseAdapter implements MouseListener {
         DynamicTreeMouseAdapter dynamicTreeMouseAdapter = new DynamicTreeMouseAdapter(tree);
         tree.addMouseListener(dynamicTreeMouseAdapter);
     }
-
-    /**
-     * für die Kommunikation zwischen mousePressed und mouseClicked
-     */
-    private LGMTreeNode<?> selectedNode = null;
 
     @Override
     public void mouseClicked(final MouseEvent e) {
@@ -121,26 +121,26 @@ public class DynamicTreeMouseAdapter implements MouseListener {
         if (gdcoll instanceof DummyGDCollection) {
             return;
         }
+
+        int xin = e.getX();
+        int yin = e.getY();
+        final JTree sourceTree = (JTree) e.getComponent();
+        TreePath path = sourceTree.getPathForLocation(xin, yin);
+        selectedNode = path == null ? null : (LGMTreeNode<?>) path.getLastPathComponent();
         if ((e.getModifiersEx() & InputEvent.CTRL_DOWN_MASK) != 0) {
             ContextGenerator contextGenerator = tree.getContextGenerator();
             contextGenerator.setControlled(true);
         }
         if (Tool3lgmConstants.isPopupTrigger(e)) {
             JPopupMenu menu = null;
-            int xin = e.getX();
-            int yin = e.getY();
-            final JTree sourceTree = (JTree) e.getComponent();
-            TreePath path = sourceTree.getPathForLocation(xin, yin);
             //Wenn die rechte Maustaste gedrückt wurde, wird <code>right_button</code> true;
             if (path == null) { //right click to an empty space in the tree (and not to a tree path)
                 menu = getExpandCollapseTreeContectMenu(sourceTree);
             } else {
                 // we must explicitely select the tree node if it was only right clicked
-                LGMTreeNode<?> lastNode = (LGMTreeNode<?>) path.getLastPathComponent();
-                if (!(lastNode.getUserObject() instanceof ElementContainer)) {
+                if (!(selectedNode instanceof ElementContainerTreeNode)) {
                     tree.getSelectionModel().setSelectionPath(tree.getPathForLocation(xin, yin));
                 }
-                selectedNode = (LGMTreeNode<?>) path.getLastPathComponent();
                 Object lastPathComponent = path.getLastPathComponent();
                 if (tree.isLayerNode(lastPathComponent)) {
                     ContextGenerator contextGenerator = tree.getContextGenerator();
