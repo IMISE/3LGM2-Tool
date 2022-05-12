@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.apache.commons.collections4.bidimap.DualHashBidiMap;
 
@@ -680,6 +681,8 @@ public class LGMGraphDocument extends GraphDocument {
 
             MetaModel metaModel = sourceCollection.getMetaModel();
 
+            Set<ElementContainer> multipleCreationTryedEdgeContainers = new HashSet<>();
+
             for (int i = 0; i < elementContainersInGraphOrder.size(); i++) {
                 ElementContainer sourceContainer = elementContainersInGraphOrder.get(i);
                 ModelElement sourceElement = sourceContainer.getElement();
@@ -737,7 +740,10 @@ public class LGMGraphDocument extends GraphDocument {
                         // if this is an edge for an edge (like KommbezEtNtVerbindung) then the start- or Element maybe not exists yet -> try later
                         if (targetContainer == null) {
                             ElementContainer laterCopiedEdgeContainer = elementContainersInGraphOrder.remove(i--);
-                            elementContainersInGraphOrder.add(laterCopiedEdgeContainer);
+                            if (!multipleCreationTryedEdgeContainers.contains(laterCopiedEdgeContainer)) {
+                                elementContainersInGraphOrder.add(laterCopiedEdgeContainer);
+                                multipleCreationTryedEdgeContainers.add(laterCopiedEdgeContainer);
+                            }
                             continue;
                         }
                         //select also all bendpoints after copying
