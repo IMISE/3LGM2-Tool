@@ -263,26 +263,6 @@ public class CopyDependencyResolver {
         GDCollection gdcoll = me.getCollection();
         LGMGraphDocument mainDoc = gdcoll.getMainDoc();
         Class<? extends ModelElement> elementClass = me.getClass();
-        if (me instanceof Edge) {
-            int layer = me.layerFor();
-            LayerContainer lc = mainDoc.getLayer(layer);
-            Iterable<BendpointContainer> bendpointContainers = lc.getBendpointContainers();
-            for (BendpointContainer bpc : bendpointContainers) {
-                Bendpoint bendpoint = bpc.getBendpoint();
-                String edgeID = bendpoint.getEdgeID();
-                if (edgeID != null) {
-                    String meID = me.getID();
-                    if (edgeID.equals(meID)) {
-                        result.add(bendpoint);
-                    }
-                }
-            }
-            Edge edge = (Edge) me;
-            ModelElement start = edge.getStart();
-            resolveCopyDependencies(start, elementClass, result, initialSelectedElements);
-            ModelElement end = edge.getEnd();
-            resolveCopyDependencies(end, elementClass, result, initialSelectedElements);
-        }
         MetaModel metaModel = gdcoll.getMetaModel();
         Collection<ElementaryMetaPath> copyDependencies = metaModel.getCopyDependencies(elementClass);
         for (ElementaryMetaPath copyDependentElementaryMetaPath : copyDependencies) {

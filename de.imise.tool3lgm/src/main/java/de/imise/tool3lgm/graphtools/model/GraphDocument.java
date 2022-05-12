@@ -327,6 +327,14 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
     }
 
     /**
+     * @param modelCategory
+     * @return
+     */
+    public boolean hasModelCategory(ModelCategory modelCategory) {
+        return gdcoll.hasModelCategory(modelCategory);
+    }
+
+    /**
      * @return <code>true</code> if this Graphdocument is the main GraphDocument
      *         of the model, otherwise <code>false</code>
      */
@@ -3901,7 +3909,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
      * @param name
      * @param description
      * @param elementID
-     * @param addToSelection
+     * @param selectCreated
      * @param pid
      * @return
      */
@@ -3917,7 +3925,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
             ModelElement me = lastCreated.getElement();
             if (!me.isUnique()) {
                 if (this instanceof Szenario) {
-                    lastCreated = addElementToSzenario(id, lastCreated, pid);
+                    lastCreated = addElementToSzenario(id, lastCreated, false, pid);
                 }
             }
         }
@@ -3925,6 +3933,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
             select(lastCreated, pid);
         }
         finish_transaction(pid, DATA_CHANGED);
+
         return lastCreated;
     }
 

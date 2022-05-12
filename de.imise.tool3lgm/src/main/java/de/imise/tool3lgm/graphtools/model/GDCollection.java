@@ -1338,6 +1338,7 @@ public class GDCollection extends UserFieldTarget implements MetaModelSpecific {
     //#############################################################################################//
     /////////////////////////////////////////////////////////////////////////////////////////////////
     //ANFANG ADD //
+
     /**
      * @param szenID
      * @param edgeID
@@ -1346,7 +1347,9 @@ public class GDCollection extends UserFieldTarget implements MetaModelSpecific {
      * @param y
      * @param bendpointIndex Index des Knickpunktes auf dem
      *            {@link EdgeContainer}
+     * @param selectEdgeAndBendpoint
      * @param pid
+     * @return
      */
     public final BendpointContainer insertBendingPoint(final String szenID, final String edgeID, final String bendpointID, final int x, final int y, int bendpointIndex, final int pid) {
         GraphDocument szen = getGraphDocumentCoded(szenID);
@@ -1361,9 +1364,7 @@ public class GDCollection extends UserFieldTarget implements MetaModelSpecific {
         if (!isNullOrEmpty(edgeID)) {
             edgeContainer = szen.findEdgeContainerCoded(edgeID);
         }
-        if (edgeContainer != null) {
-            szen.select(edgeContainer, pid);
-        } else {
+        if (edgeContainer == null) {
             if (!szen.isSelectedOnlyEdges()) {
                 return null;
             }
@@ -1391,8 +1392,7 @@ public class GDCollection extends UserFieldTarget implements MetaModelSpecific {
         mainDoc.getLayer(layerNumber).add(new BendpointContainer(bendpoint, mainDoc));
         edgeContainer.addBendpoint(bendpointContainer, bendpointIndex);
         bendpointContainer.setLocation(x, y);
-        szen.select(bendpointContainer, pid);
-        szen.finish_transaction(pid, DATA_CHANGED, SELECTION_CHANGED);
+        szen.finish_transaction(pid, DATA_CHANGED);
         edgeContainer.computeBorderPoints();
         return bendpointContainer;
     }

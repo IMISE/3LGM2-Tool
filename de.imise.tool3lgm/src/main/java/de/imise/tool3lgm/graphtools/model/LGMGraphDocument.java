@@ -622,6 +622,7 @@ public class LGMGraphDocument extends GraphDocument {
      * @param pid
      */
     private static final void copyToModel(final Collection<ElementContainer> sourceElements, final GraphDocument sourceDoc, final LGMGraphDocument targetDoc, int pid) {
+
         if (sourceElements.size() > 100) {
             Static.showProgressDialog();
             Static.setProgressDialogTitle("Kopiere Elemente (AUSLAGERN)");
@@ -653,6 +654,7 @@ public class LGMGraphDocument extends GraphDocument {
 
         //selection will be lost during copying ->
         List<ElementContainer> selectedSourceElements = new ArrayList<>(sourceDoc.selectedContainer);
+
         sourceDoc.deselectAll(false);
 
         targetDoc.start_transaction(pid);
@@ -670,6 +672,8 @@ public class LGMGraphDocument extends GraphDocument {
 
             GDCollectionIconTable iconTable = new GDCollectionIconTable();
             List<ElementContainer> elementContainersInGraphOrder = getElementsInGraphOrderAndIcons(resolvedCopyDependencies.elements, sourceDoc, iconTable);
+            List<ElementContainer> edgeContainersInGraphOrder = getElementsInGraphOrderAndIcons(resolvedCopyDependencies.additionalEdges, sourceDoc, iconTable);
+            elementContainersInGraphOrder.addAll(edgeContainersInGraphOrder);
             //copy icons used by the NodeContainers in the source to the target
             GDCollectionIconTable targetIconTable = targetCollection.getIconTable();
             targetIconTable.putAll(iconTable);
@@ -728,12 +732,18 @@ public class LGMGraphDocument extends GraphDocument {
                     if (sourceContainer instanceof NodeContainer) {
                         targetContainer = copyNodeContainer((NodeContainer) sourceContainer, targetDoc, targetElementID, pid);
                     } else if (sourceContainer instanceof EdgeContainer) {
-                        targetContainer = copyEdgeContainer((EdgeContainer) sourceContainer, targetDoc, targetElementID, oldToNewID, pid);
+                        EdgeContainer targetEdgeContainer = copyEdgeContainer((EdgeContainer) sourceContainer, targetDoc, targetElementID, oldToNewID, pid);
+                        targetContainer = targetEdgeContainer;
                         // if this is an edge for an edge (like KommbezEtNtVerbindung) then the start- or Element maybe not exists yet -> try later
                         if (targetContainer == null) {
                             ElementContainer laterCopiedEdgeContainer = elementContainersInGraphOrder.remove(i--);
                             elementContainersInGraphOrder.add(laterCopiedEdgeContainer);
                             continue;
+                        }
+                        //select also all bendpoints after copying
+                        for (int b = 0; b < targetEdgeContainer.getBendpointContainerCount(); b++) {
+                            BendpointContainer bpc = targetEdgeContainer.getBendpointContainer(b);
+                            targetDoc.addSimpleToSelection(bpc);
                         }
                     }
                     //store the new created ID
@@ -741,184 +751,10 @@ public class LGMGraphDocument extends GraphDocument {
                         String targetID = targetContainer.getID();
                         oldToNewID.put(sourceID, targetID);
                     }
-
-                    //                    ElementContainer targetMainContainer = null;
-                    //                    if (sourceElement instanceof Node) {
-                    //                        Class<? extends Node> targetElementClass = sourceElement.getClass().asSubclass(Node.class);
-                    //                        SubType targetSubType = sourceElement.getSubType();
-                    //                        String targetElementName = sourceElement.getName();
-                    //                        String targetElementDescription = sourceElement.getDescription();
-                    //                        String targetElementID = existingTargetElement == null ? sourceElement.getID() : null;
-                    //                        targetMainContainer = targetMainDoc.createNodeAndContainer(targetElementClass, targetSubType, targetElementName, targetElementDescription, targetElementID, pid);
-                    //                    } else { // Edge
-                    //                        Edge sourceEdge = (Edge) sourceElement;
-                    //                        String targetEdgeName = sourceElement.getName();
-                    //                        String targetEdgeDescription = sourceElement.getDescription();
-                    //                        String targetEdgeID = existingTargetElement == null ? sourceElement.getID() : null;
-                    //                        ModelElement sourceEdgeStart = sourceEdge.getStart();
-                    //                        ModelElement sourceEdgeEnd = sourceEdge.getEnd();
-                    //                        String sourceEdgeStartID = sourceEdgeStart.getID();
-                    //                        String sourceEdgeEndID = sourceEdgeEnd.getID();
-                    //                        String targetEdgeStartID = oldToNewID.getOrDefault(sourceEdgeStartID, sourceEdgeStartID);
-                    //                        String targetEdgeEndID = oldToNewID.getOrDefault(sourceEdgeEndID, sourceEdgeEndID);
-                    //                        int targetEdgeStartEdgeIndex = sourceEdgeStart.getEdgeIndex(sourceEdge);
-                    //                        int targetEdgeEndEdgeIndex = sourceEdgeEnd.getEdgeIndex(sourceEdge);
-                    //                        String targetEdgeClassName = sourceEdge.getClass().getSimpleName();
-                    //                        Edge targetEdge = targetCollection.link(targetEdgeClassName, targetEdgeID, targetEdgeStartID, targetEdgeEndID, targetEdgeStartEdgeIndex, targetEdgeEndEdgeIndex, pid);
-                    //                        targetEdge.setName(targetEdgeName);
-                    //                        targetEdge.setDescription(targetEdgeDescription);
-                    //                        targetMainContainer = targetEdge.getContainer(targetMainDoc);
-                    //                    }
-                    //                    ModelElement targetElement = targetMainContainer.getElement();
-                    //                    if (existingTargetElement == null) {
-                    //                        targetElement.setID(sourceID);
-                    //                    } else {
-                    //                        String targetID = targetElement.getID();
-                    //                        oldToNewID.put(sourceID, targetID);
-                    //                    }
-                    //                    if (targetElement instanceof Bendpoint) {
-                    //                        Bendpoint bendpoint = (Bendpoint) targetElement;
-                    //                        String edgeID = bendpoint.getEdgeID();
-                    //                        edgeID = oldToNewID.getOrDefault(edgeID, edgeID);
-                    //                        LayerContainer targetMainDocLayer = targetMainDoc.getLayer(layer);
-                    //                        EdgeContainer edgeC = targetMainDocLayer.getEdgeContainer(edgeID);
-                    //                        Edge edge = edgeC.getEdge();
-                    //                        bendpoint.addEdge(edge);
-                    //                    }
-                    //
-                    //                    //                    //first create the element in the mainDoc
-                    //                    //                    ElementContainer targetMainContainer = sourceContainer.clone(true, targetMainDoc);
-                    //                    //                    ModelElement targetElement = targetMainContainer.getElement();
-                    //                    //                    LayerContainer targetMainDocLayer = targetMainDoc.getLayer(layer);
-                    //                    //                    if (existingTargetElement == null) {
-                    //                    //                        targetElement.setID(sourceID);
-                    //                    //                    } else {
-                    //                    //                        String targetID = targetElement.getID();
-                    //                    //                        oldToNewID.put(sourceID, targetID);
-                    //                    //                    }
-                    //                    //                    if (targetElement instanceof Bendpoint) {
-                    //                    //                        Bendpoint bendpoint = (Bendpoint) targetElement;
-                    //                    //                        String edgeID = bendpoint.getEdgeID();
-                    //                    //                        edgeID = oldToNewID.getOrDefault(edgeID, edgeID);
-                    //                    //                        EdgeContainer edgeC = targetMainDocLayer.getEdgeContainer(edgeID);
-                    //                    //                        Edge edge = edgeC.getEdge();
-                    //                    //                        bendpoint.addEdge(edge);
-                    //                    //                    }
-                    //                    //
-                    //                    //                    targetMainDocLayer.add(targetMainContainer);
-                    //
-                    //                    //                    targetMainDoc.addUndo(pid, MODEL_ACTION_DELETE_FROM_MODEL, targetElement);
-                    //                    //                    //Argumente: 1.) Quell-GraphDoc 2.) Zielszenario 3.) ID des Elementes
-                    //                    //                    targetSzenario.addRedo(pid, MODEL_ACTION_ADD_ELEMENT_TO_SUBMODEL, sourceDocID, targetSzenID, me);
-                    //
-                    //                    //                    Sys.out1("\nNACH EINFÜGEN VON ELEMENT " + targetMainContainer + " (" + targetMainContainer.getID() + ")");
-                    //                    //                    GDCollectionPrinter.print(targetCollection, true, true);
-                    //
-                    //                    if (targetElement instanceof Edge) {
-                    //                        Edge edge = (Edge) targetElement;
-                    //
-                    //                        ModelElement targetEdgeStart = edge.getStart();
-                    //                        ModelElement targetEdgeEnd = edge.getEnd();
-                    //                        String targetEdgeStartID = targetEdgeStart.getID();
-                    //                        String targetEdgeEndID = targetEdgeEnd.getID();
-                    //                        String newStartID = oldToNewID.get(targetEdgeStartID);
-                    //                        String newEndID = oldToNewID.get(targetEdgeEndID);
-                    //                        if (newStartID != null || newEndID != null) {
-                    //                            if (newStartID == null) {
-                    //                                newStartID = targetEdgeStartID;
-                    //                            }
-                    //                            if (newEndID == null) {
-                    //                                newEndID = targetEdgeEndID;
-                    //                            }
-                    //                            edge.setStartAndEndByIDs(newStartID, newEndID, targetMainDoc);
-                    //                        }
-                    //
-                    //                        //edges are inserted in the szenario separately
-                    //                        edges.add(edge);
-                    //
-                    //                        //                        Sys.out1("\nNACH UMHÄNGEN DER EDGE " + targetMainContainer);
-                    //                        //                        GDCollectionPrinter.print(targetCollection, true, true);
-                    //
-                    //                        //all not unique elements must be inserted to the szenario
-                    //                    } else if (!targetElement.isUnique() && targetDoc instanceof Szenario) {
-                    //                        //create container for the szenario and adds this container to the
-                    //                        //container map of the element
-                    //                        ElementContainer targetContainer = targetMainContainer.clone(false, targetDoc);
-                    //                        targetContainer.setElement(targetElement);
-                    //                        if (targetElement instanceof Bendpoint) {
-                    //                            //bendpoints separately too
-                    //                            bendpoints.add((BendpointContainer) targetContainer);
-                    //                        } else {
-                    //                            targetElement.updateGraphName(targetContainer);
-                    //                            //add the container to the layer of the szenario
-                    //                            targetContainer.refreshText();
-                    //                            LayerContainer targetDocLayer = targetDoc.getLayer(layer);
-                    //                            targetDocLayer.add(targetContainer);
-                    //                            targetDoc.addSimpleToSelection(targetContainer);
-                    //                        }
-                    //                    }
-                    //                    targetMainContainer.setVisible(true);
-                    //                    targetMainContainer.setExpanded(true);
-                    //                    targetMainContainer.setHighLight(false);
-                    //                    targetMainContainer.refreshText();
+                    //select the copied node or edge
                     targetDoc.addSimpleToSelection(targetContainer);
                 }
             }
-
-            //            for (Edge edge : edges) {
-            //                if (!edge.reconnect(targetCollection)) {
-            //                    targetCollection.deleteElement(edge, STANDARD_PID);
-            //                } else {
-            //                    EdgeContainer edgeCont = edge.getContainer(targetMainDoc);
-            //                    //this call adds a edgeContainer to all szenarios where it mus be added
-            //                    //the tarte mainDoc and the target szenarion already contain the edge container
-            //                    targetCollection.addEdge(edgeCont, STANDARD_PID);
-            //                    ElementContainer edgeC = edge.getContainer(targetMainDoc);
-            //                    targetMainDoc.addSimpleToSelection(edgeC);
-            //                }
-            //            }
-            //
-            //            List<EdgeContainer> edgeConts = new ArrayList<>();
-            //            while (!bendpoints.isEmpty()) {
-            //                BendpointContainer targetBpc = bendpoints.remove(0);
-            //                String targetBendpointID = targetBpc.getID();
-            //                String sourceBendpointID = oldToNewID.getKey(targetBendpointID);
-            //                if (sourceBendpointID == null) {
-            //                    sourceBendpointID = targetBendpointID;
-            //                }
-            //                BendpointContainer sourceBpc = sourceDoc.findBendpointContainerCoded(sourceBendpointID);
-            //                //der Container kann null sein, wenn die zu kopierende Kante auch noch mind. einen Knickpunkt in einem
-            //                //anderen Teilmodell hat, denn es werden beim resolven der CopyDependencies alle Knickpunkte der Kante aus
-            //                //allen Teilmodellen eingesammelt
-            //                if (sourceBpc == null) {
-            //                    continue;
-            //                }
-            //                Bendpoint targetBendpoint = targetBpc.getBendpoint();
-            //                String targetEdgeID = targetBendpoint.getEdgeID();
-            //                targetEdgeID = oldToNewID.getOrDefault(targetEdgeID, targetEdgeID);
-            //                EdgeContainer targetEdgeC = targetDoc.findEdgeContainerCoded(targetEdgeID);
-            //
-            //                Bendpoint sourceBendpoint = sourceBpc.getBendpoint();
-            //                EdgeContainer sourceEdgeC = sourceBendpoint.getOwner();
-            //                if (sourceEdgeC == null) {
-            //                    sourceEdgeC = sourceDoc.findEdgeContainerCoded(targetEdgeC.getID());
-            //                }
-            //                if (targetEdgeC != null) {
-            //                    edgeConts.add(targetEdgeC);
-            //                    int indexOfBendpoint = sourceEdgeC.getIndexOfBendpoint(sourceBendpoint);
-            //                    targetEdgeC.setBendpointContainer(targetBpc, indexOfBendpoint);
-            //                    //                    Sys.out1(targetEdgeC + " (EdgeContainerID=" + System.identityHashCode(targetEdgeC) + ")   " + targetBpc + " (" + System.identityHashCode(targetBpc) + ")");
-            //                    int layer = targetEdgeC.layerFor();
-            //                    LayerContainer targetDocLayer = targetDoc.getLayer(layer);
-            //                    targetDocLayer.add(targetBpc);
-            //                    targetDoc.addSimpleToSelection(targetBpc);
-            //                }
-            //            }
-            //
-            //            for (EdgeContainer edgeC : edgeConts) {
-            //                edgeC.computeBorderPoints();
-            //            }
-
         } catch (Exception ex) {
             targetDoc.undo(pid);
             Log.show(Log.ERROR, sourceDoc.getResString("FehlerKorrupt") + "\n" + targetCollection.getName(), ex);
@@ -940,7 +776,6 @@ public class LGMGraphDocument extends GraphDocument {
 
         sourceCollection.createInferenceEdges(true, pid);
         targetCollection.createInferenceEdges(true, pid);
-        sourceDoc.distributeEvent(DATA_CHANGED);
         targetDoc.distributeEvent(DATA_CHANGED);
 
         Static.closeProgressDialog();
@@ -960,15 +795,17 @@ public class LGMGraphDocument extends GraphDocument {
         SubType targetSubType = sourceElement.getSubType();
         String targetElementName = sourceElement.getName();
         String targetElementDescription = sourceElement.getDescription();
+        NodeContainer targetContainer = null;
         if (!(targetDoc instanceof Szenario)) {
-            return targetDoc.createNodeAndContainer(targetElementClass, targetSubType, targetElementName, targetElementDescription, targetElementID, false, pid);
+            targetContainer = targetDoc.createNodeAndContainer(targetElementClass, targetSubType, targetElementName, targetElementDescription, targetElementID, false, pid);
+        } else {
+            GraphElementLayout layout = sourceContainer.get3LGMLayout();
+            targetContainer = targetDoc.createNodeAndContainer(targetElementClass, targetSubType, targetElementName, targetElementDescription, targetElementID, layout, false, pid);
+            targetDoc.setVisible(targetContainer, sourceContainer.isVisible(), pid);
+            //        //TODO: Copying not expanded elements -> we must set both layouts and the expanded states!
+            //        //targetContainer.setExpanded(sourceContainer.isExpanded());
+            //        targetContainer.setHighLight(false);
         }
-        GraphElementLayout layout = sourceContainer.get3LGMLayout();
-        NodeContainer targetContainer = targetDoc.createNodeAndContainer(targetElementClass, targetSubType, targetElementName, targetElementDescription, targetElementID, layout, false, pid);
-        targetDoc.setVisible(targetContainer, sourceContainer.isVisible(), pid);
-        //        //TODO: Copying not expanded elements -> we must set both layouts and the expanded states!
-        //        //targetContainer.setExpanded(sourceContainer.isExpanded());
-        //        targetContainer.setHighLight(false);
         return targetContainer;
     }
 
@@ -992,6 +829,7 @@ public class LGMGraphDocument extends GraphDocument {
         int targetEdgeEndEdgeIndex = sourceEdgeEnd.getEdgeIndex(sourceEdge);
         String targetEdgeClassName = sourceEdge.getClass().getSimpleName();
         GDCollection targetCollection = targetDoc.getCollection();
+        addMissingElementForClipboardModels(sourceContainer, targetDoc, pid);
         Edge targetEdge = targetCollection.link(targetEdgeClassName, targetEdgeID, targetEdgeStartID, targetEdgeEndID, targetEdgeStartEdgeIndex, targetEdgeEndEdgeIndex, pid);
         EdgeContainer targetContainer = null;
         if (targetEdge != null) {
@@ -1003,10 +841,57 @@ public class LGMGraphDocument extends GraphDocument {
                 targetContainer = targetEdge.getContainer(mainDoc);
             }
         }
-        if (targetContainer != null) {
+        if (targetContainer != null && targetContainer.getGraphDocument() instanceof Szenario) {
             addBendpoints(sourceContainer, targetContainer, pid);
         }
         return targetContainer;
+    }
+
+    /**
+     * Adds the missing start or end node to the passed targetDoc if it is
+     * missing for this edge. This happens only for CLIPBOARD models. However,
+     * these missing nodes are not selected, so they are not copied with the
+     * paste. The whole thing serves to also copy edges to elements that already
+     * exist in the target model.
+     *
+     * @param sourceContainer
+     * @param targetDoc
+     * @param pid
+     */
+    private static void addMissingElementForClipboardModels(EdgeContainer sourceContainer, LGMGraphDocument targetDoc, int pid) {
+        if (targetDoc.hasModelCategory(CLIPBOARD)) {
+            ElementContainer sourceStartContainer = sourceContainer.getStartElementContainer();
+            boolean startCreated = !(sourceStartContainer instanceof NodeContainer); //prevent creating EdgeContainer here
+            if (!startCreated) {
+                startCreated = createNodeContainerIfNotExists((NodeContainer) sourceStartContainer, targetDoc, pid);
+            }
+            if (!startCreated) {
+                ElementContainer sourceEndContainer = sourceContainer.getEndElementContainer();
+                if (sourceEndContainer instanceof NodeContainer) {
+                    createNodeContainerIfNotExists((NodeContainer) sourceEndContainer, targetDoc, pid);
+                }
+            }
+        }
+    }
+
+    /**
+     * @param sourceContainer
+     * @param targetDoc
+     * @param pid
+     * @return
+     */
+    private static boolean createNodeContainerIfNotExists(NodeContainer sourceContainer, LGMGraphDocument targetDoc, int pid) {
+        String sourceID = sourceContainer.getID();
+        boolean isTargetElement = targetDoc.isMyElement(sourceID);
+        if (!isTargetElement) {
+            GraphDocument targetMainDoc = targetDoc.getMainDoc();
+            isTargetElement = targetMainDoc.isMyElement(sourceID);
+        }
+        if (!isTargetElement) {
+            copyNodeContainer(sourceContainer, targetDoc, sourceID, pid);
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -1050,8 +935,8 @@ public class LGMGraphDocument extends GraphDocument {
      * @return a list of element containers. The first elements are all
      *         NodeContainers
      */
-    private static List<ElementContainer> getElementsInGraphOrderAndIcons(List<ModelElement> elements, GraphDocument sourceDoc, GDCollectionIconTable iconTable) {
-        HashSet<ModelElement> elementsCopyAsSet = new HashSet<>(elements);
+    private static List<ElementContainer> getElementsInGraphOrderAndIcons(Collection<? extends ModelElement> elements, GraphDocument sourceDoc, GDCollectionIconTable iconTable) {
+        HashSet<ModelElement> elementsCopyAsSet = new HashSet<>(elements); //faster contains() than in list
         List<ElementContainer> elementsInGraphOrder = new ArrayList<>();
         //first add all real graph node containers from the submodel in the correct graph order
         GDCollection sourceCollection = sourceDoc.getCollection();
