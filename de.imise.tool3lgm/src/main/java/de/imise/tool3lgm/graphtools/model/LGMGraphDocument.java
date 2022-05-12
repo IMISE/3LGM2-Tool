@@ -947,11 +947,13 @@ public class LGMGraphDocument extends GraphDocument {
                 elementsInGraphOrder.add(ec);
             }
             GraphElementLayout layout = ec.get3LGMLayout();
-            String iconID = layout.getIconID();
-            if (!Strings.isNullOrEmpty(iconID)) {
-                byte[] icon = sourceIconTable.get(iconID);
-                if (icon != null) {
-                    iconTable.put(iconID, icon);
+            if (layout != null) {
+                String iconID = layout.getIconID();
+                if (!Strings.isNullOrEmpty(iconID)) {
+                    byte[] icon = sourceIconTable.get(iconID);
+                    if (icon != null) {
+                        iconTable.put(iconID, icon);
+                    }
                 }
             }
         }
