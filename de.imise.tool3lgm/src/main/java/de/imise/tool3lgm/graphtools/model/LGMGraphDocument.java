@@ -242,34 +242,6 @@ public class LGMGraphDocument extends GraphDocument {
     }
 
     /**
-     * Liste aller Kanten, bei denen das das eine Endelement gerade kopiert
-     * werden soll und das andere nicht kopiert werden soll aber bereits im
-     * Zielmodell vorkommt
-     *
-     * @param sourceElements
-     * @param targetDoc
-     */
-    private static final void addSplittedSourceEdgesToCopy(final List<ModelElement> sourceElements, final GraphDocument targetDoc) {
-        GraphDocument targetMainDoc = targetDoc.getCollection().getMainDoc();
-        for (int i = 0; i < sourceElements.size(); i++) {
-            ModelElement me = sourceElements.get(i);
-            if (me instanceof Bendpoint) {
-                continue;
-            }
-            for (Edge edge : me.getEdges()) {
-                if (!sourceElements.contains(edge)) {
-                    ModelElement other = edge.getOther(me);
-                    String otherID = other.getID();
-                    ModelElement destElement = targetMainDoc.findElementCoded(otherID);
-                    if (destElement != null) {
-                        sourceElements.add(edge);
-                    }
-                }
-            }
-        }
-    }
-
-    /**
      * @param me
      * @param targetDoc
      */
