@@ -274,6 +274,10 @@
 									toDir="../de.imise.tool3lgm.deploy/Tool3lgm/Templates">
 									<fileset dir="../de.imise.tool3lgm/Templates" />
 								</copy>
+								<copy
+									toDir="../de.imise.tool3lgm.deploy/Tool3lgm/Examples">
+									<fileset dir="../de.imise.tool3lgm/Examples" />
+								</copy>
 							</target>
 						</configuration>
 						<goals>
