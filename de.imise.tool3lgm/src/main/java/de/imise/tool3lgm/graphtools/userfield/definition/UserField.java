@@ -6,6 +6,7 @@ import static de.imise.tool3lgm.graphtools.userfield.definition.UserFieldDefinit
 import java.math.BigDecimal;
 import java.text.NumberFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Set;
@@ -142,6 +143,8 @@ public final class UserField extends NameAndDescriptionTargetAdapter implements 
         },;
 
         public static final Set<Style> NUMBER_STYLES = ImmutableSet.of(NUMBER, FORMULA);
+
+        public static final Set<Style> STRUCTURE_STYLES = ImmutableSet.of(TAB, GROUP, SEPARATOR, SUBTYPE);
 
         /**
          * Vergleicht die beiden UserFields hinsichtlich ihres Wertes bezüglich
@@ -430,10 +433,20 @@ public final class UserField extends NameAndDescriptionTargetAdapter implements 
      * zugeordnet ist
      *
      * @param style
-     * @param definitions
      */
     public UserField(final Style style) {
         this(GLOBAL_USERFIELD_IDENTIFIER_CLASS, style);
+    }
+
+    /**
+     * Erzeugt ein globales UserField, das keiner realen Elementklasse
+     * zugeordnet ist
+     *
+     * @param style
+     * @param id
+     */
+    public UserField(String id, final Style style) {
+        this(GLOBAL_USERFIELD_IDENTIFIER_CLASS, id, style);
     }
 
     /**
@@ -441,7 +454,6 @@ public final class UserField extends NameAndDescriptionTargetAdapter implements 
      *
      * @param targetClass
      * @param style
-     * @param definitions
      */
     public UserField(final Class<? extends UserFieldTarget> targetClass, final Style style) {
         this(targetClass);
@@ -460,12 +472,22 @@ public final class UserField extends NameAndDescriptionTargetAdapter implements 
      * @param id
      */
     public UserField(final Class<? extends UserFieldTarget> targetClass, final String id) {
+        this(targetClass, id, null);
+    }
+
+    /**
+     * @param targetClass
+     * @param id
+     * @param style
+     */
+    public UserField(final Class<? extends UserFieldTarget> targetClass, final String id, Style style) {
         this.id = id;
         if (targetClass != null) {
             this.targetClass = targetClass;
         } else {
             this.targetClass = GLOBAL_USERFIELD_IDENTIFIER_CLASS;
         }
+        this.style = style;
     }
 
     /**
@@ -505,9 +527,9 @@ public final class UserField extends NameAndDescriptionTargetAdapter implements 
                 style = Style.values()[index];
             }
         } else if (fieldName.equals("userFieldTreeVis")) {
-            treeVisibility = Boolean.valueOf(value).booleanValue();
+            treeVisibility = Boolean.valueOf(value);
         } else if (fieldName.equals("userFieldShowDescriptionInDialog")) {
-            showDescriptionInDialog = Boolean.valueOf(value).booleanValue();
+            showDescriptionInDialog = Boolean.valueOf(value);
         } else if (fieldName.equals("userFieldStandardValue")) {
             addListValue(value);
         } else if (fieldName.equals("userFieldFormula")) {
@@ -594,6 +616,36 @@ public final class UserField extends NameAndDescriptionTargetAdapter implements 
      */
     public boolean isSubtype() {
         return style == Style.SUBTYPE;
+    }
+
+    /**
+     * @return style == Style.SEPARATOR
+     */
+    public boolean isSeparator() {
+        return style == Style.SEPARATOR;
+    }
+
+    /**
+     * @return style == Style.GROUP
+     */
+    public boolean isGroup() {
+        return style == Style.GROUP;
+    }
+
+    /**
+     * @return style == Style.TAB
+     */
+    public boolean isTab() {
+        return style == Style.TAB;
+    }
+
+    /**
+     * @return <code>true</code> if the userField has a sytle that indactes that
+     *         the userfield is only used to structure the list and not to have
+     *         an input value.
+     */
+    public boolean isStructureUserField() {
+        return Style.STRUCTURE_STYLES.contains(style);
     }
 
     /**
@@ -725,9 +777,11 @@ public final class UserField extends NameAndDescriptionTargetAdapter implements 
      * können.
      *
      * @param numberFormat
+     * @return numberformat input value
      */
-    public void setNumberFormat(final UserFieldNumberFormat numberFormat) {
+    public UserFieldNumberFormat setNumberFormat(final UserFieldNumberFormat numberFormat) {
         this.numberFormat = numberFormat;
+        return numberFormat;
     }
 
     /**
@@ -791,6 +845,14 @@ public final class UserField extends NameAndDescriptionTargetAdapter implements 
      */
     public boolean containsListValue(final String value) {
         return listValues != null && listValues.contains(value);
+    }
+
+    /**
+     * @return
+     */
+    @SuppressWarnings("unchecked")
+    public Iterable<String> getListalues() {
+        return () -> listValues == null ? Collections.EMPTY_LIST.iterator() : listValues.iterator();
     }
 
     @Override
@@ -1088,23 +1150,21 @@ public final class UserField extends NameAndDescriptionTargetAdapter implements 
 
         while (true) {
             index = sb.indexOf(".", index);
-            if (index >= 0 && index < lastIndexOfSeparator) {
-                sb.deleteCharAt(index);
-                lastIndexOfSeparator--;
-            } else {
+            if (index < 0 || index >= lastIndexOfSeparator) {
                 break;
             }
+            sb.deleteCharAt(index);
+            lastIndexOfSeparator--;
         }
         //alle Kommas vor diesem letzten Separator löschen
         index = 0;
         while (true) {
             index = sb.indexOf(",", index);
-            if (index >= 0 && index < lastIndexOfSeparator) {
-                sb.deleteCharAt(index);
-                lastIndexOfSeparator--;
-            } else {
+            if (index < 0 || index >= lastIndexOfSeparator) {
                 break;
             }
+            sb.deleteCharAt(index);
+            lastIndexOfSeparator--;
         }
         return sb.toString();
     }

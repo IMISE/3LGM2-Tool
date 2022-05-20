@@ -7,6 +7,7 @@ import static de.imise.tool3lgm.Static.getTool;
 import static de.imise.tool3lgm.Tool3lgmConstants.getReplacedResString;
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
 import static de.imise.tool3lgm.event.action.StaticAction.PPP;
+import static de.imise.tool3lgm.graphtools.undoredo.TransactionManager.STANDARD_PID;
 import static de.imise.tool3lgm.userproperties.UserProperties.IntProperty.PROPERTY_INT_RENDER_SETTINGS;
 import static de.imise.tool3lgm.userproperties.UserProperties.IntProperty.PROPERTY_INT_RMI_PORT;
 
@@ -203,7 +204,7 @@ public class ActionLibrary {
             public static final Action ACTION_IMPORT_SUBMODEL = new GraphDocumentAction(ActionIdentifier.ACTION_IMPORT_SUBMODEL, PPP) {
                 @Override
                 protected void actionPerformed() {
-                    GDCollectionImExportHandler.importSzenarios();
+                    GDCollectionImExportHandler.importSzenarios(STANDARD_PID);
                 }
             };
 
@@ -211,7 +212,7 @@ public class ActionLibrary {
             public static final Action ACTION_IMPORT_MODEL = new GraphDocumentAction(ActionIdentifier.ACTION_IMPORT_MODEL, PPP) {
                 @Override
                 protected void actionPerformed() {
-                    GDCollectionImExportHandler.importModel();
+                    GDCollectionImExportHandler.importModel(STANDARD_PID);
                 }
             };
 

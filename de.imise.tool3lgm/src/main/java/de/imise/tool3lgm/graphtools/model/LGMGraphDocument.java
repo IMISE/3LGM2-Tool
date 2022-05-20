@@ -56,6 +56,7 @@ import de.imise.tool3lgm.graphtools.path.paths.ElementaryPath;
 import de.imise.tool3lgm.graphtools.path.paths.ParallelPath;
 import de.imise.tool3lgm.graphtools.path.paths.SimplePath;
 import de.imise.tool3lgm.graphtools.userfield.definition.SubType;
+import de.imise.tool3lgm.graphtools.userfield.definition.UserField;
 import de.imise.tool3lgm.graphtools.userfield.definition.UserFieldDefinitions;
 import de.imise.tool3lgm.graphtools.view.container.BendpointContainer;
 import de.imise.tool3lgm.graphtools.view.container.EdgeContainer;
@@ -279,7 +280,6 @@ public class LGMGraphDocument extends GraphDocument {
      * @param pid
      */
     private static final void copyToModel(final Collection<ElementContainer> sourceElements, final GraphDocument sourceDoc, final LGMGraphDocument targetDoc, int pid) {
-
         if (sourceElements.size() > 100) {
             Static.showProgressDialog();
             Static.setProgressDialogTitle("Kopiere Elemente (AUSLAGERN)");
@@ -294,20 +294,9 @@ public class LGMGraphDocument extends GraphDocument {
         sourceCollection.removeInferenceEdges(true, pid);
         targetCollection.removeInferenceEdges(true, pid);
 
-        CopyDependencyResolverResultSimple resolvedCopyDependencies = resolveCopyDependencies(sourceElements);
+        CopyDependencyResolverResultSimple resolvedCopyDependencies = resolveCopyDependencies(sourceElements, targetCollection);
 
-        if (targetCollection.hasModelCategory(CLIPBOARD)) { //copy to clipboard
-            //            UserFieldDefinitions sourceUserFieldDefinitions = sourceCollection.getUserFieldDefinitions();
-            //            UserFieldDefinitions clonedSourceUserFieldDefinitions = sourceUserFieldDefinitions.cloneForTargetCollection(targetCollection);
-            //            clonedSourceUserFieldDefinitions.retain(resolvedCopyDependencies.usedUserFields);
-            //            targetCollection.setUserFieldDefinitions(clonedSourceUserFieldDefinitions);
-        } else if (sourceCollection.hasModelCategory(CLIPBOARD)) { //copy from clipboard
-
-        } else { // copy from model to model
-            UserFieldDefinitions userFieldDefinitions = targetCollection.getUserFieldDefinitions();
-            UserFieldDefinitions userFieldDefinitions2Add = resolvedCopyDependencies.getUserFieldDefinitions();
-            userFieldDefinitions.addAll(userFieldDefinitions2Add);
-        }
+        copyUserFields(sourceCollection, targetCollection, resolvedCopyDependencies, pid);
 
         //selection will be lost during copying ->
         List<ElementContainer> selectedSourceElements = new ArrayList<>(sourceDoc.selectedContainer);
@@ -415,6 +404,8 @@ public class LGMGraphDocument extends GraphDocument {
                     }
                     //select the copied node or edge
                     targetDoc.addSimpleToSelection(targetContainer);
+                    existingTargetElement = targetContainer.getElement();
+                    copyUserFieldValues(sourceElement, existingTargetElement, targetCollection.getUserFieldDefinitions());
                 }
             }
         } catch (Exception ex) {
@@ -579,6 +570,39 @@ public class LGMGraphDocument extends GraphDocument {
     }
 
     /**
+     * @param sourceCollection
+     * @param targetCollection
+     * @param resolvedCopyDependencies
+     * @param pid
+     */
+    private static void copyUserFields(GDCollection sourceCollection, GDCollection targetCollection, CopyDependencyResolverResultSimple resolvedCopyDependencies, int pid) {
+        //        if (targetCollection.hasModelCategory(CLIPBOARD)) { //copy to CLIPBOARD model
+        //            UserFieldDefinitions sourceUserFieldDefinitions = sourceCollection.getUserFieldDefinitions();
+        //            UserFieldDefinitions clonedSourceUserFieldDefinitions = sourceUserFieldDefinitions.cloneForTargetCollection(targetCollection);
+        //            clonedSourceUserFieldDefinitions.retain(resolvedCopyDependencies.usedUserFields);
+        //            targetCollection.setUserFieldDefinitions(clonedSourceUserFieldDefinitions);
+        //        } else { // copy from CLIPBOARD or from REGULAR or from TEMPLATE model to model
+        UserFieldDefinitions targetUserFieldDefinitions = targetCollection.getUserFieldDefinitions();
+        UserFieldDefinitions userFieldDefinitions2Add = resolvedCopyDependencies.getUserFieldDefinitions();
+        targetUserFieldDefinitions.addAll(userFieldDefinitions2Add, pid);
+        //        }
+    }
+
+    /**
+     * @param source
+     * @param target
+     * @param targetUserFieldDefinitions
+     */
+    private static void copyUserFieldValues(ModelElement source, ModelElement target, UserFieldDefinitions targetUserFieldDefinitions) {
+        for (UserField sourceUserField : source.getUserFieldInputValueKeys()) {
+            String userFieldInputValue = source.getUserFieldInputValue(sourceUserField);
+            String sourceUserFieldID = sourceUserField.getID();
+            UserField targetUserField = targetUserFieldDefinitions.getUserField(sourceUserFieldID);
+            target.setUserFieldInputValue(targetUserField, userFieldInputValue);
+        }
+    }
+
+    /**
      * In the function the containers of all passed nodes are searched in the
      * passed sourceDoc and inserted first of all in the return list in exactly
      * the order in which they also are present in the soureDoc in the graphic.
@@ -588,11 +612,7 @@ public class LGMGraphDocument extends GraphDocument {
      *
      * @param elements
      * @param sourceDoc
-     */
-    /**
-     * @param elements
-     * @param sourceDoc
-     * @param iconTable this isnatce will be filled with all icons used by the
+     * @param iconTable this istance will be filled with all icons used by the
      *            elements
      * @return a list of element containers. The first elements are all
      *         NodeContainers

@@ -8,7 +8,9 @@ import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.NO_LAYER;
 import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction.BACKWARD;
 import static de.imise.tool3lgm.graphtools.metamodel.elements.SubordinationEdge.SUPER_TO_SUB_DIRECTION;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_ADD_ELEMENT_TO_SUBMODEL;
+import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_ADD_USER_FIELD;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_DELETE_FROM_SUBMODEL;
+import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_DELETE_USER_FIELD;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_LINK_ELEMENT_TO_SUBMODEL;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_MOVE_ORDER;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_MOVE_ORDER_ONE_POSITION_DOWN;
@@ -118,7 +120,10 @@ import de.imise.tool3lgm.graphtools.undoredo.TransactionStackTable;
 import de.imise.tool3lgm.graphtools.userfield.WeightReplacer;
 import de.imise.tool3lgm.graphtools.userfield.definition.SubType;
 import de.imise.tool3lgm.graphtools.userfield.definition.UserField;
+import de.imise.tool3lgm.graphtools.userfield.definition.UserField.Style;
 import de.imise.tool3lgm.graphtools.userfield.definition.UserFieldDefinitions;
+import de.imise.tool3lgm.graphtools.userfield.definition.UserFieldNumberFormat;
+import de.imise.tool3lgm.graphtools.userfield.definition.UserFieldTarget;
 import de.imise.tool3lgm.graphtools.view.container.BendpointContainer;
 import de.imise.tool3lgm.graphtools.view.container.EdgeContainer;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
@@ -1135,6 +1140,77 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
             }
             break;
         }
+        case MODEL_ACTION_ADD_USER_FIELD: {
+            // UserFieldNumberFormat
+            // 0 = userFieldID
+            // 1 = formatUnit
+            if (argc == 2) {
+                String formatID = argv[0];
+                String formatExportString = getDecodedParseSaveString(argv[1]);
+                addUserFieldNumberFormat(formatID, formatExportString, pid);
+            }
+            // Global Userfield
+            // 0 = userFieldID
+            // 1 = style
+            // 2 = insertIndex
+            // 3 = name
+            // 4 = description
+            // 5 = formulaString
+            // 6 = numberFormat
+            // 7 = positiveOnly
+            else if (argc == 8) {
+                String userFieldID = argv[0];
+                Style userFieldStyle = Style.valueOf(argv[1]);
+                int insertIndex = Integer.parseInt(argv[2]);
+                String name = getDecodedParseSaveString(argv[3]);
+                String description = getDecodedParseSaveString(argv[4]);
+                String formulaString = getDecodedParseSaveString(argv[5]);
+                String numberFormatID = argv[6];
+                boolean positiveOnly = Boolean.parseBoolean(argv[7]);
+                addGlobalUserField(userFieldID, userFieldStyle, insertIndex, name, description, formulaString, numberFormatID, positiveOnly, pid);
+            }
+            // Element Class UserField
+            // 0 = userFieldID
+            // 1 = style
+            // 2 = targetClass
+            // 3 = insertIndex
+            // 4 = name
+            // 5 = description
+            // ? = parentSubType (internal value)
+            // 6 = treeVisibility
+            // 7 = showDescriptionInDialog
+            // 8 = formulaString
+            // 9 = numberFormat
+            // 10 = positiveOnly
+            // 11... = listValues
+            else if (argc > 10) {
+                try {
+                    String userFieldID = argv[0];
+                    Style userFieldStyle = Style.valueOf(argv[1]);
+                    Class<? extends ModelElement> targetClass = metaModel.getClassForName(argv[2]);
+                    int insertIndex = Integer.parseInt(argv[3]);
+                    String name = getDecodedParseSaveString(argv[4]);
+                    String description = getDecodedParseSaveString(argv[5]);
+                    boolean treeVisibility = Boolean.parseBoolean(argv[6]);
+                    boolean showDescriptionInDialog = Boolean.parseBoolean(argv[7]);
+                    String formulaString = getDecodedParseSaveString(argv[8]);
+                    String numberFormatID = argv[9];
+                    boolean positiveOnly = Boolean.parseBoolean(argv[10]);
+                    List<String> listValues = new ArrayList<>();
+                    for (int i = 0; i < argc - 11; i++) {
+                        listValues.add(getDecodedParseSaveString(argv[i + 11]));
+                    }
+                    addUserField(userFieldID, userFieldStyle, targetClass, insertIndex, name, description, treeVisibility, showDescriptionInDialog, formulaString, numberFormatID, positiveOnly, listValues, pid);
+                } catch (Exception e) {
+                    Log(e);
+                }
+            }
+            break;
+        }
+        case MODEL_ACTION_DELETE_USER_FIELD: {
+            // 0 = userFieldID
+            deleteUserField(argv[0], pid);
+        }
         case MODEL_ACTION_SET_USER_FIELD_VALUE: {
             if (argc == 3) {
                 setUserFieldValue(argv[0], argv[1], argv[2], pid);
@@ -1627,6 +1703,10 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
         }
     }
 
+    /**
+     * @param line
+     * @param pid
+     */
     private void exec_command(final String line, final int pid) {
         try {
             if (isVerificationMode()) {
@@ -5026,6 +5106,183 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
         addUndoCommandIfNotExist(pid, oldSubType, MODEL_ACTION_SET_ELEMENT_SUBTYPE, me);
         me.setSubType(subType);
         finish_transaction(pid, DATA_CHANGED);
+    }
+
+    /**
+     * @param formatID
+     * @param formatExportString
+     * @param pid
+     */
+    private void addUserFieldNumberFormat(String formatID, String formatExportString, int pid) {
+        UserFieldDefinitions userFieldDefinitions = gdcoll.getUserFieldDefinitions();
+        UserFieldNumberFormat format = userFieldDefinitions.getNumberFormat(formatID);
+        if (format != null) { //we do not override or change an existing UserField
+            return;
+        }
+        start_transaction(pid);
+        format = new UserFieldNumberFormat(formatExportString);
+        format.setFractionDigitsCountAndUnit(formatExportString);
+        userFieldDefinitions.add(format);
+        addUndo(pid, MODEL_ACTION_DELETE_USER_FIELD, format);
+        addRedo(pid, MODEL_ACTION_ADD_USER_FIELD, format, formatExportString);
+        finish_transaction(pid);
+    }
+
+    /**
+     * @param userFieldID
+     * @param userFieldStyle
+     * @param insertIndex
+     * @param name
+     * @param description
+     * @param formulaString
+     * @param numberFormatID
+     * @param positiveOnly
+     * @param pid
+     */
+    private UserField addGlobalUserField(String userFieldID, Style userFieldStyle, int insertIndex, String name, String description, String formulaString, String numberFormatID, boolean positiveOnly, int pid) {
+        UserFieldDefinitions userFieldDefinitions = gdcoll.getUserFieldDefinitions();
+        UserField userField = userFieldDefinitions.getUserField(userFieldID);
+        if (userField != null) { //we do not override or change an existing UserField
+            return userField;
+        }
+        start_transaction(pid);
+        userField = new UserField(userFieldID, userFieldStyle);
+        userField.setName(name);
+        userField.setDescription(description);
+        userField.setFormula(formulaString);
+        UserFieldNumberFormat numberFormat = userFieldDefinitions.getNumberFormat(numberFormatID);
+        userField.setNumberFormat(numberFormat);
+        userFieldDefinitions.insert(userField, insertIndex);
+        addUndo(pid, MODEL_ACTION_DELETE_USER_FIELD, userField);
+        addRedo(pid, MODEL_ACTION_ADD_USER_FIELD, userField, userFieldStyle, insertIndex, name, description, formulaString, numberFormat, positiveOnly);
+        finish_transaction(pid);
+        return userField;
+    }
+
+    /**
+     * @param userFieldID
+     * @param userFieldStyle
+     * @param targetClass
+     * @param insertIndex
+     * @param name
+     * @param description
+     * @param treeVisibility
+     * @param showDescriptionInDialog
+     * @param formulaString
+     * @param numberFormatID
+     * @param positiveOnly
+     * @param listValues
+     * @param pid
+     * @return the new UserField or the existing one with the same ID
+     */
+    private UserField addUserField(String userFieldID, Style userFieldStyle, Class<? extends UserFieldTarget> targetClass, int insertIndex, String name, String description, boolean treeVisibility, boolean showDescriptionInDialog, String formulaString,
+            String numberFormatID, boolean positiveOnly, List<String> listValues, int pid) {
+        UserFieldDefinitions userFieldDefinitions = gdcoll.getUserFieldDefinitions();
+        UserField userField = userFieldDefinitions.getUserField(userFieldID);
+        if (userField != null) { //we do not override or change an existing UserField
+            return userField;
+        }
+        start_transaction(pid);
+        userField = new UserField(targetClass, userFieldID, userFieldStyle);
+        userField.setName(name);
+        userField.setDescription(description);
+        userField.setTreeVisibility(treeVisibility);
+        userField.setShowDescriptionInDialog(showDescriptionInDialog);
+        userField.setFormula(formulaString);
+        UserFieldNumberFormat numberFormat = userFieldDefinitions.getNumberFormat(numberFormatID);
+        userField.setNumberFormat(numberFormat);
+        for (String listValue : listValues) {
+            userField.addListValue(listValue);
+        }
+        userFieldDefinitions.insert(userField, insertIndex);
+        addUndo(pid, MODEL_ACTION_DELETE_USER_FIELD, userField);
+        addRedo(pid, MODEL_ACTION_ADD_USER_FIELD, userField, userFieldStyle, targetClass, insertIndex, name, description, treeVisibility, showDescriptionInDialog, formulaString, numberFormat, positiveOnly, listValues);
+        finish_transaction(pid);
+        return userField;
+    }
+
+    /**
+     * Adds a copy of the given userField to the definitions of this model via
+     * String based undo-redo-save commands.
+     *
+     * @param userField
+     * @param insertIndex
+     * @param pid
+     * @return the new UserField or the existing one with the same ID
+     */
+    public UserField addUserField(UserField userField, int insertIndex, int pid) {
+        String userFieldID = userField.getID();
+        Style style = userField.getStyle();
+        String name = userField.getName();
+        String description = userField.getDescription();
+        String formulaString = userField.getFormula();
+        UserFieldNumberFormat numberFormat = userField.getNumberFormat();
+        String numberFormatID = numberFormat == null ? null : numberFormat.getID();
+        boolean positiveOnly = userField.isPositiveOnly();
+        if (userField.isGlobal()) {
+            return addGlobalUserField(userFieldID, style, insertIndex, name, description, formulaString, numberFormatID, positiveOnly, pid);
+        }
+        Class<? extends UserFieldTarget> targetClass = userField.getTargetClass();
+        boolean treeVisibility = userField.isTreeVisibility();
+        boolean showDescriptionInDialog = userField.isShowDescriptionInDialog();
+        List<String> listValues = ImmutableList.copyOf(userField.getListalues());
+        return addUserField(userFieldID, style, targetClass, insertIndex, name, description, treeVisibility, showDescriptionInDialog, formulaString, numberFormatID, positiveOnly, listValues, pid);
+    }
+
+    /**
+     * @param format
+     * @param pid
+     */
+    public void addUserFieldFormat(UserFieldNumberFormat format, int pid) {
+        String formatID = format.getID();
+        String formatExportString = format.getExportString();
+        addUserFieldNumberFormat(formatID, formatExportString, pid);
+    }
+
+    /**
+     * @param userFieldID
+     * @param pid
+     */
+    private void deleteUserField(String userFieldID, int pid) {
+        start_transaction(pid);
+        UserFieldDefinitions userFieldDefinitions = gdcoll.getUserFieldDefinitions();
+        UserField userField = userFieldDefinitions.getUserField(userFieldID);
+        if (userField != null) { //should be only null if the id is not from a userfield but from a userfield format
+            Style userFieldStyle = userField.getStyle();
+            Class<? extends UserFieldTarget> targetClass = userField.getTargetClass();
+            int insertIndex = userFieldDefinitions.getUserFieldIndex(userField);
+            String name = userField.getName();
+            String description = userField.getDescription();
+            String formulaString = userField.getFormula();
+            UserFieldNumberFormat numberFormat = userField.getNumberFormat();
+            boolean positiveOnly = userField.isPositiveOnly();
+            //global userfields (can only be numbers or formulas with a format)
+            if (userField.isGlobal()) {
+                addUndo(pid, MODEL_ACTION_ADD_USER_FIELD, userField, userFieldStyle, targetClass, insertIndex, name, description, formulaString, numberFormat, positiveOnly);
+                addRedo(pid, MODEL_ACTION_DELETE_USER_FIELD, userField);
+            } else { //element class userfields (have 3 more fields)
+                boolean treeVisibility = userField.isTreeVisibility();
+                boolean showDescriptionInDialog = userField.isShowDescriptionInDialog();
+                int listValuesCount = userField.getListValuesCount();
+                List<String> listValues = listValuesCount > 0 ? new ArrayList<>(listValuesCount) : null;
+                for (int i = 0; i < listValuesCount; i++) {
+                    String listValue = userField.getListValueAt(i);
+                    listValues.add(listValue);
+                }
+                userFieldDefinitions.remove(userField);
+                addUndo(pid, MODEL_ACTION_ADD_USER_FIELD, userField, userFieldStyle, targetClass, insertIndex, name, description, treeVisibility, showDescriptionInDialog, formulaString, numberFormat, positiveOnly, listValues);
+                addRedo(pid, MODEL_ACTION_DELETE_USER_FIELD, userField);
+            }
+        } else { // format
+            UserFieldNumberFormat numberFormat = userFieldDefinitions.getNumberFormat(userFieldID);
+            if (numberFormat != null) {
+                String exportString = numberFormat.getExportString();
+                userFieldDefinitions.removeNumberFormat(numberFormat);
+                addUndo(pid, MODEL_ACTION_ADD_USER_FIELD, numberFormat, exportString);
+                addRedo(pid, MODEL_ACTION_DELETE_USER_FIELD, numberFormat);
+            }
+        }
+        finish_transaction(pid);
     }
 
     /**

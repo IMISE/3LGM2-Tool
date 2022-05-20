@@ -14,9 +14,11 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.InferenceEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
 import de.imise.tool3lgm.graphtools.path.metapaths.ElementaryMetaPath;
+import de.imise.tool3lgm.graphtools.userfield.definition.SubType;
 import de.imise.tool3lgm.graphtools.userfield.definition.UserField;
 import de.imise.tool3lgm.graphtools.userfield.definition.UserFieldDefinitions;
 import de.imise.tool3lgm.graphtools.userfield.definition.UserFieldNumberFormat;
+import de.imise.tool3lgm.graphtools.userfield.definition.UserFieldTarget;
 import de.imise.tool3lgm.graphtools.view.container.BendpointContainer;
 import de.imise.tool3lgm.graphtools.view.container.EdgeContainer;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
@@ -41,35 +43,45 @@ public class CopyDependencyResolver {
         /**  */
         public final Set<Edge> additionalEdges;
 
-        /**  */
+        /**
+         * This definitions contains all userFields and numberformats that must
+         * be copied too
+         */
         public UserFieldDefinitions userFieldDefinitions;
 
         /**  */
-        public final Set<UserField> usedUserFields;
+        protected final Set<UserField> usedUserFields;
 
         /**
-         * @param gdcoll
+         * This set should contain all element classes which should be copied
+         * and will be used to identify all default userfields which mus be
+         * copied too
          */
-        public CopyDependencyResolverResultSimple(final GDCollection gdcoll) {
+        public final Set<Class<? extends UserFieldTarget>> userFieldTargetClasses;
+
+        /**
+         * This set should contain all subtype userfields which should be copied
+         * with its subuserfields
+         */
+        public final Set<SubType> subTypes;
+
+        /**
+         * @param sourceCollection
+         */
+        public CopyDependencyResolverResultSimple(final GDCollection sourceCollection) {
             elements = new ArrayList<>();
             additionalEdges = new ListSet<>();
-            userFieldDefinitions = new UserFieldDefinitions(gdcoll);
+            userFieldDefinitions = new UserFieldDefinitions(sourceCollection);
             usedUserFields = new HashSet<>();
-        }
-
-        /**
-         * @return the source {@link GDCollection} from which the elements to be
-         *         copied originate
-         */
-        public GDCollection getSourceCollection() {
-            return userFieldDefinitions.getCollection();
+            userFieldTargetClasses = new HashSet<>();
+            subTypes = new HashSet<>();
         }
 
         /**
          * @param me
          * @return
          */
-        public boolean add(final ModelElement me) {
+        protected boolean add(final ModelElement me) {
             if (me instanceof Bendpoint || contains(me)) {
                 return false;
             }
@@ -82,6 +94,11 @@ public class CopyDependencyResolver {
                         userFieldDefinitions.add(numberFormat);
                     }
                 }
+            }
+            userFieldTargetClasses.add(me.getClass());
+            SubType subType = me.getSubType();
+            if (subType != null) {
+                subTypes.add(subType);
             }
             return elements.add(me);
         }
@@ -214,25 +231,31 @@ public class CopyDependencyResolver {
                 }
             }
         }
+        //TODO: the UserFieldDefinitions is never set here
         addNotSelectedEdgesOfSelectedElements(result);
         return result;
     }
 
     /**
-     * @param elements ArrayList with ElementContainer
-     * @param result ArrayList with hastStrings
-     * @param usedUserFields
+     * @param sourceElements ArrayList with ElementContainer
+     * @param targetCollection
+     * @return
      */
-    public static CopyDependencyResolverResultSimple resolveCopyDependencies(final Collection<ElementContainer> elements) {
-        ElementContainer firstEc = elements.isEmpty() ? null : elements.iterator().next();
+    public static CopyDependencyResolverResultSimple resolveCopyDependencies(final Collection<ElementContainer> sourceElements, GDCollection targetCollection) {
+        ElementContainer firstEc = sourceElements.isEmpty() ? null : sourceElements.iterator().next();
         ModelElement firstMe = firstEc == null ? null : firstEc.getElement();
         GDCollection gdcoll = firstMe == null ? null : firstMe.getCollection();
         CopyDependencyResolverResultSimple result = new CopyDependencyResolverResultSimple(gdcoll);
-        for (ElementContainer ec : elements) {
+        for (ElementContainer ec : sourceElements) {
             ModelElement me = ec.getElement();
-            resolveCopyDependencies(me, null, result, elements);
+            resolveCopyDependencies(me, null, result, sourceElements);
         }
         addNotSelectedEdgesOfSelectedElements(result);
+
+        UserFieldDefinitions sourceUserFieldDefinitions = gdcoll.getUserFieldDefinitions();
+        UserFieldDefinitions clonedSourceUserFieldDefinitions = sourceUserFieldDefinitions.cloneForTargetCollection(targetCollection);
+        clonedSourceUserFieldDefinitions.retain(result);
+        result.userFieldDefinitions = clonedSourceUserFieldDefinitions;
         return result;
     }
 
@@ -249,16 +272,16 @@ public class CopyDependencyResolver {
      *            elements list
      * @param initialSelectedElements
      */
-    private static void resolveCopyDependencies(final ModelElement me, final Class<? extends ModelElement> ignoreClass, CopyDependencyResolverResultSimple result, final Collection<ElementContainer> initialSelectedElements) {
-        if (me instanceof Bendpoint || me instanceof InferenceEdge) {
-            return;
-        }
+    private static CopyDependencyResolverResultSimple resolveCopyDependencies(final ModelElement me, final Class<? extends ModelElement> ignoreClass, CopyDependencyResolverResultSimple result, final Collection<ElementContainer> initialSelectedElements) {
         if (result == null) {
             GDCollection gdcoll = me.getCollection();
             result = new CopyDependencyResolverResultSimple(gdcoll);
         }
+        if (me instanceof Bendpoint || me instanceof InferenceEdge) {
+            return result;
+        }
         if (!result.add(me)) {
-            return;
+            return result;
         }
         GDCollection gdcoll = me.getCollection();
         LGMGraphDocument mainDoc = gdcoll.getMainDoc();
@@ -290,7 +313,7 @@ public class CopyDependencyResolver {
                 resolveCopyDependencies(edge, elementClass, result, initialSelectedElements);
             }
         }
-
+        return result;
     }
 
     /**

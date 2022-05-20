@@ -3,6 +3,7 @@ package de.imise.tool3lgm.graphtools.userfield.definition;
 import static de.imise.tool3lgm.graphtools.userfield.definition.UserField.Style.SUBTYPE;
 
 import java.security.InvalidParameterException;
+import java.util.Objects;
 
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.IDSource;
@@ -101,10 +102,7 @@ public class SubType implements NameAndDescriptionSource, IDSource {
 
     @Override
     public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + (subTypeUserField == null ? 0 : subTypeUserField.hashCode());
-        return result;
+        return Objects.hash(subTypeUserField);
     }
 
     @Override
@@ -119,11 +117,7 @@ public class SubType implements NameAndDescriptionSource, IDSource {
             return false;
         }
         SubType other = (SubType) obj;
-        if (subTypeUserField == null) {
-            if (other.subTypeUserField != null) {
-                return false;
-            }
-        } else if (!subTypeUserField.equals(other.subTypeUserField)) {
+        if (!Objects.equals(subTypeUserField, other.subTypeUserField)) {
             return false;
         }
         return true;

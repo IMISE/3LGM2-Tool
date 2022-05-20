@@ -4,8 +4,12 @@ import java.text.NumberFormat;
 
 import de.imise.tool3lgm.graphtools.IDSource;
 
+/**
+ * @author
+ */
 public class UserFieldNumberFormat implements IDSource, Cloneable {
 
+    /**  */
     private final String id;
 
     /**
@@ -139,7 +143,7 @@ public class UserFieldNumberFormat implements IDSource, Cloneable {
      *
      * @param formatStringWithPrefixes
      */
-    private void setFractionDigitsCountAndUnit(final String formatStringWithPrefixes) {
+    public void setFractionDigitsCountAndUnit(final String formatStringWithPrefixes) {
         int decimalIndex = formatStringWithPrefixes.indexOf(FORMAT_DECIMAL_PLACES_PREFIX);
         int unitIndex = formatStringWithPrefixes.indexOf(FORMAT_UNIT_PREFIX);
         String decimalPlaces = formatStringWithPrefixes.substring(decimalIndex + FORMAT_DECIMAL_PLACES_PREFIX.length(), unitIndex).trim();

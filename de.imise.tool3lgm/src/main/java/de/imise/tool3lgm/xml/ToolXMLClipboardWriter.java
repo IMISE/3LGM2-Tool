@@ -68,7 +68,7 @@ public class ToolXMLClipboardWriter extends ToolXMLWriter {
     private final void writeClipboardContent() throws XMLStreamException {
         LGMGraphDocument lgmDoc = (LGMGraphDocument) selectedDoc;
         SortedSelection sortedSelection = lgmDoc.getSortedSelection();
-        CopyDependencyResolverResultSimple resolvedCopyDependencies = resolveCopyDependencies(sortedSelection);
+        CopyDependencyResolverResultSimple resolvedCopyDependencies = resolveCopyDependencies(sortedSelection, gdcoll); //das hier ist wahrscheinlich Unsinn (also die source GDCollection zu übergeben),  aber dieser Code hier kommt sowieso in die Tonne
         writeStartDocument();
         writeStartElement("tool3lgm_clipboard"); //<tool3lgm_clipboard>
         writeAttribute("time", String.valueOf(System.currentTimeMillis()));

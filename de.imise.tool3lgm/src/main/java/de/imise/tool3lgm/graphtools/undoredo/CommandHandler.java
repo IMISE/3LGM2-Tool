@@ -179,6 +179,8 @@ public class CommandHandler {
                     arg = ((Class<?>) arg).getName();
                 } else if (arg instanceof Color) {
                     arg = ((Color) arg).getRGB();
+                } else if (arg instanceof Enum<?>) {
+                    arg = ((Enum<?>) arg).name();
                 }
                 //not a Number? -> convert arg to String that the command parser
                 //understands as one token (numbers are already one token)

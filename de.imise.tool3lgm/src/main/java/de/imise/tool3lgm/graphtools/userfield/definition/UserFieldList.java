@@ -1,9 +1,11 @@
 package de.imise.tool3lgm.graphtools.userfield.definition;
 
+import static de.imise.tool3lgm.graphtools.userfield.definition.UserField.Style.GROUP;
 import static de.imise.tool3lgm.graphtools.userfield.definition.UserField.Style.SUBTYPE;
 import static de.imise.tool3lgm.graphtools.userfield.definition.UserField.Style.TAB;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
@@ -171,26 +173,81 @@ public class UserFieldList implements Cloneable, Iterable<UserField> {
     }
 
     /**
-     * All subtypes (and their sub userfields) have an order in this list. If
-     * the given subtype is in this list the function returns the count of other
-     * subtypes before this subtype.
-     *
      * @param subType
-     * @return the index of the given subtype or -1 if it is not in the list
+     * @return the last index of a userField that belongs to the guven subtype.
+     *         If the given subtype is a dummy (null or DUMMY_SUBTYPE) then the
+     *         index of the first tab (with no subtype) will be returned. If the
+     *         userField is not present in the list, then -1 is returned.
      */
-    public int getSubTypeIndex(final SubType subType) {
-        int index = -1;
-        if (!SubType.isDummy(subType)) {
-            for (UserField userField : list) {
-                if (userField.hasStyle(SUBTYPE)) {
-                    index++;
-                }
-                if (subType.hasUserField(userField)) {
+    private int getSubtypeEndIndex(final UserField userField) {
+        SubType subType = userField.getParentSubType();
+        int subTypeEndIndex = indexOf(userField);
+        if (SubType.isDummy(subType) || subTypeEndIndex >= 0) {
+            for (subTypeEndIndex++; subTypeEndIndex < size(); subTypeEndIndex++) {
+                UserField nextUserField = get(subTypeEndIndex);
+                if (nextUserField.isSubtype()) {
                     break;
                 }
             }
+            subTypeEndIndex--;
+        }
+        return subTypeEndIndex;
+    }
+
+    /**
+     * @param userField
+     * @return
+     */
+    private int getTabEndIndex(UserField userField) {
+        int index = indexOf(userField);
+        if (index >= 0) {
+            for (index++; index < size(); index++) {
+                UserField nextUserField = get(index);
+                if (nextUserField.isSubtype() || nextUserField.isTab()) {
+                    break;
+                }
+            }
+            index--;
         }
         return index;
+    }
+
+    /**
+     * @param userField
+     * @return
+     */
+    private int getGroupEndIndex(UserField userField) {
+        int index = indexOf(userField);
+        if (index >= 0) {
+            for (index++; index < size(); index++) {
+                UserField nextUserField = get(index);
+                if (nextUserField.isSubtype() || nextUserField.isTab() || nextUserField.isGroup()) {
+                    break;
+                }
+            }
+            index--;
+        }
+        return index;
+    }
+
+    /**
+     * @param userField
+     * @return
+     */
+    public int getEndIndex(UserField userField) {
+        if (userField != null) {
+            if (userField.isSubtype()) {
+                return getSubtypeEndIndex(userField);
+            }
+            if (userField.isTab()) {
+                return getTabEndIndex(userField);
+            }
+            if (userField.isGroup()) {
+                return getGroupEndIndex(userField);
+            }
+            return indexOf(userField);
+        }
+        return -1;
     }
 
     /**
@@ -204,15 +261,6 @@ public class UserFieldList implements Cloneable, Iterable<UserField> {
                 subType = new SubType(userField);
             }
             userField.setParentSubType(subType);
-        }
-    }
-
-    /**
-     * Marks the parent subtypes of all userFields in this list as invalid
-     */
-    public void invalidateParentSubTypesForUserFields() {
-        for (UserField userField : list) {
-            userField.setParentSubType(null);
         }
     }
 
@@ -317,7 +365,64 @@ public class UserFieldList implements Cloneable, Iterable<UserField> {
 
     @Override
     public String toString() {
-        return list.toString();
+        StringBuilder sb = new StringBuilder();
+        sb.append(targetClass.getSimpleName());
+        sb.append(" ");
+        sb.append(getClass().getSimpleName());
+        sb.append(" Size=");
+        sb.append(size());
+        sb.append("\n");
+
+        int indent = 0;
+        int subTypeIndent = 0;
+        int tabIndent = 0;
+        int groupIndent = 0;
+        for (UserField userField : this) {
+            if (userField.hasStyle(SUBTYPE)) {
+                indent = 0;
+                subTypeIndent = 1;
+                tabIndent = 0;
+                groupIndent = 0;
+            } else if (userField.hasStyle(TAB)) {
+                indent = subTypeIndent;
+                tabIndent = 1;
+                groupIndent = 0;
+            } else if (userField.hasStyle(GROUP)) {
+                indent = subTypeIndent + tabIndent;
+                groupIndent = 1;
+            } else {
+                indent = subTypeIndent + tabIndent + groupIndent;
+            }
+            sb.append(getIndent(indent + 1));
+            sb.append(userField.getName().replaceAll("\n", " "));
+            sb.append(" (");
+            sb.append(userField.getDisplayableStyleName());
+            sb.append(")   [ParentSubType: " + userField.getParentSubType() + "]\n");
+        }
+        int length = sb.length();
+        if (length > 0 && sb.charAt(length - 1) == '\n') {
+            sb.setLength(length - 1);
+        }
+        return sb.toString();
+    }
+
+    /**
+     * @param indent
+     * @return
+     */
+    private String getIndent(int indent) {
+        switch (indent) {
+        case 1:
+            return "\t";
+        case 2:
+            return "\t\t";
+        case 3:
+            return "\t\t\t";
+        case 4:
+            return "\t\t\t\t";
+        default:
+            return "";
+        }
     }
 
     /**
@@ -328,6 +433,59 @@ public class UserFieldList implements Cloneable, Iterable<UserField> {
      */
     public int indexOf(final UserField userField) {
         return list.indexOf(userField);
+    }
+
+    /**
+     * Removes all userFields that are not in this list. Empty tabs or empty
+     * subtypes are removed too even if they are contained in the set.
+     *
+     * @param valueUserFields a list of UserFields that are not Subtypes or Tabs
+     *            or Groups or Separators
+     */
+    void retainAll(Collection<UserField> valueUserFields) {
+        //delete all input values userfields that are not in the given collection
+        for (int i = list.size() - 1; i >= 0; i--) {
+            UserField userField = list.get(i);
+            if (!userField.isStructureUserField()) {
+                if (!valueUserFields.contains(userField)) {
+                    list.remove(i);
+                }
+            }
+        }
+        //now remove all separators beside other structure userFields
+        for (int i = list.size() - 1; i >= 0; i--) {
+            if (list.get(i).isSeparator()) {
+                if (i == 0 || list.get(i - 1).isStructureUserField()) { //check predecessor
+                    list.remove(i);
+                } else if (i < list.size() - 1 && list.get(i + 1).isStructureUserField()) { // check successor
+                    list.remove(i);
+                }
+            }
+        }
+        //now remove all empty groups at the end of the list
+        while (list.size() > 0 && list.get(list.size() - 1).isGroup()) {
+            list.remove(list.size() - 1);
+        }
+        //now remove all empty groups
+        for (int i = list.size() - 2; i >= 0; i--) {
+            if (list.get(i).isGroup()) {
+                if (list.get(i + 1).isStructureUserField()) {
+                    list.remove(i);
+                }
+            }
+        }
+        //now remove all empty tabs at the end of the list
+        while (list.size() > 0 && list.get(list.size() - 1).isTab()) {
+            list.remove(list.size() - 1);
+        }
+        //now remove all empty tabs
+        for (int i = list.size() - 2; i >= 0; i--) {
+            if (list.get(i).isTab()) {
+                if (list.get(i + 1).isTab()) {
+                    list.remove(i);
+                }
+            }
+        }
     }
 
 }

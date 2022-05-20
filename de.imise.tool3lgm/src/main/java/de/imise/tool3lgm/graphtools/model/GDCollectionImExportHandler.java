@@ -53,17 +53,21 @@ public final class GDCollectionImExportHandler {
     /**
      * Zeigt einen Dialog an, um eine Modelldatei zu wählen und stellt dann die
      * darin enthaltenen Teilmodelle zur Auswahl, die dann importiert werden.
+     *
+     * @param pid
      */
-    public static final void importSzenarios() {
-        importModel(true);
+    public static final void importSzenarios(int pid) {
+        importModel(true, pid);
     }
 
     /**
      * Zeigt einen Dialog an, um eine Modelldatei zu wählen und importiert dann
      * das Gesamtmodell.
+     *
+     * @param pid
      */
-    public static final void importModel() {
-        importModel(false);
+    public static final void importModel(int pid) {
+        importModel(false, pid);
     }
 
     /**
@@ -74,14 +78,14 @@ public final class GDCollectionImExportHandler {
      *            für zu importierende Teilmodelle angezeigt. Bei
      *            <code>false</code> wird das Gesamtmodell importiert.
      */
-    private static final void importModel(final boolean chooseSubmodels) {
+    private static final void importModel(final boolean chooseSubmodels, int pid) {
         ExtendedFileChooser oeffnenDialog = new ExtendedFileChooser(null);
         oeffnenDialog.setMultiSelectionEnabled(false);
         oeffnenDialog.setFileFilters(false, getFileNameExtensionFilters(FileFilterType.LGM3, FileFilterType.LGM3_ZIP, FileFilterType.LGM3_UNZIPPED));
         if (oeffnenDialog.showOpenDialog(getMainFrame()) == JFileChooser.APPROVE_OPTION) {
             GDCollection selectedGDColl = getSelectedGDCollection();
             GDCollectionImExportHandler imExportHandler = selectedGDColl.getImExportHandler();
-            imExportHandler.importSzenarios(oeffnenDialog.getSelectedFile(), chooseSubmodels);
+            imExportHandler.importSzenarios(oeffnenDialog.getSelectedFile(), chooseSubmodels, pid);
         }
     }
 
@@ -90,8 +94,9 @@ public final class GDCollectionImExportHandler {
      *
      * @param file Modelldatei, aus der Szenarios importiert werden sollen
      * @param chooseSzenarioDialog wenn <code>true</code> kann der
+     * @param pid
      */
-    private void importSzenarios(final File file, final boolean chooseSzenarioDialog) {
+    private void importSzenarios(final File file, final boolean chooseSzenarioDialog, int pid) {
         GDCollection sourceGDColl = new GDCollection(gdcoll.getModelType());
 
         Static.showProgressDialog();
@@ -115,28 +120,23 @@ public final class GDCollectionImExportHandler {
             importSzenarios.add(sourceGDColl.getMainDoc());
             importSzenarios.addAll(sourceGDColl.getSzenarios());
         }
-        importSzenarios(importSzenarios.build(), sourceGDColl);
+        importSzenarios(importSzenarios.build(), sourceGDColl, pid);
     }
 
     /**
      * @param importSzenarios
      * @param sourceGDColl
+     * @param pid
      */
-    private void importSzenarios(final List<GraphDocument> importSzenarios, final GDCollection sourceGDColl) {
+    private void importSzenarios(final List<GraphDocument> importSzenarios, final GDCollection sourceGDColl, int pid) {
 
         Static.showProgressDialog();
         Static.setProgressDialogStatusLabel("importSzenario");
-        int size = 0;
-        LGMGraphDocument collectionMainDoc = sourceGDColl.getMainDoc();
-        for (int i = 0; i < ModelConstants.LAYERS.length; i++) {
-            LayerContainer lc = collectionMainDoc.getLayer(ModelConstants.LAYERS[i]);
-            size += lc.getNodeContainerCount() + lc.getEdgeContainerCount() + lc.getBendpointContainerCount();
-        }
 
         CopyDependencyResolverResultFull resolvedCopyDependencies = CopyDependencyResolver.resolveCopyDependencies(importSzenarios);
         UserFieldDefinitions userFieldDefinitions = gdcoll.getUserFieldDefinitions();
         UserFieldDefinitions userFieldDefinitions2Add = resolvedCopyDependencies.getUserFieldDefinitions();
-        userFieldDefinitions.addAll(userFieldDefinitions2Add);
+        userFieldDefinitions.addAll(userFieldDefinitions2Add, pid);
 
         Map<String, byte[]> iconTable = gdcoll.getIconTable();
         for (String iconID : resolvedCopyDependencies.iconIDs) {
