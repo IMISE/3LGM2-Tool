@@ -405,7 +405,7 @@ public class LGMGraphDocument extends GraphDocument {
                     //select the copied node or edge
                     targetDoc.addSimpleToSelection(targetContainer);
                     existingTargetElement = targetContainer.getElement();
-                    copyUserFieldValues(sourceElement, existingTargetElement, targetCollection.getUserFieldDefinitions());
+                    copyUserFieldValues(sourceElement, existingTargetElement, targetCollection, pid);
                 }
             }
         } catch (Exception ex) {
@@ -591,15 +591,19 @@ public class LGMGraphDocument extends GraphDocument {
     /**
      * @param source
      * @param target
-     * @param targetUserFieldDefinitions
+     * @param targetCollection
+     * @param pid
      */
-    private static void copyUserFieldValues(ModelElement source, ModelElement target, UserFieldDefinitions targetUserFieldDefinitions) {
+    private static void copyUserFieldValues(ModelElement source, ModelElement target, GDCollection targetCollection, int pid) {
+        UserFieldDefinitions targetUserFieldDefinitions = targetCollection.getUserFieldDefinitions();
+        LGMGraphDocument targetMainDoc = targetCollection.getMainDoc();
         for (UserField sourceUserField : source.getUserFieldInputValueKeys()) {
             String userFieldInputValue = source.getUserFieldInputValue(sourceUserField);
             String sourceUserFieldID = sourceUserField.getID();
             UserField targetUserField = targetUserFieldDefinitions.getUserField(sourceUserFieldID);
-            target.setUserFieldInputValue(targetUserField, userFieldInputValue);
+            targetMainDoc.setUserFieldValue(target, targetUserField, userFieldInputValue, pid);
         }
+
     }
 
     /**
