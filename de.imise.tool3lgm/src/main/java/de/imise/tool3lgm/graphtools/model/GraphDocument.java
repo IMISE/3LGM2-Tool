@@ -5120,7 +5120,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
             return;
         }
         start_transaction(pid);
-        format = new UserFieldNumberFormat(formatExportString);
+        format = new UserFieldNumberFormat(formatID);
         format.setFractionDigitsCountAndUnit(formatExportString);
         userFieldDefinitions.add(format);
         addUndo(pid, MODEL_ACTION_DELETE_USER_FIELD, format);

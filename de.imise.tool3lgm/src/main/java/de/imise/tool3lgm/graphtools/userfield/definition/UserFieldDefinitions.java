@@ -487,6 +487,9 @@ public class UserFieldDefinitions extends UserFieldDefinitionChangeHandler imple
     public void addAll(final UserFieldDefinitions sourceUserFieldDefinition, int pid) {
         LGMGraphDocument mainDoc = gdcoll.getMainDoc();
         mainDoc.start_transaction(pid);
+        for (UserFieldNumberFormat format : sourceUserFieldDefinition.formatIdToFormat.values()) {
+            mainDoc.addUserFieldFormat(format, pid);
+        }
         for (Class<? extends UserFieldTarget> clazz : sourceUserFieldDefinition.classToUserFieldTargetSpecificListMap.keySet()) {
             UserFieldList targetUserFieldList = classToUserFieldTargetSpecificListMap.get(clazz);
             if (targetUserFieldList == null) {
@@ -526,9 +529,6 @@ public class UserFieldDefinitions extends UserFieldDefinitionChangeHandler imple
                     targetNonStructureUserField = mainDoc.addUserField(sourceUserField, targetUserFieldList.getEndIndex(targetSubTypeOrTabOrGroupUserField) + 1, pid); //this is a new created or the existing one with the same ID
                 }
             }
-        }
-        for (UserFieldNumberFormat format : sourceUserFieldDefinition.formatIdToFormat.values()) {
-            mainDoc.addUserFieldFormat(format, pid);
         }
         mainDoc.finish_transaction(pid);
     }

@@ -576,16 +576,9 @@ public class LGMGraphDocument extends GraphDocument {
      * @param pid
      */
     private static void copyUserFields(GDCollection sourceCollection, GDCollection targetCollection, CopyDependencyResolverResultSimple resolvedCopyDependencies, int pid) {
-        //        if (targetCollection.hasModelCategory(CLIPBOARD)) { //copy to CLIPBOARD model
-        //            UserFieldDefinitions sourceUserFieldDefinitions = sourceCollection.getUserFieldDefinitions();
-        //            UserFieldDefinitions clonedSourceUserFieldDefinitions = sourceUserFieldDefinitions.cloneForTargetCollection(targetCollection);
-        //            clonedSourceUserFieldDefinitions.retain(resolvedCopyDependencies.usedUserFields);
-        //            targetCollection.setUserFieldDefinitions(clonedSourceUserFieldDefinitions);
-        //        } else { // copy from CLIPBOARD or from REGULAR or from TEMPLATE model to model
         UserFieldDefinitions targetUserFieldDefinitions = targetCollection.getUserFieldDefinitions();
         UserFieldDefinitions userFieldDefinitions2Add = resolvedCopyDependencies.getUserFieldDefinitions();
         targetUserFieldDefinitions.addAll(userFieldDefinitions2Add, pid);
-        //        }
     }
 
     /**
