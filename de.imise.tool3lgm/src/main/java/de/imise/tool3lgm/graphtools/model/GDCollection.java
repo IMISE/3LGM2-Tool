@@ -280,7 +280,10 @@ public class GDCollection extends UserFieldTarget implements MetaModelSpecific {
     /**
      * Dieser Counter berechnet die Verschiebung, mit der die Elemente bei einem
      * Paste in die Grafik kopiert werden. Jedes Mal, wenn gepastet wird ohne
-     * eine neue Kopie anzufertigen, dann wird der Counter hochgezählt.
+     * eine neue Kopie anzufertigen, dann wird der Counter hochgezählt.</br>
+     * </br>
+     * This is unused since we changed the copy & paste mechanism from file
+     * based to memory based.
      */
     private int pasteCounter;
 

@@ -343,7 +343,7 @@ public class GDCollectionFileHandler {
             }
         };
         zipStream.getNextEntry();
-        boolean retVal = loadXMLFile(zipStream, false, loadContent);
+        boolean retVal = loadXMLFile(zipStream, loadContent);
         return retVal;
     }
 
@@ -367,23 +367,22 @@ public class GDCollectionFileHandler {
             throw new LGMVersionException(getResString("to_old_file_format"));
         }
         fileStream.getChannel().position(0);
-        return loadXMLFile(fileStream, false, loadContent);
+        return loadXMLFile(fileStream, loadContent);
     }
 
     /**
      * load collection from xml-source
      *
      * @param inputStream an InputStream to the xml-source
-     * @param paste
      * @param loadContent only if this parameter is <code>true</code> then the
      *            file content will be really loaded. If <code>false</code> then
      *            only the FileVersion will be loaded.
      * @return true, if reading was successful
      * @author Thomas Rudert
      */
-    private boolean loadXMLFile(final InputStream inputStream, final boolean paste, boolean loadContent) {
+    private boolean loadXMLFile(final InputStream inputStream, boolean loadContent) {
         try {
-            ToolXMLParser parser = new ToolXMLParser(gdcoll, inputStream, paste, loadContent);
+            ToolXMLParser parser = new ToolXMLParser(gdcoll, inputStream, loadContent);
             if (loadContent) {
                 parser.parseDocument();
             }

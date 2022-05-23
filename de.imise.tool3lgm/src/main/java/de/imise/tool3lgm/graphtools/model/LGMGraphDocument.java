@@ -237,8 +237,6 @@ public class LGMGraphDocument extends GraphDocument {
             e.printStackTrace();
             return;
         }
-        //        addRedo(STANDARD_PID, MODEL_ACTION_PASTE);
-        //        addUndo(STANDARD_PID, MODEL_ACTION_DELETE_FROM_MODEL);
         finish_transaction(STANDARD_PID, DATA_CHANGED);
     }
 

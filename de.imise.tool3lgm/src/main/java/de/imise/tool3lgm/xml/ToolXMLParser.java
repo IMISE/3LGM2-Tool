@@ -105,7 +105,6 @@ public class ToolXMLParser {
     /**
      * @param collection
      * @param inputStream
-     * @param paste
      * @param loadContent only if this parameter is <code>true</code> then the
      *            file content will be really loaded/parsed. If
      *            <code>false</code> then only the {@link FileVersion} and the
@@ -117,25 +116,24 @@ public class ToolXMLParser {
      * @throws LGMVersionException
      * @throws XMLVersionException
      */
-    public ToolXMLParser(final GDCollection collection, final InputStream inputStream, final boolean paste, boolean loadContent) throws SAXException, ParserConfigurationException, FileNotFoundException, IOException, LGMVersionException,
+    public ToolXMLParser(final GDCollection collection, final InputStream inputStream, boolean loadContent) throws SAXException, ParserConfigurationException, FileNotFoundException, IOException, LGMVersionException,
             XMLVersionException {
 
         parseStream = inputStream;
         gdcoll = collection;
 
         version = extractVersionAndMetaModel(parseStream);
-        if (!paste) {
-            Tool3lgmModelType modelType = new Tool3lgmModelType(version.metaModelContext, version.modelCategory);
-            //For new models of the original metamodel, the default UserProperties
-            //should not be loaded anymore, because they should already be included
-            //(by the new creation of the file) or already removed by the user.
-            //With files with an old version (< 3.6 = 10) they must be loaded
-            //however, since in such files these additional fields can still stand
-            //hardwired in the file and only afterwards to (deletable) user-defined
-            //properties were made.
-            boolean loadDefaultUserProperties = version.lgmVersionIndex < 10;
-            gdcoll.setModelType(modelType, loadDefaultUserProperties);
-        }
+
+        Tool3lgmModelType modelType = new Tool3lgmModelType(version.metaModelContext, version.modelCategory);
+        //For new models of the original metamodel, the default UserProperties
+        //should not be loaded anymore, because they should already be included
+        //(by the new creation of the file) or already removed by the user.
+        //With files with an old version (< 3.6 = 10) they must be loaded
+        //however, since in such files these additional fields can still stand
+        //hardwired in the file and only afterwards to (deletable) user-defined
+        //properties were made.
+        boolean loadDefaultUserProperties = version.lgmVersionIndex < 10;
+        gdcoll.setModelType(modelType, loadDefaultUserProperties);
 
         /* XML Version */
         if (version.xmlVersionIndex < 0) {
@@ -154,18 +152,20 @@ public class ToolXMLParser {
             parser.getXMLReader().setDTDHandler(new ToolDTDHandler());
 
             /* Tool3lgm2-Datei-Version */
-            ContentHandler contentHandler = getContentHandler(collection, version, paste);
+            ContentHandler contentHandler = getContentHandler(collection, version);
             XMLReader xmlReader = parser.getXMLReader();
             xmlReader.setContentHandler(contentHandler);
         }
     }
 
     /**
+     * @param gdcoll
+     * @param version
      * @return the xml content handler to parse a model wit a specifi Tool3lgm2
      *         file version
      * @throws SAXException
      */
-    private ContentHandler getContentHandler(final GDCollection gdcoll, final FileVersion version, final boolean paste) throws SAXException {
+    private ContentHandler getContentHandler(final GDCollection gdcoll, final FileVersion version) throws SAXException {
         /* Tool3lgm2-Datei-Version */
         switch (version.lgmVersionIndex) {
         case 0:
@@ -193,7 +193,7 @@ public class ToolXMLParser {
         case 13: //Version 3.9 -> Formats of UserFields are no longer UserFields themselves but now have their own type UserFieldNumberFormat and
             //               Style.NUMER was Style.CLASSIFICATION_NUMBER and Style.FORMULA was Style.CLASSIFICATION_NUMBER_FORMULA
         case 14: //Version 3.9 -> Aus-/Einbelenden der Namen verbundener Elemente in der Grafik wird gespeichert
-            return new ToolContentHandlerV3_1(gdcoll, paste);
+            return new ToolContentHandlerV3_1(gdcoll);
         default:
             throw new SAXException("angegebenes Dateiformat wird nicht unterstützt");
         }

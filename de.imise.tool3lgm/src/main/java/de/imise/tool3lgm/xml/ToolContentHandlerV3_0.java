@@ -53,6 +53,7 @@ import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout.TextPositionHo
 import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout.TextPositionVertical;
 import de.imise.tool3lgm.graphtools.view.graph.Shape;
 import de.imise.tool3lgm.log.Log;
+import de.imise.util.Sys;
 
 /**
  * Die Variablen sind auf protected Gesetzt, damit man einen neuen
@@ -67,16 +68,6 @@ import de.imise.tool3lgm.log.Log;
  */
 public class ToolContentHandlerV3_0 implements ContentHandler {
 
-    private static String lastCopyFileTimeStamp = "";
-
-    private boolean paste = false;
-
-    /**
-     * Alle über Copy&Paste eingefügten Elemente. Diese werden am Ende
-     * selected(true) gesetzt
-     */
-    private List<ElementContainer> pastedElements;
-
     /**
      * Hier kommen beim Anlegen der Elemente alle Elemente rein, die keinen
      * feststehenden Layer haben. Im Moment sind das Bendpoints und TextFields
@@ -87,23 +78,6 @@ public class ToolContentHandlerV3_0 implements ContentHandler {
      *
      */
     private Map<String, BendpointContainer> idToSzenarioBendpointContainer;
-
-    /**
-     * Faktor, um den die Position von per Paste eingefügten Elementen in x und
-     * y Richtung nach unten verschoben wird. Mehrmaliges Hintereinandereinfügen
-     * erhöht diesen Faktor, so dass die kopierten Elemente immer schräg unter
-     * den originalen bzw. zuletzt eingefügten Elementen landen.
-     */
-    private int copyAndPastePositionShift = 0;
-
-    private final boolean isCopyAndPaste() {
-        return copyAndPastePositionShift > 0;
-    }
-
-    /**
-     * gänderte IDs (bei copyAndPaste). Schlüssel ist alte ID, Wert ist neue ID.
-     */
-    private Map<String, String> oldToNewID;
 
     /**
      * Alle Kanten. Am Ende müssem deren IDs (start, end) aufgelöst werden.
@@ -186,22 +160,10 @@ public class ToolContentHandlerV3_0 implements ContentHandler {
     protected boolean avoidDuplicates = false;
 
     /**
-     * @param coll
-     */
-    public ToolContentHandlerV3_0(final GDCollection coll) {
-        this(coll, false);
-    }
-
-    /**
      * @param gdcoll
-     * @param paste
      */
-    public ToolContentHandlerV3_0(final GDCollection gdcoll, final boolean paste) {
+    public ToolContentHandlerV3_0(final GDCollection gdcoll) {
         this.gdcoll = gdcoll;
-        this.paste = paste;
-        if (paste) {
-            pastedElements = new ArrayList<>();
-        }
         mainDoc = gdcoll.getMainDoc();
         szenario = gdcoll.getSelectedDoc();
         userFieldDefinitions = gdcoll.getUserFieldDefinitions();
@@ -213,7 +175,6 @@ public class ToolContentHandlerV3_0 implements ContentHandler {
 
     @Override
     public void startDocument() throws SAXException {
-        oldToNewID = new HashMap<>();
     }
 
     /**
@@ -231,14 +192,8 @@ public class ToolContentHandlerV3_0 implements ContentHandler {
         for (Szenario szen : gdcoll.getSzenarios()) {
             szen.initNodeContainers();
             szen.initEdgeContainers();
-            //			collection.getSzenario(i).refreshSpecialInfoTargets();
         }
         mainDoc.deselectAll(true);
-        if (paste) {
-            for (ElementContainer ec : pastedElements) {
-                mainDoc.addToSelection(ec, 0);
-            }
-        }
         mainDoc = null;
         containerWithIcon = null;
         gdcoll = null;
@@ -291,13 +246,7 @@ public class ToolContentHandlerV3_0 implements ContentHandler {
 
                 if (element != null) {
                     String id = atts.getValue("hash");
-                    //Copy&Paste and elenent with same ID already exists -> retain the new ID and store it in the map
-                    if (isCopyAndPaste() && mainDoc.findElementCoded(id) != null) {
-                        String newID = element.getID();
-                        oldToNewID.put(id, newID);
-                    } else {
-                        element.setID(id); //no Copy&Paste or no element with same ID found -> set the id
-                    }
+                    element.setID(id);
 
                     if (element instanceof Edge) {
                         Edge edge = (Edge) element;
@@ -313,14 +262,10 @@ public class ToolContentHandlerV3_0 implements ContentHandler {
                     }
 
                 } else {
-                    System.err.println("Could not proceed element!\n Name=" + qName + "\n UserField=" + attsToString(atts));
+                    Sys.err1("Could not proceed element!\n Name=" + qName + "\n UserField=" + attsToString(atts));
                 }
             } else if (qName.equals("container")) {
                 String id = atts.getValue("hash");
-                String newID = oldToNewID.get(id);
-                if (newID != null) {
-                    id = newID;
-                }
                 element = mainDoc.findElementCoded(id);
                 if (element == null) {
                     ElementContainer bendpointContainerOrTexField = idToMainDocContainer.get(id);
@@ -390,11 +335,11 @@ public class ToolContentHandlerV3_0 implements ContentHandler {
 
                 if (container != null) {
                     layout = container.getE3LGMLayout();
-                    if (layout == null) { //Dieser Fall hier scheint nie einzutreten (Coverage-Test mit allelei Modellen laden + Copy&Paste)
+                    if (layout == null) { //Dieser Fall hier scheint nie einzutreten (Coverage-Test mit allelei Modellen laden)
                         layout = new GraphElementLayout();
                         container.setE3LGMLayout(layout);
                     }
-                } else if (layer != null) { //Dieser Fall hier scheint nie einzutreten (Coverage-Test mit allelei Modellen laden + Copy&Paste)
+                } else if (layer != null) { //Dieser Fall hier scheint nie einzutreten (Coverage-Test mit allelei Modellen laden)
                     layout = layer.get3LGMLayout();
                     if (layout == null) {
                         layout = new GraphElementLayout();
@@ -420,10 +365,7 @@ public class ToolContentHandlerV3_0 implements ContentHandler {
 
             } else if (qName.equals("szenario")) {
                 Static.setProgressDialogStatusLabel("labelReadSzenario", atts.getValue("titel") + " ...");
-
-                if (!isCopyAndPaste()) {
-                    szenario = gdcoll.createSzenario(atts.getValue("titel"), false, "", atts.getValue("hash"), false);
-                }
+                szenario = gdcoll.createSzenario(atts.getValue("titel"), false, "", atts.getValue("hash"), false);
                 idToSzenarioBendpointContainer = new HashMap<>();
 
                 //            } else if (qName.equals("description")) {
@@ -501,18 +443,6 @@ public class ToolContentHandlerV3_0 implements ContentHandler {
                 //
             } else if (qName.equals("modell_3lgm_2")) {
                 mainDoc = gdcoll.getMainDoc();
-
-            } else if (qName.equals("tool3lgm_clipboard")) {
-                String timeStamp = atts.getValue("time");
-                if (timeStamp == null || lastCopyFileTimeStamp.equals(timeStamp)) {
-                    copyAndPastePositionShift = gdcoll.increasePasteCounter();
-                } else {
-                    copyAndPastePositionShift = gdcoll.resetPasteCounter();
-                    lastCopyFileTimeStamp = timeStamp;
-                }
-                mainDoc = Static.getSelectedGDCollection().getMainDoc();
-                szenario = gdcoll.getSelectedDoc();
-                szenario.clearSelection();
 
             } else if (qName.equals("objects")) {
                 Static.setProgressDialogStatusLabel("labelReadElements");
@@ -607,9 +537,6 @@ public class ToolContentHandlerV3_0 implements ContentHandler {
                                 idToMainDocContainer.put(element.getID(), container);
                             }
                         }
-                        if (paste) {
-                            pastedElements.add(container);
-                        }
                         element = null;
                         container = null;
                     } catch (Exception e) {
@@ -623,7 +550,7 @@ public class ToolContentHandlerV3_0 implements ContentHandler {
                     tmp_container = null;
                 } else if (container != null) {
                     ModelElement me = container.getElement();
-                    if (isCopyAndPaste() || !szenario.equals(mainDoc)) {
+                    if (!szenario.equals(mainDoc)) {
                         //Knickpunkte werden erst zum Layer hinzugefügt, wenn die Kante zu dem sie gehören auch
                         //hinzugefügt wurde. Das passiert beim Ende des szenaro-Tags
                         if (!(me instanceof Bendpoint)) {
@@ -643,9 +570,6 @@ public class ToolContentHandlerV3_0 implements ContentHandler {
                     }
                     if (container instanceof BendpointContainer) {
                         idToSzenarioBendpointContainer.put(container.getID(), (BendpointContainer) container);
-                    }
-                    if (isCopyAndPaste()) {
-                        szenario.addSimpleToSelection(container);
                     }
                 }
                 container = null;
@@ -670,19 +594,11 @@ public class ToolContentHandlerV3_0 implements ContentHandler {
                 }
                 layout.x = Integer.parseInt(value);
 
-                if (isCopyAndPaste()) {
-                    layout.x = layout.x + 10 * copyAndPastePositionShift;
-                }
-
             } else if (qName.equals("y")) {
                 if (layout == null) {
                     return;
                 }
                 layout.y = Integer.parseInt(value);
-
-                if (isCopyAndPaste()) {
-                    layout.y = layout.y + 10 * copyAndPastePositionShift;
-                }
 
             } else if (qName.equals("width")) {
                 if (layout == null) {
@@ -860,11 +776,6 @@ public class ToolContentHandlerV3_0 implements ContentHandler {
                 for (BendpointContainer benpointContainer : idToSzenarioBendpointContainer.values()) {
                     Bendpoint bendpoint = benpointContainer.getBendpoint();
                     String bendpointEdgeID = bendpoint.getEdgeID();
-
-                    String newBendpointEdgeID = oldToNewID.get(bendpointEdgeID);
-                    if (newBendpointEdgeID != null) {
-                        bendpointEdgeID = newBendpointEdgeID;
-                    }
                     EdgeContainer kc = benpointContainer.getGraphDocument().findEdgeContainerCoded(bendpointEdgeID);
                     if (kc != null) {
                         bendpoint.addEdge(kc.getEdge());
@@ -976,33 +887,7 @@ public class ToolContentHandlerV3_0 implements ContentHandler {
                 }
 
             } else if (qName.equals("objects")) {
-                if (isCopyAndPaste()) {
-                    Static.setProgressDialogStatusLabel("labelAddBendpoints");
-                    for (ElementContainer ec : idToMainDocContainer.values()) {
-                        if (ec instanceof BendpointContainer) {
-                            Bendpoint bendpoint = ((BendpointContainer) ec).getBendpoint();
-                            bendpoint.putXMLFieldString("kanteHash", oldToNewID.get(bendpoint.getEdgeID()));
-                        }
-                    }
-                }
-                //die IDs für das Start- bzw. End-Objekt einer Edge setzten
-                Static.setProgressDialogStatusLabel("labelConnectTraces");
-                for (Edge edge : edges) {
-                    if (isCopyAndPaste()) {
-                        String startID = edge.getStartID();
-                        String newStartID = oldToNewID.get(startID);
-                        if (!Strings.isNullOrEmpty(newStartID)) {
-                            startID = newStartID;
-                        }
-                        String endID = edge.getEndID();
-                        String newEndID = oldToNewID.get(endID);
-                        if (!Strings.isNullOrEmpty(newEndID)) {
-                            endID = newEndID;
-                        }
-                        edge.putXMLFieldString("start", startID);
-                        edge.putXMLFieldString("end", endID);
-                    }
-                }
+
             }
         } catch (Exception e) {
             Log.show(Log.ERROR, e);

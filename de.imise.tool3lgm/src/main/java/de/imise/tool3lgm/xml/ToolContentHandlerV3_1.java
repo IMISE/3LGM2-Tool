@@ -26,13 +26,6 @@ public class ToolContentHandlerV3_1 extends ToolContentHandlerV3_0 {
         super(coll);
     }
 
-    /**
-     * @param coll
-     */
-    public ToolContentHandlerV3_1(final GDCollection coll, final boolean paste) {
-        super(coll, paste);
-    }
-
     @Override
     public void startElement(final String namespaceURI, final String localName, final String qName, final Attributes atts) throws SAXException {
         //        elementValue.setLength(0);
