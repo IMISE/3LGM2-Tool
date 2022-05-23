@@ -281,9 +281,7 @@ public class LGMGraphDocument extends GraphDocument {
      */
     private static final void copyToModel(final Collection<ElementContainer> sourceElements, final GraphDocument sourceDoc, final LGMGraphDocument targetDoc, int pid) {
         if (sourceElements.size() > 100) {
-            Static.showProgressDialog();
-            Static.setProgressDialogTitle("Kopiere Elemente (AUSLAGERN)");
-            Static.setProgressDialogStatusLabel("Ermittle Referenzen...(AUSLAGERN)");
+            Static.showProgressDialog("PROGRESS_COPY_ELEMENTS_TITLE", "PROGRESS_COPY_ELEMENTS_RESOLVE_REFERENCES_MESSAGE");
         }
         GDCollection sourceCollection = sourceDoc.getCollection();
         GDCollection targetCollection = targetDoc.getCollection();
@@ -327,6 +325,8 @@ public class LGMGraphDocument extends GraphDocument {
             MetaModel metaModel = sourceCollection.getMetaModel();
 
             Set<ElementContainer> multipleCreationTryedEdgeContainers = new HashSet<>();
+
+            Static.setProgressDialogStatusLabel("PROGRESS_COPY_ELEMENTS_CREATE_COPIES_MESSAGE");
 
             for (int i = 0; i < elementContainersInGraphOrder.size(); i++) {
                 ElementContainer sourceContainer = elementContainersInGraphOrder.get(i);

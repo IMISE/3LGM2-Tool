@@ -172,7 +172,7 @@ public class Tool3lgm {
                     return null;
                 }
             }
-            Static.showProgressDialog(true);
+            Static.showProgressDialog();
             Static.setProgressDialogTitle("load_model", file.getName());
             Static.setProgressDialogStatusLabel("read_progress");
             boolean retVal = fileHandler.loadFromRAF();
@@ -537,7 +537,7 @@ public class Tool3lgm {
         //das Hauptdokument holen
         selDoc = gdcoll.getMainDoc();
 
-        Static.showProgressDialog(true);
+        Static.showProgressDialog();
         Static.setProgressDialogTitle("close_model", gdcoll.getName());
 
         ElementPropertyDialogsContext.closeAllDialogs(selDoc);

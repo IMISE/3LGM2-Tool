@@ -787,9 +787,7 @@ public class ActionLibrary {
         public static final Action SELECT_ALL = new GraphDocumentAction(ActionIdentifier.ACTION_SELECT_ALL) {
             @Override
             protected void actionPerformed() {
-                Static.showProgressDialog();
-                Static.setProgressDialogTitle("PROGRESS_SELECT_ALL_TITLE");
-                Static.setProgressDialogStatusLabel("PROGRESS_SELECT_ALL_MESSAGE");
+                Static.showProgressDialog("PROGRESS_SELECT_ALL_TITLE", "PROGRESS_SELECT_ALL_MESSAGE");
                 LGMGraphDocument selectedDoc = getSelectedDoc();
 
                 MainFrame mainFrame = Static.getMainFrame();

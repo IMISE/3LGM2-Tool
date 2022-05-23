@@ -424,7 +424,8 @@ public class Static {
     // ProgressDialog //
 
     /**
-     * erstellt einen neuen ProgressDialog mit dem Hauotfenster als owner
+     * Shows a new ProgressDialog with the main frame as owner. This dialog
+     * always shows a status label and not only the progress bar.
      */
     public static void showProgressDialog() {
         showProgressDialog(true);
@@ -468,6 +469,19 @@ public class Static {
     public static void showProgressDialog(final JDialog owner, final boolean showStatusLabel) {
         closeProgressDialog();
         progressDialog = new ProgressDialog(owner, showStatusLabel);
+    }
+
+    /**
+     * Shows a new ProgressDialog with the main frame as owner. This dialog
+     * always shows a status label and not only the progress bar.
+     *
+     * @param titleResourceKeyOrText
+     * @param statusLabelResourceKeyOrText
+     */
+    public static void showProgressDialog(final String titleResourceKeyOrText, final String statusLabelResourceKeyOrText) {
+        showProgressDialog();
+        setProgressDialogTitle(titleResourceKeyOrText);
+        setProgressDialogStatusLabel(statusLabelResourceKeyOrText);
     }
 
     /**
