@@ -286,6 +286,9 @@ public class LGMGraphDocument extends GraphDocument {
         GDCollection sourceCollection = sourceDoc.getCollection();
         GDCollection targetCollection = targetDoc.getCollection();
 
+        //selection will be lost during copying -> we need this list to restore it
+        List<ElementContainer> selectedSourceElements = new ArrayList<>(sourceDoc.selectedContainer);
+
         //set source collections to bulk mode to prevent any selection update events
         boolean sourceBulkMode = sourceCollection.setBulkMode(true);
 
@@ -295,9 +298,6 @@ public class LGMGraphDocument extends GraphDocument {
         CopyDependencyResolverResultSimple resolvedCopyDependencies = resolveCopyDependencies(sourceElements, targetCollection);
 
         copyUserFields(sourceCollection, targetCollection, resolvedCopyDependencies, pid);
-
-        //selection will be lost during copying ->
-        List<ElementContainer> selectedSourceElements = new ArrayList<>(sourceDoc.selectedContainer);
 
         sourceDoc.deselectAll(false);
 

@@ -252,10 +252,13 @@ public class CopyDependencyResolver {
         }
         addNotSelectedEdgesOfSelectedElements(result);
 
-        UserFieldDefinitions sourceUserFieldDefinitions = gdcoll.getUserFieldDefinitions();
-        UserFieldDefinitions clonedSourceUserFieldDefinitions = sourceUserFieldDefinitions.cloneForTargetCollection(targetCollection);
-        clonedSourceUserFieldDefinitions.retain(result);
-        result.userFieldDefinitions = clonedSourceUserFieldDefinitions;
+        if (gdcoll != null) {
+            UserFieldDefinitions sourceUserFieldDefinitions = gdcoll.getUserFieldDefinitions();
+            UserFieldDefinitions clonedSourceUserFieldDefinitions = sourceUserFieldDefinitions.cloneForTargetCollection(targetCollection);
+            clonedSourceUserFieldDefinitions.retain(result);
+            result.userFieldDefinitions = clonedSourceUserFieldDefinitions;
+        }
+
         return result;
     }
 
