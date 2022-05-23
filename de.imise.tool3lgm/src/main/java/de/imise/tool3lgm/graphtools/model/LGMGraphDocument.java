@@ -448,6 +448,11 @@ public class LGMGraphDocument extends GraphDocument {
         SubType targetSubType = sourceElement.getSubType();
         String targetElementName = sourceElement.getName();
         String targetElementDescription = sourceElement.getDescription();
+
+        int sourceLayer = sourceContainer.layerFor();
+        GDCollection targetCollection = targetDoc.getCollection();
+        targetCollection.setActiveLayer(sourceLayer); //this must be to ensure that Textfields are created on the right layer
+
         NodeContainer targetContainer = null;
         if (!(targetDoc instanceof Szenario)) {
             targetContainer = targetDoc.createNodeAndContainer(targetElementClass, targetSubType, targetElementName, targetElementDescription, targetElementID, false, pid);
