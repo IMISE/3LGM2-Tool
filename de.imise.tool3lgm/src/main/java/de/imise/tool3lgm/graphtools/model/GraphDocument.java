@@ -3962,6 +3962,12 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
                         if (iconID != null) {
                             setIcon(id, lastCreated.getID(), iconID, pid);
                         }
+                        //TextPositionHorizontal
+                        setTextPositionHorizontal(layout2Adapt.textPositionHorizontal, lastCreated, pid);
+                        //TextPositionVertical
+                        setTextPositionVertical(layout2Adapt.textPositionVertical, lastCreated, pid);
+                        //TextAlignmentHTML
+                        setTextAlignmentHTML(layout2Adapt.textAlignmentHTML, lastCreated, pid);
                     }
                 }
             }
