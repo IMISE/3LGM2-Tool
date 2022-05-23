@@ -7,6 +7,7 @@ import java.util.Collection;
 import java.util.List;
 
 import de.imise.tool3lgm.graphtools.IDSource;
+import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GDCommands;
 import de.imise.util.htmlxml.ParseSaveStringHandler;
 
@@ -176,7 +177,9 @@ public class CommandHandler {
                     arg = ((IDSource) arg).getID();
                     //Class ? -> take the ClassName
                 } else if (arg instanceof Class<?>) {
-                    arg = ((Class<?>) arg).getName();
+                    Class<?> clazz = (Class<?>) arg;
+                    //shorten the command by using the simple class name of elements
+                    arg = ModelElement.class.isAssignableFrom(clazz) ? clazz.getSimpleName() : clazz.getName();
                 } else if (arg instanceof Color) {
                     arg = ((Color) arg).getRGB();
                 } else if (arg instanceof Enum<?>) {
