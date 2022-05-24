@@ -303,6 +303,11 @@ public class ProgressDialog extends JDialog {
 
         public ProgressThread(final ProgressDialog pd) {
             this.pd = pd;
+            try {
+                setPriority(MIN_PRIORITY);
+            } catch (Exception e) {
+                //ignore
+            }
         }
 
         @Override
