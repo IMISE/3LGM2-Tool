@@ -24,14 +24,11 @@ import java.io.File;
 import java.util.List;
 
 import javax.help.CSH;
-import javax.swing.BorderFactory;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.JViewport;
-import javax.swing.border.Border;
-import javax.swing.border.TitledBorder;
 
 import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.Tool3lgm;
@@ -49,6 +46,7 @@ import de.imise.tool3lgm.graphtools.view.graph.BasicGraphArea;
 import de.imise.tool3lgm.graphtools.view.graph.GraphViewParameter;
 import de.imise.tool3lgm.graphtools.view.graph.InputGraphArea;
 import de.imise.tool3lgm.graphtools.view.template.TemplateBrowserPanel;
+import de.imise.tool3lgm.gui.TitledBorderHigligter.TitledBorderHighlighterAdapterPanel;
 import de.imise.tool3lgm.gui.internalframe.MainFrameDesktopInternalFramesPane;
 import de.imise.tool3lgm.gui.tabbedframe.MainFrameDesktopTabbedPane;
 import de.imise.tool3lgm.gui.viewpane.ViewPane;
@@ -118,7 +116,7 @@ public final class MainFrameDesktopPane extends JPanel implements PropertyChange
     private TemplateBrowserPanel templateBrowserPanel;
 
     /** The panel that displays the consistency error table */
-    private JPanel consistencyErrorTableBorderPanel;
+    private TitledBorderHighlighterAdapterPanel consistencyErrorTableBorderPanel;
 
     /** The scroll pane with the consistency error table */
     private ConsistencyErrorTablePane consistencyErrorTablePane;
@@ -306,7 +304,7 @@ public final class MainFrameDesktopPane extends JPanel implements PropertyChange
             }
             workarea.add(topComponent, BorderLayout.CENTER);
         } else if (bottomSplitPane == null) {
-            consistencyErrorTableBorderPanel = new JPanel(new BorderLayout());
+            consistencyErrorTableBorderPanel = new TitledBorderHighlighterAdapterPanel(new BorderLayout());
             bottomSplitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, topComponent, consistencyErrorTableBorderPanel);
             bottomSplitPane.setOneTouchExpandable(true);
             bottomSplitPane.setDividerSize(10);
@@ -756,80 +754,18 @@ public final class MainFrameDesktopPane extends JPanel implements PropertyChange
         SuggestShowConsistencyTableHandler.suggestShowConsistencyTable();
     }
 
+    /**
+     *
+     */
     private void updateTitledBorders() {
-        if (OPTION_SHOW_VIEW_COMPONENT_TITLES.is()) {
-            addTitledBorders();
-        } else {
-            removeTitledBorders();
+        desktop.initBorder("PANEL_LABEL_GRAPH_VIEW_TITLE");
+        modelBrowserPanel.initBorder("PANEL_LABEL_MODEL_BROWSER_TITLE");
+        if (consistencyErrorTableBorderPanel != null) {
+            consistencyErrorTableBorderPanel.initBorder("PANEL_LABEL_CONSISTENCY_TABLE_TITLE");
         }
         if (templateBrowserPanel != null) {
             templateBrowserPanel.updateComponents();
-        }
-    }
-
-    /**
-     *
-     */
-    private void addTitledBorders() {
-        //show the the graph view border only if there is no active model
-        //        if (!desktop.hasViewPaneFrameComponents()) {
-        createTitledBorder(desktop, "PANEL_LABEL_GRAPH_VIEW_TITLE");
-        //        } else {
-        //            removeTitledBorder(desktop);
-        //        }
-        createTitledBorder(modelBrowserPanel, "PANEL_LABEL_MODEL_BROWSER_TITLE");
-        createTitledBorder(templateBrowserPanel, "PANEL_LABEL_TEMPLATE_BROWSER_TITLE");
-        createTitledBorder(consistencyErrorTableBorderPanel, "PANEL_LABEL_CONSISTENCY_TABLE_TITLE");
-    }
-
-    /**
-     *
-     */
-    private void removeTitledBorders() {
-        removeTitledBorder(desktop);
-        removeTitledBorder(modelBrowserPanel);
-        removeTitledBorder(templateBrowserPanel);
-        removeTitledBorder(consistencyErrorTableBorderPanel);
-    }
-
-    /**
-     * @param component
-     * @param titleResKey
-     */
-    private static final void createTitledBorder(final ViewPaneFrameComponentParent component, final String titleResKey) {
-        createTitledBorder((JComponent) component, titleResKey);
-    }
-
-    /**
-     * @param component
-     * @param titleResKey
-     */
-    private static final void createTitledBorder(final JComponent component, final String titleResKey) {
-        if (component != null) {
-            //create only new titled border if there is not already a titled border
-            Border border = component.getBorder();
-            if (border != null && border instanceof TitledBorder) {
-                return;
-            }
-            String borderTitle = Tool3lgmConstants.getResString(titleResKey);
-            TitledBorder titledBorder = BorderFactory.createTitledBorder(borderTitle);
-            component.setBorder(titledBorder);
-        }
-    }
-
-    /**
-     * @param component
-     */
-    private static final void removeTitledBorder(final ViewPaneFrameComponentParent component) {
-        removeTitledBorder((JComponent) component);
-    }
-
-    /**
-     * @param component
-     */
-    private static final void removeTitledBorder(final JComponent component) {
-        if (component != null) {
-            component.setBorder(null);
+            templateBrowserPanel.initBorder("PANEL_LABEL_TEMPLATE_BROWSER_TITLE");
         }
     }
 

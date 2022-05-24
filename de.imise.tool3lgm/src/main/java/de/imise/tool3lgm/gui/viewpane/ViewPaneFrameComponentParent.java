@@ -6,6 +6,7 @@ import java.util.List;
 
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
+import de.imise.tool3lgm.gui.TitledBorderHigligter;
 import de.imise.tool3lgm.gui.viewpane.graph.GraphViewPane;
 import de.imise.tool3lgm.gui.viewpane.graph.GraphViewPaneFrameComponent;
 import de.imise.tool3lgm.gui.viewpane.matrix.MatrixViewPaneFrameComponent;
@@ -15,7 +16,7 @@ import de.imise.tool3lgm.gui.viewpane.matrix.MatrixViewPaneFrameComponent;
  *
  * @author AXS (16.05.2020)
  */
-public interface ViewPaneFrameComponentParent {
+public interface ViewPaneFrameComponentParent extends TitledBorderHigligter {
 
     /**
      * @param doc

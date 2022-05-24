@@ -26,6 +26,7 @@ import com.apple.eawt.Application;
 
 import de.imise.tool3lgm.graphtools.analyse.context.AnalysesRepository;
 import de.imise.tool3lgm.graphtools.dialog.RMIErrorPanel;
+import de.imise.tool3lgm.gui.GUIFocusContextManager;
 import de.imise.tool3lgm.gui.ToolSplashScreen;
 import de.imise.tool3lgm.log.Log;
 import de.imise.tool3lgm.rmi.Tool3lgmServer;
@@ -156,6 +157,7 @@ public class Tool3lgmMain {
         setLookAndFeel();
 
         activateRMI(arguments, visible, newInstance);
+
     }
 
     /**
@@ -291,6 +293,9 @@ public class Tool3lgmMain {
                     if (Static.tool == null || newInstance) {
                         //Static.tool wird im Constructor gesetzt
                         new Tool3lgm(visible);
+                        if (visible) {
+                            GUIFocusContextManager.start();
+                        }
                     }
 
                     // Hier ist die kritische Stelle. Das Rebind schlägt fehl, wenn ein fremder Service den Port belegt, auf dem der Baukasten lauschen soll.

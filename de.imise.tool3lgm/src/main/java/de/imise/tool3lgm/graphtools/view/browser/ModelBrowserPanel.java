@@ -19,12 +19,13 @@ import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.model.LGMGraphDocument;
 import de.imise.tool3lgm.graphtools.model.Szenario;
+import de.imise.tool3lgm.gui.TitledBorderHigligter;
 import de.imise.tool3lgm.userproperties.AbstractUserProperties;
 
 /**
  * @author Rudi, AXS
  */
-public final class ModelBrowserPanel extends JPanel implements PropertyChangeListener {
+public final class ModelBrowserPanel extends JPanel implements PropertyChangeListener, TitledBorderHigligter {
 
     /** show ModelBrowsers sidy by side or all models in one browser */
     protected boolean showModelsInSeparateBrowser = false;

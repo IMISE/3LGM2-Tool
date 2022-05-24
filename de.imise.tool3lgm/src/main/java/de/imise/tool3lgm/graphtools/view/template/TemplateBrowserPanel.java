@@ -25,12 +25,13 @@ import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.model.LGMGraphDocument;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
+import de.imise.tool3lgm.gui.TitledBorderHigligter;
 import de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty;
 
 /**
  * @author AXS (23.08.2019)
  */
-public class TemplateBrowserPanel extends JPanel implements PropertyChangeListener {
+public class TemplateBrowserPanel extends JPanel implements PropertyChangeListener, TitledBorderHigligter {
 
     /** */
     private final TemplateBrowserTree tree;
@@ -139,11 +140,9 @@ public class TemplateBrowserPanel extends JPanel implements PropertyChangeListen
                 searchPanel = new TreeSearchOptionsPanel(tree);
                 add(searchPanel, BorderLayout.NORTH);
             }
-        } else {
-            if (searchPanel != null) {
-                remove(searchPanel);
-                searchPanel = null;
-            }
+        } else if (searchPanel != null) {
+            remove(searchPanel);
+            searchPanel = null;
         }
     }
 
@@ -157,10 +156,8 @@ public class TemplateBrowserPanel extends JPanel implements PropertyChangeListen
             if (scrolPaneParent != null) {
                 remove(treeScrollPane);
             }
-        } else {
-            if (scrolPaneParent == null) {
-                add(treeScrollPane, BorderLayout.CENTER);
-            }
+        } else if (scrolPaneParent == null) {
+            add(treeScrollPane, BorderLayout.CENTER);
         }
 
     }
