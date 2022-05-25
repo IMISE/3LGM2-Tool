@@ -180,9 +180,12 @@ public class TemplateBrowserTree extends DynamicTree implements SearchResultView
      */
     public Set<GraphDocument> getSelectedGraphDocuments() {
         Set<GraphDocument> selectedGraphDocuments = new HashSet<>();
-        for (TreePath selectedPath : getSelectionPaths()) {
-            GraphDocument doc = getGraphDocument(selectedPath);
-            selectedGraphDocuments.add(doc);
+        TreePath[] selectionPaths = getSelectionPaths();
+        if (selectionPaths != null) { //can be null for unknown reasons...
+            for (TreePath selectedPath : selectionPaths) {
+                GraphDocument doc = getGraphDocument(selectedPath);
+                selectedGraphDocuments.add(doc);
+            }
         }
         return selectedGraphDocuments;
     }
