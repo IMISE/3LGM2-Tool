@@ -32,6 +32,7 @@ import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.model.LGMGraphDocument;
 import de.imise.tool3lgm.graphtools.model.Szenario;
 import de.imise.tool3lgm.graphtools.undoredo.CommandHandler;
+import de.imise.tool3lgm.gui.GUIFocusContextManager.SetFocusToClickedComponentPopupMenu;
 import de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty;
 import de.imise.util.swing.event.ExtendedAction;
 import de.imise.util.swing.menu.DynamicPopupMenu;
@@ -87,7 +88,7 @@ public abstract class ContextGenerator implements ActionListener {
      *         visible
      */
     public final JPopupMenu createUpdatingPopupMenu(final String label) {
-        JPopupMenu menu = new JPopupMenu(label);
+        JPopupMenu menu = new SetFocusToClickedComponentPopupMenu(label);
         menu.addPopupMenuListener(new PopupMenuListener() {
 
             @Override

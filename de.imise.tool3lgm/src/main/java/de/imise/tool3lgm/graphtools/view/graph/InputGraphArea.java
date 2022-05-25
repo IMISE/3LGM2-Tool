@@ -13,13 +13,13 @@ import static de.imise.tool3lgm.graphtools.model.GDCommands.INVALID_BENDPOINT_IN
 import static de.imise.tool3lgm.graphtools.model.GDCommands.INVALID_ID_STRING;
 import static de.imise.tool3lgm.graphtools.model.LGMChangeListener.LGMChangeType.ELEMENT_GRAPHICS_CHANGED;
 import static de.imise.tool3lgm.graphtools.undoredo.TransactionManager.STANDARD_PID;
+import static de.imise.tool3lgm.gui.GUIFocusContextManager.SET_FOCUS_TO_CLICKED_COMPONENT_MOUSE_LISTENER;
 import static de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty.OPTION_GRAPH_MOVE_SUBELEMENTS;
 import static de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty.OPTION_PAINT_EDGES_ONLY_FOR_SELECTED_ELEMENTS;
 import static de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty.OPTION_USE_RASTER;
 import static de.imise.tool3lgm.userproperties.UserProperties.IntProperty.PROPERTY_INT_RASTER_WIDTH;
 import static java.awt.Cursor.DEFAULT_CURSOR;
 
-import java.awt.Component;
 import java.awt.Container;
 import java.awt.Cursor;
 import java.awt.Dimension;
@@ -187,6 +187,7 @@ public final class InputGraphArea extends BasicGraphArea implements MouseListene
      */
     public InputGraphArea(final GraphDocument doc) {
         super(doc);
+        addMouseListener(SET_FOCUS_TO_CLICKED_COMPONENT_MOUSE_LISTENER);
         if (doc instanceof Szenario) {
             addMouseListener(this);
             addMouseMotionListener(this);
@@ -487,17 +488,6 @@ public final class InputGraphArea extends BasicGraphArea implements MouseListene
 
     @Override
     public void mousePressed(final MouseEvent e) {
-        //we have to request the focus explicitely so that this
-        //component really gets the CTRL + A (Select all) key
-        //events after leaving the template browser. If we don't
-        //request the focus here then the template browser
-        //will execute the select all command.
-        Object source = e.getSource();
-        if (source instanceof Component) {
-            Component c = (Component) source;
-            c.requestFocus();
-        }
-
         boolean controlKeyPressed = InputEvents.isOperatingSystemDependentCTRLorCMDorSHIFTdown(e);
         contextGenerator.setControlled(controlKeyPressed);
 

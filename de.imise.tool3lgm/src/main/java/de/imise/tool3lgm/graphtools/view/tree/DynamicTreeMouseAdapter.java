@@ -1,10 +1,12 @@
 package de.imise.tool3lgm.graphtools.view.tree;
 
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
+import static de.imise.tool3lgm.gui.GUIFocusContextManager.SET_FOCUS_TO_CLICKED_COMPONENT_MOUSE_LISTENER;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
+import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
@@ -39,7 +41,7 @@ import de.imise.util.swing.event.ExtendedAction;
 /**
  * @author N.N. (??.??.200?), AXS
  */
-public class DynamicTreeMouseAdapter implements MouseListener {
+public class DynamicTreeMouseAdapter extends MouseAdapter {
 
     /** The target tree for this mouse adapter */
     private final DynamicTree tree;
@@ -60,13 +62,37 @@ public class DynamicTreeMouseAdapter implements MouseListener {
      * @param tree
      */
     public static void addAdapter(final DynamicTree tree) {
+        //we must ensure that the mouselistener which refreshes the global
+        //focus must be inserted before the mouselistener which opens the
+        //popup menus
+        MouseListener focusMouseListener = null;
+        MouseListener mouseListener = null;
         for (MouseListener listener : tree.getMouseListeners()) {
+            if (listener == SET_FOCUS_TO_CLICKED_COMPONENT_MOUSE_LISTENER) {
+                focusMouseListener = listener;
+            }
             if (listener instanceof DynamicTreeMouseAdapter) {
+                mouseListener = listener;
+            }
+            if (focusMouseListener != null && mouseListener != null) {
                 return;
             }
         }
-        DynamicTreeMouseAdapter dynamicTreeMouseAdapter = new DynamicTreeMouseAdapter(tree);
-        tree.addMouseListener(dynamicTreeMouseAdapter);
+        if (focusMouseListener == null) {
+            if (mouseListener != null) {
+                tree.removeMouseListener(mouseListener);
+            }
+            //focus before mouse!
+            tree.addMouseListener(SET_FOCUS_TO_CLICKED_COMPONENT_MOUSE_LISTENER);
+            if (mouseListener != null) {
+                tree.addMouseListener(mouseListener);
+                return;
+            }
+        }
+        if (mouseListener == null) {
+            DynamicTreeMouseAdapter dynamicTreeMouseAdapter = new DynamicTreeMouseAdapter(tree);
+            tree.addMouseListener(dynamicTreeMouseAdapter);
+        }
     }
 
     @Override
@@ -104,14 +130,6 @@ public class DynamicTreeMouseAdapter implements MouseListener {
             ElementContainer ec = ((ElementContainerTreeNode) selectedNode).getUserObject();
             Static.showPropertyDialog(ec);
         }
-    }
-
-    @Override
-    public void mouseEntered(final MouseEvent e) {
-    }
-
-    @Override
-    public void mouseExited(final MouseEvent e) {
     }
 
     @Override
