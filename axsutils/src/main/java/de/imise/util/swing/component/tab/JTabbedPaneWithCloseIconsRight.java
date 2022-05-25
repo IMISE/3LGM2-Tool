@@ -51,7 +51,9 @@ public class JTabbedPaneWithCloseIconsRight extends JTabbedPane {
     private void initLastTabComponent() {
         //without this border sometimes a Nullpointer occurs at the
         //start if the tool loads a model via start parameter2911
-        setBorder(BorderFactory.createEmptyBorder());
+        if (getBorder() == null) {
+            setBorder(BorderFactory.createEmptyBorder());
+        }
         int lastTabComponentIndex = getTabCount() - 1;
         Icon tabIcon = getIconAt(lastTabComponentIndex);
         setTabComponentAt(lastTabComponentIndex, new FlexibleTabPaneTab(this, tabIcon, activeForegroundColor));

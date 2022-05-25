@@ -286,6 +286,9 @@ public abstract class Tool3lgmConstants {
     /** text color for active tabs in tab panes */
     public static final Color ACTIVE_TAB_FOREGROUND_COLOR = Color.BLUE;
 
+    /** Border highlight Color all views */
+    public static final Color ACTIVE_VIEW_BORDER_COLOR = Color.BLUE;
+
     /**
      * für die Sanduhr...
      */

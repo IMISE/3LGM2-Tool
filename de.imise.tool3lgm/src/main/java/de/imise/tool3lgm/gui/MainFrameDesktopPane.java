@@ -731,6 +731,7 @@ public final class MainFrameDesktopPane extends JPanel implements PropertyChange
         //to catch the selection changed events for the template browser
         source.addAllTransactionsListener(this);
         SuggestShowTemplateBrowserHandler.suggestShowTemplateBrowser();
+        GUIFocusContextManager.setDefaultFocusedComponent(desktop);
     }
 
     @Override

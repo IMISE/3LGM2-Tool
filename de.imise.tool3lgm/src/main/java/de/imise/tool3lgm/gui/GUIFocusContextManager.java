@@ -8,6 +8,10 @@ import java.awt.Component;
 import de.imise.tool3lgm.Static;
 
 /**
+ * Class that starts a Thread. These Thread checks if a Component or a sub
+ * component of a {@link TitledBorderHigligter} has the focus. If yes then the
+ * border highlight will be updated.
+ *
  * @author AXS (24.05.2022)
  */
 public class GUIFocusContextManager {
@@ -16,6 +20,11 @@ public class GUIFocusContextManager {
      *
      */
     private static Thread focusOwnerChangeListener = null;
+
+    /**
+     *
+     */
+    private static TitledBorderHigligter currentFocusedTitledBorderComponent;
 
     /**
      *
@@ -33,6 +42,16 @@ public class GUIFocusContextManager {
     }
 
     /**
+     * @param defaultFocusedComponent
+     */
+    public static final void setDefaultFocusedComponent(TitledBorderHigligter defaultFocusedComponent) {
+        if (currentFocusedTitledBorderComponent == null) {
+            currentFocusedTitledBorderComponent = defaultFocusedComponent;
+            currentFocusedTitledBorderComponent.setHighlight();
+        }
+    }
+
+    /**
      *
      */
     private static Thread startFocusThread() {
@@ -40,26 +59,34 @@ public class GUIFocusContextManager {
 
             private Component lastFocusOwner = null;
 
-            private TitledBorderHigligter lastTitledBorder = null;
-
             @Override
             public void run() {
                 while (true) {
-                    MainFrame mainFrame = Static.getMainFrame();
-                    if (mainFrame != null) {
-                        Component focusOwner = mainFrame.getFocusOwner();
-                        if (focusOwner != lastFocusOwner) {
-                            if (lastTitledBorder != null) {
-                                lastTitledBorder.removeHighlight();
-                            }
-                            lastFocusOwner = focusOwner;
-                            while (lastFocusOwner != null) {
-                                if (lastFocusOwner instanceof TitledBorderHigligter) {
-                                    lastTitledBorder = (TitledBorderHigligter) lastFocusOwner;
-                                    lastTitledBorder.setHighlight();
-                                    break;
+                    //no model is opened
+                    if (Static.getSelectedGDCollection() == null) {
+                        if (currentFocusedTitledBorderComponent != null) {
+                            currentFocusedTitledBorderComponent.removeHighlight();
+                            currentFocusedTitledBorderComponent = null;
+                            lastFocusOwner = null;
+                        }
+                    } else {
+                        MainFrame mainFrame = Static.getMainFrame();
+                        if (mainFrame != null) {
+                            Component focusOwner = mainFrame.getFocusOwner();
+                            if (focusOwner != lastFocusOwner) {
+                                lastFocusOwner = focusOwner;
+                                Component lastFocusOwnerOrParent = focusOwner;
+                                while (lastFocusOwnerOrParent != null) {
+                                    if (lastFocusOwnerOrParent instanceof TitledBorderHigligter) {
+                                        if (currentFocusedTitledBorderComponent != null) {
+                                            currentFocusedTitledBorderComponent.removeHighlight();
+                                        }
+                                        currentFocusedTitledBorderComponent = (TitledBorderHigligter) lastFocusOwnerOrParent;
+                                        currentFocusedTitledBorderComponent.setHighlight();
+                                        break;
+                                    }
+                                    lastFocusOwnerOrParent = lastFocusOwnerOrParent.getParent();
                                 }
-                                lastFocusOwner = lastFocusOwner.getParent();
                             }
                         }
                     }
@@ -71,11 +98,13 @@ public class GUIFocusContextManager {
                 }
             }
         };
+
         try {
             focusOwnerChangeListener.setPriority(Thread.MIN_PRIORITY);
         } catch (Exception e) {
             // ignore
         }
+
         focusOwnerChangeListener.start();
         return focusOwnerChangeListener;
     }

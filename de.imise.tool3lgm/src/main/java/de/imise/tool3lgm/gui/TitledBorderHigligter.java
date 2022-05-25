@@ -1,5 +1,6 @@
 package de.imise.tool3lgm.gui;
 
+import static de.imise.tool3lgm.Tool3lgmConstants.ACTIVE_VIEW_BORDER_COLOR;
 import static de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty.OPTION_SHOW_VIEW_COMPONENT_TITLES;
 
 import java.awt.Color;
@@ -36,6 +37,7 @@ public interface TitledBorderHigligter {
                 border = new InternalTitledBorder(titledBorderBaseBorder, title);
                 c.setBorder(border);
             }
+            c.revalidate();
             c.repaint();
         }
     }
@@ -46,19 +48,17 @@ public interface TitledBorderHigligter {
     public default void setHighlight() {
         if (this instanceof JComponent) {
             JComponent c = (JComponent) this;
-            TitledBorder titledBorder = (TitledBorder) c.getBorder();
-            String borderTitle = titledBorder.getTitle();
+            InternalTitledBorder titledBorder = (InternalTitledBorder) c.getBorder();
             Border baseBorder = titledBorder.getBorder();
 
-            Color lineColor = Color.BLACK;
             int thickness = 1;
             boolean roundedCorners = false;
             Border highlightBaseBorder = null;
             if (baseBorder instanceof EtchedBorder) {
                 EtchedBorder etchedBaseBorder = (EtchedBorder) baseBorder;
                 int etchType = etchedBaseBorder.getEtchType();
-                Color highlightColor = lineColor;
-                Color shadowColor = lineColor.brighter();
+                Color highlightColor = ACTIVE_VIEW_BORDER_COLOR;
+                Color shadowColor = etchedBaseBorder.getShadowColor();
                 highlightBaseBorder = new EtchedBorder(etchType, highlightColor, shadowColor);
             } else if (baseBorder instanceof LineBorder) {
                 LineBorder lineBaseBorder = (LineBorder) baseBorder;
@@ -66,11 +66,12 @@ public interface TitledBorderHigligter {
                 roundedCorners = lineBaseBorder.getRoundedCorners();
             }
             if (highlightBaseBorder == null) {
-                highlightBaseBorder = new LineBorder(lineColor, thickness, roundedCorners);
+                highlightBaseBorder = new LineBorder(ACTIVE_VIEW_BORDER_COLOR, thickness, roundedCorners);
             }
-            titledBorder = new TitledBorder(highlightBaseBorder, borderTitle);
-            titledBorder.setTitleColor(lineColor);
+            titledBorder = new InternalTitledBorder(highlightBaseBorder, titledBorder.title);
+            titledBorder.setTitleColor(ACTIVE_VIEW_BORDER_COLOR);
             c.setBorder(titledBorder);
+            c.revalidate();
             c.repaint();
         }
     }
@@ -82,13 +83,11 @@ public interface TitledBorderHigligter {
         if (this instanceof JComponent) {
             JComponent c = (JComponent) this;
             Border border = c.getBorder();
-            if (border instanceof TitledBorder) {
-                TitledBorder titledBorder = (TitledBorder) border;
-                String title = titledBorder.getTitle();
-                titledBorder = new TitledBorder(titledBorderBaseBorder, title);
-                c.setBorder(titledBorder);
-                c.repaint();
-            }
+            InternalTitledBorder titledBorder = (InternalTitledBorder) border;
+            titledBorder = new InternalTitledBorder(titledBorderBaseBorder, titledBorder.title);
+            c.setBorder(titledBorder);
+            c.revalidate();
+            c.repaint();
         }
     }
 
@@ -135,6 +134,13 @@ public interface TitledBorderHigligter {
          */
         public void checkTitle() {
             super.title = OPTION_SHOW_VIEW_COMPONENT_TITLES.is() ? title : "";
+        }
+
+        /**
+         * @return
+         */
+        public String getInternalTitle() {
+            return title;
         }
 
     }
