@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.ImageIcon;
+import javax.swing.JComponent;
 import javax.swing.JTabbedPane;
 import javax.swing.plaf.TabbedPaneUI;
 import javax.swing.plaf.basic.BasicTabbedPaneUI;
@@ -15,6 +16,7 @@ import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.model.LGMChangeListenerSimple;
+import de.imise.tool3lgm.gui.viewpane.ViewPane;
 import de.imise.tool3lgm.gui.viewpane.ViewPaneFrameComponent;
 import de.imise.tool3lgm.gui.viewpane.ViewPaneFrameComponentListener;
 import de.imise.tool3lgm.gui.viewpane.ViewPaneFrameComponentParent;
@@ -228,6 +230,21 @@ public class MainFrameDesktopTabbedPane extends JTabbedPaneWithCloseIconsRight i
             }
         }
         return null;
+    }
+
+    @Override
+    public Component getRealFocusOwner() {
+        Component selectedComponent = getSelectedComponent();
+        if (selectedComponent instanceof MainFrameDesktopTabComponent) {
+            ViewPane viewPane = ((MainFrameDesktopTabComponent) selectedComponent).getViewPane();
+            if (viewPane != null) {
+                JComponent contentComponent = viewPane.getContentComponent();
+                if (contentComponent != null) {
+                    return contentComponent;
+                }
+            }
+        }
+        return selectedComponent;
     }
 
 }

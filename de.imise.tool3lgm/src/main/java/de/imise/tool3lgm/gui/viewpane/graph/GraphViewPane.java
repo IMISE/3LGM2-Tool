@@ -1,5 +1,7 @@
 package de.imise.tool3lgm.gui.viewpane.graph;
 
+import javax.swing.JComponent;
+
 import de.imise.tool3lgm.MetaModelContext;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
@@ -39,6 +41,11 @@ public final class GraphViewPane extends ViewPane {
      * @return
      */
     public InputGraphArea getInputGraphArea() {
+        return area;
+    }
+
+    @Override
+    public JComponent getContentComponent() {
         return area;
     }
 

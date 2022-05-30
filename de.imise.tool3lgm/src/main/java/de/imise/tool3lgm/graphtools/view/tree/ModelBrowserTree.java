@@ -48,6 +48,7 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Textfield;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
+import de.imise.tool3lgm.graphtools.model.GraphDocumentOwner;
 import de.imise.tool3lgm.graphtools.model.LGMChangeListener;
 import de.imise.tool3lgm.graphtools.model.LGMGraphDocument;
 import de.imise.tool3lgm.graphtools.userfield.definition.UserField;
@@ -71,7 +72,7 @@ import de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty;
  *
  * @author N.N.
  */
-public final class ModelBrowserTree extends DynamicTree implements UserFieldListener {
+public final class ModelBrowserTree extends DynamicTree implements UserFieldListener, GraphDocumentOwner {
 
     /** Node for the Domain Layer */
     private final StringTreeNode domainLayer = new StringTreeNode(ModelConstants.getVisibleLayerName(ModelConstants.DOMAIN_LAYER), getLayerIcon(ActionIdentifier.ACTION_ACTIVATE_DOMAIN_LAYER));
@@ -711,7 +712,8 @@ public final class ModelBrowserTree extends DynamicTree implements UserFieldList
             if (layer == LOGICAL_LAYER) {
                 textFieldLogicalLayer = getOrCreateTextFieldNode(logicalLayer, textFieldLogicalLayer);
                 return textFieldLogicalLayer;
-            } else if (layer == PHYSICAL_LAYER) {
+            }
+            if (layer == PHYSICAL_LAYER) {
                 textFieldPhysicalLayer = getOrCreateTextFieldNode(physicalLayer, textFieldPhysicalLayer);
                 return textFieldPhysicalLayer;
             }

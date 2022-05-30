@@ -183,4 +183,17 @@ public class GUIFocusContextManager {
         }
     };
 
+    /**
+     * @return
+     */
+    public static Component getLastFocusOwner() {
+        return lastFocusOwner;
+    }
+
+    /**
+     * @return
+     */
+    public static TitledBorderHigligter getCurrentFocusedTitledBorderComponent() {
+        return currentFocusedTitledBorderComponent;
+    }
 }

@@ -220,4 +220,10 @@ public final class ModelBrowserPanel extends JPanel implements PropertyChangeLis
         }
     }
 
+    @Override
+    public Component getRealFocusOwner() {
+        GDCollection selectedGDCollection = Static.getSelectedGDCollection();
+        return getModelBrowser(selectedGDCollection);
+    }
+
 }

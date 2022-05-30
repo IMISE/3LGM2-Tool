@@ -1,7 +1,9 @@
 package de.imise.tool3lgm.gui.viewpane;
 
 import java.awt.BorderLayout;
+import java.util.Objects;
 
+import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
@@ -56,10 +58,7 @@ public abstract class ViewPane extends JPanel implements GraphDocumentOwner {
 
     @Override
     public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + (doc == null ? 0 : doc.hashCode());
-        return result;
+        return Objects.hash(doc);
     }
 
     /**
@@ -84,14 +83,18 @@ public abstract class ViewPane extends JPanel implements GraphDocumentOwner {
             return false;
         }
         ViewPane other = (ViewPane) obj;
-        if (doc == null) {
-            if (other.doc != null) {
-                return false;
-            }
-        } else if (!doc.equals(other.doc)) {
+        if (!Objects.equals(doc, other.doc)) {
             return false;
         }
         return true;
+    }
+
+    /**
+     * @return if this is a panel that contains an other context compoenent then
+     *         this function can return the 'real' content component.
+     */
+    public JComponent getContentComponent() {
+        return this;
     }
 
 }

@@ -12,6 +12,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import javax.swing.JComponent;
 import javax.swing.JDesktopPane;
 import javax.swing.JInternalFrame;
 import javax.swing.event.InternalFrameEvent;
@@ -324,6 +325,11 @@ public class MainFrameDesktopInternalFramesPane extends JDesktopPane implements 
         for (int k = count; k < frames.length; k++) {
             frames[k].setBounds(0 + (k - count) * (int) width / rest, (int) height / zeilen * (zeilen - 1), (int) width / rest, (int) height / zeilen);
         }
+    }
+
+    @Override
+    public JComponent getRealFocusOwner() {
+        return getSelectedFrame();
     }
 
 }

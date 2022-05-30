@@ -201,7 +201,7 @@ public final class MainFrameDesktopPane extends JPanel implements PropertyChange
             }
         } else {
             String propertyName = evt.getPropertyName();
-            if (propertyName.equals("dividerLocation")) {
+            if ("dividerLocation".equals(propertyName)) {
                 savePositionAndSizeInUserProperties();
             }
         }
@@ -304,7 +304,7 @@ public final class MainFrameDesktopPane extends JPanel implements PropertyChange
             }
             workarea.add(topComponent, BorderLayout.CENTER);
         } else if (bottomSplitPane == null) {
-            consistencyErrorTableBorderPanel = new TitledBorderHighlighterAdapterPanel(new BorderLayout());
+            consistencyErrorTableBorderPanel = new TitledBorderHighlighterAdapterPanel(new BorderLayout(), consistencyErrorTableBorderPanel);
             bottomSplitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, topComponent, consistencyErrorTableBorderPanel);
             bottomSplitPane.setOneTouchExpandable(true);
             bottomSplitPane.setDividerSize(10);

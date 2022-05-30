@@ -4,6 +4,7 @@ import static de.imise.tool3lgm.Tool3lgmConstants.ACTIVE_VIEW_BORDER_COLOR;
 import static de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty.OPTION_SHOW_VIEW_COMPONENT_TITLES;
 
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.LayoutManager;
 
 import javax.swing.BorderFactory;
@@ -21,7 +22,16 @@ import de.imise.tool3lgm.Tool3lgmConstants;
  */
 public interface TitledBorderHigligter {
 
+    /**
+     *
+     */
     public Border titledBorderBaseBorder = BorderFactory.createTitledBorder("").getBorder();
+
+    /**
+     * @return the component which should react on Shortcuts if this
+     *         TitledBorderHigligter Component has the focus.
+     */
+    public Component getRealFocusOwner();
 
     /**
      * @param titleResKey
@@ -97,12 +107,24 @@ public interface TitledBorderHigligter {
     public static class TitledBorderHighlighterAdapterPanel extends JPanel implements TitledBorderHigligter {
 
         /**
+         *
+         */
+        protected JComponent realFocusOwner;
+
+        /**
          * Create a new buffered JPanel with the specified layout manager
          *
          * @param layout the LayoutManager to use
+         * @param realFocusOwner
          */
-        public TitledBorderHighlighterAdapterPanel(LayoutManager layout) {
+        public TitledBorderHighlighterAdapterPanel(LayoutManager layout, JComponent realFocusOwner) {
             super(layout);
+            this.realFocusOwner = realFocusOwner;
+        }
+
+        @Override
+        public JComponent getRealFocusOwner() {
+            return realFocusOwner;
         }
 
     }

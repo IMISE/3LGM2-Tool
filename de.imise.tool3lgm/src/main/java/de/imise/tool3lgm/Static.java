@@ -36,7 +36,9 @@ import de.imise.tool3lgm.graphtools.view.container.BendpointContainer;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
 import de.imise.tool3lgm.graphtools.view.graph.GraphViewParameter;
+import de.imise.tool3lgm.gui.GUIFocusContextManager;
 import de.imise.tool3lgm.gui.MainFrame;
+import de.imise.tool3lgm.gui.TitledBorderHigligter;
 import de.imise.tool3lgm.gui.menu.RegularContextGenerator;
 import de.imise.tool3lgm.gui.menu.TemplateContextGenerator;
 import de.imise.tool3lgm.gui.viewpane.ViewPaneFrameComponent;
@@ -247,6 +249,19 @@ public class Static {
     }
 
     /**
+     * @return the component which should have the focus that means which should
+     *         receive any Shortcuts. This is the component in the urrently
+     *         selected titled border (can be <code>null</code>).
+     */
+    public static Component getComponentWithFocus() {
+        TitledBorderHigligter currentFocusedTitledBorderComponent = GUIFocusContextManager.getCurrentFocusedTitledBorderComponent();
+        if (currentFocusedTitledBorderComponent != null) {
+            return currentFocusedTitledBorderComponent.getRealFocusOwner();
+        }
+        return null;
+    }
+
+    /**
      * Shows the property dialog for the given element. If the elenents model is
      * a template model and this model is only shown in the template browser
      * (and is not selected) so the function tries to find the same element in
@@ -323,13 +338,13 @@ public class Static {
     /** Gibt zurück, ob ein aktiver, sichtbarer Grafik-Frame existiert */
     public static boolean isActiveFrameGraphFrame() {
         ViewPaneFrameComponent f = getActiveFrame();
-        return f != null && f instanceof GraphViewPaneFrameComponent && f.getGraphDocument() instanceof Szenario && f.isVisible();
+        return f instanceof GraphViewPaneFrameComponent && f.getGraphDocument() instanceof Szenario && f.isVisible();
     }
 
     /** Gibt zurück, ob ein aktiver, sichtbarer Matrix-Frame existiert */
     public static boolean isActiveFrameMatrixFrame() {
         ViewPaneFrameComponent f = getActiveFrame();
-        return f != null && f instanceof MatrixViewPaneFrameComponent && f.isVisible();
+        return f instanceof MatrixViewPaneFrameComponent && f.isVisible();
     }
 
     /**

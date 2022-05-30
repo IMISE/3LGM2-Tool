@@ -159,7 +159,11 @@ public class TemplateBrowserPanel extends JPanel implements PropertyChangeListen
         } else if (scrolPaneParent == null) {
             add(treeScrollPane, BorderLayout.CENTER);
         }
+    }
 
+    @Override
+    public JComponent getRealFocusOwner() {
+        return tree;
     }
 
 }
