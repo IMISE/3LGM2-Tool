@@ -8,6 +8,7 @@ import static de.imise.tool3lgm.Tool3lgmConstants.getReplacedResString;
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
 import static de.imise.tool3lgm.event.action.StaticAction.PPP;
 import static de.imise.tool3lgm.graphtools.undoredo.TransactionManager.STANDARD_PID;
+import static de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty.OPTION_ENABLE_SUBMODEL_BROWSER;
 import static de.imise.tool3lgm.userproperties.UserProperties.IntProperty.PROPERTY_INT_RENDER_SETTINGS;
 import static de.imise.tool3lgm.userproperties.UserProperties.IntProperty.PROPERTY_INT_RMI_PORT;
 
@@ -69,12 +70,14 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GDCollectionImExportHandler;
 import de.imise.tool3lgm.graphtools.model.GDCommands;
+import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.model.LGMChangeListener.LGMChangeType;
 import de.imise.tool3lgm.graphtools.model.LGMGraphDocument;
 import de.imise.tool3lgm.graphtools.model.Szenario;
 import de.imise.tool3lgm.graphtools.path.metapaths.MetaPath;
 import de.imise.tool3lgm.graphtools.userfield.dialog.declaration.UserFieldDeclarationDialog;
 import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.UserFieldEditorDialog;
+import de.imise.tool3lgm.graphtools.view.browser.ModelBrowser;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.graphtools.view.container.InterLayerConnectedNodeContainer;
 import de.imise.tool3lgm.graphtools.view.container.LayerContainer;
@@ -788,13 +791,20 @@ public class ActionLibrary {
             @Override
             protected void actionPerformed() {
                 Static.showProgressDialog("PROGRESS_SELECT_ALL_TITLE", "PROGRESS_SELECT_ALL_MESSAGE");
+                Component focusComponent = Static.getComponentWithFocus();
                 LGMGraphDocument selectedDoc = getSelectedDoc();
-
-                MainFrame mainFrame = Static.getMainFrame();
-                Component focusOwner = mainFrame == null ? null : mainFrame.getFocusOwner();
-                InputGraphArea area = focusOwner != null && focusOwner instanceof InputGraphArea ? (InputGraphArea) focusOwner : null;
-                boolean selectOnylActiveLayer = area != null && !area.isMultiView();
-                selectedDoc.selectAll(selectOnylActiveLayer);
+                if (focusComponent instanceof ModelBrowser) {
+                    if (OPTION_ENABLE_SUBMODEL_BROWSER.is()) {
+                        selectedDoc.selectAll(selectedDoc, false, false);
+                    } else {
+                        GraphDocument mainDoc = selectedDoc.getMainDoc();
+                        mainDoc.selectAll(selectedDoc, false, false);
+                    }
+                } else if (focusComponent instanceof InputGraphArea) {
+                    InputGraphArea area = (InputGraphArea) focusComponent;
+                    boolean selectOnylActiveLayer = !area.isMultiView();
+                    selectedDoc.selectAll(selectedDoc, true, selectOnylActiveLayer);
+                }
                 Static.closeProgressDialog();
             }
         };

@@ -144,7 +144,6 @@ import de.imise.tool3lgm.userproperties.UserProperties.StringProperty;
 import de.imise.util.Alphabetical;
 import de.imise.util.NameAndDescriptionTarget;
 import de.imise.util.OptionsSupport;
-import de.imise.util.Sys;
 import de.imise.util.collections.CollectionUtils;
 import de.imise.util.pair.Pair;
 import de.imise.util.swing.dialog.ImageChooser;
@@ -731,7 +730,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
             String title = getResStringWithoutError("tool3lgm");
             String message = getResStringWithoutError(GDCommands.MODEL_ACTION_COMMAND_LINE.name());
             String answer = (String) JOptionPane.showInputDialog(getMainFrame(), message, title, JOptionPane.QUESTION_MESSAGE, null, null, null);
-            if (answer != null && !answer.equals("") && !answer.equals("COMMAND_LINE")) {
+            if (answer != null && !"".equals(answer) && !"COMMAND_LINE".equals(answer)) {
                 exec(answer, "", pid);
             }
         } else if (command.equals(GDCommands.MODEL_ACTION_INTERNAL_CHECK_CONSISTENCY.toString())) {
@@ -807,7 +806,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
         }
         // Auswahl in einem Teilmodell
         else {
-            Object[] buttons = new Object[] {
+            Object[] buttons = {
                     getResString("submodel"), getResString("whole_model"), getResString("cancel")
             };
             MainFrame mainFrame = Static.getMainFrame();
@@ -1629,7 +1628,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
                     return;
                 }
                 ElementContainer ec = szenario.findContainerCoded(argv[1]);
-                if (ec != null && ec instanceof NodeContainer) {
+                if (ec instanceof NodeContainer) {
                     gdcoll.removeContainerFromSubmodel(ec, pid);
                 }
                 //							szen.removeContainer((NodeContainer)ec, pid);
@@ -1821,7 +1820,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
         //			System.err.println("jetze");
 
         if (log) {
-            if (!(transStackInt > 1)) {
+            if (transStackInt <= 1) {
                 //				System.err.println("start_transaction " + iii++ + " + " + pid + ": "+ transStackInt + " " + this);
                 for (ElementContainer ec : selectedContainer) {
                     TransactionManager transactionManager = gdcoll.getTman();
@@ -3173,11 +3172,11 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
                 if (metaModel.isPaintable(elementClass)) {
                     for (Edge edge : me.getEdges()) {
                         ModelElement other = edge.getOther(me);
-                        if (other == null) {
-                            String startEnd = edge.isStart(me) ? "end" : "start";
-                            Sys.err1("Model: " + gdcoll.getName() + " --- Submodel: " + this + " --- Edge " + edge + " (" + edge.getClass().getSimpleName() + ") of element " + me + " (" + me.getClass().getSimpleName() + ") has null as " + startEnd
-                                    + " element.");
-                        }
+                        //                        if (other == null) {
+                        //                            String startEnd = edge.isStart(me) ? "end" : "start";
+                        //                            Sys.err1("Model: " + gdcoll.getName() + " --- Submodel: " + this + " --- Edge " + edge + " (" + edge.getClass().getSimpleName() + ") of element " + me + " (" + me.getClass().getSimpleName() + ") has null as " + startEnd
+                        //                                    + " element.");
+                        //                        }
                         if (other != null && other.isPaintable()) { //The null check is only for the symptoms not against the cause. Sometimes there are faulty edges where the other is null.
                             ElementContainer otherEc = other.getContainer(this);
                             if (selectedContainer.contains(otherEc)) {
@@ -3611,36 +3610,64 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
     }
 
     /**
-     * @param selectOnylActiveLayerVisibleElements
+     * @param preferredElementContainerSource if not <code>null</code> and not
+     *            equals this then the container will be searched first in this
+     *            {@link GraphDocument}. If no container found then the
+     *            container from is will be selected. Use this from a main model
+     *            to select all Container in a Submodel and additional all other
+     *            container in the main model.
+     * @param selectOnlyInPreferredElementContainerSource if <code>true</code>
+     *            the only elements in the given {@link GraphDocument} will be
+     *            selected. Use this if you will select only visible elements in
+     *            the graph.
+     * @param selectOnlyOnActiveLayer
      */
-    public void selectAll(final boolean selectOnylActiveLayerVisibleElements) {
+    public void selectAll(GraphDocument preferredElementContainerSource, boolean selectOnlyInPreferredElementContainerSource, boolean selectOnlyOnActiveLayer) {
         start_transaction(STANDARD_PID, false);
         deselectAll(true);
         for (int i = 0; i < layer.length; i++) {
-            LayerContainer layerContainer = layer[i];
-            if (selectOnylActiveLayerVisibleElements && gdcoll.getActiveLayer() != i) {
+            if (selectOnlyOnActiveLayer && gdcoll.getActiveLayer() != i) {
                 continue;
             }
+            LayerContainer layerContainer = selectOnlyInPreferredElementContainerSource ? preferredElementContainerSource.layer[i] : layer[i];
             for (ElementContainer ec : layerContainer.getGraphNodeContainers()) {
-                if (!selectOnylActiveLayerVisibleElements || ec.isVisible()) {
-                    gdcoll.addToSelection(ec);
+                if (!selectOnlyInPreferredElementContainerSource || ec.isVisible()) {
+                    addContainerToSelection(preferredElementContainerSource, ec);
                 }
             }
             for (ElementContainer ec : layerContainer.getEdgeContainers()) {
-                if (!selectOnylActiveLayerVisibleElements || ec.isVisible()) {
-                    gdcoll.addToSelection(ec);
+                if (!selectOnlyInPreferredElementContainerSource || ec.isVisible()) {
+                    addContainerToSelection(preferredElementContainerSource, ec);
                     EdgeContainer edgeC = (EdgeContainer) ec;
                     for (BendpointContainer bc : edgeC.iterateBendpointContainers()) {
-                        gdcoll.addToSelection(bc);
+                        addContainerToSelection(preferredElementContainerSource, bc);
                     }
                 }
             }
         }
-        if (!selectOnylActiveLayerVisibleElements) {
+        if (!selectOnlyInPreferredElementContainerSource) {
             gdcoll.selectAllUniques();
         }
         finish_transaction(STANDARD_PID, false);
         distributeEvent(SELECTION_CHANGED, STANDARD_PID);
+    }
+
+    /**
+     * @param preferredElementContainerSource if not <code>null</code> and not
+     *            equals this then the container will be searched first in this
+     *            {@link GraphDocument}. If no container found then the
+     *            container from is will be selected. Use this from a main model
+     *            to select all Container in a Submodel and additional all other
+     *            container in the main model.
+     */
+    private final void addContainerToSelection(GraphDocument preferredElementContainerSource, ElementContainer ec) {
+        if (preferredElementContainerSource != this) {
+            ModelElement me = ec.getElement();
+            ElementContainer preferredEc = me.getContainer(preferredElementContainerSource);
+            gdcoll.addToSelection(preferredEc == null ? ec : preferredEc);
+        } else {
+            gdcoll.addToSelection(ec);
+        }
     }
 
     /**
@@ -5704,7 +5731,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
         if (joinedElement != null) {
             String id = joinedElement.getID();
             ElementContainer ec = findNodeContainerCoded(id);
-            if (ec != null && ec instanceof NodeContainer) {
+            if (ec instanceof NodeContainer) {
                 ModelElement me = ec.getElement();
                 for (Edge edge : me.getEdges()) {
                     EdgeContainer kac = edge.getContainer(this);
