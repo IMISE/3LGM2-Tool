@@ -7,6 +7,7 @@ import static de.imise.tool3lgm.userproperties.UserProperties.IntProperty.PROPER
 import static de.imise.tool3lgm.userproperties.UserProperties.IntProperty.PROPERTY_INT_RMI_PORT;
 
 import java.awt.Image;
+import java.awt.Taskbar;
 import java.rmi.Naming;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
@@ -21,8 +22,6 @@ import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.UIDefaults;
 import javax.swing.UIManager;
-
-import com.apple.eawt.Application;
 
 import de.imise.tool3lgm.graphtools.analyse.context.AnalysesRepository;
 import de.imise.tool3lgm.graphtools.dialog.RMIErrorPanel;
@@ -143,9 +142,9 @@ public class Tool3lgmMain {
         boolean newInstance = false;
         List<String> arguments = new ArrayList<>();
         for (String arg : args) {
-            if (arg.equalsIgnoreCase("-i")) { // -i = invisible
+            if ("-i".equalsIgnoreCase(arg)) { // -i = invisible
                 visible = false;
-            } else if (arg.equalsIgnoreCase("-n")) { // -n = always new instance
+            } else if ("-n".equalsIgnoreCase(arg)) { // -n = always new instance
                 newInstance = true;
             } else {
                 arguments.add(arg);
@@ -156,6 +155,7 @@ public class Tool3lgmMain {
         setLookAndFeel();
 
         activateRMI(arguments, visible, newInstance);
+
     }
 
     /**
@@ -191,11 +191,12 @@ public class Tool3lgmMain {
      */
     private static void setDockIcon() {
         try {
-            if (OperatingSystem.isMacOs() || !OperatingSystem.isARMArchtecture()) {
-                Application application = Application.getApplication();
+            //on Windows there would be an exception, because transparent images are not supportet
+            //and Windows always uses the icon set that is given to the frame (in MainFrame) -> so try it only for not windows systems
+            if (Taskbar.isTaskbarSupported() && !OperatingSystem.isWindowsOs()) {
                 ImageIcon icon = Tool3lgmConstants.TOOL_ICON_TRANSPARENT_128;
                 Image image = icon.getImage();
-                application.setDockIconImage(image);
+                Taskbar.getTaskbar().setIconImage(image);
             }
         } catch (Exception e) {
             // do nothing
@@ -246,7 +247,7 @@ public class Tool3lgmMain {
             String regValue = String.valueOf(rmiPort);
 
             // hier wird geprüft, ob der Wert ungleich "" ist und mittels regulären Ausdruck, ob nur Ziffern enthalten sind.
-            if (!regValue.equals("") && regValue.matches("\\d*")) {
+            if (!"".equals(regValue) && regValue.matches("\\d*")) {
                 regPort = Integer.parseInt(regValue);
             }
 
