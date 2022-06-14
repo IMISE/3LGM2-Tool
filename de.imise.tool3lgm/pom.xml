@@ -104,18 +104,11 @@
 			<version>1.7.29</version>
 		</dependency>
 
-		<!-- https://mvnrepository.com/artifact/com.apple/AppleJavaExtensions -->
-		<dependency>
-			<groupId>com.apple</groupId>
-			<artifactId>AppleJavaExtensions</artifactId>
-			<version>1.4</version>
-		</dependency>
-
 	</dependencies>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<maven.compiler.source>1.8</maven.compiler.source>
-		<maven.compiler.target>1.8</maven.compiler.target>
+		<maven.compiler.source>9</maven.compiler.source>
+		<maven.compiler.target>9</maven.compiler.target>
 	</properties>
 	<build>
 		<finalName>tool3lgm</finalName>
