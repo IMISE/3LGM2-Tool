@@ -487,6 +487,12 @@ public class LGMGraphDocument extends GraphDocument {
         GDCollection targetCollection = targetDoc.getCollection();
         addMissingElementForClipboardModels(sourceContainer, targetDoc, pid);
         Edge targetEdge = targetCollection.link(targetEdgeClassName, targetEdgeID, targetEdgeStartID, targetEdgeEndID, targetEdgeStartEdgeIndex, targetEdgeEndEdgeIndex, pid);
+        if (sourceEdge instanceof DoubleMeaningEdge) {
+            DoubleMeaningEdge sourceDoubleMeaningEdge = (DoubleMeaningEdge) sourceEdge;
+            DoubleMeaningEdge targetDoubleMeaningEdge = (DoubleMeaningEdge) targetEdge;
+            ConnectionState connectionState = sourceDoubleMeaningEdge.getConnectionState();
+            targetDoubleMeaningEdge.setConnectionState(connectionState);
+        }
         EdgeContainer targetContainer = null;
         if (targetEdge != null) {
             targetDoc.setName(targetEdge, sourceEdge.getName(), pid);
