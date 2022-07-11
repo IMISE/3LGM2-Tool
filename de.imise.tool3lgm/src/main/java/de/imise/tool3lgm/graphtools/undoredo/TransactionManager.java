@@ -169,7 +169,7 @@ public class TransactionManager {
             return null;
         }
         command = command.trim();
-        if (command.equals("")) {
+        if ("".equals(command)) {
             return null;
         }
         return command;
@@ -229,8 +229,8 @@ public class TransactionManager {
 
     /**
      * Löscht das letzte Redo-Kommando, das mit dem <code>commadPrefix</code>
-     * beginnt und fürgt ein neues Kommando mit dem <code>commadPrefix</code>
-     * und den <code>commandArguments</code> am Ende an. <br />
+     * beginnt und fügt ein neues Kommando mit dem <code>commadPrefix</code> und
+     * den <code>commandArguments</code> am Ende an. <br />
      * Diese Funktion ist gedacht, um z. B. bei Verschiebeoperationen nicht
      * jeden Zwischenschritt zu speichern. Für das Redo benötigt man immer nur
      * die letzte Verschiebeoperation, da sie den endgültigen Ort und Größe

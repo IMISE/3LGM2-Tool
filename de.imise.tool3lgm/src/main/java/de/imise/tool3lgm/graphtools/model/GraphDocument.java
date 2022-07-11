@@ -4039,6 +4039,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
             if (!me.isUnique()) {
                 if (this instanceof Szenario) {
                     lastCreated = addElementToSzenario(id, lastCreated, false, pid);
+                    moveNodeContainer(lastCreated, next_x_pos, next_y_pos, pid);
                 }
             }
         }
