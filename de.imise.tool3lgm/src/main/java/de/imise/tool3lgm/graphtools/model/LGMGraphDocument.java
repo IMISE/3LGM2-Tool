@@ -509,7 +509,7 @@ public class LGMGraphDocument extends GraphDocument {
         EdgeContainer targetContainer = null;
         Edge targetEdge = targetCollection.link(targetEdgeClassName, targetEdgeID, targetEdgeStartID, targetEdgeEndID, targetEdgeStartEdgeIndex, targetEdgeEndEdgeIndex, pid);
         if (targetEdge != null) {
-            if (sourceEdge instanceof DoubleMeaningEdge) {
+            if (sourceEdge instanceof DoubleMeaningEdge && targetEdge instanceof DoubleMeaningEdge) {
                 DoubleMeaningEdge sourceDoubleMeaningEdge = (DoubleMeaningEdge) sourceEdge;
                 DoubleMeaningEdge targetDoubleMeaningEdge = (DoubleMeaningEdge) targetEdge;
                 ConnectionState connectionState = sourceDoubleMeaningEdge.getConnectionState();
