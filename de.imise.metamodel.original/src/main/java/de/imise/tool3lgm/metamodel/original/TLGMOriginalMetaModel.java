@@ -106,12 +106,71 @@ public class TLGMOriginalMetaModel extends MetaModelDefinition implements Regula
 
     @Override
     protected final void putOldToNewClassNames() {
+        // Element Class Names in this MetaModel before and after
+        // a refactor rename:
         putOldToNewClassName("RawbAwbVerbindung", "RawbRawbVerbindung");
         putOldToNewClassName("EtntKombination", "EreignisNachrichtenTyp");
         putOldToNewClassName("EtdtKombination", "EreignisDokumentenTyp");
         putOldToNewClassName("ETNTKombination", "EreignisNachrichtenTyp");
         putOldToNewClassName("ETDTKombination", "EreignisDokumentenTyp");
         putOldToNewClassName("AwbKawbVerbindung", "KawbAwbVerbindung");
+
+        // This is also used at the moment to "translate" element classes between 2
+        // metamodels. However, this should not actually be done here, but via a
+        // separate plugin, which knows both metamodels and describes all translations
+        // of node and edge classes as well as metapaths.
+
+        // The left name is always the name of the model element class in the 3LGM2-S
+        // metamodel and the right name is the name of the corresponding class in the
+        // 3LGM2-M metamodel:
+
+        putOldToNewClassName("Function", "Aufgabe");
+        putOldToNewClassName("ObjectType", "Objekttyp");
+        putOldToNewClassName("OrganisationalUnit", "Organisationseinheit");
+        putOldToNewClassName("Use", "AufOrgKombination");
+        putOldToNewClassName("Process", "Prozess");
+
+        putOldToNewClassName("ApplicationSystem", "RechAnwendungsbaustein");
+        putOldToNewClassName("OrganisationSystem", "KonAnwendungsbaustein");
+        putOldToNewClassName("InvokingInterface", "Bausteinschnittstelle");
+        putOldToNewClassName("ProvidingInterface", "Bausteinschnittstelle");
+        putOldToNewClassName("SoftwareProduct", "Softwareprodukt");
+
+        putOldToNewClassName("PhysicalDataProcessingComponent", "PhysischerDVBaustein");
+        putOldToNewClassName("Location", "Standort");
+
+        // hasPart-Edges
+        putOldToNewClassName("Function_HasPartEdge", "AufAufVerbindung");
+        putOldToNewClassName("ObjectType_HasPartEdge", "ObjObjVerbindung");
+        putOldToNewClassName("ApplicationSystem_HasPartEdge", "RawbRawbVerbindung");
+        putOldToNewClassName("OrganisationalUnit_HasPartEdge", "OrgOrgVerbindung");
+        putOldToNewClassName("PartableApplicationComponent_HasPartEdge", "RawbRawbVerbindung"); // diese Zerlegung ist nicht eindeutig, aber fast immer ist sie diese hier -> wenns klappt, dann diese hier
+        //putOldToNewClassName("PartableApplicationComponent_HasPartEdge", "KawbAwbVerbindung"); // und diese eher nicht
+        putOldToNewClassName("PhysicalDataProcessingComponent_HasPartEdge", "PdvbPdvbVerbindung");
+
+        putOldToNewClassName("Function_ObjectType_Edge", "AufObjVerbindung");
+        putOldToNewClassName("Function_Use_Edge", "AufAufOrgVerbindung");
+        putOldToNewClassName("OrganisationalUnit_Use_Edge", "OrgAufOrgVerbindung");
+        putOldToNewClassName("Process_Function_Edge", "PrzAufVerbindung");
+
+        putOldToNewClassName("Function_SoftwareProduct_Edge", "SwpAufVerbindung");
+        putOldToNewClassName("ObjectType_RepresentationForm_Edge", "ObjReprVerbindung");
+        putOldToNewClassName("PartableApplicationComponent_CommunicationInterface_Edge", "AwbKommssVerbindung");
+        putOldToNewClassName("CommunicationLink_Edge", "KommBeziehung");
+
+        putOldToNewClassName("PhysicalDataProcessingComponent_Location_Edge", "PdvbStoVerbindung");
+        putOldToNewClassName("DataTransmissionLink_Edge", "DatenuebertragungsVerbindung");
+
+        // CommunicationLink_Edge -> Service_CommunicationLink_Edge -> Service                -> Service_RepresentationForm_Edge -> RepresentationForm -> ObjectType_RepresentationForm_Edge -> ObjectType
+        // KommBeziehung          -> KommbezEtntVerbindung          -> EreignisNachrichtenTyp -> EtntNatVerbindung               -> Nachrichtentyp     -> ObjReprVerbindung                  -> Objekttyp
+        putOldToNewClassName("Service_InvokingInterface_Edge", "BssEtntVerbindung");
+        putOldToNewClassName("Service_ProvidingInterface_Edge", "BssEtntVerbindung");
+        putOldToNewClassName("Service_CommunicationLink_Edge", "KommbezEtntVerbindung");
+        putOldToNewClassName("Service", "EreignisNachrichtenTyp");
+        putOldToNewClassName("Service_RepresentationForm_Edge", "EtntNatVerbindung");
+        putOldToNewClassName("RepresentationForm", "Nachrichtentyp");
+        putOldToNewClassName("ObjectType_RepresentationForm_Edge", "ObjReprVerbindung");
+
     }
 
     /////////////////////
