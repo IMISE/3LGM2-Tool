@@ -104,7 +104,7 @@ public interface MetaModelSpecific {
      * @return
      */
     public default String getResStringWithoutError(final String prefix, final Object o) {
-        boolean classObject = o != null && o instanceof Class<?>;
+        boolean classObject = o instanceof Class<?>;
         String oString = classObject ? ((Class<?>) o).getSimpleName() : String.valueOf(o);
         String resKey = Strings.isNullOrEmpty(prefix) ? oString : String.valueOf(prefix) + oString;
         return getResStringWithoutError(resKey);
@@ -161,6 +161,14 @@ public interface MetaModelSpecific {
     public default ModelValidatorDefinition getModelValidatorDefinition() {
         MetaModel metaModel = getMetaModel();
         return metaModel.getModelValidatorDefinition();
+    }
+
+    /**
+     * @param other
+     * @return
+     */
+    public default boolean hasSameMetaModel(MetaModelSpecific other) {
+        return other != null && hasMetaModel(other.getMetaModel());
     }
 
 }

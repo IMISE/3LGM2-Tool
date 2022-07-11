@@ -395,15 +395,17 @@ public class LGMGraphDocument extends GraphDocument {
                             targetDoc.addSimpleToSelection(bpc);
                         }
                     }
-                    //store the new created ID
-                    if (targetElementID == null) {
-                        String targetID = targetContainer.getID();
-                        oldToNewID.put(sourceID, targetID);
+                    if (targetContainer != null) { //can be null if we copy between models with different metamodels
+                        //store the new created ID
+                        if (targetElementID == null) {
+                            String targetID = targetContainer.getID();
+                            oldToNewID.put(sourceID, targetID);
+                        }
+                        //select the copied node or edge
+                        targetDoc.addSimpleToSelection(targetContainer);
+                        existingTargetElement = targetContainer.getElement();
+                        copyUserFieldValues(sourceElement, existingTargetElement, targetCollection, pid);
                     }
-                    //select the copied node or edge
-                    targetDoc.addSimpleToSelection(targetContainer);
-                    existingTargetElement = targetContainer.getElement();
-                    copyUserFieldValues(sourceElement, existingTargetElement, targetCollection, pid);
                 }
             }
         } catch (Exception ex) {
@@ -442,25 +444,40 @@ public class LGMGraphDocument extends GraphDocument {
      */
     private static ElementContainer copyNodeContainer(NodeContainer sourceContainer, GraphDocument targetDoc, String targetElementID, int pid) {
         Node sourceElement = sourceContainer.getNode();
-        Class<? extends Node> targetElementClass = sourceElement.getClass();
-        SubType targetSubType = sourceElement.getSubType();
-        String targetElementName = sourceElement.getName();
-        String targetElementDescription = sourceElement.getDescription();
-
-        int sourceLayer = sourceContainer.layerFor();
-        GDCollection targetCollection = targetDoc.getCollection();
-        targetCollection.setActiveLayer(sourceLayer); //this must be to ensure that Textfields are created on the right layer
-
         NodeContainer targetContainer = null;
-        if (!(targetDoc instanceof Szenario)) {
-            targetContainer = targetDoc.createNodeAndContainer(targetElementClass, targetSubType, targetElementName, targetElementDescription, targetElementID, false, pid);
-        } else {
-            GraphElementLayout layout = sourceContainer.get3LGMLayout();
-            targetContainer = targetDoc.createNodeAndContainer(targetElementClass, targetSubType, targetElementName, targetElementDescription, targetElementID, layout, false, pid);
-            targetDoc.setVisible(targetContainer, sourceContainer.isVisible(), pid);
-            //        //TODO: Copying not expanded elements -> we must set both layouts and the expanded states!
-            //        //targetContainer.setExpanded(sourceContainer.isExpanded());
-            //        targetContainer.setHighLight(false);
+
+        // find the correct element class. If we copy in models with the same metamodel
+        // then everything is fine. If the metamodels are dfferent then we have to find
+        // the corresponding element class in the target metamodel. If this could not
+        // be found then there is nothing to copy.
+        Class<? extends Node> targetElementClass = sourceElement.getClass();
+        MetaModel targetMetaModel = targetDoc.getMetaModel();
+        if (!sourceContainer.hasSameMetaModel(targetMetaModel)) {
+            String targetElementClassName = targetElementClass.getSimpleName();
+            targetElementClassName = targetMetaModel.getCurrentClassName(targetElementClassName);
+            Class<? extends ModelElement> elementClass = targetMetaModel.getClassForName(targetElementClassName);
+            targetElementClass = elementClass != null && Node.class.isAssignableFrom(elementClass) ? elementClass.asSubclass(Node.class) : null;
+        }
+
+        if (targetElementClass != null) {
+            SubType targetSubType = sourceElement.getSubType();
+            String targetElementName = sourceElement.getName();
+            String targetElementDescription = sourceElement.getDescription();
+
+            int sourceLayer = sourceContainer.layerFor();
+            GDCollection targetCollection = targetDoc.getCollection();
+            targetCollection.setActiveLayer(sourceLayer); //this must be to ensure that Textfields are created on the right layer
+
+            if (!(targetDoc instanceof Szenario)) {
+                targetContainer = targetDoc.createNodeAndContainer(targetElementClass, targetSubType, targetElementName, targetElementDescription, targetElementID, false, pid);
+            } else {
+                GraphElementLayout layout = sourceContainer.get3LGMLayout();
+                targetContainer = targetDoc.createNodeAndContainer(targetElementClass, targetSubType, targetElementName, targetElementDescription, targetElementID, layout, false, pid);
+                targetDoc.setVisible(targetContainer, sourceContainer.isVisible(), pid);
+                //        //TODO: Copying not expanded elements -> we must set both layouts and the expanded states!
+                //        //targetContainer.setExpanded(sourceContainer.isExpanded());
+                //        targetContainer.setHighLight(false);
+            }
         }
         return targetContainer;
     }
@@ -483,28 +500,35 @@ public class LGMGraphDocument extends GraphDocument {
         String targetEdgeEndID = oldToNewID.getOrDefault(sourceEdgeEndID, sourceEdgeEndID);
         int targetEdgeStartEdgeIndex = sourceEdgeStart.getEdgeIndex(sourceEdge);
         int targetEdgeEndEdgeIndex = sourceEdgeEnd.getEdgeIndex(sourceEdge);
-        String targetEdgeClassName = sourceEdge.getClass().getSimpleName();
+        String targetEdgeClassName = sourceEdge.getClass().getSimpleName(); // must be the simple name!
+
+        MetaModel targetMetaModel = targetDoc.getMetaModel();
+        if (!sourceContainer.hasSameMetaModel(targetMetaModel)) {
+            targetEdgeClassName = targetMetaModel.getCurrentClassName(targetEdgeClassName);
+        }
         GDCollection targetCollection = targetDoc.getCollection();
         addMissingElementForClipboardModels(sourceContainer, targetDoc, pid);
-        Edge targetEdge = targetCollection.link(targetEdgeClassName, targetEdgeID, targetEdgeStartID, targetEdgeEndID, targetEdgeStartEdgeIndex, targetEdgeEndEdgeIndex, pid);
-        if (sourceEdge instanceof DoubleMeaningEdge) {
-            DoubleMeaningEdge sourceDoubleMeaningEdge = (DoubleMeaningEdge) sourceEdge;
-            DoubleMeaningEdge targetDoubleMeaningEdge = (DoubleMeaningEdge) targetEdge;
-            ConnectionState connectionState = sourceDoubleMeaningEdge.getConnectionState();
-            targetDoubleMeaningEdge.setConnectionState(connectionState);
-        }
         EdgeContainer targetContainer = null;
+        Edge targetEdge = targetCollection.link(targetEdgeClassName, targetEdgeID, targetEdgeStartID, targetEdgeEndID, targetEdgeStartEdgeIndex, targetEdgeEndEdgeIndex, pid);
         if (targetEdge != null) {
-            targetDoc.setName(targetEdge, sourceEdge.getName(), pid);
-            targetDoc.setDescription(targetEdge, sourceEdge.getDescription(), pid);
-            targetContainer = targetEdge.getContainer(targetDoc); //can be null if the egde has no Szenario Container
-            if (targetContainer == null) {
-                LGMGraphDocument mainDoc = targetCollection.getMainDoc();
-                targetContainer = targetEdge.getContainer(mainDoc);
+            if (sourceEdge instanceof DoubleMeaningEdge) {
+                DoubleMeaningEdge sourceDoubleMeaningEdge = (DoubleMeaningEdge) sourceEdge;
+                DoubleMeaningEdge targetDoubleMeaningEdge = (DoubleMeaningEdge) targetEdge;
+                ConnectionState connectionState = sourceDoubleMeaningEdge.getConnectionState();
+                targetDoubleMeaningEdge.setConnectionState(connectionState);
             }
-        }
-        if (targetContainer != null && targetContainer.getGraphDocument() instanceof Szenario) {
-            addBendpoints(sourceContainer, targetContainer, pid);
+            if (targetEdge != null) {
+                targetDoc.setName(targetEdge, sourceEdge.getName(), pid);
+                targetDoc.setDescription(targetEdge, sourceEdge.getDescription(), pid);
+                targetContainer = targetEdge.getContainer(targetDoc); //can be null if the egde has no Szenario Container
+                if (targetContainer == null) {
+                    LGMGraphDocument mainDoc = targetCollection.getMainDoc();
+                    targetContainer = targetEdge.getContainer(mainDoc);
+                }
+            }
+            if (targetContainer != null && targetContainer.getGraphDocument() instanceof Szenario) {
+                addBendpoints(sourceContainer, targetContainer, pid);
+            }
         }
         return targetContainer;
     }
@@ -1125,7 +1149,7 @@ public class LGMGraphDocument extends GraphDocument {
                 //be subordinated to more than one other element in the graph in
                 //a metamodel -> reposition only if it is subordinated to only
                 //one graph displayed element.)
-                if (nextEdge.isPaintable() && !(nextEdge instanceof CompositionEdge && nextElementaryPath.hasDirection(SLAVE_TO_MASTER_DIRECTION))) {
+                if (nextEdge.isPaintable() && (!(nextEdge instanceof CompositionEdge) || !nextElementaryPath.hasDirection(SLAVE_TO_MASTER_DIRECTION))) {
                     CompositionEdge compositionEdge = (CompositionEdge) edge;
                     ModelElement master = compositionEdge.getMaster();
                     ModelElement slave = compositionEdge.getSlave();
