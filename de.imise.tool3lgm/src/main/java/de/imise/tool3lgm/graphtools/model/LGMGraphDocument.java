@@ -290,7 +290,6 @@ public class LGMGraphDocument extends GraphDocument {
         //set source collections to bulk mode to prevent any selection update events
         boolean sourceBulkMode = sourceCollection.setBulkMode(true);
 
-        sourceCollection.removeInferenceEdges(true, pid);
         targetCollection.removeInferenceEdges(true, pid);
 
         CopyDependencyResolverResultSimple resolvedCopyDependencies = resolveCopyDependencies(sourceElements, targetCollection);
@@ -427,7 +426,6 @@ public class LGMGraphDocument extends GraphDocument {
 
         targetDoc.finish_transaction(pid, SELECTION_CHANGED);
 
-        sourceCollection.createInferenceEdges(true, pid);
         targetCollection.createInferenceEdges(true, pid);
         targetDoc.distributeEvent(DATA_CHANGED);
 
