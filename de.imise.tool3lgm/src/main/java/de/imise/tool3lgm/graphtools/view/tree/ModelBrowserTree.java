@@ -783,25 +783,28 @@ public final class ModelBrowserTree extends DynamicTree implements UserFieldList
      * {@link GraphDocument}.
      */
     public void selectObjects() {
+        DefaultTreeModel treeModel = (DefaultTreeModel) super.treeModel;
         setSelectionListenerActive(false);
-        TreePath[] path = new TreePath[doc.getSelectedRealElementContainerCount()];
-        int m = 0;
-        GraphDocument mainDoc = doc.getCollection().getMainDoc();
-        for (NodeContainer ec : doc.getSelectedRealElementContainerIterable()) {
-            ModelElement me = ec.getElement();
-            ec = (NodeContainer) me.getContainer(doc);
-            if (ec == null) {
-                ec = (NodeContainer) me.getContainer(mainDoc);
-            }
-            LGMTreeNode<?> node = ec.getTreeNode();
-            if (node != null) {
-                DefaultTreeModel defaultTreeModel = (DefaultTreeModel) treeModel;
-                TreeNode[] pathToRoot = defaultTreeModel.getPathToRoot(node);
-                path[m++] = new TreePath(pathToRoot);
+        List<TreePath> selectedPaths = new ArrayList<>();
+        List<DefaultMutableTreeNode> nodes = new ArrayList<>();
+        nodes.add((DefaultMutableTreeNode) treeModel.getRoot());
+        for (int i = 0; i < nodes.size(); i++) {
+            DefaultMutableTreeNode treeNode = nodes.get(i);
+            for (int j = 0; j < treeNode.getChildCount(); j++) {
+                DefaultMutableTreeNode child = (DefaultMutableTreeNode) treeNode.getChildAt(j);
+                nodes.add(child);
+                Object userObject = child.getUserObject();
+                if (userObject instanceof ElementContainer) {
+                    if (doc.isSelected((ElementContainer) userObject)) {
+                        TreeNode[] pathToRoot = treeModel.getPathToRoot(child);
+                        selectedPaths.add(new TreePath(pathToRoot));
+                    }
+                }
             }
         }
-        setSelectionPaths(path);
-        scrollToPath(path);
+        TreePath[] paths = selectedPaths.toArray(new TreePath[0]);
+        setSelectionPaths(paths);
+        scrollToPath(paths);
         setSelectionListenerActive(true);
     }
 

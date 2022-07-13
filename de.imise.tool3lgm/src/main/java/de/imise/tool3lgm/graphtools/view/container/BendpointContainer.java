@@ -8,7 +8,6 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.Stroke;
-import java.util.Objects;
 
 import de.imise.tool3lgm.graphtools.metamodel.elements.Bendpoint;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
@@ -136,29 +135,6 @@ public class BendpointContainer extends NodeContainer {
         }
         BendpointContainer bc = edgeC.getBendpointContainer(pos + 1);
         return new Point(bc.getX(), bc.getY());
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(me);
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        BendpointContainer other = (BendpointContainer) obj;
-        if (!Objects.equals(me, other.me)) {
-            return false;
-        }
-        return true;
     }
 
 }
