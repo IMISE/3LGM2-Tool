@@ -200,12 +200,12 @@ public class UserFieldNumberFormat implements IDSource, Cloneable {
 
     @Override
     public int hashCode() {
-        return id.hashCode();
+        return idHashCode();
     }
 
     @Override
     public boolean equals(final Object obj) {
-        return obj instanceof UserFieldNumberFormat && ((UserFieldNumberFormat) obj).getID().equals(id);
+        return idEquals(obj);
     }
 
     @Override

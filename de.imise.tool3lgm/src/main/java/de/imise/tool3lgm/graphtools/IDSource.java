@@ -95,4 +95,32 @@ public interface IDSource {
         return other.hasID(getID());
     }
 
+    /**
+     * @return a default implementation for a {@link #hashCode()} function
+     */
+    public default int idHashCode() {
+        return Objects.hash(getID());
+    }
+
+    /**
+     * @param obj
+     * @return a default implementation for a {@link #equals(Object)} function
+     */
+    public default boolean idEquals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        IDSource other = (IDSource) obj;
+        if (!Objects.equals(getID(), other.getID())) {
+            return false;
+        }
+        return true;
+    }
+
 }
