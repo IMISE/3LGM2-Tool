@@ -353,7 +353,6 @@ public class LGMGraphDocument extends GraphDocument {
                 if (!copy) {
                     if (!answer.applyToAll) {
                         sourceDoc.select(sourceContainer, pid);
-                        sourceDoc.distributeEvent(SELECTION_CHANGED, sourceContainer, pid);
                         answer = OverwriteDialog.showDialog(existingTargetElement, sourceElement);
                     }
 
