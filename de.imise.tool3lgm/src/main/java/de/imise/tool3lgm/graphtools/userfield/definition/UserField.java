@@ -508,11 +508,11 @@ public final class UserField extends NameAndDescriptionTargetAdapter implements 
      * @return
      */
     public boolean putXMLFieldString(final String fieldName, final String value, final UserFieldDefinitions definitions) {
-        if (fieldName.equals("userFieldName")) {
+        if ("userFieldName".equals(fieldName)) {
             name = value;
-        } else if (fieldName.equals("userFieldDescription")) {
+        } else if ("userFieldDescription".equals(fieldName)) {
             description = value;
-        } else if (fieldName.equals("userFieldStyle")) {
+        } else if ("userFieldStyle".equals(fieldName)) {
             try {
                 //neue Modelle geben des Style als String an.
                 style = Style.valueOf(value);
@@ -526,16 +526,16 @@ public final class UserField extends NameAndDescriptionTargetAdapter implements 
                 }
                 style = Style.values()[index];
             }
-        } else if (fieldName.equals("userFieldTreeVis")) {
+        } else if ("userFieldTreeVis".equals(fieldName)) {
             treeVisibility = Boolean.valueOf(value);
-        } else if (fieldName.equals("userFieldShowDescriptionInDialog")) {
+        } else if ("userFieldShowDescriptionInDialog".equals(fieldName)) {
             showDescriptionInDialog = Boolean.valueOf(value);
-        } else if (fieldName.equals("userFieldStandardValue")) {
+        } else if ("userFieldStandardValue".equals(fieldName)) {
             addListValue(value);
-        } else if (fieldName.equals("userFieldFormula")) {
+        } else if ("userFieldFormula".equals(fieldName)) {
             setFormula(value);
             style = Style.FORMULA;
-        } else if (fieldName.equals("userFieldFormatHash")) {
+        } else if ("userFieldFormatHash".equals(fieldName)) {
             setNumberFormat(definitions.getNumberFormat(value));
         } else {
             return false;
@@ -1009,7 +1009,7 @@ public final class UserField extends NameAndDescriptionTargetAdapter implements 
             return value;
         }
 
-        if (value == null || value.equals("")) {
+        if (value == null || "".equals(value)) {
             return "";
         }
 
@@ -1202,7 +1202,7 @@ public final class UserField extends NameAndDescriptionTargetAdapter implements 
      * @return
      */
     public Set<String> getIDsInFormula() {
-        if (formulaString == null || formulaString.equals("")) {
+        if (formulaString == null || "".equals(formulaString)) {
             return null;
         }
         StringTokenizer st = new StringTokenizer(formulaString, " ()+-/*|");

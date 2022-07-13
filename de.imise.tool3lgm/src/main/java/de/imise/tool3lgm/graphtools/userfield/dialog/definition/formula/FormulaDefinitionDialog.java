@@ -20,6 +20,7 @@ import static de.imise.tool3lgm.graphtools.userfield.definition.UserField.ACCOUN
 import static de.imise.tool3lgm.graphtools.userfield.definition.UserField.ACCOUNTING_FUNCTION_REF;
 import static de.imise.tool3lgm.graphtools.userfield.definition.UserField.ACCOUNTING_FUNCTION_SUM;
 import static de.imise.tool3lgm.graphtools.userfield.definition.UserField.ACCOUNTING_FUNCTION_TWSUM;
+import static de.imise.tool3lgm.graphtools.userfield.definition.UserField.USERFIELD_ID_PREFIX;
 import static java.awt.GridBagConstraints.BOTH;
 import static java.awt.GridBagConstraints.NORTHWEST;
 
@@ -61,7 +62,6 @@ import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.userfield.CostingUtil;
-import de.imise.tool3lgm.graphtools.userfield.calculator.Calculator;
 import de.imise.tool3lgm.graphtools.userfield.definition.UserField;
 import de.imise.tool3lgm.graphtools.userfield.definition.UserFieldDefinitions;
 import de.imise.tool3lgm.graphtools.userfield.definition.UserFieldTarget;
@@ -424,10 +424,10 @@ public class FormulaDefinitionDialog extends JDialog implements ActionListener {
             dispose();
         } else if (isOperator(cmd)) {
             termStack.push(cmd);
-        } else if (cmd.equals(BRACKETS)) {
+        } else if (BRACKETS.equals(cmd)) {
             leaveableBracketCounter++;
             termStack.push(cmd);
-        } else if (cmd.equals(LEAVE_BRACKET_ESCAPE_CHARS)) {
+        } else if (LEAVE_BRACKET_ESCAPE_CHARS.equals(cmd)) {
             leaveableBracketCounter--;
             termStack.push(cmd);
         } else if (source == accountingFunctionsButtonPanel.buttonindikator) {
@@ -452,7 +452,7 @@ public class FormulaDefinitionDialog extends JDialog implements ActionListener {
             String lastElement = termStack.getLastElement();
             if (isNumber(lastElement)) {
                 termStack.append(cmd);
-            } else if (lastElement.equals(OPERATOR_MINUS)) {
+            } else if (OPERATOR_MINUS.equals(lastElement)) {
                 String preLastElement = termStack.getPreLastElement();
                 if (isOperator(preLastElement)) {
                     termStack.append(cmd);
@@ -467,7 +467,7 @@ public class FormulaDefinitionDialog extends JDialog implements ActionListener {
             termStack.append(cmd);
         } else if (source == formulaControlPanel.undoButton) {
             String lastStackElement = termStack.getLastElement();
-            leaveableBracketCounter += lastStackElement.equals(LEAVE_BRACKET_ESCAPE_CHARS) ? 1 : lastStackElement.equals(BRACKETS) ? -1 : 0;
+            leaveableBracketCounter += LEAVE_BRACKET_ESCAPE_CHARS.equals(lastStackElement) ? 1 : BRACKETS.equals(lastStackElement) ? -1 : 0;
             termStack.pop();
         } else if (source == formulaControlPanel.clearFormulaButton) {
             // Wenn der Löschenbutton betätigt wurde, werden alle Elemente des Term-stacks entfernt und die textAreas neu gefüllt (in diesem Falls mich nichts).
@@ -479,7 +479,7 @@ public class FormulaDefinitionDialog extends JDialog implements ActionListener {
         StringBuilder sb = new StringBuilder();
         if (!Strings.isNullOrEmpty(orgIndicatorString)) {
             sb.append(" ");
-            sb.append(UserField.ACCOUNTING_FUNCTION_INDI);
+            sb.append(ACCOUNTING_FUNCTION_INDI);
             sb.append(" ( ");
             sb.append(orgIndicatorString);
             sb.append(" ) ");
@@ -509,17 +509,17 @@ public class FormulaDefinitionDialog extends JDialog implements ActionListener {
         String partTerm = "";
         for (int i = 0; i < termStack.size(); i++) {
             partTerm = termStack.get(i);
-            if (partTerm.equals(BRACKETS)) {
-                termList.add(insertIndex, Calculator.OPEN_BRACKET);
+            if (BRACKETS.equals(partTerm)) {
+                termList.add(insertIndex, OPEN_BRACKET);
 
                 //hier wird mit Absicht nicht insertIndex++ gemacht,
                 //da somit nochmal an der selben Stelle etwas eingefügt werden kann
-                termList.add(insertIndex + 1, Calculator.CLOSE_BRACKET);
+                termList.add(insertIndex + 1, CLOSE_BRACKET);
 
                 //Wenn eine Klammer eingefügt wird,
                 //ist die soll der Cursor in der Mitte des Klammernpaares stehen.
                 caretPosInFormulaArea += 2;
-            } else if (partTerm.equals(LEAVE_BRACKET_ESCAPE_CHARS)) {
+            } else if (LEAVE_BRACKET_ESCAPE_CHARS.equals(partTerm)) {
                 caretPosInFormulaArea += 2;
             } else {
                 termList.add(insertIndex, partTerm);
@@ -570,19 +570,19 @@ public class FormulaDefinitionDialog extends JDialog implements ActionListener {
         formulaControlPanel.clearFormulaButton.setEnabled(!emptyFormula);
         formulaControlPanel.leaveBracketButton.setEnabled(false);
 
-        if (emptyFormula || lastTermElement.equals(BRACKETS)) {
+        if (emptyFormula || BRACKETS.equals(lastTermElement)) {
             setOperatorAndNumberButtonStates(false, true, true, false, true);
             setFunctionButtonStates(true);
-        } else if (lastTermElement.equals(LEAVE_BRACKET_ESCAPE_CHARS)) {
+        } else if (LEAVE_BRACKET_ESCAPE_CHARS.equals(lastTermElement)) {
             setOperatorAndNumberButtonStates(true, true, false, false, false);
             setFunctionButtonStates(false);
         } else if (isOperator(lastTermElement)) {
-            boolean minusBefore = lastTermElement.equals(Calculator.OPERATOR_MINUS);
+            boolean minusBefore = OPERATOR_MINUS.equals(lastTermElement);
             setOperatorAndNumberButtonStates(false, !minusBefore, true, false, true);
             String preLastElement = termStack.getPreLastElement();
             boolean negateMinusBefore = minusBefore && (preLastElement.isEmpty() || isOperator(preLastElement));
             setFunctionButtonStates(!negateMinusBefore);
-        } else if (UserField.isAccountingFunction(extractFunctionName(lastTermElement)) || lastTermElement.startsWith(UserField.USERFIELD_ID_PREFIX)) {
+        } else if (UserField.isAccountingFunction(extractFunctionName(lastTermElement)) || lastTermElement.startsWith(USERFIELD_ID_PREFIX)) {
             setOperatorAndNumberButtonStates(true, true, false, false, false);
             setFunctionButtonStates(false);
             formulaControlPanel.leaveBracketButton.setEnabled(leaveableBracketCounter > 0);

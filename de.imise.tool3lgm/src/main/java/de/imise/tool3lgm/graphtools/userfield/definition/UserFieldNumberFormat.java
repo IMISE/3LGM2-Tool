@@ -69,7 +69,7 @@ public class UserFieldNumberFormat implements IDSource, Cloneable {
      * @param value Der Wert, mit der die Variable belegt werden soll.
      */
     public boolean putXMLFieldString(final String fieldName, final String value) {
-        if (fieldName.equals("userFieldFormatString")) {
+        if ("userFieldFormatString".equals(fieldName)) {
             setFractionDigitsCountAndUnit(value);
             return true;
         }
@@ -107,7 +107,7 @@ public class UserFieldNumberFormat implements IDSource, Cloneable {
      * @param unitString
      */
     public void setUnit(final String unitString) {
-        if (unitString.trim().equals("")) {
+        if ("".equals(unitString.trim())) {
             formatUnit = null;
         } else {
             formatUnit = unitString;

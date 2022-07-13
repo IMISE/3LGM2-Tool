@@ -5,6 +5,7 @@
 package de.imise.tool3lgm.graphtools.userfield.dialog.definition.formula;
 
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
+import static de.imise.tool3lgm.graphtools.userfield.definition.UserField.ACCOUNTING_FUNCTION_REF;
 
 import java.awt.Dialog;
 import java.awt.GridBagConstraints;
@@ -97,7 +98,7 @@ public class VfDialog extends JDialog implements ActionListener {
         gbc.weighty = 1;
         gbc.anchor = GridBagConstraints.NORTHWEST;
 
-        if (vfOperator.equals(UserField.ACCOUNTING_FUNCTION_REF)) {
+        if (ACCOUNTING_FUNCTION_REF.equals(vfOperator)) {
             rp = new ReferencePanel(definitions, userField);
             add(rp, gbc);
         } else {
@@ -133,9 +134,9 @@ public class VfDialog extends JDialog implements ActionListener {
 
     @Override
     public void actionPerformed(final ActionEvent e) {
-        if (e.getActionCommand().equals("ok")) {
+        if ("ok".equals(e.getActionCommand())) {
 
-            if (vfOperator.equals(UserField.ACCOUNTING_FUNCTION_REF)) {
+            if (ACCOUNTING_FUNCTION_REF.equals(vfOperator)) {
                 retVal = rp.getRetVal();
             } else {
                 retVal = operatorInputPanel.getRetVal();
@@ -148,7 +149,7 @@ public class VfDialog extends JDialog implements ActionListener {
 
             }
 
-        } else if (e.getActionCommand().equals("cancel")) {
+        } else if ("cancel".equals(e.getActionCommand())) {
             retVal = "";
             dispose();
         }

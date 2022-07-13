@@ -280,7 +280,7 @@ public class FormatPanel extends AbstractInputPanel implements ActionListener, C
             String formatUnit = format.getUnit();
             if (formatUnit != null) {
                 unitBoxElements.add(formatUnit);
-                if (formatUnit.equals("%")) {
+                if ("%".equals(formatUnit)) {
                     percentAdded = true;
                 }
             }

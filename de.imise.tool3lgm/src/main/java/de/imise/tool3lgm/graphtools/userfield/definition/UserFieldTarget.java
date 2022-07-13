@@ -3,6 +3,7 @@
  */
 package de.imise.tool3lgm.graphtools.userfield.definition;
 
+import static com.google.common.base.Strings.isNullOrEmpty;
 import static de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty.OPTION_ENABLE_FORMULA_CALCULATION;
 
 import java.util.HashMap;
@@ -121,7 +122,7 @@ public abstract class UserFieldTarget extends NameAndDescriptionTargetAdapter im
         }
         userFieldToInputValuesMap.remove(userField);
         value = value.trim();
-        if (value == null || value.equals("") || value.equals("\"\"") || value.equalsIgnoreCase("null") || value.equalsIgnoreCase("__3LGM_DELETE__")) {
+        if (isNullOrEmpty(value) || "\"\"".equals(value) || "null".equalsIgnoreCase(value) || "__3LGM_DELETE__".equalsIgnoreCase(value)) {
             return;
         }
         if (value.length() > 0) {

@@ -81,16 +81,16 @@ public class FormulaDefinitionDialogStack extends Stack<String> {
                 String token = st.nextToken();
                 if (UserField.isAccountingFunction(token)) {
                     sb = new StringBuilder();
-                    while (!token.equals(")")) {
+                    while (!")".equals(token)) {
                         sb.append(" ");
                         sb.append(token);
                         token = st.nextToken();
                     }
                     sb.append(" )");
                     push(sb.toString());
-                } else if (token.equals("(")) {
+                } else if ("(".equals(token)) {
                     push(FormulaDefinitionDialog.BRACKETS);
-                } else if (token.equals(")")) {
+                } else if (")".equals(token)) {
                     push(FormulaDefinitionDialog.LEAVE_BRACKET_ESCAPE_CHARS);
                 } else if (token.startsWith(UserField.USERFIELD_ID_PREFIX)) {
                     push(token);
@@ -103,7 +103,6 @@ public class FormulaDefinitionDialogStack extends Stack<String> {
             update = true;
         }
         update();
-        return;
     }
 
 }

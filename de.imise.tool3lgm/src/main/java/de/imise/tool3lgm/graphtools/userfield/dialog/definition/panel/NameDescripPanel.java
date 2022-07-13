@@ -4,6 +4,7 @@
 package de.imise.tool3lgm.graphtools.userfield.dialog.definition.panel;
 
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
+import static de.imise.util.StringUtils.isNullOrEmptyOrBlank;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -89,7 +90,7 @@ public class NameDescripPanel extends AbstractInputPanel implements NameAndDescr
 
     @Override
     public String getError() {
-        if (nameTextField.getText().trim().equals("")) {
+        if (isNullOrEmptyOrBlank(nameTextField.getText())) {
             return getResString("empty_name");
         }
         return super.getError();

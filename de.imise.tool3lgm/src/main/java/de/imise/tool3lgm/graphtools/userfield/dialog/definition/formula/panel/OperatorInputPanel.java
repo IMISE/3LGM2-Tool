@@ -124,7 +124,7 @@ public class OperatorInputPanel extends JPanel implements ActionListener {
         gbc.gridy++;
         gbc.weighty = 1;
 
-        if (vfOperator.equals(UserField.ACCOUNTING_FUNCTION_TWSUM)) {
+        if (UserField.ACCOUNTING_FUNCTION_TWSUM.equals(vfOperator)) {
             gbc.gridy++;
             add(new JLabel(getResString("weighting") + ": "), gbc);
 
@@ -198,7 +198,7 @@ public class OperatorInputPanel extends JPanel implements ActionListener {
                     found = true;
                 }
                 if (uf.isNumberUserField()) {
-                    if (uf.getName().trim().equals("")) {
+                    if ("".equals(uf.getName().trim())) {
                         String name = getResString("this_calculation_formula");
                         connectedAttributesBox.addSeparator(true);
                         connectedAttributesBox.addObject(uf, name);
@@ -212,7 +212,7 @@ public class OperatorInputPanel extends JPanel implements ActionListener {
             connectedAttributesBox.removeObject(userField);
         } else if (!found && assignableClass) {
             String name = userField.getName().trim();
-            if (name.equals("")) {
+            if (name.isEmpty()) {
                 name = getResString("this_calculation_formula");
             }
             connectedAttributesBox.addSeparator(true);
@@ -297,11 +297,10 @@ public class OperatorInputPanel extends JPanel implements ActionListener {
      */
     public String getRetVal() {
         UserField tmpUserField;
-        if (connectedAttributesBox.getSelectedIndex() >= 0) {
-            tmpUserField = connectedAttributesBox.getSelectedObject();
-        } else {
+        if (connectedAttributesBox.getSelectedIndex() < 0) {
             return null;
         }
+        tmpUserField = connectedAttributesBox.getSelectedObject();
         Class<? extends Edge> edgeClass;
         if (associationBox.getSelectedIndex() < 0) {
             return null;
@@ -358,7 +357,7 @@ public class OperatorInputPanel extends JPanel implements ActionListener {
             } else {
                 updateFieldListAttributesOfAssociatedClass(getStartClass(edgeClass));
             }
-            if (vfOperator.equals(UserField.ACCOUNTING_FUNCTION_TWSUM)) {
+            if (UserField.ACCOUNTING_FUNCTION_TWSUM.equals(vfOperator)) {
                 updateVGComboBoxItems(edgeClass);
             }
         }

@@ -7,6 +7,7 @@ package de.imise.tool3lgm.graphtools.userfield.dialog.definition.formula.panel;
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
 import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.getEndClass;
 import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.getStartClass;
+import static de.imise.util.StringUtils.isNullOrEmptyOrBlank;
 import static javax.swing.BorderFactory.createTitledBorder;
 
 import java.awt.BorderLayout;
@@ -264,7 +265,7 @@ public class ReferencePanel extends JPanel implements ActionListener {
         Class<? extends ModelElement> selectedClass = ((Class<?>) classesList.getSelectedObject()).asSubclass(ModelElement.class);
         for (UserField uf : definitions.getUserFields(selectedClass)) {
             if (uf.isNumberUserField()) {
-                if (uf.getName().trim().equals("")) {
+                if (isNullOrEmptyOrBlank(uf.getName())) {
                     String name = getResString("this_calculation_formula");
                     userFieldList.addObject(uf, name);
                 } else {

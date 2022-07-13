@@ -333,7 +333,7 @@ public class IndicatorDialog extends JDialog implements ActionListener {
 
     @Override
     public void actionPerformed(final ActionEvent e) {
-        if (e.getActionCommand().equals("okbutton")) {
+        if ("okbutton".equals(e.getActionCommand())) {
             if (validateInputs()) {
                 UserField u = userFieldComboBox.getSelectedObject();
                 retVal += u.getID() + " | ";
@@ -348,7 +348,7 @@ public class IndicatorDialog extends JDialog implements ActionListener {
             }
         }
 
-        if (e.getActionCommand().equals("cancelbutton")) {
+        if ("cancelbutton".equals(e.getActionCommand())) {
             dispose();
         }
 

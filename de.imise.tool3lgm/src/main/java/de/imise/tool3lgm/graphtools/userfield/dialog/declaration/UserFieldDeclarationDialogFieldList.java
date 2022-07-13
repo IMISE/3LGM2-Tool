@@ -403,11 +403,10 @@ public class UserFieldDeclarationDialogFieldList extends JList<NamedObjectContai
                         if (string.charAt(i) != ' ') {
                             if (i == 0) {
                                 break;
-                            } else {
-                                indent = string.substring(0, i);
-                                text = string.substring(i);
-                                break;
                             }
+                            indent = string.substring(0, i);
+                            text = string.substring(i);
+                            break;
                         }
                     }
                     indentation_label.setText(indent);

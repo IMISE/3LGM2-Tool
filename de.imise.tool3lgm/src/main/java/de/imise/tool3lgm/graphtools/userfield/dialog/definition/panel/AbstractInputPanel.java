@@ -16,7 +16,6 @@ public abstract class AbstractInputPanel extends JPanel {
      *
      */
     public AbstractInputPanel() {
-        super();
     }
 
     /**

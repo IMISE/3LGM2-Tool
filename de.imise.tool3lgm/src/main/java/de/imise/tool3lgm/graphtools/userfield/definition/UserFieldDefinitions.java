@@ -1,6 +1,12 @@
 package de.imise.tool3lgm.graphtools.userfield.definition;
 
+import static de.imise.tool3lgm.graphtools.userfield.calculator.Calculator.ALL_IN_FUNCTION_SIGNS;
+import static de.imise.tool3lgm.graphtools.userfield.calculator.Calculator.OPERAND_DELIMITER;
 import static de.imise.tool3lgm.graphtools.userfield.definition.SubType.DUMMY_SUBTYPE;
+import static de.imise.tool3lgm.graphtools.userfield.definition.UserField.DIRECTION_FROM_PART_TO_WHOLE;
+import static de.imise.tool3lgm.graphtools.userfield.definition.UserField.DIRECTION_FROM_WHOLE_TO_PART;
+import static de.imise.tool3lgm.graphtools.userfield.definition.UserField.ERROR_CROSS_REFERENCE_IN_FORMULA_DEFINITION;
+import static de.imise.tool3lgm.graphtools.userfield.definition.UserField.USERFIELD_ID_PREFIX;
 import static de.imise.tool3lgm.graphtools.userfield.definition.UserField.Style.TAB;
 
 import java.util.ArrayList;
@@ -637,7 +643,7 @@ public class UserFieldDefinitions extends UserFieldDefinitionChangeHandler imple
             return ImmutableList.of();
         }
         final Iterator<UserField> userFieldsIterator = fieldList.iterator();
-        Iterable<UserField> userFieldsIterable = () -> new Iterator<UserField>() {
+        Iterable<UserField> userFieldsIterable = () -> new Iterator<>() {
 
             @Override
             public boolean hasNext() {
@@ -668,7 +674,7 @@ public class UserFieldDefinitions extends UserFieldDefinitionChangeHandler imple
         if (fieldList == null) {
             return ImmutableList.of();
         }
-        Iterable<UserField> userFieldsIterable = () -> new Iterator<UserField>() {
+        Iterable<UserField> userFieldsIterable = () -> new Iterator<>() {
 
             private UserField next = null;
 
@@ -935,7 +941,7 @@ public class UserFieldDefinitions extends UserFieldDefinitionChangeHandler imple
             secondString = st.nextToken();
 
             if (secondString.equals(userField.getID())) {
-                if (!firstString.equals(Calculator.OPERAND_DELIMITER)) {
+                if (!OPERAND_DELIMITER.equals(firstString)) {
                     return true;
                 }
             }
@@ -979,21 +985,21 @@ public class UserFieldDefinitions extends UserFieldDefinitionChangeHandler imple
                 if (st.hasMoreTokens()) {
                     secondString = st.nextToken();
                 }
-                if (secondString.equals(Calculator.OPERAND_DELIMITER)) {
+                if (OPERAND_DELIMITER.equals(secondString)) {
                     if (st.hasMoreTokens()) {
                         secondString = st.nextToken();
                     }
                     // Wenn wieder auf das eigene UserField gestoßen wird, muss
                     // geprüft werden, ob erst ein Verteilungsgewicht angegeben
                     // wurde.
-                    if (secondString.startsWith(UserField.USERFIELD_ID_PREFIX)) {
+                    if (secondString.startsWith(USERFIELD_ID_PREFIX)) {
                         // Wenn erst ein Verteilungsgewicht angegeben wurde,
                         // muss als nächstes der Delimiter und als nächstes die
                         // Richtung geholt werden
                         if (st.hasMoreTokens()) {
                             secondString = st.nextToken();
                         }
-                        if (secondString.equals(Calculator.OPERAND_DELIMITER)) {
+                        if (OPERAND_DELIMITER.equals(secondString)) {
                             if (st.hasMoreTokens()) {
                                 // spätestens an dieser Stelle kommt auf jeden
                                 // Fall die Richtung
@@ -1001,12 +1007,12 @@ public class UserFieldDefinitions extends UserFieldDefinitionChangeHandler imple
                             }
                         }
 
-                        if (secondString.equals(UserField.DIRECTION_FROM_PART_TO_WHOLE) || secondString.equals(UserField.DIRECTION_FROM_WHOLE_TO_PART)) {
+                        if (DIRECTION_FROM_PART_TO_WHOLE.equals(secondString) || DIRECTION_FROM_WHOLE_TO_PART.equals(secondString)) {
                             direction = secondString;
                         }
                     } else
                     // Wenn es kein Verteilungsgewicht ist, gehts gleich hier weiter.
-                    if (direction.equals("")) {
+                    if (direction.isEmpty()) {
                         //Die erste Richtung, die gefunden wurde, wird als die Vergleichsrichtung angesegen.
                         //Alle anderen Richtungen in Verrechnungsfuntionen, die sich selbst verrechnen, müssen die selbe Richtung haben.
                         direction = secondString;
@@ -1059,10 +1065,10 @@ public class UserFieldDefinitions extends UserFieldDefinitionChangeHandler imple
                 if (formula == null) {
                     return null;
                 }
-                StringTokenizer st = new StringTokenizer(formula, Calculator.ALL_IN_FUNCTION_SIGNS);
+                StringTokenizer st = new StringTokenizer(formula, ALL_IN_FUNCTION_SIGNS);
                 while (st.hasMoreElements()) {
                     String token = st.nextToken();
-                    if (token.startsWith(UserField.USERFIELD_ID_PREFIX)) {
+                    if (token.startsWith(USERFIELD_ID_PREFIX)) {
                         //hole das UserField von dem die aktuelle Formel abhängig ist
                         UserField dependingUserField = getUserField(token);
                         //wenn jetzt die Formel sich selbst enthält, dann ist das zulässig (oben wurden alle
@@ -1184,7 +1190,7 @@ public class UserFieldDefinitions extends UserFieldDefinitionChangeHandler imple
      */
     protected final String calculate(final UserField userField, final UserFieldTarget target) {
         if (!isCalculatable(userField)) {
-            return UserField.ERROR_CROSS_REFERENCE_IN_FORMULA_DEFINITION;
+            return ERROR_CROSS_REFERENCE_IN_FORMULA_DEFINITION;
         }
 
         //      if (count==0){
