@@ -41,8 +41,14 @@ public class ModelBrowserTreeLGMChangeListener implements LGMChangeListener {
     public void elementGraphicsChanged(final ElementContainer element) {
         if (active) {
             //      System.out.println("elementGraphicsChanged");
-            tree.refreshTree();
-            //      repaint();
+            // The next instruction to refresh the tree must not be activated
+            // under any circumstances. Then the tree will be refreshed again
+            // and again with every change in the graphic (e.g. moving elements).
+            // This is actually only necessary to update a change in the color of
+            // processes immediately in the tree. Actually one would have to
+            // introduce a new event "ELEMENT_COLOR_CHANGED", but only for this
+            // one, rare case it doesn't matter. Therefore here never refreshTree() !
+            //tree.refreshTree();
         }
     }
 
