@@ -3509,6 +3509,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
         }
         start_transaction(STANDARD_PID, false);
         deselectAll(true);
+        boolean oldBulkMode = gdcoll.setBulkMode(true);
         //alle Kanten im angegebenen Bereich selektieren
         int activeLayerIndex = gdcoll.getActiveLayer();
         LayerContainer activeLayer = layer[activeLayerIndex];
@@ -3547,6 +3548,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
                 }
             }
         }
+        gdcoll.setBulkMode(oldBulkMode);
         finish_transaction(STANDARD_PID, false);
         distributeEvent(SELECTION_CHANGED, STANDARD_PID);
     }
@@ -3590,7 +3592,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
     public void selectAll() {
         final int PID = TransactionManager.STANDARD_PID;
         start_transaction(PID, false);
-        gdcoll.setBulkMode(true);
+        boolean oldBulkMode = gdcoll.setBulkMode(true);
         deselectAll(true);
         for (int i = 0; i < layer.length; i++) {
             LayerContainer lc = layer[i];
@@ -3601,7 +3603,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
             gdcoll.addToSelection(elementContainers);
         }
         gdcoll.selectAllUniques();
-        gdcoll.setBulkMode(false);
+        gdcoll.setBulkMode(oldBulkMode);
         finish_transaction(PID, false);
         distributeEvent(SELECTION_CHANGED, PID);
     }
@@ -3719,7 +3721,11 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
         //		System.err.println("GraphDocument.addToSelection(): " + layerElemMe.getClass().getSimpleName() + " " + this + " " + layerElemMe.getClearName() + " " + layerElemMe.getID() + " " + layerElemMe.getCreationDate().toLocaleString());
 
         gdcoll.addToSelection(ec);
-        distributeEvent(SELECTION_CHANGED, ec, pid);
+        // Never fire this event in the commented out way (with ElementContainer),
+        // because otherwise e.g. with selectArea(...) quite a lot of unnecessary
+        // single events will be fired.
+        // distributeEvent(SELECTION_CHANGED, ec, pid); //don't use this!
+        distributeEvent(SELECTION_CHANGED, pid);
     }
 
     /**
@@ -3754,7 +3760,11 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
             return;
         }
         gdcoll.deselect(ec);
-        distributeEvent(SELECTION_CHANGED, ec, pid);
+        // There is no reason to fire this event with the specific ElementContainer. Especially
+        // if this event will be fired for a lot of elements while the gdcoll is in bulkMode
+        // then every single event will be collected and fired after bulkMode is set to false.
+        // distributeEvent(SELECTION_CHANGED, ec, pid); //don't use this!
+        distributeEvent(SELECTION_CHANGED, pid);
     }
 
     /**
