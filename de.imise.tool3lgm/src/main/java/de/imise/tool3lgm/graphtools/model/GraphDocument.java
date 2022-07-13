@@ -3507,10 +3507,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
             right_y = left_y;
             left_y = tmp;
         }
-
-        final int PID = TransactionManager.STANDARD_PID;
-
-        start_transaction(PID, false);
+        start_transaction(STANDARD_PID, false);
         deselectAll(true);
         //alle Kanten im angegebenen Bereich selektieren
         int activeLayerIndex = gdcoll.getActiveLayer();
@@ -3527,7 +3524,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
             if (isInRect(startC, left_x, left_y, right_x, right_y)) {
                 if (isInRect(endC, left_x, left_y, right_x, right_y)) {
                     if (!edgeC.isSelected()) { //this question is much more expensive than the other both, so don't change the order
-                        addToSelection(edgeC, PID);
+                        addToSelection(edgeC, STANDARD_PID);
                     }
                 }
             }
@@ -3535,7 +3532,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
             if (edgeC.isVisible()) {
                 for (BendpointContainer bc : edgeC.iterateBendpointContainers()) {
                     if (isInRect(bc, left_x, left_y, right_x, right_y)) {
-                        addToSelection(bc, PID);
+                        addToSelection(bc, STANDARD_PID);
                     }
                 }
             }
@@ -3545,13 +3542,13 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
             if (nc.isPaintable()) {
                 if (isInRect(nc, left_x, left_y, right_x, right_y)) {
                     if (!nc.isSelected()) {
-                        addToSelection(nc, PID);
+                        addToSelection(nc, STANDARD_PID);
                     }
                 }
             }
         }
-        finish_transaction(PID, false);
-        distributeEvent(SELECTION_CHANGED, PID);
+        finish_transaction(STANDARD_PID, false);
+        distributeEvent(SELECTION_CHANGED, STANDARD_PID);
     }
 
     /**
@@ -3710,19 +3707,19 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
     }
 
     /**
-     * @param mc
+     * @param ec
      * @param pid
      */
-    public final void addToSelection(final ElementContainer mc, final int pid) {
-        if (mc == null) {
+    public final void addToSelection(final ElementContainer ec, final int pid) {
+        if (ec == null) {
             return;
         }
 
         //		ModelElement layerElemMe = mc.getElement();
         //		System.err.println("GraphDocument.addToSelection(): " + layerElemMe.getClass().getSimpleName() + " " + this + " " + layerElemMe.getClearName() + " " + layerElemMe.getID() + " " + layerElemMe.getCreationDate().toLocaleString());
 
-        gdcoll.addToSelection(mc);
-        distributeEvent(SELECTION_CHANGED, mc, pid);
+        gdcoll.addToSelection(ec);
+        distributeEvent(SELECTION_CHANGED, ec, pid);
     }
 
     /**

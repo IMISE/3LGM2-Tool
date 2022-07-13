@@ -1,6 +1,7 @@
 package de.imise.tool3lgm.graphtools.view.container;
 
 import static de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout.STANDARD_COLORS;
+import static de.imise.util.StringUtils.isNullOrEmptyOrBlank;
 
 import java.awt.Dimension;
 import java.awt.Font;
@@ -77,7 +78,8 @@ public class NodeContainer extends ElementContainer implements AlphabeticalSortT
     private String additionalTextRightDown;
 
     /**
-     * COMMENTME
+     * The main TreeNode for this container that is directly shown under the
+     * class node.
      */
     protected ElementContainerTreeNode treeNode = null;
 
@@ -243,7 +245,7 @@ public class NodeContainer extends ElementContainer implements AlphabeticalSortT
         if (layout == null) {
             return;
         }
-        if (iconID == null || iconID.trim().equals("") || iconID.equals("none") || iconID.equals("null")) {
+        if (isNullOrEmptyOrBlank(iconID) || "none".equals(iconID) || "null".equals(iconID)) {
             layout.setIconID(null);
             super.setIcon(null);
             return;

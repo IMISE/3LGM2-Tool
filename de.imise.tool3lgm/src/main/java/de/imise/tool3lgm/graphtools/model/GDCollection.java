@@ -51,6 +51,7 @@ import static de.imise.tool3lgm.graphtools.model.LGMChangeListener.LGMChangeType
 import static de.imise.tool3lgm.graphtools.model.LGMChangeListener.LGMChangeType.SZENARIO_REMOVED;
 import static de.imise.tool3lgm.graphtools.undoredo.TransactionManager.STANDARD_PID;
 import static de.imise.tool3lgm.log.Log.ERROR;
+import static de.imise.util.StringUtils.isNullOrEmptyOrBlank;
 import static de.imise.util.collections.CollectionUtils.getNextIndicatedName;
 import static de.imise.util.htmlxml.ParseSaveStringHandler.getDecodedParseSaveString;
 import static java.lang.Integer.parseInt;
@@ -601,7 +602,7 @@ public class GDCollection extends UserFieldTarget implements MetaModelSpecific {
      * @return
      */
     public Szenario createSzenario(String title, final boolean askName, final String description, final String szenID, final boolean log, final int pid, final boolean isImport) {
-        if (title == null || title.trim().equals("")) {
+        if (isNullOrEmptyOrBlank(title)) {
             title = getNextIndicatedName(getResString("submodel") + " #", activeGraphDocumentsList);
         }
         if (askName) {
@@ -827,7 +828,7 @@ public class GDCollection extends UserFieldTarget implements MetaModelSpecific {
             if (d.getInputColor() != null) {
                 ec.get3LGMLayout().bg_color = d.getInputColor();
             }
-            if (inputString.equals("") || inputString.equals(me.toString())) {
+            if (inputString.isEmpty() || inputString.equals(me.toString())) {
                 return true;
             }
             me.setName(inputString);
@@ -1452,7 +1453,7 @@ public class GDCollection extends UserFieldTarget implements MetaModelSpecific {
                 }
             }
         }
-        if (description != null && !description.trim().equals("")) {
+        if (!isNullOrEmptyOrBlank(description)) {
             me.setDescription(getDecodedParseSaveString(description));
         }
         mainDoc.start_transaction(pid);

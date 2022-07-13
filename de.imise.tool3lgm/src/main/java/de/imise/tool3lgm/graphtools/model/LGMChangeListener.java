@@ -111,20 +111,21 @@ public interface LGMChangeListener {
         ;
 
         /**
-         * Enthält alle {@link LGMChangeType}s, für die die Funktion
-         * {@link #isSzenarioSpecific()} <code>false</code> liefern soll
+         * Contains all {@link LGMChangeType}s for which the
+         * {@link #isScenarioSpecific()} function should return
+         * <code>false</code>.
          */
         private static final Collection<LGMChangeType> NOT_SZENARIO_SPECIFIC_CHANGE_TYPES = ImmutableSet.of(DATA_CHANGED, ELEMENT_NAME_CHANGED, USER_FIELD_VALUE_CHANGED, SELECTION_CHANGED, ACTIVE_LAYER_CHANGED); //ACTIVE_LAYER wird in der Collection gespeichert und gilt immer für alle docs
 
         /**
-         * Liefert <code>true</code>, wenn dieses Ereignis nur für ein
-         * bestimmtes Szenario ausgelöst werden soll. Soll es für alle ausgelöst
-         * werden, dann muss das Ereignis <code>false</code> liefern. Bsp.:
-         * DATA_CHANGED oder ELEMENT_NAME_CHANGED muss in allen Szenarios
-         * durchschlagen, also muss diese Funktion <code>false</code> liefern.
-         * SZENARIO_REMOVED aber darf nur für das tatsächlich gelöschte Szenario
-         * aufgerufen werden, da sonst auch alle anderen melden, dass sie
-         * gelöscht seien und die Fenster alle zugehen.
+         * Returns <code>true</code> if this event is to be triggered only for a
+         * specific scenario. If it is to be triggered for all, then the event
+         * must return <code>false</code>. Ex: DATA_CHANGED or
+         * ELEMENT_NAME_CHANGED must pass in all scenarios, so this function
+         * must return <code>false</code>. SZENARIO_REMOVED, however, may only
+         * be called for the actually deleted scenario, otherwise all others
+         * will report that they have been deleted and the windows will all
+         * close.
          *
          * @return
          */
@@ -150,9 +151,10 @@ public interface LGMChangeListener {
          *            {@link Tool3lgmChangeListener}
          */
         protected void deliverEvent(final List<LGMChangeListener> listeners, final GraphDocument source, final ElementContainer last_elem, final boolean deliverStatic) {
-            //das hier muss sein, weil es vorkommen kann, dass sich bei
-            //deliverEvent(l, source, last_elem); der aktuelle Listener
-            //aus der Listener-Liste löscht und dann wieder hinzufügt
+            // this one has to be, because it can happen that
+            // deliverEvent(l, source, last_elem); deletes the
+            // current listener from the listener list and then
+            // adds it again.
             Collection<LGMChangeListener> listenersClone = new ArrayList<>(listeners);
             for (LGMChangeListener l : listenersClone) {
                 deliverEvent(l, source, last_elem);
@@ -162,11 +164,11 @@ public interface LGMChangeListener {
             //            }
             //            System.err.println();
 
-            //Das hier stellt die Verbindung zwischen dem globalen Listener des Tools und dem für ein
-            //GraphDocument bzw. einer GDCollection her.
-            //Die folgenden Ereignisse werden von beiden Listenern weiter geleitet.
-            //Ser source null check ist notwendig, weil sonst beim Öffnen eines Modells diese Ereignisse
-            //hier fliegen und damit die Frames doppelt angelegt werden.
+            // This establishes the connection between the global listener of
+            // the tool and the one for a GraphDocument or a GDCollection.
+            // The following events are forwarded by both listeners.
+            // The source null check is necessary because otherwise when a model
+            // is opened these events arrive here and thus the frames are created twice.
             if (deliverStatic && source != null) {
                 if (this == SZENARIO_ADDED) {
                     Static.distribute(MODEL_CHANGE_SZENARIO_ADDED, source);

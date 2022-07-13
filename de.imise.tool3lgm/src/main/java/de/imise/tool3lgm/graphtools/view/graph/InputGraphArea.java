@@ -688,7 +688,7 @@ public final class InputGraphArea extends BasicGraphArea implements MouseListene
                         }
                     }
                     // wenn ein Knickpunkt gedraggt wurde
-                    if (mouse_dragged && clickedEc != null && clickedEc instanceof BendpointContainer) {
+                    if (mouse_dragged && clickedEc instanceof BendpointContainer) {
                         //Prüfe ob er gelöscht werden soll. Das soll er, wenn er auf einer Linie
                         //zwischen den anderen Knickpunkten oder den Endpunkten der Edge liegt
                         BendpointContainer bc = (BendpointContainer) clickedEc;

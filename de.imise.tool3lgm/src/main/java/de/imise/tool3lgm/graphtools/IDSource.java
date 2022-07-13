@@ -55,13 +55,10 @@ public interface IDSource {
     /**
      * Creates a comparator that compares the IDs of ID sources
      */
-    public static final Comparator<IDSource> ID_COMPARATOR = new Comparator<IDSource>() {
-        @Override
-        public int compare(final IDSource o1, final IDSource o2) {
-            String id1 = o1.getID();
-            String id2 = o2.getID();
-            return id1.compareToIgnoreCase(id2);
-        }
+    public static final Comparator<IDSource> ID_COMPARATOR = (o1, o2) -> {
+        String id1 = o1.getID();
+        String id2 = o2.getID();
+        return id1.compareToIgnoreCase(id2);
     };
 
     /**

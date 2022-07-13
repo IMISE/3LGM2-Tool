@@ -779,8 +779,8 @@ public final class ModelBrowserTree extends DynamicTree implements UserFieldList
     }
 
     /**
-     * Selektiert im Baum alle Elemente, die im dazugehörigen
-     * {@link GraphDocument} selektiert sind.
+     * Selects all elements in the tree which are selected in the corresponding
+     * {@link GraphDocument}.
      */
     public void selectObjects() {
         setSelectionListenerActive(false);
