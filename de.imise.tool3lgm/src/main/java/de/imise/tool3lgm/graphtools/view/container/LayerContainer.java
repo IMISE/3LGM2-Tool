@@ -15,12 +15,12 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Stroke;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 
 import de.imise.tool3lgm.Static;
-import de.imise.tool3lgm.graphtools.IDSource;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Bendpoint;
 import de.imise.tool3lgm.graphtools.metamodel.elements.CompositionEdge;
@@ -36,6 +36,7 @@ import de.imise.tool3lgm.graphtools.view.graph.InputGraphArea;
 import de.imise.tool3lgm.gui.MainFrame;
 import de.imise.util.Alphabetical;
 import de.imise.util.ReflectionUtils;
+import de.imise.util.Sys;
 import de.imise.util.collections.CollectionUtils;
 
 /**
@@ -83,6 +84,11 @@ public class LayerContainer extends ElementContainer implements Iterable<Element
      *
      */
     private List<EdgeContainer> tmpEdgeContainer;
+
+    /**
+     * Maps from the IDs of all elements of this layer to the element.
+     */
+    private HashMap<String, ModelElement> idToElement;
 
     /**
      * Stores during paint all nodes which are already painted (no bendpoints)
@@ -150,18 +156,19 @@ public class LayerContainer extends ElementContainer implements Iterable<Element
      */
     private void init() {
         if (doc instanceof Szenario) {
-            graphNodeContainers = new ArrayList<>(100);
-            treeNodeContainers = new ArrayList<>(100);
-            edgeContainers = new ArrayList<>(100);
-            bendpointContainers = new ArrayList<>(50);
+            graphNodeContainers = new ArrayList<>();
+            treeNodeContainers = new ArrayList<>();
+            edgeContainers = new ArrayList<>();
+            bendpointContainers = new ArrayList<>();
         } else {
-            graphNodeContainers = new ArrayList<>(500);
-            treeNodeContainers = new ArrayList<>(500);
-            edgeContainers = new ArrayList<>(500);
-            bendpointContainers = new ArrayList<>(1000);
+            graphNodeContainers = new ArrayList<>();
+            treeNodeContainers = new ArrayList<>();
+            edgeContainers = new ArrayList<>();
+            bendpointContainers = new ArrayList<>();
         }
-        numberedEdgesNodeContainer = new ArrayList<>(10);
-        tmpEdgeContainer = new ArrayList<>(100);
+        numberedEdgesNodeContainer = new ArrayList<>();
+        tmpEdgeContainer = new ArrayList<>();
+        idToElement = new HashMap<>();
     }
 
     @Override
@@ -614,25 +621,6 @@ public class LayerContainer extends ElementContainer implements Iterable<Element
     }
 
     /**
-     * @param id
-     * @return
-     */
-    public boolean containsID(final String id) {
-        //do not skip this in bulk mode because this will add texfields
-        //multiple if they are in more than one submodel
-        if (IDSource.containsID(graphNodeContainers, id)) {
-            return true;
-        }
-        if (IDSource.containsID(edgeContainers, id)) {
-            return true;
-        }
-        if (IDSource.containsID(bendpointContainers, id)) {
-            return true;
-        }
-        return false;
-    }
-
-    /**
      * @param kc
      */
     public void resetPositionOf(final NodeContainer kc) {
@@ -652,11 +640,11 @@ public class LayerContainer extends ElementContainer implements Iterable<Element
             return null;
         }
         ElementContainer ec = (ElementContainer) comp;
-        String id = ec.getID();
-        if (containsID(id)) {
+        if (isMyElement(ec)) {
             return null;
         }
-        //		comp = super.add(comp);
+        //		comp = super.add(comp); //we don't need the super.add(..)
+        ModelElement me = ec.getElement();
         if (comp instanceof BendpointContainer) {
             if (pos != -1) {
                 bendpointContainers.add(pos, (BendpointContainer) comp);
@@ -679,17 +667,16 @@ public class LayerContainer extends ElementContainer implements Iterable<Element
                 graphNodeContainers.add(nc);
             }
             Alphabetical.insert(treeNodeContainers, nc);
-            Node node = nc.getNode();
             MetaModel metaModel = doc.getMetaModel();
-            if (metaModel.hasOrderedEdgeClassesToPaintable(node.getClass())) {
+            if (metaModel.hasOrderedEdgeClassesToPaintable(me.getClass())) {
                 numberedEdgesNodeContainer.add(nc);
             }
         }
+        idToElement.put(ec.getID(), me);
         ((ElementContainer) comp).setParent(this);
         if (!(doc.getCollection().getSelectedDoc() instanceof Szenario)) {
             comp.setVisible(false);
         }
-
         return comp;
     }
 
@@ -700,18 +687,20 @@ public class LayerContainer extends ElementContainer implements Iterable<Element
         //            ElementContainer ec = (ElementContainer) comp;
         //            Sys.err(ec + " (" + ec.getGraphDocument() + ")   " + ec.getID() + "  " + ec.getElement().getClass().getSimpleName());
         //        }
-        if (comp == null) {
+        if (!(comp instanceof ElementContainer)) {
             return;
         }
-        if (comp instanceof BendpointContainer) {
-            bendpointContainers.remove(comp);
+        ElementContainer ec = (ElementContainer) comp;
+        if (ec instanceof BendpointContainer) {
+            bendpointContainers.remove(ec);
         } else if (comp instanceof EdgeContainer) {
-            edgeContainers.remove(comp);
+            edgeContainers.remove(ec);
         } else {
-            graphNodeContainers.remove(comp);
-            treeNodeContainers.remove(comp);
-            numberedEdgesNodeContainer.remove(comp);
+            graphNodeContainers.remove(ec);
+            treeNodeContainers.remove(ec);
+            numberedEdgesNodeContainer.remove(ec);
         }
+        idToElement.remove(ec.getID());
     }
 
     @Override
@@ -721,6 +710,7 @@ public class LayerContainer extends ElementContainer implements Iterable<Element
         edgeContainers.clear();
         bendpointContainers.clear();
         numberedEdgesNodeContainer.clear();
+        idToElement.clear();
     }
 
     /**
@@ -743,6 +733,28 @@ public class LayerContainer extends ElementContainer implements Iterable<Element
                 //fuege ihn am Ende wieder hinzu
                 edgeContainers.add(edgeC);
             }
+        }
+    }
+
+    /**
+     * @param id
+     * @return
+     */
+    public ModelElement getElement(String id) {
+        return idToElement.get(id);
+    }
+
+    /**
+     * If the ID of an element was change then we must update the map from ID to
+     * element. So this should be called always (and only) if
+     * ModelElement.setID() is called.
+     *
+     * @param oldID
+     */
+    public void updateElementID(String oldID) {
+        ModelElement elementWIthNewID = idToElement.remove(oldID);
+        if (elementWIthNewID != null) {
+            idToElement.put(elementWIthNewID.getID(), elementWIthNewID);
         }
     }
 
@@ -881,20 +893,18 @@ public class LayerContainer extends ElementContainer implements Iterable<Element
     }
 
     /**
+     * @return
+     */
+    public int getFullContainerCount() {
+        return getNodeContainerCount() + getEdgeContainerCount() + getBendpointContainerCount();
+    }
+
+    /**
      * @param ec
      * @return
      */
     public boolean isMyElement(final ElementContainer ec) {
-        if (ec instanceof BendpointContainer) {
-            return bendpointContainers.contains(ec);
-        }
-        if (ec instanceof NodeContainer) {
-            return graphNodeContainers.contains(ec);
-        }
-        if (ec instanceof EdgeContainer) {
-            return edgeContainers.contains(ec);
-        }
-        return false;
+        return idToElement.get(ec.getID()) != null;
     }
 
     /**
@@ -902,26 +912,7 @@ public class LayerContainer extends ElementContainer implements Iterable<Element
      * @return
      */
     public boolean isMyElement(final ModelElement me) {
-        if (me instanceof Bendpoint) {
-            for (ElementContainer ec : bendpointContainers) {
-                if (ec.hasElement(me)) {
-                    return true;
-                }
-            }
-        } else if (me instanceof Node) {
-            for (ElementContainer ec : graphNodeContainers) {
-                if (ec.hasElement(me)) {
-                    return true;
-                }
-            }
-        } else if (me instanceof Edge) {
-            for (ElementContainer ec : edgeContainers) {
-                if (ec.hasElement(me)) {
-                    return true;
-                }
-            }
-        }
-        return false;
+        return idToElement.get(me.getID()) != null;
     }
 
     /**
@@ -1069,8 +1060,13 @@ public class LayerContainer extends ElementContainer implements Iterable<Element
     /**
      *
      */
-    public void printStatistics() {
-        System.err.println("Layer " + layerNumber + "    nodeContainer: " + graphNodeContainers.size() + " -> " + ReflectionUtils.getCommonSuperClass(graphNodeContainers));
+    public void _printStatistics(String prefix) {
+        //Sys.err1("Layer " + layerNumber + "    nodeContainer: " + graphNodeContainers.size() + " -> " + ReflectionUtils.getCommonSuperClass(graphNodeContainers));
+        int mapSize = idToElement.size();
+        int listsSize = getFullContainerCount();
+        if (mapSize != listsSize) {
+            Sys.errn(2, prefix + " Layer " + layerNumber + "    MapSize=" + idToElement.size() + " <-> ListsSize=" + getFullContainerCount());
+        }
     }
 
 }

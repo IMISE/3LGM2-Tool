@@ -4198,7 +4198,6 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
             return me;
         }
         me = findBendpointCoded(elementID);
-        findBendpointContainerCoded(elementID);
         return me;
     }
 
@@ -4223,6 +4222,17 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
     }
 
     /**
+     * If an ModelElement ID is changed via {@link ModelElement#setID(String)}
+     * then the layer with the element must update the map from ID to element.
+     *
+     * @param oldID
+     * @param newID
+     */
+    public void updateChangedElementID(ModelElement elementWithNewID, String oldID) {
+        layer[elementWithNewID.layerFor()].updateElementID(oldID);
+    }
+
+    /**
      * @param elementID
      * @param layer
      * @return
@@ -4237,11 +4247,9 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
         }
         if (elementID != null) {
             LayerContainer lc = layer[layerIndex];
-            for (NodeContainer ec : lc.getNodeContainersAlphabetical()) {
-                String id = ec.getID();
-                if (elementID.equals(id)) {
-                    return ec.getNode();
-                }
+            ModelElement element = lc.getElement(elementID);
+            if (element instanceof Node) {
+                return (Node) element;
             }
         }
         return null;
@@ -4282,11 +4290,9 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
                 return mainDoc.findEdgeCoded(idString, layerIndex);
             }
             LayerContainer lc = layer[layerIndex];
-            for (EdgeContainer edgeC : lc.getEdgeContainers()) {
-                String id = edgeC.getID();
-                if (idString.equals(id)) {
-                    return edgeC.getEdge();
-                }
+            ModelElement element = lc.getElement(idString);
+            if (element instanceof Edge) {
+                return (Edge) element;
             }
         }
         return null;
@@ -4327,11 +4333,9 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
         }
         if (elementID != null) {
             LayerContainer lc = layer[layerIndex];
-            for (BendpointContainer bc : lc.getBendpointContainers()) {
-                String id = bc.getID();
-                if (elementID.equals(id)) {
-                    return bc.getBendpoint();
-                }
+            ModelElement element = lc.getElement(elementID);
+            if (element instanceof Bendpoint) {
+                return (Bendpoint) element;
             }
         }
         return null;

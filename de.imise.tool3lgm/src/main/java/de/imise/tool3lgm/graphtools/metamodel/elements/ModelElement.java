@@ -354,7 +354,12 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
         if (id.equals("") || id.equals("null")) {
             return;
         }
+        String oldID = this.id;
         this.id = id;
+        for (GraphDocument doc : getMySzenarios()) {
+            //we must update the map from ID to element in all LayerContainers
+            doc.updateChangedElementID(this, oldID);
+        }
     }
 
     @Override
