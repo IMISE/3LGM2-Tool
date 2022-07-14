@@ -3,6 +3,7 @@ package de.imise.tool3lgm.graphtools.metamodel.elements;
 import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction.BACKWARD;
 import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction.FORWARD;
 import static de.imise.tool3lgm.graphtools.userfield.definition.UserField.EMPTY_STRING;
+import static org.apache.jena.ext.com.google.common.base.Strings.isNullOrEmpty;
 
 import java.awt.Color;
 import java.util.ArrayList;
@@ -351,7 +352,7 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
         if (id == null) {
             return;
         }
-        if (id.equals("") || id.equals("null")) {
+        if (isNullOrEmpty(id) || "null".equals(id)) {
             return;
         }
         String oldID = this.id;
@@ -521,7 +522,7 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
         if (name == null) {
             return;
         }
-        super.setName(name.equalsIgnoreCase("null") ? "" : name);
+        super.setName("null".equalsIgnoreCase(name) ? "" : name);
 
         updateNameWithSzens();
 
@@ -687,7 +688,7 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
     @Override
     public final void setDescription(final String descr) {
         if (descr != null) {
-            if (descr.equalsIgnoreCase("null")) {
+            if ("null".equalsIgnoreCase(descr)) {
                 description = "";
             } else {
                 super.setDescription(descr);
@@ -720,19 +721,19 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
      * @author Thomas Rudert
      */
     public boolean putXMLFieldString(final String field, final String value) {
-        if (field.equals("name")) {
+        if ("name".equals(field)) {
             setName(value);
             return true;
         }
-        if (field.equals("description") || field.equals("requirement") || field.equals("note")) {
+        if ("description".equals(field) || "requirement".equals(field) || "note".equals(field)) {
             if (!"".equals(value)) {
                 String descrip = getDescription();
-                setDescription(!descrip.equals("") ? descrip + "\n" + value : value);
+                setDescription(!"".equals(descrip) ? descrip + "\n" + value : value);
             }
             return true;
 
         }
-        if (field.equals("assoc_szen")) {
+        if ("assoc_szen".equals(field)) {
             setAssociatedDoc(value);
             return true;
         }
@@ -750,7 +751,7 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
      * @return boolean with true, if property / field was set successful
      */
     public boolean setField(final String fieldName, final String value) {
-        if (fieldName.equals("name")) {
+        if ("name".equals(fieldName)) {
             if (value == null) {
                 setName("");
             } else {
@@ -759,7 +760,7 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
 
             return true;
         }
-        if (fieldName.equals("description")) {
+        if ("description".equals(fieldName)) {
             if (value == null) {
                 setDescription("");
             } else {

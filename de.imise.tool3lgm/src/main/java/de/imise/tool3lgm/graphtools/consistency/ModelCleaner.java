@@ -361,7 +361,7 @@ public class ModelCleaner {
                     loop: for (int t = 0; t < uf.getListValuesCount(); t++) {
                         String listValue = uf.getListValueAt(t);
                         for (String superFlous : superflousStrings) {
-                            if (listValue.indexOf(superFlous) >= 0 || listValue.equals(EMPTY_STRING)) {
+                            if (listValue.indexOf(superFlous) >= 0 || EMPTY_STRING.equals(listValue)) {
                                 continue loop;
                             }
                         }

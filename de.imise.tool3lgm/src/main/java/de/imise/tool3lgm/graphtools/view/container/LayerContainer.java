@@ -48,21 +48,21 @@ import de.imise.util.collections.CollectionUtils;
 public class LayerContainer extends ElementContainer implements Iterable<ElementContainer> {
 
     /**
-     *
+     * Index of this layer.
      */
     private int layerNumber = -1;
 
     /**
-     * Liste, aus der die Grafik aufgebaut wird (Reihenfolge der Elemente
-     * bestimmt, welches zuerst gemalt wird)
+     * List from which the graphic is built (order of elements determines which
+     * one is painted first).
      */
     private List<NodeContainer> graphNodeContainers;
 
     /**
-     * Liste, aus der der Baum aufgebaut wird (Reihenfolge der Elemente wird
-     * alphabetisch gehalten)
+     * List from which the tree is built (order of elements is kept
+     * alphabetical).
      */
-    private List<NodeContainer> treeNodeContainers;
+    private List<NodeContainer> alphabeticalNodeContainers;
 
     /**
      *
@@ -75,13 +75,13 @@ public class LayerContainer extends ElementContainer implements Iterable<Element
     private List<BendpointContainer> bendpointContainers;
 
     /**
-     * Liste aller NodeContainer, fuer die die Kanten sortiert werden muessen
-     * (momentan nur Prozesse)
+     * List of all NodeContainers for which the edges have to be sorted
+     * (currently only processes).
      */
     private List<NodeContainer> numberedEdgesNodeContainer;
 
     /**
-     *
+     * We need this as cache.
      */
     private List<EdgeContainer> tmpEdgeContainer;
 
@@ -95,12 +95,15 @@ public class LayerContainer extends ElementContainer implements Iterable<Element
      */
     private final HashSet<ModelElement> paintedNodes = new HashSet<>();
 
-    //Strings, die oben und unten geschrieben werden (z.B. an Aufgaben und Objekttypen Redundanzfaktoren...)
+    /**
+     * Strings written above and below (e.g. on functions and object types
+     * redundancy factors...).
+     */
     private KeyObjectStringMap additionalTextAbove, additionalTextDown;
 
     /**
-     * Je nach State, werden einige Dinge (Raster + Selektionen) nicht
-     * mitgezeichnet
+     * Depending on the state, some things (grids + selections) will not be
+     * drawn.
      */
     private BasicGraphArea.PaintState paintState = PaintState.REGULAR;
 
@@ -148,7 +151,7 @@ public class LayerContainer extends ElementContainer implements Iterable<Element
      * falsch einsortiert wurden.
      */
     public void refreshAlpahbetical() {
-        Alphabetical.sort(treeNodeContainers);
+        Alphabetical.sort(alphabeticalNodeContainers);
     }
 
     /**
@@ -157,12 +160,12 @@ public class LayerContainer extends ElementContainer implements Iterable<Element
     private void init() {
         if (doc instanceof Szenario) {
             graphNodeContainers = new ArrayList<>();
-            treeNodeContainers = new ArrayList<>();
+            alphabeticalNodeContainers = new ArrayList<>();
             edgeContainers = new ArrayList<>();
             bendpointContainers = new ArrayList<>();
         } else {
             graphNodeContainers = new ArrayList<>();
-            treeNodeContainers = new ArrayList<>();
+            alphabeticalNodeContainers = new ArrayList<>();
             edgeContainers = new ArrayList<>();
             bendpointContainers = new ArrayList<>();
         }
@@ -475,6 +478,11 @@ public class LayerContainer extends ElementContainer implements Iterable<Element
         }
     }
 
+    /**
+     * @param gc
+     * @param page_width
+     * @param page_height
+     */
     private void paintRaster(final Graphics2D gc, final int page_width, final int page_height) {
         gc.setColor(Color.darkGray);
         int maxX = page_width / 2 + 1;
@@ -621,11 +629,11 @@ public class LayerContainer extends ElementContainer implements Iterable<Element
     }
 
     /**
-     * @param kc
+     * @param nc
      */
-    public void resetPositionOf(final NodeContainer kc) {
-        if (treeNodeContainers.remove(kc)) {
-            Alphabetical.insert(treeNodeContainers, kc);
+    public void resetPositionOf(final NodeContainer nc) {
+        if (alphabeticalNodeContainers.remove(nc)) {
+            Alphabetical.insert(alphabeticalNodeContainers, nc);
         }
     }
 
@@ -666,7 +674,7 @@ public class LayerContainer extends ElementContainer implements Iterable<Element
             } else {
                 graphNodeContainers.add(nc);
             }
-            Alphabetical.insert(treeNodeContainers, nc);
+            Alphabetical.insert(alphabeticalNodeContainers, nc);
             MetaModel metaModel = doc.getMetaModel();
             if (metaModel.hasOrderedEdgeClassesToPaintable(me.getClass())) {
                 numberedEdgesNodeContainer.add(nc);
@@ -697,7 +705,7 @@ public class LayerContainer extends ElementContainer implements Iterable<Element
             edgeContainers.remove(ec);
         } else {
             graphNodeContainers.remove(ec);
-            treeNodeContainers.remove(ec);
+            alphabeticalNodeContainers.remove(ec);
             numberedEdgesNodeContainer.remove(ec);
         }
         idToElement.remove(ec.getID());
@@ -706,7 +714,7 @@ public class LayerContainer extends ElementContainer implements Iterable<Element
     @Override
     public void removeAll() {
         graphNodeContainers.clear();
-        treeNodeContainers.clear();
+        alphabeticalNodeContainers.clear();
         edgeContainers.clear();
         bendpointContainers.clear();
         numberedEdgesNodeContainer.clear();
@@ -778,7 +786,7 @@ public class LayerContainer extends ElementContainer implements Iterable<Element
      * @return
      */
     public List<NodeContainer> getNodeContainersAlphabetical() {
-        return treeNodeContainers;
+        return alphabeticalNodeContainers;
     }
 
     /**
@@ -789,7 +797,7 @@ public class LayerContainer extends ElementContainer implements Iterable<Element
         //und man ohne irgendwelche Konflikte erst Knickpunkte, dann Kanten und dann Knoten löschen kann
         list.addAll(bendpointContainers);
         list.addAll(edgeContainers);
-        list.addAll(treeNodeContainers);
+        list.addAll(alphabeticalNodeContainers);
     }
 
     /**
@@ -797,7 +805,7 @@ public class LayerContainer extends ElementContainer implements Iterable<Element
      * @param alphabetical
      */
     public void addNodeContainers(final List<ElementContainer> list, final boolean alphabetical) {
-        list.addAll(alphabetical ? treeNodeContainers : graphNodeContainers);
+        list.addAll(alphabetical ? alphabeticalNodeContainers : graphNodeContainers);
     }
 
     /**
@@ -855,9 +863,9 @@ public class LayerContainer extends ElementContainer implements Iterable<Element
      * @return
      */
     public EdgeContainer getEdgeContainer(final String id) {
-        for (EdgeContainer kc : edgeContainers) {
-            if (kc.getID().equals(id)) {
-                return kc;
+        for (EdgeContainer ec : edgeContainers) {
+            if (ec.getID().equals(id)) {
+                return ec;
             }
         }
         return null;
@@ -958,11 +966,11 @@ public class LayerContainer extends ElementContainer implements Iterable<Element
     }
 
     /**
-     * @param kc
+     * @param ec
      */
-    public void addTmpEdgeContainer(final EdgeContainer kc) {
-        tmpEdgeContainer.add(kc);
-        kc.setParent(this);
+    public void addTmpEdgeContainer(final EdgeContainer ec) {
+        tmpEdgeContainer.add(ec);
+        ec.setParent(this);
     }
 
     /**

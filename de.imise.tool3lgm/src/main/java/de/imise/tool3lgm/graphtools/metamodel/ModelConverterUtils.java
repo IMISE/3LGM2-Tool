@@ -183,7 +183,8 @@ public class ModelConverterUtils {
             String elementID = element.getID();
             if (elementID.equals(id)) {
                 return element;
-            } else if (elementID.startsWith(idPrefix)) {
+            }
+            if (elementID.startsWith(idPrefix)) {
                 String number = elementID.substring(idPrefixLength);
                 try {
                     Integer.parseInt(number);

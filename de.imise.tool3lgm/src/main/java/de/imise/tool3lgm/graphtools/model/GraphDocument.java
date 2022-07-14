@@ -4256,17 +4256,17 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
     }
 
     /**
-     * @param idString
+     * @param elementID
      * @return
      */
-    public Edge findEdgeCoded(final String idString) {
+    public Edge findEdgeCoded(final String elementID) {
         GraphDocument mainDoc = gdcoll.getMainDoc();
         if (mainDoc != this) {
-            return mainDoc.findEdgeCoded(idString);
+            return mainDoc.findEdgeCoded(elementID);
         }
-        if (idString != null) {
+        if (elementID != null) {
             for (int layerIndex : ModelConstants.LAYERS) {
-                Edge edge = findEdgeCoded(idString, layerIndex);
+                Edge edge = findEdgeCoded(elementID, layerIndex);
                 if (edge != null) {
                     return edge;
                 }
@@ -4276,21 +4276,21 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
     }
 
     /**
-     * @param idString
+     * @param elementID
      * @param layerIndex
      * @return
      */
-    public Edge findEdgeCoded(final String idString, final int layerIndex) {
+    public Edge findEdgeCoded(final String elementID, final int layerIndex) {
         if (layerIndex < 0) {
-            return findEdgeCoded(idString);
+            return findEdgeCoded(elementID);
         }
-        if (idString != null) {
+        if (elementID != null) {
             GraphDocument mainDoc = gdcoll.getMainDoc();
             if (mainDoc != this) {
-                return mainDoc.findEdgeCoded(idString, layerIndex);
+                return mainDoc.findEdgeCoded(elementID, layerIndex);
             }
             LayerContainer lc = layer[layerIndex];
-            ModelElement element = lc.getElement(idString);
+            ModelElement element = lc.getElement(elementID);
             if (element instanceof Edge) {
                 return (Edge) element;
             }

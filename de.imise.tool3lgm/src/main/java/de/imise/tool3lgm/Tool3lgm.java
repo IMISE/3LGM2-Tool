@@ -180,7 +180,7 @@ public class Tool3lgm {
             return retVal ? gdcoll : null;
         } catch (Exception e) {
             Log.show(Log.FATAL, getResString("FehlerAllgemein"), e);
-            Object[] buttons = new Object[] {
+            Object[] buttons = {
                     getResString("ok")
             };
             JOptionPane.showOptionDialog(mainFrame, getResString("oeffnenfehler") + "\n" + file.getPath() + "\n" + e.getMessage(), getResString("tool3lgm"), JOptionPane.OK_OPTION, JOptionPane.ERROR_MESSAGE, null, buttons, null);
@@ -494,7 +494,7 @@ public class Tool3lgm {
         if (!gdcoll.isChanged()) {
             return true;
         }
-        Object[] buttons = new Object[] {
+        Object[] buttons = {
                 getResString("yes"), getResString("no"), getResString("cancel")
         };
         File file = gdcoll.getFile();
@@ -691,7 +691,7 @@ public class Tool3lgm {
 
         if (frame != null) {
             if (hyperlink != null) {
-                Object[] buttons = new Object[] {
+                Object[] buttons = {
                         getResString("hyperlink"), getResString("submodel"), getResString("cancel")
                 };
                 int value = JOptionPane.showOptionDialog(null, getResString("link_oder_szen_frage"), getResString("tool3lgm"), JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, buttons, buttons[2]);
@@ -718,7 +718,7 @@ public class Tool3lgm {
         if (command == null) {
             return;
         }
-        if (command.equalsIgnoreCase("open")) {
+        if ("open".equalsIgnoreCase(command)) {
             if (params == null || params.length < 1) {
                 return;
             }
@@ -742,7 +742,7 @@ public class Tool3lgm {
                     path.append(' ');
                 }
             }
-        } else if (command.equalsIgnoreCase("selectSubmodel")) {
+        } else if ("selectSubmodel".equalsIgnoreCase(command)) {
             if (params == null || params.length < 1) {
                 return;
             }
@@ -752,7 +752,7 @@ public class Tool3lgm {
                     frame.setSelected();
                 }
             }
-        } else if (command.equalsIgnoreCase("select")) {
+        } else if ("select".equalsIgnoreCase(command)) {
             if (params == null || params.length < 1) {
                 return;
             }
@@ -767,7 +767,7 @@ public class Tool3lgm {
             }
             selectedMainDoc.finish_transaction(STANDARD_PID, false);
             selectedMainDoc.distributeEvent(SELECTION_CHANGED, STANDARD_PID);
-        } else if (command.equalsIgnoreCase("selectByUserField")) {
+        } else if ("selectByUserField".equalsIgnoreCase(command)) {
             if (params == null || params.length < 2) {
                 return;
             }
