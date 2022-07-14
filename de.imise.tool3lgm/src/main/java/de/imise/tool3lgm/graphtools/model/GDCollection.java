@@ -760,9 +760,11 @@ public class GDCollection extends UserFieldTarget implements MetaModelSpecific {
      * @param doc
      */
     public void setSelectedDoc(final GraphDocument doc) {
-        activeGraphDocumentsList.remove(doc);
-        activeGraphDocumentsList.add((LGMGraphDocument) doc);
-        distribute(SELECTED_SZENARIO_CHANGED, null, doc, STANDARD_PID);
+        if (doc != getSelectedDoc()) { //distribute is expensive and calls this function here itself again
+            activeGraphDocumentsList.remove(doc);
+            activeGraphDocumentsList.add((LGMGraphDocument) doc);
+            distribute(SELECTED_SZENARIO_CHANGED, null, doc, STANDARD_PID);
+        }
     }
 
     /**
@@ -2681,6 +2683,9 @@ public class GDCollection extends UserFieldTarget implements MetaModelSpecific {
      * @return the previous bulk mode
      */
     public boolean setBulkMode(final boolean bulk_mode) {
+        if (this.bulk_mode == bulk_mode) { // prevent updates if same bulk_mode is already set
+            return bulk_mode;
+        }
         //Sys.errn(10, toString() + " BULKMODE: " + this.bulk_mode + " -> " + bulk_mode);
         //das erste Setzten des bulk_mode auf false beendet die Initialisierung
         if (!initialized && !bulk_mode) {

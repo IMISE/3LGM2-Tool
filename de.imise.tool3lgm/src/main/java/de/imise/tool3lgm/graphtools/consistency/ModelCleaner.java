@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 
 import com.google.common.collect.Lists;
@@ -328,9 +329,14 @@ public class ModelCleaner {
         };
         for (ModelElement me : gdcoll.getMainDoc().getModelItems(ModelElement.class, true)) {
             // Element-Namen und Beschreibungen bereinigen
-            me.setName(getCleanString(me.getName(), getResString("joined"), superflousStrings));
-            me.setDescription(getCleanString(me.getDescription(), getResString("joined"), superflousStrings));
-
+            String cleanName = getCleanString(me.getName(), getResString("joined"), superflousStrings);
+            if (!Objects.equals(me.getName(), cleanName)) {
+                me.setName(cleanName);
+            }
+            String cleanDescription = getCleanString(me.getDescription(), getResString("joined"), superflousStrings);
+            if (!Objects.equals(me.getDescription(), cleanDescription)) {
+                me.setDescription(cleanDescription);
+            }
             // alle Radiobuttons, Comboboxes und Kennzahlen, die beim Zusammenführen irgendwelche
             // komischen Werte zusammengeführt bekommen haben, wieder berichtigen
             for (UserField uf : new ArrayList<>(me.getUserFieldInputValueKeys())) {

@@ -518,6 +518,9 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
      * @param sort
      */
     public final void setName(final String name, final boolean sort) {
+        if (Objects.equals(this.name, name)) { //this function is expensive
+            return;
+        }
         toStringName = null;
         if (name == null) {
             return;
