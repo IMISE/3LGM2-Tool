@@ -40,7 +40,7 @@ public class IheRDFDataImporter extends RDFDataImporter {
     public static final String IHE_RDF_FILE_NAME = "/IHE/iheDomain_Ontology.rdf";
 
     static File getRdfFile() {
-        File templateDir = Tool3lgmConstants.TEMPLATE_DIR;
+        File templateDir = Tool3lgmConstants.TOOL_TEMPLATE_DIR;
         String templateDirName = templateDir.getAbsolutePath();
         String thisProjectNameSuffix = ".template.ihe";
         int replaceStart = templateDirName.lastIndexOf(thisProjectNameSuffix);

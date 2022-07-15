@@ -68,6 +68,9 @@ public class UserProperties extends AbstractUserProperties {
     /** Path to the properties file with all user options */
     public static final File USER_INFO_FILE = new File(USER_HOME_3LGM_DIR, "tool3lgm2UserInfo.config");
 
+    /** Templates directory in the user home directory */
+    public static final File USER_TEMPLATE_DIR = new File(USER_HOME_3LGM_DIR, "Templates");
+
     /**
      * Liest die Benutzeroptionen ein.<br>
      * Je nachdem, ob bereits eine Datei mit Optionen im Home-Pfad des Benutzers
@@ -734,7 +737,7 @@ public class UserProperties extends AbstractUserProperties {
     ///////////////////
 
     /** Liste mit Verzeichnissen, in denen XSL-Skripte gesucht werden; */
-    private static final List<File> xslSearchDirs = new ArrayList<File>() {
+    private static final List<File> xslSearchDirs = new ArrayList<>() {
         @Override
         public boolean add(final File o) {
             if (contains(o)) {

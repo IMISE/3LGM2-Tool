@@ -3,6 +3,7 @@ package de.imise.tool3lgm;
 import static de.imise.tool3lgm.userproperties.UserProperties.USER_HOME_3LGM_DIR;
 import static de.imise.tool3lgm.userproperties.UserProperties.USER_HOME_DIR_NAME;
 import static de.imise.tool3lgm.userproperties.UserProperties.USER_INFO_FILE;
+import static de.imise.tool3lgm.userproperties.UserProperties.USER_TEMPLATE_DIR;
 
 import java.io.File;
 
@@ -11,6 +12,7 @@ import java.io.File;
  *
  * @author AXS (21.06.2021)
  */
+//TODO: Eventuell mal umbenennen, da diese Klasse auch die Verzeichnisse im UserHome erstellt, also nicht nur deprecated-handling macht
 public class DeprecatedHandler {
 
     /**
@@ -18,6 +20,9 @@ public class DeprecatedHandler {
      * file and if it exists cut and paste it to the new .3lgm folder
      */
     public static void relocateUserInfo() {
+
+        createUserHomeTemplateDirIfNotExists();
+
         //the currently valid 3lgm-userHome dir exists -> return
         if (USER_HOME_3LGM_DIR.isDirectory()) {
             return;
@@ -49,6 +54,7 @@ public class DeprecatedHandler {
         }
         renameAnalysisFile("en");
         renameAnalysisFile("de");
+
     }
 
     /**
@@ -62,6 +68,15 @@ public class DeprecatedHandler {
         if (deprecated_AnalysisFile.exists()) {
             File new_AnalysisFile = new File(USER_HOME_3LGM_DIR, anlyseFileName);
             deprecated_AnalysisFile.renameTo(new_AnalysisFile);
+        }
+    }
+
+    /**
+     *
+     */
+    private static void createUserHomeTemplateDirIfNotExists() {
+        if (!USER_TEMPLATE_DIR.exists()) {
+            USER_TEMPLATE_DIR.mkdirs();
         }
     }
 

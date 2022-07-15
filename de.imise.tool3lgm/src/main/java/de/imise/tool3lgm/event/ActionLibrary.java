@@ -905,7 +905,7 @@ public class ActionLibrary {
         public static final ExtendedAction ACTION_OPEN_FILE_CHOSSER_IN_MODEL_LIBRARY = new StaticAction(ActionIdentifier.ACTION_OPEN_FILE_CHOSSER_IN_MODEL_LIBRARY, PPP) {
             @Override
             public void actionPerformed() {
-                File modelLibraryDir = Tool3lgmConstants.TEMPLATE_DIR;
+                File modelLibraryDir = Tool3lgmConstants.EXAMPLES_DIR;
                 getTool().openModelFile(modelLibraryDir, ActionIdentifier.ACTION_OPEN_FILE_CHOSSER_IN_MODEL_LIBRARY);
             }
         };

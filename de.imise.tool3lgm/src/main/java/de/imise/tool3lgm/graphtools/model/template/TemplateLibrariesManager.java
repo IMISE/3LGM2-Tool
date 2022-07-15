@@ -1,6 +1,7 @@
 package de.imise.tool3lgm.graphtools.model.template;
 
-import static de.imise.tool3lgm.Tool3lgmConstants.TEMPLATE_DIR;
+import static de.imise.tool3lgm.Tool3lgmConstants.TOOL_TEMPLATE_DIR;
+import static de.imise.tool3lgm.userproperties.UserProperties.USER_TEMPLATE_DIR;
 import static de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty.OPTION_SHOW_TEMPLATE_BROWSER;
 
 import java.beans.PropertyChangeEvent;
@@ -154,7 +155,7 @@ public class TemplateLibrariesManager extends PropertyChangeHandler implements P
      * @return
      */
     public static List<File> getTemplateDirectories() {
-        return ImmutableList.of(TEMPLATE_DIR); //TODO: expand with user defined directories
+        return ImmutableList.of(TOOL_TEMPLATE_DIR, USER_TEMPLATE_DIR); //TODO: expand with user defined directories
     }
 
     /**

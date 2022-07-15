@@ -92,8 +92,8 @@ public abstract class Tool3lgmConstants {
      */
     static final File LIB_DIR = new File(APPLICATION_DIR, "lib");
 
-    /** Templates directory */
-    public static final File TEMPLATE_DIR = new File(APPLICATION_DIR, "Templates");
+    /** Templates directory in the application directory */
+    public static final File TOOL_TEMPLATE_DIR = new File(APPLICATION_DIR, "Templates");
 
     /** Model examples directory */
     public static final File EXAMPLES_DIR = new File(APPLICATION_DIR, "Examples");
@@ -264,9 +264,7 @@ public abstract class Tool3lgmConstants {
      */
     public static final SimpleResourceBundleSource RESOURCE_BUNDLE_SOURCE = new SimpleResourceBundleSourceAdapter(resourceBundle);
 
-    /**
-     *
-     */
+    /** Resource bundles which are added by plugins */
     private final static List<ResourceBundle> ADDITIONAL_RESOURCE_BUNDLES = new ArrayList<>();
 
     /**
