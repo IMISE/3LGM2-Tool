@@ -4,6 +4,7 @@ import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
 import static de.imise.tool3lgm.graphtools.undoredo.TransactionManager.STANDARD_PID;
 
 import java.awt.Component;
+import java.io.File;
 import java.util.Set;
 
 import javax.swing.Action;
@@ -123,6 +124,17 @@ public class TemplateContextGenerator extends ElementSelectionContextGenerator {
     }
 
     /**
+     * @return
+     */
+    private final JMenuItem createOpenTemplateAsModelItem(GraphDocument template) {
+        JMenuItem item = new JMenuItem(getResString("OPEN_TEMPLATE_AS_MODEL"));
+        GDCollection gdcoll = template.getCollection();
+        File templateFile = gdcoll.getFile();
+        item.addActionListener(e -> Static.getTool().openModelFile(templateFile));
+        return item;
+    }
+
+    /**
      * Kontextmenü eines Einzelknotens
      *
      * @param contextSource
@@ -173,6 +185,7 @@ public class TemplateContextGenerator extends ElementSelectionContextGenerator {
         LGMGraphDocument selectedTemplateDoc = template.getSelectedDoc();
         selectedTemplateDoc.selectAll();
         addMenuItem(menu, createCopyToModelItem(template));
+        addMenuItem(menu, createOpenTemplateAsModelItem(template));
         return menu;
     }
 
