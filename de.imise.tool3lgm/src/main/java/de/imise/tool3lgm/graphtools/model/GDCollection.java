@@ -768,9 +768,9 @@ public class GDCollection extends UserFieldTarget implements MetaModelSpecific {
     }
 
     /**
-     * Nachdem alle Szenarios eingelesen oder das eine eines neuen Modell
-     * erstellt wurden, muss man einmal diese Funktion hier aufrufen, damit das
-     * richtige Graphdocument selektiert ist.
+     * Nachdem alle Szenarios eingelesen oder das eine Szenario eines neuen
+     * Modells erstellt wurde, muss man einmal diese Funktion hier aufrufen,
+     * damit das richtige GraphDocument selektiert ist.
      */
     public void initSelectedDocByViewParameterFromFile() {
         for (Szenario szen : szenarios) {
@@ -780,7 +780,11 @@ public class GDCollection extends UserFieldTarget implements MetaModelSpecific {
                 return;
             }
         }
-        setSelectedDoc(mainDoc);
+        if (!szenarios.isEmpty()) {
+            setSelectedDoc(szenarios.get(0));
+        } else {
+            setSelectedDoc(mainDoc);
+        }
     }
 
     /**
