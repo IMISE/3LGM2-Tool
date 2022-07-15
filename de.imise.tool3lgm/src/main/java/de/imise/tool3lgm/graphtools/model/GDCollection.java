@@ -754,13 +754,24 @@ public class GDCollection extends UserFieldTarget implements MetaModelSpecific {
     }
 
     /**
-     * Setzt das übergebene <code>GraphDocument</code> als das aktuell
-     * selektierte.
+     * Sets the processed <code>GraphDocument</code> as the currently selected.
      *
      * @param doc
      */
     public void setSelectedDoc(final GraphDocument doc) {
-        if (doc != getSelectedDoc()) { //distribute is expensive and calls this function here itself again
+        setSelectedDoc(doc, false);
+    }
+
+    /**
+     * Sets the processed <code>GraphDocument</code> as the currently selected.
+     *
+     * @param doc
+     * @param forceEvent if <code>true</code> then the event with the type
+     *            {@link LGMChangeType#SELECTED_SZENARIO_CHANGED} will be even
+     *            if the selected doc has not really changed.
+     */
+    private void setSelectedDoc(final GraphDocument doc, boolean forceEvent) {
+        if (forceEvent || doc != getSelectedDoc()) { //distribute is expensive and calls this function here itself again
             activeGraphDocumentsList.remove(doc);
             activeGraphDocumentsList.add((LGMGraphDocument) doc);
             distribute(SELECTED_SZENARIO_CHANGED, null, doc, STANDARD_PID);
@@ -768,23 +779,29 @@ public class GDCollection extends UserFieldTarget implements MetaModelSpecific {
     }
 
     /**
-     * Nachdem alle Szenarios eingelesen oder das eine Szenario eines neuen
-     * Modells erstellt wurde, muss man einmal diese Funktion hier aufrufen,
-     * damit das richtige GraphDocument selektiert ist.
+     * After all scenarios have been read in or the one scenario of a new model
+     * has been created, you have to call this function once here, so that the
+     * correct GraphDocument is selected.
      */
     public void initSelectedDocByViewParameterFromFile() {
+        GraphDocument selectedDoc = null;
         for (Szenario szen : szenarios) {
             GraphViewParameter graphViewParameter = szen.getGraphViewParameter();
             if (graphViewParameter != null && graphViewParameter.selected) {
-                setSelectedDoc(szen);
-                return;
+                selectedDoc = szen;
+                break;
             }
         }
-        if (!szenarios.isEmpty()) {
-            setSelectedDoc(szenarios.get(0));
-        } else {
-            setSelectedDoc(mainDoc);
+        if (selectedDoc == null) {
+            if (!szenarios.isEmpty()) {
+                selectedDoc = szenarios.get(0);
+            } else {
+                selectedDoc = mainDoc;
+            }
         }
+        // in new models the default selected doc is already the first
+        // scenario,so here we need to force the setting of the selected doc
+        setSelectedDoc(selectedDoc, true);
     }
 
     /**
