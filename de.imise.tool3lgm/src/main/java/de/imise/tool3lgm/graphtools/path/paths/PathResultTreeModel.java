@@ -1,6 +1,7 @@
 package de.imise.tool3lgm.graphtools.path.paths;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
@@ -510,13 +511,17 @@ public class PathResultTreeModel extends DefaultTreeModel {
     private List<PathResultTreeNode> addPath(final PathResultTreeNode startNode, final MetaPath metaPath, final boolean isSubStep) {
         if (metaPath instanceof ElementaryMetaPath) {
             return addPath(startNode, (ElementaryMetaPath) metaPath, isSubStep);
-        } else if (metaPath instanceof SerialMetaPath) {
+        }
+        if (metaPath instanceof SerialMetaPath) {
             return addPath(startNode, (SerialMetaPath) metaPath, isSubStep);
-        } else if (metaPath instanceof UnionMetaPath) {
+        }
+        if (metaPath instanceof UnionMetaPath) {
             return addPath(startNode, (UnionMetaPath) metaPath, isSubStep);
-        } else if (metaPath instanceof SectionMetaPath) {
+        }
+        if (metaPath instanceof SectionMetaPath) {
             return addPath(startNode, (SectionMetaPath) metaPath, isSubStep);
-        } else if (metaPath instanceof DifferenceMetaPath) {
+        }
+        if (metaPath instanceof DifferenceMetaPath) {
             return addPath(startNode, (DifferenceMetaPath) metaPath, isSubStep);
         }
         return null;
@@ -555,7 +560,7 @@ public class PathResultTreeModel extends DefaultTreeModel {
             for (PathResultTreeNode actStartNode : actStartNodes) {
                 List<PathResultTreeNode> subMetaPathEndNodes;
                 subMetaPathEndNodes = addPath(actStartNode, subMetaPath, subMetaPath instanceof ElementaryMetaPath ? isSubStep : true);
-                if (subMetaPathEndNodes == null || subMetaPathEndNodes.size() == 0) {
+                if (subMetaPathEndNodes == null || subMetaPathEndNodes.isEmpty()) {
                     if (!keepIncompleteBranches) {
                         deleteBranch(actStartNode);
                     } else {
@@ -682,7 +687,7 @@ public class PathResultTreeModel extends DefaultTreeModel {
      * @return
      */
     private void addLeaf(final PathResultTreeNode leafNode, final List<PathResultTreeNode> resultList) {
-        if (nodeElementIsDefinedEndElement(leafNode) && (keepMultipleEqualsBranches || !listContainsNodeEqualsTo(leafNode, resultList))) {
+        if (nodeElementIsDefinedEndElement(leafNode) && (keepMultipleEqualsBranches || !listContainsNodeWithSamePathToRoot(leafNode, resultList))) {
             resultList.add(leafNode);
         }
     }
@@ -703,15 +708,17 @@ public class PathResultTreeModel extends DefaultTreeModel {
 
     /**
      * Compares the {@link PathResultTreeNode} with the other ones in the list
-     * with the {@link PathResultTreeNode#equalsTo(Object)} method.
+     * with the {@link PathResultTreeNode#containsPath(PathResultTreeNode)}
+     * method.
      *
      * @param node
      * @param nodeList
      * @return
      */
-    private boolean listContainsNodeEqualsTo(final PathResultTreeNode node, final List<PathResultTreeNode> nodeList) {
+    private boolean listContainsNodeWithSamePathToRoot(final PathResultTreeNode node, final List<PathResultTreeNode> nodeList) {
         for (PathResultTreeNode nodeFromList : nodeList) {
-            if (node.equalsTo(nodeFromList)) {
+            //check if both nodes representing the same path to root
+            if (node.containsPath(nodeFromList)) {
                 return true;
             }
         }
@@ -861,6 +868,36 @@ public class PathResultTreeModel extends DefaultTreeModel {
             }
         }
         return resultNodes;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder("MetaPath=")
+                .append(metaPath.getClass().getSimpleName())
+                .append(metaPath.getDebugName())
+                .append("\nSettings:   keepIncompleteBranches=")
+                .append(keepIncompleteBranches)
+                .append("   keepMultipleEqualsBranches=")
+                .append(keepMultipleEqualsBranches)
+                .append("\nComplete Result Paths");
+        if (completePathLeafs.isEmpty()) {
+            sb.append("\n\t[empty]");
+        } else {
+            for (PathResultTreeNode node : completePathLeafs) {
+                sb.append("\n\t");
+                sb.append(Arrays.asList(node.getPathToRoot()));
+            }
+        }
+        sb.append("\nIncomplete Result Paths");
+        if (incompletePathLeafs.isEmpty()) {
+            sb.append("\n\t[empty]");
+        } else {
+            for (PathResultTreeNode node : incompletePathLeafs) {
+                sb.append("\n\t");
+                sb.append(Arrays.asList(node.getPathToRoot()));
+            }
+        }
+        return sb.toString();
     }
 
 }

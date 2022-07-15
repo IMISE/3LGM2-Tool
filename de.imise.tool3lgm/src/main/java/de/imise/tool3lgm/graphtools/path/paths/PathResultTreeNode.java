@@ -172,7 +172,7 @@ public class PathResultTreeNode extends DefaultMutableTreeNode {
      * @param obj
      * @return
      */
-    public boolean equalsTo(final Object obj) {
+    private boolean equalsTo(final Object obj) {
         if (this == obj) {
             return true;
         }
