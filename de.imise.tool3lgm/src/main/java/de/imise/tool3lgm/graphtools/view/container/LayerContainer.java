@@ -405,19 +405,26 @@ public class LayerContainer extends ElementContainer implements Iterable<Element
 
     @Override
     public void paint(final Graphics g) {
-        super.paint(g);
-        //if we paint this the very first time -> repaint the whole frame again!
-        //only this ensures that the JAVA-BUG with not correct HTML-text after
-        //the first paint doesn't occurs if we change the view from a single layer
-        //view to the three layer view. This works in combination with
-        //NodeContainer#paintSuperComponent(Graphics). The whole problem only
-        //occurs if the text offsets in the Shape are not null and the size of
-        //the component is changed during painting the html text with super.paint...
-        if (!isAlreadyPainted) {
-            isAlreadyPainted = true;
-            MainFrame mainFrame = Static.getMainFrame();
-            mainFrame.revalidate();
-            mainFrame.repaint();
+        try {
+            // if we start the tool with a model as parameter then super.paint()
+            // causes a Java internal buggy NullPointerException (some insets are
+            // null) -> try catch (Compiler Level 9 on Open JKD 15.0.2)
+            super.paint(g);
+            // if we paint this the very first time -> repaint the whole frame again!
+            // only this ensures that the JAVA-BUG with not correct HTML-text after
+            // the first paint doesn't occurs if we change the view from a single layer
+            // view to the three layer view. This works in combination with
+            // NodeContainer#paintSuperComponent(Graphics). The whole problem only
+            // occurs if the text offsets in the Shape are not null and the size of
+            // the component is changed during painting the html text with super.paint...
+            if (!isAlreadyPainted) {
+                isAlreadyPainted = true;
+                MainFrame mainFrame = Static.getMainFrame();
+                mainFrame.revalidate();
+                mainFrame.repaint();
+            }
+        } catch (Exception e) {
+            //ignore
         }
     }
 
