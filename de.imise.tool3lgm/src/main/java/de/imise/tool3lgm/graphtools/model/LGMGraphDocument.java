@@ -1,6 +1,5 @@
 package de.imise.tool3lgm.graphtools.model;
 
-import static de.imise.tool3lgm.Tool3lgmConstants.CLIPBOARD_PATH;
 import static de.imise.tool3lgm.Tool3lgmModelType.ModelCategory.CLIPBOARD;
 import static de.imise.tool3lgm.Tool3lgmModelType.ModelCategory.REGULAR;
 import static de.imise.tool3lgm.graphtools.dialog.OverwriteDialog.OverwriteOption.IGNORE;
@@ -201,13 +200,6 @@ public class LGMGraphDocument extends GraphDocument {
         //man muss die Selektion clonen, da sie sich wärend des Löschens ändert
         gdcoll.deleteElements(getSelectedElements(), this, STANDARD_PID);
         finish_transaction(STANDARD_PID, DATA_CHANGED);
-    }
-
-    /**
-     * @return
-     */
-    public static synchronized final boolean isClipboardAvailable() {
-        return CLIPBOARD_PATH.exists();
     }
 
     /**

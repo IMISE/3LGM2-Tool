@@ -207,12 +207,7 @@ public class RegularContextGenerator extends ElementSelectionContextGenerator im
     /**
      * COMMENTME
      */
-    private JMenuItem cb_copy, cb_cut, cb_paste, cb_clear;
-
-    /**
-     * COMMENTME
-     */
-    private JMenuItem undo, redo, queue, consistency;
+    private JMenuItem queue, consistency;
 
     /**
      * COMMENTME
@@ -1075,65 +1070,6 @@ public class RegularContextGenerator extends ElementSelectionContextGenerator im
             menu.add(internals);
         }
         return menu;
-    }
-
-    /**
-     *
-     */
-    public void check_cb_menu() {
-        check_undo_redo();
-        GraphDocument doc = getDoc();
-        if (doc == null) {
-            cb_copy.setEnabled(false);
-            cb_cut.setEnabled(false);
-            delete_selected_from_szenario.setEnabled(false);
-            delete_selected.setEnabled(false);
-            cb_paste.setEnabled(false);
-            cb_clear.setEnabled(false);
-            return;
-        }
-        if (!doc.isSelection()) {
-            cb_copy.setEnabled(false);
-            cb_cut.setEnabled(false);
-            delete_selected_from_szenario.setEnabled(false);
-            delete_selected.setEnabled(false);
-        } else {
-            cb_copy.setEnabled(true);
-            cb_cut.setEnabled(true);
-            if (doc instanceof Szenario) {
-                delete_selected_from_szenario.setEnabled(true);
-            }
-            delete_selected.setEnabled(true);
-        }
-        if (!LGMGraphDocument.isClipboardAvailable()) {
-            cb_paste.setEnabled(false);
-            cb_clear.setEnabled(false);
-        } else {
-            cb_paste.setEnabled(true);
-            cb_clear.setEnabled(true);
-        }
-    }
-
-    /**
-     *
-     */
-    private void check_undo_redo() {
-        GraphDocument doc = getDoc();
-        if (doc == null) {
-            undo.setEnabled(false);
-            redo.setEnabled(false);
-            return;
-        }
-        if (doc.getCollection().getTman().isUndoAvailable()) {
-            undo.setEnabled(true);
-        } else {
-            undo.setEnabled(false);
-        }
-        if (doc.getCollection().getTman().isRedoAvailable()) {
-            redo.setEnabled(true);
-        } else {
-            redo.setEnabled(false);
-        }
     }
 
     /**

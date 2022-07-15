@@ -68,9 +68,6 @@ public abstract class Tool3lgmConstants {
     /** Path to the installation directory of the application as string */
     public static final String APPLICATION_DIR_PATH = APPLICATION_DIR.toURI().getPath();
 
-    /** filename with path for internal clipboard */
-    public static final File CLIPBOARD_PATH = new File(USER_HOME_3LGM_DIR, "3lgm_clipboard");
-
     /**
      * Name des Packages in dem alle Node-Klassen liegen, die allgemein
      * gebraucht werden (Knickpunkte, Textfelder)
