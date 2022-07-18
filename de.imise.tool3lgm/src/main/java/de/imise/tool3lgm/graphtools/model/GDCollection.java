@@ -759,23 +759,9 @@ public class GDCollection extends UserFieldTarget implements MetaModelSpecific {
      * @param doc
      */
     public void setSelectedDoc(final GraphDocument doc) {
-        setSelectedDoc(doc, false);
-    }
-
-    /**
-     * Sets the processed <code>GraphDocument</code> as the currently selected.
-     *
-     * @param doc
-     * @param forceEvent if <code>true</code> then the event with the type
-     *            {@link LGMChangeType#SELECTED_SZENARIO_CHANGED} will be even
-     *            if the selected doc has not really changed.
-     */
-    private void setSelectedDoc(final GraphDocument doc, boolean forceEvent) {
-        if (forceEvent || doc != getSelectedDoc()) { //distribute is expensive and calls this function here itself again
-            activeGraphDocumentsList.remove(doc);
-            activeGraphDocumentsList.add((LGMGraphDocument) doc);
-            distribute(SELECTED_SZENARIO_CHANGED, null, doc, STANDARD_PID);
-        }
+        activeGraphDocumentsList.remove(doc);
+        activeGraphDocumentsList.add((LGMGraphDocument) doc);
+        distribute(SELECTED_SZENARIO_CHANGED, null, doc, STANDARD_PID);
     }
 
     /**
@@ -801,7 +787,7 @@ public class GDCollection extends UserFieldTarget implements MetaModelSpecific {
         }
         // in new models the default selected doc is already the first
         // scenario,so here we need to force the setting of the selected doc
-        setSelectedDoc(selectedDoc, true);
+        setSelectedDoc(selectedDoc);
     }
 
     /**
