@@ -3962,6 +3962,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
      * @param description
      * @param elementID
      * @param layout2Adapt
+     * @param selectCreated
      * @param pid
      * @return
      */

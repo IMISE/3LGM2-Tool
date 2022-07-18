@@ -1460,9 +1460,6 @@ public class GDCollection extends UserFieldTarget implements MetaModelSpecific {
             Log.show(ERROR, getResString("FehlerAllgemein"), ex);
             return null;
         }
-        if (StringUtils.isValid(id, "null")) {
-            me.setID(id);
-        }
         boolean nameIsEmpty = Strings.isNullOrEmpty(name);
         boolean nameIsValidAndNotMarkedAsGenerated = !nameIsEmpty && name.charAt(0) != GraphDocument.GENERATED_NAME_PREFIX;
         if (nameIsValidAndNotMarkedAsGenerated) {
@@ -1497,6 +1494,11 @@ public class GDCollection extends UserFieldTarget implements MetaModelSpecific {
             mainDoc.undo(pid);
             return null;
         }
+        // set ID works only correct if the correct layer index is known after the add to the correct layer
+        if (StringUtils.isValid(id, "null")) {
+            me.setID(id);
+        }
+
         boolean oldAutomaticMode = setAutomaticMode(true);
         createInitialSubordinates(me, pid);
         setAutomaticMode(oldAutomaticMode);
