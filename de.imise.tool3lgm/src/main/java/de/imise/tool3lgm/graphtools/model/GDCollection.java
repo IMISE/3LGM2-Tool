@@ -1463,11 +1463,6 @@ public class GDCollection extends UserFieldTarget implements MetaModelSpecific {
             me.setDescription(getDecodedParseSaveString(description));
         }
         mainDoc.start_transaction(pid);
-        mainDoc.addRedo(pid, MODEL_ACTION_CREATE_NODE, me.getClass().getName(), me.getSubType(), me.getName(), me.getDescription(), me);
-        if (nc.getColor() != null) {
-            mainDoc.addRedo(pid, MODEL_ACTION_SET_ELEMENT_COLOR, mainDoc, me, nc.getColor().getRGB());
-        }
-        mainDoc.addUndo(pid, MODEL_ACTION_DELETE_FROM_MODEL, me);
         // den Layer bestimmen auf dem das Element eingefügt werden soll
         int layerNumber = me.layerFor();
         //das hier darf eigentlich nur bei Textfeldern passieren, da diese keinen festen Layer haben. Wahrscheinlich
@@ -1485,6 +1480,12 @@ public class GDCollection extends UserFieldTarget implements MetaModelSpecific {
             me.setID(id);
         }
 
+        //add Undo/Redo at very last escpecially after the setting of the ID!
+        mainDoc.addRedo(pid, MODEL_ACTION_CREATE_NODE, me.getClass().getName(), me.getSubType(), me.getName(), me.getDescription(), me);
+        if (nc.getColor() != null) {
+            mainDoc.addRedo(pid, MODEL_ACTION_SET_ELEMENT_COLOR, mainDoc, me, nc.getColor().getRGB());
+        }
+        mainDoc.addUndo(pid, MODEL_ACTION_DELETE_FROM_MODEL, me);
         boolean oldAutomaticMode = setAutomaticMode(true);
         createInitialSubordinates(me, pid);
         setAutomaticMode(oldAutomaticMode);
