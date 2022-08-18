@@ -3280,7 +3280,10 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
 
         ModelElement me = ec.getElement();
         List<ElementContainer> directPartContainers = me.getDirectPartContainers(szen);
-        if (directPartContainers.isEmpty()) {
+        // if a collapsed element was copied from an other submodel to this szen
+        // but without any sub elements then it is collapsed here too but without
+        // any direct parth containers here
+        if (directPartContainers.isEmpty() && ec.isExpanded()) {
             return;
         }
 

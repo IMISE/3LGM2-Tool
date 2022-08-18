@@ -584,15 +584,16 @@ public class RegularContextGenerator extends ElementSelectionContextGenerator im
                 }
                 if (contextSource instanceof InputGraphArea) {
                     if (me.canHaveParts()) {
+                        boolean isCollapsed = !ec.isExpanded();
                         // menu.addSeparator();
-                        if (me.hasDirectPartContainer(doc)) {
+                        if (me.hasDirectPartContainer(doc) || isCollapsed) {
                             expand.setEnabled(true);
                             collapse.setEnabled(true);
                         } else {
                             expand.setEnabled(false);
                             collapse.setEnabled(false);
                         }
-                        if (!ec.isExpanded()) {
+                        if (isCollapsed) {
                             menu.add(expand);
                         } else {
                             menu.add(collapse);
