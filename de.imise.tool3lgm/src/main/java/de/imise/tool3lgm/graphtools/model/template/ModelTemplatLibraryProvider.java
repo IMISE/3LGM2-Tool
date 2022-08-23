@@ -55,6 +55,7 @@ public class ModelTemplatLibraryProvider extends TemplateLibraryProvider {
             e.printStackTrace();
         }
         gdcoll.setModelCategory(TEMPLATE);
+        gdcoll.finishInit();
         return gdcoll;
     }
 

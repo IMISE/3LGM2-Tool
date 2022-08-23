@@ -22,7 +22,6 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import de.imise.tool3lgm.Tool3lgmChangeListener.Tool3lgmChangeType;
 import de.imise.tool3lgm.Tool3lgmConstants.FileFilterType;
 import de.imise.tool3lgm.Tool3lgmModelType.ModelCategory;
-import de.imise.tool3lgm.graphtools.consistency.ModelValidatorDefinition;
 import de.imise.tool3lgm.graphtools.dialog.element.ElementPropertyDialogsContext;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
@@ -314,13 +313,7 @@ public class Tool3lgm {
         Static.setProgressDialogStatusLabel("finish_progress");
         collections.add(gdcoll);
         distribute(MODEL_CHANGE_MODEL_OPENED, gdcoll);
-        //vor dem Selektieren des aktuellen Teilmodells alle nicht behebbaren Fehler löschen
-        ModelValidatorDefinition modelValidatorDefinition = gdcoll.getModelValidatorDefinition();
-        modelValidatorDefinition.clearUnfixableErrors(gdcoll);
-        gdcoll.initSelectedDocByViewParameterFromFile();
-        gdcoll.setUnchanged();
-        System.gc();
-
+        gdcoll.finishInit();
         //		System.err.println();
         //		System.err.println("###########################################################################");
         //		printStatistic(gdcoll, true, false);
@@ -331,7 +324,7 @@ public class Tool3lgm {
         //		System.err.println();
         //		printStatistic(gdcoll, false, true);
         //		System.err.println("###########################################################################");
-
+        System.gc();
         return true;
     }
 

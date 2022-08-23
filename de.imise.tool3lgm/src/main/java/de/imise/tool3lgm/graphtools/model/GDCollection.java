@@ -53,6 +53,7 @@ import static de.imise.tool3lgm.graphtools.undoredo.TransactionManager.STANDARD_
 import static de.imise.tool3lgm.log.Log.ERROR;
 import static de.imise.util.StringUtils.isNullOrEmptyOrBlank;
 import static de.imise.util.collections.CollectionUtils.getNextIndicatedName;
+import static de.imise.util.collections.CollectionUtils.lastItem;
 import static de.imise.util.htmlxml.ParseSaveStringHandler.getDecodedParseSaveString;
 import static java.lang.Integer.parseInt;
 import static javax.swing.BoxLayout.Y_AXIS;
@@ -85,6 +86,7 @@ import de.imise.tool3lgm.MetaModelContext;
 import de.imise.tool3lgm.Tool3lgmModelType;
 import de.imise.tool3lgm.Tool3lgmModelType.ModelCategory;
 import de.imise.tool3lgm.graphtools.consistency.ModelValidator;
+import de.imise.tool3lgm.graphtools.consistency.ModelValidatorDefinition;
 import de.imise.tool3lgm.graphtools.dialog.element.ElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.dialog.element.ElementPropertyDialogsContext;
 import de.imise.tool3lgm.graphtools.metamodel.CoreMetaModel;
@@ -338,6 +340,17 @@ public class GDCollection extends UserFieldTarget implements MetaModelSpecific {
     public GDCollection(@Nonnull final Tool3lgmModelType modelType, final boolean loadDefaultUserFieldDefinition) {
         this();
         setModelType(modelType, loadDefaultUserFieldDefinition);
+    }
+
+    /**
+     * Clears all errors and sets (then) the selected doc.
+     */
+    public void finishInit() {
+        //vor dem Selektieren des aktuellen Teilmodells alle nicht behebbaren Fehler löschen
+        ModelValidatorDefinition modelValidatorDefinition = getModelValidatorDefinition();
+        modelValidatorDefinition.clearUnfixableErrors(this);
+        initSelectedDocByViewParameterFromFile();
+        setUnchanged();
     }
 
     /**
