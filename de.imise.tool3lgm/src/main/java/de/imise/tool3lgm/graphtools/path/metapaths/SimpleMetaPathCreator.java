@@ -1,6 +1,6 @@
 package de.imise.tool3lgm.graphtools.path.metapaths;
 
-import static de.imise.util.collections.CollectionUtils.getFirstItem;
+import static de.imise.util.collections.CollectionUtils.firstItem;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -685,7 +685,8 @@ public class SimpleMetaPathCreator extends MetaModelSpecificAdapter {
                 if (commonSuperStartAndEdgeClass != null) { // START_WITH_EDGE
                     if (endClass == null || CoreMetaModel.isEndClassOrEndClassSuperclass(edgeClass, endClass)) {
                         return emph.getEdgeToEndElementMetaPath(edgeClass, endClass); //FORWARD to edgeEndElement
-                    } else if (CoreMetaModel.isStartClassOrStartClassSuperclass(edgeClass, endClass)) {
+                    }
+                    if (CoreMetaModel.isStartClassOrStartClassSuperclass(edgeClass, endClass)) {
                         return emph.getEdgeToStartElementMetaPath(edgeClass, endClass); //BACKWARD to edgeStartElement
                     }
                 }
@@ -695,7 +696,8 @@ public class SimpleMetaPathCreator extends MetaModelSpecificAdapter {
             if (commonSuperEndAndEdgeClass != null) { // END_WITH_EDGE
                 if (startClass == null || CoreMetaModel.isStartClassOrStartClassSuperclass(edgeClass, startClass)) {
                     return emph.getStartElementToEdgeMetaPath(startClass, edgeClass);//FORWARD to edge
-                } else if (CoreMetaModel.isEndClassOrEndClassSuperclass(edgeClass, startClass)) {
+                }
+                if (CoreMetaModel.isEndClassOrEndClassSuperclass(edgeClass, startClass)) {
                     return emph.getEndElementToEdgeMetaPath(startClass, edgeClass);//BACKWARD to edge
                 }
             }
@@ -841,9 +843,9 @@ public class SimpleMetaPathCreator extends MetaModelSpecificAdapter {
                 replace = true;
             } else if (instanciableAssignableEndClasses.size() > 1) {
                 replace = true;
-            } else if (getFirstItem(instanciableAssignableStartClasses) != pathStepConnectingStartClass) {
+            } else if (firstItem(instanciableAssignableStartClasses) != pathStepConnectingStartClass) {
                 replace = true;
-            } else if (getFirstItem(instanciableAssignableEndClasses) != pathStepConnectingEndClass) {
+            } else if (firstItem(instanciableAssignableEndClasses) != pathStepConnectingEndClass) {
                 replace = true;
             }
             if (replace) {

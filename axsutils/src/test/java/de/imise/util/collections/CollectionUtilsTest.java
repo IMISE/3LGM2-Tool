@@ -1,8 +1,10 @@
 package de.imise.util.collections;
 
 import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertNull;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.testng.annotations.Test;
@@ -87,6 +89,22 @@ public class CollectionUtilsTest {
     //  @Test
     public void ensureImmutableTestMultimapKV() {
         throw new RuntimeException("Test not implemented");
+    }
+
+    @Test
+    public void firstItemTest() {
+        String[] strings = {"one", "two", "three"};
+        assertEquals(CollectionUtils.firstItem(Arrays.asList(strings)), strings[0]);
+        assertNull(CollectionUtils.firstItem(new ArrayList<>()));
+        assertNull(CollectionUtils.firstItem(null));
+    }
+
+    @Test
+    public void lastItemTest() {
+        String[] strings = {"one", "two", "three"};
+        assertEquals(CollectionUtils.lastItem(Arrays.asList(strings)), strings[strings.length - 1]);
+        assertNull(CollectionUtils.lastItem(new ArrayList<>()));
+        assertNull(CollectionUtils.lastItem(null));
     }
 
     //  @Test

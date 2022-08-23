@@ -851,7 +851,7 @@ public abstract class CollectionUtils {
      */
     @SafeVarargs
     public static <T> Iterator<T> getCommonIterator(final Iterable<? extends T>... iterables) {
-        return new Iterator<T>() {
+        return new Iterator<>() {
 
             int currentIterableIndex = 0;
 
@@ -905,7 +905,7 @@ public abstract class CollectionUtils {
      * @return
      */
     public static <T> Iterator<T> getCommonIterator(final List<Iterable<T>> iterables) {
-        return new Iterator<T>() {
+        return new Iterator<>() {
 
             int currentIterableIndex = 0;
 
@@ -950,14 +950,20 @@ public abstract class CollectionUtils {
      * @param <T>
      * @param collection
      * @return the first item in the {@link Collection} or <code>null</code> if
-     *         the collection is empty
+     *         the collection is empty or <code>null</code> itself
      */
-    public static <T> T getFirstItem(final Collection<T> collection) {
-        if (collection.isEmpty()) {
-            return null;
-        }
-        Iterator<T> iterator = collection.iterator();
-        return iterator.next();
+    public static <T> T firstItem(final Collection<T> collection) {
+        return collection == null || collection.isEmpty() ? null : collection.iterator().next();
+    }
+
+    /**
+     * @param <T>
+     * @param list
+     * @return the last item in the {@link List} or <code>null</code> if the
+     *         list is empty or <code>null</code> itself
+     */
+    public static <T> T lastItem(final List<T> list) {
+        return list == null || list.isEmpty() ? null : list.get(list.size() - 1);
     }
 
     /**
@@ -968,7 +974,7 @@ public abstract class CollectionUtils {
      * @return
      */
     public static final <T> Iterable<T> getBackwardIterable(final List<T> list) {
-        return () -> new ListIterator<T>() {
+        return () -> new ListIterator<>() {
 
             private final ListIterator<T> originalIterator = list.listIterator(list.size());
 

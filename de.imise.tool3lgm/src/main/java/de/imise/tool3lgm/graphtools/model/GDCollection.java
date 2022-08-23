@@ -794,10 +794,7 @@ public class GDCollection extends UserFieldTarget implements MetaModelSpecific {
      * Gibt das aktuell selektierte <code>GraphDocument</code> zurück.
      */
     public LGMGraphDocument getSelectedDoc() {
-        if (activeGraphDocumentsList.size() < 1) {
-            return null;
-        }
-        return activeGraphDocumentsList.get(activeGraphDocumentsList.size() - 1);
+        return lastItem(activeGraphDocumentsList);
     }
 
     /**
