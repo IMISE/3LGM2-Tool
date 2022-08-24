@@ -40,7 +40,7 @@ public class MainFrameDesktopTabbedPane extends JTabbedPaneWithCloseIconsRight i
      * If all tabs are removed no border should be painted. Store the original
      * TabbedPaintUI to reset it if there is at least one tab.
      */
-    private TabbedPaneUI defaultTabbedPaneUI;
+    private final TabbedPaneUI defaultTabbedPaneUI;
 
     /**
      *
@@ -48,6 +48,7 @@ public class MainFrameDesktopTabbedPane extends JTabbedPaneWithCloseIconsRight i
     public MainFrameDesktopTabbedPane() {
         super(Tool3lgmConstants.ACTIVE_TAB_FOREGROUND_COLOR);
         setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);
+        defaultTabbedPaneUI = getUI();
         updateBorder();
     }
 
@@ -66,24 +67,29 @@ public class MainFrameDesktopTabbedPane extends JTabbedPaneWithCloseIconsRight i
         return null;
     }
 
+    private static final BasicTabbedPaneUI NO_BORDER_AND_NO_INSETS_TABBED_PANE_UI = new BasicTabbedPaneUI() {
+        private final Insets borderInsets = new Insets(0, 0, 0, 0);
+        @Override
+        protected void paintContentBorder(final Graphics g, final int tabPlacement, final int selectedIndex) {
+        }
+        @Override
+        protected Insets getContentBorderInsets(final int tabPlacement) {
+            return borderInsets;
+        }
+    };
+
     /**
      * If all tabs are removed no border is painted. If there is at least one
      * tab the default border is painted.
      */
     private void updateBorder() {
+        TabbedPaneUI currentUI = getUI();
         if (getTabCount() == 0) {
-            defaultTabbedPaneUI = getUI();
-            setUI(new BasicTabbedPaneUI() {
-                private final Insets borderInsets = new Insets(0, 0, 0, 0);
-                @Override
-                protected void paintContentBorder(final Graphics g, final int tabPlacement, final int selectedIndex) {
-                }
-                @Override
-                protected Insets getContentBorderInsets(final int tabPlacement) {
-                    return borderInsets;
-                }
-            });
-        } else {
+            if (currentUI != NO_BORDER_AND_NO_INSETS_TABBED_PANE_UI) {
+                setUI(NO_BORDER_AND_NO_INSETS_TABBED_PANE_UI);
+            }
+        } else //never reset the same ui again because then it scrolls always to the very first tab and maybe away from the selected tab
+        if (currentUI != defaultTabbedPaneUI) {
             setUI(defaultTabbedPaneUI);
         }
     }
