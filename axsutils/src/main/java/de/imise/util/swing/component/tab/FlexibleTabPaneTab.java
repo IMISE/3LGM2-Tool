@@ -225,6 +225,7 @@ public class FlexibleTabPaneTab extends JPanel {
                 g2.setColor(Color.MAGENTA);
             } else {
                 g2.setColor(Color.BLACK);
+            }
 
                 g2.drawLine(x1, y1, x2, y2);
                 g2.drawLine(x1 + 1, y1, x2, y2 - 1);
@@ -235,7 +236,6 @@ public class FlexibleTabPaneTab extends JPanel {
                 g2.drawLine(x1 + 1, y2, x2, y1 + 1);
                 g2.dispose();
             }
-        }
 
     }
 
