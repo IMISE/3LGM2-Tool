@@ -6,8 +6,6 @@ import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -48,6 +46,9 @@ public class FlexibleTabPaneTab extends JPanel {
     /**  */
     private final Font boldFont;
 
+    /**  */
+    private static final int THREE_PIXEL_Y_SHIFT_TO_LOOK_OK_IN_EVERY_LOOK_AND_FEEL = 3;
+
     /**
      * The icon that is displayed on the tab
      */
@@ -56,22 +57,25 @@ public class FlexibleTabPaneTab extends JPanel {
     /**
      * @param tabbedPane
      * @param activeForegroundColor
+     * @param backgroundColor
      */
-    public FlexibleTabPaneTab(final JTabbedPane tabbedPane, final Color activeForegroundColor) {
-        this(tabbedPane, null, activeForegroundColor);
+    public FlexibleTabPaneTab(final JTabbedPane tabbedPane, final Color activeForegroundColor, Color backgroundColor) {
+        this(tabbedPane, null, activeForegroundColor, backgroundColor);
     }
 
     /**
      * @param tabbedPane
      * @param icon
      * @param activeForegroundColor
+     * @param backgroundColor
      */
-    public FlexibleTabPaneTab(final JTabbedPane tabbedPane, final Icon icon, final Color activeForegroundColor) {
+    public FlexibleTabPaneTab(final JTabbedPane tabbedPane, final Icon icon, final Color activeForegroundColor, final Color backgroundColor) {
         super(new FlowLayout(FlowLayout.LEFT, 0, 0));
         this.tabbedPane = tabbedPane;
-        setOpaque(false);
+        setOpaque(true);
 
         setIcon(icon);
+
         tabLabel = new JLabel() {
             @Override
             public String getText() {
@@ -86,6 +90,11 @@ public class FlexibleTabPaneTab extends JPanel {
             @Override
             public Color getForeground() {
                 return isSelectedTab() ? activeForegroundColor : super.getForeground();
+            }
+
+            @Override
+            public Color getBackground() {
+                return backgroundColor;
             }
 
             @Override
@@ -112,15 +121,20 @@ public class FlexibleTabPaneTab extends JPanel {
         //tabLabel.getTooltipText() is never called.
         tabLabel.setToolTipText("Dummy ToolTip");
 
+        tabLabel.setOpaque(true);
+
         add(tabLabel);
-        tabLabel.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 5));
-        closeButton = new CloseButton();
+
+        //tabLabel.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 5));
+        closeButton = new CloseButton(backgroundColor);
         add(closeButton);
-        setBorder(BorderFactory.createEmptyBorder(2, 0, 0, 0));
+        setBackground(backgroundColor);
+        setBorder(BorderFactory.createEmptyBorder(1, 0, THREE_PIXEL_Y_SHIFT_TO_LOOK_OK_IN_EVERY_LOOK_AND_FEEL, 0));
 
         addMouseListener(selectTabWhenMousePressedMouseListener);
         tabLabel.addMouseListener(selectTabWhenMousePressedMouseListener);
         closeButton.addMouseListener(paintCloseButtonWhenMouseOverMouseListener);
+
     }
 
     /**
@@ -132,10 +146,13 @@ public class FlexibleTabPaneTab extends JPanel {
         int h = -1;
         int sizeAndImageInsets = -1;
 
+        Color backgroundColor;
+
         /**
-         *
+         * @param backgroundColor
          */
-        public CloseButton() {
+        public CloseButton(Color backgroundColor) {
+            this.backgroundColor = backgroundColor;
             //If we don't set an irrelevant default preferred size > 0 the paintComponent(g) will never be called
             int size = 17;
             setPreferredSize(new Dimension(size, size));
@@ -150,13 +167,10 @@ public class FlexibleTabPaneTab extends JPanel {
             setRolloverEnabled(true);
             setBorderPainted(false);
             //close tab when clicking the button
-            addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(final ActionEvent e) {
-                    int tabIndex = getTabIndex();
-                    if (tabIndex != -1) {
-                        tabbedPane.remove(tabIndex);
-                    }
+            addActionListener(e -> {
+                int tabIndex = getTabIndex();
+                if (tabIndex != -1) {
+                    tabbedPane.remove(tabIndex);
                 }
             });
         }
@@ -194,19 +208,23 @@ public class FlexibleTabPaneTab extends JPanel {
                     //shift the image for pressed buttons
                     g2.translate(1, 1);
                 }
-                if (getModel().isRollover()) {
-                    //this isRollover() is only for the button. The global
-                    //variable isRollover is for the whole tab inclusive the
-                    //border, label and button.
-                    g2.setColor(Color.MAGENTA);
-                } else {
-                    g2.setColor(Color.BLACK);
-                }
+            }
 
-                int x1 = sizeAndImageInsets;
-                int y1 = sizeAndImageInsets;
-                int x2 = w - sizeAndImageInsets;
-                int y2 = h - sizeAndImageInsets;
+            int x1 = sizeAndImageInsets;
+            int y1 = sizeAndImageInsets;
+            int x2 = w - sizeAndImageInsets;
+            int y2 = h - sizeAndImageInsets;
+
+            g2.setColor(backgroundColor);
+            g2.fillRect(x1 - 10, y1 - 10, w * 2, h * 2);
+
+            if (getModel().isRollover()) {
+                //this isRollover() is only for the button. The global
+                //variable isRollover is for the whole tab inclusive the
+                //border, label and button.
+                g2.setColor(Color.MAGENTA);
+            } else {
+                g2.setColor(Color.BLACK);
 
                 g2.drawLine(x1, y1, x2, y2);
                 g2.drawLine(x1 + 1, y1, x2, y2 - 1);
@@ -318,6 +336,12 @@ public class FlexibleTabPaneTab extends JPanel {
             Border border = BorderFactory.createEmptyBorder(0, 1, 0, 3);
             iconLabel.setBorder(border);
         }
+    }
+
+    @Override
+    protected void paintComponent(Graphics g) {
+        g.translate(0, THREE_PIXEL_Y_SHIFT_TO_LOOK_OK_IN_EVERY_LOOK_AND_FEEL);
+        super.paintComponent(g);
     }
 
 }

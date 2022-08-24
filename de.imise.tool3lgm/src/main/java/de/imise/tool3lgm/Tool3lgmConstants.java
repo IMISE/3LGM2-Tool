@@ -62,6 +62,18 @@ public abstract class Tool3lgmConstants {
         JAR
     }
 
+    /**
+     * Colors for opened models (their tabs, tree entries, etc.)
+     */
+    public static final Color[] MODEL_COLORS = {
+            new Color(160, 195, 208),
+            new Color(190, 236, 190),
+            new Color(250, 249, 183),
+            new Color(203, 165, 200),
+            new Color(241, 190, 118),
+            new Color(255, 153, 154),
+    };
+
     /** Path to the installation directory of the application as file */
     public static final File APPLICATION_DIR = ApplicationManager.getApplicationDir("lib");
 

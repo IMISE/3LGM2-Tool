@@ -6,11 +6,15 @@ import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
 import static de.imise.tool3lgm.graphtools.model.LGMChangeListener.LGMChangeType.SELECTION_CHANGED;
 import static de.imise.tool3lgm.graphtools.undoredo.TransactionManager.STANDARD_PID;
 
+import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Frame;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.swing.JDesktopPane;
 import javax.swing.JFileChooser;
@@ -18,6 +22,8 @@ import javax.swing.JInternalFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JTabbedPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
+
+import com.google.common.base.Objects;
 
 import de.imise.tool3lgm.Tool3lgmChangeListener.Tool3lgmChangeType;
 import de.imise.tool3lgm.Tool3lgmConstants.FileFilterType;
@@ -27,6 +33,7 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GDCollectionFileHandler;
+import de.imise.tool3lgm.graphtools.model.GDCollectionOwner;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.model.LGMGraphDocument;
 import de.imise.tool3lgm.graphtools.model.Szenario;
@@ -56,6 +63,11 @@ public class Tool3lgm {
 
     /** alle GDCollections */
     private final List<GDCollection> collections = new ArrayList<>();
+
+    /**
+     * Maps from a model to the call that will be used to colorize tabs etc.
+     */
+    private final Map<GDCollection, Color> modelToColor = new HashMap<>();
 
     /** alle ChangeListener, die auf Toolereignisse reagieren müssen */
     private final ListenerSupport<Tool3lgmChangeListener> toolChangeListenerSupport = new ListenerSupport<>();
@@ -312,6 +324,7 @@ public class Tool3lgm {
     public boolean openModel(final GDCollection gdcoll) {
         Static.setProgressDialogStatusLabel("finish_progress");
         collections.add(gdcoll);
+        setModelColor(gdcoll);
         distribute(MODEL_CHANGE_MODEL_OPENED, gdcoll);
         gdcoll.finishInit();
         //		System.err.println();
@@ -326,6 +339,40 @@ public class Tool3lgm {
         //		System.err.println("###########################################################################");
         System.gc();
         return true;
+    }
+
+    /**
+     * @param gdcoll
+     */
+    private void setModelColor(GDCollection gdcoll) {
+        Collection<Color> usedColors = modelToColor.values();
+        int minUse = Integer.MAX_VALUE;
+        Color nextMinUsedColor = null;
+        for (Color color : Tool3lgmConstants.MODEL_COLORS) {
+            int use = 0;
+            for (Color usedColor : usedColors) {
+                if (Objects.equal(color, usedColor)) {
+                    use++;
+                }
+            }
+            if (use < minUse) {
+                minUse = use;
+                nextMinUsedColor = color;
+                if (minUse == 0) {
+                    break;
+                }
+            }
+        }
+        modelToColor.put(gdcoll, nextMinUsedColor);
+    }
+
+    /**
+     * @param gdcollOwner
+     * @return
+     */
+    public Color getModelColor(GDCollectionOwner gdcollOwner) {
+        GDCollection gdcoll = gdcollOwner.getCollection();
+        return modelToColor.get(gdcoll);
     }
 
     /**
@@ -540,6 +587,7 @@ public class Tool3lgm {
 
         //ab hier ist sicher, dass das Modell geschlossen werden soll
         collections.remove(gdcoll);
+        modelToColor.remove(gdcoll);
 
         gdcoll.simpleRemoveGraphDocuments();
 

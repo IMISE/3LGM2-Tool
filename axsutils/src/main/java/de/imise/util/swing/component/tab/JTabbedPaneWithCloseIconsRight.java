@@ -15,10 +15,8 @@ import javax.swing.JTabbedPane;
  */
 public class JTabbedPaneWithCloseIconsRight extends JTabbedPane {
 
-    /**
-     *
-     */
-    private Color activeForegroundColor;
+    /**  */
+    private final Color activeForegroundColor;
 
     /**
      * @param activeForegroundColor
@@ -30,25 +28,25 @@ public class JTabbedPaneWithCloseIconsRight extends JTabbedPane {
     @Override
     public void addTab(final String title, final Component component) {
         this.addTab(title, null, component);
-        initLastTabComponent();
+        initLastTabComponent(component);
     }
 
     @Override
     public void addTab(final String title, final Icon extraIcon, final Component component) {
         super.addTab(title, extraIcon, component);
-        initLastTabComponent();
+        initLastTabComponent(component);
     }
 
     @Override
     public void addTab(final String title, final Icon extraIcon, final Component component, final String tooltip) {
         super.addTab(title, extraIcon, component, tooltip);
-        initLastTabComponent();
+        initLastTabComponent(component);
     }
 
     /**
-     *
+     * @param component
      */
-    private void initLastTabComponent() {
+    private void initLastTabComponent(Component component) {
         //without this border sometimes a Nullpointer occurs at the
         //start if the tool loads a model via start parameter2911
         if (getBorder() == null) {
@@ -56,21 +54,16 @@ public class JTabbedPaneWithCloseIconsRight extends JTabbedPane {
         }
         int lastTabComponentIndex = getTabCount() - 1;
         Icon tabIcon = getIconAt(lastTabComponentIndex);
-        setTabComponentAt(lastTabComponentIndex, new FlexibleTabPaneTab(this, tabIcon, activeForegroundColor));
+        Color tabBackgroundColor = getTabBackgroundColor(component);
+        setTabComponentAt(lastTabComponentIndex, new FlexibleTabPaneTab(this, tabIcon, activeForegroundColor, tabBackgroundColor));
+        setBackgroundAt(lastTabComponentIndex, tabBackgroundColor);
     }
 
     /**
+     * @param component
      * @return
      */
-    public Color getActiveForegroundColor() {
-        return activeForegroundColor;
+    protected Color getTabBackgroundColor(Component component) {
+        return null;
     }
-
-    /**
-     * @param activeForegroundColor
-     */
-    public void setActiveForegroundColor(final Color activeForegroundColor) {
-        this.activeForegroundColor = activeForegroundColor;
-    }
-
 }

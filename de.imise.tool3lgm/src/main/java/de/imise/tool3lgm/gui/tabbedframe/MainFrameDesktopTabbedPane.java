@@ -1,5 +1,6 @@
 package de.imise.tool3lgm.gui.tabbedframe;
 
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Graphics;
 import java.awt.Insets;
@@ -14,6 +15,7 @@ import javax.swing.plaf.basic.BasicTabbedPaneUI;
 
 import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.Tool3lgmConstants;
+import de.imise.tool3lgm.graphtools.model.GDCollectionOwner;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.model.LGMChangeListenerSimple;
 import de.imise.tool3lgm.gui.viewpane.ViewPane;
@@ -84,7 +86,6 @@ public class MainFrameDesktopTabbedPane extends JTabbedPaneWithCloseIconsRight i
         } else {
             setUI(defaultTabbedPaneUI);
         }
-
     }
 
     @Override
@@ -245,6 +246,14 @@ public class MainFrameDesktopTabbedPane extends JTabbedPaneWithCloseIconsRight i
             }
         }
         return selectedComponent;
+    }
+
+    @Override
+    protected Color getTabBackgroundColor(Component component) {
+        if (component instanceof GDCollectionOwner) {
+            return Static.getTool().getModelColor((GDCollectionOwner) component);
+        }
+        return null;
     }
 
 }
