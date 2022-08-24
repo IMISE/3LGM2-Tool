@@ -49,6 +49,8 @@ public class FlexibleTabPaneTab extends JPanel {
     /**  */
     private static final int THREE_PIXEL_Y_SHIFT_TO_LOOK_OK_IN_EVERY_LOOK_AND_FEEL = 3;
 
+    private static Color foregroundColor = null;
+
     /**
      * The icon that is displayed on the tab
      */
@@ -89,7 +91,15 @@ public class FlexibleTabPaneTab extends JPanel {
 
             @Override
             public Color getForeground() {
-                return isSelectedTab() ? activeForegroundColor : super.getForeground();
+                if (foregroundColor == null) {
+                    foregroundColor = super.getForeground(); //usually black
+                    if (foregroundColor != null) {
+                        for (int i = 0; i < 11; i++) {
+                            foregroundColor = foregroundColor.brighter(); // if black then a little bit brighter than Color.darkgray
+                        }
+                    }
+                }
+                return isSelectedTab() ? activeForegroundColor : foregroundColor; // super.getForeground();
             }
 
             @Override
@@ -227,15 +237,15 @@ public class FlexibleTabPaneTab extends JPanel {
                 g2.setColor(Color.BLACK);
             }
 
-                g2.drawLine(x1, y1, x2, y2);
-                g2.drawLine(x1 + 1, y1, x2, y2 - 1);
-                g2.drawLine(x1, y1 + 1, x2 - 1, y2);
+            g2.drawLine(x1, y1, x2, y2);
+            g2.drawLine(x1 + 1, y1, x2, y2 - 1);
+            g2.drawLine(x1, y1 + 1, x2 - 1, y2);
 
-                g2.drawLine(x1, y2, x2, y1);
-                g2.drawLine(x1, y2 - 1, x2 - 1, y1);
-                g2.drawLine(x1 + 1, y2, x2, y1 + 1);
-                g2.dispose();
-            }
+            g2.drawLine(x1, y2, x2, y1);
+            g2.drawLine(x1, y2 - 1, x2 - 1, y1);
+            g2.drawLine(x1 + 1, y2, x2, y1 + 1);
+            g2.dispose();
+        }
 
     }
 
