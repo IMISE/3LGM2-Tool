@@ -20,6 +20,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import javax.imageio.ImageIO;
+import javax.swing.GrayFilter;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -396,7 +397,7 @@ public class ImageTools {
      * @return
      */
     public static final BufferedImage getPartOfImageFile(final String sourceFileName, final String targetFileName, final Rectangle partRect) {
-        if (targetFileName == null || targetFileName.trim().equals("")) {
+        if (targetFileName == null || "".equals(targetFileName.trim())) {
             return null;
         }
         BufferedImage image = getImage(sourceFileName);
@@ -868,4 +869,20 @@ public class ImageTools {
         return icon;
     }
 
+    /**
+     * @see https://stackoverflow.com/q/14358499/230513
+     * @see https://stackoverflow.com/a/12228640/230513
+     */
+    public static Icon getGray(Icon icon) {
+        final int w = icon.getIconWidth();
+        final int h = icon.getIconHeight();
+        GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+        GraphicsDevice gd = ge.getDefaultScreenDevice();
+        GraphicsConfiguration gc = gd.getDefaultConfiguration();
+        BufferedImage image = gc.createCompatibleImage(w, h);
+        Graphics2D g2d = image.createGraphics();
+        icon.paintIcon(null, g2d, 0, 0);
+        Image gray = GrayFilter.createDisabledImage(image);
+        return new ImageIcon(gray);
+    }
 }
