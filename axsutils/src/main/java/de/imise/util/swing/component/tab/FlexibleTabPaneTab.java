@@ -191,6 +191,9 @@ public class FlexibleTabPaneTab extends JPanel {
         //paint the cross
         @Override
         protected void paintComponent(final Graphics g) {
+            if (!isSelectedTab() && !getModel().isRollover()) {
+                return;
+            }
             Graphics2D g2 = (Graphics2D) g.create();
             Dimension labelSize = tabLabel.getSize();
             int labelHeight = labelSize.height / 2 * 2;
