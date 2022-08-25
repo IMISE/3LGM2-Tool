@@ -176,10 +176,7 @@ public final class ModelBrowserPanel extends JPanel implements PropertyChangeLis
                 while (firstBrowser.getTabCount() > 1) {
                     ModelBrowser modelBrowser = new ModelBrowser(JTabbedPane.WRAP_TAB_LAYOUT); // if the space is not enough for the only tab, there should not be shown the useless scroll buttons
                     modelBrowser.stopChangeListening();
-                    Component tab = firstBrowser.getComponentAt(1);
-                    String title = firstBrowser.getTitleAt(1);
-                    firstBrowser.remove(1);
-                    modelBrowser.addTab(title, tab);
+                    modelBrowser.addTabFromOther(firstBrowser, 1);
                     add(modelBrowser);
                     modelBrowser.startChangeListening();
                 }
@@ -189,9 +186,9 @@ public final class ModelBrowserPanel extends JPanel implements PropertyChangeLis
                 while (getComponentCount() > 1) {
                     ModelBrowser secondBrowser = (ModelBrowser) getComponent(1);
                     remove(secondBrowser);
-                    firstBrowser.addTab(secondBrowser.getTitleAt(0), secondBrowser.getComponentAt(0));
-                    firstBrowser.setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT); // if the space is not enough for the only tab, there should be shown the wonderful scroll buttons
+                    firstBrowser.addTabsFromOther(secondBrowser);
                 }
+                firstBrowser.setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT); // if the space is not enough for the only tab, there should be shown the wonderful scroll buttons
                 setLayout(new GridLayout(1, 1, 0, 0));
             }
         }

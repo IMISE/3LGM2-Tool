@@ -256,4 +256,22 @@ public final class ModelBrowser extends JTabbedPaneWithCloseIconsRight implement
         closeDocOnCloseTab = true;
     }
 
+    /**
+     * @param other
+     */
+    public void addTabsFromOther(ModelBrowser other) {
+        while (other.getTabCount() > 0) {
+            addTabFromOther(other, 0);
+        }
+    }
+
+    /**
+     * @param other
+     * @param tabIndex
+     */
+    public void addTabFromOther(ModelBrowser other, int tabIndex) {
+        other.closeDocOnCloseTab = false;
+        addTab(other.getTitleAt(tabIndex), other.getComponentAt(tabIndex));
+    }
+
 }
