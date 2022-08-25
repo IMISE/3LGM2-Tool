@@ -5,7 +5,6 @@ import java.awt.Component;
 
 import javax.swing.BorderFactory;
 import javax.swing.Icon;
-import javax.swing.JTabbedPane;
 
 /**
  * A JTabbedPane which has a close ('X') icon on each tab. To add a tab, use the
@@ -13,7 +12,7 @@ import javax.swing.JTabbedPane;
  * in JBuilder, showing the file type) use the method addTab(String, Component,
  * Icon). Only clicking the 'X' closes the tab.
  */
-public class JTabbedPaneWithCloseIconsRight extends JTabbedPane {
+public abstract class JTabbedPaneWithCloseIconsRight extends ReorderableTabbedPane {
 
     /**  */
     private final Color activeForegroundColor;
@@ -63,7 +62,5 @@ public class JTabbedPaneWithCloseIconsRight extends JTabbedPane {
      * @param component
      * @return
      */
-    protected Color getTabBackgroundColor(Component component) {
-        return null;
-    }
+    protected abstract Color getTabBackgroundColor(Component component);
 }
