@@ -31,7 +31,7 @@ public class MainFrameDesktopMatrixTabComponent extends MainFrameDesktopTabCompo
     }
 
     @Override
-    public ImageIcon getTabIcon() {
+    public ImageIcon getIcon() {
         return Tool3lgmConstants.MATRIX_ICON_13;
     }
 

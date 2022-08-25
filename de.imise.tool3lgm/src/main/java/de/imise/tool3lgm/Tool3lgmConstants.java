@@ -207,6 +207,8 @@ public abstract class Tool3lgmConstants {
     public static final ImageIcon TOOL_ICON_64 = getIcon("toolIcon_64.gif");
     public static final ImageIcon TOOL_ICON_128 = getIcon("toolIcon_128.gif");
 
+    public static final ImageIcon TEMPLATE_ICON_16 = getIcon("templateIcon_16.gif");
+
     public static final ImageIcon ERROR_ICON = getIcon("error.gif");
 
     /** All tool ions als list to initialize the frame (like MainFrame) */
@@ -221,6 +223,7 @@ public abstract class Tool3lgmConstants {
 
     /** icon for frames, dialogs and tabs */
     public static final ImageIcon TOOL_ICON_13 = new ImageIcon(TOOL_ICON_16.getImage().getScaledInstance(13, 13, Image.SCALE_FAST));
+    public static final ImageIcon TEMPLATE_ICON_13 = new ImageIcon(TEMPLATE_ICON_16.getImage().getScaledInstance(13, 13, Image.SCALE_FAST));
 
     /** icon for frames, dialogs and tabs */
     public static final ImageIcon MATRIX_ICON_13 = getIcon("matrixIcon_13.gif");

@@ -2,7 +2,6 @@ package de.imise.tool3lgm.gui.tabbedframe;
 
 import java.awt.BorderLayout;
 
-import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
@@ -48,10 +47,5 @@ public abstract class MainFrameDesktopTabComponent extends JPanel implements Vie
         GraphDocument doc = getGraphDocument();
         doc.removeAllTransactionsListener(this);
     }
-
-    /**
-     * @return the icon that should be displayed on the tab
-     */
-    public abstract ImageIcon getTabIcon();
 
 }

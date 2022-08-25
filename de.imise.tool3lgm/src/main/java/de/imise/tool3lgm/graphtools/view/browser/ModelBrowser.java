@@ -64,7 +64,7 @@ public final class ModelBrowser extends JTabbedPaneWithCloseIconsRight implement
      */
     protected void addCollection(final GDCollection gdcoll) {
         SubModelsBrowser subModelsBrowser = new SubModelsBrowser(gdcoll);
-        addTab(subModelsBrowser.getTitle(), subModelsBrowser);
+        addTab(subModelsBrowser.getTitle(), subModelsBrowser.getIcon(), subModelsBrowser, gdcoll.getFile().getAbsolutePath());
         setSelectedComponent(subModelsBrowser);
     }
 

@@ -1,5 +1,7 @@
 package de.imise.tool3lgm.gui.tabbedframe;
 
+import static de.imise.tool3lgm.Tool3lgmModelType.ModelCategory.TEMPLATE;
+
 import javax.swing.ImageIcon;
 
 import de.imise.tool3lgm.Tool3lgmConstants;
@@ -44,8 +46,8 @@ public class MainFrameDesktopGraphTabComponent extends MainFrameDesktopTabCompon
     }
 
     @Override
-    public ImageIcon getTabIcon() {
-        return Tool3lgmConstants.TOOL_ICON_13;
+    public ImageIcon getIcon() {
+        return getCollection().hasModelCategory(TEMPLATE) ? Tool3lgmConstants.TEMPLATE_ICON_13 : Tool3lgmConstants.TOOL_ICON_13;
     }
 
 }

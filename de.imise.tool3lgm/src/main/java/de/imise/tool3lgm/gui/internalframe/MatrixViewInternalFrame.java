@@ -1,5 +1,8 @@
 package de.imise.tool3lgm.gui.internalframe;
 
+import javax.swing.ImageIcon;
+
+import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.gui.viewpane.ViewPaneToolbarManager;
 import de.imise.tool3lgm.gui.viewpane.matrix.MatrixViewPane;
@@ -29,6 +32,11 @@ public class MatrixViewInternalFrame extends ToolInternalFrame implements Matrix
     @Override
     public MatrixViewPane getViewPane() {
         return (MatrixViewPane) viewPane;
+    }
+
+    @Override
+    public ImageIcon getIcon() {
+        return Tool3lgmConstants.MATRIX_ICON_13;
     }
 
 }

@@ -145,7 +145,7 @@ public class MainFrameDesktopTabbedPane extends JTabbedPaneWithCloseIconsRight i
      */
     private void addView(final MainFrameDesktopTabComponent tabComponent) {
         String name = tabComponent.getName();
-        ImageIcon icon = tabComponent.getTabIcon();
+        ImageIcon icon = tabComponent.getIcon();
         String toolTip = tabComponent.getFullName();
         addTab(name, icon, tabComponent, toolTip);
         GraphDocument doc = tabComponent.getGraphDocument();

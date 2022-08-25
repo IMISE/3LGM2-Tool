@@ -1,5 +1,7 @@
 package de.imise.tool3lgm.graphtools.view.browser;
 
+import static de.imise.tool3lgm.Tool3lgmModelType.ModelCategory.REGULAR;
+
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.event.FocusEvent;
@@ -7,12 +9,15 @@ import java.awt.event.FocusListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 
+import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.event.PopupMenuEvent;
 import javax.swing.event.PopupMenuListener;
 
 import de.imise.tool3lgm.Static;
+import de.imise.tool3lgm.Tool3lgmConstants;
+import de.imise.tool3lgm.Tool3lgmModelType.ModelCategory;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GDCollectionOwner;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
@@ -20,6 +25,7 @@ import de.imise.tool3lgm.graphtools.model.LGMChangeListenerSimple;
 import de.imise.tool3lgm.graphtools.model.LGMGraphDocument;
 import de.imise.tool3lgm.graphtools.view.tree.ModelBrowserTree;
 import de.imise.tool3lgm.gui.viewpane.ViewPaneFrameComponentListener;
+import de.imise.util.swing.IconSource;
 import de.imise.util.swing.component.AlphabeticalComboBox;
 
 /**
@@ -28,7 +34,7 @@ import de.imise.util.swing.component.AlphabeticalComboBox;
  *
  * @author AXS
  */
-public final class SubModelsBrowser extends JPanel implements FocusListener, ItemListener, PopupMenuListener, LGMChangeListenerSimple, GDCollectionOwner {
+public final class SubModelsBrowser extends JPanel implements FocusListener, ItemListener, PopupMenuListener, LGMChangeListenerSimple, GDCollectionOwner, IconSource {
 
     /**
      * Das Modell das über dieses Tab-Pane dargestellt wird
@@ -195,6 +201,12 @@ public final class SubModelsBrowser extends JPanel implements FocusListener, Ite
     @Override
     public void popupMenuCanceled(final PopupMenuEvent e) {
         //ignore
+    }
+
+    @Override
+    public ImageIcon getIcon() {
+        ModelCategory modelCategory = gdcoll.getModelType().getModelCategory();
+        return modelCategory == REGULAR ? Tool3lgmConstants.TOOL_ICON_13 : Tool3lgmConstants.TEMPLATE_ICON_13;
     }
 
 }

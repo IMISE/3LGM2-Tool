@@ -6,13 +6,14 @@ import java.awt.Cursor;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.model.GraphDocumentOwner;
 import de.imise.tool3lgm.graphtools.model.LGMChangeListenerSimple;
+import de.imise.util.swing.IconSource;
 
 /**
  * The component that surrounds resp. contains a single {@link ViewPane}.
  *
  * @author AXS (20.05.2020)
  */
-public interface ViewPaneFrameComponent extends GraphDocumentOwner, LGMChangeListenerSimple {
+public interface ViewPaneFrameComponent extends GraphDocumentOwner, LGMChangeListenerSimple, IconSource {
 
     /**
      * @return the contained {@link ViewPane}

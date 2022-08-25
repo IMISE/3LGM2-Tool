@@ -1,5 +1,10 @@
 package de.imise.tool3lgm.gui.internalframe;
 
+import static de.imise.tool3lgm.Tool3lgmModelType.ModelCategory.TEMPLATE;
+
+import javax.swing.ImageIcon;
+
+import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.view.graph.GraphViewParameter;
 import de.imise.tool3lgm.graphtools.view.graph.InputGraphArea;
@@ -43,6 +48,11 @@ public final class GraphViewInternalFrame extends ToolInternalFrame implements G
 
     public GraphViewParameter getGraphViewParameter() {
         return area.getGraphViewParameter();
+    }
+
+    @Override
+    public ImageIcon getIcon() {
+        return getCollection().hasModelCategory(TEMPLATE) ? Tool3lgmConstants.TEMPLATE_ICON_13 : Tool3lgmConstants.TOOL_ICON_13;
     }
 
 }
