@@ -28,8 +28,11 @@ public final class ModelBrowser extends JTabbedPaneWithCloseIconsRight implement
     /** Der zuletzt aktive Browser */
     protected static ModelBrowser lastActiveBrowser = null;
 
+    /**  */
+    private boolean closeDocOnCloseTab = true;
+
     /**
-     * Ein neuer Browser
+     * @param tabLayoutPolicy
      */
     protected ModelBrowser(final int tabLayoutPolicy) {
         super(ACTIVE_TAB_FOREGROUND_COLOR);
@@ -238,6 +241,19 @@ public final class ModelBrowser extends JTabbedPaneWithCloseIconsRight implement
             return Static.getTool().getModelColor((GDCollectionOwner) component);
         }
         return null;
+    }
+
+    @Override
+    public void removeTabAt(int index) {
+        if (closeDocOnCloseTab) {
+            closeDocOnCloseTab = false;
+            SubModelsBrowser subModelsBrowser = (SubModelsBrowser) getComponentAt(index);
+            GraphDocument doc = subModelsBrowser.getCurrentDoc();
+            Static.getTool().fileClose(doc); // this calls removeTabAt(int index) again (then with closeDocOnCloseTab == false)
+            return;
+        }
+        super.removeTabAt(index);
+        closeDocOnCloseTab = true;
     }
 
 }
