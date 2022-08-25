@@ -4,22 +4,23 @@ import static de.imise.tool3lgm.Tool3lgmConstants.ACTIVE_TAB_FOREGROUND_COLOR;
 import static de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty.OPTION_SHOW_MODELS_IN_SEPARATE_BROWSER;
 
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 
-import javax.swing.SwingConstants;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
+import de.imise.tool3lgm.graphtools.model.GDCollectionOwner;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
-import de.imise.util.swing.component.tab.ReorderableTabbedPane;
+import de.imise.util.swing.component.tab.JTabbedPaneWithCloseIconsRight;
 
 /** Erzeugt ModelBrowser für 3lgm */
-public final class ModelBrowser extends ReorderableTabbedPane implements ChangeListener, FocusListener {
+public final class ModelBrowser extends JTabbedPaneWithCloseIconsRight implements ChangeListener, FocusListener {
 
     /** xmlText color for tabs with models of non-active frames */
     private static Color inactiveColor;
@@ -31,7 +32,8 @@ public final class ModelBrowser extends ReorderableTabbedPane implements ChangeL
      * Ein neuer Browser
      */
     protected ModelBrowser(final int tabLayoutPolicy) {
-        super(SwingConstants.TOP, tabLayoutPolicy);
+        super(ACTIVE_TAB_FOREGROUND_COLOR);
+        setTabLayoutPolicy(tabLayoutPolicy);
         setMinimumSize(new Dimension(10, 10));
         addFocusListener(this);
         inactiveColor = getForeground();
@@ -228,6 +230,14 @@ public final class ModelBrowser extends ReorderableTabbedPane implements ChangeL
         } catch (Exception e) {
             // ignore
         }
+    }
+
+    @Override
+    protected Color getTabBackgroundColor(Component component) {
+        if (component instanceof GDCollectionOwner) {
+            return Static.getTool().getModelColor((GDCollectionOwner) component);
+        }
+        return null;
     }
 
 }

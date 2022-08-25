@@ -14,6 +14,7 @@ import javax.swing.event.PopupMenuListener;
 
 import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
+import de.imise.tool3lgm.graphtools.model.GDCollectionOwner;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.model.LGMChangeListenerSimple;
 import de.imise.tool3lgm.graphtools.model.LGMGraphDocument;
@@ -27,7 +28,7 @@ import de.imise.util.swing.component.AlphabeticalComboBox;
  *
  * @author AXS
  */
-public final class SubModelsBrowser extends JPanel implements FocusListener, ItemListener, PopupMenuListener, LGMChangeListenerSimple {
+public final class SubModelsBrowser extends JPanel implements FocusListener, ItemListener, PopupMenuListener, LGMChangeListenerSimple, GDCollectionOwner {
 
     /**
      * Das Modell das über dieses Tab-Pane dargestellt wird
@@ -95,6 +96,7 @@ public final class SubModelsBrowser extends JPanel implements FocusListener, Ite
     /**
      * @return
      */
+    @Override
     public GDCollection getCollection() {
         return gdcoll;
     }
