@@ -94,12 +94,10 @@ public class FlexibleTabPaneTab extends JPanel {
                 if (foregroundColor == null) {
                     foregroundColor = super.getForeground(); //usually black
                     if (foregroundColor != null) {
-                        for (int i = 0; i < 11; i++) {
-                            foregroundColor = foregroundColor.brighter(); // if black then a little bit brighter than Color.darkgray
-                        }
+                        foregroundColor = Color.DARK_GRAY.brighter().brighter(); //it's a little bit darker than light gray and ok in all look&feels
                     }
                 }
-                return isSelectedTab() ? activeForegroundColor : foregroundColor; // super.getForeground();
+                return isSelectedTab() ? activeForegroundColor : foregroundColor;
             }
 
             @Override
@@ -123,7 +121,7 @@ public class FlexibleTabPaneTab extends JPanel {
 
         };
 
-        normalFont = tabLabel.getFont();
+        normalFont = tabbedPane.getFont().deriveFont(Font.PLAIN); // Motiv Look&Feel has a Bold Font as default
         boldFont = normalFont.deriveFont(Font.BOLD);
 
         //we must set an irrelevant  dummy tooltip to enable the
