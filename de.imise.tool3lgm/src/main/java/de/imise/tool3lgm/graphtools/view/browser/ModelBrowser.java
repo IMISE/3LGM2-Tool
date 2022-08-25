@@ -34,9 +34,9 @@ public final class ModelBrowser extends JTabbedPaneWithCloseIconsRight implement
     /**
      * @param tabLayoutPolicy
      */
-    protected ModelBrowser(final int tabLayoutPolicy) {
+    protected ModelBrowser() {
         super(ACTIVE_TAB_FOREGROUND_COLOR);
-        setTabLayoutPolicy(tabLayoutPolicy);
+        setTabLayoutPolicy(SCROLL_TAB_LAYOUT);
         setMinimumSize(new Dimension(10, 10));
         addFocusListener(this);
         inactiveColor = getForeground();

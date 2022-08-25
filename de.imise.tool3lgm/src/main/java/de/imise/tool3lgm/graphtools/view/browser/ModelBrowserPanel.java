@@ -12,7 +12,6 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
 import javax.swing.JPanel;
-import javax.swing.JTabbedPane;
 
 import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
@@ -39,7 +38,7 @@ public final class ModelBrowserPanel extends JPanel implements PropertyChangeLis
     public ModelBrowserPanel() {
         setLayout(new GridLayout(1, 1, 0, 0));
         showModelsInSeparateBrowser = OPTION_SHOW_MODELS_IN_SEPARATE_BROWSER.is();
-        inactiveColor = new ModelBrowser(JTabbedPane.SCROLL_TAB_LAYOUT).getForeground();
+        inactiveColor = new ModelBrowser().getForeground();
         AbstractUserProperties.addPropertyChangeListener(this);
     }
 
@@ -50,14 +49,14 @@ public final class ModelBrowserPanel extends JPanel implements PropertyChangeLis
     public final void addCollection(final GDCollection gdcoll) {
         ModelBrowser modelBrowser;
         if (showModelsInSeparateBrowser) {
-            modelBrowser = new ModelBrowser(JTabbedPane.WRAP_TAB_LAYOUT); //WRAP -> never show the scroll buttons even if the space is not enough for the single tab in this pane
+            modelBrowser = new ModelBrowser();
             modelBrowser.addCollection(gdcoll);
             ((GridLayout) getLayout()).setColumns(((GridLayout) getLayout()).getColumns() + 1);
             add(modelBrowser);
         } else {
             modelBrowser = getFirstBrowser();
             if (modelBrowser == null) {
-                modelBrowser = new ModelBrowser(JTabbedPane.SCROLL_TAB_LAYOUT);
+                modelBrowser = new ModelBrowser();
                 add(modelBrowser);
             }
             modelBrowser.addCollection(gdcoll);
@@ -174,21 +173,21 @@ public final class ModelBrowserPanel extends JPanel implements PropertyChangeLis
                 setLayout(new GridLayout(1, Math.max(firstBrowser.getTabCount(), 1), 0, 0));
                 firstBrowser.stopChangeListening();//the tab removing and adding fires selected doc change events -> disable listeners for this proecedure
                 while (firstBrowser.getTabCount() > 1) {
-                    ModelBrowser modelBrowser = new ModelBrowser(JTabbedPane.WRAP_TAB_LAYOUT); // if the space is not enough for the only tab, there should not be shown the useless scroll buttons
+                    // if the space is not enough for the only tab, there should not be shown the useless scroll buttons
+                    // but don't set the wrap layout as tab policy because it centers the tab title in this case
+                    ModelBrowser modelBrowser = new ModelBrowser();
                     modelBrowser.stopChangeListening();
                     modelBrowser.addTabFromOther(firstBrowser, 1);
                     add(modelBrowser);
                     modelBrowser.startChangeListening();
                 }
                 firstBrowser.startChangeListening(); //finally reenable selected doc change events for the selected tab
-                firstBrowser.setTabLayoutPolicy(JTabbedPane.WRAP_TAB_LAYOUT); // if the space is not enough for the only tab, there should not be shown the useless scroll buttons
             } else {
                 while (getComponentCount() > 1) {
                     ModelBrowser secondBrowser = (ModelBrowser) getComponent(1);
                     remove(secondBrowser);
                     firstBrowser.addTabsFromOther(secondBrowser);
                 }
-                firstBrowser.setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT); // if the space is not enough for the only tab, there should be shown the wonderful scroll buttons
                 setLayout(new GridLayout(1, 1, 0, 0));
             }
         }
