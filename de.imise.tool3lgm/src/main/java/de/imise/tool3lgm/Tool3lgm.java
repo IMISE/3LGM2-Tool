@@ -3,6 +3,8 @@ package de.imise.tool3lgm;
 import static de.imise.tool3lgm.Tool3lgmChangeListener.Tool3lgmChangeType.MODEL_CHANGE_MODEL_CLOSED;
 import static de.imise.tool3lgm.Tool3lgmChangeListener.Tool3lgmChangeType.MODEL_CHANGE_MODEL_OPENED;
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
+import static de.imise.tool3lgm.Tool3lgmModelType.ModelCategory.REGULAR;
+import static de.imise.tool3lgm.Tool3lgmModelType.ModelCategory.TEMPLATE;
 import static de.imise.tool3lgm.graphtools.model.LGMChangeListener.LGMChangeType.SELECTION_CHANGED;
 import static de.imise.tool3lgm.graphtools.undoredo.TransactionManager.STANDARD_PID;
 
@@ -186,6 +188,18 @@ public class Tool3lgm {
             Static.setProgressDialogTitle("load_model", file.getName());
             Static.setProgressDialogStatusLabel("read_progress");
             boolean retVal = fileHandler.loadFromRAF();
+
+            //all models loaded from template dir must be set as TEMPLATE even if they ar REGULAR
+            if (gdcoll.hasModelCategory(REGULAR)) {
+                String path = file.getAbsolutePath();
+                for (File templateDir : TemplateLibrariesManager.getTemplateDirectories()) {
+                    String templateDirName = templateDir.getAbsolutePath();
+                    if (path.startsWith(templateDirName)) {
+                        gdcoll.setModelCategory(TEMPLATE);
+                    }
+                }
+            }
+
             gdcoll.setBulkMode(false);
             return retVal ? gdcoll : null;
         } catch (Exception e) {
@@ -194,6 +208,7 @@ public class Tool3lgm {
                     getResString("ok")
             };
             JOptionPane.showOptionDialog(mainFrame, getResString("oeffnenfehler") + "\n" + file.getPath() + "\n" + e.getMessage(), getResString("tool3lgm"), JOptionPane.OK_OPTION, JOptionPane.ERROR_MESSAGE, null, buttons, null);
+
             Static.closeProgressDialog();
             return null;
         }
