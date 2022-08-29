@@ -2,6 +2,7 @@ package de.imise.tool3lgm.gui.tabbedframe;
 
 import javax.swing.ImageIcon;
 
+import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.view.graph.InputGraphArea;
 import de.imise.tool3lgm.gui.viewpane.graph.GraphViewPane;
@@ -44,7 +45,7 @@ public class MainFrameDesktopGraphTabComponent extends MainFrameDesktopTabCompon
 
     @Override
     public ImageIcon getIcon() {
-        return getCollection().getModelType().getIcon();
+        return Tool3lgmConstants.getFrameOrTabIcon(area);
     }
 
 }

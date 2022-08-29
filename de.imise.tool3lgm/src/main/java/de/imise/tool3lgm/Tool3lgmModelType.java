@@ -2,8 +2,6 @@ package de.imise.tool3lgm;
 
 import static de.imise.tool3lgm.Tool3lgmModelType.ModelCategory.REGULAR;
 
-import javax.swing.ImageIcon;
-
 import de.imise.tool3lgm.graphtools.metamodel.MetaModelSpecificAdapter;
 
 /**
@@ -41,13 +39,6 @@ public class Tool3lgmModelType extends MetaModelSpecificAdapter {
          * Type of the model used as clipboard
          */
         CLIPBOARD;
-
-        /**
-         * @return
-         */
-        public ImageIcon getIcon() {
-            return Tool3lgmConstants.getIcon(this);
-        }
 
     }
 
@@ -106,13 +97,6 @@ public class Tool3lgmModelType extends MetaModelSpecificAdapter {
     @Override
     public String toString() {
         return String.valueOf(modelCategory);
-    }
-
-    /**
-     * @return
-     */
-    public ImageIcon getIcon() {
-        return Tool3lgmConstants.getIcon(modelCategory);
     }
 
 }

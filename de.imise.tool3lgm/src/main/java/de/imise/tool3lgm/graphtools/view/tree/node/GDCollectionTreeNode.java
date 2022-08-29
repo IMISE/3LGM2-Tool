@@ -22,7 +22,7 @@ public class GDCollectionTreeNode extends IconifiedTreeNode<GDCollection> {
      * @param icon
      */
     public GDCollectionTreeNode(GDCollection gdcoll, boolean defaultIcon) {
-        this(gdcoll, defaultIcon ? Tool3lgmConstants.TOOL_ICON_TRANSPARENT_16 : null);
+        this(gdcoll, defaultIcon ? Tool3lgmConstants.getTreeIcon(gdcoll) : null);
     }
 
     /**

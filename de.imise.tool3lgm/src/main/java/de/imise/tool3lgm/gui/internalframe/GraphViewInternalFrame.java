@@ -2,6 +2,7 @@ package de.imise.tool3lgm.gui.internalframe;
 
 import javax.swing.ImageIcon;
 
+import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.view.graph.GraphViewParameter;
 import de.imise.tool3lgm.graphtools.view.graph.InputGraphArea;
@@ -49,7 +50,7 @@ public final class GraphViewInternalFrame extends ToolInternalFrame implements G
 
     @Override
     public ImageIcon getIcon() {
-        return getCollection().getModelType().getIcon();
+        return Tool3lgmConstants.getFrameOrTabIcon(area);
     }
 
 }

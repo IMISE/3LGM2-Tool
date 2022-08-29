@@ -27,6 +27,7 @@ import com.google.common.collect.ImmutableList;
 import de.imise.tool3lgm.Tool3lgmModelType.ModelCategory;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
+import de.imise.tool3lgm.graphtools.model.GDCollectionOwner;
 import de.imise.tool3lgm.userproperties.UserProperties;
 import de.imise.util.ApplicationManager;
 import de.imise.util.GitVersionInfoHandler;
@@ -211,7 +212,9 @@ public abstract class Tool3lgmConstants {
     public static final ImageIcon TOOL_ICON_128 = getIcon("toolIcon_128.gif");
 
     public static final ImageIcon TEMPLATE_ICON_16 = getIcon("templateIcon_16.gif");
+    public static final ImageIcon TEMPLATE_ICON_TRANSPARENT_16 = getIcon("templateIcon_transparent_16.gif");
     public static final ImageIcon EXAMPLE_ICON_16 = getIcon("exampleIcon_16.gif");
+    public static final ImageIcon EXAMPLE_ICON_TRANSPARENT_16 = getIcon("exampleIcon_transparent_16.gif");
 
     public static final ImageIcon ERROR_ICON = getIcon("error.gif");
 
@@ -227,8 +230,11 @@ public abstract class Tool3lgmConstants {
 
     /** icon for frames, dialogs and tabs */
     public static final ImageIcon TOOL_ICON_13 = new ImageIcon(TOOL_ICON_16.getImage().getScaledInstance(13, 13, Image.SCALE_FAST));
+    public static final ImageIcon TOOL_ICON_TRANSPARENT_13 = new ImageIcon(TOOL_ICON_TRANSPARENT_16.getImage().getScaledInstance(13, 13, Image.SCALE_FAST));
     public static final ImageIcon TEMPLATE_ICON_13 = new ImageIcon(TEMPLATE_ICON_16.getImage().getScaledInstance(13, 13, Image.SCALE_FAST));
+    public static final ImageIcon TEMPLATE_ICON_TRANSPARENT_13 = new ImageIcon(TEMPLATE_ICON_TRANSPARENT_16.getImage().getScaledInstance(13, 13, Image.SCALE_FAST));
     public static final ImageIcon EXAMPLE_ICON_13 = new ImageIcon(EXAMPLE_ICON_16.getImage().getScaledInstance(13, 13, Image.SCALE_FAST));
+    public static final ImageIcon EXAMPLE_ICON_TRANSPARENT_13 = new ImageIcon(EXAMPLE_ICON_TRANSPARENT_16.getImage().getScaledInstance(13, 13, Image.SCALE_FAST));
 
     /** icon for frames, dialogs and tabs */
     public static final ImageIcon MATRIX_ICON_13 = getIcon("matrixIcon_13.gif");
@@ -310,11 +316,21 @@ public abstract class Tool3lgmConstants {
     protected static Cursor normalCursor = new Cursor(Cursor.DEFAULT_CURSOR), waitCursor = new Cursor(Cursor.WAIT_CURSOR), handCursor = new Cursor(Cursor.HAND_CURSOR);
 
     /**
-     * @param modelCategory
+     * @param gdCollectionOwner
      * @return
      */
-    public static final ImageIcon getIcon(ModelCategory modelCategory) {
-        return modelCategory == TEMPLATE ? TEMPLATE_ICON_13 : modelCategory == EXAMPLE ? EXAMPLE_ICON_13 : TOOL_ICON_13;
+    public static final ImageIcon getFrameOrTabIcon(GDCollectionOwner gdCollectionOwner) {
+        ModelCategory modelCategory = gdCollectionOwner.getCollection().getModelCategory();
+        return modelCategory == TEMPLATE ? TEMPLATE_ICON_13 : modelCategory == EXAMPLE ? EXAMPLE_ICON_13 : TOOL_ICON_13; // 16 px icons are a little bit to much here -> scaled 13 px
+    }
+
+    /**
+     * @param gdCollectionOwner
+     * @return
+     */
+    public static final ImageIcon getTreeIcon(GDCollectionOwner gdCollectionOwner) {
+        ModelCategory modelCategory = gdCollectionOwner.getCollection().getModelCategory();
+        return modelCategory == TEMPLATE ? TEMPLATE_ICON_TRANSPARENT_16 : modelCategory == EXAMPLE ? EXAMPLE_ICON_TRANSPARENT_16 : TOOL_ICON_TRANSPARENT_16;
     }
 
     /**

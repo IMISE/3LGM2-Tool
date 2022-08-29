@@ -138,7 +138,7 @@ import de.imise.util.swing.dialog.NameAndColorInputDialog;
  *
  * @author thomas, AXS
  */
-public class GDCollection extends UserFieldTarget implements MetaModelSpecific {
+public class GDCollection extends UserFieldTarget implements MetaModelSpecific, GDCollectionOwner {
 
     /**
      * Holds the {@link MetaModelContext} and the type of the model (
@@ -340,6 +340,11 @@ public class GDCollection extends UserFieldTarget implements MetaModelSpecific {
     public GDCollection(@Nonnull final Tool3lgmModelType modelType, final boolean loadDefaultUserFieldDefinition) {
         this();
         setModelType(modelType, loadDefaultUserFieldDefinition);
+    }
+
+    @Override
+    public GDCollection getCollection() {
+        return this;
     }
 
     /**
@@ -806,6 +811,7 @@ public class GDCollection extends UserFieldTarget implements MetaModelSpecific {
     /**
      * Gibt das aktuell selektierte <code>GraphDocument</code> zurück.
      */
+    @Override
     public LGMGraphDocument getSelectedDoc() {
         return lastItem(activeGraphDocumentsList);
     }

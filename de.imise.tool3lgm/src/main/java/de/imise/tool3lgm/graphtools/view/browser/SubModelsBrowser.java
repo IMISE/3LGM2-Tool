@@ -14,6 +14,7 @@ import javax.swing.event.PopupMenuEvent;
 import javax.swing.event.PopupMenuListener;
 
 import de.imise.tool3lgm.Static;
+import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GDCollectionOwner;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
@@ -201,7 +202,7 @@ public final class SubModelsBrowser extends JPanel implements FocusListener, Ite
 
     @Override
     public ImageIcon getIcon() {
-        return gdcoll.getModelType().getIcon();
+        return Tool3lgmConstants.getFrameOrTabIcon(gdcoll);
     }
 
 }
