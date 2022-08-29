@@ -1,5 +1,7 @@
 package de.imise.tool3lgm;
 
+import static de.imise.tool3lgm.Tool3lgmModelType.ModelCategory.EXAMPLE;
+import static de.imise.tool3lgm.Tool3lgmModelType.ModelCategory.TEMPLATE;
 import static de.imise.tool3lgm.userproperties.UserProperties.USER_HOME_3LGM_DIR;
 import static de.imise.tool3lgm.userproperties.UserProperties.USER_HOME_DIR_NAME;
 
@@ -22,6 +24,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 
 import com.google.common.collect.ImmutableList;
 
+import de.imise.tool3lgm.Tool3lgmModelType.ModelCategory;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.userproperties.UserProperties;
@@ -208,6 +211,7 @@ public abstract class Tool3lgmConstants {
     public static final ImageIcon TOOL_ICON_128 = getIcon("toolIcon_128.gif");
 
     public static final ImageIcon TEMPLATE_ICON_16 = getIcon("templateIcon_16.gif");
+    public static final ImageIcon EXAMPLE_ICON_16 = getIcon("exampleIcon_16.gif");
 
     public static final ImageIcon ERROR_ICON = getIcon("error.gif");
 
@@ -224,6 +228,7 @@ public abstract class Tool3lgmConstants {
     /** icon for frames, dialogs and tabs */
     public static final ImageIcon TOOL_ICON_13 = new ImageIcon(TOOL_ICON_16.getImage().getScaledInstance(13, 13, Image.SCALE_FAST));
     public static final ImageIcon TEMPLATE_ICON_13 = new ImageIcon(TEMPLATE_ICON_16.getImage().getScaledInstance(13, 13, Image.SCALE_FAST));
+    public static final ImageIcon EXAMPLE_ICON_13 = new ImageIcon(EXAMPLE_ICON_16.getImage().getScaledInstance(13, 13, Image.SCALE_FAST));
 
     /** icon for frames, dialogs and tabs */
     public static final ImageIcon MATRIX_ICON_13 = getIcon("matrixIcon_13.gif");
@@ -303,6 +308,14 @@ public abstract class Tool3lgmConstants {
      * für die Sanduhr...
      */
     protected static Cursor normalCursor = new Cursor(Cursor.DEFAULT_CURSOR), waitCursor = new Cursor(Cursor.WAIT_CURSOR), handCursor = new Cursor(Cursor.HAND_CURSOR);
+
+    /**
+     * @param modelCategory
+     * @return
+     */
+    public static final ImageIcon getIcon(ModelCategory modelCategory) {
+        return modelCategory == TEMPLATE ? TEMPLATE_ICON_13 : modelCategory == EXAMPLE ? EXAMPLE_ICON_13 : TOOL_ICON_13;
+    }
 
     /**
      * Liefert <code>true</code>, wenn der übergebene String eine Extension

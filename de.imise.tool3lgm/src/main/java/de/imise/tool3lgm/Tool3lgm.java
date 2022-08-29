@@ -3,6 +3,7 @@ package de.imise.tool3lgm;
 import static de.imise.tool3lgm.Tool3lgmChangeListener.Tool3lgmChangeType.MODEL_CHANGE_MODEL_CLOSED;
 import static de.imise.tool3lgm.Tool3lgmChangeListener.Tool3lgmChangeType.MODEL_CHANGE_MODEL_OPENED;
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
+import static de.imise.tool3lgm.Tool3lgmModelType.ModelCategory.EXAMPLE;
 import static de.imise.tool3lgm.Tool3lgmModelType.ModelCategory.REGULAR;
 import static de.imise.tool3lgm.Tool3lgmModelType.ModelCategory.TEMPLATE;
 import static de.imise.tool3lgm.graphtools.model.LGMChangeListener.LGMChangeType.SELECTION_CHANGED;
@@ -192,10 +193,15 @@ public class Tool3lgm {
             //all models loaded from template dir must be set as TEMPLATE even if they ar REGULAR
             if (gdcoll.hasModelCategory(REGULAR)) {
                 String path = file.getAbsolutePath();
-                for (File templateDir : TemplateLibrariesManager.getTemplateDirectories()) {
-                    String templateDirName = templateDir.getAbsolutePath();
-                    if (path.startsWith(templateDirName)) {
-                        gdcoll.setModelCategory(TEMPLATE);
+                String exampleDir = Tool3lgmConstants.EXAMPLES_DIR.getAbsolutePath();
+                if (path.startsWith(exampleDir)) {
+                    gdcoll.setModelCategory(EXAMPLE);
+                } else {
+                    for (File templateDir : TemplateLibrariesManager.getTemplateDirectories()) {
+                        String templateDirName = templateDir.getAbsolutePath();
+                        if (path.startsWith(templateDirName)) {
+                            gdcoll.setModelCategory(TEMPLATE);
+                        }
                     }
                 }
             }
