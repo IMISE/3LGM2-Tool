@@ -221,15 +221,15 @@ public final class MainFrameDesktopPane extends JPanel implements PropertyChange
     private void savePositionAndSizeInUserProperties() {
         if (OPTION_SHOW_MODEL_BROWSER.is() && leftSplitPane != null && leftSplitPane.isVisible()) {
             int dividerLocation = leftSplitPane.getDividerLocation();
-            IntProperty.PROPERTY_INT_MODELBRWOSER_GRAPHVIEW_DIVIDER_LOCATION.set(dividerLocation);
+            PROPERTY_INT_MODELBRWOSER_GRAPHVIEW_DIVIDER_LOCATION.set(dividerLocation);
         }
         if (OPTION_SHOW_TEMPLATE_BROWSER.is() && rightSplitPane != null && rightSplitPane.isVisible()) {
             int dividerLocation = rightSplitPane.getDividerLocation();
-            IntProperty.PROPERTY_INT_GRAPHVIEW_TEMPLATEBROWSER_DIVIDER_LOCATION.set(dividerLocation);
+            PROPERTY_INT_GRAPHVIEW_TEMPLATEBROWSER_DIVIDER_LOCATION.set(dividerLocation);
         }
         if (isShowConsistencyTable() && bottomSplitPane != null && bottomSplitPane.isVisible()) {
             int dividerLocation = bottomSplitPane.getDividerLocation();
-            IntProperty.PROPERTY_INT_GRAPHVIEW_CONSISTENCY_TABLE_DIVIDER_LOCATION.set(dividerLocation);
+            PROPERTY_INT_GRAPHVIEW_CONSISTENCY_TABLE_DIVIDER_LOCATION.set(dividerLocation);
         }
     }
 
