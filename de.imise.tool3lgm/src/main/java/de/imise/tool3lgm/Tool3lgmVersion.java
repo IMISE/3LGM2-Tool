@@ -1,5 +1,7 @@
 package de.imise.tool3lgm;
 
+import java.util.Objects;
+
 import de.imise.util.GitVersionInfoHandler.GitVersionInfo;
 
 public class Tool3lgmVersion implements Comparable<Tool3lgmVersion> {
@@ -131,13 +133,7 @@ public class Tool3lgmVersion implements Comparable<Tool3lgmVersion> {
 
     @Override
     public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + major;
-        result = prime * result + minor;
-        result = prime * result + patch;
-        result = prime * result + (suffix == null ? 0 : suffix.hashCode());
-        return result;
+        return Objects.hash(major, minor, patch, suffix);
     }
 
     @Override
@@ -161,11 +157,7 @@ public class Tool3lgmVersion implements Comparable<Tool3lgmVersion> {
         if (patch != other.patch) {
             return false;
         }
-        if (suffix == null) {
-            if (other.suffix != null) {
-                return false;
-            }
-        } else if (!suffix.equals(other.suffix)) {
+        if (!Objects.equals(suffix, other.suffix)) {
             return false;
         }
         return true;
