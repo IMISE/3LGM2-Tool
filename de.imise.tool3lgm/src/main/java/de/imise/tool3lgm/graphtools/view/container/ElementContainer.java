@@ -748,7 +748,8 @@ public abstract class ElementContainer extends JLabel implements Cloneable, Grap
      */
     @Override
     public final String getName() {
-        return me.getName();
+        //null check is needed if we want to use Nimbus Look&Feel! Reason unknown.
+        return me == null ? "" : me.getName();
     }
 
     /**

@@ -34,7 +34,8 @@ public abstract class MainFrameDesktopTabComponent extends JPanel implements Vie
 
     @Override
     public String getName() {
-        return viewPane.getName();
+        //null check is needed if we want to use Nimbus Look&Feel! Reason unknown.
+        return viewPane == null ? "" : viewPane.getName();
     }
 
     @Override

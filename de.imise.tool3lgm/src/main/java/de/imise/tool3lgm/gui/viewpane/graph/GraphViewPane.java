@@ -98,7 +98,8 @@ public final class GraphViewPane extends ViewPane {
     @Override
     public String getName() {
         GraphDocument doc = getGraphDocument();
-        String name = doc.toString();
+        //null check is needed if we want to use Nimbus Look&Feel! Reason unknown.
+        String name = doc == null ? "" : doc.toString();
         return name;
     }
 
