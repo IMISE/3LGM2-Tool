@@ -2,6 +2,8 @@ package de.imise.util.swing.component.tab;
 
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 
 import javax.swing.BorderFactory;
 import javax.swing.Icon;
@@ -54,8 +56,21 @@ public abstract class JTabbedPaneWithCloseIconsRight extends ReorderableTabbedPa
         int lastTabComponentIndex = getTabCount() - 1;
         Icon tabIcon = getIconAt(lastTabComponentIndex);
         Color tabBackgroundColor = getTabBackgroundColor(component);
-        setTabComponentAt(lastTabComponentIndex, new FlexibleTabPaneTab(this, tabIcon, activeForegroundColor, tabBackgroundColor));
+        setTabComponentAt(lastTabComponentIndex, new FlexibleTabPaneTab(this, tabIcon, activeForegroundColor, tabBackgroundColor, 80));
         setBackgroundAt(lastTabComponentIndex, tabBackgroundColor);
+
+        // if we resize the panel then the tabs must
+        // expilicetly called to resize themself
+        addComponentListener(new ComponentAdapter() {
+            @Override
+            public void componentResized(ComponentEvent e) {
+                for (int i = 0; i < getTabCount(); i++) {
+                    Component tabComponentAt = getTabComponentAt(i);
+                    tabComponentAt.revalidate();
+                    tabComponentAt.repaint();
+                }
+            }
+        });
     }
 
     /**

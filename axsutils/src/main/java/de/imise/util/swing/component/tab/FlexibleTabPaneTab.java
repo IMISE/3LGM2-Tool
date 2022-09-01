@@ -1,5 +1,7 @@
 package de.imise.util.swing.component.tab;
 
+import static java.lang.Integer.MAX_VALUE;
+
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -16,10 +18,12 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
+import javax.swing.UIManager;
 import javax.swing.border.Border;
 import javax.swing.plaf.basic.BasicButtonUI;
 
 import de.imise.util.resource.SimpleResourceBundleSourceAdapter;
+import de.imise.util.swing.component.ParentComponentFinder;
 
 /**
  * @author Ich (10.08.2020)
@@ -51,18 +55,37 @@ public class FlexibleTabPaneTab extends JPanel {
 
     private static Color foregroundColor = null;
 
+    /**  */
+    private JTabbedPane parentTabPane = null;
+
     /**
      * The icon that is displayed on the tab
      */
     private Icon icon;
 
     /**
+     * Magic number: Got this through trying. I had no idea how to set this
+     * value in an other way :(
+     */
+    private static final int lookAndFeelDependentSingleTabOffsetFromParentsFullWidth = UIManager.getLookAndFeel().getName().contains("Windows") ? 20 : 30;
+
+    /**
      * @param tabbedPane
      * @param activeForegroundColor
      * @param backgroundColor
      */
-    public FlexibleTabPaneTab(final JTabbedPane tabbedPane, final Color activeForegroundColor, Color backgroundColor) {
-        this(tabbedPane, null, activeForegroundColor, backgroundColor);
+    public FlexibleTabPaneTab(final JTabbedPane tabbedPane, final Color activeForegroundColor, final Color backgroundColor) {
+        this(tabbedPane, activeForegroundColor, backgroundColor, MAX_VALUE);
+    }
+
+    /**
+     * @param tabbedPane
+     * @param activeForegroundColor
+     * @param backgroundColor
+     * @param minTitleWidth
+     */
+    public FlexibleTabPaneTab(final JTabbedPane tabbedPane, final Color activeForegroundColor, final Color backgroundColor, int minTitleWidth) {
+        this(tabbedPane, null, activeForegroundColor, backgroundColor, minTitleWidth);
     }
 
     /**
@@ -71,12 +94,25 @@ public class FlexibleTabPaneTab extends JPanel {
      * @param activeForegroundColor
      * @param backgroundColor
      */
-    public FlexibleTabPaneTab(final JTabbedPane tabbedPane, final Icon icon, final Color activeForegroundColor, final Color backgroundColor) {
+    public FlexibleTabPaneTab(int i, final JTabbedPane tabbedPane, final Icon icon, final Color activeForegroundColor, final Color backgroundColor) {
+        this(tabbedPane, null, activeForegroundColor, backgroundColor, MAX_VALUE);
+    }
+
+    /**
+     * @param tabbedPane
+     * @param icon
+     * @param activeForegroundColor
+     * @param backgroundColor
+     * @param minTitleWidth
+     */
+    public FlexibleTabPaneTab(final JTabbedPane tabbedPane, final Icon icon, final Color activeForegroundColor, final Color backgroundColor, final int minTitleWidth) {
         super(new FlowLayout(FlowLayout.LEFT, 0, 0));
         this.tabbedPane = tabbedPane;
         setOpaque(true);
 
         setIcon(icon);
+
+        final FlexibleTabPaneTab tab = this;
 
         tabLabel = new JLabel() {
             @Override
@@ -117,6 +153,24 @@ public class FlexibleTabPaneTab extends JPanel {
                 int tabIndex = getTabIndex();
                 int selectedIndex = getSelectedTabIndex();
                 return tabIndex == selectedIndex;
+            }
+
+            @Override
+            public Dimension getPreferredSize() {
+                Dimension preferredSize = super.getPreferredSize();
+                int orgMinWidth = preferredSize.width;
+                int currentMaxLabelWidth = tab.getCurrentMaxLabelWidth();
+                if (orgMinWidth > currentMaxLabelWidth) {
+                    preferredSize.width = currentMaxLabelWidth;
+                    if (preferredSize.width < minTitleWidth) {
+                        if (orgMinWidth > minTitleWidth) {
+                            preferredSize.width = minTitleWidth;
+                        } else {
+                            preferredSize.width = orgMinWidth;
+                        }
+                    }
+                }
+                return preferredSize;
             }
 
         };
@@ -353,6 +407,23 @@ public class FlexibleTabPaneTab extends JPanel {
     protected void paintComponent(Graphics g) {
         g.translate(0, THREE_PIXEL_Y_SHIFT_TO_LOOK_OK_IN_EVERY_LOOK_AND_FEEL);
         super.paintComponent(g);
+    }
+
+    /**
+     * @return
+     */
+    public int getCurrentMaxLabelWidth() {
+        if (parentTabPane == null) {
+            parentTabPane = ParentComponentFinder.getParent(this, JTabbedPane.class);
+        }
+        int parentWidth = parentTabPane.getWidth();
+        int tabCount = parentTabPane.getTabCount();
+        int currentMaxLabelWidth = parentWidth / tabCount;
+        if (icon != null) {
+            currentMaxLabelWidth -= icon.getIconWidth();
+        }
+        currentMaxLabelWidth -= closeButton.getWidth();
+        return currentMaxLabelWidth - lookAndFeelDependentSingleTabOffsetFromParentsFullWidth;
     }
 
 }
