@@ -22,6 +22,7 @@ import javax.swing.UIManager;
 import javax.swing.border.Border;
 import javax.swing.plaf.basic.BasicButtonUI;
 
+import de.imise.util.image.ImageTools;
 import de.imise.util.resource.SimpleResourceBundleSourceAdapter;
 import de.imise.util.swing.component.ParentComponentFinder;
 
@@ -58,10 +59,14 @@ public class FlexibleTabPaneTab extends JPanel {
     /**  */
     private JTabbedPane parentTabPane = null;
 
-    /**
-     * The icon that is displayed on the tab
-     */
+    /** The icon that is displayed on the tab */
     private Icon icon;
+
+    /** Icon for the deactivated state */
+    private Icon grayIcon;
+
+    /** Caches the currently setted icon */
+    private Icon currentIcon;
 
     /**
      * Magic number: Got this through trying. I had no idea how to set this
@@ -110,7 +115,8 @@ public class FlexibleTabPaneTab extends JPanel {
         this.tabbedPane = tabbedPane;
         setOpaque(true);
 
-        setIcon(icon);
+        this.icon = icon;
+        grayIcon = icon != null ? ImageTools.getGray(icon) : null;
 
         final FlexibleTabPaneTab tab = this;
 
@@ -390,11 +396,11 @@ public class FlexibleTabPaneTab extends JPanel {
     /**
      * @param icon
      */
-    public void setIcon(final Icon icon) {
-        if (this.icon != null) {
+    private void setIcon(final Icon icon) {
+        if (currentIcon != null) {
             remove(0);
         }
-        this.icon = icon;
+        currentIcon = icon;
         if (icon != null) {
             JLabel iconLabel = new JLabel(icon);
             add(iconLabel, 0);
@@ -405,6 +411,13 @@ public class FlexibleTabPaneTab extends JPanel {
 
     @Override
     protected void paintComponent(Graphics g) {
+        if (isSelectedTab()) {
+            if (currentIcon != icon) {
+                setIcon(icon);
+            }
+        } else if (currentIcon != grayIcon) {
+            setIcon(grayIcon);
+        }
         g.translate(0, THREE_PIXEL_Y_SHIFT_TO_LOOK_OK_IN_EVERY_LOOK_AND_FEEL);
         super.paintComponent(g);
     }
