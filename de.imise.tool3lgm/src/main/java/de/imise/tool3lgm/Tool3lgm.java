@@ -30,7 +30,6 @@ import com.google.common.base.Objects;
 
 import de.imise.tool3lgm.Tool3lgmChangeListener.Tool3lgmChangeType;
 import de.imise.tool3lgm.Tool3lgmConstants.FileFilterType;
-import de.imise.tool3lgm.Tool3lgmModelType.ModelCategory;
 import de.imise.tool3lgm.graphtools.dialog.element.ElementPropertyDialogsContext;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
@@ -516,15 +515,13 @@ public class Tool3lgm {
         if (doc != null) {
             //das zu aktivierende Graphdocument und dessen Collection an die richtige Position bringen
             GDCollection gdcoll = doc.getCollection();
-            if (gdcoll.getModelCategory() == ModelCategory.REGULAR) {
-                //die Collection des übergebene doc als letzte in die Collection-Liste bringen
-                boolean removed = collections.remove(gdcoll); // nur wenn das Ding da drin war, kommt true zurück. Template-Modelle dürfen hier nicht gesetzt werden -> nur hinzufügen, wenn es auch vorher drin war
-                if (removed) {
-                    collections.add(gdcoll);
-                }
-                //das aktive doc in der Collection selbst setzen
-                gdcoll.setSelectedDoc(doc);
+            //die Collection des übergebenen doc als letzte in die Collection-Liste bringen
+            boolean removed = collections.remove(gdcoll); // nur wenn das Ding da drin war, kommt true zurück. Template-Modelle dürfen hier nicht gesetzt werden -> nur hinzufügen, wenn es auch vorher drin war
+            if (removed) {
+                collections.add(gdcoll);
             }
+            //das aktive doc in der Collection selbst setzen
+            gdcoll.setSelectedDoc(doc);
         }
     }
 
