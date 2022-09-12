@@ -185,8 +185,8 @@ public class MenuCollection {
                 BooleanProperty.OPTION_MARK_INCONSISTENT_ELEMENTS);
 
         /** Das Browser-Optionen-Menu */
-        public static final JMenu BROWSER_OPTIONS_MENU = createMenu("browserOptionsMenu", BooleanProperty.OPTION_ENABLE_SUBMODEL_BROWSER, BooleanProperty.OPTION_SHOW_MODELS_IN_SEPARATE_BROWSER,
-                //createCheckBoxItem(ActionLibrary.ViewActions.SHOW_SUBMODELS_IN_BROWSER_SIDE_BY_SIDE),
+        public static final JMenu BROWSER_OPTIONS_MENU = createMenu("browserOptionsMenu", BooleanProperty.OPTION_ENABLE_SUBMODEL_BROWSER,
+                //BooleanProperty.OPTION_SHOW_MODELS_IN_SEPARATE_BROWSER, //AXS 12.09.2022 deactivated in Ticket #600 because the highlighting/focus not works correct with this option (and no one needs this...)
                 new JSeparator(), BooleanProperty.OPTION_SHOW_USER_DEFINED_PROPERTIES_IN_MODEL_BROWSER, BooleanProperty.OPTION_SUBORDINATE_COMPOSITION_ELEMENTS_IN_MODEL_BROWSER, BooleanProperty.OPTION_SHOW_TEMPLATE_ELEMENTS_IN_MODEL_BROWSER);
 
         /** Das Grafik-Optionen-Menu */

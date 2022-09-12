@@ -365,7 +365,13 @@ public class UserProperties extends AbstractUserProperties {
          * Jedes geöffnete Modell hat einen eigenen ModelBrowser, die alle
          * nebeneinander angeordnet werden
          */
-        OPTION_SHOW_MODELS_IN_SEPARATE_BROWSER,
+        OPTION_SHOW_MODELS_IN_SEPARATE_BROWSER {
+            @Override
+            public boolean is() {
+                return false; //AXS 12.09.2022 deactivated in Ticket #600 because the highlighting/focus not works correct with this option (and no one needs this...)
+                // remove this option if no one calls for a reactivation!
+            }
+        },
         /**
          * Über CompositionEdges verbundene Elemente im ModellBrowser
          * unterordnen
