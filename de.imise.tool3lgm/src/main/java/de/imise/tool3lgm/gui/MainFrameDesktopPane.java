@@ -576,8 +576,9 @@ public final class MainFrameDesktopPane extends JPanel implements PropertyChange
             this.activateGraphView = false;
         }
 
-        Static.setSelectedDoc(doc);
+        // first set the doc in the model browser and the the static selected doc!
         modelBrowserPanel.addGraphDocumentAndSetSelected(doc);
+        Static.setSelectedDoc(doc);
         //beim nächsten Konextwechsel auch das nach Vorne holen des grafischen Views wieder einschalten
         this.activateGraphView = true;
 
