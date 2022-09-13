@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 
 import de.imise.tool3lgm.MetaModelContext;
@@ -77,11 +78,7 @@ public class PathTreeDefinition extends MetaModelSpecificAdapter implements Iter
             return false;
         }
         PathTreeDefinition other = (PathTreeDefinition) obj;
-        if (branches == null) {
-            if (other.branches != null) {
-                return false;
-            }
-        } else if (!branches.equals(other.branches)) {
+        if (!Objects.equals(branches, other.branches)) {
             return false;
         }
         return true;

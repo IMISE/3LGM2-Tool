@@ -54,8 +54,8 @@ public class IheTemplateLibraryProvider extends TemplateLibraryProvider {
     public TemplateViewDefinition getViewDefinition() {
         return new TemplateViewDefinition(resourceHandler, IheRDFDataImporter.IHE_RDF_FILE_NAME) {
             @Override
-            public Object[] getMainCategoryResStringAndIconKeys() {
-                return new Object[] {"MAIN_CATEGORY_NAME"};
+            public List<?> getMainCategoryResStringAndIconKeys() {
+                return List.of("MAIN_CATEGORY_NAME");
             }
 
             @SuppressWarnings("unchecked")

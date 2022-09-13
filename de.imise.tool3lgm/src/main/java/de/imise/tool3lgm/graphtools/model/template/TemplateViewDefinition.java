@@ -42,8 +42,8 @@ public abstract class TemplateViewDefinition {
      *         "HL7". More than one template library can be in the same
      *         category. If <code>null</code> it will be ignored.
      */
-    protected Object[] getMainCategoryResStringAndIconKeys() {
-        return new Object[0];
+    protected List<?> getMainCategoryResStringAndIconKeys() {
+        return List.of();
     }
 
     /**
@@ -60,7 +60,7 @@ public abstract class TemplateViewDefinition {
      */
     public final List<PathTreeBranchDefinition> getTreeBranchDefinition() {
         List<PathTreeBranchDefinition> treeBranchDefinitions = new ArrayList<>();
-        Object[] mainCategoryResStringAndIconKey = getMainCategoryResStringAndIconKeys();
+        List<?> mainCategoryResStringAndIconKey = getMainCategoryResStringAndIconKeys();
         List<SequenceMetaPath> viewMetaPaths = getViewMetaPaths();
         if (viewMetaPaths != null && !viewMetaPaths.isEmpty()) {
             for (SequenceMetaPath viewMetaPath : getViewMetaPaths()) {

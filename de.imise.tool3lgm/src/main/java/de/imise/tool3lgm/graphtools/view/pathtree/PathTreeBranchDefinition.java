@@ -60,7 +60,7 @@ public final class PathTreeBranchDefinition implements SimpleResourceSource {
      *            displayed with this tree branch definition.
      * @param hierarchyObjects
      */
-    public PathTreeBranchDefinition(final SimpleResourceSource resourceHandler, final String displayedModelsNamePrefix, final Object... hierarchyObjects) {
+    public PathTreeBranchDefinition(final SimpleResourceSource resourceHandler, final String displayedModelsNamePrefix, final List<?> hierarchyObjects) {
         this.resourceHandler = resourceHandler;
         this.displayedModelsNamePrefix = displayedModelsNamePrefix;
         elementsPath = null;
@@ -75,7 +75,7 @@ public final class PathTreeBranchDefinition implements SimpleResourceSource {
      * @param elementsPath
      * @param hierarchyObjects
      */
-    public PathTreeBranchDefinition(final SimpleResourceSource resourceHandler, final String displayedModelsNamePrefix, final SequenceMetaPath elementsPath, final Object... hierarchyObjects) {
+    public PathTreeBranchDefinition(final SimpleResourceSource resourceHandler, final String displayedModelsNamePrefix, final SequenceMetaPath elementsPath, final List<?> hierarchyObjects) {
         this.resourceHandler = resourceHandler;
         this.displayedModelsNamePrefix = displayedModelsNamePrefix;
         this.elementsPath = elementsPath;
@@ -85,10 +85,10 @@ public final class PathTreeBranchDefinition implements SimpleResourceSource {
     /**
      * @param hierarchyObjects
      */
-    private void initHierarchyObjects(Object... hierarchyObjects) {
+    private void initHierarchyObjects(List<?> hierarchyObjects) {
         for (Object hierarchyObject : hierarchyObjects) {
-            this.hierarchyObjects.add(hierarchyObject);
-        }
+                this.hierarchyObjects.add(hierarchyObject);
+            }
     }
 
     /**

@@ -3,6 +3,8 @@ package de.imise.tool3lgm.graphtools.model.template;
 import static de.imise.tool3lgm.Tool3lgmModelType.ModelCategory.TEMPLATE;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import com.google.common.collect.ImmutableList;
@@ -68,7 +70,7 @@ public class ModelTemplatLibraryProvider extends TemplateLibraryProvider {
     public TemplateViewDefinition getViewDefinition() {
         return new TemplateViewDefinition(null, null) {
             @Override
-            protected Object[] getMainCategoryResStringAndIconKeys() {
+            protected List<?> getMainCategoryResStringAndIconKeys() {
                 List<File> templateDirectories = TemplateLibrariesManager.getTemplateDirectories();
                 String templateFilePath = templateFile.getPath();
                 for (File templateDirectory : templateDirectories) {
@@ -82,9 +84,8 @@ public class ModelTemplatLibraryProvider extends TemplateLibraryProvider {
                     }
                 }
                 String[] modelTemplateFileHieraryNames = templateFilePath.split("\\" + File.separator);
-                Object[] modelTemplateFileHierary = new Object[modelTemplateFileHieraryNames.length];
-                System.arraycopy(modelTemplateFileHieraryNames, 0, modelTemplateFileHierary, 0, modelTemplateFileHieraryNames.length - 1);
-                modelTemplateFileHierary[modelTemplateFileHierary.length - 1] = gdcoll;
+                List<Object> modelTemplateFileHierary = new ArrayList<>(Arrays.asList(modelTemplateFileHieraryNames));
+                modelTemplateFileHierary.set(modelTemplateFileHierary.size() - 1, gdcoll);
                 return modelTemplateFileHierary;
             }
 
