@@ -11,6 +11,7 @@ import java.awt.Graphics2D;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
 
 import javax.swing.BorderFactory;
 import javax.swing.Icon;
@@ -437,6 +438,20 @@ public class FlexibleTabPaneTab extends JPanel {
         }
         currentMaxLabelWidth -= closeButton.getWidth();
         return currentMaxLabelWidth - lookAndFeelDependentSingleTabOffsetFromParentsFullWidth;
+    }
+
+    @Override
+    public synchronized void addMouseListener(MouseListener l) {
+        tabLabel.addMouseListener(l);
+        closeButton.addMouseListener(l);
+        super.addMouseListener(l);
+    }
+
+    @Override
+    public synchronized void addMouseMotionListener(MouseMotionListener l) {
+        tabLabel.addMouseMotionListener(l);
+        closeButton.addMouseMotionListener(l);
+        super.addMouseMotionListener(l);
     }
 
 }

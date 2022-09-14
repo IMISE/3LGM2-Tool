@@ -9,7 +9,9 @@ import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
+import java.awt.Point;
 import java.awt.Rectangle;
+import java.awt.event.MouseEvent;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -275,6 +277,32 @@ public class SwingUtils {
         maximumFrameBounds.x -= frameInsets.left;
         maximumFrameBounds.width += frameInsets.right + frameInsets.left;
         maximumFrameBounds.height += frameInsets.bottom;
+    }
+
+    /**
+     * @param parent
+     * @param child
+     * @param locationOnChild
+     * @return
+     */
+    public static final Point getLocationOnParent(Container parent, Component child, Point locationOnChild) {
+        // as long as the child is not the parent itself but a component contained
+        // in it -> determine relative coordinates of the child in the parent
+        while (child != parent && child != null) {
+            Point location = child.getLocation();
+            locationOnChild.translate(location.x, location.y);
+            child = child.getParent();
+        }
+        return locationOnChild;
+    }
+
+    /**
+     * @param parent
+     * @param e
+     * @return
+     */
+    public static final Point getLocationOnParent(Container parent, MouseEvent e) {
+        return getLocationOnParent(parent, (Component) e.getSource(), e.getPoint());
     }
 
 }

@@ -1,14 +1,16 @@
 package de.imise.util.swing.component.tab;
 
+import static de.imise.util.swing.SwingUtils.getLocationOnParent;
+
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Cursor;
+import java.awt.Point;
 import java.awt.event.MouseEvent;
 
 import javax.swing.Icon;
 import javax.swing.JTabbedPane;
 import javax.swing.event.MouseInputAdapter;
-import javax.swing.event.MouseInputListener;
 
 /**
  * Ein TabPane, bei dem man die Tabs per Maus-Drag in ihrer Reihenfolge ändern
@@ -22,6 +24,14 @@ import javax.swing.event.MouseInputListener;
  * @author dsmalley (Dave)
  */
 public class ReorderableTabbedPane extends TabPaneMnemonics {
+
+    private final MouseHandler mouseHandler;
+
+    private Cursor defaultCursor;
+
+    private Cursor handCursor;
+
+    private boolean isInReordering = false;
 
     public ReorderableTabbedPane() {
         this(TOP);
@@ -38,10 +48,9 @@ public class ReorderableTabbedPane extends TabPaneMnemonics {
         addMouseMotionListener(mouseHandler);
     }
 
-    private final MouseInputListener mouseHandler;
-    private Cursor defaultCursor, handCursor;
-
     private void dragTab(final int dragIndex, final int tabIndex) {
+        isInReordering = true;
+        Component tabComponent = getTabComponentAt(dragIndex);
         String title = getTitleAt(dragIndex);
         Icon icon = getIconAt(dragIndex);
         Component component = getComponentAt(dragIndex);
@@ -56,6 +65,8 @@ public class ReorderableTabbedPane extends TabPaneMnemonics {
         setForegroundAt(tabIndex, foreground);
         setDisabledIconAt(tabIndex, disabledIcon);
         setEnabledAt(tabIndex, enabled);
+        setTabComponentAt(tabIndex, tabComponent);
+        isInReordering = false;
     }
 
     private Cursor getDefaultCursor() {
@@ -70,10 +81,6 @@ public class ReorderableTabbedPane extends TabPaneMnemonics {
             handCursor = Cursor.getPredefinedCursor(Cursor.HAND_CURSOR);
         }
         return handCursor;
-    }
-
-    private int getTabIndex(final int x, final int y) {
-        return getUI().tabForCoordinate(this, x, y);
     }
 
     private void maybeSetDefaultCursor() {
@@ -102,8 +109,8 @@ public class ReorderableTabbedPane extends TabPaneMnemonics {
         public void mousePressed(final MouseEvent e) {
             //			if (!e.isPopupTrigger() && e.getButton() == MouseEvent.BUTTON1) {
             if (e.getButton() == MouseEvent.BUTTON1) {
-                int tabIndex = getTabIndex(e.getX(), e.getY());
-                if (tabIndex != -1) {
+                int tabIndex = getTabIndex(e);
+                if (tabIndex >= 0) {
                     dragIndex = tabIndex;
                     maybeSetHandCursor();
                 }
@@ -115,7 +122,7 @@ public class ReorderableTabbedPane extends TabPaneMnemonics {
             //			if (!e.isPopupTrigger() && e.getButton() == MouseEvent.BUTTON1) {
             if (e.getButton() == MouseEvent.BUTTON1) {
                 if (dragIndex != -1) {
-                    int tabIndex = getTabIndex(e.getX(), e.getY());
+                    int tabIndex = getTabIndex(e);
                     if (tabIndex != -1 && tabIndex != dragIndex) {
                         dragTab(dragIndex, tabIndex);
                         setSelectedIndex(tabIndex);
@@ -125,7 +132,15 @@ public class ReorderableTabbedPane extends TabPaneMnemonics {
             }
             maybeSetDefaultCursor();
         }
+    }
 
+    /**
+     * @param e
+     * @return
+     */
+    private int getTabIndex(MouseEvent e) {
+        Point locationOnParent = getLocationOnParent(this, (Component) e.getSource(), e.getPoint());
+        return indexAtLocation(locationOnParent.x, locationOnParent.y);
     }
 
     /**
@@ -140,8 +155,21 @@ public class ReorderableTabbedPane extends TabPaneMnemonics {
     }
 
     @Override
-    public void fireStateChanged() {
-        super.fireStateChanged();
+    public void setTabComponentAt(int index, Component component) {
+        super.setTabComponentAt(index, component);
+        if (component != null) {
+            component.addMouseListener(mouseHandler);
+            component.addMouseMotionListener(mouseHandler);
+        }
+    }
+
+    /**
+     * Only true during dragging of a tab. Subclasses can detect that the tab
+     * closing during drag does not really mean a tab closing because the closed
+     * tab will be inserted again at the new drag position.
+     */
+    public final boolean isInTabReordering() {
+        return isInReordering;
     }
 
 }

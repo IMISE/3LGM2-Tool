@@ -245,7 +245,7 @@ public final class ModelBrowser extends JTabbedPaneWithCloseIconsRight implement
 
     @Override
     public void removeTabAt(int index) {
-        if (closeDocOnCloseTab) {
+        if (!isInTabReordering() && closeDocOnCloseTab) {
             closeDocOnCloseTab = false;
             SubModelsBrowser subModelsBrowser = (SubModelsBrowser) getComponentAt(index);
             GraphDocument doc = subModelsBrowser.getCurrentDoc();
