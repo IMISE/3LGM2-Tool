@@ -7,11 +7,14 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import org.apache.jena.ext.com.google.common.collect.Lists;
+
 import com.google.common.collect.ImmutableList;
 
 import de.imise.tool3lgm.MetaModelContext;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GDCollectionFileHandler;
+import de.imise.tool3lgm.graphtools.model.Szenario;
 import de.imise.tool3lgm.graphtools.path.metapaths.SequenceMetaPath;
 
 /**
@@ -85,7 +88,9 @@ public class ModelTemplatLibraryProvider extends TemplateLibraryProvider {
                 }
                 String[] modelTemplateFileHieraryNames = templateFilePath.split("\\" + File.separator);
                 List<Object> modelTemplateFileHierary = new ArrayList<>(Arrays.asList(modelTemplateFileHieraryNames));
-                modelTemplateFileHierary.set(modelTemplateFileHierary.size() - 1, gdcoll);
+                modelTemplateFileHierary.set(modelTemplateFileHierary.size() - 1, gdcoll); //replace string with filename by model
+                List<Szenario> szens = Lists.newArrayList(gdcoll.getSzenarios());
+                modelTemplateFileHierary.add(szens);
                 return modelTemplateFileHierary;
             }
 

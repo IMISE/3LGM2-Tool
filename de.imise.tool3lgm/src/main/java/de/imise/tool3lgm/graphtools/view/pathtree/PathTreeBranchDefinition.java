@@ -83,6 +83,17 @@ public final class PathTreeBranchDefinition implements SimpleResourceSource {
     }
 
     /**
+     * Copy Constructor
+     *
+     * @param other
+     */
+    private PathTreeBranchDefinition(PathTreeBranchDefinition other) {
+        this(other.resourceHandler, other.displayedModelsNamePrefix, other.elementsPath, other.hierarchyObjects);
+    }
+
+    /**
+     * Create always a copy of the hierarchy objects!
+     *
      * @param hierarchyObjects
      */
     private void initHierarchyObjects(List<?> hierarchyObjects) {
@@ -186,7 +197,7 @@ public final class PathTreeBranchDefinition implements SimpleResourceSource {
 
     @Override
     public String toString() {
-        return getClass().getSimpleName() + ": hierarchy=" + hierarchyObjects + " metaPath=" + (elementsPath == null ? null : elementsPath.getDebugName());
+        return getClass().getSimpleName() + ": displayedModelsNamePrefix=" + displayedModelsNamePrefix + " hierarchy=" + hierarchyObjects + " metaPath=" + (elementsPath == null ? null : elementsPath.getDebugName());
     }
 
     /**
@@ -196,6 +207,37 @@ public final class PathTreeBranchDefinition implements SimpleResourceSource {
      */
     public final String getDisplayedModelsNamePrefix() {
         return displayedModelsNamePrefix;
+    }
+
+    /**
+     * Expands a definition that contains a list (or multiple lists) to multiple
+     * definitions without lists.
+     *
+     * @return
+     */
+    public List<PathTreeBranchDefinition> getExpanded() {
+        List<PathTreeBranchDefinition> expanded = new ArrayList<>();
+        PathTreeBranchDefinition initial = new PathTreeBranchDefinition(resourceHandler, displayedModelsNamePrefix, new ArrayList<>());
+        expanded.add(initial);
+        for (Object hierarchyObject : hierarchyObjects) {
+            if (!(hierarchyObject instanceof Iterable)) {
+                for (PathTreeBranchDefinition definition : expanded) {
+                    definition.hierarchyObjects.add(hierarchyObject);
+                }
+            } else {
+                List<PathTreeBranchDefinition> newExpanded = new ArrayList<>();
+                Iterable<?> hierarchySubObjects = (Iterable<?>) hierarchyObject;
+                for (PathTreeBranchDefinition definition : expanded) {
+                    for (Object hierarchySubObject : hierarchySubObjects) {
+                        PathTreeBranchDefinition expandedDefinition = new PathTreeBranchDefinition(definition); //copy
+                        expandedDefinition.hierarchyObjects.add(hierarchySubObject);
+                        newExpanded.add(expandedDefinition);
+                    }
+                }
+                expanded = newExpanded;
+            }
+        }
+        return expanded;
     }
 
 }

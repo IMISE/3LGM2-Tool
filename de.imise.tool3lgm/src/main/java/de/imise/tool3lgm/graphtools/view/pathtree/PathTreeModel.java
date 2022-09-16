@@ -168,6 +168,8 @@ public class PathTreeModel extends DefaultTreeModel implements MetaModelSpecific
             }
         } else if (hierarchyDefinitionObject instanceof GDCollection) {
             hierarchyNode = new GDCollectionTreeNode((GDCollection) hierarchyDefinitionObject);
+        } else if (hierarchyDefinitionObject instanceof GraphDocument) {
+            hierarchyNode = new IconifiedTreeNode<>((GraphDocument) hierarchyDefinitionObject);
         }
         if (hierarchyNode == null) {
             String hierarchyNodeTextResourceKey = hierarchyDefinitionObject.toString();
@@ -186,7 +188,7 @@ public class PathTreeModel extends DefaultTreeModel implements MetaModelSpecific
      * @return the last node of the hierarchy node defined by the given branch
      *         definition
      */
-    protected IconifiedTreeNode<?> getOrCreateBranchLastHierarchyNode(final PathTreeBranchDefinition branchDefinition) {
+    private IconifiedTreeNode<?> getOrCreateBranchLastHierarchyNode(final PathTreeBranchDefinition branchDefinition) {
         IconifiedTreeNode<?> lastHierarchyNode = root;
         for (Object hierarchyObject : branchDefinition.iterableHierarchyObjects()) {
             ImageIcon icon = branchDefinition.getIcon(hierarchyObject);
@@ -200,29 +202,69 @@ public class PathTreeModel extends DefaultTreeModel implements MetaModelSpecific
     }
 
     /**
+     * Creates the full hierarchy of the given branch defintion and returns the
+     * last node in this hierarchy.
+     *
+     * @param branchDefinition
+     * @return the last node of the hierarchy node defined by the given branch
+     *         definition
+     */
+    private List<IconifiedTreeNode<?>> getOrCreateBranchLastHierarchyNodes(final PathTreeBranchDefinition branchDefinition) {
+        List<IconifiedTreeNode<?>> lastHierarchyNodes = new ArrayList<>();
+        List<PathTreeBranchDefinition> expandedBranchDefinitions = branchDefinition.getExpanded();
+        for (PathTreeBranchDefinition expandedBranchDefinition : expandedBranchDefinitions) {
+            IconifiedTreeNode<?> hierarchyNode = getOrCreateBranchLastHierarchyNode(expandedBranchDefinition);
+            lastHierarchyNodes.add(hierarchyNode);
+        }
+        return lastHierarchyNodes;
+    }
+
+    /**
      * @param branchDefinition
      */
     protected void addBranch(final PathTreeBranchDefinition branchDefinition) {
-        IconifiedTreeNode<?> lastHierarchyNode = getOrCreateBranchLastHierarchyNode(branchDefinition);
+        List<IconifiedTreeNode<?>> lastHierarchyNodes = getOrCreateBranchLastHierarchyNodes(branchDefinition);
         SequenceMetaPath metaPath = branchDefinition.getElementsPath();
         if (metaPath != null) {
-            Class<? extends ModelElement> pathStepConnectionClass = metaPath.getStartClass();
-            Collection<ElementContainerTreeNode> pathStepNodes = new ArrayList<>();
-            String modelsNamePrefix = branchDefinition.getDisplayedModelsNamePrefix();
-            Iterable<GraphDocument> allSourceModels = getAllSourceModels(modelsNamePrefix);
-            for (GraphDocument sourceModel : allSourceModels) {
-                List<ElementContainer> elementContainers = sourceModel.getElementContainers(pathStepConnectionClass);
-                getOrCreateNodes(pathStepNodes, elementContainers, lastHierarchyNode, null, branchDefinition);
-            }
-            boolean showAllElements = this.showAllElements.is();
-            List<MetaPath> subMetaPaths = metaPath.getSubMetaPaths(showAllElements);
-            int pathLength = subMetaPaths.size();
-            for (int i = 0; i < pathLength; i++) {
-                pathStepConnectionClass = MetaPathFunctions.getMetaPathsConnectingClass(subMetaPaths, i);
-                MetaPath subMetaPath = subMetaPaths.get(i);
-                pathStepNodes = addPathStepNodes(pathStepNodes, subMetaPath, branchDefinition);
+            for (IconifiedTreeNode<?> lastHierarchyNode : lastHierarchyNodes) {
+
+                Class<? extends ModelElement> pathStepConnectionClass = metaPath.getStartClass();
+                Collection<ElementContainerTreeNode> pathStepNodes = new ArrayList<>();
+                String modelsNamePrefix = branchDefinition.getDisplayedModelsNamePrefix();
+                Iterable<GraphDocument> allSourceModels = getBranchGraphDocumentAsIterable(lastHierarchyNode);
+                if (allSourceModels == null) {
+                    allSourceModels = getAllSourceModels(modelsNamePrefix);
+                }
+                for (GraphDocument sourceModel : allSourceModels) {
+                    List<ElementContainer> elementContainers = sourceModel.getElementContainers(pathStepConnectionClass);
+                    getOrCreateNodes(pathStepNodes, elementContainers, lastHierarchyNode, null, branchDefinition);
+                }
+                boolean showAllElements = this.showAllElements.is();
+                List<MetaPath> subMetaPaths = metaPath.getSubMetaPaths(showAllElements);
+                int pathLength = subMetaPaths.size();
+                for (int i = 0; i < pathLength; i++) {
+                    pathStepConnectionClass = MetaPathFunctions.getMetaPathsConnectingClass(subMetaPaths, i);
+                    MetaPath subMetaPath = subMetaPaths.get(i);
+                    pathStepNodes = addPathStepNodes(pathStepNodes, subMetaPath, branchDefinition);
+                }
             }
         }
+    }
+
+    /**
+     * @param lastNodeInBranch
+     * @return
+     */
+    private Iterable<GraphDocument> getBranchGraphDocumentAsIterable(TypedTreeNode<?> lastNodeInBranch) {
+        TypedTreeNode<?> currentNode = lastNodeInBranch;
+        while (currentNode != null) {
+            GraphDocument doc = currentNode.getUserObject(GraphDocument.class);
+            if (doc != null) {
+                return List.of(doc);
+            }
+            currentNode = (TypedTreeNode<?>) currentNode.getParent();
+        }
+        return null;
     }
 
     /**

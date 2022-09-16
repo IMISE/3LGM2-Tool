@@ -3,6 +3,7 @@
  */
 package de.imise.util.swing.component.tree;
 
+import java.util.Objects;
 import java.util.Vector;
 
 import javax.swing.tree.DefaultMutableTreeNode;
@@ -87,7 +88,8 @@ public class TypedTreeNode<T> extends DefaultMutableTreeNode {
     public String toString() {
         if (visibleText != null) {
             return visibleText;
-        } else if (userObject != null) {
+        }
+        if (userObject != null) {
             return userObject.toString();
         }
         return "";
@@ -119,10 +121,7 @@ public class TypedTreeNode<T> extends DefaultMutableTreeNode {
 
     @Override
     public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + (userObject == null ? 0 : userObject.hashCode());
-        return result;
+        return Objects.hash(userObject);
     }
 
     @Override
@@ -137,14 +136,36 @@ public class TypedTreeNode<T> extends DefaultMutableTreeNode {
             return false;
         }
         TypedTreeNode<?> other = (TypedTreeNode<?>) obj;
-        if (userObject == null) {
-            if (other.userObject != null) {
-                return false;
-            }
-        } else if (!userObject.equals(other.userObject)) {
+        if (!Objects.equals(userObject, other.userObject)) {
             return false;
         }
         return true;
+    }
+
+    /**
+     * @param clazz
+     * @return
+     */
+    public boolean hasUserObjectType(Class<?> clazz) {
+        if (userObject == null) {
+            return false;
+        }
+        Class<? extends Object> userObjectClass = userObject.getClass();
+        return clazz.isAssignableFrom(userObjectClass);
+    }
+
+    /**
+     * @param type
+     * @return the userObject casted to the given type if it has the type or
+     *         <code>null</code> if the tyoe doesn't match the class of the
+     *         userObject.
+     */
+    @SuppressWarnings("unchecked")
+    public <S> S getUserObject(Class<S> type) {
+        if (hasUserObjectType(type)) {
+            return (S) userObject;
+        }
+        return null;
     }
 
 }
