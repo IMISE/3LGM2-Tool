@@ -155,7 +155,7 @@ import de.imise.util.swing.dialog.MultipleOptionPane;
  * oder ein Szenario (= eine beliebige Elementauswahl aus allen Elementen mit
  * einer grafischen Repräsentation)
  */
-public abstract class GraphDocument extends ElementSelectionContext implements GDCollectionOwner, IDSource, NameAndDescriptionTarget {
+public abstract class GraphDocument extends ElementSelectionContext implements GDCollectionOwner, IDSource, NameAndDescriptionTarget, GraphDocumentOwner {
 
     /**
      *
@@ -6216,6 +6216,11 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
             layerGraphNodeContainers.add(graphNodeContainers);
         }
         return CollectionUtils.getCommonIterable(layerGraphNodeContainers);
+    }
+
+    @Override
+    public GraphDocument getGraphDocument() {
+        return this;
     }
 
 }

@@ -28,6 +28,7 @@ import de.imise.tool3lgm.Tool3lgmModelType.ModelCategory;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GDCollectionOwner;
+import de.imise.tool3lgm.graphtools.model.GraphDocumentOwner;
 import de.imise.tool3lgm.userproperties.UserProperties;
 import de.imise.util.ApplicationManager;
 import de.imise.util.GitVersionInfoHandler;
@@ -325,12 +326,19 @@ public abstract class Tool3lgmConstants {
     }
 
     /**
-     * @param gdCollectionOwner
+     * @param identifier
      * @return
      */
-    public static final ImageIcon getTreeIcon(GDCollectionOwner gdCollectionOwner) {
-        ModelCategory modelCategory = gdCollectionOwner.getCollection().getModelCategory();
-        return modelCategory == TEMPLATE ? TEMPLATE_ICON_TRANSPARENT_16 : modelCategory == EXAMPLE ? EXAMPLE_ICON_TRANSPARENT_16 : TOOL_ICON_TRANSPARENT_16;
+    public static final ImageIcon getTreeIcon(Object identifier) {
+        if (identifier instanceof GraphDocumentOwner) {
+            return null;
+        }
+        if (identifier instanceof GDCollectionOwner) {
+            GDCollectionOwner gdCollectionOwner = (GDCollectionOwner) identifier;
+            ModelCategory modelCategory = gdCollectionOwner.getCollection().getModelCategory();
+            return modelCategory == TEMPLATE ? TEMPLATE_ICON_TRANSPARENT_16 : modelCategory == EXAMPLE ? EXAMPLE_ICON_TRANSPARENT_16 : TOOL_ICON_TRANSPARENT_16;
+        }
+        return null;
     }
 
     /**

@@ -11,6 +11,7 @@ import com.google.common.base.Strings;
 import com.google.common.collect.ImmutableList;
 
 import de.imise.tool3lgm.Static;
+import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModelDefinition;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModelSpecific;
@@ -169,7 +170,8 @@ public class PathTreeModel extends DefaultTreeModel implements MetaModelSpecific
         } else if (hierarchyDefinitionObject instanceof GDCollection) {
             hierarchyNode = new GDCollectionTreeNode((GDCollection) hierarchyDefinitionObject);
         } else if (hierarchyDefinitionObject instanceof GraphDocument) {
-            hierarchyNode = new IconifiedTreeNode<>((GraphDocument) hierarchyDefinitionObject);
+            GraphDocument doc = (GraphDocument) hierarchyDefinitionObject;
+            hierarchyNode = new IconifiedTreeNode<>(doc, Tool3lgmConstants.getTreeIcon(doc));
         }
         if (hierarchyNode == null) {
             String hierarchyNodeTextResourceKey = hierarchyDefinitionObject.toString();
