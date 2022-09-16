@@ -8,8 +8,10 @@ import java.util.Vector;
 
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.MutableTreeNode;
+import javax.swing.tree.TreePath;
 
 import de.imise.util.Alphabetical;
+import de.imise.util.ReflectionUtils;
 
 /**
  * A typed TreeNode. These TreeNodes are equal if they have the same UserObject
@@ -143,18 +145,16 @@ public class TypedTreeNode<T> extends DefaultMutableTreeNode {
     }
 
     /**
-     * @param clazz
-     * @return
+     * @param type
+     * @return <code>true</code> if the user object of this node is assignable
+     *         to the given type.
      */
-    public boolean hasUserObjectType(Class<?> clazz) {
-        if (userObject == null) {
-            return false;
-        }
-        Class<? extends Object> userObjectClass = userObject.getClass();
-        return clazz.isAssignableFrom(userObjectClass);
+    public boolean hasUserObjectType(Class<?> type) {
+        return ReflectionUtils.isAssignable(userObject, type);
     }
 
     /**
+     * @param <S>
      * @param type
      * @return the userObject casted to the given type if it has the type or
      *         <code>null</code> if the tyoe doesn't match the class of the
@@ -166,6 +166,38 @@ public class TypedTreeNode<T> extends DefaultMutableTreeNode {
             return (S) userObject;
         }
         return null;
+    }
+
+    /**
+     * @param <S>
+     * @param treePath
+     * @param type
+     * @return the user object of the last path component if it has an
+     *         assignable class to the given type.
+     */
+    @SuppressWarnings("unchecked")
+    public static <S> S getUserObject(TreePath treePath, Class<S> type) {
+        if (treePath != null) {
+            Object lastPathComponent = treePath.getLastPathComponent();
+            if (lastPathComponent instanceof DefaultMutableTreeNode) {
+                Object userObject = ((DefaultMutableTreeNode) lastPathComponent).getUserObject();
+                if (ReflectionUtils.isAssignable(userObject, type)) {
+                    return (S) userObject;
+                }
+            }
+        }
+        return null;
+    }
+
+    /**
+     * @param <S>
+     * @param treePath
+     * @param type
+     * @return <code>true</code> if the last path component of the given tree
+     *         path has an user object with the given type.
+     */
+    public static <S> boolean hasUserObject(TreePath treePath, Class<S> type) {
+        return getUserObject(treePath, type) != null;
     }
 
 }

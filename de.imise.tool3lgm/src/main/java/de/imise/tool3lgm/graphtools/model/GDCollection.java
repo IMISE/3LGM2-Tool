@@ -138,7 +138,7 @@ import de.imise.util.swing.dialog.NameAndColorInputDialog;
  *
  * @author thomas, AXS
  */
-public class GDCollection extends UserFieldTarget implements MetaModelSpecific, GDCollectionOwner {
+public class GDCollection extends UserFieldTarget implements MetaModelSpecific, GraphDocumentOwner {
 
     /**
      * Holds the {@link MetaModelContext} and the type of the model (
@@ -368,6 +368,19 @@ public class GDCollection extends UserFieldTarget implements MetaModelSpecific, 
     @Override
     public String toString() {
         return getName();
+    }
+
+    /**
+     * @param gdcoll
+     * @return
+     */
+    public String getNameWithoutFileExtension() {
+        String name = getName();
+        int lastIndexOfPoint = name.lastIndexOf('.');
+        if (lastIndexOfPoint > 0) {
+            name = name.substring(0, lastIndexOfPoint);
+        }
+        return name;
     }
 
     @Override
@@ -814,6 +827,11 @@ public class GDCollection extends UserFieldTarget implements MetaModelSpecific, 
     @Override
     public LGMGraphDocument getSelectedDoc() {
         return lastItem(activeGraphDocumentsList);
+    }
+
+    @Override
+    public GraphDocument getGraphDocument() {
+        return getSelectedDoc();
     }
 
     /**

@@ -23,7 +23,7 @@ import de.imise.tool3lgm.graphtools.view.container.BendpointContainer;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.graphtools.view.template.TemplateBrowserTree;
 import de.imise.tool3lgm.graphtools.view.tree.node.ElementContainerTreeNode;
-import de.imise.tool3lgm.graphtools.view.tree.node.GDCollectionTreeNode;
+import de.imise.util.swing.component.tree.TypedTreeNode;
 
 /**
  * @author AXS (23.09.2019)
@@ -79,7 +79,7 @@ public class TemplateContextGenerator extends ElementSelectionContextGenerator {
                     }
                 }
             }
-        } else if (lastPathComponent instanceof GDCollectionTreeNode) {
+        } else if (TypedTreeNode.hasUserObject(clickedTreePath, GDCollection.class)) {
             GDCollection selectedGDcoll = Static.getSelectedGDCollection();
             GDCollection selectedTemplate = selectedTemplateDoc.getCollection();
             if (selectedGDcoll != null && selectedGDcoll != selectedTemplate) {

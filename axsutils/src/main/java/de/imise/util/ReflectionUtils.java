@@ -300,6 +300,19 @@ public class ReflectionUtils {
     }
 
     /**
+     * @param o
+     * @param type
+     * @return
+     */
+    public static final boolean isAssignable(Object o, Class<?> type) {
+        if (o == null) {
+            return false;
+        }
+        Class<? extends Object> class1 = o.getClass();
+        return isAssignable(class1, type);
+    }
+
+    /**
      * @param clazz
      * @return
      */

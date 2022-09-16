@@ -330,7 +330,7 @@ public abstract class Tool3lgmConstants {
      * @return
      */
     public static final ImageIcon getTreeIcon(Object identifier) {
-        if (identifier instanceof GraphDocumentOwner) {
+        if (identifier instanceof GraphDocumentOwner && !(identifier instanceof GDCollection)) {
             return null;
         }
         if (identifier instanceof GDCollectionOwner) {

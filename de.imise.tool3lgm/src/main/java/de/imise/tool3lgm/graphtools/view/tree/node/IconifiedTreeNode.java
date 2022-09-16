@@ -2,6 +2,8 @@ package de.imise.tool3lgm.graphtools.view.tree.node;
 
 import javax.swing.ImageIcon;
 
+import de.imise.tool3lgm.Tool3lgmConstants;
+
 /**
  * @author AXS (15.06.2020)
  */
@@ -76,7 +78,7 @@ public class IconifiedTreeNode<T> extends LGMTreeNode<T> {
      */
     public IconifiedTreeNode(final T o, final String visibleText, final boolean sort, final ImageIcon icon) {
         super(o, visibleText, sort);
-        this.icon = icon;
+        this.icon = icon == null ? Tool3lgmConstants.getTreeIcon(o) : icon;
     }
 
     /**

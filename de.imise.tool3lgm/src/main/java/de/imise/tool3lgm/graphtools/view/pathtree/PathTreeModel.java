@@ -11,7 +11,6 @@ import com.google.common.base.Strings;
 import com.google.common.collect.ImmutableList;
 
 import de.imise.tool3lgm.Static;
-import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModelDefinition;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModelSpecific;
@@ -25,7 +24,6 @@ import de.imise.tool3lgm.graphtools.path.metapaths.SequenceMetaPath;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.graphtools.view.tree.node.ElementClassTreeNode;
 import de.imise.tool3lgm.graphtools.view.tree.node.ElementContainerTreeNode;
-import de.imise.tool3lgm.graphtools.view.tree.node.GDCollectionTreeNode;
 import de.imise.tool3lgm.graphtools.view.tree.node.IconifiedTreeNode;
 import de.imise.tool3lgm.graphtools.view.tree.node.LGMTreeNode;
 import de.imise.tool3lgm.graphtools.view.tree.node.PathStepTreeNode;
@@ -167,14 +165,8 @@ public class PathTreeModel extends DefaultTreeModel implements MetaModelSpecific
                 hierarchyNode = new ElementClassTreeNode(elementClass, elementClassName, icon);
             } catch (Exception e) {
             }
-        } else if (hierarchyDefinitionObject instanceof GDCollection) {
-            hierarchyNode = new GDCollectionTreeNode((GDCollection) hierarchyDefinitionObject);
-        } else if (hierarchyDefinitionObject instanceof GraphDocument) {
-            GraphDocument doc = (GraphDocument) hierarchyDefinitionObject;
-            hierarchyNode = new IconifiedTreeNode<>(doc, Tool3lgmConstants.getTreeIcon(doc));
-        }
-        if (hierarchyNode == null) {
-            String hierarchyNodeTextResourceKey = hierarchyDefinitionObject.toString();
+        } else {
+            String hierarchyNodeTextResourceKey = hierarchyDefinitionObject instanceof GDCollection ? ((GDCollection) hierarchyDefinitionObject).getNameWithoutFileExtension() : hierarchyDefinitionObject.toString();
             String hierarchyNodeText = treeDefinition.getResStringWithoutError(hierarchyNodeTextResourceKey);
             hierarchyNode = new IconifiedTreeNode<>(hierarchyDefinitionObject, hierarchyNodeText, true, icon);
         }

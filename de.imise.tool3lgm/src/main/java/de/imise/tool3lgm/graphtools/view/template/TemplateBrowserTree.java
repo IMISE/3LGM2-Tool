@@ -39,6 +39,7 @@ import de.imise.tool3lgm.graphtools.dialog.search.SearchResultView;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
+import de.imise.tool3lgm.graphtools.model.GraphDocumentOwner;
 import de.imise.tool3lgm.graphtools.model.template.TemplateLibrariesManager;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
@@ -48,11 +49,11 @@ import de.imise.tool3lgm.graphtools.view.pathtree.PathTreeModel;
 import de.imise.tool3lgm.graphtools.view.tree.DynamicTree;
 import de.imise.tool3lgm.graphtools.view.tree.TreeRenderer;
 import de.imise.tool3lgm.graphtools.view.tree.node.ElementContainerTreeNode;
-import de.imise.tool3lgm.graphtools.view.tree.node.GDCollectionTreeNode;
 import de.imise.tool3lgm.gui.menu.ContextGenerator;
 import de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty;
 import de.imise.util.BooleanOption;
 import de.imise.util.swing.component.ParentComponentFinder;
+import de.imise.util.swing.component.tree.TypedTreeNode;
 
 /**
  * Baum, in dem die Templates dargestellt werden.
@@ -157,18 +158,8 @@ public class TemplateBrowserTree extends DynamicTree implements SearchResultView
      *         of the given treepath
      */
     public GraphDocument getGraphDocument(final TreePath treePath) {
-        GraphDocument doc = null;
-        if (treePath != null) {
-            Object lastPathComponent = treePath.getLastPathComponent();
-            if (lastPathComponent instanceof ElementContainerTreeNode) {
-                ElementContainerTreeNode elementContainerNode = (ElementContainerTreeNode) lastPathComponent;
-                doc = elementContainerNode.getGraphDocument();
-            } else if (lastPathComponent instanceof GDCollectionTreeNode) {
-                GDCollection gdcoll = ((GDCollectionTreeNode) lastPathComponent).getUserObject();
-                doc = gdcoll.getSelectedDoc();
-            }
-        }
-        return doc;
+        GraphDocumentOwner graphDocumentOwner = TypedTreeNode.getUserObject(treePath, GraphDocumentOwner.class);
+        return graphDocumentOwner == null ? null : graphDocumentOwner.getGraphDocument();
     }
 
     /**
