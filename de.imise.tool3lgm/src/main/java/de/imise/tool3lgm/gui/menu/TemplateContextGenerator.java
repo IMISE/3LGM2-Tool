@@ -79,12 +79,9 @@ public class TemplateContextGenerator extends ElementSelectionContextGenerator {
                     }
                 }
             }
-        } else if (TypedTreeNode.hasUserObject(clickedTreePath, GDCollection.class)) {
-            GDCollection selectedGDcoll = Static.getSelectedGDCollection();
-            GDCollection selectedTemplate = selectedTemplateDoc.getCollection();
-            if (selectedGDcoll != null && selectedGDcoll != selectedTemplate) {
-                menu = getTemplateModelContextMenu(source, selectedTemplateDoc);
-            }
+        } else if (TypedTreeNode.hasUserObject(clickedTreePath, GraphDocument.class)) {
+            selectedTemplateDoc = TypedTreeNode.getUserObject(clickedTreePath, GraphDocument.class);
+            menu = getTemplateModelContextMenu(source, selectedTemplateDoc);
         }
 
         return menu;
