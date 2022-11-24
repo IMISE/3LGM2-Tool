@@ -24,6 +24,7 @@ import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_JOIN_SE
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_LINK;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_LINK_SELECTED_TO_NEW_SUBMODEL;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_LINK_SELECTED_TO_SUBMODEL;
+import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_PRINT_MODEL_TO_CONSOLE;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_PRINT_QUEUE;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_SELECT_LINKED_SUBMODEL;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_SET_ELEMENT_EXPANSION_OFF;
@@ -44,7 +45,10 @@ import static de.imise.tool3lgm.graphtools.undoredo.CommandHandler.getArgumentsS
 import static de.imise.tool3lgm.graphtools.undoredo.TransactionManager.STANDARD_PID;
 import static de.imise.tool3lgm.graphtools.userfield.definition.SubType.DUMMY_SUBTYPE;
 import static de.imise.tool3lgm.graphtools.userfield.definition.UserField.Style.SUBTYPE;
+import static de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty.OPTION_ENABLE_EXPERT_MODE;
 import static de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty.OPTION_ENABLE_SUBMODEL_BROWSER;
+import static de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty.TRANSIENT_OPTION_DEBUG_GRAPH;
+import static de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty.TRANSIENT_OPTION_LOG_READABLE_UNOD_REDO_COMMANDS;
 import static javax.swing.BoxLayout.Y_AXIS;
 import static javax.swing.JOptionPane.DEFAULT_OPTION;
 import static javax.swing.JOptionPane.PLAIN_MESSAGE;
@@ -107,7 +111,6 @@ import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.graphtools.view.container.InterLayerConnectedNodeContainer;
 import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
 import de.imise.tool3lgm.graphtools.view.graph.InputGraphArea;
-import de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty;
 import de.imise.util.Alphabetical;
 import de.imise.util.NamedObjectContainer;
 import de.imise.util.pair.Pair;
@@ -144,11 +147,6 @@ public class RegularContextGenerator extends ElementSelectionContextGenerator im
      * COMMENTME
      */
     private JMenuItem unlinkToSzenario, selectLinkedSzenario;
-
-    /**
-     * COMMENTME
-     */
-    private JMenuItem command_line;
 
     /**
      * Menu Options for setting transparency to half, full, and non-transparent
@@ -207,11 +205,6 @@ public class RegularContextGenerator extends ElementSelectionContextGenerator im
     /**
      * COMMENTME
      */
-    private JMenuItem queue, consistency;
-
-    /**
-     * COMMENTME
-     */
     private JPopupMenu menu = null;
 
     /**
@@ -260,27 +253,18 @@ public class RegularContextGenerator extends ElementSelectionContextGenerator im
 
         join_selected = getItem(MODEL_ACTION_JOIN_SELECTED);
 
-        JMenuItem verify = getItem(MODEL_OPTION_GDOC_VERIFICATION_MODE);
-        JMenuItem interactive = getItem(MODEL_OPTION_GDCOLL_AUTOMATIC_MODE);
-        JMenuItem debugGraph = getItem(BooleanProperty.TRANSIENT_OPTION_DEBUG_GRAPH);
-        JMenuItem expertMode = getItem(BooleanProperty.OPTION_ENABLE_EXPERT_MODE);
-        JMenuItem logUndoRedoReadable = getItem(BooleanProperty.TRANSIENT_OPTION_LOG_READABLE_UNOD_REDO_COMMANDS);
-
-        command_line = getItem(MODEL_ACTION_COMMAND_LINE);
-        queue = getItem(MODEL_ACTION_PRINT_QUEUE);
-        consistency = getItem(MODEL_ACTION_INTERNAL_CHECK_CONSISTENCY);
-
         internals = new JMenu(getResString("intern"));
-        internals.add(verify);
-        internals.add(debugGraph);
-        internals.add(logUndoRedoReadable);
-        internals.add(interactive);
-        internals.add(expertMode);
+        internals.add(getItem(MODEL_OPTION_GDOC_VERIFICATION_MODE));
+        internals.add(getItem(TRANSIENT_OPTION_DEBUG_GRAPH));
+        internals.add(getItem(TRANSIENT_OPTION_LOG_READABLE_UNOD_REDO_COMMANDS));
+        internals.add(getItem(MODEL_OPTION_GDCOLL_AUTOMATIC_MODE));
+        internals.add(getItem(OPTION_ENABLE_EXPERT_MODE));
         internals.addSeparator();
-        internals.add(command_line);
+        internals.add(getItem(MODEL_ACTION_COMMAND_LINE));
         internals.addSeparator();
-        internals.add(queue);
-        internals.add(consistency);
+        internals.add(getItem(MODEL_ACTION_PRINT_QUEUE));
+        internals.add(getItem(MODEL_ACTION_INTERNAL_CHECK_CONSISTENCY));
+        internals.add(getItem(MODEL_ACTION_PRINT_MODEL_TO_CONSOLE));
 
         // From here on: graphical options
         normalize_layer = getItem(MODEL_ACTION_SET_LAYER_DEFAULT_COLOR_AND_TRANSPARENCY);

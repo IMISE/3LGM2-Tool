@@ -38,7 +38,7 @@ public class GDCollectionPrinter {
     private final boolean withBendpointDetails;
 
     public GDCollectionPrinter(final GDCollection gdcoll) {
-        this(gdcoll, false, true, true);
+        this(gdcoll, true, true);
     }
 
     /**
@@ -48,7 +48,7 @@ public class GDCollectionPrinter {
      *            will be shown too.
      */
     public GDCollectionPrinter(final GDCollection gdcoll, boolean withSystemID, boolean withBendpointDetails) {
-        this(gdcoll, false, withSystemID, withBendpointDetails);
+        this(gdcoll, true, withSystemID, withBendpointDetails);
     }
 
     /**

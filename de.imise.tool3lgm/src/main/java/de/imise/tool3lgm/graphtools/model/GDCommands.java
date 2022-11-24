@@ -2,6 +2,8 @@ package de.imise.tool3lgm.graphtools.model;
 
 import static de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty.TRANSIENT_OPTION_LOG_READABLE_UNOD_REDO_COMMANDS;
 
+import com.google.common.base.Objects;
+
 import de.imise.tool3lgm.event.action.GraphDocumentAction;
 import de.imise.tool3lgm.event.action.GraphFrameAction;
 import de.imise.tool3lgm.event.action.GraphMultipleSelectedRealNodeOrBendpointAction;
@@ -150,7 +152,8 @@ public enum GDCommands implements ActionSource {
     MODEL_ACTION_PRINT_QUEUE,
     MODEL_ACTION_INTERNAL_CHECK_CONSISTENCY,
     MODEL_OPTION_GDCOLL_AUTOMATIC_MODE,
-    MODEL_OPTION_GDOC_VERIFICATION_MODE;
+    MODEL_OPTION_GDOC_VERIFICATION_MODE,
+    MODEL_ACTION_PRINT_MODEL_TO_CONSOLE;
     //110
     //Ungültige Werte für alle Kommandos
     public static final String INVALID_ID_STRING = "";
@@ -173,15 +176,33 @@ public enum GDCommands implements ActionSource {
         return Integer.toString(ordinal());
     }
 
+    /**
+     * @param command
+     * @return
+     */
     public static final boolean isModelOption(final GDCommands command) {
         return command.name().startsWith("MODEL_OPTION_");
     }
 
+    /**
+     * @return
+     */
     public final boolean isModelOption() {
         return isModelOption(this);
     }
 
+    /**
+     *
+     */
     private static final GDCommands[] VALUES = values();
+
+    /**
+     * @param s
+     * @return <code>true</code> if this.toString() is equals to s
+     */
+    public boolean is(String s) {
+        return Objects.equal(toString(), s);
+    }
 
     /**
      * @return always the same instance of the values of this enum and not every

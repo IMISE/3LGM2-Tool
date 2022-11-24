@@ -9,12 +9,16 @@ import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction.BAC
 import static de.imise.tool3lgm.graphtools.metamodel.elements.SubordinationEdge.SUPER_TO_SUB_DIRECTION;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_ADD_ELEMENT_TO_SUBMODEL;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_ADD_USER_FIELD;
+import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_COMMAND_LINE;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_DELETE_FROM_SUBMODEL;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_DELETE_USER_FIELD;
+import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_INTERNAL_CHECK_CONSISTENCY;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_LINK_ELEMENT_TO_SUBMODEL;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_MOVE_ORDER;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_MOVE_ORDER_ONE_POSITION_DOWN;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_MOVE_ORDER_ONE_POSITION_UP;
+import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_PRINT_MODEL_TO_CONSOLE;
+import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_PRINT_QUEUE;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_SET_ELEMENT_ALPHA;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_SET_ELEMENT_COLOR;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_SET_ELEMENT_DEFAULT_COLOR;
@@ -722,18 +726,20 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
             System.out.println("Kommando: " + command + "\n" + ucommand + "\n\n");
         }
         if (command == null) {
-        } else if (command.equals(GDCommands.MODEL_ACTION_PRINT_QUEUE.toString())) {
+        } else if (MODEL_ACTION_PRINT_QUEUE.is(command)) {
             GDCollection gdcoll = getCollection();
             TransactionManager transactionManager = gdcoll.getTman();
             transactionManager.printQueue(10);
-        } else if (command.startsWith(GDCommands.MODEL_ACTION_COMMAND_LINE.toString())) {
+        } else if (MODEL_ACTION_COMMAND_LINE.is(command)) {
             String title = getResStringWithoutError("tool3lgm");
-            String message = getResStringWithoutError(GDCommands.MODEL_ACTION_COMMAND_LINE.name());
+            String message = getResStringWithoutError(MODEL_ACTION_COMMAND_LINE.name());
             String answer = (String) JOptionPane.showInputDialog(getMainFrame(), message, title, JOptionPane.QUESTION_MESSAGE, null, null, null);
             if (answer != null && !"".equals(answer) && !"COMMAND_LINE".equals(answer)) {
                 exec(answer, "", pid);
             }
-        } else if (command.equals(GDCommands.MODEL_ACTION_INTERNAL_CHECK_CONSISTENCY.toString())) {
+        } else if (MODEL_ACTION_PRINT_MODEL_TO_CONSOLE.is(command)) {
+            GDCollectionPrinter.print(gdcoll);
+        } else if (MODEL_ACTION_INTERNAL_CHECK_CONSISTENCY.is(command)) {
             //	Testausgabe aller Elemente im Modell (kann für Prüfzwecke wieder aktiviert werden
             //			for (Class<? extends ModelElement> meClass : ModelConstants.ALL_NODES){
             //				GraphDocument doc = gdcoll.getGraphDocument();
