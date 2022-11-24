@@ -583,7 +583,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
      * @param command
      */
     private void addUndoCommand(final int pid, final String command) {
-        if (!gdcoll.isBulkMode()) {
+        if (gdcoll.isLogUndoRedo()) {
             TransactionManager transactionManager = gdcoll.getTman();
             transactionManager.addUndoCommand(pid, command);
         }
@@ -594,7 +594,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
      * @param command
      */
     private void addRedoCommand(final int pid, final String command) {
-        if (!gdcoll.isBulkMode()) {
+        if (gdcoll.isLogUndoRedo()) {
             TransactionManager transactionManager = gdcoll.getTman();
             transactionManager.addRedoCommand(pid, command);
         }
@@ -611,7 +611,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
      * @param commandPrefix
      */
     private void addRedoCommandOrReplace(final int pid, final Object commandArguments, final GDCommands command, final Object... commandPrefix) {
-        if (!gdcoll.isBulkMode()) {
+        if (gdcoll.isLogUndoRedo()) {
             TransactionManager transactionManager = gdcoll.getTman();
             String fullCommandPrefix = getCommandLine(command, commandPrefix);
             String arguments = getArgumentsString(commandArguments);
@@ -631,7 +631,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
      * @param commandPrefix
      */
     private void addUndoCommandIfNotExist(final int pid, final Object commandArguments, final GDCommands command, final Object... commandPrefix) {
-        if (!gdcoll.isBulkMode()) {
+        if (gdcoll.isLogUndoRedo()) {
             TransactionManager transactionManager = gdcoll.getTman();
             String fullCommandPrefix = getCommandLine(command, commandPrefix);
             String arguments = getArgumentsString(commandArguments);
@@ -1797,7 +1797,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
      */
     public void start_transaction(final int pid, final boolean log) {
         //        Sys.errn(10, "Call start: " + (gdcoll.isBulkMode() ? "BUT IS BULK MODE " : "will start... ") + " " + pid + " " + log + " " + gdcoll);
-        if (gdcoll.isBulkMode()) {
+        if (!gdcoll.isLogUndoRedo()) {
             return;
         }
         if (log) {
@@ -1854,7 +1854,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
      */
     public void finish_transaction(final int pid, final boolean log) {
         //        Sys.errn(10, "Call finish: " + (gdcoll.isBulkMode() ? "BUT IS BULK MODE " : "will finish... ") + " " + pid + " " + log + " " + gdcoll);
-        if (gdcoll.isBulkMode()) {
+        if (!gdcoll.isLogUndoRedo()) {
             return;
         }
         Map<Integer, Integer> transStackTable = gdcoll.getTransStackTable();

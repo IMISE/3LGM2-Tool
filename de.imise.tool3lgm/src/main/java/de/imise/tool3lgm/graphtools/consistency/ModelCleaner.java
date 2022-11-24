@@ -82,8 +82,7 @@ public class ModelCleaner {
             return;
         }
 
-        boolean bulkMode = gdcoll.isBulkMode();
-        gdcoll.setBulkMode(true);
+        boolean bulkMode = gdcoll.setBulkMode(true);
 
         GraphDocument mainDoc = gdcoll.getMainDoc();
 

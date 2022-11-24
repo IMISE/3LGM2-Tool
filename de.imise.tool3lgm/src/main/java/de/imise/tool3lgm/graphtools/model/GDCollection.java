@@ -260,9 +260,22 @@ public class GDCollection extends UserFieldTarget implements MetaModelSpecific, 
      * währenddessen die Kommandos nicht noch einmal aufgezeichnet werden
      * müssen. <code>false</code> ist der Default. Nach dem Init muss dieser auf
      * <code>true</code> gesetzt werden, damit die dann Kommandos geloggt
-     * werden.
+     * werden. Beside this in the bulk mode all events are collected an fired
+     * after setting the bulk_mode to <code>false</code>.
      */
     private boolean bulk_mode = true;
+
+    /**
+     * Usually in bulk_mode the events will be collected and no undo redo
+     * commands are logged. But in some cases the undo redo commands should be
+     * logged and the events should be collected. To enable this state we can
+     * switch here the undo redo loggin to on. This all should be replaced by an
+     * state model with 3 states for events (1. ignore events, 2. collect events
+     * and 3. fire all events immideately) and 2 states for undo redo logging
+     * (on and off). But this is a very big change with a lot of possible side
+     * effects...)
+     */
+    private boolean enableUndoRedoLoggingInBulkMode = false;
 
     /**
      * <code>true</code> means the model is in 'automatic mode'. In this mode
@@ -2751,6 +2764,23 @@ public class GDCollection extends UserFieldTarget implements MetaModelSpecific, 
      */
     public boolean isBulkMode() {
         return bulk_mode;
+    }
+
+    /**
+     * @param enableUndoRedoLoggingInBulkMode
+     * @return the previous enableUndoRedoLoggingInBulkMode
+     */
+    public boolean setEnableUndoRedoLoggingInBulkMode(boolean enableUndoRedoLoggingInBulkMode) {
+        boolean lastEnableUndoRedoLoggingInBulkMode = this.enableUndoRedoLoggingInBulkMode;
+        this.enableUndoRedoLoggingInBulkMode = enableUndoRedoLoggingInBulkMode;
+        return lastEnableUndoRedoLoggingInBulkMode;
+    }
+
+    /**
+     * @return
+     */
+    public boolean isLogUndoRedo() {
+        return !isBulkMode() || enableUndoRedoLoggingInBulkMode;
     }
 
     /**

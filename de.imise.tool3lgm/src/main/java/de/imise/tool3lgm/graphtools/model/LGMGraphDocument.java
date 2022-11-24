@@ -281,6 +281,8 @@ public class LGMGraphDocument extends GraphDocument {
 
         //set source collections to bulk mode to prevent any selection update events
         boolean sourceBulkMode = sourceCollection.setBulkMode(true);
+        boolean targetBulkMode = targetCollection.setBulkMode(true);
+        boolean targetEnableUndoRedoLoggingInBulkMode = targetCollection.setEnableUndoRedoLoggingInBulkMode(true);
 
         targetCollection.removeInferenceEdges(true, pid);
 
@@ -413,6 +415,8 @@ public class LGMGraphDocument extends GraphDocument {
         //bei Bedarf anschalten, um zu sehen, wie das Modell danach aussieht
         //GDCollectionPrinter.print(targetCollection);
 
+        targetCollection.setEnableUndoRedoLoggingInBulkMode(targetEnableUndoRedoLoggingInBulkMode);
+        targetCollection.setBulkMode(targetBulkMode);
         sourceCollection.setBulkMode(sourceBulkMode);
 
         targetDoc.finish_transaction(pid, SELECTION_CHANGED);
