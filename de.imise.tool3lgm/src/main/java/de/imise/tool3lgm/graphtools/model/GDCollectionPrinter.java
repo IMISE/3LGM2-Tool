@@ -63,10 +63,15 @@ public class GDCollectionPrinter {
         this.gdcoll = gdcoll;
         this.withSystemID = withSystemID;
         this.withBendpointDetails = withBendpointDetails;
-        appendln("Model name=", gdcoll.getName() + " (" + gdcoll.getModelCategory().name() + ")");
-        if (appendMainModelInformation) {
-            appendMainModelInformation();
+        if (gdcoll != null) {
+            appendln("Model name=", gdcoll.getName() + " (" + gdcoll.getModelCategory().name() + ")");
+            if (appendMainModelInformation) {
+                appendMainModelInformation();
+            }
+        } else {
+            appendln("Model is null");
         }
+
     }
 
     private StringBuilder appendMainModelInformation() {
