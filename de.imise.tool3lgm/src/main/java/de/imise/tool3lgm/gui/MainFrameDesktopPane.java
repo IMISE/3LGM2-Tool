@@ -541,12 +541,18 @@ public final class MainFrameDesktopPane extends JPanel implements PropertyChange
      *            nicht.
      */
     public void setCurrentDoc(final GraphDocument doc, final boolean activateGraphView) {
-        //das doc kann null sein, wenn eine Datei geladen wird und das ModelBrowserPanel grade mit den
-        //geladenen Teilmodellen gefüllt wird. Im ModelBrowserPanel wird bei jedem Hinzufügen eines
-        //Teilmodell-Tabs immer diese Funktion hier aufgerufen.
-        //Es kann auch null sein, wenn das letzte Modell geschlossen wurde
+        // The doc can be null if a file is loaded and the ModelBrowserPanel is just
+        // filled with the loaded submodels. In the ModelBrowserPanel every time you
+        // add a submodel tab, this function is always called here.
+        // It can also be null if the last model was closed.
         if (doc == null) {
             checkViewComponentsVisibility();
+            return;
+        }
+        // do not open the graph view for templates (e.g. if an property dialog
+        // is opened from the tempalte browser, then this function is called. But
+        // we must prevent to open a graph view for the template
+        if (!Static.getTool().containsCollection(doc.getCollection())) {
             return;
         }
 

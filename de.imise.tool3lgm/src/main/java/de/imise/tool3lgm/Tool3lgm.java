@@ -724,6 +724,16 @@ public class Tool3lgm {
     }
 
     /**
+     * @param gdcoll
+     * @return <code>true</code> if the given {@link GDCollection} is one of the
+     *         currently loaded collections as model. For Every Temaplte that is
+     *         not loaded as model this function return <code>false</code>.
+     */
+    public boolean containsCollection(GDCollection gdcoll) {
+        return collections.contains(gdcoll);
+    }
+
+    /**
      * @param doc
      */
     public void changeToLinked(final GraphDocument doc) {
