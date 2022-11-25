@@ -353,7 +353,7 @@ public class LGMGraphDocument extends GraphDocument {
                     if (answer.overwriteOption == OVERWRITE) {
                         //hier müsste das alte evtl. noch gelöscht werden !?
                     } else if (answer.overwriteOption == JOIN) {
-                        targetDoc.joinElements(existingTargetElement, sourceElement, sourceDoc, true);
+                        targetDoc.joinElements(existingTargetElement, sourceElement, sourceDoc, true, true);
                         if (existingTargetElement instanceof Edge) {
                             Edge edge = (Edge) existingTargetElement;
                             edge.reconnect(targetCollection);
@@ -698,7 +698,7 @@ public class LGMGraphDocument extends GraphDocument {
         lastSelected = sourceDoc.selectedContainer.getLastSelected();
         ModelElement sourceElement = lastSelected.getElement();
 
-        joinElements(targetElement, sourceElement, sourceDoc, true);
+        joinElements(targetElement, sourceElement, sourceDoc, false, true);
         distributeEvent(DATA_CHANGED);
     }
 
@@ -706,9 +706,12 @@ public class LGMGraphDocument extends GraphDocument {
      * @param targetElement
      * @param sourceElement
      * @param sourceDoc
+     * @param ignoreEdgesOfJointElements if <code>true</code> then the edges of
+     *            the source element will not be joined with the edges of the
+     *            target element
      * @param joinNameDescriptionAndUserfields
      */
-    private void joinElements(final ModelElement targetElement, final ModelElement sourceElement, final GraphDocument sourceDoc, final boolean joinNameDescriptionAndUserfields) {
+    private void joinElements(final ModelElement targetElement, final ModelElement sourceElement, final GraphDocument sourceDoc, boolean ignoreEdgesOfJointElements, final boolean joinNameDescriptionAndUserfields) {
         if (targetElement instanceof Bendpoint) {
             return;
         }
@@ -721,58 +724,60 @@ public class LGMGraphDocument extends GraphDocument {
         }
         targetElement.refreshText();
 
-        for (Edge sourceEdge : sourceElement.getEdges()) {
-            Edge oldEdge;
-            /* vorwaerts */
-            if (sourceEdge.getStart().equals(sourceElement)) {
-                existingTargetElement = findElementCoded(sourceEdge.getEnd().getID());
-                if (existingTargetElement == null || existingTargetElement == targetElement) {
-                    continue;
-                }
-                if (targetElement.isConnectedWith(existingTargetElement, sourceEdge.getClass())) {
+        if (!ignoreEdgesOfJointElements) {
+            for (Edge sourceEdge : sourceElement.getEdges()) {
+                Edge oldEdge;
+                /* vorwaerts */
+                if (sourceEdge.getStart().equals(sourceElement)) {
+                    existingTargetElement = findElementCoded(sourceEdge.getEnd().getID());
+                    if (existingTargetElement == null || existingTargetElement == targetElement) {
+                        continue;
+                    }
+                    if (targetElement.isConnectedWith(existingTargetElement, sourceEdge.getClass())) {
+                        continue;
+                    }
+
+                    oldEdge = sourceEdge;
+                    sourceEdge = sourceEdge.clone();
+                    sourceEdge.setStartAndInsert(targetElement);
+                    sourceEdge.setEndAndInsert(existingTargetElement);
+                    /* rueckwaerts */
+                } else if (sourceEdge.getEnd().equals(sourceElement)) {
+                    existingTargetElement = findElementCoded(sourceEdge.getStart().getID());
+                    if (existingTargetElement == null || existingTargetElement == targetElement) {
+                        continue;
+                    }
+                    if (targetElement.isConnectedWith(existingTargetElement, sourceEdge.getClass())) {
+                        continue;
+                    }
+
+                    oldEdge = sourceEdge;
+                    sourceEdge = sourceEdge.clone();
+                    sourceEdge.setStartAndInsert(existingTargetElement);
+                    sourceEdge.setEndAndInsert(targetElement);
+                } else {
                     continue;
                 }
 
-                oldEdge = sourceEdge;
-                sourceEdge = sourceEdge.clone();
-                sourceEdge.setStartAndInsert(targetElement);
-                sourceEdge.setEndAndInsert(existingTargetElement);
-                /* rueckwaerts */
-            } else if (sourceEdge.getEnd().equals(sourceElement)) {
-                existingTargetElement = findElementCoded(sourceEdge.getStart().getID());
-                if (existingTargetElement == null || existingTargetElement == targetElement) {
-                    continue;
-                }
-                if (targetElement.isConnectedWith(existingTargetElement, sourceEdge.getClass())) {
-                    continue;
-                }
-
-                oldEdge = sourceEdge;
-                sourceEdge = sourceEdge.clone();
-                sourceEdge.setStartAndInsert(existingTargetElement);
-                sourceEdge.setEndAndInsert(targetElement);
-            } else {
-                continue;
-            }
-
-            //Main Doc
-            LGMGraphDocument mainDoc = gdcoll.getMainDoc();
-            int edgeLayer = sourceEdge.layerFor();
-            LayerContainer lc = mainDoc.getLayer(edgeLayer);
-            ElementContainer edgeContainer = sourceEdge.createContainer(mainDoc);
-            lc.add(edgeContainer);
-            //Szenario
-            if (this != mainDoc) {
-                if (targetElement.getContainer(this) != null) {
-                    if (existingTargetElement.getContainer(this) != null) {
-                        edgeContainer = sourceEdge.createContainer(this);
-                        lc = getLayer(edgeLayer);
-                        lc.add(edgeContainer);
+                //Main Doc
+                LGMGraphDocument mainDoc = gdcoll.getMainDoc();
+                int edgeLayer = sourceEdge.layerFor();
+                LayerContainer lc = mainDoc.getLayer(edgeLayer);
+                ElementContainer edgeContainer = sourceEdge.createContainer(mainDoc);
+                lc.add(edgeContainer);
+                //Szenario
+                if (this != mainDoc) {
+                    if (targetElement.getContainer(this) != null) {
+                        if (existingTargetElement.getContainer(this) != null) {
+                            edgeContainer = sourceEdge.createContainer(this);
+                            lc = getLayer(edgeLayer);
+                            lc.add(edgeContainer);
+                        }
                     }
                 }
-            }
 
-            joinElements(sourceEdge, oldEdge, sourceDoc, joinNameDescriptionAndUserfields);
+                joinElements(sourceEdge, oldEdge, sourceDoc, ignoreEdgesOfJointElements, joinNameDescriptionAndUserfields);
+            }
         }
     }
 
