@@ -141,11 +141,6 @@ public class RegularContextGenerator extends ElementSelectionContextGenerator im
     /**
      * COMMENTME
      */
-    private JMenuItem new_text;
-
-    /**
-     * COMMENTME
-     */
     private JMenuItem unlinkToSzenario, selectLinkedSzenario;
 
     /**
@@ -242,8 +237,6 @@ public class RegularContextGenerator extends ElementSelectionContextGenerator im
      *
      */
     private void init() {
-        new_text = getItem("text_neu", MODEL_ACTION_CREATE_NODE, Textfield.class.getName());
-
         properties = getItem(ActionLibrary.ContextActions.ACTION_SHOW_ELEMENTS_PROPERTY_DIALOG);
         unlinkToSzenario = getItem(MODEL_ACTION_UNLINK_SELECTED_TO_SUBMODEL);
         selectLinkedSzenario = getItem("selectLinkedSzenario", MODEL_ACTION_SELECT_LINKED_SUBMODEL);
@@ -992,6 +985,8 @@ public class RegularContextGenerator extends ElementSelectionContextGenerator im
                 }
             }
         }
+        layerMenu.addSeparator();
+        addCreateNodeItem(doc, layerMenu, Textfield.class, null);
         return layerMenu;
     }
 
@@ -1039,9 +1034,7 @@ public class RegularContextGenerator extends ElementSelectionContextGenerator im
     public final JPopupMenu getLayerContextMenu() {
         JPopupMenu menu = createUpdatingPopupMenu();
         menu.add(getCreateNewNodesMenu());
-        menu.add(new_text);
         menu.addSeparator();
-
         addMenuItem(menu, layer_show_configs);
         addMenuItem(menu, layer_hide_configs);
         addMenuItem(menu, layer_show_connected_names);
