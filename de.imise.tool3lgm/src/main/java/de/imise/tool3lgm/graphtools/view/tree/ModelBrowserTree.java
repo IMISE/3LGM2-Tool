@@ -382,9 +382,9 @@ public final class ModelBrowserTree extends DynamicTree implements UserFieldList
         for (LGMTreeNode<?> node : nodesToClear) {
             node.removeAllChildren();
         }
-        for (StringTreeNode layerNode : everyLayerElementTypeNodes.rowKeySet()) {
-            for (Class<? extends ModelElement> elementClass : everyLayerElementTypeNodes.columnKeySet()) {
-                ElementClassTreeNode elementClassTreeNode = everyLayerElementTypeNodes.get(layerNode, elementClass);
+        for (ElementClassTreeNode elementClassTreeNode : everyLayerElementTypeNodes.values()) {
+            DefaultMutableTreeNode layerNode = (DefaultMutableTreeNode) elementClassTreeNode.getParent(); // should be a layer node
+            if (layerNode != null) {
                 layerNode.remove(elementClassTreeNode);
             }
         }
