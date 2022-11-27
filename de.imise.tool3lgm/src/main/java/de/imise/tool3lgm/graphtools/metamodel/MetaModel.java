@@ -1,6 +1,7 @@
 package de.imise.tool3lgm.graphtools.metamodel;
 
 import static de.imise.tool3lgm.graphtools.metamodel.EdgeCardinality.ZERO;
+import static de.imise.util.collections.CollectionUtils.getCommonIterable;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -34,10 +35,10 @@ import de.imise.tool3lgm.Tool3lgmModelType.ModelCategory;
 import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
 import de.imise.tool3lgm.graphtools.consistency.ModelValidatorDefinition;
 import de.imise.tool3lgm.graphtools.consistency.error.condition.MissingPathErrorCheckCondition;
-import de.imise.tool3lgm.graphtools.metamodel.elements.Bendpoint;
 import de.imise.tool3lgm.graphtools.metamodel.elements.CompositionEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction;
+import de.imise.tool3lgm.graphtools.metamodel.elements.Group;
 import de.imise.tool3lgm.graphtools.metamodel.elements.HasPartEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.InferenceEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.InstanciationEdge;
@@ -47,7 +48,6 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElementInstanceCreat
 import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
 import de.imise.tool3lgm.graphtools.metamodel.elements.OrderedEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.SubordinationEdge;
-import de.imise.tool3lgm.graphtools.metamodel.elements.Textfield;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.model.Szenario;
@@ -464,11 +464,11 @@ public final class MetaModel extends CoreMetaModel {
         elementClassesWithLayout = CollectionUtils.ensureImmutable(getElementClassesWithLayout());
         // Die folgenden Arrays müssen hier unten initialisiert werden nachdem die Maps mit den Edges gefüllt sind, sonst InitialException
         treeDomainLayerNodes = CollectionUtils.ensureImmutable(getTreeVisibleNodes(allDomainLayerNodesSet, false));
-        creatableDomainLayerNodes = CollectionUtils.ensureImmutable(getTreeVisibleNodes(treeDomainLayerNodes, true));
+        creatableDomainLayerNodes = CollectionUtils.ensureImmutable(getCommonIterable(getTreeVisibleNodes(treeDomainLayerNodes, true), List.of(Group.class)));
         treeLogicalLayerNodes = CollectionUtils.ensureImmutable(getTreeVisibleNodes(allLogicalLayerNodesSet, false));
-        creatableLogicalLayerNodes = CollectionUtils.ensureImmutable(getTreeVisibleNodes(treeLogicalLayerNodes, true));
+        creatableLogicalLayerNodes = CollectionUtils.ensureImmutable(getCommonIterable(getTreeVisibleNodes(treeLogicalLayerNodes, true), List.of(Group.class)));
         treePhysicalLayerNodes = CollectionUtils.ensureImmutable(getTreeVisibleNodes(allPhysicalLayerNodesSet, false));
-        creatablePhysicalLayerNodes = CollectionUtils.ensureImmutable(getTreeVisibleNodes(treePhysicalLayerNodes, true));
+        creatablePhysicalLayerNodes = CollectionUtils.ensureImmutable(getCommonIterable(getTreeVisibleNodes(treePhysicalLayerNodes, true), List.of(Group.class)));
         elementClassesWithHasPartEdgeClasses = CollectionUtils.ensureImmutable(getElementClassesWithPartEdges(HasPartEdge.PARENT_TO_PART_DIRECTION));
         elementClassesWithPartOfEdgeClasses = CollectionUtils.ensureImmutable(getElementClassesWithPartEdges(HasPartEdge.PART_TO_PARENT_DIRECTION));
         elementClassToLayer = CollectionUtils.ensureImmutable(getElementClassToLayerMap());
@@ -1190,7 +1190,7 @@ public final class MetaModel extends CoreMetaModel {
      * @return
      */
     public final boolean hasLayout(final Class<? extends ModelElement> elementClass) {
-        return elementClassesWithLayout.contains(elementClass) || Textfield.class.isAssignableFrom(elementClass) || Bendpoint.class.isAssignableFrom(elementClass);
+        return elementClassesWithLayout.contains(elementClass) || META_MODEL_INDEPENDENT_ELEMENT_TYPES.contains(elementClass);
     }
 
     /**

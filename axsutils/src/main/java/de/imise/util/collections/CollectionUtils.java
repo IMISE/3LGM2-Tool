@@ -421,6 +421,24 @@ public abstract class CollectionUtils {
      * @param original
      * @return
      */
+    public static <T> Iterable<T> ensureImmutable(final Iterable<T> original) {
+        if (original == null) {
+            return ImmutableList.of();
+        }
+        ImmutableList.Builder<T> listBuilder = ImmutableList.builder();
+        for (T item : original) {
+            listBuilder.add(item);
+        }
+        return listBuilder.build();
+    }
+
+    /**
+     * Liefert eine Immutable-Variante des übergebenen Sets. Ist es bereits
+     * immutable, dann kommt das Set selbst zurück.
+     *
+     * @param original
+     * @return
+     */
     public static <T> ImmutableList<T> ensureImmutable(final Collection<T> original) {
         if (original == null) {
             return ImmutableList.of();

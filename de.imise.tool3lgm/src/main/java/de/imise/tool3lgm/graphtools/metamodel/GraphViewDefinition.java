@@ -18,6 +18,7 @@ import com.google.common.collect.ImmutableSet;
 import de.imise.tool3lgm.graphtools.dialog.LayoutEditor;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Bendpoint;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
+import de.imise.tool3lgm.graphtools.metamodel.elements.Group;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Textfield;
 import de.imise.tool3lgm.graphtools.path.metapaths.MetaPath;
@@ -155,6 +156,7 @@ public abstract class GraphViewDefinition {
         //Diese Klassen müssen noch hinzugefügt werden, da sie auch dargestellt werden
         allPaintableNodesSetBuilder.add(Bendpoint.class);
         allPaintableNodesSetBuilder.add(Textfield.class);
+        allPaintableNodesSetBuilder.add(Group.class);
         allPaintableNodes = allPaintableNodesSetBuilder.build();
     }
 
@@ -319,9 +321,15 @@ public abstract class GraphViewDefinition {
      */
     private final void initDefaultElementLayoutInternal() {
         //do not add this via the setDefaultLayout(...) fuctions because this would add the Textfield or Bendpoits to the metaModelSpecificPaintableNodes
+        // Textfield
         defaultElementsLayoutDefinition.setStandardForm(Textfield.class, Shape.rechteck);
         defaultElementsLayoutDefinition.setStandardBackGroundColor(Textfield.class, new Color(0, 0, 0, 0));
         defaultElementsLayoutDefinition.setStandardSize(Textfield.class, GraphElementLayout.STANDARD_WIDTH, GraphElementLayout.STANDARD_HEIGHT);
+        // Group
+        defaultElementsLayoutDefinition.setStandardForm(Group.class, Shape.rechteck);
+        defaultElementsLayoutDefinition.setStandardBackGroundColor(Group.class, new Color(0, 0, 0, 0));
+        defaultElementsLayoutDefinition.setStandardSize(Group.class, GraphElementLayout.STANDARD_WIDTH, GraphElementLayout.STANDARD_HEIGHT);
+        // Bendpoint
         defaultElementsLayoutDefinition.setStandardSize(Bendpoint.class, 10, 10);
     }
 
