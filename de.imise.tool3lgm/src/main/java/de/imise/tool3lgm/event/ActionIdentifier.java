@@ -1,6 +1,7 @@
 package de.imise.tool3lgm.event;
 
 import de.imise.tool3lgm.event.action.StaticAction;
+import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
 
 /**
  * Identifiers für {@link StaticAction}
@@ -86,5 +87,22 @@ public enum ActionIdentifier {
     ACTION_IMPORT_LICENSE_FILE,
 
     ;
+
+    /**
+     * @param layerIndex
+     * @return
+     */
+    public static ActionIdentifier getActivateLayerActionIdentifier(int layerIndex) {
+        if (layerIndex == ModelConstants.DOMAIN_LAYER) {
+            return ACTION_ACTIVATE_DOMAIN_LAYER;
+        }
+        if (layerIndex == ModelConstants.LOGICAL_LAYER) {
+            return ACTION_ACTIVATE_LOGICAL_LAYER;
+        }
+        if (layerIndex == ModelConstants.PHYSICAL_LAYER) {
+            return ACTION_ACTIVATE_PHYSICAL_LAYER;
+        }
+        return null;
+    }
 
 }

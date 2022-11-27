@@ -570,7 +570,7 @@ public final class MetaModel extends CoreMetaModel {
      */
     public Map<String, Class<? extends ModelElement>> getElementClassNameToElementClass() {
         ImmutableMap.Builder<String, Class<? extends ModelElement>> elementClassNameToElementClass = ImmutableMap.builder();
-        for (Class<? extends ModelElement> elementClass : CollectionUtils.getCommonIterable(allModelElementClassesWithSuperClasses, META_MODEL_INDEPENDENT_MODEL_ELEMENT_TYPES)) {
+        for (Class<? extends ModelElement> elementClass : CollectionUtils.getCommonIterable(allModelElementClassesWithSuperClasses, META_MODEL_INDEPENDENT_ELEMENT_TYPES)) {
             elementClassNameToElementClass.put(elementClass.getSimpleName(), elementClass);
             elementClassNameToElementClass.put(elementClass.getName(), elementClass);
         }
@@ -2326,6 +2326,25 @@ public final class MetaModel extends CoreMetaModel {
             return false;
         }
         return true;
+    }
+
+    /**
+     * This should be realized by a list :(
+     *
+     * @param layerIndex
+     * @return
+     */
+    public Iterable<Class<? extends ModelElement>> getTreeVisibleNodesForLayer(int layerIndex) {
+        if (layerIndex == ModelConstants.DOMAIN_LAYER) {
+            return treeDomainLayerNodes;
+        }
+        if (layerIndex == ModelConstants.LOGICAL_LAYER) {
+            return treeLogicalLayerNodes;
+        }
+        if (layerIndex == ModelConstants.PHYSICAL_LAYER) {
+            return treePhysicalLayerNodes;
+        }
+        return null;
     }
 
 }

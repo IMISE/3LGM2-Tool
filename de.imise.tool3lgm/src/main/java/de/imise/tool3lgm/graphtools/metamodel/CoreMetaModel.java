@@ -4,6 +4,7 @@ import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.STANDARD_ERR
 
 import java.lang.reflect.Modifier;
 import java.util.Collection;
+import java.util.Objects;
 import java.util.Set;
 
 import com.google.common.collect.ImmutableList;
@@ -55,10 +56,10 @@ public abstract class CoreMetaModel implements MetaModelSpecific {
     public static final Collection<Class<? extends ModelElement>> EMPTY_ELEMENT_CLASS_COLLECTION = ImmutableList.of();
 
     /**
-     * Alle Modellelementklassen, die instanziierbar sind und in jedem
-     * Metamodell automatisch enthalten sind
+     * All instanciable element classes which are automatically present in every
+     * metamodel.
      */
-    protected static final Set<Class<? extends ModelElement>> META_MODEL_INDEPENDENT_MODEL_ELEMENT_TYPES = ImmutableSet.of(Bendpoint.class, Textfield.class);
+    public static final Set<Class<? extends ModelElement>> META_MODEL_INDEPENDENT_ELEMENT_TYPES = ImmutableSet.of(Bendpoint.class, Textfield.class);
 
     /**
      * @param metaModelContext
@@ -537,10 +538,7 @@ public abstract class CoreMetaModel implements MetaModelSpecific {
 
     @Override
     public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + (metaModelContext == null ? 0 : metaModelContext.hashCode());
-        return result;
+        return Objects.hash(metaModelContext);
     }
 
     @Override
@@ -555,11 +553,7 @@ public abstract class CoreMetaModel implements MetaModelSpecific {
             return false;
         }
         CoreMetaModel other = (CoreMetaModel) obj;
-        if (metaModelContext == null) {
-            if (other.metaModelContext != null) {
-                return false;
-            }
-        } else if (!metaModelContext.equals(other.metaModelContext)) {
+        if (!Objects.equals(metaModelContext, other.metaModelContext)) {
             return false;
         }
         return true;
