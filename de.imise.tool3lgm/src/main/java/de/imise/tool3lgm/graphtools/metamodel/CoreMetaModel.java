@@ -17,6 +17,7 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.DoubleMeaningEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Group;
+import de.imise.tool3lgm.graphtools.metamodel.elements.Group_HasPartEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.HasPartEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.InstanciationEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
@@ -61,6 +62,12 @@ public abstract class CoreMetaModel implements MetaModelSpecific {
      * metamodel.
      */
     public static final Set<Class<? extends ModelElement>> META_MODEL_INDEPENDENT_ELEMENT_TYPES = ImmutableSet.of(Bendpoint.class, Textfield.class, Group.class);
+
+    /**
+     * All instanciable edge classes which are automatically present in every
+     * metamodel.
+     */
+    public static final Set<Class<? extends Edge>> META_MODEL_INDEPENDENT_EDGE_TYPES = ImmutableSet.of(Group_HasPartEdge.class);
 
     /**
      * @param metaModelContext

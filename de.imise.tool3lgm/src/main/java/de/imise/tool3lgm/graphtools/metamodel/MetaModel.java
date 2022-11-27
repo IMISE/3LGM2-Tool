@@ -21,6 +21,8 @@ import java.util.Set;
 
 import javax.swing.Action;
 
+import org.apache.jena.ext.com.google.common.collect.Lists;
+
 import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.ImmutableList;
@@ -446,7 +448,11 @@ public final class MetaModel extends CoreMetaModel {
         allNodesSet = ImmutableSet.<Class<? extends ModelElement>> builder().addAll(allDomainLayerNodesSet).addAll(allInterDomainLogicalLayerNodesSet).addAll(allLogicalLayerNodesSet).addAll(allInterLogicalPhysicalLayerNodesSet)
                 .addAll(allPhysicalLayerNodesSet).build();
         //Kanten
-        allEdgesSet = copyOf(asList(metaModelDefinition.getAllEdges()));
+        List<Class<? extends Edge>> allEdges = Lists.newArrayList(metaModelDefinition.getAllEdges());
+        if (!allEdges.isEmpty()) { // adding to the DefaultMetaModel(Context) throws an error
+            allEdges.addAll(META_MODEL_INDEPENDENT_EDGE_TYPES);
+        }
+        allEdgesSet = copyOf(allEdges);
         //alle Elementklassen
         allElementsSet = ImmutableSet.<Class<? extends ModelElement>> builder().addAll(allNodesSet).addAll(allEdgesSet).build();
         allModelElementClassesWithSuperClasses = ensureImmutable(getAllElementClassesWithSuperClasses());
