@@ -1,13 +1,16 @@
 package de.imise.tool3lgm.graphtools.metamodel;
 
+import static com.google.common.collect.ImmutableSet.copyOf;
 import static de.imise.tool3lgm.graphtools.metamodel.EdgeCardinality.ZERO;
+import static de.imise.util.collections.CollectionUtils.ensureImmutable;
+import static de.imise.util.collections.CollectionUtils.ensureImmutableCombined;
 import static de.imise.util.collections.CollectionUtils.getCommonIterable;
+import static java.util.Arrays.asList;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -435,46 +438,46 @@ public final class MetaModel extends CoreMetaModel {
         Constructor<? extends MetaModelDefinition> metaModelConstructor = metaModelClass.getDeclaredConstructor();
         MetaModelDefinition metaModelDefinition = metaModelConstructor.newInstance();
         //Knoten
-        allDomainLayerNodesSet = ImmutableSet.copyOf(Arrays.asList(metaModelDefinition.getAllDomainLayerNodes()));
-        allInterDomainLogicalLayerNodesSet = ImmutableSet.copyOf(Arrays.asList(metaModelDefinition.getAllInterDomainLogicalLayerNodes()));
-        allLogicalLayerNodesSet = ImmutableSet.copyOf(Arrays.asList(metaModelDefinition.getAllLogicalLayerNodes()));
-        allInterLogicalPhysicalLayerNodesSet = ImmutableSet.copyOf(Arrays.asList(metaModelDefinition.getAllInterLogicalPhysicalLayerNodes()));
-        allPhysicalLayerNodesSet = ImmutableSet.copyOf(Arrays.asList(metaModelDefinition.getAllPhysicalLayerNodes()));
+        allDomainLayerNodesSet = copyOf(asList(metaModelDefinition.getAllDomainLayerNodes()));
+        allInterDomainLogicalLayerNodesSet = copyOf(asList(metaModelDefinition.getAllInterDomainLogicalLayerNodes()));
+        allLogicalLayerNodesSet = copyOf(asList(metaModelDefinition.getAllLogicalLayerNodes()));
+        allInterLogicalPhysicalLayerNodesSet = copyOf(asList(metaModelDefinition.getAllInterLogicalPhysicalLayerNodes()));
+        allPhysicalLayerNodesSet = copyOf(asList(metaModelDefinition.getAllPhysicalLayerNodes()));
         allNodesSet = ImmutableSet.<Class<? extends ModelElement>> builder().addAll(allDomainLayerNodesSet).addAll(allInterDomainLogicalLayerNodesSet).addAll(allLogicalLayerNodesSet).addAll(allInterLogicalPhysicalLayerNodesSet)
                 .addAll(allPhysicalLayerNodesSet).build();
         //Kanten
-        allEdgesSet = ImmutableSet.copyOf(Arrays.asList(metaModelDefinition.getAllEdges()));
+        allEdgesSet = copyOf(asList(metaModelDefinition.getAllEdges()));
         //alle Elementklassen
         allElementsSet = ImmutableSet.<Class<? extends ModelElement>> builder().addAll(allNodesSet).addAll(allEdgesSet).build();
-        allModelElementClassesWithSuperClasses = CollectionUtils.ensureImmutable(getAllElementClassesWithSuperClasses());
-        elementClassNameToElementClass = CollectionUtils.ensureImmutable(getElementClassNameToElementClass());
+        allModelElementClassesWithSuperClasses = ensureImmutable(getAllElementClassesWithSuperClasses());
+        elementClassNameToElementClass = ensureImmutable(getElementClassNameToElementClass());
 
         //jetzt die GraphViewDefinition, weil die gleich gebraucht wird
         Class<? extends GraphViewDefinition> graphViewDefinitionClass = metaModelDefinition.getGraphViewDefinitionClass();
         graphViewDefinition = getInstance(graphViewDefinitionClass);
         //spezielle Knoteneigenschaften
-        pureTemplateElementClasses = CollectionUtils.ensureImmutable(metaModelDefinition.getPureTemplateSourceNodes());
-        onlyExpertModeVisibleNodes = CollectionUtils.ensureImmutableCombined(metaModelDefinition.getOnlyExpertModeVisibleNodes());
+        pureTemplateElementClasses = ensureImmutable(metaModelDefinition.getPureTemplateSourceNodes());
+        onlyExpertModeVisibleNodes = ensureImmutableCombined(metaModelDefinition.getOnlyExpertModeVisibleNodes());
         treeDomainLayerVisibleAbstractNodes = metaModelDefinition.getTreeDomainLayerVisibleAbstractNodes();
         treeLogicalLayerVisibleAbstractNodes = metaModelDefinition.getTreeLogicalLayerVisibleAbstractNodes();
         treePhysicalLayerVisibleAbstractNodes = metaModelDefinition.getTreePhysicalLayerVisibleAbstractNodes();
-        oldToNewClassName = CollectionUtils.ensureImmutable(metaModelDefinition.getOldToNewClassNameMap());
+        oldToNewClassName = ensureImmutable(metaModelDefinition.getOldToNewClassNameMap());
         elementClassToOrderedEdges = getElementClassToOrderedEdges(); //muss vor elementClassesWithOrderedEdgesToPaintable, da für dessen init notwendig!
-        elementClassesWithOrderedEdgesToPaintable = CollectionUtils.ensureImmutable(getElementClassesWithOrderedEdgeClassesToPaintable()); //muss vor elementClassesWithLayout, da für dessen init notwendig!
-        elementClassesWithLayout = CollectionUtils.ensureImmutable(getElementClassesWithLayout());
+        elementClassesWithOrderedEdgesToPaintable = ensureImmutable(getElementClassesWithOrderedEdgeClassesToPaintable()); //muss vor elementClassesWithLayout, da für dessen init notwendig!
+        elementClassesWithLayout = ensureImmutable(getElementClassesWithLayout());
         // Die folgenden Arrays müssen hier unten initialisiert werden nachdem die Maps mit den Edges gefüllt sind, sonst InitialException
-        treeDomainLayerNodes = CollectionUtils.ensureImmutable(getTreeVisibleNodes(allDomainLayerNodesSet, false));
-        creatableDomainLayerNodes = CollectionUtils.ensureImmutable(getCommonIterable(getTreeVisibleNodes(treeDomainLayerNodes, true), List.of(Group.class)));
-        treeLogicalLayerNodes = CollectionUtils.ensureImmutable(getTreeVisibleNodes(allLogicalLayerNodesSet, false));
-        creatableLogicalLayerNodes = CollectionUtils.ensureImmutable(getCommonIterable(getTreeVisibleNodes(treeLogicalLayerNodes, true), List.of(Group.class)));
-        treePhysicalLayerNodes = CollectionUtils.ensureImmutable(getTreeVisibleNodes(allPhysicalLayerNodesSet, false));
-        creatablePhysicalLayerNodes = CollectionUtils.ensureImmutable(getCommonIterable(getTreeVisibleNodes(treePhysicalLayerNodes, true), List.of(Group.class)));
-        elementClassesWithHasPartEdgeClasses = CollectionUtils.ensureImmutable(getElementClassesWithPartEdges(HasPartEdge.PARENT_TO_PART_DIRECTION));
-        elementClassesWithPartOfEdgeClasses = CollectionUtils.ensureImmutable(getElementClassesWithPartEdges(HasPartEdge.PART_TO_PARENT_DIRECTION));
-        elementClassToLayer = CollectionUtils.ensureImmutable(getElementClassToLayerMap());
-        initialSubtypes = CollectionUtils.ensureImmutable(getInitialSubtypes());
-        generateNameClasses = CollectionUtils.ensureImmutable(metaModelDefinition.getGenerateNameClasses());
-        importableNodes = CollectionUtils.ensureImmutable(metaModelDefinition.getImportableNodes());
+        treeDomainLayerNodes = ensureImmutable(getTreeVisibleNodes(allDomainLayerNodesSet, false));
+        creatableDomainLayerNodes = ensureImmutable(getCommonIterable(getTreeVisibleNodes(treeDomainLayerNodes, true), List.of(Group.class)));
+        treeLogicalLayerNodes = ensureImmutable(getTreeVisibleNodes(allLogicalLayerNodesSet, false));
+        creatableLogicalLayerNodes = ensureImmutable(getCommonIterable(getTreeVisibleNodes(treeLogicalLayerNodes, true), List.of(Group.class)));
+        treePhysicalLayerNodes = ensureImmutable(getTreeVisibleNodes(allPhysicalLayerNodesSet, false));
+        creatablePhysicalLayerNodes = ensureImmutable(getCommonIterable(getTreeVisibleNodes(treePhysicalLayerNodes, true), List.of(Group.class)));
+        elementClassesWithHasPartEdgeClasses = ensureImmutable(getElementClassesWithPartEdges(HasPartEdge.PARENT_TO_PART_DIRECTION));
+        elementClassesWithPartOfEdgeClasses = ensureImmutable(getElementClassesWithPartEdges(HasPartEdge.PART_TO_PARENT_DIRECTION));
+        elementClassToLayer = ensureImmutable(getElementClassToLayerMap());
+        initialSubtypes = ensureImmutable(getInitialSubtypes());
+        generateNameClasses = ensureImmutable(metaModelDefinition.getGenerateNameClasses());
+        importableNodes = ensureImmutable(metaModelDefinition.getImportableNodes());
         uniqueNodes = getUniqueNodes(); //already immutable
         compositionSlaveNodes = getAllCompositionSlaveNodes(); //already immutable
         analysesDefinition = getInstance(metaModelDefinition.getAnalysesDefinitionClass());
@@ -484,17 +487,17 @@ public final class MetaModel extends CoreMetaModel {
         Class<? extends MetaPathDefinition> metaPathsDefinitionClass = metaModelDefinition.getMetaPathsDefinitionClass();
         metaPathsDefinition = getInstance(metaPathsDefinitionClass);
         copyDependencies = getInstance(metaModelDefinition.getCopyDependenciesClass());
-        edgeClassToConditionMetaPath = CollectionUtils.ensureImmutable(metaPathsDefinition.getConditionMetaPaths());
-        edgeClassToSoftConditionMetaPath = CollectionUtils.ensureImmutable(metaPathsDefinition.getSoftConditionMetaPaths());
-        instanciationEdgeToAdditionalInstanciationMetaPaths = CollectionUtils.ensureImmutable(getInstanciationEdgeToAdditionalInstanciationNonAbstractMetaPaths(metaPathsDefinition.getInstanciationEdgeToAdditionalInstanciationMetaPaths()));
-        elementClassToCreatableMetaPaths = CollectionUtils.ensureImmutable(getCreatableMetaPathsMap(metaPathsDefinition.getCreatableMetaPaths()));
-        elementClassToNameExtensionPathAsNameTarget = CollectionUtils.ensureImmutable(metaPathsDefinition.getElementClassToNameExtensionMetaPath());
-        elementClassesWithNameExtensionsAsNameTarget = CollectionUtils.ensureImmutable(elementClassToNameExtensionPathAsNameTarget.keySet());
+        edgeClassToConditionMetaPath = ensureImmutable(metaPathsDefinition.getConditionMetaPaths());
+        edgeClassToSoftConditionMetaPath = ensureImmutable(metaPathsDefinition.getSoftConditionMetaPaths());
+        instanciationEdgeToAdditionalInstanciationMetaPaths = ensureImmutable(getInstanciationEdgeToAdditionalInstanciationNonAbstractMetaPaths(metaPathsDefinition.getInstanciationEdgeToAdditionalInstanciationMetaPaths()));
+        elementClassToCreatableMetaPaths = ensureImmutable(getCreatableMetaPathsMap(metaPathsDefinition.getCreatableMetaPaths()));
+        elementClassToNameExtensionPathAsNameTarget = ensureImmutable(metaPathsDefinition.getElementClassToNameExtensionMetaPath());
+        elementClassesWithNameExtensionsAsNameTarget = ensureImmutable(elementClassToNameExtensionPathAsNameTarget.keySet());
         elementClassToNameExtensionPathAsNameSource = getElementClassToNameExtensionPathAsNameSource(elementClassToNameExtensionPathAsNameTarget);
-        elementClassesWithNameExtensionsAsNameSource = CollectionUtils.ensureImmutable(elementClassToNameExtensionPathAsNameSource.keySet());
-        edgeClassToInitialCreatedNameSourcePath = CollectionUtils.ensureImmutable(metaPathsDefinition.getEdgeClassToInitialCreatedNameSourceMetaPath());
+        elementClassesWithNameExtensionsAsNameSource = ensureImmutable(elementClassToNameExtensionPathAsNameSource.keySet());
+        edgeClassToInitialCreatedNameSourcePath = ensureImmutable(metaPathsDefinition.getEdgeClassToInitialCreatedNameSourceMetaPath());
 
-        inferenceEdgeClassToConditionMetaPath = CollectionUtils.ensureImmutable(metaPathsDefinition.getInferenceEdgeToConditionMetaPath());
+        inferenceEdgeClassToConditionMetaPath = ensureImmutable(metaPathsDefinition.getInferenceEdgeToConditionMetaPath());
 
     }
 
@@ -978,7 +981,7 @@ public final class MetaModel extends CoreMetaModel {
      */
     @SafeVarargs
     public final boolean isEditable(final Class<? extends ModelElement>... elementClasses) {
-        List<Class<? extends ModelElement>> elementClassesList = Arrays.asList(elementClasses);
+        List<Class<? extends ModelElement>> elementClassesList = asList(elementClasses);
         return isEditable(elementClassesList);
     }
 
