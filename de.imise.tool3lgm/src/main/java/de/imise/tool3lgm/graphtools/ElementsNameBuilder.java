@@ -551,13 +551,27 @@ public final class ElementsNameBuilder extends MetaModelSpecificAdapter {
      * @param connectionState
      * @param appendPrefixClass
      * @param appendPostfixClass
+     * @param replaceEndClass
      * @return
-     * @see getMetaAssociationName
      */
     public String getMetaAssociationName(final Class<? extends Edge> edgeClass, final Direction direction, final ConnectionState connectionState, final boolean appendPrefixClass, final boolean appendPostfixClass) {
+        return getMetaAssociationName(edgeClass, direction, connectionState, appendPrefixClass, appendPostfixClass, null);
+    }
+
+    /**
+     * @param edgeClass
+     * @param direction
+     * @param connectionState
+     * @param appendPrefixClass
+     * @param appendPostfixClass
+     * @param replaceEndClass
+     * @return
+     */
+    public String getMetaAssociationName(final Class<? extends Edge> edgeClass, final Direction direction, final ConnectionState connectionState, final boolean appendPrefixClass, final boolean appendPostfixClass,
+            Class<? extends ModelElement> replaceEndClass) {
         boolean forward = direction != Direction.BACKWARD;
-        Class<? extends ModelElement> prefixClass = !appendPrefixClass ? null : forward ? getStartClass(edgeClass) : getEndClass(edgeClass);
-        Class<? extends ModelElement> postfixClass = !appendPostfixClass ? null : forward ? getEndClass(edgeClass) : getStartClass(edgeClass);
+        Class<? extends ModelElement> prefixClass = !appendPrefixClass ? null : forward ? getStartClass(edgeClass) : replaceEndClass == null ? getEndClass(edgeClass) : replaceEndClass;
+        Class<? extends ModelElement> postfixClass = !appendPostfixClass ? null : forward ? replaceEndClass == null ? getEndClass(edgeClass) : replaceEndClass : getStartClass(edgeClass);
         return getMetaAssociationName(edgeClass, direction, connectionState, prefixClass, postfixClass);
     }
 

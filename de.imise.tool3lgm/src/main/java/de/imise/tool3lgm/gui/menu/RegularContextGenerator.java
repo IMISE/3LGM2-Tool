@@ -387,9 +387,9 @@ public class RegularContextGenerator extends ElementSelectionContextGenerator im
     private JMenu getChangeSubTypeMenu() {
         JMenu subTypeMenu = null;
         GraphDocument doc = getDoc();
-        Class<? extends ModelElement> mostSpecialRealElementsClass = doc.getMostSpecialRealElementsClass();
+        Class<? extends ModelElement> selectedMostSpecialRealElementsClass = doc.getSelectedMostSpecialRealElementsClass();
         UserFieldDefinitions userFieldDefinitions = doc.getUserFieldDefinitions();
-        List<UserField> subTypeUserFields = userFieldDefinitions.getUserFields(mostSpecialRealElementsClass, SUBTYPE);
+        List<UserField> subTypeUserFields = userFieldDefinitions.getUserFields(selectedMostSpecialRealElementsClass, SUBTYPE);
         if (!subTypeUserFields.isEmpty()) {
 
             //collect the different subtypes of all selected elements
@@ -733,8 +733,9 @@ public class RegularContextGenerator extends ElementSelectionContextGenerator im
                                     }
                                     String edgeClassName = edgeClass.getSimpleName();
                                     ElementsNameBuilder elementsNameBuilder = doc.getElementsNameBuilder();
-                                    String label = elementsNameBuilder.getMetaAssociationName(edgeClass, edgeDirection, connectionState, false, true);
-                                    String toolTip = elementsNameBuilder.getMetaAssociationName(edgeClass, edgeDirection, connectionState, true, true);
+                                    Class<? extends ModelElement> replacedEndClass = doc.getSelectedMostSpecialRealElementsClassWithoutLastSelected();
+                                    String label = elementsNameBuilder.getMetaAssociationName(edgeClass, edgeDirection, connectionState, false, true, replacedEndClass);
+                                    String toolTip = elementsNameBuilder.getMetaAssociationName(edgeClass, edgeDirection, connectionState, true, true, replacedEndClass);
                                     //Menuitems
                                     //das muss sein, weil man sich nicht darauf verlassen sollte, dass die ConnectionStates und Directions dieselben Strings haben.
                                     //In den UndoRedo-Kommandos werden aber Directions gebraucht, die sich in diesem Fall aber aus den ConnectionStates ergeben -> sauber überführen

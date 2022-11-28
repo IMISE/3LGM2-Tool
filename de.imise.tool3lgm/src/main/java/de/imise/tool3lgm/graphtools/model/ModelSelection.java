@@ -53,12 +53,18 @@ public class ModelSelection extends MetaModelSpecificAdapter implements Set<Elem
     private NodeContainer lastSelectedGraphVisibleNodeOrBendpoint;
 
     /**
-     * Enthält die speziellste gemeinsame Unterklasse von {@link ModelElement}
-     * aus allen Elementen der selektierten {@link NodeContainer} aus
+     * Contains the most special common subclass of {@link ModelElement} from
+     * all elements of the selected {@link NodeContainer} from
      * <code>selectedRealNodeContainer</code>.<br>
-     * Wenn nichts selektiert ist, ist dieser Wert <code>null</code>.
+     * If nothing is selected, this value is <code>null</code>.
      */
     private Class<? extends ModelElement> mostSpecialRealElementClass = null;
+
+    /**
+     * Same as {@link #mostSpecialRealElementClass} but without the last
+     * selected element.
+     */
+    private Class<? extends ModelElement> mostSpecialRealElementClassWithoutLastSelected = null;
 
     /**
      * Wenn viele Elemente hinzugefügt oder entfernt werden sollen, muss nicht
@@ -137,6 +143,7 @@ public class ModelSelection extends MetaModelSpecificAdapter implements Set<Elem
                 lastSelectedGraphVisibleNodeOrBendpoint = (NodeContainer) lastSelected;
             }
         }
+        updateSelectionState();
         //Sys.errn(15, (lastSelected != null ? lastSelected.getGraphDocument() : "") + " " + lastSelected + " | " + lastSelectedGraphVisibleNodeOrBendpoint);
     }
 
@@ -570,9 +577,10 @@ public class ModelSelection extends MetaModelSpecificAdapter implements Set<Elem
         }
         //mostSpecialClass mit null und den Rest false initialisieren
         mostSpecialRealElementClass = null;
+        mostSpecialRealElementClassWithoutLastSelected = null;
 
         //es ist nichts selektiert -> raus
-        if (selectedRealNodeContainer.size() == 0) {
+        if (selectedRealNodeContainer.isEmpty()) {
             return;
         }
 
@@ -587,6 +595,9 @@ public class ModelSelection extends MetaModelSpecificAdapter implements Set<Elem
             ModelElement me = nc.getElement();
             Class<? extends ModelElement> elementClass = me.getClass();
             mostSpecialRealElementClass = ReflectionUtils.getCommonSuperClassOfClasses(mostSpecialRealElementClass, elementClass);
+            if (nc != lastSelected) {
+                mostSpecialRealElementClassWithoutLastSelected = ReflectionUtils.getCommonSuperClassOfClasses(mostSpecialRealElementClassWithoutLastSelected, elementClass);
+            }
             if (mostSpecialRealElementClass == commonRealElementsSuperClass) {
                 break;
             }
@@ -594,16 +605,21 @@ public class ModelSelection extends MetaModelSpecificAdapter implements Set<Elem
     }
 
     /**
-     * Gibt die erste gemeinsame Klasse aller selektierten Elemente zurück.<br>
-     * In der Selektion sind zwar {@link ElementContainer}, aber hier kommt die
-     * Oberklasse der in den Containern befindlichen Unterklassen von
-     * {@link ModelElement} zurück. Wenn nichts selektiert ist, ist dieser Wert
-     * <code>null</code>.
-     *
-     * @return
+     * @return the most special common subclass of {@link ModelElement} from all
+     *         elements of the selected {@link NodeContainer} from
+     *         <code>selectedRealNodeContainer</code>.<br>
+     *         If nothing is selected, this value is <code>null</code>.
      */
     public Class<? extends ModelElement> getMostSpecialRealElementsClass() {
         return mostSpecialRealElementClass;
+    }
+
+    /**
+     * @return Same as {{@link #getMostSpecialRealElementsClass()}} but without
+     *         the last selected element.
+     */
+    public Class<? extends ModelElement> getMostSpecialRealElementsClassWithoutLastSelected() {
+        return mostSpecialRealElementClassWithoutLastSelected;
     }
 
     /**
