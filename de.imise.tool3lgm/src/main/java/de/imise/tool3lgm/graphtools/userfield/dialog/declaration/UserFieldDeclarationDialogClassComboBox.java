@@ -7,11 +7,14 @@ import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
 import de.imise.tool3lgm.graphtools.metamodel.CoreMetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
+import de.imise.tool3lgm.graphtools.metamodel.elements.Group;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
+import de.imise.tool3lgm.graphtools.metamodel.elements.Textfield;
 import de.imise.tool3lgm.graphtools.userfield.definition.UserFieldDefinitions;
 import de.imise.tool3lgm.graphtools.userfield.definition.UserFieldTarget;
 import de.imise.util.NamedObjectContainer;
+import de.imise.util.collections.CollectionUtils;
 import de.imise.util.htmlxml.HTMLConverter;
 import de.imise.util.swing.component.AlphabeticalComboBox;
 
@@ -49,7 +52,7 @@ public class UserFieldDeclarationDialogClassComboBox extends AlphabeticalComboBo
         MetaModel metaModel = userFieldDefinitions.getMetaModel();
         ElementsNameBuilder elementsNameBuilder = metaModel.getElementsNameBuilder();
         //alle nicht abstracten Knotenklassen hinzufügen
-        for (Class<? extends ModelElement> elementClass : metaModel.allNodesSet) {
+        for (Class<? extends ModelElement> elementClass : CollectionUtils.getCommonIterable(metaModel.allNodesSet, Group.class, Textfield.class)) {
             if (!CoreMetaModel.isAbstract(elementClass) && !CoreMetaModel.isEdgeType(elementClass)) { //some Edge classes are regisered as nodes too (all association classes)
                 String itemName = elementsNameBuilder.getDisplayableFullName(elementClass);
                 addObject(elementClass, itemName);

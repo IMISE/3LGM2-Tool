@@ -2,6 +2,7 @@ package de.imise.util.collections;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -136,7 +137,6 @@ public abstract class CollectionUtils {
             }
         }
         return containsName;
-
     }
 
     /**
@@ -848,6 +848,19 @@ public abstract class CollectionUtils {
             }
             return list.iterator();
         };
+    }
+
+    /**
+     * @param iterable
+     * @param objects
+     * @return
+     * @throws ClassCastException if the objects have not the same type as the
+     *             elements in the iterable
+     */
+    @SuppressWarnings("unchecked")
+    @SafeVarargs
+    public static <T> Iterable<T> getCommonIterable(final Iterable<? extends T> iterable, Object... objects) {
+        return getCommonIterable(iterable, (List<? extends T>) Arrays.asList(objects));
     }
 
     /**
