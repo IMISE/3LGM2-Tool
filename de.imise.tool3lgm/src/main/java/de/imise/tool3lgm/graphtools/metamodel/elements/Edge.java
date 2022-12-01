@@ -128,6 +128,11 @@ public abstract class Edge extends ModelElement {
         if (layer == ModelConstants.NO_LAYER) {
             layer = getMetaModel().getEdgeLayer(startElement.getClass(), endElement.getClass());
         }
+        // if the edge connects two groups then layer is still NO_LAYER here -> get the layer of the
+        // start element
+        if (layer == ModelConstants.NO_LAYER) {
+            layer = startElement.layerFor();
+        }
         return layer;
     }
 
@@ -279,18 +284,18 @@ public abstract class Edge extends ModelElement {
 
     @Override
     public boolean putXMLFieldString(final String field, final String value) {
-        if (field.equals("start")) {
+        if ("start".equals(field)) {
             startID = value;
             return true;
         }
-        if (field.equals("end")) {
+        if ("end".equals(field)) {
             endID = value;
             return true;
         }
-        if (field.equals("direction")) {
+        if ("direction".equals(field)) {
             return true;
         }
-        if (field.equals("master_slave")) {
+        if ("master_slave".equals(field)) {
             return true;
         }
         return super.putXMLFieldString(field, value);
