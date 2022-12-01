@@ -472,10 +472,10 @@ public final class ModelBrowserTree extends DynamicTree implements UserFieldList
         if (!showPartOfHierarchy) {
             return;
         }
-        ElementContainer kc = elementNode.getUserObject();
+        ElementContainer ec = elementNode.getUserObject();
         LGMTreeNode<?> parent = (LGMTreeNode<?>) elementNode.getParent();
         GraphDocument maindoc = doc.getCollection().getMainDoc();
-        List<ElementContainer> allPartContainers = kc.getElement().getDirectPartContainers(showSubmodelInBrowser ? selDoc : maindoc);
+        List<ElementContainer> allPartContainers = ec.getElement().getDirectPartContainers(showSubmodelInBrowser ? selDoc : maindoc);
         loop1: for (ElementContainer partContainer : allPartContainers) {
             ModelElement part = partContainer.getElement();
             ElementContainer selDocPartContainer = part.getContainer(selDoc);

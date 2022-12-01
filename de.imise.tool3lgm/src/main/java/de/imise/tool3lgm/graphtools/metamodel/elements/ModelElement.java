@@ -942,33 +942,43 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
      * Prüft, ob zwischen diesem und dem übergebenen Element eine Edge der
      * angegebenen Art existiert. Die Richtung ist dabei egal.
      *
-     * @param modelElement Element zu dem die Existenz einer Verbindung geprüft
+     * @param other Element zu dem die Existenz einer Verbindung geprüft
      *            werden soll
      * @param edgeClass Art der Edge, die gesucht werden soll
      * @return <code>true</code>, wenn eine Edge zwischen diesem und dem
      *         übergebenen Element besteht
      */
-    public final boolean isConnectedWith(final ModelElement modelElement, final Class<? extends Edge> edgeClass) {
+    public final boolean isConnectedWith(final ModelElement other, final Class<? extends Edge> edgeClass) {
         for (Edge edge : getEdges()) {
-            if (edgeClass.isAssignableFrom(edge.getClass()) && edge.isConnecting(this, modelElement)) {
+            if (edgeClass.isAssignableFrom(edge.getClass()) && edge.isConnecting(this, other)) {
                 return true;
             }
         }
         return false;
     }
 
-    public final boolean isConnectedTo(final ModelElement k, final Class<? extends Edge> edgeClass) {
+    /**
+     * @param other
+     * @param edgeClass
+     * @return
+     */
+    public final boolean isConnectedTo(final ModelElement other, final Class<? extends Edge> edgeClass) {
         for (Edge edge : getEdges()) {
-            if (edgeClass.isAssignableFrom(edge.getClass()) && edge.isDirecting(this, k)) {
+            if (edgeClass.isAssignableFrom(edge.getClass()) && edge.isDirecting(this, other)) {
                 return true;
             }
         }
         return false;
     }
 
-    public final boolean isConnectedFrom(final ModelElement k, final Class<? extends Edge> edgeClass) {
+    /**
+     * @param other
+     * @param edgeClass
+     * @return
+     */
+    public final boolean isConnectedFrom(final ModelElement other, final Class<? extends Edge> edgeClass) {
         for (Edge edge : getEdges()) {
-            if (edgeClass.isAssignableFrom(edge.getClass()) && edge.isDirecting(k, this)) {
+            if (edgeClass.isAssignableFrom(edge.getClass()) && edge.isDirecting(other, this)) {
                 return true;
             }
         }
@@ -981,12 +991,12 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
      * <code>getConnectionTo(ModelElement, Class, int)</code> für alle
      * Positionen aus.
      *
-     * @param modelElement
+     * @param other
      * @param edgeClasses
      * @return
      */
-    public final Edge getEdgeTo(final ModelElement modelElement, final Class<? extends Edge> edgeClass) {
-        return getEdgeTo(this, modelElement, edgeClass);
+    public final Edge getEdgeTo(final ModelElement other, final Class<? extends Edge> edgeClass) {
+        return getEdgeTo(this, other, edgeClass);
     }
 
     /**
@@ -1009,37 +1019,37 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
     }
 
     /**
-     * @param modelElement
+     * @param other
      * @param edgeClass
      * @param position
      * @return
      */
-    public final Edge getEdgeTo(final ModelElement modelElement, final Class<? extends Edge> edgeClass, final int position) {
+    public final Edge getEdgeTo(final ModelElement other, final Class<? extends Edge> edgeClass, final int position) {
         if (isValidEdgeIndex(position)) {
             Edge edge = edges.get(position);
-            if (isEdgeTo(edge, edgeClass, this, modelElement)) {
+            if (isEdgeTo(edge, edgeClass, this, other)) {
                 return edge;
             }
         } else if (position == GDCommands.INVALID_EDGE_INDEX) {
-            return getEdgeTo(this, modelElement, edgeClass);
+            return getEdgeTo(this, other, edgeClass);
         }
         return null;
     }
 
     /**
-     * @param modelElement
+     * @param other
      * @param edgeClass
      * @param position
      * @return
      */
-    public final Edge getEdgeFrom(final ModelElement modelElement, final Class<? extends Edge> edgeClass, final int position) {
+    public final Edge getEdgeFrom(final ModelElement other, final Class<? extends Edge> edgeClass, final int position) {
         if (isValidEdgeIndex(position)) {
             Edge edge = edges.get(position);
-            if (isEdgeTo(edge, edgeClass, modelElement, this)) {
+            if (isEdgeTo(edge, edgeClass, other, this)) {
                 return edge;
             }
         } else if (position == GDCommands.INVALID_EDGE_INDEX) {
-            return getEdgeTo(modelElement, this, edgeClass);
+            return getEdgeTo(other, this, edgeClass);
         }
         return null;
     }
@@ -1076,61 +1086,61 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
     }
 
     /**
-     * @param modelElement
+     * @param other
      * @return
      */
-    public final List<Edge> getEdgesWith(final ModelElement modelElement) {
-        return getEdgesWith(modelElement, null);
+    public final List<Edge> getEdgesWith(final ModelElement other) {
+        return getEdgesWith(other, null);
     }
 
     /**
-     * @param modelElement
+     * @param other
      * @param edgeClass
      * @return
      */
-    public final List<Edge> getEdgesWith(final ModelElement modelElement, final Class<? extends Edge> edgeClass) {
-        return getEdgesWith(modelElement, edgeClass, GDCommands.INVALID_EDGE_INDEX);
+    public final List<Edge> getEdgesWith(final ModelElement other, final Class<? extends Edge> edgeClass) {
+        return getEdgesWith(other, edgeClass, GDCommands.INVALID_EDGE_INDEX);
     }
 
     /**
-     * @param modelElement
-     * @param edgeClass
-     * @param position
-     * @return
-     */
-    public final List<Edge> getEdgesWith(final ModelElement modelElement, final Class<? extends Edge> edgeClass, final int position) {
-        return getEdgesWith(modelElement, edgeClass, position, null);
-    }
-
-    /**
-     * @param modelElement
-     * @param edgeClass
-     * @return
-     */
-    public final List<Edge> getEdgesTo(final ModelElement modelElement, final Class<? extends Edge> edgeClass) {
-        return getEdgesWith(modelElement, edgeClass, GDCommands.INVALID_EDGE_INDEX, FORWARD);
-    }
-
-    /**
-     * @param modelElement
+     * @param other
      * @param edgeClass
      * @param position
      * @return
      */
-    public final List<Edge> getEdgesTo(final ModelElement modelElement, final Class<? extends Edge> edgeClass, final int position) {
-        return getEdgesWith(modelElement, edgeClass, position, FORWARD);
+    public final List<Edge> getEdgesWith(final ModelElement other, final Class<? extends Edge> edgeClass, final int position) {
+        return getEdgesWith(other, edgeClass, position, null);
     }
 
     /**
-     * @param modelElement
+     * @param other
+     * @param edgeClass
+     * @return
+     */
+    public final List<Edge> getEdgesTo(final ModelElement other, final Class<? extends Edge> edgeClass) {
+        return getEdgesWith(other, edgeClass, GDCommands.INVALID_EDGE_INDEX, FORWARD);
+    }
+
+    /**
+     * @param other
+     * @param edgeClass
+     * @param position
+     * @return
+     */
+    public final List<Edge> getEdgesTo(final ModelElement other, final Class<? extends Edge> edgeClass, final int position) {
+        return getEdgesWith(other, edgeClass, position, FORWARD);
+    }
+
+    /**
+     * @param other
      * @param edgeClass
      * @param edgeIndex
      * @param direction
      * @return
      */
-    private final List<Edge> getEdgesWith(final ModelElement modelElement, final Class<? extends Edge> edgeClass, final int edgeIndex, final Direction direction) {
+    private final List<Edge> getEdgesWith(final ModelElement other, final Class<? extends Edge> edgeClass, final int edgeIndex, final Direction direction) {
         List<Edge> retVal = new ArrayList<>();
-        if (modelElement == null || edges == null) {
+        if (other == null || edges == null) {
             return retVal;
         }
         int startIndex = 0;
@@ -1146,11 +1156,11 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
             }
             boolean add = false;
             if (direction == FORWARD) {
-                add = edge.isDirecting(this, modelElement);
+                add = edge.isDirecting(this, other);
             } else if (direction == BACKWARD) {
-                add = edge.isDirecting(modelElement, this);
+                add = edge.isDirecting(other, this);
             } else {
-                add = edge.isConnecting(this, modelElement);
+                add = edge.isConnecting(this, other);
             }
             if (add) {
                 retVal.add(edge);
