@@ -204,6 +204,15 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
     }
 
     /**
+     * @param possitbleSuperClass
+     * @return <code>true</code> if the given class is a superclass of class of
+     *         this.
+     */
+    public boolean is(Class<? extends ModelElement> possibleSuperClass) {
+        return possibleSuperClass.isAssignableFrom(getClass());
+    }
+
+    /**
      * @return the subType
      */
     public SubType getSubType() {

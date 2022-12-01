@@ -718,10 +718,16 @@ public final class ModelBrowserTree extends DynamicTree implements UserFieldList
     private boolean addOnlyAsPart(ModelElement me, GraphDocument doc) {
         if (showPartOfHierarchy) {
             List<ElementContainer> parents = me.getDirectParentContainers(doc);
+            // Groups with parents ( = Groups) should never added unter its
+            // Class node, if it is a child.
+            if (!parents.isEmpty() && me.is(Group.class)) {
+                return true;
+            }
             for (ElementContainer parent : parents) {
                 ModelElement parentElement = parent.getElement();
-                // if there is any other parent than a group -> the element will
-                // be only added as child
+                // If there is any other parent than a Group -> the element will
+                // be only added as child. If not, it will be added as group child
+                // and also under its class node.
                 if (!ReflectionUtils.isAssignable(parentElement.getClass(), Group.class)) {
                     return true;
                 }
@@ -751,8 +757,8 @@ public final class ModelBrowserTree extends DynamicTree implements UserFieldList
     }
 
     /**
-    *
-    */
+     *
+     */
     void buildTree() {
         if (doc == null) {
             return;
