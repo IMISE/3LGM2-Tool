@@ -8,6 +8,7 @@ import java.util.Date;
 import de.imise.tool3lgm.graphtools.metamodel.elements.CompositionEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
+import de.imise.tool3lgm.graphtools.metamodel.elements.SubordinationEdge;
 import de.imise.tool3lgm.graphtools.view.container.BendpointContainer;
 import de.imise.tool3lgm.graphtools.view.container.EdgeContainer;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
@@ -177,6 +178,34 @@ public class Szenario extends LGMGraphDocument {
                             continue;
                         }
                         kc.refreshText();
+                        // if it is the usual modeling mode
+                        if (!gdcoll.isBulkMode()) {
+                            // for SubordinationEdges we want to bring the subordinated elements
+                            // in front of the superelements, if both elements are on the same
+                            // layer in the graph
+                            if (edge instanceof SubordinationEdge) {
+                                SubordinationEdge subEdge = (SubordinationEdge) edge;
+                                ModelElement superElement = subEdge.getSuperElement();
+                                ElementContainer superContainer = superElement.getContainer(this);
+                                if (superContainer != null) {
+                                    ModelElement subElement = subEdge.getSubElement();
+                                    ElementContainer subContainer = subElement.getContainer(this);
+                                    if (subContainer != null) {
+                                        int superElementLayer = superElement.layerFor();
+                                        int subElementLayer = subElement.layerFor();
+                                        if (superElementLayer == subElementLayer) {
+                                            LayerContainer lc = layer[subElementLayer];
+                                            int superElementIndexInGraph = lc.indexOf(superContainer);
+                                            int subElementIndexInGraph = lc.indexOf(subContainer);
+                                            int diff = superElementIndexInGraph - subElementIndexInGraph;
+                                            if (diff > 0) {
+                                                z_move(this, subContainer, diff, pid);
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
                         if (select) {
                             addToSelection(kc, pid);
                         }

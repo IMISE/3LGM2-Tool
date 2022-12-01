@@ -4792,10 +4792,19 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
      */
     public final void z_move(final String szenID, final String elementID, final int position, final int pid) {
         GraphDocument szen = gdcoll.getGraphDocumentCoded(szenID);
+        ElementContainer ec = szen.findContainerCoded(elementID);
+        z_move(szen, ec, position, pid);
+    }
+
+    /**
+     * @param szen
+     * @param elementID
+     * @param pid
+     */
+    public final void z_move(final GraphDocument szen, final ElementContainer ec, final int position, final int pid) {
         if (!(szen instanceof Szenario)) {
             return;
         }
-        ElementContainer ec = szen.findContainerCoded(elementID);
         int layer = ec.layerFor();
         if (layer < 0) {
             return;
@@ -4803,8 +4812,8 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
         LayerContainer lc = szen.layer[layer];
         int indexOnLayer = lc.indexOf(ec);
         szen.start_transaction(pid);
-        addRedo(pid, MODEL_ACTION_MOVE_ORDER, szenID, elementID, position);
-        addUndo(pid, MODEL_ACTION_MOVE_ORDER, szenID, elementID, indexOnLayer);
+        addRedo(pid, MODEL_ACTION_MOVE_ORDER, szen, ec, position);
+        addUndo(pid, MODEL_ACTION_MOVE_ORDER, szen, ec, indexOnLayer);
         lc.z_move(ec, position, pid);
         szen.finish_transaction(pid);
         distributeEvent(GROUP_ORDER_CHANGED, lc, pid);

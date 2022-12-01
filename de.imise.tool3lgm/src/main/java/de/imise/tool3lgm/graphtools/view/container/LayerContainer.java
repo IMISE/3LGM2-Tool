@@ -27,6 +27,7 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.CompositionEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
+import de.imise.tool3lgm.graphtools.metamodel.elements.SubordinationEdge;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.model.Szenario;
 import de.imise.tool3lgm.graphtools.view.graph.BasicGraphArea;
@@ -293,15 +294,32 @@ public class LayerContainer extends ElementContainer implements Iterable<Element
         z_move(ec, indexOf(ec) - 1, pid);
     }
 
+    private final ElementContainer raised = null;
+
     /**
      * If the passed container has {@link CompositionEdge}s to slave elements,
      * then this ensures that the slaves are drawn in the order of all elements
      * above the master and not obscured by it.
      *
      * @param ec the container which can have slave elements that must be raised
+     * @param pid
      */
     public final void raiseSlaves(final ElementContainer ec, final int pid) {
-        if (!(ec instanceof NodeContainer)) {
+        raiseConnected(ec, CompositionEdge.class, pid);
+    }
+
+    /**
+     * If the passed container has {@link CompositionEdge}s to connected
+     * elements, then this ensures that the connected are drawn in the order of
+     * all elements above the passed and not obscured by it.
+     *
+     * @param ec the container which can have connected elements that must be
+     *            raised
+     * @param edgeClassToConnected
+     * @param pid
+     */
+    public final void raiseConnected(final ElementContainer ec, Class<? extends SubordinationEdge> edgeClassToConnected, final int pid) {
+        if (!(ec instanceof NodeContainer) || ec == raised) {
             return;
         }
 
@@ -313,15 +331,16 @@ public class LayerContainer extends ElementContainer implements Iterable<Element
         }
         ModelElement me = nc.getElement();
         for (Edge edge : me.getEdges()) {
-            //only CompositionEdges where me is the master are relevant
-            if (!(edge instanceof CompositionEdge)) {
+            //only SubordinationEdges where me is the master are relevant
+            if (!edgeClassToConnected.isAssignableFrom(edge.getClass())) {
                 continue;
             }
-            CompositionEdge compositionEdge = (CompositionEdge) edge;
-            ModelElement slave = compositionEdge.getSlave();
-            if (slave != me && indexOf(slave) >= 0) {
+            SubordinationEdge subordinationEdge = (SubordinationEdge) edge;
+
+            ModelElement subordinated = subordinationEdge.getSubElement();
+            if (subordinated != me && indexOf(subordinated) >= 0) {
                 // raise the slave until it is just in front of the master
-                ElementContainer slaveC = slave.getContainer(doc);
+                ElementContainer slaveC = subordinated.getContainer(doc);
                 if (!(slaveC instanceof NodeContainer)) {
                     return;
                 }
@@ -330,23 +349,24 @@ public class LayerContainer extends ElementContainer implements Iterable<Element
                 }
 
                 // rekursiv die Unterelmente raisen
-                if (slave.hasEdges()) {
-                    raiseSlaves(slave.getContainer(doc), pid);
+                if (subordinated.getEdgesCount() > 1) {
+                    raiseConnected(subordinated.getContainer(doc), edgeClassToConnected, pid);
                 }
-                //Quick and dirty but works fine in 99.9% of cases.
-                //If the new slave is positioned in the zero point,
-                //then it is repositioned on the master element.
-                //The probability that it is randomly positioned in
-                //the zero point by the user is vanishingly small.
-                //But if the slave was added from the mainDoc, then
-                //it lies always in the zero point and is shifted
-                //here on a useful position.
-                int x = slaveC.getX();
-                int y = slaveC.getY();
-                if (x == 0 && y == 0) {
-                    Class<? extends CompositionEdge> compositionEdgeClass = compositionEdge.getClass();
-                    doc.subordinate(me, slave, compositionEdgeClass, pid);
-                }
+                //                //Quick and dirty but works fine in 99.9% of cases.
+                //                //If the new slave is positioned in the zero point,
+                //                //then it is repositioned on the master element.
+                //                //The probability that it is randomly positioned in
+                //                //the zero point by the user is vanishingly small.
+                //                //But if the slave was added from the mainDoc, then
+                //                //it lies always in the zero point and is shifted
+                //                //here on a useful position.
+                //                int x = slaveC.getX();
+                //                int y = slaveC.getY();
+                //                if (x == 0 && y == 0) {
+                //                    Class<? extends CompositionEdge> compositionEdgeClass = compositionEdge.getClass();
+                //                    raised = ec;
+                //                    doc.subordinate(me, slave, compositionEdgeClass, pid);
+                //                }
             }
         }
     }

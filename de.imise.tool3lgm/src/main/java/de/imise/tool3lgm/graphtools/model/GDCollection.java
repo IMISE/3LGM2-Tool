@@ -1746,13 +1746,11 @@ public class GDCollection extends UserFieldTarget implements MetaModelSpecific, 
             LayerContainer lc = mainDoc.getLayer(layer);
             lc.add(ec);
         }
-        boolean bulkMode = setBulkMode(true);
         for (Szenario szen : szenarios) {
             ModelElement start = edge.getStart();
             ElementContainer startEc = start.getContainer(szen);
             szen.createEdgeContainer(startEc, szen, false, pid);
         }
-        setBulkMode(bulkMode);
     }
 
     //ENDE ADD //
