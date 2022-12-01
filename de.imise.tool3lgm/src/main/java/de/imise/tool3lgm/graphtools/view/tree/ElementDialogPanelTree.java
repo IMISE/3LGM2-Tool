@@ -217,8 +217,23 @@ public class ElementDialogPanelTree extends CorrectSelectionTree implements Sear
             return null;
         }
         boolean showPartOfHierarchy = OPTION_SHOW_PART_OF_HIERARCHY.is();
-        if (showPartOfHierarchy && !force && !ec.getElement().getParentElements().isEmpty()) {
-            return null;
+        if (showPartOfHierarchy && !force) {
+            ModelElement me = ec.getElement();
+            List<ModelElement> directParentElements = me.getDirectParentElements();
+            // Check if the element is part of an other element from the same type.
+            // HasPart-Connections between different type should be ignored here.
+            boolean isPart = false;
+            if (!directParentElements.isEmpty()) {
+                for (ModelElement directParent : directParentElements) {
+                    if (ReflectionUtils.isAssignable(me, directParent)) {
+                        isPart = true;
+                    }
+                }
+            }
+            //if (showPartOfHierarchy && !force && !ec.getElement().getParentElements().isEmpty()) {
+            if (isPart) {
+                return null;
+            }
         }
         ElementContainerTreeNode elementNode = ElementContainerTreeNode.createDialogTreeNode(ec);
         if (excludeChildren != null && excludeChildren.contains(ec)) {

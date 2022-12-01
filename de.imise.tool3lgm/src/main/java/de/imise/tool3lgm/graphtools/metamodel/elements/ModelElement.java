@@ -1686,6 +1686,15 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
         return !getSubOrSuperElements(HasPartEdge.class, parentType, false, true).isEmpty();
     }
 
+    /**
+     * @param subordinationEdgeType
+     * @return
+     */
+    public final boolean hasSuperElement(Class<? extends SubordinationEdge> subordinationEdgeType) {
+        Class<? extends ModelElement> superClass = SubordinationEdge.getSuperClass(subordinationEdgeType);
+        return !getSubOrSuperElements(subordinationEdgeType, superClass, false, true).isEmpty();
+    }
+
     /** rekursiv über alle ist-Teil-von-Beziehungen */
     public final Set<ModelElement> getPartElements() {
         return getSubOrSuperElements(HasPartEdge.class, true);
@@ -1871,7 +1880,7 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
      * @return
      */
     public final boolean hasPart() {
-        return getDirectPartElements().size() > 0;
+        return !getDirectPartElements().isEmpty();
     }
 
     /**
@@ -1880,7 +1889,7 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
      * @return
      */
     public final boolean hasParent() {
-        return getDirectParentElements().size() > 0;
+        return !getDirectParentElements().isEmpty();
     }
 
     //////////////////

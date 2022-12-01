@@ -284,10 +284,7 @@ public class ReflectionUtils {
      * @return
      */
     public static final boolean isAssignable(final Class<?> class1, final Class<?> class2) {
-        if (class1 == null) {
-            return false;
-        }
-        if (class2 == null) {
+        if (class1 == null || class2 == null) {
             return false;
         }
         if (class1.isAssignableFrom(class2)) {
@@ -304,12 +301,27 @@ public class ReflectionUtils {
      * @param type
      * @return
      */
-    public static final boolean isAssignable(Object o, Class<?> type) {
+    public static final boolean _isAssignable(Object o, Class<?> type) {
         if (o == null) {
             return false;
         }
         Class<? extends Object> class1 = o.getClass();
         return isAssignable(class1, type);
+    }
+
+    /**
+     * @param o1
+     * @param o2
+     * @return <code>true</code>, if the given objects are not <code>null</code>
+     *         and one of their classes is a superclass of the other.
+     */
+    public static final boolean isAssignable(final Object o1, final Object o2) {
+        if (o1 == null || o2 == null) {
+            return false;
+        }
+        Class<?> class1 = o1.getClass();
+        Class<?> class2 = o2.getClass();
+        return isAssignable(class1, class2);
     }
 
     /**
