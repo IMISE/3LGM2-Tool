@@ -8,6 +8,7 @@ import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Rectangle;
+import java.util.List;
 import java.util.StringTokenizer;
 
 import javax.swing.ImageIcon;
@@ -368,6 +369,14 @@ public class NodeContainer extends ElementContainer implements AlphabeticalSortT
      */
     public boolean hasParent(final GraphDocument doc) {
         return me.hasDirectParentContainer(doc);
+    }
+
+    /**
+     * @param doc
+     * @return
+     */
+    public List<ElementContainer> getParents(final GraphDocument doc) {
+        return me.getDirectParentContainers(doc);
     }
 
     /**

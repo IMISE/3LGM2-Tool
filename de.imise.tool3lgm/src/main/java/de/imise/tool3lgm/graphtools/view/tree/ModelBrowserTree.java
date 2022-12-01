@@ -44,6 +44,7 @@ import de.imise.tool3lgm.graphtools.metamodel.CoreMetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
 import de.imise.tool3lgm.graphtools.metamodel.elements.CompositionEdge;
+import de.imise.tool3lgm.graphtools.metamodel.elements.Group;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
@@ -64,6 +65,7 @@ import de.imise.tool3lgm.graphtools.view.tree.node.StringTreeNode;
 import de.imise.tool3lgm.graphtools.view.tree.node.UserFieldTreeNode;
 import de.imise.tool3lgm.gui.menu.ContextGenerator;
 import de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty;
+import de.imise.util.ReflectionUtils;
 
 /**
  * A tree view to the model. Under the root node are the layer nodes, then for
@@ -447,6 +449,7 @@ public final class ModelBrowserTree extends DynamicTree implements UserFieldList
                 elementNode.removeAllChildren();
             }
             LGMTreeNode<?> parent_node = getParentNodeOfType(kc, layer);
+
             if (parent_node != null) {
                 parent_node.add(elementNode);
                 addChildren(elementNode, selDoc);
@@ -472,40 +475,50 @@ public final class ModelBrowserTree extends DynamicTree implements UserFieldList
         ElementContainer kc = elementNode.getUserObject();
         LGMTreeNode<?> parent = (LGMTreeNode<?>) elementNode.getParent();
         GraphDocument maindoc = doc.getCollection().getMainDoc();
-        List<ElementContainer> all = kc.getElement().getDirectPartContainers(showSubmodelInBrowser ? selDoc : maindoc);
-        loop1: for (ElementContainer pc : all) {
-            ModelElement me = pc.getElement();
-            ElementContainer ecSelDoc = me.getContainer(selDoc);
-            if (ecSelDoc != null) {
-                pc = ecSelDoc;
+        List<ElementContainer> allPartContainers = kc.getElement().getDirectPartContainers(showSubmodelInBrowser ? selDoc : maindoc);
+        loop1: for (ElementContainer partContainer : allPartContainers) {
+            ModelElement part = partContainer.getElement();
+            ElementContainer selDocPartContainer = part.getContainer(selDoc);
+            if (selDocPartContainer != null) {
+                partContainer = selDocPartContainer;
             }
             if (showSubmodelInBrowser) {
-                if (!me.isUnique() && ecSelDoc == null) {
+                if (!part.isUnique() && selDocPartContainer == null) {
                     continue;
                 }
             }
             LGMTreeNode<?> p = parent;
             while (p != null) {
-                if (p.getUserObject() == pc) {
+                if (p.getUserObject() == partContainer) {
                     continue loop1;
                 }
                 p = (LGMTreeNode<?>) p.getParent();
             }
             ElementContainerTreeNode childNode = null;
-            //bei NodeContainern werden die evtl. bereits vorhandenen TreeNodes wiederverwendet
-            if (pc instanceof NodeContainer) {
-                List<ElementContainer> directParentElements = me.getDirectParentContainers(showSubmodelInBrowser ? selDoc : maindoc);
-                // wenn es mehr als einen parent gibt, dann einfach alle Nodes neu erzeugen. Der Fall ist selten
-                //aber dann werden evtl. vorher ausgeklappte nodes nicht mehr aufgeklappt sein. Die Alternative wäre,
-                //sich statt nur eines Nodes im ElementContaier alle zu merken. Ich finde das muss nicht sein, da das
-                //nur in diesem seltenen Fals den expansionState von allen Node retten würde, die mehr als einen Parent haben.
-                if (directParentElements.size() < 2) {
-                    NodeContainer nc = (NodeContainer) pc;
+            //with NodeContainers the possibly already existing TreeNodes are reused
+            if (partContainer instanceof NodeContainer) {
+                List<ElementContainer> directParentContainers = part.getDirectParentContainers(showSubmodelInBrowser ? selDoc : maindoc);
+                // If there is more than one parent, then simply recreate all nodes. The case is rare, but
+                // then possibly previously expanded nodes will no longer be expanded. The alternative would
+                // be to remember all nodes in the ElementContaier instead of just one. I think this is not
+                // necessary, because this would save the expansionState of all nodes that have more than one
+                // parent only in this rare case.
+                int parentCount = directParentContainers.size();
+                if (parentCount == 1) {
+                    ModelElement directParent = directParentContainers.get(0).getElement();
+                    // If an element has only exactly 1 Group as parent, it should still be displayed
+                    // under its element type node -> so it has 2 parents -> parentCount++
+                    if (directParent instanceof Group) {
+                        parentCount++;
+                    }
+                }
+                if (parentCount < 2) {
+                    NodeContainer nc = (NodeContainer) partContainer;
                     childNode = nc.getTreeNode();
                 }
             }
             if (childNode == null) {
-                childNode = ElementContainerTreeNode.createModelBrowserTreeNode(pc);
+                childNode = ElementContainerTreeNode.createModelBrowserTreeNode(partContainer);
             } else {
                 childNode.removeAllChildren();
             }
@@ -704,8 +717,49 @@ public final class ModelBrowserTree extends DynamicTree implements UserFieldList
     }
 
     /**
-     *
+     * @param me
+     * @param doc
+     * @return <code>true</code> if the {@link NodeContainer} should be only
+     *         added as child in part of hierarchies
      */
+    private boolean addOnlyAsPart(ModelElement me, GraphDocument doc) {
+        if (showPartOfHierarchy) {
+            List<ElementContainer> parents = me.getDirectParentContainers(doc);
+            for (ElementContainer parent : parents) {
+                ModelElement parentElement = parent.getElement();
+                // if there is any other parent than a group -> the element will
+                // be only added as child
+                if (!ReflectionUtils.isAssignable(parentElement.getClass(), Group.class)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    /**
+     * @param me
+     * @param doc
+     * @return <code>true</code> if the element should be only added under its
+     *         master
+     */
+    private boolean addOnlyAsSlave(ModelElement me, GraphDocument doc) {
+        return subordinateSlaveElements && me.isCompositionSlave(doc);
+    }
+
+    /**
+     * @param me
+     * @param doc
+     * @return <code>true</code> if the element should not added as indipendent
+     *         element, but only under its parent or master
+     */
+    private boolean addOnlyAsSubordinatedElement(ModelElement me, GraphDocument doc) {
+        return addOnlyAsPart(me, doc) || addOnlyAsSlave(me, doc);
+    }
+
+    /**
+    *
+    */
     void buildTree() {
         if (doc == null) {
             return;
@@ -729,27 +783,14 @@ public final class ModelBrowserTree extends DynamicTree implements UserFieldList
                 ModelElement me = nc.getElement();
                 if (showSubmodelInBrowser) {
                     if (me.isUnique()) {
-                        if (showPartOfHierarchy && nc.hasParent(maindoc)) {
+                        if (addOnlyAsSubordinatedElement(me, maindoc)) {
                             continue;
                         }
-                        if (subordinateSlaveElements && me.isCompositionSlave(maindoc)) {
-                            continue;
-                        }
-                    } else {
-                        if (me.getContainer(doc) == null || showPartOfHierarchy && nc.hasParent(doc)) {
-                            continue;
-                        }
-                        if (subordinateSlaveElements && me.isCompositionSlave(doc)) {
-                            continue;
-                        }
-                    }
-                } else {
-                    if (showPartOfHierarchy && nc.hasParent(maindoc)) {
+                    } else if (me.getContainer(doc) == null || addOnlyAsSubordinatedElement(me, doc)) {
                         continue;
                     }
-                    if (subordinateSlaveElements && me.isCompositionSlave(maindoc)) {
-                        continue;
-                    }
+                } else if (addOnlyAsSubordinatedElement(me, maindoc)) {
+                    continue;
                 }
                 addObject(nc, true, doc, ebene);
             }
