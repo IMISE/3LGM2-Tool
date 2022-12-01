@@ -441,7 +441,7 @@ public class PathConnectionPanel extends AbstractExpandablePanel {
                 //store the connectable element containers with an element
                 //to solve an error and not connect them now
                 errorSolutionElementContainers.add(ec);
-            } else {
+            } else if (me != getModelElement()) {
                 rtree.addObject(ec, childrenToExcludeFromRtree, false, true);
             }
         }
