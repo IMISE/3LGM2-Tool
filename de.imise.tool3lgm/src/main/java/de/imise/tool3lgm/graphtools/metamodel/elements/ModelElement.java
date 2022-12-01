@@ -942,8 +942,8 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
      * Prüft, ob zwischen diesem und dem übergebenen Element eine Edge der
      * angegebenen Art existiert. Die Richtung ist dabei egal.
      *
-     * @param other Element zu dem die Existenz einer Verbindung geprüft
-     *            werden soll
+     * @param other Element zu dem die Existenz einer Verbindung geprüft werden
+     *            soll
      * @param edgeClass Art der Edge, die gesucht werden soll
      * @return <code>true</code>, wenn eine Edge zwischen diesem und dem
      *         übergebenen Element besteht
@@ -1678,6 +1678,14 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
         return getSubOrSuperElements(HasPartEdge.class, false);
     }
 
+    /**
+     * @param parentType
+     * @return
+     */
+    public final boolean hasParent(Class<? extends ModelElement> parentType) {
+        return !getSubOrSuperElements(HasPartEdge.class, parentType, false, true).isEmpty();
+    }
+
     /** rekursiv über alle ist-Teil-von-Beziehungen */
     public final Set<ModelElement> getPartElements() {
         return getSubOrSuperElements(HasPartEdge.class, true);
@@ -1713,24 +1721,44 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
      * @return
      */
     private final Set<ModelElement> getSubOrSuperElements(final Class<? extends SubordinationEdge> subordinationEdgeClass, final boolean subElements) {
+        return getSubOrSuperElements(subordinationEdgeClass, ModelElement.class, subElements, false);
+    }
+
+    /**
+     * @param subordinationEdgeClass
+     * @param connectedElementClass
+     * @param subElements
+     * @param testOnly
+     * @return
+     */
+    private final Set<ModelElement> getSubOrSuperElements(final Class<? extends SubordinationEdge> subordinationEdgeClass, Class<? extends ModelElement> connectedElementClass, final boolean subElements, boolean testOnly) {
         Set<ModelElement> recursiveConnected = new HashSet<>();
-        getSubOrSuperElementsRecursive(recursiveConnected, subordinationEdgeClass, subElements);
+        getSubOrSuperElementsRecursive(recursiveConnected, subordinationEdgeClass, connectedElementClass, subElements, testOnly);
         return recursiveConnected;
     }
 
     /**
      * @param result
      * @param edgeClass
+     * @param connectedElementClass
      * @param subElements
+     * @param testOnly
      */
-    private final void getSubOrSuperElementsRecursive(final Set<ModelElement> result, final Class<? extends SubordinationEdge> edgeClass, final boolean subElements) {
+    private final void getSubOrSuperElementsRecursive(final Set<ModelElement> result, final Class<? extends SubordinationEdge> edgeClass, Class<? extends ModelElement> connectedElementClass, final boolean subElements, boolean testOnly) {
         for (Edge edge : getEdges()) {
             if (!edgeClass.isAssignableFrom(edge.getClass())) {
                 continue;
             }
             ModelElement connected = subElements ? ((SubordinationEdge) edge).getSubElement() : ((SubordinationEdge) edge).getSuperElement();
-            if (this != connected && result.add(connected)) {
-                connected.getSubOrSuperElementsRecursive(result, edgeClass, subElements);
+            if (this != connected) {
+                if (ReflectionUtils.isAssignable(connectedElementClass, connected.getClass())) {
+                    if (result.add(connected)) {
+                        if (testOnly) {
+                            return;
+                        }
+                    }
+                }
+                connected.getSubOrSuperElementsRecursive(result, edgeClass, connectedElementClass, subElements, testOnly);
             }
         }
     }

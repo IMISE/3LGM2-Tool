@@ -469,13 +469,14 @@ public final class ModelBrowserTree extends DynamicTree implements UserFieldList
         if (showUserDefinedProperties) {
             addUserDefinedProperties(elementNode, selDoc);
         }
-        if (!showPartOfHierarchy) {
+        ElementContainer ec = elementNode.getUserObject();
+        ModelElement me = ec.getElement();
+        if (!showPartOfHierarchy && !(me instanceof Group)) {
             return;
         }
-        ElementContainer ec = elementNode.getUserObject();
         LGMTreeNode<?> parent = (LGMTreeNode<?>) elementNode.getParent();
         GraphDocument maindoc = doc.getCollection().getMainDoc();
-        List<ElementContainer> allPartContainers = ec.getElement().getDirectPartContainers(showSubmodelInBrowser ? selDoc : maindoc);
+        List<ElementContainer> allPartContainers = me.getDirectPartContainers(showSubmodelInBrowser ? selDoc : maindoc);
         loop1: for (ElementContainer partContainer : allPartContainers) {
             ModelElement part = partContainer.getElement();
             ElementContainer selDocPartContainer = part.getContainer(selDoc);
@@ -503,16 +504,8 @@ public final class ModelBrowserTree extends DynamicTree implements UserFieldList
                 // be to remember all nodes in the ElementContaier instead of just one. I think this is not
                 // necessary, because this would save the expansionState of all nodes that have more than one
                 // parent only in this rare case.
-                int parentCount = directParentContainers.size();
-                if (parentCount == 1) {
-                    ModelElement directParent = directParentContainers.get(0).getElement();
-                    // If an element has only exactly 1 Group as parent, it should still be displayed
-                    // under its element type node -> so it has 2 parents -> parentCount++
-                    if (directParent instanceof Group) {
-                        parentCount++;
-                    }
-                }
-                if (parentCount < 2) {
+                int directParentCount = directParentContainers.size();
+                if (directParentCount == 0 || directParentCount == 1 && !part.hasParent(Group.class)) { // the only parent ca be not a group but some parent of parent can be
                     NodeContainer nc = (NodeContainer) partContainer;
                     childNode = nc.getTreeNode();
                 }
