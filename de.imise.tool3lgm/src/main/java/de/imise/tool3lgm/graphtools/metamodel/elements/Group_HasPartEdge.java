@@ -15,6 +15,6 @@ public class Group_HasPartEdge extends PartitioningEdge {
 
     public static final EdgeCardinality ECARD = ZERO_UNLIMITED;
 
-    public static final Class<? extends ModelElement> ETCL = ModelElement.class;
+    public static final Class<? extends ModelElement> ETCL = Node.class;
 
 }
