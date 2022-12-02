@@ -111,7 +111,7 @@ public class DynamicTreeMouseAdapter extends MouseAdapter {
         }
         // Hyprlink öffnen
         tree.dispatchEvent(new KeyEvent(tree, KeyEvent.KEY_RELEASED, 0l, 0, KeyEvent.VK_ALT, KeyEvent.CHAR_UNDEFINED, KeyEvent.KEY_LOCATION_STANDARD));
-        if (left_button && selectedNode != null && selectedNode instanceof UserFieldTreeNode) {
+        if (left_button && selectedNode instanceof UserFieldTreeNode) {
             ((UserFieldTreeNode) selectedNode).openUserFieldEditorOrTarget();
             return;
         }
@@ -126,7 +126,7 @@ public class DynamicTreeMouseAdapter extends MouseAdapter {
             return;
         }
 
-        if (left_button && selectedNode != null && selectedNode instanceof ElementContainerTreeNode) {
+        if (left_button && selectedNode instanceof ElementContainerTreeNode) {
             ElementContainer ec = ((ElementContainerTreeNode) selectedNode).getUserObject();
             Static.showPropertyDialog(ec);
         }

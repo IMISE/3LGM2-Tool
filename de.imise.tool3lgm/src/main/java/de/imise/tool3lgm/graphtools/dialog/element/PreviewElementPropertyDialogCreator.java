@@ -10,8 +10,6 @@ import java.awt.Container;
 import java.awt.Dialog.ModalityType;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 
 import javax.swing.BorderFactory;
 import javax.swing.JComponent;
@@ -204,17 +202,14 @@ public class PreviewElementPropertyDialogCreator {
         splitPane.setDividerLocation(lastDividerLocation);
 
         //store last divider location to restore the value on next showing the dialog
-        splitPane.addPropertyChangeListener(new PropertyChangeListener() {
-            @Override
-            public void propertyChange(final PropertyChangeEvent evt) {
-                try {
-                    String propertyName = evt.getPropertyName();
-                    if ("dividerLocation".equals(propertyName)) {
-                        lastDividerLocation = (Integer) evt.getNewValue();
-                    }
-                } catch (Exception e) {
-                    // ignore: handle exception
+        splitPane.addPropertyChangeListener(evt -> {
+            try {
+                String propertyName = evt.getPropertyName();
+                if ("dividerLocation".equals(propertyName)) {
+                    lastDividerLocation = (Integer) evt.getNewValue();
                 }
+            } catch (Exception e) {
+                // ignore: handle exception
             }
         });
         return originalDialog;
@@ -237,7 +232,8 @@ public class PreviewElementPropertyDialogCreator {
                     ElementContainerTreeNode elementTreeNode = (ElementContainerTreeNode) node;
                     selectedElement = elementTreeNode.getModelElement();
                     break;
-                } else if (node instanceof UserFieldTreeNode) {
+                }
+                if (node instanceof UserFieldTreeNode) {
                     UserFieldTreeNode userFieldTreeNode = (UserFieldTreeNode) node;
                     UserField userField = userFieldTreeNode.getUserField();
                     if (selectedTabUserField == null && userField.hasStyle(TAB)) {
