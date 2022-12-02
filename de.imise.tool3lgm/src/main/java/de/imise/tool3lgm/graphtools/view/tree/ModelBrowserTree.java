@@ -531,11 +531,12 @@ public final class ModelBrowserTree extends DynamicTree implements UserFieldList
         MetaModel metaModel = selDoc.getMetaModel();
         Class<? extends CompositionEdge>[] compositionEdgeTypesForMaster = metaModel.getCompositionEdgeTypesForMaster(elementClass);
         GraphDocument doc = OPTION_ENABLE_SUBMODEL_BROWSER.is() ? selDoc : selDoc.getMainDoc();
-        //        hier dürfen onlyExpertModeVsisibleNodes nciht hinzugefügt werden, wenn der ExpertMode aus ist
+        //        hier dürfen onlyExpertModeVsisibleNodes nicht hinzugefügt werden, wenn der ExpertMode aus ist
         //        und hier dürfen TemplateElemente nicht hinzugefügt werden, wenn diese gerade nicth angezeigt werden sollen
         for (Class<? extends CompositionEdge> composition : compositionEdgeTypesForMaster) {
             List<ElementContainer> slaveContainers = me.getConnectedContainers(doc, composition);
             for (ElementContainer slaveContainer : slaveContainers) {
+                ModelElement slave = slaveContainer.getElement();
                 ElementContainerTreeNode slaveTreeNode = null;
                 //Don't subordinate element classes to hide (expert mode only visible
                 //nodes and template elements).
@@ -544,7 +545,6 @@ public final class ModelBrowserTree extends DynamicTree implements UserFieldList
                 //of this slave class can be an expert mode only visible element class
                 //and another not. Same with template element classes.
                 if (!showExpertModeOnlyVisisbleElements) {
-                    ModelElement slave = slaveContainer.getElement();
                     Class<? extends ModelElement> slaveClass = slave.getClass();
                     if (metaModel.isOnlyExpertModeVisibleElementClass(slaveClass)) {
                         continue;
@@ -556,8 +556,19 @@ public final class ModelBrowserTree extends DynamicTree implements UserFieldList
                     }
                 }
                 if (slaveContainer instanceof NodeContainer) {
-                    NodeContainer slaveNodeContainer = (NodeContainer) slaveContainer;
-                    slaveTreeNode = slaveNodeContainer.getTreeNode();
+                    List<ElementContainer> directParentContainers = slave.getDirectCompositionMasterContainer(selDoc);
+                    // If there is more than one parent, then simply recreate all nodes. The case is rare, but
+                    // then possibly previously expanded nodes will no longer be expanded. The alternative would
+                    // be to remember all nodes in the ElementContaier instead of just one. I think this is not
+                    // necessary, because this would save the expansionState of all nodes that have more than one
+                    // parent only in this rare case.
+                    int directParentCount = directParentContainers.size();
+                    // very ugly code but in most cases we don't need the second OR part and so we should not
+                    // execute the expensive hasPart(...) function before the ID
+                    if (directParentCount == 0 || directParentCount == 1 && !directParentContainers.get(0).getElement().hasParent(Group.class)) {
+                        NodeContainer slaveNodeContainer = (NodeContainer) slaveContainer;
+                        slaveTreeNode = slaveNodeContainer.getTreeNode();
+                    }
                 }
                 if (slaveTreeNode == null) {
                     slaveTreeNode = ElementContainerTreeNode.createModelBrowserTreeNode(slaveContainer);

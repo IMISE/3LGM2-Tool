@@ -1689,7 +1689,9 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
 
     /**
      * @param parentType
-     * @return
+     * @return <code>true</code> if this element or one if its parents (over a
+     *         {@link HasPartEdge} hierarchy) has a {@link ModelElement} of the
+     *         given class as parent.
      */
     public final boolean hasParent(Class<? extends ModelElement> parentType) {
         return !getSubOrSuperElements(HasPartEdge.class, parentType, false, true).isEmpty();
@@ -1910,6 +1912,19 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
     ////////////////////////
 
     /**
+     * Returns a list of all containers of master elements of this element, i.e.
+     * all elements that are linked to this element via a
+     * {@link CompositionEdge}, where the linked element is subordinate to this
+     * element.
+     *
+     * @param doc {@link GraphDocument} which should contain the elements
+     * @return
+     */
+    public final List<ElementContainer> getDirectCompositionMasterContainer(final GraphDocument doc) {
+        return getDirectCompositionMasterContainer(CompositionEdge.class, doc);
+    }
+
+    /**
      * Returns a list of all containers of slave elements of this element, i.e.
      * all elements that are linked to this element via a
      * {@link CompositionEdge}, where the linked element is subordinate to this
@@ -1946,21 +1961,35 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
      * @return
      */
     public final List<ElementContainer> getDirectCompositionMasterContainer(final Class<? extends CompositionEdge> compositionEdgeClass, final GraphDocument doc) {
-        List<ElementContainer> allMasterContainers = new ArrayList<>();
+        return getDirectSubordinationSuperContainer(compositionEdgeClass, doc);
+    }
+
+    /**
+     * Returns a list of all containers of this element's master elements, i.e.
+     * all elements that are linked to this element via a
+     * {@link SubordinationEdge} of the given type, where the linked element is
+     * superordinated to this element.
+     *
+     * @param subordinationEdgeClass
+     * @param doc
+     * @return
+     */
+    public final List<ElementContainer> getDirectSubordinationSuperContainer(final Class<? extends SubordinationEdge> subordinationEdgeClass, final GraphDocument doc) {
+        List<ElementContainer> allSuperContainers = new ArrayList<>();
         for (Edge edge : getEdges()) {
             Class<? extends Edge> edgeClass = edge.getClass();
-            if (compositionEdgeClass.isAssignableFrom(edgeClass)) {
-                CompositionEdge composition = (CompositionEdge) edge;
-                if (composition.getSlave() == this) {
-                    ModelElement master = composition.getMaster();
-                    ElementContainer masterContainer = master.getContainer(doc);
-                    if (masterContainer != null) {
-                        allMasterContainers.add(masterContainer);
+            if (subordinationEdgeClass.isAssignableFrom(edgeClass)) {
+                SubordinationEdge subordination = (SubordinationEdge) edge;
+                if (subordination.getSubElement() == this) {
+                    ModelElement superElement = subordination.getSuperElement();
+                    ElementContainer superContainer = superElement.getContainer(doc);
+                    if (superContainer != null) {
+                        allSuperContainers.add(superContainer);
                     }
                 }
             }
         }
-        return allMasterContainers;
+        return allSuperContainers;
     }
 
     //////////////////////
