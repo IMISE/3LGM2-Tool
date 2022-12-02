@@ -4,13 +4,13 @@ import static de.imise.tool3lgm.graphtools.metamodel.EdgeCardinality.ZERO_UNLIMI
 
 import de.imise.tool3lgm.graphtools.metamodel.EdgeCardinality;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
-import de.imise.tool3lgm.graphtools.metamodel.elements.SimpleEdge;
+import de.imise.tool3lgm.graphtools.metamodel.elements.SubordinationEdge;
 import de.imise.tool3lgm.metamodel.service.node.PhysicalDataProcessingComponent;
 
 /**
  * @author AXS (22.12.2017)
  */
-public final class PhysicalDataProcessingComponentVirtualises_Edge extends SimpleEdge {
+public final class PhysicalDataProcessingComponentVirtualises_Edge extends SubordinationEdge {
 
     public static final Class<? extends ModelElement> STCL = PhysicalDataProcessingComponent.class;
 
