@@ -301,7 +301,7 @@ public class ReflectionUtils {
      * @param type
      * @return
      */
-    public static final boolean _isAssignable(Object o, Class<?> type) {
+    public static final boolean isAssignable(Object o, Class<?> type) {
         if (o == null) {
             return false;
         }
