@@ -808,37 +808,39 @@ public final class ModelBrowserTree extends DynamicTree implements UserFieldList
         ((DefaultTreeModel) treeModel).reload();
         restoreExpansionState();
         setSelectionListenerActive(true);
-        selectObjects();
+        selectObjects(null);
     }
 
     /**
      * Selects all elements in the tree which are selected in the corresponding
      * {@link GraphDocument}.
      */
-    public void selectObjects() {
-        DefaultTreeModel treeModel = (DefaultTreeModel) super.treeModel;
-        setSelectionListenerActive(false);
-        List<TreePath> selectedPaths = new ArrayList<>();
-        List<DefaultMutableTreeNode> nodes = new ArrayList<>();
-        nodes.add((DefaultMutableTreeNode) treeModel.getRoot());
-        for (int i = 0; i < nodes.size(); i++) {
-            DefaultMutableTreeNode treeNode = nodes.get(i);
-            for (int j = 0; j < treeNode.getChildCount(); j++) {
-                DefaultMutableTreeNode child = (DefaultMutableTreeNode) treeNode.getChildAt(j);
-                nodes.add(child);
-                Object userObject = child.getUserObject();
-                if (userObject instanceof ElementContainer) {
-                    if (doc.isSelected((ElementContainer) userObject)) {
-                        TreeNode[] pathToRoot = treeModel.getPathToRoot(child);
-                        selectedPaths.add(new TreePath(pathToRoot));
+    public void selectObjects(ElementContainer container2Select) {
+        if (container2Select == null) {
+            DefaultTreeModel treeModel = (DefaultTreeModel) super.treeModel;
+            setSelectionListenerActive(false);
+            List<TreePath> selectedPaths = new ArrayList<>();
+            List<DefaultMutableTreeNode> nodes = new ArrayList<>();
+            nodes.add((DefaultMutableTreeNode) treeModel.getRoot());
+            for (int i = 0; i < nodes.size(); i++) {
+                DefaultMutableTreeNode treeNode = nodes.get(i);
+                for (int j = 0; j < treeNode.getChildCount(); j++) {
+                    DefaultMutableTreeNode child = (DefaultMutableTreeNode) treeNode.getChildAt(j);
+                    nodes.add(child);
+                    Object userObject = child.getUserObject();
+                    if (userObject instanceof ElementContainer) {
+                        if (doc.isSelected((ElementContainer) userObject)) {
+                            TreeNode[] pathToRoot = treeModel.getPathToRoot(child);
+                            selectedPaths.add(new TreePath(pathToRoot));
+                        }
                     }
                 }
             }
+            TreePath[] paths = selectedPaths.toArray(new TreePath[0]);
+            setSelectionPaths(paths);
+            scrollToPath(paths);
+            setSelectionListenerActive(true);
         }
-        TreePath[] paths = selectedPaths.toArray(new TreePath[0]);
-        setSelectionPaths(paths);
-        scrollToPath(paths);
-        setSelectionListenerActive(true);
     }
 
     /**

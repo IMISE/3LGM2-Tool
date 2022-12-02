@@ -74,6 +74,12 @@ public interface LGMChangeListenerSimple extends LGMChangeListener {
     }
 
     @Override
+    public default void selectionChanged(final ElementContainer source) {
+        changed();
+        changed(source);
+    }
+
+    @Override
     public default void modelOrSzenarioNameChanged(final GraphDocument source) {
         changed();
         changed(source);

@@ -96,7 +96,19 @@ public class ModelBrowserTreeLGMChangeListener implements LGMChangeListener {
         if (active) {
             //      System.out.println("selectionChanged");
             //      long start = System.currentTimeMillis();
-            tree.selectObjects();
+            tree.selectObjects(null);
+            //      long end = System.currentTimeMillis();
+            //      System.err.println("DynamicTree.selectionChanged()");
+            //      System.err.println(end - start);
+        }
+    }
+
+    @Override
+    public void selectionChanged(final ElementContainer source) {
+        if (active) {
+            //      System.out.println("selectionChanged");
+            //      long start = System.currentTimeMillis();
+            tree.selectObjects(source);
             //      long end = System.currentTimeMillis();
             //      System.err.println("DynamicTree.selectionChanged()");
             //      System.err.println(end - start);

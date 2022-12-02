@@ -3718,6 +3718,23 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
     }
 
     /**
+     * This function should be only used in cases when the ModelBrowser should
+     * not select all different occurences of the same NodeContainer in the
+     * tree. In All other cases use
+     * {@link #addToSelection(ElementContainer, int)}
+     *
+     * @param ec
+     * @param pid
+     */
+    public final void addSimpleToSelection(final ElementContainer ec, final int pid) {
+        if (ec == null) {
+            return;
+        }
+        gdcoll.addToSelection(ec);
+        distributeEvent(SELECTION_CHANGED, ec, pid);
+    }
+
+    /**
      * @param ec
      * @param pid
      */
@@ -3725,10 +3742,8 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
         if (ec == null) {
             return;
         }
-
         //		ModelElement layerElemMe = mc.getElement();
         //		System.err.println("GraphDocument.addToSelection(): " + layerElemMe.getClass().getSimpleName() + " " + this + " " + layerElemMe.getClearName() + " " + layerElemMe.getID() + " " + layerElemMe.getCreationDate().toLocaleString());
-
         gdcoll.addToSelection(ec);
         // Never fire this event in the commented out way (with ElementContainer),
         // because otherwise e.g. with selectArea(...) quite a lot of unnecessary

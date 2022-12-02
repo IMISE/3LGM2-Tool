@@ -179,7 +179,7 @@ public class DynamicTreeMouseAdapter extends MouseAdapter {
                             ElementContainer ec = selectedElementContainerTreeNode.getUserObject();
                             //wenn das Element schon in der Selektion war, wird es nur an die hinterste Position in der Selektiion verschoben
                             //und ist somit das Element, bezüglich dessen für andere selektierte Elemente das Kontextmenü angeboten wird
-                            ec.getGraphDocument().addToSelection(ec, ModelBrowserTree.PID);
+                            ec.getGraphDocument().addSimpleToSelection(ec, ModelBrowserTree.PID);
                         }
                         menu = callContextGenerator(xin, yin);
                     }

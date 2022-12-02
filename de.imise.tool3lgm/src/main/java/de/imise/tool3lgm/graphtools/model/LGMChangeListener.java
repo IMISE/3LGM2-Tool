@@ -80,7 +80,11 @@ public interface LGMChangeListener {
         SELECTION_CHANGED {
             @Override
             protected void deliverEvent(final LGMChangeListener gdl, final GraphDocument source, final ElementContainer last_elem) {
-                gdl.selectionChanged(source);
+                if (last_elem != null) {
+                    gdl.selectionChanged(last_elem);
+                } else {
+                    gdl.selectionChanged(source);
+                }
             }
         },
         MODEL_OR_SZENARIO_NAME_CHANGED {
@@ -212,6 +216,9 @@ public interface LGMChangeListener {
 
     /** Hier GraphArea und evtl. ModelBrowser */
     public void selectionChanged(GraphDocument source);
+
+    /** Hier ModelBrowser */
+    public void selectionChanged(ElementContainer source);
 
     /**
      * Aktualisiert je nach Parameter alle Components, die den Title eines

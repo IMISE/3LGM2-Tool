@@ -182,7 +182,7 @@ public class PreviewElementPropertyDialogCreator {
         //modelbrowser has changed
         SampleModelBrowserSelectionListener.addModelBrowserTreeSelectionListener(this);
         modelBrowserTree.expandAll();
-        modelBrowserTree.selectObjects();
+        modelBrowserTree.selectObjects(null);
 
         //replace the dialogs content by the splitpane with the modelbrowser
         //at the left and the original element property dialog components
