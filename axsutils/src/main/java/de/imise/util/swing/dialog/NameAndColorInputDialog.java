@@ -18,7 +18,7 @@ import de.imise.util.swing.component.LimitedSizeScrollTextPane;
 import de.imise.util.swing.event.ConfirmDialogAction.ConfirmDialog;
 
 /**
- * Dialog zum Eingeben eines Namens und optional einer Farbe
+ * Dialog for entering a name and optionally a color
  *
  * @author AXS created on 21.08.2004
  */
@@ -96,7 +96,7 @@ public class NameAndColorInputDialog extends JDialog implements ActionListener, 
     }
 
     /**
-     * Initilaisiert die Komponente
+     * Initilaizes the component
      */
     private void init() {
         setModal(true);
@@ -119,11 +119,12 @@ public class NameAndColorInputDialog extends JDialog implements ActionListener, 
         centerPanel.add(inputArea, BorderLayout.CENTER);
         getContentPane().add(centerPanel, BorderLayout.CENTER);
         getContentPane().add(buttonpanel, BorderLayout.SOUTH);
+
     }
 
     /**
-     * Zeigt einen Eingabedialog an und liefert eine <code>ArrayList</code> mit
-     * den eingegebenen Werten zurück.
+     * Displays an input dialog and returns an <code>ArrayList</code> with the
+     * entered values.
      *
      * @param title
      * @param defaultString
@@ -178,8 +179,8 @@ public class NameAndColorInputDialog extends JDialog implements ActionListener, 
     }
 
     /**
-     * Zeigt einen Eingabedialog an und liefert eine <code>ArrayList</code> mit
-     * den eingegebenen Werten zurück.
+     * Displays an input dialog and returns an <code>ArrayList</code> with the
+     * entered values.
      *
      * @param title
      * @param defaultString
@@ -190,8 +191,8 @@ public class NameAndColorInputDialog extends JDialog implements ActionListener, 
     }
 
     /**
-     * Zeigt einen Eingabedialog an und liefert eine <code>ArrayList</code> mit
-     * den eingegebenen Werten zurück.
+     * Displays an input dialog and returns an <code>ArrayList</code> with the
+     * entered values.
      *
      * @param title
      * @param defaultString
@@ -206,8 +207,8 @@ public class NameAndColorInputDialog extends JDialog implements ActionListener, 
     }
 
     /**
-     * Zeigt einen Eingabedialog an und liefert eine <code>ArrayList</code> mit
-     * den eingegebenen Werten zurück.
+     * Displays an input dialog and returns an <code>ArrayList</code> with the
+     * entered values.
      *
      * @param title
      * @param defaultString
@@ -222,8 +223,8 @@ public class NameAndColorInputDialog extends JDialog implements ActionListener, 
     }
 
     /**
-     * Zeigt einen Eingabedialog an und liefert eine <code>ArrayList</code> mit
-     * den eingegebenen Werten zurück.
+     * Displays an input dialog and returns an <code>ArrayList</code> with the
+     * entered values.
      *
      * @param title
      * @param defaultString
@@ -248,8 +249,8 @@ public class NameAndColorInputDialog extends JDialog implements ActionListener, 
     }
 
     /**
-     * Zeigt einen Eingabedialog an und liefert eine <code>ArrayList</code> mit
-     * den eingegebenen Werten zurück.
+     * Displays an input dialog and returns an <code>ArrayList</code> with the
+     * entered values.
      *
      * @param title
      * @param defaultString
@@ -261,8 +262,8 @@ public class NameAndColorInputDialog extends JDialog implements ActionListener, 
     }
 
     /**
-     * Zeigt einen Eingabedialog an und liefert eine <code>ArrayList</code> mit
-     * den eingegebenen Werten zurück.
+     * Displays an input dialog and returns an <code>ArrayList</code> with the
+     * entered values.
      *
      * @param title
      * @param defaultString

@@ -24,9 +24,8 @@ public class DynamicTreeSelectionListener implements TreeSelectionListener {
     }
 
     /**
-     * Wenn Node selektiert wurden, die keine NodeContainer-Node sind, wird über
-     * diese Variable fetsgelegt, dass gerade so ein Node aus der Selektion
-     * entfernt wurde.
+     * If nodes are selected that are not NodeContainer nodes, this variable
+     * indicates that such a node has been removed from the selection.
      */
     int correctingSelectionCount = 0;
 
@@ -39,7 +38,7 @@ public class DynamicTreeSelectionListener implements TreeSelectionListener {
         if (doc == null) {
             return;
         }
-        //keine von sich selbst ausgelösten SelectionChangeEvents empfangen -> deaktivieren und zum Schnluss wieder anschalten
+        // do not receive SelectionChangeEvents triggered by itself -> deactivate and switch on again for closing
         tree.setTransactionListenerActive(false);
         doc.start_transaction(ModelBrowserTree.PID, false);
         doc.deselectAll(true);
@@ -50,7 +49,7 @@ public class DynamicTreeSelectionListener implements TreeSelectionListener {
             for (int i = 0; i < paths.length; i++) {
                 node = (LGMTreeNode<?>) paths[i].getLastPathComponent();
                 Object userObject = node.getUserObject();
-                if (userObject != null && userObject instanceof NodeContainer) {
+                if (userObject instanceof NodeContainer) {
                     if (node.isSelectable()) {
                         NodeContainer knot = (NodeContainer) userObject;
                         doc.addToSelection(knot, ModelBrowserTree.PID);
@@ -61,10 +60,10 @@ public class DynamicTreeSelectionListener implements TreeSelectionListener {
                     }
                 }
             }
-            //vom letzten selektieren Node den Layer bestimmen
+            // determine the layer from the last selected node
             selectedLayerNode = getLayerNode(node);
         }
-        //wenn das hier ein Layerknoten ist, wird im Tree der Layer gewechselt und es kommt true zurück
+        // if this is a layer node, the layer is changed in the tree and true is returned
         boolean layerChanged = tree.setActiveLayer(selectedLayerNode);
         doc.finish_transaction(ModelBrowserTree.PID, false);
         doc.distributeEvent(SELECTION_CHANGED);
@@ -75,10 +74,10 @@ public class DynamicTreeSelectionListener implements TreeSelectionListener {
     }
 
     /**
-     * Wenn der übergebene Node selbst ein Layer-Node ist, dann kommt dieser
-     * Node zurück. Wenn nicht, wird solange in den Parents des Knotens gesucht
-     * bis ein Layer-Node gefunden wurde (der dann zurück kommt) oder
-     * <code>null</code> zurück gegeben, wenn kein Layer-Node gefunden wurde.
+     * If the passed node is itself a layer node, then that node is returned. If
+     * not, it will search in the node's parents until a layer node is found
+     * (which will return) or <code>null</code> is returned if no layer node is
+     * found.
      *
      * @param node
      * @return
