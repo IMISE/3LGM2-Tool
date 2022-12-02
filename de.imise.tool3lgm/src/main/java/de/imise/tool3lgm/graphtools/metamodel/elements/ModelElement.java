@@ -2337,12 +2337,6 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
     public final ElementPropertyDialog getNewPropertyDialogInsance() {
         ElementPropertyDialog propertyDialog = createPropertyDialog();
         propertyDialog.extendDefaultDialog();
-        // add a panel to display Groups, this here is quick and dirty and should be
-        // a parameter of the metamodel. but for now (and if it ist the only edge for
-        // all ModelElements) it's ok.
-        if (!is(Group.class)) {
-            propertyDialog.addEdgePanel(Group_HasPartEdge.class);
-        }
         propertyDialog.update();
         return propertyDialog;
     }

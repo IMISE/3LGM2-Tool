@@ -35,6 +35,8 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.CompositionEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.DoubleMeaningEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction;
+import de.imise.tool3lgm.graphtools.metamodel.elements.Group;
+import de.imise.tool3lgm.graphtools.metamodel.elements.Group_HasPartEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.path.metapaths.MetaPath;
 import de.imise.tool3lgm.graphtools.path.metapaths.SequenceMetaPath;
@@ -71,6 +73,11 @@ public abstract class ElementPropertyDialog extends AbstractElementPropertyDialo
             for (Class<? extends Edge> edgeClass : metaModel.getEdgeTypes(elementClass)) {
                 addEdgePanel(edgeClass);
             }
+        } else // add a panel to display Groups, this here is quick and dirty and should be
+        // a parameter of the metamodel. but for now (and if it ist the only edge for
+        // all ModelElements) it's ok.
+        if (!getModelElement().is(Group.class)) {
+            addEdgePanel(Group_HasPartEdge.class);
         }
     }
 
