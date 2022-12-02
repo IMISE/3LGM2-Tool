@@ -24,6 +24,7 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.HasPartEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
+import de.imise.tool3lgm.graphtools.metamodel.elements.SubordinationEdge;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.model.Szenario;
 import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout;
@@ -573,13 +574,13 @@ public class EdgeContainer extends ElementContainer {
 
             if (i == 0) {
                 Edge edge = getEdge();
-                boolean backward; // außer bei DoubleMeaningEdges und HasPartEdges wird der Rückwärts-Pfeil auch bei unberichteten Kanten gezeichnet
+                boolean backward; // außer bei DoubleMeaningEdges und HasPartEdges wird der Rückwärts-Pfeil auch bei ungerichteten Kanten gezeichnet
                 if (edge instanceof DoubleMeaningEdge) {
                     DoubleMeaningEdge doubleMeaningEdge = (DoubleMeaningEdge) edge;
                     ConnectionState connectionState = doubleMeaningEdge.getConnectionState();
                     backward = connectionState == BACKWARD || connectionState == DOUBLE;
                 } else {
-                    backward = edge instanceof HasPartEdge || !doc.getMetaModel().isDirectedEdge(edge.getClass());
+                    backward = edge instanceof SubordinationEdge || !doc.getMetaModel().isDirectedEdge(edge.getClass());
                 }
                 if (backward) {
                     gc.rotate(rad1, startx, starty);
@@ -603,7 +604,7 @@ public class EdgeContainer extends ElementContainer {
                     ConnectionState connectionState = doubleMeaningEdge.getConnectionState();
                     forward = connectionState == FORWARD || connectionState == DOUBLE;
                 } else {
-                    forward = !(edge instanceof HasPartEdge);
+                    forward = !(edge instanceof SubordinationEdge);
                 }
 
                 if (forward) {
