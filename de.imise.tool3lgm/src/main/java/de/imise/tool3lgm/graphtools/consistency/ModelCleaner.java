@@ -418,7 +418,7 @@ public class ModelCleaner {
             //stehen dann mehrfach drin und der eigentliche Knickpunkt an position 0 ist weg
         }
 
-        gdcoll.setBulkMode(bulkMode);
+        gdcoll.setBulkMode(bulkMode, true);
     }
 
     /**

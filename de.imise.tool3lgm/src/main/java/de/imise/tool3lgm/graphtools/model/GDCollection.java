@@ -2738,6 +2738,15 @@ public class GDCollection extends UserFieldTarget implements MetaModelSpecific, 
      * @return the previous bulk mode
      */
     public boolean setBulkMode(final boolean bulk_mode) {
+        return setBulkMode(bulk_mode, false);
+    }
+
+    /**
+     * @param bulk_mode
+     * @param ignoreChangeEvents
+     * @return the previous bulk mode
+     */
+    public boolean setBulkMode(final boolean bulk_mode, boolean ignoreChangeEvents) {
         if (this.bulk_mode == bulk_mode) { // prevent updates if same bulk_mode is already set
             return bulk_mode;
         }
@@ -2752,7 +2761,7 @@ public class GDCollection extends UserFieldTarget implements MetaModelSpecific, 
         //during selection of all elements in large models
         setPreventModelSelectionStateUpdate(bulk_mode);
         if (lastModeWasBulkMode && !bulk_mode) {
-            distributeChangeEvents();
+            distributeChangeEvents(ignoreChangeEvents);
         }
         return lastModeWasBulkMode;
     }
@@ -2808,17 +2817,23 @@ public class GDCollection extends UserFieldTarget implements MetaModelSpecific, 
     /**
      * Delivers all change events from the list
      * {@link GDCollection#changeEvents} and after this clears the list.
+     *
+     * @param doNotReallyDistributeButClearList if <code>true</code> then the
+     *            collected ChangeEvents will not be fired, but the list will be
+     *            cleared.
      */
-    private void distributeChangeEvents() {
+    private void distributeChangeEvents(boolean doNotReallyDistributeButClearList) {
         //Sys.err(changeEvents.size());
         //Don't use the iterator here! In some cases the distribution of a ChangeEvent
-        //will produce a new ChangeEvent and alters the list changeEvents
-        for (int i = 0; i < changeEvents.size(); i++) {
-            LGMChangeEvent changeEvent = changeEvents.get(i);
-            //long start = System.currentTimeMillis();
-            distribute(changeEvent.changeType, changeEvent.last_elem, changeEvent.source, changeEvent.pid);
-            //long end = System.currentTimeMillis();
-            //Sys.err1(end - start + "\t" + changeEvent);
+        //will produce a new ChangeEvent and alters the list
+        if (!doNotReallyDistributeButClearList) {
+            for (int i = 0; i < changeEvents.size(); i++) {
+                LGMChangeEvent changeEvent = changeEvents.get(i);
+                //long start = System.currentTimeMillis();
+                distribute(changeEvent.changeType, changeEvent.last_elem, changeEvent.source, changeEvent.pid);
+                //long end = System.currentTimeMillis();
+                //Sys.err1(end - start + "\t" + changeEvent);
+            }
         }
         changeEvents.clear();
     }
