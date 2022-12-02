@@ -45,7 +45,7 @@ import de.imise.util.StringUtils;
 import de.imise.util.swing.component.tab.ReorderableTabbedPane;
 
 /**
- * Eigenschaftsdialog für Modellelemnte, also Node und Kanten.<br>
+ * Properties dialog for model elements, i.e. node and edges.<br>
  *
  * @author N.N., AXS
  */
@@ -59,10 +59,10 @@ public abstract class ElementPropertyDialog extends AbstractElementPropertyDialo
     }
 
     /**
-     * Wenn der Dialog von keiner Unterklasse des ModelElements aus seinem
-     * Default-Zustand (DescripPanel + evtl. Benutzerdef. Eigenschaften)
-     * geändert wurde, dann werden hier automatisch für alle Kanten des
-     * Elementes passende Panels hinzugefügt.
+     * If the dialog has not been changed from its default state (DescripPanel +
+     * possibly user-def. properties) by any subclass of the ModelElement, then
+     * appropriate panels are automatically added here for all edges of the
+     * element.
      */
     public void extendDefaultDialog() {
         if (isUnchangedDefaultDialog()) {
@@ -287,9 +287,8 @@ public abstract class ElementPropertyDialog extends AbstractElementPropertyDialo
     //////////////////////////////////
 
     /**
-     * Das zuletzt über die Funktion
-     * {@link ElementPropertyDialog#addTabbedPanel(Class)} hinzugefügte
-     * TabbedPanel
+     * The last TabbedPanel added via the
+     * {@link ElementPropertyDialog#addTabbedPanel(Class)} function.
      */
     private TabbedPanel lastAddedTabbedPanel;
 
@@ -532,9 +531,11 @@ public abstract class ElementPropertyDialog extends AbstractElementPropertyDialo
     @SafeVarargs
     private final AbstractPathConnectionPanel getAddablePanel(final PanelLabelOption titleLabelOption, final PanelLabelOption westLabelOption, final Class<? extends ModelElement> searchElementClass, final Class<? extends Edge>... edgeClasses) {
         SequenceMetaPath metaPath = createSequenceMetaPath(searchElementClass, edgeClasses);
-        //Wenn sich ein Pfad für diese Elementart nicht anlegen lässt -> Panel nicht adden. Das ist der Fall, wenn Kanten einer Oberklasse
-        //für eine Unterklasse nicht mehr gelten (z.B. Service-Metamodell: ApplicationSystem -> ApplicationSystem_IheActorInstance_Edge soll
-        //für IheActorInstances nicht angezeigt werden, da IheActorInstances keine IheActorInstances untergordnet werden können.
+        // If a path cannot be created for this element type -> do not add panel. This is the case
+        // if edges of a superclass are no longer valid for a subclass (e.g. service metamodel:
+        // ApplicationSystem -> ApplicationSystem_IheActorInstance_Edge should not be displayed for
+        // IheActorInstances, because IheActorInstances cannot be subordinated to IheActorInstances
+        // (very complicated and possibly no longer valid. Check!).
         if (metaPath == null) {
             return null;
         }
