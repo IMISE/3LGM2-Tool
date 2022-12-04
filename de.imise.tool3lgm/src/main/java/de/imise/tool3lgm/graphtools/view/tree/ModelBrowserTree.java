@@ -511,7 +511,7 @@ public final class ModelBrowserTree extends DynamicTree implements UserFieldList
                 }
             }
             if (childNode == null) {
-                childNode = ElementContainerTreeNode.createModelBrowserTreeNode(partContainer);
+                childNode = ElementContainerTreeNode.createModelBrowserTreeNode(partContainer, false);
             } else {
                 childNode.removeAllChildren();
             }

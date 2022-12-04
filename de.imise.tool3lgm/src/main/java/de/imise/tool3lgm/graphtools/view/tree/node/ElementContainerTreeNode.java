@@ -42,7 +42,16 @@ public class ElementContainerTreeNode extends IconifiedTreeNode<ElementContainer
      * @return
      */
     public static ElementContainerTreeNode createModelBrowserTreeNode(final ElementContainer ec) {
-        return new ElementContainerTreeNode(ec, true, true, false);
+        return createModelBrowserTreeNode(ec, true);
+    }
+
+    /**
+     * @param ec
+     * @param setTreeNode
+     * @return
+     */
+    public static ElementContainerTreeNode createModelBrowserTreeNode(final ElementContainer ec, boolean setTreeNode) {
+        return new ElementContainerTreeNode(ec, true, setTreeNode, false);
     }
 
     /**
