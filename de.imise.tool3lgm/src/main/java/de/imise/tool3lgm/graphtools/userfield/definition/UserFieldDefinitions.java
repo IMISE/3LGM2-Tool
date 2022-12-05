@@ -584,6 +584,9 @@ public class UserFieldDefinitions extends UserFieldDefinitionChangeHandler imple
      * @return
      */
     public UserField getParentTab(final UserField userField) {
+        if (userField.hasStyle(TAB)) {
+            return userField;
+        }
         UserField parent = getParent(userField, TAB);
         return parent.hasStyle(TAB) ? parent : null;
     }
