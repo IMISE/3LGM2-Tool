@@ -1454,7 +1454,7 @@ public final class MetaModel extends CoreMetaModel {
             }
             return classes;
         }
-        for (Class<? extends ModelElement> clazz : allElementsSet) {
+        for (Class<? extends ModelElement> clazz : CollectionUtils.getCommonIterable(allElementsSet, List.of(Group.class))) {
             if (elementClass.isAssignableFrom(clazz) && !isAbstract(clazz)) {
                 elementClassToNonAbstractAssignableElementClasses.put(elementClass, clazz);
             }

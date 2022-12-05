@@ -36,9 +36,11 @@ import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.graphtools.IDSource;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
+import de.imise.tool3lgm.graphtools.metamodel.elements.Group;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.log.Log;
+import de.imise.util.collections.CollectionUtils;
 import de.imise.util.swing.component.list.AlphabeticalJList;
 import de.imise.util.swing.dialog.NameAndColorInputDialog;
 import de.imise.util.swing.event.ConfirmDialogAction.ConfirmDialog;
@@ -583,7 +585,7 @@ public class AnalysisEditor extends JDialog implements ActionListener, ConfirmDi
 
         PathStepComponent pathComponent = new PathStepComponent(this);
 
-        for (Class<? extends ModelElement> elementClass : metaModel.allNodesSet) {
+        for (Class<? extends ModelElement> elementClass : CollectionUtils.getCommonIterable(metaModel.allNodesSet, List.of(Group.class))) {
             String simpleElementClassName = elementClass.getSimpleName();
             String resName = metaModel.getResString(simpleElementClassName);
             pathComponent.pathStepElementTypeList.addObject(elementClass, resName);
