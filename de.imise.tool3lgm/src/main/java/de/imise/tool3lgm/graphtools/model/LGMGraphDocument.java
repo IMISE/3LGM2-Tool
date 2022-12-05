@@ -835,6 +835,7 @@ public class LGMGraphDocument extends GraphDocument {
             ModelElement instance = instanceContainer.getElement();
             String masterDescription = master.getDescription();
             instance.setDescription(masterDescription);
+            instance.setSeeAlso(master.getSeeAlso());
             GDCollection targetGDColl = targetDoc.getCollection();
             targetGDColl.link(instanciationEdgeClass, master, instance, pid);
 
