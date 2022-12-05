@@ -397,6 +397,9 @@ public class LGMGraphDocument extends GraphDocument {
                         targetDoc.addSimpleToSelection(targetContainer);
                         existingTargetElement = targetContainer.getElement();
                         copyUserFieldValues(sourceElement, existingTargetElement, targetCollection, pid);
+                        //Copy the See Also Information
+                        existingTargetElement.setSeeAlso(sourceElement.getSeeAlso());
+
                     }
                 }
             }
