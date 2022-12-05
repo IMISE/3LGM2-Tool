@@ -1,0 +1,1336 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--Tool3lgmFile version='3.10' metamodel='TLGMServiceMetaModel@2388259974838049670' category='TEMPLATE'-->
+<modell_3lgm_2>
+  <header>
+    <title>IT-Sicherheit.3lgm</title>
+    <description>Dieses Modell enthält benutzerdefinierte Eigenschaften Felder und auf den 3 Ebenen verteilt jeweils ein damit versehenes Element. Dieses kann z.B. aus dem Template-Browser in eine Modell übernommen werden.</description>
+    <version>3_sippe_1670260215572</version>
+  </header>
+  <userFieldDefinitions>
+    <userFieldFormat hash="FRM_1623450079169_2058">
+      <userFieldFormatString>d2 u%</userFieldFormatString>
+    </userFieldFormat>
+    <userFieldFormat hash="USERFIELD_1497433330877_1">
+      <userFieldFormatString>d2 u%</userFieldFormatString>
+    </userFieldFormat>
+    <userFieldFormat hash="USERFIELD_1497433362070_2">
+      <userFieldFormatString>d0 uh / Jahr</userFieldFormatString>
+    </userFieldFormat>
+    <userFieldFormat hash="USERFIELD_1497434059112_14">
+      <userFieldFormatString>d1 uGB</userFieldFormatString>
+    </userFieldFormat>
+    <userFieldFormat hash="USERFIELD_1497434089887_15">
+      <userFieldFormatString>d0 uMB</userFieldFormatString>
+    </userFieldFormat>
+    <userFieldFormat hash="USERFIELD_1497434962331_19">
+      <userFieldFormatString>d0 uh / year</userFieldFormatString>
+    </userFieldFormat>
+    <userFieldDef hash="USERFIELD_1618563118424_1773">
+      <userFieldName>User-defined property fields</userFieldName>
+      <userFieldDescription></userFieldDescription>
+      <userFieldStyle>TAB</userFieldStyle>
+      <userFieldTreeVis>true</userFieldTreeVis>
+      <userFieldShowDescriptionInDialog>false</userFieldShowDescriptionInDialog>
+    </userFieldDef>
+    <userFieldDef hash="USERFIELD_1600172338298_21512">
+      <userFieldName>Link im SharePoint</userFieldName>
+      <userFieldDescription></userFieldDescription>
+      <userFieldStyle>HYPERLINK</userFieldStyle>
+      <userFieldTreeVis>true</userFieldTreeVis>
+      <userFieldShowDescriptionInDialog>false</userFieldShowDescriptionInDialog>
+    </userFieldDef>
+    <userFieldDef elementClass="Group" hash="USERFIELD_1669975909569_28793">
+      <userFieldName>IT-Sicherheitszone</userFieldName>
+      <userFieldDescription>In einer IT-Sicherheitszone können Anwendungssysteme gruppiert werden.</userFieldDescription>
+      <userFieldStyle>SUBTYPE</userFieldStyle>
+      <userFieldTreeVis>true</userFieldTreeVis>
+      <userFieldShowDescriptionInDialog>true</userFieldShowDescriptionInDialog>
+    </userFieldDef>
+    <userFieldDef elementClass="Group" hash="USERFIELD_1669994410989_38780">
+      <userFieldName>IT-Sicherheitszone</userFieldName>
+      <userFieldDescription>In einer IT-Sicherheitszone können Anwendungssysteme gruppiert werden.</userFieldDescription>
+      <userFieldStyle>TAB</userFieldStyle>
+      <userFieldTreeVis>true</userFieldTreeVis>
+      <userFieldShowDescriptionInDialog>true</userFieldShowDescriptionInDialog>
+    </userFieldDef>
+    <userFieldDef elementClass="Group" hash="USERFIELD_1670254696266_66965">
+      <userFieldName>Schutzbedarf</userFieldName>
+      <userFieldDescription>...nach BSI, siehe Objekttypen</userFieldDescription>
+      <userFieldStyle>COMBO_BOX</userFieldStyle>
+      <userFieldTreeVis>true</userFieldTreeVis>
+      <userFieldShowDescriptionInDialog>false</userFieldShowDescriptionInDialog>
+      <userFieldStandardValue>normal</userFieldStandardValue>
+      <userFieldStandardValue>high</userFieldStandardValue>
+      <userFieldStandardValue>very high</userFieldStandardValue>
+    </userFieldDef>
+    <userFieldDef elementClass="Group" hash="USERFIELD_1670229999071_10371">
+      <userFieldName>Verantwortlicher Mitarbeiter</userFieldName>
+      <userFieldDescription></userFieldDescription>
+      <userFieldStyle>SINGLE_LINE</userFieldStyle>
+      <userFieldTreeVis>true</userFieldTreeVis>
+      <userFieldShowDescriptionInDialog>false</userFieldShowDescriptionInDialog>
+    </userFieldDef>
+    <userFieldDef elementClass="Group" hash="USERFIELD_1669994178892_38775">
+      <userFieldName>Netzwerkzone</userFieldName>
+      <userFieldDescription>In einer Netzwerkzone können physische Datenverarbeitungsbausteine gruppiert werden.</userFieldDescription>
+      <userFieldStyle>SUBTYPE</userFieldStyle>
+      <userFieldTreeVis>true</userFieldTreeVis>
+      <userFieldShowDescriptionInDialog>true</userFieldShowDescriptionInDialog>
+    </userFieldDef>
+    <userFieldDef elementClass="Group" hash="USERFIELD_1669994634381_38782">
+      <userFieldName>Netzwerkzone</userFieldName>
+      <userFieldDescription>In einer Netzwerkzone können physische Datenverarbeitungsbausteine gruppiert werden.</userFieldDescription>
+      <userFieldStyle>TAB</userFieldStyle>
+      <userFieldTreeVis>true</userFieldTreeVis>
+      <userFieldShowDescriptionInDialog>true</userFieldShowDescriptionInDialog>
+    </userFieldDef>
+    <userFieldDef elementClass="Group" hash="USERFIELD_1669996287108_38999">
+      <userFieldName>Network Name</userFieldName>
+      <userFieldDescription></userFieldDescription>
+      <userFieldStyle>COMBO_BOX</userFieldStyle>
+      <userFieldTreeVis>true</userFieldTreeVis>
+      <userFieldShowDescriptionInDialog>true</userFieldShowDescriptionInDialog>
+      <userFieldStandardValue>Clinic Prd</userFieldStandardValue>
+      <userFieldStandardValue>DIC Clinic Prd</userFieldStandardValue>
+      <userFieldStandardValue>DIC Clinic Dev</userFieldStandardValue>
+      <userFieldStandardValue>DIC Research Prd</userFieldStandardValue>
+      <userFieldStandardValue>DIC Research Dev</userFieldStandardValue>
+      <userFieldStandardValue>DIC DataSharing Prd</userFieldStandardValue>
+      <userFieldStandardValue>MII Data Sharing</userFieldStandardValue>
+      <userFieldStandardValue>Clinic Dev</userFieldStandardValue>
+      <userFieldStandardValue>Research Prd</userFieldStandardValue>
+      <userFieldStandardValue>Research Dev</userFieldStandardValue>
+      <userFieldStandardValue>DataSharing Prd</userFieldStandardValue>
+    </userFieldDef>
+    <userFieldDef elementClass="Group" hash="USERFIELD_1669997137955_39002">
+      <userFieldName>IPv4 Settings</userFieldName>
+      <userFieldDescription>see https://www.site24x7.com/de/tools/ipv4-subnet-zrechner.html</userFieldDescription>
+      <userFieldStyle>GROUP</userFieldStyle>
+      <userFieldTreeVis>true</userFieldTreeVis>
+      <userFieldShowDescriptionInDialog>true</userFieldShowDescriptionInDialog>
+    </userFieldDef>
+    <userFieldDef elementClass="Group" hash="USERFIELD_1669996237291_38998">
+      <userFieldName>Subnet IPv4</userFieldName>
+      <userFieldDescription>e.g. 10.10.0.0/16</userFieldDescription>
+      <userFieldStyle>SINGLE_LINE</userFieldStyle>
+      <userFieldTreeVis>true</userFieldTreeVis>
+      <userFieldShowDescriptionInDialog>true</userFieldShowDescriptionInDialog>
+    </userFieldDef>
+    <userFieldDef elementClass="Group" hash="USERFIELD_1669996648528_39000">
+      <userFieldName>Subnet Mask IPv4</userFieldName>
+      <userFieldDescription>e.g. 255.255.254.0/23</userFieldDescription>
+      <userFieldStyle>SINGLE_LINE</userFieldStyle>
+      <userFieldTreeVis>true</userFieldTreeVis>
+      <userFieldShowDescriptionInDialog>true</userFieldShowDescriptionInDialog>
+    </userFieldDef>
+    <userFieldDef elementClass="Group" hash="USERFIELD_1669996827587_39001">
+      <userFieldName>Host Address Range IPv4</userFieldName>
+      <userFieldDescription>e.g. 10.10.0.1 - 10.10.1.254</userFieldDescription>
+      <userFieldStyle>SINGLE_LINE</userFieldStyle>
+      <userFieldTreeVis>true</userFieldTreeVis>
+      <userFieldShowDescriptionInDialog>true</userFieldShowDescriptionInDialog>
+    </userFieldDef>
+    <userFieldDef elementClass="ObjectType" hash="USERFIELD_1624433876123_2038">
+      <userFieldName>Sicherheit</userFieldName>
+      <userFieldDescription></userFieldDescription>
+      <userFieldStyle>TAB</userFieldStyle>
+      <userFieldTreeVis>true</userFieldTreeVis>
+      <userFieldShowDescriptionInDialog>false</userFieldShowDescriptionInDialog>
+    </userFieldDef>
+    <userFieldDef elementClass="ObjectType" hash="USERFIELD_1624434122301_2053">
+      <userFieldName>Nach BSI</userFieldName>
+      <userFieldDescription>Sicherheitsbetrachtung nach BSI Kompendium: https://www.bsi.bund.de/SharedDocs/Downloads/DE/BSI/Grundschutz/Kompendium/IT_Grundschutz_Kompendium_Edition2021.pdf?__blob=publicationFile&amp;v=6</userFieldDescription>
+      <userFieldStyle>GROUP</userFieldStyle>
+      <userFieldTreeVis>true</userFieldTreeVis>
+      <userFieldShowDescriptionInDialog>true</userFieldShowDescriptionInDialog>
+    </userFieldDef>
+    <userFieldDef elementClass="ObjectType" hash="USERFIELD_1624433911195_2039">
+      <userFieldName>Schutzsbedarfskategorien</userFieldName>
+      <userFieldDescription>Schutzbedarfskategorien nach BSI Kompenium (2021), S. 37.</userFieldDescription>
+      <userFieldStyle>COMBO_BOX</userFieldStyle>
+      <userFieldTreeVis>true</userFieldTreeVis>
+      <userFieldShowDescriptionInDialog>true</userFieldShowDescriptionInDialog>
+      <userFieldStandardValue>normal</userFieldStandardValue>
+      <userFieldStandardValue>hoch</userFieldStandardValue>
+      <userFieldStandardValue>sehr hoch</userFieldStandardValue>
+    </userFieldDef>
+    <userFieldDef elementClass="ObjectType" hash="USERFIELD_1624434040639_2046">
+      <userFieldName>Sicherheitsanforderungen</userFieldName>
+      <userFieldDescription>Sicherheitsanforderungen nach BSI Kompenium (2021), S. 37.</userFieldDescription>
+      <userFieldStyle>COMBO_BOX</userFieldStyle>
+      <userFieldTreeVis>true</userFieldTreeVis>
+      <userFieldShowDescriptionInDialog>true</userFieldShowDescriptionInDialog>
+      <userFieldStandardValue>Basis-Anforderungen</userFieldStandardValue>
+      <userFieldStandardValue>Standard-Anforderungen</userFieldStandardValue>
+      <userFieldStandardValue>erhöhter Schutzbedarf</userFieldStandardValue>
+    </userFieldDef>
+    <userFieldDef elementClass="ObjectType" hash="USERFIELD_1623450079141_2057">
+      <userFieldName>Benutzerdefinierte Eigenschaftsfelder</userFieldName>
+      <userFieldDescription></userFieldDescription>
+      <userFieldStyle>TAB</userFieldStyle>
+      <userFieldTreeVis>false</userFieldTreeVis>
+      <userFieldShowDescriptionInDialog>false</userFieldShowDescriptionInDialog>
+    </userFieldDef>
+    <userFieldDef elementClass="ObjectType" hash="USERFIELD_1623450107796_2059">
+      <userFieldName>Zehnfach Foo</userFieldName>
+      <userFieldDescription></userFieldDescription>
+      <userFieldStyle>FORMULA</userFieldStyle>
+      <userFieldTreeVis>false</userFieldTreeVis>
+      <userFieldShowDescriptionInDialog>false</userFieldShowDescriptionInDialog>
+      <userFieldFormula>USERFIELD_1623450079141_2056 * 10 </userFieldFormula>
+    </userFieldDef>
+    <userFieldDef elementClass="ObjectType" hash="USERFIELD_1623450079141_2056">
+      <userFieldName>Foo</userFieldName>
+      <userFieldDescription></userFieldDescription>
+      <userFieldStyle>NUMBER</userFieldStyle>
+      <userFieldTreeVis>false</userFieldTreeVis>
+      <userFieldShowDescriptionInDialog>false</userFieldShowDescriptionInDialog>
+    </userFieldDef>
+  </userFieldDefinitions>
+  <objects>
+    <model></model>
+    <element class="ObjectType" hash="OTY_1624434781674_2064">
+      <field name="name">IDAT</field>
+      <field name="description">Patientenidentifizierende Daten (IDAT)</field>
+      <userField hash="USERFIELD_1623450079141_2056">10</userField>
+      <userField hash="USERFIELD_1624433911195_2039">sehr hoch</userField>
+      <userField hash="USERFIELD_1624434040639_2046">erhöhter Schutzbedarf</userField>
+    </element>
+    <element class="Group" hash="Gro_1669902391797_7166" subtype="USERFIELD_1669975909569_28793">
+      <field name="name">Zone: Patient Care</field>
+      <userField hash="USERFIELD_1670229999071_10371">Mrs. Foo</userField>
+      <userField hash="USERFIELD_1670254696266_66965">high</userField>
+    </element>
+    <element class="Group" hash="GRO_1670063700662_5439" subtype="USERFIELD_1669994178892_38775">
+      <field name="name">NZone: ClinPrd</field>
+      <userField hash="USERFIELD_1669996237291_38998">10.10.0.0/16</userField>
+      <userField hash="USERFIELD_1669996287108_38999">Clinic Prd</userField>
+      <userField hash="USERFIELD_1669996648528_39000">255.255.254.0/23</userField>
+      <userField hash="USERFIELD_1669996827587_39001">10.10.10.1 - 10.10.11.254</userField>
+    </element>
+  </objects>
+  <szenario hash="SZN_1670234222827_0" titel="FE: Sicherheit Objekttypen">
+    <description></description>
+    <view>
+      <selected>true</selected>
+      <x>0</x>
+      <y>0</y>
+      <zoom>0.99</zoom>
+      <degree>65</degree>
+      <shift>200</shift>
+      <pageSizeFactor>1.0</pageSizeFactor>
+      <activeLayer>4</activeLayer>
+      <multiView>true</multiView>
+    </view>
+    <mapping>
+      <layout class="Bendpoint">
+        <color name="bg_color">
+          <red>255</red>
+          <green>100</green>
+          <blue>100</blue>
+        </color>
+        <color name="fg_color">
+          <red>0</red>
+          <green>0</green>
+          <blue>0</blue>
+        </color>
+        <color name="border_color">
+          <red>0</red>
+          <green>0</green>
+          <blue>0</blue>
+        </color>
+        <form>0</form>
+        <font_family>SansSerif</font_family>
+        <font_style>0</font_style>
+        <font_size>12</font_size>
+        <width>10</width>
+        <height>10</height>
+      </layout>
+      <layout class="Group">
+        <color name="bg_color">
+          <red>0</red>
+          <green>0</green>
+          <blue>0</blue>
+          <alpha>0</alpha>
+        </color>
+        <color name="fg_color">
+          <red>0</red>
+          <green>0</green>
+          <blue>0</blue>
+        </color>
+        <color name="border_color">
+          <red>0</red>
+          <green>0</green>
+          <blue>0</blue>
+        </color>
+        <form>0</form>
+        <font_family>SansSerif</font_family>
+        <font_style>0</font_style>
+        <font_size>12</font_size>
+        <width>90</width>
+        <height>50</height>
+      </layout>
+      <layout class="Textfield">
+        <color name="bg_color">
+          <red>0</red>
+          <green>0</green>
+          <blue>0</blue>
+          <alpha>0</alpha>
+        </color>
+        <color name="fg_color">
+          <red>0</red>
+          <green>0</green>
+          <blue>0</blue>
+        </color>
+        <color name="border_color">
+          <red>0</red>
+          <green>0</green>
+          <blue>0</blue>
+        </color>
+        <form>0</form>
+        <font_family>SansSerif</font_family>
+        <font_style>0</font_style>
+        <font_size>12</font_size>
+        <width>90</width>
+        <height>50</height>
+      </layout>
+      <layout class="ApplicationSystem">
+        <color name="bg_color">
+          <red>255</red>
+          <green>153</green>
+          <blue>102</blue>
+        </color>
+        <color name="fg_color">
+          <red>0</red>
+          <green>0</green>
+          <blue>0</blue>
+        </color>
+        <color name="border_color">
+          <red>0</red>
+          <green>0</green>
+          <blue>0</blue>
+        </color>
+        <form>3</form>
+        <font_family>SansSerif</font_family>
+        <font_style>0</font_style>
+        <font_size>12</font_size>
+        <width>90</width>
+        <height>50</height>
+      </layout>
+      <layout class="Function">
+        <color name="bg_color">
+          <red>255</red>
+          <green>100</green>
+          <blue>100</blue>
+        </color>
+        <color name="fg_color">
+          <red>0</red>
+          <green>0</green>
+          <blue>0</blue>
+        </color>
+        <color name="border_color">
+          <red>0</red>
+          <green>0</green>
+          <blue>0</blue>
+        </color>
+        <form>0</form>
+        <font_family>SansSerif</font_family>
+        <font_style>0</font_style>
+        <font_size>12</font_size>
+        <width>90</width>
+        <height>50</height>
+      </layout>
+      <layout class="IheActorInstance">
+        <color name="bg_color">
+          <red>0</red>
+          <green>204</green>
+          <blue>255</blue>
+        </color>
+        <color name="fg_color">
+          <red>0</red>
+          <green>0</green>
+          <blue>0</blue>
+        </color>
+        <color name="border_color">
+          <red>0</red>
+          <green>0</green>
+          <blue>0</blue>
+        </color>
+        <form>0</form>
+        <font_family>SansSerif</font_family>
+        <font_style>0</font_style>
+        <font_size>12</font_size>
+        <width>90</width>
+        <height>50</height>
+      </layout>
+      <layout class="IheActorInstanceInvokingInterface">
+        <color name="bg_color">
+          <red>255</red>
+          <green>100</green>
+          <blue>100</blue>
+        </color>
+        <color name="fg_color">
+          <red>0</red>
+          <green>0</green>
+          <blue>0</blue>
+        </color>
+        <color name="border_color">
+          <red>0</red>
+          <green>0</green>
+          <blue>0</blue>
+        </color>
+        <form>1</form>
+        <font_family>SansSerif</font_family>
+        <font_style>0</font_style>
+        <font_size>12</font_size>
+        <width>16</width>
+        <height>16</height>
+      </layout>
+      <layout class="IheActorInstanceProvidingInterface">
+        <color name="bg_color">
+          <red>192</red>
+          <green>192</green>
+          <blue>192</blue>
+        </color>
+        <color name="fg_color">
+          <red>0</red>
+          <green>0</green>
+          <blue>0</blue>
+        </color>
+        <color name="border_color">
+          <red>0</red>
+          <green>0</green>
+          <blue>0</blue>
+        </color>
+        <form>2</form>
+        <font_family>SansSerif</font_family>
+        <font_style>0</font_style>
+        <font_size>12</font_size>
+        <width>16</width>
+        <height>16</height>
+      </layout>
+      <layout class="InvokingInterface">
+        <color name="bg_color">
+          <red>204</red>
+          <green>255</green>
+          <blue>204</blue>
+        </color>
+        <color name="fg_color">
+          <red>0</red>
+          <green>0</green>
+          <blue>0</blue>
+        </color>
+        <color name="border_color">
+          <red>0</red>
+          <green>0</green>
+          <blue>0</blue>
+        </color>
+        <form>1</form>
+        <font_family>SansSerif</font_family>
+        <font_style>0</font_style>
+        <font_size>12</font_size>
+        <width>16</width>
+        <height>16</height>
+      </layout>
+      <layout class="ObjectType">
+        <color name="bg_color">
+          <red>100</red>
+          <green>100</green>
+          <blue>255</blue>
+        </color>
+        <color name="fg_color">
+          <red>0</red>
+          <green>0</green>
+          <blue>0</blue>
+        </color>
+        <color name="border_color">
+          <red>0</red>
+          <green>0</green>
+          <blue>0</blue>
+        </color>
+        <form>1</form>
+        <font_family>SansSerif</font_family>
+        <font_style>0</font_style>
+        <font_size>12</font_size>
+        <width>90</width>
+        <height>50</height>
+      </layout>
+      <layout class="OrganisationSystem">
+        <color name="bg_color">
+          <red>100</red>
+          <green>100</green>
+          <blue>255</blue>
+        </color>
+        <color name="fg_color">
+          <red>0</red>
+          <green>0</green>
+          <blue>0</blue>
+        </color>
+        <color name="border_color">
+          <red>0</red>
+          <green>0</green>
+          <blue>0</blue>
+        </color>
+        <form>3</form>
+        <font_family>SansSerif</font_family>
+        <font_style>0</font_style>
+        <font_size>12</font_size>
+        <width>90</width>
+        <height>50</height>
+      </layout>
+      <layout class="PhysicalDataProcessingComponent">
+        <color name="bg_color">
+          <red>255</red>
+          <green>200</green>
+          <blue>0</blue>
+        </color>
+        <color name="fg_color">
+          <red>0</red>
+          <green>0</green>
+          <blue>0</blue>
+        </color>
+        <color name="border_color">
+          <red>0</red>
+          <green>0</green>
+          <blue>0</blue>
+        </color>
+        <form>0</form>
+        <font_family>SansSerif</font_family>
+        <font_style>0</font_style>
+        <font_size>12</font_size>
+        <width>90</width>
+        <height>50</height>
+      </layout>
+      <layout class="ProvidingInterface">
+        <color name="bg_color">
+          <red>255</red>
+          <green>200</green>
+          <blue>0</blue>
+        </color>
+        <color name="fg_color">
+          <red>0</red>
+          <green>0</green>
+          <blue>0</blue>
+        </color>
+        <color name="border_color">
+          <red>0</red>
+          <green>0</green>
+          <blue>0</blue>
+        </color>
+        <form>2</form>
+        <font_family>SansSerif</font_family>
+        <font_style>0</font_style>
+        <font_size>12</font_size>
+        <width>16</width>
+        <height>16</height>
+      </layout>
+    </mapping>
+    <layer number="0">
+      <layout>
+        <color name="bg_color">
+          <red>255</red>
+          <green>255</green>
+          <blue>255</blue>
+        </color>
+      </layout>
+    </layer>
+    <layer number="1">
+      <layout>
+        <color name="bg_color">
+          <red>255</red>
+          <green>255</green>
+          <blue>255</blue>
+        </color>
+      </layout>
+    </layer>
+    <layer number="2">
+      <layout>
+        <color name="bg_color">
+          <red>255</red>
+          <green>255</green>
+          <blue>255</blue>
+        </color>
+      </layout>
+    </layer>
+    <layer number="3">
+      <layout>
+        <color name="bg_color">
+          <red>255</red>
+          <green>255</green>
+          <blue>255</blue>
+        </color>
+      </layout>
+    </layer>
+    <layer number="4">
+      <layout>
+        <color name="bg_color">
+          <red>255</red>
+          <green>255</green>
+          <blue>255</blue>
+        </color>
+      </layout>
+      <container hash="OTY_1624434781674_2064">
+        <layout>
+          <x>-273</x>
+          <y>-200</y>
+        </layout>
+      </container>
+    </layer>
+  </szenario>
+  <szenario hash="SZN_1670255451602_5" titel="LWE: IT-Sicherheitszonen">
+    <description></description>
+    <view>
+      <selected>false</selected>
+      <x>0</x>
+      <y>0</y>
+      <zoom>0.81</zoom>
+      <degree>65</degree>
+      <shift>200</shift>
+      <pageSizeFactor>1.11328125</pageSizeFactor>
+      <activeLayer>4</activeLayer>
+      <multiView>true</multiView>
+    </view>
+    <mapping>
+      <layout class="Bendpoint">
+        <color name="bg_color">
+          <red>255</red>
+          <green>100</green>
+          <blue>100</blue>
+        </color>
+        <color name="fg_color">
+          <red>0</red>
+          <green>0</green>
+          <blue>0</blue>
+        </color>
+        <color name="border_color">
+          <red>0</red>
+          <green>0</green>
+          <blue>0</blue>
+        </color>
+        <form>0</form>
+        <font_family>SansSerif</font_family>
+        <font_style>0</font_style>
+        <font_size>12</font_size>
+        <width>10</width>
+        <height>10</height>
+      </layout>
+      <layout class="Group">
+        <color name="bg_color">
+          <red>0</red>
+          <green>0</green>
+          <blue>0</blue>
+          <alpha>0</alpha>
+        </color>
+        <color name="fg_color">
+          <red>0</red>
+          <green>0</green>
+          <blue>0</blue>
+        </color>
+        <color name="border_color">
+          <red>0</red>
+          <green>0</green>
+          <blue>0</blue>
+        </color>
+        <form>0</form>
+        <font_family>SansSerif</font_family>
+        <font_style>0</font_style>
+        <font_size>12</font_size>
+        <width>90</width>
+        <height>50</height>
+      </layout>
+      <layout class="Textfield">
+        <color name="bg_color">
+          <red>0</red>
+          <green>0</green>
+          <blue>0</blue>
+          <alpha>0</alpha>
+        </color>
+        <color name="fg_color">
+          <red>0</red>
+          <green>0</green>
+          <blue>0</blue>
+        </color>
+        <color name="border_color">
+          <red>0</red>
+          <green>0</green>
+          <blue>0</blue>
+        </color>
+        <form>0</form>
+        <font_family>SansSerif</font_family>
+        <font_style>0</font_style>
+        <font_size>12</font_size>
+        <width>90</width>
+        <height>50</height>
+      </layout>
+      <layout class="ApplicationSystem">
+        <color name="bg_color">
+          <red>255</red>
+          <green>153</green>
+          <blue>102</blue>
+        </color>
+        <color name="fg_color">
+          <red>0</red>
+          <green>0</green>
+          <blue>0</blue>
+        </color>
+        <color name="border_color">
+          <red>0</red>
+          <green>0</green>
+          <blue>0</blue>
+        </color>
+        <form>3</form>
+        <font_family>SansSerif</font_family>
+        <font_style>0</font_style>
+        <font_size>12</font_size>
+        <width>90</width>
+        <height>50</height>
+      </layout>
+      <layout class="Function">
+        <color name="bg_color">
+          <red>255</red>
+          <green>100</green>
+          <blue>100</blue>
+        </color>
+        <color name="fg_color">
+          <red>0</red>
+          <green>0</green>
+          <blue>0</blue>
+        </color>
+        <color name="border_color">
+          <red>0</red>
+          <green>0</green>
+          <blue>0</blue>
+        </color>
+        <form>0</form>
+        <font_family>SansSerif</font_family>
+        <font_style>0</font_style>
+        <font_size>12</font_size>
+        <width>90</width>
+        <height>50</height>
+      </layout>
+      <layout class="IheActorInstance">
+        <color name="bg_color">
+          <red>0</red>
+          <green>204</green>
+          <blue>255</blue>
+        </color>
+        <color name="fg_color">
+          <red>0</red>
+          <green>0</green>
+          <blue>0</blue>
+        </color>
+        <color name="border_color">
+          <red>0</red>
+          <green>0</green>
+          <blue>0</blue>
+        </color>
+        <form>0</form>
+        <font_family>SansSerif</font_family>
+        <font_style>0</font_style>
+        <font_size>12</font_size>
+        <width>90</width>
+        <height>50</height>
+      </layout>
+      <layout class="IheActorInstanceInvokingInterface">
+        <color name="bg_color">
+          <red>255</red>
+          <green>100</green>
+          <blue>100</blue>
+        </color>
+        <color name="fg_color">
+          <red>0</red>
+          <green>0</green>
+          <blue>0</blue>
+        </color>
+        <color name="border_color">
+          <red>0</red>
+          <green>0</green>
+          <blue>0</blue>
+        </color>
+        <form>1</form>
+        <font_family>SansSerif</font_family>
+        <font_style>0</font_style>
+        <font_size>12</font_size>
+        <width>16</width>
+        <height>16</height>
+      </layout>
+      <layout class="IheActorInstanceProvidingInterface">
+        <color name="bg_color">
+          <red>192</red>
+          <green>192</green>
+          <blue>192</blue>
+        </color>
+        <color name="fg_color">
+          <red>0</red>
+          <green>0</green>
+          <blue>0</blue>
+        </color>
+        <color name="border_color">
+          <red>0</red>
+          <green>0</green>
+          <blue>0</blue>
+        </color>
+        <form>2</form>
+        <font_family>SansSerif</font_family>
+        <font_style>0</font_style>
+        <font_size>12</font_size>
+        <width>16</width>
+        <height>16</height>
+      </layout>
+      <layout class="InvokingInterface">
+        <color name="bg_color">
+          <red>204</red>
+          <green>255</green>
+          <blue>204</blue>
+        </color>
+        <color name="fg_color">
+          <red>0</red>
+          <green>0</green>
+          <blue>0</blue>
+        </color>
+        <color name="border_color">
+          <red>0</red>
+          <green>0</green>
+          <blue>0</blue>
+        </color>
+        <form>1</form>
+        <font_family>SansSerif</font_family>
+        <font_style>0</font_style>
+        <font_size>12</font_size>
+        <width>16</width>
+        <height>16</height>
+      </layout>
+      <layout class="ObjectType">
+        <color name="bg_color">
+          <red>100</red>
+          <green>100</green>
+          <blue>255</blue>
+        </color>
+        <color name="fg_color">
+          <red>0</red>
+          <green>0</green>
+          <blue>0</blue>
+        </color>
+        <color name="border_color">
+          <red>0</red>
+          <green>0</green>
+          <blue>0</blue>
+        </color>
+        <form>1</form>
+        <font_family>SansSerif</font_family>
+        <font_style>0</font_style>
+        <font_size>12</font_size>
+        <width>90</width>
+        <height>50</height>
+      </layout>
+      <layout class="OrganisationSystem">
+        <color name="bg_color">
+          <red>100</red>
+          <green>100</green>
+          <blue>255</blue>
+        </color>
+        <color name="fg_color">
+          <red>0</red>
+          <green>0</green>
+          <blue>0</blue>
+        </color>
+        <color name="border_color">
+          <red>0</red>
+          <green>0</green>
+          <blue>0</blue>
+        </color>
+        <form>3</form>
+        <font_family>SansSerif</font_family>
+        <font_style>0</font_style>
+        <font_size>12</font_size>
+        <width>90</width>
+        <height>50</height>
+      </layout>
+      <layout class="PhysicalDataProcessingComponent">
+        <color name="bg_color">
+          <red>255</red>
+          <green>200</green>
+          <blue>0</blue>
+        </color>
+        <color name="fg_color">
+          <red>0</red>
+          <green>0</green>
+          <blue>0</blue>
+        </color>
+        <color name="border_color">
+          <red>0</red>
+          <green>0</green>
+          <blue>0</blue>
+        </color>
+        <form>0</form>
+        <font_family>SansSerif</font_family>
+        <font_style>0</font_style>
+        <font_size>12</font_size>
+        <width>90</width>
+        <height>50</height>
+      </layout>
+      <layout class="ProvidingInterface">
+        <color name="bg_color">
+          <red>255</red>
+          <green>200</green>
+          <blue>0</blue>
+        </color>
+        <color name="fg_color">
+          <red>0</red>
+          <green>0</green>
+          <blue>0</blue>
+        </color>
+        <color name="border_color">
+          <red>0</red>
+          <green>0</green>
+          <blue>0</blue>
+        </color>
+        <form>2</form>
+        <font_family>SansSerif</font_family>
+        <font_style>0</font_style>
+        <font_size>12</font_size>
+        <width>16</width>
+        <height>16</height>
+      </layout>
+    </mapping>
+    <layer number="0">
+      <layout>
+        <color name="bg_color">
+          <red>255</red>
+          <green>255</green>
+          <blue>255</blue>
+        </color>
+      </layout>
+    </layer>
+    <layer number="1">
+      <layout>
+        <color name="bg_color">
+          <red>255</red>
+          <green>255</green>
+          <blue>255</blue>
+        </color>
+      </layout>
+    </layer>
+    <layer number="2">
+      <layout>
+        <color name="bg_color">
+          <red>255</red>
+          <green>255</green>
+          <blue>255</blue>
+        </color>
+      </layout>
+      <container hash="Gro_1669902391797_7166">
+        <layout>
+          <color name="bg_color">
+            <red>207</red>
+            <green>200</green>
+            <blue>207</blue>
+          </color>
+          <x>-260</x>
+          <y>77</y>
+          <width>620</width>
+          <height>545</height>
+          <halign>LEFT</halign>
+          <valign>TOP</valign>
+          <htmlalign>LEFT</htmlalign>
+        </layout>
+      </container>
+    </layer>
+    <layer number="3">
+      <layout>
+        <color name="bg_color">
+          <red>255</red>
+          <green>255</green>
+          <blue>255</blue>
+        </color>
+      </layout>
+    </layer>
+    <layer number="4">
+      <layout>
+        <color name="bg_color">
+          <red>255</red>
+          <green>255</green>
+          <blue>255</blue>
+        </color>
+      </layout>
+    </layer>
+  </szenario>
+  <szenario hash="SZN_1670255585942_6" titel="PWE: Netzwerkzone">
+    <description></description>
+    <view>
+      <selected>false</selected>
+      <x>0</x>
+      <y>0</y>
+      <zoom>0.81</zoom>
+      <degree>65</degree>
+      <shift>200</shift>
+      <pageSizeFactor>1.38671875</pageSizeFactor>
+      <activeLayer>4</activeLayer>
+      <multiView>false</multiView>
+    </view>
+    <mapping>
+      <layout class="Bendpoint">
+        <color name="bg_color">
+          <red>255</red>
+          <green>100</green>
+          <blue>100</blue>
+        </color>
+        <color name="fg_color">
+          <red>0</red>
+          <green>0</green>
+          <blue>0</blue>
+        </color>
+        <color name="border_color">
+          <red>0</red>
+          <green>0</green>
+          <blue>0</blue>
+        </color>
+        <form>0</form>
+        <font_family>SansSerif</font_family>
+        <font_style>0</font_style>
+        <font_size>12</font_size>
+        <width>10</width>
+        <height>10</height>
+      </layout>
+      <layout class="Group">
+        <color name="bg_color">
+          <red>0</red>
+          <green>0</green>
+          <blue>0</blue>
+          <alpha>0</alpha>
+        </color>
+        <color name="fg_color">
+          <red>0</red>
+          <green>0</green>
+          <blue>0</blue>
+        </color>
+        <color name="border_color">
+          <red>0</red>
+          <green>0</green>
+          <blue>0</blue>
+        </color>
+        <form>0</form>
+        <font_family>SansSerif</font_family>
+        <font_style>0</font_style>
+        <font_size>12</font_size>
+        <width>90</width>
+        <height>50</height>
+      </layout>
+      <layout class="Textfield">
+        <color name="bg_color">
+          <red>0</red>
+          <green>0</green>
+          <blue>0</blue>
+          <alpha>0</alpha>
+        </color>
+        <color name="fg_color">
+          <red>0</red>
+          <green>0</green>
+          <blue>0</blue>
+        </color>
+        <color name="border_color">
+          <red>0</red>
+          <green>0</green>
+          <blue>0</blue>
+        </color>
+        <form>0</form>
+        <font_family>SansSerif</font_family>
+        <font_style>0</font_style>
+        <font_size>12</font_size>
+        <width>90</width>
+        <height>50</height>
+      </layout>
+      <layout class="ApplicationSystem">
+        <color name="bg_color">
+          <red>255</red>
+          <green>153</green>
+          <blue>102</blue>
+        </color>
+        <color name="fg_color">
+          <red>0</red>
+          <green>0</green>
+          <blue>0</blue>
+        </color>
+        <color name="border_color">
+          <red>0</red>
+          <green>0</green>
+          <blue>0</blue>
+        </color>
+        <form>3</form>
+        <font_family>SansSerif</font_family>
+        <font_style>0</font_style>
+        <font_size>12</font_size>
+        <width>90</width>
+        <height>50</height>
+      </layout>
+      <layout class="Function">
+        <color name="bg_color">
+          <red>255</red>
+          <green>100</green>
+          <blue>100</blue>
+        </color>
+        <color name="fg_color">
+          <red>0</red>
+          <green>0</green>
+          <blue>0</blue>
+        </color>
+        <color name="border_color">
+          <red>0</red>
+          <green>0</green>
+          <blue>0</blue>
+        </color>
+        <form>0</form>
+        <font_family>SansSerif</font_family>
+        <font_style>0</font_style>
+        <font_size>12</font_size>
+        <width>90</width>
+        <height>50</height>
+      </layout>
+      <layout class="IheActorInstance">
+        <color name="bg_color">
+          <red>0</red>
+          <green>204</green>
+          <blue>255</blue>
+        </color>
+        <color name="fg_color">
+          <red>0</red>
+          <green>0</green>
+          <blue>0</blue>
+        </color>
+        <color name="border_color">
+          <red>0</red>
+          <green>0</green>
+          <blue>0</blue>
+        </color>
+        <form>0</form>
+        <font_family>SansSerif</font_family>
+        <font_style>0</font_style>
+        <font_size>12</font_size>
+        <width>90</width>
+        <height>50</height>
+      </layout>
+      <layout class="IheActorInstanceInvokingInterface">
+        <color name="bg_color">
+          <red>255</red>
+          <green>100</green>
+          <blue>100</blue>
+        </color>
+        <color name="fg_color">
+          <red>0</red>
+          <green>0</green>
+          <blue>0</blue>
+        </color>
+        <color name="border_color">
+          <red>0</red>
+          <green>0</green>
+          <blue>0</blue>
+        </color>
+        <form>1</form>
+        <font_family>SansSerif</font_family>
+        <font_style>0</font_style>
+        <font_size>12</font_size>
+        <width>16</width>
+        <height>16</height>
+      </layout>
+      <layout class="IheActorInstanceProvidingInterface">
+        <color name="bg_color">
+          <red>192</red>
+          <green>192</green>
+          <blue>192</blue>
+        </color>
+        <color name="fg_color">
+          <red>0</red>
+          <green>0</green>
+          <blue>0</blue>
+        </color>
+        <color name="border_color">
+          <red>0</red>
+          <green>0</green>
+          <blue>0</blue>
+        </color>
+        <form>2</form>
+        <font_family>SansSerif</font_family>
+        <font_style>0</font_style>
+        <font_size>12</font_size>
+        <width>16</width>
+        <height>16</height>
+      </layout>
+      <layout class="InvokingInterface">
+        <color name="bg_color">
+          <red>204</red>
+          <green>255</green>
+          <blue>204</blue>
+        </color>
+        <color name="fg_color">
+          <red>0</red>
+          <green>0</green>
+          <blue>0</blue>
+        </color>
+        <color name="border_color">
+          <red>0</red>
+          <green>0</green>
+          <blue>0</blue>
+        </color>
+        <form>1</form>
+        <font_family>SansSerif</font_family>
+        <font_style>0</font_style>
+        <font_size>12</font_size>
+        <width>16</width>
+        <height>16</height>
+      </layout>
+      <layout class="ObjectType">
+        <color name="bg_color">
+          <red>100</red>
+          <green>100</green>
+          <blue>255</blue>
+        </color>
+        <color name="fg_color">
+          <red>0</red>
+          <green>0</green>
+          <blue>0</blue>
+        </color>
+        <color name="border_color">
+          <red>0</red>
+          <green>0</green>
+          <blue>0</blue>
+        </color>
+        <form>1</form>
+        <font_family>SansSerif</font_family>
+        <font_style>0</font_style>
+        <font_size>12</font_size>
+        <width>90</width>
+        <height>50</height>
+      </layout>
+      <layout class="OrganisationSystem">
+        <color name="bg_color">
+          <red>100</red>
+          <green>100</green>
+          <blue>255</blue>
+        </color>
+        <color name="fg_color">
+          <red>0</red>
+          <green>0</green>
+          <blue>0</blue>
+        </color>
+        <color name="border_color">
+          <red>0</red>
+          <green>0</green>
+          <blue>0</blue>
+        </color>
+        <form>3</form>
+        <font_family>SansSerif</font_family>
+        <font_style>0</font_style>
+        <font_size>12</font_size>
+        <width>90</width>
+        <height>50</height>
+      </layout>
+      <layout class="PhysicalDataProcessingComponent">
+        <color name="bg_color">
+          <red>255</red>
+          <green>200</green>
+          <blue>0</blue>
+        </color>
+        <color name="fg_color">
+          <red>0</red>
+          <green>0</green>
+          <blue>0</blue>
+        </color>
+        <color name="border_color">
+          <red>0</red>
+          <green>0</green>
+          <blue>0</blue>
+        </color>
+        <form>0</form>
+        <font_family>SansSerif</font_family>
+        <font_style>0</font_style>
+        <font_size>12</font_size>
+        <width>90</width>
+        <height>50</height>
+      </layout>
+      <layout class="ProvidingInterface">
+        <color name="bg_color">
+          <red>255</red>
+          <green>200</green>
+          <blue>0</blue>
+        </color>
+        <color name="fg_color">
+          <red>0</red>
+          <green>0</green>
+          <blue>0</blue>
+        </color>
+        <color name="border_color">
+          <red>0</red>
+          <green>0</green>
+          <blue>0</blue>
+        </color>
+        <form>2</form>
+        <font_family>SansSerif</font_family>
+        <font_style>0</font_style>
+        <font_size>12</font_size>
+        <width>16</width>
+        <height>16</height>
+      </layout>
+    </mapping>
+    <layer number="0">
+      <layout>
+        <color name="bg_color">
+          <red>255</red>
+          <green>255</green>
+          <blue>255</blue>
+        </color>
+      </layout>
+      <container hash="GRO_1670063700662_5439">
+        <layout>
+          <color name="bg_color">
+            <red>235</red>
+            <green>229</green>
+            <blue>255</blue>
+          </color>
+          <x>-435</x>
+          <y>-70</y>
+          <width>160</width>
+          <height>530</height>
+          <halign>LEFT</halign>
+          <valign>TOP</valign>
+        </layout>
+      </container>
+    </layer>
+    <layer number="1">
+      <layout>
+        <color name="bg_color">
+          <red>255</red>
+          <green>255</green>
+          <blue>255</blue>
+        </color>
+      </layout>
+    </layer>
+    <layer number="2">
+      <layout>
+        <color name="bg_color">
+          <red>255</red>
+          <green>255</green>
+          <blue>255</blue>
+        </color>
+      </layout>
+    </layer>
+    <layer number="3">
+      <layout>
+        <color name="bg_color">
+          <red>255</red>
+          <green>255</green>
+          <blue>255</blue>
+        </color>
+      </layout>
+    </layer>
+    <layer number="4">
+      <layout>
+        <color name="bg_color">
+          <red>255</red>
+          <green>255</green>
+          <blue>255</blue>
+        </color>
+      </layout>
+    </layer>
+  </szenario>
+  <images></images>
+</modell_3lgm_2>

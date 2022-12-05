@@ -1,0 +1,2250 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--Tool3lgmFile version='3.10' metamodel='TLGMServiceMetaModel@2388259974838049670' category='TEMPLATE'-->
+<modell_3lgm_2>
+  <header>
+    <title>Desease-Management.3lgm</title>
+    <description></description>
+    <version>164_sippe_1670250614551</version>
+  </header>
+  <userFieldDefinitions>
+    <userFieldFormat hash="FRM_1623450079169_2058">
+      <userFieldFormatString>d2 u%</userFieldFormatString>
+    </userFieldFormat>
+    <userFieldFormat hash="USERFIELD_1497433330877_1">
+      <userFieldFormatString>d2 u%</userFieldFormatString>
+    </userFieldFormat>
+    <userFieldFormat hash="USERFIELD_1497433362070_2">
+      <userFieldFormatString>d0 uh / Jahr</userFieldFormatString>
+    </userFieldFormat>
+    <userFieldFormat hash="USERFIELD_1497434059112_14">
+      <userFieldFormatString>d1 uGB</userFieldFormatString>
+    </userFieldFormat>
+    <userFieldFormat hash="USERFIELD_1497434089887_15">
+      <userFieldFormatString>d0 uMB</userFieldFormatString>
+    </userFieldFormat>
+    <userFieldFormat hash="USERFIELD_1497434962331_19">
+      <userFieldFormatString>d0 uh / year</userFieldFormatString>
+    </userFieldFormat>
+    <userFieldDef hash="USERFIELD_1618563118424_1773">
+      <userFieldName>User-defined property fields</userFieldName>
+      <userFieldDescription></userFieldDescription>
+      <userFieldStyle>TAB</userFieldStyle>
+      <userFieldTreeVis>true</userFieldTreeVis>
+      <userFieldShowDescriptionInDialog>false</userFieldShowDescriptionInDialog>
+    </userFieldDef>
+    <userFieldDef hash="USERFIELD_1600172338298_21512">
+      <userFieldName>Link im SharePoint</userFieldName>
+      <userFieldDescription></userFieldDescription>
+      <userFieldStyle>HYPERLINK</userFieldStyle>
+      <userFieldTreeVis>true</userFieldTreeVis>
+      <userFieldShowDescriptionInDialog>false</userFieldShowDescriptionInDialog>
+    </userFieldDef>
+    <userFieldDef elementClass="Function" hash="USERFIELD_1625125405430_17206">
+      <userFieldName>References</userFieldName>
+      <userFieldDescription>References</userFieldDescription>
+      <userFieldStyle>TAB</userFieldStyle>
+      <userFieldTreeVis>true</userFieldTreeVis>
+      <userFieldShowDescriptionInDialog>false</userFieldShowDescriptionInDialog>
+    </userFieldDef>
+    <userFieldDef elementClass="Function" hash="USERFIELD_1625125464163_17207">
+      <userFieldName>Citation</userFieldName>
+      <userFieldDescription></userFieldDescription>
+      <userFieldStyle>SINGLE_LINE</userFieldStyle>
+      <userFieldTreeVis>true</userFieldTreeVis>
+      <userFieldShowDescriptionInDialog>false</userFieldShowDescriptionInDialog>
+    </userFieldDef>
+    <userFieldDef elementClass="Function" hash="USERFIELD_1625125488338_17208">
+      <userFieldName>Hyperlink</userFieldName>
+      <userFieldDescription></userFieldDescription>
+      <userFieldStyle>HYPERLINK</userFieldStyle>
+      <userFieldTreeVis>true</userFieldTreeVis>
+      <userFieldShowDescriptionInDialog>false</userFieldShowDescriptionInDialog>
+    </userFieldDef>
+    <userFieldDef elementClass="PhysicalDataProcessingComponent" hash="USERFIELD_1670080293518_5897">
+      <userFieldName>Virtual Maschine</userFieldName>
+      <userFieldDescription></userFieldDescription>
+      <userFieldStyle>SUBTYPE</userFieldStyle>
+      <userFieldTreeVis>true</userFieldTreeVis>
+      <userFieldShowDescriptionInDialog>false</userFieldShowDescriptionInDialog>
+    </userFieldDef>
+    <userFieldDef elementClass="PhysicalDataProcessingComponent" hash="USERFIELD_1670080600594_6226">
+      <userFieldName>Metadata</userFieldName>
+      <userFieldDescription></userFieldDescription>
+      <userFieldStyle>TAB</userFieldStyle>
+      <userFieldTreeVis>true</userFieldTreeVis>
+      <userFieldShowDescriptionInDialog>false</userFieldShowDescriptionInDialog>
+    </userFieldDef>
+    <userFieldDef elementClass="PhysicalDataProcessingComponent" hash="USERFIELD_1670080751662_6232">
+      <userFieldName>Ressources</userFieldName>
+      <userFieldDescription></userFieldDescription>
+      <userFieldStyle>GROUP</userFieldStyle>
+      <userFieldTreeVis>true</userFieldTreeVis>
+      <userFieldShowDescriptionInDialog>false</userFieldShowDescriptionInDialog>
+    </userFieldDef>
+    <userFieldDef elementClass="PhysicalDataProcessingComponent" hash="USERFIELD_1670080646449_6227">
+      <userFieldName>Operating system</userFieldName>
+      <userFieldDescription></userFieldDescription>
+      <userFieldStyle>SINGLE_LINE</userFieldStyle>
+      <userFieldTreeVis>true</userFieldTreeVis>
+      <userFieldShowDescriptionInDialog>false</userFieldShowDescriptionInDialog>
+    </userFieldDef>
+    <userFieldDef elementClass="PhysicalDataProcessingComponent" hash="USERFIELD_1670080646449_6230">
+      <userFieldName>Processor</userFieldName>
+      <userFieldDescription></userFieldDescription>
+      <userFieldStyle>SINGLE_LINE</userFieldStyle>
+      <userFieldTreeVis>true</userFieldTreeVis>
+      <userFieldShowDescriptionInDialog>false</userFieldShowDescriptionInDialog>
+    </userFieldDef>
+    <userFieldDef elementClass="PhysicalDataProcessingComponent" hash="USERFIELD_1670080646449_6229">
+      <userFieldName>RAM</userFieldName>
+      <userFieldDescription></userFieldDescription>
+      <userFieldStyle>NUMBER</userFieldStyle>
+      <userFieldTreeVis>true</userFieldTreeVis>
+      <userFieldShowDescriptionInDialog>false</userFieldShowDescriptionInDialog>
+      <userFieldFormatHash>USERFIELD_1497434089887_15</userFieldFormatHash>
+    </userFieldDef>
+    <userFieldDef elementClass="PhysicalDataProcessingComponent" hash="USERFIELD_1670080646449_6228">
+      <userFieldName>Hard disc size</userFieldName>
+      <userFieldDescription></userFieldDescription>
+      <userFieldStyle>NUMBER</userFieldStyle>
+      <userFieldTreeVis>true</userFieldTreeVis>
+      <userFieldShowDescriptionInDialog>false</userFieldShowDescriptionInDialog>
+      <userFieldFormatHash>USERFIELD_1497434059112_14</userFieldFormatHash>
+    </userFieldDef>
+    <userFieldDef elementClass="PhysicalDataProcessingComponent" hash="USERFIELD_1670080585602_6225">
+      <userFieldName>Dedicated Server</userFieldName>
+      <userFieldDescription></userFieldDescription>
+      <userFieldStyle>SUBTYPE</userFieldStyle>
+      <userFieldTreeVis>true</userFieldTreeVis>
+      <userFieldShowDescriptionInDialog>false</userFieldShowDescriptionInDialog>
+    </userFieldDef>
+    <userFieldDef elementClass="PhysicalDataProcessingComponent" hash="USERFIELD_1618563118425_1775">
+      <userFieldName>Metadata</userFieldName>
+      <userFieldDescription></userFieldDescription>
+      <userFieldStyle>TAB</userFieldStyle>
+      <userFieldTreeVis>true</userFieldTreeVis>
+      <userFieldShowDescriptionInDialog>false</userFieldShowDescriptionInDialog>
+    </userFieldDef>
+    <userFieldDef elementClass="PhysicalDataProcessingComponent" hash="USERFIELD_1670080667510_6231">
+      <userFieldName>Ressources</userFieldName>
+      <userFieldDescription></userFieldDescription>
+      <userFieldStyle>GROUP</userFieldStyle>
+      <userFieldTreeVis>true</userFieldTreeVis>
+      <userFieldShowDescriptionInDialog>false</userFieldShowDescriptionInDialog>
+    </userFieldDef>
+    <userFieldDef elementClass="PhysicalDataProcessingComponent" hash="USERFIELD_1497433961756_10">
+      <userFieldName>Operating system</userFieldName>
+      <userFieldDescription></userFieldDescription>
+      <userFieldStyle>SINGLE_LINE</userFieldStyle>
+      <userFieldTreeVis>true</userFieldTreeVis>
+      <userFieldShowDescriptionInDialog>false</userFieldShowDescriptionInDialog>
+    </userFieldDef>
+    <userFieldDef elementClass="PhysicalDataProcessingComponent" hash="USERFIELD_1497434106454_17">
+      <userFieldName>Processor</userFieldName>
+      <userFieldDescription></userFieldDescription>
+      <userFieldStyle>SINGLE_LINE</userFieldStyle>
+      <userFieldTreeVis>true</userFieldTreeVis>
+      <userFieldShowDescriptionInDialog>false</userFieldShowDescriptionInDialog>
+    </userFieldDef>
+    <userFieldDef elementClass="PhysicalDataProcessingComponent" hash="USERFIELD_1497434038201_13">
+      <userFieldName>RAM</userFieldName>
+      <userFieldDescription></userFieldDescription>
+      <userFieldStyle>NUMBER</userFieldStyle>
+      <userFieldTreeVis>true</userFieldTreeVis>
+      <userFieldShowDescriptionInDialog>false</userFieldShowDescriptionInDialog>
+      <userFieldFormatHash>USERFIELD_1497434089887_15</userFieldFormatHash>
+    </userFieldDef>
+    <userFieldDef elementClass="PhysicalDataProcessingComponent" hash="USERFIELD_1497434147788_18">
+      <userFieldName>Hard disc size</userFieldName>
+      <userFieldDescription></userFieldDescription>
+      <userFieldStyle>NUMBER</userFieldStyle>
+      <userFieldTreeVis>true</userFieldTreeVis>
+      <userFieldShowDescriptionInDialog>false</userFieldShowDescriptionInDialog>
+      <userFieldFormatHash>USERFIELD_1497434059112_14</userFieldFormatHash>
+    </userFieldDef>
+    <userFieldDef elementClass="PhysicalDataProcessingComponent" hash="USERFIELD_1670080825876_6234">
+      <userFieldName>Reliability</userFieldName>
+      <userFieldDescription></userFieldDescription>
+      <userFieldStyle>GROUP</userFieldStyle>
+      <userFieldTreeVis>true</userFieldTreeVis>
+      <userFieldShowDescriptionInDialog>false</userFieldShowDescriptionInDialog>
+    </userFieldDef>
+    <userFieldDef elementClass="PhysicalDataProcessingComponent" hash="USERFIELD_1497433330855_0">
+      <userFieldName>Downtime</userFieldName>
+      <userFieldDescription></userFieldDescription>
+      <userFieldStyle>NUMBER</userFieldStyle>
+      <userFieldTreeVis>true</userFieldTreeVis>
+      <userFieldShowDescriptionInDialog>false</userFieldShowDescriptionInDialog>
+      <userFieldFormatHash>USERFIELD_1497434962331_19</userFieldFormatHash>
+    </userFieldDef>
+    <userFieldDef elementClass="PhysicalDataProcessingComponent" hash="USERFIELD_1497433756485_9">
+      <userFieldName>Availability</userFieldName>
+      <userFieldDescription></userFieldDescription>
+      <userFieldStyle>FORMULA</userFieldStyle>
+      <userFieldTreeVis>true</userFieldTreeVis>
+      <userFieldShowDescriptionInDialog>false</userFieldShowDescriptionInDialog>
+      <userFieldFormula>100 - ( 100 / 365 / 24 ) * USERFIELD_1497433330855_0 </userFieldFormula>
+      <userFieldFormatHash>USERFIELD_1497433330877_1</userFieldFormatHash>
+    </userFieldDef>
+    <userFieldDef elementClass="PhysicalDataProcessingComponent" hash="USERFIELD_1670080768830_6233">
+      <userFieldName>Inventory</userFieldName>
+      <userFieldDescription></userFieldDescription>
+      <userFieldStyle>GROUP</userFieldStyle>
+      <userFieldTreeVis>true</userFieldTreeVis>
+      <userFieldShowDescriptionInDialog>false</userFieldShowDescriptionInDialog>
+    </userFieldDef>
+    <userFieldDef elementClass="PhysicalDataProcessingComponent" hash="USERFIELD_1497433989459_11">
+      <userFieldName>Serial number</userFieldName>
+      <userFieldDescription></userFieldDescription>
+      <userFieldStyle>SINGLE_LINE</userFieldStyle>
+      <userFieldTreeVis>true</userFieldTreeVis>
+      <userFieldShowDescriptionInDialog>false</userFieldShowDescriptionInDialog>
+    </userFieldDef>
+    <userFieldDef elementClass="PhysicalDataProcessingComponent" hash="USERFIELD_1497434000226_12">
+      <userFieldName>Inventory number</userFieldName>
+      <userFieldDescription></userFieldDescription>
+      <userFieldStyle>SINGLE_LINE</userFieldStyle>
+      <userFieldTreeVis>true</userFieldTreeVis>
+      <userFieldShowDescriptionInDialog>false</userFieldShowDescriptionInDialog>
+    </userFieldDef>
+    <userFieldDef elementClass="Group" hash="USERFIELD_1669975909569_28793">
+      <userFieldName>Security Zone</userFieldName>
+      <userFieldDescription></userFieldDescription>
+      <userFieldStyle>SUBTYPE</userFieldStyle>
+      <userFieldTreeVis>true</userFieldTreeVis>
+      <userFieldShowDescriptionInDialog>true</userFieldShowDescriptionInDialog>
+    </userFieldDef>
+    <userFieldDef elementClass="Group" hash="USERFIELD_1669994410989_38780">
+      <userFieldName>Security Zone</userFieldName>
+      <userFieldDescription></userFieldDescription>
+      <userFieldStyle>TAB</userFieldStyle>
+      <userFieldTreeVis>true</userFieldTreeVis>
+      <userFieldShowDescriptionInDialog>true</userFieldShowDescriptionInDialog>
+    </userFieldDef>
+    <userFieldDef elementClass="Group" hash="USERFIELD_1670229999071_10371">
+      <userFieldName>Verantwortlicher Mitarbeiter</userFieldName>
+      <userFieldDescription></userFieldDescription>
+      <userFieldStyle>SINGLE_LINE</userFieldStyle>
+      <userFieldTreeVis>true</userFieldTreeVis>
+      <userFieldShowDescriptionInDialog>false</userFieldShowDescriptionInDialog>
+    </userFieldDef>
+    <userFieldDef elementClass="Group" hash="USERFIELD_1669975930855_28794">
+      <userFieldName>Security</userFieldName>
+      <userFieldDescription>dt. Schutzbedarf, z.B. nach BSI</userFieldDescription>
+      <userFieldStyle>SUBTYPE</userFieldStyle>
+      <userFieldTreeVis>true</userFieldTreeVis>
+      <userFieldShowDescriptionInDialog>true</userFieldShowDescriptionInDialog>
+    </userFieldDef>
+    <userFieldDef elementClass="Group" hash="USERFIELD_1669994624683_38781">
+      <userFieldName>Security</userFieldName>
+      <userFieldDescription></userFieldDescription>
+      <userFieldStyle>TAB</userFieldStyle>
+      <userFieldTreeVis>true</userFieldTreeVis>
+      <userFieldShowDescriptionInDialog>true</userFieldShowDescriptionInDialog>
+    </userFieldDef>
+    <userFieldDef elementClass="Group" hash="USERFIELD_1669994178892_38775">
+      <userFieldName>Network Zone</userFieldName>
+      <userFieldDescription></userFieldDescription>
+      <userFieldStyle>SUBTYPE</userFieldStyle>
+      <userFieldTreeVis>true</userFieldTreeVis>
+      <userFieldShowDescriptionInDialog>true</userFieldShowDescriptionInDialog>
+    </userFieldDef>
+    <userFieldDef elementClass="Group" hash="USERFIELD_1669994634381_38782">
+      <userFieldName>Network Zone</userFieldName>
+      <userFieldDescription></userFieldDescription>
+      <userFieldStyle>TAB</userFieldStyle>
+      <userFieldTreeVis>true</userFieldTreeVis>
+      <userFieldShowDescriptionInDialog>true</userFieldShowDescriptionInDialog>
+    </userFieldDef>
+    <userFieldDef elementClass="Group" hash="USERFIELD_1669996287108_38999">
+      <userFieldName>Network Name</userFieldName>
+      <userFieldDescription></userFieldDescription>
+      <userFieldStyle>COMBO_BOX</userFieldStyle>
+      <userFieldTreeVis>true</userFieldTreeVis>
+      <userFieldShowDescriptionInDialog>true</userFieldShowDescriptionInDialog>
+      <userFieldStandardValue>Clinic Prd</userFieldStandardValue>
+      <userFieldStandardValue>DIC Clinic Prd</userFieldStandardValue>
+      <userFieldStandardValue>DIC Clinic Dev</userFieldStandardValue>
+      <userFieldStandardValue>DIC Research Prd</userFieldStandardValue>
+      <userFieldStandardValue>DIC Research Dev</userFieldStandardValue>
+      <userFieldStandardValue>DIC DataSharing Prd</userFieldStandardValue>
+      <userFieldStandardValue>MII Data Sharing</userFieldStandardValue>
+      <userFieldStandardValue>Clinic Dev</userFieldStandardValue>
+      <userFieldStandardValue>Research Prd</userFieldStandardValue>
+      <userFieldStandardValue>Research Dev</userFieldStandardValue>
+      <userFieldStandardValue>DataSharing Prd</userFieldStandardValue>
+    </userFieldDef>
+    <userFieldDef elementClass="Group" hash="USERFIELD_1669997137955_39002">
+      <userFieldName>IPv4 Settings</userFieldName>
+      <userFieldDescription>see https://www.site24x7.com/de/tools/ipv4-subnet-zrechner.html</userFieldDescription>
+      <userFieldStyle>GROUP</userFieldStyle>
+      <userFieldTreeVis>true</userFieldTreeVis>
+      <userFieldShowDescriptionInDialog>true</userFieldShowDescriptionInDialog>
+    </userFieldDef>
+    <userFieldDef elementClass="Group" hash="USERFIELD_1669996237291_38998">
+      <userFieldName>Subnet IPv4</userFieldName>
+      <userFieldDescription>e.g. 10.10.0.0/16</userFieldDescription>
+      <userFieldStyle>SINGLE_LINE</userFieldStyle>
+      <userFieldTreeVis>true</userFieldTreeVis>
+      <userFieldShowDescriptionInDialog>true</userFieldShowDescriptionInDialog>
+    </userFieldDef>
+    <userFieldDef elementClass="Group" hash="USERFIELD_1669996648528_39000">
+      <userFieldName>Subnet Mask IPv4</userFieldName>
+      <userFieldDescription>e.g. 255.255.254.0/23</userFieldDescription>
+      <userFieldStyle>SINGLE_LINE</userFieldStyle>
+      <userFieldTreeVis>true</userFieldTreeVis>
+      <userFieldShowDescriptionInDialog>true</userFieldShowDescriptionInDialog>
+    </userFieldDef>
+    <userFieldDef elementClass="Group" hash="USERFIELD_1669996827587_39001">
+      <userFieldName>Host Address Range IPv4</userFieldName>
+      <userFieldDescription>e.g. 10.10.0.1 - 10.10.1.254</userFieldDescription>
+      <userFieldStyle>SINGLE_LINE</userFieldStyle>
+      <userFieldTreeVis>true</userFieldTreeVis>
+      <userFieldShowDescriptionInDialog>true</userFieldShowDescriptionInDialog>
+    </userFieldDef>
+    <userFieldDef elementClass="ObjectType" hash="USERFIELD_1624433876123_2038">
+      <userFieldName>Sicherheit</userFieldName>
+      <userFieldDescription></userFieldDescription>
+      <userFieldStyle>TAB</userFieldStyle>
+      <userFieldTreeVis>true</userFieldTreeVis>
+      <userFieldShowDescriptionInDialog>false</userFieldShowDescriptionInDialog>
+    </userFieldDef>
+    <userFieldDef elementClass="ObjectType" hash="USERFIELD_1624434122301_2053">
+      <userFieldName>Nach BSI</userFieldName>
+      <userFieldDescription>Sicherheitsbetrachtung nach BSI Kompendium: https://www.bsi.bund.de/SharedDocs/Downloads/DE/BSI/Grundschutz/Kompendium/IT_Grundschutz_Kompendium_Edition2021.pdf?__blob=publicationFile&amp;v=6</userFieldDescription>
+      <userFieldStyle>GROUP</userFieldStyle>
+      <userFieldTreeVis>true</userFieldTreeVis>
+      <userFieldShowDescriptionInDialog>true</userFieldShowDescriptionInDialog>
+    </userFieldDef>
+    <userFieldDef elementClass="ObjectType" hash="USERFIELD_1624433911195_2039">
+      <userFieldName>Schutzsbedarfskategorien</userFieldName>
+      <userFieldDescription>Schutzbedarfskategorien nach BSI Kompenium (2021), S. 37.</userFieldDescription>
+      <userFieldStyle>COMBO_BOX</userFieldStyle>
+      <userFieldTreeVis>true</userFieldTreeVis>
+      <userFieldShowDescriptionInDialog>true</userFieldShowDescriptionInDialog>
+      <userFieldStandardValue>normal</userFieldStandardValue>
+      <userFieldStandardValue>hoch</userFieldStandardValue>
+      <userFieldStandardValue>sehr hoch</userFieldStandardValue>
+    </userFieldDef>
+    <userFieldDef elementClass="ObjectType" hash="USERFIELD_1624434040639_2046">
+      <userFieldName>Sicherheitsanforderungen</userFieldName>
+      <userFieldDescription>Sicherheitsanforderungen nach BSI Kompenium (2021), S. 37.</userFieldDescription>
+      <userFieldStyle>COMBO_BOX</userFieldStyle>
+      <userFieldTreeVis>true</userFieldTreeVis>
+      <userFieldShowDescriptionInDialog>true</userFieldShowDescriptionInDialog>
+      <userFieldStandardValue>Basis-Anforderungen</userFieldStandardValue>
+      <userFieldStandardValue>Standard-Anforderungen</userFieldStandardValue>
+      <userFieldStandardValue>erhöhter Schutzbedarf</userFieldStandardValue>
+    </userFieldDef>
+    <userFieldDef elementClass="ObjectType" hash="USERFIELD_1623450079141_2057">
+      <userFieldName>Benutzerdefinierte Eigenschaftsfelder</userFieldName>
+      <userFieldDescription></userFieldDescription>
+      <userFieldStyle>TAB</userFieldStyle>
+      <userFieldTreeVis>false</userFieldTreeVis>
+      <userFieldShowDescriptionInDialog>false</userFieldShowDescriptionInDialog>
+    </userFieldDef>
+    <userFieldDef elementClass="ObjectType" hash="USERFIELD_1623450107796_2059">
+      <userFieldName>Zehnfach Foo</userFieldName>
+      <userFieldDescription></userFieldDescription>
+      <userFieldStyle>FORMULA</userFieldStyle>
+      <userFieldTreeVis>false</userFieldTreeVis>
+      <userFieldShowDescriptionInDialog>false</userFieldShowDescriptionInDialog>
+      <userFieldFormula>USERFIELD_1623450079141_2056 * 10 </userFieldFormula>
+    </userFieldDef>
+    <userFieldDef elementClass="ObjectType" hash="USERFIELD_1623450079141_2056">
+      <userFieldName>Foo</userFieldName>
+      <userFieldDescription></userFieldDescription>
+      <userFieldStyle>NUMBER</userFieldStyle>
+      <userFieldTreeVis>false</userFieldTreeVis>
+      <userFieldShowDescriptionInDialog>false</userFieldShowDescriptionInDialog>
+    </userFieldDef>
+  </userFieldDefinitions>
+  <objects>
+    <model></model>
+    <element class="Function" hash="FUN_1670107543928_8220">
+      <field name="name">Desease Management</field>
+    </element>
+    <element class="Group" hash="GRO_1670108171689_8315">
+      <field name="name">Desease Management</field>
+    </element>
+    <element class="OrganisationalUnit" hash="OUN_1670182181735_9731">
+      <field name="name">DMP-Center</field>
+    </element>
+    <element class="Function" hash="FUN_1670108015447_8277">
+      <field name="name">generate DMP Export</field>
+    </element>
+    <element class="ObjectType" hash="OTY_1670108092449_8303">
+      <field name="name">MDAT_DMP</field>
+      <field name="description">- medical Data for DMP</field>
+    </element>
+    <element class="Use" hash="USE_1621349632443_2257">
+      <field name="name">Nutzung 1</field>
+    </element>
+    <element class="Use" hash="USE_1621349661643_2260">
+      <field name="name">Nutzung 1</field>
+    </element>
+    <element class="Use" hash="USE_1625124235745_17138">
+      <field name="name">Nutzung 1</field>
+    </element>
+    <element class="Use" hash="USE_1625124869311_17167">
+      <field name="name">Nutzung 1</field>
+    </element>
+    <element class="Use" hash="USE_1625124962155_17178">
+      <field name="name">Nutzung 1</field>
+    </element>
+    <element class="Use" hash="USE_1625125086613_17191">
+      <field name="name">Nutzung 1</field>
+    </element>
+    <element class="Use" hash="USE_1626334190186_4789">
+      <field name="name">Usage 1</field>
+    </element>
+    <element class="Use" hash="USE_1669712277253_7522">
+      <field name="name">Nutzung 1</field>
+    </element>
+    <element class="Use" hash="USE_1669712529605_7662">
+      <field name="name">Nutzung 1</field>
+    </element>
+    <element class="Use" hash="USE_1669715437428_14269">
+      <field name="name">Nutzung 1</field>
+    </element>
+    <element class="Use" hash="USE_1669715489444_14320">
+      <field name="name">Nutzung 1</field>
+    </element>
+    <element class="Use" hash="USE_1669723870567_53256">
+      <field name="name">Nutzung 1</field>
+    </element>
+    <element class="Use" hash="USE_1669725178991_86003">
+      <field name="name">Nutzung 1</field>
+    </element>
+    <element class="Use" hash="USE_1669725208415_86029">
+      <field name="name">Nutzung 1</field>
+    </element>
+    <element class="Use" hash="USE_1669726472832_110801">
+      <field name="name">Nutzung 1</field>
+    </element>
+    <element class="Use" hash="USE_1669726590975_111205">
+      <field name="name">Nutzung 1</field>
+    </element>
+    <element class="Use" hash="USE_1669727428128_121081">
+      <field name="name">Nutzung 1</field>
+    </element>
+    <element class="Use" hash="USE_1669813024644_46667">
+      <field name="name">Nutzung 1</field>
+    </element>
+    <element class="Use" hash="USE_1669814027381_52183">
+      <field name="name">Nutzung 1</field>
+    </element>
+    <element class="Use" hash="USE_1669814130294_52297">
+      <field name="name">Nutzung 1</field>
+    </element>
+    <element class="Use" hash="USE_1669814195862_52380">
+      <field name="name">Nutzung 1</field>
+    </element>
+    <element class="Use" hash="USE_1670182200808_9732">
+      <field name="name">Nutzung 1</field>
+    </element>
+    <element class="Use" hash="USE_1617262041525_4232">
+      <field name="name">Nutzung 1</field>
+    </element>
+    <element class="Use" hash="USE_1617263200085_4327">
+      <field name="name">Nutzung 1</field>
+    </element>
+    <element class="Use" hash="USE_1669711622005_5589">
+      <field name="name">Nutzung 1</field>
+    </element>
+    <element class="OrganisationalUnit" hash="OUN_1617261808836_4227">
+      <field name="name">Patient Care Institution</field>
+    </element>
+    <element class="IheIntegrationProfile" hash="https://www.3lgm2.de/resource/ihe/ATNA">
+      <field name="name">Audit Trail and Node Authentication (ATNA)</field>
+      <field name="description">The ITI Audit Trail and Node Authentication (ATNA) Profile establishes the characteristics of a Basic Secure Node: It describes the security environment (user identification, authentication, authorization, access control, etc.) assumed for the node so that security reviewers may decide whether this matches their environments. It defines basic security requirements for the communications of the node using TLS or equivalent functionality. It defines basic auditing requirements for the node. The profile also establishes the characteristics of the communication of audit messages between the Basic Secure Nodes and Audit Repository nodes that collect audit information. It defines a Secure Application Actor for describing product configurations that are not able to meet all of the requirements of a Secure Node. This profile has been designed so that specific domain frameworks may extend it through an option defined in the domain specific technical framework. Extensions are used to define additional audit event reporting requirements, especially actor specific requirements. The Radiology Audit Trail Option in the IHE Radiology Technical Framework is an example of such an extension.</field>
+    </element>
+    <element class="IheIntegrationProfile" hash="https://www.3lgm2.de/resource/ihe/CT">
+      <field name="name">Consistent Time (CT)</field>
+      <field name="description">Consistent Time defines mechanisms to synchronize the time base between multiple actors and computers. Various infrastructure, security, and acquisition profiles require use of a consistent time base on multiple computers. The Consistent Time Profile provides median synchronization error of less than 1 second. Configuration options can provide better synchronization. The Consistent Time Profile specifies the use of the Network Time Protocol (NTP) defined in RFC1305.</field>
+    </element>
+    <element class="IheIntegrationProfile" hash="https://www.3lgm2.de/resource/ihe/XDS.b">
+      <field name="name">Cross-Enterprise Document Sharing (XDS.b)</field>
+      <field name="description">The Cross-Enterprise Document Sharing (XDS.b) IHE Integration Profile facilitates the registration, distribution and access across health enterprises of patient electronic health records. 
+Cross-Enterprise Document Sharing is focused on providing a standards-based specification for managing the sharing of documents between any healthcare enterprise, ranging from a private physician office to a clinic to an acute care in-patient facility. 
+In the rest of the ITI Technical Framework the term XDS refers generically to any flavor of XDS, currently only XDS.b. 
+The XDS.b Integration Profile assumes that these enterprises belong to one or more XDS Affinity Domains. An XDS Affinity Domain is a group of healthcare enterprises that have agreed to work together using a common set of policies and share a common infrastructure.</field>
+    </element>
+    <element class="ApplicationSystem" hash="ASY_1670107320282_8147">
+      <field name="name">Desease Management Record Information System</field>
+    </element>
+    <element class="IheActor" hash="https://www.3lgm2.de/resource/ihe/XDSB_DOC_CONSUMER">
+      <field name="name">Document Consumer (XDS.b)</field>
+      <field name="description">The Document Consumer Actor queries a Document Registry Actor for documents meeting certain criteria, and retrieves selected documents from one or more Document Repository actors.</field>
+    </element>
+    <element class="IheActorInstance" hash="IAI_1670108665037_8624">
+      <field name="name">Document Consumer (XDS.b)  1</field>
+      <field name="description">The Document Consumer Actor queries a Document Registry Actor for documents meeting certain criteria, and retrieves selected documents from one or more Document Repository actors.</field>
+    </element>
+    <element class="IheActor" hash="https://www.3lgm2.de/resource/ihe/XDSB_DOC_REGISTRY">
+      <field name="name">Document Registry (XDS.b)</field>
+      <field name="description">The Document Registry Actor maintains metadata about each registered document in a document entry. This includes a link to the Document in the Repository where it is stored. The Document Registry responds to queries from Document Consumer actors about documents meeting specific criteria. It also enforces some healthcare specific technical policies at the time of document registration.</field>
+    </element>
+    <element class="IheActorInstance" hash="IAI_1670108422695_8481">
+      <field name="name">Document Registry (XDS.b)  1</field>
+      <field name="description">The Document Registry Actor maintains metadata about each registered document in a document entry. This includes a link to the Document in the Repository where it is stored. The Document Registry responds to queries from Document Consumer actors about documents meeting specific criteria. It also enforces some healthcare specific technical policies at the time of document registration.</field>
+    </element>
+    <element class="IheActor" hash="https://www.3lgm2.de/resource/ihe/XDSB_DOC_REPOSITORY">
+      <field name="name">Document Repository (XDS.b)</field>
+      <field name="description">The Document Repository is responsible for both the persistent storage of these documents as well as for their registration with the appropriate Document Registry. It assigns a URI to documents for subsequent retrieval by a Document Consumer.</field>
+    </element>
+    <element class="IheActor" hash="https://www.3lgm2.de/resource/ihe/XDSB_DOC_SOURCE">
+      <field name="name">Document Source (XDS.b)</field>
+      <field name="description">The Document Source is the producer and publisher of documents and metadata.</field>
+    </element>
+    <element class="IheActor" hash="https://www.3lgm2.de/resource/ihe/XDSB_EMBED_REPOS">
+      <field name="name">Integrated Document Source / Repository (XDS.b)</field>
+      <field name="description">The Integrated Document Source / Repository is an XDS combination of Document Source and Document Repository that does not expose the interface between the Source and Repository. That is, this Source only publishes documents to its own Repository. It does register documents with a Document Registry</field>
+    </element>
+    <element class="IheInvokingInterface" hash="[https://www.3lgm2.de/resource/ihe/CT_TIME_CLIENT; https://www.3lgm2.de/resource/ihe/iti-1; https://www.3lgm2.de/resource/ihe/CT_TS]_2">
+      <field name="name">ITI-1 Aktor Schnittstelle (aufrufend)</field>
+    </element>
+    <element class="IheTransaction" hash="[https://www.3lgm2.de/resource/ihe/CT_TIME_CLIENT; https://www.3lgm2.de/resource/ihe/iti-1; https://www.3lgm2.de/resource/ihe/CT_TS]">
+      <field name="name">ITI-1 Maintain Time</field>
+      <field name="description">NTP transactions used to maintain time synchronization.</field>
+    </element>
+    <element class="IheInvokingInterface" hash="[https://www.3lgm2.de/resource/ihe/XDSB_DOC_CONSUMER; https://www.3lgm2.de/resource/ihe/iti-18; https://www.3lgm2.de/resource/ihe/XDSB_DOC_REGISTRY]_2">
+      <field name="name">ITI-18 Aktor Schnittstelle (aufrufend)</field>
+    </element>
+    <element class="IheActorInstanceInvokingInterface" hash="IAI_1670108665038_8626">
+      <field name="name">ITI-18 Aktor Schnittstelle (aufrufend)  1</field>
+    </element>
+    <element class="IheProvidingInterface" hash="[https://www.3lgm2.de/resource/ihe/XDSB_DOC_CONSUMER; https://www.3lgm2.de/resource/ihe/iti-18; https://www.3lgm2.de/resource/ihe/XDSB_DOC_REGISTRY]_5">
+      <field name="name">ITI-18 Aktor Schnittstelle (bereitstellend)</field>
+    </element>
+    <element class="IheActorInstanceProvidingInterface" hash="IAI_1670108422696_8483">
+      <field name="name">ITI-18 Aktor Schnittstelle (bereitstellend)  1</field>
+    </element>
+    <element class="IheTransaction" hash="[https://www.3lgm2.de/resource/ihe/RMD_DOC_ADMINISTRATOR; https://www.3lgm2.de/resource/ihe/iti-18; https://www.3lgm2.de/resource/ihe/RMD_DOC_REGISTRY]">
+      <field name="name">ITI-18 Registry Stored Query</field>
+      <field name="description">The Query Registry transaction is issued by the Document Consumer Actor on behalf of a care provider (EHR-CR) to a Document Registry. The Document Registry Actor searches the registry to locate documents that meet the provider s specified query criteria. It will return a list of document entries that contain metadata found to meet the specified criteria including the locations and identifier of each corresponding document in one or more Document Repositories. The stored query uses parameters and not direct SQL</field>
+    </element>
+    <element class="IheInvokingInterface" hash="[https://www.3lgm2.de/resource/ihe/ATNA_SA; https://www.3lgm2.de/resource/ihe/iti-19; https://www.3lgm2.de/resource/ihe/ATNA_SN]_2">
+      <field name="name">ITI-19 Aktor Schnittstelle (aufrufend)</field>
+    </element>
+    <element class="IheInvokingInterface" hash="[https://www.3lgm2.de/resource/ihe/ATNA_SN; https://www.3lgm2.de/resource/ihe/iti-19; https://www.3lgm2.de/resource/ihe/ATNA_SA]_2">
+      <field name="name">ITI-19 Aktor Schnittstelle (aufrufend)</field>
+    </element>
+    <element class="IheProvidingInterface" hash="[https://www.3lgm2.de/resource/ihe/ATNA_SA; https://www.3lgm2.de/resource/ihe/iti-19; https://www.3lgm2.de/resource/ihe/ATNA_SN]_5">
+      <field name="name">ITI-19 Aktor Schnittstelle (bereitstellend)</field>
+    </element>
+    <element class="IheProvidingInterface" hash="[https://www.3lgm2.de/resource/ihe/ATNA_SN; https://www.3lgm2.de/resource/ihe/iti-19; https://www.3lgm2.de/resource/ihe/ATNA_SA]_5">
+      <field name="name">ITI-19 Aktor Schnittstelle (bereitstellend)</field>
+    </element>
+    <element class="IheTransaction" hash="[https://www.3lgm2.de/resource/ihe/ATNA_SN; https://www.3lgm2.de/resource/ihe/iti-19; https://www.3lgm2.de/resource/ihe/ATNA_SA]">
+      <field name="name">ITI-19 Authenticate Node</field>
+      <field name="description">This transaction is embedded within all network communications activity. All DICOM, HL7, and HTML connections shall comply with the IHE specification for bi-directional authentication and authorization of communications of Protected Healthcare Information (PHI). IHE does not specify how other protocols that transfer PHI shall perform bi-directional authentication and authorization, but requires that other protocols perform such authentication and authorization.</field>
+    </element>
+    <element class="IheInvokingInterface" hash="[https://www.3lgm2.de/resource/ihe/ATNA_SA; https://www.3lgm2.de/resource/ihe/iti-20; https://www.3lgm2.de/resource/ihe/ATNA_ARR]_2">
+      <field name="name">ITI-20 Aktor Schnittstelle (aufrufend)</field>
+    </element>
+    <element class="IheInvokingInterface" hash="[https://www.3lgm2.de/resource/ihe/ATNA_SN; https://www.3lgm2.de/resource/ihe/iti-20; https://www.3lgm2.de/resource/ihe/ATNA_ARR]_2">
+      <field name="name">ITI-20 Aktor Schnittstelle (aufrufend)</field>
+    </element>
+    <element class="IheTransaction" hash="[https://www.3lgm2.de/resource/ihe/ATNA_AUDIT_RECORD_FORWARDER; https://www.3lgm2.de/resource/ihe/iti-20; https://www.3lgm2.de/resource/ihe/ATNA_ARR]">
+      <field name="name">ITI-20 Record Audit Event</field>
+      <field name="description">The delivery of an audit event description from any secure node to the Audit Repository.</field>
+    </element>
+    <element class="IheInvokingInterface" hash="[https://www.3lgm2.de/resource/ihe/XDSB_DOC_SOURCE; https://www.3lgm2.de/resource/ihe/iti-41; https://www.3lgm2.de/resource/ihe/XDSB_DOC_REPOSITORY]_2">
+      <field name="name">ITI-41 Aktor Schnittstelle (aufrufend)</field>
+    </element>
+    <element class="IheProvidingInterface" hash="[https://www.3lgm2.de/resource/ihe/XDSB_DOC_SOURCE; https://www.3lgm2.de/resource/ihe/iti-41; https://www.3lgm2.de/resource/ihe/XDSB_DOC_REPOSITORY]_5">
+      <field name="name">ITI-41 Aktor Schnittstelle (bereitstellend)</field>
+    </element>
+    <element class="IheTransaction" hash="[https://www.3lgm2.de/resource/ihe/XDR_DOC_SOURCE; https://www.3lgm2.de/resource/ihe/iti-41; https://www.3lgm2.de/resource/ihe/XDR_DOC_RECIPIENT]">
+      <field name="name">ITI-41 Provide and Register Document Set-b</field>
+      <field name="description">Provide and Register Document Set-b</field>
+    </element>
+    <element class="IheInvokingInterface" hash="[https://www.3lgm2.de/resource/ihe/XDSB_DOC_REPOSITORY; https://www.3lgm2.de/resource/ihe/iti-42; https://www.3lgm2.de/resource/ihe/XDSB_DOC_REGISTRY]_2">
+      <field name="name">ITI-42 Aktor Schnittstelle (aufrufend)</field>
+    </element>
+    <element class="IheInvokingInterface" hash="[https://www.3lgm2.de/resource/ihe/XDSB_EMBED_REPOS; https://www.3lgm2.de/resource/ihe/iti-42; https://www.3lgm2.de/resource/ihe/XDSB_DOC_REGISTRY]_2">
+      <field name="name">ITI-42 Aktor Schnittstelle (aufrufend)</field>
+    </element>
+    <element class="IheProvidingInterface" hash="[https://www.3lgm2.de/resource/ihe/XDSB_DOC_REPOSITORY; https://www.3lgm2.de/resource/ihe/iti-42; https://www.3lgm2.de/resource/ihe/XDSB_DOC_REGISTRY]_5">
+      <field name="name">ITI-42 Aktor Schnittstelle (bereitstellend)</field>
+    </element>
+    <element class="IheActorInstanceProvidingInterface" hash="IAI_1670108422697_8486">
+      <field name="name">ITI-42 Aktor Schnittstelle (bereitstellend)  1</field>
+    </element>
+    <element class="IheTransaction" hash="[https://www.3lgm2.de/resource/ihe/XDSB_DOC_REPOSITORY; https://www.3lgm2.de/resource/ihe/iti-42; https://www.3lgm2.de/resource/ihe/XDSB_DOC_REGISTRY]">
+      <field name="name">ITI-42 Register Document Set-b</field>
+      <field name="description">Register Document Set-b</field>
+    </element>
+    <element class="IheInvokingInterface" hash="[https://www.3lgm2.de/resource/ihe/XDSB_DOC_CONSUMER; https://www.3lgm2.de/resource/ihe/iti-43; https://www.3lgm2.de/resource/ihe/XDSB_DOC_REPOSITORY]_2">
+      <field name="name">ITI-43 Aktor Schnittstelle (aufrufend)</field>
+    </element>
+    <element class="IheActorInstanceInvokingInterface" hash="IAI_1670108665040_8629">
+      <field name="name">ITI-43 Aktor Schnittstelle (aufrufend)  1</field>
+    </element>
+    <element class="IheProvidingInterface" hash="[https://www.3lgm2.de/resource/ihe/XDSB_DOC_CONSUMER; https://www.3lgm2.de/resource/ihe/iti-43; https://www.3lgm2.de/resource/ihe/XDSB_DOC_REPOSITORY]_5">
+      <field name="name">ITI-43 Aktor Schnittstelle (bereitstellend)</field>
+    </element>
+    <element class="IheProvidingInterface" hash="[https://www.3lgm2.de/resource/ihe/XDSB_DOC_CONSUMER; https://www.3lgm2.de/resource/ihe/iti-43; https://www.3lgm2.de/resource/ihe/XDSB_EMBED_REPOS]_5">
+      <field name="name">ITI-43 Aktor Schnittstelle (bereitstellend)</field>
+    </element>
+    <element class="IheTransaction" hash="[https://www.3lgm2.de/resource/ihe/XDS-IB_DOC_CONSUMER; https://www.3lgm2.de/resource/ihe/iti-43; https://www.3lgm2.de/resource/ihe/XDS-IB_DOC_REPOSITORY]">
+      <field name="name">ITI-43 Retrieve Document Set</field>
+      <field name="description">Retrieve Document Set</field>
+    </element>
+    <element class="IheInvokingInterface" hash="[https://www.3lgm2.de/resource/ihe/XDSB_PAT_IDENTITY_SRC; https://www.3lgm2.de/resource/ihe/iti-44; https://www.3lgm2.de/resource/ihe/XDSB_DOC_REGISTRY]_2">
+      <field name="name">ITI-44 Aktor Schnittstelle (aufrufend)</field>
+    </element>
+    <element class="IheActorInstanceInvokingInterface" hash="IAI_1670108461901_8534">
+      <field name="name">ITI-44 Aktor Schnittstelle (aufrufend)  1</field>
+    </element>
+    <element class="IheProvidingInterface" hash="[https://www.3lgm2.de/resource/ihe/XDSB_PAT_IDENTITY_SRC; https://www.3lgm2.de/resource/ihe/iti-44; https://www.3lgm2.de/resource/ihe/XDSB_DOC_REGISTRY]_5">
+      <field name="name">ITI-44 Aktor Schnittstelle (bereitstellend)</field>
+    </element>
+    <element class="IheActorInstanceProvidingInterface" hash="IAI_1670108422699_8489">
+      <field name="name">ITI-44 Aktor Schnittstelle (bereitstellend)  1</field>
+    </element>
+    <element class="IheTransaction" hash="[https://www.3lgm2.de/resource/ihe/XDSB_PAT_IDENTITY_SRC; https://www.3lgm2.de/resource/ihe/iti-44; https://www.3lgm2.de/resource/ihe/XDSB_DOC_REGISTRY]">
+      <field name="name">ITI-44 Patient Identity Feed HL7 V3</field>
+      <field name="description">Patient Identity Feed HL7 V3</field>
+    </element>
+    <element class="IheProvidingInterface" hash="[https://www.3lgm2.de/resource/ihe/XDSB_DOC_ADMINISTRATOR; https://www.3lgm2.de/resource/ihe/iti-57; https://www.3lgm2.de/resource/ihe/XDSB_DOC_REGISTRY]_5">
+      <field name="name">ITI-57 Aktor Schnittstelle (bereitstellend)</field>
+    </element>
+    <element class="IheActorInstanceProvidingInterface" hash="IAI_1670108422700_8492">
+      <field name="name">ITI-57 Aktor Schnittstelle (bereitstellend)  1</field>
+    </element>
+    <element class="IheTransaction" hash="[https://www.3lgm2.de/resource/ihe/XDR_DOC_ADMINISTRATOR; https://www.3lgm2.de/resource/ihe/iti-57; https://www.3lgm2.de/resource/ihe/XDR_DOC_RECIPIENT]">
+      <field name="name">ITI-57 Update Document Set</field>
+      <field name="description">The Update Document Set transaction passes a collection of metadata updates from the Document Administrator actor to the Document Registry or Document Recipient actor.</field>
+    </element>
+    <element class="IheProvidingInterface" hash="[https://www.3lgm2.de/resource/ihe/XDSB_ON_DEMAND_DOC_SOURCE; https://www.3lgm2.de/resource/ihe/iti-61; https://www.3lgm2.de/resource/ihe/XDSB_DOC_REGISTRY]_5">
+      <field name="name">ITI-61 Aktor Schnittstelle (bereitstellend)</field>
+    </element>
+    <element class="IheActorInstanceProvidingInterface" hash="IAI_1670108422701_8495">
+      <field name="name">ITI-61 Aktor Schnittstelle (bereitstellend)  1</field>
+    </element>
+    <element class="IheTransaction" hash="[https://www.3lgm2.de/resource/ihe/XDSB_ON_DEMAND_DOC_SOURCE; https://www.3lgm2.de/resource/ihe/iti-61; https://www.3lgm2.de/resource/ihe/XDSB_DOC_REGISTRY]">
+      <field name="name">ITI-61 Register On-Demand Document Entry</field>
+      <field name="description">The Register On-Demand Document Entry transaction is used by the On-Demand Document Source to register one or more On-Demand Document Entries in the Document Registry.</field>
+    </element>
+    <element class="IheInvokingInterface" hash="[https://www.3lgm2.de/resource/ihe/XDSB_PAT_IDENTITY_SRC; https://www.3lgm2.de/resource/ihe/iti-8; https://www.3lgm2.de/resource/ihe/XDSB_DOC_REGISTRY]_2">
+      <field name="name">ITI-8 Aktor Schnittstelle (aufrufend)</field>
+    </element>
+    <element class="IheActorInstanceInvokingInterface" hash="IAI_1670108461902_8537">
+      <field name="name">ITI-8 Aktor Schnittstelle (aufrufend)  1</field>
+    </element>
+    <element class="IheProvidingInterface" hash="[https://www.3lgm2.de/resource/ihe/XDSB_PAT_IDENTITY_SRC; https://www.3lgm2.de/resource/ihe/iti-8; https://www.3lgm2.de/resource/ihe/XDSB_DOC_REGISTRY]_5">
+      <field name="name">ITI-8 Aktor Schnittstelle (bereitstellend)</field>
+    </element>
+    <element class="IheActorInstanceProvidingInterface" hash="IAI_1670108422702_8498">
+      <field name="name">ITI-8 Aktor Schnittstelle (bereitstellend)  1</field>
+    </element>
+    <element class="IheTransaction" hash="[https://www.3lgm2.de/resource/ihe/XDSB_PAT_IDENTITY_SRC; https://www.3lgm2.de/resource/ihe/iti-8; https://www.3lgm2.de/resource/ihe/XDSB_DOC_REGISTRY]">
+      <field name="name">ITI-8 Patient Identity Feed</field>
+      <field name="description">Allows a Patient Identity Source Actor to notify a Patient Identity Cross-Referencing Actor of all events related to patient identification (creation, update, merge, etc.).</field>
+    </element>
+    <element class="IheDomain" hash="https://www.3lgm2.de/resource/ihe/ITI">
+      <field name="name">IT-Infrastructure (ITI)</field>
+      <field name="description">The IT Infrastructure Domain supplies infrastructure for sharing healthcare information. An infrastructure interoperability component represents a common IT function that is used as a building block for a variety of use cases... a necessary ingredient, but rarely visible to the end user! These components may be embedded in an application, but are often deployed as a shared resource within a RHIO or Health Information Exchange.</field>
+    </element>
+    <element class="ApplicationSystem" hash="ASY_1670108434362_8502">
+      <field name="name">MPI</field>
+    </element>
+    <element class="IheActor" hash="https://www.3lgm2.de/resource/ihe/XDSB_PAT_IDENTITY_SRC">
+      <field name="name">Patient Identity Source (XDS.b)</field>
+      <field name="description">Each Patient Identification Domain requires this Actor to assign patient identities and to notify a Patient Identity Cross-reference Manager Actor of all events related to patient identification (creation, update, merge, etc.). For example, the Registration (ADT) Actor defined by the radiology Scheduled Workflow Profile would likely be a Patient Identity Source.</field>
+    </element>
+    <element class="IheActorInstance" hash="IAI_1670108461900_8532">
+      <field name="name">Patient Identity Source (XDS.b)  1</field>
+      <field name="description">Each Patient Identification Domain requires this Actor to assign patient identities and to notify a Patient Identity Cross-reference Manager Actor of all events related to patient identification (creation, update, merge, etc.). For example, the Registration (ADT) Actor defined by the radiology Scheduled Workflow Profile would likely be a Patient Identity Source.</field>
+    </element>
+    <element class="ApplicationSystem" hash="ASY_1670108605888_8588">
+      <field name="name">Practitioner Information System</field>
+    </element>
+    <element class="IheActor" hash="https://www.3lgm2.de/resource/ihe/ATNA_SA">
+      <field name="name">Secure Application (ATNA)</field>
+      <field name="description">The difference between the Secure Node and the Secure Application is the extent to which the underlying operating system and other environment are secured. A Secure Node includes all aspects of user authentication, file system protections, and operating environment security. The Secure Application is a product that does not include the operating environment. The Secure Application provides security features only for the application features. See section 9.7 for the relationships among a Secure Node, Secure Application, and other actors.</field>
+    </element>
+    <element class="IheActor" hash="https://www.3lgm2.de/resource/ihe/ATNA_SN">
+      <field name="name">Secure Node (ATNA)</field>
+      <field name="description">A system unit that validates the identity of any user and of any other node, and determines whether or not access to the system for this user and information exchange with the other node is allowed. Maintains the correct time.</field>
+    </element>
+    <element class="IheActor" hash="https://www.3lgm2.de/resource/ihe/CT_TIME_CLIENT">
+      <field name="name">Time Client (CT)</field>
+      <field name="description">Establishes time synchronization with one or more Time Servers using the NTP protocol and either the NTP or SNTP algorithms. Maintains the local computer system clock synchronization with UTC based on synchronization with the Time Servers.</field>
+    </element>
+    <element class="RepresentationForm" hash="RFO_1670107951956_8264">
+      <field name="name">XDS.b Document</field>
+    </element>
+    <element class="Group" hash="GRO_1670107281245_8146" subtype="USERFIELD_1669975909569_28793">
+      <field name="name">Zone: Desease Management</field>
+    </element>
+    <element class="Group" hash="GRO_1670108552112_8587">
+      <field name="name">Zone: Practitioner</field>
+    </element>
+    <element class="DeviceClass" hash="DCL_1670181737349_9667">
+      <field name="name">Dedicated Server</field>
+    </element>
+    <element class="Group" hash="GRO_1670181660001_9621">
+      <field name="name">DMP</field>
+    </element>
+    <element class="TransmissionMedium" hash="TME_1670076499361_10951">
+      <field name="name">Ethernet / LAN</field>
+    </element>
+    <element class="TransmissionMedium" hash="TME_1670077730056_11043">
+      <field name="name">Ethernet / WAN</field>
+    </element>
+    <element class="PhysicalDataProcessingComponent" hash="PDP_1670076614512_11015">
+      <field name="name">Internet</field>
+    </element>
+    <element class="DeviceClass" hash="DCL_1670181737349_9664">
+      <field name="name">Network Component</field>
+    </element>
+    <element class="Group" hash="GRO_1670181678871_9622" subtype="USERFIELD_1669994178892_38775">
+      <field name="name">NZone: DMP</field>
+    </element>
+    <element class="PhysicalDataProcessingComponent" hash="PDP_1670181737348_9661">
+      <field name="name">Router DMP 01</field>
+    </element>
+    <element class="PhysicalDataProcessingComponent" hash="PDP_1670181737348_9660" subtype="USERFIELD_1670080585602_6225">
+      <field name="name">Server DMP 01</field>
+      <userField hash="USERFIELD_1497433330855_0">8</userField>
+      <userField hash="USERFIELD_1497433961756_10">Linux</userField>
+      <userField hash="USERFIELD_1497433989459_11">ServDMP01</userField>
+      <userField hash="USERFIELD_1497434000226_12">2022120401</userField>
+      <userField hash="USERFIELD_1497434038201_13">64</userField>
+      <userField hash="USERFIELD_1497434106454_17">Intel Xeon</userField>
+      <userField hash="USERFIELD_1497434147788_18">4096</userField>
+    </element>
+    <element class="OrganisationalUnit_Use_Edge" hash="DLK_1617262041588_4234">
+      <field name="name">Beziehung 1</field>
+      <field name="start">OUN_1617261808836_4227</field>
+      <field name="end">USE_1617262041525_4232</field>
+    </element>
+    <element class="OrganisationalUnit_Use_Edge" hash="DLK_1617263200136_4329">
+      <field name="name">Beziehung 2</field>
+      <field name="start">OUN_1617261808836_4227</field>
+      <field name="end">USE_1617263200085_4327</field>
+    </element>
+    <element class="OrganisationalUnit_Use_Edge" hash="DLK_1669711622056_5591">
+      <field name="name">Beziehung 8</field>
+      <field name="start">OUN_1617261808836_4227</field>
+      <field name="end">USE_1669711622005_5589</field>
+    </element>
+    <element class="ObjectType_RepresentationForm_Edge" hash="DLK_1670108092450_8304">
+      <field name="name">Beziehung 2</field>
+      <field name="start">OTY_1670108092449_8303</field>
+      <field name="end">RFO_1670107951956_8264</field>
+    </element>
+    <element class="Function_ObjectType_Edge" hash="DLK_1670108092451_8305">
+      <field name="name">Beziehung 34</field>
+      <field name="start">FUN_1670108015447_8277</field>
+      <field name="end">OTY_1670108092449_8303</field>
+      <field name="state">FORWARD</field>
+    </element>
+    <element class="Function_ObjectType_Edge" hash="DLK_1670108134952_8314">
+      <field name="name">Beziehung 35</field>
+      <field name="start">FUN_1670107543928_8220</field>
+      <field name="end">OTY_1670108092449_8303</field>
+      <field name="state">BACKWARD</field>
+    </element>
+    <element class="Function_Use_Edge" hash="DLK_1670182200810_9733">
+      <field name="name">Beziehung 3</field>
+      <field name="start">FUN_1670107543928_8220</field>
+      <field name="end">USE_1670182200808_9732</field>
+    </element>
+    <element class="OrganisationalUnit_Use_Edge" hash="DLK_1670182200836_9734">
+      <field name="name">Beziehung 32</field>
+      <field name="start">OUN_1670182181735_9731</field>
+      <field name="end">USE_1670182200808_9732</field>
+    </element>
+    <element class="ApplicationComponent_Use_Edge" hash="DLK_1670182216701_9735">
+      <field name="name">Beziehung 2</field>
+      <field name="start">ASY_1670107320282_8147</field>
+      <field name="end">USE_1670182200808_9732</field>
+    </element>
+    <element class="ApplicationComponent_Use_Edge" hash="DLK_1670182222626_9736">
+      <field name="name">Beziehung 3</field>
+      <field name="start">ASY_1670108434362_8502</field>
+      <field name="end">USE_1670182200808_9732</field>
+    </element>
+    <element class="Group_HasPartEdge" hash="DLK_1670108202272_8316">
+      <field name="name">Hat-Teil-Beziehung 68</field>
+      <field name="start">GRO_1670108171689_8315</field>
+      <field name="end">OTY_1670108092449_8303</field>
+    </element>
+    <element class="Group_HasPartEdge" hash="DLK_1670108202279_8317">
+      <field name="name">Hat-Teil-Beziehung 69</field>
+      <field name="start">GRO_1670108171689_8315</field>
+      <field name="end">FUN_1670107543928_8220</field>
+    </element>
+    <element class="IheIntegrationProfile_IheDomain_Edge" hash="[https://www.3lgm2.de/resource/ihe/XDS.b; https://www.3lgm2.de/resource/ihe/iheDomain; https://www.3lgm2.de/resource/ihe/ITI]">
+      <field name="name">Beziehung 30</field>
+      <field name="start">https://www.3lgm2.de/resource/ihe/XDS.b</field>
+      <field name="end">https://www.3lgm2.de/resource/ihe/ITI</field>
+    </element>
+    <element class="IheIntegrationProfile_IheActor_Edge" hash="[https://www.3lgm2.de/resource/ihe/XDSB_DOC_SOURCE; https://www.3lgm2.de/resource/ihe/iheIntegrationProfile; https://www.3lgm2.de/resource/ihe/XDS.b]">
+      <field name="name">Beziehung 174</field>
+      <field name="start">https://www.3lgm2.de/resource/ihe/XDS.b</field>
+      <field name="end">https://www.3lgm2.de/resource/ihe/XDSB_DOC_SOURCE</field>
+    </element>
+    <element class="IheInvokingInterface_IheTransaction_Edge" hash="[https://www.3lgm2.de/resource/ihe/XDSB_DOC_SOURCE; https://www.3lgm2.de/resource/ihe/iti-41; https://www.3lgm2.de/resource/ihe/XDSB_DOC_REPOSITORY]_3">
+      <field name="name">Beziehung 96</field>
+      <field name="start">[https://www.3lgm2.de/resource/ihe/XDSB_DOC_SOURCE; https://www.3lgm2.de/resource/ihe/iti-41; https://www.3lgm2.de/resource/ihe/XDSB_DOC_REPOSITORY]_2</field>
+      <field name="end">[https://www.3lgm2.de/resource/ihe/XDR_DOC_SOURCE; https://www.3lgm2.de/resource/ihe/iti-41; https://www.3lgm2.de/resource/ihe/XDR_DOC_RECIPIENT]</field>
+    </element>
+    <element class="IheActor_IheInterface_Edge" hash="[https://www.3lgm2.de/resource/ihe/XDSB_DOC_SOURCE; https://www.3lgm2.de/resource/ihe/iti-41; https://www.3lgm2.de/resource/ihe/XDSB_DOC_REPOSITORY]_1">
+      <field name="name">Unterordunungsbeziehung 192</field>
+      <field name="start">https://www.3lgm2.de/resource/ihe/XDSB_DOC_SOURCE</field>
+      <field name="end">[https://www.3lgm2.de/resource/ihe/XDSB_DOC_SOURCE; https://www.3lgm2.de/resource/ihe/iti-41; https://www.3lgm2.de/resource/ihe/XDSB_DOC_REPOSITORY]_2</field>
+    </element>
+    <element class="IheIntegrationProfile_IheDomain_Edge" hash="[https://www.3lgm2.de/resource/ihe/ATNA; https://www.3lgm2.de/resource/ihe/iheDomain; https://www.3lgm2.de/resource/ihe/ITI]">
+      <field name="name">Beziehung 45</field>
+      <field name="start">https://www.3lgm2.de/resource/ihe/ATNA</field>
+      <field name="end">https://www.3lgm2.de/resource/ihe/ITI</field>
+    </element>
+    <element class="IheIntegrationProfile_IheActor_Edge" hash="[https://www.3lgm2.de/resource/ihe/ATNA_SA; https://www.3lgm2.de/resource/ihe/iheIntegrationProfile; https://www.3lgm2.de/resource/ihe/ATNA]">
+      <field name="name">Beziehung 170</field>
+      <field name="start">https://www.3lgm2.de/resource/ihe/ATNA</field>
+      <field name="end">https://www.3lgm2.de/resource/ihe/ATNA_SA</field>
+    </element>
+    <element class="IheInvokingInterface_IheTransaction_Edge" hash="[https://www.3lgm2.de/resource/ihe/ATNA_SA; https://www.3lgm2.de/resource/ihe/iti-19; https://www.3lgm2.de/resource/ihe/ATNA_SN]_3">
+      <field name="name">Beziehung 94</field>
+      <field name="start">[https://www.3lgm2.de/resource/ihe/ATNA_SA; https://www.3lgm2.de/resource/ihe/iti-19; https://www.3lgm2.de/resource/ihe/ATNA_SN]_2</field>
+      <field name="end">[https://www.3lgm2.de/resource/ihe/ATNA_SN; https://www.3lgm2.de/resource/ihe/iti-19; https://www.3lgm2.de/resource/ihe/ATNA_SA]</field>
+    </element>
+    <element class="IheActor_IheInterface_Edge" hash="[https://www.3lgm2.de/resource/ihe/ATNA_SA; https://www.3lgm2.de/resource/ihe/iti-19; https://www.3lgm2.de/resource/ihe/ATNA_SN]_1">
+      <field name="name">Unterordunungsbeziehung 189</field>
+      <field name="start">https://www.3lgm2.de/resource/ihe/ATNA_SA</field>
+      <field name="end">[https://www.3lgm2.de/resource/ihe/ATNA_SA; https://www.3lgm2.de/resource/ihe/iti-19; https://www.3lgm2.de/resource/ihe/ATNA_SN]_2</field>
+    </element>
+    <element class="IheProvidingInterface_IheTransaction_Edge" hash="[https://www.3lgm2.de/resource/ihe/ATNA_SN; https://www.3lgm2.de/resource/ihe/iti-19; https://www.3lgm2.de/resource/ihe/ATNA_SA]_4">
+      <field name="name">Beziehung 23</field>
+      <field name="start">[https://www.3lgm2.de/resource/ihe/ATNA_SN; https://www.3lgm2.de/resource/ihe/iti-19; https://www.3lgm2.de/resource/ihe/ATNA_SA]_5</field>
+      <field name="end">[https://www.3lgm2.de/resource/ihe/ATNA_SN; https://www.3lgm2.de/resource/ihe/iti-19; https://www.3lgm2.de/resource/ihe/ATNA_SA]</field>
+    </element>
+    <element class="IheActor_IheInterface_Edge" hash="[https://www.3lgm2.de/resource/ihe/ATNA_SN; https://www.3lgm2.de/resource/ihe/iti-19; https://www.3lgm2.de/resource/ihe/ATNA_SA]_6">
+      <field name="name">Unterordunungsbeziehung 47</field>
+      <field name="start">https://www.3lgm2.de/resource/ihe/ATNA_SA</field>
+      <field name="end">[https://www.3lgm2.de/resource/ihe/ATNA_SN; https://www.3lgm2.de/resource/ihe/iti-19; https://www.3lgm2.de/resource/ihe/ATNA_SA]_5</field>
+    </element>
+    <element class="IheCommunicationLink_Edge" hash="DLK_1670078268369_5203">
+      <field name="name">ITI-19 Authenticate Node</field>
+      <field name="start">[https://www.3lgm2.de/resource/ihe/ATNA_SA; https://www.3lgm2.de/resource/ihe/iti-19; https://www.3lgm2.de/resource/ihe/ATNA_SN]_2</field>
+      <field name="end">[https://www.3lgm2.de/resource/ihe/ATNA_SN; https://www.3lgm2.de/resource/ihe/iti-19; https://www.3lgm2.de/resource/ihe/ATNA_SA]_5</field>
+    </element>
+    <element class="IheInvokingInterface_IheTransaction_Edge" hash="[https://www.3lgm2.de/resource/ihe/ATNA_SA; https://www.3lgm2.de/resource/ihe/iti-20; https://www.3lgm2.de/resource/ihe/ATNA_ARR]_3">
+      <field name="name">Beziehung 93</field>
+      <field name="start">[https://www.3lgm2.de/resource/ihe/ATNA_SA; https://www.3lgm2.de/resource/ihe/iti-20; https://www.3lgm2.de/resource/ihe/ATNA_ARR]_2</field>
+      <field name="end">[https://www.3lgm2.de/resource/ihe/ATNA_AUDIT_RECORD_FORWARDER; https://www.3lgm2.de/resource/ihe/iti-20; https://www.3lgm2.de/resource/ihe/ATNA_ARR]</field>
+    </element>
+    <element class="IheActor_IheInterface_Edge" hash="[https://www.3lgm2.de/resource/ihe/ATNA_SA; https://www.3lgm2.de/resource/ihe/iti-20; https://www.3lgm2.de/resource/ihe/ATNA_ARR]_1">
+      <field name="name">Unterordunungsbeziehung 188</field>
+      <field name="start">https://www.3lgm2.de/resource/ihe/ATNA_SA</field>
+      <field name="end">[https://www.3lgm2.de/resource/ihe/ATNA_SA; https://www.3lgm2.de/resource/ihe/iti-20; https://www.3lgm2.de/resource/ihe/ATNA_ARR]_2</field>
+    </element>
+    <element class="IheIntegrationProfile_IheDomain_Edge" hash="[https://www.3lgm2.de/resource/ihe/CT; https://www.3lgm2.de/resource/ihe/iheDomain; https://www.3lgm2.de/resource/ihe/ITI]">
+      <field name="name">Beziehung 47</field>
+      <field name="start">https://www.3lgm2.de/resource/ihe/CT</field>
+      <field name="end">https://www.3lgm2.de/resource/ihe/ITI</field>
+    </element>
+    <element class="IheIntegrationProfile_IheActor_Edge" hash="[https://www.3lgm2.de/resource/ihe/CT_TIME_CLIENT; https://www.3lgm2.de/resource/ihe/iheIntegrationProfile; https://www.3lgm2.de/resource/ihe/CT]">
+      <field name="name">Beziehung 194</field>
+      <field name="start">https://www.3lgm2.de/resource/ihe/CT</field>
+      <field name="end">https://www.3lgm2.de/resource/ihe/CT_TIME_CLIENT</field>
+    </element>
+    <element class="IheInvokingInterface_IheTransaction_Edge" hash="[https://www.3lgm2.de/resource/ihe/CT_TIME_CLIENT; https://www.3lgm2.de/resource/ihe/iti-1; https://www.3lgm2.de/resource/ihe/CT_TS]_3">
+      <field name="name">Beziehung 104</field>
+      <field name="start">[https://www.3lgm2.de/resource/ihe/CT_TIME_CLIENT; https://www.3lgm2.de/resource/ihe/iti-1; https://www.3lgm2.de/resource/ihe/CT_TS]_2</field>
+      <field name="end">[https://www.3lgm2.de/resource/ihe/CT_TIME_CLIENT; https://www.3lgm2.de/resource/ihe/iti-1; https://www.3lgm2.de/resource/ihe/CT_TS]</field>
+    </element>
+    <element class="IheActor_IheInterface_Edge" hash="[https://www.3lgm2.de/resource/ihe/CT_TIME_CLIENT; https://www.3lgm2.de/resource/ihe/iti-1; https://www.3lgm2.de/resource/ihe/CT_TS]_1">
+      <field name="name">Unterordunungsbeziehung 210</field>
+      <field name="start">https://www.3lgm2.de/resource/ihe/CT_TIME_CLIENT</field>
+      <field name="end">[https://www.3lgm2.de/resource/ihe/CT_TIME_CLIENT; https://www.3lgm2.de/resource/ihe/iti-1; https://www.3lgm2.de/resource/ihe/CT_TS]_2</field>
+    </element>
+    <element class="IheActor_IheActor_MustBeGroupedWith_Edge" hash="[https://www.3lgm2.de/resource/ihe/ATNA_SA; https://www.3lgm2.de/resource/ihe/mustBeGroupedWith; https://www.3lgm2.de/resource/ihe/CT_TIME_CLIENT]">
+      <field name="name">Gruppierung 93</field>
+      <field name="start">https://www.3lgm2.de/resource/ihe/ATNA_SA</field>
+      <field name="end">https://www.3lgm2.de/resource/ihe/CT_TIME_CLIENT</field>
+    </element>
+    <element class="IheActor_IheActor_MustBeGroupedWith_Edge" hash="[https://www.3lgm2.de/resource/ihe/XDSB_DOC_SOURCE; https://www.3lgm2.de/resource/ihe/mustBeGroupedWith; https://www.3lgm2.de/resource/ihe/ATNA_SA]">
+      <field name="name">Gruppierung 99</field>
+      <field name="start">https://www.3lgm2.de/resource/ihe/XDSB_DOC_SOURCE</field>
+      <field name="end">https://www.3lgm2.de/resource/ihe/ATNA_SA</field>
+    </element>
+    <element class="IheIntegrationProfile_IheActor_Edge" hash="[https://www.3lgm2.de/resource/ihe/ATNA_SN; https://www.3lgm2.de/resource/ihe/iheIntegrationProfile; https://www.3lgm2.de/resource/ihe/ATNA]">
+      <field name="name">Beziehung 44</field>
+      <field name="start">https://www.3lgm2.de/resource/ihe/ATNA</field>
+      <field name="end">https://www.3lgm2.de/resource/ihe/ATNA_SN</field>
+    </element>
+    <element class="IheInvokingInterface_IheTransaction_Edge" hash="[https://www.3lgm2.de/resource/ihe/ATNA_SN; https://www.3lgm2.de/resource/ihe/iti-19; https://www.3lgm2.de/resource/ihe/ATNA_SA]_3">
+      <field name="name">Beziehung 24</field>
+      <field name="start">[https://www.3lgm2.de/resource/ihe/ATNA_SN; https://www.3lgm2.de/resource/ihe/iti-19; https://www.3lgm2.de/resource/ihe/ATNA_SA]_2</field>
+      <field name="end">[https://www.3lgm2.de/resource/ihe/ATNA_SN; https://www.3lgm2.de/resource/ihe/iti-19; https://www.3lgm2.de/resource/ihe/ATNA_SA]</field>
+    </element>
+    <element class="IheCommunicationLink_Edge" hash="DLK_1670078268372_5262">
+      <field name="name">ITI-19 Authenticate Node</field>
+      <field name="start">[https://www.3lgm2.de/resource/ihe/ATNA_SN; https://www.3lgm2.de/resource/ihe/iti-19; https://www.3lgm2.de/resource/ihe/ATNA_SA]_2</field>
+      <field name="end">[https://www.3lgm2.de/resource/ihe/ATNA_SN; https://www.3lgm2.de/resource/ihe/iti-19; https://www.3lgm2.de/resource/ihe/ATNA_SA]_5</field>
+    </element>
+    <element class="IheActor_IheInterface_Edge" hash="[https://www.3lgm2.de/resource/ihe/ATNA_SN; https://www.3lgm2.de/resource/ihe/iti-19; https://www.3lgm2.de/resource/ihe/ATNA_SA]_1">
+      <field name="name">Unterordunungsbeziehung 46</field>
+      <field name="start">https://www.3lgm2.de/resource/ihe/ATNA_SN</field>
+      <field name="end">[https://www.3lgm2.de/resource/ihe/ATNA_SN; https://www.3lgm2.de/resource/ihe/iti-19; https://www.3lgm2.de/resource/ihe/ATNA_SA]_2</field>
+    </element>
+    <element class="IheProvidingInterface_IheTransaction_Edge" hash="[https://www.3lgm2.de/resource/ihe/ATNA_SA; https://www.3lgm2.de/resource/ihe/iti-19; https://www.3lgm2.de/resource/ihe/ATNA_SN]_4">
+      <field name="name">Beziehung 96</field>
+      <field name="start">[https://www.3lgm2.de/resource/ihe/ATNA_SA; https://www.3lgm2.de/resource/ihe/iti-19; https://www.3lgm2.de/resource/ihe/ATNA_SN]_5</field>
+      <field name="end">[https://www.3lgm2.de/resource/ihe/ATNA_SN; https://www.3lgm2.de/resource/ihe/iti-19; https://www.3lgm2.de/resource/ihe/ATNA_SA]</field>
+    </element>
+    <element class="IheCommunicationLink_Edge" hash="DLK_1670078268369_5204">
+      <field name="name">ITI-19 Authenticate Node</field>
+      <field name="start">[https://www.3lgm2.de/resource/ihe/ATNA_SA; https://www.3lgm2.de/resource/ihe/iti-19; https://www.3lgm2.de/resource/ihe/ATNA_SN]_2</field>
+      <field name="end">[https://www.3lgm2.de/resource/ihe/ATNA_SA; https://www.3lgm2.de/resource/ihe/iti-19; https://www.3lgm2.de/resource/ihe/ATNA_SN]_5</field>
+    </element>
+    <element class="IheActor_IheInterface_Edge" hash="[https://www.3lgm2.de/resource/ihe/ATNA_SA; https://www.3lgm2.de/resource/ihe/iti-19; https://www.3lgm2.de/resource/ihe/ATNA_SN]_6">
+      <field name="name">Unterordunungsbeziehung 190</field>
+      <field name="start">https://www.3lgm2.de/resource/ihe/ATNA_SN</field>
+      <field name="end">[https://www.3lgm2.de/resource/ihe/ATNA_SA; https://www.3lgm2.de/resource/ihe/iti-19; https://www.3lgm2.de/resource/ihe/ATNA_SN]_5</field>
+    </element>
+    <element class="IheCommunicationLink_Edge" hash="DLK_1670078268372_5263">
+      <field name="name">ITI-19 Authenticate Node</field>
+      <field name="start">[https://www.3lgm2.de/resource/ihe/ATNA_SN; https://www.3lgm2.de/resource/ihe/iti-19; https://www.3lgm2.de/resource/ihe/ATNA_SA]_2</field>
+      <field name="end">[https://www.3lgm2.de/resource/ihe/ATNA_SA; https://www.3lgm2.de/resource/ihe/iti-19; https://www.3lgm2.de/resource/ihe/ATNA_SN]_5</field>
+    </element>
+    <element class="IheInvokingInterface_IheTransaction_Edge" hash="[https://www.3lgm2.de/resource/ihe/ATNA_SN; https://www.3lgm2.de/resource/ihe/iti-20; https://www.3lgm2.de/resource/ihe/ATNA_ARR]_3">
+      <field name="name">Beziehung 23</field>
+      <field name="start">[https://www.3lgm2.de/resource/ihe/ATNA_SN; https://www.3lgm2.de/resource/ihe/iti-20; https://www.3lgm2.de/resource/ihe/ATNA_ARR]_2</field>
+      <field name="end">[https://www.3lgm2.de/resource/ihe/ATNA_AUDIT_RECORD_FORWARDER; https://www.3lgm2.de/resource/ihe/iti-20; https://www.3lgm2.de/resource/ihe/ATNA_ARR]</field>
+    </element>
+    <element class="IheActor_IheInterface_Edge" hash="[https://www.3lgm2.de/resource/ihe/ATNA_SN; https://www.3lgm2.de/resource/ihe/iti-20; https://www.3lgm2.de/resource/ihe/ATNA_ARR]_1">
+      <field name="name">Unterordunungsbeziehung 45</field>
+      <field name="start">https://www.3lgm2.de/resource/ihe/ATNA_SN</field>
+      <field name="end">[https://www.3lgm2.de/resource/ihe/ATNA_SN; https://www.3lgm2.de/resource/ihe/iti-20; https://www.3lgm2.de/resource/ihe/ATNA_ARR]_2</field>
+    </element>
+    <element class="IheActor_IheActor_MustBeGroupedWith_Edge" hash="[https://www.3lgm2.de/resource/ihe/ATNA_SN; https://www.3lgm2.de/resource/ihe/mustBeGroupedWith; https://www.3lgm2.de/resource/ihe/CT_TIME_CLIENT]">
+      <field name="name">Gruppierung 27</field>
+      <field name="start">https://www.3lgm2.de/resource/ihe/ATNA_SN</field>
+      <field name="end">https://www.3lgm2.de/resource/ihe/CT_TIME_CLIENT</field>
+    </element>
+    <element class="IheActor_IheActor_MustBeGroupedWith_Edge" hash="[https://www.3lgm2.de/resource/ihe/XDSB_DOC_SOURCE; https://www.3lgm2.de/resource/ihe/mustBeGroupedWith; https://www.3lgm2.de/resource/ihe/ATNA_SN]">
+      <field name="name">Gruppierung 98</field>
+      <field name="start">https://www.3lgm2.de/resource/ihe/XDSB_DOC_SOURCE</field>
+      <field name="end">https://www.3lgm2.de/resource/ihe/ATNA_SN</field>
+    </element>
+    <element class="IheIntegrationProfile_IheActor_Edge" hash="[https://www.3lgm2.de/resource/ihe/XDSB_DOC_REPOSITORY; https://www.3lgm2.de/resource/ihe/iheIntegrationProfile; https://www.3lgm2.de/resource/ihe/XDS.b]">
+      <field name="name">Beziehung 132</field>
+      <field name="start">https://www.3lgm2.de/resource/ihe/XDS.b</field>
+      <field name="end">https://www.3lgm2.de/resource/ihe/XDSB_DOC_REPOSITORY</field>
+    </element>
+    <element class="IheProvidingInterface_IheTransaction_Edge" hash="[https://www.3lgm2.de/resource/ihe/XDSB_DOC_SOURCE; https://www.3lgm2.de/resource/ihe/iti-41; https://www.3lgm2.de/resource/ihe/XDSB_DOC_REPOSITORY]_4">
+      <field name="name">Beziehung 97</field>
+      <field name="start">[https://www.3lgm2.de/resource/ihe/XDSB_DOC_SOURCE; https://www.3lgm2.de/resource/ihe/iti-41; https://www.3lgm2.de/resource/ihe/XDSB_DOC_REPOSITORY]_5</field>
+      <field name="end">[https://www.3lgm2.de/resource/ihe/XDR_DOC_SOURCE; https://www.3lgm2.de/resource/ihe/iti-41; https://www.3lgm2.de/resource/ihe/XDR_DOC_RECIPIENT]</field>
+    </element>
+    <element class="IheActor_IheInterface_Edge" hash="[https://www.3lgm2.de/resource/ihe/XDSB_DOC_SOURCE; https://www.3lgm2.de/resource/ihe/iti-41; https://www.3lgm2.de/resource/ihe/XDSB_DOC_REPOSITORY]_6">
+      <field name="name">Unterordunungsbeziehung 193</field>
+      <field name="start">https://www.3lgm2.de/resource/ihe/XDSB_DOC_REPOSITORY</field>
+      <field name="end">[https://www.3lgm2.de/resource/ihe/XDSB_DOC_SOURCE; https://www.3lgm2.de/resource/ihe/iti-41; https://www.3lgm2.de/resource/ihe/XDSB_DOC_REPOSITORY]_5</field>
+    </element>
+    <element class="IheInvokingInterface_IheTransaction_Edge" hash="[https://www.3lgm2.de/resource/ihe/XDSB_DOC_REPOSITORY; https://www.3lgm2.de/resource/ihe/iti-42; https://www.3lgm2.de/resource/ihe/XDSB_DOC_REGISTRY]_3">
+      <field name="name">Beziehung 72</field>
+      <field name="start">[https://www.3lgm2.de/resource/ihe/XDSB_DOC_REPOSITORY; https://www.3lgm2.de/resource/ihe/iti-42; https://www.3lgm2.de/resource/ihe/XDSB_DOC_REGISTRY]_2</field>
+      <field name="end">[https://www.3lgm2.de/resource/ihe/XDSB_DOC_REPOSITORY; https://www.3lgm2.de/resource/ihe/iti-42; https://www.3lgm2.de/resource/ihe/XDSB_DOC_REGISTRY]</field>
+    </element>
+    <element class="IheActor_IheInterface_Edge" hash="[https://www.3lgm2.de/resource/ihe/XDSB_DOC_REPOSITORY; https://www.3lgm2.de/resource/ihe/iti-42; https://www.3lgm2.de/resource/ihe/XDSB_DOC_REGISTRY]_1">
+      <field name="name">Unterordunungsbeziehung 144</field>
+      <field name="start">https://www.3lgm2.de/resource/ihe/XDSB_DOC_REPOSITORY</field>
+      <field name="end">[https://www.3lgm2.de/resource/ihe/XDSB_DOC_REPOSITORY; https://www.3lgm2.de/resource/ihe/iti-42; https://www.3lgm2.de/resource/ihe/XDSB_DOC_REGISTRY]_2</field>
+    </element>
+    <element class="IheProvidingInterface_IheTransaction_Edge" hash="[https://www.3lgm2.de/resource/ihe/XDSB_DOC_CONSUMER; https://www.3lgm2.de/resource/ihe/iti-43; https://www.3lgm2.de/resource/ihe/XDSB_DOC_REPOSITORY]_4">
+      <field name="name">Beziehung 71</field>
+      <field name="start">[https://www.3lgm2.de/resource/ihe/XDSB_DOC_CONSUMER; https://www.3lgm2.de/resource/ihe/iti-43; https://www.3lgm2.de/resource/ihe/XDSB_DOC_REPOSITORY]_5</field>
+      <field name="end">[https://www.3lgm2.de/resource/ihe/XDS-IB_DOC_CONSUMER; https://www.3lgm2.de/resource/ihe/iti-43; https://www.3lgm2.de/resource/ihe/XDS-IB_DOC_REPOSITORY]</field>
+    </element>
+    <element class="IheActor_IheInterface_Edge" hash="[https://www.3lgm2.de/resource/ihe/XDSB_DOC_CONSUMER; https://www.3lgm2.de/resource/ihe/iti-43; https://www.3lgm2.de/resource/ihe/XDSB_DOC_REPOSITORY]_6">
+      <field name="name">Unterordunungsbeziehung 141</field>
+      <field name="start">https://www.3lgm2.de/resource/ihe/XDSB_DOC_REPOSITORY</field>
+      <field name="end">[https://www.3lgm2.de/resource/ihe/XDSB_DOC_CONSUMER; https://www.3lgm2.de/resource/ihe/iti-43; https://www.3lgm2.de/resource/ihe/XDSB_DOC_REPOSITORY]_5</field>
+    </element>
+    <element class="IheActor_IheActor_MustBeGroupedWith_Edge" hash="[https://www.3lgm2.de/resource/ihe/XDSB_DOC_REPOSITORY; https://www.3lgm2.de/resource/ihe/mustBeGroupedWith; https://www.3lgm2.de/resource/ihe/ATNA_SA]">
+      <field name="name">Gruppierung 74</field>
+      <field name="start">https://www.3lgm2.de/resource/ihe/XDSB_DOC_REPOSITORY</field>
+      <field name="end">https://www.3lgm2.de/resource/ihe/ATNA_SA</field>
+    </element>
+    <element class="IheActor_IheActor_MustBeGroupedWith_Edge" hash="[https://www.3lgm2.de/resource/ihe/XDSB_DOC_REPOSITORY; https://www.3lgm2.de/resource/ihe/mustBeGroupedWith; https://www.3lgm2.de/resource/ihe/ATNA_SN]">
+      <field name="name">Gruppierung 73</field>
+      <field name="start">https://www.3lgm2.de/resource/ihe/XDSB_DOC_REPOSITORY</field>
+      <field name="end">https://www.3lgm2.de/resource/ihe/ATNA_SN</field>
+    </element>
+    <element class="IheCommunicationLink_Edge" hash="DLK_1670078268373_5309">
+      <field name="name">ITI-41 Provide and Register Document Set-b</field>
+      <field name="start">[https://www.3lgm2.de/resource/ihe/XDSB_DOC_SOURCE; https://www.3lgm2.de/resource/ihe/iti-41; https://www.3lgm2.de/resource/ihe/XDSB_DOC_REPOSITORY]_2</field>
+      <field name="end">[https://www.3lgm2.de/resource/ihe/XDSB_DOC_SOURCE; https://www.3lgm2.de/resource/ihe/iti-41; https://www.3lgm2.de/resource/ihe/XDSB_DOC_REPOSITORY]_5</field>
+    </element>
+    <element class="IheIntegrationProfile_IheActor_Edge" hash="[https://www.3lgm2.de/resource/ihe/XDSB_DOC_REGISTRY; https://www.3lgm2.de/resource/ihe/iheIntegrationProfile; https://www.3lgm2.de/resource/ihe/XDS.b]">
+      <field name="name">Beziehung 105</field>
+      <field name="start">https://www.3lgm2.de/resource/ihe/XDS.b</field>
+      <field name="end">https://www.3lgm2.de/resource/ihe/XDSB_DOC_REGISTRY</field>
+    </element>
+    <element class="IheProvidingInterface_IheTransaction_Edge" hash="[https://www.3lgm2.de/resource/ihe/XDSB_DOC_CONSUMER; https://www.3lgm2.de/resource/ihe/iti-18; https://www.3lgm2.de/resource/ihe/XDSB_DOC_REGISTRY]_4">
+      <field name="name">Beziehung 72</field>
+      <field name="start">[https://www.3lgm2.de/resource/ihe/XDSB_DOC_CONSUMER; https://www.3lgm2.de/resource/ihe/iti-18; https://www.3lgm2.de/resource/ihe/XDSB_DOC_REGISTRY]_5</field>
+      <field name="end">[https://www.3lgm2.de/resource/ihe/RMD_DOC_ADMINISTRATOR; https://www.3lgm2.de/resource/ihe/iti-18; https://www.3lgm2.de/resource/ihe/RMD_DOC_REGISTRY]</field>
+    </element>
+    <element class="IheActor_IheInterface_Edge" hash="[https://www.3lgm2.de/resource/ihe/XDSB_DOC_CONSUMER; https://www.3lgm2.de/resource/ihe/iti-18; https://www.3lgm2.de/resource/ihe/XDSB_DOC_REGISTRY]_6">
+      <field name="name">Unterordunungsbeziehung 143</field>
+      <field name="start">https://www.3lgm2.de/resource/ihe/XDSB_DOC_REGISTRY</field>
+      <field name="end">[https://www.3lgm2.de/resource/ihe/XDSB_DOC_CONSUMER; https://www.3lgm2.de/resource/ihe/iti-18; https://www.3lgm2.de/resource/ihe/XDSB_DOC_REGISTRY]_5</field>
+    </element>
+    <element class="IheProvidingInterface_IheTransaction_Edge" hash="[https://www.3lgm2.de/resource/ihe/XDSB_DOC_REPOSITORY; https://www.3lgm2.de/resource/ihe/iti-42; https://www.3lgm2.de/resource/ihe/XDSB_DOC_REGISTRY]_4">
+      <field name="name">Beziehung 75</field>
+      <field name="start">[https://www.3lgm2.de/resource/ihe/XDSB_DOC_REPOSITORY; https://www.3lgm2.de/resource/ihe/iti-42; https://www.3lgm2.de/resource/ihe/XDSB_DOC_REGISTRY]_5</field>
+      <field name="end">[https://www.3lgm2.de/resource/ihe/XDSB_DOC_REPOSITORY; https://www.3lgm2.de/resource/ihe/iti-42; https://www.3lgm2.de/resource/ihe/XDSB_DOC_REGISTRY]</field>
+    </element>
+    <element class="IheActor_IheInterface_Edge" hash="[https://www.3lgm2.de/resource/ihe/XDSB_DOC_REPOSITORY; https://www.3lgm2.de/resource/ihe/iti-42; https://www.3lgm2.de/resource/ihe/XDSB_DOC_REGISTRY]_6">
+      <field name="name">Unterordunungsbeziehung 147</field>
+      <field name="start">https://www.3lgm2.de/resource/ihe/XDSB_DOC_REGISTRY</field>
+      <field name="end">[https://www.3lgm2.de/resource/ihe/XDSB_DOC_REPOSITORY; https://www.3lgm2.de/resource/ihe/iti-42; https://www.3lgm2.de/resource/ihe/XDSB_DOC_REGISTRY]_5</field>
+    </element>
+    <element class="IheProvidingInterface_IheTransaction_Edge" hash="[https://www.3lgm2.de/resource/ihe/XDSB_PAT_IDENTITY_SRC; https://www.3lgm2.de/resource/ihe/iti-44; https://www.3lgm2.de/resource/ihe/XDSB_DOC_REGISTRY]_4">
+      <field name="name">Beziehung 17</field>
+      <field name="start">[https://www.3lgm2.de/resource/ihe/XDSB_PAT_IDENTITY_SRC; https://www.3lgm2.de/resource/ihe/iti-44; https://www.3lgm2.de/resource/ihe/XDSB_DOC_REGISTRY]_5</field>
+      <field name="end">[https://www.3lgm2.de/resource/ihe/XDSB_PAT_IDENTITY_SRC; https://www.3lgm2.de/resource/ihe/iti-44; https://www.3lgm2.de/resource/ihe/XDSB_DOC_REGISTRY]</field>
+    </element>
+    <element class="IheActor_IheInterface_Edge" hash="[https://www.3lgm2.de/resource/ihe/XDSB_PAT_IDENTITY_SRC; https://www.3lgm2.de/resource/ihe/iti-44; https://www.3lgm2.de/resource/ihe/XDSB_DOC_REGISTRY]_6">
+      <field name="name">Unterordunungsbeziehung 34</field>
+      <field name="start">https://www.3lgm2.de/resource/ihe/XDSB_DOC_REGISTRY</field>
+      <field name="end">[https://www.3lgm2.de/resource/ihe/XDSB_PAT_IDENTITY_SRC; https://www.3lgm2.de/resource/ihe/iti-44; https://www.3lgm2.de/resource/ihe/XDSB_DOC_REGISTRY]_5</field>
+    </element>
+    <element class="IheProvidingInterface_IheTransaction_Edge" hash="[https://www.3lgm2.de/resource/ihe/XDSB_DOC_ADMINISTRATOR; https://www.3lgm2.de/resource/ihe/iti-57; https://www.3lgm2.de/resource/ihe/XDSB_DOC_REGISTRY]_4">
+      <field name="name">Beziehung 113</field>
+      <field name="start">[https://www.3lgm2.de/resource/ihe/XDSB_DOC_ADMINISTRATOR; https://www.3lgm2.de/resource/ihe/iti-57; https://www.3lgm2.de/resource/ihe/XDSB_DOC_REGISTRY]_5</field>
+      <field name="end">[https://www.3lgm2.de/resource/ihe/XDR_DOC_ADMINISTRATOR; https://www.3lgm2.de/resource/ihe/iti-57; https://www.3lgm2.de/resource/ihe/XDR_DOC_RECIPIENT]</field>
+    </element>
+    <element class="IheActor_IheInterface_Edge" hash="[https://www.3lgm2.de/resource/ihe/XDSB_DOC_ADMINISTRATOR; https://www.3lgm2.de/resource/ihe/iti-57; https://www.3lgm2.de/resource/ihe/XDSB_DOC_REGISTRY]_6">
+      <field name="name">Unterordunungsbeziehung 226</field>
+      <field name="start">https://www.3lgm2.de/resource/ihe/XDSB_DOC_REGISTRY</field>
+      <field name="end">[https://www.3lgm2.de/resource/ihe/XDSB_DOC_ADMINISTRATOR; https://www.3lgm2.de/resource/ihe/iti-57; https://www.3lgm2.de/resource/ihe/XDSB_DOC_REGISTRY]_5</field>
+    </element>
+    <element class="IheProvidingInterface_IheTransaction_Edge" hash="[https://www.3lgm2.de/resource/ihe/XDSB_ON_DEMAND_DOC_SOURCE; https://www.3lgm2.de/resource/ihe/iti-61; https://www.3lgm2.de/resource/ihe/XDSB_DOC_REGISTRY]_4">
+      <field name="name">Beziehung 22</field>
+      <field name="start">[https://www.3lgm2.de/resource/ihe/XDSB_ON_DEMAND_DOC_SOURCE; https://www.3lgm2.de/resource/ihe/iti-61; https://www.3lgm2.de/resource/ihe/XDSB_DOC_REGISTRY]_5</field>
+      <field name="end">[https://www.3lgm2.de/resource/ihe/XDSB_ON_DEMAND_DOC_SOURCE; https://www.3lgm2.de/resource/ihe/iti-61; https://www.3lgm2.de/resource/ihe/XDSB_DOC_REGISTRY]</field>
+    </element>
+    <element class="IheActor_IheInterface_Edge" hash="[https://www.3lgm2.de/resource/ihe/XDSB_ON_DEMAND_DOC_SOURCE; https://www.3lgm2.de/resource/ihe/iti-61; https://www.3lgm2.de/resource/ihe/XDSB_DOC_REGISTRY]_6">
+      <field name="name">Unterordunungsbeziehung 44</field>
+      <field name="start">https://www.3lgm2.de/resource/ihe/XDSB_DOC_REGISTRY</field>
+      <field name="end">[https://www.3lgm2.de/resource/ihe/XDSB_ON_DEMAND_DOC_SOURCE; https://www.3lgm2.de/resource/ihe/iti-61; https://www.3lgm2.de/resource/ihe/XDSB_DOC_REGISTRY]_5</field>
+    </element>
+    <element class="IheProvidingInterface_IheTransaction_Edge" hash="[https://www.3lgm2.de/resource/ihe/XDSB_PAT_IDENTITY_SRC; https://www.3lgm2.de/resource/ihe/iti-8; https://www.3lgm2.de/resource/ihe/XDSB_DOC_REGISTRY]_4">
+      <field name="name">Beziehung 18</field>
+      <field name="start">[https://www.3lgm2.de/resource/ihe/XDSB_PAT_IDENTITY_SRC; https://www.3lgm2.de/resource/ihe/iti-8; https://www.3lgm2.de/resource/ihe/XDSB_DOC_REGISTRY]_5</field>
+      <field name="end">[https://www.3lgm2.de/resource/ihe/XDSB_PAT_IDENTITY_SRC; https://www.3lgm2.de/resource/ihe/iti-8; https://www.3lgm2.de/resource/ihe/XDSB_DOC_REGISTRY]</field>
+    </element>
+    <element class="IheActor_IheInterface_Edge" hash="[https://www.3lgm2.de/resource/ihe/XDSB_PAT_IDENTITY_SRC; https://www.3lgm2.de/resource/ihe/iti-8; https://www.3lgm2.de/resource/ihe/XDSB_DOC_REGISTRY]_6">
+      <field name="name">Unterordunungsbeziehung 36</field>
+      <field name="start">https://www.3lgm2.de/resource/ihe/XDSB_DOC_REGISTRY</field>
+      <field name="end">[https://www.3lgm2.de/resource/ihe/XDSB_PAT_IDENTITY_SRC; https://www.3lgm2.de/resource/ihe/iti-8; https://www.3lgm2.de/resource/ihe/XDSB_DOC_REGISTRY]_5</field>
+    </element>
+    <element class="IheActor_IheActor_MustBeGroupedWith_Edge" hash="[https://www.3lgm2.de/resource/ihe/XDSB_DOC_REGISTRY; https://www.3lgm2.de/resource/ihe/mustBeGroupedWith; https://www.3lgm2.de/resource/ihe/ATNA_SA]">
+      <field name="name">Gruppierung 59</field>
+      <field name="start">https://www.3lgm2.de/resource/ihe/XDSB_DOC_REGISTRY</field>
+      <field name="end">https://www.3lgm2.de/resource/ihe/ATNA_SA</field>
+    </element>
+    <element class="IheActor_IheActor_MustBeGroupedWith_Edge" hash="[https://www.3lgm2.de/resource/ihe/XDSB_DOC_REGISTRY; https://www.3lgm2.de/resource/ihe/mustBeGroupedWith; https://www.3lgm2.de/resource/ihe/ATNA_SN]">
+      <field name="name">Gruppierung 58</field>
+      <field name="start">https://www.3lgm2.de/resource/ihe/XDSB_DOC_REGISTRY</field>
+      <field name="end">https://www.3lgm2.de/resource/ihe/ATNA_SN</field>
+    </element>
+    <element class="IheCommunicationLink_Edge" hash="DLK_1670078268371_5255">
+      <field name="name">ITI-42 Register Document Set-b</field>
+      <field name="start">[https://www.3lgm2.de/resource/ihe/XDSB_DOC_REPOSITORY; https://www.3lgm2.de/resource/ihe/iti-42; https://www.3lgm2.de/resource/ihe/XDSB_DOC_REGISTRY]_2</field>
+      <field name="end">[https://www.3lgm2.de/resource/ihe/XDSB_DOC_REPOSITORY; https://www.3lgm2.de/resource/ihe/iti-42; https://www.3lgm2.de/resource/ihe/XDSB_DOC_REGISTRY]_5</field>
+    </element>
+    <element class="IheActor_IheActorInstance_Edge" hash="DLK_1670108422696_8482">
+      <field name="name">Unterordunungsbeziehung 3</field>
+      <field name="start">https://www.3lgm2.de/resource/ihe/XDSB_DOC_REGISTRY</field>
+      <field name="end">IAI_1670108422695_8481</field>
+    </element>
+    <element class="IheProvidingInterface_IheActorInstanceProvidingInterface_Edge" hash="DLK_1670108422696_8484">
+      <field name="name">Unterordunungsbeziehung 3</field>
+      <field name="start">[https://www.3lgm2.de/resource/ihe/XDSB_DOC_CONSUMER; https://www.3lgm2.de/resource/ihe/iti-18; https://www.3lgm2.de/resource/ihe/XDSB_DOC_REGISTRY]_5</field>
+      <field name="end">IAI_1670108422696_8483</field>
+    </element>
+    <element class="IheActorInstance_IheActorInstanceInterface_Edge" hash="DLK_1670108422697_8485">
+      <field name="name">Unterordunungsbeziehung 5</field>
+      <field name="start">IAI_1670108422695_8481</field>
+      <field name="end">IAI_1670108422696_8483</field>
+    </element>
+    <element class="IheProvidingInterface_IheActorInstanceProvidingInterface_Edge" hash="DLK_1670108422698_8487">
+      <field name="name">Unterordunungsbeziehung 4</field>
+      <field name="start">[https://www.3lgm2.de/resource/ihe/XDSB_DOC_REPOSITORY; https://www.3lgm2.de/resource/ihe/iti-42; https://www.3lgm2.de/resource/ihe/XDSB_DOC_REGISTRY]_5</field>
+      <field name="end">IAI_1670108422697_8486</field>
+    </element>
+    <element class="IheActorInstance_IheActorInstanceInterface_Edge" hash="DLK_1670108422698_8488">
+      <field name="name">Unterordunungsbeziehung 6</field>
+      <field name="start">IAI_1670108422695_8481</field>
+      <field name="end">IAI_1670108422697_8486</field>
+    </element>
+    <element class="IheProvidingInterface_IheActorInstanceProvidingInterface_Edge" hash="DLK_1670108422699_8490">
+      <field name="name">Unterordunungsbeziehung 5</field>
+      <field name="start">[https://www.3lgm2.de/resource/ihe/XDSB_PAT_IDENTITY_SRC; https://www.3lgm2.de/resource/ihe/iti-44; https://www.3lgm2.de/resource/ihe/XDSB_DOC_REGISTRY]_5</field>
+      <field name="end">IAI_1670108422699_8489</field>
+    </element>
+    <element class="IheActorInstance_IheActorInstanceInterface_Edge" hash="DLK_1670108422699_8491">
+      <field name="name">Unterordunungsbeziehung 7</field>
+      <field name="start">IAI_1670108422695_8481</field>
+      <field name="end">IAI_1670108422699_8489</field>
+    </element>
+    <element class="IheProvidingInterface_IheActorInstanceProvidingInterface_Edge" hash="DLK_1670108422700_8493">
+      <field name="name">Unterordunungsbeziehung 6</field>
+      <field name="start">[https://www.3lgm2.de/resource/ihe/XDSB_DOC_ADMINISTRATOR; https://www.3lgm2.de/resource/ihe/iti-57; https://www.3lgm2.de/resource/ihe/XDSB_DOC_REGISTRY]_5</field>
+      <field name="end">IAI_1670108422700_8492</field>
+    </element>
+    <element class="IheActorInstance_IheActorInstanceInterface_Edge" hash="DLK_1670108422700_8494">
+      <field name="name">Unterordunungsbeziehung 8</field>
+      <field name="start">IAI_1670108422695_8481</field>
+      <field name="end">IAI_1670108422700_8492</field>
+    </element>
+    <element class="IheProvidingInterface_IheActorInstanceProvidingInterface_Edge" hash="DLK_1670108422701_8496">
+      <field name="name">Unterordunungsbeziehung 7</field>
+      <field name="start">[https://www.3lgm2.de/resource/ihe/XDSB_ON_DEMAND_DOC_SOURCE; https://www.3lgm2.de/resource/ihe/iti-61; https://www.3lgm2.de/resource/ihe/XDSB_DOC_REGISTRY]_5</field>
+      <field name="end">IAI_1670108422701_8495</field>
+    </element>
+    <element class="IheActorInstance_IheActorInstanceInterface_Edge" hash="DLK_1670108422702_8497">
+      <field name="name">Unterordunungsbeziehung 9</field>
+      <field name="start">IAI_1670108422695_8481</field>
+      <field name="end">IAI_1670108422701_8495</field>
+    </element>
+    <element class="IheProvidingInterface_IheActorInstanceProvidingInterface_Edge" hash="DLK_1670108422703_8499">
+      <field name="name">Unterordunungsbeziehung 8</field>
+      <field name="start">[https://www.3lgm2.de/resource/ihe/XDSB_PAT_IDENTITY_SRC; https://www.3lgm2.de/resource/ihe/iti-8; https://www.3lgm2.de/resource/ihe/XDSB_DOC_REGISTRY]_5</field>
+      <field name="end">IAI_1670108422702_8498</field>
+    </element>
+    <element class="IheActorInstance_IheActorInstanceInterface_Edge" hash="DLK_1670108422703_8500">
+      <field name="name">Unterordunungsbeziehung 10</field>
+      <field name="start">IAI_1670108422695_8481</field>
+      <field name="end">IAI_1670108422702_8498</field>
+    </element>
+    <element class="ApplicationSystem_IheActorInstance_Edge" hash="DLK_1670108422706_8501">
+      <field name="name">Unterordunungsbeziehung 3</field>
+      <field name="start">ASY_1670107320282_8147</field>
+      <field name="end">IAI_1670108422695_8481</field>
+    </element>
+    <element class="IheIntegrationProfile_IheActor_Edge" hash="[https://www.3lgm2.de/resource/ihe/XDSB_PAT_IDENTITY_SRC; https://www.3lgm2.de/resource/ihe/iheIntegrationProfile; https://www.3lgm2.de/resource/ihe/XDS.b]">
+      <field name="name">Beziehung 31</field>
+      <field name="start">https://www.3lgm2.de/resource/ihe/XDS.b</field>
+      <field name="end">https://www.3lgm2.de/resource/ihe/XDSB_PAT_IDENTITY_SRC</field>
+    </element>
+    <element class="IheInvokingInterface_IheTransaction_Edge" hash="[https://www.3lgm2.de/resource/ihe/XDSB_PAT_IDENTITY_SRC; https://www.3lgm2.de/resource/ihe/iti-44; https://www.3lgm2.de/resource/ihe/XDSB_DOC_REGISTRY]_3">
+      <field name="name">Beziehung 17</field>
+      <field name="start">[https://www.3lgm2.de/resource/ihe/XDSB_PAT_IDENTITY_SRC; https://www.3lgm2.de/resource/ihe/iti-44; https://www.3lgm2.de/resource/ihe/XDSB_DOC_REGISTRY]_2</field>
+      <field name="end">[https://www.3lgm2.de/resource/ihe/XDSB_PAT_IDENTITY_SRC; https://www.3lgm2.de/resource/ihe/iti-44; https://www.3lgm2.de/resource/ihe/XDSB_DOC_REGISTRY]</field>
+    </element>
+    <element class="IheActor_IheInterface_Edge" hash="[https://www.3lgm2.de/resource/ihe/XDSB_PAT_IDENTITY_SRC; https://www.3lgm2.de/resource/ihe/iti-44; https://www.3lgm2.de/resource/ihe/XDSB_DOC_REGISTRY]_1">
+      <field name="name">Unterordunungsbeziehung 33</field>
+      <field name="start">https://www.3lgm2.de/resource/ihe/XDSB_PAT_IDENTITY_SRC</field>
+      <field name="end">[https://www.3lgm2.de/resource/ihe/XDSB_PAT_IDENTITY_SRC; https://www.3lgm2.de/resource/ihe/iti-44; https://www.3lgm2.de/resource/ihe/XDSB_DOC_REGISTRY]_2</field>
+    </element>
+    <element class="IheInvokingInterface_IheTransaction_Edge" hash="[https://www.3lgm2.de/resource/ihe/XDSB_PAT_IDENTITY_SRC; https://www.3lgm2.de/resource/ihe/iti-8; https://www.3lgm2.de/resource/ihe/XDSB_DOC_REGISTRY]_3">
+      <field name="name">Beziehung 18</field>
+      <field name="start">[https://www.3lgm2.de/resource/ihe/XDSB_PAT_IDENTITY_SRC; https://www.3lgm2.de/resource/ihe/iti-8; https://www.3lgm2.de/resource/ihe/XDSB_DOC_REGISTRY]_2</field>
+      <field name="end">[https://www.3lgm2.de/resource/ihe/XDSB_PAT_IDENTITY_SRC; https://www.3lgm2.de/resource/ihe/iti-8; https://www.3lgm2.de/resource/ihe/XDSB_DOC_REGISTRY]</field>
+    </element>
+    <element class="IheActor_IheInterface_Edge" hash="[https://www.3lgm2.de/resource/ihe/XDSB_PAT_IDENTITY_SRC; https://www.3lgm2.de/resource/ihe/iti-8; https://www.3lgm2.de/resource/ihe/XDSB_DOC_REGISTRY]_1">
+      <field name="name">Unterordunungsbeziehung 35</field>
+      <field name="start">https://www.3lgm2.de/resource/ihe/XDSB_PAT_IDENTITY_SRC</field>
+      <field name="end">[https://www.3lgm2.de/resource/ihe/XDSB_PAT_IDENTITY_SRC; https://www.3lgm2.de/resource/ihe/iti-8; https://www.3lgm2.de/resource/ihe/XDSB_DOC_REGISTRY]_2</field>
+    </element>
+    <element class="IheActor_IheActor_MustBeGroupedWith_Edge" hash="[https://www.3lgm2.de/resource/ihe/XDSB_PAT_IDENTITY_SRC; https://www.3lgm2.de/resource/ihe/mustBeGroupedWith; https://www.3lgm2.de/resource/ihe/ATNA_SA]">
+      <field name="name">Gruppierung 21</field>
+      <field name="start">https://www.3lgm2.de/resource/ihe/XDSB_PAT_IDENTITY_SRC</field>
+      <field name="end">https://www.3lgm2.de/resource/ihe/ATNA_SA</field>
+    </element>
+    <element class="IheActor_IheActor_MustBeGroupedWith_Edge" hash="[https://www.3lgm2.de/resource/ihe/XDSB_PAT_IDENTITY_SRC; https://www.3lgm2.de/resource/ihe/mustBeGroupedWith; https://www.3lgm2.de/resource/ihe/ATNA_SN]">
+      <field name="name">Gruppierung 20</field>
+      <field name="start">https://www.3lgm2.de/resource/ihe/XDSB_PAT_IDENTITY_SRC</field>
+      <field name="end">https://www.3lgm2.de/resource/ihe/ATNA_SN</field>
+    </element>
+    <element class="IheCommunicationLink_Edge" hash="DLK_1670078268369_5187">
+      <field name="name">ITI-44 Patient Identity Feed HL7 V3</field>
+      <field name="start">[https://www.3lgm2.de/resource/ihe/XDSB_PAT_IDENTITY_SRC; https://www.3lgm2.de/resource/ihe/iti-44; https://www.3lgm2.de/resource/ihe/XDSB_DOC_REGISTRY]_2</field>
+      <field name="end">[https://www.3lgm2.de/resource/ihe/XDSB_PAT_IDENTITY_SRC; https://www.3lgm2.de/resource/ihe/iti-44; https://www.3lgm2.de/resource/ihe/XDSB_DOC_REGISTRY]_5</field>
+    </element>
+    <element class="IheCommunicationLink_Edge" hash="DLK_1670078268369_5189">
+      <field name="name">ITI-8 Patient Identity Feed</field>
+      <field name="start">[https://www.3lgm2.de/resource/ihe/XDSB_PAT_IDENTITY_SRC; https://www.3lgm2.de/resource/ihe/iti-8; https://www.3lgm2.de/resource/ihe/XDSB_DOC_REGISTRY]_2</field>
+      <field name="end">[https://www.3lgm2.de/resource/ihe/XDSB_PAT_IDENTITY_SRC; https://www.3lgm2.de/resource/ihe/iti-8; https://www.3lgm2.de/resource/ihe/XDSB_DOC_REGISTRY]_5</field>
+    </element>
+    <element class="IheActor_IheActorInstance_Edge" hash="DLK_1670108461901_8533">
+      <field name="name">Unterordunungsbeziehung 4</field>
+      <field name="start">https://www.3lgm2.de/resource/ihe/XDSB_PAT_IDENTITY_SRC</field>
+      <field name="end">IAI_1670108461900_8532</field>
+    </element>
+    <element class="IheInvokingInterface_IheActorInstanceInvokingInterface_Edge" hash="DLK_1670108461901_8535">
+      <field name="name">Unterordunungsbeziehung 3</field>
+      <field name="start">[https://www.3lgm2.de/resource/ihe/XDSB_PAT_IDENTITY_SRC; https://www.3lgm2.de/resource/ihe/iti-44; https://www.3lgm2.de/resource/ihe/XDSB_DOC_REGISTRY]_2</field>
+      <field name="end">IAI_1670108461901_8534</field>
+    </element>
+    <element class="IheActorInstance_IheActorInstanceInterface_Edge" hash="DLK_1670108461902_8536">
+      <field name="name">Unterordunungsbeziehung 11</field>
+      <field name="start">IAI_1670108461900_8532</field>
+      <field name="end">IAI_1670108461901_8534</field>
+    </element>
+    <element class="IheInvokingInterface_IheActorInstanceInvokingInterface_Edge" hash="DLK_1670108461903_8538">
+      <field name="name">Unterordunungsbeziehung 4</field>
+      <field name="start">[https://www.3lgm2.de/resource/ihe/XDSB_PAT_IDENTITY_SRC; https://www.3lgm2.de/resource/ihe/iti-8; https://www.3lgm2.de/resource/ihe/XDSB_DOC_REGISTRY]_2</field>
+      <field name="end">IAI_1670108461902_8537</field>
+    </element>
+    <element class="IheActorInstance_IheActorInstanceInterface_Edge" hash="DLK_1670108461903_8539">
+      <field name="name">Unterordunungsbeziehung 12</field>
+      <field name="start">IAI_1670108461900_8532</field>
+      <field name="end">IAI_1670108461902_8537</field>
+    </element>
+    <element class="ApplicationSystem_IheActorInstance_Edge" hash="DLK_1670108461906_8540">
+      <field name="name">Unterordunungsbeziehung 4</field>
+      <field name="start">ASY_1670108434362_8502</field>
+      <field name="end">IAI_1670108461900_8532</field>
+    </element>
+    <element class="IheIntegrationProfile_IheActor_Edge" hash="[https://www.3lgm2.de/resource/ihe/XDSB_EMBED_REPOS; https://www.3lgm2.de/resource/ihe/iheIntegrationProfile; https://www.3lgm2.de/resource/ihe/XDS.b]">
+      <field name="name">Beziehung 173</field>
+      <field name="start">https://www.3lgm2.de/resource/ihe/XDS.b</field>
+      <field name="end">https://www.3lgm2.de/resource/ihe/XDSB_EMBED_REPOS</field>
+    </element>
+    <element class="IheInvokingInterface_IheTransaction_Edge" hash="[https://www.3lgm2.de/resource/ihe/XDSB_EMBED_REPOS; https://www.3lgm2.de/resource/ihe/iti-42; https://www.3lgm2.de/resource/ihe/XDSB_DOC_REGISTRY]_3">
+      <field name="name">Beziehung 95</field>
+      <field name="start">[https://www.3lgm2.de/resource/ihe/XDSB_EMBED_REPOS; https://www.3lgm2.de/resource/ihe/iti-42; https://www.3lgm2.de/resource/ihe/XDSB_DOC_REGISTRY]_2</field>
+      <field name="end">[https://www.3lgm2.de/resource/ihe/XDSB_DOC_REPOSITORY; https://www.3lgm2.de/resource/ihe/iti-42; https://www.3lgm2.de/resource/ihe/XDSB_DOC_REGISTRY]</field>
+    </element>
+    <element class="IheActor_IheInterface_Edge" hash="[https://www.3lgm2.de/resource/ihe/XDSB_EMBED_REPOS; https://www.3lgm2.de/resource/ihe/iti-42; https://www.3lgm2.de/resource/ihe/XDSB_DOC_REGISTRY]_1">
+      <field name="name">Unterordunungsbeziehung 191</field>
+      <field name="start">https://www.3lgm2.de/resource/ihe/XDSB_EMBED_REPOS</field>
+      <field name="end">[https://www.3lgm2.de/resource/ihe/XDSB_EMBED_REPOS; https://www.3lgm2.de/resource/ihe/iti-42; https://www.3lgm2.de/resource/ihe/XDSB_DOC_REGISTRY]_2</field>
+    </element>
+    <element class="IheProvidingInterface_IheTransaction_Edge" hash="[https://www.3lgm2.de/resource/ihe/XDSB_DOC_CONSUMER; https://www.3lgm2.de/resource/ihe/iti-43; https://www.3lgm2.de/resource/ihe/XDSB_EMBED_REPOS]_4">
+      <field name="name">Beziehung 73</field>
+      <field name="start">[https://www.3lgm2.de/resource/ihe/XDSB_DOC_CONSUMER; https://www.3lgm2.de/resource/ihe/iti-43; https://www.3lgm2.de/resource/ihe/XDSB_EMBED_REPOS]_5</field>
+      <field name="end">[https://www.3lgm2.de/resource/ihe/XDS-IB_DOC_CONSUMER; https://www.3lgm2.de/resource/ihe/iti-43; https://www.3lgm2.de/resource/ihe/XDS-IB_DOC_REPOSITORY]</field>
+    </element>
+    <element class="IheActor_IheInterface_Edge" hash="[https://www.3lgm2.de/resource/ihe/XDSB_DOC_CONSUMER; https://www.3lgm2.de/resource/ihe/iti-43; https://www.3lgm2.de/resource/ihe/XDSB_EMBED_REPOS]_6">
+      <field name="name">Unterordunungsbeziehung 145</field>
+      <field name="start">https://www.3lgm2.de/resource/ihe/XDSB_EMBED_REPOS</field>
+      <field name="end">[https://www.3lgm2.de/resource/ihe/XDSB_DOC_CONSUMER; https://www.3lgm2.de/resource/ihe/iti-43; https://www.3lgm2.de/resource/ihe/XDSB_EMBED_REPOS]_5</field>
+    </element>
+    <element class="IheActor_IheActor_MustBeGroupedWith_Edge" hash="[https://www.3lgm2.de/resource/ihe/XDSB_EMBED_REPOS; https://www.3lgm2.de/resource/ihe/mustBeGroupedWith; https://www.3lgm2.de/resource/ihe/ATNA_SA]">
+      <field name="name">Gruppierung 97</field>
+      <field name="start">https://www.3lgm2.de/resource/ihe/XDSB_EMBED_REPOS</field>
+      <field name="end">https://www.3lgm2.de/resource/ihe/ATNA_SA</field>
+    </element>
+    <element class="IheActor_IheActor_MustBeGroupedWith_Edge" hash="[https://www.3lgm2.de/resource/ihe/XDSB_EMBED_REPOS; https://www.3lgm2.de/resource/ihe/mustBeGroupedWith; https://www.3lgm2.de/resource/ihe/ATNA_SN]">
+      <field name="name">Gruppierung 95</field>
+      <field name="start">https://www.3lgm2.de/resource/ihe/XDSB_EMBED_REPOS</field>
+      <field name="end">https://www.3lgm2.de/resource/ihe/ATNA_SN</field>
+    </element>
+    <element class="IheActor_IheActor_MustBeGroupedWith_Edge" hash="[https://www.3lgm2.de/resource/ihe/XDSB_EMBED_REPOS; https://www.3lgm2.de/resource/ihe/mustBeGroupedWith; https://www.3lgm2.de/resource/ihe/XDSB_DOC_REPOSITORY]">
+      <field name="name">Gruppierung 94</field>
+      <field name="start">https://www.3lgm2.de/resource/ihe/XDSB_EMBED_REPOS</field>
+      <field name="end">https://www.3lgm2.de/resource/ihe/XDSB_DOC_REPOSITORY</field>
+    </element>
+    <element class="IheActor_IheActor_MustBeGroupedWith_Edge" hash="[https://www.3lgm2.de/resource/ihe/XDSB_EMBED_REPOS; https://www.3lgm2.de/resource/ihe/mustBeGroupedWith; https://www.3lgm2.de/resource/ihe/XDSB_DOC_SOURCE]">
+      <field name="name">Gruppierung 96</field>
+      <field name="start">https://www.3lgm2.de/resource/ihe/XDSB_EMBED_REPOS</field>
+      <field name="end">https://www.3lgm2.de/resource/ihe/XDSB_DOC_SOURCE</field>
+    </element>
+    <element class="IheCommunicationLink_Edge" hash="DLK_1670078268371_5232">
+      <field name="name">ITI-42 Register Document Set-b</field>
+      <field name="start">[https://www.3lgm2.de/resource/ihe/XDSB_EMBED_REPOS; https://www.3lgm2.de/resource/ihe/iti-42; https://www.3lgm2.de/resource/ihe/XDSB_DOC_REGISTRY]_2</field>
+      <field name="end">[https://www.3lgm2.de/resource/ihe/XDSB_DOC_REPOSITORY; https://www.3lgm2.de/resource/ihe/iti-42; https://www.3lgm2.de/resource/ihe/XDSB_DOC_REGISTRY]_5</field>
+    </element>
+    <element class="IheIntegrationProfile_IheActor_Edge" hash="[https://www.3lgm2.de/resource/ihe/XDSB_DOC_CONSUMER; https://www.3lgm2.de/resource/ihe/iheIntegrationProfile; https://www.3lgm2.de/resource/ihe/XDS.b]">
+      <field name="name">Beziehung 131</field>
+      <field name="start">https://www.3lgm2.de/resource/ihe/XDS.b</field>
+      <field name="end">https://www.3lgm2.de/resource/ihe/XDSB_DOC_CONSUMER</field>
+    </element>
+    <element class="IheInvokingInterface_IheTransaction_Edge" hash="[https://www.3lgm2.de/resource/ihe/XDSB_DOC_CONSUMER; https://www.3lgm2.de/resource/ihe/iti-18; https://www.3lgm2.de/resource/ihe/XDSB_DOC_REGISTRY]_3">
+      <field name="name">Beziehung 71</field>
+      <field name="start">[https://www.3lgm2.de/resource/ihe/XDSB_DOC_CONSUMER; https://www.3lgm2.de/resource/ihe/iti-18; https://www.3lgm2.de/resource/ihe/XDSB_DOC_REGISTRY]_2</field>
+      <field name="end">[https://www.3lgm2.de/resource/ihe/RMD_DOC_ADMINISTRATOR; https://www.3lgm2.de/resource/ihe/iti-18; https://www.3lgm2.de/resource/ihe/RMD_DOC_REGISTRY]</field>
+    </element>
+    <element class="IheActor_IheInterface_Edge" hash="[https://www.3lgm2.de/resource/ihe/XDSB_DOC_CONSUMER; https://www.3lgm2.de/resource/ihe/iti-18; https://www.3lgm2.de/resource/ihe/XDSB_DOC_REGISTRY]_1">
+      <field name="name">Unterordunungsbeziehung 142</field>
+      <field name="start">https://www.3lgm2.de/resource/ihe/XDSB_DOC_CONSUMER</field>
+      <field name="end">[https://www.3lgm2.de/resource/ihe/XDSB_DOC_CONSUMER; https://www.3lgm2.de/resource/ihe/iti-18; https://www.3lgm2.de/resource/ihe/XDSB_DOC_REGISTRY]_2</field>
+    </element>
+    <element class="IheInvokingInterface_IheTransaction_Edge" hash="[https://www.3lgm2.de/resource/ihe/XDSB_DOC_CONSUMER; https://www.3lgm2.de/resource/ihe/iti-43; https://www.3lgm2.de/resource/ihe/XDSB_DOC_REPOSITORY]_3">
+      <field name="name">Beziehung 70</field>
+      <field name="start">[https://www.3lgm2.de/resource/ihe/XDSB_DOC_CONSUMER; https://www.3lgm2.de/resource/ihe/iti-43; https://www.3lgm2.de/resource/ihe/XDSB_DOC_REPOSITORY]_2</field>
+      <field name="end">[https://www.3lgm2.de/resource/ihe/XDS-IB_DOC_CONSUMER; https://www.3lgm2.de/resource/ihe/iti-43; https://www.3lgm2.de/resource/ihe/XDS-IB_DOC_REPOSITORY]</field>
+    </element>
+    <element class="IheActor_IheInterface_Edge" hash="[https://www.3lgm2.de/resource/ihe/XDSB_DOC_CONSUMER; https://www.3lgm2.de/resource/ihe/iti-43; https://www.3lgm2.de/resource/ihe/XDSB_DOC_REPOSITORY]_1">
+      <field name="name">Unterordunungsbeziehung 140</field>
+      <field name="start">https://www.3lgm2.de/resource/ihe/XDSB_DOC_CONSUMER</field>
+      <field name="end">[https://www.3lgm2.de/resource/ihe/XDSB_DOC_CONSUMER; https://www.3lgm2.de/resource/ihe/iti-43; https://www.3lgm2.de/resource/ihe/XDSB_DOC_REPOSITORY]_2</field>
+    </element>
+    <element class="IheActor_IheActor_MustBeGroupedWith_Edge" hash="[https://www.3lgm2.de/resource/ihe/XDSB_DOC_CONSUMER; https://www.3lgm2.de/resource/ihe/mustBeGroupedWith; https://www.3lgm2.de/resource/ihe/ATNA_SA]">
+      <field name="name">Gruppierung 71</field>
+      <field name="start">https://www.3lgm2.de/resource/ihe/XDSB_DOC_CONSUMER</field>
+      <field name="end">https://www.3lgm2.de/resource/ihe/ATNA_SA</field>
+    </element>
+    <element class="IheActor_IheActor_MustBeGroupedWith_Edge" hash="[https://www.3lgm2.de/resource/ihe/XDSB_DOC_CONSUMER; https://www.3lgm2.de/resource/ihe/mustBeGroupedWith; https://www.3lgm2.de/resource/ihe/ATNA_SN]">
+      <field name="name">Gruppierung 72</field>
+      <field name="start">https://www.3lgm2.de/resource/ihe/XDSB_DOC_CONSUMER</field>
+      <field name="end">https://www.3lgm2.de/resource/ihe/ATNA_SN</field>
+    </element>
+    <element class="IheCommunicationLink_Edge" hash="DLK_1670078268368_5170">
+      <field name="name">ITI-18 Registry Stored Query</field>
+      <field name="start">[https://www.3lgm2.de/resource/ihe/XDSB_DOC_CONSUMER; https://www.3lgm2.de/resource/ihe/iti-18; https://www.3lgm2.de/resource/ihe/XDSB_DOC_REGISTRY]_2</field>
+      <field name="end">[https://www.3lgm2.de/resource/ihe/XDSB_DOC_CONSUMER; https://www.3lgm2.de/resource/ihe/iti-18; https://www.3lgm2.de/resource/ihe/XDSB_DOC_REGISTRY]_5</field>
+    </element>
+    <element class="IheCommunicationLink_Edge" hash="DLK_1670078268368_5164">
+      <field name="name">ITI-43 Retrieve Document Set</field>
+      <field name="start">[https://www.3lgm2.de/resource/ihe/XDSB_DOC_CONSUMER; https://www.3lgm2.de/resource/ihe/iti-43; https://www.3lgm2.de/resource/ihe/XDSB_DOC_REPOSITORY]_2</field>
+      <field name="end">[https://www.3lgm2.de/resource/ihe/XDSB_DOC_CONSUMER; https://www.3lgm2.de/resource/ihe/iti-43; https://www.3lgm2.de/resource/ihe/XDSB_DOC_REPOSITORY]_5</field>
+    </element>
+    <element class="IheCommunicationLink_Edge" hash="DLK_1670078268368_5165">
+      <field name="name">ITI-43 Retrieve Document Set</field>
+      <field name="start">[https://www.3lgm2.de/resource/ihe/XDSB_DOC_CONSUMER; https://www.3lgm2.de/resource/ihe/iti-43; https://www.3lgm2.de/resource/ihe/XDSB_DOC_REPOSITORY]_2</field>
+      <field name="end">[https://www.3lgm2.de/resource/ihe/XDSB_DOC_CONSUMER; https://www.3lgm2.de/resource/ihe/iti-43; https://www.3lgm2.de/resource/ihe/XDSB_EMBED_REPOS]_5</field>
+    </element>
+    <element class="IheActor_IheActorInstance_Edge" hash="DLK_1670108665038_8625">
+      <field name="name">Unterordunungsbeziehung 2</field>
+      <field name="start">https://www.3lgm2.de/resource/ihe/XDSB_DOC_CONSUMER</field>
+      <field name="end">IAI_1670108665037_8624</field>
+    </element>
+    <element class="IheInvokingInterface_IheActorInstanceInvokingInterface_Edge" hash="DLK_1670108665039_8627">
+      <field name="name">Unterordunungsbeziehung 2</field>
+      <field name="start">[https://www.3lgm2.de/resource/ihe/XDSB_DOC_CONSUMER; https://www.3lgm2.de/resource/ihe/iti-18; https://www.3lgm2.de/resource/ihe/XDSB_DOC_REGISTRY]_2</field>
+      <field name="end">IAI_1670108665038_8626</field>
+    </element>
+    <element class="IheActorInstance_IheActorInstanceInterface_Edge" hash="DLK_1670108665039_8628">
+      <field name="name">Unterordunungsbeziehung 3</field>
+      <field name="start">IAI_1670108665037_8624</field>
+      <field name="end">IAI_1670108665038_8626</field>
+    </element>
+    <element class="IheInvokingInterface_IheActorInstanceInvokingInterface_Edge" hash="DLK_1670108665040_8630">
+      <field name="name">Unterordunungsbeziehung 5</field>
+      <field name="start">[https://www.3lgm2.de/resource/ihe/XDSB_DOC_CONSUMER; https://www.3lgm2.de/resource/ihe/iti-43; https://www.3lgm2.de/resource/ihe/XDSB_DOC_REPOSITORY]_2</field>
+      <field name="end">IAI_1670108665040_8629</field>
+    </element>
+    <element class="IheActorInstance_IheActorInstanceInterface_Edge" hash="DLK_1670108665040_8631">
+      <field name="name">Unterordunungsbeziehung 4</field>
+      <field name="start">IAI_1670108665037_8624</field>
+      <field name="end">IAI_1670108665040_8629</field>
+    </element>
+    <element class="ApplicationSystem_IheActorInstance_Edge" hash="DLK_1670108665044_8632">
+      <field name="name">Unterordunungsbeziehung 2</field>
+      <field name="start">ASY_1670108605888_8588</field>
+      <field name="end">IAI_1670108665037_8624</field>
+    </element>
+    <element class="IheActorInstanceCommunicationLink_Edge" hash="DLK_1670108684174_8633">
+      <field name="name">ITI-8 Patient Identity Feed</field>
+      <field name="start">IAI_1670108461902_8537</field>
+      <field name="end">IAI_1670108422702_8498</field>
+    </element>
+    <element class="IheActorInstanceCommunicationLink_Edge" hash="DLK_1670108708084_8635">
+      <field name="name">ITI-18 Registry Stored Query</field>
+      <field name="start">IAI_1670108665038_8626</field>
+      <field name="end">IAI_1670108422696_8483</field>
+    </element>
+    <element class="ApplicationComponent_PhysicalDataProcessingComponent_RequiresForFunctionality_Edge" hash="DLK_1670182025022_9722">
+      <field name="name">Funktionalität 22</field>
+      <field name="start">ASY_1670108434362_8502</field>
+      <field name="end">PDP_1670181737348_9660</field>
+    </element>
+    <element class="ApplicationComponent_PhysicalDataProcessingComponent_RequiresForFunctionality_Edge" hash="DLK_1670182025032_9723">
+      <field name="name">Funktionalität 23</field>
+      <field name="start">ASY_1670107320282_8147</field>
+      <field name="end">PDP_1670181737348_9660</field>
+    </element>
+    <element class="ApplicationComponent_PhysicalDataProcessingComponent_RequiresForStorage_Edge" hash="DLK_1670182039691_9724">
+      <field name="name">Speicherung 10</field>
+      <field name="start">ASY_1670107320282_8147</field>
+      <field name="end">PDP_1670181737348_9660</field>
+    </element>
+    <element class="ApplicationComponent_PhysicalDataProcessingComponent_RequiresForStorage_Edge" hash="DLK_1670182044320_9725">
+      <field name="name">Speicherung 11</field>
+      <field name="start">ASY_1670108434362_8502</field>
+      <field name="end">PDP_1670181737348_9660</field>
+    </element>
+    <element class="ApplicationComponent_RepresentationForm_Edge" hash="DLK_1670182292781_9739">
+      <field name="name">Speicherung 6</field>
+      <field name="start">ASY_1670107320282_8147</field>
+      <field name="end">RFO_1670107951956_8264</field>
+    </element>
+    <element class="IheTransaction_IheCommunicationLink_Edge" hash="DLK_1670229166842_5780">
+      <field name="name">Beziehung 1</field>
+      <field name="start">[https://www.3lgm2.de/resource/ihe/ATNA_SN; https://www.3lgm2.de/resource/ihe/iti-19; https://www.3lgm2.de/resource/ihe/ATNA_SA]</field>
+      <field name="end">DLK_1670078268369_5203</field>
+    </element>
+    <element class="IheTransaction_IheCommunicationLink_Edge" hash="DLK_1670229166842_5781">
+      <field name="name">Beziehung 2</field>
+      <field name="start">[https://www.3lgm2.de/resource/ihe/ATNA_SN; https://www.3lgm2.de/resource/ihe/iti-19; https://www.3lgm2.de/resource/ihe/ATNA_SA]</field>
+      <field name="end">DLK_1670078268372_5262</field>
+    </element>
+    <element class="IheTransaction_IheCommunicationLink_Edge" hash="DLK_1670229166842_5782">
+      <field name="name">Beziehung 3</field>
+      <field name="start">[https://www.3lgm2.de/resource/ihe/ATNA_SN; https://www.3lgm2.de/resource/ihe/iti-19; https://www.3lgm2.de/resource/ihe/ATNA_SA]</field>
+      <field name="end">DLK_1670078268369_5204</field>
+    </element>
+    <element class="IheTransaction_IheCommunicationLink_Edge" hash="DLK_1670229166842_5783">
+      <field name="name">Beziehung 4</field>
+      <field name="start">[https://www.3lgm2.de/resource/ihe/ATNA_SN; https://www.3lgm2.de/resource/ihe/iti-19; https://www.3lgm2.de/resource/ihe/ATNA_SA]</field>
+      <field name="end">DLK_1670078268372_5263</field>
+    </element>
+    <element class="IheTransaction_IheCommunicationLink_Edge" hash="DLK_1670229166842_5784">
+      <field name="name">Beziehung 5</field>
+      <field name="start">[https://www.3lgm2.de/resource/ihe/XDR_DOC_SOURCE; https://www.3lgm2.de/resource/ihe/iti-41; https://www.3lgm2.de/resource/ihe/XDR_DOC_RECIPIENT]</field>
+      <field name="end">DLK_1670078268373_5309</field>
+    </element>
+    <element class="IheTransaction_IheCommunicationLink_Edge" hash="DLK_1670229166842_5785">
+      <field name="name">Beziehung 6</field>
+      <field name="start">[https://www.3lgm2.de/resource/ihe/XDSB_DOC_REPOSITORY; https://www.3lgm2.de/resource/ihe/iti-42; https://www.3lgm2.de/resource/ihe/XDSB_DOC_REGISTRY]</field>
+      <field name="end">DLK_1670078268371_5255</field>
+    </element>
+    <element class="IheTransaction_IheCommunicationLink_Edge" hash="DLK_1670229166842_5786">
+      <field name="name">Beziehung 7</field>
+      <field name="start">[https://www.3lgm2.de/resource/ihe/XDSB_PAT_IDENTITY_SRC; https://www.3lgm2.de/resource/ihe/iti-44; https://www.3lgm2.de/resource/ihe/XDSB_DOC_REGISTRY]</field>
+      <field name="end">DLK_1670078268369_5187</field>
+    </element>
+    <element class="IheTransaction_IheCommunicationLink_Edge" hash="DLK_1670229166842_5787">
+      <field name="name">Beziehung 8</field>
+      <field name="start">[https://www.3lgm2.de/resource/ihe/XDSB_PAT_IDENTITY_SRC; https://www.3lgm2.de/resource/ihe/iti-8; https://www.3lgm2.de/resource/ihe/XDSB_DOC_REGISTRY]</field>
+      <field name="end">DLK_1670078268369_5189</field>
+    </element>
+    <element class="IheTransaction_IheCommunicationLink_Edge" hash="DLK_1670229166842_5788">
+      <field name="name">Beziehung 9</field>
+      <field name="start">[https://www.3lgm2.de/resource/ihe/XDSB_DOC_REPOSITORY; https://www.3lgm2.de/resource/ihe/iti-42; https://www.3lgm2.de/resource/ihe/XDSB_DOC_REGISTRY]</field>
+      <field name="end">DLK_1670078268371_5232</field>
+    </element>
+    <element class="IheTransaction_IheCommunicationLink_Edge" hash="DLK_1670229166842_5789">
+      <field name="name">Beziehung 10</field>
+      <field name="start">[https://www.3lgm2.de/resource/ihe/RMD_DOC_ADMINISTRATOR; https://www.3lgm2.de/resource/ihe/iti-18; https://www.3lgm2.de/resource/ihe/RMD_DOC_REGISTRY]</field>
+      <field name="end">DLK_1670078268368_5170</field>
+    </element>
+    <element class="IheTransaction_IheCommunicationLink_Edge" hash="DLK_1670229166843_5790">
+      <field name="name">Beziehung 11</field>
+      <field name="start">[https://www.3lgm2.de/resource/ihe/XDS-IB_DOC_CONSUMER; https://www.3lgm2.de/resource/ihe/iti-43; https://www.3lgm2.de/resource/ihe/XDS-IB_DOC_REPOSITORY]</field>
+      <field name="end">DLK_1670078268368_5164</field>
+    </element>
+    <element class="IheTransaction_IheCommunicationLink_Edge" hash="DLK_1670229166843_5791">
+      <field name="name">Beziehung 12</field>
+      <field name="start">[https://www.3lgm2.de/resource/ihe/XDS-IB_DOC_CONSUMER; https://www.3lgm2.de/resource/ihe/iti-43; https://www.3lgm2.de/resource/ihe/XDS-IB_DOC_REPOSITORY]</field>
+      <field name="end">DLK_1670078268368_5165</field>
+    </element>
+    <element class="IheCommunicationLink_IheActorInstanceCommunicationLink_Edge" hash="DLK_1670229166843_5793">
+      <field name="name">Beziehung 2</field>
+      <field name="start">DLK_1670078268369_5189</field>
+      <field name="end">DLK_1670108684174_8633</field>
+    </element>
+    <element class="IheCommunicationLink_IheActorInstanceCommunicationLink_Edge" hash="DLK_1670229166843_5794">
+      <field name="name">Beziehung 3</field>
+      <field name="start">DLK_1670078268368_5170</field>
+      <field name="end">DLK_1670108708084_8635</field>
+    </element>
+    <element class="Group_HasPartEdge" hash="DLK_1670107353403_8148">
+      <field name="name">Hat-Teil-Beziehung 67</field>
+      <field name="start">GRO_1670107281245_8146</field>
+      <field name="end">ASY_1670107320282_8147</field>
+    </element>
+    <element class="Group_HasPartEdge" hash="DLK_1670108444015_8503">
+      <field name="name">Hat-Teil-Beziehung 70</field>
+      <field name="start">GRO_1670107281245_8146</field>
+      <field name="end">ASY_1670108434362_8502</field>
+    </element>
+    <element class="Group_HasPartEdge" hash="DLK_1670108625539_8589">
+      <field name="name">Hat-Teil-Beziehung 71</field>
+      <field name="start">GRO_1670108552112_8587</field>
+      <field name="end">ASY_1670108605888_8588</field>
+    </element>
+    <element class="PhysicalDataProcessingComponent_DeviceClass_Edge" hash="DLK_1670181737349_9665">
+      <field name="name">Beziehung 11</field>
+      <field name="start">PDP_1670181737348_9661</field>
+      <field name="end">DCL_1670181737349_9664</field>
+    </element>
+    <element class="PhysicalDataProcessingComponent_DeviceClass_Edge" hash="DLK_1670181737349_9668">
+      <field name="name">Beziehung 9</field>
+      <field name="start">PDP_1670181737348_9660</field>
+      <field name="end">DCL_1670181737349_9667</field>
+    </element>
+    <element class="PhysicalDataProcessingComponent_DeviceClass_Edge" hash="DLK_1670181737349_9671">
+      <field name="name">Beziehung 13</field>
+      <field name="start">PDP_1670076614512_11015</field>
+      <field name="end">DCL_1670181737349_9664</field>
+    </element>
+    <element class="DataTransmissionLink_Edge" hash="DLK_1670181737349_9673">
+      <field name="name">Datenübertragungsverbindung 3</field>
+      <field name="start">PDP_1670181737348_9661</field>
+      <field name="end">PDP_1670181737348_9660</field>
+    </element>
+    <element class="DataTransmissionLink_Edge" hash="DLK_1670181737350_9677">
+      <field name="name">Datenübertragungsverbindung 7</field>
+      <field name="start">PDP_1670076614512_11015</field>
+      <field name="end">PDP_1670181737348_9661</field>
+    </element>
+    <element class="TransmissionMedium_DataTransmissionLink_Edge" hash="DLK_1670248662779_8518">
+      <field name="name">Beziehung 1</field>
+      <field name="start">DLK_1670181737350_9677</field>
+      <field name="end">TME_1670077730056_11043</field>
+    </element>
+    <element class="TransmissionMedium_DataTransmissionLink_Edge" hash="DLK_1670248669386_8519">
+      <field name="name">Beziehung 2</field>
+      <field name="start">DLK_1670181737349_9673</field>
+      <field name="end">TME_1670076499361_10951</field>
+    </element>
+    <element class="Group_HasPartEdge" hash="DLK_1670181869507_9708">
+      <field name="name">Hat-Teil-Beziehung 72</field>
+      <field name="start">GRO_1670181678871_9622</field>
+      <field name="end">PDP_1670181737348_9660</field>
+    </element>
+    <element class="Bendpoint" hash="BEN_1670108728048_8640">
+      <field name="name">Knickpunkt 108</field>
+      <field name="kantenHash">DLK_1670108708084_8635</field>
+      <field name="index">0</field>
+    </element>
+    <element class="Bendpoint" hash="BEN_1670108730425_8641">
+      <field name="name">Knickpunkt 111</field>
+      <field name="kantenHash">DLK_1670108708084_8635</field>
+      <field name="index">1</field>
+    </element>
+    <element class="Bendpoint" hash="BEN_1670181791122_9707">
+      <field name="name">Knickpunkt 118</field>
+      <field name="kantenHash">DLK_1670181737349_9673</field>
+      <field name="index">1</field>
+    </element>
+    <element class="Bendpoint" hash="BEN_1670181791122_9706">
+      <field name="name">Knickpunkt 116</field>
+      <field name="kantenHash">DLK_1670181737349_9673</field>
+      <field name="index">0</field>
+    </element>
+  </objects>
+  <szenario hash="SZN_1669727077865_5" titel="DMP">
+    <description></description>
+    <view>
+      <selected>true</selected>
+      <x>30</x>
+      <y>0</y>
+      <zoom>0.54</zoom>
+      <degree>73</degree>
+      <shift>284</shift>
+      <pageSizeFactor>2.5611979166666665</pageSizeFactor>
+      <activeLayer>2</activeLayer>
+      <multiView>true</multiView>
+    </view>
+    <mapping>
+      <layout class="Bendpoint">
+        <color name="bg_color">
+          <red>255</red>
+          <green>100</green>
+          <blue>100</blue>
+        </color>
+        <color name="fg_color">
+          <red>0</red>
+          <green>0</green>
+          <blue>0</blue>
+        </color>
+        <color name="border_color">
+          <red>0</red>
+          <green>0</green>
+          <blue>0</blue>
+        </color>
+        <form>0</form>
+        <font_family>SansSerif</font_family>
+        <font_style>0</font_style>
+        <font_size>12</font_size>
+        <width>10</width>
+        <height>10</height>
+      </layout>
+      <layout class="Group">
+        <color name="bg_color">
+          <red>0</red>
+          <green>0</green>
+          <blue>0</blue>
+          <alpha>0</alpha>
+        </color>
+        <color name="fg_color">
+          <red>0</red>
+          <green>0</green>
+          <blue>0</blue>
+        </color>
+        <color name="border_color">
+          <red>0</red>
+          <green>0</green>
+          <blue>0</blue>
+        </color>
+        <form>0</form>
+        <font_family>SansSerif</font_family>
+        <font_style>0</font_style>
+        <font_size>12</font_size>
+        <width>90</width>
+        <height>50</height>
+      </layout>
+      <layout class="Textfield">
+        <color name="bg_color">
+          <red>0</red>
+          <green>0</green>
+          <blue>0</blue>
+          <alpha>0</alpha>
+        </color>
+        <color name="fg_color">
+          <red>0</red>
+          <green>0</green>
+          <blue>0</blue>
+        </color>
+        <color name="border_color">
+          <red>0</red>
+          <green>0</green>
+          <blue>0</blue>
+        </color>
+        <form>0</form>
+        <font_family>SansSerif</font_family>
+        <font_style>0</font_style>
+        <font_size>12</font_size>
+        <width>90</width>
+        <height>50</height>
+      </layout>
+      <layout class="ApplicationSystem">
+        <color name="bg_color">
+          <red>255</red>
+          <green>153</green>
+          <blue>102</blue>
+        </color>
+        <color name="fg_color">
+          <red>0</red>
+          <green>0</green>
+          <blue>0</blue>
+        </color>
+        <color name="border_color">
+          <red>0</red>
+          <green>0</green>
+          <blue>0</blue>
+        </color>
+        <form>3</form>
+        <font_family>SansSerif</font_family>
+        <font_style>0</font_style>
+        <font_size>12</font_size>
+        <width>90</width>
+        <height>50</height>
+      </layout>
+      <layout class="Function">
+        <color name="bg_color">
+          <red>255</red>
+          <green>153</green>
+          <blue>153</blue>
+        </color>
+        <color name="fg_color">
+          <red>0</red>
+          <green>0</green>
+          <blue>0</blue>
+        </color>
+        <color name="border_color">
+          <red>0</red>
+          <green>0</green>
+          <blue>0</blue>
+        </color>
+        <form>0</form>
+        <font_family>SansSerif</font_family>
+        <font_style>0</font_style>
+        <font_size>12</font_size>
+        <width>90</width>
+        <height>50</height>
+      </layout>
+      <layout class="IheActorInstance">
+        <color name="bg_color">
+          <red>0</red>
+          <green>204</green>
+          <blue>255</blue>
+        </color>
+        <color name="fg_color">
+          <red>0</red>
+          <green>0</green>
+          <blue>0</blue>
+        </color>
+        <color name="border_color">
+          <red>0</red>
+          <green>0</green>
+          <blue>0</blue>
+        </color>
+        <form>0</form>
+        <font_family>SansSerif</font_family>
+        <font_style>0</font_style>
+        <font_size>12</font_size>
+        <width>90</width>
+        <height>50</height>
+      </layout>
+      <layout class="IheActorInstanceInvokingInterface">
+        <color name="bg_color">
+          <red>255</red>
+          <green>100</green>
+          <blue>100</blue>
+        </color>
+        <color name="fg_color">
+          <red>0</red>
+          <green>0</green>
+          <blue>0</blue>
+        </color>
+        <color name="border_color">
+          <red>0</red>
+          <green>0</green>
+          <blue>0</blue>
+        </color>
+        <form>1</form>
+        <font_family>SansSerif</font_family>
+        <font_style>0</font_style>
+        <font_size>12</font_size>
+        <width>15</width>
+        <height>15</height>
+      </layout>
+      <layout class="IheActorInstanceProvidingInterface">
+        <color name="bg_color">
+          <red>192</red>
+          <green>192</green>
+          <blue>192</blue>
+        </color>
+        <color name="fg_color">
+          <red>0</red>
+          <green>0</green>
+          <blue>0</blue>
+        </color>
+        <color name="border_color">
+          <red>0</red>
+          <green>0</green>
+          <blue>0</blue>
+        </color>
+        <form>2</form>
+        <font_family>SansSerif</font_family>
+        <font_style>0</font_style>
+        <font_size>12</font_size>
+        <width>20</width>
+        <height>20</height>
+      </layout>
+      <layout class="InvokingInterface">
+        <color name="bg_color">
+          <red>204</red>
+          <green>255</green>
+          <blue>204</blue>
+        </color>
+        <color name="fg_color">
+          <red>0</red>
+          <green>0</green>
+          <blue>0</blue>
+        </color>
+        <color name="border_color">
+          <red>0</red>
+          <green>0</green>
+          <blue>0</blue>
+        </color>
+        <form>1</form>
+        <font_family>SansSerif</font_family>
+        <font_style>0</font_style>
+        <font_size>12</font_size>
+        <width>15</width>
+        <height>15</height>
+      </layout>
+      <layout class="ObjectType">
+        <color name="bg_color">
+          <red>153</red>
+          <green>153</green>
+          <blue>255</blue>
+        </color>
+        <color name="fg_color">
+          <red>0</red>
+          <green>0</green>
+          <blue>0</blue>
+        </color>
+        <color name="border_color">
+          <red>0</red>
+          <green>0</green>
+          <blue>0</blue>
+        </color>
+        <form>1</form>
+        <font_family>SansSerif</font_family>
+        <font_style>0</font_style>
+        <font_size>12</font_size>
+        <width>90</width>
+        <height>50</height>
+      </layout>
+      <layout class="OrganisationSystem">
+        <color name="bg_color">
+          <red>100</red>
+          <green>100</green>
+          <blue>255</blue>
+        </color>
+        <color name="fg_color">
+          <red>0</red>
+          <green>0</green>
+          <blue>0</blue>
+        </color>
+        <color name="border_color">
+          <red>0</red>
+          <green>0</green>
+          <blue>0</blue>
+        </color>
+        <form>3</form>
+        <font_family>SansSerif</font_family>
+        <font_style>0</font_style>
+        <font_size>12</font_size>
+        <width>90</width>
+        <height>50</height>
+      </layout>
+      <layout class="PhysicalDataProcessingComponent">
+        <color name="bg_color">
+          <red>255</red>
+          <green>200</green>
+          <blue>0</blue>
+        </color>
+        <color name="fg_color">
+          <red>0</red>
+          <green>0</green>
+          <blue>0</blue>
+        </color>
+        <color name="border_color">
+          <red>0</red>
+          <green>0</green>
+          <blue>0</blue>
+        </color>
+        <form>0</form>
+        <font_family>SansSerif</font_family>
+        <font_style>0</font_style>
+        <font_size>12</font_size>
+        <width>90</width>
+        <height>50</height>
+      </layout>
+      <layout class="ProvidingInterface">
+        <color name="bg_color">
+          <red>255</red>
+          <green>200</green>
+          <blue>0</blue>
+        </color>
+        <color name="fg_color">
+          <red>0</red>
+          <green>0</green>
+          <blue>0</blue>
+        </color>
+        <color name="border_color">
+          <red>0</red>
+          <green>0</green>
+          <blue>0</blue>
+        </color>
+        <form>2</form>
+        <font_family>SansSerif</font_family>
+        <font_style>0</font_style>
+        <font_size>12</font_size>
+        <width>20</width>
+        <height>20</height>
+      </layout>
+    </mapping>
+    <layer number="0">
+      <layout>
+        <color name="bg_color">
+          <red>255</red>
+          <green>255</green>
+          <blue>255</blue>
+        </color>
+      </layout>
+      <container hash="GRO_1670181660001_9621">
+        <layout>
+          <x>-1123</x>
+          <y>-130</y>
+          <width>205</width>
+          <height>580</height>
+          <valign>TOP</valign>
+        </layout>
+      </container>
+      <container hash="GRO_1670181678871_9622">
+        <layout>
+          <color name="bg_color">
+            <red>235</red>
+            <green>229</green>
+            <blue>255</blue>
+          </color>
+          <x>-1125</x>
+          <y>-125</y>
+          <width>160</width>
+          <height>530</height>
+          <valign>TOP</valign>
+        </layout>
+      </container>
+      <container hash="PDP_1670181737348_9660">
+        <layout>
+          <x>-1125</x>
+          <y>-330</y>
+          <width>140</width>
+          <height>50</height>
+        </layout>
+      </container>
+      <container hash="PDP_1670181737348_9661">
+        <layout>
+          <color name="bg_color">
+            <red>204</red>
+            <green>204</green>
+            <blue>0</blue>
+          </color>
+          <x>-1123</x>
+          <y>-505</y>
+          <width>140</width>
+          <height>50</height>
+        </layout>
+      </container>
+      <container hash="PDP_1670076614512_11015">
+        <layout>
+          <color name="bg_color">
+            <red>204</red>
+            <green>204</green>
+            <blue>0</blue>
+          </color>
+          <x>0</x>
+          <y>-655</y>
+          <width>140</width>
+          <height>50</height>
+        </layout>
+      </container>
+      <container hash="DCL_1670181737349_9667">
+        <visible>false</visible>
+      </container>
+      <container hash="TME_1670076499361_10951">
+        <visible>false</visible>
+      </container>
+      <container hash="TME_1670077730056_11043">
+        <visible>false</visible>
+      </container>
+      <container hash="DCL_1670181737349_9664">
+        <visible>false</visible>
+      </container>
+      <container hash="DLK_1670181737349_9673"></container>
+      <container hash="DLK_1670181869507_9708"></container>
+      <container hash="DLK_1670181737350_9677"></container>
+      <container hash="DLK_1670181737349_9668"></container>
+      <container hash="DLK_1670248669386_8519"></container>
+      <container hash="DLK_1670248662779_8518"></container>
+      <container hash="DLK_1670181737349_9665"></container>
+      <container hash="DLK_1670181737349_9671"></container>
+      <container hash="BEN_1670181791122_9707">
+        <layout>
+          <color name="bg_color">
+            <red>0</red>
+            <green>0</green>
+            <blue>0</blue>
+            <alpha>0</alpha>
+          </color>
+          <x>-1240</x>
+          <y>-330</y>
+        </layout>
+      </container>
+      <container hash="BEN_1670181791122_9706">
+        <layout>
+          <color name="bg_color">
+            <red>0</red>
+            <green>0</green>
+            <blue>0</blue>
+            <alpha>0</alpha>
+          </color>
+          <x>-1240</x>
+          <y>-505</y>
+        </layout>
+      </container>
+    </layer>
+    <layer number="1">
+      <layout>
+        <color name="bg_color">
+          <red>255</red>
+          <green>255</green>
+          <blue>255</blue>
+        </color>
+      </layout>
+    </layer>
+    <layer number="2">
+      <layout>
+        <color name="bg_color">
+          <red>255</red>
+          <green>255</green>
+          <blue>255</blue>
+        </color>
+      </layout>
+      <container hash="GRO_1670107281245_8146">
+        <layout>
+          <x>-925</x>
+          <y>80</y>
+          <width>310</width>
+          <height>489</height>
+          <valign>TOP</valign>
+        </layout>
+      </container>
+      <container hash="ASY_1670107320282_8147">
+        <layout>
+          <x>-958</x>
+          <y>150</y>
+          <width>155</width>
+          <height>190</height>
+          <valign>BOTTOM</valign>
+        </layout>
+      </container>
+      <container hash="IAI_1670108422695_8481">
+        <layout>
+          <x>-958</x>
+          <y>150</y>
+          <width>90</width>
+          <height>62</height>
+        </layout>
+      </container>
+      <container hash="IAI_1670108422696_8483">
+        <layout>
+          <x>-1003</x>
+          <y>138</y>
+          <width>16</width>
+          <height>16</height>
+        </layout>
+      </container>
+      <container hash="IAI_1670108422697_8486">
+        <layout>
+          <x>-913</x>
+          <y>162</y>
+          <width>16</width>
+          <height>16</height>
+        </layout>
+      </container>
+      <container hash="IAI_1670108422699_8489">
+        <visible>false</visible>
+        <layout>
+          <x>-1003</x>
+          <y>162</y>
+          <width>16</width>
+          <height>16</height>
+        </layout>
+      </container>
+      <container hash="IAI_1670108422700_8492">
+        <layout>
+          <x>-913</x>
+          <y>138</y>
+          <width>16</width>
+          <height>16</height>
+        </layout>
+      </container>
+      <container hash="IAI_1670108422701_8495">
+        <layout>
+          <x>-1003</x>
+          <y>150</y>
+          <width>16</width>
+          <height>16</height>
+        </layout>
+      </container>
+      <container hash="IAI_1670108422702_8498">
+        <layout>
+          <x>-925</x>
+          <y>120</y>
+          <width>16</width>
+          <height>16</height>
+        </layout>
+      </container>
+      <container hash="ASY_1670108434362_8502">
+        <layout>
+          <x>-955</x>
+          <y>-35</y>
+          <width>155</width>
+          <height>120</height>
+          <valign>TOP</valign>
+        </layout>
+      </container>
+      <container hash="IAI_1670108461900_8532">
+        <layout>
+          <x>-955</x>
+          <y>-29</y>
+          <width>90</width>
+          <height>62</height>
+        </layout>
+      </container>
+      <container hash="IAI_1670108461901_8534">
+        <visible>false</visible>
+        <layout>
+          <x>-1000</x>
+          <y>-41</y>
+          <width>19</width>
+          <height>19</height>
+        </layout>
+      </container>
+      <container hash="IAI_1670108461902_8537">
+        <layout>
+          <x>-925</x>
+          <y>5</y>
+          <width>19</width>
+          <height>19</height>
+        </layout>
+      </container>
+      <container hash="GRO_1670108552112_8587">
+        <layout>
+          <x>-1198</x>
+          <y>80</y>
+          <width>165</width>
+          <height>489</height>
+          <valign>TOP</valign>
+        </layout>
+      </container>
+      <container hash="ASY_1670108605888_8588">
+        <layout>
+          <x>-1198</x>
+          <y>22</y>
+          <width>125</width>
+          <height>235</height>
+          <valign>TOP</valign>
+        </layout>
+      </container>
+      <container hash="IAI_1670108665037_8624">
+        <layout>
+          <x>-1198</x>
+          <y>22</y>
+          <width>90</width>
+          <height>62</height>
+        </layout>
+      </container>
+      <container hash="IAI_1670108665038_8626">
+        <layout>
+          <x>-1150</x>
+          <y>5</y>
+          <width>19</width>
+          <height>19</height>
+        </layout>
+      </container>
+      <container hash="IAI_1670108665040_8629">
+        <layout>
+          <x>-1153</x>
+          <y>34</y>
+          <width>19</width>
+          <height>19</height>
+        </layout>
+      </container>
+      <container hash="RFO_1670107951956_8264">
+        <visible>false</visible>
+      </container>
+      <container hash="DLK_1670107353403_8148"></container>
+      <container hash="DLK_1670108422697_8485"></container>
+      <container hash="DLK_1670108422698_8488"></container>
+      <container hash="DLK_1670108422699_8491"></container>
+      <container hash="DLK_1670108422700_8494"></container>
+      <container hash="DLK_1670108422702_8497"></container>
+      <container hash="DLK_1670108422703_8500"></container>
+      <container hash="DLK_1670108422706_8501"></container>
+      <container hash="DLK_1670108444015_8503"></container>
+      <container hash="DLK_1670108461902_8536"></container>
+      <container hash="DLK_1670108461903_8539"></container>
+      <container hash="DLK_1670108461906_8540"></container>
+      <container hash="DLK_1670108625539_8589"></container>
+      <container hash="DLK_1670108665039_8628"></container>
+      <container hash="DLK_1670108665040_8631"></container>
+      <container hash="DLK_1670108665044_8632"></container>
+      <container hash="DLK_1670108684174_8633"></container>
+      <container hash="DLK_1670108708084_8635"></container>
+      <container hash="DLK_1670182025022_9722"></container>
+      <container hash="DLK_1670182025032_9723"></container>
+      <container hash="DLK_1670182039691_9724"></container>
+      <container hash="DLK_1670182044320_9725"></container>
+      <container hash="DLK_1670182292781_9739"></container>
+      <container hash="BEN_1670108728048_8640">
+        <layout>
+          <color name="bg_color">
+            <red>0</red>
+            <green>0</green>
+            <blue>0</blue>
+            <alpha>0</alpha>
+          </color>
+          <x>-1095</x>
+          <y>5</y>
+        </layout>
+      </container>
+      <container hash="BEN_1670108730425_8641">
+        <layout>
+          <color name="bg_color">
+            <red>0</red>
+            <green>0</green>
+            <blue>0</blue>
+            <alpha>0</alpha>
+          </color>
+          <x>-1095</x>
+          <y>135</y>
+        </layout>
+      </container>
+    </layer>
+    <layer number="3">
+      <layout>
+        <color name="bg_color">
+          <red>255</red>
+          <green>255</green>
+          <blue>255</blue>
+        </color>
+      </layout>
+    </layer>
+    <layer number="4">
+      <layout>
+        <color name="bg_color">
+          <red>255</red>
+          <green>255</green>
+          <blue>255</blue>
+        </color>
+      </layout>
+      <container hash="GRO_1670108171689_8315">
+        <layout>
+          <color name="bg_color">
+            <red>204</red>
+            <green>255</green>
+            <blue>255</blue>
+          </color>
+          <x>-1026</x>
+          <y>-305</y>
+          <width>201</width>
+          <height>270</height>
+          <valign>TOP</valign>
+        </layout>
+      </container>
+      <container hash="FUN_1670107543928_8220">
+        <layout>
+          <color name="bg_color">
+            <red>204</red>
+            <green>255</green>
+            <blue>153</blue>
+          </color>
+          <x>-1031</x>
+          <y>-373</y>
+          <width>92</width>
+          <height>50</height>
+        </layout>
+      </container>
+      <container hash="FUN_1670108015447_8277">
+        <layout>
+          <color name="bg_color">
+            <red>204</red>
+            <green>255</green>
+            <blue>153</blue>
+          </color>
+          <x>-641</x>
+          <y>-238</y>
+          <width>92</width>
+          <height>50</height>
+        </layout>
+      </container>
+      <container hash="OTY_1670108092449_8303">
+        <layout>
+          <color name="bg_color">
+            <red>153</red>
+            <green>255</green>
+            <blue>102</blue>
+          </color>
+          <x>-1031</x>
+          <y>-238</y>
+        </layout>
+      </container>
+      <container hash="OUN_1670182181735_9731">
+        <visible>false</visible>
+      </container>
+      <container hash="OUN_1617261808836_4227">
+        <visible>false</visible>
+      </container>
+      <container hash="DLK_1670108092451_8305"></container>
+      <container hash="DLK_1670108134952_8314"></container>
+      <container hash="DLK_1670108202272_8316"></container>
+      <container hash="DLK_1670108202279_8317"></container>
+      <container hash="DLK_1670108092450_8304"></container>
+    </layer>
+  </szenario>
+  <images></images>
+</modell_3lgm_2>

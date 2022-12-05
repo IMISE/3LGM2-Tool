@@ -1,0 +1,775 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--Tool3lgmFile version='3.10' metamodel='TLGMServiceMetaModel@2388259974838049670' category='TEMPLATE'-->
+<modell_3lgm_2>
+  <header>
+    <title>FHIR-XDS-OpenEHR.3lgm #1</title>
+    <description></description>
+    <version>5_sippe_1670237025957</version>
+  </header>
+  <userFieldDefinitions>
+    <userFieldFormat hash="FRM_1623450079169_2058">
+      <userFieldFormatString>d2 u%</userFieldFormatString>
+    </userFieldFormat>
+    <userFieldDef elementClass="RepresentationForm" hash="USERFIELD_1622801082285_1965">
+      <userFieldName>XDS Metadaten</userFieldName>
+      <userFieldDescription></userFieldDescription>
+      <userFieldStyle>SUBTYPE</userFieldStyle>
+      <userFieldTreeVis>true</userFieldTreeVis>
+      <userFieldShowDescriptionInDialog>false</userFieldShowDescriptionInDialog>
+    </userFieldDef>
+    <userFieldDef elementClass="RepresentationForm" hash="USERFIELD_1620154377098_7156">
+      <userFieldName>XDS Metadaten</userFieldName>
+      <userFieldDescription>Metadaten zur Repräsentationsform</userFieldDescription>
+      <userFieldStyle>TAB</userFieldStyle>
+      <userFieldTreeVis>true</userFieldTreeVis>
+      <userFieldShowDescriptionInDialog>true</userFieldShowDescriptionInDialog>
+    </userFieldDef>
+    <userFieldDef elementClass="RepresentationForm" hash="USERFIELD_1620154470655_7157">
+      <userFieldName>Art des Dokuments</userFieldName>
+      <userFieldDescription></userFieldDescription>
+      <userFieldStyle>GROUP</userFieldStyle>
+      <userFieldTreeVis>true</userFieldTreeVis>
+      <userFieldShowDescriptionInDialog>true</userFieldShowDescriptionInDialog>
+    </userFieldDef>
+    <userFieldDef elementClass="RepresentationForm" hash="USERFIELD_1620154569452_7158">
+      <userFieldName>classCode</userFieldName>
+      <userFieldDescription>Dokumentenklasse, siehe https://wiki.hl7.de/index.php?title=Ihevs:DocumentEntry.classCode</userFieldDescription>
+      <userFieldStyle>COMBO_BOX</userFieldStyle>
+      <userFieldTreeVis>true</userFieldTreeVis>
+      <userFieldShowDescriptionInDialog>true</userFieldShowDescriptionInDialog>
+      <userFieldStandardValue>ADM Administratives Dokument</userFieldStandardValue>
+      <userFieldStandardValue>ANF Anforderung</userFieldStandardValue>
+      <userFieldStandardValue>ASM Assessment</userFieldStandardValue>
+      <userFieldStandardValue>BEF Befundbericht</userFieldStandardValue>
+      <userFieldStandardValue>BIL Bilddaten</userFieldStandardValue>
+      <userFieldStandardValue>BRI Brief</userFieldStandardValue>
+      <userFieldStandardValue>DOK Dokumente ohne besondere Form (Notizen)</userFieldStandardValue>
+      <userFieldStandardValue>DUR Durchführungsprotokoll</userFieldStandardValue>
+      <userFieldStandardValue>FOR Forschung</userFieldStandardValue>
+      <userFieldStandardValue>GUT Gutachten und Qualitätsmanagement</userFieldStandardValue>
+      <userFieldStandardValue>LAB Laborergebnisse</userFieldStandardValue>
+      <userFieldStandardValue>AUS Medizinischer Ausweis</userFieldStandardValue>
+      <userFieldStandardValue>PLA Planungsdokument</userFieldStandardValue>
+      <userFieldStandardValue>57016-8 Patienteneinverständniserklärung</userFieldStandardValue>
+      <userFieldStandardValue>VER Verordnung</userFieldStandardValue>
+      <userFieldStandardValue>VID Videodaten</userFieldStandardValue>
+      <userFieldStandardValue>MED obsolet</userFieldStandardValue>
+    </userFieldDef>
+    <userFieldDef elementClass="RepresentationForm" hash="USERFIELD_1620154965613_7161">
+      <userFieldName>typeCode</userFieldName>
+      <userFieldDescription>Dokumententyp, siehe https://wiki.hl7.de/index.php?title=Ihevs:DocumentEntry.typeCode</userFieldDescription>
+      <userFieldStyle>COMBO_BOX</userFieldStyle>
+      <userFieldTreeVis>true</userFieldTreeVis>
+      <userFieldShowDescriptionInDialog>true</userFieldShowDescriptionInDialog>
+      <userFieldStandardValue>ABRE Abrechnungsdokumente</userFieldStandardValue>
+      <userFieldStandardValue>ADCH Administrative Checklisten</userFieldStandardValue>
+      <userFieldStandardValue>ANTR Anträge und deren Bescheide</userFieldStandardValue>
+      <userFieldStandardValue>ANAE Anästhesiedokumente</userFieldStandardValue>
+      <userFieldStandardValue>BERI Arztberichte</userFieldStandardValue>
+      <userFieldStandardValue>BESC Ärztliche Bescheinigungen</userFieldStandardValue>
+      <userFieldStandardValue>BEFU Ergebnisse Diagnostik</userFieldStandardValue>
+      <userFieldStandardValue>BSTR Bestrahlungsdokumentation</userFieldStandardValue>
+      <userFieldStandardValue>AUFN Einweisungs- und Aufnahmedokumente</userFieldStandardValue>
+      <userFieldStandardValue>EINW Einwilligungen/Aufklärungen</userFieldStandardValue>
+      <userFieldStandardValue>FUNK Ergebnisse Funktionsdiagnostik</userFieldStandardValue>
+      <userFieldStandardValue>BILD Ergebnisse bildgebender Diagnostik</userFieldStandardValue>
+      <userFieldStandardValue>FALL Fallbesprechungen</userFieldStandardValue>
+      <userFieldStandardValue>FOTO Fotodokumentation</userFieldStandardValue>
+      <userFieldStandardValue>FPRO Therapiedokumentation</userFieldStandardValue>
+      <userFieldStandardValue>IMMU Ergebnisse Immunologie</userFieldStandardValue>
+      <userFieldStandardValue>INTS Intensivmedizinische Dokumente</userFieldStandardValue>
+      <userFieldStandardValue>KOMP Komplexbehandlungsbögen</userFieldStandardValue>
+      <userFieldStandardValue>MEDI Medikamentöse Therapien</userFieldStandardValue>
+      <userFieldStandardValue>MKRO Ergebnisse Mikrobiologie</userFieldStandardValue>
+      <userFieldStandardValue>OPDK OP-Dokumente</userFieldStandardValue>
+      <userFieldStandardValue>ONKO Onkologische Dokumente</userFieldStandardValue>
+      <userFieldStandardValue>PATH Pathologiebefundberichte</userFieldStandardValue>
+      <userFieldStandardValue>PATD Patienteneigene Dokumente</userFieldStandardValue>
+      <userFieldStandardValue>PATI Patienteninformationen</userFieldStandardValue>
+      <userFieldStandardValue>PFLG Pflegedokumentation</userFieldStandardValue>
+      <userFieldStandardValue>57016-8 Patienteneinverständniserklärung</userFieldStandardValue>
+      <userFieldStandardValue>QUAL Qualitätssicherung</userFieldStandardValue>
+      <userFieldStandardValue>RETT Rettungsdienstliche Dokumente</userFieldStandardValue>
+      <userFieldStandardValue>SCHR Schriftwechsel (administrativ)</userFieldStandardValue>
+      <userFieldStandardValue>GEBU Schwangerschafts- und Geburtsdokumentation</userFieldStandardValue>
+      <userFieldStandardValue>SOZI Sozialdienstdokumente</userFieldStandardValue>
+      <userFieldStandardValue>STUD Studiendokumente</userFieldStandardValue>
+      <userFieldStandardValue>TRFU Transfusionsdokumente</userFieldStandardValue>
+      <userFieldStandardValue>TRPL Transplantationsdokumente</userFieldStandardValue>
+      <userFieldStandardValue>VERO Verordnungen</userFieldStandardValue>
+      <userFieldStandardValue>VERT Verträge</userFieldStandardValue>
+      <userFieldStandardValue>VIRO Ergebnisse Virologie</userFieldStandardValue>
+      <userFieldStandardValue>WUND Wunddokumentation</userFieldStandardValue>
+    </userFieldDef>
+    <userFieldDef elementClass="RepresentationForm" hash="USERFIELD_1620155158095_7169">
+      <userFieldName>eventCodeList</userFieldName>
+      <userFieldDescription>Tätigkeitskennzeichen/Zusätzliche Kennzeichnung, siehe https://wiki.hl7.de/index.php?title=Ihevs:DocumentEntry.eventCodeList</userFieldDescription>
+      <userFieldStyle>COMBO_BOX</userFieldStyle>
+      <userFieldTreeVis>true</userFieldTreeVis>
+      <userFieldShowDescriptionInDialog>true</userFieldShowDescriptionInDialog>
+      <userFieldStandardValue>urn:ihe:iti:xdw:2011:eventCode:open Workflow offen</userFieldStandardValue>
+      <userFieldStandardValue>urn:ihe:iti:xdw:2011:eventCode:closed Workflow abgeschlossen</userFieldStandardValue>
+      <userFieldStandardValue>H1 vom Patienten mitgebracht</userFieldStandardValue>
+      <userFieldStandardValue>H2 noch nicht mit Patient besprochen</userFieldStandardValue>
+      <userFieldStandardValue>H3 eventuell veraltete Daten</userFieldStandardValue>
+      <userFieldStandardValue>H4 vorläufiges Dokument</userFieldStandardValue>
+      <userFieldStandardValue>E100 ambulanter Kontakt</userFieldStandardValue>
+      <userFieldStandardValue>-E110 ambulante OP</userFieldStandardValue>
+      <userFieldStandardValue>E200 stationärer Aufenthalt</userFieldStandardValue>
+      <userFieldStandardValue>-E210 stationäre Aufnahme</userFieldStandardValue>
+      <userFieldStandardValue>--E211 Aufnahme vollstationär</userFieldStandardValue>
+      <userFieldStandardValue>--E212 Aufnahme/Wiederaufnahme teilstationär</userFieldStandardValue>
+      <userFieldStandardValue>--E213 Aufnahme Entbindung stationär</userFieldStandardValue>
+      <userFieldStandardValue>--E214 Aufnahme eines Neugeborenen</userFieldStandardValue>
+      <userFieldStandardValue>--E215 Aufnahme des Spenders zur Organentnahme</userFieldStandardValue>
+      <userFieldStandardValue>-E230 stationäre Entlassung</userFieldStandardValue>
+      <userFieldStandardValue>--E231 stationäre Entlassung nach Hause</userFieldStandardValue>
+      <userFieldStandardValue>--E232 stationäre Entlassung in eine Rehabilitationseinrichtung</userFieldStandardValue>
+      <userFieldStandardValue>--E233 stationäre Entlassung in eine Pflegeeinrichtung/Hospiz</userFieldStandardValue>
+      <userFieldStandardValue>--E234 Entlassung zur nachstationären Behandlung</userFieldStandardValue>
+      <userFieldStandardValue>--E235 Patient während stationärem Aufenthalt verstorben</userFieldStandardValue>
+      <userFieldStandardValue>-E250 stationäre Verlegung</userFieldStandardValue>
+      <userFieldStandardValue>--E251 Verlegung innerhalb eines Krankenhauses</userFieldStandardValue>
+      <userFieldStandardValue>--E252 Verlegung in ein anderes Krankenhaus</userFieldStandardValue>
+      <userFieldStandardValue>--E253 externe Verlegung in Psychiatrie</userFieldStandardValue>
+      <userFieldStandardValue>-E270 kurzzeitige Unterbrechung einer stationären Behandlung</userFieldStandardValue>
+      <userFieldStandardValue>E280 Konsil</userFieldStandardValue>
+      <userFieldStandardValue>E300 Behandlung im häuslichen Umfeld</userFieldStandardValue>
+      <userFieldStandardValue>E400 Virtual Encounter</userFieldStandardValue>
+    </userFieldDef>
+    <userFieldDef elementClass="RepresentationForm" hash="USERFIELD_1620155819305_7188">
+      <userFieldName>practiceSettingCode</userFieldName>
+      <userFieldDescription>Erstellende Fachrichtung, siehe https://wiki.hl7.de/index.php?title=Ihevs:DocumentEntry.PracticeSettingCode</userFieldDescription>
+      <userFieldStyle>COMBO_BOX</userFieldStyle>
+      <userFieldTreeVis>true</userFieldTreeVis>
+      <userFieldShowDescriptionInDialog>true</userFieldShowDescriptionInDialog>
+      <userFieldStandardValue>ALLG Allgemeinmedizin</userFieldStandardValue>
+      <userFieldStandardValue>ANAE Anästhesiologie</userFieldStandardValue>
+      <userFieldStandardValue>ARBE Arbeitsmedizin</userFieldStandardValue>
+      <userFieldStandardValue>AUGE Augenheilkunde</userFieldStandardValue>
+      <userFieldStandardValue>CHIR Chirurgie</userFieldStandardValue>
+      <userFieldStandardValue>-ALCH Allgemeinchirurgie</userFieldStandardValue>
+      <userFieldStandardValue>-GFCH Gefäßchirurgie</userFieldStandardValue>
+      <userFieldStandardValue>-HZCH Herzchirurgie</userFieldStandardValue>
+      <userFieldStandardValue>-KDCH Kinderchirurgie</userFieldStandardValue>
+      <userFieldStandardValue>-ORTH Orthopädie</userFieldStandardValue>
+      <userFieldStandardValue>-PLCH Plastische und Ästhetische Chirurgie</userFieldStandardValue>
+      <userFieldStandardValue>-THCH Thoraxchirurgie</userFieldStandardValue>
+      <userFieldStandardValue>-UNFC Unfallchirurgie</userFieldStandardValue>
+      <userFieldStandardValue>-VICH Viszeralchirurgie</userFieldStandardValue>
+      <userFieldStandardValue>FRAU Frauenheilkunde und Geburtshilfe</userFieldStandardValue>
+      <userFieldStandardValue>-GEND Gynäkologische Endokrinologie und Reproduktionsmedizin</userFieldStandardValue>
+      <userFieldStandardValue>-GONK Gynäkologische Onkologie</userFieldStandardValue>
+      <userFieldStandardValue>-PERI Perinatalmedizin</userFieldStandardValue>
+      <userFieldStandardValue>GERI Geriatrie</userFieldStandardValue>
+      <userFieldStandardValue>HNOH Hals-Nasen-Ohrenheilkunde</userFieldStandardValue>
+      <userFieldStandardValue>-HRST Sprach-, Stimm- und kindliche Hörstörungen</userFieldStandardValue>
+      <userFieldStandardValue>HAUT Haut- und Geschlechtskrankheiten</userFieldStandardValue>
+      <userFieldStandardValue>0 D HIST obsolet</userFieldStandardValue>
+      <userFieldStandardValue>HUMA Humangenetik</userFieldStandardValue>
+      <userFieldStandardValue>HYGI Hygiene und Umweltmedizin</userFieldStandardValue>
+      <userFieldStandardValue>INNE Innere Medizin</userFieldStandardValue>
+      <userFieldStandardValue>-ANGI Angiologie</userFieldStandardValue>
+      <userFieldStandardValue>-ENDO Endokrinologie und Diabetologie</userFieldStandardValue>
+      <userFieldStandardValue>-GAST Gastroenterologie</userFieldStandardValue>
+      <userFieldStandardValue>-HAEM Hämatologie und internistische Onkologie</userFieldStandardValue>
+      <userFieldStandardValue>-KARD Kardiologie</userFieldStandardValue>
+      <userFieldStandardValue>-NEPH Nephrologie</userFieldStandardValue>
+      <userFieldStandardValue>-PNEU Pneumologie</userFieldStandardValue>
+      <userFieldStandardValue>-RHEU Rheumatologie</userFieldStandardValue>
+      <userFieldStandardValue>INTM Intensivmedizin</userFieldStandardValue>
+      <userFieldStandardValue>INTO Interdisziplinäre Onkologie</userFieldStandardValue>
+      <userFieldStandardValue>INTS Interdisziplinäre Schmerzmedizin</userFieldStandardValue>
+      <userFieldStandardValue>KIJU Kinder- und Jugendmedizin</userFieldStandardValue>
+      <userFieldStandardValue>-KONK Kinder-Hämatologie und -Onkologie</userFieldStandardValue>
+      <userFieldStandardValue>-KKAR Kinder-Kardiologie</userFieldStandardValue>
+      <userFieldStandardValue>-NNAT Neonatologie</userFieldStandardValue>
+      <userFieldStandardValue>-NPAE Neuropädiatrie</userFieldStandardValue>
+      <userFieldStandardValue>KPSY Kinder- und Jugendpsychiatrie und -psychotherapie</userFieldStandardValue>
+      <userFieldStandardValue>LABO Laboratoriumsmedizin</userFieldStandardValue>
+      <userFieldStandardValue>MIKR Mikrobiologie, Virologie und Infektionsepidemiologie</userFieldStandardValue>
+      <userFieldStandardValue>MKGC Mund-Kiefer-Gesichtschirurgie</userFieldStandardValue>
+      <userFieldStandardValue>NATU Naturheilverfahren und alternative Heilmethoden</userFieldStandardValue>
+      <userFieldStandardValue>NOTF Notfallmedizin</userFieldStandardValue>
+      <userFieldStandardValue>NRCH Neurochirurgie</userFieldStandardValue>
+      <userFieldStandardValue>NEUR Neurologie</userFieldStandardValue>
+      <userFieldStandardValue>NUKL Nuklearmedizin</userFieldStandardValue>
+      <userFieldStandardValue>GESU Öffentliches Gesundheitswesen</userFieldStandardValue>
+      <userFieldStandardValue>PALL Palliativmedizin</userFieldStandardValue>
+      <userFieldStandardValue>PATH Pathologie</userFieldStandardValue>
+      <userFieldStandardValue>-NPAT Neuropathologie</userFieldStandardValue>
+      <userFieldStandardValue>PHAR Pharmakologie</userFieldStandardValue>
+      <userFieldStandardValue>-TOXI Toxikologie</userFieldStandardValue>
+      <userFieldStandardValue>REHA Physikalische und Rehabilitative Medizin</userFieldStandardValue>
+      <userFieldStandardValue>PSYC Psychiatrie und Psychotherapie</userFieldStandardValue>
+      <userFieldStandardValue>-FPSY Forensische Psychiatrie</userFieldStandardValue>
+      <userFieldStandardValue>PSYM Psychosomatische Medizin und Psychotherapie</userFieldStandardValue>
+      <userFieldStandardValue>RADI Radiologie</userFieldStandardValue>
+      <userFieldStandardValue>-KRAD Kinderradiologie</userFieldStandardValue>
+      <userFieldStandardValue>-NRAD Neuroradiologie</userFieldStandardValue>
+      <userFieldStandardValue>RECH Rechtsmedizin</userFieldStandardValue>
+      <userFieldStandardValue>SCHL Schlafmedizin</userFieldStandardValue>
+      <userFieldStandardValue>SPOR Sport- und Bewegungsmedizin</userFieldStandardValue>
+      <userFieldStandardValue>STRA Strahlentherapie</userFieldStandardValue>
+      <userFieldStandardValue>TRAN Transfusionsmedizin</userFieldStandardValue>
+      <userFieldStandardValue>TROP Tropen-/Reisemedizin</userFieldStandardValue>
+      <userFieldStandardValue>UROL Urologie</userFieldStandardValue>
+      <userFieldStandardValue>MZKH Zahnmedizin</userFieldStandardValue>
+      <userFieldStandardValue>-ORAL Oralchirurgie</userFieldStandardValue>
+      <userFieldStandardValue>-KIEF Kieferorthopädie</userFieldStandardValue>
+      <userFieldStandardValue>TRPL Transplantationsmedizin</userFieldStandardValue>
+      <userFieldStandardValue>ERG Ergotherapie</userFieldStandardValue>
+      <userFieldStandardValue>ERN Ernährung und Diätetik</userFieldStandardValue>
+      <userFieldStandardValue>FOR Forschung</userFieldStandardValue>
+      <userFieldStandardValue>PFL Pflege und Betreuung</userFieldStandardValue>
+      <userFieldStandardValue>-ALT Altenpflege</userFieldStandardValue>
+      <userFieldStandardValue>-KIN Kinderpflege</userFieldStandardValue>
+      <userFieldStandardValue>PAT Patient außerhalb der Betreuung</userFieldStandardValue>
+      <userFieldStandardValue>PHZ Pharmazeutik</userFieldStandardValue>
+      <userFieldStandardValue>POD Podologie</userFieldStandardValue>
+      <userFieldStandardValue>PRV Prävention</userFieldStandardValue>
+      <userFieldStandardValue>SOZ Sozialwesen</userFieldStandardValue>
+      <userFieldStandardValue>SPR Sprachtherapie</userFieldStandardValue>
+      <userFieldStandardValue>VKO Versorgungskoordination</userFieldStandardValue>
+      <userFieldStandardValue>VER Verwaltung</userFieldStandardValue>
+    </userFieldDef>
+    <userFieldDef elementClass="RepresentationForm" hash="USERFIELD_1620156061386_7196">
+      <userFieldName>Format</userFieldName>
+      <userFieldDescription></userFieldDescription>
+      <userFieldStyle>GROUP</userFieldStyle>
+      <userFieldTreeVis>true</userFieldTreeVis>
+      <userFieldShowDescriptionInDialog>true</userFieldShowDescriptionInDialog>
+    </userFieldDef>
+    <userFieldDef elementClass="RepresentationForm" hash="USERFIELD_1620156164656_7198">
+      <userFieldName>mimeType</userFieldName>
+      <userFieldDescription>Mime Type des Dokuments, z.B.: "text/xml“ für CDA oder "application/fhir+json" für FHIR Ressourcen im JSON Format.</userFieldDescription>
+      <userFieldStyle>SINGLE_LINE</userFieldStyle>
+      <userFieldTreeVis>true</userFieldTreeVis>
+      <userFieldShowDescriptionInDialog>true</userFieldShowDescriptionInDialog>
+    </userFieldDef>
+    <userFieldDef elementClass="RepresentationForm" hash="USERFIELD_1620156362242_7199">
+      <userFieldName>formatCode</userFieldName>
+      <userFieldDescription>Dokumentenformat, siehe https://wiki.hl7.de/index.php?title=Ihevs:DocumentEntry.formatCode</userFieldDescription>
+      <userFieldStyle>COMBO_BOX</userFieldStyle>
+      <userFieldTreeVis>true</userFieldTreeVis>
+      <userFieldShowDescriptionInDialog>true</userFieldShowDescriptionInDialog>
+      <userFieldStandardValue>&lt;html&gt;&lt;i&gt;urn:ihe:pcc:xds-ms:2007&lt;/i&gt;&lt;nb&gt; - Medical Summaries (XDS-MS)&lt;/nb&gt;&lt;/html&gt;</userFieldStandardValue>
+      <userFieldStandardValue>urn:ihe:pcc:xphr:2007 - Exchange of Personal Health Records (XPHR)</userFieldStandardValue>
+      <userFieldStandardValue>urn:ihe:pcc:edr:2007 - Emergency Department Referral (EDR)</userFieldStandardValue>
+      <userFieldStandardValue>urn:ihe:pcc:aps:2007 - Antepartum Summary (APS)</userFieldStandardValue>
+      <userFieldStandardValue>urn:ihe:pcc:edes:2007 - Emergency Department Encounter Summary (EDES)</userFieldStandardValue>
+      <userFieldStandardValue>urn:ihe:pcc:aphp:2008 - Antepartum History and Physical (APHP)</userFieldStandardValue>
+      <userFieldStandardValue>urn:ihe:pcc:apl:2008 - Antepartum Laboratory (APL)</userFieldStandardValue>
+      <userFieldStandardValue>urn:ihe:pcc:ape:2008 - Antepartum Education (APE)</userFieldStandardValue>
+      <userFieldStandardValue>urn:ihe:pcc:ic:2009 - Immunization Content (IC)</userFieldStandardValue>
+      <userFieldStandardValue>urn:ihe:pcc:cm:2008 - Care Management (CM)</userFieldStandardValue>
+      <userFieldStandardValue>urn:ihe:pcc:tn:2007 - ??? (urn:ihe:pcc:tn:2007)</userFieldStandardValue>
+      <userFieldStandardValue>urn:ihe:pcc:nn:2007 - ??? (urn:ihe:pcc:nn:2007)</userFieldStandardValue>
+      <userFieldStandardValue>urn:ihe:pcc:ctn:2007 - ??? (urn:ihe:pcc:ctn:2007)</userFieldStandardValue>
+      <userFieldStandardValue>urn:ihe:pcc:edpn:2007 - ??? (urn:ihe:pcc:edpn:2007)</userFieldStandardValue>
+      <userFieldStandardValue>urn:ihe:pcc:hp:2008 - ??? (urn:ihe:pcc:hp:2008)</userFieldStandardValue>
+      <userFieldStandardValue>urn:ihe:pcc:ldhp:2009 - ??? (urn:ihe:pcc:ldhp:2009)</userFieldStandardValue>
+      <userFieldStandardValue>urn:ihe:pcc:lds:2009 - ??? (urn:ihe:pcc:lds:2009)</userFieldStandardValue>
+      <userFieldStandardValue>urn:ihe:pcc:mds:2009 - ??? (urn:ihe:pcc:mds:2009)</userFieldStandardValue>
+      <userFieldStandardValue>urn:ihe:pcc:nds:2010 - ??? (urn:ihe:pcc:nds:2010)</userFieldStandardValue>
+      <userFieldStandardValue>urn:ihe:pcc:ppvs:2010 - ??? (urn:ihe:pcc:ppvs:2010)</userFieldStandardValue>
+      <userFieldStandardValue>urn:ihe:pcc:trs:2011 - ??? (urn:ihe:pcc:trs:2011)</userFieldStandardValue>
+      <userFieldStandardValue>urn:ihe:pcc:ets:2011 - ??? (urn:ihe:pcc:ets:2011)</userFieldStandardValue>
+      <userFieldStandardValue>urn:ihe:pcc:its:2011 - ??? (urn:ihe:pcc:its:2011)</userFieldStandardValue>
+      <userFieldStandardValue>urn:ihe:iti:xds-sd:pdf:2008 - Scanned Documents (PDF)</userFieldStandardValue>
+      <userFieldStandardValue>urn:ihe:iti:xds-sd:text:2008 - Scanned Documents (text)</userFieldStandardValue>
+      <userFieldStandardValue>urn:ihe:iti:bppc:2007 - Basic Patient Privacy Consents</userFieldStandardValue>
+      <userFieldStandardValue>urn:ihe:iti:bppc-sd:2007 - Basic Patient Privacy Consents with Scanned Document</userFieldStandardValue>
+      <userFieldStandardValue>urn:ihe:iti:appc:2016:consent - APPC Privacy Consent Document</userFieldStandardValue>
+      <userFieldStandardValue>urn:ihe:iti:xdw:2011:workflowDoc - XDW Workflow Document</userFieldStandardValue>
+      <userFieldStandardValue>urn:ihe:iti:dsg:detached:2014 - DSG Detached Document</userFieldStandardValue>
+      <userFieldStandardValue>urn:ihe:iti:dsg:enveloping:2014 - DSG Enveloping Document</userFieldStandardValue>
+      <userFieldStandardValue>urn:ihe:lab:xd-lab:2008 - CDA Laboratory Report</userFieldStandardValue>
+      <userFieldStandardValue>urn:ihe:rad:TEXT - XDS-I CDA Wrapped Text Report (XDS-I)</userFieldStandardValue>
+      <userFieldStandardValue>urn:ihe:rad:PDF - XDS-I PDF (XDS-I)</userFieldStandardValue>
+      <userFieldStandardValue>urn:ihe:rad:CDA:ImagingReportStructuredHeadings:2013 - XDS-I Imaging Report with Structured Headings (XDS-I)</userFieldStandardValue>
+      <userFieldStandardValue>urn:ihe:card:CRC:2012 - Cardiology ??? (CRC)</userFieldStandardValue>
+      <userFieldStandardValue>urn:ihe:card:EPRC-IE:2014 - Cardiology ??? (EPRC-IE)</userFieldStandardValue>
+      <userFieldStandardValue>urn:ihe:card:imaging:2011 - Cardiac Imaging Report</userFieldStandardValue>
+      <userFieldStandardValue>urn:ihe:dent:TEXT - Dental CDA Wrapped Text Report (DENT)</userFieldStandardValue>
+      <userFieldStandardValue>urn:ihe:dent:PDF - Dental PDF (DENT)</userFieldStandardValue>
+      <userFieldStandardValue>urn:ihe:dent:CDA:ImagingReportStructuredHeadings:2013 - Dental Imaging Report with Structured Headings (DENT)</userFieldStandardValue>
+      <userFieldStandardValue>urn:ihe:palm:apsr:2016 - Anatomic Pathology Structured Report (APSR)</userFieldStandardValue>
+      <userFieldStandardValue>urn:ihe:pharm:pre:2010 - Pharmacy ??? (urn:ihe:pharm:pre:2010)</userFieldStandardValue>
+      <userFieldStandardValue>urn:ihe:pharm:padv:2010 - Pharmacy ??? (urn:ihe:pharm:padv:2010)</userFieldStandardValue>
+      <userFieldStandardValue>urn:ihe:pharm:dis:2010 - Pharmacy ??? (urn:ihe:pharm:dis:2010)</userFieldStandardValue>
+      <userFieldStandardValue>urn:ihe:pharm:pml:2013 - Pharmacy ??? (urn:ihe:pharm:pml:2013)</userFieldStandardValue>
+      <userFieldStandardValue>1.2.840.10008.5.1.4.1.1.88.59 - DICOM Manifest (DICOM KOS SOP Class UID)</userFieldStandardValue>
+      <userFieldStandardValue>urn:ihe:iti:xds:2017:mimeTypeSufficient - Format aus MIME Type ableitbar</userFieldStandardValue>
+      <userFieldStandardValue>urn:ihe-d:ig:Entlassmanagementbrief:2018 - Entlassmanagementbrief</userFieldStandardValue>
+      <userFieldStandardValue>urn:ihe-d:ig:NotaufnahmeregisterTraumaModul:2017 - NotaufnahmeregisterTraumamodul</userFieldStandardValue>
+      <userFieldStandardValue>urn:ihe-d:ig:NotaufnahmeregisterBasisModul:2017 - NotaufnahmeregisterBasismodul</userFieldStandardValue>
+      <userFieldStandardValue>urn:ihe-d:ig:MeldepflichtigeKrankheitenLabor:2014 - Meldepflichtige Krankheiten: Labormeldung</userFieldStandardValue>
+      <userFieldStandardValue>urn:ihe-d:ig:MeldepflichtigeKrankheitenArzt:2013 - Übermittlung meldepflichtiger Krankheiten – Arztmeldung</userFieldStandardValue>
+      <userFieldStandardValue>urn:ihe-d:ig:RehaEntlassbrief:2009 - Ärztlicher Reha-Entlassungsbericht</userFieldStandardValue>
+      <userFieldStandardValue>urn:ihe-d:ig:KurzberichtUeberleitungKrankenhaus:2016 - Überleitungsmanagement Ärztlicher Kurzbericht über den Krankenhausaufenthalt</userFieldStandardValue>
+      <userFieldStandardValue>urn:ihe-d:ig:KurzberichtUeberleitungNiedergelassenerArzt:2016 - Überleitungsmanagement Ärztlicher Kurzbericht des niedergelassenen Arztes</userFieldStandardValue>
+      <userFieldStandardValue>urn:ihe-d:ig:Medikationsplan:2015 - Medikationsplan</userFieldStandardValue>
+      <userFieldStandardValue>urn:ihe-d:ig:Arztbriefplus:2017 - Arztbrief plus</userFieldStandardValue>
+      <userFieldStandardValue>urn:ihe-d:ig:arztbrief:2014:nonXmlBody - Arztbrief 2014</userFieldStandardValue>
+      <userFieldStandardValue>urn:ihe-d:ig:eppc-g:2015 - Enhanced Patient Privacy Consent - Germany</userFieldStandardValue>
+      <userFieldStandardValue>urn:ihe-d:ig:eppc-g-sd:2015 - Enhanced Patient Privacy Consent - Germany - Scanned Document Option</userFieldStandardValue>
+      <userFieldStandardValue>urn:ihe-d:spec:PDF_A1:2005 - PDF/A-1</userFieldStandardValue>
+      <userFieldStandardValue>urn:ihe-d:spec:PDF_A2:2011 - PDF/A-2</userFieldStandardValue>
+      <userFieldStandardValue>urn:ihe-d:spec:PDF_A3:2012 - PDF/A-3</userFieldStandardValue>
+      <userFieldStandardValue>urn:ihe-d:spec:PDF_UA:2008 - PDF/UA</userFieldStandardValue>
+      <userFieldStandardValue>urn:ihe-d:mime - obsolet</userFieldStandardValue>
+      <userFieldStandardValue>urn:ihe:pcc:xds-ms:2007 - Medical Summaries (XDS-MS)</userFieldStandardValue>
+    </userFieldDef>
+    <userFieldDef elementClass="RepresentationForm" hash="USERFIELD_1622801104013_1966">
+      <userFieldName>FHIR Ressource</userFieldName>
+      <userFieldDescription></userFieldDescription>
+      <userFieldStyle>SUBTYPE</userFieldStyle>
+      <userFieldTreeVis>true</userFieldTreeVis>
+      <userFieldShowDescriptionInDialog>false</userFieldShowDescriptionInDialog>
+    </userFieldDef>
+    <userFieldDef elementClass="RepresentationForm" hash="USERFIELD_1620285514229_7874">
+      <userFieldName>FHIR Ressource</userFieldName>
+      <userFieldDescription>Metadaten von FHIR Ressourcen</userFieldDescription>
+      <userFieldStyle>TAB</userFieldStyle>
+      <userFieldTreeVis>true</userFieldTreeVis>
+      <userFieldShowDescriptionInDialog>true</userFieldShowDescriptionInDialog>
+    </userFieldDef>
+    <userFieldDef elementClass="RepresentationForm" hash="USERFIELD_1620285553237_7875">
+      <userFieldName>Ressourcen Typ</userFieldName>
+      <userFieldDescription></userFieldDescription>
+      <userFieldStyle>COMBO_BOX</userFieldStyle>
+      <userFieldTreeVis>true</userFieldTreeVis>
+      <userFieldShowDescriptionInDialog>false</userFieldShowDescriptionInDialog>
+      <userFieldStandardValue>Condition</userFieldStandardValue>
+      <userFieldStandardValue>Consent</userFieldStandardValue>
+      <userFieldStandardValue>Diagnosis</userFieldStandardValue>
+      <userFieldStandardValue>Location</userFieldStandardValue>
+      <userFieldStandardValue>Medication</userFieldStandardValue>
+      <userFieldStandardValue>Observation</userFieldStandardValue>
+      <userFieldStandardValue>Organization</userFieldStandardValue>
+      <userFieldStandardValue>Patient</userFieldStandardValue>
+      <userFieldStandardValue>Practitioner</userFieldStandardValue>
+      <userFieldStandardValue>Provenance</userFieldStandardValue>
+    </userFieldDef>
+    <userFieldDef elementClass="RepresentationForm" hash="USERFIELD_1623054261459_3913">
+      <userFieldName>Link zur FHIR Spezifikation</userFieldName>
+      <userFieldDescription>Link zur FHIR Spezifikation der Ressource unter http://hl7.org/fhir/
+(ToDo: ggf. automatisch hinzufügen)</userFieldDescription>
+      <userFieldStyle>HYPERLINK</userFieldStyle>
+      <userFieldTreeVis>true</userFieldTreeVis>
+      <userFieldShowDescriptionInDialog>true</userFieldShowDescriptionInDialog>
+    </userFieldDef>
+    <userFieldDef elementClass="RepresentationForm" hash="USERFIELD_1620285612795_7876">
+      <userFieldName>Profil</userFieldName>
+      <userFieldDescription>Link zum Profil, z.B. auf Simplifier (http://simplifier.net/)</userFieldDescription>
+      <userFieldStyle>HYPERLINK</userFieldStyle>
+      <userFieldTreeVis>true</userFieldTreeVis>
+      <userFieldShowDescriptionInDialog>true</userFieldShowDescriptionInDialog>
+    </userFieldDef>
+    <userFieldDef elementClass="RepresentationForm" hash="USERFIELD_1622803876617_5861">
+      <userFieldName>OpenEHR Metadaten</userFieldName>
+      <userFieldDescription></userFieldDescription>
+      <userFieldStyle>SUBTYPE</userFieldStyle>
+      <userFieldTreeVis>true</userFieldTreeVis>
+      <userFieldShowDescriptionInDialog>false</userFieldShowDescriptionInDialog>
+    </userFieldDef>
+    <userFieldDef elementClass="RepresentationForm" hash="USERFIELD_1622803925771_5862">
+      <userFieldName>OpenEHR Metadaten</userFieldName>
+      <userFieldDescription>Metadaten von OpenEHR Archtypen</userFieldDescription>
+      <userFieldStyle>TAB</userFieldStyle>
+      <userFieldTreeVis>true</userFieldTreeVis>
+      <userFieldShowDescriptionInDialog>false</userFieldShowDescriptionInDialog>
+    </userFieldDef>
+    <userFieldDef elementClass="RepresentationForm" hash="USERFIELD_1620155964405_7195">
+      <userFieldName>Link zum Informationsmodell</userFieldName>
+      <userFieldDescription>Link zum Informationsmodell des Objekttyps UML oder Template im CKM</userFieldDescription>
+      <userFieldStyle>HYPERLINK</userFieldStyle>
+      <userFieldTreeVis>true</userFieldTreeVis>
+      <userFieldShowDescriptionInDialog>true</userFieldShowDescriptionInDialog>
+    </userFieldDef>
+  </userFieldDefinitions>
+  <objects>
+    <model></model>
+    <element class="RepresentationForm" hash="RFO_1622804003846_5863" subtype="USERFIELD_1622803876617_5861">
+      <field name="name">1. Blutdruck</field>
+      <userField hash="USERFIELD_1620155964405_7195">https://ckm.openehr.org/ckm/archetypes/1013.1.3574</userField>
+    </element>
+    <element class="RepresentationForm" hash="RFO_1624435139776_2095" subtype="USERFIELD_1622801104013_1966">
+      <field name="name">2. FHIR Patient Ressource (IDAT)</field>
+      <userField hash="USERFIELD_1620285553237_7875">Patient</userField>
+      <userField hash="USERFIELD_1620285612795_7876">https://simplifier.net/medizininformatikinitiative-modulperson/patientin</userField>
+      <userField hash="USERFIELD_1623054261459_3913">http://hl7.org/fhir/patient.html</userField>
+    </element>
+    <element class="RepresentationForm" hash="RFO_1622801518777_1971" subtype="USERFIELD_1622801082285_1965">
+      <field name="name">3. XDS Befund</field>
+      <userField hash="USERFIELD_1620154569452_7158">BEF Befundbericht</userField>
+      <userField hash="USERFIELD_1620154965613_7161">BERI Arztberichte</userField>
+      <userField hash="USERFIELD_1620155158095_7169">H4 vorläufiges Dokument</userField>
+      <userField hash="USERFIELD_1620155819305_7188">RADI Radiologie</userField>
+      <userField hash="USERFIELD_1620156164656_7198">text/xml</userField>
+      <userField hash="USERFIELD_1620156362242_7199">&lt;html&gt;&lt;i&gt;urn:ihe:pcc:xds-ms:2007&lt;/i&gt;&lt;nb&gt; - Medical Summaries (XDS-MS)&lt;/nb&gt;&lt;/html&gt;</userField>
+    </element>
+  </objects>
+  <szenario hash="SZN_1670233317168_0" titel="Repräsentationsformen">
+    <description></description>
+    <view>
+      <selected>true</selected>
+      <x>200</x>
+      <y>0</y>
+      <zoom>0.8</zoom>
+      <degree>65</degree>
+      <shift>200</shift>
+      <pageSizeFactor>1.0</pageSizeFactor>
+      <activeLayer>4</activeLayer>
+      <multiView>true</multiView>
+    </view>
+    <mapping>
+      <layout class="Bendpoint">
+        <color name="bg_color">
+          <red>255</red>
+          <green>100</green>
+          <blue>100</blue>
+        </color>
+        <color name="fg_color">
+          <red>0</red>
+          <green>0</green>
+          <blue>0</blue>
+        </color>
+        <color name="border_color">
+          <red>0</red>
+          <green>0</green>
+          <blue>0</blue>
+        </color>
+        <form>0</form>
+        <font_family>SansSerif</font_family>
+        <font_style>0</font_style>
+        <font_size>12</font_size>
+        <width>10</width>
+        <height>10</height>
+      </layout>
+      <layout class="Group">
+        <color name="bg_color">
+          <red>0</red>
+          <green>0</green>
+          <blue>0</blue>
+        </color>
+        <color name="fg_color">
+          <red>0</red>
+          <green>0</green>
+          <blue>0</blue>
+        </color>
+        <color name="border_color">
+          <red>0</red>
+          <green>0</green>
+          <blue>0</blue>
+        </color>
+        <form>0</form>
+        <font_family>SansSerif</font_family>
+        <font_style>0</font_style>
+        <font_size>12</font_size>
+        <width>90</width>
+        <height>50</height>
+      </layout>
+      <layout class="Textfield">
+        <color name="bg_color">
+          <red>0</red>
+          <green>0</green>
+          <blue>0</blue>
+        </color>
+        <color name="fg_color">
+          <red>0</red>
+          <green>0</green>
+          <blue>0</blue>
+        </color>
+        <color name="border_color">
+          <red>0</red>
+          <green>0</green>
+          <blue>0</blue>
+        </color>
+        <form>0</form>
+        <font_family>SansSerif</font_family>
+        <font_style>0</font_style>
+        <font_size>12</font_size>
+        <width>90</width>
+        <height>50</height>
+      </layout>
+      <layout class="ApplicationSystem">
+        <color name="bg_color">
+          <red>255</red>
+          <green>153</green>
+          <blue>102</blue>
+        </color>
+        <color name="fg_color">
+          <red>0</red>
+          <green>0</green>
+          <blue>0</blue>
+        </color>
+        <color name="border_color">
+          <red>0</red>
+          <green>0</green>
+          <blue>0</blue>
+        </color>
+        <form>3</form>
+        <font_family>SansSerif</font_family>
+        <font_style>0</font_style>
+        <font_size>12</font_size>
+        <width>90</width>
+        <height>50</height>
+      </layout>
+      <layout class="Function">
+        <color name="bg_color">
+          <red>255</red>
+          <green>100</green>
+          <blue>100</blue>
+        </color>
+        <color name="fg_color">
+          <red>0</red>
+          <green>0</green>
+          <blue>0</blue>
+        </color>
+        <color name="border_color">
+          <red>0</red>
+          <green>0</green>
+          <blue>0</blue>
+        </color>
+        <form>0</form>
+        <font_family>SansSerif</font_family>
+        <font_style>0</font_style>
+        <font_size>12</font_size>
+        <width>90</width>
+        <height>50</height>
+      </layout>
+      <layout class="IheActorInstance">
+        <color name="bg_color">
+          <red>0</red>
+          <green>204</green>
+          <blue>255</blue>
+        </color>
+        <color name="fg_color">
+          <red>0</red>
+          <green>0</green>
+          <blue>0</blue>
+        </color>
+        <color name="border_color">
+          <red>0</red>
+          <green>0</green>
+          <blue>0</blue>
+        </color>
+        <form>0</form>
+        <font_family>SansSerif</font_family>
+        <font_style>0</font_style>
+        <font_size>12</font_size>
+        <width>90</width>
+        <height>50</height>
+      </layout>
+      <layout class="IheActorInstanceInvokingInterface">
+        <color name="bg_color">
+          <red>255</red>
+          <green>100</green>
+          <blue>100</blue>
+        </color>
+        <color name="fg_color">
+          <red>0</red>
+          <green>0</green>
+          <blue>0</blue>
+        </color>
+        <color name="border_color">
+          <red>0</red>
+          <green>0</green>
+          <blue>0</blue>
+        </color>
+        <form>1</form>
+        <font_family>SansSerif</font_family>
+        <font_style>0</font_style>
+        <font_size>12</font_size>
+        <width>16</width>
+        <height>16</height>
+      </layout>
+      <layout class="IheActorInstanceProvidingInterface">
+        <color name="bg_color">
+          <red>192</red>
+          <green>192</green>
+          <blue>192</blue>
+        </color>
+        <color name="fg_color">
+          <red>0</red>
+          <green>0</green>
+          <blue>0</blue>
+        </color>
+        <color name="border_color">
+          <red>0</red>
+          <green>0</green>
+          <blue>0</blue>
+        </color>
+        <form>2</form>
+        <font_family>SansSerif</font_family>
+        <font_style>0</font_style>
+        <font_size>12</font_size>
+        <width>16</width>
+        <height>16</height>
+      </layout>
+      <layout class="InvokingInterface">
+        <color name="bg_color">
+          <red>204</red>
+          <green>255</green>
+          <blue>204</blue>
+        </color>
+        <color name="fg_color">
+          <red>0</red>
+          <green>0</green>
+          <blue>0</blue>
+        </color>
+        <color name="border_color">
+          <red>0</red>
+          <green>0</green>
+          <blue>0</blue>
+        </color>
+        <form>1</form>
+        <font_family>SansSerif</font_family>
+        <font_style>0</font_style>
+        <font_size>12</font_size>
+        <width>16</width>
+        <height>16</height>
+      </layout>
+      <layout class="ObjectType">
+        <color name="bg_color">
+          <red>100</red>
+          <green>100</green>
+          <blue>255</blue>
+        </color>
+        <color name="fg_color">
+          <red>0</red>
+          <green>0</green>
+          <blue>0</blue>
+        </color>
+        <color name="border_color">
+          <red>0</red>
+          <green>0</green>
+          <blue>0</blue>
+        </color>
+        <form>1</form>
+        <font_family>SansSerif</font_family>
+        <font_style>0</font_style>
+        <font_size>12</font_size>
+        <width>90</width>
+        <height>50</height>
+      </layout>
+      <layout class="OrganisationSystem">
+        <color name="bg_color">
+          <red>100</red>
+          <green>100</green>
+          <blue>255</blue>
+        </color>
+        <color name="fg_color">
+          <red>0</red>
+          <green>0</green>
+          <blue>0</blue>
+        </color>
+        <color name="border_color">
+          <red>0</red>
+          <green>0</green>
+          <blue>0</blue>
+        </color>
+        <form>3</form>
+        <font_family>SansSerif</font_family>
+        <font_style>0</font_style>
+        <font_size>12</font_size>
+        <width>90</width>
+        <height>50</height>
+      </layout>
+      <layout class="PhysicalDataProcessingComponent">
+        <color name="bg_color">
+          <red>255</red>
+          <green>200</green>
+          <blue>0</blue>
+        </color>
+        <color name="fg_color">
+          <red>0</red>
+          <green>0</green>
+          <blue>0</blue>
+        </color>
+        <color name="border_color">
+          <red>0</red>
+          <green>0</green>
+          <blue>0</blue>
+        </color>
+        <form>0</form>
+        <font_family>SansSerif</font_family>
+        <font_style>0</font_style>
+        <font_size>12</font_size>
+        <width>90</width>
+        <height>50</height>
+      </layout>
+      <layout class="ProvidingInterface">
+        <color name="bg_color">
+          <red>255</red>
+          <green>200</green>
+          <blue>0</blue>
+        </color>
+        <color name="fg_color">
+          <red>0</red>
+          <green>0</green>
+          <blue>0</blue>
+        </color>
+        <color name="border_color">
+          <red>0</red>
+          <green>0</green>
+          <blue>0</blue>
+        </color>
+        <form>2</form>
+        <font_family>SansSerif</font_family>
+        <font_style>0</font_style>
+        <font_size>12</font_size>
+        <width>16</width>
+        <height>16</height>
+      </layout>
+    </mapping>
+    <layer number="0">
+      <layout>
+        <color name="bg_color">
+          <red>255</red>
+          <green>255</green>
+          <blue>255</blue>
+        </color>
+      </layout>
+    </layer>
+    <layer number="1">
+      <layout>
+        <color name="bg_color">
+          <red>255</red>
+          <green>255</green>
+          <blue>255</blue>
+        </color>
+      </layout>
+    </layer>
+    <layer number="2">
+      <layout>
+        <color name="bg_color">
+          <red>255</red>
+          <green>255</green>
+          <blue>255</blue>
+        </color>
+      </layout>
+    </layer>
+    <layer number="3">
+      <layout>
+        <color name="bg_color">
+          <red>255</red>
+          <green>255</green>
+          <blue>255</blue>
+        </color>
+      </layout>
+    </layer>
+    <layer number="4">
+      <layout>
+        <color name="bg_color">
+          <red>255</red>
+          <green>255</green>
+          <blue>255</blue>
+        </color>
+      </layout>
+    </layer>
+  </szenario>
+  <images></images>
+</modell_3lgm_2>
