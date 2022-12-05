@@ -101,7 +101,6 @@
         <rdfs:domain rdf:resource="https://www.3lgm2.de/resource/ihe/IntegrationProfile"/>
         <rdfs:range rdf:resource="https://www.3lgm2.de/resource/ihe/Domain"/>
         <rdfs:label xml:lang="en">IHE Domain</rdfs:label>
-        <rdfs:seeAlso xml:lang="en">isPublishedIn</rdfs:seeAlso>
     </owl:ObjectProperty>
     
 
@@ -156,6 +155,7 @@
         <ontology:abbreviation>ITI-1</ontology:abbreviation>
         <terms:description>NTP transactions used to maintain time synchronization.</terms:description>
         <rdfs:label>Maintain Time</rdfs:label>
+        <rdfs:seeAlso rdf:datatype="http://schema.org/url">https://profiles.ihe.net/ITI/TF/Volume2/ITI-1.html</rdfs:seeAlso>
     </owl:ObjectProperty>
     
 
@@ -167,6 +167,7 @@
         <ontology:abbreviation>ITI-10</ontology:abbreviation>
         <terms:description>Allows a Patient Identity Consumer to be notified by the Patient Identity Cross-reference Manager Actor of changes to the identification of a patient in Patient Identification Domains the Consumer is interested in.</terms:description>
         <rdfs:label>PIX Update Notification</rdfs:label>
+        <rdfs:seeAlso rdf:datatype="http://schema.org/url">https://profiles.ihe.net/ITI/TF/Volume2/ITI-10.html</rdfs:seeAlso>
     </owl:ObjectProperty>
     
 
@@ -178,6 +179,7 @@
         <ontology:abbreviation>ITI-11</ontology:abbreviation>
         <terms:description>A request issued by a display system for specific information related to a patient returned in a ready for presentation information format</terms:description>
         <rdfs:label>Retrieve Specific Information for Display</rdfs:label>
+        <rdfs:seeAlso rdf:datatype="http://schema.org/url">https://profiles.ihe.net/ITI/TF/Volume2/ITI-11.html</rdfs:seeAlso>
     </owl:ObjectProperty>
     
 
@@ -189,6 +191,7 @@
         <ontology:abbreviation>ITI-12</ontology:abbreviation>
         <terms:description>A display system requests an instance of a uniquely identified persistent document under custodianship by an information source and returns its content ready for presentation.</terms:description>
         <rdfs:label>Retrieve Document for Display</rdfs:label>
+        <rdfs:seeAlso rdf:datatype="http://schema.org/url">https://profiles.ihe.net/ITI/TF/Volume2/ITI-12.html</rdfs:seeAlso>
     </owl:ObjectProperty>
     
 
@@ -200,6 +203,7 @@
         <ontology:abbreviation>ITI-13</ontology:abbreviation>
         <terms:description>Accounts for all messages required to propagate a context change to a responding participant actor: -Survey of all other Context Participant Actors by the Context Manager Actor and display by the instigating Participant Actor of any associated replies. -Notification of context change result from the Context manager Actor to the Context Participant Actors. -Retrieval of the context data by the Context Participant Actors</terms:description>
         <rdfs:label>Follow Context</rdfs:label>
+        <rdfs:seeAlso rdf:datatype="http://schema.org/url">https://profiles.ihe.net/ITI/TF/Volume2/ITI-13.html</rdfs:seeAlso>
     </owl:ObjectProperty>
     
 
@@ -211,6 +215,7 @@
         <ontology:abbreviation>ITI-18</ontology:abbreviation>
         <terms:description>The Query Registry transaction is issued by the Document Consumer Actor on behalf of a care provider (EHR-CR) to a Document Registry. The Document Registry Actor searches the registry to locate documents that meet the provider s specified query criteria. It will return a list of document entries that contain metadata found to meet the specified criteria including the locations and identifier of each corresponding document in one or more Document Repositories. The stored query uses parameters and not direct SQL</terms:description>
         <rdfs:label>Registry Stored Query</rdfs:label>
+        <rdfs:seeAlso rdf:datatype="http://schema.org/url">https://profiles.ihe.net/ITI/TF/Volume2/ITI-18.html</rdfs:seeAlso>
     </owl:ObjectProperty>
     
 
@@ -222,6 +227,7 @@
         <ontology:abbreviation>ITI-19</ontology:abbreviation>
         <terms:description>This transaction is embedded within all network communications activity. All DICOM, HL7, and HTML connections shall comply with the IHE specification for bi-directional authentication and authorization of communications of Protected Healthcare Information (PHI). IHE does not specify how other protocols that transfer PHI shall perform bi-directional authentication and authorization, but requires that other protocols perform such authentication and authorization.</terms:description>
         <rdfs:label>Authenticate Node</rdfs:label>
+        <rdfs:seeAlso rdf:datatype="http://schema.org/url">https://profiles.ihe.net/ITI/TF/Volume2/ITI-19.html</rdfs:seeAlso>
     </owl:ObjectProperty>
     
 
@@ -233,6 +239,7 @@
         <ontology:abbreviation>ITI-2</ontology:abbreviation>
         <terms:description>The Client Authentication Agent requests user authentication from the Kerberos Authentication Server.  When the user is authenticated, the Kerberos Authentication Server returns a Ticket Granting Ticket (TGT) to optimize future activity.</terms:description>
         <rdfs:label>Get User Authentication</rdfs:label>
+        <rdfs:seeAlso rdf:datatype="http://schema.org/url">https://profiles.ihe.net/ITI/TF/Volume2/ITI-2.html</rdfs:seeAlso>
     </owl:ObjectProperty>
     
 
@@ -244,6 +251,7 @@
         <ontology:abbreviation>ITI-20</ontology:abbreviation>
         <terms:description>The delivery of an audit event description from any secure node to the Audit Repository.</terms:description>
         <rdfs:label>Record Audit Event</rdfs:label>
+        <rdfs:seeAlso rdf:datatype="http://schema.org/url">https://profiles.ihe.net/ITI/TF/Volume2/ITI-20.html</rdfs:seeAlso>
     </owl:ObjectProperty>
     
 
@@ -255,6 +263,7 @@
         <ontology:abbreviation>ITI-21</ontology:abbreviation>
         <terms:description>Look up and return patient demographic information in a single patient demographics source, based upon matches with full or partial demographic information entered by the user.</terms:description>
         <rdfs:label>Patient Demographics Query</rdfs:label>
+        <rdfs:seeAlso rdf:datatype="http://schema.org/url">https://profiles.ihe.net/ITI/TF/Volume2/ITI-21.html</rdfs:seeAlso>
     </owl:ObjectProperty>
     
 
@@ -266,6 +275,7 @@
         <ontology:abbreviation>ITI-22</ontology:abbreviation>
         <terms:description>Look up and return patient demographic and visit information in a single patient demographics source, based upon matches with full or partial demographic/visit information entered by the user.</terms:description>
         <rdfs:label>Patient Demographics and Visit Query</rdfs:label>
+        <rdfs:seeAlso rdf:datatype="http://schema.org/url">https://profiles.ihe.net/ITI/TF/Volume2/ITI-22.html</rdfs:seeAlso>
     </owl:ObjectProperty>
     
 
@@ -277,6 +287,7 @@
         <ontology:abbreviation>ITI-23</ontology:abbreviation>
         <terms:description>This transaction will find the LDAP Directory by querying the DNS.</terms:description>
         <rdfs:label>Find Personnel White Pages</rdfs:label>
+        <rdfs:seeAlso rdf:datatype="http://schema.org/url">https://profiles.ihe.net/ITI/TF/Volume2/ITI-23.html</rdfs:seeAlso>
     </owl:ObjectProperty>
     
 
@@ -288,6 +299,7 @@
         <ontology:abbreviation>ITI-24</ontology:abbreviation>
         <terms:description>This transaction provides for read-only access to the Personnel White Pages directory.</terms:description>
         <rdfs:label>Query Personnel White Pages</rdfs:label>
+        <rdfs:seeAlso rdf:datatype="http://schema.org/url">https://profiles.ihe.net/ITI/TF/Volume2/ITI-24.html</rdfs:seeAlso>
     </owl:ObjectProperty>
     
 
@@ -299,6 +311,7 @@
         <ontology:abbreviation>ITI-3</ontology:abbreviation>
         <terms:description>Obtain a ticket using Kerberos protocol for use with a service. Service identity option is specific for each protocol. For example HOST for HTTP.</terms:description>
         <rdfs:label>Get Service Ticket</rdfs:label>
+        <rdfs:seeAlso rdf:datatype="http://schema.org/url">https://profiles.ihe.net/ITI/TF/Volume2/ITI-3.html</rdfs:seeAlso>
     </owl:ObjectProperty>
     
 
@@ -310,6 +323,7 @@
         <ontology:abbreviation>ITI-30</ontology:abbreviation>
         <terms:description>The Patient Demographics Supplier registers or updates a patient and forwards the demographic information (i.e. all information directly related to the patient, such as ID, address, next of kin, to other systems implementing Patient Demographics Consumer.</terms:description>
         <rdfs:label>Patient Identity Management</rdfs:label>
+        <rdfs:seeAlso rdf:datatype="http://schema.org/url">https://profiles.ihe.net/ITI/TF/Volume2/ITI-30.html</rdfs:seeAlso>
     </owl:ObjectProperty>
     
 
@@ -321,6 +335,7 @@
         <ontology:abbreviation>ITI-31</ontology:abbreviation>
         <terms:description>The Patient Encounter Source registers or updates an encounter (inpatient, outpatient, pre-admit...) and forwards the information to other systems implementing Patient Encounter Consumer. This information will include the patients location and care providers for a particular (usually current) encounter.</terms:description>
         <rdfs:label>Patient Encounter Management</rdfs:label>
+        <rdfs:seeAlso rdf:datatype="http://schema.org/url">https://profiles.ihe.net/ITI/TF/Volume2/ITI-31.html</rdfs:seeAlso>
     </owl:ObjectProperty>
     
 
@@ -332,6 +347,7 @@
         <ontology:abbreviation>ITI-32</ontology:abbreviation>
         <terms:description>The Portable Media Creator sends information to media reading actors by means of Interchange Media where it stores the information.</terms:description>
         <rdfs:label>Distribute Document Set on Media</rdfs:label>
+        <rdfs:seeAlso rdf:datatype="http://schema.org/url">https://profiles.ihe.net/ITI/TF/Volume2/ITI-32.html</rdfs:seeAlso>
     </owl:ObjectProperty>
     
 
@@ -343,6 +359,7 @@
         <ontology:abbreviation>ITI-34</ontology:abbreviation>
         <terms:description>Retrieve Form</terms:description>
         <rdfs:label>Retrieve Form</rdfs:label>
+        <rdfs:seeAlso rdf:datatype="http://schema.org/url">https://profiles.ihe.net/ITI/TF/Volume2/ITI-34.html</rdfs:seeAlso>
     </owl:ObjectProperty>
     
 
@@ -354,6 +371,7 @@
         <ontology:abbreviation>ITI-35</ontology:abbreviation>
         <terms:description>Submit Form</terms:description>
         <rdfs:label>Submit Form</rdfs:label>
+        <rdfs:seeAlso rdf:datatype="http://schema.org/url">https://profiles.ihe.net/ITI/TF/Volume2/ITI-35.html</rdfs:seeAlso>
     </owl:ObjectProperty>
     
 
@@ -365,6 +383,7 @@
         <ontology:abbreviation>ITI-36</ontology:abbreviation>
         <terms:description>Archive Form</terms:description>
         <rdfs:label>Archive Form</rdfs:label>
+        <rdfs:seeAlso rdf:datatype="http://schema.org/url">https://profiles.ihe.net/ITI/TF/Volume2/ITI-36.html</rdfs:seeAlso>
     </owl:ObjectProperty>
     
 
@@ -376,6 +395,7 @@
         <ontology:abbreviation>ITI-37</ontology:abbreviation>
         <terms:description>Retrieve Clarifications</terms:description>
         <rdfs:label>Retrieve Clarifications</rdfs:label>
+        <rdfs:seeAlso rdf:datatype="http://schema.org/url">https://profiles.ihe.net/ITI/TF/Volume2/ITI-37.html</rdfs:seeAlso>
     </owl:ObjectProperty>
     
 
@@ -387,6 +407,7 @@
         <ontology:abbreviation>ITI-38</ontology:abbreviation>
         <terms:description>Cross Gateway Query</terms:description>
         <rdfs:label>Cross Gateway Query</rdfs:label>
+        <rdfs:seeAlso rdf:datatype="http://schema.org/url">https://profiles.ihe.net/ITI/TF/Volume2/ITI-38.html</rdfs:seeAlso>
     </owl:ObjectProperty>
     
 
@@ -398,6 +419,7 @@
         <ontology:abbreviation>ITI-39</ontology:abbreviation>
         <terms:description>Cross Gateway Retrieve</terms:description>
         <rdfs:label>Cross Gateway Retrieve</rdfs:label>
+        <rdfs:seeAlso rdf:datatype="http://schema.org/url">https://profiles.ihe.net/ITI/TF/Volume2/ITI-39.html</rdfs:seeAlso>
     </owl:ObjectProperty>
     
 
@@ -409,6 +431,7 @@
         <ontology:abbreviation>ITI-4</ontology:abbreviation>
         <terms:description>The Kerberized Communication transaction is an aspect of the connection between a local client and a remote server.</terms:description>
         <rdfs:label>Kerberized Communication</rdfs:label>
+        <rdfs:seeAlso rdf:datatype="http://schema.org/url">https://profiles.ihe.net/ITI/TF/Volume2/ITI-4.html</rdfs:seeAlso>
     </owl:ObjectProperty>
     
 
@@ -420,6 +443,7 @@
         <ontology:abbreviation>ITI-40</ontology:abbreviation>
         <terms:description>Provide X-User Assertion</terms:description>
         <rdfs:label>Provide X-User Assertion</rdfs:label>
+        <rdfs:seeAlso rdf:datatype="http://schema.org/url">https://profiles.ihe.net/ITI/TF/Volume2/ITI-40.html</rdfs:seeAlso>
     </owl:ObjectProperty>
     
 
@@ -431,6 +455,7 @@
         <ontology:abbreviation>ITI-41</ontology:abbreviation>
         <terms:description>Provide and Register Document Set-b</terms:description>
         <rdfs:label>Provide and Register Document Set-b</rdfs:label>
+        <rdfs:seeAlso rdf:datatype="http://schema.org/url">https://profiles.ihe.net/ITI/TF/Volume2/ITI-41.html</rdfs:seeAlso>
     </owl:ObjectProperty>
     
 
@@ -442,6 +467,7 @@
         <ontology:abbreviation>ITI-42</ontology:abbreviation>
         <terms:description>Register Document Set-b</terms:description>
         <rdfs:label>Register Document Set-b</rdfs:label>
+        <rdfs:seeAlso rdf:datatype="http://schema.org/url">https://profiles.ihe.net/ITI/TF/Volume2/ITI-42.html</rdfs:seeAlso>
     </owl:ObjectProperty>
     
 
@@ -453,6 +479,7 @@
         <ontology:abbreviation>ITI-43</ontology:abbreviation>
         <terms:description>Retrieve Document Set</terms:description>
         <rdfs:label>Retrieve Document Set</rdfs:label>
+        <rdfs:seeAlso rdf:datatype="http://schema.org/url">https://profiles.ihe.net/ITI/TF/Volume2/ITI-43.html</rdfs:seeAlso>
     </owl:ObjectProperty>
     
 
@@ -464,6 +491,7 @@
         <ontology:abbreviation>ITI-44</ontology:abbreviation>
         <terms:description>Patient Identity Feed HL7 V3</terms:description>
         <rdfs:label>Patient Identity Feed HL7 V3</rdfs:label>
+        <rdfs:seeAlso rdf:datatype="http://schema.org/url">https://profiles.ihe.net/ITI/TF/Volume2/ITI-44.html</rdfs:seeAlso>
     </owl:ObjectProperty>
     
 
@@ -475,6 +503,7 @@
         <ontology:abbreviation>ITI-45</ontology:abbreviation>
         <terms:description>PIXV3 Query</terms:description>
         <rdfs:label>PIXV3 Query</rdfs:label>
+        <rdfs:seeAlso rdf:datatype="http://schema.org/url">https://profiles.ihe.net/ITI/TF/Volume2/ITI-45.html</rdfs:seeAlso>
     </owl:ObjectProperty>
     
 
@@ -486,6 +515,7 @@
         <ontology:abbreviation>ITI-46</ontology:abbreviation>
         <terms:description>PIXV3 Update Notification</terms:description>
         <rdfs:label>PIXV3 Update Notification</rdfs:label>
+        <rdfs:seeAlso rdf:datatype="http://schema.org/url">https://profiles.ihe.net/ITI/TF/Volume2/ITI-46.html</rdfs:seeAlso>
     </owl:ObjectProperty>
     
 
@@ -497,6 +527,7 @@
         <ontology:abbreviation>ITI-47</ontology:abbreviation>
         <terms:description>Patient Demographics Query HL7 V3</terms:description>
         <rdfs:label>Patient Demographics Query HL7 V3</rdfs:label>
+        <rdfs:seeAlso rdf:datatype="http://schema.org/url">https://profiles.ihe.net/ITI/TF/Volume2/ITI-47.html</rdfs:seeAlso>
     </owl:ObjectProperty>
     
 
@@ -508,6 +539,7 @@
         <ontology:abbreviation>ITI-48</ontology:abbreviation>
         <terms:description>This transaction is used by the Value Set Consumer to retrieve a Resolved Value Set from the Value Set Repository.  The Value Set Consumer has previously obtained the Resolved Value Set OID by means outside of the scope of this transaction. Appendix B of the IHE ITI Technical Framework Volume 2 has further information about obtaining and managing OIDs which are used as the Value Set Unique ID.</terms:description>
         <rdfs:label>Retrieve Value Set</rdfs:label>
+        <rdfs:seeAlso rdf:datatype="http://schema.org/url">https://profiles.ihe.net/ITI/TF/Volume2/ITI-48.html</rdfs:seeAlso>
     </owl:ObjectProperty>
     
 
@@ -519,6 +551,7 @@
         <ontology:abbreviation>ITI-5</ontology:abbreviation>
         <terms:description>Allows a Context Participant Actor to locate and establish communication with the Context Manager Actor.</terms:description>
         <rdfs:label>Join Context</rdfs:label>
+        <rdfs:seeAlso rdf:datatype="http://schema.org/url">https://profiles.ihe.net/ITI/TF/Volume2/ITI-5.html</rdfs:seeAlso>
     </owl:ObjectProperty>
     
 
@@ -530,6 +563,7 @@
         <ontology:abbreviation>ITI-51</ontology:abbreviation>
         <terms:description>Multi-Patient Stored Query</terms:description>
         <rdfs:label>Multi-Patient Stored Query</rdfs:label>
+        <rdfs:seeAlso rdf:datatype="http://schema.org/url">https://profiles.ihe.net/ITI/TF/Volume2/ITI-51.html</rdfs:seeAlso>
     </owl:ObjectProperty>
     
 
@@ -541,6 +575,7 @@
         <ontology:abbreviation>ITI-52</ontology:abbreviation>
         <terms:description>Document Metadata Subscribe</terms:description>
         <rdfs:label>Document Metadata Subscribe</rdfs:label>
+        <rdfs:seeAlso rdf:datatype="http://schema.org/url">https://profiles.ihe.net/ITI/TF/Volume2/ITI-52.html</rdfs:seeAlso>
     </owl:ObjectProperty>
     
 
@@ -552,6 +587,7 @@
         <ontology:abbreviation>ITI-53</ontology:abbreviation>
         <terms:description>Document Metadata Notify</terms:description>
         <rdfs:label>Document Metadata Notify</rdfs:label>
+        <rdfs:seeAlso rdf:datatype="http://schema.org/url">https://profiles.ihe.net/ITI/TF/Volume2/ITI-53.html</rdfs:seeAlso>
     </owl:ObjectProperty>
     
 
@@ -563,6 +599,7 @@
         <ontology:abbreviation>ITI-54</ontology:abbreviation>
         <terms:description>Document Metadata Publish</terms:description>
         <rdfs:label>Document Metadata Publish</rdfs:label>
+        <rdfs:seeAlso rdf:datatype="http://schema.org/url">https://profiles.ihe.net/ITI/TF/Volume2/ITI-54.html</rdfs:seeAlso>
     </owl:ObjectProperty>
     
 
@@ -574,6 +611,7 @@
         <ontology:abbreviation>ITI-55</ontology:abbreviation>
         <terms:description>Cross Gateway Patient Discovery</terms:description>
         <rdfs:label>Cross Gateway Patient Discovery</rdfs:label>
+        <rdfs:seeAlso rdf:datatype="http://schema.org/url">https://profiles.ihe.net/ITI/TF/Volume2/ITI-55.html</rdfs:seeAlso>
     </owl:ObjectProperty>
     
 
@@ -585,6 +623,7 @@
         <ontology:abbreviation>ITI-56</ontology:abbreviation>
         <terms:description>Patient Location Query</terms:description>
         <rdfs:label>Patient Location Query</rdfs:label>
+        <rdfs:seeAlso rdf:datatype="http://schema.org/url">https://profiles.ihe.net/ITI/TF/Volume2/ITI-56.html</rdfs:seeAlso>
     </owl:ObjectProperty>
     
 
@@ -596,6 +635,7 @@
         <ontology:abbreviation>ITI-57</ontology:abbreviation>
         <terms:description>The Update Document Set transaction passes a collection of metadata updates from the Document Administrator actor to the Document Registry or Document Recipient actor.</terms:description>
         <rdfs:label>Update Document Set</rdfs:label>
+        <rdfs:seeAlso rdf:datatype="http://schema.org/url">https://profiles.ihe.net/ITI/TF/Volume2/ITI-57.html</rdfs:seeAlso>
     </owl:ObjectProperty>
     
 
@@ -607,6 +647,7 @@
         <ontology:abbreviation>ITI-58</ontology:abbreviation>
         <terms:description>This transaction supports the ability to lookup information about healthcare providers from a healthcare provider directory on the following: • Individual Providers – A person who provides healthcare services, such as a physician, nurse, or pharmacist. • Organizational Providers – Organizations that provide or support healthcare services, such as hospitals, Healthcare Information Exchanges (HIEs), Managed Care, Integrated Delivery Networks (IDNs), and Associations. • Relationship between providers.</terms:description>
         <rdfs:label>Provider Information Query</rdfs:label>
+        <rdfs:seeAlso rdf:datatype="http://schema.org/url">https://profiles.ihe.net/ITI/TF/Volume2/ITI-58.html</rdfs:seeAlso>
     </owl:ObjectProperty>
     
 
@@ -618,6 +659,7 @@
         <ontology:abbreviation>ITI-59</ontology:abbreviation>
         <terms:description>The Provider Information Feed specifies one or more of the following actions: • An “Add” to add new provider entries • A “Delete” to delete any existing provider entries • An “Update” to modify or update any existing provider entries</terms:description>
         <rdfs:label>Provider Information Feed</rdfs:label>
+        <rdfs:seeAlso rdf:datatype="http://schema.org/url">https://profiles.ihe.net/ITI/TF/Volume2/ITI-59.html</rdfs:seeAlso>
     </owl:ObjectProperty>
     
 
@@ -629,6 +671,7 @@
         <ontology:abbreviation>ITI-6</ontology:abbreviation>
         <terms:description>Includes all messages required to initiate and finalize a context change transaction: -Initiation of a context change request from the instigating participant actor. -Delivery of survey results to instigating actor and display of associated replies. -Communication of context change decision to the Context Manager Actor</terms:description>
         <rdfs:label>Change Context</rdfs:label>
+        <rdfs:seeAlso rdf:datatype="http://schema.org/url">https://profiles.ihe.net/ITI/TF/Volume2/ITI-6.html</rdfs:seeAlso>
     </owl:ObjectProperty>
     
 
@@ -651,6 +694,7 @@
         <ontology:abbreviation>ITI-61</ontology:abbreviation>
         <terms:description>The Register On-Demand Document Entry transaction is used by the On-Demand Document Source to register one or more On-Demand Document Entries in the Document Registry.</terms:description>
         <rdfs:label>Register On-Demand Document Entry</rdfs:label>
+        <rdfs:seeAlso rdf:datatype="http://schema.org/url">https://profiles.ihe.net/ITI/TF/Volume2/ITI-60.html</rdfs:seeAlso>
     </owl:ObjectProperty>
     
 
@@ -662,6 +706,7 @@
         <ontology:abbreviation>ITI-62</ontology:abbreviation>
         <terms:description>The Remove Metadata transaction is used by the Document Administrator to request removal of one or more metadata objects from a Document Registry.</terms:description>
         <rdfs:label>Remove Metadata</rdfs:label>
+        <rdfs:seeAlso rdf:datatype="http://schema.org/url">https://profiles.ihe.net/ITI/TF/Volume2/ITI-62.html</rdfs:seeAlso>
     </owl:ObjectProperty>
     
 
@@ -673,6 +718,7 @@
         <ontology:abbreviation>ITI-63</ontology:abbreviation>
         <terms:description>This transaction is used to fetch a document or a set of documents from a remote community that matches a given set of metadata attribute values.</terms:description>
         <rdfs:label>Cross Gateway Fetch</rdfs:label>
+        <rdfs:seeAlso rdf:datatype="http://schema.org/url">https://profiles.ihe.net/ITI/TF/Volume2/ITI-63.html</rdfs:seeAlso>
     </owl:ObjectProperty>
     
 
@@ -684,6 +730,7 @@
         <ontology:abbreviation>ITI-69</ontology:abbreviation>
         <terms:description>Create Destroy Pull Point</terms:description>
         <rdfs:label>Create Destroy Pull Point</rdfs:label>
+        <rdfs:seeAlso rdf:datatype="http://schema.org/url">https://profiles.ihe.net/ITI/TF/Volume2/ITI-69.html</rdfs:seeAlso>
     </owl:ObjectProperty>
     
 
@@ -695,6 +742,7 @@
         <ontology:abbreviation>ITI-7</ontology:abbreviation>
         <terms:description>Allows Context Participant Actor to notify the Context manager Actor that it is breaking off communication.</terms:description>
         <rdfs:label>Leave Context</rdfs:label>
+        <rdfs:seeAlso rdf:datatype="http://schema.org/url">https://profiles.ihe.net/ITI/TF/Volume2/ITI-7.html</rdfs:seeAlso>
     </owl:ObjectProperty>
     
 
@@ -706,6 +754,7 @@
         <ontology:abbreviation>ITI-70</ontology:abbreviation>
         <terms:description>Pull Notification</terms:description>
         <rdfs:label>Pull Notification</rdfs:label>
+        <rdfs:seeAlso rdf:datatype="http://schema.org/url">https://profiles.ihe.net/ITI/TF/Volume2/ITI-70.html</rdfs:seeAlso>
     </owl:ObjectProperty>
     
 
@@ -717,6 +766,7 @@
         <ontology:abbreviation>ITI-78</ontology:abbreviation>
         <terms:description>Performs a query against a patient demographics supplier using HTTP, REST, and JSON/XML message encoding.</terms:description>
         <rdfs:label>Mobile Patient Demographics Query</rdfs:label>
+        <rdfs:seeAlso rdf:datatype="http://schema.org/url">https://profiles.ihe.net/ITI/TF/Volume2/ITI-78.html</rdfs:seeAlso>
     </owl:ObjectProperty>
     
 
@@ -728,6 +778,7 @@
         <ontology:abbreviation>ITI-79</ontology:abbreviation>
         <terms:description>Transaction used by the service provider (Authorization Decisions Verifier) to request valid authorization decisions granted for the Requester Entity to disclose specific documents.</terms:description>
         <rdfs:label>Authorization Decisions Query</rdfs:label>
+        <rdfs:seeAlso rdf:datatype="http://schema.org/url">https://profiles.ihe.net/ITI/TF/Volume2/ITI-79.html</rdfs:seeAlso>
     </owl:ObjectProperty>
     
 
@@ -739,6 +790,7 @@
         <ontology:abbreviation>ITI-8</ontology:abbreviation>
         <terms:description>Allows a Patient Identity Source Actor to notify a Patient Identity Cross-Referencing Actor of all events related to patient identification (creation, update, merge, etc.).</terms:description>
         <rdfs:label>Patient Identity Feed</rdfs:label>
+        <rdfs:seeAlso rdf:datatype="http://schema.org/url">https://profiles.ihe.net/ITI/TF/Volume2/ITI-8.html</rdfs:seeAlso>
     </owl:ObjectProperty>
     
 
@@ -750,6 +802,7 @@
         <ontology:abbreviation>ITI-81</ontology:abbreviation>
         <terms:description>Retrieve Audit Messages. Search ATNA audit messages based upon queries using ATNA audit message content.</terms:description>
         <rdfs:label>Retrieve ATNA Audit Event</rdfs:label>
+        <rdfs:seeAlso rdf:datatype="http://schema.org/url">https://profiles.ihe.net/ITI/TF/Volume2/ITI-81.html</rdfs:seeAlso>
     </owl:ObjectProperty>
     
 
@@ -761,6 +814,7 @@
         <ontology:abbreviation>ITI-82</ontology:abbreviation>
         <terms:description>Retrieve Syslog Messages. Search syslog messages based upon using the syslog metadata.</terms:description>
         <rdfs:label>Retrieve Syslog Event</rdfs:label>
+        <rdfs:seeAlso rdf:datatype="http://schema.org/url">https://profiles.ihe.net/ITI/TF/Volume2/ITI-82.html</rdfs:seeAlso>
     </owl:ObjectProperty>
     
 
@@ -772,6 +826,7 @@
         <ontology:abbreviation>ITI-83</ontology:abbreviation>
         <terms:description>Performs a query against a patient identifier cross-reference manager using HTTP, REST, and JSON/XML message encoding.</terms:description>
         <rdfs:label>Mobile Patient Identifier Cross-Reference Query</rdfs:label>
+        <rdfs:seeAlso rdf:datatype="http://schema.org/url">https://profiles.ihe.net/ITI/TF/Volume2/ITI-83.html</rdfs:seeAlso>
     </owl:ObjectProperty>
     
 
@@ -783,6 +838,7 @@
         <ontology:abbreviation>ITI-86</ontology:abbreviation>
         <terms:description>The Remove Documents transaction is used by the Document Administrator to request the removal of documents from a Document Repository.</terms:description>
         <rdfs:label>Remove Documents</rdfs:label>
+        <rdfs:seeAlso rdf:datatype="http://schema.org/url">https://profiles.ihe.net/ITI/TF/Volume2/ITI-86.html</rdfs:seeAlso>
     </owl:ObjectProperty>
     
 
@@ -794,6 +850,7 @@
         <ontology:abbreviation>ITI-9</ontology:abbreviation>
         <terms:description>This transaction allows a Patient Identity Consumer to find out the identification of a patient in different Patient Identification Domains by using the services of a Patient Identity Cross-reference Manager Actor.</terms:description>
         <rdfs:label>PIX Query</rdfs:label>
+        <rdfs:seeAlso rdf:datatype="http://schema.org/url">https://profiles.ihe.net/ITI/TF/Volume2/ITI-9.html</rdfs:seeAlso>
     </owl:ObjectProperty>
     
 
@@ -1838,6 +1895,7 @@
         <ontology:abbreviation>RO</ontology:abbreviation>
         <terms:description>IHE Radiation Oncology addresses information sharing, workflow, and patient care in radiation oncology.</terms:description>
         <rdfs:label>Radiation Oncology</rdfs:label>
+        <rdfs:seeAlso rdf:datatype="http://schema.org/url">https://www.ihe.net/resources/technical_frameworks/#radiationoncology</rdfs:seeAlso>
     </owl:NamedIndividual>
     
 
@@ -1851,6 +1909,7 @@
         <ontology:abbreviation rdf:datatype="http://www.w3.org/2001/XMLSchema#string">APPC</ontology:abbreviation>
         <terms:description rdf:datatype="http://www.w3.org/2001/XMLSchema#string">The Advanced Patient Privacy Consents (APPC) Profile defines a structural representation of a privacy consent policy. The definition allows for privacy consent policies that can include individualized parts, based on the patient’s choices.</terms:description>
         <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Advanced Patient Privacy Consents</rdfs:label>
+        <rdfs:seeAlso rdf:datatype="http://schema.org/url">https://profiles.ihe.net/ITI/TF/Volume1/ch-43.html</rdfs:seeAlso>
     </owl:NamedIndividual>
     
 
@@ -1972,6 +2031,7 @@
         <ontology:abbreviation>ATNA</ontology:abbreviation>
         <terms:description>The ITI Audit Trail and Node Authentication (ATNA) Profile establishes the characteristics of a Basic Secure Node: It describes the security environment (user identification, authentication, authorization, access control, etc.) assumed for the node so that security reviewers may decide whether this matches their environments. It defines basic security requirements for the communications of the node using TLS or equivalent functionality. It defines basic auditing requirements for the node. The profile also establishes the characteristics of the communication of audit messages between the Basic Secure Nodes and Audit Repository nodes that collect audit information. It defines a Secure Application Actor for describing product configurations that are not able to meet all of the requirements of a Secure Node. This profile has been designed so that specific domain frameworks may extend it through an option defined in the domain specific technical framework. Extensions are used to define additional audit event reporting requirements, especially actor specific requirements. The Radiology Audit Trail Option in the IHE Radiology Technical Framework is an example of such an extension.</terms:description>
         <rdfs:label>Audit Trail and Node Authentication</rdfs:label>
+        <rdfs:seeAlso rdf:datatype="http://schema.org/url">https://profiles.ihe.net/ITI/TF/Volume1/ch-9.html</rdfs:seeAlso>
     </owl:NamedIndividual>
     
 
@@ -1986,6 +2046,7 @@
         <ontology:abbreviation rdf:datatype="http://www.w3.org/2001/XMLSchema#string">ATNA_ARR</ontology:abbreviation>
         <terms:description rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A system unit that receives and collects audit records from multiple systems.</terms:description>
         <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Audit Record Repository (ATNA)</rdfs:label>
+        <rdfs:seeAlso rdf:datatype="http://schema.org/url">https://profiles.ihe.net/ITI/TF/Volume1/ch-9.html#9.1</rdfs:seeAlso>
     </owl:NamedIndividual>
     
 
@@ -2001,6 +2062,7 @@
         <ontology:abbreviation rdf:datatype="http://www.w3.org/2001/XMLSchema#string">ATNA_AUDIT_CONSUMER</ontology:abbreviation>
         <terms:description rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Search for syslog and ATNA audit messages based upon queries using Syslog metadata and ATNA audit message content. Subsequent processing is not defined.</terms:description>
         <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Audit Consumer (ATNA)</rdfs:label>
+        <rdfs:seeAlso rdf:datatype="http://schema.org/url">https://profiles.ihe.net/ITI/TF/Volume1/ch-9.html#9.1</rdfs:seeAlso>
     </owl:NamedIndividual>
     
 
@@ -2015,6 +2077,7 @@
         <ontology:abbreviation rdf:datatype="http://www.w3.org/2001/XMLSchema#string">ATNA_AUDIT_RECORD_FORWARDER</ontology:abbreviation>
         <terms:description rdf:datatype="http://www.w3.org/2001/XMLSchema#string">This actor filters audit records that have been received and forwards selected audit records to an Audit Record Repository. Added to the ATNA profile in Sept 2015 in CP-ITI-872</terms:description>
         <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Audit Record Forwarder (ATNA)</rdfs:label>
+        <rdfs:seeAlso rdf:datatype="http://schema.org/url">https://profiles.ihe.net/ITI/TF/Volume1/ch-9.html#9.1</rdfs:seeAlso>
     </owl:NamedIndividual>
     
 
@@ -2030,6 +2093,7 @@
         <ontology:abbreviation rdf:datatype="http://www.w3.org/2001/XMLSchema#string">ATNA_SA</ontology:abbreviation>
         <terms:description rdf:datatype="http://www.w3.org/2001/XMLSchema#string">The difference between the Secure Node and the Secure Application is the extent to which the underlying operating system and other environment are secured. A Secure Node includes all aspects of user authentication, file system protections, and operating environment security. The Secure Application is a product that does not include the operating environment. The Secure Application provides security features only for the application features. See section 9.7 for the relationships among a Secure Node, Secure Application, and other actors.</terms:description>
         <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Secure Application (ATNA)</rdfs:label>
+        <rdfs:seeAlso rdf:datatype="http://schema.org/url">https://profiles.ihe.net/ITI/TF/Volume1/ch-9.html#9.1</rdfs:seeAlso>
     </owl:NamedIndividual>
     
 
@@ -2045,6 +2109,7 @@
         <ontology:abbreviation rdf:datatype="http://www.w3.org/2001/XMLSchema#string">ATNA_SN</ontology:abbreviation>
         <terms:description rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A system unit that validates the identity of any user and of any other node, and determines whether or not access to the system for this user and information exchange with the other node is allowed. Maintains the correct time.</terms:description>
         <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Secure Node (ATNA)</rdfs:label>
+        <rdfs:seeAlso rdf:datatype="http://schema.org/url">https://profiles.ihe.net/ITI/TF/Volume1/ch-9.html#9.1</rdfs:seeAlso>
     </owl:NamedIndividual>
     
 
@@ -2058,6 +2123,7 @@
         <ontology:abbreviation>BPPC</ontology:abbreviation>
         <terms:description rdf:datatype="http://www.w3.org/2001/XMLSchema#string">The document sharing infrastructure provided by XD* allow for the publication and use of clinical documents associated with a patient. This profile allows for a Patient Privacy Policy Domain (e.g., an XDS Affinity Domain to have a number of Patient Privacy Policies that can be acknowledged (aka consent). This allows for more flexibility to support some patient concerns, while providing an important and useful dataset to the healthcare provider. Without BPPC, the XDS profile requires that the administrators of an XDS Affinity Domain creates and agrees to a single document publication and use policy (See ITI TF-1: Appendix L). Such a single XDS Affinity Domain Policy is enforced in a distributed way through the inherent access controls of the systems involved in the XDS Affinity Domain.</terms:description>
         <rdfs:label>Basic Patient Privacy Consents</rdfs:label>
+        <rdfs:seeAlso rdf:datatype="http://schema.org/url">https://profiles.ihe.net/ITI/TF/Volume1/ch-19.html</rdfs:seeAlso>
     </owl:NamedIndividual>
     
 
@@ -2102,6 +2168,7 @@
         <ontology:abbreviation>CARD</ontology:abbreviation>
         <terms:description>IHE Cardiology addresses information sharing, workflow and patient care in cardiology, including electrophysiology and nuclear medicine.</terms:description>
         <rdfs:label>Cardiology</rdfs:label>
+        <rdfs:seeAlso rdf:datatype="http://schema.org/url">https://www.ihe.net/resources/technical_frameworks/#cardiology</rdfs:seeAlso>
     </owl:NamedIndividual>
     
 
@@ -2352,6 +2419,7 @@
         <ontology:abbreviation>CT</ontology:abbreviation>
         <terms:description>Consistent Time defines mechanisms to synchronize the time base between multiple actors and computers. Various infrastructure, security, and acquisition profiles require use of a consistent time base on multiple computers. The Consistent Time Profile provides median synchronization error of less than 1 second. Configuration options can provide better synchronization. The Consistent Time Profile specifies the use of the Network Time Protocol (NTP) defined in RFC1305.</terms:description>
         <rdfs:label>Consistent Time</rdfs:label>
+        <rdfs:seeAlso rdf:datatype="http://schema.org/url">https://profiles.ihe.net/ITI/TF/Volume1/ch-7.html</rdfs:seeAlso>
     </owl:NamedIndividual>
     
 
@@ -2365,6 +2433,7 @@
         <ontology:abbreviation rdf:datatype="http://www.w3.org/2001/XMLSchema#string">CT_TIME_CLIENT</ontology:abbreviation>
         <terms:description rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Establishes time synchronization with one or more Time Servers using the NTP protocol and either the NTP or SNTP algorithms. Maintains the local computer system clock synchronization with UTC based on synchronization with the Time Servers.</terms:description>
         <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Time Client (CT)</rdfs:label>
+        <rdfs:seeAlso rdf:datatype="http://schema.org/url">https://profiles.ihe.net/ITI/TF/Volume1/ch-7.html#7.1</rdfs:seeAlso>
     </owl:NamedIndividual>
     
 
@@ -2377,6 +2446,7 @@
         <ontology:abbreviation rdf:datatype="http://www.w3.org/2001/XMLSchema#string">CT_TS</ontology:abbreviation>
         <terms:description rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A system unit that knows, maintains and distributes the correct time in the enterprise.</terms:description>
         <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Time Server (CT)</rdfs:label>
+        <rdfs:seeAlso rdf:datatype="http://schema.org/url">https://profiles.ihe.net/ITI/TF/Volume1/ch-7.html#7.1</rdfs:seeAlso>
     </owl:NamedIndividual>
     
 
@@ -2481,6 +2551,7 @@
         <ontology:abbreviation>DSG</ontology:abbreviation>
         <terms:description>The Document Digital Signature (DSG) Profile is a Document Content Profile that provides general purpose methods of digitally signing of documents for communication and persistence. This method can be used within a Document Sharing infrastructure (e.g., XDS, XCA, XDM, XDR, and MHD). There are three methods of digital signature provided: Enveloping, Detached, and SubmissionSet.</terms:description>
         <rdfs:label>Document Digital Signature</rdfs:label>
+        <rdfs:seeAlso rdf:datatype="http://schema.org/url">https://profiles.ihe.net/ITI/TF/Volume1/ch-37.html</rdfs:seeAlso>
     </owl:NamedIndividual>
     
 
@@ -2494,6 +2565,7 @@
         <ontology:abbreviation>DSUB</ontology:abbreviation>
         <terms:description>This profile describes the use of subscription and notification mechanism for use within an XDS Affinity Domain and across communities. The subscription allows for the matching of metadata during the publication of a new document for a given patient, and results in the delivery of a notification.</terms:description>
         <rdfs:label>Document Metadata Subscription</rdfs:label>
+        <rdfs:seeAlso rdf:datatype="http://schema.org/url">https://profiles.ihe.net/ITI/TF/Volume1/ch-26.html</rdfs:seeAlso>
     </owl:NamedIndividual>
     
 
@@ -2669,6 +2741,7 @@
         <ontology:abbreviation>EUA</ontology:abbreviation>
         <terms:description>Enterprise User Authentication (EUA) - Defines a means to establish one name per user that can then be used on all of the devices and software that participate in this integration profile. It greatly facilitates centralized user authentication management and provides users with the convenience and speed of a single sign-on. This profile leverages Kerberos (RFC 1510) and the HL7 CCOW standard (user subject). User authentication is a necessary step for most application and data access operations and it is a workflow improvement for the users. Future profiles will deal with other security issues, such as authorization management</terms:description>
         <rdfs:label>Enterprise User Authentication</rdfs:label>
+        <rdfs:seeAlso rdf:datatype="http://schema.org/url">https://profiles.ihe.net/ITI/TF/Volume1/ch-4.html</rdfs:seeAlso>
     </owl:NamedIndividual>
     
 
@@ -2778,6 +2851,7 @@
         <status rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Trial Implementation</status>
         <ontology:abbreviation rdf:datatype="http://www.w3.org/2001/XMLSchema#string">HPD</ontology:abbreviation>
         <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Healthcare Provider Directory</rdfs:label>
+        <rdfs:seeAlso rdf:datatype="http://schema.org/url">https://profiles.ihe.net/ITI/TF/Volume1/ch-28.html</rdfs:seeAlso>
     </owl:NamedIndividual>
     
 
@@ -3003,6 +3077,7 @@
         <ontology:abbreviation>ITI</ontology:abbreviation>
         <terms:description>The IT Infrastructure Domain supplies infrastructure for sharing healthcare information. An infrastructure interoperability component represents a common IT function that is used as a building block for a variety of use cases... a necessary ingredient, but rarely visible to the end user! These components may be embedded in an application, but are often deployed as a shared resource within a RHIO or Health Information Exchange.</terms:description>
         <rdfs:label>IT-Infrastructure</rdfs:label>
+        <rdfs:seeAlso rdf:datatype="http://schema.org/url">https://profiles.ihe.net/ITI/</rdfs:seeAlso>
     </owl:NamedIndividual>
     
 
@@ -3239,6 +3314,7 @@ The profile involves a set of transactions, to maintain the consistency of order
         <ontology:abbreviation>MPQ</ontology:abbreviation>
         <terms:description>The Multi-Patient Queries Profile defines a mechanism to enable aggregated queries to a Document Registry based on certain criteria needed by areas related to data analysis, such as quality accreditation of health care practitioners or health care facilities, clinical research trial data collection or population health monitoring.</terms:description>
         <rdfs:label>Multi-Patient Queries</rdfs:label>
+        <rdfs:seeAlso rdf:datatype="http://schema.org/url">https://profiles.ihe.net/ITI/TF/Volume1/ch-25.html</rdfs:seeAlso>
     </owl:NamedIndividual>
     
 
@@ -3349,6 +3425,7 @@ The profile involves a set of transactions, to maintain the consistency of order
         <terms:description>Patient Administration Management establishes the continuity and integrity of patient data, and additional information such as related persons (primary caregiver, guarantor, next of kin, etc.). It coordinates the exchange of patient registration and update information among systems that need to be able to provide current information regarding a patient’s encounter status and location. This profile supports ambulatory and acute care use cases including patient identity feed, admission and discharge, and transfer and encounter management, as well as explicit and precise error reporting and application acknowledgment.
 The PAM Profile supports two patient encounter management scenarios: either one single central patient registration system serving the entire institution, or multiple patient registration systems collaborating as peers serving different clinical settings in an institution.</terms:description>
         <rdfs:label>Patient Administration Management</rdfs:label>
+        <rdfs:seeAlso rdf:datatype="http://schema.org/url">https://profiles.ihe.net/ITI/TF/Volume1/ch-14.html</rdfs:seeAlso>
     </owl:NamedIndividual>
     
 
@@ -3412,6 +3489,7 @@ The PAM Profile supports two patient encounter management scenarios: either one 
         <ontology:abbreviation>PCC</ontology:abbreviation>
         <terms:description>IHE Patient Care Coordination (PCC) domain was established in July 2005 to deal with integration issues that cross providers, patient problems or time. It deals with general clinical care aspects such as document exchange, order processing, and coordination with other specialty domains. PCC also addresses workflows that are common to multiple specialty areas and the integration needs of specialty areas that do not have a separate domain within IHE.</terms:description>
         <rdfs:label>Patient Care Coordination</rdfs:label>
+        <rdfs:seeAlso rdf:datatype="http://schema.org/url">https://profiles.ihe.net/PCC/</rdfs:seeAlso>
     </owl:NamedIndividual>
     
 
@@ -3420,9 +3498,11 @@ The PAM Profile supports two patient encounter management scenarios: either one 
 
     <owl:NamedIndividual rdf:about="https://www.3lgm2.de/resource/ihe/PCD">
         <rdf:type rdf:resource="https://www.3lgm2.de/resource/ihe/Domain"/>
+        <ontology:abbreviation>DEV</ontology:abbreviation>
         <ontology:abbreviation>PCD</ontology:abbreviation>
         <terms:description>The Patient Care Device Domain is concerned with use cases in which at least one actor is a regulated patient-centric point-of-care medical device that communicates with at least one other actor such as a medical device or information system.</terms:description>
         <rdfs:label>Patient Care Devices</rdfs:label>
+        <rdfs:seeAlso rdf:datatype="http://schema.org/url">https://profiles.ihe.net/DEV/</rdfs:seeAlso>
     </owl:NamedIndividual>
     
 
@@ -3553,6 +3633,7 @@ The PAM Profile supports two patient encounter management scenarios: either one 
         <ontology:abbreviation>PDQ</ontology:abbreviation>
         <terms:description>Patient Demographics Query provides ways for multiple distributed applications to query a patient information server for a list of patients, based on user-defined search criteria, and retrieve a patient’s demographic (and, optionally, visit or visit-related) information directly into the application.</terms:description>
         <rdfs:label>Patient Demographics Query</rdfs:label>
+        <rdfs:seeAlso rdf:datatype="http://schema.org/url">https://profiles.ihe.net/ITI/TF/Volume1/ch-8.html</rdfs:seeAlso>
     </owl:NamedIndividual>
     
 
@@ -3566,6 +3647,7 @@ The PAM Profile supports two patient encounter management scenarios: either one 
         <ontology:abbreviation>PDQV3</ontology:abbreviation>
         <terms:description>The functionality of the PDQV3 Profile is identical to the PDQ Profile described in Section 2.2.6. The differences are in the format of the messages, and in the use of SOAP-based web services. These changes make this profile well suited for use within an existing IT infrastructure for cross-enterprise data access and exchange. The PDQV3 Profile provides ways for multiple organizations, or multiple distributed applications to query a patient information server for a list of patients, based on user-defined search criteria, and retrieve a patient’s demographic information directly into the application.</terms:description>
         <rdfs:label>Patient Demographic Query HL7 V3</rdfs:label>
+        <rdfs:seeAlso rdf:datatype="http://schema.org/url">https://profiles.ihe.net/ITI/TF/Volume1/ch-24.html</rdfs:seeAlso>
     </owl:NamedIndividual>
     
 
@@ -3737,6 +3819,7 @@ The PAM Profile supports two patient encounter management scenarios: either one 
         <ontology:abbreviation>PHARM</ontology:abbreviation>
         <terms:description>IHE Pharmacy (PHARM) addresses information sharing, workflow and patient care in both community and hospital pharmacies.</terms:description>
         <rdfs:label>Pharmacy</rdfs:label>
+        <rdfs:seeAlso rdf:datatype="http://schema.org/url">https://profiles.ihe.net/PHARM/</rdfs:seeAlso>
     </owl:NamedIndividual>
     
 
@@ -3857,6 +3940,7 @@ The PAM Profile supports two patient encounter management scenarios: either one 
 -The ability to access the list(s) of cross-referenced patient identifiers either via a query/ response or via update notification.
 By specifying the above transactions among specific actors, this integration profile does not define any specific enterprise policies or cross-referencing algorithms. By encapsulating these behaviors in a single actor, this integration profile provides the necessary interoperability while maintaining the flexibility to be used with any cross-referencing policy and algorithm as deemed adequate by the enterprise.</terms:description>
         <rdfs:label>Patient Identifier Cross-referencing</rdfs:label>
+        <rdfs:seeAlso rdf:datatype="http://schema.org/url">https://profiles.ihe.net/ITI/TF/Volume1/ch-5.html</rdfs:seeAlso>
     </owl:NamedIndividual>
     
 
@@ -3870,6 +3954,7 @@ By specifying the above transactions among specific actors, this integration pro
         <ontology:abbreviation>PIXV3</ontology:abbreviation>
         <terms:description>The PIX profile ) is targeted at cross-enterprise Patient Identifier Cross-reference Domains (as defined in Section 5) as well as healthcare enterprises with developed IT infrastructure. The discussion in Section 5 fully applies here, with the obvious adjustments to the referenced transactions.</terms:description>
         <rdfs:label>Patient Identifier Cross-Reference HL7 V3</rdfs:label>
+        <rdfs:seeAlso rdf:datatype="http://schema.org/url">https://profiles.ihe.net/ITI/TF/Volume1/ch-23.html</rdfs:seeAlso>
     </owl:NamedIndividual>
     
 
@@ -3884,6 +3969,7 @@ By specifying the above transactions among specific actors, this integration pro
         <ontology:abbreviation rdf:datatype="http://www.w3.org/2001/XMLSchema#string">PIXV3_PAT_IDENTITY_SRC</ontology:abbreviation>
         <terms:description rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Each Patient Identification Domain requires this Actor to assign patient identities and to notify a Patient Identity Cross-reference Manager Actor of all events related to patient identification (creation, update, merge, etc.). For example, the Registration (ADT) Actor defined by the radiology Scheduled Workflow Profile would likely be a Patient Identity Source.</terms:description>
         <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Patient Identity Source (PIXV3)</rdfs:label>
+        <rdfs:seeAlso rdf:datatype="http://schema.org/url">https://profiles.ihe.net/ITI/TF/Volume1/ch-23#23.1.html</rdfs:seeAlso>
     </owl:NamedIndividual>
     
 
@@ -3898,6 +3984,7 @@ By specifying the above transactions among specific actors, this integration pro
         <ontology:abbreviation rdf:datatype="http://www.w3.org/2001/XMLSchema#string">PIXV3_PIX_CONSUMER</ontology:abbreviation>
         <terms:description rdf:datatype="http://www.w3.org/2001/XMLSchema#string">This actor allows a system in a Patient Identification Domain to find out the identification of a patient in a different Patient Identification Domain by using the services of a Patient Identity Cross-Reference Manager Actor.</terms:description>
         <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Patient Identifier Cross-reference Consumer (PIXV3)</rdfs:label>
+        <rdfs:seeAlso rdf:datatype="http://schema.org/url">https://profiles.ihe.net/ITI/TF/Volume1/ch-23#23.1.html</rdfs:seeAlso>
     </owl:NamedIndividual>
     
 
@@ -3912,6 +3999,7 @@ By specifying the above transactions among specific actors, this integration pro
         <ontology:abbreviation rdf:datatype="http://www.w3.org/2001/XMLSchema#string">PIXV3_PIX_MANAGER</ontology:abbreviation>
         <terms:description rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Serves a well-defined set of Patient Identification Domains. Based on information provided by in each Patient Identification Domain by a Patient Identification Source Actor, it manages the cross-referencing of patient identifiers across Patient Identification Domains.</terms:description>
         <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Patient Identity Cross-reference Manager (PIXV3)</rdfs:label>
+        <rdfs:seeAlso rdf:datatype="http://schema.org/url">https://profiles.ihe.net/ITI/TF/Volume1/ch-23#23.1.html</rdfs:seeAlso>
     </owl:NamedIndividual>
     <owl:Axiom>
         <owl:annotatedSource rdf:resource="https://www.3lgm2.de/resource/ihe/PIXV3_PIX_MANAGER"/>
@@ -3932,6 +4020,7 @@ By specifying the above transactions among specific actors, this integration pro
         <ontology:abbreviation>PIX_PAT_IDENTITY_CONSUMER</ontology:abbreviation>
         <terms:description>This actor allows a system in a Patient Identification Domain to find out the identification of a patient in a different Patient Identification Domain by using the services of a Patient Identity Cross-Reference Manager Actor.</terms:description>
         <rdfs:label>Patient Identifier Cross-reference Consumer (PIX)</rdfs:label>
+        <rdfs:seeAlso rdf:datatype="http://schema.org/url">https://profiles.ihe.net/ITI/TF/Volume1/ch-5#5.1.html</rdfs:seeAlso>
     </owl:NamedIndividual>
     
 
@@ -3947,6 +4036,7 @@ By specifying the above transactions among specific actors, this integration pro
         <ontology:abbreviation>PIX_PAT_IDENTITY_SRC</ontology:abbreviation>
         <terms:description>Each Patient Identification Domain requires this Actor to assign patient identities and to notify a Patient Identity Cross-reference Manager Actor of all events related to patient identification (creation, update, merge, etc.). For example, the Registration (ADT) Actor defined by the radiology Scheduled Workflow Profile would likely be a Patient Identity Source.</terms:description>
         <rdfs:label>Patient Identity Source (PIX)</rdfs:label>
+        <rdfs:seeAlso rdf:datatype="http://schema.org/url">https://profiles.ihe.net/ITI/TF/Volume1/ch-5#5.1.html</rdfs:seeAlso>
     </owl:NamedIndividual>
     <owl:Axiom>
         <owl:annotatedSource rdf:resource="https://www.3lgm2.de/resource/ihe/PIX_PAT_IDENTITY_SRC"/>
@@ -3967,6 +4057,7 @@ By specifying the above transactions among specific actors, this integration pro
         <ontology:abbreviation>PIX_PAT_IDENTITY_X_REF_MGR</ontology:abbreviation>
         <terms:description>Serves a well-defined set of Patient Identification Domains. Based on information provided by in each Patient Identification Domain by a Patient Identification Source Actor, it manages the cross-referencing of patient identifiers across Patient Identification Domains.</terms:description>
         <rdfs:label>Patient Identity Cross-reference Manager (PIX)</rdfs:label>
+        <rdfs:seeAlso rdf:datatype="http://schema.org/url">https://profiles.ihe.net/ITI/TF/Volume1/ch-5#5.1.html</rdfs:seeAlso>
     </owl:NamedIndividual>
     <owl:Axiom>
         <owl:annotatedSource rdf:resource="https://www.3lgm2.de/resource/ihe/PIX_PAT_IDENTITY_X_REF_MGR"/>
@@ -4027,6 +4118,7 @@ This profile does not assume Patient Identifier Cross-reference Manager has the 
         <ontology:abbreviation>PSA</ontology:abbreviation>
         <terms:description>Patient Synchronized Applications supports viewing data for a single patient among otherwise independent and unlinked applications on a user s workstation. Its implementation reduces the repetitive tasks of selecting the same patient in multiple applications. It also improves patient safety by reducing the chance of medical errors caused by viewing the wrong patient s data. Its ability to work with the Patient Identifier Cross-referencing for MPI - provides a seamless environment both for the clinician and the IT staff. This profile leverages the HL7 CCOW standard specifically for patient subject context management.</terms:description>
         <rdfs:label>Patient Synchronized Application</rdfs:label>
+        <rdfs:seeAlso rdf:datatype="http://schema.org/url">https://profiles.ihe.net/ITI/TF/Volume1/ch-6.html</rdfs:seeAlso>
     </owl:NamedIndividual>
     
 
@@ -4070,6 +4162,7 @@ This profile does not assume Patient Identifier Cross-reference Manager has the 
         <ontology:abbreviation>PWP</ontology:abbreviation>
         <terms:description>The Personnel White Pages Profile provides access to basic human workforce user directory information. This information has broad use among many clinical and non-clinical applications across the healthcare enterprise.</terms:description>
         <rdfs:label>Personnel White Pages</rdfs:label>
+        <rdfs:seeAlso rdf:datatype="http://schema.org/url">https://profiles.ihe.net/ITI/TF/Volume1/ch-11.html</rdfs:seeAlso>
     </owl:NamedIndividual>
     
 
@@ -4128,6 +4221,7 @@ This profile does not assume Patient Identifier Cross-reference Manager has the 
         <ontology:abbreviation>PaLM</ontology:abbreviation>
         <terms:description>IHE Pathology and Laboratory Medicine domain addresses information sharing and workflow related to in vitro diagnostic testing in anatomic pathology, clinical laboratories, as well as at the point of care.</terms:description>
         <rdfs:label>Pathology and Laboratory Medicine</rdfs:label>
+        <rdfs:seeAlso rdf:datatype="http://schema.org/url">https://profiles.ihe.net/PALM/</rdfs:seeAlso>
     </owl:NamedIndividual>
     
 
@@ -4139,6 +4233,7 @@ This profile does not assume Patient Identifier Cross-reference Manager has the 
         <ontology:abbreviation>QRPH</ontology:abbreviation>
         <terms:description>IHE Quality, Research and Public Health Domain (QRPH) addresses the infrastructure necessary to share information relevant to quality improvement in electronic patient care and health care records.</terms:description>
         <rdfs:label>Quality, Research and Public Health</rdfs:label>
+        <rdfs:seeAlso rdf:datatype="http://schema.org/url">https://profiles.ihe.net/QRPH/</rdfs:seeAlso>
     </owl:NamedIndividual>
     
 
@@ -4150,6 +4245,7 @@ This profile does not assume Patient Identifier Cross-reference Manager has the 
         <ontology:abbreviation>RAD</ontology:abbreviation>
         <terms:description>IHE Radiology addresses information sharing, workflow and patient care in radiology, including mammography and nuclear medicine.</terms:description>
         <rdfs:label>Radiology</rdfs:label>
+        <rdfs:seeAlso rdf:datatype="http://schema.org/url">https://profiles.ihe.net/RAD/</rdfs:seeAlso>
     </owl:NamedIndividual>
     
 
@@ -4241,6 +4337,7 @@ This profile does not assume Patient Identifier Cross-reference Manager has the 
         <ontology:abbreviation>RFD</ontology:abbreviation>
         <terms:description>The Retrieve Form for Data-capture Profile (RFD) provides a method for gathering data within a user&apos;s current application to meet the requirements of an external system. RFD supports the retrieval of forms from a form source, display and completion of a form, and return of instance data from the display application to the source application.</terms:description>
         <rdfs:label>Retrieve Form for Data Capture</rdfs:label>
+        <rdfs:seeAlso rdf:datatype="http://schema.org/url">https://profiles.ihe.net/ITI/TF/Volume1/ch-17.html</rdfs:seeAlso>
     </owl:NamedIndividual>
     
 
@@ -4337,6 +4434,7 @@ This profile does not assume Patient Identifier Cross-reference Manager has the 
         <ontology:abbreviation>RID</ontology:abbreviation>
         <terms:description>Retrieve Information for Display enables simple and rapid access to patient information for better care. It supports access to existing persistent documents in well-known presentation formats such as CDA, PDF, JPEG, etc. It also supports access to specific key patient-centric information such as allergies, current medications, summary of reports, etc. for presentation to a clinician. It complements workflows from within the users on-screen workspace or application. By linking it with two other IHE profiles - Enterprise User Authentication and Patient Identifier Cross-referencing for MPI, this profile s reach can extend across organization boundaries. This IHE Integration Profile leverages HTTP, Web Services, IT presentation formats and HL7 CDA.</terms:description>
         <rdfs:label>Retrieve Information for Display</rdfs:label>
+        <rdfs:seeAlso rdf:datatype="http://schema.org/url">https://profiles.ihe.net/ITI/TF/Volume1/ch-3.html</rdfs:seeAlso>
     </owl:NamedIndividual>
     
 
@@ -4628,6 +4726,7 @@ This profile does not assume Patient Identifier Cross-reference Manager has the 
         <ontology:abbreviation>SVS</ontology:abbreviation>
         <terms:description>The Sharing Value Sets (SVS) profile provides a means through which healthcare systems producing clinical or administrative data, such as diagnostic imaging equipment, laboratory reporting systems, primary care physician office EMR systems, or national healthcare record systems, can receive a common, uniform nomenclature managed centrally. Shared nomenclatures are essential to achieving semantic interoperability.</terms:description>
         <rdfs:label>Sharing Value Sets</rdfs:label>
+        <rdfs:seeAlso rdf:datatype="http://schema.org/url">https://profiles.ihe.net/ITI/TF/Volume1/ch-21.html</rdfs:seeAlso>
     </owl:NamedIndividual>
     
 
@@ -5011,6 +5110,7 @@ This profile does not assume Patient Identifier Cross-reference Manager has the 
         <ontology:abbreviation>XCA</ontology:abbreviation>
         <terms:description>The Cross-Community Access profile supports the means to query and retrieve patient relevant medical data held by other communities. A community is defined as a coupling of facilities/enterprises that have agreed to work together using a common set of policies for the purpose of sharing clinical information via an established mechanism. Facilities/enterprises may host any type of healthcare application such as EHR, PHR, etc. A community is identifiable by a globally unique id called the homeCommunityId. Membership of a facility/enterprise in one community does not preclude it from being a member in another community. Such communities may be XDS Affinity Domains which define document sharing using the XDS profile or any other communities, no matter what their internal sharing structure.</terms:description>
         <rdfs:label>Cross-Community Access</rdfs:label>
+        <rdfs:seeAlso rdf:datatype="http://schema.org/url">https://profiles.ihe.net/ITI/TF/Volume1/ch-18.html</rdfs:seeAlso>
     </owl:NamedIndividual>
     
 
@@ -5148,6 +5248,7 @@ This profile does not assume Patient Identifier Cross-reference Manager has the 
         <ontology:abbreviation rdf:datatype="http://www.w3.org/2001/XMLSchema#string">XCF</ontology:abbreviation>
         <terms:description rdf:datatype="http://www.w3.org/2001/XMLSchema#string">The Cross-Community Fetch (XCF) profile defines a single transaction for exchanging medical data between gateways that facilitate multiple dimensions of communication (trust, semantics, encoding, legislation, authority, etc.). The profile is highly inspired by the Cross Gateway Query/Cross Gateway Retrieve transactions and integrates these originally distinct transactions in order to allow for keeping Responding Gateways to remain stateless, controllable, and simple.</terms:description>
         <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Cross-Community Fetch</rdfs:label>
+        <rdfs:seeAlso rdf:datatype="http://schema.org/url">https://profiles.ihe.net/ITI/TF/Volume1/ch-29.html</rdfs:seeAlso>
     </owl:NamedIndividual>
     
 
@@ -5190,6 +5291,7 @@ This profile does not assume Patient Identifier Cross-reference Manager has the 
         <ontology:abbreviation>XCPD</ontology:abbreviation>
         <terms:description>The Cross-Community Patient Discovery (XCPD) profile supports the means to locate 275 communities that hold patient relevant health data and the translation of patient identifiers across communities holding the same patient‟s data. A community is defined as a group of facilities/enterprises that have agreed to work together using a common set of policies for the purpose of sharing health information within the community via an established mechanism. Facilities/enterprises may host any type of healthcare application such as EHR, PHR, etc. A community is identifiable by a globally unique id called the homeCommunityId. Membership of a facility/enterprise in one community does not preclude it from being a member in another community. Such communities may be XDS Affinity Domains which define document sharing using the XDS profile or any other communities, no matter what their internal sharing structure.</terms:description>
         <rdfs:label>Cross Community Patient Discovery</rdfs:label>
+        <rdfs:seeAlso rdf:datatype="http://schema.org/url">https://profiles.ihe.net/ITI/TF/Volume1/ch-27.html</rdfs:seeAlso>
     </owl:NamedIndividual>
     
 
@@ -5233,6 +5335,7 @@ This profile does not assume Patient Identifier Cross-reference Manager has the 
         <ontology:abbreviation>XDM</ontology:abbreviation>
         <terms:description>Cross-Enterprise Document Media Interchange (XDM) provides document interchange using a common file and directory structure over several standard media. This permits the patient to use physical media to carry medical documents. This also permits the use of person-to-person email to convey medical documents.</terms:description>
         <rdfs:label>Cross-Enterprise Document Media Interchange</rdfs:label>
+        <rdfs:seeAlso rdf:datatype="http://schema.org/url">https://profiles.ihe.net/ITI/TF/Volume1/ch-16.html</rdfs:seeAlso>
     </owl:NamedIndividual>
     
 
@@ -5277,6 +5380,7 @@ This profile does not assume Patient Identifier Cross-reference Manager has the 
         <ontology:abbreviation>XDR</ontology:abbreviation>
         <terms:description>Cross-Enterprise Document Reliable Interchange provides document interchange using a reliable messaging system. This permits direct document interchange between EHRs, PHRs, and other healthcare IT systems in the absence of a document sharing infrastructure such as XDS Registry and Repositories.</terms:description>
         <rdfs:label>Cross-Enterprise Document Reliable Interchange</rdfs:label>
+        <rdfs:seeAlso rdf:datatype="http://schema.org/url">https://profiles.ihe.net/ITI/TF/Volume1/ch-15.html</rdfs:seeAlso>
     </owl:NamedIndividual>
     
 
@@ -5484,6 +5588,7 @@ This profile does not assume Patient Identifier Cross-reference Manager has the 
         <ontology:abbreviation>XDS-SD</ontology:abbreviation>
         <terms:description>XDS-SD use a variety of legacy paper, film, electronic and scanner outputted formats to store and exchange clinical documents. These formats are not designed for healthcare documentation, and furthermore, do not have a uniform mechanism to store healthcare metadata associated with the documents, including patient identifiers, demographics, encounter, order or service information. The association of structured, healthcare metadata with this kind of document is important to maintain the integrity of the patient health record as managed by the source system. It is necessary to provide a mechanism that allows such source metadata to be stored with the document.</terms:description>
         <rdfs:label>Cross-Enterprise Document Sharing of Scanned Documents</rdfs:label>
+        <rdfs:seeAlso rdf:datatype="http://schema.org/url">https://profiles.ihe.net/ITI/TF/Volume1/ch-20.html</rdfs:seeAlso>
     </owl:NamedIndividual>
     
 
@@ -5530,6 +5635,8 @@ Cross-Enterprise Document Sharing is focused on providing a standards-based spec
 In the rest of the ITI Technical Framework the term XDS refers generically to any flavor of XDS, currently only XDS.b. 
 The XDS.b Integration Profile assumes that these enterprises belong to one or more XDS Affinity Domains. An XDS Affinity Domain is a group of healthcare enterprises that have agreed to work together using a common set of policies and share a common infrastructure.</terms:description>
         <rdfs:label>Cross-Enterprise Document Sharing</rdfs:label>
+        <rdfs:seeAlso rdf:datatype="http://schema.org/url">https://profiles.ihe.net/ITI/TF/Volume1/ch-10.html</rdfs:seeAlso>
+        <rdfs:seeAlso rdf:datatype="http://schema.org/url">https://wiki.ihe.net/index.php/Cross-Enterprise_Document_Sharing</rdfs:seeAlso>
     </owl:NamedIndividual>
     
 
@@ -5547,6 +5654,7 @@ The XDS.b Integration Profile assumes that these enterprises belong to one or mo
         <ontology:abbreviation>XDSB_DOC_ADMINISTRATOR</ontology:abbreviation>
         <terms:description>The Document Administrator actor supports metadata update by issuing the Update Document Set transaction [ITI-57] and Delete Document Set [ITI-61 ] transaction to the Document Registry actor.</terms:description>
         <rdfs:label>Document Administrator (XDS.b)</rdfs:label>
+        <rdfs:seeAlso rdf:datatype="http://schema.org/url">https://profiles.ihe.net/ITI/TF/Volume1/ch-10.html#10.1</rdfs:seeAlso>
     </owl:NamedIndividual>
     <owl:Axiom>
         <owl:annotatedSource rdf:resource="https://www.3lgm2.de/resource/ihe/XDSB_DOC_ADMINISTRATOR"/>
@@ -5571,6 +5679,7 @@ The XDS.b Integration Profile assumes that these enterprises belong to one or mo
         <ontology:abbreviation>XDSB_DOC_CONSUMER</ontology:abbreviation>
         <terms:description>The Document Consumer Actor queries a Document Registry Actor for documents meeting certain criteria, and retrieves selected documents from one or more Document Repository actors.</terms:description>
         <rdfs:label>Document Consumer (XDS.b)</rdfs:label>
+        <rdfs:seeAlso rdf:datatype="http://schema.org/url">https://profiles.ihe.net/ITI/TF/Volume1/ch-10.html#10.1</rdfs:seeAlso>
     </owl:NamedIndividual>
     
 
@@ -5585,6 +5694,7 @@ The XDS.b Integration Profile assumes that these enterprises belong to one or mo
         <ontology:abbreviation>XDSB_DOC_REGISTRY</ontology:abbreviation>
         <terms:description>The Document Registry Actor maintains metadata about each registered document in a document entry. This includes a link to the Document in the Repository where it is stored. The Document Registry responds to queries from Document Consumer actors about documents meeting specific criteria. It also enforces some healthcare specific technical policies at the time of document registration.</terms:description>
         <rdfs:label>Document Registry (XDS.b)</rdfs:label>
+        <rdfs:seeAlso rdf:datatype="http://schema.org/url">https://profiles.ihe.net/ITI/TF/Volume1/ch-10.html#10.1</rdfs:seeAlso>
     </owl:NamedIndividual>
     
 
@@ -5600,6 +5710,7 @@ The XDS.b Integration Profile assumes that these enterprises belong to one or mo
         <ontology:abbreviation>XDSB_DOC_REPOSITORY</ontology:abbreviation>
         <terms:description>The Document Repository is responsible for both the persistent storage of these documents as well as for their registration with the appropriate Document Registry. It assigns a URI to documents for subsequent retrieval by a Document Consumer.</terms:description>
         <rdfs:label>Document Repository (XDS.b)</rdfs:label>
+        <rdfs:seeAlso rdf:datatype="http://schema.org/url">https://profiles.ihe.net/ITI/TF/Volume1/ch-10.html#10.1</rdfs:seeAlso>
     </owl:NamedIndividual>
     
 
@@ -5615,6 +5726,7 @@ The XDS.b Integration Profile assumes that these enterprises belong to one or mo
         <ontology:abbreviation>XDSB_DOC_SOURCE</ontology:abbreviation>
         <terms:description>The Document Source is the producer and publisher of documents and metadata.</terms:description>
         <rdfs:label>Document Source (XDS.b)</rdfs:label>
+        <rdfs:seeAlso rdf:datatype="http://schema.org/url">https://profiles.ihe.net/ITI/TF/Volume1/ch-10.html#10.1</rdfs:seeAlso>
     </owl:NamedIndividual>
     
 
@@ -5632,6 +5744,7 @@ The XDS.b Integration Profile assumes that these enterprises belong to one or mo
         <ontology:abbreviation>XDSB_EMBED_REPOS</ontology:abbreviation>
         <terms:description>The Integrated Document Source / Repository is an XDS combination of Document Source and Document Repository that does not expose the interface between the Source and Repository. That is, this Source only publishes documents to its own Repository. It does register documents with a Document Registry</terms:description>
         <rdfs:label>Integrated Document Source / Repository (XDS.b)</rdfs:label>
+        <rdfs:seeAlso rdf:datatype="http://schema.org/url">https://profiles.ihe.net/ITI/TF/Volume1/ch-10.html#10.1</rdfs:seeAlso>
     </owl:NamedIndividual>
     
 
@@ -5647,6 +5760,7 @@ The XDS.b Integration Profile assumes that these enterprises belong to one or mo
         <ontology:abbreviation>XDSB_ON_DEMAND_DOC_SOURCE</ontology:abbreviation>
         <terms:description>The On-Demand Document Source is the producer and publisher of On-Demand Documents. This actor registers On-Demand Document Entries with the Document Registry and responds to Retrieve Document Set transactions with a document reflecting current information for the entry requested.</terms:description>
         <rdfs:label>On-Demand Document Source (XDS.b)</rdfs:label>
+        <rdfs:seeAlso rdf:datatype="http://schema.org/url">https://profiles.ihe.net/ITI/TF/Volume1/ch-10.html#10.1</rdfs:seeAlso>
     </owl:NamedIndividual>
     <owl:Axiom>
         <owl:annotatedSource rdf:resource="https://www.3lgm2.de/resource/ihe/XDSB_ON_DEMAND_DOC_SOURCE"/>
@@ -5669,6 +5783,7 @@ The XDS.b Integration Profile assumes that these enterprises belong to one or mo
         <ontology:abbreviation>XDSB_PAT_IDENTITY_SRC</ontology:abbreviation>
         <terms:description>Each Patient Identification Domain requires this Actor to assign patient identities and to notify a Patient Identity Cross-reference Manager Actor of all events related to patient identification (creation, update, merge, etc.). For example, the Registration (ADT) Actor defined by the radiology Scheduled Workflow Profile would likely be a Patient Identity Source.</terms:description>
         <rdfs:label>Patient Identity Source (XDS.b)</rdfs:label>
+        <rdfs:seeAlso rdf:datatype="http://schema.org/url">https://profiles.ihe.net/ITI/TF/Volume1/ch-10.html#10.1</rdfs:seeAlso>
     </owl:NamedIndividual>
     <owl:Axiom>
         <owl:annotatedSource rdf:resource="https://www.3lgm2.de/resource/ihe/XDSB_PAT_IDENTITY_SRC"/>
@@ -5696,6 +5811,7 @@ The XDS.b Integration Profile assumes that these enterprises belong to one or mo
         <ontology:abbreviation rdf:datatype="http://www.w3.org/2001/XMLSchema#string">XDW</ontology:abbreviation>
         <terms:description rdf:datatype="http://www.w3.org/2001/XMLSchema#string">The Cross-Enterprise Document Workflow (XDW) profile enables participants in a multi- organizational environment to manage and track the tasks related to patient-centric workflows as the systems hosting workflow management applications coordinate their activities for the health professionals and patients they support. XDW builds upon the sharing of health documents provided by other IHE profiles such as XDS, adding the means to associate documents conveying clinical facts to a patient-specific workflow. XDW provides a common interoperability infrastructure upon which a wide range of specific workflow definitions may be supported. It is designed to support the complexity of health services delivery with flexibility to adapt as workflows evolve.</terms:description>
         <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Cross-Enterprise Document Workflow</rdfs:label>
+        <rdfs:seeAlso rdf:datatype="http://schema.org/url">https://profiles.ihe.net/ITI/TF/Volume1/ch-30.html</rdfs:seeAlso>
     </owl:NamedIndividual>
     
 
@@ -5710,6 +5826,7 @@ The XDS.b Integration Profile assumes that these enterprises belong to one or mo
         <terms:description>The Cross-Enterprise User Assertion Profile (XUA) provides a means to communicate claims about an authenticated principal (user, application, system...) in transactions that cross enterprise boundaries. To provide accountability in these cross-enterprise transactions there is a need to identify the requesting user in a way that enables the receiver to make access decisions and proper audit entries. The XUA Profile supports many solutions including enterprises that have 3185 chosen to have their own user directory with their own unique method of authenticating the users, and others that have chosen to use a third party to perform the authentication.</terms:description>
         <terms:description rdf:datatype="http://www.w3.org/2001/XMLSchema#string">provides user identity in transactions that cross enterprise boundaries, specifically the XDS profile that creates an Affinity Domain. When transactions cross enterprise boundaries the mechanisms found in the EUA and PWP profile are insufficient and often nonfunctional. Enterprises may choose to have their own user directory and their own unique method of authenticating. To provide accountability in these cross enterprise transactions there is a need to identify the requesting user in a way that the receiver can make access decisions and proper audit entries.</terms:description>
         <rdfs:label>Cross Enterprise User Assertion</rdfs:label>
+        <rdfs:seeAlso rdf:datatype="http://schema.org/url">https://profiles.ihe.net/ITI/TF/Volume1/ch-13.html</rdfs:seeAlso>
     </owl:NamedIndividual>
     
 

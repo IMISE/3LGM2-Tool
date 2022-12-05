@@ -9,6 +9,8 @@ import java.awt.Insets;
 import javax.swing.JLabel;
 import javax.swing.JScrollPane;
 
+import com.google.common.base.Strings;
+
 import de.imise.tool3lgm.graphtools.dialog.element.AbstractElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
@@ -17,6 +19,7 @@ import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.path.metapaths.ElementaryMetaPath;
 import de.imise.tool3lgm.graphtools.path.metapaths.ElementaryMetaPathHandler;
 import de.imise.tool3lgm.graphtools.path.metapaths.SimpleMetaPath;
+import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.panel.PropertyDialogUserFieldPanelDescriptionLabel;
 import de.imise.util.swing.component.LimitedSizeScrollTextPane;
 import de.imise.util.swing.component.text.ExtendedTextPane;
 
@@ -53,16 +56,16 @@ public final class DescripPanel
         gbc.insets = new Insets(1, 0, 1, 3);
 
         // Bezeichung und Eingabefeld
-        JLabel label2 = new JLabel(getResString("bez"));
-        add(this, label2, gbc, 0, gridy, 1, 1);
+        JLabel label = new JLabel(getResString("bez"));
+        add(this, label, gbc, 0, gridy, 1, 1);
         boolean isEditableDialog = !dialog.isInfoDialog();
         nameTextPane = new LimitedSizeScrollTextPane(4);
 
         //Name editable?
+        ModelElement me = getModelElement();
         boolean editableName = isEditableDialog;
         if (editableName) {
             MetaModel metaModel = getMetaModel();
-            ModelElement me = getModelElement();
             Class<? extends ModelElement> elementClass = me.getClass();
             editableName = !metaModel.isGenerateName(elementClass);
         }
@@ -72,8 +75,19 @@ public final class DescripPanel
         add(this, nameTextPane, gbc, 1, gridy++, 1, 1);
         gbc.weightx = 0;
 
+        // See Also
+        String seeAlso = me.getSeeAlso();
+        if (!Strings.isNullOrEmpty(seeAlso)) {
+            label = new JLabel(getResString("seeAlso"));
+            add(this, label, gbc, 0, gridy, 1, 1);
+            gbc.weightx = 1;
+            PropertyDialogUserFieldPanelDescriptionLabel seeAlsoLabel = new PropertyDialogUserFieldPanelDescriptionLabel(seeAlso);
+            add(this, seeAlsoLabel, gbc, 1, gridy++, 1, 1);
+            gbc.weightx = 0;
+        }
+
         // Beschreibung und TextPane
-        JLabel label = new JLabel(getResString("description"));
+        label = new JLabel(getResString("description"));
         add(this, label, gbc, 0, gridy, 1, 1);
 
         gbc.weighty = 1;

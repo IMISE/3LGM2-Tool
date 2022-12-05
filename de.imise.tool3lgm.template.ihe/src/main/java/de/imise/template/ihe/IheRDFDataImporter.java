@@ -104,6 +104,11 @@ public class IheRDFDataImporter extends RDFDataImporter {
         return "description";
     }
 
+    @Override
+    public String getSeeAlsoUrlPropertyUriOrLocalName() {
+        return "seeAlso";
+    }
+
     ////////////////////////////////////
     //Test the RDF File Quality ////////
     ////////////////////////////////////

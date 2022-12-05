@@ -80,6 +80,12 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
     private String graphName = "";
 
     /**
+     * This string will be displayed in the property dialog if nit
+     * <code>null</code> and shoul be a link.
+     */
+    private String seeAlso = null;
+
+    /**
      * ID of the element
      */
     protected String id;
@@ -2658,6 +2664,9 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
                     description = description.concat("\n-" + joined + "-\n" + other.description);
                 }
             }
+            if (Strings.isNullOrEmpty(seeAlso) || !Strings.isNullOrEmpty(other.seeAlso)) {
+                seeAlso = other.seeAlso; // overwrite should be ok here!?
+            }
         }
         updateGraphName(null);
         refreshText();
@@ -2717,6 +2726,20 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
      */
     public String getHyperlink() {
         return hyperlink;
+    }
+
+    /**
+     * @return the seeAlso
+     */
+    public final String getSeeAlso() {
+        return seeAlso;
+    }
+
+    /**
+     * @param seeAlso
+     */
+    public void setSeeAlso(String seeAlso) {
+        this.seeAlso = seeAlso;
     }
 
 }

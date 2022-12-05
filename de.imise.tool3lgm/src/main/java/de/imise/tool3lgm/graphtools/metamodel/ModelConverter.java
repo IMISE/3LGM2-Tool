@@ -149,6 +149,8 @@ public class ModelConverter {
             for (ModelElement sourceNode : sourceNodes) {
                 //lege im Hauptdokument des Zielmodells einen Knoten der neuen Art an mit gleichem Namen, gleicher Beschreibung und gleicher ID, wie der entsprechende Knoten im Ausgangsmodell hatte
                 NodeContainer targetMainDocContainer = targetMainDoc.createNodeAndContainer(targetNodeClass, sourceNode.getName(), sourceNode.getDescription(), sourceNode.getID(), STANDARD_PID);
+                ModelElement targetNode = targetMainDocContainer.getElement();
+                targetNode.setSeeAlso(sourceNode.getSeeAlso());
                 //für alle Teilmodelle, in denen der umzuwandelnde Knoten im Ausgangsmodell vorkommt
                 for (GraphDocument sourceDoc : sourceNode.getMySzenarios()) {
                     //wenn es nicht das Hauptdokument ist

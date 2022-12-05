@@ -2,6 +2,7 @@ package de.imise.tool3lgm.imexport;
 
 import static de.imise.tool3lgm.imexport.RDFDataImporter.NameCreationPatternStandardIndentifier.LABEL;
 import static de.imise.tool3lgm.imexport.RDFDataImporter.NameCreationPatternStandardIndentifier.LOCAL_NAME;
+import static de.imise.util.StringUtils.isNullOrEmptyOrBlank;
 
 import java.io.File;
 import java.net.MalformedURLException;
@@ -193,7 +194,9 @@ public abstract class RDFDataImporter extends UrlSourceDataImporter<Object> impl
             ontModel.read(urlString);
             String descriptionPropertyNameOrUri = getDescriptionPropertyUriOrLocalName();
             OntPropertyResolver descriptionPropertyResolver = new OntPropertyResolver(ontModel, descriptionPropertyNameOrUri);
-            importNodes(ontModel, descriptionPropertyResolver);
+            String seeAlsoPropertyNameOrUri = getSeeAlsoUrlPropertyUriOrLocalName();
+            OntPropertyResolver seeAlsoPropertyResolver = new OntPropertyResolver(ontModel, seeAlsoPropertyNameOrUri);
+            importNodes(ontModel, descriptionPropertyResolver, seeAlsoPropertyResolver);
             importEdges(ontModel, descriptionPropertyResolver);
         } catch (Exception e) {
             // show a message that a/the template could not be loaded
@@ -290,10 +293,11 @@ public abstract class RDFDataImporter extends UrlSourceDataImporter<Object> impl
      * Class-Knoten und der korrespondierende 3LGM2-Knoten in einer Map in
      * DataImporter gespeichert.
      *
-     * @param ontModel Quellmodell
-     * @param annotationPropertyResolver
+     * @param ontModel
+     * @param descriptionPropertyResolver
+     * @param seeAlsoPropertyResolver
      */
-    private void importNodes(final OntModel ontModel, final OntPropertyResolver descriptionPropertyResolver) {
+    private void importNodes(final OntModel ontModel, final OntPropertyResolver descriptionPropertyResolver, OntPropertyResolver seeAlsoPropertyResolver) {
         GDCollection gdcoll = getCollection();
         MetaModel metaModel = gdcoll.getMetaModel();
         Collection<String> classNames = getSimpleClassNames(metaModel.allNodesSet, "");
@@ -328,10 +332,19 @@ public abstract class RDFDataImporter extends UrlSourceDataImporter<Object> impl
                     //hier muss man die falsche Klasse abfangen
 
                     Node lgmNode = addNode(ontNode, lgmNodeClass, name, description, id);
+
                     if (lgmNode == null) {
                         printe(i++ + "\t" + ontClassName + " -> " + ontNode + "  ->  " + lgmNode);
                     } else {
                         print(i++ + "\t" + ontClassName + " -> " + ontNode + "  ->  " + lgmNode);
+                        String seeAlso = seeAlsoPropertyResolver.getValue(ontNode);
+                        if (!isNullOrEmptyOrBlank(seeAlso)) {
+                            int schemaStart = seeAlso.lastIndexOf("^^");
+                            if (schemaStart >= 0) {
+                                seeAlso = seeAlso.substring(0, schemaStart);
+                            }
+                            lgmNode.setSeeAlso(seeAlso);
+                        }
                     }
                     //Wenn die Ontologie nicht ganz richtig modelliert ist(oder irgendwas andere nicht stimmt), kann es vorkommen,
                     //dass ontClass.listInstances(true) auch Instanzen anderer als der eigentlichen Zielklasse zurück liefert.
@@ -556,5 +569,10 @@ public abstract class RDFDataImporter extends UrlSourceDataImporter<Object> impl
      * @return
      */
     public abstract String getDescriptionPropertyUriOrLocalName();
+
+    /**
+     * @return the property name of the see-also- URLs in the RDF ontology
+     */
+    public abstract String getSeeAlsoUrlPropertyUriOrLocalName();
 
 }
