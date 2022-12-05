@@ -17,6 +17,7 @@ import de.imise.tool3lgm.event.ActionIdentifier;
 import de.imise.tool3lgm.event.action.SelectedElementsAction;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
+import de.imise.tool3lgm.graphtools.model.GDCollectionOwner;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.model.LGMGraphDocument;
 import de.imise.tool3lgm.graphtools.view.container.BendpointContainer;
@@ -82,6 +83,9 @@ public class TemplateContextGenerator extends ElementSelectionContextGenerator {
         } else if (TypedTreeNode.hasUserObject(clickedTreePath, GraphDocument.class)) {
             selectedTemplateDoc = TypedTreeNode.getUserObject(clickedTreePath, GraphDocument.class);
             menu = getTemplateModelContextMenu(source, selectedTemplateDoc);
+        } else if (TypedTreeNode.hasUserObject(clickedTreePath, GDCollection.class)) {
+            GDCollection selectedGDColl = TypedTreeNode.getUserObject(clickedTreePath, GDCollection.class);
+            menu = getTemplateModelContextMenu(source, selectedGDColl);
         }
 
         return menu;
@@ -173,16 +177,20 @@ public class TemplateContextGenerator extends ElementSelectionContextGenerator {
 
     /**
      * @param contextSource
-     * @param template
+     * @param templateSource
      * @return
      */
-    private JPopupMenu getTemplateModelContextMenu(final Component contextSource, final GraphDocument template) {
+    private JPopupMenu getTemplateModelContextMenu(final Component contextSource, final GDCollectionOwner templateSource) {
         //Sys.err1("ContextGenerator.getTemplateModelContextMenu()");
         JPopupMenu menu = createUpdatingPopupMenu();
-        LGMGraphDocument selectedTemplateDoc = template.getSelectedDoc();
-        selectedTemplateDoc.selectAll();
-        addMenuItem(menu, createCopyToModelItem(template));
-        addMenuItem(menu, createOpenTemplateAsModelItem(template));
+        LGMGraphDocument selectedTemplateDoc = templateSource.getSelectedDoc();
+        if (templateSource instanceof LGMGraphDocument) {
+            selectedTemplateDoc = (LGMGraphDocument) templateSource;
+            selectedTemplateDoc.selectAll();
+            addMenuItem(menu, createCopyToModelItem(selectedTemplateDoc));
+        } else if (templateSource instanceof GDCollection) {
+            addMenuItem(menu, createOpenTemplateAsModelItem(selectedTemplateDoc));
+        }
         return menu;
     }
 
