@@ -320,11 +320,10 @@ public class Calculator {
                 operand1 = operandenStack.pop().toString().replace(",", ".");
                 result = getResult(operand1, operand2, operator);
                 if (result != null) {
-                    if (!formelStack.empty()) {
-                        formelStack.push(result);
-                    } else {
+                    if (formelStack.empty()) {
                         break;
                     }
+                    formelStack.push(result);
                 }
             }
         }
@@ -367,25 +366,25 @@ public class Calculator {
 
             String value = "";
 
-            if (accountingFunction.equals(UserField.ACCOUNTING_FUNCTION_TWSUM)) {
+            if (UserField.ACCOUNTING_FUNCTION_TWSUM.equals(accountingFunction)) {
                 //jetzt berechnen der TeilwertSumme anstoßen
                 value = PartValueSumFunction.getTWSUM(definitions, userField, me, arguments);
-            } else if (accountingFunction.equals(UserField.ACCOUNTING_FUNCTION_SUM)) {
+            } else if (UserField.ACCOUNTING_FUNCTION_SUM.equals(accountingFunction)) {
                 //jetzt berechnen der Summe anstoßen
                 value = getSUM(userField, me, arguments, UserField.ACCOUNTING_FUNCTION_SUM);
-            } else if (accountingFunction.equals(UserField.ACCOUNTING_FUNCTION_MULT)) {
+            } else if (UserField.ACCOUNTING_FUNCTION_MULT.equals(accountingFunction)) {
                 //jetzt berechnen des Produktes anstoßen
                 value = getMULT(userField, me, arguments, UserField.ACCOUNTING_FUNCTION_MULT);
-            } else if (accountingFunction.equals(UserField.ACCOUNTING_FUNCTION_MIN)) {
+            } else if (UserField.ACCOUNTING_FUNCTION_MIN.equals(accountingFunction)) {
                 //jetzt Suches des Minimums anstoßen
                 value = getMIN(userField, me, arguments);
-            } else if (accountingFunction.equals(UserField.ACCOUNTING_FUNCTION_MAX)) {
+            } else if (UserField.ACCOUNTING_FUNCTION_MAX.equals(accountingFunction)) {
                 //jetzt Suchen des Maximums anstoßen
                 value = getMAX(userField, me, arguments);
-            } else if (accountingFunction.equals(UserField.ACCOUNTING_FUNCTION_REF)) {
+            } else if (UserField.ACCOUNTING_FUNCTION_REF.equals(accountingFunction)) {
                 //jetzt das Heraussuchen dees Referenzierten wertes anstoßen.
                 value = getREF(userField, me, arguments);
-            } else if (accountingFunction.equals(UserField.ACCOUNTING_FUNCTION_AVG)) {
+            } else if (UserField.ACCOUNTING_FUNCTION_AVG.equals(accountingFunction)) {
                 //jetzt berechnen des Durchschnittes anstoßen
                 value = getAvg(userField, me, arguments);
             }
@@ -472,10 +471,12 @@ public class Calculator {
         if (OPERATOR_PLUS.equals(operator)) {
             return bd1.add(bd2).toString();
             //Minus
-        } else if (OPERATOR_MINUS.equals(operator)) {
+        }
+        if (OPERATOR_MINUS.equals(operator)) {
             return bd1.subtract(bd2).toString();
             //Mal
-        } else if (OPERATOR_MULT.equals(operator)) {
+        }
+        if (OPERATOR_MULT.equals(operator)) {
             return bd1.multiply(bd2).toString();
             //Durch
         } else if (OPERATOR_DIV.equals(operator)) {
@@ -617,7 +618,7 @@ public class Calculator {
         }
 
         String result = ZERO;
-        if (accountingFunction.equals(UserField.ACCOUNTING_FUNCTION_MULT)) {
+        if (UserField.ACCOUNTING_FUNCTION_MULT.equals(accountingFunction)) {
             result = ONE;
         }
 
@@ -631,9 +632,9 @@ public class Calculator {
             }
             //den Eingabewert des aufzusummierenden Feldes holen
             String value = connectedElement.getValue(userField);
-            if (accountingFunction.equals(UserField.ACCOUNTING_FUNCTION_SUM)) {
+            if (UserField.ACCOUNTING_FUNCTION_SUM.equals(accountingFunction)) {
                 result = getResult(result, value, OPERATOR_PLUS);
-            } else if (accountingFunction.equals(UserField.ACCOUNTING_FUNCTION_MULT)) {
+            } else if (UserField.ACCOUNTING_FUNCTION_MULT.equals(accountingFunction)) {
                 result = getResult(result, value, OPERATOR_MULT);
             }
         }
@@ -762,10 +763,10 @@ public class Calculator {
                     return UserField.NUMBER_FORMAT_ERROR;
                 }
                 if (valueTwo.compareTo(valueOne) == -1) {
-                    if (accountingFunction.equals(UserField.ACCOUNTING_FUNCTION_MIN)) {
+                    if (UserField.ACCOUNTING_FUNCTION_MIN.equals(accountingFunction)) {
                         result = value;
                     }
-                } else if (accountingFunction.equals(UserField.ACCOUNTING_FUNCTION_MAX)) {
+                } else if (UserField.ACCOUNTING_FUNCTION_MAX.equals(accountingFunction)) {
                     result = value;
                 }
 
@@ -921,27 +922,25 @@ public class Calculator {
                 while (!stack.empty()) {
                     String tmp_op;
                     tmp_op = stack.pop().toString();
-                    if (tmp_op.equals(OPERATOR_MULT) || tmp_op.equals(OPERATOR_DIV)) {
-                        tmp_string_postfix.append(" ");
-                        tmp_string_postfix.append(tmp_op);
-                    } else {
+                    if (!OPERATOR_MULT.equals(tmp_op) && !OPERATOR_DIV.equals(tmp_op)) {
                         stack.push(tmp_op);
                         break;
                     }
+                    tmp_string_postfix.append(" ");
+                    tmp_string_postfix.append(tmp_op);
                 }
                 stack.push(tmp_str);
-            } else if (tmp_str.equals("(")) {
+            } else if ("(".equals(tmp_str)) {
                 stack.push(tmp_str);
-            } else if (tmp_str.equals(")")) {
+            } else if (")".equals(tmp_str)) {
                 while (!stack.empty()) {
                     String tmp_element;
                     tmp_element = stack.pop().toString();
-                    if (!tmp_element.equals("(")) {
-                        tmp_string_postfix.append(" ");
-                        tmp_string_postfix.append(tmp_element);
-                    } else {
+                    if ("(".equals(tmp_element)) {
                         break;
                     }
+                    tmp_string_postfix.append(" ");
+                    tmp_string_postfix.append(tmp_element);
                 }
             } else {
                 try {
