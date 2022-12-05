@@ -570,11 +570,12 @@ public class Calculator {
      */
     public static final List<Edge> getEdges(final ModelElement me, final Class<? extends ModelElement> elemClass, final Class<? extends Edge> edgeClass, final String direction) {
         List<Edge> edges = null;
-        //Alle Kanten mit der richtigen Richtung holen
+        // Get all edges in the correct direction.
+        // ATTENTION: It is really so around correct!
         if (UserField.DIRECTION_FROM_WHOLE_TO_PART.equals(direction)) {
-            edges = me.getEdgesTo(elemClass, edgeClass);
-        } else if (UserField.DIRECTION_FROM_PART_TO_WHOLE.equals(direction)) {
             edges = me.getEdgesFrom(elemClass, edgeClass);
+        } else if (UserField.DIRECTION_FROM_PART_TO_WHOLE.equals(direction)) {
+            edges = me.getEdgesTo(elemClass, edgeClass);
         } else {
             edges = me.getEdgesWith(elemClass, edgeClass);
         }
