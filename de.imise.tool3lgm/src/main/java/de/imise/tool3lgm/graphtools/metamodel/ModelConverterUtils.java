@@ -338,6 +338,10 @@ public class ModelConverterUtils {
         // the element
         String description = nameSourceEdge.getDescription();
         element2Rename.setDescription(description);
+        // Same as with the description. This should be optional by the pattern
+        // objects.
+        String seeAlso = nameSourceEdge.getSeeAlso();
+        element2Rename.setSeeAlso(seeAlso);
         return element2Rename;
     }
 

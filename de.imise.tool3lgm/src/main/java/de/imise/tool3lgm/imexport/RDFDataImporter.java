@@ -197,7 +197,7 @@ public abstract class RDFDataImporter extends UrlSourceDataImporter<Object> impl
             String seeAlsoPropertyNameOrUri = getSeeAlsoUrlPropertyUriOrLocalName();
             OntPropertyResolver seeAlsoPropertyResolver = new OntPropertyResolver(ontModel, seeAlsoPropertyNameOrUri);
             importNodes(ontModel, descriptionPropertyResolver, seeAlsoPropertyResolver);
-            importEdges(ontModel, descriptionPropertyResolver);
+            importEdges(ontModel, descriptionPropertyResolver, seeAlsoPropertyResolver);
         } catch (Exception e) {
             // show a message that a/the template could not be loaded
             if (isDebugErrors()) {
@@ -286,6 +286,20 @@ public abstract class RDFDataImporter extends UrlSourceDataImporter<Object> impl
     }
 
     /**
+     * @param target
+     * @param seeAlso
+     */
+    private void setSeeAlso(ModelElement target, String seeAlso) {
+        if (!isNullOrEmptyOrBlank(seeAlso)) {
+            int schemaStart = seeAlso.lastIndexOf("^^"); // if the schema is set -> cut it off
+            if (schemaStart >= 0) {
+                seeAlso = seeAlso.substring(0, schemaStart);
+            }
+            target.setSeeAlso(seeAlso);
+        }
+    }
+
+    /**
      * Fragt in der Ontologie alle Class-Knoten ab, deren Klasse denselben Namen
      * hat, wie eine Klasse aus dem Metamodell des zu füllenden 3LGM2-Modells
      * und legt in diesem 3LGM2-Modell für jede Instanz des Class-Knotens im
@@ -338,13 +352,7 @@ public abstract class RDFDataImporter extends UrlSourceDataImporter<Object> impl
                     } else {
                         print(i++ + "\t" + ontClassName + " -> " + ontNode + "  ->  " + lgmNode);
                         String seeAlso = seeAlsoPropertyResolver.getValue(ontNode);
-                        if (!isNullOrEmptyOrBlank(seeAlso)) {
-                            int schemaStart = seeAlso.lastIndexOf("^^");
-                            if (schemaStart >= 0) {
-                                seeAlso = seeAlso.substring(0, schemaStart);
-                            }
-                            lgmNode.setSeeAlso(seeAlso);
-                        }
+                        setSeeAlso(lgmNode, seeAlso);
                     }
                     //Wenn die Ontologie nicht ganz richtig modelliert ist(oder irgendwas andere nicht stimmt), kann es vorkommen,
                     //dass ontClass.listInstances(true) auch Instanzen anderer als der eigentlichen Zielklasse zurück liefert.
@@ -360,16 +368,11 @@ public abstract class RDFDataImporter extends UrlSourceDataImporter<Object> impl
         }
     }
 
-    //    private void property(final OntModel ontModel, final Property p) {
-    //        ontModel.listObjectProperties();
-    //        System.err.println(p);
-    //
-    //    }
-    //
-    //    private void statement(final Statement s) {
-    //        System.err.println(s);
-    //    }
-
+    /**
+     * @param property
+     * @param importableObjectPropertiesToTargetEdgeClassName
+     * @return
+     */
     private OntProperty getOntProperty(final Property property, final Map<ObjectProperty, String> importableObjectPropertiesToTargetEdgeClassName) {
         for (ObjectProperty objectProperty : importableObjectPropertiesToTargetEdgeClassName.keySet()) {
             if (objectProperty.equals(property)) {
@@ -385,11 +388,12 @@ public abstract class RDFDataImporter extends UrlSourceDataImporter<Object> impl
      *
      * @param ontModel
      * @param descriptionPropertyResolver
+     * @param seeAlsoPropertyResolver
      * @return Map mit allen Statements, die eine zu importierende Kante
      *         repräsentieren als Key und dem Namen der daraus zu erzeugenden
      *         Kantenart im Zielmodell als value
      */
-    private void importEdges(final OntModel ontModel, final OntPropertyResolver descriptionPropertyResolver) {
+    private void importEdges(final OntModel ontModel, final OntPropertyResolver descriptionPropertyResolver, OntPropertyResolver seeAlsoPropertyResolver) {
         //ObjectProperty -> Kantenklassenname
         Map<ObjectProperty, String> importableObjectPropertiesToTargetEdgeClassName = getImportableObjetctProperties(ontModel);
         print(importableObjectPropertiesToTargetEdgeClassName);
@@ -416,9 +420,11 @@ public abstract class RDFDataImporter extends UrlSourceDataImporter<Object> impl
                         List<Object> namePattern = createRealPattern(ontModel, targetEdgeClassName);
                         String name = getName(ontProperty, namePattern);
                         String description = descriptionPropertyResolver.getValue(predicate);
+                        String seeAlso = seeAlsoPropertyResolver.getValue(predicate);
                         try {
                             Edge lgmEdge = addEdge(targetEdgeClassName, name, edgeID, startNode, endNode);
                             lgmEdge.setDescription(description);
+                            setSeeAlso(lgmEdge, seeAlso);
                             String resultEdgeID = lgmEdge.getID();
                             print(i++ + "\t" + targetEdgeClassName + " (" + resultEdgeID + ")" + " | Edge: StartNode=" + startNode + "  ->  EndNode=" + endNode + "  | EdgeName=" + lgmEdge + " | EdgeDescription=" + description);
                             if (!edgeID.equals(resultEdgeID)) {
