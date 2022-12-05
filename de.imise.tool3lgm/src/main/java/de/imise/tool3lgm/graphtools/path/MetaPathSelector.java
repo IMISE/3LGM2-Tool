@@ -23,13 +23,16 @@ import javax.swing.event.ChangeListener;
 import org.apache.jena.ext.com.google.common.base.Strings;
 
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableSet;
 
 import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
 import de.imise.tool3lgm.graphtools.metamodel.CoreMetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
+import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
+import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
 import de.imise.tool3lgm.graphtools.path.metapaths.MetaPath;
 import de.imise.tool3lgm.gui.MainFrame;
 import de.imise.util.Alphabetical;
@@ -115,6 +118,8 @@ public class MetaPathSelector implements ActionListener {
      */
     private final Set<Class<? extends ModelElement>> endElementClassesInPaths;
 
+    private static final Set<Class<? extends ModelElement>> generalClasses = ImmutableSet.of(ModelElement.class, Node.class, Edge.class);
+
     /**
      * @param model Model, das die auswählbaren Elementklassen und Pfade
      *            festlegt.
@@ -134,11 +139,15 @@ public class MetaPathSelector implements ActionListener {
             if (!Strings.isNullOrEmpty(displayableClassName)) {
                 Collection<Class<? extends ModelElement>> instanciableAssignableClasses = metaModel.getInstanciableAssignableClasses(elementClass);
                 boolean showInstanciableElementClassList = CoreMetaModel.isAbstract(elementClass) || instanciableAssignableClasses.size() > 1;
-                if (showInstanciableElementClassList) {
+                if (showInstanciableElementClassList && !generalClasses.contains(elementClass)) {
                     StringBuilder sb = new StringBuilder(displayableClassName);
                     sb.append(" (");
                     String displayableNames = elementsNameBuilder.getDisplayableName(instanciableAssignableClasses);
                     sb.append(displayableNames);
+                    if (sb.length() > 100) {
+                        sb.setLength(100);
+                        sb.append("...");
+                    }
                     sb.append(")");
                     displayableClassName = sb.toString();
                 }
