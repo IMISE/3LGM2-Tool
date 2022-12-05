@@ -576,3 +576,88 @@ Content-ID: ANA_1634729959635_5012
 	</suche>
 </analyse>
 --multipart_3lgm_query_separator
+Content-Type: text/xml
+Model-Type: TLGMServiceMetaModel@2388259974838049670
+Content-ID: ANA_1670266471863_16190
+<?xml version="1.0" encoding="ISO-8559-15"?>
+<analyse>
+	<name>
+		<en>[Service] Which phys. data processing components belong to this device class??</en>
+		<de>[Service] Welche Phys. Datenverabeitungssysteme gehören dieser Geräteklasse an?</de>
+	</name>
+	<startknoten name="DeviceClass"/>
+	<suche>
+		<typ>
+			<eintrag>DeviceClass</eintrag>
+		</typ>
+		<verbundenstate>wahr</verbundenstate>
+	</suche>
+	<suche>
+		<typ>
+			<eintrag>PhysicalDataProcessingComponent</eintrag>
+		</typ>
+		<verbundenstate>true</verbundenstate>
+	</suche>
+</analyse>
+--multipart_3lgm_query_separator
+Content-Type: text/xml
+Model-Type: TLGMServiceMetaModel@2388259974838049670
+Content-ID: ANA_1670267145293_4412
+<?xml version="1.0" encoding="ISO-8559-15"?>
+<analyse>
+	<name>
+		<en>[Service] What functions does this organizational unit perform?</en>
+		<de>[Service] Welche Aufgaben erledigt diese Organisationseinheit?</de>
+	</name>
+	<startknoten name="OrganisationalUnit"/>
+	<suche>
+		<typ>
+			<eintrag>OrganisationalUnit</eintrag>
+		</typ>
+		<verbundenstate>wahr</verbundenstate>
+	</suche>
+	<suche>
+		<typ>
+			<eintrag>Use</eintrag>
+		</typ>
+		<verbundenstate>true</verbundenstate>
+	</suche>
+	<suche>
+		<typ>
+			<eintrag>Function</eintrag>
+		</typ>
+		<verbundenstate>true</verbundenstate>
+	</suche>
+</analyse>
+--multipart_3lgm_query_separator
+Content-Type: text/xml
+Model-Type: TLGMServiceMetaModel@2388259974838049670
+Content-ID: ANA_1670267185925_4413
+<?xml version="1.0" encoding="ISO-8559-15"?>
+<analyse>
+	<name>
+		<en>[Service] Which application components are involved in completing the tasks of this organizational unit?</en>
+		<de>[Service] Welche Anwendungssysteme sind an der Erledigung der Aufgaben dieser Organisationseinheit beteiligt?</de>
+	</name>
+	<startknoten name="OrganisationalUnit"/>
+	<suche>
+		<typ>
+			<eintrag>OrganisationalUnit</eintrag>
+		</typ>
+		<verbundenstate>wahr</verbundenstate>
+	</suche>
+	<suche>
+		<typ>
+			<eintrag>Use</eintrag>
+		</typ>
+		<verbundenstate>true</verbundenstate>
+	</suche>
+	<suche>
+		<typ>
+			<eintrag>ApplicationSystem</eintrag>
+			<eintrag>OrganisationSystem</eintrag>
+		</typ>
+		<verbundenstate>true</verbundenstate>
+	</suche>
+</analyse>
+--multipart_3lgm_query_separator
