@@ -4,7 +4,7 @@
   <header>
     <title>3LGM2-Tutorium_DIZ-Modell_v4.3lgm</title>
     <description></description>
-    <version>179_sippe_1670286128101</version>
+    <version>180_sippe_1670313625052</version>
   </header>
   <userFieldDefinitions>
     <userFieldFormat hash="FRM_1623450079169_2058">
@@ -186,27 +186,6 @@
       <userFieldTreeVis>true</userFieldTreeVis>
       <userFieldShowDescriptionInDialog>false</userFieldShowDescriptionInDialog>
     </userFieldDef>
-    <userFieldDef elementClass="ObjectType" hash="USERFIELD_1669884870745_32050">
-      <userFieldName>MII KDS</userFieldName>
-      <userFieldDescription></userFieldDescription>
-      <userFieldStyle>SUBTYPE</userFieldStyle>
-      <userFieldTreeVis>true</userFieldTreeVis>
-      <userFieldShowDescriptionInDialog>false</userFieldShowDescriptionInDialog>
-    </userFieldDef>
-    <userFieldDef elementClass="ObjectType" hash="USERFIELD_1669884904331_32051">
-      <userFieldName>MII KDS</userFieldName>
-      <userFieldDescription></userFieldDescription>
-      <userFieldStyle>TAB</userFieldStyle>
-      <userFieldTreeVis>true</userFieldTreeVis>
-      <userFieldShowDescriptionInDialog>false</userFieldShowDescriptionInDialog>
-    </userFieldDef>
-    <userFieldDef elementClass="ObjectType" hash="USERFIELD_1669884915184_32052">
-      <userFieldName>MII Dokumentation</userFieldName>
-      <userFieldDescription>Link zu weiterführenden Informationen</userFieldDescription>
-      <userFieldStyle>HYPERLINK</userFieldStyle>
-      <userFieldTreeVis>true</userFieldTreeVis>
-      <userFieldShowDescriptionInDialog>false</userFieldShowDescriptionInDialog>
-    </userFieldDef>
     <userFieldDef elementClass="RepresentationForm" hash="USERFIELD_1622801104013_1966">
       <userFieldName>FHIR Ressource</userFieldName>
       <userFieldDescription></userFieldDescription>
@@ -252,6 +231,27 @@
       <userFieldStyle>HYPERLINK</userFieldStyle>
       <userFieldTreeVis>true</userFieldTreeVis>
       <userFieldShowDescriptionInDialog>true</userFieldShowDescriptionInDialog>
+    </userFieldDef>
+    <userFieldDef elementClass="ObjectType" hash="USERFIELD_1669884870745_32050">
+      <userFieldName>MII KDS</userFieldName>
+      <userFieldDescription></userFieldDescription>
+      <userFieldStyle>SUBTYPE</userFieldStyle>
+      <userFieldTreeVis>true</userFieldTreeVis>
+      <userFieldShowDescriptionInDialog>false</userFieldShowDescriptionInDialog>
+    </userFieldDef>
+    <userFieldDef elementClass="ObjectType" hash="USERFIELD_1669884904331_32051">
+      <userFieldName>MII KDS</userFieldName>
+      <userFieldDescription></userFieldDescription>
+      <userFieldStyle>TAB</userFieldStyle>
+      <userFieldTreeVis>true</userFieldTreeVis>
+      <userFieldShowDescriptionInDialog>false</userFieldShowDescriptionInDialog>
+    </userFieldDef>
+    <userFieldDef elementClass="ObjectType" hash="USERFIELD_1669884915184_32052">
+      <userFieldName>MII Dokumentation</userFieldName>
+      <userFieldDescription>Link zu weiterführenden Informationen</userFieldDescription>
+      <userFieldStyle>HYPERLINK</userFieldStyle>
+      <userFieldTreeVis>true</userFieldTreeVis>
+      <userFieldShowDescriptionInDialog>false</userFieldShowDescriptionInDialog>
     </userFieldDef>
     <userFieldDef elementClass="Group" hash="USERFIELD_1669994178892_38775">
       <userFieldName>Netzwerkzone</userFieldName>
@@ -696,10 +696,6 @@ The DIC expects the required rules from R&amp;D teams. The DIC is responsible fo
     <element class="ProvidingInterface" hash="PIN_1631260939649_19682">
       <field name="name">Anonymization Service Schnittstelle (bereitstellend) 2</field>
     </element>
-    <element class="IheIntegrationProfile" hash="https://www.3lgm2.de/resource/ihe/ATNA">
-      <field name="name">Audit Trail and Node Authentication (ATNA)</field>
-      <field name="description">The ITI Audit Trail and Node Authentication (ATNA) Profile establishes the characteristics of a Basic Secure Node: It describes the security environment (user identification, authentication, authorization, access control, etc.) assumed for the node so that security reviewers may decide whether this matches their environments. It defines basic security requirements for the communications of the node using TLS or equivalent functionality. It defines basic auditing requirements for the node. The profile also establishes the characteristics of the communication of audit messages between the Basic Secure Nodes and Audit Repository nodes that collect audit information. It defines a Secure Application Actor for describing product configurations that are not able to meet all of the requirements of a Secure Node. This profile has been designed so that specific domain frameworks may extend it through an option defined in the domain specific technical framework. Extensions are used to define additional audit event reporting requirements, especially actor specific requirements. The Radiology Audit Trail Option in the IHE Radiology Technical Framework is an example of such an extension.</field>
-    </element>
     <element class="ApplicationSystem" hash="ASY_1631691339295_2469">
       <field name="name">Authorization Service</field>
       <field name="description">Provides authorization for external and internal users using existing directory services or identity providers.Software Products, e.g. KeyCloakToDo: Interface to Benutzerverzeichnisdienst</field>
@@ -753,17 +749,6 @@ dt. "KIS Integration", engl. "HIS Integration" (Clinical Part)</field>
     <element class="ProvidingInterface" hash="PIN_1670253787063_58864">
       <field name="name">Consent management service Schnittstelle (bereitstellend) 1</field>
     </element>
-    <element class="IheIntegrationProfile" hash="https://www.3lgm2.de/resource/ihe/CT">
-      <field name="name">Consistent Time (CT)</field>
-      <field name="description">Consistent Time defines mechanisms to synchronize the time base between multiple actors and computers. Various infrastructure, security, and acquisition profiles require use of a consistent time base on multiple computers. The Consistent Time Profile provides median synchronization error of less than 1 second. Configuration options can provide better synchronization. The Consistent Time Profile specifies the use of the Network Time Protocol (NTP) defined in RFC1305.</field>
-    </element>
-    <element class="IheIntegrationProfile" hash="https://www.3lgm2.de/resource/ihe/XDS.b">
-      <field name="name">Cross-Enterprise Document Sharing (XDS.b)</field>
-      <field name="description">The Cross-Enterprise Document Sharing (XDS.b) IHE Integration Profile facilitates the registration, distribution and access across health enterprises of patient electronic health records. 
-Cross-Enterprise Document Sharing is focused on providing a standards-based specification for managing the sharing of documents between any healthcare enterprise, ranging from a private physician office to a clinic to an acute care in-patient facility. 
-In the rest of the ITI Technical Framework the term XDS refers generically to any flavor of XDS, currently only XDS.b. 
-The XDS.b Integration Profile assumes that these enterprises belong to one or more XDS Affinity Domains. An XDS Affinity Domain is a group of healthcare enterprises that have agreed to work together using a common set of policies and share a common infrastructure.</field>
-    </element>
     <element class="ApplicationSystem" hash="ASY_1614941279987_3004">
       <field name="name">Data Integration Engine Clinical</field>
       <field name="description">Implements Extract, Transform and Load Processes (ETL)
@@ -814,22 +799,6 @@ dt. "KIS Integration", engl. "HIS Integration" (Research Part)</field>
     </element>
     <element class="Service" hash="SER_1670251234367_47865">
       <field name="name">DIC Transfer Research</field>
-    </element>
-    <element class="IheActor" hash="https://www.3lgm2.de/resource/ihe/XDSB_DOC_CONSUMER">
-      <field name="name">Document Consumer (XDS.b)</field>
-      <field name="description">The Document Consumer Actor queries a Document Registry Actor for documents meeting certain criteria, and retrieves selected documents from one or more Document Repository actors.</field>
-    </element>
-    <element class="IheActor" hash="https://www.3lgm2.de/resource/ihe/XDSB_DOC_REGISTRY">
-      <field name="name">Document Registry (XDS.b)</field>
-      <field name="description">The Document Registry Actor maintains metadata about each registered document in a document entry. This includes a link to the Document in the Repository where it is stored. The Document Registry responds to queries from Document Consumer actors about documents meeting specific criteria. It also enforces some healthcare specific technical policies at the time of document registration.</field>
-    </element>
-    <element class="IheActor" hash="https://www.3lgm2.de/resource/ihe/XDSB_DOC_REPOSITORY">
-      <field name="name">Document Repository (XDS.b)</field>
-      <field name="description">The Document Repository is responsible for both the persistent storage of these documents as well as for their registration with the appropriate Document Registry. It assigns a URI to documents for subsequent retrieval by a Document Consumer.</field>
-    </element>
-    <element class="IheActor" hash="https://www.3lgm2.de/resource/ihe/XDSB_DOC_SOURCE">
-      <field name="name">Document Source (XDS.b)</field>
-      <field name="description">The Document Source is the producer and publisher of documents and metadata.</field>
     </element>
     <element class="RepresentationForm" hash="RFO_1669812116315_30222">
       <field name="name">DUP Dataset Description</field>
@@ -917,127 +886,6 @@ dt. "KIS Integration", engl. "HIS Integration" (Research Part)</field>
     </element>
     <element class="ApplicationSystem" hash="ASY_1614941398972_3009">
       <field name="name">ID management and record linkage service</field>
-    </element>
-    <element class="IheActor" hash="https://www.3lgm2.de/resource/ihe/XDSB_EMBED_REPOS">
-      <field name="name">Integrated Document Source / Repository (XDS.b)</field>
-      <field name="description">The Integrated Document Source / Repository is an XDS combination of Document Source and Document Repository that does not expose the interface between the Source and Repository. That is, this Source only publishes documents to its own Repository. It does register documents with a Document Registry</field>
-    </element>
-    <element class="IheInvokingInterface" hash="[https://www.3lgm2.de/resource/ihe/CT_TIME_CLIENT; https://www.3lgm2.de/resource/ihe/iti-1; https://www.3lgm2.de/resource/ihe/CT_TS]_2">
-      <field name="name">ITI-1 Aktor Schnittstelle (aufrufend)</field>
-    </element>
-    <element class="IheTransaction" hash="[https://www.3lgm2.de/resource/ihe/CT_TIME_CLIENT; https://www.3lgm2.de/resource/ihe/iti-1; https://www.3lgm2.de/resource/ihe/CT_TS]">
-      <field name="name">ITI-1 Maintain Time</field>
-      <field name="description">NTP transactions used to maintain time synchronization.</field>
-    </element>
-    <element class="IheInvokingInterface" hash="[https://www.3lgm2.de/resource/ihe/XDSB_DOC_CONSUMER; https://www.3lgm2.de/resource/ihe/iti-18; https://www.3lgm2.de/resource/ihe/XDSB_DOC_REGISTRY]_2">
-      <field name="name">ITI-18 Aktor Schnittstelle (aufrufend)</field>
-    </element>
-    <element class="IheProvidingInterface" hash="[https://www.3lgm2.de/resource/ihe/XDSB_DOC_CONSUMER; https://www.3lgm2.de/resource/ihe/iti-18; https://www.3lgm2.de/resource/ihe/XDSB_DOC_REGISTRY]_5">
-      <field name="name">ITI-18 Aktor Schnittstelle (bereitstellend)</field>
-    </element>
-    <element class="IheTransaction" hash="[https://www.3lgm2.de/resource/ihe/RMD_DOC_ADMINISTRATOR; https://www.3lgm2.de/resource/ihe/iti-18; https://www.3lgm2.de/resource/ihe/RMD_DOC_REGISTRY]">
-      <field name="name">ITI-18 Registry Stored Query</field>
-      <field name="description">The Query Registry transaction is issued by the Document Consumer Actor on behalf of a care provider (EHR-CR) to a Document Registry. The Document Registry Actor searches the registry to locate documents that meet the provider s specified query criteria. It will return a list of document entries that contain metadata found to meet the specified criteria including the locations and identifier of each corresponding document in one or more Document Repositories. The stored query uses parameters and not direct SQL</field>
-    </element>
-    <element class="IheInvokingInterface" hash="[https://www.3lgm2.de/resource/ihe/ATNA_SA; https://www.3lgm2.de/resource/ihe/iti-19; https://www.3lgm2.de/resource/ihe/ATNA_SN]_2">
-      <field name="name">ITI-19 Aktor Schnittstelle (aufrufend)</field>
-    </element>
-    <element class="IheInvokingInterface" hash="[https://www.3lgm2.de/resource/ihe/ATNA_SN; https://www.3lgm2.de/resource/ihe/iti-19; https://www.3lgm2.de/resource/ihe/ATNA_SA]_2">
-      <field name="name">ITI-19 Aktor Schnittstelle (aufrufend)</field>
-    </element>
-    <element class="IheProvidingInterface" hash="[https://www.3lgm2.de/resource/ihe/ATNA_SA; https://www.3lgm2.de/resource/ihe/iti-19; https://www.3lgm2.de/resource/ihe/ATNA_SN]_5">
-      <field name="name">ITI-19 Aktor Schnittstelle (bereitstellend)</field>
-    </element>
-    <element class="IheProvidingInterface" hash="[https://www.3lgm2.de/resource/ihe/ATNA_SN; https://www.3lgm2.de/resource/ihe/iti-19; https://www.3lgm2.de/resource/ihe/ATNA_SA]_5">
-      <field name="name">ITI-19 Aktor Schnittstelle (bereitstellend)</field>
-    </element>
-    <element class="IheTransaction" hash="[https://www.3lgm2.de/resource/ihe/ATNA_SN; https://www.3lgm2.de/resource/ihe/iti-19; https://www.3lgm2.de/resource/ihe/ATNA_SA]">
-      <field name="name">ITI-19 Authenticate Node</field>
-      <field name="description">This transaction is embedded within all network communications activity. All DICOM, HL7, and HTML connections shall comply with the IHE specification for bi-directional authentication and authorization of communications of Protected Healthcare Information (PHI). IHE does not specify how other protocols that transfer PHI shall perform bi-directional authentication and authorization, but requires that other protocols perform such authentication and authorization.</field>
-    </element>
-    <element class="IheInvokingInterface" hash="[https://www.3lgm2.de/resource/ihe/ATNA_SA; https://www.3lgm2.de/resource/ihe/iti-20; https://www.3lgm2.de/resource/ihe/ATNA_ARR]_2">
-      <field name="name">ITI-20 Aktor Schnittstelle (aufrufend)</field>
-    </element>
-    <element class="IheInvokingInterface" hash="[https://www.3lgm2.de/resource/ihe/ATNA_SN; https://www.3lgm2.de/resource/ihe/iti-20; https://www.3lgm2.de/resource/ihe/ATNA_ARR]_2">
-      <field name="name">ITI-20 Aktor Schnittstelle (aufrufend)</field>
-    </element>
-    <element class="IheTransaction" hash="[https://www.3lgm2.de/resource/ihe/ATNA_AUDIT_RECORD_FORWARDER; https://www.3lgm2.de/resource/ihe/iti-20; https://www.3lgm2.de/resource/ihe/ATNA_ARR]">
-      <field name="name">ITI-20 Record Audit Event</field>
-      <field name="description">The delivery of an audit event description from any secure node to the Audit Repository.</field>
-    </element>
-    <element class="IheInvokingInterface" hash="[https://www.3lgm2.de/resource/ihe/XDSB_DOC_SOURCE; https://www.3lgm2.de/resource/ihe/iti-41; https://www.3lgm2.de/resource/ihe/XDSB_DOC_REPOSITORY]_2">
-      <field name="name">ITI-41 Aktor Schnittstelle (aufrufend)</field>
-    </element>
-    <element class="IheProvidingInterface" hash="[https://www.3lgm2.de/resource/ihe/XDSB_DOC_SOURCE; https://www.3lgm2.de/resource/ihe/iti-41; https://www.3lgm2.de/resource/ihe/XDSB_DOC_REPOSITORY]_5">
-      <field name="name">ITI-41 Aktor Schnittstelle (bereitstellend)</field>
-    </element>
-    <element class="IheTransaction" hash="[https://www.3lgm2.de/resource/ihe/XDR_DOC_SOURCE; https://www.3lgm2.de/resource/ihe/iti-41; https://www.3lgm2.de/resource/ihe/XDR_DOC_RECIPIENT]">
-      <field name="name">ITI-41 Provide and Register Document Set-b</field>
-      <field name="description">Provide and Register Document Set-b</field>
-    </element>
-    <element class="IheInvokingInterface" hash="[https://www.3lgm2.de/resource/ihe/XDSB_DOC_REPOSITORY; https://www.3lgm2.de/resource/ihe/iti-42; https://www.3lgm2.de/resource/ihe/XDSB_DOC_REGISTRY]_2">
-      <field name="name">ITI-42 Aktor Schnittstelle (aufrufend)</field>
-    </element>
-    <element class="IheInvokingInterface" hash="[https://www.3lgm2.de/resource/ihe/XDSB_EMBED_REPOS; https://www.3lgm2.de/resource/ihe/iti-42; https://www.3lgm2.de/resource/ihe/XDSB_DOC_REGISTRY]_2">
-      <field name="name">ITI-42 Aktor Schnittstelle (aufrufend)</field>
-    </element>
-    <element class="IheProvidingInterface" hash="[https://www.3lgm2.de/resource/ihe/XDSB_DOC_REPOSITORY; https://www.3lgm2.de/resource/ihe/iti-42; https://www.3lgm2.de/resource/ihe/XDSB_DOC_REGISTRY]_5">
-      <field name="name">ITI-42 Aktor Schnittstelle (bereitstellend)</field>
-    </element>
-    <element class="IheTransaction" hash="[https://www.3lgm2.de/resource/ihe/XDSB_DOC_REPOSITORY; https://www.3lgm2.de/resource/ihe/iti-42; https://www.3lgm2.de/resource/ihe/XDSB_DOC_REGISTRY]">
-      <field name="name">ITI-42 Register Document Set-b</field>
-      <field name="description">Register Document Set-b</field>
-    </element>
-    <element class="IheInvokingInterface" hash="[https://www.3lgm2.de/resource/ihe/XDSB_DOC_CONSUMER; https://www.3lgm2.de/resource/ihe/iti-43; https://www.3lgm2.de/resource/ihe/XDSB_DOC_REPOSITORY]_2">
-      <field name="name">ITI-43 Aktor Schnittstelle (aufrufend)</field>
-    </element>
-    <element class="IheProvidingInterface" hash="[https://www.3lgm2.de/resource/ihe/XDSB_DOC_CONSUMER; https://www.3lgm2.de/resource/ihe/iti-43; https://www.3lgm2.de/resource/ihe/XDSB_DOC_REPOSITORY]_5">
-      <field name="name">ITI-43 Aktor Schnittstelle (bereitstellend)</field>
-    </element>
-    <element class="IheProvidingInterface" hash="[https://www.3lgm2.de/resource/ihe/XDSB_DOC_CONSUMER; https://www.3lgm2.de/resource/ihe/iti-43; https://www.3lgm2.de/resource/ihe/XDSB_EMBED_REPOS]_5">
-      <field name="name">ITI-43 Aktor Schnittstelle (bereitstellend)</field>
-    </element>
-    <element class="IheTransaction" hash="[https://www.3lgm2.de/resource/ihe/XDS-IB_DOC_CONSUMER; https://www.3lgm2.de/resource/ihe/iti-43; https://www.3lgm2.de/resource/ihe/XDS-IB_DOC_REPOSITORY]">
-      <field name="name">ITI-43 Retrieve Document Set</field>
-      <field name="description">Retrieve Document Set</field>
-    </element>
-    <element class="IheInvokingInterface" hash="[https://www.3lgm2.de/resource/ihe/XDSB_PAT_IDENTITY_SRC; https://www.3lgm2.de/resource/ihe/iti-44; https://www.3lgm2.de/resource/ihe/XDSB_DOC_REGISTRY]_2">
-      <field name="name">ITI-44 Aktor Schnittstelle (aufrufend)</field>
-    </element>
-    <element class="IheProvidingInterface" hash="[https://www.3lgm2.de/resource/ihe/XDSB_PAT_IDENTITY_SRC; https://www.3lgm2.de/resource/ihe/iti-44; https://www.3lgm2.de/resource/ihe/XDSB_DOC_REGISTRY]_5">
-      <field name="name">ITI-44 Aktor Schnittstelle (bereitstellend)</field>
-    </element>
-    <element class="IheTransaction" hash="[https://www.3lgm2.de/resource/ihe/XDSB_PAT_IDENTITY_SRC; https://www.3lgm2.de/resource/ihe/iti-44; https://www.3lgm2.de/resource/ihe/XDSB_DOC_REGISTRY]">
-      <field name="name">ITI-44 Patient Identity Feed HL7 V3</field>
-      <field name="description">Patient Identity Feed HL7 V3</field>
-    </element>
-    <element class="IheProvidingInterface" hash="[https://www.3lgm2.de/resource/ihe/XDSB_DOC_ADMINISTRATOR; https://www.3lgm2.de/resource/ihe/iti-57; https://www.3lgm2.de/resource/ihe/XDSB_DOC_REGISTRY]_5">
-      <field name="name">ITI-57 Aktor Schnittstelle (bereitstellend)</field>
-    </element>
-    <element class="IheTransaction" hash="[https://www.3lgm2.de/resource/ihe/XDR_DOC_ADMINISTRATOR; https://www.3lgm2.de/resource/ihe/iti-57; https://www.3lgm2.de/resource/ihe/XDR_DOC_RECIPIENT]">
-      <field name="name">ITI-57 Update Document Set</field>
-      <field name="description">The Update Document Set transaction passes a collection of metadata updates from the Document Administrator actor to the Document Registry or Document Recipient actor.</field>
-    </element>
-    <element class="IheProvidingInterface" hash="[https://www.3lgm2.de/resource/ihe/XDSB_ON_DEMAND_DOC_SOURCE; https://www.3lgm2.de/resource/ihe/iti-61; https://www.3lgm2.de/resource/ihe/XDSB_DOC_REGISTRY]_5">
-      <field name="name">ITI-61 Aktor Schnittstelle (bereitstellend)</field>
-    </element>
-    <element class="IheTransaction" hash="[https://www.3lgm2.de/resource/ihe/XDSB_ON_DEMAND_DOC_SOURCE; https://www.3lgm2.de/resource/ihe/iti-61; https://www.3lgm2.de/resource/ihe/XDSB_DOC_REGISTRY]">
-      <field name="name">ITI-61 Register On-Demand Document Entry</field>
-      <field name="description">The Register On-Demand Document Entry transaction is used by the On-Demand Document Source to register one or more On-Demand Document Entries in the Document Registry.</field>
-    </element>
-    <element class="IheInvokingInterface" hash="[https://www.3lgm2.de/resource/ihe/XDSB_PAT_IDENTITY_SRC; https://www.3lgm2.de/resource/ihe/iti-8; https://www.3lgm2.de/resource/ihe/XDSB_DOC_REGISTRY]_2">
-      <field name="name">ITI-8 Aktor Schnittstelle (aufrufend)</field>
-    </element>
-    <element class="IheProvidingInterface" hash="[https://www.3lgm2.de/resource/ihe/XDSB_PAT_IDENTITY_SRC; https://www.3lgm2.de/resource/ihe/iti-8; https://www.3lgm2.de/resource/ihe/XDSB_DOC_REGISTRY]_5">
-      <field name="name">ITI-8 Aktor Schnittstelle (bereitstellend)</field>
-    </element>
-    <element class="IheTransaction" hash="[https://www.3lgm2.de/resource/ihe/XDSB_PAT_IDENTITY_SRC; https://www.3lgm2.de/resource/ihe/iti-8; https://www.3lgm2.de/resource/ihe/XDSB_DOC_REGISTRY]">
-      <field name="name">ITI-8 Patient Identity Feed</field>
-      <field name="description">Allows a Patient Identity Source Actor to notify a Patient Identity Cross-Referencing Actor of all events related to patient identification (creation, update, merge, etc.).</field>
-    </element>
-    <element class="IheDomain" hash="https://www.3lgm2.de/resource/ihe/ITI">
-      <field name="name">IT-Infrastructure (ITI)</field>
-      <field name="description">The IT Infrastructure Domain supplies infrastructure for sharing healthcare information. An infrastructure interoperability component represents a common IT function that is used as a building block for a variety of use cases... a necessary ingredient, but rarely visible to the end user! These components may be embedded in an application, but are often deployed as a shared resource within a RHIO or Health Information Exchange.</field>
     </element>
     <element class="InvokingInterface" hash="IIN_1617264525796_4373">
       <field name="name">Klinische Chemie Labor(e) Schnittstelle (aufrufend) 1</field>
@@ -1159,10 +1007,6 @@ dt. "KIS Integration", engl. "HIS Integration" (Research Part)</field>
     <element class="Service" hash="SER_1670075445498_10326">
       <field name="name">Patient Documentation</field>
     </element>
-    <element class="IheActor" hash="https://www.3lgm2.de/resource/ihe/XDSB_PAT_IDENTITY_SRC">
-      <field name="name">Patient Identity Source (XDS.b)</field>
-      <field name="description">Each Patient Identification Domain requires this Actor to assign patient identities and to notify a Patient Identity Cross-reference Manager Actor of all events related to patient identification (creation, update, merge, etc.). For example, the Registration (ADT) Actor defined by the radiology Scheduled Workflow Profile would likely be a Patient Identity Source.</field>
-    </element>
     <element class="ApplicationSystem" hash="ASY_1630568589439_2452">
       <field name="name">Patient Portal / App</field>
       <field name="description">- Bereitstellung von Informationen für den Patienten (Projektbeteiligung, - ergebnisse)- Consent?- "Datenspende", Patient Recorded Outcomes- etc.</field>
@@ -1230,14 +1074,6 @@ dt. "KIS Integration", engl. "HIS Integration" (Research Part)</field>
     <element class="ProvidingInterface" hash="PIN_1617266976855_4459">
       <field name="name">Research Transfer Engine Schnittstelle (bereitstellend) 3</field>
     </element>
-    <element class="IheActor" hash="https://www.3lgm2.de/resource/ihe/ATNA_SA">
-      <field name="name">Secure Application (ATNA)</field>
-      <field name="description">The difference between the Secure Node and the Secure Application is the extent to which the underlying operating system and other environment are secured. A Secure Node includes all aspects of user authentication, file system protections, and operating environment security. The Secure Application is a product that does not include the operating environment. The Secure Application provides security features only for the application features. See section 9.7 for the relationships among a Secure Node, Secure Application, and other actors.</field>
-    </element>
-    <element class="IheActor" hash="https://www.3lgm2.de/resource/ihe/ATNA_SN">
-      <field name="name">Secure Node (ATNA)</field>
-      <field name="description">A system unit that validates the identity of any user and of any other node, and determines whether or not access to the system for this user and information exchange with the other node is allowed. Maintains the correct time.</field>
-    </element>
     <element class="ServiceClass" hash="SCL_1670074335278_7358">
       <field name="name">Service Class: Clinical</field>
     </element>
@@ -1258,10 +1094,6 @@ dt. "KIS Integration", engl. "HIS Integration" (Research Part)</field>
     </element>
     <element class="ApplicationSystem" hash="ASY_1616599638516_2600">
       <field name="name">Ticket\-system</field>
-    </element>
-    <element class="IheActor" hash="https://www.3lgm2.de/resource/ihe/CT_TIME_CLIENT">
-      <field name="name">Time Client (CT)</field>
-      <field name="description">Establishes time synchronization with one or more Time Servers using the NTP protocol and either the NTP or SNTP algorithms. Maintains the local computer system clock synchronization with UTC based on synchronization with the Time Servers.</field>
     </element>
     <element class="ApplicationSystem" hash="ASY_1632897867338_3233">
       <field name="name">Transfer Service</field>
@@ -3355,436 +3187,6 @@ dt. "KIS Integration", engl. "HIS Integration" (Research Part)</field>
       <field name="start">ASY_1631690118104_2457</field>
       <field name="end">DVB_1591264813322_4911</field>
     </element>
-    <element class="IheIntegrationProfile_IheDomain_Edge" hash="[https://www.3lgm2.de/resource/ihe/XDS.b; https://www.3lgm2.de/resource/ihe/iheDomain; https://www.3lgm2.de/resource/ihe/ITI]">
-      <field name="name">Beziehung 30</field>
-      <field name="start">https://www.3lgm2.de/resource/ihe/XDS.b</field>
-      <field name="end">https://www.3lgm2.de/resource/ihe/ITI</field>
-    </element>
-    <element class="IheIntegrationProfile_IheActor_Edge" hash="[https://www.3lgm2.de/resource/ihe/XDSB_DOC_SOURCE; https://www.3lgm2.de/resource/ihe/iheIntegrationProfile; https://www.3lgm2.de/resource/ihe/XDS.b]">
-      <field name="name">Beziehung 174</field>
-      <field name="start">https://www.3lgm2.de/resource/ihe/XDS.b</field>
-      <field name="end">https://www.3lgm2.de/resource/ihe/XDSB_DOC_SOURCE</field>
-    </element>
-    <element class="IheInvokingInterface_IheTransaction_Edge" hash="[https://www.3lgm2.de/resource/ihe/XDSB_DOC_SOURCE; https://www.3lgm2.de/resource/ihe/iti-41; https://www.3lgm2.de/resource/ihe/XDSB_DOC_REPOSITORY]_3">
-      <field name="name">Beziehung 96</field>
-      <field name="start">[https://www.3lgm2.de/resource/ihe/XDSB_DOC_SOURCE; https://www.3lgm2.de/resource/ihe/iti-41; https://www.3lgm2.de/resource/ihe/XDSB_DOC_REPOSITORY]_2</field>
-      <field name="end">[https://www.3lgm2.de/resource/ihe/XDR_DOC_SOURCE; https://www.3lgm2.de/resource/ihe/iti-41; https://www.3lgm2.de/resource/ihe/XDR_DOC_RECIPIENT]</field>
-    </element>
-    <element class="IheActor_IheInterface_Edge" hash="[https://www.3lgm2.de/resource/ihe/XDSB_DOC_SOURCE; https://www.3lgm2.de/resource/ihe/iti-41; https://www.3lgm2.de/resource/ihe/XDSB_DOC_REPOSITORY]_1">
-      <field name="name">Unterordunungsbeziehung 192</field>
-      <field name="start">https://www.3lgm2.de/resource/ihe/XDSB_DOC_SOURCE</field>
-      <field name="end">[https://www.3lgm2.de/resource/ihe/XDSB_DOC_SOURCE; https://www.3lgm2.de/resource/ihe/iti-41; https://www.3lgm2.de/resource/ihe/XDSB_DOC_REPOSITORY]_2</field>
-    </element>
-    <element class="IheIntegrationProfile_IheDomain_Edge" hash="[https://www.3lgm2.de/resource/ihe/ATNA; https://www.3lgm2.de/resource/ihe/iheDomain; https://www.3lgm2.de/resource/ihe/ITI]">
-      <field name="name">Beziehung 45</field>
-      <field name="start">https://www.3lgm2.de/resource/ihe/ATNA</field>
-      <field name="end">https://www.3lgm2.de/resource/ihe/ITI</field>
-    </element>
-    <element class="IheIntegrationProfile_IheActor_Edge" hash="[https://www.3lgm2.de/resource/ihe/ATNA_SA; https://www.3lgm2.de/resource/ihe/iheIntegrationProfile; https://www.3lgm2.de/resource/ihe/ATNA]">
-      <field name="name">Beziehung 170</field>
-      <field name="start">https://www.3lgm2.de/resource/ihe/ATNA</field>
-      <field name="end">https://www.3lgm2.de/resource/ihe/ATNA_SA</field>
-    </element>
-    <element class="IheInvokingInterface_IheTransaction_Edge" hash="[https://www.3lgm2.de/resource/ihe/ATNA_SA; https://www.3lgm2.de/resource/ihe/iti-19; https://www.3lgm2.de/resource/ihe/ATNA_SN]_3">
-      <field name="name">Beziehung 94</field>
-      <field name="start">[https://www.3lgm2.de/resource/ihe/ATNA_SA; https://www.3lgm2.de/resource/ihe/iti-19; https://www.3lgm2.de/resource/ihe/ATNA_SN]_2</field>
-      <field name="end">[https://www.3lgm2.de/resource/ihe/ATNA_SN; https://www.3lgm2.de/resource/ihe/iti-19; https://www.3lgm2.de/resource/ihe/ATNA_SA]</field>
-    </element>
-    <element class="IheActor_IheInterface_Edge" hash="[https://www.3lgm2.de/resource/ihe/ATNA_SA; https://www.3lgm2.de/resource/ihe/iti-19; https://www.3lgm2.de/resource/ihe/ATNA_SN]_1">
-      <field name="name">Unterordunungsbeziehung 189</field>
-      <field name="start">https://www.3lgm2.de/resource/ihe/ATNA_SA</field>
-      <field name="end">[https://www.3lgm2.de/resource/ihe/ATNA_SA; https://www.3lgm2.de/resource/ihe/iti-19; https://www.3lgm2.de/resource/ihe/ATNA_SN]_2</field>
-    </element>
-    <element class="IheProvidingInterface_IheTransaction_Edge" hash="[https://www.3lgm2.de/resource/ihe/ATNA_SN; https://www.3lgm2.de/resource/ihe/iti-19; https://www.3lgm2.de/resource/ihe/ATNA_SA]_4">
-      <field name="name">Beziehung 23</field>
-      <field name="start">[https://www.3lgm2.de/resource/ihe/ATNA_SN; https://www.3lgm2.de/resource/ihe/iti-19; https://www.3lgm2.de/resource/ihe/ATNA_SA]_5</field>
-      <field name="end">[https://www.3lgm2.de/resource/ihe/ATNA_SN; https://www.3lgm2.de/resource/ihe/iti-19; https://www.3lgm2.de/resource/ihe/ATNA_SA]</field>
-    </element>
-    <element class="IheActor_IheInterface_Edge" hash="[https://www.3lgm2.de/resource/ihe/ATNA_SN; https://www.3lgm2.de/resource/ihe/iti-19; https://www.3lgm2.de/resource/ihe/ATNA_SA]_6">
-      <field name="name">Unterordunungsbeziehung 47</field>
-      <field name="start">https://www.3lgm2.de/resource/ihe/ATNA_SA</field>
-      <field name="end">[https://www.3lgm2.de/resource/ihe/ATNA_SN; https://www.3lgm2.de/resource/ihe/iti-19; https://www.3lgm2.de/resource/ihe/ATNA_SA]_5</field>
-    </element>
-    <element class="IheCommunicationLink_Edge" hash="DLK_1670078268369_5203">
-      <field name="name">ITI-19 Authenticate Node</field>
-      <field name="start">[https://www.3lgm2.de/resource/ihe/ATNA_SA; https://www.3lgm2.de/resource/ihe/iti-19; https://www.3lgm2.de/resource/ihe/ATNA_SN]_2</field>
-      <field name="end">[https://www.3lgm2.de/resource/ihe/ATNA_SN; https://www.3lgm2.de/resource/ihe/iti-19; https://www.3lgm2.de/resource/ihe/ATNA_SA]_5</field>
-    </element>
-    <element class="IheInvokingInterface_IheTransaction_Edge" hash="[https://www.3lgm2.de/resource/ihe/ATNA_SA; https://www.3lgm2.de/resource/ihe/iti-20; https://www.3lgm2.de/resource/ihe/ATNA_ARR]_3">
-      <field name="name">Beziehung 93</field>
-      <field name="start">[https://www.3lgm2.de/resource/ihe/ATNA_SA; https://www.3lgm2.de/resource/ihe/iti-20; https://www.3lgm2.de/resource/ihe/ATNA_ARR]_2</field>
-      <field name="end">[https://www.3lgm2.de/resource/ihe/ATNA_AUDIT_RECORD_FORWARDER; https://www.3lgm2.de/resource/ihe/iti-20; https://www.3lgm2.de/resource/ihe/ATNA_ARR]</field>
-    </element>
-    <element class="IheActor_IheInterface_Edge" hash="[https://www.3lgm2.de/resource/ihe/ATNA_SA; https://www.3lgm2.de/resource/ihe/iti-20; https://www.3lgm2.de/resource/ihe/ATNA_ARR]_1">
-      <field name="name">Unterordunungsbeziehung 188</field>
-      <field name="start">https://www.3lgm2.de/resource/ihe/ATNA_SA</field>
-      <field name="end">[https://www.3lgm2.de/resource/ihe/ATNA_SA; https://www.3lgm2.de/resource/ihe/iti-20; https://www.3lgm2.de/resource/ihe/ATNA_ARR]_2</field>
-    </element>
-    <element class="IheIntegrationProfile_IheDomain_Edge" hash="[https://www.3lgm2.de/resource/ihe/CT; https://www.3lgm2.de/resource/ihe/iheDomain; https://www.3lgm2.de/resource/ihe/ITI]">
-      <field name="name">Beziehung 47</field>
-      <field name="start">https://www.3lgm2.de/resource/ihe/CT</field>
-      <field name="end">https://www.3lgm2.de/resource/ihe/ITI</field>
-    </element>
-    <element class="IheIntegrationProfile_IheActor_Edge" hash="[https://www.3lgm2.de/resource/ihe/CT_TIME_CLIENT; https://www.3lgm2.de/resource/ihe/iheIntegrationProfile; https://www.3lgm2.de/resource/ihe/CT]">
-      <field name="name">Beziehung 194</field>
-      <field name="start">https://www.3lgm2.de/resource/ihe/CT</field>
-      <field name="end">https://www.3lgm2.de/resource/ihe/CT_TIME_CLIENT</field>
-    </element>
-    <element class="IheInvokingInterface_IheTransaction_Edge" hash="[https://www.3lgm2.de/resource/ihe/CT_TIME_CLIENT; https://www.3lgm2.de/resource/ihe/iti-1; https://www.3lgm2.de/resource/ihe/CT_TS]_3">
-      <field name="name">Beziehung 104</field>
-      <field name="start">[https://www.3lgm2.de/resource/ihe/CT_TIME_CLIENT; https://www.3lgm2.de/resource/ihe/iti-1; https://www.3lgm2.de/resource/ihe/CT_TS]_2</field>
-      <field name="end">[https://www.3lgm2.de/resource/ihe/CT_TIME_CLIENT; https://www.3lgm2.de/resource/ihe/iti-1; https://www.3lgm2.de/resource/ihe/CT_TS]</field>
-    </element>
-    <element class="IheActor_IheInterface_Edge" hash="[https://www.3lgm2.de/resource/ihe/CT_TIME_CLIENT; https://www.3lgm2.de/resource/ihe/iti-1; https://www.3lgm2.de/resource/ihe/CT_TS]_1">
-      <field name="name">Unterordunungsbeziehung 210</field>
-      <field name="start">https://www.3lgm2.de/resource/ihe/CT_TIME_CLIENT</field>
-      <field name="end">[https://www.3lgm2.de/resource/ihe/CT_TIME_CLIENT; https://www.3lgm2.de/resource/ihe/iti-1; https://www.3lgm2.de/resource/ihe/CT_TS]_2</field>
-    </element>
-    <element class="IheActor_IheActor_MustBeGroupedWith_Edge" hash="[https://www.3lgm2.de/resource/ihe/ATNA_SA; https://www.3lgm2.de/resource/ihe/mustBeGroupedWith; https://www.3lgm2.de/resource/ihe/CT_TIME_CLIENT]">
-      <field name="name">Gruppierung 93</field>
-      <field name="start">https://www.3lgm2.de/resource/ihe/ATNA_SA</field>
-      <field name="end">https://www.3lgm2.de/resource/ihe/CT_TIME_CLIENT</field>
-    </element>
-    <element class="IheActor_IheActor_MustBeGroupedWith_Edge" hash="[https://www.3lgm2.de/resource/ihe/XDSB_DOC_SOURCE; https://www.3lgm2.de/resource/ihe/mustBeGroupedWith; https://www.3lgm2.de/resource/ihe/ATNA_SA]">
-      <field name="name">Gruppierung 99</field>
-      <field name="start">https://www.3lgm2.de/resource/ihe/XDSB_DOC_SOURCE</field>
-      <field name="end">https://www.3lgm2.de/resource/ihe/ATNA_SA</field>
-    </element>
-    <element class="IheIntegrationProfile_IheActor_Edge" hash="[https://www.3lgm2.de/resource/ihe/ATNA_SN; https://www.3lgm2.de/resource/ihe/iheIntegrationProfile; https://www.3lgm2.de/resource/ihe/ATNA]">
-      <field name="name">Beziehung 44</field>
-      <field name="start">https://www.3lgm2.de/resource/ihe/ATNA</field>
-      <field name="end">https://www.3lgm2.de/resource/ihe/ATNA_SN</field>
-    </element>
-    <element class="IheInvokingInterface_IheTransaction_Edge" hash="[https://www.3lgm2.de/resource/ihe/ATNA_SN; https://www.3lgm2.de/resource/ihe/iti-19; https://www.3lgm2.de/resource/ihe/ATNA_SA]_3">
-      <field name="name">Beziehung 24</field>
-      <field name="start">[https://www.3lgm2.de/resource/ihe/ATNA_SN; https://www.3lgm2.de/resource/ihe/iti-19; https://www.3lgm2.de/resource/ihe/ATNA_SA]_2</field>
-      <field name="end">[https://www.3lgm2.de/resource/ihe/ATNA_SN; https://www.3lgm2.de/resource/ihe/iti-19; https://www.3lgm2.de/resource/ihe/ATNA_SA]</field>
-    </element>
-    <element class="IheCommunicationLink_Edge" hash="DLK_1670078268372_5262">
-      <field name="name">ITI-19 Authenticate Node</field>
-      <field name="start">[https://www.3lgm2.de/resource/ihe/ATNA_SN; https://www.3lgm2.de/resource/ihe/iti-19; https://www.3lgm2.de/resource/ihe/ATNA_SA]_2</field>
-      <field name="end">[https://www.3lgm2.de/resource/ihe/ATNA_SN; https://www.3lgm2.de/resource/ihe/iti-19; https://www.3lgm2.de/resource/ihe/ATNA_SA]_5</field>
-    </element>
-    <element class="IheActor_IheInterface_Edge" hash="[https://www.3lgm2.de/resource/ihe/ATNA_SN; https://www.3lgm2.de/resource/ihe/iti-19; https://www.3lgm2.de/resource/ihe/ATNA_SA]_1">
-      <field name="name">Unterordunungsbeziehung 46</field>
-      <field name="start">https://www.3lgm2.de/resource/ihe/ATNA_SN</field>
-      <field name="end">[https://www.3lgm2.de/resource/ihe/ATNA_SN; https://www.3lgm2.de/resource/ihe/iti-19; https://www.3lgm2.de/resource/ihe/ATNA_SA]_2</field>
-    </element>
-    <element class="IheProvidingInterface_IheTransaction_Edge" hash="[https://www.3lgm2.de/resource/ihe/ATNA_SA; https://www.3lgm2.de/resource/ihe/iti-19; https://www.3lgm2.de/resource/ihe/ATNA_SN]_4">
-      <field name="name">Beziehung 96</field>
-      <field name="start">[https://www.3lgm2.de/resource/ihe/ATNA_SA; https://www.3lgm2.de/resource/ihe/iti-19; https://www.3lgm2.de/resource/ihe/ATNA_SN]_5</field>
-      <field name="end">[https://www.3lgm2.de/resource/ihe/ATNA_SN; https://www.3lgm2.de/resource/ihe/iti-19; https://www.3lgm2.de/resource/ihe/ATNA_SA]</field>
-    </element>
-    <element class="IheCommunicationLink_Edge" hash="DLK_1670078268369_5204">
-      <field name="name">ITI-19 Authenticate Node</field>
-      <field name="start">[https://www.3lgm2.de/resource/ihe/ATNA_SA; https://www.3lgm2.de/resource/ihe/iti-19; https://www.3lgm2.de/resource/ihe/ATNA_SN]_2</field>
-      <field name="end">[https://www.3lgm2.de/resource/ihe/ATNA_SA; https://www.3lgm2.de/resource/ihe/iti-19; https://www.3lgm2.de/resource/ihe/ATNA_SN]_5</field>
-    </element>
-    <element class="IheActor_IheInterface_Edge" hash="[https://www.3lgm2.de/resource/ihe/ATNA_SA; https://www.3lgm2.de/resource/ihe/iti-19; https://www.3lgm2.de/resource/ihe/ATNA_SN]_6">
-      <field name="name">Unterordunungsbeziehung 190</field>
-      <field name="start">https://www.3lgm2.de/resource/ihe/ATNA_SN</field>
-      <field name="end">[https://www.3lgm2.de/resource/ihe/ATNA_SA; https://www.3lgm2.de/resource/ihe/iti-19; https://www.3lgm2.de/resource/ihe/ATNA_SN]_5</field>
-    </element>
-    <element class="IheCommunicationLink_Edge" hash="DLK_1670078268372_5263">
-      <field name="name">ITI-19 Authenticate Node</field>
-      <field name="start">[https://www.3lgm2.de/resource/ihe/ATNA_SN; https://www.3lgm2.de/resource/ihe/iti-19; https://www.3lgm2.de/resource/ihe/ATNA_SA]_2</field>
-      <field name="end">[https://www.3lgm2.de/resource/ihe/ATNA_SA; https://www.3lgm2.de/resource/ihe/iti-19; https://www.3lgm2.de/resource/ihe/ATNA_SN]_5</field>
-    </element>
-    <element class="IheInvokingInterface_IheTransaction_Edge" hash="[https://www.3lgm2.de/resource/ihe/ATNA_SN; https://www.3lgm2.de/resource/ihe/iti-20; https://www.3lgm2.de/resource/ihe/ATNA_ARR]_3">
-      <field name="name">Beziehung 23</field>
-      <field name="start">[https://www.3lgm2.de/resource/ihe/ATNA_SN; https://www.3lgm2.de/resource/ihe/iti-20; https://www.3lgm2.de/resource/ihe/ATNA_ARR]_2</field>
-      <field name="end">[https://www.3lgm2.de/resource/ihe/ATNA_AUDIT_RECORD_FORWARDER; https://www.3lgm2.de/resource/ihe/iti-20; https://www.3lgm2.de/resource/ihe/ATNA_ARR]</field>
-    </element>
-    <element class="IheActor_IheInterface_Edge" hash="[https://www.3lgm2.de/resource/ihe/ATNA_SN; https://www.3lgm2.de/resource/ihe/iti-20; https://www.3lgm2.de/resource/ihe/ATNA_ARR]_1">
-      <field name="name">Unterordunungsbeziehung 45</field>
-      <field name="start">https://www.3lgm2.de/resource/ihe/ATNA_SN</field>
-      <field name="end">[https://www.3lgm2.de/resource/ihe/ATNA_SN; https://www.3lgm2.de/resource/ihe/iti-20; https://www.3lgm2.de/resource/ihe/ATNA_ARR]_2</field>
-    </element>
-    <element class="IheActor_IheActor_MustBeGroupedWith_Edge" hash="[https://www.3lgm2.de/resource/ihe/ATNA_SN; https://www.3lgm2.de/resource/ihe/mustBeGroupedWith; https://www.3lgm2.de/resource/ihe/CT_TIME_CLIENT]">
-      <field name="name">Gruppierung 27</field>
-      <field name="start">https://www.3lgm2.de/resource/ihe/ATNA_SN</field>
-      <field name="end">https://www.3lgm2.de/resource/ihe/CT_TIME_CLIENT</field>
-    </element>
-    <element class="IheActor_IheActor_MustBeGroupedWith_Edge" hash="[https://www.3lgm2.de/resource/ihe/XDSB_DOC_SOURCE; https://www.3lgm2.de/resource/ihe/mustBeGroupedWith; https://www.3lgm2.de/resource/ihe/ATNA_SN]">
-      <field name="name">Gruppierung 98</field>
-      <field name="start">https://www.3lgm2.de/resource/ihe/XDSB_DOC_SOURCE</field>
-      <field name="end">https://www.3lgm2.de/resource/ihe/ATNA_SN</field>
-    </element>
-    <element class="IheIntegrationProfile_IheActor_Edge" hash="[https://www.3lgm2.de/resource/ihe/XDSB_DOC_REPOSITORY; https://www.3lgm2.de/resource/ihe/iheIntegrationProfile; https://www.3lgm2.de/resource/ihe/XDS.b]">
-      <field name="name">Beziehung 132</field>
-      <field name="start">https://www.3lgm2.de/resource/ihe/XDS.b</field>
-      <field name="end">https://www.3lgm2.de/resource/ihe/XDSB_DOC_REPOSITORY</field>
-    </element>
-    <element class="IheProvidingInterface_IheTransaction_Edge" hash="[https://www.3lgm2.de/resource/ihe/XDSB_DOC_SOURCE; https://www.3lgm2.de/resource/ihe/iti-41; https://www.3lgm2.de/resource/ihe/XDSB_DOC_REPOSITORY]_4">
-      <field name="name">Beziehung 97</field>
-      <field name="start">[https://www.3lgm2.de/resource/ihe/XDSB_DOC_SOURCE; https://www.3lgm2.de/resource/ihe/iti-41; https://www.3lgm2.de/resource/ihe/XDSB_DOC_REPOSITORY]_5</field>
-      <field name="end">[https://www.3lgm2.de/resource/ihe/XDR_DOC_SOURCE; https://www.3lgm2.de/resource/ihe/iti-41; https://www.3lgm2.de/resource/ihe/XDR_DOC_RECIPIENT]</field>
-    </element>
-    <element class="IheActor_IheInterface_Edge" hash="[https://www.3lgm2.de/resource/ihe/XDSB_DOC_SOURCE; https://www.3lgm2.de/resource/ihe/iti-41; https://www.3lgm2.de/resource/ihe/XDSB_DOC_REPOSITORY]_6">
-      <field name="name">Unterordunungsbeziehung 193</field>
-      <field name="start">https://www.3lgm2.de/resource/ihe/XDSB_DOC_REPOSITORY</field>
-      <field name="end">[https://www.3lgm2.de/resource/ihe/XDSB_DOC_SOURCE; https://www.3lgm2.de/resource/ihe/iti-41; https://www.3lgm2.de/resource/ihe/XDSB_DOC_REPOSITORY]_5</field>
-    </element>
-    <element class="IheInvokingInterface_IheTransaction_Edge" hash="[https://www.3lgm2.de/resource/ihe/XDSB_DOC_REPOSITORY; https://www.3lgm2.de/resource/ihe/iti-42; https://www.3lgm2.de/resource/ihe/XDSB_DOC_REGISTRY]_3">
-      <field name="name">Beziehung 72</field>
-      <field name="start">[https://www.3lgm2.de/resource/ihe/XDSB_DOC_REPOSITORY; https://www.3lgm2.de/resource/ihe/iti-42; https://www.3lgm2.de/resource/ihe/XDSB_DOC_REGISTRY]_2</field>
-      <field name="end">[https://www.3lgm2.de/resource/ihe/XDSB_DOC_REPOSITORY; https://www.3lgm2.de/resource/ihe/iti-42; https://www.3lgm2.de/resource/ihe/XDSB_DOC_REGISTRY]</field>
-    </element>
-    <element class="IheActor_IheInterface_Edge" hash="[https://www.3lgm2.de/resource/ihe/XDSB_DOC_REPOSITORY; https://www.3lgm2.de/resource/ihe/iti-42; https://www.3lgm2.de/resource/ihe/XDSB_DOC_REGISTRY]_1">
-      <field name="name">Unterordunungsbeziehung 144</field>
-      <field name="start">https://www.3lgm2.de/resource/ihe/XDSB_DOC_REPOSITORY</field>
-      <field name="end">[https://www.3lgm2.de/resource/ihe/XDSB_DOC_REPOSITORY; https://www.3lgm2.de/resource/ihe/iti-42; https://www.3lgm2.de/resource/ihe/XDSB_DOC_REGISTRY]_2</field>
-    </element>
-    <element class="IheProvidingInterface_IheTransaction_Edge" hash="[https://www.3lgm2.de/resource/ihe/XDSB_DOC_CONSUMER; https://www.3lgm2.de/resource/ihe/iti-43; https://www.3lgm2.de/resource/ihe/XDSB_DOC_REPOSITORY]_4">
-      <field name="name">Beziehung 71</field>
-      <field name="start">[https://www.3lgm2.de/resource/ihe/XDSB_DOC_CONSUMER; https://www.3lgm2.de/resource/ihe/iti-43; https://www.3lgm2.de/resource/ihe/XDSB_DOC_REPOSITORY]_5</field>
-      <field name="end">[https://www.3lgm2.de/resource/ihe/XDS-IB_DOC_CONSUMER; https://www.3lgm2.de/resource/ihe/iti-43; https://www.3lgm2.de/resource/ihe/XDS-IB_DOC_REPOSITORY]</field>
-    </element>
-    <element class="IheActor_IheInterface_Edge" hash="[https://www.3lgm2.de/resource/ihe/XDSB_DOC_CONSUMER; https://www.3lgm2.de/resource/ihe/iti-43; https://www.3lgm2.de/resource/ihe/XDSB_DOC_REPOSITORY]_6">
-      <field name="name">Unterordunungsbeziehung 141</field>
-      <field name="start">https://www.3lgm2.de/resource/ihe/XDSB_DOC_REPOSITORY</field>
-      <field name="end">[https://www.3lgm2.de/resource/ihe/XDSB_DOC_CONSUMER; https://www.3lgm2.de/resource/ihe/iti-43; https://www.3lgm2.de/resource/ihe/XDSB_DOC_REPOSITORY]_5</field>
-    </element>
-    <element class="IheActor_IheActor_MustBeGroupedWith_Edge" hash="[https://www.3lgm2.de/resource/ihe/XDSB_DOC_REPOSITORY; https://www.3lgm2.de/resource/ihe/mustBeGroupedWith; https://www.3lgm2.de/resource/ihe/ATNA_SA]">
-      <field name="name">Gruppierung 74</field>
-      <field name="start">https://www.3lgm2.de/resource/ihe/XDSB_DOC_REPOSITORY</field>
-      <field name="end">https://www.3lgm2.de/resource/ihe/ATNA_SA</field>
-    </element>
-    <element class="IheActor_IheActor_MustBeGroupedWith_Edge" hash="[https://www.3lgm2.de/resource/ihe/XDSB_DOC_REPOSITORY; https://www.3lgm2.de/resource/ihe/mustBeGroupedWith; https://www.3lgm2.de/resource/ihe/ATNA_SN]">
-      <field name="name">Gruppierung 73</field>
-      <field name="start">https://www.3lgm2.de/resource/ihe/XDSB_DOC_REPOSITORY</field>
-      <field name="end">https://www.3lgm2.de/resource/ihe/ATNA_SN</field>
-    </element>
-    <element class="IheCommunicationLink_Edge" hash="DLK_1670078268373_5309">
-      <field name="name">ITI-41 Provide and Register Document Set-b</field>
-      <field name="start">[https://www.3lgm2.de/resource/ihe/XDSB_DOC_SOURCE; https://www.3lgm2.de/resource/ihe/iti-41; https://www.3lgm2.de/resource/ihe/XDSB_DOC_REPOSITORY]_2</field>
-      <field name="end">[https://www.3lgm2.de/resource/ihe/XDSB_DOC_SOURCE; https://www.3lgm2.de/resource/ihe/iti-41; https://www.3lgm2.de/resource/ihe/XDSB_DOC_REPOSITORY]_5</field>
-    </element>
-    <element class="IheIntegrationProfile_IheActor_Edge" hash="[https://www.3lgm2.de/resource/ihe/XDSB_DOC_REGISTRY; https://www.3lgm2.de/resource/ihe/iheIntegrationProfile; https://www.3lgm2.de/resource/ihe/XDS.b]">
-      <field name="name">Beziehung 105</field>
-      <field name="start">https://www.3lgm2.de/resource/ihe/XDS.b</field>
-      <field name="end">https://www.3lgm2.de/resource/ihe/XDSB_DOC_REGISTRY</field>
-    </element>
-    <element class="IheProvidingInterface_IheTransaction_Edge" hash="[https://www.3lgm2.de/resource/ihe/XDSB_DOC_CONSUMER; https://www.3lgm2.de/resource/ihe/iti-18; https://www.3lgm2.de/resource/ihe/XDSB_DOC_REGISTRY]_4">
-      <field name="name">Beziehung 72</field>
-      <field name="start">[https://www.3lgm2.de/resource/ihe/XDSB_DOC_CONSUMER; https://www.3lgm2.de/resource/ihe/iti-18; https://www.3lgm2.de/resource/ihe/XDSB_DOC_REGISTRY]_5</field>
-      <field name="end">[https://www.3lgm2.de/resource/ihe/RMD_DOC_ADMINISTRATOR; https://www.3lgm2.de/resource/ihe/iti-18; https://www.3lgm2.de/resource/ihe/RMD_DOC_REGISTRY]</field>
-    </element>
-    <element class="IheActor_IheInterface_Edge" hash="[https://www.3lgm2.de/resource/ihe/XDSB_DOC_CONSUMER; https://www.3lgm2.de/resource/ihe/iti-18; https://www.3lgm2.de/resource/ihe/XDSB_DOC_REGISTRY]_6">
-      <field name="name">Unterordunungsbeziehung 143</field>
-      <field name="start">https://www.3lgm2.de/resource/ihe/XDSB_DOC_REGISTRY</field>
-      <field name="end">[https://www.3lgm2.de/resource/ihe/XDSB_DOC_CONSUMER; https://www.3lgm2.de/resource/ihe/iti-18; https://www.3lgm2.de/resource/ihe/XDSB_DOC_REGISTRY]_5</field>
-    </element>
-    <element class="IheProvidingInterface_IheTransaction_Edge" hash="[https://www.3lgm2.de/resource/ihe/XDSB_DOC_REPOSITORY; https://www.3lgm2.de/resource/ihe/iti-42; https://www.3lgm2.de/resource/ihe/XDSB_DOC_REGISTRY]_4">
-      <field name="name">Beziehung 75</field>
-      <field name="start">[https://www.3lgm2.de/resource/ihe/XDSB_DOC_REPOSITORY; https://www.3lgm2.de/resource/ihe/iti-42; https://www.3lgm2.de/resource/ihe/XDSB_DOC_REGISTRY]_5</field>
-      <field name="end">[https://www.3lgm2.de/resource/ihe/XDSB_DOC_REPOSITORY; https://www.3lgm2.de/resource/ihe/iti-42; https://www.3lgm2.de/resource/ihe/XDSB_DOC_REGISTRY]</field>
-    </element>
-    <element class="IheActor_IheInterface_Edge" hash="[https://www.3lgm2.de/resource/ihe/XDSB_DOC_REPOSITORY; https://www.3lgm2.de/resource/ihe/iti-42; https://www.3lgm2.de/resource/ihe/XDSB_DOC_REGISTRY]_6">
-      <field name="name">Unterordunungsbeziehung 147</field>
-      <field name="start">https://www.3lgm2.de/resource/ihe/XDSB_DOC_REGISTRY</field>
-      <field name="end">[https://www.3lgm2.de/resource/ihe/XDSB_DOC_REPOSITORY; https://www.3lgm2.de/resource/ihe/iti-42; https://www.3lgm2.de/resource/ihe/XDSB_DOC_REGISTRY]_5</field>
-    </element>
-    <element class="IheProvidingInterface_IheTransaction_Edge" hash="[https://www.3lgm2.de/resource/ihe/XDSB_PAT_IDENTITY_SRC; https://www.3lgm2.de/resource/ihe/iti-44; https://www.3lgm2.de/resource/ihe/XDSB_DOC_REGISTRY]_4">
-      <field name="name">Beziehung 17</field>
-      <field name="start">[https://www.3lgm2.de/resource/ihe/XDSB_PAT_IDENTITY_SRC; https://www.3lgm2.de/resource/ihe/iti-44; https://www.3lgm2.de/resource/ihe/XDSB_DOC_REGISTRY]_5</field>
-      <field name="end">[https://www.3lgm2.de/resource/ihe/XDSB_PAT_IDENTITY_SRC; https://www.3lgm2.de/resource/ihe/iti-44; https://www.3lgm2.de/resource/ihe/XDSB_DOC_REGISTRY]</field>
-    </element>
-    <element class="IheActor_IheInterface_Edge" hash="[https://www.3lgm2.de/resource/ihe/XDSB_PAT_IDENTITY_SRC; https://www.3lgm2.de/resource/ihe/iti-44; https://www.3lgm2.de/resource/ihe/XDSB_DOC_REGISTRY]_6">
-      <field name="name">Unterordunungsbeziehung 34</field>
-      <field name="start">https://www.3lgm2.de/resource/ihe/XDSB_DOC_REGISTRY</field>
-      <field name="end">[https://www.3lgm2.de/resource/ihe/XDSB_PAT_IDENTITY_SRC; https://www.3lgm2.de/resource/ihe/iti-44; https://www.3lgm2.de/resource/ihe/XDSB_DOC_REGISTRY]_5</field>
-    </element>
-    <element class="IheProvidingInterface_IheTransaction_Edge" hash="[https://www.3lgm2.de/resource/ihe/XDSB_DOC_ADMINISTRATOR; https://www.3lgm2.de/resource/ihe/iti-57; https://www.3lgm2.de/resource/ihe/XDSB_DOC_REGISTRY]_4">
-      <field name="name">Beziehung 113</field>
-      <field name="start">[https://www.3lgm2.de/resource/ihe/XDSB_DOC_ADMINISTRATOR; https://www.3lgm2.de/resource/ihe/iti-57; https://www.3lgm2.de/resource/ihe/XDSB_DOC_REGISTRY]_5</field>
-      <field name="end">[https://www.3lgm2.de/resource/ihe/XDR_DOC_ADMINISTRATOR; https://www.3lgm2.de/resource/ihe/iti-57; https://www.3lgm2.de/resource/ihe/XDR_DOC_RECIPIENT]</field>
-    </element>
-    <element class="IheActor_IheInterface_Edge" hash="[https://www.3lgm2.de/resource/ihe/XDSB_DOC_ADMINISTRATOR; https://www.3lgm2.de/resource/ihe/iti-57; https://www.3lgm2.de/resource/ihe/XDSB_DOC_REGISTRY]_6">
-      <field name="name">Unterordunungsbeziehung 226</field>
-      <field name="start">https://www.3lgm2.de/resource/ihe/XDSB_DOC_REGISTRY</field>
-      <field name="end">[https://www.3lgm2.de/resource/ihe/XDSB_DOC_ADMINISTRATOR; https://www.3lgm2.de/resource/ihe/iti-57; https://www.3lgm2.de/resource/ihe/XDSB_DOC_REGISTRY]_5</field>
-    </element>
-    <element class="IheProvidingInterface_IheTransaction_Edge" hash="[https://www.3lgm2.de/resource/ihe/XDSB_ON_DEMAND_DOC_SOURCE; https://www.3lgm2.de/resource/ihe/iti-61; https://www.3lgm2.de/resource/ihe/XDSB_DOC_REGISTRY]_4">
-      <field name="name">Beziehung 22</field>
-      <field name="start">[https://www.3lgm2.de/resource/ihe/XDSB_ON_DEMAND_DOC_SOURCE; https://www.3lgm2.de/resource/ihe/iti-61; https://www.3lgm2.de/resource/ihe/XDSB_DOC_REGISTRY]_5</field>
-      <field name="end">[https://www.3lgm2.de/resource/ihe/XDSB_ON_DEMAND_DOC_SOURCE; https://www.3lgm2.de/resource/ihe/iti-61; https://www.3lgm2.de/resource/ihe/XDSB_DOC_REGISTRY]</field>
-    </element>
-    <element class="IheActor_IheInterface_Edge" hash="[https://www.3lgm2.de/resource/ihe/XDSB_ON_DEMAND_DOC_SOURCE; https://www.3lgm2.de/resource/ihe/iti-61; https://www.3lgm2.de/resource/ihe/XDSB_DOC_REGISTRY]_6">
-      <field name="name">Unterordunungsbeziehung 44</field>
-      <field name="start">https://www.3lgm2.de/resource/ihe/XDSB_DOC_REGISTRY</field>
-      <field name="end">[https://www.3lgm2.de/resource/ihe/XDSB_ON_DEMAND_DOC_SOURCE; https://www.3lgm2.de/resource/ihe/iti-61; https://www.3lgm2.de/resource/ihe/XDSB_DOC_REGISTRY]_5</field>
-    </element>
-    <element class="IheProvidingInterface_IheTransaction_Edge" hash="[https://www.3lgm2.de/resource/ihe/XDSB_PAT_IDENTITY_SRC; https://www.3lgm2.de/resource/ihe/iti-8; https://www.3lgm2.de/resource/ihe/XDSB_DOC_REGISTRY]_4">
-      <field name="name">Beziehung 18</field>
-      <field name="start">[https://www.3lgm2.de/resource/ihe/XDSB_PAT_IDENTITY_SRC; https://www.3lgm2.de/resource/ihe/iti-8; https://www.3lgm2.de/resource/ihe/XDSB_DOC_REGISTRY]_5</field>
-      <field name="end">[https://www.3lgm2.de/resource/ihe/XDSB_PAT_IDENTITY_SRC; https://www.3lgm2.de/resource/ihe/iti-8; https://www.3lgm2.de/resource/ihe/XDSB_DOC_REGISTRY]</field>
-    </element>
-    <element class="IheActor_IheInterface_Edge" hash="[https://www.3lgm2.de/resource/ihe/XDSB_PAT_IDENTITY_SRC; https://www.3lgm2.de/resource/ihe/iti-8; https://www.3lgm2.de/resource/ihe/XDSB_DOC_REGISTRY]_6">
-      <field name="name">Unterordunungsbeziehung 36</field>
-      <field name="start">https://www.3lgm2.de/resource/ihe/XDSB_DOC_REGISTRY</field>
-      <field name="end">[https://www.3lgm2.de/resource/ihe/XDSB_PAT_IDENTITY_SRC; https://www.3lgm2.de/resource/ihe/iti-8; https://www.3lgm2.de/resource/ihe/XDSB_DOC_REGISTRY]_5</field>
-    </element>
-    <element class="IheActor_IheActor_MustBeGroupedWith_Edge" hash="[https://www.3lgm2.de/resource/ihe/XDSB_DOC_REGISTRY; https://www.3lgm2.de/resource/ihe/mustBeGroupedWith; https://www.3lgm2.de/resource/ihe/ATNA_SA]">
-      <field name="name">Gruppierung 59</field>
-      <field name="start">https://www.3lgm2.de/resource/ihe/XDSB_DOC_REGISTRY</field>
-      <field name="end">https://www.3lgm2.de/resource/ihe/ATNA_SA</field>
-    </element>
-    <element class="IheActor_IheActor_MustBeGroupedWith_Edge" hash="[https://www.3lgm2.de/resource/ihe/XDSB_DOC_REGISTRY; https://www.3lgm2.de/resource/ihe/mustBeGroupedWith; https://www.3lgm2.de/resource/ihe/ATNA_SN]">
-      <field name="name">Gruppierung 58</field>
-      <field name="start">https://www.3lgm2.de/resource/ihe/XDSB_DOC_REGISTRY</field>
-      <field name="end">https://www.3lgm2.de/resource/ihe/ATNA_SN</field>
-    </element>
-    <element class="IheCommunicationLink_Edge" hash="DLK_1670078268371_5255">
-      <field name="name">ITI-42 Register Document Set-b</field>
-      <field name="start">[https://www.3lgm2.de/resource/ihe/XDSB_DOC_REPOSITORY; https://www.3lgm2.de/resource/ihe/iti-42; https://www.3lgm2.de/resource/ihe/XDSB_DOC_REGISTRY]_2</field>
-      <field name="end">[https://www.3lgm2.de/resource/ihe/XDSB_DOC_REPOSITORY; https://www.3lgm2.de/resource/ihe/iti-42; https://www.3lgm2.de/resource/ihe/XDSB_DOC_REGISTRY]_5</field>
-    </element>
-    <element class="IheIntegrationProfile_IheActor_Edge" hash="[https://www.3lgm2.de/resource/ihe/XDSB_PAT_IDENTITY_SRC; https://www.3lgm2.de/resource/ihe/iheIntegrationProfile; https://www.3lgm2.de/resource/ihe/XDS.b]">
-      <field name="name">Beziehung 31</field>
-      <field name="start">https://www.3lgm2.de/resource/ihe/XDS.b</field>
-      <field name="end">https://www.3lgm2.de/resource/ihe/XDSB_PAT_IDENTITY_SRC</field>
-    </element>
-    <element class="IheInvokingInterface_IheTransaction_Edge" hash="[https://www.3lgm2.de/resource/ihe/XDSB_PAT_IDENTITY_SRC; https://www.3lgm2.de/resource/ihe/iti-44; https://www.3lgm2.de/resource/ihe/XDSB_DOC_REGISTRY]_3">
-      <field name="name">Beziehung 17</field>
-      <field name="start">[https://www.3lgm2.de/resource/ihe/XDSB_PAT_IDENTITY_SRC; https://www.3lgm2.de/resource/ihe/iti-44; https://www.3lgm2.de/resource/ihe/XDSB_DOC_REGISTRY]_2</field>
-      <field name="end">[https://www.3lgm2.de/resource/ihe/XDSB_PAT_IDENTITY_SRC; https://www.3lgm2.de/resource/ihe/iti-44; https://www.3lgm2.de/resource/ihe/XDSB_DOC_REGISTRY]</field>
-    </element>
-    <element class="IheActor_IheInterface_Edge" hash="[https://www.3lgm2.de/resource/ihe/XDSB_PAT_IDENTITY_SRC; https://www.3lgm2.de/resource/ihe/iti-44; https://www.3lgm2.de/resource/ihe/XDSB_DOC_REGISTRY]_1">
-      <field name="name">Unterordunungsbeziehung 33</field>
-      <field name="start">https://www.3lgm2.de/resource/ihe/XDSB_PAT_IDENTITY_SRC</field>
-      <field name="end">[https://www.3lgm2.de/resource/ihe/XDSB_PAT_IDENTITY_SRC; https://www.3lgm2.de/resource/ihe/iti-44; https://www.3lgm2.de/resource/ihe/XDSB_DOC_REGISTRY]_2</field>
-    </element>
-    <element class="IheInvokingInterface_IheTransaction_Edge" hash="[https://www.3lgm2.de/resource/ihe/XDSB_PAT_IDENTITY_SRC; https://www.3lgm2.de/resource/ihe/iti-8; https://www.3lgm2.de/resource/ihe/XDSB_DOC_REGISTRY]_3">
-      <field name="name">Beziehung 18</field>
-      <field name="start">[https://www.3lgm2.de/resource/ihe/XDSB_PAT_IDENTITY_SRC; https://www.3lgm2.de/resource/ihe/iti-8; https://www.3lgm2.de/resource/ihe/XDSB_DOC_REGISTRY]_2</field>
-      <field name="end">[https://www.3lgm2.de/resource/ihe/XDSB_PAT_IDENTITY_SRC; https://www.3lgm2.de/resource/ihe/iti-8; https://www.3lgm2.de/resource/ihe/XDSB_DOC_REGISTRY]</field>
-    </element>
-    <element class="IheActor_IheInterface_Edge" hash="[https://www.3lgm2.de/resource/ihe/XDSB_PAT_IDENTITY_SRC; https://www.3lgm2.de/resource/ihe/iti-8; https://www.3lgm2.de/resource/ihe/XDSB_DOC_REGISTRY]_1">
-      <field name="name">Unterordunungsbeziehung 35</field>
-      <field name="start">https://www.3lgm2.de/resource/ihe/XDSB_PAT_IDENTITY_SRC</field>
-      <field name="end">[https://www.3lgm2.de/resource/ihe/XDSB_PAT_IDENTITY_SRC; https://www.3lgm2.de/resource/ihe/iti-8; https://www.3lgm2.de/resource/ihe/XDSB_DOC_REGISTRY]_2</field>
-    </element>
-    <element class="IheActor_IheActor_MustBeGroupedWith_Edge" hash="[https://www.3lgm2.de/resource/ihe/XDSB_PAT_IDENTITY_SRC; https://www.3lgm2.de/resource/ihe/mustBeGroupedWith; https://www.3lgm2.de/resource/ihe/ATNA_SA]">
-      <field name="name">Gruppierung 21</field>
-      <field name="start">https://www.3lgm2.de/resource/ihe/XDSB_PAT_IDENTITY_SRC</field>
-      <field name="end">https://www.3lgm2.de/resource/ihe/ATNA_SA</field>
-    </element>
-    <element class="IheActor_IheActor_MustBeGroupedWith_Edge" hash="[https://www.3lgm2.de/resource/ihe/XDSB_PAT_IDENTITY_SRC; https://www.3lgm2.de/resource/ihe/mustBeGroupedWith; https://www.3lgm2.de/resource/ihe/ATNA_SN]">
-      <field name="name">Gruppierung 20</field>
-      <field name="start">https://www.3lgm2.de/resource/ihe/XDSB_PAT_IDENTITY_SRC</field>
-      <field name="end">https://www.3lgm2.de/resource/ihe/ATNA_SN</field>
-    </element>
-    <element class="IheCommunicationLink_Edge" hash="DLK_1670078268369_5187">
-      <field name="name">ITI-44 Patient Identity Feed HL7 V3</field>
-      <field name="start">[https://www.3lgm2.de/resource/ihe/XDSB_PAT_IDENTITY_SRC; https://www.3lgm2.de/resource/ihe/iti-44; https://www.3lgm2.de/resource/ihe/XDSB_DOC_REGISTRY]_2</field>
-      <field name="end">[https://www.3lgm2.de/resource/ihe/XDSB_PAT_IDENTITY_SRC; https://www.3lgm2.de/resource/ihe/iti-44; https://www.3lgm2.de/resource/ihe/XDSB_DOC_REGISTRY]_5</field>
-    </element>
-    <element class="IheCommunicationLink_Edge" hash="DLK_1670078268369_5189">
-      <field name="name">ITI-8 Patient Identity Feed</field>
-      <field name="start">[https://www.3lgm2.de/resource/ihe/XDSB_PAT_IDENTITY_SRC; https://www.3lgm2.de/resource/ihe/iti-8; https://www.3lgm2.de/resource/ihe/XDSB_DOC_REGISTRY]_2</field>
-      <field name="end">[https://www.3lgm2.de/resource/ihe/XDSB_PAT_IDENTITY_SRC; https://www.3lgm2.de/resource/ihe/iti-8; https://www.3lgm2.de/resource/ihe/XDSB_DOC_REGISTRY]_5</field>
-    </element>
-    <element class="IheIntegrationProfile_IheActor_Edge" hash="[https://www.3lgm2.de/resource/ihe/XDSB_EMBED_REPOS; https://www.3lgm2.de/resource/ihe/iheIntegrationProfile; https://www.3lgm2.de/resource/ihe/XDS.b]">
-      <field name="name">Beziehung 173</field>
-      <field name="start">https://www.3lgm2.de/resource/ihe/XDS.b</field>
-      <field name="end">https://www.3lgm2.de/resource/ihe/XDSB_EMBED_REPOS</field>
-    </element>
-    <element class="IheInvokingInterface_IheTransaction_Edge" hash="[https://www.3lgm2.de/resource/ihe/XDSB_EMBED_REPOS; https://www.3lgm2.de/resource/ihe/iti-42; https://www.3lgm2.de/resource/ihe/XDSB_DOC_REGISTRY]_3">
-      <field name="name">Beziehung 95</field>
-      <field name="start">[https://www.3lgm2.de/resource/ihe/XDSB_EMBED_REPOS; https://www.3lgm2.de/resource/ihe/iti-42; https://www.3lgm2.de/resource/ihe/XDSB_DOC_REGISTRY]_2</field>
-      <field name="end">[https://www.3lgm2.de/resource/ihe/XDSB_DOC_REPOSITORY; https://www.3lgm2.de/resource/ihe/iti-42; https://www.3lgm2.de/resource/ihe/XDSB_DOC_REGISTRY]</field>
-    </element>
-    <element class="IheActor_IheInterface_Edge" hash="[https://www.3lgm2.de/resource/ihe/XDSB_EMBED_REPOS; https://www.3lgm2.de/resource/ihe/iti-42; https://www.3lgm2.de/resource/ihe/XDSB_DOC_REGISTRY]_1">
-      <field name="name">Unterordunungsbeziehung 191</field>
-      <field name="start">https://www.3lgm2.de/resource/ihe/XDSB_EMBED_REPOS</field>
-      <field name="end">[https://www.3lgm2.de/resource/ihe/XDSB_EMBED_REPOS; https://www.3lgm2.de/resource/ihe/iti-42; https://www.3lgm2.de/resource/ihe/XDSB_DOC_REGISTRY]_2</field>
-    </element>
-    <element class="IheProvidingInterface_IheTransaction_Edge" hash="[https://www.3lgm2.de/resource/ihe/XDSB_DOC_CONSUMER; https://www.3lgm2.de/resource/ihe/iti-43; https://www.3lgm2.de/resource/ihe/XDSB_EMBED_REPOS]_4">
-      <field name="name">Beziehung 73</field>
-      <field name="start">[https://www.3lgm2.de/resource/ihe/XDSB_DOC_CONSUMER; https://www.3lgm2.de/resource/ihe/iti-43; https://www.3lgm2.de/resource/ihe/XDSB_EMBED_REPOS]_5</field>
-      <field name="end">[https://www.3lgm2.de/resource/ihe/XDS-IB_DOC_CONSUMER; https://www.3lgm2.de/resource/ihe/iti-43; https://www.3lgm2.de/resource/ihe/XDS-IB_DOC_REPOSITORY]</field>
-    </element>
-    <element class="IheActor_IheInterface_Edge" hash="[https://www.3lgm2.de/resource/ihe/XDSB_DOC_CONSUMER; https://www.3lgm2.de/resource/ihe/iti-43; https://www.3lgm2.de/resource/ihe/XDSB_EMBED_REPOS]_6">
-      <field name="name">Unterordunungsbeziehung 145</field>
-      <field name="start">https://www.3lgm2.de/resource/ihe/XDSB_EMBED_REPOS</field>
-      <field name="end">[https://www.3lgm2.de/resource/ihe/XDSB_DOC_CONSUMER; https://www.3lgm2.de/resource/ihe/iti-43; https://www.3lgm2.de/resource/ihe/XDSB_EMBED_REPOS]_5</field>
-    </element>
-    <element class="IheActor_IheActor_MustBeGroupedWith_Edge" hash="[https://www.3lgm2.de/resource/ihe/XDSB_EMBED_REPOS; https://www.3lgm2.de/resource/ihe/mustBeGroupedWith; https://www.3lgm2.de/resource/ihe/ATNA_SA]">
-      <field name="name">Gruppierung 97</field>
-      <field name="start">https://www.3lgm2.de/resource/ihe/XDSB_EMBED_REPOS</field>
-      <field name="end">https://www.3lgm2.de/resource/ihe/ATNA_SA</field>
-    </element>
-    <element class="IheActor_IheActor_MustBeGroupedWith_Edge" hash="[https://www.3lgm2.de/resource/ihe/XDSB_EMBED_REPOS; https://www.3lgm2.de/resource/ihe/mustBeGroupedWith; https://www.3lgm2.de/resource/ihe/ATNA_SN]">
-      <field name="name">Gruppierung 95</field>
-      <field name="start">https://www.3lgm2.de/resource/ihe/XDSB_EMBED_REPOS</field>
-      <field name="end">https://www.3lgm2.de/resource/ihe/ATNA_SN</field>
-    </element>
-    <element class="IheActor_IheActor_MustBeGroupedWith_Edge" hash="[https://www.3lgm2.de/resource/ihe/XDSB_EMBED_REPOS; https://www.3lgm2.de/resource/ihe/mustBeGroupedWith; https://www.3lgm2.de/resource/ihe/XDSB_DOC_REPOSITORY]">
-      <field name="name">Gruppierung 94</field>
-      <field name="start">https://www.3lgm2.de/resource/ihe/XDSB_EMBED_REPOS</field>
-      <field name="end">https://www.3lgm2.de/resource/ihe/XDSB_DOC_REPOSITORY</field>
-    </element>
-    <element class="IheActor_IheActor_MustBeGroupedWith_Edge" hash="[https://www.3lgm2.de/resource/ihe/XDSB_EMBED_REPOS; https://www.3lgm2.de/resource/ihe/mustBeGroupedWith; https://www.3lgm2.de/resource/ihe/XDSB_DOC_SOURCE]">
-      <field name="name">Gruppierung 96</field>
-      <field name="start">https://www.3lgm2.de/resource/ihe/XDSB_EMBED_REPOS</field>
-      <field name="end">https://www.3lgm2.de/resource/ihe/XDSB_DOC_SOURCE</field>
-    </element>
-    <element class="IheCommunicationLink_Edge" hash="DLK_1670078268371_5232">
-      <field name="name">ITI-42 Register Document Set-b</field>
-      <field name="start">[https://www.3lgm2.de/resource/ihe/XDSB_EMBED_REPOS; https://www.3lgm2.de/resource/ihe/iti-42; https://www.3lgm2.de/resource/ihe/XDSB_DOC_REGISTRY]_2</field>
-      <field name="end">[https://www.3lgm2.de/resource/ihe/XDSB_DOC_REPOSITORY; https://www.3lgm2.de/resource/ihe/iti-42; https://www.3lgm2.de/resource/ihe/XDSB_DOC_REGISTRY]_5</field>
-    </element>
-    <element class="IheIntegrationProfile_IheActor_Edge" hash="[https://www.3lgm2.de/resource/ihe/XDSB_DOC_CONSUMER; https://www.3lgm2.de/resource/ihe/iheIntegrationProfile; https://www.3lgm2.de/resource/ihe/XDS.b]">
-      <field name="name">Beziehung 131</field>
-      <field name="start">https://www.3lgm2.de/resource/ihe/XDS.b</field>
-      <field name="end">https://www.3lgm2.de/resource/ihe/XDSB_DOC_CONSUMER</field>
-    </element>
-    <element class="IheInvokingInterface_IheTransaction_Edge" hash="[https://www.3lgm2.de/resource/ihe/XDSB_DOC_CONSUMER; https://www.3lgm2.de/resource/ihe/iti-18; https://www.3lgm2.de/resource/ihe/XDSB_DOC_REGISTRY]_3">
-      <field name="name">Beziehung 71</field>
-      <field name="start">[https://www.3lgm2.de/resource/ihe/XDSB_DOC_CONSUMER; https://www.3lgm2.de/resource/ihe/iti-18; https://www.3lgm2.de/resource/ihe/XDSB_DOC_REGISTRY]_2</field>
-      <field name="end">[https://www.3lgm2.de/resource/ihe/RMD_DOC_ADMINISTRATOR; https://www.3lgm2.de/resource/ihe/iti-18; https://www.3lgm2.de/resource/ihe/RMD_DOC_REGISTRY]</field>
-    </element>
-    <element class="IheActor_IheInterface_Edge" hash="[https://www.3lgm2.de/resource/ihe/XDSB_DOC_CONSUMER; https://www.3lgm2.de/resource/ihe/iti-18; https://www.3lgm2.de/resource/ihe/XDSB_DOC_REGISTRY]_1">
-      <field name="name">Unterordunungsbeziehung 142</field>
-      <field name="start">https://www.3lgm2.de/resource/ihe/XDSB_DOC_CONSUMER</field>
-      <field name="end">[https://www.3lgm2.de/resource/ihe/XDSB_DOC_CONSUMER; https://www.3lgm2.de/resource/ihe/iti-18; https://www.3lgm2.de/resource/ihe/XDSB_DOC_REGISTRY]_2</field>
-    </element>
-    <element class="IheInvokingInterface_IheTransaction_Edge" hash="[https://www.3lgm2.de/resource/ihe/XDSB_DOC_CONSUMER; https://www.3lgm2.de/resource/ihe/iti-43; https://www.3lgm2.de/resource/ihe/XDSB_DOC_REPOSITORY]_3">
-      <field name="name">Beziehung 70</field>
-      <field name="start">[https://www.3lgm2.de/resource/ihe/XDSB_DOC_CONSUMER; https://www.3lgm2.de/resource/ihe/iti-43; https://www.3lgm2.de/resource/ihe/XDSB_DOC_REPOSITORY]_2</field>
-      <field name="end">[https://www.3lgm2.de/resource/ihe/XDS-IB_DOC_CONSUMER; https://www.3lgm2.de/resource/ihe/iti-43; https://www.3lgm2.de/resource/ihe/XDS-IB_DOC_REPOSITORY]</field>
-    </element>
-    <element class="IheActor_IheInterface_Edge" hash="[https://www.3lgm2.de/resource/ihe/XDSB_DOC_CONSUMER; https://www.3lgm2.de/resource/ihe/iti-43; https://www.3lgm2.de/resource/ihe/XDSB_DOC_REPOSITORY]_1">
-      <field name="name">Unterordunungsbeziehung 140</field>
-      <field name="start">https://www.3lgm2.de/resource/ihe/XDSB_DOC_CONSUMER</field>
-      <field name="end">[https://www.3lgm2.de/resource/ihe/XDSB_DOC_CONSUMER; https://www.3lgm2.de/resource/ihe/iti-43; https://www.3lgm2.de/resource/ihe/XDSB_DOC_REPOSITORY]_2</field>
-    </element>
-    <element class="IheActor_IheActor_MustBeGroupedWith_Edge" hash="[https://www.3lgm2.de/resource/ihe/XDSB_DOC_CONSUMER; https://www.3lgm2.de/resource/ihe/mustBeGroupedWith; https://www.3lgm2.de/resource/ihe/ATNA_SA]">
-      <field name="name">Gruppierung 71</field>
-      <field name="start">https://www.3lgm2.de/resource/ihe/XDSB_DOC_CONSUMER</field>
-      <field name="end">https://www.3lgm2.de/resource/ihe/ATNA_SA</field>
-    </element>
-    <element class="IheActor_IheActor_MustBeGroupedWith_Edge" hash="[https://www.3lgm2.de/resource/ihe/XDSB_DOC_CONSUMER; https://www.3lgm2.de/resource/ihe/mustBeGroupedWith; https://www.3lgm2.de/resource/ihe/ATNA_SN]">
-      <field name="name">Gruppierung 72</field>
-      <field name="start">https://www.3lgm2.de/resource/ihe/XDSB_DOC_CONSUMER</field>
-      <field name="end">https://www.3lgm2.de/resource/ihe/ATNA_SN</field>
-    </element>
-    <element class="IheCommunicationLink_Edge" hash="DLK_1670078268368_5170">
-      <field name="name">ITI-18 Registry Stored Query</field>
-      <field name="start">[https://www.3lgm2.de/resource/ihe/XDSB_DOC_CONSUMER; https://www.3lgm2.de/resource/ihe/iti-18; https://www.3lgm2.de/resource/ihe/XDSB_DOC_REGISTRY]_2</field>
-      <field name="end">[https://www.3lgm2.de/resource/ihe/XDSB_DOC_CONSUMER; https://www.3lgm2.de/resource/ihe/iti-18; https://www.3lgm2.de/resource/ihe/XDSB_DOC_REGISTRY]_5</field>
-    </element>
-    <element class="IheCommunicationLink_Edge" hash="DLK_1670078268368_5164">
-      <field name="name">ITI-43 Retrieve Document Set</field>
-      <field name="start">[https://www.3lgm2.de/resource/ihe/XDSB_DOC_CONSUMER; https://www.3lgm2.de/resource/ihe/iti-43; https://www.3lgm2.de/resource/ihe/XDSB_DOC_REPOSITORY]_2</field>
-      <field name="end">[https://www.3lgm2.de/resource/ihe/XDSB_DOC_CONSUMER; https://www.3lgm2.de/resource/ihe/iti-43; https://www.3lgm2.de/resource/ihe/XDSB_DOC_REPOSITORY]_5</field>
-    </element>
-    <element class="IheCommunicationLink_Edge" hash="DLK_1670078268368_5165">
-      <field name="name">ITI-43 Retrieve Document Set</field>
-      <field name="start">[https://www.3lgm2.de/resource/ihe/XDSB_DOC_CONSUMER; https://www.3lgm2.de/resource/ihe/iti-43; https://www.3lgm2.de/resource/ihe/XDSB_DOC_REPOSITORY]_2</field>
-      <field name="end">[https://www.3lgm2.de/resource/ihe/XDSB_DOC_CONSUMER; https://www.3lgm2.de/resource/ihe/iti-43; https://www.3lgm2.de/resource/ihe/XDSB_EMBED_REPOS]_5</field>
-    </element>
     <element class="Service_ProvidingInterface_Edge" hash="DLK_1670250913098_46677">
       <field name="name">Beziehung 9</field>
       <field name="start">SER_1670075445498_10326</field>
@@ -4331,66 +3733,6 @@ dt. "KIS Integration", engl. "HIS Integration" (Research Part)</field>
       <field name="name">Beziehung 30</field>
       <field name="start">SER_1670254016790_63731</field>
       <field name="end">DLK_1670253948929_62598</field>
-    </element>
-    <element class="IheTransaction_IheCommunicationLink_Edge" hash="DLK_1670273961090_7364">
-      <field name="name">Beziehung 1</field>
-      <field name="start">[https://www.3lgm2.de/resource/ihe/ATNA_SN; https://www.3lgm2.de/resource/ihe/iti-19; https://www.3lgm2.de/resource/ihe/ATNA_SA]</field>
-      <field name="end">DLK_1670078268369_5203</field>
-    </element>
-    <element class="IheTransaction_IheCommunicationLink_Edge" hash="DLK_1670273961090_7365">
-      <field name="name">Beziehung 2</field>
-      <field name="start">[https://www.3lgm2.de/resource/ihe/ATNA_SN; https://www.3lgm2.de/resource/ihe/iti-19; https://www.3lgm2.de/resource/ihe/ATNA_SA]</field>
-      <field name="end">DLK_1670078268372_5262</field>
-    </element>
-    <element class="IheTransaction_IheCommunicationLink_Edge" hash="DLK_1670273961090_7366">
-      <field name="name">Beziehung 3</field>
-      <field name="start">[https://www.3lgm2.de/resource/ihe/ATNA_SN; https://www.3lgm2.de/resource/ihe/iti-19; https://www.3lgm2.de/resource/ihe/ATNA_SA]</field>
-      <field name="end">DLK_1670078268369_5204</field>
-    </element>
-    <element class="IheTransaction_IheCommunicationLink_Edge" hash="DLK_1670273961090_7367">
-      <field name="name">Beziehung 4</field>
-      <field name="start">[https://www.3lgm2.de/resource/ihe/ATNA_SN; https://www.3lgm2.de/resource/ihe/iti-19; https://www.3lgm2.de/resource/ihe/ATNA_SA]</field>
-      <field name="end">DLK_1670078268372_5263</field>
-    </element>
-    <element class="IheTransaction_IheCommunicationLink_Edge" hash="DLK_1670273961090_7368">
-      <field name="name">Beziehung 5</field>
-      <field name="start">[https://www.3lgm2.de/resource/ihe/XDR_DOC_SOURCE; https://www.3lgm2.de/resource/ihe/iti-41; https://www.3lgm2.de/resource/ihe/XDR_DOC_RECIPIENT]</field>
-      <field name="end">DLK_1670078268373_5309</field>
-    </element>
-    <element class="IheTransaction_IheCommunicationLink_Edge" hash="DLK_1670273961090_7369">
-      <field name="name">Beziehung 6</field>
-      <field name="start">[https://www.3lgm2.de/resource/ihe/XDSB_DOC_REPOSITORY; https://www.3lgm2.de/resource/ihe/iti-42; https://www.3lgm2.de/resource/ihe/XDSB_DOC_REGISTRY]</field>
-      <field name="end">DLK_1670078268371_5255</field>
-    </element>
-    <element class="IheTransaction_IheCommunicationLink_Edge" hash="DLK_1670273961090_7370">
-      <field name="name">Beziehung 7</field>
-      <field name="start">[https://www.3lgm2.de/resource/ihe/XDSB_PAT_IDENTITY_SRC; https://www.3lgm2.de/resource/ihe/iti-44; https://www.3lgm2.de/resource/ihe/XDSB_DOC_REGISTRY]</field>
-      <field name="end">DLK_1670078268369_5187</field>
-    </element>
-    <element class="IheTransaction_IheCommunicationLink_Edge" hash="DLK_1670273961090_7371">
-      <field name="name">Beziehung 8</field>
-      <field name="start">[https://www.3lgm2.de/resource/ihe/XDSB_PAT_IDENTITY_SRC; https://www.3lgm2.de/resource/ihe/iti-8; https://www.3lgm2.de/resource/ihe/XDSB_DOC_REGISTRY]</field>
-      <field name="end">DLK_1670078268369_5189</field>
-    </element>
-    <element class="IheTransaction_IheCommunicationLink_Edge" hash="DLK_1670273961090_7372">
-      <field name="name">Beziehung 9</field>
-      <field name="start">[https://www.3lgm2.de/resource/ihe/XDSB_DOC_REPOSITORY; https://www.3lgm2.de/resource/ihe/iti-42; https://www.3lgm2.de/resource/ihe/XDSB_DOC_REGISTRY]</field>
-      <field name="end">DLK_1670078268371_5232</field>
-    </element>
-    <element class="IheTransaction_IheCommunicationLink_Edge" hash="DLK_1670273961090_7373">
-      <field name="name">Beziehung 10</field>
-      <field name="start">[https://www.3lgm2.de/resource/ihe/RMD_DOC_ADMINISTRATOR; https://www.3lgm2.de/resource/ihe/iti-18; https://www.3lgm2.de/resource/ihe/RMD_DOC_REGISTRY]</field>
-      <field name="end">DLK_1670078268368_5170</field>
-    </element>
-    <element class="IheTransaction_IheCommunicationLink_Edge" hash="DLK_1670273961090_7374">
-      <field name="name">Beziehung 11</field>
-      <field name="start">[https://www.3lgm2.de/resource/ihe/XDS-IB_DOC_CONSUMER; https://www.3lgm2.de/resource/ihe/iti-43; https://www.3lgm2.de/resource/ihe/XDS-IB_DOC_REPOSITORY]</field>
-      <field name="end">DLK_1670078268368_5164</field>
-    </element>
-    <element class="IheTransaction_IheCommunicationLink_Edge" hash="DLK_1670273961090_7375">
-      <field name="name">Beziehung 12</field>
-      <field name="start">[https://www.3lgm2.de/resource/ihe/XDS-IB_DOC_CONSUMER; https://www.3lgm2.de/resource/ihe/iti-43; https://www.3lgm2.de/resource/ihe/XDS-IB_DOC_REPOSITORY]</field>
-      <field name="end">DLK_1670078268368_5165</field>
     </element>
     <element class="PartableApplicationComponent_HasPartEdge" hash="DLK_1631690360996_2463">
       <field name="name">Hat-Teil-Beziehung 39</field>
@@ -5658,7 +5000,7 @@ dt. "KIS Integration", engl. "HIS Integration" (Research Part)</field>
       <degree>66</degree>
       <shift>435</shift>
       <pageSizeFactor>1.7291666666666667</pageSizeFactor>
-      <activeLayer>4</activeLayer>
+      <activeLayer>2</activeLayer>
       <multiView>true</multiView>
     </view>
     <mapping>
