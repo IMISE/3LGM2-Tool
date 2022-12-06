@@ -4,7 +4,7 @@
   <header>
     <title>Desease-Management.3lgm</title>
     <description></description>
-    <version>164_sippe_1670250614551</version>
+    <version>165_sippe_1670281300880</version>
   </header>
   <userFieldDefinitions>
     <userFieldFormat hash="FRM_1623450079169_2058">
@@ -39,26 +39,134 @@
       <userFieldTreeVis>true</userFieldTreeVis>
       <userFieldShowDescriptionInDialog>false</userFieldShowDescriptionInDialog>
     </userFieldDef>
-    <userFieldDef elementClass="Function" hash="USERFIELD_1625125405430_17206">
-      <userFieldName>References</userFieldName>
-      <userFieldDescription>References</userFieldDescription>
+    <userFieldDef elementClass="ObjectType" hash="USERFIELD_1624433876123_2038">
+      <userFieldName>Sicherheit</userFieldName>
+      <userFieldDescription></userFieldDescription>
       <userFieldStyle>TAB</userFieldStyle>
       <userFieldTreeVis>true</userFieldTreeVis>
       <userFieldShowDescriptionInDialog>false</userFieldShowDescriptionInDialog>
     </userFieldDef>
-    <userFieldDef elementClass="Function" hash="USERFIELD_1625125464163_17207">
-      <userFieldName>Citation</userFieldName>
+    <userFieldDef elementClass="ObjectType" hash="USERFIELD_1624434122301_2053">
+      <userFieldName>Nach BSI</userFieldName>
+      <userFieldDescription>Sicherheitsbetrachtung nach BSI Kompendium: https://www.bsi.bund.de/SharedDocs/Downloads/DE/BSI/Grundschutz/Kompendium/IT_Grundschutz_Kompendium_Edition2021.pdf?__blob=publicationFile&amp;v=6</userFieldDescription>
+      <userFieldStyle>GROUP</userFieldStyle>
+      <userFieldTreeVis>true</userFieldTreeVis>
+      <userFieldShowDescriptionInDialog>true</userFieldShowDescriptionInDialog>
+    </userFieldDef>
+    <userFieldDef elementClass="ObjectType" hash="USERFIELD_1624433911195_2039">
+      <userFieldName>Schutzsbedarfskategorien</userFieldName>
+      <userFieldDescription>Schutzbedarfskategorien nach BSI Kompenium (2021), S. 37.</userFieldDescription>
+      <userFieldStyle>COMBO_BOX</userFieldStyle>
+      <userFieldTreeVis>true</userFieldTreeVis>
+      <userFieldShowDescriptionInDialog>true</userFieldShowDescriptionInDialog>
+      <userFieldStandardValue>normal</userFieldStandardValue>
+      <userFieldStandardValue>hoch</userFieldStandardValue>
+      <userFieldStandardValue>sehr hoch</userFieldStandardValue>
+    </userFieldDef>
+    <userFieldDef elementClass="ObjectType" hash="USERFIELD_1624434040639_2046">
+      <userFieldName>Sicherheitsanforderungen</userFieldName>
+      <userFieldDescription>Sicherheitsanforderungen nach BSI Kompenium (2021), S. 37.</userFieldDescription>
+      <userFieldStyle>COMBO_BOX</userFieldStyle>
+      <userFieldTreeVis>true</userFieldTreeVis>
+      <userFieldShowDescriptionInDialog>true</userFieldShowDescriptionInDialog>
+      <userFieldStandardValue>Basis-Anforderungen</userFieldStandardValue>
+      <userFieldStandardValue>Standard-Anforderungen</userFieldStandardValue>
+      <userFieldStandardValue>erhöhter Schutzbedarf</userFieldStandardValue>
+    </userFieldDef>
+    <userFieldDef elementClass="Group" hash="USERFIELD_1669975909569_28793">
+      <userFieldName>Security Zone</userFieldName>
+      <userFieldDescription></userFieldDescription>
+      <userFieldStyle>SUBTYPE</userFieldStyle>
+      <userFieldTreeVis>true</userFieldTreeVis>
+      <userFieldShowDescriptionInDialog>true</userFieldShowDescriptionInDialog>
+    </userFieldDef>
+    <userFieldDef elementClass="Group" hash="USERFIELD_1669994410989_38780">
+      <userFieldName>Security Zone</userFieldName>
+      <userFieldDescription></userFieldDescription>
+      <userFieldStyle>TAB</userFieldStyle>
+      <userFieldTreeVis>true</userFieldTreeVis>
+      <userFieldShowDescriptionInDialog>true</userFieldShowDescriptionInDialog>
+    </userFieldDef>
+    <userFieldDef elementClass="Group" hash="USERFIELD_1670229999071_10371">
+      <userFieldName>Verantwortlicher Mitarbeiter</userFieldName>
       <userFieldDescription></userFieldDescription>
       <userFieldStyle>SINGLE_LINE</userFieldStyle>
       <userFieldTreeVis>true</userFieldTreeVis>
       <userFieldShowDescriptionInDialog>false</userFieldShowDescriptionInDialog>
     </userFieldDef>
-    <userFieldDef elementClass="Function" hash="USERFIELD_1625125488338_17208">
-      <userFieldName>Hyperlink</userFieldName>
-      <userFieldDescription></userFieldDescription>
-      <userFieldStyle>HYPERLINK</userFieldStyle>
+    <userFieldDef elementClass="Group" hash="USERFIELD_1669975930855_28794">
+      <userFieldName>Security</userFieldName>
+      <userFieldDescription>dt. Schutzbedarf, z.B. nach BSI</userFieldDescription>
+      <userFieldStyle>SUBTYPE</userFieldStyle>
       <userFieldTreeVis>true</userFieldTreeVis>
-      <userFieldShowDescriptionInDialog>false</userFieldShowDescriptionInDialog>
+      <userFieldShowDescriptionInDialog>true</userFieldShowDescriptionInDialog>
+    </userFieldDef>
+    <userFieldDef elementClass="Group" hash="USERFIELD_1669994624683_38781">
+      <userFieldName>Security</userFieldName>
+      <userFieldDescription></userFieldDescription>
+      <userFieldStyle>TAB</userFieldStyle>
+      <userFieldTreeVis>true</userFieldTreeVis>
+      <userFieldShowDescriptionInDialog>true</userFieldShowDescriptionInDialog>
+    </userFieldDef>
+    <userFieldDef elementClass="Group" hash="USERFIELD_1669994178892_38775">
+      <userFieldName>Network Zone</userFieldName>
+      <userFieldDescription></userFieldDescription>
+      <userFieldStyle>SUBTYPE</userFieldStyle>
+      <userFieldTreeVis>true</userFieldTreeVis>
+      <userFieldShowDescriptionInDialog>true</userFieldShowDescriptionInDialog>
+    </userFieldDef>
+    <userFieldDef elementClass="Group" hash="USERFIELD_1669994634381_38782">
+      <userFieldName>Network Zone</userFieldName>
+      <userFieldDescription></userFieldDescription>
+      <userFieldStyle>TAB</userFieldStyle>
+      <userFieldTreeVis>true</userFieldTreeVis>
+      <userFieldShowDescriptionInDialog>true</userFieldShowDescriptionInDialog>
+    </userFieldDef>
+    <userFieldDef elementClass="Group" hash="USERFIELD_1669996287108_38999">
+      <userFieldName>Network Name</userFieldName>
+      <userFieldDescription></userFieldDescription>
+      <userFieldStyle>COMBO_BOX</userFieldStyle>
+      <userFieldTreeVis>true</userFieldTreeVis>
+      <userFieldShowDescriptionInDialog>true</userFieldShowDescriptionInDialog>
+      <userFieldStandardValue>Clinic Prd</userFieldStandardValue>
+      <userFieldStandardValue>DIC Clinic Prd</userFieldStandardValue>
+      <userFieldStandardValue>DIC Clinic Dev</userFieldStandardValue>
+      <userFieldStandardValue>DIC Research Prd</userFieldStandardValue>
+      <userFieldStandardValue>DIC Research Dev</userFieldStandardValue>
+      <userFieldStandardValue>DIC DataSharing Prd</userFieldStandardValue>
+      <userFieldStandardValue>MII Data Sharing</userFieldStandardValue>
+      <userFieldStandardValue>Clinic Dev</userFieldStandardValue>
+      <userFieldStandardValue>Research Prd</userFieldStandardValue>
+      <userFieldStandardValue>Research Dev</userFieldStandardValue>
+      <userFieldStandardValue>DataSharing Prd</userFieldStandardValue>
+    </userFieldDef>
+    <userFieldDef elementClass="Group" hash="USERFIELD_1669997137955_39002">
+      <userFieldName>IPv4 Settings</userFieldName>
+      <userFieldDescription>see https://www.site24x7.com/de/tools/ipv4-subnet-zrechner.html</userFieldDescription>
+      <userFieldStyle>GROUP</userFieldStyle>
+      <userFieldTreeVis>true</userFieldTreeVis>
+      <userFieldShowDescriptionInDialog>true</userFieldShowDescriptionInDialog>
+    </userFieldDef>
+    <userFieldDef elementClass="Group" hash="USERFIELD_1669996237291_38998">
+      <userFieldName>Subnet IPv4</userFieldName>
+      <userFieldDescription>e.g. 10.10.0.0/16</userFieldDescription>
+      <userFieldStyle>SINGLE_LINE</userFieldStyle>
+      <userFieldTreeVis>true</userFieldTreeVis>
+      <userFieldShowDescriptionInDialog>true</userFieldShowDescriptionInDialog>
+    </userFieldDef>
+    <userFieldDef elementClass="Group" hash="USERFIELD_1669996648528_39000">
+      <userFieldName>Subnet Mask IPv4</userFieldName>
+      <userFieldDescription>e.g. 255.255.254.0/23</userFieldDescription>
+      <userFieldStyle>SINGLE_LINE</userFieldStyle>
+      <userFieldTreeVis>true</userFieldTreeVis>
+      <userFieldShowDescriptionInDialog>true</userFieldShowDescriptionInDialog>
+    </userFieldDef>
+    <userFieldDef elementClass="Group" hash="USERFIELD_1669996827587_39001">
+      <userFieldName>Host Address Range IPv4</userFieldName>
+      <userFieldDescription>e.g. 10.10.0.1 - 10.10.1.254</userFieldDescription>
+      <userFieldStyle>SINGLE_LINE</userFieldStyle>
+      <userFieldTreeVis>true</userFieldTreeVis>
+      <userFieldShowDescriptionInDialog>true</userFieldShowDescriptionInDialog>
     </userFieldDef>
     <userFieldDef elementClass="PhysicalDataProcessingComponent" hash="USERFIELD_1670080293518_5897">
       <userFieldName>Virtual Maschine</userFieldName>
@@ -205,157 +313,6 @@
       <userFieldDescription></userFieldDescription>
       <userFieldStyle>SINGLE_LINE</userFieldStyle>
       <userFieldTreeVis>true</userFieldTreeVis>
-      <userFieldShowDescriptionInDialog>false</userFieldShowDescriptionInDialog>
-    </userFieldDef>
-    <userFieldDef elementClass="Group" hash="USERFIELD_1669975909569_28793">
-      <userFieldName>Security Zone</userFieldName>
-      <userFieldDescription></userFieldDescription>
-      <userFieldStyle>SUBTYPE</userFieldStyle>
-      <userFieldTreeVis>true</userFieldTreeVis>
-      <userFieldShowDescriptionInDialog>true</userFieldShowDescriptionInDialog>
-    </userFieldDef>
-    <userFieldDef elementClass="Group" hash="USERFIELD_1669994410989_38780">
-      <userFieldName>Security Zone</userFieldName>
-      <userFieldDescription></userFieldDescription>
-      <userFieldStyle>TAB</userFieldStyle>
-      <userFieldTreeVis>true</userFieldTreeVis>
-      <userFieldShowDescriptionInDialog>true</userFieldShowDescriptionInDialog>
-    </userFieldDef>
-    <userFieldDef elementClass="Group" hash="USERFIELD_1670229999071_10371">
-      <userFieldName>Verantwortlicher Mitarbeiter</userFieldName>
-      <userFieldDescription></userFieldDescription>
-      <userFieldStyle>SINGLE_LINE</userFieldStyle>
-      <userFieldTreeVis>true</userFieldTreeVis>
-      <userFieldShowDescriptionInDialog>false</userFieldShowDescriptionInDialog>
-    </userFieldDef>
-    <userFieldDef elementClass="Group" hash="USERFIELD_1669975930855_28794">
-      <userFieldName>Security</userFieldName>
-      <userFieldDescription>dt. Schutzbedarf, z.B. nach BSI</userFieldDescription>
-      <userFieldStyle>SUBTYPE</userFieldStyle>
-      <userFieldTreeVis>true</userFieldTreeVis>
-      <userFieldShowDescriptionInDialog>true</userFieldShowDescriptionInDialog>
-    </userFieldDef>
-    <userFieldDef elementClass="Group" hash="USERFIELD_1669994624683_38781">
-      <userFieldName>Security</userFieldName>
-      <userFieldDescription></userFieldDescription>
-      <userFieldStyle>TAB</userFieldStyle>
-      <userFieldTreeVis>true</userFieldTreeVis>
-      <userFieldShowDescriptionInDialog>true</userFieldShowDescriptionInDialog>
-    </userFieldDef>
-    <userFieldDef elementClass="Group" hash="USERFIELD_1669994178892_38775">
-      <userFieldName>Network Zone</userFieldName>
-      <userFieldDescription></userFieldDescription>
-      <userFieldStyle>SUBTYPE</userFieldStyle>
-      <userFieldTreeVis>true</userFieldTreeVis>
-      <userFieldShowDescriptionInDialog>true</userFieldShowDescriptionInDialog>
-    </userFieldDef>
-    <userFieldDef elementClass="Group" hash="USERFIELD_1669994634381_38782">
-      <userFieldName>Network Zone</userFieldName>
-      <userFieldDescription></userFieldDescription>
-      <userFieldStyle>TAB</userFieldStyle>
-      <userFieldTreeVis>true</userFieldTreeVis>
-      <userFieldShowDescriptionInDialog>true</userFieldShowDescriptionInDialog>
-    </userFieldDef>
-    <userFieldDef elementClass="Group" hash="USERFIELD_1669996287108_38999">
-      <userFieldName>Network Name</userFieldName>
-      <userFieldDescription></userFieldDescription>
-      <userFieldStyle>COMBO_BOX</userFieldStyle>
-      <userFieldTreeVis>true</userFieldTreeVis>
-      <userFieldShowDescriptionInDialog>true</userFieldShowDescriptionInDialog>
-      <userFieldStandardValue>Clinic Prd</userFieldStandardValue>
-      <userFieldStandardValue>DIC Clinic Prd</userFieldStandardValue>
-      <userFieldStandardValue>DIC Clinic Dev</userFieldStandardValue>
-      <userFieldStandardValue>DIC Research Prd</userFieldStandardValue>
-      <userFieldStandardValue>DIC Research Dev</userFieldStandardValue>
-      <userFieldStandardValue>DIC DataSharing Prd</userFieldStandardValue>
-      <userFieldStandardValue>MII Data Sharing</userFieldStandardValue>
-      <userFieldStandardValue>Clinic Dev</userFieldStandardValue>
-      <userFieldStandardValue>Research Prd</userFieldStandardValue>
-      <userFieldStandardValue>Research Dev</userFieldStandardValue>
-      <userFieldStandardValue>DataSharing Prd</userFieldStandardValue>
-    </userFieldDef>
-    <userFieldDef elementClass="Group" hash="USERFIELD_1669997137955_39002">
-      <userFieldName>IPv4 Settings</userFieldName>
-      <userFieldDescription>see https://www.site24x7.com/de/tools/ipv4-subnet-zrechner.html</userFieldDescription>
-      <userFieldStyle>GROUP</userFieldStyle>
-      <userFieldTreeVis>true</userFieldTreeVis>
-      <userFieldShowDescriptionInDialog>true</userFieldShowDescriptionInDialog>
-    </userFieldDef>
-    <userFieldDef elementClass="Group" hash="USERFIELD_1669996237291_38998">
-      <userFieldName>Subnet IPv4</userFieldName>
-      <userFieldDescription>e.g. 10.10.0.0/16</userFieldDescription>
-      <userFieldStyle>SINGLE_LINE</userFieldStyle>
-      <userFieldTreeVis>true</userFieldTreeVis>
-      <userFieldShowDescriptionInDialog>true</userFieldShowDescriptionInDialog>
-    </userFieldDef>
-    <userFieldDef elementClass="Group" hash="USERFIELD_1669996648528_39000">
-      <userFieldName>Subnet Mask IPv4</userFieldName>
-      <userFieldDescription>e.g. 255.255.254.0/23</userFieldDescription>
-      <userFieldStyle>SINGLE_LINE</userFieldStyle>
-      <userFieldTreeVis>true</userFieldTreeVis>
-      <userFieldShowDescriptionInDialog>true</userFieldShowDescriptionInDialog>
-    </userFieldDef>
-    <userFieldDef elementClass="Group" hash="USERFIELD_1669996827587_39001">
-      <userFieldName>Host Address Range IPv4</userFieldName>
-      <userFieldDescription>e.g. 10.10.0.1 - 10.10.1.254</userFieldDescription>
-      <userFieldStyle>SINGLE_LINE</userFieldStyle>
-      <userFieldTreeVis>true</userFieldTreeVis>
-      <userFieldShowDescriptionInDialog>true</userFieldShowDescriptionInDialog>
-    </userFieldDef>
-    <userFieldDef elementClass="ObjectType" hash="USERFIELD_1624433876123_2038">
-      <userFieldName>Sicherheit</userFieldName>
-      <userFieldDescription></userFieldDescription>
-      <userFieldStyle>TAB</userFieldStyle>
-      <userFieldTreeVis>true</userFieldTreeVis>
-      <userFieldShowDescriptionInDialog>false</userFieldShowDescriptionInDialog>
-    </userFieldDef>
-    <userFieldDef elementClass="ObjectType" hash="USERFIELD_1624434122301_2053">
-      <userFieldName>Nach BSI</userFieldName>
-      <userFieldDescription>Sicherheitsbetrachtung nach BSI Kompendium: https://www.bsi.bund.de/SharedDocs/Downloads/DE/BSI/Grundschutz/Kompendium/IT_Grundschutz_Kompendium_Edition2021.pdf?__blob=publicationFile&amp;v=6</userFieldDescription>
-      <userFieldStyle>GROUP</userFieldStyle>
-      <userFieldTreeVis>true</userFieldTreeVis>
-      <userFieldShowDescriptionInDialog>true</userFieldShowDescriptionInDialog>
-    </userFieldDef>
-    <userFieldDef elementClass="ObjectType" hash="USERFIELD_1624433911195_2039">
-      <userFieldName>Schutzsbedarfskategorien</userFieldName>
-      <userFieldDescription>Schutzbedarfskategorien nach BSI Kompenium (2021), S. 37.</userFieldDescription>
-      <userFieldStyle>COMBO_BOX</userFieldStyle>
-      <userFieldTreeVis>true</userFieldTreeVis>
-      <userFieldShowDescriptionInDialog>true</userFieldShowDescriptionInDialog>
-      <userFieldStandardValue>normal</userFieldStandardValue>
-      <userFieldStandardValue>hoch</userFieldStandardValue>
-      <userFieldStandardValue>sehr hoch</userFieldStandardValue>
-    </userFieldDef>
-    <userFieldDef elementClass="ObjectType" hash="USERFIELD_1624434040639_2046">
-      <userFieldName>Sicherheitsanforderungen</userFieldName>
-      <userFieldDescription>Sicherheitsanforderungen nach BSI Kompenium (2021), S. 37.</userFieldDescription>
-      <userFieldStyle>COMBO_BOX</userFieldStyle>
-      <userFieldTreeVis>true</userFieldTreeVis>
-      <userFieldShowDescriptionInDialog>true</userFieldShowDescriptionInDialog>
-      <userFieldStandardValue>Basis-Anforderungen</userFieldStandardValue>
-      <userFieldStandardValue>Standard-Anforderungen</userFieldStandardValue>
-      <userFieldStandardValue>erhöhter Schutzbedarf</userFieldStandardValue>
-    </userFieldDef>
-    <userFieldDef elementClass="ObjectType" hash="USERFIELD_1623450079141_2057">
-      <userFieldName>Benutzerdefinierte Eigenschaftsfelder</userFieldName>
-      <userFieldDescription></userFieldDescription>
-      <userFieldStyle>TAB</userFieldStyle>
-      <userFieldTreeVis>false</userFieldTreeVis>
-      <userFieldShowDescriptionInDialog>false</userFieldShowDescriptionInDialog>
-    </userFieldDef>
-    <userFieldDef elementClass="ObjectType" hash="USERFIELD_1623450107796_2059">
-      <userFieldName>Zehnfach Foo</userFieldName>
-      <userFieldDescription></userFieldDescription>
-      <userFieldStyle>FORMULA</userFieldStyle>
-      <userFieldTreeVis>false</userFieldTreeVis>
-      <userFieldShowDescriptionInDialog>false</userFieldShowDescriptionInDialog>
-      <userFieldFormula>USERFIELD_1623450079141_2056 * 10 </userFieldFormula>
-    </userFieldDef>
-    <userFieldDef elementClass="ObjectType" hash="USERFIELD_1623450079141_2056">
-      <userFieldName>Foo</userFieldName>
-      <userFieldDescription></userFieldDescription>
-      <userFieldStyle>NUMBER</userFieldStyle>
-      <userFieldTreeVis>false</userFieldTreeVis>
       <userFieldShowDescriptionInDialog>false</userFieldShowDescriptionInDialog>
     </userFieldDef>
   </userFieldDefinitions>

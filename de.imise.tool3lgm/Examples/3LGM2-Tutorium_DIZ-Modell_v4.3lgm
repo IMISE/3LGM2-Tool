@@ -4,7 +4,7 @@
   <header>
     <title>3LGM2-Tutorium_DIZ-Modell_v4.3lgm</title>
     <description></description>
-    <version>177_sippe_1670277798732</version>
+    <version>179_sippe_1670286128101</version>
   </header>
   <userFieldDefinitions>
     <userFieldFormat hash="FRM_1623450079169_2058">
@@ -38,133 +38,6 @@
       <userFieldStyle>HYPERLINK</userFieldStyle>
       <userFieldTreeVis>true</userFieldTreeVis>
       <userFieldShowDescriptionInDialog>false</userFieldShowDescriptionInDialog>
-    </userFieldDef>
-    <userFieldDef elementClass="ObjectType" hash="USERFIELD_1669884870745_32050">
-      <userFieldName>MII KDS</userFieldName>
-      <userFieldDescription></userFieldDescription>
-      <userFieldStyle>SUBTYPE</userFieldStyle>
-      <userFieldTreeVis>true</userFieldTreeVis>
-      <userFieldShowDescriptionInDialog>false</userFieldShowDescriptionInDialog>
-    </userFieldDef>
-    <userFieldDef elementClass="ObjectType" hash="USERFIELD_1669884904331_32051">
-      <userFieldName>MII KDS</userFieldName>
-      <userFieldDescription></userFieldDescription>
-      <userFieldStyle>TAB</userFieldStyle>
-      <userFieldTreeVis>true</userFieldTreeVis>
-      <userFieldShowDescriptionInDialog>false</userFieldShowDescriptionInDialog>
-    </userFieldDef>
-    <userFieldDef elementClass="ObjectType" hash="USERFIELD_1669884915184_32052">
-      <userFieldName>MII Dokumentation</userFieldName>
-      <userFieldDescription>Link zu weiterführenden Informationen</userFieldDescription>
-      <userFieldStyle>HYPERLINK</userFieldStyle>
-      <userFieldTreeVis>true</userFieldTreeVis>
-      <userFieldShowDescriptionInDialog>false</userFieldShowDescriptionInDialog>
-    </userFieldDef>
-    <userFieldDef elementClass="RepresentationForm" hash="USERFIELD_1622801104013_1966">
-      <userFieldName>FHIR Ressource</userFieldName>
-      <userFieldDescription></userFieldDescription>
-      <userFieldStyle>SUBTYPE</userFieldStyle>
-      <userFieldTreeVis>true</userFieldTreeVis>
-      <userFieldShowDescriptionInDialog>false</userFieldShowDescriptionInDialog>
-    </userFieldDef>
-    <userFieldDef elementClass="RepresentationForm" hash="USERFIELD_1620285514229_7874">
-      <userFieldName>FHIR Ressource</userFieldName>
-      <userFieldDescription>Metadaten von FHIR Ressourcen</userFieldDescription>
-      <userFieldStyle>TAB</userFieldStyle>
-      <userFieldTreeVis>true</userFieldTreeVis>
-      <userFieldShowDescriptionInDialog>true</userFieldShowDescriptionInDialog>
-    </userFieldDef>
-    <userFieldDef elementClass="RepresentationForm" hash="USERFIELD_1620285553237_7875">
-      <userFieldName>Ressourcen Typ</userFieldName>
-      <userFieldDescription></userFieldDescription>
-      <userFieldStyle>COMBO_BOX</userFieldStyle>
-      <userFieldTreeVis>true</userFieldTreeVis>
-      <userFieldShowDescriptionInDialog>false</userFieldShowDescriptionInDialog>
-      <userFieldStandardValue>Condition</userFieldStandardValue>
-      <userFieldStandardValue>Consent</userFieldStandardValue>
-      <userFieldStandardValue>Diagnosis</userFieldStandardValue>
-      <userFieldStandardValue>Location</userFieldStandardValue>
-      <userFieldStandardValue>Medication</userFieldStandardValue>
-      <userFieldStandardValue>Observation</userFieldStandardValue>
-      <userFieldStandardValue>Organization</userFieldStandardValue>
-      <userFieldStandardValue>Patient</userFieldStandardValue>
-      <userFieldStandardValue>Practitioner</userFieldStandardValue>
-      <userFieldStandardValue>Provenance</userFieldStandardValue>
-    </userFieldDef>
-    <userFieldDef elementClass="RepresentationForm" hash="USERFIELD_1623054261459_3913">
-      <userFieldName>Link zur FHIR Spezifikation</userFieldName>
-      <userFieldDescription>Link zur FHIR Spezifikation der Ressource unter http://hl7.org/fhir/
-(ToDo: ggf. automatisch hinzufügen)</userFieldDescription>
-      <userFieldStyle>HYPERLINK</userFieldStyle>
-      <userFieldTreeVis>true</userFieldTreeVis>
-      <userFieldShowDescriptionInDialog>true</userFieldShowDescriptionInDialog>
-    </userFieldDef>
-    <userFieldDef elementClass="RepresentationForm" hash="USERFIELD_1620285612795_7876">
-      <userFieldName>Profil</userFieldName>
-      <userFieldDescription>Link zum Profil, z.B. auf Simplifier (http://simplifier.net/)</userFieldDescription>
-      <userFieldStyle>HYPERLINK</userFieldStyle>
-      <userFieldTreeVis>true</userFieldTreeVis>
-      <userFieldShowDescriptionInDialog>true</userFieldShowDescriptionInDialog>
-    </userFieldDef>
-    <userFieldDef elementClass="Group" hash="USERFIELD_1669994178892_38775">
-      <userFieldName>Netzwerkzone</userFieldName>
-      <userFieldDescription>In einer Netzwerkzone können physische Datenverarbeitungsbausteine gruppiert werden.</userFieldDescription>
-      <userFieldStyle>SUBTYPE</userFieldStyle>
-      <userFieldTreeVis>true</userFieldTreeVis>
-      <userFieldShowDescriptionInDialog>true</userFieldShowDescriptionInDialog>
-    </userFieldDef>
-    <userFieldDef elementClass="Group" hash="USERFIELD_1669994634381_38782">
-      <userFieldName>Netzwerkzone</userFieldName>
-      <userFieldDescription>In einer Netzwerkzone können physische Datenverarbeitungsbausteine gruppiert werden.</userFieldDescription>
-      <userFieldStyle>TAB</userFieldStyle>
-      <userFieldTreeVis>true</userFieldTreeVis>
-      <userFieldShowDescriptionInDialog>true</userFieldShowDescriptionInDialog>
-    </userFieldDef>
-    <userFieldDef elementClass="Group" hash="USERFIELD_1669996287108_38999">
-      <userFieldName>Network Name</userFieldName>
-      <userFieldDescription></userFieldDescription>
-      <userFieldStyle>COMBO_BOX</userFieldStyle>
-      <userFieldTreeVis>true</userFieldTreeVis>
-      <userFieldShowDescriptionInDialog>true</userFieldShowDescriptionInDialog>
-      <userFieldStandardValue>Clinic Prd</userFieldStandardValue>
-      <userFieldStandardValue>DIC Clinic Prd</userFieldStandardValue>
-      <userFieldStandardValue>DIC Clinic Dev</userFieldStandardValue>
-      <userFieldStandardValue>DIC Research Prd</userFieldStandardValue>
-      <userFieldStandardValue>DIC Research Dev</userFieldStandardValue>
-      <userFieldStandardValue>DIC DataSharing Prd</userFieldStandardValue>
-      <userFieldStandardValue>MII Data Sharing</userFieldStandardValue>
-      <userFieldStandardValue>Clinic Dev</userFieldStandardValue>
-      <userFieldStandardValue>Research Prd</userFieldStandardValue>
-      <userFieldStandardValue>Research Dev</userFieldStandardValue>
-      <userFieldStandardValue>DataSharing Prd</userFieldStandardValue>
-    </userFieldDef>
-    <userFieldDef elementClass="Group" hash="USERFIELD_1669997137955_39002">
-      <userFieldName>IPv4 Settings</userFieldName>
-      <userFieldDescription>see https://www.site24x7.com/de/tools/ipv4-subnet-zrechner.html</userFieldDescription>
-      <userFieldStyle>GROUP</userFieldStyle>
-      <userFieldTreeVis>true</userFieldTreeVis>
-      <userFieldShowDescriptionInDialog>true</userFieldShowDescriptionInDialog>
-    </userFieldDef>
-    <userFieldDef elementClass="Group" hash="USERFIELD_1669996237291_38998">
-      <userFieldName>Subnet IPv4</userFieldName>
-      <userFieldDescription>e.g. 10.10.0.0/16</userFieldDescription>
-      <userFieldStyle>SINGLE_LINE</userFieldStyle>
-      <userFieldTreeVis>true</userFieldTreeVis>
-      <userFieldShowDescriptionInDialog>true</userFieldShowDescriptionInDialog>
-    </userFieldDef>
-    <userFieldDef elementClass="Group" hash="USERFIELD_1669996648528_39000">
-      <userFieldName>Subnet Mask IPv4</userFieldName>
-      <userFieldDescription>e.g. 255.255.254.0/23</userFieldDescription>
-      <userFieldStyle>SINGLE_LINE</userFieldStyle>
-      <userFieldTreeVis>true</userFieldTreeVis>
-      <userFieldShowDescriptionInDialog>true</userFieldShowDescriptionInDialog>
-    </userFieldDef>
-    <userFieldDef elementClass="Group" hash="USERFIELD_1669996827587_39001">
-      <userFieldName>Host Address Range IPv4</userFieldName>
-      <userFieldDescription>e.g. 10.10.0.1 - 10.10.1.254</userFieldDescription>
-      <userFieldStyle>SINGLE_LINE</userFieldStyle>
-      <userFieldTreeVis>true</userFieldTreeVis>
-      <userFieldShowDescriptionInDialog>true</userFieldShowDescriptionInDialog>
     </userFieldDef>
     <userFieldDef elementClass="PhysicalDataProcessingComponent" hash="USERFIELD_1670080293518_5897">
       <userFieldName>Virtual Maschine</userFieldName>
@@ -312,6 +185,133 @@
       <userFieldStyle>SINGLE_LINE</userFieldStyle>
       <userFieldTreeVis>true</userFieldTreeVis>
       <userFieldShowDescriptionInDialog>false</userFieldShowDescriptionInDialog>
+    </userFieldDef>
+    <userFieldDef elementClass="ObjectType" hash="USERFIELD_1669884870745_32050">
+      <userFieldName>MII KDS</userFieldName>
+      <userFieldDescription></userFieldDescription>
+      <userFieldStyle>SUBTYPE</userFieldStyle>
+      <userFieldTreeVis>true</userFieldTreeVis>
+      <userFieldShowDescriptionInDialog>false</userFieldShowDescriptionInDialog>
+    </userFieldDef>
+    <userFieldDef elementClass="ObjectType" hash="USERFIELD_1669884904331_32051">
+      <userFieldName>MII KDS</userFieldName>
+      <userFieldDescription></userFieldDescription>
+      <userFieldStyle>TAB</userFieldStyle>
+      <userFieldTreeVis>true</userFieldTreeVis>
+      <userFieldShowDescriptionInDialog>false</userFieldShowDescriptionInDialog>
+    </userFieldDef>
+    <userFieldDef elementClass="ObjectType" hash="USERFIELD_1669884915184_32052">
+      <userFieldName>MII Dokumentation</userFieldName>
+      <userFieldDescription>Link zu weiterführenden Informationen</userFieldDescription>
+      <userFieldStyle>HYPERLINK</userFieldStyle>
+      <userFieldTreeVis>true</userFieldTreeVis>
+      <userFieldShowDescriptionInDialog>false</userFieldShowDescriptionInDialog>
+    </userFieldDef>
+    <userFieldDef elementClass="RepresentationForm" hash="USERFIELD_1622801104013_1966">
+      <userFieldName>FHIR Ressource</userFieldName>
+      <userFieldDescription></userFieldDescription>
+      <userFieldStyle>SUBTYPE</userFieldStyle>
+      <userFieldTreeVis>true</userFieldTreeVis>
+      <userFieldShowDescriptionInDialog>false</userFieldShowDescriptionInDialog>
+    </userFieldDef>
+    <userFieldDef elementClass="RepresentationForm" hash="USERFIELD_1620285514229_7874">
+      <userFieldName>FHIR Ressource</userFieldName>
+      <userFieldDescription>Metadaten von FHIR Ressourcen</userFieldDescription>
+      <userFieldStyle>TAB</userFieldStyle>
+      <userFieldTreeVis>true</userFieldTreeVis>
+      <userFieldShowDescriptionInDialog>true</userFieldShowDescriptionInDialog>
+    </userFieldDef>
+    <userFieldDef elementClass="RepresentationForm" hash="USERFIELD_1620285553237_7875">
+      <userFieldName>Ressourcen Typ</userFieldName>
+      <userFieldDescription></userFieldDescription>
+      <userFieldStyle>COMBO_BOX</userFieldStyle>
+      <userFieldTreeVis>true</userFieldTreeVis>
+      <userFieldShowDescriptionInDialog>false</userFieldShowDescriptionInDialog>
+      <userFieldStandardValue>Condition</userFieldStandardValue>
+      <userFieldStandardValue>Consent</userFieldStandardValue>
+      <userFieldStandardValue>Diagnosis</userFieldStandardValue>
+      <userFieldStandardValue>Location</userFieldStandardValue>
+      <userFieldStandardValue>Medication</userFieldStandardValue>
+      <userFieldStandardValue>Observation</userFieldStandardValue>
+      <userFieldStandardValue>Organization</userFieldStandardValue>
+      <userFieldStandardValue>Patient</userFieldStandardValue>
+      <userFieldStandardValue>Practitioner</userFieldStandardValue>
+      <userFieldStandardValue>Provenance</userFieldStandardValue>
+    </userFieldDef>
+    <userFieldDef elementClass="RepresentationForm" hash="USERFIELD_1623054261459_3913">
+      <userFieldName>Link zur FHIR Spezifikation</userFieldName>
+      <userFieldDescription>Link zur FHIR Spezifikation der Ressource unter http://hl7.org/fhir/
+(ToDo: ggf. automatisch hinzufügen)</userFieldDescription>
+      <userFieldStyle>HYPERLINK</userFieldStyle>
+      <userFieldTreeVis>true</userFieldTreeVis>
+      <userFieldShowDescriptionInDialog>true</userFieldShowDescriptionInDialog>
+    </userFieldDef>
+    <userFieldDef elementClass="RepresentationForm" hash="USERFIELD_1620285612795_7876">
+      <userFieldName>Profil</userFieldName>
+      <userFieldDescription>Link zum Profil, z.B. auf Simplifier (http://simplifier.net/)</userFieldDescription>
+      <userFieldStyle>HYPERLINK</userFieldStyle>
+      <userFieldTreeVis>true</userFieldTreeVis>
+      <userFieldShowDescriptionInDialog>true</userFieldShowDescriptionInDialog>
+    </userFieldDef>
+    <userFieldDef elementClass="Group" hash="USERFIELD_1669994178892_38775">
+      <userFieldName>Netzwerkzone</userFieldName>
+      <userFieldDescription>In einer Netzwerkzone können physische Datenverarbeitungsbausteine gruppiert werden.</userFieldDescription>
+      <userFieldStyle>SUBTYPE</userFieldStyle>
+      <userFieldTreeVis>true</userFieldTreeVis>
+      <userFieldShowDescriptionInDialog>true</userFieldShowDescriptionInDialog>
+    </userFieldDef>
+    <userFieldDef elementClass="Group" hash="USERFIELD_1669994634381_38782">
+      <userFieldName>Netzwerkzone</userFieldName>
+      <userFieldDescription>In einer Netzwerkzone können physische Datenverarbeitungsbausteine gruppiert werden.</userFieldDescription>
+      <userFieldStyle>TAB</userFieldStyle>
+      <userFieldTreeVis>true</userFieldTreeVis>
+      <userFieldShowDescriptionInDialog>true</userFieldShowDescriptionInDialog>
+    </userFieldDef>
+    <userFieldDef elementClass="Group" hash="USERFIELD_1669996287108_38999">
+      <userFieldName>Network Name</userFieldName>
+      <userFieldDescription></userFieldDescription>
+      <userFieldStyle>COMBO_BOX</userFieldStyle>
+      <userFieldTreeVis>true</userFieldTreeVis>
+      <userFieldShowDescriptionInDialog>true</userFieldShowDescriptionInDialog>
+      <userFieldStandardValue>Clinic Prd</userFieldStandardValue>
+      <userFieldStandardValue>DIC Clinic Prd</userFieldStandardValue>
+      <userFieldStandardValue>DIC Clinic Dev</userFieldStandardValue>
+      <userFieldStandardValue>DIC Research Prd</userFieldStandardValue>
+      <userFieldStandardValue>DIC Research Dev</userFieldStandardValue>
+      <userFieldStandardValue>DIC DataSharing Prd</userFieldStandardValue>
+      <userFieldStandardValue>MII Data Sharing</userFieldStandardValue>
+      <userFieldStandardValue>Clinic Dev</userFieldStandardValue>
+      <userFieldStandardValue>Research Prd</userFieldStandardValue>
+      <userFieldStandardValue>Research Dev</userFieldStandardValue>
+      <userFieldStandardValue>DataSharing Prd</userFieldStandardValue>
+    </userFieldDef>
+    <userFieldDef elementClass="Group" hash="USERFIELD_1669997137955_39002">
+      <userFieldName>IPv4 Settings</userFieldName>
+      <userFieldDescription>see https://www.site24x7.com/de/tools/ipv4-subnet-zrechner.html</userFieldDescription>
+      <userFieldStyle>GROUP</userFieldStyle>
+      <userFieldTreeVis>true</userFieldTreeVis>
+      <userFieldShowDescriptionInDialog>true</userFieldShowDescriptionInDialog>
+    </userFieldDef>
+    <userFieldDef elementClass="Group" hash="USERFIELD_1669996237291_38998">
+      <userFieldName>Subnet IPv4</userFieldName>
+      <userFieldDescription>e.g. 10.10.0.0/16</userFieldDescription>
+      <userFieldStyle>SINGLE_LINE</userFieldStyle>
+      <userFieldTreeVis>true</userFieldTreeVis>
+      <userFieldShowDescriptionInDialog>true</userFieldShowDescriptionInDialog>
+    </userFieldDef>
+    <userFieldDef elementClass="Group" hash="USERFIELD_1669996648528_39000">
+      <userFieldName>Subnet Mask IPv4</userFieldName>
+      <userFieldDescription>e.g. 255.255.254.0/23</userFieldDescription>
+      <userFieldStyle>SINGLE_LINE</userFieldStyle>
+      <userFieldTreeVis>true</userFieldTreeVis>
+      <userFieldShowDescriptionInDialog>true</userFieldShowDescriptionInDialog>
+    </userFieldDef>
+    <userFieldDef elementClass="Group" hash="USERFIELD_1669996827587_39001">
+      <userFieldName>Host Address Range IPv4</userFieldName>
+      <userFieldDescription>e.g. 10.10.0.1 - 10.10.1.254</userFieldDescription>
+      <userFieldStyle>SINGLE_LINE</userFieldStyle>
+      <userFieldTreeVis>true</userFieldTreeVis>
+      <userFieldShowDescriptionInDialog>true</userFieldShowDescriptionInDialog>
     </userFieldDef>
   </userFieldDefinitions>
   <objects>
@@ -653,17 +653,6 @@ The DIC expects the required rules from R&amp;D teams. The DIC is responsible fo
     </element>
     <element class="Textfield" hash="TEX_1669815326099_56943">
       <field name="name">Research Institution</field>
-    </element>
-    <element class="Textfield" hash="TEX_1669815526818_57826">
-      <field name="name">ToDo ST:
-Textfelder:
-- zeichnen Zugehörigkeit zu OU aus -&gt; Analyse dafür bauen
-Gruppen:
-- sollen für Schutzbedarfsklassen auf der FE genutzt werden
-Templates:
-- Desease Management
-- 
-KDS FHIR Ressourcen (Userfields für OT:Patient Consent)</field>
     </element>
     <element class="Function" hash="FUN_1669637392931_37213">
       <field name="name">Transfer Management</field>
@@ -1273,14 +1262,6 @@ dt. "KIS Integration", engl. "HIS Integration" (Research Part)</field>
     <element class="IheActor" hash="https://www.3lgm2.de/resource/ihe/CT_TIME_CLIENT">
       <field name="name">Time Client (CT)</field>
       <field name="description">Establishes time synchronization with one or more Time Servers using the NTP protocol and either the NTP or SNTP algorithms. Maintains the local computer system clock synchronization with UTC based on synchronization with the Time Servers.</field>
-    </element>
-    <element class="Textfield" hash="TEX_1669641708077_47193">
-      <field name="name">ToDo Tutorium:
-- Schnittstellen THS?
-- Schnittstellen:
-  - Repräsentationsformen zuweisen
-- [done] "(G)" -&gt; Gruppen=IT-Sicherheitszonen (sinnvolle Namen verwenden)
-- [done] Model cleanup (alles ausgeblendete entfernen)</field>
     </element>
     <element class="ApplicationSystem" hash="ASY_1632897867338_3233">
       <field name="name">Transfer Service</field>
@@ -5673,12 +5654,12 @@ dt. "KIS Integration", engl. "HIS Integration" (Research Part)</field>
       <selected>true</selected>
       <x>0</x>
       <y>0</y>
-      <zoom>0.25</zoom>
+      <zoom>0.3</zoom>
       <degree>66</degree>
       <shift>435</shift>
       <pageSizeFactor>1.7291666666666667</pageSizeFactor>
-      <activeLayer>0</activeLayer>
-      <multiView>false</multiView>
+      <activeLayer>4</activeLayer>
+      <multiView>true</multiView>
     </view>
     <mapping>
       <layout class="Bendpoint">
