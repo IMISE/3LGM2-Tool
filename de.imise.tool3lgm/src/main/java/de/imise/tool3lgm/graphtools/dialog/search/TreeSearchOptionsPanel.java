@@ -108,7 +108,7 @@ public class TreeSearchOptionsPanel extends BasicSearchOptionsPanel {
      * @param constraints
      * @param insets
      */
-    private static void setLefRightInsets(final GridBagConstraints constraints, final int insets) {
+    private static void setLeftRightInsets(final GridBagConstraints constraints, final int insets) {
         constraints.insets.left = insets;
         constraints.insets.right = insets;
     }
@@ -137,9 +137,9 @@ public class TreeSearchOptionsPanel extends BasicSearchOptionsPanel {
         constraints.gridx = 1;
         constraints.gridy = 0;
         constraints.weightx = 0;
-        setLefRightInsets(constraints, labelInsets);
+        setLeftRightInsets(constraints, labelInsets);
         add(labelName, constraints);
-        setLefRightInsets(constraints, 0);
+        setLeftRightInsets(constraints, 0);
 
         constraints.gridx = 2;
         constraints.gridy++;
@@ -150,9 +150,9 @@ public class TreeSearchOptionsPanel extends BasicSearchOptionsPanel {
         constraints.gridx = 1;
         constraints.gridy++;
         constraints.weightx = 0;
-        setLefRightInsets(constraints, labelInsets);
+        setLeftRightInsets(constraints, labelInsets);
         add(labelDescription, constraints);
-        setLefRightInsets(constraints, 0);
+        setLeftRightInsets(constraints, 0);
 
         constraints.gridx = 2;
         constraints.weightx = 1;
@@ -168,9 +168,9 @@ public class TreeSearchOptionsPanel extends BasicSearchOptionsPanel {
         constraints.gridx = 1;
         constraints.gridy++;
         constraints.weightx = 0;
-        setLefRightInsets(constraints, labelInsets);
+        setLeftRightInsets(constraints, labelInsets);
         add(labelElementType, constraints);
-        setLefRightInsets(constraints, 0);
+        setLeftRightInsets(constraints, 0);
 
         constraints.gridx = 2;
         constraints.weightx = 1;
