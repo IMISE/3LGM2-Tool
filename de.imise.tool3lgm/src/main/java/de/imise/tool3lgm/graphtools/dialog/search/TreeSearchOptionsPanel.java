@@ -90,10 +90,10 @@ public class TreeSearchOptionsPanel extends BasicSearchOptionsPanel {
     }
 
     /**
-     * @param full
+     * @param collapse
      */
-    public final void showFullPanel(final boolean full) {
-        if (expanded) {
+    public final void showFullPanel(final boolean collapse) {
+        if (collapse) {
             showPartlyPanel();
             expandButton.setToolTipText(getResString("SEARCH_TREE_OPTIONS_PANEL_TOOLTIP_more_options"));
         } else {
