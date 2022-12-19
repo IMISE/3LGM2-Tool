@@ -4,21 +4,21 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.Stroke;
 
 import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
 
 /**
- * Alle Standardformen. Die String-Repräsentation steht als Schlüssel auch in
- * den Ressourcen. Die Position des Enum-Eintrages wird in der
- * XML-Repräsentation des Modells gepsiechert. D.h. wer hier die Reihenfolge
- * ändert, ändert das Layout der Elemente in Modellen, die vorher erstellt
- * wurden.
+ * All standard forms. The string representation is also in the resources as a
+ * key. The position of the enum entry is psied in the XML representation of the
+ * model. I.e. who changes the order here, changes the layout of the elements in
+ * models, which were created before.
  */
 public enum Shape {
     rechteck {
         @Override
-        public void paint(final Graphics g, final NodeContainer kc, final Color col, final Color analysisColor, final Boolean isResult, final int x, final int y, final int xm, final int ym, final int xp, final int yp, final int[] xs, final int[] ys,
-                final int width, final int height, final int npoints) {
+        public void paint(Graphics g, NodeContainer kc, Color col, Color analysisColor, Boolean isResult, int x, int y, int xm, int ym, int xp, int yp, int[] xs, int[] ys, int width, int height, int npoints) {
             g.setColor(col);
             g.fillRect(xm, ym, width, height);
             paintTextWithOffset(g, kc, this, xm, ym);
@@ -28,8 +28,7 @@ public enum Shape {
     },
     oval {
         @Override
-        public void paint(final Graphics g, final NodeContainer kc, final Color col, final Color analysisColor, final Boolean isResult, final int x, final int y, final int xm, final int ym, final int xp, final int yp, final int[] xs, final int[] ys,
-                final int width, final int height, final int npoints) {
+        public void paint(Graphics g, NodeContainer kc, Color col, Color analysisColor, Boolean isResult, int x, int y, int xm, int ym, int xp, int yp, int[] xs, int[] ys, int width, int height, int npoints) {
             g.setColor(col);
             g.fillOval(xm, ym, width, height);
             paintTextWithOffset(g, kc, this, xm, ym);
@@ -39,8 +38,7 @@ public enum Shape {
     },
     dreieck {
         @Override
-        public void paint(final Graphics g, final NodeContainer kc, final Color col, final Color analysisColor, final Boolean isResult, final int x, final int y, final int xm, final int ym, final int xp, final int yp, final int[] xs, final int[] ys,
-                final int width, final int height, int npoints) {
+        public void paint(Graphics g, NodeContainer kc, Color col, Color analysisColor, Boolean isResult, int x, int y, int xm, int ym, int xp, int yp, int[] xs, int[] ys, int width, int height, int npoints) {
             xs[0] = xm;
             xs[1] = x;
             xs[2] = xp;
@@ -57,8 +55,7 @@ public enum Shape {
     },
     rundeck {
         @Override
-        public void paint(final Graphics g, final NodeContainer kc, final Color col, final Color analysisColor, final Boolean isResult, final int x, final int y, final int xm, final int ym, final int xp, final int yp, final int[] xs, final int[] ys,
-                final int width, final int height, final int npoints) {
+        public void paint(Graphics g, NodeContainer kc, Color col, Color analysisColor, Boolean isResult, int x, int y, int xm, int ym, int xp, int yp, int[] xs, int[] ys, int width, int height, int npoints) {
             int cornerSize = roundRectCorner(width, height);
             g.setColor(col);
             g.fillRoundRect(xm, ym, width, height, cornerSize, cornerSize);
@@ -69,8 +66,7 @@ public enum Shape {
     },
     rhombus {
         @Override
-        public void paint(final Graphics g, final NodeContainer kc, final Color col, final Color analysisColor, final Boolean isResult, final int x, final int y, final int xm, final int ym, final int xp, final int yp, final int[] xs, final int[] ys,
-                final int width, final int height, int npoints) {
+        public void paint(Graphics g, NodeContainer kc, Color col, Color analysisColor, Boolean isResult, int x, int y, int xm, int ym, int xp, int yp, int[] xs, int[] ys, int width, int height, int npoints) {
             xs[0] = xm;
             xs[1] = x;
             xs[2] = xp;
@@ -89,8 +85,7 @@ public enum Shape {
     },
     tonne {
         @Override
-        public void paint(final Graphics g, final NodeContainer kc, final Color col, final Color analysisColor, final Boolean isResult, final int x, final int y, final int xm, final int ym, final int xp, final int yp, final int[] xs, final int[] ys,
-                final int width, final int height, final int npoints) {
+        public void paint(Graphics g, NodeContainer kc, Color col, Color analysisColor, Boolean isResult, int x, int y, int xm, int ym, int xp, int yp, int[] xs, int[] ys, int width, int height, int npoints) {
             int height_half = height / 2;
             g.setColor(col);
             g.fillArc(xm, ym, width, height_half + 1, 180, -180);
@@ -110,8 +105,7 @@ public enum Shape {
     },
     wabe {
         @Override
-        public void paint(final Graphics g, final NodeContainer kc, final Color col, final Color analysisColor, final Boolean isResult, final int x, final int y, final int xm, final int ym, final int xp, final int yp, final int[] xs, final int[] ys,
-                final int width, final int height, int npoints) {
+        public void paint(Graphics g, NodeContainer kc, Color col, Color analysisColor, Boolean isResult, int x, int y, int xm, int ym, int xp, int yp, int[] xs, int[] ys, int width, int height, int npoints) {
             xs[0] = xm;
             xs[1] = x - width / 3;
             xs[2] = x + width / 3;
@@ -136,8 +130,7 @@ public enum Shape {
     },
     ordner {
         @Override
-        public void paint(final Graphics g, final NodeContainer kc, final Color col, final Color analysisColor, final Boolean isResult, final int x, final int y, final int xm, final int ym, final int xp, final int yp, final int[] xs, final int[] ys,
-                final int width, final int height, final int npoints) {
+        public void paint(Graphics g, NodeContainer kc, Color col, Color analysisColor, Boolean isResult, int x, int y, int xm, int ym, int xp, int yp, int[] xs, int[] ys, int width, int height, int npoints) {
             int width_third = width / 3;
             g.setColor(col);
             g.fillRect(xm, ym, width_third, height);
@@ -175,7 +168,7 @@ public enum Shape {
      * {@link GraphElementLayout#STANDARD_WIDTH} and
      * {@link GraphElementLayout#STANDARD_HEIGHT}.
      */
-    public static final int DEFAULT_HTML_LABEL_INSETS = 20;
+    public static int DEFAULT_HTML_LABEL_INSETS = 20;
 
     /**
      * @return the insets of the label inside the shape
@@ -192,7 +185,7 @@ public enum Shape {
      * @param height
      * @return cornerSize
      */
-    private static int roundRectCorner(final int width, final int height) {
+    private static int roundRectCorner(int width, int height) {
         int min = Math.min(width, height);
         int cornerSize = GraphElementLayout.STANDARD_ROUND_RECT_CONER_SIZE;
         if (min < cornerSize * 2) { //very small roundrect get the half corner size, all the others the default
@@ -211,7 +204,7 @@ public enum Shape {
      * @param xm
      * @param ym
      */
-    private static void paintTextWithOffset(final Graphics g, final NodeContainer kc, final Shape shape, final int xm, final int ym) {
+    private static void paintTextWithOffset(Graphics g, NodeContainer kc, Shape shape, int xm, int ym) {
         //if the whohle height is too small for the offset -> reduce the offset
         //if the whole height is great enough -> take the original shape offset
         Dimension size = kc.getSize();
@@ -255,7 +248,7 @@ public enum Shape {
      * @param height
      * @param npoints
      */
-    public abstract void paint(final Graphics g, final NodeContainer kc, final Color col, final Color analysisColor, final Boolean isResult, final int x, final int y, final int xm, final int ym, final int xp, final int yp, final int[] xs, final int[] ys,
-            final int width, final int height, final int npoints);
+    public abstract void paint(Graphics g, NodeContainer kc, Color col, Color analysisColor, Boolean isResult, int x, int y, int xm, int ym, int xp, int yp, int[] xs, int[] ys,
+            int width, int height, int npoints);
 
 }
