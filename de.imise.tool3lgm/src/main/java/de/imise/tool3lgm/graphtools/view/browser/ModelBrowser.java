@@ -249,8 +249,15 @@ public final class ModelBrowser extends JTabbedPaneWithCloseIconsRight implement
             closeDocOnCloseTab = false;
             SubModelsBrowser subModelsBrowser = (SubModelsBrowser) getComponentAt(index);
             GraphDocument doc = subModelsBrowser.getCurrentDoc();
-            Static.getTool().fileClose(doc);
-            super.removeTabAt(index);
+            boolean closeTab = true;
+            // Is null if the model was closed via Close Model menu entry.
+            // Is not null if the model should be closed over the Close button on the tab.
+            if (doc != null) {
+                closeTab = Static.getTool().fileClose(doc); // don't close if fileClose was canceled
+            }
+            if (closeTab) {
+                super.removeTabAt(index);
+            }
             closeDocOnCloseTab = true;
         }
     }
