@@ -1433,9 +1433,6 @@ public class GDCollection extends UserFieldTarget implements MetaModelSpecific, 
         Bendpoint bendpoint = metaModel.createElement(Bendpoint.class);
         bendpoint.setName(mainDoc.getNextNewName(bendpoint.getClass()));
         bendpointContainer = new BendpointContainer(bendpoint, szen);
-        if (!isNullOrEmpty(bendpointID)) {
-            bendpointContainer.getNode().setID(bendpointID);
-        }
         szen.start_transaction(pid);
         if (bendpointIndex == INVALID_BENDPOINT_INDEX) {
             bendpointIndex = edgeContainer.getBendpointInsertIndex(x, y);
@@ -1454,6 +1451,10 @@ public class GDCollection extends UserFieldTarget implements MetaModelSpecific, 
         bendpointContainer.setLocation(x, y);
         szen.finish_transaction(pid, DATA_CHANGED);
         edgeContainer.computeBorderPoints();
+        // for this call the EdgeContainer must already be set, so make it last
+        if (!isNullOrEmpty(bendpointID)) {
+            bendpointContainer.getNode().setID(bendpointID);
+        }
         return bendpointContainer;
     }
 
