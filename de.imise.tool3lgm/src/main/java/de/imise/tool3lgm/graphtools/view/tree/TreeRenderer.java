@@ -65,8 +65,9 @@ public class TreeRenderer extends DefaultTreeCellRenderer {
                 }
                 if (icon == null) { // no icon found for this shape in the resources -> store the dummy
                     icon = DUMMY_ICON;
-                } else {
-                    icon = ImageTools.getScaledInstance(icon, height, 10);
+                /** Skalierung im Model Browser auf 10px (Test, deaktiviert) */
+                // } else {
+                   // icon = ImageTools.getScaledInstance(icon, height, 10);
                 }
                 keyToTreeIcon.put(shape, icon);
             }
