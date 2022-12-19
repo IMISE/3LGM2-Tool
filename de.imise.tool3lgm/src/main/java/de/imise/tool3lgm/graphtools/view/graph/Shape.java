@@ -153,6 +153,20 @@ public enum Shape {
             g.drawRect(xm + width_third, ym, width_third, height);
             g.drawRect(xm + 2 * width_third, ym, width_third, height);
         }
+    },
+    rectangle_dashed {
+        @Override
+        public void paint(Graphics g, NodeContainer kc, Color col, Color analysisColor, Boolean isResult, int x, int y, int xm, int ym, int xp, int yp, int[] xs, int[] ys, int width, int height, int npoints) {
+            g.setColor(col);
+            g.fillRect(xm, ym, width, height);
+            paintTextWithOffset(g, kc, this, xm, ym);
+            g.setColor(isResult && analysisColor != null ? analysisColor : kc.getFrameColor());
+            Graphics2D gc = (Graphics2D) g;
+            Stroke stroke = gc.getStroke();
+            gc.setStroke(GraphElementLayout.NORMAL_STROKE_DASHED);
+            g.drawRect(xm, ym, width, height);
+            gc.setStroke(stroke);
+        }
     };
 
     /**

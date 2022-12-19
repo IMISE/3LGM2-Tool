@@ -326,7 +326,7 @@ public abstract class GraphViewDefinition {
         defaultElementsLayoutDefinition.setStandardBackGroundColor(Textfield.class, new Color(0, 0, 0, 0));
         defaultElementsLayoutDefinition.setStandardSize(Textfield.class, GraphElementLayout.STANDARD_WIDTH, GraphElementLayout.STANDARD_HEIGHT);
         // Group
-        defaultElementsLayoutDefinition.setStandardForm(Group.class, Shape.rechteck);
+        defaultElementsLayoutDefinition.setStandardForm(Group.class, Shape.rectangle_dashed);
         defaultElementsLayoutDefinition.setStandardBackGroundColor(Group.class, new Color(0, 0, 0, 0));
         defaultElementsLayoutDefinition.setStandardSize(Group.class, GraphElementLayout.STANDARD_WIDTH, GraphElementLayout.STANDARD_HEIGHT);
         // Bendpoint
