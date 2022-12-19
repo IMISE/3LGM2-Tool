@@ -268,4 +268,13 @@ public abstract class UserFieldTarget extends NameAndDescriptionTargetAdapter im
         return getUserFieldInputValue(userField);
     }
 
+    /**
+     * @param userField
+     * @return
+     */
+    public boolean hasEmptyValueOrError(UserField userField) {
+        String value = getValue(userField);
+        return UserField.isError(value);
+    }
+
 }

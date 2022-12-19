@@ -4,7 +4,9 @@ import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.MAX_LAYER_IN
 import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.MIN_LAYER_INDEX;
 import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.isInterLayer;
 import static de.imise.tool3lgm.graphtools.undoredo.TransactionManager.STANDARD_PID;
+import static de.imise.tool3lgm.graphtools.userfield.definition.UserField.Style.FORMULA;
 import static de.imise.tool3lgm.graphtools.userfield.definition.UserField.Style.GROUP;
+import static de.imise.tool3lgm.graphtools.userfield.definition.UserField.Style.SEPARATOR;
 import static de.imise.tool3lgm.graphtools.userfield.definition.UserField.Style.TAB;
 import static de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty.OPTION_ENABLE_EXPERT_MODE;
 import static de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty.OPTION_ENABLE_SUBMODEL_BROWSER;
@@ -610,8 +612,12 @@ public final class ModelBrowserTree extends DynamicTree implements UserFieldList
                 removeNodeIfEmpty(currentGroupNode); //remove empty group
                 currentGroupNode = userField.isTreeVisibility() ? new UserFieldTreeNode(userField, me) : null;
                 valueOrSeparatorNode = null;
-            } else if (userField.hasStyle(UserField.Style.SEPARATOR) || allOfThisElement.contains(userField)) {
-                valueOrSeparatorNode = userField.isTreeVisibility() ? new UserFieldTreeNode(userField, me) : null;
+            } else {
+                boolean add = userField.hasStyle(SEPARATOR) || allOfThisElement.contains(userField);
+                add = add || userField.hasStyle(FORMULA) && !me.hasEmptyValueOrError(userField);
+                if (add) {
+                    valueOrSeparatorNode = userField.isTreeVisibility() ? new UserFieldTreeNode(userField, me) : null;
+                }
             }
             LGMTreeNode<?> parent = null;
             LGMTreeNode<?> child = null;
