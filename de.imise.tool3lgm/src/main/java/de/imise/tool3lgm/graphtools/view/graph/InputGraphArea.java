@@ -396,7 +396,7 @@ public final class InputGraphArea extends BasicGraphArea implements MouseListene
                     continue;
                 }
                 grabbedElementsRealRect = getIncludingRectangle(grabbedElementsRealRect, kc);
-                if (OPTION_GRAPH_MOVE_SUBELEMENTS.is()) {
+                if (OPTION_GRAPH_MOVE_SUBELEMENTS.is() && !contextGenerator.isControlled()) {
                     for (ElementContainer ec : kc.getElement().getSubordinatedContainers(szenario)) {
                         ModelElement me = ec.getElement();
                         if (!me.isPaintable() || !ec.isVisible() || !multiView && kc.layerFor() != ebene) {
@@ -993,7 +993,6 @@ public final class InputGraphArea extends BasicGraphArea implements MouseListene
             } else if (yreal[ebene] > layerHeight / 2) {
                 yreal[ebene] = layerHeight / 2;
             }
-            //            boolean isMoveSubElements = OPTION_GRAPH_MOVE_SUBELEMENTS.set(false);
             switch (getCursor().getType()) {
             case Cursor.DEFAULT_CURSOR:
                 break;
@@ -1068,7 +1067,6 @@ public final class InputGraphArea extends BasicGraphArea implements MouseListene
             default:
                 break;
             }
-            //            OPTION_GRAPH_MOVE_SUBELEMENTS.set(isMoveSubElements);
         }
         if (grabbed) {
             if (clickedEc instanceof NodeContainer) {
