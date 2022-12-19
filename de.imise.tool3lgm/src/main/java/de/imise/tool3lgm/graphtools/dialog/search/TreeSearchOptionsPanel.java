@@ -4,8 +4,10 @@ import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.util.Objects;
 import java.util.Set;
 
+import javax.swing.Action;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.border.Border;
@@ -14,6 +16,7 @@ import javax.swing.event.AncestorListener;
 
 import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
+import de.imise.util.NamedObjectContainer;
 
 /**
  * @author AXS (31.07.2020)
@@ -205,6 +208,10 @@ public class TreeSearchOptionsPanel extends BasicSearchOptionsPanel {
      */
     @Override
     protected void fillElementClassBox() {
+        Action action = elementClassBox.getAction();
+        elementClassBox.setAction(null);
+        Object selectedItem = elementClassBox.getSelectedItem();
+        int selectedIndex = elementClassBox.getSelectedIndex();
         elementClassBox.removeAllItems();
         Set<Class<? extends ModelElement>> searchableElementClasses = resultTargetView.getSearchableElementClasses();
         elementClassBox.addObject(ModelElement.class, getResString("SEARCH_DIALOG_all_element_types"));
@@ -219,7 +226,25 @@ public class TreeSearchOptionsPanel extends BasicSearchOptionsPanel {
                 elementClassBox.addObject(elementClass, displayableFullName);
             }
         }
-        elementClassBox.setSelectedObject(ModelElement.class);
+        // if for some reason the box is filled with the same elements like before -> restore selection
+        if (selectedIndex >= 0 && elementClassBox.getItemCount() > selectedIndex) {
+            NamedObjectContainer<Class<? extends ModelElement>> item = elementClassBox.getItemAt(selectedIndex);
+            if (Objects.equals(item, selectedItem)) {
+                elementClassBox.setSelectedIndex(selectedIndex);
+            }
+        } else {
+            elementClassBox.setSelectedObject(ModelElement.class);
+        }
+        elementClassBox.setAction(action);
+    }
+
+    /**
+     * Should be called if the selected model is switched from a model with one
+     * metamodel to a model with another metamodel.
+     */
+    @Override
+    public void refresh() {
+        fillElementClassBox();
     }
 
 }

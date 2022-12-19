@@ -139,6 +139,8 @@ public class TemplateBrowserPanel extends JPanel implements PropertyChangeListen
             if (searchPanel == null) {
                 searchPanel = new TreeSearchOptionsPanel(tree);
                 add(searchPanel, BorderLayout.NORTH);
+            } else {
+                searchPanel.refresh();
             }
         } else if (searchPanel != null) {
             remove(searchPanel);
