@@ -28,14 +28,15 @@ public abstract class DynamicMenu extends JMenu {
      * <p>
      * Erzeugt eine neue Instanz mit entsprechender Beschriftung
      *
-     * @param s
+     * @param title
      * @param menuEntries
      */
-    public DynamicMenu(final String s, final Object... menuEntries) {
-        super(s);
-        Object[] allMenuEntries = menuEntries.length > 0 ? menuEntries : new Object[] {
-                new DynamicMenuPlaceholder() // wenn gar keine Items angegeben wurden, dann wird hier ein Placeholder eingefügt. Ohne diesen Placeholder braucht man kein DynamicMenu zu nehmen
-        };
+    public DynamicMenu(final String title, final Object... menuEntries) {
+        super(title);
+        Object[] allMenuEntries = menuEntries.length > 0 ? menuEntries
+                : new Object[] {
+                        new DynamicMenuPlaceholder() // wenn gar keine Items angegeben wurden, dann wird hier ein Placeholder eingefügt. Ohne diesen Placeholder braucht man kein DynamicMenu zu nehmen
+                };
         for (int i = 0; i < allMenuEntries.length; i++) {
             if (allMenuEntries[i] instanceof DynamicMenuPlaceholder) {
                 DynamicMenuPlaceholder placeholder = (DynamicMenuPlaceholder) allMenuEntries[i];
