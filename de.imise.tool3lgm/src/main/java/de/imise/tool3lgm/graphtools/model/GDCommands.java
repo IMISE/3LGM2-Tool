@@ -2,6 +2,8 @@ package de.imise.tool3lgm.graphtools.model;
 
 import static de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty.TRANSIENT_OPTION_LOG_READABLE_UNOD_REDO_COMMANDS;
 
+import javax.swing.KeyStroke;
+
 import com.google.common.base.Objects;
 
 import de.imise.tool3lgm.event.action.GraphDocumentAction;
@@ -14,6 +16,7 @@ import de.imise.tool3lgm.event.action.SelectionAction;
 import de.imise.tool3lgm.event.action.SubmodelAction;
 import de.imise.tool3lgm.event.action.SubmodelSelectionAction;
 import de.imise.util.swing.event.ActionSource;
+import de.imise.util.swing.event.ExtendedAction;
 
 public enum GDCommands implements ActionSource {
 
@@ -162,6 +165,26 @@ public enum GDCommands implements ActionSource {
     public static final int INVALID_BENDPOINT_INDEX = -1;
     public static final int INVALID_EDGE_INDEX = -1;
     public static final String INVALID_EDGE_CLASS_NAME = "";
+
+    /** The action for this command */
+    private ExtendedAction action;
+
+    @Override
+    public ExtendedAction createAction() {
+        if (action == null) {
+            action = ActionSource.super.createAction();
+
+        }
+        return action;
+    }
+
+    /**
+     * @param keyStroke
+     */
+    public void setKeyStroke(KeyStroke keyStroke) {
+        ExtendedAction action = createAction();
+        action.setKeyStroke(keyStroke);
+    }
 
     @Override
     public String toString() {
