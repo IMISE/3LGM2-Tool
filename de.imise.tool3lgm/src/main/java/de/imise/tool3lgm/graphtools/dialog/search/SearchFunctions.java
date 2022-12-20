@@ -41,7 +41,7 @@ public class SearchFunctions {
         value = value.replaceAll("\\+", "\\\\+");
 
         Pattern pattern = null;
-        if (!value.equals("")) {
+        if (!"".equals(value)) {
             try {
                 pattern = Pattern.compile(value);
             } catch (PatternSyntaxException error) {
@@ -194,7 +194,7 @@ public class SearchFunctions {
         if (patternUserFields == null && searchAllUserFields) {
             return true;
         }
-        if (patternUserFields != null || searchUserFieldStyle.equals(CHECK_BOX)) {
+        if (patternUserFields != null || CHECK_BOX.equals(searchUserFieldStyle)) {
             ModelElement me = ec.getElement();
             if (me.getUserFieldInputValueKeys().isEmpty()) {
                 return false;
@@ -226,10 +226,10 @@ public class SearchFunctions {
                     }
                     Matcher matchNameOfCheckBox = patternUserFields.matcher(userFieldName);
                     if (matchNameOfCheckBox.find()) {
-                        if (checkBoxMode == UserFieldCheckBoxState.CHECKBOX_STATE_CHECKED && userFieldInputValue.equals("true")) {
+                        if (checkBoxMode == UserFieldCheckBoxState.CHECKBOX_STATE_CHECKED && "true".equals(userFieldInputValue)) {
                             return true;
                         }
-                        if (checkBoxMode == UserFieldCheckBoxState.CHECKBOX_STATE_NOT_CHECKED && userFieldInputValue.equals("false")) {
+                        if (checkBoxMode == UserFieldCheckBoxState.CHECKBOX_STATE_NOT_CHECKED && "false".equals(userFieldInputValue)) {
                             return true;
                         }
                         if (checkBoxMode == UserFieldCheckBoxState.CHECKBOX_STATE_ALL) {
