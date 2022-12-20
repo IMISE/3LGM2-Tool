@@ -14,6 +14,7 @@ import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 import javax.swing.JRadioButtonMenuItem;
+import javax.swing.KeyStroke;
 
 import de.imise.util.NamedObjectContainer;
 import de.imise.util.ReflectionUtils;
@@ -133,9 +134,17 @@ public class MenuCreator {
 
         Component[] menuItems = new Component[allMenuEntries.size()];
         for (int i = 0; i < allMenuEntries.size(); i++) {
-            Component item = createMenuEntry(allMenuEntries.get(i));
+            Object entry = allMenuEntries.get(i);
+            Component item = createMenuEntry(entry);
             if (item != null) {
                 menuItems[i] = item;
+                if (item instanceof JMenuItem) {
+                    if (entry instanceof ExtendedAction) {
+                        KeyStroke keyStroke = ((ExtendedAction) entry).getKeyStroke();
+                        ((JMenuItem) item).setAccelerator(keyStroke);
+                    }
+                }
+
             }
         }
         if (setMnemonics) {
@@ -154,7 +163,8 @@ public class MenuCreator {
         Component item = null;
         if (entry == null) {
             throw new IllegalArgumentException("null ist kein gültiges Argument");
-        } else if (entry instanceof Action) {
+        }
+        if (entry instanceof Action) {
             if (entry instanceof ExtendedAction) {
                 ExtendedAction action = (ExtendedAction) entry;
                 item = action.createMenuItem();

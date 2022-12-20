@@ -16,6 +16,7 @@ import de.imise.tool3lgm.event.ActionLibrary.EditActions;
 import de.imise.tool3lgm.event.ActionLibrary.FileActions;
 import de.imise.tool3lgm.graphtools.model.GDCommands;
 import de.imise.util.collections.CollectionUtils;
+import de.imise.util.swing.event.ExtendedAction;
 
 public class KeyStrokes {
 
@@ -42,7 +43,7 @@ public class KeyStrokes {
     }
 
     private static void put(final GDCommands command, final int keyCode, final int modifiers) {
-        KEYSTROKES.put(command.createAction(), KeyStroke.getKeyStroke(keyCode, modifiers));
+        put(command.createAction(), keyCode, modifiers);
     }
 
     private static void put(final Action action, final int keyCode, final int modifiers) {
@@ -62,6 +63,10 @@ public class KeyStrokes {
                 im.put(keyStroke, action);
             }
             am.put(action, action);
+            // this is needed that the menu items can set the keystroke to display it in the menu
+            if (action instanceof ExtendedAction) {
+                ((ExtendedAction) action).setKeyStroke(keyStroke);
+            }
         }
         component.setInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT, im);
         component.setActionMap(am);
