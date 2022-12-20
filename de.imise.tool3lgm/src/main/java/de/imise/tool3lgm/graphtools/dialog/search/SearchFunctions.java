@@ -9,6 +9,12 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
+import javax.swing.JTree;
+import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.DefaultTreeModel;
+import javax.swing.tree.TreeNode;
+import javax.swing.tree.TreePath;
+
 import de.imise.tool3lgm.graphtools.dialog.search.SearchOptions.UserFieldCheckBoxState;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
@@ -298,6 +304,52 @@ public class SearchFunctions {
             }
         }
         return initialTargetElements;
+    }
+
+    /**
+     * Returns all TreePathes to nodes whose UserObject is not an
+     * ElementContainer and whose toString machting the name pattern of the
+     * searchOptions.
+     *
+     * @param tree
+     * @param searchOptions
+     * @return
+     */
+    public static List<TreePath> getResult(JTree tree, final SearchOptions searchOptions) {
+        DefaultTreeModel model = (DefaultTreeModel) tree.getModel();
+        DefaultMutableTreeNode root = (DefaultMutableTreeNode) model.getRoot();
+        ArrayList<TreePath> result = new ArrayList<>();
+        if (searchOptions.getSearchedElementType() != ModelElement.class) {
+            return result;
+        }
+        String inputStringName = searchOptions.inputStringName;
+        boolean caseSensitiveName = searchOptions.caseSensitiveName;
+        Pattern patternName = compilePattern(inputStringName, caseSensitiveName);
+        return addResult(result, root, patternName);
+    }
+
+    /**
+     * @param result
+     * @param node
+     * @param pattern
+     * @return
+     */
+    private static List<TreePath> addResult(List<TreePath> result, DefaultMutableTreeNode node, Pattern pattern) {
+        Object userObject = node.getUserObject();
+        if (!(userObject instanceof ElementContainer)) {
+            String nodeName = node.toString();
+            //last parameter is irrelevant because create pattern has already checked the case sensitivity
+            if (matches(pattern, nodeName, false)) {
+                TreeNode[] path = node.getPath();
+                TreePath treePath = new TreePath(path);
+                result.add(treePath);
+            }
+            for (int i = 0; i < node.getChildCount(); i++) {
+                DefaultMutableTreeNode child = (DefaultMutableTreeNode) node.getChildAt(i);
+                addResult(result, child, pattern);
+            }
+        }
+        return result;
     }
 
 }

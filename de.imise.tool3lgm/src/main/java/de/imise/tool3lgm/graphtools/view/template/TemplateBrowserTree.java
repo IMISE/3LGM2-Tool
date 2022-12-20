@@ -407,6 +407,9 @@ public class TemplateBrowserTree extends DynamicTree implements SearchResultView
             template.addToSelection(result);
         }
         setSelection();
+        List<TreePath> paths2Select = SearchFunctions.getResult(this, options);
+        TreePath[] paths = paths2Select.toArray(new TreePath[0]);
+        addSelectionPaths(paths);
     }
 
     /**
