@@ -48,66 +48,63 @@ import de.imise.util.swing.event.ConfirmDialogAction.ConfirmDialog;
 /** @author thomas, AXS, xhb */
 public class AnalysisEditor extends JDialog implements ActionListener, ConfirmDialog {
 
-    /** Das MetaModel, für das die Analsysen erstellt werden sollen */
+    /** The MetaModel for which the anal sysys should be created */
     private final MetaModel metaModel;
 
     /**
-     * Diese Componente besteht aus zwei Listen, die Elementklassen enthalten.
-     * In der ersten sind die Elemteklassen enthalten, von denen eine
-     * Teilanalyse ausgeht. In der zweiten sind die Elemtklassen enthalten, die
-     * die Bedingung für eine Teilanalyse darstellen. Es sind Radiobutton
-     * enthalten. Die Radiobuttons sind einer ButtonGroup zugeordnet. Die
-     * Radiobuttons geben die Ausprägung der Condition an. D.h. Soll ein Element
-     * verbunden sein oder nicht? An die erste Liste ist ein
-     * <code>ListSelectionListener</code> geknüpft, der die nachfolgende Liste
-     * füllt, wenn sie schon existiert. Wenn also eine Elementklasse selektiert
-     * wird, werden in der nachfolgenen <code>PathStepComponent</code> die erste
-     * Liste mit den möglichen Elementklassen gefüllt, die mit dem selektierten
-     * Element verbunden sein können.
+     * This component consists of two lists containing element classes. The
+     * first one contains the element classes from which a partial analysis
+     * starts. The second one contains the element classes that are the
+     * condition for a partial analysis. Radio buttons are included. The radio
+     * buttons are assigned to a button group. The radio buttons indicate the
+     * characteristic of the condition. That means, whether an element should be
+     * connected or not. Attached to the first list is a
+     * <code>ListSelectionListener</code> that fills the subsequent list if it
+     * already exists. Thus, when an element class is selected, in the
+     * subsequent <code>PathStepComponent</code> the first list is filled with
+     * the possible element classes that can be linked to the selected element.
      */
     private class PathStepComponent implements ListSelectionListener {
 
         /**
-         * Diese ButtonGroup beinhaltet die zwei Radiobuttons, die die Condition
-         * darstellen. Es sind die zwei RadioButtons enthalten, die angeben, ob
-         * ein Element mit einem anderen verbunden sein muss oder nicht
-         * verbunden sein darf.
+         * This ButtonGroup contains the two radio buttons that represent the
+         * Condition. It contains the two RadioButtons that indicate whether an
+         * element must or must not be connected to another.
          */
         private ButtonGroup bgroup;
 
         /**
-         * Die RadioButtons, die angeben, ob das selektierte Element der ersten
-         * Liste mit dem(n) selektierten Element(en) der Eingränzungsliste
-         * verbunden sein muss oder nicht sein darf.
+         * The RadioButtons that indicate whether the selected element of the
+         * first list must or must not be connected to the selected element(s)
+         * of the addition list.
          */
         private JRadioButton connectedRadioBut, notConnectedRadioBut;
 
         /**
-         * Enthält die Elementklassen, die start einer XMLAnalyse sein können
-         * und die Zwischenschritte in einer Analysekette sein können.
+         * Contains the element classes that can be the start of an XML analysis
+         * and that can be intermediate steps in an analysis chain.
          */
         private AlphabeticalJList<Class<? extends ModelElement>> pathStepElementTypeList;
 
         /**
-         * Enthält die Elemntklassen, die angeben, ob ein Element mit einem
-         * seletierten aus dieser Liste verbunden sein muss/nicht verbunden sein
-         * darf.
+         * Contains the elemnt classes that specify whether an element must
+         * be/not be connected to a selected one from this list.
          */
         private AlphabeticalJList<Class<? extends ModelElement>> conditionElementTypeList;
 
-        /** In diesem scrollPane sind die Elementklassen */
+        /** In this ScrollPane are the element classes */
         private JScrollPane scrollPaneTyp;
 
         /**
-         * In diesem <code>JScrollPane</code> sind die Elementklassen für
-         * Einschränkungen
+         * In this <code>JScrollPane</code> are the element classes for
+         * constraints.
          */
         private JScrollPane scrollPaneverb;
 
-        /** Die Überschrift für das <code>scrollPaneTyp</code> */
+        /** Header for the <code>scrollPaneTyp</code> */
         private JLabel pathElementCaption;
 
-        /** Die Überschrift für die RadioButtons */
+        /** Header for the radio buttons */
         private JLabel limitationCaption;
 
         /** @param listener */
@@ -115,21 +112,20 @@ public class AnalysisEditor extends JDialog implements ActionListener, ConfirmDi
             config(listener);
         }
 
-        /** Fügt die Listen und Beschriftungen im Panel hinzu */
+        /** Adds the lists and labels in the panel */
         public void addElements() {
-            // TODO: für unsere englischen Freunde auslagern. Dann aber auch gleich die Analyseeditoren und
-            // parser so umschreiben, dass sie nur noch englische Tags schreiben und lesen
+            // TODO: Rewrite the analysis editors and parsers to write and read only English tags
 
             pathStepMainPanelConstraints.gridy++;
             pathStepMainPanelConstraints.gridx = 0;
 
-            // Die Beschriftung für die Liste, die die Elementklassen enthält.
+            // The label for the list containing the element classes.
             pathStepMainPanel.add(pathElementCaption, pathStepMainPanelConstraints);
 
             pathStepMainPanelConstraints.gridx = 1;
             pathStepMainPanelConstraints.gridwidth = 2;
 
-            // Beschriftung für die EingrenzungsRadioButtons
+            // Label for the Condition RadioButtons
             pathStepMainPanel.add(limitationCaption, pathStepMainPanelConstraints);
             pathStepMainPanelConstraints.gridwidth = 1;
 
@@ -137,12 +133,12 @@ public class AnalysisEditor extends JDialog implements ActionListener, ConfirmDi
             pathStepMainPanelConstraints.gridy++;
             pathStepMainPanelConstraints.gridheight = 2;
 
-            // Die Liste, die die Elementklassen enthält
+            // The list containing the element classes
             pathStepMainPanel.add(scrollPaneTyp, pathStepMainPanelConstraints);
             pathStepMainPanelConstraints.gridheight = 1;
             pathStepMainPanelConstraints.gridx++;
 
-            // Die Radiobuttons, die angeben, ob eine Einschränkung vorliegen soll.
+            // The radio buttons that indicate whether there should be a restriction.
             pathStepMainPanel.add(connectedRadioBut, pathStepMainPanelConstraints);
             pathStepMainPanelConstraints.gridy++;
 
@@ -151,7 +147,7 @@ public class AnalysisEditor extends JDialog implements ActionListener, ConfirmDi
             pathStepMainPanelConstraints.gridy--;
             pathStepMainPanelConstraints.gridheight = 2;
 
-            // Die Liste, die die Elementklassen enthält, mit den Einschränkungen getroffen werden können.
+            // The list that contains the element classes with which constraints can be made.
             pathStepMainPanel.add(scrollPaneverb, pathStepMainPanelConstraints);
             pathStepMainPanelConstraints.gridheight = 1;
 
@@ -161,8 +157,8 @@ public class AnalysisEditor extends JDialog implements ActionListener, ConfirmDi
         }
 
         /**
-         * Initialisiert die Listen und Labels Ruft initial die Methode auf, die
-         * die GUI-Elemente zum <code>pathStepMainPanel</code> hinzufügt.
+         * Initializes the lists and labels Initially calls the method that adds
+         * the GUI elements to the <code>pathStepMainPanel</code>.
          *
          * @param listener
          */
@@ -193,9 +189,9 @@ public class AnalysisEditor extends JDialog implements ActionListener, ConfirmDi
         }
 
         /**
-         * Löscht sich selbst aus der grafischen Anzeige. Es werden die Listen,
-         * die RadioButtons sowie die Beschriftungen der zuletzt hinzugefügten
-         * Gruppe gelöscht.
+         * Deletes itself from the graphical display. The lists, the
+         * RadioButtons as well as the labels of the last added group are
+         * deleted.
          */
         public void removeLastInsertetLists() {
             pathStepMainPanel.remove(scrollPaneverb);
@@ -209,7 +205,7 @@ public class AnalysisEditor extends JDialog implements ActionListener, ConfirmDi
         }
 
         /**
-         * Füllt die nachfolgenden Listen
+         * Fills the following lists
          *
          * @param newList
          */
@@ -265,8 +261,8 @@ public class AnalysisEditor extends JDialog implements ActionListener, ConfirmDi
     }
 
     /**
-     * Liefert ein Array der Klassen aller Elemente, die mit Elementen der
-     * übergebenen Art über irgendeine Art von Kanten verbunden sein können.
+     * Returns an array of the classes of all elements that can be connected to
+     * elements of the given type via some kind of edges.
      *
      * @param elementClasses
      */
@@ -301,7 +297,7 @@ public class AnalysisEditor extends JDialog implements ActionListener, ConfirmDi
     }
 
     /**
-     * Zeigt den AnalysisEditor an.
+     * Displays the AnalysisEditor.
      *
      * @param owner
      * @param metaModel
@@ -314,7 +310,7 @@ public class AnalysisEditor extends JDialog implements ActionListener, ConfirmDi
     }
 
     /**
-     * Zeigt den AnalysisEditor an.
+     * Displays the AnalysisEditor.
      *
      * @param owner
      * @param metaModel
@@ -327,41 +323,39 @@ public class AnalysisEditor extends JDialog implements ActionListener, ConfirmDi
     }
 
     /**
-     * Liste aller <code>PathStepComponent</code>s, über die weitere
-     * Pfadschritte und bedinungen eingegeben werden können
+     * List of all <code>PathStepComponent</code>s that can be used to enter
+     * further path steps and conditions.
      */
     private final List<PathStepComponent> pathPanels = new ArrayList<>();
 
     /**
-     * Button, mit dem das letzte Panel eines Pfadschrittes wieder entfernt
-     * werden kann
+     * Button with which the last panel of a path step can be removed again
      */
-    private final JButton addPathStepPanelBut = new JButton("+"/* getResString("erw") */);
+    private final JButton addPathStepPanelBut = new JButton("+");
 
     /**
-     * Button, mit dem ein weiteres Panel für einen Pfadschritt hinzugefügt
-     * werden kann
+     * Button to add another panel for a path step
      */
-    private final JButton removePathStepPanelBut = new JButton("-"/* getResString("vereinfachen") */);
+    private final JButton removePathStepPanelBut = new JButton("-");
 
     /**
      * Button to exit the panel
      */
     private JButton exitButton;
 
-    /** Panel, das alle <code>PathStepComponent</code>s enthält */
+    /** Panel containing all <code>PathStepComponent</code>s. */
     private JPanel pathStepMainPanel;
 
     /**
-     * Die Constraints mit denen die einzelnen <code>PathStepComponent</code>s
-     * in das <code>pathStepMainPanel</code> eingefügt werden.
+     * The Constraints with which the individual <code>PathStepComponent</code>s
+     * are inserted into the <code>pathStepMainPanel</code>.
      */
     private final GridBagConstraints pathStepMainPanelConstraints = new GridBagConstraints();
 
-    /** Das haupt JPanel, in dem die Listen und Buttons untergebracht sind. */
+    /** The main JPanel, where the lists and buttons are located. */
     private JPanel mainPanel;
 
-    /** Die Instanz dieser Klasse, die dann tatsächlich angezeigt wird. */
+    /** The instance of this class that will actually be displayed. */
     static AnalysisEditor editor = null;
 
     /**
@@ -453,18 +447,18 @@ public class AnalysisEditor extends JDialog implements ActionListener, ConfirmDi
                     Log.show(Log.ERROR, getResString("ANALYSIS_CANT_CREATE") + "\n" + ex.getMessage(), ex);
                 }
                 if (toadd != null) {
-                    // wenn der AnalysesRepositoryFrame sichtbar ist, wird die neue XMLAnalyse nicht
-                    // gleich ins Standard-Repository übernommen, sondern erst ins
+                    // if the AnalysesRepositoryFrame is visible, the new XML analysis is not
+                    // immediately transferred to the standard repository, but first to the
                     if (AnalysesRepositoryFrame.dialog.isVisible()) {
                         AnalysesRepositoryFrame.addAnalysis(toadd, false);
                         AnalysesRepositoryFrame.table.update();
                         AnalysesRepositoryFrame.refreshActionStates();
-                        // der Editor wurde ohne AnalysesRepositoryFrame gestartet -> neue XMLAnalyse
-                        // gleich ins Repository schreiben
+                        // the editor was started without AnalysesRepositoryFrame -> write new
+                        // XMLAnalysis immediately into the repository
                     } else {
                         AnalysesRepository.addAnalysis(toadd);
                         AnalysesRepository.saveRepository();
-                        // die Kopie der Analysen des Repositories auch im Dialog updaten
+                        // update the copy of the analyses of the repository in the dialog as well
                         AnalysesRepositoryFrame.refreshAnalyses();
                     }
                 }
@@ -475,16 +469,13 @@ public class AnalysisEditor extends JDialog implements ActionListener, ConfirmDi
     @Override
     public void dispose() {
         super.dispose();
-        // null setzten, weil nicht fest steht, ob der Editor wieder mit dem gleichen Parent
-        // gestartet wird
-        // (das kann das Hauptfenster oder der AnalysesRepositoryFrame sein)
+        // set to null, because it is not certain whether the editor will be started again with
+        // the same parent (this can be the main window or the AnalysesRepositoryFrame)
         AnalysisEditor.editor = null;
     }
 
     /**
-     * Liefert den XML-String
-     *
-     * @return XML-String der XMLAnalyse
+     * @return XML-String of the XMLAnalysis
      */
     public String getAnalysisString() {
         PathStepComponent firstListPanel = pathPanels.get(0);
@@ -501,9 +492,8 @@ public class AnalysisEditor extends JDialog implements ActionListener, ConfirmDi
         querystring.append(((Class<?>) firstSelectionIndices.get(lastIndex)).getSimpleName());
         querystring.append("\"/>\n");
 
-        // Das Hinzufügen der Startklasse als erstes Suchelement erfolgt,
-        // da die Angabe im Tag <startknoten>, in dem ja keine Enischränkungen getroffen werden,
-        // nicht ausreicht.
+        // The addition of the start class as the first search element is done because the specification in
+        // the <startknoten> tag, in which no restrictions are made, is not sufficient.
         PathStepComponent first = pathPanels.get(0);
         querystring.append("\t<suche>\n");
         if (!first.pathStepElementTypeList.getSelectedValuesList().isEmpty()) {
@@ -532,8 +522,7 @@ public class AnalysisEditor extends JDialog implements ActionListener, ConfirmDi
         for (int i = 1; i < pathPanels.size(); i++) {
 
             PathStepComponent current = pathPanels.get(i);
-            // Wenn Listen angezeigt werden, die entweder leer sind oder in denen nichts selektiert
-            // ist.
+            // When lists are displayed that are either empty or have nothing selected.
             if (current.pathStepElementTypeList.getSelectedValuesList().isEmpty()) {
                 break;
             }
@@ -566,7 +555,7 @@ public class AnalysisEditor extends JDialog implements ActionListener, ConfirmDi
         return querystring.toString();
     }
 
-    /** Initialisiert die GUI-Kompnenten */
+    /** Initializes the GUI-Compnents */
     private void init() {
         setTitle(getResString("analysis"));
         registerCtrlEnterKey();
@@ -603,7 +592,7 @@ public class AnalysisEditor extends JDialog implements ActionListener, ConfirmDi
         panel.add(new JScrollPane(pathStepMainPanel), BorderLayout.CENTER);
         panel.add(buttonPanel, BorderLayout.SOUTH);
 
-        /* Panels Ende */
+        /* Panels End */
         JPanel buttons = new JPanel();
         buttons.setLayout(new FlowLayout());
         JButton but = new JButton(AnalysesRepositoryFrameActions.ACTION_RESET_ANALYSIS_RESULT);
