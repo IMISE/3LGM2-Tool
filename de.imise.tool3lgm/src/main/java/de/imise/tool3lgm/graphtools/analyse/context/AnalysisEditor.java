@@ -31,6 +31,8 @@ import javax.swing.event.ListSelectionListener;
 
 import org.xml.sax.SAXException;
 
+import com.google.common.base.Strings;
+
 import de.imise.tool3lgm.MetaModelContext;
 import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.graphtools.IDSource;
@@ -392,11 +394,11 @@ public class AnalysisEditor extends JDialog implements ActionListener, ConfirmDi
             if (!(first.pathStepElementTypeList.isSelectionEmpty() && first.conditionElementTypeList.isSelectionEmpty())) {
                 try {
                     MetaModelContext selectedMetaModelContext = selectedDoc.getMetaModelContext();
-                    String analysisString = getAnalysisString();
+                    String analysisString = getAnalysisString(null);
                     XMLAnalysis analysis = XMLAnalysis.createAnalysis(selectedMetaModelContext, analysisString, IDSource.createIDString("ANA"));
                     analysis.setAnalysisResult(selectedDoc);
                 } catch (SAXException e1) {
-                    Log.log(Log.ERROR, "Can't execute analysis\n" + getAnalysisString());
+                    Log.log(Log.ERROR, "Can't execute analysis\n" + getAnalysisString(null));
                     // e1.printStackTrace();
                 }
             }
@@ -432,16 +434,16 @@ public class AnalysisEditor extends JDialog implements ActionListener, ConfirmDi
             if (!(first.pathStepElementTypeList.isSelectionEmpty() && first.conditionElementTypeList.isSelectionEmpty())) {
                 NameAndColorInputDialog nd = new NameAndColorInputDialog(this);
                 nd.showDialog(getResString("ana_name_title"), "");
-                String val = nd.getInputString();
-                if (val == null) {
-                    val = "(null)";
+                String name = nd.getInputString();
+                if (name == null) {
+                    name = "(null)";
                 }
                 XMLAnalysis toadd = null;
                 MetaModelContext selectedMetaModelContext = Static.getSelectedMetaModelContext();
                 try {
                     toadd = XMLAnalysis.createAnalysis(selectedMetaModelContext);
-                    toadd.setName(val);
-                    String analysisString = getAnalysisString();
+                    toadd.setName(name);
+                    String analysisString = getAnalysisString(name);
                     toadd.setXMLText(analysisString);
                 } catch (SAXException ex) {
                     Log.show(Log.ERROR, getResString("ANALYSIS_CANT_CREATE") + "\n" + ex.getMessage(), ex);
@@ -477,9 +479,22 @@ public class AnalysisEditor extends JDialog implements ActionListener, ConfirmDi
     /**
      * @return XML-String of the XMLAnalysis
      */
-    public String getAnalysisString() {
+    public String getAnalysisString(String name) {
         PathStepComponent firstListPanel = pathPanels.get(0);
         StringBuilder querystring = new StringBuilder("<?xml version=\"1.0\" encoding=\"ISO-8559-15\"?>\n<analyse>\n");
+        if (!Strings.isNullOrEmpty(name)) {
+            querystring.append("\t<name>\n");
+            for (String lang : List.of("en", "de")) {
+                querystring.append("\t\t<");
+                querystring.append(lang);
+                querystring.append(">");
+                querystring.append(name);
+                querystring.append("</");
+                querystring.append(lang);
+                querystring.append(">\n");
+            }
+            querystring.append("\t</name>\n");
+        }
         querystring.append("\t<startknoten name=\"");
         List<Class<? extends ModelElement>> firstSelectionIndices = firstListPanel.pathStepElementTypeList.getSelectedObjects();
         int lastIndex = firstSelectionIndices.size() - 1;
