@@ -5,6 +5,7 @@ import static de.imise.tool3lgm.graphtools.userfield.definition.SubType.DUMMY_SU
 import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.userfield.definition.SubType;
+import de.imise.tool3lgm.graphtools.userfield.definition.UserFieldTarget;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.graphtools.view.container.InterLayerConnectedNodeContainer;
 import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
@@ -63,7 +64,7 @@ public abstract class Node extends ModelElement {
             this.subType = DUMMY_SUBTYPE;
             return;
         }
-        Class<? extends ModelElement> superClass = subType.getSuperClass();
+        Class<? extends UserFieldTarget> superClass = subType.getSuperClass();
         Class<? extends Node> thisClass = getClass();
         if (superClass.isAssignableFrom(thisClass)) {
             this.subType = subType;

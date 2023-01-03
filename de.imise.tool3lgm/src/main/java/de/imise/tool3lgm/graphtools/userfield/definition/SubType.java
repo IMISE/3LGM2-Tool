@@ -35,7 +35,7 @@ public class SubType implements NameAndDescriptionSource, IDSource {
     /**
      *
      */
-    private final Class<? extends ModelElement> superClass;
+    private final Class<? extends UserFieldTarget> superClass;
 
     /**
      * This constructor should be used only for creating the DUMMY_SUBTYPE
@@ -55,7 +55,7 @@ public class SubType implements NameAndDescriptionSource, IDSource {
             throw new InvalidParameterException();
         }
         this.subTypeUserField = subTypeUserField;
-        superClass = subTypeUserField.getTargetClass().asSubclass(ModelElement.class);
+        superClass = subTypeUserField.getTargetClass();
     }
 
     /**
@@ -68,7 +68,7 @@ public class SubType implements NameAndDescriptionSource, IDSource {
     /**
      * @return
      */
-    public Class<? extends ModelElement> getSuperClass() {
+    public Class<? extends UserFieldTarget> getSuperClass() {
         return superClass;
     }
 
