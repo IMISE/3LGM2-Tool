@@ -40,6 +40,13 @@ public class Tool3lgmModelType extends MetaModelSpecificAdapter {
          */
         CLIPBOARD;
 
+        /**
+         * @return a dsiplay text for this model category.
+         */
+        public String getDisplay() {
+            return Tool3lgmConstants.getResString("MODEL_CATEGORY_" + name());
+        }
+
     }
 
     /** Modell-Kategorie dieses Typs */

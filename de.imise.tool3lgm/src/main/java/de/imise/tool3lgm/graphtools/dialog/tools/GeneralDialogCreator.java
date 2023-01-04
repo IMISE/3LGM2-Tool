@@ -1,10 +1,15 @@
 package de.imise.tool3lgm.graphtools.dialog.tools;
 
+import static javax.swing.JOptionPane.CANCEL_OPTION;
+import static javax.swing.JOptionPane.NO_OPTION;
+import static javax.swing.JOptionPane.YES_OPTION;
+
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Dimension;
 
 import javax.swing.BorderFactory;
+import javax.swing.JCheckBox;
 import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
@@ -12,6 +17,8 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.border.TitledBorder;
+
+import com.google.common.base.Strings;
 
 import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.Tool3lgmConstants;
@@ -144,6 +151,87 @@ public class GeneralDialogCreator {
         }
         panel.setPreferredSize(preferredSize);
         return panel;
+    }
+
+    /**
+     * Struct to encapsulate the two answers from a Don't-ask-again-dialog.
+     */
+    public static class DontAskAgainDialogAnswer {
+        /**
+         * @param dialogAnswer The dialog answer according to a Yes-No-Cancel
+         *            JOptionPane
+         * @param dontAskAgain Boolean of the Don't-ask-again-Checkbox
+         */
+        public DontAskAgainDialogAnswer(int dialogAnswer, boolean dontAskAgain) {
+            this.dialogAnswer = dialogAnswer;
+            this.dontAskAgain = dontAskAgain;
+        }
+        /** The dialog answer according to a Yes-No-Cancel JOptionPane */
+        private final int dialogAnswer;
+        /** Boolean of the Don't-ask-again-Checkbox */
+        private final boolean dontAskAgain;
+        /**
+         * @return <code>true</code> if the dialg answer is
+         *         {@link JOptionPane#YES_OPTION}
+         */
+        public boolean isYes() {
+            return dialogAnswer == YES_OPTION;
+        }
+        /**
+         * @return <code>true</code> if the dialg answer is
+         *         {@link JOptionPane#NO_OPTION}
+         */
+        public boolean isNo() {
+            return dialogAnswer == NO_OPTION;
+        }
+        /**
+         * @return <code>true</code> if the dialg answer is
+         *         {@link JOptionPane#CANCEL_OPTION}
+         */
+        public boolean isCancel() {
+            return dialogAnswer == CANCEL_OPTION;
+        }
+        /**
+         * @return <code>true</code> if dontAskAgain is <code>true</code>
+         */
+        public boolean isDontAskAgain() {
+            return dontAskAgain;
+        }
+    }
+
+    /**
+     * @param titleOrResKey
+     * @param messageOrResKey
+     * @return
+     */
+    public static DontAskAgainDialogAnswer showNeverAskAgainDialog(final String titleOrResKey, final String messageOrResKey) {
+        String message = Strings.isNullOrEmpty(messageOrResKey) ? null : Tool3lgmConstants.getResStringWithoutError(messageOrResKey);
+        JCheckBox showAgainCheckBox = getShowAgainCheckBox(false);
+        Object fullMessage[] = {
+                message == null ? null : getLabelPanel(message, true), showAgainCheckBox
+        };
+        int dialogAnswer = showDialog(titleOrResKey, fullMessage);
+        boolean dontAskAgain = showAgainCheckBox.isSelected();
+        return new DontAskAgainDialogAnswer(dialogAnswer, dontAskAgain);
+    }
+
+    /**
+     * @param selected
+     * @return
+     */
+    public static JCheckBox getShowAgainCheckBox(boolean selected) {
+        return getShowAgainCheckBox("message_do_not_ask_again", selected);
+    }
+
+    /**
+     * @param labelOrResKey
+     * @param selected
+     * @return
+     */
+    public static JCheckBox getShowAgainCheckBox(String labelOrResKey, boolean selected) {
+        String title = Tool3lgmConstants.getResStringWithoutError(labelOrResKey);
+        JCheckBox showThisDialogAgainCheckBox = new JCheckBox(title, selected);
+        return showThisDialogAgainCheckBox;
     }
 
 }

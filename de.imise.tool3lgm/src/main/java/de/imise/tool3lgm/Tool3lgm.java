@@ -16,8 +16,10 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.swing.JDesktopPane;
 import javax.swing.JFileChooser;
@@ -31,6 +33,8 @@ import com.google.common.base.Objects;
 import de.imise.tool3lgm.Tool3lgmChangeListener.Tool3lgmChangeType;
 import de.imise.tool3lgm.Tool3lgmConstants.FileFilterType;
 import de.imise.tool3lgm.graphtools.dialog.element.ElementPropertyDialogsContext;
+import de.imise.tool3lgm.graphtools.dialog.tools.GeneralDialogCreator;
+import de.imise.tool3lgm.graphtools.dialog.tools.GeneralDialogCreator.DontAskAgainDialogAnswer;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
@@ -79,6 +83,14 @@ public class Tool3lgm {
 
     /** Manager for the loaded templates */
     private final TemplateLibrariesManager templateLibrariesManager;
+
+    /**
+     * This Set contains all GDCollections for whcih the user has decided that
+     * they should be overwritten without asking again if he wants it. This
+     * should be only used for protected models like examples or default
+     * templates.
+     */
+    private final Set<GDCollection> neverAskOverwriteAgain = new HashSet<>();
 
     /**
      * constructor
@@ -616,10 +628,9 @@ public class Tool3lgm {
         } catch (Exception e) {
         }
 
+        neverAskOverwriteAgain.remove(gdcoll);
         distribute(MODEL_CHANGE_MODEL_CLOSED, selDoc);
-
         System.gc();
-
         Static.closeProgressDialog();
         return true;
     }
@@ -635,14 +646,30 @@ public class Tool3lgm {
         //        if (!LicenseHandler.checkLicenses()) {
         //            return false;
         //        }
-        /* GDCollection zum ausgewähtlen Frame */
-        GraphDocument selectedDoc = getSelectedDoc();
-        if (selectedDoc == null) {
+        /* GDCollection of active Frame */
+        GDCollection gdcoll = getSelectedGDCollection();
+        if (gdcoll == null) {
             return false;
         }
-        GDCollection gdcoll = selectedDoc.getCollection();
         GDCollectionFileHandler fileHandler = gdcoll.getFileHandler();
         saveAs = fileHandler.isReadOnly() || saveAs;
+        if (!saveAs) {
+            // TEMPLATE or EXAMPLE -> show "Really Override?" dialog
+            if (gdcoll.hasModelCategory(TEMPLATE) || gdcoll.hasModelCategory(EXAMPLE)) {
+                if (!neverAskOverwriteAgain.contains(gdcoll)) {
+                    String modelCategoryName = gdcoll.getModelCategory().getDisplay();
+                    String message = Tool3lgmConstants.getReplacedResString("WARNING_OVERRIDE_PROTECTED_MODEL_MESSAGE", modelCategoryName);
+                    DontAskAgainDialogAnswer overwriteAnswer = GeneralDialogCreator.showNeverAskAgainDialog("save", message);
+                    if (overwriteAnswer.isCancel()) {
+                        return true; // not an error if the user choose cancel
+                    }
+                    saveAs = overwriteAnswer.isNo();
+                    if (overwriteAnswer.isDontAskAgain()) {
+                        neverAskOverwriteAgain.add(gdcoll);
+                    }
+                }
+            }
+        }
         if (saveAs) {
             if (!fileHandler.chooseFile()) {
                 return true;
