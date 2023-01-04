@@ -88,7 +88,14 @@ public class ModelTemplatLibraryProvider extends TemplateLibraryProvider {
                 }
                 String[] modelTemplateFileHieraryNames = templateFilePath.split("\\" + File.separator);
                 List<Object> modelTemplateFileHierary = new ArrayList<>(Arrays.asList(modelTemplateFileHieraryNames));
-                modelTemplateFileHierary.set(modelTemplateFileHierary.size() - 1, gdcoll); //replace string with filename by model
+                // replace string with filename by model
+                modelTemplateFileHierary.set(modelTemplateFileHierary.size() - 1, gdcoll);
+                // replace Strings of dir names by dir objects
+                File parentFolder = templateFile.getParentFile();
+                for (int i = modelTemplateFileHierary.size() - 2; i >= 0; i--) {
+                    modelTemplateFileHierary.set(i, parentFolder);
+                    parentFolder = parentFolder.getParentFile();
+                }
                 List<Szenario> szens = Lists.newArrayList(gdcoll.getSzenarios());
                 modelTemplateFileHierary.add(szens);
                 return modelTemplateFileHierary;

@@ -1,11 +1,14 @@
 package de.imise.tool3lgm.graphtools.view.pathtree;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
 import javax.swing.ImageIcon;
 import javax.swing.tree.DefaultTreeModel;
+
+import org.apache.commons.io.FilenameUtils;
 
 import com.google.common.base.Strings;
 import com.google.common.collect.ImmutableList;
@@ -165,6 +168,10 @@ public class PathTreeModel extends DefaultTreeModel implements MetaModelSpecific
                 hierarchyNode = new ElementClassTreeNode(elementClass, elementClassName, icon);
             } catch (Exception e) {
             }
+        } else if (hierarchyDefinitionObject instanceof File) {
+            File file = (File) hierarchyDefinitionObject;
+            String hierarchyNodeText = FilenameUtils.getBaseName(file.getName());
+            hierarchyNode = new IconifiedTreeNode<>(file, hierarchyNodeText, true, icon);
         } else {
             String hierarchyNodeTextResourceKey = hierarchyDefinitionObject instanceof GDCollection ? ((GDCollection) hierarchyDefinitionObject).getNameWithoutFileExtension() : hierarchyDefinitionObject.toString();
             String hierarchyNodeText = treeDefinition.getResStringWithoutError(hierarchyNodeTextResourceKey);

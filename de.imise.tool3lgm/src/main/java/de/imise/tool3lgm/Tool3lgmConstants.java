@@ -241,6 +241,9 @@ public abstract class Tool3lgmConstants {
     /** icon for frames, dialogs and tabs */
     public static final ImageIcon MATRIX_ICON_13 = getIcon("matrixIcon_13.gif");
 
+    /** General Tree Icons */
+    public static final ImageIcon TREE_ICON_FOLDER_16 = getIcon("TREE_ICON_FOLDER.gif");
+
     /** Anzahl der im Menü angezeigten zu letzt benutzen Dateien */
     public static final int LAST_USED_MODEL_FILES_IN_MENU = 25;
 
@@ -344,6 +347,9 @@ public abstract class Tool3lgmConstants {
      * @return
      */
     public static final ImageIcon getTreeIcon(Object identifier) {
+        if (identifier instanceof File) {
+            return TREE_ICON_FOLDER_16;
+        }
         if (identifier instanceof GraphDocument) {
             return TOOL_ICON_TRANSPARENT_13;
         }
