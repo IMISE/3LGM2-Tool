@@ -317,12 +317,25 @@ public abstract class Tool3lgmConstants {
     protected static Cursor normalCursor = new Cursor(Cursor.DEFAULT_CURSOR), waitCursor = new Cursor(Cursor.WAIT_CURSOR), handCursor = new Cursor(Cursor.HAND_CURSOR);
 
     /**
+     * @param modelCategory
+     * @param transparent
+     * @return
+     */
+    public static final ImageIcon getFrameOrTabIcon(ModelCategory modelCategory, boolean transparent) {
+        // 16 px icons are a little bit to much here -> scaled 13 px
+        if (transparent) {
+            return modelCategory == TEMPLATE ? TEMPLATE_ICON_TRANSPARENT_13 : modelCategory == EXAMPLE ? EXAMPLE_ICON_TRANSPARENT_13 : TOOL_ICON_TRANSPARENT_13;
+        }
+        return modelCategory == TEMPLATE ? TEMPLATE_ICON_13 : modelCategory == EXAMPLE ? EXAMPLE_ICON_13 : TOOL_ICON_13;
+    }
+
+    /**
      * @param gdCollectionOwner
      * @return
      */
     public static final ImageIcon getFrameOrTabIcon(GDCollectionOwner gdCollectionOwner) {
         ModelCategory modelCategory = gdCollectionOwner.getCollection().getModelCategory();
-        return modelCategory == TEMPLATE ? TEMPLATE_ICON_13 : modelCategory == EXAMPLE ? EXAMPLE_ICON_13 : TOOL_ICON_13; // 16 px icons are a little bit to much here -> scaled 13 px
+        return getFrameOrTabIcon(modelCategory, false);
     }
 
     /**

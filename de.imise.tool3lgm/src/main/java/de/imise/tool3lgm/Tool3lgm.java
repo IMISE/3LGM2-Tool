@@ -32,6 +32,7 @@ import com.google.common.base.Objects;
 
 import de.imise.tool3lgm.Tool3lgmChangeListener.Tool3lgmChangeType;
 import de.imise.tool3lgm.Tool3lgmConstants.FileFilterType;
+import de.imise.tool3lgm.Tool3lgmModelType.ModelCategory;
 import de.imise.tool3lgm.graphtools.dialog.element.ElementPropertyDialogsContext;
 import de.imise.tool3lgm.graphtools.dialog.tools.GeneralDialogCreator;
 import de.imise.tool3lgm.graphtools.dialog.tools.GeneralDialogCreator.DontAskAgainDialogAnswer;
@@ -184,6 +185,64 @@ public class Tool3lgm {
     }
 
     /**
+     * Determines the model category of the given file.</br>
+     * If the file is located in a template directory then it is
+     * {@link ModelCategory#TEMPLATE}.</br>
+     * If the file is located in an examples directory then it is
+     * {@link ModelCategory#EXAMPLE}.</br>
+     * If it is not in such a directory then the file type will be loaded from
+     * the file itself.</br>
+     * If the model categoy cannot be loaded then {@link ModelCategory#REGULAR}
+     * is returned (and never <code>null</code>).
+     *
+     * @param file
+     * @return the model category of the given file
+     */
+    public static ModelCategory getFileModelCategory(File file) {
+        ModelCategory modelCategory = getFileLocationDependentModelCategory(file);
+        if (modelCategory == null) {
+            Tool3lgmModelType modelType = GDCollectionFileHandler.loadModelType(file);
+            if (modelType != null) {
+                modelCategory = modelType.getModelCategory();
+            }
+        }
+        return modelCategory == null ? REGULAR : modelCategory;
+    }
+
+    /**
+     * Determines the {@link ModelCategory} of a given file only on basis of the
+     * location information.</br>
+     * If the file is located in a template directory then it is
+     * {@link ModelCategory#TEMPLATE}.</br>
+     * If the file is located in an examples directory then it is
+     * {@link ModelCategory#EXAMPLE}.</br>
+     * In all other cases <code>null</code> is returned.
+     *
+     * @param file
+     * @return the model category or <code>null</code>
+     */
+    private static ModelCategory getFileLocationDependentModelCategory(File file) {
+        ModelCategory modelCategory = null;
+        if (file != null) {
+            // all models loaded from template dir must be set as TEMPLATE even if they are REGULAR
+            // same with example models from example model directories
+            String path = file.getAbsolutePath();
+            String exampleDir = Tool3lgmConstants.EXAMPLES_DIR.getAbsolutePath();
+            if (path.startsWith(exampleDir)) {
+                modelCategory = EXAMPLE;
+            } else {
+                for (File templateDir : TemplateLibrariesManager.getTemplateDirectories()) {
+                    String templateDirName = templateDir.getAbsolutePath();
+                    if (path.startsWith(templateDirName)) {
+                        modelCategory = TEMPLATE;
+                    }
+                }
+            }
+        }
+        return modelCategory;
+    }
+
+    /**
      * @param file
      * @return geladenes Model
      */
@@ -201,20 +260,10 @@ public class Tool3lgm {
             Static.setProgressDialogStatusLabel("read_progress");
             boolean retVal = fileHandler.loadFromRAF();
 
-            //all models loaded from template dir must be set as TEMPLATE even if they ar REGULAR
-            if (gdcoll.hasModelCategory(REGULAR)) {
-                String path = file.getAbsolutePath();
-                String exampleDir = Tool3lgmConstants.EXAMPLES_DIR.getAbsolutePath();
-                if (path.startsWith(exampleDir)) {
-                    gdcoll.setModelCategory(EXAMPLE);
-                } else {
-                    for (File templateDir : TemplateLibrariesManager.getTemplateDirectories()) {
-                        String templateDirName = templateDir.getAbsolutePath();
-                        if (path.startsWith(templateDirName)) {
-                            gdcoll.setModelCategory(TEMPLATE);
-                        }
-                    }
-                }
+            // override modelCategory if the file is located in example or tempalte dir
+            ModelCategory fileLocationDependentModelCategory = getFileLocationDependentModelCategory(file);
+            if (fileLocationDependentModelCategory != null) {
+                gdcoll.setModelCategory(fileLocationDependentModelCategory);
             }
 
             gdcoll.setBulkMode(false);

@@ -24,6 +24,7 @@ import java.util.List;
 
 import javax.swing.AbstractAction;
 import javax.swing.Action;
+import javax.swing.ImageIcon;
 import javax.swing.JColorChooser;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
@@ -704,6 +705,9 @@ public class ActionLibrary {
                     }
                 };
                 actions[i].setShortDescription(file.getPath());
+                ModelCategory modelCategory = Tool3lgm.getFileModelCategory(file);
+                ImageIcon icon = Tool3lgmConstants.getFrameOrTabIcon(modelCategory, true);
+                actions[i].setSmallIcon(icon);
             }
             // Die Actions werden hier nicht alphabetisch sortiert, da die durch die
             // UserProperties gegebene Reihenfolge entscheidend ist
