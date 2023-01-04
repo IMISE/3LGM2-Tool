@@ -20,12 +20,12 @@ import de.imise.util.htmlxml.HTMLConverter;
  *
  * @author AXS (09.06.2020)
  */
-public class ElementToolTipProvider implements ToolTipProvider {
+public class LGMToolTipProvider implements ToolTipProvider {
 
     /**
      *
      */
-    public ElementToolTipProvider() {
+    public LGMToolTipProvider() {
     }
 
     /**
@@ -33,7 +33,7 @@ public class ElementToolTipProvider implements ToolTipProvider {
      *
      * @param target
      */
-    public ElementToolTipProvider(final JComponent target) {
+    public LGMToolTipProvider(final JComponent target) {
         addToolTipMouseListeners(target);
     }
 

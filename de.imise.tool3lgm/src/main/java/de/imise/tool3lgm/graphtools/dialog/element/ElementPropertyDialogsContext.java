@@ -10,7 +10,7 @@ import javax.swing.JComponent;
 
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
-import de.imise.tool3lgm.graphtools.view.tooltip.ElementToolTipProvider;
+import de.imise.tool3lgm.graphtools.view.tooltip.LGMToolTipProvider;
 import de.imise.tool3lgm.userproperties.AbstractUserProperties;
 import de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty;
 import de.imise.util.ToolTipProvider;
@@ -52,7 +52,7 @@ public class ElementPropertyDialogsContext {
             }
         };
         AbstractUserProperties.addPropertyChangeListener(optionsChangeListener);
-        toolTipProvider = new ElementToolTipProvider();
+        toolTipProvider = new LGMToolTipProvider();
     }
 
     /**

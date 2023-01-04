@@ -42,7 +42,7 @@ import de.imise.tool3lgm.graphtools.path.metapaths.MetaPath;
 import de.imise.tool3lgm.graphtools.path.metapaths.SequenceMetaPath;
 import de.imise.tool3lgm.graphtools.path.metapaths.SimpleMetaPath;
 import de.imise.tool3lgm.graphtools.path.metapaths.SimpleMetaPathCreator;
-import de.imise.tool3lgm.graphtools.view.tooltip.ElementToolTipProvider;
+import de.imise.tool3lgm.graphtools.view.tooltip.LGMToolTipProvider;
 import de.imise.util.StringUtils;
 import de.imise.util.swing.component.tab.ReorderableTabbedPane;
 
@@ -654,7 +654,7 @@ public abstract class ElementPropertyDialog extends AbstractElementPropertyDialo
 
     /**
      * @return all components that should show tooltips via
-     *         {@link ElementToolTipProvider}
+     *         {@link LGMToolTipProvider}
      */
     public Collection<JComponent> getToolTipTargets() {
         Collection<JComponent> toolTipTargets = new ArrayList<>();

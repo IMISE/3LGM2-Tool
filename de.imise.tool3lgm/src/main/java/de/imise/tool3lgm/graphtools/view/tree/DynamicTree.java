@@ -13,7 +13,7 @@ import javax.swing.tree.TreePath;
 
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.model.GraphDocumentOwner;
-import de.imise.tool3lgm.graphtools.view.tooltip.ElementToolTipProvider;
+import de.imise.tool3lgm.graphtools.view.tooltip.LGMToolTipProvider;
 import de.imise.tool3lgm.graphtools.view.tree.node.LGMTreeNode;
 import de.imise.tool3lgm.gui.menu.ContextGenerator;
 import de.imise.util.ToolTipProvider;
@@ -30,7 +30,7 @@ public abstract class DynamicTree extends JTree implements GraphDocumentOwner {
      * Object that provides the tooltips for the treenodes. If <code>null</code>
      * no tooltips are shown.
      */
-    private ToolTipProvider toolTipProvider;
+    private ToolTipProvider elementToolTipProvider;
 
     /**
      * The TreePath that was clicked left or right (it must not be selected and
@@ -69,7 +69,7 @@ public abstract class DynamicTree extends JTree implements GraphDocumentOwner {
     private void init() {
         DynamicTreeMouseAdapter.addAdapter(this);
         selectionListener = new DynamicTreeSelectionListener(this);
-        toolTipProvider = new ElementToolTipProvider(this);
+        elementToolTipProvider = new LGMToolTipProvider(this);
         //Tooltip dismiss time increase (from 4s to 15s)
         ToolTipShowTimeHandler.setDismissTime(this, 15000);
     }
@@ -135,7 +135,7 @@ public abstract class DynamicTree extends JTree implements GraphDocumentOwner {
 
     @Override
     public final String getToolTipText(final MouseEvent event) {
-        return toolTipProvider.getToolTip(event);
+        return elementToolTipProvider.getToolTip(event);
     }
 
     /**
