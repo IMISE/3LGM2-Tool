@@ -28,6 +28,7 @@ import de.imise.tool3lgm.Tool3lgmModelType.ModelCategory;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GDCollectionOwner;
+import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.model.GraphDocumentOwner;
 import de.imise.tool3lgm.userproperties.UserProperties;
 import de.imise.util.ApplicationManager;
@@ -343,6 +344,9 @@ public abstract class Tool3lgmConstants {
      * @return
      */
     public static final ImageIcon getTreeIcon(Object identifier) {
+        if (identifier instanceof GraphDocument) {
+            return TOOL_ICON_TRANSPARENT_13;
+        }
         if (identifier instanceof GraphDocumentOwner && !(identifier instanceof GDCollection)) {
             return null;
         }

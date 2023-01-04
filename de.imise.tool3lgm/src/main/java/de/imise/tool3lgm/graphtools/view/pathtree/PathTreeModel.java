@@ -221,7 +221,6 @@ public class PathTreeModel extends DefaultTreeModel implements MetaModelSpecific
         SequenceMetaPath metaPath = branchDefinition.getElementsPath();
         if (metaPath != null) {
             for (IconifiedTreeNode<?> lastHierarchyNode : lastHierarchyNodes) {
-
                 Class<? extends ModelElement> pathStepConnectionClass = metaPath.getStartClass();
                 Collection<ElementContainerTreeNode> pathStepNodes = new ArrayList<>();
                 String modelsNamePrefix = branchDefinition.getDisplayedModelsNamePrefix();
