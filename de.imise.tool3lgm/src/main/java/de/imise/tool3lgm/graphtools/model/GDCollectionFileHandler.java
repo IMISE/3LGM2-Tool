@@ -233,13 +233,21 @@ public class GDCollectionFileHandler {
     }
 
     /**
-     * @param file
-     * @return
-     * @throws Exception
+     * Loads the model type from a model file without parsing the content.
+     *
+     * @param file a file
+     * @return the model type with the meta informations of the model or
+     *         <code>null</code> if the file is not a model file.
      */
-    public Tool3lgmModelType getModelType(File file) throws Exception {
-        if (loadFromRAF(file, false)) {
-            return gdcoll.getModelType();
+    public static Tool3lgmModelType loadModelType(File file) {
+        GDCollection testGdcoll = new GDCollection();
+        GDCollectionFileHandler fileHandler = testGdcoll.getFileHandler();
+        try {
+            if (fileHandler.loadFromRAF(file, false)) {
+                return fileHandler.gdcoll.getModelType();
+            }
+        } catch (Exception e) {
+            // ignore
         }
         return null;
     }

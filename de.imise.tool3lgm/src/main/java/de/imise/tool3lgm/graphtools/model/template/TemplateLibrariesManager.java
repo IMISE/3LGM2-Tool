@@ -199,21 +199,22 @@ public class TemplateLibrariesManager extends PropertyChangeHandler implements P
     }
 
     /**
-     * @param metaModelContext
-     * @param file
-     * @return
+     * Loads a model as template if the file is a model file has the same
+     * metamodel like the given metaModelContext.
+     *
+     * @param metaModelContext the metamodel context that must be fit for the
+     *            model file
+     * @param file the model file that should be loaded as template
+     * @return a template {@link TemplateLibraryProvider} with the loaded
+     *         template model or <code>null</code>
      */
     private TemplateLibraryProvider loadModelTemplate(MetaModelContext metaModelContext, File file) {
-        try {
-            GDCollection testGdcoll = new GDCollection();
-            GDCollectionFileHandler fh = testGdcoll.getFileHandler();
-            Tool3lgmModelType modelType = fh.getModelType(file);
-            //Sys.err1(modelType.getMetaModelID() + " " + modelType.getModelCategory());
+        Tool3lgmModelType modelType = GDCollectionFileHandler.loadModelType(file);
+        //Sys.err1(modelType.getMetaModelID() + " " + modelType.getModelCategory());
+        if (modelType != null) {
             if (Objects.equal(metaModelContext, modelType.getMetaModelContext())) {
                 return new ModelTemplatLibraryProvider(metaModelContext, file);
             }
-        } catch (Exception e) {
-            //ignore
         }
         return null;
     }
