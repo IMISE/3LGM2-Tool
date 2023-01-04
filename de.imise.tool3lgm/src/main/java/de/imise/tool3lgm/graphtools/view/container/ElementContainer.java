@@ -423,11 +423,6 @@ public abstract class ElementContainer extends JLabel implements Cloneable, Grap
         } else if (additionalLabelTextGenerator != null) {
             additionalLabelTextGenerator.deleteSpecialInfoFromTargets();
         }
-        for (Class<? extends ModelElement> c : metaModel.getSlaveElementTypes(me.getClass())) {
-            for (ElementContainer sC : me.getConnectedContainers(c, doc)) {
-                sC.setVisible(visible);
-            }
-        }
     }
 
     /**
