@@ -5,6 +5,7 @@ import static javax.swing.JOptionPane.NO_OPTION;
 import static javax.swing.JOptionPane.YES_OPTION;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 
@@ -16,7 +17,10 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
+import javax.swing.border.Border;
 import javax.swing.border.TitledBorder;
+import javax.swing.text.JTextComponent;
 
 import com.google.common.base.Strings;
 
@@ -232,6 +236,30 @@ public class GeneralDialogCreator {
         String title = Tool3lgmConstants.getResStringWithoutError(labelOrResKey);
         JCheckBox showThisDialogAgainCheckBox = new JCheckBox(title, selected);
         return showThisDialogAgainCheckBox;
+    }
+
+    /**
+     * @return
+     */
+    public static JTextComponent getDescriptionLabel() {
+        return getDescriptionLabel(null);
+    }
+
+    /**
+     * @param text
+     * @return
+     */
+    public static JTextComponent getDescriptionLabel(String text) {
+        JTextArea descriptionLabel = new JTextArea();
+        descriptionLabel.setLineWrap(true);
+        descriptionLabel.setWrapStyleWord(true);
+        descriptionLabel.setEditable(false);
+        Color background = new JLabel().getBackground();
+        descriptionLabel.setBackground(background);
+        Border emptyBorder = BorderFactory.createEmptyBorder(5, 10, 5, 10);
+        descriptionLabel.setBorder(emptyBorder);
+        descriptionLabel.setText(text);
+        return descriptionLabel;
     }
 
 }

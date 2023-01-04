@@ -1,21 +1,15 @@
 package de.imise.tool3lgm.gui;
 
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
+import static de.imise.tool3lgm.graphtools.dialog.tools.GeneralDialogCreator.getDescriptionLabel;
+import static de.imise.tool3lgm.graphtools.dialog.tools.GeneralDialogCreator.getShowAgainCheckBox;
 import static de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty.OPTION_ENABLE_EXPERT_MODE;
 import static de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty.OPTION_SHOW_CHOOSE_METAMODEL_DIALOG;
 
-import java.awt.Color;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
-
-import javax.swing.BorderFactory;
 import javax.swing.JCheckBox;
 import javax.swing.JComponent;
-import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JSeparator;
-import javax.swing.JTextArea;
-import javax.swing.border.Border;
 import javax.swing.text.JTextComponent;
 
 import de.imise.tool3lgm.MetaModelContext;
@@ -43,7 +37,7 @@ public class Tool3lgmMetaModelContextChooser {
     private final JCheckBox expertModeCreateAsTemplateCheckBox = getExpertModeCreateAsTemplateCheckBox();
 
     /** CheckBox show this dialog before creating a new model */
-    private final JCheckBox showThisDialogAgainCheckBox = getShowThisDialogAgainCheckBox();
+    private final JCheckBox showThisDialogAgainCheckBox = getShowAgainCheckBox("show_this_dialog_when_creating_new_model", OPTION_SHOW_CHOOSE_METAMODEL_DIALOG.is());
 
     /**
      * @return
@@ -98,12 +92,7 @@ public class Tool3lgmMetaModelContextChooser {
      */
     private void addDescriptionUpdateListener() {
         updateDescription(); // initial update!
-        chooseMetaModelComboBox.addItemListener(new ItemListener() {
-            @Override
-            public void itemStateChanged(final ItemEvent e) {
-                updateDescription();
-            }
-        });
+        chooseMetaModelComboBox.addItemListener(e -> updateDescription());
     }
 
     /**
@@ -149,31 +138,6 @@ public class Tool3lgmMetaModelContextChooser {
             expertModeCreateAsTemplateCheckBox = new JCheckBox(checkBoxTitle, false);
         }
         return expertModeCreateAsTemplateCheckBox;
-    }
-
-    /**
-     * @return
-     */
-    private static JCheckBox getShowThisDialogAgainCheckBox() {
-        String title = getResString("show_this_dialog_when_creating_new_model");
-        boolean enabled = OPTION_SHOW_CHOOSE_METAMODEL_DIALOG.is();
-        JCheckBox showThisDialogAgainCheckBox = new JCheckBox(title, enabled);
-        return showThisDialogAgainCheckBox;
-    }
-
-    /**
-     * @return
-     */
-    public static JTextComponent getDescriptionLabel() {
-        JTextArea descriptionLabel = new JTextArea();
-        descriptionLabel.setLineWrap(true);
-        descriptionLabel.setWrapStyleWord(true);
-        descriptionLabel.setEditable(false);
-        Color background = new JLabel().getBackground();
-        descriptionLabel.setBackground(background);
-        Border emptyBorder = BorderFactory.createEmptyBorder(5, 10, 5, 10);
-        descriptionLabel.setBorder(emptyBorder);
-        return descriptionLabel;
     }
 
 }
