@@ -22,7 +22,7 @@ import de.imise.tool3lgm.imexport.image.GraphImageExporter;
 import de.imise.util.NamedObjectContainer;
 import de.imise.util.ToolTipProvider;
 import de.imise.util.htmlxml.HTMLConverter;
-import de.imise.util.image.ComponentAsImageExportHandler.ImageInfo;
+import de.imise.util.image.ComponentImageExporter.ImageInfo;
 
 /**
  * A {@link ToolTipProvider} implementation that provides the tooltips for

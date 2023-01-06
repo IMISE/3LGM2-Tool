@@ -102,8 +102,8 @@ import de.imise.tool3lgm.xslt.WebExportDialog;
 import de.imise.tool3lgm.xslt.XMLExportDialog;
 import de.imise.util.Alphabetical;
 import de.imise.util.BrowseUtils;
-import de.imise.util.image.ComponentAsImageExportHandler;
-import de.imise.util.image.ComponentAsImageExportHandler.FileFilterType;
+import de.imise.util.image.ComponentImageExporter;
+import de.imise.util.image.ComponentImageExporter.FileFilterType;
 import de.imise.util.pair.Pair;
 import de.imise.util.swing.dialog.DirectoryChooser;
 import de.imise.util.swing.event.ExtendedAction;
@@ -309,7 +309,7 @@ public class ActionLibrary {
                     if (selframe instanceof GraphViewPaneFrameComponent) {
                         InputGraphArea iga = ((GraphViewPaneFrameComponent) selframe).getInputGraphArea();
                         iga.setPaintState(PaintState.SAVE_IMAGE_AS_FILE);
-                        fileAndType = ComponentAsImageExportHandler.createFile(iga, exportDirectory, filterType);
+                        fileAndType = ComponentImageExporter.createFile(iga, exportDirectory, filterType);
                         iga.setPaintState(PaintState.REGULAR);
                     } else { //MatrixView
                         ViewPane viewPane = selframe.getViewPane();
@@ -317,7 +317,7 @@ public class ActionLibrary {
                         Dimension size = sp.getSize();
                         sp.setSize(sp.getMaximumSize());
                         sp.revalidate();
-                        fileAndType = ComponentAsImageExportHandler.createFile(sp, exportDirectory, filterType);
+                        fileAndType = ComponentImageExporter.createFile(sp, exportDirectory, filterType);
                         sp.setSize(size);
                         sp.revalidate();
                     }

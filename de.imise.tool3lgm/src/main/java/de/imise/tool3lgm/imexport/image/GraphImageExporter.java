@@ -9,8 +9,8 @@ import de.imise.tool3lgm.graphtools.model.Szenario;
 import de.imise.tool3lgm.graphtools.view.container.LayerContainer;
 import de.imise.tool3lgm.graphtools.view.graph.BasicGraphArea;
 import de.imise.tool3lgm.graphtools.view.graph.BasicGraphArea.PaintState;
-import de.imise.util.image.ComponentAsImageExportHandler;
-import de.imise.util.image.ComponentAsImageExportHandler.ImageInfo;
+import de.imise.util.image.ComponentImageExporter;
+import de.imise.util.image.ComponentImageExporter.ImageInfo;
 
 /**
  * Extracted and expanded from WebExportDialog.
@@ -125,7 +125,7 @@ public class GraphImageExporter {
         area.setZoom(zoomFactor);
         area.setSize(area.getPreferredSize());
         area.setPaintState(PaintState.SAVE_IMAGE_AS_FILE);
-        ImageInfo imageInfo = ComponentAsImageExportHandler.createFile(area, filename);
+        ImageInfo imageInfo = ComponentImageExporter.createFile(area, filename);
         area.setPaintState(PaintState.REGULAR);
         return imageInfo;
     }

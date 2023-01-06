@@ -28,7 +28,7 @@ import de.imise.tool3lgm.Tool3lgmVersion;
 import de.imise.tool3lgm.event.action.ChangeLocaleAction;
 import de.imise.tool3lgm.event.action.UserPropertyBooleanChangeAction;
 import de.imise.util.BooleanOption;
-import de.imise.util.image.ComponentAsImageExportHandler.FileFilterType;
+import de.imise.util.image.ComponentImageExporter.FileFilterType;
 import de.imise.util.io.FileHandler;
 import de.imise.util.swing.event.ActionSource;
 

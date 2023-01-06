@@ -26,7 +26,7 @@ import de.imise.tool3lgm.graphtools.model.GraphDocumentOwner;
 import de.imise.tool3lgm.graphtools.model.Szenario;
 import de.imise.tool3lgm.graphtools.view.container.LayerContainer;
 import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
-import de.imise.util.image.ComponentAsImageExportHandler.ZoomableComponent;
+import de.imise.util.image.ComponentImageExporter.ZoomableComponent;
 
 /**
  * @author N.N.

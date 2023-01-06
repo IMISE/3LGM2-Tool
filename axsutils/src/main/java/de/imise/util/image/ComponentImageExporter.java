@@ -39,7 +39,7 @@ import de.imise.util.swing.dialog.ExtendedFileChooser;
  * @author AXS
  * @create 07.07.2012
  */
-public class ComponentAsImageExportHandler {
+public class ComponentImageExporter {
 
     /**
      * Possible types of FileFilters this dialog can display. For all these
@@ -97,7 +97,7 @@ public class ComponentAsImageExportHandler {
     public static final String FILE_FILTER_RESOURCE_EXTENSION_POSTFIX = "_EXT";
 
     /** Ressourcenhandler */
-    private static final DialogResourceHandler drh = new DialogResourceHandler(ComponentAsImageExportHandler.class);
+    private static final DialogResourceHandler drh = new DialogResourceHandler(ComponentImageExporter.class);
 
     /**
      * Liefert für die übergebenen filterNamen ein Array von FileFiltern, wenn
@@ -393,7 +393,7 @@ public class ComponentAsImageExportHandler {
      *         type
      */
     private static final Pair<File, FileFilterType> createFileInternal(final JComponent comp, final File file, final FileFilterType fileFormat) {
-        ExtendedFileChooser fc = new ExtendedFileChooser(ComponentAsImageExportHandler.class, file);
+        ExtendedFileChooser fc = new ExtendedFileChooser(ComponentImageExporter.class, file);
         fc.setFileSystemView(FileSystemView.getFileSystemView());
         fc.setAcceptAllFileFilterUsed(false);
 
