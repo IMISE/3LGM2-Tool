@@ -1,5 +1,6 @@
 package de.imise.tool3lgm.graphtools.view.tooltip;
 
+import java.awt.Toolkit;
 import java.io.File;
 import java.net.MalformedURLException;
 
@@ -16,12 +17,12 @@ import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.model.Szenario;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
-import de.imise.tool3lgm.graphtools.view.graph.BasicGraphArea;
 import de.imise.tool3lgm.graphtools.view.tree.node.LGMTreeNode;
-import de.imise.tool3lgm.xslt.WebExportDialog;
+import de.imise.tool3lgm.imexport.image.GraphImageExporter;
 import de.imise.util.NamedObjectContainer;
 import de.imise.util.ToolTipProvider;
 import de.imise.util.htmlxml.HTMLConverter;
+import de.imise.util.image.ComponentAsImageExportHandler.ImageInfo;
 
 /**
  * A {@link ToolTipProvider} implementation that provides the tooltips for
@@ -32,7 +33,13 @@ import de.imise.util.htmlxml.HTMLConverter;
 public class LGMToolTipProvider implements ToolTipProvider {
 
     /**  */
-    private static final String TOOLTIP_IMAGE_CACHE_FILE_NAME = new File(Tool3lgmConstants.CACHE_DIR, "tooltip_image.png").getAbsolutePath();
+    private static final String TOOLTIP_IMAGE_CACHE_FILE_NAME = new File(Tool3lgmConstants.CACHE_DIR, "tooltip_image.jpg").getAbsolutePath();
+
+    /** Maximum width of tooltips in pixel for tooltips with text only. */
+    private static final int MAX_TOOLTIP_WIDTH_TEXT_ONLY = Toolkit.getDefaultToolkit().getScreenSize().width / 4;
+
+    /** Maximum width of tooltips in pixel for tooltips with images. */
+    private static final int MAX_TOOLTIP_WIDTH_WITH_IMAGE = Toolkit.getDefaultToolkit().getScreenSize().width / 3;
 
     /**
      *
@@ -51,6 +58,7 @@ public class LGMToolTipProvider implements ToolTipProvider {
 
     @Override
     public String getToolTip(Object o) {
+        int maxToolTipWidth = MAX_TOOLTIP_WIDTH_TEXT_ONLY;
         if (o instanceof LGMTreeNode<?>) {
             LGMTreeNode<?> treeNode = (LGMTreeNode<?>) o;
             AbstractConsistencyError consistencyError = treeNode.getConsistencyError();
@@ -91,9 +99,8 @@ public class LGMToolTipProvider implements ToolTipProvider {
             appendBold(sb, o);
             appendDescription(sb, ((GraphDocument) o).getDescription());
             if (o instanceof Szenario) {
-                Szenario szen = (Szenario) o;
-                BasicGraphArea area = new BasicGraphArea(szen);
-                appendImage(sb, area);
+                appendImage(sb, (Szenario) o);
+                maxToolTipWidth = MAX_TOOLTIP_WIDTH_WITH_IMAGE;
             }
         } else if (o instanceof File) {
             sb.append(o);
@@ -103,7 +110,7 @@ public class LGMToolTipProvider implements ToolTipProvider {
         }
 
         // limit width to 500px if tooltip if it contains more than 80 chars
-        sb.insert(0, sb.length() > 80 ? "<html><p width=\"500\">" : "<html><p>");
+        sb.insert(0, sb.length() > 80 ? "<html><p width=\"" + maxToolTipWidth + "\">" : "<html><p>");
         sb.append("</p></html>");
         return sb.toString();
     }
@@ -134,14 +141,14 @@ public class LGMToolTipProvider implements ToolTipProvider {
      * @param sb
      * @param comp
      */
-    private static void appendImage(StringBuilder sb, BasicGraphArea area) {
+    private static void appendImage(StringBuilder sb, Szenario szen) {
         try {
-            File imageFile = WebExportDialog.createImage(area, TOOLTIP_IMAGE_CACHE_FILE_NAME, 0, 0);
-
-            //File imageFile = ComponentAsImageExportHandler.createFile(area, TOOLTIP_IMAGE_CACHE_FILE_NAME, JPG);
-            sb.append("<br><img src=\"");
-            sb.append(imageFile.toURI().toURL()); // exception source -> try catch
-            sb.append("\" />");
+            ImageInfo imageInfo = GraphImageExporter.createImageBestFit(szen, TOOLTIP_IMAGE_CACHE_FILE_NAME, MAX_TOOLTIP_WIDTH_WITH_IMAGE);
+            if (imageInfo.file != null) {
+                sb.append("<br><br><img src=\"");
+                sb.append(imageInfo.file.toURI().toURL()); // exception source -> try catch
+                sb.append("\" />");
+            }
         } catch (MalformedURLException e) {
             // ignore
         }

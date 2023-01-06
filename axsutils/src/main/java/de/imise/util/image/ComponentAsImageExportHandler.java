@@ -60,6 +60,33 @@ public class ComponentAsImageExportHandler {
     }
 
     /**
+     * All Infos of an image that was created by this class
+     */
+    public static class ImageInfo {
+
+        public int width = -1;
+        public int heigth = -1;
+        public File file;
+        public FileFilterType type;
+
+        public ImageInfo() {
+        }
+
+        public ImageInfo(int width, int heigth, File file, FileFilterType type) {
+            this.width = width;
+            this.heigth = heigth;
+            this.file = file;
+            this.type = type;
+        }
+
+        @Override
+        public String toString() {
+            return "ImageInfo [width=" + width + ", heigth=" + heigth + ", file=" + file + ", type=" + type + "]";
+        }
+
+    }
+
+    /**
      * Anfang des ResourceString, mit dem bei jedem über die Funktion zu
      * ladenden FileFilter der Key-String der Beschreibung und der
      * Dateierweiterungen beginnen muss.
@@ -95,7 +122,7 @@ public class ComponentAsImageExportHandler {
      * @return the crated imgage file or <code>null</code> if an error has
      *         occured
      */
-    public static final File createFile(final JComponent comp, final String fileName) {
+    public static final ImageInfo createFile(final JComponent comp, final String fileName) {
         return createFile(comp, fileName, FileFilterType.JPG);
     }
 
@@ -106,7 +133,7 @@ public class ComponentAsImageExportHandler {
      * @return the crated imgage file or <code>null</code> if an error has
      *         occured
      */
-    public static final File createFile(final JComponent comp, final String filename, final FileFilterType fileType) {
+    public static final ImageInfo createFile(final JComponent comp, final String filename, final FileFilterType fileType) {
         return new ComponentAsImageExportHandler().createFileInternal(comp, filename, fileType, false, null);
     }
 
@@ -118,7 +145,7 @@ public class ComponentAsImageExportHandler {
      * @return the crated imgage file or <code>null</code> if an error has
      *         occured
      */
-    public static final File createFile(final JComponent comp, final String filename, final FileFilterType fileType, final boolean maximizeSize, final Double zoomScale) {
+    public static final ImageInfo createFile(final JComponent comp, final String filename, final FileFilterType fileType, final boolean maximizeSize, final Double zoomScale) {
         return new ComponentAsImageExportHandler().createFileInternal(comp, filename, fileType, maximizeSize, zoomScale);
     }
 
@@ -160,18 +187,24 @@ public class ComponentAsImageExportHandler {
      * @return the crated imgage file or <code>null</code> if an error has
      *         occured
      */
-    private final File createFileInternal(final JComponent comp, final String filename, final FileFilterType fileType, boolean maximizeSize, final Double zoomScale) {
+    private final ImageInfo createFileInternal(final JComponent comp, final String filename, final FileFilterType fileType, boolean maximizeSize, final Double zoomScale) {
         double originalZoom = setNewZoom(comp, maximizeSize, zoomScale);
         File createdFile = null;
+        int width = -1;
+        int height = -1;
         try {
             if (fileType == FileFilterType.SVG) {
-                exportAsSVG(comp, filename);
+                Dimension imageSize = exportAsSVG(comp, filename);
+                width = imageSize.width;
+                height = imageSize.height;
             } else {
                 BufferedImage image = createImage(comp);
                 createdFile = new File(filename);
                 String exportFileType = fileType.name();
                 createdFile.getParentFile().mkdirs();
                 ImageIO.write(image, exportFileType, createdFile);
+                width = image.getWidth();
+                height = image.getHeight();
             }
         } catch (Exception e) {
             // ignore
@@ -183,7 +216,7 @@ public class ComponentAsImageExportHandler {
         if (originalZoom >= 0d) {
             ((ZoomableComponent) comp).setZoom(originalZoom);
         }
-        return createdFile;
+        return new ImageInfo(width, height, createdFile, fileType);
     }
 
     /**
@@ -321,7 +354,7 @@ public class ComponentAsImageExportHandler {
      * @param comp
      * @param fileName
      */
-    private final void exportAsSVG(final JComponent comp, final String fileName) throws IOException {
+    private final Dimension exportAsSVG(final JComponent comp, final String fileName) throws IOException {
         Dimension preferredSize = comp.getPreferredSize();
         // Get a DOMImplementation.
         DOMImplementation domImpl = GenericDOMImplementation.getDOMImplementation();
@@ -338,6 +371,7 @@ public class ComponentAsImageExportHandler {
         Writer out = new OutputStreamWriter(outputStream, "UTF-8");
         svgGenerator.stream(out, useCSS);
         out.close();
+        return preferredSize;
     }
 
     /**
@@ -443,33 +477,31 @@ public class ComponentAsImageExportHandler {
     }
 
     /**
-     * Bei Unterklassen dieser Klasse kann beim Export ausgewählt werden, ob die
-     * Componente mit maximalem Zoom exportiert werden soll.
+     * For subclasses of this class, you can select whether the component should
+     * be exported with maximum zoom when exporting.
      *
-     * @author astruebi
+     * @author AXS
      * @create 20.02.2013
      */
     public static interface ZoomableComponent {
 
         /**
-         * Setzt den Maximalen Zoom und gibt den alten Zoom-Wert zurück
+         * Sets the maximum zoom.
          *
-         * @return
+         * @return the old zoom value
          */
         public abstract double setZoomToMaximum();
 
         /**
-         * Setzt den Zoom entsprechend dem übergebenen Wert
+         * Sets the zoom according to the passed value
          *
          * @param zoom
-         * @return
+         * @return the old zoom value
          */
         public abstract double setZoom(double zoom);
 
         /**
-         * Liefert den aktuellen Zoom-Wert
-         *
-         * @return
+         * @return the current zoom value
          */
         public abstract double getZoom();
 

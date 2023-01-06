@@ -41,13 +41,12 @@ import de.imise.tool3lgm.graphtools.model.GDCollectionImExportHandler;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.model.Szenario;
 import de.imise.tool3lgm.graphtools.view.graph.BasicGraphArea;
-import de.imise.tool3lgm.graphtools.view.graph.BasicGraphArea.PaintState;
+import de.imise.tool3lgm.imexport.image.GraphImageExporter;
 import de.imise.tool3lgm.log.Log;
 import de.imise.tool3lgm.userproperties.UserProperties;
 import de.imise.tool3lgm.userproperties.UserProperties.StringProperty;
 import de.imise.util.BrowseUtils;
 import de.imise.util.htmlxml.XMLCharacterCoder;
-import de.imise.util.image.ComponentAsImageExportHandler;
 import de.imise.util.io.FileHandler;
 import de.imise.util.swing.component.text.ExtendedTextField;
 import de.imise.util.swing.dialog.AbstractSizeAndPositionRestoringDialog;
@@ -283,13 +282,13 @@ public class WebExportDialog extends AbstractSizeAndPositionRestoringDialog {
                 int activeLayer = gdcoll.getActiveLayer();
 
                 BasicGraphArea area = new BasicGraphArea(szen);
-                createImage(area, filesDir.toString() + "/szen" + j + "_3layerView.jpg", 0.8, ModelConstants.NO_LAYER);
+                GraphImageExporter.createImage(area, filesDir.toString() + "/szen" + j + "_3layerView.jpg", 0.8, ModelConstants.NO_LAYER);
                 gdcoll.setActiveLayer(ModelConstants.DOMAIN_LAYER);
-                createImage(area, filesDir.toString() + "/szen" + j + "_domainLayer.jpg", 0.8, ModelConstants.DOMAIN_LAYER);
+                GraphImageExporter.createImage(area, filesDir.toString() + "/szen" + j + "_domainLayer.jpg", 0.8, ModelConstants.DOMAIN_LAYER);
                 gdcoll.setActiveLayer(ModelConstants.LOGICAL_LAYER);
-                createImage(area, filesDir.toString() + "/szen" + j + "_logicalLayer.jpg", 0.8, ModelConstants.LOGICAL_LAYER);
+                GraphImageExporter.createImage(area, filesDir.toString() + "/szen" + j + "_logicalLayer.jpg", 0.8, ModelConstants.LOGICAL_LAYER);
                 gdcoll.setActiveLayer(ModelConstants.PHYSICAL_LAYER);
-                createImage(area, filesDir.toString() + "/szen" + j + "_physicalLayer.jpg", 0.8, ModelConstants.PHYSICAL_LAYER);
+                GraphImageExporter.createImage(area, filesDir.toString() + "/szen" + j + "_physicalLayer.jpg", 0.8, ModelConstants.PHYSICAL_LAYER);
                 gdcoll.setActiveLayer(activeLayer);
                 j++;
             }
@@ -304,36 +303,6 @@ public class WebExportDialog extends AbstractSizeAndPositionRestoringDialog {
             File file = new File(path, WEB_EXPORT_RESOURCES_FILES[0]);
             BrowseUtils.browse(file);
         }
-    }
-
-    /**
-     * export layer of gcdollection to jpg-File
-     *
-     * @param area
-     * @param filename String with jpg-File
-     * @param zoomFactor 0 < x < 1
-     * @param layer -1 for 3layerView; 0 for physical layer; 2 for logical
-     *            layer; 4 for domain layer
-     */
-    public static final File createImage(final BasicGraphArea area, final String filename, final double zoomFactor, final int layer) {
-        if (layer < 0) {
-            Szenario szen = area.getSzenario();
-            double pageSizeFactor = szen.getPageSizeFactor();
-            Double layerGap = 400d * pageSizeFactor;
-            area.setLayerGap(layerGap.intValue());
-            area.setLayerAngle(45);
-            area.setMultiView(true);
-        } else {
-            area.setLayerAngle(0);
-            area.setLayerGap(0);
-            area.setMultiView(false);
-        }
-        area.setZoom(zoomFactor);
-        area.setSize(area.getPreferredSize());
-        area.setPaintState(PaintState.SAVE_IMAGE_AS_FILE);
-        File imageFile = ComponentAsImageExportHandler.createFile(area, filename);
-        area.setPaintState(PaintState.REGULAR);
-        return imageFile;
     }
 
     /**
