@@ -97,7 +97,7 @@ public class ComponentAsImageExportHandler {
     public static final String FILE_FILTER_RESOURCE_EXTENSION_POSTFIX = "_EXT";
 
     /** Ressourcenhandler */
-    private final DialogResourceHandler drh = new DialogResourceHandler(ComponentAsImageExportHandler.class);
+    private static final DialogResourceHandler drh = new DialogResourceHandler(ComponentAsImageExportHandler.class);
 
     /**
      * Liefert für die übergebenen filterNamen ein Array von FileFiltern, wenn
@@ -107,7 +107,7 @@ public class ComponentAsImageExportHandler {
      * @param filterNames
      * @return
      */
-    private final FileNameExtensionFilter[] getFileNameExtensionFilters(final FileFilterType... filterNames) {
+    private static final FileNameExtensionFilter[] getFileNameExtensionFilters(final FileFilterType... filterNames) {
         FileNameExtensionFilter[] returnFilter = new FileNameExtensionFilter[filterNames.length];
         for (int i = 0; i < filterNames.length; i++) {
             String fileFilterResourceKey = FILE_FILTER_RESOURCE_PREFIX + filterNames[i];
@@ -134,7 +134,7 @@ public class ComponentAsImageExportHandler {
      *         occured
      */
     public static final ImageInfo createFile(final JComponent comp, final String filename, final FileFilterType fileType) {
-        return new ComponentAsImageExportHandler().createFileInternal(comp, filename, fileType, false, null);
+        return createFileInternal(comp, filename, fileType, false, null);
     }
 
     /**
@@ -146,7 +146,7 @@ public class ComponentAsImageExportHandler {
      *         occured
      */
     public static final ImageInfo createFile(final JComponent comp, final String filename, final FileFilterType fileType, final boolean maximizeSize, final Double zoomScale) {
-        return new ComponentAsImageExportHandler().createFileInternal(comp, filename, fileType, maximizeSize, zoomScale);
+        return createFileInternal(comp, filename, fileType, maximizeSize, zoomScale);
     }
 
     /**
@@ -155,7 +155,7 @@ public class ComponentAsImageExportHandler {
      * @param zoomScale
      * @return original zoom
      */
-    private double setNewZoom(final JComponent comp, boolean maximizeSize, final Double zoomScale) {
+    private static double setNewZoom(final JComponent comp, boolean maximizeSize, final Double zoomScale) {
         // not zoomable?
         if (!(comp instanceof ZoomableComponent)) {
             return -1d;
@@ -187,7 +187,7 @@ public class ComponentAsImageExportHandler {
      * @return the crated imgage file or <code>null</code> if an error has
      *         occured
      */
-    private final ImageInfo createFileInternal(final JComponent comp, final String filename, final FileFilterType fileType, boolean maximizeSize, final Double zoomScale) {
+    private static final ImageInfo createFileInternal(final JComponent comp, final String filename, final FileFilterType fileType, boolean maximizeSize, final Double zoomScale) {
         double originalZoom = setNewZoom(comp, maximizeSize, zoomScale);
         File createdFile = null;
         int width = -1;
@@ -241,7 +241,7 @@ public class ComponentAsImageExportHandler {
      * @param zoomScale
      * @return
      */
-    public BufferedImage createZoomedImage(final JComponent comp, boolean maximizeSize, final Double zoomScale) {
+    public static BufferedImage createZoomedImage(final JComponent comp, boolean maximizeSize, final Double zoomScale) {
         double originalZoom = setNewZoom(comp, maximizeSize, zoomScale);
         BufferedImage image = createImage(comp);
         // reset zoom to original value
@@ -256,7 +256,7 @@ public class ComponentAsImageExportHandler {
      * @param comp
      * @return
      */
-    public BufferedImage createImage(final JComponent comp) {
+    public static BufferedImage createImage(final JComponent comp) {
         Dimension preferredSize = comp.getPreferredSize();
         //MemoryHandler.printMaxNowAvailableMemory();
         //this here is the critical memory operation
@@ -276,7 +276,7 @@ public class ComponentAsImageExportHandler {
      * @return a scaled size of the given size in the same aspect ratio that
      *         will fit in memory when exporting an image of that size
      */
-    private Dimension getMaxHeapAvailableSize(final Dimension preferredSize) {
+    private static Dimension getMaxHeapAvailableSize(final Dimension preferredSize) {
         Dimension maxAvailableImageSize = preferredSize;
         //70% as memory buffer for other processes during export (tested with -Xmx768m -Xss64m)
         //lower buffer values than 61% will cause an OutOfMemory exception -> 9% buffer buffer :)
@@ -315,7 +315,7 @@ public class ComponentAsImageExportHandler {
      *
      * @param comp
      */
-    private void setHeapAvailableMaximumExportSize(final JComponent comp) {
+    private static void setHeapAvailableMaximumExportSize(final JComponent comp) {
         comp.getPreferredSize();
         Dimension preferredSize = comp.getPreferredSize();
         Dimension availableSize = getMaxHeapAvailableSize(preferredSize);
@@ -354,7 +354,7 @@ public class ComponentAsImageExportHandler {
      * @param comp
      * @param fileName
      */
-    private final Dimension exportAsSVG(final JComponent comp, final String fileName) throws IOException {
+    private static final Dimension exportAsSVG(final JComponent comp, final String fileName) throws IOException {
         Dimension preferredSize = comp.getPreferredSize();
         // Get a DOMImplementation.
         DOMImplementation domImpl = GenericDOMImplementation.getDOMImplementation();
@@ -382,7 +382,7 @@ public class ComponentAsImageExportHandler {
      *         type
      */
     public static final Pair<File, FileFilterType> createFile(final JComponent comp, final File file, final FileFilterType fileFormat) {
-        return new ComponentAsImageExportHandler().createFileInternal(comp, file, fileFormat);
+        return createFileInternal(comp, file, fileFormat);
     }
 
     /**
@@ -392,7 +392,7 @@ public class ComponentAsImageExportHandler {
      * @return Pair containing the destination of the exported file and the file
      *         type
      */
-    private final Pair<File, FileFilterType> createFileInternal(final JComponent comp, final File file, final FileFilterType fileFormat) {
+    private static final Pair<File, FileFilterType> createFileInternal(final JComponent comp, final File file, final FileFilterType fileFormat) {
         ExtendedFileChooser fc = new ExtendedFileChooser(ComponentAsImageExportHandler.class, file);
         fc.setFileSystemView(FileSystemView.getFileSystemView());
         fc.setAcceptAllFileFilterUsed(false);
