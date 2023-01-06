@@ -98,6 +98,9 @@ public abstract class Tool3lgmConstants {
     /** path for temp-files */
     public static final String TEMP_PATH = USER_HOME_DIR_NAME + "/";
 
+    /** Path to the cache directory */
+    public static final File CACHE_DIR = new File(USER_HOME_3LGM_DIR, "cache");
+
     /**
      * Plugin Verzeichnis (das hat die Sichtbarkeit package, weil das nur über
      * {@link Static#loadPlugin(Class)} erreichbar sein soll.

@@ -315,7 +315,7 @@ public class WebExportDialog extends AbstractSizeAndPositionRestoringDialog {
      * @param layer -1 for 3layerView; 0 for physical layer; 2 for logical
      *            layer; 4 for domain layer
      */
-    public static final void createImage(final BasicGraphArea area, final String filename, final double zoomFactor, final int layer) {
+    public static final File createImage(final BasicGraphArea area, final String filename, final double zoomFactor, final int layer) {
         if (layer < 0) {
             Szenario szen = area.getSzenario();
             double pageSizeFactor = szen.getPageSizeFactor();
@@ -331,8 +331,9 @@ public class WebExportDialog extends AbstractSizeAndPositionRestoringDialog {
         area.setZoom(zoomFactor);
         area.setSize(area.getPreferredSize());
         area.setPaintState(PaintState.SAVE_IMAGE_AS_FILE);
-        ComponentAsImageExportHandler.createFile(area, filename);
+        File imageFile = ComponentAsImageExportHandler.createFile(area, filename);
         area.setPaintState(PaintState.REGULAR);
+        return imageFile;
     }
 
     /**

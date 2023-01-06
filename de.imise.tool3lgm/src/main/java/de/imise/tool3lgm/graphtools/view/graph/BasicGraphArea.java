@@ -207,7 +207,7 @@ public class BasicGraphArea extends JComponent implements ZoomableComponent, Gra
         Container parent = getParent();
         graphViewParameter.viewPositionX = 0;
         graphViewParameter.viewPositionY = 0;
-        if (parent != null && parent instanceof JViewport) {
+        if (parent instanceof JViewport) {
             JViewport viewport = (JViewport) parent;
             Point viewPosition = viewport.getViewPosition();
             graphViewParameter.viewPositionX = viewPosition.x;
@@ -354,7 +354,8 @@ public class BasicGraphArea extends JComponent implements ZoomableComponent, Gra
      * @param factor
      */
     @Override
-    public void setZoom(double zoom) {
+    public double setZoom(double zoom) {
+        double oldZoom = this.zoom;
         if (zoom < ZOOM_FACTOR_MINIMUM) {
             zoom = ZOOM_FACTOR_MINIMUM;
         }
@@ -366,6 +367,7 @@ public class BasicGraphArea extends JComponent implements ZoomableComponent, Gra
         adjustInterLayerSpace();
         adjust_size();
         fireZoomChanged();
+        return oldZoom;
     }
 
     /**

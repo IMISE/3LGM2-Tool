@@ -2,11 +2,11 @@ package de.imise.util.image;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.GridLayout;
 import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -18,7 +18,6 @@ import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.filechooser.FileFilter;
@@ -33,7 +32,6 @@ import org.w3c.dom.Document;
 import de.imise.util.MemoryHandler;
 import de.imise.util.StringUtils;
 import de.imise.util.pair.Pair;
-import de.imise.util.swing.component.ParentComponentFinder;
 import de.imise.util.swing.dialog.DialogResourceHandler;
 import de.imise.util.swing.dialog.ExtendedFileChooser;
 
@@ -94,86 +92,150 @@ public class ComponentAsImageExportHandler {
     /**
      * @param comp
      * @param fileName
+     * @return the crated imgage file or <code>null</code> if an error has
+     *         occured
      */
-    public static final void createFile(final JComponent comp, final String fileName) {
-        createFile(comp, FileFilterType.JPG, fileName);
+    public static final File createFile(final JComponent comp, final String fileName) {
+        return createFile(comp, fileName, FileFilterType.JPG);
     }
 
     /**
      * @param comp
-     * @param fileFormat
+     * @param fileType
      * @param filename
+     * @return the crated imgage file or <code>null</code> if an error has
+     *         occured
      */
-    public static final void createFile(final JComponent comp, final FileFilterType fileFormat, final String filename) {
-        new ComponentAsImageExportHandler().createFileInternal(comp, fileFormat, filename, false, null);
+    public static final File createFile(final JComponent comp, final String filename, final FileFilterType fileType) {
+        return new ComponentAsImageExportHandler().createFileInternal(comp, filename, fileType, false, null);
     }
 
     /**
-     * COMMENTME
-     *
      * @param comp
-     * @param fileFormat
      * @param filename
+     * @param fileType
      * @param maximizeSize
+     * @return the crated imgage file or <code>null</code> if an error has
+     *         occured
      */
-    public static final void createFile(final JComponent comp, final FileFilterType fileFormat, final String filename, final boolean maximizeSize, final Double zoomScale) {
-        new ComponentAsImageExportHandler().createFileInternal(comp, fileFormat, filename, maximizeSize, zoomScale);
+    public static final File createFile(final JComponent comp, final String filename, final FileFilterType fileType, final boolean maximizeSize, final Double zoomScale) {
+        return new ComponentAsImageExportHandler().createFileInternal(comp, filename, fileType, maximizeSize, zoomScale);
     }
 
     /**
      * @param comp
-     * @param fileFormat
-     * @param filename
      * @param maximizeSize
+     * @param zoomScale
+     * @return original zoom
      */
-    private final void createFileInternal(final JComponent comp, final FileFilterType fileFormat, final String filename, boolean maximizeSize, final Double zoomScale) {
-        if (fileFormat == null) {
-            return;
+    private double setNewZoom(final JComponent comp, boolean maximizeSize, final Double zoomScale) {
+        // not zoomable?
+        if (!(comp instanceof ZoomableComponent)) {
+            return -1d;
         }
-
-        ZoomableComponent zoomComp = comp instanceof ZoomableComponent ? (ZoomableComponent) comp : null;
-
-        //wenn das Bild mit maximaler Größe gespeichert werden soll und das Bild auch maximierbar ist
-        maximizeSize = zoomComp != null && maximizeSize;
-        double originalZoom = zoomComp != null ? zoomComp.getZoom() : -1d;
-
-        //maximale Bildgröße speichern?
+        // nothing to zoom?
+        if (!maximizeSize && (zoomScale == null || zoomScale == 1d)) {
+            return -1d;
+        }
+        ZoomableComponent zoomComp = (ZoomableComponent) comp;
+        // store original zoom
+        double originalZoom = zoomComp.getZoom();
+        // zoom to max sizeß?
         if (maximizeSize) {
-            //vollen Zoom setzen und alten zoom merken
+            // set full zoom
             zoomComp.setZoomToMaximum();
         } else if (zoomScale != null) {
             zoomComp.setZoom(zoomScale);
         }
         setHeapAvailableMaximumExportSize(comp);
+        return originalZoom;
+    }
 
+    /**
+     * @param comp
+     * @param filename
+     * @param fileType
+     * @param maximizeSize
+     * @param zoomScale
+     * @return the crated imgage file or <code>null</code> if an error has
+     *         occured
+     */
+    private final File createFileInternal(final JComponent comp, final String filename, final FileFilterType fileType, boolean maximizeSize, final Double zoomScale) {
+        double originalZoom = setNewZoom(comp, maximizeSize, zoomScale);
+        File createdFile = null;
         try {
-            if (fileFormat == FileFilterType.SVG) {
+            if (fileType == FileFilterType.SVG) {
                 exportAsSVG(comp, filename);
             } else {
-                Dimension preferredSize = comp.getPreferredSize();
-                //MemoryHandler.printMaxNowAvailableMemory();
-                //this here is the critical memory operation
-                BufferedImage buffer = new BufferedImage(preferredSize.width, preferredSize.height, BufferedImage.TYPE_3BYTE_BGR);
-                //MemoryHandler.printMaxNowAvailableMemory();
-
-                Graphics og = buffer.getGraphics();
-                og.setColor(new Color(255, 255, 255, 255));
-                og.fillRect(0, 0, preferredSize.width, preferredSize.height);
-                comp.printAll(og);
-
-                File saveFile = new File(filename);
-                String exportFileType = fileFormat.name();
-
-                ImageIO.write(buffer, exportFileType, saveFile);
+                BufferedImage image = createImage(comp);
+                createdFile = new File(filename);
+                String exportFileType = fileType.name();
+                createdFile.getParentFile().mkdirs();
+                ImageIO.write(image, exportFileType, createdFile);
             }
         } catch (Exception e) {
-            Component parent = ParentComponentFinder.getFrameOrDialog(comp);
-            JOptionPane.showMessageDialog(parent, drh.getResString("ERROR_MESSAGE"), drh.getResString("ERROR_TITLE"), JOptionPane.ERROR_MESSAGE);
+            // ignore
+            // Component parent = ParentComponentFinder.getFrameOrDialog(comp);
+            // JOptionPane.showMessageDialog(parent, drh.getResString("ERROR_MESSAGE"), drh.getResString("ERROR_TITLE"), JOptionPane.ERROR_MESSAGE);
         }
-        //ggf. Zoom auf alten Wert zurück setzen
+        // reset zoom to original value
+        // if comp is not a zoomable component then originalZoom is -1
         if (originalZoom >= 0d) {
-            zoomComp.setZoom(originalZoom);
+            ((ZoomableComponent) comp).setZoom(originalZoom);
         }
+        return createdFile;
+    }
+
+    /**
+     * @param image
+     * @param type
+     * @return
+     */
+    public static byte[] toByteArray(BufferedImage image, String type) {
+        try {
+            try (ByteArrayOutputStream out = new ByteArrayOutputStream()) {
+                ImageIO.write(image, type, out);
+                return out.toByteArray();
+            }
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    /**
+     * @param comp
+     * @param maximizeSize
+     * @param zoomScale
+     * @return
+     */
+    public BufferedImage createZoomedImage(final JComponent comp, boolean maximizeSize, final Double zoomScale) {
+        double originalZoom = setNewZoom(comp, maximizeSize, zoomScale);
+        BufferedImage image = createImage(comp);
+        // reset zoom to original value
+        // if comp is not a zoomable component then originalZoom is -1
+        if (originalZoom >= 0d) {
+            ((ZoomableComponent) comp).setZoom(originalZoom);
+        }
+        return image;
+    }
+
+    /**
+     * @param comp
+     * @return
+     */
+    public BufferedImage createImage(final JComponent comp) {
+        Dimension preferredSize = comp.getPreferredSize();
+        //MemoryHandler.printMaxNowAvailableMemory();
+        //this here is the critical memory operation
+        BufferedImage buffer = new BufferedImage(preferredSize.width, preferredSize.height, BufferedImage.TYPE_3BYTE_BGR);
+        //MemoryHandler.printMaxNowAvailableMemory();
+
+        Graphics og = buffer.getGraphics();
+        og.setColor(new Color(255, 255, 255, 255));
+        og.fillRect(0, 0, preferredSize.width, preferredSize.height);
+        comp.printAll(og);
+
+        return buffer;
     }
 
     /**
@@ -280,13 +342,24 @@ public class ComponentAsImageExportHandler {
 
     /**
      * @param comp
-     * @param destination
-     * @param lastSelected
+     * @param file
+     * @param fileFormat
      * @return Pair containing the destination of the exported file and the file
      *         type
      */
-    private final Pair<File, FileFilterType> createFileInternal(final JComponent comp, final File destination, final FileFilterType lastSelected) {
-        ExtendedFileChooser fc = new ExtendedFileChooser(ComponentAsImageExportHandler.class, destination);
+    public static final Pair<File, FileFilterType> createFile(final JComponent comp, final File file, final FileFilterType fileFormat) {
+        return new ComponentAsImageExportHandler().createFileInternal(comp, file, fileFormat);
+    }
+
+    /**
+     * @param comp
+     * @param file
+     * @param fileFormat
+     * @return Pair containing the destination of the exported file and the file
+     *         type
+     */
+    private final Pair<File, FileFilterType> createFileInternal(final JComponent comp, final File file, final FileFilterType fileFormat) {
+        ExtendedFileChooser fc = new ExtendedFileChooser(ComponentAsImageExportHandler.class, file);
         fc.setFileSystemView(FileSystemView.getFileSystemView());
         fc.setAcceptAllFileFilterUsed(false);
 
@@ -330,7 +403,7 @@ public class ComponentAsImageExportHandler {
         fc.setMultiSelectionEnabled(false);
 
         FileNameExtensionFilter[] fileFilters = getFileNameExtensionFilters(FileFilterType.values());
-        FileNameExtensionFilter[] lastSelectedFileNameExtensionFilter = getFileNameExtensionFilters(lastSelected);
+        FileNameExtensionFilter[] lastSelectedFileNameExtensionFilter = getFileNameExtensionFilters(fileFormat);
         FileNameExtensionFilter selectedFileFilter = lastSelectedFileNameExtensionFilter.length > 0 ? lastSelectedFileNameExtensionFilter[0] : null;
         fc.showSaveDialog(comp, drh.getResString("DIALOG_TITLE"), false, selectedFileFilter, fileFilters);
 
@@ -344,7 +417,7 @@ public class ComponentAsImageExportHandler {
             }
         }
         if (type == null) {
-            type = lastSelected;
+            type = fileFormat;
         }
 
         File f = fc.getSelectedFile();
@@ -365,19 +438,8 @@ public class ComponentAsImageExportHandler {
             }
         }
 
-        createFile(comp, type, f.getPath(), maximizeImage, zoomScale);
+        createFile(comp, f.getPath(), type, maximizeImage, zoomScale);
         return fileAndType;
-    }
-
-    /**
-     * @param comp
-     * @param destination
-     * @param lastSelected
-     * @return Pair containing the destination of the exported file and the file
-     *         type
-     */
-    public static final Pair<File, FileFilterType> createFile(final JComponent comp, final File destination, final FileFilterType lastSelected) {
-        return new ComponentAsImageExportHandler().createFileInternal(comp, destination, lastSelected);
     }
 
     /**
@@ -402,7 +464,7 @@ public class ComponentAsImageExportHandler {
          * @param zoom
          * @return
          */
-        public abstract void setZoom(double zoom);
+        public abstract double setZoom(double zoom);
 
         /**
          * Liefert den aktuellen Zoom-Wert

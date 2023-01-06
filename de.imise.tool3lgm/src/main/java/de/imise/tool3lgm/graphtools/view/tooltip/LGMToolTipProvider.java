@@ -1,19 +1,24 @@
 package de.imise.tool3lgm.graphtools.view.tooltip;
 
 import java.io.File;
+import java.net.MalformedURLException;
 
 import javax.swing.JComponent;
 
 import com.google.common.base.Strings;
 
+import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
 import de.imise.tool3lgm.graphtools.consistency.error.type.AbstractConsistencyError;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
+import de.imise.tool3lgm.graphtools.model.Szenario;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
+import de.imise.tool3lgm.graphtools.view.graph.BasicGraphArea;
 import de.imise.tool3lgm.graphtools.view.tree.node.LGMTreeNode;
+import de.imise.tool3lgm.xslt.WebExportDialog;
 import de.imise.util.NamedObjectContainer;
 import de.imise.util.ToolTipProvider;
 import de.imise.util.htmlxml.HTMLConverter;
@@ -25,6 +30,9 @@ import de.imise.util.htmlxml.HTMLConverter;
  * @author AXS (09.06.2020)
  */
 public class LGMToolTipProvider implements ToolTipProvider {
+
+    /**  */
+    private static final String TOOLTIP_IMAGE_CACHE_FILE_NAME = new File(Tool3lgmConstants.CACHE_DIR, "tooltip_image.png").getAbsolutePath();
 
     /**
      *
@@ -82,6 +90,11 @@ public class LGMToolTipProvider implements ToolTipProvider {
         } else if (o instanceof GraphDocument) { // Submodel = GraphDocument
             appendBold(sb, o);
             appendDescription(sb, ((GraphDocument) o).getDescription());
+            if (o instanceof Szenario) {
+                Szenario szen = (Szenario) o;
+                BasicGraphArea area = new BasicGraphArea(szen);
+                appendImage(sb, area);
+            }
         } else if (o instanceof File) {
             sb.append(o);
         }
@@ -91,7 +104,6 @@ public class LGMToolTipProvider implements ToolTipProvider {
 
         // limit width to 500px if tooltip if it contains more than 80 chars
         sb.insert(0, sb.length() > 80 ? "<html><p width=\"500\">" : "<html><p>");
-
         sb.append("</p></html>");
         return sb.toString();
     }
@@ -116,6 +128,23 @@ public class LGMToolTipProvider implements ToolTipProvider {
         sb.append("<b>");
         sb.append(line);
         sb.append("</b>");
+    }
+
+    /**
+     * @param sb
+     * @param comp
+     */
+    private static void appendImage(StringBuilder sb, BasicGraphArea area) {
+        try {
+            File imageFile = WebExportDialog.createImage(area, TOOLTIP_IMAGE_CACHE_FILE_NAME, 0, 0);
+
+            //File imageFile = ComponentAsImageExportHandler.createFile(area, TOOLTIP_IMAGE_CACHE_FILE_NAME, JPG);
+            sb.append("<br><img src=\"");
+            sb.append(imageFile.toURI().toURL()); // exception source -> try catch
+            sb.append("\" />");
+        } catch (MalformedURLException e) {
+            // ignore
+        }
     }
 
 }
