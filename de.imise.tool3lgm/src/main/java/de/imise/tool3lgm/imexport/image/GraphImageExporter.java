@@ -37,6 +37,7 @@ public class GraphImageExporter {
             area.setLayerAngle(45);
             area.setMultiView(true);
         } else {
+            area.getCollection().setActiveLayer(layer);
             area.setLayerAngle(0);
             area.setLayerGap(0);
             area.setMultiView(false);
