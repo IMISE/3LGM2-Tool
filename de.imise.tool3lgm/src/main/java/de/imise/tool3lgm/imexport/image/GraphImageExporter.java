@@ -30,17 +30,17 @@ public class GraphImageExporter {
      */
     private static void adjustView(BasicGraphArea area, int layer) {
         if (layer < 0) {
+            area.setMultiView(true);
             Szenario szen = area.getSzenario();
             double pageSizeFactor = szen.getPageSizeFactor();
             Double layerGap = 400d * pageSizeFactor;
             area.setLayerGap(layerGap.intValue());
             area.setLayerAngle(45);
-            area.setMultiView(true);
         } else {
+            area.setMultiView(false);
             area.getCollection().setActiveLayer(layer);
             area.setLayerAngle(0);
             area.setLayerGap(0);
-            area.setMultiView(false);
         }
     }
 
