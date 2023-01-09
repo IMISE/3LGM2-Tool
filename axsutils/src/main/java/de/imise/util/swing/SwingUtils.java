@@ -305,4 +305,35 @@ public class SwingUtils {
         return getLocationOnParent(parent, (Component) e.getSource(), e.getPoint());
     }
 
+    /**
+     * Creates a new Insets object with all 4 values have the same value.
+     * 
+     * @param value the value vor all insets
+     * @return a new Insets object with the same value for all 4 insets.
+     */
+    public static Insets getInsets(int value) {
+        return setInsets(null, value);
+    }
+
+    /**
+     * Sets all 4 values of the given insets to the given value. If the insets
+     * object is <code>null</code> then a new Object is created.
+     *
+     * @param insets
+     * @param value
+     * @return the modified given isets or new insets with all values are the
+     *         same
+     */
+    public static Insets setInsets(Insets insets, int value) {
+        if (insets == null) {
+            insets = new Insets(value, value, value, value);
+        } else {
+            insets.top = value;
+            insets.right = value;
+            insets.bottom = value;
+            insets.left = value;
+        }
+        return insets;
+    }
+
 }

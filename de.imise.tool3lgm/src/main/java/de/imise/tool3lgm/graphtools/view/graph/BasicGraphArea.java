@@ -1,5 +1,6 @@
 package de.imise.tool3lgm.graphtools.view.graph;
 
+import static de.imise.tool3lgm.graphtools.view.graph.BasicGraphArea.PaintState.REGULAR;
 import static de.imise.tool3lgm.userproperties.UserProperties.IntProperty.PROPERTY_INT_RENDER_SETTINGS;
 
 import java.awt.Container;
@@ -27,6 +28,7 @@ import de.imise.tool3lgm.graphtools.model.Szenario;
 import de.imise.tool3lgm.graphtools.view.container.LayerContainer;
 import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
 import de.imise.util.image.ComponentImageExporter.ZoomableComponent;
+import de.imise.util.swing.SwingUtils;
 
 /**
  * @author N.N.
@@ -146,9 +148,20 @@ public class BasicGraphArea extends JComponent implements ZoomableComponent, Gra
     protected boolean mouse_selection = false;
 
     /**
-     * Aktuelle Abstände der Ebenendarstellung vom Gesamtrand dieser Komponente
+     * Border for all 4 sides if the area is painted in the tool.
      */
-    public static final Insets GRAPH_BORDER = new Insets(50, 50, 50, 50);
+    public static final int STANDARD_BORDER = 50;
+
+    /**
+     * Border for all 4 sides if the area is painted for export as image.
+     */
+    public static final int IMAGE_EXPORT_BORDER = 1;
+
+    /**
+     * Current distances of the layer display from the total edge of this
+     * component
+     */
+    public static final Insets GRAPH_BORDER = SwingUtils.getInsets(STANDARD_BORDER);
 
     /** Minimaler interner Zoom-Wert */
     public static final double ZOOM_FACTOR_MINIMUM = 0.1d;
@@ -284,6 +297,14 @@ public class BasicGraphArea extends JComponent implements ZoomableComponent, Gra
         layerWidth = width;
         check_size();
         firePageSizeChangedChanged();
+    }
+
+    /**
+     * @param border
+     */
+    public void setGraphBorder(int border) {
+        SwingUtils.setInsets(GRAPH_BORDER, border);
+        adjust_size();
     }
 
     /**
@@ -690,6 +711,7 @@ public class BasicGraphArea extends JComponent implements ZoomableComponent, Gra
      * @param exportMode the exportMode to set
      */
     public void setPaintState(final PaintState paintState) {
+        setGraphBorder(paintState == REGULAR ? STANDARD_BORDER : IMAGE_EXPORT_BORDER);
         this.paintState = paintState;
         //wenn die Selektion und das Raster nicht gemalt werden soll
         for (int i = 0; i < ModelConstants.LAYERS.length; i++) {

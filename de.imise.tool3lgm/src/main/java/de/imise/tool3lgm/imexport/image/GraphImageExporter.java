@@ -70,6 +70,7 @@ public class GraphImageExporter {
      */
     public static final ImageInfo createImage(BasicGraphArea area, final String filename, final int width, final int layer) {
         adjustView(area, layer);
+        area.setPaintState(PaintState.SAVE_IMAGE_AS_FILE); // sets border to minimum
         area.setZoom(1d);
         Dimension preferredSize = area.getPreferredSize();
         double zoomFactor = (double) width / preferredSize.width;
@@ -120,14 +121,14 @@ public class GraphImageExporter {
      * @return the {@link ImageInfo} of the created image file
      */
     private static final ImageInfo createImage(BasicGraphArea area, final String filename, final double zoomFactor, final int layer, boolean adjustView) {
+        area.setPaintState(PaintState.SAVE_IMAGE_AS_FILE); // sets border to minimum, inactivates selection painting
         if (adjustView) {
             adjustView(area, layer);
         }
         area.setZoom(zoomFactor);
         area.setSize(area.getPreferredSize());
-        area.setPaintState(PaintState.SAVE_IMAGE_AS_FILE);
         ImageInfo imageInfo = ComponentImageExporter.createFile(area, filename);
-        area.setPaintState(PaintState.REGULAR);
+        area.setPaintState(PaintState.REGULAR); // sets border to standard value
         return imageInfo;
     }
 
