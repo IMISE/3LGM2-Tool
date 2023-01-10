@@ -2,6 +2,9 @@ package de.imise.tool3lgm.graphtools.model;
 
 import static de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty.TRANSIENT_OPTION_LOG_READABLE_UNOD_REDO_COMMANDS;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.swing.KeyStroke;
 
 import com.google.common.base.Objects;
@@ -166,14 +169,18 @@ public enum GDCommands implements ActionSource {
     public static final int INVALID_EDGE_INDEX = -1;
     public static final String INVALID_EDGE_CLASS_NAME = "";
 
-    /** The action for this command */
-    private ExtendedAction action;
+    /**
+     * Maps from the command to the key stroke that shloud be registered for the
+     * command's action
+     */
+    public static final Map<GDCommands, KeyStroke> COMMAND_TO_KEYSTROKE = new HashMap<>();
 
     @Override
     public ExtendedAction createAction() {
-        if (action == null) {
-            action = ActionSource.super.createAction();
-
+        ExtendedAction action = ActionSource.super.createAction();
+        if (action != null) {
+            KeyStroke keyStroke = COMMAND_TO_KEYSTROKE.get(this);
+            action.setKeyStroke(keyStroke);
         }
         return action;
     }
@@ -182,8 +189,7 @@ public enum GDCommands implements ActionSource {
      * @param keyStroke
      */
     public void setKeyStroke(KeyStroke keyStroke) {
-        ExtendedAction action = createAction();
-        action.setKeyStroke(keyStroke);
+        COMMAND_TO_KEYSTROKE.put(this, keyStroke);
     }
 
     @Override

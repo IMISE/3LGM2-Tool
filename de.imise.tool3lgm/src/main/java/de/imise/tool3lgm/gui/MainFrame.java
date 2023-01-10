@@ -50,6 +50,9 @@ public class MainFrame extends JFrame implements Tool3lgmChangeListener, Compone
     private final MainFrameDesktopPane contentPane;
 
     public MainFrame() {
+        // Call this before the MenuBar, so that the GDCommands know their
+        // KeyStrokes, when the Actions for the menu are created
+        KeyStrokes.registerPublicKeyStrokes(getRootPane());
         //setIconImage(Tool3lgmConstants.TOOL_ICON_16.getImage());
         setIconImages(Tool3lgmConstants.TOOL_ICON_IMAGES);
         setTitle(null);
@@ -65,7 +68,6 @@ public class MainFrame extends JFrame implements Tool3lgmChangeListener, Compone
 
         menuBar = new MenuBar();
         CSH.setHelpIDString(menuBar, "uebersicht_menueleiste");
-        KeyStrokes.registerPublicKeyStrokes(getRootPane());
         setJMenuBar(menuBar);
         addAsToolChangeListener();
         updateTitle();
