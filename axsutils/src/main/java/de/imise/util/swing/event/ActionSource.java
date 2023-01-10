@@ -10,35 +10,37 @@ import java.util.Set;
 import javax.swing.Action;
 
 /**
- * Interface das vorzugsweise an alle Enum-Klassen gehängt werden kann, die
- * irgendwelche ActionIdentifiert definieren. Damit können gleich die Actions
- * definiert werden, wenn diese zur Initialisierung nur das ActionSource-Object
- * brauchen.
+ * Interface that can preferably be attached to all enum classes that define any
+ * ActionIdentifier. This way, the actions can be defined right away, if they
+ * only need the ActionSource object for initialization.
  *
  * @author AXS (10.03.2018)
  */
 public interface ActionSource {
 
-    public static final String PPP = "...";
-
     /**
-     * Alle Actions, bei denen an den Namen im Menü noch 3 Punkte angehängt
-     * werden sollen, müssen im Namen ihres Enums am Ende diesen String haben.
-     * Das sollten alle Actions sein, bei denen eine Interaktion des Nutzers bei
-     * der Durchführung der Action nötig ist, also ein Dialog aufgeht.
+     * All actions that should have 3 dots appended to the name in the menu must
+     * have this string in the name of their enum at the end. These should be
+     * all actions that require user interaction during the execution of the
+     * action, i.e. a dialog is opened.
      */
     public static final String INTERACTIVE_ACTION_NAME_POSTFIX = "_PPP";
 
     /**
-     * Mappt von einer ActionSource auf die Action-Klasse, die für diese
-     * ActionSource initialisiert werden soll.
+     * These 3 dots are appended to the label of all actions whose Identifier
+     * toString() method returns a string with "_PPP"
+     * ({@link #INTERACTIVE_ACTION_NAME_POSTFIX}) at the end.
      */
-    public static final Map<ActionSource, Class<? extends ExtendedAction>> ACTION_CLASS = new HashMap<>();
+    public static final String PPP = "...";
 
     /**
-     * Liefert die Action zu dieser ActionSource
-     *
-     * @return
+     * Maps from an ActionSource to the action class to be initialized for that
+     * ActionSource.
+     */
+    static final Map<ActionSource, Class<? extends ExtendedAction>> ACTION_CLASS = new HashMap<>();
+
+    /**
+     * @return action for this ActionSource
      */
     public default ExtendedAction createAction() {
         if (this instanceof ExtendedAction) {
@@ -63,9 +65,9 @@ public interface ActionSource {
     }
 
     /**
-     * Speichert für die übergebenen ActionSources, welche ActionClass über die
-     * Methode {@link #getActionClass()} zurück geliefert werden soll (wenn die
-     * default implementierung bestehen bleibt).
+     * Stores for the passed ActionSources which ActionClass should be returned
+     * via the {@link #getActionClass()} method (if the default implementation
+     * remains).
      *
      * @param actionClass
      * @param actionSources
@@ -86,10 +88,10 @@ public interface ActionSource {
     }
 
     /**
-     * Actions bei denen irgendwie ein Dialog nach dem Aufruf angezeigt wird,
-     * sollten über diese put-Funktion geadded werden. Einzige Auswirkung ist,
-     * dass sie im Menü 3 Punkte hinter ihren Namen bekommen. Alternativ kann
-     * man den Namen der ActionSource am Ende mit "_PPP" versehen.
+     * Actions where somehow a dialog is displayed after the call should be
+     * added via this put function. The only effect is that they get 3 dots
+     * behind their name in the menu. Alternatively, you can add "_PPP" to the
+     * end of the ActionSource name.
      *
      * @param actionClass
      * @param actionSources
@@ -100,7 +102,7 @@ public interface ActionSource {
     }
 
     /**
-     * Liefert die ActionKlasse, die für diese ActionSource initialisiert wird.
+     * Returns the ActionClass that is initialized for this ActionSource.
      */
     public default Class<? extends ExtendedAction> getActionClass() {
         return ACTION_CLASS.get(this);
@@ -119,8 +121,8 @@ public interface ActionSource {
     }
 
     /**
-     * Bei allen Actions, die eine Benutzerinteraktion (z.B. über einen Dialog
-     * vorraussetzen, sollte hier <code>true</code> zurück kommen.
+     * For all actions that require user interaction (e.g. via a dialog),
+     * <code>true</code> should be returned here.
      *
      * @return
      */
