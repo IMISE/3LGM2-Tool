@@ -9,11 +9,12 @@ import de.imise.tool3lgm.graphtools.model.Szenario;
 import de.imise.tool3lgm.graphtools.view.container.LayerContainer;
 import de.imise.tool3lgm.graphtools.view.graph.BasicGraphArea;
 import de.imise.tool3lgm.graphtools.view.graph.BasicGraphArea.PaintState;
+import de.imise.tool3lgm.xslt.WebExportDialog;
 import de.imise.util.image.ComponentImageExporter;
 import de.imise.util.image.ComponentImageExporter.ImageInfo;
 
 /**
- * Extracted and expanded from WebExportDialog.
+ * Extracted and expanded from {@link WebExportDialog}.
  *
  * @author AXS (06.01.2023)
  */

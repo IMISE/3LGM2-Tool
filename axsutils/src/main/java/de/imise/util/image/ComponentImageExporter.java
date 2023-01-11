@@ -87,22 +87,22 @@ public class ComponentImageExporter {
     }
 
     /**
-     * Anfang des ResourceString, mit dem bei jedem über die Funktion zu
-     * ladenden FileFilter der Key-String der Beschreibung und der
-     * Dateierweiterungen beginnen muss.
+     * Start of the ResourceString with which the key string of the description
+     * and file extensions must start for each FileFilter to be loaded via the
+     * function.
      */
     public static final String FILE_FILTER_RESOURCE_PREFIX = "FILE_FILTER_";
 
-    /** Ende des Key-Strings für die Dateiertweiterungen eines FileFilters */
+    /** End of the key strings for the file extensions of a FileFilter. */
     public static final String FILE_FILTER_RESOURCE_EXTENSION_POSTFIX = "_EXT";
 
-    /** Ressourcenhandler */
+    /** Resource handler */
     private static final DialogResourceHandler drh = new DialogResourceHandler(ComponentImageExporter.class);
 
     /**
-     * Liefert für die übergebenen filterNamen ein Array von FileFiltern, wenn
-     * die Beschreibung und die Liste der Erweiterungen den Konventionen
-     * entsprechend in den Resoourcendateien abgelegt sind.
+     * Returns an array of FileFilters for the passed filterNames if the
+     * description and the list of extensions are stored in the resoourced files
+     * according to the conventions.
      *
      * @param filterNames
      * @return
@@ -111,7 +111,9 @@ public class ComponentImageExporter {
         FileNameExtensionFilter[] returnFilter = new FileNameExtensionFilter[filterNames.length];
         for (int i = 0; i < filterNames.length; i++) {
             String fileFilterResourceKey = FILE_FILTER_RESOURCE_PREFIX + filterNames[i];
-            returnFilter[i] = new FileNameExtensionFilter(drh.getResString(fileFilterResourceKey), StringUtils.tokenize(drh.getResString(fileFilterResourceKey + FILE_FILTER_RESOURCE_EXTENSION_POSTFIX), " ", false));
+            String fileFilterDescription = drh.getResString(fileFilterResourceKey);
+            String[] fileFilterExtensions = StringUtils.tokenize(drh.getResString(fileFilterResourceKey + FILE_FILTER_RESOURCE_EXTENSION_POSTFIX), " ", false);
+            returnFilter[i] = new FileNameExtensionFilter(fileFilterDescription, fileFilterExtensions);
         }
         return returnFilter;
     }

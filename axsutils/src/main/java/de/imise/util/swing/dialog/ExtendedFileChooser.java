@@ -20,86 +20,79 @@ import de.imise.util.io.FileHandler;
 import de.imise.util.swing.component.ParentComponentFinder;
 
 /**
- * Erweitert die Funktionalität des {@link JFileChooser} dahin, dass im
- * Konstruktor FileSystemView gesetzt und currentDirectory auf userPath gesetzt
- * werden. Wenn der Rückgabewert von showDialog, showOpenDialog bzw.
- * showSaveDialog gleich APPROVE_OPTION ist, wird userPath auf currentDirectory
- * gesetzt. Alle Dialoge, die mit demselben <code>pathKey</code> initialisiert
- * werden, starten immer in dem zuletzt in einem solchen Dialog gewählten Pfad.
- * Außerdem wird beim Aufruf des Speichern-Dialoges und bestätigen des Benutzers
- * mit dem Speichern-Button immer sichergestellt, dass die zu speichernde Datei
- * existiert und überschrieben werden darf. Weiterhin: Wenn der aktuelle
- * {@link FileFilter} während des Speicherns ein {@link FileNameExtensionFilter}
- * ist und der Dateiname keine Extension besitzt, die dieser {@link FileFilter}
- * akzeptiert, dann wird die erste der Extensions, die dieser Filter akzeptiert
- * an die Datei angehängt.
+ * Extends the functionality of the {@link JFileChooser} to set FileSystemView
+ * and set currentDirectory to userPath in the constructor. If the return value
+ * of showDialog, showOpenDialog or showSaveDialog is APPROVE_OPTION, then
+ * userPath will be set to currentDirectory. All dialogs initialized with the
+ * same <code>pathKey</code> always start in the path last selected in such a
+ * dialog. Furthermore, when the save dialog is called and the user confirms
+ * with the save button, it is always ensured that the file to be saved exists
+ * and may be overwritten. Furthermore: if the current {@link FileFilter} is a
+ * {@link FileNameExtensionFilter} while saving and the filename does not have
+ * an extension that this {@link FileFilter} accepts, then the first of the
+ * extensions that this filter accepts is appended to the file.
  */
 public class ExtendedFileChooser extends JFileChooser {
 
     /**
-     * Wenn kein Verzeichnis angegeben wurde, startet eine Instanz dieses
-     * Dialoges in diesem Verzeichnis
+     * If no directory is specified, an instance of this dialog starts in this
+     * directory
      */
     private static final File DEFAULT_PATH = FileSystemView.getFileSystemView().getDefaultDirectory();
 
     /**
-     * Mappt von einem Key-Object auf einen Pfad. Je nachdem mit welchem
-     * Key-Object eine Instanz dieser Klasse gestartet wurde, wird sich der
-     * zuletzt gewählte Pfad in dieser Map gemerkt. Default ist das Key-Object
-     * <code>null</code>
+     * Maps from a Key-Object to a path. Depending on which key object was used
+     * to start an instance of this class, the last selected path in this map is
+     * remembered. The default is the key object <code>null</code>.
      */
     private static final Map<Object, File> KEY_TO_PATH_MAP = new HashMap<>();
 
     /**
-     * Default Key für den letzten Pfad dieses Dialoges, wenn kein anderes
-     * Key-Object gesetzt wurde.
+     * Default key for the last path of this dialog, if no other key object was
+     * set.
      */
     private Object pathKey = null;
 
-    /** ResourceHandler für alle Instanzen */
+    /** ResourceHandler for all instances */
     private static final DialogResourceHandler drh = new DialogResourceHandler(ExtendedFileChooser.class);
 
     private String fileName = null;
 
     /**
-     * @param pathKey Anhand des PathKeys wird festgestellt in welchem Pfad ein
-     *            Chooser mit diesem PathKey zuletzt geöffnet war und auf diese
-     *            Weise wiederhersgestellt.
+     * @param pathKey is used to determine in which path a Chooser with this
+     *            pathKey was last opened and restored in this way.
      */
     public ExtendedFileChooser(final Object pathKey) {
         this(pathKey, (File) null);
     }
 
     /**
-     * @param pathKey Anhand des PathKeys wird festgestellt in welchem Pfad ein
-     *            Chooser mit diesem PathKey zuletzt geöffnet war und auf diese
-     *            Weise wiederhersgestellt.
-     * @param defaultPath Wenn noch keine Pfad für den pathKey gefunden wird,
-     *            wird der übergebene DefaulPath gesetzt. Ist der ungültig
-     *            landet man im Hauptverzeichnis des Benutzers
+     * @param pathKey is used to determine in which path a Chooser with this
+     *            pathKey was last opened and restored in this way.
+     * @param defaultPath If no path is found for the pathKey yet, the passed
+     *            DefaulPath is set. If this is invalid, you will end up in the
+     *            user's main directory.
      */
     public ExtendedFileChooser(final Object pathKey, final File defaultPath) {
         this(pathKey, defaultPath, null);
     }
 
     /**
-     * @param pathKey Anhand des PathKeys wird festgestellt in welchem Pfad ein
-     *            Chooser mit diesem PathKey zuletzt geöffnet war und auf diese
-     *            Weise wiederhersgestellt.
-     * @param fileName Name der Datei, der schon veriengestellt sein soll
+     * @param pathKey is used to determine in which path a Chooser with this
+     *            pathKey was last opened and restored in this way.
+     * @param fileName Name of the file that should already be preset
      */
     public ExtendedFileChooser(final Object pathKey, final String fileName) {
         this(pathKey, null, fileName);
     }
 
     /**
-     * @param pathKey Anhand des PathKeys wird festgestellt in welchem Pfad ein
-     *            Chooser mit diesem PathKey zuletzt geöffnet war und auf diese
-     *            Weise wiederhersgestellt.
-     * @param defaultPath Wenn noch keine Pfad für den pathKey gefunden wird,
-     *            wird der übergebene DefaulPath gesetzt. Ist der ungültig
-     *            landet man im Hauptverzeichnis des Benutzers
-     * @param fileName Name der Datei, der schon veriengestellt sein soll
+     * @param pathKey is used to determine in which path a Chooser with this
+     *            pathKey was last opened and restored in this way.
+     * @param defaultPath If no path is found for the pathKey yet, the passed
+     *            DefaulPath is set. If this is invalid, you will end up in the
+     *            user's main directory.
+     * @param fileName Name of the file that should already be preset
      */
     public ExtendedFileChooser(final Object pathKey, final File defaultPath, final String fileName) {
         setPathKey(pathKey);
@@ -113,22 +106,26 @@ public class ExtendedFileChooser extends JFileChooser {
     }
 
     /**
-     * @param pathKey
+     * @param pathKey is used to determine in which path a Chooser with this
+     *            pathKey was last opened and restored in this way.
      */
     public void setPathKey(final Object pathKey) {
         this.pathKey = pathKey;
     }
 
     /**
-     * @return the pathKey
+     * @return the pathKey is used to determine in which path a Chooser with
+     *         this pathKey was last opened and restored in this way.
      */
     public Object getPathKey() {
         return pathKey;
     }
 
     /**
-     * @param pathKey
-     * @param path
+     * @param pathKey is used to determine in which path a Chooser with this
+     *            pathKey was last opened and restored in this way.
+     * @param path this path or file will be current directory or file for
+     *            dialogs with the given pathKey
      */
     public void setPath(final Object pathKey, final File path) {
         setPathKey(pathKey);
@@ -154,8 +151,8 @@ public class ExtendedFileChooser extends JFileChooser {
     }
 
     /**
-     * Setzt die FileFilter dieses Dialoges. Der erste FileFilter aus dem Array
-     * wird als aktiv gesetzt.
+     * Sets the FileFilter of this dialog. The first FileFilter from the array
+     * is set as active.
      *
      * @param showAllFileFilter
      * @param fileFilters
@@ -213,20 +210,20 @@ public class ExtendedFileChooser extends JFileChooser {
 
         boolean correctFileName = false;
         int returnValue = ERROR_OPTION;
-        //der Dialog wird solange wiederholt, bis eine beschreibbare Datei ausgewählt wurde oder Abbrechen gedrückt wurde
+        // the dialog is repeated until a writable file is selected or Cancel is pressed
         while (!correctFileName && returnValue != CANCEL_OPTION) {
             Component parent = ParentComponentFinder.getFrameOrDialog(parentComponent);
             returnValue = showDialog(parent, null);
 
-            //wenn nicht OK gedückt wurde -> raus
+            // if not OK pressed -> out
             if (returnValue != APPROVE_OPTION) {
                 return returnValue;
             }
             setPath(pathKey, getCurrentDirectory());
-            //ausgewählte Datei holen
+            // get chooesed file
             File selectedFile = getSelectedFile();
 
-            //Prüfen, ob ungültige Zeichen im Namen stehen
+            // Check if there are invalid characters in the name
             correctFileName = false;
             try {
                 correctFileName = selectedFile.getCanonicalPath().endsWith(selectedFile.getName());
@@ -237,15 +234,15 @@ public class ExtendedFileChooser extends JFileChooser {
                 continue;
             }
 
-            //wenn die angegebene Datei noch nicht existiert prüfe, ob eine Extension angehängt werden sollte.
+            // if the specified file does not exist yet check if an extension should be appended
             FileFilter fileFilter = getFileFilter();
             if (fileFilter instanceof FileNameExtensionFilter) {
                 String[] extensions = ((FileNameExtensionFilter) fileFilter).getExtensions();
-                // wenn der angegebene Dateiname keine Extension hat, aber eine gültige Extension im FileFilter existiert
+                // if the specified filename has no extension, but a valid extension exists in the FileFilter
                 if (extensions.length > 0) {
                     String newSelectedFileName = getSelectedFile().getPath();
                     boolean extensionFound = false;
-                    //wenn der Dateiname keine der gültigen Extensions besitzt IMMER die erste Dateierweiterung des FileFilters anhängen
+                    // if the filename has none of the valid extensions ALWAYS append the first file extension of the FileFilter
                     for (String extension : extensions) {
                         if (newSelectedFileName.endsWith(extension)) {
                             extensionFound = true;
@@ -259,28 +256,27 @@ public class ExtendedFileChooser extends JFileChooser {
                 }
             }
 
-            //wenn die angegebene Datei bereits existiert
+            // if the specified file already exists
             if (selectedFile.exists()) {
-                //wenn beschreibbar -> Fragen, ob drüberspeichern
-                if (selectedFile.canWrite()) {
-                    switch (JOptionPane.showConfirmDialog(parent, drh.getResString("MESSAGE_OVERWRITE_1") + selectedFile.getName() + drh.getResString("MESSAGE_OVERWRITE_2"))) {
-                    case JOptionPane.YES_OPTION:
-                        return APPROVE_OPTION;
-                    case JOptionPane.NO_OPTION:
-                        correctFileName = false;
-                        continue;
-                    case JOptionPane.CANCEL_OPTION:
-                        return CANCEL_OPTION;
-                    }
-                    //wenn nicht beschreibbar -> Fehler und Dialog für Dateiauswahl wiederholen
-                } else {
+                // if writable -> ask whether to save over it
+                if (!selectedFile.canWrite()) {
                     correctFileName = false;
                     showSaveErrorMessage(parent);
                     continue;
                 }
+                switch (JOptionPane.showConfirmDialog(parent, drh.getResString("MESSAGE_OVERWRITE_1") + selectedFile.getName() + drh.getResString("MESSAGE_OVERWRITE_2"))) {
+                case JOptionPane.YES_OPTION:
+                    return APPROVE_OPTION;
+                case JOptionPane.NO_OPTION:
+                    correctFileName = false;
+                    continue;
+                case JOptionPane.CANCEL_OPTION:
+                    return CANCEL_OPTION;
+                }
+                // if not writable -> repeat error and dialog for file selection
             }
 
-            //wenn sich die neue Datei nicht anlegen lässt oder doch aus irgendwelchen Gründen nicht beschreibbar ist
+            // if the new file cannot be created or is not writable for some reason
             if (!FileHandler.guaranteeWriteableFile(selectedFile)) {
                 correctFileName = false;
                 MultipleOptionPane.showConfirmDialog(parent, drh.getResString("MESSAGE_SAVE_ERROR"), drh.getResString("MESSAGE_CANT_WRITE"), MultipleOptionPane.DEFAULT_OPTION, MultipleOptionPane.ERROR_MESSAGE);
@@ -296,8 +292,7 @@ public class ExtendedFileChooser extends JFileChooser {
     }
 
     /**
-     * Zeigt einen Hinweisdialog an, dass die Datei nicht gespiechert werden
-     * konnte.
+     * Displays a message dialog that the file could not be saved.
      *
      * @param parent
      */
@@ -306,9 +301,8 @@ public class ExtendedFileChooser extends JFileChooser {
     }
 
     /**
-     * Gibt den URL-String des übergebenen File-Objektes zurück oder
-     * <code>null</code>, wenn es sich nicht in eine gültige URL umwandelnd
-     * ließ.
+     * Returns the URL string of the passed File object or <code>null</code> if
+     * it could not be converted to a valid URL.
      *
      * @param file
      * @return
