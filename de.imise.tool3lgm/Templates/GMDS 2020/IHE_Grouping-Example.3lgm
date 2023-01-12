@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--Tool3lgmFile version='3.10' metamodel='TLGMServiceMetaModel@2388259974838049670' category='REGULAR'-->
+<!--Tool3lgmFile version='3.10' metamodel='TLGMServiceMetaModel@2388259974838049670' category='TEMPLATE'-->
 <modell_3lgm_2>
   <header>
-    <title>gmds2020_IHE_Grouping-Example_v2.3lgm</title>
+    <title>IHE_Grouping-Example.3lgm</title>
     <description></description>
-    <version>19_sippe_1656435483486</version>
+    <version>23_sippe_1673510836710</version>
   </header>
   <userFieldDefinitions>
     <userFieldFormat hash="USERFIELD_1497433330877_1">
@@ -128,14 +128,18 @@ The XDS.b Integration Profile assumes that these enterprises belong to one or mo
       <field name="name">Cross-Enterprise Document Sharing of Scanned Documents</field>
       <field name="description">XDS-SD use a variety of legacy paper, film, electronic and scanner outputted formats to store and exchange clinical documents. These formats are not designed for healthcare documentation, and furthermore, do not have a uniform mechanism to store healthcare metadata associated with the documents, including patient identifiers, demographics, encounter, order or service information. The association of structured, healthcare metadata with this kind of document is important to maintain the integrity of the patient health record as managed by the source system. It is necessary to provide a mechanism that allows such source metadata to be stored with the document.</field>
     </element>
-    <element class="Textfield" hash="_1585422295521_10048">
+    <element class="Group" hash="GRO_1673339287315_5106">
       <field name="name">Doctor´s office context</field>
     </element>
-    <element class="Textfield" hash="_1585423267081_10072">
+    <element class="Group" hash="GRO_1673339309719_5107">
       <field name="name">Doctor´s office context</field>
     </element>
     <element class="IheActor" hash="https://www.3lgm2.de/resource/ihe/XDSB_DOC_CONSUMER">
       <field name="name">Document Consumer (XDS.b)</field>
+      <field name="description">The Document Consumer Actor queries a Document Registry Actor for documents meeting certain criteria, and retrieves selected documents from one or more Document Repository actors.</field>
+    </element>
+    <element class="IheActorInstance" hash="IAI_1673339375262_5171">
+      <field name="name">Document Consumer (XDS.b)  1</field>
       <field name="description">The Document Consumer Actor queries a Document Registry Actor for documents meeting certain criteria, and retrieves selected documents from one or more Document Repository actors.</field>
     </element>
     <element class="IheActor" hash="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REGISTRY">
@@ -177,29 +181,30 @@ The XDS.b Integration Profile assumes that these enterprises belong to one or mo
     <element class="ApplicationSystem" hash="S_1570999950932_135">
       <field name="name">Electronic Health Record System, EHRS</field>
     </element>
-    <element class="Textfield" hash="_1585422197405_10047">
+    <element class="Group" hash="GRO_1673338943129_5101">
       <field name="name">Hospital context</field>
     </element>
     <element class="IheActor" hash="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_EMBED_REPOS">
       <field name="name">Integrated Document Source / Repository (XDS.b)</field>
       <field name="description">The Integrated Document Source / Repository is an XDS combination of Document Source and Document Repository that does not expose the interface between the Source and Repository. That is, this Source only publishes documents to its own Repository. It does register documents with a Document Registry</field>
     </element>
-    <element class="IheInvokingInterface" hash="[https://www.3lgm2.de/resource/ihe/CT_TIME_CLIENT; https://www.3lgm2.de/resource/ihe/iti-1; https://www.3lgm2.de/resource/ihe/CT_TS]_2">
-      <field name="name">ITI-1 Actor Interface (invoking)</field>
-    </element>
     <element class="IheActorInstanceInvokingInterface" hash="IAI_1656428030254_3754">
       <field name="name">ITI-1 Actor Interface (invoking)  1</field>
-    </element>
-    <element class="IheActorInstanceInvokingInterface" hash="IAI_1656428092014_3772">
-      <field name="name">ITI-1 Actor Interface (invoking)  2</field>
     </element>
     <element class="IheActorInstanceInvokingInterface" hash="IAI_1656428189424_4009">
       <field name="name">ITI-1 Actor Interface (invoking)  3</field>
     </element>
+    <element class="IheInvokingInterface" hash="[https://www.3lgm2.de/resource/ihe/CT_TIME_CLIENT; https://www.3lgm2.de/resource/ihe/iti-1; https://www.3lgm2.de/resource/ihe/CT_TS]_2">
+      <field name="name">ITI-1 Actor Interface (invoking)
+
+-ZUSAMMENGEFÜHRT-
+
+ITI-1 Aktor Schnittstelle (aufrufend)</field>
+    </element>
     <element class="IheInvokingInterface" hash="[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#CT_TIME_CLIENT; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-1; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#CT_TS]_2">
       <field name="name">ITI-1 Aktor Schnittstelle (aufrufend)
 
--JOINED-
+-ZUSAMMENGEFÜHRT-
 
 ITI-1 Actor Interface (invoking)</field>
     </element>
@@ -212,7 +217,18 @@ ITI-1 Actor Interface (invoking)</field>
       <field name="description">NTP transactions used to maintain time synchronization.</field>
     </element>
     <element class="IheInvokingInterface" hash="[https://www.3lgm2.de/resource/ihe/XDSB_DOC_CONSUMER; https://www.3lgm2.de/resource/ihe/iti-18; https://www.3lgm2.de/resource/ihe/XDSB_DOC_REGISTRY]_2">
-      <field name="name">ITI-18 Actor Interface (invoking)</field>
+      <field name="name">ITI-18 Actor Interface (invoking)
+
+-ZUSAMMENGEFÜHRT-
+
+ITI-18 Aktor Schnittstelle (aufrufend)</field>
+    </element>
+    <element class="IheActorInstanceInvokingInterface" hash="IAI_1673339376731_5173">
+      <field name="name">ITI-18 Actor Interface (invoking)
+
+-ZUSAMMENGEFÜHRT-
+
+ITI-18 Aktor Schnittstelle (aufrufend)  1</field>
     </element>
     <element class="IheProvidingInterface" hash="[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_CONSUMER; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-18; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REGISTRY]_5">
       <field name="name">ITI-18 Actor Interface (providing)</field>
@@ -235,61 +251,71 @@ ITI-1 Actor Interface (invoking)</field>
       <field name="name">ITI-18 Registry Stored Query</field>
       <field name="description">The Query Registry transaction is issued by the Document Consumer Actor on behalf of a care provider (EHR-CR) to a Document Registry. The Document Registry Actor searches the registry to locate documents that meet the provider s specified query criteria. It will return a list of document entries that contain metadata found to meet the specified criteria including the locations and identifier of each corresponding document in one or more Document Repositories. The stored query uses parameters and not direct SQL</field>
     </element>
-    <element class="IheInvokingInterface" hash="[https://www.3lgm2.de/resource/ihe/ATNA_SA; https://www.3lgm2.de/resource/ihe/iti-19; https://www.3lgm2.de/resource/ihe/ATNA_SN]_2">
-      <field name="name">ITI-19 Actor Interface (invoking)</field>
-    </element>
-    <element class="IheInvokingInterface" hash="[https://www.3lgm2.de/resource/ihe/ATNA_SN; https://www.3lgm2.de/resource/ihe/iti-19; https://www.3lgm2.de/resource/ihe/ATNA_SA]_2">
-      <field name="name">ITI-19 Actor Interface (invoking)</field>
-    </element>
     <element class="IheActorInstanceInvokingInterface" hash="IAI_1656427966832_3742">
       <field name="name">ITI-19 Actor Interface (invoking)  1</field>
-    </element>
-    <element class="IheActorInstanceInvokingInterface" hash="IAI_1656428066366_3760">
-      <field name="name">ITI-19 Actor Interface (invoking)  2</field>
     </element>
     <element class="IheActorInstanceInvokingInterface" hash="IAI_1656428170719_3997">
       <field name="name">ITI-19 Actor Interface (invoking)  3</field>
     </element>
-    <element class="IheProvidingInterface" hash="[https://www.3lgm2.de/resource/ihe/ATNA_SA; https://www.3lgm2.de/resource/ihe/iti-19; https://www.3lgm2.de/resource/ihe/ATNA_SN]_5">
-      <field name="name">ITI-19 Actor Interface (providing)</field>
+    <element class="IheInvokingInterface" hash="[https://www.3lgm2.de/resource/ihe/ATNA_SA; https://www.3lgm2.de/resource/ihe/iti-19; https://www.3lgm2.de/resource/ihe/ATNA_SN]_2">
+      <field name="name">ITI-19 Actor Interface (invoking)
+
+-ZUSAMMENGEFÜHRT-
+
+ITI-19 Aktor Schnittstelle (aufrufend)</field>
     </element>
-    <element class="IheProvidingInterface" hash="[https://www.3lgm2.de/resource/ihe/ATNA_SN; https://www.3lgm2.de/resource/ihe/iti-19; https://www.3lgm2.de/resource/ihe/ATNA_SA]_5">
-      <field name="name">ITI-19 Actor Interface (providing)</field>
+    <element class="IheInvokingInterface" hash="[https://www.3lgm2.de/resource/ihe/ATNA_SN; https://www.3lgm2.de/resource/ihe/iti-19; https://www.3lgm2.de/resource/ihe/ATNA_SA]_2">
+      <field name="name">ITI-19 Actor Interface (invoking)
+
+-ZUSAMMENGEFÜHRT-
+
+ITI-19 Aktor Schnittstelle (aufrufend)</field>
     </element>
     <element class="IheActorInstanceProvidingInterface" hash="IAI_1656427966840_3748">
       <field name="name">ITI-19 Actor Interface (providing)  1</field>
     </element>
-    <element class="IheActorInstanceProvidingInterface" hash="IAI_1656428066376_3766">
-      <field name="name">ITI-19 Actor Interface (providing)  2</field>
-    </element>
     <element class="IheActorInstanceProvidingInterface" hash="IAI_1656428170727_4003">
       <field name="name">ITI-19 Actor Interface (providing)  3</field>
+    </element>
+    <element class="IheProvidingInterface" hash="[https://www.3lgm2.de/resource/ihe/ATNA_SA; https://www.3lgm2.de/resource/ihe/iti-19; https://www.3lgm2.de/resource/ihe/ATNA_SN]_5">
+      <field name="name">ITI-19 Actor Interface (providing)
+
+-ZUSAMMENGEFÜHRT-
+
+ITI-19 Aktor Schnittstelle (bereitstellend)</field>
+    </element>
+    <element class="IheProvidingInterface" hash="[https://www.3lgm2.de/resource/ihe/ATNA_SN; https://www.3lgm2.de/resource/ihe/iti-19; https://www.3lgm2.de/resource/ihe/ATNA_SA]_5">
+      <field name="name">ITI-19 Actor Interface (providing)
+
+-ZUSAMMENGEFÜHRT-
+
+ITI-19 Aktor Schnittstelle (bereitstellend)</field>
     </element>
     <element class="IheInvokingInterface" hash="[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_SA; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-19; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_SN]_2">
       <field name="name">ITI-19 Aktor Schnittstelle (aufrufend)
 
--JOINED-
+-ZUSAMMENGEFÜHRT-
 
 ITI-19 Actor Interface (invoking)</field>
     </element>
     <element class="IheInvokingInterface" hash="[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_SN; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-19; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_SA]_2">
       <field name="name">ITI-19 Aktor Schnittstelle (aufrufend)
 
--JOINED-
+-ZUSAMMENGEFÜHRT-
 
 ITI-19 Actor Interface (invoking)</field>
     </element>
     <element class="IheProvidingInterface" hash="[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_SA; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-19; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_SN]_5">
       <field name="name">ITI-19 Aktor Schnittstelle (bereitstellend)
 
--JOINED-
+-ZUSAMMENGEFÜHRT-
 
 ITI-19 Actor Interface (providing)</field>
     </element>
     <element class="IheProvidingInterface" hash="[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_SN; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-19; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_SA]_5">
       <field name="name">ITI-19 Aktor Schnittstelle (bereitstellend)
 
--JOINED-
+-ZUSAMMENGEFÜHRT-
 
 ITI-19 Actor Interface (providing)</field>
     </element>
@@ -301,32 +327,37 @@ ITI-19 Actor Interface (providing)</field>
       <field name="name">ITI-19 Authenticate Node</field>
       <field name="description">This transaction is embedded within all network communications activity. All DICOM, HL7, and HTML connections shall comply with the IHE specification for bi-directional authentication and authorization of communications of Protected Healthcare Information (PHI). IHE does not specify how other protocols that transfer PHI shall perform bi-directional authentication and authorization, but requires that other protocols perform such authentication and authorization.</field>
     </element>
-    <element class="IheInvokingInterface" hash="[https://www.3lgm2.de/resource/ihe/ATNA_SA; https://www.3lgm2.de/resource/ihe/iti-20; https://www.3lgm2.de/resource/ihe/ATNA_ARR]_2">
-      <field name="name">ITI-20 Actor Interface (invoking)</field>
-    </element>
-    <element class="IheInvokingInterface" hash="[https://www.3lgm2.de/resource/ihe/ATNA_SN; https://www.3lgm2.de/resource/ihe/iti-20; https://www.3lgm2.de/resource/ihe/ATNA_ARR]_2">
-      <field name="name">ITI-20 Actor Interface (invoking)</field>
-    </element>
     <element class="IheActorInstanceInvokingInterface" hash="IAI_1656427966837_3745">
       <field name="name">ITI-20 Actor Interface (invoking)  1</field>
-    </element>
-    <element class="IheActorInstanceInvokingInterface" hash="IAI_1656428066372_3763">
-      <field name="name">ITI-20 Actor Interface (invoking)  2</field>
     </element>
     <element class="IheActorInstanceInvokingInterface" hash="IAI_1656428170723_4000">
       <field name="name">ITI-20 Actor Interface (invoking)  3</field>
     </element>
+    <element class="IheInvokingInterface" hash="[https://www.3lgm2.de/resource/ihe/ATNA_SA; https://www.3lgm2.de/resource/ihe/iti-20; https://www.3lgm2.de/resource/ihe/ATNA_ARR]_2">
+      <field name="name">ITI-20 Actor Interface (invoking)
+
+-ZUSAMMENGEFÜHRT-
+
+ITI-20 Aktor Schnittstelle (aufrufend)</field>
+    </element>
+    <element class="IheInvokingInterface" hash="[https://www.3lgm2.de/resource/ihe/ATNA_SN; https://www.3lgm2.de/resource/ihe/iti-20; https://www.3lgm2.de/resource/ihe/ATNA_ARR]_2">
+      <field name="name">ITI-20 Actor Interface (invoking)
+
+-ZUSAMMENGEFÜHRT-
+
+ITI-20 Aktor Schnittstelle (aufrufend)</field>
+    </element>
     <element class="IheInvokingInterface" hash="[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_SA; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-20; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_ARR]_2">
       <field name="name">ITI-20 Aktor Schnittstelle (aufrufend)
 
--JOINED-
+-ZUSAMMENGEFÜHRT-
 
 ITI-20 Actor Interface (invoking)</field>
     </element>
     <element class="IheInvokingInterface" hash="[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_SN; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-20; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_ARR]_2">
       <field name="name">ITI-20 Aktor Schnittstelle (aufrufend)
 
--JOINED-
+-ZUSAMMENGEFÜHRT-
 
 ITI-20 Actor Interface (invoking)</field>
     </element>
@@ -398,7 +429,18 @@ ITI-20 Actor Interface (invoking)</field>
       <field name="description">Register Document Set-b</field>
     </element>
     <element class="IheInvokingInterface" hash="[https://www.3lgm2.de/resource/ihe/XDSB_DOC_CONSUMER; https://www.3lgm2.de/resource/ihe/iti-43; https://www.3lgm2.de/resource/ihe/XDSB_DOC_REPOSITORY]_2">
-      <field name="name">ITI-43 Actor Interface (invoking)</field>
+      <field name="name">ITI-43 Actor Interface (invoking)
+
+-ZUSAMMENGEFÜHRT-
+
+ITI-43 Aktor Schnittstelle (aufrufend)</field>
+    </element>
+    <element class="IheActorInstanceInvokingInterface" hash="IAI_1673339376734_5176">
+      <field name="name">ITI-43 Actor Interface (invoking)
+
+-ZUSAMMENGEFÜHRT-
+
+ITI-43 Aktor Schnittstelle (aufrufend)  1</field>
     </element>
     <element class="IheProvidingInterface" hash="[https://www.3lgm2.de/resource/ihe/XDSB_DOC_CONSUMER; https://www.3lgm2.de/resource/ihe/iti-43; https://www.3lgm2.de/resource/ihe/XDSB_DOC_REPOSITORY]_5">
       <field name="name">ITI-43 Actor Interface (providing)</field>
@@ -528,7 +570,7 @@ ITI-20 Actor Interface (invoking)</field>
     <element class="ApplicationSystem" hash="S_1571000158218_140">
       <field name="name">Master Patient Index, MPI</field>
     </element>
-    <element class="Textfield" hash="_1585423217349_10071">
+    <element class="Group" hash="GRO_1673339237927_5105">
       <field name="name">Patient context</field>
     </element>
     <element class="IheActor" hash="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_PAT_IDENTITY_SRC">
@@ -555,10 +597,6 @@ ITI-20 Actor Interface (invoking)</field>
       <field name="name">Secure Application (ATNA)  1</field>
       <field name="description">The difference between the Secure Node and the Secure Application is the extent to which the underlying operating system and other environment are secured. A Secure Node includes all aspects of user authentication, file system protections, and operating environment security. The Secure Application is a product that does not include the operating environment. The Secure Application provides security features only for the application features. See section 9.7 for the relationships among a Secure Node, Secure Application, and other actors.</field>
     </element>
-    <element class="IheActorInstance" hash="IAI_1656428066360_3758">
-      <field name="name">Secure Application (ATNA)  2</field>
-      <field name="description">The difference between the Secure Node and the Secure Application is the extent to which the underlying operating system and other environment are secured. A Secure Node includes all aspects of user authentication, file system protections, and operating environment security. The Secure Application is a product that does not include the operating environment. The Secure Application provides security features only for the application features. See section 9.7 for the relationships among a Secure Node, Secure Application, and other actors.</field>
-    </element>
     <element class="IheActorInstance" hash="IAI_1656428170713_3995">
       <field name="name">Secure Application (ATNA)  3</field>
       <field name="description">The difference between the Secure Node and the Secure Application is the extent to which the underlying operating system and other environment are secured. A Secure Node includes all aspects of user authentication, file system protections, and operating environment security. The Secure Application is a product that does not include the operating environment. The Secure Application provides security features only for the application features. See section 9.7 for the relationships among a Secure Node, Secure Application, and other actors.</field>
@@ -583,10 +621,6 @@ ITI-20 Actor Interface (invoking)</field>
       <field name="name">Time Client (CT)  1</field>
       <field name="description">Establishes time synchronization with one or more Time Servers using the NTP protocol and either the NTP or SNTP algorithms. Maintains the local computer system clock synchronization with UTC based on synchronization with the Time Servers.</field>
     </element>
-    <element class="IheActorInstance" hash="IAI_1656428092008_3770">
-      <field name="name">Time Client (CT)  2</field>
-      <field name="description">Establishes time synchronization with one or more Time Servers using the NTP protocol and either the NTP or SNTP algorithms. Maintains the local computer system clock synchronization with UTC based on synchronization with the Time Servers.</field>
-    </element>
     <element class="IheActorInstance" hash="IAI_1656428189419_4007">
       <field name="name">Time Client (CT)  3</field>
       <field name="description">Establishes time synchronization with one or more Time Servers using the NTP protocol and either the NTP or SNTP algorithms. Maintains the local computer system clock synchronization with UTC based on synchronization with the Time Servers.</field>
@@ -594,7 +628,7 @@ ITI-20 Actor Interface (invoking)</field>
     <element class="IheIntegrationProfile_IheDomain_Edge" hash="[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDS.b; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iheDomain; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ITI]">
       <field name="name">IheIntegrationProfile_IheDomain_Edge 13
 
--JOINED-
+-ZUSAMMENGEFÜHRT-
 
 Connection 28</field>
       <field name="start">http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDS.b</field>
@@ -603,7 +637,7 @@ Connection 28</field>
     <element class="IheIntegrationProfile_IheDomain_Edge" hash="[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDS-SD; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iheDomain; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ITI]">
       <field name="name">IheIntegrationProfile_IheDomain_Edge 28
 
--JOINED-
+-ZUSAMMENGEFÜHRT-
 
 Connection 50</field>
       <field name="start">http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDS-SD</field>
@@ -617,7 +651,7 @@ Connection 50</field>
     <element class="IheIntegrationProfile_IheDomain_Edge" hash="[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iheDomain; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ITI]">
       <field name="name">IheIntegrationProfile_IheDomain_Edge 5
 
--JOINED-
+-ZUSAMMENGEFÜHRT-
 
 Connection 17</field>
       <field name="start">http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA</field>
@@ -626,7 +660,7 @@ Connection 17</field>
     <element class="IheIntegrationProfile_IheActor_Edge" hash="[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_SA; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iheIntegrationProfile; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA]">
       <field name="name">IheIntegrationProfile_IheActor_Edge 43
 
--JOINED-
+-ZUSAMMENGEFÜHRT-
 
 Connection 49</field>
       <field name="start">http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA</field>
@@ -635,7 +669,7 @@ Connection 49</field>
     <element class="IheInvokingInterface_IheTransaction_Edge" hash="[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_SA; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-19; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_SN]_3">
       <field name="name">IheInvokingInterface_IheTransaction_Edge 41
 
--JOINED-
+-ZUSAMMENGEFÜHRT-
 
 Connection 56</field>
       <field name="start">[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_SA; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-19; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_SN]_2</field>
@@ -644,7 +678,7 @@ Connection 56</field>
     <element class="IheActor_IheInterface_Edge" hash="[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_SA; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-19; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_SN]_1">
       <field name="name">IheActor_IheInterface_Edge 81
 
--JOINED-
+-ZUSAMMENGEFÜHRT-
 
 Connection 112</field>
       <field name="start">http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_SA</field>
@@ -653,7 +687,7 @@ Connection 112</field>
     <element class="IheInvokingInterface_IheTransaction_Edge" hash="[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_SA; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-20; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_ARR]_3">
       <field name="name">IheInvokingInterface_IheTransaction_Edge 40
 
--JOINED-
+-ZUSAMMENGEFÜHRT-
 
 Connection 55</field>
       <field name="start">[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_SA; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-20; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_ARR]_2</field>
@@ -662,7 +696,7 @@ Connection 55</field>
     <element class="IheActor_IheInterface_Edge" hash="[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_SA; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-20; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_ARR]_1">
       <field name="name">IheActor_IheInterface_Edge 79
 
--JOINED-
+-ZUSAMMENGEFÜHRT-
 
 Connection 111</field>
       <field name="start">http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_SA</field>
@@ -671,7 +705,7 @@ Connection 111</field>
     <element class="IheProvidingInterface_IheTransaction_Edge" hash="[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_SN; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-19; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_SA]_4">
       <field name="name">IheProvidingInterface_IheTransaction_Edge 32
 
--JOINED-
+-ZUSAMMENGEFÜHRT-
 
 Connection 54</field>
       <field name="start">[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_SN; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-19; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_SA]_5</field>
@@ -680,7 +714,7 @@ Connection 54</field>
     <element class="IheActor_IheInterface_Edge" hash="[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_SN; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-19; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_SA]_6">
       <field name="name">IheActor_IheInterface_Edge 64
 
--JOINED-
+-ZUSAMMENGEFÜHRT-
 
 Connection 105</field>
       <field name="start">http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_SA</field>
@@ -694,7 +728,7 @@ Connection 105</field>
     <element class="IheIntegrationProfile_IheActor_Edge" hash="[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_SN; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iheIntegrationProfile; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA]">
       <field name="name">IheIntegrationProfile_IheActor_Edge 31
 
--JOINED-
+-ZUSAMMENGEFÜHRT-
 
 Connection 46</field>
       <field name="start">http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA</field>
@@ -703,7 +737,7 @@ Connection 46</field>
     <element class="IheInvokingInterface_IheTransaction_Edge" hash="[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_SN; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-19; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_SA]_3">
       <field name="name">IheInvokingInterface_IheTransaction_Edge 32
 
--JOINED-
+-ZUSAMMENGEFÜHRT-
 
 Connection 51</field>
       <field name="start">[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_SN; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-19; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_SA]_2</field>
@@ -717,7 +751,7 @@ Connection 51</field>
     <element class="IheActor_IheInterface_Edge" hash="[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_SN; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-19; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_SA]_1">
       <field name="name">IheActor_IheInterface_Edge 63
 
--JOINED-
+-ZUSAMMENGEFÜHRT-
 
 Connection 104</field>
       <field name="start">http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_SN</field>
@@ -726,7 +760,7 @@ Connection 104</field>
     <element class="IheInvokingInterface_IheTransaction_Edge" hash="[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_SN; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-20; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_ARR]_3">
       <field name="name">IheInvokingInterface_IheTransaction_Edge 31
 
--JOINED-
+-ZUSAMMENGEFÜHRT-
 
 Connection 50</field>
       <field name="start">[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_SN; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-20; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_ARR]_2</field>
@@ -735,7 +769,7 @@ Connection 50</field>
     <element class="IheActor_IheInterface_Edge" hash="[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_SN; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-20; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_ARR]_1">
       <field name="name">IheActor_IheInterface_Edge 61
 
--JOINED-
+-ZUSAMMENGEFÜHRT-
 
 Connection 102</field>
       <field name="start">http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_SN</field>
@@ -744,7 +778,7 @@ Connection 102</field>
     <element class="IheProvidingInterface_IheTransaction_Edge" hash="[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_SA; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-19; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_SN]_4">
       <field name="name">IheProvidingInterface_IheTransaction_Edge 41
 
--JOINED-
+-ZUSAMMENGEFÜHRT-
 
 Connection 57</field>
       <field name="start">[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_SA; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-19; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_SN]_5</field>
@@ -758,7 +792,7 @@ Connection 57</field>
     <element class="IheActor_IheInterface_Edge" hash="[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_SA; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-19; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_SN]_6">
       <field name="name">IheActor_IheInterface_Edge 82
 
--JOINED-
+-ZUSAMMENGEFÜHRT-
 
 Connection 113</field>
       <field name="start">http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_SN</field>
@@ -772,7 +806,7 @@ Connection 113</field>
     <element class="IheIntegrationProfile_IheDomain_Edge" hash="[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#CT; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iheDomain; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ITI]">
       <field name="name">IheIntegrationProfile_IheDomain_Edge 22
 
--JOINED-
+-ZUSAMMENGEFÜHRT-
 
 Connection 49</field>
       <field name="start">http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#CT</field>
@@ -781,7 +815,7 @@ Connection 49</field>
     <element class="IheIntegrationProfile_IheActor_Edge" hash="[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#CT_TIME_CLIENT; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iheIntegrationProfile; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#CT]">
       <field name="name">IheIntegrationProfile_IheActor_Edge 41
 
--JOINED-
+-ZUSAMMENGEFÜHRT-
 
 Connection 61</field>
       <field name="start">http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#CT</field>
@@ -790,7 +824,7 @@ Connection 61</field>
     <element class="IheInvokingInterface_IheTransaction_Edge" hash="[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#CT_TIME_CLIENT; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-1; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#CT_TS]_3">
       <field name="name">IheInvokingInterface_IheTransaction_Edge 38
 
--JOINED-
+-ZUSAMMENGEFÜHRT-
 
 Connection 61</field>
       <field name="start">[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#CT_TIME_CLIENT; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-1; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#CT_TS]_2</field>
@@ -799,7 +833,7 @@ Connection 61</field>
     <element class="IheActor_IheInterface_Edge" hash="[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#CT_TIME_CLIENT; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-1; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#CT_TS]_1">
       <field name="name">IheActor_IheInterface_Edge 75
 
--JOINED-
+-ZUSAMMENGEFÜHRT-
 
 Connection 122</field>
       <field name="start">http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#CT_TIME_CLIENT</field>
@@ -808,11 +842,11 @@ Connection 122</field>
     <element class="IheActor_IheActor_MustBeGroupedWith_Edge" hash="[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_SA; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#mustBeGroupedWith; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#CT_TIME_CLIENT]">
       <field name="name">IheActor_IheActor_MustBeGroupedWith_Edge 40
 
--JOINED-
+-ZUSAMMENGEFÜHRT-
 
 IheActor_IheActor_MustBeGroupedWith_Edge 33
 
--JOINED-
+-ZUSAMMENGEFÜHRT-
 
 Grouping 55</field>
       <field name="start">http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_SA</field>
@@ -821,11 +855,11 @@ Grouping 55</field>
     <element class="IheActor_IheActor_MustBeGroupedWith_Edge" hash="[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_SN; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#mustBeGroupedWith; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#CT_TIME_CLIENT]">
       <field name="name">IheActor_IheActor_MustBeGroupedWith_Edge 34
 
--JOINED-
+-ZUSAMMENGEFÜHRT-
 
 IheActor_IheActor_MustBeGroupedWith_Edge 27
 
--JOINED-
+-ZUSAMMENGEFÜHRT-
 
 Grouping 52</field>
       <field name="start">http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_SN</field>
@@ -834,7 +868,7 @@ Grouping 52</field>
     <element class="IheIntegrationProfile_IheActor_Edge" hash="[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REPOSITORY; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iheIntegrationProfile; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDS.b]">
       <field name="name">IheIntegrationProfile_IheActor_Edge 10
 
--JOINED-
+-ZUSAMMENGEFÜHRT-
 
 Connection 39</field>
       <field name="start">http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDS.b</field>
@@ -843,7 +877,7 @@ Connection 39</field>
     <element class="IheInvokingInterface_IheTransaction_Edge" hash="[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REPOSITORY; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-42; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REGISTRY]_3">
       <field name="name">IheInvokingInterface_IheTransaction_Edge 13
 
--JOINED-
+-ZUSAMMENGEFÜHRT-
 
 Connection 46</field>
       <field name="start">[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REPOSITORY; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-42; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REGISTRY]_2</field>
@@ -857,7 +891,7 @@ Connection 46</field>
     <element class="IheIntegrationProfile_IheActor_Edge" hash="[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_EMBED_REPOS; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iheIntegrationProfile; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDS.b]">
       <field name="name">IheIntegrationProfile_IheActor_Edge 24
 
--JOINED-
+-ZUSAMMENGEFÜHRT-
 
 Connection 27</field>
       <field name="start">http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDS.b</field>
@@ -866,7 +900,7 @@ Connection 27</field>
     <element class="IheInvokingInterface_IheTransaction_Edge" hash="[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_EMBED_REPOS; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-42; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REGISTRY]_3">
       <field name="name">IheInvokingInterface_IheTransaction_Edge 27
 
--JOINED-
+-ZUSAMMENGEFÜHRT-
 
 Connection 22</field>
       <field name="start">[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_EMBED_REPOS; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-42; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REGISTRY]_2</field>
@@ -895,11 +929,11 @@ Connection 22</field>
     <element class="IheActor_IheActor_MustBeGroupedWith_Edge" hash="[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REPOSITORY; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#mustBeGroupedWith; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_SA]">
       <field name="name">IheActor_IheActor_MustBeGroupedWith_Edge 15
 
--JOINED-
+-ZUSAMMENGEFÜHRT-
 
 IheActor_IheActor_MustBeGroupedWith_Edge 12
 
--JOINED-
+-ZUSAMMENGEFÜHRT-
 
 Grouping 48</field>
       <field name="start">http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REPOSITORY</field>
@@ -908,11 +942,11 @@ Grouping 48</field>
     <element class="IheActor_IheActor_MustBeGroupedWith_Edge" hash="[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_EMBED_REPOS; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#mustBeGroupedWith; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_SA]">
       <field name="name">IheActor_IheActor_MustBeGroupedWith_Edge 25
 
--JOINED-
+-ZUSAMMENGEFÜHRT-
 
 IheActor_IheActor_MustBeGroupedWith_Edge 20
 
--JOINED-
+-ZUSAMMENGEFÜHRT-
 
 Grouping 35</field>
       <field name="start">http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_EMBED_REPOS</field>
@@ -921,11 +955,11 @@ Grouping 35</field>
     <element class="IheActor_IheActor_MustBeGroupedWith_Edge" hash="[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REPOSITORY; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#mustBeGroupedWith; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_SN]">
       <field name="name">IheActor_IheActor_MustBeGroupedWith_Edge 14
 
--JOINED-
+-ZUSAMMENGEFÜHRT-
 
 IheActor_IheActor_MustBeGroupedWith_Edge 11
 
--JOINED-
+-ZUSAMMENGEFÜHRT-
 
 Grouping 47</field>
       <field name="start">http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REPOSITORY</field>
@@ -934,11 +968,11 @@ Grouping 47</field>
     <element class="IheActor_IheActor_MustBeGroupedWith_Edge" hash="[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_EMBED_REPOS; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#mustBeGroupedWith; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_SN]">
       <field name="name">IheActor_IheActor_MustBeGroupedWith_Edge 24
 
--JOINED-
+-ZUSAMMENGEFÜHRT-
 
 IheActor_IheActor_MustBeGroupedWith_Edge 19
 
--JOINED-
+-ZUSAMMENGEFÜHRT-
 
 Grouping 34</field>
       <field name="start">http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_EMBED_REPOS</field>
@@ -977,7 +1011,7 @@ Grouping 34</field>
     <element class="IheIntegrationProfile_IheActor_Edge" hash="[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_SOURCE; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iheIntegrationProfile; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDS.b]">
       <field name="name">IheIntegrationProfile_IheActor_Edge 16
 
--JOINED-
+-ZUSAMMENGEFÜHRT-
 
 Connection 72</field>
       <field name="start">http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDS.b</field>
@@ -1011,11 +1045,11 @@ Connection 72</field>
     <element class="IheActor_IheActor_MustBeGroupedWith_Edge" hash="[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_SOURCE; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#mustBeGroupedWith; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_SA]">
       <field name="name">IheActor_IheActor_MustBeGroupedWith_Edge 16
 
--JOINED-
+-ZUSAMMENGEFÜHRT-
 
 IheActor_IheActor_MustBeGroupedWith_Edge 14
 
--JOINED-
+-ZUSAMMENGEFÜHRT-
 
 Grouping 77</field>
       <field name="start">http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_SOURCE</field>
@@ -1024,11 +1058,11 @@ Grouping 77</field>
     <element class="IheActor_IheActor_MustBeGroupedWith_Edge" hash="[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_SOURCE; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#mustBeGroupedWith; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_SN]">
       <field name="name">IheActor_IheActor_MustBeGroupedWith_Edge 18
 
--JOINED-
+-ZUSAMMENGEFÜHRT-
 
 IheActor_IheActor_MustBeGroupedWith_Edge 13
 
--JOINED-
+-ZUSAMMENGEFÜHRT-
 
 Grouping 76</field>
       <field name="start">http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_SOURCE</field>
@@ -1047,7 +1081,7 @@ Grouping 76</field>
     <element class="IheIntegrationProfile_IheActor_Edge" hash="[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_PAT_IDENTITY_SRC; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iheIntegrationProfile; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDS.b]">
       <field name="name">IheIntegrationProfile_IheActor_Edge 6
 
--JOINED-
+-ZUSAMMENGEFÜHRT-
 
 Connection 74</field>
       <field name="start">http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDS.b</field>
@@ -1056,7 +1090,7 @@ Connection 74</field>
     <element class="IheInvokingInterface_IheTransaction_Edge" hash="[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_PAT_IDENTITY_SRC; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-44; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REGISTRY]_3">
       <field name="name">IheInvokingInterface_IheTransaction_Edge 8
 
--JOINED-
+-ZUSAMMENGEFÜHRT-
 
 Connection 72</field>
       <field name="start">[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_PAT_IDENTITY_SRC; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-44; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REGISTRY]_2</field>
@@ -1070,7 +1104,7 @@ Connection 72</field>
     <element class="IheInvokingInterface_IheTransaction_Edge" hash="[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_PAT_IDENTITY_SRC; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-8; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REGISTRY]_3">
       <field name="name">IheInvokingInterface_IheTransaction_Edge 7
 
--JOINED-
+-ZUSAMMENGEFÜHRT-
 
 Connection 71</field>
       <field name="start">[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_PAT_IDENTITY_SRC; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-8; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REGISTRY]_2</field>
@@ -1084,11 +1118,11 @@ Connection 71</field>
     <element class="IheActor_IheActor_MustBeGroupedWith_Edge" hash="[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_PAT_IDENTITY_SRC; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#mustBeGroupedWith; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_SA]">
       <field name="name">IheActor_IheActor_MustBeGroupedWith_Edge 11
 
--JOINED-
+-ZUSAMMENGEFÜHRT-
 
 IheActor_IheActor_MustBeGroupedWith_Edge 9
 
--JOINED-
+-ZUSAMMENGEFÜHRT-
 
 Grouping 80</field>
       <field name="start">http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_PAT_IDENTITY_SRC</field>
@@ -1097,11 +1131,11 @@ Grouping 80</field>
     <element class="IheActor_IheActor_MustBeGroupedWith_Edge" hash="[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_PAT_IDENTITY_SRC; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#mustBeGroupedWith; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_SN]">
       <field name="name">IheActor_IheActor_MustBeGroupedWith_Edge 10
 
--JOINED-
+-ZUSAMMENGEFÜHRT-
 
 IheActor_IheActor_MustBeGroupedWith_Edge 8
 
--JOINED-
+-ZUSAMMENGEFÜHRT-
 
 Grouping 79</field>
       <field name="start">http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_PAT_IDENTITY_SRC</field>
@@ -1208,17 +1242,29 @@ Grouping 79</field>
       <field name="end">[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_PAT_IDENTITY_SRC; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-8; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REGISTRY]_5</field>
     </element>
     <element class="IheIntegrationProfile_IheDomain_Edge" hash="[https://www.3lgm2.de/resource/ihe/XDS.b; https://www.3lgm2.de/resource/ihe/iheDomain; https://www.3lgm2.de/resource/ihe/ITI]">
-      <field name="name">Connection 30</field>
+      <field name="name">Connection 30
+
+-ZUSAMMENGEFÜHRT-
+
+Beziehung 30</field>
       <field name="start">https://www.3lgm2.de/resource/ihe/XDS.b</field>
       <field name="end">https://www.3lgm2.de/resource/ihe/ITI</field>
     </element>
     <element class="IheIntegrationProfile_IheActor_Edge" hash="[https://www.3lgm2.de/resource/ihe/XDSB_DOC_REGISTRY; https://www.3lgm2.de/resource/ihe/iheIntegrationProfile; https://www.3lgm2.de/resource/ihe/XDS.b]">
-      <field name="name">Connection 105</field>
+      <field name="name">Connection 105
+
+-ZUSAMMENGEFÜHRT-
+
+Beziehung 105</field>
       <field name="start">https://www.3lgm2.de/resource/ihe/XDS.b</field>
       <field name="end">https://www.3lgm2.de/resource/ihe/XDSB_DOC_REGISTRY</field>
     </element>
     <element class="IheProvidingInterface_IheTransaction_Edge" hash="[https://www.3lgm2.de/resource/ihe/XDSB_DOC_CONSUMER; https://www.3lgm2.de/resource/ihe/iti-18; https://www.3lgm2.de/resource/ihe/XDSB_DOC_REGISTRY]_4">
-      <field name="name">Connection 72</field>
+      <field name="name">Connection 72
+
+-ZUSAMMENGEFÜHRT-
+
+Beziehung 72</field>
       <field name="start">[https://www.3lgm2.de/resource/ihe/XDSB_DOC_CONSUMER; https://www.3lgm2.de/resource/ihe/iti-18; https://www.3lgm2.de/resource/ihe/XDSB_DOC_REGISTRY]_5</field>
       <field name="end">[https://www.3lgm2.de/resource/ihe/RMD_DOC_ADMINISTRATOR; https://www.3lgm2.de/resource/ihe/iti-18; https://www.3lgm2.de/resource/ihe/RMD_DOC_REGISTRY]</field>
     </element>
@@ -1278,32 +1324,56 @@ Grouping 79</field>
       <field name="end">[https://www.3lgm2.de/resource/ihe/XDSB_PAT_IDENTITY_SRC; https://www.3lgm2.de/resource/ihe/iti-8; https://www.3lgm2.de/resource/ihe/XDSB_DOC_REGISTRY]_5</field>
     </element>
     <element class="IheIntegrationProfile_IheDomain_Edge" hash="[https://www.3lgm2.de/resource/ihe/ATNA; https://www.3lgm2.de/resource/ihe/iheDomain; https://www.3lgm2.de/resource/ihe/ITI]">
-      <field name="name">Connection 45</field>
+      <field name="name">Connection 45
+
+-ZUSAMMENGEFÜHRT-
+
+Beziehung 45</field>
       <field name="start">https://www.3lgm2.de/resource/ihe/ATNA</field>
       <field name="end">https://www.3lgm2.de/resource/ihe/ITI</field>
     </element>
     <element class="IheIntegrationProfile_IheActor_Edge" hash="[https://www.3lgm2.de/resource/ihe/ATNA_SA; https://www.3lgm2.de/resource/ihe/iheIntegrationProfile; https://www.3lgm2.de/resource/ihe/ATNA]">
-      <field name="name">Connection 170</field>
+      <field name="name">Connection 170
+
+-ZUSAMMENGEFÜHRT-
+
+Beziehung 170</field>
       <field name="start">https://www.3lgm2.de/resource/ihe/ATNA</field>
       <field name="end">https://www.3lgm2.de/resource/ihe/ATNA_SA</field>
     </element>
     <element class="IheInvokingInterface_IheTransaction_Edge" hash="[https://www.3lgm2.de/resource/ihe/ATNA_SA; https://www.3lgm2.de/resource/ihe/iti-19; https://www.3lgm2.de/resource/ihe/ATNA_SN]_3">
-      <field name="name">Connection 94</field>
+      <field name="name">Connection 94
+
+-ZUSAMMENGEFÜHRT-
+
+Beziehung 93</field>
       <field name="start">[https://www.3lgm2.de/resource/ihe/ATNA_SA; https://www.3lgm2.de/resource/ihe/iti-19; https://www.3lgm2.de/resource/ihe/ATNA_SN]_2</field>
       <field name="end">[https://www.3lgm2.de/resource/ihe/ATNA_SN; https://www.3lgm2.de/resource/ihe/iti-19; https://www.3lgm2.de/resource/ihe/ATNA_SA]</field>
     </element>
     <element class="IheActor_IheInterface_Edge" hash="[https://www.3lgm2.de/resource/ihe/ATNA_SA; https://www.3lgm2.de/resource/ihe/iti-19; https://www.3lgm2.de/resource/ihe/ATNA_SN]_1">
-      <field name="name">Subordination relation 189</field>
+      <field name="name">Subordination relation 189
+
+-ZUSAMMENGEFÜHRT-
+
+Unterordunungsbeziehung 188</field>
       <field name="start">https://www.3lgm2.de/resource/ihe/ATNA_SA</field>
       <field name="end">[https://www.3lgm2.de/resource/ihe/ATNA_SA; https://www.3lgm2.de/resource/ihe/iti-19; https://www.3lgm2.de/resource/ihe/ATNA_SN]_2</field>
     </element>
     <element class="IheProvidingInterface_IheTransaction_Edge" hash="[https://www.3lgm2.de/resource/ihe/ATNA_SN; https://www.3lgm2.de/resource/ihe/iti-19; https://www.3lgm2.de/resource/ihe/ATNA_SA]_4">
-      <field name="name">Connection 23</field>
+      <field name="name">Connection 23
+
+-ZUSAMMENGEFÜHRT-
+
+Beziehung 23</field>
       <field name="start">[https://www.3lgm2.de/resource/ihe/ATNA_SN; https://www.3lgm2.de/resource/ihe/iti-19; https://www.3lgm2.de/resource/ihe/ATNA_SA]_5</field>
       <field name="end">[https://www.3lgm2.de/resource/ihe/ATNA_SN; https://www.3lgm2.de/resource/ihe/iti-19; https://www.3lgm2.de/resource/ihe/ATNA_SA]</field>
     </element>
     <element class="IheActor_IheInterface_Edge" hash="[https://www.3lgm2.de/resource/ihe/ATNA_SN; https://www.3lgm2.de/resource/ihe/iti-19; https://www.3lgm2.de/resource/ihe/ATNA_SA]_6">
-      <field name="name">Subordination relation 47</field>
+      <field name="name">Subordination relation 47
+
+-ZUSAMMENGEFÜHRT-
+
+Unterordunungsbeziehung 46</field>
       <field name="start">https://www.3lgm2.de/resource/ihe/ATNA_SA</field>
       <field name="end">[https://www.3lgm2.de/resource/ihe/ATNA_SN; https://www.3lgm2.de/resource/ihe/iti-19; https://www.3lgm2.de/resource/ihe/ATNA_SA]_5</field>
     </element>
@@ -1313,52 +1383,92 @@ Grouping 79</field>
       <field name="end">[https://www.3lgm2.de/resource/ihe/ATNA_SN; https://www.3lgm2.de/resource/ihe/iti-19; https://www.3lgm2.de/resource/ihe/ATNA_SA]_5</field>
     </element>
     <element class="IheInvokingInterface_IheTransaction_Edge" hash="[https://www.3lgm2.de/resource/ihe/ATNA_SA; https://www.3lgm2.de/resource/ihe/iti-20; https://www.3lgm2.de/resource/ihe/ATNA_ARR]_3">
-      <field name="name">Connection 93</field>
+      <field name="name">Connection 93
+
+-ZUSAMMENGEFÜHRT-
+
+Beziehung 94</field>
       <field name="start">[https://www.3lgm2.de/resource/ihe/ATNA_SA; https://www.3lgm2.de/resource/ihe/iti-20; https://www.3lgm2.de/resource/ihe/ATNA_ARR]_2</field>
       <field name="end">[https://www.3lgm2.de/resource/ihe/ATNA_AUDIT_RECORD_FORWARDER; https://www.3lgm2.de/resource/ihe/iti-20; https://www.3lgm2.de/resource/ihe/ATNA_ARR]</field>
     </element>
     <element class="IheActor_IheInterface_Edge" hash="[https://www.3lgm2.de/resource/ihe/ATNA_SA; https://www.3lgm2.de/resource/ihe/iti-20; https://www.3lgm2.de/resource/ihe/ATNA_ARR]_1">
-      <field name="name">Subordination relation 188</field>
+      <field name="name">Subordination relation 188
+
+-ZUSAMMENGEFÜHRT-
+
+Unterordunungsbeziehung 190</field>
       <field name="start">https://www.3lgm2.de/resource/ihe/ATNA_SA</field>
       <field name="end">[https://www.3lgm2.de/resource/ihe/ATNA_SA; https://www.3lgm2.de/resource/ihe/iti-20; https://www.3lgm2.de/resource/ihe/ATNA_ARR]_2</field>
     </element>
     <element class="IheIntegrationProfile_IheDomain_Edge" hash="[https://www.3lgm2.de/resource/ihe/CT; https://www.3lgm2.de/resource/ihe/iheDomain; https://www.3lgm2.de/resource/ihe/ITI]">
-      <field name="name">Connection 47</field>
+      <field name="name">Connection 47
+
+-ZUSAMMENGEFÜHRT-
+
+Beziehung 47</field>
       <field name="start">https://www.3lgm2.de/resource/ihe/CT</field>
       <field name="end">https://www.3lgm2.de/resource/ihe/ITI</field>
     </element>
     <element class="IheIntegrationProfile_IheActor_Edge" hash="[https://www.3lgm2.de/resource/ihe/CT_TIME_CLIENT; https://www.3lgm2.de/resource/ihe/iheIntegrationProfile; https://www.3lgm2.de/resource/ihe/CT]">
-      <field name="name">Connection 194</field>
+      <field name="name">Connection 194
+
+-ZUSAMMENGEFÜHRT-
+
+Beziehung 194</field>
       <field name="start">https://www.3lgm2.de/resource/ihe/CT</field>
       <field name="end">https://www.3lgm2.de/resource/ihe/CT_TIME_CLIENT</field>
     </element>
     <element class="IheInvokingInterface_IheTransaction_Edge" hash="[https://www.3lgm2.de/resource/ihe/CT_TIME_CLIENT; https://www.3lgm2.de/resource/ihe/iti-1; https://www.3lgm2.de/resource/ihe/CT_TS]_3">
-      <field name="name">Connection 104</field>
+      <field name="name">Connection 104
+
+-ZUSAMMENGEFÜHRT-
+
+Beziehung 104</field>
       <field name="start">[https://www.3lgm2.de/resource/ihe/CT_TIME_CLIENT; https://www.3lgm2.de/resource/ihe/iti-1; https://www.3lgm2.de/resource/ihe/CT_TS]_2</field>
       <field name="end">[https://www.3lgm2.de/resource/ihe/CT_TIME_CLIENT; https://www.3lgm2.de/resource/ihe/iti-1; https://www.3lgm2.de/resource/ihe/CT_TS]</field>
     </element>
     <element class="IheActor_IheInterface_Edge" hash="[https://www.3lgm2.de/resource/ihe/CT_TIME_CLIENT; https://www.3lgm2.de/resource/ihe/iti-1; https://www.3lgm2.de/resource/ihe/CT_TS]_1">
-      <field name="name">Subordination relation 210</field>
+      <field name="name">Subordination relation 210
+
+-ZUSAMMENGEFÜHRT-
+
+Unterordunungsbeziehung 210</field>
       <field name="start">https://www.3lgm2.de/resource/ihe/CT_TIME_CLIENT</field>
       <field name="end">[https://www.3lgm2.de/resource/ihe/CT_TIME_CLIENT; https://www.3lgm2.de/resource/ihe/iti-1; https://www.3lgm2.de/resource/ihe/CT_TS]_2</field>
     </element>
     <element class="IheActor_IheActor_MustBeGroupedWith_Edge" hash="[https://www.3lgm2.de/resource/ihe/ATNA_SA; https://www.3lgm2.de/resource/ihe/mustBeGroupedWith; https://www.3lgm2.de/resource/ihe/CT_TIME_CLIENT]">
-      <field name="name">Grouping 93</field>
+      <field name="name">Grouping 93
+
+-ZUSAMMENGEFÜHRT-
+
+Gruppierung 93</field>
       <field name="start">https://www.3lgm2.de/resource/ihe/ATNA_SA</field>
       <field name="end">https://www.3lgm2.de/resource/ihe/CT_TIME_CLIENT</field>
     </element>
     <element class="IheActor_IheActor_MustBeGroupedWith_Edge" hash="[https://www.3lgm2.de/resource/ihe/XDSB_DOC_REGISTRY; https://www.3lgm2.de/resource/ihe/mustBeGroupedWith; https://www.3lgm2.de/resource/ihe/ATNA_SA]">
-      <field name="name">Grouping 59</field>
+      <field name="name">Grouping 59
+
+-ZUSAMMENGEFÜHRT-
+
+Gruppierung 59</field>
       <field name="start">https://www.3lgm2.de/resource/ihe/XDSB_DOC_REGISTRY</field>
       <field name="end">https://www.3lgm2.de/resource/ihe/ATNA_SA</field>
     </element>
     <element class="IheIntegrationProfile_IheActor_Edge" hash="[https://www.3lgm2.de/resource/ihe/ATNA_SN; https://www.3lgm2.de/resource/ihe/iheIntegrationProfile; https://www.3lgm2.de/resource/ihe/ATNA]">
-      <field name="name">Connection 44</field>
+      <field name="name">Connection 44
+
+-ZUSAMMENGEFÜHRT-
+
+Beziehung 44</field>
       <field name="start">https://www.3lgm2.de/resource/ihe/ATNA</field>
       <field name="end">https://www.3lgm2.de/resource/ihe/ATNA_SN</field>
     </element>
     <element class="IheInvokingInterface_IheTransaction_Edge" hash="[https://www.3lgm2.de/resource/ihe/ATNA_SN; https://www.3lgm2.de/resource/ihe/iti-19; https://www.3lgm2.de/resource/ihe/ATNA_SA]_3">
-      <field name="name">Connection 24</field>
+      <field name="name">Connection 24
+
+-ZUSAMMENGEFÜHRT-
+
+Beziehung 23</field>
       <field name="start">[https://www.3lgm2.de/resource/ihe/ATNA_SN; https://www.3lgm2.de/resource/ihe/iti-19; https://www.3lgm2.de/resource/ihe/ATNA_SA]_2</field>
       <field name="end">[https://www.3lgm2.de/resource/ihe/ATNA_SN; https://www.3lgm2.de/resource/ihe/iti-19; https://www.3lgm2.de/resource/ihe/ATNA_SA]</field>
     </element>
@@ -1368,12 +1478,20 @@ Grouping 79</field>
       <field name="end">[https://www.3lgm2.de/resource/ihe/ATNA_SN; https://www.3lgm2.de/resource/ihe/iti-19; https://www.3lgm2.de/resource/ihe/ATNA_SA]_5</field>
     </element>
     <element class="IheActor_IheInterface_Edge" hash="[https://www.3lgm2.de/resource/ihe/ATNA_SN; https://www.3lgm2.de/resource/ihe/iti-19; https://www.3lgm2.de/resource/ihe/ATNA_SA]_1">
-      <field name="name">Subordination relation 46</field>
+      <field name="name">Subordination relation 46
+
+-ZUSAMMENGEFÜHRT-
+
+Unterordunungsbeziehung 45</field>
       <field name="start">https://www.3lgm2.de/resource/ihe/ATNA_SN</field>
       <field name="end">[https://www.3lgm2.de/resource/ihe/ATNA_SN; https://www.3lgm2.de/resource/ihe/iti-19; https://www.3lgm2.de/resource/ihe/ATNA_SA]_2</field>
     </element>
     <element class="IheProvidingInterface_IheTransaction_Edge" hash="[https://www.3lgm2.de/resource/ihe/ATNA_SA; https://www.3lgm2.de/resource/ihe/iti-19; https://www.3lgm2.de/resource/ihe/ATNA_SN]_4">
-      <field name="name">Connection 96</field>
+      <field name="name">Connection 96
+
+-ZUSAMMENGEFÜHRT-
+
+Beziehung 96</field>
       <field name="start">[https://www.3lgm2.de/resource/ihe/ATNA_SA; https://www.3lgm2.de/resource/ihe/iti-19; https://www.3lgm2.de/resource/ihe/ATNA_SN]_5</field>
       <field name="end">[https://www.3lgm2.de/resource/ihe/ATNA_SN; https://www.3lgm2.de/resource/ihe/iti-19; https://www.3lgm2.de/resource/ihe/ATNA_SA]</field>
     </element>
@@ -1383,7 +1501,11 @@ Grouping 79</field>
       <field name="end">[https://www.3lgm2.de/resource/ihe/ATNA_SA; https://www.3lgm2.de/resource/ihe/iti-19; https://www.3lgm2.de/resource/ihe/ATNA_SN]_5</field>
     </element>
     <element class="IheActor_IheInterface_Edge" hash="[https://www.3lgm2.de/resource/ihe/ATNA_SA; https://www.3lgm2.de/resource/ihe/iti-19; https://www.3lgm2.de/resource/ihe/ATNA_SN]_6">
-      <field name="name">Subordination relation 190</field>
+      <field name="name">Subordination relation 190
+
+-ZUSAMMENGEFÜHRT-
+
+Unterordunungsbeziehung 189</field>
       <field name="start">https://www.3lgm2.de/resource/ihe/ATNA_SN</field>
       <field name="end">[https://www.3lgm2.de/resource/ihe/ATNA_SA; https://www.3lgm2.de/resource/ihe/iti-19; https://www.3lgm2.de/resource/ihe/ATNA_SN]_5</field>
     </element>
@@ -1393,22 +1515,38 @@ Grouping 79</field>
       <field name="end">[https://www.3lgm2.de/resource/ihe/ATNA_SA; https://www.3lgm2.de/resource/ihe/iti-19; https://www.3lgm2.de/resource/ihe/ATNA_SN]_5</field>
     </element>
     <element class="IheInvokingInterface_IheTransaction_Edge" hash="[https://www.3lgm2.de/resource/ihe/ATNA_SN; https://www.3lgm2.de/resource/ihe/iti-20; https://www.3lgm2.de/resource/ihe/ATNA_ARR]_3">
-      <field name="name">Connection 23</field>
+      <field name="name">Connection 23
+
+-ZUSAMMENGEFÜHRT-
+
+Beziehung 24</field>
       <field name="start">[https://www.3lgm2.de/resource/ihe/ATNA_SN; https://www.3lgm2.de/resource/ihe/iti-20; https://www.3lgm2.de/resource/ihe/ATNA_ARR]_2</field>
       <field name="end">[https://www.3lgm2.de/resource/ihe/ATNA_AUDIT_RECORD_FORWARDER; https://www.3lgm2.de/resource/ihe/iti-20; https://www.3lgm2.de/resource/ihe/ATNA_ARR]</field>
     </element>
     <element class="IheActor_IheInterface_Edge" hash="[https://www.3lgm2.de/resource/ihe/ATNA_SN; https://www.3lgm2.de/resource/ihe/iti-20; https://www.3lgm2.de/resource/ihe/ATNA_ARR]_1">
-      <field name="name">Subordination relation 45</field>
+      <field name="name">Subordination relation 45
+
+-ZUSAMMENGEFÜHRT-
+
+Unterordunungsbeziehung 47</field>
       <field name="start">https://www.3lgm2.de/resource/ihe/ATNA_SN</field>
       <field name="end">[https://www.3lgm2.de/resource/ihe/ATNA_SN; https://www.3lgm2.de/resource/ihe/iti-20; https://www.3lgm2.de/resource/ihe/ATNA_ARR]_2</field>
     </element>
     <element class="IheActor_IheActor_MustBeGroupedWith_Edge" hash="[https://www.3lgm2.de/resource/ihe/ATNA_SN; https://www.3lgm2.de/resource/ihe/mustBeGroupedWith; https://www.3lgm2.de/resource/ihe/CT_TIME_CLIENT]">
-      <field name="name">Grouping 27</field>
+      <field name="name">Grouping 27
+
+-ZUSAMMENGEFÜHRT-
+
+Gruppierung 27</field>
       <field name="start">https://www.3lgm2.de/resource/ihe/ATNA_SN</field>
       <field name="end">https://www.3lgm2.de/resource/ihe/CT_TIME_CLIENT</field>
     </element>
     <element class="IheActor_IheActor_MustBeGroupedWith_Edge" hash="[https://www.3lgm2.de/resource/ihe/XDSB_DOC_REGISTRY; https://www.3lgm2.de/resource/ihe/mustBeGroupedWith; https://www.3lgm2.de/resource/ihe/ATNA_SN]">
-      <field name="name">Grouping 58</field>
+      <field name="name">Grouping 58
+
+-ZUSAMMENGEFÜHRT-
+
+Gruppierung 58</field>
       <field name="start">https://www.3lgm2.de/resource/ihe/XDSB_DOC_REGISTRY</field>
       <field name="end">https://www.3lgm2.de/resource/ihe/ATNA_SN</field>
     </element>
@@ -1483,7 +1621,11 @@ Grouping 79</field>
       <field name="end">IAI_1656427738610_3257</field>
     </element>
     <element class="IheIntegrationProfile_IheActor_Edge" hash="[https://www.3lgm2.de/resource/ihe/XDSB_DOC_REPOSITORY; https://www.3lgm2.de/resource/ihe/iheIntegrationProfile; https://www.3lgm2.de/resource/ihe/XDS.b]">
-      <field name="name">Connection 132</field>
+      <field name="name">Connection 132
+
+-ZUSAMMENGEFÜHRT-
+
+Beziehung 132</field>
       <field name="start">https://www.3lgm2.de/resource/ihe/XDS.b</field>
       <field name="end">https://www.3lgm2.de/resource/ihe/XDSB_DOC_REPOSITORY</field>
     </element>
@@ -1508,7 +1650,11 @@ Grouping 79</field>
       <field name="end">[https://www.3lgm2.de/resource/ihe/XDSB_DOC_REPOSITORY; https://www.3lgm2.de/resource/ihe/iti-42; https://www.3lgm2.de/resource/ihe/XDSB_DOC_REGISTRY]_2</field>
     </element>
     <element class="IheProvidingInterface_IheTransaction_Edge" hash="[https://www.3lgm2.de/resource/ihe/XDSB_DOC_CONSUMER; https://www.3lgm2.de/resource/ihe/iti-43; https://www.3lgm2.de/resource/ihe/XDSB_DOC_REPOSITORY]_4">
-      <field name="name">Connection 71</field>
+      <field name="name">Connection 71
+
+-ZUSAMMENGEFÜHRT-
+
+Beziehung 71</field>
       <field name="start">[https://www.3lgm2.de/resource/ihe/XDSB_DOC_CONSUMER; https://www.3lgm2.de/resource/ihe/iti-43; https://www.3lgm2.de/resource/ihe/XDSB_DOC_REPOSITORY]_5</field>
       <field name="end">[https://www.3lgm2.de/resource/ihe/XDS-IB_DOC_CONSUMER; https://www.3lgm2.de/resource/ihe/iti-43; https://www.3lgm2.de/resource/ihe/XDS-IB_DOC_REPOSITORY]</field>
     </element>
@@ -1518,12 +1664,20 @@ Grouping 79</field>
       <field name="end">[https://www.3lgm2.de/resource/ihe/XDSB_DOC_CONSUMER; https://www.3lgm2.de/resource/ihe/iti-43; https://www.3lgm2.de/resource/ihe/XDSB_DOC_REPOSITORY]_5</field>
     </element>
     <element class="IheActor_IheActor_MustBeGroupedWith_Edge" hash="[https://www.3lgm2.de/resource/ihe/XDSB_DOC_REPOSITORY; https://www.3lgm2.de/resource/ihe/mustBeGroupedWith; https://www.3lgm2.de/resource/ihe/ATNA_SA]">
-      <field name="name">Grouping 74</field>
+      <field name="name">Grouping 74
+
+-ZUSAMMENGEFÜHRT-
+
+Gruppierung 73</field>
       <field name="start">https://www.3lgm2.de/resource/ihe/XDSB_DOC_REPOSITORY</field>
       <field name="end">https://www.3lgm2.de/resource/ihe/ATNA_SA</field>
     </element>
     <element class="IheActor_IheActor_MustBeGroupedWith_Edge" hash="[https://www.3lgm2.de/resource/ihe/XDSB_DOC_REPOSITORY; https://www.3lgm2.de/resource/ihe/mustBeGroupedWith; https://www.3lgm2.de/resource/ihe/ATNA_SN]">
-      <field name="name">Grouping 73</field>
+      <field name="name">Grouping 73
+
+-ZUSAMMENGEFÜHRT-
+
+Gruppierung 74</field>
       <field name="start">https://www.3lgm2.de/resource/ihe/XDSB_DOC_REPOSITORY</field>
       <field name="end">https://www.3lgm2.de/resource/ihe/ATNA_SN</field>
     </element>
@@ -1578,7 +1732,11 @@ Grouping 79</field>
       <field name="end">IAI_1656427738654_3262</field>
     </element>
     <element class="IheIntegrationProfile_IheActor_Edge" hash="[https://www.3lgm2.de/resource/ihe/XDSB_PAT_IDENTITY_SRC; https://www.3lgm2.de/resource/ihe/iheIntegrationProfile; https://www.3lgm2.de/resource/ihe/XDS.b]">
-      <field name="name">Connection 31</field>
+      <field name="name">Connection 31
+
+-ZUSAMMENGEFÜHRT-
+
+Beziehung 31</field>
       <field name="start">https://www.3lgm2.de/resource/ihe/XDS.b</field>
       <field name="end">https://www.3lgm2.de/resource/ihe/XDSB_PAT_IDENTITY_SRC</field>
     </element>
@@ -1603,12 +1761,20 @@ Grouping 79</field>
       <field name="end">[https://www.3lgm2.de/resource/ihe/XDSB_PAT_IDENTITY_SRC; https://www.3lgm2.de/resource/ihe/iti-8; https://www.3lgm2.de/resource/ihe/XDSB_DOC_REGISTRY]_2</field>
     </element>
     <element class="IheActor_IheActor_MustBeGroupedWith_Edge" hash="[https://www.3lgm2.de/resource/ihe/XDSB_PAT_IDENTITY_SRC; https://www.3lgm2.de/resource/ihe/mustBeGroupedWith; https://www.3lgm2.de/resource/ihe/ATNA_SA]">
-      <field name="name">Grouping 21</field>
+      <field name="name">Grouping 21
+
+-ZUSAMMENGEFÜHRT-
+
+Gruppierung 21</field>
       <field name="start">https://www.3lgm2.de/resource/ihe/XDSB_PAT_IDENTITY_SRC</field>
       <field name="end">https://www.3lgm2.de/resource/ihe/ATNA_SA</field>
     </element>
     <element class="IheActor_IheActor_MustBeGroupedWith_Edge" hash="[https://www.3lgm2.de/resource/ihe/XDSB_PAT_IDENTITY_SRC; https://www.3lgm2.de/resource/ihe/mustBeGroupedWith; https://www.3lgm2.de/resource/ihe/ATNA_SN]">
-      <field name="name">Grouping 20</field>
+      <field name="name">Grouping 20
+
+-ZUSAMMENGEFÜHRT-
+
+Gruppierung 20</field>
       <field name="start">https://www.3lgm2.de/resource/ihe/XDSB_PAT_IDENTITY_SRC</field>
       <field name="end">https://www.3lgm2.de/resource/ihe/ATNA_SN</field>
     </element>
@@ -1717,68 +1883,12 @@ Grouping 79</field>
       <field name="start">S_1570999950932_135</field>
       <field name="end">IAI_1656428030249_3752</field>
     </element>
-    <element class="IheActor_IheActorInstance_Edge" hash="DLK_1656428066365_3759">
-      <field name="name">Subordination relation 6</field>
-      <field name="start">https://www.3lgm2.de/resource/ihe/ATNA_SA</field>
-      <field name="end">IAI_1656428066360_3758</field>
-    </element>
-    <element class="IheInvokingInterface_IheActorInstanceInvokingInterface_Edge" hash="DLK_1656428066368_3761">
-      <field name="name">Subordination relation 7</field>
-      <field name="start">[https://www.3lgm2.de/resource/ihe/ATNA_SA; https://www.3lgm2.de/resource/ihe/iti-19; https://www.3lgm2.de/resource/ihe/ATNA_SN]_2</field>
-      <field name="end">IAI_1656428066366_3760</field>
-    </element>
-    <element class="IheActorInstance_IheActorInstanceInterface_Edge" hash="DLK_1656428066369_3762">
-      <field name="name">Subordination relation 16</field>
-      <field name="start">IAI_1656428066360_3758</field>
-      <field name="end">IAI_1656428066366_3760</field>
-    </element>
-    <element class="IheInvokingInterface_IheActorInstanceInvokingInterface_Edge" hash="DLK_1656428066374_3764">
-      <field name="name">Subordination relation 8</field>
-      <field name="start">[https://www.3lgm2.de/resource/ihe/ATNA_SA; https://www.3lgm2.de/resource/ihe/iti-20; https://www.3lgm2.de/resource/ihe/ATNA_ARR]_2</field>
-      <field name="end">IAI_1656428066372_3763</field>
-    </element>
-    <element class="IheActorInstance_IheActorInstanceInterface_Edge" hash="DLK_1656428066376_3765">
-      <field name="name">Subordination relation 17</field>
-      <field name="start">IAI_1656428066360_3758</field>
-      <field name="end">IAI_1656428066372_3763</field>
-    </element>
-    <element class="IheProvidingInterface_IheActorInstanceProvidingInterface_Edge" hash="DLK_1656428066376_3767">
-      <field name="name">Subordination relation 10</field>
-      <field name="start">[https://www.3lgm2.de/resource/ihe/ATNA_SN; https://www.3lgm2.de/resource/ihe/iti-19; https://www.3lgm2.de/resource/ihe/ATNA_SA]_5</field>
-      <field name="end">IAI_1656428066376_3766</field>
-    </element>
-    <element class="IheActorInstance_IheActorInstanceInterface_Edge" hash="DLK_1656428066376_3768">
-      <field name="name">Subordination relation 18</field>
-      <field name="start">IAI_1656428066360_3758</field>
-      <field name="end">IAI_1656428066376_3766</field>
-    </element>
-    <element class="ApplicationSystem_IheActorInstance_Edge" hash="DLK_1656428066392_3769">
-      <field name="name">Subordination relation 6</field>
-      <field name="start">S_1571000158218_140</field>
-      <field name="end">IAI_1656428066360_3758</field>
-    </element>
-    <element class="IheActor_IheActorInstance_Edge" hash="DLK_1656428092012_3771">
-      <field name="name">Subordination relation 7</field>
-      <field name="start">https://www.3lgm2.de/resource/ihe/CT_TIME_CLIENT</field>
-      <field name="end">IAI_1656428092008_3770</field>
-    </element>
-    <element class="IheInvokingInterface_IheActorInstanceInvokingInterface_Edge" hash="DLK_1656428092016_3773">
-      <field name="name">Subordination relation 9</field>
-      <field name="start">[https://www.3lgm2.de/resource/ihe/CT_TIME_CLIENT; https://www.3lgm2.de/resource/ihe/iti-1; https://www.3lgm2.de/resource/ihe/CT_TS]_2</field>
-      <field name="end">IAI_1656428092014_3772</field>
-    </element>
-    <element class="IheActorInstance_IheActorInstanceInterface_Edge" hash="DLK_1656428092018_3774">
-      <field name="name">Subordination relation 19</field>
-      <field name="start">IAI_1656428092008_3770</field>
-      <field name="end">IAI_1656428092014_3772</field>
-    </element>
-    <element class="ApplicationSystem_IheActorInstance_Edge" hash="DLK_1656428092024_3775">
-      <field name="name">Subordination relation 7</field>
-      <field name="start">S_1571000158218_140</field>
-      <field name="end">IAI_1656428092008_3770</field>
-    </element>
     <element class="IheIntegrationProfile_IheActor_Edge" hash="[https://www.3lgm2.de/resource/ihe/XDSB_DOC_SOURCE; https://www.3lgm2.de/resource/ihe/iheIntegrationProfile; https://www.3lgm2.de/resource/ihe/XDS.b]">
-      <field name="name">Connection 174</field>
+      <field name="name">Connection 174
+
+-ZUSAMMENGEFÜHRT-
+
+Beziehung 174</field>
       <field name="start">https://www.3lgm2.de/resource/ihe/XDS.b</field>
       <field name="end">https://www.3lgm2.de/resource/ihe/XDSB_DOC_SOURCE</field>
     </element>
@@ -1793,12 +1903,20 @@ Grouping 79</field>
       <field name="end">[https://www.3lgm2.de/resource/ihe/XDSB_DOC_SOURCE; https://www.3lgm2.de/resource/ihe/iti-41; https://www.3lgm2.de/resource/ihe/XDSB_DOC_REPOSITORY]_2</field>
     </element>
     <element class="IheActor_IheActor_MustBeGroupedWith_Edge" hash="[https://www.3lgm2.de/resource/ihe/XDSB_DOC_SOURCE; https://www.3lgm2.de/resource/ihe/mustBeGroupedWith; https://www.3lgm2.de/resource/ihe/ATNA_SA]">
-      <field name="name">Grouping 99</field>
+      <field name="name">Grouping 99
+
+-ZUSAMMENGEFÜHRT-
+
+Gruppierung 99</field>
       <field name="start">https://www.3lgm2.de/resource/ihe/XDSB_DOC_SOURCE</field>
       <field name="end">https://www.3lgm2.de/resource/ihe/ATNA_SA</field>
     </element>
     <element class="IheActor_IheActor_MustBeGroupedWith_Edge" hash="[https://www.3lgm2.de/resource/ihe/XDSB_DOC_SOURCE; https://www.3lgm2.de/resource/ihe/mustBeGroupedWith; https://www.3lgm2.de/resource/ihe/ATNA_SN]">
-      <field name="name">Grouping 98</field>
+      <field name="name">Grouping 98
+
+-ZUSAMMENGEFÜHRT-
+
+Gruppierung 98</field>
       <field name="start">https://www.3lgm2.de/resource/ihe/XDSB_DOC_SOURCE</field>
       <field name="end">https://www.3lgm2.de/resource/ihe/ATNA_SN</field>
     </element>
@@ -1893,37 +2011,65 @@ Grouping 79</field>
       <field name="end">IAI_1656427773621_3502</field>
     </element>
     <element class="IheIntegrationProfile_IheActor_Edge" hash="[https://www.3lgm2.de/resource/ihe/XDSB_DOC_CONSUMER; https://www.3lgm2.de/resource/ihe/iheIntegrationProfile; https://www.3lgm2.de/resource/ihe/XDS.b]">
-      <field name="name">Connection 131</field>
+      <field name="name">Connection 131
+
+-ZUSAMMENGEFÜHRT-
+
+Beziehung 131</field>
       <field name="start">https://www.3lgm2.de/resource/ihe/XDS.b</field>
       <field name="end">https://www.3lgm2.de/resource/ihe/XDSB_DOC_CONSUMER</field>
     </element>
     <element class="IheInvokingInterface_IheTransaction_Edge" hash="[https://www.3lgm2.de/resource/ihe/XDSB_DOC_CONSUMER; https://www.3lgm2.de/resource/ihe/iti-18; https://www.3lgm2.de/resource/ihe/XDSB_DOC_REGISTRY]_3">
-      <field name="name">Connection 71</field>
+      <field name="name">Connection 71
+
+-ZUSAMMENGEFÜHRT-
+
+Beziehung 71</field>
       <field name="start">[https://www.3lgm2.de/resource/ihe/XDSB_DOC_CONSUMER; https://www.3lgm2.de/resource/ihe/iti-18; https://www.3lgm2.de/resource/ihe/XDSB_DOC_REGISTRY]_2</field>
       <field name="end">[https://www.3lgm2.de/resource/ihe/RMD_DOC_ADMINISTRATOR; https://www.3lgm2.de/resource/ihe/iti-18; https://www.3lgm2.de/resource/ihe/RMD_DOC_REGISTRY]</field>
     </element>
     <element class="IheActor_IheInterface_Edge" hash="[https://www.3lgm2.de/resource/ihe/XDSB_DOC_CONSUMER; https://www.3lgm2.de/resource/ihe/iti-18; https://www.3lgm2.de/resource/ihe/XDSB_DOC_REGISTRY]_1">
-      <field name="name">Subordination relation 142</field>
+      <field name="name">Subordination relation 142
+
+-ZUSAMMENGEFÜHRT-
+
+Unterordunungsbeziehung 142</field>
       <field name="start">https://www.3lgm2.de/resource/ihe/XDSB_DOC_CONSUMER</field>
       <field name="end">[https://www.3lgm2.de/resource/ihe/XDSB_DOC_CONSUMER; https://www.3lgm2.de/resource/ihe/iti-18; https://www.3lgm2.de/resource/ihe/XDSB_DOC_REGISTRY]_2</field>
     </element>
     <element class="IheInvokingInterface_IheTransaction_Edge" hash="[https://www.3lgm2.de/resource/ihe/XDSB_DOC_CONSUMER; https://www.3lgm2.de/resource/ihe/iti-43; https://www.3lgm2.de/resource/ihe/XDSB_DOC_REPOSITORY]_3">
-      <field name="name">Connection 70</field>
+      <field name="name">Connection 70
+
+-ZUSAMMENGEFÜHRT-
+
+Beziehung 70</field>
       <field name="start">[https://www.3lgm2.de/resource/ihe/XDSB_DOC_CONSUMER; https://www.3lgm2.de/resource/ihe/iti-43; https://www.3lgm2.de/resource/ihe/XDSB_DOC_REPOSITORY]_2</field>
       <field name="end">[https://www.3lgm2.de/resource/ihe/XDS-IB_DOC_CONSUMER; https://www.3lgm2.de/resource/ihe/iti-43; https://www.3lgm2.de/resource/ihe/XDS-IB_DOC_REPOSITORY]</field>
     </element>
     <element class="IheActor_IheInterface_Edge" hash="[https://www.3lgm2.de/resource/ihe/XDSB_DOC_CONSUMER; https://www.3lgm2.de/resource/ihe/iti-43; https://www.3lgm2.de/resource/ihe/XDSB_DOC_REPOSITORY]_1">
-      <field name="name">Subordination relation 140</field>
+      <field name="name">Subordination relation 140
+
+-ZUSAMMENGEFÜHRT-
+
+Unterordunungsbeziehung 140</field>
       <field name="start">https://www.3lgm2.de/resource/ihe/XDSB_DOC_CONSUMER</field>
       <field name="end">[https://www.3lgm2.de/resource/ihe/XDSB_DOC_CONSUMER; https://www.3lgm2.de/resource/ihe/iti-43; https://www.3lgm2.de/resource/ihe/XDSB_DOC_REPOSITORY]_2</field>
     </element>
     <element class="IheActor_IheActor_MustBeGroupedWith_Edge" hash="[https://www.3lgm2.de/resource/ihe/XDSB_DOC_CONSUMER; https://www.3lgm2.de/resource/ihe/mustBeGroupedWith; https://www.3lgm2.de/resource/ihe/ATNA_SA]">
-      <field name="name">Grouping 71</field>
+      <field name="name">Grouping 71
+
+-ZUSAMMENGEFÜHRT-
+
+Gruppierung 71</field>
       <field name="start">https://www.3lgm2.de/resource/ihe/XDSB_DOC_CONSUMER</field>
       <field name="end">https://www.3lgm2.de/resource/ihe/ATNA_SA</field>
     </element>
     <element class="IheActor_IheActor_MustBeGroupedWith_Edge" hash="[https://www.3lgm2.de/resource/ihe/XDSB_DOC_CONSUMER; https://www.3lgm2.de/resource/ihe/mustBeGroupedWith; https://www.3lgm2.de/resource/ihe/ATNA_SN]">
-      <field name="name">Grouping 72</field>
+      <field name="name">Grouping 72
+
+-ZUSAMMENGEFÜHRT-
+
+Gruppierung 72</field>
       <field name="start">https://www.3lgm2.de/resource/ihe/XDSB_DOC_CONSUMER</field>
       <field name="end">https://www.3lgm2.de/resource/ihe/ATNA_SN</field>
     </element>
@@ -1937,124 +2083,194 @@ Grouping 79</field>
       <field name="start">[https://www.3lgm2.de/resource/ihe/XDSB_DOC_CONSUMER; https://www.3lgm2.de/resource/ihe/iti-43; https://www.3lgm2.de/resource/ihe/XDSB_DOC_REPOSITORY]_2</field>
       <field name="end">[https://www.3lgm2.de/resource/ihe/XDSB_DOC_CONSUMER; https://www.3lgm2.de/resource/ihe/iti-43; https://www.3lgm2.de/resource/ihe/XDSB_DOC_REPOSITORY]_5</field>
     </element>
-    <element class="IheTransaction_IheCommunicationLink_Edge" hash="DLK_1656428331145_4213">
-      <field name="name">Connection 1</field>
+    <element class="IheTransaction_IheCommunicationLink_Edge" hash="DLK_1673339375258_5149">
+      <field name="name">Beziehung 1</field>
       <field name="start">[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_SN; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-19; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_SA]</field>
       <field name="end">DLK_1585409326837_791</field>
     </element>
-    <element class="IheTransaction_IheCommunicationLink_Edge" hash="DLK_1656428331145_4214">
-      <field name="name">Connection 2</field>
+    <element class="IheTransaction_IheCommunicationLink_Edge" hash="DLK_1673339375258_5150">
+      <field name="name">Beziehung 2</field>
       <field name="start">[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_SN; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-19; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_SA]</field>
       <field name="end">DLK_1585409326841_801</field>
     </element>
-    <element class="IheTransaction_IheCommunicationLink_Edge" hash="DLK_1656428331145_4215">
-      <field name="name">Connection 3</field>
+    <element class="IheTransaction_IheCommunicationLink_Edge" hash="DLK_1673339375258_5151">
+      <field name="name">Beziehung 3</field>
       <field name="start">[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_SN; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-19; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_SA]</field>
       <field name="end">DLK_1585409326836_790</field>
     </element>
-    <element class="IheTransaction_IheCommunicationLink_Edge" hash="DLK_1656428331145_4216">
-      <field name="name">Connection 4</field>
+    <element class="IheTransaction_IheCommunicationLink_Edge" hash="DLK_1673339375258_5152">
+      <field name="name">Beziehung 4</field>
       <field name="start">[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_SN; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-19; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_SA]</field>
       <field name="end">DLK_1585409326841_800</field>
     </element>
-    <element class="IheTransaction_IheCommunicationLink_Edge" hash="DLK_1656428331145_4217">
-      <field name="name">Connection 5</field>
+    <element class="IheTransaction_IheCommunicationLink_Edge" hash="DLK_1673339375258_5153">
+      <field name="name">Beziehung 5</field>
       <field name="start">[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDR_DOC_SOURCE; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-41; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDR_DOC_RECIPIENT]</field>
       <field name="end">DLK_1585409326832_776</field>
     </element>
-    <element class="IheTransaction_IheCommunicationLink_Edge" hash="DLK_1656428331145_4218">
-      <field name="name">Connection 6</field>
+    <element class="IheTransaction_IheCommunicationLink_Edge" hash="DLK_1673339375258_5154">
+      <field name="name">Beziehung 6</field>
       <field name="start">[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_EMBED_REPOS; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-42; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REGISTRY]</field>
       <field name="end">DLK_1605011038173_1702</field>
     </element>
-    <element class="IheTransaction_IheCommunicationLink_Edge" hash="DLK_1656428331145_4219">
-      <field name="name">Connection 7</field>
+    <element class="IheTransaction_IheCommunicationLink_Edge" hash="DLK_1673339375258_5155">
+      <field name="name">Beziehung 7</field>
       <field name="start">[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_EMBED_REPOS; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-42; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REGISTRY]</field>
       <field name="end">DLK_1605011038179_1780</field>
     </element>
-    <element class="IheTransaction_IheCommunicationLink_Edge" hash="DLK_1656428331145_4220">
-      <field name="name">Connection 8</field>
+    <element class="IheTransaction_IheCommunicationLink_Edge" hash="DLK_1673339375258_5156">
+      <field name="name">Beziehung 8</field>
       <field name="start">[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#PIXV3_PAT_IDENTITY_SRC; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-44; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#PIXV3_PIX_MANAGER]</field>
       <field name="end">DLK_1605011038178_1770</field>
     </element>
-    <element class="IheTransaction_IheCommunicationLink_Edge" hash="DLK_1656428331145_4221">
-      <field name="name">Connection 9</field>
+    <element class="IheTransaction_IheCommunicationLink_Edge" hash="DLK_1673339375258_5157">
+      <field name="name">Beziehung 9</field>
       <field name="start">[http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_PAT_IDENTITY_SRC; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-8; http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REGISTRY]</field>
       <field name="end">DLK_1605011038178_1769</field>
     </element>
-    <element class="IheTransaction_IheCommunicationLink_Edge" hash="DLK_1656428331145_4222">
-      <field name="name">Connection 10</field>
+    <element class="IheTransaction_IheCommunicationLink_Edge" hash="DLK_1673339375259_5158">
+      <field name="name">Beziehung 10</field>
       <field name="start">[https://www.3lgm2.de/resource/ihe/ATNA_SN; https://www.3lgm2.de/resource/ihe/iti-19; https://www.3lgm2.de/resource/ihe/ATNA_SA]</field>
       <field name="end">DLK_1656427654762_2667</field>
     </element>
-    <element class="IheTransaction_IheCommunicationLink_Edge" hash="DLK_1656428331145_4223">
-      <field name="name">Connection 11</field>
+    <element class="IheTransaction_IheCommunicationLink_Edge" hash="DLK_1673339375259_5159">
+      <field name="name">Beziehung 11</field>
       <field name="start">[https://www.3lgm2.de/resource/ihe/ATNA_SN; https://www.3lgm2.de/resource/ihe/iti-19; https://www.3lgm2.de/resource/ihe/ATNA_SA]</field>
       <field name="end">DLK_1656427654803_2726</field>
     </element>
-    <element class="IheTransaction_IheCommunicationLink_Edge" hash="DLK_1656428331145_4224">
-      <field name="name">Connection 12</field>
+    <element class="IheTransaction_IheCommunicationLink_Edge" hash="DLK_1673339375259_5160">
+      <field name="name">Beziehung 12</field>
       <field name="start">[https://www.3lgm2.de/resource/ihe/ATNA_SN; https://www.3lgm2.de/resource/ihe/iti-19; https://www.3lgm2.de/resource/ihe/ATNA_SA]</field>
       <field name="end">DLK_1656427654762_2668</field>
     </element>
-    <element class="IheTransaction_IheCommunicationLink_Edge" hash="DLK_1656428331145_4225">
-      <field name="name">Connection 13</field>
+    <element class="IheTransaction_IheCommunicationLink_Edge" hash="DLK_1673339375259_5161">
+      <field name="name">Beziehung 13</field>
       <field name="start">[https://www.3lgm2.de/resource/ihe/ATNA_SN; https://www.3lgm2.de/resource/ihe/iti-19; https://www.3lgm2.de/resource/ihe/ATNA_SA]</field>
       <field name="end">DLK_1656427654804_2727</field>
     </element>
-    <element class="IheTransaction_IheCommunicationLink_Edge" hash="DLK_1656428331145_4226">
-      <field name="name">Connection 14</field>
+    <element class="IheTransaction_IheCommunicationLink_Edge" hash="DLK_1673339375259_5162">
+      <field name="name">Beziehung 14</field>
       <field name="start">[https://www.3lgm2.de/resource/ihe/XDSB_DOC_REPOSITORY; https://www.3lgm2.de/resource/ihe/iti-42; https://www.3lgm2.de/resource/ihe/XDSB_DOC_REGISTRY]</field>
       <field name="end">DLK_1656427654797_2719</field>
     </element>
-    <element class="IheTransaction_IheCommunicationLink_Edge" hash="DLK_1656428331145_4227">
-      <field name="name">Connection 15</field>
+    <element class="IheTransaction_IheCommunicationLink_Edge" hash="DLK_1673339375259_5163">
+      <field name="name">Beziehung 15</field>
       <field name="start">[https://www.3lgm2.de/resource/ihe/XDSB_PAT_IDENTITY_SRC; https://www.3lgm2.de/resource/ihe/iti-44; https://www.3lgm2.de/resource/ihe/XDSB_DOC_REGISTRY]</field>
       <field name="end">DLK_1656427654750_2651</field>
     </element>
-    <element class="IheTransaction_IheCommunicationLink_Edge" hash="DLK_1656428331145_4228">
-      <field name="name">Connection 16</field>
+    <element class="IheTransaction_IheCommunicationLink_Edge" hash="DLK_1673339375259_5164">
+      <field name="name">Beziehung 16</field>
       <field name="start">[https://www.3lgm2.de/resource/ihe/XDSB_PAT_IDENTITY_SRC; https://www.3lgm2.de/resource/ihe/iti-8; https://www.3lgm2.de/resource/ihe/XDSB_DOC_REGISTRY]</field>
       <field name="end">DLK_1656427654752_2653</field>
     </element>
-    <element class="IheTransaction_IheCommunicationLink_Edge" hash="DLK_1656428331145_4229">
-      <field name="name">Connection 17</field>
+    <element class="IheTransaction_IheCommunicationLink_Edge" hash="DLK_1673339375259_5165">
+      <field name="name">Beziehung 17</field>
       <field name="start">[https://www.3lgm2.de/resource/ihe/XDR_DOC_SOURCE; https://www.3lgm2.de/resource/ihe/iti-41; https://www.3lgm2.de/resource/ihe/XDR_DOC_RECIPIENT]</field>
       <field name="end">DLK_1656427654835_2773</field>
     </element>
-    <element class="IheTransaction_IheCommunicationLink_Edge" hash="DLK_1656428331145_4230">
-      <field name="name">Connection 18</field>
+    <element class="IheTransaction_IheCommunicationLink_Edge" hash="DLK_1673339375259_5166">
+      <field name="name">Beziehung 18</field>
       <field name="start">[https://www.3lgm2.de/resource/ihe/RMD_DOC_ADMINISTRATOR; https://www.3lgm2.de/resource/ihe/iti-18; https://www.3lgm2.de/resource/ihe/RMD_DOC_REGISTRY]</field>
       <field name="end">DLK_1656427654735_2634</field>
     </element>
-    <element class="IheTransaction_IheCommunicationLink_Edge" hash="DLK_1656428331145_4231">
-      <field name="name">Connection 19</field>
+    <element class="IheTransaction_IheCommunicationLink_Edge" hash="DLK_1673339375259_5167">
+      <field name="name">Beziehung 19</field>
       <field name="start">[https://www.3lgm2.de/resource/ihe/XDS-IB_DOC_CONSUMER; https://www.3lgm2.de/resource/ihe/iti-43; https://www.3lgm2.de/resource/ihe/XDS-IB_DOC_REPOSITORY]</field>
       <field name="end">DLK_1656427654732_2628</field>
     </element>
-    <element class="IheCommunicationLink_IheActorInstanceCommunicationLink_Edge" hash="DLK_1656428331145_4232">
-      <field name="name">Connection 1</field>
+    <element class="IheCommunicationLink_IheActorInstanceCommunicationLink_Edge" hash="DLK_1673339375259_5168">
+      <field name="name">Beziehung 1</field>
       <field name="start">DLK_1656427654797_2719</field>
       <field name="end">DLK_1656427808757_3509</field>
     </element>
-    <element class="IheCommunicationLink_IheActorInstanceCommunicationLink_Edge" hash="DLK_1656428331145_4233">
-      <field name="name">Connection 2</field>
+    <element class="IheCommunicationLink_IheActorInstanceCommunicationLink_Edge" hash="DLK_1673339375259_5169">
+      <field name="name">Beziehung 2</field>
       <field name="start">DLK_1656427654752_2653</field>
       <field name="end">DLK_1656427889864_3738</field>
     </element>
-    <element class="IheCommunicationLink_IheActorInstanceCommunicationLink_Edge" hash="DLK_1656428331145_4234">
-      <field name="name">Connection 3</field>
+    <element class="IheCommunicationLink_IheActorInstanceCommunicationLink_Edge" hash="DLK_1673339375260_5170">
+      <field name="name">Beziehung 3</field>
       <field name="start">DLK_1656427654835_2773</field>
       <field name="end">DLK_1656428226417_4013</field>
     </element>
+    <element class="IheActor_IheActorInstance_Edge" hash="DLK_1673339376729_5172">
+      <field name="name">Unterordunungsbeziehung 1</field>
+      <field name="start">https://www.3lgm2.de/resource/ihe/XDSB_DOC_CONSUMER</field>
+      <field name="end">IAI_1673339375262_5171</field>
+    </element>
+    <element class="IheInvokingInterface_IheActorInstanceInvokingInterface_Edge" hash="DLK_1673339376732_5174">
+      <field name="name">Unterordunungsbeziehung 1</field>
+      <field name="start">[https://www.3lgm2.de/resource/ihe/XDSB_DOC_CONSUMER; https://www.3lgm2.de/resource/ihe/iti-18; https://www.3lgm2.de/resource/ihe/XDSB_DOC_REGISTRY]_2</field>
+      <field name="end">IAI_1673339376731_5173</field>
+    </element>
+    <element class="IheActorInstance_IheActorInstanceInterface_Edge" hash="DLK_1673339376732_5175">
+      <field name="name">Unterordunungsbeziehung 1</field>
+      <field name="start">IAI_1673339375262_5171</field>
+      <field name="end">IAI_1673339376731_5173</field>
+    </element>
+    <element class="IheInvokingInterface_IheActorInstanceInvokingInterface_Edge" hash="DLK_1673339376735_5177">
+      <field name="name">Unterordunungsbeziehung 2</field>
+      <field name="start">[https://www.3lgm2.de/resource/ihe/XDSB_DOC_CONSUMER; https://www.3lgm2.de/resource/ihe/iti-43; https://www.3lgm2.de/resource/ihe/XDSB_DOC_REPOSITORY]_2</field>
+      <field name="end">IAI_1673339376734_5176</field>
+    </element>
+    <element class="IheActorInstance_IheActorInstanceInterface_Edge" hash="DLK_1673339376736_5178">
+      <field name="name">Unterordunungsbeziehung 2</field>
+      <field name="start">IAI_1673339375262_5171</field>
+      <field name="end">IAI_1673339376734_5176</field>
+    </element>
+    <element class="IheActorInstanceCommunicationLink_Edge" hash="DLK_1673339607968_5180">
+      <field name="name">ITI-43 Retrieve Document Set</field>
+      <field name="start">IAI_1673339376734_5176</field>
+      <field name="end">IAI_1656427773632_3505</field>
+    </element>
+    <element class="IheActorInstanceCommunicationLink_Edge" hash="DLK_1673339630684_5190">
+      <field name="name">ITI-18 Registry Stored Query</field>
+      <field name="start">IAI_1673339376731_5173</field>
+      <field name="end">IAI_1656427738629_3259</field>
+    </element>
+    <element class="IheCommunicationLink_IheActorInstanceCommunicationLink_Edge" hash="DLK_1673340259961_5300">
+      <field name="name">Beziehung 4</field>
+      <field name="start">DLK_1656427654732_2628</field>
+      <field name="end">DLK_1673339607968_5180</field>
+    </element>
+    <element class="IheCommunicationLink_IheActorInstanceCommunicationLink_Edge" hash="DLK_1673340259962_5301">
+      <field name="name">Beziehung 5</field>
+      <field name="start">DLK_1656427654735_2634</field>
+      <field name="end">DLK_1673339630684_5190</field>
+    </element>
+    <element class="Group_HasPartEdge" hash="DLK_1673338995450_5102">
+      <field name="name">Hat-Teil-Beziehung 1</field>
+      <field name="start">GRO_1673338943129_5101</field>
+      <field name="end">S_1571000158218_140</field>
+    </element>
+    <element class="Group_HasPartEdge" hash="DLK_1673338995453_5103">
+      <field name="name">Hat-Teil-Beziehung 2</field>
+      <field name="start">GRO_1673338943129_5101</field>
+      <field name="end">S_1570999950932_135</field>
+    </element>
+    <element class="Group_HasPartEdge" hash="DLK_1673338995455_5104">
+      <field name="name">Hat-Teil-Beziehung 3</field>
+      <field name="start">GRO_1673338943129_5101</field>
+      <field name="end">S_1570999563825_18176</field>
+    </element>
+    <element class="Group_HasPartEdge" hash="DLK_1673339402412_5179">
+      <field name="name">Hat-Teil-Beziehung 4</field>
+      <field name="start">GRO_1673339287315_5106</field>
+      <field name="end">IAI_1673339375262_5171</field>
+    </element>
+    <element class="Bendpoint" hash="BEN_1673339610404_5187">
+      <field name="name">Knickpunkt 1</field>
+      <field name="kantenHash">DLK_1673339607968_5180</field>
+      <field name="index">0</field>
+    </element>
   </objects>
-  <szenario hash="SZN_1585409323751_0" titel="Teilmodell #1">
+  <szenario hash="SZN_1585409323751_0" titel="IHE ITI XDS.b">
     <description></description>
     <view>
       <selected>true</selected>
-      <x>252</x>
-      <y>245</y>
-      <zoom>1.19</zoom>
+      <x>183</x>
+      <y>232</y>
+      <zoom>0.9</zoom>
       <degree>0</degree>
       <shift>0</shift>
       <pageSizeFactor>1.0</pageSizeFactor>
@@ -2084,6 +2300,30 @@ Grouping 79</field>
         <font_size>12</font_size>
         <width>10</width>
         <height>10</height>
+      </layout>
+      <layout class="Group">
+        <color name="bg_color">
+          <red>0</red>
+          <green>0</green>
+          <blue>0</blue>
+          <alpha>0</alpha>
+        </color>
+        <color name="fg_color">
+          <red>0</red>
+          <green>0</green>
+          <blue>0</blue>
+        </color>
+        <color name="border_color">
+          <red>0</red>
+          <green>0</green>
+          <blue>0</blue>
+        </color>
+        <form>8</form>
+        <font_family>SansSerif</font_family>
+        <font_style>0</font_style>
+        <font_size>12</font_size>
+        <width>90</width>
+        <height>50</height>
       </layout>
       <layout class="Textfield">
         <color name="bg_color">
@@ -2171,7 +2411,7 @@ Grouping 79</field>
           <green>0</green>
           <blue>0</blue>
         </color>
-        <form>6</form>
+        <form>0</form>
         <font_family>SansSerif</font_family>
         <font_style>0</font_style>
         <font_size>12</font_size>
@@ -2366,47 +2606,15 @@ Grouping 79</field>
           <blue>255</blue>
         </color>
       </layout>
-      <container hash="_1585423267081_10072">
+      <container hash="GRO_1673338943129_5101">
         <layout>
-          <color name="bg_color">
-            <red>255</red>
-            <green>255</green>
-            <blue>255</blue>
-          </color>
-          <x>215</x>
-          <y>180</y>
-          <width>190</width>
-          <height>70</height>
-          <valign>TOP</valign>
-        </layout>
-      </container>
-      <container hash="_1585422197405_10047">
-        <layout>
-          <color name="bg_color">
-            <red>255</red>
-            <green>255</green>
-            <blue>255</blue>
-          </color>
           <x>-143</x>
           <y>40</y>
-          <width>414</width>
+          <width>415</width>
           <height>350</height>
           <halign>LEFT</halign>
           <valign>TOP</valign>
-        </layout>
-      </container>
-      <container hash="_1585422295521_10048">
-        <layout>
-          <color name="bg_color">
-            <red>255</red>
-            <green>255</green>
-            <blue>255</blue>
-          </color>
-          <x>215</x>
-          <y>37</y>
-          <width>190</width>
-          <height>95</height>
-          <valign>TOP</valign>
+          <htmlalign>LEFT</htmlalign>
         </layout>
       </container>
       <container hash="S_1570999563825_18176">
@@ -2420,34 +2628,20 @@ Grouping 79</field>
       </container>
       <container hash="S_1571000158218_140">
         <layout>
-          <x>-58</x>
+          <x>-53</x>
           <y>-73</y>
-          <width>205</width>
+          <width>215</width>
           <height>95</height>
           <valign>TOP</valign>
         </layout>
       </container>
       <container hash="S_1570999950932_135">
         <layout>
-          <x>-58</x>
+          <x>-53</x>
           <y>95</y>
-          <width>205</width>
+          <width>215</width>
           <height>210</height>
           <valign>BOTTOM</valign>
-        </layout>
-      </container>
-      <container hash="_1585423217349_10071">
-        <layout>
-          <color name="bg_color">
-            <red>255</red>
-            <green>255</green>
-            <blue>255</blue>
-          </color>
-          <x>215</x>
-          <y>-100</y>
-          <width>190</width>
-          <height>70</height>
-          <valign>TOP</valign>
         </layout>
       </container>
       <container hash="IAI_1656427738610_3257">
@@ -2458,19 +2652,11 @@ Grouping 79</field>
           <height>49</height>
         </layout>
       </container>
-      <container hash="IAI_1656427738629_3259">
-        <layout>
-          <x>-5</x>
-          <y>50</y>
-          <width>16</width>
-          <height>16</height>
-        </layout>
-      </container>
       <container hash="IAI_1656427738654_3262">
         <layout>
           <x>-65</x>
           <y>64</y>
-          <width>16</width>
+          <width>15</width>
           <height>16</height>
         </layout>
       </container>
@@ -2478,23 +2664,23 @@ Grouping 79</field>
         <layout>
           <x>-40</x>
           <y>14</y>
-          <width>16</width>
+          <width>15</width>
           <height>16</height>
         </layout>
       </container>
       <container hash="IAI_1656427738697_3268">
         <layout>
-          <x>-130</x>
+          <x>-140</x>
           <y>20</y>
-          <width>16</width>
+          <width>15</width>
           <height>16</height>
         </layout>
       </container>
       <container hash="IAI_1656427738720_3271">
         <layout>
-          <x>-130</x>
+          <x>-140</x>
           <y>50</y>
-          <width>16</width>
+          <width>15</width>
           <height>16</height>
         </layout>
       </container>
@@ -2502,7 +2688,7 @@ Grouping 79</field>
         <layout>
           <x>-65</x>
           <y>14</y>
-          <width>16</width>
+          <width>15</width>
           <height>16</height>
         </layout>
       </container>
@@ -2518,23 +2704,23 @@ Grouping 79</field>
         <layout>
           <x>-65</x>
           <y>104</y>
-          <width>19</width>
-          <height>19</height>
+          <width>15</width>
+          <height>16</height>
         </layout>
       </container>
       <container hash="IAI_1656427773621_3502">
         <layout>
           <x>-140</x>
           <y>130</y>
-          <width>16</width>
+          <width>15</width>
           <height>16</height>
         </layout>
       </container>
       <container hash="IAI_1656427773632_3505">
         <layout>
-          <x>0</x>
-          <y>140</y>
-          <width>16</width>
+          <x>10</x>
+          <y>130</y>
+          <width>15</width>
           <height>16</height>
         </layout>
       </container>
@@ -2550,21 +2736,21 @@ Grouping 79</field>
         <layout>
           <x>-41</x>
           <y>-40</y>
-          <width>19</width>
-          <height>19</height>
+          <width>15</width>
+          <height>16</height>
         </layout>
       </container>
       <container hash="IAI_1656427818366_3734">
         <layout>
           <x>-65</x>
           <y>-40</y>
-          <width>19</width>
-          <height>19</height>
+          <width>15</width>
+          <height>16</height>
         </layout>
       </container>
       <container hash="IAI_1656427966825_3740">
         <layout>
-          <x>22</x>
+          <x>32</x>
           <y>85</y>
           <width>25</width>
           <height>20</height>
@@ -2572,90 +2758,42 @@ Grouping 79</field>
       </container>
       <container hash="IAI_1656427966832_3742">
         <layout>
-          <x>10</x>
+          <x>20</x>
           <y>81</y>
-          <width>19</width>
-          <height>19</height>
+          <width>15</width>
+          <height>16</height>
         </layout>
       </container>
       <container hash="IAI_1656427966837_3745">
         <layout>
-          <x>34</x>
+          <x>44</x>
           <y>88</y>
-          <width>19</width>
-          <height>19</height>
+          <width>15</width>
+          <height>16</height>
         </layout>
       </container>
       <container hash="IAI_1656427966840_3748">
         <layout>
-          <x>20</x>
+          <x>30</x>
           <y>95</y>
-          <width>16</width>
+          <width>15</width>
           <height>16</height>
         </layout>
       </container>
       <container hash="IAI_1656428030249_3752">
         <layout>
-          <x>28</x>
-          <y>10</y>
+          <x>32</x>
+          <y>5</y>
           <width>24</width>
           <height>20</height>
         </layout>
       </container>
       <container hash="IAI_1656428030254_3754">
         <layout>
-          <x>16</x>
-          <y>10</y>
-          <width>19</width>
-          <height>19</height>
-        </layout>
-      </container>
-      <container hash="IAI_1656428066360_3758">
-        <layout>
-          <x>27</x>
-          <y>-45</y>
-          <width>25</width>
-          <height>20</height>
-        </layout>
-      </container>
-      <container hash="IAI_1656428066366_3760">
-        <layout>
-          <x>15</x>
-          <y>-48</y>
-          <width>19</width>
-          <height>19</height>
-        </layout>
-      </container>
-      <container hash="IAI_1656428066372_3763">
-        <layout>
-          <x>39</x>
-          <y>-42</y>
-          <width>19</width>
-          <height>19</height>
-        </layout>
-      </container>
-      <container hash="IAI_1656428066376_3766">
-        <layout>
-          <x>15</x>
-          <y>-42</y>
-          <width>16</width>
+          <x>20</x>
+          <y>2</y>
+          <width>15</width>
           <height>16</height>
-        </layout>
-      </container>
-      <container hash="IAI_1656428092008_3770">
-        <layout>
-          <x>28</x>
-          <y>-85</y>
-          <width>24</width>
-          <height>20</height>
-        </layout>
-      </container>
-      <container hash="IAI_1656428092014_3772">
-        <layout>
-          <x>16</x>
-          <y>-85</y>
-          <width>19</width>
-          <height>19</height>
         </layout>
       </container>
       <container hash="IAI_1656428148287_3989">
@@ -2670,8 +2808,8 @@ Grouping 79</field>
         <layout>
           <x>-191</x>
           <y>130</y>
-          <width>19</width>
-          <height>19</height>
+          <width>15</width>
+          <height>16</height>
         </layout>
       </container>
       <container hash="IAI_1656428170713_3995">
@@ -2685,24 +2823,24 @@ Grouping 79</field>
       <container hash="IAI_1656428170719_3997">
         <layout>
           <x>-325</x>
-          <y>57</y>
-          <width>19</width>
-          <height>19</height>
+          <y>53</y>
+          <width>15</width>
+          <height>16</height>
         </layout>
       </container>
       <container hash="IAI_1656428170723_4000">
         <layout>
           <x>-191</x>
-          <y>72</y>
-          <width>19</width>
-          <height>19</height>
+          <y>73</y>
+          <width>15</width>
+          <height>16</height>
         </layout>
       </container>
       <container hash="IAI_1656428170727_4003">
         <layout>
           <x>-325</x>
-          <y>72</y>
-          <width>16</width>
+          <y>73</y>
+          <width>15</width>
           <height>16</height>
         </layout>
       </container>
@@ -2718,8 +2856,67 @@ Grouping 79</field>
         <layout>
           <x>-326</x>
           <y>0</y>
+          <width>15</width>
+          <height>16</height>
+        </layout>
+      </container>
+      <container hash="GRO_1673339237927_5105">
+        <layout>
+          <x>215</x>
+          <y>-100</y>
+          <width>190</width>
+          <height>70</height>
+          <valign>TOP</valign>
+        </layout>
+      </container>
+      <container hash="GRO_1673339287315_5106">
+        <layout>
+          <x>215</x>
+          <y>40</y>
+          <width>190</width>
+          <height>100</height>
+          <valign>TOP</valign>
+        </layout>
+      </container>
+      <container hash="GRO_1673339309719_5107">
+        <layout>
+          <x>215</x>
+          <y>180</y>
+          <width>190</width>
+          <height>70</height>
+          <valign>TOP</valign>
+        </layout>
+      </container>
+      <container hash="IAI_1673339375262_5171">
+        <layout>
+          <x>215</x>
+          <y>47</y>
+          <width>135</width>
+          <height>44</height>
+        </layout>
+      </container>
+      <container hash="IAI_1673339376731_5173">
+        <layout>
+          <x>148</x>
+          <y>38</y>
           <width>19</width>
           <height>19</height>
+        </layout>
+      </container>
+      <container hash="IAI_1673339376734_5176">
+        <layout>
+          <x>215</x>
+          <y>70</y>
+          <width>19</width>
+          <height>19</height>
+        </layout>
+      </container>
+      <container hash="IAI_1656427738629_3259">
+        <layout>
+          <x>10</x>
+          <y>38</y>
+          <width>15</width>
+          <height>16</height>
         </layout>
       </container>
       <container hash="DLK_1656427738643_3261"></container>
@@ -2744,12 +2941,6 @@ Grouping 79</field>
       <container hash="DLK_1656427966856_3751"></container>
       <container hash="DLK_1656428030257_3756"></container>
       <container hash="DLK_1656428030263_3757"></container>
-      <container hash="DLK_1656428066369_3762"></container>
-      <container hash="DLK_1656428066376_3765"></container>
-      <container hash="DLK_1656428066376_3768"></container>
-      <container hash="DLK_1656428066392_3769"></container>
-      <container hash="DLK_1656428092018_3774"></container>
-      <container hash="DLK_1656428092024_3775"></container>
       <container hash="DLK_1656428148287_3993"></container>
       <container hash="DLK_1656428148303_3994"></container>
       <container hash="DLK_1656428170722_3999"></container>
@@ -2759,6 +2950,26 @@ Grouping 79</field>
       <container hash="DLK_1656428189428_4011"></container>
       <container hash="DLK_1656428189435_4012"></container>
       <container hash="DLK_1656428226417_4013"></container>
+      <container hash="DLK_1673338995450_5102"></container>
+      <container hash="DLK_1673338995453_5103"></container>
+      <container hash="DLK_1673338995455_5104"></container>
+      <container hash="DLK_1673339376732_5175"></container>
+      <container hash="DLK_1673339376736_5178"></container>
+      <container hash="DLK_1673339402412_5179"></container>
+      <container hash="DLK_1673339607968_5180"></container>
+      <container hash="DLK_1673339630684_5190"></container>
+      <container hash="BEN_1673339610404_5187">
+        <layout>
+          <color name="bg_color">
+            <red>0</red>
+            <green>0</green>
+            <blue>0</blue>
+            <alpha>0</alpha>
+          </color>
+          <x>214</x>
+          <y>129</y>
+        </layout>
+      </container>
     </layer>
     <layer number="3">
       <layout>
