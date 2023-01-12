@@ -239,23 +239,6 @@ public class ComponentImageExporter {
 
     /**
      * @param comp
-     * @param maximizeSize
-     * @param zoomScale
-     * @return
-     */
-    public static BufferedImage createZoomedImage(final JComponent comp, boolean maximizeSize, final Double zoomScale) {
-        double originalZoom = setNewZoom(comp, maximizeSize, zoomScale);
-        BufferedImage image = createImage(comp);
-        // reset zoom to original value
-        // if comp is not a zoomable component then originalZoom is -1
-        if (originalZoom >= 0d) {
-            ((ZoomableComponent) comp).setZoom(originalZoom);
-        }
-        return image;
-    }
-
-    /**
-     * @param comp
      * @return
      */
     public static BufferedImage createImage(final JComponent comp) {
@@ -384,7 +367,7 @@ public class ComponentImageExporter {
      *         type
      */
     public static final Pair<File, FileFilterType> createFile(final JComponent comp, final File file, final FileFilterType fileFormat) {
-        return createFileInternal(comp, file, fileFormat);
+        return askResolutionAndCreateFile(comp, file, fileFormat);
     }
 
     /**
@@ -394,10 +377,10 @@ public class ComponentImageExporter {
      * @return Pair containing the destination of the exported file and the file
      *         type
      */
-    private static final Pair<File, FileFilterType> createFileInternal(final JComponent comp, final File file, final FileFilterType fileFormat) {
-        ExtendedFileChooser fc = new ExtendedFileChooser(ComponentImageExporter.class, file);
-        fc.setFileSystemView(FileSystemView.getFileSystemView());
-        fc.setAcceptAllFileFilterUsed(false);
+    private static final Pair<File, FileFilterType> askResolutionAndCreateFile(final JComponent comp, final File file, final FileFilterType fileFormat) {
+        ExtendedFileChooser fileChooser = new ExtendedFileChooser(ComponentImageExporter.class, file);
+        fileChooser.setFileSystemView(FileSystemView.getFileSystemView());
+        fileChooser.setAcceptAllFileFilterUsed(false);
 
         JRadioButton normalSizeRBut = null;
         JRadioButton mediumSizeRBut = null;
@@ -431,21 +414,21 @@ public class ComponentImageExporter {
             saveOriginalSizeRBut.setSelected(true);
 
             sizeOptionPanel.add(buttonPanel, BorderLayout.NORTH);
-            fc.setAccessory(sizeOptionPanel);
+            fileChooser.setAccessory(sizeOptionPanel);
             label.setMaximumSize(new Dimension(buttonPanel.getPreferredSize().width, Integer.MAX_VALUE));
             label.setPreferredSize(new Dimension(label.getMaximumSize().width, label.getPreferredSize().height));
         }
 
-        fc.setMultiSelectionEnabled(false);
+        fileChooser.setMultiSelectionEnabled(false);
 
         FileNameExtensionFilter[] fileFilters = getFileNameExtensionFilters(FileFilterType.values());
         FileNameExtensionFilter[] lastSelectedFileNameExtensionFilter = getFileNameExtensionFilters(fileFormat);
         FileNameExtensionFilter selectedFileFilter = lastSelectedFileNameExtensionFilter.length > 0 ? lastSelectedFileNameExtensionFilter[0] : null;
-        fc.showSaveDialog(comp, drh.getResString("DIALOG_TITLE"), false, selectedFileFilter, fileFilters);
+        fileChooser.showSaveDialog(comp, drh.getResString("DIALOG_TITLE"), false, selectedFileFilter, fileFilters);
 
         boolean maximizeImage = saveMaximumSizeRBut != null && saveMaximumSizeRBut.isSelected();
         FileFilterType type = null;
-        FileFilter choosedFileFilter = fc.getFileFilter();
+        FileFilter choosedFileFilter = fileChooser.getFileFilter();
         for (int c = 0; c < fileFilters.length; c++) {
             if (choosedFileFilter == fileFilters[c]) {
                 type = FileFilterType.values()[c];
@@ -456,7 +439,7 @@ public class ComponentImageExporter {
             type = fileFormat;
         }
 
-        File f = fc.getSelectedFile();
+        File f = fileChooser.getSelectedFile();
         Pair<File, FileFilterType> fileAndType = new Pair<>(f, type);
         if (f == null) {
             return fileAndType;
