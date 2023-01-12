@@ -380,6 +380,7 @@ public class MenuCollection {
                     FileActions.ACTION_OPEN_MODEL,
                     FileActions.ACTION_SAVE_MODEL,
                     FileActions.ACTION_SAVE_MODEL_AS,
+                    FileActions.ACTION_SAVE_MODEL_AS_TEMPLATE,
                     FileActions.ACTION_CLOSE_MODEL,
                     new JSeparator(),
                     FileActions.ACTION_SHOW_MODEL_DESCRIPTION_FRAME,

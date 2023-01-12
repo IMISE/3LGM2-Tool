@@ -6,6 +6,8 @@ import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
 import static de.imise.tool3lgm.Tool3lgmModelType.ModelCategory.EXAMPLE;
 import static de.imise.tool3lgm.Tool3lgmModelType.ModelCategory.REGULAR;
 import static de.imise.tool3lgm.Tool3lgmModelType.ModelCategory.TEMPLATE;
+import static de.imise.tool3lgm.event.ActionIdentifier.ACTION_SAVE_MODEL;
+import static de.imise.tool3lgm.event.ActionIdentifier.ACTION_SAVE_MODEL_AS;
 import static de.imise.tool3lgm.graphtools.model.LGMChangeListener.LGMChangeType.SELECTION_CHANGED;
 import static de.imise.tool3lgm.graphtools.undoredo.TransactionManager.STANDARD_PID;
 
@@ -33,6 +35,7 @@ import com.google.common.base.Objects;
 import de.imise.tool3lgm.Tool3lgmChangeListener.Tool3lgmChangeType;
 import de.imise.tool3lgm.Tool3lgmConstants.FileFilterType;
 import de.imise.tool3lgm.Tool3lgmModelType.ModelCategory;
+import de.imise.tool3lgm.event.ActionIdentifier;
 import de.imise.tool3lgm.graphtools.dialog.element.ElementPropertyDialogsContext;
 import de.imise.tool3lgm.graphtools.dialog.tools.GeneralDialogCreator;
 import de.imise.tool3lgm.graphtools.dialog.tools.GeneralDialogCreator.DontAskAgainDialogAnswer;
@@ -621,7 +624,7 @@ public class Tool3lgm {
                 buttons, null);
 
         if (answer == JOptionPane.YES_OPTION) {
-            boolean retVal = fileSave(false);
+            boolean retVal = fileSave(ACTION_SAVE_MODEL);
             if (!retVal || gdcoll.isChanged()) {
                 return false;
             }
@@ -685,12 +688,15 @@ public class Tool3lgm {
     }
 
     /**
-     * save the model, which have the focus to file
+     * Save the model, which have the focus to file
      *
-     * @param saveAs, boolean with true if model, is to save with new filename
-     * @return boolean with true if save was successful or save was cancelled
+     * @param saveState one of the three action identifier
+     *            {@link ActionIdentifier#ACTION_SAVE_MODEL},{@link ActionIdentifier#ACTION_SAVE_MODEL_AS}
+     *            or {@link ActionIdentifier#ACTION_SAVE_MODEL_AS_TEMPLATE}
+     * @return boolean with <code>true</code> if save was successful or save was
+     *         cancelled
      */
-    public boolean fileSave(boolean saveAs) {
+    public boolean fileSave(ActionIdentifier saveState) {
         //	   long start = System.currentTimeMillis();
         //        if (!LicenseHandler.checkLicenses()) {
         //            return false;
@@ -701,7 +707,7 @@ public class Tool3lgm {
             return false;
         }
         GDCollectionFileHandler fileHandler = gdcoll.getFileHandler();
-        saveAs = fileHandler.isReadOnly() || saveAs;
+        boolean saveAs = fileHandler.isReadOnly() || saveState != ACTION_SAVE_MODEL;
         if (!saveAs) {
             // TEMPLATE or EXAMPLE -> show "Really Override?" dialog
             if (gdcoll.hasModelCategory(TEMPLATE) || gdcoll.hasModelCategory(EXAMPLE)) {
@@ -719,14 +725,19 @@ public class Tool3lgm {
                 }
             }
         }
+        // change saveState Save to SaveAs so if there is still
+        // no file specified the SaveAs dialog will be shown
+        if (saveState == ACTION_SAVE_MODEL) {
+            saveState = ACTION_SAVE_MODEL_AS;
+        }
         if (saveAs) {
-            if (!fileHandler.chooseFile()) {
+            if (!fileHandler.chooseFile(saveState)) {
                 return true;
             }
         }
         File file = fileHandler.getFile();
         if (file == null) {
-            return fileSave(true);
+            return fileSave(saveState);
         }
         if (!saveToFile(gdcoll)) {
             return false;
@@ -744,6 +755,10 @@ public class Tool3lgm {
         return true;
     }
 
+    /**
+     * @param gdcoll
+     * @return
+     */
     public static final boolean saveToFile(final GDCollection gdcoll) {
         try {
             GDCollectionFileHandler fileHandler = gdcoll.getFileHandler();

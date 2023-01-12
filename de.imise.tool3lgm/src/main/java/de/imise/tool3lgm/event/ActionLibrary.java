@@ -143,27 +143,35 @@ public class ActionLibrary {
             }
         };
 
-        /** Speichern des Models an bekannter Stelle */
-        public static final Action ACTION_SAVE_MODEL = new GraphDocumentAction(ActionIdentifier.ACTION_SAVE_MODEL) {
-            @Override
-            protected void actionPerformed() {
-                Tool3lgm tool3lgm = getTool();
-                if (!tool3lgm.fileSave(false)) {
-                    JOptionPane.showMessageDialog(getMainFrame(), getResString("save_failed"), "", JOptionPane.ERROR_MESSAGE);
+        /**
+         * Save Model on existing file without asking the user (if file is
+         * known)
+         */
+        public static final Action ACTION_SAVE_MODEL = createSaveAction(ActionIdentifier.ACTION_SAVE_MODEL, null);
+        /**
+         * Save model in a new file
+         */
+        public static final Action ACTION_SAVE_MODEL_AS = createSaveAction(ActionIdentifier.ACTION_SAVE_MODEL_AS, PPP);
+        /**
+         * Save model as template
+         */
+        public static final Action ACTION_SAVE_MODEL_AS_TEMPLATE = createSaveAction(ActionIdentifier.ACTION_SAVE_MODEL_AS_TEMPLATE, PPP);
+        /**
+         * @param saveState
+         * @param textSuffix
+         * @return a new save action
+         */
+        private static final Action createSaveAction(final ActionIdentifier saveState, String textSuffix) {
+            return new GraphDocumentAction(saveState, textSuffix) {
+                @Override
+                protected void actionPerformed() {
+                    Tool3lgm tool3lgm = getTool();
+                    if (!tool3lgm.fileSave(saveState)) {
+                        JOptionPane.showMessageDialog(getMainFrame(), getResString("save_failed"), "", JOptionPane.ERROR_MESSAGE);
+                    }
                 }
-            }
-        };
-
-        /** Speichern des Models an neuer Stelle */
-        public static final Action ACTION_SAVE_MODEL_AS = new GraphDocumentAction(ActionIdentifier.ACTION_SAVE_MODEL_AS, PPP) {
-            @Override
-            protected void actionPerformed() {
-                Tool3lgm tool3lgm = getTool();
-                if (!tool3lgm.fileSave(true)) {
-                    JOptionPane.showMessageDialog(getMainFrame(), getResString("save_failed"), "", JOptionPane.ERROR_MESSAGE);
-                }
-            }
-        };
+            };
+        }
 
         /** Schließen des Models */
         public static final Action ACTION_CLOSE_MODEL = new GraphDocumentAction(ActionIdentifier.ACTION_CLOSE_MODEL) {

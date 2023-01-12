@@ -1,6 +1,9 @@
 package de.imise.tool3lgm.graphtools.model;
 
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
+import static de.imise.tool3lgm.event.ActionIdentifier.ACTION_SAVE_MODEL;
+import static de.imise.tool3lgm.event.ActionIdentifier.ACTION_SAVE_MODEL_AS;
+import static de.imise.tool3lgm.event.ActionIdentifier.ACTION_SAVE_MODEL_AS_TEMPLATE;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -13,7 +16,10 @@ import java.nio.channels.FileLock;
 import java.util.zip.DataFormatException;
 import java.util.zip.ZipInputStream;
 
+import javax.swing.BorderFactory;
 import javax.swing.JFileChooser;
+import javax.swing.JLabel;
+import javax.swing.SwingConstants;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.xml.stream.FactoryConfigurationError;
 import javax.xml.stream.XMLStreamException;
@@ -22,6 +28,7 @@ import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.Tool3lgmConstants.FileFilterType;
 import de.imise.tool3lgm.Tool3lgmModelType;
+import de.imise.tool3lgm.event.ActionIdentifier;
 import de.imise.tool3lgm.graphtools.userfield.definition.UserFieldDefinitions;
 import de.imise.tool3lgm.log.Log;
 import de.imise.tool3lgm.userproperties.UserProperties;
@@ -406,17 +413,31 @@ public class GDCollectionFileHandler {
     }
 
     /**
+     * @param saveState
      * @return
      */
-    public boolean chooseFile() {
-        ExtendedFileChooser fileChooser = new ExtendedFileChooser(null, UserProperties.getDirectory(StringProperty.WORKING_DIRECTORY));
+    public boolean chooseFile(ActionIdentifier saveState) {
+        // Set the default working directory. Regular save has an other dir than save as template
+        File workingDirectory = saveState == ACTION_SAVE_MODEL_AS_TEMPLATE ? UserProperties.USER_TEMPLATE_DIR : UserProperties.getDirectory(StringProperty.WORKING_DIRECTORY);
+        // ACTION_SAVE_MODEL_AS and ACTION_SAVE_MODEL should have the same
+        // pathKey and ACTION_SAVE_MODEL_AS_TEMPLATE should have its own.
+        Object fileChooserPathKey = saveState == ACTION_SAVE_MODEL_AS ? ACTION_SAVE_MODEL : saveState;
+        ExtendedFileChooser fileChooser = new ExtendedFileChooser(fileChooserPathKey, workingDirectory);
+        fileChooser.setDialogTitle(getResString(saveState));
         FileNameExtensionFilter lgmZippedFileFiler = Tool3lgmConstants.getFileNameExtensionFilter(FileFilterType.LGM3_ZIP);
         FileNameExtensionFilter lgmUnzippedFileFiler = Tool3lgmConstants.getFileNameExtensionFilter(FileFilterType.LGM3_UNZIPPED);
         fileChooser.setFileFilters(false, lgmZippedFileFiler, lgmUnzippedFileFiler);
         fileChooser.setFileFilter(isZipFile ? lgmZippedFileFiler : lgmUnzippedFileFiler);
-        if (getFile() != null) {
+        if (getFile() != null && saveState != ACTION_SAVE_MODEL_AS_TEMPLATE) {
             fileChooser.setSelectedFile(getFile());
         }
+        if (saveState == ACTION_SAVE_MODEL_AS_TEMPLATE) {
+            JLabel label = new JLabel("<html><p width=200>" + getResString("ACTION_SAVE_MODEL_AS_TEMPLATE_HINT") + "</p></html>");
+            label.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+            label.setVerticalAlignment(SwingConstants.TOP);
+            fileChooser.setAccessory(label);
+        }
+
         if (fileChooser.showSaveDialog(Static.getMainFrame()) != JFileChooser.APPROVE_OPTION) {
             return false;
         }
@@ -445,11 +466,11 @@ public class GDCollectionFileHandler {
     }
 
     /**
-     * save collection to file<br/>
-     * if isReadOnly is true do nothing and return false<br/>
-     * if isZipFile write content into compressed file<br/>
-     * create temporary file for writing and if all actions are completed
-     * successfully overwrites original file
+     * Save collection to file<br/>
+     * If isReadOnly is true do nothing and return false<br/>
+     * If isZipFile write content into compressed file<br/>
+     * Create temporary file for writing and if all actions are completed
+     * successfully overwrites original file.
      *
      * @return boolean with true, if and only if filewriting was successful
      * @author Thomas Rudert
@@ -460,7 +481,7 @@ public class GDCollectionFileHandler {
     public boolean saveToFile() {
         try {
             if (isReadOnly || file == null) {
-                if (!chooseFile()) {
+                if (!chooseFile(ACTION_SAVE_MODEL_AS)) {
                     return false;
                 }
             }
