@@ -4,7 +4,10 @@ import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
 import static de.imise.tool3lgm.event.ActionIdentifier.ACTION_SAVE_MODEL;
 import static de.imise.tool3lgm.event.ActionIdentifier.ACTION_SAVE_MODEL_AS;
 import static de.imise.tool3lgm.event.ActionIdentifier.ACTION_SAVE_MODEL_AS_TEMPLATE;
+import static de.imise.tool3lgm.userproperties.UserProperties.USER_TEMPLATE_DIR;
 
+import java.awt.BorderLayout;
+import java.awt.event.ActionEvent;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -16,9 +19,12 @@ import java.nio.channels.FileLock;
 import java.util.zip.DataFormatException;
 import java.util.zip.ZipInputStream;
 
+import javax.swing.AbstractAction;
 import javax.swing.BorderFactory;
+import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
+import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.xml.stream.FactoryConfigurationError;
@@ -428,22 +434,41 @@ public class GDCollectionFileHandler {
         FileNameExtensionFilter lgmUnzippedFileFiler = Tool3lgmConstants.getFileNameExtensionFilter(FileFilterType.LGM3_UNZIPPED);
         fileChooser.setFileFilters(false, lgmZippedFileFiler, lgmUnzippedFileFiler);
         fileChooser.setFileFilter(isZipFile ? lgmZippedFileFiler : lgmUnzippedFileFiler);
-        if (getFile() != null && saveState != ACTION_SAVE_MODEL_AS_TEMPLATE) {
+        if (getFile() != null) {
             fileChooser.setSelectedFile(getFile());
         }
         if (saveState == ACTION_SAVE_MODEL_AS_TEMPLATE) {
-            JLabel label = new JLabel("<html><p width=200>" + getResString("ACTION_SAVE_MODEL_AS_TEMPLATE_HINT") + "</p></html>");
-            label.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-            label.setVerticalAlignment(SwingConstants.TOP);
-            fileChooser.setAccessory(label);
+            fileChooser.setCurrentDirectory(workingDirectory);
+            setSaveAsTemplateAccessory(fileChooser);
         }
-
         if (fileChooser.showSaveDialog(Static.getMainFrame()) != JFileChooser.APPROVE_OPTION) {
             return false;
         }
         isZipFile = fileChooser.getFileFilter() == lgmZippedFileFiler;
         File file = fileChooser.getSelectedFile();
         return setSaveFile(file, isZipFile);
+    }
+
+    /**
+     * @param fileChooser
+     */
+    private static void setSaveAsTemplateAccessory(JFileChooser fileChooser) {
+        JPanel panel = new JPanel(new BorderLayout());
+        // Label
+        JLabel label = new JLabel("<html><p width=200>" + getResString("FILE_CHOOSER_SAVE_MODEL_AS_TEMPLATE_HINT") + "</p></html>");
+        label.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        label.setVerticalAlignment(SwingConstants.TOP);
+        panel.add(label, BorderLayout.CENTER);
+        // Button
+        JButton button = new JButton(new AbstractAction(getResString("FILE_CHOOSER_ACTION_SWITCH_TO_TEMPLATE_DIR")) {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                fileChooser.setCurrentDirectory(USER_TEMPLATE_DIR);
+            }
+        });
+        button.setToolTipText(Tool3lgmConstants.getReplacedResString("FILE_CHOOSER_ACTION_SWITCH_TO_TEMPLATE_DIR_TOOLTIP", USER_TEMPLATE_DIR.getAbsolutePath()));
+        panel.add(button, BorderLayout.SOUTH);
+        fileChooser.setAccessory(panel);
     }
 
     /**
