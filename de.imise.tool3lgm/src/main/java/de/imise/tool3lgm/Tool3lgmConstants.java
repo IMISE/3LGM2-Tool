@@ -116,8 +116,11 @@ public abstract class Tool3lgmConstants {
     /** Templates directory in the application directory */
     public static final File TOOL_TEMPLATE_DIR = new File(APPLICATION_DIR, "Templates");
 
+    /** Model library directory */
+    public static final File LIBRARY_DIR = new File(APPLICATION_DIR, "Examples");
+
     /** Model examples directory */
-    public static final File EXAMPLES_DIR = new File(APPLICATION_DIR, "Examples");
+    public static final File EXAMPLES_DIR = new File(LIBRARY_DIR, "HIS");
 
     /** Third party licenses html file */
     public static final File THIRD_PARTY_LICENSES_HTML_FILE = new File(APPLICATION_DIR, "thirdPartyLicense.html");

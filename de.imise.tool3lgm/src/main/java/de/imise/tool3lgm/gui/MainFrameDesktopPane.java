@@ -520,7 +520,7 @@ public final class MainFrameDesktopPane extends JPanel implements PropertyChange
      * @return <code>true</code> if the given file is an model example file
      */
     private boolean isExampleFile(File file) {
-        String examplesDirPath = Tool3lgmConstants.EXAMPLES_DIR.getPath();
+        String examplesDirPath = Tool3lgmConstants.LIBRARY_DIR.getPath();
         String filePath = file.getPath();
         return filePath.startsWith(examplesDirPath);
     }
