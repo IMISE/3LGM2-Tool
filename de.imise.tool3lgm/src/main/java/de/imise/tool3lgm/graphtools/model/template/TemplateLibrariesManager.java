@@ -1,6 +1,9 @@
 package de.imise.tool3lgm.graphtools.model.template;
 
 import static de.imise.tool3lgm.Tool3lgmConstants.TOOL_TEMPLATE_DIR;
+import static de.imise.tool3lgm.Tool3lgmModelType.ModelCategory.TEMPLATE;
+import static de.imise.tool3lgm.event.ActionIdentifier.ACTION_SAVE_MODEL_AS_TEMPLATE;
+import static de.imise.tool3lgm.graphtools.model.GDCollectionFileHandler.getFileLocationDependentModelCategory;
 import static de.imise.tool3lgm.userproperties.UserProperties.USER_TEMPLATE_DIR;
 import static de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty.OPTION_SHOW_TEMPLATE_BROWSER;
 
@@ -18,12 +21,14 @@ import de.imise.tool3lgm.MetaModelContext;
 import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.Tool3lgmChangeListener;
 import de.imise.tool3lgm.Tool3lgmModelType;
+import de.imise.tool3lgm.Tool3lgmModelType.ModelCategory;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModelDefinition;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GDCollectionFileHandler;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.view.pathtree.PathTreeBranchDefinition;
 import de.imise.tool3lgm.graphtools.view.pathtree.PathTreeDefinition;
+import de.imise.tool3lgm.graphtools.view.template.TemplateBrowserTree;
 import de.imise.tool3lgm.userproperties.AbstractUserProperties;
 import de.imise.util.event.PropertyChangeHandler;
 
@@ -74,6 +79,16 @@ public class TemplateLibrariesManager extends PropertyChangeHandler implements P
         loadOrUnloadTemplates(); //do not remove because model_change_selected_szenario_changed(...) is never called if the last model was closed!
     }
 
+    @Override
+    public void model_change_model_saved(GraphDocument source) {
+        GDCollection gdcoll = source.getCollection();
+        File file = gdcoll.getFile();
+        ModelCategory fileLocationDependentModelCategory = getFileLocationDependentModelCategory(file);
+        if (fileLocationDependentModelCategory == TEMPLATE) {
+            loadOrUnloadTemplates(gdcoll);
+        }
+    }
+
     /**
      * @return the activeTemplate
      */
@@ -102,20 +117,32 @@ public class TemplateLibrariesManager extends PropertyChangeHandler implements P
      *
      */
     private void loadOrUnloadTemplates() {
+        loadOrUnloadTemplates(null);
+    }
+
+    /**
+     * @param template If a model was saved as template, then this model must be
+     *            loaded as template in the {@link TemplateBrowserTree}. In all
+     *            other cases this parameter should be <code>null</code>.
+     */
+    private void loadOrUnloadTemplates(GDCollection template) {
         if (!OPTION_SHOW_TEMPLATE_BROWSER.is()) { //unload
             templateLibrariesContext.clear();
-        } else { //load
+        } else if (template == null) { //load all
             MetaModelContext selectedMetaModelContext = Static.getSelectedMetaModelContext();
-            if (Static.isDummyMetaModelContext(selectedMetaModelContext)) {
+            if (Static.isDummyMetaModelContext(selectedMetaModelContext)) { // dummy metamodel context has no templates
                 templateLibrariesContext.clear();
                 setActiveTemplate(null);
             } else if (!templateLibrariesContext.contains(selectedMetaModelContext)) { //templates already loaded?
                 List<TemplateLibraryProvider> templateLibraryProviders = getTemplateLibraryProviders();
                 addTemplateLibraries(templateLibraryProviders);
             }
+            removeSuperfluousTemplates();
+        } else if (!templateLibrariesContext.contains(template)) { // the template parameter was not null -> add only this template
+            ModelTemplatLibraryProvider modelTemplateLibraryProvider = new ModelTemplatLibraryProvider(template.getMetaModelContext(), template.getFile());
+            addTemplateLibraries(List.of(modelTemplateLibraryProvider));
         }
-        removeSuperfluousTemplates();
-        firePropertyChange();
+        firePropertyChange(ACTION_SAVE_MODEL_AS_TEMPLATE, null, template);
     }
 
     /**

@@ -89,6 +89,15 @@ public class TemplateLibrariesContext {
     }
 
     /**
+     * @param gdcoll
+     * @return <code>true</code> if this context contains the given
+     *         {@link GDCollection} as template.
+     */
+    public boolean contains(final GDCollection gdcoll) {
+        return templateToTreeDefinition.containsKey(gdcoll);
+    }
+
+    /**
      * Clears all templates in the context
      */
     public void clear() {

@@ -2,6 +2,7 @@ package de.imise.tool3lgm;
 
 import static de.imise.tool3lgm.Tool3lgmChangeListener.Tool3lgmChangeType.MODEL_CHANGE_MODEL_CLOSED;
 import static de.imise.tool3lgm.Tool3lgmChangeListener.Tool3lgmChangeType.MODEL_CHANGE_MODEL_OPENED;
+import static de.imise.tool3lgm.Tool3lgmChangeListener.Tool3lgmChangeType.MODEL_CHANGE_MODEL_SAVED;
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
 import static de.imise.tool3lgm.Tool3lgmModelType.ModelCategory.EXAMPLE;
 import static de.imise.tool3lgm.Tool3lgmModelType.ModelCategory.REGULAR;
@@ -720,6 +721,7 @@ public class Tool3lgm {
         //		System.err.println();
         //		printStatistic(gdCollection, false, true);
         //		System.err.println("###########################################################################");
+        distribute(MODEL_CHANGE_MODEL_SAVED, gdcoll);
         return true;
     }
 

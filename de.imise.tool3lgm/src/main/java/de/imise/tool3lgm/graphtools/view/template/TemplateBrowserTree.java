@@ -1,5 +1,6 @@
 package de.imise.tool3lgm.graphtools.view.template;
 
+import static de.imise.tool3lgm.event.ActionIdentifier.ACTION_SAVE_MODEL_AS_TEMPLATE;
 import static de.imise.tool3lgm.graphtools.view.template.TemplateBrowserTree.PropertyChangeEventType.CONTENT_CHANGED;
 
 import java.awt.Color;
@@ -216,8 +217,9 @@ public class TemplateBrowserTree extends DynamicTree implements SearchResultView
 
     @Override
     public void propertyChange(final PropertyChangeEvent evt) {
-        //Sys.err("propertyChange " + evt);
-        reload(false);
+        String propertyName = evt == null ? null : evt.getPropertyName();
+        boolean forceRealod = ACTION_SAVE_MODEL_AS_TEMPLATE.name().equals(propertyName);
+        reload(forceRealod);
     }
 
     /**
