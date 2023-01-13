@@ -219,7 +219,7 @@ public class Tool3lgmMain {
                 //auf dem Mac gibt es mit dem Apple-Glas-Look-And-Feel totale Probleme, wenn man viele InternalFrames
                 //verwendet, was unser Tool tut. Viele beginnt hier bereits bei ca. 5. Da beginnt es schlimm zu werden
                 //und ab 10 friert das Tool immer mal für ne Minute ein.
-                // javax.swing.UIManager.setLookAndFeel(javax.swing.UIManager.getSystemLookAndFeelClassName());
+                //UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
                 UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
             }
         } catch (Exception ex) {
