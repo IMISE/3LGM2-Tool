@@ -20,6 +20,7 @@ import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
 import de.imise.util.ReflectionUtils;
 import de.imise.util.collections.CollectionUtils;
+import de.imise.util.collections.ListSet2;
 
 /**
  * Grundklasse zur Verwaltung der Modellselektion. Sie besteht aus 3 Mengen
@@ -79,9 +80,9 @@ public class ModelSelection extends MetaModelSpecificAdapter implements Set<Elem
     public ModelSelection(final MetaModel metaModel, final int initialCapacity) {
         super(metaModel);
         commonRealElementsSuperClass = ReflectionUtils.getCommonSuperClass(metaModel.allNodesSet);
-        selectedRealNodeContainer = new HashSet<>(initialCapacity);
-        selectedBendpointContainer = new HashSet<>(initialCapacity);
-        selectedEdgeContainer = new HashSet<>(initialCapacity);
+        selectedRealNodeContainer = new ListSet2<>(initialCapacity);
+        selectedBendpointContainer = new ListSet2<>(initialCapacity);
+        selectedEdgeContainer = new ListSet2<>(initialCapacity);
     }
 
     /**
@@ -194,7 +195,7 @@ public class ModelSelection extends MetaModelSpecificAdapter implements Set<Elem
      * @return Liste der ModellElemente der selektierten ElementContainer
      */
     public final List<ModelElement> getSelectedElements() {
-        ArrayList<ModelElement> returnList = new ArrayList<>(size());
+        List<ModelElement> returnList = new ArrayList<>(size());
         returnList.addAll(GDCollection.getModelElements(selectedRealNodeContainer));
         returnList.addAll(GDCollection.getModelElements(selectedEdgeContainer));
         returnList.addAll(GDCollection.getModelElements(selectedBendpointContainer));

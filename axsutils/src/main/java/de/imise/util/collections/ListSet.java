@@ -2,6 +2,7 @@ package de.imise.util.collections;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
@@ -9,6 +10,12 @@ import java.util.Set;
 import java.util.Spliterator;
 
 /**
+ * Implementation of a ordered set.<br>
+ * This implementation stores all data only in a {@link List}. So the contains()
+ * function is not as fast as on a {@link HashSet}. If you neeed the same
+ * functionality with a faster contains() but (double RAM size) then use
+ * {@link ListSet2}.
+ *
  * @author AXS (30.06.2021)
  * @param <E>
  */
@@ -57,11 +64,10 @@ public class ListSet<E> implements Set<E>, List<E> {
             if (i == index) {
                 content.set(index, element);
                 return;
-            } else {
-                remove(i);
-                if (i < index) {
-                    index--;
-                }
+            }
+            remove(i);
+            if (i < index) {
+                index--;
             }
         }
         content.add(index, element);
