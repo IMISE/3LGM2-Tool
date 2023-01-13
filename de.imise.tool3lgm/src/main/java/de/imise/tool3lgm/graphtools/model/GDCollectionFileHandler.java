@@ -1,6 +1,8 @@
 package de.imise.tool3lgm.graphtools.model;
 
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
+import static de.imise.tool3lgm.Tool3lgmModelType.ModelCategory.EXAMPLE;
+import static de.imise.tool3lgm.Tool3lgmModelType.ModelCategory.TEMPLATE;
 import static de.imise.tool3lgm.event.ActionIdentifier.ACTION_SAVE_MODEL;
 import static de.imise.tool3lgm.event.ActionIdentifier.ACTION_SAVE_MODEL_AS;
 import static de.imise.tool3lgm.event.ActionIdentifier.ACTION_SAVE_MODEL_AS_TEMPLATE;
@@ -34,7 +36,9 @@ import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.Tool3lgmConstants.FileFilterType;
 import de.imise.tool3lgm.Tool3lgmModelType;
+import de.imise.tool3lgm.Tool3lgmModelType.ModelCategory;
 import de.imise.tool3lgm.event.ActionIdentifier;
+import de.imise.tool3lgm.graphtools.model.template.TemplateLibrariesManager;
 import de.imise.tool3lgm.graphtools.userfield.definition.UserFieldDefinitions;
 import de.imise.tool3lgm.log.Log;
 import de.imise.tool3lgm.userproperties.UserProperties;
@@ -69,8 +73,10 @@ public class GDCollectionFileHandler {
      */
     private StayOpenFileInputStream randomAccessFileInputStream;
 
+    /**  */
     private File file;
 
+    /**  */
     private FileLock lock;
 
     /** flag, whether file for this collection is only opened for reading */
@@ -85,6 +91,9 @@ public class GDCollectionFileHandler {
     /** flag, whether collection will be saved in compressed zip-file or not */
     private boolean isZipFile = true;
 
+    /**
+     * @param gdcoll
+     */
     public GDCollectionFileHandler(final GDCollection gdcoll) {
         this.gdcoll = gdcoll;
         createName();
@@ -199,8 +208,8 @@ public class GDCollectionFileHandler {
     }
 
     /**
-    *
-    */
+     *
+     */
     private void createName() {
         int counter = 0;
         String newName = createName(counter);
@@ -557,6 +566,39 @@ public class GDCollectionFileHandler {
         }
         tmpIStream.close();
         tempFile.delete();
+    }
+
+    /**
+     * Determines the {@link ModelCategory} of a given file only on basis of the
+     * location information.</br>
+     * If the file is located in a template directory then it is
+     * {@link ModelCategory#TEMPLATE}.</br>
+     * If the file is located in an examples directory then it is
+     * {@link ModelCategory#EXAMPLE}.</br>
+     * In all other cases <code>null</code> is returned.
+     *
+     * @param file
+     * @return the model category or <code>null</code>
+     */
+    public static ModelCategory getFileLocationDependentModelCategory(File file) {
+        ModelCategory modelCategory = null;
+        if (file != null) {
+            // all models loaded from template dir must be set as TEMPLATE even if they are REGULAR
+            // same with example models from example model directories
+            String path = file.getAbsolutePath();
+            String exampleDir = Tool3lgmConstants.LIBRARY_DIR.getAbsolutePath();
+            if (path.startsWith(exampleDir)) {
+                modelCategory = EXAMPLE;
+            } else {
+                for (File templateDir : TemplateLibrariesManager.getTemplateDirectories()) {
+                    String templateDirName = templateDir.getAbsolutePath();
+                    if (path.startsWith(templateDirName)) {
+                        modelCategory = TEMPLATE;
+                    }
+                }
+            }
+        }
+        return modelCategory;
     }
 
 }

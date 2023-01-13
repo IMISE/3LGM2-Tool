@@ -8,6 +8,7 @@ import static de.imise.tool3lgm.Tool3lgmModelType.ModelCategory.REGULAR;
 import static de.imise.tool3lgm.Tool3lgmModelType.ModelCategory.TEMPLATE;
 import static de.imise.tool3lgm.event.ActionIdentifier.ACTION_SAVE_MODEL;
 import static de.imise.tool3lgm.event.ActionIdentifier.ACTION_SAVE_MODEL_AS;
+import static de.imise.tool3lgm.graphtools.model.GDCollectionFileHandler.getFileLocationDependentModelCategory;
 import static de.imise.tool3lgm.graphtools.model.LGMChangeListener.LGMChangeType.SELECTION_CHANGED;
 import static de.imise.tool3lgm.graphtools.undoredo.TransactionManager.STANDARD_PID;
 
@@ -210,39 +211,6 @@ public class Tool3lgm {
             }
         }
         return modelCategory == null ? REGULAR : modelCategory;
-    }
-
-    /**
-     * Determines the {@link ModelCategory} of a given file only on basis of the
-     * location information.</br>
-     * If the file is located in a template directory then it is
-     * {@link ModelCategory#TEMPLATE}.</br>
-     * If the file is located in an examples directory then it is
-     * {@link ModelCategory#EXAMPLE}.</br>
-     * In all other cases <code>null</code> is returned.
-     *
-     * @param file
-     * @return the model category or <code>null</code>
-     */
-    private static ModelCategory getFileLocationDependentModelCategory(File file) {
-        ModelCategory modelCategory = null;
-        if (file != null) {
-            // all models loaded from template dir must be set as TEMPLATE even if they are REGULAR
-            // same with example models from example model directories
-            String path = file.getAbsolutePath();
-            String exampleDir = Tool3lgmConstants.EXAMPLES_DIR.getAbsolutePath();
-            if (path.startsWith(exampleDir)) {
-                modelCategory = EXAMPLE;
-            } else {
-                for (File templateDir : TemplateLibrariesManager.getTemplateDirectories()) {
-                    String templateDirName = templateDir.getAbsolutePath();
-                    if (path.startsWith(templateDirName)) {
-                        modelCategory = TEMPLATE;
-                    }
-                }
-            }
-        }
-        return modelCategory;
     }
 
     /**
