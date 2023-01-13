@@ -13,8 +13,8 @@ java=java
 ## java executable (specific to JAVA_HOME)
 #java=$JAVA_HOME/bin/java
 ## print JAVA_HOME and java version
-#echo JAVA_HOME=$JAVA_HOME
-#$java -version
+echo JAVA_HOME=$JAVA_HOME
+$java -version
 
 # Max Memory for 32-Bit Systems
 MEMORY32="-Xmx512m -Xss20m"
@@ -58,6 +58,11 @@ for param in "$@";
 			SCALE=-Dsun.java2d.uiScale='2'
 			# does not work
 			# SCALE=-Dsun.java2d.win.uiScaleX=120dpi -Dsun.java2d.win.uiScaleY=120dpi
+			echo SCALE=$SCALE
+		fi
+		if [ $param = "--scale=auto" ]; then
+			# does not work in most settings
+			SCALE=-Dsun.java2d.dpiaware=true
 			echo SCALE=$SCALE
 		fi
 		if [ $param = "--help" -o $param = "-help" ]; then
