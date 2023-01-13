@@ -1,5 +1,7 @@
 package de.imise.template.ihe;
 
+import static de.imise.tool3lgm.Tool3lgmModelType.ModelCategory.TEMPLATE;
+
 import java.util.List;
 
 import com.google.common.collect.ImmutableList;
@@ -8,7 +10,6 @@ import de.imise.tool3lgm.MetaModelContext;
 import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.Tool3lgmMetaModelContext;
-import de.imise.tool3lgm.Tool3lgmModelType.ModelCategory;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModelDefinition;
 import de.imise.tool3lgm.graphtools.metamodel.ModelConverter;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
@@ -107,12 +108,12 @@ public class IheTemplateLibraryProvider extends TemplateLibraryProvider {
     public GDCollection getTemplateLibrary() {
         IheRDFDataImporter dataImporter = Static.loadPlugin(IheRDFDataImporter.class);
         IheModelConverterDefinition modelConverterDefinition = Static.loadPlugin(IheModelConverterDefinition.class);
-        if (dataImporter.startImport(ModelCategory.TEMPLATE)) {
+        if (dataImporter.startImport(TEMPLATE)) {
             GDCollection gdcoll = dataImporter.getCollection();
             if (modelConverterDefinition != null) {
                 gdcoll = ModelConverter.convert(modelConverterDefinition, gdcoll);
             }
-            gdcoll.setModelCategory(ModelCategory.TEMPLATE);
+            gdcoll.setModelCategory(TEMPLATE);
             return gdcoll;
         }
         return null;
