@@ -368,7 +368,7 @@ public class FileHandler {
      * @return
      */
     public static File getNextNotExistingFile(final String filePath, String extension, final boolean restartCounter) {
-        if (filePath == null || filePath.trim().equals("")) {
+        if (filePath == null || "".equals(filePath.trim())) {
             return null;
         }
         File f = null;
@@ -474,6 +474,26 @@ public class FileHandler {
         } finally {
         }
         return result;
+    }
+
+    /**
+     * Checks if a file can be renamed. The check performs a real renaming. If
+     * the renaming was successful then it will be reverted and the function
+     * returns <code>true</code>.</br>
+     * This also indicates whether a file is deletable.
+     *
+     * @param file
+     * @return <code>true</code> if the file can be renamed (or deleted)
+     */
+    public static boolean isRenameable(File file) {
+        String path = file.getAbsolutePath();
+        String ending = ".renamed";
+        File renamed = new File(path + ending);
+        if (file.renameTo(renamed)) {
+            renamed.renameTo(file);
+            return true;
+        }
+        return false;
     }
 
 }
