@@ -1,20 +1,28 @@
 package de.imise.tool3lgm.gui.menu;
 
+import static de.imise.tool3lgm.Tool3lgmChangeListener.Tool3lgmChangeType.MODEL_CHANGE_MODEL_CLOSED;
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
+import static de.imise.tool3lgm.event.ActionIdentifier.ACTION_DELETE_TEMPLATE;
+import static de.imise.tool3lgm.event.ActionIdentifier.ACTION_SHOW_ELEMENTS_PROPERTY_DIALOG;
 import static de.imise.tool3lgm.graphtools.undoredo.TransactionManager.STANDARD_PID;
+import static javax.swing.JOptionPane.YES_NO_OPTION;
+import static javax.swing.JOptionPane.showConfirmDialog;
 
 import java.awt.Component;
+import java.awt.event.ActionEvent;
 import java.io.File;
 import java.util.Set;
 
 import javax.swing.Action;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPopupMenu;
 import javax.swing.tree.TreePath;
 
 import de.imise.tool3lgm.Static;
-import de.imise.tool3lgm.event.ActionIdentifier;
+import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.event.action.SelectedElementsAction;
+import de.imise.tool3lgm.event.action.StaticAction;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GDCollectionOwner;
@@ -100,7 +108,7 @@ public class TemplateContextGenerator extends ElementSelectionContextGenerator {
      *
      */
     private final Action getShowElementPropertyDialogAction() {
-        return new SelectedElementsAction(ActionIdentifier.ACTION_SHOW_ELEMENTS_PROPERTY_DIALOG, true) {
+        return new SelectedElementsAction(ACTION_SHOW_ELEMENTS_PROPERTY_DIALOG, true) {
             @Override
             public void actionPerformed() {
                 GraphDocument activeTemplateDoc = getActiveDoc();
@@ -127,11 +135,34 @@ public class TemplateContextGenerator extends ElementSelectionContextGenerator {
     /**
      * @return
      */
-    private final JMenuItem createOpenTemplateAsModelItem(GraphDocument template) {
+    /**
+     * @param template
+     * @return
+     */
+    private final JMenuItem createOpenTemplateAsModelItem(GDCollection template) {
         JMenuItem item = new JMenuItem(getResString("OPEN_TEMPLATE_AS_MODEL"));
-        GDCollection gdcoll = template.getCollection();
-        File templateFile = gdcoll.getFile();
+        File templateFile = template.getFile();
         item.addActionListener(e -> Static.getTool().openModelFile(templateFile));
+        return item;
+    }
+
+    /**
+     * @return
+     */
+    private final JMenuItem createDeleteTemplateMenuItem(final GDCollection template) {
+        JMenuItem item = new JMenuItem(new StaticAction(ACTION_DELETE_TEMPLATE) {
+            @Override
+            public void actionPerformed(ActionEvent event) {
+                int reallyDeletAnswer = showConfirmDialog(Static.getMainFrame(), Tool3lgmConstants.getConfirmQuestionResString(ACTION_DELETE_TEMPLATE), toString(), YES_NO_OPTION);
+                if (reallyDeletAnswer == JOptionPane.YES_OPTION) {
+                    File templateFile = template.getFile();
+                    File f = new File(templateFile.getAbsolutePath() + ".bak");
+                    templateFile.renameTo(f);
+                    f.delete();
+                    Static.getTool().distribute(MODEL_CHANGE_MODEL_CLOSED, template);
+                }
+            }
+        });
         return item;
     }
 
@@ -183,13 +214,18 @@ public class TemplateContextGenerator extends ElementSelectionContextGenerator {
     private JPopupMenu getTemplateModelContextMenu(final Component contextSource, final GDCollectionOwner templateSource) {
         //Sys.err1("ContextGenerator.getTemplateModelContextMenu()");
         JPopupMenu menu = createUpdatingPopupMenu();
-        LGMGraphDocument selectedTemplateDoc = templateSource.getSelectedDoc();
         if (templateSource instanceof LGMGraphDocument) {
+            LGMGraphDocument selectedTemplateDoc = templateSource.getSelectedDoc();
             selectedTemplateDoc = (LGMGraphDocument) templateSource;
             selectedTemplateDoc.selectAll();
             addMenuItem(menu, createCopyToModelItem(selectedTemplateDoc));
         } else if (templateSource instanceof GDCollection) {
-            addMenuItem(menu, createOpenTemplateAsModelItem(selectedTemplateDoc));
+            GDCollection template = (GDCollection) templateSource;
+            addMenuItem(menu, createOpenTemplateAsModelItem(template));
+            // self generated templates -> offer delete
+            if (templateSource.getCollection().isUserTemplate()) {
+                addMenuItem(menu, createDeleteTemplateMenuItem(template));
+            }
         }
         return menu;
     }

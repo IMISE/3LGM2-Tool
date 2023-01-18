@@ -90,6 +90,25 @@ public class TemplateLibrariesContext {
 
     /**
      * @param gdcoll
+     * @return
+     */
+    public void remove(final GDCollection gdcoll) {
+        MetaModelContext metaModelContext = gdcoll.getMetaModelContext();
+        templateToTreeDefinition.remove(gdcoll);
+        boolean atLeastOneMoreExists = false;
+        for (GDCollection template : templateToTreeDefinition.keySet()) {
+            if (template.hasMetaModelContext(metaModelContext)) {
+                atLeastOneMoreExists = true;
+                break;
+            }
+        }
+        if (!atLeastOneMoreExists) {
+            metaModelContextsWithLoadedTemplates.remove(metaModelContext);
+        }
+    }
+
+    /**
+     * @param gdcoll
      * @return <code>true</code> if this context contains the given
      *         {@link GDCollection} as template.
      */

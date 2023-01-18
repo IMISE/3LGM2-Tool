@@ -2,6 +2,7 @@ package de.imise.tool3lgm.graphtools.model.template;
 
 import static de.imise.tool3lgm.Tool3lgmConstants.TOOL_TEMPLATE_DIR;
 import static de.imise.tool3lgm.Tool3lgmModelType.ModelCategory.TEMPLATE;
+import static de.imise.tool3lgm.event.ActionIdentifier.ACTION_DELETE_TEMPLATE;
 import static de.imise.tool3lgm.event.ActionIdentifier.ACTION_SAVE_MODEL_AS_TEMPLATE;
 import static de.imise.tool3lgm.graphtools.model.GDCollectionFileHandler.getFileLocationDependentModelCategory;
 import static de.imise.tool3lgm.userproperties.UserProperties.USER_TEMPLATE_DIR;
@@ -76,17 +77,34 @@ public class TemplateLibrariesManager extends PropertyChangeHandler implements P
 
     @Override
     public void model_change_model_closed(final GraphDocument source) {
-        loadOrUnloadTemplates(); //do not remove because model_change_selected_szenario_changed(...) is never called if the last model was closed!
+        GDCollection gdcoll = source == null ? null : source.getCollection();
+        if (templateLibrariesContext.contains(gdcoll)) {
+            loadOrUnloadTemplates(gdcoll, true);
+        } else {
+            loadOrUnloadTemplates(); //do not remove because model_change_selected_szenario_changed(...) is never called if the last model was closed!
+        }
     }
 
     @Override
     public void model_change_model_saved(GraphDocument source) {
         GDCollection gdcoll = source.getCollection();
+        if (isTemplateByFileLocation(gdcoll)) {
+            loadOrUnloadTemplates(gdcoll, false);
+        }
+    }
+
+    /**
+     * @param gdcoll
+     * @return <code>true</code> if the file of the given collection is located
+     *         in a template directory.
+     */
+    public static final boolean isTemplateByFileLocation(GDCollection gdcoll) {
+        if (gdcoll == null) {
+            return false;
+        }
         File file = gdcoll.getFile();
         ModelCategory fileLocationDependentModelCategory = getFileLocationDependentModelCategory(file);
-        if (fileLocationDependentModelCategory == TEMPLATE) {
-            loadOrUnloadTemplates(gdcoll);
-        }
+        return fileLocationDependentModelCategory == TEMPLATE;
     }
 
     /**
@@ -117,15 +135,16 @@ public class TemplateLibrariesManager extends PropertyChangeHandler implements P
      *
      */
     private void loadOrUnloadTemplates() {
-        loadOrUnloadTemplates(null);
+        loadOrUnloadTemplates(null, false);
     }
 
     /**
      * @param template If a model was saved as template, then this model must be
      *            loaded as template in the {@link TemplateBrowserTree}. In all
      *            other cases this parameter should be <code>null</code>.
+     * @param unload
      */
-    private void loadOrUnloadTemplates(GDCollection template) {
+    private void loadOrUnloadTemplates(GDCollection template, boolean remove) {
         if (!OPTION_SHOW_TEMPLATE_BROWSER.is()) { //unload
             templateLibrariesContext.clear();
         } else if (template == null) { //load all
@@ -138,11 +157,15 @@ public class TemplateLibrariesManager extends PropertyChangeHandler implements P
                 addTemplateLibraries(templateLibraryProviders);
             }
             removeSuperfluousTemplates();
-        } else if (!templateLibrariesContext.contains(template)) { // the template parameter was not null -> add only this template
+            firePropertyChange();
+        } else if (!remove && !templateLibrariesContext.contains(template)) { // the template parameter was not null -> add only this template
             ModelTemplatLibraryProvider modelTemplateLibraryProvider = new ModelTemplatLibraryProvider(template.getMetaModelContext(), template.getFile());
             addTemplateLibraries(List.of(modelTemplateLibraryProvider));
+            firePropertyChange(ACTION_SAVE_MODEL_AS_TEMPLATE, null, template);
+        } else if (remove && templateLibrariesContext.contains(template)) { // remove the template after file delete
+            templateLibrariesContext.remove(template);
+            firePropertyChange(ACTION_DELETE_TEMPLATE, null, template);
         }
-        firePropertyChange(ACTION_SAVE_MODEL_AS_TEMPLATE, null, template);
     }
 
     /**

@@ -173,7 +173,7 @@ public class ActionLibrary {
             };
         }
 
-        /** Schließen des Models */
+        /** Cloeses a model */
         public static final Action ACTION_CLOSE_MODEL = new GraphDocumentAction(ActionIdentifier.ACTION_CLOSE_MODEL) {
             @Override
             protected void actionPerformed() {

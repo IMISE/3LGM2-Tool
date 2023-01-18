@@ -1,5 +1,6 @@
 package de.imise.tool3lgm.graphtools.view.template;
 
+import static de.imise.tool3lgm.event.ActionIdentifier.ACTION_DELETE_TEMPLATE;
 import static de.imise.tool3lgm.event.ActionIdentifier.ACTION_SAVE_MODEL_AS_TEMPLATE;
 import static de.imise.tool3lgm.graphtools.view.template.TemplateBrowserTree.PropertyChangeEventType.CONTENT_CHANGED;
 
@@ -33,6 +34,7 @@ import javax.swing.tree.TreePath;
 import de.imise.tool3lgm.MetaModelContext;
 import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.Tool3lgmConstants;
+import de.imise.tool3lgm.event.ActionIdentifier;
 import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
 import de.imise.tool3lgm.graphtools.dialog.search.SearchFunctions;
 import de.imise.tool3lgm.graphtools.dialog.search.SearchOptions;
@@ -216,10 +218,24 @@ public class TemplateBrowserTree extends DynamicTree implements SearchResultView
     }
 
     @Override
-    public void propertyChange(final PropertyChangeEvent evt) {
-        String propertyName = evt == null ? null : evt.getPropertyName();
-        boolean forceRealod = ACTION_SAVE_MODEL_AS_TEMPLATE.name().equals(propertyName);
+    public void propertyChange(final PropertyChangeEvent event) {
+        boolean forceRealod = hasActionIdentifier(event, ACTION_SAVE_MODEL_AS_TEMPLATE, ACTION_DELETE_TEMPLATE);
         reload(forceRealod);
+    }
+
+    /**
+     * @param event
+     * @param actionIdentifiers
+     * @return
+     */
+    public static final boolean hasActionIdentifier(PropertyChangeEvent event, ActionIdentifier... actionIdentifiers) {
+        String propertyName = event == null ? null : event.getPropertyName();
+        for (ActionIdentifier actionIdentifier : actionIdentifiers) {
+            if (actionIdentifier.name().equals(propertyName)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**

@@ -126,6 +126,7 @@ import de.imise.tool3lgm.graphtools.view.graph.DefaultElementsLayoutDefinition;
 import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout;
 import de.imise.tool3lgm.graphtools.view.graph.GraphViewParameter;
 import de.imise.tool3lgm.log.Log;
+import de.imise.tool3lgm.userproperties.UserProperties;
 import de.imise.util.StringUtils;
 import de.imise.util.collections.AlphabeticalSet;
 import de.imise.util.outparam.OutParamObject;
@@ -497,6 +498,16 @@ public class GDCollection extends UserFieldTarget implements MetaModelSpecific, 
      */
     public File getFile() {
         return fileHandler.getFile();
+    }
+
+    /**
+     * @return <code>true</code> if the file of this model is located in the
+     *         user home template directory.
+     */
+    public boolean isUserTemplate() {
+        File file = getFile();
+        String userTemplateDirName = UserProperties.USER_TEMPLATE_DIR.getAbsolutePath();
+        return file != null && file.getAbsolutePath().startsWith(userTemplateDirName);
     }
 
     /**
