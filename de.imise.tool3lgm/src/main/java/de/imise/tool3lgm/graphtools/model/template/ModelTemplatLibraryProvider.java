@@ -56,6 +56,7 @@ public class ModelTemplatLibraryProvider extends TemplateLibraryProvider {
         try {
             fileHandler.setFile(templateFile);
             couldBeLoaded = fileHandler.loadFromRAF();
+            fileHandler.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
