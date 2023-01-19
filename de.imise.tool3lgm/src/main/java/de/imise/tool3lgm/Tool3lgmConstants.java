@@ -542,8 +542,9 @@ public abstract class Tool3lgmConstants {
      * @param baseKey
      * @return a resource string with the full key "CONFIRM_" + baseKey
      */
-    public static String getConfirmQuestionResString(final Object baseKey) {
-        return getResString(CONFIRM_QUESTION_RESSOURCE_PREFIX, baseKey);
+    public static String getConfirmResString(final Object baseKey) {
+        return getConfirmResString(baseKey, null);
+    }
     }
 
     /**
