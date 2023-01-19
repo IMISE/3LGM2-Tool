@@ -1,12 +1,15 @@
 package de.imise.tool3lgm.gui.menu;
 
+import static de.imise.tool3lgm.Static.getMainFrame;
+import static de.imise.tool3lgm.Static.getTool;
 import static de.imise.tool3lgm.Tool3lgmChangeListener.Tool3lgmChangeType.MODEL_CHANGE_MODEL_CLOSED;
+import static de.imise.tool3lgm.Tool3lgmConstants.getConfirmResString;
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
 import static de.imise.tool3lgm.event.ActionIdentifier.ACTION_DELETE_TEMPLATE;
 import static de.imise.tool3lgm.event.ActionIdentifier.ACTION_SHOW_ELEMENTS_PROPERTY_DIALOG;
 import static de.imise.tool3lgm.graphtools.undoredo.TransactionManager.STANDARD_PID;
-import static javax.swing.JOptionPane.YES_NO_OPTION;
-import static javax.swing.JOptionPane.showConfirmDialog;
+import static javax.swing.JOptionPane.ERROR_MESSAGE;
+import static javax.swing.JOptionPane.showMessageDialog;
 
 import java.awt.Component;
 import java.awt.event.ActionEvent;
@@ -15,12 +18,10 @@ import java.util.Set;
 
 import javax.swing.Action;
 import javax.swing.JMenuItem;
-import javax.swing.JOptionPane;
 import javax.swing.JPopupMenu;
 import javax.swing.tree.TreePath;
 
 import de.imise.tool3lgm.Static;
-import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.event.action.SelectedElementsAction;
 import de.imise.tool3lgm.event.action.StaticAction;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
@@ -32,6 +33,7 @@ import de.imise.tool3lgm.graphtools.view.container.BendpointContainer;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.graphtools.view.template.TemplateBrowserTree;
 import de.imise.tool3lgm.graphtools.view.tree.node.ElementContainerTreeNode;
+import de.imise.util.io.FileHandler;
 import de.imise.util.swing.component.tree.TypedTreeNode;
 
 /**
@@ -153,14 +155,19 @@ public class TemplateContextGenerator extends ElementSelectionContextGenerator {
         JMenuItem item = new JMenuItem(new StaticAction(ACTION_DELETE_TEMPLATE) {
             @Override
             public void actionPerformed(ActionEvent event) {
-                int reallyDeletAnswer = showConfirmDialog(Static.getMainFrame(), Tool3lgmConstants.getConfirmQuestionResString(ACTION_DELETE_TEMPLATE), toString(), YES_NO_OPTION);
-                if (reallyDeletAnswer == JOptionPane.YES_OPTION) {
-                    File templateFile = template.getFile();
-                    File f = new File(templateFile.getAbsolutePath() + ".bak");
-                    templateFile.renameTo(f);
-                    f.delete();
-                    Static.getTool().distribute(MODEL_CHANGE_MODEL_CLOSED, template);
+                File templateFile = template.getFile();
+                if (!FileHandler.isRenameable(templateFile)) { // renameable = deletable
+                    showMessageDialog(getMainFrame(), getConfirmResString(ACTION_DELETE_TEMPLATE, "_2"), getText(), ERROR_MESSAGE);
+                    return;
                 }
+                super.actionPerformed(event); // calls actionPerformed() if the other confirm message is passed
+            }
+
+            @Override
+            protected void actionPerformed() {
+                File templateFile = template.getFile();
+                templateFile.delete();
+                getTool().distribute(MODEL_CHANGE_MODEL_CLOSED, template);
             }
         });
         return item;
