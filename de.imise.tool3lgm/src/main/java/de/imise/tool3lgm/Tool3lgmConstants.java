@@ -545,6 +545,14 @@ public abstract class Tool3lgmConstants {
     public static String getConfirmResString(final Object baseKey) {
         return getConfirmResString(baseKey, null);
     }
+
+    /**
+     * @param baseKey
+     * @param suffix
+     * @return a resource string with the full key "CONFIRM_" + baseKey + suffix
+     */
+    public static String getConfirmResString(final Object baseKey, String suffix) {
+        return getResString(CONFIRM_QUESTION_RESSOURCE_PREFIX, baseKey, suffix);
     }
 
     /**
@@ -599,9 +607,27 @@ public abstract class Tool3lgmConstants {
      * @return String with value of resource
      */
     public static String getResString(final String prefix, final Object baseKey) {
+        return getResString(prefix, baseKey, null);
+    }
+
+    /**
+     * Gets a string for the given key from this resource bundle or one of its
+     * parents.
+     *
+     * @param prefix
+     * @param baseKey String with key for resource or the key. For enums will be
+     *            called the name() function, for all other objects the
+     *            toString() function.
+     * @param suffix
+     * @return String from the resources with the key prefix + baseKey + suffix
+     */
+    public static String getResString(final String prefix, final Object baseKey, String suffix) {
         String key = baseKey instanceof Enum ? ((Enum<?>) baseKey).name() : baseKey.toString();
         if (prefix != null) {
             key = prefix + key;
+        }
+        if (suffix != null) {
+            key += suffix;
         }
         return getResString(key);
     }
