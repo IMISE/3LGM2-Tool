@@ -256,7 +256,7 @@ public abstract class StaticAction extends ExtendedAction {
         try {
             String confirmQuestion = getConfirmResString(confirmQuestionResBaseKey);
             //wenn es eine confirm-Question in den Resourcen gibt -> Confirm-Frage stellen
-            int answer = JOptionPane.showConfirmDialog(getMainFrame(), confirmQuestion, getResString("confirm"), JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+            int answer = JOptionPane.showConfirmDialog(getMainFrame(), confirmQuestion, getText(), JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
             if (answer == JOptionPane.YES_OPTION) {
                 //wenn ja gedrückt wurde -> Action ausführen
                 perform = true;
