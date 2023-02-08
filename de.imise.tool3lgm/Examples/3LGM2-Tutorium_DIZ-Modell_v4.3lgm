@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--Tool3lgmFile version='3.10' metamodel='TLGMServiceMetaModel@2388259974838049670' category='REGULAR'-->
+<!--Tool3lgmFile version='3.10' metamodel='TLGMServiceMetaModel@2388259974838049670' category='EXAMPLE'-->
 <modell_3lgm_2>
   <header>
     <title>3LGM2-Tutorium_DIZ-Modell_v4.3lgm</title>
     <description></description>
-    <version>180_sippe_1670313625052</version>
+    <version>182_sippe_1675866604187</version>
   </header>
   <userFieldDefinitions>
     <userFieldFormat hash="FRM_1623450079169_2058">
@@ -38,6 +38,112 @@
       <userFieldStyle>HYPERLINK</userFieldStyle>
       <userFieldTreeVis>true</userFieldTreeVis>
       <userFieldShowDescriptionInDialog>false</userFieldShowDescriptionInDialog>
+    </userFieldDef>
+    <userFieldDef elementClass="RepresentationForm" hash="USERFIELD_1622801104013_1966">
+      <userFieldName>FHIR Ressource</userFieldName>
+      <userFieldDescription></userFieldDescription>
+      <userFieldStyle>SUBTYPE</userFieldStyle>
+      <userFieldTreeVis>true</userFieldTreeVis>
+      <userFieldShowDescriptionInDialog>false</userFieldShowDescriptionInDialog>
+    </userFieldDef>
+    <userFieldDef elementClass="RepresentationForm" hash="USERFIELD_1620285514229_7874">
+      <userFieldName>FHIR Ressource</userFieldName>
+      <userFieldDescription>Metadaten von FHIR Ressourcen</userFieldDescription>
+      <userFieldStyle>TAB</userFieldStyle>
+      <userFieldTreeVis>true</userFieldTreeVis>
+      <userFieldShowDescriptionInDialog>true</userFieldShowDescriptionInDialog>
+    </userFieldDef>
+    <userFieldDef elementClass="RepresentationForm" hash="USERFIELD_1620285553237_7875">
+      <userFieldName>Ressourcen Typ</userFieldName>
+      <userFieldDescription></userFieldDescription>
+      <userFieldStyle>COMBO_BOX</userFieldStyle>
+      <userFieldTreeVis>true</userFieldTreeVis>
+      <userFieldShowDescriptionInDialog>false</userFieldShowDescriptionInDialog>
+      <userFieldStandardValue>Condition</userFieldStandardValue>
+      <userFieldStandardValue>Consent</userFieldStandardValue>
+      <userFieldStandardValue>Diagnosis</userFieldStandardValue>
+      <userFieldStandardValue>Location</userFieldStandardValue>
+      <userFieldStandardValue>Medication</userFieldStandardValue>
+      <userFieldStandardValue>Observation</userFieldStandardValue>
+      <userFieldStandardValue>Organization</userFieldStandardValue>
+      <userFieldStandardValue>Patient</userFieldStandardValue>
+      <userFieldStandardValue>Practitioner</userFieldStandardValue>
+      <userFieldStandardValue>Provenance</userFieldStandardValue>
+    </userFieldDef>
+    <userFieldDef elementClass="RepresentationForm" hash="USERFIELD_1623054261459_3913">
+      <userFieldName>Link zur FHIR Spezifikation</userFieldName>
+      <userFieldDescription>Link zur FHIR Spezifikation der Ressource unter http://hl7.org/fhir/
+(ToDo: ggf. automatisch hinzufügen)</userFieldDescription>
+      <userFieldStyle>HYPERLINK</userFieldStyle>
+      <userFieldTreeVis>true</userFieldTreeVis>
+      <userFieldShowDescriptionInDialog>true</userFieldShowDescriptionInDialog>
+    </userFieldDef>
+    <userFieldDef elementClass="RepresentationForm" hash="USERFIELD_1620285612795_7876">
+      <userFieldName>Profil</userFieldName>
+      <userFieldDescription>Link zum Profil, z.B. auf Simplifier (http://simplifier.net/)</userFieldDescription>
+      <userFieldStyle>HYPERLINK</userFieldStyle>
+      <userFieldTreeVis>true</userFieldTreeVis>
+      <userFieldShowDescriptionInDialog>true</userFieldShowDescriptionInDialog>
+    </userFieldDef>
+    <userFieldDef elementClass="Group" hash="USERFIELD_1669994178892_38775">
+      <userFieldName>Netzwerkzone</userFieldName>
+      <userFieldDescription>In einer Netzwerkzone können physische Datenverarbeitungsbausteine gruppiert werden.</userFieldDescription>
+      <userFieldStyle>SUBTYPE</userFieldStyle>
+      <userFieldTreeVis>true</userFieldTreeVis>
+      <userFieldShowDescriptionInDialog>true</userFieldShowDescriptionInDialog>
+    </userFieldDef>
+    <userFieldDef elementClass="Group" hash="USERFIELD_1669994634381_38782">
+      <userFieldName>Netzwerkzone</userFieldName>
+      <userFieldDescription>In einer Netzwerkzone können physische Datenverarbeitungsbausteine gruppiert werden.</userFieldDescription>
+      <userFieldStyle>TAB</userFieldStyle>
+      <userFieldTreeVis>true</userFieldTreeVis>
+      <userFieldShowDescriptionInDialog>true</userFieldShowDescriptionInDialog>
+    </userFieldDef>
+    <userFieldDef elementClass="Group" hash="USERFIELD_1669996287108_38999">
+      <userFieldName>Network Name</userFieldName>
+      <userFieldDescription></userFieldDescription>
+      <userFieldStyle>COMBO_BOX</userFieldStyle>
+      <userFieldTreeVis>true</userFieldTreeVis>
+      <userFieldShowDescriptionInDialog>true</userFieldShowDescriptionInDialog>
+      <userFieldStandardValue>Clinic Prd</userFieldStandardValue>
+      <userFieldStandardValue>DIC Clinic Prd</userFieldStandardValue>
+      <userFieldStandardValue>DIC Clinic Dev</userFieldStandardValue>
+      <userFieldStandardValue>DIC Research Prd</userFieldStandardValue>
+      <userFieldStandardValue>DIC Research Dev</userFieldStandardValue>
+      <userFieldStandardValue>DIC DataSharing Prd</userFieldStandardValue>
+      <userFieldStandardValue>MII Data Sharing</userFieldStandardValue>
+      <userFieldStandardValue>Clinic Dev</userFieldStandardValue>
+      <userFieldStandardValue>Research Prd</userFieldStandardValue>
+      <userFieldStandardValue>Research Dev</userFieldStandardValue>
+      <userFieldStandardValue>DataSharing Prd</userFieldStandardValue>
+    </userFieldDef>
+    <userFieldDef elementClass="Group" hash="USERFIELD_1669997137955_39002">
+      <userFieldName>IPv4 Settings</userFieldName>
+      <userFieldDescription>see https://www.site24x7.com/de/tools/ipv4-subnet-zrechner.html</userFieldDescription>
+      <userFieldStyle>GROUP</userFieldStyle>
+      <userFieldTreeVis>true</userFieldTreeVis>
+      <userFieldShowDescriptionInDialog>true</userFieldShowDescriptionInDialog>
+    </userFieldDef>
+    <userFieldDef elementClass="Group" hash="USERFIELD_1669996237291_38998">
+      <userFieldName>Subnet IPv4</userFieldName>
+      <userFieldDescription>e.g. 10.10.0.0/16</userFieldDescription>
+      <userFieldStyle>SINGLE_LINE</userFieldStyle>
+      <userFieldTreeVis>true</userFieldTreeVis>
+      <userFieldShowDescriptionInDialog>true</userFieldShowDescriptionInDialog>
+    </userFieldDef>
+    <userFieldDef elementClass="Group" hash="USERFIELD_1669996648528_39000">
+      <userFieldName>Subnet Mask IPv4</userFieldName>
+      <userFieldDescription>e.g. 255.255.254.0/23</userFieldDescription>
+      <userFieldStyle>SINGLE_LINE</userFieldStyle>
+      <userFieldTreeVis>true</userFieldTreeVis>
+      <userFieldShowDescriptionInDialog>true</userFieldShowDescriptionInDialog>
+    </userFieldDef>
+    <userFieldDef elementClass="Group" hash="USERFIELD_1669996827587_39001">
+      <userFieldName>Host Address Range IPv4</userFieldName>
+      <userFieldDescription>e.g. 10.10.0.1 - 10.10.1.254</userFieldDescription>
+      <userFieldStyle>SINGLE_LINE</userFieldStyle>
+      <userFieldTreeVis>true</userFieldTreeVis>
+      <userFieldShowDescriptionInDialog>true</userFieldShowDescriptionInDialog>
     </userFieldDef>
     <userFieldDef elementClass="PhysicalDataProcessingComponent" hash="USERFIELD_1670080293518_5897">
       <userFieldName>Virtual Maschine</userFieldName>
@@ -186,52 +292,6 @@
       <userFieldTreeVis>true</userFieldTreeVis>
       <userFieldShowDescriptionInDialog>false</userFieldShowDescriptionInDialog>
     </userFieldDef>
-    <userFieldDef elementClass="RepresentationForm" hash="USERFIELD_1622801104013_1966">
-      <userFieldName>FHIR Ressource</userFieldName>
-      <userFieldDescription></userFieldDescription>
-      <userFieldStyle>SUBTYPE</userFieldStyle>
-      <userFieldTreeVis>true</userFieldTreeVis>
-      <userFieldShowDescriptionInDialog>false</userFieldShowDescriptionInDialog>
-    </userFieldDef>
-    <userFieldDef elementClass="RepresentationForm" hash="USERFIELD_1620285514229_7874">
-      <userFieldName>FHIR Ressource</userFieldName>
-      <userFieldDescription>Metadaten von FHIR Ressourcen</userFieldDescription>
-      <userFieldStyle>TAB</userFieldStyle>
-      <userFieldTreeVis>true</userFieldTreeVis>
-      <userFieldShowDescriptionInDialog>true</userFieldShowDescriptionInDialog>
-    </userFieldDef>
-    <userFieldDef elementClass="RepresentationForm" hash="USERFIELD_1620285553237_7875">
-      <userFieldName>Ressourcen Typ</userFieldName>
-      <userFieldDescription></userFieldDescription>
-      <userFieldStyle>COMBO_BOX</userFieldStyle>
-      <userFieldTreeVis>true</userFieldTreeVis>
-      <userFieldShowDescriptionInDialog>false</userFieldShowDescriptionInDialog>
-      <userFieldStandardValue>Condition</userFieldStandardValue>
-      <userFieldStandardValue>Consent</userFieldStandardValue>
-      <userFieldStandardValue>Diagnosis</userFieldStandardValue>
-      <userFieldStandardValue>Location</userFieldStandardValue>
-      <userFieldStandardValue>Medication</userFieldStandardValue>
-      <userFieldStandardValue>Observation</userFieldStandardValue>
-      <userFieldStandardValue>Organization</userFieldStandardValue>
-      <userFieldStandardValue>Patient</userFieldStandardValue>
-      <userFieldStandardValue>Practitioner</userFieldStandardValue>
-      <userFieldStandardValue>Provenance</userFieldStandardValue>
-    </userFieldDef>
-    <userFieldDef elementClass="RepresentationForm" hash="USERFIELD_1623054261459_3913">
-      <userFieldName>Link zur FHIR Spezifikation</userFieldName>
-      <userFieldDescription>Link zur FHIR Spezifikation der Ressource unter http://hl7.org/fhir/
-(ToDo: ggf. automatisch hinzufügen)</userFieldDescription>
-      <userFieldStyle>HYPERLINK</userFieldStyle>
-      <userFieldTreeVis>true</userFieldTreeVis>
-      <userFieldShowDescriptionInDialog>true</userFieldShowDescriptionInDialog>
-    </userFieldDef>
-    <userFieldDef elementClass="RepresentationForm" hash="USERFIELD_1620285612795_7876">
-      <userFieldName>Profil</userFieldName>
-      <userFieldDescription>Link zum Profil, z.B. auf Simplifier (http://simplifier.net/)</userFieldDescription>
-      <userFieldStyle>HYPERLINK</userFieldStyle>
-      <userFieldTreeVis>true</userFieldTreeVis>
-      <userFieldShowDescriptionInDialog>true</userFieldShowDescriptionInDialog>
-    </userFieldDef>
     <userFieldDef elementClass="ObjectType" hash="USERFIELD_1669884870745_32050">
       <userFieldName>MII KDS</userFieldName>
       <userFieldDescription></userFieldDescription>
@@ -252,66 +312,6 @@
       <userFieldStyle>HYPERLINK</userFieldStyle>
       <userFieldTreeVis>true</userFieldTreeVis>
       <userFieldShowDescriptionInDialog>false</userFieldShowDescriptionInDialog>
-    </userFieldDef>
-    <userFieldDef elementClass="Group" hash="USERFIELD_1669994178892_38775">
-      <userFieldName>Netzwerkzone</userFieldName>
-      <userFieldDescription>In einer Netzwerkzone können physische Datenverarbeitungsbausteine gruppiert werden.</userFieldDescription>
-      <userFieldStyle>SUBTYPE</userFieldStyle>
-      <userFieldTreeVis>true</userFieldTreeVis>
-      <userFieldShowDescriptionInDialog>true</userFieldShowDescriptionInDialog>
-    </userFieldDef>
-    <userFieldDef elementClass="Group" hash="USERFIELD_1669994634381_38782">
-      <userFieldName>Netzwerkzone</userFieldName>
-      <userFieldDescription>In einer Netzwerkzone können physische Datenverarbeitungsbausteine gruppiert werden.</userFieldDescription>
-      <userFieldStyle>TAB</userFieldStyle>
-      <userFieldTreeVis>true</userFieldTreeVis>
-      <userFieldShowDescriptionInDialog>true</userFieldShowDescriptionInDialog>
-    </userFieldDef>
-    <userFieldDef elementClass="Group" hash="USERFIELD_1669996287108_38999">
-      <userFieldName>Network Name</userFieldName>
-      <userFieldDescription></userFieldDescription>
-      <userFieldStyle>COMBO_BOX</userFieldStyle>
-      <userFieldTreeVis>true</userFieldTreeVis>
-      <userFieldShowDescriptionInDialog>true</userFieldShowDescriptionInDialog>
-      <userFieldStandardValue>Clinic Prd</userFieldStandardValue>
-      <userFieldStandardValue>DIC Clinic Prd</userFieldStandardValue>
-      <userFieldStandardValue>DIC Clinic Dev</userFieldStandardValue>
-      <userFieldStandardValue>DIC Research Prd</userFieldStandardValue>
-      <userFieldStandardValue>DIC Research Dev</userFieldStandardValue>
-      <userFieldStandardValue>DIC DataSharing Prd</userFieldStandardValue>
-      <userFieldStandardValue>MII Data Sharing</userFieldStandardValue>
-      <userFieldStandardValue>Clinic Dev</userFieldStandardValue>
-      <userFieldStandardValue>Research Prd</userFieldStandardValue>
-      <userFieldStandardValue>Research Dev</userFieldStandardValue>
-      <userFieldStandardValue>DataSharing Prd</userFieldStandardValue>
-    </userFieldDef>
-    <userFieldDef elementClass="Group" hash="USERFIELD_1669997137955_39002">
-      <userFieldName>IPv4 Settings</userFieldName>
-      <userFieldDescription>see https://www.site24x7.com/de/tools/ipv4-subnet-zrechner.html</userFieldDescription>
-      <userFieldStyle>GROUP</userFieldStyle>
-      <userFieldTreeVis>true</userFieldTreeVis>
-      <userFieldShowDescriptionInDialog>true</userFieldShowDescriptionInDialog>
-    </userFieldDef>
-    <userFieldDef elementClass="Group" hash="USERFIELD_1669996237291_38998">
-      <userFieldName>Subnet IPv4</userFieldName>
-      <userFieldDescription>e.g. 10.10.0.0/16</userFieldDescription>
-      <userFieldStyle>SINGLE_LINE</userFieldStyle>
-      <userFieldTreeVis>true</userFieldTreeVis>
-      <userFieldShowDescriptionInDialog>true</userFieldShowDescriptionInDialog>
-    </userFieldDef>
-    <userFieldDef elementClass="Group" hash="USERFIELD_1669996648528_39000">
-      <userFieldName>Subnet Mask IPv4</userFieldName>
-      <userFieldDescription>e.g. 255.255.254.0/23</userFieldDescription>
-      <userFieldStyle>SINGLE_LINE</userFieldStyle>
-      <userFieldTreeVis>true</userFieldTreeVis>
-      <userFieldShowDescriptionInDialog>true</userFieldShowDescriptionInDialog>
-    </userFieldDef>
-    <userFieldDef elementClass="Group" hash="USERFIELD_1669996827587_39001">
-      <userFieldName>Host Address Range IPv4</userFieldName>
-      <userFieldDescription>e.g. 10.10.0.1 - 10.10.1.254</userFieldDescription>
-      <userFieldStyle>SINGLE_LINE</userFieldStyle>
-      <userFieldTreeVis>true</userFieldTreeVis>
-      <userFieldShowDescriptionInDialog>true</userFieldShowDescriptionInDialog>
     </userFieldDef>
   </userFieldDefinitions>
   <objects>
@@ -360,6 +360,9 @@
       <field name="description">Check data of patients for plausibility, duplicates etc. and correct if necessary.  Indicate curated data as such. Checks are based on rules for data curation and data quality management. Those rules  may contain actions to be taken e.g. by study nurses in order to acquire additional findings from certain patients for data completion.  Annotate semantic information to data items.
 
 The DIC expects the required rules from R&amp;D teams. The DIC is responsible for proper operation of the rules in daily routine.</field>
+    </element>
+    <element class="Group" hash="GRO_1675866248061_5317">
+      <field name="name">Data Integration Center</field>
     </element>
     <element class="OrganisationalUnit" hash="OUN_1617261971396_4228">
       <field name="name">Data Integration Center</field>
@@ -575,6 +578,9 @@ The DIC expects the required rules from R&amp;D teams. The DIC is responsible fo
     <element class="ObjectType" hash="OTY_1626335012066_4807">
       <field name="name">Patient</field>
     </element>
+    <element class="Group" hash="GRO_1675866138203_4598">
+      <field name="name">Patient Care</field>
+    </element>
     <element class="Textfield" hash="TEX_1669815150465_55981">
       <field name="name">Patient Care</field>
     </element>
@@ -647,12 +653,18 @@ The DIC expects the required rules from R&amp;D teams. The DIC is responsible fo
 - Dashboards
 - etc.</field>
     </element>
+    <element class="Group" hash="GRO_1675866533852_20309">
+      <field name="name">Research Institution</field>
+    </element>
     <element class="OrganisationalUnit" hash="OUN_1617261795029_4226">
       <field name="name">Research Institution</field>
       <field name="description">represents researchers on behalf of their research institution</field>
     </element>
     <element class="Textfield" hash="TEX_1669815326099_56943">
       <field name="name">Research Institution</field>
+    </element>
+    <element class="Group" hash="GRO_1675866389324_16739">
+      <field name="name">Thrusted Third Party</field>
     </element>
     <element class="Function" hash="FUN_1669637392931_37213">
       <field name="name">Transfer Management</field>
@@ -1172,7 +1184,7 @@ dt. "KIS Integration", engl. "HIS Integration" (Research Part)</field>
       <field name="name">Zone: Patient Care</field>
     </element>
     <element class="Group" hash="GRO_1669924287955_26678">
-      <field name="name">Zone: Trust Unit</field>
+      <field name="name">Zone: Trusted Third Party</field>
     </element>
     <element class="Group" hash="GRO_1669902442714_7419">
       <field name="name">Zone: University Hospital</field>
@@ -2398,6 +2410,221 @@ dt. "KIS Integration", engl. "HIS Integration" (Research Part)</field>
       <field name="name">Beziehung 2</field>
       <field name="start">ASY_1617262857752_4296</field>
       <field name="end">USE_1669726590975_111205</field>
+    </element>
+    <element class="Group_HasPartEdge" hash="DLK_1675866209181_5111">
+      <field name="name">Hat-Teil-Beziehung 8</field>
+      <field name="start">GRO_1675866138203_4598</field>
+      <field name="end">OTY_1623309716982_29982</field>
+    </element>
+    <element class="Group_HasPartEdge" hash="DLK_1675866209206_5112">
+      <field name="name">Hat-Teil-Beziehung 22</field>
+      <field name="start">GRO_1675866138203_4598</field>
+      <field name="end">OTY_1623310421592_32348</field>
+    </element>
+    <element class="Group_HasPartEdge" hash="DLK_1675866209221_5113">
+      <field name="name">Hat-Teil-Beziehung 23</field>
+      <field name="start">GRO_1675866138203_4598</field>
+      <field name="end">OTY_1670253378881_57145</field>
+    </element>
+    <element class="Group_HasPartEdge" hash="DLK_1675866209235_5114">
+      <field name="name">Hat-Teil-Beziehung 24</field>
+      <field name="start">GRO_1675866138203_4598</field>
+      <field name="end">OTY_1623312568362_10601</field>
+    </element>
+    <element class="Group_HasPartEdge" hash="DLK_1675866209250_5115">
+      <field name="name">Hat-Teil-Beziehung 25</field>
+      <field name="start">GRO_1675866138203_4598</field>
+      <field name="end">OTY_1623309796307_30788</field>
+    </element>
+    <element class="Group_HasPartEdge" hash="DLK_1675866209264_5116">
+      <field name="name">Hat-Teil-Beziehung 26</field>
+      <field name="start">GRO_1675866138203_4598</field>
+      <field name="end">FUN_1669635066582_52296</field>
+    </element>
+    <element class="Group_HasPartEdge" hash="DLK_1675866209287_5117">
+      <field name="name">Hat-Teil-Beziehung 29</field>
+      <field name="start">GRO_1675866138203_4598</field>
+      <field name="end">OTY_1669638701886_44152</field>
+    </element>
+    <element class="Group_HasPartEdge" hash="DLK_1675866209311_5118">
+      <field name="name">Hat-Teil-Beziehung 34</field>
+      <field name="start">GRO_1675866138203_4598</field>
+      <field name="end">OTY_1669638689632_44086</field>
+    </element>
+    <element class="Group_HasPartEdge" hash="DLK_1675866316749_6434">
+      <field name="name">Hat-Teil-Beziehung 37</field>
+      <field name="start">GRO_1675866248061_5317</field>
+      <field name="end">FUN_1623309560371_27116</field>
+    </element>
+    <element class="Group_HasPartEdge" hash="DLK_1675866316787_6435">
+      <field name="name">Hat-Teil-Beziehung 38</field>
+      <field name="start">GRO_1675866248061_5317</field>
+      <field name="end">FUN_1669811318605_27951</field>
+    </element>
+    <element class="Group_HasPartEdge" hash="DLK_1675866316804_6436">
+      <field name="name">Hat-Teil-Beziehung 40</field>
+      <field name="start">GRO_1675866248061_5317</field>
+      <field name="end">FUN_1669643560392_49685</field>
+    </element>
+    <element class="Group_HasPartEdge" hash="DLK_1675866316817_6437">
+      <field name="name">Hat-Teil-Beziehung 41</field>
+      <field name="start">GRO_1675866248061_5317</field>
+      <field name="end">FUN_1623309343448_23675</field>
+    </element>
+    <element class="Group_HasPartEdge" hash="DLK_1675866316831_6438">
+      <field name="name">Hat-Teil-Beziehung 45</field>
+      <field name="start">GRO_1675866248061_5317</field>
+      <field name="end">FUN_1669637392931_37213</field>
+    </element>
+    <element class="Group_HasPartEdge" hash="DLK_1675866316846_6439">
+      <field name="name">Hat-Teil-Beziehung 53</field>
+      <field name="start">GRO_1675866248061_5317</field>
+      <field name="end">OTY_1669643631536_50069</field>
+    </element>
+    <element class="Group_HasPartEdge" hash="DLK_1675866316860_6440">
+      <field name="name">Hat-Teil-Beziehung 67</field>
+      <field name="start">GRO_1675866248061_5317</field>
+      <field name="end">OTY_1669811347963_28144</field>
+    </element>
+    <element class="Group_HasPartEdge" hash="DLK_1675866316873_6441">
+      <field name="name">Hat-Teil-Beziehung 68</field>
+      <field name="start">GRO_1675866248061_5317</field>
+      <field name="end">OTY_1669637616885_39457</field>
+    </element>
+    <element class="Group_HasPartEdge" hash="DLK_1675866316887_6442">
+      <field name="name">Hat-Teil-Beziehung 69</field>
+      <field name="start">GRO_1675866248061_5317</field>
+      <field name="end">OTY_1669637527197_39074</field>
+    </element>
+    <element class="Group_HasPartEdge" hash="DLK_1675866316901_6443">
+      <field name="name">Hat-Teil-Beziehung 70</field>
+      <field name="start">GRO_1675866248061_5317</field>
+      <field name="end">OTY_1623309983311_31526</field>
+    </element>
+    <element class="Group_HasPartEdge" hash="DLK_1675866316916_6444">
+      <field name="name">Hat-Teil-Beziehung 71</field>
+      <field name="start">GRO_1675866248061_5317</field>
+      <field name="end">OTY_1669903773213_17008</field>
+    </element>
+    <element class="Group_HasPartEdge" hash="DLK_1675866316943_6445">
+      <field name="name">Hat-Teil-Beziehung 72</field>
+      <field name="start">GRO_1675866248061_5317</field>
+      <field name="end">TEX_1623310315102_32342</field>
+    </element>
+    <element class="Group_HasPartEdge" hash="DLK_1675866316969_6446">
+      <field name="name">Hat-Teil-Beziehung 73</field>
+      <field name="start">GRO_1675866248061_5317</field>
+      <field name="end">AUF_1489483574688_48497</field>
+    </element>
+    <element class="Group_HasPartEdge" hash="DLK_1675866316985_6447">
+      <field name="name">Hat-Teil-Beziehung 74</field>
+      <field name="start">GRO_1675866248061_5317</field>
+      <field name="end">AUF_1489483574728_48569</field>
+    </element>
+    <element class="Group_HasPartEdge" hash="DLK_1675866317000_6448">
+      <field name="name">Hat-Teil-Beziehung 75</field>
+      <field name="start">GRO_1675866248061_5317</field>
+      <field name="end">FUN_1669637129582_33279</field>
+    </element>
+    <element class="Group_HasPartEdge" hash="DLK_1675866317016_6449">
+      <field name="name">Hat-Teil-Beziehung 76</field>
+      <field name="start">GRO_1675866248061_5317</field>
+      <field name="end">FUN_1623311465095_34759</field>
+    </element>
+    <element class="Group_HasPartEdge" hash="DLK_1675866317033_6450">
+      <field name="name">Hat-Teil-Beziehung 77</field>
+      <field name="start">GRO_1675866248061_5317</field>
+      <field name="end">OTY_1623311018457_33882</field>
+    </element>
+    <element class="Group_HasPartEdge" hash="DLK_1675866317049_6451">
+      <field name="name">Hat-Teil-Beziehung 78</field>
+      <field name="start">GRO_1675866248061_5317</field>
+      <field name="end">OTY_1669714493449_9053</field>
+    </element>
+    <element class="Group_HasPartEdge" hash="DLK_1675866317065_6452">
+      <field name="name">Hat-Teil-Beziehung 79</field>
+      <field name="start">GRO_1675866248061_5317</field>
+      <field name="end">OTY_1623312069832_10573</field>
+    </element>
+    <element class="Group_HasPartEdge" hash="DLK_1675866317082_6453">
+      <field name="name">Hat-Teil-Beziehung 80</field>
+      <field name="start">GRO_1675866248061_5317</field>
+      <field name="end">OTY_1623310955638_33878</field>
+    </element>
+    <element class="Group_HasPartEdge" hash="DLK_1675866317100_6454">
+      <field name="name">Hat-Teil-Beziehung 81</field>
+      <field name="start">GRO_1675866248061_5317</field>
+      <field name="end">OTY_1669638820837_44641</field>
+    </element>
+    <element class="Group_HasPartEdge" hash="DLK_1675866317118_6455">
+      <field name="name">Hat-Teil-Beziehung 82</field>
+      <field name="start">GRO_1675866248061_5317</field>
+      <field name="end">OTY_1669638820837_44642</field>
+    </element>
+    <element class="Group_HasPartEdge" hash="DLK_1675866317135_6456">
+      <field name="name">Hat-Teil-Beziehung 83</field>
+      <field name="start">GRO_1675866248061_5317</field>
+      <field name="end">OTY_1669714724412_12102</field>
+    </element>
+    <element class="Group_HasPartEdge" hash="DLK_1675866317152_6457">
+      <field name="name">Hat-Teil-Beziehung 84</field>
+      <field name="start">GRO_1675866248061_5317</field>
+      <field name="end">OTY_1669714724409_12101</field>
+    </element>
+    <element class="Group_HasPartEdge" hash="DLK_1675866317172_6458">
+      <field name="name">Hat-Teil-Beziehung 85</field>
+      <field name="start">GRO_1675866248061_5317</field>
+      <field name="end">OTY_1669638823472_44665</field>
+    </element>
+    <element class="Group_HasPartEdge" hash="DLK_1675866317190_6459">
+      <field name="name">Hat-Teil-Beziehung 86</field>
+      <field name="start">GRO_1675866248061_5317</field>
+      <field name="end">OTY_1669638823470_44664</field>
+    </element>
+    <element class="Group_HasPartEdge" hash="DLK_1675866317209_6460">
+      <field name="name">Hat-Teil-Beziehung 87</field>
+      <field name="start">GRO_1675866248061_5317</field>
+      <field name="end">OTY_1669638807290_44518</field>
+    </element>
+    <element class="Group_HasPartEdge" hash="DLK_1675866317226_6461">
+      <field name="name">Hat-Teil-Beziehung 88</field>
+      <field name="start">GRO_1675866248061_5317</field>
+      <field name="end">OTY_1669638807291_44519</field>
+    </element>
+    <element class="Group_HasPartEdge" hash="DLK_1675866449653_17476">
+      <field name="name">Hat-Teil-Beziehung 89</field>
+      <field name="start">GRO_1675866389324_16739</field>
+      <field name="end">FUN_1623311166767_34592</field>
+    </element>
+    <element class="Group_HasPartEdge" hash="DLK_1675866449698_17477">
+      <field name="name">Hat-Teil-Beziehung 90</field>
+      <field name="start">GRO_1675866389324_16739</field>
+      <field name="end">FUN_1623312212282_10583</field>
+    </element>
+    <element class="Group_HasPartEdge" hash="DLK_1675866449717_17478">
+      <field name="name">Hat-Teil-Beziehung 91</field>
+      <field name="start">GRO_1675866389324_16739</field>
+      <field name="end">FUN_1669712657595_7725</field>
+    </element>
+    <element class="Group_HasPartEdge" hash="DLK_1675866449734_17479">
+      <field name="name">Hat-Teil-Beziehung 92</field>
+      <field name="start">GRO_1675866389324_16739</field>
+      <field name="end">FUN_1623312123023_10575</field>
+    </element>
+    <element class="Group_HasPartEdge" hash="DLK_1675866563052_21046">
+      <field name="name">Hat-Teil-Beziehung 93</field>
+      <field name="start">GRO_1675866533852_20309</field>
+      <field name="end">FUN_1669637728880_40460</field>
+    </element>
+    <element class="Group_HasPartEdge" hash="DLK_1675866563098_21047">
+      <field name="name">Hat-Teil-Beziehung 94</field>
+      <field name="start">GRO_1675866533852_20309</field>
+      <field name="end">FUN_1669727345133_120901</field>
+    </element>
+    <element class="Group_HasPartEdge" hash="DLK_1675866563117_21048">
+      <field name="name">Hat-Teil-Beziehung 95</field>
+      <field name="start">GRO_1675866533852_20309</field>
+      <field name="end">FUN_1669727157016_119722</field>
     </element>
     <element class="PartableApplicationComponent_CommunicationInterface_Edge" hash="DLK_1617263022095_4314">
       <field name="name">Unterordunungsbeziehung 1</field>
@@ -4994,14 +5221,14 @@ dt. "KIS Integration", engl. "HIS Integration" (Research Part)</field>
     <description></description>
     <view>
       <selected>true</selected>
-      <x>0</x>
-      <y>0</y>
-      <zoom>0.3</zoom>
+      <x>564</x>
+      <y>476</y>
+      <zoom>0.7</zoom>
       <degree>66</degree>
       <shift>435</shift>
-      <pageSizeFactor>1.7291666666666667</pageSizeFactor>
-      <activeLayer>2</activeLayer>
-      <multiView>true</multiView>
+      <pageSizeFactor>3.02734375</pageSizeFactor>
+      <activeLayer>0</activeLayer>
+      <multiView>false</multiView>
     </view>
     <mapping>
       <layout class="Bendpoint">
@@ -5044,7 +5271,7 @@ dt. "KIS Integration", engl. "HIS Integration" (Research Part)</field>
           <green>0</green>
           <blue>0</blue>
         </color>
-        <form>0</form>
+        <form>8</form>
         <font_family>SansSerif</font_family>
         <font_style>0</font_style>
         <font_size>12</font_size>
@@ -8002,7 +8229,7 @@ dt. "KIS Integration", engl. "HIS Integration" (Research Part)</field>
           <alpha>128</alpha>
         </color>
       </layout>
-      <container hash="TEX_1669815326099_56943">
+      <container hash="GRO_1675866533852_20309">
         <layout>
           <color name="bg_color">
             <red>204</red>
@@ -8019,24 +8246,7 @@ dt. "KIS Integration", engl. "HIS Integration" (Research Part)</field>
           <valign>BOTTOM</valign>
         </layout>
       </container>
-      <container hash="TEX_1669815150465_55981">
-        <layout>
-          <color name="bg_color">
-            <red>204</red>
-            <green>255</green>
-            <blue>204</blue>
-          </color>
-          <font_family>SansSerif</font_family>
-          <font_style>0</font_style>
-          <font_size>16</font_size>
-          <x>-505</x>
-          <y>-305</y>
-          <width>450</width>
-          <height>270</height>
-          <valign>TOP</valign>
-        </layout>
-      </container>
-      <container hash="TEX_1623310315102_32342">
+      <container hash="GRO_1675866248061_5317">
         <layout>
           <color name="bg_color">
             <red>204</red>
@@ -8053,7 +8263,96 @@ dt. "KIS Integration", engl. "HIS Integration" (Research Part)</field>
           <valign>BOTTOM</valign>
         </layout>
       </container>
+      <container hash="GRO_1675866389324_16739">
+        <layout>
+          <color name="bg_color">
+            <red>255</red>
+            <green>204</green>
+            <blue>153</blue>
+          </color>
+          <font_family>SansSerif</font_family>
+          <font_style>0</font_style>
+          <font_size>16</font_size>
+          <x>360</x>
+          <y>-181</y>
+          <width>384</width>
+          <height>248</height>
+          <valign>TOP</valign>
+        </layout>
+      </container>
+      <container hash="TEX_1623310315102_32342">
+        <visible>false</visible>
+        <layout>
+          <color name="bg_color">
+            <red>204</red>
+            <green>204</green>
+            <blue>204</blue>
+          </color>
+          <font_family>SansSerif</font_family>
+          <font_style>0</font_style>
+          <font_size>16</font_size>
+          <x>-45</x>
+          <y>152</y>
+          <width>1370</width>
+          <height>626</height>
+          <valign>BOTTOM</valign>
+        </layout>
+      </container>
+      <container hash="TEX_1669815150465_55981">
+        <visible>false</visible>
+        <layout>
+          <color name="bg_color">
+            <red>204</red>
+            <green>255</green>
+            <blue>204</blue>
+          </color>
+          <font_family>SansSerif</font_family>
+          <font_style>0</font_style>
+          <font_size>16</font_size>
+          <x>-505</x>
+          <y>-305</y>
+          <width>450</width>
+          <height>270</height>
+          <valign>TOP</valign>
+        </layout>
+      </container>
+      <container hash="GRO_1675866138203_4598">
+        <layout>
+          <color name="bg_color">
+            <red>204</red>
+            <green>255</green>
+            <blue>204</blue>
+          </color>
+          <font_family>SansSerif</font_family>
+          <font_style>0</font_style>
+          <font_size>16</font_size>
+          <x>-505</x>
+          <y>-305</y>
+          <width>450</width>
+          <height>270</height>
+          <valign>TOP</valign>
+        </layout>
+      </container>
+      <container hash="TEX_1669815326099_56943">
+        <visible>false</visible>
+        <layout>
+          <color name="bg_color">
+            <red>204</red>
+            <green>255</green>
+            <blue>255</blue>
+          </color>
+          <font_family>SansSerif</font_family>
+          <font_style>0</font_style>
+          <font_size>16</font_size>
+          <x>767</x>
+          <y>333</y>
+          <width>235</width>
+          <height>214</height>
+          <valign>BOTTOM</valign>
+        </layout>
+      </container>
       <container hash="TEX_1669815062113_54437">
+        <visible>false</visible>
         <layout>
           <color name="bg_color">
             <red>255</red>
@@ -8593,6 +8892,49 @@ dt. "KIS Integration", engl. "HIS Integration" (Research Part)</field>
       <container hash="DLK_1669900458973_25191"></container>
       <container hash="DLK_1669903795232_17129"></container>
       <container hash="DLK_1670253378883_57148"></container>
+      <container hash="DLK_1675866209181_5111"></container>
+      <container hash="DLK_1675866209206_5112"></container>
+      <container hash="DLK_1675866209221_5113"></container>
+      <container hash="DLK_1675866209235_5114"></container>
+      <container hash="DLK_1675866209250_5115"></container>
+      <container hash="DLK_1675866209264_5116"></container>
+      <container hash="DLK_1675866209287_5117"></container>
+      <container hash="DLK_1675866209311_5118"></container>
+      <container hash="DLK_1675866316749_6434"></container>
+      <container hash="DLK_1675866316787_6435"></container>
+      <container hash="DLK_1675866316804_6436"></container>
+      <container hash="DLK_1675866316817_6437"></container>
+      <container hash="DLK_1675866316831_6438"></container>
+      <container hash="DLK_1675866316846_6439"></container>
+      <container hash="DLK_1675866316860_6440"></container>
+      <container hash="DLK_1675866316873_6441"></container>
+      <container hash="DLK_1675866316887_6442"></container>
+      <container hash="DLK_1675866316901_6443"></container>
+      <container hash="DLK_1675866316916_6444"></container>
+      <container hash="DLK_1675866316943_6445"></container>
+      <container hash="DLK_1675866316969_6446"></container>
+      <container hash="DLK_1675866316985_6447"></container>
+      <container hash="DLK_1675866317000_6448"></container>
+      <container hash="DLK_1675866317016_6449"></container>
+      <container hash="DLK_1675866317033_6450"></container>
+      <container hash="DLK_1675866317049_6451"></container>
+      <container hash="DLK_1675866317065_6452"></container>
+      <container hash="DLK_1675866317082_6453"></container>
+      <container hash="DLK_1675866317100_6454"></container>
+      <container hash="DLK_1675866317118_6455"></container>
+      <container hash="DLK_1675866317135_6456"></container>
+      <container hash="DLK_1675866317152_6457"></container>
+      <container hash="DLK_1675866317172_6458"></container>
+      <container hash="DLK_1675866317190_6459"></container>
+      <container hash="DLK_1675866317209_6460"></container>
+      <container hash="DLK_1675866317226_6461"></container>
+      <container hash="DLK_1675866449653_17476"></container>
+      <container hash="DLK_1675866449698_17477"></container>
+      <container hash="DLK_1675866449717_17478"></container>
+      <container hash="DLK_1675866449734_17479"></container>
+      <container hash="DLK_1675866563052_21046"></container>
+      <container hash="DLK_1675866563098_21047"></container>
+      <container hash="DLK_1675866563117_21048"></container>
       <container hash="BEN_1669714493454_9058">
         <layout>
           <color name="bg_color">
@@ -8638,7 +8980,7 @@ dt. "KIS Integration", engl. "HIS Integration" (Research Part)</field>
             <alpha>0</alpha>
           </color>
           <x>-140</x>
-          <y>-152</y>
+          <y>-149</y>
         </layout>
       </container>
       <container hash="BEN_1669899165360_11690">
@@ -8806,7 +9148,7 @@ dt. "KIS Integration", engl. "HIS Integration" (Research Part)</field>
             <alpha>0</alpha>
           </color>
           <x>-140</x>
-          <y>-107</y>
+          <y>-104</y>
         </layout>
       </container>
       <container hash="BEN_1669637181730_33543">
@@ -8866,7 +9208,7 @@ dt. "KIS Integration", engl. "HIS Integration" (Research Part)</field>
             <alpha>0</alpha>
           </color>
           <x>-200</x>
-          <y>-212</y>
+          <y>-210</y>
         </layout>
       </container>
       <container hash="BEN_1669899082680_9906">
@@ -8878,7 +9220,7 @@ dt. "KIS Integration", engl. "HIS Integration" (Research Part)</field>
             <alpha>0</alpha>
           </color>
           <x>-170</x>
-          <y>-197</y>
+          <y>-194</y>
         </layout>
       </container>
       <container hash="BEN_1669899147285_11258">
@@ -8890,7 +9232,7 @@ dt. "KIS Integration", engl. "HIS Integration" (Research Part)</field>
             <alpha>0</alpha>
           </color>
           <x>-200</x>
-          <y>-122</y>
+          <y>-120</y>
         </layout>
       </container>
       <container hash="BEN_1669899076417_9722">
@@ -8902,7 +9244,7 @@ dt. "KIS Integration", engl. "HIS Integration" (Research Part)</field>
             <alpha>0</alpha>
           </color>
           <x>-140</x>
-          <y>-187</y>
+          <y>-184</y>
         </layout>
       </container>
       <container hash="BEN_1669899122100_10591">
@@ -8914,7 +9256,7 @@ dt. "KIS Integration", engl. "HIS Integration" (Research Part)</field>
             <alpha>0</alpha>
           </color>
           <x>-200</x>
-          <y>-168</y>
+          <y>-165</y>
         </layout>
       </container>
       <container hash="BEN_1669639104920_45959">
@@ -8950,7 +9292,7 @@ dt. "KIS Integration", engl. "HIS Integration" (Research Part)</field>
             <alpha>0</alpha>
           </color>
           <x>-170</x>
-          <y>-97</y>
+          <y>-94</y>
         </layout>
       </container>
       <container hash="BEN_1669899465482_15093">
