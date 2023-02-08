@@ -7,6 +7,7 @@ target
 Plugins
 de.imise.tool3lgm.deploy/Tool3lgm/lib
 de.imise.tool3lgm.deploy/Tool3lgm/Templates
+de.imise.tool3lgm.deploy/Tool3lgm/Examples
 de.imise.tool3lgm.deploy/DeployResults
 de.imise.tool3lgm.deploy/Tool3lgm/Tool3lgm_de.analysis
 de.imise.tool3lgm.deploy/Tool3lgm/Tool3lgm.analysis
