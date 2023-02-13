@@ -6,7 +6,7 @@
 
 [The Metamodel](02. 3LGM² Metamodel)
 
-[The 3LGM² Toolkit](03. The 3LGM² Toolkit)
+[The 3LGM² Tool](03. The 3LGM² Tool)
 
 -------------------
 ## 3LGM-IHE
