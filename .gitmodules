@@ -1,3 +1,5 @@
 [submodule "wiki"]
 	path = wiki
 	url = git@bitbucket.org:imise/tool-3lgm2.git/wiki
+	ignore = untracked
+	branch = master
