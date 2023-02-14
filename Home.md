@@ -1,4 +1,4 @@
-# Welcome to 3LGM² tool documentation
+# Welcome to 3LGM²-Tool documentation
 
 ## Fundamentals
 
@@ -6,7 +6,7 @@
 
 [The Metamodel](02. 3LGM² Metamodel)
 
-[The 3LGM² Tool](03. The 3LGM² Tool)
+[The 3LGM²-Tool](03. The 3LGM²-Tool)
 
 -------------------
 ## 3LGM-IHE
