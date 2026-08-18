@@ -1,6 +1,6 @@
-<?xml version="1.0" encoding="iso-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 
-<!--name: Organisationseinheiten: unterstützende Anwendungsbausteine -->
+<!--name: Organisationseinheiten: unterstÃ¼tzende Anwendungsbausteine -->
 <!--type: html -->
 <!--description: Welche Organisationseinheiten nutzen welche Anwendungsbausteine? -->
 <!--author: Oliver Heller -->

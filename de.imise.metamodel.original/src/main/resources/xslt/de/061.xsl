@@ -1,8 +1,8 @@
-<?xml version="1.0" encoding="iso-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 
-<!--name: Software: unterstützende Aufgaben -->
+<!--name: Software: unterstÃ¼tzende Aufgaben -->
 <!--type: html -->
-<!--description: Welche Software unterstützt welche Aufgaben? -->
+<!--description: Welche Software unterstÃ¼tzt welche Aufgaben? -->
 <!--author: Oliver Heller -->
 
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
@@ -83,7 +83,7 @@
 	<xsl:template match="/">
 		<html>
 			<head>
-				<title>Welche Software unterstützt welche Aufgaben?</title>
+				<title>Welche Software unterstÃ¼tzt welche Aufgaben?</title>
 				<meta name="author" content="Tool3lgm" />
 			</head>
 			<body>
@@ -91,7 +91,7 @@
 					Diese HTML-Datei wurde maschinell aus einem 3LGM&#178;-Modell
 					erzeugt.
 				</xsl:comment>
-				<h1>Welche Software wird zur Unterstützung welcher Aufgaben genutzt?</h1>
+				<h1>Welche Software wird zur UnterstÃ¼tzung welcher Aufgaben genutzt?</h1>
 				<h2>
 					<xsl:value-of select="modell_3lgm_2/header/title" />
 				</h2>

@@ -1,8 +1,8 @@
-<?xml version="1.0" encoding="iso-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 
 <!--name: Objekttypen: Kommunikation -->
 <!--type: html -->
-<!--description: Welche Objekttypen können zwischen welchen Anwendungsbausteinen 
+<!--description: Welche Objekttypen kÃ¶nnen zwischen welchen Anwendungsbausteinen 
 	kommuniziert werden? -->
 <!--author: Thomas Rudert -->
 
@@ -49,12 +49,12 @@
 
 	<!-- Schluessel zur Auswahl von Elementen -->
 
-	<!-- Kanten von Objekttyp zu Repräsentationsform (Nachrichtentyp/Dokumententyp) -->
+	<!-- Kanten von Objekttyp zu ReprÃ¤sentationsform (Nachrichtentyp/Dokumententyp) -->
 	<xsl:key name="kanteObjRep"
 		match="/modell_3lgm_2/objects/element[@class='ObjReprVerbindung']"
 		use="child::field[@name='start']" />
 
-	<!-- Kanten von Repräsentationsform (Nachrichtentyp/Dokumententyp) zu ETNT 
+	<!-- Kanten von ReprÃ¤sentationsform (Nachrichtentyp/Dokumententyp) zu ETNT 
 		(Kanten beginnen bei ETNT) -->
 	<xsl:key name="kanteRepEtnt"
 		match="/modell_3lgm_2/objects/element[@class='EtntDotVerbindung' or @class='EtntNatVerbindung']"
@@ -89,7 +89,7 @@
 	<xsl:key name="kanteEtntEt"
 		match="/modell_3lgm_2/objects/element[@class='EtntEtVerbindung']" use="child::field[@name='start']" />
 
-	<!-- Kante von Anwendungsbaustein (rechnerunterstütz/konventionell/gemischt) 
+	<!-- Kante von Anwendungsbaustein (rechnerunterstÃ¼tz/konventionell/gemischt) 
 		zu Bausteinschnittstelle -->
 	<xsl:key name="kanteAnwBau"
 		match="/modell_3lgm_2/objects/element[@class='AwbKommssVerbindung']"

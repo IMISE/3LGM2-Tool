@@ -1,8 +1,8 @@
-<?xml version="1.0" encoding="iso-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 
 <!--name: Elemente: Statistik -->
 <!--type: html -->
-<!--description: Erstellt eine Statistik über die Anzahl der einzelnen Objekte 
+<!--description: Erstellt eine Statistik Ã¼ber die Anzahl der einzelnen Objekte 
 	im Modell -->
 <!--author: Thomas Rudert -->
 

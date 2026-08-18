@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='ISO-8859-1'  ?>
+<?xml version='1.0' encoding='UTF-8'  ?>
 <!DOCTYPE toc PUBLIC "-//Sun Microsystems Inc.//DTD JavaHelp TOC Version 1.0//EN"
             "http://java.sun.com/products/javahelp/toc_1_0.dtd">
 
@@ -10,7 +10,7 @@
 		<tocitem text="Add elements" target="neueElemente"/>
 	</tocitem>
 
-	<tocitem text="The 3LGM² Metamodel" expand="false">
+	<tocitem text="The 3LGMÂ² Metamodel" expand="false">
 		<tocitem text="Domain Layer" target="modell_fachlich"/>
 		<tocitem text="Logical Tool Layer" target="modell_logisch"/>
 		<tocitem text="Physical Tool Layer" target="modell_physisch"/>
@@ -19,7 +19,7 @@
 		<tocitem text="Literature" target="modell_literatur"/>
 	</tocitem>
 
-	<tocitem text="The 3LGM² Toolkit" expand="false">
+	<tocitem text="The 3LGMÂ² Toolkit" expand="false">
 		<tocitem text="Overview" target="baukasten_uebersicht"/>
 		<tocitem text="Inserting and modifying model elements" target="dialoge"/>
 		<tocitem text="The Matrix-View" target="matrixsicht"/>

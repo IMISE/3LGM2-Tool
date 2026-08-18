@@ -1,8 +1,8 @@
-<?xml version="1.0" encoding="iso-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 
 <!--name: Physische Datenverarbeitungsbausteine: gruppiert nach Bausteintyp -->
 <!--type: html -->
-<!--description: Welche Physischen Datenverarbeitungsbausteine gehören zu 
+<!--description: Welche Physischen Datenverarbeitungsbausteine gehÃ¶ren zu 
 	welchem Bausteintyp? Eigenschaften der Physischen Datenverarbeitungsbausteine? -->
 <!--author: Thomas Rudert -->
 

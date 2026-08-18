@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="iso-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 
 <!--name: Objekttypen: Speicherung -->
 <!--type: html -->
@@ -278,7 +278,7 @@
 							<xsl:with-param name="maxKanteDbsAwb" select="$maxKanteDbsAwb" />
 							<xsl:with-param name="indexKanteDbsAwb" select="$indexKanteDbsAwb + 1" />
 							<xsl:with-param name="ergebnis"
-								select="concat($ergebnis, '§$§' , $hash)" />
+								select="concat($ergebnis, 'Â§$Â§' , $hash)" />
 							<xsl:with-param name="counter" select="$counter + 1" />
 						</xsl:call-template>
 					</xsl:otherwise>
@@ -319,7 +319,7 @@
 					</td>
 					<xsl:call-template name="stringTrennen">
 						<xsl:with-param name="zeichenkette"
-							select="substring-after($ergebnis, '§$§')" />
+							select="substring-after($ergebnis, 'Â§$Â§')" />
 						<xsl:with-param name="eintraege" select="$anzahl" />
 					</xsl:call-template>
 				</xsl:when>
@@ -349,16 +349,16 @@
 			<xsl:when test="$eintraege &gt; 1">
 				<td>
 					<xsl:value-of
-						select="str:removeLineBreak(key('hash', substring-before($zeichenkette, '§$§'))/child::field[@name='name'])" />
+						select="str:removeLineBreak(key('hash', substring-before($zeichenkette, 'Â§$Â§'))/child::field[@name='name'])" />
 					<xsl:text> (</xsl:text>
 					<xsl:value-of
-						select="key('hash',key('SW',key('AWP',substring-before($zeichenkette, '§$§'))/child::field[@name='end'])/child::field[@name='end'])/child::field[@name='name']" />
+						select="key('hash',key('SW',key('AWP',substring-before($zeichenkette, 'Â§$Â§'))/child::field[@name='end'])/child::field[@name='end'])/child::field[@name='name']" />
 					<xsl:text>) </xsl:text>
 				</td>
 				<xsl:text disable-output-escaping="yes">&lt;/tr&gt;&lt;tr&gt;</xsl:text>
 				<xsl:call-template name="stringTrennen">
 					<xsl:with-param name="zeichenkette"
-						select="substring-after($zeichenkette, '§$§')" />
+						select="substring-after($zeichenkette, 'Â§$Â§')" />
 					<xsl:with-param name="eintraege" select="$eintraege - 1" />
 				</xsl:call-template>
 			</xsl:when>
