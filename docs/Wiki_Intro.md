@@ -1,22 +1,19 @@
-# Welcome
+# Dokumentation bearbeiten
 
-Welcome to your wiki! This is the default page we've installed for your convenience. Go ahead and edit it.
+Die Dokumentation wird als Markdown im Verzeichnis `docs` des Projekt-Repositorys
+gepflegt und als GitHub-Pages-Site veröffentlicht.
 
--Das ist ein Test -
+## Lokale Bearbeitung
 
-## Wiki features
-
-This wiki uses the [Markdown](http://daringfireball.net/projects/markdown/) syntax.
-
-The wiki itself is actually a git repository, which means you can clone it, edit it locally/offline, add images or any other file type, and push it back to us. It will be live immediately.
-
-Go ahead and try:
+Das Repository kann lokal geklont, die Dokumentation bearbeitet und die Änderungen
+anschließend per Pull Request eingereicht werden:
 
 ```
-$ git clone https://imise@bitbucket.org/imise/tool-3lgm2.git/wiki
+$ git clone https://github.com/IMISE/3LGM2-Tool.git
 ```
 
-Wiki pages are normal files, with the .md extension. You can edit them locally, as well as creating new ones.
+Die Dokumentationsseiten sind normale Dateien mit der Endung `.md`. Sie können lokal
+bearbeitet und um neue Seiten ergänzt werden.
 
 ## Syntax highlighting
 
