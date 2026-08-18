@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="iso-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 
 <!--name: Anwendungsbausteine: auf welchen physischen Datenverarbeitungsbausteinen -->
 <!--type: html -->
@@ -14,7 +14,7 @@
 		select="'Welche Anwendungsbausteine sind auf welchen Physischen Datenverarbeitungsbausteinen installiert?'" />
 	<xsl:variable name="cont_text" select="'Inhalt'" />
 	<xsl:variable name="comp_text"
-		select="'rechnerunterstützte Anwendungsbausteine'" />
+		select="'rechnerunterstÃ¼tzte Anwendungsbausteine'" />
 	<xsl:variable name="paper_text" select="'papierbasierte Anwendungsbausteine'" />
 	<xsl:variable name="appl_text" select="'Anwendungsbaustein'" />
 	<xsl:variable name="conf_text"

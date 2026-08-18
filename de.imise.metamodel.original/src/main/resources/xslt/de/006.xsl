@@ -1,6 +1,6 @@
-<?xml version="1.0" encoding="iso-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 
-<!--name: Anwendungsbausteine: Übersicht -->
+<!--name: Anwendungsbausteine: Ãœbersicht -->
 <!--type: html -->
 <!--description: extrahiert alle Anwendungsbausteine mit Namen und Beschreibungen -->
 <!--author: Thomas Trommer -->
@@ -26,11 +26,11 @@
 		</xsl:choose>
 	</xsl:function>
 
-	<!--Überschrift -->
+	<!--Ãœberschrift -->
 	<xsl:variable name="header_text"
 		select="'Alle Anwendungsbausteine des Modells'" />
 
-	<!--Key - für die Performance -->
+	<!--Key - fÃ¼r die Performance -->
 	<xsl:key name="element" match="modell_3lgm_2/objects/element"
 		use="@class" />
 
