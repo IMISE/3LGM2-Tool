@@ -13,18 +13,18 @@
 
 ### 3LGM-IHE
 
-[Introduction in 3LGM² and IHE](IHE/1. Introduction "Introduction IHE chapter")
+[Introduction in 3LGM² and IHE](/IHE/1.%20Introduction "Introduction IHE chapter")
 
-[Dependencies between IHE Actos (MustBeGroupedWith)](IHE/MustBeGroupedWith "MustBeGroupedWith functionality")
+[Dependencies between IHE Actos (MustBeGroupedWith)](/IHE/MustBeGroupedWith "MustBeGroupedWith functionality")
 
 ### 3LGM-FHIR
-<ToDo>
+TODO
 
 -------------------
 
 ## Frequently asked questions
 
-[FAQ](FAQ - English "Frequently asked questions")
+[FAQ](/FAQ%20-%20English "Frequently asked questions")
 
 --------------------------
 
