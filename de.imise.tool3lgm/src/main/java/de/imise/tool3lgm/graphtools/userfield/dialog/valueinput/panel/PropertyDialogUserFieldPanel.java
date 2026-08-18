@@ -901,7 +901,7 @@ public class PropertyDialogUserFieldPanel extends ElementDialogPanel implements 
         System.err.println("ipady = " + c.ipady);
         System.err.println("weightx = " + c.weightx);
         System.err.println("weighty = " + c.weighty);
-        Sys.errm(1, 1, null);
+        Sys.errm(1, 1, (Object) null);
     }
 
     /**

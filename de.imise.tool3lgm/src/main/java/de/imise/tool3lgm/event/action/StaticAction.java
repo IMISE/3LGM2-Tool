@@ -224,7 +224,7 @@ public abstract class StaticAction extends ExtendedAction {
      */
     public final void setReplacedText(final String... replacements) {
         String text = getText();
-        text = Tool3lgmConstants.getReplacedString(text, replacements);
+        text = Tool3lgmConstants.getReplacedString(text, (Object[]) replacements);
         setText(text);
     }
 
