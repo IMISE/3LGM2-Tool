@@ -49,11 +49,17 @@ export default defineConfig({
         ]
       },
       {
-        text: 'Weitere Themen',
+        text: '3LGM² und IHE',
         items: [
           { text: 'IHE: Einführung', link: '/IHE/1.%20Introduction' },
           { text: 'IHE: Actors verwenden', link: '/IHE/Usage%20of%20IHE%20Actors' },
-          { text: 'IHE: Transactions verwenden', link: '/IHE/Usage%20of%20IHE%20Transactions' },
+          { text: 'IHE: Actor-Abhängigkeiten', link: '/IHE/MusBeGroupedWith' },
+          { text: 'IHE: Transactions verwenden', link: '/IHE/Usage%20of%20IHE%20Transactions' }
+        ]
+      },
+      {
+        text: 'Weitere Themen',
+        items: [
           { text: 'FAQ (Deutsch)', link: '/FAQ' },
           { text: 'FAQ (English)', link: '/FAQ%20-%20English' }
         ]
