@@ -93,14 +93,14 @@ Das Metamodell sieht das nicht vor, und der Baukasten (dementsprechend) auch nic
 #### ***1.5.1    Was bedeutet die Ist_Teil_von Beziehung zwischen Objekttypen?*** ####
 Diese ist_Teil_von Beziehung ist im Sinne einer Aggregation zu verstehen. Die sich hieraus ergebenden Konsequenzen für Beziehungen zwischen Modellkomponenten werden am Beispiel der Beziehung zwischen der Klasse Aufgabe und Objekttyp im folgenden verdeutlicht:
 
-![istTeilVon01.PNG](/images/firststeps/istTeilVon01.PNG)
+![istTeilVon01.png](/images/firststeps/istTeilVon01.png)
 
 1. Alle Teilaufgaben von PATIENTENAUFNAHME greifen interpretierend auf den Objekttyp FALL zu.
 2. Die Teilaufgabe ADMINISTRATIVE PATIENTENAUFNAHME greift bearbeitend auf alle Teil-Objekttypen zu.
 3. Die Teilaufgabe ÄRZTLICHE PATIENTENAUFNAHME greift bearbeitend auf den Objekttyp DIAGNOSE zu.
 
 #### ***1.5.2    Wie wirken sich die Ist-Teil_von Beziehungen beim Vergröbern und Verfeinern aus?*** ####
-![istTeilVon02.PNG](/images/firststeps/istTeilVon02.PNG)
+![istTeilVon02.png](/images/firststeps/istTeilVon02.png)
 
 Beim Vergröbern einer Instanz werden die Beziehungen der untergeordneten Instanzen an die übergeordnete Instanz weitergegeben. In der Darstellung wird unterschieden, ob lediglich Teile berührt sind, oder die Instanz als Ganzes. Im Beispiel ist dies durch farblich unterschiedliche Pfeile ausgedrückt. 
 
