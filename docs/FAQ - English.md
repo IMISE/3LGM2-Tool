@@ -94,7 +94,7 @@ The meta model does not provide for this, nor does the modelling tool (according
 #### ***1.5.1 What does the is_part_of relationship between object types mean?*** ####
 This is_part_of relationship is to be understood in the sense of an aggregation. The resulting consequences for relationships between model components are illustrated in the following using the example of the relationship between the class Function and Object Type:
 
-![istTeilVon01.PNG](/public/images/faq/istTeilVon01.PNG)
+![istTeilVon01.PNG](/images/faq/istTeilVon01.PNG)
 
 1 All subtasks of PATIENT CALL access the object type CASE interpretatively.
 2. the subtask ADMINISTRATIVE PATIENT CALL accesses all subtask object types in an editing manner.
@@ -102,7 +102,7 @@ The subtask MEDICAL PATIENT CALL accesses the object type DIAGNOSIS.
 
 
 #### ***1.5.2    How do the actual_part_of relationships affect coarsening and refining?*** ####
-![istTeilVon02.PNG](/public/images/faq/istTeilVon02.PNG)
+![istTeilVon02.PNG](/images/faq/istTeilVon02.PNG)
 
 When coarsening an instance, the relationships of the subordinate instances are passed on to the parent instance. In the representation, a distinction is made between whether only parts are touched or the instance as a whole. In the example this is expressed by arrows of different colors. 
 
