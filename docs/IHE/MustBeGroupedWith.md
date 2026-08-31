@@ -23,43 +23,43 @@ In the following image we modeled a Patient Management System.
 Starting from the bottom, first we will create the **application system** for patient management.
 For the Patient Management System we will add the **Patient Identity Source** from the **Patient Identifier Cross-referencing profile (PIX)**
 
-![patientManagementSystem.PNG](/public/images/ihe/patientManagementSystem.PNG)
+![patientManagementSystem.PNG](/images/ihe/patientManagementSystem.PNG)
 
 The **technical framework** states following groupings for the actors in the **Patient Identity Source** (PIX) profile.
 
-![mustbegroupedwith.PNG](/public/images/ihe/mustbegroupedwith.PNG)
+![mustbegroupedwith.PNG](/images/ihe/mustbegroupedwith.PNG)
 
 So when we **add** the **Patient Identity Source** from the Template Browser
 
-![addingPIXSource.PNG](/public/images/ihe/addingPIXSource.PNG)
+![addingPIXSource.PNG](/images/ihe/addingPIXSource.PNG)
 
 we get following **error message** on the **bottom of the 3LGM tool** (Consistency Check view).
 
-![groupingError.PNG](/public/images/ihe/groupingError.PNG)
+![groupingError.PNG](/images/ihe/groupingError.PNG)
 
 The error message states, that the actor **needs to be grouped with another actor**. By **right clicking on the error** you have three options to resolv this issue.
 
 ### 1. Option: Property dialog for error-correcting
-![firstOption.PNG](/public/images/ihe/firstOption.PNG)
+![firstOption.PNG](/images/ihe/firstOption.PNG)
 
 The first option will open the property dialogue window showing the vacant IHE Actors on the right.
-![pDialogue.PNG](/public/images/ihe/pDialogue.PNG)
+![pDialogue.PNG](/images/ihe/pDialogue.PNG)
 
 Doubleclick on the added Actor (Patient Identity Source) and it will open another window. Here go to the tab **Grouping** to find out which actors have to be grouped with the current one. 
 
-![pDialogue2.PNG](/public/images/ihe/pDialogue2.PNG)
+![pDialogue2.PNG](/images/ihe/pDialogue2.PNG)
 
 Now go back to the first window and select the vacant Actor(s), in this case the Time Client and add it to your application system by clicking on the **<** button.
 
-![pDialogue3.PNG](/public/images/ihe/pDialogue3.PNG)
+![pDialogue3.PNG](/images/ihe/pDialogue3.PNG)
 
 ### 2. Option: Remove inconsistent Element
-![secondOption.PNG](/public/images/ihe/secondOption.PNG)
+![secondOption.PNG](/images/ihe/secondOption.PNG)
 
 This option will just remove the element, which generated the inconsistency error.
 
 ### 3. Option: Connect
 
-![groupingErrorResolve.PNG](/public/images/ihe/groupingErrorResolve.PNG)
+![groupingErrorResolve.PNG](/images/ihe/groupingErrorResolve.PNG)
 
 This will add the missing actor to the application system. There might be a need for readjusting the position but the error message will be resolved by this.
