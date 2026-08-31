@@ -6,6 +6,7 @@ export default defineConfig({
   description: 'Dokumentation des 3LGM²-Tools',
   base: '/3LGM2-Tool/',
   cleanUrls: true,
+  assetsInclude: ['**/*.PNG', '**/*.png', '**/*.jpg', '**/*.jpeg', '**/*.gif', '**/*.svg'],
   themeConfig: {
     nav: [
       { text: 'Dokumentation', link: '/01.%20First%20steps' },
