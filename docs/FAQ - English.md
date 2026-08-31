@@ -49,7 +49,7 @@ An interface is always a component interface when it is used to model a communic
 According to our metamodel, there are three ways in which an object type can be represented at the logical tool layer: as a message type, as a record type or as a document type. The representation as record type refers to the storage in a database system. The representation as message type refers to the communication between two computer-based application modules. The representation as document type refers to the storage in a document collection and the communication between two application components, of which at least one is paper-based.
 
 #### ***1.2.6    Can I understand the master DBS as the database management system as it is named in the model browser?*** ####
-No. See also [1.‎1.4](#markdown-header-114-what-should-i-do-with-the-master-dbs-in-the-object-typeproperties-dialoggeneral-on-the-domain-layer)
+No. See also [1.1.4](#markdown-header-114-what-should-i-do-with-the-master-dbs-in-the-object-typeproperties-dialoggeneral-on-the-domain-layer)
 
 #### ***1.2.7    When is it necessary to model non-computer supported application component interfaces? (e.g. if something is first documented on paper and later captured with a computer-based application component - Service arrangement)*** ####
 A typical example of data communication between a computer-based and a paper-based application component is the occurrence of media breaks. If one wants to model/see this, the following questions have to be asked for the interfaces:
@@ -63,7 +63,7 @@ Tip: Since users are not usually modeled in the 3LGM²-Tool, the use of the comp
 Our meta model allows one and the same interface to be both a sending and receiving interface. This is not obvious at first, since realistic interfaces are generally either send or receive interfaces. However, it should be considered that it will be desirable to model more abstractly. For example, if you only want to show that two application components communicate with each other in both directions, you will define an interface for each application component and connect them in both directions. The meta-model deliberately leaves open possibilities here, in order to enable the modeler to model his IS under different objectives and degrees of abstraction.
 
 #### ***1.2.9    How can I assign its master DBS on the logical layer to my database system?*** ####
-This is not possible. See also [1.‎1.4](#markdown-header-114-what-should-i-do-with-the-master-dbs-in-the-object-typeproperties-dialoggeneral-on-the-domain-layer)
+This is not possible. See also [1.1.4](#markdown-header-114-what-should-i-do-with-the-master-dbs-in-the-object-typeproperties-dialoggeneral-on-the-domain-layer)
 
 #### ***1.2.10    ETMT is not offered for the record type, only for the document type. How can I then model this for two computer-based application components?*** ####
 This is intended. Behind it is the following: If we are in the purely computer-based area, the communication takes place exclusively via message types, an ETMT combination is therefore not necessary for the data record type. The data record type only represents how object types are stored. In the paper-based area, on the other hand, the representation form document type is used both for communication and for storing object types. Therefore, we also need an ETMT combination ( which should actually be called ETDT combination ).
@@ -94,7 +94,7 @@ The meta model does not provide for this, nor does the modelling tool (according
 #### ***1.5.1 What does the is_part_of relationship between object types mean?*** ####
 This is_part_of relationship is to be understood in the sense of an aggregation. The resulting consequences for relationships between model components are illustrated in the following using the example of the relationship between the class Function and Object Type:
 
-![istTeilVon01.PNG](https://bitbucket.org/repo/9L6rMz/images/1072977069-istTeilVon01.PNG)
+![istTeilVon01.PNG](/public/images/faq/istTeilVon01.PNG)
 
 1 All subtasks of PATIENT CALL access the object type CASE interpretatively.
 2. the subtask ADMINISTRATIVE PATIENT CALL accesses all subtask object types in an editing manner.
@@ -102,7 +102,7 @@ The subtask MEDICAL PATIENT CALL accesses the object type DIAGNOSIS.
 
 
 #### ***1.5.2    How do the actual_part_of relationships affect coarsening and refining?*** ####
-![istTeilVon02.PNG](https://bitbucket.org/repo/9L6rMz/images/3419780724-istTeilVon02.PNG)
+![istTeilVon02.PNG](/public/images/faq/istTeilVon02.PNG)
 
 When coarsening an instance, the relationships of the subordinate instances are passed on to the parent instance. In the representation, a distinction is made between whether only parts are touched or the instance as a whole. In the example this is expressed by arrows of different colors. 
 
