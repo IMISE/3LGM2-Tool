@@ -1,8 +1,8 @@
 ---
-name: Bug report / Feature request
+name: Bug report
 about: Create a ticket to help us improve
-title: '[ISSUE] '
-labels: ''
+title: '[BUG] '
+labels: 'bug'
 assignees: ''
 
 ---
@@ -35,6 +35,11 @@ assignees: ''
 
 <!-- Fügen Sie bei Bedarf Screenshots oder Umgebungsinfos hinzu -->
 <!-- Add screenshots or environment info if needed -->
+
+## Umgebung
+- **3LGM² Tool Version:** [z.B. 4.5.0]
+- **Betriebssystem:** [z.B. Windows 10, macOS 12, Ubuntu 22.04]
+- **Java-Version:** [z.B. Java 11, Java 17]
 
 ## Zusätzliche Informationen / Additional Information
 
