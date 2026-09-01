@@ -54,7 +54,7 @@ export default defineConfig({
         items: [
           { text: 'IHE: Einführung', link: '/IHE/1.%20Introduction' },
           { text: 'IHE: Actors verwenden', link: '/IHE/Usage%20of%20IHE%20Actors' },
-          { text: 'IHE: Actor-Abhängigkeiten', link: '/IHE/MusBeGroupedWith' },
+          { text: 'IHE: Actor-Abhängigkeiten', link: '/IHE/MustBeGroupedWith' },
           { text: 'IHE: Transactions verwenden', link: '/IHE/Usage%20of%20IHE%20Transactions' }
         ]
       },
