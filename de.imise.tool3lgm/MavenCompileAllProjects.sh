@@ -1,4 +1,9 @@
 #!/bin/bash
+set -euo pipefail
+
+# CI can supply additional Maven options, for example a custom local repository.
+# The historic default of skipping tests is retained for local release builds.
+MAVEN_ARGS=${MAVEN_ARGS:--Dmaven.test.skip=true}
 
 SELF=$(realpath $0)
 APPDIR=$(dirname $SELF)
@@ -23,37 +28,35 @@ echo '#############################################'
 echo '###   A X S U T I L S  -  P R O J E K T   ###'
 echo '#############################################'
 cd ../axsutils/
-wget -N http://svn.apache.org/repos/asf/servicemix/m2-repo/com/bea/xml/jsr173-ri/1.0/jsr173-ri-1.0.jar
-mvn install:install-file -Dfile=jsr173-ri-1.0.jar -DpomFile=jsr173.pom
-mvn -B -Dmaven.test.skip=true clean install
+mvn -B $MAVEN_ARGS clean install
 
 echo
 echo '#############################################'
 echo '###   T O O L 3 L G M  -  P R O J E K T   ###'
 echo '#############################################'
 cd $APPDIR
-mvn -B -Dmaven.test.skip=true clean install
+mvn -B $MAVEN_ARGS clean install
 
 echo
 echo '##################################################################'
 echo '###   M E T A M O D E L    O R I G I N A L  -  P R O J E K T   ###'
 echo '##################################################################'
 cd ../de.imise.metamodel.original/
-mvn -B -Dmaven.test.skip=true clean install
+mvn -B $MAVEN_ARGS clean install
 
 echo
 echo '################################################################'
 echo '###   M E T A M O D E L    S E R V I C E  -  P R O J E K T   ###'
 echo '################################################################'
 cd ../de.imise.metamodel.service/
-mvn -B -Dmaven.test.skip=true clean install
+mvn -B $MAVEN_ARGS clean install
 
 echo
 echo '#######################################################'
 echo '###   T E M P L A T E    I H E   -  P R O J E K T   ###'
 echo '#######################################################'
 cd ../de.imise.tool3lgm.template.ihe/
-mvn -B -Dmaven.test.skip=true clean install
+mvn -B $MAVEN_ARGS clean install
 
 cd $APPDIR
 

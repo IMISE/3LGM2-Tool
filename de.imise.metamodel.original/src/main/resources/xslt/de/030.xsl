@@ -1,6 +1,6 @@
-<?xml version="1.0" encoding="iso-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 
-<!--name: Anwendungsbausteine: unterstützende Aufgaben -->
+<!--name: Anwendungsbausteine: unterstÃ¼tzende Aufgaben -->
 <!--type: html -->
 <!--description: Welche Anwendungsbausteine erledigen welche Aufgaben? -->
 <!--author: Oliver Heller -->

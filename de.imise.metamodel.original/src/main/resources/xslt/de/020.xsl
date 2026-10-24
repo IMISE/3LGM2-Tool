@@ -1,9 +1,9 @@
-<?xml version="1.0" encoding="iso-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 
-<!--name: Aufgaben: unterstützende Anwendungsbausteine -->
+<!--name: Aufgaben: unterstÃ¼tzende Anwendungsbausteine -->
 <!--type: html -->
 <!--description: Welche Aufgaben werden noch konventionell erledigt bzw. 
-	wo gibt es verschiedene Möglichkeiten? -->
+	wo gibt es verschiedene MÃ¶glichkeiten? -->
 <!--author: Thomas Rudert, Oliver Heller -->
 
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"

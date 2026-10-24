@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="iso-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 
 <!--name: Functions supported by application components, arranged according 
 	to organizational units -->
@@ -113,7 +113,7 @@
 		</xsl:choose>
 	</xsl:function>
 
-	<!-- zählt in Hierarchie eins weiter (1.3.4 zu 2.3.4 / 2 zu 3) -->
+	<!-- zÃ¤hlt in Hierarchie eins weiter (1.3.4 zu 2.3.4 / 2 zu 3) -->
 	<!-- Leesweise von rechts nach links -->
 	<xsl:function name="lgm:hierarchyNext" as="xs:string">
 		<xsl:param name="current" as="xs:string" />
@@ -129,7 +129,7 @@
 		</xsl:choose>
 	</xsl:function>
 
-	<!-- setzt den letzten Zähler der Hierarchie (1.3.4 mit 5 zu 5.3.4) -->
+	<!-- setzt den letzten ZÃ¤hler der Hierarchie (1.3.4 mit 5 zu 5.3.4) -->
 	<!-- Leesweise von rechts nach links -->
 	<xsl:function name="lgm:hierarchySet" as="xs:string">
 		<xsl:param name="current" as="xs:string" />

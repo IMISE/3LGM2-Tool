@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='ISO-8859-1' ?>
+<?xml version='1.0' encoding='UTF-8' ?>
 <!DOCTYPE index PUBLIC "-//Sun Microsystems Inc.//DTD JavaHelp Index Version 2.0//EN" "http://java.sun.com/products/javahelp/index_2_0.dtd">
 <index version="2.0">
 	<indexitem text="Ansichtswerkzeuge">
@@ -132,7 +132,7 @@
 		<indexitem text="Importieren und Exportieren von Modellen" target="import_export"/>
 		<indexitem text="Modelle anlegen, &ouml;ffnen und speichern" target="neu"/>
 		<indexitem text="Im Modell navigieren" target="navigieren"/>
-		<indexitem text="Das 3LGM²-Metamodell - &Uuml;berblick" target="modell_ueberblick"/>
+		<indexitem text="Das 3LGMÂ²-Metamodell - &Uuml;berblick" target="modell_ueberblick"/>
 	</indexitem>
 	<indexitem text="Datensatztyp">
 		<indexitem text="Eigenschaften-Dialog Datensatztyp" target="dialoge_datensatztyp"/>

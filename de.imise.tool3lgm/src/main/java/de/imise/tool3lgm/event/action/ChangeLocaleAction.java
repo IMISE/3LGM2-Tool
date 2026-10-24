@@ -126,7 +126,7 @@ public class ChangeLocaleAction extends ExtendedAction {
      */
     public static final ChangeLocaleAction[] getAllActions() {
         Locale[] locales = getInstalledLanguages();
-        Alphabetical.sort(locales);
+        Alphabetical.sort((Object[]) locales);
         ChangeLocaleAction[] allActions = new ChangeLocaleAction[locales.length];
         for (int i = 0; i < locales.length; i++) { // Wähle die Standard-Sprache aus den UserProperties
             allActions[i] = new ChangeLocaleAction(locales[i]);
@@ -134,7 +134,7 @@ public class ChangeLocaleAction extends ExtendedAction {
                 allActions[i].setSelected(true);
             }
         }
-        Alphabetical.sort(allActions);
+        Alphabetical.sort((Object[]) allActions);
         return allActions;
     }
 

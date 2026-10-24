@@ -646,7 +646,7 @@ public abstract class Tool3lgmConstants {
      * @return String with value of resource
      */
     public static String getReplacedResString(final Object key, final String... replacements) {
-        return getReplacedString(getResStringWithoutError(key.toString()), replacements);
+        return getReplacedString(getResStringWithoutError(key.toString()), (Object[]) replacements);
     }
 
     /**

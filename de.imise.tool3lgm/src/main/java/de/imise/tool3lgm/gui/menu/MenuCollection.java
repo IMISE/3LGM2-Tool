@@ -506,7 +506,7 @@ public class MenuCollection {
         private final int scrollItemCount = 30;
 
         public WindowMenu() {
-            super(title, MenuCreator.createMenuEntries(true, new DynamicMenuPlaceholder()));
+            super(title, (Object[]) MenuCreator.createMenuEntries(true, new DynamicMenuPlaceholder()));
             DynamicMenuPlaceholder placeHolder = getPlaceholder(0);
             // firstFrameIndex + 2 because the active frame and the following JSeparator should not be scrolled as well
             MenuScroller.setScrollerFor(this, scrollItemCount, 125, placeHolder.getStartIndex() + 2, 0);

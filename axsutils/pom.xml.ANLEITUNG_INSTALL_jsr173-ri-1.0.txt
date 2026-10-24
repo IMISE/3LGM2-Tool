@@ -1,9 +1,9 @@
-Man muss das File manuell installieren, da es in den Maven-Repositories nicht verf¸gbar ist:
+Man muss das File manuell installieren, da es in den Maven-Repositories nicht verf√ºgbar ist:
 
 Anleitung siehe: https://stackoverflow.com/questions/14101312/is-it-possible-to-have-a-jar-missing-in-maven-central-repository
 Vorraussetzung: auf dem Rechner ist Maven installiert und das mvn-Kommando funktioniert in der Shell (Windows oder OSX oder Linux)
 
-//getestet unter Windows (wie ich das genau unter OSX gemacht habe weiﬂ ich nicht mehr, aber dieser Weg sollte dort auch gehen)
+//getestet unter Windows (wie ich das genau unter OSX gemacht habe wei√ü ich nicht mehr, aber dieser Weg sollte dort auch gehen)
 
 1.) Download: http://svn.apache.org/repos/asf/servicemix/m2-repo/com/bea/xml/jsr173-ri/1.0/
 2.) im selben Ordner die Datei jsr173.pom mit folgendem Inhalt anlegen:
@@ -12,9 +12,9 @@ Vorraussetzung: auf dem Rechner ist Maven installiert und das mvn-Kommando funkt
     <artifactId>jsr173-ri</artifactId>
     <version>1.0</version>
 </project>
-3.) in der Shell in den Ordner wechseln, in dem die jar und die pom Datei liegen und folgendes Kommando ausf¸hren
+3.) in der Shell in den Ordner wechseln, in dem die jar und die pom Datei liegen und folgendes Kommando ausf√ºhren
 mvn install:install-file -Dfile=jsr173-ri-1.0.jar -DpomFile=jsr173.pom
-4.) In Eclipse auf dem Projekt, das die jar braucht das Kontextmen¸ ˆffen und Maven -> Update Project aufrufen
-5.) Eventuell muss man danach f¸r die Projekte wieder einstellen, dass sie mit dem 1.8er JDK gebaut werden sollen, weil Maven das auf 1.5 oder 1.6 zur¸ck setzt
+4.) In Eclipse auf dem Projekt, das die jar braucht das Kontextmen√º √∂ffen und Maven -> Update Project aufrufen
+5.) Eventuell muss man danach f√ºr die Projekte wieder einstellen, dass sie mit dem 1.8er JDK gebaut werden sollen, weil Maven das auf 1.5 oder 1.6 zur√ºck setzt
 
 

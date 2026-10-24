@@ -1,0 +1,112 @@
+name: Package releases
+
+on:
+  push:
+    tags: ['v*']
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Numeric application version (for example 4.6.0)'
+        required: true
+        default: '0.0.0'
+
+permissions:
+  contents: write
+
+jobs:
+  prepare:
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.version.outputs.value }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - id: version
+        env:
+          INPUT_VERSION: ${{ inputs.version }}
+        run: |
+          value="${GITHUB_REF_NAME#v}"
+          if [ "${{ github.event_name }}" = workflow_dispatch ]; then value="$INPUT_VERSION"; fi
+          [[ "$value" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]
+          echo "value=$value" >> "$GITHUB_OUTPUT"
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '25'
+          cache: maven
+      - run: bash de.imise.tool3lgm/MavenCompileAllProjects.sh
+      - run: |
+          bash scripts/package/create-staging.sh dist/Tool3lgm '${{ steps.version.outputs.value }}'
+          bash scripts/package/check-staging.sh dist/Tool3lgm
+      - uses: actions/upload-artifact@v4
+        with:
+          name: application-staging
+          path: dist/Tool3lgm
+
+  linux:
+    needs: prepare
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v4
+        with: {name: application-staging, path: staging}
+      - run: bash scripts/package/package-linux.sh staging dist '${{ needs.prepare.outputs.version }}'
+      - uses: actions/upload-artifact@v4
+        with: {name: linux-package, path: dist}
+
+  windows:
+    needs: prepare
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with: {name: application-staging, path: staging}
+      - uses: actions/setup-java@v4
+        with: {distribution: temurin, java-version: '25'}
+      - name: Install Windows packagers
+        shell: powershell
+        run: choco install wixtoolset innosetup -y --no-progress
+      - name: Build JRE and external-Java packages
+        shell: powershell
+        run: |
+          scripts/package/package-windows-jre.ps1 -StagingDirectory staging -OutputDirectory dist -Version '${{ needs.prepare.outputs.version }}'
+          scripts/package/package-windows-external.ps1 -StagingDirectory staging -OutputDirectory dist -Version '${{ needs.prepare.outputs.version }}' -RepositoryRoot '${{ github.workspace }}'
+      - uses: actions/upload-artifact@v4
+        with: {name: windows-packages, path: dist}
+
+  macos:
+    needs: prepare
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - runner: macos-15-intel
+            architecture: x64
+          - runner: macos-15
+            architecture: arm64
+    runs-on: ${{ matrix.runner }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with: {name: application-staging, path: staging}
+      - uses: actions/setup-java@v4
+        with: {distribution: temurin, java-version: '25'}
+      - run: bash scripts/package/package-macos.sh staging dist '${{ needs.prepare.outputs.version }}' '${{ matrix.architecture }}'
+      - uses: actions/upload-artifact@v4
+        with:
+          name: "macos-${{ matrix.architecture }}-packages"
+          path: dist
+
+  publish:
+    if: github.event_name == 'push'
+    needs: [prepare, linux, windows, macos]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v4
+        with: {path: release-assets, pattern: '*-package*', merge-multiple: true}
+      - run: |
+          cd release-assets
+          sha256sum * > SHA256SUMS.txt
+      - uses: softprops/action-gh-release@v2
+        with:
+          files: release-assets/*

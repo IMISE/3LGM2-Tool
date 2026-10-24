@@ -79,7 +79,7 @@ for param in "$@";
 			echo "-log_rdf, -log_all		activates logging (all)"
 			echo "-log_rdf_err			activates logging (only errors and warnings of RDF import process)"
 			echo ""
-			echo Please report bugs and feature request via https://bitbucket.org/imise/tool-3lgm2/issues/new
+			echo Please report bugs and feature request via https://github.com/IMISE/3LGM2-Tool/issues/new/choose
 			exit 0
 		fi
 	done

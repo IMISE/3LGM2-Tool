@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="iso-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 
 <!--name: Application Components: Overview 2 -->
 <!--type: html -->
@@ -27,11 +27,11 @@
 		</xsl:choose>
 	</xsl:function>
 
-	<!--Überschrift -->
+	<!--Ãœberschrift -->
 	<xsl:variable name="header_text"
 		select="'All application components of a model'" />
 
-	<!--Key - für die Performance -->
+	<!--Key - fÃ¼r die Performance -->
 	<xsl:key name="element" match="modell_3lgm_2/objects/element"
 		use="@class" />
 

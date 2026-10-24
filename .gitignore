@@ -16,3 +16,7 @@ de.imise.tool3lgm/version.info
 de.imise.tool3lgm.deploy/Tool3lgm/version.info
 axsutils/jsr173-ri-1.0.jar
 .metadata
+
+node_modules/
+docs/.vitepress/cache/
+docs/.vitepress/dist/

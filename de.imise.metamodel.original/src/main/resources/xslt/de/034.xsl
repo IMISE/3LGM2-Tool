@@ -1,8 +1,8 @@
-<?xml version="1.0" encoding="iso-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 
-<!--name: Kommunikationsstandards: Übersicht -->
+<!--name: Kommunikationsstandards: Ãœbersicht -->
 <!--type: html -->
-<!--description: Übersicht wo welcher Kommunikationsstandard verwendet wird -->
+<!--description: Ãœbersicht wo welcher Kommunikationsstandard verwendet wird -->
 <!--author: Oliver Heller -->
 
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
@@ -78,7 +78,7 @@
 	<xsl:template match="/">
 		<html>
 			<head>
-				<title>Übersicht wo welcher Kommunikationsstandard verwendet wird</title>
+				<title>Ãœbersicht wo welcher Kommunikationsstandard verwendet wird</title>
 				<meta name="author" content="Tool3lgm" />
 			</head>
 			<body>
@@ -86,7 +86,7 @@
 					Diese HTML-Datei wurde maschinell aus einem 3LGM&#178;-Modell
 					erzeugt.
 				</xsl:comment>
-				<h1>Übersicht wo welcher Kommunikationsstandard verwendet wird</h1>
+				<h1>Ãœbersicht wo welcher Kommunikationsstandard verwendet wird</h1>
 				<h2>
 					<xsl:value-of select="modell_3lgm_2/header/title" />
 				</h2>
@@ -94,7 +94,7 @@
 					<tr>
 						<th>Kommunikationsstandard</th><!--<th>Schnittstellen</th> -->
 						<th>bestehende Verbindungen</th>
-						<th>mögliche Verbindungen</th>
+						<th>mÃ¶gliche Verbindungen</th>
 					</tr>
 					<tbody valign="top" align="left">
 						<tr>
