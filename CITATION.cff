@@ -1,0 +1,74 @@
+# This CITATION.cff file was generated with cffinit.
+# Visit https://bit.ly/cffinit to generate yours today!
+
+cff-version: 1.2.0
+title: 3LGM² Tool
+message: 'If you use the 3LGM² Tool, please cite us.'
+type: software
+authors:
+  - orcid: 'https://orcid.org/0000-0002-7221-7415'
+    given-names: Sebastian
+    family-names: Stäubert
+    email: sebastian.staeubert@imise.uni-leipzig.de
+    name-particle: Stäubert
+    affiliation: Universität Leipzig
+  - given-names: Alexander
+    family-names: Strübing
+    email: alexander.struebing@imise.uni-leipzig.de
+    affiliation: Universität Leipzig
+    orcid: 'https://orcid.org/0000-0001-5151-7665'
+  - given-names: Franziska
+    family-names: Jahn
+    email: franziska.jahn@imise.uni-leipzig.de
+    affiliation: Universität Leipzig
+    orcid: 'https://orcid.org/0000-0002-7687-8544'
+  - given-names: Thomas
+    family-names: Wendt
+    email: thomas.wendt@uni-leipzig.de
+    orcid: 'https://orcid.org/0009-0005-2287-9655'
+    affiliation: Nationale Akademie der Wissenschaften Leopoldina
+  - given-names: Afred
+    email: alfred.winter@imise.uni-leipzig.de
+    family-names: Winter
+    affiliation: Universität Leipzig
+    orcid: 'https://orcid.org/0000-0003-0179-954X'
+  - name: Universität Leipzig
+    city: Leipzig
+    address: Härtelstr. 16-18
+    post-code: '04107'
+    region: Sachsen (Saxony)
+    tel: +49 341 97 16100
+    country: DE
+    location: >-
+      Institute for Medical Informatics, Statistics and
+      Epidemiology (IMISE)
+    website: 'https://www.imise.uni-leipzig.de/'
+    fax: +49 341 97 16109
+identifiers:
+  - type: doi
+    value: 10.1007/978-3-031-12310-8_2
+    description: >-
+      Refer to chapter 2.14 for the 3-layer graph-based meta
+      model (3LGM²) description.
+  - type: doi
+    value: 10.1007/978-3-031-12310-8_3
+    description: >-
+      Chapter Technological Perspective: Architecture,
+      Integration, and Standards.
+repository-code: 'https://github.com/IMISE/3LGM2-Tool'
+url: 'https://www.3lgm2.de'
+repository: 'https://github.com/IMISE/3LGM2-Meta-Model'
+repository-artifact: 'https://imise.github.io/3LGM2-Tool/'
+abstract: >-
+  3LGM² Tool is a graphical user interface (Java
+  Application) for model files following the 3-layer
+  graph-based meta model (3LGM²).
+keywords:
+  - Medical Informatics
+  - Healthcare
+  - Information System
+  - Information System Architecture
+  - Information System Analysis and Design
+  - modeling
+  - 3lgm²
+license: Apache-2.0
