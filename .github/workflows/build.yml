@@ -1,0 +1,33 @@
+name: Java build
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '25'
+          cache: maven
+      - name: Build Java projects
+        run: bash de.imise.tool3lgm/MavenCompileAllProjects.sh
+      - name: Create and validate neutral staging payload
+        run: |
+          bash scripts/package/create-staging.sh dist/Tool3lgm 0.0.0
+          bash scripts/package/check-staging.sh dist/Tool3lgm
+      - uses: actions/upload-artifact@v4
+        with:
+          name: application-staging
+          path: dist/Tool3lgm
+          if-no-files-found: error
