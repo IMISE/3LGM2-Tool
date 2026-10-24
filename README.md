@@ -23,7 +23,7 @@ call: java -Xmx512m -Xss20m -splash:splash.gif -jar lib/tool3lgm.jar %1 %2 %3 %4
 
 ### Build and release packages ###
 
-`Java build` runs for pull requests and pushes to `main`. It builds the Maven
+`Java build` runs for pull requests and pushes to `main` and `develop`. It builds the Maven
 projects with Temurin 25 and validates a clean, platform-neutral application
 payload.
 
