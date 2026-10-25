@@ -55,6 +55,7 @@ jobs:
       - uses: actions/download-artifact@v4
         with: {name: application-staging, path: staging}
       - run: bash scripts/package/package-linux.sh staging dist '${{ needs.prepare.outputs.version }}'
+      - run: bash scripts/package/package-linux-jre.sh staging dist '${{ needs.prepare.outputs.version }}'
       - uses: actions/upload-artifact@v4
         with: {name: linux-package, path: dist}
 
