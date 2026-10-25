@@ -8,6 +8,7 @@ OUTPUT=${2:?"output directory is required"}
 VERSION=${3:?"version is required"}
 ARCH=${4:?"architecture is required"}
 NAME="3LGM2-Tool_v${VERSION}_macos-${ARCH}"
+APP_VERSION="${VERSION%%-*}"
 WORK=$(mktemp -d)
 trap 'rm -rf "$WORK"' EXIT
 
@@ -21,7 +22,7 @@ jpackage \
   --type app-image \
   --dest "$WORK/image" \
   --name "3LGM2-Tool" \
-  --app-version "$VERSION" \
+  --app-version "$APP_VERSION" \
   --vendor "University Leipzig - IMISE" \
   --input "$WORK/input" \
   --main-jar tool3lgm.jar \

@@ -7,6 +7,7 @@ param(
 
 $ErrorActionPreference = 'Stop'
 $name = "3LGM2-Tool_v$Version"
+$numericVersion = ($Version -split '-')[0]
 $work = Join-Path ([System.IO.Path]::GetTempPath()) "3lgm2-jpackage-$([guid]::NewGuid())"
 New-Item -ItemType Directory -Force -Path $work, $OutputDirectory | Out-Null
 try {
@@ -19,7 +20,7 @@ try {
         ForEach-Object { Join-Path $StagingDirectory $_ }
     $appImage = Join-Path $work 'image'
     $common = @(
-        '--name', '3LGM2-Tool', '--app-version', $Version,
+        '--name', '3LGM2-Tool', '--app-version', $numericVersion,
         '--vendor', 'University Leipzig - IMISE',
         '--input', $input, '--main-jar', 'tool3lgm.jar',
         '--main-class', 'de.imise.tool3lgm.Tool3lgmMain',
