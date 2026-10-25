@@ -15,7 +15,7 @@ try {
     New-Item -ItemType Directory -Force -Path $input | Out-Null
     Copy-Item "$StagingDirectory\lib\tool3lgm.jar" "$input\tool3lgm.jar"
     Copy-Item "$StagingDirectory\splash.gif" "$input\splash.gif"
-    foreach ($item in @('lib', 'Plugins', 'Templates', 'Examples', 'Symbols', 'Dok_Auswertungen', 'XSLT-Beispiele', 'thirdPartyLicense.html', 'LICENSE-2.0.txt')) {
+    foreach ($item in @('lib', 'Plugins', 'Templates', 'Examples', 'Symbols', 'Dok_Auswertungen', 'XSLT-Beispiele', 'thirdPartyLicense.html', 'LICENSE-2.0.txt', 'version.info')) {
         Copy-Item (Join-Path $StagingDirectory $item) $input -Recurse
     }
 

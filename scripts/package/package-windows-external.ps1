@@ -65,6 +65,8 @@ Root: "HKCR"; Subkey: "tool3lgm\shell\open\command"; ValueType: string; ValueDat
     if (-not $iscc) { throw 'ISCC.exe is not on PATH. Install Inno Setup before running this script.' }
     & $iscc $issPath
     if ($LASTEXITCODE -ne 0) { throw 'Inno Setup could not create the external-Java installer.' }
+
+    Compress-Archive -Path (Join-Path $app '*') -DestinationPath (Join-Path $OutputDirectory "3LGM2-Tool_v${Version}.zip") -Force
 }
 finally {
     Remove-Item -Recurse -Force -ErrorAction SilentlyContinue $work
