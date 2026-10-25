@@ -22,6 +22,10 @@ public final class ApplicationManager {
      * @return path to the application
      */
     public static File getApplicationDir(final String ignoreSubDir) {
+        String appDir = System.getProperty("tool3lgm.app.dir");
+        if (!Strings.isNullOrEmpty(appDir)) {
+            return new File(appDir);
+        }
         File f = null;
         try {
             f = new File(".").getCanonicalFile();

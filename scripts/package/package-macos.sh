@@ -34,7 +34,8 @@ jpackage \
   --java-options '-cp $APPDIR/lib/*:$APPDIR/Plugins/*' \
   --java-options '-splash:$APPDIR/splash.gif' \
   --java-options '-Xmx768m' \
-  --java-options '-Xss32m'
+  --java-options '-Xss32m' \
+  --java-options '-Dtool3lgm.app.dir=$APPDIR'
 
 APP="$WORK/image/3LGM2-Tool.app"
 ditto -c -k --sequesterRsrc --keepParent "$APP" "$OUTPUT/${NAME}.app.zip"

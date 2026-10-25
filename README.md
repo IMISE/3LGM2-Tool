@@ -44,6 +44,22 @@ numeric version and creates the complete set of packages as workflow artifacts
 without publishing a release. macOS packages are intentionally unsigned;
 signing and notarization are handled separately in issue #694.
 
+#### Notes on macOS packages ####
+
+Because the macOS packages are unsigned, the macOS Gatekeeper warns that the
+downloaded package could not be verified. To run the tool anyway, use one of
+these options:
+
+* Right-click the app and choose "Open" (confirm twice), or
+* Open "System Settings" → "Privacy & Security" and click "Open Anyway" for
+  the app, or
+* Remove the quarantine attribute in a terminal:
+  `xattr -dr com.apple.quarantine /path/to/3LGM2-Tool.app`
+
+This applies to both the `.pkg` installer and the `.app.zip` bundle. If the
+macOS "app cannot be opened because it is from an unidentified developer"
+dialog appears for the built-in app, the same procedure applies.
+
 ### Contribution guidelines ###
 
 * Writing tests
