@@ -15,6 +15,7 @@ trap 'rm -rf "$WORK"' EXIT
 mkdir -p "$WORK/input" "$OUTPUT"
 cp "$STAGING/lib/tool3lgm.jar" "$WORK/input/tool3lgm.jar"
 cp "$STAGING/splash.gif" "$WORK/input/splash.gif"
+cp "$STAGING/version.info" "$WORK/input/version.info"
 cp -R "$STAGING/lib" "$STAGING/Plugins" "$STAGING/Templates" "$STAGING/Examples" \
   "$STAGING/Symbols" "$STAGING/Dok_Auswertungen" "$STAGING/XSLT-Beispiele" \
   "$STAGING/thirdPartyLicense.html" "$STAGING/LICENSE-2.0.txt" "$WORK/input/"
