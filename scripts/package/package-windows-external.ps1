@@ -9,6 +9,7 @@ param(
 # Legacy compatibility package: it intentionally requires a locally installed
 # Java runtime. JRE-bearing Windows packages are built with jpackage instead.
 $ErrorActionPreference = 'Stop'
+$numericVersion = ($Version -split '-')[0]
 $work = Join-Path ([System.IO.Path]::GetTempPath()) "3lgm2-external-$([guid]::NewGuid())"
 New-Item -ItemType Directory -Force -Path $work, $OutputDirectory | Out-Null
 try {
@@ -20,7 +21,7 @@ try {
     Copy-Item -Recurse -Force $StagingDirectory $app
 
     $config = Join-Path $launch4j '3lgm2tool.cfg.xml'
-    (Get-Content -Raw $config) -replace '<txtProductVersion>.*?</txtProductVersion>', "<txtProductVersion>$Version</txtProductVersion>" |
+    (Get-Content -Raw $config) -replace '<txtProductVersion>.*?</txtProductVersion>', "<txtProductVersion>$numericVersion</txtProductVersion>" |
         Set-Content -NoNewline -Encoding utf8 $config
     Push-Location $launch4j
     try { & java -jar launch4j.jar 3lgm2tool.cfg.xml } finally { Pop-Location }
@@ -29,7 +30,7 @@ try {
     $icon = Join-Path $deployTools 'Icons\toolIcon_gross.ico'
     $iss = @"
 #define MyAppName "3LGM² Tool"
-#define MyAppVersion "$Version"
+#define MyAppVersion "$numericVersion"
 #define MyAppExeName "3lgm2tool.exe"
 [Setup]
 AppId={{88B62F13-55E9-4E6B-96B2-9F2D0217F0FB}
