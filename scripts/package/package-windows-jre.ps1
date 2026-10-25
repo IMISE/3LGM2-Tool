@@ -15,16 +15,16 @@ try {
     New-Item -ItemType Directory -Force -Path $input | Out-Null
     Copy-Item "$StagingDirectory\lib\tool3lgm.jar" "$input\tool3lgm.jar"
     Copy-Item "$StagingDirectory\splash.gif" "$input\splash.gif"
+    foreach ($item in @('lib', 'Plugins', 'Templates', 'Examples', 'Symbols', 'Dok_Auswertungen', 'XSLT-Beispiele', 'thirdPartyLicense.html', 'LICENSE-2.0.txt')) {
+        Copy-Item (Join-Path $StagingDirectory $item) $input -Recurse
+    }
 
-    $content = @('lib', 'Plugins', 'Templates', 'Examples', 'Symbols', 'Dok_Auswertungen', 'XSLT-Beispiele', 'thirdPartyLicense.html', 'LICENSE-2.0.txt') |
-        ForEach-Object { Join-Path $StagingDirectory $_ }
     $appImage = Join-Path $work 'image'
     $common = @(
         '--name', '3LGM2-Tool', '--app-version', $numericVersion,
         '--vendor', 'University Leipzig - IMISE',
         '--input', $input, '--main-jar', 'tool3lgm.jar',
         '--main-class', 'de.imise.tool3lgm.Tool3lgmMain',
-        '--app-content', ($content -join ','),
         '--java-options', '-cp $APPDIR\lib\*;$APPDIR\Plugins\*',
         '--java-options', '-splash:$APPDIR\splash.gif',
         '--java-options', '-Xmx768m', '--java-options', '-Xss32m'

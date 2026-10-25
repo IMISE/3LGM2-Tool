@@ -15,6 +15,9 @@ trap 'rm -rf "$WORK"' EXIT
 mkdir -p "$WORK/input" "$OUTPUT"
 cp "$STAGING/lib/tool3lgm.jar" "$WORK/input/tool3lgm.jar"
 cp "$STAGING/splash.gif" "$WORK/input/splash.gif"
+cp -R "$STAGING/lib" "$STAGING/Plugins" "$STAGING/Templates" "$STAGING/Examples" \
+  "$STAGING/Symbols" "$STAGING/Dok_Auswertungen" "$STAGING/XSLT-Beispiele" \
+  "$STAGING/thirdPartyLicense.html" "$STAGING/LICENSE-2.0.txt" "$WORK/input/"
 
 # The legacy application expects its libraries and data below the application
 # directory. $APPDIR is expanded by the jpackage launcher at runtime.
@@ -27,7 +30,6 @@ jpackage \
   --input "$WORK/input" \
   --main-jar tool3lgm.jar \
   --main-class de.imise.tool3lgm.Tool3lgmMain \
-  --app-content "$STAGING/lib,$STAGING/Plugins,$STAGING/Templates,$STAGING/Examples,$STAGING/Symbols,$STAGING/Dok_Auswertungen,$STAGING/XSLT-Beispiele,$STAGING/thirdPartyLicense.html,$STAGING/LICENSE-2.0.txt" \
   --java-options '-cp $APPDIR/lib/*:$APPDIR/Plugins/*' \
   --java-options '-splash:$APPDIR/splash.gif' \
   --java-options '-Xmx768m' \
