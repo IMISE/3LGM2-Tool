@@ -26,6 +26,7 @@ try {
         '--input', $input, '--main-jar', 'tool3lgm.jar',
         '--main-class', 'de.imise.tool3lgm.Tool3lgmMain',
         '--java-options', '-splash:$APPDIR\splash.gif',
+        '--java-options', '-Dtool3lgm.app.dir=$APPDIR',
         '--java-options', '-Xmx768m', '--java-options', '-Xss32m'
     )
     & jpackage --type app-image --dest $appImage @common
@@ -37,6 +38,8 @@ try {
     $cfg = Join-Path $smokeDirectory '3LGM2-Tool/app/3LGM2-Tool.cfg'
     if (-not (Test-Path $cfg)) { throw 'Launcher config missing from packaged image.' }
     if (Select-String -Path $cfg -Pattern '^java-options=-cp\s*$' -Quiet) { throw 'Launcher config contains a bare classpath option.' }
+    if (-not (Test-Path (Join-Path $smokeDirectory '3LGM2-Tool/app/version.info'))) { throw 'Packaged app is missing version.info.' }
+    if (-not (Select-String -Path $cfg -Pattern 'java-options=-Dtool3lgm.app.dir' -Quiet)) { throw 'Launcher config is missing the app-dir property.' }
     $runtime = Join-Path $smokeDirectory '3LGM2-Tool/runtime'
     if (-not (Test-Path (Join-Path $runtime 'lib/modules'))) { throw 'Bundled runtime is missing lib/modules.' }
     if (-not (Test-Path (Join-Path $runtime 'bin/server/jvm.dll'))) { throw 'Bundled runtime is missing the server JVM.' }
