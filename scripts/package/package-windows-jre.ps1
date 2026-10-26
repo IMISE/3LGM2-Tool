@@ -25,7 +25,6 @@ try {
         '--vendor', 'University Leipzig - IMISE',
         '--input', $input, '--main-jar', 'tool3lgm.jar',
         '--main-class', 'de.imise.tool3lgm.Tool3lgmMain',
-        '--java-options', '-cp $APPDIR\lib\*;$APPDIR\Plugins\*',
         '--java-options', '-splash:$APPDIR\splash.gif',
         '--java-options', '-Xmx768m', '--java-options', '-Xss32m'
     )
@@ -33,6 +32,10 @@ try {
     if ($LASTEXITCODE -ne 0) { throw 'jpackage could not create the Windows application image.' }
 
     Compress-Archive -Path (Join-Path $appImage '3LGM2-Tool') -DestinationPath (Join-Path $OutputDirectory "${name}_JRE.zip") -Force
+    $smokeDirectory = Join-Path $work 'smoke'
+    Expand-Archive (Join-Path $OutputDirectory "${name}_JRE.zip") $smokeDirectory
+    & (Join-Path $smokeDirectory '3LGM2-Tool/runtime/bin/java.exe') -version
+    if ($LASTEXITCODE -ne 0) { throw 'Bundled runtime smoke test failed.' }
     & jpackage --type exe --dest $OutputDirectory --name "${name}_JRE" --app-image (Join-Path $appImage '3LGM2-Tool')
     if ($LASTEXITCODE -ne 0) { throw 'jpackage could not create the Windows installer.' }
     $generatedInstaller = Get-ChildItem -Path $OutputDirectory -Filter '*.exe' | Sort-Object LastWriteTime -Descending | Select-Object -First 1

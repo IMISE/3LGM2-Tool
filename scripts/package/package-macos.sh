@@ -31,7 +31,6 @@ jpackage \
   --input "$WORK/input" \
   --main-jar tool3lgm.jar \
   --main-class de.imise.tool3lgm.Tool3lgmMain \
-  --java-options '-cp $APPDIR/lib/*:$APPDIR/Plugins/*' \
   --java-options '-splash:$APPDIR/splash.gif' \
   --java-options '-Xmx768m' \
   --java-options '-Xss32m' \
