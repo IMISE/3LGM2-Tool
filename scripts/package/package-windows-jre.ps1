@@ -34,8 +34,12 @@ try {
     Compress-Archive -Path (Join-Path $appImage '3LGM2-Tool') -DestinationPath (Join-Path $OutputDirectory "${name}_JRE.zip") -Force
     $smokeDirectory = Join-Path $work 'smoke'
     Expand-Archive (Join-Path $OutputDirectory "${name}_JRE.zip") $smokeDirectory
-    & (Join-Path $smokeDirectory '3LGM2-Tool/runtime/bin/java.exe') -version
-    if ($LASTEXITCODE -ne 0) { throw 'Bundled runtime smoke test failed.' }
+    $cfg = Join-Path $smokeDirectory '3LGM2-Tool/app/3LGM2-Tool.cfg'
+    if (-not (Test-Path $cfg)) { throw 'Launcher config missing from packaged image.' }
+    if (Select-String -Path $cfg -Pattern '^java-options=-cp\s*$' -Quiet) { throw 'Launcher config contains a bare classpath option.' }
+    $runtime = Join-Path $smokeDirectory '3LGM2-Tool/runtime'
+    if (-not (Test-Path (Join-Path $runtime 'lib/modules'))) { throw 'Bundled runtime is missing lib/modules.' }
+    if (-not (Test-Path (Join-Path $runtime 'bin/server/jvm.dll'))) { throw 'Bundled runtime is missing the server JVM.' }
     & jpackage --type exe --dest $OutputDirectory --name "${name}_JRE" --app-image (Join-Path $appImage '3LGM2-Tool')
     if ($LASTEXITCODE -ne 0) { throw 'jpackage could not create the Windows installer.' }
     $generatedInstaller = Get-ChildItem -Path $OutputDirectory -Filter '*.exe' | Sort-Object LastWriteTime -Descending | Select-Object -First 1
