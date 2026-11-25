@@ -75,10 +75,13 @@
 			</exclusions>
 		</dependency>
 		<!-- https://mvnrepository.com/artifact/org.netbeans.api/org-openide-awt -->
+		<!-- RELEASE280 instead of RELEASE122: the Active Reference Queue Daemon of
+			org-openide-util-lookup spins at 100% CPU on Java 21+ with versions up to
+			RELEASE130 (apache/netbeans#9035, fixed by apache/netbeans#4130), see #705 -->
 		<dependency>
 			<groupId>org.netbeans.api</groupId>
 			<artifactId>org-openide-awt</artifactId>
-			<version>RELEASE122</version>
+			<version>RELEASE280</version>
 		</dependency>
 
 	</dependencies>
